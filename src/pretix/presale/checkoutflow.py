@@ -40,6 +40,7 @@ from django.conf import settings
 from django.contrib import messages
 from django.core.exceptions import ValidationError
 from django.core.validators import EmailValidator
+from django.db.models import F, Q
 from django.http import HttpResponseNotAllowed, JsonResponse
 from django.shortcuts import redirect
 from django.utils import translation
@@ -56,13 +57,14 @@ from pretix.base.models.tax import TaxedPrice, TaxRule
 from pretix.base.services.cart import (
     CartError, error_messages, get_fees, set_cart_addons, update_tax_rates,
 )
+from pretix.base.services.memberships import validate_memberships_in_cart
 from pretix.base.services.orders import perform_order
 from pretix.base.signals import validate_cart_addons
 from pretix.base.templatetags.rich_text import rich_text_snippet
 from pretix.base.views.tasks import AsyncAction
 from pretix.multidomain.urlreverse import eventreverse
 from pretix.presale.forms.checkout import (
-    ContactForm, InvoiceAddressForm, InvoiceNameForm,
+    ContactForm, InvoiceAddressForm, InvoiceNameForm, MembershipForm,
 )
 from pretix.presale.forms.customer import AuthenticationForm, RegistrationForm
 from pretix.presale.signals import (
@@ -229,7 +231,7 @@ class CustomerStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
     identifier = "customer"
     template_name = "pretixpresale/event/checkout_customer.html"
     label = pgettext_lazy('checkoutflow', 'Customer account')
-    icon = 'id-badge'
+    icon = 'user'
 
     def is_applicable(self, request):
         return request.organizer.settings.customer_accounts
@@ -334,6 +336,80 @@ class CustomerStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
                 self.cart_session['customer_mode'] = None
         elif self.request.customer:
             ctx['customer'] = self.request.customer
+
+        return ctx
+
+
+class MembershipStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
+    priority = 47
+    identifier = "membership"
+    template_name = "pretixpresale/event/checkout_membership.html"
+    label = pgettext_lazy('checkoutflow', 'Membership')
+    icon = 'id-card'
+
+    def is_applicable(self, request):
+        self.request = request
+        return bool(self.applicable_positions)
+
+    @cached_property
+    def applicable_positions(self):
+        return [
+            p for p in self.positions
+            if p.item.require_membership or (p.variation and p.variation.require_membership)
+        ]
+
+    @cached_property
+    def forms(self):
+        forms = []
+
+        memberships = list(self.cart_customer.memberships.with_usages().filter(
+            Q(Q(membership_type__max_usages__isnull=True) | Q(usages__lt=F('membership_type__max_usages'))),
+        ).select_related('membership_type'))
+
+        for p in self.applicable_positions:
+            form = MembershipForm(
+                event=self.request.event,
+                memberships=memberships,
+                position=p,
+                prefix=f"membership-{p.id}",
+                initial={
+                    'membership': str(p.used_membership_id)
+                },
+                data=self.request.POST if self.request.method == "POST" else None,
+            )
+            forms.append(form)
+
+        return forms
+
+    def post(self, request):
+        self.request = request
+
+        for f in self.forms:
+            if not f.is_valid():
+                return self.render()
+
+            f.position.used_membership = f.cleaned_data['membership']
+
+        try:
+            validate_memberships_in_cart(self.cart_customer, self.positions, self.request.event, lock=False)
+        except ValidationError as e:
+            messages.error(self.request, e)
+            self.render()
+        else:
+            for f in self.forms:
+                f.position.save(update_fields=['used_membership'])
+
+        return redirect(self.get_next_url(request))
+
+    def is_completed(self, request, warn=False):
+        self.request = request
+        return all([p.used_membership_id for p in self.applicable_positions])
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['cart'] = self.get_cart()
+        ctx['cart_session'] = self.cart_session
+        ctx['forms'] = self.forms
 
         return ctx
 
@@ -622,13 +698,31 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
         return f
 
     def get_question_override_sets(self, cart_position):
-        return [
+        o = []
+        if self.cart_customer:
+            o.append({
+                'attendee_name_parts': {
+                    'initial': self.cart_customer.name_parts
+                }
+            })
+        o += [
             resp for recv, resp in question_form_fields_overrides.send(
                 self.request.event,
                 position=cart_position,
                 request=self.request
             )
         ]
+        if cart_position.used_membership:
+            d = {
+                'initial': cart_position.used_membership.attendee_name_parts
+            }
+            if not cart_position.used_membership.membership_type.transferable:
+                d['disabled'] = True
+            o.append({
+                'attendee_name_parts': d
+            })
+
+        return o
 
     @cached_property
     def eu_reverse_charge_relevant(self):
@@ -1097,8 +1191,9 @@ class ConfirmStep(CartMixin, AsyncAction, TemplateFlowStep):
 
 
 DEFAULT_FLOW = (
-    CustomerStep,
     AddOnsStep,
+    CustomerStep,
+    MembershipStep,
     QuestionsStep,
     PaymentStep,
     ConfirmStep

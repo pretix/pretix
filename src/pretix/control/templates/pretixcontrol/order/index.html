@@ -349,7 +349,7 @@
                                     {{ line.seat }}
                                 {% endif %}
                                 {% if line.voucher %}
-                                    <br/><span class="fa fa-tags"></span> {% trans "Voucher code used:" %}
+                                    <br/><span class="fa fa-tags fa-fw"></span> {% trans "Voucher code used:" %}
                                     <a
                                             {% if line.price_before_voucher|default_if_none:"NONE" != "NONE" %}data-toggle="tooltip" title="{% blocktrans trimmed with price=line.price_before_voucher|money:request.event.currency %}Original price: {{ price }}{% endblocktrans %}"{% endif %}
                                             href="{% url "control:event.voucher" event=request.event.slug organizer=request.event.organizer.slug voucher=line.voucher.pk %}">
@@ -358,11 +358,14 @@
                                 {% endif %}
                                 {% if line.subevent %}
                                     <br/>
-                                    <span class="fa fa-calendar"></span> {{ line.subevent.name }} &middot; {{ line.subevent.get_date_range_display }}
+                                    <span class="fa fa-calendar fa-fw"></span> {{ line.subevent.name }} &middot; {{ line.subevent.get_date_range_display }}
                                     {% if event.settings.show_times %}
                                         <span class="fa fa-clock-o"></span>
                                         {{ line.subevent.date_from|date:"TIME_FORMAT" }}
                                     {% endif %}
+                                {% endif %}
+                                {% if line.used_membership %}
+                                    <br /><span class="fa fa-id-card fa-fw" aria-hidden="true"></span> {{ line.used_membership }}
                                 {% endif %}
                                 {% if not line.canceled %}
                                     <div class="position-buttons">

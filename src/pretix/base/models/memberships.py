@@ -28,7 +28,8 @@ class MembershipType(LoggedModel):
     )
     allow_parallel_usage = models.BooleanField(
         verbose_name=_('Parallel usage is allowed'),
-        help_text=_('If this is selected, the membership can be used to purchase tickets for events happening at the same time.'),
+        help_text=_('If this is selected, the membership can be used to purchase tickets for events happening at the same time. Note '
+                    'that this will only check for an identical start time of the events, not for any overlap between events.'),
         default=False
     )
     max_usages = models.PositiveIntegerField(
@@ -66,6 +67,12 @@ class MembershipQuerySet(models.QuerySet):
             )
         )
 
+    def active(self, ev):
+        return self.filter(
+            date_start__lte=ev.date_from,
+            date_end__gte=ev.date_from
+        )
+
 
 class MembershipQuerySetManager(ScopedManager(organizer='customer__organizer').__class__):
     def __init__(self):
@@ -74,6 +81,9 @@ class MembershipQuerySetManager(ScopedManager(organizer='customer__organizer')._
 
     def with_usages(self):
         return self.get_queryset().with_usages()
+
+    def active(self, ev):
+        return self.get_queryset().active(ev)
 
 
 class Membership(models.Model):

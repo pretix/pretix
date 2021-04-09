@@ -43,6 +43,7 @@ from typing import List, Optional
 from celery.exceptions import MaxRetriesExceededError
 from django.conf import settings
 from django.core.cache import cache
+from django.core.exceptions import ValidationError
 from django.db import transaction
 from django.db.models import (
     Exists, F, IntegerField, Max, Min, OuterRef, Q, Sum, Value,
@@ -82,7 +83,9 @@ from pretix.base.services.invoices import (
 )
 from pretix.base.services.locking import LockTimeoutException, NoLockManager
 from pretix.base.services.mail import SendMailException
-from pretix.base.services.memberships import create_membership
+from pretix.base.services.memberships import (
+    create_membership, validate_memberships_in_cart,
+)
 from pretix.base.services.pricing import get_price
 from pretix.base.services.quotas import QuotaAvailability
 from pretix.base.services.tasks import ProfiledEventTask, ProfiledTask
@@ -532,7 +535,7 @@ def _check_date(event: Event, now_dt: datetime):
 
 
 def _check_positions(event: Event, now_dt: datetime, positions: List[CartPosition], address: InvoiceAddress=None,
-                     sales_channel='web'):
+                     sales_channel='web', customer=None):
     err = None
     errargs = None
     _check_date(event, now_dt)
@@ -554,7 +557,8 @@ def _check_positions(event: Event, now_dt: datetime, positions: List[CartPositio
             deleted_positions.add(cp.pk)
             cp.delete()
 
-    for i, cp in enumerate(sorted(positions, key=lambda s: -int(s.is_bundled))):
+    sorted_positions = sorted(positions, key=lambda s: -int(s.is_bundled))
+    for i, cp in enumerate(sorted_positions):
         if cp.pk in deleted_positions:
             continue
 
@@ -749,6 +753,13 @@ def _check_positions(event: Event, now_dt: datetime, positions: List[CartPositio
         else:
             # Sorry, can't let you keep that!
             delete(cp)
+
+    if not err:
+        try:
+            validate_memberships_in_cart(customer, [p for p in sorted_positions if p.pk not in deleted_positions], event, lock=True)
+        except ValidationError as e:
+            raise OrderError(e)
+
     if err:
         raise OrderError(err, errargs)
 
@@ -985,7 +996,7 @@ def _perform_order(event: Event, payment_provider: str, position_ids: List[str],
             raise OrderError(error_messages['empty'])
         if len(position_ids) != len(positions):
             raise OrderError(error_messages['internal'])
-        _check_positions(event, now_dt, positions, address=addr, sales_channel=sales_channel)
+        _check_positions(event, now_dt, positions, address=addr, sales_channel=sales_channel, customer=customer)
         order, payment = _create_order(event, email, positions, now_dt, pprov,
                                        locale=locale, address=addr, meta_info=meta_info, sales_channel=sales_channel,
                                        gift_cards=gift_cards, shown_total=shown_total, customer=customer)

@@ -336,7 +336,7 @@ class OrderDetail(OrderView):
         cartpos = queryset.order_by(
             'item', 'variation'
         ).select_related(
-            'item', 'variation', 'addon_to', 'tax_rule'
+            'item', 'variation', 'addon_to', 'tax_rule', 'used_membership', 'used_membership__membership_type'
         ).prefetch_related(
             'item__questions', 'issued_gift_cards',
             Prefetch('answers', queryset=QuestionAnswer.objects.prefetch_related('options').select_related('question')),

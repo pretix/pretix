@@ -782,6 +782,8 @@ Creating orders
 
        * does not support redeeming gift cards
 
+       * does not support or validate memberships
+
    You can supply the following fields of the resource:
 
    * ``code`` (optional)

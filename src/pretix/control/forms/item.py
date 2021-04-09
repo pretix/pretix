@@ -368,7 +368,7 @@ class ItemCreateForm(I18nModelForm):
                 'hidden_if_available',
                 'require_bundling',
                 'checkin_attention',
-                'require_membersip',
+                'require_membership',
                 'grant_membership_type',
                 'grant_membership_duration_like_event',
                 'grant_membership_duration_days',
@@ -376,9 +376,6 @@ class ItemCreateForm(I18nModelForm):
             )
             for f in fields:
                 setattr(self.instance, f, getattr(self.cleaned_data['copy_from'], f))
-            self.instance.require_membership_types.set(
-                self.cleaned_data['copy_from'].require_membership_types.all()
-            )
         else:
             # Add to all sales channels by default
             self.instance.sales_channels = list(get_all_sales_channels().keys())
@@ -407,6 +404,10 @@ class ItemCreateForm(I18nModelForm):
                     'items': [self.instance.pk]
                 })
 
+        if self.cleaned_data.get('copy_from'):
+            self.instance.require_membership_types.set(
+                self.cleaned_data['copy_from'].require_membership_types.all()
+            )
         if self.cleaned_data.get('has_variations'):
             if self.cleaned_data.get('copy_from') and self.cleaned_data.get('copy_from').has_variations:
                 for variation in self.cleaned_data['copy_from'].variations.all():

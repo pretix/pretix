@@ -1,9 +1,15 @@
 from datetime import timedelta
+from typing import List
 
 from dateutil.relativedelta import relativedelta
+from django.core.exceptions import ValidationError
+from django.utils.formats import date_format
 from django.utils.timezone import now
+from django.utils.translation import gettext_lazy as _
 
-from pretix.base.models import Customer, Event, Item, OrderPosition, SubEvent
+from pretix.base.models import (
+    CartPosition, Customer, Event, Item, Membership, OrderPosition, SubEvent,
+)
 
 
 def membership_validity(item: Item, subevent: SubEvent, event: Event):
@@ -47,3 +53,89 @@ def create_membership(customer: Customer, position: OrderPosition):
         date_end=date_end,
         attendee_name_parts=position.attendee_name_parts
     )
+
+
+def validate_memberships_in_cart(customer: Customer, cartpositions: List[CartPosition], event: Event, lock=False):
+    applicable_positions = [
+        p for p in cartpositions
+        if p.item.require_membership or (p.variation and p.variation.require_membership)
+    ]
+
+    for p in applicable_positions:
+        if not p.used_membership_id:
+            raise ValidationError(
+                _('You selected the product "{product}" which requires an active membership to '
+                  'be selected.').format(
+                    product=str(p.item.name) + (' – ' + str(p.variation.value) if p.variation else '')
+                )
+            )
+
+    base_qs = Membership.objects.with_usages()
+
+    if lock:
+        base_qs = base_qs.select_for_update()
+
+    membership_cache = base_qs\
+        .select_related('membership_type')\
+        .prefetch_related('orderposition_set', 'orderposition_set__order', 'orderposition_set__order__event', 'orderposition_set__subevent')\
+        .in_bulk([p.used_membership_id for p in cartpositions])
+
+    for m in membership_cache.values():
+        m._used_at_dates = [
+            (op.subevent or op.order.event).date_from
+            for op in m.orderposition_set.all()
+        ]
+
+    for p in applicable_positions:
+        m = membership_cache[p.used_membership_id]
+        if not customer or m.customer_id != customer.pk:
+            raise ValidationError(
+                _('You selected a membership that is connected to a different customer account.')
+            )
+
+        ev = p.subevent or event
+
+        if not m.is_valid(ev):
+            raise ValidationError(
+                _('You selected a membership that is valid from {start} to {end}, but selected an event '
+                  'taking place at {date}.').format(
+                    start=date_format(m.date_start, 'SHORT_DATETIME_FORMAT'),
+                    end=date_format(m.date_end, 'SHORT_DATETIME_FORMAT'),
+                    date=date_format(ev.date_from, 'SHORT_DATETIME_FORMAT'),
+                )
+            )
+
+        if p.variation and p.variation.require_membership:
+            types = p.variation.require_membership_types.all()
+        else:
+            types = p.item.require_membership_types.all()
+
+        if not types.filter(pk=m.membership_type_id).exists():
+            raise ValidationError(
+                _('You selected a membership of type "{type}", which is not allowed for the product "{product}".').format(
+                    product=str(p.item.name) + (' – ' + str(p.variation.value) if p.variation else ''),
+                    type=m.membership_type.name
+                )
+            )
+
+        if m.membership_type.max_usages is not None:
+            if m.usages >= m.membership_type.max_usages:
+                raise ValidationError(
+                    _('You are trying to use your membership of type "{type}" more than {number} times, which is the maximum amount.').format(
+                        type=m.membership_type.name,
+                        number=m.usages,
+                    )
+                )
+            m.usages += 1
+
+        if m.membership_type.allow_parallel_usage:
+            df = ev.date_from
+            if any(abs(df - d) < timedelta(minutes=1) for d in m.membership_type._used_at_dates):
+                raise ValidationError(
+                    _('You are trying to use your membership of type "{type}" for an event taking place at {date}, '
+                      'however you already used your membership for a different ticket at that time.').format(
+                        type=m.membership_type.name,
+                        date=date_format(ev.date_from, 'SHORT_DATETIME_FORMAT'),
+                    )
+                )
+            m._used_at_dates.append(ev.date_from)
