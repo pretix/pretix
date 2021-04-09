@@ -195,7 +195,7 @@
                                 </a>
                             </dd>
                         {% endif %}
-                        <dt>{% trans "Buyer email" %}</dt>
+                        <dt>{% trans "Contact email" %}</dt>
                         <dd>
                             {{ order.email|default_if_none:"" }}
                             {% if order.email and order.email_known_to_work %}
@@ -365,7 +365,10 @@
                                     {% endif %}
                                 {% endif %}
                                 {% if line.used_membership %}
-                                    <br /><span class="fa fa-id-card fa-fw" aria-hidden="true"></span> {{ line.used_membership }}
+                                    <br /><span class="fa fa-id-card fa-fw" aria-hidden="true"></span>
+                                    <a href="{% url "control:organizer.customer.membership.edit" organizer=request.organizer.slug customer=order.customer.identifier id=line.used_membership.pk %}">
+                                        {{ line.used_membership }}
+                                    </a>
                                 {% endif %}
                                 {% if not line.canceled %}
                                     <div class="position-buttons">

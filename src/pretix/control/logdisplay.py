@@ -78,6 +78,10 @@ def _display_order_changed(event: Event, logentry: LogEntry):
             old_price=money_filter(Decimal(data['old_price']), event.currency),
             new_price=money_filter(Decimal(data['new_price']), event.currency),
         )
+    elif logentry.action_type == 'pretix.event.order.changed.membership':
+        return text + ' ' + _('Position #{posid}: Used membership changed.').format(
+            posid=data.get('positionid', '?'),
+        )
     elif logentry.action_type == 'pretix.event.order.changed.seat':
         return text + ' ' + _('Position #{posid}: Seat "{old_seat}" changed '
                               'to "{new_seat}".').format(

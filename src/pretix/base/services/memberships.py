@@ -56,22 +56,28 @@ def create_membership(customer: Customer, position: OrderPosition):
     )
 
 
-def validate_memberships_in_cart(customer: Customer, positions: List[AbstractPosition], event: Event, lock=False):
+def validate_memberships_in_order(customer: Customer, positions: List[AbstractPosition], event: Event, lock=False, ignored_order: Order = None):
     """
-    Validate that a set of cart or order positions.
+    Validate that a set of cart or order positions. This currently does not validate
 
-    The algorithm expects that the passed cart or order positions currently do not count against usages, i.e.
-    you should only pass
-    - cart positions
-    - order positions not yet saved to the database
-    - order positions of a canceled order
-
-    This is currently used during checkout validation and during reactivation of canceled orders.
+    :param customer: Customer to validate for
+    :param positions: List of order or cart positions
+    :param event: Event this all is computed in
+    :param lock: Whether to place a SELECT FOR UPDATE lock on the selected memberships
+    :param ignored_order: An order that should be ignored for usage counting
     """
     applicable_positions = [
         p for p in positions
         if p.item.require_membership or (p.variation and p.variation.require_membership)
     ]
+
+    for p in positions:
+        if p not in applicable_positions and p.used_membership_id:
+            raise ValidationError(
+                _('You selected a membership for the product "{product}" which does not require a membership.').format(
+                    product=str(p.item.name) + (' – ' + str(p.variation.value) if p.variation else '')
+                )
+            )
 
     for p in applicable_positions:
         if not p.used_membership_id:
@@ -95,7 +101,9 @@ def validate_memberships_in_cart(customer: Customer, positions: List[AbstractPos
     for m in membership_cache.values():
         m._used_at_dates = [
             (op.subevent or op.order.event).date_from
-            for op in m.orderposition_set.filter(canceled=False).exclude(order__status=Order.STATUS_CANCELED).all()
+            for op in m.orderposition_set.filter(canceled=False).exclude(
+                order_id=ignored_order.pk
+            ).exclude(order__status=Order.STATUS_CANCELED)
         ]
 
     for p in applicable_positions:
@@ -133,7 +141,7 @@ def validate_memberships_in_cart(customer: Customer, positions: List[AbstractPos
         if m.membership_type.max_usages is not None:
             if m.usages >= m.membership_type.max_usages:
                 raise ValidationError(
-                    _('You are trying to use your membership of type "{type}" more than {number} times, which is the maximum amount.').format(
+                    _('You are trying to use a membership of type "{type}" more than {number} times, which is the maximum amount.').format(
                         type=m.membership_type.name,
                         number=m.usages,
                     )
@@ -144,8 +152,8 @@ def validate_memberships_in_cart(customer: Customer, positions: List[AbstractPos
             df = ev.date_from
             if any(abs(df - d) < timedelta(minutes=1) for d in m.membership_type._used_at_dates):
                 raise ValidationError(
-                    _('You are trying to use your membership of type "{type}" for an event taking place at {date}, '
-                      'however you already used your membership for a different ticket at that time.').format(
+                    _('You are trying to use a membership of type "{type}" for an event taking place at {date}, '
+                      'however you already used the same membership for a different ticket at the same time.').format(
                         type=m.membership_type.name,
                         date=date_format(ev.date_from, 'SHORT_DATETIME_FORMAT'),
                     )

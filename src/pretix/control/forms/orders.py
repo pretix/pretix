@@ -291,6 +291,10 @@ class OrderPositionAddForm(forms.Form):
         widget=forms.TextInput(attrs={'placeholder': _('General admission'), 'data-seat-guid-field': 'true'}),
         label=_('Seat')
     )
+    used_membership = forms.ChoiceField(
+        label=_('Membership'),
+        required=False,
+    )
     price = forms.DecimalField(
         required=False,
         max_digits=10, decimal_places=2,
@@ -361,6 +365,23 @@ class OrderPositionAddForm(forms.Form):
             del self.fields['subevent']
         change_decimal_field(self.fields['price'], order.event.currency)
 
+        choices = [
+            ('''''', ''),
+        ]
+        if order.customer:
+            self.memberships = list(order.customer.memberships.all())
+            for m in self.memberships:
+                choices.append((str(m.pk), str(m)))
+        self.fields['used_membership'].choices = choices
+
+    def clean(self):
+        d = super().clean()
+        if d['used_membership']:
+            d['used_membership'] = [m for m in self.memberships if str(m.pk) == d['used_membership']][0]
+        else:
+            d['used_membership'] = None
+        return d
+
 
 class OrderPositionAddFormset(forms.BaseFormSet):
     def __init__(self, *args, **kwargs):
@@ -405,6 +426,9 @@ class OrderPositionChangeForm(forms.Form):
         max_digits=10, decimal_places=2,
         localize=True,
         label=_('New price (gross)')
+    )
+    used_membership = forms.ChoiceField(
+        required=False,
     )
     tax_rule = forms.ModelChoiceField(
         TaxRule.objects.none(),
@@ -478,6 +502,24 @@ class OrderPositionChangeForm(forms.Form):
                 choices.append((str(i.pk), pname))
         self.fields['itemvar'].choices = choices
         change_decimal_field(self.fields['price'], instance.order.event.currency)
+
+        choices = [
+            ('', _('(Unchanged)')),
+            ('CLEAR', _('(No membership)')),
+        ]
+        if instance.order.customer:
+            self.memberships = list(instance.order.customer.memberships.all())
+            for m in self.memberships:
+                choices.append((str(m.pk), str(m)))
+        self.fields['used_membership'].choices = choices
+
+    def clean(self):
+        d = super().clean()
+        if d['used_membership'] and d['used_membership'] != 'CLEAR':
+            d['used_membership'] = [m for m in self.memberships if str(m.pk) == d['used_membership']][0]
+        elif not d['used_membership']:
+            d['used_membership'] = None
+        return d
 
 
 class OrderFeeChangeForm(forms.Form):

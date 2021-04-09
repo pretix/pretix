@@ -1860,6 +1860,13 @@ class MembershipUpdateView(OrganizerDetailViewMixin, OrganizerPermissionRequired
             pk=self.kwargs.get('id')
         )
 
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['usages'] = self.object.orderposition_set.select_related(
+            'order', 'order__event', 'subevent', 'item', 'variation',
+        )
+        return ctx
+
     def form_valid(self, form):
         if form.has_changed():
             d = {

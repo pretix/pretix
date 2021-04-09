@@ -154,6 +154,18 @@
 
                         <div class="row">
                             <div class="col-sm-3">
+                                <strong>{% trans "Membership" %}</strong>
+                            </div>
+                            <div class="col-sm-5">
+                                {{ position.used_membership|default:"–" }}
+                            </div>
+                            <div class="col-sm-4 field-container">
+                                {% bootstrap_field position.form.used_membership layout='inline' %}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-sm-3">
                                 <strong>{% trans "Price" %}</strong>
                             </div>
                             <div class="col-sm-5">
@@ -232,6 +244,9 @@
                                 {% if add_form.subevent %}
                                     {% bootstrap_field add_form.subevent layout="control" %}
                                 {% endif %}
+                                {% if add_form.used_membership %}
+                                    {% bootstrap_field add_form.used_membership layout="control" %}
+                                {% endif %}
                                 {% bootstrap_field add_form.seat layout="control" %}
                             </div>
                         </div>
@@ -263,6 +278,9 @@
                                 {% endif %}
                                 {% if add_formset.empty_form.subevent %}
                                     {% bootstrap_field add_formset.empty_form.subevent layout="control" %}
+                                {% endif %}
+                                {% if add_formset.empty_form.used_membership %}
+                                    {% bootstrap_field add_formset.empty_form.used_membership layout="control" %}
                                 {% endif %}
                                 {% bootstrap_field add_formset.empty_form.seat layout="control" %}
                             </div>

@@ -834,7 +834,7 @@ class Order(LockModel, LoggedModel):
     def _is_still_available(self, now_dt: datetime=None, count_waitinglist=True, force=False,
                             check_voucher_usage=False, check_memberships=False) -> Union[bool, str]:
         from pretix.base.services.memberships import (
-            validate_memberships_in_cart,
+            validate_memberships_in_order,
         )
 
         error_messages = {
@@ -851,9 +851,9 @@ class Order(LockModel, LoggedModel):
         try:
             if check_memberships:
                 try:
-                    validate_memberships_in_cart(self.customer, positions, self.event, lock=False)
+                    validate_memberships_in_order(self.customer, positions, self.event, lock=False)
                 except ValidationError as e:
-                    raise Quota.QuotaExceededException(e)
+                    raise Quota.QuotaExceededException(e.message)
 
             for i, op in enumerate(positions):
                 if op.seat:

@@ -57,7 +57,7 @@ from pretix.base.models.tax import TaxedPrice, TaxRule
 from pretix.base.services.cart import (
     CartError, error_messages, get_fees, set_cart_addons, update_tax_rates,
 )
-from pretix.base.services.memberships import validate_memberships_in_cart
+from pretix.base.services.memberships import validate_memberships_in_order
 from pretix.base.services.orders import perform_order
 from pretix.base.signals import validate_cart_addons
 from pretix.base.templatetags.rich_text import rich_text_snippet
@@ -391,9 +391,9 @@ class MembershipStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
             f.position.used_membership = f.cleaned_data['membership']
 
         try:
-            validate_memberships_in_cart(self.cart_customer, self.positions, self.request.event, lock=False)
+            validate_memberships_in_order(self.cart_customer, self.positions, self.request.event, lock=False)
         except ValidationError as e:
-            messages.error(self.request, e)
+            messages.error(self.request, e.message)
             self.render()
         else:
             for f in self.forms:

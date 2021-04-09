@@ -48,18 +48,21 @@ class MembershipType(LoggedModel):
 class MembershipQuerySet(models.QuerySet):
 
     @scopes_disabled()  # no scoping of subquery
-    def with_usages(self):
+    def with_usages(self, ignored_order=None):
         from . import Order, OrderPosition
 
+        sq = OrderPosition.all.filter(
+            used_membership_id=OuterRef('pk'),
+            canceled=False,
+        ).exclude(
+            order__status=Order.STATUS_CANCELED
+        )
+        if ignored_order:
+            sq = sq.exclude(order__id=ignored_order.pk)
         return self.annotate(
             usages=Coalesce(
                 Subquery(
-                    OrderPosition.all.filter(
-                        used_membership_id=OuterRef('pk'),
-                        canceled=False,
-                    ).exclude(
-                        order__status=Order.STATUS_CANCELED
-                    ).order_by().values('used_membership_id').annotate(
+                    sq.order_by().values('used_membership_id').annotate(
                         c=Count('*')
                     ).values('c')
                 ),
@@ -79,8 +82,8 @@ class MembershipQuerySetManager(ScopedManager(organizer='customer__organizer')._
         super().__init__()
         self._queryset_class = MembershipQuerySet
 
-    def with_usages(self):
-        return self.get_queryset().with_usages()
+    def with_usages(self, ignored_order=None):
+        return self.get_queryset().with_usages(ignored_order)
 
     def active(self, ev):
         return self.get_queryset().active(ev)
