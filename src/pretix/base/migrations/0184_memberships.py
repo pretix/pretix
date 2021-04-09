@@ -44,7 +44,7 @@ class Migration(migrations.Migration):
             name='MembershipType',
             fields=[
                 ('id', models.BigAutoField(primary_key=True, serialize=False)),
-                ('name', i18nfield.fields.I18nCharField(max_length=255)),
+                ('name', i18nfield.fields.I18nCharField()),
                 ('transferable', models.BooleanField(default=False)),
                 ('allow_parallel_usage', models.BooleanField(default=False)),
                 ('max_usages', models.PositiveIntegerField(null=True)),
@@ -63,7 +63,7 @@ class Migration(migrations.Migration):
                 ('date_end', models.DateTimeField()),
                 ('attendee_name_parts', jsonfallback.fields.FallbackJSONField(default=dict, null=True)),
                 ('customer', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='memberships', to='pretixbase.Customer')),
-                ('granted_in', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='granted_memberships', to='pretixbase.OrderPosition')),
+                ('granted_in', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='granted_memberships', to='pretixbase.OrderPosition', null=True)),
                 ('membership_type', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='memberships', to='pretixbase.MembershipType')),
             ],
         ),

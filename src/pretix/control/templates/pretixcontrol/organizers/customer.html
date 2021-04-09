@@ -62,6 +62,82 @@
             <div class="panel panel-default items">
                 <div class="panel-heading">
                     <h3 class="panel-title">
+                        {% trans "Memberships" %}
+                    </h3>
+                </div>
+                <table class="panel-body table table-hover">
+                    <thead>
+                    <tr>
+                        <th>{% trans "Membership type" %}</th>
+                        <th>{% trans "Valid from" %}</th>
+                        <th>{% trans "Valid until" %}</th>
+                        <th>{% trans "Order" %}</th>
+                        <th>{% trans "Attendee name" %}</th>
+                        <th>{% trans "Usages" %}</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for m in memberships %}
+                        <tr>
+                            <td>
+                                {{ m.membership_type.name }}
+                            </td>
+                            <td class="{% if not m.is_valid %}text-muted{% endif %}">
+                                {{ m.date_start|date:"SHORT_DATETIME_FORMAT" }}
+                            </td>
+                            <td class="{% if not m.is_valid %}text-muted{% endif %}">
+                                {{ m.date_end|date:"SHORT_DATETIME_FORMAT" }}
+                            </td>
+                            <td>
+                                {% if m.granted_in %}
+                                    <a href="{% url "control:event.order" event=m.granted_in.order.event.slug organizer=customer.organizer.slug code=m.granted_in.order.code %}">
+                                        {{ m.granted_in.order.code }}-{{ m.granted_in.positionid }}
+                                    </a>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {{ m.attendee_name }}
+                            </td>
+                            <td>
+                                <div class="quotabox">
+                                    <div class="progress">
+                                        <div class="progress-bar progress-bar-success progress-bar-{{ m.percent }}">
+                                        </div>
+                                    </div>
+                                    <div class="numbers">
+                                        {{ m.usages }} /
+                                        {{ m.membership_type.max_usages|default_if_none:"∞" }}
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="text-right flip">
+                                <a href="{% url "control:organizer.customer.membership.edit" organizer=request.organizer.slug customer=customer.identifier id=m.pk %}"
+                                        data-toggle="tooltip"
+                                        title="{% trans "Edit" %}"
+                                        class="btn btn-default">
+                                    <i class="fa fa-edit"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                <tfoot>
+                <tr>
+                    <td colspan="7">
+                        <a href="{% url "control:organizer.customer.membership.add" organizer=request.organizer.slug customer=customer.identifier %}"
+                                class="btn btn-default">
+                            <i class="fa fa-plus"></i>
+                            {% trans "Add membership" %}
+                        </a>
+                    </td>
+                </tr>
+                </tfoot>
+                </table>
+            </div>
+            <div class="panel panel-default items">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
                         {% trans "Orders" %}
                     </h3>
                 </div>
@@ -96,6 +172,12 @@
                             <span class="fa fa-{{ o.sales_channel_obj.icon }} text-muted"
                                   data-toggle="tooltip" title="{% trans o.sales_channel_obj.verbose_name %}"></span>
                                 {{ o.datetime|date:"SHORT_DATETIME_FORMAT" }}
+                                {% if o.customer_id != customer.pk %}
+                                    <span class="fa fa-link text-muted"
+                                            data-toggle="tooltip"
+                                            title="{% trans "Matched to the account based on the email address." %}"
+                                    ></span>
+                                {% endif %}
                             </td>
                             <td class="text-right flip">
                                 {% if o.has_cancellation_request %}

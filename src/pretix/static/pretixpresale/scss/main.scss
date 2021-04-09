@@ -303,6 +303,29 @@ h2 .label {
     }
 }
 
+.quotabox {
+    display: inline-block;
+    vertical-align: top;
+    width: 50px;
+    .progress {
+        height: 7px;
+        margin-bottom: 2px;
+    }
+    .numbers {
+        font-size: 10px;
+        color: $text-muted;
+        display: block;
+        text-align: center;
+    }
+    &.availability .progress-bar-success {
+        background: lighten($brand-success, 20%);
+    }
+}
+
+@for $i from 0 through 100 {
+    .progress-bar-#{$i} { width: 1% * $i; }
+}
+
 @import "_iframe.scss";
 @import "_a11y.scss";
 @import "_print.scss";

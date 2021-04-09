@@ -1,5 +1,10 @@
 from django.db import models
+from django.db.models import Count, OuterRef, Subquery, Value
+from django.db.models.functions import Coalesce
+from django.utils.formats import date_format
+from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
+from django_scopes import ScopedManager, scopes_disabled
 from i18nfield.fields import I18nCharField
 from jsonfallback.fields import FallbackJSONField
 
@@ -33,10 +38,42 @@ class MembershipType(LoggedModel):
     )
 
     def __str__(self):
-        return self.name
+        return str(self.name)
 
     def allow_delete(self):
         return not self.memberships.exists() and not self.granted_by.exists()
+
+
+class MembershipQuerySet(models.QuerySet):
+
+    @scopes_disabled()  # no scoping of subquery
+    def with_usages(self):
+        from . import Order, OrderPosition
+
+        return self.annotate(
+            usages=Coalesce(
+                Subquery(
+                    OrderPosition.all.filter(
+                        used_membership_id=OuterRef('pk'),
+                        canceled=False,
+                    ).exclude(
+                        order__status=Order.STATUS_CANCELED
+                    ).order_by().values('used_membership_id').annotate(
+                        c=Count('*')
+                    ).values('c')
+                ),
+                Value('0')
+            )
+        )
+
+
+class MembershipQuerySetManager(ScopedManager(organizer='customer__organizer').__class__):
+    def __init__(self):
+        super().__init__()
+        self._queryset_class = MembershipQuerySet
+
+    def with_usages(self):
+        return self.get_queryset().with_usages()
 
 
 class Membership(models.Model):
@@ -55,7 +92,8 @@ class Membership(models.Model):
     granted_in = models.ForeignKey(
         'OrderPosition',
         related_name='granted_memberships',
-        on_delete=models.PROTECT
+        on_delete=models.PROTECT,
+        null=True, blank=True,
     )
     date_start = models.DateTimeField(
         verbose_name=_('Start date')
@@ -64,6 +102,16 @@ class Membership(models.Model):
         verbose_name=_('End date')
     )
     attendee_name_parts = FallbackJSONField(default=dict, null=True)
+
+    objects = MembershipQuerySetManager()
+
+    class Meta:
+        ordering = "-date_end", "-date_start", "membership_type"
+
+    def __str__(self):
+        ds = date_format(self.date_start, 'SHORT_DATE_FORMAT')
+        de = date_format(self.date_end, 'SHORT_DATE_FORMAT')
+        return f'{self.membership_type.name}: {self.attendee_name} ({ds} – {de})'
 
     @property
     def attendee_name(self):
@@ -77,5 +125,10 @@ class Membership(models.Model):
             scheme = PERSON_NAME_SCHEMES[self.customer.organizer.settings.name_scheme]
         return scheme['concatenation'](self.attendee_name_parts).strip()
 
-    class Meta:
-        ordering = "-date_end", "-date_start", "membership_type"
+    def is_valid(self, ev=None):
+        if ev:
+            dt = ev.date_from
+        else:
+            dt = now()
+
+        return dt >= self.date_start and dt <= self.date_end

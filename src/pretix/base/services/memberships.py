@@ -3,7 +3,7 @@ from datetime import timedelta
 from dateutil.relativedelta import relativedelta
 from django.utils.timezone import now
 
-from pretix.base.models import Item, OrderPosition, Customer, SubEvent, Event
+from pretix.base.models import Customer, Event, Item, OrderPosition, SubEvent
 
 
 def membership_validity(item: Item, subevent: SubEvent, event: Event):

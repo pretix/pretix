@@ -52,8 +52,8 @@ from pretix.base.forms import I18nModelForm, PlaceholderValidator, SettingsForm
 from pretix.base.forms.questions import NamePartsFormField
 from pretix.base.forms.widgets import SplitDateTimePickerWidget
 from pretix.base.models import (
-    Customer, Device, EventMetaProperty, Gate, GiftCard, MembershipType,
-    Organizer, Team,
+    Customer, Device, EventMetaProperty, Gate, GiftCard, Membership,
+    MembershipType, Organizer, Team,
 )
 from pretix.base.settings import PERSON_NAME_SCHEMES, PERSON_NAME_TITLE_GROUPS
 from pretix.control.forms import (
@@ -553,3 +553,30 @@ class CustomerUpdateForm(forms.ModelForm):
                 )
 
         return self.cleaned_data
+
+
+class MembershipUpdateForm(forms.ModelForm):
+
+    class Meta:
+        model = Membership
+        fields = ['membership_type', 'date_start', 'date_end', 'attendee_name_parts']
+        field_classes = {
+            'date_start': SplitDateTimeField,
+            'date_end': SplitDateTimeField,
+        }
+        widgets = {
+            'date_start': SplitDateTimePickerWidget(),
+            'date_end': SplitDateTimePickerWidget(attrs={'data-date-after': '#id_date_Start'}),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.fields['membership_type'].queryset = self.instance.customer.organizer.membership_types.all()
+        self.fields['attendee_name_parts'] = NamePartsFormField(
+            max_length=255,
+            required=True,
+            scheme=self.instance.customer.organizer.settings.name_scheme,
+            titles=self.instance.customer.organizer.settings.name_scheme_titles,
+            label=_('Attendee name'),
+        )

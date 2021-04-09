@@ -265,9 +265,15 @@ class ProfileView(CustomerRequiredMixin, ListView):
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         ctx['customer'] = self.request.customer
-        ctx['memberships'] = self.request.customer.memberships.select_related(
+        ctx['memberships'] = self.request.customer.memberships.with_usages().select_related(
             'membership_type', 'granted_in', 'granted_in__order', 'granted_in__order__event'
         )
+
+        for m in ctx['memberships']:
+            if m.membership_type.max_usages:
+                m.percent = m.usage / m.membership_type.max_usages
+            else:
+                m.percent = 0
 
         s = OrderPosition.objects.filter(
             order=OuterRef('pk')

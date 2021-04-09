@@ -45,7 +45,7 @@ from django.core.files import File
 from django.db import transaction
 from django.db.models import (
     Count, Exists, IntegerField, Max, Min, OuterRef, Prefetch, ProtectedError,
-    Subquery, Sum,
+    Q, Subquery, Sum,
 )
 from django.db.models.functions import Coalesce, Greatest
 from django.forms import DecimalField
@@ -67,8 +67,8 @@ from pretix.base.channels import get_all_sales_channels
 from pretix.base.i18n import language
 from pretix.base.models import (
     CachedFile, Customer, Device, Gate, GiftCard, Invoice, LogEntry,
-    MembershipType, Order, OrderPayment, OrderPosition, Organizer, Team,
-    TeamInvite, User,
+    Membership, MembershipType, Order, OrderPayment, OrderPosition, Organizer,
+    Team, TeamInvite, User,
 )
 from pretix.base.models.event import Event, EventMetaProperty, EventMetaValue
 from pretix.base.models.giftcards import (
@@ -92,8 +92,9 @@ from pretix.control.forms.orders import ExporterForm
 from pretix.control.forms.organizer import (
     CustomerUpdateForm, DeviceForm, EventMetaPropertyForm, GateForm,
     GiftCardCreateForm, GiftCardUpdateForm, MailSettingsForm,
-    MembershipTypeForm, OrganizerDeleteForm, OrganizerForm,
-    OrganizerSettingsForm, OrganizerUpdateForm, TeamForm, WebHookForm,
+    MembershipTypeForm, MembershipUpdateForm, OrganizerDeleteForm,
+    OrganizerForm, OrganizerSettingsForm, OrganizerUpdateForm, TeamForm,
+    WebHookForm,
 )
 from pretix.control.logdisplay import OVERVIEW_BANLIST
 from pretix.control.permissions import (
@@ -1747,7 +1748,11 @@ class CustomerDetailView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMi
     context_object_name = 'orders'
 
     def get_queryset(self):
-        return self.customer.orders.select_related('event').order_by('-datetime')
+        qs = Order.objects.filter(
+            Q(customer=self.customer)
+            | Q(email__iexact=self.customer.email)
+        ).select_related('event').order_by('-datetime')
+        return qs
 
     @cached_property
     def customer(self):
@@ -1760,6 +1765,16 @@ class CustomerDetailView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMi
         ctx = super().get_context_data(**kwargs)
         ctx['customer'] = self.customer
         ctx['display_locale'] = dict(settings.LANGUAGES)[self.customer.locale or self.request.organizer.settings.locale]
+
+        ctx['memberships'] = self.customer.memberships.with_usages().select_related(
+            'membership_type', 'granted_in', 'granted_in__order', 'granted_in__order__event'
+        )
+
+        for m in ctx['memberships']:
+            if m.membership_type.max_usages:
+                m.percent = m.usage / m.membership_type.max_usages
+            else:
+                m.percent = 0
 
         # Only compute this annotations for this page (query optimization)
         s = OrderPosition.objects.filter(
@@ -1828,6 +1843,76 @@ class CustomerUpdateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMi
         return reverse('control:organizer.customer', kwargs={
             'organizer': self.request.organizer.slug,
             'customer': self.object.identifier,
+        })
+
+
+class MembershipUpdateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, UpdateView):
+    template_name = 'pretixcontrol/organizers/customer_membership.html'
+    permission = 'can_manage_customers'
+    context_object_name = 'membership'
+    form_class = MembershipUpdateForm
+
+    def get_object(self, queryset=None):
+        return get_object_or_404(
+            Membership,
+            customer__organizer=self.request.organizer,
+            customer__identifier=self.kwargs.get('customer'),
+            pk=self.kwargs.get('id')
+        )
+
+    def form_valid(self, form):
+        if form.has_changed():
+            d = {
+                k: getattr(self.object, k)
+                for k in form.changed_data
+            }
+            d['id'] = self.object.pk
+            self.object.customer.log_action('pretix.customer.membership.changed', user=self.request.user, data=d)
+        messages.success(self.request, _('Your changes have been saved.'))
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse('control:organizer.customer', kwargs={
+            'organizer': self.request.organizer.slug,
+            'customer': self.object.customer.identifier,
+        })
+
+
+class MembershipCreateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, CreateView):
+    template_name = 'pretixcontrol/organizers/customer_membership.html'
+    permission = 'can_manage_customers'
+    context_object_name = 'membership'
+    form_class = MembershipUpdateForm
+
+    @cached_property
+    def customer(self):
+        return get_object_or_404(
+            self.request.organizer.customers,
+            identifier=self.kwargs.get('customer')
+        )
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['instance'] = Membership(
+            customer=self.customer,
+        )
+        return kwargs
+
+    def form_valid(self, form):
+        r = super().form_valid(form)
+        d = {
+            k: getattr(self.object, k)
+            for k in form.changed_data
+        }
+        d['id'] = self.object.pk
+        self.customer.log_action('pretix.customer.membership.created', user=self.request.user, data=d)
+        messages.success(self.request, _('Your changes have been saved.'))
+        return r
+
+    def get_success_url(self):
+        return reverse('control:organizer.customer', kwargs={
+            'organizer': self.request.organizer.slug,
+            'customer': self.object.customer.identifier,
         })
 
 
