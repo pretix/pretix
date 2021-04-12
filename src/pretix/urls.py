@@ -40,7 +40,9 @@ import pretix.control.urls
 import pretix.presale.urls
 from pretix.base.views import js_helpers
 
-from .base.views import cachedfiles, csp, health, js_catalog, metrics, redirect, source
+from .base.views import (
+    cachedfiles, csp, health, js_catalog, metrics, redirect, source,
+)
 
 base_patterns = [
     url(r'^download/(?P<id>[^/]+)/$', cachedfiles.DownloadView.as_view(),

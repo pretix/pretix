@@ -32,6 +32,7 @@
 # distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations under the License.
 
+import pkg_resources
 from django.contrib import messages
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, reverse
@@ -39,13 +40,12 @@ from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
 from django.views import View
 from django.views.generic import FormView, TemplateView
-import pkg_resources
 
 from pretix.base.models import LogEntry, OrderPayment, OrderRefund
 from pretix.base.services.update_check import check_result_table, update_check
 from pretix.base.settings import GlobalSettingsObject
 from pretix.control.forms.global_settings import (
-    GlobalSettingsForm, UpdateSettingsForm, LicenseCheckForm,
+    GlobalSettingsForm, LicenseCheckForm, UpdateSettingsForm,
 )
 from pretix.control.permissions import (
     AdministratorPermissionRequiredMixin, StaffMemberRequiredMixin,
