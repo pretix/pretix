@@ -54,7 +54,7 @@ jobs:
         run: flake8 .
         working-directory: ./src
   licenseheader:
-    name: flake8
+    name: licenseheaders
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
