@@ -250,7 +250,7 @@ class LicenseCheckView(StaffMemberRequiredMixin, FormView):
                       'plugin "{plugin}" with license "{license}".').format(plugin=entry_point.dist.key, license=license)
                 ))
 
-            if not any(l in license for l in ('Apache', 'MIT', 'BSD', 'pretix Enterprise', 'GPL')):
+            if not license or not any(l in license for l in ('Apache', 'MIT', 'BSD', 'pretix Enterprise', 'GPL')):
                 res.append((
                     'muted', 'warning',
                     _('We found the plugin "{plugin}" with license "{license}" which this tool does not know about and '

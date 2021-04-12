@@ -21,6 +21,7 @@
 #
 import logging
 
+from django.http import Http404
 from django.shortcuts import render
 
 from pretix.base.settings import GlobalSettingsObject
@@ -30,5 +31,9 @@ logger = logging.getLogger('pretix.security.csp')
 
 def get_source(request):
     gs = GlobalSettingsObject()
-    n = gs.settings.license_check_input.get('source_notice', '')
-    return render(request, 'source.html', {'notice': n})
+    d = gs.settings.license_check_input
+    if d.get('base_license') == 'agpl':
+        n = d.get('source_notice', '')
+        return render(request, 'source.html', {'notice': n})
+    else:
+        raise Http404(f'Not used under AGPL ({d["base_license"]})')
