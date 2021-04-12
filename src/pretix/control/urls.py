@@ -1,3 +1,38 @@
+#
+# This file is part of pretix (Community Edition).
+#
+# Copyright (C) 2014-2020 Raphael Michel and contributors
+# Copyright (C) 2020-2021 rami.io GmbH and contributors
+#
+# This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
+# Public License as published by the Free Software Foundation in version 3 of the License.
+#
+# ADDITIONAL TERMS APPLY: Pursuant to Section 7 of the GNU Affero General Public License, additional terms are
+# applicable granting you additional permissions and placing additional restrictions on your usage of this software.
+# Please refer to the pretix LICENSE file to obtain the full terms applicable to this work. If you did not receive
+# this file, see <https://pretix.eu/about/en/license>.
+#
+# This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+# warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Affero General Public License for more
+# details.
+#
+# You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
+# <https://www.gnu.org/licenses/>.
+#
+
+# This file is based on an earlier version of pretix which was released under the Apache License 2.0. The full text of
+# the Apache License 2.0 can be obtained at <http://www.apache.org/licenses/LICENSE-2.0>.
+#
+# This file may have since been changed and any changes are released under the terms of AGPLv3 as described above. A
+# full history of changes and contributors is available at <https://github.com/pretix/pretix>.
+#
+# This file contains Apache-licensed contributions copyrighted by: Daniel, Enrique Saez, Jahongir, Mason Mohkami,
+# Sohalt, Tobias Kunze, jasonwaiting@live.hk, luto, oocf
+#
+# Unless required by applicable law or agreed to in writing, software distributed under the Apache License 2.0 is
+# distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+# License for the specific language governing permissions and limitations under the License.
+
 from django.conf.urls import include, url
 from django.views.generic.base import RedirectView
 
@@ -19,6 +54,7 @@ urlpatterns = [
     url(r'^widgets.json$', dashboards.user_index_widgets_lazy, name='index.widgets'),
     url(r'^global/settings/$', global_settings.GlobalSettingsView.as_view(), name='global.settings'),
     url(r'^global/update/$', global_settings.UpdateCheckView.as_view(), name='global.update'),
+    url(r'^global/license/$', global_settings.LicenseCheckView.as_view(), name='global.license'),
     url(r'^global/message/$', global_settings.MessageView.as_view(), name='global.message'),
     url(r'^logdetail/$', global_settings.LogDetailView.as_view(), name='global.logdetail'),
     url(r'^logdetail/payment/$', global_settings.PaymentDetailView.as_view(), name='global.paymentdetail'),

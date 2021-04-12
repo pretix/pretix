@@ -67,7 +67,7 @@
             <a href="{% safelink f.url %}" target="_blank" rel="noopener">{{ f.label }}</a>
             &middot;
         {% endfor %}
-        {% include "pretixpresale/base_footer.html" %}
+        {% include "pretixpresale/base_footer.html" %} {# removing or hiding this might be in violation of pretix' license #}
         </nav>
     </footer>
 </div>

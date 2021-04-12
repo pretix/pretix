@@ -1,0 +1,13 @@
+{% extends "error.html" %}
+{% load i18n %}
+{% load rich_text %}
+{% load static %}
+{% block title %}{% trans "Source code" %}{% endblock %}
+{% block content %}
+    <i class="fa fa-code fa-fw big-icon"></i>
+    <div class="error-details">
+        <h1>{% trans "Source code" %}</h1>
+        <p>{% trans "This site is powered by free software. If you want to read the license terms or obtain the source code, follow these links or instructions:" %}</p>
+        {{ notice|rich_text }}
+    </div>
+{% endblock %}

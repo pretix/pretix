@@ -1,0 +1,86 @@
+{% extends "pretixcontrol/global_settings_base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+
+{% block inner %}
+    <div class="alert alert-legal">
+        <p>
+            {% trans "This page is intended to help you use pretix in compliance with its license." %}
+        </p>
+        <p>
+            <strong>{% trans "The text and output of this page is not legally binding and filling out this page does not guarantee you are within the license. Only the original license text is legally binding." %}</strong>
+        </p>
+        <p>
+            {% trans "You should have received a copy of pretix' license together with your copy of pretix. You can also view the current version of the license file here:" %}
+            <a href="https://github.com/pretix/pretix/blob/master/LICENSE" target="_blank">LICENSE</a>
+        </p>
+        <p>
+            {% trans "Answers to common questions about the license can be found here:" %}
+            <a href="https://docs.pretix.eu/en/latest/license/faq.html" target="_blank">License FAQ</a>
+        </p>
+        <p>
+            {% trans "For more information or to obtain a paid pretix Enterprise license, contact support@pretix.eu." %}
+        </p>
+    </div>
+    <fieldset>
+        <legend>{% trans "License settings and check" %}</legend>
+        <form action="" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <h4>{% trans "Installation details" %}</h4>
+            {% bootstrap_form_errors form %}
+            {% bootstrap_field form.usage %}
+            {% bootstrap_field form.base_changes %}
+            {% bootstrap_field form.base_license %}
+            <label>{% trans "Installed plugins" %}</label>
+            {% bootstrap_field form.plugins_free %}
+            {% bootstrap_field form.plugins_copyleft %}
+            {% bootstrap_field form.plugins_own %}
+            {% bootstrap_field form.plugins_enterprise %}
+            <br>
+            <h4>{% trans "Public information" %}</h4>
+            <div class="row">
+                <div class="col-md-6">
+                    {% bootstrap_field form.poweredby_name %}
+                </div>
+                <div class="col-md-6">
+                    {% bootstrap_field form.poweredby_url %}
+                </div>
+            </div>
+            {% bootstrap_field form.source_notice %}
+            <p>
+                <button type="submit" class="btn btn-primary btn-lg">
+                    {% trans "Save and check" %}
+                </button>
+            </p>
+        </form>
+    </fieldset>
+    {% if results != False %}
+        <br>
+        <fieldset>
+            <legend>{% trans "Check results" %}</legend>
+            {% for color, icon, text in results %}
+                <div class="row">
+                    <div class="col-xs-1 text-center">
+                        <span class="fa fa-fw fa-2x fa-{{ icon }} text-{{ color }}"></span>
+                    </div>
+                    <div class="col-xs-11">
+                        <p>
+                            {{ text }}
+                        </p>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="row">
+                    <div class="col-xs-1 text-center">
+                        <span class="fa fa-fw fa-2x fa-check text-success"></span>
+                    </div>
+                    <div class="col-xs-11">
+                        <p>
+                            {% trans "The automated license check did not identify any issues." %}
+                        </p>
+                    </div>
+                </div>
+            {% endfor %}
+        </fieldset>
+    {% endif %}
+{% endblock %}

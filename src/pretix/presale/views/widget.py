@@ -1,3 +1,24 @@
+#
+# This file is part of pretix (Community Edition).
+#
+# Copyright (C) 2014-2020 Raphael Michel and contributors
+# Copyright (C) 2020-2021 rami.io GmbH and contributors
+#
+# This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
+# Public License as published by the Free Software Foundation in version 3 of the License.
+#
+# ADDITIONAL TERMS APPLY: Pursuant to Section 7 of the GNU Affero General Public License, additional terms are
+# applicable granting you additional permissions and placing additional restrictions on your usage of this software.
+# Please refer to the pretix LICENSE file to obtain the full terms applicable to this work. If you did not receive
+# this file, see <https://pretix.eu/about/en/license>.
+#
+# This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+# warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Affero General Public License for more
+# details.
+#
+# You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
+# <https://www.gnu.org/licenses/>.
+#
 import calendar
 import hashlib
 import json
@@ -19,7 +40,7 @@ from django.template import Context, Engine
 from django.template.loader import get_template
 from django.utils.formats import date_format
 from django.utils.timezone import now
-from django.utils.translation import get_language, gettext, pgettext
+from django.utils.translation import get_language, gettext
 from django.utils.translation.trans_real import DjangoTranslation
 from django.views import View
 from django.views.decorators.cache import cache_page
@@ -30,6 +51,7 @@ from django.views.i18n import (
 )
 from lxml import html
 
+from pretix.base.context import get_powered_by
 from pretix.base.i18n import language
 from pretix.base.models import CartPosition, Event, Quota, SubEvent, Voucher
 from pretix.base.services.cart import error_messages
@@ -262,9 +284,7 @@ class WidgetAPIProductList(EventListMixin, View):
         return grps, display_add_to_cart, len(items)
 
     def post_process(self, data):
-        data['poweredby'] = '<a href="https://pretix.eu" target="_blank" rel="noopener">{}</a>'.format(
-            pgettext('widget', 'event ticketing powered by pretix')
-        )
+        data['poweredby'] = get_powered_by(safelink=False)
 
     def response(self, data):
         self.post_process(data)
