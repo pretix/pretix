@@ -72,7 +72,7 @@ class IdempotencyMiddleware:
         if created:
             resp = self.get_response(request)
             with transaction.atomic():
-                if resp.status_code in (409, 429, 503):
+                if resp.status_code in (409, 429, 500, 503):
                     # This is the exception: These calls are *meant* to be retried!
                     call.delete()
                 else:

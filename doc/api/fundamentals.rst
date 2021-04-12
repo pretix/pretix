@@ -213,12 +213,15 @@ Please note that this also goes for most error responses. For example, if we ret
 error and you retry with the same ``X-Idempotency-Key``, you will get the same error again, even if you were granted
 permission in the meantime! This includes internal server errors on our side that might have been fixed in the meantime.
 
-There are only three exceptions to the rule:
+There are only the following exceptions to the rule:
 
 * Responses with status code ``409 Conflict`` are not cached. If you send the request again, it will be executed as a
   new request, since these responses are intended to be retried.
 
 * Rate-limited responses with status code ``429 Too Many Requests`` are not cached and you can safely retry them.
+
+* Responses with status code ``500 Internal Server Error`` are not cached and you can retry them. This is not guaranteed
+  to be safe in all theoretical cases,  but 500 by definition is an unforseen situation and we need to have some way out.
 
 * Responses with status code ``503 Service Unavailable`` are not cached and you can safely retry them.
 
