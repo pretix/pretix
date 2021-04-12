@@ -221,7 +221,7 @@ There are only the following exceptions to the rule:
 * Rate-limited responses with status code ``429 Too Many Requests`` are not cached and you can safely retry them.
 
 * Responses with status code ``500 Internal Server Error`` are not cached and you can retry them. This is not guaranteed
-  to be safe in all theoretical cases,  but 500 by definition is an unforseen situation and we need to have some way out.
+  to be safe in all theoretical cases,  but 500 by definition is an unforeseen situation and we need to have some way out.
 
 * Responses with status code ``503 Service Unavailable`` are not cached and you can safely retry them.
 
