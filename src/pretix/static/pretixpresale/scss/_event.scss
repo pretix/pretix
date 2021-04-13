@@ -1,5 +1,4 @@
 .product-row {
-    border-top: 1px solid $table-border-color;
     .addons &:first-child {
         border-top: 2px solid $table-border-color;
     }
@@ -84,6 +83,43 @@
         font-weight: bold;
         text-decoration: none;
     }
+
+    position: relative;
+
+    border-top: 1px solid transparent;
+    &::before {
+        position: absolute;
+        top: 0;
+        left: 15px;
+        width: calc(100% - 30px);
+        content: '';
+        border-top: 1px solid $table-border-color;
+    }
+
+    &.headline, &.simple {
+        border-top: 2px solid transparent;
+        &::before {
+            border-top: 2px solid $table-border-color;
+        }
+    }
+}
+
+article.item-with-variations {
+    margin: 0 -15px;
+    padding: 0 15px;
+}
+
+article.item-with-variations:last-child, .product-row:last-child {
+    position: relative;
+    border-bottom: 2px solid transparent;
+    &::after {
+        position: absolute;
+        bottom: 0;
+        left: 15px;
+        width: calc(100% - 30px);
+        content: '';
+        border-bottom: 2px solid $table-border-color;
+    }
 }
 
 .radio .variation-description {
@@ -100,12 +136,6 @@
 }
 #voucher-toggle {
     display: none;
-}
-.item-with-variations .product-row.headline, .product-row.simple {
-    border-top: 2px solid $table-border-color;
-}
-.item-with-variations:last-child {
-    border-bottom: 2px solid $table-border-color;
 }
 
 .panel-body address:last-child {
