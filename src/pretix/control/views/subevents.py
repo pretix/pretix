@@ -1116,7 +1116,7 @@ class SubEventBulkEdit(SubEventQueryMixin, EventPermissionRequiredMixin, FormVie
                         if 'limit_products' in f.changed_data:
                             q.limit_products.set(f.cleaned_data.get('limit_products', []))
                         if 'gates' in f.changed_data:
-                            q.gates.set(f.cleaned_data.get('limit_products', []))
+                            q.gates.set(f.cleaned_data.get('gates', []))
                         log_entries.append(
                             q.log_action(action='pretix.event.checkinlist.changed', user=self.request.user,
                                          data=change_data, save=False)
