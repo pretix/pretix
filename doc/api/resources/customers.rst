@@ -22,7 +22,7 @@ is_verified                           boolean                    Whether the ema
                                                                  verified
 last_login                            datetime                   Date and time of last login
 date_joined                           datetime                   Date and time of registration
-locale                                string                     Prefered language of the customer
+locale                                string                     Preferred language of the customer
 last_modified                         datetime                   Date and time of modification of the record
 ===================================== ========================== =======================================================
 
