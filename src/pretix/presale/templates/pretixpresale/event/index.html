@@ -271,7 +271,7 @@
                 {% include "pretixpresale/event/fragment_product_list.html" %}
                 {% if ev.presale_is_running and display_add_to_cart %}
                     <section class="front-page">
-                        <div class="row-fluid">
+                        <div class="row">
                             <div class="col-md-4 col-md-offset-8 col-xs-12">
                                 <button class="btn btn-block btn-primary btn-lg" type="submit" id="btn-add-to-cart">
                                     {% if request.event.settings.redirect_to_checkout_directly %}
@@ -302,7 +302,7 @@
                 </div>
             {% endif %}
             <form method="get" action="{% eventurl event "presale:event.redeem" cart_namespace=cart_namespace %}">
-                <div class="row-voucher">
+                <div class="row row-voucher">
                     <div class="col-md-8 col-sm-6 col-xs-12">
                         <label for="voucher" class="sr-only">{% trans "Voucher code" %}</label>
                         <div class="input-group">
@@ -326,7 +326,7 @@
         {% eventsignal event "pretix.presale.signals.front_page_bottom" subevent=subevent request=request %}
         <aside class="front-page" aria-labelledby="if-you-already-ordered-a-ticket">
             <h3 id="if-you-already-ordered-a-ticket">{% trans "If you already ordered a ticket" %}</h3>
-            <div>
+            <div class="row">
                 <div class="col-md-8 col-xs-12">
                     <p>
                         {% blocktrans trimmed %}

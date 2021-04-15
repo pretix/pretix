@@ -17,10 +17,10 @@
         {% endif %}
         {% for item in tup.1 %}
             {% if item.has_variations %}
-                <article>
-                <details class="item-with-variations" {% if event.settings.show_variations_expanded %}open{% endif %}
+                <article class="item-with-variations">
+                <details {% if event.settings.show_variations_expanded %}open{% endif %}
                         id="item-{{ item.id }}">
-                    <summary class="row-fluid product-row headline">
+                    <summary class="row product-row headline">
                         <div class="col-md-8 col-xs-12">
                             {% if item.picture %}
                                 <a href="{{ item.picture.url }}" class="productpicture"
@@ -78,7 +78,7 @@
                     </summary>
                     <div class="variations {% if not event.settings.show_variations_expanded %}variations-collapsed{% endif %}">
                         {% for var in item.available_variations %}
-                            <article class="row-fluid product-row variation">
+                            <article class="row product-row variation">
                                 <div class="col-md-8 col-xs-12">
                                     <h5>
                                         <label for="variation_{{ item.pk }}_{{ var.pk }}">
@@ -179,7 +179,7 @@
                 </details>
                 </article>
             {% else %}
-                <article class="row-fluid product-row simple" id="item-{{ item.id }}">
+                <article class="row product-row simple" id="item-{{ item.id }}">
                     <div class="col-md-8 col-xs-12">
                         {% if item.picture %}
                             <a href="{{ item.picture.url }}" class="productpicture"
