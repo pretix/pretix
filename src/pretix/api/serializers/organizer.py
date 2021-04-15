@@ -35,7 +35,7 @@ from pretix.base.auth import get_auth_backends
 from pretix.base.i18n import get_language_without_region
 from pretix.base.models import (
     Customer, Device, GiftCard, GiftCardTransaction, Organizer, SeatingPlan,
-    Team, TeamAPIToken, TeamInvite, User,
+    Team, TeamAPIToken, TeamInvite, User, MembershipType, Membership,
 )
 from pretix.base.models.seating import SeatingPlanLayoutValidator
 from pretix.base.services.mail import SendMailException, mail
@@ -62,11 +62,40 @@ class SeatingPlanSerializer(I18nAwareModelSerializer):
 
 
 class CustomerSerializer(I18nAwareModelSerializer):
+    identifier = serializers.CharField(read_only=True)
+    name = serializers.CharField(read_only=True)
+    last_login = serializers.DateTimeField(read_only=True)
+    date_joined = serializers.DateTimeField(read_only=True)
+    last_modified = serializers.DateTimeField(read_only=True)
 
     class Meta:
         model = Customer
         fields = ('identifier', 'email', 'name', 'name_parts', 'is_active', 'is_verified', 'last_login', 'date_joined',
                   'locale', 'last_modified')
+
+
+class MembershipTypeSerializer(I18nAwareModelSerializer):
+
+    class Meta:
+        model = MembershipType
+        fields = ('id', 'name', 'transferable', 'allow_parallel_usage', 'max_usages')
+
+
+class MembershipSerializer(I18nAwareModelSerializer):
+    customer = serializers.SlugRelatedField(slug_field='identifier', queryset=Customer.objects.none())
+
+    class Meta:
+        model = Membership
+        fields = ('id', 'customer', 'membership_type', 'date_start', 'date_end', 'attendee_name_parts')
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['customer'].queryset = self.context['organizer'].customers.all()
+        self.fields['membership_type'].queryset = self.context['organizer'].membership_types.all()
+
+    def update(self, instance, validated_data):
+        validated_data['customer'] = instance.customer  # no modifying
+        return super().update(instance, validated_data)
 
 
 class GiftCardSerializer(I18nAwareModelSerializer):

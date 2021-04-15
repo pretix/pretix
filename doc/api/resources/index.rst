@@ -22,6 +22,8 @@ Resources and endpoints
    checkinlists
    waitinglist
    customers
+   membershiptypes
+   memberships
    giftcards
    carts
    teams

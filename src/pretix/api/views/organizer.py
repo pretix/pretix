@@ -41,11 +41,11 @@ from pretix.api.serializers.organizer import (
     CustomerSerializer, DeviceSerializer, GiftCardSerializer,
     GiftCardTransactionSerializer, OrganizerSerializer,
     OrganizerSettingsSerializer, SeatingPlanSerializer, TeamAPITokenSerializer,
-    TeamInviteSerializer, TeamMemberSerializer, TeamSerializer,
+    TeamInviteSerializer, TeamMemberSerializer, TeamSerializer, MembershipTypeSerializer, MembershipSerializer,
 )
 from pretix.base.models import (
     Customer, Device, GiftCard, GiftCardTransaction, Organizer, SeatingPlan,
-    Team, TeamAPIToken, TeamInvite, User,
+    Team, TeamAPIToken, TeamInvite, User, MembershipType, Membership,
 )
 from pretix.base.settings import SETTINGS_AFFECTING_CSS
 from pretix.helpers.dicts import merge_dicts
@@ -482,11 +482,22 @@ class OrganizerSettingsView(views.APIView):
         return Response(s.data)
 
 
-class CustomerViewSet(viewsets.ReadOnlyModelViewSet):
+with scopes_disabled():
+    class CustomerFilter(FilterSet):
+        email = django_filters.CharFilter(field_name='email', lookup_expr='iexact')
+
+        class Meta:
+            model = Customer
+            fields = ['email']
+
+
+class CustomerViewSet(viewsets.ModelViewSet):
     serializer_class = CustomerSerializer
     queryset = Customer.objects.none()
     permission = 'can_manage_customers'
     lookup_field = 'identifier'
+    filter_backends = (DjangoFilterBackend,)
+    filterset_class = CustomerFilter
 
     def get_queryset(self):
         qs = self.request.organizer.customers.all()
@@ -496,3 +507,136 @@ class CustomerViewSet(viewsets.ReadOnlyModelViewSet):
         ctx = super().get_serializer_context()
         ctx['organizer'] = self.request.organizer
         return ctx
+
+    def perform_destroy(self, instance):
+        raise MethodNotAllowed("Customers cannot be deleted.")
+
+    @transaction.atomic()
+    def perform_create(self, serializer):
+        inst = serializer.save(organizer=self.request.organizer)
+        serializer.instance.log_action(
+            'pretix.customer.created',
+            user=self.request.user,
+            auth=self.request.auth,
+            data=self.request.data,
+        )
+        return inst
+
+    @transaction.atomic()
+    def perform_update(self, serializer):
+        inst = serializer.save(organizer=self.request.organizer)
+        serializer.instance.log_action(
+            'pretix.customer.changed',
+            user=self.request.user,
+            auth=self.request.auth,
+            data=self.request.data,
+        )
+        return inst
+
+    @action(detail=True, methods=["POST"])
+    @transaction.atomic()
+    def transact(self, request, **kwargs):
+        o = self.get_object()
+        o.anonymize()
+        o.log_action('pretix.customer.anonymized', user=self.request.user, auth=self.request.auth)
+        return Response(CustomerSerializer(o).data, status=status.HTTP_200_OK)
+
+
+class MembershipTypeViewSet(viewsets.ModelViewSet):
+    serializer_class = MembershipTypeSerializer
+    queryset = MembershipType.objects.none()
+    permission = 'can_change_organizer_settings'
+
+    def get_queryset(self):
+        qs = self.request.organizer.membership_types.all()
+        return qs
+
+    def get_serializer_context(self):
+        ctx = super().get_serializer_context()
+        ctx['organizer'] = self.request.organizer
+        return ctx
+
+    def perform_destroy(self, instance):
+        if not instance.allow_delete():
+            raise PermissionDenied("Can only be deleted if unused.")
+        instance.log_action(
+            'pretix.membershiptype.deleted',
+            user=self.request.user,
+            auth=self.request.auth,
+            data={'id': instance.pk}
+        )
+        instance.delete()
+
+    @transaction.atomic()
+    def perform_create(self, serializer):
+        inst = serializer.save(organizer=self.request.organizer)
+        serializer.instance.log_action(
+            'pretix.membershiptype.created',
+            user=self.request.user,
+            auth=self.request.auth,
+            data=self.request.data,
+        )
+        return inst
+
+    @transaction.atomic()
+    def perform_update(self, serializer):
+        inst = serializer.save(organizer=self.request.organizer)
+        serializer.instance.log_action(
+            'pretix.membershiptype.changed',
+            user=self.request.user,
+            auth=self.request.auth,
+            data=self.request.data,
+        )
+        return inst
+
+
+with scopes_disabled():
+    class MembershipFilter(FilterSet):
+        customer = django_filters.CharFilter(field_name='customer__identifier', lookup_expr='iexact')
+
+        class Meta:
+            model = Membership
+            fields = ['customer', 'membership_type']
+
+
+class MembershipViewSet(viewsets.ModelViewSet):
+    serializer_class = MembershipSerializer
+    queryset = Membership.objects.none()
+    permission = 'can_manage_customers'
+    filter_backends = (DjangoFilterBackend,)
+    filterset_class = MembershipFilter
+
+    def get_queryset(self):
+        return Membership.objects.filter(
+            customer__organizer=self.request.organizer
+        )
+
+    def get_serializer_context(self):
+        ctx = super().get_serializer_context()
+        ctx['organizer'] = self.request.organizer
+        return ctx
+
+    def perform_destroy(self, instance):
+        raise MethodNotAllowed("Memberships cannot be deleted. You can change the date instead.")
+
+    @transaction.atomic()
+    def perform_create(self, serializer):
+        inst = serializer.save(organizer=self.request.organizer)
+        serializer.instance.customer.log_action(
+            'pretix.customer.membership.created',
+            user=self.request.user,
+            auth=self.request.auth,
+            data=self.request.data,
+        )
+        return inst
+
+    @transaction.atomic()
+    def perform_update(self, serializer):
+        inst = serializer.save(organizer=self.request.organizer)
+        serializer.instance.customer.log_action(
+            'pretix.customer.membership.changed',
+            user=self.request.user,
+            auth=self.request.auth,
+            data=self.request.data,
+        )
+        return inst
