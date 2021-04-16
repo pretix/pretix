@@ -2040,27 +2040,27 @@ class OrderChangeManager:
             fake_cart.append(cp)
             positions_to_fake_cart[p] = cp
 
-            for op in self._operations:
-                if isinstance(op, self.ItemOperation):
-                    positions_to_fake_cart[op.position].item = op.item
-                    positions_to_fake_cart[op.position].variation = op.variation
-                elif isinstance(op, self.SubeventOperation):
-                    positions_to_fake_cart[op.position].subevent = op.subevent
-                elif isinstance(op, self.SeatOperation):
-                    positions_to_fake_cart[op.position].seat = op.seat
-                elif isinstance(op, self.MembershipOperation):
-                    positions_to_fake_cart[op.position].used_membership = op.membership
-                elif isinstance(op, self.CancelOperation):
-                    fake_cart.remove(positions_to_fake_cart[op.position])
-                elif isinstance(op, self.AddOperation):
-                    cp = CartPosition(
-                        item=op.item,
-                        variation=op.variation,
-                        used_membership=op.membership,
-                        subevent=op.subevent,
-                        seat=op.seat,
-                    )
-                    fake_cart.append(cp)
+        for op in self._operations:
+            if isinstance(op, self.ItemOperation):
+                positions_to_fake_cart[op.position].item = op.item
+                positions_to_fake_cart[op.position].variation = op.variation
+            elif isinstance(op, self.SubeventOperation):
+                positions_to_fake_cart[op.position].subevent = op.subevent
+            elif isinstance(op, self.SeatOperation):
+                positions_to_fake_cart[op.position].seat = op.seat
+            elif isinstance(op, self.MembershipOperation):
+                positions_to_fake_cart[op.position].used_membership = op.membership
+            elif isinstance(op, self.CancelOperation):
+                fake_cart.remove(positions_to_fake_cart[op.position])
+            elif isinstance(op, self.AddOperation):
+                cp = CartPosition(
+                    item=op.item,
+                    variation=op.variation,
+                    used_membership=op.membership,
+                    subevent=op.subevent,
+                    seat=op.seat,
+                )
+                fake_cart.append(cp)
         try:
             validate_memberships_in_order(self.order.customer, fake_cart, self.event, lock=True, ignored_order=self.order)
         except ValidationError as e:
