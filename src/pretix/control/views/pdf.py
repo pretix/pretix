@@ -220,7 +220,12 @@ class BaseEditorView(EventPermissionRequiredMixin, TemplateView):
 
             resp = HttpResponse(data, content_type=mimet)
             ftype = fname.split(".")[-1]
-            resp['Content-Disposition'] = 'attachment; filename="ticket-preview.{}"'.format(ftype)
+            if settings.DEBUG:
+                # attachment is more secure as we're dealing with user-generated stuff here, but inline is much more convenient during debugging
+                resp['Content-Disposition'] = 'inline; filename="ticket-preview.{}"'.format(ftype)
+                resp._csp_ignore = True
+            else:
+                resp['Content-Disposition'] = 'attachment; filename="ticket-preview.{}"'.format(ftype)
             return resp
         elif "data" in request.POST:
             if cf:
