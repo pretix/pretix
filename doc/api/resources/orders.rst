@@ -1629,7 +1629,8 @@ Manipulating individual positions
    * ``answers``: If specified, you will need to provide **all** answers for this order position.
      Validation is handled the same way as when creating orders through the API. You are therefore
      expected to provide ``question``, ``answer``, and possibly ``options``. ``question_identifier``
-     and ``option_identifiers`` will be ignored.
+     and ``option_identifiers`` will be ignored. As a special case, you can submit the magic value
+     ``"file:keep"`` as the answer to a file question to keep the current value without re-uploading it.
 
    **Example request**:
 

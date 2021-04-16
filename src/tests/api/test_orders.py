@@ -4951,11 +4951,33 @@ def test_position_update_question_handling(token_client, organizer, event, order
     )
     assert r.status_code == 201
     file_id_png = r.data['id']
+
     payload = {
         'answers': [
             {
                 "question": question.id,
                 "answer": file_id_png
+            }
+        ]
+    }
+    question.type = Question.TYPE_FILE
+    question.save()
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/orderpositions/{}/'.format(
+            organizer.slug, event.slug, op.pk
+        ), format='json', data=payload
+    )
+    assert resp.status_code == 200
+    with scopes_disabled():
+        answ = op.answers.get()
+    assert answ.file
+    assert answ.answer.startswith("file://")
+
+    payload = {
+        'answers': [
+            {
+                "question": question.id,
+                "answer": "file:keep"
             }
         ]
     }

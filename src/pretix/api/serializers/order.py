@@ -168,6 +168,8 @@ class AnswerSerializer(I18nAwareModelSerializer):
         return q
 
     def _handle_file_upload(self, data):
+        if data['answer'] == 'file:keep':
+            return data
         try:
             ao = self.context["request"].user or self.context["request"].auth
             cf = CachedFile.objects.get(
@@ -439,6 +441,8 @@ class OrderPositionSerializer(I18nAwareModelSerializer):
                     if isinstance(answ_data['answer'], File):
                         a.file.save(answ_data['answer'].name, answ_data['answer'], save=False)
                         a.answer = 'file://' + a.file.name
+                    elif a.answer.startswith('file://') and answ_data['answer'] == "file:keep":
+                        pass  # keep current file
                     else:
                         for attr, value in answ_data.items():
                             setattr(a, attr, value)
