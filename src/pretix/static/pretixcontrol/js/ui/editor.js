@@ -181,6 +181,7 @@ var editor = {
                     bottom: editor._px2mm(editor.pdf_viewport.height - o.height * o.scaleY - top).toFixed(2),
                     size: editor._px2mm(o.height * o.scaleY).toFixed(2),
                     content: o.content,
+                    nowhitespace: o.nowhitespace || false,
                 });
             } else  if (o.type === "poweredby") {
                 d.push({
@@ -200,6 +201,7 @@ var editor = {
             o = editor._add_qrcode();
             o.content = d.content;
             o.scaleToHeight(editor._mm2px(d.size));
+            o.nowhitespace = d.nowhitespace || false;
         } else if (d.type === "imagearea") {
             o = editor._add_imagearea(d.content);
             o.content = d.content;
@@ -398,6 +400,7 @@ var editor = {
 
         if (o.type === "barcodearea") {
             $("#toolbox-squaresize").val(editor._px2mm(o.height * o.scaleY).toFixed(2));
+            $("#toolbox-qrwhitespace").prop("checked", o.nowhitespace || false);
         } else if (o.type === "imagearea") {
             $("#toolbox-height").val(editor._px2mm(o.height * o.scaleY).toFixed(2));
             $("#toolbox-width").val(editor._px2mm(o.width * o.scaleX).toFixed(2));
@@ -457,6 +460,7 @@ var editor = {
             o.setScaleX(1);
             o.setScaleY(1);
             o.set('top', new_top)
+            o.nowhitespace = $("#toolbox-qrwhitespace").prop("checked") || false;
         } else if (o.type === "imagearea") {
             var new_w = editor._mm2px($("#toolbox-width").val());
             var new_h = editor._mm2px($("#toolbox-height").val());
@@ -614,6 +618,7 @@ var editor = {
             lockUniScaling: true,
             fill: '#666',
             content: $(this).attr("data-content"),
+            nowhitespace: true,
         });
         rect.setControlsVisibility({'mtr': false});
         editor.fabric.add(rect);
@@ -918,9 +923,9 @@ var editor = {
             }
         }).prop('disabled', !$.support.fileInput).parent().addClass($.support.fileInput ? undefined : 'disabled');
 
-        $("#toolbox input[type=number], #toolbox textarea, #toolbox input[type=text]").bind('change keydown keyup' +
+        $("#toolbox input[type=number], #toolbox textarea, #toolbox input[type=text], #toolbox input[type=checkbox]").bind('change keydown keyup' +
             ' input', editor._update_values_from_toolbox);
-        $("#toolbox input[type=number], #toolbox textarea, #toolbox input[type=text], #toolbox input[type=radio]").bind('change', editor._create_savepoint);
+        $("#toolbox input[type=number], #toolbox textarea, #toolbox input[type=text], #toolbox input[type=checkbox], #toolbox input[type=radio]").bind('change', editor._create_savepoint);
         $("#toolbox label.btn").bind('click change', editor._update_values_from_toolbox);
         $("#toolbox select").bind('change', editor._update_values_from_toolbox);
         $("#toolbox select").bind('change', editor._create_savepoint);

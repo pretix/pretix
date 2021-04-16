@@ -249,12 +249,14 @@
                     </div>
                     <div class="row control-group squaresize">
                         <div class="col-sm-12">
-                            <p>
-                                {% blocktrans trimmed %}
-                                    The final QR code will be slightly smaller because some whitespace is required
-                                    for proper scanning.
-                                {% endblocktrans %}
-                            </p>
+                            <div class="checkbox">
+                                <label class="">
+                                    <input type="checkbox" value="off" class="checkbox"
+                                            id="toolbox-qrwhitespace">
+                                    {% trans "Render without whitespace" %}
+                                </label><br>
+                                <span class="text-muted">{% trans "Required for consistent size across platforms. Supported on Android starting with pretixPRINT 2.3.3 and on Desktop with pretixSCAN 1.9.3." %}</span>
+                            </div>
                         </div>
                     </div>
                     <div class="row control-group text">

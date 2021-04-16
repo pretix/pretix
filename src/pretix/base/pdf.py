@@ -597,7 +597,10 @@ class Renderer:
         if len(content) > 128:
             level = 'L'
         reqs = float(o['size']) * mm
-        qrw = QrCodeWidget(content, barLevel=level, barHeight=reqs, barWidth=reqs)
+        kwargs = {}
+        if o.get('nowhitespace', False):
+            kwargs['barBorder'] = 0
+        qrw = QrCodeWidget(content, barLevel=level, barHeight=reqs, barWidth=reqs, **kwargs)
         d = Drawing(reqs, reqs)
         d.add(qrw)
         qr_x = float(o['left']) * mm
