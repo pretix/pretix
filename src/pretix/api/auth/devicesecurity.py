@@ -123,7 +123,7 @@ class PretixPosSecurityProfile(AllowListSecurityProfile):
         ('GET', 'api-v1:order-detail'),
         ('DELETE', 'api-v1:orderposition-detail'),
         ('GET', 'api-v1:orderposition-pdf_image'),
-        ('POST', 'api-v1:order-mark_canceled'),
+        ('POST', 'api-v1:order-mark-canceled'),
         ('POST', 'api-v1:orderpayment-list'),
         ('POST', 'api-v1:orderrefund-list'),
         ('POST', 'api-v1:orderrefund-done'),
