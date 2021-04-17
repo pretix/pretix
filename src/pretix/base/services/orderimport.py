@@ -98,6 +98,8 @@ def import_orders(event: Event, fileid: str, settings: dict, locale: str, user) 
             values = {}
             for c in cols:
                 val = c.resolve(settings, record)
+                if isinstance(val, str):
+                    val = val.strip()
                 try:
                     values[c.identifier] = c.clean(val, values)
                 except ValidationError as e:
