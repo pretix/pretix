@@ -1,0 +1,66 @@
+{% load i18n %}
+{% load eventurl %}
+{% load safelink %}
+{% load rich_text %}
+{% load money %}
+<details class="panel {% if open %}panel-primary{% else %}panel-default{% endif %} cart" {% if open %}open{% endif %}>
+    <summary class="panel-heading">
+        <h3 class="panel-title">
+                    <span>
+                        <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+                        <strong>{% trans "Your cart" %}</strong>
+                    </span>
+            <span>
+                        <strong id="cart-deadline-short" data-expires="{{ cart.first_expiry|date:"Y-m-d H:i:sO" }}" aria-hidden="true">
+                            {% if cart.minutes_left > 0 or cart.seconds_left > 0 %}
+                                {{ cart.minutes_left|stringformat:"02d" }}:{{ cart.seconds_left|stringformat:"02d" }}
+                            {% else %}
+                                {% trans "Cart expired" %}
+                            {% endif %}
+                        </strong>
+                        <i class="fa fa-angle-down collapse-indicator" aria-hidden="true"></i>
+                    </span>
+        </h3>
+    </summary>
+    <div>
+        <div class="panel-body">
+            {% include "pretixpresale/event/fragment_cart.html" with cart=cart event=request.event editable=True %}
+            <em id="cart-deadline" data-expires="{{ cart.first_expiry|date:"Y-m-d H:i:sO" }}">
+                {% if cart.minutes_left > 0 or cart.seconds_left > 0 %}
+                    {% blocktrans trimmed with minutes=cart.minutes_left %}
+                        The items in your cart are reserved for you for {{ minutes }} minutes.
+                    {% endblocktrans %}
+                {% else %}
+                    {% trans "The items in your cart are no longer reserved for you." %}
+                {% endif %}
+            </em>
+            <div class="row checkout-button-row">
+                <div class="col-md-4 col-sm-6 col-xs-12 hidden-xs">
+                    <form method="post" data-asynctask action="{% eventurl request.event "presale:event.cart.clear" cart_namespace=cart_namespace %}">
+                        {% csrf_token %}
+                        <button class="btn btn-block btn-default btn-lg" type="submit">
+                            <i class="fa fa-close" aria-hidden="true"></i> {% trans "Empty cart" %}</button>
+                    </form>
+                </div>
+                <div class="col-md-4 col-sm-6 col-md-offset-4 col-xs-12">
+                    <a class="btn btn-block btn-primary btn-lg"
+                       href="{% eventurl request.event "presale:event.checkout.start" cart_namespace=cart_namespace  %}">
+                        {% if has_addon_choices or cart.total == 0 %}
+                            <i class="fa fa-shopping-cart" aria-hidden="true"></i> {% trans "Continue" %}
+                        {% else %}
+                            <i class="fa fa-shopping-cart" aria-hidden="true"></i> {% trans "Proceed with checkout" %}
+                        {% endif %}
+                    </a>
+                </div>
+                <div class="visible-xs-block col-xs-12">
+                    <form method="post" data-asynctask action="{% eventurl request.event "presale:event.cart.clear" cart_namespace=cart_namespace %}">
+                        {% csrf_token %}
+                        <button class="btn btn-block btn-default btn-lg" type="submit">
+                            <i class="fa fa-close" aria-hidden="true"></i> {% trans "Empty cart" %}</button>
+                    </form>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+    </div>
+</details>

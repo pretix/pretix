@@ -66,7 +66,7 @@ from pretix.base.views.tasks import AsyncAction
 from pretix.multidomain.urlreverse import eventreverse
 from pretix.presale.views import (
     EventViewMixin, allow_cors_if_namespaced, allow_frame_if_namespaced,
-    iframe_entry_view_wrapper,
+    iframe_entry_view_wrapper, CartMixin,
 )
 from pretix.presale.views.event import (
     get_grouped_items, item_group_by_category,
@@ -513,7 +513,7 @@ class CartAdd(EventViewMixin, CartActionMixin, AsyncAction, View):
 
 @method_decorator(allow_frame_if_namespaced, 'dispatch')
 @method_decorator(iframe_entry_view_wrapper, 'dispatch')
-class RedeemView(NoSearchIndexViewMixin, EventViewMixin, TemplateView):
+class RedeemView(NoSearchIndexViewMixin, EventViewMixin, CartMixin, TemplateView):
     template_name = "pretixpresale/event/voucher.html"
 
     def get_context_data(self, **kwargs):
@@ -540,6 +540,9 @@ class RedeemView(NoSearchIndexViewMixin, EventViewMixin, TemplateView):
             )
             for item in items if item.has_variations
         )
+
+        context['cart'] = self.get_cart()
+        context['show_cart'] = context['cart']['positions']
 
         # Regroup those by category
         context['items_by_category'] = item_group_by_category(items)
