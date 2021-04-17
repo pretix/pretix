@@ -1,9 +1,9 @@
 {% extends "pretixcontrol/event/base.html" %}
 {% load i18n %}
-{% block title %}{{ object.name }} :: {% trans "Product" %}{% endblock %}
+{% block title %}{{ object }} :: {% trans "Product" %}{% endblock %}
 {% block content %}
     {% if object.id %}
-        <h1>{% trans "Modify product:" %} {{ object.name }}</h1>
+        <h1>{% trans "Modify product:" %} {{ object }}</h1>
     {% else %}
         <h1>{% trans "Create product" %}</h1>
         <p>{% blocktrans trimmed %}
