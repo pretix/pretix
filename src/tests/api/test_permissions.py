@@ -183,6 +183,7 @@ org_permission_sub_urls = [
     ('post', 'can_manage_customers', 'customers/', 201),
     ('get', 'can_manage_customers', 'customers/1/', 404),
     ('patch', 'can_manage_customers', 'customers/1/', 404),
+    ('post', 'can_manage_customers', 'customers/1/anonymize/', 404),
     ('put', 'can_manage_customers', 'customers/1/', 404),
     ('delete', 'can_manage_customers', 'customers/1/', 404),
     ('get', 'can_manage_customers', 'memberships/', 200),

@@ -20,6 +20,7 @@
 # <https://www.gnu.org/licenses/>.
 #
 import pytest
+from django_scopes import scopes_disabled
 
 
 @pytest.fixture
@@ -50,7 +51,7 @@ TEST_CUSTOMER_RES = {
 
 
 @pytest.mark.django_db
-def test_customer_list(token_client, organizer, event, customer):
+def test_customer_list(token_client, organizer, customer):
     res = dict(TEST_CUSTOMER_RES)
     res["date_joined"] = customer.date_joined.isoformat().replace('+00:00', 'Z')
     res["last_modified"] = customer.last_modified.isoformat().replace('+00:00', 'Z')
@@ -61,10 +62,69 @@ def test_customer_list(token_client, organizer, event, customer):
 
 
 @pytest.mark.django_db
-def test_customer_detail(token_client, organizer, event, customer):
+def test_customer_detail(token_client, organizer, customer):
     res = dict(TEST_CUSTOMER_RES)
     res["date_joined"] = customer.date_joined.isoformat().replace('+00:00', 'Z')
     res["last_modified"] = customer.last_modified.isoformat().replace('+00:00', 'Z')
     resp = token_client.get('/api/v1/organizers/{}/customers/{}/'.format(organizer.slug, customer.identifier))
     assert resp.status_code == 200
     assert res == resp.data
+
+
+@pytest.mark.django_db
+def test_customer_create(token_client, organizer):
+    resp = token_client.post(
+        '/api/v1/organizers/{}/customers/'.format(organizer.slug),
+        format='json',
+        data={
+            'identifier': 'IGNORED',
+            'email': 'bar@example.com',
+            'name_parts': {
+                "_scheme": "given_family",
+                'given_name': 'John',
+                'family_name': 'Doe',
+            },
+            'is_active': True,
+            'is_verified': True,
+        }
+    )
+    assert resp.status_code == 201
+    with scopes_disabled():
+        customer = organizer.customers.get(identifier=resp.data['identifier'])
+        assert customer.identifier != 'IGNORED'
+        assert customer.email == 'bar@example.com'
+        assert customer.is_active
+        assert customer.name == 'John Doe'
+        assert customer.is_verified
+
+
+@pytest.mark.django_db
+def test_customer_patch(token_client, organizer, customer):
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/customers/{}/'.format(organizer.slug, customer.identifier),
+        format='json',
+        data={
+            'email': 'blubb@example.org',
+        }
+    )
+    assert resp.status_code == 200
+    customer.refresh_from_db()
+    assert customer.email == 'blubb@example.org'
+
+
+@pytest.mark.django_db
+def test_customer_anonymize(token_client, organizer, customer):
+    resp = token_client.post(
+        '/api/v1/organizers/{}/customers/{}/anonymize/'.format(organizer.slug, customer.identifier),
+    )
+    assert resp.status_code == 200
+    customer.refresh_from_db()
+    assert customer.email is None
+
+
+@pytest.mark.django_db
+def test_customer_delete(token_client, organizer, customer):
+    resp = token_client.delete(
+        '/api/v1/organizers/{}/customers/{}/'.format(organizer.slug, customer.identifier),
+    )
+    assert resp.status_code == 405

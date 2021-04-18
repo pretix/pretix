@@ -535,7 +535,7 @@ class CustomerViewSet(viewsets.ModelViewSet):
 
     @action(detail=True, methods=["POST"])
     @transaction.atomic()
-    def transact(self, request, **kwargs):
+    def anonymize(self, request, **kwargs):
         o = self.get_object()
         o.anonymize()
         o.log_action('pretix.customer.anonymized', user=self.request.user, auth=self.request.auth)
@@ -621,7 +621,7 @@ class MembershipViewSet(viewsets.ModelViewSet):
 
     @transaction.atomic()
     def perform_create(self, serializer):
-        inst = serializer.save(organizer=self.request.organizer)
+        inst = serializer.save()
         serializer.instance.customer.log_action(
             'pretix.customer.membership.created',
             user=self.request.user,
@@ -632,7 +632,7 @@ class MembershipViewSet(viewsets.ModelViewSet):
 
     @transaction.atomic()
     def perform_update(self, serializer):
-        inst = serializer.save(organizer=self.request.organizer)
+        inst = serializer.save()
         serializer.instance.customer.log_action(
             'pretix.customer.membership.changed',
             user=self.request.user,
