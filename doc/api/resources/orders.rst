@@ -31,7 +31,7 @@ testmode                              boolean                    If ``true``, th
 secret                                string                     The secret contained in the link sent to the customer
 email                                 string                     The customer email address
 phone                                 string                     The customer phone number
-customer                              string                     The customer account ID (or ``null``)
+customer                              string                     The customer account identifier (or ``null``)
 locale                                string                     The locale used for communication with this customer
 sales_channel                         string                     Channel this sale was created through, such as
                                                                  ``"web"``.
@@ -792,6 +792,7 @@ Creating orders
      or in state ``confirmed``, depending on this value. If you create a paid order, the ``order_paid`` signal will
      **not** be sent out to plugins and no email will be sent. If you want that behavior, create an unpaid order and
      then call the ``mark_paid`` API method.
+   * ``customer`` (optional) – Customer identifier or ``null``
    * ``testmode`` (optional) – Defaults to ``false``
    * ``consume_carts`` (optional) – A list of cart IDs. All cart positions with these IDs will be deleted if the
      order creation is successful. Any quotas or seats that become free by this operation will be credited to your order

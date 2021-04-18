@@ -1634,6 +1634,9 @@ def test_order_create(token_client, organizer, event, item, quota, question):
     res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
     res['positions'][0]['item'] = item.pk
     res['positions'][0]['answers'][0]['question'] = question.pk
+    with scopes_disabled():
+        customer = organizer.customers.create()
+    res['customer'] = customer.identifier
     resp = token_client.post(
         '/api/v1/organizers/{}/events/{}/orders/'.format(
             organizer.slug, event.slug
@@ -1642,6 +1645,7 @@ def test_order_create(token_client, organizer, event, item, quota, question):
     assert resp.status_code == 201
     with scopes_disabled():
         o = Order.objects.get(code=resp.data['code'])
+    assert o.customer == customer
     assert o.email == "dummy@dummy.test"
     assert o.phone == "+49622112345"
     assert o.locale == "en"

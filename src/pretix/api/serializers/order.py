@@ -46,7 +46,7 @@ from pretix.base.i18n import language
 from pretix.base.models import (
     CachedFile, Checkin, Invoice, InvoiceAddress, InvoiceLine, Item,
     ItemVariation, Order, OrderPosition, Question, QuestionAnswer, Seat,
-    SubEvent, TaxRule, Voucher,
+    SubEvent, TaxRule, Voucher, Customer,
 )
 from pretix.base.models.orders import (
     CartPosition, OrderFee, OrderPayment, OrderRefund, RevokedTicketSecret,
@@ -908,16 +908,18 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
     payment_date = serializers.DateTimeField(required=False, allow_null=True)
     send_email = serializers.BooleanField(default=False, required=False)
     simulate = serializers.BooleanField(default=False, required=False)
+    customer = serializers.SlugRelatedField(slug_field='identifier', queryset=Customer.objects.none(), required=False)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['positions'].child.fields['voucher'].queryset = self.context['event'].vouchers.all()
+        self.fields['customer'].queryset = self.context['event'].organizer.customers.all()
 
     class Meta:
         model = Order
         fields = ('code', 'status', 'testmode', 'email', 'phone', 'locale', 'payment_provider', 'fees', 'comment', 'sales_channel',
                   'invoice_address', 'positions', 'checkin_attention', 'payment_info', 'payment_date', 'consume_carts',
-                  'force', 'send_email', 'simulate')
+                  'force', 'send_email', 'simulate', 'customer')
 
     def validate_payment_provider(self, pp):
         if pp is None:
