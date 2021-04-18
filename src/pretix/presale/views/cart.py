@@ -65,8 +65,8 @@ from pretix.base.services.cart import (
 from pretix.base.views.tasks import AsyncAction
 from pretix.multidomain.urlreverse import eventreverse
 from pretix.presale.views import (
-    EventViewMixin, allow_cors_if_namespaced, allow_frame_if_namespaced,
-    iframe_entry_view_wrapper, CartMixin,
+    CartMixin, EventViewMixin, allow_cors_if_namespaced,
+    allow_frame_if_namespaced, iframe_entry_view_wrapper,
 )
 from pretix.presale.views.event import (
     get_grouped_items, item_group_by_category,
