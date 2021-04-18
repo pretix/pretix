@@ -69,6 +69,16 @@ require_approval                      boolean                    If ``true``, or
                                                                  approved by the event organizer before they can be
                                                                  paid.
 require_bundling                      boolean                    If ``true``, this item is only available as part of bundles.
+require_membership                    boolean                    If ``true``, booking this item requires an active membership.
+require_membership_types              list of integers           Internal IDs of membership types valid if ``require_membership`` is ``true``
+grant_membership_type                 integer                    If set to the internal ID of a membership type, purchasing this item will
+                                                                 create a membership of the given type.
+grant_membership_duration_like_event  boolean                    If ``true``, the membership created through ``grant_membership_type`` will derive
+                                                                 its term from ``date_from`` to ``date_to`` of the purchased (sub)event.
+grant_membership_duration_days        integer                    If ``grant_membership_duration_like_event`` is ``false``, this sets the number of
+                                                                 days for the membership.
+grant_membership_duration_months      integer                    If ``grant_membership_duration_like_event`` is ``false``, this sets the number of
+                                                                 calendar months for the membership.
 generate_tickets                      boolean                    If ``false``, tickets are never generated for this
                                                                  product, regardless of other settings. If ``true``,
                                                                  tickets are generated even if this is a
@@ -198,6 +208,12 @@ Endpoints
             "show_quota_left": null,
             "require_approval": false,
             "require_bundling": false,
+            "require_membership": false,
+            "require_membership_types": [],
+            "grant_membership_type": null,
+            "grant_membership_duration_like_event": true,
+            "grant_membership_duration_days": 0,
+            "grant_membership_duration_months": 0,
             "variations": [
               {
                  "value": {"en": "Student"},
@@ -294,6 +310,12 @@ Endpoints
         "has_variations": false,
         "require_approval": false,
         "require_bundling": false,
+        "require_membership": false,
+        "require_membership_types": [],
+        "grant_membership_type": null,
+        "grant_membership_duration_like_event": true,
+        "grant_membership_duration_days": 0,
+        "grant_membership_duration_months": 0,
         "variations": [
           {
              "value": {"en": "Student"},
@@ -370,6 +392,12 @@ Endpoints
         "checkin_attention": false,
         "require_approval": false,
         "require_bundling": false,
+        "require_membership": false,
+        "require_membership_types": [],
+        "grant_membership_type": null,
+        "grant_membership_duration_like_event": true,
+        "grant_membership_duration_days": 0,
+        "grant_membership_duration_months": 0,
         "variations": [
           {
              "value": {"en": "Student"},
@@ -435,6 +463,12 @@ Endpoints
         "has_variations": true,
         "require_approval": false,
         "require_bundling": false,
+        "require_membership": false,
+        "require_membership_types": [],
+        "grant_membership_type": null,
+        "grant_membership_duration_like_event": true,
+        "grant_membership_duration_days": 0,
+        "grant_membership_duration_months": 0,
         "variations": [
           {
              "value": {"en": "Student"},
@@ -531,6 +565,12 @@ Endpoints
         "has_variations": true,
         "require_approval": false,
         "require_bundling": false,
+        "require_membership": false,
+        "require_membership_types": [],
+        "grant_membership_type": null,
+        "grant_membership_duration_like_event": true,
+        "grant_membership_duration_days": 0,
+        "grant_membership_duration_months": 0,
         "variations": [
           {
              "value": {"en": "Student"},

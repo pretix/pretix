@@ -160,8 +160,16 @@ class ItemSerializer(I18nAwareModelSerializer):
                   'require_voucher', 'hide_without_voucher', 'allow_cancel', 'require_bundling',
                   'min_per_order', 'max_per_order', 'checkin_attention', 'has_variations', 'variations',
                   'addons', 'bundles', 'original_price', 'require_approval', 'generate_tickets',
-                  'show_quota_left', 'hidden_if_available', 'allow_waitinglist', 'issue_giftcard', 'meta_data')
+                  'show_quota_left', 'hidden_if_available', 'allow_waitinglist', 'issue_giftcard', 'meta_data',
+                  'require_membership', 'require_membership_types', 'grant_membership_type',
+                  'grant_membership_duration_like_event', 'grant_membership_duration_days',
+                  'grant_membership_duration_months')
         read_only_fields = ('has_variations',)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['require_membership_types'].queryset = self.context['event'].organizer.membership_types.all()
+        self.fields['grant_membership_type'].queryset = self.context['event'].organizer.membership_types.all()
 
     def validate(self, data):
         data = super().validate(data)

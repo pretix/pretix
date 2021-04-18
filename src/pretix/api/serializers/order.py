@@ -537,7 +537,7 @@ class CheckinListOrderPositionSerializer(OrderPositionSerializer):
             self.fields['subevent'] = SubEventSerializer(read_only=True)
 
         if 'item' in self.context['request'].query_params.getlist('expand'):
-            self.fields['item'] = ItemSerializer(read_only=True)
+            self.fields['item'] = ItemSerializer(read_only=True, context=self.context)
 
         if 'variation' in self.context['request'].query_params.getlist('expand'):
             self.fields['variation'] = InlineItemVariationSerializer(read_only=True)
