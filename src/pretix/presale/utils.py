@@ -169,6 +169,9 @@ def _detect_event(request, require_live=True, require_plugin=None):
             for receiver, response in process_request.send(request.event, request=request):
                 if response:
                     return response
+        elif hasattr(request, 'organizer'):
+            # Restrict locales to the ones available for this organizer
+            LocaleMiddleware().process_request(request)
 
     except Event.DoesNotExist:
         try:
