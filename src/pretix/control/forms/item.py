@@ -415,7 +415,7 @@ class ItemCreateForm(I18nModelForm):
             for a in self.cleaned_data['copy_from'].addons.all():
                 instance.addons.create(addon_category=a.addon_category, min_count=a.min_count, max_count=a.max_count,
                                        price_included=a.price_included, position=a.position,
-                                       multiple_allowed=a.multiple_allowed)
+                                       multi_allowed=a.multi_allowed)
             for b in self.cleaned_data['copy_from'].bundles.all():
                 instance.bundles.create(bundled_item=b.bundled_item, bundled_variation=b.bundled_variation,
                                         count=b.count, designated_price=b.designated_price)
