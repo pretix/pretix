@@ -8,16 +8,16 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-04-19 14:58+0000\n"
-"PO-Revision-Date: 2021-04-12 10:30+0200\n"
+"PO-Revision-Date: 2021-04-19 16:31+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
-"Language: de\n"
+"Language: de_Informal\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Poedit 2.4.1\n"
+"X-Generator: Weblate 4.4.2\n"
 
 #: pretix/api/auth/devicesecurity.py:27
 msgid ""
@@ -354,22 +354,18 @@ msgid "Online shop"
 msgstr "Online-Shop"
 
 #: pretix/base/context.py:45
-#, fuzzy, python-brace-format
-#| msgid "powered by <a %(a_attr)s>pretix</a>"
+#, python-brace-format
 msgid "powered by {name} based on <a {a_attr}>pretix</a>"
-msgstr "powered by <a %(a_attr)s>pretix</a>"
+msgstr "powered by {name} based on <a %(a_attr)s>pretix</a>"
 
 #: pretix/base/context.py:52
-#, fuzzy, python-format
-#| msgid "<a %(a_attr)s>event ticketing powered by pretix</a>"
+#, python-format
 msgid "<a %(a_attr)s>ticketing powered by pretix</a>"
-msgstr "<a %(a_attr)s 1>Event-Ticketing-Software von pretix</a>"
+msgstr "<a %(a_attr)s>Event-Ticketing-Software von pretix</a>"
 
 #: pretix/base/context.py:61
-#, fuzzy
-#| msgid "Voucher code"
 msgid "source code"
-msgstr "Gutscheincode"
+msgstr "Quellcode"
 
 #: pretix/base/email.py:176 pretix/control/views/main.py:291
 #: pretix/plugins/badges/__init__.py:45 pretix/plugins/badges/models.py:48
@@ -1687,22 +1683,26 @@ msgid ""
 "You uploaded an image in landscape orientation. Please upload an image in "
 "portrait orientation."
 msgstr ""
+"Sie haben ein Bild im Querformat hochgeladen. Bitte laden Sie ein Bild im "
+"Hochformat hoch."
 
 #: pretix/base/forms/questions.py:411
 msgid "Please upload an image where the width is 3/4 of the height."
-msgstr ""
+msgstr "Bitte laden Sie ein Bild hoch, bei dem die Breite 3/4 der Höhe beträgt."
 
 #: pretix/base/forms/questions.py:414
 msgid ""
 "The file you uploaded has a very large number of pixels, please upload an "
 "image no larger than 10000 x 10000 pixels."
 msgstr ""
+"Die hochgeladene Bilddatei hat sehr viele Pixel. Maximal zulässig sind 10000 "
+"x 10000 Pixel."
 
 #: pretix/base/forms/questions.py:417
 msgid ""
 "Upload a valid image. The file you uploaded was either not an image or a "
 "corrupted image."
-msgstr ""
+msgstr "Die hochgeladene Datei ist kein Bild oder ist beschädigt."
 
 #: pretix/base/forms/questions.py:574 pretix/base/forms/questions.py:886
 msgid "Street and Number"
@@ -3139,13 +3139,15 @@ msgstr "Maximaler Wert"
 
 #: pretix/base/models/items.py:1145
 msgid "Validate file to be a portrait"
-msgstr ""
+msgstr "Prüfe, dass es sich um ein Foto im Portraitformat handelt"
 
 #: pretix/base/models/items.py:1146
 msgid ""
 "If checked, files must be images with an aspect ratio of 3:4. This is "
 "commonly used for photos printed on badges."
 msgstr ""
+"Wenn diese Option aktiv ist, werden nur Bilder im Format 3:4 akzeptiert. "
+"Wird üblicherweise für Teilnehmerausweise benutzt."
 
 #: pretix/base/models/items.py:1198
 msgid "An answer to this question is required to proceed."
@@ -4770,16 +4772,12 @@ msgid "Sample product – sample variation"
 msgstr "Beispielprodukt – Beispielvariante"
 
 #: pretix/base/pdf.py:125
-#, fuzzy
-#| msgid "Product description"
 msgid "Product variation description"
-msgstr "Produktbeschreibung"
+msgstr "Beschreibung der Produktvariante"
 
 #: pretix/base/pdf.py:126
-#, fuzzy
-#| msgid "Sample product description"
 msgid "Sample product variation description"
-msgstr "Beispielproduktbeschreibung"
+msgstr "Beispielproduktvariantenbeschreibung"
 
 #: pretix/base/pdf.py:133
 msgid "Ticket category"
@@ -8272,10 +8270,8 @@ msgstr "erstellt von"
 
 #: pretix/base/templates/pretixbase/email/order_details.html:36
 #: pretix/base/templates/pretixbase/email/order_details.html:124
-#, fuzzy
-#| msgid "Bancontact"
 msgid "Contact:"
-msgstr "Bancontact"
+msgstr "Kontakt:"
 
 #: pretix/base/templates/pretixbase/email/order_details.html:51
 msgid "View registration details"
@@ -8295,7 +8291,7 @@ msgstr "Details:"
 
 #: pretix/base/templates/pretixbase/forms/widgets/portrait_image.html:10
 msgid "Upload photo"
-msgstr ""
+msgstr "Foto hochladen"
 
 #: pretix/base/templates/pretixbase/forms/widgets/reldate.html:15
 #: pretix/base/templates/pretixbase/forms/widgets/reldatetime.html:19
@@ -8311,10 +8307,8 @@ msgid "at"
 msgstr "Datum"
 
 #: pretix/base/templates/source.html:5 pretix/base/templates/source.html:9
-#, fuzzy
-#| msgid "Voucher code"
 msgid "Source code"
-msgstr "Gutscheincode"
+msgstr "Quellcode"
 
 #: pretix/base/templates/source.html:10
 msgid ""
@@ -16631,13 +16625,15 @@ msgstr "Größe (mm)"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:256
 msgid "Render without whitespace"
-msgstr ""
+msgstr "Ohne Weißraum darstellen"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:258
 msgid ""
 "Required for consistent size across platforms. Supported on Android starting "
 "with pretixPRINT 2.3.3 and on Desktop with pretixSCAN 1.9.3."
 msgstr ""
+"Für konsistente Anzeige auf allen Plattformen benötigt. Funktioniert auf "
+"Android ab pretixPRINT 2.3.3 und auf Desktop ab pretixSCAN 1.9.3."
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:264
 msgid "Font size (pt)"
@@ -23482,12 +23478,7 @@ msgid "We had difficulties processing your input."
 msgstr "Wir waren nicht in der Lage, deine Eingaben zu verarbeiten."
 
 #: pretix/presale/views/user.py:70
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "If the email address you entered is valid and associated with a ticket, "
-#| "we have already sent you an email with a link to your ticket in the past "
-#| "{number} hours. If the email did not arrive, please your check spam "
-#| "folder and also double check that you used the correct email address."
+#, python-brace-format
 msgid ""
 "If the email address you entered is valid and associated with a ticket, we "
 "have already sent you an email with a link to your ticket in the past "
