@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-04-19 14:58+0000\n"
-"PO-Revision-Date: 2021-04-20 07:49+0000\n"
+"PO-Revision-Date: 2021-04-19 16:31+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
@@ -3139,7 +3139,11 @@ msgstr "Maximaler Wert"
 
 #: pretix/base/models/items.py:1145
 msgid "Validate file to be a portrait"
+<<<<<<< HEAD
 msgstr "Prüfe, dass es sich um ein Foto im Hochformat handelt"
+=======
+msgstr "Prüfe, dass es sich um ein Foto im Portraitformat handelt"
+>>>>>>> d5e63be6d... Translated on translate.pretix.eu (German (informal) (de_Informal))
 
 #: pretix/base/models/items.py:1146
 msgid ""
