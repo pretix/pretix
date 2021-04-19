@@ -249,6 +249,8 @@ def estimate_count_fast(type):
         cursor = connection.cursor()
         cursor.execute("select reltuples from pg_class where relname='%s';" % type._meta.db_table)
         row = cursor.fetchone()
+        if not row:
+            return 0
         return int(row[0])
     else:
         return type.objects.count()
