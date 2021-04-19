@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-03-30 16:15+0000\n"
+"POT-Creation-Date: 2021-04-19 14:58+0000\n"
 "PO-Revision-Date: 2019-08-27 08:00+0000\n"
 "Last-Translator: Bostjan Marusic <bostjan@brokenbones.si>\n"
 "Language-Team: Slovenian <https://translate.pretix.eu/projects/pretix/pretix-"
@@ -379,50 +379,50 @@ msgstr "Lead Scan QR"
 msgid "Check-in QR"
 msgstr "QR koda za check-in"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:311
+#: pretix/static/pretixcontrol/js/ui/editor.js:313
 msgid "The PDF background file could not be loaded for the following reason:"
 msgstr "Ozadja PDF ni bilo mogoče naložiti zaradi naslednjega razloga:"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:517
+#: pretix/static/pretixcontrol/js/ui/editor.js:521
 msgid "Group of objects"
 msgstr "Skupina objektov"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:523
+#: pretix/static/pretixcontrol/js/ui/editor.js:527
 msgid "Text object"
 msgstr "Tekstovni objekt"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:525
+#: pretix/static/pretixcontrol/js/ui/editor.js:529
 msgid "Barcode area"
 msgstr "Področje za črtno kodo"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:527
+#: pretix/static/pretixcontrol/js/ui/editor.js:531
 #, fuzzy
 #| msgid "Barcode area"
 msgid "Image area"
 msgstr "Področje za črtno kodo"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:529
+#: pretix/static/pretixcontrol/js/ui/editor.js:533
 msgid "Powered by pretix"
 msgstr "Powered by pretix"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:531
+#: pretix/static/pretixcontrol/js/ui/editor.js:535
 msgid "Object"
 msgstr "Objekt"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:535
+#: pretix/static/pretixcontrol/js/ui/editor.js:539
 msgid "Ticket design"
 msgstr "Oblikovanje vstopnice"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:808
+#: pretix/static/pretixcontrol/js/ui/editor.js:813
 msgid "Saving failed."
 msgstr "Shranjevanje ni bilo uspešno."
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:857
-#: pretix/static/pretixcontrol/js/ui/editor.js:896
+#: pretix/static/pretixcontrol/js/ui/editor.js:862
+#: pretix/static/pretixcontrol/js/ui/editor.js:901
 msgid "Error while uploading your PDF file, please try again."
 msgstr "Napaka pri nalaganju datoteke PDF. Poskusite ponovno."
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:881
+#: pretix/static/pretixcontrol/js/ui/editor.js:886
 msgid "Do you really want to leave the editor without saving your changes?"
 msgstr "Ali zares želite zapustiti urejevalnik ne da bi shranili spremembe?"
 
@@ -462,15 +462,15 @@ msgstr "Vse"
 msgid "None"
 msgstr "Nič"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:801
+#: pretix/static/pretixcontrol/js/ui/main.js:802
 msgid "Use a different name internally"
 msgstr "Uporabite drugo interno ime"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:858
+#: pretix/static/pretixcontrol/js/ui/main.js:859
 msgid "Click to close"
 msgstr "Kliknite za zapiranje"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:873
+#: pretix/static/pretixcontrol/js/ui/main.js:874
 msgid "You have unsaved changes!"
 msgstr ""
 
@@ -486,11 +486,11 @@ msgstr "Drugi"
 msgid "Count"
 msgstr "Seštevek"
 
-#: pretix/static/pretixcontrol/js/ui/question.js:135
+#: pretix/static/pretixcontrol/js/ui/question.js:136
 msgid "Yes"
 msgstr "Da"
 
-#: pretix/static/pretixcontrol/js/ui/question.js:136
+#: pretix/static/pretixcontrol/js/ui/question.js:137
 msgid "No"
 msgstr "Ne"
 
@@ -518,40 +518,40 @@ msgstr[1] "Izdelki v vaši košarici bodo rezervirani še dve minuti."
 msgstr[2] "Izdelki v vaši košarici bodo rezervirani še nekaj minut."
 msgstr[3] "Izdelki v vaši košarici bodo rezervirani še več minut."
 
-#: pretix/static/pretixpresale/js/ui/main.js:268
+#: pretix/static/pretixpresale/js/ui/main.js:269
 msgid "Please enter a quantity for one of the ticket types."
 msgstr "Prosimo vnesite količino za eno od vrst vstopnic."
 
-#: pretix/static/pretixpresale/js/ui/main.js:304
+#: pretix/static/pretixpresale/js/ui/main.js:305
 #, fuzzy
 #| msgid "Cart expired"
 msgid "required"
 msgstr "Vsebina košarice je potekla"
 
-#: pretix/static/pretixpresale/js/ui/main.js:401
+#: pretix/static/pretixpresale/js/ui/main.js:402
 #, fuzzy
 #| msgctxt "widget"
 #| msgid "from %(currency)s %(price)s"
 msgid "The organizer keeps %(currency)s %(amount)s"
 msgstr "od %(currency)s %(price)s"
 
-#: pretix/static/pretixpresale/js/ui/main.js:409
+#: pretix/static/pretixpresale/js/ui/main.js:410
 #, fuzzy
 #| msgctxt "widget"
 #| msgid "from %(currency)s %(price)s"
 msgid "You get %(currency)s %(amount)s back"
 msgstr "od %(currency)s %(price)s"
 
-#: pretix/static/pretixpresale/js/ui/main.js:425
+#: pretix/static/pretixpresale/js/ui/main.js:426
 msgid "Please enter the amount the organizer can keep."
 msgstr ""
 
-#: pretix/static/pretixpresale/js/ui/main.js:439
-#: pretix/static/pretixpresale/js/ui/main.js:457
+#: pretix/static/pretixpresale/js/ui/main.js:440
+#: pretix/static/pretixpresale/js/ui/main.js:458
 msgid "Time zone:"
 msgstr ""
 
-#: pretix/static/pretixpresale/js/ui/main.js:448
+#: pretix/static/pretixpresale/js/ui/main.js:449
 msgid "Your local time:"
 msgstr ""
 

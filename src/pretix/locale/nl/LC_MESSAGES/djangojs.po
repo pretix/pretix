@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-03-30 16:15+0000\n"
+"POT-Creation-Date: 2021-04-19 14:58+0000\n"
 "PO-Revision-Date: 2020-08-05 06:00+0000\n"
 "Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
 "Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix-js/"
@@ -363,50 +363,50 @@ msgstr "QR-code voor lead-scanning"
 msgid "Check-in QR"
 msgstr "QR-code voor check-in"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:311
+#: pretix/static/pretixcontrol/js/ui/editor.js:313
 msgid "The PDF background file could not be loaded for the following reason:"
 msgstr "Het PDF-achtergrondbestand kon niet geladen worden met als reden:"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:517
+#: pretix/static/pretixcontrol/js/ui/editor.js:521
 msgid "Group of objects"
 msgstr "Groep van objecten"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:523
+#: pretix/static/pretixcontrol/js/ui/editor.js:527
 msgid "Text object"
 msgstr "Tekstobject"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:525
+#: pretix/static/pretixcontrol/js/ui/editor.js:529
 msgid "Barcode area"
 msgstr "Barcode gebied"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:527
+#: pretix/static/pretixcontrol/js/ui/editor.js:531
 #, fuzzy
 #| msgid "Barcode area"
 msgid "Image area"
 msgstr "Barcode gebied"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:529
+#: pretix/static/pretixcontrol/js/ui/editor.js:533
 msgid "Powered by pretix"
 msgstr "Mogelijk gemaakt door pretix"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:531
+#: pretix/static/pretixcontrol/js/ui/editor.js:535
 msgid "Object"
 msgstr "Object"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:535
+#: pretix/static/pretixcontrol/js/ui/editor.js:539
 msgid "Ticket design"
 msgstr "Ticketontwerp"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:808
+#: pretix/static/pretixcontrol/js/ui/editor.js:813
 msgid "Saving failed."
 msgstr "Opslaan mislukt."
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:857
-#: pretix/static/pretixcontrol/js/ui/editor.js:896
+#: pretix/static/pretixcontrol/js/ui/editor.js:862
+#: pretix/static/pretixcontrol/js/ui/editor.js:901
 msgid "Error while uploading your PDF file, please try again."
 msgstr "Probleem bij het uploaden van het PDF-bestand, probeer het opnieuw."
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:881
+#: pretix/static/pretixcontrol/js/ui/editor.js:886
 msgid "Do you really want to leave the editor without saving your changes?"
 msgstr "Wilt u de editor verlaten zonder uw wijzigingen op te slaan?"
 
@@ -447,15 +447,15 @@ msgstr "Alle"
 msgid "None"
 msgstr "Geen"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:801
+#: pretix/static/pretixcontrol/js/ui/main.js:802
 msgid "Use a different name internally"
 msgstr "Gebruik intern een andere naam"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:858
+#: pretix/static/pretixcontrol/js/ui/main.js:859
 msgid "Click to close"
 msgstr "Klik om te sluiten"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:873
+#: pretix/static/pretixcontrol/js/ui/main.js:874
 msgid "You have unsaved changes!"
 msgstr "U heeft nog niet opgeslagen wijzigingen!"
 
@@ -471,11 +471,11 @@ msgstr "Andere"
 msgid "Count"
 msgstr "Aantal"
 
-#: pretix/static/pretixcontrol/js/ui/question.js:135
+#: pretix/static/pretixcontrol/js/ui/question.js:136
 msgid "Yes"
 msgstr "Ja"
 
-#: pretix/static/pretixcontrol/js/ui/question.js:136
+#: pretix/static/pretixcontrol/js/ui/question.js:137
 msgid "No"
 msgstr "Nee"
 
@@ -500,34 +500,34 @@ msgstr[0] "De items in uw winkelwagen zijn nog één voor u gereserveerd."
 msgstr[1] ""
 "De items in uw winkelwagen zijn nog {num} minuten voor u gereserveerd."
 
-#: pretix/static/pretixpresale/js/ui/main.js:268
+#: pretix/static/pretixpresale/js/ui/main.js:269
 msgid "Please enter a quantity for one of the ticket types."
 msgstr "Voer een hoeveelheid voor een van de producten in."
 
-#: pretix/static/pretixpresale/js/ui/main.js:304
+#: pretix/static/pretixpresale/js/ui/main.js:305
 #, fuzzy
 #| msgid "Cart expired"
 msgid "required"
 msgstr "Winkelwagen is verlopen"
 
-#: pretix/static/pretixpresale/js/ui/main.js:401
+#: pretix/static/pretixpresale/js/ui/main.js:402
 msgid "The organizer keeps %(currency)s %(amount)s"
 msgstr "De organisator houdt %(currency)s %(amount)s"
 
-#: pretix/static/pretixpresale/js/ui/main.js:409
+#: pretix/static/pretixpresale/js/ui/main.js:410
 msgid "You get %(currency)s %(amount)s back"
 msgstr "U krijgt %(currency)s %(amount)s terug"
 
-#: pretix/static/pretixpresale/js/ui/main.js:425
+#: pretix/static/pretixpresale/js/ui/main.js:426
 msgid "Please enter the amount the organizer can keep."
 msgstr "Voer het bedrag in dat de organisator mag houden."
 
-#: pretix/static/pretixpresale/js/ui/main.js:439
-#: pretix/static/pretixpresale/js/ui/main.js:457
+#: pretix/static/pretixpresale/js/ui/main.js:440
+#: pretix/static/pretixpresale/js/ui/main.js:458
 msgid "Time zone:"
 msgstr "Tijdzone:"
 
-#: pretix/static/pretixpresale/js/ui/main.js:448
+#: pretix/static/pretixpresale/js/ui/main.js:449
 msgid "Your local time:"
 msgstr "Uw lokale tijd:"
 

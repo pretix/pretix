@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-03-30 16:15+0000\n"
+"POT-Creation-Date: 2021-04-19 14:58+0000\n"
 "PO-Revision-Date: 2020-10-27 06:00+0000\n"
 "Last-Translator: David Vaz <davidmgvaz@gmail.com>\n"
 "Language-Team: Portuguese (Portugal) <https://translate.pretix.eu/projects/"
@@ -365,50 +365,50 @@ msgstr "Scan QR de leads"
 msgid "Check-in QR"
 msgstr "Check-in QR"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:311
+#: pretix/static/pretixcontrol/js/ui/editor.js:313
 msgid "The PDF background file could not be loaded for the following reason:"
 msgstr "O ficheiro de fundo PDF não pôde ser carregado pela seguinte razão:"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:517
+#: pretix/static/pretixcontrol/js/ui/editor.js:521
 msgid "Group of objects"
 msgstr "Grupo de objectos"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:523
+#: pretix/static/pretixcontrol/js/ui/editor.js:527
 msgid "Text object"
 msgstr "Objecto de texto"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:525
+#: pretix/static/pretixcontrol/js/ui/editor.js:529
 msgid "Barcode area"
 msgstr "Área do código de barras"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:527
+#: pretix/static/pretixcontrol/js/ui/editor.js:531
 #, fuzzy
 #| msgid "Barcode area"
 msgid "Image area"
 msgstr "Área do código de barras"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:529
+#: pretix/static/pretixcontrol/js/ui/editor.js:533
 msgid "Powered by pretix"
 msgstr "Powered by pretix"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:531
+#: pretix/static/pretixcontrol/js/ui/editor.js:535
 msgid "Object"
 msgstr "Objecto"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:535
+#: pretix/static/pretixcontrol/js/ui/editor.js:539
 msgid "Ticket design"
 msgstr "Design do Bilhete"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:808
+#: pretix/static/pretixcontrol/js/ui/editor.js:813
 msgid "Saving failed."
 msgstr "Salvar falhou."
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:857
-#: pretix/static/pretixcontrol/js/ui/editor.js:896
+#: pretix/static/pretixcontrol/js/ui/editor.js:862
+#: pretix/static/pretixcontrol/js/ui/editor.js:901
 msgid "Error while uploading your PDF file, please try again."
 msgstr "Erro ao carregar o seu ficheiro PDF, por favor tente novamente."
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:881
+#: pretix/static/pretixcontrol/js/ui/editor.js:886
 msgid "Do you really want to leave the editor without saving your changes?"
 msgstr "Quer mesmo deixar o editor sem guardar as suas alterações?"
 
@@ -449,15 +449,15 @@ msgstr "Tudo"
 msgid "None"
 msgstr "Nada"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:801
+#: pretix/static/pretixcontrol/js/ui/main.js:802
 msgid "Use a different name internally"
 msgstr "Use um nome interno diferente"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:858
+#: pretix/static/pretixcontrol/js/ui/main.js:859
 msgid "Click to close"
 msgstr "Clique para fechar"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:873
+#: pretix/static/pretixcontrol/js/ui/main.js:874
 msgid "You have unsaved changes!"
 msgstr "Tem alterações por guardar!"
 
@@ -473,11 +473,11 @@ msgstr "Outros"
 msgid "Count"
 msgstr "Contagem"
 
-#: pretix/static/pretixcontrol/js/ui/question.js:135
+#: pretix/static/pretixcontrol/js/ui/question.js:136
 msgid "Yes"
 msgstr "Sim"
 
-#: pretix/static/pretixcontrol/js/ui/question.js:136
+#: pretix/static/pretixcontrol/js/ui/question.js:137
 msgid "No"
 msgstr "Não"
 
@@ -502,34 +502,34 @@ msgstr[0] "Os artigos no seu carrinho estão reservados para si por um minuto."
 msgstr[1] ""
 "Os artigos no seu carrinho estão reservados para si por {num} minutos."
 
-#: pretix/static/pretixpresale/js/ui/main.js:268
+#: pretix/static/pretixpresale/js/ui/main.js:269
 msgid "Please enter a quantity for one of the ticket types."
 msgstr "Por favor insira a quantidade para um tipo de bilhetes."
 
-#: pretix/static/pretixpresale/js/ui/main.js:304
+#: pretix/static/pretixpresale/js/ui/main.js:305
 #, fuzzy
 #| msgid "Cart expired"
 msgid "required"
 msgstr "Carrinho expirado"
 
-#: pretix/static/pretixpresale/js/ui/main.js:401
+#: pretix/static/pretixpresale/js/ui/main.js:402
 msgid "The organizer keeps %(currency)s %(amount)s"
 msgstr "O organizador mantém %(currency)s %(amount)s"
 
-#: pretix/static/pretixpresale/js/ui/main.js:409
+#: pretix/static/pretixpresale/js/ui/main.js:410
 msgid "You get %(currency)s %(amount)s back"
 msgstr "Recebes %(currency)s %(amount)s de volta"
 
-#: pretix/static/pretixpresale/js/ui/main.js:425
+#: pretix/static/pretixpresale/js/ui/main.js:426
 msgid "Please enter the amount the organizer can keep."
 msgstr "Por favor insira o montante com que a organização pode ficar."
 
-#: pretix/static/pretixpresale/js/ui/main.js:439
-#: pretix/static/pretixpresale/js/ui/main.js:457
+#: pretix/static/pretixpresale/js/ui/main.js:440
+#: pretix/static/pretixpresale/js/ui/main.js:458
 msgid "Time zone:"
 msgstr "Fuso horário:"
 
-#: pretix/static/pretixpresale/js/ui/main.js:448
+#: pretix/static/pretixpresale/js/ui/main.js:449
 msgid "Your local time:"
 msgstr "Sua hora local:"
 
