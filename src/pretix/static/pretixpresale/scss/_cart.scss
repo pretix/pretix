@@ -142,3 +142,11 @@
 .btn-invisible {
     opacity: 0 !important;
 }
+
+.answer-thumb img {
+    width: auto;
+    height: auto;
+    max-height: 100px;
+    max-width: 100%;
+    margin-top: 5px;
+}

@@ -318,6 +318,21 @@ input[type=number].short {
   }
 }
 
+.photo-initial {
+  margin-bottom: 5px;
+}
+.photo-preview {
+  max-width: 550px;
+  width: 100%;
+  height: auto;
+  margin-top: 10px;
+
+  img {
+    display: block;
+    max-width: 100%;
+  }
+}
+
 .propagated-settings-box {
   position: relative;
 

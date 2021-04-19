@@ -36,6 +36,7 @@ import copy
 import json
 import logging
 from decimal import Decimal
+from io import BytesIO
 from urllib.error import HTTPError
 
 import dateutil.parser
@@ -47,6 +48,7 @@ from babel import Locale
 from django import forms
 from django.contrib import messages
 from django.core.exceptions import ValidationError
+from django.core.files.uploadedfile import SimpleUploadedFile
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db.models import QuerySet
 from django.forms import Select
@@ -63,6 +65,7 @@ from phonenumber_field.phonenumber import PhoneNumber
 from phonenumber_field.widgets import PhoneNumberPrefixWidget
 from phonenumbers import NumberParseException, national_significant_number
 from phonenumbers.data import _COUNTRY_CODE_TO_REGION_CODE
+from PIL import ImageOps
 
 from pretix.base.forms.widgets import (
     BusinessBooleanRadio, DatePickerWidget, SplitDateTimePickerWidget,
@@ -80,7 +83,9 @@ from pretix.base.settings import (
     PERSON_NAME_SCHEMES, PERSON_NAME_TITLE_GROUPS,
 )
 from pretix.base.templatetags.rich_text import rich_text
-from pretix.control.forms import ExtFileField, SplitDateTimeField
+from pretix.control.forms import (
+    ExtFileField, ExtValidationMixin, SizeValidationMixin, SplitDateTimeField,
+)
 from pretix.helpers.countries import CachedCountries
 from pretix.helpers.escapejson import escapejson_attr
 from pretix.helpers.i18n import get_format_without_seconds
@@ -386,6 +391,126 @@ class MaxDateTimeValidator(MaxValueValidator):
             raise e
 
 
+class PortraitImageWidget(UploadedFileWidget):
+    template_name = 'pretixbase/forms/widgets/portrait_image.html'
+
+    def value_from_datadict(self, data, files, name):
+        d = super().value_from_datadict(data, files, name)
+        if d is not None:
+            d._cropdata = json.loads(data.get(name + '_cropdata', '{}') or '{}')
+        return d
+
+
+class PortraitImageField(SizeValidationMixin, ExtValidationMixin, forms.FileField):
+    widget = PortraitImageWidget
+    default_error_messages = {
+        'aspect_ratio_landscape': _(
+            "You uploaded an image in landscape orientation. Please upload an image in portrait orientation."
+        ),
+        'aspect_ratio_not_3_by_4': _(
+            "Please upload an image where the width is 3/4 of the height."
+        ),
+        'max_dimension': _(
+            "The file you uploaded has a very large number of pixels, please upload an image no larger than 10000 x 10000 pixels."
+        ),
+        'invalid_image': _(
+            "Upload a valid image. The file you uploaded was either not an "
+            "image or a corrupted image."
+        ),
+    }
+
+    def to_python(self, data):
+        """
+        Based on Django's ImageField
+        """
+        f = super().to_python(data)
+        if f is None:
+            return None
+
+        from PIL import Image
+
+        # We need to get a file object for Pillow. We might have a path or we might
+        # have to read the data into memory.
+        if hasattr(data, 'temporary_file_path'):
+            file = data.temporary_file_path()
+        else:
+            if hasattr(data, 'read'):
+                file = BytesIO(data.read())
+            else:
+                file = BytesIO(data['content'])
+
+        try:
+            image = Image.open(file)
+            # verify() must be called immediately after the constructor.
+            image.verify()
+
+            # We want to do more than just verify(), so we need to re-open the file
+            if hasattr(file, 'seek'):
+                file.seek(0)
+            image = Image.open(file)
+
+            # load() is a potential DoS vector (see Django bug #18520), so we verify the size first
+            if image.width > 10_000 or image.height > 10_000:
+                raise ValidationError(
+                    self.error_messages['max_dimension'],
+                    code='max_dimension',
+                )
+
+            image.load()
+
+            # Annotating so subclasses can reuse it for their own validation
+            f.image = image
+            # Pillow doesn't detect the MIME type of all formats. In those
+            # cases, content_type will be None.
+            f.content_type = Image.MIME.get(image.format)
+
+            # before we calc aspect ratio, we need to check and apply EXIF-orientation
+            image = ImageOps.exif_transpose(image)
+
+            if f._cropdata:
+                image = image.crop((
+                    f._cropdata.get('x', 0),
+                    f._cropdata.get('y', 0),
+                    f._cropdata.get('x', 0) + f._cropdata.get('width', image.width),
+                    f._cropdata.get('y', 0) + f._cropdata.get('height', image.height),
+                ))
+                with BytesIO() as output:
+                    # This might use a lot of memory, but temporary files are not a good option since
+                    # we don't control the cleanup
+                    image.save(output, format=f.image.format)
+                    f = SimpleUploadedFile(f.name, output.getvalue(), f.content_type)
+                    f.image = image
+
+            if image.width > image.height:
+                raise ValidationError(
+                    self.error_messages['aspect_ratio_landscape'],
+                    code='aspect_ratio_landscape',
+                )
+
+            if not 3 / 4 * .95 < image.width / image.height < 3 / 4 * 1.05:  # give it some tolerance
+                raise ValidationError(
+                    self.error_messages['aspect_ratio_not_3_by_4'],
+                    code='aspect_ratio_not_3_by_4',
+                )
+        except Exception as exc:
+            logger.exception('foo')
+            # Pillow doesn't recognize it as an image.
+            if isinstance(exc, ValidationError):
+                raise
+            raise ValidationError(
+                self.error_messages['invalid_image'],
+                code='invalid_image',
+            ) from exc
+        if hasattr(f, 'seek') and callable(f.seek):
+            f.seek(0)
+        return f
+
+    def __init__(self, *args, **kwargs):
+        kwargs.setdefault('ext_whitelist', (".png", ".jpg", ".jpeg", ".jfif", ".tif", ".tiff", ".bmp"))
+        kwargs.setdefault('max_size', 10 * 1024 * 1024)
+        super().__init__(*args, **kwargs)
+
+
 class BaseQuestionsForm(forms.Form):
     """
     This form class is responsible for asking order-related questions. This includes
@@ -596,18 +721,26 @@ class BaseQuestionsForm(forms.Form):
                     initial=initial.options.all() if initial else None,
                 )
             elif q.type == Question.TYPE_FILE:
-                field = ExtFileField(
-                    label=label, required=required,
-                    help_text=help_text,
-                    initial=initial.file if initial else None,
-                    widget=UploadedFileWidget(position=pos, event=event, answer=initial),
-                    ext_whitelist=(
-                        ".png", ".jpg", ".gif", ".jpeg", ".pdf", ".txt", ".docx", ".gif", ".svg",
-                        ".pptx", ".ppt", ".doc", ".xlsx", ".xls", ".jfif", ".heic", ".heif", ".pages",
-                        ".bmp", ".tif", ".tiff"
-                    ),
-                    max_size=10 * 1024 * 1024,
-                )
+                if q.valid_file_portrait:
+                    field = PortraitImageField(
+                        label=label, required=required,
+                        help_text=help_text,
+                        initial=initial.file if initial else None,
+                        widget=PortraitImageWidget(position=pos, event=event, answer=initial, attrs={'data-portrait-photo': 'true'}),
+                    )
+                else:
+                    field = ExtFileField(
+                        label=label, required=required,
+                        help_text=help_text,
+                        initial=initial.file if initial else None,
+                        widget=UploadedFileWidget(position=pos, event=event, answer=initial),
+                        ext_whitelist=(
+                            ".png", ".jpg", ".gif", ".jpeg", ".pdf", ".txt", ".docx", ".gif", ".svg",
+                            ".pptx", ".ppt", ".doc", ".xlsx", ".xls", ".jfif", ".heic", ".heif", ".pages",
+                            ".bmp", ".tif", ".tiff"
+                        ),
+                        max_size=10 * 1024 * 1024,
+                    )
             elif q.type == Question.TYPE_DATE:
                 attrs = {}
                 if q.valid_date_min:

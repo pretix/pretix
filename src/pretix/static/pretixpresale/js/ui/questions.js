@@ -70,6 +70,46 @@ function questions_toggle_dependent(ev) {
                 $(this).prop("required", false).addClass("required-hidden");
             });
         }
+    });
+}
 
+function questions_init_photos(el) {
+    if (!FileReader) {
+        // No browser support
+        return
+    }
+
+    el.find("input[data-portrait-photo]").each(function () {
+        var $inp = $(this)
+        var $container = $inp.parent().parent()
+
+        $container.find(".photo-input").addClass("hidden")
+        $container.find(".photo-buttons").removeClass("hidden")
+
+        $container.find("button[data-action=upload]").click(function () {
+            $inp.click();
+        })
+
+        var cropper = new Cropper($container.find(".photo-preview img").get(0), {
+            aspectRatio: 3 / 4,
+            viewMode: 1,
+            zoomable: false,
+            crop(event) {
+                $container.find("input[type=hidden]").val(JSON.stringify(cropper.getData(true)));
+            },
+        });
+        /* This rule is very important, please don't ignore this */
+
+        $inp.on("change", function () {
+            if (!$inp.get(0).files[0]) return
+            $container.find("button[data-action=upload]").append("<span class='fa fa-spin fa-cog'></span>")
+            var fr = new FileReader()
+            fr.onload = function () {
+                cropper.replace(fr.result)
+                $container.find(".photo-preview").removeClass("hidden")
+                $container.find("button[data-action=upload] .fa-spin").remove()
+            }
+            fr.readAsDataURL($inp.get(0).files[0])
+        })
     });
 }

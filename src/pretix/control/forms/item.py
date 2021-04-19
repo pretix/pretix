@@ -153,6 +153,7 @@ class QuestionForm(I18nModelForm):
             'valid_datetime_max',
             'valid_date_min',
             'valid_date_max',
+            'valid_file_portrait',
         ]
         widgets = {
             'valid_datetime_min': SplitDateTimePickerWidget(),

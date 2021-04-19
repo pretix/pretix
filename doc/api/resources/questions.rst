@@ -62,6 +62,7 @@ valid_date_min                        date                       Minimum value f
 valid_date_max                        date                       Maximum value for date questions (optional)
 valid_datetime_min                    datetime                   Minimum value for date and time questions (optional)
 valid_datetime_max                    datetime                   Maximum value for date and time questions (optional)
+valid_file_portrait                   boolean                    Turn on file validation for portrait photos
 dependency_question                   integer                    Internal ID of a different question. The current
                                                                  question will only be shown if the question given in
                                                                  this attribute is set to the value given in
@@ -82,6 +83,10 @@ dependency_value                      string                     An old version 
 .. versionchanged:: 3.14
 
   The attributes ``valid_*`` have been added.
+
+.. versionchanged:: 3.18
+
+  The attribute ``valid_file_portrait`` have been added.
 
 Endpoints
 ---------
@@ -134,6 +139,7 @@ Endpoints
             "valid_date_max": null,
             "valid_datetime_min": null,
             "valid_datetime_max": null,
+            "valid_file_portrait": false,
             "dependency_question": null,
             "dependency_value": null,
             "dependency_values": [],
@@ -211,6 +217,7 @@ Endpoints
         "valid_date_max": null,
         "valid_datetime_min": null,
         "valid_datetime_max": null,
+        "valid_file_portrait": false,
         "dependency_question": null,
         "dependency_value": null,
         "dependency_values": [],
@@ -311,6 +318,7 @@ Endpoints
         "valid_date_max": null,
         "valid_datetime_min": null,
         "valid_datetime_max": null,
+        "valid_file_portrait": false,
         "options": [
           {
             "id": 1,
@@ -392,6 +400,7 @@ Endpoints
         "valid_date_max": null,
         "valid_datetime_min": null,
         "valid_datetime_max": null,
+        "valid_file_portrait": false,
         "options": [
           {
             "id": 1,

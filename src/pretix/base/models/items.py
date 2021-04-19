@@ -1140,6 +1140,12 @@ class Question(LoggedModel):
     valid_datetime_max = models.DateTimeField(null=True, blank=True,
                                               verbose_name=_('Maximum value'),
                                               help_text=_('Currently not supported in our apps and during check-in'))
+    valid_file_portrait = models.BooleanField(
+        default=False,
+        verbose_name=_('Validate file to be a portrait'),
+        help_text=_('If checked, files must be images with an aspect ratio of 3:4. This is commonly used for photos '
+                    'printed on badges.')
+    )
 
     objects = ScopedManager(organizer='event__organizer')
 

@@ -567,6 +567,7 @@ var form_handlers = function (el) {
 
     el.find("input[name*=question], select[name*=question]").change(questions_toggle_dependent);
     questions_toggle_dependent();
+    questions_init_photos(el);
 };
 
 $(function () {

@@ -102,6 +102,13 @@
                                     <a href="{{ q.answer.frontend_file_url }}?token={% answer_token request q.answer %}">
                                         {{ q.answer.file_name }}
                                     </a>
+                                    {% if q.answer.is_image %}
+                                        <br>
+                                        <a href="{{ q.answer.frontend_file_url }}?token={% answer_token request q.answer %}" data-lightbox="order"
+                                                class="answer-thumb">
+                                            <img src="{{ q.answer.frontend_file_url }}?token={% answer_token request q.answer %}">
+                                        </a>
+                                    {% endif %}
                                 {% elif q.type == "M" %}
                                     {{ q.answer|rich_text_snippet }}
                                 {% else %}

@@ -178,8 +178,7 @@ class CachedFileInput(forms.ClearableFileInput):
         return ctx
 
 
-class SizeFileField(forms.FileField):
-
+class SizeValidationMixin:
     def __init__(self, *args, **kwargs):
         self.max_size = kwargs.pop("max_size", None)
         super().__init__(*args, **kwargs)
@@ -196,13 +195,12 @@ class SizeFileField(forms.FileField):
         data = super().clean(*args, **kwargs)
         if isinstance(data, UploadedFile) and self.max_size and data.size > self.max_size:
             raise forms.ValidationError(_("Please do not upload files larger than {size}!").format(
-                size=SizeFileField._sizeof_fmt(self.max_size)
+                size=SizeValidationMixin._sizeof_fmt(self.max_size)
             ))
         return data
 
 
-class ExtFileField(SizeFileField):
-    widget = ClearableBasenameFileInput
+class ExtValidationMixin:
 
     def __init__(self, *args, **kwargs):
         ext_whitelist = kwargs.pop("ext_whitelist")
@@ -218,6 +216,14 @@ class ExtFileField(SizeFileField):
             if ext not in self.ext_whitelist:
                 raise forms.ValidationError(_("Filetype not allowed!"))
         return data
+
+
+class SizeFileField(SizeValidationMixin, forms.FileField):
+    pass
+
+
+class ExtFileField(ExtValidationMixin, SizeFileField):
+    widget = ClearableBasenameFileInput
 
 
 class CachedFileField(ExtFileField):

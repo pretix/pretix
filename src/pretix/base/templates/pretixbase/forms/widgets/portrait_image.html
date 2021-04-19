@@ -1,0 +1,19 @@
+{% load i18n %}
+{% if widget.is_initial %}<div class="photo-initial">{{ widget.initial_text }}: <a href="{{ widget.value.url }}">{{ widget.value }}</a>{% if not widget.required %}
+<input type="checkbox" name="{{ widget.checkbox_name }}" id="{{ widget.checkbox_id }}">
+<label for="{{ widget.checkbox_id }}">{{ widget.clear_checkbox_label }}</label>{% endif %}<br></div>
+<span class="photo-input">{{ widget.input_text }}:{% else %}<span class="photo-input">{% endif %}
+<input type="{{ widget.type }}" name="{{ widget.name }}" {% include "django/forms/widgets/attrs.html" %}>
+</span>
+<div class="photo-buttons hidden">
+    <button class="btn btn-primary" type="button" data-action="upload">
+        <span class="fa fa-upload"></span> {% trans "Upload photo" %}
+    </button>
+</div>
+    <div class="photo-camera hidden">
+        <video></video>
+    </div>
+    <div class="photo-preview hidden">
+        <img>
+    </div>
+<input type="hidden" name="{{ widget.name }}_cropdata" value="">

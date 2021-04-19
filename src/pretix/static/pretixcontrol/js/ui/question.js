@@ -105,6 +105,7 @@ $(function () {
         $("#valid-date").toggle($("#id_type").val() == "D");
         $("#valid-datetime").toggle($("#id_type").val() == "W");
         $("#valid-number").toggle($("#id_type").val() == "N");
+        $("#valid-file").toggle($("#id_type").val() == "F");
 
         show = $("#id_type").val() == "B" && $("#id_required").prop("checked");
         $(".alert-required-boolean").toggle(show);
