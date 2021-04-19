@@ -5,8 +5,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-04-19 14:58+0000\n"
-"PO-Revision-Date: 2021-03-30 19:44+0000\n"
-"Last-Translator: Richard Schreiber <schreiber@rami.io>\n"
+"PO-Revision-Date: 2021-04-19 16:31+0000\n"
+"Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
 ">\n"
 "Language: de\n"
@@ -353,22 +353,18 @@ msgid "Online shop"
 msgstr "Online-Shop"
 
 #: pretix/base/context.py:45
-#, fuzzy, python-brace-format
-#| msgid "powered by <a %(a_attr)s>pretix</a>"
+#, python-brace-format
 msgid "powered by {name} based on <a {a_attr}>pretix</a>"
-msgstr "powered by <a %(a_attr)s>pretix</a>"
+msgstr "powered by {name} based on <a %(a_attr)s>pretix</a>"
 
 #: pretix/base/context.py:52
-#, fuzzy, python-format
-#| msgid "<a %(a_attr)s>event ticketing powered by pretix</a>"
+#, python-format
 msgid "<a %(a_attr)s>ticketing powered by pretix</a>"
-msgstr "<a %(a_attr)s 1>Event-Ticketing-Software von pretix</a>"
+msgstr "<a %(a_attr)s>Event-Ticketing-Software von pretix</a>"
 
 #: pretix/base/context.py:61
-#, fuzzy
-#| msgid "Voucher code"
 msgid "source code"
-msgstr "Gutscheincode"
+msgstr "Quellcode"
 
 #: pretix/base/email.py:176 pretix/control/views/main.py:291
 #: pretix/plugins/badges/__init__.py:45 pretix/plugins/badges/models.py:48
@@ -1687,22 +1683,26 @@ msgid ""
 "You uploaded an image in landscape orientation. Please upload an image in "
 "portrait orientation."
 msgstr ""
+"Du hast ein Bild im Querformat hochgeladen. Bitte lade ein Bild im "
+"Hochformat hoch."
 
 #: pretix/base/forms/questions.py:411
 msgid "Please upload an image where the width is 3/4 of the height."
-msgstr ""
+msgstr "Bitte lade ein Bild hoch, bei dem die Breite 3/4 der Höhe beträgt."
 
 #: pretix/base/forms/questions.py:414
 msgid ""
 "The file you uploaded has a very large number of pixels, please upload an "
 "image no larger than 10000 x 10000 pixels."
 msgstr ""
+"Die hochgeladene Bilddatei hat sehr viele Pixel. Maximal zulässig sind 10000 "
+"x 10000 Pixel."
 
 #: pretix/base/forms/questions.py:417
 msgid ""
 "Upload a valid image. The file you uploaded was either not an image or a "
 "corrupted image."
-msgstr ""
+msgstr "Die hochgeladene Datei ist kein Bild oder ist beschädigt."
 
 #: pretix/base/forms/questions.py:574 pretix/base/forms/questions.py:886
 msgid "Street and Number"
