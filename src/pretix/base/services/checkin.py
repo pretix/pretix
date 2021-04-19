@@ -153,8 +153,8 @@ class SQLLogic:
     def __init__(self, list):
         self.list = list
         self.bool_ops = {
-            "and": lambda *args: reduce(lambda total, arg: total & arg, args),
-            "or": lambda *args: reduce(lambda total, arg: total | arg, args),
+            "and": lambda *args: reduce(lambda total, arg: total & arg, args) if args else Q(),
+            "or": lambda *args: reduce(lambda total, arg: total | arg, args) if args else Q(),
         }
         self.comparison_ops = {
             "==": partial(self.comparison_to_q, operator=Equal),
