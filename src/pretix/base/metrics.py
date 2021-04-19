@@ -286,17 +286,19 @@ def metric_values():
             metrics['pretix_model_instances']['{model="%s"}' % m._meta] = estimate_count_fast(m)
 
     if settings.HAS_CELERY:
-        client = app.broker_connection().channel().client
-        for q in settings.CELERY_TASK_QUEUES:
-            llen = client.llen(q.name)
-            lfirst = client.lindex(q.name, -1)
-            metrics['pretix_celery_tasks_queued_count']['{queue="%s"}' % q.name] = llen
-            if lfirst:
-                ldata = json.loads(lfirst)
-                dt = time.time() - ldata.get('created', 0)
-                metrics['pretix_celery_tasks_queued_age_seconds']['{queue="%s"}' % q.name] = dt
-            else:
-                metrics['pretix_celery_tasks_queued_age_seconds']['{queue="%s"}' % q.name] = 0
+        channel = app.broker_connection().channel()
+        if hasattr(channel, 'client') and channel.client is not None:
+            client = channel.client
+            for q in settings.CELERY_TASK_QUEUES:
+                llen = client.llen(q.name)
+                lfirst = client.lindex(q.name, -1)
+                metrics['pretix_celery_tasks_queued_count']['{queue="%s"}' % q.name] = llen
+                if lfirst:
+                    ldata = json.loads(lfirst)
+                    dt = time.time() - ldata.get('created', 0)
+                    metrics['pretix_celery_tasks_queued_age_seconds']['{queue="%s"}' % q.name] = dt
+                else:
+                    metrics['pretix_celery_tasks_queued_age_seconds']['{queue="%s"}' % q.name] = 0
 
     return metrics
 
