@@ -5,11 +5,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-04-19 14:58+0000\n"
-<<<<<<< HEAD
 "PO-Revision-Date: 2021-04-20 07:49+0000\n"
-=======
-"PO-Revision-Date: 2021-04-20 07:36+0000\n"
->>>>>>> 3224f7d26... Translated on translate.pretix.eu (German)
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
 ">\n"
