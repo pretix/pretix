@@ -122,14 +122,14 @@ class AllTicketsPDF(BaseExporter):
             dt = make_aware(datetime.combine(
                 dateutil.parser.parse(form_data['date_from']).date(),
                 time(hour=0, minute=0, second=0)
-            ), self.event.timezone)
+            ), self.timezone)
             qs = qs.filter(Q(subevent__date_from__gte=dt) | Q(subevent__isnull=True, order__event__date_from__gte=dt))
 
         if form_data.get('date_to'):
             dt = make_aware(datetime.combine(
                 dateutil.parser.parse(form_data['date_to']).date() + timedelta(days=1),
                 time(hour=0, minute=0, second=0)
-            ), self.event.timezone)
+            ), self.timezone)
             qs = qs.filter(Q(subevent__date_from__lt=dt) | Q(subevent__isnull=True, order__event__date_from__lt=dt))
 
         if form_data.get('order_by') == 'name':

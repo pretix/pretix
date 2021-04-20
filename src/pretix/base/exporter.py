@@ -72,8 +72,10 @@ class BaseExporter:
         if isinstance(event, QuerySet):
             self.events = event
             self.event = None
+            self.timezone = self.events.first().timezone
         else:
             self.events = Event.objects.filter(pk=event.pk)
+            self.timezone = event.timezone
 
     def __str__(self):
         return self.identifier
