@@ -4,6 +4,8 @@ Absenderadresse
 Absendername
 Admin
 Adminbereich
+AGPL
+AGPLv
 Alipay
 and
 App
@@ -26,6 +28,7 @@ Banking
 Bcc
 BCC
 Beispielevent
+Beispielproduktvariantenbeschreibung
 Benachrichtigungs
 Benachrichtigungsart
 Benachrichtigungsarten
@@ -96,6 +99,7 @@ geocoding
 gescannt
 ggf
 giropay
+GPL
 Guide
 Gutscheineinlöser
 herunterscrollen
@@ -164,6 +168,7 @@ pretix
 pretixdesk
 pretixdroid
 pretixPOS
+pretixPRINT
 pretixSCAN
 Professional
 Przelewy

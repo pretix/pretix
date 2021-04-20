@@ -1,5 +1,6 @@
 2FA
 ABN
+AGPL
 Alipay
 anonymize
 anonymized
@@ -37,6 +38,7 @@ geo
 geocoding
 gift
 giropay
+GPL
 hostname
 HTTPS
 IBAN
@@ -68,6 +70,7 @@ pretix
 pretixdesk
 pretixdroid
 pretixPOS
+pretixPRINT
 pretixSCAN
 Przelewy
 Pseudonymization

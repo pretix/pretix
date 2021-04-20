@@ -222,7 +222,7 @@ class LicenseCheckView(StaffMemberRequiredMixin, FormView):
                 res.append((
                     'warning', 'warning',
                     _('You need to make all your installed plugins freely available to every visitor '
-                      'of your site in source code form under the same license terms as pretix (AGPLv3 + additional'
+                      'of your site in source code form under the same license terms as pretix (AGPLv3 + additional '
                       'restrictions). Make sure to keep it up to date!')
                 ))
 
