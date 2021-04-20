@@ -120,7 +120,7 @@
                                 <ul>
                                     {% for item in cl.limit_products.all %}
                                         <li>
-                                            <a href="{% url "control:event.item" organizer=request.event.organizer.slug event=request.event.slug item=item.id %}">{{ item.name }}</a>
+                                            <a href="{% url "control:event.item" organizer=request.event.organizer.slug event=request.event.slug item=item.id %}">{{ item }}</a>
                                         </li>
                                     {% endfor %}
                                 </ul>
