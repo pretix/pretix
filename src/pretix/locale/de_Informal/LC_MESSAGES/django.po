@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-04-19 14:58+0000\n"
-"PO-Revision-Date: 2021-04-19 16:31+0000\n"
+"PO-Revision-Date: 2021-04-20 07:36+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
@@ -356,7 +356,7 @@ msgstr "Online-Shop"
 #: pretix/base/context.py:45
 #, python-brace-format
 msgid "powered by {name} based on <a {a_attr}>pretix</a>"
-msgstr "powered by {name} based on <a %(a_attr)s>pretix</a>"
+msgstr "powered by {name} based on <a {a_attr}>pretix</a>"
 
 #: pretix/base/context.py:52
 #, python-format
