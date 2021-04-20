@@ -17274,7 +17274,7 @@ msgstr ""
 msgid ""
 "You need to make all your installed plugins freely available to every "
 "visitor of your site in source code form under the same license terms as "
-"pretix (AGPLv3 + additionalrestrictions). Make sure to keep it up to date!"
+"pretix (AGPLv3 + additional restrictions). Make sure to keep it up to date!"
 msgstr ""
 
 #: pretix/control/views/global_settings.py:235
