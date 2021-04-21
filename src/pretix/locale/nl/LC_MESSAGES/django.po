@@ -7,16 +7,16 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-26 09:20+0000\n"
-"PO-Revision-Date: 2023-04-27 01:00+0000\n"
-"Last-Translator: Julian Geraerds <julian.geraerds@itisours.nl>\n"
-"Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/"
-">\n"
+"PO-Revision-Date: 2023-05-30 21:19+0000\n"
+"Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
+"Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
+"\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.16.4\n"
+"X-Generator: Weblate 4.17\n"
 
 #: pretix/_base_settings.py:78
 msgid "English"
@@ -352,8 +352,7 @@ msgstr "Deze voucher is al het maximale aantal keren gebruikt."
 msgid ""
 "The application \"{application_name}\" has been authorized to access your "
 "account."
-msgstr ""
-"De applicatie \"{application_name}\" is toegang gegeven tot uw account."
+msgstr "De applicatie \"{application_name}\" is toegang gegeven tot uw account."
 
 #: pretix/api/views/order.py:538 pretix/control/views/orders.py:1340
 #: pretix/presale/views/order.py:747 pretix/presale/views/order.py:820
@@ -8682,8 +8681,7 @@ msgstr ""
 
 #: pretix/base/settings.py:902
 msgid "Hide \"payment pending\" state on customer-facing pages"
-msgstr ""
-"Verberg \"wacht op betaling\"-status op pagina's zichtbaar voor klanten"
+msgstr "Verberg \"wacht op betaling\"-status op pagina's zichtbaar voor klanten"
 
 #: pretix/base/settings.py:903
 msgid ""
@@ -9548,8 +9546,8 @@ msgid ""
 "Tickets will never be attached if they're larger than {size} to avoid email "
 "delivery problems."
 msgstr ""
-"Tickets worden nooit bijgevoegd bij een e-mail als ze groter zijn dan "
-"{size}, om problemen met het versturen van de e-mail te voorkomen."
+"Tickets worden nooit bijgevoegd bij een e-mail als ze groter zijn dan {size}"
+", om problemen met het versturen van de e-mail te voorkomen."
 
 #: pretix/base/settings.py:1925 pretix/plugins/sendmail/forms.py:222
 #: pretix/plugins/sendmail/models.py:215
@@ -10407,8 +10405,8 @@ msgstr ""
 "\n"
 "Deze link is één dag geldig.\n"
 "\n"
-"Als u niet uzelf heeft aangemeld voor dit account kunt u deze e-mail "
-"negeren.\n"
+"Als u niet uzelf heeft aangemeld voor dit account kunt u deze e-mail negeren."
+"\n"
 "\n"
 "Met vriendelijke groet,\n"
 "\n"
@@ -12983,8 +12981,7 @@ msgstr "Extra footertekst"
 
 #: pretix/control/forms/global_settings.py:60
 msgid "Will be included as additional text in the footer, site-wide."
-msgstr ""
-"Zal over de hele website als extra tekst in de footer worden opgenomen."
+msgstr "Zal over de hele website als extra tekst in de footer worden opgenomen."
 
 #: pretix/control/forms/global_settings.py:65
 msgid "Additional footer link"
@@ -14474,8 +14471,8 @@ msgstr "Een nieuw geheim is gegenereerd voor plaats #{posid}."
 msgid ""
 "Position #{posid} ({old_item}, {old_price}) split into new order: {order}"
 msgstr ""
-"Plaats #{posid} ({old_item}, {old_price}) afgesplitst naar nieuwe "
-"bestelling: {order}"
+"Plaats #{posid} ({old_item}, {old_price}) afgesplitst naar nieuwe bestelling:"
+" {order}"
 
 #: pretix/control/logdisplay.py:200
 #, python-brace-format
@@ -14503,8 +14500,8 @@ msgstr ""
 msgid ""
 "Unknown scan of code \"{barcode}…\" for list \"{list}\", type \"{type}\"."
 msgstr ""
-"Onbekende scan van code \"{barcode}…\" voor lijst \"{list}\", type "
-"\"{type}\"."
+"Onbekende scan van code \"{barcode}…\" voor lijst \"{list}\", type \"{type}\""
+"."
 
 #: pretix/control/logdisplay.py:247
 #, python-brace-format
@@ -14512,8 +14509,8 @@ msgid ""
 "Scan scan of revoked code \"{barcode}…\" at {datetime} for list \"{list}\", "
 "type \"{type}\", was uploaded."
 msgstr ""
-"Een scan van ingetrokken code \"{barcode}…\" om {datetime} voor lijst "
-"\"{list}\", type \"{type}\" is geüpload."
+"Een scan van ingetrokken code \"{barcode}…\" om {datetime} voor lijst \""
+"{list}\", type \"{type}\" is geüpload."
 
 #: pretix/control/logdisplay.py:257
 #, python-brace-format
@@ -14521,8 +14518,8 @@ msgid ""
 "Scan of revoked code \"{barcode}\" for list \"{list}\", type \"{type}\", was "
 "uploaded."
 msgstr ""
-"Scan van ingetrokken code \"{barcode}\" voor lijst \"{list}\", type "
-"\"{type}\" is geüpload."
+"Scan van ingetrokken code \"{barcode}\" voor lijst \"{list}\", type \"{type}"
+"\" is geüpload."
 
 #: pretix/control/logdisplay.py:268
 #, python-brace-format
@@ -14530,8 +14527,8 @@ msgid ""
 "Denied scan of position #{posid} at {datetime} for list \"{list}\", type "
 "\"{type}\", error code \"{errorcode}\"."
 msgstr ""
-"Een scan voor plaats #{posid} is geweigerd om {datetime} voor lijst "
-"\"{list}\", type \"{type}\". Foutcode: \"{errorcode}\"."
+"Een scan voor plaats #{posid} is geweigerd om {datetime} voor lijst \"{list}"
+"\", type \"{type}\". Foutcode: \"{errorcode}\"."
 
 #: pretix/control/logdisplay.py:279
 #, python-brace-format
@@ -14539,8 +14536,8 @@ msgid ""
 "Denied scan of position #{posid} for list \"{list}\", type \"{type}\", error "
 "code \"{errorcode}\"."
 msgstr ""
-"Een scan voor plaats #{posid} is geweigerd voor de lijst \"{list}\", type "
-"\"{type}\". Foutcode: \"{errorcode}\"."
+"Een scan voor plaats #{posid} is geweigerd voor de lijst \"{list}\", type \""
+"{type}\". Foutcode: \"{errorcode}\"."
 
 #: pretix/control/logdisplay.py:289
 #, python-brace-format
@@ -14579,8 +14576,8 @@ msgid ""
 "Position #{posid} has been scanned and rejected because it has already been "
 "scanned before on list \"{list}\"."
 msgstr ""
-"Plaats #{posid} is gescand en geweigerd omdat het al is gescand op lijst "
-"\"{list}\"."
+"Plaats #{posid} is gescand en geweigerd omdat het al is gescand op lijst \""
+"{list}\"."
 
 #: pretix/control/logdisplay.py:333
 msgid "This object has been created by cloning."
@@ -17350,8 +17347,8 @@ msgid ""
 "To confirm you really want this, please type out the event's short name "
 "(\"%(slug)s\") here:"
 msgstr ""
-"Typ om zeker te zijn dat u dit echt wilt de korte naam van het evenement "
-"(\"%(slug)s\") hier:"
+"Typ om zeker te zijn dat u dit echt wilt de korte naam van het evenement (\""
+"%(slug)s\") hier:"
 
 #: pretix/control/templates/pretixcontrol/event/delete.html:36
 msgid "Your event can not be deleted as it already contains orders."
@@ -18452,8 +18449,8 @@ msgid ""
 "JavaScript is disabled in your browser. To access our ticket shop without "
 "JavaScript, please &lt;a %(a_attr)s&gt;click here&lt;/a&gt;."
 msgstr ""
-"JavaScript is uitgeschakeld in uw browser. &lt;a %(a_attr)s&gt;Klik hier&lt;/"
-"a&gt; om onze ticketwinkel zonder JavaScript te openen."
+"JavaScript is uitgeschakeld in uw browser. &lt;a %(a_attr)s&gt;Klik "
+"hier&lt;/a&gt; om onze ticketwinkel zonder JavaScript te openen."
 
 #: pretix/control/templates/pretixcontrol/event/widget.html:64
 #: pretix/plugins/returnurl/templates/returnurl/settings.html:15
@@ -21580,8 +21577,8 @@ msgid ""
 "To confirm you really want this, please type out the organizer's short name "
 "(\"%(slug)s\") here:"
 msgstr ""
-"Typ om zeker te zijn dat u dit echt wilt de korte naam van de organisator "
-"(\"%(slug)s\") hier:"
+"Typ om zeker te zijn dat u dit echt wilt de korte naam van de organisator (\""
+"%(slug)s\") hier:"
 
 #: pretix/control/templates/pretixcontrol/organizers/delete.html:36
 msgid ""
@@ -22814,8 +22811,8 @@ msgid ""
 msgstr ""
 "Controleer opnieuw of u zeker weet dat u de gekozen soorten gegevens wilt "
 "verwijderen uit het evenement <strong>%(event)s</strong>. Voer om te "
-"bevestigen dat u dit echt wilt de korte naam van het evenement "
-"(\"%(slug)s\") hier in:"
+"bevestigen dat u dit echt wilt de korte naam van het evenement (\"%(slug)s\")"
+" hier in:"
 
 #: pretix/control/templates/pretixcontrol/shredder/download.html:41
 msgid "Event short name"
@@ -24528,8 +24525,8 @@ msgid ""
 "found the plugin \"{plugin}\" with license \"{license}\"."
 msgstr ""
 "U heeft aangegeven dat u geen plugins onder copyleft-voorwaarden heeft "
-"geïnstalleerd, maar we hebben de plugin \"{plugin}\" met de licentie "
-"\"{license}\" gevonden."
+"geïnstalleerd, maar we hebben de plugin \"{plugin}\" met de licentie \""
+"{license}\" gevonden."
 
 #: pretix/control/views/global_settings.py:260
 #, python-brace-format
@@ -24827,8 +24824,7 @@ msgstr[1] ""
 #: pretix/presale/views/order.py:1036 pretix/presale/views/order.py:1208
 #: pretix/presale/views/order.py:1589 pretix/presale/views/order.py:1620
 msgid "Unknown order code or not authorized to access this order."
-msgstr ""
-"Onbekende bestelcode of niet gemachtigd om deze bestelling te bekijken."
+msgstr "Onbekende bestelcode of niet gemachtigd om deze bestelling te bekijken."
 
 #: pretix/control/views/orders.py:470 pretix/presale/views/order.py:1040
 msgid "Ticket download is not enabled for this product."
@@ -25099,8 +25095,7 @@ msgstr "De betalingstermijn is veranderd."
 msgid ""
 "We were not able to process the request completely as the server was too "
 "busy."
-msgstr ""
-"We konden uw verzoek niet verwerken, omdat de server het te druk heeft."
+msgstr "We konden uw verzoek niet verwerken, omdat de server het te druk heeft."
 
 #: pretix/control/views/orders.py:1546
 msgid "This action is only allowed for pending orders."
@@ -30248,8 +30243,8 @@ msgid ""
 "Add one more %(item)s to your cart. You currently have %(count)s in your "
 "cart."
 msgstr ""
-"Voeg nog een %(item)s toe aan uw winkelwagen. U heeft op dit moment "
-"%(count)s ervan in uw winkelwagen."
+"Voeg nog een %(item)s toe aan uw winkelwagen. U heeft op dit moment %(count)"
+"s ervan in uw winkelwagen."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:377
 #: pretix/presale/templates/pretixpresale/event/order_giftcard.html:20
@@ -30904,8 +30899,8 @@ msgid ""
 "also sent you an email containing the link to the address you specified."
 msgstr ""
 "Sla de volgende link op als u later uw bestelling wilt kunnen openen. We "
-"hebben u ook een e-mail met deze link gestuurd op het door u opgegeven e-"
-"mailadres."
+"hebben u ook een e-mail met deze link gestuurd op het door u opgegeven "
+"e-mailadres."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:73
 #: pretix/presale/templates/pretixpresale/event/position.html:18
