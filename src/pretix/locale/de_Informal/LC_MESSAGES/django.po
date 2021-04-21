@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-04-19 14:58+0000\n"
-"PO-Revision-Date: 2021-04-20 07:49+0000\n"
+"PO-Revision-Date: 2021-04-21 15:14+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
@@ -25,7 +25,7 @@ msgid ""
 "products and settings)"
 msgstr ""
 "Voller Gerätezugriff (Lese- und Schreibzugriff auf Bestellungen und "
-"Geschenkgutscheine, Lesezugriff auf Produkte und Einstellungen)"
+"Wertgutscheine, Lesezugriff auf Produkte und Einstellungen)"
 
 #: pretix/api/auth/devicesecurity.py:43
 msgid "pretixSCAN"
@@ -154,12 +154,12 @@ msgid ""
 "Gift card products should not be associated with non-zero tax rates since "
 "sales tax will be applied when the gift card is redeemed."
 msgstr ""
-"Geschenkgutscheine müssen einem 0%-Steuersatz zugeordnet sein, da "
-"Umsatzsteuer berechnet wird, wenn der Gutschein eingelöst wird."
+"Wertgutscheine müssen einem 0%-Steuersatz zugeordnet sein, da Umsatzsteuer "
+"berechnet wird, wenn der Gutschein eingelöst wird."
 
 #: pretix/api/serializers/item.py:183 pretix/control/forms/item.py:538
 msgid "Gift card products should not be admission products at the same time."
-msgstr "Geschenkgutscheine können nicht gleichzeitig zum Einlass berechtigen."
+msgstr "Wertgutscheine können nicht gleichzeitig zum Einlass berechtigen."
 
 #: pretix/api/serializers/item.py:220
 #, python-brace-format
@@ -197,7 +197,7 @@ msgid ""
 "A gift card with the same secret already exists in your or an affiliated "
 "organizer account."
 msgstr ""
-"Ein Geschenkgutschein mit dem gleichen Code existiert bereits in diesem oder "
+"Ein Wertgutschein mit dem gleichen Code existiert bereits in diesem oder "
 "einem verbundenen Veranstalterkonto."
 
 #: pretix/api/serializers/organizer.py:163
@@ -1434,7 +1434,7 @@ msgstr "Unendlich"
 
 #: pretix/base/exporters/orderlist.py:867
 msgid "Gift card redemptions"
-msgstr "Geschenkgutschein-Einlösungen"
+msgstr "Wertgutschein-Einlösungen"
 
 #: pretix/base/exporters/orderlist.py:884
 #: pretix/base/exporters/orderlist.py:975 pretix/base/models/giftcards.py:75
@@ -1455,7 +1455,7 @@ msgstr "Aussteller"
 #: pretix/base/exporters/orderlist.py:912 pretix/control/navigation.py:485
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:71
 msgid "Gift cards"
-msgstr "Geschenkgutscheine"
+msgstr "Wertgutscheine"
 
 #: pretix/base/exporters/orderlist.py:919
 msgid "Show value at"
@@ -2874,15 +2874,15 @@ msgstr "Verkaufskanäle"
 
 #: pretix/base/models/items.py:456
 msgid "This product is a gift card"
-msgstr "Das Produkt ist ein Geschenkgutschein"
+msgstr "Das Produkt ist ein Wertgutschein"
 
 #: pretix/base/models/items.py:457
 msgid ""
 "When a customer buys this product, they will get a gift card with a value "
 "corresponding to the product price."
 msgstr ""
-"Dem Käufer dieses Produktes wird statt eines Tickets ein Geschenkgutschein "
-"in Höhe des Produktpreises ausgestellt."
+"Dem Käufer dieses Produktes wird statt eines Tickets ein Wertgutschein in "
+"Höhe des Produktpreises ausgestellt."
 
 #: pretix/base/models/items.py:466 pretix/base/models/items.py:1099
 #: pretix/control/forms/filter.py:361 pretix/control/forms/filter.py:1233
@@ -3593,7 +3593,7 @@ msgstr "Andere Gebühren"
 #: pretix/control/templates/pretixcontrol/items/index.html:84
 #: pretix/control/templates/pretixcontrol/order/index.html:133
 msgid "Gift card"
-msgstr "Geschenkgutschein"
+msgstr "Wertgutschein / Geschenkgutschein"
 
 #: pretix/base/models/orders.py:1891
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:65
@@ -3692,7 +3692,7 @@ msgstr ""
 
 #: pretix/base/models/organizer.py:240
 msgid "Can manage gift cards"
-msgstr "Kann Geschenkgutscheine verwalten"
+msgstr "Kann Wertgutscheine verwalten"
 
 #: pretix/base/models/organizer.py:245
 msgid "Can change event settings"
@@ -4658,18 +4658,17 @@ msgstr "Im Testmodus funktionieren nur Testgutscheine."
 #: pretix/base/payment.py:1299 pretix/base/services/orders.py:808
 msgid "You cannot pay with gift cards when buying a gift card."
 msgstr ""
-"Geschenkgutscheine können nicht benutzt werden um Geschenkgutscheine zu "
-"erwerben."
+"Wertgutscheine können nicht benutzt werden um Wertgutscheine zu erwerben."
 
 #: pretix/base/payment.py:1201 pretix/base/payment.py:1263
 #: pretix/base/payment.py:1307 pretix/base/services/orders.py:799
 msgid "This gift card does not support this currency."
-msgstr "Dieser Geschenkgutschein unterstützt diese Währung nicht."
+msgstr "Dieser Wertgutschein unterstützt diese Währung nicht."
 
 #: pretix/base/payment.py:1204 pretix/base/payment.py:1266
 #: pretix/base/services/orders.py:801
 msgid "This gift card can only be used in test mode."
-msgstr "Dieser Geschenkgutschein kann nur im Testmodus verwendet werden."
+msgstr "Dieser Wertgutschein kann nur im Testmodus verwendet werden."
 
 #: pretix/base/payment.py:1207 pretix/base/payment.py:1269
 #: pretix/base/services/orders.py:803
@@ -4679,58 +4678,57 @@ msgstr "Im Testmodus können nur Testgutscheine verwendet werden."
 #: pretix/base/payment.py:1210 pretix/base/payment.py:1272
 #: pretix/base/payment.py:1313
 msgid "This gift card is no longer valid."
-msgstr "Dieser Geschenkgutschein ist nicht mehr gültig."
+msgstr "Dieser Wertgutschein ist nicht mehr gültig."
 
 #: pretix/base/payment.py:1213 pretix/base/payment.py:1275
 msgid "All credit on this gift card has been used."
-msgstr "Auf diesem Geschenkgutschein ist kein Guthaben mehr vorhanden."
+msgstr "Auf diesem Wertgutschein ist kein Guthaben mehr vorhanden."
 
 #: pretix/base/payment.py:1218
 msgid "This gift card is already used for your payment."
-msgstr "Dieser Geschenkgutschein ist für diese Zahlung bereits in Verwendung."
+msgstr "Dieser Wertgutschein ist für diese Zahlung bereits in Verwendung."
 
 #: pretix/base/payment.py:1233
 msgid ""
 "Your gift card has been applied, but {} still need to be paid. Please select "
 "a payment method."
 msgstr ""
-"Der Geschenkgutschein kann eingelöst werden, aber {} müssen noch bezahlt "
-"werden. Bitte wähle eine Zahlungsmethode für den Restbetrag aus."
+"Der Wertgutschein kann eingelöst werden, aber {} müssen noch bezahlt werden. "
+"Bitte wähle eine Zahlungsmethode für den Restbetrag aus."
 
 #: pretix/base/payment.py:1237
 msgid "Your gift card has been applied."
-msgstr "Dein Geschenkgutschein wurde angewendet."
+msgstr "Dein Wertgutschein wurde angewendet."
 
 #: pretix/base/payment.py:1245 pretix/base/payment.py:1287
 msgid ""
 "You entered a voucher instead of a gift card. Vouchers can only be entered "
 "on the first page of the shop below the product selection."
 msgstr ""
-"Du hast einen Rabatt- oder Zugangsgutschein statt eines Geschenkgutscheins "
+"Du hast einen Rabatt- oder Zugangsgutschein statt eines Wertgutscheins "
 "eingegeben. Solche Gutscheine können auf der ersten Shop-Seite unterhalb der "
 "Produktauswahl eingegeben werden."
 
 #: pretix/base/payment.py:1248 pretix/base/payment.py:1290
 msgid "This gift card is not known."
-msgstr "Dieser Geschenkgutschein ist nicht bekannt."
+msgstr "Dieser Wertgutschein ist nicht bekannt."
 
 #: pretix/base/payment.py:1250 pretix/base/payment.py:1292
 msgid ""
 "This gift card can not be redeemed since its code is not unique. Please "
 "contact the organizer of this event."
 msgstr ""
-"Dieser Geschenkgutschein kann nicht eingelöst werden, da der Code mehrfach "
+"Dieser Wertgutschein kann nicht eingelöst werden, da der Code mehrfach "
 "existiert. Bitte kontaktiere den Veranstalter für Unterstützung."
 
 #: pretix/base/payment.py:1309 pretix/base/services/orders.py:805
 msgid "This gift card is not accepted by this event organizer."
-msgstr ""
-"Dieser Geschenkgutschein wird von diesem Veranstalter nicht akzeptiert."
+msgstr "Dieser Wertgutschein wird von diesem Veranstalter nicht akzeptiert."
 
 #: pretix/base/payment.py:1311
 msgid "This gift card was used in the meantime. Please try again."
 msgstr ""
-"Dieser Geschenkgutschein wurde zwischenzeitlich verwendet. Bitte erneut "
+"Dieser Wertgutschein wurde zwischenzeitlich verwendet. Bitte erneut "
 "versuchen."
 
 #: pretix/base/pdf.py:85
@@ -5372,7 +5370,7 @@ msgid ""
 "You entered a gift card instead of a voucher. Gift cards can be entered "
 "later on when you're asked for your payment details."
 msgstr ""
-"Du hast einen Geschenkgutschein eingegeben. Dieser kann später im Ablauf "
+"Du hast einen Wertgutschein eingegeben. Dieser kann später im Ablauf "
 "eingegeben werden, wenn du nach deiner Zahlungsmethode gefragt wirst."
 
 #: pretix/base/services/checkin.py:398
@@ -5660,7 +5658,7 @@ msgid ""
 "order has already been redeemed."
 msgstr ""
 "Diese Bestellung kann nicht storniert werden, da der hier erworbene "
-"Geschenkgutschein {card} bereits eingelöst wurde."
+"Wertgutschein {card} bereits eingelöst wurde."
 
 #: pretix/base/services/orders.py:436 pretix/control/forms/orders.py:187
 msgid ""
@@ -5790,7 +5788,7 @@ msgid ""
 "You cannot change the price of a position that has been used to issue a gift "
 "card."
 msgstr ""
-"Du kannst den Preis einer Position, aus der ein Geschenkgutschein erstellt "
+"Du kannst den Preis einer Position, aus der ein Wertgutschein erstellt "
 "wurde, nicht ändern."
 
 #: pretix/base/services/orders.py:1732
@@ -5799,7 +5797,7 @@ msgid ""
 "A position can not be canceled since the gift card {card} purchased in this "
 "order has already been redeemed."
 msgstr ""
-"Eine Position kann nicht storniert werden, da der Geschenkgutschein {card} "
+"Eine Position kann nicht storniert werden, da der Wertgutschein {card} "
 "bereits verwendet wurde."
 
 #: pretix/base/services/orders.py:2183
@@ -6979,12 +6977,12 @@ msgstr "Das Geld wird immer auf die ursprüngliche Zahlungsmethode erstattet"
 msgid ""
 "Customers can choose between a gift card and a refund to their payment method"
 msgstr ""
-"Kunden können zwischen einem Geschenkgutschein und einer Erstattung auf die "
+"Kunden können zwischen einem Wertgutschein und einer Erstattung auf die "
 "ursprüngliche Zahlungsmethode wählen"
 
 #: pretix/base/settings.py:1370 pretix/base/settings.py:1379
 msgid "All refunds are issued as gift cards"
-msgstr "Alle Erstattungen werden als Geschenkgutscheine ausgegeben"
+msgstr "Alle Erstattungen werden als Wertgutschein ausgegeben"
 
 #: pretix/base/settings.py:1375
 #: pretix/control/templates/pretixcontrol/order/index.html:130
@@ -7834,20 +7832,19 @@ msgstr "Dieser Text wird auf der Veranstalter-Seite angezeigt."
 
 #: pretix/base/settings.py:2290
 msgid "Length of gift card codes"
-msgstr "Code-Länge für Geschenkgutscheine"
+msgstr "Code-Länge für Wertgutscheine"
 
 #: pretix/base/settings.py:2291
 msgid ""
 "The system generates by default {}-character long gift card codes. However, "
 "if a different length is required, it can be set here."
 msgstr ""
-"Das System erstellt standardmäßig {} Zeichen lange Codes für "
-"Geschenkgutscheine. Wenn eine andere Länge notwendig ist, kann diese hier "
-"gesetzt werden."
+"Das System erstellt standardmäßig {} Zeichen lange Codes für Wertgutscheine. "
+"Wenn eine andere Länge notwendig ist, kann diese hier gesetzt werden."
 
 #: pretix/base/settings.py:2301
 msgid "Validity of gift card codes in years"
-msgstr "Gültigkeit von Geschenkgutscheinen in Jahren"
+msgstr "Gültigkeit von Wertgutscheinen in Jahren"
 
 #: pretix/base/settings.py:2302
 msgid ""
@@ -7855,7 +7852,7 @@ msgid ""
 "the year after this many years. If you keep it empty, gift cards do not have "
 "an explicit expiry date."
 msgstr ""
-"Wenn du hier eine Zahl einträgst, laufen Geschenkgutscheine standardmäßig so "
+"Wenn du hier eine Zahl einträgst, laufen Wertgutscheine standardmäßig so "
 "viele Jahre nach dem Ende des Jahres der Ausstellung ab. Wenn du nichts "
 "einträgst, laufen Gutscheine standardmäßig nicht explizit ab."
 
@@ -8627,8 +8624,8 @@ msgid ""
 "You have configured gift cards to be valid {} years plus the year the gift "
 "card is issued in."
 msgstr ""
-"Du hast eingestellt, dass Geschenkgutscheine {} Jahre nach Ende des Jahres "
-"der Ausstellung ablaufen."
+"Du hast eingestellt, dass Wertgutscheine {} Jahre nach Ende des Jahres der "
+"Ausstellung ablaufen."
 
 #: pretix/control/forms/event.py:664
 msgid "Tax rule for payment fees"
@@ -10014,12 +10011,12 @@ msgid ""
 "Refund order value to a gift card instead instead of the original payment "
 "method"
 msgstr ""
-"Geldbeträge als Geschenkgutschein ausgeben statt einer Rückbuchung auf die "
+"Geldbeträge als Wertgutschein ausgeben statt einer Rückbuchung auf die "
 "ursprüngliche Zahlungsmethode"
 
 #: pretix/control/forms/orders.py:689
 msgid "Gift card validity"
-msgstr "Gültigkeit von Geschenkgutscheinen"
+msgstr "Gültigkeit von Wertgutscheinen"
 
 #: pretix/control/forms/orders.py:708
 msgid "Keep a fixed cancellation fee per ticket"
@@ -10173,7 +10170,7 @@ msgstr "Benachrichtigungsarten"
 
 #: pretix/control/forms/organizer.py:330
 msgid "Gift card value"
-msgstr "Wert des Geschenkgutscheins"
+msgstr "Wert des Wertgutscheins"
 
 #: pretix/control/forms/renderers.py:54
 #: pretix/control/templates/pretixcontrol/items/question_edit.html:135
@@ -10622,12 +10619,11 @@ msgstr "Die Veranstalter-Einstellungen wurden geändert."
 #: pretix/control/logdisplay.py:313
 msgid "Gift card acceptance for another organizer has been added."
 msgstr ""
-"Geschenkgutschein-Akzeptanz für einen anderen Veranstalter wurde hinzugefügt."
+"Wertgutschein-Akzeptanz für einen anderen Veranstalter wurde hinzugefügt."
 
 #: pretix/control/logdisplay.py:314
 msgid "Gift card acceptance for another organizer has been removed."
-msgstr ""
-"Geschenkgutschein-Akzeptanz für einen anderen Veranstalter wurde entfernt."
+msgstr "Wertgutschein-Akzeptanz für einen anderen Veranstalter wurde entfernt."
 
 #: pretix/control/logdisplay.py:315
 msgid "The webhook has been created."
@@ -11317,11 +11313,11 @@ msgstr ""
 
 #: pretix/control/logdisplay.py:480
 msgid "The gift card has been created."
-msgstr "Der Geschenkgutschein wurde erstellt."
+msgstr "Der Wertgutschein wurde erstellt."
 
 #: pretix/control/logdisplay.py:481 pretix/control/views/organizer.py:1166
 msgid "The gift card has been changed."
-msgstr "Der Geschenkgutschein wurde geändert."
+msgstr "Der Wertgutschein wurde geändert."
 
 #: pretix/control/logdisplay.py:482
 msgid "A manual transaction has been performed."
@@ -13831,8 +13827,8 @@ msgid ""
 "    "
 msgstr ""
 "\n"
-"        Wenn du einen Geschenkgutschein hast, kannst du den Code hier "
-"eingeben. Wenn der Geschenkgutschein\n"
+"        Wenn du einen Wertgutschein hast, kannst du den Code hier eingeben. "
+"Wenn der Wertgutschein\n"
 "nicht mehr ausreichend Guthaben aufweist, um die Bestellung voll zu "
 "bezahlen, wird diese Seite erneut angezeigt\n"
 "und du kannst einen weiteren Gutschein eingeben oder eine andere "
@@ -13850,8 +13846,8 @@ msgid ""
 "    "
 msgstr ""
 "\n"
-"        Dein Geschenkgutschein wird zur Bezahlung dieser Bestellung benutzt. "
-"Wenn das Guthaben auf dem Geschenkgutschein niedriger ist als die\n"
+"        Dein Wertgutschein wird zur Bezahlung dieser Bestellung benutzt. "
+"Wenn das Guthaben auf dem Wertgutschein niedriger ist als die\n"
 "Bestellsumme, kannst du den Restbetrag mit einer anderen Zahlungsmethode "
 "bezahlen. Wenn das Guthaben höher ist als die Bestellsumme,\n"
 "kannst du den Gutschein in Zukunft erneut verwenden.\n"
@@ -15531,14 +15527,14 @@ msgstr "Mit anderer Bestellung verrechnen"
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:130
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_create.html:5
 msgid "Create a new gift card"
-msgstr "Neuen Geschenkgutschein erstellen"
+msgstr "Neuen Wertgutschein erstellen"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:134
 msgid ""
 "The gift card can be used to buy tickets for all events of this organizer."
 msgstr ""
-"Der Geschenkgutschein kann für alle Veranstaltungen dieses Veranstalters "
-"akzeptiert werden."
+"Der Wertgutschein kann für alle Veranstaltungen dieses Veranstalters "
+"eingelöst werden."
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:154
 msgid "Manual refund"
@@ -15697,8 +15693,8 @@ msgid ""
 "provided email functionality."
 msgstr ""
 "Da du die Erstattungen als Gutschein ausgibst, solltest du deinen Kunden "
-"erklären, wie diese an den Geschenkgutschein gelangen. Der einfachste Weg "
-"ist, eine kurze Erklärung und einen Link zu ihrer Bestellung mit der hier "
+"erklären, wie diese an den Wertgutschein gelangen. Der einfachste Weg ist, "
+"eine kurze Erklärung und einen Link zu ihrer Bestellung mit der hier "
 "angebotenen E-Mail-Funktion zu verschicken."
 
 #: pretix/control/templates/pretixcontrol/orders/cancel.html:64
@@ -16161,7 +16157,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_edit.html:6
 #, python-format
 msgid "Gift card: %(card)s"
-msgstr "Geschenkgutschein: %(card)s"
+msgstr "Wertgutschein: %(card)s"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:23
 #: pretix/control/templates/pretixcontrol/organizers/giftcards.html:86
@@ -16198,29 +16194,29 @@ msgstr "Manuelle Transaktion"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:119
 msgid "Gift card history"
-msgstr "Geschenkgutschein-Verlauf"
+msgstr "Wertgutschein-Verlauf"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcards.html:8
 msgid "Issued gift cards"
-msgstr "Ausgestellte Geschenkgutscheine"
+msgstr "Ausgestellte Wertgutscheine"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcards.html:13
 msgid ""
 "You haven't issued any gift cards yet. You can either set up a product in an "
 "event shop to sell gift cards, or you can manually issue gift cards."
 msgstr ""
-"Du hast noch keine Geschenkgutscheine ausgestellt. Du kannst entweder ein "
-"Produkt in einer Veranstaltung so konfigurieren, dass Geschenkgutscheine "
+"Du hast noch keine Wertgutscheine ausgestellt. Du kannst entweder ein "
+"Produkt in einer Veranstaltung so konfigurieren, dass Wertgutscheine "
 "verkauft werden, oder diese manuell ausstellen."
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcards.html:20
 #: pretix/control/templates/pretixcontrol/organizers/giftcards.html:45
 msgid "Manually issue a gift card"
-msgstr "Geschenkgutschein manuell ausstellen"
+msgstr "Wertgutschein manuell ausstellen"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcards.html:101
 msgid "Accepted gift cards of other organizers"
-msgstr "Akzeptierte Geschenkgutscheine anderer Veranstalter"
+msgstr "Akzeptierte Wertgutschein anderer Veranstalter"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcards.html:103
 msgid ""
@@ -18673,8 +18669,8 @@ msgstr ""
 msgid ""
 "A new gift card was created. You can now send the user their gift card code."
 msgstr ""
-"Ein neuer Geschenkgutschein wurde erstellt und kann nun an den Kunden "
-"verschickt werden."
+"Ein neuer Wertgutschein wurde erstellt und kann nun an den Kunden verschickt "
+"werden."
 
 #: pretix/control/views/orders.py:1022
 msgid "Your gift card code"
@@ -18696,7 +18692,7 @@ msgstr ""
 "\n"
 "wir haben dir {amount} für deine Bestellung zurückerstattet.\n"
 "\n"
-"Du kannst den Geschenkgutschein mit dem Code {giftcard} nutzen, um für "
+"Du kannst den Wertgutschein mit dem Code {giftcard} nutzen, um für "
 "zukünftige Käufe in unserem Shop zu bezahlen.\n"
 "\n"
 "Dein {event}-Team"
@@ -19022,7 +19018,7 @@ msgstr "Der ausgewählte Gutscheinaussteller wurde gelöscht."
 #: pretix/control/views/organizer.py:1051
 #: pretix/control/views/organizer.py:1084
 msgid "Gift cards are not allowed to have negative values."
-msgstr "Geschenkgutscheine dürfen keine negativen Werte haben."
+msgstr "Wertgutscheine dürfen keine negativen Werte haben."
 
 #: pretix/control/views/organizer.py:1074
 msgid "The transaction could not be reversed."
@@ -19042,7 +19038,7 @@ msgstr "Die manuelle Transaktion wurde gespeichert."
 
 #: pretix/control/views/organizer.py:1130
 msgid "The gift card has been created and can now be used."
-msgstr "Der Geschenkgutschein wurde erstellt und kann nun verwendet werden."
+msgstr "Der Wertgutschein wurde erstellt und kann nun verwendet werden."
 
 #: pretix/control/views/organizer.py:1380
 msgid "The selected gate has been deleted."
@@ -22808,7 +22804,7 @@ msgid ""
 "We've issued your refund of %(amount)s as a gift card. On your next purchase "
 "with us, you can use the following gift card code during payment:"
 msgstr ""
-"Wir haben einen Geschenkgutschein für deine Erstattung von %(amount)s "
+"Wir haben einen Wertgutschein für deine Erstattung von %(amount)s "
 "ausgestellt. Du kannst für deinen nächsten Kauf den hier angezeigten "
 "Gutscheincode zur Zahlung verwenden:"
 
@@ -22820,7 +22816,7 @@ msgstr "Der aktuelle Wert deines Gutscheins ist %(value)s."
 #: pretix/presale/templates/pretixpresale/event/order.html:161
 #, python-format
 msgid "This gift card is valid until %(expiry)s."
-msgstr "Dieser Geschenkgutschein ist gültig bis %(expiry)s."
+msgstr "Dieser Wertgutschein ist gültig bis %(expiry)s."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:172
 #, python-format
@@ -22928,7 +22924,7 @@ msgid ""
 "The refund will be issued in form of a gift card that you can use for "
 "further purchases."
 msgstr ""
-"Der Erstattungsbetrag wird dir als Geschenkgutschein zugestellt, den du für "
+"Der Erstattungsbetrag wird dir als Wertgutschein zugestellt, den du für "
 "weitere Käufe verwenden kannst."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:395
@@ -22936,8 +22932,8 @@ msgstr ""
 msgid ""
 "The refund can be issued to your original payment method or as a gift card."
 msgstr ""
-"Der Erstattungsbetrag kann dir als Geschenkgutschein oder als Rückzahlung "
-"mit deiner ursprünglichen Zahlungsmethode geschickt werden."
+"Der Erstattungsbetrag kann dir als Wertgutschein oder als Rückzahlung mit "
+"deiner ursprünglichen Zahlungsmethode geschickt werden."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:397
 #: pretix/presale/templates/pretixpresale/event/order.html:418
@@ -23017,7 +23013,7 @@ msgstr "Erstattungsbetrag:"
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:114
 #, python-format
 msgid "Your gift card will be valid until %(expiry_date)s."
-msgstr "Dein Geschenkgutschein wird bis %(expiry_date)s gültig sein."
+msgstr "Dein Wertgutschein wird bis %(expiry_date)s gültig sein."
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:102
 msgid "I want the refund as a gift card for later purchases"
