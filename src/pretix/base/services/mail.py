@@ -355,9 +355,20 @@ def mail_send_task(self, *args, to: List[str], subject: str, body: str, html: st
                             args = []
                             attach_size = 0
                             for name, ct in get_tickets_for_order(order, base_position=position):
-                                content = ct.file.read()
-                                args.append((name, content, ct.type))
-                                attach_size += len(content)
+                                try:
+                                    content = ct.file.read()
+                                    args.append((name, content, ct.type))
+                                    attach_size += len(content)
+                                except:
+                                    # This sometimes fails e.g. with FileNotFoundError. We haven't been able to figure out
+                                    # why (probably some race condition with ticket cache invalidation?), so retry later.
+                                    try:
+                                        self.retry(max_retries=5, countdown=60)
+                                    except MaxRetriesExceededError:
+                                        # Well then, something is really wrong, let's send it without attachment before we
+                                        # don't sent at all
+                                        logger.exception('Could not attach invoice to email')
+                                        pass
 
                             if attach_size < 4 * 1024 * 1024:
                                 # Do not attach more than 4MB, it will bounce way to often.
