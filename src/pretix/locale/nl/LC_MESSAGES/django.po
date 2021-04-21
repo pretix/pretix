@@ -7,10 +7,10 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-04-19 14:58+0000\n"
-"PO-Revision-Date: 2021-03-14 17:33+0000\n"
-"Last-Translator: Raphael Michel <michel@rami.io>\n"
-"Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/"
-">\n"
+"PO-Revision-Date: 2021-04-22 04:00+0000\n"
+"Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
+"Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
+"\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -355,22 +355,18 @@ msgid "Online shop"
 msgstr "Online winkel"
 
 #: pretix/base/context.py:45
-#, fuzzy, python-brace-format
-#| msgid "powered by <a %(a_attr)s>pretix</a>"
+#, python-brace-format
 msgid "powered by {name} based on <a {a_attr}>pretix</a>"
-msgstr "mogelijk gemaakt door <a %(a_attr)s>pretix</a>"
+msgstr "mogelijk gemaakt door {name}, gebaseerd op <a {a_attr}>pretix</a>"
 
 #: pretix/base/context.py:52
-#, fuzzy, python-format
-#| msgid "<a %(a_attr)s>event ticketing powered by pretix</a>"
+#, python-format
 msgid "<a %(a_attr)s>ticketing powered by pretix</a>"
 msgstr "<a %(a_attr)s>ticketverkoop mogelijk gemaakt door pretix</a>"
 
 #: pretix/base/context.py:61
-#, fuzzy
-#| msgid "Voucher code"
 msgid "source code"
-msgstr "Vouchercode"
+msgstr "broncode"
 
 #: pretix/base/email.py:176 pretix/control/views/main.py:291
 #: pretix/plugins/badges/__init__.py:45 pretix/plugins/badges/models.py:48
@@ -965,22 +961,16 @@ msgid "Show multiple choice answers grouped in one column"
 msgstr "Toon antwoorden voor meerkeuzevragen gegroepeerd in één kolom"
 
 #: pretix/base/exporters/orderlist.py:110
-#, fuzzy
-#| msgid "Only include tickets for dates on or after this date."
 msgid "Only include orders created on or after this date."
-msgstr "Alleen tickets voor subevenementen op of na deze datum."
+msgstr "Alleen bestellingen aangemaakt op of na deze datum."
 
 #: pretix/base/exporters/orderlist.py:117
-#, fuzzy
-#| msgid "Only include tickets for dates on or after this date."
 msgid "Only include orders created on or before this date."
-msgstr "Alleen tickets voor subevenementen op of na deze datum."
+msgstr "Alleen bestellingen gemaakt op of voor deze datum."
 
 #: pretix/base/exporters/orderlist.py:121
-#, fuzzy
-#| msgid "Start date"
 msgid "Start event date"
-msgstr "Begindatum"
+msgstr "Eerste evenementsdatum"
 
 #: pretix/base/exporters/orderlist.py:124
 #: pretix/base/exporters/orderlist.py:132
@@ -988,12 +978,13 @@ msgid ""
 "Only include orders including at least one ticket for a date on or after "
 "this date. Will also include other dates in case of mixed orders!"
 msgstr ""
+"Laat alleen bestellingen zien die ten minste één ticket bevatten voor een "
+"subevenement op of na deze datum. Als zo'n bestelling ticket bevat voor "
+"andere datums zullen deze ook worden getoond!"
 
 #: pretix/base/exporters/orderlist.py:129
-#, fuzzy
-#| msgid "Event date"
 msgid "End event date"
-msgstr "Evenementdatum"
+msgstr "Laatste evenementsdatum"
 
 #: pretix/base/exporters/orderlist.py:268
 #: pretix/base/exporters/orderlist.py:431
@@ -1467,10 +1458,8 @@ msgid "Gift cards"
 msgstr "Cadeaubonnen"
 
 #: pretix/base/exporters/orderlist.py:919
-#, fuzzy
-#| msgid "Show variants"
 msgid "Show value at"
-msgstr "Toon varianten"
+msgstr "Toon waarde op"
 
 #: pretix/base/exporters/orderlist.py:923
 #: pretix/base/exporters/orderlist.py:926 pretix/control/forms/filter.py:207
@@ -1554,22 +1543,16 @@ msgid "Current value"
 msgstr "Huidige waarde"
 
 #: pretix/base/exporters/orderlist.py:982
-#, fuzzy
-#| msgid "Free order"
 msgid "Created in order"
-msgstr "Gratis bestelling"
+msgstr "Aangemaakt in bestelling"
 
 #: pretix/base/exporters/orderlist.py:983
-#, fuzzy
-#| msgid "Invoice number prefix"
 msgid "Last invoice number of order"
-msgstr "Factuurnummer-prefix"
+msgstr "Laatste factuurnummer van bestelling"
 
 #: pretix/base/exporters/orderlist.py:984
-#, fuzzy
-#| msgid "Show expiration date of order"
 msgid "Last invoice date of order"
-msgstr "Toon verloopdatum van bestelling"
+msgstr "Laatste factuurdatum van bestelling"
 
 #: pretix/base/exporters/waitinglist.py:47
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:87
@@ -1688,38 +1671,42 @@ msgid "Please enter a shorter name."
 msgstr "Vul alstublieft een kortere naam in."
 
 #: pretix/base/forms/questions.py:264
-#, fuzzy
-#| msgid "Internal reference"
 msgctxt "phonenumber"
 msgid "International area code"
-msgstr "Interne referentie"
+msgstr "Landnummer"
 
 #: pretix/base/forms/questions.py:288
 msgctxt "phonenumber"
 msgid "Phone number (without international area code)"
-msgstr ""
+msgstr "Telefoonnummer (zonder landnummer)"
 
 #: pretix/base/forms/questions.py:408
 msgid ""
 "You uploaded an image in landscape orientation. Please upload an image in "
 "portrait orientation."
 msgstr ""
+"U heeft een afbeelding in een liggend formaat geüpload. Upload een "
+"afbeelding met een staand formaat."
 
 #: pretix/base/forms/questions.py:411
 msgid "Please upload an image where the width is 3/4 of the height."
-msgstr ""
+msgstr "Upload een afbeelding waarbij de breedte 3/4 van de hoogte bedraagt."
 
 #: pretix/base/forms/questions.py:414
 msgid ""
 "The file you uploaded has a very large number of pixels, please upload an "
 "image no larger than 10000 x 10000 pixels."
 msgstr ""
+"Het bestand dat u uploadde had een zeer grote hoeveelheid pixels. De "
+"maximale toegestane resolutie is 10000 x 10000 pixels."
 
 #: pretix/base/forms/questions.py:417
 msgid ""
 "Upload a valid image. The file you uploaded was either not an image or a "
 "corrupted image."
 msgstr ""
+"Upload een geldige afbeelding. Het bestand dat u uploadde was geen "
+"afbeelding of was een corrupte afbeelding."
 
 #: pretix/base/forms/questions.py:574 pretix/base/forms/questions.py:886
 msgid "Street and Number"
@@ -3143,10 +3130,8 @@ msgstr "Minimumwaarde"
 #: pretix/base/models/items.py:1127 pretix/base/models/items.py:1130
 #: pretix/base/models/items.py:1133 pretix/base/models/items.py:1136
 #: pretix/base/models/items.py:1139 pretix/base/models/items.py:1142
-#, fuzzy
-#| msgid "Currently not supported in our apps"
 msgid "Currently not supported in our apps and during check-in"
-msgstr "Momenteel niet ondersteund in onze apps"
+msgstr "Momenteel niet ondersteund in onze apps en tijdens inchecken"
 
 #: pretix/base/models/items.py:1129 pretix/base/models/items.py:1135
 #: pretix/base/models/items.py:1141
@@ -3155,13 +3140,16 @@ msgstr "Maximumwaarde"
 
 #: pretix/base/models/items.py:1145
 msgid "Validate file to be a portrait"
-msgstr ""
+msgstr "Controleer dat bestand een afbeelding in portretformaat is"
 
 #: pretix/base/models/items.py:1146
 msgid ""
 "If checked, files must be images with an aspect ratio of 3:4. This is "
 "commonly used for photos printed on badges."
 msgstr ""
+"Als deze optie is ingeschakeld moeten de geüploade bestanden afbeeldingen "
+"met een aspectverhouding van 3:4 zijn. Dit wordt vaak gebruikt voor foto's "
+"die op badges worden afgedrukt."
 
 #: pretix/base/models/items.py:1198
 msgid "An answer to this question is required to proceed."
@@ -3725,10 +3713,8 @@ msgid "Can change orders"
 msgstr "Kan bestellingen wijzigen"
 
 #: pretix/base/models/organizer.py:261
-#, fuzzy
-#| msgid "Perform update checks"
 msgid "Can perform check-ins"
-msgstr "Voer updatechecks uit"
+msgstr "Kan tickets inchecken"
 
 #: pretix/base/models/organizer.py:262
 msgid ""
@@ -3736,6 +3722,9 @@ msgid ""
 "information about attendees. Users with \"can change orders\" can also "
 "perform check-ins."
 msgstr ""
+"Deze optie staat ook toe om te zoeken in de gastenlijst, wat zou kunnen "
+"worden gebruikt om privégegevens van gasten op te zoeken. Gebruikers met "
+"\"kan bestellingen wijzigen\" kunnen ook tickets inchecken."
 
 #: pretix/base/models/organizer.py:267
 msgid "Can view vouchers"
@@ -4780,16 +4769,12 @@ msgid "Sample product – sample variation"
 msgstr "Voorbeeldproduct – voorbeeldvariant"
 
 #: pretix/base/pdf.py:125
-#, fuzzy
-#| msgid "Product description"
 msgid "Product variation description"
-msgstr "Productomschrijving"
+msgstr "Productvariantomschrijving"
 
 #: pretix/base/pdf.py:126
-#, fuzzy
-#| msgid "Sample product description"
 msgid "Sample product variation description"
-msgstr "Voorbeeld productomschrijving"
+msgstr "Voorbeeld productvariantomschrijving"
 
 #: pretix/base/pdf.py:133
 msgid "Ticket category"
@@ -6827,7 +6812,7 @@ msgstr ""
 
 #: pretix/base/settings.py:1182
 msgid "Hide all unavailable dates from calendar or list views"
-msgstr ""
+msgstr "Verberg alle niet beschikbare datums uit kalender- en lijstweergaven"
 
 #: pretix/base/settings.py:1191
 msgid "Allow customers to modify their information after they checked in."
@@ -8282,10 +8267,8 @@ msgstr "aangemaakt door"
 
 #: pretix/base/templates/pretixbase/email/order_details.html:36
 #: pretix/base/templates/pretixbase/email/order_details.html:124
-#, fuzzy
-#| msgid "Bancontact"
 msgid "Contact:"
-msgstr "Bancontact"
+msgstr "Contact:"
 
 #: pretix/base/templates/pretixbase/email/order_details.html:51
 msgid "View registration details"
@@ -8305,7 +8288,7 @@ msgstr "Details:"
 
 #: pretix/base/templates/pretixbase/forms/widgets/portrait_image.html:10
 msgid "Upload photo"
-msgstr ""
+msgstr "Foto uploaden"
 
 #: pretix/base/templates/pretixbase/forms/widgets/reldate.html:15
 #: pretix/base/templates/pretixbase/forms/widgets/reldatetime.html:19
@@ -8321,16 +8304,17 @@ msgid "at"
 msgstr "op"
 
 #: pretix/base/templates/source.html:5 pretix/base/templates/source.html:9
-#, fuzzy
-#| msgid "Voucher code"
 msgid "Source code"
-msgstr "Vouchercode"
+msgstr "Broncode"
 
 #: pretix/base/templates/source.html:10
 msgid ""
 "This site is powered by free software. If you want to read the license terms "
 "or obtain the source code, follow these links or instructions:"
 msgstr ""
+"Deze site is gebouwd op vrije software. Volg de volgende links of "
+"instructies als u de licentievoorwaarden wilt lezen of de broncode wilt "
+"ontvangen:"
 
 #: pretix/base/ticketoutput.py:179
 msgid "Enable ticket format"
@@ -9479,34 +9463,37 @@ msgstr ""
 "de e-mails zullen door deze server lokaal worden verstuurd."
 
 #: pretix/control/forms/global_settings.py:133
-#, fuzzy
-#| msgid "Change to"
 msgid "Changes to pretix"
-msgstr "Veranderen naar"
+msgstr "Veranderingen aan pretix"
 
 #: pretix/control/forms/global_settings.py:136
 msgid ""
 "This installation of pretix is running without any custom modifications or "
 "extensions (except for installed plugins)."
 msgstr ""
+"Deze installatie van pretix draait zonder eigen aanpassingen of "
+"uitbreidingen (behalve geïnstalleerde plugins)."
 
 #: pretix/control/forms/global_settings.py:138
 msgid ""
 "This installation of pretix includes changes or extensions made to the "
 "source code."
 msgstr ""
+"Deze installatie van pretix bevat veranderingen of uitbreidingen aan de "
+"broncode."
 
 #: pretix/control/forms/global_settings.py:143
-#, fuzzy
-#| msgid "Usage overview"
 msgid "Usage of pretix"
-msgstr "Gebruiksoverzicht"
+msgstr "Gebruik van pretix"
 
 #: pretix/control/forms/global_settings.py:146
 msgid ""
 "I only use pretix to organize events which are executed by my own company or "
 "its affiliated companies, or to sell products sold by my own company."
 msgstr ""
+"Ik gebruik pretix alleen om evenementen te organiseren die worden uitgevoerd "
+"door mijn eigen bedrijf of aan mijn bedrijf gerelateerde bedrijven, of om "
+"producten te verkopen die worden aangeboden door mijn eigen bedrijf."
 
 #: pretix/control/forms/global_settings.py:148
 msgid ""
@@ -9514,14 +9501,17 @@ msgid ""
 "company) or I offer the functionality of pretix to others (e.g. a Software-"
 "as-a-Service company)."
 msgstr ""
+"Ik gebruik pretix om tickets te verkopen van andere evenementenorganisatoren "
+"(bijv. een ticketingbedrijf) of ik bied de functionaliteit van pretix aan "
+"anderen aan (bijv. een Software-as-a-Service-bedrijf)."
 
 #: pretix/control/forms/global_settings.py:150
 msgid "I'm not sure which option applies."
-msgstr ""
+msgstr "Ik weet niet zeker welke optie van toepassing is."
 
 #: pretix/control/forms/global_settings.py:155
 msgid "License choice"
-msgstr ""
+msgstr "Licentiekeuze"
 
 #: pretix/control/forms/global_settings.py:158
 msgid ""
@@ -9529,6 +9519,8 @@ msgid ""
 "the copyright holders which allows me to not share modifications if I only "
 "use pretix internally."
 msgstr ""
+"Ik wil pretix gebruiken onder de extra voorwaarden die mij toestaan om "
+"wijzigingen aan pretix niet te delen als ik pretix alleen intern gebruik."
 
 #: pretix/control/forms/global_settings.py:161
 msgid ""
@@ -9536,39 +9528,52 @@ msgid ""
 "restriction on the scope of usage and therefore without making use of any "
 "additional permission."
 msgstr ""
+"Ik wil pretix gebruiken onder de voorwaarden van de AGPLv3-licentie zonder "
+"extra beperkingen op aan wie pretix beschikbaar wordt gesteld, en dus geen "
+"gebruik maken van de extra voorwaarden."
 
 #: pretix/control/forms/global_settings.py:163
 msgid ""
 "I have obtained a paid pretix Enterprise license which is currently valid."
 msgstr ""
+"Ik heb een betaalde pretix Enterprise-licentie die op dit moment geldig is."
 
 #: pretix/control/forms/global_settings.py:168
 msgid ""
 "This installation of pretix has installed plugins which are available freely "
 "under a non-copyleft license (Apache License, MIT License, BSD license, …)."
 msgstr ""
+"Deze installatie van pretix heeft plugins geïnstalleerd die vrij beschikbaar "
+"onder een niet-copyleft-licentie zijn (Apache-licentie, MIT-licentie, BSD-"
+"licentie, …)."
 
 #: pretix/control/forms/global_settings.py:173
 msgid ""
 "This installation of pretix has installed plugins which are available freely "
 "under a license with strong copyleft (GPL, AGPL, …)."
 msgstr ""
+"Deze installatie van pretix heeft plugins geïnstalleerd die vrij beschikbaar "
+"zijn onder een licentie met sterke copyleft-voorwaarden (GPL, AGPL, …)."
 
 #: pretix/control/forms/global_settings.py:178
 msgid ""
 "This installation of pretix has installed plugins which have been created "
 "internally or obtained under a proprietary license by a third party."
 msgstr ""
+"Deze installatie van pretix heeft plugins geïnstalleerd die intern zijn "
+"gemaakt of onder een eigen licentie van een derde partij zijn verkregen."
 
 #: pretix/control/forms/global_settings.py:183
 msgid ""
 "This installation of pretix has installed pretix Enterprise plugins with a "
 "valid license."
 msgstr ""
+"Deze installatie van pretix heeft pretix Enterprise-plugins geïnstalleerd "
+"met een geldige licentie."
 
 #: pretix/control/forms/global_settings.py:187
 msgid "Footer: \"powered by\" name (optional)"
-msgstr ""
+msgstr "Footer: \"mogelijk gemaakt door\"-naam (optioneel)"
 
 #: pretix/control/forms/global_settings.py:188
 msgid ""
@@ -9576,21 +9581,23 @@ msgid ""
 "name of your company or organization (if you made any changes to pretix), "
 "set the name here."
 msgstr ""
+"Als u wilt dat de \"mogelijk gemaakt door\"-melding in de footer van elke "
+"pagina uw bedrijfsnaam vermeldt kunt u hier de naam instellen."
 
 #: pretix/control/forms/global_settings.py:193
 msgid "Link for powered by name"
-msgstr ""
+msgstr "Link voor \"mogelijk gemaakt door\"-naam"
 
 #: pretix/control/forms/global_settings.py:194
 msgid ""
 "If you used the previous option, you can set an URL to link to in the footer."
 msgstr ""
+"Als u bij de vorige optie een naam heeft ingevuld kunt u hier een URL "
+"instellen om deze in de footer op te nemen."
 
 #: pretix/control/forms/global_settings.py:198
-#, fuzzy
-#| msgid "Your registration"
 msgid "Source code instructions"
-msgstr "Uw aanmelding"
+msgstr "Broncodeinstructies"
 
 #: pretix/control/forms/global_settings.py:200
 msgid ""
@@ -9598,6 +9605,10 @@ msgid ""
 "current source code of the site including all modifications and installed "
 "plugins. This will be publicly available. Make sure to keep it up to date!"
 msgstr ""
+"Als u pretix onder de AGPLv3-voorwaarden gebruikt, beschrijf dan hier hoe de "
+"huidige broncode van de site te downloaden is, inclusief alle aanpassingen "
+"en geïnstalleerde plugins. Deze informatie zal publiek beschikbaar zijn. "
+"Zorg ervoor dat deze informatie bijgewerkt blijft!"
 
 #: pretix/control/forms/item.py:130
 msgid "This field is required"
@@ -11625,10 +11636,8 @@ msgid "Update check"
 msgstr "Updatecontrole"
 
 #: pretix/control/navigation.py:413
-#, fuzzy
-#| msgid "Tickets & check-in"
 msgid "License check"
-msgstr "Tickets & inchecken"
+msgstr "Licentie-controle"
 
 #: pretix/control/navigation.py:457
 #: pretix/control/templates/pretixcontrol/organizers/properties.html:5
@@ -11766,10 +11775,9 @@ msgstr ""
 "uw pretix-account?"
 
 #: pretix/control/templates/pretixcontrol/auth/oauth_authorization.html:24
-#, fuzzy, python-format
-#| msgid "You are currently working on behalf of %(user)s."
+#, python-format
 msgid "You are currently logged in as <strong>%(user)s</strong>."
-msgstr "U werkt momenteel namens %(user)s."
+msgstr "U bent momenteel ingelogd als <strong>%(user)s</strong>."
 
 #: pretix/control/templates/pretixcontrol/auth/oauth_authorization.html:28
 msgid "The application requires the following permissions:"
@@ -11936,6 +11944,9 @@ msgid ""
 "Click here to do a license compliance check to make sure your usage of "
 "pretix is in line with pretix' license."
 msgstr ""
+"Klik hier om een licentiecontrole uit te voeren, om zeker te zijn dat uw "
+"gebruik van pretix in overeenstemming is met de gebruiksvoorwaarden van "
+"pretix."
 
 #: pretix/control/templates/pretixcontrol/base.html:411
 msgid ""
@@ -13873,6 +13884,8 @@ msgstr ""
 msgid ""
 "This page is intended to help you use pretix in compliance with its license."
 msgstr ""
+"Deze pagina is bedoeld om u te helpen pretix te gebruiken op een manier die "
+"is toegestaan door de gebruiksvoorwaarden."
 
 #: pretix/control/templates/pretixcontrol/global_license.html:11
 msgid ""
@@ -13880,56 +13893,56 @@ msgid ""
 "page does not guarantee you are within the license. Only the original "
 "license text is legally binding."
 msgstr ""
+"De tekst en uitvoer van deze pagina zijn geen rechtsgeldige documenten en "
+"het invullen van deze pagina garandeert niet dat uw gebruik overeenkomt met "
+"de pretix-licentie. Alleen de oorspronkelijke licentietekst is rechtsgeldig."
 
 #: pretix/control/templates/pretixcontrol/global_license.html:14
 msgid ""
 "You should have received a copy of pretix' license together with your copy "
 "of pretix. You can also view the current version of the license file here:"
 msgstr ""
+"U hoort een kopie van de licentievoorwaarden van pretix samen met uw kopie "
+"van pretix te hebben ontvangen. U kunt ook de huidige versie van de "
+"licentievoorwaarden hier bekijken:"
 
 #: pretix/control/templates/pretixcontrol/global_license.html:18
 msgid "Answers to common questions about the license can be found here:"
 msgstr ""
+"Antwoorden op veelgestelde vragen over de licentievoorwaarden kunnen hier "
+"gevonden worden:"
 
 #: pretix/control/templates/pretixcontrol/global_license.html:22
 msgid ""
 "For more information or to obtain a paid pretix Enterprise license, contact "
 "support@pretix.eu."
 msgstr ""
+"Neem contact op met support@pretix.eu voor meer informatie of om een "
+"betaalde pretix Enterprise-licentie aan te schaffen."
 
 #: pretix/control/templates/pretixcontrol/global_license.html:26
-#, fuzzy
-#| msgid "Price settings"
 msgid "License settings and check"
-msgstr "Prijsinstellingen"
+msgstr "Licentieinstellingen en -controle"
 
 #: pretix/control/templates/pretixcontrol/global_license.html:29
-#, fuzzy
-#| msgid "Registration details"
 msgid "Installation details"
-msgstr "Aanmeldingsdetails"
+msgstr "Installatiedetails"
 
 #: pretix/control/templates/pretixcontrol/global_license.html:40
-#, fuzzy
-#| msgid "Your information"
 msgid "Public information"
-msgstr "Uw informatie"
+msgstr "Publieke informatie"
 
 #: pretix/control/templates/pretixcontrol/global_license.html:52
-#, fuzzy
-#| msgid "Save and show preview"
 msgid "Save and check"
-msgstr "Sla op en toon voorbeeld"
+msgstr "Opslaan en controleren"
 
 #: pretix/control/templates/pretixcontrol/global_license.html:60
-#, fuzzy
-#| msgid "Update check results"
 msgid "Check results"
-msgstr "Resultaten updatecontrole"
+msgstr "Controleer resultaat"
 
 #: pretix/control/templates/pretixcontrol/global_license.html:79
 msgid "The automated license check did not identify any issues."
-msgstr ""
+msgstr "De automatische licentiecontrole heeft geen problemen gevonden."
 
 #: pretix/control/templates/pretixcontrol/global_message.html:5
 #: pretix/control/templates/pretixcontrol/global_message.html:7
@@ -16637,13 +16650,16 @@ msgstr "Grootte (mm)"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:256
 msgid "Render without whitespace"
-msgstr ""
+msgstr "Zonder witruimte renderen"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:258
 msgid ""
 "Required for consistent size across platforms. Supported on Android starting "
 "with pretixPRINT 2.3.3 and on Desktop with pretixSCAN 1.9.3."
 msgstr ""
+"Deze optie is verplicht voor een consistente grootte over verschillende "
+"platforms. Ondersteund op Android vanaf pretixPRINT 2.3.3 en op Desktop met "
+"pretixSCAN 1.9.3."
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:264
 msgid "Font size (pt)"
@@ -18308,6 +18324,11 @@ msgid ""
 "others, you must either use pretix under AGPLv3 terms or obtain a pretix "
 "Enterprise license."
 msgstr ""
+"Uw gebruik van pretix voldoet niet aan de licentievoorwaarden. Als u niet "
+"zeker weet of u de aanvullende toestemming kunt gebruiken of als u de "
+"functionaliteit van pretix aan derden aanbiedt moet u pretix gebruiken onder "
+"de voorwaarden van de AGPLv3-licentie of een betaalde pretix Enterprise-"
+"licentie aanschaffen."
 
 #: pretix/control/views/global_settings.py:195
 msgid ""
@@ -18315,18 +18336,26 @@ msgid ""
 "license if you install any plugins licensed with strong copyleft, otherwise "
 "you are likely in violation of the license of these plugins."
 msgstr ""
+"U kunt geen gebruik maken van de aanvullende toestemming of van een betaalde "
+"pretix Enterprise-licentie als u plugins installeert met een sterke copyleft-"
+"licentie, want dan schendt u waarschijnlijk de voorwaarden van de licentie "
+"op deze plugins."
 
 #: pretix/control/views/global_settings.py:203
 msgid ""
 "If you're using pretix under AGPL license, you need to provide instructions "
 "on how to access the source code."
 msgstr ""
+"Als u pretix onder de AGPL-licentie gebruikt bent u verplicht om instructies "
+"te tonen hoe de broncode van uw pretix-installatie kan worden opgevraagd."
 
 #: pretix/control/views/global_settings.py:210
 msgid ""
 "You must not use pretix under AGPL terms if you use pretix Enterprise "
 "plugins."
 msgstr ""
+"U kunt pretix niet onder de AGPL-licentie gebruiken als u pretix Enterprise-"
+"plugins gebruikt."
 
 #: pretix/control/views/global_settings.py:217
 msgid ""
@@ -18335,6 +18364,10 @@ msgid ""
 "license terms as pretix (AGPLv3 + additional restrictions). Make sure to "
 "keep it up to date!"
 msgstr ""
+"U moet alle wijzigingen die u aan de broncode van pretix hebt gemaakt vrij "
+"beschikbaar maken voor elke bezoeker van uw website, in de vorm van broncode "
+"onder dezelfde licentievoorwaarden als pretix (AGPLv3 + bijkomende "
+"beperkingen). Zorg ervoor dat u de broncode up-to-date houdt!"
 
 #: pretix/control/views/global_settings.py:224
 msgid ""
@@ -18342,6 +18375,10 @@ msgid ""
 "visitor of your site in source code form under the same license terms as "
 "pretix (AGPLv3 + additional restrictions). Make sure to keep it up to date!"
 msgstr ""
+"U moet al uw geïnstalleerde plugins vrij beschikbaar maken aan elke bezoeker "
+"van uw site, in de vorm van broncode onder dezelfde licentievoorwaarden als "
+"pretix (AGPLv3 + extra beperkingen). Zorg ervoor dat u de broncode up-to-"
+"date houdt!"
 
 #: pretix/control/views/global_settings.py:235
 #, python-brace-format
@@ -18349,6 +18386,8 @@ msgid ""
 "You selected that you have no active pretix Enterprise licenses, but we "
 "found the following Enterprise plugin: {plugin}"
 msgstr ""
+"U heeft aangegeven dat u geen actieve pretix Enterprise-licenties heeft, "
+"maar we hebben de volgende pretix Enterprise-plugin gevonden: {plugin}"
 
 #: pretix/control/views/global_settings.py:242
 #, python-brace-format
@@ -18356,6 +18395,9 @@ msgid ""
 "You selected that you have no copyleft-licensed plugins installed, but we "
 "found the plugin \"{plugin}\" with license \"{license}\"."
 msgstr ""
+"U heeft aangegeven dat u geen plugins onder copyleft-voorwaarden heeft "
+"geïnstalleerd, maar we hebben de plugin \"{plugin}\" met de licentie \""
+"{license}\" gevonden."
 
 #: pretix/control/views/global_settings.py:249
 #, python-brace-format
@@ -18363,6 +18405,9 @@ msgid ""
 "You selected that you have no free plugins installed, but we found the "
 "plugin \"{plugin}\" with license \"{license}\"."
 msgstr ""
+"U heeft aangegeven dat u geen vrij beschikbare plugins heeft geïnstalleerd, "
+"maar we hebben de plugin \"{plugin}\" onder de licentie \"{license}\" "
+"gevonden."
 
 #: pretix/control/views/global_settings.py:256
 #, python-brace-format
@@ -18370,6 +18415,9 @@ msgid ""
 "We found the plugin \"{plugin}\" with license \"{license}\" which this tool "
 "does not know about and therefore cannot give any recommendations."
 msgstr ""
+"We hebben de plugin \"{plugin}\" met licentie \"{license}\" gevonden, "
+"waarover deze tool geen informatie heeft. Hierom kunnen we u hierover geen "
+"aanbevelingen geven."
 
 #: pretix/control/views/item.py:122 pretix/control/views/item.py:1403
 msgid "The requested product does not exist."
@@ -21793,24 +21841,16 @@ msgstr "PDF-ticketlay-out: {}"
 
 #: pretix/plugins/webcheckin/__init__.py:30
 #: pretix/plugins/webcheckin/__init__.py:33
-#, fuzzy
-#| msgid "Automated check-in"
 msgid "Web-based check-in"
-msgstr "Automatisch inchecken"
+msgstr "Web-gebaseerde check-in"
 
 #: pretix/plugins/webcheckin/__init__.py:37
-#, fuzzy
-#| msgid ""
-#| "This plugin allows you to generate check-in lists for your conference."
 msgid "This plugin allows you to perform check-in actions in your browser."
-msgstr ""
-"Deze plug-in staat u toe om inchecklijsten te genereren voor uw conferentie."
+msgstr "Deze plugin staat u toe om gasten in te checken in uw browser."
 
 #: pretix/plugins/webcheckin/signals.py:36
-#, fuzzy
-#| msgid "Check-in"
 msgid "Web Check-in"
-msgstr "Check-in"
+msgstr "Web Check-in"
 
 #: pretix/plugins/webcheckin/templates/pretixplugins/webcheckin/index.html:11
 msgid "Check-in"
@@ -21930,16 +21970,14 @@ msgid "No other variations of this product exist."
 msgstr "Er bestaan geen andere varianten van dit product."
 
 #: pretix/presale/forms/renderers.py:50
-#, fuzzy
-#| msgid "Valid"
 msgctxt "form"
 msgid "is valid"
-msgstr "Geldig"
+msgstr "is geldig"
 
 #: pretix/presale/forms/renderers.py:52
 msgctxt "form"
 msgid "has errors"
-msgstr ""
+msgstr "bevat fouten"
 
 #: pretix/presale/forms/renderers.py:64
 msgctxt "form"
@@ -22194,10 +22232,8 @@ msgid "Add or remove tickets"
 msgstr "Tickets toevoegen of verwijderen"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:60
-#, fuzzy
-#| msgid "Confirm payment"
 msgid "Modify payment"
-msgstr "Bevestig betaling"
+msgstr "Betalingsgegevens bewerken"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:62
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:84
@@ -22206,16 +22242,12 @@ msgid "Modify"
 msgstr "Wijzigen"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:82
-#, fuzzy
-#| msgid "Invoice information"
 msgid "Modify invoice information"
-msgstr "Factuurgegevens"
+msgstr "Factuurgegevens bewerken"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:132
-#, fuzzy
-#| msgid "Contact information"
 msgid "Modify contact information"
-msgstr "Contactgegevens"
+msgstr "Contactgegevens bewerken"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:138
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:18
@@ -22371,17 +22403,13 @@ msgstr ""
 "beschikbaar worden."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:54
-#, fuzzy
-#| msgid "Show attendee names on invoices"
 msgid "No attendee name provided"
-msgstr "Toon namen van gasten op facturen"
+msgstr "Geen gastnaam opgegeven"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:148
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:199
-#, fuzzy
-#| msgid "Modify price for %(item)s"
 msgid "price per item"
-msgstr "Verander prijs voor %(item)s"
+msgstr "prijs per stuk"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:159
 msgid "Okay, we're removing that…"
@@ -22393,7 +22421,7 @@ msgstr "Verwijder één"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:172
 msgid "quantity"
-msgstr ""
+msgstr "hoeveelheid"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:176
 msgid "We're trying to reserve another one for you!"
@@ -22416,10 +22444,8 @@ msgid "Add one more"
 msgstr "Voeg nog een toe"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:208
-#, fuzzy
-#| msgid "Price"
 msgid "price"
-msgstr "Prijs"
+msgstr "prijs"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:289
 #, python-format
@@ -22635,11 +22661,8 @@ msgid "General information, add products to your cart"
 msgstr "Algemene informatie, nieuwe producten aan winkelwagen toevoegen"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:47
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "Please either select all dates or a date range, not both."
 msgid "Please select a date to redeem your voucher."
-msgstr "Kies alle evenementsdatums of een datumbereik, maar niet beiden."
+msgstr "Kies een datum om uw voucher te verzilveren."
 
 #: pretix/presale/templates/pretixpresale/event/index.html:60
 msgid "View other date"
@@ -22866,10 +22889,8 @@ msgstr ""
 "zichtbaar is."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:189
-#, fuzzy
-#| msgid "Change order"
 msgid "Change ordered items"
-msgstr "Verander bestelling"
+msgstr "Bestelde producten bewerken"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:191
 #: pretix/presale/templates/pretixpresale/event/order.html:285
@@ -22890,10 +22911,8 @@ msgid "Request invoice"
 msgstr "Vraag factuur aan"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:283
-#, fuzzy
-#| msgid "Change order information"
 msgid "Change your information"
-msgstr "Verander bestellingsinformatie"
+msgstr "Klantgegevens veranderen"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:291
 msgid "Your information"
@@ -23211,11 +23230,8 @@ msgid "Voucher redemption"
 msgstr "Voucher verzilveren"
 
 #: pretix/presale/templates/pretixpresale/event/voucher.html:21
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "This voucher is not valid for this event date."
 msgid "This voucher is valid only for the following specific date and time."
-msgstr "Deze voucher is niet geldig voor deze evenementsdatum."
+msgstr "Deze voucher is alleen voor de volgende datum en tijd geldig."
 
 #: pretix/presale/templates/pretixpresale/event/voucher.html:68
 msgid ""
@@ -23519,12 +23535,7 @@ msgid "We had difficulties processing your input."
 msgstr "We konden uw invoer niet verwerken."
 
 #: pretix/presale/views/user.py:70
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "If the email address you entered is valid and associated with a ticket, "
-#| "we have already sent you an email with a link to your ticket in the past "
-#| "{number} hours. If the email did not arrive, please your check spam "
-#| "folder and also double check that you used the correct email address."
+#, python-brace-format
 msgid ""
 "If the email address you entered is valid and associated with a ticket, we "
 "have already sent you an email with a link to your ticket in the past "
