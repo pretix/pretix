@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-04-19 14:58+0000\n"
-"PO-Revision-Date: 2021-04-21 15:14+0000\n"
+"PO-Revision-Date: 2021-04-21 15:33+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
@@ -4549,7 +4549,7 @@ msgstr ""
 #: pretix/base/payment.py:410
 msgctxt "invoice"
 msgid "The payment for this invoice has already been received."
-msgstr "Die Zahlung für diese Rechnung ist bereits eingegangen."
+msgstr "Die Rechnung wurde bereits beglichen."
 
 #: pretix/base/payment.py:821
 msgid "Automatic refunds are not supported by this payment provider."
@@ -20441,7 +20441,7 @@ msgstr "Die Rückerstattung über PayPal ist fehlgeschlagen: {}"
 
 #: pretix/plugins/paypal/payment.py:678 pretix/plugins/paypal/payment.py:686
 msgid "The payment for this invoice has already been received."
-msgstr "Die Zahlung für diese Rechnung ist bereits eingegangen."
+msgstr "Die Rechnung wurde bereits beglichen."
 
 #: pretix/plugins/paypal/payment.py:679 pretix/plugins/paypal/payment.py:687
 msgid "PayPal payment ID"
