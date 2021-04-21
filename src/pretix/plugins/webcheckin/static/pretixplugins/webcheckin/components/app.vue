@@ -262,6 +262,9 @@ export default {
     checkResultText () {
       if (!this.checkResult) return ''
       if (this.checkResult.status === 'ok') {
+        if (this.type === "exit") {
+          return this.$root.strings['result.exit']
+        }
         return this.$root.strings['result.ok']
       } else if (this.checkResult.status === 'incomplete') {
         return this.$root.strings['result.questions']
