@@ -77,7 +77,7 @@
             </div>
 
             <h4>{% trans "Refund to a different payment method" %}</h4>
-            <div class="table-responsive">
+            <div class="table-responsive table-responsive-small-only">
                 <table class="table table-condensed">
                     <thead>
                     <tr>
@@ -130,8 +130,12 @@
                             <strong>{% trans "Create a new gift card" %}</strong>
                         </td>
                         <td>
-                            <div class="text-muted">
+                            <p class="text-muted">
                                 {% trans "The gift card can be used to buy tickets for all events of this organizer." %}
+                            </p>
+                            <div class="pos-relative">
+                                <input type="text" name="giftcard-expires" placeholder="{% trans "Expiration date" %}"
+                                        value="{{ giftcard_expires }}" title="" class="datepickerfield form-control" autocomple="off">
                             </div>
                         </td>
                         <td class="text-right flip refund-amount">

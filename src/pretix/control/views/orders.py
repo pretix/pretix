@@ -43,6 +43,7 @@ from decimal import Decimal, DecimalException
 from urllib.parse import quote, urlencode
 
 import vat_moss.id
+from django import forms
 from django.conf import settings
 from django.contrib import messages
 from django.core.exceptions import ValidationError
@@ -60,6 +61,7 @@ from django.http import (
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils import formats
+from django.utils.formats import date_format, get_format
 from django.utils.functional import cached_property
 from django.utils.http import is_safe_url
 from django.utils.timezone import make_aware, now
@@ -858,8 +860,22 @@ class OrderRefundView(OrderView):
             else:
                 if giftcard_value:
                     refund_selected += giftcard_value
+
+                    if self.request.POST.get('giftcard-expires'):
+                        try:
+                            expires = forms.DateField().to_python(self.request.POST.get('giftcard-expires'))
+                            expires = make_aware(datetime.combine(
+                                expires,
+                                time(hour=23, minute=59, second=59)
+                            ), self.request.event.timezone)
+                        except ValidationError as e:
+                            messages.error(self.request, e.message)
+                            is_valid = False
+                    else:
+                        expires = None
+
                     giftcard = self.request.organizer.issued_gift_cards.create(
-                        expires=self.request.organizer.default_gift_card_expiry,
+                        expires=expires,
                         currency=self.request.event.currency,
                         testmode=self.order.testmode
                     )
@@ -1054,6 +1070,10 @@ class OrderRefundView(OrderView):
             'order': self.order,
             'comment': comment,
             'giftcard_proposal': giftcard_proposal,
+            'giftcard_expires': (
+                date_format(self.request.organizer.default_gift_card_expiry, get_format('DATE_INPUT_FORMATS')[0])
+                if self.request.organizer.default_gift_card_expiry else ''
+            ),
             'partial_amount': (
                 self.request.POST.get('start-partial_amount') if self.request.method == 'POST'
                 else self.request.GET.get('start-partial_amount')

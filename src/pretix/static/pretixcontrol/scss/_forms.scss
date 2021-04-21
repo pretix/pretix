@@ -687,3 +687,12 @@ table td > .checkbox input[type="checkbox"] {
     }
   }
 }
+
+@media (min-width: $screen-md-min) {
+  .table-responsive-small-only {
+    overflow-x: visible;
+  }
+}
+.pos-relative {
+  position: relative;
+}
