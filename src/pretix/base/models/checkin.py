@@ -225,6 +225,11 @@ class CheckinList(LoggedModel):
         for v in values:
             cls.validate_rules(v, seen_nonbool=seen_nonbool or operator not in ('or', 'and'), depth=depth + 1)
 
+        if operator in ('or', 'and') and depth == 0 and not values:
+            return {}
+
+        return rules
+
 
 class Checkin(models.Model):
     """

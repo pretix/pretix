@@ -128,7 +128,7 @@ class CheckinListForm(forms.ModelForm):
 
     def clean(self):
         d = super().clean()
-        CheckinList.validate_rules(d.get('rules'))
+        d['rules'] = CheckinList.validate_rules(d.get('rules'))
         return d
 
 
