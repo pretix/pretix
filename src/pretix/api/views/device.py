@@ -187,6 +187,16 @@ class EventSelectionView(APIView):
             qs = qs.annotate(has_cl=Exists(has_cl)).filter(has_cl=True)
         return qs
 
+    def _max_first_date_event(self, a, b):
+        if a and b:
+            return a if a.first_date > b.first_date else b
+        return a or b
+
+    def _min_first_date_event(self, a, b):
+        if a and b:
+            return a if a.first_date < b.first_date else b
+        return a or b
+
     def get(self, request, format=None):
         device = request.auth
         current_event = None
@@ -200,27 +210,35 @@ class EventSelectionView(APIView):
 
         if current_event:
             current_ev = current_subevent or current_event
+        else:
+            current_ev = None
+
+        # The event that is selected might not currently be running. We cannot rely on all events having a proper end date.
+        # Also, if events run back-to-back, the later event can overlap the earlier event due to its admission-time.
+        # In any case, we'll need to decide between the current event, the event that last started (and might still be running) and the
+        # event that starts next (and might already be letting people in), so let's get these as well!
+        # No matter if current event is given in query_params, always check whether another event already
+        # started – overlaps can happen through e.g. admission-time overlapping or misconfig).
+        # Note that last_started here means either admission started or the event itself started.
+        last_started_ev = self._max_first_date_event(
+            self.base_event_qs.filter(first_date__lte=now()).last(),
+            self.base_subevent_qs.filter(first_date__lte=now()).last()
+        )
+        if last_started_ev and current_ev != last_started_ev and \
+           last_started_ev.date_to and now() < last_started_ev.date_to:
+            return self._suggest_event(current_event, last_started_ev)
+
+        if current_event:
             current_ev_start = current_ev.date_admission or current_ev.date_from
             tz = current_event.timezone
-            if current_ev.date_to and current_ev_start < now() < current_ev.date_to:
+            if current_ev.date_to and current_ev_start <= now() < current_ev.date_to:
                 # The event that is selected is currently running. Good enough.
                 return Response(status=status.HTTP_304_NOT_MODIFIED)
 
-        # The event that is selected is not currently running. We cannot rely on all events having a proper end date.
-        # In any case, we'll need to decide between the event that last started (and might still be running) and the
-        # event that starts next (and might already be letting people in), so let's get these two!
-        last_started_ev = self.base_event_qs.filter(first_date__lte=now()).last() or self.base_subevent_qs.filter(
-            first_date__lte=now()).last()
-
-        upcoming_event = self.base_event_qs.filter(first_date__gt=now()).first()
-        upcoming_subevent = self.base_subevent_qs.filter(first_date__gt=now()).first()
-        if upcoming_event and upcoming_subevent:
-            if upcoming_event.first_date > upcoming_subevent.first_date:
-                upcoming_ev = upcoming_subevent
-            else:
-                upcoming_ev = upcoming_event
-        else:
-            upcoming_ev = upcoming_event or upcoming_subevent
+        upcoming_ev = self._min_first_date_event(
+            self.base_event_qs.filter(first_date__gt=now()).first(),
+            self.base_subevent_qs.filter(first_date__gt=now()).first()
+        )
 
         if not upcoming_ev and not last_started_ev:
             # Ooops, no events here
@@ -232,12 +250,8 @@ class EventSelectionView(APIView):
             # No event upcoming, so let's take the next one
             return self._suggest_event(current_event, last_started_ev)
 
-        if last_started_ev.date_to and now() < last_started_ev.date_to:
-            # The event that last started is currently running. Good enough.
-            return self._suggest_event(current_event, last_started_ev)
-
         if not current_event:
-            tz = (upcoming_event or last_started_ev).timezone
+            tz = (upcoming_ev or last_started_ev).timezone
 
         lse_d = last_started_ev.date_from.astimezone(tz).date()
         upc_d = upcoming_ev.date_from.astimezone(tz).date()
