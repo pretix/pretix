@@ -289,6 +289,7 @@ class OrderListExporter(MultiSheetListExporter):
         headers.append(_('Requires special attention'))
         headers.append(_('Comment'))
         headers.append(_('Positions'))
+        headers.append(_('E-mail address verified'))
         headers.append(_('Payment providers'))
         if form_data.get('include_payment_amounts'):
             payment_methods = self._get_all_payment_methods(qs)
@@ -393,6 +394,7 @@ class OrderListExporter(MultiSheetListExporter):
             row.append(_('Yes') if order.checkin_attention else _('No'))
             row.append(order.comment or "")
             row.append(order.pcnt)
+            row.append(_('Yes') if order.email_known_to_work else _('No'))
             row.append(', '.join([
                 str(self.providers.get(p, p)) for p in sorted(set((order.payment_providers or '').split(',')))
                 if p and p != 'free'
@@ -601,6 +603,7 @@ class OrderListExporter(MultiSheetListExporter):
         ]
         headers += [
             _('Sales channel'), _('Order locale'),
+            _('E-mail address verified'),
             _('Payment providers'),
         ]
 
@@ -718,6 +721,7 @@ class OrderListExporter(MultiSheetListExporter):
                 row += [
                     order.sales_channel,
                     order.locale,
+                    row.append(_('Yes') if order.email_known_to_work else _('No'))
                 ]
                 row.append(', '.join([
                     str(self.providers.get(p, p)) for p in sorted(set((op.payment_providers or '').split(',')))
