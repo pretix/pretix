@@ -8,112 +8,117 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-04-19 14:58+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2021-04-24 07:00+0000\n"
+"Last-Translator: Alexander Dalen <alexdalen2@gmail.com>\n"
+"Language-Team: Norwegian Bokmål <https://translate.pretix.eu/projects/pretix/"
+"pretix/nb_NO/>\n"
 "Language: nb_NO\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.4.2\n"
 
 #: pretix/api/auth/devicesecurity.py:27
 msgid ""
 "Full device access (reading and changing orders and gift cards, reading of "
 "products and settings)"
-msgstr ""
+msgstr "Full enhetsadgang"
 
 #: pretix/api/auth/devicesecurity.py:43
 msgid "pretixSCAN"
-msgstr ""
+msgstr "pretixSCAN"
 
 #: pretix/api/auth/devicesecurity.py:73
 msgid "pretixSCAN (kiosk mode, online only)"
-msgstr ""
+msgstr "pretixSCAN(kioskmodus, kun online)"
 
 #: pretix/api/auth/devicesecurity.py:101
 msgid "pretixPOS"
-msgstr ""
+msgstr "pretixPOS"
 
 #: pretix/api/models.py:39
 msgid "Application name"
-msgstr ""
+msgstr "Applikasjonsnavn"
 
 #: pretix/api/models.py:42
 msgid "Redirection URIs"
-msgstr ""
+msgstr "Videresendings URL"
 
 #: pretix/api/models.py:43
 msgid "Allowed URIs list, space separated"
-msgstr ""
+msgstr "Tillatte URL lister, separer med mellomrom"
 
 #: pretix/api/models.py:46 pretix/plugins/paypal/payment.py:112
 msgid "Client ID"
-msgstr ""
+msgstr "Klient ID"
 
 #: pretix/api/models.py:50
 msgid "Client secret"
-msgstr ""
+msgstr "Klient hemmelig"
 
 #: pretix/api/models.py:97
 msgid "Enable webhook"
-msgstr ""
+msgstr "Muliggjør webhook"
 
 #: pretix/api/models.py:98
 #: pretix/control/templates/pretixcontrol/organizers/webhooks.html:36
 msgid "Target URL"
-msgstr ""
+msgstr "Mål URL"
 
 #: pretix/api/models.py:99 pretix/base/models/devices.py:121
 #: pretix/base/models/organizer.py:221
 msgid "All events (including newly created ones)"
-msgstr ""
+msgstr "Alle eventer (inkludert nylagde)"
 
 #: pretix/api/models.py:100 pretix/base/models/devices.py:122
 #: pretix/base/models/organizer.py:222
 msgid "Limit to events"
-msgstr ""
+msgstr "Begrens til eventer"
 
 #: pretix/api/serializers/cart.py:81 pretix/api/serializers/order.py:1149
 msgid "The product \"{}\" is not assigned to a quota."
-msgstr ""
+msgstr "Dette produktet \"{}\" er ikke tildelt noe kvote."
 
 #: pretix/api/serializers/cart.py:89 pretix/api/serializers/order.py:1161
 msgid ""
 "There is not enough quota available on quota \"{}\" to perform the operation."
 msgstr ""
+"Det er ikke nok kvote tilgjengelig på \"{}\" for å utføre denne handlingen."
 
 #: pretix/api/serializers/cart.py:116 pretix/api/serializers/order.py:1121
 #: pretix/base/services/orders.py:1218
 #, python-brace-format
 msgid "The selected seat \"{seat}\" is not available."
-msgstr ""
+msgstr "Det valgte setet \"{seat}\" er ikke tilgjengelig."
 
 #: pretix/api/serializers/checkin.py:65 pretix/base/models/event.py:1311
 #: pretix/base/models/items.py:1293 pretix/base/models/items.py:1524
 msgid "One or more items do not belong to this event."
-msgstr ""
+msgstr "En eller flere gjenstander tilhører ikke dette eventet."
 
 #: pretix/api/serializers/checkin.py:69 pretix/api/serializers/checkin.py:72
 #: pretix/base/models/items.py:1535 pretix/base/models/items.py:1538
 #: pretix/base/models/waitinglist.py:208 pretix/base/models/waitinglist.py:211
 msgid "The subevent does not belong to this event."
-msgstr ""
+msgstr "Undereventet tilhører ikke dette eventet."
 
 #: pretix/api/serializers/checkin.py:76
 msgid "Unknown sales channel."
-msgstr ""
+msgstr "Ukjent salgskanal."
 
 #: pretix/api/serializers/event.py:198
 msgid ""
 "Events cannot be created as 'live'. Quotas and payment must be added to the "
 "event before sales can go live."
 msgstr ""
+"Eventene kan ikke bli laget som \"live\". Kvoter og betaling må bli lagt til "
+"eventet før salget gå live."
 
 #: pretix/api/serializers/event.py:213 pretix/api/serializers/event.py:497
 #, python-brace-format
 msgid "Meta data property '{name}' does not exist."
-msgstr ""
+msgstr "Meta data property '{name}' does not exist."
 
 #: pretix/api/serializers/event.py:216 pretix/api/serializers/event.py:500
 #, python-brace-format
@@ -144,103 +149,118 @@ msgid ""
 "Gift card products should not be associated with non-zero tax rates since "
 "sales tax will be applied when the gift card is redeemed."
 msgstr ""
+"Gavekortprodukter bør ikke assosieres med med nullsumsavgifter, da "
+"merverdiavgiften legges på når kortet blir innløst."
 
 #: pretix/api/serializers/item.py:183 pretix/control/forms/item.py:538
 msgid "Gift card products should not be admission products at the same time."
-msgstr ""
+msgstr "Gavekortprodukter bør ikke være et adgangsprodukt på samme tid."
 
 #: pretix/api/serializers/item.py:220
 #, python-brace-format
 msgid "Item meta data property '{name}' does not exist."
-msgstr ""
+msgstr "Item meta data property '{name}' does not exist."
 
 #: pretix/api/serializers/item.py:337
+#, fuzzy
 msgid ""
 "Updating options via PATCH/PUT is not supported. Please use the dedicated "
 "nested endpoint."
 msgstr ""
+"Updating options via PATCH/PUT is not supported. Please use the dedicated "
+"nested endpoint."
 
 #: pretix/api/serializers/item.py:351 pretix/control/forms/item.py:109
+#, fuzzy
 msgid "Question cannot depend on a question asked during check-in."
-msgstr ""
+msgstr "Question cannot depend on a question asked during check-in."
 
 #: pretix/api/serializers/item.py:356 pretix/control/forms/item.py:114
+#, fuzzy
 msgid "Circular dependency between questions detected."
-msgstr ""
+msgstr "Circular dependency between questions detected."
 
 #: pretix/api/serializers/item.py:361 pretix/control/forms/item.py:123
 msgid "This type of question cannot be asked during check-in."
-msgstr ""
+msgstr "Denne type spørsmål kan ikke bli spurt under innsjekk."
 
 #: pretix/api/serializers/order.py:1134 pretix/api/serializers/order.py:1141
 msgid "The product \"{}\" is not available on this date."
-msgstr ""
+msgstr "Produktet \"{}\" er ikke tilgjengelig på denne datoen."
 
 #: pretix/api/serializers/organizer.py:81 pretix/control/forms/organizer.py:349
 msgid ""
 "A gift card with the same secret already exists in your or an affiliated "
 "organizer account."
 msgstr ""
+"Et gavekort med samme hemmelighet eksisterer allerede i en av dine "
+"assosierte organisasjonskontoer."
 
 #: pretix/api/serializers/organizer.py:163
 #: pretix/control/views/organizer.py:545
+#, fuzzy
 msgid "pretix account invitation"
-msgstr ""
+msgstr "pretix account invitation"
 
 #: pretix/api/serializers/organizer.py:185
 #: pretix/control/views/organizer.py:644
+#, fuzzy
 msgid "This user already has been invited for this team."
-msgstr ""
+msgstr "This user already has been invited for this team."
 
 #: pretix/api/serializers/organizer.py:201
 #: pretix/control/views/organizer.py:661
+#, fuzzy
 msgid "This user already has permissions for this team."
-msgstr ""
+msgstr "This user already has permissions for this team."
 
 #: pretix/api/views/oauth.py:106 pretix/control/logdisplay.py:398
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid ""
 "The application \"{application_name}\" has been authorized to access your "
 "account."
 msgstr ""
+"The application \"{application_name}\" has been authorized to access your "
+"account."
 
 #: pretix/api/views/order.py:485 pretix/control/views/orders.py:1230
 #: pretix/presale/views/order.py:698 pretix/presale/views/order.py:763
 msgid "You cannot generate an invoice for this order."
-msgstr ""
+msgstr "Du kan ikke genere en faktura for denne ordren."
 
 #: pretix/api/views/order.py:490 pretix/control/views/orders.py:1232
 #: pretix/presale/views/order.py:700 pretix/presale/views/order.py:765
 msgid "An invoice for this order already exists."
-msgstr ""
+msgstr "En faktura for denne ordren eksisterer allerede."
 
 #: pretix/api/views/order.py:516 pretix/control/views/orders.py:1358
 #: pretix/control/views/users.py:118
 msgid "There was an error sending the mail. Please try again later."
-msgstr ""
+msgstr "Det var en feil ved sending av e-post. Vennligst prøv igjen senere."
 
 #: pretix/api/views/order.py:594 pretix/base/services/cart.py:143
 #: pretix/base/services/orders.py:129 pretix/presale/views/order.py:747
+#, fuzzy
 msgid "One of the selected products is not available in the selected country."
-msgstr ""
+msgstr "One of the selected products is not available in the selected country."
 
 #: pretix/api/webhooks.py:200 pretix/base/notifications.py:258
 msgid "New order placed"
-msgstr ""
+msgstr "Ny ordre er lagt til"
 
 #: pretix/api/webhooks.py:204 pretix/base/notifications.py:264
 msgid "New order requires approval"
-msgstr ""
+msgstr "Ny ordre krever godkjenning"
 
 #: pretix/api/webhooks.py:208 pretix/base/notifications.py:270
 msgid "Order marked as paid"
-msgstr ""
+msgstr "Ordren er markert som betalt"
 
 #: pretix/api/webhooks.py:212 pretix/base/notifications.py:276
 #: pretix/control/templates/pretixcontrol/event/mail.html:68
 #: pretix/control/views/orders.py:1196
 msgid "Order canceled"
-msgstr ""
+msgstr "Ordren er kansellert"
 
 #: pretix/api/webhooks.py:216 pretix/base/notifications.py:282
 msgid "Order reactivated"
@@ -320,7 +340,7 @@ msgstr ""
 #: pretix/presale/forms/user.py:40
 #: pretix/presale/templates/pretixpresale/event/order.html:297
 msgid "E-mail"
-msgstr ""
+msgstr "E-post"
 
 #: pretix/base/auth.py:149 pretix/base/forms/auth.py:153
 #: pretix/base/forms/auth.py:205 pretix/control/forms/event.py:1044
@@ -443,7 +463,7 @@ msgstr ""
 #: pretix/plugins/checkinlists/exporters.py:455
 #: pretix/plugins/ticketoutputpdf/exporters.py:75
 msgid "Start date"
-msgstr ""
+msgstr "Startdato"
 
 #: pretix/base/exporters/dekodi.py:226 pretix/base/exporters/invoices.py:73
 msgid ""
@@ -465,7 +485,7 @@ msgstr ""
 #: pretix/plugins/checkinlists/exporters.py:456
 #: pretix/plugins/ticketoutputpdf/exporters.py:82
 msgid "End date"
-msgstr ""
+msgstr "Sluttdato"
 
 #: pretix/base/exporters/dekodi.py:234 pretix/base/exporters/invoices.py:81
 msgid ""
@@ -622,7 +642,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order.html:309
 #: pretix/presale/templates/pretixpresale/organizers/index.html:61
 msgid "Name"
-msgstr ""
+msgstr "Navn"
 
 #: pretix/base/exporters/invoices.py:207 pretix/base/exporters/invoices.py:334
 #: pretix/base/exporters/orderlist.py:276
@@ -638,7 +658,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:99
 #: pretix/presale/templates/pretixpresale/event/order.html:313
 msgid "Address"
-msgstr ""
+msgstr "Adresse"
 
 #: pretix/base/exporters/invoices.py:208 pretix/base/exporters/invoices.py:216
 #: pretix/base/exporters/invoices.py:335 pretix/base/exporters/invoices.py:343
@@ -653,7 +673,7 @@ msgstr ""
 #: pretix/plugins/checkinlists/exporters.py:474
 #: pretix/plugins/reports/exporters.py:752
 msgid "ZIP code"
-msgstr ""
+msgstr "Postkode"
 
 #: pretix/base/exporters/invoices.py:209 pretix/base/exporters/invoices.py:217
 #: pretix/base/exporters/invoices.py:336 pretix/base/exporters/invoices.py:344
@@ -668,7 +688,7 @@ msgstr ""
 #: pretix/plugins/checkinlists/exporters.py:475
 #: pretix/plugins/reports/exporters.py:753
 msgid "City"
-msgstr ""
+msgstr "By"
 
 #: pretix/base/exporters/invoices.py:210 pretix/base/exporters/invoices.py:218
 #: pretix/base/exporters/invoices.py:337 pretix/base/exporters/invoices.py:345
@@ -689,11 +709,11 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:103
 #: pretix/presale/templates/pretixpresale/event/order.html:317
 msgid "Country"
-msgstr ""
+msgstr "Land"
 
 #: pretix/base/exporters/invoices.py:211 pretix/base/exporters/invoices.py:338
 msgid "Tax ID"
-msgstr ""
+msgstr "MVA nummer"
 
 #: pretix/base/exporters/invoices.py:212 pretix/base/exporters/invoices.py:220
 #: pretix/base/exporters/invoices.py:339 pretix/base/exporters/invoices.py:347
@@ -707,7 +727,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:110
 #: pretix/presale/templates/pretixpresale/event/order.html:324
 msgid "VAT ID"
-msgstr ""
+msgstr "MVA Nummer"
 
 #: pretix/base/exporters/invoices.py:213 pretix/base/exporters/invoices.py:214
 #: pretix/base/exporters/invoices.py:215 pretix/base/exporters/invoices.py:216
@@ -720,7 +740,7 @@ msgstr ""
 #: pretix/base/exporters/invoices.py:346 pretix/base/exporters/invoices.py:347
 #: pretix/base/exporters/invoices.py:348 pretix/base/exporters/invoices.py:349
 msgid "Invoice recipient:"
-msgstr ""
+msgstr "Fakturamottaker:"
 
 #: pretix/base/exporters/invoices.py:213 pretix/base/exporters/invoices.py:340
 #: pretix/base/exporters/orderlist.py:269
@@ -737,11 +757,11 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:94
 #: pretix/presale/templates/pretixpresale/event/order.html:305
 msgid "Company"
-msgstr ""
+msgstr "Firma"
 
 #: pretix/base/exporters/invoices.py:215 pretix/base/exporters/invoices.py:342
 msgid "Street address"
-msgstr ""
+msgstr "Gateadresse"
 
 #: pretix/base/exporters/invoices.py:219 pretix/base/exporters/invoices.py:346
 #: pretix/base/exporters/orderlist.py:276
@@ -757,7 +777,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order.html:320
 msgctxt "address"
 msgid "State"
-msgstr ""
+msgstr "Delstat"
 
 #: pretix/base/exporters/invoices.py:221 pretix/base/exporters/invoices.py:348
 #: pretix/base/models/orders.py:2311
@@ -829,7 +849,7 @@ msgstr ""
 #: pretix/plugins/checkinlists/exporters.py:651
 #: pretix/presale/checkoutflow.py:870
 msgid "Yes"
-msgstr ""
+msgstr "Ja"
 
 #: pretix/base/exporters/invoices.py:305 pretix/base/exporters/orderlist.py:393
 #: pretix/base/exporters/orderlist.py:693
@@ -845,7 +865,7 @@ msgstr ""
 #: pretix/plugins/checkinlists/exporters.py:651
 #: pretix/presale/checkoutflow.py:872
 msgid "No"
-msgstr ""
+msgstr "Nei"
 
 #: pretix/base/exporters/invoices.py:319
 msgid "Line number"
@@ -855,21 +875,21 @@ msgstr ""
 #: pretix/base/models/items.py:315 pretix/base/models/items.py:680
 #: pretix/base/models/items.py:687
 msgid "Description"
-msgstr ""
+msgstr "Beskrivelse"
 
 #: pretix/base/exporters/invoices.py:321 pretix/control/forms/orders.py:297
 msgid "Gross price"
-msgstr ""
+msgstr "Bruttopris"
 
 #: pretix/base/exporters/invoices.py:322
 msgid "Net price"
-msgstr ""
+msgstr "Nettopris"
 
 #: pretix/base/exporters/invoices.py:323 pretix/base/exporters/orderlist.py:443
 #: pretix/base/exporters/orderlist.py:552 pretix/base/models/orders.py:1915
 #: pretix/base/models/orders.py:2015
 msgid "Tax value"
-msgstr ""
+msgstr "Avgifter"
 
 #: pretix/base/exporters/invoices.py:324 pretix/base/exporters/orderlist.py:441
 #: pretix/base/exporters/orderlist.py:550 pretix/base/models/orders.py:1906
@@ -877,7 +897,7 @@ msgstr ""
 #: pretix/plugins/reports/exporters.py:704
 #: pretix/plugins/reports/exporters.py:749
 msgid "Tax rate"
-msgstr ""
+msgstr "Avgiftsrate"
 
 #: pretix/base/exporters/invoices.py:325
 msgid "Tax name"
@@ -885,7 +905,7 @@ msgstr ""
 
 #: pretix/base/exporters/invoices.py:326
 msgid "Event start date"
-msgstr ""
+msgstr "Event startdato"
 
 #: pretix/base/exporters/mail.py:52
 msgid "Email addresses (text file)"
@@ -1004,7 +1024,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/checkin/index.html:77
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:138
 msgid "Email"
-msgstr ""
+msgstr "E-post"
 
 #: pretix/base/exporters/orderlist.py:268
 #: pretix/base/exporters/orderlist.py:435
@@ -1020,7 +1040,7 @@ msgstr ""
 #: pretix/presale/forms/waitinglist.py:69
 #: pretix/presale/templates/pretixpresale/event/order.html:301
 msgid "Phone number"
-msgstr ""
+msgstr "Telefonnummer"
 
 #: pretix/base/exporters/orderlist.py:268
 #: pretix/base/exporters/orderlist.py:436
@@ -1217,7 +1237,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:53
 #: pretix/presale/templates/pretixpresale/event/order_change.html:51
 msgid "Attendee name"
-msgstr ""
+msgstr "Deltakernavn"
 
 #: pretix/base/exporters/orderlist.py:560 pretix/base/forms/questions.py:552
 #: pretix/base/models/orders.py:1177 pretix/base/pdf.py:195
@@ -3228,7 +3248,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order.html:63
 #, python-format
 msgid "Your order: %(code)s"
-msgstr ""
+msgstr "Din ordre: %(code)s"
 
 #: pretix/base/models/orders.py:1069
 msgid "<file>"
@@ -4248,6 +4268,8 @@ msgid ""
 "No payment is required as this order only includes products which are free "
 "of charge."
 msgstr ""
+"Ingen betaling er nødvendig, da denne ordrer kun inneholder produkter som er "
+"gratis."
 
 #: pretix/base/payment.py:899
 msgid "Free of charge"
@@ -4709,7 +4731,7 @@ msgstr ""
 #: pretix/plugins/ticketoutputpdf/exporters.py:95
 #, python-brace-format
 msgid "Attendee name: {part}"
-msgstr ""
+msgstr "Deltakernavn: {part}"
 
 #: pretix/base/pdf.py:527
 #, python-brace-format
@@ -5035,7 +5057,7 @@ msgstr ""
 #, python-brace-format
 msgctxt "invoice"
 msgid "Attendee: {name}"
-msgstr ""
+msgstr "Deltaker: {name}"
 
 #: pretix/base/services/invoices.py:206 pretix/plugins/reports/exporters.py:282
 msgctxt "subevent"
@@ -15142,7 +15164,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/subevents/index.html:77
 msgid "Begin"
-msgstr ""
+msgstr "Starter"
 
 #: pretix/control/templates/pretixcontrol/subevents/index.html:98
 msgid "Select all results on other pages as well"
@@ -19775,7 +19797,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/fragment_cart_box.html:30
 #, python-format
 msgid "The items in your cart are reserved for you for %(minutes)s minutes."
-msgstr ""
+msgstr "Gjenstandene i handlekurven din holdes av i %(minutes)s minutter."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:44
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:47
@@ -19886,12 +19908,14 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:6
 msgid "Before we continue, we need you to answer some questions."
-msgstr ""
+msgstr "Før vi fortsetter, trenger vi litt informasjon."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:8
 msgid ""
 "You need to fill all fields that are marked with <span>*</span> to continue."
 msgstr ""
+"Du må fylle ut alle feltene som er markert med <span>*</span> for å "
+"fortsette."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:67
 msgid "Copy answers from above"
@@ -20236,7 +20260,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/voucher.html:32
 #, python-format
 msgid "Begin: %(time)s"
-msgstr ""
+msgstr "Starttid: %(time)s"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:157
 #: pretix/presale/templates/pretixpresale/event/voucher.html:37
@@ -20280,7 +20304,7 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/index.html:268
 msgid "If you already ordered a ticket"
-msgstr ""
+msgstr "Har du allerede bestilt billett"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:272
 msgid ""
@@ -20289,17 +20313,21 @@ msgid ""
 "cannot find the link, click on the following button to request the link to "
 "your order to be sent to you again."
 msgstr ""
+"Om du ønsker se eller endre status og detaljer på din bestilling, klikk på "
+"linken vi har sendt deg på e-post under bestillingsprosessen. Om du ikke "
+"finner linken, klikk på denne knappen for å be om at linken sendes til deg "
+"på nytt."
 
 #: pretix/presale/templates/pretixpresale/event/index.html:281
 #: pretix/presale/templates/pretixpresale/event/resend_link.html:4
 #: pretix/presale/templates/pretixpresale/event/resend_link.html:11
 msgid "Resend order links"
-msgstr ""
+msgstr "Send bestillingslenke"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:12
 #: pretix/presale/templates/pretixpresale/event/order.html:29
 msgid "Thank you!"
-msgstr ""
+msgstr "Tusen takk!"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:14
 #: pretix/presale/templates/pretixpresale/event/order.html:32
@@ -20309,7 +20337,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order.html:16
 #: pretix/presale/templates/pretixpresale/event/order.html:44
 msgid "Your order has been processed successfully! See below for details."
-msgstr ""
+msgstr "Din ordre er nå fullført. Se under for detaljer."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:18
 #: pretix/presale/templates/pretixpresale/event/order.html:46
@@ -20332,6 +20360,8 @@ msgid ""
 "your order later. We also sent you an email containing the link to the "
 "address you specified."
 msgstr ""
+"Vennligst lagre linken til denne siden dersom du ønsker tilgang til den "
+"senere. Vi har også sendt deg en e-post med link til denne siden."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:54
 msgid ""
@@ -20873,7 +20903,7 @@ msgstr ""
 
 #: pretix/presale/views/cart.py:459
 msgid "The products have been successfully added to your cart."
-msgstr ""
+msgstr "Produktet er lagt inn i handlelisten din."
 
 #: pretix/presale/views/cart.py:481 pretix/presale/views/event.py:390
 #: pretix/presale/views/widget.py:306
