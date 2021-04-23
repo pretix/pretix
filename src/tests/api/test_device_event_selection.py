@@ -116,6 +116,14 @@ def test_choose_between_events(device_client, device):
         assert resp.status_code == 200
         assert resp.data['event']['slug'] == 'e2'
 
+    # check for overlapping events
+    e2.date_admission = tz.localize(datetime(2020, 1, 10, 14, 45))
+    e2.save()
+    with freeze_time("2020-01-10T14:45:00+09:00"):
+        resp = device_client.get(f'/api/v1/device/eventselection?current_event=e1')
+        assert resp.status_code == 200
+        resp = device_client.get(f'/api/v1/device/eventselection?current_event=e2')
+        assert resp.status_code == 304
 
 @pytest.mark.django_db
 def test_choose_between_subevents(device_client, device):
@@ -136,7 +144,6 @@ def test_choose_between_subevents(device_client, device):
             name="Event", active=True,
             date_from=tz.localize(datetime(2020, 1, 10, 16, 0)),
             date_to=tz.localize(datetime(2020, 1, 10, 17, 0)),
-            date_admission=tz.localize(datetime(2020, 1, 10, 14, 45)),
         )
         cl2 = e.checkin_lists.create(name="Same name", subevent=se2)
         cl3 = e.checkin_lists.create(name="Other name")
@@ -148,11 +155,6 @@ def test_choose_between_subevents(device_client, device):
         )
     with freeze_time("2020-01-10T14:30:00+09:00"):
         resp = device_client.get(f'/api/v1/device/eventselection?current_event=e1&current_subevent={se1.pk}')
-        assert resp.status_code == 304
-    with freeze_time("2020-01-10T14:45:00+09:00"):
-        resp = device_client.get(f'/api/v1/device/eventselection?current_event=e1&current_subevent={se1.pk}')
-        assert resp.status_code == 200
-        resp = device_client.get(f'/api/v1/device/eventselection?current_event=e1&current_subevent={se2.pk}')
         assert resp.status_code == 304
     with freeze_time("2020-01-10T16:30:00+09:00"):
         resp = device_client.get(f'/api/v1/device/eventselection?current_event=e1&current_subevent={se1.pk}')
@@ -213,6 +215,14 @@ def test_choose_between_subevents(device_client, device):
         assert resp.data['event']['slug'] == 'e1'
         assert resp.data['subevent'] == se2.pk
 
+    # check for overlapping events
+    se2.date_admission = tz.localize(datetime(2020, 1, 10, 14, 45))
+    se2.save()
+    with freeze_time("2020-01-10T14:45:00+09:00"):
+        resp = device_client.get(f'/api/v1/device/eventselection?current_event=e1&current_subevent={se1.pk}')
+        assert resp.status_code == 200
+        resp = device_client.get(f'/api/v1/device/eventselection?current_event=e1&current_subevent={se2.pk}')
+        assert resp.status_code == 304
 
 @pytest.mark.django_db
 def test_require_gate(device_client, device):
