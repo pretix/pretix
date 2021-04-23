@@ -197,7 +197,7 @@ class CheckinList(LoggedModel):
             'product', 'variation', 'now', 'entries_number', 'entries_today', 'entries_days'
         }
         if not rules or not isinstance(rules, dict):
-            return
+            return rules
 
         if len(rules) > 1:
             raise ValidationError(f'Rules should not include dictionaries with more than one key, found: "{rules}".')
@@ -217,7 +217,7 @@ class CheckinList(LoggedModel):
         if operator == 'var':
             if values[0] not in allowed_vars:
                 raise ValidationError(f'Logic variable "{values[0]}" is currently not allowed.')
-            return
+            return rules
 
         if operator in ('or', 'and') and seen_nonbool:
             raise ValidationError(f'You cannot use OR/AND logic on a level below a comparison operator.')

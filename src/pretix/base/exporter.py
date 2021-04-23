@@ -39,8 +39,10 @@ from collections import OrderedDict, namedtuple
 from decimal import Decimal
 from typing import Tuple
 
+import pytz
 from defusedcsv import csv
 from django import forms
+from django.conf import settings
 from django.db.models import QuerySet
 from django.utils.formats import localize
 from django.utils.translation import gettext, gettext_lazy as _
@@ -72,7 +74,8 @@ class BaseExporter:
         if isinstance(event, QuerySet):
             self.events = event
             self.event = None
-            self.timezone = self.events.first().timezone
+            e = self.events.first()
+            self.timezone = e.timezone if e else pytz.timezone(settings.TIME_ZONE)
         else:
             self.events = Event.objects.filter(pk=event.pk)
             self.timezone = event.timezone
