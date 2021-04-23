@@ -1764,6 +1764,43 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
         with scopes_disabled():
             assert not CartPosition.objects.filter(id=cr1.id).exists()
 
+    def test_subevent_availability(self):
+        self.event.has_subevents = True
+        self.event.save()
+        with scopes_disabled():
+            se = self.event.subevents.create(name='Foo', date_from=now())
+            q = se.quotas.create(name="foo", size=None, event=self.event)
+            q.items.add(self.ticket)
+            SubEventItem.objects.create(subevent=se, item=self.ticket, price=24, available_until=now() - timedelta(days=1))
+            cr1 = CartPosition.objects.create(
+                event=self.event, cart_id=self.session_key, item=self.ticket,
+                price=23, expires=now() - timedelta(minutes=10), subevent=se
+            )
+        self._set_session('payment', 'banktransfer')
+
+        self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
+        with scopes_disabled():
+            assert not CartPosition.objects.filter(id=cr1.id).exists()
+
+    def test_subevent_variation_availability(self):
+        self.event.has_subevents = True
+        self.event.save()
+        with scopes_disabled():
+            se = self.event.subevents.create(name='Foo', date_from=now())
+            q = se.quotas.create(name="foo", size=None, event=self.event)
+            q.items.add(self.workshop2)
+            q.variations.add(self.workshop2b)
+            SubEventItemVariation.objects.create(subevent=se, variation=self.workshop2b, price=24, available_from=now() + timedelta(days=1))
+            cr1 = CartPosition.objects.create(
+                event=self.event, cart_id=self.session_key, item=self.workshop2, variation=self.workshop2b,
+                price=23, expires=now() - timedelta(minutes=10), subevent=se
+            )
+        self._set_session('payment', 'banktransfer')
+
+        self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
+        with scopes_disabled():
+            assert not CartPosition.objects.filter(id=cr1.id).exists()
+
     def test_addon_price_included(self):
         with scopes_disabled():
             ItemAddOn.objects.create(base_item=self.ticket, addon_category=self.workshopcat, min_count=1,

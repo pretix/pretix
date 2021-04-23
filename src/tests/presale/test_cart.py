@@ -554,6 +554,22 @@ class CartTest(CartTestMixin, TestCase):
             objs = list(CartPosition.objects.filter(cart_id=self.session_key, event=self.event))
         self.assertEqual(len(objs), 0)
 
+    def test_subevent_availability(self):
+        self.event.has_subevents = True
+        self.event.save()
+        with scopes_disabled():
+            se = self.event.subevents.create(name='Foo', date_from=now(), active=True)
+            q = se.quotas.create(name="foo", size=None, event=self.event)
+            q.items.add(self.ticket)
+            SubEventItem.objects.create(subevent=se, item=self.ticket, price=42, available_until=now() - timedelta(hours=1))
+        self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
+            'item_%d' % self.ticket.id: '1',
+            'subevent': se.pk
+        }, follow=False)
+        with scopes_disabled():
+            objs = list(CartPosition.objects.filter(cart_id=self.session_key, event=self.event))
+        self.assertEqual(len(objs), 0)
+
     def test_subevent_price(self):
         self.event.has_subevents = True
         self.event.save()
@@ -698,6 +714,22 @@ class CartTest(CartTestMixin, TestCase):
             q = se.quotas.create(name="foo", size=None, event=self.event)
             q.variations.add(self.shirt_red)
             SubEventItemVariation.objects.create(subevent=se, variation=self.shirt_red, price=42, disabled=True)
+        self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
+            'variation_%d_%d' % (self.shirt.id, self.shirt_red.id): '1',
+            'subevent': se.pk
+        }, follow=False)
+        with scopes_disabled():
+            objs = list(CartPosition.objects.filter(cart_id=self.session_key, event=self.event))
+        self.assertEqual(len(objs), 0)
+
+    def test_subevent_variation_availability(self):
+        self.event.has_subevents = True
+        self.event.save()
+        with scopes_disabled():
+            se = self.event.subevents.create(name='Foo', date_from=now(), active=True)
+            q = se.quotas.create(name="foo", size=None, event=self.event)
+            q.variations.add(self.shirt_red)
+            SubEventItemVariation.objects.create(subevent=se, variation=self.shirt_red, price=42, available_from=now() + timedelta(hours=1))
         self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
             'variation_%d_%d' % (self.shirt.id, self.shirt_red.id): '1',
             'subevent': se.pk
