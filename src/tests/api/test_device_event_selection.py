@@ -125,6 +125,7 @@ def test_choose_between_events(device_client, device):
         resp = device_client.get(f'/api/v1/device/eventselection?current_event=e2')
         assert resp.status_code == 304
 
+
 @pytest.mark.django_db
 def test_choose_between_subevents(device_client, device):
     with scopes_disabled():
@@ -223,6 +224,7 @@ def test_choose_between_subevents(device_client, device):
         assert resp.status_code == 200
         resp = device_client.get(f'/api/v1/device/eventselection?current_event=e1&current_subevent={se2.pk}')
         assert resp.status_code == 304
+
 
 @pytest.mark.django_db
 def test_require_gate(device_client, device):
