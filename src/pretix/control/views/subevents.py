@@ -68,9 +68,10 @@ from pretix.control.forms.checkin import SimpleCheckinListForm
 from pretix.control.forms.filter import SubEventFilterForm
 from pretix.control.forms.item import QuotaForm
 from pretix.control.forms.subevents import (
-    CheckinListFormSet, QuotaFormSet, RRuleFormSet, SubEventBulkEditForm,
-    SubEventBulkForm, SubEventForm, SubEventItemForm,
-    SubEventItemVariationForm, SubEventMetaValueForm, TimeFormSet, BulkSubEventItemForm, BulkSubEventItemVariationForm,
+    BulkSubEventItemForm, BulkSubEventItemVariationForm, CheckinListFormSet,
+    QuotaFormSet, RRuleFormSet, SubEventBulkEditForm, SubEventBulkForm,
+    SubEventForm, SubEventItemForm, SubEventItemVariationForm,
+    SubEventMetaValueForm, TimeFormSet,
 )
 from pretix.control.permissions import EventPermissionRequiredMixin
 from pretix.control.signals import subevent_forms

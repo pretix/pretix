@@ -44,7 +44,7 @@ import pytz
 from django.conf import settings
 from django.core.exceptions import PermissionDenied
 from django.db.models import (
-    Count, Exists, IntegerField, OuterRef, Prefetch, Value, Q,
+    Count, Exists, IntegerField, OuterRef, Prefetch, Q, Value,
 )
 from django.http import Http404, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render

@@ -69,8 +69,9 @@ from pretix.helpers.database import GroupConcat
 from pretix.helpers.daterange import daterange
 from pretix.helpers.json import safe_string
 from pretix.helpers.thumb import get_thumbnail
-from .organizer import Organizer, Team
+
 from ..settings import settings_hierarkey
+from .organizer import Organizer, Team
 
 
 class EventMixin:
