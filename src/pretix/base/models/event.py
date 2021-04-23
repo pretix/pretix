@@ -50,6 +50,7 @@ from django.core.validators import (
 )
 from django.db import models
 from django.db.models import Exists, OuterRef, Prefetch, Q, Subquery, Value
+from django.db.models.functions import Coalesce
 from django.template.defaultfilters import date as _date
 from django.urls import reverse
 from django.utils.crypto import get_random_string
@@ -68,9 +69,8 @@ from pretix.helpers.database import GroupConcat
 from pretix.helpers.daterange import daterange
 from pretix.helpers.json import safe_string
 from pretix.helpers.thumb import get_thumbnail
-
-from ..settings import settings_hierarkey
 from .organizer import Organizer, Team
+from ..settings import settings_hierarkey
 
 
 class EventMixin:
@@ -280,6 +280,14 @@ class EventMixin:
         vars_reserved = set()
         items_gone = set()
         vars_gone = set()
+        items_disabled = set()
+        vars_disabled = set()
+
+        if hasattr(self, 'disabled_items'):  # SubEventItem
+            items_disabled = set(self.disabled_items.split(","))
+
+        if hasattr(self, 'disabled_vars'):  # SubEventItemVariation
+            vars_disabled = set(self.disabled_vars.split(","))
 
         r = getattr(self, '_quota_cache', {})
         for q in self.active_quotas:
@@ -300,8 +308,19 @@ class EventMixin:
                     items_gone.update(q.active_items.split(","))
                 if q.active_variations:
                     vars_gone.update(q.active_variations.split(","))
-        if not self.active_quotas:
+
+        items_available -= items_disabled
+        items_reserved -= items_disabled
+        items_gone -= items_disabled
+        vars_available -= vars_disabled
+        vars_reserved -= vars_disabled
+        vars_gone -= vars_gone
+
+        if not self.active_quotas or (
+            not items_available and not items_reserved and not items_gone and not vars_gone and not vars_available and not vars_reserved
+        ):
             return None
+
         if items_available - items_reserved - items_gone or vars_available - vars_reserved - vars_gone:
             return Quota.AVAILABILITY_OK
         if items_reserved - items_gone or vars_reserved - vars_gone:
@@ -1226,6 +1245,36 @@ class SubEvent(EventMixin, LoggedModel):
                                       minimal_distance=self.settings.seating_minimal_distance,
                                       distance_only_within_row=self.settings.seating_distance_within_row)
         return qs_annotated
+
+    @classmethod
+    def annotated(cls, qs, channel='web'):
+        from .items import SubEventItem, SubEventItemVariation
+
+        qs = super().annotated(qs, channel)
+        qs = qs.annotate(
+            disabled_items=Coalesce(
+                Subquery(
+                    SubEventItem.objects.filter(
+                        Q(disabled=True) | Q(available_from__gt=now()) | Q(available_until__lt=now()),
+                        subevent=OuterRef('pk'),
+                    ).order_by().values('subevent').annotate(items=GroupConcat('item_id', delimiter=',')).values('items'),
+                    output_field=models.TextField(),
+                ),
+                Value('')
+            ),
+            disabled_vars=Coalesce(
+                Subquery(
+                    SubEventItemVariation.objects.filter(
+                        Q(disabled=True) | Q(available_from__gt=now()) | Q(available_until__lt=now()),
+                        subevent=OuterRef('pk'),
+                    ).order_by().values('subevent').annotate(items=GroupConcat('variation_id', delimiter=',')).values('items'),
+                    output_field=models.TextField(),
+                ),
+                Value('')
+            )
+        )
+
+        return qs
 
     @cached_property
     def settings(self):

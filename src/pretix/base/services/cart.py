@@ -292,10 +292,11 @@ class CartManager:
             if self._sales_channel not in op.item.sales_channels:
                 raise CartError(error_messages['unavailable'])
 
-            if op.subevent and op.item.pk in op.subevent.item_overrides and op.subevent.item_overrides[op.item.pk].disabled:
+            if op.subevent and op.item.pk in op.subevent.item_overrides and not op.subevent.item_overrides[op.item.pk].is_available():
                 raise CartError(error_messages['not_for_sale'])
 
-            if op.subevent and op.variation and op.variation.pk in op.subevent.var_overrides and op.subevent.var_overrides[op.variation.pk].disabled:
+            if op.subevent and op.variation and op.variation.pk in op.subevent.var_overrides and \
+                    not op.subevent.var_overrides[op.variation.pk].is_available():
                 raise CartError(error_messages['not_for_sale'])
 
             if op.item.has_variations and not op.variation:

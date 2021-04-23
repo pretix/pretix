@@ -185,6 +185,16 @@ class SubEventItem(models.Model):
         if self.subevent:
             self.subevent.event.cache.clear()
 
+    def is_available(self, now_dt: datetime=None) -> bool:
+        now_dt = now_dt or now()
+        if self.disabled:
+            return False
+        if self.available_from and self.available_from > now_dt:
+            return False
+        if self.available_until and self.available_until < now_dt:
+            return False
+        return True
+
 
 class SubEventItemVariation(models.Model):
     """
@@ -230,6 +240,16 @@ class SubEventItemVariation(models.Model):
         super().save(*args, **kwargs)
         if self.subevent:
             self.subevent.event.cache.clear()
+
+    def is_available(self, now_dt: datetime=None) -> bool:
+        now_dt = now_dt or now()
+        if self.disabled:
+            return False
+        if self.available_from and self.available_from > now_dt:
+            return False
+        if self.available_until and self.available_until < now_dt:
+            return False
+        return True
 
 
 def filter_available(qs, channel='web', voucher=None, allow_addons=False):

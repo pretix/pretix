@@ -38,14 +38,18 @@ location                              multi-lingual string       The sub-event l
 geo_lat                               float                      Latitude of the location (or ``null``)
 geo_lon                               float                      Longitude of the location (or ``null``)
 item_price_overrides                  list of objects            List of items for which this sub-event overrides the
-                                                                 default price
+                                                                 default price or settings
 ├ item                                integer                    The internal item ID
 ├ disabled                            boolean                    If ``true``, item should not be available for this sub-event
+├ available_from                      datetime                   Start of availability (or ``null``)
+├ available_until                     datetime                   End of availability (or ``null``)
 └ price                               money (string)             The price or ``null`` for the default price
 variation_price_overrides             list of objects            List of variations for which this sub-event overrides
-                                                                 the default price
+                                                                 the default price or settings
 ├ variation                           integer                    The internal variation ID
 ├ disabled                            boolean                    If ``true``, variation should not be available for this sub-event
+├ available_from                      datetime                   Start of availability (or ``null``)
+├ available_until                     datetime                   End of availability (or ``null``)
 └ price                               money (string)             The price or ``null`` for the default price
 meta_data                             object                     Values set for organizer-specific meta data parameters.
 seating_plan                          integer                    If reserved seating is in use, the ID of a seating
@@ -66,6 +70,10 @@ last_modified                         datetime                   Last modificati
 .. versionchanged:: 3.12
 
    The ``last_modified`` attribute has been added.
+
+.. versionchanged:: 3.18
+
+   The ``available_from``/``available_until`` attributes have been added to ``item_price_overrides`` and ``variation_price_overrides``.
 
 Endpoints
 ---------
@@ -119,6 +127,8 @@ Endpoints
               {
                 "item": 2,
                 "disabled": false,
+                "available_from": null,
+                "available_until": null,
                 "price": "12.00"
               }
             ],
@@ -179,6 +189,8 @@ Endpoints
           {
             "item": 2,
             "disabled": false,
+            "available_from": null,
+            "available_until": null,
             "price": "12.00"
           }
         ],
@@ -214,6 +226,8 @@ Endpoints
           {
             "item": 2,
             "disabled": false,
+            "available_from": null,
+            "available_until": null,
             "price": "12.00"
           }
         ],
@@ -270,6 +284,8 @@ Endpoints
           {
             "item": 2,
             "disabled": false,
+            "available_from": null,
+            "available_until": null,
             "price": "12.00"
           }
         ],
@@ -307,6 +323,8 @@ Endpoints
           {
             "item": 2,
             "disabled": false,
+            "available_from": null,
+            "available_until": null,
             "price": "23.42"
           }
         ],
@@ -340,6 +358,8 @@ Endpoints
           {
             "item": 2,
             "disabled": false,
+            "available_from": null,
+            "available_until": null,
             "price": "23.42"
           }
         ],
@@ -429,6 +449,8 @@ Endpoints
               {
                 "item": 2,
                 "disabled": false,
+                "available_from": null,
+                "available_until": null,
                 "price": "12.00"
               }
             ],
