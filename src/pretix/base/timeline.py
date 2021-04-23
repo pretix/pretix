@@ -166,6 +166,56 @@ def timeline_for_event(event, subevent=None):
                 })
             ))
 
+    if subevent:
+        for sei in subevent.item_overrides.values():
+            if sei.available_from:
+                tl.append(TimelineEvent(
+                    event=event, subevent=subevent,
+                    datetime=sei.available_from,
+                    description=pgettext_lazy('timeline', 'Product "{name}" becomes available').format(name=str(sei.item)),
+                    edit_url=reverse('control:event.subevent', kwargs={
+                        'event': event.slug,
+                        'organizer': event.organizer.slug,
+                        'subevent': subevent.pk,
+                    })
+                ))
+            if sei.available_until:
+                tl.append(TimelineEvent(
+                    event=event, subevent=subevent,
+                    datetime=sei.available_until,
+                    description=pgettext_lazy('timeline', 'Product "{name}" becomes unavailable').format(name=str(sei.item)),
+                    edit_url=reverse('control:event.subevent', kwargs={
+                        'event': event.slug,
+                        'organizer': event.organizer.slug,
+                        'subevent': subevent.pk,
+                    })
+                ))
+        for sei in subevent.var_overrides.values():
+            if sei.available_from:
+                tl.append(TimelineEvent(
+                    event=event, subevent=subevent,
+                    datetime=sei.available_from,
+                    description=pgettext_lazy('timeline', 'Product "{name}" becomes available').format(
+                        name=str(sei.variation.item) + ' – ' + str(sei.variation)),
+                    edit_url=reverse('control:event.subevent', kwargs={
+                        'event': event.slug,
+                        'organizer': event.organizer.slug,
+                        'subevent': subevent.pk,
+                    })
+                ))
+            if sei.available_until:
+                tl.append(TimelineEvent(
+                    event=event, subevent=subevent,
+                    datetime=sei.available_until,
+                    description=pgettext_lazy('timeline', 'Product "{name}" becomes unavailable').format(
+                        name=str(sei.variation.item) + ' – ' + str(sei.variation)),
+                    edit_url=reverse('control:event.subevent', kwargs={
+                        'event': event.slug,
+                        'organizer': event.organizer.slug,
+                        'subevent': subevent.pk,
+                    })
+                ))
+
     for p in event.items.filter(Q(available_from__isnull=False) | Q(available_until__isnull=False)):
         if p.available_from:
             tl.append(TimelineEvent(

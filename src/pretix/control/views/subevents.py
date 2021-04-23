@@ -70,7 +70,7 @@ from pretix.control.forms.item import QuotaForm
 from pretix.control.forms.subevents import (
     CheckinListFormSet, QuotaFormSet, RRuleFormSet, SubEventBulkEditForm,
     SubEventBulkForm, SubEventForm, SubEventItemForm,
-    SubEventItemVariationForm, SubEventMetaValueForm, TimeFormSet,
+    SubEventItemVariationForm, SubEventMetaValueForm, TimeFormSet, BulkSubEventItemForm, BulkSubEventItemVariationForm,
 )
 from pretix.control.permissions import EventPermissionRequiredMixin
 from pretix.control.signals import subevent_forms
@@ -193,6 +193,8 @@ class SubEventDelete(EventPermissionRequiredMixin, DeleteView):
 class SubEventEditorMixin(MetaDataEditorMixin):
     meta_form = SubEventMetaValueForm
     meta_model = SubEventMetaValue
+    itemformclass = SubEventItemForm
+    itemvarformclass = SubEventItemVariationForm
 
     @cached_property
     def plugin_forms(self):
@@ -391,11 +393,17 @@ class SubEventEditorMixin(MetaDataEditorMixin):
 
         if self.copy_from:
             se_item_instances = {
-                sei.item_id: SubEventItem(item=sei.item, price=sei.price, disabled=sei.disabled)
+                sei.item_id: SubEventItem(
+                    item=sei.item, price=sei.price, disabled=sei.disabled,
+                    available_from=sei.available_from, available_until=sei.available_until
+                )
                 for sei in SubEventItem.objects.filter(subevent=self.copy_from).select_related('item')
             }
             se_var_instances = {
-                sei.variation_id: SubEventItemVariation(variation=sei.variation, price=sei.price, disabled=sei.disabled)
+                sei.variation_id: SubEventItemVariation(
+                    variation=sei.variation, price=sei.price, disabled=sei.disabled,
+                    available_from=sei.available_from, available_until=sei.available_until
+                )
                 for sei in SubEventItemVariation.objects.filter(subevent=self.copy_from).select_related('variation')
             }
 
@@ -404,7 +412,7 @@ class SubEventEditorMixin(MetaDataEditorMixin):
             if i.has_variations:
                 for v in i.variations.all():
                     inst = se_var_instances.get(v.pk) or SubEventItemVariation(subevent=self.object, variation=v)
-                    formlist.append(SubEventItemVariationForm(
+                    formlist.append(self.itemvarformclass(
                         prefix='itemvar-{}'.format(v.pk),
                         item=i, variation=v,
                         instance=inst,
@@ -412,7 +420,7 @@ class SubEventEditorMixin(MetaDataEditorMixin):
                     ))
             else:
                 inst = se_item_instances.get(i.pk) or SubEventItem(subevent=self.object, item=i)
-                formlist.append(SubEventItemForm(
+                formlist.append(self.itemformclass(
                     prefix='item-{}'.format(i.pk),
                     item=i,
                     instance=inst,
@@ -641,6 +649,8 @@ class SubEventBulkCreate(SubEventEditorMixin, EventPermissionRequiredMixin, Crea
     permission = 'can_change_settings'
     context_object_name = 'subevent'
     form_class = SubEventBulkForm
+    itemformclass = BulkSubEventItemForm
+    itemvarformclass = BulkSubEventItemVariationForm
 
     def is_valid(self, form):
         return self.rrule_formset.is_valid() and self.time_formset.is_valid() and super().is_valid(form)
@@ -846,6 +856,18 @@ class SubEventBulkCreate(SubEventEditorMixin, EventPermissionRequiredMixin, Crea
                 i = copy.copy(f.instance)
                 i.pk = None
                 i.subevent = se
+
+                i.available_from = (
+                    f.cleaned_data['rel_available_from'].datetime(se)
+                    if f.cleaned_data.get('rel_available_from')
+                    else None
+                )
+                i.available_until = (
+                    f.cleaned_data['rel_available_until'].datetime(se)
+                    if f.cleaned_data.get('rel_available_until')
+                    else None
+                )
+
                 if isinstance(i, SubEventItem):
                     to_save_items.append(i)
                 else:
@@ -962,16 +984,19 @@ class SubEventBulkEdit(SubEventQueryMixin, EventPermissionRequiredMixin, FormVie
     def cached_num(self):
         return self.get_queryset().count()
 
+    itemformclass = SubEventItemForm
+    itemvarformclass = SubEventItemVariationForm
+
     @cached_property
     def itemvar_forms(self):
         matches = defaultdict(list)
         for sei in SubEventItem.objects.filter(
             subevent__in=self.get_queryset()
-        ).order_by().values('item', 'price', 'disabled').annotate(c=Count('*')):
+        ).order_by().values('item', 'price', 'disabled', 'available_from', 'available_until').annotate(c=Count('*')):
             matches['item', sei['item']].append(sei)
         for sei in SubEventItemVariation.objects.filter(
             subevent__in=self.get_queryset()
-        ).order_by().values('variation', 'price', 'disabled').annotate(c=Count('*')):
+        ).order_by().values('variation', 'price', 'disabled', 'available_from', 'available_until').annotate(c=Count('*')):
             matches['variation', sei['variation']].append(sei)
         total = self.cached_num
 
@@ -981,10 +1006,13 @@ class SubEventBulkEdit(SubEventQueryMixin, EventPermissionRequiredMixin, FormVie
                 for v in i.variations.all():
                     m = matches['variation', v.pk]
                     if m and len(m) == 1 and m[0]['c'] == total:
-                        inst = SubEventItemVariation(variation=v, disabled=m[0]['disabled'], price=m[0]['price'])
+                        inst = SubEventItemVariation(
+                            variation=v, disabled=m[0]['disabled'], price=m[0]['price'],
+                            available_from=m[0]['available_from'], available_until=m[0]['available_until']
+                        )
                     else:
                         inst = SubEventItemVariation(variation=v)
-                    formlist.append(SubEventItemVariationForm(
+                    formlist.append(self.itemvarformclass(
                         prefix='itemvar-{}'.format(v.pk),
                         item=i, variation=v,
                         instance=inst,
@@ -993,10 +1021,13 @@ class SubEventBulkEdit(SubEventQueryMixin, EventPermissionRequiredMixin, FormVie
             else:
                 m = matches['item', i.pk]
                 if m and len(m) == 1 and m[0]['c'] == total:
-                    inst = SubEventItem(item=i, disabled=m[0]['disabled'], price=m[0]['price'])
+                    inst = SubEventItem(
+                        item=i, disabled=m[0]['disabled'], price=m[0]['price'],
+                        available_from=m[0]['available_from'], available_until=m[0]['available_until']
+                    )
                 else:
                     inst = SubEventItem(item=i)
-                formlist.append(SubEventItemForm(
+                formlist.append(self.itemformclass(
                     prefix='item-{}'.format(i.pk),
                     item=i,
                     instance=inst,
@@ -1406,11 +1437,13 @@ class SubEventBulkEdit(SubEventQueryMixin, EventPermissionRequiredMixin, FormVie
             if f.prefix + 'disabled' in self.request.POST.getlist('_bulk'):
                 u['disabled'] = f.cleaned_data.get('disabled')
 
+            # TODO: dates
+
             if not u:
                 continue
 
             if isinstance(f, SubEventItemForm):
-                if u.get('price') is None and not u.get('disabled'):
+                if u.get('price') is None and not u.get('disabled') and not u.get('available_from') and not u.get('available_until'):
                     SubEventItem.objects.filter(
                         subevent__in=self.get_queryset(),
                         item=f.instance.item,
@@ -1423,7 +1456,7 @@ class SubEventBulkEdit(SubEventQueryMixin, EventPermissionRequiredMixin, FormVie
                             defaults=u
                         )
             elif isinstance(f, SubEventItemVariationForm):
-                if u.get('price') is None and not u.get('disabled'):
+                if u.get('price') is None and not u.get('disabled') and not u.get('available_from') and not u.get('available_until'):
                     SubEventItemVariation.objects.filter(
                         subevent__in=self.get_queryset(),
                         variation=f.instance.variation,
