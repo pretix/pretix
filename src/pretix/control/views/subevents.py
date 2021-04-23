@@ -1436,8 +1436,10 @@ class SubEventBulkEdit(SubEventQueryMixin, EventPermissionRequiredMixin, FormVie
                 u['price'] = f.cleaned_data.get('price')
             if f.prefix + 'disabled' in self.request.POST.getlist('_bulk'):
                 u['disabled'] = f.cleaned_data.get('disabled')
-
-            # TODO: dates
+            if f.prefix + 'available_from' in self.request.POST.getlist('_bulk'):
+                u['available_from'] = f.cleaned_data.get('available_from')
+            if f.prefix + 'available_until' in self.request.POST.getlist('_bulk'):
+                u['available_until'] = f.cleaned_data.get('available_until')
 
             if not u:
                 continue
