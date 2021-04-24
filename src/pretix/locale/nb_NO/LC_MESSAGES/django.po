@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-04-19 14:58+0000\n"
-"PO-Revision-Date: 2021-04-24 07:00+0000\n"
+"PO-Revision-Date: 2021-04-24 21:00+0000\n"
 "Last-Translator: Alexander Dalen <alexdalen2@gmail.com>\n"
 "Language-Team: Norwegian Bokmål <https://translate.pretix.eu/projects/pretix/"
 "pretix/nb_NO/>\n"
@@ -574,7 +574,7 @@ msgstr ""
 #: pretix/plugins/reports/exporters.py:795
 #: pretix/plugins/ticketoutputpdf/exporters.py:92
 msgid "Order code"
-msgstr ""
+msgstr "Ordrekode"
 
 #: pretix/base/exporters/invoices.py:202 pretix/base/exporters/invoices.py:330
 #: pretix/base/models/waitinglist.py:73 pretix/base/orderimport.py:147
@@ -1015,7 +1015,7 @@ msgstr ""
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:61
 #: pretix/presale/templates/pretixpresale/organizers/index.html:67
 msgid "Status"
-msgstr ""
+msgstr "Status"
 
 #: pretix/base/exporters/orderlist.py:268
 #: pretix/base/exporters/orderlist.py:434
@@ -1056,7 +1056,7 @@ msgstr "Telefonnummer"
 #: pretix/plugins/reports/exporters.py:584
 #: pretix/plugins/reports/exporters.py:795
 msgid "Order date"
-msgstr ""
+msgstr "Ordredato"
 
 #: pretix/base/exporters/orderlist.py:269
 #: pretix/base/exporters/orderlist.py:437
@@ -1197,7 +1197,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order_change.html:29
 msgctxt "subevent"
 msgid "Date"
-msgstr ""
+msgstr "Dato"
 
 #: pretix/base/exporters/orderlist.py:547 pretix/base/models/items.py:465
 #: pretix/base/models/vouchers.py:191 pretix/base/models/waitinglist.py:88
@@ -1217,7 +1217,7 @@ msgstr ""
 #: pretix/presale/forms/order.py:36
 #: pretix/presale/templates/pretixpresale/event/waitinglist.html:10
 msgid "Product"
-msgstr ""
+msgstr "Produkt"
 
 #: pretix/base/exporters/orderlist.py:548
 #: pretix/base/exporters/waitinglist.py:110 pretix/base/models/orders.py:1157
@@ -1254,7 +1254,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html:8
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:148
 msgid "Voucher"
-msgstr ""
+msgstr "Voucher"
 
 #: pretix/base/exporters/orderlist.py:568
 msgid "Pseudonymization ID"
@@ -1263,12 +1263,12 @@ msgstr ""
 #: pretix/base/exporters/orderlist.py:569 pretix/base/orderimport.py:615
 #: pretix/plugins/checkinlists/exporters.py:467
 msgid "Seat ID"
-msgstr ""
+msgstr "Sete ID"
 
 #: pretix/base/exporters/orderlist.py:570
 #: pretix/plugins/checkinlists/exporters.py:468
 msgid "Seat name"
-msgstr ""
+msgstr "Setenavn"
 
 #: pretix/base/exporters/orderlist.py:571
 #: pretix/plugins/checkinlists/exporters.py:469
@@ -1611,7 +1611,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/index.html:247
 #: pretix/presale/templates/pretixpresale/event/index.html:251
 msgid "Voucher code"
-msgstr ""
+msgstr "Voucher kode"
 
 #: pretix/base/forms/auth.py:57 pretix/base/forms/auth.py:166
 msgid "Keep me logged in"
@@ -1889,7 +1889,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order.html:67
 #: pretix/presale/templates/pretixpresale/event/position.html:14
 msgid "TEST MODE"
-msgstr ""
+msgstr "TESTMODUS"
 
 #: pretix/base/invoice.py:434 pretix/base/services/mail.py:403
 #, python-brace-format
@@ -2320,7 +2320,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/organizers/webhooks.html:37
 #: pretix/control/views/organizer.py:1213
 msgid "Events"
-msgstr ""
+msgstr "Eventer"
 
 #: pretix/base/models/event.py:984
 msgid ""
@@ -3916,7 +3916,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/index.html:71
 msgctxt "subevent"
 msgid "Dates"
-msgstr ""
+msgstr "Datoer"
 
 #: pretix/base/notifications.py:219 pretix/base/pdf.py:210
 #: pretix/plugins/badges/exporters.py:296
@@ -4740,7 +4740,7 @@ msgstr ""
 
 #: pretix/base/pdf.py:745 pretix/plugins/ticketoutputpdf/ticketoutput.py:112
 msgid "Ticket"
-msgstr ""
+msgstr "Billett"
 
 #: pretix/base/reldate.py:35
 msgid "Event start"
@@ -7481,7 +7481,7 @@ msgstr ""
 #: pretix/plugins/sendmail/forms.py:91
 msgctxt "subevent"
 msgid "All dates"
-msgstr ""
+msgstr "Alle datoer"
 
 #: pretix/control/forms/event.py:79
 msgid "Use languages"
@@ -8787,7 +8787,7 @@ msgstr ""
 #: pretix/control/views/vouchers.py:108
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:84
 msgid "Seat"
-msgstr ""
+msgstr "Sete"
 
 #: pretix/control/forms/orders.py:298
 msgid "Including taxes, if any. Keep empty for the product's default price"
@@ -10224,7 +10224,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/organizers/index.html:133
 #: pretix/presale/templates/pretixpresale/organizers/index.html:135
 msgid "Tickets"
-msgstr ""
+msgstr "Billetter"
 
 #: pretix/control/navigation.py:89
 #: pretix/control/templates/pretixcontrol/event/tax_index.html:3
@@ -10557,7 +10557,7 @@ msgstr ""
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/organizer_stripe.html:20
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/edit.html:35
 msgid "Save"
-msgstr ""
+msgstr "Lagre"
 
 #: pretix/control/templates/pretixcontrol/auth/register.html:7
 msgid "Create a new account"
@@ -10900,7 +10900,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order_pay_change.html:54
 #: pretix/presale/templates/pretixpresale/event/order_pay_confirm.html:40
 msgid "Cancel"
-msgstr ""
+msgstr "Avbryt"
 
 #: pretix/control/templates/pretixcontrol/checkin/list_delete.html:21
 #: pretix/control/templates/pretixcontrol/event/delete.html:30
@@ -10924,7 +10924,7 @@ msgstr ""
 #: pretix/plugins/badges/templates/pretixplugins/badges/delete.html:16
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/delete.html:15
 msgid "Delete"
-msgstr ""
+msgstr "Slett"
 
 #: pretix/control/templates/pretixcontrol/checkin/list_edit.html:10
 #: pretix/control/templates/pretixcontrol/checkin/list_edit.html:17
@@ -11693,7 +11693,7 @@ msgstr ""
 #: pretix/plugins/badges/views.py:131 pretix/plugins/stripe/views.py:632
 #: pretix/plugins/ticketoutputpdf/views.py:167
 msgid "Your changes have been saved."
-msgstr ""
+msgstr "Dine endringer er lagret."
 
 #: pretix/control/templates/pretixcontrol/event/plugins.html:25
 #, python-format
@@ -16015,7 +16015,7 @@ msgstr ""
 #: pretix/plugins/stripe/views.py:635
 #: pretix/plugins/ticketoutputpdf/views.py:127
 msgid "We could not save your changes. See below for details."
-msgstr ""
+msgstr "Vi kunne ikke lagre dine endringer. Se under for detaljer."
 
 #: pretix/control/views/checkin.py:316 pretix/control/views/checkin.py:353
 msgid "The requested list does not exist."
@@ -16871,7 +16871,7 @@ msgstr ""
 #: pretix/control/views/organizer.py:1418
 #: pretix/control/views/organizer.py:1447
 msgid "Your changes could not be saved."
-msgstr ""
+msgstr "Dine endringer kunne ikke bli lagret."
 
 #: pretix/control/views/organizer.py:509
 msgid "The selected team has been deleted."
@@ -18419,7 +18419,7 @@ msgstr ""
 #: pretix/plugins/reports/exporters.py:156
 #, python-format
 msgid "Created: %s"
-msgstr ""
+msgstr "Laget: %s"
 
 #: pretix/plugins/reports/exporters.py:196
 msgid "Order overview (PDF)"
@@ -18741,7 +18741,7 @@ msgstr ""
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:109
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:111
 msgid "Available"
-msgstr ""
+msgstr "Ledig"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:116
 msgid "On Sale"
@@ -20039,7 +20039,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:312
 #: pretix/presale/templates/pretixpresale/event/index.html:238
 msgid "Redeem a voucher"
-msgstr ""
+msgstr "Innløs en voucher"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:315
 msgid "We're applying this voucher to your cart..."
@@ -20048,7 +20048,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:323
 #: pretix/presale/templates/pretixpresale/event/index.html:257
 msgid "Redeem voucher"
-msgstr ""
+msgstr "Innløs voucher"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart_box.html:42
 #: pretix/presale/templates/pretixpresale/event/fragment_cart_box.html:59
@@ -20300,7 +20300,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/index.html:224
 #: pretix/presale/templates/pretixpresale/event/voucher.html:358
 msgid "Add to cart"
-msgstr ""
+msgstr "Legg til handlekurv"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:268
 msgid "If you already ordered a ticket"
@@ -20477,7 +20477,7 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/order.html:358
 msgid "Change order"
-msgstr ""
+msgstr "Endre rekkefølge"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:368
 msgid ""
