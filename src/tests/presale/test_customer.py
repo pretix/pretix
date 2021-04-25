@@ -29,7 +29,7 @@ from django.core.signing import dumps
 from django.utils.timezone import now
 from django_scopes import scopes_disabled
 
-from pretix.base.models import Event, Organizer, Item, Order, OrderPosition
+from pretix.base.models import Event, Item, Order, OrderPosition, Organizer
 from pretix.presale.forms.customer import TokenGenerator
 
 

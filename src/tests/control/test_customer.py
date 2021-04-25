@@ -26,11 +26,11 @@ import pytest
 from bs4 import BeautifulSoup
 from django.utils.timezone import now
 from django_scopes import scopes_disabled
+from tests.base import extract_form_fields
 
 from pretix.base.models import (
-    Organizer, Team, User, Item, Order, OrderPosition,
+    Item, Order, OrderPosition, Organizer, Team, User,
 )
-from tests.base import extract_form_fields
 
 
 @pytest.fixture

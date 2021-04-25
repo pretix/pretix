@@ -34,8 +34,9 @@ from pretix.api.serializers.settings import SettingsSerializer
 from pretix.base.auth import get_auth_backends
 from pretix.base.i18n import get_language_without_region
 from pretix.base.models import (
-    Customer, Device, GiftCard, GiftCardTransaction, Organizer, SeatingPlan,
-    Team, TeamAPIToken, TeamInvite, User, MembershipType, Membership,
+    Customer, Device, GiftCard, GiftCardTransaction, Membership,
+    MembershipType, Organizer, SeatingPlan, Team, TeamAPIToken, TeamInvite,
+    User,
 )
 from pretix.base.models.seating import SeatingPlanLayoutValidator
 from pretix.base.services.mail import SendMailException, mail
