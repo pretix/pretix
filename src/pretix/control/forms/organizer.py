@@ -532,7 +532,7 @@ class CustomerUpdateForm(forms.ModelForm):
 
         self.fields['name_parts'] = NamePartsFormField(
             max_length=255,
-            required=True,
+            required=False,
             scheme=self.instance.organizer.settings.name_scheme,
             titles=self.instance.organizer.settings.name_scheme_titles,
             label=_('Name'),
@@ -575,7 +575,7 @@ class MembershipUpdateForm(forms.ModelForm):
         self.fields['membership_type'].queryset = self.instance.customer.organizer.membership_types.all()
         self.fields['attendee_name_parts'] = NamePartsFormField(
             max_length=255,
-            required=True,
+            required=False,
             scheme=self.instance.customer.organizer.settings.name_scheme,
             titles=self.instance.customer.organizer.settings.name_scheme_titles,
             label=_('Attendee name'),
