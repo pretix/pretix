@@ -92,8 +92,7 @@ class AuthenticationForm(forms.Form):
                 )
             else:
                 self.confirm_login_allowed(self.customer_cache)
-
-        if not email or not password:
+        else:
             raise forms.ValidationError(
                 self.error_messages['incomplete'],
                 code='incomplete'

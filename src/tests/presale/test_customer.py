@@ -79,10 +79,11 @@ def test_org_register(env, client):
         assert not customer.is_verified
         assert customer.is_active
 
-    r = client.post(f'/bigevents/account/activate?id={customer.identifier}&token={TokenGenerator().make_token(customer)}', {
-        'password': 'PANioMR62',
-        'password_repeat': 'PANioMR62',
-    })
+    r = client.post(
+        f'/bigevents/account/activate?id={customer.identifier}&token={TokenGenerator().make_token(customer)}', {
+            'password': 'PANioMR62',
+            'password_repeat': 'PANioMR62',
+        })
     assert r.status_code == 302
 
     customer.refresh_from_db()
@@ -113,10 +114,11 @@ def test_org_resetpw(env, client):
     assert r.status_code == 302
     assert len(djmail.outbox) == 1
 
-    r = client.post(f'/bigevents/account/pwrecover?id={customer.identifier}&token={TokenGenerator().make_token(customer)}', {
-        'password': 'PANioMR62',
-        'password_repeat': 'PANioMR62',
-    })
+    r = client.post(
+        f'/bigevents/account/pwrecover?id={customer.identifier}&token={TokenGenerator().make_token(customer)}', {
+            'password': 'PANioMR62',
+            'password_repeat': 'PANioMR62',
+        })
     assert r.status_code == 302
 
     customer.refresh_from_db()
@@ -128,7 +130,8 @@ def test_org_resetpw(env, client):
 def test_org_activate_invalid_token(env, client):
     with scopes_disabled():
         customer = env[0].customers.create(email='john@example.org', is_verified=False)
-    r = client.get(f'/bigevents/account/activate?id={customer.identifier}&token=.invalid.{TokenGenerator().make_token(customer)}')
+    r = client.get(
+        f'/bigevents/account/activate?id={customer.identifier}&token=.invalid.{TokenGenerator().make_token(customer)}')
     assert r.status_code == 302
 
 
@@ -174,6 +177,21 @@ def test_org_login_invalid_password(env, client):
 def test_org_login_not_verified(env, client):
     with scopes_disabled():
         customer = env[0].customers.create(email='john@example.org', is_verified=False)
+        customer.set_password('foo')
+        customer.save()
+
+    r = client.post('/bigevents/account/login', {
+        'email': 'john@example.org',
+        'password': 'foo',
+    })
+    assert r.status_code == 200
+    assert b'alert-danger' in r.content
+
+
+@pytest.mark.django_db
+def test_org_login_not_active(env, client):
+    with scopes_disabled():
+        customer = env[0].customers.create(email='john@example.org', is_verified=True, is_active=False)
         customer.set_password('foo')
         customer.save()
 

@@ -3690,3 +3690,167 @@ class CheckoutVoucherBudgetTest(BaseCheckoutTestCase, TestCase):
                            'web')
         self.cp2.refresh_from_db()
         assert self.cp2.price == Decimal('23.00')
+
+
+class CustomerCheckoutTestCase(BaseCheckoutTestCase, TestCase):
+
+    @scopes_disabled()
+    def setUp(self):
+        super().setUp()
+        self.orga.settings.customer_accounts = True
+        self.event.settings.set('payment_stripe__enabled', True)
+        self.event.settings.set('payment_banktransfer__enabled', True)
+        with scopes_disabled():
+            CartPosition.objects.create(
+                event=self.event, cart_id=self.session_key, item=self.ticket,
+                price=23, expires=now() + timedelta(minutes=10)
+            )
+            self.customer = self.orga.customers.create(email='john@example.org', is_verified=True)
+            self.customer.set_password('foo')
+            self.customer.save()
+
+    def _finish(self):
+        self._set_session('payment', 'banktransfer')
+        self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
+        with scopes_disabled():
+            return Order.objects.last()
+
+    def test_guest(self):
+        response = self.client.get('/%s/%s/checkout/start' % (self.orga.slug, self.event.slug), follow=True)
+        self.assertRedirects(response, '/%s/%s/checkout/customer/' % (self.orga.slug, self.event.slug),
+                             target_status_code=200)
+
+        response = self.client.post('/%s/%s/checkout/customer/' % (self.orga.slug, self.event.slug), {
+            'customer_mode': 'guest'
+        }, follow=True)
+        self.assertRedirects(response, '/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug),
+                             target_status_code=200)
+
+        order = self._finish()
+        assert order.email == 'admin@localhost'
+        assert not order.customer
+
+    def test_guest_even_if_logged_in(self):
+        self.client.post('/%s/account/login' % self.orga.slug, {
+            'email': 'john@example.org',
+            'password': 'foo',
+        })
+
+        response = self.client.get('/%s/%s/checkout/start' % (self.orga.slug, self.event.slug), follow=True)
+        self.assertRedirects(response, '/%s/%s/checkout/customer/' % (self.orga.slug, self.event.slug),
+                             target_status_code=200)
+        assert 'john@example.org' in response.content.decode()
+
+        response = self.client.post('/%s/%s/checkout/customer/' % (self.orga.slug, self.event.slug), {
+            'customer_mode': 'guest'
+        }, follow=True)
+        self.assertRedirects(response, '/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug),
+                             target_status_code=200)
+
+        order = self._finish()
+        assert order.email == 'admin@localhost'
+        assert not order.customer
+
+    def test_login_already_logged_in_and_forced_email(self):
+        self.client.post('/%s/account/login' % self.orga.slug, {
+            'email': 'john@example.org',
+            'password': 'foo',
+        })
+
+        response = self.client.get('/%s/%s/checkout/start' % (self.orga.slug, self.event.slug), follow=True)
+        self.assertRedirects(response, '/%s/%s/checkout/customer/' % (self.orga.slug, self.event.slug),
+                             target_status_code=200)
+        assert 'john@example.org' in response.content.decode()
+
+        response = self.client.post('/%s/%s/checkout/customer/' % (self.orga.slug, self.event.slug), {
+            'customer_mode': 'login'
+        }, follow=True)
+        self.assertRedirects(response, '/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug),
+                             target_status_code=200)
+        response = self.client.post('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), {
+            'email': 'will-be-ignored'
+        }, follow=True)
+        self.assertRedirects(response, '/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug),
+                             target_status_code=200)
+
+        order = self._finish()
+        assert order.email == 'john@example.org'
+        assert order.customer == self.customer
+
+    def test_login_valid(self):
+        response = self.client.get('/%s/%s/checkout/start' % (self.orga.slug, self.event.slug), follow=True)
+        self.assertRedirects(response, '/%s/%s/checkout/customer/' % (self.orga.slug, self.event.slug),
+                             target_status_code=200)
+
+        response = self.client.post('/%s/%s/checkout/customer/' % (self.orga.slug, self.event.slug), {
+            'customer_mode': 'login',
+            'login-email': 'john@example.org',
+            'login-password': 'foo',
+        }, follow=True)
+        self.assertRedirects(response, '/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug),
+                             target_status_code=200)
+        order = self._finish()
+        assert order.customer == self.customer
+
+    def test_login_invalid(self):
+        response = self.client.get('/%s/%s/checkout/start' % (self.orga.slug, self.event.slug), follow=True)
+        self.assertRedirects(response, '/%s/%s/checkout/customer/' % (self.orga.slug, self.event.slug),
+                             target_status_code=200)
+
+        response = self.client.post('/%s/%s/checkout/customer/' % (self.orga.slug, self.event.slug), {
+            'customer_mode': 'login',
+            'login-email': 'john@example.org',
+            'login-password': 'bar',
+        }, follow=False)
+        assert response.status_code == 200
+        assert b'alert-danger' in response.content
+
+    def test_register_valid(self):
+        response = self.client.get('/%s/%s/checkout/start' % (self.orga.slug, self.event.slug), follow=True)
+        self.assertRedirects(response, '/%s/%s/checkout/customer/' % (self.orga.slug, self.event.slug),
+                             target_status_code=200)
+
+        response = self.client.post('/%s/%s/checkout/customer/' % (self.orga.slug, self.event.slug), {
+            'customer_mode': 'register',
+            'register-email': 'foo@example.com',
+            'register-name_parts_0': 'John Doe',
+        }, follow=False)
+        self.assertRedirects(response, '/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug),
+                             target_status_code=200)
+        assert len(djmail.outbox) == 1
+
+        # After a valid registration form, we apply a kind of soft login. Since the email address hasn't yet been
+        # verified, we do not do a proper login, since that would cause security problems. However, if the customer
+        # goes back to this step manually, they can re-use the account.
+        response = self.client.get('/%s/%s/checkout/customer/' % (self.orga.slug, self.event.slug))
+        assert response.content.decode().count('foo@example.com') == 1
+
+        response = self.client.post('/%s/%s/checkout/customer/' % (self.orga.slug, self.event.slug), {
+            'customer_mode': 'login',
+        }, follow=False)
+        self.assertRedirects(response, '/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug),
+                             target_status_code=200)
+
+        response = self.client.post('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), {
+            'email': 'will-be-ignored'
+        }, follow=True)
+        self.assertRedirects(response, '/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug),
+                             target_status_code=200)
+        order = self._finish()
+        assert order.customer != self.customer
+        assert order.customer.email == 'foo@example.com'
+        assert order.email == 'foo@example.com'
+        assert not order.customer.is_verified
+
+    def test_register_invalid(self):
+        response = self.client.get('/%s/%s/checkout/start' % (self.orga.slug, self.event.slug), follow=True)
+        self.assertRedirects(response, '/%s/%s/checkout/customer/' % (self.orga.slug, self.event.slug),
+                             target_status_code=200)
+
+        response = self.client.post('/%s/%s/checkout/customer/' % (self.orga.slug, self.event.slug), {
+            'customer_mode': 'register',
+            'register-email': 'john@example.org',
+            'register-name_parts_0': 'John Doe',
+        }, follow=False)
+        assert response.status_code == 200
+        assert b'alert-danger' in response.content
