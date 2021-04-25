@@ -19,7 +19,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.BigAutoField(primary_key=True, serialize=False)),
                 ('identifier', models.CharField(db_index=True, max_length=190, unique=True)),
-                ('email', models.EmailField(db_index=True, max_length=190, null=True, unique=True)),
+                ('email', models.EmailField(db_index=True, max_length=190, null=True)),
                 ('password', models.CharField(max_length=128)),
                 ('name_cached', models.CharField(max_length=255)),
                 ('name_parts', jsonfallback.fields.FallbackJSONField(default=dict)),

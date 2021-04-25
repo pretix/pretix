@@ -26,7 +26,7 @@ from django.core.signing import BadSignature, dumps, loads
 from django.db import transaction
 from django.db.models import Count, IntegerField, OuterRef, Q, Subquery
 from django.http import Http404, HttpResponseRedirect
-from django.shortcuts import redirect
+from django.shortcuts import redirect, get_object_or_404
 from django.utils.decorators import method_decorator
 from django.utils.functional import cached_property
 from django.utils.http import url_has_allowed_host_and_scheme
@@ -190,7 +190,7 @@ class SetPasswordView(FormView):
         except Customer.DoesNotExist:
             messages.error(request, _('You clicked an invalid link.'))
             return HttpResponseRedirect(self.get_success_url())
-        if not TokenGenerator().check_token(self.customer, self.request.GET.get('token')):
+        if not TokenGenerator().check_token(self.customer, self.request.GET.get('token', '')):
             messages.error(request, _('You clicked an invalid link.'))
             return HttpResponseRedirect(self.get_success_url())
         return super().dispatch(request, *args, **kwargs)
@@ -327,7 +327,10 @@ class MembershipUsageView(CustomerRequiredMixin, ListView):
 
     @cached_property
     def membership(self):
-        return self.request.customer.memberships.get(pk=self.kwargs.get('id'))
+        return get_object_or_404(
+            self.request.customer.memberships,
+            pk=self.kwargs.get('id')
+        )
 
     def get_queryset(self):
         return self.membership.orderposition_set.select_related(
@@ -382,7 +385,8 @@ class ChangeInformationView(CustomerRequiredMixin, FormView):
     def dispatch(self, request, *args, **kwargs):
         if not request.organizer.settings.customer_accounts:
             raise Http404('Feature not enabled')
-        self.initial_email = self.request.customer.email
+        if self.request.customer:
+            self.initial_email = self.request.customer.email
         return super().dispatch(request, *args, **kwargs)
 
     def get_success_url(self):
@@ -431,7 +435,7 @@ class ChangeInformationView(CustomerRequiredMixin, FormView):
         return kwargs
 
 
-class ConfirmChangeView(CustomerRequiredMixin, View):
+class ConfirmChangeView(View):
     template_name = 'pretixpresale/organizers/customer_info.html'
     form_class = ChangeInfoForm
 
@@ -440,7 +444,7 @@ class ConfirmChangeView(CustomerRequiredMixin, View):
             raise Http404('Feature not enabled')
 
         try:
-            data = loads(request.GET.get('token'), salt='pretix.presale.views.customer.ChangeInformationView', max_age=3600 * 24)
+            data = loads(request.GET.get('token', ''), salt='pretix.presale.views.customer.ChangeInformationView', max_age=3600 * 24)
         except BadSignature:
             messages.error(request, _('You clicked an invalid link.'))
             return HttpResponseRedirect(self.get_success_url())
