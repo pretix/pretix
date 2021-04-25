@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-04-19 14:58+0000\n"
-"PO-Revision-Date: 2021-04-25 15:43+0000\n"
+"PO-Revision-Date: 2021-04-25 15:48+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
 ">\n"
@@ -16681,7 +16681,7 @@ msgstr "Größe (mm)"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:256
 msgid "Render without whitespace"
-msgstr "Ohne Weißra"
+msgstr "Ohne Weißraum darstellen"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:258
 msgid ""
