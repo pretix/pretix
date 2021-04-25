@@ -11,7 +11,7 @@ import pretix.base.models.base
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('pretixbase', '0183_team_can_manage_customers'),
+        ('pretixbase', '0183_customer'),
     ]
 
     operations = [

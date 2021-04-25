@@ -7,10 +7,16 @@ from django.db import migrations, models
 import pretix.base.models.base
 
 
+def set_can_manage_customers(apps, schema_editor):
+    Team = apps.get_model('pretixbase', 'Team')
+    Team.objects.filter(can_change_organizer_settings=True).update(can_manage_customers=True)
+    Team.objects.filter(can_change_orders=True, all_events=True).update(can_manage_customers=True)
+
+
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('pretixbase', '0181_team_can_checkin_orders'),
+        ('pretixbase', '0182_question_valid_file_portrait'),
     ]
 
     operations = [
@@ -45,5 +51,9 @@ class Migration(migrations.Migration):
             model_name='team',
             name='can_manage_customers',
             field=models.BooleanField(default=False),
+        ),
+        migrations.RunPython(
+            set_can_manage_customers,
+            migrations.RunPython.noop,
         ),
     ]
