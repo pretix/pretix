@@ -366,7 +366,7 @@ class OrderPositionAddForm(forms.Form):
         change_decimal_field(self.fields['price'], order.event.currency)
 
         choices = [
-            ('''''', ''),
+            ('', ''),
         ]
         if order.customer:
             self.memberships = list(order.customer.memberships.all())
