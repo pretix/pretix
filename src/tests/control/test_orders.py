@@ -65,7 +65,7 @@ def env():
     )
     event.settings.set('ticketoutput_testdummy__enabled', True)
     user = User.objects.create_user('dummy@dummy.dummy', 'dummy')
-    t = Team.objects.create(organizer=o, can_view_orders=True, can_change_orders=True)
+    t = Team.objects.create(organizer=o, can_view_orders=True, can_change_orders=True, can_manage_customers=True)
     t.members.add(user)
     t.limit_events.add(event)
     o = Order.objects.create(
@@ -206,6 +206,22 @@ def test_order_set_contact(client, env):
     with scopes_disabled():
         o = Order.objects.get(id=env[2].id)
     assert o.email == 'admin@rami.io'
+
+
+@pytest.mark.django_db
+def test_order_set_customer(client, env):
+    with scopes_disabled():
+        org = env[0].organizer
+        c = org.customers.create(email='foo@example.org')
+        org.settings.customer_accounts = True
+    client.login(email='dummy@dummy.dummy', password='dummy')
+    client.post('/control/event/dummy/dummy/orders/FOO/contact', {
+        'email': 'admin@rami.io',
+        'customer': c.pk
+    }, follow=True)
+    env[2].refresh_from_db()
+    assert env[2].email == 'admin@rami.io'
+    assert env[2].customer == c
 
 
 @pytest.mark.django_db
