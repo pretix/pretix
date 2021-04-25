@@ -10,6 +10,7 @@ Alipay
 and
 App
 Apps
+as
 auschecken
 Ausgangsscan
 Ausgangsscans
@@ -43,6 +44,7 @@ BezahlCode
 Bezahlmethode
 Blackberry
 Browsereinstellungen
+BSD
 bspw
 Bundles
 bzw
@@ -53,6 +55,7 @@ Chrome
 Choice
 CONFIRM
 Connect
+Copyleft
 Cronjob
 csv
 Customer
@@ -73,6 +76,7 @@ Einlassbuchung
 Einlassdatum
 Einlassuhrzeit
 email
+Enterprise
 EPS
 Erstattungsbetrag
 Erstattungsliste
