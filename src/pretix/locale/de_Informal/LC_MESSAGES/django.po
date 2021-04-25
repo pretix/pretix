@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-04-19 14:58+0000\n"
-"PO-Revision-Date: 2021-04-21 15:33+0000\n"
+"PO-Revision-Date: 2021-04-25 15:43+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.4.2\n"
+"X-Generator: Weblate 4.6\n"
 
 #: pretix/api/auth/devicesecurity.py:27
 msgid ""
@@ -5885,7 +5885,7 @@ msgstr ""
 "Es gibt ein Update für pretix oder eines der von dir installierten pretix-"
 "Plugins. Bitte klicke auf den folgenden Link für mehr Informationen:\n"
 "\n"
-"  {url}\n"
+" {url}\n"
 "\n"
 "Neuste Informationen über Updates findest du immer im pretix.eu-Blog:\n"
 "\n"
@@ -8312,6 +8312,9 @@ msgid ""
 "This site is powered by free software. If you want to read the license terms "
 "or obtain the source code, follow these links or instructions:"
 msgstr ""
+"Diese Website wird mit freier Software betrieben. Wenn du die "
+"Lizenzbedingungen lesen oder den Quellcode erhalten möchtest, folge "
+"folgenden Links oder Anweisungen:"
 
 #: pretix/base/ticketoutput.py:179
 msgid "Enable ticket format"
@@ -9308,7 +9311,7 @@ msgstr "Kein Administrator"
 
 #: pretix/control/forms/filter.py:1387
 msgid "Valid"
-msgstr "gültig"
+msgstr "Gültig"
 
 #: pretix/control/forms/filter.py:1388
 msgid "Unredeemed"
@@ -9456,34 +9459,37 @@ msgstr ""
 "von diesem Server lokal verschickt."
 
 #: pretix/control/forms/global_settings.py:133
-#, fuzzy
-#| msgid "Change to"
 msgid "Changes to pretix"
-msgstr "Ändern zu"
+msgstr "Änderungen an pretix"
 
 #: pretix/control/forms/global_settings.py:136
 msgid ""
 "This installation of pretix is running without any custom modifications or "
 "extensions (except for installed plugins)."
 msgstr ""
+"Diese Installation von pretix läuft ohne eigene Modifikationen oder "
+"Erweiterungen (mit Ausnahme installierter Plugins)."
 
 #: pretix/control/forms/global_settings.py:138
 msgid ""
 "This installation of pretix includes changes or extensions made to the "
 "source code."
 msgstr ""
+"Die Installation von pretix enthält Änderungen oder Erweiterungen des Source-"
+"Codes."
 
 #: pretix/control/forms/global_settings.py:143
-#, fuzzy
-#| msgid "Usage overview"
 msgid "Usage of pretix"
-msgstr "Nutzungsübersicht"
+msgstr "Nutzung von pretix"
 
 #: pretix/control/forms/global_settings.py:146
 msgid ""
 "I only use pretix to organize events which are executed by my own company or "
 "its affiliated companies, or to sell products sold by my own company."
 msgstr ""
+"Ich nutze pretix nur, um Veranstaltungen zu organisieren, die von meiner "
+"eigenen Institution oder verbundenen Unternehmen durchgeführt werden, oder "
+"um Produkte zu verkaufen, die von meiner eigenen Institution verkauft werden."
 
 #: pretix/control/forms/global_settings.py:148
 msgid ""
@@ -9491,14 +9497,17 @@ msgid ""
 "company) or I offer the functionality of pretix to others (e.g. a Software-"
 "as-a-Service company)."
 msgstr ""
+"Ich nutze pretix um Tickets anderer Veranstalter zu verkaufen (z.B. eine "
+"Ticketing-Firma/-Agentur) oder ich biete die Funktionen von pretix Dritten "
+"an (z.B. als Software as a Service)."
 
 #: pretix/control/forms/global_settings.py:150
 msgid "I'm not sure which option applies."
-msgstr ""
+msgstr "Ich bin mir nicht sicher, welche Option auf mich zutrifft."
 
 #: pretix/control/forms/global_settings.py:155
 msgid "License choice"
-msgstr ""
+msgstr "Lizenzwahl"
 
 #: pretix/control/forms/global_settings.py:158
 msgid ""
@@ -9506,6 +9515,9 @@ msgid ""
 "the copyright holders which allows me to not share modifications if I only "
 "use pretix internally."
 msgstr ""
+"Ich möchte pretix auf Basis der zusätzlichen Berechtigung nutzen, die jedem "
+"erlaubt Änderungen nicht zu veröffentlichen, wenn pretix nur intern bzw. für "
+"den eigenen Bedarf verwendet wird."
 
 #: pretix/control/forms/global_settings.py:161
 msgid ""
@@ -9513,39 +9525,54 @@ msgid ""
 "restriction on the scope of usage and therefore without making use of any "
 "additional permission."
 msgstr ""
+"Ich möchte pretix unter den Bedingungen der AGPLv3 nutzen, ohne in Umfang "
+"und Art der Nutzung beschränkt zu sein und mache daher von der zusätzlichen "
+"Berechtigung keinen Gebrauch."
 
 #: pretix/control/forms/global_settings.py:163
 msgid ""
 "I have obtained a paid pretix Enterprise license which is currently valid."
 msgstr ""
+"Ich habe eine bezahlte pretix-Enterprise-Lizenz erworben, die derzeit gültig "
+"ist."
 
 #: pretix/control/forms/global_settings.py:168
 msgid ""
 "This installation of pretix has installed plugins which are available freely "
 "under a non-copyleft license (Apache License, MIT License, BSD license, …)."
 msgstr ""
+"Diese Installation von pretix hat installierte Plugins, die unter freien "
+"Lizenzen ohne Copyleft verfügbar sind (Apache-Lizenz, MIT-Lizenz, BSD-"
+"Lizenz, …)."
 
 #: pretix/control/forms/global_settings.py:173
 msgid ""
 "This installation of pretix has installed plugins which are available freely "
 "under a license with strong copyleft (GPL, AGPL, …)."
 msgstr ""
+"Diese Installation von pretix hat installierte Plugins, die unter freien "
+"Lizenzen mit starkem Copyleft verfügbar sind (GPL, AGPL, …)."
 
 #: pretix/control/forms/global_settings.py:178
 msgid ""
 "This installation of pretix has installed plugins which have been created "
 "internally or obtained under a proprietary license by a third party."
 msgstr ""
+"Diese Installation von pretix hat installierte Plugins, die von uns selbst "
+"entwickelt wurden oder die wir unter einer proprietären Lizenz von einer "
+"dritten Partei erhalten haben."
 
 #: pretix/control/forms/global_settings.py:183
 msgid ""
 "This installation of pretix has installed pretix Enterprise plugins with a "
 "valid license."
 msgstr ""
+"Diese Installation von pretix hat installierte pretix-Enterprise-Plugins mit "
+"gültiger Lizenz."
 
 #: pretix/control/forms/global_settings.py:187
 msgid "Footer: \"powered by\" name (optional)"
-msgstr ""
+msgstr "Fußzeile: \"powered by\"-Name (optional)"
 
 #: pretix/control/forms/global_settings.py:188
 msgid ""
@@ -9553,19 +9580,22 @@ msgid ""
 "name of your company or organization (if you made any changes to pretix), "
 "set the name here."
 msgstr ""
+"Wenn du den \"powered by\"-Text in der Fußzeile anpassen willst, um den "
+"Namen Ihrer Firma oder Organisation aufzunehmen (wenn du Änderungen an "
+"pretix vorgenommen hast), kannst du hier den Namen eintragen."
 
 #: pretix/control/forms/global_settings.py:193
 msgid "Link for powered by name"
-msgstr ""
+msgstr "Verlinkung des Namens"
 
 #: pretix/control/forms/global_settings.py:194
 msgid ""
 "If you used the previous option, you can set an URL to link to in the footer."
 msgstr ""
+"Wenn du die vorherige Option benutzt hast, kannst du hier eine URL für den "
+"Link in der Fußzeile eintragen."
 
 #: pretix/control/forms/global_settings.py:198
-#, fuzzy
-#| msgid "Your registration"
 msgid "Source code instructions"
 msgstr "Deine Anmeldung"
 
@@ -9575,6 +9605,10 @@ msgid ""
 "current source code of the site including all modifications and installed "
 "plugins. This will be publicly available. Make sure to keep it up to date!"
 msgstr ""
+"Wenn du pretix unter AGPLv3-Bedingungen nutzt, beschreibe hier genau wie der "
+"aktuelle Quellcode der Website inkl. aller Änderungen und Plugins "
+"heruntergeladen werden kann. Diese Informationen werden öffentlich verfügbar "
+"gemacht. Bitte stelle sicher, dass du sie aktuell hältst!"
 
 #: pretix/control/forms/item.py:130
 msgid "This field is required"
@@ -10438,7 +10472,7 @@ msgstr ""
 #: pretix/control/logdisplay.py:98
 #, python-brace-format
 msgid "Price of position #{posid} changed from {old_price} to {new_price}."
-msgstr "Preis von Position #{posid} von  {old_price} auf {new_price} geändert."
+msgstr "Preis von Position #{posid} von {old_price} auf {new_price} geändert."
 
 #: pretix/control/logdisplay.py:106
 #, python-brace-format
@@ -11604,10 +11638,8 @@ msgid "Update check"
 msgstr "Update-Check"
 
 #: pretix/control/navigation.py:413
-#, fuzzy
-#| msgid "Tickets & check-in"
 msgid "License check"
-msgstr "Tickets & Check-In"
+msgstr "Lizenz-Check"
 
 #: pretix/control/navigation.py:457
 #: pretix/control/templates/pretixcontrol/organizers/properties.html:5
@@ -11748,10 +11780,9 @@ msgstr ""
 "pretix-Konto gewähren?"
 
 #: pretix/control/templates/pretixcontrol/auth/oauth_authorization.html:24
-#, fuzzy, python-format
-#| msgid "You are currently working on behalf of %(user)s."
+#, python-format
 msgid "You are currently logged in as <strong>%(user)s</strong>."
-msgstr "Du arbeitest derzeit im Namen von %(user)s."
+msgstr "Du bist derzeit angemeldet als <strong>%(user)s</strong>."
 
 #: pretix/control/templates/pretixcontrol/auth/oauth_authorization.html:28
 msgid "The application requires the following permissions:"
@@ -11919,6 +11950,8 @@ msgid ""
 "Click here to do a license compliance check to make sure your usage of "
 "pretix is in line with pretix' license."
 msgstr ""
+"Klicke hier um einen Lizenz-Check durchzuführen und zu prüfen, ob deine "
+"Nutzung von pretix mit der Lizenz von pretix kompatibel ist."
 
 #: pretix/control/templates/pretixcontrol/base.html:411
 msgid ""
@@ -13857,6 +13890,8 @@ msgstr ""
 msgid ""
 "This page is intended to help you use pretix in compliance with its license."
 msgstr ""
+"Diese Seite hilft dir, pretix in Einklang mit den Lizenzbedingungen von "
+"pretix zu verwenden."
 
 #: pretix/control/templates/pretixcontrol/global_license.html:11
 msgid ""
@@ -13864,56 +13899,55 @@ msgid ""
 "page does not guarantee you are within the license. Only the original "
 "license text is legally binding."
 msgstr ""
+"Der Text und die Ergebnisse dieser Seite sind nicht rechtsverbindlich und "
+"das Ausfüllen dieses Formulars garantiert nicht, dass du die "
+"Lizenzbedingungen erfüllst. Nur der originale Text der Lizenz ist "
+"rechtsverbindlich."
 
 #: pretix/control/templates/pretixcontrol/global_license.html:14
 msgid ""
 "You should have received a copy of pretix' license together with your copy "
 "of pretix. You can also view the current version of the license file here:"
 msgstr ""
+"Du hast eine Kopie der Lizenzbedingungen von pretix zusammen mit deiner "
+"Kopie von pretix erhalten. Du kannst die aktuelle Version der "
+"Lizenzbedingungen außerdem hier einsehen:"
 
 #: pretix/control/templates/pretixcontrol/global_license.html:18
 msgid "Answers to common questions about the license can be found here:"
-msgstr ""
+msgstr "Antworten auf häufige Fragen zur Lizenz können hier gefunden werden:"
 
 #: pretix/control/templates/pretixcontrol/global_license.html:22
 msgid ""
 "For more information or to obtain a paid pretix Enterprise license, contact "
 "support@pretix.eu."
 msgstr ""
+"Für weitere Informationen oder um eine pretix Enterprise-Lizenz zu erhalten, "
+"kontaktiere bitte support@pretix.eu."
 
 #: pretix/control/templates/pretixcontrol/global_license.html:26
-#, fuzzy
-#| msgid "Price settings"
 msgid "License settings and check"
-msgstr "Preis"
+msgstr "Lizenz-Einstellungen und Prüfung"
 
 #: pretix/control/templates/pretixcontrol/global_license.html:29
-#, fuzzy
-#| msgid "Registration details"
 msgid "Installation details"
-msgstr "Anmeldedetails"
+msgstr "Details zur Installation"
 
 #: pretix/control/templates/pretixcontrol/global_license.html:40
-#, fuzzy
-#| msgid "Your information"
 msgid "Public information"
-msgstr "Deine Informationen"
+msgstr "Öffentliche Informationen"
 
 #: pretix/control/templates/pretixcontrol/global_license.html:52
-#, fuzzy
-#| msgid "Save and show preview"
 msgid "Save and check"
-msgstr "Speichern und Vorschau zeigen"
+msgstr "Speichern und Prüfen"
 
 #: pretix/control/templates/pretixcontrol/global_license.html:60
-#, fuzzy
-#| msgid "Update check results"
 msgid "Check results"
 msgstr "Prüf-Ergebnisse"
 
 #: pretix/control/templates/pretixcontrol/global_license.html:79
 msgid "The automated license check did not identify any issues."
-msgstr ""
+msgstr "Der automatische Lizenzcheck hat keine Probleme identifiziert."
 
 #: pretix/control/templates/pretixcontrol/global_message.html:5
 #: pretix/control/templates/pretixcontrol/global_message.html:7
@@ -18297,6 +18331,9 @@ msgid ""
 "others, you must either use pretix under AGPLv3 terms or obtain a pretix "
 "Enterprise license."
 msgstr ""
+"Du verstößt gegen die Lizenzbedingungen. Wenn du die Funktionen von pretix "
+"Dritten anbietest oder dir nicht sicher bist, musst du pretix entweder unter "
+"AGPLv3-Bedingungen nutzen oder eine Enterprise-Lizenz erwerben."
 
 #: pretix/control/views/global_settings.py:195
 msgid ""
@@ -18304,18 +18341,25 @@ msgid ""
 "license if you install any plugins licensed with strong copyleft, otherwise "
 "you are likely in violation of the license of these plugins."
 msgstr ""
+"Du kannst keine Verwendung von der zusätzlichen Berechtigung machen, wenn du "
+"Plugins mit starkem Copyleft installiert hast, ansonsten verstößt du gegen "
+"die Lizenzbedingungen dieser Plugins."
 
 #: pretix/control/views/global_settings.py:203
 msgid ""
 "If you're using pretix under AGPL license, you need to provide instructions "
 "on how to access the source code."
 msgstr ""
+"Wenn du pretix unter AGPLv3-Bedingungen verwendest, musst du Instruktionen "
+"angeben, wie Nutzer den Quellcode erhalten können."
 
 #: pretix/control/views/global_settings.py:210
 msgid ""
 "You must not use pretix under AGPL terms if you use pretix Enterprise "
 "plugins."
 msgstr ""
+"Du darfst pretix nicht unter AGPLv3-Bedingungen nutzen, wenn du Enterprise-"
+"Plugins nutzt."
 
 #: pretix/control/views/global_settings.py:217
 msgid ""
@@ -18324,6 +18368,10 @@ msgid ""
 "license terms as pretix (AGPLv3 + additional restrictions). Make sure to "
 "keep it up to date!"
 msgstr ""
+"Du musst alle Änderungen am Quellcode von pretix jedem Besucher deiner "
+"Website kostenlos unter den gleichen Lizenzbedingungen wie pretix (AGPLv3 + "
+"zusätzliche Einschränkungen) zugänglich machen. Stelle sicher, dass du die "
+"Informationen aktuell hältst!"
 
 #: pretix/control/views/global_settings.py:224
 msgid ""
@@ -18331,6 +18379,10 @@ msgid ""
 "visitor of your site in source code form under the same license terms as "
 "pretix (AGPLv3 + additional restrictions). Make sure to keep it up to date!"
 msgstr ""
+"Du musst den Quellcode aller installierter Plugins jedem Besucher deinre "
+"Website kostenlos unter den gleichen Lizenzbedingungen wie pretix (AGPLv3 + "
+"zusätzliche Einschränkungen) zugänglich machen. Stelle sicher, dass du die "
+"Informationen aktuell hältst!"
 
 #: pretix/control/views/global_settings.py:235
 #, python-brace-format
@@ -18338,6 +18390,8 @@ msgid ""
 "You selected that you have no active pretix Enterprise licenses, but we "
 "found the following Enterprise plugin: {plugin}"
 msgstr ""
+"Du hast ausgewählt, dass du keine aktiven Enterprise-Lizenzen hast, aber wir "
+"haben folgendes Enterprise-Plugin gefunden: {plugin}"
 
 #: pretix/control/views/global_settings.py:242
 #, python-brace-format
@@ -18345,6 +18399,8 @@ msgid ""
 "You selected that you have no copyleft-licensed plugins installed, but we "
 "found the plugin \"{plugin}\" with license \"{license}\"."
 msgstr ""
+"Du hast ausgewählt, dass du keine Plugins mit Copyleft installiert hast, "
+"aber wir haben das Plugin \"{plugin}\" mit der Lizenz \"{license}\" gefunden."
 
 #: pretix/control/views/global_settings.py:249
 #, python-brace-format
@@ -18352,6 +18408,8 @@ msgid ""
 "You selected that you have no free plugins installed, but we found the "
 "plugin \"{plugin}\" with license \"{license}\"."
 msgstr ""
+"Du hast ausgewählt, dass du keine freien Plugins installiert hast, aber wir "
+"haben das Plugin \"{plugin}\" mit der Lizenz \"{license}\" gefunden."
 
 #: pretix/control/views/global_settings.py:256
 #, python-brace-format
@@ -18359,6 +18417,9 @@ msgid ""
 "We found the plugin \"{plugin}\" with license \"{license}\" which this tool "
 "does not know about and therefore cannot give any recommendations."
 msgstr ""
+"Wir haben das Plugin \"{plugin}\" mit Lizenz \"{license}\" gefunden, über "
+"das diese Lizenzprüfung keine Informationen hat und daher keine Empfehlungen "
+"geben kann."
 
 #: pretix/control/views/item.py:122 pretix/control/views/item.py:1403
 msgid "The requested product does not exist."
