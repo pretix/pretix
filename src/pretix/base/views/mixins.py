@@ -98,12 +98,16 @@ class BaseQuestionsViewMixin:
                                 question_field.initial = overrides[question_field.question.identifier]['initial']
                             if 'disabled' in overrides[question_field.question.identifier]:
                                 question_field.disabled = overrides[question_field.question.identifier]['disabled']
+                            if 'validators' in overrides[question_field.question.identifier]:
+                                question_field.validators += overrides[question_field.question.identifier]['validators']
                     else:
                         if question_name in overrides:
                             if 'initial' in overrides[question_name]:
                                 question_field.initial = overrides[question_name]['initial']
                             if 'disabled' in overrides[question_name]:
                                 question_field.disabled = overrides[question_name]['disabled']
+                            if 'validators' in overrides[question_name]:
+                                question_field.validators += overrides[question_name]['validators']
 
             if len(form.fields) > 0:
                 formlist.append(form)

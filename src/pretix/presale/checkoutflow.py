@@ -498,6 +498,8 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
             for fname, val in overrides.items():
                 if 'disabled' in val and fname in f.fields:
                     f.fields[fname].disabled = val['disabled']
+                if 'validators' in val and fname in f.fields:
+                    f.fields[fname].validators += val['validators']
 
         return f
 
@@ -564,6 +566,8 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
             for fname, val in overrides.items():
                 if 'disabled' in val and fname in f.fields:
                     f.fields[fname].disabled = val['disabled']
+                if 'validators' in val and fname in f.fields:
+                    f.fields[fname].validators += val['validators']
 
         return f
 

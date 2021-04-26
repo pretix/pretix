@@ -229,8 +229,8 @@ contact_form_fields_overrides = EventPluginSignal(
 This signal allows you to override fields of the contact form that is presented during checkout
 and by default only asks for the email address. It is also being used for the invoice address
 form. You are supposed to return a dictionary of dictionaries with globally unique keys. The
-value-dictionary should contain one or more of the following keys: ``initial``, ``disabled``. The
-key of the dictionary should be the name of the form field.
+value-dictionary should contain one or more of the following keys: ``initial``, ``disabled``,
+``validators``. The key of the dictionary should be the name of the form field.
 
 As with all plugin signals, the ``sender`` keyword argument will contain the event. A ``request``
 argument will contain the request object. The ``order`` argument is ``None`` during the checkout
@@ -260,8 +260,9 @@ question_form_fields_overrides = EventPluginSignal(
 This signal allows you to override fields of the questions form that is presented during checkout
 and by default only asks for the questions configured in the backend. You are supposed to return a
 dictionary of dictionaries with globally unique keys. The value-dictionary should contain one or
-more of the following keys: ``initial``, ``disabled``. The key of the dictionary should not be the
-question's form field name (``question_n``) but rather the questions ``identifier``.
+more of the following keys: ``initial``, ``disabled``, ``validators``. The key of the dictionary
+should be the form field name for system fields (e.g. ``company``), or the question's ``identifier``
+for user-defined questions.
 
 The ``position`` keyword argument will contain a ``CartPosition`` or ``OrderPosition`` object.
 
