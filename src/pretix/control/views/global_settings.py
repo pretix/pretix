@@ -172,13 +172,17 @@ class LicenseCheckView(StaffMemberRequiredMixin, FormView):
             pkg = pkgs[0]
         except:
             return None, None
-        for line in pkg.get_metadata_lines('PKG-INFO'):
-            if ': ' in line:
-                (k, v) = line.split(': ', 1)
-                if k == "License":
-                    license = v
-                if k == "Home-page":
-                    url = v
+        try:
+            for line in pkg.get_metadata_lines('PKG-INFO'):
+                if ': ' in line:
+                    (k, v) = line.split(': ', 1)
+                    if k == "License":
+                        license = v
+                    if k == "Home-page":
+                        url = v
+        except FileNotFoundError:
+            license = '?'
+            url = '?'
         return license, url
 
     def _check_results(self, input):
