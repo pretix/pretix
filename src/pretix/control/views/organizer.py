@@ -77,7 +77,7 @@ from pretix.base.settings import SETTINGS_AFFECTING_CSS
 from pretix.base.signals import register_multievent_data_exporters
 from pretix.base.views.tasks import AsyncAction
 from pretix.control.forms.filter import (
-    EventFilterForm, GiftCardFilterForm, OrganizerFilterForm,
+    EventFilterForm, GiftCardFilterForm, OrganizerFilterForm, TeamFilterForm,
 )
 from pretix.control.forms.orders import ExporterForm
 from pretix.control.forms.organizer import (
@@ -390,18 +390,30 @@ class OrganizerCreate(CreateView):
         })
 
 
-class TeamListView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, ListView):
+class TeamListView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, PaginationMixin, ListView):
     model = Team
     template_name = 'pretixcontrol/organizers/teams.html'
     permission = 'can_change_teams'
     context_object_name = 'teams'
 
     def get_queryset(self):
-        return self.request.organizer.teams.annotate(
+        qs = self.request.organizer.teams.annotate(
             memcount=Count('members', distinct=True),
             eventcount=Count('limit_events', distinct=True),
             invcount=Count('invites', distinct=True)
         ).all().order_by('name')
+        if self.filter_form.is_valid():
+            qs = self.filter_form.filter_qs(qs)
+        return qs
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['filter_form'] = self.filter_form
+        return ctx
+
+    @cached_property
+    def filter_form(self):
+        return TeamFilterForm(data=self.request.GET, request=self.request)
 
 
 class TeamCreateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, CreateView):

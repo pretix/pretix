@@ -1,11 +1,25 @@
 {% extends "pretixcontrol/organizers/base.html" %}
 {% load i18n %}
+{% load urlreplace %}
 {% load bootstrap3 %}
 {% block inner %}
     <h1>{% trans "Teams" %}</h1>
     <p>
         {% trans "The list below shows all teams that exist within this organizer." %}
     </p>
+    <form class="row filter-form" action="" method="get">
+        <div class="col-md-10 col-sm-6 col-xs-12">
+            {% bootstrap_field filter_form.query layout='inline' %}
+        </div>
+        <div class="col-md-2 col-sm-6 col-xs-12">
+            <button class="btn btn-primary btn-block" type="submit">
+                <span class="fa fa-filter"></span>
+                <span class="hidden-md">
+                    {% trans "Filter" %}
+                </span>
+            </button>
+        </div>
+    </form>
     <a href="{% url "control:organizer.team.add" organizer=request.organizer.slug %}" class="btn btn-default">
         <span class="fa fa-plus"></span>
         {% trans "Create a new team" %}
@@ -13,7 +27,9 @@
     <table class="table table-condensed table-hover">
         <thead>
         <tr>
-            <th>{% trans "Team name" %}</th>
+            <th>{% trans "Team name" %}
+                <a href="?{% url_replace request 'ordering' '-name' %}"><i class="fa fa-caret-down"></i></a>
+                <a href="?{% url_replace request 'ordering' 'name' %}"><i class="fa fa-caret-up"></i></a></th>
             <th>{% trans "Members" %}</th>
             <th>{% trans "Events" %}</th>
             <th></th>

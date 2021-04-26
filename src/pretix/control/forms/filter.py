@@ -1022,6 +1022,44 @@ class GiftCardFilterForm(FilterForm):
         return qs.distinct()
 
 
+class TeamFilterForm(FilterForm):
+    orders = {
+        'name': 'name',
+    }
+    query = forms.CharField(
+        label=_('Search query'),
+        widget=forms.TextInput(attrs={
+            'placeholder': _('Search query'),
+            'autofocus': 'autofocus'
+        }),
+        required=False
+    )
+
+    def __init__(self, *args, **kwargs):
+        kwargs.pop('request')
+        super().__init__(*args, **kwargs)
+
+    def filter_qs(self, qs):
+        fdata = self.cleaned_data
+
+        if fdata.get('query'):
+            query = fdata.get('query')
+            qs = qs.filter(
+                Q(name__icontains=query)
+                | Q(members__email__icontains=query)
+                | Q(members__fullname__icontains=query)
+                | Q(invites__email__icontains=query)
+                | Q(tokens__name__icontains=query)
+            )
+
+        if fdata.get('ordering'):
+            qs = qs.order_by(self.get_order_by())
+        else:
+            qs = qs.order_by('name')
+
+        return qs.distinct()
+
+
 class EventFilterForm(FilterForm):
     orders = {
         'slug': 'slug',
