@@ -380,21 +380,44 @@ var form_handlers = function (el) {
         if ($(this).find(".choice-options-all").length > 0) {
             return;
         }
-        var $small = $("<small>");
+        var $menu = $("<div>").addClass("choice-options-menu");
         var $a_all = $("<a>").addClass("choice-options-all").attr("href", "#").text(gettext("All"));
         var $a_none = $("<a>").addClass("choice-options-none").attr("href", "#").text(gettext("None"));
-        $(this).prepend($small.append($a_all).append(" / ").append($a_none));
+        var $inp_search = $("<input>").addClass("form-control").attr("type", "text").attr("placeholder", gettext("Search query"));
+        var $lbl_tgl = $("<div>").addClass("checkbox menu-checkbox");
+        var $cb_tgl = $("<input>").attr("type", "checkbox").addClass("menu-checkbox");
+        $lbl_tgl.append($("<label>").append($cb_tgl).append(gettext("Selected only")));
+        $menu.append($("<span>").append($a_all).append(" / ").append($a_none))
+        $menu.append($inp_search);
+        $menu.append($lbl_tgl);
+        $(this).prepend($menu);
 
         $(this).find(".choice-options-none").click(function (e) {
-            $(this).closest(".scrolling-multiple-choice").find("input[type=checkbox]").prop("checked", false);
+            $(this).closest(".scrolling-multiple-choice").find("input[type=checkbox]:not(.menu-checkbox)").prop("checked", false);
+            $cb_tgl.trigger("change");
             e.preventDefault();
             return false;
         });
         $(this).find(".choice-options-all").click(function (e) {
-            $(this).closest(".scrolling-multiple-choice").find("input[type=checkbox]").prop("checked", true);
+            $(this).closest(".scrolling-multiple-choice").find("input[type=checkbox]:not(.menu-checkbox)").prop("checked", true);
+            $cb_tgl.trigger("change");
             e.preventDefault();
             return false;
         });
+        $cb_tgl.on("change", function (e) {
+            var tgl = $cb_tgl.prop("checked");
+
+            $(this).closest(".scrolling-multiple-choice").find("div.checkbox:not(.menu-checkbox)").each(function () {
+                $(this).toggleClass("sr-only", tgl && !$(this).find("input[type=checkbox]").prop("checked"));
+            })
+        });
+        $inp_search.on("keyup change", function (e) {
+            var term = $inp_search.val().toLowerCase();
+
+            $(this).closest(".scrolling-multiple-choice").find("div.checkbox:not(.menu-checkbox)").each(function () {
+                $(this).toggleClass("hidden", !$(this).text().toLowerCase().includes(term));
+            })
+        })
     });
 
     el.find('.select2-static').select2({

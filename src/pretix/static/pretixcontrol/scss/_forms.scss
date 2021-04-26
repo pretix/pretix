@@ -387,15 +387,37 @@ div.scrolling-multiple-choice, div.scrolling-choice {
   height: 150px;
   border: 1px solid $input-border;
   border-radius: $input-border-radius;
-  padding-left: 15px;
-  overflow-y: auto;
-  padding-top: 5px;
+  padding: 5px 15px;
+  overflow-y: scroll;
 
   .radio:first-of-type, .checkbox:first-of-type {
     margin-top: 0;
   }
   &.scrolling-multiple-choice-large {
     height: 350px;
+  }
+  div.choice-options-menu {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    font-size: 12px;
+    border-bottom: 1px solid $input-border;
+    margin: 0 -15px;
+    padding: 0 15px 5px;
+    span {
+      display: block;
+    }
+    .checkbox {
+      padding-top: 3px;
+    }
+    .form-control {
+      flex: auto 1 1;
+      width: auto;
+      margin: 0 10px 0 10px;
+      font-size: 12px;
+      height: auto;
+      padding: 2px 6px;
+    }
   }
 }
 table td > .checkbox {
