@@ -36,4 +36,4 @@ def get_source(request):
         n = d.get('source_notice', '')
         return render(request, 'source.html', {'notice': n})
     else:
-        raise Http404(f'Not used under AGPL ({d["base_license"]})')
+        raise Http404(f'Not used under AGPL ({d.get("base_license")})')

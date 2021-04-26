@@ -134,7 +134,10 @@ class LicenseCheckView(StaffMemberRequiredMixin, FormView):
             seen = set()
             for entry_point in pkg_resources.iter_entry_points(group='pretix.plugin', name=None):
                 if entry_point.dist.key not in seen:
-                    license, url = self._get_license_for_pkg(entry_point.dist.key)
+                    try:
+                        license, url = self._get_license_for_pkg(entry_point.dist.key)
+                    except FileNotFoundError:
+                        license, url = '?', '?'
                     d['source_notice'] += f'\n{entry_point.dist.key} ({license}): {url}'
                     seen.add(entry_point.dist.key)
 
