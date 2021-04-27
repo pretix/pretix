@@ -236,6 +236,14 @@ class LicenseCheckView(StaffMemberRequiredMixin, FormView):
         for entry_point in pkg_resources.iter_entry_points(group='pretix.plugin', name=None):
             license, url = self._get_license_for_pkg(entry_point.dist.key)
 
+            if not license or not any(l in license for l in ('Apache', 'MIT', 'BSD', 'pretix Enterprise', 'GPL')):
+                res.append((
+                    'muted', 'warning',
+                    _('We found the plugin "{plugin}" with license "{license}" which this tool does not know about and '
+                      'therefore cannot give any recommendations.').format(plugin=entry_point.dist.key, license=license)
+                ))
+                continue
+
             if not input.get('plugins_enterprise') and 'pretix Enterprise' in license:
                 res.append((
                     'danger', 'exclamation-circle',
@@ -255,13 +263,6 @@ class LicenseCheckView(StaffMemberRequiredMixin, FormView):
                     'danger', 'exclamation-circle',
                     _('You selected that you have no free plugins installed, but we found the '
                       'plugin "{plugin}" with license "{license}".').format(plugin=entry_point.dist.key, license=license)
-                ))
-
-            if not license or not any(l in license for l in ('Apache', 'MIT', 'BSD', 'pretix Enterprise', 'GPL')):
-                res.append((
-                    'muted', 'warning',
-                    _('We found the plugin "{plugin}" with license "{license}" which this tool does not know about and '
-                      'therefore cannot give any recommendations.').format(plugin=entry_point.dist.key, license=license)
                 ))
 
         return res
