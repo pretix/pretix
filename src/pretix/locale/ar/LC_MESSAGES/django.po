@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-04-19 14:58+0000\n"
-"PO-Revision-Date: 2021-04-26 13:31+0000\n"
+"PO-Revision-Date: 2021-04-27 21:00+0000\n"
 "Last-Translator: Mohamed Tawfiq <mtawfiq@wafyapp.com>\n"
 "Language-Team: Arabic <https://translate.pretix.eu/projects/pretix/pretix/ar/"
 ">\n"
@@ -875,7 +875,7 @@ msgstr "فاتورة"
 #: pretix/plugins/checkinlists/exporters.py:651
 #: pretix/presale/checkoutflow.py:870
 msgid "Yes"
-msgstr "نعم فعلا"
+msgstr "نعم"
 
 #: pretix/base/exporters/invoices.py:305 pretix/base/exporters/orderlist.py:393
 #: pretix/base/exporters/orderlist.py:693
@@ -1258,7 +1258,7 @@ msgstr "تاريخ"
 #: pretix/presale/forms/order.py:36
 #: pretix/presale/templates/pretixpresale/event/waitinglist.html:10
 msgid "Product"
-msgstr "التذاكر"
+msgstr "منتج"
 
 #: pretix/base/exporters/orderlist.py:548
 #: pretix/base/exporters/waitinglist.py:110 pretix/base/models/orders.py:1157
@@ -1428,7 +1428,7 @@ msgstr "الحصة الإجمالية"
 #: pretix/control/templates/pretixcontrol/event/cancel.html:16
 #: pretix/control/views/item.py:833
 msgid "Paid orders"
-msgstr "طلبات مدفوعة."
+msgstr "طلبات مدفوعة"
 
 #: pretix/base/exporters/orderlist.py:820 pretix/control/views/item.py:838
 msgid "Pending orders"
@@ -2265,14 +2265,12 @@ msgstr ""
 "في التحقق من صحة مباشرة عند الشراء."
 
 #: pretix/base/models/checkin.py:236
-#, fuzzy
-#| msgid "Country"
 msgid "Entry"
-msgstr "بلد"
+msgstr "دخول"
 
 #: pretix/base/models/checkin.py:237
 msgid "Exit"
-msgstr ""
+msgstr "خروج"
 
 #: pretix/base/models/devices.py:71 pretix/base/models/items.py:1078
 msgid "Internal identifier"
@@ -2987,7 +2985,7 @@ msgstr "موضع"
 #: pretix/base/models/items.py:711 pretix/base/models/vouchers.py:203
 #: pretix/base/models/waitinglist.py:96 pretix/base/orderimport.py:228
 msgid "Product variation"
-msgstr "تباين المنتج"
+msgstr "خيارات المنتج"
 
 #: pretix/base/models/items.py:712
 #: pretix/control/templates/pretixcontrol/item/create.html:64
@@ -3911,7 +3909,7 @@ msgstr "عدد مرات هذا قسيمة يمكن استبدالها."
 
 #: pretix/base/models/vouchers.py:150 pretix/control/views/vouchers.py:108
 msgid "Redeemed"
-msgstr "مطفأة"
+msgstr "مسترد"
 
 #: pretix/base/models/vouchers.py:154
 #, fuzzy
@@ -5157,15 +5155,15 @@ msgstr "تذكرة"
 
 #: pretix/base/reldate.py:35
 msgid "Event start"
-msgstr "بداية الحدث"
+msgstr "موعد بداية الفعالية"
 
 #: pretix/base/reldate.py:36
 msgid "Event end"
-msgstr "نهاية الحدث"
+msgstr "موعد إنتهاء الفعالية"
 
 #: pretix/base/reldate.py:37
 msgid "Event admission"
-msgstr "القبول الحدث"
+msgstr "قبول الفعالية"
 
 #: pretix/base/reldate.py:38
 msgid "Presale start"
@@ -9381,7 +9379,7 @@ msgstr "لا المسؤول"
 
 #: pretix/control/forms/filter.py:1387
 msgid "Valid"
-msgstr "صالح"
+msgstr "ساري المفعول"
 
 #: pretix/control/forms/filter.py:1388
 msgid "Unredeemed"
@@ -11826,7 +11824,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order_pay.html:27
 #: pretix/presale/templates/pretixpresale/event/order_pay_change.html:60
 msgid "Continue"
-msgstr "استمر"
+msgstr "تابع"
 
 #: pretix/control/templates/pretixcontrol/auth/oauth_authorization.html:8
 msgid "Authorize an application"
@@ -14478,7 +14476,7 @@ msgstr "مدفوع"
 #: pretix/plugins/reports/exporters.py:287
 #: pretix/presale/templates/pretixpresale/event/fragment_order_status.html:24
 msgid "Canceled"
-msgstr "ألغيت"
+msgstr "ملغاة"
 
 #: pretix/control/templates/pretixcontrol/items/question.html:44
 msgid "No matching answers found."
@@ -14490,7 +14488,7 @@ msgstr "تحتاج إلى تعيين السؤال إلى منتج لإجابات
 
 #: pretix/control/templates/pretixcontrol/items/question.html:69
 msgid "Count"
-msgstr "عد"
+msgstr "احسب"
 
 #: pretix/control/templates/pretixcontrol/items/question.html:70
 msgid "Percentage"
@@ -15369,7 +15367,7 @@ msgstr "الضرائب"
 #: pretix/plugins/reports/exporters.py:868
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:287
 msgid "Total"
-msgstr "مجموع"
+msgstr "المجموع"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:580
 #: pretix/presale/templates/pretixpresale/event/order.html:204
@@ -21868,7 +21866,7 @@ msgstr "تخطيط تذكرة: %(name)s"
 
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/edit.html:23
 msgid "Ticket design"
-msgstr "تصميم تذكرة"
+msgstr "تصميم التذكرة"
 
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/form.html:3
 msgid ""
@@ -22336,7 +22334,7 @@ msgstr "سيتم الغاء الحجز تلقائيا بعد %(minutes)s دقا�
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:47
 #: pretix/presale/templates/pretixpresale/event/fragment_cart_box.html:34
 msgid "The items in your cart are no longer reserved for you."
-msgstr "التذاكر في عربتك لم تعد محجوزة لك."
+msgstr "العناصر في سلة تسوقك لم تعد محجوزة لك."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:53
 #: pretix/presale/templates/pretixpresale/event/index.html:56
