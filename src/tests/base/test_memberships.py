@@ -218,7 +218,7 @@ def test_validate_membership_ensure_locking(event, customer, membership, requiri
                 )
             ],
             event,
-            lock=False,
+            lock=True,
             ignored_order=None
         )
     if 'sqlite' not in settings.DATABASES['default']['ENGINE']:
