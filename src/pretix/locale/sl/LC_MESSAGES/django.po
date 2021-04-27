@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-04-19 14:58+0000\n"
-"PO-Revision-Date: 2021-04-04 02:00+0000\n"
+"PO-Revision-Date: 2021-04-27 21:00+0000\n"
 "Last-Translator: lapor-kris <kristijan.tkalec@posteo.si>\n"
 "Language-Team: Slovenian <https://translate.pretix.eu/projects/pretix/pretix/"
 "sl/>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n"
 "%100==4 ? 2 : 3;\n"
-"X-Generator: Weblate 4.4.2\n"
+"X-Generator: Weblate 4.6\n"
 
 #: pretix/api/auth/devicesecurity.py:27
 msgid ""
@@ -353,18 +353,16 @@ msgstr "Spletna trgovina"
 #: pretix/base/context.py:45
 #, python-brace-format
 msgid "powered by {name} based on <a {a_attr}>pretix</a>"
-msgstr ""
+msgstr "poganja ga {name}, ki temelji na <a {a_attr}>pretixu</a>"
 
 #: pretix/base/context.py:52
 #, python-format
 msgid "<a %(a_attr)s>ticketing powered by pretix</a>"
-msgstr ""
+msgstr "<a %(a_attr)s>prodaja vstopnic, ki jo poganja pretix</a>"
 
 #: pretix/base/context.py:61
-#, fuzzy
-#| msgid "Voucher code"
 msgid "source code"
-msgstr "Koda bona"
+msgstr "izvorna koda"
 
 #: pretix/base/email.py:176 pretix/control/views/main.py:291
 #: pretix/plugins/badges/__init__.py:45 pretix/plugins/badges/models.py:48
@@ -1692,23 +1690,27 @@ msgstr "Telefonska številka (brez mednarodne področne kode)"
 msgid ""
 "You uploaded an image in landscape orientation. Please upload an image in "
 "portrait orientation."
-msgstr ""
+msgstr "Naložili ste ležečo sliko. Naložite pokončno sliko."
 
 #: pretix/base/forms/questions.py:411
 msgid "Please upload an image where the width is 3/4 of the height."
-msgstr ""
+msgstr "Naložite sliko, katere širina je enaka 3/4 višine."
 
 #: pretix/base/forms/questions.py:414
 msgid ""
 "The file you uploaded has a very large number of pixels, please upload an "
 "image no larger than 10000 x 10000 pixels."
 msgstr ""
+"Datoteka, ki ste jo naložili, ima zelo veliko število slikovnih točk, zato "
+"naložite sliko, ki ni večja od 10000 x 10000 slikovnih točk."
 
 #: pretix/base/forms/questions.py:417
 msgid ""
 "Upload a valid image. The file you uploaded was either not an image or a "
 "corrupted image."
 msgstr ""
+"Naložite veljavno sliko. Datoteka, ki ste jo naložili, ni bila slika ali pa "
+"je poškodovana."
 
 #: pretix/base/forms/questions.py:574 pretix/base/forms/questions.py:886
 msgid "Street and Number"
@@ -3100,13 +3102,15 @@ msgstr "Največja vrednost"
 
 #: pretix/base/models/items.py:1145
 msgid "Validate file to be a portrait"
-msgstr ""
+msgstr "Potrdi, da je datoteka portret"
 
 #: pretix/base/models/items.py:1146
 msgid ""
 "If checked, files must be images with an aspect ratio of 3:4. This is "
 "commonly used for photos printed on badges."
 msgstr ""
+"Če je označeno, morajo biti slike v razmerju stranic 3:4. To se običajno "
+"uporablja za fotografije, natisnjene na značke."
 
 #: pretix/base/models/items.py:1198
 msgid "An answer to this question is required to proceed."
@@ -5824,39 +5828,42 @@ msgstr "Največje število izdelkov na naročilo"
 
 #: pretix/base/settings.py:118
 msgid "Add-on products will not be counted."
-msgstr ""
+msgstr "Dodatni izdelki se ne upoštevajo."
 
 #: pretix/base/settings.py:127
 msgid ""
 "Show net prices instead of gross prices in the product list (not "
 "recommended!)"
 msgstr ""
+"Prikaži neto cene namesto bruto cene na seznamu izdelkov (ni priporočljivo!)"
 
 #: pretix/base/settings.py:128
 msgid ""
 "Independent of your choice, the cart will show gross prices as this is the "
 "price that needs to be paid."
 msgstr ""
+"Ne glede na vašo izbiro bodo v košarici prikazane bruto cene, saj je to "
+"cena, ki jo je treba plačati."
 
 #: pretix/base/settings.py:143
 msgid "Ask for attendee names"
-msgstr ""
+msgstr "Povprašaj po imenih udeležencev"
 
 #: pretix/base/settings.py:144
 msgid "Ask for a name for all tickets which include admission to the event."
-msgstr ""
+msgstr "Vprašaj za ime za vse vstopnice, ki vključujejo vstop na dogodek."
 
 #: pretix/base/settings.py:153
 msgid "Require attendee names"
-msgstr ""
+msgstr "Zahtevajte imena udeležencev"
 
 #: pretix/base/settings.py:154
 msgid "Require customers to fill in the names of all attendees."
-msgstr ""
+msgstr "Od strank zahtevajte, da vpišejo imena vseh udeležencev."
 
 #: pretix/base/settings.py:164
 msgid "Ask for email addresses per ticket"
-msgstr ""
+msgstr "Zahtevajte e-poštne naslove na vstopnico"
 
 #: pretix/base/settings.py:165
 msgid ""
@@ -5869,10 +5876,17 @@ msgid ""
 "primary email address, not to the per-attendee addresses. You can however "
 "enable this in the E-mail settings."
 msgstr ""
+"Običajno pretix zahteva en e-poštni naslov na naročilo in potrditev naročila "
+"bo poslana samo na ta e-poštni naslov. Če omogočite to možnost, bo sistem "
+"dodatno zahteval posamezne e-poštne naslove za vsako vstopnico. To je lahko "
+"koristno, če želite pridobiti posamezne naslove za vsakega udeleženca tudi v "
+"primeru skupinskih naročil. Vendar bo pretix potrditev naročila privzeto "
+"poslal samo na en primarni e-poštni naslov, ne pa tudi na naslove posameznih "
+"udeležencev. To lahko omogočite v nastavitvah e-pošte."
 
 #: pretix/base/settings.py:179
 msgid "Require email addresses per ticket"
-msgstr ""
+msgstr "Zahtevajte e-poštne naslove na vstopnico"
 
 #: pretix/base/settings.py:180
 msgid ""
