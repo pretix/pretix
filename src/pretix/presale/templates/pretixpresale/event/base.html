@@ -51,7 +51,7 @@
         {% endif %}
         {% if request.event.settings.organizer_link_back %}
             <div class="pull-left header-part flip hidden-print">
-                <a href="{% eventurl request.organizer "presale:organizer.index" %}">
+                <a href="{% abseventurl request.organizer "presale:organizer.index" %}">
                     &laquo; {% blocktrans trimmed with name=request.organizer.name %}
                     Show all events of {{ name }}
                 {% endblocktrans %}

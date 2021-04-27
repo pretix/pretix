@@ -684,11 +684,12 @@ class Event(EventMixin, LoggedModel):
             if i.grant_membership_type and other.organizer_id != self.organizer_id:
                 i.grant_membership_type = None
 
+            i.save()
+            i.log_action('pretix.object.cloned')
+
             if require_membership_types and other.organizer_id == self.organizer_id:
                 i.require_membership_types.set(require_membership_types)
 
-            i.save()
-            i.log_action('pretix.object.cloned')
             for v in vars:
                 variation_map[v.pk] = v
                 v.pk = None

@@ -20,7 +20,7 @@
 # <https://www.gnu.org/licenses/>.
 #
 from datetime import timedelta
-from typing import List
+from typing import List, Optional
 
 from dateutil.relativedelta import relativedelta
 from django.core.exceptions import ValidationError
@@ -34,7 +34,7 @@ from pretix.base.models import (
 )
 
 
-def membership_validity(item: Item, subevent: SubEvent, event: Event):
+def membership_validity(item: Item, subevent: Optional[SubEvent], event: Event):
     tz = event.timezone
     if item.grant_membership_duration_like_event:
         ev = subevent or event
@@ -46,7 +46,7 @@ def membership_validity(item: Item, subevent: SubEvent, event: Event):
             date_end = date_start.astimezone(tz).replace(hour=23, minute=59, second=59, microsecond=999999)
 
     else:
-        # Always end at start of day
+        # Always start at start of day
         date_start = now().astimezone(tz).replace(hour=0, minute=0, second=0, microsecond=0)
         date_end = date_start
 
@@ -56,6 +56,9 @@ def membership_validity(item: Item, subevent: SubEvent, event: Event):
 
         if item.grant_membership_duration_days:
             date_end += timedelta(days=item.grant_membership_duration_days)
+            if not item.grant_membership_duration_months:
+                # Correct off-by-one due to first day
+                date_end -= timedelta(days=1)
 
         # Always end at end of day
         date_end = date_end.astimezone(tz).replace(hour=23, minute=59, second=59, microsecond=999999)
@@ -121,11 +124,12 @@ def validate_memberships_in_order(customer: Customer, positions: List[AbstractPo
         .in_bulk([p.used_membership_id for p in applicable_positions])
 
     for m in membership_cache.values():
+        qs = m.orderposition_set.filter(canceled=False).exclude(order__status=Order.STATUS_CANCELED)
+        if ignored_order:
+            qs = qs.exclude(order_id=ignored_order.pk)
         m._used_at_dates = [
             (op.subevent or op.order.event).date_from
-            for op in m.orderposition_set.filter(canceled=False).exclude(
-                order_id=ignored_order.pk
-            ).exclude(order__status=Order.STATUS_CANCELED)
+            for op in qs
         ]
 
     for p in applicable_positions:
@@ -170,9 +174,9 @@ def validate_memberships_in_order(customer: Customer, positions: List[AbstractPo
                 )
             m.usages += 1
 
-        if m.membership_type.allow_parallel_usage:
+        if not m.membership_type.allow_parallel_usage:
             df = ev.date_from
-            if any(abs(df - d) < timedelta(minutes=1) for d in m.membership_type._used_at_dates):
+            if any(abs(df - d) < timedelta(minutes=1) for d in m._used_at_dates):
                 raise ValidationError(
                     _('You are trying to use a membership of type "{type}" for an event taking place at {date}, '
                       'however you already used the same membership for a different ticket at the same time.').format(

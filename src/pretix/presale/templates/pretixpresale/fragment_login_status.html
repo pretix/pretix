@@ -4,18 +4,18 @@
 {% if request.organizer.settings.customer_accounts %}
     <nav class="loginstatus" aria-label="{% trans "customer account" %}">
         {% if request.customer %}
-            <a href="{% eventurl request.organizer "presale:organizer.customer.profile" %}"
+            <a href="{% abseventurl request.organizer "presale:organizer.customer.profile" %}"
                aria-label="{% trans "View customer account" %}" data-placement="bottom"
                title="{% trans "View user profile" %}" data-toggle="tooltip">
                 <span class="fa fa-user" aria-hidden="true"></span>
                 {{ request.customer.name|default:request.customer.email }}</a>
-            <a href="{% eventurl request.organizer "presale:organizer.customer.logout" %}?next={{ request.path|urlencode }}%3F{{ request.META.QUERY_STRING|urlencode }}"
+            <a href="{% abseventurl request.organizer "presale:organizer.customer.logout" %}?next={{ request.path|urlencode }}%3F{{ request.META.QUERY_STRING|urlencode }}"
                aria-label="{% trans "Log out" %}" data-toggle="tooltip" data-placement="left"
                title="{% trans "Log out" %}">
                 <span class="fa fa-sign-out" aria-hidden="true"></span>
             </a>
         {% else %}
-            <a href="{% eventurl request.organizer "presale:organizer.customer.login" %}?next={{ request.path|urlencode }}%3F{{ request.META.QUERY_STRING|urlencode }}">
+            <a href="{% abseventurl request.organizer "presale:organizer.customer.login" %}?next={{ request.path|urlencode }}%3F{{ request.META.QUERY_STRING|urlencode }}">
                 {% trans "Log in" %}</a>
 
         {% endif %}

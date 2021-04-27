@@ -1024,9 +1024,9 @@ class GiftCardFilterForm(FilterForm):
 
 class CustomerFilterForm(FilterForm):
     orders = {
-                 'email': 'email',
-                 'identifier': 'identifier',
-                 'name_cached': 'name_cached',
+        'email': 'email',
+        'identifier': 'identifier',
+        'name_cached': 'name_cached',
     }
     query = forms.CharField(
         label=_('Search query'),

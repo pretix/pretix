@@ -83,7 +83,7 @@
                         {% endif %}
                     </td>
                     <td class="text-right flip">
-                        <a href="{% eventurl op.order.event "presale:event.order" order=op.order.code secret=op.order.secret %}"
+                        <a href="{% abseventurl op.order.event "presale:event.order" order=op.order.code secret=op.order.secret %}"
                                 target="_blank"
                                 class="btn btn-default">
                             {% trans "Details" %}

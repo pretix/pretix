@@ -152,6 +152,7 @@ def eventreverse(obj, name, kwargs=None):
     else:
         domain, domaintype = get_organizer_domain(organizer), "organizer"
 
+    print(domain, domaintype)
     if domain:
         if domaintype == "event" and 'event' in kwargs:
             del kwargs['event']

@@ -82,7 +82,7 @@
                         </div>
                     </td>
                     <td class="text-right flip">
-                        <a href="{% eventurl request.organizer "presale:organizer.customer.membership" id=m.id %}"
+                        <a href="{% abseventurl request.organizer "presale:organizer.customer.membership" id=m.id %}"
                                 data-toggle="tooltip"
                                 title="{% trans "Details" %}"
                                 class="btn btn-default">
@@ -117,7 +117,7 @@
                 <tr>
                     <td>
                         <strong>
-                            <a href="{% eventurl o.event "presale:event.order" order=o.code secret=o.secret %}" target="_blank">
+                            <a href="{% abseventurl o.event "presale:event.order" order=o.code secret=o.secret %}" target="_blank">
                                 {{ o.code }}
                             </a>
                         </strong>
@@ -143,7 +143,7 @@
                     <td class="text-right flip">{{ o.count_positions|default_if_none:"0" }}</td>
                     <td class="text-right flip">{% include "pretixpresale/event/fragment_order_status.html" with order=o event=o.event %}</td>
                     <td class="text-right flip">
-                        <a href="{% eventurl o.event "presale:event.order" order=o.code secret=o.secret %}"
+                        <a href="{% abseventurl o.event "presale:event.order" order=o.code secret=o.secret %}"
                                 target="_blank"
                                 class="btn btn-default">
                             {% trans "Details" %}
