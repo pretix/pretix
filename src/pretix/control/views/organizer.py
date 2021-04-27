@@ -84,9 +84,8 @@ from pretix.base.signals import register_multievent_data_exporters
 from pretix.base.templatetags.rich_text import markdown_compile_email
 from pretix.base.views.tasks import AsyncAction
 from pretix.control.forms.filter import (
-    EventFilterForm, GiftCardFilterForm, OrganizerFilterForm, TeamFilterForm,
     CustomerFilterForm, EventFilterForm, GiftCardFilterForm,
-    OrganizerFilterForm,
+    OrganizerFilterForm, TeamFilterForm,
 )
 from pretix.control.forms.orders import ExporterForm
 from pretix.control.forms.organizer import (
