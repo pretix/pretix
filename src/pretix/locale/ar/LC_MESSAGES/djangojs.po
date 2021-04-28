@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-04-19 14:58+0000\n"
-"PO-Revision-Date: 2021-04-27 21:00+0000\n"
+"PO-Revision-Date: 2021-04-28 18:00+0000\n"
 "Last-Translator: Mohamed Tawfiq <mtawfiq@wafyapp.com>\n"
 "Language-Team: Arabic <https://translate.pretix.eu/projects/pretix/pretix-js/"
 "ar/>\n"
@@ -32,9 +32,8 @@ msgstr "تعليق:"
 
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:15
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:39
-#, fuzzy
 msgid "Placed orders"
-msgstr "الطلبات مختارة"
+msgstr "طلبات مختارة"
 
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:15
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:39
@@ -133,7 +132,7 @@ msgstr "إلغاء"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:48
 msgid "Continue"
-msgstr "تابع"
+msgstr "المتابعة"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:49
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:58
@@ -178,7 +177,7 @@ msgstr "إدخال غير مسموح"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:60
 msgid "Ticket code revoked/changed"
-msgstr "تم إلغاء أو تبديل رمز التذكرة"
+msgstr "تم إلغاء رمز التذكرة أو تبديله"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:61
 msgid "Order canceled"
@@ -186,7 +185,7 @@ msgstr "تم إلغاء الطلب"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:62
 msgid "Checked-in Tickets"
-msgstr "تذاكر مسجلة"
+msgstr "تذاكر دخول"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:63
 msgid "Valid Tickets"
@@ -203,7 +202,7 @@ msgid ""
 "event, this might take up to a few minutes."
 msgstr ""
 "تتم معالجة طلبك حاليا. قد يستغرق الأمر بضع دقائق بناء على حجم الفعالية التي "
-"اخترت"
+"اخترت."
 
 #: pretix/static/pretixbase/js/asynctask.js:48
 #: pretix/static/pretixbase/js/asynctask.js:122
@@ -236,13 +235,14 @@ msgstr "لم نتمكن من الاتصال بالخادم، لكن سنواصل
 #: pretix/static/pretixbase/js/asynctask.js:142
 #: pretix/static/pretixcontrol/js/ui/mail.js:21
 msgid "The request took too long. Please try again."
-msgstr "استغرقت العملية فترة طويلة، الرجاء المحاولة مرة أخرى."
+msgstr "استغرقت الطلب فترة طويلة، الرجاء المحاولة مرة أخرى."
 
 #: pretix/static/pretixbase/js/asynctask.js:177
 #: pretix/static/pretixcontrol/js/ui/mail.js:26
 msgid ""
 "We currently cannot reach the server. Please try again. Error code: {code}"
-msgstr "لم نستطع معالجة طلبك، ولكننا نواصل المحاولة. رمز الخطأ : {code}"
+msgstr ""
+"لا يمكننا الوصول إلى الخادم حاليا، حاول مرة أخرى من فضلك. رمز الخطأ : {code}"
 
 #: pretix/static/pretixbase/js/asynctask.js:199
 msgid "We are processing your request …"
@@ -254,8 +254,8 @@ msgid ""
 "than one minute, please check your internet connection and then reload this "
 "page and try again."
 msgstr ""
-"يجري الآن معالجة طلبك، اذا أستغرقت العملية أكثر من دقيقة، يرجى التحقق من "
-"اتصالك بالإنترنت ثم حاول مرة أخرى."
+"نعمل الآن على ارسال طلبك إلى الخادم، إذا أستغرقت العملية أكثر من دقيقة، يرجى "
+"التحقق من اتصالك بالإنترنت ثم أعد تحميل الصفحة مرة أخرى."
 
 #: pretix/static/pretixbase/js/asynctask.js:245
 #: pretix/static/pretixcontrol/js/ui/main.js:34
@@ -268,7 +268,7 @@ msgstr "تم النسخ!"
 
 #: pretix/static/pretixcontrol/js/clipboard.js:29
 msgid "Press Ctrl-C to copy!"
-msgstr "اضغط Ctrl + C للنسخ!"
+msgstr "للنسخ اضغط Ctrl + C!"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:10
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:16
@@ -293,7 +293,7 @@ msgstr "خيارات المنتج"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:67
 msgid "Current date and time"
-msgstr "اليوم والوقت الحالي"
+msgstr "التاريخ والوقت الحالي"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:71
 msgid "Number of previous entries"
@@ -321,11 +321,11 @@ msgstr "موعد بداية الفعالية"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:229
 msgid "Event end"
-msgstr "موعد إنتهاء الفعالية"
+msgstr "موعد نهاية الفعالية"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:230
 msgid "Event admission"
-msgstr "قبول الفعالية"
+msgstr "تسجيل الفعالية"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:231
 msgid "custom time"
@@ -342,7 +342,7 @@ msgstr "أضف شرط"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:69
 msgid "Lead Scan QR"
-msgstr "يؤدي إلى مسح QR"
+msgstr "قم بمسح QR"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:71
 msgid "Check-in QR"
@@ -417,7 +417,7 @@ msgstr "اللون يحظى بتباين معقول ويمكن أن يكون م�
 msgid ""
 "Your color has bad contrast for text on white background, please choose a "
 "darker shade."
-msgstr "اللون غير مناسب للخلفية البيضاء، الرجاء اختيار لون غامق."
+msgstr "تباين اللون سيئ للخلفية البيضاء، الرجاء اختيار لون غامق."
 
 #: pretix/static/pretixcontrol/js/ui/main.js:384
 msgid "All"
@@ -429,7 +429,7 @@ msgstr "لا شيء"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:802
 msgid "Use a different name internally"
-msgstr "قم باستخدام اسم مغاير داخليا"
+msgstr "قم باستخدم اسم مختلف داخليا"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:859
 msgid "Click to close"
@@ -445,7 +445,7 @@ msgstr "حساب السعر الافتراضي…"
 
 #: pretix/static/pretixcontrol/js/ui/question.js:42
 msgid "Others"
-msgstr "الآخرون"
+msgstr "آخرون"
 
 #: pretix/static/pretixcontrol/js/ui/question.js:82
 msgid "Count"
@@ -489,7 +489,7 @@ msgstr[5] "سيتم حجز العناصر لك في سلة التسوق لمدة
 
 #: pretix/static/pretixpresale/js/ui/main.js:269
 msgid "Please enter a quantity for one of the ticket types."
-msgstr "الرجاء إدخال عدد التذاكر لأحد أنواع التذاكر."
+msgstr "الرجاء إدخال عدد لأحد أنواع التذاكر."
 
 #: pretix/static/pretixpresale/js/ui/main.js:305
 msgid "required"
@@ -497,11 +497,11 @@ msgstr "مطلوب"
 
 #: pretix/static/pretixpresale/js/ui/main.js:402
 msgid "The organizer keeps %(currency)s %(amount)s"
-msgstr "يحصل المنظم على %(العملة) %(المبلغ)"
+msgstr "يحصل المنظم على %(currency) %(amount)"
 
 #: pretix/static/pretixpresale/js/ui/main.js:410
 msgid "You get %(currency)s %(amount)s back"
-msgstr "ستسترد %(العملة)%(المبلغ)"
+msgstr "ستسترد %(currency)%(amount)"
 
 #: pretix/static/pretixpresale/js/ui/main.js:426
 msgid "Please enter the amount the organizer can keep."
@@ -529,7 +529,7 @@ msgstr "اشتري"
 #: pretix/static/pretixpresale/js/widget/widget.js:19
 msgctxt "widget"
 msgid "Register"
-msgstr "تسجيل"
+msgstr "سجل"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:20
 msgctxt "widget"
@@ -549,12 +549,12 @@ msgstr "من %(currency) s %(price)s"
 #: pretix/static/pretixpresale/js/widget/widget.js:23
 msgctxt "widget"
 msgid "incl. %(rate)s% %(taxname)s"
-msgstr "متضمن %(rate)s% %(taxname)s"
+msgstr "يشمل %(rate)s% %(taxname)s"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:24
 msgctxt "widget"
 msgid "plus %(rate)s% %(taxname)s"
-msgstr "زائد %(rate)s% %(taxname)s"
+msgstr "بالإضافة إلى %(rate)s% %(taxname)s"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:25
 msgctxt "widget"
@@ -609,8 +609,8 @@ msgid ""
 "You currently have an active cart for this event. If you select more "
 "products, they will be added to your existing cart."
 msgstr ""
-"لديك الآن سلة تسوق مفعلة لهذا الحدث. إن قمت باختيار منتجات أخرى سيتم إضافتها "
-"إلى سلة التسوق الموجودة حالياً."
+"لديك الآن سلة تسوق مفعلة لهذا الحدث. إذا قمت باختيار منتجات أخرى سيتم "
+"إضافتها إلى سلة التسوق الموجودة حالياً."
 
 #: pretix/static/pretixpresale/js/widget/widget.js:36
 msgctxt "widget"
@@ -625,7 +625,7 @@ msgstr "استبدال قسيمة"
 #: pretix/static/pretixpresale/js/widget/widget.js:38
 msgctxt "widget"
 msgid "Redeem"
-msgstr "حرر"
+msgstr "استبدال"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:39
 msgctxt "widget"
@@ -650,12 +650,12 @@ msgstr "أنظر إلى الاختلافات"
 #: pretix/static/pretixpresale/js/widget/widget.js:43
 msgctxt "widget"
 msgid "Choose a different event"
-msgstr "اختر فعالية مختلفة"
+msgstr "اختر فعالية أخرى"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:44
 msgctxt "widget"
 msgid "Choose a different date"
-msgstr "اختر تاريخا مختلفا"
+msgstr "اختر تاريخا آخر"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:45
 msgctxt "widget"
