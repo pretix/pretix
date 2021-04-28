@@ -185,6 +185,7 @@ class CheckinList(LoggedModel):
         # Every change to our supported JSON logic must be done
         # * in pretix.base.services.checkin
         # * in pretix.base.models.checkin
+        # * in pretix.helpers.jsonlogic_boolalg
         # * in checkinrules.js
         # * in libpretixsync
         top_level_operators = {

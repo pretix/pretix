@@ -46,6 +46,7 @@ from django.db.models import (
 )
 from django.db.models.functions import Coalesce, TruncDate
 from django.dispatch import receiver
+from django.utils.formats import date_format
 from django.utils.functional import cached_property
 from django.utils.timezone import make_aware, now, override
 from django.utils.translation import gettext as _
@@ -56,27 +57,198 @@ from pretix.base.models import (
 )
 from pretix.base.signals import checkin_created, order_placed, periodic_task
 from pretix.helpers.jsonlogic import Logic
+from pretix.helpers.jsonlogic_boolalg import convert_to_dnf
 from pretix.helpers.jsonlogic_query import (
     Equal, GreaterEqualThan, GreaterThan, InList, LowerEqualThan, LowerThan,
     tolerance,
 )
 
 
-def get_logic_environment(ev):
+def _build_time(t=None, value=None, ev=None):
+    if t == "custom":
+        return dateutil.parser.parse(value)
+    elif t == 'date_from':
+        return ev.date_from
+    elif t == 'date_to':
+        return ev.date_to or ev.date_from
+    elif t == 'date_admission':
+        return ev.date_admission or ev.date_from
+
+
+def _logic_explain(rules, ev, rule_data):
+    """
+    Explains whe the logic denied the check-in. Only works for a denied check-in.
+
+    While our custom check-in logic is very flexible, its main problem is that is is pretty
+    intransparent during execution. If the logic causes an entry to be forbidden, the result
+    of the logic evaluation is just a simple ``False``, which is very unhelpful to explain to
+    attendees why they don't get into the event.
+
+    The main problem with fixing this is that there is no correct answer for this, it is always
+    up for interpretation. A good example is the following set of rules:
+
+    - Attendees with a regular ticket can enter the venue between 09:00 and 17:00 on three days
+    - Attendees with a VIP ticket can enter the venue between 08:00 and 18:00 on three days
+
+    If an attendee with a regular ticket now shows up at 17:30 on the first day, there are three
+    possible error messages:
+
+    a) You do not have a VIP ticket
+    b) You can only get in before 17:00
+    c) You can only get in after 09:00 tomorrow
+
+    All three of them are just as valid, and "fixing" either one of them would get the attendee in.
+    Showing all three is too much, especially since the list can get very long with complex logic.
+
+    We therefore make an opinionated choice based on a number of assumptions. An example for these
+    assumptions is "it is very unlikely that the attendee is unable to change their ticket type".
+    Additionally, we favor a "close failure". Therefore, in the above example, we'd show "You can only
+    get in before 17:00". In the middle of the night it would switch to "You can only get in after 09:00".
+    """
+    logic_environment = _get_logic_environment(ev)
+    _var_values = {'False': False, 'True': True}
+    _var_explanations = {}
+
+    # Step 1: To simplify things later, we replace every operator of the rule that
+    # is NOT a boolean operator (AND and OR in our case) with the evaluation result.
+    def _evaluate_inners(r):
+        if r is True:
+            return {'var': 'True'}
+        if r is False:
+            return {'var': 'False'}
+        if not isinstance(r, dict):
+            return r
+        operator = list(r.keys())[0]
+        values = r[operator]
+        if operator in ("and", "or"):
+            return {operator: [_evaluate_inners(v) for v in values]}
+        result = logic_environment.apply(r, rule_data)
+        new_var_name = f'v{len(_var_values)}'
+        _var_values[new_var_name] = result
+        if not result:
+            # Operator returned false, let's dig deeper
+            if "var" not in values[0]:
+                raise ValueError("Binary operators should be normalized to have a variable on their left-hand side")
+            if isinstance(values[0]["var"], list):
+                values[0]["var"] = values[0]["var"][0]
+            _var_explanations[new_var_name] = {
+                'operator': operator,
+                'var': values[0]["var"],
+                'rhs': values[1:],
+            }
+        return {'var': new_var_name}
+    try:
+        rules = _evaluate_inners(rules)
+    except ValueError:
+        return _('Unknown reason')
+
+    # Step 2: Transform the the logic into disjunctive normal form (max. one level of ANDs nested in max. one level
+    # of ORs), e.g. `(a AND b AND c) OR (d AND e)`
+    rules = convert_to_dnf(rules)
+
+    # Step 3: Split into the various paths to truthiness, e.g. ``[[a, b, c], [d, e]]`` for our sample above
+    paths = []
+    if "and" in rules:
+        # only one path
+        paths.append([v["var"] for v in rules["and"]])
+    elif "or" in rules:
+        # multiple paths
+        for r in rules["or"]:
+            if "and" in r:
+                paths.append([v["var"] for v in r["and"]])
+            else:
+                paths.append([r["var"]])
+    else:
+        # only one expression on only one path
+        paths.append([rules["var"]])
+
+    # Step 4: For every variable with value False, compute a weight. The weight is a 2-tuple of numbers.
+    # The first component indicates a "rigidness level". The higher the rigidness, the less likely it is that the
+    # outcome is determined by some action of the attendee. For example, the number of entries has a very low
+    # rigidness since the attendee decides how often they enter. The current time has a medium rigidness
+    # since the attendee decides when they show up. The product has a high rigidness, since customers usually
+    # can't change what type of ticket they have.
+    # The second component indicates the "error size". For example for a date comparision this would be the number of
+    # seconds between the two dates.
+    # Additionally, we compute a text for every variable.
+    var_weights = {
+        'False': (100000, 0),  # used during testing
+        'True': (100000, 0),  # used during testing
+    }
+    var_texts = {
+        'False': 'Always false',  # used during testing
+        'True': 'Always true',  # used during testing
+    }
+    for vname, data in _var_explanations.items():
+        var, operator, rhs = data['var'], data['operator'], data['rhs']
+        if var == 'now':
+            compare_to = _build_time(*rhs[0]['buildTime'], ev=ev).astimezone(ev.timezone)
+            tolerance = timedelta(minutes=float(rhs[1])) if len(rhs) > 1 and rhs[1] else timedelta(seconds=0)
+            if operator == 'isBefore':
+                compare_to += tolerance
+            else:
+                compare_to -= tolerance
+
+            var_weights[vname] = (200, abs(now() - compare_to).total_seconds())
+
+            if abs(now() - compare_to) < timedelta(hours=12):
+                compare_to_text = date_format(compare_to, 'TIME_FORMAT')
+            else:
+                compare_to_text = date_format(compare_to, 'SHORT_DATETIME_FORMAT')
+            if operator == 'isBefore':
+                var_texts[vname] = _('Only allowed before {datetime}').format(datetime=compare_to_text)
+            elif operator == 'isAfter':
+                var_texts[vname] = _('Only allowed after {datetime}').format(datetime=compare_to_text)
+        elif var == 'product' or var == 'variation':
+            var_weights[vname] = (1000, 0)
+            var_texts[vname] = _('Ticket type not allowed')
+        elif var in ('entries_number', 'entries_today', 'entries_days'):
+            w = {
+                'entries_days': 100,
+                'entries_number': 120,
+                'entries_today': 140,
+            }
+            l = {
+                'entries_days': _('number of days with an entry'),
+                'entries_number': _('number of entries'),
+                'entries_today': _('number of entries today'),
+            }
+            compare_to = rhs[0]
+            var_weights[vname] = (w[var], abs(compare_to - rule_data[var]))
+            if operator == '==':
+                var_texts[vname] = _('{variable} is not {value}').format(variable=l[var], value=compare_to)
+            elif operator in ('<', '<='):
+                var_texts[vname] = _('Maximum {variable} exceeded').format(variable=l[var])
+            elif operator in ('>', '>='):
+                var_texts[vname] = _('Minimum {variable} exceeded').format(variable=l[var])
+            elif operator == '!=':
+                var_texts[vname] = _('{variable} is {value}').format(variable=l[var], value=compare_to)
+        else:
+            raise ValueError(f'Unknown variable {var}')
+
+    # Step 5: For every path, compute the maximum weight
+    path_weights = [
+        max([
+            var_weights[v] for v in path if not _var_values[v]
+        ] or [(0, 0)]) for path in paths
+    ]
+
+    # Step 6: Find the paths with the minimum weight
+    min_weight = min(path_weights)
+    paths_with_min_weight = [
+        p for i, p in enumerate(paths) if path_weights[i] == min_weight
+    ]
+
+    # Finally, return the text for one of them
+    return ', '.join(var_texts[v] for v in paths_with_min_weight[0] if not _var_values[v])
+
+
+def _get_logic_environment(ev):
     # Every change to our supported JSON logic must be done
     # * in pretix.base.services.checkin
     # * in pretix.base.models.checkin
     # * in checkinrules.js
     # * in libpretixsync
-    def build_time(t=None, value=None):
-        if t == "custom":
-            return dateutil.parser.parse(value)
-        elif t == 'date_from':
-            return ev.date_from
-        elif t == 'date_to':
-            return ev.date_to or ev.date_from
-        elif t == 'date_admission':
-            return ev.date_admission or ev.date_from
 
     def is_before(t1, t2, tolerance=None):
         if tolerance:
@@ -88,7 +260,7 @@ def get_logic_environment(ev):
     logic.add_operation('objectList', lambda *objs: list(objs))
     logic.add_operation('lookup', lambda model, pk, str: int(pk))
     logic.add_operation('inList', lambda a, b: a in b)
-    logic.add_operation('buildTime', build_time)
+    logic.add_operation('buildTime', partial(_build_time, ev=ev))
     logic.add_operation('isBefore', is_before)
     logic.add_operation('isAfter', lambda t1, t2, tol=None: is_before(t2, t1, tol))
     return logic
@@ -141,7 +313,7 @@ class SQLLogic:
     This is a simplified implementation of JSON logic that creates a Q-object to be used in a QuerySet.
     It does not implement all operations supported by JSON logic and makes a few simplifying assumptions,
     but all that can be created through our graphical editor. There's also CheckinList.validate_rules()
-    which tries to validate the same preconditions for rules set throught he API (probably not perfect).
+    which tries to validate the same preconditions for rules set through the API (probably not perfect).
 
     Assumptions:
 
@@ -443,10 +615,12 @@ def perform_checkin(op: OrderPosition, clist: CheckinList, given_answers: dict, 
 
         if type == Checkin.TYPE_ENTRY and clist.rules and not force:
             rule_data = LazyRuleVars(op, clist, dt)
-            logic = get_logic_environment(op.subevent or clist.event)
+            logic = _get_logic_environment(op.subevent or clist.event)
             if not logic.apply(clist.rules, rule_data):
                 raise CheckInError(
-                    _('This entry is not permitted due to custom rules.'),
+                    _('Entry not permitted: {explanation}.').format(
+                        explanation=_logic_explain(clist.rules, op.subevent or clist.event, rule_data)
+                    ),
                     'rules'
                 )
 
