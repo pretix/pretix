@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-04-19 14:58+0000\n"
-"PO-Revision-Date: 2021-04-27 21:00+0000\n"
+"PO-Revision-Date: 2021-04-28 18:00+0000\n"
 "Last-Translator: Mohamed Tawfiq <mtawfiq@wafyapp.com>\n"
 "Language-Team: Arabic <https://translate.pretix.eu/projects/pretix/pretix/ar/"
 ">\n"
@@ -5159,11 +5159,11 @@ msgstr "موعد بداية الفعالية"
 
 #: pretix/base/reldate.py:36
 msgid "Event end"
-msgstr "موعد إنتهاء الفعالية"
+msgstr "موعد نهاية الفعالية"
 
 #: pretix/base/reldate.py:37
 msgid "Event admission"
-msgstr "قبول الفعالية"
+msgstr "تسجيل الفعالية"
 
 #: pretix/base/reldate.py:38
 msgid "Presale start"
@@ -11824,7 +11824,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order_pay.html:27
 #: pretix/presale/templates/pretixpresale/event/order_pay_change.html:60
 msgid "Continue"
-msgstr "تابع"
+msgstr "المتابعة"
 
 #: pretix/control/templates/pretixcontrol/auth/oauth_authorization.html:8
 msgid "Authorize an application"
