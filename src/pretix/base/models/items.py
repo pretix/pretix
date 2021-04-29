@@ -151,11 +151,29 @@ class SubEventItem(models.Model):
     :type item: Item
     :param price: The modified price (or ``None`` for the original price)
     :type price: Decimal
+    :param disabled: Disable the product for this subevent
+    :type disabled: bool
+    :param available_until: The date until when the product is on sale
+    :type available_until: datetime
+    :param available_from: The date this product goes on sale
+    :type available_from: datetime
+    :param available_until: The date until when the product is on sale
+    :type available_until: datetime
     """
     subevent = models.ForeignKey('SubEvent', on_delete=models.CASCADE)
     item = models.ForeignKey('Item', on_delete=models.CASCADE)
     price = models.DecimalField(max_digits=7, decimal_places=2, null=True, blank=True)
     disabled = models.BooleanField(default=False, verbose_name=_('Disable product for this date'))
+    available_from = models.DateTimeField(
+        verbose_name=_("Available from"),
+        null=True, blank=True,
+        help_text=_('This product will not be sold before the given date.')
+    )
+    available_until = models.DateTimeField(
+        verbose_name=_("Available until"),
+        null=True, blank=True,
+        help_text=_('This product will not be sold after the given date.')
+    )
 
     def delete(self, *args, **kwargs):
         super().delete(*args, **kwargs)
@@ -166,6 +184,16 @@ class SubEventItem(models.Model):
         super().save(*args, **kwargs)
         if self.subevent:
             self.subevent.event.cache.clear()
+
+    def is_available(self, now_dt: datetime=None) -> bool:
+        now_dt = now_dt or now()
+        if self.disabled:
+            return False
+        if self.available_from and self.available_from > now_dt:
+            return False
+        if self.available_until and self.available_until < now_dt:
+            return False
+        return True
 
 
 class SubEventItemVariation(models.Model):
@@ -179,11 +207,29 @@ class SubEventItemVariation(models.Model):
     :type variation: ItemVariation
     :param price: The modified price (or ``None`` for the original price)
     :type price: Decimal
+    :param disabled: Disable the product for this subevent
+    :type disabled: bool
+    :param available_until: The date until when the product is on sale
+    :type available_until: datetime
+    :param available_from: The date this product goes on sale
+    :type available_from: datetime
+    :param available_until: The date until when the product is on sale
+    :type available_until: datetime
     """
     subevent = models.ForeignKey('SubEvent', on_delete=models.CASCADE)
     variation = models.ForeignKey('ItemVariation', on_delete=models.CASCADE)
     price = models.DecimalField(max_digits=7, decimal_places=2, null=True, blank=True)
-    disabled = models.BooleanField(default=False)
+    disabled = models.BooleanField(default=False, verbose_name=_('Disable product for this date'))
+    available_from = models.DateTimeField(
+        verbose_name=_("Available from"),
+        null=True, blank=True,
+        help_text=_('This product will not be sold before the given date.')
+    )
+    available_until = models.DateTimeField(
+        verbose_name=_("Available until"),
+        null=True, blank=True,
+        help_text=_('This product will not be sold after the given date.')
+    )
 
     def delete(self, *args, **kwargs):
         super().delete(*args, **kwargs)
@@ -194,6 +240,16 @@ class SubEventItemVariation(models.Model):
         super().save(*args, **kwargs)
         if self.subevent:
             self.subevent.event.cache.clear()
+
+    def is_available(self, now_dt: datetime=None) -> bool:
+        now_dt = now_dt or now()
+        if self.disabled:
+            return False
+        if self.available_from and self.available_from > now_dt:
+            return False
+        if self.available_until and self.available_until < now_dt:
+            return False
+        return True
 
 
 def filter_available(qs, channel='web', voucher=None, allow_addons=False):

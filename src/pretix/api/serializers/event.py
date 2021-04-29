@@ -423,13 +423,13 @@ class CloneEventSerializer(EventSerializer):
 class SubEventItemSerializer(I18nAwareModelSerializer):
     class Meta:
         model = SubEventItem
-        fields = ('item', 'price', 'disabled')
+        fields = ('item', 'price', 'disabled', 'available_from', 'available_until')
 
 
 class SubEventItemVariationSerializer(I18nAwareModelSerializer):
     class Meta:
         model = SubEventItemVariation
-        fields = ('variation', 'price', 'disabled')
+        fields = ('variation', 'price', 'disabled', 'available_from', 'available_until')
 
 
 class SubEventSerializer(I18nAwareModelSerializer):

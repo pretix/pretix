@@ -44,7 +44,7 @@ import pytz
 from django.conf import settings
 from django.core.exceptions import PermissionDenied
 from django.db.models import (
-    Count, Exists, IntegerField, OuterRef, Prefetch, Value,
+    Count, Exists, IntegerField, OuterRef, Prefetch, Q, Value,
 )
 from django.http import Http404, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
@@ -139,9 +139,9 @@ def get_grouped_items(event, subevent=None, voucher=None, channel='web', require
                  queryset=ItemVariation.objects.using(settings.DATABASE_REPLICA).annotate(
                      subevent_disabled=Exists(
                          SubEventItemVariation.objects.filter(
+                             Q(disabled=True) | Q(available_from__gt=now()) | Q(available_until__lt=now()),
                              variation_id=OuterRef('pk'),
                              subevent=subevent,
-                             disabled=True,
                          )
                      ),
                  ).filter(
@@ -156,9 +156,9 @@ def get_grouped_items(event, subevent=None, voucher=None, channel='web', require
         has_variations=Count('variations'),
         subevent_disabled=Exists(
             SubEventItem.objects.filter(
+                Q(disabled=True) | Q(available_from__gt=now()) | Q(available_until__lt=now()),
                 item_id=OuterRef('pk'),
                 subevent=subevent,
-                disabled=True,
             )
         ),
         requires_seat=requires_seat,

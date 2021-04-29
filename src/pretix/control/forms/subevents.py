@@ -35,8 +35,8 @@ from i18nfield.forms import I18nInlineFormSet
 from pretix.base.forms import I18nModelForm
 from pretix.base.forms.widgets import DatePickerWidget, TimePickerWidget
 from pretix.base.models.event import SubEvent, SubEventMetaValue
-from pretix.base.models.items import SubEventItem
-from pretix.base.reldate import RelativeDateTimeField
+from pretix.base.models.items import SubEventItem, SubEventItemVariation
+from pretix.base.reldate import RelativeDateTimeField, RelativeDateWrapper
 from pretix.base.templatetags.money import money_filter
 from pretix.control.forms import SplitDateTimeField, SplitDateTimePickerWidget
 from pretix.helpers.money import change_decimal_field
@@ -263,9 +263,15 @@ class SubEventItemForm(SubEventItemOrVariationFormMixin, forms.ModelForm):
 
     class Meta:
         model = SubEventItem
-        fields = ['price', 'disabled']
+        fields = ['price', 'disabled', 'available_from', 'available_until']
         widgets = {
+            'available_from': SplitDateTimePickerWidget(),
+            'available_until': SplitDateTimePickerWidget(),
             'price': forms.TextInput
+        }
+        field_classes = {
+            'available_from': SplitDateTimeField,
+            'available_until': SplitDateTimeField,
         }
 
 
@@ -276,11 +282,61 @@ class SubEventItemVariationForm(SubEventItemOrVariationFormMixin, forms.ModelFor
         self.fields['price'].label = '{} – {}'.format(str(self.item), self.variation.value)
 
     class Meta:
-        model = SubEventItem
-        fields = ['price', 'disabled']
+        model = SubEventItemVariation
+        fields = ['price', 'disabled', 'available_from', 'available_until']
         widgets = {
+            'available_from': SplitDateTimePickerWidget(),
+            'available_until': SplitDateTimePickerWidget(),
             'price': forms.TextInput
         }
+        field_classes = {
+            'available_from': SplitDateTimeField,
+            'available_until': SplitDateTimeField,
+        }
+
+
+class BulkSubEventItemForm(SubEventItemForm):
+    rel_available_from = RelativeDateTimeField(
+        label=_('Available from'),
+        required=False,
+        limit_choices=('date_from', 'date_to'),
+    )
+    rel_available_until = RelativeDateTimeField(
+        label=_('Available_until'),
+        required=False,
+        limit_choices=('date_from', 'date_to'),
+    )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        del self.fields['available_from']
+        del self.fields['available_until']
+        if self.instance and self.instance.available_from and 'rel_available_from' not in self.initial:
+            self.initial['rel_available_from'] = RelativeDateWrapper(self.instance.available_from)
+        if self.instance and self.instance.available_until and 'rel_available_until' not in self.initial:
+            self.initial['rel_available_until'] = RelativeDateWrapper(self.instance.available_until)
+
+
+class BulkSubEventItemVariationForm(SubEventItemVariationForm):
+    rel_available_from = RelativeDateTimeField(
+        label=_('Available from'),
+        required=False,
+        limit_choices=('date_from', 'date_to'),
+    )
+    rel_available_until = RelativeDateTimeField(
+        label=_('Available_until'),
+        required=False,
+        limit_choices=('date_from', 'date_to'),
+    )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        del self.fields['available_from']
+        del self.fields['available_until']
+        if self.instance and self.instance.available_from and 'rel_available_from' not in self.initial:
+            self.initial['rel_available_from'] = RelativeDateWrapper(self.instance.available_from)
+        if self.instance and self.instance.available_until and 'rel_available_until' not in self.initial:
+            self.initial['rel_available_until'] = RelativeDateWrapper(self.instance.available_until)
 
 
 class QuotaFormSet(I18nInlineFormSet):

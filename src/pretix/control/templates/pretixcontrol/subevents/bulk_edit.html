@@ -151,15 +151,27 @@
         <fieldset>
             <legend>{% trans "Item prices" %}</legend>
             {% for f in itemvar_forms %}
-                <div class="form-group">
+                <div class="form-group subevent-itemvar-group">
                     <label class="col-md-3 control-label" for="id_{{ f.prefix }}-price">
                         {% if f.variation %}{{ f.item }} – {{ f.variation }}{% else %}{{ f.item }}{% endif %}
                     </label>
-                    <div class="col-md-6">
+                    <div class="col-md-4">
+                        <label for="{{ f.price.id_for_label }}" class="text-muted">{% trans "Price" %}</label><br>
                         {% bootstrap_field f.price addon_after=request.event.currency form_group_class="" layout="bulkedit_inline" %}
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-5">
+                        <label class="text-muted">&nbsp;</label><br>
                         {% bootstrap_field f.disabled layout="bulkedit_inline" form_group_class="" %}
+                    </div>
+                </div>
+                <div class="form-group subevent-itemvar-group">
+                    <div class="col-md-4 col-md-offset-3">
+                        <label for="{{ f.available_from.id_for_label }}" class="text-muted">{% trans "Available from" %}</label><br>
+                        {% bootstrap_field f.available_from form_group_class="" layout="bulkedit_inline" %}
+                    </div>
+                    <div class="col-md-5">
+                        <label for="{{ f.available_until.id_for_label }}" class="text-muted">{% trans "Available until" %}</label><br>
+                        {% bootstrap_field f.available_until form_group_class="" layout="bulkedit_inline" %}
                     </div>
                 </div>
             {% endfor %}

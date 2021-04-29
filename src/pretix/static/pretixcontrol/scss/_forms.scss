@@ -718,3 +718,17 @@ table td > .checkbox input[type="checkbox"] {
 .pos-relative {
   position: relative;
 }
+
+#subevent-bulk-create-form {
+  fieldset {
+    margin-bottom: 40px;
+  }
+}
+.subevent-itemvar-group {
+  label.control-label {
+    padding-top: 0;
+  }
+  label:not(.control-label) {
+    font-weight: normal;
+  }
+}
