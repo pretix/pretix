@@ -310,7 +310,11 @@ class PDFCheckinList(ReportlabExportMixin, CheckInListMixin, BaseExporter):
             story += [
                 Spacer(1, 3 * mm),
                 Paragraph(
-                    '{} ({} {})'.format(cl.subevent.name, cl.subevent.get_date_range_display(), date_format(cl.subevent.date_from, 'TIME_FORMAT')),
+                    '{} ({} {})'.format(
+                        cl.subevent.name,
+                        cl.subevent.get_date_range_display(),
+                        date_format(cl.subevent.date_from.astimezone(self.timezone), 'TIME_FORMAT')
+                    ),
                     self.get_style()
                 ),
             ]
@@ -637,8 +641,8 @@ class CheckinLogList(ListExporter):
                 ia = InvoiceAddress()
 
             yield [
-                date_format(ci.datetime, 'SHORT_DATE_FORMAT'),
-                date_format(ci.datetime, 'TIME_FORMAT'),
+                date_format(ci.datetime.astimezone(self.timezone), 'SHORT_DATE_FORMAT'),
+                date_format(ci.datetime.astimezone(self.timezone), 'TIME_FORMAT'),
                 str(ci.list),
                 ci.get_type_display(),
                 ci.position.order.code,
