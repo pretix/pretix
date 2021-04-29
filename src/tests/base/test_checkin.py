@@ -687,3 +687,40 @@ def test_auto_check_out_only_if_checked_in(event, position, clist):
     with freeze_time("2020-01-03 03:05:00+01:00"):
         process_exit_all(sender=None)
     assert position.checkins.count() == 2
+
+
+@pytest.mark.django_db(transaction=True)
+def test_auto_check_out_dst(event, position, clist):
+    event.settings.timezone = 'Europe/Berlin'
+
+    # Survive across a shift that doesn't affect the time in question
+    clist.exit_all_at = event.timezone.localize(datetime(2021, 3, 28, 1, 0))
+    clist.save()
+    with freeze_time(clist.exit_all_at + timedelta(minutes=5)):
+        process_exit_all(sender=None)
+    clist.refresh_from_db()
+    assert clist.exit_all_at.astimezone(event.timezone) == event.timezone.localize(datetime(2021, 3, 29, 1, 0))
+
+    # Survive across a shift that makes the time in question ambigous
+    clist.exit_all_at = event.timezone.localize(datetime(2021, 10, 28, 2, 30))
+    clist.save()
+    with freeze_time(clist.exit_all_at + timedelta(minutes=5)):
+        process_exit_all(sender=None)
+    clist.refresh_from_db()
+    assert clist.exit_all_at.astimezone(event.timezone) == event.timezone.localize(datetime(2021, 10, 29, 2, 30))
+
+    # Doesn't survive across a shift that makes the time in question non-existant
+    clist.exit_all_at = event.timezone.localize(datetime(2021, 3, 27, 2, 30))
+    clist.save()
+    with freeze_time(clist.exit_all_at + timedelta(minutes=5)):
+        process_exit_all(sender=None)
+    clist.refresh_from_db()
+    assert clist.exit_all_at.astimezone(event.timezone) == event.timezone.localize(datetime(2021, 3, 28, 2, 30))
+    with freeze_time(clist.exit_all_at + timedelta(minutes=5)):
+        process_exit_all(sender=None)
+    clist.refresh_from_db()
+    assert clist.exit_all_at.astimezone(event.timezone) == event.timezone.localize(datetime(2021, 3, 29, 2, 30))
+    with freeze_time(clist.exit_all_at + timedelta(minutes=5)):
+        process_exit_all(sender=None)
+    clist.refresh_from_db()
+    assert clist.exit_all_at.astimezone(event.timezone) == event.timezone.localize(datetime(2021, 3, 30, 2, 30))

@@ -32,11 +32,12 @@
 # distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations under the License.
 
-from datetime import timedelta
+from datetime import datetime, timedelta
 from functools import partial, reduce
 
 import dateutil
 import dateutil.parser
+import pytz
 from django.core.files import File
 from django.db import transaction
 from django.db.models import (
@@ -46,7 +47,7 @@ from django.db.models import (
 from django.db.models.functions import Coalesce, TruncDate
 from django.dispatch import receiver
 from django.utils.functional import cached_property
-from django.utils.timezone import now, override
+from django.utils.timezone import make_aware, now, override
 from django.utils.translation import gettext as _
 from django_scopes import scope, scopes_disabled
 
@@ -523,5 +524,15 @@ def process_exit_all(sender, **kwargs):
                     position=p, list=cl, auto_checked_in=True, type=Checkin.TYPE_EXIT, datetime=cl.exit_all_at
                 )
                 checkin_created.send(cl.event, checkin=ci)
-        cl.exit_all_at = cl.exit_all_at + timedelta(days=1)
+        d = cl.exit_all_at.astimezone(cl.event.timezone)
+        if cl.event.settings.get(f'autocheckin_dst_hack_{cl.pk}'):  # move time back if yesterday was DST switch
+            d -= timedelta(hours=1)
+            cl.event.settings.delete(f'autocheckin_dst_hack_{cl.pk}')
+        try:
+            cl.exit_all_at = make_aware(datetime.combine(d.date() + timedelta(days=1), d.time()), cl.event.timezone)
+        except pytz.exceptions.NonExistentTimeError:
+            cl.event.settings.set(f'autocheckin_dst_hack_{cl.pk}', True)
+            d += timedelta(hours=1)
+            cl.exit_all_at = make_aware(datetime.combine(d.date() + timedelta(days=1), d.time()), cl.event.timezone)
+            # AmbiguousTimeError shouldn't be possible since d.time() includes fold=0
         cl.save(update_fields=['exit_all_at'])
