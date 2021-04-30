@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-04-19 14:58+0000\n"
+"POT-Creation-Date: 2021-04-30 09:39+0000\n"
 "PO-Revision-Date: 2020-01-24 08:00+0000\n"
 "Last-Translator: Prokaj Miklós <mixolid0@gmail.com>\n"
 "Language-Team: Hungarian <https://translate.pretix.eu/projects/pretix/pretix-"
@@ -84,10 +84,8 @@ msgid "No tickets found"
 msgstr "Jegyvásárlás bezárása"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:35
-#, fuzzy
-#| msgid "Check-in QR"
-msgid "Check-in result"
-msgstr "Check in QR"
+msgid "Result"
+msgstr ""
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:36
 msgid "This ticket requires special attention"
@@ -461,15 +459,23 @@ msgstr "Összes"
 msgid "None"
 msgstr "Semmi"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:802
+#: pretix/static/pretixcontrol/js/ui/main.js:386
+msgid "Search query"
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/main.js:389
+msgid "Selected only"
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/main.js:825
 msgid "Use a different name internally"
 msgstr "Használj másik nevet"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:859
+#: pretix/static/pretixcontrol/js/ui/main.js:882
 msgid "Click to close"
 msgstr "Bezárásért kattints"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:874
+#: pretix/static/pretixcontrol/js/ui/main.js:897
 msgid "You have unsaved changes!"
 msgstr "Mentetlen változtatások!"
 
@@ -799,6 +805,11 @@ msgstr "November"
 #: pretix/static/pretixpresale/js/widget/widget.js:72
 msgid "December"
 msgstr "December"
+
+#, fuzzy
+#~| msgid "Check-in QR"
+#~ msgid "Check-in result"
+#~ msgstr "Check in QR"
 
 #, fuzzy
 #~| msgid "May"

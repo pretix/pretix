@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-04-19 14:58+0000\n"
+"POT-Creation-Date: 2021-04-30 09:39+0000\n"
 "PO-Revision-Date: 2019-03-28 14:00+0000\n"
 "Last-Translator: yichengsd <sunzl@jxepub.com>\n"
 "Language-Team: Chinese (Simplified) <https://translate.pretix.eu/projects/"
@@ -86,10 +86,8 @@ msgid "No tickets found"
 msgstr "关闭售票"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:35
-#, fuzzy
-#| msgid "Check-in QR"
-msgid "Check-in result"
-msgstr "签到QR码"
+msgid "Result"
+msgstr ""
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:36
 msgid "This ticket requires special attention"
@@ -457,15 +455,23 @@ msgstr "所有"
 msgid "None"
 msgstr "无"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:802
+#: pretix/static/pretixcontrol/js/ui/main.js:386
+msgid "Search query"
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/main.js:389
+msgid "Selected only"
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/main.js:825
 msgid "Use a different name internally"
 msgstr "在内部使用一个不同的名称"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:859
+#: pretix/static/pretixcontrol/js/ui/main.js:882
 msgid "Click to close"
 msgstr "点此关闭"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:874
+#: pretix/static/pretixcontrol/js/ui/main.js:897
 msgid "You have unsaved changes!"
 msgstr ""
 
@@ -798,6 +804,11 @@ msgstr "十一月"
 #: pretix/static/pretixpresale/js/widget/widget.js:72
 msgid "December"
 msgstr "十二月"
+
+#, fuzzy
+#~| msgid "Check-in QR"
+#~ msgid "Check-in result"
+#~ msgstr "签到QR码"
 
 #, fuzzy
 #~| msgid "May"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-04-19 14:58+0000\n"
+"POT-Creation-Date: 2021-04-30 09:39+0000\n"
 "PO-Revision-Date: 2020-12-19 07:00+0000\n"
 "Last-Translator: albert <albert.serra.monner@gmail.com>\n"
 "Language-Team: Catalan <https://translate.pretix.eu/projects/pretix/pretix-"
@@ -81,7 +81,7 @@ msgid "No tickets found"
 msgstr ""
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:35
-msgid "Check-in result"
+msgid "Result"
 msgstr ""
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:36
@@ -419,15 +419,23 @@ msgstr ""
 msgid "None"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/main.js:802
+#: pretix/static/pretixcontrol/js/ui/main.js:386
+msgid "Search query"
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/main.js:389
+msgid "Selected only"
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/main.js:825
 msgid "Use a different name internally"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/main.js:859
+#: pretix/static/pretixcontrol/js/ui/main.js:882
 msgid "Click to close"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/main.js:874
+#: pretix/static/pretixcontrol/js/ui/main.js:897
 msgid "You have unsaved changes!"
 msgstr ""
 

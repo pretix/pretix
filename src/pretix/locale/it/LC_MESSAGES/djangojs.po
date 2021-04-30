@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-04-19 14:58+0000\n"
+"POT-Creation-Date: 2021-04-30 09:39+0000\n"
 "PO-Revision-Date: 2020-06-12 20:00+0000\n"
 "Last-Translator: Frank <webappconcept@gmail.com>\n"
 "Language-Team: Italian <https://translate.pretix.eu/projects/pretix/pretix-"
@@ -84,10 +84,8 @@ msgid "No tickets found"
 msgstr "Chiudi la biglietteria"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:35
-#, fuzzy
-#| msgid "Check-in QR"
-msgid "Check-in result"
-msgstr "Check-in con QR"
+msgid "Result"
+msgstr ""
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:36
 msgid "This ticket requires special attention"
@@ -460,15 +458,23 @@ msgstr "Tutto"
 msgid "None"
 msgstr "Nessuno"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:802
+#: pretix/static/pretixcontrol/js/ui/main.js:386
+msgid "Search query"
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/main.js:389
+msgid "Selected only"
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/main.js:825
 msgid "Use a different name internally"
 msgstr "Utilizza un nome diverso internamente"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:859
+#: pretix/static/pretixcontrol/js/ui/main.js:882
 msgid "Click to close"
 msgstr "Clicca per chiudere"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:874
+#: pretix/static/pretixcontrol/js/ui/main.js:897
 msgid "You have unsaved changes!"
 msgstr "Hai cambiamenti non salvati!"
 
@@ -789,6 +795,11 @@ msgstr "Novembre"
 #: pretix/static/pretixpresale/js/widget/widget.js:72
 msgid "December"
 msgstr "Dicembre"
+
+#, fuzzy
+#~| msgid "Check-in QR"
+#~ msgid "Check-in result"
+#~ msgstr "Check-in con QR"
 
 #, fuzzy
 #~| msgid "May"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-04-19 14:58+0000\n"
+"POT-Creation-Date: 2021-04-30 09:39+0000\n"
 "PO-Revision-Date: 2019-10-03 19:00+0000\n"
 "Last-Translator: Chris Spy <chrispiropoulou@hotmail.com>\n"
 "Language-Team: Greek <https://translate.pretix.eu/projects/pretix/pretix-js/"
@@ -86,10 +86,8 @@ msgid "No tickets found"
 msgstr "Κλείστε το κατάστημα εισιτηρίων"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:35
-#, fuzzy
-#| msgid "Check-in QR"
-msgid "Check-in result"
-msgstr "Έλεγχος QR"
+msgid "Result"
+msgstr ""
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:36
 msgid "This ticket requires special attention"
@@ -473,15 +471,23 @@ msgstr "Όλα"
 msgid "None"
 msgstr "Κανένας"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:802
+#: pretix/static/pretixcontrol/js/ui/main.js:386
+msgid "Search query"
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/main.js:389
+msgid "Selected only"
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/main.js:825
 msgid "Use a different name internally"
 msgstr "Χρησιμοποιήστε διαφορετικό όνομα εσωτερικά"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:859
+#: pretix/static/pretixcontrol/js/ui/main.js:882
 msgid "Click to close"
 msgstr "Κάντε κλικ για να κλείσετε"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:874
+#: pretix/static/pretixcontrol/js/ui/main.js:897
 msgid "You have unsaved changes!"
 msgstr ""
 
@@ -812,6 +818,11 @@ msgstr "Νοέμβριος"
 #: pretix/static/pretixpresale/js/widget/widget.js:72
 msgid "December"
 msgstr "Δεκέμβριος"
+
+#, fuzzy
+#~| msgid "Check-in QR"
+#~ msgid "Check-in result"
+#~ msgstr "Έλεγχος QR"
 
 #, fuzzy
 #~| msgid "May"
