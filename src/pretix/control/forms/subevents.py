@@ -302,7 +302,7 @@ class BulkSubEventItemForm(SubEventItemForm):
         limit_choices=('date_from', 'date_to'),
     )
     rel_available_until = RelativeDateTimeField(
-        label=_('Available_until'),
+        label=_('Available until'),
         required=False,
         limit_choices=('date_from', 'date_to'),
     )
