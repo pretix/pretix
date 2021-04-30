@@ -400,6 +400,11 @@ DEFAULT_VARIABLES = OrderedDict((
         "editor_sample": 4,
         "evaluate": lambda op, order, ev: str(op.seat.seat_number if op.seat else "")
     }),
+    ("first_scan", {
+        "label": _("Date and time of first scan"),
+        "editor_sample": _("2017-05-31 19:00"),
+        "evaluate": lambda op, order, ev: get_first_scan(op)
+    }),
 ))
 DEFAULT_IMAGES = OrderedDict([])
 
@@ -533,6 +538,17 @@ def get_variables(event):
         v.update(res)
 
     return v
+
+
+def get_first_scan(op: OrderPosition):
+    scans = list(op.checkins.all())
+
+    if scans:
+        return date_format(
+            list(op.checkins.all())[-1].datetime.astimezone(op.order.event.timezone),
+            "SHORT_DATETIME_FORMAT"
+        )
+    return ""
 
 
 class Renderer:
