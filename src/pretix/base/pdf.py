@@ -70,7 +70,7 @@ from reportlab.platypus import Paragraph
 
 from pretix.base.i18n import language
 from pretix.base.invoice import ThumbnailingImageReader
-from pretix.base.models import Order, OrderPosition, Question
+from pretix.base.models import Order, OrderPosition, Question, Checkin
 from pretix.base.settings import PERSON_NAME_SCHEMES
 from pretix.base.signals import layout_image_variables, layout_text_variables
 from pretix.base.templatetags.money import money_filter
@@ -399,6 +399,46 @@ DEFAULT_VARIABLES = OrderedDict((
         "label": _("Seat: seat number"),
         "editor_sample": 4,
         "evaluate": lambda op, order, ev: str(op.seat.seat_number if op.seat else "")
+    }),
+    ("first_checkin", {
+        "label": _("Date and Time of first Check-In"),
+        "editor_sample": _("2017-05-31 19:00"),
+        "evaluate": lambda op, order, ev: date_format(
+            op.checkins.filter(type=Checkin.TYPE_ENTRY).order_by('datetime').first().datetime.astimezone(
+                timezone(ev.settings.timezone)
+            ),
+            "SHORT_DATETIME_FORMAT"
+        ) if op.checkins.first() else ""
+    }),
+    ("last_checkin", {
+        "label": _("Date and Time of last Check-In"),
+        "editor_sample": _("2017-05-31 19:00"),
+        "evaluate": lambda op, order, ev: date_format(
+            op.checkins.filter(type=Checkin.TYPE_ENTRY).order_by('datetime').last().datetime.astimezone(
+                timezone(ev.settings.timezone)
+            ),
+            "SHORT_DATETIME_FORMAT"
+        ) if op.checkins.last() else ""
+    }),
+    ("first_checkout", {
+        "label": _("Date and Time of first Check-Out"),
+        "editor_sample": _("2017-05-31 19:00"),
+        "evaluate": lambda op, order, ev: date_format(
+            op.checkins.filter(type=Checkin.TYPE_EXIT).order_by('datetime').first().datetime.astimezone(
+                timezone(ev.settings.timezone)
+            ),
+            "SHORT_DATETIME_FORMAT"
+        ) if op.checkins.first() else ""
+    }),
+    ("last_checkout", {
+        "label": _("Date and Time of last Check-Out"),
+        "editor_sample": _("2017-05-31 19:00"),
+        "evaluate": lambda op, order, ev: date_format(
+            op.checkins.filter(type=Checkin.TYPE_EXIT).order_by('datetime').last().datetime.astimezone(
+                timezone(ev.settings.timezone)
+            ),
+            "SHORT_DATETIME_FORMAT"
+        ) if op.checkins.last() else ""
     }),
 ))
 DEFAULT_IMAGES = OrderedDict([])
