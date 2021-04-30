@@ -20,6 +20,7 @@
 # <https://www.gnu.org/licenses/>.
 #
 import json
+import logging
 from collections import Counter, defaultdict
 from decimal import Decimal
 
@@ -57,6 +58,9 @@ from pretix.base.services.pricing import get_price
 from pretix.base.settings import COUNTRIES_WITH_STATE_IN_ADDRESS
 from pretix.base.signals import register_ticket_outputs
 from pretix.multidomain.urlreverse import build_absolute_uri
+
+
+logger = logging.getLogger(__name__)
 
 
 class CompatibleCountryField(serializers.Field):
@@ -315,7 +319,11 @@ class PdfDataSerializer(serializers.Field):
                 self.context['vars_images'] = get_images(self.context['request'].event)
 
             for k, f in self.context['vars'].items():
-                res[k] = f['evaluate'](instance, instance.order, ev)
+                try:
+                    res[k] = f['evaluate'](instance, instance.order, ev)
+                except:
+                    logger.exception('Evaluating PDF variable failed')
+                    res[k] = '(error)'
 
             if not hasattr(ev, '_cached_meta_data'):
                 ev._cached_meta_data = ev.meta_data
@@ -332,10 +340,19 @@ class PdfDataSerializer(serializers.Field):
 
             for k, f in self.context['vars_images'].items():
                 if 'etag' in f:
-                    has_image = etag = f['etag'](instance, instance.order, ev)
+                    try:
+                        has_image = etag = f['etag'](instance, instance.order, ev)
+                    except:
+                        has_image = False
+                        etag = None
+                        logger.exception('Evaluating PDF variable failed')
                 else:
-                    has_image = f['etag'](instance, instance.order, ev)
-                    etag = None
+                    try:
+                        has_image = f['valuate'](instance, instance.order, ev)
+                        etag = None
+                    except:
+                        has_image = False
+                        logger.exception('Evaluating PDF variable failed')
                 if has_image:
                     url = reverse('api-v1:orderposition-pdf_image', kwargs={
                         'organizer': instance.order.event.organizer.slug,
