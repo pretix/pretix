@@ -686,6 +686,14 @@ table td > .checkbox input[type="checkbox"] {
     .check {
       fill: $brand-success;
     }
+    .text {
+      font-size: 12px;
+      width: 100%;
+      height: 100%;
+      overflow-y: scroll;
+      cursor: default;
+      text-align: center;
+    }
   }
 }
 

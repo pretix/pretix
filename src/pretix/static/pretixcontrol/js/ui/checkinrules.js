@@ -101,7 +101,8 @@ $(document).ready(function () {
           date_admission: gettext('Event admission'),
           date_custom: gettext('custom time'),
           date_tolerance: gettext('Tolerance (minutes)'),
-          condition_add: gettext('Add condition')
+          condition_add: gettext('Add condition'),
+          minutes: gettext('minutes'),
         },
         hasRules: false,
       };

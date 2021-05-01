@@ -19,7 +19,7 @@
         return 300
       },
       boxHeight() {
-        return 50
+        return 62
       },
       paddingX() {
         return 50

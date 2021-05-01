@@ -5,9 +5,42 @@
         <path v-if="!node.children.length" :d="checkEdge" class="edge"></path>
         <rect :width="boxWidth" :height="boxHeight" :x="x" :y="y" class="node" rx="5">
         </rect>
-        <text text-anchor="middle" :x="x + boxWidth/2" :y="y + boxHeight/2">
-            {{ nodeid }} {{ Object.keys(node.rule)[0] }} {{ node.children.length }}
-        </text>
+        <foreignObject :width="boxWidth - 10" :height="boxHeight - 10" :x="x + 5" :y="y + 5">
+            <div xmlns="http://www.w3.org/1999/xhtml" class="text">
+                <span v-if="vardata.type === 'int'">
+                    <span v-if="variable.startsWith('entries_')" class="fa fa-sign-in"></span>
+                    {{ vardata.label }}
+                    <br>
+                    <strong>
+                        {{ op.label }} {{ rightoperand }}
+                    </strong>
+                </span>
+                <span v-else-if="variable === 'now'">
+                    <span class="fa fa-clock-o"></span> {{ vardata.label }}<br>
+                    <strong>
+                        {{ op.label }}<br>
+                        <span v-if="rightoperand.buildTime[0] === 'custom'">
+                            {{ df(rightoperand.buildTime[1]) }}
+                        </span>
+                        <span v-else>
+                            {{ this.$root.texts[rightoperand.buildTime[0]] }}
+                        </span>
+                        <span v-if="operands[2]">
+                            <span v-if="operator === 'isBefore'">+</span>
+                            <span v-else>-</span>
+                            {{ operands[2] }}
+                            {{ this.$root.texts.minutes }}
+                        </span>
+                    </strong>
+                </span>
+                <span v-else-if="operator === 'inList'">
+                    <span class="fa fa-ticket"></span> {{ vardata.label }}<br>
+                    <strong>
+                        {{ rightoperand.objectList.map((o) => o.lookup[2]).join(", ") }}
+                    </strong>
+                </span>
+            </div>
+        </foreignObject>
 
         <g v-if="!node.children.length" :transform="`translate(${x + boxWidth + 25}, ${y + boxHeight/2 - 15})`">
             <path d="m 25.078125,11.835938 c 0,-0.332032 -0.117188,-0.664063 -0.351563,-0.898438 L 22.949219,9.1796875 c -0.234375,-0.234375 -0.546875,-0.3710937 -0.878907,-0.3710937 -0.332031,0 -0.644531,0.1367187 -0.878906,0.3710937 L 13.222656,17.128906 8.8085938,12.714844 C 8.5742188,12.480469 8.2617188,12.34375 7.9296875,12.34375 c -0.3320313,0 -0.6445313,0.136719 -0.8789063,0.371094 l -1.7773437,1.757812 c -0.234375,0.234375 -0.3515625,0.566407 -0.3515625,0.898438 0,0.332031 0.1171875,0.644531 0.3515625,0.878906 l 7.0703125,7.070312 c 0.234375,0.234375 0.566406,0.371094 0.878906,0.371094 0.332032,0 0.664063,-0.136719 0.898438,-0.371094 L 24.726562,12.714844 c 0.234375,-0.234375 0.351563,-0.546875 0.351563,-0.878906 z M 30,15 C 30,23.28125 23.28125,30 15,30 6.71875,30 0,23.28125 0,15 0,6.71875 6.71875,0 15,0 23.28125,0 30,6.71875 30,15 Z"
@@ -73,7 +106,40 @@
             C ${endX - 25} ${endY} ${endX - 25} ${endY} ${endX} ${endY}
         `
       },
+      variable () {
+        const op = this.operator;
+        if (this.node.rule[op] && this.node.rule[op][0]) {
+          return this.node.rule[op][0]["var"];
+        } else {
+          return "";
+        }
+      },
+      vardata () {
+        return this.$root.VARS[this.variable];
+      },
+      rightoperand () {
+        const op = this.operator;
+        if (this.node.rule[op] && typeof this.node.rule[op][1] !== "undefined") {
+          return this.node.rule[op][1];
+        } else {
+          return null;
+        }
+      },
+      op: function () {
+        return this.$root.TYPEOPS[this.vardata.type][this.operator]
+      },
+      operands: function () {
+        return this.node.rule[this.operator]
+      },
+      operator: function () {
+        return Object.keys(this.node.rule)[0];
+      },
     },
-    methods: {},
+    methods: {
+      df (val) {
+        const format = $("body").attr("data-datetimeformat")
+        return moment(val).format(format)
+      }
+    },
   }
 </script>
