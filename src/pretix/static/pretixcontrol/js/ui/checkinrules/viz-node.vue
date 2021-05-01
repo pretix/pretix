@@ -11,7 +11,7 @@
 
         <g v-if="!node.children.length" :transform="`translate(${x + boxWidth + 25}, ${y + boxHeight/2 - 15})`">
             <path d="m 25.078125,11.835938 c 0,-0.332032 -0.117188,-0.664063 -0.351563,-0.898438 L 22.949219,9.1796875 c -0.234375,-0.234375 -0.546875,-0.3710937 -0.878907,-0.3710937 -0.332031,0 -0.644531,0.1367187 -0.878906,0.3710937 L 13.222656,17.128906 8.8085938,12.714844 C 8.5742188,12.480469 8.2617188,12.34375 7.9296875,12.34375 c -0.3320313,0 -0.6445313,0.136719 -0.8789063,0.371094 l -1.7773437,1.757812 c -0.234375,0.234375 -0.3515625,0.566407 -0.3515625,0.898438 0,0.332031 0.1171875,0.644531 0.3515625,0.878906 l 7.0703125,7.070312 c 0.234375,0.234375 0.566406,0.371094 0.878906,0.371094 0.332032,0 0.664063,-0.136719 0.898438,-0.371094 L 24.726562,12.714844 c 0.234375,-0.234375 0.351563,-0.546875 0.351563,-0.878906 z M 30,15 C 30,23.28125 23.28125,30 15,30 6.71875,30 0,23.28125 0,15 0,6.71875 6.71875,0 15,0 23.28125,0 30,6.71875 30,15 Z"
-                  class="check" />
+                  class="check"/>
         </g>
     </g>
 </template>
@@ -40,14 +40,14 @@
         return this.children.map((c) => {
           const endX = (c.column * (this.boxWidth + this.marginX) + this.marginX / 2 + this.paddingX) - 1
           const endY = (c.y * (this.boxHeight + this.marginY) + this.marginY / 2) + this.boxHeight / 2
-          const p0X = endX - 40
-          const p0Y = startY
-          const p1X = p0X + 40
-          const p1Y = p0Y
-          const p2X = endX - 40
-          const p2Y = endY
 
-          return `M ${startX} ${startY} L ${p0X} ${p0Y} C ${p1X} ${p1Y} ${p2X} ${p2Y} ${endX} ${endY}`
+          return `
+            M ${startX} ${startY}
+            L ${endX - 50} ${startY}
+            C ${endX - 25} ${startY} ${endX - 25} ${startY} ${endX - 25} ${startY + 25 * Math.sign(endY - startY)}
+            L ${endX - 25} ${endY - 25 * Math.sign(endY - startY)}
+            C ${endX - 25} ${endY} ${endX - 25} ${endY} ${endX} ${endY}
+          `
         })
       },
       checkEdge() {
@@ -64,14 +64,14 @@
         const startY = this.boxHeight / 2 + this.marginY / 2
         const endX = this.x - 1
         const endY = this.y + this.boxHeight / 2
-        const p0X = endX - 40
-        const p0Y = startY
-        const p1X = p0X + 40
-        const p1Y = p0Y
-        const p2X = endX - 40
-        const p2Y = endY
 
-        return `M ${startX} ${startY} L ${p0X} ${p0Y} C ${p1X} ${p1Y} ${p2X} ${p2Y} ${endX} ${endY}`
+        return `
+            M ${startX} ${startY}
+            L ${endX - 50} ${startY}
+            C ${endX - 25} ${startY} ${endX - 25} ${startY} ${endX - 25} ${startY + 25 * Math.sign(endY - startY)}
+            L ${endX - 25} ${endY - 25 * Math.sign(endY - startY)}
+            C ${endX - 25} ${endY} ${endX - 25} ${endY} ${endX} ${endY}
+        `
       },
     },
     methods: {},

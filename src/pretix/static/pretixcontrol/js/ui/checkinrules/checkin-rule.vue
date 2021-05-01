@@ -194,7 +194,6 @@
         }
       },
       setTimeValue: function (val) {
-        console.log(val);
         this.$set(this.rule[this.operator][1]["buildTime"], 1, val);
       },
       setRightOperandProductList: function (val) {
