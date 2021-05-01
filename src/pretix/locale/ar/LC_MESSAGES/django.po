@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-04-30 09:39+0000\n"
-"PO-Revision-Date: 2021-04-28 18:00+0000\n"
+"PO-Revision-Date: 2021-05-01 06:00+0000\n"
 "Last-Translator: Mohamed Tawfiq <mtawfiq@wafyapp.com>\n"
 "Language-Team: Arabic <https://translate.pretix.eu/projects/pretix/pretix/ar/"
 ">\n"
@@ -25,6 +25,8 @@ msgid ""
 "Full device access (reading and changing orders and gift cards, reading of "
 "products and settings)"
 msgstr ""
+"الوصول الكامل إلى الجهاز (قراءة وتغيير الطلبات وبطاقات الهدايا، وقراءة "
+"المنتجات والإعدادات)"
 
 #: pretix/api/auth/devicesecurity.py:43
 #, fuzzy
@@ -33,8 +35,9 @@ msgid "pretixSCAN"
 msgstr "تحميل pretixSCAN"
 
 #: pretix/api/auth/devicesecurity.py:73
+#, fuzzy
 msgid "pretixSCAN (kiosk mode, online only)"
-msgstr ""
+msgstr "المسح الضوئي pretix (وضع كشك، عبر الانترنت فقط)"
 
 #: pretix/api/auth/devicesecurity.py:101
 #, fuzzy
@@ -52,24 +55,26 @@ msgstr "إعادة توجيه محددات"
 
 #: pretix/api/models.py:43
 msgid "Allowed URIs list, space separated"
-msgstr "يسمح قائمة محددات، فصل الفضاء"
+msgstr "يسمح بقائمة محددات، مسافة مفصولة"
 
 #: pretix/api/models.py:46 pretix/plugins/paypal/payment.py:112
 msgid "Client ID"
-msgstr "ID العميل"
+msgstr "هوية العميل"
 
 #: pretix/api/models.py:50
 msgid "Client secret"
 msgstr "سر العميل"
 
 #: pretix/api/models.py:97
+#, fuzzy
 msgid "Enable webhook"
-msgstr "تمكين webhook"
+msgstr "تمكين الربط على الانترنت"
 
 #: pretix/api/models.py:98
 #: pretix/control/templates/pretixcontrol/organizers/webhooks.html:36
+#, fuzzy
 msgid "Target URL"
-msgstr "الرابط"
+msgstr "الرابط المستهدف"
 
 #: pretix/api/models.py:99 pretix/base/models/devices.py:121
 #: pretix/base/models/organizer.py:221
@@ -82,13 +87,15 @@ msgid "Limit to events"
 msgstr "حد للأحداث"
 
 #: pretix/api/serializers/cart.py:81 pretix/api/serializers/order.py:1149
+#, fuzzy
 msgid "The product \"{}\" is not assigned to a quota."
-msgstr "المنتج \"{}\" لم يتم تعيين إلى الحصص."
+msgstr "المنتج \"{}\" لم يتم تعيينه في الحصة."
 
 #: pretix/api/serializers/cart.py:89 pretix/api/serializers/order.py:1161
+#, fuzzy
 msgid ""
 "There is not enough quota available on quota \"{}\" to perform the operation."
-msgstr "ليس هناك حصص كافية متوفرة على الكوتا \"{}\" لتنفيذ العملية."
+msgstr "ليس هناك حصص كافية متوفرة على الحصة \"{}\" الإجراء العملية."
 
 #: pretix/api/serializers/cart.py:116 pretix/api/serializers/order.py:1121
 #: pretix/base/services/orders.py:1219
@@ -99,107 +106,105 @@ msgstr "المقعد المحدد \"{seat}\" غير متوفر."
 #: pretix/api/serializers/checkin.py:65 pretix/base/models/event.py:1361
 #: pretix/base/models/items.py:1349 pretix/base/models/items.py:1580
 msgid "One or more items do not belong to this event."
-msgstr "واحد أو أكثر من عناصر لا تنتمي إلى هذا الحدث."
+msgstr "عنصر واحد أو أكثر لا تنتمي إلى هذا الحدث."
 
 #: pretix/api/serializers/checkin.py:69 pretix/api/serializers/checkin.py:72
 #: pretix/base/models/items.py:1591 pretix/base/models/items.py:1594
 #: pretix/base/models/waitinglist.py:208 pretix/base/models/waitinglist.py:211
 msgid "The subevent does not belong to this event."
-msgstr "وsubevent لا ينتمي إلى هذا الحدث."
+msgstr "الحدث الفرعي لا ينتمي إلى هذا الحدث."
 
 #: pretix/api/serializers/checkin.py:76
 msgid "Unknown sales channel."
 msgstr "قنوات البيع غير معروفة."
 
 #: pretix/api/serializers/event.py:198
+#, fuzzy
 msgid ""
 "Events cannot be created as 'live'. Quotas and payment must be added to the "
 "event before sales can go live."
 msgstr ""
-"لا يمكن إنشاء أحداث باسم 'يعيش'. يجب إضافة الحصص ودفع لهذا الحدث قبل البيع "
-"يمكن ان تذهب مباشرة."
+"لا يمكن تنظيم الأحداث 'في البث المباشر'. يجب إضافة الحصص والدفع لهذا الحدث "
+"قبل أن يبدأ البيع على البث المباشرة."
 
 #: pretix/api/serializers/event.py:213 pretix/api/serializers/event.py:497
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Meta data property '{name}' does not exist."
-msgstr "ميتا الملكية بيانات '{name}' غير موجود."
+msgstr "ملكية بيانات  Meta '{الاسم}' غير موجودة."
 
 #: pretix/api/serializers/event.py:216 pretix/api/serializers/event.py:500
-#, fuzzy, python-brace-format
-#| msgid "Meta data property '{name}' does not exist."
+#, python-brace-format
 msgid "Meta data property '{name}' does not allow value '{value}'."
-msgstr "ميتا الملكية بيانات '{name}' غير موجود."
+msgstr "ملكية بيانات Meta '{الاسم}' لا تسمح بقيمة '{القيمة}'."
 
 #: pretix/api/serializers/event.py:259
 #, python-brace-format
 msgid "Unknown plugin: '{name}'."
-msgstr "المساعد غير معروف: '{name}'."
+msgstr "التوصيلة غير معروفة: '{الاسم}'."
 
 #: pretix/api/serializers/item.py:103 pretix/control/forms/item.py:833
 msgid "The bundled item must not be the same item as the bundling one."
-msgstr "لا يجب أن يكون هذا البند المجمعة نفس البند كما تجميع واحد."
+msgstr "يجب ألا يكون العنصر المجمّع هو نفس عنصر التجميع."
 
 #: pretix/api/serializers/item.py:106 pretix/control/forms/item.py:835
 msgid "The bundled item must not have bundles on its own."
-msgstr "يجب أن لا يكون هذا البند المجمعة حزم من تلقاء نفسها."
+msgstr "يجب ألا يحتوي العنصر المجمّع على حزم بمفرده."
 
 #: pretix/api/serializers/item.py:169
 msgid ""
 "Updating add-ons, bundles, or variations via PATCH/PUT is not supported. "
 "Please use the dedicated nested endpoint."
 msgstr ""
-"تحديث إضافات، حزم، أو الاختلافات عبر PATCH / غير معتمدة PUT. الرجاء استخدام "
-"نقطة النهاية المتداخلة مخصصة."
+"لا يتم دعم تحديث الإضافات أو الحزم أو المتغيرات عبر PATCH / PUT. الرجاء "
+"استخدام نقطة النهاية المتداخلة المخصصة."
 
 #: pretix/api/serializers/item.py:178 pretix/control/forms/item.py:532
 msgid ""
 "Gift card products should not be associated with non-zero tax rates since "
 "sales tax will be applied when the gift card is redeemed."
 msgstr ""
-"لا ينبغي أن تكون مرتبطة منتجات بطاقة هدية مع معدلات الضرائب غير الصفرية منذ "
-"سيتم تطبيق ضريبة المبيعات عندما يتم استبدال بطاقة هدية."
+"يجب ألا ترتبط منتجات بطاقات الهدايا بمعدلات ضريبية غير صفرية حيث سيتم تطبيق "
+"ضريبة المبيعات عند استرداد بطاقة الهدايا."
 
 #: pretix/api/serializers/item.py:183 pretix/control/forms/item.py:538
 msgid "Gift card products should not be admission products at the same time."
-msgstr "يجب أن منتجات بطاقة هدية لا تكون المنتجات القبول في نفس الوقت."
+msgstr "لا ينبغي أن تكون منتجات بطاقات الهدايا منتجات قبول في نفس الوقت."
 
 #: pretix/api/serializers/item.py:220
-#, fuzzy, python-brace-format
-#| msgid "Meta data property '{name}' does not exist."
+#, python-brace-format
 msgid "Item meta data property '{name}' does not exist."
-msgstr "ميتا الملكية بيانات '{name}' غير موجود."
+msgstr "ملكية بيانات ميتا  '{name}' غير موجودة."
 
 #: pretix/api/serializers/item.py:337
 msgid ""
 "Updating options via PATCH/PUT is not supported. Please use the dedicated "
 "nested endpoint."
 msgstr ""
-"تحديث الخيارات عبر PATCH / غير معتمدة PUT. الرجاء استخدام نقطة النهاية "
-"المتداخلة مخصصة."
+"خيارات التحديث عبر PATCH / PUT غير مدعومة. الرجاء استخدام نقطة النهاية "
+"المتداخلة المخصصة."
 
 #: pretix/api/serializers/item.py:351 pretix/control/forms/item.py:109
 msgid "Question cannot depend on a question asked during check-in."
-msgstr "سؤال لا يمكن أن تعتمد على سؤال طلب خلال التسجيل في مكتب الاستقبال."
+msgstr "لا يمكن أن يعتمد السؤال على سؤال تم طرحه أثناء التسجيل."
 
 #: pretix/api/serializers/item.py:356 pretix/control/forms/item.py:114
+#, fuzzy
 msgid "Circular dependency between questions detected."
-msgstr "الكشف عن تبعية دائرية بين الأسئلة."
+msgstr "تم الكشف عن تبعية دائرية بين الأسئلة."
 
 #: pretix/api/serializers/item.py:361 pretix/control/forms/item.py:123
 msgid "This type of question cannot be asked during check-in."
-msgstr "هذا السوال لا يمكن سؤاله خلال تسجيل الدخول."
+msgstr "لا يمكن طرح هذا النوع من الأسئلة أثناء تسجيل الدخول."
 
 #: pretix/api/serializers/order.py:1134 pretix/api/serializers/order.py:1141
-#, fuzzy
-#| msgid "The product \"{}\" is not assigned to a quota."
 msgid "The product \"{}\" is not available on this date."
-msgstr "المنتج \"{}\" لم يتم تعيين إلى الحصص."
+msgstr "المنتج \"{}\" غير متوفر في هذا التاريخ."
 
 #: pretix/api/serializers/organizer.py:81 pretix/control/forms/organizer.py:349
 msgid ""
 "A gift card with the same secret already exists in your or an affiliated "
 "organizer account."
-msgstr "بطاقة هدية بنفس سر موجود بالفعل في حساب منظم التابعة لها أو."
+msgstr "توجد بطاقة هدايا بنفس السر مسبقا في حسابك أو حساب منظم تابع."
 
 #: pretix/api/serializers/organizer.py:163
 #: pretix/control/views/organizer.py:557
@@ -209,7 +214,7 @@ msgstr "دعوة حساب pretix"
 #: pretix/api/serializers/organizer.py:185
 #: pretix/control/views/organizer.py:656
 msgid "This user already has been invited for this team."
-msgstr "هذا المستخدم من قبل انه تم توجيه الدعوة لهذا الفريق."
+msgstr "تمت دعوة هذا المستخدم سابقا لهذا الفريق."
 
 #: pretix/api/serializers/organizer.py:201
 #: pretix/control/views/organizer.py:673
@@ -221,17 +226,17 @@ msgstr "هذا المستخدم لديه بالفعل أذونات لهذا ال
 msgid ""
 "The application \"{application_name}\" has been authorized to access your "
 "account."
-msgstr "تطبيق \"{application_name}\" وقد أذن للوصول إلى حسابك."
+msgstr "تم تفويض التطبيق \"{application_name}\" للوصول إلى حسابك."
 
 #: pretix/api/views/order.py:485 pretix/control/views/orders.py:1250
 #: pretix/presale/views/order.py:698 pretix/presale/views/order.py:763
 msgid "You cannot generate an invoice for this order."
-msgstr "لا يمكنك إنشاء فاتورة لهذا النظام."
+msgstr "لا يمكنك إنشاء فاتورة لهذا الطلب."
 
 #: pretix/api/views/order.py:490 pretix/control/views/orders.py:1252
 #: pretix/presale/views/order.py:700 pretix/presale/views/order.py:765
 msgid "An invoice for this order already exists."
-msgstr "فاتورة لهذا النظام موجود بالفعل."
+msgstr "توجد فاتورة سابقة لهذا الطلب."
 
 #: pretix/api/views/order.py:516 pretix/control/views/orders.py:1378
 #: pretix/control/views/users.py:118
@@ -240,22 +245,20 @@ msgstr "كان هناك خطأ أثناء إرسال البريد. الرجاء 
 
 #: pretix/api/views/order.py:594 pretix/base/services/cart.py:143
 #: pretix/base/services/orders.py:129 pretix/presale/views/order.py:747
-#, fuzzy
-#| msgid "The selected product does not allow to select a seat."
 msgid "One of the selected products is not available in the selected country."
-msgstr "لا يسمح للمنتج المحدد إلى اختيار مقعد."
+msgstr "أحد المنتجات المختارة غير متوفر في البلد المحدد."
 
 #: pretix/api/webhooks.py:200 pretix/base/notifications.py:258
 msgid "New order placed"
-msgstr "النظام الجديد وضعت"
+msgstr "تم تقديم طلب جديد"
 
 #: pretix/api/webhooks.py:204 pretix/base/notifications.py:264
 msgid "New order requires approval"
-msgstr "نظام جديد يتطلب موافقة"
+msgstr "طلب جديد يتطلب الموافقة."
 
 #: pretix/api/webhooks.py:208 pretix/base/notifications.py:270
 msgid "Order marked as paid"
-msgstr "أجل وضع علامة على دفع"
+msgstr "تم تمييز الطلب على أنه مدفوع"
 
 #: pretix/api/webhooks.py:212 pretix/base/notifications.py:276
 #: pretix/control/templates/pretixcontrol/event/mail.html:68
@@ -264,85 +267,73 @@ msgid "Order canceled"
 msgstr "تم إلغاء الطلب"
 
 #: pretix/api/webhooks.py:216 pretix/base/notifications.py:282
-#, fuzzy
-#| msgid "Order denied"
 msgid "Order reactivated"
-msgstr "نفى أجل"
+msgstr "تمت إعادة تنشيط الطلب"
 
 #: pretix/api/webhooks.py:220 pretix/base/notifications.py:288
 msgid "Order expired"
-msgstr "انتهت ترتيب"
+msgstr "الطلب منتهي الصلاحية"
 
 #: pretix/api/webhooks.py:224 pretix/base/notifications.py:294
 msgid "Order information changed"
-msgstr "تغيرت معلومات النظام"
+msgstr "تغيرت معلومات الطلب"
 
 #: pretix/api/webhooks.py:228 pretix/base/notifications.py:300
 msgid "Order contact address changed"
-msgstr "عنوان النظام اتصال تغيرت"
+msgstr "تم تغيير عنوان اتصال الطلب"
 
 #: pretix/api/webhooks.py:232 pretix/base/notifications.py:306
 #: pretix/control/templates/pretixcontrol/event/mail.html:59
 msgid "Order changed"
-msgstr "تغير ترتيب"
+msgstr "تم تغيير الطلب."
 
 #: pretix/api/webhooks.py:236 pretix/base/notifications.py:318
 msgid "External refund of payment"
-msgstr "رد الخارجي للدفع"
+msgstr "الاسترداد الخارجي للسداد"
 
 #: pretix/api/webhooks.py:240
 msgid "Order approved"
-msgstr "أجل الموافقة"
+msgstr "تمت الموافقة على الطلب"
 
 #: pretix/api/webhooks.py:244
 msgid "Order denied"
-msgstr "نفى أجل"
+msgstr "الطلب مرفوض"
 
 #: pretix/api/webhooks.py:248
 msgid "Ticket checked in"
-msgstr "فحص التذاكر في"
+msgstr "تم تسجيل التذكرة"
 
 #: pretix/api/webhooks.py:252
 msgid "Ticket check-in reverted"
-msgstr "الاختيار في تذكرة محولة"
+msgstr "تم إرجاع تسجيل التذكرة."
 
 #: pretix/api/webhooks.py:256
-#, fuzzy
-#| msgid "Event date"
 msgid "Event created"
-msgstr "تاريخ الحدث"
+msgstr "تم إنشاء الحدث"
 
 #: pretix/api/webhooks.py:260 pretix/api/webhooks.py:264
-#, fuzzy
-#| msgid "Event date range"
 msgid "Event details changed"
-msgstr "نطاق التاريخ الحدث"
+msgstr "تم تغيير تفاصيل الحدث"
 
 #: pretix/api/webhooks.py:268
-#, fuzzy
-#| msgid "Event begin date and time"
 msgctxt "subevent"
 msgid "Event series date added"
-msgstr "الحدث بدء التاريخ والوقت"
+msgstr "تمت إضافة تاريخ سلسلة الأحداث"
 
 #: pretix/api/webhooks.py:272
-#, fuzzy
-#| msgid "Event date range"
 msgctxt "subevent"
 msgid "Event series date changed"
-msgstr "نطاق التاريخ الحدث"
+msgstr "تم تغيير تاريخ سلسلة الأحداث"
 
 #: pretix/api/webhooks.py:276
-#, fuzzy
-#| msgid "Event begin date and time"
 msgctxt "subevent"
 msgid "Event series date deleted"
-msgstr "الحدث بدء التاريخ والوقت"
+msgstr "تم حذف تاريخ سلسلة الأحداث"
 
 #: pretix/base/auth.py:138
 #, python-brace-format
 msgid "{system} User"
-msgstr ""
+msgstr "{system} اسم المستخدم"
 
 #: pretix/base/auth.py:147 pretix/base/forms/auth.py:242
 #: pretix/base/models/auth.py:124 pretix/base/models/notifications.py:46
@@ -358,17 +349,16 @@ msgstr "البريد الإلكتروني"
 #: pretix/base/auth.py:149 pretix/base/forms/auth.py:153
 #: pretix/base/forms/auth.py:205 pretix/control/forms/event.py:1044
 msgid "Password"
-msgstr "كلمه السر"
+msgstr "كلمة المرور"
 
 #: pretix/base/channels.py:105
 msgid "Online shop"
 msgstr "متجر على الانترنت"
 
 #: pretix/base/context.py:45
-#, fuzzy, python-brace-format
-#| msgid "powered by <a %(a_attr)s>pretix</a>"
+#, python-brace-format
 msgid "powered by {name} based on <a {a_attr}>pretix</a>"
-msgstr "المنصة من<a %(a_attr)s>pretix</a>"
+msgstr "مدعوم من {name} على أساس <a {a_attr}> البريميكس </a>"
 
 #: pretix/base/context.py:52
 #, fuzzy, python-format
