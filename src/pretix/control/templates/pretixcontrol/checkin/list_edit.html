@@ -81,6 +81,10 @@
     </form>
     {% compress js %}
         <script type="text/javascript" src="{% static "vuejs/vue.js" %}"></script>
+        <script type="text/vue" src="{% static 'pretixcontrol/js/ui/checkinrules/datetimefield.vue' %}"></script>
+        <script type="text/vue" src="{% static 'pretixcontrol/js/ui/checkinrules/lookup-select2.vue' %}"></script>
+        <script type="text/vue" src="{% static 'pretixcontrol/js/ui/checkinrules/checkin-rule.vue' %}"></script>
+        <script type="text/vue" src="{% static 'pretixcontrol/js/ui/checkinrules/checkin-rules-editor.vue' %}"></script>
         <script type="text/javascript" src="{% static "pretixcontrol/js/ui/checkinrules.js" %}"></script>
     {% endcompress %}
 {% endblock %}
