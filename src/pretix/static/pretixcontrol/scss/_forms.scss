@@ -642,18 +642,27 @@ table td > .checkbox input[type="checkbox"] {
 
 #rules-editor {
   .checkin-rule {
-    border-left: 4px solid $brand-primary;
+    border-left: 4px solid transparentize($brand-primary, .5);
     background: rgba(0, 0, 0, 0.05);
     padding: 5px 15px 5px 15px;
     margin: 5px 0;
     position: relative;
+    &:hover {
+      border-left-color: $brand-primary;
+    }
   }
 
   .checkin-rule-and {
-    border-left: 4px solid $brand-danger;
+    border-left: 4px solid transparentize($brand-danger, .5);
+    &:hover {
+      border-left-color: $brand-danger;
+    }
   }
   .checkin-rule-or {
-    border-left: 4px solid $brand-success;
+    border-left: 4px solid transparentize($brand-success, .5);
+    &:hover {
+      border-left-color: $brand-success;
+    }
   }
 }
 
