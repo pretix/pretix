@@ -29,7 +29,7 @@ import sass
 from compressor.filters.cssmin import CSSCompressorFilter
 from django.conf import settings
 from django.core.cache import cache
-from django.core.files.base import ContentFile
+from django.core.files.base import ContentFile, File
 from django.core.files.storage import default_storage
 from django.dispatch import Signal
 from django.templatetags.static import static as _static
@@ -123,6 +123,14 @@ def compile_scss(object, file="main.scss", fonts=True):
     return css, checksum
 
 
+def delete_old_file(fname):
+    if fname:
+        if isinstance(fname, File):
+            default_storage.delete(fname.name)
+        else:
+            default_storage.delete(fname)
+
+
 @app.task(base=TransactionAwareProfiledEventTask)
 def regenerate_css(event):
     # main.scss
@@ -130,18 +138,22 @@ def regenerate_css(event):
     fname = 'pub/{}/{}/presale.{}.css'.format(event.organizer.slug, event.slug, checksum[:16])
 
     if event.settings.get('presale_css_checksum', '') != checksum:
+        old_fname = event.settings.get('presale_css_file') if 'presale_css_file' in event.settings._cache() else None
         newname = default_storage.save(fname, ContentFile(css.encode('utf-8')))
         event.settings.set('presale_css_file', newname)
         event.settings.set('presale_css_checksum', checksum)
+        delete_old_file(old_fname)
 
     # widget.scss
     css, checksum = compile_scss(event, file='widget.scss', fonts=False)
     fname = 'pub/{}/{}/widget.{}.css'.format(event.organizer.slug, event.slug, checksum[:16])
 
     if event.settings.get('presale_widget_css_checksum', '') != checksum:
+        old_fname = event.settings.get('presale_css_file') if 'presale_widget_css_file' in event.settings._cache() else None
         newname = default_storage.save(fname, ContentFile(css.encode('utf-8')))
         event.settings.set('presale_widget_css_file', newname)
         event.settings.set('presale_widget_css_checksum', checksum)
+        delete_old_file(old_fname)
 
 
 @app.task(base=TransactionAwareTask)
@@ -153,17 +165,21 @@ def regenerate_organizer_css(organizer_id: int):
         css, checksum = compile_scss(organizer)
         fname = 'pub/{}/presale.{}.css'.format(organizer.slug, checksum[:16])
         if organizer.settings.get('presale_css_checksum', '') != checksum:
+            old_fname = organizer.settings.get('presale_css_file')
             newname = default_storage.save(fname, ContentFile(css.encode('utf-8')))
             organizer.settings.set('presale_css_file', newname)
             organizer.settings.set('presale_css_checksum', checksum)
+            delete_old_file(old_fname)
 
         # widget.scss
         css, checksum = compile_scss(organizer, file='widget.scss', fonts=False)
         fname = 'pub/{}/widget.{}.css'.format(organizer.slug, checksum[:16])
         if organizer.settings.get('presale_widget_css_checksum', '') != checksum:
+            old_fname = organizer.settings.get('presale_widget_css_file')
             newname = default_storage.save(fname, ContentFile(css.encode('utf-8')))
             organizer.settings.set('presale_widget_css_file', newname)
             organizer.settings.set('presale_widget_css_checksum', checksum)
+            delete_old_file(old_fname)
 
         non_inherited_events = set(Event_SettingsStore.objects.filter(
             object__organizer=organizer, key__in=affected_keys
