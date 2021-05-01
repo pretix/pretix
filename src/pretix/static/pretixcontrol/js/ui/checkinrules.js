@@ -86,6 +86,7 @@ $(document).ready(function () {
     el: '#rules-editor',
     components: {
       CheckinRulesEditor: CheckinRulesEditor.default,
+      CheckinRulesVisualization: CheckinRulesVisualization.default,
     },
     data: function () {
       return {

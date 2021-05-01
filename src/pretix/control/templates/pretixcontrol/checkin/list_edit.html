@@ -66,7 +66,33 @@
 
                 <h3>{% trans "Custom check-in rule" %}</h3>
                 <div id="rules-editor" class="form-inline">
-                    <checkin-rules-editor></checkin-rules-editor>
+                    <div>
+                        <ul class="nav nav-tabs" role="tablist">
+                            <li role="presentation" class="active">
+                                <a href="#rules-edit" role="tab" data-toggle="tab">
+                                    <span class="fa fa-edit"></span>
+                                    {% trans "Edit" %}
+                                </a>
+                            </li>
+                            <li role="presentation">
+                                <a href="#rules-viz" role="tab" data-toggle="tab">
+                                    <span class="fa fa-eye"></span>
+                                    {% trans "Visualize" %}
+                                </a>
+                            </li>
+                        </ul>
+
+                        <!-- Tab panes -->
+                        <div class="tab-content">
+                            <div role="tabpanel" class="tab-pane active" id="rules-edit">
+                                <checkin-rules-editor></checkin-rules-editor>
+                            </div>
+                            <div role="tabpanel" class="tab-pane" id="rules-viz">
+                                <checkin-rules-visualization></checkin-rules-visualization>
+                            </div>
+                        </div>
+
+                    </div>
                 </div>
                 <div class="disabled-withoutjs sr-only">
                     {{ form.rules }}
@@ -85,6 +111,8 @@
         <script type="text/vue" src="{% static 'pretixcontrol/js/ui/checkinrules/lookup-select2.vue' %}"></script>
         <script type="text/vue" src="{% static 'pretixcontrol/js/ui/checkinrules/checkin-rule.vue' %}"></script>
         <script type="text/vue" src="{% static 'pretixcontrol/js/ui/checkinrules/checkin-rules-editor.vue' %}"></script>
+        <script type="text/vue" src="{% static 'pretixcontrol/js/ui/checkinrules/viz-node.vue' %}"></script>
+        <script type="text/vue" src="{% static 'pretixcontrol/js/ui/checkinrules/checkin-rules-visualization.vue' %}"></script>
         <script type="text/javascript" src="{% static "pretixcontrol/js/ui/checkinrules.js" %}"></script>
     {% endcompress %}
 {% endblock %}

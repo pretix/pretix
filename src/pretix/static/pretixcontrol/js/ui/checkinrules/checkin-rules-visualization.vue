@@ -1,0 +1,184 @@
+<template>
+    <div class="checkin-rules-visualization">
+        <svg :width="graph.columns * (boxWidth + marginX) + 2 * paddingX" :height="graph.height * (boxHeight + marginY)"
+             :viewBox="viewBox">
+            <viz-node v-for="(node, nodeid) in graph.nodes_by_id" :key="nodeid" :node="node"
+                      :children="node.children.map(n => graph.nodes_by_id[n])" :nodeid="nodeid"
+                      :boxWidth="boxWidth" :boxHeight="boxHeight" :marginX="marginX" :marginY="marginY"
+                      :paddingX="paddingX"></viz-node>
+        </svg>
+    </div>
+</template>
+<script>
+  export default {
+    components: {
+      VizNode: VizNode.default,
+    },
+    computed: {
+      boxWidth() {
+        return 300
+      },
+      boxHeight() {
+        return 50
+      },
+      paddingX() {
+        return 50
+      },
+      marginX() {
+        return 50
+      },
+      marginY() {
+        return 20
+      },
+      viewBox() {
+        return `0 0 ${this.graph.columns * (this.boxWidth + this.marginX) + 2 * this.paddingX} ${this.graph.height * (this.boxHeight + this.marginY)}`
+      },
+      graph() {
+        /**
+         * Converts a JSON logic rule into a "flow chart".
+         *
+         * A JSON logic rule has a structure like an operator tree:
+         *
+         *  OR
+         *  |-- AND
+         *      |-- A
+         *      |-- B
+         *  |-- AND
+         *      |-- OR
+         *          |-- C
+         *          |-- D
+         *      |-- E
+         *
+         * For our visualization, we want to visualize that tree as a graph one can follow along to reach a
+         * decision, which has the structure of a directed graph:
+         *
+         *         --- A --- B --- OK!
+         *       /
+         *      /
+         *     /
+         *  --
+         *     \
+         *      \       --- C ---
+         *       \    /           \
+         *        ---              --- E --- OK!
+         *            \           /
+         *              --- D ---
+         */
+        const graph = {
+          nodes_by_id: {},
+          children: [],
+          columns: -1,
+        }
+
+        // Step 1: Start building the graph by finding all nodes and edges
+        let counter = 0;
+        const _add_to_graph = (rule) => {  // returns [heads, tails]
+          if (typeof rule !== 'object' || rule === null) {
+            const node_id = (counter++).toString()
+            graph.nodes_by_id[node_id] = {
+              rule: rule,
+              column: -1,
+              height: -1,
+              children: [],
+            }
+            return [[node_id], [node_id]]
+          }
+
+          const operator = Object.keys(rule)[0]
+          const operands = rule[operator]
+
+          if (operator === "and") {
+            let children = []
+            let tails = null
+            operands.reverse()
+            for (let operand of operands) {
+              let [new_children, new_tails] = _add_to_graph(operand)
+              for (let new_child of new_tails) {
+                graph.nodes_by_id[new_child].children.push(...children)
+              }
+              if (tails === null) {
+                tails = new_tails
+              }
+              children = new_children
+            }
+            return [children, tails]
+          } else if (operator === "or") {
+            const children = []
+            const tails = []
+            for (let operand of operands) {
+              let [new_children, new_tails] = _add_to_graph(operand)
+              children.push(...new_children)
+              tails.push(...new_tails)
+            }
+            return [children, tails]
+          } else {
+            const node_id = (counter++).toString()
+            graph.nodes_by_id[node_id] = {
+              rule: rule,
+              column: -1,
+              height: -1,
+              children: [],
+            }
+            return [[node_id], [node_id]]
+          }
+
+        }
+        graph.children = _add_to_graph(JSON.parse(JSON.stringify(this.$root.rules)))[0]
+
+        // Step 2: We compute the "column" of every node, which is the maximum number of hops required to reach the
+        // node from the root node
+        const _set_column_to_min = (nodes, mincol) => {
+          for (let node of nodes) {
+            if (mincol > node.column) {
+              node.column = mincol
+              graph.columns = Math.max(mincol + 1, graph.columns)
+              _set_column_to_min(node.children.map(nid => graph.nodes_by_id[nid]), mincol + 1)
+            }
+          }
+        }
+        _set_column_to_min(graph.children.map(nid => graph.nodes_by_id[nid]), 0)
+
+        // Step 3: We compute the "height" of every node, which is the maximum number of descendent nodes in
+        // the same column
+        const _get_all_descendents = (node) => {
+          let result = [...node.children]
+          for (let cid of node.children) {
+            result.push(..._get_all_descendents(graph.nodes_by_id[cid]))
+          }
+          result = result.filter((v, idx, self) => self.indexOf(v) === idx)  // ensure uniqueness
+          return result
+        }
+        for (let node of [...Object.values(graph.nodes_by_id), graph]) {
+          const descendents = _get_all_descendents(node)
+          const descendents_by_column = {}
+          for (let descid of descendents) {
+            const col = graph.nodes_by_id[descid].column
+            descendents_by_column[col] = (descendents_by_column[col] || 0) + 1
+          }
+          node.height = Math.max(1, ...Object.values(descendents_by_column))
+        }
+
+        // Step 4: Align each node on a grid. The x position is already given by the column computed above, but we still
+        // need the y position. This part of the algorithm is opinionated and probably not yet the nicest solution we
+        // can use!
+        const _set_y = (node, offset) => {
+          if (typeof node.y === "undefined") {
+            // We only take the first value we found for each node
+            node.y = offset
+          }
+
+          let used = 0
+          for (let cid of node.children) {
+            used += Math.max(0, _set_y(graph.nodes_by_id[cid], offset + used) - 1)
+            used++
+          }
+          return used
+        }
+        _set_y(graph, 0)
+
+        return graph
+      }
+    },
+    methods: {},
+  }
+</script>
