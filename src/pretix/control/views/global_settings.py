@@ -168,12 +168,11 @@ class LicenseCheckView(StaffMemberRequiredMixin, FormView):
     def _get_license_for_pkg(self, pkg):
         license, url = None, None
         try:
-            pkgs = pkg_resources.require(pkg)
-            pkg = pkgs[0]
-        except:
+            pkg = pkg_resources.get_distribution(pkg)
+        except pkg_resources.DistributionNotFound:
             return None, None
         try:
-            for line in pkg.get_metadata_lines('PKG-INFO'):
+            for line in pkg.get_metadata_lines(pkg.PKG_INFO):
                 if ': ' in line:
                     (k, v) = line.split(': ', 1)
                     if k == "License":
