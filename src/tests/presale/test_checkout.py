@@ -3854,3 +3854,89 @@ class CustomerCheckoutTestCase(BaseCheckoutTestCase, TestCase):
         }, follow=False)
         assert response.status_code == 200
         assert b'alert-danger' in response.content
+
+    def test_guest_not_allowed_if_granting_membership(self):
+        self.ticket.grant_membership_type = self.orga.membership_types.create(
+            name='Week pass'
+        )
+        self.ticket.save()
+        response = self.client.post('/%s/%s/checkout/customer/' % (self.orga.slug, self.event.slug), {
+            'customer_mode': 'guest'
+        }, follow=False)
+        assert response.status_code == 200
+
+    def test_guest_not_allowed_if_requiring_membership(self):
+        self.ticket.require_membership = True
+        self.ticket.save()
+        response = self.client.post('/%s/%s/checkout/customer/' % (self.orga.slug, self.event.slug), {
+            'customer_mode': 'guest'
+        }, follow=False)
+        assert response.status_code == 200
+
+    def test_select_membership(self):
+        mtype = self.orga.membership_types.create(name='Week pass', transferable=False)
+        mtype2 = self.orga.membership_types.create(name='Invalid pass')
+        self.ticket.require_membership = True
+        self.ticket.require_membership_types.add(mtype)
+        self.ticket.admission = True
+        self.ticket.save()
+        self.event.settings.attendee_names_asked = True
+
+        with scopes_disabled():
+            cp = CartPosition.objects.get()
+            m_correct1 = self.customer.memberships.create(
+                membership_type=mtype,
+                date_start=self.event.date_from - datetime.timedelta(days=1),
+                date_end=self.event.date_from + datetime.timedelta(days=1),
+                attendee_name_parts={'_scheme': 'full', 'full_name': 'John Doe'},
+            )
+            self.customer.memberships.create(
+                membership_type=mtype,
+                date_start=self.event.date_from - datetime.timedelta(days=1),
+                date_end=self.event.date_from + datetime.timedelta(days=1),
+                attendee_name_parts={'_scheme': 'full', 'full_name': 'Mark Fisher'},
+            )
+            self.customer.memberships.create(
+                membership_type=mtype,
+                date_start=self.event.date_from - datetime.timedelta(days=5),
+                date_end=self.event.date_from - datetime.timedelta(days=1),
+                attendee_name_parts={'_scheme': 'full', 'full_name': 'Sue Fisher'},
+            )
+            self.customer.memberships.create(
+                membership_type=mtype2,
+                date_start=self.event.date_from - datetime.timedelta(days=5),
+                date_end=self.event.date_from + datetime.timedelta(days=1),
+                attendee_name_parts={'_scheme': 'full', 'full_name': 'Mike Miller'},
+            )
+
+        response = self.client.post('/%s/%s/checkout/customer/' % (self.orga.slug, self.event.slug), {
+            'customer_mode': 'login',
+            'login-email': 'john@example.org',
+            'login-password': 'foo',
+        }, follow=True)
+        self.assertRedirects(response, '/%s/%s/checkout/membership/' % (self.orga.slug, self.event.slug),
+                             target_status_code=200)
+        assert b'John Doe' in response.content
+        assert b'Mark Fisher' in response.content
+        assert b'Sue Fisher' not in response.content
+        assert b'Mike Miller' not in response.content
+
+        response = self.client.post('/%s/%s/checkout/membership/' % (self.orga.slug, self.event.slug), {
+            f'membership-{cp.pk}-membership': m_correct1.pk,
+        }, follow=True)
+        self.assertRedirects(response, '/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug),
+                             target_status_code=200)
+        assert b'John Doe' in response.content
+        assert b'Mark Fisher' not in response.content
+        response = self.client.post('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), {
+            'email': 'will-be-ignored',
+            f'{cp.pk}-attendee_name_parts_0': 'will-be-ignored'
+        }, follow=True)
+        self.assertRedirects(response, '/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug),
+                             target_status_code=200)
+        order = self._finish()
+        assert order.customer == self.customer
+        assert order.customer.email == order.email
+        with scopes_disabled():
+            assert order.positions.first().used_membership == m_correct1
+            assert order.positions.first().attendee_name == 'John Doe'

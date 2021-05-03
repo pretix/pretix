@@ -838,6 +838,8 @@ def _create_order(event: Event, email: str, positions: List[CartPosition], now_d
             sales_channel=sales_channel.identifier,
             customer=customer,
         )
+        if customer:
+            order.email_known_to_work = customer.is_verified
         order.set_expires(now_dt, event.subevents.filter(id__in=[p.subevent_id for p in positions]))
         order.save()
 
