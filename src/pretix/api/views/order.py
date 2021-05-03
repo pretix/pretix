@@ -608,9 +608,22 @@ class OrderViewSet(viewsets.ModelViewSet):
             )
 
         with language(order.locale, self.request.event.settings.region):
+            payment = order.payments.last()
+
             order_placed.send(self.request.event, order=order)
             if order.status == Order.STATUS_PAID:
                 order_paid.send(self.request.event, order=order)
+                order.log_action(
+                    'pretix.event.order.paid',
+                    {
+                        'provider': payment.provider if payment else None,
+                        'info': {},
+                        'date': now().isoformat(),
+                        'force': False
+                    },
+                    user=request.user if request.user.is_authenticated else None,
+                    auth=request.auth,
+                )
 
             gen_invoice = invoice_qualified(order) and (
                 (order.event.settings.get('invoice_generate') == 'True') or
@@ -621,7 +634,6 @@ class OrderViewSet(viewsets.ModelViewSet):
                 invoice = generate_invoice(order, trigger_pdf=True)
 
             if send_mail:
-                payment = order.payments.last()
                 free_flow = (
                     payment and order.total == Decimal('0.00') and order.status == Order.STATUS_PAID and
                     not order.require_approval and payment.provider == "free"
