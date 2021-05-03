@@ -57,6 +57,7 @@ from django_countries import countries
 
 from pretix import __version__
 from pretix.base.decimal import round_decimal
+from pretix.base.forms import SecretKeySettingsField
 from pretix.base.models import Event, OrderPayment, OrderRefund, Quota
 from pretix.base.payment import BasePaymentProvider, PaymentException
 from pretix.base.plugins import get_all_plugins
@@ -196,7 +197,7 @@ class StripeSettingsHolder(BasePaymentProvider):
                      ),
                  )),
                 ('secret_key',
-                 forms.CharField(
+                 SecretKeySettingsField(
                      label=_('Secret key'),
                      validators=(
                          StripeKeyValidator(['sk_', 'rk_']),
@@ -357,6 +358,10 @@ class StripeMethod(BasePaymentProvider):
                 fee = max(fee, self.settings.get('connect_app_fee_min', as_type=Decimal))
             if fee:
                 d['application_fee_amount'] = self._decimal_to_int(fee)
+            if self.settings.connect_destination:
+                d['transfer_data'] = {
+                    'destination': self.settings.connect_destination
+                }
         return d
 
     def statement_descriptor(self, payment, length=22):
@@ -557,8 +562,12 @@ class StripeMethod(BasePaymentProvider):
                 chargeid = payment_info['id']
 
             ch = stripe.Charge.retrieve(chargeid, **self.api_kwargs)
+            kwargs = {}
+            if self.settings.connect_destination:
+                kwargs['reverse_transfer'] = True
             r = ch.refunds.create(
                 amount=self._get_amount(refund),
+                **kwargs,
             )
             ch.refresh()
         except (stripe.error.InvalidRequestError, stripe.error.AuthenticationError, stripe.error.APIConnectionError) \
