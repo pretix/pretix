@@ -59,7 +59,6 @@ from pretix.base.settings import COUNTRIES_WITH_STATE_IN_ADDRESS
 from pretix.base.signals import register_ticket_outputs
 from pretix.multidomain.urlreverse import build_absolute_uri
 
-
 logger = logging.getLogger(__name__)
 
 
