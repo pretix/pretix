@@ -16,7 +16,7 @@ def set_can_manage_customers(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('pretixbase', '0182_question_valid_file_portrait'),
+        ('pretixbase', '0183_auto_20210423_0829'),
     ]
 
     operations = [
