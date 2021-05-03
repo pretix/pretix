@@ -169,7 +169,7 @@ class LicenseCheckView(StaffMemberRequiredMixin, FormView):
         license, url = None, None
         try:
             pkg = pkg_resources.get_distribution(pkg)
-        except pkg_resources.DistributionNotFound:
+        except:
             return None, None
         try:
             for line in pkg.get_metadata_lines(pkg.PKG_INFO):
