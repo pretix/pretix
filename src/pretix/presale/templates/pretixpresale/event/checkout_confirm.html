@@ -146,10 +146,21 @@
                             </dl>
                         {% endif %}
                         {% for l, v in contact_info %}
-                            <dl class="dl-horizontal">
-                                <dt>{{ l }}</dt>
-                                <dd>{{ v }}</dd>
-                            </dl>
+                            {% if v is False %}
+                                {# do not show #}
+                            {% elif v is True %}
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" class="checkbox" checked disabled>
+                                        {{ l }}
+                                    </label>
+                                </div>
+                            {% else %}
+                                <dl class="dl-horizontal">
+                                    <dt>{{ l }}</dt>
+                                    <dd>{{ v }}</dd>
+                                </dl>
+                            {% endif %}
                         {% endfor %}
                     </div>
                 </div>

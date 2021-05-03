@@ -870,10 +870,6 @@ class ConfirmStep(CartMixin, AsyncAction, TemplateFlowStep):
             for key, value in response.items():
                 v = self.cart_session.get('contact_form_data', {}).get(key)
                 v = value.bound_data(v, initial='')
-                if v is True:
-                    v = _('Yes')
-                elif v is False:
-                    v = _('No')
                 ctx['contact_info'].append((rich_text_snippet(value.label), v))
 
         return ctx
