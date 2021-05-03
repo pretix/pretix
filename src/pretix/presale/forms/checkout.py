@@ -34,7 +34,9 @@
 
 from itertools import chain
 
+import dns.resolver
 from django import forms
+from django.core.cache import cache
 from django.core.exceptions import ValidationError
 from django.utils.encoding import force_str
 from django.utils.translation import gettext_lazy as _
@@ -52,12 +54,52 @@ from pretix.base.validators import EmailBanlistValidator
 from pretix.presale.signals import contact_form_fields
 
 
+class EmailDNSValidator:
+    msg = _('Please check your email domain, it does not look like "%(value)s" is able to receive emails.')
+
+    def __call__(self, value):
+        domain = value.split('@')[-1]
+        works = cache.get(f"mail_domain_exists_{domain}")
+        if works == "true":
+            return value
+        if works == "false":
+            raise ValidationError(self.msg, code='dns', params={'value': domain})
+
+        resolver = dns.resolver.Resolver()
+        resolver.lifetime = 0.5
+        resolver.timeout = 0.5
+        record_types = ('MX', 'AAAA', 'A')
+        for record_type in record_types:
+            try:
+                if len(resolver.query(domain, record_type)):
+                    cache.set(f"mail_domain_exists_{domain}", "true", 3600 * 24 * 7)
+                    return value
+            except (dns.resolver.NoAnswer, dns.resolver.NXDOMAIN, dns.resolver.YXDOMAIN):
+                # These errors represent a non-existing domain or entry, we want to continue with the
+                # other types of records and if all fail, we'll report an error.
+                continue
+            except:
+                # Timeout, IO errors, etc.: We don't know what's happening! Let's not stop the user
+                # from buying and just not validate this. Let's cache this result for a short while
+                # to prevent issues during peak load
+                cache.set(f"mail_domain_exists_{domain}", "false", 60)
+                return value
+        # No valid record found, even though the requests did not fail. This domain will not receive email.
+        # Cache this result for a short time.
+        cache.set(f"mail_domain_exists_{domain}", "false", 300)
+        raise ValidationError(self.msg, code='dns', params={'value': domain})
+
+
 class ContactForm(forms.Form):
     required_css_class = 'required'
-    email = forms.EmailField(label=_('E-mail'),
-                             validators=[EmailBanlistValidator()],
-                             widget=forms.EmailInput(attrs={'autocomplete': 'section-contact email'})
-                             )
+    email = forms.EmailField(
+        label=_('E-mail'),
+        validators=[
+            EmailBanlistValidator(),
+            EmailDNSValidator(),
+        ],
+        widget=forms.EmailInput(attrs={'autocomplete': 'section-contact email'})
+    )
 
     def __init__(self, *args, **kwargs):
         self.event = kwargs.pop('event')

@@ -44,6 +44,7 @@ oauthlib==3.1.*
 django-jsonfallback>=2.1.2
 psycopg2-binary
 tqdm==4.*
+dnspython==1.16.*
 # Stripe
 stripe==2.42.*
 # PayPal
