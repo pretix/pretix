@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-04-30 09:39+0000\n"
-"PO-Revision-Date: 2021-05-03 12:54+0000\n"
+"PO-Revision-Date: 2021-05-03 20:26+0000\n"
 "Last-Translator: Mohamed Tawfiq <mtawfiq@wafyapp.com>\n"
 "Language-Team: Arabic <https://translate.pretix.eu/projects/pretix/pretix/ar/"
 ">\n"
@@ -50,7 +50,7 @@ msgstr "عناوين إعادة التوجيه"
 
 #: pretix/api/models.py:43
 msgid "Allowed URIs list, space separated"
-msgstr "قائمة العناوين المسموح بها, بينهم فاصلة."
+msgstr "قائمة العناوين المسموح بها, بينهم فاصلة"
 
 #: pretix/api/models.py:46 pretix/plugins/paypal/payment.py:112
 msgid "Client ID"
@@ -177,9 +177,8 @@ msgid "Question cannot depend on a question asked during check-in."
 msgstr "لا يمكن أن يعتمد السؤال على سؤال تم طرحه أثناء التسجيل."
 
 #: pretix/api/serializers/item.py:356 pretix/control/forms/item.py:114
-#, fuzzy
 msgid "Circular dependency between questions detected."
-msgstr "تم الكشف عن تبعية دائرية بين الأسئلة."
+msgstr "الأسئلة تدور في سلسلة لا متناهية."
 
 #: pretix/api/serializers/item.py:361 pretix/control/forms/item.py:123
 msgid "This type of question cannot be asked during check-in."
@@ -1256,7 +1255,7 @@ msgstr "التغير"
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:53
 #: pretix/presale/templates/pretixpresale/event/order_change.html:51
 msgid "Attendee name"
-msgstr "اسم الحضور"
+msgstr "اسم الحاضر"
 
 #: pretix/base/exporters/orderlist.py:562 pretix/base/forms/questions.py:552
 #: pretix/base/models/orders.py:1177 pretix/base/pdf.py:195
@@ -1265,7 +1264,7 @@ msgstr "اسم الحضور"
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:60
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:63
 msgid "Attendee email"
-msgstr "البريد الإلكتروني للحضور"
+msgstr "البريد الإلكتروني للحاضر"
 
 #: pretix/base/exporters/orderlist.py:569 pretix/base/models/vouchers.py:244
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html:5
@@ -1305,10 +1304,8 @@ msgid "Seat number"
 msgstr "رقم المقعد"
 
 #: pretix/base/exporters/orderlist.py:576
-#, fuzzy
-#| msgid "Order code"
 msgid "Order comment"
-msgstr "تعليق الطلب"
+msgstr "ملاحظة الطلب"
 
 #: pretix/base/exporters/orderlist.py:741
 msgid "Order payments and refunds"
@@ -1320,7 +1317,7 @@ msgstr "‪حالات الدفع"
 
 #: pretix/base/exporters/orderlist.py:757
 msgid "Refund states"
-msgstr "حالة استعادة المبلغ"
+msgstr "حالات استعادة المبلغ"
 
 #: pretix/base/exporters/orderlist.py:782
 #: pretix/base/exporters/orderlist.py:888 pretix/base/models/orders.py:244
@@ -1330,13 +1327,13 @@ msgstr "حالة استعادة المبلغ"
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:15
 #: pretix/plugins/checkinlists/exporters.py:332
 msgid "Order"
-msgstr "طلب"
+msgstr "الطلب"
 
 #: pretix/base/exporters/orderlist.py:782
 #: pretix/base/exporters/orderlist.py:888
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/control.html:5
 msgid "Payment ID"
-msgstr "الطلب"
+msgstr "معرف الدفع"
 
 #: pretix/base/exporters/orderlist.py:782
 #: pretix/base/exporters/orderlist.py:981
@@ -1364,7 +1361,7 @@ msgstr "رمز الحالة"
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_assign.html:25
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:13
 msgid "Amount"
-msgstr "كمية"
+msgstr "المبلغ"
 
 #: pretix/base/exporters/orderlist.py:783
 #: pretix/control/templates/pretixcontrol/order/index.html:616
@@ -1372,11 +1369,11 @@ msgstr "كمية"
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:84
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_confirm.html:19
 msgid "Payment method"
-msgstr "طريقة الدفع او السداد"
+msgstr "طريقة السداد"
 
 #: pretix/base/exporters/orderlist.py:819
 msgid "Quota availabilities"
-msgstr "توافر الحصة"
+msgstr "توفر الحصة"
 
 #: pretix/base/exporters/orderlist.py:824
 #: pretix/control/templates/pretixcontrol/items/quotas.html:45
@@ -1392,7 +1389,7 @@ msgstr "الحصة الإجمالية"
 #: pretix/control/templates/pretixcontrol/event/cancel.html:16
 #: pretix/control/views/item.py:833
 msgid "Paid orders"
-msgstr "طلبات مدفوعة"
+msgstr "الطلبات المدفوعة"
 
 #: pretix/base/exporters/orderlist.py:824 pretix/control/views/item.py:838
 msgid "Pending orders"
@@ -1403,8 +1400,9 @@ msgid "Blocking vouchers"
 msgstr "حظر القسائم"
 
 #: pretix/base/exporters/orderlist.py:825 pretix/control/views/item.py:857
+#, fuzzy
 msgid "Current user's carts"
-msgstr "بطاقات المستخدم الحالية"
+msgstr "عربات المستخدم الحالية"
 
 #: pretix/base/exporters/orderlist.py:825
 #: pretix/base/exporters/waitinglist.py:41 pretix/base/shredder.py:239
@@ -1457,7 +1455,7 @@ msgstr "رمز بطاقة الهدايا"
 #: pretix/base/exporters/orderlist.py:888
 #: pretix/control/templates/pretixcontrol/giftcards/payment.html:10
 msgid "Issuer"
-msgstr "المُصدر"
+msgstr "المصدر"
 
 #: pretix/base/exporters/orderlist.py:916 pretix/control/navigation.py:485
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:71
@@ -1539,7 +1537,7 @@ msgstr "شروط وأحكام خاصة"
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/control.html:15
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:57
 msgid "Currency"
-msgstr "عملة"
+msgstr "العملة"
 
 #: pretix/base/exporters/orderlist.py:985
 #: pretix/control/templates/pretixcontrol/order/change.html:94
@@ -1550,8 +1548,9 @@ msgid "Current value"
 msgstr "القيمة الحالية"
 
 #: pretix/base/exporters/orderlist.py:986
+#, fuzzy
 msgid "Created in order"
-msgstr "تم إنشاؤها بالترتيب"
+msgstr "أنشأت بدافع"
 
 #: pretix/base/exporters/orderlist.py:987
 msgid "Last invoice number of order"
@@ -1569,7 +1568,7 @@ msgstr "جميع الإدخالات"
 #: pretix/base/exporters/waitinglist.py:52
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:90
 msgid "Waiting for a voucher"
-msgstr "انتظار قسيمة"
+msgstr "في انتظار قسيمة"
 
 #: pretix/base/exporters/waitinglist.py:57
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:92
@@ -1581,13 +1580,13 @@ msgstr "تم تعيين القسيمة"
 #: pretix/base/exporters/waitinglist.py:62
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:95
 msgid "Waiting for redemption"
-msgstr "في انتظار المخالصة"
+msgstr "في انتظار الاسترداد"
 
 #: pretix/base/exporters/waitinglist.py:70
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:183
 #: pretix/control/views/waitinglist.py:263
 msgid "Voucher redeemed"
-msgstr "تم استبدال القسيمة"
+msgstr "تم استرداد القسيمة"
 
 #: pretix/base/exporters/waitinglist.py:78
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:101
@@ -1609,7 +1608,7 @@ msgstr "اسم المنتج"
 #: pretix/control/templates/pretixcontrol/events/index.html:64
 #: pretix/control/templates/pretixcontrol/organizers/detail.html:52
 msgid "Event name"
-msgstr "اسم الحدث"
+msgstr "اسم الفعالية"
 
 #: pretix/base/exporters/waitinglist.py:113 pretix/base/orderimport.py:160
 #: pretix/control/templates/pretixcontrol/checkin/index.html:70
@@ -1636,11 +1635,11 @@ msgstr "رمز قسيمة"
 
 #: pretix/base/forms/auth.py:57 pretix/base/forms/auth.py:166
 msgid "Keep me logged in"
-msgstr "أبق تسجيل دخولي"
+msgstr "استمرار تسجيل الدخول"
 
 #: pretix/base/forms/auth.py:60 pretix/base/forms/auth.py:257
 msgid "This combination of credentials is not known to our system."
-msgstr "هذه مجموعة بيانات الاعتماد غير معروفة لدى نظامنا."
+msgstr "مجموعة بيانات الاعتماد هذه غير معروفة لدى نظامنا."
 
 #: pretix/base/forms/auth.py:61 pretix/base/forms/user.py:57
 msgid "For security reasons, please wait 5 minutes before you try again."
@@ -1654,8 +1653,8 @@ msgstr "هذا الحساب غير نشط."
 msgid ""
 "You already registered with that email address, please use the login form."
 msgstr ""
-"لقد قمت بالتسجيل بالفعل باستخدام عنوان البريد الإلكتروني هذا ، يرجى استخدام "
-"نموذج تسجيل الدخول."
+"لقد سجلت باستخدام عنوان البريد الإلكتروني هذا ، يرجى استخدام نموذج تسجيل "
+"الدخول."
 
 #: pretix/base/forms/auth.py:146 pretix/base/forms/auth.py:202
 #: pretix/base/forms/user.py:56 pretix/control/forms/users.py:45
@@ -1668,7 +1667,7 @@ msgstr "عنوان البريد الإلكتروني"
 
 #: pretix/base/forms/auth.py:160 pretix/base/forms/auth.py:210
 msgid "Repeat password"
-msgstr "اعد كلمة السر"
+msgstr "أعد كلمة السر"
 
 #: pretix/base/forms/questions.py:244
 msgid "Please enter a shorter name."
@@ -1677,12 +1676,12 @@ msgstr "الرجاء إدخال اسم أقصر."
 #: pretix/base/forms/questions.py:264
 msgctxt "phonenumber"
 msgid "International area code"
-msgstr "رمز المنطقة الدولية"
+msgstr "مفتاح الاتصال الدولي"
 
 #: pretix/base/forms/questions.py:288
 msgctxt "phonenumber"
 msgid "Phone number (without international area code)"
-msgstr "رقم الهاتف (بدون رمز المنطقة الدولية)"
+msgstr "رقم الهاتف (بدون مفتاح الاتصال الدولي)"
 
 #: pretix/base/forms/questions.py:408
 msgid ""
@@ -1693,7 +1692,7 @@ msgstr ""
 
 #: pretix/base/forms/questions.py:411
 msgid "Please upload an image where the width is 3/4 of the height."
-msgstr "يرجى تحميل صورة بعرض 3/4 من ارتفاعها."
+msgstr "يرجى تحميل صورة بحيث يكون العرض 3/4 الارتفاعها."
 
 #: pretix/base/forms/questions.py:414
 msgid ""
@@ -1707,8 +1706,7 @@ msgstr ""
 msgid ""
 "Upload a valid image. The file you uploaded was either not an image or a "
 "corrupted image."
-msgstr ""
-"قم بتحميل صورة صالحة. كان الملف الذي قمت بتحميله إما غير صورة أو صورة تالفة."
+msgstr "قم بتحميل صورة صالحة. الملف الذي قمت بتحميله ليس صورة أو هو صورة تالفة."
 
 #: pretix/base/forms/questions.py:574 pretix/base/forms/questions.py:886
 msgid "Street and Number"
@@ -1717,7 +1715,7 @@ msgstr "الشارع والرقم"
 #: pretix/base/forms/questions.py:608 pretix/base/forms/questions.py:926
 msgctxt "address"
 msgid "Select state"
-msgstr "اختر ولايه"
+msgstr "اختر منطقة"
 
 #: pretix/base/forms/questions.py:839 pretix/base/forms/questions.py:870
 #: pretix/base/forms/questions.py:1017 pretix/base/payment.py:86
@@ -1752,8 +1750,8 @@ msgid ""
 "your invoice. You can get the tax amount back via the VAT reimbursement "
 "process."
 msgstr ""
-"تعذر التحقق من معرّف ضريبة القيمة المضافة ، نظرًا لأن خدمة التحقق من ضريبة "
-"القيمة المضافة في بلدك غير متوفرة حاليًا. لذلك سنحتاج إلى فرض ضريبة القيمة "
+"تعذر التحقق من معرف ضريبة القيمة المضافة ، نظرا لأن خدمة التحقق من ضريبة "
+"القيمة المضافة في بلدك غير متوفرة حاليا. لذلك سنحتاج إلى فرض ضريبة القيمة "
 "المضافة على فاتورتك. يمكنك استرداد مبلغ الضريبة من خلال عملية استرداد ضريبة "
 "القيمة المضافة."
 
@@ -1764,15 +1762,16 @@ msgid ""
 "on your invoice. Please contact support to resolve this manually."
 msgstr ""
 "تعذر التحقق من معرّف ضريبة القيمة المضافة ، لأن خدمة التحقق من ضريبة القيمة "
-"المضافة في بلدك أعادت نتيجة غير صحيحة. لذلك سنحتاج إلى فرض ضريبة القيمة "
-"المضافة على فاتورتك. يرجى الاتصال بالدعم لحل هذا يدويًا."
+"المضافة في بلدك قدمت نتيجة غير صحيحة. لذلك سنحتاج إلى فرض ضريبة القيمة "
+"المضافة على فاتورتك. يرجى الاتصال بالدعم لحل هذا الأمر يدويا."
 
 #: pretix/base/forms/user.py:51 pretix/control/forms/users.py:43
 msgid ""
 "There already is an account associated with this e-mail address. Please "
 "choose a different one."
 msgstr ""
-"يوجد حساب مرتبط مع عنوان البريد الإلكتروني هذا. الرجاء اختيار واحدا مختلفا."
+"يوجد حساب مرتبط مع عنوان البريد الإلكتروني هذا. الرجاء اختيار بريد إلكتروني "
+"مختلف."
 
 #: pretix/base/forms/user.py:53
 msgid ""
@@ -1807,8 +1806,8 @@ msgid ""
 "Only used for views that are not bound to an event. For all event views, the "
 "event timezone is used instead."
 msgstr ""
-"تستخدم فقط للعرض غير المرتبط بحدث. بالنسبة لجميع عروض الأحداث ، يتم استخدام "
-"المنطقة الزمنية للحدث بدلاً من ذلك."
+"تستخدم فقط للمشاهدات غير المرتبط بحدث. بالنسبة لجميع الفعاليات ، يتم استخدام "
+"المنطقة الزمنية للفعالية بدلاً من ذلك."
 
 #: pretix/base/forms/user.py:168
 msgid "Device name"
@@ -1830,12 +1829,12 @@ msgstr "رمز جهاز متوافق مع WebAuthn (مثل Yubikey)"
 msgid ""
 "Invalid placeholder syntax: You used a different number of \"{\" than of "
 "\"}\"."
-msgstr "تركيب النائب صالح: يمكنك استخدام عدد مختلف من \"{\" من ل\"}\"."
+msgstr "تركيب النائب غير صالح: يمكنك استخدام عدد مختلف من \"{than of}\"."
 
 #: pretix/base/forms/validators.py:73
 #, python-format
 msgid "Invalid placeholder(s): %(value)s"
-msgstr "نائب الكان خاطئ: %(value)s"
+msgstr "تركيب النائب خاطئ: %(value)s"
 
 #: pretix/base/forms/widgets.py:187 pretix/base/forms/widgets.py:192
 #: pretix/base/models/orders.py:2290
@@ -1853,9 +1852,10 @@ msgid "Page %d of %d"
 msgstr "صفحة %d من %d"
 
 #: pretix/base/invoice.py:246
+#, fuzzy
 msgctxt "invoice"
 msgid "Classic renderer (pretix 1.0)"
-msgstr "العارض الكلاسيكية (pretix 1.0)"
+msgstr "عرض كلاسيكي (pretix 1.0)"
 
 #: pretix/base/invoice.py:290
 msgctxt "invoice"
@@ -1875,12 +1875,12 @@ msgstr "رمز الطلب"
 #: pretix/base/invoice.py:333 pretix/base/invoice.py:782
 msgctxt "invoice"
 msgid "Cancellation number"
-msgstr "عدد إلغاء"
+msgstr "رقم الإلغاء"
 
 #: pretix/base/invoice.py:339 pretix/base/invoice.py:790
 msgctxt "invoice"
 msgid "Original invoice"
-msgstr "الايصال الاصلي"
+msgstr "الفاتورة الأصلية"
 
 #: pretix/base/invoice.py:344 pretix/base/invoice.py:797
 msgctxt "invoice"
@@ -1914,7 +1914,7 @@ msgid ""
 "{from_date}\n"
 "until {to_date}"
 msgstr ""
-"{from_date}\n"
+"من {from_date}\n"
 "حتى {to_date}"
 
 #: pretix/base/invoice.py:429
@@ -1943,12 +1943,12 @@ msgstr "فاتورة {num}"
 #, python-brace-format
 msgctxt "invoice"
 msgid "Customer reference: {reference}"
-msgstr "إشارة العملاء: {reference}"
+msgstr "رقم المرجعية للعملاء: {reference}"
 
 #: pretix/base/invoice.py:485
 msgctxt "invoice"
 msgid "Customer VAT ID"
-msgstr "ID VAT العملاء"
+msgstr "معرف ضريبة القيمة المضافة للعميل"
 
 #: pretix/base/invoice.py:492
 msgctxt "invoice"
@@ -1956,11 +1956,9 @@ msgid "Beneficiary"
 msgstr "المستفيد"
 
 #: pretix/base/invoice.py:513
-#, fuzzy
-#| msgid "Invoice"
 msgctxt "invoice"
 msgid "Tax Invoice"
-msgstr "فاتورة"
+msgstr "فاتورة الضريبة"
 
 #: pretix/base/invoice.py:514
 msgctxt "invoice"
@@ -1990,9 +1988,10 @@ msgid "Tax rate"
 msgstr "معدل الضريبة"
 
 #: pretix/base/invoice.py:539
+#, fuzzy
 msgctxt "invoice"
 msgid "Net"
-msgstr "شبكة"
+msgstr "صافي"
 
 #: pretix/base/invoice.py:540
 msgctxt "invoice"
@@ -2002,7 +2001,7 @@ msgstr "إجمالي"
 #: pretix/base/invoice.py:546
 msgctxt "invoice"
 msgid "Amount"
-msgstr "كمية"
+msgstr "المبلغ"
 
 #: pretix/base/invoice.py:571 pretix/base/invoice.py:576
 msgctxt "invoice"
