@@ -77,7 +77,7 @@ def _build_time(t=None, value=None, ev=None):
 
 def _logic_explain(rules, ev, rule_data):
     """
-    Explains whe the logic denied the check-in. Only works for a denied check-in.
+    Explains when the logic denied the check-in. Only works for a denied check-in.
 
     While our custom check-in logic is very flexible, its main problem is that is is pretty
     intransparent during execution. If the logic causes an entry to be forbidden, the result
