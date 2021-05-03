@@ -290,6 +290,14 @@ class StripeSettingsHolder(BasePaymentProvider):
                  )),
             ] + list(super().settings_form_fields.items()) + moto_settings
         )
+        if not self.settings.connect_client_id or self.settings.secret_key:
+            d['connect_destination'] = forms.CharField(
+                label=_('Destination'),
+                validators=(
+                    StripeKeyValidator(['acct_']),
+                ),
+                required=False
+            )
         d.move_to_end('_enabled', last=False)
         return d
 
@@ -358,10 +366,10 @@ class StripeMethod(BasePaymentProvider):
                 fee = max(fee, self.settings.get('connect_app_fee_min', as_type=Decimal))
             if fee:
                 d['application_fee_amount'] = self._decimal_to_int(fee)
-            if self.settings.connect_destination:
-                d['transfer_data'] = {
-                    'destination': self.settings.connect_destination
-                }
+        if self.settings.connect_destination:
+            d['transfer_data'] = {
+                'destination': self.settings.connect_destination
+            }
         return d
 
     def statement_descriptor(self, payment, length=22):
