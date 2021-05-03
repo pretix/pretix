@@ -52,6 +52,7 @@ def event():
         organizer=o, name='Dummy', slug='dummy',
         date_from=TZ.localize(datetime(2021, 4, 27, 10, 0, 0, 0)),
         date_to=TZ.localize(datetime(2021, 4, 28, 10, 0, 0, 0)),
+        presale_end=TZ.localize(datetime(2221, 4, 28, 10, 0, 0, 0)),
         plugins='pretix.plugins.banktransfer'
     )
     event.settings.timezone = 'Europe/Berlin'
