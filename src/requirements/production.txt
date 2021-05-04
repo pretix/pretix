@@ -42,6 +42,7 @@ openpyxl==3.0.*
 django-oauth-toolkit==1.2.*
 oauthlib==3.1.*
 psycopg2-binary
+django-mysql
 tqdm==4.*
 # Stripe
 stripe==2.42.*
