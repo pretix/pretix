@@ -192,7 +192,6 @@ setup(
         'chardet<3.1.0,>=3.0.2',
         'mt-940==3.2',
         'django-i18nfield==1.9.*,>=1.9.1',
-        'django-jsonfallback>=2.1.2',
         'psycopg2-binary',
         'tqdm==4.*',
         'vobject==0.9.*',

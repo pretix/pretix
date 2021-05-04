@@ -27,7 +27,6 @@ from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
 from django_scopes import ScopedManager, scopes_disabled
 from i18nfield.fields import I18nCharField
-from jsonfallback.fields import FallbackJSONField
 
 from pretix.base.models import Customer
 from pretix.base.models.base import LoggedModel
@@ -135,7 +134,7 @@ class Membership(models.Model):
     date_end = models.DateTimeField(
         verbose_name=_('End date')
     )
-    attendee_name_parts = FallbackJSONField(default=dict, null=True)
+    attendee_name_parts = models.JSONField(default=dict, null=True)
 
     objects = MembershipQuerySetManager()
 

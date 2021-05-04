@@ -2,7 +2,6 @@
 
 import django.db.models.deletion
 import django.db.models.manager
-import jsonfallback.fields
 from django.db import migrations, models
 
 

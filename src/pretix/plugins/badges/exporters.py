@@ -41,7 +41,6 @@ from typing import Tuple
 
 import dateutil.parser
 from django import forms
-from django.conf import settings
 from django.contrib.staticfiles import finders
 from django.core.files import File
 from django.core.files.storage import default_storage
@@ -49,7 +48,6 @@ from django.db.models import Exists, OuterRef, Q
 from django.db.models.functions import Coalesce
 from django.utils.timezone import make_aware
 from django.utils.translation import gettext as _, gettext_lazy
-from jsonfallback.functions import JSONExtract
 from reportlab.lib import pagesizes
 from reportlab.lib.units import mm
 from reportlab.pdfgen import canvas
@@ -60,6 +58,7 @@ from pretix.base.models import Order, OrderPosition
 from pretix.base.pdf import Renderer
 from pretix.base.services.orders import OrderError
 from pretix.base.settings import PERSON_NAME_SCHEMES
+from pretix.helpers.templatetags.jsonfield import JSONExtract
 from pretix.plugins.badges.models import BadgeItem, BadgeLayout
 
 
@@ -297,7 +296,7 @@ class BadgeExporter(BaseExporter):
                      ] + ([
                          ('name:{}'.format(k), _('Attendee name: {part}').format(part=label))
                          for k, label, w in name_scheme['fields']
-                     ] if settings.JSON_FIELD_AVAILABLE and len(name_scheme['fields']) > 1 else []),
+                     ] if len(name_scheme['fields']) > 1 else []),
                  )),
             ]
         )

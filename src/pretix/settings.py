@@ -116,7 +116,6 @@ else:
 
 if 'mysql' in db_backend:
     db_options['charset'] = 'utf8mb4'
-JSON_FIELD_AVAILABLE = db_backend in ('mysql', 'postgresql')
 
 DATABASES = {
     'default': {

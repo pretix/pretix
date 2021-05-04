@@ -26,7 +26,6 @@ from django.db import models, transaction
 from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _, pgettext_lazy
 from django_scopes import ScopedManager
-from jsonfallback.fields import FallbackJSONField
 from phonenumber_field.modelfields import PhoneNumberField
 
 from pretix.base.email import get_email_context
@@ -66,7 +65,7 @@ class WaitingListEntry(LoggedModel):
         verbose_name=_("Name"),
         blank=True, null=True,
     )
-    name_parts = FallbackJSONField(
+    name_parts = models.JSONField(
         blank=True, default=dict
     )
     email = models.EmailField(

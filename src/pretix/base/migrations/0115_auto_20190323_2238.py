@@ -3,7 +3,6 @@
 from decimal import Decimal
 
 import django.db.models.deletion
-import jsonfallback.fields
 from django.db import migrations, models
 
 import pretix.base.models.fields
