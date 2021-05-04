@@ -59,6 +59,7 @@ class Customer(LoggedModel):
 
     class Meta:
         unique_together = [['organizer', 'email']]
+        ordering = ('email',)
 
     def save(self, **kwargs):
         if self.email:
