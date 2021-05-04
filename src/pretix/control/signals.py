@@ -178,7 +178,7 @@ As with all plugin signals, the ``sender`` keyword argument will contain the eve
 
 voucher_form_class = EventPluginSignal()
 """
-Arguments: 'cls'
+Arguments: ``cls``
 
 This signal allows you to replace the form class that is used for modifying vouchers.
 You will receive the default form class (or the class set by a previous plugin) in the
