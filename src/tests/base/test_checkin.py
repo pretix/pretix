@@ -647,7 +647,7 @@ def test_rules_isafter_subevent(position, clist, event):
 
 @pytest.mark.django_db(transaction=True)
 def test_position_queries(django_assert_num_queries, position, clist):
-    with django_assert_num_queries(11) as captured:
+    with django_assert_num_queries(12) as captured:
         perform_checkin(position, clist, {})
     if 'sqlite' not in settings.DATABASES['default']['ENGINE']:
         assert any('FOR UPDATE' in s['sql'] for s in captured)
