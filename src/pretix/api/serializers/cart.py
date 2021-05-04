@@ -129,6 +129,7 @@ class CartPositionCreateSerializer(I18nAwareModelSerializer):
                 answ.file.save(os.path.basename(an.name), an, save=False)
                 answ.answer = 'file://' + answ.file.name
                 answ.save()
+                an.close()
             else:
                 answ = cp.answers.create(**answ_data)
                 answ.options.add(*options)
