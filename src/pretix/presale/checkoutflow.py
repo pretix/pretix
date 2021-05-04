@@ -386,6 +386,7 @@ class MembershipStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
 
         for f in self.forms:
             if not f.is_valid():
+                messages.error(request, _('Your cart includes a product that requires an active membership to be selected.'))
                 return self.render()
 
             f.position.used_membership = f.cleaned_data['membership']
@@ -403,7 +404,10 @@ class MembershipStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
 
     def is_completed(self, request, warn=False):
         self.request = request
-        return all([p.used_membership_id for p in self.applicable_positions])
+        ok = all([p.used_membership_id for p in self.applicable_positions])
+        if not ok and warn:
+            messages.error(request, _('Your cart includes a product that requires an active membership to be selected.'))
+        return ok
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)

@@ -233,6 +233,6 @@ class MembershipForm(forms.Form):
 
     def clean(self):
         d = super().clean()
-        if d['membership']:
+        if d.get('membership'):
             d['membership'] = [m for m in self.memberships if str(m.pk) == d['membership']][0]
         return d
