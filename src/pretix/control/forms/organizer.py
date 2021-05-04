@@ -39,20 +39,31 @@ from django import forms
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db.models import Q
+from django.utils.crypto import get_random_string
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _, pgettext_lazy
 from django_scopes.forms import SafeModelMultipleChoiceField
+from i18nfield.forms import I18nFormField, I18nTextarea
+from pytz import common_timezones
 
 from pretix.api.models import WebHook
 from pretix.api.webhooks import get_all_webhook_events
-from pretix.base.forms import I18nModelForm, SettingsForm
+from pretix.base.forms import I18nModelForm, PlaceholderValidator, SettingsForm
+from pretix.base.forms.questions import NamePartsFormField
 from pretix.base.forms.widgets import SplitDateTimePickerWidget
 from pretix.base.models import (
-    Device, EventMetaProperty, Gate, GiftCard, Organizer, Team,
+    Customer, Device, EventMetaProperty, Gate, GiftCard, Membership,
+    MembershipType, Organizer, Team,
 )
-from pretix.control.forms import ExtFileField, SplitDateTimeField
-from pretix.control.forms.event import SafeEventMultipleChoiceField
+from pretix.base.settings import PERSON_NAME_SCHEMES, PERSON_NAME_TITLE_GROUPS
+from pretix.control.forms import (
+    ExtFileField, SMTPSettingsMixin, SplitDateTimeField,
+)
+from pretix.control.forms.event import (
+    SafeEventMultipleChoiceField, multimail_validate,
+)
 from pretix.multidomain.models import KnownDomain
+from pretix.multidomain.urlreverse import build_absolute_uri
 
 
 class OrganizerForm(I18nModelForm):
@@ -168,6 +179,12 @@ class EventMetaPropertyForm(forms.ModelForm):
         }
 
 
+class MembershipTypeForm(I18nModelForm):
+    class Meta:
+        model = MembershipType
+        fields = ['name', 'transferable', 'allow_parallel_usage', 'max_usages']
+
+
 class TeamForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
@@ -181,7 +198,7 @@ class TeamForm(forms.ModelForm):
         model = Team
         fields = ['name', 'all_events', 'limit_events', 'can_create_events',
                   'can_change_teams', 'can_change_organizer_settings',
-                  'can_manage_gift_cards',
+                  'can_manage_gift_cards', 'can_manage_customers',
                   'can_change_event_settings', 'can_change_items',
                   'can_view_orders', 'can_change_orders', 'can_checkin_orders',
                   'can_view_vouchers', 'can_change_vouchers']
@@ -250,7 +267,24 @@ class DeviceForm(forms.ModelForm):
 
 
 class OrganizerSettingsForm(SettingsForm):
+    timezone = forms.ChoiceField(
+        choices=((a, a) for a in common_timezones),
+        label=_("Default timezone"),
+    )
+    name_scheme = forms.ChoiceField(
+        label=_("Name format"),
+        help_text=_("This defines how pretix will ask for human names. Changing this after you already received "
+                    "orders might lead to unexpected behavior when sorting or changing names."),
+        required=True,
+    )
+    name_scheme_titles = forms.ChoiceField(
+        label=_("Allowed titles"),
+        help_text=_("If the naming scheme you defined above allows users to input a title, you can use this to "
+                    "restrict the set of selectable titles."),
+        required=False,
+    )
     auto_fields = [
+        'customer_accounts',
         'contact_mail',
         'imprint_url',
         'organizer_info_text',
@@ -291,6 +325,115 @@ class OrganizerSettingsForm(SettingsForm):
         help_text=_('If you provide a favicon, we will show it instead of the default pretix icon. '
                     'We recommend a size of at least 200x200px to accommodate most devices.')
     )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['name_scheme'].choices = (
+            (k, _('Ask for {fields}, display like {example}').format(
+                fields=' + '.join(str(vv[1]) for vv in v['fields']),
+                example=v['concatenation'](v['sample'])
+            ))
+            for k, v in PERSON_NAME_SCHEMES.items()
+        )
+        self.fields['name_scheme_titles'].choices = [('', _('Free text input'))] + [
+            (k, '{scheme}: {samples}'.format(
+                scheme=v[0],
+                samples=', '.join(v[1])
+            ))
+            for k, v in PERSON_NAME_TITLE_GROUPS.items()
+        ]
+
+
+class MailSettingsForm(SMTPSettingsMixin, SettingsForm):
+    auto_fields = [
+        'mail_from',
+        'mail_from_name',
+    ]
+
+    mail_bcc = forms.CharField(
+        label=_("Bcc address"),
+        help_text=_("All emails will be sent to this address as a Bcc copy"),
+        validators=[multimail_validate],
+        required=False,
+        max_length=255
+    )
+    mail_text_signature = I18nFormField(
+        label=_("Signature"),
+        required=False,
+        widget=I18nTextarea,
+        help_text=_("This will be attached to every email."),
+        validators=[PlaceholderValidator([])],
+        widget_kwargs={'attrs': {
+            'rows': '4',
+            'placeholder': _(
+                'e.g. your contact details'
+            )
+        }}
+    )
+
+    mail_text_customer_registration = I18nFormField(
+        label=_("Text"),
+        required=False,
+        widget=I18nTextarea,
+    )
+    mail_text_customer_email_change = I18nFormField(
+        label=_("Text"),
+        required=False,
+        widget=I18nTextarea,
+    )
+    mail_text_customer_reset = I18nFormField(
+        label=_("Text"),
+        required=False,
+        widget=I18nTextarea,
+    )
+
+    base_context = {
+        'mail_text_customer_registration': ['customer', 'url'],
+        'mail_text_customer_email_change': ['customer', 'url'],
+        'mail_text_customer_reset': ['customer', 'url'],
+    }
+
+    def _get_sample_context(self, base_parameters):
+        placeholders = {
+            'organizer': self.organizer.name
+        }
+
+        if 'url' in base_parameters:
+            placeholders['url'] = build_absolute_uri(
+                self.organizer,
+                'presale:organizer.customer.activate'
+            ) + '?token=' + get_random_string(30)
+
+        if 'customer' in base_parameters:
+            placeholders['name'] = pgettext_lazy('person_name_sample', 'John Doe')
+            name_scheme = PERSON_NAME_SCHEMES[self.organizer.settings.name_scheme]
+            for f, l, w in name_scheme['fields']:
+                if f == 'full_name':
+                    continue
+                placeholders['name_%s' % f] = name_scheme['sample'][f]
+        return placeholders
+
+    def _set_field_placeholders(self, fn, base_parameters):
+        phs = [
+            '{%s}' % p
+            for p in sorted(self._get_sample_context(base_parameters).keys())
+        ]
+        ht = _('Available placeholders: {list}').format(
+            list=', '.join(phs)
+        )
+        if self.fields[fn].help_text:
+            self.fields[fn].help_text += ' ' + str(ht)
+        else:
+            self.fields[fn].help_text = ht
+        self.fields[fn].validators.append(
+            PlaceholderValidator(phs)
+        )
+
+    def __init__(self, *args, **kwargs):
+        self.organizer = kwargs.get('obj')
+        super().__init__(*args, **kwargs)
+        for k, v in self.base_context.items():
+            self._set_field_placeholders(k, v)
 
 
 class WebHookForm(forms.ModelForm):
@@ -373,3 +516,67 @@ class GiftCardUpdateForm(forms.ModelForm):
             'expires': SplitDateTimePickerWidget,
             'conditions': forms.Textarea(attrs={"rows": 2})
         }
+
+
+class CustomerUpdateForm(forms.ModelForm):
+    error_messages = {
+        'duplicate': _("An account with this email address is already registered."),
+    }
+
+    class Meta:
+        model = Customer
+        fields = ['is_active', 'name_parts', 'email', 'is_verified', 'locale']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.fields['name_parts'] = NamePartsFormField(
+            max_length=255,
+            required=False,
+            scheme=self.instance.organizer.settings.name_scheme,
+            titles=self.instance.organizer.settings.name_scheme_titles,
+            label=_('Name'),
+        )
+
+    def clean(self):
+        email = self.cleaned_data.get('email')
+
+        if email is not None:
+            try:
+                self.instance.organizer.customers.exclude(pk=self.instance.pk).get(email=email)
+            except Customer.DoesNotExist:
+                pass
+            else:
+                raise forms.ValidationError(
+                    self.error_messages['duplicate'],
+                    code='duplicate',
+                )
+
+        return self.cleaned_data
+
+
+class MembershipUpdateForm(forms.ModelForm):
+
+    class Meta:
+        model = Membership
+        fields = ['membership_type', 'date_start', 'date_end', 'attendee_name_parts']
+        field_classes = {
+            'date_start': SplitDateTimeField,
+            'date_end': SplitDateTimeField,
+        }
+        widgets = {
+            'date_start': SplitDateTimePickerWidget(),
+            'date_end': SplitDateTimePickerWidget(attrs={'data-date-after': '#id_date_Start'}),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.fields['membership_type'].queryset = self.instance.customer.organizer.membership_types.all()
+        self.fields['attendee_name_parts'] = NamePartsFormField(
+            max_length=255,
+            required=False,
+            scheme=self.instance.customer.organizer.settings.name_scheme,
+            titles=self.instance.customer.organizer.settings.name_scheme_titles,
+            label=_('Attendee name'),
+        )

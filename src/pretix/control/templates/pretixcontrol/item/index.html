@@ -101,6 +101,12 @@
                         {% bootstrap_field form.require_voucher layout="control" %}
                         {% bootstrap_field form.hide_without_voucher layout="control" %}
                         {% bootstrap_field form.require_bundling layout="control" %}
+                        {% if form.require_membership %}
+                            {% bootstrap_field form.require_membership layout="control" %}
+                            <div data-display-dependency="#{{ form.require_membership.id_for_label }}">
+                                {% bootstrap_field form.require_membership_types layout="control" %}
+                            </div>
+                        {% endif %}
                         {% bootstrap_field form.allow_cancel layout="control" %}
                         {% bootstrap_field form.allow_waitinglist layout="control" %}
                         {% bootstrap_field form.hidden_if_available layout="control" %}
@@ -120,6 +126,28 @@
                         <legend>{% trans "Additional settings" %}</legend>
                         {% bootstrap_field form.issue_giftcard layout="control" %}
                         {% bootstrap_field form.show_quota_left layout="control" %}
+                        {% if form.grant_membership_type %}
+                            {% bootstrap_field form.grant_membership_type layout="control" %}
+                            <div data-display-dependency="#id_grant_membership_type">
+                                {% bootstrap_field form.grant_membership_duration_like_event layout="control" %}
+                                <div data-display-dependency="#id_grant_membership_duration_like_event" data-inverse class="form-group">
+                                    {% blocktrans asvar days %}days{% endblocktrans %}
+                                    {% blocktrans asvar months %}months{% endblocktrans %}
+                                    <label class="col-md-3 col-xs-12 control-label">
+                                        {% trans "Membership duration after purchase" %}
+                                    </label>
+                                    <div class="col-md-4 col-xs-5">
+                                        {% bootstrap_field form.grant_membership_duration_months layout="" addon_after=months label_class="sr-only" form_group_class="" %}
+                                    </div>
+                                    <label class="col-md-1 col-xs-2 control-label text-center">
+                                        +
+                                    </label>
+                                    <div class="col-md-4 col-xs-5">
+                                        {% bootstrap_field form.grant_membership_duration_days layout="" addon_after=days label_class="sr-only" form_group_class="" %}
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
                         {% for f in plugin_forms %}
                             {% bootstrap_form f layout="control" %}
                         {% endfor %}

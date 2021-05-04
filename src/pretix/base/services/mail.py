@@ -66,7 +66,8 @@ from i18nfield.strings import LazyI18nString
 from pretix.base.email import ClassicMailRenderer
 from pretix.base.i18n import language
 from pretix.base.models import (
-    CachedFile, Event, Invoice, InvoiceAddress, Order, OrderPosition, User,
+    CachedFile, Customer, Event, Invoice, InvoiceAddress, Order, OrderPosition,
+    Organizer, User,
 )
 from pretix.base.services.invoices import invoice_pdf_task
 from pretix.base.services.tasks import TransactionAwareTask
@@ -92,10 +93,10 @@ class SendMailException(Exception):
 
 
 def mail(email: Union[str, Sequence[str]], subject: str, template: Union[str, LazyI18nString],
-         context: Dict[str, Any] = None, event: Event = None, locale: str = None,
-         order: Order = None, position: OrderPosition = None, headers: dict = None, sender: str = None,
-         invoices: Sequence = None, attach_tickets=False, auto_email=True, user=None, attach_ical=False,
-         attach_cached_files: Sequence = None):
+         context: Dict[str, Any] = None, event: Event = None, locale: str = None, order: Order = None,
+         position: OrderPosition = None, *, headers: dict = None, sender: str = None, organizer: Organizer = None,
+         customer: Customer = None, invoices: Sequence = None, attach_tickets=False, auto_email=True, user=None,
+         attach_ical=False, attach_cached_files: Sequence = None):
     """
     Sends out an email to a user. The mail will be sent synchronously or asynchronously depending on the installation.
 
@@ -111,6 +112,9 @@ def mail(email: Union[str, Sequence[str]], subject: str, template: Union[str, La
     :param context: The context for rendering the template (see ``template`` parameter)
 
     :param event: The event this email is related to (optional). If set, this will be used to determine the sender,
+        a possible prefix for the subject and the SMTP server that should be used to send this email.
+
+    :param organizer: The event this organizer is related to (optional). If set, this will be used to determine the sender,
         a possible prefix for the subject and the SMTP server that should be used to send this email.
 
     :param order: The order this email is related to (optional). If set, this will be used to include a link to the
@@ -135,6 +139,8 @@ def mail(email: Union[str, Sequence[str]], subject: str, template: Union[str, La
     :param auto_email: Whether this email is auto-generated
 
     :param user: The user this email is sent to
+
+    :param customer: The user this email is sent to
 
     :param attach_cached_files: A list of cached file to attach to this email.
 
@@ -165,15 +171,24 @@ def mail(email: Union[str, Sequence[str]], subject: str, template: Union[str, La
                     'invoice_name': '',
                     'invoice_company': ''
                 })
-        renderer = ClassicMailRenderer(None)
+        renderer = ClassicMailRenderer(None, organizer)
         content_plain = body_plain = render_mail(template, context)
         subject = str(subject).format_map(TolerantDict(context))
-        sender = sender or (event.settings.get('mail_from') if event else settings.MAIL_FROM) or settings.MAIL_FROM
+        sender = (
+            sender or
+            (event.settings.get('mail_from') if event else settings.MAIL_FROM) or
+            (organizer.settings.get('mail_from') if organizer else settings.MAIL_FROM) or
+            settings.MAIL_FROM
+        )
         if event:
-            sender_name = str(event.name)
+            sender_name = event.settings.mail_from_name or str(event.name)
             if len(sender_name) > 75:
                 sender_name = sender_name[:75] + "..."
-            sender_name = event.settings.mail_from_name or sender_name
+            sender = formataddr((sender_name, sender))
+        elif organizer:
+            sender_name = organizer.settings.mail_from_name or str(organizer.name)
+            if len(sender_name) > 75:
+                sender_name = sender_name[:75] + "..."
             sender = formataddr((sender_name, sender))
         else:
             sender = formataddr((settings.PRETIX_INSTANCE_NAME, sender))
@@ -182,17 +197,27 @@ def mail(email: Union[str, Sequence[str]], subject: str, template: Union[str, La
         signature = ""
 
         bcc = []
+
+        settings_holder = event or organizer
+
         if event:
             timezone = event.timezone
-            renderer = event.get_html_mail_renderer()
-            if event.settings.mail_bcc:
-                for bcc_mail in event.settings.mail_bcc.split(','):
+        elif user:
+            timezone = pytz.timezone(user.timezone)
+        elif organizer:
+            timezone = organizer.timezone
+        else:
+            timezone = pytz.timezone(settings.TIME_ZONE)
+
+        if settings_holder:
+            if settings_holder.settings.mail_bcc:
+                for bcc_mail in set.settings.mail_bcc.split(','):
                     bcc.append(bcc_mail.strip())
 
-            if event.settings.mail_from == settings.DEFAULT_FROM_EMAIL and event.settings.contact_mail and not headers.get('Reply-To'):
-                headers['Reply-To'] = event.settings.contact_mail
+            if settings_holder.settings.mail_from == settings.DEFAULT_FROM_EMAIL and settings_holder.settings.contact_mail and not headers.get('Reply-To'):
+                headers['Reply-To'] = settings_holder.settings.contact_mail
 
-            prefix = event.settings.get('mail_prefix')
+            prefix = settings_holder.settings.get('mail_prefix')
             if prefix and prefix.startswith('[') and prefix.endswith(']'):
                 prefix = prefix[1:-1]
             if prefix:
@@ -200,11 +225,14 @@ def mail(email: Union[str, Sequence[str]], subject: str, template: Union[str, La
 
             body_plain += "\r\n\r\n-- \r\n"
 
-            signature = str(event.settings.get('mail_text_signature'))
+            signature = str(settings_holder.settings.get('mail_text_signature'))
             if signature:
-                signature = signature.format(event=event.name)
+                signature = signature.format(event=event.name if event else '')
                 body_plain += signature
                 body_plain += "\r\n\r\n-- \r\n"
+
+        if event:
+            renderer = event.get_html_mail_renderer()
 
             if order and order.testmode:
                 subject = "[TESTMODE] " + subject
@@ -242,10 +270,6 @@ def mail(email: Union[str, Sequence[str]], subject: str, template: Union[str, La
                     )
                 )
             body_plain += "\r\n"
-        elif user:
-            timezone = pytz.timezone(user.timezone)
-        else:
-            timezone = pytz.timezone(settings.TIME_ZONE)
 
         with override(timezone):
             try:
@@ -276,6 +300,8 @@ def mail(email: Union[str, Sequence[str]], subject: str, template: Union[str, La
             attach_tickets=attach_tickets,
             attach_ical=attach_ical,
             user=user.pk if user else None,
+            organizer=organizer.pk if organizer else None,
+            customer=customer.pk if customer else None,
             attach_cached_files=[(cf.id if isinstance(cf, CachedFile) else cf) for cf in attach_cached_files] if attach_cached_files else [],
         )
 
@@ -314,7 +340,7 @@ class CustomEmail(EmailMultiAlternatives):
 def mail_send_task(self, *args, to: List[str], subject: str, body: str, html: str, sender: str,
                    event: int = None, position: int = None, headers: dict = None, bcc: List[str] = None,
                    invoices: List[int] = None, order: int = None, attach_tickets=False, user=None,
-                   attach_ical=False, attach_cached_files: List[int] = None) -> bool:
+                   organizer=None, customer=None, attach_ical=False, attach_cached_files: List[int] = None) -> bool:
     email = CustomEmail(subject, body, sender, to=to, bcc=bcc, headers=headers)
     if html is not None:
         html_message = SafeMIMEMultipart(_subtype='related', encoding=settings.DEFAULT_CHARSET)
@@ -326,14 +352,24 @@ def mail_send_task(self, *args, to: List[str], subject: str, body: str, html: st
     if user:
         user = User.objects.get(pk=user)
 
+    if customer:
+        customer = Customer.objects.get(pk=customer)
+
     if event:
         with scopes_disabled():
             event = Event.objects.get(id=event)
         backend = event.get_mail_backend()
         cm = lambda: scope(organizer=event.organizer)  # noqa
+    elif organizer:
+        with scopes_disabled():
+            organizer = Organizer.objects.get(id=organizer)
+        backend = organizer.get_mail_backend()
+        cm = lambda: scope(organizer=organizer)  # noqa
     else:
         backend = get_connection(fail_silently=False)
         cm = lambda: scopes_disabled()  # noqa
+
+    log_target = order or user or customer
 
     with cm():
         if event:
@@ -432,7 +468,8 @@ def mail_send_task(self, *args, to: List[str], subject: str, body: str, html: st
                         logger.exception('Could not attach file to email')
                         pass
 
-        email = global_email_filter.send_chained(event, 'message', message=email, user=user, order=order)
+        email = global_email_filter.send_chained(event, 'message', message=email, user=user, order=order,
+                                                 organizer=organizer, customer=customer)
 
         try:
             backend.send_messages([email])
@@ -442,9 +479,9 @@ def mail_send_task(self, *args, to: List[str], subject: str, body: str, html: st
                 try:
                     self.retry(max_retries=5, countdown=2 ** (self.request.retries * 3))  # max is 2 ** (4*3) = 4096 seconds = 68 minutes
                 except MaxRetriesExceededError:
-                    if order:
-                        order.log_action(
-                            'pretix.event.order.email.error',
+                    if log_target:
+                        log_target.log_action(
+                            'pretix.email.error',
                             data={
                                 'subject': 'SMTP code {}, max retries exceeded'.format(e.smtp_code),
                                 'message': e.smtp_error.decode() if isinstance(e.smtp_error, bytes) else str(e.smtp_error),
@@ -455,9 +492,9 @@ def mail_send_task(self, *args, to: List[str], subject: str, body: str, html: st
                     raise e
 
             logger.exception('Error sending email')
-            if order:
-                order.log_action(
-                    'pretix.event.order.email.error',
+            if log_target:
+                log_target.log_action(
+                    'pretix.email.error',
                     data={
                         'subject': 'SMTP code {}'.format(e.smtp_code),
                         'message': e.smtp_error.decode() if isinstance(e.smtp_error, bytes) else str(e.smtp_error),
@@ -479,13 +516,13 @@ def mail_send_task(self, *args, to: List[str], subject: str, body: str, html: st
                     pass
 
             logger.exception('Error sending email')
-            if order:
+            if log_target:
                 message = []
                 for e, val in e.recipients.items():
                     message.append(f'{e}: {val[0]} {val[1].decode()}')
 
-                order.log_action(
-                    'pretix.event.order.email.error',
+                logger.log_action(
+                    'pretix.email.error',
                     data={
                         'subject': 'SMTP error',
                         'message': '\n'.join(message),
@@ -500,9 +537,9 @@ def mail_send_task(self, *args, to: List[str], subject: str, body: str, html: st
                 try:
                     self.retry(max_retries=5, countdown=2 ** (self.request.retries * 3))  # max is 2 ** (4*3) = 4096 seconds = 68 minutes
                 except MaxRetriesExceededError:
-                    if order:
-                        order.log_action(
-                            'pretix.event.order.email.error',
+                    if log_target:
+                        log_target.log_action(
+                            'pretix.email.error',
                             data={
                                 'subject': 'Internal error',
                                 'message': 'Max retries exceeded',
@@ -511,9 +548,9 @@ def mail_send_task(self, *args, to: List[str], subject: str, body: str, html: st
                             }
                         )
                     raise e
-            if order:
-                order.log_action(
-                    'pretix.event.order.email.error',
+            if logger:
+                log_target.log_action(
+                    'pretix.email.error',
                     data={
                         'subject': 'Internal error',
                         'message': str(e),

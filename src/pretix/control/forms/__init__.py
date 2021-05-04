@@ -45,7 +45,7 @@ from django.urls import reverse
 from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
 
-from ...base.forms import I18nModelForm
+from ...base.forms import I18nModelForm, SecretKeySettingsField
 
 # Import for backwards compatibility with okd import paths
 from ...base.forms.widgets import (  # noqa
@@ -368,3 +368,46 @@ class SplitDateTimeField(forms.SplitDateTimeField):
 
 class FontSelect(forms.RadioSelect):
     option_template_name = 'pretixcontrol/font_option.html'
+
+
+class SMTPSettingsMixin(forms.Form):
+    smtp_use_custom = forms.BooleanField(
+        label=_("Use custom SMTP server"),
+        help_text=_("All mail related to your event will be sent over the smtp server specified by you."),
+        required=False
+    )
+    smtp_host = forms.CharField(
+        label=_("Hostname"),
+        required=False,
+        widget=forms.TextInput(attrs={'placeholder': 'mail.example.org'})
+    )
+    smtp_port = forms.IntegerField(
+        label=_("Port"),
+        required=False,
+        widget=forms.TextInput(attrs={'placeholder': 'e.g. 587, 465, 25, ...'})
+    )
+    smtp_username = forms.CharField(
+        label=_("Username"),
+        widget=forms.TextInput(attrs={'placeholder': 'myuser@example.org'}),
+        required=False
+    )
+    smtp_password = SecretKeySettingsField(
+        label=_("Password"),
+        required=False,
+    )
+    smtp_use_tls = forms.BooleanField(
+        label=_("Use STARTTLS"),
+        help_text=_("Commonly enabled on port 587."),
+        required=False
+    )
+    smtp_use_ssl = forms.BooleanField(
+        label=_("Use SSL"),
+        help_text=_("Commonly enabled on port 465."),
+        required=False
+    )
+
+    def clean(self):
+        data = super().clean()
+        if data.get('smtp_use_tls') and data.get('smtp_use_ssl'):
+            raise ValidationError(_('You can activate either SSL or STARTTLS security, but not both at the same time.'))
+        return data

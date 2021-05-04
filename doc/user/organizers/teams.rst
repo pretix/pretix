@@ -33,6 +33,8 @@ Permissions separate into two areas:
 
    * Can create events – To create a new event under this organizer account, users need to have this permission
 
+   * Can manage customer accounts – This permission is required to view and change organizer-level customer accounts.
+
    * Can change teams and permissions – This permission is required to perform the kind of action you are doing right now.
      Anyone with this permission can assign arbitrary other permissions to themselves, so this is the most powerful
      permission there is to give.

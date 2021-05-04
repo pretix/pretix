@@ -826,6 +826,14 @@ class OrderChangeManagerTests(TestCase):
             self.quota.items.add(self.ticket2)
             self.quota.items.add(self.shirt)
 
+            self.mtype = self.o.membership_types.create(name="Week pass")
+            self.vip = Item.objects.create(event=self.event, name='VIP', tax_rule=self.tr7,
+                                           default_price=Decimal('23.00'), admission=True,
+                                           require_membership=True)
+            self.vip.require_membership_types.add(self.mtype)
+            self.quota.items.add(self.vip)
+            self.stalls = Item.objects.create(event=self.event, name='Stalls', tax_rule=self.tr7,
+                                              default_price=Decimal('23.00'), admission=True)
             self.stalls = Item.objects.create(event=self.event, name='Stalls', tax_rule=self.tr7,
                                               default_price=Decimal('23.00'), admission=True)
             self.plan = SeatingPlan.objects.create(
@@ -2557,6 +2565,115 @@ class OrderChangeManagerTests(TestCase):
         assert nop.tax_rule == self.tr19
         assert nop.tax_rate == Decimal('19.00')
         assert nop.tax_value == Decimal('3.67')
+
+    @classscope(attr='o')
+    def test_add_with_membership_required(self):
+        with self.assertRaises(OrderError):
+            self.ocm.add_position(self.vip, None, price=Decimal('13.00'))
+            self.ocm.commit()
+
+    @classscope(attr='o')
+    def test_add_with_membership_forbidden(self):
+        self.order.customer = self.o.customers.create(email="foo@bar.com")
+        m = self.order.customer.memberships.create(
+            membership_type=self.mtype,
+            date_start=self.event.date_from - timedelta(days=1),
+            date_end=self.event.date_from + timedelta(days=1),
+            attendee_name_parts={'_scheme': 'full', 'full_name': 'John Doe'},
+        )
+        with self.assertRaises(OrderError):
+            self.ocm.add_position(self.ticket, None, price=Decimal('13.00'), membership=m)
+            self.ocm.commit()
+
+    @classscope(attr='o')
+    def test_add_with_membership(self):
+        self.order.customer = self.o.customers.create(email="foo@bar.com")
+        m = self.order.customer.memberships.create(
+            membership_type=self.mtype,
+            date_start=self.event.date_from - timedelta(days=1),
+            date_end=self.event.date_from + timedelta(days=1),
+            attendee_name_parts={'_scheme': 'full', 'full_name': 'John Doe'},
+        )
+        self.ocm.add_position(self.vip, None, price=Decimal('13.00'), membership=m)
+        self.ocm.commit()
+        assert self.order.positions.last().used_membership == m
+
+    @classscope(attr='o')
+    def test_change_membership(self):
+        self.order.customer = self.o.customers.create(email="foo@bar.com")
+        m = self.order.customer.memberships.create(
+            membership_type=self.mtype,
+            date_start=self.event.date_from - timedelta(days=1),
+            date_end=self.event.date_from + timedelta(days=1),
+            attendee_name_parts={'_scheme': 'full', 'full_name': 'John Doe'},
+        )
+        m2 = self.order.customer.memberships.create(
+            membership_type=self.mtype,
+            date_start=self.event.date_from - timedelta(days=1),
+            date_end=self.event.date_from + timedelta(days=1),
+            attendee_name_parts={'_scheme': 'full', 'full_name': 'John Doe'},
+        )
+        self.op1.item = self.vip
+        self.op1.used_membership = m
+        self.op1.save()
+        self.ocm.change_membership(self.op1, membership=m2)
+        self.ocm.commit()
+        self.op1.refresh_from_db()
+        assert self.op1.used_membership == m2
+
+    @classscope(attr='o')
+    def test_change_to_invalid_membership(self):
+        self.order.customer = self.o.customers.create(email="foo@bar.com")
+        m = self.order.customer.memberships.create(
+            membership_type=self.mtype,
+            date_start=self.event.date_from - timedelta(days=1),
+            date_end=self.event.date_from + timedelta(days=1),
+            attendee_name_parts={'_scheme': 'full', 'full_name': 'John Doe'},
+        )
+        m2 = self.order.customer.memberships.create(
+            membership_type=self.mtype,
+            date_start=self.event.date_from - timedelta(days=5),
+            date_end=self.event.date_from - timedelta(days=1),
+            attendee_name_parts={'_scheme': 'full', 'full_name': 'John Doe'},
+        )
+        self.op1.item = self.vip
+        self.op1.used_membership = m
+        self.op1.save()
+        self.ocm.change_membership(self.op1, membership=m2)
+        with self.assertRaises(OrderError):
+            self.ocm.commit()
+
+    @classscope(attr='o')
+    def test_change_item_to_required_membership(self):
+        self.order.customer = self.o.customers.create(email="foo@bar.com")
+        self.ocm.change_item(self.op1, self.vip, None)
+        with self.assertRaises(OrderError):
+            self.ocm.commit()
+
+    @classscope(attr='o')
+    def test_change_membership_to_none(self):
+        self.order.customer = self.o.customers.create(email="foo@bar.com")
+        m = self.order.customer.memberships.create(
+            membership_type=self.mtype,
+            date_start=self.event.date_from - timedelta(days=1),
+            date_end=self.event.date_from + timedelta(days=1),
+            attendee_name_parts={'_scheme': 'full', 'full_name': 'John Doe'},
+        )
+        self.order.customer.memberships.create(
+            membership_type=self.mtype,
+            date_start=self.event.date_from - timedelta(days=1),
+            date_end=self.event.date_from + timedelta(days=1),
+            attendee_name_parts={'_scheme': 'full', 'full_name': 'John Doe'},
+        )
+        self.op1.item = self.vip
+        self.op1.used_membership = m
+        self.op1.save()
+        self.ocm.change_item(self.op1, self.ticket, None)
+        self.ocm.change_membership(self.op1, membership=None)
+        self.ocm.commit()
+        self.op1.refresh_from_db()
+        assert self.op1.used_membership is None
+        assert self.op1.item == self.ticket
 
 
 @pytest.mark.django_db

@@ -182,7 +182,20 @@
                             <dt>{% trans "Expiry date" %}</dt>
                             <dd>{{ order.expires|date:"SHORT_DATETIME_FORMAT" }}</dd>
                         {% endif %}
-                        <dt>{% trans "User" %}</dt>
+                        {% if request.organizer.settings.customer_accounts %}
+                            <dt>{% trans "Customer account" %}</dt>
+                            <dd>
+                                {% if order.customer %}
+                                    <a href="{% url "control:organizer.customer" organizer=request.organizer.slug customer=order.customer.identifier %}">
+                                        {{ order.customer.identifier }} – {{ order.customer.email }}
+                                    </a>
+                                {% endif %}
+                                <a href="{% url "control:event.order.contact" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}" class="btn btn-default btn-xs">
+                                    <span class="fa fa-edit"></span>
+                                </a>
+                            </dd>
+                        {% endif %}
+                        <dt>{% trans "Contact email" %}</dt>
                         <dd>
                             {{ order.email|default_if_none:"" }}
                             {% if order.email and order.email_known_to_work %}
@@ -197,7 +210,7 @@
                                 </a>
                                 {% if order.status != "c" %}
                                     <form class="form-inline helper-display-inline" method="post"
-                                            action="{% url "control:event.order.resendlink" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}">
+                                          action="{% url "control:event.order.resendlink" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}">
                                         {% csrf_token %}
                                         <button class="btn btn-default btn-xs">
                                             {% trans "Resend link" %}
@@ -336,7 +349,7 @@
                                     {{ line.seat }}
                                 {% endif %}
                                 {% if line.voucher %}
-                                    <br/><span class="fa fa-tags"></span> {% trans "Voucher code used:" %}
+                                    <br/><span class="fa fa-tags fa-fw"></span> {% trans "Voucher code used:" %}
                                     <a
                                             {% if line.price_before_voucher|default_if_none:"NONE" != "NONE" %}data-toggle="tooltip" title="{% blocktrans trimmed with price=line.price_before_voucher|money:request.event.currency %}Original price: {{ price }}{% endblocktrans %}"{% endif %}
                                             href="{% url "control:event.voucher" event=request.event.slug organizer=request.event.organizer.slug voucher=line.voucher.pk %}">
@@ -345,11 +358,17 @@
                                 {% endif %}
                                 {% if line.subevent %}
                                     <br/>
-                                    <span class="fa fa-calendar"></span> {{ line.subevent.name }} &middot; {{ line.subevent.get_date_range_display }}
+                                    <span class="fa fa-calendar fa-fw"></span> {{ line.subevent.name }} &middot; {{ line.subevent.get_date_range_display }}
                                     {% if event.settings.show_times %}
                                         <span class="fa fa-clock-o"></span>
                                         {{ line.subevent.date_from|date:"TIME_FORMAT" }}
                                     {% endif %}
+                                {% endif %}
+                                {% if line.used_membership %}
+                                    <br /><span class="fa fa-id-card fa-fw" aria-hidden="true"></span>
+                                    <a href="{% url "control:organizer.customer.membership.edit" organizer=request.organizer.slug customer=order.customer.identifier id=line.used_membership.pk %}">
+                                        {{ line.used_membership }}
+                                    </a>
                                 {% endif %}
                                 {% if not line.canceled %}
                                     <div class="position-buttons">

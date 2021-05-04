@@ -43,6 +43,7 @@ from typing import List, Optional
 from celery.exceptions import MaxRetriesExceededError
 from django.conf import settings
 from django.core.cache import cache
+from django.core.exceptions import ValidationError
 from django.db import transaction
 from django.db.models import (
     Exists, F, IntegerField, Max, Min, OuterRef, Q, Sum, Value,
@@ -62,8 +63,8 @@ from pretix.base.i18n import (
     LazyLocaleException, get_language_without_region, language,
 )
 from pretix.base.models import (
-    CartPosition, Device, Event, GiftCard, Item, ItemVariation, Order,
-    OrderPayment, OrderPosition, Quota, Seat, SeatCategoryMapping, User,
+    CartPosition, Device, Event, GiftCard, Item, ItemVariation, Membership,
+    Order, OrderPayment, OrderPosition, Quota, Seat, SeatCategoryMapping, User,
     Voucher,
 )
 from pretix.base.models.event import SubEvent
@@ -82,6 +83,9 @@ from pretix.base.services.invoices import (
 )
 from pretix.base.services.locking import LockTimeoutException, NoLockManager
 from pretix.base.services.mail import SendMailException
+from pretix.base.services.memberships import (
+    create_membership, validate_memberships_in_order,
+)
 from pretix.base.services.pricing import get_price
 from pretix.base.services.quotas import QuotaAvailability
 from pretix.base.services.tasks import ProfiledEventTask, ProfiledTask
@@ -145,7 +149,8 @@ def reactivate_order(order: Order, force: bool=False, user: User=None, auth=None
         raise OrderError('The order was not canceled.')
 
     with order.event.lock() as now_dt:
-        is_available = force or order._is_still_available(now_dt, count_waitinglist=False, check_voucher_usage=True)
+        is_available = force or order._is_still_available(now_dt, count_waitinglist=False, check_voucher_usage=True,
+                                                          check_memberships=True)
         if is_available is True:
             if order.payment_refund_sum >= order.total:
                 order.status = Order.STATUS_PAID
@@ -531,7 +536,7 @@ def _check_date(event: Event, now_dt: datetime):
 
 
 def _check_positions(event: Event, now_dt: datetime, positions: List[CartPosition], address: InvoiceAddress=None,
-                     sales_channel='web'):
+                     sales_channel='web', customer=None):
     err = None
     errargs = None
     _check_date(event, now_dt)
@@ -553,7 +558,8 @@ def _check_positions(event: Event, now_dt: datetime, positions: List[CartPositio
             deleted_positions.add(cp.pk)
             cp.delete()
 
-    for i, cp in enumerate(sorted(positions, key=lambda s: -int(s.is_bundled))):
+    sorted_positions = sorted(positions, key=lambda s: -int(s.is_bundled))
+    for i, cp in enumerate(sorted_positions):
         if cp.pk in deleted_positions:
             continue
 
@@ -748,6 +754,13 @@ def _check_positions(event: Event, now_dt: datetime, positions: List[CartPositio
         else:
             # Sorry, can't let you keep that!
             delete(cp)
+
+    if not err:
+        try:
+            validate_memberships_in_order(customer, [p for p in sorted_positions if p.pk not in deleted_positions], event, lock=True)
+        except ValidationError as e:
+            raise OrderError(e.message)
+
     if err:
         raise OrderError(err, errargs)
 
@@ -786,8 +799,8 @@ def _get_fees(positions: List[CartPosition], payment_provider: BasePaymentProvid
 
 def _create_order(event: Event, email: str, positions: List[CartPosition], now_dt: datetime,
                   payment_provider: BasePaymentProvider, locale: str=None, address: InvoiceAddress=None,
-                  meta_info: dict=None, sales_channel: str='web', gift_cards: list=None,
-                  shown_total=None):
+                  meta_info: dict=None, sales_channel: str='web', gift_cards: list=None, shown_total=None,
+                  customer=None):
     p = None
     sales_channel = get_all_sales_channels()[sales_channel]
 
@@ -822,8 +835,11 @@ def _create_order(event: Event, email: str, positions: List[CartPosition], now_d
             testmode=True if sales_channel.testmode_supported and event.testmode else False,
             meta_info=json.dumps(meta_info or {}),
             require_approval=any(p.item.require_approval for p in positions),
-            sales_channel=sales_channel.identifier
+            sales_channel=sales_channel.identifier,
+            customer=customer,
         )
+        if customer:
+            order.email_known_to_work = customer.is_verified
         order.set_expires(now_dt, event.subevents.filter(id__in=[p.subevent_id for p in positions]))
         order.save()
 
@@ -927,13 +943,16 @@ def _order_placed_email_attendee(event: Event, order: Order, position: OrderPosi
 
 def _perform_order(event: Event, payment_provider: str, position_ids: List[str],
                    email: str, locale: str, address: int, meta_info: dict=None, sales_channel: str='web',
-                   gift_cards: list=None, shown_total=None):
+                   gift_cards: list=None, shown_total=None, customer=None):
     if payment_provider:
         pprov = event.get_payment_providers().get(payment_provider)
         if not pprov:
             raise OrderError(error_messages['internal'])
     else:
         pprov = None
+
+    if customer:
+        customer = event.organizer.customers.get(pk=customer)
 
     if email == settings.PRETIX_EMAIL_NONE_VALUE:
         email = None
@@ -960,8 +979,8 @@ def _perform_order(event: Event, payment_provider: str, position_ids: List[str],
         id__in=position_ids, event=event
     )
 
-    validate_order.send(event, payment_provider=pprov, email=email, positions=positions,
-                        locale=locale, invoice_address=addr, meta_info=meta_info)
+    validate_order.send(event, payment_provider=pprov, email=email, positions=positions, locale=locale,
+                        invoice_address=addr, meta_info=meta_info, customer=customer)
 
     lockfn = NoLockManager
     locked = False
@@ -980,10 +999,10 @@ def _perform_order(event: Event, payment_provider: str, position_ids: List[str],
             raise OrderError(error_messages['empty'])
         if len(position_ids) != len(positions):
             raise OrderError(error_messages['internal'])
-        _check_positions(event, now_dt, positions, address=addr, sales_channel=sales_channel)
+        _check_positions(event, now_dt, positions, address=addr, sales_channel=sales_channel, customer=customer)
         order, payment = _create_order(event, email, positions, now_dt, pprov,
                                        locale=locale, address=addr, meta_info=meta_info, sales_channel=sales_channel,
-                                       gift_cards=gift_cards, shown_total=shown_total)
+                                       gift_cards=gift_cards, shown_total=shown_total, customer=customer)
 
         free_order_flow = payment and payment_provider == 'free' and order.pending_sum == Decimal('0.00') and not order.require_approval
         if free_order_flow:
@@ -1228,8 +1247,9 @@ class OrderChangeManager:
     SeatOperation = namedtuple('SubeventOperation', ('position', 'seat'))
     PriceOperation = namedtuple('PriceOperation', ('position', 'price'))
     TaxRuleOperation = namedtuple('TaxRuleOperation', ('position', 'tax_rule'))
+    MembershipOperation = namedtuple('MembershipOperation', ('position', 'membership'))
     CancelOperation = namedtuple('CancelOperation', ('position',))
-    AddOperation = namedtuple('AddOperation', ('item', 'variation', 'price', 'addon_to', 'subevent', 'seat'))
+    AddOperation = namedtuple('AddOperation', ('item', 'variation', 'price', 'addon_to', 'subevent', 'seat', 'membership'))
     SplitOperation = namedtuple('SplitOperation', ('position',))
     FeeValueOperation = namedtuple('FeeValueOperation', ('fee', 'value'))
     AddFeeOperation = namedtuple('AddFeeOperation', ('fee',))
@@ -1286,6 +1306,9 @@ class OrderChangeManager:
         if seat:
             self._seatdiff.update([seat])
         self._operations.append(self.SeatOperation(position, seat))
+
+    def change_membership(self, position: OrderPosition, membership: Membership):
+        self._operations.append(self.MembershipOperation(position, membership))
 
     def change_subevent(self, position: OrderPosition, subevent: SubEvent):
         try:
@@ -1416,7 +1439,7 @@ class OrderChangeManager:
             self._invoice_dirty = True
 
     def add_position(self, item: Item, variation: ItemVariation, price: Decimal, addon_to: Order = None,
-                     subevent: SubEvent = None, seat: Seat = None):
+                     subevent: SubEvent = None, seat: Seat = None, membership: Membership = None):
         if isinstance(seat, str):
             if not seat:
                 seat = None
@@ -1468,7 +1491,7 @@ class OrderChangeManager:
         self._quotadiff.update(new_quotas)
         if seat:
             self._seatdiff.update([seat])
-        self._operations.append(self.AddOperation(item, variation, price, addon_to, subevent, seat))
+        self._operations.append(self.AddOperation(item, variation, price, addon_to, subevent, seat, membership))
 
     def split(self, position: OrderPosition):
         if self.order.event.settings.invoice_include_free or position.price != Decimal('0.00'):
@@ -1633,6 +1656,15 @@ class OrderChangeManager:
                     event=self.event, position=op.position, force_invalidate=False, save=False
                 )
                 op.position.save()
+            elif isinstance(op, self.MembershipOperation):
+                self.order.log_action('pretix.event.order.changed.membership', user=self.user, auth=self.auth, data={
+                    'position': op.position.pk,
+                    'positionid': op.position.positionid,
+                    'old_membership_id': op.position.used_membership_id,
+                    'new_membership_id': op.membership.pk if op.membership else None,
+                })
+                op.position.used_membership = op.membership
+                op.position.save()
             elif isinstance(op, self.SeatOperation):
                 self.order.log_action('pretix.event.order.changed.seat', user=self.user, auth=self.auth, data={
                     'position': op.position.pk,
@@ -1773,7 +1805,8 @@ class OrderChangeManager:
                     item=op.item, variation=op.variation, addon_to=op.addon_to,
                     price=op.price.gross, order=self.order, tax_rate=op.price.rate,
                     tax_value=op.price.tax, tax_rule=op.item.tax_rule,
-                    positionid=nextposid, subevent=op.subevent, seat=op.seat
+                    positionid=nextposid, subevent=op.subevent, seat=op.seat,
+                    used_membership=op.membership,
                 )
                 nextposid += 1
                 self.order.log_action('pretix.event.order.changed.add', user=self.user, auth=self.auth, data={
@@ -1783,6 +1816,7 @@ class OrderChangeManager:
                     'addon_to': op.addon_to.pk if op.addon_to else None,
                     'price': op.price.gross,
                     'positionid': pos.positionid,
+                    'membership': pos.used_membership_id,
                     'subevent': op.subevent.pk if op.subevent else None,
                     'seat': op.seat.pk if op.seat else None,
                 })
@@ -1990,6 +2024,50 @@ class OrderChangeManager:
         except InvoiceAddress.DoesNotExist:
             return None
 
+    def _check_and_lock_memberships(self):
+        # To avoid duplicating all the logic around memberships, we simulate an application of all relevant
+        # operations in a non-existing cart and then pass that to our cart checker.
+        fake_cart = []
+        positions_to_fake_cart = {}
+
+        for p in self.order.positions.all():
+            cp = CartPosition(
+                item=p.item,
+                variation=p.variation,
+                attendee_name_parts=p.attendee_name_parts,
+                used_membership=p.used_membership,
+                subevent=p.subevent,
+                seat=p.seat,
+            )
+            fake_cart.append(cp)
+            positions_to_fake_cart[p] = cp
+
+        for op in self._operations:
+            if isinstance(op, self.ItemOperation):
+                positions_to_fake_cart[op.position].item = op.item
+                positions_to_fake_cart[op.position].variation = op.variation
+            elif isinstance(op, self.SubeventOperation):
+                positions_to_fake_cart[op.position].subevent = op.subevent
+            elif isinstance(op, self.SeatOperation):
+                positions_to_fake_cart[op.position].seat = op.seat
+            elif isinstance(op, self.MembershipOperation):
+                positions_to_fake_cart[op.position].used_membership = op.membership
+            elif isinstance(op, self.CancelOperation):
+                fake_cart.remove(positions_to_fake_cart[op.position])
+            elif isinstance(op, self.AddOperation):
+                cp = CartPosition(
+                    item=op.item,
+                    variation=op.variation,
+                    used_membership=op.membership,
+                    subevent=op.subevent,
+                    seat=op.seat,
+                )
+                fake_cart.append(cp)
+        try:
+            validate_memberships_in_order(self.order.customer, fake_cart, self.event, lock=True, ignored_order=self.order)
+        except ValidationError as e:
+            raise OrderError(e.message)
+
     def commit(self, check_quotas=True):
         if self._committed:
             # an order change can only be committed once
@@ -2011,6 +2089,7 @@ class OrderChangeManager:
                     self._check_quotas()
                 self._check_seats()
                 self._check_complete_cancel()
+                self._check_and_lock_memberships()
                 try:
                     self._perform_operations()
                 except TaxRule.SaleNotAllowed:
@@ -2055,12 +2134,12 @@ class OrderChangeManager:
 @app.task(base=ProfiledEventTask, bind=True, max_retries=5, default_retry_delay=1, throws=(OrderError,))
 def perform_order(self, event: Event, payment_provider: str, positions: List[str],
                   email: str=None, locale: str=None, address: int=None, meta_info: dict=None,
-                  sales_channel: str='web', gift_cards: list=None, shown_total=None):
+                  sales_channel: str='web', gift_cards: list=None, shown_total=None, customer=None):
     with language(locale):
         try:
             try:
                 return _perform_order(event, payment_provider, positions, email, locale, address, meta_info,
-                                      sales_channel, gift_cards, shown_total)
+                                      sales_channel, gift_cards, shown_total, customer)
             except LockTimeoutException:
                 self.retry()
         except (MaxRetriesExceededError, LockTimeoutException):
@@ -2321,3 +2400,14 @@ def signal_listener_issue_giftcards(sender: Event, order: Order, **kwargs):
 
     if any_giftcards:
         tickets.invalidate_cache.apply_async(kwargs={'event': sender.pk, 'order': order.pk})
+
+
+@receiver(order_paid, dispatch_uid="pretixbase_order_paid_memberships")
+@receiver(order_changed, dispatch_uid="pretixbase_order_changed_memberships")
+@transaction.atomic()
+def signal_listener_issue_memberships(sender: Event, order: Order, **kwargs):
+    if order.status != Order.STATUS_PAID or not order.customer:
+        return
+    for p in order.positions.all():
+        if p.item.grant_membership_type_id:
+            create_membership(order.customer, p)

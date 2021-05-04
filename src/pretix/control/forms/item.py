@@ -368,6 +368,11 @@ class ItemCreateForm(I18nModelForm):
                 'hidden_if_available',
                 'require_bundling',
                 'checkin_attention',
+                'require_membership',
+                'grant_membership_type',
+                'grant_membership_duration_like_event',
+                'grant_membership_duration_days',
+                'grant_membership_duration_months',
             )
             for f in fields:
                 setattr(self.instance, f, getattr(self.cleaned_data['copy_from'], f))
@@ -399,6 +404,10 @@ class ItemCreateForm(I18nModelForm):
                     'items': [self.instance.pk]
                 })
 
+        if self.cleaned_data.get('copy_from'):
+            self.instance.require_membership_types.set(
+                self.cleaned_data['copy_from'].require_membership_types.all()
+            )
         if self.cleaned_data.get('has_variations'):
             if self.cleaned_data.get('copy_from') and self.cleaned_data.get('copy_from').has_variations:
                 for variation in self.cleaned_data['copy_from'].variations.all():
@@ -523,6 +532,19 @@ class ItemUpdateForm(I18nModelForm):
         )
         self.fields['category'].widget.choices = self.fields['category'].choices
 
+        qs = self.event.organizer.membership_types.all()
+        if qs:
+            self.fields['require_membership_types'].queryset = qs
+            self.fields['grant_membership_type'].queryset = qs
+            self.fields['grant_membership_type'].empty_label = _('No membership granted')
+        else:
+            del self.fields['require_membership']
+            del self.fields['require_membership_types']
+            del self.fields['grant_membership_type']
+            del self.fields['grant_membership_duration_like_event']
+            del self.fields['grant_membership_duration_days']
+            del self.fields['grant_membership_duration_months']
+
     def clean(self):
         d = super().clean()
         if d['issue_giftcard']:
@@ -571,15 +593,26 @@ class ItemUpdateForm(I18nModelForm):
             'show_quota_left',
             'hidden_if_available',
             'issue_giftcard',
+            'require_membership',
+            'require_membership_types',
+            'grant_membership_type',
+            'grant_membership_duration_like_event',
+            'grant_membership_duration_days',
+            'grant_membership_duration_months',
         ]
         field_classes = {
             'available_from': SplitDateTimeField,
             'available_until': SplitDateTimeField,
             'hidden_if_available': SafeModelChoiceField,
+            'grant_membership_type': SafeModelChoiceField,
+            'require_membership_types': SafeModelMultipleChoiceField,
         }
         widgets = {
             'available_from': SplitDateTimePickerWidget(),
             'available_until': SplitDateTimePickerWidget(attrs={'data-date-after': '#id_available_from_0'}),
+            'require_membership_types': forms.CheckboxSelectMultiple(attrs={
+                'class': 'scrolling-multiple-choice'
+            }),
             'generate_tickets': TicketNullBooleanSelect(),
             'show_quota_left': ShowQuotaNullBooleanSelect()
         }
@@ -632,6 +665,13 @@ class ItemVariationForm(I18nModelForm):
         super().__init__(*args, **kwargs)
         change_decimal_field(self.fields['default_price'], self.event.currency)
 
+        qs = self.event.organizer.membership_types.all()
+        if qs:
+            self.fields['require_membership_types'].queryset = qs
+        else:
+            del self.fields['require_membership']
+            del self.fields['require_membership_types']
+
     class Meta:
         model = ItemVariation
         localized_fields = '__all__'
@@ -641,7 +681,14 @@ class ItemVariationForm(I18nModelForm):
             'default_price',
             'original_price',
             'description',
+            'require_membership',
+            'require_membership_types'
         ]
+        widgets = {
+            'require_membership_types': forms.CheckboxSelectMultiple(attrs={
+                'class': 'scrolling-multiple-choice'
+            }),
+        }
 
 
 class ItemAddOnsFormSet(I18nFormSet):

@@ -1,0 +1,88 @@
+{% extends "pretixcontrol/organizers/base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% block title %}
+    {% trans "Membership" %}
+{% endblock %}
+{% block inner %}
+    <h1>
+        {% trans "Membership" %}
+    </h1>
+    <div class="panel panel-primary items">
+        <div class="panel-heading">
+            <h3 class="panel-title">
+                {% trans "Details" %}
+            </h3>
+        </div>
+        <div class="panel-body">
+            <form class="form-horizontal" action="" method="post">
+                {% csrf_token %}
+                {% bootstrap_form form layout="control" %}
+                <div class="form-group">
+                    <div class="col-md-offset-3 col-md-9">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            {% trans "Save" %}
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="panel panel-default items">
+        <div class="panel-heading">
+            <h3 class="panel-title">
+                {% trans "Usages" %}
+            </h3>
+        </div>
+        <table class="panel-body table table-hover">
+            <thead>
+            <tr>
+                <th>{% trans "Order code" %}</th>
+                <th>{% trans "Event" %}</th>
+                <th>{% trans "Date" context "subevent" %}</th>
+                <th>{% trans "Product" %}</th>
+                <th>{% trans "Order date" %}</th>
+                <th class="text-right">{% trans "Status" %}</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for op in usages %}
+                <tr>
+                    <td>
+                        <strong>
+                            <a href="{% url "control:event.order" event=op.order.event.slug organizer=membership.customer.organizer.slug code=op.order.code %}">
+                                {{ op.order.code }}</a>-{{ op.positionid }}
+                        </strong>
+                        {% if op.order.testmode %}
+                            <span class="label label-warning">{% trans "TEST MODE" %}</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {{ op.order.event }}
+                    </td>
+                    <td>
+                        {{ op.subevent|default:"" }}
+                    </td>
+                    <td>
+                        {{ op.item }}
+                        {% if op.variation %}– {{ op.variation }}{% endif %}
+                    </td>
+                    <td>
+                        {{ op.order.datetime|date:"SHORT_DATETIME_FORMAT" }}
+                    </td>
+                    <td class="text-right flip">
+                        {% if op.canceled %}
+                            <span class="label label-danger">
+                                <span class="fa fa-times"></span>
+                                {% trans "Canceled" %}
+                            </span>
+                        {% else %}
+                            {% include "pretixcontrol/orders/fragment_order_status.html" with order=op.order %}
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

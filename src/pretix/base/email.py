@@ -71,8 +71,9 @@ class BaseHTMLMailRenderer:
     This is the base class for all HTML e-mail renderers.
     """
 
-    def __init__(self, event: Event):
+    def __init__(self, event: Event, organizer=None):
         self.event = event
+        self.organizer = organizer
 
     def __str__(self):
         return self.identifier
@@ -140,6 +141,9 @@ class TemplateBasedMailRenderer(BaseHTMLMailRenderer):
             'color': settings.PRETIX_PRIMARY_COLOR,
             'rtl': get_language() in settings.LANGUAGES_RTL or get_language().split('-')[0] in settings.LANGUAGES_RTL,
         }
+        if self.organizer:
+            htmlctx['organizer'] = self.organizer
+
         if self.event:
             htmlctx['event'] = self.event
             htmlctx['color'] = self.event.settings.primary_color

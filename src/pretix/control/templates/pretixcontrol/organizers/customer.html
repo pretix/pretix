@@ -1,0 +1,231 @@
+{% extends "pretixcontrol/organizers/base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% load money %}
+{% block title %}
+    {% blocktrans trimmed with id=customer.identifier %}
+        Customer #{{ id }}
+    {% endblocktrans %}
+{% endblock %}
+{% block inner %}
+    <h1>
+        {% blocktrans trimmed with id=customer.identifier %}
+            Customer #{{ id }}
+        {% endblocktrans %}
+    </h1>
+    <div class="row">
+        <div class="col-md-10 col-xs-12">
+            <div class="panel panel-primary items">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        {% trans "Details" %}
+                    </h3>
+                </div>
+                <div class="panel-body">
+                    <dl class="dl-horizontal">
+                        <dt>{% trans "Customer ID" %}</dt>
+                        <dd>#{{ customer.identifier }}</dd>
+                        <dt>{% trans "Status" %}</dt>
+                        <dd>
+                            {% if not customer.is_active %}
+                                {% trans "disabled" %}
+                                {% elif not customer.is_verified %}
+                                {% trans "not yet activated" %}
+                            {% else %}
+                                {% trans "active" %}
+                            {% endif %}
+                        </dd>
+                        <dt>{% trans "E-mail" %}</dt>
+                        <dd>{{ customer.email|default_if_none:"" }}</dd>
+                        <dt>{% trans "Name" %}</dt>
+                        <dd>{{ customer.name }}</dd>
+                        <dt>{% trans "Locale" %}</dt>
+                        <dd>{{ display_locale }}</dd>
+                        <dt>{% trans "Registration date" %}</dt>
+                        <dd>{{ customer.date_joined|date:"SHORT_DATETIME_FORMAT" }}</dd>
+                        <dt>{% trans "Last login" %}</dt>
+                        <dd>{% if customer.last_login %}{{ customer.last_login|date:"SHORT_DATETIME_FORMAT" }}{% else %}
+                            –{% endif %}</dd>
+                    </dl>
+                    <div class="text-right">
+                        <a href="{% url "control:organizer.customer.edit" organizer=request.organizer.slug customer=customer.identifier %}"
+                                class="btn btn-default">
+                            <i class="fa fa-edit"></i> {% trans "Edit" %}
+                        </a>
+                        <a href="{% url "control:organizer.customer.anonymize" organizer=request.organizer.slug customer=customer.identifier %}"
+                                class="btn btn-danger">
+                            <i class="fa fa-trash"></i> {% trans "Anonymize" %}
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="panel panel-default items">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        {% trans "Memberships" %}
+                    </h3>
+                </div>
+                <table class="panel-body table table-hover">
+                    <thead>
+                    <tr>
+                        <th>{% trans "Membership type" %}</th>
+                        <th>{% trans "Valid from" %}</th>
+                        <th>{% trans "Valid until" %}</th>
+                        <th>{% trans "Order" %}</th>
+                        <th>{% trans "Attendee name" %}</th>
+                        <th>{% trans "Usages" %}</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for m in memberships %}
+                        <tr>
+                            <td>
+                                {{ m.membership_type.name }}
+                            </td>
+                            <td>
+                                {{ m.date_start|date:"SHORT_DATETIME_FORMAT" }}
+                            </td>
+                            <td>
+                                {{ m.date_end|date:"SHORT_DATETIME_FORMAT" }}
+                            </td>
+                            <td>
+                                {% if m.granted_in %}
+                                    <a href="{% url "control:event.order" event=m.granted_in.order.event.slug organizer=customer.organizer.slug code=m.granted_in.order.code %}">
+                                        {{ m.granted_in.order.code }}-{{ m.granted_in.positionid }}
+                                    </a>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {{ m.attendee_name }}
+                            </td>
+                            <td>
+                                <div class="quotabox">
+                                    <div class="progress">
+                                        <div class="progress-bar progress-bar-success progress-bar-{{ m.percent }}">
+                                        </div>
+                                    </div>
+                                    <div class="numbers">
+                                        {{ m.usages }} /
+                                        {{ m.membership_type.max_usages|default_if_none:"∞" }}
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="text-right flip">
+                                <a href="{% url "control:organizer.customer.membership.edit" organizer=request.organizer.slug customer=customer.identifier id=m.pk %}"
+                                        data-toggle="tooltip"
+                                        title="{% trans "Edit" %}"
+                                        class="btn btn-default">
+                                    <i class="fa fa-edit"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                <tfoot>
+                <tr>
+                    <td colspan="7">
+                        <a href="{% url "control:organizer.customer.membership.add" organizer=request.organizer.slug customer=customer.identifier %}"
+                                class="btn btn-default">
+                            <i class="fa fa-plus"></i>
+                            {% trans "Add membership" %}
+                        </a>
+                    </td>
+                </tr>
+                </tfoot>
+                </table>
+            </div>
+            <div class="panel panel-default items">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        {% trans "Orders" %}
+                    </h3>
+                </div>
+                <table class="panel-body table">
+                    <thead>
+                    <tr>
+                        <th>{% trans "Order code" %}</th>
+                        <th>{% trans "Event" %}</th>
+                        <th>{% trans "Order date" %}</th>
+                        <th class="text-right">{% trans "Order paid / total" %}</th>
+                        <th class="text-right">{% trans "Positions" %}</th>
+                        <th class="text-right">{% trans "Status" %}</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for o in orders %}
+                        <tr>
+                            <td>
+                                <strong>
+                                    <a href="{% url "control:event.order" event=o.event.slug organizer=customer.organizer.slug code=o.code %}">
+                                        {{ o.code }}
+                                    </a>
+                                </strong>
+                                {% if o.testmode %}
+                                    <span class="label label-warning">{% trans "TEST MODE" %}</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {{ o.event }}
+                            </td>
+                            <td>
+                            <span class="fa fa-{{ o.sales_channel_obj.icon }} text-muted"
+                                  data-toggle="tooltip" title="{% trans o.sales_channel_obj.verbose_name %}"></span>
+                                {{ o.datetime|date:"SHORT_DATETIME_FORMAT" }}
+                                {% if o.customer_id != customer.pk %}
+                                    <span class="fa fa-link text-muted"
+                                            data-toggle="tooltip"
+                                            title="{% trans "Matched to the account based on the email address." %}"
+                                    ></span>
+                                {% endif %}
+                            </td>
+                            <td class="text-right flip">
+                                {% if o.has_cancellation_request %}
+                                    <span class="label label-warning">{% trans "CANCELLATION REQUESTED" %}</span>
+                                {% endif %}
+                                {% if o.has_external_refund or o.has_pending_refund %}
+                                    <span class="label label-danger">{% trans "REFUND PENDING" %}</span>
+                                    {% elif o.has_pending_refund %}
+                                    <span class="label label-warning">{% trans "REFUND PENDING" %}</span>
+                                {% endif %}
+                                {% if o.is_overpaid %}
+                                    <span class="label label-warning">{% trans "OVERPAID" %}</span>
+                                    {% elif o.is_underpaid %}
+                                    <span class="label label-danger">{% trans "UNDERPAID" %}</span>
+                                    {% elif o.is_pending_with_full_payment %}
+                                    <span class="label label-danger">{% trans "FULLY PAID" %}</span>
+                                {% endif %}
+                                {% if o.computed_payment_refund_sum == o.total or o.computed_payment_refund_sum == 0 %}
+                                    <span class="text-muted">
+                                {% endif %}
+                                {{ o.computed_payment_refund_sum|money:o.event.currency }} /
+                                {% if o.computed_payment_refund_sum == o.total or o.computed_payment_refund_sum == 0 %}
+                                    </span>
+                                {% endif %}
+                                {{ o.total|money:o.event.currency }}
+                                {% if o.status == "c" and o.icnt %}
+                                    <br>
+                                    <span class="label label-warning">{% trans "INVOICE NOT CANCELED" %}</span>
+                                {% endif %}
+                            </td>
+                            <td class="text-right flip">{{ o.pcnt|default_if_none:"0" }}</td>
+                            <td class="text-right flip">{% include "pretixcontrol/orders/fragment_order_status.html" with order=o %}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+                {% include "pretixcontrol/pagination.html" %}
+            </div>
+        </div>
+        <div class="col-md-2 col-xs-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        {% trans "Customer history" %}
+                    </h3>
+                </div>
+                {% include "pretixcontrol/includes/logs.html" with obj=customer %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

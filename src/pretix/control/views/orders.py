@@ -336,7 +336,7 @@ class OrderDetail(OrderView):
         cartpos = queryset.order_by(
             'item', 'variation'
         ).select_related(
-            'item', 'variation', 'addon_to', 'tax_rule'
+            'item', 'variation', 'addon_to', 'tax_rule', 'used_membership', 'used_membership__membership_type'
         ).prefetch_related(
             'item__questions', 'issued_gift_cards',
             Prefetch('answers', queryset=QuestionAnswer.objects.prefetch_related('options').select_related('question')),
@@ -1568,7 +1568,10 @@ class OrderChange(OrderView):
 
     @cached_property
     def positions(self):
-        positions = list(self.order.positions.select_related('item', 'item__tax_rule'))
+        positions = list(self.order.positions.select_related(
+            'item', 'item__tax_rule', 'used_membership', 'used_membership__membership_type', 'tax_rule',
+            'seat', 'subevent',
+        ))
         for p in positions:
             p.form = OrderPositionChangeForm(prefix='op-{}'.format(p.pk), instance=p, items=self.items,
                                              initial={'seat': p.seat.seat_guid if p.seat else None},
@@ -1616,7 +1619,8 @@ class OrderChange(OrderView):
                                      f.cleaned_data['price'],
                                      f.cleaned_data.get('addon_to'),
                                      f.cleaned_data.get('subevent'),
-                                     f.cleaned_data.get('seat'))
+                                     f.cleaned_data.get('seat'),
+                                     f.cleaned_data.get('used_membership'))
                 except OrderError as e:
                     f.custom_error = str(e)
                     return False
@@ -1684,6 +1688,12 @@ class OrderChange(OrderView):
 
                 if p.form.cleaned_data['price'] is not None and p.form.cleaned_data['price'] != p.price:
                     ocm.change_price(p, p.form.cleaned_data['price'])
+
+                if p.form.cleaned_data['used_membership'] is not None and p.form.cleaned_data['used_membership'] != (p.used_membership or 'CLEAR'):
+                    if p.form.cleaned_data['used_membership'] == 'CLEAR':
+                        ocm.change_membership(p, None)
+                    else:
+                        ocm.change_membership(p, p.form.cleaned_data['used_membership'])
 
                 if p.form.cleaned_data['tax_rule'] and p.form.cleaned_data['tax_rule'] != p.tax_rule:
                     ocm.change_tax_rule(p, p.form.cleaned_data['tax_rule'])
@@ -1792,12 +1802,18 @@ class OrderContactChange(OrderView):
     def form(self):
         return OrderContactForm(
             instance=self.order,
-            data=self.request.POST if self.request.method == "POST" else None
+            data=self.request.POST if self.request.method == "POST" else None,
+            customers=self.request.organizer.settings.customer_accounts and (
+                self.request.user.has_organizer_permission(
+                    self.request.organizer, 'can_manage_customers', request=self.request
+                )
+            )
         )
 
     def post(self, *args, **kwargs):
         old_email = self.order.email
         old_phone = self.order.phone
+        old_customer = self.order.customer
         changed = False
         if self.form.is_valid():
             new_email = self.form.cleaned_data['email']
@@ -1820,6 +1836,18 @@ class OrderContactChange(OrderView):
                     data={
                         'old_phone': old_phone,
                         'new_phone': self.form.cleaned_data['phone'],
+                    },
+                    user=self.request.user,
+                )
+
+            new_customer = self.form.cleaned_data.get('customer')
+            if new_customer != old_customer:
+                changed = True
+                self.order.log_action(
+                    'pretix.event.order.customer.changed',
+                    data={
+                        'old_customer': old_customer,
+                        'new_customer': self.form.cleaned_data['customer'],
                     },
                     user=self.request.user,
                 )

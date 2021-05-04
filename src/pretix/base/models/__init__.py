@@ -23,6 +23,7 @@ from ..settings import GlobalSettingsObject_SettingsStore
 from .auth import U2FDevice, User, WebAuthnDevice
 from .base import CachedFile, LoggedModel, cachedfile_name
 from .checkin import Checkin, CheckinList
+from .customers import Customer
 from .devices import Device, Gate
 from .event import (
     Event, Event_SettingsStore, EventLock, EventMetaProperty, EventMetaValue,
@@ -36,6 +37,7 @@ from .items import (
     SubEventItemVariation, itempicture_upload_to,
 )
 from .log import LogEntry
+from .memberships import Membership, MembershipType
 from .notifications import NotificationSetting
 from .orders import (
     AbstractPosition, CachedCombinedTicket, CachedTicket, CartPosition,

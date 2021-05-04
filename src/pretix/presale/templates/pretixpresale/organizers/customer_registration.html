@@ -1,0 +1,30 @@
+{% extends "pretixpresale/organizers/base.html" %}
+{% load i18n %}
+{% load eventurl %}
+{% load urlreplace %}
+{% load bootstrap3 %}
+{% block title %}{% trans "Registration" %}{% endblock %}
+{% block content %}
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+            <h2>
+                {% blocktrans trimmed with org=request.organizer.name %}
+                    Create a new account at {{ org }}
+                {% endblocktrans %}
+            </h2>
+            <form action="" method="post">
+                {% csrf_token %}
+                {% bootstrap_form form %}
+                <div class="form-group buttons">
+                    <button type="submit" class="btn btn-primary btn-lg btn-block">
+                        {% trans "Create account" %}
+                    </button>
+                </div>
+                <a class="btn btn-link btn-block" href="{% eventurl request.organizer "presale:organizer.customer.login" %}">
+                    {% trans "Log in to an existing account" %}
+                </a>
+            </form>
+        </div>
+    </div>
+    <p>&nbsp;</p>
+{% endblock %}

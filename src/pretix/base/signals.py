@@ -324,7 +324,7 @@ The ``sender`` keyword argument will contain an organizer.
 
 validate_order = EventPluginSignal(
     providing_args=["payment_provider", "positions", "email", "locale", "invoice_address",
-                    "meta_info"]
+                    "meta_info", "customer"]
 )
 """
 This signal is sent out when the user tries to confirm the order, before we actually create
@@ -633,7 +633,7 @@ well, otherwise it will be ``None``.
 """
 
 global_email_filter = GlobalSignal(
-    providing_args=['message', 'order', 'user']
+    providing_args=['message', 'order', 'user', 'customer', 'organizer']
 )
 """
 This signal allows you to implement a middleware-style filter on all outgoing emails. You are expected to

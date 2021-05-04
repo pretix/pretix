@@ -47,6 +47,7 @@ import dateutil
 import pycountry
 import pytz
 from django.conf import settings
+from django.core.exceptions import ValidationError
 from django.db import models, transaction
 from django.db.models import (
     Case, Exists, F, Max, OuterRef, Q, Subquery, Sum, Value, When,
@@ -73,7 +74,7 @@ from pretix.base.banlist import banned
 from pretix.base.decimal import round_decimal
 from pretix.base.email import get_email_context
 from pretix.base.i18n import language
-from pretix.base.models import User
+from pretix.base.models import Customer, User
 from pretix.base.reldate import RelativeDateWrapper
 from pretix.base.services.locking import NoLockManager
 from pretix.base.settings import PERSON_NAME_SCHEMES
@@ -119,6 +120,8 @@ class Order(LockModel, LoggedModel):
 
     :param event: The event this order belongs to
     :type event: Event
+    :param customer: The customer this order belongs to
+    :type customer: Customer
     :param email: The email of the person who ordered this
     :type email: str
     :param phone: The phone number of the person who ordered this
@@ -176,6 +179,13 @@ class Order(LockModel, LoggedModel):
         verbose_name=_("Event"),
         related_name="orders",
         on_delete=models.CASCADE
+    )
+    customer = models.ForeignKey(
+        Customer,
+        verbose_name=_("Customer"),
+        related_name="orders",
+        null=True, blank=True,
+        on_delete=models.SET_NULL
     )
     email = models.EmailField(
         null=True, blank=True,
@@ -822,7 +832,11 @@ class Order(LockModel, LoggedModel):
         return self._is_still_available(count_waitinglist=count_waitinglist, force=force)
 
     def _is_still_available(self, now_dt: datetime=None, count_waitinglist=True, force=False,
-                            check_voucher_usage=False) -> Union[bool, str]:
+                            check_voucher_usage=False, check_memberships=False) -> Union[bool, str]:
+        from pretix.base.services.memberships import (
+            validate_memberships_in_order,
+        )
+
         error_messages = {
             'unavailable': _('The ordered product "{item}" is no longer available.'),
             'seat_unavailable': _('The seat "{seat}" is no longer available.'),
@@ -830,11 +844,17 @@ class Order(LockModel, LoggedModel):
             'voucher_usages': _('The voucher "{voucher}" has been used in the meantime.'),
         }
         now_dt = now_dt or now()
-        positions = self.positions.all().select_related('item', 'variation', 'seat', 'voucher')
+        positions = list(self.positions.all().select_related('item', 'variation', 'seat', 'voucher'))
         quota_cache = {}
         v_budget = {}
         v_usage = Counter()
         try:
+            if check_memberships:
+                try:
+                    validate_memberships_in_order(self.customer, positions, self.event, lock=False)
+                except ValidationError as e:
+                    raise Quota.QuotaExceededException(e.message)
+
             for i, op in enumerate(positions):
                 if op.seat:
                     if not op.seat.is_available(ignore_orderpos=op):
@@ -1180,6 +1200,9 @@ class AbstractPosition(models.Model):
     )
     voucher = models.ForeignKey(
         'Voucher', null=True, blank=True, on_delete=models.PROTECT
+    )
+    used_membership = models.ForeignKey(
+        'Membership', null=True, blank=True, on_delete=models.PROTECT
     )
     addon_to = models.ForeignKey(
         'self', null=True, blank=True, on_delete=models.PROTECT, related_name='addons'

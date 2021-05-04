@@ -283,7 +283,13 @@ TEST_ITEM_RES = {
     "original_price": None,
     "meta_data": {
         "day": "Tuesday"
-    }
+    },
+    "require_membership": False,
+    "require_membership_types": [],
+    "grant_membership_type": None,
+    "grant_membership_duration_like_event": True,
+    "grant_membership_duration_days": 0,
+    "grant_membership_duration_months": 0,
 }
 
 

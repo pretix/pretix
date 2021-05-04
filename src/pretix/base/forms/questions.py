@@ -234,8 +234,8 @@ class NamePartsFormField(forms.MultiValueField):
         if self.one_required and (not value or not any(v for v in value.values())):
             raise forms.ValidationError(self.error_messages['required'], code='required')
         if self.one_required:
-            for k, v in value.items():
-                if k in REQUIRED_NAME_PARTS and not v:
+            for k, label, size in self.scheme['fields']:
+                if k in REQUIRED_NAME_PARTS and not value.get(k):
                     raise forms.ValidationError(self.error_messages['required'], code='required')
         if self.require_all_fields and not all(v for v in value):
             raise forms.ValidationError(self.error_messages['incomplete'], code='required')

@@ -107,6 +107,17 @@ class LazyI18nStringList(UserList):
 
 
 DEFAULTS = {
+    'customer_accounts': {
+        'default': 'False',
+        'type': bool,
+        'form_class': forms.BooleanField,
+        'serializer_class': serializers.BooleanField,
+        'form_kwargs': dict(
+            label=_("Allow customers to create accounts"),
+            help_text=_("This will allow customers to sign up for an account on your ticket shop. This is a prerequesite for some "
+                        "advanced features like memberships.")
+        )
+    },
     'max_items_per_order': {
         'default': '10',
         'type': int,
@@ -1753,13 +1764,13 @@ Your {event} team"""))
         'type': LazyI18nString,
         'default': LazyI18nString.from_gettext(gettext_noop("""Hello {attendee_name},
 
-you are registered for {event}.
+    you are registered for {event}.
 
-If you did not do so already, you can download your ticket here:
-{url}
+    If you did not do so already, you can download your ticket here:
+    {url}
 
-Best regards,
-Your {event} team"""))
+    Best regards,
+    Your {event} team"""))
     },
     'mail_text_download_reminder': {
         'type': LazyI18nString,
@@ -1772,6 +1783,60 @@ If you did not do so already, you can download your ticket here:
 
 Best regards,
 Your {event} team"""))
+    },
+    'mail_text_customer_registration': {
+        'type': LazyI18nString,
+        'default': LazyI18nString.from_gettext(gettext_noop("""Hello {name},
+
+thank you for signing up for an account at {organizer}!
+
+To activate your account and set a password, please click here:
+
+{url}
+
+This link is valid for one day.
+
+If you did not sign up yourself, please ignore this email.
+
+Best regards,
+
+Your {organizer} team"""))
+    },
+    'mail_text_customer_email_change': {
+        'type': LazyI18nString,
+        'default': LazyI18nString.from_gettext(gettext_noop("""Hello {name},
+
+you requested to change the email address of your account at {organizer}!
+
+To confirm the change, please click here:
+
+{url}
+
+This link is valid for one day.
+
+If you did not request this, please ignore this email.
+
+Best regards,
+
+Your {organizer} team"""))
+    },
+    'mail_text_customer_reset': {
+        'type': LazyI18nString,
+        'default': LazyI18nString.from_gettext(gettext_noop("""Hello {name},
+
+you requested a new password for your account at {organizer}!
+
+To set a new password, please click here:
+
+{url}
+
+This link is valid for one day.
+
+If you did not request a new password, please ignore this email.
+
+Best regards,
+
+Your {organizer} team"""))
     },
     'smtp_use_custom': {
         'default': 'False',

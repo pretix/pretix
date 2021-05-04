@@ -100,10 +100,12 @@ def test_plugin_in_order(event, mocker):
 
     flow = with_mocked_step(mocker, MockingStep, event)
     assert isinstance(flow[0], checkoutflow.AddOnsStep)
-    assert isinstance(flow[1], checkoutflow.QuestionsStep)
-    assert isinstance(flow[2], MockingStep)
-    assert isinstance(flow[3], checkoutflow.PaymentStep)
-    assert isinstance(flow[4], checkoutflow.ConfirmStep)
+    assert isinstance(flow[1], checkoutflow.CustomerStep)
+    assert isinstance(flow[2], checkoutflow.MembershipStep)
+    assert isinstance(flow[3], checkoutflow.QuestionsStep)
+    assert isinstance(flow[4], MockingStep)
+    assert isinstance(flow[5], checkoutflow.PaymentStep)
+    assert isinstance(flow[6], checkoutflow.ConfirmStep)
 
 
 @pytest.mark.django_db
@@ -117,9 +119,9 @@ def test_step_ignored(event, mocker, req_with_session):
 
     flow = with_mocked_step(mocker, MockingStep, event)
     req_with_session.event = event
-    assert flow[1].get_next_applicable(req_with_session) is flow[4]
+    assert flow[3].get_next_applicable(req_with_session) is flow[6]
     # flow[3] is also skipped because no payment is required if there is no cart
-    assert flow[1] is flow[4].get_prev_applicable(req_with_session)
+    assert flow[3] is flow[6].get_prev_applicable(req_with_session)
 
 
 @pytest.mark.django_db

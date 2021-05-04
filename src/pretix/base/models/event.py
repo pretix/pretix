@@ -670,6 +670,7 @@ class Event(EventMixin, LoggedModel):
         variation_map = {}
         for i in Item.objects.filter(event=other).prefetch_related('variations'):
             vars = list(i.variations.all())
+            require_membership_types = list(i.require_membership_types.all())
             item_map[i.pk] = i
             i.pk = None
             i.event = self
@@ -679,8 +680,16 @@ class Event(EventMixin, LoggedModel):
                 i.category = category_map[i.category_id]
             if i.tax_rule_id:
                 i.tax_rule = tax_map[i.tax_rule_id]
+
+            if i.grant_membership_type and other.organizer_id != self.organizer_id:
+                i.grant_membership_type = None
+
             i.save()
             i.log_action('pretix.object.cloned')
+
+            if require_membership_types and other.organizer_id == self.organizer_id:
+                i.require_membership_types.set(require_membership_types)
+
             for v in vars:
                 variation_map[v.pk] = v
                 v.pk = None

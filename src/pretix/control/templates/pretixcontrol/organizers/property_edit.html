@@ -2,7 +2,7 @@
 {% load i18n %}
 {% load bootstrap3 %}
 {% block inner %}
-    {% if gate %}
+    {% if property %}
         <h1>{% trans "Property:" %} {{ property.name }}</h1>
     {% else %}
         <h1>{% trans "Create a new property" %}</h1>

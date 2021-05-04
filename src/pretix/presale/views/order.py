@@ -731,6 +731,14 @@ class OrderModify(EventViewMixin, OrderDetailMixin, OrderQuestionsViewMixin, Tem
             for k in override:
                 # We don't want initial values to be modified, they should come from the order directly
                 override[k].pop('initial', None)
+
+        if order_position.used_membership and not order_position.used_membership.membership_type.transferable:
+            override_sets.append({
+                'attendee_name_parts': {
+                    'disabled': True
+                }
+            })
+
         return override_sets
 
     def post(self, request, *args, **kwargs):

@@ -78,6 +78,10 @@ def _display_order_changed(event: Event, logentry: LogEntry):
             old_price=money_filter(Decimal(data['old_price']), event.currency),
             new_price=money_filter(Decimal(data['new_price']), event.currency),
         )
+    elif logentry.action_type == 'pretix.event.order.changed.membership':
+        return text + ' ' + _('Position #{posid}: Used membership changed.').format(
+            posid=data.get('positionid', '?'),
+        )
     elif logentry.action_type == 'pretix.event.order.changed.seat':
         return text + ' ' + _('Position #{posid}: Seat "{old_seat}" changed '
                               'to "{new_seat}".').format(
@@ -314,6 +318,17 @@ def pretixcontrol_logentry_display(sender: Event, logentry: LogEntry, **kwargs):
         'pretix.giftcards.acceptance.removed': _('Gift card acceptance for another organizer has been removed.'),
         'pretix.webhook.created': _('The webhook has been created.'),
         'pretix.webhook.changed': _('The webhook has been changed.'),
+        'pretix.membershiptype.created': _('The membership type has been created.'),
+        'pretix.membershiptype.changed': _('The membership type has been changed.'),
+        'pretix.membershiptype.deleted': _('The membership type has been deleted.'),
+        'pretix.customer.created': _('The account has been created.'),
+        'pretix.customer.changed': _('The account has been changed.'),
+        'pretix.customer.membership.created': _('A membership for this account has been added.'),
+        'pretix.customer.membership.changed': _('A membership of this account has been changed.'),
+        'pretix.customer.anonymized': _('The account has been disabled and anonymized.'),
+        'pretix.customer.password.resetrequested': _('A new password has been requested.'),
+        'pretix.customer.password.set': _('A new password has been set.'),
+        'pretix.email.error': _('Sending of an email has failed.'),
         'pretix.event.comment': _('The event\'s internal comment has been updated.'),
         'pretix.event.canceled': _('The event has been canceled.'),
         'pretix.event.deleted': _('An event has been deleted.'),
@@ -338,6 +353,7 @@ def pretixcontrol_logentry_display(sender: Event, logentry: LogEntry, **kwargs):
                                                   'in the email for the first time).'),
         'pretix.event.order.phone.changed': _('The phone number has been changed from "{old_phone}" '
                                               'to "{new_phone}".'),
+        'pretix.event.order.customer.changed': _('The customer account has been changed.'),
         'pretix.event.order.locale.changed': _('The order locale has been changed.'),
         'pretix.event.order.invoice.generated': _('The invoice has been generated.'),
         'pretix.event.order.invoice.regenerated': _('The invoice has been regenerated.'),

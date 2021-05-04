@@ -333,25 +333,27 @@ input[type=number].short {
   }
 }
 
-.propagated-settings-box {
-  position: relative;
-
-  .propagated-settings-overlay {
-    background: rgba(255, 255, 255, 0.7);
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    text-align: center;
+.propagated-settings-box.locked {
+  .propagated-settings-form {
+    opacity: 0.7;
   }
-
-  .propagated-settings-form.blurred {
-    -webkit-filter: blur(2px);
-    -moz-filter: blur(2px);
-    -ms-filter: blur(2px);
-    -o-filter: blur(2px);
-    filter: blur(2px);
+  .panel-body.help-text {
+    border-bottom: 1px solid $panel-default-heading-bg;
+  }
+}
+.propagated-settings-box.unlocked {
+  border: 0;
+  transition: border-width 0.5s linear;
+  .panel-heading, .panel-body.help-text {
+    height: 0;
+    padding: 0;
+    border: 0;
+    overflow: hidden;
+    transition: height 0.5s linear, padding 0.5s linear, border-width 0.5s linear;
+  }
+  .panel-body {
+    padding: 0;
+    transition: padding 0.5s linear;
   }
 }
 @media (max-width: $screen-sm-max) {

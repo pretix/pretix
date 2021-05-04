@@ -50,6 +50,13 @@
                         <legend>{% trans "Localization" %}</legend>
                         {% bootstrap_field sform.locales layout="control" %}
                         {% bootstrap_field sform.region layout="control" %}
+                        {% bootstrap_field sform.timezone layout="control" %}
+                    </fieldset>
+                    <fieldset>
+                        <legend>{% trans "Customer accounts" %}</legend>
+                        {% bootstrap_field sform.customer_accounts layout="control" %}
+                        {% bootstrap_field sform.name_scheme layout="control" %}
+                        {% bootstrap_field sform.name_scheme_titles layout="control" %}
                     </fieldset>
                     <fieldset>
                         <legend>{% trans "Shop design" %}</legend>

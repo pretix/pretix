@@ -51,7 +51,9 @@ from pretix.base.models import (
     ItemVariation, Order, Organizer, User, Voucher,
 )
 from pretix.control.forms.event import EventWizardCopyForm
-from pretix.control.permissions import event_permission_required
+from pretix.control.permissions import (
+    event_permission_required, organizer_permission_required,
+)
 from pretix.helpers.daterange import daterange
 from pretix.helpers.i18n import i18ncomp
 
@@ -161,6 +163,36 @@ def event_list(request):
     doc = {
         'results': [
             serialize_event(e) for e in qs.select_related('organizer')[offset:offset + pagesize]
+        ],
+        'pagination': {
+            "more": total >= (offset + pagesize)
+        }
+    }
+    return JsonResponse(doc)
+
+
+@organizer_permission_required("can_manage_customers")
+def customer_select2(request, **kwargs):
+    query = request.GET.get('query', '')
+    try:
+        page = int(request.GET.get('page', '1'))
+    except ValueError:
+        page = 1
+
+    qs = request.organizer.customers.filter(
+        Q(email__icontains=query) | Q(name_cached__icontains=query) | Q(identifier__istartswith=query)
+    ).order_by('name_cached')
+
+    total = qs.count()
+    pagesize = 20
+    offset = (page - 1) * pagesize
+    doc = {
+        'results': [
+            {
+                'id': e.pk,
+                'text': str(e),
+            }
+            for e in qs[offset:offset + pagesize]
         ],
         'pagination': {
             "more": total >= (offset + pagesize)

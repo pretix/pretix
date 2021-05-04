@@ -35,6 +35,8 @@
 import string
 from datetime import date, datetime, time
 
+import pytz
+from django.core.mail import get_connection
 from django.core.validators import MinLengthValidator, RegexValidator
 from django.db import models
 from django.db.models import Exists, OuterRef, Q
@@ -123,6 +125,10 @@ class Organizer(LoggedModel):
 
         return ObjectRelatedCache(self)
 
+    @property
+    def timezone(self):
+        return pytz.timezone(self.settings.timezone)
+
     @cached_property
     def all_logentries_link(self):
         return reverse(
@@ -173,6 +179,24 @@ class Organizer(LoggedModel):
             e.delete()
         self.teams.all().delete()
 
+    def get_mail_backend(self, timeout=None, force_custom=False):
+        """
+        Returns an email server connection, either by using the system-wide connection
+        or by returning a custom one based on the organizer's settings.
+        """
+        from pretix.base.email import CustomSMTPBackend
+
+        if self.settings.smtp_use_custom or force_custom:
+            return CustomSMTPBackend(host=self.settings.smtp_host,
+                                     port=self.settings.smtp_port,
+                                     username=self.settings.smtp_username,
+                                     password=self.settings.smtp_password,
+                                     use_tls=self.settings.smtp_use_tls,
+                                     use_ssl=self.settings.smtp_use_ssl,
+                                     fail_silently=False, timeout=timeout)
+        else:
+            return get_connection(fail_silently=False)
+
 
 def generate_invite_token():
     return get_random_string(length=32, allowed_chars=string.ascii_lowercase + string.digits)
@@ -198,6 +222,8 @@ class Team(LoggedModel):
     :type can_create_events: bool
     :param can_change_teams: If ``True``, the members can change the teams of this organizer account.
     :type can_change_teams: bool
+    :param can_manage_customers: If ``True``, the members can view and change organizer-level customer accounts.
+    :type can_manage_customers: bool
     :param can_change_organizer_settings: If ``True``, the members can change the settings of this organizer account.
     :type can_change_organizer_settings: bool
     :param can_change_event_settings: If ``True``, the members can change the settings of the associated events.
@@ -235,11 +261,14 @@ class Team(LoggedModel):
         help_text=_('Someone with this setting can get access to most data of all of your events, i.e. via privacy '
                     'reports, so be careful who you add to this team!')
     )
+    can_manage_customers = models.BooleanField(
+        default=False,
+        verbose_name=_("Can manage customer accounts")
+    )
     can_manage_gift_cards = models.BooleanField(
         default=False,
         verbose_name=_("Can manage gift cards")
     )
-
     can_change_event_settings = models.BooleanField(
         default=False,
         verbose_name=_("Can change event settings")

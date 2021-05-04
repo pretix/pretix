@@ -65,7 +65,7 @@ def env():
     )
     event.settings.set('ticketoutput_testdummy__enabled', True)
     user = User.objects.create_user('dummy@dummy.dummy', 'dummy')
-    t = Team.objects.create(organizer=o, can_view_orders=True, can_change_orders=True)
+    t = Team.objects.create(organizer=o, can_view_orders=True, can_change_orders=True, can_manage_customers=True)
     t.members.add(user)
     t.limit_events.add(event)
     o = Order.objects.create(
@@ -206,6 +206,22 @@ def test_order_set_contact(client, env):
     with scopes_disabled():
         o = Order.objects.get(id=env[2].id)
     assert o.email == 'admin@rami.io'
+
+
+@pytest.mark.django_db
+def test_order_set_customer(client, env):
+    with scopes_disabled():
+        org = env[0].organizer
+        c = org.customers.create(email='foo@example.org')
+        org.settings.customer_accounts = True
+    client.login(email='dummy@dummy.dummy', password='dummy')
+    client.post('/control/event/dummy/dummy/orders/FOO/contact', {
+        'email': 'admin@rami.io',
+        'customer': c.pk
+    }, follow=True)
+    env[2].refresh_from_db()
+    assert env[2].email == 'admin@rami.io'
+    assert env[2].customer == c
 
 
 @pytest.mark.django_db
@@ -1331,6 +1347,39 @@ class OrderChangeTests(SoupTest):
         self.order.refresh_from_db()
         assert self.op1.subevent == se2
         assert self.op2.subevent == se1
+
+    def test_change_membership_success(self):
+        self.event.organizer.settings.customer_accounts = True
+        with scopes_disabled():
+            mtype = self.event.organizer.membership_types.create(name='Week pass', transferable=True, allow_parallel_usage=True)
+            self.ticket.require_membership = True
+            self.ticket.require_membership_types.add(mtype)
+            self.ticket.admission = True
+            self.ticket.save()
+            customer = self.event.organizer.customers.create(email='john@example.org', is_verified=True)
+            self.order.customer = customer
+            self.order.save()
+            m_correct1 = customer.memberships.create(
+                membership_type=mtype,
+                date_start=self.event.date_from - timedelta(days=1),
+                date_end=self.event.date_from + timedelta(days=1),
+                attendee_name_parts={'_scheme': 'full', 'full_name': 'John Doe'},
+            )
+        r = self.client.post('/control/event/{}/{}/orders/{}/change'.format(
+            self.event.organizer.slug, self.event.slug, self.order.code
+        ), {
+            'add-TOTAL_FORMS': '0',
+            'add-INITIAL_FORMS': '0',
+            'add-MIN_NUM_FORMS': '0',
+            'add-MAX_NUM_FORMS': '100',
+            'op-{}-used_membership'.format(self.op1.pk): str(m_correct1.pk),
+            'op-{}-used_membership'.format(self.op2.pk): str(m_correct1.pk),
+            'op-{}-used_membership'.format(self.op3.pk): str(m_correct1.pk),
+        }, follow=True)
+        print(r.content)
+        self.op1.refresh_from_db()
+        self.order.refresh_from_db()
+        assert self.op1.used_membership == m_correct1
 
     def test_change_price_success(self):
         self.client.post('/control/event/{}/{}/orders/{}/change'.format(

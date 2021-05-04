@@ -1,0 +1,98 @@
+{% extends "pretixpresale/organizers/base.html" %}
+{% load i18n %}
+{% load eventurl %}
+{% load urlreplace %}
+{% load money %}
+{% load bootstrap3 %}
+{% block title %}{% trans "Your membership" %}{% endblock %}
+{% block content %}
+    <h2>
+        {% trans "Your membership" %}
+    </h2>
+    <div class="panel panel-primary items">
+        <div class="panel-heading">
+            <h3 class="panel-title">
+                {% trans "Details" %}
+            </h3>
+        </div>
+        <div class="panel-body">
+            <dl class="dl-horizontal">
+                <dt>{% trans "Membership type" %}</dt>
+                <dd>{{ membership.membership_type.name }}</dd>
+                <dt>{% trans "Valid from" %}</dt>
+                <dd>{{ membership.date_start|date:"SHORT_DATETIME_FORMAT" }}
+                <dt>{% trans "Valid until" %}</dt>
+                <dd>{{ membership.date_end|date:"SHORT_DATETIME_FORMAT" }}
+                <dt>{% trans "Attendee name" %}</dt>
+                <dd>{{ membership.attendee_name }}
+                <dt>{% trans "Maximum usages" %}</dt>
+                <dd>{{ membership.membership_type.max_usages|default_if_none:"–" }}</dd>
+            </dl>
+        </div>
+    </div>
+    <div class="panel panel-default items">
+        <div class="panel-heading">
+            <h3 class="panel-title">
+                {% trans "Usages" %}
+            </h3>
+        </div>
+        <table class="panel-body table table-hover">
+            <thead>
+            <tr>
+                <th>{% trans "Order code" %}</th>
+                <th>{% trans "Event" %}</th>
+                <th>{% trans "Product" %}</th>
+                <th>{% trans "Order date" %}</th>
+                <th class="text-right">{% trans "Status" %}</th>
+                <th class="text-right"></th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for op in usages %}
+                <tr>
+                    <td>
+                        <strong>
+                            {{ op.order.code }}-{{ op.positionid }}
+                        </strong>
+                        {% if op.order.testmode %}
+                            <span class="label label-warning">{% trans "TEST MODE" %}</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {{ op.order.event }}
+                        {% if op.subevent %}
+                            <br>
+                            {{ op.subevent|default:"" }}
+                        {% endif %}
+                    </td>
+                    <td>
+                        {{ op.item.name }}
+                        {% if op.variation %}– {{ op.variation }}{% endif %}
+                    </td>
+                    <td>
+                        {{ op.order.datetime|date:"SHORT_DATETIME_FORMAT" }}
+                    </td>
+                    <td class="text-right flip">
+                        {% if op.canceled %}
+                            <span class="label label-danger">
+                                <span class="fa fa-times"></span>
+                                {% trans "Canceled" %}
+                            </span>
+                        {% else %}
+                            {% include "pretixcontrol/orders/fragment_order_status.html" with order=op.order %}
+                        {% endif %}
+                    </td>
+                    <td class="text-right flip">
+                        <a href="{% abseventurl op.order.event "presale:event.order" order=op.order.code secret=op.order.secret %}"
+                                target="_blank"
+                                class="btn btn-default">
+                            {% trans "Details" %}
+                        </a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        {% include "pretixcontrol/pagination.html" %}
+    </div>
+{% endblock %}

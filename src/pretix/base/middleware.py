@@ -85,6 +85,8 @@ class LocaleMiddleware(MiddlewareMixin):
         tzname = None
         if hasattr(request, 'event'):
             tzname = request.event.settings.timezone
+        elif hasattr(request, 'organizer') and 'timezone' in request.organizer.settings._cache():
+            tzname = request.organizer.settings.timezone
         elif request.user.is_authenticated:
             tzname = request.user.timezone
         if tzname:
@@ -102,6 +104,13 @@ class LocaleMiddleware(MiddlewareMixin):
         if 'Content-Language' not in response:
             response['Content-Language'] = language
         return response
+
+
+def get_language_from_customer_settings(request: HttpRequest) -> str:
+    if getattr(request, 'customer', None):
+        lang_code = request.customer.locale
+        if lang_code in _supported and lang_code is not None and check_for_language(lang_code):
+            return lang_code
 
 
 def get_language_from_user_settings(request: HttpRequest) -> str:
@@ -169,6 +178,7 @@ def get_language_from_request(request: HttpRequest) -> str:
     if request.path.startswith(get_script_prefix() + 'control'):
         return (
             get_language_from_user_settings(request)
+            or get_language_from_customer_settings(request)
             or get_language_from_session_or_cookie(request)
             or get_language_from_browser(request)
             or get_language_from_event(request)
@@ -177,6 +187,7 @@ def get_language_from_request(request: HttpRequest) -> str:
     else:
         return (
             get_language_from_session_or_cookie(request)
+            or get_language_from_customer_settings(request)
             or get_language_from_user_settings(request)
             or get_language_from_browser(request)
             or get_language_from_event(request)

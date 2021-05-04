@@ -194,7 +194,7 @@ class EmailAddressShredder(BaseDataShredder):
     verbose_name = _('E-mails')
     identifier = 'order_emails'
     description = _('This will remove all e-mail addresses from orders and attendees, as well as logged email '
-                    'contents.')
+                    'contents. This will also remove the association to customer accounts.')
 
     def generate_files(self) -> List[Tuple[str, str, str]]:
         yield 'emails-by-order.json', 'application/json', json.dumps({
@@ -211,12 +211,13 @@ class EmailAddressShredder(BaseDataShredder):
 
         for o in self.event.orders.all():
             o.email = None
+            o.customer = None
             d = o.meta_info_data
             if d:
                 if 'contact_form_data' in d and 'email' in d['contact_form_data']:
                     del d['contact_form_data']['email']
                 o.meta_info = json.dumps(d)
-            o.save(update_fields=['meta_info', 'email'])
+            o.save(update_fields=['meta_info', 'email', 'customer'])
 
         for le in self.event.logentry_set.filter(action_type__contains="order.email"):
             shred_log_fields(le, banlist=['recipient', 'message', 'subject'])

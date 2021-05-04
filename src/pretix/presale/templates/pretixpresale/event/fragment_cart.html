@@ -34,6 +34,9 @@
                     </span>
                 {% endif %}
             {% endif %}
+            {% if line.used_membership %}
+                <br /><span class="fa fa-id-card fa-fw" aria-hidden="true"></span> {{ line.used_membership }}
+            {% endif %}
 
             {% if line.issued_gift_cards %}
                 <dl>

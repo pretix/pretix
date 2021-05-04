@@ -37,6 +37,9 @@ from itertools import chain
 from django import forms
 from django.core.exceptions import ValidationError
 from django.utils.encoding import force_str
+from django.utils.formats import date_format
+from django.utils.html import escape
+from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
 from phonenumber_field.formfields import PhoneNumberField
 from phonenumber_field.phonenumber import PhoneNumber
@@ -178,3 +181,60 @@ class AddOnVariationField(forms.ChoiceField):
             if value == k or text_value == force_str(k):
                 return True
         return False
+
+
+class MembershipForm(forms.Form):
+    required_css_class = 'required'
+
+    def __init__(self, *args, **kwargs):
+        self.memberships = kwargs.pop('memberships')
+        event = kwargs.pop('event')
+        self.position = kwargs.pop('position')
+
+        super().__init__(*args, **kwargs)
+
+        ev = self.position.subevent or event
+        if self.position.variation and self.position.variation.require_membership:
+            types = self.position.variation.require_membership_types.all()
+        else:
+            types = self.position.item.require_membership_types.all()
+
+        initial = None
+
+        memberships = [
+            m for m in self.memberships
+            if m.is_valid(ev) and m.membership_type in types
+        ]
+
+        if len(memberships) == 1:
+            initial = str(memberships[0].pk)
+
+        self.fields['membership'] = forms.ChoiceField(
+            label=_('Membership'),
+            choices=[
+                (str(m.pk), self._label_from_instance(m))
+                for m in memberships
+            ],
+            initial=initial,
+            widget=forms.RadioSelect,
+        )
+        self.is_empty = not memberships
+
+    def _label_from_instance(self, obj):
+        ds = date_format(obj.date_start, 'SHORT_DATE_FORMAT')
+        de = date_format(obj.date_end, 'SHORT_DATE_FORMAT')
+        if obj.membership_type.max_usages is not None:
+            usages = f'({obj.usages} / {obj.membership_type.max_usages})'
+        else:
+            usages = ''
+        return mark_safe(
+            f'<strong>{escape(obj.membership_type)}</strong> {usages}<br>'
+            f'{escape(obj.attendee_name)}<br>'
+            f'<span class="text-muted">{ds} – {de}</span>'
+        )
+
+    def clean(self):
+        d = super().clean()
+        if d.get('membership'):
+            d['membership'] = [m for m in self.memberships if str(m.pk) == d['membership']][0]
+        return d

@@ -1,0 +1,27 @@
+{% extends "pretixpresale/organizers/base.html" %}
+{% load i18n %}
+{% load eventurl %}
+{% load urlreplace %}
+{% load bootstrap3 %}
+{% block title %}{% trans "Password reset" %}{% endblock %}
+{% block content %}
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+            <h2>
+                {% blocktrans trimmed %}
+                    Password reset
+                {% endblocktrans %}
+            </h2>
+            <form action="" method="post">
+                {% csrf_token %}
+                {% bootstrap_form form %}
+                <div class="form-group buttons">
+                    <button type="submit" class="btn btn-primary btn-lg btn-block">
+                        {% trans "Request a new password" %}
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <p>&nbsp;</p>
+{% endblock %}

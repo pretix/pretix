@@ -46,6 +46,7 @@ from django.utils.timezone import make_aware, now
 from django.utils.translation import (
     gettext_lazy as _, gettext_noop, pgettext_lazy,
 )
+from django_scopes.forms import SafeModelChoiceField
 from i18nfield.forms import I18nFormField, I18nTextarea, I18nTextInput
 from i18nfield.strings import LazyI18nString
 
@@ -290,6 +291,10 @@ class OrderPositionAddForm(forms.Form):
         widget=forms.TextInput(attrs={'placeholder': _('General admission'), 'data-seat-guid-field': 'true'}),
         label=_('Seat')
     )
+    used_membership = forms.ChoiceField(
+        label=_('Membership'),
+        required=False,
+    )
     price = forms.DecimalField(
         required=False,
         max_digits=10, decimal_places=2,
@@ -360,6 +365,23 @@ class OrderPositionAddForm(forms.Form):
             del self.fields['subevent']
         change_decimal_field(self.fields['price'], order.event.currency)
 
+        choices = [
+            ('', ''),
+        ]
+        if order.customer:
+            self.memberships = list(order.customer.memberships.all())
+            for m in self.memberships:
+                choices.append((str(m.pk), str(m)))
+        self.fields['used_membership'].choices = choices
+
+    def clean(self):
+        d = super().clean()
+        if d['used_membership']:
+            d['used_membership'] = [m for m in self.memberships if str(m.pk) == d['used_membership']][0]
+        else:
+            d['used_membership'] = None
+        return d
+
 
 class OrderPositionAddFormset(forms.BaseFormSet):
     def __init__(self, *args, **kwargs):
@@ -404,6 +426,9 @@ class OrderPositionChangeForm(forms.Form):
         max_digits=10, decimal_places=2,
         localize=True,
         label=_('New price (gross)')
+    )
+    used_membership = forms.ChoiceField(
+        required=False,
     )
     tax_rule = forms.ModelChoiceField(
         TaxRule.objects.none(),
@@ -478,6 +503,24 @@ class OrderPositionChangeForm(forms.Form):
         self.fields['itemvar'].choices = choices
         change_decimal_field(self.fields['price'], instance.order.event.currency)
 
+        choices = [
+            ('', _('(Unchanged)')),
+            ('CLEAR', _('(No membership)')),
+        ]
+        if instance.order.customer:
+            self.memberships = list(instance.order.customer.memberships.all())
+            for m in self.memberships:
+                choices.append((str(m.pk), str(m)))
+        self.fields['used_membership'].choices = choices
+
+    def clean(self):
+        d = super().clean()
+        if d['used_membership'] and d['used_membership'] != 'CLEAR':
+            d['used_membership'] = [m for m in self.memberships if str(m.pk) == d['used_membership']][0]
+        elif not d['used_membership']:
+            d['used_membership'] = None
+        return d
+
 
 class OrderFeeChangeForm(forms.Form):
     value = forms.DecimalField(
@@ -516,15 +559,35 @@ class OrderContactForm(forms.ModelForm):
 
     class Meta:
         model = Order
-        fields = ['email', 'email_known_to_work', 'phone']
+        fields = ['customer', 'email', 'email_known_to_work', 'phone']
         widgets = {
-            'phone': WrappedPhoneNumberPrefixWidget()
+            'phone': WrappedPhoneNumberPrefixWidget(),
+        }
+        field_classes = {
+            'customer': SafeModelChoiceField,
         }
 
     def __init__(self, *args, **kwargs):
+        customers = kwargs.pop('customers')
         super().__init__(*args, **kwargs)
         if not self.instance.event.settings.order_phone_asked and not self.instance.phone:
             del self.fields['phone']
+
+        if customers:
+            self.fields['customer'].queryset = self.instance.event.organizer.customers.all()
+            self.fields['customer'].widget = Select2(
+                attrs={
+                    'data-model-select2': 'generic',
+                    'data-select2-url': reverse('control:organizer.customers.select2', kwargs={
+                        'organizer': self.instance.event.organizer.slug,
+                    }),
+                    'data-placeholder': _('Customer')
+                }
+            )
+            self.fields['customer'].widget.choices = self.fields['customer'].choices
+            self.fields['customer'].required = False
+        else:
+            del self.fields['customer']
 
 
 class OrderLocaleForm(forms.ModelForm):

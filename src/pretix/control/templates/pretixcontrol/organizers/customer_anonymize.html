@@ -1,0 +1,43 @@
+{% extends "pretixcontrol/organizers/base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% block title %}
+    {% blocktrans trimmed with id=customer.identifier %}
+        Anonymize customer #{{ id }}
+    {% endblocktrans %}
+{% endblock %}
+{% block inner %}
+    <h1>
+        {% blocktrans trimmed with id=customer.identifier %}
+            Anonymize customer #{{ id }}
+        {% endblocktrans %}
+    </h1>
+    <p>
+        {% trans "Are you sure you want to anonymize this customer account?" %}
+    </p>
+    <ul>
+        <li>
+            {% trans "All orders will be disconnected from this customer account." %}
+            <strong>
+                {% trans "The orders themselves will not be anonymized and can still contain personal information!" %}
+            </strong>
+        </li>
+        <li>
+            {% trans "The customer will no longer be ble to log in and will lose access to any membership benefits." %}
+        </li>
+        <li>
+            {% trans "This action is irreversible." %}
+        </li>
+    </ul>
+    <form action="" method="post">
+        {% csrf_token %}
+        <div class="form-group submit-group">
+            <a href="{% url "control:organizer.customer" organizer=request.organizer.slug customer=customer.identifier %}" class="btn btn-default btn-cancel">
+                {% trans "Cancel" %}
+            </a>
+            <button type="submit" class="btn btn-danger btn-save">
+                {% trans "Anonymize" %}
+            </button>
+        </div>
+    </form>
+{% endblock %}
