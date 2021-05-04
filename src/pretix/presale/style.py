@@ -142,7 +142,8 @@ def regenerate_css(event):
         newname = default_storage.save(fname, ContentFile(css.encode('utf-8')))
         event.settings.set('presale_css_file', newname)
         event.settings.set('presale_css_checksum', checksum)
-        delete_old_file(old_fname)
+        if old_fname != newname:
+            delete_old_file(old_fname)
 
     # widget.scss
     css, checksum = compile_scss(event, file='widget.scss', fonts=False)
@@ -153,7 +154,8 @@ def regenerate_css(event):
         newname = default_storage.save(fname, ContentFile(css.encode('utf-8')))
         event.settings.set('presale_widget_css_file', newname)
         event.settings.set('presale_widget_css_checksum', checksum)
-        delete_old_file(old_fname)
+        if old_fname != newname:
+            delete_old_file(old_fname)
 
 
 @app.task(base=TransactionAwareTask)
@@ -169,7 +171,8 @@ def regenerate_organizer_css(organizer_id: int):
             newname = default_storage.save(fname, ContentFile(css.encode('utf-8')))
             organizer.settings.set('presale_css_file', newname)
             organizer.settings.set('presale_css_checksum', checksum)
-            delete_old_file(old_fname)
+            if old_fname != newname:
+                delete_old_file(old_fname)
 
         # widget.scss
         css, checksum = compile_scss(organizer, file='widget.scss', fonts=False)
@@ -179,7 +182,8 @@ def regenerate_organizer_css(organizer_id: int):
             newname = default_storage.save(fname, ContentFile(css.encode('utf-8')))
             organizer.settings.set('presale_widget_css_file', newname)
             organizer.settings.set('presale_widget_css_checksum', checksum)
-            delete_old_file(old_fname)
+            if old_fname != newname:
+                delete_old_file(old_fname)
 
         non_inherited_events = set(Event_SettingsStore.objects.filter(
             object__organizer=organizer, key__in=affected_keys
