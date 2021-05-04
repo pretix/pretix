@@ -19,3 +19,29 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
+from django.apps import AppConfig
+from django.utils.translation import gettext, gettext_lazy as _
+
+from pretix import __version__ as version
+
+
+class BadgesApp(AppConfig):
+    name = 'pretix.plugins.badges'
+    verbose_name = _("Badges")
+
+    class PretixPluginMeta:
+        name = _("Badges")
+        author = _("the pretix team")
+        version = version
+        category = "FEATURE"
+        description = _("This plugin allows you to generate badges or name tags for your attendees.")
+
+    def ready(self):
+        from . import signals  # NOQA
+
+    def installed(self, event):
+        if not event.badge_layouts.exists():
+            event.badge_layouts.create(
+                name=gettext('Default'),
+                default=True,
+            )

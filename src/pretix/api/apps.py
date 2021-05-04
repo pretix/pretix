@@ -19,3 +19,12 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
+from django.apps import AppConfig
+
+
+class PretixApiConfig(AppConfig):
+    name = 'pretix.api'
+    label = 'pretixapi'
+
+    def ready(self):
+        from . import signals, webhooks  # noqa

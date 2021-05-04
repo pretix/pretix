@@ -19,14 +19,3 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
-from django.apps import AppConfig
-
-from .database import *  # noqa
-
-
-class PretixHelpersConfig(AppConfig):
-    name = 'pretix.helpers'
-    label = 'pretixhelpers'
-
-
-default_app_config = 'pretix.helpers.PretixHelpersConfig'
