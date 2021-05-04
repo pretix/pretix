@@ -198,9 +198,7 @@ class DeprecatedSignal(django.dispatch.Signal):
         super().connect(receiver, sender=None, weak=True, dispatch_uid=None)
 
 
-event_live_issues = EventPluginSignal(
-    providing_args=[]
-)
+event_live_issues = EventPluginSignal()
 """
 This signal is sent out to determine whether an event can be taken live. If you want to
 prevent the event from going live, return a string that will be displayed to the user
@@ -210,9 +208,7 @@ As with all event-plugin signals, the ``sender`` keyword argument will contain t
 """
 
 
-register_payment_providers = EventPluginSignal(
-    providing_args=[]
-)
+register_payment_providers = EventPluginSignal()
 """
 This signal is sent out to get all known payment providers. Receivers should return a
 subclass of pretix.base.payment.BasePaymentProvider or a list of these
@@ -220,9 +216,7 @@ subclass of pretix.base.payment.BasePaymentProvider or a list of these
 As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
 """
 
-register_mail_placeholders = EventPluginSignal(
-    providing_args=[]
-)
+register_mail_placeholders = EventPluginSignal()
 """
 This signal is sent out to get all known email text placeholders. Receivers should return
 an instance of a subclass of pretix.base.email.BaseMailTextPlaceholder or a list of these.
@@ -230,9 +224,7 @@ an instance of a subclass of pretix.base.email.BaseMailTextPlaceholder or a list
 As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
 """
 
-register_html_mail_renderers = EventPluginSignal(
-    providing_args=[]
-)
+register_html_mail_renderers = EventPluginSignal()
 """
 This signal is sent out to get all known HTML email renderers. Receivers should return a
 subclass of pretix.base.email.BaseHTMLMailRenderer or a list of these
@@ -240,9 +232,7 @@ subclass of pretix.base.email.BaseHTMLMailRenderer or a list of these
 As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
 """
 
-register_invoice_renderers = EventPluginSignal(
-    providing_args=[]
-)
+register_invoice_renderers = EventPluginSignal()
 """
 This signal is sent out to get all known invoice renderers. Receivers should return a
 subclass of pretix.base.invoice.BaseInvoiceRenderer or a list of these
@@ -250,9 +240,7 @@ subclass of pretix.base.invoice.BaseInvoiceRenderer or a list of these
 As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
 """
 
-register_ticket_secret_generators = EventPluginSignal(
-    providing_args=[]
-)
+register_ticket_secret_generators = EventPluginSignal()
 """
 This signal is sent out to get all known ticket secret generators. Receivers should return a
 subclass of ``pretix.base.secrets.BaseTicketSecretGenerator`` or a list of these
@@ -260,9 +248,7 @@ subclass of ``pretix.base.secrets.BaseTicketSecretGenerator`` or a list of these
 As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
 """
 
-register_data_shredders = EventPluginSignal(
-    providing_args=[]
-)
+register_data_shredders = EventPluginSignal()
 """
 This signal is sent out to get all known data shredders. Receivers should return a
 subclass of pretix.base.shredder.BaseDataShredder or a list of these
@@ -270,9 +256,7 @@ subclass of pretix.base.shredder.BaseDataShredder or a list of these
 As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
 """
 
-register_ticket_outputs = EventPluginSignal(
-    providing_args=[]
-)
+register_ticket_outputs = EventPluginSignal()
 """
 This signal is sent out to get all known ticket outputs. Receivers should return a
 subclass of pretix.base.ticketoutput.BaseTicketOutput
@@ -280,9 +264,7 @@ subclass of pretix.base.ticketoutput.BaseTicketOutput
 As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
 """
 
-register_notification_types = EventPluginSignal(
-    providing_args=[]
-)
+register_notification_types = EventPluginSignal()
 """
 This signal is sent out to get all known notification types. Receivers should return an
 instance of a subclass of pretix.base.notifications.NotificationType or a list of such
@@ -293,18 +275,14 @@ however for this signal, the ``sender`` **may also be None** to allow creating t
 notification settings!
 """
 
-register_sales_channels = django.dispatch.Signal(
-    providing_args=[]
-)
+register_sales_channels = django.dispatch.Signal()
 """
 This signal is sent out to get all known sales channels types. Receivers should return an
 instance of a subclass of ``pretix.base.channels.SalesChannel`` or a list of such
 instances.
 """
 
-register_data_exporters = EventPluginSignal(
-    providing_args=[]
-)
+register_data_exporters = EventPluginSignal()
 """
 This signal is sent out to get all known data exporters. Receivers should return a
 subclass of pretix.base.exporter.BaseExporter
@@ -312,10 +290,10 @@ subclass of pretix.base.exporter.BaseExporter
 As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
 """
 
-register_multievent_data_exporters = django.dispatch.Signal(
-    providing_args=["event"]
-)
+register_multievent_data_exporters = django.dispatch.Signal()
 """
+Arguments: ``event``
+
 This signal is sent out to get all known data exporters, which support exporting data for
 multiple events. Receivers should return a subclass of pretix.base.exporter.BaseExporter
 
@@ -323,10 +301,11 @@ The ``sender`` keyword argument will contain an organizer.
 """
 
 validate_order = EventPluginSignal(
-    providing_args=["payment_provider", "positions", "email", "locale", "invoice_address",
-                    "meta_info", "customer"]
 )
 """
+Arguments: ``payment_provider``, ``positions``, ``email``, ``locale``, ``invoice_address``,
+``meta_info``, ``customer``
+
 This signal is sent out when the user tries to confirm the order, before we actually create
 the order. It allows you to inspect the cart positions. Your return value will be ignored,
 but you can raise an OrderError with an appropriate exception message if you like to block
@@ -335,10 +314,10 @@ the order. We strongly discourage making changes to the order here.
 As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
 """
 
-validate_cart = EventPluginSignal(
-    providing_args=["positions"]
-)
+validate_cart = EventPluginSignal()
 """
+Arguments: ``positions``
+
 This signal is sent out before the user starts checkout. It includes an iterable
 with the current CartPosition objects.
 The response of receivers will be ignored, but you can raise a CartError with an
@@ -347,10 +326,10 @@ appropriate exception message.
 As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
 """
 
-validate_cart_addons = EventPluginSignal(
-    providing_args=["addons", "base_position", "iao"]
-)
+validate_cart_addons = EventPluginSignal()
 """
+Arguments: ``addons``, ``base_position``, ``iao``
+
 This signal is sent when a user tries to select a combination of addons. In contrast to
  ``validate_cart``, this is executed before the cart is actually modified. You are passed
 an argument ``addons`` containing a dict of ``(item, variation or None) → count`` tuples as well
@@ -362,10 +341,10 @@ appropriate exception message.
 As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
 """
 
-order_placed = EventPluginSignal(
-    providing_args=["order"]
-)
+order_placed = EventPluginSignal()
 """
+Arguments: ``order``
+
 This signal is sent out every time an order is placed. The order object is given
 as the first argument. This signal is *not* sent out if an order is created through
 splitting an existing order, so you can not expect to see all orders by listening
@@ -374,10 +353,10 @@ to this signal.
 As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
 """
 
-order_paid = EventPluginSignal(
-    providing_args=["order"]
-)
+order_paid = EventPluginSignal()
 """
+Arguments: ``order``
+
 This signal is sent out every time an order is paid. The order object is given
 as the first argument. This signal is *not* sent out if an order is marked as paid
 because an already-paid order has been split.
@@ -385,80 +364,80 @@ because an already-paid order has been split.
 As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
 """
 
-order_canceled = EventPluginSignal(
-    providing_args=["order"]
-)
+order_canceled = EventPluginSignal()
 """
+Arguments: ``order``
+
 This signal is sent out every time an order is canceled. The order object is given
 as the first argument.
 
 As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
 """
 
-order_reactivated = EventPluginSignal(
-    providing_args=["order"]
-)
+order_reactivated = EventPluginSignal()
 """
+Arguments: ``order``
+
 This signal is sent out every time a canceled order is reactivated. The order object is given
 as the first argument.
 
 As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
 """
 
-order_expired = EventPluginSignal(
-    providing_args=["order"]
-)
+order_expired = EventPluginSignal()
 """
+Arguments: ``order``
+
 This signal is sent out every time an order is marked as expired. The order object is given
 as the first argument.
 
 As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
 """
 
-order_modified = EventPluginSignal(
-    providing_args=["order"]
-)
+order_modified = EventPluginSignal()
 """
+Arguments: ``order``
+
 This signal is sent out every time an order's information is modified. The order object is given
 as the first argument.
 
 As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
 """
 
-order_changed = EventPluginSignal(
-    providing_args=["order"]
-)
+order_changed = EventPluginSignal()
 """
+Arguments: ``order``
+
 This signal is sent out every time an order's content is changed. The order object is given
 as the first argument.
 
 As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
 """
 
-order_approved = EventPluginSignal(
-    providing_args=["order"]
-)
+order_approved = EventPluginSignal()
 """
+Arguments: ``order``
+
 This signal is sent out every time an order is being approved. The order object is given
 as the first argument.
 
 As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
 """
 
-order_denied = EventPluginSignal(
-    providing_args=["order"]
-)
+order_denied = EventPluginSignal()
 """
+Arguments: ``order``
+
 This signal is sent out every time an order is being denied. The order object is given
 as the first argument.
 
 As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
 """
 
-order_gracefully_delete = EventPluginSignal(
-    providing_args=["order"]
-)
+order_gracefully_delete = EventPluginSignal()
 """
+Arguments: ``order``
+
 This signal is sent out every time a test-mode order is being deleted. The order object
 is given as the first argument.
 
@@ -469,10 +448,10 @@ the deletion of the order.
 As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
 """
 
-checkin_created = EventPluginSignal(
-    providing_args=["checkin"],
-)
+checkin_created = EventPluginSignal()
 """
+Arguments: ``checkin``
+
 This signal is sent out every time a check-in is created (i.e. an order position is marked as
 checked in). It is not send if the position was already checked in and is force-checked-in a second time.
 The check-in object is given as the first argument
@@ -480,10 +459,10 @@ The check-in object is given as the first argument
 As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
 """
 
-logentry_display = EventPluginSignal(
-    providing_args=["logentry"]
-)
+logentry_display = EventPluginSignal()
 """
+Arguments: ``logentry``
+
 To display an instance of the ``LogEntry`` model to a human user,
 ``pretix.base.signals.logentry_display`` will be sent out with a ``logentry`` argument.
 
@@ -493,10 +472,10 @@ to the user. The receivers are expected to return plain text.
 As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
 """
 
-logentry_object_link = EventPluginSignal(
-    providing_args=["logentry"]
-)
+logentry_object_link = EventPluginSignal()
 """
+Arguments: ``logentry``
+
 To display the relationship of an instance of the ``LogEntry`` model to another model
 to a human user, ``pretix.base.signals.logentry_object_link`` will be sent out with a
 ``logentry`` argument.
@@ -521,10 +500,10 @@ Make sure that any user content in the HTML code you return is properly escaped!
 As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
 """
 
-requiredaction_display = EventPluginSignal(
-    providing_args=["action", "request"]
-)
+requiredaction_display = EventPluginSignal()
 """
+Arguments: ``action``, ``request``
+
 To display an instance of the ``RequiredAction`` model to a human user,
 ``pretix.base.signals.requiredaction_display`` will be sent out with a ``action`` argument.
 You will also get the current ``request`` in a different argument.
@@ -535,10 +514,10 @@ to the user. The receivers are expected to return HTML code.
 As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
 """
 
-event_copy_data = EventPluginSignal(
-    providing_args=["other", "tax_map", "category_map", "item_map", "question_map", "variation_map", "checkin_list_map"]
-)
+event_copy_data = EventPluginSignal()
 """
+Arguments: "other", ``tax_map``, ``category_map``, ``item_map``, ``question_map``, ``variation_map``, ``checkin_list_map``
+
 This signal is sent out when a new event is created as a clone of an existing event, i.e.
 the settings from the older event are copied to the newer one. You can listen to this
 signal to copy data or configuration stored within your plugin's models as well.
@@ -553,10 +532,10 @@ keyword argument will contain the event to **copy from**. The keyword arguments
 in the new event of the respective types.
 """
 
-item_copy_data = EventPluginSignal(
-    providing_args=["source", "target"]
-)
+item_copy_data = EventPluginSignal()
 """
+Arguments: ``source``, ``target``
+
 This signal is sent out when a new product is created as a clone of an existing product, i.e.
 the settings from the older product are copied to the newer one. You can listen to this
 signal to copy data or configuration stored within your plugin's models as well.
@@ -580,10 +559,10 @@ All plugins that are installed may send fields for the global settings form, as
 an OrderedDict of (setting name, form field).
 """
 
-order_fee_calculation = EventPluginSignal(
-    providing_args=['positions', 'invoice_address', 'meta_info', 'total', 'gift_cards']
-)
+order_fee_calculation = EventPluginSignal()
 """
+Arguments: ``positions``, ``invoice_address``, ``meta_info``, ``total``, ``gift_cards``
+
 This signals allows you to add fees to an order while it is being created. You are expected to
 return a list of ``OrderFee`` objects that are not yet saved to the database
 (because there is no order yet).
@@ -596,10 +575,10 @@ keyword argument will contain the total cart sum without any fees. You should no
 the gift cards in use.
 """
 
-order_fee_type_name = EventPluginSignal(
-    providing_args=['request', 'fee']
-)
+order_fee_type_name = EventPluginSignal()
 """
+Arguments: ``request``, ``fee``
+
 This signals allows you to return a human-readable description for a fee type based on the ``fee_type``
 and ``internal_type`` attributes of the ``OrderFee`` model that you get as keyword arguments. You are
 expected to return a string or None, if you don't know about this fee.
@@ -607,20 +586,20 @@ expected to return a string or None, if you don't know about this fee.
 As with all plugin signals, the ``sender`` keyword argument will contain the event.
 """
 
-allow_ticket_download = EventPluginSignal(
-    providing_args=['order']
-)
+allow_ticket_download = EventPluginSignal()
 """
+Arguments: ``order``
+
 This signal is sent out to check if tickets for an order can be downloaded. If any receiver returns false,
 a download will not be offered.
 
 As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
 """
 
-email_filter = EventPluginSignal(
-    providing_args=['message', 'order', 'user']
-)
+email_filter = EventPluginSignal()
 """
+Arguments: ``message``, ``order``, ``user``
+
 This signal allows you to implement a middleware-style filter on all outgoing emails. You are expected to
 return a (possibly modified) copy of the message object passed to you.
 
@@ -632,10 +611,10 @@ If the email is associated with a specific user, e.g. a notification email, the 
 well, otherwise it will be ``None``.
 """
 
-global_email_filter = GlobalSignal(
-    providing_args=['message', 'order', 'user', 'customer', 'organizer']
-)
+global_email_filter = GlobalSignal()
 """
+Arguments: ``message``, ``order``, ``user``, ``customer``, ``organizer``
+
 This signal allows you to implement a middleware-style filter on all outgoing emails. You are expected to
 return a (possibly modified) copy of the message object passed to you.
 
@@ -700,10 +679,10 @@ a ``subevent`` argument which might be none and you are expected to return a lis
 """
 
 
-quota_availability = EventPluginSignal(
-    providing_args=['quota', 'result', 'count_waitinglist']
-)
+quota_availability = EventPluginSignal()
 """
+Arguments: ``quota``, ``result``, ``count_waitinglist``
+
 This signal allows you to modify the availability of a quota. You are passed the ``quota`` and an
 ``availability`` result calculated by pretix code or other plugins. ``availability`` is a tuple
 with the first entry being one of the ``Quota.AVAILABILITY_*`` constants and the second entry being
@@ -716,25 +695,23 @@ system really bad.** Also, keep in mind that your response is subject to caching
 quotas might be used for display (not for actual order processing).
 """
 
-order_split = EventPluginSignal(
-    providing_args=["original", "split_order"]
-)
+order_split = EventPluginSignal()
 """
+Arguments: ``original``, ``split_order``
+
 This signal is sent out when an order is split into two orders and allows you to copy related models
 to the new order. You will be passed the old order as ``original`` and the new order as ``split_order``.
 """
 
-invoice_line_text = EventPluginSignal(
-    providing_args=["position"]
-)
+invoice_line_text = EventPluginSignal()
 """
+Arguments: ``position``
+
 This signal is sent out when an invoice is built for an order. You can return additional text that
 should be shown on the invoice for the given ``position``.
 """
 
-order_import_columns = EventPluginSignal(
-    providing_args=[]
-)
+order_import_columns = EventPluginSignal()
 """
 This signal is sent out if the user performs an import of orders from an external source. You can use this
 to define additional columns that can be read during import. You are expected to return a list of instances of
@@ -743,10 +720,10 @@ to define additional columns that can be read during import. You are expected to
 As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
 """
 
-validate_event_settings = EventPluginSignal(
-    providing_args=["settings_dict"]
-)
+validate_event_settings = EventPluginSignal()
 """
+Arguments: ``settings_dict``
+
 This signal is sent out if the user performs an update of event settings through the API or web interface.
 You are passed a ``settings_dict`` dictionary with the new state of the event settings object and are expected
 to raise a ``django.core.exceptions.ValidationError`` if the new state is not valid.
@@ -757,9 +734,7 @@ serializer field instead.
 As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
 """
 
-api_event_settings_fields = EventPluginSignal(
-    providing_args=[]
-)
+api_event_settings_fields = EventPluginSignal()
 """
 This signal is sent out to collect serializable settings fields for the API. You are expected to
 return a dictionary mapping names of attributes in the settings store to DRF serializer field instances.
