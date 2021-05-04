@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-04-30 09:39+0000\n"
-"PO-Revision-Date: 2021-05-04 12:00+0000\n"
+"PO-Revision-Date: 2021-05-04 14:06+0000\n"
 "Last-Translator: Mohamed Tawfiq <mtawfiq@wafyapp.com>\n"
 "Language-Team: Arabic <https://translate.pretix.eu/projects/pretix/pretix/ar/"
 ">\n"
@@ -29,16 +29,19 @@ msgstr ""
 "المنتجات والإعدادات)"
 
 #: pretix/api/auth/devicesecurity.py:43
+#, fuzzy
 msgid "pretixSCAN"
-msgstr "تحميل pretixSCAN"
+msgstr "pretixSCAN"
 
 #: pretix/api/auth/devicesecurity.py:73
+#, fuzzy
 msgid "pretixSCAN (kiosk mode, online only)"
-msgstr "المسح الضوئي pretix (وضع kiosk، عبر الانترنت فقط)"
+msgstr "pretixSCAN (وضع kiosk، عبر الانترنت فقط)"
 
 #: pretix/api/auth/devicesecurity.py:101
+#, fuzzy
 msgid "pretixPOS"
-msgstr "نظام pretixPOS"
+msgstr "pretixPOS"
 
 #: pretix/api/models.py:39
 msgid "Application name"
@@ -46,7 +49,7 @@ msgstr "اسم التطبيق"
 
 #: pretix/api/models.py:42
 msgid "Redirection URIs"
-msgstr "عناوين إعادة التوجيه"
+msgstr "عناوين اعادة التوجيه"
 
 #: pretix/api/models.py:43
 msgid "Allowed URIs list, space separated"
@@ -61,6 +64,7 @@ msgid "Client secret"
 msgstr "سر العميل"
 
 #: pretix/api/models.py:97
+#, fuzzy
 msgid "Enable webhook"
 msgstr "تمكين webhook"
 
@@ -78,16 +82,18 @@ msgstr "كل الفعاليات (بما في ذلك تلك التي تم إنش�
 #: pretix/api/models.py:100 pretix/base/models/devices.py:122
 #: pretix/base/models/organizer.py:222
 msgid "Limit to events"
-msgstr "حد أقصى للفعاليات"
+msgstr "حد اقصى للفعاليات"
 
 #: pretix/api/serializers/cart.py:81 pretix/api/serializers/order.py:1149
+#, fuzzy
 msgid "The product \"{}\" is not assigned to a quota."
-msgstr "لم يتم تعيين حصة للمنتج {}."
+msgstr "المنتج \"{}\" غير مخصص لحصة."
 
 #: pretix/api/serializers/cart.py:89 pretix/api/serializers/order.py:1161
+#, fuzzy
 msgid ""
 "There is not enough quota available on quota \"{}\" to perform the operation."
-msgstr "ليس هناك حصص كافية على حصة \"{}\" لتنفيذ العملية."
+msgstr "ليس هناك حصص كافية على حصة \"{}\" لإجراء العملية."
 
 #: pretix/api/serializers/cart.py:116 pretix/api/serializers/order.py:1121
 #: pretix/base/services/orders.py:1219
@@ -124,7 +130,7 @@ msgstr "خاصية البيانات الوصفية لـ '{name}' غير موجو
 #: pretix/api/serializers/event.py:216 pretix/api/serializers/event.py:500
 #, python-brace-format
 msgid "Meta data property '{name}' does not allow value '{value}'."
-msgstr "خاصية البيانات الوصفية {الاسم} لا تسمح بقيمة '{value}'."
+msgstr "خاصية البيانات الوصفية '{name}' لا يسمح بقيمة '{value}'."
 
 #: pretix/api/serializers/event.py:259
 #, python-brace-format
@@ -3422,10 +3428,9 @@ msgid "The voucher \"{voucher}\" no longer has sufficient budget."
 msgstr ""
 
 #: pretix/base/models/orders.py:830
-#, fuzzy, python-brace-format
-#| msgid "The voucher has been sent to {recipient}."
+#, python-brace-format
 msgid "The voucher \"{voucher}\" has been used in the meantime."
-msgstr "القسيمة تم إرسالها إلى {recipient}."
+msgstr "القسيمة \"{voucher}\" استخدمت في هذه الأثناء."
 
 #: pretix/base/models/orders.py:958 pretix/base/services/orders.py:898
 #: pretix/control/views/event.py:736
@@ -4495,10 +4500,9 @@ msgid ""
 "\"noopener\">Click here for detailed information on what this does.</a> "
 "Don't forget to set the correct fees above!"
 msgstr ""
-"نوصي لتمكين هذا إذا كنت تريد المستخدمين لديك لدفع الرسوم دفع مقدم الدفع "
-"الخاص بك. <a target=\"_blank\" href=\"{docs_url}\" rel=\"noopener\"> انقر "
-"هنا للحصول على معلومات مفصلة عن ما يفعل ذلك. </a> لا ننسى لضبط رسوم الصحيحة "
-"أعلاه!"
+"نوصي بتمكين هذا إذا كنت تريد من المستخدمين لديك دفع الرسوم مقدم خدمة الدفع "
+"الخاص بك. <a href=\"{docs_url}\" target=\"_blank\" rel=\"noopener\"> انقر "
+"هنا للحصول على معلومات مفصلة. </a> لا تنسى تحديد الرسوم الصحيحة أعلاه!"
 
 #: pretix/base/payment.py:334
 msgid "Restrict to countries"
@@ -5346,16 +5350,12 @@ msgstr ""
 "%(base)s."
 
 #: pretix/base/services/cart.py:134
-#, fuzzy, python-format
-#| msgid ""
-#| "You can select at most %(max)s add-ons from the category %(cat)s for the "
-#| "product %(base)s."
+#, python-format
 msgid ""
 "You can select every add-ons from the category %(cat)s for the product "
 "%(base)s at most once."
 msgstr ""
-"يمكنك تحديد في معظم %(max)s الصورة إضافات من فئة %(cat)s ليالي للمنتج "
-"%(base)s."
+"بامكانك اختيار الاضافات من الفئة%(cat)s للمنتجات %(base)sلمرة واحدة فقط."
 
 #: pretix/base/services/cart.py:135
 msgid ""
@@ -11792,10 +11792,9 @@ msgstr ""
 "الحساب الخاص بك pretix؟"
 
 #: pretix/control/templates/pretixcontrol/auth/oauth_authorization.html:24
-#, fuzzy, python-format
-#| msgid "You are currently working on behalf of %(user)s."
+#, python-format
 msgid "You are currently logged in as <strong>%(user)s</strong>."
-msgstr "كنت أعمل حاليا باسم%(user)s."
+msgstr "كنت تعمل حاليا باسم <strong>%(user)s</strong>."
 
 #: pretix/control/templates/pretixcontrol/auth/oauth_authorization.html:28
 msgid "The application requires the following permissions:"
@@ -14628,9 +14627,9 @@ msgid ""
 "applied to. If you apply two quotas to the same product, it will only be "
 "available if <strong>both</strong> quotas have capacity left."
 msgstr ""
-"يرجى تحديد المنتجات أو الاختلافات المنتج يجب أن تطبق هذه الحصص ل. إذا قمت "
-"بتطبيق اثنين من الحصص لنفس المنتج، وسوف تكون متاحة إلا إذا على  على حد سواء "
-"الحصص لديها قدرة اليسار."
+"يرجى تحديد المنتجات أو خيارات المنتج ي</strong>جب أن تنطبق هذه الحصص على. "
+"إذا قمت بتطبيق حصتين لنفس المنتج فسوف تكون متاحة فقط في حالة <strong> في "
+"حالة </strong> توفر سعة كافية."
 
 #: pretix/control/templates/pretixcontrol/items/quota_edit.html:41
 msgid "Advanced options"
@@ -15250,10 +15249,9 @@ msgid "Voucher code used:"
 msgstr "كود القسيمة المستخدمة:"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:341
-#, fuzzy, python-format
-#| msgid "Original price"
+#, python-format
 msgid "Original price: %(price)s"
-msgstr "السعر الأصلي"
+msgstr "السعر الأصلي: %(price)s"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:377
 #, fuzzy
@@ -16014,8 +16012,8 @@ msgid ""
 "Download an app that is compatible with pretix. For example, our check-in "
 "app <strong>pretixSCAN</strong> is available on all major platforms."
 msgstr ""
-"تحميل التطبيق متوافق مع pretix. على سبيل المثال، لدينا الاختيار في التطبيق "
-"على pretixSCAN متاح في جميع المنصات الرئيسية."
+"حمل تطبيقا متوافقا مع pretix. فعلى سبيل المثالى تطبيقنا  <strong>pretixSCAN</"
+"strong>متاح لجميع المنصات الرئيسة."
 
 #: pretix/control/templates/pretixcontrol/organizers/device_connect.html:14
 msgid "Download pretixSCAN"
