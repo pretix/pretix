@@ -13,6 +13,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='item',
             name='show_quota_left',
-            field=models.NullBooleanField(),
+            field=models.BooleanField(null=True, blank=True),
         ),
     ]

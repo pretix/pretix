@@ -16,6 +16,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='item',
             name='generate_tickets',
-            field=models.NullBooleanField(verbose_name='Allow ticket download'),
+            field=models.BooleanField(verbose_name='Allow ticket download', null=True, blank=True),
         ),
     ]
