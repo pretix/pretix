@@ -270,7 +270,7 @@ class CustomerStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
                 else None
             ),
             prefix='register',
-            request=self.request.event,
+            request=self.request,
         )
         for field in f.fields.values():
             field.required = False

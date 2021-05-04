@@ -437,7 +437,6 @@ class ChangeInformationView(CustomerRequiredMixin, FormView):
 
 class ConfirmChangeView(View):
     template_name = 'pretixpresale/organizers/customer_info.html'
-    form_class = ChangeInfoForm
 
     def get(self, request, *args, **kwargs):
         if not request.organizer.settings.customer_accounts:
