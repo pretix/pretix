@@ -61,6 +61,9 @@ class Customer(LoggedModel):
         unique_together = [['organizer', 'email']]
         ordering = ('email',)
 
+    def get_email_field_name(self):
+        return 'email'
+
     def save(self, **kwargs):
         if self.email:
             self.email = self.email.lower()
