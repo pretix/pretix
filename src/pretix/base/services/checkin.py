@@ -31,7 +31,7 @@
 # Unless required by applicable law or agreed to in writing, software distributed under the Apache License 2.0 is
 # distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations under the License.
-
+import os
 from datetime import datetime, timedelta
 from functools import partial, reduce
 
@@ -356,7 +356,7 @@ def _save_answers(op, answers, given_answers):
                 qa = answers[q]
             else:
                 qa = op.answers.create(question=q, answer=str(a))
-            qa.file.save(a.name, a, save=False)
+            qa.file.save(os.path.basename(a.name), a, save=False)
             qa.answer = 'file://' + qa.file.name
             qa.save()
             written = True
