@@ -19,7 +19,7 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
-from django.conf.urls import url
+from django.conf.urls import re_path
 
 from pretix.api.urls import event_router
 from pretix.plugins.ticketoutputpdf.api import (
@@ -31,18 +31,18 @@ from pretix.plugins.ticketoutputpdf.views import (
 )
 
 urlpatterns = [
-    url(r'^control/event/(?P<organizer>[^/]+)/(?P<event>[^/]+)/pdfoutput/$',
-        LayoutListView.as_view(), name='index'),
-    url(r'^control/event/(?P<organizer>[^/]+)/(?P<event>[^/]+)/pdfoutput/add$',
-        LayoutCreate.as_view(), name='add'),
-    url(r'^control/event/(?P<organizer>[^/]+)/(?P<event>[^/]+)/pdfoutput/(?P<layout>\d+)/default$',
-        LayoutSetDefault.as_view(), name='default'),
-    url(r'^control/event/(?P<organizer>[^/]+)/(?P<event>[^/]+)/pdfoutput/default$',
-        LayoutGetDefault.as_view(), name='getdefault'),
-    url(r'^control/event/(?P<organizer>[^/]+)/(?P<event>[^/]+)/pdfoutput/(?P<layout>\d+)/delete$',
-        LayoutDelete.as_view(), name='delete'),
-    url(r'^control/event/(?P<organizer>[^/]+)/(?P<event>[^/]+)/pdfoutput/(?P<layout>\d+)/editor',
-        LayoutEditorView.as_view(), name='edit'),
+    re_path(r'^control/event/(?P<organizer>[^/]+)/(?P<event>[^/]+)/pdfoutput/$',
+            LayoutListView.as_view(), name='index'),
+    re_path(r'^control/event/(?P<organizer>[^/]+)/(?P<event>[^/]+)/pdfoutput/add$',
+            LayoutCreate.as_view(), name='add'),
+    re_path(r'^control/event/(?P<organizer>[^/]+)/(?P<event>[^/]+)/pdfoutput/(?P<layout>\d+)/default$',
+            LayoutSetDefault.as_view(), name='default'),
+    re_path(r'^control/event/(?P<organizer>[^/]+)/(?P<event>[^/]+)/pdfoutput/default$',
+            LayoutGetDefault.as_view(), name='getdefault'),
+    re_path(r'^control/event/(?P<organizer>[^/]+)/(?P<event>[^/]+)/pdfoutput/(?P<layout>\d+)/delete$',
+            LayoutDelete.as_view(), name='delete'),
+    re_path(r'^control/event/(?P<organizer>[^/]+)/(?P<event>[^/]+)/pdfoutput/(?P<layout>\d+)/editor',
+            LayoutEditorView.as_view(), name='edit'),
 ]
 event_router.register('ticketlayouts', TicketLayoutViewSet)
 event_router.register('ticketlayoutitems', TicketLayoutItemViewSet)
