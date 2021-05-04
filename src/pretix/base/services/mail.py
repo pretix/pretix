@@ -211,7 +211,7 @@ def mail(email: Union[str, Sequence[str]], subject: str, template: Union[str, La
 
         if settings_holder:
             if settings_holder.settings.mail_bcc:
-                for bcc_mail in set.settings.mail_bcc.split(','):
+                for bcc_mail in settings_holder.settings.mail_bcc.split(','):
                     bcc.append(bcc_mail.strip())
 
             if settings_holder.settings.mail_from == settings.DEFAULT_FROM_EMAIL and settings_holder.settings.contact_mail and not headers.get('Reply-To'):
