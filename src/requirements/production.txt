@@ -1,15 +1,15 @@
 # Functional requirements
-Django==3.0.*,>=3.0.14
-djangorestframework==3.11.*
+Django==3.2.*
+djangorestframework==3.12.*
 python-dateutil==2.8.*
 isoweek
-requests==2.24.0
+requests==2.25.0
 pytz
-django-bootstrap3==12.0.*
+django-bootstrap3==15.0.*
 django-formset-js-improved==0.5.0.2
 django-compressor==2.4.*
 django-hierarkey==1.0.*,>=1.0.4
-django-filter==2.2.*
+django-filter==2.4.*
 django-scopes==1.2.*
 reportlab>=3.5.65
 PyPDF2==1.26.*
@@ -19,7 +19,7 @@ libsass==0.20.*
 django-otp==0.7.*,>=0.7.5
 python-u2flib-server==4.*
 webauthn==0.4.*
-django-formtools==2.2
+django-formtools==2.3
 celery==4.4.*
 kombu==4.6.*
 django-statici18n==1.9.*
@@ -58,7 +58,7 @@ django-countries>=6.0
 pyuca  # for better sorting of country names in django-countries
 defusedcsv>=1.1.0
 vat_moss_forked==2020.3.20.0.11.0
-django-localflavor>=2.2
+django-localflavor==3.0.*
 django-redis==4.11.*
 redis==3.4.*
 django-phonenumber-field==4.0.*
