@@ -377,12 +377,12 @@ class Order(LockModel, LoggedModel):
                 refund_sum=refund_sum_sq,
             )
             qs = qs.annotate(
-                computed_payment_refund_sum=Coalesce(payment_sum_sq, 0) - Coalesce(refund_sum_sq, 0),
+                computed_payment_refund_sum=Coalesce(payment_sum_sq, Decimal('0.00')) - Coalesce(refund_sum_sq, Decimal('0.00')),
             )
 
         qs = qs.annotate(
-            pending_sum_t=F('total') - Coalesce(payment_sum_sq, 0) + Coalesce(refund_sum_sq, 0),
-            pending_sum_rc=-1 * Coalesce(payment_sum_sq, 0) + Coalesce(refund_sum_sq, 0),
+            pending_sum_t=F('total') - Coalesce(payment_sum_sq, Decimal('0.00')) + Coalesce(refund_sum_sq, Decimal('0.00')),
+            pending_sum_rc=-1 * Coalesce(payment_sum_sq, Decimal('0.00')) + Coalesce(refund_sum_sq, Decimal('0.00')),
         )
         if refunds:
             qs = qs.annotate(
@@ -393,23 +393,23 @@ class Order(LockModel, LoggedModel):
             qs = qs.annotate(
                 is_overpaid=Case(
                     When(~Q(status=Order.STATUS_CANCELED) & Q(pending_sum_t__lt=-1e-8),
-                         then=Value('1')),
+                         then=Value(1)),
                     When(Q(status=Order.STATUS_CANCELED) & Q(pending_sum_rc__lt=-1e-8),
-                         then=Value('1')),
-                    default=Value('0'),
+                         then=Value(1)),
+                    default=Value(0),
                     output_field=models.IntegerField()
                 ),
                 is_pending_with_full_payment=Case(
                     When(Q(status__in=(Order.STATUS_EXPIRED, Order.STATUS_PENDING)) & Q(pending_sum_t__lte=1e-8)
                          & Q(require_approval=False),
-                         then=Value('1')),
-                    default=Value('0'),
+                         then=Value(1)),
+                    default=Value(0),
                     output_field=models.IntegerField()
                 ),
                 is_underpaid=Case(
                     When(Q(status=Order.STATUS_PAID) & Q(pending_sum_t__gt=1e-8),
-                         then=Value('1')),
-                    default=Value('0'),
+                         then=Value(1)),
+                    default=Value(0),
                     output_field=models.IntegerField()
                 )
             )

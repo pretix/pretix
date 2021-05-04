@@ -89,7 +89,7 @@ class MembershipQuerySet(models.QuerySet):
                         c=Count('*')
                     ).values('c')
                 ),
-                Value('0')
+                Value(0),
             )
         )
 
