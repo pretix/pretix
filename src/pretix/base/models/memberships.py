@@ -58,6 +58,9 @@ class MembershipType(LoggedModel):
         null=True, blank=True,
     )
 
+    class Meta:
+        ordering = ('id',)
+
     def __str__(self):
         return str(self.name)
 
