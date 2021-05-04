@@ -75,7 +75,7 @@ class Migration(migrations.Migration):
                 ('date', models.DateTimeField(blank=True, null=True)),
                 ('filename', models.CharField(max_length=255)),
                 ('type', models.CharField(max_length=255)),
-                ('file', models.FileField(blank=True, null=True, upload_to=pretix.base.models.base.cachedfile_name)),
+                ('file', models.FileField(blank=True, null=True, upload_to=pretix.base.models.base._cachedfile_name)),
             ],
         ),
         migrations.CreateModel(

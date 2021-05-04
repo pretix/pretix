@@ -36,7 +36,13 @@ from pretix.helpers.json import CustomJSONEncoder
 
 def cachedfile_name(instance, filename: str) -> str:
     secret = get_random_string(length=12)
-    return 'cachedfiles/%s.%s.%s' % (instance.id, secret, filename.split('.')[-1])
+    return '%s.%s.%s' % (instance.id, secret, filename.split('.')[-1])
+
+
+def _cachedfile_name(instance, filename: str) -> str:
+    # This was previously combined with cachedfile_name in one function, but a security patch for Django introduced
+    # additional file name validation in May 2021, and this was the best way to fix it without breaking plugins.
+    return 'cachedfiles/' + cachedfile_name(instance, filename)
 
 
 class CachedFile(models.Model):
@@ -48,7 +54,7 @@ class CachedFile(models.Model):
     date = models.DateTimeField(null=True, blank=True)
     filename = models.CharField(max_length=255)
     type = models.CharField(max_length=255)
-    file = models.FileField(null=True, blank=True, upload_to=cachedfile_name, max_length=255)
+    file = models.FileField(null=True, blank=True, upload_to=_cachedfile_name, max_length=255)
     web_download = models.BooleanField(default=True)  # allow web download, True for backwards compatibility in plugins
     session_key = models.TextField(null=True, blank=True)  # only allow download in this session
 

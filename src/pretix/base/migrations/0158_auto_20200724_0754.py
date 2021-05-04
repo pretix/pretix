@@ -16,7 +16,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='cachedfile',
             name='file',
-            field=models.FileField(max_length=255, null=True, upload_to=pretix.base.models.base.cachedfile_name),
+            field=models.FileField(max_length=255, null=True, upload_to=pretix.base.models.base._cachedfile_name),
         ),
         migrations.AlterField(
             model_name='cartposition',
