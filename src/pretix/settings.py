@@ -604,12 +604,14 @@ COMPRESS_PRECOMPILERS = (
 
 COMPRESS_ENABLED = COMPRESS_OFFLINE = not debug_fallback
 
-COMPRESS_CSS_FILTERS = (
-    # CssAbsoluteFilter is incredibly slow, especially when dealing with our _flags.scss
-    # However, we don't need it if we consequently use the static() function in Sass
-    # 'compressor.filters.css_default.CssAbsoluteFilter',
-    'compressor.filters.cssmin.CSSCompressorFilter',
-)
+COMPRESS_FILTERS = {
+    'css': (
+        # CssAbsoluteFilter is incredibly slow, especially when dealing with our _flags.scss
+        # However, we don't need it if we consequently use the static() function in Sass
+        # 'compressor.filters.css_default.CssAbsoluteFilter',
+        'compressor.filters.cssmin.CSSCompressorFilter',
+    )
+}
 
 INTERNAL_IPS = ('127.0.0.1', '::1')
 
