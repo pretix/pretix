@@ -248,6 +248,7 @@ class CustomerStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
             request=self.request.event,
         )
         for field in f.fields.values():
+            field._show_required = field.required
             field.required = False
             field.widget.is_required = False
         return f
@@ -273,6 +274,7 @@ class CustomerStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
             request=self.request,
         )
         for field in f.fields.values():
+            field._show_required = field.required
             field.required = False
             field.widget.is_required = False
         return f

@@ -184,6 +184,8 @@ class AddOnVariationField(forms.ChoiceField):
 
 
 class MembershipForm(forms.Form):
+    required_css_class = 'required'
+
     def __init__(self, *args, **kwargs):
         self.memberships = kwargs.pop('memberships')
         event = kwargs.pop('event')

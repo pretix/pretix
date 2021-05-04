@@ -45,6 +45,7 @@ class TokenGenerator(PasswordResetTokenGenerator):
 
 
 class AuthenticationForm(forms.Form):
+    required_css_class = 'required'
     email = forms.EmailField(
         label=_("E-mail"),
         widget=forms.EmailInput(attrs={'autofocus': True})
@@ -117,18 +118,19 @@ class AuthenticationForm(forms.Form):
 
 
 class RegistrationForm(forms.Form):
+    required_css_class = 'required'
     name_parts = forms.CharField()
     email = forms.EmailField(
         label=_("E-mail"),
     )
 
     error_messages = {
-        'incomplete': _('You need to fill out all fields.'),
         'rate_limit': _("We've received a lot of registration requests from you, please wait 10 minutes before you try again."),
         'duplicate': _(
             "An account with this email address is already registered. Please try to log in or reset your password "
             "instead."
         ),
+        'required': _('This field is required.'),
     }
 
     def __init__(self, request=None, *args, **kwargs):
@@ -170,13 +172,13 @@ class RegistrationForm(forms.Form):
                 pass
             else:
                 raise forms.ValidationError(
-                    self.error_messages['duplicate'],
+                    {'email': self.error_messages['duplicate']},
                     code='duplicate',
                 )
 
-        if not self.cleaned_data.get('email') or not self.cleaned_data.get('name_parts'):
+        if not self.cleaned_data.get('email'):
             raise forms.ValidationError(
-                self.error_messages['incomplete'],
+                {'email': self.error_messages['required']},
                 code='incomplete'
             )
         else:
@@ -221,21 +223,28 @@ class RegistrationForm(forms.Form):
 
 
 class SetPasswordForm(forms.Form):
+    required_css_class = 'required'
     error_messages = {
         'pw_mismatch': _("Please enter the same password twice"),
     }
+    email = forms.EmailField(
+        label=_('E-mail'),
+        disabled=True
+    )
     password = forms.CharField(
         label=_('Password'),
-        widget=forms.PasswordInput,
+        widget=forms.PasswordInput(attrs={'minlength': '8', 'autocomplete': 'new-password'}),
         required=True
     )
     password_repeat = forms.CharField(
         label=_('Repeat password'),
-        widget=forms.PasswordInput
+        widget=forms.PasswordInput(attrs={'minlength': '8', 'autocomplete': 'new-password'}),
     )
 
     def __init__(self, customer=None, *args, **kwargs):
         self.customer = customer
+        kwargs.setdefault('initial', {})
+        kwargs['initial']['email'] = self.customer.email
         super().__init__(*args, **kwargs)
 
     def clean(self):
@@ -257,6 +266,7 @@ class SetPasswordForm(forms.Form):
 
 
 class ResetPasswordForm(forms.Form):
+    required_css_class = 'required'
     error_messages = {
         'rate_limit': _("For security reasons, please wait 10 minutes before you try again."),
         'unknown': _("A user with this email address is not known in our system."),
@@ -298,11 +308,16 @@ class ResetPasswordForm(forms.Form):
 
 
 class ChangePasswordForm(forms.Form):
+    required_css_class = 'required'
     error_messages = {
         'pw_current_wrong': _("The current password you entered was not correct."),
         'pw_mismatch': _("Please enter the same password twice"),
         'rate_limit': _("For security reasons, please wait 5 minutes before you try again."),
     }
+    email = forms.EmailField(
+        label=_('E-mail'),
+        disabled=True
+    )
     password_current = forms.CharField(
         label=_('Your current password'),
         widget=forms.PasswordInput,
@@ -315,11 +330,13 @@ class ChangePasswordForm(forms.Form):
     )
     password_repeat = forms.CharField(
         label=_('Repeat password'),
-        widget=forms.PasswordInput
+        widget=forms.PasswordInput(attrs={'minlength': '8', 'autocomplete': 'new-password'}),
     )
 
     def __init__(self, customer, *args, **kwargs):
         self.customer = customer
+        kwargs.setdefault('initial', {})
+        kwargs['initial']['email'] = self.customer.email
         super().__init__(*args, **kwargs)
 
     def clean(self):
@@ -362,6 +379,7 @@ class ChangePasswordForm(forms.Form):
 
 
 class ChangeInfoForm(forms.ModelForm):
+    required_css_class = 'required'
     error_messages = {
         'pw_current_wrong': _("The current password you entered was not correct."),
         'rate_limit': _("For security reasons, please wait 5 minutes before you try again."),
