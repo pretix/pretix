@@ -44,7 +44,7 @@ def event():
 def req_with_session():
     factory = RequestFactory()
     r = factory.get('/')
-    SessionMiddleware().process_request(r)
+    SessionMiddleware(NotImplementedError).process_request(r)
     r.session.save()
     return r
 
