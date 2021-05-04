@@ -125,16 +125,24 @@ def customer_login(request, customer):
 
 
 def customer_logout(request):
-    # session_key = f'customer_auth_id:{request.organizer.pk}'
-    # hash_session_key = f'customer_auth_hash:{request.organizer.pk}'
-    # request.session.pop(session_key, None)
-    # request.session.pop(hash_session_key, None)
-    # request.session.cycle_key()
+    session_key = f'customer_auth_id:{request.organizer.pk}'
+    hash_session_key = f'customer_auth_hash:{request.organizer.pk}'
 
-    # Instead of only logging out for this organizer, log the user out domain-wide including all carts. This might
-    # be expected or unepxected behaviour for the users – we'll need to figure that out in practice.
-    request.session.flush()
+    # Remove user session
+    customer_id = request.session.pop(session_key, None)
+    request.session.pop(hash_session_key, None)
+
+    # Remove carts tied to this user
+    carts = request.session.get('carts', {})
+    for k, v in list(carts.items()):
+        if v.get('customer') == customer_id:
+            carts.pop(k)
+    request.session['carts'] = carts
+
+    # Cycle session key and CSRF token
+    request.session.cycle_key()
     rotate_token(request)
+
     request.customer = None
     request._cached_customer = None
 
