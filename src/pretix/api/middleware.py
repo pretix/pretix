@@ -89,7 +89,7 @@ class IdempotencyMiddleware:
                         call.response_body = json.dumps(resp.data)
                     else:
                         call.response_body = repr(resp).encode()
-                    call.response_headers = json.dumps(resp._headers)
+                    call.response_headers = json.dumps(resp.headers._store)
                     call.locked = None
                     call.save(update_fields=['locked', 'response_code', 'response_headers',
                                              'response_body'])
