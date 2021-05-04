@@ -3853,7 +3853,7 @@ class CustomerCheckoutTestCase(BaseCheckoutTestCase, TestCase):
             'register-name_parts_0': 'John Doe',
         }, follow=False)
         assert response.status_code == 200
-        assert b'alert-danger' in response.content
+        assert b'has-error' in response.content
 
     def test_guest_not_allowed_if_granting_membership(self):
         self.ticket.grant_membership_type = self.orga.membership_types.create(
