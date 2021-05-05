@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-04-30 09:39+0000\n"
-"PO-Revision-Date: 2021-04-27 21:00+0000\n"
+"PO-Revision-Date: 2021-05-05 19:38+0000\n"
 "Last-Translator: lapor-kris <kristijan.tkalec@posteo.si>\n"
 "Language-Team: Slovenian <https://translate.pretix.eu/projects/pretix/pretix/"
 "sl/>\n"
@@ -5916,73 +5916,80 @@ msgid ""
 "tickets. See the above option for more details. One email address for the "
 "order confirmation will always be required regardless of this setting."
 msgstr ""
+"Od strank zahtevajte, da za vse vstopnice vpišejo posamezne e-poštne "
+"naslove. Za več podrobnosti glejte zgornjo možnost. Ne glede na to "
+"nastavitev bo vedno zahtevan en e-poštni naslov za potrditev naročila."
 
 #: pretix/base/settings.py:192
 msgid "Ask for company per ticket"
-msgstr ""
+msgstr "Vprašajte za podjetje na vstopnico"
 
 #: pretix/base/settings.py:201
 msgid "Require company per ticket"
-msgstr ""
+msgstr "Zahtevajte podjetje na vstopnico"
 
 #: pretix/base/settings.py:211
 msgid "Ask for postal addresses per ticket"
-msgstr ""
+msgstr "Vprašajte za poštne naslove na vstopnico"
 
 #: pretix/base/settings.py:220
 msgid "Require postal addresses per ticket"
-msgstr ""
+msgstr "Zahtevajte poštne naslove na vstopnico"
 
 #: pretix/base/settings.py:230
 msgid "Ask for the order email address twice"
-msgstr ""
+msgstr "Dvakrat vprašajte za e-poštni naslov naročila"
 
 #: pretix/base/settings.py:231
 msgid ""
 "Require customers to fill in the primary email address twice to avoid errors."
 msgstr ""
+"V izogib napakam od strank zahtevajte, da primarni e-poštni naslov izpolnijo "
+"dvakrat."
 
 #: pretix/base/settings.py:240
 msgid "Ask for a phone number per order"
-msgstr ""
+msgstr "Vprašajte za telefonsko številko pri naročilu"
 
 #: pretix/base/settings.py:249
 msgid "Require a phone number per order"
-msgstr ""
+msgstr "Zahtevajte telefonsko številko pri naročilu"
 
 #: pretix/base/settings.py:259
 msgid "Ask for invoice address"
-msgstr ""
+msgstr "Vprašajte za naslov računa"
 
 #: pretix/base/settings.py:268
 msgid "Do not ask for invoice address if an order is free"
-msgstr ""
+msgstr "Ne zahtevajte naslova računa, če je naročilo brezplačno"
 
 #: pretix/base/settings.py:277
 msgid "Require customer name"
-msgstr ""
+msgstr "Zahtevajte ime stranke"
 
 #: pretix/base/settings.py:286
 msgid "Show attendee names on invoices"
-msgstr ""
+msgstr "Prikaži imena udeležencev na računih"
 
 #: pretix/base/settings.py:295
 msgid ""
 "On invoices from one EU country into another EU country with a different "
 "currency, print the tax amounts in both currencies if possible"
 msgstr ""
+"Na računih iz ene države EU v drugo državo EU z drugo valuto natisnite "
+"davčne zneske v obeh valutah, če je to mogoče"
 
 #: pretix/base/settings.py:305
 msgid "Require invoice address"
-msgstr ""
+msgstr "Zahtevajte naslov računa"
 
 #: pretix/base/settings.py:315
 msgid "Require a business addresses"
-msgstr ""
+msgstr "Zahtevajte poslovne naslove"
 
 #: pretix/base/settings.py:316
 msgid "This will require users to enter a company name."
-msgstr ""
+msgstr "Uporabniki bodo morali vnesti ime podjetja."
 
 #: pretix/base/settings.py:326
 msgid "Ask for beneficiary"
@@ -6035,10 +6042,8 @@ msgid ""
 msgstr ""
 
 #: pretix/base/settings.py:395
-#, fuzzy
-#| msgid "Expiration date"
 msgid "Show expiration date of order"
-msgstr "Datum poteka"
+msgstr "Prikaži datum poteka naročila"
 
 #: pretix/base/settings.py:396
 msgid ""
