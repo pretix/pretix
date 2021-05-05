@@ -69,7 +69,7 @@
     border: 1px solid $input-border;
     border-radius: $input-border-radius;
     height: $input-height-base;
-    padding: $padding-base-vertical $padding-base-horizontal;
+    padding: $padding-base-vertical 0 $padding-base-vertical $padding-base-horizontal; // Setting the padding-right to zero, as some versions Firefox render the arrow-buttons on number inputs useless.
     color: $input-color;
     background-color: $input-bg;
     @include box-shadow(inset 0 1px 1px rgba(0, 0, 0, .075));
