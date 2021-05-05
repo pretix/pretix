@@ -133,28 +133,30 @@ def delete_old_file(fname):
 
 @app.task(base=TransactionAwareProfiledEventTask)
 def regenerate_css(event):
+    settings = event.settings._cache()  # ignore organizer settings
+
     # main.scss
     css, checksum = compile_scss(event)
     fname = 'pub/{}/{}/presale.{}.css'.format(event.organizer.slug, event.slug, checksum[:16])
 
-    if event.settings.get('presale_css_checksum', '') != checksum:
-        old_fname = event.settings.get('presale_css_file') if 'presale_css_file' in event.settings._cache() else None
+    if settings.get('presale_css_checksum', '') != checksum:
+        old_fname = settings.get('presale_css_file')
         newname = default_storage.save(fname, ContentFile(css.encode('utf-8')))
         event.settings.set('presale_css_file', newname)
         event.settings.set('presale_css_checksum', checksum)
-        if old_fname != newname:
+        if old_fname and old_fname != newname:
             delete_old_file(old_fname)
 
     # widget.scss
     css, checksum = compile_scss(event, file='widget.scss', fonts=False)
     fname = 'pub/{}/{}/widget.{}.css'.format(event.organizer.slug, event.slug, checksum[:16])
 
-    if event.settings.get('presale_widget_css_checksum', '') != checksum:
-        old_fname = event.settings.get('presale_css_file') if 'presale_widget_css_file' in event.settings._cache() else None
+    if settings.get('presale_widget_css_checksum', '') != checksum:
+        old_fname = settings.get('presale_css_file')
         newname = default_storage.save(fname, ContentFile(css.encode('utf-8')))
         event.settings.set('presale_widget_css_file', newname)
         event.settings.set('presale_widget_css_checksum', checksum)
-        if old_fname != newname:
+        if old_fname and old_fname != newname:
             delete_old_file(old_fname)
 
 
