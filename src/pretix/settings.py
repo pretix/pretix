@@ -722,7 +722,7 @@ if config.has_option('sentry', 'dsn') and not any(c in sys.argv for c in ('shell
                 event_level=logging.CRITICAL
             )
         ],
-        environment=SITE_URL,
+        environment=urlparse(SITE_URL).netloc,
         release=__version__,
         send_default_pii=False,
     )
