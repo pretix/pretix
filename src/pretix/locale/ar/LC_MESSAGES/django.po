@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-04-30 09:39+0000\n"
-"PO-Revision-Date: 2021-05-04 14:06+0000\n"
+"PO-Revision-Date: 2021-05-05 10:58+0000\n"
 "Last-Translator: Mohamed Tawfiq <mtawfiq@wafyapp.com>\n"
 "Language-Team: Arabic <https://translate.pretix.eu/projects/pretix/pretix/ar/"
 ">\n"
@@ -4606,41 +4606,31 @@ msgid "Payment process description in order confirmation emails"
 msgstr "وصف عملية الدفع من أجل رسائل البريد الإلكتروني تأكيد"
 
 #: pretix/base/payment.py:1006
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "This text will be included for the {payment_info} placeholder in order "
-#| "confirmation mails. It should instruct the user on how to proceed with "
-#| "the payment. You can use the placeholders {order}, {total}, {currency} "
-#| "and {total_with_currency}"
+#, python-brace-format
 msgid ""
 "This text will be included for the {payment_info} placeholder in order "
 "confirmation mails. It should instruct the user on how to proceed with the "
 "payment. You can use the placeholders {order}, {amount}, {currency} and "
 "{amount_with_currency}."
 msgstr ""
-"وسيتم إدراج هذا النص ل{payment_info} نائبا في رسائل تأكيد الطلب. يجب أن "
-"إرشاد المستخدم على كيفية المضي قدما في الدفع. يمكنك إستخدام النائبة {order}، "
-"{total}، {currency}و {total_with_currency}"
+"سيتم تضمين هذا النص لغرض {payment_info} لعنصر النائب بهدف تأكير البريد. على "
+"أن يوجه المستخدم لكيفية الدفع. يمكنك استخدام عناصر النائب  {order}, {amount}"
+", {currency} و{amount_with_currency}."
 
 #: pretix/base/payment.py:1013
 msgid "Payment process description for pending orders"
 msgstr "وصف عملية الدفع لأوامر معلقة"
 
 #: pretix/base/payment.py:1014
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "This text will be shown on the order confirmation page for pending "
-#| "orders. It should instruct the user on how to proceed with the payment. "
-#| "You can use the placeholders {order}, {total}, {currency} and "
-#| "{total_with_currency}"
+#, python-brace-format
 msgid ""
 "This text will be shown on the order confirmation page for pending orders. "
 "It should instruct the user on how to proceed with the payment. You can use "
 "the placeholders {order}, {amount}, {currency} and {amount_with_currency}."
 msgstr ""
-"سيتم عرض هذا النص على صفحة تأكيد أمر الأوامر المعلقة. يجب أن إرشاد المستخدم "
-"على كيفية المضي قدما في الدفع. يمكنك إستخدام النائبة {order}، {total}، "
-"{currency} و {total_with_currency}"
+"سيعرض هذا النص في صفحة تأكيد الطلب للطلبات في الانتظار. يجب أن يوجه المستخدم "
+"لآلية الدفع. استخدم عناصر النائب{order}, {amount}, "
+"{currency}و{amount_with_currency}."
 
 #: pretix/base/payment.py:1063
 msgid "Offsetting"
@@ -5426,11 +5416,10 @@ msgid "Your export did not contain any data."
 msgstr "لم التصدير لا يحتوي على أية بيانات."
 
 #: pretix/base/services/invoices.py:102
-#, fuzzy, python-brace-format
-#| msgid "Please complete your payment before %(date)s"
+#, python-brace-format
 msgctxt "invoice"
 msgid "Please complete your payment before {expire_date}."
-msgstr "يرجى إتمام عملية الدفع قبل %(date)s"
+msgstr "يرجى إتمام عملية الدفع قبل {expire_date}."
 
 #: pretix/base/services/invoices.py:113
 #, python-brace-format
@@ -8429,10 +8418,9 @@ msgid "The task has been completed."
 msgstr "تم الانتهاء من المهمة."
 
 #: pretix/control/forms/__init__.py:197
-#, fuzzy, python-brace-format
-#| msgid "Please only upload PDF files."
+#, python-brace-format
 msgid "Please do not upload files larger than {size}!"
-msgstr "يرجى فقط تحميل الملفات PDF."
+msgstr "الرجاء عدم تحميل ملفات بحجم أكبر من{size}!"
 
 #: pretix/control/forms/__init__.py:217
 msgid "Filetype not allowed!"
@@ -8524,10 +8512,9 @@ msgid "Do not copy"
 msgstr "لا تنسخ"
 
 #: pretix/control/forms/event.py:310 pretix/control/forms/subevents.py:386
-#, fuzzy, python-brace-format
-#| msgid "Default language"
+#, python-brace-format
 msgid "Default ({value})"
-msgstr "اللغة الافتراضية"
+msgstr "تلقائي ({value})"
 
 #: pretix/control/forms/event.py:362 pretix/control/forms/organizer.py:118
 msgid "Custom domain"
@@ -10069,23 +10056,12 @@ msgid "Send information to waiting list"
 msgstr "إرسال رسائل البريد الإلكتروني"
 
 #: pretix/control/forms/orders.py:765 pretix/control/forms/orders.py:791
-#, fuzzy, python-brace-format
-#| msgid "Can create events"
+#, python-brace-format
 msgid "Canceled: {event}"
-msgstr "يمكن إنشاء أحداث"
+msgstr "ملغية: {event}"
 
 #: pretix/control/forms/orders.py:776
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Hello {attendee_name},\n"
-#| "\n"
-#| "a ticket for {event} that has been ordered for you is now paid.\n"
-#| "\n"
-#| "You can view the details and status of your ticket here:\n"
-#| "{url}\n"
-#| "\n"
-#| "Best regards,\n"
-#| "Your {event} team"
+#, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -10101,28 +10077,22 @@ msgid ""
 "\n"
 "Your {event} team"
 msgstr ""
-"مرحبا {attendee_name}،\n"
+"مرحبا\n"
 "\n"
-"تم دفع تذكرة لك لحضور {event}.\n"
+"إذا وصلك هذا البريد الإلكتروني فنأسف باعلامك أن فعالية {event} قد ألغيت\n"
 "\n"
-"يمكنك عرض تفاصيل التذكرة من خلال:\n"
+"سيتم اعادة المبلغ {refund_amount} عبر نفس طريقة الدفع التي استخدمتها\n"
+"\n"
+"يمكنك الاطلاع على حالة الطلب هنا\n"
+"\n"
 "{url}\n"
 "\n"
-"تحياتنا،\n"
-"فريق {event}"
+"تحياتنا\n"
+"\n"
+"فريق فعالية {event}"
 
 #: pretix/control/forms/orders.py:803
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Hello {attendee_name},\n"
-#| "\n"
-#| "a ticket for {event} that has been ordered for you is now paid.\n"
-#| "\n"
-#| "You can view the details and status of your ticket here:\n"
-#| "{url}\n"
-#| "\n"
-#| "Best regards,\n"
-#| "Your {event} team"
+#, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -10134,15 +10104,15 @@ msgid ""
 "\n"
 "Your {event} team"
 msgstr ""
-"مرحبا {attendee_name}،\n"
+"مرحبا\n"
 "\n"
-"تم دفع تذكرة لك لحضور {event}.\n"
+"نقدم لك أسفنا عبد هذا الإيميل ونعلمك بإلغاء الفعالية{event}\n"
 "\n"
-"يمكنك عرض تفاصيل التذكرة من خلال:\n"
-"{url}\n"
+"وعليه فلن تحصل على تذكرة من قائمة الإنتظار\n"
 "\n"
-"تحياتنا،\n"
-"فريق {event}"
+"تحياتنا\n"
+"\n"
+"فريق الفعالية {event}"
 
 #: pretix/control/forms/orders.py:835 pretix/plugins/sendmail/forms.py:117
 #, fuzzy
@@ -16814,20 +16784,16 @@ msgid "Step 2: Confirm deletion"
 msgstr "الخطوة 3: تاكيد الحذف"
 
 #: pretix/control/templates/pretixcontrol/shredder/download.html:36
-#, fuzzy, python-format
-#| msgid ""
-#| "Please re-check that you are fully certain that you want to delete the "
-#| "selected categories of data from the event <strong>%(event)s</strong>. In "
-#| "this case, please enter your user password here:"
+#, python-format
 msgid ""
 "Please re-check that you are fully certain that you want to delete the "
 "selected categories of data from the event <strong>%(event)s</strong>. To "
 "confirm you really want this, please type out the event's short name "
 "(\"%(slug)s\") here:"
 msgstr ""
-"الرجاء إعادة الاختيار التي كنت متأكدا تماما أنك تريد حذف فئات مختارة من "
-"البيانات من الحدث على <strong>%(event)s</strong>. في هذه الحالة، يرجى إدخال "
-"كلمة المرور المستخدم الخاص بك هنا:"
+"الرجاء إعادة التحقق من أنك ترغب في حذف فئات مختارة من بيانات الفعالية على "
+"<strong>%(event)s</strong>. للتأكيد الرجاء ادخال الاسم المختصر للفعالية(\""
+"%(slug)s\") هنا:"
 
 #: pretix/control/templates/pretixcontrol/shredder/download.html:41
 #, fuzzy
@@ -17482,15 +17448,11 @@ msgid "Disable notifications"
 msgstr "اشعارات البريد الالكتروني"
 
 #: pretix/control/templates/pretixcontrol/user/reauth.html:12
-#, fuzzy, python-format
-#| msgid ""
-#| "We just want to make sure it's really you. Please re-enter your password "
-#| "to continue."
+#, python-format
 msgid ""
 "We just want to make sure it's really you. Please re-authenticate with "
 "'%(login_provider)s'."
-msgstr ""
-"نحن نريد فقط للتأكد من انها حقا لك. يرجى إعادة إدخال كلمة المرور للمتابعة."
+msgstr "نرغب في التحقق من هويتك، الرجاء إعادة التحقق '%(login_provider)s'."
 
 #: pretix/control/templates/pretixcontrol/user/reauth.html:14
 msgid ""
@@ -19942,7 +19904,7 @@ msgstr ""
 msgid ""
 "Currently, this feature supports <code>.csv</code> files and files in the "
 "MT940 format."
-msgstr "حاليا، هذه الميزة تدعم بتنسيق csv الملفات والملفات في شكل MT940."
+msgstr "تدعم هذه الخاصية حاليا ملفات  <code>.csv</code> والملفات بصيغةMT940."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:29
 #: pretix/plugins/banktransfer/views.py:522
@@ -21305,10 +21267,10 @@ msgid ""
 "confirmed in some cases. Please only activate this payment method if your "
 "payment term allows for this lag."
 msgstr ""
-"على الرغم من الاسم، والمدفوعات Sofort عبر الشريط هي على <strong> لا </"
-"strong> معالجتها على الفور ولكن قد يستغرق ما يصل إلى  14 يوما لابد من تأكيد "
-"في بعض الحالات. يرجى تفعيلها فقط طريقة الدفع هذه إذا سمح مصطلح الدفع الخاص "
-"بك لهذا التأخر."
+"برغم الاسم إلا أن مدفوعات Sofort عبر Stripe لا تدفع  <strong>فورا </strong> "
+"بل قد تستغرق بعض الوقت<strong> تستغرق 14 يوم</strong> حتى تتأكد في بعض "
+"الأحيان. الرجاء تفعيل طريقة الدفع هذه فقط في حال كانت شروط الدفع لديكم "
+"تستحمل هذا التأخر."
 
 #: pretix/plugins/stripe/payment.py:264 pretix/plugins/stripe/payment.py:1239
 msgid "EPS"
@@ -22156,13 +22118,9 @@ msgstr[4] "يجب أن تختار %(min_count)s خيارات من هذا الت�
 msgstr[5] "يجب أن تختار %(min_count)s خيارات من هذا التصنيف."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_addons.html:53
-#, fuzzy, python-format
-#| msgid ""
-#| "You can choose between %(min_count)s and %(max_count)s options from this "
-#| "category."
+#, python-format
 msgid "You can choose up to %(max_count)s options from this category."
-msgstr ""
-"يمكنك الاختيار بين%(min_count)s و %(max_count)s الصورة خيارات من هذه الفئة."
+msgstr "يمكنك الاختيار من هذه الفئة حتى %(max_count)s ."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_addons.html:57
 #, python-format
@@ -22538,22 +22496,20 @@ msgid "price"
 msgstr "السعر"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:289
-#, fuzzy, python-format
-#| msgid "Add product"
+#, python-format
 msgid "One product"
 msgid_plural "%(num)s products"
-msgstr[0] "أضف منتج"
-msgstr[1] "أضف منتج"
-msgstr[2] "أضف منتج"
-msgstr[3] "أضف منتج"
-msgstr[4] "أضف منتج"
-msgstr[5] "أضف منتج"
+msgstr[0] "صفر منتج"
+msgstr[1] "منتج واحد"
+msgstr[2] "منتجان %(num)s"
+msgstr[3] "بضعة منتجات %(num)s"
+msgstr[4] "العديد من المنتجات %(num)s"
+msgstr[5] "عدد %(num)s"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:303
-#, fuzzy, python-format
-#| msgid "incl. %(rate)s%% %(taxname)s"
+#, python-format
 msgid "incl. %(tax_sum)s taxes"
-msgstr "بما في ذلك %(rate)s%% %(taxname)s"
+msgstr "يشمل ضريبة %(tax_sum)s"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:312
 #: pretix/presale/templates/pretixpresale/event/index.html:238
@@ -22688,10 +22644,9 @@ msgstr "غير مصنف"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:30
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:189
-#, fuzzy, python-format
-#| msgid "Show all events of %(name)s"
+#, python-format
 msgid "Show full-size image of %(item)s"
-msgstr "عرض كل الأحداث من %(name)s"
+msgstr "أظهر الحجم الكبير للصورة%(item)s"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:65
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:122
@@ -22973,10 +22928,9 @@ msgid "The current value of your gift card is %(value)s."
 msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/order.html:161
-#, fuzzy, python-format
-#| msgid "This gift card is not known."
+#, python-format
 msgid "This gift card is valid until %(expiry)s."
-msgstr "ولا يعرف هذه البطاقة هدية."
+msgstr "هذه البطاقة سارية حتى%(expiry)s."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:172
 #, python-format
@@ -23180,10 +23134,9 @@ msgstr "برد فقط"
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:93
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:114
-#, fuzzy, python-format
-#| msgid "Your gift card has been applied."
+#, python-format
 msgid "Your gift card will be valid until %(expiry_date)s."
-msgstr "وقد تم تطبيق بطاقة الهدايا."
+msgstr "بطاقة هديتك ستبقى سارية حتى%(expiry_date)s."
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:102
 msgid "I want the refund as a gift card for later purchases"
