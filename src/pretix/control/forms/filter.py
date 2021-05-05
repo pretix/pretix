@@ -40,7 +40,7 @@ from django import forms
 from django.apps import apps
 from django.conf import settings
 from django.db.models import (
-    Count, Exists, F, Max, Model, OuterRef, Q, QuerySet,
+    Count, Exists, F, Max, Model, OuterRef, Q, QuerySet, OrderBy,
 )
 from django.db.models.functions import Coalesce, ExtractWeekDay
 from django.urls import reverse, reverse_lazy
@@ -62,7 +62,7 @@ from pretix.base.signals import register_payment_providers
 from pretix.control.forms.widgets import Select2
 from pretix.control.signals import order_search_filter_q
 from pretix.helpers.countries import CachedCountries
-from pretix.helpers.database import FixedOrderBy, rolledback_transaction
+from pretix.helpers.database import rolledback_transaction
 from pretix.helpers.dicts import move_to_end
 from pretix.helpers.i18n import i18ncomp
 
@@ -1270,10 +1270,10 @@ class CheckInFilterForm(FilterForm):
         '-code': ('-order__code', '-item__name'),
         'email': ('order__email', 'item__name'),
         '-email': ('-order__email', '-item__name'),
-        'status': (FixedOrderBy(F('last_entry'), nulls_first=True, descending=True), 'order__code'),
-        '-status': (FixedOrderBy(F('last_entry'), nulls_last=True), '-order__code'),
-        'timestamp': (FixedOrderBy(F('last_entry'), nulls_first=True), 'order__code'),
-        '-timestamp': (FixedOrderBy(F('last_entry'), nulls_last=True, descending=True), '-order__code'),
+        'status': (OrderBy(F('last_entry'), nulls_first=True, descending=True), 'order__code'),
+        '-status': (OrderBy(F('last_entry'), nulls_last=True), '-order__code'),
+        'timestamp': (OrderBy(F('last_entry'), nulls_first=True), 'order__code'),
+        '-timestamp': (OrderBy(F('last_entry'), nulls_last=True, descending=True), '-order__code'),
         'item': ('item__name', 'variation__value', 'order__code'),
         '-item': ('-item__name', '-variation__value', '-order__code'),
         'seat': ('seat__sorting_rank', 'seat__guid'),

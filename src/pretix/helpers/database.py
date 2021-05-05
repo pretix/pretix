@@ -23,7 +23,6 @@ import contextlib
 
 from django.db import transaction
 from django.db.models import Aggregate, Field, Lookup
-from django.db.models.expressions import OrderBy
 
 
 class DummyRollbackException(Exception):
@@ -57,28 +56,6 @@ def casual_reads():
     Kept for backwards compatibility.
     """
     yield
-
-
-class FixedOrderBy(OrderBy):
-    # Workaround for https://code.djangoproject.com/ticket/28848
-    template = '%(expression)s %(ordering)s'
-
-    def as_sql(self, compiler, connection, template=None, **extra_context):
-        if not template:
-            if self.nulls_last:
-                template = '%s NULLS LAST' % self.template
-            elif self.nulls_first:
-                template = '%s NULLS FIRST' % self.template
-        connection.ops.check_expression_support(self)
-        expression_sql, params = compiler.compile(self.expression)
-        placeholders = {
-            'expression': expression_sql,
-            'ordering': 'DESC' if self.descending else 'ASC',
-        }
-        placeholders.update(extra_context)
-        template = template or self.template
-        params = params * template.count('%(expression)s')
-        return (template % placeholders).rstrip(), params
 
 
 class GroupConcat(Aggregate):
