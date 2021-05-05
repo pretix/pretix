@@ -159,7 +159,7 @@ def regenerate_css(event):
 
 
 @app.task(base=TransactionAwareTask)
-def regenerate_organizer_css(organizer_id: int):
+def regenerate_organizer_css(organizer_id: int, regenerate_events=True):
     organizer = Organizer.objects.get(pk=organizer_id)
 
     with scope(organizer=organizer):
@@ -185,12 +185,13 @@ def regenerate_organizer_css(organizer_id: int):
             if old_fname != newname:
                 delete_old_file(old_fname)
 
-        non_inherited_events = set(Event_SettingsStore.objects.filter(
-            object__organizer=organizer, key__in=affected_keys
-        ).values_list('object_id', flat=True))
-        for event in organizer.events.all():
-            if event.pk not in non_inherited_events:
-                regenerate_css.apply_async(args=(event.pk,))
+        if regenerate_events:
+            non_inherited_events = set(Event_SettingsStore.objects.filter(
+                object__organizer=organizer, key__in=affected_keys
+            ).values_list('object_id', flat=True))
+            for event in organizer.events.all():
+                if event.pk not in non_inherited_events:
+                    regenerate_css.apply_async(args=(event.pk,))
 
 
 register_fonts = Signal()

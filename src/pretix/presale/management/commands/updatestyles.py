@@ -52,7 +52,7 @@ class Command(BaseCommand):
         if options.get('organizer'):
             ostore = ostore.filter(object__slug=options['organizer'])
         for es in ostore:
-            regenerate_organizer_css.apply_async(args=(es.object_id,))
+            regenerate_organizer_css.apply_async(args=(es.object_id,), kwargs={'regenerate_events': False})
 
         estore = Event_SettingsStore.objects.filter(key="presale_css_file").order_by('-object__date_from')
         if options.get('event'):
