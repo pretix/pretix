@@ -105,8 +105,19 @@
             </button>
         </div>
     </form>
+
     {% compress js %}
         <script type="text/javascript" src="{% static "vuejs/vue.js" %}"></script>
+        <script type="text/javascript" src="{% static "d3/d3.v6.js" %}"></script>
+        <script type="text/javascript" src="{% static "d3/d3-color.v2.js" %}"></script>
+        <script type="text/javascript" src="{% static "d3/d3-dispatch.v2.js" %}"></script>
+        <script type="text/javascript" src="{% static "d3/d3-ease.v2.js" %}"></script>
+        <script type="text/javascript" src="{% static "d3/d3-interpolate.v2.js" %}"></script>
+        <script type="text/javascript" src="{% static "d3/d3-selection.v2.js" %}"></script>
+        <script type="text/javascript" src="{% static "d3/d3-timer.v2.js" %}"></script>
+        <script type="text/javascript" src="{% static "d3/d3-transition.v2.js" %}"></script>
+        <script type="text/javascript" src="{% static "d3/d3-drag.v2.js" %}"></script>
+        <script type="text/javascript" src="{% static "d3/d3-zoom.v2.js" %}"></script>
         <script type="text/vue" src="{% static 'pretixcontrol/js/ui/checkinrules/datetimefield.vue' %}"></script>
         <script type="text/vue" src="{% static 'pretixcontrol/js/ui/checkinrules/lookup-select2.vue' %}"></script>
         <script type="text/vue" src="{% static 'pretixcontrol/js/ui/checkinrules/checkin-rule.vue' %}"></script>
