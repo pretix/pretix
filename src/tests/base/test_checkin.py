@@ -621,16 +621,33 @@ def test_rules_time_isbefore_with_tolerance(event, position, clist):
 def test_rules_time_isafter_custom_time(event, position, clist):
     # Ticket is valid starting at a custom time
     event.settings.timezone = 'Europe/Berlin'
-    clist.rules = {"isAfter": [{"var": "now"}, {"buildTime": ["custom", "2020-01-01T22:00:00.000Z"]}, None]}
+    clist.rules = {"isAfter": [{"var": "now"}, {"buildTime": ["customtime", "22:00:00"]}, None]}
     clist.save()
-    with freeze_time("2020-01-01 21:55:00"):
+    with freeze_time("2020-01-01 21:55:00+01:00"):
         assert not OrderPosition.objects.filter(SQLLogic(clist).apply(clist.rules), pk=position.pk).exists()
         with pytest.raises(CheckInError) as excinfo:
             perform_checkin(position, clist, {})
         assert excinfo.value.code == 'rules'
         assert 'Only allowed after 23:00' in str(excinfo.value)
 
-    with freeze_time("2020-01-01 22:05:00"):
+    with freeze_time("2020-01-01 22:05:00+01:00"):
+        assert OrderPosition.objects.filter(SQLLogic(clist).apply(clist.rules), pk=position.pk).exists()
+        perform_checkin(position, clist, {})
+
+
+@pytest.mark.django_db
+def test_rules_time_isafter_custom_datetime(event, position, clist):
+    # Ticket is valid starting at a custom time
+    event.settings.timezone = 'Europe/Berlin'
+    clist.rules = {"isAfter": [{"var": "now"}, {"buildTime": ["custom", "2020-01-01T23:00:00.000+01:00"]}, None]}
+    clist.save()
+    with freeze_time("2020-01-01 21:55:00+00:00"):
+        assert not OrderPosition.objects.filter(SQLLogic(clist).apply(clist.rules), pk=position.pk).exists()
+        with pytest.raises(CheckInError) as excinfo:
+            perform_checkin(position, clist, {})
+        assert excinfo.value.code == 'rules'
+
+    with freeze_time("2020-01-01 22:05:00+00:00"):
         assert OrderPosition.objects.filter(SQLLogic(clist).apply(clist.rules), pk=position.pk).exists()
         perform_checkin(position, clist, {})
 
