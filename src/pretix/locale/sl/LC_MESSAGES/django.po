@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-04-30 09:39+0000\n"
-"PO-Revision-Date: 2021-05-05 20:47+0000\n"
+"PO-Revision-Date: 2021-05-05 21:34+0000\n"
 "Last-Translator: lapor-kris <kristijan.tkalec@posteo.si>\n"
 "Language-Team: Slovenian <https://translate.pretix.eu/projects/pretix/pretix/"
 "sl/>\n"
@@ -157,10 +157,8 @@ msgstr ""
 "se ob unovčitvi darilne kartice uporablja davek od prodaje."
 
 #: pretix/api/serializers/item.py:183 pretix/control/forms/item.py:538
-#, fuzzy
-#| msgid "You cannot select a quota and a specific product at the same time."
 msgid "Gift card products should not be admission products at the same time."
-msgstr "Darilne kartice ne smejo biti hkrati sprejemni izdelki."
+msgstr "Izdelki z darilnimi karticami ne smejo biti hkrati izdelki za sprejem."
 
 #: pretix/api/serializers/item.py:220
 #, python-brace-format
@@ -296,11 +294,11 @@ msgstr "Naročilo zavrnjeno"
 
 #: pretix/api/webhooks.py:248
 msgid "Ticket checked in"
-msgstr "Vstopnica 'checkirana'"
+msgstr "Vstopnica je uporabljena"
 
 #: pretix/api/webhooks.py:252
 msgid "Ticket check-in reverted"
-msgstr "Vstopnica je odcheckirana"
+msgstr "Vstopnica je v ponovni uporabi"
 
 #: pretix/api/webhooks.py:256
 msgid "Event created"
@@ -462,7 +460,7 @@ msgstr "Vstopnica za dogodek {event}-{code}"
 #: pretix/plugins/checkinlists/exporters.py:459
 #: pretix/plugins/ticketoutputpdf/exporters.py:75
 msgid "Start date"
-msgstr "Začetni datum"
+msgstr "Datum začetka"
 
 #: pretix/base/exporters/dekodi.py:226 pretix/base/exporters/invoices.py:73
 msgid ""
@@ -486,7 +484,7 @@ msgstr ""
 #: pretix/plugins/checkinlists/exporters.py:460
 #: pretix/plugins/ticketoutputpdf/exporters.py:82
 msgid "End date"
-msgstr "Končni datum"
+msgstr "Datum konca"
 
 #: pretix/base/exporters/dekodi.py:234 pretix/base/exporters/invoices.py:81
 msgid ""
@@ -993,7 +991,6 @@ msgstr "Datum zaključka dogodka"
 #: pretix/base/exporters/orderlist.py:888
 #: pretix/base/exporters/waitinglist.py:111 pretix/control/forms/event.py:1309
 #: pretix/control/forms/organizer.py:83
-#, fuzzy
 msgid "Event slug"
 msgstr "Oznaka dogodka"
 
@@ -1310,10 +1307,8 @@ msgid "Seat number"
 msgstr "Številka sedeža"
 
 #: pretix/base/exporters/orderlist.py:576
-#, fuzzy
-#| msgid "Order code"
 msgid "Order comment"
-msgstr "Komentar na naročilo"
+msgstr "Komentar k naročilu"
 
 #: pretix/base/exporters/orderlist.py:741
 msgid "Order payments and refunds"
@@ -1445,10 +1440,8 @@ msgid "Infinite"
 msgstr "Neomejeno"
 
 #: pretix/base/exporters/orderlist.py:871
-#, fuzzy
-#| msgid "Gift card"
 msgid "Gift card redemptions"
-msgstr "Unovčene darilne kartice"
+msgstr "Unovčenje darilnih kartic"
 
 #: pretix/base/exporters/orderlist.py:888
 #: pretix/base/exporters/orderlist.py:979 pretix/base/models/giftcards.py:75
@@ -4562,43 +4555,33 @@ msgid "Payment process description in order confirmation emails"
 msgstr "Opis postopka plačila za potrditev v e-poštnih sporočilih"
 
 #: pretix/base/payment.py:1006
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "This text will be included for the {payment_info} placeholder in order "
-#| "confirmation mails. It should instruct the user on how to proceed with "
-#| "the payment. You can use the placeholders {order}, {total}, {currency} "
-#| "and {total_with_currency}."
+#, python-brace-format
 msgid ""
 "This text will be included for the {payment_info} placeholder in order "
 "confirmation mails. It should instruct the user on how to proceed with the "
 "payment. You can use the placeholders {order}, {amount}, {currency} and "
 "{amount_with_currency}."
 msgstr ""
-"To besedilo bo za vsebnik {payment_info} vključeno v e-pošti za potrditev "
-"naročila. Besedilo mora dati uporabniku navodila, kako nadaljevati s "
-"plačilom. Uporabite lahko vsebnike: {order}, {total}, {currency} in "
-"{total_with_currency}."
+"To besedilo bo vključeno v nadomestno polje {payment_info} v sporočilih za "
+"potrditev naročila. Uporabnika mora obvestiti o tem, kako naj nadaljuje s "
+"plačilom. Uporabite lahko nadomestne oznake {order}, {amount}, {currency} in "
+"{amount_with_currency}."
 
 #: pretix/base/payment.py:1013
 msgid "Payment process description for pending orders"
 msgstr "Opis postopka plačila za čakajoča naročila"
 
 #: pretix/base/payment.py:1014
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "This text will be shown on the order confirmation page for pending "
-#| "orders. It should instruct the user on how to proceed with the payment. "
-#| "You can use the placeholders {order}, {total}, {currency} and "
-#| "{total_with_currency}."
+#, python-brace-format
 msgid ""
 "This text will be shown on the order confirmation page for pending orders. "
 "It should instruct the user on how to proceed with the payment. You can use "
 "the placeholders {order}, {amount}, {currency} and {amount_with_currency}."
 msgstr ""
-"To besedilo bo prikazano na strani za potrditev naročila za čakajoča "
-"naročila. Besedilo mora dati uporabniku navodila, kako nadaljevati s "
-"plačilom. Uporabite lahko vsebnike: {order}, {total}, {currency} in "
-"{total_with_currency}."
+"To besedilo se prikaže na strani za potrditev naročila za čakajoča naročila. "
+"Uporabnika mora obvestiti o tem, kako naj nadaljuje s plačilom. Uporabite "
+"lahko nadomestne oznake {order}, {amount}, {currency} in "
+"{amount_with_currency}."
 
 #: pretix/base/payment.py:1063
 msgid "Offsetting"
@@ -6179,10 +6162,13 @@ msgid ""
 "If using days, the order will expire at the end of the last day. Using "
 "minutes is more exact, but should only be used for real-time payment methods."
 msgstr ""
+"Če uporabljate dneve, se naročilo izteče ob koncu zadnjega dne. Uporaba "
+"minut je natančnejša, vendar jo lahko uporabite le za načine plačila v "
+"realnem času."
 
 #: pretix/base/settings.py:529
 msgid "Payment term in days"
-msgstr ""
+msgstr "Rok plačila v dnevih"
 
 #: pretix/base/settings.py:536
 msgid ""
@@ -6191,10 +6177,15 @@ msgid ""
 "recommend 14 days. If you only use real-time payment methods, we recommend "
 "still setting two or three days to allow people to retry failed payments."
 msgstr ""
+"Število dni po oddaji naročila, ko mora uporabnik plačati za ohranitev "
+"rezervacije. Če uporabljate počasne načine plačila, kot je bančno nakazilo, "
+"priporočamo 14 dni. Če uporabljate samo metode plačila v realnem času, "
+"priporočamo, da še vedno nastavite dva ali tri dni, da lahko uporabniki "
+"ponovijo neuspešna plačila."
 
 #: pretix/base/settings.py:554
 msgid "Only end payment terms on weekdays"
-msgstr ""
+msgstr "Konec plačilnih rokov samo ob delavnikih"
 
 #: pretix/base/settings.py:555
 msgid ""
