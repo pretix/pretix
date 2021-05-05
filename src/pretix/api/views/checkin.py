@@ -22,7 +22,7 @@
 import django_filters
 from django.core.exceptions import ValidationError
 from django.db.models import (
-    Count, Exists, F, Max, OuterRef, Prefetch, Q, Subquery, OrderBy,
+    Count, Exists, F, Max, OrderBy, OuterRef, Prefetch, Q, Subquery,
 )
 from django.db.models.functions import Coalesce
 from django.http import Http404

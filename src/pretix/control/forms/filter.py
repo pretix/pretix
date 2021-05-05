@@ -40,7 +40,7 @@ from django import forms
 from django.apps import apps
 from django.conf import settings
 from django.db.models import (
-    Count, Exists, F, Max, Model, OuterRef, Q, QuerySet, OrderBy,
+    Count, Exists, F, Max, Model, OrderBy, OuterRef, Q, QuerySet,
 )
 from django.db.models.functions import Coalesce, ExtractWeekDay
 from django.urls import reverse, reverse_lazy
