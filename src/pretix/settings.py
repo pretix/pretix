@@ -803,3 +803,5 @@ COUNTRIES_OVERRIDE = {
 
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 25000
 DATA_UPLOAD_MAX_MEMORY_SIZE = 10 * 1024 * 1024  # 10 MB
+
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'  # sadly. we would prefer BigInt, and should use it for all new models but the migration will be hard
