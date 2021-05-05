@@ -56,6 +56,9 @@ def excel_safe(val):
     if not isinstance(val, KNOWN_TYPES):
         val = str(val)
 
+    if isinstance(val, bytes):
+        val = val.decode("utf-8", errors="ignore")
+
     if isinstance(val, str):
         val = re.sub(ILLEGAL_CHARACTERS_RE, '', val)
 
