@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-04-30 09:39+0000\n"
-"PO-Revision-Date: 2021-05-05 11:03+0000\n"
+"PO-Revision-Date: 2021-05-05 11:40+0000\n"
 "Last-Translator: Mohamed Tawfiq <mtawfiq@wafyapp.com>\n"
 "Language-Team: Arabic <https://translate.pretix.eu/projects/pretix/pretix/ar/"
 ">\n"
@@ -10077,19 +10077,19 @@ msgid ""
 "\n"
 "Your {event} team"
 msgstr ""
-"مرحبا\n"
+"مرحبا،\n"
 "\n"
-"إذا وصلك هذا البريد الإلكتروني فنأسف باعلامك أن فعالية {event} قد ألغيت\n"
+"نأسف تم إلغاء فعالية{event}.\n"
 "\n"
-"سيتم اعادة المبلغ {refund_amount} عبر نفس طريقة الدفع التي استخدمتها\n"
+"سيتم إعادة المبلغ{refund_amount}عبر نفس طريقة الدفع التي استخدمتها.\n"
 "\n"
-"يمكنك الاطلاع على حالة الطلب هنا\n"
+"يمكنك الإطلاع على الحالة الراهنة للطلب هنا:\n"
 "\n"
 "{url}\n"
 "\n"
-"تحياتنا\n"
+"تحياتنا،\n"
 "\n"
-"فريق فعالية {event}"
+"فريق {event}"
 
 #: pretix/control/forms/orders.py:803
 #, python-brace-format
@@ -10508,46 +10508,37 @@ msgid ""
 msgstr "تم مسح رمز غير معروف\"{barcode}...\" لقائمة{list}، نوع\"{type}\"."
 
 #: pretix/control/logdisplay.py:224
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "A scan for position #{posid} at {datetime} for list \"{list}\" has been "
-#| "uploaded even though it has been scanned already."
+#, python-brace-format
 msgid ""
 "Scan scan of revoked code \"{barcode}…\" at {datetime} for list \"{list}\", "
 "type \"{type}\", was uploaded."
 msgstr ""
-"تفحص لموقف #{posid} في{datetime} لقائمة \"{list}\" تم تحميلها حتى لو تم "
-"مسحها بالفعل."
+"تم تحديث مسح الرمز الملغي\"{barcode}...\"في {datetime}للقائمة\"{list}\"، "
+"نوع\"{type}\"."
 
 #: pretix/control/logdisplay.py:234
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "The check-in of position #{posid} on list \"{list}\" has been reverted."
+#, python-brace-format
 msgid ""
 "Scan of revoked code \"{barcode}\" for list \"{list}\", type \"{type}\", was "
 "uploaded."
-msgstr "في الاختيار من موقف # {posid} على قائمة \"{list}\" وقد عادت."
+msgstr "تم تحديث مسح رمز ملغى\"{barcode}\"لقائمة\"{list}\"، نوع\"{type}\""
 
 #: pretix/control/logdisplay.py:245
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "A scan for position #{posid} at {datetime} for list \"{list}\" has been "
-#| "uploaded even though it has been scanned already."
+#, python-brace-format
 msgid ""
 "Denied scan of position #{posid} at {datetime} for list \"{list}\", type "
 "\"{type}\", error code \"{errorcode}\"."
 msgstr ""
-"تفحص لموقف #{posid} في{datetime} لقائمة \"{list}\" تم تحميلها حتى لو تم "
-"مسحها بالفعل."
+"تم رفض مسح الحالة#{posid}في{datetime}لقائمة\"{list}\"نوع\"{type}\"خطأ الرمز\""
+"{errorcode}\"."
 
 #: pretix/control/logdisplay.py:256
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "The check-in of position #{posid} on list \"{list}\" has been reverted."
+#, python-brace-format
 msgid ""
 "Denied scan of position #{posid} for list \"{list}\", type \"{type}\", error "
 "code \"{errorcode}\"."
-msgstr "في الاختيار من موقف # {posid} على قائمة \"{list}\" وقد عادت."
+msgstr ""
+"رفض نسح الحالة#{posid}قائمة\"{list}\"،نوع\"{type}\"خطأ الرمز\"{errorcode}\"."
 
 #: pretix/control/logdisplay.py:266
 #, fuzzy, python-brace-format
@@ -10730,14 +10721,10 @@ msgid ""
 msgstr ""
 
 #: pretix/control/logdisplay.py:339
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "The email address has been changed from \"{old_email}\" to "
-#| "\"{new_email}\"."
+#, python-brace-format
 msgid ""
 "The phone number has been changed from \"{old_phone}\" to \"{new_phone}\"."
-msgstr ""
-"تم تغيير عنوان البريد الإلكتروني من \"{old_email}\" إلى \"{new_email}\"."
+msgstr "تم تغيير رقم الهاتف من\"{old_phone}\"إلى\"{new_phone}\"."
 
 #: pretix/control/logdisplay.py:341
 msgid "The order locale has been changed."
@@ -18639,20 +18626,7 @@ msgid "Your cancellation request"
 msgstr "رسوم الإلغاء"
 
 #: pretix/control/views/orders.py:726
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Hello,\n"
-#| "\n"
-#| "unfortunately, we denied your order request for {event}.\n"
-#| "\n"
-#| "{comment}\n"
-#| "\n"
-#| "You can view the details of your order here:\n"
-#| "\n"
-#| "{url}\n"
-#| "\n"
-#| "Best regards,\n"
-#| "Your {event} team"
+#, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -18663,16 +18637,9 @@ msgid ""
 msgstr ""
 "مرحبا،\n"
 "\n"
-"نعتذر منك، تم رفض طلبك {event}.\n"
+"للأسف لم نتمكن من تنفيذ طلبك وتم إلغاءه\n"
 "\n"
-"{comment}\n"
-"\n"
-"ويمكنك الاطلاع على تفاصيل طلبك هنا:\n"
-"\n"
-"{url}\n"
-"\n"
-"تحياتنا،\n"
-"فريق{event}"
+"فريق فعاليتك{event}"
 
 #: pretix/control/views/orders.py:770
 msgid ""
@@ -19736,10 +19703,9 @@ msgid "Invalid IBAN/BIC"
 msgstr ""
 
 #: pretix/plugins/banktransfer/payment.py:347
-#, fuzzy, python-brace-format
-#| msgid "Bank account type"
+#, python-brace-format
 msgid "Bank account {iban}"
-msgstr "البنك نوع الحساب"
+msgstr "الحساب المصرفي{iban}"
 
 #: pretix/plugins/banktransfer/payment.py:363
 msgid "Can only create a bank transfer refund from an existing payment."
@@ -21364,10 +21330,9 @@ msgstr "اسم غير معروف"
 #: pretix/plugins/stripe/payment.py:983 pretix/plugins/stripe/payment.py:1035
 #: pretix/plugins/stripe/payment.py:1150 pretix/plugins/stripe/payment.py:1302
 #: pretix/plugins/stripe/payment.py:1405
-#, fuzzy, python-brace-format
-#| msgid "Bank account type"
+#, python-brace-format
 msgid "Bank account at {bank}"
-msgstr "البنك نوع الحساب"
+msgstr "الحساب في مصرف{bank}"
 
 #: pretix/plugins/stripe/payment.py:991
 msgid "iDEAL via Stripe"
@@ -21410,10 +21375,9 @@ msgid "Spain"
 msgstr "إسبانيا"
 
 #: pretix/plugins/stripe/payment.py:1227
-#, fuzzy, python-brace-format
-#| msgid "Bank account details"
+#, python-brace-format
 msgid "Bank account {iban} at {bank}"
-msgstr "تفاصيل الحساب المصرفي"
+msgstr "حساب مصرفي{iban}في{bank}"
 
 #: pretix/plugins/stripe/payment.py:1238
 #, fuzzy
@@ -23592,16 +23556,11 @@ msgid "You cannot change this order."
 msgstr "لا يمكنك إلغاء هذا النظام."
 
 #: pretix/presale/views/order.py:1240
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "The order has been canceled. You can now select how you want to transfer "
-#| "the money back to the user."
+#, python-brace-format
 msgid ""
 "The order has been changed. You can now proceed by paying the open amount of "
 "{amount}."
-msgstr ""
-"تم إلغاء هذا الأمر. يمكنك الآن تحديد كيف تريد لنقل الجزء الخلفي المال "
-"للمستخدم."
+msgstr "تم الغاء الطلب، يمكنك الاستمرار في دفع مبلغ{amount}."
 
 #: pretix/presale/views/user.py:61
 msgid "We had difficulties processing your input."
