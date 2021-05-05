@@ -152,7 +152,7 @@ def regenerate_css(event):
     fname = 'pub/{}/{}/widget.{}.css'.format(event.organizer.slug, event.slug, checksum[:16])
 
     if settings.get('presale_widget_css_checksum', '') != checksum:
-        old_fname = settings.get('presale_css_file')
+        old_fname = settings.get('presale_widget_css_file')
         newname = default_storage.save(fname, ContentFile(css.encode('utf-8')))
         event.settings.set('presale_widget_css_file', newname)
         event.settings.set('presale_widget_css_checksum', checksum)
