@@ -6,6 +6,7 @@ src/pretix/static/datetimepicker/* linguist-vendored
 src/pretix/static/colorpicker/* linguist-vendored
 src/pretix/static/fileupload/* linguist-vendored
 src/pretix/static/vuejs/* linguist-vendored
+src/pretix/static/d3/* linguist-vendored
 src/pretix/static/select2/* linguist-vendored
 src/pretix/static/charts/* linguist-vendored
 src/pretix/static/rrule/* linguist-vendored
