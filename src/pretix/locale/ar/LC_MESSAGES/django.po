@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-04-30 09:39+0000\n"
-"PO-Revision-Date: 2021-05-05 10:58+0000\n"
+"PO-Revision-Date: 2021-05-05 11:03+0000\n"
 "Last-Translator: Mohamed Tawfiq <mtawfiq@wafyapp.com>\n"
 "Language-Team: Arabic <https://translate.pretix.eu/projects/pretix/pretix/ar/"
 ">\n"
@@ -10427,16 +10427,14 @@ msgid "Price of position #{posid} changed from {old_price} to {new_price}."
 msgstr "سعر موقف # {posid} تغير من {old_price} إلى {new_price}."
 
 #: pretix/control/logdisplay.py:106
-#, fuzzy, python-brace-format
-#| msgid "Price of position #{posid} changed from {old_price} to {new_price}."
+#, python-brace-format
 msgid "Tax rule of position #{posid} changed from {old_rule} to {new_rule}."
-msgstr "سعر موقف # {posid} تغير من {old_price} إلى {new_price}."
+msgstr "وضع الضريبة {posid} تغير من {old_rule}إلى{new_rule}"
 
 #: pretix/control/logdisplay.py:113
-#, fuzzy, python-brace-format
-#| msgid "Price of position #{posid} changed from {old_price} to {new_price}."
+#, python-brace-format
 msgid "Tax rule of fee #{fee} changed from {old_rule} to {new_rule}."
-msgstr "سعر موقف # {posid} تغير من {old_price} إلى {new_price}."
+msgstr "رسوم الضريبة {fee}تغيرت من {old_rule}إلى{new_rule}."
 
 #: pretix/control/logdisplay.py:120
 #, fuzzy
@@ -10495,24 +10493,19 @@ msgid "(unknown)"
 msgstr "(غير معروف)"
 
 #: pretix/control/logdisplay.py:203
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "A scan for position #{posid} at {datetime} for list \"{list}\" has been "
-#| "uploaded even though it has been scanned already."
+#, python-brace-format
 msgid ""
 "Unknown scan of code \"{barcode}…\" at {datetime} for list \"{list}\", type "
 "\"{type}\"."
 msgstr ""
-"تفحص لموقف #{posid} في{datetime} لقائمة \"{list}\" تم تحميلها حتى لو تم "
-"مسحها بالفعل."
+"تم مسح رمز غير محدد\"{barcode}...\" في \"{datetime}\"لقائمة\"{list}\"نوع\""
+"{type}\"."
 
 #: pretix/control/logdisplay.py:213
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "The check-in of position #{posid} on list \"{list}\" has been reverted."
+#, python-brace-format
 msgid ""
 "Unknown scan of code \"{barcode}…\" for list \"{list}\", type \"{type}\"."
-msgstr "في الاختيار من موقف # {posid} على قائمة \"{list}\" وقد عادت."
+msgstr "تم مسح رمز غير معروف\"{barcode}...\" لقائمة{list}، نوع\"{type}\"."
 
 #: pretix/control/logdisplay.py:224
 #, fuzzy, python-brace-format
