@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-04-30 09:39+0000\n"
-"PO-Revision-Date: 2021-05-05 19:38+0000\n"
+"PO-Revision-Date: 2021-05-05 20:47+0000\n"
 "Last-Translator: lapor-kris <kristijan.tkalec@posteo.si>\n"
 "Language-Team: Slovenian <https://translate.pretix.eu/projects/pretix/pretix/"
 "sl/>\n"
@@ -5993,7 +5993,7 @@ msgstr "Uporabniki bodo morali vnesti ime podjetja."
 
 #: pretix/base/settings.py:326
 msgid "Ask for beneficiary"
-msgstr ""
+msgstr "Vprašajte za upravičenca"
 
 #: pretix/base/settings.py:338
 msgid ""
@@ -6003,43 +6003,54 @@ msgid ""
 "details as well as for displaying the value on the invoice. The field will "
 "not be required."
 msgstr ""
+"Če želite v obrazec za naslov računa dodati besedilno polje po meri, npr. za "
+"registracijsko številko, ki je specifična za posamezno državo, tukaj "
+"izpolnite oznako. Ta oznaka se bo uporabila tako za poziv uporabniku, naj "
+"vnese svoje podatke, kot tudi za prikaz vrednosti na računu. Polje ne bo "
+"obvezno."
 
 #: pretix/base/settings.py:350
 msgid "Ask for VAT ID"
-msgstr ""
+msgstr "Vprašajte za identifikacijsko številko za DDV"
 
 #: pretix/base/settings.py:351
 msgid ""
 "Does only work if an invoice address is asked for. VAT ID is not required."
 msgstr ""
+"Deluje le, če je zahtevan naslov računa. Identifikacijska številka za DDV ni "
+"potrebna."
 
 #: pretix/base/settings.py:361
 msgid "Invoice address explanation"
-msgstr ""
+msgstr "Pojasnilo naslova računa"
 
 #: pretix/base/settings.py:364
 msgid "This text will be shown above the invoice address form during checkout."
-msgstr ""
+msgstr "To besedilo bo prikazano nad obrazcem za naslov računa med naročanjem."
 
 #: pretix/base/settings.py:373
 msgid "Show paid amount on partially paid invoices"
-msgstr ""
+msgstr "Prikaži plačani znesek na delno plačanih računih"
 
 #: pretix/base/settings.py:374
 msgid ""
 "If an invoice has already been paid partially, this option will add the paid "
 "and pending amount to the invoice."
 msgstr ""
+"Če je bil račun že delno plačan, se s to možnostjo na račun doda plačani in "
+"še neplačani znesek."
 
 #: pretix/base/settings.py:384
 msgid "Show free products on invoices"
-msgstr ""
+msgstr "Prikaži brezplačne izdelke na računih"
 
 #: pretix/base/settings.py:385
 msgid ""
 "Note that invoices will never be generated for orders that contain only free "
 "products."
 msgstr ""
+"Upoštevajte, da se računi nikoli ne bodo ustvarili za naročila, ki vsebujejo "
+"samo brezplačne izdelke."
 
 #: pretix/base/settings.py:395
 msgid "Show expiration date of order"
@@ -6050,28 +6061,32 @@ msgid ""
 "The expiration date will not be shown if the invoice is generated after the "
 "order is paid."
 msgstr ""
+"Če je račun izstavljen po plačilu naročila, se datum poteka veljavnosti ne "
+"prikaže."
 
 #: pretix/base/settings.py:405
 msgid "Minimum length of invoice number after prefix"
-msgstr ""
+msgstr "Najmanjša dolžina številke računa po predponi"
 
 #: pretix/base/settings.py:406
 msgid ""
 "The part of your invoice number after your prefix will be filled up with "
 "leading zeros up to this length, e.g. INV-001 or INV-00001."
 msgstr ""
+"Del številke računa, ki sledi predponi, bo zapolnjen z ničlami do te "
+"dolžine, npr. INV-001 ali INV-00001."
 
 #: pretix/base/settings.py:415
 msgid "Generate invoices with consecutive numbers"
-msgstr ""
+msgstr "Ustvari račune z zaporednimi številkami"
 
 #: pretix/base/settings.py:416
 msgid "If deactivated, the order code will be used in the invoice number."
-msgstr ""
+msgstr "Če je onemogočeno, se v številki računa uporabi koda naročila."
 
 #: pretix/base/settings.py:425
 msgid "Invoice number prefix"
-msgstr ""
+msgstr "Predpona številke računa"
 
 #: pretix/base/settings.py:426
 msgid ""
@@ -6083,10 +6098,17 @@ msgid ""
 "can use %Y (with century) %y (without century) to insert the year of the "
 "invoice, or %m and %d for the day of month."
 msgstr ""
+"To se bo dodalo številkam računov. Če to polje pustite prazno, bo "
+"uporabljena oznaka dogodka, ki ji bo sledil pomišljaj. Pozor: Če več "
+"dogodkov v isti organizaciji uporablja isto vrednost v tem polju, si bodo "
+"delili razpon številk, kar pomeni, da bo vsaka polna številka uporabljena "
+"največ enkrat pri vseh vaših dogodkih. Ta nastavitev vpliva samo na "
+"prihodnje račune. Uporabite lahko %Y (s stoletjem) %y (brez stoletja) za "
+"vnos leta računa ali %m in %d za dan v mesecu."
 
 #: pretix/base/settings.py:440
 msgid "Invoice number prefix for cancellations"
-msgstr ""
+msgstr "Predpona številke računa za preklice"
 
 #: pretix/base/settings.py:441
 msgid ""
@@ -6094,24 +6116,29 @@ msgid ""
 "this field empty, the same numbering scheme will be used that you configured "
 "for regular invoices."
 msgstr ""
+"To se bo dodalo številkam računov pri preklicih. Če to polje pustite prazno, "
+"bo uporabljena enaka shema številčenja, kot ste jo nastavili za običajne "
+"račune."
 
 #: pretix/base/settings.py:460
 msgid "Reservation period"
-msgstr ""
+msgstr "Obdobje rezervacije"
 
 #: pretix/base/settings.py:461
 msgid ""
 "The number of minutes the items in a user's cart are reserved for this user."
 msgstr ""
+"Število minut, v katerih so predmeti v uporabnikovi košarici rezervirani za "
+"tega uporabnika."
 
 #: pretix/base/settings.py:470
 msgid ""
 "Directly redirect to check-out after a product has been added to the cart."
-msgstr ""
+msgstr "Po dodajanju izdelka v košarico neposredno preusmerite na odjavo."
 
 #: pretix/base/settings.py:479
 msgid "End of presale text"
-msgstr ""
+msgstr "Konec besedila o predprodaji"
 
 #: pretix/base/settings.py:482
 msgid ""
@@ -6119,30 +6146,33 @@ msgid ""
 "timeframe for this event is over. You can use it to describe other options "
 "to get a ticket, such as a box office."
 msgstr ""
+"To besedilo bo prikazano nad trgovino z vstopnicami, ko se izteče časovni "
+"okvir prodaje za ta dogodek. Uporabite ga lahko za opis drugih možnosti za "
+"pridobitev vstopnice, na primer fizične blagajne."
 
 #: pretix/base/settings.py:496
 msgid "Guidance text"
-msgstr ""
+msgstr "Navodila"
 
 #: pretix/base/settings.py:497
 msgid ""
 "This text will be shown above the payment options. You can explain the "
 "choices to the user here, if you want."
 msgstr ""
+"To besedilo bo prikazano nad možnostmi plačila. Če želite, lahko tukaj "
+"uporabniku razložite izbor možnosti."
 
 #: pretix/base/settings.py:508 pretix/base/settings.py:516
 msgid "in days"
-msgstr ""
+msgstr "v dnevih"
 
 #: pretix/base/settings.py:509 pretix/base/settings.py:517
 msgid "in minutes"
-msgstr ""
+msgstr "v minutah"
 
 #: pretix/base/settings.py:513
-#, fuzzy
-#| msgid "Enable payment method"
 msgid "Set payment term"
-msgstr "Omogoči način plačila"
+msgstr "Določite rok plačila"
 
 #: pretix/base/settings.py:519
 msgid ""
