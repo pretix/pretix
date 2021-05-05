@@ -107,10 +107,11 @@ ALLOWED_LANGUAGES = dict(settings.LANGUAGES)
 def get_babel_locale():
     babel_locale = 'en'
     # Babel, and therefore django-phonenumberfield, do not support our custom locales such das de_Informal
-    if localedata.exists(translation.get_language()):
-        babel_locale = translation.get_language()
-    elif localedata.exists(translation.get_language()[:2]):
-        babel_locale = translation.get_language()[:2]
+    if translation.get_language():
+        if localedata.exists(translation.get_language()):
+            babel_locale = translation.get_language()
+        elif localedata.exists(translation.get_language()[:2]):
+            babel_locale = translation.get_language()[:2]
     return babel_locale
 
 
