@@ -134,6 +134,44 @@ var form_handlers = function (el) {
     el.find("input[name*=question], select[name*=question]").change(questions_toggle_dependent);
     questions_toggle_dependent();
     questions_init_photos(el);
+
+    var cancel_fee_slider_update = function () {
+        if (typeof django === "undefined") {
+            window.setTimeout(cancel_fee_slider_update, 100);
+            return;
+        }
+        $("#cancel-fee-keep").text(interpolate(
+            gettext("The organizer keeps %(currency)s %(amount)s"),
+            {
+                'currency': $("body").attr("data-currency"),
+                'amount': floatformat(cancel_fee_slider.getValue(), 2)
+            },
+            true
+        ));
+        $("#cancel-fee-refund").text(interpolate(
+            gettext("You get %(currency)s %(amount)s back"),
+            {
+                'currency': $("body").attr("data-currency"),
+                'amount': floatformat((cancel_fee_slider.getAttribute("max") - cancel_fee_slider.getValue()), 2)
+            },
+            true
+        ));
+    }
+    var cancel_fee_slider = el.find('#cancel-fee-slider').slider({
+    }).on('slide', function () {
+        cancel_fee_slider_update();
+    }).data('slider');
+    if (cancel_fee_slider) {
+        cancel_fee_slider_update();
+        el.find("#cancel-fee-custom").click(function () {
+            try {
+                var newinp = parseFloat(prompt(gettext("Please enter the amount the organizer can keep."), cancel_fee_slider.getValue().toString()).replace(',', '.'));
+                cancel_fee_slider.setValue(newinp);
+                cancel_fee_slider_update();
+            } catch (e) {
+            }
+        });
+    }
 };
 
 
@@ -392,44 +430,6 @@ $(function () {
     });
 
     form_handlers($("body"));
-
-    var cancel_fee_slider_update = function () {
-        if (typeof django === "undefined") {
-            window.setTimeout(cancel_fee_slider_update, 100);
-            return;
-        }
-        $("#cancel-fee-keep").text(interpolate(
-            gettext("The organizer keeps %(currency)s %(amount)s"),
-            {
-                'currency': $("body").attr("data-currency"),
-                'amount': floatformat(cancel_fee_slider.getValue(), 2)
-            },
-            true
-        ));
-        $("#cancel-fee-refund").text(interpolate(
-            gettext("You get %(currency)s %(amount)s back"),
-            {
-                'currency': $("body").attr("data-currency"),
-                'amount': floatformat((cancel_fee_slider.getAttribute("max") - cancel_fee_slider.getValue()), 2)
-            },
-            true
-        ));
-    }
-    var cancel_fee_slider = $('#cancel-fee-slider').slider({
-    }).on('slide', function () {
-        cancel_fee_slider_update();
-    }).data('slider');
-    if (cancel_fee_slider) {
-        cancel_fee_slider_update();
-        $("#cancel-fee-custom").click(function () {
-            try {
-                var newinp = parseFloat(prompt(gettext("Please enter the amount the organizer can keep."), cancel_fee_slider.getValue().toString()).replace(',', '.'));
-                cancel_fee_slider.setValue(newinp);
-                cancel_fee_slider_update();
-            } catch (e) {
-            }
-        });
-    }
 
     var local_tz = moment.tz.guess()
     $("span[data-timezone], small[data-timezone]").each(function() {
