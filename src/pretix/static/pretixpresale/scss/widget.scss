@@ -83,6 +83,9 @@
       @include box-shadow(inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px $color-rgba);
     }
   }
+  input[type=number] {
+    padding-right: 0; // Setting the padding-right to zero, as some versions Firefox render the arrow-buttons on number inputs useless.
+  }
   input[type="checkbox"],
   input[type="radio"] {
     box-sizing: border-box; // 1

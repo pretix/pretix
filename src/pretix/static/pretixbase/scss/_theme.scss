@@ -1,3 +1,7 @@
+input[type=number] {
+  padding-right: 0; // Setting the padding-right to zero, as some versions Firefox render the arrow-buttons on number inputs useless.
+}
+
 .sidebar-nav li > a > .fa {
   color: $navbar-inverse-bg;
 }
