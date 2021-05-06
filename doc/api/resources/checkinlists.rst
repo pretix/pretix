@@ -697,6 +697,9 @@ Order position endpoints
    * ``product`` - Tickets with this product may not be scanned at this device
    * ``rules`` - Check-in prevented by a user-defined rule
 
+   In case of reason ``rules``, there might be an additional response field ``reason_explanation`` with a human-readable
+   description of the violated rules. However, that field can also be missing or be ``null``.
+
    :param organizer: The ``slug`` field of the organizer to fetch
    :param event: The ``slug`` field of the event to fetch
    :param list: The ID of the check-in list to look for

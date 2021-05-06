@@ -395,52 +395,54 @@ class CheckinListPositionViewSet(viewsets.ReadOnlyModelViewSet):
                     except ValidationError:
                         pass
 
-        try:
-            perform_checkin(
-                op=op,
-                clist=self.checkinlist,
-                given_answers=given_answers,
-                force=force,
-                ignore_unpaid=ignore_unpaid,
-                nonce=nonce,
-                datetime=dt,
-                questions_supported=self.request.data.get('questions_supported', True),
-                canceled_supported=self.request.data.get('canceled_supported', False),
-                user=self.request.user,
-                auth=self.request.auth,
-                type=type,
-            )
-        except RequiredQuestionsError as e:
-            return Response({
-                'status': 'incomplete',
-                'require_attention': op.item.checkin_attention or op.order.checkin_attention,
-                'position': CheckinListOrderPositionSerializer(op, context=self.get_serializer_context()).data,
-                'questions': [
-                    QuestionSerializer(q).data for q in e.questions
-                ]
-            }, status=400)
-        except CheckInError as e:
-            op.order.log_action('pretix.event.checkin.denied', data={
-                'position': op.id,
-                'positionid': op.positionid,
-                'errorcode': e.code,
-                'force': force,
-                'datetime': dt,
-                'type': type,
-                'list': self.checkinlist.pk
-            }, user=self.request.user, auth=self.request.auth)
-            return Response({
-                'status': 'error',
-                'reason': e.code,
-                'require_attention': op.item.checkin_attention or op.order.checkin_attention,
-                'position': CheckinListOrderPositionSerializer(op, context=self.get_serializer_context()).data
-            }, status=400)
-        else:
-            return Response({
-                'status': 'ok',
-                'require_attention': op.item.checkin_attention or op.order.checkin_attention,
-                'position': CheckinListOrderPositionSerializer(op, context=self.get_serializer_context()).data
-            }, status=201)
+        with language(self.request.event.settings.locale):
+            try:
+                perform_checkin(
+                    op=op,
+                    clist=self.checkinlist,
+                    given_answers=given_answers,
+                    force=force,
+                    ignore_unpaid=ignore_unpaid,
+                    nonce=nonce,
+                    datetime=dt,
+                    questions_supported=self.request.data.get('questions_supported', True),
+                    canceled_supported=self.request.data.get('canceled_supported', False),
+                    user=self.request.user,
+                    auth=self.request.auth,
+                    type=type,
+                )
+            except RequiredQuestionsError as e:
+                return Response({
+                    'status': 'incomplete',
+                    'require_attention': op.item.checkin_attention or op.order.checkin_attention,
+                    'position': CheckinListOrderPositionSerializer(op, context=self.get_serializer_context()).data,
+                    'questions': [
+                        QuestionSerializer(q).data for q in e.questions
+                    ]
+                }, status=400)
+            except CheckInError as e:
+                op.order.log_action('pretix.event.checkin.denied', data={
+                    'position': op.id,
+                    'positionid': op.positionid,
+                    'errorcode': e.code,
+                    'force': force,
+                    'datetime': dt,
+                    'type': type,
+                    'list': self.checkinlist.pk
+                }, user=self.request.user, auth=self.request.auth)
+                return Response({
+                    'status': 'error',
+                    'reason': e.code,
+                    'reason_explanation': e.reason,
+                    'require_attention': op.item.checkin_attention or op.order.checkin_attention,
+                    'position': CheckinListOrderPositionSerializer(op, context=self.get_serializer_context()).data
+                }, status=400)
+            else:
+                return Response({
+                    'status': 'ok',
+                    'require_attention': op.item.checkin_attention or op.order.checkin_attention,
+                    'position': CheckinListOrderPositionSerializer(op, context=self.get_serializer_context()).data
+                }, status=201)
 
     def _handle_file_upload(self, data):
         try:

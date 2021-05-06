@@ -480,9 +480,10 @@ class SQLLogic:
 
 
 class CheckInError(Exception):
-    def __init__(self, msg, code):
+    def __init__(self, msg, code, reason=None):
         self.msg = msg
         self.code = code
+        self.reason = reason
         super().__init__(msg)
 
 
@@ -617,11 +618,13 @@ def perform_checkin(op: OrderPosition, clist: CheckinList, given_answers: dict, 
             rule_data = LazyRuleVars(op, clist, dt)
             logic = _get_logic_environment(op.subevent or clist.event)
             if not logic.apply(clist.rules, rule_data):
+                reason = _logic_explain(clist.rules, op.subevent or clist.event, rule_data)
                 raise CheckInError(
                     _('Entry not permitted: {explanation}.').format(
-                        explanation=_logic_explain(clist.rules, op.subevent or clist.event, rule_data)
+                        explanation=reason
                     ),
-                    'rules'
+                    'rules',
+                    reason=reason
                 )
 
         device = None
