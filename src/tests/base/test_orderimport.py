@@ -452,17 +452,36 @@ def test_import_country_invalid(user, event, item):
 
 @pytest.mark.django_db
 @scopes_disabled()
+def test_import_street(user, event, item):
+    settings = dict(DEFAULT_SETTINGS)
+    settings['item'] = 'static:{}'.format(item.pk)
+    settings['invoice_address_street'] = 'csv:H'
+    settings['attendee_street'] = 'csv:H'
+    settings['email'] = 'csv:C'
+    import_orders.apply(
+        args=(event.pk, inputfile_factory().id, settings, 'en', user.pk)
+    )
+    assert str(event.orders.get(email='schneider@example.org').invoice_address.street) == 'Texas'
+    assert str(event.orders.get(email='schneider@example.org').positions.first().street) == 'Texas'
+
+
+@pytest.mark.django_db
+@scopes_disabled()
 def test_import_state(user, event, item):
     settings = dict(DEFAULT_SETTINGS)
     settings['item'] = 'static:{}'.format(item.pk)
     settings['invoice_address_country'] = 'csv:G'
     settings['invoice_address_state'] = 'csv:H'
+    settings['attendee_country'] = 'csv:G'
+    settings['attendee_state'] = 'csv:H'
     settings['email'] = 'csv:C'
     import_orders.apply(
         args=(event.pk, inputfile_factory().id, settings, 'en', user.pk)
     )
     assert str(event.orders.get(email='schneider@example.org').invoice_address.country) == 'US'
-    assert str(event.orders.get(email='schneider@example.org').invoice_address.state) == 'TX'
+    assert str(event.orders.get(email='schneider@example.org').invoice_address.country) == 'US'
+    assert str(event.orders.get(email='schneider@example.org').positions.first().state) == 'TX'
+    assert str(event.orders.get(email='schneider@example.org').positions.first().country) == 'US'
 
 
 @pytest.mark.django_db

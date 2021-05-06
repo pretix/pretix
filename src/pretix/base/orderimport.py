@@ -295,7 +295,7 @@ class InvoiceAddressStreet(ImportColumn):
         return _('Invoice address') + ': ' + _('Address')
 
     def assign(self, value, order, position, invoice_address, **kwargs):
-        invoice_address.address = value or ''
+        invoice_address.street = value or ''
 
 
 class InvoiceAddressZip(ImportColumn):
