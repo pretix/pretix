@@ -234,8 +234,7 @@ class ListExporter(BaseExporter):
                 total = line.total
                 continue
             ws.append([
-                excel_safe(val) if not isinstance(val, KNOWN_TYPES) else val
-                for val in line
+                excel_safe(val) for val in line
             ])
             if total:
                 counter += 1
