@@ -1883,6 +1883,7 @@ Your {organizer} team"""))
                 RegexValidator(regex='^#[0-9a-fA-F]{6}$',
                                message=_('Please enter the hexadecimal code of a color, e.g. #990000.')),
             ],
+            required=True,
             widget=forms.TextInput(attrs={'class': 'colorpickerfield'})
         ),
     },
@@ -1904,6 +1905,7 @@ Your {organizer} team"""))
                 RegexValidator(regex='^#[0-9a-fA-F]{6}$',
                                message=_('Please enter the hexadecimal code of a color, e.g. #990000.')),
             ],
+            required=True,
             widget=forms.TextInput(attrs={'class': 'colorpickerfield'})
         ),
     },
@@ -1925,6 +1927,7 @@ Your {organizer} team"""))
                 RegexValidator(regex='^#[0-9a-fA-F]{6}$',
                                message=_('Please enter the hexadecimal code of a color, e.g. #990000.')),
             ],
+            required=True,
             widget=forms.TextInput(attrs={'class': 'colorpickerfield'})
         ),
     },
@@ -1945,6 +1948,7 @@ Your {organizer} team"""))
                 RegexValidator(regex='^#[0-9a-fA-F]{6}$',
                                message=_('Please enter the hexadecimal code of a color, e.g. #990000.')),
             ],
+            required=True,
             widget=forms.TextInput(attrs={'class': 'colorpickerfield no-contrast'})
         ),
     },
@@ -1966,6 +1970,7 @@ Your {organizer} team"""))
         'form_kwargs': lambda: dict(
             label=_('Font'),
             help_text=_('Only respected by modern browsers.'),
+            required=True,
             widget=FontSelect,
             **primary_font_kwargs()
         ),
