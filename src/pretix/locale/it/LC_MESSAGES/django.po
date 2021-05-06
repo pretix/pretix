@@ -5883,7 +5883,7 @@ msgstr "Check-in del biglietto effettuato"
 #: pretix/base/settings.py:117
 msgid ""
 "This will allow customers to sign up for an account on your ticket shop. "
-"This is a prerequesite for some advanced features like memberships."
+"This is a prerequisite for some advanced features like memberships."
 msgstr ""
 
 #: pretix/base/settings.py:128
@@ -15442,7 +15442,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/organizers/customer_anonymize.html:26
 msgid ""
-"The customer will no longer be ble to log in and will lose access to any "
+"The customer will no longer be able to log in and will lose access to any "
 "membership benefits."
 msgstr ""
 

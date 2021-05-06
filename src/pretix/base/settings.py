@@ -114,7 +114,7 @@ DEFAULTS = {
         'serializer_class': serializers.BooleanField,
         'form_kwargs': dict(
             label=_("Allow customers to create accounts"),
-            help_text=_("This will allow customers to sign up for an account on your ticket shop. This is a prerequesite for some "
+            help_text=_("This will allow customers to sign up for an account on your ticket shop. This is a prerequisite for some "
                         "advanced features like memberships.")
         )
     },
