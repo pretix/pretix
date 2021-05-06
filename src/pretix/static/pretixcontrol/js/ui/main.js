@@ -705,12 +705,12 @@ $(function () {
         );
     });
 
-    $(".propagated-settings-box").find("input, textarea, select").not("[disabled]")
-        .attr("data-propagated-locked", "true").prop("disabled", true);
+    $(".propagated-settings-box").find("input, textarea, select").not("[readonly]")
+        .attr("data-propagated-locked", "true").prop("readonly", true);
 
     $(".propagated-settings-box button[data-action=unlink]").click(function (ev) {
         var $box = $(this).closest(".propagated-settings-box");
-        $box.find("[data-propagated-locked]").prop("disabled", false);
+        $box.find("[data-propagated-locked]").prop("readonly", false);
         $box.removeClass("locked").addClass("unlocked");
         ev.preventDefault();
         return true;
