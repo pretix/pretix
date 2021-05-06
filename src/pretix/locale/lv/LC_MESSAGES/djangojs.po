@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-04-30 09:39+0000\n"
+"POT-Creation-Date: 2021-05-06 18:55+0000\n"
 "PO-Revision-Date: 2019-11-13 06:00+0000\n"
 "Last-Translator: Zane Smite <z.smite@riga-jurmala.com>\n"
 "Language-Team: Latvian <https://translate.pretix.eu/projects/pretix/pretix-"
@@ -338,37 +338,40 @@ msgstr ""
 msgid "Number of days with a previous entry"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:219
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:97
 msgid "All of the conditions below (AND)"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:220
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:98
 msgid "At least one of the conditions below (OR)"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:228
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:99
 msgid "Event start"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:229
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:100
 msgid "Event end"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:230
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:101
 msgid "Event admission"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:231
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:102
 msgid "custom time"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:234
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:103
 msgid "Tolerance (minutes)"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:242
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:449
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:104
 msgid "Add condition"
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:105
+msgid "minutes"
 msgstr ""
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:69
@@ -459,31 +462,31 @@ msgstr ""
 "Izvēlētā krāsa tekstam neizceļas uz esošā fona, lūdzu, izvēlieties tumšāku "
 "krāsu."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:384
+#: pretix/static/pretixcontrol/js/ui/main.js:387
 msgid "All"
 msgstr "Visi"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:385
+#: pretix/static/pretixcontrol/js/ui/main.js:388
 msgid "None"
 msgstr "Neviens"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:386
+#: pretix/static/pretixcontrol/js/ui/main.js:389
 msgid "Search query"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/main.js:389
+#: pretix/static/pretixcontrol/js/ui/main.js:392
 msgid "Selected only"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/main.js:825
+#: pretix/static/pretixcontrol/js/ui/main.js:830
 msgid "Use a different name internally"
 msgstr "Izmantojiet citu nosaukumu iekšēji"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:882
+#: pretix/static/pretixcontrol/js/ui/main.js:887
 msgid "Click to close"
 msgstr "Noklikšķiniet, lai aizvērtu"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:897
+#: pretix/static/pretixcontrol/js/ui/main.js:902
 msgid "You have unsaved changes!"
 msgstr ""
 
@@ -529,33 +532,33 @@ msgstr[0] "Preces jūsu grozā ir rezervētas nulle minūtes."
 msgstr[1] "Preces jūsu grozā ir rezervētas uz vienu minūti."
 msgstr[2] "Preces jūsu grozā ir rezervētas uz {num} minūtēm."
 
-#: pretix/static/pretixpresale/js/ui/main.js:269
-msgid "Please enter a quantity for one of the ticket types."
-msgstr "Lūdzu, ievadiet nepieciešamo daudzumu izvēlētajam biļešu veidam."
-
-#: pretix/static/pretixpresale/js/ui/main.js:305
-#, fuzzy
-#| msgid "Cart expired"
-msgid "required"
-msgstr "Pirkumu groza rezervācijas laiks ir beidzies"
-
-#: pretix/static/pretixpresale/js/ui/main.js:402
+#: pretix/static/pretixpresale/js/ui/main.js:144
 #, fuzzy
 #| msgctxt "widget"
 #| msgid "from %(currency)s %(price)s"
 msgid "The organizer keeps %(currency)s %(amount)s"
 msgstr "no %(currency)s %(price)s"
 
-#: pretix/static/pretixpresale/js/ui/main.js:410
+#: pretix/static/pretixpresale/js/ui/main.js:152
 #, fuzzy
 #| msgctxt "widget"
 #| msgid "from %(currency)s %(price)s"
 msgid "You get %(currency)s %(amount)s back"
 msgstr "no %(currency)s %(price)s"
 
-#: pretix/static/pretixpresale/js/ui/main.js:426
+#: pretix/static/pretixpresale/js/ui/main.js:168
 msgid "Please enter the amount the organizer can keep."
 msgstr ""
+
+#: pretix/static/pretixpresale/js/ui/main.js:307
+msgid "Please enter a quantity for one of the ticket types."
+msgstr "Lūdzu, ievadiet nepieciešamo daudzumu izvēlētajam biļešu veidam."
+
+#: pretix/static/pretixpresale/js/ui/main.js:343
+#, fuzzy
+#| msgid "Cart expired"
+msgid "required"
+msgstr "Pirkumu groza rezervācijas laiks ir beidzies"
 
 #: pretix/static/pretixpresale/js/ui/main.js:440
 #: pretix/static/pretixpresale/js/ui/main.js:458

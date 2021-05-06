@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-04-30 09:39+0000\n"
+"POT-Creation-Date: 2021-05-06 18:55+0000\n"
 "PO-Revision-Date: 2021-04-30 11:40+0200\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix-js/"
@@ -314,38 +314,41 @@ msgstr "Anzahl bisheriger Eintritte seit Mitternacht"
 msgid "Number of days with a previous entry"
 msgstr "Anzahl an Tagen mit vorherigem Eintritt"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:219
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:97
 msgid "All of the conditions below (AND)"
 msgstr "Alle der folgenden Bedingungen (UND)"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:220
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:98
 msgid "At least one of the conditions below (OR)"
 msgstr "Mindestens eine der folgenden Bedingungen (ODER)"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:228
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:99
 msgid "Event start"
 msgstr "Veranstaltungsbeginn"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:229
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:100
 msgid "Event end"
 msgstr "Veranstaltungsende"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:230
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:101
 msgid "Event admission"
 msgstr "Einlass"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:231
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:102
 msgid "custom time"
 msgstr "Feste Uhrzeit"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:234
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:103
 msgid "Tolerance (minutes)"
 msgstr "Toleranz (Minuten)"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:242
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:449
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:104
 msgid "Add condition"
 msgstr "Bedingung hinzufügen"
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:105
+msgid "minutes"
+msgstr ""
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:69
 msgid "Lead Scan QR"
@@ -431,31 +434,31 @@ msgstr ""
 "Diese Farbe hat einen schlechten Kontrast für Text auf einem weißen "
 "Hintergrund. Bitte wählen Sie eine dunklere Farbe."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:384
+#: pretix/static/pretixcontrol/js/ui/main.js:387
 msgid "All"
 msgstr "Alle"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:385
+#: pretix/static/pretixcontrol/js/ui/main.js:388
 msgid "None"
 msgstr "Keine"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:386
+#: pretix/static/pretixcontrol/js/ui/main.js:389
 msgid "Search query"
 msgstr "Suchbegriff"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:389
+#: pretix/static/pretixcontrol/js/ui/main.js:392
 msgid "Selected only"
 msgstr "Nur ausgewählte"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:825
+#: pretix/static/pretixcontrol/js/ui/main.js:830
 msgid "Use a different name internally"
 msgstr "Intern einen anderen Namen verwenden"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:882
+#: pretix/static/pretixcontrol/js/ui/main.js:887
 msgid "Click to close"
 msgstr "Klicken zum Schließen"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:897
+#: pretix/static/pretixcontrol/js/ui/main.js:902
 msgid "You have unsaved changes!"
 msgstr "Sie haben ungespeicherte Änderungen!"
 
@@ -501,25 +504,25 @@ msgstr[0] ""
 msgstr[1] ""
 "Die Produkte in Ihrem Warenkorb sind noch {num} Minuten für Sie reserviert."
 
-#: pretix/static/pretixpresale/js/ui/main.js:269
-msgid "Please enter a quantity for one of the ticket types."
-msgstr "Bitte tragen Sie eine Menge für eines der Produkte ein."
-
-#: pretix/static/pretixpresale/js/ui/main.js:305
-msgid "required"
-msgstr "verpflichtend"
-
-#: pretix/static/pretixpresale/js/ui/main.js:402
+#: pretix/static/pretixpresale/js/ui/main.js:144
 msgid "The organizer keeps %(currency)s %(amount)s"
 msgstr "Der Veranstalter behält %(currency)s %(amount)s ein"
 
-#: pretix/static/pretixpresale/js/ui/main.js:410
+#: pretix/static/pretixpresale/js/ui/main.js:152
 msgid "You get %(currency)s %(amount)s back"
 msgstr "Sie erhalten %(currency)s %(amount)s zurück"
 
-#: pretix/static/pretixpresale/js/ui/main.js:426
+#: pretix/static/pretixpresale/js/ui/main.js:168
 msgid "Please enter the amount the organizer can keep."
 msgstr "Bitte geben Sie den Betrag ein, den der Veranstalter einbehalten darf."
+
+#: pretix/static/pretixpresale/js/ui/main.js:307
+msgid "Please enter a quantity for one of the ticket types."
+msgstr "Bitte tragen Sie eine Menge für eines der Produkte ein."
+
+#: pretix/static/pretixpresale/js/ui/main.js:343
+msgid "required"
+msgstr "verpflichtend"
 
 #: pretix/static/pretixpresale/js/ui/main.js:440
 #: pretix/static/pretixpresale/js/ui/main.js:458

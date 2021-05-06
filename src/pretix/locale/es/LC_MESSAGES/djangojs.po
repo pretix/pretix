@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-04-30 09:39+0000\n"
+"POT-Creation-Date: 2021-05-06 18:55+0000\n"
 "PO-Revision-Date: 2020-04-27 20:00+0000\n"
 "Last-Translator: Gonzalo Gabriel Perez <zalitoar@gmail.com>\n"
 "Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/pretix-"
@@ -337,37 +337,40 @@ msgstr ""
 msgid "Number of days with a previous entry"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:219
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:97
 msgid "All of the conditions below (AND)"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:220
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:98
 msgid "At least one of the conditions below (OR)"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:228
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:99
 msgid "Event start"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:229
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:100
 msgid "Event end"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:230
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:101
 msgid "Event admission"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:231
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:102
 msgid "custom time"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:234
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:103
 msgid "Tolerance (minutes)"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:242
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:449
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:104
 msgid "Add condition"
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:105
+msgid "minutes"
 msgstr ""
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:69
@@ -458,31 +461,31 @@ msgstr ""
 "Tu color tiene mal contraste para un texto con fondo blanco, por favor "
 "escoge un tono más oscuro."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:384
+#: pretix/static/pretixcontrol/js/ui/main.js:387
 msgid "All"
 msgstr "Todos"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:385
+#: pretix/static/pretixcontrol/js/ui/main.js:388
 msgid "None"
 msgstr "Ninguno"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:386
+#: pretix/static/pretixcontrol/js/ui/main.js:389
 msgid "Search query"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/main.js:389
+#: pretix/static/pretixcontrol/js/ui/main.js:392
 msgid "Selected only"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/main.js:825
+#: pretix/static/pretixcontrol/js/ui/main.js:830
 msgid "Use a different name internally"
 msgstr "Usar un nombre diferente internamente"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:882
+#: pretix/static/pretixcontrol/js/ui/main.js:887
 msgid "Click to close"
 msgstr "Click para cerrar"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:897
+#: pretix/static/pretixcontrol/js/ui/main.js:902
 msgid "You have unsaved changes!"
 msgstr "¡Tienes cambios sin guardar!"
 
@@ -528,33 +531,33 @@ msgstr[0] ""
 msgstr[1] ""
 "Los elementos en su carrito de compras se han reservado por {num} minutos."
 
-#: pretix/static/pretixpresale/js/ui/main.js:269
-msgid "Please enter a quantity for one of the ticket types."
-msgstr "Por favor, introduce un valor para cada tipo de entrada."
-
-#: pretix/static/pretixpresale/js/ui/main.js:305
-#, fuzzy
-#| msgid "Cart expired"
-msgid "required"
-msgstr "El carrito de compras ha expirado"
-
-#: pretix/static/pretixpresale/js/ui/main.js:402
+#: pretix/static/pretixpresale/js/ui/main.js:144
 #, fuzzy
 #| msgctxt "widget"
 #| msgid "from %(currency)s %(price)s"
 msgid "The organizer keeps %(currency)s %(amount)s"
 msgstr "a partir de %(currency)s %(price)s"
 
-#: pretix/static/pretixpresale/js/ui/main.js:410
+#: pretix/static/pretixpresale/js/ui/main.js:152
 #, fuzzy
 #| msgctxt "widget"
 #| msgid "from %(currency)s %(price)s"
 msgid "You get %(currency)s %(amount)s back"
 msgstr "a partir de %(currency)s %(price)s"
 
-#: pretix/static/pretixpresale/js/ui/main.js:426
+#: pretix/static/pretixpresale/js/ui/main.js:168
 msgid "Please enter the amount the organizer can keep."
 msgstr ""
+
+#: pretix/static/pretixpresale/js/ui/main.js:307
+msgid "Please enter a quantity for one of the ticket types."
+msgstr "Por favor, introduce un valor para cada tipo de entrada."
+
+#: pretix/static/pretixpresale/js/ui/main.js:343
+#, fuzzy
+#| msgid "Cart expired"
+msgid "required"
+msgstr "El carrito de compras ha expirado"
 
 #: pretix/static/pretixpresale/js/ui/main.js:440
 #: pretix/static/pretixpresale/js/ui/main.js:458
