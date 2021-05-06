@@ -250,6 +250,11 @@ class CheckinListPositionViewSet(viewsets.ReadOnlyModelViewSet):
     permission = ('can_view_orders', 'can_checkin_orders')
     write_permission = ('can_change_orders', 'can_checkin_orders')
 
+    def get_serializer_context(self):
+        ctx = super().get_serializer_context()
+        ctx['event'] = self.request.event
+        return ctx
+
     def get_filterset_kwargs(self):
         return {
             'checkinlist': self.checkinlist,
