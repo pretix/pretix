@@ -369,13 +369,14 @@ def mail_send_task(self, *args, to: List[str], subject: str, body: str, html: st
         backend = get_connection(fail_silently=False)
         cm = lambda: scopes_disabled()  # noqa
 
-    log_target = order or user or customer
+    log_target = user or customer
 
     with cm():
         if event:
             if order:
                 try:
                     order = event.orders.get(pk=order)
+                    log_target = order
                 except Order.DoesNotExist:
                     order = None
                 else:
