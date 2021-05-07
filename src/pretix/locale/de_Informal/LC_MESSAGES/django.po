@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-05-06 18:54+0000\n"
-"PO-Revision-Date: 2021-05-07 07:35+0000\n"
+"PO-Revision-Date: 2021-05-08 10:00+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
@@ -32,7 +32,7 @@ msgstr "Shop deaktiviert"
 #: pretix/control/templates/pretixcontrol/organizers/detail.html:100
 #: pretix/control/templates/pretixcontrol/subevents/index.html:133
 msgid "Presale over"
-msgstr "Verkauf vorüber"
+msgstr "Verkauf beendet"
 
 #: htmlcov/pretix_control_views_dashboards_py.html:967
 #: pretix/control/forms/filter.py:813 pretix/control/forms/filter.py:1116
@@ -5419,7 +5419,7 @@ msgstr "Der Vorverkauf für diese Veranstaltung hat noch nicht begonnen."
 
 #: pretix/base/services/cart.py:102
 msgid "The presale period for this event has ended."
-msgstr "Der Vorverkaufszeitraum für diese Veranstaltung ist vorüber."
+msgstr "Der Vorverkaufszeitraum für diese Veranstaltung ist beendet."
 
 #: pretix/base/services/cart.py:103
 msgid ""
@@ -5442,7 +5442,7 @@ msgid ""
 "The presale period for one of the events in your cart has ended. The "
 "affected positions have been removed from your cart."
 msgstr ""
-"Der Vorverkauf für eine der Veranstaltungen im Warenkorb ist nun vorüber. "
+"Der Vorverkauf für eine der Veranstaltungen im Warenkorb ist nun beendet. "
 "Die betroffenen Positionen wurden aus dem Warenkorb entfernt."
 
 #: pretix/base/services/cart.py:108
@@ -5830,7 +5830,7 @@ msgstr ""
 
 #: pretix/base/services/orders.py:115
 msgid "The presale period has ended."
-msgstr "Der Vorverkaufszeitraum ist vorüber."
+msgstr "Der Vorverkaufszeitraum ist beendet."
 
 #: pretix/base/services/orders.py:116
 msgid ""
@@ -6516,7 +6516,7 @@ msgid ""
 "to get a ticket, such as a box office."
 msgstr ""
 "Dieser Text wird über dem Ticketshop angezeigt, sobald der konfigurierte "
-"Verkaufszeitraum vorüber ist. Du kannst hier andere Wege ein Ticket zu "
+"Verkaufszeitraum beendet ist. Du kannst hier andere Wege ein Ticket zu "
 "bekommen, wie z.B. eine Abendkasse, beschreiben."
 
 #: pretix/base/settings.py:507
@@ -8438,7 +8438,7 @@ msgstr ""
 #: pretix/base/shredder.py:74 pretix/base/shredder.py:77
 msgid "Your event needs to be over for at least 30 days to use this feature."
 msgstr ""
-"Die Veranstaltung muss mindestens 30 Tage vorüber sein, damit diese Funktion "
+"Die Veranstaltung muss mindestens 30 Tage beendet sein, damit diese Funktion "
 "bereitsteht."
 
 #: pretix/base/shredder.py:79
@@ -18848,7 +18848,7 @@ msgstr "Aktion erforderlich"
 #: pretix/presale/templates/pretixpresale/organizers/index.html:120
 #: pretix/presale/views/widget.py:366
 msgid "Sale over"
-msgstr "Verkauf vorüber"
+msgstr "Verkauf beendet"
 
 #: pretix/control/views/dashboards.py:534
 #: pretix/presale/templates/pretixpresale/fragment_calendar.html:96
@@ -23570,7 +23570,7 @@ msgstr "Andere Termine"
 #: pretix/presale/templates/pretixpresale/event/index.html:117
 #: pretix/presale/views/widget.py:624
 msgid "The presale period for this event is over."
-msgstr "Der Vorverkaufszeitraum für diese Veranstaltung ist vorüber."
+msgstr "Der Vorverkaufszeitraum für diese Veranstaltung ist beendet."
 
 #: pretix/presale/templates/pretixpresale/event/index.html:122
 #: pretix/presale/views/widget.py:626
