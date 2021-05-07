@@ -522,7 +522,7 @@ def mail_send_task(self, *args, to: List[str], subject: str, body: str, html: st
                 for e, val in e.recipients.items():
                     message.append(f'{e}: {val[0]} {val[1].decode()}')
 
-                logger.log_action(
+                log_target.log_action(
                     'pretix.email.error',
                     data={
                         'subject': 'SMTP error',
