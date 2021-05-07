@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-05-06 18:54+0000\n"
-"PO-Revision-Date: 2021-05-07 01:03+0000\n"
-"Last-Translator: Mohamed Tawfiq <mtawfiq@wafyapp.com>\n"
+"PO-Revision-Date: 2021-05-07 03:31+0000\n"
+"Last-Translator: Ahmad AlHarthi <to.ahmad@pm.me>\n"
 "Language-Team: Arabic <https://translate.pretix.eu/projects/pretix/pretix/ar/"
 ">\n"
 "Language: ar\n"
@@ -182,7 +182,7 @@ msgstr "لا يمكن أن يضمن العنصر في نفسه."
 
 #: pretix/api/serializers/item.py:106 pretix/control/forms/item.py:882
 msgid "The bundled item must not have bundles on its own."
-msgstr "يجب ألا يحتوي العنصر المضمن على حزم خاصة به."
+msgstr "العنصر المضمن يجب أن لا يمتلك أية حزم خاصة به."
 
 #: pretix/api/serializers/item.py:177
 msgid ""
