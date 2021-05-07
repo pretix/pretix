@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-05-06 18:54+0000\n"
 "PO-Revision-Date: 2021-05-07 01:03+0000\n"
-"Last-Translator: Ahmad AlHarthi <to.ahmad@pm.me>\n"
+"Last-Translator: Mohamed Tawfiq <mtawfiq@wafyapp.com>\n"
 "Language-Team: Arabic <https://translate.pretix.eu/projects/pretix/pretix/ar/"
 ">\n"
 "Language: ar\n"
@@ -79,12 +79,14 @@ msgid "Application name"
 msgstr "اسم التطبيق"
 
 #: pretix/api/models.py:42
+#, fuzzy
 msgid "Redirection URIs"
-msgstr "عناوين اعادة التوجيه"
+msgstr "روابط اعادة التوجيه"
 
 #: pretix/api/models.py:43
+#, fuzzy
 msgid "Allowed URIs list, space separated"
-msgstr "قائمة العناوين المسموح بها, بينهم فاصلة"
+msgstr "قائمة العناوين المسموح بها, مفصولة بمسافة"
 
 #: pretix/api/models.py:46 pretix/plugins/paypal/payment.py:112
 msgid "Client ID"
@@ -112,8 +114,9 @@ msgstr "كل الفعاليات (بما في ذلك تلك التي تم إنش�
 
 #: pretix/api/models.py:100 pretix/base/models/devices.py:122
 #: pretix/base/models/organizer.py:248
+#, fuzzy
 msgid "Limit to events"
-msgstr "حد اقصى للفعاليات"
+msgstr "الحد من الفعاليات"
 
 #: pretix/api/serializers/cart.py:81 pretix/api/serializers/order.py:1168
 #, fuzzy
@@ -124,7 +127,7 @@ msgstr "المنتج \"{}\" غير مخصص لحصة."
 #, fuzzy
 msgid ""
 "There is not enough quota available on quota \"{}\" to perform the operation."
-msgstr "ليس هناك حصص كافية على حصة \"{}\" لإجراء العملية."
+msgstr "لا توجد حصة كافية متاحة في الحصة \"{}\" لإجراء العملية."
 
 #: pretix/api/serializers/cart.py:116 pretix/api/serializers/order.py:1140
 #: pretix/base/services/orders.py:1238
@@ -134,8 +137,9 @@ msgstr "المقعد المحدد \"{seat}\" غير متوفر."
 
 #: pretix/api/serializers/checkin.py:65 pretix/base/models/event.py:1370
 #: pretix/base/models/items.py:1386 pretix/base/models/items.py:1617
+#, fuzzy
 msgid "One or more items do not belong to this event."
-msgstr "هناك عنصر أو أكثر لا ينتمي إلى هذه الفعالية."
+msgstr "هناك عنصر او اكثر لا ينتمي إلى هذه الفعالية."
 
 #: pretix/api/serializers/checkin.py:69 pretix/api/serializers/checkin.py:72
 #: pretix/base/models/items.py:1628 pretix/base/models/items.py:1631
@@ -144,17 +148,21 @@ msgid "The subevent does not belong to this event."
 msgstr "الفعالية الفرعية لا تنتمي إلى هذه الفعالية."
 
 #: pretix/api/serializers/checkin.py:76
+#, fuzzy
 msgid "Unknown sales channel."
-msgstr "قنوات البيع غير معروفة."
+msgstr "قناة مبيعات غير معروفة."
 
 #: pretix/api/serializers/event.py:198
+#, fuzzy
 msgid ""
 "Events cannot be created as 'live'. Quotas and payment must be added to the "
 "event before sales can go live."
-msgstr "لا يمكن نشر الفعالية، يلزم إضافة الحصص والمدفوعات قبل النشر."
+msgstr ""
+"لا يمكن إنشاء الفعاليات \"بالمباشر\". يجب إضافة الحصص والدفع إلى الفعالية "
+"قبل بدء المبيعات."
 
 #: pretix/api/serializers/event.py:213 pretix/api/serializers/event.py:497
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Meta data property '{name}' does not exist."
 msgstr "خاصية البيانات الوصفية لـ '{name}' غير موجودة."
 
