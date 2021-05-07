@@ -352,9 +352,6 @@ def mail_send_task(self, *args, to: List[str], subject: str, body: str, html: st
     if user:
         user = User.objects.get(pk=user)
 
-    if customer:
-        customer = Customer.objects.get(pk=customer)
-
     if event:
         with scopes_disabled():
             event = Event.objects.get(id=event)
@@ -369,9 +366,11 @@ def mail_send_task(self, *args, to: List[str], subject: str, body: str, html: st
         backend = get_connection(fail_silently=False)
         cm = lambda: scopes_disabled()  # noqa
 
-    log_target = user or customer
-
     with cm():
+        if customer:
+            customer = Customer.objects.get(pk=customer)
+        log_target = user or customer
+
         if event:
             if order:
                 try:
