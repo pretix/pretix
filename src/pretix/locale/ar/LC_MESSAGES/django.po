@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-05-06 18:54+0000\n"
-"PO-Revision-Date: 2021-05-07 03:31+0000\n"
+"PO-Revision-Date: 2021-05-07 07:38+0000\n"
 "Last-Translator: Mohamed Tawfiq <mtawfiq@wafyapp.com>\n"
 "Language-Team: Arabic <https://translate.pretix.eu/projects/pretix/pretix/ar/"
 ">\n"
@@ -182,8 +182,9 @@ msgid "The bundled item must not be the same item as the bundling one."
 msgstr "يجب ألا يكون العنصر المجمّع هو نفس عنصر التجميع."
 
 #: pretix/api/serializers/item.py:106 pretix/control/forms/item.py:882
+#, fuzzy
 msgid "The bundled item must not have bundles on its own."
-msgstr "العنصر المضمن يجب أن لا يمتلك أية حزم خاصة به."
+msgstr "يجب ألا يحتوي العنصر المجمع على حزم بمفرده."
 
 #: pretix/api/serializers/item.py:177
 msgid ""
