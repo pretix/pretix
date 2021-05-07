@@ -30,6 +30,7 @@
         <div class="panel-body" v-if="checkResult.position">
           <div class="details">
             <h4>{{ checkResult.position.order }}-{{ checkResult.position.positionid }} {{ checkResult.position.attendee_name }}</h4>
+            <strong v-if="checkResult.reason_explanation">{{ checkResult.reason_explanation }}<br></strong>
             <span>{{ checkResultItemvar }}</span>
             <span v-if="checkResult.position.seat"><br>{{ checkResult.position.seat.name }}</span>
           </div>
