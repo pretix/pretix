@@ -30,6 +30,7 @@ from django.utils.timezone import now
 from django_scopes import scope
 from freezegun import freeze_time
 
+from pretix.base.i18n import language
 from pretix.base.models import (
     CartPosition, Event, Item, Order, OrderPosition, Organizer,
 )
@@ -56,7 +57,7 @@ def event():
         plugins='pretix.plugins.banktransfer'
     )
     event.settings.timezone = 'Europe/Berlin'
-    with scope(organizer=o):
+    with scope(organizer=o), language('en'):
         yield event
 
 
