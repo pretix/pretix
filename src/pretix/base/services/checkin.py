@@ -67,6 +67,14 @@ from pretix.helpers.jsonlogic_query import (
 def _build_time(t=None, value=None, ev=None):
     if t == "custom":
         return dateutil.parser.parse(value)
+    elif t == "customtime":
+        parsed = dateutil.parser.parse(value)
+        return now().astimezone(ev.timezone).replace(
+            hour=parsed.hour,
+            minute=parsed.minute,
+            second=parsed.second,
+            microsecond=parsed.microsecond,
+        )
     elif t == 'date_from':
         return ev.date_from
     elif t == 'date_to':
@@ -354,7 +362,15 @@ class SQLLogic:
 
         if operator == 'buildTime':
             if values[0] == "custom":
-                return Value(dateutil.parser.parse(values[1]))
+                return Value(dateutil.parser.parse(values[1]).astimezone(pytz.UTC))
+            elif values[0] == "customtime":
+                parsed = dateutil.parser.parse(values[1])
+                return Value(now().astimezone(self.list.event.timezone).replace(
+                    hour=parsed.hour,
+                    minute=parsed.minute,
+                    second=parsed.second,
+                    microsecond=parsed.microsecond,
+                ).astimezone(pytz.UTC))
             elif values[0] == 'date_from':
                 return Coalesce(
                     F(f'subevent__date_from'),
@@ -382,7 +398,7 @@ class SQLLogic:
             return int(values[1])
         elif operator == 'var':
             if values[0] == 'now':
-                return Value(now())
+                return Value(now().astimezone(pytz.UTC))
             elif values[0] == 'product':
                 return F('item_id')
             elif values[0] == 'variation':

@@ -75,12 +75,14 @@ def convert_to_dnf(rules):
         rules = _distribute_or_over_and(rules)
         operator = list(rules.keys())[0]
         values = rules[operator]
+        no_list = False
         if not isinstance(values, list):
             values = [values]
+            no_list = True
         rules = {
             operator: [
                 convert_to_dnf(v) for v in values
-            ] if len(values) > 1 else convert_to_dnf(values[0])
+            ] if not no_list else convert_to_dnf(values[0])
         }
         if old_rules == rules:
             break

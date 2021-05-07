@@ -22,6 +22,9 @@
                         <span v-if="rightoperand.buildTime[0] === 'custom'">
                             {{ df(rightoperand.buildTime[1]) }}
                         </span>
+                        <span v-else-if="rightoperand.buildTime[0] === 'customtime'">
+                            {{ tf(rightoperand.buildTime[1]) }}
+                        </span>
                         <span v-else>
                             {{ this.$root.texts[rightoperand.buildTime[0]] }}
                         </span>
@@ -138,6 +141,10 @@
     methods: {
       df (val) {
         const format = $("body").attr("data-datetimeformat")
+        return moment(val).format(format)
+      },
+      tf (val) {
+        const format = $("body").attr("data-timeformat")
         return moment(val).format(format)
       }
     },

@@ -27,11 +27,14 @@
             <option value="date_to">{{texts.date_to}}</option>
             <option value="date_admission">{{texts.date_admission}}</option>
             <option value="custom">{{texts.date_custom}}</option>
+            <option value="customtime">{{texts.date_customtime}}</option>
         </select>
         <datetimefield v-if="vartype == 'datetime' && timeType == 'custom'" :value="timeValue"
                        v-on:input="setTimeValue"></datetimefield>
+        <timefield v-if="vartype == 'datetime' && timeType == 'customtime'" :value="timeValue"
+            v-on:input="setTimeValue"></timefield>
         <input class="form-control" required type="number"
-               v-if="vartype == 'datetime' && timeType && timeType != 'custom'" v-bind:value="timeTolerance"
+               v-if="vartype == 'datetime' && timeType && timeType != 'customtime' && timeType != 'custom'" v-bind:value="timeTolerance"
                v-on:input="setTimeTolerance" :placeholder="texts.date_tolerance">
         <input class="form-control" required type="number" v-if="vartype == 'int' && cardinality > 1"
                v-bind:value="rightoperand" v-on:input="setRightOperandNumber">
@@ -56,6 +59,7 @@
     components: {
       LookupSelect2: LookupSelect2.default,
       Datetimefield: Datetimefield.default,
+      Timefield: Timefield.default,
     },
     props: {
       rule: Object,
