@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-05-06 18:54+0000\n"
 "PO-Revision-Date: 2021-05-07 03:31+0000\n"
-"Last-Translator: Ahmad AlHarthi <to.ahmad@pm.me>\n"
+"Last-Translator: Mohamed Tawfiq <mtawfiq@wafyapp.com>\n"
 "Language-Team: Arabic <https://translate.pretix.eu/projects/pretix/pretix/ar/"
 ">\n"
 "Language: ar\n"
@@ -177,8 +177,9 @@ msgid "Unknown plugin: '{name}'."
 msgstr "إضافة غير معروفة: '{name}'."
 
 #: pretix/api/serializers/item.py:103 pretix/control/forms/item.py:880
+#, fuzzy
 msgid "The bundled item must not be the same item as the bundling one."
-msgstr "لا يمكن أن يضمن العنصر في نفسه."
+msgstr "يجب ألا يكون العنصر المجمّع هو نفس عنصر التجميع."
 
 #: pretix/api/serializers/item.py:106 pretix/control/forms/item.py:882
 msgid "The bundled item must not have bundles on its own."
