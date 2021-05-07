@@ -22,7 +22,7 @@
 import sys
 from datetime import timedelta
 
-from django.db.models import Q
+from django.db.models import Q, Exists, OuterRef
 from django.dispatch import receiver
 from django.utils.timezone import now
 from django_scopes import scopes_disabled
@@ -101,6 +101,12 @@ def assign_automatically(event: Event, user_id: int=None, subevent_id: int=None)
 @scopes_disabled()
 def process_waitinglist(sender, **kwargs):
     qs = Event.objects.filter(
+        Exists(
+            WaitingListEntry.objects.filter(
+                event_id=OuterRef('pk'),
+                voucher__isnull=True,
+            )
+        ),
         live=True
     ).exclude(
         Q(date_to__isnull=True) | Q(date_to__lt=now() - timedelta(days=14)),
