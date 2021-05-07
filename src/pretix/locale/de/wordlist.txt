@@ -145,6 +145,8 @@ Merchandise
 Meta
 Metadaten
 Mi
+Mitgliedschafts
+Mitgliedschaftsdauer
 min
 Mo
 MOTO
@@ -184,8 +186,10 @@ Rechnungs
 Rechungsdatei
 Reddit
 Referer
+Registrierungs
 Registrierungsdatum
 Registrierungsnummer
+Registrierungsversuche
 Renderer
 Request
 Requests
@@ -288,6 +292,7 @@ Zahlungs
 Zahlungsbestätigungs
 zahlungspflichtig
 Zahlungsplugins
+Zehnerkarten
 zeitbasiert
 Zeitslotbuchung
 zubuchbaren
