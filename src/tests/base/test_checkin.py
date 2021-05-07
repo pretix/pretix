@@ -413,6 +413,7 @@ def test_rules_product(event, position, clist):
     with pytest.raises(CheckInError) as excinfo:
         perform_checkin(position, clist, {})
     assert excinfo.value.code == 'rules'
+    assert 'Ticket type not allowed' in str(excinfo.value)
 
     clist.rules = {
         "inList": [
@@ -449,6 +450,7 @@ def test_rules_variation(item, position, clist):
         perform_checkin(position, clist, {})
     assert not OrderPosition.objects.filter(SQLLogic(clist).apply(clist.rules), pk=position.pk).exists()
     assert excinfo.value.code == 'rules'
+    assert 'Ticket type not allowed' in str(excinfo.value)
 
     clist.rules = {
         "inList": [
@@ -481,6 +483,7 @@ def test_rules_scan_number(position, clist):
     with pytest.raises(CheckInError) as excinfo:
         perform_checkin(position, clist, {})
     assert excinfo.value.code == 'rules'
+    assert 'Maximum number of entries' in str(excinfo.value)
 
 
 @pytest.mark.django_db
@@ -500,12 +503,14 @@ def test_rules_scan_today(event, position, clist):
         with pytest.raises(CheckInError) as excinfo:
             perform_checkin(position, clist, {})
         assert excinfo.value.code == 'rules'
+        assert 'Maximum number of entries today' in str(excinfo.value)
 
     with freeze_time("2020-01-01 22:50:00"):
         assert not OrderPosition.objects.filter(SQLLogic(clist).apply(clist.rules), pk=position.pk).exists()
         with pytest.raises(CheckInError) as excinfo:
             perform_checkin(position, clist, {})
         assert excinfo.value.code == 'rules'
+        assert 'Maximum number of entries today' in str(excinfo.value)
 
     with freeze_time("2020-01-01 23:10:00"):
         assert OrderPosition.objects.filter(SQLLogic(clist).apply(clist.rules), pk=position.pk).exists()
@@ -516,6 +521,7 @@ def test_rules_scan_today(event, position, clist):
         with pytest.raises(CheckInError) as excinfo:
             perform_checkin(position, clist, {})
         assert excinfo.value.code == 'rules'
+        assert 'Maximum number of entries today' in str(excinfo.value)
 
 
 @pytest.mark.django_db
@@ -547,6 +553,7 @@ def test_rules_scan_days(event, position, clist):
         with pytest.raises(CheckInError) as excinfo:
             perform_checkin(position, clist, {})
         assert excinfo.value.code == 'rules'
+        assert 'Maximum number of days with an entry exceeded.' in str(excinfo.value)
 
 
 @pytest.mark.django_db
@@ -562,6 +569,7 @@ def test_rules_time_isafter_tolerance(event, position, clist):
         with pytest.raises(CheckInError) as excinfo:
             perform_checkin(position, clist, {})
         assert excinfo.value.code == 'rules'
+        assert 'Only allowed after 11:50' in str(excinfo.value)
 
     with freeze_time("2020-01-01 10:51:00"):
         assert OrderPosition.objects.filter(SQLLogic(clist).apply(clist.rules), pk=position.pk).exists()
@@ -582,6 +590,7 @@ def test_rules_time_isafter_no_tolerance(event, position, clist):
         with pytest.raises(CheckInError) as excinfo:
             perform_checkin(position, clist, {})
         assert excinfo.value.code == 'rules'
+        assert 'Only allowed after 12:00' in str(excinfo.value)
 
     with freeze_time("2020-01-01 11:01:00"):
         assert OrderPosition.objects.filter(SQLLogic(clist).apply(clist.rules), pk=position.pk).exists()
@@ -601,6 +610,7 @@ def test_rules_time_isbefore_with_tolerance(event, position, clist):
         with pytest.raises(CheckInError) as excinfo:
             perform_checkin(position, clist, {})
         assert excinfo.value.code == 'rules'
+        assert 'Only allowed before 12:10' in str(excinfo.value)
 
     with freeze_time("2020-01-01 11:09:00"):
         assert OrderPosition.objects.filter(SQLLogic(clist).apply(clist.rules), pk=position.pk).exists()
@@ -618,6 +628,7 @@ def test_rules_time_isafter_custom_time(event, position, clist):
         with pytest.raises(CheckInError) as excinfo:
             perform_checkin(position, clist, {})
         assert excinfo.value.code == 'rules'
+        assert 'Only allowed after 23:00' in str(excinfo.value)
 
     with freeze_time("2020-01-01 22:05:00"):
         assert OrderPosition.objects.filter(SQLLogic(clist).apply(clist.rules), pk=position.pk).exists()
@@ -639,10 +650,106 @@ def test_rules_isafter_subevent(position, clist, event):
         with pytest.raises(CheckInError) as excinfo:
             perform_checkin(position, clist, {})
         assert excinfo.value.code == 'rules'
+        assert 'Only allowed after 12:00' in str(excinfo.value)
 
     with freeze_time("2020-02-01 11:01:00"):
         assert OrderPosition.objects.filter(SQLLogic(clist).apply(clist.rules), pk=position.pk).exists()
         perform_checkin(position, clist, {})
+
+
+@pytest.mark.django_db
+def test_rules_reasoning_prefer_close_date(event, position, clist):
+    # Ticket is valid starting at a custom time
+    event.settings.timezone = 'Europe/Berlin'
+    clist.rules = {
+        "or": [
+            {
+                "and": [
+                    {"isAfter": [{"var": "now"}, {"buildTime": ["custom", "2020-01-01T10:00:00.000Z"]}, None]},
+                    {"isBefore": [{"var": "now"}, {"buildTime": ["custom", "2020-01-01T18:00:00.000Z"]}, None]},
+                ]
+            },
+            {
+                "and": [
+                    {"isAfter": [{"var": "now"}, {"buildTime": ["custom", "2020-01-02T10:00:00.000Z"]}, None]},
+                    {"isBefore": [{"var": "now"}, {"buildTime": ["custom", "2020-01-02T18:00:00.000Z"]}, None]},
+                ]
+            },
+        ]
+    }
+    clist.save()
+    with freeze_time("2020-01-01 09:00:00Z"):
+        with pytest.raises(CheckInError) as excinfo:
+            perform_checkin(position, clist, {})
+        assert excinfo.value.code == 'rules'
+        assert 'Only allowed after 11:00' in str(excinfo.value)
+
+    with freeze_time("2020-01-01 20:00:00Z"):
+        with pytest.raises(CheckInError) as excinfo:
+            perform_checkin(position, clist, {})
+        assert excinfo.value.code == 'rules'
+        assert 'Only allowed before 19:00' in str(excinfo.value)
+
+    with freeze_time("2020-01-02 09:00:00Z"):
+        with pytest.raises(CheckInError) as excinfo:
+            perform_checkin(position, clist, {})
+        assert excinfo.value.code == 'rules'
+        assert 'Only allowed after 11:00' in str(excinfo.value)
+
+    with freeze_time("2020-01-03 18:00:00Z"):
+        with pytest.raises(CheckInError) as excinfo:
+            perform_checkin(position, clist, {})
+        assert excinfo.value.code == 'rules'
+        assert 'Only allowed before 2020-01-02 19:00' in str(excinfo.value)
+
+
+@pytest.mark.django_db
+def test_rules_reasoning_prefer_date_over_product(event, position, clist):
+    i2 = event.items.create(name="Ticket", default_price=3, admission=True)
+    clist.rules = {
+        "or": [
+            {
+                "inList": [
+                    {"var": "product"}, {
+                        "objectList": [
+                            {"lookup": ["product", str(i2.pk), "Ticket"]},
+                        ]
+                    }
+                ]
+            },
+            {
+                "and": [
+                    {"isAfter": [{"var": "now"}, {"buildTime": ["custom", "2020-01-02T10:00:00.000Z"]}, None]},
+                    {"isBefore": [{"var": "now"}, {"buildTime": ["custom", "2020-01-02T18:00:00.000Z"]}, None]},
+                ]
+            }
+        ]
+    }
+    clist.save()
+
+    with freeze_time("2020-01-02 20:00:00Z"):
+        with pytest.raises(CheckInError) as excinfo:
+            perform_checkin(position, clist, {})
+        assert excinfo.value.code == 'rules'
+        assert 'Only allowed before 19:00' in str(excinfo.value)
+
+
+@pytest.mark.django_db
+def test_rules_reasoning_prefer_number_over_date(event, position, clist):
+    clist.rules = {
+        "and": [
+            {"isAfter": [{"var": "now"}, {"buildTime": ["custom", "2020-01-02T10:00:00.000Z"]}, None]},
+            {"isBefore": [{"var": "now"}, {"buildTime": ["custom", "2020-01-02T18:00:00.000Z"]}, None]},
+            {">": [{"var": "entries_today"}, 3]}
+        ]
+    }
+    clist.save()
+
+    with freeze_time("2020-01-01 20:00:00Z"):
+        with pytest.raises(CheckInError) as excinfo:
+            perform_checkin(position, clist, {})
+        assert excinfo.value.code == 'rules'
+        assert 'Minimum number of entries today exceeded' in str(excinfo.value)
 
 
 @pytest.mark.django_db(transaction=True)
