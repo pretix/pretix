@@ -171,21 +171,22 @@ def _detect_event(request, require_live=True, require_plugin=None):
                 path = "/" + request.get_full_path().split("/", 2)[-1]
                 return redirect(path)
 
-            request.event = request.organizer.events.using(db).get(
-                slug=url.kwargs['event'],
-                organizer=request.organizer,
-            )
             request.organizer = request.organizer
+            if 'event' in url.kwargs:
+                request.event = request.organizer.events.using(db).get(
+                    slug=url.kwargs['event'],
+                    organizer=request.organizer,
+                )
 
-            # If this event has a custom domain, send the user there
-            domain = get_event_domain(request.event)
-            if domain:
-                if request.port and request.port not in (80, 443):
-                    domain = '%s:%d' % (domain, request.port)
-                path = request.get_full_path().split("/", 2)[-1]
-                r = redirect(urljoin('%s://%s' % (request.scheme, domain), path))
-                r['Access-Control-Allow-Origin'] = '*'
-                return r
+                # If this event has a custom domain, send the user there
+                domain = get_event_domain(request.event)
+                if domain:
+                    if request.port and request.port not in (80, 443):
+                        domain = '%s:%d' % (domain, request.port)
+                    path = request.get_full_path().split("/", 2)[-1]
+                    r = redirect(urljoin('%s://%s' % (request.scheme, domain), path))
+                    r['Access-Control-Allow-Origin'] = '*'
+                    return r
         else:
             # We are on our main domain
             if 'event' in url.kwargs and 'organizer' in url.kwargs:
