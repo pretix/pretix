@@ -37,7 +37,6 @@ from datetime import datetime, time, timedelta
 
 import dateutil.parser
 from django import forms
-from django.conf import settings
 from django.db.models import (
     Case, Exists, Max, OuterRef, Q, Subquery, Value, When,
 )
@@ -46,7 +45,6 @@ from django.urls import reverse
 from django.utils.formats import date_format
 from django.utils.timezone import is_aware, make_aware
 from django.utils.translation import gettext as _, gettext_lazy, pgettext
-from jsonfallback.functions import JSONExtract
 from pytz import UTC
 from reportlab.lib.units import mm
 from reportlab.platypus import Flowable, Paragraph, Spacer, Table, TableStyle
@@ -58,6 +56,7 @@ from pretix.base.models import (
 from pretix.base.settings import PERSON_NAME_SCHEMES
 from pretix.base.templatetags.money import money_filter
 from pretix.control.forms.widgets import Select2
+from pretix.helpers.templatetags.jsonfield import JSONExtract
 from pretix.plugins.reports.exporters import ReportlabExportMixin
 
 
@@ -110,7 +109,7 @@ class CheckInListMixin(BaseExporter):
                      ] + ([
                          ('name:{}'.format(k), _('Attendee name: {part}').format(part=label))
                          for k, label, w in name_scheme['fields']
-                     ] if settings.JSON_FIELD_AVAILABLE and len(name_scheme['fields']) > 1 else []),
+                     ] if len(name_scheme['fields']) > 1 else []),
                      widget=forms.RadioSelect,
                      required=False
                  )),

@@ -27,7 +27,6 @@ from django.db import models
 from django.utils.crypto import get_random_string, salted_hmac
 from django.utils.translation import gettext_lazy as _
 from django_scopes import ScopedManager, scopes_disabled
-from jsonfallback.fields import FallbackJSONField
 
 from pretix.base.banlist import banned
 from pretix.base.models.base import LoggedModel
@@ -45,7 +44,7 @@ class Customer(LoggedModel):
     email = models.EmailField(db_index=True, null=True, blank=False, verbose_name=_('E-mail'), max_length=190)
     password = models.CharField(verbose_name=_('Password'), max_length=128)
     name_cached = models.CharField(max_length=255, verbose_name=_('Full name'), blank=True)
-    name_parts = FallbackJSONField(default=dict)
+    name_parts = models.JSONField(default=dict)
     is_active = models.BooleanField(default=True, verbose_name=_('Account active'))
     is_verified = models.BooleanField(default=True, verbose_name=_('Verified email address'))
     last_login = models.DateTimeField(verbose_name=_('Last login'), blank=True, null=True)
@@ -60,6 +59,10 @@ class Customer(LoggedModel):
 
     class Meta:
         unique_together = [['organizer', 'email']]
+        ordering = ('email',)
+
+    def get_email_field_name(self):
+        return 'email'
 
     def save(self, **kwargs):
         if self.email:

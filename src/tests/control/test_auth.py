@@ -33,7 +33,7 @@
 # License for the specific language governing permissions and limitations under the License.
 
 import time
-from datetime import date, timedelta
+from datetime import datetime, timedelta
 
 import pytest
 from django.conf import settings
@@ -526,8 +526,8 @@ class PasswordRecoveryFormTest(TestCase):
 
     def test_recovery_expired_token(self):
         class Mocked(PasswordResetTokenGenerator):
-            def _today(self):
-                return date.today() - timedelta(settings.PASSWORD_RESET_TIMEOUT_DAYS + 1)
+            def _now(self):
+                return datetime.now() - timedelta(seconds=settings.PASSWORD_RESET_TIMEOUT + 3600)
 
         generator = Mocked()
         token = generator.make_token(self.user)

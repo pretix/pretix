@@ -59,7 +59,7 @@ def admin():
 def admin_request(admin, client):
     factory = RequestFactory()
     r = factory.get('/')
-    SessionMiddleware().process_request(r)
+    SessionMiddleware(NotImplementedError).process_request(r)
     r.session.save()
     admin.staffsession_set.create(date_start=now(), session_key=r.session.session_key)
     admin.staffsession_set.create(date_start=now(), session_key=client.session.session_key)

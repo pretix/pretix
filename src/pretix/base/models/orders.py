@@ -65,7 +65,6 @@ from django.utils.translation import gettext_lazy as _, pgettext_lazy
 from django_countries.fields import Country
 from django_scopes import ScopedManager, scopes_disabled
 from i18nfield.strings import LazyI18nString
-from jsonfallback.fields import FallbackJSONField
 from phonenumber_field.modelfields import PhoneNumberField
 from phonenumber_field.phonenumber import PhoneNumber
 from phonenumbers import NumberParseException
@@ -378,12 +377,12 @@ class Order(LockModel, LoggedModel):
                 refund_sum=refund_sum_sq,
             )
             qs = qs.annotate(
-                computed_payment_refund_sum=Coalesce(payment_sum_sq, 0) - Coalesce(refund_sum_sq, 0),
+                computed_payment_refund_sum=Coalesce(payment_sum_sq, Decimal('0.00')) - Coalesce(refund_sum_sq, Decimal('0.00')),
             )
 
         qs = qs.annotate(
-            pending_sum_t=F('total') - Coalesce(payment_sum_sq, 0) + Coalesce(refund_sum_sq, 0),
-            pending_sum_rc=-1 * Coalesce(payment_sum_sq, 0) + Coalesce(refund_sum_sq, 0),
+            pending_sum_t=F('total') - Coalesce(payment_sum_sq, Decimal('0.00')) + Coalesce(refund_sum_sq, Decimal('0.00')),
+            pending_sum_rc=-1 * Coalesce(payment_sum_sq, Decimal('0.00')) + Coalesce(refund_sum_sq, Decimal('0.00')),
         )
         if refunds:
             qs = qs.annotate(
@@ -394,23 +393,23 @@ class Order(LockModel, LoggedModel):
             qs = qs.annotate(
                 is_overpaid=Case(
                     When(~Q(status=Order.STATUS_CANCELED) & Q(pending_sum_t__lt=-1e-8),
-                         then=Value('1')),
+                         then=Value(1)),
                     When(Q(status=Order.STATUS_CANCELED) & Q(pending_sum_rc__lt=-1e-8),
-                         then=Value('1')),
-                    default=Value('0'),
+                         then=Value(1)),
+                    default=Value(0),
                     output_field=models.IntegerField()
                 ),
                 is_pending_with_full_payment=Case(
                     When(Q(status__in=(Order.STATUS_EXPIRED, Order.STATUS_PENDING)) & Q(pending_sum_t__lte=1e-8)
                          & Q(require_approval=False),
-                         then=Value('1')),
-                    default=Value('0'),
+                         then=Value(1)),
+                    default=Value(0),
                     output_field=models.IntegerField()
                 ),
                 is_underpaid=Case(
                     When(Q(status=Order.STATUS_PAID) & Q(pending_sum_t__gt=1e-8),
-                         then=Value('1')),
-                    default=Value('0'),
+                         then=Value(1)),
+                    default=Value(0),
                     output_field=models.IntegerField()
                 )
             )
@@ -1190,7 +1189,7 @@ class AbstractPosition(models.Model):
         blank=True, null=True,
         help_text=_("Empty, if this product is not an admission ticket")
     )
-    attendee_name_parts = FallbackJSONField(
+    attendee_name_parts = models.JSONField(
         blank=True, default=dict
     )
     attendee_email = models.EmailField(
@@ -2313,7 +2312,7 @@ class InvoiceAddress(models.Model):
     is_business = models.BooleanField(default=False, verbose_name=_('Business customer'))
     company = models.CharField(max_length=255, blank=True, verbose_name=_('Company name'))
     name_cached = models.CharField(max_length=255, verbose_name=_('Full name'), blank=True)
-    name_parts = FallbackJSONField(default=dict)
+    name_parts = models.JSONField(default=dict)
     street = models.TextField(verbose_name=_('Address'), blank=False)
     zipcode = models.CharField(max_length=30, verbose_name=_('ZIP code'), blank=False)
     city = models.CharField(max_length=255, verbose_name=_('City'), blank=False)

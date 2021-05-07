@@ -230,7 +230,7 @@ def _detect_event(request, require_live=True, require_plugin=None):
 
         if hasattr(request, 'event'):
             # Restrict locales to the ones available for this event
-            LocaleMiddleware().process_request(request)
+            LocaleMiddleware(NotImplementedError).process_request(request)
 
             if require_live and not request.event.live:
                 can_access = (
@@ -267,7 +267,7 @@ def _detect_event(request, require_live=True, require_plugin=None):
                     return response
         elif hasattr(request, 'organizer'):
             # Restrict locales to the ones available for this organizer
-            LocaleMiddleware().process_request(request)
+            LocaleMiddleware(NotImplementedError).process_request(request)
 
     except Event.DoesNotExist:
         try:

@@ -19,11 +19,11 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
-from django.conf.urls import url
+from django.conf.urls import re_path
 
 from . import views
 
 urlpatterns = [
-    url(r'^control/event/(?P<organizer>[^/]+)/(?P<event>[^/]+)/statistics/', views.IndexView.as_view(),
-        name='index'),
+    re_path(r'^control/event/(?P<organizer>[^/]+)/(?P<event>[^/]+)/statistics/', views.IndexView.as_view(),
+            name='index'),
 ]

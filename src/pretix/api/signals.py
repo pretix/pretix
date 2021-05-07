@@ -29,9 +29,7 @@ from pretix.api.models import ApiCall, WebHookCall
 from pretix.base.signals import periodic_task
 from pretix.helpers.periodic import minimum_interval
 
-register_webhook_events = Signal(
-    providing_args=[]
-)
+register_webhook_events = Signal()
 """
 This signal is sent out to get all known webhook events. Receivers should return an
 instance of a subclass of pretix.api.webhooks.WebhookEvent or a list of such

@@ -19,15 +19,3 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
-from django.apps import AppConfig
-
-
-class PretixPresaleConfig(AppConfig):
-    name = 'pretix.presale'
-    label = 'pretixpresale'
-
-    def ready(self):
-        from . import style  # noqa
-
-
-default_app_config = 'pretix.presale.PretixPresaleConfig'

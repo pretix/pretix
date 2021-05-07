@@ -1270,7 +1270,8 @@ class SubEvent(EventMixin, LoggedModel):
                     ).order_by().values('subevent').annotate(items=GroupConcat('item_id', delimiter=',')).values('items'),
                     output_field=models.TextField(),
                 ),
-                Value('')
+                Value(''),
+                output_field=models.TextField()
             ),
             disabled_vars=Coalesce(
                 Subquery(
@@ -1280,7 +1281,8 @@ class SubEvent(EventMixin, LoggedModel):
                     ).order_by().values('subevent').annotate(items=GroupConcat('variation_id', delimiter=',')).values('items'),
                     output_field=models.TextField(),
                 ),
-                Value('')
+                Value(''),
+                output_field=models.TextField()
             )
         )
 

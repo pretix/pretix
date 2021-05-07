@@ -116,7 +116,6 @@ else:
 
 if 'mysql' in db_backend:
     db_options['charset'] = 'utf8mb4'
-JSON_FIELD_AVAILABLE = db_backend in ('mysql', 'postgresql')
 
 DATABASES = {
     'default': {
@@ -605,12 +604,14 @@ COMPRESS_PRECOMPILERS = (
 
 COMPRESS_ENABLED = COMPRESS_OFFLINE = not debug_fallback
 
-COMPRESS_CSS_FILTERS = (
-    # CssAbsoluteFilter is incredibly slow, especially when dealing with our _flags.scss
-    # However, we don't need it if we consequently use the static() function in Sass
-    # 'compressor.filters.css_default.CssAbsoluteFilter',
-    'compressor.filters.cssmin.CSSCompressorFilter',
-)
+COMPRESS_FILTERS = {
+    'css': (
+        # CssAbsoluteFilter is incredibly slow, especially when dealing with our _flags.scss
+        # However, we don't need it if we consequently use the static() function in Sass
+        # 'compressor.filters.css_default.CssAbsoluteFilter',
+        'compressor.filters.cssmin.CSSCompressorFilter',
+    )
+}
 
 INTERNAL_IPS = ('127.0.0.1', '::1')
 
@@ -802,3 +803,5 @@ COUNTRIES_OVERRIDE = {
 
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 25000
 DATA_UPLOAD_MAX_MEMORY_SIZE = 10 * 1024 * 1024  # 10 MB
+
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'  # sadly. we would prefer BigInt, and should use it for all new models but the migration will be hard

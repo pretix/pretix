@@ -32,17 +32,8 @@
 # distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations under the License.
 
-from django.apps import AppConfig
 from django.urls import URLPattern
 from django.urls.resolvers import RegexPattern
-
-
-class PretixMultidomainConfig(AppConfig):
-    name = 'pretix.multidomain'
-    label = 'pretixmultidomain'
-
-
-default_app_config = 'pretix.multidomain.PretixMultidomainConfig'
 
 
 def event_url(route, view, name=None, require_live=True):

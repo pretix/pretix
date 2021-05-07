@@ -2,7 +2,6 @@
 
 import django.db.models.deletion
 import i18nfield.fields
-import jsonfallback.fields
 from django.db import migrations, models
 
 import pretix.base.models.base
@@ -61,7 +60,7 @@ class Migration(migrations.Migration):
                 ('id', models.BigAutoField(primary_key=True, serialize=False)),
                 ('date_start', models.DateTimeField()),
                 ('date_end', models.DateTimeField()),
-                ('attendee_name_parts', jsonfallback.fields.FallbackJSONField(default=dict, null=True)),
+                ('attendee_name_parts', models.JSONField(default=dict, null=True)),
                 ('customer', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='memberships', to='pretixbase.Customer')),
                 ('granted_in', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='granted_memberships', to='pretixbase.OrderPosition', null=True)),
                 ('membership_type', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='memberships', to='pretixbase.MembershipType')),

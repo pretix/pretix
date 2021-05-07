@@ -21,6 +21,7 @@
 #
 import json
 import logging
+import os
 from collections import Counter, defaultdict
 from decimal import Decimal
 
@@ -467,7 +468,7 @@ class OrderPositionSerializer(I18nAwareModelSerializer):
                     if isinstance(answ_data['answer'], File):
                         an = answ_data.pop('answer')
                         a = instance.answers.create(**answ_data, answer='')
-                        a.file.save(an.name, an, save=False)
+                        a.file.save(os.path.basename(an.name), an, save=False)
                         a.answer = 'file://' + a.file.name
                         a.save()
                     else:
@@ -1274,7 +1275,7 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
                         if isinstance(answ_data['answer'], File):
                             an = answ_data.pop('answer')
                             answ = pos.answers.create(**answ_data, answer='')
-                            answ.file.save(an.name, an, save=False)
+                            answ.file.save(os.path.basename(an.name), an, save=False)
                             answ.answer = 'file://' + answ.file.name
                             answ.save()
                         else:

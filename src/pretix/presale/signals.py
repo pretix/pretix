@@ -36,10 +36,10 @@ from django.dispatch import Signal
 
 from pretix.base.signals import EventPluginSignal
 
-global_html_head = Signal(
-    providing_args=["request"]
-)
+global_html_head = Signal()
 """
+Arguments: ``request``
+
 This signal allows you to put code inside the HTML ``<head>`` tag
 of every page in the frontend. You will get the request as the keyword argument
 ``request`` and are expected to return plain HTML.
@@ -47,10 +47,10 @@ of every page in the frontend. You will get the request as the keyword argument
 This signal is called regardless of whether your plugin is active for all pages of the system.
 """
 
-global_html_page_header = Signal(
-    providing_args=["request"]
-)
+global_html_page_header = Signal()
 """
+Arguments: ``request``
+
 This signal allows you to put code right in the beginning of the HTML ``<body>`` tag
 of every page in the frontend. You will get the request as the keyword argument
 ``request`` and are expected to return plain HTML.
@@ -58,10 +58,10 @@ of every page in the frontend. You will get the request as the keyword argument
 This signal is called regardless of whether your plugin is active for all pages of the system.
 """
 
-global_html_footer = Signal(
-    providing_args=["request"]
-)
+global_html_footer = Signal()
 """
+Arguments: ``request``
+
 This signal allows you to put code before the end of the HTML ``<body>`` tag
 of every page in the frontend. You will get the request as the keyword argument
 ``request`` and are expected to return plain HTML.
@@ -69,10 +69,10 @@ of every page in the frontend. You will get the request as the keyword argument
 This signal is called regardless of whether your plugin is active for all pages of the system.
 """
 
-html_head = EventPluginSignal(
-    providing_args=["request"]
-)
+html_head = EventPluginSignal()
 """
+Arguments: ``request``
+
 This signal allows you to put code inside the HTML ``<head>`` tag
 of every page in the frontend. You will get the request as the keyword argument
 ``request`` and are expected to return plain HTML.
@@ -80,10 +80,10 @@ of every page in the frontend. You will get the request as the keyword argument
 As with all plugin signals, the ``sender`` keyword argument will contain the event.
 """
 
-html_page_header = EventPluginSignal(
-    providing_args=["request"]
-)
+html_page_header = EventPluginSignal()
 """
+Arguments: ``request``
+
 This signal allows you to put code right in the beginning of the HTML ``<body>`` tag
 of every page in the frontend. You will get the request as the keyword argument
 ``request`` and are expected to return plain HTML.
@@ -91,10 +91,10 @@ of every page in the frontend. You will get the request as the keyword argument
 As with all plugin signals, the ``sender`` keyword argument will contain the event.
 """
 
-html_footer = EventPluginSignal(
-    providing_args=["request"]
-)
+html_footer = EventPluginSignal()
 """
+Arguments: ``request``
+
 This signal allows you to put code before the end of the HTML ``<body>`` tag
 of every page in the frontend. You will get the request as the keyword argument
 ``request`` and are expected to return plain HTML.
@@ -102,10 +102,10 @@ of every page in the frontend. You will get the request as the keyword argument
 As with all plugin signals, the ``sender`` keyword argument will contain the event.
 """
 
-sass_preamble = EventPluginSignal(
-    providing_args=["filename"]
-)
+sass_preamble = EventPluginSignal()
 """
+Arguments: ``filename``
+
 This signal allows you to put SASS code at the beginning of the event-specific
 stylesheet. Keep in mind that this will only be called/rebuilt when the user changes
 display settings or pretix gets updated. You will get the filename that is being
@@ -116,10 +116,10 @@ code.
 As with all plugin signals, the ``sender`` keyword argument will contain the event.
 """
 
-sass_postamble = EventPluginSignal(
-    providing_args=["filename"]
-)
+sass_postamble = EventPluginSignal()
 """
+Arguments: ``filename``
+
 This signal allows you to put SASS code at the end of the event-specific
 stylesheet. Keep in mind that this will only be called/rebuilt when the user changes
 display settings or pretix gets updated. You will get the filename that is being
@@ -129,20 +129,20 @@ all of pretix' SASS code.
 As with all plugin signals, the ``sender`` keyword argument will contain the event.
 """
 
-footer_link = EventPluginSignal(
-    providing_args=["request"]
-)
+footer_link = EventPluginSignal()
 """
+Arguments: ``request``
+
 The signal ``pretix.presale.signals.footer_link`` allows you to add links to the footer of an event page. You
 are expected to return a dictionary containing the keys ``label`` and ``url``.
 
 As with all plugin signals, the ``sender`` keyword argument will contain the event.
 """
 
-global_footer_link = Signal(
-    providing_args=["request"]
-)
+global_footer_link = Signal()
 """
+Arguments: ``request``
+
 The signal ``pretix.presale.signals.global_footer_link`` allows you to add links to the footer of any page. You
 are expected to return a dictionary containing the keys ``label`` and ``url``.
 """
@@ -165,29 +165,29 @@ a subclass of ``pretix.presale.checkoutflow.BaseCheckoutFlowStep``.
 As with all plugin signals, the ``sender`` keyword argument will contain the event.
 """
 
-voucher_redeem_info = EventPluginSignal(
-    providing_args=["voucher"]
-)
+voucher_redeem_info = EventPluginSignal()
 """
+Arguments: ``voucher``
+
 This signal is sent out to display additional information on the "redeem a voucher" page
 
 As with all plugin signals, the ``sender`` keyword argument will contain the event.
 """
 
-order_meta_from_request = EventPluginSignal(
-    providing_args=["request"]
-)
+order_meta_from_request = EventPluginSignal()
 """
+Arguments: ``request``
+
 This signal is sent before an order is created through the pretixpresale frontend. It allows you
 to return a dictionary that will be merged in the meta_info attribute of the order.
 You will receive the request triggering the order creation as the ``request`` keyword argument.
 
 As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
 """
-checkout_confirm_page_content = EventPluginSignal(
-    providing_args=['request']
-)
+checkout_confirm_page_content = EventPluginSignal()
 """
+Arguments: 'request'
+
 This signals allows you to add HTML content to the confirmation page that is presented at the
 end of the checkout process, just before the order is being created.
 
@@ -195,10 +195,10 @@ As with all plugin signals, the ``sender`` keyword argument will contain the eve
 argument will contain the request object.
 """
 
-fee_calculation_for_cart = EventPluginSignal(
-    providing_args=['request', 'invoice_address', 'total', 'positions']
-)
+fee_calculation_for_cart = EventPluginSignal()
 """
+Arguments: 'request', 'invoice_address', 'total', 'positions'
+
 This signals allows you to add fees to a cart. You are expected to return a list of ``OrderFee``
 objects that are not yet saved to the database (because there is no order yet).
 
@@ -209,9 +209,7 @@ You should not rely on this ``total`` value for fee calculations as other fees m
 The ``positions`` argument will contain a list or queryset of ``CartPosition`` objects.
 """
 
-contact_form_fields = EventPluginSignal(
-    providing_args=[]
-)
+contact_form_fields = EventPluginSignal()
 """
 This signals allows you to add form fields to the contact form that is presented during checkout
 and by default only asks for the email address. You are supposed to return a dictionary of
@@ -222,10 +220,10 @@ As with all plugin signals, the ``sender`` keyword argument will contain the eve
 argument will contain the request object.
 """
 
-contact_form_fields_overrides = EventPluginSignal(
-    providing_args=["request", "order"]
-)
+contact_form_fields_overrides = EventPluginSignal()
 """
+Arguments: ``request``, ``order``
+
 This signal allows you to override fields of the contact form that is presented during checkout
 and by default only asks for the email address. It is also being used for the invoice address
 form. You are supposed to return a dictionary of dictionaries with globally unique keys. The
@@ -237,10 +235,10 @@ argument will contain the request object. The ``order`` argument is ``None`` dur
 process and contains an order if the customer is trying to change an existing order.
 """
 
-question_form_fields = EventPluginSignal(
-    providing_args=["position"]
-)
+question_form_fields = EventPluginSignal()
 """
+Arguments: ``position``
+
 This signals allows you to add form fields to the questions form that is presented during checkout
 and by default asks for the questions configured in the backend. You are supposed to return a dictionary
 of form fields with globally unique keys. The validated form results will be saved into the
@@ -253,10 +251,10 @@ later.
 As with all plugin signals, the ``sender`` keyword argument will contain the event.
 """
 
-question_form_fields_overrides = EventPluginSignal(
-    providing_args=["position", "request"]
-)
+question_form_fields_overrides = EventPluginSignal()
 """
+Arguments: ``position``, ``request``
+
 This signal allows you to override fields of the questions form that is presented during checkout
 and by default only asks for the questions configured in the backend. You are supposed to return a
 dictionary of dictionaries with globally unique keys. The value-dictionary should contain one or
@@ -270,46 +268,46 @@ As with all plugin signals, the ``sender`` keyword argument will contain the eve
 argument will contain the request object.
 """
 
-order_info = EventPluginSignal(
-    providing_args=["order", "request"]
-)
+order_info = EventPluginSignal()
 """
+Arguments: ``order``, ``request``
+
 This signal is sent out to display additional information on the order detail page
 
 As with all plugin signals, the ``sender`` keyword argument will contain the event.
 """
 
-position_info = EventPluginSignal(
-    providing_args=["order", "position", "request"]
-)
+position_info = EventPluginSignal()
 """
+Arguments: ``order``, ``position``, ``request``
+
 This signal is sent out to display additional information on the position detail page
 
 As with all plugin signals, the ``sender`` keyword argument will contain the event.
 """
 
-order_info_top = EventPluginSignal(
-    providing_args=["order", "request"]
-)
+order_info_top = EventPluginSignal()
 """
+Arguments: ``order``, ``request``
+
 This signal is sent out to display additional information on top of the order detail page
 
 As with all plugin signals, the ``sender`` keyword argument will contain the event.
 """
 
-position_info_top = EventPluginSignal(
-    providing_args=["order", "position", "request"]
-)
+position_info_top = EventPluginSignal()
 """
+Arguments: ``order``, ``position``, ``request``
+
 This signal is sent out to display additional information on top of the position detail page
 
 As with all plugin signals, the ``sender`` keyword argument will contain the event.
 """
 
-process_request = EventPluginSignal(
-    providing_args=["request"]
-)
+process_request = EventPluginSignal()
 """
+Arguments: ``request``
+
 This signal is sent out whenever a request is made to a event presale page. Most of the
 time, this will be called from the middleware layer (except on plugin-provided pages
 this will be called by the @event_view decorator). Similarly to Django's process_request
@@ -322,10 +320,10 @@ easy to cause serious performance problems.
 As with all plugin signals, the ``sender`` keyword argument will contain the event.
 """
 
-process_response = EventPluginSignal(
-    providing_args=["request", "response"]
-)
+process_response = EventPluginSignal()
 """
+Arguments: ``request``, ``response``
+
 This signal is sent out whenever a response is sent from a event presale page. Most of
 the time, this will be called from the middleware layer (except on plugin-provided pages
 this will be called by the @event_view decorator). Similarly to Django's process_response
@@ -339,10 +337,10 @@ easy to cause serious performance problems.
 As with all plugin signals, the ``sender`` keyword argument will contain the event.
 """
 
-front_page_top = EventPluginSignal(
-    providing_args=["request", "subevent"]
-)
+front_page_top = EventPluginSignal()
 """
+Arguments: ``request``, ``subevent``
+
 This signal is sent out to display additional information on the frontpage above the list
 of products and but below a custom frontpage text.
 
@@ -350,10 +348,10 @@ As with all plugin signals, the ``sender`` keyword argument will contain the eve
 receivers are expected to return HTML.
 """
 
-render_seating_plan = EventPluginSignal(
-    providing_args=["request", "subevent", "voucher"]
-)
+render_seating_plan = EventPluginSignal()
 """
+Arguments: ``request``, ``subevent``, ``voucher``
+
 This signal is sent out to render a seating plan, if one is configured for the specific event.
 You will be passed the ``request`` as a keyword argument. If applicable, a ``subevent`` or
 ``voucher`` argument might be given.
@@ -362,10 +360,10 @@ As with all plugin signals, the ``sender`` keyword argument will contain the eve
 receivers are expected to return HTML.
 """
 
-front_page_bottom = EventPluginSignal(
-    providing_args=["request", "subevent"]
-)
+front_page_bottom = EventPluginSignal()
 """
+Arguments: ``request``, ``subevent``
+
 This signal is sent out to display additional information on the frontpage below the list
 of products.
 
@@ -373,10 +371,10 @@ As with all plugin signals, the ``sender`` keyword argument will contain the eve
 receivers are expected to return HTML.
 """
 
-front_page_bottom_widget = EventPluginSignal(
-    providing_args=["request", "subevent"]
-)
+front_page_bottom_widget = EventPluginSignal()
 """
+Arguments: ``request``, ``subevent``
+
 This signal is sent out to display additional information on the frontpage below the list
 of products if the front page is shown in the widget.
 
@@ -384,10 +382,10 @@ As with all plugin signals, the ``sender`` keyword argument will contain the eve
 receivers are expected to return HTML.
 """
 
-checkout_all_optional = EventPluginSignal(
-    providing_args=['request']
-)
+checkout_all_optional = EventPluginSignal()
 """
+Arguments: 'request'
+
 If any receiver of this signal returns ``True``, all input fields during checkout (contact data,
 invoice address, confirmations) will be optional, except for questions. Use with care!
 
@@ -395,10 +393,10 @@ As with all plugin signals, the ``sender`` keyword argument will contain the eve
 argument will contain the request object.
 """
 
-item_description = EventPluginSignal(
-    providing_args=["item", "variation"]
-)
+item_description = EventPluginSignal()
 """
+Arguments: ``item``, ``variation``
+
 This signal is sent out when the description of an item or variation is rendered and allows you to append
 additional text to the description. You are passed the ``item`` and ``variation`` and expected to return
 HTML.

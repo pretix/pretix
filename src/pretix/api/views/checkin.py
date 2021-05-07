@@ -22,7 +22,7 @@
 import django_filters
 from django.core.exceptions import ValidationError
 from django.db.models import (
-    Count, Exists, F, Max, OuterRef, Prefetch, Q, Subquery,
+    Count, Exists, F, Max, OrderBy, OuterRef, Prefetch, Q, Subquery,
 )
 from django.db.models.functions import Coalesce
 from django.http import Http404
@@ -48,7 +48,6 @@ from pretix.base.models import (
 from pretix.base.services.checkin import (
     CheckInError, RequiredQuestionsError, SQLLogic, perform_checkin,
 )
-from pretix.helpers.database import FixedOrderBy
 
 with scopes_disabled():
     class CheckinListFilter(FilterSet):
@@ -239,10 +238,10 @@ class CheckinListPositionViewSet(viewsets.ReadOnlyModelViewSet):
             'display_name': Coalesce('attendee_name_cached', 'addon_to__attendee_name_cached')
         },
         'last_checked_in': {
-            '_order': FixedOrderBy(F('last_checked_in'), nulls_first=True),
+            '_order': OrderBy(F('last_checked_in'), nulls_first=True),
         },
         '-last_checked_in': {
-            '_order': FixedOrderBy(F('last_checked_in'), nulls_last=True, descending=True),
+            '_order': OrderBy(F('last_checked_in'), nulls_last=True, descending=True),
         },
     }
 

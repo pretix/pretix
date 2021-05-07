@@ -1,4 +1,4 @@
-django-debug-toolbar==2.1
+django-debug-toolbar==3.2
 # Testing requirements
 pycodestyle==2.5.*
 pyflakes==2.1.*

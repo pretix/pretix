@@ -38,13 +38,11 @@ from io import BytesIO
 
 import dateutil.parser
 from django import forms
-from django.conf import settings
 from django.core.files.base import ContentFile
 from django.db.models import Q
 from django.db.models.functions import Coalesce
 from django.utils.timezone import make_aware
 from django.utils.translation import gettext as _, gettext_lazy
-from jsonfallback.functions import JSONExtract
 from PyPDF2.merger import PdfFileMerger
 
 from pretix.base.exporter import BaseExporter
@@ -52,6 +50,7 @@ from pretix.base.i18n import language
 from pretix.base.models import Event, Order, OrderPosition
 from pretix.base.settings import PERSON_NAME_SCHEMES
 
+from ...helpers.templatetags.jsonfield import JSONExtract
 from .ticketoutput import PdfTicketOutput
 
 
@@ -94,7 +93,7 @@ class AllTicketsPDF(BaseExporter):
                      ] + ([
                          ('name:{}'.format(k), _('Attendee name: {part}').format(part=label))
                          for k, label, w in name_scheme['fields']
-                     ] if settings.JSON_FIELD_AVAILABLE and name_scheme and len(name_scheme['fields']) > 1 else []),
+                     ] if name_scheme and len(name_scheme['fields']) > 1 else []),
                  )),
             ]
         )
