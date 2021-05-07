@@ -25,7 +25,7 @@ from decimal import Decimal
 
 import pytest
 from django.conf import settings
-from django.utils.timezone import now
+from django.utils.timezone import now, override
 from django_scopes import scope
 from freezegun import freeze_time
 
@@ -623,12 +623,12 @@ def test_rules_time_isafter_custom_time(event, position, clist):
     event.settings.timezone = 'Europe/Berlin'
     clist.rules = {"isAfter": [{"var": "now"}, {"buildTime": ["customtime", "22:00:00"]}, None]}
     clist.save()
-    with freeze_time("2020-01-01 21:55:00+01:00"):
+    with freeze_time("2020-01-01 21:55:00+01:00"), override(event.timezone):
         assert not OrderPosition.objects.filter(SQLLogic(clist).apply(clist.rules), pk=position.pk).exists()
         with pytest.raises(CheckInError) as excinfo:
             perform_checkin(position, clist, {})
         assert excinfo.value.code == 'rules'
-        assert 'Only allowed after 23:00' in str(excinfo.value)
+        assert 'Only allowed after 22:00' in str(excinfo.value)
 
     with freeze_time("2020-01-01 22:05:00+01:00"):
         assert OrderPosition.objects.filter(SQLLogic(clist).apply(clist.rules), pk=position.pk).exists()
