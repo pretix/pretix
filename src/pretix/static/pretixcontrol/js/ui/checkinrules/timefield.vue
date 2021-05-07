@@ -12,12 +12,12 @@
           .datetimepicker(this.opts())
           .trigger("change")
           .on("dp.change", function (e) {
-            vm.$emit("input", $(this).data('DateTimePicker').date().toISOString());
+            vm.$emit("input", $(this).data('DateTimePicker').date().format("HH:mm:ss"));
           });
       if (!vm.value) {
         $(this.$el).data("DateTimePicker").viewDate(moment().hour(0).minute(0).second(0).millisecond(0));
       } else {
-        $(this.$el).data("DateTimePicker").date(moment(vm.value));
+        $(this.$el).data("DateTimePicker").date(vm.value);
       }
     },
     methods: {
@@ -43,7 +43,7 @@
     },
     watch: {
       value: function (val) {
-        $(this.$el).data('DateTimePicker').date(moment(val));
+        $(this.$el).data('DateTimePicker').date(val);
       },
     },
     destroyed: function () {
