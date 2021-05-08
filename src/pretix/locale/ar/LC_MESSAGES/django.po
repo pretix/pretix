@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-05-06 18:54+0000\n"
-"PO-Revision-Date: 2021-05-07 07:38+0000\n"
+"PO-Revision-Date: 2021-05-08 10:00+0000\n"
 "Last-Translator: Mohamed Tawfiq <mtawfiq@wafyapp.com>\n"
 "Language-Team: Arabic <https://translate.pretix.eu/projects/pretix/pretix/ar/"
 ">\n"
@@ -191,8 +191,8 @@ msgid ""
 "Updating add-ons, bundles, or variations via PATCH/PUT is not supported. "
 "Please use the dedicated nested endpoint."
 msgstr ""
-"تحديث الإضافات، أو الحزم، أو المنوعات عن طريق PATCH/PUT غير مدعوم. الرجاء "
-"استخدام نهاية شبكية مستقلة."
+"تحديث الإضافات، أو الحزم، أو المتغيرات عن طريق PATCH/PUT غير مدعوم. الرجاء "
+"استخدام نقطة النهاية المتداخلة المخصصة."
 
 #: pretix/api/serializers/item.py:186 pretix/control/forms/item.py:554
 msgid ""
@@ -204,28 +204,29 @@ msgstr ""
 
 #: pretix/api/serializers/item.py:191 pretix/control/forms/item.py:560
 msgid "Gift card products should not be admission products at the same time."
-msgstr "لا يمكن أن تكون منتجات بطاقات الهدايا منتجات دخول."
+msgstr "لا يمكن أن تكون منتجات بطاقات الهدايا منتجات القبول."
 
 #: pretix/api/serializers/item.py:228
 #, python-brace-format
 msgid "Item meta data property '{name}' does not exist."
-msgstr "بيانات '{name}' غير موجودة."
+msgstr "خاصية البيانات الوصفية للعنصر '{name}' غير موجودة."
 
 #: pretix/api/serializers/item.py:345
 msgid ""
 "Updating options via PATCH/PUT is not supported. Please use the dedicated "
 "nested endpoint."
 msgstr ""
-"خيارات التحديث عبر PATCH / PUT غير مدعومة. الرجاء استخدام نقطة النهايات "
-"المتشابكة المخصصة."
+"خيارات التحديث عبر PATCH/PUT غير مدعومة. الرجاء استخدام نقطة النهاية "
+"المتداخلة المخصصة."
 
 #: pretix/api/serializers/item.py:359 pretix/control/forms/item.py:109
 msgid "Question cannot depend on a question asked during check-in."
 msgstr "لا يمكن أن يعتمد السؤال على سؤال تم طرحه أثناء التسجيل."
 
 #: pretix/api/serializers/item.py:364 pretix/control/forms/item.py:114
+#, fuzzy
 msgid "Circular dependency between questions detected."
-msgstr "الأسئلة تدور في سلسلة لا متناهية."
+msgstr "تم الكشف عن تبعية دائرية بين الأسئلة."
 
 #: pretix/api/serializers/item.py:369 pretix/control/forms/item.py:123
 msgid "This type of question cannot be asked during check-in."
@@ -237,10 +238,11 @@ msgstr "المنتج \"{}\" غير متوفر في هذا التاريخ."
 
 #: pretix/api/serializers/organizer.py:119
 #: pretix/control/forms/organizer.py:492
+#, fuzzy
 msgid ""
 "A gift card with the same secret already exists in your or an affiliated "
 "organizer account."
-msgstr "توجد بطاقة هدايا بنفس السر مسبقا في حسابك أو حساب منظم تابع."
+msgstr "توجد مسبقا بطاقة هدايا بنفس السر في حسابك أو حساب منظم تابع."
 
 #: pretix/api/serializers/organizer.py:201
 #: pretix/control/views/organizer.py:665
@@ -249,20 +251,21 @@ msgstr "دعوة حساب pretix"
 
 #: pretix/api/serializers/organizer.py:223
 #: pretix/control/views/organizer.py:764
+#, fuzzy
 msgid "This user already has been invited for this team."
 msgstr "تمت دعوة هذا المستخدم سابقا لهذا الفريق."
 
 #: pretix/api/serializers/organizer.py:239
 #: pretix/control/views/organizer.py:781
 msgid "This user already has permissions for this team."
-msgstr "هذا المستخدم لديه أذن سابقة لهذا الفريق."
+msgstr "هذا المستخدم لديه تصاريح سابقة لهذا الفريق."
 
 #: pretix/api/views/oauth.py:106 pretix/control/logdisplay.py:414
 #, python-brace-format
 msgid ""
 "The application \"{application_name}\" has been authorized to access your "
 "account."
-msgstr "تم التصريج التطبيق \"{application_name}\" للوصول إلى حسابك."
+msgstr "تم تفويض التطبيق \"{application_name}\" للوصول إلى حسابك."
 
 #: pretix/api/views/order.py:485 pretix/control/views/orders.py:1250
 #: pretix/presale/views/order.py:698 pretix/presale/views/order.py:771
@@ -290,11 +293,11 @@ msgstr "تم تقديم طلب جديد"
 
 #: pretix/api/webhooks.py:204 pretix/base/notifications.py:264
 msgid "New order requires approval"
-msgstr "الطلب الجديد يتطلب الموافقة."
+msgstr "طلب جديد يتطلب الموافقة."
 
 #: pretix/api/webhooks.py:208 pretix/base/notifications.py:270
 msgid "Order marked as paid"
-msgstr "الطلب مدفوع"
+msgstr "تم تمييز الطلب على أنه مدفوع"
 
 #: pretix/api/webhooks.py:212 pretix/base/notifications.py:276
 #: pretix/control/templates/pretixcontrol/event/mail.html:72
@@ -312,11 +315,11 @@ msgstr "الطلب منتهي الصلاحية"
 
 #: pretix/api/webhooks.py:224 pretix/base/notifications.py:294
 msgid "Order information changed"
-msgstr "تغيرت معلومات الطلب"
+msgstr "تم تغيير معلومات الطلب"
 
 #: pretix/api/webhooks.py:228 pretix/base/notifications.py:300
 msgid "Order contact address changed"
-msgstr "تم تغيير عنوان تواصل الطلب"
+msgstr "تم تغيير عنوان اتصال الطلب"
 
 #: pretix/api/webhooks.py:232 pretix/base/notifications.py:306
 #: pretix/control/templates/pretixcontrol/event/mail.html:63
@@ -325,7 +328,7 @@ msgstr "تم تغيير الطلب."
 
 #: pretix/api/webhooks.py:236 pretix/base/notifications.py:318
 msgid "External refund of payment"
-msgstr "استرداد خارجي للمدفوعات"
+msgstr "استرداد الدفع الخارجي"
 
 #: pretix/api/webhooks.py:240
 msgid "Order approved"
@@ -337,9 +340,10 @@ msgstr "تم رفض الطلب"
 
 #: pretix/api/webhooks.py:248
 msgid "Ticket checked in"
-msgstr "تم اصدار التذكرة"
+msgstr "تم تسجيل التذكرة"
 
 #: pretix/api/webhooks.py:252
+#, fuzzy
 msgid "Ticket check-in reverted"
 msgstr "تم التراجع عن اصدار التذكرة"
 
@@ -359,7 +363,7 @@ msgstr "تمت إضافة تاريخ سلسلة الفعاليات"
 #: pretix/api/webhooks.py:272
 msgctxt "subevent"
 msgid "Event series date changed"
-msgstr "تم تغيير تاريخ سلسلة الأحداث"
+msgstr "تم تغيير تاريخ سلسلة الفعاليات"
 
 #: pretix/api/webhooks.py:276
 msgctxt "subevent"
@@ -384,6 +388,7 @@ msgstr "{system} اسم المستخدم"
 #: pretix/presale/forms/customer.py:318 pretix/presale/forms/user.py:40
 #: pretix/presale/templates/pretixpresale/event/order.html:297
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:22
+#, fuzzy
 msgid "E-mail"
 msgstr "البريد الإلكتروني"
 
@@ -399,9 +404,9 @@ msgid "Online shop"
 msgstr "متجر إلكتروني"
 
 #: pretix/base/context.py:45
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "powered by {name} based on <a {a_attr}>pretix</a>"
-msgstr "مدعوم من {name} على أساس <a {a_attr}> pretix </a>"
+msgstr "مدعوم من {name} على أساس <a {a_attr}>pretix</a>"
 
 #: pretix/base/context.py:52
 #, python-format
@@ -435,15 +440,15 @@ msgstr "جون دوي"
 
 #: pretix/base/email.py:465
 msgid "Sample Corporation"
-msgstr "مثال لشركة"
+msgstr "شركة النموذج"
 
 #: pretix/base/email.py:505
 msgid "Sample Admission Ticket"
-msgstr "مثال لتذكرة الدخول"
+msgstr "نموذج تذكرة الدخول"
 
 #: pretix/base/email.py:531
 msgid "An individual text with a reason can be inserted here."
-msgstr "يمكن إدراج نص هنا."
+msgstr "يمكن إدراج نص فردي مع سبب هنا."
 
 #: pretix/base/email.py:535
 msgid "The amount has been charged to your card."
@@ -451,15 +456,15 @@ msgstr "تم خصم المبلغ من بطاقتك."
 
 #: pretix/base/email.py:539
 msgid "Please transfer money to this bank account: 9999-9999-9999-9999"
-msgstr "يرجى التحويل إلى هذا الحساب المصرفي: 9999-9999-9999-9999"
+msgstr "يرجى تحويل الأموال إلى هذا الحساب المصرفي: 9999-9999-9999-9999"
 
 #: pretix/base/exporter.py:159 pretix/base/exporter.py:285
 msgid "Export format"
-msgstr "تصدير الصيغة"
+msgstr "طريقة التصدير"
 
 #: pretix/base/exporter.py:161
 msgid "Excel (.xlsx)"
-msgstr "إكسل (. XLSX)"
+msgstr "إكسل (.xlsx)"
 
 #: pretix/base/exporter.py:162 pretix/base/exporter.py:277
 msgid "CSV (with commas)"
@@ -471,22 +476,23 @@ msgstr "CSV (نمط إكسل)"
 
 #: pretix/base/exporter.py:164 pretix/base/exporter.py:279
 msgid "CSV (with semicolons)"
-msgstr "CSV (مع فواصل منقوطة)"
+msgstr "CSV (قيم مفصولة بفاصلة)"
 
 #: pretix/base/exporter.py:273
+#, fuzzy
 msgid "Combined Excel (.xlsx)"
-msgstr "إكسل مجمع (. XLSX)"
+msgstr "إكسل مركب (.xlsx)"
 
 #: pretix/base/exporters/answers.py:52
 msgid "Answers to file upload questions"
-msgstr "أجوبة لأسئلة رفع الملفات"
+msgstr "إجابات على ملف تحميل الأسئلة"
 
 #: pretix/base/exporters/answers.py:61 pretix/base/models/items.py:1247
 #: pretix/control/navigation.py:182
 #: pretix/control/templates/pretixcontrol/items/questions.html:3
 #: pretix/control/templates/pretixcontrol/items/questions.html:5
 msgid "Questions"
-msgstr "الأسئلة"
+msgstr "أسئلة"
 
 #: pretix/base/exporters/dekodi.py:103
 #, python-brace-format
@@ -519,7 +525,7 @@ msgid ""
 "date does not always correspond to the order or payment date."
 msgstr ""
 "قم بتضمين الفواتير الصادرة في هذا التاريخ أو بعده فقط. لاحظ أن تاريخ "
-"الفاتورة لا يتوافق دائمًا مع الطلب أو تاريخ الدفع."
+"الفاتورة لا يتوافق دائما مع الطلب أو تاريخ الدفع."
 
 #: pretix/base/exporters/dekodi.py:231 pretix/base/exporters/invoices.py:78
 #: pretix/base/exporters/orderlist.py:114
@@ -543,8 +549,8 @@ msgid ""
 "Only include invoices issued on or before this date. Note that the invoice "
 "date does not always correspond to the order or payment date."
 msgstr ""
-"تشمل فقط الفواتير الصادرة في هذا التاريخ أو قبله. علما بأن تاريخ الفاتورة لا "
-"يتوافق دائما مع الطلب أو تاريخ الدفع."
+"قم بتضمين الفواتير الصادرة في هذا التاريخ أو قبله فقط. لاحظ بأن تاريخ "
+"الفاتورة لا يتوافق دائما مع الطلب أو تاريخ الدفع."
 
 #: pretix/base/exporters/invoices.py:86 pretix/base/models/orders.py:1413
 #: pretix/base/models/orders.py:1790 pretix/control/forms/filter.py:173
@@ -556,12 +562,12 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:59
 #: pretix/control/templates/pretixcontrol/orders/refunds.html:47
 msgid "Payment provider"
-msgstr "مقدم الدفع"
+msgstr "مقدم خدمة السداد"
 
 #: pretix/base/exporters/invoices.py:88 pretix/base/exporters/invoices.py:90
 #: pretix/control/forms/filter.py:175 pretix/control/forms/filter.py:1653
 msgid "All payment providers"
-msgstr "جميع مقدمي خدمات الدفع"
+msgstr "جميع مزودي خدمات السداد"
 
 #: pretix/base/exporters/invoices.py:95
 msgid ""
@@ -569,9 +575,9 @@ msgid ""
 "this payment provider. Note that this might include some invoices of orders "
 "which in the end have been fully or partially paid with a different provider."
 msgstr ""
-"يشمل فواتير الطلبات التي لديها محاولة دفع واحدة على الأقل مع موفر الدفع هذا. "
-"لاحظ أن هذا قد يشمل بعض فواتير الطلبات التي تم دفعها كليًا أو جزئيًا عن طريق "
-"مزود آخر."
+"قم بتضمين فواتير الطلبات التي لديها محاولة سداد واحدة على الأقل مع مزود "
+"الدفع هذا. لاحظ أنه قد يشمل بعض فواتير الطلبات التي في النهاية تم دفعها كليا "
+"أو جزئيا عن طريق مزود آخر."
 
 #: pretix/base/exporters/invoices.py:131
 msgid "All invoices"
@@ -587,12 +593,12 @@ msgstr "بيانات الفاتورة"
 #: pretix/presale/templates/pretixpresale/event/order.html:230
 #: pretix/presale/templates/pretixpresale/event/order.html:251
 msgid "Invoices"
-msgstr "الفواتير"
+msgstr "فواتير"
 
 #: pretix/base/exporters/invoices.py:192
 #, fuzzy
 msgid "Invoice lines"
-msgstr "مراحل الفاتورة"
+msgstr "أسطر الفاتورة"
 
 #: pretix/base/exporters/invoices.py:199 pretix/base/exporters/invoices.py:318
 msgid "Invoice number"
@@ -650,8 +656,9 @@ msgid "Invoice type"
 msgstr "نوع الفاتورة"
 
 #: pretix/base/exporters/invoices.py:204 pretix/base/exporters/invoices.py:332
+#, fuzzy
 msgid "Cancellation of"
-msgstr "إلغاء"
+msgstr "إلغاء لــ"
 
 #: pretix/base/exporters/invoices.py:205
 #: pretix/base/exporters/waitinglist.py:116 pretix/base/models/auth.py:136
@@ -846,7 +853,7 @@ msgstr "عنوان الشارع"
 #: pretix/presale/templates/pretixpresale/event/order.html:320
 msgctxt "address"
 msgid "State"
-msgstr "المنطقة"
+msgstr "الولاية"
 
 #: pretix/base/exporters/invoices.py:221 pretix/base/exporters/invoices.py:348
 #: pretix/base/models/orders.py:2334
@@ -863,7 +870,7 @@ msgstr "المرجع الداخلي"
 
 #: pretix/base/exporters/invoices.py:223 pretix/control/forms/event.py:1169
 msgid "Reverse charge"
-msgstr "الضريبة العكسية"
+msgstr "التكلفة العكسية"
 
 #: pretix/base/exporters/invoices.py:224
 msgid "Shown foreign currency"
@@ -875,11 +882,11 @@ msgstr "أسعار العملات الأجنبية"
 
 #: pretix/base/exporters/invoices.py:226
 msgid "Total value (with taxes)"
-msgstr "القيمة الإجمالية (مع الضريبة)"
+msgstr "القيمة الإجمالية (مع الضرائب)"
 
 #: pretix/base/exporters/invoices.py:227
 msgid "Total value (without taxes)"
-msgstr "القيمة الإجمالية (بدون الضريبة)"
+msgstr "القيمة الإجمالية (بدون الضرائب)"
 
 #: pretix/base/exporters/invoices.py:228
 msgid "Payment matching IDs"
@@ -892,7 +899,7 @@ msgstr "معرفات مطابقة الدفع"
 #: pretix/control/templates/pretixcontrol/event/payment.html:10
 #: pretix/control/views/event.py:325
 msgid "Payment providers"
-msgstr "مقدمي خدمات الدفع"
+msgstr "مزودي خدمات الدفع"
 
 #: pretix/base/exporters/invoices.py:285 pretix/base/exporters/invoices.py:387
 msgid "Cancellation"
@@ -977,20 +984,20 @@ msgstr "الاسم الضريبي"
 
 #: pretix/base/exporters/invoices.py:326
 msgid "Event start date"
-msgstr "تاريخ بدء الحدث"
+msgstr "تاريخ بدء الفعالية"
 
 #: pretix/base/exporters/mail.py:52
 msgid "Email addresses (text file)"
-msgstr "عناوين البريد الإلكتروني (ملف نصي)"
+msgstr "عناوين البريد الإلكتروني (ملف النص)"
 
 #: pretix/base/exporters/mail.py:74 pretix/plugins/reports/exporters.py:382
 #: pretix/plugins/reports/exporters.py:562
 msgid "Filter by status"
-msgstr "تصنيف حسب الحالة"
+msgstr "تصفية حسب الحالة"
 
 #: pretix/base/exporters/orderlist.py:70
 msgid "Order data"
-msgstr "طلب بيانات"
+msgstr "بيانات الطلب"
 
 #: pretix/base/exporters/orderlist.py:79 pretix/base/models/orders.py:255
 #: pretix/control/navigation.py:245
@@ -1000,12 +1007,13 @@ msgstr "طلب بيانات"
 #: pretix/plugins/reports/exporters.py:550
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:100
 msgid "Orders"
-msgstr "الطلبات"
+msgstr "طلبات"
 
 #: pretix/base/exporters/orderlist.py:80 pretix/base/models/orders.py:2054
 #: pretix/base/notifications.py:230
+#, fuzzy
 msgid "Order positions"
-msgstr "ترتيب الطلبات"
+msgstr "وضعيات الطلب"
 
 #: pretix/base/exporters/orderlist.py:81
 msgid "Order fees"
@@ -1021,15 +1029,16 @@ msgstr "تضمين مبالغ الدفع"
 
 #: pretix/base/exporters/orderlist.py:101
 msgid "Show multiple choice answers grouped in one column"
-msgstr "أظهر إجابات متعددة الخيارات، مجمعة في عمود واحد"
+msgstr "أظهر إجابات متعددة الخيار، مجمعة في عمود واحد"
 
 #: pretix/base/exporters/orderlist.py:110
+#, fuzzy
 msgid "Only include orders created on or after this date."
-msgstr "الطلبات التي تم إنشاؤها في هذا التاريخ أو بعده فقط."
+msgstr "قم بتضمين الطلبات التي تم إنشاؤها في هذا التاريخ أو بعده فقط."
 
 #: pretix/base/exporters/orderlist.py:117
 msgid "Only include orders created on or before this date."
-msgstr "الطلبات التي تم إنشاؤها في هذا التاريخ أو قبله فقط."
+msgstr "قم بتضمين الطلبات التي تم إنشاؤها في هذا التاريخ أو قبله فقط."
 
 #: pretix/base/exporters/orderlist.py:121
 msgid "Start event date"
@@ -1041,8 +1050,8 @@ msgid ""
 "Only include orders including at least one ticket for a date on or after "
 "this date. Will also include other dates in case of mixed orders!"
 msgstr ""
-"الطلبات التي تتضمن تذكرة واحدة على الأقل ليوم في هذا التاريخ أو بعده. يشمل "
-"أيضًا تواريخ أخرى في حالة الطلبات المختلطة!"
+"قم بتضمين الطلبات التي تشمل تذكرة واحدة على الأقل في هذا التاريخ أو بعده. "
+"سيشمل أيضا تواريخ أخرى في حالة الطلبات المختلطة!"
 
 #: pretix/base/exporters/orderlist.py:129
 msgid "End event date"
@@ -1057,7 +1066,7 @@ msgstr "تاريخ نهاية الفعالية"
 #: pretix/control/forms/organizer.py:94
 #, fuzzy
 msgid "Event slug"
-msgstr "slug الفعالية"
+msgstr "رابط الفعالية"
 
 #: pretix/base/exporters/orderlist.py:268 pretix/base/notifications.py:226
 #: pretix/control/templates/pretixcontrol/search/orders.html:53
