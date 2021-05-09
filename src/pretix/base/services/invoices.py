@@ -288,6 +288,7 @@ def generate_cancellation(invoice: Invoice, trigger_pdf=True):
     cancellation.date = timezone.now().date()
     cancellation.payment_provider_text = ''
     cancellation.file = None
+    cancellation.sent_to_organizer = None
     with language(invoice.locale, invoice.event.settings.region):
         cancellation.invoice_from = invoice.event.settings.get('invoice_address_from')
         cancellation.invoice_from_name = invoice.event.settings.get('invoice_address_from_name')
@@ -442,3 +443,44 @@ def fetch_ecb_rates(sender, **kwargs):
         gs.settings.ecb_rates_dict = json.dumps(rates, cls=DjangoJSONEncoder)
     except urllib.error.URLError:
         logger.exception('Could not retrieve rates from ECB')
+
+
+@receiver(signal=periodic_task)
+@scopes_disabled()
+def send_invoices_to_organizer(sender, **kwargs):
+    from pretix.base.services.mail import mail
+
+    batch_size = 50
+    # this adds some rate limiting on the number of invoices to send at the same time. If there's more, the next
+    # cronjob will handle them
+    max_number_of_batches = 10
+
+    for i in range(max_number_of_batches):
+        with transaction.atomic():
+            qs = Invoice.objects.filter(
+                sent_to_organizer__isnull=True
+            ).prefetch_related('event').select_for_update(skip_locked=True)
+            for i in qs[:batch_size]:
+                if i.event.settings.invoice_email_organizer:
+                    with language(i.event.settings.locale):
+                        mail(
+                            email=i.event.settings.invoice_email_organizer,
+                            subject=_('New invoice: {number}').format(number=i.number),
+                            template=LazyI18nString.from_gettext(_(
+                                'Hello,\n\n'
+                                'a new invoice for {event} has been created, see attached.\n\n'
+                                'We are sending this email because you configured us to do so in your event settings.'
+                            )),
+                            context={
+                                'event': str(i.event),
+                            },
+                            locale=i.event.settings.locale,
+                            event=i.event,
+                            invoices=[i],
+                            auto_email=True,
+                        )
+                    i.sent_to_organizer = True
+                    i.save(update_fields=['sent_to_organizer'])
+                else:
+                    i.sent_to_organizer = False
+                i.save(update_fields=['sent_to_organizer'])
