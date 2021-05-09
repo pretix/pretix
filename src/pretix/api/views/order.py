@@ -1451,6 +1451,8 @@ class InvoiceViewSet(viewsets.ReadOnlyModelViewSet):
         inv = self.get_object()
         if inv.canceled:
             raise ValidationError('The invoice has already been canceled.')
+        if not inv.event.settings.invoice_regenerate_allowed:
+            raise PermissionDenied('Invoices may not be changed after they are created.')
         elif inv.shredded:
             raise PermissionDenied('The invoice file is no longer stored on the server.')
         else:

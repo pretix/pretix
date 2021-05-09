@@ -1330,6 +1330,8 @@ class OrderInvoiceRegenerate(OrderView):
         except Invoice.DoesNotExist:
             messages.error(self.request, _('Unknown invoice.'))
         else:
+            if not inv.event.settings.invoice_regenerate_allowed:
+                messages.error(self.request, _('Invoices may not be changed after they are created.'))
             if inv.canceled:
                 messages.error(self.request, _('The invoice has already been canceled.'))
             elif inv.shredded:

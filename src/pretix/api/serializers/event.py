@@ -749,6 +749,7 @@ class EventSettingsSerializer(SettingsSerializer):
         'invoice_footer_text',
         'invoice_eu_currencies',
         'invoice_logo_image',
+        'invoice_regenerate_allowed',
         'cancel_allow_user',
         'cancel_allow_user_until',
         'cancel_allow_user_paid',
