@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-05-06 18:54+0000\n"
-"PO-Revision-Date: 2021-05-08 10:00+0000\n"
+"PO-Revision-Date: 2021-05-09 11:00+0000\n"
 "Last-Translator: Mohamed Tawfiq <mtawfiq@wafyapp.com>\n"
 "Language-Team: Arabic <https://translate.pretix.eu/projects/pretix/pretix/ar/"
 ">\n"
@@ -1161,11 +1161,11 @@ msgstr "تاريخ الطلب"
 #: pretix/base/exporters/orderlist.py:542
 #: pretix/plugins/checkinlists/exporters.py:468
 msgid "Order time"
-msgstr "وقت الطلب"
+msgstr "توقيت الطلب"
 
 #: pretix/base/exporters/orderlist.py:277 pretix/base/settings.py:347
 msgid "Custom address field"
-msgstr "مجال العنوان المخصص"
+msgstr "حقل العنوان المخصص"
 
 #: pretix/base/exporters/orderlist.py:277
 msgid "Date of last payment"
@@ -1183,19 +1183,19 @@ msgid "Order locale"
 msgstr "مكان الطلب"
 
 #: pretix/base/exporters/orderlist.py:282
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Gross at {rate} % tax"
-msgstr "إجمالي الضريبة {rate}٪"
+msgstr "الإجمالي في {rate} % الضريبة"
 
 #: pretix/base/exporters/orderlist.py:283
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Net at {rate} % tax"
-msgstr "صافي {rate}٪ ضريبة"
+msgstr "صافي عند {rate} % ضريبة"
 
 #: pretix/base/exporters/orderlist.py:284
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Tax value at {rate} % tax"
-msgstr "قيمة الضريبة {rate}٪"
+msgstr "قيمة الضريبة في {rate} % ضريبة"
 
 #: pretix/base/exporters/orderlist.py:287
 msgid "Invoice numbers"
@@ -1279,8 +1279,9 @@ msgstr "اسم عنوان الفاتورة"
 
 #: pretix/base/exporters/orderlist.py:537
 #: pretix/plugins/checkinlists/exporters.py:613
+#, fuzzy
 msgid "Position ID"
-msgstr "معرف الحالة"
+msgstr "معرف الوظيفة"
 
 #: pretix/base/exporters/orderlist.py:545
 #: pretix/base/exporters/orderlist.py:828 pretix/base/models/checkin.py:54
@@ -1370,8 +1371,9 @@ msgstr "البريد الإلكتروني للحاضر"
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html:6
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html:8
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:148
+#, fuzzy
 msgid "Voucher"
-msgstr "إيصال"
+msgstr "فاتورة"
 
 #: pretix/base/exporters/orderlist.py:570
 msgid "Pseudonymization ID"
@@ -1403,14 +1405,16 @@ msgid "Seat number"
 msgstr "رقم المقعد"
 
 #: pretix/base/exporters/orderlist.py:576
+#, fuzzy
 msgid "Order comment"
-msgstr "ملاحظة الطلب"
+msgstr "ملاحظات الطلب"
 
 #: pretix/base/exporters/orderlist.py:741
 msgid "Order payments and refunds"
 msgstr "مدفوعات الطلب والمبالغ المستردة"
 
 #: pretix/base/exporters/orderlist.py:749
+#, fuzzy
 msgid "Payment states"
 msgstr "‪حالات الدفع"
 
@@ -1444,8 +1448,9 @@ msgstr "تاريخ الإنشاء"
 
 #: pretix/base/exporters/orderlist.py:782
 #: pretix/control/templates/pretixcontrol/order/index.html:728
+#, fuzzy
 msgid "Completion date"
-msgstr "موعد الإكمال"
+msgstr "تاريخ الاكتمال"
 
 #: pretix/base/exporters/orderlist.py:783
 msgid "Status code"
@@ -1473,7 +1478,7 @@ msgstr "طريقة السداد"
 
 #: pretix/base/exporters/orderlist.py:819
 msgid "Quota availabilities"
-msgstr "توفر الحصة"
+msgstr "توافر الحصة"
 
 #: pretix/base/exporters/orderlist.py:824
 #: pretix/control/templates/pretixcontrol/items/quotas.html:45
@@ -1523,10 +1528,12 @@ msgid "Waiting list"
 msgstr "قائمة الانتظار"
 
 #: pretix/base/exporters/orderlist.py:825
+#, fuzzy
 msgid "Exited orders"
-msgstr "أوامر الخروج"
+msgstr "طلبات غادرت"
 
 #: pretix/base/exporters/orderlist.py:825
+#, fuzzy
 msgid "Current availability"
 msgstr "المتوفر حاليا"
 
@@ -1538,8 +1545,9 @@ msgid "Infinite"
 msgstr "غير محدود"
 
 #: pretix/base/exporters/orderlist.py:871
+#, fuzzy
 msgid "Gift card redemptions"
-msgstr "استرداد بطاقات الهدايا"
+msgstr "استرداد بطاقة هدية"
 
 #: pretix/base/exporters/orderlist.py:888
 #: pretix/base/exporters/orderlist.py:979 pretix/base/models/giftcards.py:75
@@ -1549,11 +1557,13 @@ msgstr "استرداد بطاقات الهدايا"
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:28
 #: pretix/control/templates/pretixcontrol/organizers/giftcards.html:51
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:44
+#, fuzzy
 msgid "Gift card code"
-msgstr "رمز بطاقة الهدايا"
+msgstr "رمز بطاقة الهدية"
 
 #: pretix/base/exporters/orderlist.py:888
 #: pretix/control/templates/pretixcontrol/giftcards/payment.html:10
+#, fuzzy
 msgid "Issuer"
 msgstr "المصدر"
 
@@ -1650,7 +1660,7 @@ msgstr "القيمة الحالية"
 #: pretix/base/exporters/orderlist.py:986
 #, fuzzy
 msgid "Created in order"
-msgstr "أنشأت بدافع"
+msgstr "تم إنشاؤها بالترتيب"
 
 #: pretix/base/exporters/orderlist.py:987
 msgid "Last invoice number of order"
@@ -1734,8 +1744,9 @@ msgid "Voucher code"
 msgstr "رمز قسيمة"
 
 #: pretix/base/forms/auth.py:57 pretix/base/forms/auth.py:166
+#, fuzzy
 msgid "Keep me logged in"
-msgstr "استمرار تسجيل الدخول"
+msgstr "احتفظ بتسجيل دخولي"
 
 #: pretix/base/forms/auth.py:60 pretix/base/forms/auth.py:257
 msgid "This combination of credentials is not known to our system."
@@ -1747,15 +1758,17 @@ msgid "For security reasons, please wait 5 minutes before you try again."
 msgstr "لأسباب أمنية ، يرجى الانتظار 5 دقائق قبل المحاولة مرة أخرى."
 
 #: pretix/base/forms/auth.py:62 pretix/base/forms/auth.py:258
+#, fuzzy
 msgid "This account is inactive."
-msgstr "هذا الحساب غير نشط."
+msgstr "هذا الحساب غير مفعل."
 
 #: pretix/base/forms/auth.py:145
+#, fuzzy
 msgid ""
 "You already registered with that email address, please use the login form."
 msgstr ""
-"لقد سجلت باستخدام عنوان البريد الإلكتروني هذا ، يرجى استخدام نموذج تسجيل "
-"الدخول."
+"لقد سجلت مسبقا باستخدام عنوان البريد الإلكتروني هذا ، يرجى استخدام نموذج "
+"تسجيل الدخول."
 
 #: pretix/base/forms/auth.py:146 pretix/base/forms/auth.py:202
 #: pretix/base/forms/user.py:56 pretix/control/forms/users.py:45
@@ -1794,23 +1807,24 @@ msgstr ""
 "قمت بتحميل صورة في الاتجاه الأفقي. الرجاء تحميل صورة في الاتجاه العمودي."
 
 #: pretix/base/forms/questions.py:411
+#, fuzzy
 msgid "Please upload an image where the width is 3/4 of the height."
-msgstr "يرجى تحميل صورة بحيث يكون العرض 3/4 الارتفاعها."
+msgstr "يرجى تحميل صورة بحيث يكون العرض 3/4 من ارتفاعها."
 
 #: pretix/base/forms/questions.py:414
 msgid ""
 "The file you uploaded has a very large number of pixels, please upload an "
 "image no larger than 10000 x 10000 pixels."
 msgstr ""
-"يحتوي الملف الذي قمت بتحميله على عدد كبير جدًا من وحدات البكسل ، يرجى تحميل "
+"يحتوي الملف الذي قمت بتحميله على عدد كبير جدا من وحدات البكسل ، يرجى تحميل "
 "صورة لا يزيد حجمها عن 10000 × 10000 بكسل."
 
 #: pretix/base/forms/questions.py:417
+#, fuzzy
 msgid ""
 "Upload a valid image. The file you uploaded was either not an image or a "
 "corrupted image."
-msgstr ""
-"قم بتحميل صورة صالحة. الملف الذي قمت بتحميله ليس صورة أو هو صورة تالفة."
+msgstr "قم بتحميل صورة صالحة. الملف الذي قمت بتحميله ليس صورة أو هو صورة تالفة."
 
 #: pretix/base/forms/questions.py:574 pretix/base/forms/questions.py:886
 msgid "Street and Number"
@@ -1819,7 +1833,7 @@ msgstr "الشارع والرقم"
 #: pretix/base/forms/questions.py:608 pretix/base/forms/questions.py:926
 msgctxt "address"
 msgid "Select state"
-msgstr "اختر منطقة"
+msgstr "اختر دولة"
 
 #: pretix/base/forms/questions.py:839 pretix/base/forms/questions.py:870
 #: pretix/base/forms/questions.py:1017 pretix/base/payment.py:86
@@ -1833,11 +1847,11 @@ msgstr "هذه الخانة مطلوبه."
 
 #: pretix/base/forms/questions.py:1008
 msgid "You need to provide a company name."
-msgstr "تحتاج إلى توفير اسم الشركة."
+msgstr "تحتاج إلى تقديم اسم شركة."
 
 #: pretix/base/forms/questions.py:1010
 msgid "You need to provide your name."
-msgstr "تحتاج إلى توفير اسمك."
+msgstr "تحتاج إلى تقديم اسمك."
 
 #: pretix/base/forms/questions.py:1028 pretix/control/views/orders.py:1289
 msgid "Your VAT ID does not match the selected country."
@@ -1849,16 +1863,17 @@ msgstr ""
 "معرف ضريبة القيمة المضافة هذا غير صالح. يرجى إعادة فحص المدخلات الخاصة بك."
 
 #: pretix/base/forms/questions.py:1045
+#, fuzzy
 msgid ""
 "Your VAT ID could not be checked, as the VAT checking service of your "
 "country is currently not available. We will therefore need to charge VAT on "
 "your invoice. You can get the tax amount back via the VAT reimbursement "
 "process."
 msgstr ""
-"تعذر التحقق من معرف ضريبة القيمة المضافة ، نظرا لأن خدمة التحقق من ضريبة "
-"القيمة المضافة في بلدك غير متوفرة حاليا. لذلك سنحتاج إلى فرض ضريبة القيمة "
-"المضافة على فاتورتك. يمكنك استرداد مبلغ الضريبة من خلال عملية استرداد ضريبة "
-"القيمة المضافة."
+"تعذر التحقق من معرف ضريبة القيمة المضافة الخاص بك، نظرا لأن خدمة التحقق من "
+"ضريبة القيمة المضافة في بلدك غير متوفرة حاليا. لذلك سنحتاج إلى فرض ضريبة "
+"القيمة المضافة على فاتورتك. يمكنك استرداد مبلغ الضريبة من خلال إجراءات "
+"استرداد ضريبة القيمة المضافة."
 
 #: pretix/base/forms/questions.py:1053
 msgid ""
@@ -1866,9 +1881,9 @@ msgid ""
 "country returned an incorrect result. We will therefore need to charge VAT "
 "on your invoice. Please contact support to resolve this manually."
 msgstr ""
-"تعذر التحقق من معرّف ضريبة القيمة المضافة ، لأن خدمة التحقق من ضريبة القيمة "
-"المضافة في بلدك قدمت نتيجة غير صحيحة. لذلك سنحتاج إلى فرض ضريبة القيمة "
-"المضافة على فاتورتك. يرجى الاتصال بالدعم لحل هذا الأمر يدويا."
+"تعذر التحقق من معرف ضريبة القيمة المضافة الخاص بك، نظرا لأن خدمة التحقق من "
+"ضريبة القيمة المضافة في بلدك قدمت نتيجة غير صحيحة. لذلك سنحتاج إلى فرض ضريبة "
+"القيمة المضافة على فاتورتك. يرجى الاتصال بالدعم لحل هذا الأمر يدويا."
 
 #: pretix/base/forms/user.py:51 pretix/control/forms/users.py:43
 msgid ""
@@ -1902,8 +1917,9 @@ msgid "New password"
 msgstr "كلمة مرور جديدة"
 
 #: pretix/base/forms/user.py:70 pretix/control/forms/users.py:54
+#, fuzzy
 msgid "Repeat new password"
-msgstr "كرر كلمة المرور الجديدة"
+msgstr "أعد إدخال كلمة المرور الجديدة"
 
 #: pretix/base/forms/user.py:74 pretix/control/forms/organizer.py:272
 #: pretix/control/forms/users.py:58
@@ -1911,12 +1927,13 @@ msgid "Default timezone"
 msgstr "المنطقة الزمنية الافتراضية"
 
 #: pretix/base/forms/user.py:75 pretix/control/forms/users.py:59
+#, fuzzy
 msgid ""
 "Only used for views that are not bound to an event. For all event views, the "
 "event timezone is used instead."
 msgstr ""
-"تستخدم فقط للمشاهدات غير المرتبط بحدث. بالنسبة لجميع الفعاليات ، يتم استخدام "
-"المنطقة الزمنية للفعالية بدلاً من ذلك."
+"تستخدم فقط للمشاهدات الغير مرتبطة بفعالية. بالنسبة لجميع الفعاليات ، يتم "
+"استخدام المنطقة الزمنية للفعالية بدلا من ذلك."
 
 #: pretix/base/forms/user.py:168
 msgid "Device name"
@@ -1931,25 +1948,27 @@ msgid "Smartphone with the Authenticator application"
 msgstr "هاتف ذكي مع تطبيق المصادقة"
 
 #: pretix/base/forms/user.py:171
+#, fuzzy
 msgid "WebAuthn-compatible hardware token (e.g. Yubikey)"
 msgstr "رمز جهاز متوافق مع WebAuthn (مثل Yubikey)"
 
 #: pretix/base/forms/validators.py:62
+#, fuzzy
 msgid ""
 "Invalid placeholder syntax: You used a different number of \"{\" than of "
 "\"}\"."
-msgstr "تركيب النائب غير صالح: يمكنك استخدام عدد مختلف من \"{than of}\"."
+msgstr "صيغة العنصر المدرج غير صحيحة: لقد استخدمت عددا مختلفا من \"{than of}\"."
 
 #: pretix/base/forms/validators.py:73
 #, fuzzy, python-format
 msgid "Invalid placeholder(s): %(value)s"
-msgstr "عنصر غير موجود: %(value)s"
+msgstr "عنصر مدرج غير صحيح: %(value)s"
 
 #: pretix/base/forms/widgets.py:187 pretix/base/forms/widgets.py:192
 #: pretix/base/models/orders.py:2313
 #, fuzzy
 msgid "Business customer"
-msgstr "زبون العمل"
+msgstr "زبون الأعمال"
 
 #: pretix/base/forms/widgets.py:191
 msgid "Individual customer"
@@ -1965,12 +1984,12 @@ msgstr "صفحة %d من %d"
 #, fuzzy
 msgctxt "invoice"
 msgid "Classic renderer (pretix 1.0)"
-msgstr "العرض الكلاسيكي (pretix 1.0)"
+msgstr "المقدم الكلاسيكي (pretix 1.0)"
 
 #: pretix/base/invoice.py:290
 msgctxt "invoice"
 msgid "Invoice from"
-msgstr "فاتورة من"
+msgstr "فاتورة من طرف"
 
 #: pretix/base/invoice.py:296
 msgctxt "invoice"
@@ -1990,7 +2009,7 @@ msgstr "رقم الإلغاء"
 #: pretix/base/invoice.py:339 pretix/base/invoice.py:793
 msgctxt "invoice"
 msgid "Original invoice"
-msgstr "الفاتورة الأصلية"
+msgstr "فاتورة أصلية"
 
 #: pretix/base/invoice.py:344 pretix/base/invoice.py:800
 msgctxt "invoice"
@@ -2054,7 +2073,7 @@ msgid "Invoice {num}"
 msgstr "فاتورة {num}"
 
 #: pretix/base/invoice.py:477
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgctxt "invoice"
 msgid "Customer reference: {reference}"
 msgstr "رقم مرجع العميل: {reference}"
@@ -2104,7 +2123,7 @@ msgstr "معدل الضريبة"
 #: pretix/base/invoice.py:539
 msgctxt "invoice"
 msgid "Net"
-msgstr "الصافي"
+msgstr "صافي"
 
 #: pretix/base/invoice.py:540
 msgctxt "invoice"
@@ -2158,8 +2177,8 @@ msgid ""
 "Using the conversion rate of 1:{rate} as published by the European Central "
 "Bank on {date}, this corresponds to:"
 msgstr ""
-"باستخدام معدل التحويل 1: {rate} كما نشره البنك المركزي الأوروبي بتاريخ "
-"{date} ، المبلغ يعادل:"
+"باستخدام معدل التحويل 1: {rate} كما نشره البنك المركزي الأوروبي بتاريخ {date}"
+" ، وهذا يتوافق مع:"
 
 #: pretix/base/invoice.py:699
 #, python-brace-format
@@ -2168,12 +2187,12 @@ msgid ""
 "Using the conversion rate of 1:{rate} as published by the European Central "
 "Bank on {date}, the invoice total corresponds to {total}."
 msgstr ""
-"باستخدام معدل التحويل 1: {rate} كما نشره البنك المركزي الأوروبي بتاريخ "
-"{date} ، إجمالي الفاتورة يساوي مع {total}."
+"باستخدام معدل التحويل 1: {rate} كما نشره البنك المركزي الأوروبي بتاريخ {date}"
+" ، إجمالي الفاتورة يتوافق مع {total}."
 
 #: pretix/base/invoice.py:712
 msgid "Modern Invoice Renderer (pretix 2.7)"
-msgstr "عارض الفاتورة الحديث (pretix 2.7)"
+msgstr "مقدم الفاتورة الحديث (pretix 2.7)"
 
 #: pretix/base/migrations/0077_auto_20171124_1629.py:33
 #: pretix/base/migrations/0077_auto_20171124_1629_squashed_0088_auto_20180328_1217.py:35
@@ -2193,7 +2212,7 @@ msgstr "نشط"
 
 #: pretix/base/models/auth.py:130
 msgid "Is site admin"
-msgstr "مشرف الموقع"
+msgstr "هو مشرف الموقع"
 
 #: pretix/base/models/auth.py:132
 msgid "Date joined"
@@ -2204,12 +2223,13 @@ msgid "Timezone"
 msgstr "المنطقة الزمنية"
 
 #: pretix/base/models/auth.py:142
+#, fuzzy
 msgid "Two-factor authentication is required to log in"
-msgstr "مطلوبة مصادقتين لاتمام تسجيل الدخول"
+msgstr "المصادقة الثنائية مطلوبة لتسجيل الدخول"
 
 #: pretix/base/models/auth.py:146
 msgid "Receive notifications according to my settings below"
-msgstr "تلقي الإشعارات وفقا للإعدادات أدناه"
+msgstr "تلقي الإخطارات وفقا لإعداداتي التالية"
 
 #: pretix/base/models/auth.py:147
 msgid "If turned off, you will not get any notifications."
@@ -2230,7 +2250,7 @@ msgstr "المستخدم"
 #: pretix/control/templates/pretixcontrol/users/index.html:5
 #: pretix/control/templates/pretixcontrol/users/index.html:7
 msgid "Users"
-msgstr "المستخدمين"
+msgstr "المستخدمون"
 
 #: pretix/base/models/auth.py:218
 msgid "Account information changed"
@@ -2260,7 +2280,7 @@ msgid ""
 "With this option, people will be able to check in even if the order has not "
 "been paid."
 msgstr ""
-"باستخدام هذا الخيار ، سيتمكن الأشخاص من تسجيل الدخول حتى إذا لم يتم دفع "
+"باستخدام هذا الخيار ، سيتمكن الأشخاص من تسجيل الدخول حتى في حال لم يتم دفع "
 "الطلب."
 
 #: pretix/base/models/checkin.py:60 pretix/control/navigation.py:549
@@ -2269,11 +2289,12 @@ msgid "Gates"
 msgstr "بوابات"
 
 #: pretix/base/models/checkin.py:61
+#, fuzzy
 msgid ""
 "Does not have any effect for the validation of tickets, only for the "
 "automatic configuration of check-in devices."
 msgstr ""
-"ليس له أي تأثير على المصادقة على التذاكر، فقط للوصول التلقائي لأجهزة تسجيل "
+"ليس له أي تأثير على المصادقة على التذاكر، فقط للإعداد التلقائي لأجهزة تسجيل "
 "الدخول."
 
 #: pretix/base/models/checkin.py:65
@@ -2293,12 +2314,14 @@ msgstr ""
 "للتذكرة مرة ثانية."
 
 #: pretix/base/models/checkin.py:74
+#, fuzzy
 msgid "Automatically check out everyone at"
-msgstr "تحقق تلقائيا من الجميع في"
+msgstr "تحقق تلقائيا من الجميع عند"
 
 #: pretix/base/models/checkin.py:80
+#, fuzzy
 msgid "Sales channels to automatically check in"
-msgstr "قنوات البيع لتسجيل الوصول تلقائيا"
+msgstr "قنوات البيع لتسجيل الدخول تلقائيا"
 
 #: pretix/base/models/checkin.py:81
 msgid ""
@@ -2307,10 +2330,10 @@ msgid ""
 "be useful when tickets sold at the box office are not checked again before "
 "entry and should be considered validated directly upon purchase."
 msgstr ""
-"سيتم وضع علامة على جميع العناصر الموجودة في قائمة تسجيل الوصول هذه تلقائيا "
-"على أنها مسجلة عند شرائها من خلال أي من قنوات البيع المحددة. يمكن أن يكون "
-"هذا الخيار مفيدا عندما لا يتم التحقق من التذاكر المباعة في شباك التذاكر مرة "
-"أخرى قبل الدخول ويجب اعتبارها مصدقة مباشرة عند الشراء."
+"سيتم وضع علامة على جميع العناصر الموجودة في قائمة التسجيل هذه تلقائيا على "
+"أنها مسجلة عند شرائها من خلال أي من قنوات البيع المحددة. يمكن أن يكون هذا "
+"الخيار مفيدا عندما لا يتم التحقق من التذاكر المباعة في شباك التذاكر مرة أخرى "
+"قبل الدخول ويجب اعتبارها مصدقة مباشرة عند الشراء."
 
 #: pretix/base/models/checkin.py:241
 msgid "Entry"
@@ -2321,30 +2344,22 @@ msgid "Exit"
 msgstr "خروج"
 
 #: pretix/base/models/customers.py:49
-#, fuzzy
-#| msgid "This account is inactive."
 msgid "Account active"
-msgstr "هذا الحساب غير نشط."
+msgstr "حساب نشط"
 
 #: pretix/base/models/customers.py:50
-#, fuzzy
-#| msgid "Attendee email"
 msgid "Verified email address"
-msgstr "البريد الإلكتروني الحضور"
+msgstr "تم التحقق من عنوان البريد الإلكتروني"
 
 #: pretix/base/models/customers.py:51
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:46
-#, fuzzy
-#| msgid "Login"
 msgid "Last login"
-msgstr "تسجيل الدخول"
+msgstr "آخر تسجيل دخول"
 
 #: pretix/base/models/customers.py:52
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:44
-#, fuzzy
-#| msgid "Registration details"
 msgid "Registration date"
-msgstr "تفاصيل التسجيل"
+msgstr "تاريخ التسجيل"
 
 #: pretix/base/models/devices.py:71 pretix/base/models/items.py:1171
 msgid "Internal identifier"
@@ -2379,11 +2394,11 @@ msgstr "تاريخ التهيئة"
 #: pretix/base/models/event.py:81
 #, fuzzy
 msgid "The end of the presale period has to be later than its start."
-msgstr "يجب أن تكون نهاية فترة ما قبل البيع بعد بدايتها."
+msgstr "يجب أن تكون نهاية فترة عرض ما قبل البيع بعد بدايته."
 
 #: pretix/base/models/event.py:83
 msgid "The end of the event has to be later than its start."
-msgstr "نهاية الفعالية يجب أن تكون في وقت لاحق بعد بدايته."
+msgstr "نهاية الفعالية يجب أن تكون في وقت لاحق بعد بدايتها."
 
 #: pretix/base/models/event.py:410
 msgid ""
@@ -2394,15 +2409,14 @@ msgid ""
 "codes, invoice numbers, and bank transfer references."
 msgstr ""
 "يجب أن يكون قصيرا ، ويحتوي فقط على أحرف صغيرة وأرقام ونقاط وشرطات، ويجب أن "
-"يكون فريدًا بين فعالياتك. نوصي بنوع من الاختصار أو تاريخ يحتوي على أقل من 10 "
+"يكون فريدا بين فعالياتك. نوصي بنوع من الاختصار أو تاريخ يحتوي على أقل من 10 "
 "أحرف يمكن تذكرها بسهولة، ولكن يمكنك أيضا اختيار استخدام قيمة عشوائية. سيتم "
-"استخدام هذا في عناوين الروابط ورموز الطلبات وأرقام الفواتير ومراجع التحويل "
+"استخدام ذلك في عناوين الروابط ورموز الطلب، وأرقام الفاتورة ومراجع التحويل "
 "المصرفي."
 
 #: pretix/base/models/event.py:420 pretix/base/models/organizer.py:83
-#, fuzzy
 msgid "The slug may only contain letters, numbers, dots and dashes."
-msgstr "قد تحتوي القطعة فقط على أحرف وأرقام ونقاط وشرطات."
+msgstr "يجب أن يحتوي الرابط فقط على أحرف وأرقام ونقاط وشرطات."
 
 #: pretix/base/models/event.py:424 pretix/base/models/organizer.py:87
 #: pretix/control/templates/pretixcontrol/organizers/index.html:40
@@ -2411,7 +2425,7 @@ msgstr "نموذج قصير"
 
 #: pretix/base/models/event.py:426
 msgid "Shop is live"
-msgstr "المتجر مباشر"
+msgstr "المتجر على البث مباشر"
 
 #: pretix/base/models/event.py:428
 msgid "Event currency"
@@ -2437,8 +2451,9 @@ msgid "Admission time"
 msgstr "وقت قبول التسجيل"
 
 #: pretix/base/models/event.py:437 pretix/base/models/event.py:1180
+#, fuzzy
 msgid "Show in lists"
-msgstr "تظهر في القوائم"
+msgstr "الظهور في القوائم"
 
 #: pretix/base/models/event.py:438
 #, fuzzy
@@ -2446,14 +2461,13 @@ msgid ""
 "If selected, this event will show up publicly on the list of events for your "
 "organizer account."
 msgstr ""
-"إذا تم تحديده ، فستظهر هذه الفعالية بشكل عام في قائمة الفعاليات لحسابك "
+"إذا تم تحديدها، فستظهر هذه الفعالية بشكل عام في قائمة الفعاليات لحسابك "
 "المنظم."
 
 #: pretix/base/models/event.py:441 pretix/base/models/event.py:1194
 #: pretix/control/forms/subevents.py:98
-#, fuzzy
 msgid "End of presale"
-msgstr "نهاية ما قبل البيع"
+msgstr "نهاية عرض ما قبل البيع"
 
 #: pretix/base/models/event.py:442 pretix/base/models/event.py:1195
 #: pretix/control/forms/subevents.py:99
@@ -2462,13 +2476,13 @@ msgid ""
 "Optional. No products will be sold after this date. If you do not set this "
 "value, the presale will end after the end date of your event."
 msgstr ""
-"اختياري. لن يتم بيع أي منتجات بعد هذا التاريخ. إذا لم تقم بتعيين هذه "
-"القيمة ، فسينتهي البيع المسبق بعد تاريخ انتهاء الفعالية الخاصة بك."
+"اختياري. لن يتم بيع أي منتجات بعد هذا التاريخ. إذا لم تقم بتعيين هذه القيمة ،"
+" فسينتهي عرض ما قبل البيع بعد تاريخ انتهاء الفعالية الخاصة بك."
 
 #: pretix/base/models/event.py:447 pretix/base/models/event.py:1200
 #: pretix/control/forms/subevents.py:92
 msgid "Start of presale"
-msgstr "بداية البيع المسبق"
+msgstr "بداية عرض ما قبل البيع"
 
 #: pretix/base/models/event.py:448 pretix/base/models/event.py:1201
 #: pretix/control/forms/subevents.py:93
@@ -2496,7 +2510,7 @@ msgstr "الإضافات"
 #: pretix/control/templates/pretixcontrol/event/index.html:143
 #: pretix/control/templates/pretixcontrol/order/index.html:884
 msgid "Internal comment"
-msgstr "تعليق داخلي"
+msgstr "ملاحظة داخلية"
 
 #: pretix/base/models/event.py:480 pretix/base/pdf.py:205
 #: pretix/control/forms/event.py:247 pretix/control/forms/filter.py:1120
@@ -2509,11 +2523,11 @@ msgstr "سلسلة الفعالية"
 
 #: pretix/base/models/event.py:486 pretix/base/payment.py:347
 msgid "Restrict to specific sales channels"
-msgstr "تقييد لقنوات البيع الخاصة"
+msgstr "يقتصر على قنوات مبيعات محددة"
 
 #: pretix/base/models/event.py:487
 msgid "Only sell tickets for this event on the following sales channels."
-msgstr "قم ببيع التذاكر لهذه الفعالية فقط على قنوات البيع التالية."
+msgstr "قم ببيع التذاكر لهذه الفعالية فقط على قنوات المبيعات التالية."
 
 #: pretix/base/models/event.py:493 pretix/base/models/items.py:347
 #: pretix/base/models/items.py:1489 pretix/base/models/orders.py:179
@@ -2544,11 +2558,11 @@ msgid ""
 "You have configured at least one paid product but have not enabled any "
 "payment methods."
 msgstr ""
-"لقد قمت بتكوين منتج مدفوع واحد على الأقل، ولكن لم تقم بتمكين أي وسيلة سداد."
+"لقد قمت بإعداد منتج مدفوع واحد على الأقل، ولكن لم تقم بتفعيل أي وسيلة سداد."
 
 #: pretix/base/models/event.py:1016
 msgid "You need to configure at least one quota to sell anything."
-msgstr "تحتاج إلى تكوين حصة واحدة على الأقل لبيع أي شيء."
+msgstr "تحتاج إلى إعداد حصة واحدة على الأقل لبيع أي شيء."
 
 #: pretix/base/models/event.py:1021
 #, fuzzy, python-brace-format
@@ -2559,7 +2573,7 @@ msgstr "تحتاج إلى ملء المعلمة الوصفية \"{property}\"."
 #, fuzzy
 msgid ""
 "Once created an event cannot change between an series and a single event."
-msgstr "بمجرد إنشاء فعالية لا يمكن تغييرها بين سلسلة وفعالية واحد."
+msgstr "بمجرد إنشاء فعالية لا يمكن التغيير بين سلسلة وفعالية واحدة."
 
 #: pretix/base/models/event.py:1132
 msgid "The event slug cannot be changed."
@@ -2606,26 +2620,23 @@ msgstr "نص الصفحة الأولى"
 
 #: pretix/base/models/event.py:1240
 msgid "Date in event series"
-msgstr "التاريخ في سلسلة الفعاليات"
+msgstr "التاريخ في سلسلة الفعالية"
 
 #: pretix/base/models/event.py:1241
 msgid "Dates in event series"
 msgstr "التواريخ في سلسلة الفعالية"
 
 #: pretix/base/models/event.py:1376
-#, fuzzy
 msgid "One or more variations do not belong to this event."
 msgstr "واحد أو أكثر من المتغيرات لا تنتمي إلى هذه الفعالية."
 
 #: pretix/base/models/event.py:1460 pretix/base/models/items.py:1650
-#, fuzzy
 msgid "Can not contain spaces or special characters except underscores"
-msgstr "لا يمكن أن تحتوي على مسافات أو أحرف خاصة باستثناء الشرطات السفلية (_)"
+msgstr "لا يمكن أن تحتوي على مسافات أو أحرف خاصة باستثناء الشرطات السفلية"
 
 #: pretix/base/models/event.py:1465 pretix/base/models/items.py:1655
-#, fuzzy
 msgid "The property name may only contain letters, numbers and underscores."
-msgstr "يحتوي اسم الخاصية على أحرف وأرقام وشرطات سفلية فقط."
+msgstr "لا يحتوي اسم الملكية إلا على أحرف وأرقام وشرطات سفلية فقط."
 
 #: pretix/base/models/event.py:1470
 msgid "Default value"
@@ -2635,7 +2646,7 @@ msgstr "القيمة الافتراضية"
 #, fuzzy
 #| msgid "Can change organizer settings"
 msgid "Can only be changed by organizer-level administrators"
-msgstr "لا يمكن تغييرها إلا من قبل المسؤولين في درجة منظم"
+msgstr "لا يمكن تغييرها إلا من قبل المسؤولين من درجة منظم"
 
 #: pretix/base/models/event.py:1474
 msgid "Required for events"
@@ -2647,7 +2658,7 @@ msgid ""
 "series, its always optional to set a value for individual dates"
 msgstr ""
 "إذا تم تحديده ، فلا يمكن بث الفعالية مباشرة إلا إذا تم تعيين الخاصية. في "
-"سلسلة الفعاليات ، يكون دائما أمرا اختياريا تعيين قيمة للتواريخ الفردية"
+"سلسلة الفعالية، يكون دائما أمرا اختياريا تعيين قيمة للتواريخ الفردية"
 
 #: pretix/base/models/event.py:1480
 msgid "Valid values"
@@ -2663,7 +2674,7 @@ msgstr ""
 
 #: pretix/base/models/event.py:1487
 msgid "A property can either be required or have a default value, not both."
-msgstr "يمكن أن تكون الخاصية إما مطلوبة أو لها قيمة افتراضية ، وليس كليهما."
+msgstr "يمكن أن تكون الملكية إما مطلوبة أو لها قيمة افتراضية ، وليس كليهما."
 
 #: pretix/base/models/event.py:1489
 msgid "You cannot set a default value that is not a valid value."
@@ -2687,7 +2698,7 @@ msgstr "‪شروط وأحكام خاصة"
 #, python-format
 msgctxt "invoice"
 msgid "Tax ID: %s"
-msgstr "رقم التعريف الضريبي: %s"
+msgstr "رقم تعريف الضريبة: %s"
 
 #: pretix/base/models/invoices.py:169 pretix/base/services/invoices.py:137
 #, python-format
