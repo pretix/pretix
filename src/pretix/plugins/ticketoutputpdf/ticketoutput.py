@@ -51,7 +51,7 @@ from pretix.base.models import Order, OrderPosition
 from pretix.base.pdf import Renderer
 from pretix.base.ticketoutput import BaseTicketOutput
 from pretix.plugins.ticketoutputpdf.models import (
-    TicketLayout, TicketLayoutItem, DEFAULT_TICKET_LAYOUT,
+    DEFAULT_TICKET_LAYOUT, TicketLayout, TicketLayoutItem,
 )
 from pretix.plugins.ticketoutputpdf.signals import override_layout
 
