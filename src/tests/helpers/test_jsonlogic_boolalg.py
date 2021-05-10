@@ -74,7 +74,4 @@ def compare_ignoring_order(data1, data2):
 
 @pytest.mark.parametrize("logic,expected", params)
 def test_convert_to_dnf(logic, expected):
-    print("orig", logic)
-    print("resu", convert_to_dnf(logic))
-    print("expe", expected)
     assert convert_to_dnf(logic) == expected
