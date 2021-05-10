@@ -145,7 +145,7 @@
       },
       tf (val) {
         const format = $("body").attr("data-timeformat")
-        return moment(val).format(format)
+        return moment(val, "HH:mm:ss").format(format)
       }
     },
   }
