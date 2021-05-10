@@ -51,7 +51,7 @@ from pretix.base.models import Order, OrderPosition
 from pretix.base.pdf import Renderer
 from pretix.base.ticketoutput import BaseTicketOutput
 from pretix.plugins.ticketoutputpdf.models import (
-    TicketLayout, TicketLayoutItem,
+    TicketLayout, TicketLayoutItem, DEFAULT_TICKET_LAYOUT,
 )
 from pretix.plugins.ticketoutputpdf.signals import override_layout
 
@@ -180,34 +180,7 @@ class PdfTicketOutput(BaseTicketOutput):
             return self._default_layout()
 
     def _default_layout(self):
-        return [
-            {"type": "textarea", "left": "17.50", "bottom": "274.60", "fontsize": "16.0", "color": [0, 0, 0, 1],
-             "fontfamily": "Open Sans", "bold": False, "italic": False, "width": "175.00", "content": "event_name",
-             "text": "Sample event name", "align": "left"},
-            {"type": "textarea", "left": "17.50", "bottom": "262.90", "fontsize": "13.0", "color": [0, 0, 0, 1],
-             "fontfamily": "Open Sans", "bold": False, "italic": False, "width": "110.00", "content": "itemvar",
-             "text": "Sample product – sample variation", "align": "left"},
-            {"type": "textarea", "left": "17.50", "bottom": "252.50", "fontsize": "13.0", "color": [0, 0, 0, 1],
-             "fontfamily": "Open Sans", "bold": False, "italic": False, "width": "110.00", "content": "attendee_name",
-             "text": "John Doe", "align": "left"},
-            {"type": "textarea", "left": "17.50", "bottom": "242.10", "fontsize": "13.0", "color": [0, 0, 0, 1],
-             "fontfamily": "Open Sans", "bold": False, "italic": False, "width": "110.00",
-             "content": "event_begin", "text": "2017-05-31 20:00", "align": "left"},
-            {"type": "textarea", "left": "17.50", "bottom": "204.80", "fontsize": "13.0", "color": [0, 0, 0, 1],
-             "fontfamily": "Open Sans", "bold": False, "italic": False, "width": "110.00", "content": "event_location",
-             "text": "Random City", "align": "left"},
-            {"type": "textarea", "left": "17.50", "bottom": "194.50", "fontsize": "13.0", "color": [0, 0, 0, 1],
-             "fontfamily": "Open Sans", "bold": False, "italic": False, "width": "30.00", "content": "order",
-             "text": "A1B2C", "align": "left"},
-            {"type": "textarea", "left": "52.50", "bottom": "194.50", "fontsize": "13.0", "color": [0, 0, 0, 1],
-             "fontfamily": "Open Sans", "bold": False, "italic": False, "width": "45.00", "content": "price",
-             "text": "123.45 EUR", "align": "right"},
-            {"type": "textarea", "left": "102.50", "bottom": "194.50", "fontsize": "13.0", "color": [0, 0, 0, 1],
-             "fontfamily": "Open Sans", "bold": False, "italic": False, "width": "90.00", "content": "secret",
-             "text": "tdmruoekvkpbv1o2mv8xccvqcikvr58u", "align": "left"},
-            {"type": "barcodearea", "left": "130.40", "bottom": "204.50", "size": "64.00"},
-            {"type": "poweredby", "left": "88.72", "bottom": "10.00", "size": "20.00"},
-        ]
+        return json.loads(DEFAULT_TICKET_LAYOUT)
 
     def _migrate_from_old_settings(self):
         layout = []
