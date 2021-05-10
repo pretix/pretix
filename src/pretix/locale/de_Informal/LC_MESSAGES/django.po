@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-05-06 18:54+0000\n"
-"PO-Revision-Date: 2021-05-08 10:00+0000\n"
+"PO-Revision-Date: 2021-05-10 08:48+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
@@ -3025,7 +3025,7 @@ msgstr "Erfordere eine aktive Mitgliedschaft"
 
 #: pretix/base/models/items.py:523
 msgid "Allowed membership types"
-msgstr "Erlaubte Mitgliedschafts-Arten"
+msgstr "Erlaubte Mitgliedschafts-Typen"
 
 #: pretix/base/models/items.py:531
 msgid "This product creates a membership of type"
@@ -3098,7 +3098,7 @@ msgstr "Position"
 #: pretix/control/templates/pretixcontrol/organizers/membershiptypes.html:4
 #: pretix/control/templates/pretixcontrol/organizers/membershiptypes.html:6
 msgid "Membership types"
-msgstr "Mitgliedschafts-Arten"
+msgstr "Mitgliedschafts-Typen"
 
 #: pretix/base/models/items.py:804 pretix/base/models/vouchers.py:203
 #: pretix/base/models/waitinglist.py:96 pretix/base/orderimport.py:228
@@ -3554,7 +3554,7 @@ msgstr "Maximale Anzahl der Nutzungen"
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:20
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:49
 msgid "Membership type"
-msgstr "Mitgliedschafts-Arten"
+msgstr "Mitgliedschafts-Typ"
 
 #: pretix/base/models/orders.py:159
 msgid "pending"
