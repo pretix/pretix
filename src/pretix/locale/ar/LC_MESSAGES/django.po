@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-05-06 18:54+0000\n"
-"PO-Revision-Date: 2021-05-09 11:00+0000\n"
+"PO-Revision-Date: 2021-05-10 08:48+0000\n"
 "Last-Translator: Mohamed Tawfiq <mtawfiq@wafyapp.com>\n"
 "Language-Team: Arabic <https://translate.pretix.eu/projects/pretix/pretix/ar/"
 ">\n"
@@ -2717,7 +2717,7 @@ msgstr "الاسم الداخلي"
 #: pretix/base/models/items.py:90 pretix/base/models/items.py:363
 msgid ""
 "If you set this, this will be used instead of the public name in the backend."
-msgstr "إذا قمت بتعيين هذا ، فسيتم استخدامه بدلاً من الاسم العام في الخلفية."
+msgstr "إذا قمت بتعيين هذا ، فسيتم استخدامه بدلا من الاسم العام في الخلفية."
 
 #: pretix/base/models/items.py:94
 msgid "Category description"
@@ -2728,6 +2728,7 @@ msgid "Products in this category are add-on products"
 msgstr "المنتجات في هذه الفئة هي منتجات إضافية"
 
 #: pretix/base/models/items.py:102
+#, fuzzy
 msgid ""
 "If selected, the products belonging to this category are not for sale on "
 "their own. They can only be bought in combination with a product that has "
@@ -2752,7 +2753,7 @@ msgstr "فئات المنتج"
 #: pretix/base/models/items.py:115
 #, python-brace-format
 msgid "{category} (Add-On products)"
-msgstr "{category} (المنتجات الإضافية على)"
+msgstr "{category} (المنتجات الإضافية)"
 
 #: pretix/base/models/items.py:166 pretix/base/models/items.py:222
 msgid "Disable product for this date"
@@ -2770,7 +2771,7 @@ msgstr "متاح من"
 #: pretix/base/models/items.py:170 pretix/base/models/items.py:226
 #: pretix/base/models/items.py:429
 msgid "This product will not be sold before the given date."
-msgstr "لن يتم بيع هذا المنتج قبل تاريخ معين."
+msgstr "لن يتم بيع هذا المنتج قبل التاريخ المعين."
 
 #: pretix/base/models/items.py:173 pretix/base/models/items.py:229
 #: pretix/base/models/items.py:432 pretix/base/payment.py:271
@@ -2779,12 +2780,12 @@ msgstr "لن يتم بيع هذا المنتج قبل تاريخ معين."
 #: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html:173
 #: pretix/control/templates/pretixcontrol/subevents/detail.html:149
 msgid "Available until"
-msgstr "متاحة حتى"
+msgstr "متاح حتى"
 
 #: pretix/base/models/items.py:175 pretix/base/models/items.py:231
 #: pretix/base/models/items.py:434
 msgid "This product will not be sold after the given date."
-msgstr "لن يتم بيع هذا المنتج بعد تاريخ معين."
+msgstr "لن يتم بيع هذا المنتج بعد التاريخ المحدد."
 
 #: pretix/base/models/items.py:354 pretix/base/models/items.py:957
 #: pretix/control/templates/pretixcontrol/items/index.html:38
@@ -2805,7 +2806,7 @@ msgstr "اسم العنصر"
 
 #: pretix/base/models/items.py:372
 msgid "This is shown below the product name in lists."
-msgstr "يظهر هذا أسفل اسم المنتج في القوائم."
+msgstr "سيظهر هذا في القوائم أسفل اسم المنتج."
 
 #: pretix/base/models/items.py:376 pretix/base/models/items.py:782
 msgid "Default price"
@@ -2817,13 +2818,13 @@ msgid ""
 "each of the variations. If a variation does not have a special price or if "
 "you do not have variations, this price will be used."
 msgstr ""
-"إذا كان هذا المنتج لديها اختلافات متعددة، يمكنك تعيين أسعار مختلفة لكل من "
-"الاختلافات. إذا لم يكن الاختلاف على سعر خاص أو إذا لم يكن لديك الاختلافات، "
-"وسيتم استخدام هذا السعر."
+"إذا كان هذا المنتج لديه متغيرات متعددة، يمكنك تعيين أسعار مختلفة لكل من "
+"المتغيرات. إذا لم يكن المتغير لديه سعر خاص أو إذا لم يكن لديك متغيرات، فسيتم "
+"استخدام هذا السعر."
 
 #: pretix/base/models/items.py:384
 msgid "Free price input"
-msgstr "مدخلات مجانا سعر"
+msgstr "إدخال سعر مجاني"
 
 #: pretix/base/models/items.py:385
 msgid ""
@@ -2833,10 +2834,11 @@ msgid ""
 "event. This is currently not supported for products that are bought as an "
 "add-on to other products."
 msgstr ""
-"إذا كان هذا الخيار غير نشط، يمكن للمستخدمين اختيار سعر أنفسهم. سعر تكوين "
-"أعلاه ثم يتم تفسير كحد أدنى سعر للمستخدم للدخول. هل يمكن استخدام هذا على "
-"سبيل المثال لجمع التبرعات إضافية لهذا الحدث الخاص بك. هذا غير معتمد حاليا "
-"بالنسبة للمنتجات التي يتم شراؤها كميزة إضافية إلى غيرها من المنتجات."
+"إذا كان هذا الخيار نشطا، يمكن للمستخدمين الخاصين بك اختيار السعر بأنفسهم. ثم "
+"ييتم تفسير السعر الذي تم إعداده أعلاه على أنه الحد الأدنى للسعر الذي يتعين "
+"على المستخدم إدخاله. يمكنك استخدام ذلك على سبيل المثال لجمع تبرعات إضافية "
+"لهذه الفعالية الخاصة بك. هذا غير مدعوم حاليا للمنتجات التي تم شراؤها كإضافة "
+"لمنتجات أخرى."
 
 #: pretix/base/models/items.py:392
 msgid "Sales tax"
@@ -2844,34 +2846,32 @@ msgstr "ضريبة المبيعات"
 
 #: pretix/base/models/items.py:397
 msgid "Is an admission ticket"
-msgstr "هو تذكرة الدخول"
+msgstr "هي تذكرة دخول"
 
 #: pretix/base/models/items.py:399
 msgid "Whether or not buying this product allows a person to enter your event"
-msgstr "سواء شراء هذا المنتج أو لا يسمح للشخص أن يدخل هذا الحدث الخاص بك"
+msgstr "سواء كان شراء هذا المنتج أم لا، يسمح لأي شخص بدخول الفعالية الخاصة بك"
 
 #: pretix/base/models/items.py:405
 msgid "Generate tickets"
-msgstr "توليد التذاكر"
+msgstr "إنتاج التذاكر"
 
 #: pretix/base/models/items.py:409
 msgid "Show a waiting list for this ticket"
 msgstr "عرض قائمة الانتظار لهذه التذكرة"
 
 #: pretix/base/models/items.py:410
-#, fuzzy
-#| msgid "This will only work of waiting lists are enabled for this event."
 msgid "This will only work if waiting lists are enabled for this event."
-msgstr "يتم تمكين هذا العمل لن يؤدي إلا من قوائم الانتظار لهذا الحدث."
+msgstr "لن يعمل هذا إلا إذا تم تمكين قوائم الانتظار لهذه الفعالية."
 
 #: pretix/base/models/items.py:414 pretix/base/settings.py:963
 #: pretix/control/forms/event.py:1280
 msgid "Show number of tickets left"
-msgstr "مشاهدة عدد التذاكر يقم"
+msgstr "إظهار عدد التذاكر المتبقية"
 
 #: pretix/base/models/items.py:415
 msgid "Publicly show how many tickets are still available."
-msgstr "تظهر علنا ​​كم تذاكر لا تزال متاحة."
+msgstr "أظهر علنا عدد التذاكر التي لا تزال متاحة."
 
 #: pretix/base/models/items.py:422
 msgid "Product picture"
@@ -2879,7 +2879,7 @@ msgstr "صورة المنتج"
 
 #: pretix/base/models/items.py:440
 msgid "Only show after sellout of"
-msgstr "تظهر فقط بعد خيانة من"
+msgstr "تظهر فقط بعد بيع"
 
 #: pretix/base/models/items.py:441
 msgid ""
@@ -2889,23 +2889,23 @@ msgid ""
 "out. There might be a short period in which both products are visible while "
 "all tickets in the referenced quota are reserved, but not yet sold."
 msgstr ""
-"إذا قمت بتحديد حصص هنا، وسيتم عرض هذا المنتج فقط عند هذه الحصة غير متوفرة. "
-"إذا جنبا إلى جنب مع خيار لاخفاء المنتجات التي تباع بها، وهذا يسمح لك لمبادلة "
-"خارج المنتجات لأكثر تكلفة منها مرة واحدة تباع خارج. قد تكون هناك فترة قصيرة "
-"في كل من المنتجات التي هي واضحة في حين يتم حجز جميع تذاكر في الحصص المشار "
-"إليها، ولكنها لا تباع حتى الان."
+"إذا قمت بتحديد حصة هنا ، فسيتم عرض هذا المنتج فقط عندما تكون هذه الحصة غير "
+"متوفرة. إذا تم دمجه مع خيار إخفاء المنتجات المباعة، فسيتيح لك ذلك استبدال "
+"المنتجات بمنتجات أغلى ثمنا بمجرد بيعها. قد تكون هناك فترة قصيرة يكون فيها "
+"كلا المنتجين مرئيين بينما يتم حجز جميع التذاكر في الحصة المرجعية ، ولكن لم "
+"يتم بيعها بعد."
 
 #: pretix/base/models/items.py:448
 msgid "This product can only be bought using a voucher."
-msgstr "هذا المنتج لا يمكن إلا أن يكون اشترى استخدام قسيمة."
+msgstr "لا يمكن شراء هذا المنتج إلا باستخدام قسيمة."
 
 #: pretix/base/models/items.py:450
 msgid ""
 "To buy this product, the user needs a voucher that applies to this product "
 "either directly or via a quota."
 msgstr ""
-"لشراء هذا المنتج، ويحتاج المستخدم قسيمة التي تنطبق على هذا المنتج إما مباشرة "
-"أو عن طريق الحصص."
+"لشراء هذا المنتج ، يحتاج المستخدم إلى قسيمة تنطبق على هذا المنتج إما مباشرة "
+"أو بواسطة حصة."
 
 #: pretix/base/models/items.py:454
 msgid "Buying this product requires approval"
@@ -2918,27 +2918,27 @@ msgid ""
 "completed. You can use this e.g. for discounted tickets that are only "
 "available to specific groups."
 msgstr ""
-"إذا كان هذا المنتج هو جزء من النظام، وسيتم طرح هذا الأمر في حالة \"الموافقة"
-"\"، وسوف تحتاج إلى تأكيد من قبلكم قبل أن تدفع وأكمل. يمكنك استخدام هذا على "
-"سبيل المثال تذاكر مخفضة التي لا تتوفر إلا لفئات محددة."
+"إذا كان هذا المنتج جزءا من طلب، فسيتم وضع الطلب في حالة \"الموافقة\" وسيتعين "
+"عليك تأكيده قبل دفعه وإكماله. يمكنك استخدام هذا على سبيل المثال للتذاكر "
+"المخصومة المتوفرة فقط لمجموعات محددة."
 
 #: pretix/base/models/items.py:461
 msgid ""
 "This product will only be shown if a voucher matching the product is "
 "redeemed."
-msgstr "سيتم عرض هذا المنتج فقط إذا تم استبدال قسيمة مطابقة المنتج."
+msgstr "سيظهر هذا المنتج فقط في حالة استرداد قسيمة مطابقة للمنتج."
 
 #: pretix/base/models/items.py:463
 msgid ""
 "This product will be hidden from the event page until the user enters a "
 "voucher that unlocks this product."
 msgstr ""
-"سوف تكون مخفية هذا المنتج من صفحة الحدث حتى يقوم المستخدم بإدخال قسيمة أن "
-"يفتح هذا المنتج."
+"سيتم إخفاء هذا المنتج من صفحة الفعالية حتى يقوم المستخدم بإدخال قسيمة تفتح "
+"هذا المنتج."
 
 #: pretix/base/models/items.py:467
 msgid "Only sell this product as part of a bundle"
-msgstr "فقط بيع هذا المنتج كجزء من حزمة"
+msgstr "قم ببيع هذا المنتج فقط كجزء من حزمة"
 
 #: pretix/base/models/items.py:469
 msgid ""
@@ -2946,34 +2946,27 @@ msgid ""
 "products. Do <strong>not</strong> check this option if you want to use this "
 "product as an add-on product, but only for fixed bundles!"
 msgstr ""
-"إذا تم تعيين هذا الخيار، لن يتم بيع المنتج كجزء من منتجات الباقة. هل على "
-"<strong> لا </strong> حدد هذا الخيار إذا كنت تريد استخدام هذا المنتج كما "
-"تشكل إضافة نوعية على المنتج، ولكن فقط لحزم ثابتة!"
+"إذا تم تعيين هذا الخيار ، فسيتم بيع المنتج فقط كجزء من منتجات الحزمة. قم ب "
+"<strong>وليس</strong> حدد هذا الخيار إذا كنت تريد استخدام هذا المنتج كمنتج "
+"إضافي ، ولكن فقط للحزم الثابتة!"
 
 #: pretix/base/models/items.py:474
-#, fuzzy
-#| msgid "Allow product to be canceled"
 msgid "Allow product to be canceled or changed"
-msgstr "تسمح المنتج ليتم إلغاء"
+msgstr "السماح بإلغاء المنتج أو تغييره"
 
 #: pretix/base/models/items.py:476
-#, fuzzy
-#| msgid ""
-#| "If this is checked, the usual cancellation settings of this event apply. "
-#| "If this is unchecked, orders containing this product can not be canceled "
-#| "by users but only by you."
 msgid ""
 "If this is checked, the usual cancellation and order change settings of this "
 "event apply. If this is unchecked, orders containing this product can not be "
 "canceled by users but only by you."
 msgstr ""
-"إذا تم تحديد هذا، تنطبق إعدادات إلغاء المعتادة لهذا الحدث. إذا كان هذا هو "
-"دون رادع، أوامر يحتوي هذا المنتج لا يمكن إلغاؤها من قبل المستخدمين ولكن فقط "
-"من قبلك."
+"إذا تم تحديد هذا الخيار ، فسيتم تطبيق إعدادات الإلغاء المعتادة وتغيير الطلب "
+"لهذه الفعالية. وإذا لم يتم تحديده ، فلن يمكن إلغاء الطلبات التي تحتوي على "
+"هذا المنتج من قبل المستخدمين ولكن من قبلك أنت فقط."
 
 #: pretix/base/models/items.py:480
 msgid "Minimum amount per order"
-msgstr "الحد الأدنى للمبلغ لكل طلب"
+msgstr "الحد الأدنى للمبلغ حسب كل طلب"
 
 #: pretix/base/models/items.py:482
 msgid ""
@@ -2981,13 +2974,13 @@ msgid ""
 "many times. If you keep the field empty or set it to 0, there is no special "
 "limit for this product."
 msgstr ""
-"لا يمكن إلا أن يكون اشترى هذا المنتج إذا تم إضافته إلى عربة على الأقل هذا "
-"مرات عديدة. اذا واصلتم الحقل فارغا أو تعيينها إلى 0، لا يوجد حد خاص لهذا "
+"لا يمكن شراء هذا المنتج إلا إذا تمت إضافته إلى سلة التسوق على الأقل عدة "
+"مرات. إذا احتفظت بالحقل فارغا أو قمت بتعيينه على 0 ، فلا يوجد حد خاص لهذا "
 "المنتج."
 
 #: pretix/base/models/items.py:486
 msgid "Maximum amount per order"
-msgstr "الحد الأقصى لكل أمر"
+msgstr "الحد الأقصى حسب كل طلب"
 
 #: pretix/base/models/items.py:488
 msgid ""
@@ -2996,9 +2989,9 @@ msgid ""
 "product. The limit for the maximum number of items in the whole order "
 "applies regardless."
 msgstr ""
-"هذا المنتج لا يمكن شراؤها في معظم هذه عدة مرات في أمر واحد. اذا واصلتم الحقل "
-"فارغا أو تعيينها إلى 0، لا يوجد حد خاص لهذا المنتج. الحد الأقصى لعدد ممكن من "
-"العناصر في النظام كله ينطبق بغض النظر."
+"يمكن شراء هذا المنتج مرات عديدة ضمن طلب واحد على الأكثر فقط. إذا احتفظت "
+"بالحقل فارغا أو قمت بتعيينه على 0 ، فلا يوجد حد خاص لهذا المنتج. يتم تطبيق "
+"الحد الأقصى لعدد العناصر في الطلب بالكامل بغض النظر."
 
 #: pretix/base/models/items.py:495
 msgid ""
@@ -3007,10 +3000,9 @@ msgid ""
 "tickets to indicate to the person at check-in that the student ID card still "
 "needs to be checked."
 msgstr ""
-"إذا قمت بتعيين هذا، فإن الاختيار في التطبيق تظهر تحذير واضحة على أن هذه "
-"التذكرة تتطلب اهتماما خاصا. يمكنك استخدام هذا على سبيل المثال لتذاكر الطلاب "
-"للإشارة إلى الشخص في الاختيار في أن بطاقة هوية الطالب ما زال يحتاج إلى أن "
-"يتم التحقق."
+"إذا قمت بتعيين هذا ، فسيظهر تطبيق التسجيل تحذيرا مرئيا بأن هذه التذكرة تتطلب "
+"اهتماما خاصا. يمكنك استخدام هذا على سبيل المثال لتذاكر الطلاب للإشارة إلى "
+"الشخص عند التسجيل أن بطاقة هوية الطالب لا تزال بحاجة إلى التحقق."
 
 #: pretix/base/models/items.py:500 pretix/base/models/items.py:785
 msgid "Original price"
@@ -3022,8 +3014,8 @@ msgid ""
 "current price is a discounted one. This is just a cosmetic setting and will "
 "not actually impact pricing."
 msgstr ""
-"إذا مجموعة، سيتم عرض هذا إلى جانب السعر الحالي لإظهار أن السعر الحالي هو "
-"واحد مخفضة. هذا هو مجرد وضع مستحضرات التجميل ولن تؤثر في الواقع التسعير."
+"إذا تم تعيينه ، فسيتم عرضه بجوار السعر الحالي لإظهار أن السعر الحالي هو سعر "
+"مخفض. هذا مجرد إعداد شكلي ولن يؤثر فعليا على الأسعار."
 
 #: pretix/base/models/items.py:507 pretix/control/forms/event.py:850
 #: pretix/control/forms/item.py:500
@@ -3039,38 +3031,33 @@ msgid ""
 "When a customer buys this product, they will get a gift card with a value "
 "corresponding to the product price."
 msgstr ""
-"عندما يشتري العميل هذا المنتج، وسوف تحصل على بطاقة هدية بقيمة المقابلة لسعر "
-"المنتج."
+"عندما يشتري العميل هذا المنتج ، سيحصل على بطاقة هدايا بقيمة تقابل سعر المنتج."
 
 #: pretix/base/models/items.py:518 pretix/base/models/items.py:792
-#, fuzzy
-#| msgid "Team memberships"
 msgid "Require a valid membership"
-msgstr "عضوية فريق"
+msgstr "يتتطلبون عضوية سارية المفعول"
 
 #: pretix/base/models/items.py:523
-#, fuzzy
-#| msgid "Team memberships"
 msgid "Allowed membership types"
-msgstr "عضوية فريق"
+msgstr "أنواع العضوية المسموح بها"
 
 #: pretix/base/models/items.py:531
 msgid "This product creates a membership of type"
-msgstr ""
+msgstr "هذا المنتج يخلق عضوية من النوع"
 
 #: pretix/base/models/items.py:534
 msgid ""
 "The duration of the membership is the same as the duration of the event or "
 "event series date"
-msgstr ""
+msgstr "مدة العضوية هي نفسها مدة الفعالية أو تاريخ سلسلة الفعالية"
 
 #: pretix/base/models/items.py:538
 msgid "Membership duration in days"
-msgstr ""
+msgstr "مدة العضوية بالأيام"
 
 #: pretix/base/models/items.py:542
 msgid "Membership duration in months"
-msgstr ""
+msgstr "مدة العضوية بالأشهر"
 
 #: pretix/base/models/items.py:550 pretix/base/models/items.py:1192
 #: pretix/control/forms/filter.py:361 pretix/control/forms/filter.py:1309
@@ -3089,50 +3076,50 @@ msgstr "منتجات"
 msgid ""
 "The maximum number per order can not be lower than the minimum number per "
 "order."
-msgstr "عدد أقصى لكل أمر لا يمكن أن يكون أقل من الحد الأدنى للعدد في النظام."
+msgstr "لا يمكن أن يكون العدد الأقصى حسب كل طلب أقل من العدد الأدنى حسب كل طلب."
 
 #: pretix/base/models/items.py:715
 msgid "The item's category must belong to the same event as the item."
-msgstr "فئة العنصر يجب أن تنتمي إلى نفس الحدث هذا البند."
+msgstr "يجب أن تنتمي فئة العنصر إلى نفس فعالية العنصر."
 
 #: pretix/base/models/items.py:720
 msgid "The item's tax rule must belong to the same event as the item."
-msgstr "حكم الضرائب هذا البند يجب أن تنتمي إلى نفس الحدث هذا البند."
+msgstr ""
+"يجب أن تنتمي القاعدة الضريبية للعنصر إلى نفس الفعالية التي ينتمي إليها "
+"العنصر."
 
 #: pretix/base/models/items.py:726
 msgid "The item's availability cannot end before it starts."
-msgstr "توفر العنصر لا يمكن أن تنتهي قبل أن تبدأ."
+msgstr "لا يمكن أن ينتهي توفر العنصر قبل أن يبدأ."
 
 #: pretix/base/models/items.py:772
 msgid "This is shown below the variation name in lists."
-msgstr "ويظهر ذلك تحت اسم الاختلاف في القوائم."
+msgstr "يظهر هذا في القوائم أسفل اسم التغير."
 
 #: pretix/base/models/items.py:777 pretix/base/models/items.py:980
 #: pretix/base/models/items.py:1198
 msgid "Position"
-msgstr "موضع"
+msgstr "وضع"
 
 #: pretix/base/models/items.py:797 pretix/control/navigation.py:516
 #: pretix/control/templates/pretixcontrol/organizers/membershiptypes.html:4
 #: pretix/control/templates/pretixcontrol/organizers/membershiptypes.html:6
-#, fuzzy
-#| msgid "Team memberships"
 msgid "Membership types"
-msgstr "عضوية فريق"
+msgstr "أنواع العضوية"
 
 #: pretix/base/models/items.py:804 pretix/base/models/vouchers.py:203
 #: pretix/base/models/waitinglist.py:96 pretix/base/orderimport.py:228
 msgid "Product variation"
-msgstr "خيارات المنتج"
+msgstr "تنوع المنتج"
 
 #: pretix/base/models/items.py:805
 #: pretix/control/templates/pretixcontrol/item/create.html:64
 msgid "Product variations"
-msgstr "الاختلافات المنتج"
+msgstr "تغيرات المنتج"
 
 #: pretix/base/models/items.py:962
 msgid "Minimum number"
-msgstr "عدد الحد الأدنى"
+msgstr "العدد الأدنى"
 
 #: pretix/base/models/items.py:966
 msgid "Maximum number"
@@ -3140,29 +3127,27 @@ msgstr "العدد الأقصى"
 
 #: pretix/base/models/items.py:970
 msgid "Add-Ons are included in the price"
-msgstr "تم تضمينها إضافات في السعر"
+msgstr "تم تضمين الإضافات في السعر"
 
 #: pretix/base/models/items.py:971
 msgid ""
 "If selected, adding add-ons to this ticket is free, even if the add-ons "
 "would normally cost money individually."
 msgstr ""
-"إذا المحدد، مضيفا إضافات لهذه التذكرة حرة، حتى لو كان إضافات تفعل عادة تكلف "
-"مالا على حدة."
+"إذا تم تحديده ، فإن إضافة الوظائف الإضافية إلى هذه التذكرة هي مجانية، حتى لو "
+"كانت الإضافات تكلف عادة أموالا بشكل فردي."
 
 #: pretix/base/models/items.py:976
-#, fuzzy
-#| msgid "You can not select the same seat multiple times."
 msgid "Allow the same product to be selected multiple times"
-msgstr "لا يمكنك تحديد نفس المقعد عدة مرات."
+msgstr "اسمح لنفس المنتج ليتم اختياره عدة مرات"
 
 #: pretix/base/models/items.py:995
 msgid "The add-on's category must belong to the same event as the item."
-msgstr "الوظيفة الإضافية الفئة يجب أن تنتمي إلى نفس الحدث هذا البند."
+msgstr "يجب أن تنتمي فئة الإضافة إلى نفس الفعالية و العنصر."
 
 #: pretix/base/models/items.py:1000
 msgid "The item already has an add-on of this category."
-msgstr "هذا البند لديه بالفعل وظيفة إضافية في هذه الفئة."
+msgstr "العنصر يحتوي مسبقا على إضافة من هذه الفئة."
 
 #: pretix/base/models/items.py:1005
 msgid "The minimum count needs to be equal to or greater than zero."
