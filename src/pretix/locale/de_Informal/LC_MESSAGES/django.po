@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-05-06 18:54+0000\n"
-"PO-Revision-Date: 2021-05-10 08:48+0000\n"
+"PO-Revision-Date: 2021-05-10 09:54+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
@@ -1338,7 +1338,7 @@ msgstr "Variante"
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:26
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:52
 msgid "Attendee name"
-msgstr "Name des Teilnehmenden"
+msgstr "Name Teilnehmer*in"
 
 #: pretix/base/exporters/orderlist.py:562 pretix/base/forms/questions.py:552
 #: pretix/base/models/orders.py:1197 pretix/base/pdf.py:195
@@ -1347,7 +1347,7 @@ msgstr "Name des Teilnehmenden"
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:63
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:66
 msgid "Attendee email"
-msgstr "E-Mail des Teilnehmenden"
+msgstr "E-Mail Teilnehmer*in"
 
 #: pretix/base/exporters/orderlist.py:569 pretix/base/models/vouchers.py:244
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html:5
@@ -4571,7 +4571,7 @@ msgstr "Bitte wähle einen gültigen Staat aus."
 
 #: pretix/base/orderimport.py:414 pretix/control/forms/filter.py:582
 msgid "Attendee e-mail address"
-msgstr "Teilnehmer*innen-E-Mail"
+msgstr "Teilnehmer*innen-E-Mail-Adresse"
 
 #: pretix/base/orderimport.py:430 pretix/base/orderimport.py:441
 #: pretix/base/orderimport.py:452 pretix/base/orderimport.py:463
@@ -4583,7 +4583,7 @@ msgstr "Teilnehmer*innen-E-Mail"
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:87
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:90
 msgid "Attendee address"
-msgstr "Teilnehmer-Adresse"
+msgstr "Teilnehmer*innen-Adresse"
 
 #: pretix/base/orderimport.py:498
 msgid "State"
@@ -5024,7 +5024,7 @@ msgstr "Musterfirma"
 
 #: pretix/base/pdf.py:163
 msgid "Full attendee address"
-msgstr "Volle Teilnehmer-Adresse"
+msgstr "Volle Teilnehmer*innen-Adresse"
 
 #: pretix/base/pdf.py:164
 msgid ""
@@ -5058,7 +5058,7 @@ msgstr "Teilnehmer*innen-Bundesstaat"
 
 #: pretix/base/pdf.py:188
 msgid "Attendee country"
-msgstr "Teilnehmer-Land"
+msgstr "Teilnehmer*innen-Land"
 
 #: pretix/base/pdf.py:201 pretix/base/pdf.py:206
 msgid "Sample event name"
@@ -21659,7 +21659,7 @@ msgstr "Alle nicht eingecheckten Kunden"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/history.html:40
 msgid "Attendee contact addresses"
-msgstr "Teilnehmer-E-Mail-Adressen"
+msgstr "Teilnehmer*innen-E-Mail-Adressen"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/history.html:42
 msgid "All contact addresses"
@@ -23299,7 +23299,7 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:57
 msgid "No attendee name provided"
-msgstr "Teilnehmername nicht angegeben"
+msgstr "Name der teilnehmenden Person nicht angegeben"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:151
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:202
