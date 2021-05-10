@@ -200,7 +200,7 @@ class NamePartsFormField(forms.MultiValueField):
         self.scheme_name = kwargs.pop('scheme')
         self.titles = kwargs.pop('titles')
         self.scheme = PERSON_NAME_SCHEMES.get(self.scheme_name)
-        self.original_locale = kwargs.pop('original_locale')
+        self.original_locale = kwargs.pop('original_locale') if 'original_locale' in kwargs else None
         if self.titles:
             self.scheme_titles = PERSON_NAME_TITLE_GROUPS.get(self.titles)
         else:
