@@ -862,7 +862,7 @@ DEFAULTS = {
         'form_kwargs': dict(
             label=_("Email address to receive a copy of each invoice"),
             help_text=_("Each newly created invoice will be sent to this email address shortly after creation. You can "
-                        "use this for an automated import of invoices to your accounting system. The invoice will be"
+                        "use this for an automated import of invoices to your accounting system. The invoice will be "
                         "the only attachment of the email."),
         )
     },
