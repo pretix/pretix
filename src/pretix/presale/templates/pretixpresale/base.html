@@ -73,9 +73,9 @@
 </div>
 {% include "pretixpresale/fragment_modals.html" %}
 {% if DEBUG %}
-    <script type="text/javascript" src="{% url 'javascript-catalog' lang=request.LANGUAGE_CODE %}" async></script>
+    <script type="text/javascript" src="{% url 'javascript-catalog' lang=request.LANGUAGE_CODE %}"></script>
 {% else %}
-    <script src="{% statici18n request.LANGUAGE_CODE %}" async></script>
+    <script src="{% statici18n request.LANGUAGE_CODE %}"></script>
 {% endif %}
 {% if request.session.iframe_session %}
     {% compress js %}

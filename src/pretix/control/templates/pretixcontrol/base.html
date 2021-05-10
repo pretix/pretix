@@ -15,10 +15,9 @@
             <link rel="stylesheet" type="text/x-scss" href="{% static "lightbox/css/lightbox.scss" %}" />
 		{% endcompress %}
         {% if DEBUG %}
-            <script type="text/javascript" src="{% url 'javascript-catalog' lang=request.LANGUAGE_CODE %}"
-                    defer></script>
+            <script type="text/javascript" src="{% url 'javascript-catalog' lang=request.LANGUAGE_CODE %}"></script>
         {% else %}
-            <script src="{% statici18n request.LANGUAGE_CODE %}" async></script>
+            <script src="{% statici18n request.LANGUAGE_CODE %}"></script>
         {% endif %}
 		{% compress js %}
             <script type="text/javascript" src="{% static "jquery/js/jquery-2.1.1.min.js" %}"></script>
