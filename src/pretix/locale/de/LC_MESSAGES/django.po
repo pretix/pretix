@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-05-06 18:54+0000\n"
-"PO-Revision-Date: 2021-05-10 08:48+0000\n"
+"PO-Revision-Date: 2021-05-10 09:54+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
 ">\n"
@@ -1337,7 +1337,7 @@ msgstr "Variante"
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:26
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:52
 msgid "Attendee name"
-msgstr "Name des Teilnehmenden"
+msgstr "Name Teilnehmer*in"
 
 #: pretix/base/exporters/orderlist.py:562 pretix/base/forms/questions.py:552
 #: pretix/base/models/orders.py:1197 pretix/base/pdf.py:195
@@ -1346,7 +1346,7 @@ msgstr "Name des Teilnehmenden"
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:63
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:66
 msgid "Attendee email"
-msgstr "E-Mail des Teilnehmenden"
+msgstr "E-Mail Teilnehmer*in"
 
 #: pretix/base/exporters/orderlist.py:569 pretix/base/models/vouchers.py:244
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html:5
@@ -5286,7 +5286,7 @@ msgstr "<Antwort: {question}>"
 #: pretix/plugins/ticketoutputpdf/exporters.py:95
 #, python-brace-format
 msgid "Attendee name: {part}"
-msgstr "Teilnehmername: {part}"
+msgstr "Teilnehmer*innenname: {part}"
 
 #: pretix/base/pdf.py:532
 #, python-brace-format
@@ -6239,7 +6239,7 @@ msgstr ""
 
 #: pretix/base/settings.py:154
 msgid "Ask for attendee names"
-msgstr "Namen der Teilnehmer erfragen"
+msgstr "Namen der Teilnehmer*innen erfragen"
 
 #: pretix/base/settings.py:155
 msgid "Ask for a name for all tickets which include admission to the event."
@@ -6247,11 +6247,11 @@ msgstr "Frage für alle Eintritts-Tickets nach dem Namen des Teilnehmers."
 
 #: pretix/base/settings.py:164
 msgid "Require attendee names"
-msgstr "Namen des Teilnehmer erfordern"
+msgstr "Namen der Teilnehmer*innen erfordern"
 
 #: pretix/base/settings.py:165
 msgid "Require customers to fill in the names of all attendees."
-msgstr "Erfordere die Eingabe aller Teilnehmer-Namen."
+msgstr "Erfordere die Eingabe aller Teilnehmer*innen-Namen."
 
 #: pretix/base/settings.py:175
 msgid "Ask for email addresses per ticket"
@@ -9694,7 +9694,7 @@ msgstr "Check-in-Status"
 
 #: pretix/control/forms/filter.py:1300
 msgid "All attendees"
-msgstr "Alle Teilnehmer"
+msgstr "Alle Teilnehmer*innen"
 
 #: pretix/control/forms/filter.py:1301
 msgctxt "checkin state"
@@ -12648,7 +12648,7 @@ msgstr "Filter"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html:52
 msgid "No attendee record was found."
-msgstr "Keine passenden Teilnehmer gefunden."
+msgstr "Keine passenden Teilnehmer*innen gefunden."
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html:84
 #: pretix/control/templates/pretixcontrol/user/staff_session_edit.html:29
@@ -20169,8 +20169,8 @@ msgstr "Das pretix-Team"
 msgid ""
 "This plugin allows you to generate badges or name tags for your attendees."
 msgstr ""
-"Diese Erweiterung erlaubt, Namensschilder oder Badges für die Teilnehmer zu "
-"erstellen."
+"Diese Erweiterung erlaubt, Namensschilder oder Badges für die Teilnehmer*"
+"innen zu erstellen."
 
 #: pretix/plugins/badges/exporters.py:78
 msgid "One badge per page"
@@ -21698,7 +21698,7 @@ msgstr "Alle nicht eingecheckten Kunden"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/history.html:40
 msgid "Attendee contact addresses"
-msgstr "Teilnehmer-E-Mail-Adressen"
+msgstr "Teilnehmer*innen-E-Mail-Adressen"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/history.html:42
 msgid "All contact addresses"
@@ -23345,7 +23345,7 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:57
 msgid "No attendee name provided"
-msgstr "Teilnehmername nicht angegeben"
+msgstr "Name der teilnehmenden Person nicht angegeben"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:151
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:202
