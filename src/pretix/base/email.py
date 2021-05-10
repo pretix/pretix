@@ -39,7 +39,7 @@ from pretix.base.i18n import (
     LazyCurrencyNumber, LazyDate, LazyExpiresDate, LazyNumber,
 )
 from pretix.base.models import Event
-from pretix.base.settings import PERSON_NAME_SCHEMES
+from pretix.base.settings import PERSON_NAME_SALUTATIONS, PERSON_NAME_SCHEMES
 from pretix.base.signals import (
     register_html_mail_renderers, register_mail_placeholders,
 )
@@ -554,12 +554,12 @@ def base_placeholders(sender, **kwargs):
         if f == 'full_name':
             continue
         ph.append(SimpleFunctionalMailTextPlaceholder(
-            'attendee_name_%s' % f, ['position'], lambda position, f=f: position.attendee_name_parts.get(f, ''),
+            'attendee_name_%s' % f, ['position'], lambda position, f=f: get_name_parts_localized(position.attendee_name_parts,f),
             name_scheme['sample'][f]
         ))
         ph.append(SimpleFunctionalMailTextPlaceholder(
             'name_%s' % f, ['position_or_address'],
-            lambda position_or_address, f=f: get_best_name(position_or_address, parts=True).get(f, ''),
+            lambda position_or_address, f=f: get_name_parts_localized(get_best_name(position_or_address, parts=True), f),
             name_scheme['sample'][f]
         ))
 
@@ -570,3 +570,9 @@ def base_placeholders(sender, **kwargs):
         ))
 
     return ph
+
+def get_name_parts_localized(name_parts, key):
+    value = name_parts.get(key, "")
+    if key == "salutation" and value and value in PERSON_NAME_SALUTATIONS:
+        return pgettext_lazy("person_name_salutation", value)
+    return value

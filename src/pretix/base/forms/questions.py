@@ -119,7 +119,7 @@ class NamePartsWidget(forms.MultiWidget):
             if fname == 'title' and self.titles:
                 widgets.append(Select(attrs=a, choices=[('', '')] + [(d, d) for d in self.titles[1]]))
             elif fname == 'salutation':
-                widgets.append(Select(attrs=a, choices=[('', '---')] + [(s, s) for s in PERSON_NAME_SALUTATIONS]))
+                widgets.append(Select(attrs=a, choices=[('', '---')] + [(s, pgettext_lazy("person_name_salutation", s)) for s in PERSON_NAME_SALUTATIONS]))
             else:
                 widgets.append(self.widget(attrs=a))
         super().__init__(widgets, attrs)
@@ -179,7 +179,16 @@ class NamePartsFormField(forms.MultiValueField):
         data = {}
         data['_scheme'] = self.scheme_name
         for i, value in enumerate(data_list):
-            data[self.scheme['fields'][i][0]] = value or ''
+            fname = self.scheme['fields'][i][0]
+            data[fname] = value or ''
+            if self.original_locale and fname == "salutation" and value and value not in PERSON_NAME_SALUTATIONS:
+                # probably a localized salutation, find which one it is
+                # if no existing salutation matches, ignore
+                with language(self.original_locale):
+                    for salutation in PERSON_NAME_SALUTATIONS:
+                        if pgettext_lazy("person_name_salutation", salutation) == v:
+                            data[fname] = salutation
+                            break
         return data
 
     def __init__(self, *args, **kwargs):
@@ -191,6 +200,7 @@ class NamePartsFormField(forms.MultiValueField):
         self.scheme_name = kwargs.pop('scheme')
         self.titles = kwargs.pop('titles')
         self.scheme = PERSON_NAME_SCHEMES.get(self.scheme_name)
+        self.original_locale = kwargs.pop('original_locale')
         if self.titles:
             self.scheme_titles = PERSON_NAME_TITLE_GROUPS.get(self.titles)
         else:
@@ -217,7 +227,7 @@ class NamePartsFormField(forms.MultiValueField):
                 d.pop('max_length', None)
                 field = forms.ChoiceField(
                     **d,
-                    choices=[('', '---')] + [(s, s) for s in PERSON_NAME_SALUTATIONS]
+                    choices=[('', '---')] + [(s, pgettext_lazy("person_name_salutation", s)) for s in PERSON_NAME_SALUTATIONS]
                 )
             else:
                 field = forms.CharField(**defaults)
