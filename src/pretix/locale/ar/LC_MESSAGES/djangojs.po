@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-05-06 18:55+0000\n"
-"PO-Revision-Date: 2021-05-04 12:00+0000\n"
+"PO-Revision-Date: 2021-05-10 08:48+0000\n"
 "Last-Translator: Mohamed Tawfiq <mtawfiq@wafyapp.com>\n"
 "Language-Team: Arabic <https://translate.pretix.eu/projects/pretix/pretix-js/"
 "ar/>\n"
@@ -289,7 +289,7 @@ msgstr "منتج"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:63
 msgid "Product variation"
-msgstr "خيارات المنتج"
+msgstr "تنوع المنتج"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:67
 msgid "Current date and time"
