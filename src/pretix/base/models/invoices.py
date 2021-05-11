@@ -109,11 +109,14 @@ class Invoice(models.Model):
     order = models.ForeignKey('Order', related_name='invoices', db_index=True, on_delete=models.CASCADE)
     organizer = models.ForeignKey('Organizer', related_name='invoices', db_index=True, on_delete=models.PROTECT)
     event = models.ForeignKey('Event', related_name='invoices', db_index=True, on_delete=models.CASCADE)
+
     prefix = models.CharField(max_length=160, db_index=True)
     invoice_no = models.CharField(max_length=19, db_index=True)
     full_invoice_no = models.CharField(max_length=190, db_index=True)
+
     is_cancellation = models.BooleanField(default=False)
     refers = models.ForeignKey('Invoice', related_name='refered', null=True, blank=True, on_delete=models.CASCADE)
+
     invoice_from = models.TextField()
     invoice_from_name = models.CharField(max_length=190, null=True)
     invoice_from_zipcode = models.CharField(max_length=190, null=True)
@@ -121,6 +124,7 @@ class Invoice(models.Model):
     invoice_from_country = FastCountryField(null=True)
     invoice_from_tax_id = models.CharField(max_length=190, null=True)
     invoice_from_vat_id = models.CharField(max_length=190, null=True)
+
     invoice_to = models.TextField()
     invoice_to_company = models.TextField(null=True)
     invoice_to_name = models.TextField(null=True)
@@ -131,6 +135,9 @@ class Invoice(models.Model):
     invoice_to_country = FastCountryField(null=True)
     invoice_to_vat_id = models.TextField(null=True)
     invoice_to_beneficiary = models.TextField(null=True)
+    internal_reference = models.TextField(blank=True)
+    custom_field = models.CharField(max_length=255, null=True)
+
     date = models.DateField(default=today)
     locale = models.CharField(max_length=50, default='en')
     introductory_text = models.TextField(blank=True)
@@ -138,14 +145,21 @@ class Invoice(models.Model):
     reverse_charge = models.BooleanField(default=False)
     payment_provider_text = models.TextField(blank=True)
     footer_text = models.TextField(blank=True)
+
     foreign_currency_display = models.CharField(max_length=50, null=True, blank=True)
     foreign_currency_rate = models.DecimalField(decimal_places=4, max_digits=10, null=True, blank=True)
     foreign_currency_rate_date = models.DateField(null=True, blank=True)
+
     shredded = models.BooleanField(default=False)
 
+    # The field sent_to_organizer records whether this invocie was already sent to the organizer by a configured
+    # mechanism such as email.
+    # NULL: The cronjob that handles sending did not yet run.
+    # True: The invoice was sent.
+    # False: The invoice wasn't sent and never will, because sending was not configured at the time of the check.
+    sent_to_organizer = models.BooleanField(null=True, blank=True)
+
     file = models.FileField(null=True, blank=True, upload_to=invoice_filename, max_length=255)
-    internal_reference = models.TextField(blank=True)
-    custom_field = models.CharField(max_length=255, null=True)
 
     objects = ScopedManager(organizer='event__organizer')
 
