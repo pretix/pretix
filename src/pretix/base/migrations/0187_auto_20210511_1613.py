@@ -7,7 +7,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('pretixbase', '0185_memberships'),
+        ('pretixbase', '0186_invoice_sent_to_organizer'),
     ]
 
     operations = [
@@ -34,17 +34,17 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='checkin',
             name='raw_item',
-            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='all_checkins', to='pretixbase.item'),
+            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='checkins', to='pretixbase.item'),
         ),
         migrations.AddField(
             model_name='checkin',
             name='raw_subevent',
-            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='all_checkins', to='pretixbase.subevent'),
+            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='checkins', to='pretixbase.subevent'),
         ),
         migrations.AddField(
             model_name='checkin',
             name='raw_variation',
-            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='all_checkins', to='pretixbase.itemvariation'),
+            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='checkins', to='pretixbase.itemvariation'),
         ),
         migrations.AddField(
             model_name='checkin',

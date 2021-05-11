@@ -293,19 +293,19 @@ class Checkin(models.Model):
     raw_barcode = models.TextField(null=True, blank=True)
     raw_item = models.ForeignKey(
         'pretixbase.Item',
-        related_name='all_checkins',
+        related_name='checkins',
         on_delete=models.SET_NULL,
         null=True, blank=True,
     )
     raw_variation = models.ForeignKey(
         'pretixbase.ItemVariation',
-        related_name='all_checkins',
+        related_name='checkins',
         on_delete=models.SET_NULL,
         null=True, blank=True,
     )
     raw_subevent = models.ForeignKey(
         'pretixbase.SubEvent',
-        related_name='all_checkins',
+        related_name='checkins',
         on_delete=models.SET_NULL,
         null=True, blank=True,
     )
