@@ -2447,6 +2447,22 @@ PERSON_NAME_SALUTATIONS = [
     "Mx",
 ]
 
+def concatenation_for_salutation(d):
+    salutation = d.get("salutation")
+    title = d.get("title")
+    given_name = d.get("given_name")
+    family_name = d.get("family_name")
+    # degree (after name) is not used in salutation
+    # see https://www.schreibwerkstatt.co.at/2012/12/25/der-umgang-mit-akademischen-graden/
+
+    if salutation == "Mx":
+        salutation = None
+    elif salutation:
+        salutation = pgettext("person_name_salutation", salutation)
+        given_name = None
+
+    return " ".join(filter(None, (salutation, title, given_name, family_name)))
+
 PERSON_NAME_SCHEMES = OrderedDict([
     ('given_family', {
         'fields': (
@@ -2614,6 +2630,7 @@ PERSON_NAME_SCHEMES = OrderedDict([
         'concatenation': lambda d: ' '.join(
             str(p) for p in (d.get(key, '') for key in ["given_name", "family_name"]) if p
         ),
+        'concatenation_for_salutation': concatenation_for_salutation,
         'sample': {
             'salutation': pgettext_lazy('person_name_sample', 'Mr'),
             'given_name': pgettext_lazy('person_name_sample', 'John'),
@@ -2631,6 +2648,7 @@ PERSON_NAME_SCHEMES = OrderedDict([
         'concatenation': lambda d: ' '.join(
             str(p) for p in (d.get(key, '') for key in ["title", "given_name", "family_name"]) if p
         ),
+        'concatenation_for_salutation': concatenation_for_salutation,
         'sample': {
             'salutation': pgettext_lazy('person_name_sample', 'Mr'),
             'title': pgettext_lazy('person_name_sample', 'Dr'),
@@ -2654,6 +2672,7 @@ PERSON_NAME_SCHEMES = OrderedDict([
             str((', ' if d.get('degree') else '')) +
             str(d.get('degree', ''))
         ),
+        'concatenation_for_salutation': concatenation_for_salutation,
         'sample': {
             'salutation': pgettext_lazy('person_name_sample', 'Mr'),
             'title': pgettext_lazy('person_name_sample', 'Dr'),
