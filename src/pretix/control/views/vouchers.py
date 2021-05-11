@@ -55,7 +55,9 @@ from django.views.generic import (
     CreateView, DeleteView, ListView, TemplateView, UpdateView, View,
 )
 
-from pretix.base.models import CartPosition, LogEntry, OrderPosition, Voucher, Event
+from pretix.base.models import (
+    CartPosition, Event, LogEntry, OrderPosition, Voucher,
+)
 from pretix.base.models.vouchers import _generate_random_code
 from pretix.base.services.locking import NoLockManager
 from pretix.base.services.vouchers import vouchers_send
