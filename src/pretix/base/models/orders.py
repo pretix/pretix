@@ -2055,6 +2055,14 @@ class OrderPosition(AbstractPosition):
         return self.addon_to.positionid if self.addon_to else self.positionid, self.addon_to_id or 0
 
     @property
+    def checkins(self):
+        """
+        Related manager for all successful checkins. Use ``all_checkins`` instead if you want
+        canceled positions as well.
+        """
+        return self.all_positions(manager='objects')
+
+    @property
     def generate_ticket(self):
         if self.item.generate_tickets is not None:
             return self.item.generate_tickets

@@ -231,9 +231,14 @@ class CheckinList(LoggedModel):
         return rules
 
 
+class SuccessfulCheckinManager(ScopedManager(organizer='list__event__organizer').__class__):
+    def get_queryset(self):
+        return super().get_queryset().filter(successful=True)
+
+
 class Checkin(models.Model):
     """
-    A check-in object is created when a person enters or exits the event.
+    A check-in object is created when a ticket is scanned with our scanning apps.
     """
     TYPE_ENTRY = 'entry'
     TYPE_EXIT = 'exit'
@@ -241,13 +246,82 @@ class Checkin(models.Model):
         (TYPE_ENTRY, _('Entry')),
         (TYPE_EXIT, _('Exit')),
     )
-    position = models.ForeignKey('pretixbase.OrderPosition', related_name='checkins', on_delete=models.CASCADE)
+
+    REASON_CANCELED = 'canceled'
+    REASON_INVALID = 'invalid'
+    REASON_UNPAID = 'unpaid'
+    REASON_PRODUCT = 'product'
+    REASON_RULES = 'rules'
+    REASON_REVOKED = 'revoked'
+    REASON_INCOMPLETE = 'incomplete'
+    REASON_ALREADY_REDEEMED = 'already_redeemed'
+    REASON_ERROR = 'error'
+    REASONS = (
+        (REASON_CANCELED, _('Order canceled')),
+        (REASON_INVALID, _('Invalid ticket')),
+        (REASON_UNPAID, _('Ticket not paid')),
+        (REASON_RULES, _('Forbidden by custom rule')),
+        (REASON_REVOKED, _('Ticket code revoked/changed')),
+        (REASON_INCOMPLETE, _('Information required')),
+        (REASON_ALREADY_REDEEMED, _('Ticket already used')),
+        (REASON_ERROR, _('Server error')),
+    )
+
+    successful = models.BooleanField(
+        default=True,
+    )
+    error_reason = models.CharField(
+        max_length=100,
+        choices=REASONS,
+        null=True,
+        blank=True,
+    )
+    error_explanation = models.TextField(
+        null=True,
+        blank=True,
+    )
+
+    position = models.ForeignKey(
+        'pretixbase.OrderPosition',
+        related_name='all_checkins',
+        on_delete=models.CASCADE,
+        null=True, blank=True,
+    )
+
+    # For "raw" scans where we do not know which position they belong to (e.g. scan of signed
+    # barcode that is not in database).
+    raw_barcode = models.TextField(null=True, blank=True)
+    raw_item = models.ForeignKey(
+        'pretixbase.Item',
+        related_name='all_checkins',
+        on_delete=models.SET_NULL,
+        null=True, blank=True,
+    )
+    raw_variation = models.ForeignKey(
+        'pretixbase.ItemVariation',
+        related_name='all_checkins',
+        on_delete=models.SET_NULL,
+        null=True, blank=True,
+    )
+    raw_subevent = models.ForeignKey(
+        'pretixbase.SubEvent',
+        related_name='all_checkins',
+        on_delete=models.SET_NULL,
+        null=True, blank=True,
+    )
+
+    # Datetime of checkin, might be different from created if past scans are uploaded
     datetime = models.DateTimeField(default=now)
-    nonce = models.CharField(max_length=190, null=True, blank=True)
+
+    # Datetime of creation on server
+    created = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+
     list = models.ForeignKey(
         'pretixbase.CheckinList', related_name='checkins', on_delete=models.PROTECT,
     )
     type = models.CharField(max_length=100, choices=CHECKIN_TYPES, default=TYPE_ENTRY)
+
+    nonce = models.CharField(max_length=190, null=True, blank=True)
     forced = models.BooleanField(default=False)
     device = models.ForeignKey(
         'pretixbase.Device', related_name='checkins', on_delete=models.PROTECT, null=True, blank=True
@@ -257,7 +331,8 @@ class Checkin(models.Model):
     )
     auto_checked_in = models.BooleanField(default=False)
 
-    objects = ScopedManager(organizer='position__order__event__organizer')
+    objects = SuccessfulCheckinManager()
+    all = ScopedManager(organizer='list__event__organizer')
 
     class Meta:
         ordering = (('-datetime'),)
