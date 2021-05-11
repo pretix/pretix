@@ -11,3 +11,12 @@ $(function () {
         });
     });
 });
+$(function () {
+    if ($("#logs_target").length == 0) {
+        return;
+    }
+    $.get("logs/embed", function (data) {
+        $("#logs_target").html(data)
+        add_log_expand_handlers($("#logs_target"))
+    });
+});

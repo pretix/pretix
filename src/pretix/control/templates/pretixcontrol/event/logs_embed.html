@@ -1,0 +1,53 @@
+{% load i18n %}
+{% for log in logs %}
+    <li class="list-group-item logentry">
+        <div class="row">
+            <div class="col-lg-2 col-sm-6 col-xs-12">
+                <span class="fa fa-clock-o"></span> {{ log.datetime|date:"SHORT_DATETIME_FORMAT" }}
+                {% if log.shredded %}
+                    <span class="fa fa-eraser fa-danger fa-fw"
+                            data-toggle="tooltip"
+                            title="{% trans "Personal data was cleared from this log entry." %}">
+                                </span>
+                {% endif %}
+            </div>
+            <div class="col-lg-2 col-sm-6 col-xs-12">
+                {% if log.user %}
+                    {% if log.user.is_staff %}
+                        <span class="fa fa-id-card fa-danger fa-fw"
+                                data-toggle="tooltip"
+                                title="{% trans "This change was performed by a pretix administrator." %}">
+                                </span>
+                    {% else %}
+                        <span class="fa fa-user fa-fw"></span>
+                    {% endif %}
+                    {{ log.user.get_full_name }}
+                    {% if log.oauth_application %}
+                        <br><span class="fa fa-plug fa-fw"></span>
+                        {{ log.oauth_application.name }}
+                    {% endif %}
+                {% elif log.device %}
+                    <span class="fa fa-mobile fa-fw"></span>
+                    {{ log.device.name }}
+                {% elif log.api_token %}
+                    <span class="fa fa-key fa-fw"></span>
+                    {{ log.api_token.name }}
+                {% endif %}
+            </div>
+            <div class="col-lg-2 col-sm-12 col-xs-12">
+                {% if log.display_object %}
+                    <span class="fa fa-flag"></span> {{ log.display_object|safe }}
+                {% endif %}
+            </div>
+            <div class="col-lg-6 col-sm-12 col-xs-12">
+                {{ log.display }}
+                {% if staff_session %}
+                    <a href="" class="btn btn-default btn-xs" data-expandlogs data-id="{{ log.pk }}">
+                        <span class="fa-eye fa fa-fw"></span>
+                        {% trans "Inspect" %}
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+    </li>
+{% endfor %}

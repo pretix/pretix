@@ -353,40 +353,16 @@ def event_index(request, organizer, event):
                                                           request=request)
     can_change_event_settings = request.user.has_event_permission(request.organizer, request.event,
                                                                   'can_change_event_settings', request=request)
-    can_view_vouchers = request.user.has_event_permission(request.organizer, request.event, 'can_view_vouchers',
-                                                          request=request)
 
     widgets = []
     if can_view_orders:
         for r, result in event_dashboard_widgets.send(sender=request.event, subevent=subevent, lazy=True):
             widgets.extend(result)
 
-    qs = request.event.logentry_set.all().select_related('user', 'content_type', 'api_token', 'oauth_application',
-                                                         'device').order_by('-datetime')
-    qs = qs.exclude(action_type__in=OVERVIEW_BANLIST)
-    if not can_view_orders:
-        qs = qs.exclude(content_type=ContentType.objects.get_for_model(Order))
-    if not can_view_vouchers:
-        qs = qs.exclude(content_type=ContentType.objects.get_for_model(Voucher))
-    if not can_change_event_settings:
-        allowed_types = [
-            ContentType.objects.get_for_model(Voucher),
-            ContentType.objects.get_for_model(Order)
-        ]
-        if request.user.has_event_permission(request.organizer, request.event, 'can_change_items', request=request):
-            allowed_types += [
-                ContentType.objects.get_for_model(Item),
-                ContentType.objects.get_for_model(ItemCategory),
-                ContentType.objects.get_for_model(Quota),
-                ContentType.objects.get_for_model(Question),
-            ]
-        qs = qs.filter(content_type__in=allowed_types)
-
     a_qs = request.event.requiredaction_set.filter(done=False)
 
     ctx = {
         'widgets': rearrange(widgets),
-        'logs': qs[:5],
         'subevent': subevent,
         'actions': a_qs[:5] if can_change_orders else [],
         'comment_form': CommentForm(initial={'comment': request.event.comment}, readonly=not can_change_event_settings),
@@ -443,6 +419,45 @@ def event_index_widgets_lazy(request, organizer, event):
         widgets.extend(result)
 
     return JsonResponse({'widgets': widgets})
+
+
+def event_index_log_lazy(request, organizer, event):
+    qs = request.event.logentry_set.all().select_related('user', 'content_type', 'api_token', 'oauth_application',
+                                                         'device').order_by('-datetime')
+    qs = qs.exclude(action_type__in=OVERVIEW_BANLIST)
+
+    can_view_orders = request.user.has_event_permission(request.organizer, request.event, 'can_view_orders',
+                                                        request=request)
+    can_change_event_settings = request.user.has_event_permission(request.organizer, request.event,
+                                                                  'can_change_event_settings', request=request)
+    can_view_vouchers = request.user.has_event_permission(request.organizer, request.event, 'can_view_vouchers',
+                                                          request=request)
+
+    if not can_view_orders:
+        qs = qs.exclude(content_type=ContentType.objects.get_for_model(Order))
+    if not can_view_vouchers:
+        qs = qs.exclude(content_type=ContentType.objects.get_for_model(Voucher))
+    if not can_change_event_settings:
+        allowed_types = [
+            ContentType.objects.get_for_model(Voucher),
+            ContentType.objects.get_for_model(Order)
+        ]
+        if request.user.has_event_permission(request.organizer, request.event, 'can_change_items', request=request):
+            allowed_types += [
+                ContentType.objects.get_for_model(Item),
+                ContentType.objects.get_for_model(ItemCategory),
+                ContentType.objects.get_for_model(Quota),
+                ContentType.objects.get_for_model(Question),
+            ]
+        qs = qs.filter(content_type__in=allowed_types)
+
+    return render(
+        request,
+        'pretixcontrol/event/logs_embed.html',
+        {
+            'logs': qs[:5]
+        }
+    )
 
 
 def annotated_event_query(request, lazy=False):

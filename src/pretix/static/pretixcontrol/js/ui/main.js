@@ -840,28 +840,6 @@ $(function () {
         }
     });
 
-    $("a[data-expandlogs], a[data-expandrefund], a[data-expandpayment]").click(function (e) {
-        e.preventDefault();
-        var $a = $(this);
-        var id = $(this).attr("data-id");
-        $a.find(".fa").removeClass("fa-eye").addClass("fa-cog fa-spin");
-        var url = '/control/logdetail/';
-        if ($a.is("[data-expandrefund]")) {
-            url += 'refund/'
-        } else if ($a.is("[data-expandpayment]")) {
-            url += 'payment/'
-        }
-        $.getJSON(url + '?pk=' + id, function (data) {
-            if ($a.parent().tagName === "p") {
-                $("<pre>").text(JSON.stringify(data.data, null, 2)).insertAfter($a.parent());
-            } else {
-                $("<pre>").text(JSON.stringify(data.data, null, 2)).appendTo($a.parent());
-            }
-            $a.remove();
-        });
-        return false;
-    });
-
     $("button[data-toggle=qrcode]").click(function (e) {
         e.preventDefault();
         var $current = $(".qr-code-overlay[data-qrcode='" + $(this).attr("data-qrcode") + "']");
@@ -894,7 +872,33 @@ $(function () {
 
     $("#ajaxerr").on("click", ".ajaxerr-close", ajaxErrDialog.hide);
     moment.locale($("body").attr("data-datetimelocale"));
+    add_log_expand_handlers($("body"));
 });
+
+function add_log_expand_handlers(el) {
+    el.find("a[data-expandlogs], a[data-expandrefund], a[data-expandpayment]").click(function (e) {
+        e.preventDefault();
+        var $a = $(this);
+        var id = $(this).attr("data-id");
+        $a.find(".fa").removeClass("fa-eye").addClass("fa-cog fa-spin");
+        var url = '/control/logdetail/';
+        if ($a.is("[data-expandrefund]")) {
+            url += 'refund/'
+        } else if ($a.is("[data-expandpayment]")) {
+            url += 'payment/'
+        }
+        $.getJSON(url + '?pk=' + id, function (data) {
+            if ($a.parent().tagName === "p") {
+                $("<pre>").text(JSON.stringify(data.data, null, 2)).insertAfter($a.parent());
+            } else {
+                $("<pre>").text(JSON.stringify(data.data, null, 2)).appendTo($a.parent());
+            }
+            $a.remove();
+        });
+        return false;
+    });
+
+}
 
 $(document).ready(function () {
    $('form[method=post]').filter(function () {

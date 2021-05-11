@@ -176,6 +176,16 @@
   }
 }
 
+.logs-lazy-loading {
+  text-align: center;
+  .fa-cog {
+    color: #ccc;
+    margin: 30px;
+    -webkit-animation: fa-spin 4s infinite linear;
+    animation: fa-spin 4s infinite linear;
+  }
+}
+
 @media (max-width: $screen-sm-max) {
   .dashboard .widget-container.widget-small {
     width: 50%;
