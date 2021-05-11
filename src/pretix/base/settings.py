@@ -2442,8 +2442,8 @@ PERSON_NAME_TITLE_GROUPS = OrderedDict([
 ])
 
 PERSON_NAME_SALUTATIONS = [
-    "Ms",#pgettext_lazy("person_name_salutation", "Ms"),
-    "Mr",#pgettext_lazy("person_name_salutation", "Mr"),
+    "Ms",
+    "Mr",
     "Mx",
 ]
 
