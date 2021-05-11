@@ -594,7 +594,7 @@ def perform_checkin(op: OrderPosition, clist: CheckinList, given_answers: dict, 
         clist.event.questions.filter(ask_during_checkin=True, items__in=[op.item_id])
     )
     require_answers = []
-    if checkin_questions:
+    if type != Checkin.TYPE_EXIT and checkin_questions:
         answers = {a.question: a for a in op.answers.all()}
         for q in checkin_questions:
             if q not in given_answers and q not in answers:
