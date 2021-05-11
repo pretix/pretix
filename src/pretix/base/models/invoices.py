@@ -151,6 +151,12 @@ class Invoice(models.Model):
     foreign_currency_rate_date = models.DateField(null=True, blank=True)
 
     shredded = models.BooleanField(default=False)
+
+    # The field sent_to_organizer records whether this invocie was already sent to the organizer by a configured
+    # mechanism such as email.
+    # NULL: The cronjob that handles sending did not yet run.
+    # True: The invoice was sent.
+    # False: The invoice wasn't sent and never will, because sending was not configured at the time of the check.
     sent_to_organizer = models.BooleanField(null=True, blank=True)
 
     file = models.FileField(null=True, blank=True, upload_to=invoice_filename, max_length=255)
