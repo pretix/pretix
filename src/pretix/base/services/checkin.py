@@ -566,7 +566,8 @@ def _save_answers(op, answers, given_answers):
 
 def perform_checkin(op: OrderPosition, clist: CheckinList, given_answers: dict, force=False,
                     ignore_unpaid=False, nonce=None, datetime=None, questions_supported=True,
-                    user=None, auth=None, canceled_supported=False, type=Checkin.TYPE_ENTRY):
+                    user=None, auth=None, canceled_supported=False, type=Checkin.TYPE_ENTRY,
+                    raw_barcode=None):
     """
     Create a checkin for this particular order position and check-in list. Fails with CheckInError if the check in is
     not valid at this time.
@@ -668,6 +669,7 @@ def perform_checkin(op: OrderPosition, clist: CheckinList, given_answers: dict, 
                 gate=device.gate if device else None,
                 nonce=nonce,
                 forced=force and not entry_allowed,
+                raw_barcode=raw_barcode,
             )
             op.order.log_action('pretix.event.checkin', data={
                 'position': op.id,

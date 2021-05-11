@@ -43,7 +43,8 @@ from pretix.api.views import RichOrderingFilter
 from pretix.api.views.order import OrderPositionFilter
 from pretix.base.i18n import language
 from pretix.base.models import (
-    CachedFile, Checkin, CheckinList, Event, Order, OrderPosition, Question,
+    CachedFile, Checkin, CheckinList, Device, Event, Order, OrderPosition,
+    Question,
 )
 from pretix.base.services.checkin import (
     CheckInError, RequiredQuestionsError, SQLLogic, perform_checkin,
@@ -356,6 +357,17 @@ class CheckinListPositionViewSet(viewsets.ReadOnlyModelViewSet):
         else:
             dt = now()
 
+        common_checkin_args = dict(
+            raw_barcode=self.kwargs['pk'],
+            type=type,
+            list=self.checkinlist,
+            datetime=dt,
+            device=self.request.auth if isinstance(self.request.auth, Device) else None,
+            gate=self.request.auth.gate if isinstance(self.request.auth, Device) else None,
+            nonce=nonce,
+            forced=force,
+        )
+
         try:
             queryset = self.get_queryset(ignore_status=True, ignore_products=True)
             if self.kwargs['pk'].isnumeric():
@@ -371,6 +383,15 @@ class CheckinListPositionViewSet(viewsets.ReadOnlyModelViewSet):
                     'list': self.checkinlist.pk,
                     'barcode': self.kwargs['pk']
                 }, user=self.request.user, auth=self.request.auth)
+
+                Checkin.objects.create(
+                    position=None,
+                    successful=False,
+                    error_reason=Checkin.REASON_INVALID,
+                    # TODO: raw_item, raw_variation, raw_subevent
+                    **common_checkin_args,
+                )
+
                 raise Http404()
 
             op = revoked_matches[0].position
@@ -380,6 +401,12 @@ class CheckinListPositionViewSet(viewsets.ReadOnlyModelViewSet):
                 'list': self.checkinlist.pk,
                 'barcode': self.kwargs['pk']
             }, user=self.request.user, auth=self.request.auth)
+            Checkin.objects.create(
+                position=op,
+                successful=False,
+                error_reason=Checkin.REASON_REVOKED,
+                **common_checkin_args
+            )
 
         given_answers = {}
         if 'answers' in self.request.data:
@@ -409,6 +436,7 @@ class CheckinListPositionViewSet(viewsets.ReadOnlyModelViewSet):
                     user=self.request.user,
                     auth=self.request.auth,
                     type=type,
+                    raw_barcode=None,
                 )
             except RequiredQuestionsError as e:
                 return Response({
@@ -424,11 +452,19 @@ class CheckinListPositionViewSet(viewsets.ReadOnlyModelViewSet):
                     'position': op.id,
                     'positionid': op.positionid,
                     'errorcode': e.code,
+                    'reason_explanation': e.reason,
                     'force': force,
                     'datetime': dt,
                     'type': type,
                     'list': self.checkinlist.pk
                 }, user=self.request.user, auth=self.request.auth)
+                Checkin.objects.create(
+                    position=op,
+                    successful=False,
+                    error_reason=e.code,
+                    error_explanation=e.reason,
+                    **common_checkin_args,
+                )
                 return Response({
                     'status': 'error',
                     'reason': e.code,

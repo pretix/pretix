@@ -2060,7 +2060,7 @@ class OrderPosition(AbstractPosition):
         Related manager for all successful checkins. Use ``all_checkins`` instead if you want
         canceled positions as well.
         """
-        return self.all_positions(manager='objects')
+        return self.all_checkins(manager='objects')
 
     @property
     def generate_ticket(self):
