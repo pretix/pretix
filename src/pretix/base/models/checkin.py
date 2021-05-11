@@ -31,6 +31,7 @@
 # Unless required by applicable law or agreed to in writing, software distributed under the Apache License 2.0 is
 # distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations under the License.
+from datetime import timedelta
 
 from django.conf import settings
 from django.core.exceptions import ValidationError
@@ -258,7 +259,7 @@ class Checkin(models.Model):
     REASON_ERROR = 'error'
     REASONS = (
         (REASON_CANCELED, _('Order canceled')),
-        (REASON_INVALID, _('Invalid ticket')),
+        (REASON_INVALID, _('Unknown ticket')),
         (REASON_UNPAID, _('Ticket not paid')),
         (REASON_RULES, _('Forbidden by custom rule')),
         (REASON_REVOKED, _('Ticket code revoked/changed')),
@@ -344,7 +345,8 @@ class Checkin(models.Model):
 
     def save(self, **kwargs):
         super().save(**kwargs)
-        self.position.order.touch()
+        if self.position:
+            self.position.order.touch()
         self.list.event.cache.delete('checkin_count')
         self.list.touch()
 
@@ -352,3 +354,7 @@ class Checkin(models.Model):
         super().delete(**kwargs)
         self.position.order.touch()
         self.list.touch()
+
+    @property
+    def is_late_upload(self):
+        return self.created and abs(self.created - self.datetime) > timedelta(minutes=2)

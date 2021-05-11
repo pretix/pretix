@@ -1,0 +1,153 @@
+{% extends "pretixcontrol/items/base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% block title %}{% trans "Check-in history" %}{% endblock %}
+{% block inside %}
+    <h1>{% trans "Check-in history" %}</h1>
+    <form class="" action="" method="get">
+        <div class="row filter-form">
+            <div class="col-md-3 col-sm-6 col-xs-12">
+                {% bootstrap_field filter_form.checkin_list layout='inline' %}
+            </div>
+            <div class="col-md-3 col-sm-6 col-xs-12">
+                {% bootstrap_field filter_form.status layout='inline' %}
+            </div>
+            <div class="col-md-3 col-sm-6 col-xs-12">
+                {% bootstrap_field filter_form.type layout='inline' %}
+            </div>
+            <div class="col-md-3 col-sm-6 col-xs-12">
+                {% bootstrap_field filter_form.device layout='inline' %}
+            </div>
+            <div class="col-md-3 col-sm-6 col-xs-12">
+                {% bootstrap_field filter_form.datetime_from layout='inline' %}
+            </div>
+            <div class="col-md-3 col-sm-6 col-xs-12">
+                {% bootstrap_field filter_form.datetime_until layout='inline' %}
+            </div>
+            <div class="col-md-2 col-sm-6 col-xs-12">
+                {% bootstrap_field filter_form.gate layout='inline' %}
+            </div>
+            <div class="col-md-2 col-sm-6 col-xs-12">
+                {% bootstrap_field filter_form.itemvar layout='inline' %}
+            </div>
+            <div class="col-md-2 col-xs-6">
+                <button class="btn btn-block btn-primary" type="submit">
+                    <span class="fa fa-filter"></span>
+                    <span class="hidden-md">{% trans "Filter" %}</span>
+                </button>
+            </div>
+        </div>
+    </form>
+    {% if checkins|length == 0 %}
+        <div class="empty-collection">
+            <p>
+                {% if request.GET %}
+                    {% trans "Your search did not match any check-ins." %}
+                {% else %}
+                    {% blocktrans trimmed %}
+                        You haven't scanned any tickets yet.
+                    {% endblocktrans %}
+                {% endif %}
+            </p>
+        </div>
+    {% else %}
+        <div class="table-responsive">
+            <table class="table table-hover table-quotas">
+                <thead>
+                <tr>
+                    <th>{% trans "Time of scan" %}</th>
+                    <th>{% trans "Scan type" %} / {% trans "Check-in list" %}</th>
+                    <th>{% trans "Ticket" %}</th>
+                    <th>{% trans "Result" %}</th>
+                    <th>{% trans "Device" %} / {% trans "Gate" %}</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for c in checkins %}
+                    <tr>
+                        <td>
+                            {{ c.datetime|date:"SHORT_DATETIME_FORMAT" }}
+                            {% if c.type == "exit" %}
+                                {% if c.auto_checked_in %}
+                                    <span class="fa fa-fw fa-hourglass-end" data-toggle="tooltip_html"
+                                          title="{% blocktrans trimmed with date=c.datetime|date:'SHORT_DATETIME_FORMAT' %}Automatically marked not present: {{ date }}{% endblocktrans %}"></span>
+                                {% endif %}
+                            {% elif c.forced %}
+                                <span class="fa fa-fw fa-warning" data-toggle="tooltip_html"
+                                      title="{% blocktrans trimmed with date=c.datetime|date:'SHORT_DATETIME_FORMAT' %}Additional entry scan: {{ date }}{% endblocktrans %}"></span>
+                            {% elif c.auto_checked_in %}
+                                <span class="fa fa-fw fa-magic" data-toggle="tooltip_html"
+                                      title="{% blocktrans trimmed with date=c.datetime|date:'SHORT_DATETIME_FORMAT' %}Automatically checked in: {{ date }}{% endblocktrans %}"></span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if c.type == "exit" %}<span class="fa fa-fw fa-sign-out"></span>{% endif %}
+                            {% if c.type == "entry" %}<span class="fa fa-fw fa-sign-in"></span>{% endif %}
+                            {{ c.get_type_display }}
+                            <br>
+                            <small>{{ c.list }}</small>
+                        </td>
+                        <td>
+                            {% if c.position %}
+                                <span class="fa fa-user fa-fw"></span>
+                                <strong>
+                                    <a href="{% url "control:event.order" event=request.event.slug organizer=request.event.organizer.slug code=c.position.order.code %}">{{ c.position.order.code }}</a>-{{ c.position.positionid }}
+                                </strong>
+                                {% if c.position.attendee_name %}
+                                    <br>
+                                    <small>
+                                        {{ c.position.attendee_name }}
+                                    </small>
+                                {% endif %}
+                                {% if c.position.item %}
+                                    <br>
+                                    <small>
+                                        {{ c.position.item }}{% if c.position.variation %} –
+                                            {{ c.position.variation }}{% endif %}
+                                    </small>
+                                {% endif %}
+                            {% else %}
+                                <span class="fa fa-qrcode fa-fw"></span>
+                                <span title="{{ c.raw_barcode }}">
+                                    {{ c.raw_barcode|slice:":16" }}{% if c.raw_barcode|length > 16 %}…{% endif %}
+                                </span>
+                                {% if c.raw_item %}
+                                    <br>
+                                    <small>
+                                        {{ c.raw_item }}{% if c.raw_variation %} – {{ c.raw_variation }}{% endif %}
+                                    </small>
+                                {% endif %}
+                                {% if c.raw_subevent %}
+                                    <br>
+                                    <small>
+                                        {{ c.raw_subevent }}{% if c.raw_variation %} – {{ c.raw_variation }}{% endif %}
+                                    </small>
+                                {% endif %}
+                            {% endif %}
+                        </td>
+                        <td class="{% if c.successful %}text-success{% else %}text-danger{% endif %}">
+                            {% if c.successful %}
+                                <span class="fa fa-fw fa-check"></span> {% trans "Successful" %}
+                            {% else %}
+                                <span class="fa fa-fw fa-exclamation-triangle"></span>
+                                {{ c.get_error_reason_display }}
+                                {% if c.error_explanation %}
+                                    <br>
+                                    <small>{{ c.error_explanation }}</small>
+                                {% endif %}
+                            {% endif %}
+                        </td>
+                        <td>
+                            {{ c.device|default:"" }}
+                            {% if c.gate %}
+                                <br>{{ c.gate }}
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endif %}
+    {% include "pretixcontrol/pagination.html" %}
+{% endblock %}
