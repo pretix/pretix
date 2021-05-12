@@ -2447,6 +2447,7 @@ PERSON_NAME_SALUTATIONS = [
     "Mx",
 ]
 
+
 def concatenation_for_salutation(d):
     salutation = d.get("salutation")
     title = d.get("title")
@@ -2462,6 +2463,7 @@ def concatenation_for_salutation(d):
         given_name = None
 
     return " ".join(filter(None, (salutation, title, given_name, family_name)))
+
 
 PERSON_NAME_SCHEMES = OrderedDict([
     ('given_family', {

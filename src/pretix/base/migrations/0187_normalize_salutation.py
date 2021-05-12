@@ -3,6 +3,7 @@
 from django.conf import settings
 from django.db import migrations
 from django.utils.translation import pgettext
+
 from pretix.base.i18n import language
 from pretix.base.settings import PERSON_NAME_SALUTATIONS
 
