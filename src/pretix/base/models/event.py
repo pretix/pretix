@@ -32,7 +32,7 @@
 # Unless required by applicable law or agreed to in writing, software distributed under the Apache License 2.0 is
 # distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations under the License.
-
+import os
 import string
 import uuid
 from collections import OrderedDict
@@ -675,7 +675,7 @@ class Event(EventMixin, LoggedModel):
             i.pk = None
             i.event = self
             if i.picture:
-                i.picture.save(i.picture.name, i.picture)
+                i.picture.save(os.path.basename(i.picture.name), i.picture)
             if i.category_id:
                 i.category = category_map[i.category_id]
             if i.tax_rule_id:
