@@ -86,7 +86,7 @@ going to develop around pretix, for example connect to pretix through our API, y
        sold out. If a voucher is used to apply a discount, the price of the purchased product is reduced by the
        discounted amount. Vouchers are connected to a specific event.
    * - | |:gb:| **Gift card**
-       | |:de:| Geschenkgutschein
+       | |:de:| Wertgutschein
      - A :ref:`gift card <giftcards>` is a coupon representing an exact amount of money that can be used for purchases
        of any kind. Gift cards can be sold, created manually, or used as a method to refund your customer without paying
        them back directly.
@@ -104,13 +104,18 @@ going to develop around pretix, for example connect to pretix through our API, y
    * - | |:gb:| **Order code**
        | |:de:| Bestellnummer
      - An order code is the unique identifier of an order, usually consisting of 5 numbers and letters.
+   * - | |:gb:| **Customer**
+       | |:de:| Kund\*in
+     - A customer is the person who buys a ticket, regardless of who will be using it later. A customer can be defined
+       just by an email address or a name, or can have a persistent **customer account** they can log in to.
    * - | |:gb:| **Order position**
        | |:de:| Bestellposition
      - An order position is a single line inside an order, representing the purchase of one specific product. If the
        product is an admission product, this represents an attendee.
-   * - | |:gb:| **Attendees**
-       | |:de:| Teilnehmende
-     - An attendee is the person designated to use a specific order position to access the event.
+   * - | |:gb:| **Attendee**
+       | |:de:| Teilnehmer\*in
+     - An attendee is the person designated to use a specific order position to access the event. It may be the same
+       or a different person as the customer.
    * - | |:gb:| **Fee**
        | |:de:| Gebühr
      - A fee is an additional type of line inside an order that represents a cost that needs to be paid by the customer,
@@ -121,9 +126,14 @@ going to develop around pretix, for example connect to pretix through our API, y
        numbers and no longer change after they have been issued. Every invoice is connected to an order, but an order
        can have multiple invoices: If an order changes, a cancellation document is created for the old invoice and a
        new invoice is created.
+   * - | |:gb:| **Membership**
+       | |:de:| Mitgliedschaft
+     - A membership is a status attached customer, granting that customer a special right for a limited amount of time.
+       This special right could for example be the right to purchase a specific product. Memberships can be sold through
+       pretix as well.
    * - | |:gb:| **Check-in**
        | |:de:| Check-in
-     - A check-in is the event of someone being successfully scanned at an entry or exit of the event.
+     - A check-in is the event of someone's ticket being scanned at an entry or exit of the event.
    * - | |:gb:| **Check-in list**
        | |:de:| Check-in-Liste
      - A check-in list is used to configure who can be scanned at a specific entry or exit of the event. Check-in lists
@@ -151,7 +161,7 @@ going to develop around pretix, for example connect to pretix through our API, y
      - A badge refers to the file used as a name tag for an attendee of your event.
    * - | |:gb:| **User**
        | |:de:| Benutzer
-     - A user is anyone who can sign into the backend interface of pretix.
+     - A user is anyone who can sign into the backend interface of pretix. Not to be confused with *Customer*.
    * - | |:gb:| **Team**
        | |:de:| Team
      - A :ref:`team <user-teams>` is a collection of users who are granted some level of access to a set of events.
