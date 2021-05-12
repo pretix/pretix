@@ -220,7 +220,7 @@ setup(
     ],
     extras_require={
         'dev': [
-            'django-debug-toolbar==3.2',
+            'django-debug-toolbar==3.2.*',
             'pycodestyle==2.5.*',
             'pyflakes==2.1.*',
             'flake8==3.7.*',
