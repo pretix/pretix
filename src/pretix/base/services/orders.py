@@ -755,12 +755,6 @@ def _check_positions(event: Event, now_dt: datetime, positions: List[CartPositio
             # Sorry, can't let you keep that!
             delete(cp)
 
-    if not err:
-        try:
-            validate_memberships_in_order(customer, [p for p in sorted_positions if p.pk not in deleted_positions], event, lock=True)
-        except ValidationError as e:
-            raise OrderError(e.message)
-
     if err:
         raise OrderError(err, errargs)
 
@@ -820,6 +814,11 @@ def _create_order(event: Event, email: str, positions: List[CartPosition], now_d
                 checked_gift_cards.append(gc)
         if checked_gift_cards and any(c.item.issue_giftcard for c in positions):
             raise OrderError(_("You cannot pay with gift cards when buying a gift card."))
+
+        try:
+            validate_memberships_in_order(customer, positions, event, lock=True)
+        except ValidationError as e:
+            raise OrderError(e.message)
 
         fees, pf, gift_card_values = _get_fees(positions, payment_provider, address, meta_info, event, checked_gift_cards)
         total = pending_sum = sum([c.price for c in positions]) + sum([c.value for c in fees])
