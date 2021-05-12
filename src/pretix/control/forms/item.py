@@ -32,7 +32,7 @@
 # Unless required by applicable law or agreed to in writing, software distributed under the Apache License 2.0 is
 # distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations under the License.
-
+import os
 from decimal import Decimal
 from urllib.parse import urlencode
 
@@ -346,6 +346,7 @@ class ItemCreateForm(I18nModelForm):
 
     def save(self, *args, **kwargs):
         if self.cleaned_data.get('copy_from'):
+            src = self.cleaned_data['copy_from']
             fields = (
                 'description',
                 'active',
@@ -375,7 +376,10 @@ class ItemCreateForm(I18nModelForm):
                 'grant_membership_duration_months',
             )
             for f in fields:
-                setattr(self.instance, f, getattr(self.cleaned_data['copy_from'], f))
+                setattr(self.instance, f, getattr(src, f))
+
+            if src.picture:
+                self.instance.picture.save(os.path.basename(src.picture.name), src.picture)
         else:
             # Add to all sales channels by default
             self.instance.sales_channels = list(get_all_sales_channels().keys())
