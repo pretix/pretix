@@ -41,7 +41,7 @@ from pretix.base.i18n import (
     LazyCurrencyNumber, LazyDate, LazyExpiresDate, LazyNumber,
 )
 from pretix.base.models import Event
-from pretix.base.settings import PERSON_NAME_SALUTATIONS, PERSON_NAME_SCHEMES
+from pretix.base.settings import PERSON_NAME_SCHEMES
 from pretix.base.signals import (
     register_html_mail_renderers, register_mail_placeholders,
 )
