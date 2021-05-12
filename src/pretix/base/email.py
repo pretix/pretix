@@ -587,6 +587,6 @@ def base_placeholders(sender, **kwargs):
 
 def get_name_parts_localized(name_parts, key):
     value = name_parts.get(key, "")
-    if key == "salutation" and value and value in PERSON_NAME_SALUTATIONS:
+    if key == "salutation":
         return pgettext_lazy("person_name_salutation", value)
     return value
