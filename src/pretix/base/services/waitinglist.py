@@ -22,7 +22,7 @@
 import sys
 from datetime import timedelta
 
-from django.db.models import Q, Exists, OuterRef
+from django.db.models import Exists, OuterRef, Q
 from django.dispatch import receiver
 from django.utils.timezone import now
 from django_scopes import scopes_disabled
