@@ -94,7 +94,7 @@ F. Functionality
 
     #. Refunds are implemented, if possible.
 
-    #. In case of overpayment or external refunds, a "required action" is created to notify the event organizer.
+    #. In case of overpayment or external refunds, an external refund is properly created.
 
 #. If the plugin adds steps to the checkout process, it has been tested in combination with the pretix widget.
 

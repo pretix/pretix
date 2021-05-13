@@ -1389,60 +1389,6 @@ class EventLock(models.Model):
     token = models.UUIDField(default=uuid.uuid4)
 
 
-class RequiredAction(models.Model):
-    """
-    Represents an action that is to be done by an admin. The admin will be
-    displayed a list of actions to do.
-
-    :param datatime: The timestamp of the required action
-    :type datetime: datetime
-    :param user: The user that performed the action
-    :type user: User
-    :param done: If this action has been completed or dismissed
-    :type done: bool
-    :param action_type: The type of action that has to be performed. This is
-       used to look up the renderer used to describe the action in a human-
-       readable way. This should be some namespaced value using dotted
-       notation to avoid duplicates, e.g.
-       ``"pretix.plugins.banktransfer.incoming_transfer"``.
-    :type action_type: str
-    :param data: Arbitrary data that can be used by the log action renderer
-    :type data: str
-    """
-    datetime = models.DateTimeField(auto_now_add=True, db_index=True)
-    done = models.BooleanField(default=False)
-    user = models.ForeignKey('User', null=True, blank=True, on_delete=models.PROTECT)
-    event = models.ForeignKey('Event', null=True, blank=True, on_delete=models.CASCADE)
-    action_type = models.CharField(max_length=255)
-    data = models.TextField(default='{}')
-
-    class Meta:
-        ordering = ('datetime',)
-
-    def display(self, request):
-        from ..signals import requiredaction_display
-
-        for receiver, response in requiredaction_display.send(self.event, action=self, request=request):
-            if response:
-                return response
-        return self.action_type
-
-    def save(self, *args, **kwargs):
-        created = not self.pk
-        super().save(*args, **kwargs)
-        if created:
-            from ..services.notifications import notify
-            from .log import LogEntry
-
-            logentry = LogEntry.objects.create(
-                content_object=self,
-                action_type='pretix.event.action_required',
-                event=self.event,
-                visible=False
-            )
-            notify.apply_async(args=(logentry.pk,))
-
-
 class EventMetaProperty(LoggedModel):
     """
     An organizer account can have EventMetaProperty objects attached to define meta information fields

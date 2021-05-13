@@ -66,9 +66,7 @@ from pytz import timezone
 
 from pretix.base.channels import get_all_sales_channels
 from pretix.base.email import get_available_placeholders
-from pretix.base.models import (
-    Event, LogEntry, Order, RequiredAction, TaxRule, Voucher,
-)
+from pretix.base.models import Event, LogEntry, Order, TaxRule, Voucher
 from pretix.base.models.event import EventMetaValue
 from pretix.base.services import tickets
 from pretix.base.services.invoices import build_preview_invoice_pdf
@@ -1046,42 +1044,6 @@ class EventLog(EventPermissionRequiredMixin, PaginationMixin, ListView):
         ctx['userlist'] = self.request.event.logentry_set.order_by().distinct().values('user__id', 'user__email')
         ctx['devicelist'] = self.request.event.logentry_set.order_by('device__name').distinct().values('device__id', 'device__name')
         return ctx
-
-
-class EventActions(EventPermissionRequiredMixin, ListView):
-    template_name = 'pretixcontrol/event/actions.html'
-    model = RequiredAction
-    context_object_name = 'actions'
-    paginate_by = 20
-    permission = 'can_change_orders'
-
-    def get_queryset(self):
-        qs = self.request.event.requiredaction_set.filter(done=False)
-        return qs
-
-    def get_context_data(self, **kwargs):
-        ctx = super().get_context_data()
-        for a in ctx['actions']:
-            a.display = a.display(self.request)
-        return ctx
-
-
-class EventActionDiscard(EventPermissionRequiredMixin, View):
-    permission = 'can_change_orders'
-
-    def get(self, request, **kwargs):
-        action = get_object_or_404(RequiredAction, event=request.event, pk=kwargs.get('id'))
-        action.done = True
-        action.user = request.user
-        action.save()
-        messages.success(self.request, _('The issue has been marked as resolved!'))
-        return redirect(self.get_success_url())
-
-    def get_success_url(self) -> str:
-        return reverse('control:event.index', kwargs={
-            'organizer': self.request.event.organizer.slug,
-            'event': self.request.event.slug
-        })
 
 
 class EventComment(EventPermissionRequiredMixin, View):

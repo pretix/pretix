@@ -65,36 +65,6 @@
         </div>
     {% endif %}
     {% eventsignal request.event "pretix.control.signals.event_dashboard_top" request=request %}
-    {% if actions|length > 0 %}
-        <div class="panel panel-danger">
-            <div class="panel-heading">
-                <h3 class="panel-title">
-                    {% trans "Your attention is required to resolve the following issues" %}
-                </h3>
-            </div>
-            <ul class="list-group">
-                {% for action in actions %}
-                    <li class="list-group-item logentry">
-                        <p>
-                            <a href="{% url "control:event.requiredaction.discard" event=request.event.slug organizer=request.event.organizer.slug id=action.id %}"
-                               class="btn btn-default btn-xs pull-right flip">
-                                {% trans "Hide message" %}
-                            </a>
-                            <small><span
-                                    class="fa fa-clock-o"></span> {{ action.datetime|date:"SHORT_DATETIME_FORMAT" }}
-                            </small>
-                        </p>
-                        {{ action.display|safe }}
-                    </li>
-                {% endfor %}
-            </ul>
-            <div class="panel-footer">
-                <a href="{% url "control:event.requiredactions" event=request.event.slug organizer=request.event.organizer.slug %}">
-                    {% trans "Show more" %}
-                </a>
-            </div>
-        </div>
-    {% endif %}
 
     {% if request.event.has_subevents %}
         <form class="form-inline helper-display-inline" action="" method="get">
