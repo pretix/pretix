@@ -19,4 +19,5 @@ This guide will walk you through a number of typical examples of pretix event st
    guides/groups
    guides/restricted_audience
    guides/timeslots
+   guides/season_tickets
    guides/mixed_taxation

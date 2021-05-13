@@ -20,3 +20,9 @@ Option B: Order approvals
 If you do not know your audience already, but still want to restrict it to a certain group, e.g. people with a given profession, you can check the "**Buying this product requires approval**" in the settings of your product. If a customer tries to buy such a product, they will be able to place their order but can not proceed to payment. Instead, you will be asked to approve or deny the order and only if you approve it, we will send a payment link to the customer.
 
 This requires the customer to interact with the ticket shop twice (once for the order, once for the payment) which adds a little more friction, but gives you full control over who attends the event.
+
+Option C: Registered customers & memberships
+""""""""""""""""""""""""""""""""""""""""""""
+
+You can also do this by requiring that customers have a customer account and an active membership. You can find more
+information on this mechanism in the :ref:`seasontickets` article.
