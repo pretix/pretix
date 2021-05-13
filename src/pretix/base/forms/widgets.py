@@ -189,7 +189,7 @@ class BusinessBooleanRadio(forms.RadioSelect):
         else:
             choices = (
                 ('individual', _('Individual customer')),
-                ('business', _('Business customer')),
+                ('business', _('Business or institutional customer')),
             )
         super().__init__(attrs, choices)
 
