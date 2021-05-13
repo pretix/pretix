@@ -1228,7 +1228,6 @@ class OrderChangeManager:
         'quota_missing': _('There is no quota defined that allows this operation.'),
         'product_invalid': _('The selected product is not active or has no price set.'),
         'complete_cancel': _('This operation would leave the order empty. Please cancel the order itself instead.'),
-        'not_pending_or_paid': _('Only pending or paid orders can be changed.'),
         'paid_to_free_exceeded': _('This operation would make the order free and therefore immediately paid, however '
                                    'no quota is available.'),
         'addon_to_required': _('This is an add-on product, please select the base position it should be added to.'),
@@ -1594,7 +1593,7 @@ class OrderChangeManager:
                 self.order.status = Order.STATUS_CANCELED
                 self.order.save(update_fields=['status'])
                 order_canceled.send(self.order.event, order=self.order)
-            else:
+            elif self.order.status != Order.STATUS_CANCELED:
                 # if the order becomes free, mark it paid using the 'free' provider
                 # this could happen if positions have been made cheaper or removed (_totaldiff < 0)
                 # or positions got split off to a new order (split_order with positive total)
@@ -2082,11 +2081,10 @@ class OrderChangeManager:
 
         with transaction.atomic():
             with self.order.event.lock():
-                if self.order.status not in (Order.STATUS_PENDING, Order.STATUS_PAID):
-                    raise OrderError(self.error_messages['not_pending_or_paid'])
-                if check_quotas:
-                    self._check_quotas()
-                self._check_seats()
+                if self.order.status in (Order.STATUS_PENDING, Order.STATUS_PAID):
+                    if check_quotas:
+                        self._check_quotas()
+                    self._check_seats()
                 self._check_complete_cancel()
                 self._check_and_lock_memberships()
                 try:
@@ -2094,7 +2092,8 @@ class OrderChangeManager:
                 except TaxRule.SaleNotAllowed:
                     raise OrderError(self.error_messages['tax_rule_country_blocked'])
             self._recalculate_total_and_payment_fee()
-            self._reissue_invoice()
+            if self.order.status in (Order.STATUS_PENDING, Order.STATUS_PAID):
+                self._reissue_invoice()
             self._clear_tickets_cache()
             self.order.touch()
         self._check_paid_price_change()

@@ -423,10 +423,6 @@ class Order(LockModel, LoggedModel):
         """
         return '{event}-{code}'.format(event=self.event.slug.upper(), code=self.code)
 
-    @property
-    def changable(self):
-        return self.status in (Order.STATUS_PAID, Order.STATUS_PENDING)
-
     def save(self, **kwargs):
         if 'update_fields' in kwargs and 'last_modified' not in kwargs['update_fields']:
             kwargs['update_fields'] = list(kwargs['update_fields']) + ['last_modified']

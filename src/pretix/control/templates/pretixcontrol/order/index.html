@@ -299,7 +299,7 @@
                             <span class="fa fa-edit"></span>
                             {% trans "Change answers" %}
                         </a>
-                        {% if order.changable and 'can_change_orders' in request.eventpermset %}
+                        {% if 'can_change_orders' in request.eventpermset %}
                             &middot; <a href="{% url "control:event.order.change" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}">
                                 <span class="fa fa-edit"></span>
                                 {% trans "Change products" %}
@@ -822,7 +822,7 @@
                         <div class="panel panel-default">
                             <div class="panel-heading">
                                 <div class="pull-right flip">
-                                    {% if order.changable and 'can_change_orders' in request.eventpermset %}
+                                    {% if 'can_change_orders' in request.eventpermset %}
                                         <a href="{% url "control:event.order.info" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}">
                                             <span class="fa fa-edit"></span>
                                             {% trans "Change" %}

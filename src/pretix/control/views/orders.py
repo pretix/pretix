@@ -1530,12 +1530,6 @@ class OrderChange(OrderView):
     permission = 'can_change_orders'
     template_name = 'pretixcontrol/order/change.html'
 
-    def dispatch(self, request, *args, **kwargs):
-        if self.order.status not in (Order.STATUS_PENDING, Order.STATUS_PAID):
-            messages.error(self.request, _('This action is only allowed for pending or paid orders.'))
-            return self._redirect_back()
-        return super().dispatch(request, *args, **kwargs)
-
     @cached_property
     def other_form(self):
         return OtherOperationsForm(prefix='other', order=self.order,
