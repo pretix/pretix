@@ -56,10 +56,10 @@
                 <thead>
                 <tr>
                     <th>{% trans "Time of scan" %}</th>
-                    <th>{% trans "Scan type" %} / {% trans "Check-in list" %}</th>
-                    <th>{% trans "Ticket" %}</th>
+                    <th>{% trans "Scan type" %}<br>{% trans "Check-in list" %}</th>
                     <th>{% trans "Result" %}</th>
-                    <th>{% trans "Device" %} / {% trans "Gate" %}</th>
+                    <th>{% trans "Ticket" %}<br>{% trans "Product" %}</th>
+                    <th>{% trans "Device" %}<br>{% trans "Gate" %}</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -85,7 +85,29 @@
                             {% if c.type == "entry" %}<span class="fa fa-fw fa-sign-in"></span>{% endif %}
                             {{ c.get_type_display }}
                             <br>
-                            <small>{{ c.list }}</small>
+                            <small>
+                                <a href="{% url "control:event.orders.checkinlists.show" organizer=request.event.organizer.slug event=request.event.slug list=c.list.id %}">{{ c.list }}</a>
+                            </small>
+                        </td>
+                        <td>
+                            {% if c.successful %}
+                                <span class="label label-success">
+                                    <span class="fa fa-fw fa-check"></span> {% trans "Successful" context "checkin_result" %}
+                                </span>
+                            {% else %}
+                                <span class="label label-danger">
+                                    <span class="fa fa-fw fa-exclamation-triangle"></span>
+                                    {% trans "Denied" context "checkin_result" %}
+                                </span>
+                                <br>
+                                <small>
+                                    {{ c.get_error_reason_display }}
+                                    {% if c.error_explanation %}
+                                        <br>
+                                        {{ c.error_explanation }}
+                                    {% endif %}
+                                </small>
+                            {% endif %}
                         </td>
                         <td>
                             {% if c.position %}
@@ -102,8 +124,10 @@
                                 {% if c.position.item %}
                                     <br>
                                     <small>
-                                        {{ c.position.item }}{% if c.position.variation %} –
-                                            {{ c.position.variation }}{% endif %}
+                                        <a href="{% url "control:event.item" organizer=request.event.organizer.slug event=request.event.slug item=c.position.id %}">
+                                            {{ c.position.item }}{% if c.position.variation %} –
+                                                {{ c.position.variation }}{% endif %}
+                                        </a>
                                     </small>
                                 {% endif %}
                             {% else %}
@@ -114,7 +138,9 @@
                                 {% if c.raw_item %}
                                     <br>
                                     <small>
-                                        {{ c.raw_item }}{% if c.raw_variation %} – {{ c.raw_variation }}{% endif %}
+                                        <a href="{% url "control:event.item" organizer=request.event.organizer.slug event=request.event.slug item=c.raw_item.id %}">
+                                            {{ c.raw_item }}{% if c.raw_variation %} – {{ c.raw_variation }}{% endif %}
+                                        </a>
                                     </small>
                                 {% endif %}
                                 {% if c.raw_subevent %}
@@ -125,22 +151,10 @@
                                 {% endif %}
                             {% endif %}
                         </td>
-                        <td class="{% if c.successful %}text-success{% else %}text-danger{% endif %}">
-                            {% if c.successful %}
-                                <span class="fa fa-fw fa-check"></span> {% trans "Successful" %}
-                            {% else %}
-                                <span class="fa fa-fw fa-exclamation-triangle"></span>
-                                {{ c.get_error_reason_display }}
-                                {% if c.error_explanation %}
-                                    <br>
-                                    <small>{{ c.error_explanation }}</small>
-                                {% endif %}
-                            {% endif %}
-                        </td>
                         <td>
                             {{ c.device|default:"" }}
                             {% if c.gate %}
-                                <br>{{ c.gate }}
+                                <br><small>{{ c.gate }}</small>
                             {% endif %}
                         </td>
                     </tr>

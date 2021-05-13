@@ -340,7 +340,7 @@ class OrderDetail(OrderView):
         ).prefetch_related(
             'item__questions', 'issued_gift_cards',
             Prefetch('answers', queryset=QuestionAnswer.objects.prefetch_related('options').select_related('question')),
-            Prefetch('checkins', queryset=Checkin.objects.select_related('list').order_by('datetime')),
+            Prefetch('all_checkins', queryset=Checkin.all.select_related('list').order_by('datetime')),
         ).order_by('positionid')
 
         positions = []

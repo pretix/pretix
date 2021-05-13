@@ -295,7 +295,7 @@ class CheckinListPositionViewSet(viewsets.ReadOnlyModelViewSet):
                     lookup='checkins',
                     queryset=Checkin.objects.filter(list_id=self.checkinlist.pk)
                 ),
-                'checkins', 'answers', 'answers__options', 'answers__question',
+                'answers', 'answers__options', 'answers__question',
                 Prefetch('addons', OrderPosition.objects.select_related('item', 'variation')),
                 Prefetch('order', Order.objects.select_related('invoice_address').prefetch_related(
                     Prefetch(
@@ -305,7 +305,8 @@ class CheckinListPositionViewSet(viewsets.ReadOnlyModelViewSet):
                     Prefetch(
                         'positions',
                         OrderPosition.objects.prefetch_related(
-                            'checkins', 'item', 'variation', 'answers', 'answers__options', 'answers__question',
+                            Prefetch('checkins', queryset=Checkin.objects.all()),
+                            'item', 'variation', 'answers', 'answers__options', 'answers__question',
                         )
                     )
                 ))

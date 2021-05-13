@@ -57,7 +57,7 @@ from pretix.base.i18n import language
 from pretix.base.models import (
     CachedCombinedTicket, CachedTicket, Device, Event, Invoice, InvoiceAddress,
     Order, OrderFee, OrderPayment, OrderPosition, OrderRefund, Quota, SubEvent,
-    TaxRule, TeamAPIToken, generate_secret,
+    TaxRule, TeamAPIToken, generate_secret, Checkin,
 )
 from pretix.base.models.orders import QuestionAnswer, RevokedTicketSecret
 from pretix.base.payment import PaymentException
@@ -201,7 +201,8 @@ class OrderViewSet(viewsets.ModelViewSet):
                 Prefetch(
                     'positions',
                     opq.all().prefetch_related(
-                        'checkins', 'item', 'variation', 'answers', 'answers__options', 'answers__question',
+                        Prefetch('checkins', queryset=Checkin.objects.all()),
+                        'item', 'variation', 'answers', 'answers__options', 'answers__question',
                         'item__category', 'addon_to', 'seat',
                         Prefetch('addons', opq.select_related('item', 'variation', 'seat'))
                     )
@@ -212,7 +213,8 @@ class OrderViewSet(viewsets.ModelViewSet):
                 Prefetch(
                     'positions',
                     opq.all().prefetch_related(
-                        'checkins', 'item', 'variation', 'answers', 'answers__options', 'answers__question', 'seat',
+                        Prefetch('checkins', queryset=Checkin.objects.all()),
+                        'item', 'variation', 'answers', 'answers__options', 'answers__question', 'seat',
                     )
                 )
             )
@@ -781,7 +783,7 @@ with scopes_disabled():
             )
 
         def has_checkin_qs(self, queryset, name, value):
-            return queryset.filter(checkins__isnull=not value)
+            return queryset.alias(ce=Exists(Checkin.objects.filter(position=OuterRef('pk')))).filter(ce=value)
 
         def attendee_name_qs(self, queryset, name, value):
             return queryset.filter(Q(attendee_name_cached__iexact=value) | Q(addon_to__attendee_name_cached__iexact=value))
@@ -835,7 +837,8 @@ class OrderPositionViewSet(mixins.DestroyModelMixin, mixins.UpdateModelMixin, vi
         qs = qs.filter(order__event=self.request.event)
         if self.request.query_params.get('pdf_data', 'false') == 'true':
             qs = qs.prefetch_related(
-                'checkins', 'answers', 'answers__options', 'answers__question',
+                Prefetch('checkins', queryset=Checkin.objects.all()),
+                'answers', 'answers__options', 'answers__question',
                 Prefetch('addons', qs.select_related('item', 'variation')),
                 Prefetch('order', Order.objects.select_related('invoice_address').prefetch_related(
                     Prefetch(
@@ -845,7 +848,8 @@ class OrderPositionViewSet(mixins.DestroyModelMixin, mixins.UpdateModelMixin, vi
                     Prefetch(
                         'positions',
                         qs.prefetch_related(
-                            'checkins', 'item', 'variation', 'answers', 'answers__options', 'answers__question',
+                            'item', 'variation', 'answers', 'answers__options', 'answers__question',
+                            Prefetch('checkins', queryset=Checkin.objects.all()),
                         )
                     )
                 ))
@@ -854,7 +858,8 @@ class OrderPositionViewSet(mixins.DestroyModelMixin, mixins.UpdateModelMixin, vi
             )
         else:
             qs = qs.prefetch_related(
-                'checkins', 'answers', 'answers__options', 'answers__question',
+                Prefetch('checkins', queryset=Checkin.objects.all()),
+                'answers', 'answers__options', 'answers__question',
             ).select_related(
                 'item', 'order', 'order__event', 'order__event__organizer', 'seat'
             )
