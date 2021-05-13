@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-05-13 08:11+0000\n"
-"PO-Revision-Date: 2021-05-10 08:48+0000\n"
+"PO-Revision-Date: 2021-05-13 20:00+0000\n"
 "Last-Translator: Mohamed Tawfiq <mtawfiq@wafyapp.com>\n"
 "Language-Team: Arabic <https://translate.pretix.eu/projects/pretix/pretix/ar/"
 ">\n"
@@ -3158,23 +3158,24 @@ msgstr "العنصر يحتوي مسبقا على إضافة من هذه الف�
 
 #: pretix/base/models/items.py:1005
 msgid "The minimum count needs to be equal to or greater than zero."
-msgstr "احتياجات الحد الأدنى العد لتكون مساوية أو أكبر من الصفر."
+msgstr "يجب أن يكون الحد الأدنى للعدد مساويا أو أكبر من الصفر."
 
 #: pretix/base/models/items.py:1010
 msgid "The maximum count needs to be equal to or greater than zero."
-msgstr "احتياجات عدد القصوى لتكون مساوية أو أكبر من الصفر."
+msgstr "يجب أن يكون الحد الأقصى للعدد مساويا للصفر أو أكبر منه."
 
 #: pretix/base/models/items.py:1015
 msgid "The maximum count needs to be greater than the minimum count."
-msgstr "عدد كحد أقصى يجب أن يكون أكبر من الحد الأدنى للعدد."
+msgstr "يجب أن يكون الحد الأقصى للعدد أكبر من الحد الأدنى للعد."
 
 #: pretix/base/models/items.py:1042
 msgid "Bundled item"
-msgstr "البند المجمعة"
+msgstr "عنصر مجمع"
 
 #: pretix/base/models/items.py:1048
+#, fuzzy
 msgid "Bundled variation"
-msgstr "تباين المجمعة"
+msgstr "صيغة مجمعة"
 
 #: pretix/base/models/items.py:1054 pretix/base/models/items.py:1145
 msgid "Number"
@@ -3182,7 +3183,7 @@ msgstr "رقم"
 
 #: pretix/base/models/items.py:1059
 msgid "Designated price part"
-msgstr "جزء المعين السعر"
+msgstr "جزء السعر المحدد"
 
 #: pretix/base/models/items.py:1060
 msgid ""
@@ -3191,29 +3192,31 @@ msgid ""
 "taxation, but can be kept blank otherwise. This value will NOT be added to "
 "the base item's price."
 msgstr ""
-"إذا وضع، سيظهر أن هذا البند واحدة هي المسؤولة عن قيمة معينة من السعر "
-"الإجمالي الإجمالي. قد يكون هذا هاما في حالات الضرائب مختلطة، ولكن يمكن أن "
-"تظل فارغة على خلاف ذلك. لن تضاف هذه القيمة إلى سعر القطعة قاعدة ل."
+"في حالة التعيين ، سيظهر أن هذا العنصر المجمع مسؤول عن القيمة المحددة للسعر "
+"الإجمالي الكلي. قد يكون هذا مهما في حالات الضرائب المختلطة، ولكن يمكن أن تظل "
+"فارغة على خلاف ذلك. لن يتم إضافة هذه القيمة إلى سعر العنصر الأساسي."
 
 #: pretix/base/models/items.py:1083
 msgid "The bundled item must belong to the same event as the item."
-msgstr "يجب أن ينتمي هذا البند المجمعة لنفس الحدث هذا البند."
+msgstr "يجب أن ينتمي العنصر المجمع إلى نفس فعالية العنصر."
 
 #: pretix/base/models/items.py:1085
+#, fuzzy
 msgid "A variation needs to be set for this item."
-msgstr "يحتاج وهناك تباين في وضعها لهذا البند."
+msgstr "يجب تعيين تغير لهذا العنصر."
 
 #: pretix/base/models/items.py:1087
+#, fuzzy
 msgid "The chosen variation does not belong to this item."
-msgstr "الاختلاف المختار لا ينتمي الى هذا البند."
+msgstr "التغير الذي تم اختياره لا ينتمي إلى هذا العنصر."
 
 #: pretix/base/models/items.py:1092
 msgid "The count needs to be equal to or greater than zero."
-msgstr "احتياجات العد لتكون مساوية أو أكبر من الصفر."
+msgstr "يجب أن يكون العدد مساويا للصفر أو أكبر منه."
 
 #: pretix/base/models/items.py:1146
 msgid "Text (one line)"
-msgstr "النص (سطر واحد)"
+msgstr "نص (سطر واحد)"
 
 #: pretix/base/models/items.py:1147
 msgid "Multiline text"
@@ -3221,15 +3224,15 @@ msgstr "نص متعدد الأسطر"
 
 #: pretix/base/models/items.py:1148
 msgid "Yes/No"
-msgstr "نعم لا"
+msgstr "نعم / لا"
 
 #: pretix/base/models/items.py:1149
 msgid "Choose one from a list"
-msgstr "اختيار واحد من قائمة"
+msgstr "قم باختيار واحد من قائمة"
 
 #: pretix/base/models/items.py:1150
 msgid "Choose multiple from a list"
-msgstr "اختيار متعددة من قائمة"
+msgstr "قم بعدة اختيارات من قائمة"
 
 #: pretix/base/models/items.py:1151
 msgid "File upload"
@@ -3238,7 +3241,7 @@ msgstr "تحميل الملف"
 #: pretix/base/models/items.py:1153 pretix/base/reldate.py:183
 #: pretix/plugins/checkinlists/exporters.py:608
 msgid "Time"
-msgstr "زمن"
+msgstr "وقت"
 
 #: pretix/base/models/items.py:1154
 msgid "Date and time"
@@ -3246,7 +3249,7 @@ msgstr "التاريخ و الوقت"
 
 #: pretix/base/models/items.py:1155
 msgid "Country code (ISO 3166-1 alpha-2)"
-msgstr "رمز البلد (ISO 3166-1 ألفا 2)"
+msgstr "رمز البلد (ISO 3166-1 alpha-2)"
 
 #: pretix/base/models/items.py:1167 pretix/base/models/items.py:1246
 #: pretix/base/orderimport.py:673 pretix/control/forms/item.py:80
@@ -3258,11 +3261,11 @@ msgstr "سؤال"
 
 #: pretix/base/models/items.py:1176
 msgid "Help text"
-msgstr "نص التعليمات"
+msgstr "نص المساعدة"
 
 #: pretix/base/models/items.py:1177
 msgid "If the question needs to be explained or clarified, do it here!"
-msgstr "إذا كانت احتياجات السؤال الذي يتعين شرح أو توضيح، أن تفعل ذلك هنا!"
+msgstr "إذا كان السؤال بحاجة إلى شرح أو توضيح ، فافعل ذلك هنا!"
 
 #: pretix/base/models/items.py:1183
 msgid "Question type"
@@ -3275,113 +3278,101 @@ msgstr "سؤال مطلوب"
 
 #: pretix/base/models/items.py:1194
 msgid "This question will be asked to buyers of the selected products"
-msgstr "سوف يتم طرح هذا السؤال للمشترين من المنتجات المختارة"
+msgstr "سيتم طرح هذا السؤال على مشتري المنتجات المختارة"
 
 #: pretix/base/models/items.py:1201
 msgid "Ask during check-in instead of in the ticket buying process"
-msgstr "طرح خلال التسجيل في مكتب الاستقبال بدلا من عملية شراء التذاكر"
+msgstr "اسأل أثناء التسجيل بدلا من عملية شراء التذكرة"
 
 #: pretix/base/models/items.py:1202
 msgid "Not supported by all check-in apps for all question types."
-msgstr ""
+msgstr "غير مدعوم من قبل جميع تطبيقات التسجيل لجميع أنواع الأسئلة."
 
 #: pretix/base/models/items.py:1206
 #: pretix/control/templates/pretixcontrol/items/questions.html:66
 msgid "Hidden question"
-msgstr "السؤال مخفي"
+msgstr "سؤال مخفي"
 
 #: pretix/base/models/items.py:1207
 msgid "This question will only show up in the backend."
-msgstr "على هذا السؤال سوف تظهر فقط في الخلفية."
+msgstr "سيظهر هذا السؤال فقط في الخلفية."
 
 #: pretix/base/models/items.py:1211
 msgid "Print answer on invoices"
-msgstr "طباعة الإجابة على الفواتير"
+msgstr "طباعة الجواب على الفواتير"
 
 #: pretix/base/models/items.py:1219 pretix/base/models/items.py:1225
 #: pretix/base/models/items.py:1231
-#, fuzzy
-#| msgid "Minimum number"
 msgid "Minimum value"
-msgstr "عدد الحد الأدنى"
+msgstr "الحد الأدنى للقيمة"
 
 #: pretix/base/models/items.py:1220 pretix/base/models/items.py:1223
 #: pretix/base/models/items.py:1226 pretix/base/models/items.py:1229
 #: pretix/base/models/items.py:1232 pretix/base/models/items.py:1235
-#, fuzzy
-#| msgid "Question cannot depend on a question asked during check-in."
 msgid "Currently not supported in our apps and during check-in"
-msgstr "سؤال لا يمكن أن تعتمد على سؤال طلب خلال التسجيل في مكتب الاستقبال."
+msgstr "حاليا غير مدعوم في تطبيقاتنا وأثناء التسجيل"
 
 #: pretix/base/models/items.py:1222 pretix/base/models/items.py:1228
 #: pretix/base/models/items.py:1234
-#, fuzzy
-#| msgid "Maximum number"
 msgid "Maximum value"
-msgstr "العدد الأقصى"
+msgstr "القيمة القصوى"
 
 #: pretix/base/models/items.py:1238
 msgid "Validate file to be a portrait"
-msgstr ""
+msgstr "تحقق من صحة الملف ليكون صورة"
 
 #: pretix/base/models/items.py:1239
 msgid ""
 "If checked, files must be images with an aspect ratio of 3:4. This is "
 "commonly used for photos printed on badges."
 msgstr ""
+"إذا تم تحديده ، يجب أن تكون الملفات صورًا بنسبة عرض إلى ارتفاع 3:4. يستخدم "
+"هذا بشكل شائع للصور المطبوعة على الشارات."
 
 #: pretix/base/models/items.py:1291
 msgid "An answer to this question is required to proceed."
-msgstr "مطلوب إجابة على هذا السؤال والمضي قدما."
+msgstr "مطلوب إجابة على هذا السؤال للمتابعة."
 
 #: pretix/base/models/items.py:1305 pretix/base/models/items.py:1323
 #: pretix/base/orderimport.py:683 pretix/base/orderimport.py:691
 msgid "Invalid option selected."
-msgstr "تحديد خيار غير صالح."
+msgstr "تم تحديد خيار غير صحيح."
 
 #: pretix/base/models/items.py:1333
-#, fuzzy
-#| msgid "That page number is less than 1"
 msgid "The number is to low."
-msgstr "أن رقم الصفحة هو أقل من 1"
+msgstr "الرقم منخفض."
 
 #: pretix/base/models/items.py:1335
-#, fuzzy
-#| msgid "The entered price is to high."
 msgid "The number is to high."
-msgstr "سعر تم إدخالها إلى الأعلى."
+msgstr "الرقم مرتفع."
 
 #: pretix/base/models/items.py:1338
 msgid "Invalid number input."
-msgstr "إدخال رقم صالح."
+msgstr "إدخال رقم غير صحيح."
 
 #: pretix/base/models/items.py:1345 pretix/base/models/items.py:1369
-#, fuzzy
-#| msgid "Please enter your name."
 msgid "Please choose a later date."
-msgstr "يرجى إدخال اسمك."
+msgstr "الرجاء اختيار تاريخ لاحق."
 
 #: pretix/base/models/items.py:1347 pretix/base/models/items.py:1371
-#, fuzzy
-#| msgid "Please select a valid seat."
 msgid "Please choose an earlier date."
-msgstr "الرجاء اختيار مقعد صالح."
+msgstr "الرجاء اختيار تاريخ سابق."
 
 #: pretix/base/models/items.py:1350
 msgid "Invalid date input."
-msgstr "إدخال تاريخ صالح."
+msgstr "إدخال تاريخ غير صحيح."
 
 #: pretix/base/models/items.py:1357
 msgid "Invalid time input."
-msgstr "إدخال الوقت غير صحيح."
+msgstr "إدخال وقت غير صحيح."
 
 #: pretix/base/models/items.py:1366
 msgid "Invalid datetime input."
-msgstr "غير صالحة التاريخ والوقت الإدخال."
+msgstr "إدخال تاريخ ووقت غير صالح."
 
 #: pretix/base/models/items.py:1378
 msgid "Unknown country code."
-msgstr "رمز البلد غير معروف."
+msgstr "رمز الدولة غير معروف."
 
 #: pretix/base/models/items.py:1392
 #: pretix/control/templates/pretixcontrol/items/question.html:68
@@ -3390,11 +3381,11 @@ msgstr "إجابة"
 
 #: pretix/base/models/items.py:1414
 msgid "The identifier \"{}\" is already used for a different option."
-msgstr "المعرف \"{}\" يستخدم بالفعل للخيار مختلف."
+msgstr "المعرف \"{}\" مستخدم سابقا لخيار مختلف."
 
 #: pretix/base/models/items.py:1417
 msgid "Question option"
-msgstr "خيار سؤال"
+msgstr "خيار السؤال"
 
 #: pretix/base/models/items.py:1418
 msgid "Question options"
@@ -3420,7 +3411,7 @@ msgstr "الاختلافات"
 
 #: pretix/base/models/items.py:1521
 msgid "Close this quota permanently once it is sold out"
-msgstr "إغلاق هذه الحصة بشكل دائم مرة واحدة يباع بها"
+msgstr "أغلق هذه الحصة بشكل دائم بمجرد بيعها"
 
 #: pretix/base/models/items.py:1522
 msgid ""
@@ -3428,13 +3419,13 @@ msgid ""
 "sold, even if tickets become available again through cancellations or "
 "expiring orders. Of course, you can always re-open it manually."
 msgstr ""
-"في حالة تمكين هذا، عندما يتم بيع الحصة مرة واحدة، وسيتم بيع تذاكر لا أكثر، "
-"حتى إذا أصبحت التذاكر المتاحة مرة أخرى من خلال إلغاء أو أوامر تنتهي. بالطبع، "
-"يمكنك دائما إعادة فتحه يدويا."
+"إذا قمت بتمكين هذا ، عند بيع الحصة مرة واحدة ، فلن يتم بيع المزيد من التذاكر "
+"، حتى إذا أصبحت التذاكر متاحة مرة أخرى من خلال الإلغاء أو الطلبات المنتهية "
+"الصلاحية. بالطبع ، يمكنك دائما إعادة فتحه يدويا."
 
 #: pretix/base/models/items.py:1530
 msgid "Allow to sell more tickets once people have checked out"
-msgstr ""
+msgstr "السماح ببيع المزيد من التذاكر بمجرد قيام الأشخاص بتسجيل الخروج"
 
 #: pretix/base/models/items.py:1531
 msgid ""
