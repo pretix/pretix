@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-05-06 18:55+0000\n"
+"POT-Creation-Date: 2021-05-13 08:11+0000\n"
 "PO-Revision-Date: 2020-09-15 02:00+0000\n"
 "Last-Translator: Mie Frydensbjerg <mif@aarhus.dk>\n"
 "Language-Team: Danish <https://translate.pretix.eu/projects/pretix/pretix-js/"
@@ -355,18 +355,22 @@ msgid "Event admission"
 msgstr ""
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:102
-msgid "custom time"
+msgid "custom date and time"
 msgstr ""
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:103
-msgid "Tolerance (minutes)"
+msgid "custom time"
 msgstr ""
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:104
-msgid "Add condition"
+msgid "Tolerance (minutes)"
 msgstr ""
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:105
+msgid "Add condition"
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:106
 msgid "minutes"
 msgstr ""
 
@@ -472,11 +476,11 @@ msgstr ""
 msgid "Use a different name internally"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/main.js:887
+#: pretix/static/pretixcontrol/js/ui/main.js:865
 msgid "Click to close"
 msgstr "Klik for at lukke"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:902
+#: pretix/static/pretixcontrol/js/ui/main.js:906
 msgid "You have unsaved changes!"
 msgstr "Du har ændringer, der ikke er gemt!"
 

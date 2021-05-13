@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-05-06 18:55+0000\n"
+"POT-Creation-Date: 2021-05-13 08:11+0000\n"
 "PO-Revision-Date: 2021-05-10 08:48+0000\n"
 "Last-Translator: Mohamed Tawfiq <mtawfiq@wafyapp.com>\n"
 "Language-Team: Arabic <https://translate.pretix.eu/projects/pretix/pretix-js/"
@@ -328,18 +328,24 @@ msgid "Event admission"
 msgstr "تسجيل الفعالية"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:102
+#, fuzzy
+#| msgid "Current date and time"
+msgid "custom date and time"
+msgstr "التاريخ والوقت الحالي"
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:103
 msgid "custom time"
 msgstr "الوقت المحدد"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:103
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:104
 msgid "Tolerance (minutes)"
 msgstr "القدرة على التحمل (الدقائق)"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:104
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:105
 msgid "Add condition"
 msgstr "أضف شرط"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:105
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:106
 msgid "minutes"
 msgstr ""
 
@@ -444,11 +450,11 @@ msgstr ""
 msgid "Use a different name internally"
 msgstr "قم باستخدم اسم مختلف داخليا"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:887
+#: pretix/static/pretixcontrol/js/ui/main.js:865
 msgid "Click to close"
 msgstr "اضغط لاغلاق الصفحة"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:902
+#: pretix/static/pretixcontrol/js/ui/main.js:906
 msgid "You have unsaved changes!"
 msgstr "لم تقم بحفظ التعديلات!"
 
