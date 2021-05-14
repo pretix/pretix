@@ -5765,7 +5765,7 @@ msgstr ""
 "\n"
 "eine neue Rechnung für {event} wurde erstellt, siehe Anhang.\n"
 "\n"
-"Sie erhalten diese E-mail, da Sie dies in Ihren Veranstaltungs-Einstellungen "
+"Sie erhalten diese E-Mail, da Sie dies in Ihren Veranstaltungs-Einstellungen "
 "angegeben haben."
 
 #: pretix/base/services/mail.py:242
