@@ -6,7 +6,7 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('pretixbase', '0186_invoice_sent_to_organizer'),
+        ('pretixbase', '0187_normalize_salutation'),
     ]
 
     operations = [
