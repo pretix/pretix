@@ -478,7 +478,7 @@ td > .dl-horizontal {
     width: 30%;
 }
 
-.impersonate-warning {
+.impersonate-warning, .old-browser-warning {
     background-color: #ffe761;
     background-image: -webkit-linear-gradient(-45deg, rgba(0, 0, 0, .04) 25%, transparent 25%, transparent 50%, rgba(0, 0, 0, .04) 50%, rgba(0, 0, 0, .04) 75%, transparent 75%, transparent);
     background-image: -moz-linear-gradient(-45deg, rgba(0, 0, 0, .04) 25%, transparent 25%, transparent 50%, rgba(0, 0, 0, .04) 50%, rgba(0, 0, 0, .04) 75%, transparent 75%, transparent);
@@ -487,7 +487,7 @@ td > .dl-horizontal {
 }
 
 @media(min-width:768px) {
-    .impersonate-warning {
+    .impersonate-warning, .old-browser-warning {
         position: inherit;
         margin: 0 0 0 250px;
         padding: 15px 30px;

@@ -155,6 +155,8 @@ def _default_context(request):
         if not gs.settings.update_check_ack and 'runserver' not in sys.argv:
             ctx['warning_update_check_active'] = True
 
+    ctx['ie_deprecation_warning'] = 'MSIE' in request.headers['User-Agent'] or 'Trident/' in request.headers['User-Agent']
+
     if request.user.is_authenticated:
         ctx['staff_session'] = request.user.has_active_staff_session(request.session.session_key)
         ctx['staff_need_to_explain'] = (

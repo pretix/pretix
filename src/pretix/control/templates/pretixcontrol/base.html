@@ -318,6 +318,23 @@
                     </div>
                 </div>
             </nav>
+            {% if ie_deprecation_warning %}
+                <div class="old-browser-warning">
+                    <span class="fa fa-internet-explorer"></span>
+                    {% blocktrans trimmed %}
+                        We've detected that you are using <strong>Microsoft Internet Explorer</strong>.
+                    {% endblocktrans %}
+                    {% blocktrans trimmed %}
+                        Internet Explorer is an old browser that does not support lots of recent web-based
+                        technologies. While some features might already not work properly, we plan on no longer
+                        supporting Internet Explorer in our administrative backend in the next months.
+                    {% endblocktrans %}
+                    {% blocktrans trimmed %}
+                        We kindly ask you to move to one of our supported browsers, such as Microsoft Edge,
+                        Mozilla Firefox, Google Chrome, or Safari.
+                    {% endblocktrans %}
+                </div>
+            {% endif %}
             {% if staff_need_to_explain %}
                 <div class="impersonate-warning">
                     <span class="fa fa-id-card"></span>
