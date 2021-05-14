@@ -32,7 +32,9 @@ from django.db.models import Count
 from django.dispatch import receiver
 from django.template.loader import get_template
 from django.utils.timezone import now
-from django.utils.translation import get_language, gettext_lazy as _
+from django.utils.translation import (
+    get_language, gettext_lazy as _, pgettext_lazy,
+)
 from inlinestyler.utils import inline_css
 
 from pretix.base.i18n import (
@@ -550,16 +552,27 @@ def base_placeholders(sender, **kwargs):
     ]
 
     name_scheme = PERSON_NAME_SCHEMES[sender.settings.name_scheme]
+    if "concatenation_for_salutation" in name_scheme:
+        concatenation_for_salutation = name_scheme["concatenation_for_salutation"]
+    else:
+        concatenation_for_salutation = name_scheme["concatenation"]
+
+    ph.append(SimpleFunctionalMailTextPlaceholder(
+        "name_for_salutation", ["position_or_address"],
+        lambda position_or_address: concatenation_for_salutation(get_best_name(position_or_address, parts=True)),
+        _("Mr Doe"),
+    ))
+
     for f, l, w in name_scheme['fields']:
         if f == 'full_name':
             continue
         ph.append(SimpleFunctionalMailTextPlaceholder(
-            'attendee_name_%s' % f, ['position'], lambda position, f=f: position.attendee_name_parts.get(f, ''),
+            'attendee_name_%s' % f, ['position'], lambda position, f=f: get_name_parts_localized(position.attendee_name_parts, f),
             name_scheme['sample'][f]
         ))
         ph.append(SimpleFunctionalMailTextPlaceholder(
             'name_%s' % f, ['position_or_address'],
-            lambda position_or_address, f=f: get_best_name(position_or_address, parts=True).get(f, ''),
+            lambda position_or_address, f=f: get_name_parts_localized(get_best_name(position_or_address, parts=True), f),
             name_scheme['sample'][f]
         ))
 
@@ -570,3 +583,10 @@ def base_placeholders(sender, **kwargs):
         ))
 
     return ph
+
+
+def get_name_parts_localized(name_parts, key):
+    value = name_parts.get(key, "")
+    if key == "salutation":
+        return pgettext_lazy("person_name_salutation", value)
+    return value
