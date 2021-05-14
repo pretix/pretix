@@ -385,11 +385,21 @@ class CheckinListPositionViewSet(viewsets.ReadOnlyModelViewSet):
                     'barcode': self.kwargs['pk']
                 }, user=self.request.user, auth=self.request.auth)
 
+                for k, s in self.request.event.ticket_secret_generators.items():
+                    try:
+                        parsed = s.parse_secret(self.kwargs['pk'])
+                        common_checkin_args.update({
+                            'raw_item': parsed.item,
+                            'raw_variation': parsed.variation,
+                            'raw_subevent': parsed.subevent,
+                        })
+                    except:
+                        pass
+
                 Checkin.objects.create(
                     position=None,
                     successful=False,
                     error_reason=Checkin.REASON_INVALID,
-                    # TODO: raw_item, raw_variation, raw_subevent
                     **common_checkin_args,
                 )
 
