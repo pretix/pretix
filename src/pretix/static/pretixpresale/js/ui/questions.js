@@ -94,7 +94,7 @@ function questions_init_photos(el) {
             aspectRatio: 3 / 4,
             viewMode: 1,
             zoomable: false,
-            crop(event) {
+            crop: function (event) {
                 $container.find("input[type=hidden]").val(JSON.stringify(cropper.getData(true)));
             },
         });
