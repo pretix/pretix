@@ -381,9 +381,6 @@ def event_index(request, organizer, event):
         order__event=request.event
     ).exists()
 
-    for a in ctx['actions']:
-        a.display = a.display(request)
-
     ctx['timeline'] = [
         {
             'date': t.datetime.astimezone(request.event.timezone).date(),
