@@ -18,7 +18,7 @@ def normalize_salutations(apps, schema_editor):
         ("pretix_exhibitors", "Exhibitor", "contact_name_parts"),
     )
 
-    for salutation in PERSON_NAME_SALUTATIONS:
+    for salutation, value in PERSON_NAME_SALUTATIONS:
         salutations = []
         for lang in settings.LANGUAGES:
             with language(lang[0]):
