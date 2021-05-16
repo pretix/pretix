@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-05-13 08:11+0000\n"
-"PO-Revision-Date: 2021-05-13 20:00+0000\n"
+"PO-Revision-Date: 2021-05-16 21:00+0000\n"
 "Last-Translator: Mohamed Tawfiq <mtawfiq@wafyapp.com>\n"
 "Language-Team: Arabic <https://translate.pretix.eu/projects/pretix/pretix/ar/"
 ">\n"
@@ -3428,6 +3428,7 @@ msgid "Allow to sell more tickets once people have checked out"
 msgstr "السماح ببيع المزيد من التذاكر بمجرد قيام الأشخاص بتسجيل الخروج"
 
 #: pretix/base/models/items.py:1531
+#, fuzzy
 msgid ""
 "With this option, quota will be released as soon as people are scanned at an "
 "exit of your event. This will only happen if they have been scanned both at "
@@ -3436,12 +3437,17 @@ msgid ""
 "are ignored if they are set to \"Allow re-entering after an exit scan\" to "
 "prevent accidental overbooking."
 msgstr ""
+"باستخدام هذا الخيار ، سيتم إطلاق الحصة بمجرد فحص الأشخاص عند الخروج من "
+"الفعالية الخاص بك. لن يحدث هذا إلا إذا تم مسحهم ضوئيا عند الدخول والخروج "
+"وكان الخروج هو الفحص الأحدث. لا يهم أي قائمة تسجيل كانت قيد التشغيل، ولكن "
+"يتم تجاهل قوائم التسجيل إذا تم ضبطها على \"السماح بإعادة الدخول بعد فحص "
+"الخروج\" لمنع الحجز الزائد العرضي."
 
 #: pretix/base/models/items.py:1542 pretix/base/models/vouchers.py:212
 #: pretix/control/templates/pretixcontrol/items/quota_edit.html:8
 #: pretix/control/templates/pretixcontrol/items/quota_edit.html:15
 msgid "Quota"
-msgstr "كوتا"
+msgstr "حصة"
 
 #: pretix/base/models/items.py:1543 pretix/control/navigation.py:166
 #: pretix/control/templates/pretixcontrol/items/quotas.html:4
@@ -3454,23 +3460,24 @@ msgstr "الحصص"
 
 #: pretix/base/models/items.py:1611
 msgid "All variations must belong to an item contained in the items list."
-msgstr "ويجب على جميع الاختلافات تنتمي إلى عنصر الواردة في قائمة العناصر."
+msgstr "يجب أن تنتمي جميع التغيرات إلى عنصر موجود في قائمة العناصر."
 
 #: pretix/base/models/items.py:1620
 msgid ""
 "One or more items has variations but none of these are in the variations "
 "list."
 msgstr ""
-"واحد أو أكثر من العناصر لديها اختلافات ولكن أيا من هذه في قائمة الاختلافات."
+"يحتوي عنصر واحد أو أكثر على أشكال مختلفة ولكن لا يوجد أي منها في قائمة "
+"التغيرات."
 
 #: pretix/base/models/items.py:1626 pretix/base/models/waitinglist.py:205
 msgid "Subevent cannot be null for event series."
-msgstr "Subevent لا يمكن أن يكون لاغيا لسلسلة الحدث."
+msgstr "لا يمكن أن تكون الفعالية الفرعية فارغة لسلسلة الفعاليات."
 
 #: pretix/base/models/log.py:156
 #, python-brace-format
 msgid "Order {val}"
-msgstr "ترتيب {val}"
+msgstr "طلب {val}"
 
 #: pretix/base/models/log.py:166
 #, python-brace-format
@@ -3501,26 +3508,28 @@ msgstr "فئة {val}"
 #: pretix/base/models/log.py:216
 #, python-brace-format
 msgid "Question {val}"
-msgstr "سؤال {val}"
+msgstr "سؤال{val}"
 
 #: pretix/base/models/log.py:226
 #, python-brace-format
 msgid "Tax rule {val}"
-msgstr "حكم الضرائب {val}"
+msgstr "قاعدة الضريبة {val}"
 
 #: pretix/base/models/memberships.py:44
 msgid "Membership is transferable"
-msgstr ""
+msgstr "العضوية قابلة للتحويل"
 
 #: pretix/base/models/memberships.py:45
 msgid ""
 "If this is selected, the membership can be used to purchase tickets for "
 "multiple persons. If not, the attendee name always needs to stay the same."
 msgstr ""
+"إذا تم تحديد ذلك ، يمكن استخدام العضوية لشراء تذاكر لأشخاص متعددين. إذا لم "
+"يكن الأمر كذلك ، فيجب أن يظل اسم الحاضر كما هو."
 
 #: pretix/base/models/memberships.py:50
 msgid "Parallel usage is allowed"
-msgstr ""
+msgstr "يسمح بالاستخدام الموازي"
 
 #: pretix/base/models/memberships.py:51
 msgid ""
@@ -3528,31 +3537,30 @@ msgid ""
 "events happening at the same time. Note that this will only check for an "
 "identical start time of the events, not for any overlap between events."
 msgstr ""
+"إذا تم تحديد ذلك ، يمكن استخدام العضوية لشراء تذاكر الفعاليات التي تحدث في "
+"نفس الوقت. لاحظ أن هذا سيتحقق فقط من وقت بدء متطابق للفعاليات ، وليس أي "
+"تداخل بين الفعاليات."
 
 #: pretix/base/models/memberships.py:56 pretix/base/models/vouchers.py:145
 #: pretix/control/views/vouchers.py:110
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:28
 msgid "Maximum usages"
-msgstr "الأعراف القصوى"
+msgstr "الاستخدامات القصوى"
 
 #: pretix/base/models/memberships.py:57
-#, fuzzy
-#| msgid "Number of times this voucher can be redeemed."
 msgid "Number of times this membership can be used in a purchase."
-msgstr "عدد مرات هذا قسيمة يمكن استبدالها."
+msgstr "عدد المرات التي يمكن فيها استخدام هذه العضوية في الشراء."
 
 #: pretix/base/models/memberships.py:124
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:71
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:20
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:49
-#, fuzzy
-#| msgid "Members"
 msgid "Membership type"
-msgstr "أفراد"
+msgstr "نوع العضوية"
 
 #: pretix/base/models/orders.py:158
 msgid "pending"
-msgstr "قيد الانتظار"
+msgstr "معلق"
 
 #: pretix/base/models/orders.py:159
 msgid "paid"
@@ -3564,14 +3572,11 @@ msgstr "منتهية الصلاحية"
 
 #: pretix/base/models/orders.py:161
 msgid "canceled"
-msgstr "ألغيت"
+msgstr "ملغى"
 
 #: pretix/base/models/orders.py:184 pretix/control/forms/orders.py:584
-#, fuzzy
-#| msgctxt "refund_source"
-#| msgid "Customer"
 msgid "Customer"
-msgstr "زبون"
+msgstr "عميل"
 
 #: pretix/base/models/orders.py:199 pretix/control/forms/filter.py:501
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:42
@@ -3594,7 +3599,8 @@ msgid ""
 "The text entered in this field will not be visible to the user and is "
 "available for your convenience."
 msgstr ""
-"فإن النص الذي تم إدخاله في هذا المجال لا تكون مرئية للمستخدم ومتاح لراحتك."
+"لن يكون النص الذي تم إدخاله في هذا الحقل مرئيا للمستخدم وسيكون متاحا في "
+"الوقت المناسب لك."
 
 #: pretix/base/models/orders.py:223
 msgid ""
@@ -3603,9 +3609,9 @@ msgid ""
 "custom message, so you need to brief your check-in staff how to handle these "
 "cases."
 msgstr ""
-"إذا قمت بتعيين هذا، فإن الاختيار في التطبيق تظهر تحذير واضحة على أن تذاكر "
-"هذا النظام تتطلب اهتماما خاصا. هذا لن تظهر أي تفاصيل أو رسالة مخصصة، لذلك "
-"تحتاج إلى إطلاع الخاص بك الاختيار في الموظفين كيفية التعامل مع هذه الحالات."
+"إذا قمت بتحديد هذا ، فسيظهر تطبيق التسجيل تحذيرا مرئيا بأن تذاكر هذا الطلب "
+"تتطلب اهتماما خاصا. هذا لن يظهر أي تفاصيل أو رسالة مخصصة، لذلك تحتاج إلى "
+"إطلاع موظفي التسجيل على كيفية التعامل مع هذه الحالات."
 
 #: pretix/base/models/orders.py:235 pretix/base/models/orders.py:1210
 msgid "Meta information"
@@ -3616,40 +3622,40 @@ msgid ""
 "The payment can not be accepted as the last date of payments configured in "
 "the payment settings is over."
 msgstr ""
-"دفع لا يمكن قبوله كتاريخ الأخير من المدفوعات التي تم تكوينها في إعدادات "
-"الدفع قد انتهى."
+"لا يمكن قبول الدفع نظرا لانتهاء آخر تاريخ للدفعات التي تم تكوينها في إعدادات "
+"السداد."
 
 #: pretix/base/models/orders.py:814
 msgid ""
 "The payment can not be accepted as the order is expired and you configured "
 "that no late payments should be accepted in the payment settings."
 msgstr ""
-"دفع لا يمكن قبوله كما انتهت مدة صلاحية النظام وقمت بتكوين أن عدم التأخر في "
-"السداد ينبغي قبول في إعدادات الدفع."
+"لا يمكن قبول الدفع نظرا لانتهاء صلاحية الطلب وتهيئة عدم قبول المدفوعات "
+"المتأخرة في إعدادات السداد."
 
 #: pretix/base/models/orders.py:816
 msgid "This order is not yet approved by the event organizer."
-msgstr "لم تتم الموافقة على هذا النظام بعد من قبل منظم الحدث."
+msgstr "لم تتم الموافقة على هذا الطلب بعد من قبل منظم الفعالية."
 
 #: pretix/base/models/orders.py:840
 #, python-brace-format
 msgid "The ordered product \"{item}\" is no longer available."
-msgstr "المنتج أمر \"{item}\" تتوفر لم تعد."
+msgstr "المنتج المطلوب \"{item}\" لم يعد متاحا."
 
 #: pretix/base/models/orders.py:841
 #, python-brace-format
 msgid "The seat \"{seat}\" is no longer available."
-msgstr "المقعد \"{seat}\" تتوفر لم تعد."
+msgstr "المقعد \"{seat}\" لم يعد متاحا."
 
 #: pretix/base/models/orders.py:842
 #, python-brace-format
 msgid "The voucher \"{voucher}\" no longer has sufficient budget."
-msgstr ""
+msgstr "القسيمة \"{voucher}\" لم تعد بها ميزانية كافية."
 
 #: pretix/base/models/orders.py:843
 #, python-brace-format
 msgid "The voucher \"{voucher}\" has been used in the meantime."
-msgstr "القسيمة \"{voucher}\" استخدمت في هذه الأثناء."
+msgstr "القسيمة \"{voucher}\" تم استخدامها في هذه الأثناء."
 
 #: pretix/base/models/orders.py:977 pretix/base/services/orders.py:913
 #: pretix/control/views/event.py:736
@@ -3664,7 +3670,7 @@ msgstr "<ملف>"
 
 #: pretix/base/models/orders.py:1190 pretix/base/models/orders.py:1198
 msgid "Empty, if this product is not an admission ticket"
-msgstr "تفريغ، إذا كان هذا المنتج ليس تذكرة الدخول"
+msgstr "فارغ ، إذا لم يكن هذا المنتج تذكرة دخول"
 
 #: pretix/base/models/orders.py:1217 pretix/base/models/orders.py:2313
 #: pretix/base/settings.py:735
@@ -3677,9 +3683,10 @@ msgid "Select country"
 msgstr "حدد الدولة"
 
 #: pretix/base/models/orders.py:1382
+#, fuzzy
 msgctxt "payment_state"
 msgid "created"
-msgstr "خلقت"
+msgstr "تم إنشاؤها"
 
 #: pretix/base/models/orders.py:1383
 msgctxt "payment_state"
@@ -3689,7 +3696,7 @@ msgstr "قيد الانتظار"
 #: pretix/base/models/orders.py:1384
 msgctxt "payment_state"
 msgid "confirmed"
-msgstr "تم تأكيد"
+msgstr "تم التأكيد"
 
 #: pretix/base/models/orders.py:1385
 msgctxt "payment_state"
@@ -3704,7 +3711,7 @@ msgstr "فشل"
 #: pretix/base/models/orders.py:1387
 msgctxt "payment_state"
 msgid "refunded"
-msgstr "ردها"
+msgstr "تم الاسترداد"
 
 #: pretix/base/models/orders.py:1415 pretix/base/models/orders.py:1797
 #: pretix/base/shredder.py:435
@@ -3714,7 +3721,7 @@ msgstr "معلومات الدفع"
 #: pretix/base/models/orders.py:1610
 #, python-format
 msgid "Event registration confirmed: %(code)s"
-msgstr "تم تأكيد تسجيل الإيفينت: %(code)s"
+msgstr "تم تأكيد تسجيل الفعالية: %(code)s"
 
 #: pretix/base/models/orders.py:1628
 #, python-format
@@ -3722,19 +3729,21 @@ msgid "Payment received for your order: %(code)s"
 msgstr "تم إستلام الدفع لطلبك: %(code)s"
 
 #: pretix/base/models/orders.py:1738
+#, fuzzy
 msgctxt "refund_state"
 msgid "started externally"
-msgstr "التي خارجيا"
+msgstr "بدأت من الخارج"
 
 #: pretix/base/models/orders.py:1739
 msgctxt "refund_state"
 msgid "created"
-msgstr "خلقت"
+msgstr "تم الإنشاء"
 
 #: pretix/base/models/orders.py:1740
+#, fuzzy
 msgctxt "refund_state"
 msgid "in transit"
-msgstr "في مرحلة انتقالية"
+msgstr "قيد الإرسال"
 
 #: pretix/base/models/orders.py:1741
 msgctxt "refund_state"
@@ -3768,10 +3777,8 @@ msgstr "خارجي"
 
 #: pretix/base/models/orders.py:1792
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:196
-#, fuzzy
-#| msgid "Refund only"
 msgid "Refund reason"
-msgstr "برد فقط"
+msgstr "سبب استرداد الأموال"
 
 #: pretix/base/models/orders.py:1793
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:197
@@ -3779,10 +3786,12 @@ msgstr "برد فقط"
 msgid ""
 "May be shown to the end user or used e.g. as part of a payment reference."
 msgstr ""
+"قد يتم عرضها للمستخدم النهائي أو استخدامها على سبيل المثال كجزء من مرجع "
+"السداد."
 
 #: pretix/base/models/orders.py:1903
 msgid "Payment fee"
-msgstr "دفع الرسوم"
+msgstr "رسوم السداد"
 
 #: pretix/base/models/orders.py:1904
 msgid "Shipping fee"
@@ -3805,43 +3814,46 @@ msgstr "رسوم أخرى"
 #: pretix/control/templates/pretixcontrol/items/index.html:84
 #: pretix/control/templates/pretixcontrol/order/index.html:133
 msgid "Gift card"
-msgstr "كرت هدية"
+msgstr "بطاقة هدايا"
 
 #: pretix/base/models/orders.py:1913
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:65
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:103
 #: pretix/control/views/vouchers.py:110
 msgid "Value"
-msgstr "القيمة"
+msgstr "قيمة"
 
 #: pretix/base/models/orders.py:2052
 msgid "Order position"
-msgstr "موقف ترتيب"
+msgstr "وضعية الطلب"
 
 #: pretix/base/models/orders.py:2233 pretix/base/services/orders.py:928
 #, python-format
 msgid "Your event registration: %(code)s"
-msgstr "تسجيلك للإيفينت: %(code)s"
+msgstr "تسجيل الفعالية الخاصة بك:%(code)s"
 
 #: pretix/base/models/orders.py:2262
+#, fuzzy
 msgid "Cart ID (e.g. session key)"
-msgstr "ID العربة (مثل مفتاح جلسة)"
+msgstr "معرف سلة التسوق (مثل مفتاح الجلسة)"
 
 #: pretix/base/models/orders.py:2284
+#, fuzzy
 msgid "Cart position"
-msgstr "موقف العربة"
+msgstr "وضعية سلة التسوق"
 
 #: pretix/base/models/orders.py:2285
+#, fuzzy
 msgid "Cart positions"
-msgstr "مواقف العربة"
+msgstr "وضعيات سلة التسوق"
 
 #: pretix/base/models/orders.py:2324
 msgid "Only for business customers within the EU."
-msgstr "فقط للعملاء من الشركات داخل الاتحاد الأوروبي."
+msgstr "فقط لعملاء الشركة داخل الاتحاد الأوروبي."
 
 #: pretix/base/models/orders.py:2329
 msgid "This reference will be printed on your invoice for your convenience."
-msgstr "سيتم طباعة هذا المرجع على الفاتورة لراحتك."
+msgstr "ستتم طباعة هذا المرجع على فاتورتك ليناسبك."
 
 #: pretix/base/models/organizer.py:75
 msgid ""
@@ -3849,9 +3861,9 @@ msgid ""
 "Every slug can only be used once. This is being used in URLs to refer to "
 "your organizer accounts and your events."
 msgstr ""
-"يجب أن تكون قصيرة، تحتوي فقط على الحروف الصغيرة والأرقام والنقاط، وشرطات. كل "
-"سبيكة يمكن استخدامها مرة واحدة فقط. وتستخدم هذه في عناوين URL للإشارة إلى "
-"حسابات منظم والأحداث الخاصة بك."
+"يجب أن يكون قصيرا، يحتوي فقط على الحروف الصغيرة والأرقام والنقاط، والشرطات. "
+"كل رابط يمكن استخدامه مرة واحدة فقط. ويستخدم هذا في عناوين الروابط للإشارة "
+"إلى منظم الحسابات والفعاليات الخاصة بك."
 
 #: pretix/base/models/organizer.py:92 pretix/control/forms/event.py:98
 #: pretix/control/forms/event.py:104 pretix/control/forms/filter.py:714
@@ -3882,29 +3894,27 @@ msgstr "أعضاء الفريق"
 
 #: pretix/base/models/organizer.py:252
 msgid "Can create events"
-msgstr "يمكن إنشاء أحداث"
+msgstr "يمكن إنشاء فعاليات"
 
 #: pretix/base/models/organizer.py:256
 msgid "Can change teams and permissions"
-msgstr "يمكن تغيير الفرق وأذونات"
+msgstr "يمكن تغيير الفرق والتصاريح"
 
 #: pretix/base/models/organizer.py:260
 msgid "Can change organizer settings"
-msgstr "يمكن تغيير إعدادات منظم"
+msgstr "يمكن تغيير إعدادات المنظم"
 
 #: pretix/base/models/organizer.py:261
 msgid ""
 "Someone with this setting can get access to most data of all of your events, "
 "i.e. via privacy reports, so be careful who you add to this team!"
 msgstr ""
-"شخص ما مع هذا الإعداد يمكن الحصول على معظم البيانات من جميع الأحداث الخاصة "
-"بك، أي عن طريق تقارير الخصوصية، لذا كن حذرا الذي تضيفها إلى هذا الفريق!"
+"يمكن لأي شخص لديه هذا الإعداد الوصول إلى معظم البيانات لجميع الفعاليات‏ "
+"الخاصة بك ، أي عبر تقارير الخصوصية ، لذا كن حذرا مع من تضيفه إلى هذا الفريق!"
 
 #: pretix/base/models/organizer.py:266
-#, fuzzy
-#| msgid "Internal comment"
 msgid "Can manage customer accounts"
-msgstr "تعليق الداخلي"
+msgstr "يمكن إدارة حسابات العملاء"
 
 #: pretix/base/models/organizer.py:270
 msgid "Can manage gift cards"
@@ -3912,7 +3922,7 @@ msgstr "يمكن إدارة بطاقات الهدايا"
 
 #: pretix/base/models/organizer.py:274
 msgid "Can change event settings"
-msgstr "يمكن تغيير إعدادات الحدث"
+msgstr "يمكن تغيير إعدادات الفعالية"
 
 #: pretix/base/models/organizer.py:278
 msgid "Can change product settings"
@@ -3920,17 +3930,15 @@ msgstr "يمكن تغيير إعدادات المنتج"
 
 #: pretix/base/models/organizer.py:282
 msgid "Can view orders"
-msgstr "يمكن عرض أوامر"
+msgstr "يمكن عرض الطلبات"
 
 #: pretix/base/models/organizer.py:286
 msgid "Can change orders"
-msgstr "يمكن تغيير أوامر"
+msgstr "يمكن تغيير الطلبات"
 
 #: pretix/base/models/organizer.py:290
-#, fuzzy
-#| msgid "Perform update checks"
 msgid "Can perform check-ins"
-msgstr "تنفيذ اختبارات التحديث"
+msgstr "يمكن إجراء عمليات التسجيل"
 
 #: pretix/base/models/organizer.py:291
 msgid ""
@@ -3938,24 +3946,27 @@ msgid ""
 "information about attendees. Users with \"can change orders\" can also "
 "perform check-ins."
 msgstr ""
+"هذا يشمل البحث عن الحاضرين ، والتي يمكن استخدامها للحصول على معلومات شخصية "
+"عن الحضور. يمكن للمستخدمين الذين لديهم خاصية \"يمكن تغيير الطلبات\" إجراء "
+"عمليات التسجيل."
 
 #: pretix/base/models/organizer.py:296
 msgid "Can view vouchers"
-msgstr "يمكن عرض قسائم"
+msgstr "يمكن عرض القسائم"
 
 #: pretix/base/models/organizer.py:300
 msgid "Can change vouchers"
-msgstr "يمكن تغيير قسائم"
+msgstr "يمكن تغيير القسائم"
 
 #: pretix/base/models/organizer.py:304
 #, python-format
 msgid "%(name)s on %(object)s"
-msgstr "%(name)s علي %(object)s"
+msgstr "%(name)s على %(object)s"
 
 #: pretix/base/models/organizer.py:336
 #: pretix/control/templates/pretixcontrol/events/create_basics.html:61
 msgid "Team"
-msgstr "الفريق"
+msgstr "فريق"
 
 #: pretix/base/models/organizer.py:337 pretix/control/navigation.py:483
 #: pretix/control/templates/pretixcontrol/organizers/teams.html:6
@@ -3968,12 +3979,14 @@ msgid "Invite to team '{team}' for '{email}'"
 msgstr "دعوة إلى فريق '{team}' ل '{email}'"
 
 #: pretix/base/models/seating.py:45
+#, fuzzy
 msgid "Your layout file is not a valid JSON file."
-msgstr "ملف التخطيط الخاص بك ليس ملف JSON صالح."
+msgstr "ملف التخطيط الخاص بك ليس ملفا \"ترميز باستعمال جافا سكريبت\" صالح."
 
 #: pretix/base/models/seating.py:54
+#, fuzzy
 msgid "Your layout file is not a valid seating plan. Error message: {}"
-msgstr "ملف تخطيط ليست خطة جلوس صالحة. رسالة خطأ: {}"
+msgstr "ملف التخطيط الخاص بك ليس خطة جلوس صالحة. رسالة خطأ: {}"
 
 #: pretix/base/models/seating.py:175
 #, python-brace-format
@@ -3986,16 +3999,17 @@ msgid "Seat {number}"
 msgstr "مقعد {number}"
 
 #: pretix/base/models/tax.py:129
+#, fuzzy
 msgid "Should be short, e.g. \"VAT\""
-msgstr "يجب أن تكون قصيرة، على سبيل المثال \"ضريبة القيمة المضافة\""
+msgstr "يجب أن يكون قصيرا، على سبيل المثال \"ض ق م\" ضريبة القيمة المضافة"
 
 #: pretix/base/models/tax.py:138
 msgid "The configured product prices include the tax amount"
-msgstr "وتشمل أسعار المنتجات تكوين مبلغ الضريبة"
+msgstr "أسعار المنتج تتضمن مبلغ الضريبة"
 
 #: pretix/base/models/tax.py:142
 msgid "Use EU reverse charge taxation rules"
-msgstr "قواعد الضرائب تهمة العكسي استخدام EU"
+msgstr "استخدم قواعد الضرائب العكسية في الاتحاد الأوروبي"
 
 #: pretix/base/models/tax.py:144
 msgid ""
