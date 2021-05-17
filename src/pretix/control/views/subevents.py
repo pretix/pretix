@@ -1281,7 +1281,12 @@ class SubEventBulkEdit(SubEventQueryMixin, EventPermissionRequiredMixin, FormVie
 
         quotas_by_subevent = defaultdict(set)
         for q in all_quotas:
-            quotas_by_subevent[q.pop('subevent')].add(q)
+            if q['item_list']:
+                q['item_list'] = ",".join(sorted(q['item_list'].split(',')))
+            if q['var_list']:
+                q['var_list'] = ",".join(sorted(q['var_list'].split(',')))
+            qdata = tuple(q[k] for k in sorted(q.keys()) if k != 'subevent')
+            quotas_by_subevent[q['subevent']].add(qdata)
 
         prev = None
         for se in self.get_queryset():
