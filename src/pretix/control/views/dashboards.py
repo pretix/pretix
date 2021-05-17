@@ -39,8 +39,7 @@ import pytz
 from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
 from django.db.models import (
-    Count, Exists, IntegerField, Max, Min, OuterRef, Prefetch, Q, Subquery,
-    Sum,
+    Count, IntegerField, Max, Min, OuterRef, Prefetch, Q, Subquery, Sum,
 )
 from django.db.models.functions import Coalesce, Greatest
 from django.dispatch import receiver
@@ -57,7 +56,7 @@ from django.utils.translation import gettext_lazy as _, pgettext, ungettext
 from pretix.base.decimal import round_decimal
 from pretix.base.models import (
     Item, ItemCategory, ItemVariation, Order, OrderPosition, OrderRefund,
-    Question, Quota, RequiredAction, SubEvent, Voucher, WaitingListEntry,
+    Question, Quota, SubEvent, Voucher, WaitingListEntry,
 )
 from pretix.base.services.quotas import QuotaAvailability
 from pretix.base.timeline import timeline_for_event
@@ -349,8 +348,6 @@ def event_index(request, organizer, event):
 
     can_view_orders = request.user.has_event_permission(request.organizer, request.event, 'can_view_orders',
                                                         request=request)
-    can_change_orders = request.user.has_event_permission(request.organizer, request.event, 'can_change_orders',
-                                                          request=request)
     can_change_event_settings = request.user.has_event_permission(request.organizer, request.event,
                                                                   'can_change_event_settings', request=request)
 
@@ -359,12 +356,9 @@ def event_index(request, organizer, event):
         for r, result in event_dashboard_widgets.send(sender=request.event, subevent=subevent, lazy=True):
             widgets.extend(result)
 
-    a_qs = request.event.requiredaction_set.filter(done=False)
-
     ctx = {
         'widgets': rearrange(widgets),
         'subevent': subevent,
-        'actions': a_qs[:5] if can_change_orders else [],
         'comment_form': CommentForm(initial={'comment': request.event.comment}, readonly=not can_change_event_settings),
     }
 
@@ -386,9 +380,6 @@ def event_index(request, organizer, event):
     ctx['has_cancellation_requests'] = can_view_orders and CancellationRequest.objects.filter(
         order__event=request.event
     ).exists()
-
-    for a in ctx['actions']:
-        a.display = a.display(request)
 
     ctx['timeline'] = [
         {
@@ -470,15 +461,10 @@ def annotated_event_query(request, lazy=False):
         'c'
     )
 
-    required_actions = RequiredAction.objects.filter(
-        event=OuterRef('pk'),
-        done=False
-    )
     qs = request.user.get_events_with_any_permission(request)
     if not lazy:
         qs = qs.annotate(
             order_count=Subquery(active_orders, output_field=IntegerField()),
-            has_ra=Exists(required_actions)
         )
     qs = qs.annotate(
         min_from=Min('subevents__date_from'),
@@ -539,9 +525,7 @@ def widgets_for_event_qs(request, qs, user, nmax, lazy=False):
                 else:
                     dr = date_format(event.date_from.astimezone(tz), "DATE_FORMAT")
 
-            if event.has_ra:
-                status = ('danger', _('Action required'))
-            elif not event.live:
+            if not event.live:
                 status = ('warning', _('Shop disabled'))
             elif event.presale_has_ended:
                 status = ('default', _('Sale over'))

@@ -340,7 +340,6 @@ event_permission_urls = [
     ("can_view_orders", "orders/FOO/answer/5/", 404),
     ("can_change_orders", "cancel/", 200),
     ("can_change_vouchers", "vouchers/add", 200),
-    ("can_change_orders", "requiredactions/", 200),
     ("can_change_vouchers", "vouchers/bulk_add", 200),
     ("can_view_vouchers", "vouchers/", 200),
     ("can_view_vouchers", "vouchers/tags/", 200),

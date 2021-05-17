@@ -27,7 +27,7 @@ from .customers import Customer
 from .devices import Device, Gate
 from .event import (
     Event, Event_SettingsStore, EventLock, EventMetaProperty, EventMetaValue,
-    RequiredAction, SubEvent, SubEventMetaValue, generate_invite_token,
+    SubEvent, SubEventMetaValue, generate_invite_token,
 )
 from .giftcards import GiftCard, GiftCardAcceptance, GiftCardTransaction
 from .invoices import Invoice, InvoiceLine, invoice_filename

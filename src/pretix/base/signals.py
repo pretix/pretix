@@ -502,16 +502,7 @@ As with all event-plugin signals, the ``sender`` keyword argument will contain t
 
 requiredaction_display = EventPluginSignal()
 """
-Arguments: ``action``, ``request``
-
-To display an instance of the ``RequiredAction`` model to a human user,
-``pretix.base.signals.requiredaction_display`` will be sent out with a ``action`` argument.
-You will also get the current ``request`` in a different argument.
-
-The first received response that is not ``None`` will be used to display the log entry
-to the user. The receivers are expected to return HTML code.
-
-As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
+**DEPRECATED**, will no longer be called.
 """
 
 event_copy_data = EventPluginSignal()
