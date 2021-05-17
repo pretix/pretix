@@ -264,7 +264,7 @@ class EventSerializer(I18nAwareModelSerializer):
     def ignored_meta_properties(self):
         perm_holder = (self.context['request'].auth if isinstance(self.context['request'].auth, (Device, TeamAPIToken))
                        else self.context['request'].user)
-        if perm_holder.has_organizer_permission('can_change_organizer_settings', request=self.context['request']):
+        if perm_holder.has_organizer_permission(self.context['request'].organizer, 'can_change_organizer_settings', request=self.context['request']):
             return []
         return [k for k, p in self.meta_properties.items() if p.protected]
 
@@ -504,7 +504,7 @@ class SubEventSerializer(I18nAwareModelSerializer):
     def ignored_meta_properties(self):
         perm_holder = (self.context['request'].auth if isinstance(self.context['request'].auth, (Device, TeamAPIToken))
                        else self.context['request'].user)
-        if perm_holder.has_organizer_permission('can_change_organizer_settings', request=self.context['request']):
+        if perm_holder.has_organizer_permission(self.context['request'].organizer, 'can_change_organizer_settings', request=self.context['request']):
             return []
         return [k for k, p in self.meta_properties.items() if p.protected]
 
