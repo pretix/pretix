@@ -1274,14 +1274,14 @@ class SubEventBulkEdit(SubEventQueryMixin, EventPermissionRequiredMixin, FormVie
             *(f.name for f in Quota._meta.fields if f.name not in (
                 'id', 'event', 'items', 'variations', 'closed',
             ))
-        ).order_by('subevent_id')
+        ).order_by('subevent_id', 'id')
 
         if not all_quotas:
             return Quota.objects.none()
 
-        quotas_by_subevent = defaultdict(list)
+        quotas_by_subevent = defaultdict(set)
         for q in all_quotas:
-            quotas_by_subevent[q.pop('subevent')].append(q)
+            quotas_by_subevent[q.pop('subevent')].add(q)
 
         prev = None
         for se in self.get_queryset():
