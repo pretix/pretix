@@ -46,7 +46,7 @@ Here is the currently recommended set of commands::
         ON pretixbase_order
         USING gin (upper("comment") gin_trgm_ops);
     CREATE INDEX CONCURRENTLY pretix_addidx_order_event_date
-        ON public.pretixbase_order (event_id, datetime DESC);
+        ON public.pretixbase_order (event_id, datetime);
     CREATE INDEX CONCURRENTLY pretix_addidx_orderpos_name
         ON pretixbase_orderposition
         USING gin (upper("attendee_name_cached") gin_trgm_ops);
