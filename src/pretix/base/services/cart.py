@@ -842,8 +842,12 @@ class CartManager:
         for op in self._operations:
             if isinstance(op, self.AddOperation):
                 items[op.item] += op.count
+                for bo in op.bundled:
+                    items[bo.item] += bo.count
             elif isinstance(op, self.RemoveOperation):
                 items[op.position.item] -= 1
+                for a in op.position.addons.all():
+                    items[a.item] -= 1
 
         err = None
         for item, count in items.items():
