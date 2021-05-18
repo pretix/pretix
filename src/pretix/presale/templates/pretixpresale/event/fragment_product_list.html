@@ -17,10 +17,8 @@
         {% endif %}
         {% for item in tup.1 %}
             {% if item.has_variations %}
-                <article class="item-with-variations">
-                <details {% if event.settings.show_variations_expanded %}open{% endif %}
-                        id="item-{{ item.id }}">
-                    <summary class="row product-row headline">
+                <article class="item-with-variations{% if event.settings.show_variations_expanded %} details-open{% endif %}" id="item-{{ item.id }}" role="group" aria-labelledby="item-{{ item.id }}-legend">
+                    <div class="row product-row headline">
                         <div class="col-md-8 col-xs-12">
                             {% if item.picture %}
                                 <a href="{{ item.picture.url }}" class="productpicture"
@@ -33,11 +31,7 @@
                                 </a>
                             {% endif %}
                             <div class="product-description {% if item.picture %}with-picture{% endif %}">
-                                <h4>
-                                    <a data-toggle="variations">
-                                        {{ item.name }}
-                                    </a>
-                                </h4>
+                                <h4 id="item-{{ item.id }}-legend">{{ item.name }}</h4>
                                 {% if item.description %}
                                     <div class="product-description">
                                         {{ item.description|localize|rich_text }}
@@ -88,13 +82,16 @@
                                     {% endif %}
                                     <br>
                                 {% endif %}
-                                <a data-toggle="variations" class="js-only">
+                                <button type="button" data-toggle="variations" class="btn btn-link js-only"
+                                    data-label-alt="{% trans "Hide variants" %}"
+                                    data-aria-label-alt="{% blocktrans trimmed with item=item.name %}Hide variants of {{ item }}{% endblocktrans %}"
+                                    aria-label="{% blocktrans trimmed with item=item.name %}Show variants of {{ item }}{% endblocktrans %}">
                                     {% trans "Show variants" %}
-                                </a>
+                                </button>
                             {% endif %}
                         </div>
                         <div class="clearfix"></div>
-                    </summary>
+                    </div>
                     <div class="variations {% if not event.settings.show_variations_expanded %}variations-collapsed{% endif %}">
                         {% for var in item.available_variations %}
                             <article class="row product-row variation">
@@ -177,7 +174,7 @@
                                                        {% if not ev.presale_is_running %}disabled{% endif %}
                                                        id="variation_{{ item.id }}_{{ var.id }}"
                                                        name="variation_{{ item.id }}_{{ var.id }}"
-                                                       title="{% blocktrans with item=item.name var=var.name %}Amount of {{ item }} – {{ var }} to order{% endblocktrans %}">
+                                                       title="{% blocktrans with item=item.name var=var.name %}Do you want to order {{ item }}, {{ var }}?{% endblocktrans %}">
                                             </label>
                                         {% else %}
                                             <input type="number" class="form-control input-item-count" placeholder="0" min="0"
@@ -185,7 +182,8 @@
                                                    max="{{ var.order_max }}"
                                                    pattern="\d*"
                                                    id="variation_{{ item.id }}_{{ var.id }}"
-                                                   name="variation_{{ item.id }}_{{ var.id }}">
+                                                   name="variation_{{ item.id }}_{{ var.id }}"
+                                                   aria-label="{% blocktrans with item=item.name var=var.name %}Number of {{ item }}, {{ var }} to order{% endblocktrans %}">
                                         {% endif %}
                                     </div>
                                 {% else %}
@@ -195,7 +193,6 @@
                             </article>
                         {% endfor %}
                     </div>
-                </details>
                 </article>
             {% else %}
                 <article class="row product-row simple" id="item-{{ item.id }}">
