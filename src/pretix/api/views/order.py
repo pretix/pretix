@@ -27,7 +27,7 @@ from decimal import Decimal
 import django_filters
 import pytz
 from django.db import transaction
-from django.db.models import Exists, F, OuterRef, Prefetch, Q
+from django.db.models import Exists, F, OuterRef, Prefetch, Q, Subquery
 from django.db.models.functions import Coalesce, Concat
 from django.http import FileResponse, HttpResponse
 from django.shortcuts import get_object_or_404
@@ -97,30 +97,31 @@ with scopes_disabled():
             model = Order
             fields = ['code', 'status', 'email', 'locale', 'testmode', 'require_approval']
 
+        @scopes_disabled()
         def subevent_after_qs(self, qs, name, value):
-            qs = qs.annotate(
-                has_se_after=Exists(
+            qs = qs.filter(
+                pk__in=Subquery(
                     OrderPosition.all.filter(
                         subevent_id__in=SubEvent.objects.filter(
-                            Q(date_to__gt=value) | Q(date_from__gt=value, date_to__isnull=True), event=OuterRef(OuterRef('event_id'))
+                            Q(date_to__gt=value) | Q(date_from__gt=value, date_to__isnull=True),
+                            event=self.request.event
                         ).values_list('id'),
-                        order_id=OuterRef('pk'),
-                    )
+                    ).values_list('id')
                 )
-            ).filter(has_se_after=True)
+            )
             return qs
 
         def subevent_before_qs(self, qs, name, value):
-            qs = qs.annotate(
-                has_se_before=Exists(
+            qs = qs.filter(
+                pk__in=Subquery(
                     OrderPosition.all.filter(
                         subevent_id__in=SubEvent.objects.filter(
-                            Q(date_from__lt=value), event=OuterRef(OuterRef('event_id'))
+                            Q(date_from__lt=value),
+                            event=self.request.event
                         ).values_list('id'),
-                        order_id=OuterRef('pk'),
-                    )
+                    ).values_list('id')
                 )
-            ).filter(has_se_before=True)
+            )
             return qs
 
         def search_qs(self, qs, name, value):
