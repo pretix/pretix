@@ -723,6 +723,7 @@ if config.has_option('sentry', 'dsn') and not any(c in sys.argv for c in ('shell
                 event_level=logging.CRITICAL
             )
         ],
+        traces_sample_rate=config.getfloat('sentry', 'traces_sample_rate', fallback=0.0),
         environment=urlparse(SITE_URL).netloc,
         release=__version__,
         send_default_pii=False,
