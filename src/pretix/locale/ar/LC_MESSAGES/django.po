@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-05-13 08:11+0000\n"
-"PO-Revision-Date: 2021-05-18 07:09+0000\n"
+"PO-Revision-Date: 2021-05-19 05:00+0000\n"
 "Last-Translator: Mohamed Tawfiq <mtawfiq@wafyapp.com>\n"
 "Language-Team: Arabic <https://translate.pretix.eu/projects/pretix/pretix/ar/"
 ">\n"
@@ -4632,17 +4632,16 @@ msgstr "تم تحديد خيار غامض."
 
 #: pretix/base/payment.py:266
 msgid "Enable payment method"
-msgstr "تمكين طريقة الدفع"
+msgstr "تفعيل طريقة الدفع"
 
 #: pretix/base/payment.py:272
 msgid ""
 "Users will not be able to choose this payment provider after the given date."
-msgstr ""
-"المستخدمين لن تكون قادرة على اختيار هذا مزود خدمة الدفع بعد تاريخ معين."
+msgstr "لن يتمكن المستخدمون من اختيار مزود خدمة الدفع هذا بعد التاريخ المحدد."
 
 #: pretix/base/payment.py:277
 msgid "Text on invoices"
-msgstr "النص على الفواتير"
+msgstr "نص على الفواتير"
 
 #: pretix/base/payment.py:278
 msgid ""
@@ -4651,13 +4650,13 @@ msgid ""
 "order is paid. If the invoice is generated later, it will show a text "
 "stating that it has already been paid."
 msgstr ""
-"سيتم طباعة أقل بقليل من أرقام دفع وفوق النص الختامي على الفواتير. سيتم فقط "
-"استخدام هذا إذا تم إنشاء الفاتورة قبل دفع النظام. إذا تم إنشاء الفاتورة في "
-"وقت لاحق، وسوف تظهر نص يفيد أن قد تم دفعها."
+"ستتم طباعتها أسفل أرقام الدفع مباشرة وفوق النص الختامي للفواتير. لن يتم "
+"استخدام هذا إلا إذا تم إنشاء الفاتورة قبل سداد الطلب. في حال تم إنشاء "
+"الفاتورة لاحقا ، فستظهر نصا يفيد بأنه تم دفعها مسبقا."
 
 #: pretix/base/payment.py:287
 msgid "Minimum order total"
-msgstr "الحد الأدنى مجموع النظام"
+msgstr "الحد الأدنى من إجمالي الطلب"
 
 #: pretix/base/payment.py:288
 msgid ""
@@ -4665,13 +4664,13 @@ msgid ""
 "exceeds the given value. The order total for this purpose may be computed "
 "without taking the fees imposed by this payment method into account."
 msgstr ""
-"سيكون هذا المبلغ متاحا فقط إذا كان مجموع النظام هو يساوي أو يتجاوز قيمة "
-"معينة. يمكن احتساب اجمالي أجل هذا الغرض دون أخذ الرسوم التي تفرضها طريقة "
-"الدفع هذه في الاعتبار."
+"ستكون هذه الدفعة متاحة فقط إذا كان إجمالي الطلب يساوي أو يتجاوز القيمة "
+"المحددة. يمكن حساب إجمالي الطلب لهذا الغرض دون الأخذ في الاعتبار الرسوم "
+"المفروضة بواسطة طريقة الدفع هذه."
 
 #: pretix/base/payment.py:298
 msgid "Maximum order total"
-msgstr "الحد الأقصى مجموع النظام"
+msgstr "الحد الأقصى لإجمالي الطلب"
 
 #: pretix/base/payment.py:299
 msgid ""
@@ -4679,9 +4678,9 @@ msgid ""
 "the given value. The order total for this purpose may be computed without "
 "taking the fees imposed by this payment method into account."
 msgstr ""
-"سيكون هذا المبلغ متاحا فقط إذا كان مجموع النظام هو يساوي أو أقل من قيمة "
-"معينة. يمكن احتساب اجمالي أجل هذا الغرض دون أخذ الرسوم التي تفرضها طريقة "
-"الدفع هذه في الاعتبار."
+"ستكون هذه الدفعة متاحة فقط إذا كان إجمالي الطلب يساوي أو أقل من القيمة "
+"المحددة. يمكن حساب إجمالي الطلب لهذا الغرض دون الأخذ في الاعتبار الرسوم "
+"المفروضة بواسطة طريقة الدفع هذه."
 
 #: pretix/base/payment.py:309 pretix/base/payment.py:318
 msgid "Additional fee"
@@ -4693,11 +4692,11 @@ msgstr "قيمه مطلقه"
 
 #: pretix/base/payment.py:319
 msgid "Percentage of the order total."
-msgstr "النسبة المئوية من إجمالي الطلب."
+msgstr "النسبة المئوية للطلب الإجمالي."
 
 #: pretix/base/payment.py:325
 msgid "Calculate the fee from the total value including the fee."
-msgstr "حساب رسوم من القيمة الإجمالية بما في ذلك رسوم."
+msgstr "احسب الرسوم من القيمة الإجمالية بما في ذلك الرسوم."
 
 #: pretix/base/payment.py:326
 #, python-brace-format
@@ -4707,13 +4706,15 @@ msgid ""
 "\"noopener\">Click here for detailed information on what this does.</a> "
 "Don't forget to set the correct fees above!"
 msgstr ""
-"نوصي بتمكين هذا إذا كنت تريد من المستخدمين لديك دفع الرسوم مقدم خدمة الدفع "
-"الخاص بك. <a href=\"{docs_url}\" target=\"_blank\" rel=\"noopener\"> انقر "
-"هنا للحصول على معلومات مفصلة. </a> لا تنسى تحديد الرسوم الصحيحة أعلاه!"
+"نوصي بتمكين هذا إذا كنت تريد أن يدفع المستخدمون رسوم الدفع لمزود الدفع الخاص "
+"بك. <a href=\"{docs_url}\" target=\"_blank\" rel=\"noopener\"> انقر هنا "
+"للحصول على معلومات مفصلة حول ما يقوم به هذا. </a> لا تنس تحديد الرسوم "
+"الصحيحة أعلاه!"
 
 #: pretix/base/payment.py:334
+#, fuzzy
 msgid "Restrict to countries"
-msgstr "تقييد للبلدان"
+msgstr "قصر على البلدان"
 
 #: pretix/base/payment.py:336
 msgid ""
@@ -4721,58 +4722,53 @@ msgid ""
 "selected countries. If you don't select any country, all countries are "
 "allowed. This is only enabled if the invoice address is required."
 msgstr ""
-"فقط تسمح اختيار هذا مزود دفع لعناوين الفاتورة في بلدان مختارة. إذا لم تقم "
-"بتحديد أي بلد، يسمح لجميع البلدان. تم تمكين هذا فقط إذا مطلوب عنوان الفاتورة."
+"السماح فقط باختيار مزود الدفع هذا لعناوين الفواتير في البلدان المحددة. إذا "
+"لم تحدد أي بلد ، فسيسمح بجميع البلدان. يتم تمكين هذا فقط إذا كان عنوان "
+"الفاتورة مطلوبا."
 
 #: pretix/base/payment.py:355
-#, fuzzy
-#| msgid ""
-#| "Only allow the usage of this payment provider in the following sales "
-#| "channels"
 msgid ""
 "Only allow the usage of this payment provider in the selected sales channels."
-msgstr "إسمح بإستخدام مقدم المدفوعات هذا في القنوات التالية"
+msgstr "السماح باستخدام مزود الدفع هذا فقط في قنوات المبيعات المحددة."
 
 #: pretix/base/payment.py:359
-#, fuzzy
-#| msgid "Enable payment method"
 msgid "Hide payment method"
-msgstr "تمكين طريقة الدفع"
+msgstr "إخفاء طريقة الدفع"
 
 #: pretix/base/payment.py:362
 msgid ""
 "The payment method will not be shown by default but only to people who enter "
 "the shop through a special link."
 msgstr ""
+"لن يتم عرض طريقة الدفع بشكل افتراضي ولكن فقط للأشخاص الذين يدخلون إلى المتجر "
+"من خلال رابط خاص."
 
 #: pretix/base/payment.py:368
-#, fuzzy
-#| msgid "Enable payment method"
 msgid "Link to enable payment method"
-msgstr "تمكين طريقة الدفع"
+msgstr "رابط لتمكين طريقة الدفع"
 
 #: pretix/base/payment.py:377
 msgid "Share this link with customers who should use this payment method."
-msgstr ""
+msgstr "شارك هذا الرابط مع العملاء الذين يجب عليهم استخدام طريقة الدفع هذه."
 
 #: pretix/base/payment.py:410
 msgctxt "invoice"
 msgid "The payment for this invoice has already been received."
-msgstr "تم استلام المبلغ عن هذه الفاتورة بالفعل."
+msgstr "تم استلام دفعة هذه الفاتورة سابقا."
 
 #: pretix/base/payment.py:821
 msgid "Automatic refunds are not supported by this payment provider."
-msgstr "لا يتم اعتماد مبلغ معاد الأوتوماتيكية هذا المزود الدفع."
+msgstr "لا يدعم مزود الدفع هذا المبالغ المستردة التلقائية."
 
 #: pretix/base/payment.py:892
 msgid ""
 "No payment is required as this order only includes products which are free "
 "of charge."
-msgstr "جميع التذاكر في طلبك مجانية."
+msgstr "لا يلزم الدفع لأن هذا الطلب يشمل فقط المنتجات المجانية."
 
 #: pretix/base/payment.py:899
 msgid "Free of charge"
-msgstr "شحن مجاني"
+msgstr "معفي من الرسوم"
 
 #: pretix/base/payment.py:927
 msgid "Box office"
@@ -4789,44 +4785,44 @@ msgid ""
 "In test mode, you can just manually mark this order as paid in the backend "
 "after it has been created."
 msgstr ""
-"في وضع الاختبار، يمكنك فقط يدويا بمناسبة هذا النظام كما المدفوعة في الخلفية "
-"بعد أن تم إنشاؤه."
+"في وضع الاختبار ، يمكنك فقط تحديد هذا الطلب يدويا على أنه مدفوع في الخلفية "
+"بعد إنشائه."
 
 #: pretix/base/payment.py:995 pretix/plugins/banktransfer/payment.py:144
 msgid "Payment method name"
-msgstr "الدفع اسم الأسلوب"
+msgstr "اسم طريقة الدفع"
 
 #: pretix/base/payment.py:999
 msgid "Payment process description during checkout"
-msgstr "وصف عملية الدفع خلال الخروج"
+msgstr "وصف عملية الدفع أثناء تسجيل الخروج"
 
 #: pretix/base/payment.py:1000
 msgid ""
 "This text will be shown during checkout when the user selects this payment "
 "method. It should give a short explanation on this payment method."
 msgstr ""
-"سيتم عرض هذا النص في الخروج عندما يختار المستخدم طريقة الدفع هذه. وينبغي أن "
-"تعطي شرحا موجزا عن طريقة الدفع هذه."
+"سيظهر هذا النص أثناء تسجيل الخروج عندما يختار المستخدم طريقة الدفع هذه. يجب "
+"أن يقدم شرحا موجزا عن طريقة الدفع هذه."
 
 #: pretix/base/payment.py:1005
 msgid "Payment process description in order confirmation emails"
-msgstr "وصف عملية الدفع من أجل رسائل البريد الإلكتروني تأكيد"
+msgstr "وصف عملية الدفع في رسائل البريد الإلكتروني لتأكيد الطلب"
 
 #: pretix/base/payment.py:1006
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid ""
 "This text will be included for the {payment_info} placeholder in order "
 "confirmation mails. It should instruct the user on how to proceed with the "
 "payment. You can use the placeholders {order}, {amount}, {currency} and "
 "{amount_with_currency}."
 msgstr ""
-"سيتم تضمين هذا النص لغرض {payment_info} لعنصر النائب بهدف تأكير البريد. على "
-"أن يوجه المستخدم لكيفية الدفع. يمكنك استخدام عناصر النائب  {order}, "
-"{amount}, {currency} و{amount_with_currency}."
+"سيتم تضمين هذا النص لغرض {payment_info} العنصر في رسائل تأكيد الطلب. يجب أن "
+"يوجه المستخدم إلى كيفية متابعة الدفع. {order}, {amount}, {currency} "
+"و{amount_with_currency}."
 
 #: pretix/base/payment.py:1013
 msgid "Payment process description for pending orders"
-msgstr "وصف عملية الدفع لأوامر معلقة"
+msgstr "وصف عملية الدفع للطلبات المعلقة"
 
 #: pretix/base/payment.py:1014
 #, python-brace-format
@@ -4835,124 +4831,123 @@ msgid ""
 "It should instruct the user on how to proceed with the payment. You can use "
 "the placeholders {order}, {amount}, {currency} and {amount_with_currency}."
 msgstr ""
-"سيعرض هذا النص في صفحة تأكيد الطلب للطلبات في الانتظار. يجب أن يوجه المستخدم "
-"لآلية الدفع. استخدم عناصر النائب{order}, {amount}, {currency}"
-"و{amount_with_currency}."
+"سيعرض هذا النص في صفحة تأكيد الطلب للطلبات قيد الانتظار. يجب أن يوجه "
+"المستخدم إلى كيفية متابعة الدفع. يمكنك استخدام العناصر {order}, {amount}, "
+"{currency} و {amount_with_currency}."
 
 #: pretix/base/payment.py:1063
+#, fuzzy
 msgid "Offsetting"
-msgstr "عوض"
+msgstr "تعويض"
 
 #: pretix/base/payment.py:1077 pretix/control/views/orders.py:911
 msgid "You entered an order that could not be found."
-msgstr "لقد أدخلت أمر لا يمكن العثور عليها."
+msgstr "لقد أدخلت طلبا لا يمكن العثور عليه."
 
 #: pretix/base/payment.py:1106
-#, python-format
+#, fuzzy, python-format
 msgid "Balanced against orders: %s"
-msgstr "تم تسجيلها على الطلبات: %s"
+msgstr "تم تسويتها مقابل الطلبات: %s"
 
 #: pretix/base/payment.py:1127
 msgid "In test mode, only test cards will work."
-msgstr "في وضع الاختبار، وبطاقات اختبار الوحيدة عمل."
+msgstr "في وضع الاختبار ، ستعمل بطاقات الاختبار فقط."
 
 #: pretix/base/payment.py:1192 pretix/base/payment.py:1255
 #: pretix/base/payment.py:1299 pretix/base/services/orders.py:816
 msgid "You cannot pay with gift cards when buying a gift card."
-msgstr "لا يمكنك الدفع مع بطاقات هدية عند شراء بطاقة هدية."
+msgstr "لا يمكنك الدفع ببطاقات الهدايا عند شراء بطاقة هدايا."
 
 #: pretix/base/payment.py:1201 pretix/base/payment.py:1263
 #: pretix/base/payment.py:1307 pretix/base/services/orders.py:807
 msgid "This gift card does not support this currency."
-msgstr "هذه البطاقة هدية لا يدعم هذه العملة."
+msgstr "بطاقة الهدايا هذه لا تدعم هذه العملة."
 
 #: pretix/base/payment.py:1204 pretix/base/payment.py:1266
 #: pretix/base/services/orders.py:809
 msgid "This gift card can only be used in test mode."
-msgstr "لا يمكن إلا أن هذه البطاقة هدية يمكن استخدامها في وضع الاختبار."
+msgstr "لا يمكن استخدام بطاقة الهدايا هذه إلا في وضع الاختبار."
 
 #: pretix/base/payment.py:1207 pretix/base/payment.py:1269
 #: pretix/base/services/orders.py:811
 msgid "Only test gift cards can be used in test mode."
-msgstr "بطاقات هدية اختبار الوحيدة التي يمكن أن تستخدم في وضع الاختبار."
+msgstr "يمكن استخدام بطاقات الهدايا التجريبية فقط في وضع الاختبار."
 
 #: pretix/base/payment.py:1210 pretix/base/payment.py:1272
 #: pretix/base/payment.py:1313
-#, fuzzy
-#| msgid "This gift card is not known."
 msgid "This gift card is no longer valid."
-msgstr "ولا يعرف هذه البطاقة هدية."
+msgstr "بطاقة الهدايا هذه لم تعد صالحة."
 
 #: pretix/base/payment.py:1213 pretix/base/payment.py:1275
 msgid "All credit on this gift card has been used."
-msgstr "وقد استخدمت كل الفضل على هذه البطاقة هدية."
+msgstr "تم استخدام كل الرصيد الموجود في بطاقة الهدايا هذه."
 
 #: pretix/base/payment.py:1218
 msgid "This gift card is already used for your payment."
-msgstr "وتستخدم هذه البطاقة هدية بالفعل لدفعتك."
+msgstr "بطاقة الهدايا هذه مستخدمة مسبقا لسدادك."
 
 #: pretix/base/payment.py:1233
 msgid ""
 "Your gift card has been applied, but {} still need to be paid. Please select "
 "a payment method."
 msgstr ""
-"وقد تم تطبيق بطاقة الهدايا، ولكن {} لا تزال بحاجة إلى أن تدفع. الرجاء اختيار "
-"طريقة الدفع."
+"تم استعمال بطاقة الهدايا الخاصة بك ،، ولكن {} لا تزال بحاجة إلى أن يتم "
+"سدادها. الرجاء اختيار طريقة الدفع."
 
 #: pretix/base/payment.py:1237
+#, fuzzy
 msgid "Your gift card has been applied."
-msgstr "وقد تم تطبيق بطاقة الهدايا."
+msgstr "تم استمعال بطاقة الهدية الخاصة بك."
 
 #: pretix/base/payment.py:1245 pretix/base/payment.py:1287
 msgid ""
 "You entered a voucher instead of a gift card. Vouchers can only be entered "
 "on the first page of the shop below the product selection."
 msgstr ""
-"لقد أدخلت على قسيمة بدلا من بطاقة هدية. لا يمكن إلا أن قسائم دخلت على الصفحة "
-"الأولى من المحل دون اختيار المنتج."
+"لقد أدخلت قسيمة بدلا من بطاقة هدايا. يمكن إدخال القسائم فقط في الصفحة الأولى "
+"من المتجر أسفل اختيار المنتج."
 
 #: pretix/base/payment.py:1248 pretix/base/payment.py:1290
 msgid "This gift card is not known."
-msgstr "ولا يعرف هذه البطاقة هدية."
+msgstr "بطاقة الهدايا هذه غير معروفة."
 
 #: pretix/base/payment.py:1250 pretix/base/payment.py:1292
 msgid ""
 "This gift card can not be redeemed since its code is not unique. Please "
 "contact the organizer of this event."
 msgstr ""
-"هذه البطاقة هدية لا يمكن استبدال منذ مدونتها ليست فريدة من نوعها. يرجى "
-"الاتصال المنظم لهذا الحدث."
+"لا يمكن استرداد بطاقة الهدايا هذه نظرا لأن رمزها ليس فريدا. يرجى الاتصال "
+"بمنظم هذه الفعالية."
 
 #: pretix/base/payment.py:1309 pretix/base/services/orders.py:813
 msgid "This gift card is not accepted by this event organizer."
-msgstr "لم يتم قبول هذه البطاقة هدية من هذا منظم الحدث."
+msgstr "لم يتم قبول بطاقة الهدايا هذه من قبل منظم هذه الفعالية."
 
 #: pretix/base/payment.py:1311
-#, fuzzy
-#| msgid "This gift card was used in the meantime. Please try again"
 msgid "This gift card was used in the meantime. Please try again."
-msgstr "تم استخدام هذه البطاقة هدية في هذه الأثناء. حاول مرة اخرى"
+msgstr "تم استخدام بطاقة الهدايا هذه في هذه الأثناء. حاول مرة اخرى."
 
 #: pretix/base/pdf.py:85
 msgid "Ticket code (barcode content)"
-msgstr "تذكرة التعليمات البرمجية (محتوى الباركود)"
+msgstr "رمز التذكرة (محتوى الرمز الشريطي \"الباركود\")"
 
 #: pretix/base/pdf.py:97
 msgid "Order position number"
-msgstr "رقم موقع الطلب"
+msgstr "رقم وضعية الطلب"
 
 #: pretix/base/pdf.py:103 pretix/base/services/tickets.py:100
 #: pretix/control/views/event.py:729 pretix/control/views/pdf.py:85
+#, fuzzy
 msgid "Sample product"
-msgstr "المنتج عينة"
+msgstr "منتج عينة"
 
 #: pretix/base/pdf.py:107
 msgid "Variation name"
-msgstr "اسم الاختلاف"
+msgstr "اسم الصنف"
 
 #: pretix/base/pdf.py:108
 msgid "Sample variation"
-msgstr "تباين عينة"
+msgstr "نوع العينة"
 
 #: pretix/base/pdf.py:112
 msgid "Product description"
@@ -4960,28 +4955,27 @@ msgstr "وصف المنتج"
 
 #: pretix/base/pdf.py:113 pretix/base/services/tickets.py:101
 #: pretix/control/views/event.py:730 pretix/control/views/pdf.py:86
+#, fuzzy
 msgid "Sample product description"
-msgstr "عينة وصف المنتج"
+msgstr "وصف منتج عينة"
 
 #: pretix/base/pdf.py:117
 msgid "Product name and variation"
-msgstr "اسم المنتج والاختلاف"
+msgstr "اسم المنتج والنوع"
 
 #: pretix/base/pdf.py:118
 msgid "Sample product – sample variation"
-msgstr "المنتج عينة - تباين عينة"
+msgstr "منتج عينة - نوع عينة"
 
 #: pretix/base/pdf.py:125
-#, fuzzy
-#| msgid "Product description"
 msgid "Product variation description"
-msgstr "وصف المنتج"
+msgstr "وصف نوع المنتج"
 
 #: pretix/base/pdf.py:126
 #, fuzzy
 #| msgid "Sample product description"
 msgid "Sample product variation description"
-msgstr "عينة وصف المنتج"
+msgstr "وصف نوع عينة المنتج"
 
 #: pretix/base/pdf.py:133
 msgid "Ticket category"
@@ -4989,7 +4983,7 @@ msgstr "فئة التذكرة"
 
 #: pretix/base/pdf.py:140 pretix/base/pdf.py:145
 msgid "123.45 EUR"
-msgstr "123.45 EUR"
+msgstr "123.45 يورو"
 
 #: pretix/base/pdf.py:144
 msgid "Price including add-ons"
