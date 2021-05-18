@@ -71,9 +71,7 @@ setup_collapsible_details = function (el) {
         var altLabel = $button.attr("data-label-alt");
         $button.attr("data-label-alt", $button.text());
         $button.text(altLabel);
-        altLabel = $button.attr("data-aria-label-alt");
-        $button.attr("data-aria-label-alt", $button.attr("aria-label"));
-        $button.attr("aria-label", altLabel);
+        $button.attr("aria-expanded", !isOpen);
 
         if (isOpen) {
             $details.removeClass("details-open");

@@ -84,8 +84,8 @@
                                 {% endif %}
                                 <button type="button" data-toggle="variations" class="btn btn-link js-only"
                                     data-label-alt="{% trans "Hide variants" %}"
-                                    data-aria-label-alt="{% blocktrans trimmed with item=item.name %}Hide variants of {{ item }}{% endblocktrans %}"
-                                    aria-label="{% blocktrans trimmed with item=item.name %}Show variants of {{ item }}{% endblocktrans %}">
+                                    aria-expanded="false"
+                                    aria-label="{% blocktrans trimmed with item=item.name count=item.available_variations|length %}Show {{count}} variants of {{ item }}{% endblocktrans %}">
                                     {% trans "Show variants" %}
                                 </button>
                             {% endif %}
