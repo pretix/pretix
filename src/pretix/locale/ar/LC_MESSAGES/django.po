@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-05-13 08:11+0000\n"
-"PO-Revision-Date: 2021-05-16 21:00+0000\n"
+"PO-Revision-Date: 2021-05-18 07:09+0000\n"
 "Last-Translator: Mohamed Tawfiq <mtawfiq@wafyapp.com>\n"
 "Language-Team: Arabic <https://translate.pretix.eu/projects/pretix/pretix/ar/"
 ">\n"
@@ -4020,28 +4020,29 @@ msgid ""
 "option after consulting a tax counsel. No warranty given for correct tax "
 "calculation. USE AT YOUR OWN RISK."
 msgstr ""
-"لا ينصح. لن تكون مؤهلة معظم الأحداث بالنسبة لتهمة العكسي لأن المكان من "
-"الضرائب هو موقع الحدث. تعطيل هذا الخيار فرض ضريبة القيمة المضافة لجميع "
-"العملاء خارج الاتحاد الأوروبي وللعملاء من الشركات في بلدان الاتحاد الأوروبي "
-"المختلفة الذين دخلوا الاتحاد الأوروبي ID الضريبة على القيمة المضافة. تمكين "
-"هذا الخيار فقط بعد استشارة محامي الضرائب. لا تعطى لحساب الضريبة الصحيح "
-"الضمان. استخدام على مسؤوليتك الخاصة."
+"غير مستحسن. لن تكون معظم الفعاليات مؤهلة للتكاليف العكسية لأن مكان الضرائب "
+"هو موقع الفعالية. يعطل هذا الخيار فرض ضريبة القيمة المضافة على جميع العملاء "
+"خارج الاتحاد الأوروبي وللعملاء التجاريين في دول الاتحاد الأوروبي المختلفة "
+"الذين أدخلوا معرف ضريبة القيمة المضافة في الاتحاد الأوروبي صالحا. قم بتمكين "
+"هذا الخيار فقط بعد استشارة مستشار الضرائب. لا يوجد ضمان لحساب الضريبة "
+"الصحيح. استخدم على مسؤوليتك الخاصة."
 
 #: pretix/base/models/tax.py:151 pretix/plugins/stripe/payment.py:209
 msgid "Merchant country"
 msgstr "بلد التاجر"
 
 #: pretix/base/models/tax.py:153
+#, fuzzy
 msgid ""
 "Your country of residence. This is the country the EU reverse charge rule "
 "will not apply in, if configured above."
 msgstr ""
-"بلد الإقامة. هذه هي الدولة وسيادة تهمة العكسي الاتحاد الأوروبي لا تنطبق في، "
-"إذا كان مكونا أعلاه."
+"بلد إقامتك. هذا هو البلد الذي لن تنطبق فيه قاعدة الرسوم العكسية للاتحاد "
+"الأوروبي ، إذا تم إعداده أعلاه."
 
 #: pretix/base/models/tax.py:186
 msgid "You need to set your home country to use the reverse charge feature."
-msgstr "تحتاج إلى تعيين بلدك استخدام ميزة المحاسبة العكسية."
+msgstr "تحتاج إلى تحديد بلدك لاستخدام ميزة التكلفة العكسية."
 
 #: pretix/base/models/tax.py:190
 #, python-brace-format
@@ -4051,11 +4052,12 @@ msgstr "بما في ذلك {rate}% {name}"
 #: pretix/base/models/tax.py:192
 #, python-brace-format
 msgid "plus {rate}% {name}"
-msgstr "بالإضافة إلى {rate}٪ {name}"
+msgstr "بالإضافة إلى {rate}% {name}"
 
 #: pretix/base/models/tax.py:194
+#, fuzzy
 msgid "reverse charge enabled"
-msgstr "تمكين تهمة العكسي"
+msgstr "تم تمكين التكلفة العكسية"
 
 #: pretix/base/models/tax.py:303
 msgctxt "invoice"
@@ -4063,13 +4065,13 @@ msgid ""
 "Reverse Charge: According to Article 194, 196 of Council Directive 2006/112/"
 "EEC, VAT liability rests with the service recipient."
 msgstr ""
-"عكس المسؤول: وفقا للمادة 194، 196 من توجيه المجلس 2006/112 / EEC، مساند "
-"المسؤولية VAT مع متلقي الخدمة."
+"التكلفة العكسية: وفقا للمادة 194 ، 196 من توجيه المجلس 2006/112/EEC ، تقع "
+"مسؤولية ضريبة القيمة المضافة على عاتق متلقي الخدمة."
 
 #: pretix/base/models/tax.py:309
 msgctxt "invoice"
 msgid "VAT liability rests with the service recipient."
-msgstr ""
+msgstr "تقع مسؤولية ضريبة القيمة المضافة على عاتق متلقي الخدمة."
 
 #: pretix/base/models/vouchers.py:120
 msgid "No effect"
@@ -4081,15 +4083,15 @@ msgstr "تحديد سعر المنتج ل"
 
 #: pretix/base/models/vouchers.py:122
 msgid "Subtract from product price"
-msgstr "طرح من سعر المنتج"
+msgstr "اخصم من سعر المنتج"
 
 #: pretix/base/models/vouchers.py:123
 msgid "Reduce product price by (%)"
-msgstr "تخفيض سعر المنتج بنسبة (٪)"
+msgstr "اخفض سعر المنتج بنسبة (%)"
 
 #: pretix/base/models/vouchers.py:146
 msgid "Number of times this voucher can be redeemed."
-msgstr "عدد مرات هذا قسيمة يمكن استبدالها."
+msgstr "عدد المرات التي يمكن فيها استرداد هذه القسيمة."
 
 #: pretix/base/models/vouchers.py:150 pretix/control/views/vouchers.py:110
 msgid "Redeemed"
@@ -4099,7 +4101,7 @@ msgstr "مسترد"
 #, fuzzy
 #| msgid "Maximum amount per order"
 msgid "Maximum discount budget"
-msgstr "الحد الأقصى لكل أمر"
+msgstr "ميزانية أعلى خصم"
 
 #: pretix/base/models/vouchers.py:155
 msgid ""
@@ -4107,6 +4109,9 @@ msgid ""
 "voucher across all usages. If this is sum reached, the voucher can no longer "
 "be used."
 msgstr ""
+"هذا هو الحد الأقصى للمبلغ النقدي الذي سيتم خصمه باستخدام هذه القسيمة في جميع "
+"الاستخدامات. إذا تم الوصول إلى هذا المبلغ ، فلن يعد من الممكن استخدام "
+"القسيمة."
 
 #: pretix/base/models/vouchers.py:162
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:73
@@ -4114,11 +4119,11 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:24
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:51
 msgid "Valid until"
-msgstr "ساري حتى"
+msgstr "ساري المفعول حتى"
 
 #: pretix/base/models/vouchers.py:166 pretix/control/forms/filter.py:1476
 msgid "Reserve ticket from quota"
-msgstr "تذكرة احتياطي من الحصص"
+msgstr "حجز التذكرة من الحصة"
 
 #: pretix/base/models/vouchers.py:168
 msgid ""
@@ -4126,20 +4131,21 @@ msgid ""
 "quotas, such that it is guaranteed that anyone with this voucher code does "
 "receive a ticket."
 msgstr ""
-"إذا تفعيلها، وسوف يخصم هذا قسيمة من حصص المنتج المتأثر، بحيث يتم ضمان أن أي "
-"شخص لديه هذا الرمز قسيمة لم يحصل على تذكرة."
+"في حالة تفعيلها ، سيتم خصم هذه القسيمة من حصص المنتجات المتأثرة ، بحيث يتم "
+"ضمان حصول أي شخص لديه رمز القسيمة على تذكرة."
 
 #: pretix/base/models/vouchers.py:174
+#, fuzzy
 msgid "Allow to bypass quota"
-msgstr "السماح لحصة الالتفافية"
+msgstr "السماح لتجاوز الحصة"
 
 #: pretix/base/models/vouchers.py:176
 msgid ""
 "If activated, a holder of this voucher code can buy tickets, even if there "
 "are none left."
 msgstr ""
-"إذا تفعيلها، حامل هذا الرمز قسيمة يمكن شراء تذاكر السفر، وحتى لو كانت هناك "
-"أي اليسار."
+"في حالة التفعيل ، يمكن لحامل رمز القسيمة شراء التذاكر ، حتى إذا لم يتبق منها "
+"شيء."
 
 #: pretix/base/models/vouchers.py:180
 msgid "Price mode"
@@ -4151,27 +4157,29 @@ msgstr "قيمة القسيمه"
 
 #: pretix/base/models/vouchers.py:195 pretix/control/forms/vouchers.py:65
 msgid "This product is added to the user's cart if the voucher is redeemed."
-msgstr "يضاف هذا المنتج إلى سلة المستخدم إذا تم استبدال القسيمة."
+msgstr ""
+"يضاف هذا المنتج إلى عربة التسوق الخاصة بالمستخدم إذا تم استرداد القسيمة."
 
 #: pretix/base/models/vouchers.py:205
 msgid "This variation of the product select above is being used."
-msgstr "هذا الاختلاف المنتج حدد أعلاه المستخدمة."
+msgstr "يتم استخدام هذا التغير في المنتج المحدد أعلاه."
 
 #: pretix/base/models/vouchers.py:214
 msgid ""
 "If enabled, the voucher is valid for any product affected by this quota."
-msgstr "في حالة التمكين، والقسيمة صالحة لأي منتج تتأثر هذه الحصص."
+msgstr "في حالة التفعيل، تكون القسيمة صالحة لأي منتج متأثر بهذه الحصة."
 
 #: pretix/base/models/vouchers.py:221
 msgid "Specific seat"
-msgstr "المقعد المحدد"
+msgstr "مقعد محدد"
 
 #: pretix/base/models/vouchers.py:225
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:115
 #: pretix/control/templates/pretixcontrol/vouchers/tags.html:42
 #: pretix/control/views/vouchers.py:110
+#, fuzzy
 msgid "Tag"
-msgstr "بطاقة"
+msgstr "بطاقة شعار"
 
 #: pretix/base/models/vouchers.py:228
 msgid ""
@@ -4179,12 +4187,13 @@ msgid ""
 "same value for multiple vouchers, you can get statistics on how many of them "
 "have been redeemed etc."
 msgstr ""
-"يمكنك استخدام هذا الحقل لقسائم مجموعة متعددة معا. إذا قمت بإدخال نفس القيمة "
-"للقسائم متعددة، يمكنك الحصول على إحصاءات عن عدد منهم قد افتدى الخ"
+"يمكنك استخدام هذا الحقل لتجميع العديد من القسائم معا. إذا أدخلت القيمة نفسها "
+"لقسائم متعددة ، يمكنك الحصول على إحصائيات حول عدد ما تم استبداله منها وما "
+"إلى ذلك."
 
 #: pretix/base/models/vouchers.py:237
 msgid "Shows hidden products that match this voucher"
-msgstr "عروض منتجات الخفية التي تطابق هذه القسيمة"
+msgstr "يظهر المنتجات المخفية التي تطابق هذه القسيمة"
 
 #: pretix/base/models/vouchers.py:245 pretix/control/navigation.py:257
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:6
@@ -4194,45 +4203,44 @@ msgstr "قسائم"
 
 #: pretix/base/models/vouchers.py:271
 msgid "You cannot select a quota that belongs to a different event."
-msgstr "لا يمكنك تحديد حصة ينتمي إلى الحدث مختلفة."
+msgstr "لا يمكنك تحديد حصة تنتمي إلى فعالية مختلفة."
 
 #: pretix/base/models/vouchers.py:273
 msgid "You cannot select a quota and a specific product at the same time."
-msgstr "لا يمكنك تحديد حصة ومنتج معين في نفس الوقت."
+msgstr "لا يمكنك اختيار حصة ومنتج محدد في نفس الوقت."
 
 #: pretix/base/models/vouchers.py:276
 msgid "You cannot select an item that belongs to a different event."
-msgstr "لا يمكنك تحديد العنصر الذي ينتمي إلى حدث مختلفة."
+msgstr "لا يمكنك اختيار عنصر ينتمي إلى فعالية مختلفة."
 
 #: pretix/base/models/vouchers.py:278 pretix/base/models/vouchers.py:291
 msgid ""
 "You cannot select a variation without having selected a product that "
 "provides variations."
-msgstr "لا يمكنك تحديد الاختلاف دون أن اختيار المنتجات التي توفر الاختلافات."
+msgstr "لا يمكنك اختيار أحد الأشكال دون تحديد منتج يوفر تنويعات."
 
 #: pretix/base/models/vouchers.py:281
 msgid "This variation does not belong to this product."
-msgstr "هذا الاختلاف لا ينتمي إلى هذا المنتج."
+msgstr "هذا المتغير لا ينتمي إلى هذا المنتج."
 
 #: pretix/base/models/vouchers.py:283 pretix/base/models/vouchers.py:374
 msgid ""
 "You can only block quota if you specify a specific product variation. "
 "Otherwise it might be unclear which quotas to block."
 msgstr ""
-"يمكنك منع فقط الحصة إذا قمت بتحديد الاختلاف محددة المنتج. وإلا فإنه قد يكون "
-"من الواضح أي حصص لمنع."
+"يمكنك فقط حظر الحصة إذا حددت نوع منتج معين. وإلا فقد يكون من غير الواضح ما "
+"هي الحصص التي يجب حظرها."
 
 #: pretix/base/models/vouchers.py:286
 msgid "It is currently not possible to create vouchers for add-on products."
-msgstr "ومن غير الممكن حاليا لإنشاء قسائم للإضافة على المنتجات."
+msgstr "لا يمكن حاليا إنشاء قسائم للمنتجات الإضافية."
 
 #: pretix/base/models/vouchers.py:288 pretix/base/models/vouchers.py:381
-#, fuzzy
-#| msgid "You need to choose a specific product if you select a seat."
 msgid ""
 "You need to select a specific product or quota if this voucher should "
 "reserve tickets."
-msgstr "يجب أن تختار منتج محدد إذا أخترت مقعد محدد."
+msgstr ""
+"تحتاج إلى تحديد منتج أو حصة محددة إذا كان يجب على هذه القسيمة حجز التذاكر."
 
 #: pretix/base/models/vouchers.py:298
 #, python-format
@@ -4240,38 +4248,39 @@ msgid ""
 "This voucher has already been redeemed %(redeemed)s times. You cannot reduce "
 "the maximum number of usages below this number."
 msgstr ""
-"القسيمة تم إستخدامها مسبقا %(redeemed)s مره. لا تستطيع تقليل عدد المرات للحد "
-"الأقصى لإستخدام القسيمة تحت الحد المذكور."
+"تم استرداد هذه القسيمة مسبقا %(redeemed)s مرة. لا يمكنك تقليل الحد الأقصى "
+"لعدد الاستخدامات تحت هذا الرقم."
 
 #: pretix/base/models/vouchers.py:308 pretix/base/models/vouchers.py:366
 msgid ""
 "If you want this voucher to block quota, you need to select a specific date."
-msgstr "إذا كنت تريد هذا قسيمة لمنع الحصص، تحتاج إلى تحديد موعد محدد."
+msgstr "إذا كنت تريد من هذه القسيمة حجز حصة ، فأنت بحاجة إلى تحديد تاريخ محدد."
 
 #: pretix/base/models/vouchers.py:310
 msgid "You can not select a subevent if your event is not an event series."
-msgstr "لا يمكنك اختيار subevent إذا حدث ليست سلسلة الحدث."
+msgstr ""
+"لا يمكنك تحديد فعالية فرعية إذا لم تكن الفعالية الخاصة بك سلسلة فعاليات."
 
 #: pretix/base/models/vouchers.py:385
 msgid ""
 "You cannot create a voucher that blocks quota as the selected product or "
 "quota is currently sold out or completely reserved."
 msgstr ""
-"لا يمكنك إنشاء قسيمة كتل الحصة كمنتج أو حصص محددة غير متوفر حاليا أو محجوزة "
-"بالكامل."
+"لا يمكنك إنشاء قسيمة تمنع الحصة لأن المنتج أو الحصة المحددة تم بيعها حاليا "
+"أو حجزها بالكامل."
 
 #: pretix/base/models/vouchers.py:391
 msgid "A voucher with this code already exists."
-msgstr "قسيمة مع هذا الرمز موجود بالفعل."
+msgstr "توجد قسيمة مسبقا بهذا الرمز."
 
 #: pretix/base/models/vouchers.py:398
 msgid "You need to choose a date if you select a seat."
-msgstr "يجب إختيار تاريخ إذا إخترت مقعد"
+msgstr "يجب إختيار تاريخ إذا قمت باختيار مقعد"
 
 #: pretix/base/models/vouchers.py:407
 #, python-brace-format
 msgid "The specified seat ID \"{id}\" does not exist for this event."
-msgstr "المقعد المحدد برقم \"{id}\" غير متواجد في هذا الإيفينت."
+msgstr "رقم المقعد المحدد \"{id}\" غير متواجد في هذه الفعالية."
 
 #: pretix/base/models/vouchers.py:411
 #, python-brace-format
@@ -4282,11 +4291,11 @@ msgstr "المقعد \"{id}\" حاليا غير متاح (محجوب، مباع 
 
 #: pretix/base/models/vouchers.py:416
 msgid "You need to choose a specific product if you select a seat."
-msgstr "يجب أن تختار منتج محدد إذا أخترت مقعد محدد."
+msgstr "يجب أن تختار منتجا محددا إذا اخترت مقعدا محددا."
 
 #: pretix/base/models/vouchers.py:419
 msgid "Seat-specific vouchers can only be used once."
-msgstr "القسائم المحددة بمقاعد يمكن إستخدامها مره واحدة فقط."
+msgstr "يمكن استخدام القسائم الخاصة بالمقاعد مرة واحدة فقط."
 
 #: pretix/base/models/vouchers.py:422
 #, python-brace-format
@@ -4296,7 +4305,7 @@ msgstr "يجب أن تختار المنتج \"{prod}\" لهذا المقعد."
 #: pretix/base/models/vouchers.py:425
 #, python-brace-format
 msgid "The seat \"{id}\" is already sold or currently blocked."
-msgstr "المقعد \"{id}\" مباع مسبقا أو محجوب."
+msgstr "المقعد \"{id}\" مباع مسبقا أو محظور حاليا."
 
 #: pretix/base/models/waitinglist.py:60
 msgid "On waiting list since"
@@ -4304,23 +4313,23 @@ msgstr "على قائمة الانتظار منذ"
 
 #: pretix/base/models/waitinglist.py:80
 msgid "Assigned voucher"
-msgstr "قسيمة تعيين"
+msgstr "قسيمة مخصصة"
 
 #: pretix/base/models/waitinglist.py:89
 msgid "The product the user waits for."
-msgstr "المنتج ينتظر المستخدم."
+msgstr "المنتج الذي ينتظره المستخدم."
 
 #: pretix/base/models/waitinglist.py:97
 msgid "The variation of the product selected above."
-msgstr "التغير في المنتج المحدد أعلاه."
+msgstr "نوع المنتج المحدد أعلاه."
 
 #: pretix/base/models/waitinglist.py:109
 msgid "Waiting list entry"
-msgstr "في انتظار دخول قائمة"
+msgstr "دخول قائمة الانتظار"
 
 #: pretix/base/models/waitinglist.py:110
 msgid "Waiting list entries"
-msgstr "انتظار إدخالات قائمة"
+msgstr "إدخالات قائمة الانتظار"
 
 #: pretix/base/models/waitinglist.py:149
 msgid "This product is currently not available."
@@ -4328,41 +4337,39 @@ msgstr "هذا المنتج غير متوفر حاليا."
 
 #: pretix/base/models/waitinglist.py:151
 msgid "A voucher has already been sent to this person."
-msgstr "وقد تم بالفعل أرسلت قسيمة لهذا الشخص."
+msgstr "تم إرسال قسيمة إلى هذا الشخص سابقا."
 
 #: pretix/base/models/waitinglist.py:153
 msgid "This entry is anonymized and can no longer be used."
-msgstr "يتم طمس هويتها هذا الدخول ولم يعد من الممكن استخدامها."
+msgstr "هذا الإدخال مجهول المصدر ولا يمكن استخدامه بعد الآن."
 
 #: pretix/base/models/waitinglist.py:163
 #, python-brace-format
 msgid "Automatically created from waiting list entry for {email}"
-msgstr "تم إنشاؤها تلقائيا من انتظار دخول قائمة ل{email}"
+msgstr "تم إنشاؤه تلقائيا من إدخال قائمة الانتظار ل{email}"
 
 #: pretix/base/models/waitinglist.py:187
 #, python-brace-format
 msgid "You have been selected from the waitinglist for {event}"
-msgstr "لقد تم اختيارها من waitinglist ل{event}"
+msgstr "لقد تم اختيارك من قائمة الانتظار ل{event}"
 
 #: pretix/base/models/waitinglist.py:197
 msgid "The selected item does not belong to this event."
-msgstr "لا ينتمي العنصر المحدد لهذا الحدث."
+msgstr "العنصر المحدد لا ينتمي إلى هذه الفعالية."
 
 #: pretix/base/models/waitinglist.py:199
 msgid "Please select a specific variation of this product."
-msgstr "يرجى تحديد الاختلاف محددة لهذا المنتج."
+msgstr "الرجاء تحديد نوع معين من هذا المنتج."
 
 #: pretix/base/models/waitinglist.py:217
 msgid ""
 "You are already on this waiting list! We will notify you as soon as we have "
 "a ticket available for you."
-msgstr ""
-"كنت بالفعل في هذه القائمة الانتظار! وسوف نقوم بإعلامك في أقرب وقت لدينا "
-"تذكرة متاح لك."
+msgstr "أنت مسبقا في قائمة الانتظار هذه! سنقوم بإخطارك بمجرد توفر تذكرة لك."
 
 #: pretix/base/notifications.py:156 pretix/base/notifications.py:169
 msgid "Administrative action required"
-msgstr "الإجراءات الإدارية المطلوبة"
+msgstr "مطلوب إجراء إداري"
 
 #: pretix/base/notifications.py:170
 msgid ""
@@ -4370,9 +4377,8 @@ msgid ""
 "automatically, e.g. an external refund. You need to resolve it manually or "
 "choose to ignore it, depending on the issue at hand."
 msgstr ""
-"حدث شيء في هذا الحدث الخاص بك أن نظامنا لا يمكن معالجة تلقائيا، على سبيل "
-"المثال لاسترداد الخارجي. تحتاج إلى حلها يدويا أو اختيار لتجاهله، اعتمادا على "
-"القضية المطروحة."
+"حدث شيء ما في فعاليتك لا يستطيع نظامنا التعامل معها آليا، على سبيل المثال "
+"استرداد خارجي. تحتاج إلى حلها يدويا أو اختيار تجاهلها ، حسب المشكلة المطروحة."
 
 #: pretix/base/notifications.py:174
 msgid "View all unresolved problems"
@@ -4391,17 +4397,17 @@ msgstr "تواريخ"
 #: pretix/plugins/badges/exporters.py:295
 #: pretix/plugins/ticketoutputpdf/exporters.py:92
 msgid "Event date"
-msgstr "تاريخ الحدث"
+msgstr "تاريخ الفعالية"
 
 #: pretix/base/notifications.py:225
 #: pretix/control/templates/pretixcontrol/order/index.html:571
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:271
 msgid "Net total"
-msgstr "صافي مجموع"
+msgstr "الإجمالي الصافي"
 
 #: pretix/base/notifications.py:227
 msgid "Pending amount"
-msgstr "المبلغ المعلق"
+msgstr "مبالغ متأخرة"
 
 #: pretix/base/notifications.py:229 pretix/control/forms/filter.py:180
 #: pretix/control/forms/orderimport.py:37
@@ -4420,129 +4426,114 @@ msgstr "معاينة تفاصيل الطلب"
 #: pretix/base/notifications.py:259
 #, python-brace-format
 msgid "A new order has been placed: {order.code}"
-msgstr "تم وضع نظام جديد: {order.code}"
+msgstr "تم وضع طلب جديد: {order.code}"
 
 #: pretix/base/notifications.py:265
 #, python-brace-format
 msgid "A new order has been placed that requires approval: {order.code}"
-msgstr "نظام جديد تم وضعها الذي يتطلب موافقة: {order.code}"
+msgstr "تم تقديم طلب جديد يحتاج للموافقة: {order.code}"
 
 #: pretix/base/notifications.py:271
 #, python-brace-format
 msgid "Order {order.code} has been marked as paid."
-msgstr "وقد تم ترتيب {order.code}  وضع علامة على دفع."
+msgstr "طلب {order.code} تم وضع علامة على أنه تم سداده."
 
 #: pretix/base/notifications.py:277
 #, python-brace-format
 msgid "Order {order.code} has been canceled."
-msgstr "تم إلغاء النظام {order.code}."
+msgstr "الطلب {order.code}. تم إلغاؤه."
 
 #: pretix/base/notifications.py:283
-#, fuzzy, python-brace-format
-#| msgid "Order {order.code} has been changed."
+#, python-brace-format
 msgid "Order {order.code} has been reactivated."
-msgstr "تم تغيير ترتيب {order.code}."
+msgstr "الطلب {order.code}. تم إعادة تنشيطه."
 
 #: pretix/base/notifications.py:289
 #, python-brace-format
 msgid "Order {order.code} has been marked as expired."
-msgstr "وقد اتسم أجل {order.code} كما منتهية الصلاحية."
+msgstr "الطلب {order.code} تم تعليمه على أنه منتهي الصلاحية."
 
 #: pretix/base/notifications.py:295
 #, python-brace-format
 msgid "The ticket information of order {order.code} has been changed."
-msgstr "تم تغيير معلومات تذكرة من أجل {order.code}."
+msgstr "معلومات تذكرة الطلب {order.code}. تم تغييره."
 
 #: pretix/base/notifications.py:301
 #, python-brace-format
 msgid "The contact address of order {order.code} has been changed."
-msgstr "تم تغيير عنوان الاتصال على النظام {order.code}."
+msgstr "عنوان الاتصال الخاص بالطلب {order.code}. تم تغييره."
 
 #: pretix/base/notifications.py:307
 #, python-brace-format
 msgid "Order {order.code} has been changed."
-msgstr "تم تغيير ترتيب {order.code}."
+msgstr "الطلب {order.code}. تم تغييره."
 
 #: pretix/base/notifications.py:312
 msgid "Order has been overpaid"
-msgstr "وقد تم ترتيب زائدة"
+msgstr "تم دفع مبالغ زائدة عن الطلب"
 
 #: pretix/base/notifications.py:313
 #, python-brace-format
 msgid "Order {order.code} has been overpaid."
-msgstr "وقد تم ترتيب {order.code} زائدة."
+msgstr "الطلب {order.code} تم دفع مبالغ زائدة عنه."
 
 #: pretix/base/notifications.py:319
 #, python-brace-format
 msgid "An external refund for {order.code} has occurred."
-msgstr "حدث استرداد الخارجي ل{order.code}."
+msgstr "حدث استرداد خارجي ل{order.code}."
 
 #: pretix/base/notifications.py:324
 msgid "Refund requested"
-msgstr "استرداد طلب"
+msgstr "تم طلب استرداد الأموال"
 
 #: pretix/base/notifications.py:325
 #, python-brace-format
 msgid "You have been requested to issue a refund for {order.code}."
-msgstr "وقد يطلب منك أن يصدر رد عن {order.code}."
+msgstr "لقدطلب منك إصدار استرداد ل {order.code}."
 
 #: pretix/base/orderimport.py:87
 msgid "Keep empty"
-msgstr ""
+msgstr "احتفظ به فارغا"
 
 #: pretix/base/orderimport.py:114
 #, python-brace-format
 msgid "Invalid setting for column \"{header}\"."
-msgstr ""
+msgstr "إعداد غير صالح للعمود \"{header}\"."
 
 #: pretix/base/orderimport.py:174 pretix/presale/views/waiting.py:115
 msgctxt "subevent"
 msgid "You need to select a date."
-msgstr "تحتاج إلى تحديد موعد لذلك."
+msgstr "تحتاج إلى تحديد تاريخ."
 
 #: pretix/base/orderimport.py:181
-#, fuzzy
-#| msgid "No matching answers found."
 msgctxt "subevent"
 msgid "No matching date was found."
-msgstr "لا توجد أجوبة مطابقة."
+msgstr "لم يتم العثور على تاريخ مطابق."
 
 #: pretix/base/orderimport.py:183
-#, fuzzy
-#| msgid "No matching answers found."
 msgctxt "subevent"
 msgid "Multiple matching dates were found."
-msgstr "لا توجد أجوبة مطابقة."
+msgstr "تم العثور على تواريخ مطابقة متعددة."
 
 #: pretix/base/orderimport.py:217
-#, fuzzy
-#| msgid "No matching answers found."
 msgid "No matching product was found."
-msgstr "لا توجد أجوبة مطابقة."
+msgstr "لم يتم العثور على منتج مطابق."
 
 #: pretix/base/orderimport.py:219
-#, fuzzy
-#| msgid "No matching answers found."
 msgid "Multiple matching products were found."
-msgstr "لا توجد أجوبة مطابقة."
+msgstr "تم العثور على منتجات مطابقة متعددة."
 
 #: pretix/base/orderimport.py:248
-#, fuzzy
-#| msgid "No matching answers found."
 msgid "No matching variation was found."
-msgstr "لا توجد أجوبة مطابقة."
+msgstr "لم يتم العثور على نوع مطابق."
 
 #: pretix/base/orderimport.py:250
-#, fuzzy
-#| msgid "No matching answers found."
 msgid "Multiple matching variations were found."
-msgstr "لا توجد أجوبة مطابقة."
+msgstr "تم العثور على أصناف مطابقة متعددة."
 
 #: pretix/base/orderimport.py:253
-#, fuzzy
-#| msgid "You need to select a variation of the product."
 msgid "You need to select a variation for this product."
-msgstr "تحتاج إلى تحديد الاختلاف من المنتج."
+msgstr "تحتاج إلى تحديد صنف مختلف لهذا المنتج."
 
 #: pretix/base/orderimport.py:265 pretix/base/orderimport.py:280
 #: pretix/base/orderimport.py:295 pretix/base/orderimport.py:306
@@ -4552,34 +4543,24 @@ msgstr "تحتاج إلى تحديد الاختلاف من المنتج."
 #: pretix/control/forms/filter.py:555 pretix/control/forms/filter.py:559
 #: pretix/control/forms/filter.py:563 pretix/control/forms/filter.py:568
 #: pretix/control/forms/filter.py:573
-#, fuzzy
-#| msgid "Invoice addresses"
 msgid "Invoice address"
-msgstr "عناوين فاتورة"
+msgstr "عناوين الفاتورة"
 
 #: pretix/base/orderimport.py:340 pretix/base/orderimport.py:486
-#, fuzzy
-#| msgid "Please enter a valid email address."
 msgid "Please enter a valid country code."
-msgstr "لو سمحت أدخل بريد إليكتروني صالح."
+msgstr "الرجاء إدخال رمز دولة صالح."
 
 #: pretix/base/orderimport.py:357 pretix/base/orderimport.py:503
-#, fuzzy
-#| msgid "Automatic refunds are not supported by this payment provider."
 msgid "States are not supported for this country."
-msgstr "لا يتم اعتماد مبلغ معاد الأوتوماتيكية هذا المزود الدفع."
+msgstr "خيار الولايات غير متاح لهذا البلد."
 
 #: pretix/base/orderimport.py:365 pretix/base/orderimport.py:511
-#, fuzzy
-#| msgid "Please select a valid seat."
 msgid "Please enter a valid state."
-msgstr "الرجاء اختيار مقعد صالح."
+msgstr "الرجاء اختيار ولاية صحيحة."
 
 #: pretix/base/orderimport.py:414 pretix/control/forms/filter.py:582
-#, fuzzy
-#| msgid "Attendee email"
 msgid "Attendee e-mail address"
-msgstr "البريد الإلكتروني الحضور"
+msgstr "عنوان البريد الإلكتروني للحضور"
 
 #: pretix/base/orderimport.py:430 pretix/base/orderimport.py:441
 #: pretix/base/orderimport.py:452 pretix/base/orderimport.py:463
@@ -4590,78 +4571,64 @@ msgstr "البريد الإلكتروني الحضور"
 #: pretix/control/templates/pretixcontrol/order/index.html:450
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:87
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:90
-#, fuzzy
-#| msgid "Attendee badges"
 msgid "Attendee address"
-msgstr "شارات الحضور"
+msgstr "عنوان الحضور"
 
 #: pretix/base/orderimport.py:498
-#, fuzzy
-#| msgctxt "address"
-#| msgid "State"
 msgid "State"
-msgstr "حالة"
+msgstr "ولاية"
 
 #: pretix/base/orderimport.py:521
-#, fuzzy
-#| msgid "Create a first product"
 msgid "Calculate from product"
-msgstr "إنشاء أول منتج"
+msgstr "احسب من المنتج"
 
 #: pretix/base/orderimport.py:529 pretix/control/views/orders.py:834
 #: pretix/control/views/orders.py:858 pretix/control/views/orders.py:902
 #: pretix/control/views/orders.py:934 pretix/control/views/orders.py:957
 msgid "You entered an invalid number."
-msgstr "لقد أدخلت رقم غير صالح."
+msgstr "لقد أدخلت رقما غير صالح."
 
 #: pretix/base/orderimport.py:547
 #: pretix/control/templates/pretixcontrol/checkin/index.html:81
 #: pretix/control/templates/pretixcontrol/order/index.html:390
 msgid "Ticket code"
-msgstr "تذكرة التعليمات البرمجية"
+msgstr "رمز التذكرة"
 
 #: pretix/base/orderimport.py:548
 #, fuzzy
 #| msgid "Checked in automatically"
 msgid "Generate automatically"
-msgstr "إيداعه تلقائيا"
+msgstr "إنشاء تلقائي"
 
 #: pretix/base/orderimport.py:557
+#, fuzzy
 msgid "You cannot assign a position secret that already exists."
-msgstr ""
+msgstr "لا يمكنك تعيين وضع سر ي موجود مسبقا."
 
 #: pretix/base/orderimport.py:586
-#, fuzzy
-#| msgid "Please enter a valid email address."
 msgid "Please enter a valid language code."
-msgstr "لو سمحت أدخل بريد إليكتروني صالح."
+msgstr "الرجاء إدخال رمز لغة صالح."
 
 #: pretix/base/orderimport.py:606
-#, fuzzy
-#| msgid "Please enter a valid email address."
 msgid "Please enter a valid sales channel."
-msgstr "لو سمحت أدخل بريد إليكتروني صالح."
+msgstr "الرجاء إدخال قناة مبيعات صالحة."
 
 #: pretix/base/orderimport.py:629
-#, fuzzy
-#| msgid "No matching answers found."
 msgid "No matching seat was found."
-msgstr "لا توجد أجوبة مطابقة."
+msgstr "لم يتم العثور على مقعد مطابق."
 
 #: pretix/base/orderimport.py:632 pretix/base/services/cart.py:140
 msgid ""
 "The seat you selected has already been taken. Please select a different seat."
-msgstr "وقد تم بالفعل اتخاذ المقعد الذي حددته. الرجاء اختيار مقعد مختلفة."
+msgstr "المقعد الذي اخترته قد تم شغله مسبقا. الرجاء اختيار مقعد مختلف."
 
 #: pretix/base/orderimport.py:635 pretix/base/services/cart.py:137
 msgid "You need to select a specific seat."
-msgstr "تحتاج إلى تحديد مقعد محددة."
+msgstr "يجب أن تختار مقعدا محددا."
 
 #: pretix/base/orderimport.py:685 pretix/base/orderimport.py:693
-#, fuzzy
-#| msgid "Invalid option selected."
 msgid "Ambiguous option selected."
-msgstr "تحديد خيار غير صالح."
+msgstr "تم تحديد خيار غامض."
 
 #: pretix/base/payment.py:266
 msgid "Enable payment method"
