@@ -190,7 +190,7 @@
                                                                                    id="cp_{{ form.cartpos.pk }}_variation_{{ item.id }}_{{ var.id }}"
                                                                                    name="cp_{{ form.cartpos.pk }}_variation_{{ item.id }}_{{ var.id }}"
                                                                                    data-exclusive-prefix="cp_{{ form.cartpos.pk }}_variation_{{ item.id }}_"
-                                                                                   aria-label="{% blocktrans with item=item.name var=var.name %}Add {{ item }}, {{ var }} to basket{% endblocktrans %}">
+                                                                                   aria-label="{% blocktrans with item=item.name var=var %}Add {{ item }}, {{ var }} to basket{% endblocktrans %}">
                                                                         </label>
                                                                     {% else %}
                                                                         <input type="number" class="form-control input-item-count" placeholder="0" min="0"
@@ -199,7 +199,7 @@
                                                                                pattern="\d*"
                                                                                id="cp_{{ form.cartpos.pk }}_variation_{{ item.id }}_{{ var.id }}"
                                                                                name="cp_{{ form.cartpos.pk }}_variation_{{ item.id }}_{{ var.id }}"
-                                                                               aria-label="{% blocktrans with item=item.name var=var.name %}Quantity of {{ item }}, {{ var }} to order{% endblocktrans %}">
+                                                                               aria-label="{% blocktrans with item=item.name var=var %}Quantity of {{ item }}, {{ var }} to order{% endblocktrans %}">
                                                                     {% endif %}
                                                                 </div>
                                                             {% else %}
