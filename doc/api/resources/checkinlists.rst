@@ -494,8 +494,6 @@ Order position endpoints
    * If ``attendee_name`` is empty, it will automatically fall back to values from a parent product or from invoice
      addresses.
 
-   **Instead of an ID, you can also use the ``secret`` field as the lookup parameter.**
-
    **Example request**:
 
    .. sourcecode:: http
@@ -569,7 +567,7 @@ Order position endpoints
    Tries to redeem an order position, identified by its internal ID, i.e. checks the attendee in. This endpoint
    accepts a number of optional requests in the body.
 
-   **Instead of an ID, you can also use the ``secret`` field as the lookup parameter.**
+   **Tip:** Instead of an ID, you can also use the ``secret`` field as the lookup parameter.
 
    :<json boolean questions_supported: When this parameter is set to ``true``, handling of questions is supported. If
                                        you do not implement question handling in your user interface, you **must**

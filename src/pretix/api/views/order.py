@@ -106,7 +106,7 @@ with scopes_disabled():
                             Q(date_to__gt=value) | Q(date_from__gt=value, date_to__isnull=True),
                             event=self.request.event
                         ).values_list('id'),
-                    ).values_list('id')
+                    ).values_list('order_id')
                 )
             )
             return qs
@@ -119,7 +119,7 @@ with scopes_disabled():
                             Q(date_from__lt=value),
                             event=self.request.event
                         ).values_list('id'),
-                    ).values_list('id')
+                    ).values_list('order_id')
                 )
             )
             return qs
