@@ -31,6 +31,7 @@ from django_scopes.forms import (
 
 from pretix.base.channels import get_all_sales_channels
 from pretix.base.models.checkin import CheckinList
+from pretix.control.forms import ItemMultipleChoiceField
 from pretix.control.forms.widgets import Select2
 
 
@@ -120,7 +121,7 @@ class CheckinListForm(forms.ModelForm):
             'exit_all_at': NextTimeInput(attrs={'class': 'timepickerfield'}),
         }
         field_classes = {
-            'limit_products': SafeModelMultipleChoiceField,
+            'limit_products': ItemMultipleChoiceField,
             'gates': SafeModelMultipleChoiceField,
             'subevent': SafeModelChoiceField,
             'exit_all_at': NextTimeField,
@@ -164,7 +165,7 @@ class SimpleCheckinListForm(forms.ModelForm):
             }),
         }
         field_classes = {
-            'limit_products': SafeModelMultipleChoiceField,
+            'limit_products': ItemMultipleChoiceField,
             'subevent': SafeModelChoiceField,
             'gates': SafeModelMultipleChoiceField,
         }

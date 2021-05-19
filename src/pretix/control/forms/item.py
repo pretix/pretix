@@ -41,6 +41,8 @@ from django.core.exceptions import ValidationError
 from django.db.models import Max
 from django.forms.formsets import DELETION_FIELD_NAME
 from django.urls import reverse
+from django.utils.html import escape
+from django.utils.safestring import mark_safe
 from django.utils.translation import (
     gettext as __, gettext_lazy as _, pgettext_lazy,
 )
@@ -57,7 +59,9 @@ from pretix.base.models import (
 )
 from pretix.base.models.items import ItemAddOn, ItemBundle, ItemMetaValue
 from pretix.base.signals import item_copy_data
-from pretix.control.forms import SplitDateTimeField, SplitDateTimePickerWidget
+from pretix.control.forms import (
+    ItemMultipleChoiceField, SplitDateTimeField, SplitDateTimePickerWidget,
+)
 from pretix.control.forms.widgets import Select2
 from pretix.helpers.models import modelcopy
 from pretix.helpers.money import change_decimal_field
@@ -168,7 +172,7 @@ class QuestionForm(I18nModelForm):
         field_classes = {
             'valid_datetime_min': SplitDateTimeField,
             'valid_datetime_max': SplitDateTimeField,
-            'items': SafeModelMultipleChoiceField,
+            'items': ItemMultipleChoiceField,
             'dependency_question': SafeModelChoiceField,
         }
 
@@ -200,9 +204,12 @@ class QuotaForm(I18nModelForm):
         for item in items:
             if len(item.variations.all()) > 0:
                 for v in item.variations.all():
-                    choices.append(('{}-{}'.format(item.pk, v.pk), '{} – {}'.format(item, v.value)))
+                    choices.append((
+                        '{}-{}'.format(item.pk, v.pk),
+                        '{} – {}'.format(item, v.value) if item.active else mark_safe(f'<strike class="text-muted">{escape(item)} – {escape(v.value)}</strike>')
+                    ))
             else:
-                choices.append(('{}'.format(item.pk), str(item)))
+                choices.append(('{}'.format(item.pk), str(item) if item.active else mark_safe(f'<strike class="text-muted">{escape(item)}</strike>')))
 
         self.fields['itemvars'] = forms.MultipleChoiceField(
             label=_('Products'),

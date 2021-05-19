@@ -483,7 +483,7 @@ var form_handlers = function (el) {
                     return res.text;
                 }
                 var $ret = $("<span>").append(
-                    $("<span>").addClass("primary").append($("<div>").text(res.text).html())
+                    $(res.inactive ? "<strike class='text-muted'>" : "<span>").addClass("primary").append($("<div>").text(res.text).html())
                 );
                 if (res.event) {
                     $ret.append(

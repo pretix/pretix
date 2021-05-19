@@ -42,8 +42,11 @@ from django.core.files import File
 from django.core.files.uploadedfile import UploadedFile
 from django.forms.utils import from_current_timezone
 from django.urls import reverse
+from django.utils.html import escape
+from django.utils.safestring import mark_safe
 from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
+from django_scopes.forms import SafeModelMultipleChoiceField
 
 from ...base.forms import I18nModelForm, SecretKeySettingsField
 
@@ -411,3 +414,8 @@ class SMTPSettingsMixin(forms.Form):
         if data.get('smtp_use_tls') and data.get('smtp_use_ssl'):
             raise ValidationError(_('You can activate either SSL or STARTTLS security, but not both at the same time.'))
         return data
+
+
+class ItemMultipleChoiceField(SafeModelMultipleChoiceField):
+    def label_from_instance(self, obj):
+        return str(obj) if obj.active else mark_safe(f'<strike class="text-muted">{escape(obj)}</strike>')

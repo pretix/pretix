@@ -583,17 +583,17 @@ def itemvarquota_select2(request, **kwargs):
         if variations:
             choices.append((str(i.pk), _('{product} – Any variation').format(product=i), ''))
             for v in variations:
-                choices.append(('%d-%d' % (i.pk, v.pk), '%s – %s' % (i, v.value), ''))
+                choices.append(('%d-%d' % (i.pk, v.pk), '%s – %s' % (i, v.value), '', not i.active))
         else:
-            choices.append((str(i.pk), str(i), ''))
+            choices.append((str(i.pk), str(i), '', not i.active))
     for q in quotaqs:
         if request.event.has_subevents:
             choices.append(('q-%d' % q.pk,
                             _('Any product in quota "{quota}"').format(
                                 quota=q
-                            ), str(q.subevent)))
+                            ), str(q.subevent), False))
         else:
-            choices.append(('q-%d' % q.pk, _('Any product in quota "{quota}"').format(quota=q), ''))
+            choices.append(('q-%d' % q.pk, _('Any product in quota "{quota}"').format(quota=q), '', False))
 
     doc = {
         'results': [
@@ -601,8 +601,9 @@ def itemvarquota_select2(request, **kwargs):
                 'id': k,
                 'text': str(v),
                 'event': str(t),
+                'inactive': d
             }
-            for k, v, t in choices
+            for k, v, t, d in choices
         ],
         'pagination': {
             "more": more
