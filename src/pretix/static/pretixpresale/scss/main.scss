@@ -231,7 +231,7 @@ body.loading .container {
     transform: rotate(180deg);
 }
 
-.panel-title a[data-toggle="collapse"], details h3.panel-title, details h4.panel-title {
+.panel-title a[data-toggle="collapse"], details .panel-title {
     display: flex;
     padding: 10px 15px;
     margin: -10px -15px;

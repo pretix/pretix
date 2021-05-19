@@ -15,7 +15,7 @@
 <aside aria-label="{% trans "Your cart" %}">
     <details class="panel panel-default cart" {% if "open_cart" in request.GET %}open{% endif %}>
         <summary class="panel-heading">
-            <h3 class="panel-title">
+            <h2 class="panel-title">
                 <span>
                     <i class="fa fa-shopping-cart" aria-hidden="true"></i>
                     <strong>{% trans "Your cart" %}</strong>
@@ -30,7 +30,7 @@
                     </strong>
                     <i class="fa fa-angle-down collapse-indicator" aria-hidden="true"></i>
                 </span>
-            </h3>
+            </h2>
         </summary>
         <div>
             <div class="panel-body">
