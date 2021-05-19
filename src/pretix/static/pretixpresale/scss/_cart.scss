@@ -93,6 +93,9 @@
 .cart [role=rowgroup]:last-child {
     border-top: 1px solid $table-border-color;
 }
+.cart .total strong {
+    font-size: $font-size-large;
+}
 
 .apply-voucher {
     input {
