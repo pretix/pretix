@@ -43,14 +43,16 @@
                     </form>
                 </div>
                 <div class="col-md-4 col-sm-6 col-md-offset-4 col-xs-12">
-                    <a class="btn btn-block btn-primary btn-lg"
-                       href="{% eventurl request.event "presale:event.checkout.start" cart_namespace=cart_namespace  %}">
-                        {% if has_addon_choices or cart.total == 0 %}
-                            <i class="fa fa-shopping-cart" aria-hidden="true"></i> {% trans "Continue" %}
-                        {% else %}
-                            <i class="fa fa-shopping-cart" aria-hidden="true"></i> {% trans "Proceed with checkout" %}
-                        {% endif %}
-                    </a>
+                    <form method="get" action="{% eventurl request.event "presale:event.checkout.start" cart_namespace=cart_namespace  %}">
+                        <button class="btn btn-block btn-primary btn-lg" type="submit"{% if has_addon_choices or cart.total == 0 %} aria-label="{% trans "Continue with order process" %}"{% endif %}>
+                            <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+                            {% if has_addon_choices or cart.total == 0 %}
+                                {% trans "Continue" %}
+                            {% else %}
+                                {% trans "Proceed with checkout" %}
+                            {% endif %}
+                        </button>
+                    </form>
                 </div>
                 <div class="visible-xs-block col-xs-12">
                     <form method="post" data-asynctask action="{% eventurl request.event "presale:event.cart.clear" cart_namespace=cart_namespace %}">
