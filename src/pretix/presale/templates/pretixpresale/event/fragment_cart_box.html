@@ -8,7 +8,7 @@
         <h2 class="panel-title">
                     <span>
                         <i class="fa fa-shopping-cart" aria-hidden="true"></i>
-                        <strong>{% trans "Your cart" %}</strong>
+                        <strong>{% trans "Your cart" %}<span class="sr-only">.</span></strong>
                     </span>
             <em class="sr-only" role="alert" id="cart-deadline" data-expires="{{ cart.first_expiry|date:"Y-m-d H:i:sO" }}">
                 {% if cart.minutes_left > 0 or cart.seconds_left > 0 %}
