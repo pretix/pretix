@@ -581,7 +581,7 @@ def itemvarquota_select2(request, **kwargs):
     for i in itemqs:
         variations = list(i.variations.all())
         if variations:
-            choices.append((str(i.pk), _('{product} – Any variation').format(product=i), ''))
+            choices.append((str(i.pk), _('{product} – Any variation').format(product=i), '', not i.active))
             for v in variations:
                 choices.append(('%d-%d' % (i.pk, v.pk), '%s – %s' % (i, v.value), '', not i.active))
         else:
