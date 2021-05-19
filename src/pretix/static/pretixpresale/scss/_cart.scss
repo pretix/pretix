@@ -14,10 +14,6 @@
         line-height: 1;
     }
 
-    &.total {
-        border-top: 1px solid $table-border-color;
-    }
-
     dl {
         padding-left: 20px;
         margin-bottom: 0;
@@ -27,8 +23,8 @@
         }
     }
 
-    margin-left: 0;
-    margin-right: 0;
+    margin-left: -15px;
+    margin-right: -15px;
 
     &>div {
         position: relative;
@@ -94,6 +90,10 @@
     }
 }
 
+.cart [role=rowgroup]:last-child {
+    border-top: 1px solid $table-border-color;
+}
+
 .apply-voucher {
     input {
         height: 32px;
@@ -102,13 +102,9 @@
 
 @media(max-width: $screen-sm-max) {
     .cart .panel-body {
-        padding: 5px;
-        .checkout-button-row {
-            padding: 0 10px;
-        }
         #cart-deadline {
             display: block;
-            padding: 0 10px 5px;
+            padding: 0 5px;
         }
     }
     .cart-row {
