@@ -1083,6 +1083,7 @@ class TicketSettingsForm(SettingsForm):
         'ticket_download_nonadm',
         'ticket_download_pending',
         'ticket_download_require_validated_email',
+        'ticket_secret_length',
     ]
     ticket_secret_generator = forms.ChoiceField(
         label=_("Ticket code generator"),

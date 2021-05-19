@@ -461,6 +461,32 @@ DEFAULTS = {
         'default': 'random',
         'type': str,
     },
+    'ticket_secret_length': {
+        'default': settings.ENTROPY['ticket_secret'],
+        'type': int,
+        'form_class': forms.IntegerField,
+        'serializer_class': serializers.IntegerField,
+        'serializer_kwargs': dict(
+            validators=[
+                MinValueValidator(12),
+                MaxValueValidator(64),
+            ]
+        ),
+        'form_kwargs': dict(
+            label=_('Length of ticket codes'),
+            validators=[
+                MinValueValidator(12),
+                MaxValueValidator(64),
+            ],
+            widget=forms.NumberInput(
+                attrs={
+                    'min': '12',
+                    'max': '64',
+                    'data-display-dependency': 'input[name=ticket_secret_generator][value=random]',
+                },
+            ),
+        )
+    },
     'reservation_time': {
         'default': '30',
         'type': int,

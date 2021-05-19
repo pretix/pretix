@@ -29,7 +29,6 @@ from cryptography.hazmat.primitives.serialization import (
     Encoding, NoEncryption, PrivateFormat, PublicFormat, load_pem_private_key,
     load_pem_public_key,
 )
-from django.conf import settings
 from django.dispatch import receiver
 from django.utils.crypto import get_random_string
 from django.utils.translation import gettext_lazy as _
@@ -111,7 +110,7 @@ class RandomTicketSecretGenerator(BaseTicketSecretGenerator):
         if current_secret and not force_invalidate:
             return current_secret
         return get_random_string(
-            length=settings.ENTROPY['ticket_secret'],
+            length=self.event.settings.ticket_secret_length,
             # Exclude o,0,1,i,l to avoid confusion with bad fonts/printers
             allowed_chars='abcdefghjkmnpqrstuvwxyz23456789'
         )
