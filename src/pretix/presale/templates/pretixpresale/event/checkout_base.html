@@ -19,8 +19,18 @@
                 <span>
                     <i class="fa fa-shopping-cart" aria-hidden="true"></i>
                     <strong>{% trans "Your cart" %}</strong>
+
+                <em class="sr-only" role="alert" id="cart-deadline" data-expires="{{ cart.first_expiry|date:"Y-m-d H:i:sO" }}">
+                    {% if cart.minutes_left > 0 or cart.seconds_left > 0 %}
+                        {% blocktrans trimmed with minutes=cart.minutes_left %}
+                            The items in your cart are reserved for you for {{ minutes }} minutes.
+                        {% endblocktrans %}
+                    {% else %}
+                        {% trans "The items in your cart are no longer reserved for you." %}
+                    {% endif %}
+                </em>
                 </span>
-                <span>
+                <span aria-hidden="true">
                     <strong id="cart-deadline-short" data-expires="{{ cart.first_expiry|date:"Y-m-d H:i:sO" }}">
                         {% if cart.minutes_left > 0 or cart.seconds_left > 0 %}
                             {{ cart.minutes_left|stringformat:"02d" }}:{{ cart.seconds_left|stringformat:"02d" }}
@@ -35,15 +45,6 @@
         <div>
             <div class="panel-body">
                 {% include "pretixpresale/event/fragment_cart.html" with cart=cart event=request.event %}
-                <em id="cart-deadline" data-expires="{{ cart.first_expiry|date:"Y-m-d H:i:sO" }}">
-                    {% if cart.minutes_left > 0 or cart.seconds_left > 0 %}
-                        {% blocktrans trimmed with minutes=cart.minutes_left %}
-                            The items in your cart are reserved for you for {{ minutes }} minutes.
-                        {% endblocktrans %}
-                    {% else %}
-                        {% trans "The items in your cart are no longer reserved for you." %}
-                    {% endif %}
-                </em>
             </div>
         </div>
     </details>
