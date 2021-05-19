@@ -40,7 +40,7 @@ def returnurl_process_request(sender, request, **kwargs):
     urlkwargs = r.kwargs
 
     if urlname.startswith('event.order'):
-        key = 'order_{}_{}_{}_return_url'.format(urlkwargs.get('organizer', '-'), urlkwargs['event'],
+        key = 'order_{}_{}_{}_return_url'.format(urlkwargs.get('organizer', '-'), urlkwargs.get('event', '-'),
                                                  urlkwargs['order'])
         if urlname == 'event.order' and key in request.session:
             r = redirect(request.session.get(key))
