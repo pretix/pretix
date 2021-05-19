@@ -180,16 +180,18 @@
                         method="post" data-asynctask>
                     {% csrf_token %}
                     <input type="hidden" name="id" value="{{ line.id }}" />
-                    <button class="btn btn-mini btn-link" title="{% trans "Remove one" %}" aria-label="{% trans "Remove one" %}">
+                    <button class="btn btn-mini btn-link" title="{% blocktrans with item=line.item %}Remove one {{item}} from your basket{% endblocktrans %}">
                         {% if line.seat %}
                             <i class="fa fa-trash" aria-hidden="true"></i>
+                            <span class="sr-only">{% blocktrans with item=line.item %}Remove {{item}} from your basket{% endblocktrans %}</span>
                         {% else %}
                             <i class="fa fa-minus" aria-hidden="true"></i>
+                            <span class="sr-only">{% blocktrans with item=line.item %}Remove one {{item}} from your basket{% endblocktrans %}</span>
                         {% endif %}
                     </button>
                 </form>
                 {% endif %}
-                <span class="sr-only">{% trans "quantity" %}</span>
+                <span class="sr-only">{% trans "Quantity" %}</span>
                 {{ line.count }}
                 {% if editable %}
                 <form action="{% eventurl event "presale:event.cart.add" cart_namespace=cart_namespace|default_if_none:"" %}"
@@ -209,8 +211,9 @@
                         <input type="hidden" name="price_{{ line.item.id }}"
                                 value="{% if event.settings.display_net_prices %}{{ line.bundle_sum_net }}{% else %}{{ line.bundle_sum }}{% endif %}" />
                     {% endif %}
-                    <button class="btn btn-mini btn-link {% if line.seat %}btn-invisible{% endif %}" title="{% trans "Add one more" %}" aria-label="{% trans "Add one more" %}" {% if line.seat %}disabled{% endif %}>
+                    <button class="btn btn-mini btn-link {% if line.seat %}btn-invisible{% endif %}" title="{% blocktrans with item=line.item %}Add one more {{item}} to your basket{% endblocktrans %}" {% if line.seat %}disabled{% endif %}>
                         <i class="fa fa-plus" aria-hidden="true"></i>
+                        <span class="sr-only">{% blocktrans with item=line.item %}Add one more {{item}} to your basket{% endblocktrans %}</span>
                     </button>
                 </form>
                 {% endif %}
@@ -328,7 +331,7 @@
 
         {% if editable and vouchers_exist and not cart.all_with_voucher %}
             <br>
-            <a class="js-only apply-voucher-toggle" href="#">
+            <a class="js-only apply-voucher-toggle" href="#voucher_code">
                 <span class="fa fa-tag" aria-hidden="true"></span> {% trans "Redeem a voucher" %}
             </a>
             <form action="{% eventurl event "presale:event.cart.voucher" cart_namespace=cart_namespace|default_if_none:"" %}"
