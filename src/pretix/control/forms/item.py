@@ -213,7 +213,7 @@ class QuotaForm(I18nModelForm):
 
         self.fields['itemvars'] = forms.MultipleChoiceField(
             label=_('Products'),
-            required=False,
+            required=True,
             choices=choices,
             widget=forms.CheckboxSelectMultiple
         )

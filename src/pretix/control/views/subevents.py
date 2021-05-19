@@ -263,7 +263,6 @@ class SubEventEditorMixin(MetaDataEditorMixin):
 
     @cached_property
     def formset(self):
-        extra = 0
         kwargs = {}
 
         if self.copy_from and self.request.method != "POST":
@@ -277,7 +276,14 @@ class SubEventEditorMixin(MetaDataEditorMixin):
                     ]
                 } for q in self.copy_from.quotas.prefetch_related('items', 'variations')
             ]
-            extra = len(kwargs['initial'])
+            extra = len(kwargs['initial']) - 1
+        else:
+            kwargs['initial'] = [
+                {
+                    'name': _('Tickets'),
+                }
+            ]
+            extra = 0
 
         formsetclass = inlineformset_factory(
             SubEvent, Quota,
@@ -509,6 +515,11 @@ class SubEventCreate(SubEventEditorMixin, EventPermissionRequiredMixin, CreateVi
     context_object_name = 'subevent'
     form_class = SubEventForm
 
+    def get_initial(self):
+        return {
+            'active': True,
+        }
+
     def post(self, request, *args, **kwargs):
         self.object = SubEvent(event=self.request.event)
         form = self.get_form()
@@ -567,6 +578,10 @@ class SubEventCreate(SubEventEditorMixin, EventPermissionRequiredMixin, CreateVi
             f.subevent = form.instance
             f.save()
         return ret
+
+    def form_invalid(self, form):
+        messages.error(self.request, _('We could not save your changes. See below for details.'))
+        return super().form_invalid(form)
 
     @cached_property
     def meta_forms(self):
