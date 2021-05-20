@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-05-13 08:11+0000\n"
-"PO-Revision-Date: 2021-05-10 08:48+0000\n"
+"PO-Revision-Date: 2021-05-20 07:27+0000\n"
 "Last-Translator: Mohamed Tawfiq <mtawfiq@wafyapp.com>\n"
 "Language-Team: Arabic <https://translate.pretix.eu/projects/pretix/pretix-js/"
 "ar/>\n"
@@ -317,11 +317,11 @@ msgstr "خيار واحد على الأقل"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:99
 msgid "Event start"
-msgstr "موعد بداية الفعالية"
+msgstr "بداية الفعالية"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:100
 msgid "Event end"
-msgstr "موعد نهاية الفعالية"
+msgstr "نهاية الفعالية"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:101
 msgid "Event admission"
