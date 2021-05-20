@@ -66,6 +66,10 @@ Here is the currently recommended set of commands::
         ON public.pretixbase_orderposition (upper((attendee_email)::text));
     CREATE INDEX CONCURRENTLY pretix_addidx_voucher_code_upper
         ON public.pretixbase_voucher (upper((code)::text));
+    CREATE INDEX CONCURRENTLY pretix_addidx_logentry_event_date
+        ON public.pretixbase_logentry (event_id, datetime);
+    CREATE INDEX CONCURRENTLY pretix_addidx_logentry_event_cid_date
+        ON public.pretixbase_logentry (event_id, content_type_id, datetime);
 
 
 Also, if you use our ``pretix-shipping`` plugin::
