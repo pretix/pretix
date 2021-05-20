@@ -25,7 +25,9 @@ from collections import OrderedDict
 
 from celery.exceptions import Retry
 from sentry_sdk import Hub
-from sentry_sdk.integrations.django import DjangoIntegration, _set_user_info, _before_get_response, LEGACY_RESOLVER
+from sentry_sdk.integrations.django import (
+    LEGACY_RESOLVER, DjangoIntegration, _before_get_response, _set_user_info,
+)
 from sentry_sdk.utils import capture_internal_exceptions
 
 MASK = '*' * 8
@@ -136,7 +138,9 @@ class PretixSentryIntegration(DjangoIntegration):
         BaseHandler.get_response = sentry_patched_get_response
 
         if hasattr(BaseHandler, "get_response_async"):
-            from sentry_sdk.integrations.django.asgi import patch_get_response_async
+            from sentry_sdk.integrations.django.asgi import (
+                patch_get_response_async,
+            )
 
             patch_get_response_async(BaseHandler, _before_get_response)
 
