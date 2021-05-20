@@ -35,6 +35,10 @@ var cart = {
         var now = cart._get_now();
         var diff_minutes = Math.floor(cart._deadline.diff(now) / 1000 / 60);
         var diff_seconds = Math.floor(cart._deadline.diff(now) / 1000 % 60);
+
+        if (diff_minutes < 2 || diff_minutes == 5) $("#cart-deadline").get(0).setAttribute("aria-live", "polite");
+        else $("#cart-deadline").get(0).removeAttribute("aria-live");
+
         if (diff_minutes < 0) {
             $("#cart-deadline").text(gettext("The items in your cart are no longer reserved for you."));
             $("#cart-deadline-short").text(
