@@ -104,12 +104,6 @@
 }
 
 @media(max-width: $screen-sm-max) {
-    .cart .panel-body {
-        #cart-deadline {
-            display: block;
-            padding: 0 5px;
-        }
-    }
     .cart-row {
         .download-desktop {
             clear: both;

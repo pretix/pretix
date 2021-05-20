@@ -36,20 +36,6 @@
             </div>
             <div class="panel-body">
                 {% include "pretixpresale/event/fragment_cart.html" with cart=cart event=request.event editable=False %}
-                <div class="cart-row row">
-                    <div class="col-md-6 col-xs-12">
-                        <em id="cart-deadline" data-expires="{{ cart.first_expiry|date:"Y-m-d H:i:sO" }}">
-                            {% if cart.minutes_left > 0 or cart.seconds_left > 0 %}
-                                {% blocktrans trimmed with minutes=cart.minutes_left %}
-                                    The items in your cart are reserved for you for {{ minutes }} minutes.
-                                {% endblocktrans %}
-                            {% else %}
-                                {% trans "The items in your cart are no longer reserved for you." %}
-                            {% endif %}
-                        </em>
-                    </div>
-                    <div class="clearfix"></div>
-                </div>
             </div>
         </div>
         {% if payment_provider %}

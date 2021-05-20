@@ -4,8 +4,8 @@
 {% load rich_text %}
 {% load money %}
 {% blocktrans asvar s_taxes %}taxes{% endblocktrans %}
-<div role="table" aria-label="{% trans "Your cart" %}" aria-describedby="cart-table-description" aria-rowcount="{{ cart.positions|length|add:2 }}">
-    <div class="sr-only" id="cart-table-description">{% trans "Overview of your basket. You can change the quantities of the items here." %}</div>
+{% comment %}aria-describedby="cart-deadline" gibt es nur, wenn es ein aktiver Warenkorb ist{% endcomment %}
+<div role="table" aria-label="{% trans "Your cart" %}" aria-describedby="cart-deadline" aria-rowcount="{{ cart.positions|length|add:2 }}">
     <div class="sr-only" role="rowgroup">
         <ul class="sr-only" role="row">
             <li role="columnheader" aria-sort="none">{% trans "Product" %}</li>
@@ -292,6 +292,8 @@
         <div class="clearfix"></div>
     </div>
 {% endfor %}
+</div>
+<div role="rowgroup">
 {% if event.settings.display_net_prices and cart.tax_total %}
     <div class="row cart-row total">
         <div class="col-md-4 col-xs-6">
@@ -312,8 +314,6 @@
         <div class="clearfix"></div>
     </div>
 {% endif %}
-</div>
-<div role="rowgroup">
 <div role="row" class="row cart-row total">
     <div role="rowheader" class="product">
         <strong>{% trans "Total" %}</strong><br>
@@ -326,7 +326,8 @@
         </span>
     </div>
     <div class="count hidden-xs hidden-sm"></div>
-    <div role="cell" class="col-md-3 col-xs-6 col-md-offset-3 price">
+    <div class="singleprice price"></div>
+    <div role="cell" class="totalprice price">
         <strong>{{ cart.total|money:event.currency }}</strong>
 
         {% if not event.settings.display_net_prices and cart.tax_total and not editable %}
@@ -341,28 +342,49 @@
 </div>
 </div>
 </div>
-
-        {% if editable and vouchers_exist and not cart.all_with_voucher %}
-        <div class="row">
-            <div class="col-md-3 col-xs-12 col-md-offset-9">
-                <p class="text-right"><a class="js-only apply-voucher-toggle" href="#voucher_code">
-                    <span class="fa fa-tag" aria-hidden="true"></span> {% trans "Redeem a voucher" %}
-                </a></p>
-                <form action="{% eventurl event "presale:event.cart.voucher" cart_namespace=cart_namespace|default_if_none:"" %}"
-                      data-asynctask-headline="{% trans "We're applying this voucher to your cart..." %}"
-                      method="post" data-asynctask class="apply-voucher">
-                    {% csrf_token %}
-                    <label for="voucher_code" class="sr-only">{% trans "Voucher code" %}</label>
-                    <div class="input-group">
-                        <input type="text" class="form-control" name="voucher" id="voucher_code" placeholder="{% trans "Voucher code" %}" aria-label="{% trans "Voucher code" %}">
-                        <span class="input-group-btn">
-                            <button class="btn btn-primary" type="submit">
-                                <span class="fa fa-check" aria-hidden="true"></span><span class="sr-only"> {% trans "Redeem voucher" %}</span>
-                            </button>
-                        </span>
-                    </div>
-                </form>
-            </div>
-            <div class="clearfix"></div>
-        </div>
+<div class="row cart-row">
+    <div class="col-md-8 col-sm-6 col-xs-12">
+    {% if not cart.is_ordered %}
+        <p class="text-muted" id="cart-deadline" data-expires="{{ cart.first_expiry|date:"Y-m-d H:i:sO" }}">
+            {% if cart.minutes_left > 0 or cart.seconds_left > 0 %}
+                {% blocktrans trimmed with minutes=cart.minutes_left %}
+                    The items in your cart are reserved for you for {{ minutes }} minutes.
+                {% endblocktrans %}
+            {% else %}
+                {% trans "The items in your cart are no longer reserved for you." %}
+            {% endif %}
+        </p>
+    {% else %}
+        <p class="sr-only" id="cart-deadline">
+        {% if editable %}
+            {% trans "Overview of your ordered products. You can still change your order." %}
+        {% else %}
+            {% trans "Overview of your ordered products. You cannot change your order anymore." %}
         {% endif %}
+        </p>
+    {% endif %}
+    </div>
+{% if editable and vouchers_exist and not cart.all_with_voucher %}
+    <div class="col-md-4 col-sm-6 col-xs-12">
+        <p class="text-right"><a class="js-only apply-voucher-toggle" href="#voucher_code">
+            <span class="fa fa-tag" aria-hidden="true"></span> {% trans "Redeem a voucher" %}
+        </a></p>
+        <form action="{% eventurl event "presale:event.cart.voucher" cart_namespace=cart_namespace|default_if_none:"" %}"
+              data-asynctask-headline="{% trans "We're applying this voucher to your cart..." %}"
+              method="post" data-asynctask class="apply-voucher">
+            {% csrf_token %}
+            <label for="voucher_code" class="sr-only">{% trans "Voucher code" %}</label>
+            <div class="input-group">
+                <input type="text" class="form-control" name="voucher" id="voucher_code" placeholder="{% trans "Voucher code" %}" aria-label="{% trans "Voucher code" %}">
+                <span class="input-group-btn">
+                    <button class="btn btn-primary" type="submit">
+                        <span class="fa fa-check" aria-hidden="true"></span><span class="sr-only"> {% trans "Redeem voucher" %}</span>
+                    </button>
+                </span>
+            </div>
+        </form>
+    </div>
+{% endif %}
+
+    <div class="clearfix"></div>
+</div>
