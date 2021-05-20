@@ -47,8 +47,8 @@ var cart = {
             window.clearInterval(cart._deadline_interval);
         } else {
             $("#cart-deadline").text(ngettext(
-                "The items in your cart are reserved for you for one minute.",
-                "The items in your cart are reserved for you for {num} minutes.",
+                "The items in your cart are reserved for you for one minute.",
+                "The items in your cart are reserved for you for {num} minutes.",
                 diff_minutes
             ).replace(/\{num\}/g, diff_minutes));
             $("#cart-deadline-short").text(
