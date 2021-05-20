@@ -303,6 +303,7 @@ class QuotaTest(ItemFormTest):
         form_data = extract_form_fields(doc.select('.container-fluid form')[0])
         form_data['name'] = 'Full house'
         form_data['size'] = '500'
+        form_data['itemvars'] = str(self.item1.pk)
         doc = self.post_doc('/control/event/%s/%s/quotas/add' % (self.orga1.slug, self.event1.slug), form_data)
         assert doc.select(".alert-success")
         self.assertIn("Full house", doc.select("#page-wrapper table")[0].text)
@@ -334,6 +335,7 @@ class QuotaTest(ItemFormTest):
             se1 = self.event1.subevents.create(name="Foo", date_from=now())
             se2 = self.event1.subevents.create(name="Bar", date_from=now())
             c = Quota.objects.create(event=self.event1, name="Full house", size=500, subevent=se1)
+            c.items.add(self.item1)
         doc = self.get_doc('/control/event/%s/%s/quotas/%s/change' % (self.orga1.slug, self.event1.slug, c.id))
         form_data = extract_form_fields(doc.select('.container-fluid form')[0])
         form_data['subevent'] = se2.pk
