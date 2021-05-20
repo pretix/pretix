@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-05-13 08:11+0000\n"
-"PO-Revision-Date: 2021-05-19 05:00+0000\n"
+"PO-Revision-Date: 2021-05-20 07:27+0000\n"
 "Last-Translator: Mohamed Tawfiq <mtawfiq@wafyapp.com>\n"
 "Language-Team: Arabic <https://translate.pretix.eu/projects/pretix/pretix/ar/"
 ">\n"
@@ -4987,16 +4987,14 @@ msgstr "123.45 يورو"
 
 #: pretix/base/pdf.py:144
 msgid "Price including add-ons"
-msgstr "السعر بما في ذلك إضافات"
+msgstr "السعر شاملا الإضافات"
 
 #: pretix/base/pdf.py:158
 #: pretix/control/templates/pretixcontrol/order/index.html:442
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:76
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:79
-#, fuzzy
-#| msgid "Attendee email"
 msgid "Attendee company"
-msgstr "البريد الإلكتروني الحضور"
+msgstr "شركة حاضرة"
 
 #: pretix/base/pdf.py:159 pretix/base/pdf.py:302
 #: pretix/base/services/tickets.py:117 pretix/control/views/pdf.py:101
@@ -5004,12 +5002,11 @@ msgid "Sample company"
 msgstr "شركة عينة"
 
 #: pretix/base/pdf.py:163
-#, fuzzy
-#| msgid "Attendee badges"
 msgid "Full attendee address"
-msgstr "شارات الحضور"
+msgstr "عنوان الحضور الكامل"
 
 #: pretix/base/pdf.py:164
+#, fuzzy
 msgid ""
 "John Doe\n"
 "Sample company\n"
@@ -5017,40 +5014,35 @@ msgid ""
 "12345 Any City\n"
 "Atlantis"
 msgstr ""
+"جون دو\n"
+"شركة عينة\n"
+"شارع سي سامي 42\n"
+"12345 أي مدينة\n"
+"اتلانتس"
 
 #: pretix/base/pdf.py:168
-#, fuzzy
-#| msgid "Attendee name"
 msgid "Attendee street"
-msgstr "الاسم"
+msgstr "شارع الحضور"
 
 #: pretix/base/pdf.py:173
-#, fuzzy
-#| msgid "Attendee badges"
 msgid "Attendee ZIP code"
-msgstr "شارات الحضور"
+msgstr "الرمز البريدي للحضور"
 
 #: pretix/base/pdf.py:178
-#, fuzzy
-#| msgid "Attendee email"
 msgid "Attendee city"
-msgstr "البريد الإلكتروني الحضور"
+msgstr "مدينة الحضور"
 
 #: pretix/base/pdf.py:183
-#, fuzzy
-#| msgid "Attendee name"
 msgid "Attendee state"
-msgstr "الاسم"
+msgstr "ولاية الحضور"
 
 #: pretix/base/pdf.py:188
-#, fuzzy
-#| msgid "Attendee email"
 msgid "Attendee country"
-msgstr "البريد الإلكتروني الحضور"
+msgstr "بلد الحضور"
 
 #: pretix/base/pdf.py:201 pretix/base/pdf.py:206
 msgid "Sample event name"
-msgstr "اسم الحدث عينة"
+msgstr "مثال اسم فعالية"
 
 #: pretix/base/pdf.py:211
 msgid "May 31st, 2017"
@@ -5058,7 +5050,7 @@ msgstr "31 مايو 2017"
 
 #: pretix/base/pdf.py:215
 msgid "Event date range"
-msgstr "نطاق التاريخ الحدث"
+msgstr "نطاق تاريخ الفعالية"
 
 #: pretix/base/pdf.py:216
 msgid "May 31st – June 4th, 2017"
@@ -5066,23 +5058,23 @@ msgstr "31 مايو - 4 يونيو، عام 2017"
 
 #: pretix/base/pdf.py:220
 msgid "Event begin date and time"
-msgstr "الحدث بدء التاريخ والوقت"
+msgstr "تاريخ ووقت بدء الفعالية"
 
 #: pretix/base/pdf.py:221
 msgid "2017-05-31 20:00"
-msgstr "2017/05/31 20:00"
+msgstr "2017-05-31 20:00"
 
 #: pretix/base/pdf.py:228
 msgid "Event begin date"
-msgstr "الحدث يبدأ التاريخ"
+msgstr "تاريخ بدء الفعالية"
 
 #: pretix/base/pdf.py:229 pretix/base/pdf.py:250 pretix/base/pdf.py:359
 msgid "2017-05-31"
-msgstr "2017/05/31"
+msgstr "2017-05-31"
 
 #: pretix/base/pdf.py:236
 msgid "Event begin time"
-msgstr "الحدث يبدأ وقت"
+msgstr "وقت بدء الفعالية"
 
 #: pretix/base/pdf.py:237
 msgid "20:00"
@@ -5090,15 +5082,15 @@ msgstr "20:00"
 
 #: pretix/base/pdf.py:241
 msgid "Event end date and time"
-msgstr "حدث نهاية التاريخ والوقت"
+msgstr "تاريخ ووقت انتهاء الفعالية"
 
 #: pretix/base/pdf.py:242
 msgid "2017-05-31 22:00"
-msgstr "2017/05/31 22:00"
+msgstr "2017-05-31 22:00"
 
 #: pretix/base/pdf.py:249
 msgid "Event end date"
-msgstr "تاريخ نهاية الحدث"
+msgstr "تاريخ انتهاء الفعالية"
 
 #: pretix/base/pdf.py:258
 msgid "22:00"
@@ -5106,15 +5098,15 @@ msgstr "22:00"
 
 #: pretix/base/pdf.py:265
 msgid "Event admission date and time"
-msgstr "الحدث تاريخ القبول والوقت"
+msgstr "تاريخ ووقت قبول الفعالية"
 
 #: pretix/base/pdf.py:266 pretix/base/pdf.py:367 pretix/base/pdf.py:405
 msgid "2017-05-31 19:00"
-msgstr "2017/05/31 19:00"
+msgstr "2017-05-31 19:00"
 
 #: pretix/base/pdf.py:273
 msgid "Event admission time"
-msgstr "الساعة القبول الحدث"
+msgstr "وقت قبول الفعالية"
 
 #: pretix/base/pdf.py:274 pretix/base/pdf.py:375
 msgid "19:00"
@@ -5122,7 +5114,7 @@ msgstr "19:00"
 
 #: pretix/base/pdf.py:281
 msgid "Event location"
-msgstr "موقع الحدث"
+msgstr "مكان الفعالية"
 
 #: pretix/base/pdf.py:282 pretix/base/settings.py:757
 msgid "Random City"
@@ -5133,58 +5125,48 @@ msgid "Invoice address company"
 msgstr "شركة عنوان الفاتورة"
 
 #: pretix/base/pdf.py:306
-#, fuzzy
-#| msgid "Invoice addresses"
 msgid "Invoice address street"
-msgstr "عناوين فاتورة"
+msgstr "شارع عنوان الفاتورة"
 
 #: pretix/base/pdf.py:307
+#, fuzzy
 msgid "Sesame Street 42"
-msgstr ""
+msgstr "شارع سيسامي 42"
 
 #: pretix/base/pdf.py:311
 #, fuzzy
 #| msgid "Invoice addresses"
 msgid "Invoice address ZIP code"
-msgstr "عناوين فاتورة"
+msgstr "الرمز البريدي لعنوان الفاتورة"
 
 #: pretix/base/pdf.py:312
-#, fuzzy
-#| msgid "012345"
 msgid "12345"
-msgstr "012345"
+msgstr "12345"
 
 #: pretix/base/pdf.py:316
-#, fuzzy
-#| msgid "Invoice address company"
 msgid "Invoice address city"
-msgstr "شركة عنوان الفاتورة"
+msgstr "مدينة عنوان الفاتورة"
 
 #: pretix/base/pdf.py:317 pretix/base/services/invoices.py:403
+#, fuzzy
 msgid "Sample city"
-msgstr "مدينة عينة"
+msgstr "مدينة مثال"
 
 #: pretix/base/pdf.py:321
-#, fuzzy
-#| msgid "Invoice address name"
 msgid "Invoice address state"
-msgstr "اسم عنوان الفاتورة"
+msgstr "ولاية عنوان الفاتورة"
 
 #: pretix/base/pdf.py:322
-#, fuzzy
-#| msgid "Sample city"
 msgid "Sample State"
-msgstr "مدينة عينة"
+msgstr "ولاية مثال"
 
 #: pretix/base/pdf.py:326
-#, fuzzy
-#| msgid "Invoice address company"
 msgid "Invoice address country"
-msgstr "شركة عنوان الفاتورة"
+msgstr "بلد عنوان الفاتورة"
 
 #: pretix/base/pdf.py:327
 msgid "Atlantis"
-msgstr ""
+msgstr "اتلانتس"
 
 #: pretix/base/pdf.py:331
 msgid "List of Add-Ons"
@@ -5195,32 +5177,32 @@ msgid ""
 "Add-on 1\n"
 "Add-on 2"
 msgstr ""
-"الملحق 1\n"
-"الملحق 2"
+"الإضافة 1\n"
+"الإضافة 2"
 
 #: pretix/base/pdf.py:343 pretix/control/forms/filter.py:926
 #: pretix/control/forms/filter.py:928
 #: pretix/control/templates/pretixcontrol/organizers/index.html:35
 msgid "Organizer name"
-msgstr "اسم منظم"
+msgstr "اسم المنظم"
 
 #: pretix/base/pdf.py:344
 msgid "Event organizer company"
-msgstr "شركة منظم الحدث"
+msgstr "شركة منظم الفعالية"
 
 #: pretix/base/pdf.py:348
+#, fuzzy
 msgid "Organizer info text"
-msgstr "معلومات منظم نص"
+msgstr "نص معلومات المنظم"
 
 #: pretix/base/pdf.py:349
+#, fuzzy
 msgid "Event organizer info text"
-msgstr "حدث المعلومات منظم النص"
+msgstr "نص معلومات منظم الفعالية"
 
 #: pretix/base/pdf.py:353 pretix/base/pdf.py:354
-#, fuzzy
-#| msgid "Event organizer info text"
 msgid "Event info text"
-msgstr "حدث المعلومات منظم النص"
+msgstr "نص معلومات الفعالية"
 
 #: pretix/base/pdf.py:358
 msgid "Printing date"
@@ -5232,7 +5214,7 @@ msgstr "تاريخ ووقت الطباعة"
 
 #: pretix/base/pdf.py:374
 msgid "Printing time"
-msgstr "طباعة الوقت"
+msgstr "وقت الطباعة"
 
 #: pretix/base/pdf.py:382
 msgid "Seat: Full name"
@@ -5257,17 +5239,15 @@ msgstr "الطابق الأرضي"
 
 #: pretix/base/pdf.py:394
 msgid "Seat: row"
-msgstr "مقعد: صف واحد"
+msgstr "مقعد: صف"
 
 #: pretix/base/pdf.py:399
 msgid "Seat: seat number"
 msgstr "مقعد: عدد المقاعد"
 
 #: pretix/base/pdf.py:404
-#, fuzzy
-#| msgid "Date and time"
 msgid "Date and time of first scan"
-msgstr "التاريخ و الوقت"
+msgstr "تاريخ ووقت أول مسح"
 
 #: pretix/base/pdf.py:445 pretix/base/pdf.py:483
 #, python-brace-format
@@ -5277,7 +5257,7 @@ msgstr "سؤال: {question}"
 #: pretix/base/pdf.py:484
 #, python-brace-format
 msgid "<Answer: {question}>"
-msgstr "<الجواب: {question}>"
+msgstr "<جواب: {question}>"
 
 #: pretix/base/pdf.py:515 pretix/base/pdf.py:522
 #: pretix/plugins/badges/exporters.py:297
@@ -5291,7 +5271,7 @@ msgstr "اسم الحضور: {part}"
 #: pretix/base/pdf.py:532
 #, python-brace-format
 msgid "Invoice address name: {part}"
-msgstr "الفاتورة اسم عنوان: {part}"
+msgstr "اسم عنوان الفاتورة: {part}"
 
 #: pretix/base/pdf.py:761 pretix/plugins/ticketoutputpdf/ticketoutput.py:112
 msgid "Ticket"
@@ -5299,83 +5279,90 @@ msgstr "تذكرة"
 
 #: pretix/base/reldate.py:35
 msgid "Event start"
-msgstr "موعد بداية الفعالية"
+msgstr "بداية الفعالية"
 
 #: pretix/base/reldate.py:36
 msgid "Event end"
-msgstr "موعد نهاية الفعالية"
+msgstr "نهاية الفعالية"
 
 #: pretix/base/reldate.py:37
 msgid "Event admission"
 msgstr "تسجيل الفعالية"
 
 #: pretix/base/reldate.py:38
+#, fuzzy
 msgid "Presale start"
-msgstr "بداية [خبر]"
+msgstr "بداية العرض الأولي"
 
 #: pretix/base/reldate.py:39
+#, fuzzy
 msgid "Presale end"
-msgstr "نهاية [خبر]"
+msgstr "نهاية العرض الأولي"
 
 #: pretix/base/reldate.py:208 pretix/base/reldate.py:316
 msgid "Fixed date:"
 msgstr "التاريخ المحدد:"
 
 #: pretix/base/reldate.py:209 pretix/base/reldate.py:317
+#, fuzzy
 msgid "Relative date:"
-msgstr "تاريخ النسبي:"
+msgstr "تاريخ مرتبط:"
 
 #: pretix/base/reldate.py:210
 #, fuzzy
 #| msgid "Relative date:"
 msgid "Relative time:"
-msgstr "تاريخ النسبي:"
+msgstr "وقت مرتبط:"
 
 #: pretix/base/reldate.py:218 pretix/base/reldate.py:320
+#, fuzzy
 msgid "Not set"
 msgstr "غير مضبوط"
 
 #: pretix/base/secrets.py:105
 msgid "Random (default, works with all pretix apps)"
-msgstr ""
+msgstr "عشوائي (افتراضي، يعمل مع جميع تطبيقات pretix)"
 
 #: pretix/base/secrets.py:135
+#, fuzzy
 msgid ""
 "pretix signature scheme 1 (for very large events, does not work with "
 "pretixSCAN on iOS and changes semantics of offline scanning – please refer "
 "to documentation or support for details)"
 msgstr ""
+"pretix مخطط التوقيع 1 (للأحداث الكبيرة جدا ، لا يعمل مع preixSCAN على iOS "
+"ويغير دلالات المسح دون اتصال - يرجى الرجوع إلى الوثائق أو الدعم للحصول على "
+"التفاصيل)"
 
 #: pretix/base/services/cancelevent.py:221
 #: pretix/base/services/cancelevent.py:279
-#, fuzzy
-#| msgid "Event date"
 msgid "Event canceled"
-msgstr "تاريخ الحدث"
+msgstr "تم إلغاء الفعالية"
 
 #: pretix/base/services/cart.py:86 pretix/base/services/orders.py:112
 msgid ""
 "We were not able to process your request completely as the server was too "
 "busy. Please try again."
 msgstr ""
-"لم نكن قادرين على معالجة طلبك تماما كما كان الملقم مشغول جدا. حاول مرة اخرى."
+"لم نتمكن من معالجة طلبك بالكامل لأن الخادم كان مشغولا للغاية. حاول مرة اخرى."
 
 #: pretix/base/services/cart.py:88 pretix/presale/views/cart.py:230
 msgid "You did not select any products."
-msgstr "انت لم تختر أي من المنتجات."
+msgstr "لم تقم بتحديد أي من المنتجات."
 
 #: pretix/base/services/cart.py:89
+#, fuzzy
 msgid "Unknown cart position."
-msgstr "عربة موقف معروف."
+msgstr "وضع عربة غير معروف."
 
 #: pretix/base/services/cart.py:90
 msgctxt "subevent"
 msgid "No date was specified."
-msgstr "تم تحديد موعد لذلك."
+msgstr "لم يتم تحديد تاريخ."
 
 #: pretix/base/services/cart.py:91
 msgid "You selected a product which is not available for sale."
-msgstr "يمكنك اختيار المنتج الذي هو ليس متاحة للبيع."
+msgstr "لقد اخترت منتجا غير متوفر للبيع."
 
 #: pretix/base/services/cart.py:92
 msgid ""
@@ -5389,23 +5376,23 @@ msgid ""
 "Some of the products you selected are no longer available in the quantity "
 "you selected. Please see below for details."
 msgstr ""
-"بعض المنتجات التي اخترتها لم تعد متوفرة في كمية التي حددتها. انظر أدناه "
+"بعض المنتجات التي اخترتها لم تعد متوفرة بالكمية التي حددتها. انظر أدناه "
 "للحصول على التفاصيل."
 
 #: pretix/base/services/cart.py:96
 #, python-format
 msgid "You cannot select more than %s items per order."
-msgstr "لا يمكنك تحديد أكثر من %s سلعة لكل طلب."
+msgstr "لا يمكنك تحديد أكثر من %s عناصر لكل طلب."
 
 #: pretix/base/services/cart.py:97
 #, python-format
 msgid "You cannot select more than %(max)s items of the product %(product)s."
-msgstr "لا يمكنك تحديد أكثر من %(max)s سلع من المنتج %(product)s."
+msgstr "لا يمكنك تحديد أكثر من %(max)s عناصر من المنتج %(product)s."
 
 #: pretix/base/services/cart.py:98
 #, python-format
 msgid "You need to select at least %(min)s items of the product %(product)s."
-msgstr "تحتاج إلى تحديد ما لا يقل عن %(min)s سلع من المنتج %(product)s."
+msgstr "تحتاج إلى تحديد ما لا يقل عن %(min)s عناصر من المنتج %(product)s."
 
 #: pretix/base/services/cart.py:99
 #, python-format
@@ -5413,41 +5400,45 @@ msgid ""
 "We removed %(product)s from your cart as you can not buy less than %(min)s "
 "items of it."
 msgstr ""
-"أزلنا %(product)s من عربة التسوق كما لا يمكنك شراء أقل من %(min)s سلع منه."
+"أزلنا %(product)s من عربة التسوق الخاصة بك كما لا يمكنك شراء أقل من %(min)s "
+"عناصر منه."
 
 #: pretix/base/services/cart.py:101 pretix/base/services/orders.py:114
 msgid "The presale period for this event has not yet started."
-msgstr "لم يبدأ الفترة [خبر] لهذا الحدث حتى الان."
+msgstr "لم تبدأ فترة عرض قبل البيع لهذه الفعالية بعد."
 
 #: pretix/base/services/cart.py:102
 msgid "The presale period for this event has ended."
-msgstr "انتهت الفترة [خبر] لهذا الحدث."
+msgstr "انتهت فترة عرض ما قبل البيع لهذه الفعالية."
 
 #: pretix/base/services/cart.py:103
 msgid ""
 "All payments for this event need to be confirmed already, so no new orders "
 "can be created."
 msgstr ""
+"يجب تأكيد جميع المدفوعات الخاصة بهذه الفعالية مسبقا ، لذلك لا يمكن إنشاء "
+"طلبات جديدة."
 
 #: pretix/base/services/cart.py:104
+#, fuzzy
 msgid ""
 "The presale period for this event has not yet started. The affected "
 "positions have been removed from your cart."
 msgstr ""
-"لم يبدأ الفترة [خبر] لهذا الحدث حتى الان. تم إزالة مواقع المتضررة من عربة "
-"التسوق."
+"لم تبدأ فترة عرض ما قبل البيع لهذه الفعالية بعد. تمت إزالة المواقع المتأثرة "
+"من عربة التسوق الخاصة بك."
 
 #: pretix/base/services/cart.py:106 pretix/base/services/orders.py:129
 msgid ""
 "The presale period for one of the events in your cart has ended. The "
 "affected positions have been removed from your cart."
 msgstr ""
-"انتهت الفترة [خبر] لأحد الأحداث في عربة التسوق. تم إزالة مواقع المتضررة من "
-"عربة التسوق."
+"انتهت فترة عرض ما قبل البيع لإحدى الفعاليات في عربة التسوق الخاصة بك. تمت "
+"إزالة المواقع المتأثرة من عربة التسوق الخاصة بك."
 
 #: pretix/base/services/cart.py:108
 msgid "The entered price is to high."
-msgstr "سعر تم إدخالها إلى الأعلى."
+msgstr "السعر الذي تم إدخاله مرتفع جدا."
 
 #: pretix/base/services/cart.py:109
 msgid "This voucher code is not known in our database."
