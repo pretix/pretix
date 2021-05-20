@@ -29,8 +29,8 @@
                             {{ this.$root.texts[rightoperand.buildTime[0]] }}
                         </span>
                         <span v-if="operands[2]">
-                            <span v-if="operator === 'isBefore'">+</span>
-                            <span v-else>-</span>
+                            <span v-if="operator === 'isBefore'">-</span>
+                            <span v-else>+</span>
                             {{ operands[2] }}
                             {{ this.$root.texts.minutes }}
                         </span>
