@@ -25,7 +25,7 @@ from collections import OrderedDict
 
 from celery.exceptions import Retry
 from sentry_sdk import Hub
-from sentry_sdk.integrations.django import DjangoIntegration, _set_user_info
+from sentry_sdk.integrations.django import DjangoIntegration, _set_user_info, _before_get_response, LEGACY_RESOLVER
 from sentry_sdk.utils import capture_internal_exceptions
 
 MASK = '*' * 8
@@ -85,6 +85,19 @@ def _make_event_processor(weak_request, integration):
             request_info = event.setdefault("request", {})
             request_info["cookies"] = dict(request.COOKIES)
 
+        # Sentry's DjangoIntegration already sets the transcation, but it gets confused by our multi-domain stuff
+        # where the URL resolver changes in the middleware stack. Additionally, we'd like to get the method.
+        url = LEGACY_RESOLVER.resolve(request.path_info, getattr(request, "urlconf", None))
+        if hasattr(request, 'event_domain'):
+            url = '/{organizer}/{event}' + url
+        elif hasattr(request, 'organizer_domain'):
+            url = '/{organizer}' + url
+        event['transaction'] = '{} {}'.format(
+            request.method,
+            url
+        )
+
+        # We want to scrub data not only from the request, but from traceback frames as well!
         scrub_data(event.get("request", {}))
         if 'exception' in event:
             exc = event.get("exception", {})
@@ -98,10 +111,14 @@ def _make_event_processor(weak_request, integration):
 
 
 class PretixSentryIntegration(DjangoIntegration):
+
     @staticmethod
     def setup_once():
         DjangoIntegration.setup_once()
         from django.core.handlers.base import BaseHandler
+
+        # DjangoIntegration already patched get_response, we patch it again to add our custom
+        # processor
 
         old_get_response = BaseHandler.get_response
 
@@ -113,9 +130,15 @@ class PretixSentryIntegration(DjangoIntegration):
                     scope.add_event_processor(
                         _make_event_processor(weakref.ref(request), integration)
                     )
+
             return old_get_response(self, request)
 
         BaseHandler.get_response = sentry_patched_get_response
+
+        if hasattr(BaseHandler, "get_response_async"):
+            from sentry_sdk.integrations.django.asgi import patch_get_response_async
+
+            patch_get_response_async(BaseHandler, _before_get_response)
 
 
 def ignore_retry(event, hint):
