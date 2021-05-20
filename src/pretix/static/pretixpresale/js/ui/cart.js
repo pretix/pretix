@@ -40,7 +40,7 @@ var cart = {
         else $("#cart-deadline").get(0).removeAttribute("aria-live");
 
         if (diff_minutes < 0) {
-            $("#cart-deadline").text(gettext("The items in your cart are no longer reserved for you."));
+            $("#cart-deadline").text(gettext("The items in your cart are no longer reserved for you. You can still complete your order as long as they’re available."));
             $("#cart-deadline-short").text(
                 gettext("Cart expired")
             );
