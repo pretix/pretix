@@ -295,27 +295,31 @@
     </div>
     <div role="rowgroup">
     {% if event.settings.display_net_prices and cart.tax_total %}
-        <div class="row cart-row total">
-            <div class="col-md-4 col-xs-6">
+        <div role="row" class="row cart-row total">
+            <div role="cell" class="product">
                 <strong>{% trans "Net total" %}</strong>
             </div>
-            <div class="col-md-3 col-xs-6 col-md-offset-5 price">
+            <div role="cell" class="count hidden-xs hidden-sm"></div>
+            <div role="cell" class="singleprice price"></div>
+            <div role="cell" class="totalprice price">
                 {{ cart.net_total|money:event.currency }}
             </div>
             <div class="clearfix"></div>
         </div>
-        <div class="row cart-row">
-            <div class="col-md-4 col-xs-6">
+        <div role="row" class="row cart-row">
+            <div role="cell" class="product text-muted">
                 <strong>{% trans "Taxes" %}</strong>
             </div>
-            <div class="col-md-3 col-xs-6 col-md-offset-5 price">
+            <div role="cell" class="count hidden-xs hidden-sm"></div>
+            <div role="cell" class="singleprice price"></div>
+            <div role="cell" class="totalprice price text-muted">
                 {{ cart.tax_total|money:event.currency }}
             </div>
             <div class="clearfix"></div>
         </div>
     {% endif %}
         <div role="row" class="row cart-row total">
-            <div role="rowheader" class="product">
+            <div role="cell" class="product">
                 <strong>{% trans "Total" %}</strong><br>
                 <span class="text-muted">
                     {% blocktrans trimmed count num=cart.itemcount %}
@@ -325,8 +329,8 @@
                     {% endblocktrans %}
                 </span>
             </div>
-            <div class="count hidden-xs hidden-sm"></div>
-            <div class="singleprice price"></div>
+            <div role="cell" class="count hidden-xs hidden-sm"></div>
+            <div role="cell" class="singleprice price"></div>
             <div role="cell" class="totalprice price">
                 <strong>{{ cart.total|money:event.currency }}</strong>
 
@@ -352,7 +356,7 @@
                     The items in your cart are reserved for you for {{ minutes }} minutes.
                 {% endblocktrans %}
             {% else %}
-                {% trans "The items in your cart are no longer reserved for you." %}
+                {% trans "The items in your cart are no longer reserved for you. You can still complete your order, but other users could book your ticket in the meantime." %}
             {% endif %}
         </p>
     {% else %}
