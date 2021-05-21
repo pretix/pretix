@@ -1841,7 +1841,7 @@ class OrderContactChange(OrderView):
                     'pretix.event.order.customer.changed',
                     data={
                         'old_customer': old_customer,
-                        'new_customer': self.form.cleaned_data['customer'],
+                        'new_customer': self.form.cleaned_data.get('customer'),
                     },
                     user=self.request.user,
                 )
