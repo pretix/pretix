@@ -607,17 +607,17 @@ RRuleFormSet = formset_factory(
 class TimeForm(forms.Form):
     time_from = forms.TimeField(
         label=_('Event start time'),
-        widget=forms.TimeInput(attrs={'class': 'timepickerfield'}),
+        widget=forms.TimeInput(attrs={'class': 'timepickerfield', 'autocomplete': 'off'}),
         required=True
     )
     time_to = forms.TimeField(
         label=_('Event end time'),
-        widget=forms.TimeInput(attrs={'class': 'timepickerfield'}),
+        widget=forms.TimeInput(attrs={'class': 'timepickerfield', 'autocomplete': 'off'}),
         required=False
     )
     time_admission = forms.TimeField(
         label=_('Admission time'),
-        widget=forms.TimeInput(attrs={'class': 'timepickerfield'}),
+        widget=forms.TimeInput(attrs={'class': 'timepickerfield', 'autocomplete': 'off'}),
         required=False
     )
 
