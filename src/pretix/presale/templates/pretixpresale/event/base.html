@@ -154,10 +154,9 @@
 {% endblock %}
 {% block footernav %}
     {% if request.event.settings.contact_mail %}
-        <a href="mailto:{{ request.event.settings.contact_mail }}">{% trans "Contact event organizer" %}</a> &middot;
+        <li><a href="mailto:{{ request.event.settings.contact_mail }}">{% trans "Contact event organizer" %}</a></li>
     {% endif %}
     {% if request.event.settings.imprint_url %}
-        <a href="{% safelink request.event.settings.imprint_url %}" target="_blank" rel="noopener">{% trans "Imprint" %}</a>
-        &middot;
+        <li><a href="{% safelink request.event.settings.imprint_url %}" target="_blank" rel="noopener">{% trans "Imprint" %}</a></li>
     {% endif %}
 {% endblock %}

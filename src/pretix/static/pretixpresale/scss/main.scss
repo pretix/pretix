@@ -27,6 +27,18 @@ footer nav {
     text-align: center;
     font-size: 11px;
 }
+footer nav ul {
+    display: flex;
+    justify-content: center;
+    list-style: none;
+}
+footer nav li:not(:first-child):before {
+    content: "•";
+    display: inline-block;
+    width: 1.5em;
+    text-align: center;
+}
+
 .js-only {
     display: none;
 }
