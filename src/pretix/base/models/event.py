@@ -1347,12 +1347,14 @@ class SubEvent(EventMixin, LoggedModel):
     def save(self, *args, **kwargs):
         from .orders import Order
 
+        is_new = not bool(self.pk)
+
         clear_cache = kwargs.pop('clear_cache', False)
         super().save(*args, **kwargs)
         if self.event and clear_cache:
             self.event.cache.clear()
 
-        if (self.date_from, self.date_to) != self.__original_dates:
+        if not is_new and (self.date_from, self.date_to) != self.__original_dates:
             """
             This is required to guarantee a synchronization invariant of our scanning apps.
             Our syncing apps throw away order records of subevents more than X days ago, since
