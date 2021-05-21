@@ -54,7 +54,12 @@
                                     from {{ price }}
                                 {% endblocktrans %}
                             {% elif item.min_price != item.max_price %}
-                                {{ item.min_price|money:event.currency  }} – {{ item.max_price|money:event.currency  }}
+                                <span class="sr-only">
+                                {% blocktrans trimmed with from_price=item.min_price|money:event.currency to_price=item.max_price|money:event.currency  %}
+                                    from {{ from_price }} to {{ to_price }}
+                                {% endblocktrans %}
+                                </span>
+                                <span aria-hidden="true">{{ item.min_price|money:event.currency }} – {{ item.max_price|money:event.currency }}</span>
                             {% elif not item.min_price and not item.max_price %}
                                 {% trans "FREE" context "price" %}
                             {% else %}
