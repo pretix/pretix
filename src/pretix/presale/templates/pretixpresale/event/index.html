@@ -137,7 +137,7 @@
                 {% if ev.location %}
                     <div class="info-row">
                         <span class="fa fa-map-marker fa-fw" aria-hidden="true"></span>
-                        <p><span class="sr-only">{% trans "Location" %}:</span>
+                        <p><span class="sr-only">{% trans "Where?" %}:</span>
                             {{ ev.location|linebreaksbr }}
                         </p>
                     </div>
@@ -145,20 +145,20 @@
                 {% if ev.settings.show_dates_on_frontpage %}
                     <div class="info-row">
                         <span class="fa fa-clock-o fa-fw" aria-hidden="true"></span>
-                        <p>
-                            {{ ev.get_date_range_display }}
+                        <p><span class="sr-only">{% trans "When?" %}</span>
+                            <time datetime="{{ ev.date_from.isoformat }}">{{ ev.get_date_range_display }}</time>
                             {% if event.settings.show_times %}
                                 <br>
                                 <span data-time="{{ ev.date_from.isoformat }}" data-timezone="{{ request.event.timezone }}">
                                     {% blocktrans trimmed with time=ev.date_from|date:"TIME_FORMAT" %}
-                                        Begin: {{ time }}
+                                        Begin: <time datetime="{{ time }}">{{ time }}</time>
                                     {% endblocktrans %}
                                 </span>
                                 {% if event.settings.show_date_to and ev.date_to %}
                                     <br>
                                     <span data-time="{{ ev.date_to.isoformat }}" data-timezone="{{ request.event.timezone }}">
                                         {% blocktrans trimmed with time=ev.date_to|date:"TIME_FORMAT" %}
-                                            End: {{ time }}
+                                            End: <time datetime="{{ time }}">{{ time }}</time>
                                         {% endblocktrans %}
                                    </span>
                                 {% endif %}
@@ -168,13 +168,13 @@
                                 {% if ev.date_admission|date:"SHORT_DATE_FORMAT" == ev.date_from|date:"SHORT_DATE_FORMAT" %}
                                     <span data-time="{{ ev.date_admission.isoformat }}" data-timezone="{{ request.event.timezone }}">
                                         {% blocktrans trimmed with time=ev.date_admission|date:"TIME_FORMAT" %}
-                                            Admission: {{ time }}
+                                            Admission: <time datetime="{{ time }}">{{ time }}</time>
                                         {% endblocktrans %}
                                     </span>
                                 {% else %}
                                     <span data-time="{{ ev.date_admission.isoformat }}" data-timezone="{{ request.event.timezone }}">
                                         {% blocktrans trimmed with datetime=ev.date_admission|date:"SHORT_DATETIME_FORMAT" %}
-                                            Admission: {{ datetime }}
+                                            Admission: <time datetime="{{ datetime }}">{{ datetime }}</time>
                                         {% endblocktrans %}
                                     </span>
                                 {% endif %}
