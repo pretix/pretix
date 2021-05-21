@@ -457,7 +457,9 @@ class RRuleForm(forms.Form):
     )
     interval = forms.IntegerField(
         label=_('Interval'),
-        initial=1
+        initial=1,
+        min_value=1,
+        widget=forms.NumberInput(attrs={'min': '1'})
     )
     dtstart = forms.DateField(
         label=_('Start date'),
