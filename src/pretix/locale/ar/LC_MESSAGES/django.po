@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-05-13 08:11+0000\n"
-"PO-Revision-Date: 2021-05-20 07:27+0000\n"
+"PO-Revision-Date: 2021-05-21 07:41+0000\n"
 "Last-Translator: Mohamed Tawfiq <mtawfiq@wafyapp.com>\n"
 "Language-Team: Arabic <https://translate.pretix.eu/projects/pretix/pretix/ar/"
 ">\n"
@@ -5442,12 +5442,12 @@ msgstr "السعر الذي تم إدخاله مرتفع جدا."
 
 #: pretix/base/services/cart.py:109
 msgid "This voucher code is not known in our database."
-msgstr "ولا يعرف هذا الرمز قسيمة في قاعدة البيانات الخاصة بنا."
+msgstr "رمز القسيمة هذا غير معروف في قاعدة البيانات الخاصة بنا."
 
 #: pretix/base/services/cart.py:110
 msgid ""
 "This voucher code has already been used the maximum number of times allowed."
-msgstr "انتهى كود الخصم المدخل."
+msgstr "تم استخدام رمز القسيمة هذا سابقا لأقصى عدد مسموح به من المرات."
 
 #: pretix/base/services/cart.py:111
 #, python-format
@@ -5457,34 +5457,35 @@ msgid ""
 "or that you tried to redeem it before but did not complete the checkout "
 "process. You can try to use it again in %d minutes."
 msgstr ""
-"تم تأمين هذا كود قسيمة حاليا لأنه هو وارد أصلا في عربة. وهذا قد يعني أن شخصا "
-"آخر هو التعويض هذه القسائم في الوقت الحالي، أو أنك حاولت استرداد قيمتها من "
-"قبل ولكن لم يكمل عملية السحب. يمكنك محاولة استخدامه مرة أخرى في %d دقيقة."
+"رمز القسيمة مقفول حاليا لأنه موجود مسبقا في سلة تسوق. قد يعني هذا أن شخصا "
+"آخر يسترد قيمة هذه القسيمة الآن ، أو أنك حاولت استردادها من قبل ولكنك لم "
+"تكمل عملية تسجيل الخروج. يمكنك محاولة استخدامه مرة أخرى خلال %d دقيقة."
 
 #: pretix/base/services/cart.py:115
 #, python-format
 msgid "This voucher code can only be redeemed %d more times."
-msgstr "هذا الرمز قسيمة يمكن أن يكون إلا مطفي %d أكثر من مرة."
+msgstr "يمكن فقط استرداد رمز القسيمة هذه %dمرات أخرى."
 
 #: pretix/base/services/cart.py:116
+#, fuzzy
 msgid ""
 "You already used this voucher code. Remove the associated line from your "
 "cart if you want to use it for a different product."
 msgstr ""
-"استخدمته بالفعل هذا الرمز قسيمة. إزالة السطر المرتبطة من سلة الخاص بك إذا "
-"كنت ترغب في استخدامه لمنتج مختلف."
+"لقد استخدمت سابقا رمز القسيمة هذا. قم بإزالة ‌‌السطر المرتبط من سلة التسوق "
+"الخاصة بك إذا كنت تريد استخدامه لمنتج مختلف."
 
 #: pretix/base/services/cart.py:118
 msgid "This voucher is expired."
-msgstr "هذا هو قسيمة منتهية الصلاحية."
+msgstr "هذه القسيمة منتهية الصلاحية."
 
 #: pretix/base/services/cart.py:119
 msgid "This voucher is not valid for this product."
-msgstr "هذه القسيمة غير صالح لهذا المنتج."
+msgstr "هذه القسيمة غير صالحة لهذا المنتج."
 
 #: pretix/base/services/cart.py:120
 msgid "This voucher is not valid for this seat."
-msgstr "هذة القسيمة غير صالحة لهذا المقعد."
+msgstr "هذه القسيمة غير صالحة لهذا المقعد."
 
 #: pretix/base/services/cart.py:121
 msgid ""
@@ -5492,15 +5493,18 @@ msgid ""
 "for. If you want to add something new to your cart using that voucher, you "
 "can do so with the voucher redemption option on the bottom of the page."
 msgstr ""
+"لم نعثر على أي موضع في عربة التسوق الخاصة بك يمكننا استخدام هذه القسيمة من "
+"أجله. إذا كنت ترغب في إضافة شيء جديد إلى عربة التسوق الخاصة بك باستخدام هذه "
+"القسيمة، فيمكنك القيام بذلك باستخدام خيار استرداد القسيمة في أسفل الصفحة."
 
 #: pretix/base/services/cart.py:125
 msgid "Your voucher is valid for a product that is currently not for sale."
-msgstr "القسيمة غير صالحة لالمنتج الذي هو حاليا ليس للبيع."
+msgstr "قسيمتك صالحة لمنتج ليس معروضا للبيع حاليا."
 
 #: pretix/base/services/cart.py:126
 msgctxt "subevent"
 msgid "This voucher is not valid for this event date."
-msgstr "هذه القسيمة غير صالح لهذا التاريخ الحدث."
+msgstr "هذه القسيمة غير صالحة لتاريخ هذه الفعالية."
 
 #: pretix/base/services/cart.py:127
 msgid "You need a valid voucher code to order this product."
@@ -5509,15 +5513,16 @@ msgstr "تحتاج إلى رمز قسيمة صالح لطلب هذا المنت�
 #: pretix/base/services/cart.py:128
 msgctxt "subevent"
 msgid "The selected event date is not active."
-msgstr "تاريخ الحدث المحدد غير نشط."
+msgstr "تاريخ الفعالية المحدد غير نشط."
 
 #: pretix/base/services/cart.py:129
 msgid "You can not select an add-on for the selected product."
-msgstr "لا يمكنك تحديد وظيفة إضافية على للمنتج المحدد."
+msgstr "لا يمكنك اختيار إضافة للمنتج المحدد."
 
 #: pretix/base/services/cart.py:130
+#, fuzzy
 msgid "You can not select two variations of the same add-on product."
-msgstr "لا يمكنك تحديد شكلان من نفس إضافة على المنتج."
+msgstr "لا يمكنك تحديد نوعين مختلفين من نفس الإضافة للمنتج."
 
 #: pretix/base/services/cart.py:131
 #, python-format
@@ -5525,8 +5530,7 @@ msgid ""
 "You can select at most %(max)s add-ons from the category %(cat)s for the "
 "product %(base)s."
 msgstr ""
-"يمكنك تحديد في معظم %(max)s الصورة إضافات من فئة %(cat)s ليالي للمنتج "
-"%(base)s."
+"يمكنك الاختيار على الأكثر %(max)s الإضافات من فئة %(cat)s للمنتج %(base)s."
 
 #: pretix/base/services/cart.py:132
 #, python-format
@@ -5534,8 +5538,7 @@ msgid ""
 "You need to select at least %(min)s add-ons from the category %(cat)s for "
 "the product %(base)s."
 msgstr ""
-"تحتاج إلى تحديد ما لا يقل عن %(min)s الصورة إضافات من فئة %(cat)s S للمنتج "
-"%(base)s."
+"تحتاج إلى اختيار على الأقل %(min)s الإضافات من فئة %(cat)s للمنتج %(base)s."
 
 #: pretix/base/services/cart.py:134
 #, python-format
@@ -5543,19 +5546,18 @@ msgid ""
 "You can select every add-ons from the category %(cat)s for the product "
 "%(base)s at most once."
 msgstr ""
-"بامكانك اختيار الاضافات من الفئة%(cat)s للمنتجات %(base)sلمرة واحدة فقط."
+"يمكنك اختيار كل الإضافات من الفئة %(cat)s للمنتج %(base)s مرة واحدة على "
+"الأكثر."
 
 #: pretix/base/services/cart.py:135
 msgid ""
 "One of the products you selected can only be bought as an add-on to another "
 "project."
-msgstr ""
-"واحدة من المنتجات التي حددتها لا يمكن إلا أن يكون اشترى باعتبارها إضافة إلى "
-"مشروع آخر."
+msgstr "لا يمكن شراء أحد المنتجات التي حددتها إلا كإضافة لمشروع آخر."
 
 #: pretix/base/services/cart.py:136
 msgid "One of the products you selected can only be bought part of a bundle."
-msgstr "واحدة من المنتجات التي حددتها لا يمكن إلا أن يكون اشترى جزءا من حزمة."
+msgstr "لا يمكن شراء أحد المنتجات التي حددتها سوى كجزء من الحزمة."
 
 #: pretix/base/services/cart.py:138
 msgid "Please select a valid seat."
@@ -5567,112 +5569,100 @@ msgstr "لا يمكنك تحديد مقعد لهذا المنصب."
 
 #: pretix/base/services/cart.py:141
 msgid "You can not select the same seat multiple times."
-msgstr "لا يمكنك تحديد نفس المقعد عدة مرات."
+msgstr "لا يمكنك اختيار نفس المقعد عدة مرات."
 
 #: pretix/base/services/cart.py:142
 msgid ""
 "You entered a gift card instead of a voucher. Gift cards can be entered "
 "later on when you're asked for your payment details."
 msgstr ""
-"لقد أدخلت بطاقة هدية بدلا من قسيمة. بطاقات هدية يمكن إدخالها في وقت لاحق "
-"عندما يطلب منك للحصول على تفاصيل الدفع الخاصة بك."
+"لقد أدخلت بطاقة هدايا بدلا من قسيمة. يمكن إدخال بطاقات الهدايا لاحقا عندما "
+"يطلب منك تفاصيل الدفع الخاصة بك."
 
 #: pretix/base/services/checkin.py:151
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html:36
 msgid "Unknown reason"
-msgstr "سبب غير معلوم"
+msgstr "سبب غير معروف"
 
 #: pretix/base/services/checkin.py:207
 #, python-brace-format
 msgid "Only allowed before {datetime}"
-msgstr ""
+msgstr "مسموح فقط قبل {datetime}"
 
 #: pretix/base/services/checkin.py:209
 #, python-brace-format
 msgid "Only allowed after {datetime}"
-msgstr ""
+msgstr "مسموح فقط بعد {datetime}"
 
 #: pretix/base/services/checkin.py:212
-#, fuzzy
-#| msgid "Filetype not allowed!"
 msgid "Ticket type not allowed"
-msgstr "الملف المطبوع سري!"
+msgstr "نوع التذكرة غير مسموح به"
 
 #: pretix/base/services/checkin.py:220
-#, fuzzy
-#| msgid "Number of days"
 msgid "number of days with an entry"
-msgstr "عدد الأيام"
+msgstr "عدد الأيام مع الإدخال"
 
 #: pretix/base/services/checkin.py:221
-#, fuzzy
-#| msgid "Number of tickets"
 msgid "number of entries"
-msgstr "عدد التذاكر"
+msgstr "عدد الادخالات"
 
 #: pretix/base/services/checkin.py:222
-#, fuzzy
-#| msgid "Number of tickets"
 msgid "number of entries today"
-msgstr "عدد التذاكر"
+msgstr "عدد الإدخالات اليوم"
 
 #: pretix/base/services/checkin.py:227
 #, python-brace-format
 msgid "{variable} is not {value}"
-msgstr ""
+msgstr "{variable} ليس {value}"
 
 #: pretix/base/services/checkin.py:229
-#, fuzzy, python-brace-format
-#| msgid "Maximum number"
+#, python-brace-format
 msgid "Maximum {variable} exceeded"
-msgstr "العدد الأقصى"
+msgstr "تم تجاوز الحد الأقصى {variable}"
 
 #: pretix/base/services/checkin.py:231
-#, fuzzy, python-brace-format
-#| msgid "Minimum number"
+#, python-brace-format
 msgid "Minimum {variable} exceeded"
-msgstr "عدد الحد الأدنى"
+msgstr "تم تجاوز الحد الأدنى {variable}"
 
 #: pretix/base/services/checkin.py:233
 #, python-brace-format
 msgid "{variable} is {value}"
-msgstr ""
+msgstr "{variable} هو {value}"
 
 #: pretix/base/services/checkin.py:588
 msgid "This order position has been canceled."
-msgstr "تم إلغاء هذا المنصب النظام."
+msgstr "تم إلغاء وضع الطلب هذا."
 
 #: pretix/base/services/checkin.py:611
 msgid "This order position has an invalid product for this check-in list."
-msgstr "هذا الموقف أمر له منتج غير صالح لهذا الاختيار في القائمة."
+msgstr "يحتوي هذا الطلب على منتج غير صالح لقائمة التسجيل هذه."
 
 #: pretix/base/services/checkin.py:616
-#, fuzzy
-#| msgid "This order position has an invalid product for this check-in list."
 msgid "This order position has an invalid date for this check-in list."
-msgstr "هذا الموقف أمر له منتج غير صالح لهذا الاختيار في القائمة."
+msgstr "يحتوي هذا الطلب على تاريخ غير صالح لقائمة التسجيل هذه."
 
 #: pretix/base/services/checkin.py:623
 msgid "This order is not marked as paid."
-msgstr "لم يتم وضع هذا النظام كما المدفوعة."
+msgstr "لم يتم تمييز هذا الطلب على أنه مدفوع."
 
 #: pretix/base/services/checkin.py:628
 msgid "You need to answer questions to complete this check-in."
-msgstr "تحتاج إلى الإجابة على الأسئلة لإكمال هذا الاختيار في."
+msgstr "تحتاج إلى الإجابة على الأسئلة لإكمال هذا التسجيل."
 
 #: pretix/base/services/checkin.py:639
-#, fuzzy, python-brace-format
-#| msgid "Voucher explanation"
+#, python-brace-format
 msgid "Entry not permitted: {explanation}."
-msgstr "تفسير قسيمة"
+msgstr "غير مسموح بالدخول: {explanation}."
 
 #: pretix/base/services/checkin.py:684
 msgid "This ticket has already been redeemed."
-msgstr "تم استرداد هذه التذكرة."
+msgstr "تم مسبقا استرداد هذه التذكرة."
 
 #: pretix/base/services/export.py:64 pretix/base/services/export.py:117
+#, fuzzy
 msgid "Your export did not contain any data."
-msgstr "لم التصدير لا يحتوي على أية بيانات."
+msgstr "تصديرك لا يحتوي على أي بيانات."
 
 #: pretix/base/services/invoices.py:102
 #, python-brace-format
@@ -5708,12 +5698,14 @@ msgid "Date: {}"
 msgstr "تاريخ: {}"
 
 #: pretix/base/services/invoices.py:394
+#, fuzzy
 msgid "A payment provider specific text might appear here."
-msgstr "قد يظهر النص تحديدا مزود دفع هنا."
+msgstr "قد يظهر نص محدد لمزود خدمة الدفع هنا."
 
 #: pretix/base/services/invoices.py:401
+#, fuzzy
 msgid "214th Example Street"
-msgstr "شارع مثال 214th"
+msgstr "شارع مثال رقم 214"
 
 #: pretix/base/services/invoices.py:402
 msgid "012345"
@@ -5721,17 +5713,17 @@ msgstr "012345"
 
 #: pretix/base/services/invoices.py:418
 msgid "Sample product {}"
-msgstr "المنتج عينة {}"
+msgstr "منتج عينة {}"
 
 #: pretix/base/services/invoices.py:424
+#, fuzzy
 msgid "Sample product A"
-msgstr "عينة المنتج A"
+msgstr "منتج عينة A"
 
 #: pretix/base/services/invoices.py:468
-#, fuzzy, python-brace-format
-#| msgid "Invoice number"
+#, python-brace-format
 msgid "New invoice: {number}"
-msgstr "رقم الفاتورة"
+msgstr "فاتورة جديدة: {number}"
 
 #: pretix/base/services/invoices.py:470
 #, python-brace-format
@@ -5743,13 +5735,19 @@ msgid ""
 "We are sending this email because you configured us to do so in your event "
 "settings."
 msgstr ""
+"مرحبا،\n"
+"\n"
+"تم إنشاء فاتورة جديدة لـ {event} ، انظر المرفق.\n"
+"\n"
+"نرسل هذا البريد الإلكتروني لأنك قمت بإعدادات للقيام بذلك في إعدادات الفعالية "
+"الخاص بك."
 
 #: pretix/base/services/mail.py:242
 #, python-brace-format
 msgid ""
 "You are receiving this email because someone placed an order for {event} for "
 "you."
-msgstr "لقد استلمت هذا البريد لأن الحجز مسجل بايميلك ل {event}."
+msgstr "أنت تتلقى هذا البريد الإلكتروني لأن شخصا ما قدم طلبا ل {event} من أجلك."
 
 #: pretix/base/services/mail.py:246 pretix/base/services/mail.py:262
 #, python-brace-format
@@ -5763,29 +5761,26 @@ msgstr ""
 #: pretix/base/services/mail.py:258
 #, python-brace-format
 msgid "You are receiving this email because you placed an order for {event}."
-msgstr "تلقيت هذا البريد لأنك قمت بالحجز في{event}."
+msgstr "أنت تتلقى هذا البريد الإلكتروني لأنك قدمت طلبا ل {event}."
 
 #: pretix/base/services/memberships.py:102
 #, python-brace-format
 msgid ""
 "You selected a membership for the product \"{product}\" which does not "
 "require a membership."
-msgstr ""
+msgstr "لقد حددت عضوية للمنتج \"{product}\" الذي لا يتطلب عضوية."
 
 #: pretix/base/services/memberships.py:110
-#, fuzzy, python-brace-format
-#| msgid "You selected a product which is not available for sale."
+#, python-brace-format
 msgid ""
 "You selected the product \"{product}\" which requires an active membership "
 "to be selected."
-msgstr "يمكنك اختيار المنتج الذي هو ليس متاحة للبيع."
+msgstr "لقد حددت المنتج \"{product}\" الذي يتطلب اختيار عضوية نشطة."
 
 #: pretix/base/services/memberships.py:139
-#, fuzzy
-#| msgid "You cannot select an item that belongs to a different event."
 msgid ""
 "You selected a membership that is connected to a different customer account."
-msgstr "لا يمكنك تحديد العنصر الذي ينتمي إلى حدث مختلفة."
+msgstr "لقد حددت عضوية متصلة بحساب عميل مختلف."
 
 #: pretix/base/services/memberships.py:146
 #, python-brace-format
@@ -5793,6 +5788,7 @@ msgid ""
 "You selected a membership that is valid from {start} to {end}, but selected "
 "an event taking place at {date}."
 msgstr ""
+"لقد حددت عضوية صالحة من {start} إلى {end} ، ولكنك حددت فعالية تجري في {date}."
 
 #: pretix/base/services/memberships.py:161
 #, python-brace-format
@@ -5800,6 +5796,7 @@ msgid ""
 "You selected a membership of type \"{type}\", which is not allowed for the "
 "product \"{product}\"."
 msgstr ""
+"لقد حددت عضوية من النوع \"{type}\" ، وهو غير مسموح به للمنتج \"{product}\"."
 
 #: pretix/base/services/memberships.py:170
 #, python-brace-format
@@ -5807,6 +5804,8 @@ msgid ""
 "You are trying to use a membership of type \"{type}\" more than {number} "
 "times, which is the maximum amount."
 msgstr ""
+"أنت تحاول استخدام عضوية من النوع \"{type}\" أكثر من {number} مرة ، وهو الحد "
+"الأقصى للمبلغ."
 
 #: pretix/base/services/memberships.py:181
 #, python-brace-format
@@ -5815,6 +5814,8 @@ msgid ""
 "place at {date}, however you already used the same membership for a "
 "different ticket at the same time."
 msgstr ""
+"أنت تحاول استخدام عضوية من النوع \"{type}\" لفعالية تقام في {date} ، ولكنك "
+"استخدمت سابقا نفس العضوية لتذكرة مختلفة في نفس الوقت."
 
 #: pretix/base/services/orderimport.py:108
 #, python-brace-format
@@ -5822,42 +5823,43 @@ msgid ""
 "Error while importing value \"{value}\" for column \"{column}\" in line "
 "\"{line}\": {message}"
 msgstr ""
+"خطأ أثناء استيراد القيمة \"{value}\" للعمود \"{column}\" في السطر \"{line}\":"
+" {message}"
 
 #: pretix/base/services/orderimport.py:140
 #, python-brace-format
 msgid "Invalid data in row {row}: {message}"
-msgstr ""
+msgstr "بيانات غير صالحة في الصف {row}: {message}"
 
 #: pretix/base/services/orders.py:102
 msgid ""
 "Some of the products you selected were no longer available. Please see below "
 "for details."
-msgstr ""
-"وكانت بعض المنتجات التي اخترتها لم تعد متوفرة. انظر أدناه للحصول على "
-"التفاصيل."
+msgstr "بعض المنتجات التي حددتها لم تعد متوفرة. انظر أدناه للحصول على التفاصيل."
 
 #: pretix/base/services/orders.py:104
 msgid ""
 "Some of the products you selected were no longer available in the quantity "
 "you selected. Please see below for details."
 msgstr ""
-"وكانت بعض المنتجات التي اخترتها لم تعد متوفرة في كمية التي حددتها. انظر "
-"أدناه للحصول على التفاصيل."
+"لم تعد بعض المنتجات التي حددتها متوفرة بالكمية التي حددتها. انظر أدناه "
+"للحصول على التفاصيل."
 
 #: pretix/base/services/orders.py:106
 msgid ""
 "The price of some of the items in your cart has changed in the meantime. "
 "Please see below for details."
 msgstr ""
-"لقد تغير أسعار بعض العناصر في سلة تسوقك. انظر أدناه للحصول على التفاصيل."
+"تم تغيير سعر بعض العناصر في سلة التسوق الخاصة بك في غضون ذلك. انظر أدناه "
+"للحصول على التفاصيل."
 
 #: pretix/base/services/orders.py:108
 msgid "An internal error occurred, please try again."
-msgstr "خطأ داخلي حدث، يرجى المحاولة مرة أخرى."
+msgstr "حدث خطأ داخلي ، يرجى المحاولة مرة أخرى."
 
 #: pretix/base/services/orders.py:109
 msgid "Your cart is empty."
-msgstr "عربة التسوق فارغة."
+msgstr "عربة التسوق الخاصة بك فارغة."
 
 #: pretix/base/services/orders.py:110
 #, python-format
@@ -5865,18 +5867,20 @@ msgid ""
 "You cannot select more than %(max)s items of the product %(product)s. We "
 "removed the surplus items from your cart."
 msgstr ""
-"لا يمكنك تحديد أكثر من %(max)s سلع من المنتج %(product)s. أزلنا المواد "
-"الفائضة من عربة التسوق."
+"لا يمكنك تحديد أكثر من %(max)s سلع من المنتج %(product)s. قمنا بإزالة "
+"العناصر الزائدة من سلة التسوق الخاصة بك."
 
 #: pretix/base/services/orders.py:115
 msgid "The presale period has ended."
-msgstr "انتهت الفترة [خبر]."
+msgstr "انتهت فترة عرض ما قبل البيع."
 
 #: pretix/base/services/orders.py:116
 msgid ""
 "The voucher code used for one of the items in your cart is not known in our "
 "database."
-msgstr "رمز قسيمة تستخدم لأحد التذاكر في عربة التسوق غير معروف."
+msgstr ""
+"رمز القسيمة المستخدم لأحد العناصر الموجودة في سلة التسوق الخاصة بك غير معروف "
+"في قاعدة البيانات الخاصة بنا."
 
 #: pretix/base/services/orders.py:117
 msgid ""
@@ -5884,94 +5888,96 @@ msgid ""
 "used the maximum number of times allowed. We removed this item from your "
 "cart."
 msgstr ""
-"تم استخدام الحد الأقصى لعدد مرات المسموح بها لقسيمة التخفيض . أزلنا التذكرة "
-"من عربة التسوق."
+"تم استخدام رمز القسيمة المستخدم لأحد العناصر الموجودة في سلة التسوق الخاصة "
+"بك سابقا الحد الأقصى لعدد المرات المسموح به. أزلنا هذا العنصر من سلة التسوق "
+"الخاصة بك."
 
 #: pretix/base/services/orders.py:119
-#, fuzzy
-#| msgid ""
-#| "The voucher code used for one of the items in your cart has already been "
-#| "used the maximum number of times allowed. We removed this item from your "
-#| "cart."
 msgid ""
 "The voucher code used for one of the items in your cart has already been too "
 "often. We adjusted the price of the item in your cart."
 msgstr ""
-"وقد تم بالفعل استخدام رمز قسيمة تستخدم لأحد العناصر الموجودة في سلة التسوق "
-"الخاصة بك الحد الأقصى لعدد مرات المسموح بها. أزلنا هذا البند من عربة التسوق."
+"رمز القسيمة المستخدم لأحد العناصر في سلة التسوق الخاصة بك تم استخدامه كثيرا "
+"في السابق. قمنا بتعديل سعر العنصر في سلة التسوق الخاصة بك."
 
 #: pretix/base/services/orders.py:121
 msgid ""
 "The voucher code used for one of the items in your cart is expired. We "
 "removed this item from your cart."
 msgstr ""
-"انتهت صلاحية رمز قسيمة تستخدم لأحد بنود في عربة التسوق. أزلنا هذا البند من "
-"عربة التسوق."
+"انتهت صلاحية رمز القسيمة المستخدم لأحد العناصر الموجودة في سلة التسوق الخاصة "
+"بك. أزلنا هذا العنصر من سلة التسوق الخاصة بك."
 
 #: pretix/base/services/orders.py:123
 msgid ""
 "The voucher code used for one of the items in your cart is not valid for "
 "this item. We removed this item from your cart."
 msgstr ""
-"رمز قسيمة تستخدم لأحد بنود في عربة التسوق غير صالح لهذا البند. أزلنا هذا "
-"البند من عربة التسوق."
+"رمز القسيمة المستخدم لأحد العناصر الموجودة في سلة التسوق الخاصة بك غير صالح "
+"لهذا العنصر. أزلنا هذا العنصر من سلة التسوق الخاصة بك."
 
 #: pretix/base/services/orders.py:125
 msgid ""
 "You need a valid voucher code to order one of the products in your cart. We "
 "removed this item from your cart."
 msgstr ""
-"تحتاج إلى رمز قسيمة صالحة لأمر واحد من هذه المنتجات في سلة التسوق الخاصة بك. "
-"أزلنا هذا البند من عربة التسوق."
+"أنت بحاجة إلى رمز قسيمة صالح لطلب أحد المنتجات في سلة التسوق الخاصة بك. "
+"أزلنا هذا العنصر من سلة التسوق الخاصة بك."
 
 #: pretix/base/services/orders.py:127
+#, fuzzy
 msgid ""
 "The presale period for one of the events in your cart has not yet started. "
 "The affected positions have been removed from your cart."
 msgstr ""
-"لم يبدأ الفترة [خبر] لأحد الأحداث في عربة التسوق حتى الان. تم إزالة مواقع "
-"المتضررة من عربة التسوق."
+"لم تبدأ فترة عرض ما قبل البيع لإحدى الفعاليات في عربة التسوق الخاصة بك بعد. "
+"تمت إزالة العناصر المتضررة من عربة التسوق الخاصة بك."
 
 #: pretix/base/services/orders.py:131
+#, fuzzy
 msgid ""
 "One of the seats in your order was invalid, we removed the position from "
 "your cart."
-msgstr "كان باطلا واحد من المقاعد في طلبك، أزلنا موقف من عربة التسوق."
+msgstr ""
+"كان أحد المقاعد في طلبك غير صالح ، وقمنا بإزالة العنصر من عربة التسوق الخاصة "
+"بك."
 
 #: pretix/base/services/orders.py:132
+#, fuzzy
 msgid ""
 "One of the seats in your order has been taken in the meantime, we removed "
 "the position from your cart."
 msgstr ""
-"وقد اتخذت واحد من المقاعد في طلبك في غضون ذلك، أزلنا موقف من عربة التسوق."
+"تم أخذ أحد المقاعد في طلبك في غضون ذلك ، وقمنا بإزالة العنصر من عربة التسوق "
+"الخاصة بك."
 
 #: pretix/base/services/orders.py:199 pretix/control/forms/orders.py:106
 msgid "The new expiry date needs to be in the future."
-msgstr "احتياجات تاريخ انتهاء الصلاحية الجديدة ليكون في المستقبل."
+msgstr "يجب أن يكون تاريخ انتهاء الصلاحية الجديد في المستقبل."
 
 #: pretix/base/services/orders.py:274 pretix/base/services/orders.py:334
 msgid "This order is not pending approval."
-msgstr "هذا النظام لم يتم انتظار الموافقة."
+msgstr "هذا الطلب ليس في انتظار الموافقة."
 
 #: pretix/base/services/orders.py:308
 #, python-format
 msgid "Order approved and confirmed: %(code)s"
-msgstr "ترتيب المعتمدة وأكد: %(code)s"
+msgstr "تمت الموافقة على الطلب وتأكيده: %(code)s"
 
 #: pretix/base/services/orders.py:311
 #, python-format
 msgid "Order approved and awaiting payment: %(code)s"
-msgstr "أجل الموافقة عليها وتنتظر السداد: %(code)s"
+msgstr "تمت الموافقة على الطلب وفي انتظار الدفع: %(code)s"
 
 #: pretix/base/services/orders.py:357
 #, python-format
 msgid "Order denied: %(code)s"
-msgstr "نفى أجل: %(code)s"
+msgstr "الطلب مرفوض: %(code)s"
 
 #: pretix/base/services/orders.py:392 pretix/presale/views/order.py:823
 #: pretix/presale/views/order.py:872
 msgid "You cannot cancel this order."
-msgstr "لا يمكنك إلغاء هذا النظام."
+msgstr "لا يمكنك إلغاء هذا الطلب."
 
 #: pretix/base/services/orders.py:404
 #, python-brace-format
@@ -5979,18 +5985,18 @@ msgid ""
 "This order can not be canceled since the gift card {card} purchased in this "
 "order has already been redeemed."
 msgstr ""
-"لا يمكن إلغاء هذا النظام منذ بطاقة هدية {card} شراؤها في هذا النظام قد تم "
-"استبدالها."
+"لا يمكن إلغاء هذا الطلب نظرا لأنه تم بالفعل استرداد قيمة بطاقة الهدايا {card}"
+" المشتراة بهذا الطلب."
 
 #: pretix/base/services/orders.py:441 pretix/control/forms/orders.py:188
 msgid ""
 "The cancellation fee cannot be higher than the payment credit of this order."
-msgstr "رسوم الإلغاء لا يمكن أن يكون أعلى من الائتمان دفع هذا النظام."
+msgstr "لا يمكن أن تكون رسوم الإلغاء أعلى من رصيد الدفع لهذا الطلب."
 
 #: pretix/base/services/orders.py:470
 #, python-format
 msgid "Order canceled: %(code)s"
-msgstr "من أجل إلغاء: %(code)s"
+msgstr "تم إلغاء الطلب: %(code)s"
 
 #: pretix/base/services/orders.py:885
 msgid ""
@@ -5998,24 +6004,24 @@ msgid ""
 "changed. Either one of the prices changed just now, or a gift card you used "
 "has been used in the meantime. Please check the prices below and try again."
 msgstr ""
-"بينما كان يحاول وضع النظام الخاص بك، لاحظنا أن مجموع النظام قد تغير. أي واحد "
-"من أسعار تغيرت الآن فقط، أو قد استخدمت بطاقة هدية استخدمتها في هذه الأثناء. "
-"يرجى التحقق من أسعار أقل وحاول مرة أخرى."
+"أثناء محاولة تقديم طلبك ، لاحظنا أن إجمالي الطلب قد تغير. تم تغيير أحد "
+"الأسعار الآن ، أو تم استخدام بطاقة الهدايا التي استخدمتها في الوقت الحالي. "
+"يرجى التحقق من الأسعار أدناه وحاول مرة أخرى."
 
 #: pretix/base/services/orders.py:1100
 #, python-format
 msgid "Your order is about to expire: %(code)s"
-msgstr "النظام الخاص بك هو على وشك الانتهاء: %(code)s"
+msgstr "طلبك على وشك الانتهاء: %(code)s"
 
 #: pretix/base/services/orders.py:1102
 #, python-format
 msgid "Your order is pending payment: %(code)s"
-msgstr "طلبك في انتظار دفع: %(code)s"
+msgstr "طلبك في انتظار الدفع: %(code)s"
 
 #: pretix/base/services/orders.py:1176
 #, python-format
 msgid "Your ticket is ready for download: %(code)s"
-msgstr "تذكرتك جاهز للتحميل: %(code)s"
+msgstr "تذكرتك جاهزة للتنزيل: %(code)s"
 
 #: pretix/base/services/orders.py:1214
 #, python-format
@@ -6024,57 +6030,55 @@ msgstr "تم تغيير طلبك: %(code)s"
 
 #: pretix/base/services/orders.py:1226
 msgid "You need to select a variation of the product."
-msgstr "تحتاج إلى تحديد الاختلاف من المنتج."
+msgstr "تحتاج إلى تحديد نوع من المنتج."
 
 #: pretix/base/services/orders.py:1227
 #, python-brace-format
 msgid ""
 "The quota {name} does not have enough capacity left to perform the operation."
-msgstr "الحصة {name} ليس لديها ما يكفي من القدرة اليسار لتنفيذ العملية."
+msgstr "الحصة {name} لم يتبق لديها سعة كافية لإجراء العملية."
 
 #: pretix/base/services/orders.py:1228
 msgid "There is no quota defined that allows this operation."
-msgstr "ليس هناك حصة محددة تسمح هذه العملية."
+msgstr "لا توجد حصة محددة تسمح بهذه العملية."
 
 #: pretix/base/services/orders.py:1229
 msgid "The selected product is not active or has no price set."
-msgstr "المنتج المحدد غير نشط أو لا يوجد لديه مجموعة السعر."
+msgstr "المنتج المحدد غير نشط أو ليس له سعر محدد."
 
 #: pretix/base/services/orders.py:1230
 msgid ""
 "This operation would leave the order empty. Please cancel the order itself "
 "instead."
-msgstr "أن هذه العملية تترك أجل تفريغ. يرجى إلغاء النظام نفسه بدلا من ذلك."
+msgstr "سيترك هذا الإجراء الطلب فارغا. يرجى إلغاء الطلب نفسه بدلا من ذلك."
 
 #: pretix/base/services/orders.py:1231
 msgid "Only pending or paid orders can be changed."
-msgstr "في انتظار فقط أو يمكن تغيير أوامر المدفوعة."
+msgstr "يمكن فقط تغيير الطلبات المعلقة أو المدفوعة."
 
 #: pretix/base/services/orders.py:1232
 msgid ""
 "This operation would make the order free and therefore immediately paid, "
 "however no quota is available."
 msgstr ""
-"أن هذه العملية جعل النظام مجانا، وبالتالي تدفع على الفور، ولكن لا الحصة "
-"المتاحة."
+"ستجعل هذه العملية الطلب مجانيا وبالتالي يتم دفعه على الفور ، ومع ذلك لا "
+"تتوفر حصة."
 
 #: pretix/base/services/orders.py:1234
 msgid ""
 "This is an add-on product, please select the base position it should be "
 "added to."
-msgstr ""
-"هذا هو وظيفة إضافية على المنتج، يرجى اختيار موقف الأساس لها ينبغي أن يضاف "
-"إلى."
+msgstr "هذا منتج إضافي ، يرجى تحديد الموضع الأساسي الذي يجب الإضافة إليه."
 
 #: pretix/base/services/orders.py:1235
 msgid ""
 "The selected base position does not allow you to add this product as an add-"
 "on."
-msgstr "موقف قاعدة المحدد لا يسمح لك لإضافة هذا المنتج باعتباره الإضافة."
+msgstr "لا يسمح لك المكان الأساسي المحدد بإضافة هذا المنتج كإضافة."
 
 #: pretix/base/services/orders.py:1236
 msgid "You need to choose a subevent for the new position."
-msgstr "تحتاج إلى اختيار subevent لهذا المنصب الجديد."
+msgstr "تحتاج إلى اختيار فعالية فرعية للمكان الجديد."
 
 #: pretix/base/services/orders.py:1238
 #, python-brace-format
@@ -6082,28 +6086,26 @@ msgid ""
 "You selected seat \"{seat}\" for a date that does not match the selected "
 "ticket date. Please choose a seat again."
 msgstr ""
-"لك مقعد المحدد \"{seat}\" عن التاريخ الذي لا يتطابق مع تاريخ التذكرة المحدد. "
-"الرجاء اختيار المقعد مرة أخرى."
+"لقد حددت المقعد \"{seat}\" لتاريخ لا يتطابق مع تاريخ التذكرة المحدد. الرجاء "
+"اختيار مقعد مرة أخرى."
 
 #: pretix/base/services/orders.py:1239
 msgid "The selected product requires you to select a seat."
-msgstr "المنتج المختار يتطلب منك اختيار مقعد."
+msgstr "المنتج المحدد يتطلب منك اختيار مقعد."
 
 #: pretix/base/services/orders.py:1240
 msgid "The selected product does not allow to select a seat."
-msgstr "لا يسمح للمنتج المحدد إلى اختيار مقعد."
+msgstr "المنتج المحدد لا يسمح باختيار مقعد."
 
 #: pretix/base/services/orders.py:1241
-#, fuzzy
-#| msgid "The selected product is not active or has no price set."
 msgid "The selected country is blocked by your tax rule."
-msgstr "المنتج المحدد غير نشط أو لا يوجد لديه مجموعة السعر."
+msgstr "تم حظر البلد المحدد من خلال القاعدة الضريبية الخاصة بك."
 
 #: pretix/base/services/orders.py:1242
 msgid ""
 "You cannot change the price of a position that has been used to issue a gift "
 "card."
-msgstr "لا يمكنك تغيير سعر الموقف الذي تم استخدامه لإصدار بطاقة هدية."
+msgstr "لا يمكنك تغيير سعر المكان الذي تم استخدامه لإصدار بطاقة هدايا."
 
 #: pretix/base/services/orders.py:1764
 #, python-brace-format
@@ -6111,16 +6113,16 @@ msgid ""
 "A position can not be canceled since the gift card {card} purchased in this "
 "order has already been redeemed."
 msgstr ""
-"لا يمكن إلغاء A المنصب منذ بطاقة هدية {card} شراؤها في هذا النظام قد تم "
-"استبدالها."
+"لا يمكن إلغاء مكان نظرا لأنه تم بالفعل استرداد قيمة بطاقة الهدايا {card} "
+"المشتراة في هذا الطلب."
 
 #: pretix/base/services/orders.py:2262
 msgid ""
 "There was an error while trying to send the money back to you. Please "
 "contact the event organizer for further information."
 msgstr ""
-"حدث خطأ أثناء محاولة إرسال ظهره المال لك. يرجى الاتصال منظم الحدث لمزيد من "
-"المعلومات."
+"حدث خطأ أثناء محاولة إعادة الأموال إليك. يرجى الاتصال بمنظم الفعالية لمزيد "
+"من المعلومات."
 
 #: pretix/base/services/seating.py:56 pretix/base/services/seating.py:117
 #, python-format
@@ -6128,7 +6130,8 @@ msgid ""
 "You can not change the plan since seat \"%s\" is not present in the new plan "
 "and is already sold."
 msgstr ""
-"لا يمكنك تغيير الخطة منذ مقعد \"%s\" غير موجود في الخطة الجديدة ويباع بالفعل."
+"لا يمكنك تغيير الخطة لأن المقعد \"%s\" غير موجود في الخطة الجديدة وقد تم "
+"بيعه مسبقا."
 
 #: pretix/base/services/seating.py:120
 #, python-format
@@ -6136,34 +6139,33 @@ msgid ""
 "You can not change the plan since seat \"%s\" is not present in the new plan "
 "and is already used in a voucher."
 msgstr ""
-"لا تستطيع تغيير خطة المقاعد لأن المقعد \"%s\" غير متواجد في الخطة الجديدة و "
-"قد تم أستخدامه في قسيمة."
+"لا يمكنك تغيير الخطة لأن المقعد \"%s\" غير موجود في الخطة الجديدة ومستخدم "
+"سابقا في القسيمة."
 
 #: pretix/base/services/shredder.py:107 pretix/control/views/shredder.py:85
 msgid ""
 "The download file could no longer be found on the server, please try to "
 "start again."
-msgstr ""
-"لم يعد من الممكن العثور على الملف التحميل على الخادم، يرجى محاولة للبدء من "
-"جديد."
+msgstr "لم يعد يمكن العثور على ملف التنزيل على الخادم ، يرجى المحاولة مرة أخرى."
 
 #: pretix/base/services/shredder.py:111 pretix/control/views/shredder.py:91
 msgid "This file is from a different event."
-msgstr "هذا ملف من حدث مختلفة."
+msgstr "هذا الملف من فعالية مختلفة."
 
 #: pretix/base/services/shredder.py:120
 msgid "The confirm code you entered was incorrect."
-msgstr "كان رمز تأكيد أدخلته غير صحيح."
+msgstr "رمز التأكيد الذي أدخلته غير صحيح."
 
 #: pretix/base/services/shredder.py:122
 msgid "Something happened in your event after the export, please try again."
-msgstr "حدث شيء في هذا الحدث الخاص بك بعد التصدير، يرجى المحاولة مرة أخرى."
+msgstr "حدث شيء ما في الفعالية الخاصة بك بعد التصدير ، يرجى المحاولة مرة أخرى."
 
 #: pretix/base/services/stats.py:207
 msgid "Uncategorized"
 msgstr "غير مصنف"
 
 #: pretix/base/services/tickets.py:102 pretix/control/views/pdf.py:87
+#, fuzzy
 msgid "Sample workshop"
 msgstr "ورشة عمل عينة"
 
