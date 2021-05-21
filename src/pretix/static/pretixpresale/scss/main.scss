@@ -57,6 +57,13 @@ footer nav li:not(:first-child):before {
         vertical-align: baseline;
     }
 }
+.locales ul {
+    display: inline;
+    list-style: none;
+}
+.locales li {
+    display: inline;
+}
 .loginstatus a {
     margin-left: 10px;
 }
