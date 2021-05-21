@@ -41,6 +41,7 @@ class TicketLayoutItemForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         self.event = kwargs.pop('event')
         self.sales_channel = kwargs.pop('sales_channel')
+        queryset = kwargs.pop('queryset')
         super().__init__(*args, **kwargs)
         if self.sales_channel.identifier != 'web':
             self.fields['layout'].label = _('PDF ticket layout for {channel}').format(
@@ -50,7 +51,7 @@ class TicketLayoutItemForm(forms.ModelForm):
         else:
             self.fields['layout'].label = _('PDF ticket layout')
             self.fields['layout'].empty_label = _('(Event default)')
-        self.fields['layout'].queryset = self.event.ticket_layouts.all()
+        self.fields['layout'].queryset = queryset
         self.fields['layout'].required = False
 
     def save(self, commit=True):

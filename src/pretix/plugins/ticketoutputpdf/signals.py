@@ -64,6 +64,7 @@ def register_multievent_data(sender, **kwargs):
 @receiver(item_forms, dispatch_uid="pretix_ticketoutputpdf_item_forms")
 def control_item_forms(sender, request, item, **kwargs):
     forms = []
+    queryset = sender.ticket_layouts.all()
     for k, v in sorted(list(get_all_sales_channels().items()), key=lambda a: (int(a[0] != 'web'), a[0])):
         try:
             inst = TicketLayoutItem.objects.get(item=item, sales_channel=k)
@@ -73,6 +74,7 @@ def control_item_forms(sender, request, item, **kwargs):
             instance=inst,
             event=sender,
             sales_channel=v,
+            queryset=queryset,
             data=(request.POST if request.method == "POST" else None),
             prefix="ticketlayoutitem_{}".format(k)
         ))

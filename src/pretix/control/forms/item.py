@@ -654,6 +654,7 @@ class ItemVariationsFormSet(I18nFormSet):
 
     def _construct_form(self, i, **kwargs):
         kwargs['event'] = self.event
+        kwargs['membership_types'] = self.mt
         return super()._construct_form(i, **kwargs)
 
     @property
@@ -664,19 +665,24 @@ class ItemVariationsFormSet(I18nFormSet):
             prefix=self.add_prefix('__prefix__'),
             empty_permitted=True,
             use_required_attribute=False,
+            membership_types=self.mt,
             locales=self.locales,
             event=self.event
         )
         self.add_fields(form, None)
         return form
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.mt = self.event.organizer.membership_types.all()
+
 
 class ItemVariationForm(I18nModelForm):
     def __init__(self, *args, **kwargs):
+        qs = kwargs.pop('membership_types')
         super().__init__(*args, **kwargs)
         change_decimal_field(self.fields['default_price'], self.event.currency)
 
-        qs = self.event.organizer.membership_types.all()
         if qs:
             self.fields['require_membership_types'].queryset = qs
         else:
