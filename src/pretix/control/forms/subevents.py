@@ -491,7 +491,7 @@ class RRuleForm(forms.Form):
         ),
         label=_('Last date'),
         required=True,
-        initial=lambda: now() + timedelta(days=365)
+        initial=lambda: now() + timedelta(days=30)
     )
 
     yearly_bysetpos = forms.ChoiceField(
