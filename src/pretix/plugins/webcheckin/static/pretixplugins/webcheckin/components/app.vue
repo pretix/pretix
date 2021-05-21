@@ -326,6 +326,10 @@ export default {
       this.checkResult = {}
       window.clearInterval(this.clearTimeout)
 
+      this.$nextTick(() => {
+        this.$refs.input.blur()
+      })
+
       fetch(this.$root.api.lists + this.checkinlist.id + '/positions/' + encodeURIComponent(id) + '/redeem/?expand=item&expand=variation', {
         method: 'POST',
         headers: {
@@ -444,6 +448,7 @@ export default {
               if (data.results.length) {
                 if (data.results[0].secret === this.query) {
                   this.$nextTick(() => {
+                    this.$refs.input.blur()
                     this.$refs.result[0].$refs.a.click()
                   })
                 } else {
