@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-05-13 08:11+0000\n"
-"PO-Revision-Date: 2021-05-20 07:27+0000\n"
+"PO-Revision-Date: 2021-05-24 03:00+0000\n"
 "Last-Translator: Mohamed Tawfiq <mtawfiq@wafyapp.com>\n"
 "Language-Team: Arabic <https://translate.pretix.eu/projects/pretix/pretix-js/"
 "ar/>\n"
@@ -67,7 +67,7 @@ msgstr "اختر قائمة الدخول"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:31
 msgid "No active check-in lists found."
-msgstr "لم يتم العثور على قوائم دخول نشطة"
+msgstr "لم يتم العثور على قوائم دخول نشطة."
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:32
 msgid "Switch check-in list"
@@ -83,7 +83,7 @@ msgstr "لم يتم العثور على تذاكر"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:35
 msgid "Result"
-msgstr ""
+msgstr "النتائج"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:36
 msgid "This ticket requires special attention"
@@ -103,26 +103,30 @@ msgstr "خروج"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:40
 msgid "Scan a ticket or search and press return…"
-msgstr "قم بمسح التذكرة أو ابحث واضغط زر العودة"
+msgstr "قم بمسح التذكرة أو إبحث واضغط زر العودة…"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:41
 msgid "Load more"
 msgstr "تحميل المزيد"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:42
+#, fuzzy
 msgid "Valid"
 msgstr "ساري المفعول"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:43
+#, fuzzy
 msgid "Unpaid"
 msgstr "غير مدفوع"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:44
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:45
+#, fuzzy
 msgid "Canceled"
 msgstr "ملغاة"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:46
+#, fuzzy
 msgid "Redeemed"
 msgstr "مسترد"
 
@@ -185,7 +189,7 @@ msgstr "تم إلغاء الطلب"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:62
 msgid "Checked-in Tickets"
-msgstr "تذاكر دخول"
+msgstr "تذاكر الدخول"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:63
 msgid "Valid Tickets"
@@ -230,7 +234,7 @@ msgstr "حدث خطأ من نوع {code}."
 msgid ""
 "We currently cannot reach the server, but we keep trying. Last error code: "
 "{code}"
-msgstr "لم نتمكن من الاتصال بالخادم، لكن سنواصل المحاولة، رمز آخر خطأ: {code}."
+msgstr "لم نتمكن من الاتصال بالخادم، لكن سنواصل المحاولة، رمز آخر خطأ: {code}"
 
 #: pretix/static/pretixbase/js/asynctask.js:142
 #: pretix/static/pretixcontrol/js/ui/mail.js:21
@@ -288,8 +292,9 @@ msgid "Product"
 msgstr "منتج"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:63
+#, fuzzy
 msgid "Product variation"
-msgstr "تنوع المنتج"
+msgstr "نوع المنتج"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:67
 msgid "Current date and time"
@@ -338,16 +343,17 @@ msgid "custom time"
 msgstr "الوقت المحدد"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:104
+#, fuzzy
 msgid "Tolerance (minutes)"
 msgstr "القدرة على التحمل (الدقائق)"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:105
 msgid "Add condition"
-msgstr "أضف شرط"
+msgstr "أضف شرطا"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:106
 msgid "minutes"
-msgstr ""
+msgstr "الدقائق"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:69
 msgid "Lead Scan QR"
@@ -358,6 +364,7 @@ msgid "Check-in QR"
 msgstr "QR الدخول"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:313
+#, fuzzy
 msgid "The PDF background file could not be loaded for the following reason:"
 msgstr "لا يمكن تحميل ملف PDF الخلفية للأسباب التالية:"
 
@@ -366,6 +373,7 @@ msgid "Group of objects"
 msgstr "مجموعة من العناصر"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:527
+#, fuzzy
 msgid "Text object"
 msgstr "عنصر نص"
 
@@ -407,8 +415,9 @@ msgid "An error has occurred."
 msgstr "حدث خطأ."
 
 #: pretix/static/pretixcontrol/js/ui/mail.js:54
+#, fuzzy
 msgid "Generating messages …"
-msgstr "توليد الرسائل …"
+msgstr "إنشاء الرسائل …"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:70
 msgid "Unknown error."
@@ -440,11 +449,11 @@ msgstr "لا شيء"
 #, fuzzy
 #| msgid "Search results"
 msgid "Search query"
-msgstr "البحث في النتائج"
+msgstr "البحث في الاستفسارات"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:392
 msgid "Selected only"
-msgstr ""
+msgstr "المختارة فقط"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:830
 msgid "Use a different name internally"
@@ -463,8 +472,9 @@ msgid "Calculating default price…"
 msgstr "حساب السعر الافتراضي…"
 
 #: pretix/static/pretixcontrol/js/ui/question.js:42
+#, fuzzy
 msgid "Others"
-msgstr "آخرون"
+msgstr "غير ذلك"
 
 #: pretix/static/pretixcontrol/js/ui/question.js:82
 msgid "Count"
@@ -516,7 +526,7 @@ msgstr "ستسترد %(currency)%(amount)"
 
 #: pretix/static/pretixpresale/js/ui/main.js:168
 msgid "Please enter the amount the organizer can keep."
-msgstr "الرجاء إدخال المبلغ الذي يمكن للمنظم أخذه."
+msgstr "الرجاء إدخال المبلغ الذي يمكن للمنظم الاحتفاظ به."
 
 #: pretix/static/pretixpresale/js/ui/main.js:307
 msgid "Please enter a quantity for one of the ticket types."
@@ -529,7 +539,7 @@ msgstr "مطلوب"
 #: pretix/static/pretixpresale/js/ui/main.js:440
 #: pretix/static/pretixpresale/js/ui/main.js:458
 msgid "Time zone:"
-msgstr "التوقيت"
+msgstr "المنطقة الزمنية:"
 
 #: pretix/static/pretixpresale/js/ui/main.js:449
 msgid "Your local time:"
@@ -605,7 +615,7 @@ msgstr "الحد الأدنى للطلب: %s"
 #: pretix/static/pretixpresale/js/widget/widget.js:30
 msgctxt "widget"
 msgid "Close ticket shop"
-msgstr "اغلاق متجر التذاكر"
+msgstr "إغلاق متجر التذاكر"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:31
 msgctxt "widget"
@@ -620,7 +630,7 @@ msgstr "لا يمكن إنشاء سلة التسوق. الرجاء المحاو�
 #: pretix/static/pretixpresale/js/widget/widget.js:33
 msgctxt "widget"
 msgid "Waiting list"
-msgstr "قائمة الانتظار"
+msgstr "قائمة الإنتظار"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:34
 msgctxt "widget"
