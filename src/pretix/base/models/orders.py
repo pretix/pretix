@@ -2334,6 +2334,12 @@ class CartPosition(AbstractPosition):
 class InvoiceAddress(models.Model):
     last_modified = models.DateTimeField(auto_now=True)
     order = models.OneToOneField(Order, null=True, blank=True, related_name='invoice_address', on_delete=models.CASCADE)
+    customer = models.ForeignKey(
+        Customer,
+        related_name='invoice_addresses',
+        null=True, blank=True,
+        on_delete=models.CASCADE
+    )
     is_business = models.BooleanField(default=False, verbose_name=_('Business customer'))
     company = models.CharField(max_length=255, blank=True, verbose_name=_('Company name'))
     name_cached = models.CharField(max_length=255, verbose_name=_('Full name'), blank=True)
@@ -2360,6 +2366,7 @@ class InvoiceAddress(models.Model):
     )
 
     objects = ScopedManager(organizer='order__event__organizer')
+    profiles = ScopedManager(organizer='customer__organizer')
 
     def save(self, **kwargs):
         if self.order:

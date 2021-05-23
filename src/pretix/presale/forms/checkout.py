@@ -124,6 +124,17 @@ class InvoiceAddressForm(BaseInvoiceAddressForm):
     required_css_class = 'required'
     vat_warning = True
 
+    def __init__(self, *args, **kwargs):
+        allow_save = kwargs.pop('allow_save', False)
+        super().__init__(*args, **kwargs)
+        if allow_save:
+            self.fields['saved_id'] = forms.IntegerField(required=False, widget=forms.HiddenInput)
+            self.fields['save'] = forms.BooleanField(
+                label=_('Save address in my customer account for future purchases'),
+                required=False,
+                initial=True,
+            )
+
 
 class InvoiceNameForm(InvoiceAddressForm):
 
@@ -141,6 +152,17 @@ class QuestionsForm(BaseQuestionsForm):
     as well as additional questions defined by the organizer.
     """
     required_css_class = 'required'
+
+    def __init__(self, *args, **kwargs):
+        allow_save = kwargs.pop('allow_save', False)
+        super().__init__(*args, **kwargs)
+        if allow_save and self.fields:
+            self.fields['saved_id'] = forms.IntegerField(required=False, widget=forms.HiddenInput)
+            self.fields['save'] = forms.BooleanField(
+                label=_('Save profile in my customer account for future purchases'),
+                required=False,
+                initial=True,
+            )
 
 
 class AddOnRadioSelect(forms.RadioSelect):

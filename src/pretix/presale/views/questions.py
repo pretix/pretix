@@ -47,3 +47,14 @@ class QuestionsViewMixin(BaseQuestionsViewMixin):
     def _positions_for_questions(self):
         cart = get_cart(self.request)
         return sorted(list(cart), key=self._keyfunc)
+
+    def question_form_kwargs(self, cr):
+        d = {
+            'allow_save': bool(self.cart_customer),
+            'initial': {},
+        }
+
+        if f'saved_attendee_profile_{cr.pk}' in self.cart_session:
+            d['initial']['saved_id'] = self.cart_session[f'saved_attendee_profile_{cr.pk}']
+
+        return d

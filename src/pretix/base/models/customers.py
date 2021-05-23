@@ -25,13 +25,14 @@ from django.contrib.auth.hashers import (
 )
 from django.db import models
 from django.utils.crypto import get_random_string, salted_hmac
-from django.utils.translation import gettext_lazy as _
+from django.utils.translation import gettext_lazy as _, pgettext_lazy
 from django_scopes import ScopedManager, scopes_disabled
 
 from pretix.base.banlist import banned
 from pretix.base.models.base import LoggedModel
 from pretix.base.models.organizer import Organizer
 from pretix.base.settings import PERSON_NAME_SCHEMES
+from pretix.helpers.countries import FastCountryField
 
 
 class Customer(LoggedModel):
@@ -174,3 +175,32 @@ class Customer(LoggedModel):
                 continue
             ctx['name_%s' % f] = self.name_parts.get(f, '')
         return ctx
+
+
+class AttendeeProfile(models.Model):
+    customer = models.ForeignKey(
+        Customer,
+        related_name='attendee_profiles',
+        on_delete=models.CASCADE
+    )
+    attendee_name_cached = models.CharField(
+        max_length=255,
+        verbose_name=_("Attendee name"),
+        blank=True, null=True,
+    )
+    attendee_name_parts = models.JSONField(
+        blank=True, default=dict
+    )
+    attendee_email = models.EmailField(
+        verbose_name=_("Attendee email"),
+        blank=True, null=True,
+    )
+    company = models.CharField(max_length=255, blank=True, verbose_name=_('Company name'), null=True)
+    street = models.TextField(verbose_name=_('Address'), blank=True, null=True)
+    zipcode = models.CharField(max_length=30, verbose_name=_('ZIP code'), blank=True, null=True)
+    city = models.CharField(max_length=255, verbose_name=_('City'), blank=True, null=True)
+    country = FastCountryField(verbose_name=_('Country'), blank=True, blank_label=_('Select country'), null=True)
+    state = models.CharField(max_length=255, verbose_name=pgettext_lazy('address', 'State'), blank=True, null=True)
+    answers = models.JSONField(default=list)
+
+    objects = ScopedManager(organizer='customer__organizer')

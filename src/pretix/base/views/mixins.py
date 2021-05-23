@@ -36,6 +36,7 @@ from pretix.base.models import (
     CartPosition, InvoiceAddress, OrderPosition, Question, QuestionAnswer,
     QuestionOption,
 )
+from pretix.base.models.customers import AttendeeProfile
 from pretix.presale.signals import contact_form_fields_overrides
 
 
@@ -60,6 +61,9 @@ class BaseQuestionsViewMixin:
     def get_question_override_sets(self, position):
         return []
 
+    def question_form_kwargs(self, cr):
+        return {}
+
     @cached_property
     def forms(self):
         """
@@ -71,13 +75,16 @@ class BaseQuestionsViewMixin:
         for cr in self._positions_for_questions:
             cartpos = cr if isinstance(cr, CartPosition) else None
             orderpos = cr if isinstance(cr, OrderPosition) else None
+
+            kwargs = self.question_form_kwargs(cr)
             form = self.form_class(event=self.request.event,
                                    prefix=cr.id,
                                    cartpos=cartpos,
                                    orderpos=orderpos,
                                    all_optional=self.all_optional,
                                    data=(self.request.POST if self.request.method == 'POST' else None),
-                                   files=(self.request.FILES if self.request.method == 'POST' else None))
+                                   files=(self.request.FILES if self.request.method == 'POST' else None),
+                                   **kwargs)
             form.pos = cartpos or orderpos
             form.show_copy_answers_to_addon_button = form.pos.addon_to and (
                 set(form.pos.addon_to.item.questions.all()) & set(form.pos.item.questions.all()) or
@@ -136,25 +143,43 @@ class BaseQuestionsViewMixin:
             if not form.is_valid():
                 failed = True
             else:
+                if form.cleaned_data.get('saved_id'):
+                    prof = AttendeeProfile.objects.filter(
+                        customer=self.cart_customer, pk=form.cleaned_data.get('saved_id')
+                    ).first() or AttendeeProfile(customer=getattr(self, 'cart_customer', None))
+                else:
+                    prof = AttendeeProfile(customer=getattr(self, 'cart_customer', None))
+
                 # This form was correctly filled, so we store the data as
                 # answers to the questions / in the CartPosition object
                 for k, v in form.cleaned_data.items():
-                    if k == 'attendee_name_parts':
+                    if k in ('save', 'saved_id'):
+                        continue
+                    elif k == 'attendee_name_parts':
                         form.pos.attendee_name_parts = v if v else None
+                        prof.attendee_name_parts = form.pos.attendee_name_parts
+                        prof.attendee_name_cached = form.pos.attendee_name
                     elif k == 'attendee_email':
                         form.pos.attendee_email = v if v != '' else None
+                        prof.attendee_email = form.pos.attendee_email
                     elif k == 'company':
                         form.pos.company = v if v != '' else None
+                        prof.company = form.pos.company
                     elif k == 'street':
                         form.pos.street = v if v != '' else None
+                        prof.street = form.pos.street
                     elif k == 'zipcode':
                         form.pos.zipcode = v if v != '' else None
+                        prof.zipcode = form.pos.zipcode
                     elif k == 'city':
                         form.pos.city = v if v != '' else None
+                        prof.city = form.pos.city
                     elif k == 'country':
                         form.pos.country = v if v != '' else None
+                        prof.country = form.pos.country
                     elif k == 'state':
                         form.pos.state = v if v != '' else None
+                        prof.state = form.pos.state
                     elif k.startswith('question_'):
                         field = form.fields[k]
                         if hasattr(field, 'answer'):
@@ -168,6 +193,12 @@ class BaseQuestionsViewMixin:
                             else:
                                 self._save_to_answer(field, field.answer, v)
                                 field.answer.save()
+                                prof.answers.append({
+                                    'field_name': k,
+                                    'field_label': str(field.label),
+                                    'value': field.answer.answer,
+                                    'question_identifier': field.question.identifier,
+                                })
                         elif v != '' and v is not None:
                             answer = QuestionAnswer(
                                 cartposition=(form.pos if isinstance(form.pos, CartPosition) else None),
@@ -191,8 +222,16 @@ class BaseQuestionsViewMixin:
                                 )
                                 self._save_to_answer(field, answer, v)
                                 answer.save()
+                            prof.answers.append({
+                                'field_name': k,
+                                'field_label': str(field.label),
+                                'value': answer.answer,
+                                'question_identifier': field.question.identifier,
+                            })
 
                     else:
+                        field = form.fields[k]
+
                         meta_info.setdefault('question_form_data', {})
                         if v is None:
                             if k in meta_info['question_form_data']:
@@ -200,8 +239,20 @@ class BaseQuestionsViewMixin:
                         else:
                             meta_info['question_form_data'][k] = v
 
+                        prof.answers.append({
+                            'field_name': k,
+                            'field_label': str(field.label),
+                            'value': v,
+                            'question_identifier': None,
+                        })
+
             form.pos.meta_info = json.dumps(meta_info)
             form.pos.save()
+
+            if form.cleaned_data['save']:
+                prof.save()
+                self.cart_session[f'saved_attendee_profile_{form.pos.pk}'] = prof.pk
+
         return not failed
 
     def _save_to_answer(self, field, answer, value):

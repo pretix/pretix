@@ -31,7 +31,7 @@
 # Unless required by applicable law or agreed to in writing, software distributed under the Apache License 2.0 is
 # distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations under the License.
-
+import copy
 import inspect
 from collections import defaultdict
 from decimal import Decimal
@@ -227,7 +227,7 @@ class TemplateFlowStep(TemplateResponseMixin, BaseCheckoutFlowStep):
         raise NotImplementedError()
 
 
-class CustomerStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
+class CustomerStep(CartMixin, TemplateFlowStep):
     priority = 45
     identifier = "customer"
     template_name = "pretixpresale/event/checkout_customer.html"
@@ -352,7 +352,7 @@ class CustomerStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
         return ctx
 
 
-class MembershipStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
+class MembershipStep(CartMixin, TemplateFlowStep):
     priority = 47
     identifier = "membership"
     template_name = "pretixpresale/event/checkout_membership.html"
@@ -772,6 +772,9 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
                 'name_parts': self.cart_customer.name_parts
             })
 
+            if 'saved_invoice_address' in self.cart_session:
+                initial['saved_id'] = self.cart_session['saved_invoice_address']
+
         override_sets = self._contact_override_sets
         for overrides in override_sets:
             initial.update({
@@ -791,6 +794,7 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
                                    request=self.request,
                                    initial=initial,
                                    instance=self.invoice_address,
+                                   allow_save=bool(self.cart_customer),
                                    validate_vat_id=self.eu_reverse_charge_relevant, all_optional=self.all_optional)
         for name, field in f.fields.items():
             if wd_initial.get(name) and wd.get('fix', '') == 'true':
@@ -828,6 +832,23 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
         self.cart_session['contact_form_data'] = d
         if self.address_asked or self.request.event.settings.invoice_name_required:
             addr = self.invoice_form.save()
+
+            if self.cart_customer and self.invoice_form.cleaned_data.get('save'):
+                if self.invoice_form.cleaned_data.get('saved_id'):
+                    saved = InvoiceAddress.profiles.filter(
+                        customer=self.cart_customer, pk=self.invoice_form.cleaned_data.get('saved_id')
+                    ).first() or InvoiceAddress(customer=self.cart_customer)
+                else:
+                    saved = InvoiceAddress(customer=self.cart_customer)
+
+                for f in InvoiceAddress._meta.fields:
+                    if f.name not in ('order', 'customer', 'last_modified', 'pk', 'id'):
+                        val = getattr(addr, f.name)
+                        setattr(saved, f.name, copy.deepcopy(val))
+
+                saved.save()
+                self.cart_session['saved_invoice_address'] = saved.pk
+
             try:
                 diff = update_tax_rates(
                     event=request.event,
