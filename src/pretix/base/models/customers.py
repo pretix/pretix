@@ -89,6 +89,8 @@ class Customer(LoggedModel):
         self.all_logentries().update(data={}, shredded=True)
         self.orders.all().update(customer=None)
         self.memberships.all().update(attendee_name_parts=None)
+        self.attendee_profiles.all().delete()
+        self.invoice_addresses.all().delete()
 
     @scopes_disabled()
     def assign_identifier(self):
