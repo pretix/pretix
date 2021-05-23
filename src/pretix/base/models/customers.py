@@ -19,6 +19,7 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
+import pycountry
 from django.conf import settings
 from django.contrib.auth.hashers import (
     check_password, is_password_usable, make_password,
@@ -206,3 +207,49 @@ class AttendeeProfile(models.Model):
     answers = models.JSONField(default=list)
 
     objects = ScopedManager(organizer='customer__organizer')
+
+    @property
+    def attendee_name(self):
+        if not self.attendee_name_parts:
+            return None
+        if '_legacy' in self.attendee_name_parts:
+            return self.attendee_name_parts['_legacy']
+        if '_scheme' in self.attendee_name_parts:
+            scheme = PERSON_NAME_SCHEMES[self.attendee_name_parts['_scheme']]
+        else:
+            scheme = PERSON_NAME_SCHEMES[self.customer.organizer.settings.name_scheme]
+        return scheme['concatenation'](self.attendee_name_parts).strip()
+
+    @property
+    def state_name(self):
+        sd = pycountry.subdivisions.get(code='{}-{}'.format(self.country, self.state))
+        if sd:
+            return sd.name
+        return self.state
+
+    @property
+    def state_for_address(self):
+        from pretix.base.settings import COUNTRIES_WITH_STATE_IN_ADDRESS
+        if not self.state or str(self.country) not in COUNTRIES_WITH_STATE_IN_ADDRESS:
+            return ""
+        if COUNTRIES_WITH_STATE_IN_ADDRESS[str(self.country)][1] == 'long':
+            return self.state_name
+        return self.state
+
+    def describe(self):
+        from .items import Question
+        from .orders import QuestionAnswer
+
+        parts = [
+            self.attendee_name,
+            self.attendee_email,
+            self.company,
+            self.street,
+            (self.zipcode or '') + ' ' + (self.city or '') + ' ' + (self.state_for_address or ''),
+            self.country.name,
+        ]
+        for a in self.answers:
+            val = str(QuestionAnswer(question=Question(type=a.get('question_type')), answer=str(a.get('value'))))
+            parts.append(f'{a["field_label"]}: {val}')
+
+        return '\n'.join([str(p).strip() for p in parts if p and str(p).strip()])

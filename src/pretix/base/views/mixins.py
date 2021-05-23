@@ -147,6 +147,7 @@ class BaseQuestionsViewMixin:
                     prof = AttendeeProfile.objects.filter(
                         customer=self.cart_customer, pk=form.cleaned_data.get('saved_id')
                     ).first() or AttendeeProfile(customer=getattr(self, 'cart_customer', None))
+                    prof.answers = []
                 else:
                     prof = AttendeeProfile(customer=getattr(self, 'cart_customer', None))
 
@@ -197,6 +198,7 @@ class BaseQuestionsViewMixin:
                                     'field_name': k,
                                     'field_label': str(field.label),
                                     'value': field.answer.answer,
+                                    'question_type': field.question.type,
                                     'question_identifier': field.question.identifier,
                                 })
                         elif v != '' and v is not None:
@@ -226,6 +228,7 @@ class BaseQuestionsViewMixin:
                                 'field_name': k,
                                 'field_label': str(field.label),
                                 'value': answer.answer,
+                                'question_type': field.question.type,
                                 'question_identifier': field.question.identifier,
                             })
 
@@ -242,14 +245,15 @@ class BaseQuestionsViewMixin:
                         prof.answers.append({
                             'field_name': k,
                             'field_label': str(field.label),
-                            'value': v,
+                            'value': str(v),
+                            'question_type': None,
                             'question_identifier': None,
                         })
 
             form.pos.meta_info = json.dumps(meta_info)
             form.pos.save()
 
-            if form.cleaned_data['save']:
+            if form.cleaned_data.get('save'):
                 prof.save()
                 self.cart_session[f'saved_attendee_profile_{form.pos.pk}'] = prof.pk
 

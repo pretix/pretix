@@ -37,125 +37,203 @@
             </div>
         </div>
     </div>
-    <div class="panel panel-default items">
-        <div class="panel-heading">
-            <h3 class="panel-title">
-                {% trans "Memberships" %}
-            </h3>
-        </div>
-        <table class="panel-body table table-hover">
-            <thead>
-            <tr>
-                <th>{% trans "Membership type" %}</th>
-                <th>{% trans "Valid from" %}</th>
-                <th>{% trans "Valid until" %}</th>
-                <th>{% trans "Attendee name" %}</th>
-                <th>{% trans "Usages" %}</th>
-                <th></th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for m in memberships %}
-                <tr>
-                    <td>
-                        {% if m.canceled %}<del>{% endif %}
-                        {{ m.membership_type.name }}
-                        {% if m.canceled %}</del>{% endif %}
-                        {% if m.testmode %}<span class="label label-warning">{% trans "TEST MODE" %}</span>{% endif %}
-                    </td>
-                    <td>
-                        {{ m.date_start|date:"SHORT_DATETIME_FORMAT" }}
-                    </td>
-                    <td>
-                        {{ m.date_end|date:"SHORT_DATETIME_FORMAT" }}
-                    </td>
-                    <td>
-                        {{ m.attendee_name }}
-                    </td>
-                    <td>
-                        <div class="quotabox">
-                            <div class="progress">
-                                <div class="progress-bar progress-bar-success progress-bar-{{ m.percent }}">
+    <div>
+        <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation" class="active">
+                <a href="#orders" aria-controls="orders" role="tab" data-toggle="tab">{% trans "Orders" %}</a>
+            </li>
+            <li role="presentation">
+                <a href="#memberships" aria-controls="memberships" role="tab" data-toggle="tab">{% trans "Memberships" %}</a>
+            </li>
+            <li role="presentation">
+                <a href="#addresses" aria-controls="addresses" role="tab" data-toggle="tab">{% trans "Addresses" %}</a>
+            </li>
+            <li role="presentation">
+                <a href="#profiles" aria-controls="profiles" role="tab" data-toggle="tab">{% trans "Attendee profiles" %}</a>
+            </li>
+        </ul>
+        <div class="tab-content">
+            <div role="tabpanel" class="tab-pane active" id="orders">
+                <table class="panel-body table table-hover">
+                    <thead>
+                    <tr>
+                        <th>{% trans "Order code" %}</th>
+                        <th>{% trans "Event" %}</th>
+                        <th>{% trans "Order date" %}</th>
+                        <th class="text-right">{% trans "Order total" %}</th>
+                        <th class="text-right">{% trans "Positions" %}</th>
+                        <th class="text-right">{% trans "Status" %}</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for o in orders %}
+                        <tr>
+                            <td>
+                                <strong>
+                                    <a href="{% abseventurl o.event "presale:event.order" order=o.code secret=o.secret %}" target="_blank">
+                                        {{ o.code }}
+                                    </a>
+                                </strong>
+                                {% if o.testmode %}
+                                    <span class="label label-warning">{% trans "TEST MODE" %}</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {{ o.event }}
+                            </td>
+                            <td>
+                                {{ o.datetime|date:"SHORT_DATETIME_FORMAT" }}
+                                {% if o.customer_id != customer.pk %}
+                                    <span class="fa fa-link text-muted"
+                                          data-toggle="tooltip"
+                                          title="{% trans "Matched to the account based on the email address." %}"
+                                    ></span>
+                                {% endif %}
+                            </td>
+                            <td class="text-right flip">
+                                {{ o.total|money:o.event.currency }}
+                            </td>
+                            <td class="text-right flip">{{ o.count_positions|default_if_none:"0" }}</td>
+                            <td class="text-right flip">{% include "pretixpresale/event/fragment_order_status.html" with order=o event=o.event %}</td>
+                            <td class="text-right flip">
+                                <a href="{% abseventurl o.event "presale:event.order" order=o.code secret=o.secret %}"
+                                   target="_blank"
+                                   class="btn btn-default">
+                                    {% trans "Details" %}
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+                {% include "pretixcontrol/pagination.html" %}
+            </div>
+            <div role="tabpanel" class="tab-pane" id="memberships">
+                <table class="panel-body table table-hover">
+                    <thead>
+                    <tr>
+                        <th>{% trans "Membership type" %}</th>
+                        <th>{% trans "Valid from" %}</th>
+                        <th>{% trans "Valid until" %}</th>
+                        <th>{% trans "Attendee name" %}</th>
+                        <th>{% trans "Usages" %}</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for m in memberships %}
+                        <tr>
+                            <td>
+                                {% if m.canceled %}<del>{% endif %}
+                                {{ m.membership_type.name }}
+                                {% if m.canceled %}</del>{% endif %}
+                                {% if m.testmode %}<span class="label label-warning">{% trans "TEST MODE" %}</span>{% endif %}
+                            </td>
+                            <td>
+                                {{ m.date_start|date:"SHORT_DATETIME_FORMAT" }}
+                            </td>
+                            <td>
+                                {{ m.date_end|date:"SHORT_DATETIME_FORMAT" }}
+                            </td>
+                            <td>
+                                {{ m.attendee_name }}
+                            </td>
+                            <td>
+                                <div class="quotabox">
+                                    <div class="progress">
+                                        <div class="progress-bar progress-bar-success progress-bar-{{ m.percent }}">
+                                        </div>
+                                    </div>
+                                    <div class="numbers">
+                                        {{ m.usages }} /
+                                        {{ m.membership_type.max_usages|default_if_none:"∞" }}
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="numbers">
-                                {{ m.usages }} /
-                                {{ m.membership_type.max_usages|default_if_none:"∞" }}
-                            </div>
-                        </div>
-                    </td>
-                    <td class="text-right flip">
-                        <a href="{% abseventurl request.organizer "presale:organizer.customer.membership" id=m.id %}"
-                                data-toggle="tooltip"
-                                title="{% trans "Details" %}"
-                                class="btn btn-default">
-                            <i class="fa fa-list"></i>
-                        </a>
-                    </td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
-    </div>
-    <div class="panel panel-default items">
-        <div class="panel-heading">
-            <h3 class="panel-title">
-                {% trans "Orders" %}
-            </h3>
+                            </td>
+                            <td class="text-right flip">
+                                <a href="{% abseventurl request.organizer "presale:organizer.customer.membership" id=m.id %}"
+                                   data-toggle="tooltip"
+                                   title="{% trans "Details" %}"
+                                   class="btn btn-default">
+                                    <i class="fa fa-list"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="6" class="text-center">{% trans "No memberships are stored in your account." %}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div role="tabpanel" class="tab-pane" id="addresses">
+                <table class="panel-body table table-hover">
+                    <thead>
+                    <tr>
+                        <th>{% trans "Address" %}</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for ia in invoice_addresses %}
+                        <tr>
+                            <td>
+                                {{ ia.describe|linebreaksbr }}
+                            </td>
+                            <td class="text-right flip">
+                                <a href="{% abseventurl request.organizer "presale:organizer.customer.address.delete" id=ia.id %}"
+                                   data-toggle="tooltip"
+                                   title="{% trans "Delete" %}"
+                                   class="btn btn-danger">
+                                    <i class="fa fa-trash"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="2" class="text-center">
+                                {% trans "No addresses are stored in your account." %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div role="tabpanel" class="tab-pane" id="profiles">
+                <table class="panel-body table table-hover">
+                    <thead>
+                    <tr>
+                        <th>{% trans "Profile" %}</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for ap in customer.attendee_profiles.all %}
+                        <tr>
+                            <td>
+                                {{ ap.describe|linebreaksbr }}
+                            </td>
+                            <td class="text-right flip">
+                                <a href="{% abseventurl request.organizer "presale:organizer.customer.profile.delete" id=ap.id %}"
+                                   data-toggle="tooltip"
+                                   title="{% trans "Delete" %}"
+                                   class="btn btn-danger">
+                                    <i class="fa fa-trash"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="2" class="text-center">
+                                {% trans "No attendee profiles are stored in your account." %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </div>
-        <table class="panel-body table table-hover">
-            <thead>
-            <tr>
-                <th>{% trans "Order code" %}</th>
-                <th>{% trans "Event" %}</th>
-                <th>{% trans "Order date" %}</th>
-                <th class="text-right">{% trans "Order total" %}</th>
-                <th class="text-right">{% trans "Positions" %}</th>
-                <th class="text-right">{% trans "Status" %}</th>
-                <th></th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for o in orders %}
-                <tr>
-                    <td>
-                        <strong>
-                            <a href="{% abseventurl o.event "presale:event.order" order=o.code secret=o.secret %}" target="_blank">
-                                {{ o.code }}
-                            </a>
-                        </strong>
-                        {% if o.testmode %}
-                            <span class="label label-warning">{% trans "TEST MODE" %}</span>
-                        {% endif %}
-                    </td>
-                    <td>
-                        {{ o.event }}
-                    </td>
-                    <td>
-                        {{ o.datetime|date:"SHORT_DATETIME_FORMAT" }}
-                        {% if o.customer_id != customer.pk %}
-                            <span class="fa fa-link text-muted"
-                                    data-toggle="tooltip"
-                                    title="{% trans "Matched to the account based on the email address." %}"
-                            ></span>
-                        {% endif %}
-                    </td>
-                    <td class="text-right flip">
-                        {{ o.total|money:o.event.currency }}
-                    </td>
-                    <td class="text-right flip">{{ o.count_positions|default_if_none:"0" }}</td>
-                    <td class="text-right flip">{% include "pretixpresale/event/fragment_order_status.html" with order=o event=o.event %}</td>
-                    <td class="text-right flip">
-                        <a href="{% abseventurl o.event "presale:event.order" order=o.code secret=o.secret %}"
-                                target="_blank"
-                                class="btn btn-default">
-                            {% trans "Details" %}
-                        </a>
-                    </td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
-        {% include "pretixcontrol/pagination.html" %}
     </div>
 {% endblock %}

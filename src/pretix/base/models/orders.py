@@ -2379,6 +2379,20 @@ class InvoiceAddress(models.Model):
             self.name_parts = {}
         super().save(**kwargs)
 
+    def describe(self):
+        parts = [
+            self.company,
+            self.name,
+            self.street,
+            (self.zipcode or '') + ' ' + (self.city or '') + ' ' + (self.state_for_address or ''),
+            self.country.name,
+            self.vat_id,
+            self.custom_field,
+            self.internal_reference,
+            (_('Beneficiary') + ': ' + self.beneficiary) if self.beneficiary else '',
+        ]
+        return '\n'.join([str(p).strip() for p in parts if p and str(p).strip()])
+
     @property
     def is_empty(self):
         return (
