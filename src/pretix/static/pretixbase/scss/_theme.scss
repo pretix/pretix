@@ -1,5 +1,16 @@
 input[type=number] {
-  padding-right: 0; // Setting the padding-right to zero, as some versions Firefox render the arrow-buttons on number inputs useless.
+  padding-right: 6px;
+}
+@supports (-moz-appearance:none) {
+  input[type=number] {
+    padding: 6px 2px; // decrease horizontal padding, as some versions of Firefox render the arrow-buttons on number inputs useless otherwise
+  }
+}
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button {  
+   opacity: 1;
+   cursor: pointer;
+   padding: 8px 4px;
 }
 
 .sidebar-nav li > a > .fa {
