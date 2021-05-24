@@ -251,7 +251,7 @@ class EventWizard(SafeSessionWizardView):
         with transaction.atomic(), language(basics_data['locale']):
             event = form_dict['basics'].instance
             event.organizer = foundation_data['organizer']
-            event.plugins = settings.PRETIX_PLUGINS_DEFAULT
+            event.set_active_plugins(settings.PRETIX_PLUGINS_DEFAULT.split(","), allow_restricted=True)
             event.has_subevents = foundation_data['has_subevents']
             event.testmode = True
             form_dict['basics'].save()

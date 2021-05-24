@@ -1440,7 +1440,7 @@ class QuickSetupView(FormView):
             })
             quota.items.add(*items)
 
-        self.request.event.plugins = ",".join(plugins_active)
+        self.request.event.set_active_plugins(plugins_active, allow_restricted=True)
         self.request.event.save()
         messages.success(self.request, _('Your changes have been saved. You can now go on with looking at the details '
                                          'or take your event live to start selling!'))

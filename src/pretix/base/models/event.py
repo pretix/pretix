@@ -634,7 +634,7 @@ class Event(EventMixin, LoggedModel):
             Quota,
         )
 
-        self.plugins = other.plugins
+        self.set_active_plugins(other.plugins.split(","), allow_restricted=True)
         self.is_public = other.is_public
         if other.date_admission:
             self.date_admission = self.date_from + (other.date_admission - other.date_from)
