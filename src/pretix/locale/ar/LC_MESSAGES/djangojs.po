@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-05-13 08:11+0000\n"
-"PO-Revision-Date: 2021-05-24 03:00+0000\n"
+"PO-Revision-Date: 2021-05-25 03:00+0000\n"
 "Last-Translator: Mohamed Tawfiq <mtawfiq@wafyapp.com>\n"
 "Language-Team: Arabic <https://translate.pretix.eu/projects/pretix/pretix-js/"
 "ar/>\n"
@@ -126,7 +126,6 @@ msgid "Canceled"
 msgstr "ملغاة"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:46
-#, fuzzy
 msgid "Redeemed"
 msgstr "مسترد"
 
@@ -292,7 +291,6 @@ msgid "Product"
 msgstr "منتج"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:63
-#, fuzzy
 msgid "Product variation"
 msgstr "نوع المنتج"
 
