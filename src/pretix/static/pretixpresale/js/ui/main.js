@@ -275,6 +275,7 @@ $(function () {
     attendee_address_fields.change(function () {
         copy_to_first_ticket = false;
     });
+    questions_init_profiles($("body"));
 
     // Subevent choice
     if ($(".subevent-toggle").length) {

@@ -197,7 +197,7 @@ class BaseQuestionsViewMixin:
                                 prof.answers.append({
                                     'field_name': k,
                                     'field_label': str(field.label),
-                                    'value': field.answer.answer,
+                                    'value': str(field.answer.answer),
                                     'question_type': field.question.type,
                                     'question_identifier': field.question.identifier,
                                 })
@@ -227,7 +227,7 @@ class BaseQuestionsViewMixin:
                             prof.answers.append({
                                 'field_name': k,
                                 'field_label': str(field.label),
-                                'value': answer.answer,
+                                'value': str(answer.answer),
                                 'question_type': field.question.type,
                                 'question_identifier': field.question.identifier,
                             })

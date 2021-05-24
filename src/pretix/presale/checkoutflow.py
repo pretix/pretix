@@ -59,6 +59,7 @@ from pretix.base.services.cart import (
 )
 from pretix.base.services.memberships import validate_memberships_in_order
 from pretix.base.services.orders import perform_order
+from pretix.base.settings import PERSON_NAME_SCHEMES
 from pretix.base.signals import validate_cart_addons
 from pretix.base.templatetags.phone_format import phone_format
 from pretix.base.templatetags.rich_text import rich_text_snippet
@@ -967,6 +968,46 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
         ctx['cart'] = self.get_cart()
         ctx['cart_session'] = self.cart_session
         ctx['invoice_address_asked'] = self.address_asked
+
+        if self.cart_customer:
+            ctx['addresses'] = self.cart_customer.stored_addresses.all()
+
+            profiles = list(self.cart_customer.attendee_profiles.all())
+            for form in self.forms:
+                form.profiles = []
+                for p in profiles:
+                    data = {}
+
+                    if p.attendee_name_parts:
+                        scheme = PERSON_NAME_SCHEMES[self.request.event.settings.name_scheme]
+                        for i, (k, l, w) in enumerate(scheme['fields']):
+                            data[f'attendee_name_parts_{i}'] = p.attendee_name_parts.get(k) or ''
+
+                    data.update({
+                        'attendee_email': p.attendee_email,
+                        'company': p.company,
+                        'street': p.street,
+                        'zipcode': p.zipcode,
+                        'city': p.city,
+                        'country': str(p.country) if p.country else None,
+                        'state': str(p.state) if p.state else None,
+                    })
+
+                    for k, f in form.fields.items():
+                        match_name = [a['value'] for a in p.answers if a['field_name'] == k]
+                        match_identifier = [a['value'] for a in p.answers if hasattr(f, 'question') and a['question_identifier'] == f.question.identifier]
+                        match_label = [a['value'] for a in p.answers if a['field_label'] == str(f.label)]
+                        if match_name:
+                            data[k] = match_name[0]
+                        elif match_identifier:
+                            data[k] = match_identifier[0]
+                        elif match_label:
+                            data[k] = match_label[0]
+
+                    form.profiles.append((p, data))
+
+            ctx['profiles'] = profiles
+
         return ctx
 
 

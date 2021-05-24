@@ -2428,6 +2428,30 @@ class InvoiceAddress(models.Model):
             raise TypeError("Invalid name given.")
         return scheme['concatenation'](self.name_parts).strip()
 
+    def for_js(self):
+        d = {}
+
+        if self.name_parts:
+            if '_scheme' in self.name_parts:
+                scheme = PERSON_NAME_SCHEMES[self.name_parts['_scheme']]
+                for i, (k, l, w) in enumerate(scheme['fields']):
+                    d[f'name_parts_{i}'] = self.name_parts.get(k) or ''
+
+        d.update({
+            'company': self.company,
+            'is_business': self.is_business,
+            'street': self.street,
+            'zipcode': self.zipcode,
+            'city': self.city,
+            'country': str(self.country) if self.country else None,
+            'state': str(self.state) if self.state else None,
+            'vat_id': self.vat_id,
+            'custom_field': self.custom_field,
+            'internal_reference': self.internal_reference,
+            'beneficiary': self.beneficiary,
+        })
+        return d
+
 
 def cachedticket_name(instance, filename: str) -> str:
     secret = get_random_string(length=16, allowed_chars=string.ascii_letters + string.digits)

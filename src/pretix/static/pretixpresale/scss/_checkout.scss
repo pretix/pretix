@@ -103,3 +103,18 @@
     font-weight: bold;
   }
 }
+
+.profile-list-wrapper {
+  overflow-x: auto;
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+
+  .profile-list {
+    display: flex;
+    flex-direction: row;
+    button {
+      flex: 200px 0 0;
+      margin-right: 10px;
+    }
+  }
+}

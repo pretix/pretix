@@ -24,7 +24,7 @@ import json
 from django import template
 from django.template.defaultfilters import stringfilter
 
-from pretix.helpers.escapejson import escapejson
+from pretix.helpers.escapejson import escapejson, escapejson_attr
 
 register = template.Library()
 
@@ -40,3 +40,9 @@ def escapejs_filter(value):
 def escapejs_dumps_filter(value):
     """Hex encodes characters for use in a application/json type script."""
     return escapejson(json.dumps(value))
+
+
+@register.filter("attr_escapejson_dumps")
+def attr_escapejs_dumps_filter(value):
+    """Hex encodes characters for use in an HTML attribute."""
+    return escapejson_attr(json.dumps(value))

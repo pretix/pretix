@@ -2,6 +2,8 @@
 {% load i18n %}
 {% load bootstrap3 %}
 {% load rich_text %}
+{% load lists %}
+{% load escapejson %}
 {% block inner %}
     <p>{% trans "Before we continue, we need you to answer some questions." %}</p>
     <p class="required-legend" aria-hidden="true">
@@ -46,6 +48,23 @@
                                     {{ event.settings.invoice_address_explanation_text|rich_text }}
                                 </div>
                             {% endif %}
+
+                            {% if addresses %}
+                                <div class="profile-list-wrapper">
+                                    <div role="group" class="profile-list">
+                                        {% for ia in addresses %}
+                                            <button type="button" class="btn btn-default" data-stored-values="{{ ia.for_js|attr_escapejson_dumps }}" data-id="{{ ia.pk }}">
+                                                <span class="sr-only">{% trans "Fill form section with stored data:" %}<br></span>
+                                                {{ ia.describe|splitlines|slice:":5"|joinlines|linebreaksbr }}
+                                                {% if ia.describe|splitlines|length > 5 %}
+                                                    <br>…
+                                                {% endif %}
+                                            </button>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            {% endif %}
+
                             {% bootstrap_form invoice_form layout="checkout" %}
                         </div>
                     </div>
@@ -137,6 +156,23 @@
                                     </legend>
                                 {% endif %}
                                 <div data-idx="{{ forloop.parentloop.counter0 }}" data-addonidx="{{ forloop.counter0 }}">
+
+                                    {% if form.profiles %}
+                                        <div class="profile-list-wrapper">
+                                            <div role="group" class="profile-list">
+                                                {% for ap, data in form.profiles %}
+                                                    <button type="button" class="btn btn-default" data-stored-values="{{ data|attr_escapejson_dumps }}" data-id="{{ ap.pk }}">
+                                                        <span class="sr-only">{% trans "Fill form section with stored data:" %}<br></span>
+                                                        {{ ap.describe|splitlines|slice:":6"|joinlines|linebreaksbr }}
+                                                        {% if ap.describe|splitlines|length > 6 %}
+                                                            <br>…
+                                                        {% endif %}
+                                                    </button>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                    {% endif %}
+
                                     {% bootstrap_form form layout="checkout" %}
                                 </div>
                             {% endfor %}

@@ -113,3 +113,42 @@ function questions_init_photos(el) {
         })
     });
 }
+
+function questions_init_profiles(el) {
+    el.find(".profile-list").each(function () {
+        var $profilelist = $(this);
+        var $formpart = $(this).parent().parent();
+        $profilelist.find("button").on("click", function () {
+           var $btn = $(this);
+           var values = JSON.parse($btn.attr("data-stored-values"));
+           $formpart.find("input[name$=save]").prop("checked", false);
+           $formpart.find("input[name$=saved_id]").val($btn.attr("data-id"));
+
+           for (var key of Object.keys(values)) {
+               var value = values[key];
+               var $field = $formpart.find("input[name$=" + key + "], textarea[name$=" + key + "], select[name$=" + key + "]");
+
+               console.log(key, $field, value)
+               if (key === "is_business") {
+                   $formpart.find("input[name=is_business][value=business]").prop("checked", value)
+                   $formpart.find("input[name=is_business][value=individual]").prop("checked", !value)
+                   $formpart.find("input[name=is_business][value=individual]").trigger("change")
+               } else if ($field.length === 1 && $field.attr("type") === "checkbox") {
+                   $field.prop("checked", value)
+               } else if (!value) {
+                   continue;
+               } else {
+                   $field.val(value);
+                   $field.trigger("change")
+               }
+
+               // (invoice) address: state
+               // multiplechoice
+               // choice
+               // date
+               // time
+               // datetime
+           }
+        });
+    });
+}

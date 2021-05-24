@@ -179,6 +179,10 @@ class Customer(LoggedModel):
             ctx['name_%s' % f] = self.name_parts.get(f, '')
         return ctx
 
+    @property
+    def stored_addresses(self):
+        return self.invoice_addresses(manager='profiles')
+
 
 class AttendeeProfile(models.Model):
     customer = models.ForeignKey(
