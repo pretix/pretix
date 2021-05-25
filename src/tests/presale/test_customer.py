@@ -289,6 +289,15 @@ def test_org_order_list(env, client):
     assert r.status_code == 200
     content = r.content.decode()
     assert o1.code not in content
+    assert o2.code not in content
+    assert o3.code in content
+
+    env[0].settings.customer_accounts_link_by_email = True
+
+    r = client.get(f'/bigevents/account/')
+    assert r.status_code == 200
+    content = r.content.decode()
+    assert o1.code not in content
     assert o2.code in content
     assert o3.code in content
 
