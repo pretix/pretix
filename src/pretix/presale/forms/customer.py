@@ -167,7 +167,7 @@ class RegistrationForm(forms.Form):
 
         if email is not None:
             try:
-                self.request.organizer.customers.get(email=email)
+                self.request.organizer.customers.get(email=email.lower())
             except Customer.DoesNotExist:
                 pass
             else:
@@ -444,7 +444,7 @@ class ChangeInfoForm(forms.ModelForm):
 
         if email is not None:
             try:
-                self.request.organizer.customers.exclude(pk=self.instance.pk).get(email=email)
+                self.request.organizer.customers.exclude(pk=self.instance.pk).get(email=email.lower())
             except Customer.DoesNotExist:
                 pass
             else:
