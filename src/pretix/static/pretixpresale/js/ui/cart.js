@@ -77,6 +77,7 @@ $(function () {
 
     $(".apply-voucher").hide();
     $(".apply-voucher-toggle").click(function (e) {
+        this.setAttribute("aria-expanded", true);
         $(".apply-voucher-toggle").hide();
         $(".apply-voucher").show();
         $(".apply-voucher input[type=text]").first().focus();

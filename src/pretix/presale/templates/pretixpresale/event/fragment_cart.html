@@ -371,9 +371,9 @@
     </div>
 {% if editable and vouchers_exist and not cart.all_with_voucher %}
     <div class="col-md-4 col-sm-6 col-xs-12">
-        <p class="text-right"><a class="js-only apply-voucher-toggle" href="#voucher_code">
+        <p class="text-right"><button class="js-only apply-voucher-toggle btn btn-default btn-xs" aria-expanded="false">
             <span class="fa fa-tag" aria-hidden="true"></span> {% trans "Redeem a voucher" %}
-        </a></p>
+        </button></p>
         <form action="{% eventurl event "presale:event.cart.voucher" cart_namespace=cart_namespace|default_if_none:"" %}"
               data-asynctask-headline="{% trans "We're applying this voucher to your cart..." %}"
               method="post" data-asynctask class="apply-voucher">
