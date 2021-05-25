@@ -72,6 +72,8 @@ function async_task_check_error(jqXHR, textStatus, errorThrown) {
         ));
         form_handlers($("body"));
         setup_collapsible_details($("body"));
+        window.setTimeout(function () { $(window).scrollTop(0) }, 200)
+        $(document).trigger("pretix:bind-forms");
     } else if (c.length > 0) {
         // This is some kind of 500/404/403 page, show it in an overlay
         $("body").data('ajaxing', false);
@@ -152,6 +154,8 @@ function async_task_error(jqXHR, textStatus, errorThrown) {
                 $("#page-wrapper").html(respdom.find("#page-wrapper").html());
                 form_handlers($("#page-wrapper"));
                 setup_collapsible_details($("#page-wrapper"));
+                $(document).trigger("pretix:bind-forms");
+                window.setTimeout(function () { $(window).scrollTop(0) }, 200)
             } else {
                 $("body").html(jqXHR.responseText.substring(
                     jqXHR.responseText.indexOf("<body"),
@@ -159,6 +163,8 @@ function async_task_error(jqXHR, textStatus, errorThrown) {
                 ));
                 form_handlers($("body"));
                 setup_collapsible_details($("body"));
+                $(document).trigger("pretix:bind-forms");
+                window.setTimeout(function () { $(window).scrollTop(0) }, 200)
             }
 
         } else if (c.length > 0) {

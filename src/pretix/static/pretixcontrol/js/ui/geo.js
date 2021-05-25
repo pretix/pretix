@@ -1,6 +1,6 @@
 /*globals $*/
 
-$(function () {
+$(document).on("pretix:bind-forms", function () {
     function cleanup(l) {
         return $.trim(l.replace(/\n/g, ", "));
     }
