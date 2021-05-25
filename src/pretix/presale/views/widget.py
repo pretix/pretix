@@ -331,7 +331,7 @@ class WidgetAPIProductList(EventListMixin, View):
         else:
             return self.get(request, **kwargs)
 
-    def _get_availability(self, ev, event):
+    def _get_availability(self, ev, event, tz=None):
         availability = {}
         if ev.presale_is_running and event.settings.event_list_availability:
             if ev.best_availability_state == Quota.AVAILABILITY_OK:
@@ -367,7 +367,9 @@ class WidgetAPIProductList(EventListMixin, View):
             availability['reason'] = 'over'
         elif event.settings.presale_start_show_date and ev.presale_start:
             availability['color'] = 'orange'
-            availability['text'] = gettext('from %(start_date)s') % {'start_date': date_format(ev.presale_start, "SHORT_DATE_FORMAT")}
+            availability['text'] = gettext('from %(start_date)s') % {
+                'start_date': date_format(ev.presale_start.astimezone(tz or event.timezone), "SHORT_DATE_FORMAT")
+            }
             availability['reason'] = 'soon'
         else:
             availability['color'] = 'orange'
@@ -401,8 +403,8 @@ class WidgetAPIProductList(EventListMixin, View):
                 'time': time,
                 'continued': e['continued'],
                 'location': str(ev.location),
-                'date_range': self._get_date_range(ev, event),
-                'availability': self._get_availability(ev, event),
+                'date_range': self._get_date_range(ev, event, tz=tz),
+                'availability': self._get_availability(ev, event, tz=tz),
                 'event_url': build_absolute_uri(event, 'presale:event.index'),
                 'subevent': ev.pk if isinstance(ev, SubEvent) else None,
             })
@@ -546,7 +548,7 @@ class WidgetAPIProductList(EventListMixin, View):
                         'name': str(ev.name),
                         'location': str(ev.location),
                         'date_range': self._get_date_range(ev, ev.event, tz),
-                        'availability': self._get_availability(ev, ev.event),
+                        'availability': self._get_availability(ev, ev.event, tz=tz),
                         'event_url': build_absolute_uri(ev.event, 'presale:event.index'),
                         'subevent': ev.pk,
                     } for ev in evs
@@ -564,7 +566,7 @@ class WidgetAPIProductList(EventListMixin, View):
                         avail = {'color': 'none', 'text': gettext('Event series')}
                     else:
                         dr = self._get_date_range(event, event, tz)
-                        avail = self._get_availability(event, event)
+                        avail = self._get_availability(event, event, tz=tz)
                     data['events'].append({
                         'name': str(event.name),
                         'location': str(event.location),
