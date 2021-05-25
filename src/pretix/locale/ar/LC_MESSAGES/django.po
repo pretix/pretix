@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-05-13 08:11+0000\n"
-"PO-Revision-Date: 2021-05-25 03:00+0000\n"
+"PO-Revision-Date: 2021-05-25 09:32+0000\n"
 "Last-Translator: Mohamed Tawfiq <mtawfiq@wafyapp.com>\n"
 "Language-Team: Arabic <https://translate.pretix.eu/projects/pretix/pretix/ar/"
 ">\n"
@@ -7907,22 +7907,16 @@ msgid "Font"
 msgstr "الخط"
 
 #: pretix/base/settings.py:1984
+#, fuzzy
 msgid "Only respected by modern browsers."
-msgstr "تحترم إلا من خلال المتصفحات الحديثة."
+msgstr "متبع من خلال المتصفحات الحديثة فقط."
 
 #: pretix/base/settings.py:2011 pretix/base/settings.py:2053
 #: pretix/control/forms/organizer.py:311
-#, fuzzy
-#| msgid "Sender name"
 msgid "Header image"
-msgstr "اسم المرسل"
+msgstr "صورة رأسية"
 
 #: pretix/base/settings.py:2014
-#, fuzzy
-#| msgid ""
-#| "If you provide a logo image, we will by default not show your events name "
-#| "and date in the page header. We will show your logo with a maximal height "
-#| "of 120 pixels."
 msgid ""
 "If you provide a logo image, we will by default not show your event name and "
 "date in the page header. By default, we show your logo with a size of up to "
@@ -7930,33 +7924,28 @@ msgid ""
 "recommend not using small details on the picture as it will be resized on "
 "smaller screens."
 msgstr ""
-"إذا كنت توفير صورة الشعار، ونحن سوف افتراضيا لا تظهر اسم الأحداث والتاريخ في "
-"رأس الصفحة. وسوف نعرض شعارك مع ارتفاع الحد الأقصى من 120 بكسل."
+"إذا قدمت صورة شعار ، فسنقوم افتراضيا بعدم إظهار اسم الفعالية الخاصة بك "
+"وتاريخها في رأس الصفحة. بشكل افتراضي ، نعرض شعارك بحجم يصل إلى 1140 × 120 "
+"بكسل. يمكنك زيادة الحجم مع الإعداد أدناه. نوصي بعدم استخدام التفاصيل الصغيرة "
+"على الصورة حيث سيتم تغيير حجمها على الشاشات الأصغر."
 
 #: pretix/base/settings.py:2034 pretix/base/settings.py:2075
 msgid "Use header image in its full size"
-msgstr ""
+msgstr "استخدم صورة الرأسية بحجمها الكامل"
 
 #: pretix/base/settings.py:2035 pretix/base/settings.py:2076
 msgid "We recommend to upload a picture at least 1170 pixels wide."
-msgstr ""
+msgstr "نوصي بتحميل صورة لا يقل عرضها عن 1170 بكسل."
 
 #: pretix/base/settings.py:2044
 msgid "Show event title even if a header image is present"
-msgstr ""
+msgstr "أعرض عنوان الفعالية حتى إذا كانت صورة الرأسية موجودة"
 
 #: pretix/base/settings.py:2045
-#, fuzzy
-#| msgid "This question will only show up in the backend."
 msgid "The title will only be shown on the event front page."
-msgstr "على هذا السؤال سوف تظهر فقط في الخلفية."
+msgstr "سيتم عرض العنوان فقط على الصفحة الأولى للفعالية."
 
 #: pretix/base/settings.py:2056 pretix/control/forms/organizer.py:315
-#, fuzzy
-#| msgid ""
-#| "If you provide a logo image, we will by default not show your "
-#| "organization name in the page header. We will show your logo with a "
-#| "maximal height of 120 pixels."
 msgid ""
 "If you provide a logo image, we will by default not show your organization "
 "name in the page header. By default, we show your logo with a size of up to "
@@ -7964,12 +7953,14 @@ msgid ""
 "recommend not using small details on the picture as it will be resized on "
 "smaller screens."
 msgstr ""
-"إذا كنت توفير صورة الشعار، ونحن سوف افتراضيا لا تظهر اسم مؤسستك في رأس "
-"الصفحة. وسوف نعرض شعارك مع ارتفاع الحد الأقصى من 120 بكسل."
+"إذا قدمت صورة شعار ، فسنقوم افتراضيا بعدم إظهار اسم مؤسستك في رأس الصفحة. "
+"بشكل افتراضي ، نعرض شعارك بحجم يصل إلى 1140 × 120 بكسل. يمكنك زيادة الحجم مع "
+"الإعداد أدناه. نوصي بعدم استخدام التفاصيل الصغيرة على الصورة حيث سيتم تغيير "
+"حجمها على الشاشات الأصغر."
 
 #: pretix/base/settings.py:2084
 msgid "Social media image"
-msgstr ""
+msgstr "صورة وسائل التواصل الاجتماعي"
 
 #: pretix/base/settings.py:2087
 msgid ""
@@ -7979,6 +7970,11 @@ msgid ""
 "preview, so we recommend to make sure it still looks good only the center "
 "square is shown. If you do not fill this, we will use the logo given above."
 msgstr ""
+"سيتم استخدام هذه الصورة كمعاينة إذا قمت بنشر روابط لمتجر التذاكر الخاص بك "
+"على وسائل التواصل الاجتماعي. ينصح فيسبوك باستخدام صورة بحجم 1200 × 630 بكسل ،"
+" ولكن بعض الأنظمة الأساسية مثل واتساب و Reddit تعرض فقط معاينة مربعة ، لذلك "
+"نوصي بالتأكد من أنها لا تزال تبدو جيدة في حال المربع الأوسط هو الذي يظهر "
+"فقط. إذا لم تقم بملء هذا ، فسنستخدم الشعار الموضح أعلاه."
 
 #: pretix/base/settings.py:2105
 msgid "Logo image"
@@ -7986,7 +7982,7 @@ msgstr "صورة الشعار"
 
 #: pretix/base/settings.py:2109
 msgid "We will show your logo with a maximal height and width of 2.5 cm."
-msgstr "وسوف نعرض شعارك مع ارتفاع القصوى وعرض 2.5 سم."
+msgstr "سنعرض شعارك بحد أقصى ارتفاع وعرض 2.5 سم."
 
 #: pretix/base/settings.py:2135 pretix/base/settings.py:2241
 msgid "Info text"
@@ -7997,34 +7993,32 @@ msgid ""
 "Not displayed anywhere by default, but if you want to, you can use this e.g. "
 "in ticket templates."
 msgstr ""
-"لا يتم عرض أي مكان افتراضيا، ولكن إذا كنت ترغب في ذلك، يمكنك استخدام هذا على "
-"سبيل المثال في قوالب تذكرة."
+"لا يتم عرضه في أي مكان بشكل افتراضي ، ولكن إذا كنت ترغب في ذلك ، يمكنك "
+"استخدام هذا على سبيل المثال في قوالب التذاكر."
 
 #: pretix/base/settings.py:2147
 msgid "Banner text (top)"
-msgstr ""
+msgstr "نص الشعار (أعلى)"
 
 #: pretix/base/settings.py:2150
-#, fuzzy
-#| msgid ""
-#| "This text will be shown above the payment options. You can explain the "
-#| "choices to the user here, if you want."
 msgid ""
 "This text will be shown above every page of your shop. Please only use this "
 "for very important messages."
 msgstr ""
-"سيتم عرض هذا النص فوق خيارات الدفع. هل يمكن ان توضح الخيارات للمستخدم هنا، "
-"إذا كنت تريد."
+"سيظهر هذا النص فوق كل صفحة من صفحات متجرك. الرجاء استخدام هذا فقط للرسائل "
+"الهامة جدا."
 
 #: pretix/base/settings.py:2160
 msgid "Banner text (bottom)"
-msgstr ""
+msgstr "نص الشعار (أسفل)"
 
 #: pretix/base/settings.py:2163
 msgid ""
 "This text will be shown below every page of your shop. Please only use this "
 "for very important messages."
 msgstr ""
+"سيظهر هذا النص أسفل كل صفحة من صفحات متجرك. الرجاء استخدام هذا فقط للرسائل "
+"الهامة جدا."
 
 #: pretix/base/settings.py:2173
 msgid "Voucher explanation"
@@ -8035,58 +8029,54 @@ msgid ""
 "This text will be shown next to the input for a voucher code. You can use it "
 "e.g. to explain how to obtain a voucher code."
 msgstr ""
-"وسيتم عرض هذا النص القادم لإدخال لرمز قسيمة. يمكنك استخدامه على سبيل المثال "
-"لشرح كيفية الحصول على رمز قسيمة."
+"سيظهر هذا النص بجانب إدخال رمز القسيمة. يمكنك استخدامه على سبيل المثال لشرح "
+"كيفية الحصول على رمز قسيمة."
 
 #: pretix/base/settings.py:2186
-#, fuzzy
-#| msgid "Attendee data"
 msgid "Attendee data explanation"
-msgstr "بيانات الحضور"
+msgstr "شرح بيانات الحضور"
 
 #: pretix/base/settings.py:2189
-#, fuzzy
-#| msgid ""
-#| "This text will be shown next to the input for a voucher code. You can use "
-#| "it e.g. to explain how to obtain a voucher code."
 msgid ""
 "This text will be shown above the questions asked for every admission "
 "product. You can use it e.g. to explain why you need information from them."
 msgstr ""
-"وسيتم عرض هذا النص القادم لإدخال لرمز قسيمة. يمكنك استخدامه على سبيل المثال "
-"لشرح كيفية الحصول على رمز قسيمة."
+"سيتم عرض هذا النص فوق الأسئلة المطروحة لكل منتج قبول. يمكنك استخدامه على "
+"سبيل المثال لشرح سبب حاجتك إلى معلومات منهم."
 
 #: pretix/base/settings.py:2199
 #, fuzzy
 #| msgid "Additional fee"
 msgid "Additional success message"
-msgstr "رسوم إضافية"
+msgstr "رسالة نجاح إضافية"
 
 #: pretix/base/settings.py:2200
 msgid ""
 "This message will be shown after an order has been created successfully. It "
 "will be shown in additional to the default text."
 msgstr ""
+"ستظهر هذه الرسالة بعد إنشاء الطلب بنجاح. سيتم عرضه بالإضافة إلى النص "
+"الافتراضي."
 
 #: pretix/base/settings.py:2212
 msgid "Help text of the phone number field"
-msgstr ""
+msgstr "نص المساعدة لحقل رقم الهاتف"
 
 #: pretix/base/settings.py:2219
 msgid ""
 "Make sure to enter a valid email address. We will send you an order "
 "confirmation including a link that you need to access your order later."
 msgstr ""
-"تأكد من إدخال عنوان البريد الألكتروني بشكل صحيح. سوف نرسل تأكيد الطلب  مرفقا "
-"معه رابط سوف تحتاجه للدخول لطلبك لاحقا."
+"تأكد من إدخال عنوان بريد إلكتروني صالح. سنرسل إليك تأكيدا لطلبك يتضمن رابطا "
+"تحتاجه للوصول إلى طلبك لاحقا."
 
 #: pretix/base/settings.py:2226
 msgid "Help text of the email field"
-msgstr ""
+msgstr "نص المساعدة لحقل البريد الإلكتروني"
 
 #: pretix/base/settings.py:2252
 msgid "Allow creating a new team during event creation"
-msgstr ""
+msgstr "السماح بإنشاء فريق جديد أثناء إنشاء الفعالية"
 
 #: pretix/base/settings.py:2253
 msgid ""
@@ -8095,10 +8085,14 @@ msgid ""
 "allows users to create an event-specified team on-the-fly, even when they do "
 "not have \"Can change teams and permissions\" permission."
 msgstr ""
+"يجب على المستخدمين الذين ليس لديهم حق الوصول إلى جميع الفعاليات التابعة لهذا "
+"المنظم ، تحديد أحد فرقهم للوصول إلى الفعالية التي تم إنشاؤها. يسمح هذا "
+"الإعداد للمستخدمين بإنشاء فريق محدد للفعاية أثناء التنقل ، حتى عندما لا يكون "
+"لديهم إذن \"إمكانية تغيير الفرق والتصاريح\"."
 
 #: pretix/base/settings.py:2325 pretix/base/settings.py:2335
 msgid "Event start time (descending)"
-msgstr "وقت بدء الحدث (تنازلي)"
+msgstr "وقت بدء الفعالية (تنازلي)"
 
 #: pretix/base/settings.py:2327 pretix/base/settings.py:2337
 msgid "Name (descending)"
@@ -8107,37 +8101,37 @@ msgstr "الاسم (تنازلي)"
 #: pretix/base/settings.py:2332
 msgctxt "subevent"
 msgid "Date ordering"
-msgstr "تاريخ الطلب"
+msgstr "ترتيب التاريخ"
 
 #: pretix/base/settings.py:2348
 msgid "Link back to organizer overview on all event pages"
-msgstr "صلة الى نظرة عامة منظم على جميع صفحات الحدث"
+msgstr "قم بنظرة عامة على المنظم في جميع صفحات الفعالية"
 
 #: pretix/base/settings.py:2357
 msgid "Homepage text"
-msgstr "النص الصفحة الرئيسية"
+msgstr "نص الصفحة الرئيسية"
 
 #: pretix/base/settings.py:2359
 msgid "This will be displayed on the organizer homepage."
-msgstr "سيتم عرض هذا على الصفحة الرئيسية منظم."
+msgstr "سيتم عرض هذا على الصفحة الرئيسية للمنظم."
 
 #: pretix/base/settings.py:2372
 #, fuzzy
 #| msgid "Gift card code"
 msgid "Length of gift card codes"
-msgstr "رمز بطاقة هدية"
+msgstr "طول رموز بطاقات الهدايا"
 
 #: pretix/base/settings.py:2373
 msgid ""
 "The system generates by default {}-character long gift card codes. However, "
 "if a different length is required, it can be set here."
 msgstr ""
+"ينشئ النظام افتراضيا رموز بطاقات هدايا طويلة مكونة من {}-أحرف. ومع ذلك ، إذا "
+"كان طولا مختلفا مطلوبا ، فيمكن تعيينه هنا."
 
 #: pretix/base/settings.py:2383
-#, fuzzy
-#| msgid "Gift card code"
 msgid "Validity of gift card codes in years"
-msgstr "رمز بطاقة هدية"
+msgstr "صلاحية رموز بطاقات الهدايا بالسنوات"
 
 #: pretix/base/settings.py:2384
 msgid ""
@@ -8145,12 +8139,13 @@ msgid ""
 "the year after this many years. If you keep it empty, gift cards do not have "
 "an explicit expiry date."
 msgstr ""
+"إذا قمت بتعيين رقم هنا ، فستنتهي صلاحية بطاقات الهدايا افتراضيا في نهاية "
+"العام بعد هذه السنوات العديدة. إذا أبقيتها فارغة ، فلن يكون لبطاقات الهدايا "
+"تاريخ انتهاء صلاحية صريح."
 
 #: pretix/base/settings.py:2393
-#, fuzzy
-#| msgid "Customers can cancel their unpaid orders"
 msgid "Customers can choose their own seats"
-msgstr "يمكن للعملاء إلغاء أوامرهم غير المدفوعة"
+msgstr "يمكن للعملاء اختيار مقاعدهم الخاصة"
 
 #: pretix/base/settings.py:2394
 msgid ""
@@ -8158,28 +8153,33 @@ msgid ""
 "that this can mean people will not know their seat after their purchase and "
 "it might not be written on their ticket."
 msgstr ""
+"إذا تم تعطيله ، فستحتاج إلى تعيين المقاعد يدويا في الواجهة الخلفية. لاحظ أن "
+"هذا قد يعني أن الأشخاص لن يعرفوا مقعدهم بعد شرائه وقد لا يكون مكتوبا على "
+"تذكرتهم."
 
 #: pretix/base/settings.py:2418
 msgid "Show button to copy user input from other products"
-msgstr ""
+msgstr "أظهر الزر لنسخ مدخلات المستخدم من المنتجات الأخرى"
 
 #: pretix/base/settings.py:2427
 msgid "Most common English titles"
-msgstr "معظم الألقاب الإنجليزية المشتركة"
+msgstr "العناوين الإنجليزية الأكثر شيوعا"
 
 #: pretix/base/settings.py:2437
 msgid "Most common German titles"
-msgstr "معظم الألقاب الألمانية المشتركة"
+msgstr "العناوين الألمانية الأكثر شيوعا"
 
 #: pretix/base/settings.py:2445
+#, fuzzy
 msgctxt "person_name_salutation"
 msgid "Ms"
-msgstr ""
+msgstr "آنسة"
 
 #: pretix/base/settings.py:2446
+#, fuzzy
 msgctxt "person_name_salutation"
 msgid "Mr"
-msgstr ""
+msgstr "السيد"
 
 #: pretix/base/settings.py:2453 pretix/base/settings.py:2466
 #: pretix/base/settings.py:2482 pretix/base/settings.py:2532
@@ -8206,16 +8206,17 @@ msgstr "اسم العائلة"
 #: pretix/base/settings.py:2659
 msgctxt "person_name_sample"
 msgid "John"
-msgstr "يوحنا"
+msgstr "جون"
 
 #: pretix/base/settings.py:2459 pretix/base/settings.py:2475
 #: pretix/base/settings.py:2491 pretix/base/settings.py:2507
 #: pretix/base/settings.py:2525 pretix/base/settings.py:2539
 #: pretix/base/settings.py:2569 pretix/base/settings.py:2619
 #: pretix/base/settings.py:2637 pretix/base/settings.py:2660
+#, fuzzy
 msgctxt "person_name_sample"
 msgid "Doe"
-msgstr "أنثى ظبية"
+msgstr "دوي"
 
 #: pretix/base/settings.py:2465 pretix/base/settings.py:2481
 #: pretix/base/settings.py:2513 pretix/base/settings.py:2626
@@ -8241,137 +8242,115 @@ msgstr "الاسم الأوسط"
 
 #: pretix/base/settings.py:2579 pretix/base/settings.py:2590
 #: pretix/control/forms/organizer.py:408
+#, fuzzy
 msgctxt "person_name_sample"
 msgid "John Doe"
-msgstr "فلان الفلاني"
+msgstr "جون دو"
 
 #: pretix/base/settings.py:2585
+#, fuzzy
 msgid "Calling name"
-msgstr "الشتائم"
+msgstr "اسم النداء"
 
 #: pretix/base/settings.py:2598
 msgid "Latin transcription"
-msgstr "النسخ اللاتينية"
+msgstr "النسخ اللاتيني"
 
 #: pretix/base/settings.py:2609 pretix/base/settings.py:2625
 #: pretix/base/settings.py:2643
-#, fuzzy
-#| msgid "Cancellation"
 msgctxt "person_name"
 msgid "Salutation"
-msgstr "إلغاء"
+msgstr "تحية"
 
 #: pretix/base/settings.py:2617 pretix/base/settings.py:2634
 #: pretix/base/settings.py:2657
 msgctxt "person_name_sample"
 msgid "Mr"
-msgstr ""
+msgstr "السيد"
 
 #: pretix/base/settings.py:2647
 #, fuzzy
 #| msgid "Require customer name"
 msgctxt "person_name"
 msgid "Degree (after name)"
-msgstr "تتطلب اسم العميل"
+msgstr "الدرجة (بعد الاسم)"
 
 #: pretix/base/settings.py:2661
+#, fuzzy
 msgctxt "person_name_sample"
 msgid "MA"
-msgstr ""
+msgstr "؟؟"
 
 #: pretix/base/settings.py:2762 pretix/control/forms/event.py:207
 msgid ""
 "Your default locale must also be enabled for your event (see box above)."
-msgstr ""
-"ولا بد أيضا من تمكين اللغة الافتراضية لهذا الحدث الخاص بك (انظر المربع "
-"أعلاه)."
+msgstr "يجب أيضا تمكين لغتك الافتراضية للفعالية الخاصة بك (انظر المربع أعلاه)."
 
 #: pretix/base/settings.py:2766
+#, fuzzy
 msgid ""
 "You cannot require specifying attendee names if you do not ask for them."
-msgstr "لا يمكنك تتطلب تحديد أسماء الحضور إذا كنت لا أطلب منهم."
+msgstr "لا يمكنك طلب تحديد أسماء الحضور إذا لم تطلبها منهم."
 
 #: pretix/base/settings.py:2770
 msgid "You have to ask for attendee emails if you want to make them required."
 msgstr ""
-"عليك أن تسأل لرسائل البريد الإلكتروني الحضور إذا كنت تريد أن تجعل منهم "
-"المطلوبة."
+"عليك أن تطلب رسائل البريد الإلكتروني للحضور إذا كنت ترغب في جعلها مطلوبة."
 
 #: pretix/base/settings.py:2774
-#, fuzzy
-#| msgid ""
-#| "You have to ask for attendee emails if you want to make them required."
 msgid ""
 "You have to ask for invoice addresses if you want to make them required."
-msgstr ""
-"عليك أن تسأل لرسائل البريد الإلكتروني الحضور إذا كنت تريد أن تجعل منهم "
-"المطلوبة."
+msgstr "عليك أن تطلب عناوين الفواتير إذا كنت ترغب في جعلها مطلوبة."
 
 #: pretix/base/settings.py:2778
-#, fuzzy
-#| msgid "This will require users to enter a company name."
 msgid "You have to require invoice addresses to require for company names."
-msgstr "وهذا يتطلب من المستخدمين إدخال اسم الشركة."
+msgstr "عليك أن تطلب عنوان الفاتورة لطلب أسماء الشركات."
 
 #: pretix/base/settings.py:2785
 msgid "The last payment date cannot be before the end of presale."
-msgstr "تاريخ الدفعة الأخيرة لا يمكن أن يكون قبل نهاية [خبر]."
+msgstr "لا يمكن أن يكون تاريخ الدفع الأخير قبل نهاية فترة عرض البيع المسبق."
 
 #: pretix/base/shredder.py:74 pretix/base/shredder.py:77
-#, fuzzy
-#| msgid ""
-#| "Your event needs to be over for at least 60 days to use this feature."
 msgid "Your event needs to be over for at least 30 days to use this feature."
-msgstr ""
-"يحتاج هذا الحدث الخاص بك إلى أن أكثر من 60 يوما على الأقل لاستخدام هذه "
-"الميزة."
+msgstr "يجب أن تنتهي فعاليتك خلال 30 يوما على الأقل لاستخدام هذه الميزة."
 
 #: pretix/base/shredder.py:79
 msgid "Your ticket shop needs to be offline to use this feature."
-msgstr "متجر التذكرة يجب أن يكون حاليا لاستخدام هذه الميزة."
+msgstr "يجب أن يكون متجر التذاكر الخاص بك غير متصل لاستخدام هذه الميزة."
 
 #: pretix/base/shredder.py:169
-#, fuzzy
-#| msgid "Phone number"
 msgid "Phone numbers"
-msgstr "رقم الهاتف"
+msgstr "أرقام الهاتف"
 
 #: pretix/base/shredder.py:171
-#, fuzzy
-#| msgid "This will remove all email addresses from the waiting list."
 msgid "This will remove all phone numbers from orders."
-msgstr "سيؤدي ذلك إلى إزالة جميع عناوين البريد الإلكتروني من قائمة الانتظار."
+msgstr "سيؤدي هذا إلى إزالة جميع أرقام الهواتف من الطلبات."
 
 #: pretix/base/shredder.py:194
 msgid "E-mails"
-msgstr "E-رسائل"
+msgstr "رسائل البريد الإلكتروني"
 
 #: pretix/base/shredder.py:196
-#, fuzzy
-#| msgid ""
-#| "This will remove all e-mail addresses from orders and attendees, as well "
-#| "as logged email contents."
 msgid ""
 "This will remove all e-mail addresses from orders and attendees, as well as "
 "logged email contents. This will also remove the association to customer "
 "accounts."
 msgstr ""
-"سيؤدي ذلك إلى إزالة جميع عناوين البريد الإلكتروني من أوامر والحضور، وكذلك "
-"محتويات البريد الإلكتروني تسجيل."
+"سيؤدي هذا إلى إزالة جميع عناوين البريد الإلكتروني من الطلبات والحضور ، "
+"بالإضافة إلى محتويات البريد الإلكتروني المسجلة. سيؤدي هذا أيضا إلى إزالة "
+"الارتباط بحسابات العملاء."
 
 #: pretix/base/shredder.py:242
-#, fuzzy
-#| msgid "This will remove all email addresses from the waiting list."
 msgid ""
 "This will remove all names, email addresses, and phone numbers from the "
 "waiting list."
-msgstr "سيؤدي ذلك إلى إزالة جميع عناوين البريد الإلكتروني من قائمة الانتظار."
+msgstr ""
+"سيؤدي هذا إلى إزالة جميع الأسماء وعناوين البريد الإلكتروني وأرقام الهواتف من "
+"قائمة الانتظار."
 
 #: pretix/base/shredder.py:275
-#, fuzzy
-#| msgid "Attendee name"
 msgid "Attendee info"
-msgstr "الاسم"
+msgstr "معلومات الحضور"
 
 #: pretix/base/shredder.py:277
 #, fuzzy
@@ -8382,8 +8361,8 @@ msgid ""
 "This will remove all attendee names and postal addresses from order "
 "positions, as well as logged changes to them."
 msgstr ""
-"سيؤدي هذا إلى إزالة كافة أسماء الحضور من مواقف النظام، فضلا عن التغيرات "
-"بتسجيل الدخول إليها."
+"سيؤدي هذا إلى إزالة جميع أسماء الحاضرين والعناوين البريدية من وحدات الطلبات ،"
+" بالإضافة إلى التغييرات التي تم تسجيلها عليها."
 
 #: pretix/base/shredder.py:331
 msgid "Invoice addresses"
@@ -8394,8 +8373,8 @@ msgid ""
 "This will remove all invoice addresses from orders, as well as logged "
 "changes to them."
 msgstr ""
-"سيؤدي هذا إلى إزالة كافة عناوين فاتورة من أوامر، فضلا عن التغيرات بتسجيل "
-"الدخول إليها."
+"سيؤدي هذا إلى إزالة جميع عناوين الفواتير من الطلبات ، بالإضافة إلى التغييرات "
+"المسجلة عليها."
 
 #: pretix/base/shredder.py:358
 msgid "Question answers"
@@ -8405,8 +8384,8 @@ msgstr "إجابات السؤال"
 msgid ""
 "This will remove all answers to questions, as well as logged changes to them."
 msgstr ""
-"سيؤدي هذا إلى إزالة جميع الأجوبة على الأسئلة، فضلا عن التغيرات بتسجيل الدخول "
-"إليها."
+"سيؤدي هذا إلى إزالة جميع الإجابات على الأسئلة ، بالإضافة إلى التغييرات "
+"المسجلة عليها."
 
 #: pretix/base/shredder.py:394
 msgid ""
@@ -8414,18 +8393,18 @@ msgid ""
 "might contain personal data from the database. Invoice numbers and totals "
 "will be conserved."
 msgstr ""
-"سيؤدي هذا إلى إزالة جميع ملفات PDF الفاتورة، وكذلك أي من المحتويات نصوصها "
-"التي قد تحتوي على بيانات شخصية من قاعدة البيانات. سيتم الحفاظ أرقام الفاتورة "
-"والمجاميع."
+"سيؤدي هذا إلى إزالة جميع ملفات PDF الخاصة بالفواتير ، بالإضافة إلى أي من "
+"محتوياتها النصية التي قد تحتوي على بيانات شخصية من قاعدة البيانات. سيتم "
+"الاحتفاظ بأرقام ومجاميع الفواتير."
 
 #: pretix/base/shredder.py:421
 msgid "Cached ticket files"
-msgstr "ملفات تذكرة مؤقتا"
+msgstr "ملفات التذاكر المخزنة مؤقتا"
 
 #: pretix/base/shredder.py:423
 msgid "This will remove all cached ticket files. No download will be offered."
 msgstr ""
-"سيؤدي هذا إلى إزالة جميع الملفات المخزنة مؤقتا تذكرة. وسيتم تقديم أي تنزيل."
+"سيؤدي هذا إلى إزالة جميع ملفات التذاكر المخزنة مؤقتا. لن يتم عرض أي تنزيل."
 
 #: pretix/base/shredder.py:438
 msgid ""
@@ -8433,12 +8412,12 @@ msgid ""
 "method, all data will be removed or personal data only. No download will be "
 "offered."
 msgstr ""
-"سيؤدي هذا إلى إزالة المعلومات ذات الصلة الدفع. اعتمادا على طريقة الدفع، ستتم "
-"إزالة جميع البيانات أو البيانات الشخصية فقط. وسيتم تقديم أي تنزيل."
+"سيؤدي هذا إلى إزالة المعلومات المتعلقة بالدفع. اعتمادا على طريقة الدفع ، "
+"ستتم إزالة جميع البيانات أو البيانات الشخصية فقط. لن يتم اقتراح أي تنزيل."
 
 #: pretix/base/templates/400.html:4 pretix/base/templates/400.html:8
 msgid "Bad Request"
-msgstr "اقتراح غير جيد"
+msgstr "طلب سيء"
 
 #: pretix/base/templates/400.html:9
 msgid "We were unable to parse your request."
@@ -8447,22 +8426,23 @@ msgstr "لم نتمكن من تحليل طلبك."
 #: pretix/base/templates/400.html:12 pretix/base/templates/403.html:12
 #: pretix/base/templates/404.html:12 pretix/base/templates/500.html:22
 #: pretix/base/templates/csrffail.html:26
+#, fuzzy
 msgid "Take a step back"
-msgstr "خذ خطوة للوراء"
+msgstr "عد للوراء"
 
 #: pretix/base/templates/400.html:13 pretix/base/templates/403.html:13
 #: pretix/base/templates/500.html:23
 #: pretix/presale/templates/pretixpresale/event/cookies.html:40
 msgid "Try again"
-msgstr "حاول مرة أخري"
+msgstr "حاول مرة أخرى"
 
 #: pretix/base/templates/403.html:4 pretix/base/templates/403.html:8
 msgid "Permission denied"
-msgstr "طلب الاذن مرفوض"
+msgstr "تم رفض طلب الإذن"
 
 #: pretix/base/templates/403.html:9
 msgid "You do not have access to this page."
-msgstr "لم يكن لديك الوصول إلى هذه الصفحة."
+msgstr "ليس لديك صلاحية الوصول إلى هذه الصفحة."
 
 #: pretix/base/templates/403.html:20 pretix/base/templates/404.html:19
 #: pretix/control/templates/pretixcontrol/base.html:192
@@ -8476,8 +8456,9 @@ msgid "Not found"
 msgstr "غير موجود"
 
 #: pretix/base/templates/404.html:9
+#, fuzzy
 msgid "I'm afraid we could not find the the resource you requested."
-msgstr "أخشى أننا لا يمكن العثور على المورد الذي طلب."
+msgstr "لم نتمكن من العثور على المورد الذي طلبته."
 
 #: pretix/base/templates/500.html:4 pretix/base/templates/500.html:8
 msgid "Internal Server Error"
@@ -8485,15 +8466,15 @@ msgstr "خطأ في الخادم الداخلي"
 
 #: pretix/base/templates/500.html:9
 msgid "We had trouble processing your request."
-msgstr "كان لدينا مشكلة في معالجة طلبك."
+msgstr "لقد واجهتنا مشكلة في معالجة طلبك."
 
 #: pretix/base/templates/500.html:10
 msgid "If this problem persists, please contact us."
-msgstr "إذا كانت هذه المشكلة قائمة، فيرجى الاتصال بنا."
+msgstr "إذا استمرت هذه المشكلة ، يرجى الاتصال بنا."
 
 #: pretix/base/templates/500.html:13
 msgid "If you contact us, please send us the following code:"
-msgstr "إذا قمت بالاتصال بنا، الرجاء ارسال لنا رمز يلي:"
+msgstr "إذا اتصلت بنا ، يرجى إرسال الرمز التالي إلينا:"
 
 #: pretix/base/templates/csrffail.html:4 pretix/base/templates/csrffail.html:8
 msgid "Verification failed"
@@ -8504,37 +8485,37 @@ msgid ""
 "We could not verify that this request really was sent from you. For security "
 "reasons, we therefore cannot process it."
 msgstr ""
-"لم نتمكن من التحقق من أن هذا الطلب فعلا تم إرسال منك. لأسباب أمنية، ونحن "
-"بالتالي لا يمكن معالجته."
+"لم نتمكن من التحقق من إرسال هذا الطلب منك بالفعل. لأسباب أمنية ، لذلك لا "
+"يمكننا معالجتها."
 
 #: pretix/base/templates/csrffail.html:20
 msgid ""
 "Please go back to the last page, refresh this page and then try again. If "
 "the problem persists, please get in touch with us."
 msgstr ""
-"يرجى الرجوع إلى الصفحة الأخيرة، حدث هذه الصفحة وحاول مرة أخرى. إذا كان قائما "
-"المشكلة، يرجى الحصول على اتصال معنا."
+"يرجى الرجوع إلى الصفحة الأخيرة ، وتحديث هذه الصفحة ثم المحاولة مرة أخرى. إذا "
+"استمرت المشكلة ، يرجى التواصل معنا."
 
 #: pretix/base/templates/pretixbase/cachedfiles/pending.html:21
 msgid "We are preparing your file for download …"
-msgstr "نحن نستعد الملف للتحميل ..."
+msgstr "نحن نجهز ملفك للتحميل …"
 
 #: pretix/base/templates/pretixbase/cachedfiles/pending.html:23
 msgid ""
 "If this takes longer than a few minutes, please refresh this page or contact "
 "us."
 msgstr ""
-"إذا استغرقت العملية أكثر من بضع دقائق، يرجى تحديث هذه الصفحة أو الاتصال بنا."
+"إذا استغرق هذا أكثر من بضع دقائق ، يرجى تحديث هذه الصفحة أو الاتصال بنا."
 
 #: pretix/base/templates/pretixbase/email/email_footer.html:3
-#, python-format
+#, fuzzy, python-format
 msgid "powered by <a %(a_attr)s>pretix</a>"
-msgstr "المنصة من<a %(a_attr)s>pretix</a>"
+msgstr "مشغل بواسطة <a %(a_attr)s>pretix</a>"
 
 #: pretix/base/templates/pretixbase/email/notification.html:55
 #: pretix/base/templates/pretixbase/email/notification.txt:14
 msgid "You receive these emails based on your notification settings."
-msgstr "تتلقى هذه الرسائل بناء على إعدادات الإشعار."
+msgstr "تتلقى رسائل البريد الإلكتروني هذه بناء على إعدادات الإشعارات الخاصة بك."
 
 #: pretix/base/templates/pretixbase/email/notification.html:57
 msgid "Click here to view and change your notification settings"
@@ -8542,7 +8523,7 @@ msgstr "انقر هنا لعرض وتغيير إعدادات الإشعار"
 
 #: pretix/base/templates/pretixbase/email/notification.html:60
 msgid "Click here disable all notifications immediately."
-msgstr "انقر هنا تعطيل كافة الإخطارات على الفور."
+msgstr "انقر هنا لتعطيل جميع الإشعارات على الفور."
 
 #: pretix/base/templates/pretixbase/email/notification.txt:15
 msgid "Click here to view and change your notification settings:"
@@ -8550,18 +8531,19 @@ msgstr "انقر هنا لعرض وتغيير إعدادات الإشعار:"
 
 #: pretix/base/templates/pretixbase/email/notification.txt:17
 msgid "Click here disable all notifications immediately:"
-msgstr "انقر هنا تعطيل كافة الإخطارات على الفور:"
+msgstr "انقر هنا لتعطيل جميع الإشعارات على الفور:"
 
 #: pretix/base/templates/pretixbase/email/order_details.html:6
 msgid ""
 "You are receiving this email because someone signed you up for the following "
 "event:"
-msgstr "تلقيت هذا البريد لأنك قمت بالحجز في:"
+msgstr ""
+"تتلقى هذا البريد الإلكتروني لأن شخصا ما قام بتسجيلك في الفعالية التالية:"
 
 #: pretix/base/templates/pretixbase/email/order_details.html:11
 #: pretix/base/templates/pretixbase/email/order_details.html:61
 msgid "Event:"
-msgstr "الفعالية:"
+msgstr "فعالية:"
 
 #: pretix/base/templates/pretixbase/email/order_details.html:25
 #: pretix/base/templates/pretixbase/email/order_details.html:76
@@ -8569,18 +8551,13 @@ msgid "Order code:"
 msgstr "رمز الطلب:"
 
 #: pretix/base/templates/pretixbase/email/order_details.html:30
-#, fuzzy
-#| msgctxt "payment_state"
-#| msgid "created"
 msgid "created by"
-msgstr "خلقت"
+msgstr "أنشئ من قبل"
 
 #: pretix/base/templates/pretixbase/email/order_details.html:36
 #: pretix/base/templates/pretixbase/email/order_details.html:124
-#, fuzzy
-#| msgid "Bancontact"
 msgid "Contact:"
-msgstr "Bancontact"
+msgstr "جهة اتصال:"
 
 #: pretix/base/templates/pretixbase/email/order_details.html:51
 msgid "View registration details"
@@ -8590,17 +8567,15 @@ msgstr "عرض تفاصيل التسجيل"
 msgid ""
 "You are receiving this email because you placed an order for the following "
 "event:"
-msgstr "تلقيت هذا البريد لأنك قمت بالحجز في:"
+msgstr "تتلقى هذا البريد الإلكتروني لأنك قدمت طلبا للفعالية التالية:"
 
 #: pretix/base/templates/pretixbase/email/order_details.html:85
-#, fuzzy
-#| msgid "Details"
 msgid "Details:"
-msgstr "تفاصيل"
+msgstr "تفاصيل:"
 
 #: pretix/base/templates/pretixbase/forms/widgets/portrait_image.html:10
 msgid "Upload photo"
-msgstr ""
+msgstr "حمل صورة"
 
 #: pretix/base/templates/pretixbase/forms/widgets/reldate.html:15
 #: pretix/base/templates/pretixbase/forms/widgets/reldatetime.html:19
@@ -8608,32 +8583,28 @@ msgid "days before"
 msgstr "قبل أيام"
 
 #: pretix/base/templates/pretixbase/forms/widgets/reldatetime.html:15
-#, fuzzy
-#| msgid "days before"
 msgid "minutes before"
-msgstr "قبل أيام"
+msgstr "قبل دقائق"
 
 #: pretix/base/templates/pretixbase/forms/widgets/reldatetime.html:21
 msgid "at"
-msgstr "في"
+msgstr "عند"
 
 #: pretix/base/templates/source.html:5 pretix/base/templates/source.html:9
-#, fuzzy
-#| msgid "Voucher code"
 msgid "Source code"
-msgstr "كود قسيمة"
+msgstr "رمز المصدر"
 
 #: pretix/base/templates/source.html:10
 msgid ""
 "This site is powered by free software. If you want to read the license terms "
 "or obtain the source code, follow these links or instructions:"
 msgstr ""
+"هذا الموقع مدعوم من برنامج مجاني. إذا كنت ترغب في قراءة شروط الترخيص أو "
+"الحصول على شفرة المصدر ، فاتبع هذه الروابط أو الإرشادات:"
 
 #: pretix/base/ticketoutput.py:179
-#, fuzzy
-#| msgid "Enable test mode"
 msgid "Enable ticket format"
-msgstr "تمكين وضع الاختبار"
+msgstr "تفعيل صيغة التذكرة"
 
 #: pretix/base/ticketoutput.py:197
 msgid "Download ticket"
@@ -8642,57 +8613,57 @@ msgstr "حمل تذكرة"
 #: pretix/base/timeline.py:58
 msgctxt "timeline"
 msgid "Your event starts"
-msgstr "يبدأ هذا الحدث الخاص بك"
+msgstr "تبدأ الفعالية الخاصة بك"
 
 #: pretix/base/timeline.py:66
 msgctxt "timeline"
 msgid "Your event ends"
-msgstr "ينتهي هذا الحدث الخاص بك"
+msgstr "نهايات الفعالية الخاصة بك"
 
 #: pretix/base/timeline.py:74
 msgctxt "timeline"
 msgid "Admissions for your event start"
-msgstr "القبول للبدء الحدث"
+msgstr "القبول لبدء الفعالية الخاصة بك"
 
 #: pretix/base/timeline.py:82
 msgctxt "timeline"
 msgid "Start of ticket sales"
-msgstr "بدء من مبيعات التذاكر"
+msgstr "بداية مبيعات التذكرة"
 
 #: pretix/base/timeline.py:90
 msgctxt "timeline"
 msgid "End of ticket sales"
-msgstr "نهاية مبيعات التذاكر"
+msgstr "نهاية مبيعات التذكرة"
 
 #: pretix/base/timeline.py:99
 msgctxt "timeline"
 msgid "Customers can no longer modify their orders"
-msgstr "لم يعد يمكن للعملاء تعديل أوامرهم"
+msgstr "لم يعد بإمكان العملاء تعديل طلباتهم"
 
 #: pretix/base/timeline.py:112
 msgctxt "timeline"
 msgid "No more payments can be completed"
-msgstr "يمكن أن تكتمل أي مزيد من المدفوعات"
+msgstr "لا يمكن إتمام المزيد من المدفوعات"
 
 #: pretix/base/timeline.py:124
 msgctxt "timeline"
 msgid "Tickets can be downloaded"
-msgstr "تذاكر يمكن تحميلها"
+msgstr "يمكن تنزيل التذاكر"
 
 #: pretix/base/timeline.py:136
 msgctxt "timeline"
 msgid "Customers can no longer cancel free or unpaid orders"
-msgstr "لم يعد يمكن للعملاء إلغاء أوامر المجانية أو المدفوعة"
+msgstr "لم يعد بإمكان العملاء إلغاء الطلبات المجانية أو غير المدفوعة"
 
 #: pretix/base/timeline.py:148
 msgctxt "timeline"
 msgid "Customers can no longer cancel paid orders"
-msgstr "لم يعد يمكن للعملاء إلغاء أوامر دفع"
+msgstr "لم يعد بإمكان العملاء إلغاء الطلبات المدفوعة"
 
 #: pretix/base/timeline.py:162
 msgctxt "timeline"
 msgid "Download reminders are being sent out"
-msgstr "يتم إرسال رسائل تذكيرية تحميل"
+msgstr "يتم إرسال رسائل تذكير التنزيل"
 
 #: pretix/base/timeline.py:175 pretix/base/timeline.py:198
 #: pretix/base/timeline.py:224
@@ -8706,13 +8677,13 @@ msgstr "المنتج \"{name}\" يصبح متوفرا"
 #, python-brace-format
 msgctxt "timeline"
 msgid "Product \"{name}\" becomes unavailable"
-msgstr "المنتج \"{name}\" يصبح غير متوفر"
+msgstr "المنتج \"{name}\" لم يعد متوفرا"
 
 #: pretix/base/timeline.py:263
 #, python-brace-format
 msgctxt "timeline"
 msgid "Payment provider \"{name}\" can no longer be selected"
-msgstr "مقدم الدفع \"{name}\" لم يعد من الممكن اختيار"
+msgstr "مقدم الدفع \"{name}\" لم يعد من الممكن تحديده"
 
 #: pretix/base/validators.py:49
 #, python-format
@@ -8726,18 +8697,19 @@ msgid ""
 "required for security reasons, to ensure that your browser is not being "
 "hijacked by third parties."
 msgstr ""
-"كنت ترى هذه الرسالة لهذا الموقع HTTPS يتطلب \"رأس التحويلية\" ليتم إرسالها "
-"من قبل مستعرض ويب، ولكن تم إرسال لا شيء. مطلوب هذا الرأس لأسباب أمنية، لضمان "
-"أن متصفحك لا يتم اختطافها من قبل أطراف ثالثة."
+"تشاهد هذه الرسالة لأن موقع HTTPS هذا يتطلب \"عنوان مرجعي\" ليتم إرساله "
+"بواسطة متصفح الويب الخاص بك ، ولكن لم يتم إرسال أي شيء. هذا العنوان مطلوب "
+"لأسباب أمنية ، لضمان عدم اختراق متصفحك من قبل أطراف ثالثة."
 
 #: pretix/base/views/errors.py:45
+#, fuzzy
 msgid ""
 "If you have configured your browser to disable 'Referer' headers, please re-"
 "enable them, at least for this site, or for HTTPS connections, or for 'same-"
 "origin' requests."
 msgstr ""
-"إذا قمت بتكوين متصفحك لرؤوس تعطيل \"التحويلية\"، يرجى إعادة تمكينها، على "
-"الأقل لهذا الموقع، أو HTTPS اتصالات، أو لطلبات \"من نفس المنشأ\"."
+"إذا قمت بإعداد متصفحك لتعطيل رأسيات \"Referer\" ، فالرجاء إعادة تمكينها ، "
+"على الأقل لهذا الموقع ، أو لاتصالات HTTPS ، أو لطلبات \"نفس الأصل\"."
 
 #: pretix/base/views/errors.py:50
 msgid ""
@@ -8745,25 +8717,26 @@ msgid ""
 "submitting forms. This cookie is required for security reasons, to ensure "
 "that your browser is not being hijacked by third parties."
 msgstr ""
-"كنت ترى هذه الرسالة لأن هذا الموقع يتطلب الكعكة CSRF عند إرسال النماذج. "
-"مطلوب ملف تعريف الارتباط هذا لأسباب أمنية، لضمان أن متصفحك لا يتم اختطافها "
+"تشاهد هذه الرسالة لأن هذا الموقع يتطلب ملف تعريف ارتباط CSRF عند إرسال "
+"النماذج. ملف تعريف الارتباط هذا مطلوب لأسباب أمنية ، لضمان عدم اختراق متصفحك "
 "من قبل أطراف ثالثة."
 
 #: pretix/base/views/errors.py:55
+#, fuzzy
 msgid ""
 "If you have configured your browser to disable cookies, please re-enable "
 "them, at least for this site, or for 'same-origin' requests."
 msgstr ""
-"إذا قمت بتكوين متصفحك لتعطيل ملفات تعريف الارتباط، يرجى إعادة تمكينها، على "
-"الأقل لهذا الموقع، أو لطلبات \"من نفس المنشأ\"."
+"إذا قمت بإعداد متصفحك لتعطيل ملفات تعريف الارتباط ، فالرجاء إعادة تمكينها ، "
+"على الأقل لهذا الموقع ، أو لطلبات \"نفس الأصل\"."
 
 #: pretix/base/views/tasks.py:159
 msgid "An unexpected error has occurred, please try again later."
-msgstr "حدث خطأ غير متوقع، يرجى المحاولة مرة أخرى في وقت لاحق."
+msgstr "حدث خطأ غير متوقع ، يرجى المحاولة مرة أخرى في وقت لاحق."
 
 #: pretix/base/views/tasks.py:162
 msgid "The task has been completed."
-msgstr "تم الانتهاء من المهمة."
+msgstr "تم إنهاء المهمة."
 
 #: pretix/control/forms/__init__.py:197
 #, python-brace-format
@@ -20078,7 +20051,7 @@ msgstr "نطاق معروف"
 
 #: pretix/multidomain/models.py:37
 msgid "Known domains"
-msgstr "المجالات المعروفة"
+msgstr "نطاقات معروفة"
 
 #: pretix/plugins/badges/apps.py:30 pretix/plugins/badges/apps.py:33
 #: pretix/plugins/badges/signals.py:55
@@ -20104,32 +20077,31 @@ msgstr "فريق pretix"
 #: pretix/plugins/badges/apps.py:37
 msgid ""
 "This plugin allows you to generate badges or name tags for your attendees."
-msgstr ""
-"هذا البرنامج المساعد يسمح لك لتوليد شارات أو علامات الأسماء لديك الحضور."
+msgstr "يتيح لك هذا المكون الإضافي إنشاء شارات أو بطاقات أسماء للحاضرين."
 
 #: pretix/plugins/badges/exporters.py:77
 msgid "One badge per page"
-msgstr ""
+msgstr "شارة واحدة في كل صفحة"
 
 #: pretix/plugins/badges/exporters.py:85
 msgid "4 landscape A6 pages on one A4 page"
-msgstr ""
+msgstr "4 صفحات أفقية A6 في صفحة A4 واحدة"
 
 #: pretix/plugins/badges/exporters.py:93
 msgid "4 portrait A6 pages on one A4 page"
-msgstr ""
+msgstr "4 صفحات عمودية A6 في صفحة A4 واحدة"
 
 #: pretix/plugins/badges/exporters.py:101
 msgid "8 landscape A7 pages on one A4 page"
-msgstr ""
+msgstr "8 صفحات أفقية A7 على صفحة A4 واحدة"
 
 #: pretix/plugins/badges/exporters.py:109
 msgid "8 portrait A7 pages on one A4 page"
-msgstr ""
+msgstr "8 صفحات عمودية A7 على صفحة A4 واحدة"
 
 #: pretix/plugins/badges/exporters.py:230
 msgid "None of the selected products is configured to print badges."
-msgstr "يتم تكوين أي من المنتجات المختارة لطباعة الشارات."
+msgstr "لم يتم إعداد أي من المنتجات المحددة لطباعة الشارات."
 
 #: pretix/plugins/badges/exporters.py:236
 msgid "Attendee badges"
@@ -20138,17 +20110,18 @@ msgstr "شارات الحضور"
 #: pretix/plugins/badges/exporters.py:256
 #: pretix/plugins/ticketoutputpdf/exporters.py:69
 msgid "Include pending orders"
-msgstr "وتشمل الأوامر المعلقة"
+msgstr "قم بتضمين الطلبات المعلقة"
 
 #: pretix/plugins/badges/exporters.py:261
+#, fuzzy
 msgid "Include add-on or bundled positions"
-msgstr "وتشمل إضافة على مناصب أو واحدة"
+msgstr "قم بتضمين الوحدات الإضافية أو المجمعة"
 
 #: pretix/plugins/badges/exporters.py:266
 #, fuzzy
 #| msgid "Answer options"
 msgid "Rendering option"
-msgstr "خيارات الإجابة"
+msgstr "خيار التقديم"
 
 #: pretix/plugins/badges/exporters.py:271
 msgid ""
@@ -20157,18 +20130,21 @@ msgid ""
 "Please note that your individual badge layouts must already be in the "
 "correct size."
 msgstr ""
+"يتيح لك هذا الخيار محاذاة شارات متعددة على صفحة واحدة ، على سبيل المثال إذا "
+"كنت تريد الطباعة على ورقة من الملصقات باستخدام طابعة مكتب عادية. يرجى ملاحظة "
+"أن تخطيطات شارتك الفردية يجب أن تكون بالحجم الصحيح مسبقا."
 
 #: pretix/plugins/badges/exporters.py:280
 #: pretix/plugins/checkinlists/exporters.py:83
 #: pretix/plugins/ticketoutputpdf/exporters.py:77
 msgid "Only include tickets for dates on or after this date."
-msgstr ""
+msgstr "قم بتضمين تذاكر لتواريخ في هذا التاريخ أو بعده فقط."
 
 #: pretix/plugins/badges/exporters.py:287
 #: pretix/plugins/checkinlists/exporters.py:90
 #: pretix/plugins/ticketoutputpdf/exporters.py:84
 msgid "Only include tickets for dates on or before this date."
-msgstr ""
+msgstr "قم بتضمين تذاكر لتواريخ في هذا التاريخ أو قبله فقط."
 
 #: pretix/plugins/badges/exporters.py:291
 #: pretix/plugins/checkinlists/exporters.py:104
@@ -20180,7 +20156,7 @@ msgstr "ترتيب حسب"
 
 #: pretix/plugins/badges/forms.py:42
 msgid "(Do not print badges)"
-msgstr "(لا طباعة شارات)"
+msgstr "(لا تقم بطباعة الشارات)"
 
 #: pretix/plugins/badges/forms.py:74
 #: pretix/plugins/badges/templates/pretixplugins/badges/edit.html:8
@@ -20190,15 +20166,15 @@ msgstr "تصميم شارة"
 
 #: pretix/plugins/badges/signals.py:174
 msgid "Badge layout created."
-msgstr "شارة نسق بإنشائه."
+msgstr "تم إنشاء تصميم الشارة."
 
 #: pretix/plugins/badges/signals.py:175
 msgid "Badge layout deleted."
-msgstr "حذف تخطيط شارة."
+msgstr "تم حذف تصميم الشارة."
 
 #: pretix/plugins/badges/signals.py:176
 msgid "Badge layout changed."
-msgstr "شارة نسق يتغير."
+msgstr "تم تغيير تصميم الشارة."
 
 #: pretix/plugins/badges/signals.py:189
 #, python-brace-format
@@ -20208,7 +20184,7 @@ msgstr "تصميم شارة {val}"
 #: pretix/plugins/badges/templates/pretixplugins/badges/control_order_info.html:16
 #: pretix/plugins/badges/templates/pretixplugins/badges/index.html:27
 msgid "Print badges"
-msgstr "شارات طباعة"
+msgstr "قم بطباعة الشارات"
 
 #: pretix/plugins/badges/templates/pretixplugins/badges/control_order_position_buttons.html:9
 msgid "Badge"
@@ -20218,13 +20194,13 @@ msgstr "شارة"
 #, python-format
 msgid ""
 "Are you sure you want to delete the badge layout <strong>%(layout)s</strong>?"
-msgstr "هل أنت متأكد أنك تريد حذف تخطيط شارة على <strong>%(layout)s</strong>؟"
+msgstr "هل أنت متأكد أنك تريد حذف تصميم الشارة <strong>%(layout)s</strong>؟"
 
 #: pretix/plugins/badges/templates/pretixplugins/badges/edit.html:6
 #: pretix/plugins/badges/templates/pretixplugins/badges/edit.html:13
 #, python-format
 msgid "Badge layout: %(name)s"
-msgstr "شارة التخطيط: %(name)s"
+msgstr "تصميم الشارة: %(name)s"
 
 #: pretix/plugins/badges/templates/pretixplugins/badges/edit.html:23
 msgid "Badge design"
@@ -20233,38 +20209,39 @@ msgstr "تصميم شارة"
 #: pretix/plugins/badges/templates/pretixplugins/badges/edit.html:27
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/edit.html:27
 msgid "You can modify the design after you saved this page."
-msgstr "يمكنك تعديل التصميم بعد قمت بحفظ هذه الصفحة."
+msgstr "يمكنك تعديل التصميم بعد حفظ هذه الصفحة."
 
 #: pretix/plugins/badges/templates/pretixplugins/badges/index.html:10
 msgid "You haven't created any badge layouts yet."
-msgstr "لم تقم بإنشاء أي تخطيطات شارة بعد."
+msgstr "لم تقم بإنشاء أي تخطيطات شارة حتى الآن."
 
 #: pretix/plugins/badges/templates/pretixplugins/badges/index.html:17
 #: pretix/plugins/badges/templates/pretixplugins/badges/index.html:24
 msgid "Create a new badge layout"
-msgstr "إنشاء تخطيط شارة جديدة"
+msgstr "قم بإنشاء تخطيط شارة جديد"
 
 #: pretix/plugins/badges/templates/pretixplugins/badges/index.html:63
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/index.html:60
+#, fuzzy
 msgid "Make default"
-msgstr "جعل الافتراضي"
+msgstr "اجعله افتراضيا"
 
 #: pretix/plugins/badges/views.py:78
 msgid "The new badge layout has been created."
-msgstr "تم إنشاء تخطيط شارة جديدة."
+msgstr "تم إنشاء تخطيط الشارة الجديد."
 
 #: pretix/plugins/badges/views.py:127 pretix/plugins/badges/views.py:157
 #: pretix/plugins/badges/views.py:187
 msgid "The requested badge layout does not exist."
-msgstr "عدم وجود تخطيط شارة المطلوبة."
+msgstr "تخطيط الشارة المطلوب غير موجود."
 
 #: pretix/plugins/badges/views.py:169
 msgid "The selected badge layout been deleted."
-msgstr "تم حذف تخطيط شارة المحدد."
+msgstr "تم حذف تخطيط الشارة المحدد."
 
 #: pretix/plugins/badges/views.py:191
 msgid "Badge layout: {}"
-msgstr "شارة التخطيط: {}"
+msgstr "تخطيط الشارة: {}"
 
 #: pretix/plugins/banktransfer/apps.py:31
 #: pretix/plugins/banktransfer/apps.py:34
@@ -20272,20 +20249,19 @@ msgstr "شارة التخطيط: {}"
 #: pretix/plugins/banktransfer/signals.py:45
 #: pretix/plugins/banktransfer/signals.py:82
 msgid "Bank transfer"
-msgstr "حوالة بنكية"
+msgstr "تحويل مصرفي"
 
 #: pretix/plugins/banktransfer/apps.py:38
-#, fuzzy
-#| msgid "This plugin allows you to receive payments via bank transfer "
 msgid "This plugin allows you to receive payments via bank transfer."
-msgstr "هذا البرنامج المساعد يسمح لك الحصول على الدفع عن طريق التحويل المصرفي"
+msgstr "يسمح لك هذا المكون الإضافي بتلقي المدفوعات عبر التحويل المصرفي."
 
 #: pretix/plugins/banktransfer/apps.py:52
 msgid ""
 "Install the python package 'chardet' for better CSV import capabilities."
-msgstr "تثبيت حزمة الثعبان \"chardet\" لتحسين قدرات استيراد CSV."
+msgstr "قم بتثبيت حزمة python 'chardet' لتحسين إمكانات استيراد ملفات CSV."
 
 #: pretix/plugins/banktransfer/payment.py:65
+#, fuzzy
 msgid ""
 "I have understood that people will pay the ticket price directly to my bank "
 "account and pretix cannot automatically know what payments arrived. "
@@ -20293,14 +20269,14 @@ msgid ""
 "import a digital bank statement in order to give pretix the required "
 "information."
 msgstr ""
-"لقد فهمت أن الناس سوف يدفع ثمن تذكرة مباشرة إلى حسابي المصرفي وpretix لا "
-"يستطيع أن يعرف تلقائيا ما وصلت المدفوعات. لذلك، وسوف المدفوعات إما إجعلها "
-"يدويا كاملة، أو بانتظام استيراد كشف حساب مصرفي الرقمية من أجل إعطاء pretix "
+"لقد فهمت أن الناس سيدفعون سعر التذكرة مباشرة إلى حسابي المصرفي ولا يمكن أن "
+"يعرف pretix تلقائيا المدفوعات التي وصلت. لذلك ، سأضع علامة على المدفوعات "
+"كمكتملة يدويا ، أو سأستورد بانتظام كشف حساب بنكي رقمي من أجل إعطاء pretix "
 "المعلومات المطلوبة."
 
 #: pretix/plugins/banktransfer/payment.py:72
 msgid "Bank account type"
-msgstr "البنك نوع الحساب"
+msgstr "نوع الحساب المصرفي"
 
 #: pretix/plugins/banktransfer/payment.py:75
 msgid "SEPA bank account"
@@ -20321,15 +20297,16 @@ msgstr "اسم صاحب الحساب"
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_assign.html:50
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:22
 msgid "IBAN"
-msgstr "IBAN"
+msgstr "رقم الحساب المصرفي الدولي IBAN"
 
 #: pretix/plugins/banktransfer/payment.py:101
 #: pretix/plugins/banktransfer/payment.py:247
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_payment_form.html:13
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_assign.html:66
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:23
+#, fuzzy
 msgid "BIC"
-msgstr "BIC"
+msgstr "رمز BIC"
 
 #: pretix/plugins/banktransfer/payment.py:111
 msgid "Name of bank"
@@ -20345,9 +20322,9 @@ msgid ""
 "transfer payment. If you have lots of international customers, they might "
 "need your full address and your bank's full address."
 msgstr ""
-"تشمل كل شيء آخر أن الزبائن قد تحتاج لإرسال دفع التحويل المصرفي. إذا كان لديك "
-"الكثير من العملاء الدوليين، لأنها قد تحتاج العنوان الكامل وعنوان البنك الذي "
-"تتعامل معه بشكل كامل."
+"قم بتضمين كل شيء آخر قد يحتاجه عملاؤك لإرسال دفعة بالتحويل المصرفي إليك. إذا "
+"كان لديك الكثير من العملاء الدوليين ، فقد يحتاجون إلى عنوانك الكامل وعنوان "
+"البنك الذي تتعامل معه."
 
 #: pretix/plugins/banktransfer/payment.py:130
 msgid ""
@@ -20355,56 +20332,53 @@ msgid ""
 "everything that your customers need to transfer the money, e.g. account "
 "numbers, routing numbers, addresses, etc."
 msgstr ""
-"لحسابات المصلحة، يمكنك ترك هذا فارغا. خلاف ذلك، يرجى إضافة كل ما الزبائن "
-"بحاجة لنقل الاموال، على سبيل المثال أرقام، أرقام التوجيه، عناوين، الخ حساب"
+"بالنسبة لحسابات SEPA ، يمكنك ترك هذا فارغا. بخلاف ذلك ، يرجى إضافة كل ما "
+"يحتاجه عملاؤك لتحويل الأموال ، على سبيل المثال أرقام الحسابات وأرقام التوجيه "
+"والعناوين وما إلى ذلك."
 
 #: pretix/plugins/banktransfer/payment.py:139
 msgid ""
 "Create an invoice for orders using bank transfer immediately if the event is "
 "otherwise configured to create invoices after payment is completed."
 msgstr ""
+"قم بإنشاء فاتورة للطلبات باستخدام التحويل المصرفي على الفور إذا تم إعداد "
+"الفعالية بطريقة أخرى لإنشاء الفواتير بعد إتمام الدفع."
 
 #: pretix/plugins/banktransfer/payment.py:149
-#, fuzzy
-#| msgid "Do not include a hyphen in the payment reference."
 msgid "Do not include hyphens in the payment reference."
-msgstr "لا تتضمن hyphen في إشارة الدفع."
+msgstr "لا تقم بتضمين واصلات في مرجع الدفع."
 
 #: pretix/plugins/banktransfer/payment.py:150
 msgid "This is required in some countries."
 msgstr "هذا مطلوب في بعض البلدان."
 
 #: pretix/plugins/banktransfer/payment.py:154
-#, fuzzy
-#| msgid "Do not include a hyphen in the payment reference."
 msgid "Include invoice number in the payment reference."
-msgstr "لا تتضمن hyphen في إشارة الدفع."
+msgstr "قم بتضمين رقم الفاتورة في مرجع الدفع."
 
 #: pretix/plugins/banktransfer/payment.py:158
 #, fuzzy
 #| msgid "Tax rule for payment fees"
 msgid "Prefix for the payment reference"
-msgstr "حكم الضرائب لدفع الرسوم"
+msgstr "بادئة مرجع الدفع"
 
 #: pretix/plugins/banktransfer/payment.py:162
-#, fuzzy
-#| msgid "This action is only allowed for pending orders."
 msgid "Additional text to show on pending orders"
-msgstr "يسمح هذا الإجراء فقط لانتظار أوامر."
+msgstr "نص إضافي لإظهاره في الطلبات المعلقة"
 
 #: pretix/plugins/banktransfer/payment.py:163
 msgid ""
 "This text will be shown on the order confirmation page for pending orders in "
 "addition to the standard text."
 msgstr ""
+"سيظهر هذا النص في صفحة تأكيد الطلب للأوامر المعلقة بالإضافة إلى النص المعتاد."
 
 #: pretix/plugins/banktransfer/payment.py:169
-#, fuzzy
-#| msgid "All open refunds"
 msgid "IBAN blocklist for refunds"
-msgstr "كل مبلغ معاد المفتوحة"
+msgstr "قائمة حظر IBAN للمبالغ المستردة"
 
 #: pretix/plugins/banktransfer/payment.py:172
+#, fuzzy
 msgid ""
 "Put one IBAN or IBAN prefix per line. The system will not attempt to send "
 "refunds to any of these IBANs. Useful e.g. if you receive a lot of "
@@ -20412,6 +20386,11 @@ msgid ""
 "country codes such as \"GB\" if you never want to send refunds to IBANs from "
 "a specific country."
 msgstr ""
+"ضع رقم الحساب المصرفي الدولي IBAN أو بادئة IBAN في كل سطر. لن يحاول النظام "
+"إرسال المبالغ المستردة إلى أي من أرقام IBAN هذه. مفيد على سبيل المثال إذا "
+"تلقيت الكثير من \"الدفعات المحولة\" من قبل موفر دفع تابع لجهة خارجية. يمكنك "
+"أيضا سرد رموز البلدان مثل \"GB\" إذا كنت لا ترغب أبدا في إرسال المبالغ "
+"المستردة إلى أرقام IBAN من بلد معين."
 
 #: pretix/plugins/banktransfer/payment.py:210
 msgid "Please fill out your bank account details."
@@ -20444,7 +20423,7 @@ msgstr "بنك"
 
 #: pretix/plugins/banktransfer/payment.py:278
 msgid "Invalid IBAN/BIC"
-msgstr ""
+msgstr "أرقام IBAN/BIC غير صالحة"
 
 #: pretix/plugins/banktransfer/payment.py:347
 #, python-brace-format
@@ -20453,26 +20432,22 @@ msgstr "الحساب المصرفي{iban}"
 
 #: pretix/plugins/banktransfer/payment.py:363
 msgid "Can only create a bank transfer refund from an existing payment."
-msgstr ""
+msgstr "يمكن فقط إنشاء تحويل مصرفي مسترد من دفعة موجودة."
 
 #: pretix/plugins/banktransfer/payment.py:383
-#, fuzzy
-#| msgid "(optional)"
 msgid "BIC (optional)"
-msgstr "(اختياري)"
+msgstr "رقم BIC (اختياري)"
 
 #: pretix/plugins/banktransfer/payment.py:422
-#, fuzzy
-#| msgid "Your input was invalid, please try again."
 msgid "Your input was invalid, please see below for details."
-msgstr "كان الإدخال غير صالحة، يرجى المحاولة مرة أخرى."
+msgstr "الإدخالات الخاصة بك غير صالحة ، الرجاء انظر أدناه للحصول على التفاصيل"
 
 #: pretix/plugins/banktransfer/refund_export.py:46
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/control.html:5
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_assign.html:41
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/control.html:9
 msgid "Payer"
-msgstr "دافع"
+msgstr "المسدد"
 
 #: pretix/plugins/banktransfer/signals.py:53
 #: pretix/plugins/banktransfer/signals.py:89
@@ -20481,46 +20456,44 @@ msgstr "دافع"
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_base_organizer.html:4
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_base_organizer.html:7
 msgid "Import bank data"
-msgstr "بيانات البنك استيراد"
+msgstr "قم باستيراد بيانات البنك"
 
 #: pretix/plugins/banktransfer/signals.py:61
 #: pretix/plugins/banktransfer/signals.py:97
-#, fuzzy
-#| msgid "Perform refund"
 msgid "Export refunds"
-msgstr "أداء استرداد"
+msgstr "قم بتصدير المبالغ المستردة"
 
 #: pretix/plugins/banktransfer/tasks.py:67
 #, python-format
 msgid "Your order received an incomplete payment: %(code)s"
-msgstr "تلقى طلبك دفعة ناقصة: %(code)s"
+msgstr "تلقى طلبك دفعة غير مكتملة: %(code)s"
 
 #: pretix/plugins/banktransfer/tasks.py:146
 msgid "The order has already been canceled."
-msgstr "وقد تم بالفعل إلغاء الطلب."
+msgstr "تم إلغاء الطلب سابقا."
 
 #: pretix/plugins/banktransfer/tasks.py:156
 msgid "Automatic split to multiple orders not possible."
-msgstr ""
+msgstr "التقسيم التلقائي لطلبات متعددة غير ممكن."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_payment_form.html:4
 msgid ""
 "After completing your purchase, we will ask you to transfer the money to the "
 "following bank account, using a personal reference code:"
 msgstr ""
-"بعد الانتهاء من عملية الشراء، ونحن سوف يطلب منك تحويل الأموال إلى الحساب "
-"المصرفي التالي، وذلك باستخدام رمز مرجع شخصي:"
+"بعد إتمام عملية الشراء ، سنطلب منك تحويل الأموال إلى الحساب المصرفي التالي ، "
+"باستخدام رمز مرجعي شخصي:"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_payment_form.html:20
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:30
 msgid "Reference code (important):"
-msgstr "رمز مرجع (مهم):"
+msgstr "الرمز المرجعي (مهم):"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_payment_form.html:23
 msgid ""
 "We will assign you a personal reference code to use after you completed the "
 "order."
-msgstr "سنعين لك رمز مرجع شخصي للاستخدام بعد الانتهاء من النظام."
+msgstr ""
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/control.html:8
 #, fuzzy
