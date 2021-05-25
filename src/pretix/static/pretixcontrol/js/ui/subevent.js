@@ -1,6 +1,6 @@
 /*globals $, Morris, gettext, RRule, RRuleSet*/
 
-$(function () {
+$(document).on("pretix:bind-forms", function () {
     if (!$("div[data-formset-prefix=checkinlist_set]").length) {
         return;
     }

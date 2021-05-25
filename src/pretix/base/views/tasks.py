@@ -27,7 +27,7 @@ from celery.result import AsyncResult
 from django.conf import settings
 from django.contrib import messages
 from django.core.exceptions import ValidationError
-from django.http import JsonResponse
+from django.http import JsonResponse, QueryDict
 from django.shortcuts import redirect, render
 from django.test import RequestFactory
 from django.utils import timezone, translation
@@ -206,22 +206,30 @@ class AsyncFormView(AsyncMixin, FormView):
     def __init_subclass__(cls):
         def async_execute(self, *, request_path, form_kwargs, locale, tz, organizer=None, event=None, user=None):
             view_instance = cls()
-            view_instance.request = RequestFactory().post(request_path)
-            if organizer:
+            d = QueryDict(mutable=True)
+            d.update(form_kwargs['data'])
+            req = RequestFactory().post(
+                request_path,
+                data=d.urlencode(),
+                content_type='application/x-www-form-urlencoded'
+            )
+            view_instance.request = req
+            if event:
                 view_instance.request.event = event
-            if organizer:
+                view_instance.request.organizer = event.organizer
+            elif organizer:
                 view_instance.request.organizer = organizer
             if user:
                 view_instance.request.user = User.objects.get(pk=user)
 
-            form_class = view_instance.get_form_class()
-            if form_kwargs.get('instance'):
-                cls.model.objects.get(pk=form_kwargs['instance'])
-
-            form_kwargs = view_instance.get_async_form_kwargs(form_kwargs, organizer, event)
-
-            form = form_class(**form_kwargs)
             with translation.override(locale), timezone.override(pytz.timezone(tz)):
+                form_class = view_instance.get_form_class()
+                if form_kwargs.get('instance'):
+                    cls.model.objects.get(pk=form_kwargs['instance'])
+
+                form_kwargs = view_instance.get_async_form_kwargs(form_kwargs, organizer, event)
+                form = form_class(**form_kwargs)
+                form.is_valid()
                 return view_instance.async_form_valid(self, form)
 
         cls.async_execute = app.task(
@@ -254,6 +262,8 @@ class AsyncFormView(AsyncMixin, FormView):
             else:
                 form_kwargs['instance'] = None
         form_kwargs.setdefault('data', {})
+        form_kwargs['initial'] = {}
+        form_kwargs.pop('event', None)
         kwargs = {
             'request_path': self.request.path,
             'form_kwargs': form_kwargs,

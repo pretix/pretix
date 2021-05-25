@@ -38,6 +38,7 @@ from datetime import datetime, time, timedelta
 
 from dateutil.rrule import DAILY, MONTHLY, WEEKLY, YEARLY, rrule, rruleset
 from django.contrib import messages
+from django.core.exceptions import ValidationError
 from django.core.files import File
 from django.db import connections, transaction
 from django.db.models import Count, F, Prefetch
@@ -64,6 +65,7 @@ from pretix.base.models.items import (
 from pretix.base.reldate import RelativeDate, RelativeDateWrapper
 from pretix.base.services import tickets
 from pretix.base.services.quotas import QuotaAvailability
+from pretix.base.views.tasks import AsyncFormView
 from pretix.control.forms.checkin import SimpleCheckinListForm
 from pretix.control.forms.filter import SubEventFilterForm
 from pretix.control.forms.item import QuotaForm
@@ -659,7 +661,7 @@ class SubEventBulkAction(SubEventQueryMixin, EventPermissionRequiredMixin, View)
         })
 
 
-class SubEventBulkCreate(SubEventEditorMixin, EventPermissionRequiredMixin, CreateView):
+class SubEventBulkCreate(SubEventEditorMixin, EventPermissionRequiredMixin, AsyncFormView):
     model = SubEvent
     template_name = 'pretixcontrol/subevents/bulk.html'
     permission = 'can_change_settings'
@@ -668,10 +670,20 @@ class SubEventBulkCreate(SubEventEditorMixin, EventPermissionRequiredMixin, Crea
     itemformclass = BulkSubEventItemForm
     itemvarformclass = BulkSubEventItemVariationForm
 
+    def dispatch(self, request, *args, **kwargs):
+        self.object = SubEvent(event=self.request.event)
+        return super().dispatch(request, *args, **kwargs)
+
     def is_valid(self, form):
         return self.rrule_formset.is_valid() and self.time_formset.is_valid() and super().is_valid(form)
 
-    def get_success_url(self) -> str:
+    def get_success_url(self, value) -> str:
+        return reverse('control:event.subevents', kwargs={
+            'organizer': self.request.event.organizer.slug,
+            'event': self.request.event.slug,
+        })
+
+    def get_error_url(self) -> str:
         return reverse('control:event.subevents', kwargs={
             'organizer': self.request.event.organizer.slug,
             'event': self.request.event.slug,
@@ -755,6 +767,11 @@ class SubEventBulkCreate(SubEventEditorMixin, EventPermissionRequiredMixin, Crea
         kwargs['initial'] = initial
         return kwargs
 
+    def get_async_form_kwargs(self, form_kwargs, organizer=None, event=None):
+        form_kwargs['event'] = event
+        form_kwargs['instance'] = SubEvent(event=event)
+        return form_kwargs
+
     def get_times(self):
         times = []
         for f in self.time_formset:
@@ -808,7 +825,31 @@ class SubEventBulkCreate(SubEventEditorMixin, EventPermissionRequiredMixin, Crea
         return s
 
     @transaction.atomic
-    def form_valid(self, form):
+    def async_form_valid(self, task, form):
+        self.object = SubEvent(event=self.request.event)
+        if not self.is_valid(form):
+            print([
+                self.rrule_formset.is_valid(),
+                self.time_formset.is_valid(),
+                form.is_valid(),
+                [f.is_valid() for f in self.itemvar_forms],
+                self.formset.is_valid(),
+                [f.is_valid() for f in self.meta_forms],
+                self.cl_formset.is_valid(),
+                [f.is_valid() for f in self.plugin_forms]
+            ])
+            print(form.errors)
+            raise ValidationError('Invalid submission')
+
+        def set_progress(percent):
+            if not task.request.called_directly:
+                task.update_state(
+                    state='PROGRESS',
+                    meta={'value': percent}
+                )
+
+        set_progress(0)
+
         tz = self.request.event.timezone
         subevents = []
         for rdate in self.get_rrule_set():
@@ -840,8 +881,14 @@ class SubEventBulkCreate(SubEventEditorMixin, EventPermissionRequiredMixin, Crea
                     if form.cleaned_data.get('rel_presale_end')
                     else None
                 )
-                se.save(clear_cache=False)
                 subevents.append(se)
+
+        for i, se in enumerate(subevents):
+            se.save(clear_cache=False)
+            if i % 100 == 0:
+                set_progress(10 * i / len(subevents))
+
+        set_progress(10)
 
         data = dict(form.cleaned_data)
         for f in self.plugin_forms:
@@ -865,10 +912,12 @@ class SubEventBulkCreate(SubEventEditorMixin, EventPermissionRequiredMixin, Crea
                     to_save.append(i)
         SubEventMetaValue.objects.bulk_create(to_save)
 
+        set_progress(20)
+
         to_save_items = []
         to_save_variations = []
         for f in self.itemvar_forms:
-            for se in subevents:
+            for i, se in enumerate(subevents):
                 i = copy.copy(f.instance)
                 i.pk = None
                 i.subevent = se
@@ -888,17 +937,20 @@ class SubEventBulkCreate(SubEventEditorMixin, EventPermissionRequiredMixin, Crea
                     to_save_items.append(i)
                 else:
                     to_save_variations.append(i)
+
         SubEventItem.objects.bulk_create(to_save_items)
+        set_progress(30)
         SubEventItemVariation.objects.bulk_create(to_save_variations)
+        set_progress(40)
 
         to_save_items = []
         to_save_variations = []
-        for f in self.formset.forms:
+        for k, f in enumerate(self.formset.forms):
             if self.formset._should_delete_form(f) or not f.has_changed():
                 continue
 
             change_data = {k: f.cleaned_data.get(k) for k in f.changed_data}
-            for se in subevents:
+            for j, se in enumerate(subevents):
                 i = copy.copy(f.instance)
                 i.pk = None
                 i.subevent = se
@@ -923,8 +975,13 @@ class SubEventBulkCreate(SubEventEditorMixin, EventPermissionRequiredMixin, Crea
                 log_entries.append(
                     se.log_action('pretix.subevent.quota.added', user=self.request.user, data=change_data, save=False)
                 )
+
+                if j % 100 == 0:
+                    set_progress(50 + 10 * (j + k * len(subevents)) / (len(self.formset.forms) + len(subevents)))
         Quota.items.through.objects.bulk_create(to_save_items)
+        set_progress(60)
         Quota.variations.through.objects.bulk_create(to_save_variations)
+        set_progress(70)
 
         to_save_products = []
         for f in self.cl_formset.forms:
@@ -945,12 +1002,14 @@ class SubEventBulkCreate(SubEventEditorMixin, EventPermissionRequiredMixin, Crea
                                  save=False)
                 )
         CheckinList.limit_products.through.objects.bulk_create(to_save_products)
+        set_progress(80)
 
         for f in self.plugin_forms:
             f.is_valid()
             for se in subevents:
                 f.subevent = se
                 f.save()
+        set_progress(90)
 
         if connections['default'].features.can_return_rows_from_bulk_insert:
             LogEntry.objects.bulk_create(log_entries)
@@ -961,11 +1020,10 @@ class SubEventBulkCreate(SubEventEditorMixin, EventPermissionRequiredMixin, Crea
             LogEntry.bulk_postprocess(log_entries)
 
         self.request.event.cache.clear()
-        messages.success(self.request, pgettext_lazy('subevent', '{} new dates have been created.').format(len(subevents)))
-        return redirect(reverse('control:event.subevents', kwargs={
-            'organizer': self.request.event.organizer.slug,
-            'event': self.request.event.slug,
-        }))
+        return len(subevents)
+
+    def get_success_message(self, value):
+        return pgettext_lazy('subevent', '{} new dates have been created.').format(value)
 
     def post(self, request, *args, **kwargs):
         form = self.get_form()
