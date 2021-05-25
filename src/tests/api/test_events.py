@@ -40,12 +40,13 @@ from unittest import mock
 import pytest
 from django.conf import settings
 from django.core.files.base import ContentFile
+from django.utils.timezone import now
 from django_countries.fields import Country
 from django_scopes import scopes_disabled
 from pytz import UTC
 
 from pretix.base.models import (
-    Event, InvoiceAddress, Order, OrderPosition, SeatingPlan,
+    Event, InvoiceAddress, Order, OrderPosition, Organizer, SeatingPlan,
 )
 from pretix.base.models.orders import OrderFee
 from pretix.testutils.mock import mocker_context
@@ -351,9 +352,13 @@ def test_event_create(team, token_client, organizer, event, meta_prop):
 
 
 @pytest.mark.django_db
-def test_event_create_with_clone(token_client, organizer, event, meta_prop):
+@pytest.mark.parametrize("urlstyle", [
+    '/api/v1/organizers/{}/events/{}/clone/',
+    '/api/v1/organizers/{}/events/?clone_from={}',
+])
+def test_event_create_with_clone(token_client, organizer, event, meta_prop, urlstyle):
     resp = token_client.post(
-        '/api/v1/organizers/{}/events/{}/clone/'.format(organizer.slug, event.slug),
+        urlstyle.format(organizer.slug, event.slug),
         {
             "name": {
                 "de": "Demo Konference 2020 Test",
@@ -393,7 +398,7 @@ def test_event_create_with_clone(token_client, organizer, event, meta_prop):
         assert cloned_event.settings.timezone == "Europe/Vienna"
 
     resp = token_client.post(
-        '/api/v1/organizers/{}/events/{}/clone/'.format(organizer.slug, event.slug),
+        urlstyle.format(organizer.slug, event.slug),
         {
             "name": {
                 "de": "Demo Konference 2020 Test",
@@ -425,7 +430,7 @@ def test_event_create_with_clone(token_client, organizer, event, meta_prop):
         ).exists()
 
     resp = token_client.post(
-        '/api/v1/organizers/{}/events/{}/clone/'.format(organizer.slug, event.slug),
+        urlstyle.format(organizer.slug, event.slug),
         {
             "name": {
                 "de": "Demo Konference 2020 Test",
@@ -449,6 +454,93 @@ def test_event_create_with_clone(token_client, organizer, event, meta_prop):
     with scopes_disabled():
         cloned_event = Event.objects.get(organizer=organizer.pk, slug='2032')
         assert cloned_event.plugins == ""
+
+
+@pytest.mark.django_db
+def test_event_create_with_clone_unknown_source(user, user_client, organizer, event):
+    with scopes_disabled():
+        target_org = Organizer.objects.create(name='Dummy', slug='dummy2')
+        target_org.events.create(slug='bar', name='bar', date_from=now())
+    resp = user_client.post(
+        '/api/v1/organizers/{}/events/?clone_from={}/{}'.format(organizer.slug, 'dummy2', 'bar'),
+        {
+            "name": {
+                "de": "Demo Konference 2020 Test",
+                "en": "Demo Conference 2020 Test"
+            },
+            "live": False,
+            "testmode": True,
+            "currency": "EUR",
+            "date_from": "2018-12-27T10:00:00Z",
+            "date_to": "2018-12-28T10:00:00Z",
+            "date_admission": None,
+            "is_public": False,
+            "presale_start": None,
+            "presale_end": None,
+            "location": None,
+            "slug": "2030",
+            "plugins": [
+                "pretix.plugins.ticketoutputpdf"
+            ],
+            "timezone": "Europe/Vienna"
+        },
+        format='json'
+    )
+    assert resp.status_code == 400
+
+
+@pytest.mark.django_db
+def test_event_create_with_clone_across_organizers(user, user_client, organizer, event, taxrule):
+    with scopes_disabled():
+        target_org = Organizer.objects.create(name='Dummy', slug='dummy2')
+        team = target_org.teams.create(
+            name="Test-Team",
+            can_change_teams=True,
+            can_manage_gift_cards=True,
+            can_change_items=True,
+            can_create_events=True,
+            can_change_event_settings=True,
+            can_change_vouchers=True,
+            can_view_vouchers=True,
+            can_change_orders=True,
+            can_manage_customers=True,
+            can_change_organizer_settings=True
+        )
+        team.members.add(user)
+
+    resp = user_client.post(
+        '/api/v1/organizers/{}/events/?clone_from={}/{}'.format(target_org.slug, organizer.slug, event.slug),
+        {
+            "name": {
+                "de": "Demo Konference 2020 Test",
+                "en": "Demo Conference 2020 Test"
+            },
+            "live": False,
+            "testmode": True,
+            "currency": "EUR",
+            "date_from": "2018-12-27T10:00:00Z",
+            "date_to": "2018-12-28T10:00:00Z",
+            "date_admission": None,
+            "is_public": False,
+            "presale_start": None,
+            "presale_end": None,
+            "location": None,
+            "slug": "2030",
+            "plugins": [
+                "pretix.plugins.ticketoutputpdf"
+            ],
+            "timezone": "Europe/Vienna"
+        },
+        format='json'
+    )
+    assert resp.status_code == 201
+    with scopes_disabled():
+        cloned_event = Event.objects.get(organizer=target_org.pk, slug='2030')
+        assert cloned_event.plugins == 'pretix.plugins.ticketoutputpdf'
+        assert cloned_event.is_public is False
+        assert cloned_event.testmode
+        assert cloned_event.settings.timezone == "Europe/Vienna"
+        assert cloned_event.tax_rules.exists()
 
 
 @pytest.mark.django_db

@@ -39,7 +39,7 @@ from django.utils.timezone import now
 from django_filters.rest_framework import DjangoFilterBackend, FilterSet
 from django_scopes import scopes_disabled
 from rest_framework import filters, serializers, views, viewsets
-from rest_framework.exceptions import PermissionDenied
+from rest_framework.exceptions import PermissionDenied, ValidationError
 from rest_framework.response import Response
 
 from pretix.api.auth.permission import EventCRUDPermission
@@ -120,6 +120,13 @@ class EventViewSet(viewsets.ModelViewSet):
     ordering_fields = ('date_from', 'slug')
     filterset_class = EventFilter
 
+    def get_copy_from_queryset(self):
+        if isinstance(self.request.auth, (TeamAPIToken, Device)):
+            return self.request.auth.get_events_with_any_permission()
+        elif self.request.user.is_authenticated:
+            return self.request.user.get_events_with_any_permission(self.request)
+        return Event.objects.none()
+
     def get_queryset(self):
         if isinstance(self.request.auth, (TeamAPIToken, Device)):
             qs = self.request.auth.get_events_with_any_permission()
@@ -173,8 +180,45 @@ class EventViewSet(viewsets.ModelViewSet):
             )
 
     def perform_create(self, serializer):
-        serializer.save(organizer=self.request.organizer)
-        serializer.instance.set_defaults()
+        copy_from = None
+        if 'clone_from' in self.request.GET:
+            src = self.request.GET.get('clone_from')
+            try:
+                if '/' in src:
+                    copy_from = self.get_copy_from_queryset().get(
+                        organizer__slug=src.split('/')[0],
+                        slug=src.split('/')[1]
+                    )
+                else:
+                    copy_from = self.get_copy_from_queryset().get(
+                        organizer=self.request.organizer,
+                        slug=src
+                    )
+            except Event.DoesNotExist:
+                raise ValidationError('Event to copy from was not found')
+
+        print(copy_from, self.request.GET)
+        new_event = serializer.save(organizer=self.request.organizer)
+
+        if copy_from:
+            new_event.copy_data_from(copy_from)
+
+            if 'plugins' in serializer.validated_data:
+                new_event.set_active_plugins(serializer.validated_data['plugins'])
+            if 'is_public' in serializer.validated_data:
+                new_event.is_public = serializer.validated_data['is_public']
+            if 'testmode' in serializer.validated_data:
+                new_event.testmode = serializer.validated_data['testmode']
+            if 'sales_channels' in serializer.validated_data:
+                new_event.sales_channels = serializer.validated_data['sales_channels']
+            if 'has_subevents' in serializer.validated_data:
+                new_event.has_subevents = serializer.validated_data['has_subevents']
+            new_event.save()
+            if 'timezone' in serializer.validated_data:
+                new_event.settings.timezone = serializer.validated_data['timezone']
+        else:
+            serializer.instance.set_defaults()
+
         serializer.instance.log_action(
             'pretix.event.added',
             user=self.request.user,

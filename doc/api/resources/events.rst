@@ -80,6 +80,10 @@ Endpoints
 
     The events resource can now be filtered by meta data attributes.
 
+.. versionchanged:: 4.0
+
+    The ``clone_from`` parameter has been added to the event creation endpoint.
+
 .. http:get:: /api/v1/organizers/(organizer)/events/
 
    Returns a list of all events within a given organizer the authenticated user/token has access to.
@@ -321,6 +325,9 @@ Endpoints
       }
 
    :param organizer: The ``slug`` field of the organizer of the event to create.
+   :query clone_from: Set to ``event_slug`` to clone data (settings, products, …) from an event with this slug in the
+                      same organizer or to ``organizer_slug/event_slug`` to clone from an event within a different
+                      organizer.
    :statuscode 201: no error
    :statuscode 400: The event could not be created due to invalid submitted data.
    :statuscode 401: Authentication failure
@@ -335,7 +342,8 @@ Endpoints
    If the ``plugins``, ``has_subevents`` and/or ``is_public`` fields are present in the post body this will determine their
    value. Otherwise their value will be copied from the existing event.
 
-   Please note that you can only copy from events under the same organizer.
+   Please note that you can only copy from events under the same organizer this way. Use the ``clone_from`` parameter
+   when creating a new event for this instead.
 
    Permission required: "Can create events"
 
