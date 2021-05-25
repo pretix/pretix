@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-05-13 08:11+0000\n"
-"PO-Revision-Date: 2021-05-25 12:55+0000\n"
+"PO-Revision-Date: 2021-05-25 13:09+0000\n"
 "Last-Translator: Mohamed Tawfiq <mtawfiq@wafyapp.com>\n"
 "Language-Team: Arabic <https://translate.pretix.eu/projects/pretix/pretix/ar/"
 ">\n"
@@ -8422,10 +8422,11 @@ msgid ""
 "method, all data will be removed or personal data only. No download will be "
 "offered."
 msgstr ""
-"سيؤدي هذا إلى إزالة المعلومات المتعلقة بالدفع. اعتمادا على طريقة الدفع ، "
+"سيؤدي هذا إلى إزالة المعلومات المتعلقة بالدفع. واعتمادا على طريقة الدفع ، "
 "ستتم إزالة جميع البيانات أو البيانات الشخصية فقط. لن يتم اقتراح أي تنزيل."
 
 #: pretix/base/templates/400.html:4 pretix/base/templates/400.html:8
+#, fuzzy
 msgid "Bad Request"
 msgstr "طلب سيء"
 
@@ -8438,7 +8439,7 @@ msgstr "لم نتمكن من تحليل طلبك."
 #: pretix/base/templates/csrffail.html:26
 #, fuzzy
 msgid "Take a step back"
-msgstr "عد للوراء"
+msgstr "عد للخلف"
 
 #: pretix/base/templates/400.html:13 pretix/base/templates/403.html:13
 #: pretix/base/templates/500.html:23
@@ -8495,8 +8496,8 @@ msgid ""
 "We could not verify that this request really was sent from you. For security "
 "reasons, we therefore cannot process it."
 msgstr ""
-"لم نتمكن من التحقق من إرسال هذا الطلب منك بالفعل. لأسباب أمنية ، لذلك لا "
-"يمكننا معالجتها."
+"لم نتمكن من التحقق من أن الطلب أرسل من طرفك بالفعل. ولأسباب أمنية لا يمكننا "
+"معالجته."
 
 #: pretix/base/templates/csrffail.html:20
 msgid ""
@@ -8508,19 +8509,20 @@ msgstr ""
 
 #: pretix/base/templates/pretixbase/cachedfiles/pending.html:21
 msgid "We are preparing your file for download …"
-msgstr "نحن نجهز ملفك للتحميل …"
+msgstr "نعمل على تجهيز ملفك للتحميل …"
 
 #: pretix/base/templates/pretixbase/cachedfiles/pending.html:23
 msgid ""
 "If this takes longer than a few minutes, please refresh this page or contact "
 "us."
 msgstr ""
-"إذا استغرق هذا أكثر من بضع دقائق ، يرجى تحديث هذه الصفحة أو الاتصال بنا."
+"إذا استغرق هذا الأمر أكثر من بضع دقائق ، يرجى تحديث هذه الصفحة أو الاتصال "
+"بنا."
 
 #: pretix/base/templates/pretixbase/email/email_footer.html:3
 #, fuzzy, python-format
 msgid "powered by <a %(a_attr)s>pretix</a>"
-msgstr "مشغل بواسطة <a %(a_attr)s>pretix</a>"
+msgstr "مدعوم من قبل <a %(a_attr)s>pretix</a>"
 
 #: pretix/base/templates/pretixbase/email/notification.html:55
 #: pretix/base/templates/pretixbase/email/notification.txt:14
@@ -8529,7 +8531,7 @@ msgstr "تتلقى رسائل البريد الإلكتروني هذه بناء 
 
 #: pretix/base/templates/pretixbase/email/notification.html:57
 msgid "Click here to view and change your notification settings"
-msgstr "انقر هنا لعرض وتغيير إعدادات الإشعار"
+msgstr "انقر هنا لعرض وتغيير إعدادات الإشعارات"
 
 #: pretix/base/templates/pretixbase/email/notification.html:60
 msgid "Click here disable all notifications immediately."
@@ -8537,7 +8539,7 @@ msgstr "انقر هنا لتعطيل جميع الإشعارات على الفو
 
 #: pretix/base/templates/pretixbase/email/notification.txt:15
 msgid "Click here to view and change your notification settings:"
-msgstr "انقر هنا لعرض وتغيير إعدادات الإشعار:"
+msgstr "انقر هنا لعرض وتغيير إعدادات الإشعارات:"
 
 #: pretix/base/templates/pretixbase/email/notification.txt:17
 msgid "Click here disable all notifications immediately:"
@@ -8590,11 +8592,11 @@ msgstr "حمل صورة"
 #: pretix/base/templates/pretixbase/forms/widgets/reldate.html:15
 #: pretix/base/templates/pretixbase/forms/widgets/reldatetime.html:19
 msgid "days before"
-msgstr "قبل أيام"
+msgstr "أيام قبل"
 
 #: pretix/base/templates/pretixbase/forms/widgets/reldatetime.html:15
 msgid "minutes before"
-msgstr "قبل دقائق"
+msgstr "دقائق قبل"
 
 #: pretix/base/templates/pretixbase/forms/widgets/reldatetime.html:21
 msgid "at"
@@ -8623,27 +8625,27 @@ msgstr "حمل تذكرة"
 #: pretix/base/timeline.py:58
 msgctxt "timeline"
 msgid "Your event starts"
-msgstr "تبدأ الفعالية الخاصة بك"
+msgstr "بداية الفعالية الخاصة بك"
 
 #: pretix/base/timeline.py:66
 msgctxt "timeline"
 msgid "Your event ends"
-msgstr "نهايات الفعالية الخاصة بك"
+msgstr "نهاية الفعالية الخاصة بك"
 
 #: pretix/base/timeline.py:74
 msgctxt "timeline"
 msgid "Admissions for your event start"
-msgstr "القبول لبدء الفعالية الخاصة بك"
+msgstr "قبول بداية الفعالية الخاصة بك"
 
 #: pretix/base/timeline.py:82
 msgctxt "timeline"
 msgid "Start of ticket sales"
-msgstr "بداية مبيعات التذكرة"
+msgstr "بداية بيع التذاكر"
 
 #: pretix/base/timeline.py:90
 msgctxt "timeline"
 msgid "End of ticket sales"
-msgstr "نهاية مبيعات التذكرة"
+msgstr "نهاية بيع التذاكر"
 
 #: pretix/base/timeline.py:99
 msgctxt "timeline"
@@ -8673,14 +8675,14 @@ msgstr "لم يعد بإمكان العملاء إلغاء الطلبات الم
 #: pretix/base/timeline.py:162
 msgctxt "timeline"
 msgid "Download reminders are being sent out"
-msgstr "يتم إرسال رسائل تذكير التنزيل"
+msgstr "يتم إرسال رسائل للتذكير بالتنزيل"
 
 #: pretix/base/timeline.py:175 pretix/base/timeline.py:198
 #: pretix/base/timeline.py:224
 #, python-brace-format
 msgctxt "timeline"
 msgid "Product \"{name}\" becomes available"
-msgstr "المنتج \"{name}\" يصبح متوفرا"
+msgstr "المنتج \"{name}\" أصبح متوفرا"
 
 #: pretix/base/timeline.py:186 pretix/base/timeline.py:210
 #: pretix/base/timeline.py:235
@@ -8698,7 +8700,7 @@ msgstr "مقدم الدفع \"{name}\" لم يعد من الممكن تحديد�
 #: pretix/base/validators.py:49
 #, python-format
 msgid "This field has an invalid value: %(value)s."
-msgstr "هذا الحقل يحتوي على قيمة غير صالحة: %(value)s"
+msgstr "هذا الحقل يحتوي على قيمة غير صالحة: %(value)s."
 
 #: pretix/base/views/errors.py:40
 msgid ""
