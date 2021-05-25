@@ -357,6 +357,12 @@ class EventMixin:
         return qs.filter(q)
 
 
+def default_sales_channels():
+    from ..channels import get_all_sales_channels
+
+    return list(get_all_sales_channels().keys())
+
+
 @settings_hierarkey.add(parent_field='organizer', cache_namespace='event')
 class Event(EventMixin, LoggedModel):
     """
@@ -482,7 +488,7 @@ class Event(EventMixin, LoggedModel):
     sales_channels = MultiStringField(
         verbose_name=_('Restrict to specific sales channels'),
         help_text=_('Only sell tickets for this event on the following sales channels.'),
-        default=['web'],
+        default=default_sales_channels,
     )
     objects = ScopedManager(organizer='organizer')
 
