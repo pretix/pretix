@@ -315,7 +315,7 @@ class EventMixin:
         items_gone -= items_disabled
         vars_available -= vars_disabled
         vars_reserved -= vars_disabled
-        vars_gone -= vars_gone
+        vars_gone -= vars_disabled
 
         if not self.active_quotas or (
             not items_available and not items_reserved and not items_gone and not vars_gone and not vars_available and not vars_reserved
