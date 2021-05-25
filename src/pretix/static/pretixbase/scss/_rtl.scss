@@ -20,6 +20,11 @@ html.rtl {
   }
 }
 
+.force-ltr {
+  direction: ltr !important;
+  unicode-bidi: embed;
+}
+
 @media(min-width: $screen-sm-min) {
   html.rtl .nameparts-form-group {
     input, select {

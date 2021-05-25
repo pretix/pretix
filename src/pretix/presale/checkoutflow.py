@@ -60,6 +60,7 @@ from pretix.base.services.cart import (
 from pretix.base.services.memberships import validate_memberships_in_order
 from pretix.base.services.orders import perform_order
 from pretix.base.signals import validate_cart_addons
+from pretix.base.templatetags.phone_format import phone_format
 from pretix.base.templatetags.rich_text import rich_text_snippet
 from pretix.base.views.tasks import AsyncAction
 from pretix.multidomain.urlreverse import eventreverse
@@ -1088,7 +1089,7 @@ class ConfirmStep(CartMixin, AsyncAction, TemplateFlowStep):
             ctx['contact_info'] = []
         phone = self.cart_session.get('contact_form_data', {}).get('phone')
         if phone:
-            ctx['contact_info'].append((_('Phone number'), phone))
+            ctx['contact_info'].append((_('Phone number'), phone_format(phone)))
         responses = contact_form_fields.send(self.event, request=self.request)
         for r, response in sorted(responses, key=lambda r: str(r[0])):
             for key, value in response.items():

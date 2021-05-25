@@ -285,7 +285,7 @@ DEFAULT_VARIABLES = OrderedDict((
     ("telephone", {
         "label": _("Phone number"),
         "editor_sample": "+01 1234 567890",
-        "evaluate": lambda op, order, ev: phone_format(order.phone)
+        "evaluate": lambda op, order, ev: phone_format(order.phone, html=False)
     }),
     ("email", {
         "label": _("Email"),
