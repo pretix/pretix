@@ -473,7 +473,7 @@ $(function () {
 });
 
 function copy_answers(elements, answers) {
-   elements.each(function (index) {
+   elements.not("[disabled], [readonly]").each(function (index) {
         var input = $(this),
             tagName = input.prop('tagName').toLowerCase(),
             attributeType = input.attr('type'),
