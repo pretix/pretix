@@ -20,6 +20,14 @@
     line-height: 1.8em;
 }
 
+
+.btn {
+    text-decoration: none;
+}
+a, .btn-link {
+    text-decoration: underline;
+}
+
 footer {
     padding: 10px 0;
 }
@@ -44,14 +52,12 @@ footer nav li:not(:first-child):before {
 }
 .locales, .loginstatus {
     display: inline;
-    a {
-        text-decoration: none;
-    }
     a:hover {
         border-bottom: 2px solid $gray-light;
     }
     a.active {
-        border-bottom: 2px solid $brand-primary;
+        /*border-bottom: 2px solid $brand-primary;*/
+        font-weight: bold;
     }
     img {
         vertical-align: baseline;
