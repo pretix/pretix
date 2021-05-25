@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-26 09:20+0000\n"
 "PO-Revision-Date: 2023-05-30 21:19+0000\n"
-"Last-Translator: saad91 <saad.almoosa@gmail.com>\n"
+"Last-Translator: Mohamed Tawfiq <mtawfiq@wafyapp.com>\n"
 "Language-Team: Arabic <https://translate.pretix.eu/projects/pretix/pretix/ar/"
 ">\n"
 "Language: ar\n"
@@ -2832,8 +2832,7 @@ msgstr ""
 msgid ""
 "Upload a valid image. The file you uploaded was either not an image or a "
 "corrupted image."
-msgstr ""
-"قم بتحميل صورة صالحة. الملف الذي قمت بتحميله ليس صورة أو هو صورة تالفة."
+msgstr "قم بتحميل صورة صالحة. الملف الذي قمت بتحميله ليس صورة أو هو صورة تالفة."
 
 #: pretix/base/forms/questions.py:607 pretix/base/forms/questions.py:615
 msgid ""
@@ -3723,8 +3722,8 @@ msgid ""
 "Optional. No products will be sold after this date. If you do not set this "
 "value, the presale will end after the end date of your event."
 msgstr ""
-"اختياري. لن يتم بيع أي منتجات بعد هذا التاريخ. إذا لم تقم بتعيين هذه "
-"القيمة ، فسينتهي عرض ما قبل البيع بعد تاريخ انتهاء الفعالية الخاصة بك."
+"اختياري. لن يتم بيع أي منتجات بعد هذا التاريخ. إذا لم تقم بتعيين هذه القيمة ،"
+" فسينتهي عرض ما قبل البيع بعد تاريخ انتهاء الفعالية الخاصة بك."
 
 #: pretix/base/models/event.py:575 pretix/base/models/event.py:1410
 #: pretix/control/forms/subevents.py:93
@@ -4013,8 +4012,7 @@ msgstr "اسم التصنيف"
 #: pretix/base/models/items.py:95 pretix/base/models/items.py:406
 msgid ""
 "If you set this, this will be used instead of the public name in the backend."
-msgstr ""
-"إذا قمت بتعيين هذا ، فسيتم استخدامه بدلا من الاسم العام في لوحة التحكم."
+msgstr "إذا قمت بتعيين هذا ، فسيتم استخدامه بدلا من الاسم العام في لوحة التحكم."
 
 #: pretix/base/models/items.py:99
 msgid "Category description"
@@ -4586,8 +4584,7 @@ msgstr "اسمح لنفس المنتج أن يتم اختياره عدة مرا�
 
 #: pretix/base/models/items.py:1298
 msgid "The add-on's category must belong to the same event as the item."
-msgstr ""
-"يجب أن تنتمي فئة قائمة الإضافة إلى نفس الفعالية كما هو الحال مع العنصر."
+msgstr "يجب أن تنتمي فئة قائمة الإضافة إلى نفس الفعالية كما هو الحال مع العنصر."
 
 #: pretix/base/models/items.py:1303
 msgid "The item already has an add-on of this category."
@@ -4893,9 +4890,9 @@ msgid ""
 "sold, even if tickets become available again through cancellations or "
 "expiring orders. Of course, you can always re-open it manually."
 msgstr ""
-"إذا قمت بتمكين هذا ، عند بيع الحصة مرة واحدة ، فلن يتم بيع المزيد من "
-"التذاكر ، حتى إذا أصبحت التذاكر متاحة مرة أخرى من خلال الإلغاء أو الطلبات "
-"المنتهية الصلاحية. بالطبع ، يمكنك دائما إعادة الفتح يدويا."
+"إذا قمت بتمكين هذا ، عند بيع الحصة مرة واحدة ، فلن يتم بيع المزيد من التذاكر "
+"، حتى إذا أصبحت التذاكر متاحة مرة أخرى من خلال الإلغاء أو الطلبات المنتهية "
+"الصلاحية. بالطبع ، يمكنك دائما إعادة الفتح يدويا."
 
 #: pretix/base/models/items.py:1871
 msgid "Allow to sell more tickets once people have checked out"
@@ -7611,8 +7608,7 @@ msgstr ""
 msgid ""
 "You are receiving this email because someone placed an order for {event} for "
 "you."
-msgstr ""
-"أنت تتلقى هذا البريد الإلكتروني لأن شخصا ما قدم طلبا ل {event} من أجلك."
+msgstr "أنت تتلقى هذا البريد الإلكتروني لأن شخصا ما قدم طلبا ل {event} من أجلك."
 
 #: pretix/base/services/mail.py:270 pretix/base/services/mail.py:286
 #, python-brace-format
@@ -7662,8 +7658,7 @@ msgstr "تم تغيير نوع العضوية."
 
 #: pretix/base/services/memberships.py:152
 msgid "You can only use a test mode membership for test mode tickets."
-msgstr ""
-"يمكنك استخدام وضع اختبار العضوية لصالح وضع الاختبار الخاص بالتذاكر فقط."
+msgstr "يمكنك استخدام وضع اختبار العضوية لصالح وضع الاختبار الخاص بالتذاكر فقط."
 
 #: pretix/base/services/memberships.py:159
 #, python-brace-format
@@ -7706,8 +7701,8 @@ msgid ""
 "Error while importing value \"{value}\" for column \"{column}\" in line "
 "\"{line}\": {message}"
 msgstr ""
-"خطأ أثناء استيراد القيمة \"{value}\" للعمود \"{column}\" في السطر "
-"\"{line}\": {message}"
+"خطأ أثناء استيراد القيمة \"{value}\" للعمود \"{column}\" في السطر \"{line}\":"
+" {message}"
 
 #: pretix/base/services/orderimport.py:147
 #, python-brace-format
@@ -7718,8 +7713,7 @@ msgstr "بيانات غير صالحة في الصف {row}: {message}"
 msgid ""
 "Some of the products you selected were no longer available. Please see below "
 "for details."
-msgstr ""
-"بعض المنتجات التي حددتها لم تعد متوفرة. انظر أدناه للحصول على التفاصيل."
+msgstr "بعض المنتجات التي حددتها لم تعد متوفرة. انظر أدناه للحصول على التفاصيل."
 
 #: pretix/base/services/orders.py:128
 msgid ""
@@ -9385,8 +9379,8 @@ msgid ""
 "Paid money will be automatically paid back if the payment method allows it. "
 "Otherwise, a manual refund will be created for you to process manually."
 msgstr ""
-"سيتم رد الأموال المدفوعة تلقائيا إذا كانت طريقة الدفع تسمح بذلك. وبخلاف "
-"ذلك ، سيتم إنشاء استرداد يدوي لتتم معالجته يدويا."
+"سيتم رد الأموال المدفوعة تلقائيا إذا كانت طريقة الدفع تسمح بذلك. وبخلاف ذلك ،"
+" سيتم إنشاء استرداد يدوي لتتم معالجته يدويا."
 
 #: pretix/base/settings.py:1744 pretix/control/forms/orders.py:822
 msgid "Keep a fixed cancellation fee"
@@ -10587,10 +10581,10 @@ msgid ""
 "square is shown. If you do not fill this, we will use the logo given above."
 msgstr ""
 "سيتم استخدام هذه الصورة كمعاينة إذا قمت بنشر روابط لمتجر التذاكر الخاص بك "
-"على وسائل التواصل الاجتماعي. ينصح فيسبوك باستخدام صورة بحجم 1200 × 630 "
-"بكسل ، ولكن بعض الأنظمة الأساسية مثل واتساب و Reddit تعرض فقط معاينة مربعة ، "
-"لذلك نوصي بالتأكد من أنها لا تزال تبدو جيدة في حال كان المربع الأوسط هو الذي "
-"يظهر فقط. إذا لم تقم بملء هذا ، فسنستخدم الشعار المقدم أعلاه."
+"على وسائل التواصل الاجتماعي. ينصح فيسبوك باستخدام صورة بحجم 1200 × 630 بكسل ،"
+" ولكن بعض الأنظمة الأساسية مثل واتساب و Reddit تعرض فقط معاينة مربعة ، لذلك "
+"نوصي بالتأكد من أنها لا تزال تبدو جيدة في حال كان المربع الأوسط هو الذي يظهر "
+"فقط. إذا لم تقم بملء هذا ، فسنستخدم الشعار المقدم أعلاه."
 
 #: pretix/base/settings.py:2816
 msgid "Logo image"
@@ -11259,8 +11253,7 @@ msgstr "في انتظار التأكيد"
 #: pretix/base/templates/pretixbase/email/notification.html:55
 #: pretix/base/templates/pretixbase/email/notification.txt:14
 msgid "You receive these emails based on your notification settings."
-msgstr ""
-"تتلقى رسائل البريد الإلكتروني هذه بناء على إعدادات الإشعارات الخاصة بك."
+msgstr "تتلقى رسائل البريد الإلكتروني هذه بناء على إعدادات الإشعارات الخاصة بك."
 
 #: pretix/base/templates/pretixbase/email/notification.html:57
 msgid "Click here to view and change your notification settings"
@@ -14364,8 +14357,8 @@ msgid ""
 "Unknown scan of code \"{barcode}…\" at {datetime} for list \"{list}\", type "
 "\"{type}\"."
 msgstr ""
-"تم مسح رمز غير محدد\"{barcode}...\" في "
-"\"{datetime}\"لقائمة\"{list}\"نوع\"{type}\"."
+"تم مسح رمز غير محدد\"{barcode}...\" في \"{datetime}\"لقائمة\"{list}\"نوع\""
+"{type}\"."
 
 #: pretix/control/logdisplay.py:236
 #, python-brace-format
@@ -14395,8 +14388,8 @@ msgid ""
 "Denied scan of position #{posid} at {datetime} for list \"{list}\", type "
 "\"{type}\", error code \"{errorcode}\"."
 msgstr ""
-"تم رفض مسح الحالة#{posid}في{datetime}لقائمة\"{list}\"نوع\"{type}\"خطأ "
-"الرمز\"{errorcode}\"."
+"تم رفض مسح الحالة#{posid}في{datetime}لقائمة\"{list}\"نوع\"{type}\"خطأ الرمز\""
+"{errorcode}\"."
 
 #: pretix/control/logdisplay.py:279
 #, python-brace-format
@@ -22607,8 +22600,8 @@ msgid ""
 "(\"%(slug)s\") here:"
 msgstr ""
 "الرجاء إعادة التحقق من أنك ترغب في حذف فئات مختارة من بيانات الفعالية على "
-"<strong>%(event)s</strong>. للتأكيد الرجاء ادخال الاسم المختصر "
-"للفعالية(\"%(slug)s\") هنا:"
+"<strong>%(event)s</strong>. للتأكيد الرجاء ادخال الاسم المختصر للفعالية(\""
+"%(slug)s\") هنا:"
 
 #: pretix/control/templates/pretixcontrol/shredder/download.html:41
 #, fuzzy
@@ -26547,15 +26540,13 @@ msgstr "لم نتمكن من معالجة المدخلات الخاصة بك."
 msgid ""
 "I'm sorry, but we were unable to import this CSV file. Please contact "
 "support for help."
-msgstr ""
-"نأسف ، لم نتمكن من استيراد ملف CSV هذا. الرجاء الاتصال بالدعم للمساعدة."
+msgstr "نأسف ، لم نتمكن من استيراد ملف CSV هذا. الرجاء الاتصال بالدعم للمساعدة."
 
 #: pretix/plugins/banktransfer/views.py:459
 msgid ""
 "I'm sorry, but we detected this file as empty. Please contact support for "
 "help."
-msgstr ""
-"نأسف ، لكننا اكتشفنا أن هذا الملف فارغ. الرجاء الاتصال بالدعم للمساعدة."
+msgstr "نأسف ، لكننا اكتشفنا أن هذا الملف فارغ. الرجاء الاتصال بالدعم للمساعدة."
 
 #: pretix/plugins/banktransfer/views.py:479
 msgid "Invalid input data."
@@ -28270,10 +28261,9 @@ msgid ""
 "automatically cancel orders when charges are refunded externally and to "
 "process asynchronous payment methods like SOFORT."
 msgstr ""
-"الرجاء إعداد <a href=\"https://dashboard.stripe.com/account/"
-"webhooks\">Stripe Webhook</a> إلى نقطة النهاية التالية لإلغاء الطلبات "
-"تلقائيا عندما يتم استرداد الرسوم خارجيا ومعالجة وسائل الدفع غير المتزامن مثل "
-"SOFORT."
+"الرجاء إعداد <a href=\"https://dashboard.stripe.com/account/webhooks\""
+">Stripe Webhook</a> إلى نقطة النهاية التالية لإلغاء الطلبات تلقائيا عندما "
+"يتم استرداد الرسوم خارجيا ومعالجة وسائل الدفع غير المتزامن مثل SOFORT."
 
 #: pretix/plugins/stripe/payment.py:141
 msgid "Enable MOTO payments for resellers"
@@ -31266,8 +31256,7 @@ msgstr ""
 msgid ""
 "You entered a voucher code that allows you to buy one of the following "
 "products at the specified price:"
-msgstr ""
-"لقد أدخلت رمز كود خصم يسمح لك بشراء أحد المنتجات التالية بالسعر المحدد:"
+msgstr "لقد أدخلت رمز كود خصم يسمح لك بشراء أحد المنتجات التالية بالسعر المحدد:"
 
 #: pretix/presale/templates/pretixpresale/event/voucher.html:148
 #, python-format
@@ -31749,8 +31738,7 @@ msgstr "الرجاء إدخال أرقام موجبة فقط."
 
 #: pretix/presale/views/cart.py:421
 msgid "We applied the voucher to as many products in your cart as we could."
-msgstr ""
-"طبقنا كود الخصم على أكبر عدد ممكن من المنتجات في عربة التسوق الخاصة بك."
+msgstr "طبقنا كود الخصم على أكبر عدد ممكن من المنتجات في عربة التسوق الخاصة بك."
 
 #: pretix/presale/views/cart.py:443
 msgid "Your cart has been updated."
