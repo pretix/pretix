@@ -636,6 +636,7 @@ class Event(EventMixin, LoggedModel):
         if other.date_admission:
             self.date_admission = self.date_from + (other.date_admission - other.date_from)
         self.testmode = other.testmode
+        self.sales_channels = other.sales_channels
         self.save()
         self.log_action('pretix.object.cloned', data={'source': other.slug, 'source_id': other.pk})
 
