@@ -46,7 +46,7 @@ class SubEventForm(I18nModelForm):
     def __init__(self, *args, **kwargs):
         self.event = kwargs['event']
         instance = kwargs.get('instance')
-        if instance and not instance.pk:
+        if instance and not instance.name:
             kwargs['initial'].setdefault('name', self.event.name)
             kwargs['initial'].setdefault('location', self.event.location)
             kwargs['initial'].setdefault('geo_lat', self.event.geo_lat)
