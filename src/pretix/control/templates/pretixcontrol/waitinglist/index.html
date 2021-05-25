@@ -126,12 +126,20 @@
             {% trans "Download list" %}</a>
     </form>
     </p>
-    <form method="post" action="?next={{ request.get_full_path|urlencode }}">
+    <form action="{% url "control:event.orders.waitinglist.action"  organizer=request.event.organizer.slug event=request.event.slug %}?next={{ request.get_full_path|urlencode }}" method="post">
         {% csrf_token %}
+        <input name="subevent" type="hidden" value="{{ request.GET.subevent }}">
+        <input name="item" type="hidden" value="{{ request.GET.item }}">
+        <input name="status" type="hidden" value="{{ request.GET.status }}">
         <div class="table-responsive">
             <table class="table table-condensed table-hover">
                 <thead>
                 <tr>
+                    <th>
+                        {% if "can_change_orders" in request.eventpermset %}
+                            <label aria-label="{% trans "select all rows for batch-operation" %}" class="batch-select-label"><input type="checkbox" data-toggle-table/></label>
+                        {% endif %}
+                    </th>
                     {% if request.event.settings.waiting_list_names_asked %}
                     <th>{% trans "Name" %}</th>
                     {% endif %}
@@ -148,10 +156,27 @@
                     <th>{% trans "Voucher" %}</th>
                     <th></th>
                 </tr>
+                {% if "can_change_orders" in request.eventpermset and page_obj.paginator.num_pages > 1 %}
+                    <tr class="table-select-all warning hidden">
+                        <td>
+                            <input type="checkbox" name="__ALL" id="__all" data-results-total="{{ page_obj.paginator.count }}">
+                        </td>
+                        <td colspan="5">
+                            <label for="__all">
+                                {% trans "Select all results on other pages as well" %}
+                            </label>
+                        </td>
+                    </tr>
+                {% endif %}
                 </thead>
                 <tbody>
                 {% for e in entries %}
                     <tr>
+                        <td>
+                            {% if "can_change_orders" in request.eventpermset %}
+                                <label aria-label="{% trans "select row for batch-operation" %}" class="batch-select-label"><input type="checkbox" name="entry" class="batch-select-checkbox" value="{{ s.pk }}"/></label>
+                            {% endif %}
+                        </td>
                         {% if request.event.settings.waiting_list_names_asked %}
                         <td>{{ e.name|default:"" }}</td>
                         {% endif %}
@@ -233,6 +258,13 @@
                 </tbody>
             </table>
         </div>
+        {% if "can_change_orders" in request.eventpermset %}
+            <div class="batch-select-actions">
+                <button type="submit" class="btn btn-danger btn-save" name="action" value="delete">
+                    <i class="fa fa-trash"></i>{% trans "Delete selected" %}
+                </button>
+            </div>
+        {% endif %}
     </form>
     {% include "pretixcontrol/pagination.html" %}
 {% endblock %}

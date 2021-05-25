@@ -133,7 +133,7 @@ def test_assign_single(client, env):
     with scopes_disabled():
         wle = WaitingListEntry.objects.filter(voucher__isnull=True).last()
 
-    client.post('/control/event/dummy/dummy/waitinglist/', {
+    client.post('/control/event/dummy/dummy/waitinglist/action', {
         'assign': wle.pk
     })
     wle.refresh_from_db()
@@ -147,17 +147,17 @@ def test_priority_single(client, env):
         wle = WaitingListEntry.objects.filter(voucher__isnull=True).last()
     assert wle.priority == 0
 
-    client.post('/control/event/dummy/dummy/waitinglist/', {
+    client.post('/control/event/dummy/dummy/waitinglist/action', {
         'move_top': wle.pk
     })
     wle.refresh_from_db()
     assert wle.priority == 1
-    client.post('/control/event/dummy/dummy/waitinglist/', {
+    client.post('/control/event/dummy/dummy/waitinglist/action', {
         'move_top': wle.pk
     })
     wle.refresh_from_db()
     assert wle.priority == 2
-    client.post('/control/event/dummy/dummy/waitinglist/', {
+    client.post('/control/event/dummy/dummy/waitinglist/action', {
         'move_end': wle.pk
     })
     wle.refresh_from_db()
@@ -171,6 +171,21 @@ def test_delete_single(client, env):
         wle = WaitingListEntry.objects.first()
 
     client.post('/control/event/dummy/dummy/waitinglist/%s/delete' % (wle.id))
+    with pytest.raises(WaitingListEntry.DoesNotExist):
+        with scopes_disabled():
+            WaitingListEntry.objects.get(id=wle.id)
+
+
+@pytest.mark.django_db
+def test_delete_bulk(client, env):
+    client.login(email='dummy@dummy.dummy', password='dummy')
+    with scopes_disabled():
+        wle = WaitingListEntry.objects.first()
+
+    client.post('/control/event/dummy/dummy/waitinglist/action', data={
+        'entry': wle.pk,
+        'action': 'delete_confirm',
+    })
     with pytest.raises(WaitingListEntry.DoesNotExist):
         with scopes_disabled():
             WaitingListEntry.objects.get(id=wle.id)

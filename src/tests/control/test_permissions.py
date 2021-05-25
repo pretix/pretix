@@ -163,6 +163,7 @@ event_urls = [
     "checkinlists/1/delete",
     "waitinglist/",
     "waitinglist/auto_assign",
+    "waitinglist/action",
     "invoice/1",
 ]
 
@@ -347,6 +348,7 @@ event_permission_urls = [
     ("can_change_vouchers", "vouchers/1234/delete", 404),
     ("can_view_orders", "waitinglist/", 200),
     ("can_change_orders", "waitinglist/auto_assign", 405),
+    ("can_change_orders", "waitinglist/action", 405),
     ("can_view_orders", "checkinlists/", 200),
     ("can_view_orders", "checkinlists/1/", 404),
     ("can_change_event_settings", "checkinlists/add", 200),

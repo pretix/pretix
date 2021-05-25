@@ -40,8 +40,9 @@ from django.db import transaction
 from django.db.models import F, Max, Min, Q, Sum
 from django.db.models.functions import Coalesce
 from django.http import Http404, HttpResponse, HttpResponseRedirect
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render
 from django.urls import reverse
+from django.utils.functional import cached_property
 from django.utils.http import is_safe_url
 from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _, pgettext
@@ -79,16 +80,86 @@ class AutoAssign(EventPermissionRequiredMixin, AsyncAction, View):
                        self.request.POST.get('subevent'))
 
 
-class WaitingListView(EventPermissionRequiredMixin, PaginationMixin, ListView):
+class WaitingListQuerySetMixin:
+
+    @cached_property
+    def request_data(self):
+        if self.request.method == "POST":
+            return self.request.POST
+        return self.request.GET
+
+    def get_queryset(self):
+        qs = WaitingListEntry.objects.filter(
+            event=self.request.event
+        ).select_related('item', 'variation', 'voucher').prefetch_related(
+            'item__quotas', 'variation__quotas'
+        )
+
+        s = self.request_data.get("status", "")
+        if s == 's':
+            qs = qs.filter(voucher__isnull=False)
+        elif s == 'a':
+            pass
+        elif s == 'r':
+            qs = qs.filter(
+                voucher__isnull=False,
+                voucher__redeemed__gte=F('voucher__max_usages'),
+            )
+        elif s == 'v':
+            qs = qs.filter(
+                voucher__isnull=False,
+                voucher__redeemed__lt=F('voucher__max_usages'),
+            ).filter(Q(voucher__valid_until__isnull=True) | Q(voucher__valid_until__gt=now()))
+        elif s == 'e':
+            qs = qs.filter(
+                voucher__isnull=False,
+                voucher__redeemed__lt=F('voucher__max_usages'),
+                voucher__valid_until__isnull=False,
+                voucher__valid_until__lte=now()
+            )
+        else:
+            qs = qs.filter(voucher__isnull=True)
+
+        if self.request_data.get("item", "") != "":
+            i = self.request_data.get("item", "")
+            qs = qs.filter(item_id=i)
+
+        if self.request_data.get("subevent", "") != "":
+            s = self.request_data.get("subevent", "")
+            qs = qs.filter(subevent_id=s)
+
+        if 'entry' in self.request_data and '__ALL' not in self.request_data:
+            qs = qs.filter(
+                id__in=self.request_data.getlist('entry')
+            )
+
+        return qs
+
+
+class WaitingListActionView(EventPermissionRequiredMixin, WaitingListQuerySetMixin, View):
     model = WaitingListEntry
-    context_object_name = 'entries'
-    template_name = 'pretixcontrol/waitinglist/index.html'
-    permission = 'can_view_orders'
+    permission = 'can_change_orders'
+
+    def _redirect_back(self):
+        if "next" in self.request.GET and is_safe_url(self.request.GET.get("next"), allowed_hosts=None):
+            return redirect(self.request.GET.get("next"))
+        return redirect(reverse('control:event.orders.waitinglist', kwargs={
+            'event': self.request.event.slug,
+            'organizer': self.request.event.organizer.slug
+        }))
 
     def post(self, request, *args, **kwargs):
-        if not request.user.has_event_permission(request.organizer, request.event, 'can_change_orders',
-                                                 request=request):
-            messages.error(request, _('You do not have permission to do this'))
+        if request.POST.get('action') == 'delete':
+            return render(request, 'pretixcontrol/waitinglist/delete_bulk.html', {
+                'allowed': self.get_queryset().filter(voucher__isnull=True),
+                'forbidden': self.get_queryset().filter(voucher__isnull=False),
+            })
+        elif request.POST.get('action') == 'delete_confirm':
+            for obj in self.get_queryset():
+                if not obj.voucher_id:
+                    obj.log_action('pretix.event.orders.waitinglist.deleted', user=self.request.user)
+                    obj.delete()
+            messages.success(request, _('The selected entries have been deleted.'))
             return self._redirect_back()
 
         if 'assign' in request.POST:
@@ -135,55 +206,12 @@ class WaitingListView(EventPermissionRequiredMixin, PaginationMixin, ListView):
                 return self._redirect_back()
         return self._redirect_back()
 
-    def _redirect_back(self):
-        if "next" in self.request.GET and is_safe_url(self.request.GET.get("next"), allowed_hosts=None):
-            return redirect(self.request.GET.get("next"))
-        return redirect(reverse('control:event.orders.waitinglist', kwargs={
-            'event': self.request.event.slug,
-            'organizer': self.request.event.organizer.slug
-        }))
 
-    def get_queryset(self):
-        qs = WaitingListEntry.objects.filter(
-            event=self.request.event
-        ).select_related('item', 'variation', 'voucher').prefetch_related(
-            'item__quotas', 'variation__quotas'
-        )
-
-        s = self.request.GET.get("status", "")
-        if s == 's':
-            qs = qs.filter(voucher__isnull=False)
-        elif s == 'a':
-            pass
-        elif s == 'r':
-            qs = qs.filter(
-                voucher__isnull=False,
-                voucher__redeemed__gte=F('voucher__max_usages'),
-            )
-        elif s == 'v':
-            qs = qs.filter(
-                voucher__isnull=False,
-                voucher__redeemed__lt=F('voucher__max_usages'),
-            ).filter(Q(voucher__valid_until__isnull=True) | Q(voucher__valid_until__gt=now()))
-        elif s == 'e':
-            qs = qs.filter(
-                voucher__isnull=False,
-                voucher__redeemed__lt=F('voucher__max_usages'),
-                voucher__valid_until__isnull=False,
-                voucher__valid_until__lte=now()
-            )
-        else:
-            qs = qs.filter(voucher__isnull=True)
-
-        if self.request.GET.get("item", "") != "":
-            i = self.request.GET.get("item", "")
-            qs = qs.filter(item_id=i)
-
-        if self.request.GET.get("subevent", "") != "":
-            s = self.request.GET.get("subevent", "")
-            qs = qs.filter(subevent_id=s)
-
-        return qs
+class WaitingListView(EventPermissionRequiredMixin, WaitingListQuerySetMixin, PaginationMixin, ListView):
+    model = WaitingListEntry
+    context_object_name = 'entries'
+    template_name = 'pretixcontrol/waitinglist/index.html'
+    permission = 'can_view_orders'
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
