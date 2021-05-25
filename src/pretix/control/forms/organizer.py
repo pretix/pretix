@@ -285,6 +285,7 @@ class OrganizerSettingsForm(SettingsForm):
     )
     auto_fields = [
         'customer_accounts',
+        'customer_accounts_link_by_email',
         'contact_mail',
         'imprint_url',
         'organizer_info_text',

@@ -118,6 +118,17 @@ DEFAULTS = {
                         "advanced features like memberships.")
         )
     },
+    'customer_accounts_link_by_email': {
+        'default': 'False',
+        'type': bool,
+        'form_class': forms.BooleanField,
+        'serializer_class': serializers.BooleanField,
+        'form_kwargs': dict(
+            label=_("Match orders based on email address"),
+            help_text=_("This will allow registered customers to access orders made with the same email address, even if the customer "
+                        "was not logged in during the purchase.")
+        )
+    },
     'max_items_per_order': {
         'default': '10',
         'type': int,

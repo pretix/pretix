@@ -273,6 +273,7 @@ class TeamMemberSerializer(serializers.ModelSerializer):
 class OrganizerSettingsSerializer(SettingsSerializer):
     default_fields = [
         'customer_accounts',
+        'customer_accounts_link_by_email',
         'contact_mail',
         'imprint_url',
         'organizer_info_text',

@@ -277,10 +277,12 @@ class ProfileView(CustomerRequiredMixin, ListView):
     paginate_by = 20
 
     def get_queryset(self):
-        qs = Order.objects.filter(
-            Q(customer=self.request.customer)
-            | Q(email__iexact=self.request.customer.email)
+        q = Q(customer=self.request.customer)
+        if self.request.organizer.settings.customer_accounts_link_by_email:
             # This is safe because we only let customers with verified emails log in
+            q |= Q(email__iexact=self.request.customer.email)
+        qs = Order.objects.filter(
+            q
         ).select_related('event').order_by('-datetime')
         return qs
 
