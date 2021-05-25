@@ -712,6 +712,14 @@ if config.has_option('sentry', 'dsn') and not any(c in sys.argv for c in ('shell
 
     from .sentry import PretixSentryIntegration, setup_custom_filters
 
+    SENTRY_TOKEN = config.get('sentry', 'traces_sample_token', fallback='')
+
+    def traces_sampler(sampling_context):
+        qs = sampling_context.get('wsgi_environ', {}).get('QUERY_STRING', '')
+        if SENTRY_TOKEN and SENTRY_TOKEN in qs:
+            return 1.0
+        return config.getfloat('sentry', 'traces_sample_rate', fallback=0.0)
+
     SENTRY_ENABLED = True
     sentry_sdk.init(
         dsn=config.get('sentry', 'dsn'),
@@ -723,7 +731,7 @@ if config.has_option('sentry', 'dsn') and not any(c in sys.argv for c in ('shell
                 event_level=logging.CRITICAL
             )
         ],
-        traces_sample_rate=config.getfloat('sentry', 'traces_sample_rate', fallback=0.0),
+        traces_sampler=traces_sampler,
         environment=urlparse(SITE_URL).netloc,
         release=__version__,
         send_default_pii=False,

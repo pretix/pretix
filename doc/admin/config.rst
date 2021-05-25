@@ -351,12 +351,16 @@ application. If you want to use sentry, you need to set a DSN in the configurati
     [sentry]
     dsn=https://<key>:<secret>@sentry.io/<project>
     traces_sample_rate=0.5
+    traces_sample_token=xyz
 
 ``dsn``
     You will be given this value by your sentry installation.
 
 ``traces_sample_rate``
     Sample rate for performance monitoring.
+
+``traces_sample_token``
+    If this token is found in a query string, a trace will always be sampled.
 
 
 Caching
