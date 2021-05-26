@@ -872,6 +872,9 @@ class SubEventBulkCreate(SubEventEditorMixin, EventPermissionRequiredMixin, Asyn
                 )
                 subevents.append(se)
 
+            if len(subevents) > 100_000:
+                raise ValidationError(_('Please do not create more than 100.000 dates at once.'))
+
         for i, se in enumerate(subevents):
             se.save(clear_cache=False)
             if i % 100 == 0:
