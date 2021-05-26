@@ -1417,7 +1417,7 @@ var shared_root_methods = {
                 root.loading--;
                 root.trigger_load_callback();
             }
-            if (root.parent_stack.length > 0 && root.has_seating_plan && root.categories.length === 0 && !root.frame_dismissed && root.useIframe) {
+            if (root.parent_stack.length > 0 && root.has_seating_plan && root.categories.length === 0 && !root.frame_dismissed && root.useIframe && !root.error) {
                 // If we're on desktop and someone selects a seating-only event in a calendar, let's open it right away,
                 // but only if the person didn't close it before.
                 root.startseating()
