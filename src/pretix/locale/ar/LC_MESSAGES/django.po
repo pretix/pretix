@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-05-13 08:11+0000\n"
-"PO-Revision-Date: 2021-05-25 13:09+0000\n"
+"PO-Revision-Date: 2021-05-26 10:00+0000\n"
 "Last-Translator: Mohamed Tawfiq <mtawfiq@wafyapp.com>\n"
 "Language-Team: Arabic <https://translate.pretix.eu/projects/pretix/pretix/ar/"
 ">\n"
@@ -20112,6 +20112,7 @@ msgid "8 portrait A7 pages on one A4 page"
 msgstr "8 صفحات عمودية A7 على صفحة A4 واحدة"
 
 #: pretix/plugins/badges/exporters.py:230
+#, fuzzy
 msgid "None of the selected products is configured to print badges."
 msgstr "لم يتم إعداد أي من المنتجات المحددة لطباعة الشارات."
 
@@ -20136,13 +20137,14 @@ msgid "Rendering option"
 msgstr "خيار التقديم"
 
 #: pretix/plugins/badges/exporters.py:271
+#, fuzzy
 msgid ""
 "This option allows you to align multiple badges on one page, for example if "
 "you want to print to a sheet of stickers with a regular office printer. "
 "Please note that your individual badge layouts must already be in the "
 "correct size."
 msgstr ""
-"يتيح لك هذا الخيار محاذاة شارات متعددة على صفحة واحدة ، على سبيل المثال إذا "
+"يتيح لك هذا الخيار ترتيب شارات متعددة على صفحة واحدة ، على سبيل المثال إذا "
 "كنت تريد الطباعة على ورقة من الملصقات باستخدام طابعة مكتب عادية. يرجى ملاحظة "
 "أن تخطيطات شارتك الفردية يجب أن تكون بالحجم الصحيح مسبقا."
 
@@ -20150,13 +20152,13 @@ msgstr ""
 #: pretix/plugins/checkinlists/exporters.py:83
 #: pretix/plugins/ticketoutputpdf/exporters.py:77
 msgid "Only include tickets for dates on or after this date."
-msgstr "قم بتضمين تذاكر لتواريخ في هذا التاريخ أو بعده فقط."
+msgstr "قم بتضمين تذاكر لفترة في هذا التاريخ أو بعده فقط."
 
 #: pretix/plugins/badges/exporters.py:287
 #: pretix/plugins/checkinlists/exporters.py:90
 #: pretix/plugins/ticketoutputpdf/exporters.py:84
 msgid "Only include tickets for dates on or before this date."
-msgstr "قم بتضمين تذاكر لتواريخ في هذا التاريخ أو قبله فقط."
+msgstr "قم بتضمين تذاكر لفترة في هذا التاريخ أو قبله فقط."
 
 #: pretix/plugins/badges/exporters.py:291
 #: pretix/plugins/checkinlists/exporters.py:104
@@ -20345,7 +20347,7 @@ msgid ""
 "numbers, routing numbers, addresses, etc."
 msgstr ""
 "بالنسبة لحسابات SEPA ، يمكنك ترك هذا فارغا. بخلاف ذلك ، يرجى إضافة كل ما "
-"يحتاجه عملاؤك لتحويل الأموال ، على سبيل المثال أرقام الحسابات وأرقام التوجيه "
+"يحتاجه عملاؤك لتحويل المبالغ ، على سبيل المثال أرقام الحسابات وأرقام التوجيه "
 "والعناوين وما إلى ذلك."
 
 #: pretix/plugins/banktransfer/payment.py:139
@@ -20354,11 +20356,11 @@ msgid ""
 "otherwise configured to create invoices after payment is completed."
 msgstr ""
 "قم بإنشاء فاتورة للطلبات باستخدام التحويل المصرفي على الفور إذا تم إعداد "
-"الفعالية بطريقة أخرى لإنشاء الفواتير بعد إتمام الدفع."
+"الفعالية بطريقة أخرى تسمح بإنشاء الفواتير بعد إتمام الدفع."
 
 #: pretix/plugins/banktransfer/payment.py:149
 msgid "Do not include hyphens in the payment reference."
-msgstr "لا تقم بتضمين واصلات في مرجع الدفع."
+msgstr "لا تقم بتضمين الشرطات في مرجع الدفع."
 
 #: pretix/plugins/banktransfer/payment.py:150
 msgid "This is required in some countries."
@@ -20372,7 +20374,7 @@ msgstr "قم بتضمين رقم الفاتورة في مرجع الدفع."
 #, fuzzy
 #| msgid "Tax rule for payment fees"
 msgid "Prefix for the payment reference"
-msgstr "بادئة مرجع الدفع"
+msgstr "رمز يسبق مرجع الدفع"
 
 #: pretix/plugins/banktransfer/payment.py:162
 msgid "Additional text to show on pending orders"
@@ -20386,6 +20388,7 @@ msgstr ""
 "سيظهر هذا النص في صفحة تأكيد الطلب للأوامر المعلقة بالإضافة إلى النص المعتاد."
 
 #: pretix/plugins/banktransfer/payment.py:169
+#, fuzzy
 msgid "IBAN blocklist for refunds"
 msgstr "قائمة حظر IBAN للمبالغ المستردة"
 
@@ -20398,11 +20401,11 @@ msgid ""
 "country codes such as \"GB\" if you never want to send refunds to IBANs from "
 "a specific country."
 msgstr ""
-"ضع رقم الحساب المصرفي الدولي IBAN أو بادئة IBAN في كل سطر. لن يحاول النظام "
-"إرسال المبالغ المستردة إلى أي من أرقام IBAN هذه. مفيد على سبيل المثال إذا "
-"تلقيت الكثير من \"الدفعات المحولة\" من قبل موفر دفع تابع لجهة خارجية. يمكنك "
-"أيضا سرد رموز البلدان مثل \"GB\" إذا كنت لا ترغب أبدا في إرسال المبالغ "
-"المستردة إلى أرقام IBAN من بلد معين."
+"ضع رقم الحساب المصرفي الدولي IBAN أو الرمز الذي يسبق IBAN في كل سطر. لن "
+"يحاول النظام إرسال المبالغ المستردة إلى أي من أرقام IBAN هذه. مفيد على سبيل "
+"المثال إذا تلقيت الكثير من \"الدفعات المحولة\" من قبل موفر دفع تابع لجهة "
+"خارجية. يمكنك أيضا سرد رموز البلدان مثل \"GB\" إذا كنت لا ترغب أبدا في إرسال "
+"المبالغ المستردة إلى أرقام IBAN من بلد معين."
 
 #: pretix/plugins/banktransfer/payment.py:210
 msgid "Please fill out your bank account details."
@@ -20421,6 +20424,7 @@ msgstr "الرجاء إدخال تفاصيل حسابك المصرفي."
 #: pretix/plugins/stripe/payment.py:1272
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_confirm.html:22
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_confirm.html:25
+#, fuzzy
 msgid "Account holder"
 msgstr "مالك الحساب"
 
@@ -20431,11 +20435,11 @@ msgstr "مالك الحساب"
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:27
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:33
 msgid "Bank"
-msgstr "بنك"
+msgstr "مصرف"
 
 #: pretix/plugins/banktransfer/payment.py:278
 msgid "Invalid IBAN/BIC"
-msgstr "أرقام IBAN/BIC غير صالحة"
+msgstr "رقم IBAN/BIC غير صالح"
 
 #: pretix/plugins/banktransfer/payment.py:347
 #, python-brace-format
@@ -20452,7 +20456,7 @@ msgstr "رقم BIC (اختياري)"
 
 #: pretix/plugins/banktransfer/payment.py:422
 msgid "Your input was invalid, please see below for details."
-msgstr "الإدخالات الخاصة بك غير صالحة ، الرجاء انظر أدناه للحصول على التفاصيل"
+msgstr "الإدخالات الخاصة بك غير صالحة ، الرجاء انظر أدناه للحصول على التفاصيل."
 
 #: pretix/plugins/banktransfer/refund_export.py:46
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/control.html:5
@@ -20467,11 +20471,13 @@ msgstr "المسدد"
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_base.html:7
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_base_organizer.html:4
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_base_organizer.html:7
+#, fuzzy
 msgid "Import bank data"
 msgstr "قم باستيراد بيانات البنك"
 
 #: pretix/plugins/banktransfer/signals.py:61
 #: pretix/plugins/banktransfer/signals.py:97
+#, fuzzy
 msgid "Export refunds"
 msgstr "قم بتصدير المبالغ المستردة"
 
@@ -20486,7 +20492,7 @@ msgstr "تم إلغاء الطلب سابقا."
 
 #: pretix/plugins/banktransfer/tasks.py:156
 msgid "Automatic split to multiple orders not possible."
-msgstr "التقسيم التلقائي لطلبات متعددة غير ممكن."
+msgstr "التقسيم التلقائي للطلبات المتعددة غير ممكن."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_payment_form.html:4
 msgid ""
@@ -20505,20 +20511,15 @@ msgstr "الرمز المرجعي (مهم):"
 msgid ""
 "We will assign you a personal reference code to use after you completed the "
 "order."
-msgstr ""
+msgstr "سنخصص لك رمزا مرجعيا شخصيا لاستخدامه بعد إتمام الطلب."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/control.html:8
-#, fuzzy
-#| msgid "Amount"
 msgid "Account"
-msgstr "كمية"
+msgstr "حساب"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/control.html:22
-#, fuzzy
-#| msgctxt "amount_label"
-#| msgid "Transfer"
 msgid "Transfer amount"
-msgstr "نقل"
+msgstr "مبلغ التحويل"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/control.html:26
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_assign.html:33
@@ -20542,7 +20543,7 @@ msgstr ""
 "\n"
 "يرجى تحويل المبلغ كاملا إلى الحساب المصرفي التالي.\n"
 "\n"
-"    إشارة: %(code)s\n"
+"    مرجع: %(code)s\n"
 "    المبلغ: %(total)s\n"
 "%(bank)s\n"
 
@@ -20552,25 +20553,24 @@ msgid ""
 "are aligned. Please help us by selecting which column contain what kind of "
 "data."
 msgstr ""
-"كنا غير قادرين على تحديد تلقائيا كيف يتم محاذاة الأعمدة في الملف الخاص بك. "
-"الرجاء مساعدتنا من خلال اختيار العمود الذي يحتوي على أي نوع من البيانات."
+"لم نتمكن من تحديد كيفية محاذاة الأعمدة في ملفك تلقائيا. الرجاء مساعدتنا "
+"بتحديد العمود الذي يحتوي على نوع البيانات."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_assign.html:95
 msgid ""
 "More data was uploaded but is not shown here. It will still be processed"
-msgstr "تم تحميل المزيد من البيانات ولكن لم يتم المعروضة هنا. ستظل معالجتها"
+msgstr "تم تحميل المزيد من البيانات ولكن لم تظهر هنا. ستظل قيد المعالجة"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_base.html:9
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_base_organizer.html:9
 msgid "Import currently running…"
-msgstr ""
+msgstr "الاستيراد قيد التشغيل حاليا …"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_base.html:11
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_base_organizer.html:11
-#, fuzzy, python-format
-#| msgid "Last updated: %(date)s"
+#, python-format
 msgid "Last import: %(date)s"
-msgstr "آخر تحديث: %(date)s"
+msgstr "آخر استيراد: %(date)s"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:8
 #, python-format
@@ -20578,82 +20578,83 @@ msgid ""
 "In the payment settings of your event, you set the %(date)s as the last date "
 "of any payments. Therefore, you won't be able to mark any order as paid here."
 msgstr ""
-"في إعدادات دفع هذا الحدث الخاص بك، يمكنك تعيين %(date)s موعدا الأخير من أي "
-"مدفوعات. لذلك، فلن تكون قادرا على تمييز أي أمر كما دفعت هنا."
+"في إعدادات الدفع الخاصة بفعاليتك، قمت بتعيين %(date)s كآخر تاريخ لأي "
+"مدفوعات. لذلك ، لن تتمكن من وضع علامة على أي طلب على أنه مدفوع هنا."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:19
 msgid ""
 "This page allows you to upload bank statement files to process incoming "
 "payments."
 msgstr ""
-"تتيح هذه الصفحة لك بتحميل الملفات كشف حساب بنكي لمعالجة الدفعات الواردة."
+"تسمح لك هذه الصفحة بتحميل ملفات كشوف الحسابات البنكية لمعالجة المدفوعات "
+"الواردة."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:22
 msgid ""
 "Currently, this feature supports <code>.csv</code> files and files in the "
 "MT940 format."
-msgstr "تدعم هذه الخاصية حاليا ملفات  <code>.csv</code> والملفات بصيغةMT940."
+msgstr "حاليا ، هذه الميزة تدعم ملفات <code>.csv</code> والملفات بصيغة MT940."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:29
 #: pretix/plugins/banktransfer/views.py:522
 msgid ""
 "An import is currently being processed, please try again in a few minutes."
-msgstr "استيراد ويجري حاليا معالجتها، يرجى المحاولة مرة أخرى في بضع دقائق."
+msgstr ""
+"تتم حاليا معالجة عملية استيراد ، يرجى المحاولة مرة أخرى في غضون بضع دقائق."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:40
 msgid "Start upload"
-msgstr "تحميل بداية"
+msgstr "ابدأ التحميل"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:50
 msgid "Unresolved transactions"
-msgstr "المعاملات التي لم تحل"
+msgstr "المعاملات التي لم يتم حلها"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:55
 msgid ""
 "On this page, you can import banking data on a per-event level. You also "
 "only see unmatched transactions imported directly for this event."
 msgstr ""
-"في هذه الصفحة، يمكنك استيراد البيانات المصرفية على مستوى كل حدث. ترى أيضا "
-"فقط المعاملات التي لا تضاهى المستوردة مباشرة لهذا الحدث."
+"في هذه الصفحة ، يمكنك استيراد البيانات المصرفية على مستوى كل فعالية. يمكنك "
+"أيضا مشاهدة المعاملات غير المتطابقة التي تم استيرادها مباشرة لهذه الفعالية."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:60
+#, fuzzy
 msgid "Go to organizer-level import"
-msgstr "الذهاب إلى استيراد على مستوى منظم"
+msgstr "انتقل إلى الاستيراد على مستوى المنظم"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:67
-#, fuzzy
-#| msgid "Amount"
 msgid "Amount from"
-msgstr "كمية"
+msgstr "المبلغ من"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:69
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:75
+#, fuzzy
 msgid "up to"
-msgstr ""
+msgstr "يصل إلى"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:81
+#, fuzzy
 msgid "Clear"
-msgstr ""
+msgstr "امسح"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:90
 msgid "Discard all"
-msgstr "تجاهل كل"
+msgstr "تجاهل الكل"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:102
 msgid "Your search matched no transactions."
-msgstr "بحثك مطابقة أية معاملات."
+msgstr "بحثك لم يطابق أي معاملات."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/job_detail.html:5
 msgid "Import result"
-msgstr "نتيجة استيراد"
+msgstr "نتيجة الاستيراد"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/job_detail.html:12
 msgid ""
 "The result of your import is in progress. Please be patient while we process "
 "the data …"
-msgstr ""
-"نتيجة لاستيراد الخاص بك هو في التقدم. يرجى التحلي بالصبر بينما نعالج "
-"البيانات ..."
+msgstr "نتيجة الاستيراد قيد التقدم. يرجى التحلي بالصبر أثناء معالجة البيانات …"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/job_detail.html:18
 msgid "An internal error occurred during processing your data."
@@ -20661,18 +20662,16 @@ msgstr "حدث خطأ داخلي أثناء معالجة البيانات الخ
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/job_detail.html:19
 msgid "Some transactions might be missing, please try to re-import the file."
-msgstr ""
-"بعض المعاملات قد يكون في عداد المفقودين، يرجى المحاولة ملف التمديد إعادة "
-"الاستيراد."
+msgstr "قد تكون بعض المعاملات مفقودة ، يرجى محاولة إعادة استيراد الملف."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/job_detail.html:23
 msgid ""
 "Your import did not contain any transactions that you did not import before."
-msgstr "لم الاستيراد الخاص بك لا تحتوي على أي المعاملات التي لم تستورد من قبل."
+msgstr "لم يتضمن استيرادك أي معاملات لم تقم باستيرادها من قبل."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/job_detail.html:30
 msgid "Orders marked as paid"
-msgstr "أوامر وضع علامة على دفع"
+msgstr "تم وضع علامة على الطلبات على أنها مدفوعة"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/job_detail.html:34
 msgid "Invalid payments"
@@ -20680,11 +20679,11 @@ msgstr "مدفوعات غير صالحة"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/job_detail.html:38
 msgid "Ignored payments"
-msgstr "المدفوعات تجاهل"
+msgstr "المدفوعات المتجاهلة"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/job_detail.html:44
 msgid "Review invalid and ignored payments"
-msgstr "مراجعة المدفوعات غير صالحة وتجاهلها"
+msgstr "مراجعة المدفوعات غير الصالحة والمتجاهلة"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:13
 msgid "Please transfer the full amount to the following bank account:"
@@ -20692,29 +20691,29 @@ msgstr "يرجى تحويل المبلغ كاملا إلى الحساب المص
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:29
 msgid "Amount:"
-msgstr "كمية:"
+msgstr "مبلغ:"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:33
 msgid ""
 "After you sent the bank transfer, you can close this window. We will send "
 "you an email as soon as we received your payment."
 msgstr ""
-"بعد قمت بإرسال حوالة مصرفية، يمكنك إغلاق هذه النافذة. سوف نرسل لك رسالة "
-"بالبريد الالكتروني في أقرب وقت تلقينا الدفع الخاصة بك."
+"بعد إرسال التحويل المصرفي ، يمكنك إغلاق هذه النافذة. سنرسل لك بريدا "
+"إلكترونيا بمجرد استلامنا للدفع."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:63
 msgid "Open banking app"
-msgstr "التطبيق المصرفي المفتوح"
+msgstr "افتح التطبيق المصرفي"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:65
 msgid "Requires that the app supports BezahlCode"
-msgstr "يتطلب أن التطبيق يدعم BezahlCode"
+msgstr "يتطلب أن يدعم التطبيق BezahlCode"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:5
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:7
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/sepa_export.html:7
 msgid "Export bank transfer refunds"
-msgstr ""
+msgstr "تصدير المبالغ المستردة عن طريق التحويل المصرفي"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:9
 #, python-format
@@ -20722,34 +20721,30 @@ msgid ""
 "<strong>%(num_new)s</strong> Bank transfer refunds have been placed and are "
 "not yet part of an export."
 msgstr ""
+"<strong>%(num_new)s</strong> تم رد المبالغ المستردة عن طريق التحويل المصرفي "
+"ولم تعد جزءا من عملية تصدير حتى الآن."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:15
 msgid "In test mode, your exports will only contain test mode orders."
-msgstr ""
+msgstr "في وضع الاختبار ، ستحتوي صادراتك على طلبات وضع الاختبار فقط."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:19
 msgid ""
 "If you want, you can now also create these exports for multiple events "
 "combined."
-msgstr ""
+msgstr "إذا كنت تريد ، يمكنك الآن أيضا إنشاء هذه الصادرات لفعاليات متعددة معا."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:22
-#, fuzzy
-#| msgid "Go to organizer-level import"
 msgid "Go to organizer-level exports"
-msgstr "الذهاب إلى استيراد على مستوى منظم"
+msgstr "انتقل إلى عمليات التصدير على مستوى المنظم"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:32
-#, fuzzy
-#| msgid "Create a new tax rule"
 msgid "Create new export file"
-msgstr "إنشاء قاعدة ضريبية جديدة"
+msgstr "أنشئ ملف تصدير جديد"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:38
-#, fuzzy
-#| msgid "Please transfer the full amount to the following bank account:"
 msgid "Aggregate transactions to the same bank account"
-msgstr "يرجى تحويل المبلغ كاملا إلى الحساب المصرفي التالي:"
+msgstr "تجميع المعاملات لنفس الحساب المصرفي"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:43
 msgid ""
@@ -20760,53 +20755,47 @@ msgid ""
 "refunds.\n"
 "                "
 msgstr ""
+"\n"
+"                    احذر من أنه سيتم وضع علامة \"تم\" على عمليات الاسترداد "
+"بمجرد إنشاء التصدير.\n"
+"تأكد من تنزيل التصدير وتنفيذ الاسترداد.\n"
+"                "
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:50
-#, fuzzy
-#| msgid "Import file"
 msgid "Exported files"
-msgstr "استيراد ملف"
+msgstr "الملفات المصدرة"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:55
-#, fuzzy
-#| msgid "Expiry date"
 msgid "Export date"
-msgstr "تاريخ الانتهاء"
+msgstr "تاريخ التصدير"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:56
-#, fuzzy
-#| msgid "Number of days"
 msgid "Number of orders"
-msgstr "عدد الأيام"
+msgstr "عدد الطلبات"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:76
-#, fuzzy
-#| msgid "Ticket download"
 msgid "not downloaded"
-msgstr "حمل تذكرة"
+msgstr "لم يتم تحميله"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:81
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:92
-#, fuzzy
-#| msgid "Download date"
 msgid "Download CSV"
-msgstr "تاريخ التحميل"
+msgstr "قم بتنزيل ملف CSV"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:86
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:97
+#, fuzzy
 msgid "SEPA XML"
-msgstr ""
+msgstr "‏SEPA XML"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:106
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "{} new dates have been created."
 msgid "No exports have been created yet."
-msgstr "وقد تم إنشاء {} مواعيد جديدة."
+msgstr "لم يتم إنشاء أي صادرات حتى الآن."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/sepa_export.html:10
+#, fuzzy
 msgid "Export SEPA xml"
-msgstr ""
+msgstr "تصدير SEPA xml"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/sepa_export.html:13
 #, python-format
@@ -20826,35 +20815,34 @@ msgstr[5] ""
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/sepa_export.html:23
 msgid ""
 "Please state from which bank account the refunds should be transferred from."
-msgstr ""
+msgstr "يرجى تحديد الحساب المصرفي الذي يجب تحويل المبالغ المستردة منه."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/sepa_export.html:34
-#, fuzzy
-#| msgid "Download date"
 msgid "Download"
-msgstr "تاريخ التحميل"
+msgstr "تحميل"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:12
+#, fuzzy
 msgid "Payer and reference"
-msgstr "دافع والمرجعية"
+msgstr "الدافع والمرجع"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:14
 msgid "Result"
-msgstr "النتائج"
+msgstr "نتيجة"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:25
 msgid "Accept anyway"
-msgstr "استعرض على أي حال"
+msgstr "اقبل على أي حال"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:31
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:44
 msgid "Assign to order"
-msgstr "تعيين لأجل"
+msgstr "تعيين للطلب"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:37
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:49
 msgid "Retry"
-msgstr "إعادة المحاولة"
+msgstr "أعد المحاولة"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:80
 msgid "Comment:"
@@ -20862,23 +20850,23 @@ msgstr "تعليق:"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:92
 msgid "No order code detected"
-msgstr "الكشف عن أي رمز النظام"
+msgstr "لم يتم الكشف عن أي رمز طلب"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:94
 msgid "Invalid for this order"
-msgstr "غير صالح لهذا النظام"
+msgstr "غير صالح لهذا الطلب"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:96
 msgid "Error while processing"
-msgstr "حدث خطأ أثناء معالجة"
+msgstr "خطأ أثناء المعالجة"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:98
 msgid "The order is already marked as paid"
-msgstr "وبالفعل وضعت النظام كما المدفوعة"
+msgstr "تم سابقا وضع علامة على الطلب على أنه مدفوع"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:100
 msgid "Order already paid"
-msgstr "أجل دفع بالفعل"
+msgstr "تم دفع الطلب مسبقا"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:117
 msgid "Discard"
@@ -20888,55 +20876,47 @@ msgstr "تجاهل"
 msgid ""
 "Negative amount but refund can't be logged, please create manual refund "
 "first."
-msgstr "القيم السالبة و لكن الإسترجاع لايمكن تسجيله، فضلا أنشئ إسترجاع يدوي."
+msgstr ""
+"مبلغ سلبي ولكن لا يمكن تسجيل رد الأموال ، يرجى إنشاء رد الأموال يدويا أولا."
 
 #: pretix/plugins/banktransfer/views.py:161
 msgid "Problem sending email."
-msgstr "مشكلة إرسال البريد الإلكتروني."
+msgstr "مشكلة في إرسال البريد الإلكتروني."
 
 #: pretix/plugins/banktransfer/views.py:182
 msgid "Unknown order code"
-msgstr "كود أجل غير معروف"
+msgstr "رمز طلب غير معروف"
 
 #: pretix/plugins/banktransfer/views.py:331
-#, fuzzy
-#| msgid "Search"
 msgid "Search text"
-msgstr "بحث"
+msgstr "نص البحث"
 
 #: pretix/plugins/banktransfer/views.py:332
-#, fuzzy
-#| msgid "Imprint"
 msgid "min"
-msgstr "المنظم"
+msgstr "أدنى"
 
 #: pretix/plugins/banktransfer/views.py:333
-#, fuzzy
-#| msgid "Tax"
 msgid "max"
-msgstr "ضريبة"
+msgstr "أقصى"
 
 #: pretix/plugins/banktransfer/views.py:342
-#, fuzzy
-#| msgid "This VAT ID is not valid."
 msgid "Filter form is not valid."
-msgstr "هذا ID ضريبة القيمة المضافة غير صالح."
+msgstr "نموذج التصفية غير صالح."
 
 #: pretix/plugins/banktransfer/views.py:385
 msgid "All unresolved transactions have been discarded."
-msgstr "لقد تم تجاهل جميع المعاملات التي لم تحل بعد."
+msgstr "تم تجاهل جميع المعاملات التي لم يتم حلها."
 
 #: pretix/plugins/banktransfer/views.py:404
 msgid "You must choose a file to import."
-msgstr "يجب عليك اختيار ملف لاستيراد."
+msgstr "يجب عليك اختيار ملف لاستيراده."
 
 #: pretix/plugins/banktransfer/views.py:408
 msgid ""
 "We were unable to detect the file type of this import. Please contact "
 "support for help."
 msgstr ""
-"لم نتمكن من الكشف عن نوع ملف من هذا الاستيراد. دعم الإتصال بنا للحصول على "
-"المساعدة."
+"لم نتمكن من الكشف عن نوع ملف هذا الاستيراد. الرجاء الاتصال بالدعم للمساعدة."
 
 #: pretix/plugins/banktransfer/views.py:421
 #: pretix/plugins/banktransfer/views.py:465
@@ -20947,32 +20927,30 @@ msgstr "لم نتمكن من معالجة المدخلات الخاصة بك."
 msgid ""
 "I'm sorry, but we were unable to import this CSV file. Please contact "
 "support for help."
-msgstr ""
-"أنا آسف، لكننا لم نتمكن من استيراد هذا الملف CSV. دعم الإتصال بنا للحصول على "
-"المساعدة."
+msgstr "عذرا ، لم نتمكن من استيراد ملف CSV هذا. الرجاء الاتصال بالدعم للمساعدة."
 
 #: pretix/plugins/banktransfer/views.py:435
 msgid ""
 "I'm sorry, but we detected this file as empty. Please contact support for "
 "help."
 msgstr ""
-"أنا آسف، ولكن اكتشفنا هذا الملف فارغ. دعم الإتصال بنا للحصول على المساعدة."
+"أنا آسف ، لكننا اكتشفنا أن هذا الملف فارغ. الرجاء الاتصال بالدعم للمساعدة."
 
 #: pretix/plugins/banktransfer/views.py:455
 msgid "Invalid input data."
-msgstr "إدخال البيانات غير صالح."
+msgstr "بيانات الإدخال غير صالحة."
 
 #: pretix/plugins/banktransfer/views.py:459
 msgid "You need to select the column containing the payment reference."
-msgstr "تحتاج إلى تحديد العمود الذي يحتوي المرجع الدفع."
+msgstr "تحتاج إلى تحديد العمود الذي يحتوي على مرجع الدفع."
 
 #: pretix/plugins/banktransfer/views.py:580
 msgid ""
 "Please perform per-event bank imports as this organizer has events with "
 "multiple currencies."
 msgstr ""
-"يرجى إجراء في الحدث الواردات البنك في هذه المنظمة لها الأحداث مع بعملات "
-"متعددة."
+"يرجى إجراء عمليات استيراد مصرفية لكل فعالية لأن هذا المنظم لديه فعاليات "
+"بعملات متعددة."
 
 #: pretix/plugins/banktransfer/views.py:672
 #, python-brace-format
@@ -20980,126 +20958,118 @@ msgid ""
 "We could not find bank account information for the refund {refund_id}. It "
 "was marked as failed."
 msgstr ""
+"لم نتمكن من العثور على معلومات الحساب المصرفي لعملية رد الأموال {refund_id}. "
+"تم وضع علامة عليه على أنه لم يتم."
 
 #: pretix/plugins/banktransfer/views.py:703
-#, fuzzy
-#| msgid "The order has been canceled."
 msgid "No valid orders have been found."
-msgstr "تم إلغاء هذا الأمر."
+msgstr "لم يتم العثور على طلبات صالحة."
 
 #: pretix/plugins/banktransfer/views.py:736
-#, fuzzy
-#| msgid ""
-#| "Please perform per-event bank imports as this organizer has events with "
-#| "multiple currencies."
 msgid ""
 "Please perform per-event refund exports as this organizer has events with "
 "multiple currencies."
 msgstr ""
-"يرجى إجراء في الحدث الواردات البنك في هذه المنظمة لها الأحداث مع بعملات "
-"متعددة."
+"يرجى إجراء عمليات تصدير لرد الأموال لكل فعالية لأن هذا المنظم لديه فعاليات "
+"بعملات متعددة."
 
 #: pretix/plugins/checkinlists/apps.py:47
 msgid "Check-in list exporter"
-msgstr "تحقق في مصدر قائمة"
+msgstr "تحقق في قائمة المصدر"
 
 #: pretix/plugins/checkinlists/apps.py:51
 msgid "This plugin allows you to generate check-in lists for your conference."
-msgstr "هذا البرنامج المساعد يسمح لك لتوليد الاختيار في القوائم لمؤتمركم."
+msgstr "يتيح لك هذا المكون الإضافي إنشاء قوائم تسجيل وصول لمؤتمرك."
 
 #: pretix/plugins/checkinlists/exporters.py:94
+#, fuzzy
 msgid "Include QR-code secret"
-msgstr "تتضمن QR رمز سري"
+msgstr "قم بتضمين رمز استجابة سريعة سري"
 
 #: pretix/plugins/checkinlists/exporters.py:99
-#, fuzzy
-#| msgid "Requires special attention"
 msgid "Only tickets requiring special attention"
-msgstr "يتطلب اهتماما خاصا"
+msgstr "فقط التذاكر التي تتطلب اهتماما خاصا"
 
 #: pretix/plugins/checkinlists/exporters.py:119
 msgid "Include questions"
-msgstr "وتشمل الأسئلة"
+msgstr "قم بتضمين الأسئلة"
 
 #: pretix/plugins/checkinlists/exporters.py:264
+#, fuzzy
 msgid "Check-in list (PDF)"
-msgstr "تحقق في قائمة (PDF)"
+msgstr "قائمة التسجيل (PDF)"
 
 #. Translators: maximum 5 characters
 #: pretix/plugins/checkinlists/exporters.py:330
 msgctxt "tablehead"
 msgid "paid"
-msgstr "مدفع"
+msgstr "مدفوع"
 
 #: pretix/plugins/checkinlists/exporters.py:442
 #, fuzzy
 #| msgid "Checkout"
 msgid "Checked out"
-msgstr "الدفع"
+msgstr "تم فحصه"
 
 #: pretix/plugins/checkinlists/exporters.py:442
 #: pretix/plugins/checkinlists/exporters.py:618
+#, fuzzy
 msgid "Automatically checked in"
-msgstr "التحقق تلقائيا في"
+msgstr "تم تسجيل الوصول إليه تلقائيا"
 
 #: pretix/plugins/checkinlists/exporters.py:451
 #: pretix/plugins/checkinlists/exporters.py:613
 #: pretix/plugins/paypal/payment.py:122
 msgid "Secret"
-msgstr "سر"
+msgstr "سري"
 
 #: pretix/plugins/checkinlists/exporters.py:599
 msgid "Check-in log (all successful scans)"
-msgstr ""
+msgstr "تسجيل الدخول (جميع عمليات الفحص الناجحة)"
 
 #: pretix/plugins/checkinlists/exporters.py:610
-#, fuzzy
-#| msgid "Card type"
 msgid "Scan type"
-msgstr "نوع البطاقة"
+msgstr "نوع المسح الضوئي"
 
 #: pretix/plugins/checkinlists/exporters.py:616
-#, fuzzy
-#| msgid "Devices"
 msgid "Device"
-msgstr "الأجهزة"
+msgstr "جهاز"
 
 #: pretix/plugins/checkinlists/exporters.py:617
 #, fuzzy
 #| msgid "Order overview"
 msgid "Offline override"
-msgstr "نظرة عامة ترتيب"
+msgstr "تجاوز وضع عدم الاتصال"
 
 #: pretix/plugins/checkinlists/exporters.py:692
-#, fuzzy
-#| msgid "Check-in lists"
 msgid "All check-in lists"
-msgstr "تحقق في القوائم"
+msgstr "جميع قوائم التسجيل"
 
 #: pretix/plugins/manualpayment/apps.py:37
 msgid "This plugin adds a customizable payment method for manual processing."
-msgstr "ويضيف هذا البرنامج المساعد طريقة الدفع تخصيص لمعالجة اليدوي."
+msgstr "يضيف هذا البرنامج المساعد طريقة دفع قابلة للتخصيص للمعالجة اليدوية."
 
 #: pretix/plugins/paypal/apps.py:44 pretix/plugins/paypal/apps.py:47
 #: pretix/plugins/paypal/payment.py:74
+#, fuzzy
 msgid "PayPal"
 msgstr "باي بال"
 
 #: pretix/plugins/paypal/apps.py:51
 msgid "This plugin allows you to receive payments via PayPal"
-msgstr "يسمح هذا البرنامج المساعد لك الحصول على الدفع عن طريق باي بال"
+msgstr "يتيح لك هذا المكون الإضافي تلقي المدفوعات عبر PayPal"
 
 #: pretix/plugins/paypal/payment.py:90
 msgid ""
 "The PayPal sandbox is being used, you can test without actually sending "
 "money but you will need a PayPal sandbox user to log in."
 msgstr ""
-"يتم استخدام رمل باي بال، يمكنك اختبار الواقع دون ارسال المال ولكن سوف تحتاج "
-"إلى المستخدم رمل باي بال للدخول."
+"يتم استخدام PayPal sandbox ، يمكنك الاختبار دون إرسال الأموال فعليًا ولكنك "
+"ستحتاج إلى مستخدم PayPal sandbox لتسجيل الدخول."
 
 #: pretix/plugins/paypal/payment.py:102
 msgid "PayPal account"
-msgstr "حساب باي بال"
+msgstr "حساب PayPal"
 
 #: pretix/plugins/paypal/payment.py:115 pretix/plugins/stripe/payment.py:191
 #, python-brace-format
@@ -21109,7 +21079,7 @@ msgstr "<a target=\"_blank\" rel=\"noopener\" href=\"{docs_url}\">{text}</a>"
 #: pretix/plugins/paypal/payment.py:116 pretix/plugins/stripe/payment.py:192
 msgid "Click here for a tutorial on how to obtain the required keys"
 msgstr ""
-"انقر هنا للحصول على البرنامج التعليمي حول كيفية الحصول على مفاتيح المطلوبة"
+"انقر هنا للحصول على برنامج تعليمي حول كيفية الحصول على المفاتيح المطلوبة"
 
 #: pretix/plugins/paypal/payment.py:128 pretix/plugins/stripe/payment.py:171
 msgid "Endpoint"
@@ -21119,48 +21089,52 @@ msgstr "نقطة النهاية"
 #, fuzzy
 #| msgid "Reference code"
 msgid "Reference prefix"
-msgstr "رمز مرجع"
+msgstr "بادئة المرجع"
 
 #: pretix/plugins/paypal/payment.py:141
 msgid ""
 "Any value entered here will be added in front of the regular booking "
 "reference containing the order number."
 msgstr ""
+"ستتم إضافة أي قيمة يتم إدخالها هنا أمام مرجع الحجز العادي الذي يحتوي على رقم "
+"الطلب."
 
 #: pretix/plugins/paypal/payment.py:170
+#, fuzzy
 msgid ""
 "To accept payments via PayPal, you will need an account at PayPal. By "
 "clicking on the following button, you can either create a new PayPal account "
 "connect pretix to an existing one."
 msgstr ""
-"لقبول الدفع عن طريق باي بال، وسوف تحتاج حساب في باي بال. من خلال النقر على "
-"الزر التالي، يمكنك إما إنشاء باي بال جديدة حساب pretix اتصال واحدة موجودة."
+"لقبول المدفوعات عبر PayPal ، ستحتاج إلى حساب في PayPal. من خلال النقر على "
+"الزر التالي ، يمكنك إما إنشاء حساب PayPal جديد يربط pretix بحساب موجود."
 
 #: pretix/plugins/paypal/payment.py:174
 #, python-brace-format
 msgid "Connect with {icon} PayPal"
-msgstr "تواصل مع {icon} باي بال"
+msgstr "اتصل مع {icon} باي بال"
 
 #: pretix/plugins/paypal/payment.py:184
 msgid "Disconnect from PayPal"
-msgstr "قطع من باي بال"
+msgstr "اقطع الاتصال ب PayPal"
 
 #: pretix/plugins/paypal/payment.py:188
+#, fuzzy
 msgid ""
 "Please configure a PayPal Webhook to the following endpoint in order to "
 "automatically cancel orders when payments are refunded externally."
 msgstr ""
-"يرجى تكوين وباي بال Webhook إلى نقطة النهاية التالية من أجل إلغاء أوامر "
-"تلقائيا عند المدفوعات وردها خارجيا."
+"يرجى إعداد PayPal Webhook إلى نقطة النهاية التالية لإلغاء الطلبات تلقائيا "
+"عند رد المدفوعات خارجيا."
 
 #: pretix/plugins/paypal/payment.py:199
 msgid "PayPal does not process payments in your event's currency."
-msgstr ""
+msgstr "لا يعالج PayPal المدفوعات بعملة الفعالية الخاصة بك."
 
 #: pretix/plugins/paypal/payment.py:200
 msgid ""
 "Please check this PayPal page for a complete list of supported currencies."
-msgstr ""
+msgstr "يرجى مراجعة صفحة PayPal هذه للحصول على قائمة كاملة بالعملات المدعومة."
 
 #: pretix/plugins/paypal/payment.py:205
 msgid ""
@@ -21170,13 +21144,16 @@ msgid ""
 "country and use the same currency. Out of country accounts will not be able "
 "to send any payments."
 msgstr ""
+"يدعم PayPal عملة الفعالية الخاصة بك كعملة دفع ورصيد للحسابات داخل البلد فقط. "
+"هذا يعني أنه يجب إنشاء حساب PayPal المستلم وكذلك حساب المرسل في نفس البلد "
+"واستخدام نفس العملة. لن تتمكن الحسابات خارج الدولة من إرسال أي مدفوعات."
 
 #: pretix/plugins/paypal/payment.py:253 pretix/plugins/paypal/payment.py:311
 #: pretix/plugins/paypal/payment.py:349 pretix/plugins/paypal/payment.py:364
 #: pretix/plugins/paypal/payment.py:425 pretix/plugins/paypal/payment.py:572
 #: pretix/plugins/paypal/payment.py:637
 msgid "We had trouble communicating with PayPal"
-msgstr "كان لدينا مشكلة في التواصل مع باي بال"
+msgstr "كانت لدينا مشكلة في التواصل مع PayPal"
 
 #: pretix/plugins/paypal/payment.py:378 pretix/plugins/paypal/payment.py:387
 #: pretix/plugins/paypal/payment.py:451
@@ -21184,71 +21161,74 @@ msgid ""
 "We were unable to process your payment. See below for details on how to "
 "proceed."
 msgstr ""
-"لم نتمكن من معالجة دفعتك. انظر أدناه للحصول على تفاصيل حول كيفية المضي قدما."
+"لم نتمكن من معالجة دفعتك. انظر أدناه للحصول على تفاصيل حول كيفية المتابعة."
 
 #: pretix/plugins/paypal/payment.py:432 pretix/plugins/paypal/payment.py:441
 msgid ""
 "PayPal has not yet approved the payment. We will inform you as soon as the "
 "payment completed."
-msgstr ""
-"وباي بال لم يوافق بعد الدفع. ونحن سوف أبلغكم في أقرب وقت اتمام عملية الدفع."
+msgstr "لم يوافق PayPal على الدفع بعد. سنبلغك بمجرد إتمام عملية الدفع."
 
 #: pretix/plugins/paypal/payment.py:466 pretix/plugins/stripe/payment.py:496
 #: pretix/plugins/stripe/payment.py:852
 msgid "There was an error sending the confirmation mail."
-msgstr "كان هناك خطأ أثناء إرسال البريد تأكيد."
+msgstr "حدث خطأ في إرسال بريد التأكيد."
 
 #: pretix/plugins/paypal/payment.py:548 pretix/plugins/paypal/payment.py:555
 msgid "Refunding the amount via PayPal failed: {}"
-msgstr "برد مبلغ عن طريق PayPal فشل: {}"
+msgstr "فشل رد المبلغ عبر PayPal: {}"
 
 #: pretix/plugins/paypal/payment.py:678 pretix/plugins/paypal/payment.py:686
 msgid "The payment for this invoice has already been received."
-msgstr "الدفع لهذه الفاتورة تم إستلامه مسبقا."
+msgstr "تم إستلام قيمة هذه الفاتورة مسبقا."
 
 #: pretix/plugins/paypal/payment.py:679 pretix/plugins/paypal/payment.py:687
 msgid "PayPal payment ID"
-msgstr "رقم المرجعي لعملية الدفع في باي بال"
+msgstr "رقم مرجع سداد PayPal"
 
 #: pretix/plugins/paypal/payment.py:681
 msgid "PayPal sale ID"
-msgstr "رقم البيع في باي بال"
+msgstr "رقم مرجع البيع في PayPal"
 
 #: pretix/plugins/paypal/signals.py:52
 msgid "Payment completed."
-msgstr "تم الدفع."
+msgstr "تم السداد."
 
 #: pretix/plugins/paypal/signals.py:53
 msgid "Payment denied."
-msgstr "ونفى الدفع."
+msgstr "تم رفض عملية السداد."
 
 #: pretix/plugins/paypal/signals.py:54
 msgid "Payment refunded."
-msgstr "ردها الدفع."
+msgstr "تم استرداد قيمة السداد."
 
 #: pretix/plugins/paypal/signals.py:55
 msgid "Payment reversed."
-msgstr "عكس الدفع."
+msgstr "تم عكس عملية السداد."
 
 #: pretix/plugins/paypal/signals.py:56
 msgid "Payment pending."
 msgstr "انتظار الدفع."
 
 #: pretix/plugins/paypal/signals.py:65
+#, fuzzy
 msgid "PayPal reported an event: {}"
-msgstr "ذكرت باي بال حدث: {}"
+msgstr "أبلغ PayPal عن فعالية: {}"
 
 #: pretix/plugins/paypal/signals.py:90
+#, fuzzy
 msgid "PayPal Connect: Client ID"
-msgstr "باي بال الاتصال: معرف العميل"
+msgstr "اتصال PayPal: رقم العميل"
 
 #: pretix/plugins/paypal/signals.py:94
+#, fuzzy
 msgid "PayPal Connect: Secret key"
-msgstr "باي بال الاتصال: المفتاح السري"
+msgstr "اتصال PayPal: المفتاح السري"
 
 #: pretix/plugins/paypal/signals.py:98
+#, fuzzy
 msgid "PayPal Connect Endpoint"
-msgstr "باي بال اتصال نقطة النهاية"
+msgstr "نقطة نهاية اتصال PayPal"
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/action_double.html:5
 #, python-format
@@ -21257,8 +21237,8 @@ msgid ""
 "has already been paid by other means. Please double check and refund the "
 "money via PayPal's interface."
 msgstr ""
-"باي بال المعاملات %(payment)s نجحت، ولكن النظا %(order)s تم بالفعل دفع "
-"بوسائل أخرى. يرجى التحقق من ضعف وسنرد على المال عن طريق واجهة باي بال ل."
+"نجحت معاملة PayPal %(payment)s ، ولكن تم مسبقا دفع الطلب %(order)s بوسائل "
+"أخرى. يرجى التحقق مرة أخرى واسترداد الأموال عبر واجهة PayPal."
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/action_overpaid.html:5
 #, python-format
@@ -21268,9 +21248,9 @@ msgid ""
 "could not be accepted. Please contact the user and refund the money via "
 "PayPal's interface."
 msgstr ""
-"باي بال المعاملات %(payment)s نجحت، ولكن النظام %(order)s غير منتهية "
-"الصلاحية وتم بيع المنتج في هذه الأثناء. لذلك، لا يمكن قبول الدفع. يرجى "
-"الاتصال بالمستخدم وسنرد على المال عن طريق واجهة باي بال ل."
+"نجحت معاملة PayPal %(payment)s ، ولكن انتهت صلاحية الطلب %(order)s وتم بيع "
+"المنتج في هذه الأثناء. لذلك ، لا يمكن قبول الدفع. يرجى الاتصال بالمستخدم "
+"واسترداد الأموال عبر واجهة PayPal."
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/action_refund.html:5
 #, python-format
@@ -21278,16 +21258,16 @@ msgid ""
 "PayPal reported that the payment %(payment)s has been refunded or reversed. "
 "Do you want to mark the matching order (%(order)s) as refunded?"
 msgstr ""
-"ذكرت باي بال أن دفع %(payment)s قد كان ردها أو عكسه. هل تريد وضع علامة ترتيب "
-"المطابقة (%(order)s) كما هو ردها؟"
+"أبلغ PayPal أنه قد تم رد أو إلغاء الدفعة %(payment)s. هل تريد وضع علامة على "
+"الطلب المطابق (%(order)s) على أنه مسترد؟"
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/checkout_payment_confirm.html:3
 msgid ""
 "The total amount listed above will be withdrawn from your PayPal account "
 "after the confirmation of your purchase."
 msgstr ""
-"سيتم سحب المبلغ الإجمالي المذكورة أعلاه من حساب باي بال الخاص بك بعد تأكيد "
-"لعملية الشراء."
+"سيتم سحب المبلغ الإجمالي المذكور أعلاه من حساب PayPal الخاص بك بعد تأكيد "
+"الشراء."
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/checkout_payment_form.html:3
 msgid ""
@@ -21295,18 +21275,16 @@ msgid ""
 "payment details. You will then be redirected back here to review and confirm "
 "your order."
 msgstr ""
-"بعد النقر فوق متابعة، فإننا سوف توجيهك إلى PayPal لملء في تفاصيل الدفع "
-"الخاصة بك. وعندها يمكنك أن يعاد توجيهها إلى هنا لاستعراض وتأكيد طلبك."
+"بعد النقر فوق متابعة ، سنعيد توجيهك إلى PayPal لملء تفاصيل الدفع الخاصة بك. "
+"ستتم إعادة توجيهك مرة أخرى هنا لمراجعة طلبك وتأكيده."
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/control.html:7
-#, fuzzy
-#| msgid "Sales"
 msgid "Sale ID"
-msgstr "مبيعات"
+msgstr "رقم مرجع البيع"
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/control.html:11
 msgid "Last update"
-msgstr "اخر تحديث"
+msgstr "آخر تحديث"
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/control.html:13
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:53
@@ -21318,26 +21296,26 @@ msgid ""
 "Our attempt to execute your Payment via PayPal has failed. Please try again "
 "or contact us."
 msgstr ""
-"لقد فشلت محاولتنا لتنفيذ الخاص الدفع عن طريق باي بال. يرجى المحاولة مرة أخرى "
-"أو الاتصال بنا."
+"فشلت محاولتنا لتنفيذ عملية الدفع الخاصة بك عبر PayPal. يرجى المحاولة مرة "
+"أخرى أو الاتصال بنا."
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/pending.html:8
 msgid ""
 "We're waiting for an answer from PayPal regarding your payment. Please "
 "contact us, if this takes more than a few hours."
 msgstr ""
-"نحن في انتظار إجابة من باي بال بشأن الدفع الخاصة بك. يرجى الاتصال بنا، إذا "
-"كان هذا يحتاج إلى أكثر من بضع ساعات."
+"نحن في انتظار إجابة من PayPal بخصوص دفعتك. يرجى الاتصال بنا ، إذا استغرق ذلك "
+"أكثر من بضع ساعات."
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/redirect.html:17
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/redirect.html:17
 msgid "The payment process has started in a new window."
-msgstr "وقد بدأت عملية الدفع في نافذة جديدة."
+msgstr "بدأت عملية الدفع في نافذة جديدة."
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/redirect.html:20
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/redirect.html:20
 msgid "The window to enter your payment data was not opened or was closed?"
-msgstr "لم يفتح نافذة لإدخال البيانات الدفع أو كانت مغلقة؟"
+msgstr "لم يتم فتح نافذة إدخال بيانات الدفع الخاصة بك أو أنه تم إغلاقها؟"
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/redirect.html:24
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/redirect.html:24
@@ -21346,49 +21324,49 @@ msgstr "انقر هنا لفتح النافذة."
 
 #: pretix/plugins/paypal/views.py:82 pretix/plugins/paypal/views.py:95
 msgid "An error occurred during connecting with PayPal, please try again."
-msgstr "حدث خطأ أثناء الاتصال مع باي بال، يرجى المحاولة مرة أخرى."
+msgstr "حدث خطأ أثناء الاتصال ب PayPal ، يرجى المحاولة مرة أخرى."
 
 #: pretix/plugins/paypal/views.py:98
 msgid ""
 "Your PayPal account is now connected to pretix. You can change the settings "
 "in detail below."
 msgstr ""
-"متصل الآن حساب باي بال لpretix. يمكنك تغيير الإعدادات في التفاصيل أدناه."
+"حساب PayPal الخاص بك مرتبط الآن ب pretix. يمكنك تغيير الإعدادات بالتفصيل "
+"أدناه."
 
 #: pretix/plugins/paypal/views.py:139
 msgid "Invalid response from PayPal received."
-msgstr "استجابة غير صالحة من باي بال وردت."
+msgstr "تم استلام رد غير صالح من PayPal."
 
 #: pretix/plugins/paypal/views.py:155
 msgid "It looks like you canceled the PayPal payment"
-msgstr "يبدو أنك إلغاء الدفع باي بال"
+msgstr "يبدو أنك قد ألغيت عملية السداد عبر PayPal"
 
 #: pretix/plugins/paypal/views.py:285
 msgid "Your PayPal account has been disconnected."
-msgstr "تم فصل حساب PayPal الخاص بك."
+msgstr "تم قطع اتصال حساب PayPal الخاص بك."
 
 #: pretix/plugins/pretixdroid/apps.py:30 pretix/plugins/pretixdroid/apps.py:33
 #, fuzzy
 #| msgid "Check-in device API"
 msgid "Old check-in device API"
-msgstr "تحقق في API جهاز"
+msgstr "جهاز التسجيل القديم API"
 
 #: pretix/plugins/pretixdroid/apps.py:39
 msgid ""
 "This plugin allows you to use the pretixdroid and pretixdesk apps for your "
 "event."
 msgstr ""
-"يسمح هذا البرنامج المساعد لك استخدام pretixdroid وpretixdesk تطبيقات لهذا "
-"الحدث الخاص بك."
+"يسمح لك هذا المكون الإضافي باستخدام تطبيقات preixdroid و premixdesk للفعالية "
+"الخاصة بك."
 
 #: pretix/plugins/reports/apps.py:44 pretix/plugins/reports/apps.py:47
 msgid "Report exporter"
-msgstr "تقرير مصدر"
+msgstr "مصدر تقرير"
 
 #: pretix/plugins/reports/apps.py:51
 msgid "This plugin allows you to generate printable reports about your sales."
-msgstr ""
-"هذا البرنامج المساعد يسمح لك لتوليد تقارير للطباعة حول المبيعات الخاص بك."
+msgstr "يتيح لك هذا المكون الإضافي إنشاء تقارير قابلة للطباعة حول مبيعاتك."
 
 #: pretix/plugins/reports/exporters.py:154
 #, python-format
@@ -21398,28 +21376,28 @@ msgstr "الصفحة %d"
 #: pretix/plugins/reports/exporters.py:156
 #, python-format
 msgid "Created: %s"
-msgstr "مكون: %s"
+msgstr "تم إنشاؤه: %s"
 
 #: pretix/plugins/reports/exporters.py:196
 msgid "Order overview (PDF)"
-msgstr "نظرة عامة النظام (PDF)"
+msgstr "نظرة عامة على الطلب (PDF)"
 
 #: pretix/plugins/reports/exporters.py:264
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:58
 msgid "Orders by product"
-msgstr "أوامر من قبل المنتج"
+msgstr "الطلبات حسب المنتج"
 
 #: pretix/plugins/reports/exporters.py:264
 #, fuzzy
 #| msgid "incl. taxes"
 msgid "(excl. taxes)"
-msgstr "بما في ذلك الضرائب"
+msgstr "(باستثناء الضرائب)"
 
 #: pretix/plugins/reports/exporters.py:264
 #, fuzzy
 #| msgid "incl. taxes"
 msgid "(incl. taxes)"
-msgstr "بما في ذلك الضرائب"
+msgstr "(شامل الضرائب)"
 
 #: pretix/plugins/reports/exporters.py:269
 #, python-brace-format
@@ -21442,7 +21420,7 @@ msgstr "قائمة الطلبات مع الضرائب (PDF)"
 #: pretix/plugins/reports/exporters.py:451
 #, python-brace-format
 msgid "Orders by tax rate ({currency})"
-msgstr "أوامر من سعر الضريبة ({currency})"
+msgstr "أوامر حسب معدل الضريبة ({currency})"
 
 #: pretix/plugins/reports/exporters.py:460
 #: pretix/plugins/reports/exporters.py:705
@@ -21463,61 +21441,59 @@ msgid "List of orders with taxes"
 msgstr "قائمة الطلبات مع الضرائب"
 
 #: pretix/plugins/reports/exporters.py:551
-#, fuzzy
-#| msgid "Any country"
 msgid "Taxes by country"
-msgstr "أي بلد"
+msgstr "الضرائب حسب البلد"
 
 #: pretix/plugins/reports/exporters.py:552
 #, fuzzy
 #| msgid "Business customer"
 msgid "Business customers"
-msgstr "الشركات"
+msgstr "زبائن العمل"
 
 #: pretix/plugins/reports/exporters.py:702
 #: pretix/plugins/reports/exporters.py:747
-#, fuzzy
-#| msgid "Country"
 msgid "Country code"
-msgstr "بلد"
+msgstr "رمز البلد"
 
 #: pretix/plugins/returnurl/apps.py:30 pretix/plugins/returnurl/apps.py:33
 #: pretix/plugins/returnurl/templates/returnurl/settings.html:5
 msgid "Redirection from order page"
-msgstr "إعادة توجيه من صفحة النظام"
+msgstr "إعادة التوجيه من صفحة الطلب"
 
 #: pretix/plugins/returnurl/apps.py:37
+#, fuzzy
 msgid ""
 "This plugin allows to link to payments and redirect back afterwards. This is "
 "useful in combination with our API."
 msgstr ""
-"هذا البرنامج المساعد يسمح لتصل إلى المدفوعات وإعادة توجيه يعود بعد ذلك. وهذا "
-"مفيد في تركيبة مع API لدينا."
+"يسمح هذا المكون الإضافي بالربط بالمدفوعات وإعادة التوجيه بعد ذلك. هذا مفيد "
+"بالاشتراك مع واجهة برمجة التطبيقات الخاصة بنا."
 
 #: pretix/plugins/returnurl/signals.py:65
 msgid "Redirection"
 msgstr "إعادة توجيه"
 
 #: pretix/plugins/returnurl/templates/returnurl/settings.html:7
+#, fuzzy
 msgid ""
 "This feature is useful if you use only the payment component of pretix but "
 "build your own checkout interface for other steps."
 msgstr ""
-"هذه الميزة مفيدة إذا كنت تستخدم فقط المكون دفع pretix لكن بناء واجهة الخروج "
-"الخاصة ل خطوات أخرى."
+"هذه الميزة مفيدة إذا كنت تستخدم فقط مكون الدفع الخاص ب pretix ولكنك قمت "
+"ببناء واجهة الدفع الخاصة بك لخطوات أخرى."
 
 #: pretix/plugins/returnurl/views.py:35
 msgid "Base redirection URL"
-msgstr "URL إعادة توجيه قاعدة"
+msgstr "رابط عنوان لإعادة التوجيه الأساسي"
 
 #: pretix/plugins/returnurl/views.py:36
+#, fuzzy
 msgid "Redirection will only be allowed to URLs that start with this prefix."
-msgstr "وسيسمح إعادة توجيه فقط إلى عناوين URL التي تبدأ مع هذه البادئة."
+msgstr "لن يسمح بإعادة التوجيه إلا لعناوين الروابط التي تبدأ بهذه البادئة."
 
 #: pretix/plugins/sendmail/apps.py:37
 msgid "This plugin allows you to send out emails to all your customers."
-msgstr ""
-"يسمح هذا البرنامج المساعد لك لإرسال رسائل البريد الإلكتروني لجميع الزبائن."
+msgstr "يتيح لك هذا المكون الإضافي إرسال رسائل بريد إلكتروني إلى جميع عملائك."
 
 #: pretix/plugins/sendmail/forms.py:53
 msgid "Send email to"
@@ -21525,7 +21501,7 @@ msgstr "إرسال بريد إلكتروني إلى"
 
 #: pretix/plugins/sendmail/forms.py:62
 msgid "Attachment"
-msgstr ""
+msgstr "مرفق"
 
 #: pretix/plugins/sendmail/forms.py:69
 msgid ""
@@ -21533,71 +21509,66 @@ msgid ""
 "being sorted into spam folders. We recommend only using PDFs of no more than "
 "2 MB in size."
 msgstr ""
+"يزيد إرسال مرفق من فرصة عدم وصول بريدك الإلكتروني أو تخزينه في مجلدات البريد "
+"العشوائي. نوصي فقط باستخدام ملفات PDF لا يزيد حجمها عن 2 ميجابايت."
 
 #: pretix/plugins/sendmail/forms.py:77
 msgid "Only send to people who bought"
-msgstr "إرسال فقط للأشخاص الذين اشتروا"
+msgstr "أرسل فقط للأشخاص الذين اشتروا"
 
 #: pretix/plugins/sendmail/forms.py:82
 msgid "Filter check-in status"
-msgstr "تصفية حالة تسجيل الدخول"
+msgstr "تصفية حالة التسجيل"
 
 #: pretix/plugins/sendmail/forms.py:86
 msgid "Send to customers not checked in"
-msgstr "أرسل للعملاء اللذين لم يسجلوا دخول"
+msgstr "أرسل إلى العملاء الذين لم يسجلوا الدخول"
 
 #: pretix/plugins/sendmail/forms.py:89
 msgid "Only send to customers of"
-msgstr "إرسال فقط للعملاء من"
+msgstr "أرسل فقط لعملاء"
 
 #: pretix/plugins/sendmail/forms.py:95
-#, fuzzy
-#| msgid "Only send to customers of"
 msgctxt "subevent"
 msgid "Only send to customers of dates starting at or after"
-msgstr "إرسال فقط للعملاء من"
+msgstr "أرسل فقط إلى العملاء من التواريخ التي تبدأ في أو بعد"
 
 #: pretix/plugins/sendmail/forms.py:100
-#, fuzzy
-#| msgid "Only send to customers of"
 msgctxt "subevent"
 msgid "Only send to customers of dates starting before"
-msgstr "إرسال فقط للعملاء من"
+msgstr "أرسل فقط إلى العملاء من التواريخ التي تبدأ من قبل"
 
 #: pretix/plugins/sendmail/forms.py:105
-#, fuzzy
-#| msgid "Send to customers with order status"
 msgctxt "subevent"
 msgid "Only send to customers with orders created after"
-msgstr "ارسل الى الزبائن مع حالة الطلب"
+msgstr "أرسل فقط للعملاء مع الطلبات التي تم إنشاؤها بعد ذلك"
 
 #: pretix/plugins/sendmail/forms.py:110
-#, fuzzy
-#| msgid "Only send to customers of"
 msgctxt "subevent"
 msgid "Only send to customers with orders created before"
-msgstr "إرسال فقط للعملاء من"
+msgstr "أرسل فقط للعملاء مع الطلبات التي تم إنشاؤها قبل"
 
 #: pretix/plugins/sendmail/forms.py:143
 msgid "Everyone who created a ticket order"
-msgstr "الجميع الذي خلق نظام التذاكر"
+msgstr "كل من أنشأ طلب تذكرة"
 
 #: pretix/plugins/sendmail/forms.py:147
 msgid ""
 "Every attendee (falling back to the order contact when no attendee email "
 "address is given)"
 msgstr ""
-"كل الحضور (يتراجع إلى الاتصال النظام عندما لا يتم منح أي عنوان الحضور البريد "
-"الإلكتروني)"
+"كل الحضور (يعود إلى جهة اتصال الطلب عندما لا يتم إعطاء عنوان بريد إلكتروني "
+"للحضور)"
 
 #: pretix/plugins/sendmail/forms.py:149
 msgid "Both (all order contact addresses and all attendee email addresses)"
 msgstr ""
-"على حد سواء (كل عناوين أمر الاتصال وكافة عناوين البريد الإلكتروني الحضور)"
+"كلاهما (جميع عناوين الاتصال الخاصة بالطلب وجميع عناوين البريد الإلكتروني "
+"للحضور)"
 
 #: pretix/plugins/sendmail/forms.py:166 pretix/plugins/sendmail/views.py:255
 msgid "payment pending (except unapproved)"
-msgstr ""
+msgstr "الدفع معلق (باستثناء غير الموافق عليه)"
 
 #: pretix/plugins/sendmail/forms.py:167 pretix/plugins/sendmail/views.py:256
 #, fuzzy
@@ -21607,15 +21578,15 @@ msgstr "في انتظار الموافقة"
 
 #: pretix/plugins/sendmail/forms.py:170 pretix/plugins/sendmail/views.py:254
 msgid "pending with payment overdue"
-msgstr "بانتظار مع دفع تأخر"
+msgstr "معلقة مع تأخر السداد"
 
 #: pretix/plugins/sendmail/forms.py:173
 msgid "Send to customers with order status"
-msgstr "ارسل الى الزبائن مع حالة الطلب"
+msgstr "أرسل للعملاء مع حالة الطلب"
 
 #: pretix/plugins/sendmail/forms.py:197 pretix/plugins/sendmail/forms.py:201
 msgid "Send to customers checked in on list"
-msgstr "أرسل للعملاء اللذين تم تسجيل دخولهم في القائمة"
+msgstr "أرسل إلى العملاء المسجلين في القائمة"
 
 #: pretix/plugins/sendmail/signals.py:82
 msgid "Email was sent"
@@ -21623,23 +21594,25 @@ msgstr "تم إرسال البريد الإلكتروني"
 
 #: pretix/plugins/sendmail/signals.py:83
 msgid "The order received a mass email."
-msgstr "أحصل على الطلب على البريد الإلكتروني الشامل."
+msgstr "تلقى الطلب قدرا كبيرا من رسائل البريد الإلكتروني."
 
 #: pretix/plugins/sendmail/signals.py:84
+#, fuzzy
 msgid "A ticket holder of this order received a mass email."
-msgstr "حامل التذكرة من هذا النظام تلقي البريد الإلكتروني الشامل."
+msgstr "تلقى مالك تذكرة هذا الطلب قدرا كبيرا من رسائل البريد الإلكتروني"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/history.html:19
 msgid "Sent to orders:"
-msgstr "إرسالها إلى أوامر:"
+msgstr "تم إرساله إلى الطلبات:"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/history.html:28
+#, fuzzy
 msgid "All customers not checked in"
-msgstr "كل العملاء لم يتم تسجيل دخولهم"
+msgstr "لم يتم تسجيل كل العملاء"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/history.html:40
 msgid "Attendee contact addresses"
-msgstr "الحضور عناوين الاتصال"
+msgstr "عناوين اتصال الحاضرين"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/history.html:42
 msgid "All contact addresses"
@@ -21647,38 +21620,35 @@ msgstr "كافة عناوين الاتصال"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/history.html:44
 msgid "Order contact addresses"
-msgstr "عناوين أمر الاتصال"
+msgstr "عناوين اتصال الطلب"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/history.html:55
 msgid "Send a new email based on this"
-msgstr "إرسال رسالة بريد إلكتروني جديدة بناء على هذا"
+msgstr "أرسل بريدا إلكترونيا جديدا بناء على هذا"
 
 #: pretix/plugins/sendmail/views.py:114
 msgid "You supplied an invalid log entry ID"
-msgstr "قمت بتوفيرها معرف إدخال سجل غير صالح"
+msgstr "لقد قدمت رقم تسجيل دخول غير صالح"
 
 #: pretix/plugins/sendmail/views.py:168
 msgid "There are no orders matching this selection."
-msgstr "لا توجد أوامر مطابقة هذا الاختيار."
+msgstr "لا توجد طلبات مطابقة لهذا الاختيار."
 
 #: pretix/plugins/sendmail/views.py:215
-#, fuzzy, python-format
-#| msgid ""
-#| "Your message has been queued and will be sent to the contact addresses of "
-#| "%d orders in the next minutes."
+#, python-format
 msgid ""
 "Your message has been queued and will be sent to the contact addresses of %d "
 "orders in the next few minutes."
 msgstr ""
-"وقد اصطف رسالتك وسوف يتم ارسالهم الى عناوين الاتصال %d أوامر في الدقائق "
-"القادمة."
+"تم وضع رسالتك في قائمة الانتظار وسيتم إرسالها إلى عناوين جهات الاتصال الخاصة "
+"ب %d من الطلبات في الدقائق القليلة القادمة."
 
 #: pretix/plugins/statistics/apps.py:30 pretix/plugins/statistics/apps.py:33
 #: pretix/plugins/statistics/signals.py:37
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:8
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:10
 msgid "Statistics"
-msgstr "الإحصاء"
+msgstr "إحصائيات"
 
 #: pretix/plugins/statistics/apps.py:37
 msgid "This plugin shows you various statistics."
@@ -21686,17 +21656,17 @@ msgstr "هذا البرنامج المساعد يظهر لك إحصاءات مخ
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:19
 msgid "Orders by day"
-msgstr "أوامر بعد يوم"
+msgstr "طلبات حسب اليوم"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:25
 msgid ""
 "Orders paid in multiple payments are shown with the date of their last "
 "payment."
-msgstr "وترد الطلبات المدفوعة في عدة دفعات مع تاريخ الدفع الأخير."
+msgstr "يتم عرض الطلبات المسددة على دفعات متعددة بتاريخ دفعها الأخير."
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:34
 msgid "Revenue over time"
-msgstr "عائدات على مر الزمن"
+msgstr "الإيرادات بمرور الوقت"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:40
 msgctxt "subevent"
@@ -21704,94 +21674,81 @@ msgid ""
 "If you select a single date, payment method fees will not be listed here as "
 "it might not be clear which date they belong to."
 msgstr ""
-"إذا قمت بتحديد تاريخ واحد، لن يتم سرد رسوم طريقة الدفع هنا لأنها قد لا تكون "
-"واضحة والتي تعود التي ينتمون إليها."
+"إذا حددت تاريخا واحدا ، فلن يتم إدراج رسوم طريقة الدفع هنا لأنه قد لا يكون "
+"من الواضح التاريخ الذي تنتمي إليه."
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:48
 msgid ""
 "Only fully paid orders are counted. Orders paid in multiple payments are "
 "shown with the date of their last payment."
 msgstr ""
-"تحسب فقط أوامر مدفوع بالكامل. وترد الطلبات المدفوعة في عدة دفعات مع تاريخ "
-"الدفع الأخير."
+"يتم احتساب الطلبات المدفوعة بالكامل فقط. يتم عرض الطلبات المدفوعة على دفعات "
+"متعددة بتاريخ دفعها الأخير."
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:67
-#, fuzzy
-#| msgid "Overview"
 msgid "Seating Overview"
-msgstr "نظرة عامة"
+msgstr "نظرة عامة على المقاعد"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:74
-#, fuzzy
-#| msgid "Sold out"
 msgid "Sold Seats"
-msgstr "بيعت كلها"
+msgstr "المقاعد المباعة"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:80
 msgid "Blocked Seats"
-msgstr ""
+msgstr "المقاعد المحجوبة"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:86
-#, fuzzy
-#| msgid "Free order"
 msgid "Free Seats"
-msgstr "طلب مجاني"
+msgstr "مقاعد مجانية"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:94
 #, fuzzy
 #| msgid "Waiting list entries"
 msgid "Seating Sales Potentials"
-msgstr "انتظار إدخالات قائمة"
+msgstr "احتمالات مبيعات المقاعد"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:102
 msgid "Unsold Seats"
-msgstr ""
+msgstr "مقاعد غير مباعة"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:103
 msgid "Potential Profits"
-msgstr ""
+msgstr "الأرباح المحتملة"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:107
-#, fuzzy
-#| msgid "Minimum number"
 msgid "Minimum Price"
-msgstr "عدد الحد الأدنى"
+msgstr "أدنى سعر"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:108
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:110
 msgid "Blocked"
-msgstr ""
+msgstr "ممنوع"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:109
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:111
-#, fuzzy
-#| msgid "Available from"
 msgid "Available"
-msgstr "متاح من"
+msgstr "متوفر"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:116
-#, fuzzy
-#| msgid "Sales"
 msgid "On Sale"
-msgstr "مبيعات"
+msgstr "للبيع"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:136
-#, fuzzy
-#| msgid "Not yet on sale"
 msgid "Not on Sale"
-msgstr "ليس بعد على بيع"
+msgstr "ليس معروضا للبيع"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:146
+#, fuzzy
 msgid "Seats not attributed to any specific product"
-msgstr ""
+msgstr "المقاعد لا تنسب إلى أي منتج معين"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:172
 msgid ""
 "We will show you a variety of statistics about your sales right here, as "
 "soon as the first orders are submitted!"
 msgstr ""
-"ونحن سوف تظهر لك مجموعة متنوعة من الإحصاءات حول المبيعات الخاص بك هنا، حالما "
-"يتم تقديم الطلبات الأولى!"
+"سنعرض لك مجموعة متنوعة من الإحصاءات حول مبيعاتك هنا ، بمجرد تقديم الطلبات "
+"الأولى!"
 
 #: pretix/plugins/stripe/apps.py:31 pretix/plugins/stripe/apps.py:34
 #: pretix/plugins/stripe/payment.py:81
@@ -21799,27 +21756,32 @@ msgid "Stripe"
 msgstr "شريط"
 
 #: pretix/plugins/stripe/apps.py:38
+#, fuzzy
 msgid "This plugin allows you to receive credit card payments via Stripe"
-msgstr "يسمح هذا البرنامج المساعد لك لتلقي مدفوعات بطاقات الائتمان عبر الشريط"
+msgstr "يتيح لك هذا المكون الإضافي تلقي مدفوعات بطاقات الائتمان عبر Stripe"
 
 #: pretix/plugins/stripe/forms.py:40
 #, python-format
 msgid ""
 "The provided key \"%(value)s\" does not look valid. It should start with "
 "\"%(prefix)s\"."
-msgstr "مفتاح تقدم \"%(value)s\" لا تبدو صحيحة. يجب أن تبدأ مع \"%(prefix)s\"."
+msgstr ""
+"لا يبدو المفتاح المتوفر \"%(value)s\" صالحا. يجب أن يبدأ ب\"%(prefix)s\"."
 
 #: pretix/plugins/stripe/forms.py:51 pretix/plugins/stripe/signals.py:153
+#, fuzzy
 msgid "Stripe Connect: App fee (percent)"
-msgstr "شريط الاتصال: التطبيق رسوم (نسبة مئوية)"
+msgstr "Stripe Connect: رسوم التطبيق (نسبة مئوية)"
 
 #: pretix/plugins/stripe/forms.py:55 pretix/plugins/stripe/signals.py:157
+#, fuzzy
 msgid "Stripe Connect: App fee (max)"
-msgstr "شريط الاتصال: التطبيق الرسوم (كحد أقصى)"
+msgstr "Stripe Connect: رسوم التطبيق (أقصى)"
 
 #: pretix/plugins/stripe/forms.py:59 pretix/plugins/stripe/signals.py:161
+#, fuzzy
 msgid "Stripe Connect: App fee (min)"
-msgstr "شريط الاتصال: التطبيق رسوم (دقيقة)"
+msgstr "Stripe Connect: رسوم التطبيق (أدنى)"
 
 #: pretix/plugins/stripe/payment.py:110
 msgid ""
@@ -21827,45 +21789,47 @@ msgid ""
 "clicking on the following button, you can either create a new Stripe account "
 "connect pretix to an existing one."
 msgstr ""
-"لقبول الدفع عن طريق الشريط، ستحتاج إلى حساب في الشريط. من خلال النقر على "
-"الزر التالي، يمكنك إما إنشاء الشريط الجديد حساب pretix اتصال واحدة موجودة."
+"لقبول المدفوعات عبر Stripe ، ستحتاج إلى حساب في Stripe. من خلال النقر على "
+"الزر التالي ، يمكنك إما إنشاء حساب Stripe جديد يربط pretix بحساب موجود."
 
 #: pretix/plugins/stripe/payment.py:114
 msgid "Connect with Stripe"
-msgstr "تواصل مع الشريط"
+msgstr "تواصل مع Stripe"
 
 #: pretix/plugins/stripe/payment.py:124
+#, fuzzy
 msgid "Disconnect from Stripe"
-msgstr "قطع من الشريط"
+msgstr "اقطع الاتصال من Stripe"
 
 #: pretix/plugins/stripe/payment.py:128
+#, fuzzy
 msgid ""
 "Please configure a <a href=\"https://dashboard.stripe.com/account/webhooks"
 "\">Stripe Webhook</a> to the following endpoint in order to automatically "
 "cancel orders when charges are refunded externally and to process "
 "asynchronous payment methods like SOFORT."
 msgstr ""
-"الرجاء تكوين ل<a href=\"https://dashboard.stripe.com/account/webhooks"
-"\">Stripe Webhook</a> إلى نقطة النهاية التالية من أجل إلغاء أوامر تلقائيا "
-"عندما التهم ليست ردها خارجيا وتجهيز وسائل الدفع غير متزامن مثل SOFORT."
+"الرجاء إعداد  <a href=\"https://dashboard.stripe.com/account/webhooks\""
+">Stripe Webhook</a> إلى نقطة النهاية التالية من أجل إلغاء طلبات تلقائيا "
+"عندما يتم استرداد الرسوم خارجيا ومعالجة وسائل الدفع غير متزامن مثل SOFORT."
 
 #: pretix/plugins/stripe/payment.py:140
+#, fuzzy
 msgid "Enable MOTO payments for resellers"
-msgstr ""
+msgstr "تمكين مدفوعات MOTO للبائعين"
 
 #: pretix/plugins/stripe/payment.py:142
-#, fuzzy
-#| msgid "Needs to be enabled in your Stripe account first."
 msgid ""
 "Gated feature (needs to be enabled for your account by Stripe support first)"
-msgstr "يجب تمكين في حساب الشريط الخاص بك أولا."
+msgstr "ميزة بوابات (يجب تمكينها لحسابك من خلال دعم Stripe أولا)"
 
 #: pretix/plugins/stripe/payment.py:150
+#, fuzzy
 msgid "Stripe Integration security guide"
-msgstr ""
+msgstr "دليل أمان تكامل Stripe"
 
 #: pretix/plugins/stripe/payment.py:144
-#, python-format
+#, fuzzy, python-format
 msgid ""
 "We can flag the credit card transaction you make through the reseller "
 "interface as MOTO (Mail Order / Telephone Order), which will exempt them "
@@ -21874,32 +21838,37 @@ msgid ""
 "like the 40 page SAQ D. Please consult the %s for further information on "
 "this subject."
 msgstr ""
+"يمكننا تحديد معاملة بطاقة الائتمان التي تجريها من خلال واجهة البائع على أنها "
+"MOTO (طلب عبر البريد / طلب عبر الهاتف) ، مما يعفيهم من متطلبات مصادقة "
+"العملاء القوية (SCA). ومع ذلك: من خلال تمكين هذه الميزة ، سوف تحتاج إلى ملء "
+"نماذج التقييم الذاتي السنوية لPCI-DSS مثل 40 صفحة SAQ D. يرجى الرجوع إلى%s "
+"للحصول على مزيد من المعلومات حول هذا الموضوع."
 
 #: pretix/plugins/stripe/payment.py:166
 msgid "Stripe account"
-msgstr "حساب الشريط"
+msgstr "حساب Stripe"
 
 #: pretix/plugins/stripe/payment.py:174
 msgctxt "stripe"
 msgid "Live"
-msgstr "حي"
+msgstr "مباشر"
 
 #: pretix/plugins/stripe/payment.py:175
 msgctxt "stripe"
 msgid "Testing"
-msgstr "اختبارات"
+msgstr "اختبار"
 
 #: pretix/plugins/stripe/payment.py:177
 msgid ""
 "If your event is in test mode, we will always use Stripe's test API, "
 "regardless of this setting."
 msgstr ""
-"إذا هذا الحدث الخاص بك في وضع الاختبار، وسوف نستخدم دائما API اختبار الشريط، "
-"وبغض النظر عن هذا الإعداد."
+"إذا كانت فعاليتك في وضع الاختبار ، فسنستخدم دائما واجهة برمجة تطبيقات اختبار "
+"Stripe ، بغض النظر عن هذا الإعداد."
 
 #: pretix/plugins/stripe/payment.py:190
 msgid "Publishable key"
-msgstr "مفتاح للنشر"
+msgstr "مفتاح قابل للنشر"
 
 #: pretix/plugins/stripe/payment.py:201
 msgid "Secret key"
@@ -21909,17 +21878,16 @@ msgstr "المفتاح السري"
 msgid ""
 "The country in which your Stripe-account is registered in. Usually, this is "
 "your country of residence."
-msgstr ""
-"البلد الذي هو REGISTRED الشريط في الحساب الخاص بك في. عادة، وهذا هو البلد "
-"الذي تقيم فيه."
+msgstr "البلد الذي تم فيه تسجيل حسابك على Stripe. عادة ، هذا هو بلد إقامتك."
 
 #: pretix/plugins/stripe/payment.py:218
 msgid "Credit card payments"
 msgstr "مدفوعات بطاقات الائتمان"
 
 #: pretix/plugins/stripe/payment.py:223 pretix/plugins/stripe/payment.py:937
+#, fuzzy
 msgid "giropay"
-msgstr "نظام Giropay"
+msgstr "نظام الدفع عبر الإنترنت في ألمانيا Giropay"
 
 #: pretix/plugins/stripe/payment.py:225 pretix/plugins/stripe/payment.py:232
 #: pretix/plugins/stripe/payment.py:239 pretix/plugins/stripe/payment.py:246
@@ -21927,21 +21895,24 @@ msgstr "نظام Giropay"
 #: pretix/plugins/stripe/payment.py:274 pretix/plugins/stripe/payment.py:281
 #: pretix/plugins/stripe/payment.py:288
 msgid "Needs to be enabled in your Stripe account first."
-msgstr "يجب تمكين في حساب الشريط الخاص بك أولا."
+msgstr "يجب تمكينه في حساب Stripe أولا."
 
 #: pretix/plugins/stripe/payment.py:230 pretix/plugins/stripe/payment.py:1009
 msgid "iDEAL"
-msgstr "المثالي"
+msgstr "نظام الدفع الكتروني المستخدم في هولندا iDEAL"
 
 #: pretix/plugins/stripe/payment.py:237 pretix/plugins/stripe/payment.py:1061
+#, fuzzy
 msgid "Alipay"
-msgstr "و alipay"
+msgstr "المنصة الصينية للدفع عبر الإنترنت alipay"
 
 #: pretix/plugins/stripe/payment.py:244 pretix/plugins/stripe/payment.py:1104
+#, fuzzy
 msgid "Bancontact"
 msgstr "Bancontact"
 
 #: pretix/plugins/stripe/payment.py:251 pretix/plugins/stripe/payment.py:1176
+#, fuzzy
 msgid "SOFORT"
 msgstr "SOFORT"
 
@@ -21952,32 +21923,35 @@ msgid ""
 "confirmed in some cases. Please only activate this payment method if your "
 "payment term allows for this lag."
 msgstr ""
-"برغم الاسم إلا أن مدفوعات Sofort عبر Stripe لا تدفع  <strong>فورا </strong> "
-"بل قد تستغرق بعض الوقت<strong> تستغرق 14 يوم</strong> حتى تتأكد في بعض "
-"الأحيان. الرجاء تفعيل طريقة الدفع هذه فقط في حال كانت شروط الدفع لديكم "
-"تستحمل هذا التأخر."
+"على الرغم من الاسم ، <strong> لا </strong> تتم معالجة مدفوعات Sofort عبر "
+"Stripe على الفور ولكن قد يستغرق تأكيدها في بعض الحالات ما يصل إلى <strong> "
+"أربعة عشر يوما </strong> . يرجى تنشيط طريقة الدفع هذه فقط إذا كانت مدة "
+"السداد تسمح بهذا التأخير."
 
 #: pretix/plugins/stripe/payment.py:265 pretix/plugins/stripe/payment.py:1256
+#, fuzzy
 msgid "EPS"
-msgstr ""
+msgstr "‎EPS"
 
 #: pretix/plugins/stripe/payment.py:272 pretix/plugins/stripe/payment.py:1328
+#, fuzzy
 msgid "Multibanco"
-msgstr ""
+msgstr "شبكة البنوك في البرتغال Multibanco"
 
 #: pretix/plugins/stripe/payment.py:279 pretix/plugins/stripe/payment.py:1375
+#, fuzzy
 msgid "Przelewy24"
-msgstr ""
+msgstr "Przelewy24"
 
 #: pretix/plugins/stripe/payment.py:286 pretix/plugins/stripe/payment.py:1431
+#, fuzzy
 msgid "WeChat Pay"
 msgstr ""
+"خدمة دفع عبر الهاتف المحمول ومحفظة رقمية من WeChat ومقرها الصين WeChat Pay"
 
 #: pretix/plugins/stripe/payment.py:295
-#, fuzzy
-#| msgid "Description"
 msgid "Destination"
-msgstr "الوصف"
+msgstr "وجهة"
 
 #: pretix/plugins/stripe/payment.py:321
 #, python-brace-format
@@ -21986,14 +21960,15 @@ msgid ""
 ">many test cards</a> to perform a transaction. No money will actually be "
 "transferred."
 msgstr ""
-"البرنامج المساعد الشريط يعمل في وضع الاختبار. يمكنك استخدام أحد <a {args}> "
-"العديد من بطاقات اختبار </a> لتنفيذ الصفقة. والواقع أن نقل أي مبلغ من المال."
+"يعمل المكون الإضافي Stripe في وضع الاختبار. يمكنك استخدام واحدة من <a {args}"
+"> العديد من بطاقات الاختبار </a> لإجراء معاملة. لن يتم تحويل أي أموال في "
+"الواقع."
 
 #: pretix/plugins/stripe/payment.py:454 pretix/plugins/stripe/payment.py:808
 #: pretix/plugins/stripe/payment.py:903
 #, python-format
 msgid "Stripe reported an error with your card: %s"
-msgstr "ذكرت شريط خطأ مع بطاقتك: %s"
+msgstr "أبلغ Stripe عن خطأ في بطاقتك: %s"
 
 #: pretix/plugins/stripe/payment.py:481 pretix/plugins/stripe/payment.py:618
 #: pretix/plugins/stripe/payment.py:821 pretix/plugins/stripe/payment.py:915
@@ -22002,41 +21977,40 @@ msgid ""
 "We had trouble communicating with Stripe. Please try again and get in touch "
 "with us if this problem persists."
 msgstr ""
-"كان لدينا التواصل المتاعب مع الشريط. يرجى المحاولة مرة أخرى والحصول على "
-"اتصال معنا إذا كانت هذه المشكلة قائما."
+"واجهتنا مشكلة في التواصل مع Stripe. يرجى المحاولة مرة أخرى والاتصال بنا إذا "
+"استمرت هذه المشكلة."
 
 #: pretix/plugins/stripe/payment.py:499 pretix/plugins/stripe/payment.py:855
 msgid ""
 "Your payment is pending completion. We will inform you as soon as the "
 "payment completed."
-msgstr ""
-"الدفع الخاص بك في انتظار الانتهاء. ونحن سوف أبلغكم في أقرب وقت اتمام عملية "
-"الدفع."
+msgstr "الدفع الخاص بك في انتظار الانتهاء. سنبلغك بمجرد اكتمال الدفع."
 
 #: pretix/plugins/stripe/payment.py:508 pretix/plugins/stripe/payment.py:869
 #, python-format
 msgid "Stripe reported an error: %s"
-msgstr "ذكرت شريط خطأ: %s"
+msgstr "أبلغت Stripe عن خطأ: %s"
 
 #: pretix/plugins/stripe/payment.py:564
 msgid "No payment information found."
-msgstr "لا توجد معلومات الدفع."
+msgstr "لم يتم العثور على معلومات الدفع."
 
 #: pretix/plugins/stripe/payment.py:589
 msgid ""
 "We had trouble communicating with Stripe. Please try again and contact "
 "support if the problem persists."
 msgstr ""
-"كان لدينا التواصل المتاعب مع الشريط. يرجى المحاولة مرة أخرى والاتصال بالدعم "
-"إذا كان قائما المشكلة."
+"واجهتنا مشكلة في التواصل مع Stripe. يرجى المحاولة مرة أخرى والاتصال بالدعم "
+"إذا استمرت المشكلة."
 
 #: pretix/plugins/stripe/payment.py:593
+#, fuzzy
 msgid "Stripe returned an error"
-msgstr "عاد شريط خطأ"
+msgstr "أرجع Stripe خطأ"
 
 #: pretix/plugins/stripe/payment.py:689
 msgid "Credit card via Stripe"
-msgstr "بطاقة الائتمان عبر الشريط"
+msgstr "بطاقة الائتمان من طرف Stripe"
 
 #: pretix/plugins/stripe/payment.py:690
 msgid "Credit card"
@@ -22044,15 +22018,15 @@ msgstr "بطاقة ائتمان"
 
 #: pretix/plugins/stripe/payment.py:717
 msgid "You may need to enable JavaScript for Stripe payments."
-msgstr "قد تحتاج إلى تفعيل جافا سكريبت لدفع الشريط."
+msgstr "قد تحتاج إلى تمكين JavaScript لمدفوعات Stripe."
 
 #: pretix/plugins/stripe/payment.py:863
 msgid "Your payment failed. Please try again."
-msgstr "فشل الدفع الخاص بك. حاول مرة اخرى."
+msgstr "فشلت عملية الدفع الخاص بك. حاول مرة اخرى."
 
 #: pretix/plugins/stripe/payment.py:936
 msgid "giropay via Stripe"
-msgstr "نظام Giropay عبر الشريط"
+msgstr "giropay عبر Stripe"
 
 #: pretix/plugins/stripe/payment.py:968 pretix/plugins/stripe/payment.py:1135
 #: pretix/plugins/stripe/payment.py:1287
@@ -22068,23 +22042,23 @@ msgstr "الحساب في مصرف{bank}"
 
 #: pretix/plugins/stripe/payment.py:1008
 msgid "iDEAL via Stripe"
-msgstr "مثالية عبر الشريط"
+msgstr "iDEAL عبر Stripe"
 
 #: pretix/plugins/stripe/payment.py:1060
 msgid "Alipay via Stripe"
-msgstr "و alipay عبر الشريط"
+msgstr "Alipay عبر Stripe"
 
 #: pretix/plugins/stripe/payment.py:1103
 msgid "Bancontact via Stripe"
-msgstr "Bancontact عبر الشريط"
+msgstr "Bancontact عبر Stripe"
 
 #: pretix/plugins/stripe/payment.py:1175
 msgid "SOFORT via Stripe"
-msgstr "SOFORT عبر الشريط"
+msgstr "SOFORT عبر Stripe"
 
 #: pretix/plugins/stripe/payment.py:1192
 msgid "Country of your bank"
-msgstr "بلد البنك الذي تتعامل معه"
+msgstr "بلد مصرفك"
 
 #: pretix/plugins/stripe/payment.py:1193
 msgid "Germany"
@@ -22112,44 +22086,40 @@ msgid "Bank account {iban} at {bank}"
 msgstr "حساب مصرفي{iban}في{bank}"
 
 #: pretix/plugins/stripe/payment.py:1255
-#, fuzzy
-#| msgid "iDEAL via Stripe"
 msgid "EPS via Stripe"
-msgstr "مثالية عبر الشريط"
+msgstr "EPS عبر Stripe"
 
 #: pretix/plugins/stripe/payment.py:1327
-#, fuzzy
-#| msgid "Alipay via Stripe"
 msgid "Multibanco via Stripe"
-msgstr "و alipay عبر الشريط"
+msgstr "Multibanco عبر Stripe"
 
 #: pretix/plugins/stripe/payment.py:1374
-#, fuzzy
-#| msgid "Alipay via Stripe"
 msgid "Przelewy24 via Stripe"
-msgstr "و alipay عبر الشريط"
+msgstr "Przelewy24 عبر Stripe"
 
 #: pretix/plugins/stripe/payment.py:1430
-#, fuzzy
-#| msgid "Payment via Stripe"
 msgid "WeChat Pay via Stripe"
-msgstr "الدفع عن طريق الشريط"
+msgstr "WeChat Pay عبر Stripe"
 
 #: pretix/plugins/stripe/signals.py:86
+#, fuzzy
 msgid "Charge succeeded."
-msgstr "نجح تهمة."
+msgstr "؟؟"
 
 #: pretix/plugins/stripe/signals.py:87
+#, fuzzy
 msgid "Charge refunded."
-msgstr "رد تهمة."
+msgstr "تم استرداد الرسوم"
 
 #: pretix/plugins/stripe/signals.py:88
+#, fuzzy
 msgid "Charge updated."
-msgstr "تهمة المحدثة."
+msgstr "تم تحديد الرسوم"
 
 #: pretix/plugins/stripe/signals.py:89
+#, fuzzy
 msgid "Charge pending"
-msgstr "تهمة انتظار"
+msgstr "الرسوم معلقة"
 
 #: pretix/plugins/stripe/signals.py:90
 msgid "Payment authorized."
