@@ -16,12 +16,13 @@
             {% for form in forms %}
                 <details class="panel panel-default" open>
                     <summary class="panel-heading">
-                        <h4 class="panel-title">
+                        <h3 class="panel-title">
+                            <span class="sr-only">{% trans "Add-ons:" %}</span>
                             <strong>{{ form.item.name }}{% if form.variation %}
                                 – {{ form.variation }}
                             {% endif %}</strong>
                             <i class="fa fa-angle-down collapse-indicator" aria-hidden="true"></i>
-                        </h4>
+                        </h3>
                     </summary>
                     <div id="cp{{ form.cartpos.pk }}">
                         <div class="panel-body">
@@ -50,7 +51,9 @@
                                             {% endblocktrans %}
                                         {% elif c.min_count == 0 and c.max_count >= c.items|length and not c.multi_allowed %}
                                         {% elif c.min_count == 0 %}
-                                            {% blocktrans trimmed with max_count=c.max_count %}
+                                            {% blocktrans trimmed count max_count=c.max_count %}
+                                                You can choose {{ max_count }} option from this category.
+                                            {% plural %}
                                                 You can choose up to {{ max_count }} options from this category.
                                             {% endblocktrans %}
                                         {% else %}
@@ -95,12 +98,19 @@
                                                     <div class="col-md-2 col-xs-6 price">
                                                         <p>
                                                         {% if c.price_included %}
+                                                            <span class="sr-only">{% trans "included in the price" context "price" %}</span>
+                                                            <span aria-hidden="true">{% trans "included" context "price" %}</span>
                                                         {% elif item.free_price %}
                                                             {% blocktrans trimmed with price=item.min_price|money:event.currency %}
                                                                 from {{ price }}
                                                             {% endblocktrans %}
                                                         {% elif item.min_price != item.max_price %}
-                                                            {{ item.min_price|money:event.currency  }} – {{ item.max_price|money:event.currency  }}
+                                                            <span class="sr-only">
+                                                            {% blocktrans trimmed with from_price=item.min_price|money:event.currency to_price=item.max_price|money:event.currency  %}
+                                                                from {{ from_price }} to {{ to_price }}
+                                                            {% endblocktrans %}
+                                                            </span>
+                                                            <span aria-hidden="true">{{ item.min_price|money:event.currency }} – {{ item.max_price|money:event.currency }}</span>
                                                         {% elif not item.min_price and not item.max_price %}
                                                         {% else %}
                                                             {{ item.min_price|money:event.currency }}
@@ -136,12 +146,14 @@
                                                             <div class="col-md-2 col-xs-6 price">
                                                                 {% if not c.price_included %}
                                                                     {% if var.original_price %}
+                                                                        <del><span class="sr-only">{% trans "Orignal price:" %}</span>
                                                                         {% if event.settings.display_net_prices %}
-                                                                            <del>{{ var.original_price.net|money:event.currency }}</del>
+                                                                            {{ var.original_price.net|money:event.currency }}
                                                                         {% else %}
-                                                                            <del>{{ var.original_price.gross|money:event.currency }}</del>
+                                                                            {{ var.original_price.gross|money:event.currency }}
                                                                         {% endif %}
-                                                                        <ins>
+                                                                        </del>
+                                                                        <ins><span class="sr-only">{% trans "New price:" %}</span>
                                                                     {% endif %}
                                                                     {% if item.free_price %}
                                                                         <div class="input-group input-group-price">
@@ -179,6 +191,9 @@
                                                                             incl. {{ rate }}% {{ name }}
                                                                         {% endblocktrans %}</small>
                                                                     {% endif %}
+                                                                {% else %}
+                                                                    <span class="sr-only">{% trans "included in the price" context "price" %}</span>
+                                                                    <span aria-hidden="true">{% trans "included" context "price" %}</span>
                                                                 {% endif %}
                                                             </div>
                                                             {% if var.cached_availability.0 == 100 or var.initial %}
@@ -247,12 +262,14 @@
                                                     <p>
                                                     {% if not c.price_included %}
                                                         {% if item.original_price %}
+                                                            <del><span class="sr-only">{% trans "Orignal price:" %}</span>
                                                             {% if event.settings.display_net_prices %}
-                                                                <del>{{ item.original_price.net|money:event.currency }}</del>
+                                                                {{ item.original_price.net|money:event.currency }}
                                                             {% else %}
-                                                                <del>{{ item.original_price.gross|money:event.currency }}</del>
+                                                                {{ item.original_price.gross|money:event.currency }}
                                                             {% endif %}
-                                                            <ins>
+                                                            </del>
+                                                            <ins><span class="sr-only">{% trans "New price:" %}</span>
                                                         {% endif %}
                                                         {% if item.free_price %}
                                                             <div class="input-group input-group-price">
@@ -288,6 +305,9 @@
                                                                 incl. {{ rate }}% {{ name }}
                                                             {% endblocktrans %}</small>
                                                         {% endif %}
+                                                    {% else %}
+                                                        <span class="sr-only">{% trans "included in the price" context "price" %}</span>
+                                                        <span aria-hidden="true">{% trans "included" context "price" %}</span>
                                                     {% endif %}
                                                     </p>
                                                 </div>

@@ -61,7 +61,7 @@
                                 </span>
                                 <span aria-hidden="true">{{ item.min_price|money:event.currency }} – {{ item.max_price|money:event.currency }}</span>
                             {% elif not item.min_price and not item.max_price %}
-                                {% trans "FREE" context "price" %}
+                                <span class="text-uppercase">{% trans "Free" context "price" %}</span>
                             {% else %}
                                 {{ item.min_price|money:event.currency }}
                             {% endif %}
