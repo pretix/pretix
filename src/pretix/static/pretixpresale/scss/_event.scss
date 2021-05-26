@@ -1,12 +1,10 @@
+.addons legend {
+    border-bottom: none;
+}
 .product-row {
-    .addons &:first-child {
-        border-top: 2px solid $table-border-color;
-    }
-    .addons &:last-child {
-        border-bottom: 2px solid $table-border-color;
-    }
-
-    &:last-child {
+    .addons & {
+        margin-left: -15px;
+        margin-right: -15px;
     }
     p  {
         margin-bottom: 0;
@@ -120,6 +118,9 @@ article.item-with-variations:last-child, .product-row:last-child {
         content: '';
         border-bottom: 2px solid $table-border-color;
     }
+}
+article.item-with-variations .product-row:last-child:after {
+    display: none;
 }
 
 .radio .variation-description {
