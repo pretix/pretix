@@ -206,10 +206,10 @@ class AsyncFormView(AsyncMixin, FormView):
     def __init_subclass__(cls):
         def async_execute(self, *, request_path, form_kwargs, locale, tz, organizer=None, event=None, user=None):
             view_instance = cls()
-            d = QueryDict(form_kwargs['data'])
+            form_kwargs['data'] = QueryDict(form_kwargs['data'])
             req = RequestFactory().post(
                 request_path,
-                data=d.urlencode(),
+                data=form_kwargs['data'].urlencode(),
                 content_type='application/x-www-form-urlencoded'
             )
             view_instance.request = req
