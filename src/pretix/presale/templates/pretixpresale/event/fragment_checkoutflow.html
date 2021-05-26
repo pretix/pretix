@@ -1,25 +1,24 @@
 {% load i18n %}
-<div class="checkout-flow">
+<nav aria-label="{% trans "Checkout steps" context "checkoutflow" %}">
+<ol class="checkout-flow">
     {% for step in checkout_flow %}
-        <a {% if step.c_is_before %}href="{{ step.c_resolved_url }}"{% endif %} class="checkout-step {% if step.c_is_before %}step-done{% elif request.resolver_match.kwargs.step == step.identifier %}step-current{% endif %}">
-            <div class="checkout-step-bar-left"></div>
-            <div class="checkout-step-bar-right"></div>
+        <li class="checkout-step {% if step.c_is_before %}step-done{% elif request.resolver_match.kwargs.step == step.identifier %}step-current{% endif %}">
+            {% if step.c_is_before %}<a href="{{ step.c_resolved_url }}">{% endif %}
             <div class="checkout-step-icon">
                 <span class="fa {% if step.c_is_before %}fa-check{% elif step.icon %}fa-{{ step.icon }}{% else %}fa-pencil{% endif %}" aria-hidden="true"></span>
             </div>
             <div class="checkout-step-label">
-                <span class="sr-only">
                 {% if step.c_is_before %}
-                    {% trans "Completed:" %}
+                    <span class="sr-only">{% trans "Completed:" %}</span>
                 {% elif request.resolver_match.kwargs.step == step.identifier %}
-                    {% trans "Current:" %}
+                    <span class="sr-only">{% trans "Current:" %}</span>
                 {% endif %}
-                </span>
                 {{ step.label }}
             </div>
-        </a>
+            {% if step.c_is_before %}</a>{% endif %}
+        </li>
     {% endfor %}
-    <a class="checkout-step">
+    <li class="checkout-step">
         <div class="checkout-step-bar-left"></div>
         <div class="checkout-step-bar-right"></div>
         <div class="checkout-step-icon">
@@ -28,5 +27,6 @@
         <div class="checkout-step-label">
             {% trans "Order confirmed" context "checkoutflow" %}
         </div>
-    </a>
-</div>
+    </li>
+</ol>
+</nav>

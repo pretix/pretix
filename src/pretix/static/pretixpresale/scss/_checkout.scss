@@ -2,6 +2,7 @@
   display: flex;
   flex-direction: row;
   margin: 15px 0 13px 0;
+  list-style: none;
 
   .checkout-step {
     flex: 1;
@@ -26,8 +27,13 @@
       padding-top: 10px;
       color: $text-muted;
     }
+    a .checkout-step-label {
+      color: $brand-primary;
+    }
 
-    .checkout-step-bar-left {
+    &:before, &:after {
+      content: "";
+      display: block;
       position: absolute;
       top: 22px;
       left: 0;
@@ -36,14 +42,15 @@
       background: $gray-lighter;
       z-index: 100;
     }
-    .checkout-step-bar-right {
-      position: absolute;
-      top: 22px;
+    &:after {
       left: 50%;
-      width: 50%;
-      height: 6px;
-      background: $gray-lighter;
-      z-index: 100;
+    }
+    &.step-done:before, &.step-done:after, &.step-current:before {
+      background: $brand-primary;
+    }
+    &:last-child:after,
+    &:first-child:before {
+      display: none;
     }
 
     &.step-done .checkout-step-icon {
@@ -51,11 +58,8 @@
       background: $brand-primary;
       color: white;
     }
-    &.step-done .checkout-step-label {
+    &.step-done .checkout-step-label a {
       color: $brand-primary;
-    }
-    &.step-done .checkout-step-bar-left, &.step-done .checkout-step-bar-right {
-      background: $brand-primary;
     }
 
     &.step-current .checkout-step-icon {
@@ -65,13 +69,6 @@
     }
     &.step-current .checkout-step-label {
       color: $brand-primary;
-    }
-    &.step-current .checkout-step-bar-left {
-      background: $brand-primary;
-    }
-    &:last-child .checkout-step-bar-right,
-    &:first-child .checkout-step-bar-left {
-      background: transparent;
     }
 
     &:hover, &:active {
@@ -84,7 +81,15 @@
 }
 @media(max-width: $screen-sm-max) {
   .checkout-step-label {
-    display: none;
+    /* visually hide, but keep for screen-readers */
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
   }
 }
 
