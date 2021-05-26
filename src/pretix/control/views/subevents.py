@@ -828,17 +828,6 @@ class SubEventBulkCreate(SubEventEditorMixin, EventPermissionRequiredMixin, Asyn
     def async_form_valid(self, task, form):
         self.object = SubEvent(event=self.request.event)
         if not self.is_valid(form):
-            print([
-                self.rrule_formset.is_valid(),
-                self.time_formset.is_valid(),
-                form.is_valid(),
-                [f.is_valid() for f in self.itemvar_forms],
-                self.formset.is_valid(),
-                [f.is_valid() for f in self.meta_forms],
-                self.cl_formset.is_valid(),
-                [f.is_valid() for f in self.plugin_forms]
-            ])
-            print(form.errors)
             raise ValidationError('Invalid submission')
 
         def set_progress(percent):
