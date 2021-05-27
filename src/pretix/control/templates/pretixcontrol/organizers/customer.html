@@ -82,6 +82,7 @@
                         <tr>
                             <td>
                                 {{ m.membership_type.name }}
+                                {% if m.testmode %}<span class="label label-warning">{% trans "TEST MODE" %}</span>{% endif %}
                             </td>
                             <td>
                                 {{ m.date_start|date:"SHORT_DATETIME_FORMAT" }}
@@ -118,6 +119,14 @@
                                         class="btn btn-default">
                                     <i class="fa fa-edit"></i>
                                 </a>
+                                {% if m.testmode %}
+                                    <a href="{% url "control:organizer.customer.membership.delete" organizer=request.organizer.slug customer=customer.identifier id=m.pk %}"
+                                            data-toggle="tooltip"
+                                            title="{% trans "Delete" %}"
+                                            class="btn btn-danger">
+                                        <i class="fa fa-trash"></i>
+                                    </a>
+                                {% endif %}
                             </td>
                         </tr>
                     {% endfor %}

@@ -227,11 +227,13 @@ class MembershipForm(forms.Form):
             usages = f'({obj.usages} / {obj.membership_type.max_usages})'
         else:
             usages = ''
-        return mark_safe(
-            f'<strong>{escape(obj.membership_type)}</strong> {usages}<br>'
-            f'{escape(obj.attendee_name)}<br>'
-            f'<span class="text-muted">{ds} – {de}</span>'
-        )
+        d = f'<strong>{escape(obj.membership_type)}</strong> {usages}<br>'
+        if obj.attendee_name:
+            d += f'{escape(obj.attendee_name)}<br>'
+        d += f'<span class="text-muted">{ds} – {de}</span>'
+        if obj.testmode:
+            d += ' <span class="label label-warning">{}</span>'.format(_("TEST MODE"))
+        return mark_safe(d)
 
     def clean(self):
         d = super().clean()

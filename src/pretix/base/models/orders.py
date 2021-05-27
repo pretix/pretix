@@ -258,7 +258,7 @@ class Order(LockModel, LoggedModel):
         return self.full_code
 
     def gracefully_delete(self, user=None, auth=None):
-        from . import GiftCard, GiftCardTransaction, Voucher
+        from . import GiftCard, GiftCardTransaction, Membership, Voucher
 
         if not self.testmode:
             raise TypeError("Only test mode orders can be deleted.")
@@ -280,6 +280,7 @@ class Order(LockModel, LoggedModel):
         GiftCardTransaction.objects.filter(refund__in=self.refunds.all()).update(refund=None)
         GiftCardTransaction.objects.filter(order=self).update(order=None)
         GiftCard.objects.filter(issued_in__in=self.positions.all()).update(issued_in=None)
+        Membership.objects.filter(granted_in__order=self, testmode=True).update(granted_in=None)
         OrderPosition.all.filter(order=self, addon_to__isnull=False).delete()
         OrderPosition.all.filter(order=self).delete()
         OrderFee.all.filter(order=self).delete()
@@ -846,7 +847,7 @@ class Order(LockModel, LoggedModel):
         try:
             if check_memberships:
                 try:
-                    validate_memberships_in_order(self.customer, positions, self.event, lock=False)
+                    validate_memberships_in_order(self.customer, positions, self.event, lock=False, testmode=self.testmode)
                 except ValidationError as e:
                     raise Quota.QuotaExceededException(e.message)
 

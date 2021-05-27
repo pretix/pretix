@@ -560,7 +560,7 @@ class MembershipUpdateForm(forms.ModelForm):
 
     class Meta:
         model = Membership
-        fields = ['membership_type', 'date_start', 'date_end', 'attendee_name_parts']
+        fields = ['testmode', 'membership_type', 'date_start', 'date_end', 'attendee_name_parts']
         field_classes = {
             'date_start': SplitDateTimeField,
             'date_end': SplitDateTimeField,
@@ -572,6 +572,9 @@ class MembershipUpdateForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+
+        if self.instance and self.instance.pk:
+            del self.fields['testmode']
 
         self.fields['membership_type'].queryset = self.instance.customer.organizer.membership_types.all()
         self.fields['attendee_name_parts'] = NamePartsFormField(

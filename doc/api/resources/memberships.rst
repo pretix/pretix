@@ -13,6 +13,7 @@ Field                                 Type                       Description
 ===================================== ========================== =======================================================
 id                                    integer                    Internal ID of the membership
 customer                              string                     Identifier of the customer associated with this membership (can't be changed)
+testmode                              boolean                    Whether this is a test membership
 membership_type                       integer                    Internal ID of the membership type
 date_start                            datetime                   Start of validity
 date_end                              datetime                   End of validity
@@ -51,6 +52,7 @@ Endpoints
             "id": 2,
             "customer": "EGR9SYT",
             "membership_type": 1,
+            "testmode": false,
             "date_start": "2021-04-19T00:00:00+02:00",
             "date_end": "2021-04-20T00:00:00+02:00",
             "attendee_name_parts": {
@@ -66,6 +68,7 @@ Endpoints
    :query integer page: The page number in case of a multi-page result set, default is 1
    :query string customer: A customer identifier to filter for
    :query integer membership_type: A membership type ID to filter for
+   :query boolean testmode: Filter for memberships that are (not) in test mode.
    :param organizer: The ``slug`` field of the organizer to fetch
    :statuscode 200: no error
    :statuscode 401: Authentication failure
@@ -95,6 +98,7 @@ Endpoints
         "id": 2,
         "customer": "EGR9SYT",
         "membership_type": 1,
+        "testmode": false,
         "date_start": "2021-04-19T00:00:00+02:00",
         "date_end": "2021-04-20T00:00:00+02:00",
         "attendee_name_parts": {
@@ -127,6 +131,7 @@ Endpoints
       {
         "membership_type": 2,
         "customer": "EGR9SYT",
+        "testmode": false,
         "date_start": "2021-04-19T00:00:00+02:00",
         "date_end": "2021-04-20T00:00:00+02:00",
         "attendee_name_parts": {
@@ -149,6 +154,7 @@ Endpoints
         "id": 3,
         "membership_type": 2,
         "customer": "EGR9SYT",
+        "testmode": false,
         "date_start": "2021-04-19T00:00:00+02:00",
         "date_end": "2021-04-20T00:00:00+02:00",
         "attendee_name_parts": {
@@ -171,7 +177,7 @@ Endpoints
    the resource, other fields will be reset to default. With ``PATCH``, you only need to provide the fields that you
    want to change.
 
-   You can change all fields of the resource except the ``id`` and ``customer`` fields.
+   You can change all fields of the resource except the ``id``, ``customer``, and ``testmode`` fields.
 
    **Example request**:
 

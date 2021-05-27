@@ -1887,6 +1887,45 @@ class MembershipUpdateView(OrganizerDetailViewMixin, OrganizerPermissionRequired
         })
 
 
+class MembershipDeleteView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, DeleteView):
+    template_name = 'pretixcontrol/organizers/customer_membership_delete.html'
+    permission = 'can_manage_customers'
+    context_object_name = 'membership'
+    form_class = MembershipUpdateForm
+
+    def get_object(self, queryset=None):
+        return get_object_or_404(
+            Membership,
+            customer__organizer=self.request.organizer,
+            customer__identifier=self.kwargs.get('customer'),
+            testmode=True,
+            pk=self.kwargs.get('id')
+        )
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['is_allowed'] = self.object.allow_delete()
+        return ctx
+
+    @transaction.atomic
+    def delete(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        self.customer = self.object.customer
+        success_url = self.get_success_url()
+        if self.object.allow_delete():
+            self.object.cartposition_set.all().delete()
+            self.object.customer.log_action('pretix.customer.membership.deleted', user=self.request.user)
+            self.object.delete()
+            messages.success(request, _('The selected object has been deleted.'))
+        return redirect(success_url)
+
+    def get_success_url(self):
+        return reverse('control:organizer.customer', kwargs={
+            'organizer': self.request.organizer.slug,
+            'customer': self.customer.identifier,
+        })
+
+
 class MembershipCreateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, CreateView):
     template_name = 'pretixcontrol/organizers/customer_membership.html'
     permission = 'can_manage_customers'

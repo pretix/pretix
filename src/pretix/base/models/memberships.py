@@ -114,6 +114,10 @@ class MembershipQuerySetManager(ScopedManager(organizer='customer__organizer')._
 
 class Membership(models.Model):
     id = models.BigAutoField(primary_key=True)
+    testmode = models.BooleanField(
+        verbose_name=_('Test mode'),
+        default=False
+    )
     customer = models.ForeignKey(
         Customer,
         related_name='memberships',
@@ -168,3 +172,6 @@ class Membership(models.Model):
             dt = now()
 
         return dt >= self.date_start and dt <= self.date_end
+
+    def allow_delete(self):
+        return self.testmode and not self.orderposition_set.exists()

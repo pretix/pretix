@@ -87,7 +87,7 @@ class MembershipSerializer(I18nAwareModelSerializer):
 
     class Meta:
         model = Membership
-        fields = ('id', 'customer', 'membership_type', 'date_start', 'date_end', 'attendee_name_parts')
+        fields = ('id', 'testmode', 'customer', 'membership_type', 'date_start', 'date_end', 'attendee_name_parts')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -96,6 +96,7 @@ class MembershipSerializer(I18nAwareModelSerializer):
 
     def update(self, instance, validated_data):
         validated_data['customer'] = instance.customer  # no modifying
+        validated_data['testmode'] = instance.testmode  # no modifying
         return super().update(instance, validated_data)
 
 

@@ -535,6 +535,7 @@ class OrderDelete(OrderView):
                     'organizer': self.request.organizer.slug,
                 }))
             except ProtectedError:
+                logger.exception('Could not delete order')
                 messages.error(self.request, _('The order could not be deleted as some constraints (e.g. data created '
                                                'by plug-ins) do not allow it.'))
                 return self.get(self.request, *self.args, **self.kwargs)

@@ -395,7 +395,7 @@ class MembershipStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
             f.position.used_membership = f.cleaned_data['membership']
 
         try:
-            validate_memberships_in_order(self.cart_customer, self.positions, self.request.event, lock=False)
+            validate_memberships_in_order(self.cart_customer, self.positions, self.request.event, lock=False, testmode=self.request.event.testmode)
         except ValidationError as e:
             messages.error(self.request, e.message)
             self.render()

@@ -325,6 +325,7 @@ def pretixcontrol_logentry_display(sender: Event, logentry: LogEntry, **kwargs):
         'pretix.customer.changed': _('The account has been changed.'),
         'pretix.customer.membership.created': _('A membership for this account has been added.'),
         'pretix.customer.membership.changed': _('A membership of this account has been changed.'),
+        'pretix.customer.membership.deleted': _('A membership of this account has been deleted.'),
         'pretix.customer.anonymized': _('The account has been disabled and anonymized.'),
         'pretix.customer.password.resetrequested': _('A new password has been requested.'),
         'pretix.customer.password.set': _('A new password has been set.'),

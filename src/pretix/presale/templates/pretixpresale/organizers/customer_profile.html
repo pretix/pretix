@@ -59,6 +59,7 @@
                 <tr>
                     <td>
                         {{ m.membership_type.name }}
+                        {% if m.testmode %}<span class="label label-warning">{% trans "TEST MODE" %}</span>{% endif %}
                     </td>
                     <td>
                         {{ m.date_start|date:"SHORT_DATETIME_FORMAT" }}

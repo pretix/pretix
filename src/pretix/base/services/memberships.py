@@ -76,11 +76,12 @@ def create_membership(customer: Customer, position: OrderPosition):
         granted_in=position,
         date_start=date_start,
         date_end=date_end,
-        attendee_name_parts=position.attendee_name_parts
+        attendee_name_parts=position.attendee_name_parts,
+        testmode=position.order.testmode,
     )
 
 
-def validate_memberships_in_order(customer: Customer, positions: List[AbstractPosition], event: Event, lock=False, ignored_order: Order = None):
+def validate_memberships_in_order(customer: Customer, positions: List[AbstractPosition], event: Event, lock=False, ignored_order: Order = None, testmode=False):
     """
     Validate that a set of cart or order positions. This currently does not validate
 
@@ -89,6 +90,7 @@ def validate_memberships_in_order(customer: Customer, positions: List[AbstractPo
     :param event: Event this all is computed in
     :param lock: Whether to place a SELECT FOR UPDATE lock on the selected memberships
     :param ignored_order: An order that should be ignored for usage counting
+    :param testmode: If ``True``, only test mode memberships are allowed. If ``False``, test mode memberships are not allowed.
     """
     tz = event.timezone
     applicable_positions = [
@@ -137,6 +139,11 @@ def validate_memberships_in_order(customer: Customer, positions: List[AbstractPo
         if not customer or m.customer_id != customer.pk:
             raise ValidationError(
                 _('You selected a membership that is connected to a different customer account.')
+            )
+
+        if m.testmode != testmode:
+            raise ValidationError(
+                _('You can only use a test mode membership for test mode tickets.')
             )
 
         ev = p.subevent or event

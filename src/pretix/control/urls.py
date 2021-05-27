@@ -141,6 +141,8 @@ urlpatterns = [
             organizer.MembershipCreateView.as_view(), name='organizer.customer.membership.add'),
     re_path(r'^organizer/(?P<organizer>[^/]+)/customer/(?P<customer>[^/]+)/membership/(?P<id>[^/]+)/edit$',
             organizer.MembershipUpdateView.as_view(), name='organizer.customer.membership.edit'),
+    re_path(r'^organizer/(?P<organizer>[^/]+)/customer/(?P<customer>[^/]+)/membership/(?P<id>[^/]+)/delete$',
+            organizer.MembershipDeleteView.as_view(), name='organizer.customer.membership.delete'),
     re_path(r'^organizer/(?P<organizer>[^/]+)/customer/(?P<customer>[^/]+)/anonymize$',
             organizer.CustomerAnonymizeView.as_view(), name='organizer.customer.anonymize'),
     re_path(r'^organizer/(?P<organizer>[^/]+)/giftcards$', organizer.GiftCardListView.as_view(), name='organizer.giftcards'),

@@ -68,6 +68,7 @@ TEST_MEMBERSHIP_RES = {
     "customer": "8WSAJCJ",
     "date_start": "2021-04-01T00:00:00Z",
     "date_end": "2021-04-08T23:59:59.999999Z",
+    "testmode": False,
     "attendee_name_parts": {
         "_scheme": "given_family",
         'given_name': 'John',
@@ -136,11 +137,13 @@ def test_membership_patch(token_client, organizer, customer, membership):
         format='json',
         data={
             "customer": other_customer.identifier,
+            "testmode": True,
         }
     )
     assert resp.status_code == 200
     membership.refresh_from_db()
     assert membership.customer == customer  # change is ignored
+    assert not membership.testmode  # change is ignored
 
 
 @pytest.mark.django_db

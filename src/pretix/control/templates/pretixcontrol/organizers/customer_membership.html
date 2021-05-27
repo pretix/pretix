@@ -7,6 +7,7 @@
 {% block inner %}
     <h1>
         {% trans "Membership" %}
+        {% if membership.testmode %}<span class="label label-warning">{% trans "TEST MODE" %}</span>{% endif %}
     </h1>
     <div class="panel panel-primary items">
         <div class="panel-heading">

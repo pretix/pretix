@@ -817,7 +817,7 @@ def _create_order(event: Event, email: str, positions: List[CartPosition], now_d
             raise OrderError(_("You cannot pay with gift cards when buying a gift card."))
 
         try:
-            validate_memberships_in_order(customer, positions, event, lock=True)
+            validate_memberships_in_order(customer, positions, event, lock=True, testmode=event.testmode)
         except ValidationError as e:
             raise OrderError(e.message)
 
@@ -2063,7 +2063,7 @@ class OrderChangeManager:
                 )
                 fake_cart.append(cp)
         try:
-            validate_memberships_in_order(self.order.customer, fake_cart, self.event, lock=True, ignored_order=self.order)
+            validate_memberships_in_order(self.order.customer, fake_cart, self.event, lock=True, ignored_order=self.order, testmode=self.order.testmode)
         except ValidationError as e:
             raise OrderError(e.message)
 

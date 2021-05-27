@@ -228,6 +228,44 @@ def test_validate_membership_ensure_locking(event, customer, membership, requiri
 
 
 @pytest.mark.django_db
+def test_validate_membership_test_mode(event, customer, membership, requiring_ticket, membership_type):
+    with pytest.raises(ValidationError) as excinfo:
+        membership.testmode = True
+        membership.save()
+        validate_memberships_in_order(
+            customer,
+            [
+                CartPosition(
+                    item=requiring_ticket,
+                    used_membership=membership
+                )
+            ],
+            event,
+            lock=False,
+            ignored_order=None,
+            testmode=False,
+        )
+    assert "test mode" in str(excinfo.value)
+    with pytest.raises(ValidationError) as excinfo:
+        membership.testmode = False
+        membership.save()
+        validate_memberships_in_order(
+            customer,
+            [
+                CartPosition(
+                    item=requiring_ticket,
+                    used_membership=membership
+                )
+            ],
+            event,
+            lock=False,
+            ignored_order=None,
+            testmode=True,
+        )
+    assert "test mode" in str(excinfo.value)
+
+
+@pytest.mark.django_db
 def test_validate_membership_wrong_customer(event, customer, membership, requiring_ticket, membership_type):
     customer2 = event.organizer.customers.create(email="doe@example.org")
     with pytest.raises(ValidationError) as excinfo:

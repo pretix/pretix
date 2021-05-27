@@ -598,7 +598,7 @@ with scopes_disabled():
 
         class Meta:
             model = Membership
-            fields = ['customer', 'membership_type']
+            fields = ['customer', 'membership_type', 'testmode']
 
 
 class MembershipViewSet(viewsets.ModelViewSet):
