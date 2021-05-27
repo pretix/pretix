@@ -244,6 +244,7 @@ class QuotaForm(I18nModelForm):
             'subevent',
             'close_when_sold_out',
             'release_after_exit',
+            'ignore_for_event_availability',
         ]
         field_classes = {
             'subevent': SafeModelChoiceField,

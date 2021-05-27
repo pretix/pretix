@@ -66,6 +66,9 @@
                     <tr>
                         <td>
                             <strong><a href="{% url "control:event.items.quotas.show" organizer=request.event.organizer.slug event=request.event.slug quota=q.id %}">{{ q.name }}</a></strong>
+                            {% if q.ignore_for_event_availability %}
+                                <span class="fa fa-eye-slash text-muted" data-toggle="tooltip" title="{% trans "Ignore this quota when determining event availability" %}"></span>
+                            {% endif %}
                         </td>
                         <td>
                             <ul>

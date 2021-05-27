@@ -1517,6 +1517,14 @@ class Quota(LoggedModel):
         verbose_name=_("Variations")
     )
 
+    ignore_for_event_availability = models.BooleanField(
+        verbose_name=_('Ignore this quota when determining event availability'),
+        help_text=_('If you enable this, this quota will be ignored when determining event availability in your event calendar. '
+                    'This is useful e.g. for merchandise that is added to each event but should not stop the event from being shown '
+                    'as sold out.'),
+        default=False,
+    )
+
     close_when_sold_out = models.BooleanField(
         verbose_name=_('Close this quota permanently once it is sold out'),
         help_text=_('If you enable this, when the quota is sold out once, no more tickets will be sold, '

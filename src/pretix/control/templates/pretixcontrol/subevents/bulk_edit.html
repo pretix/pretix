@@ -221,6 +221,7 @@
                                         {% bootstrap_field form.size layout="control" %}
                                         {% bootstrap_field form.itemvars layout="control" %}
                                         {% bootstrap_field form.release_after_exit layout="control" %}
+                                        {% bootstrap_field form.ignore_for_event_availability layout="control" %}
                                     </div>
                                 </div>
                             {% endfor %}
@@ -249,6 +250,7 @@
                                         {% bootstrap_field formset.empty_form.size layout="control" %}
                                         {% bootstrap_field formset.empty_form.itemvars layout="control" %}
                                         {% bootstrap_field formset.empty_form.release_after_exit layout="control" %}
+                                        {% bootstrap_field formset.empty_form.ignore_for_event_availability layout="control" %}
                                     </div>
                                 </div>
                             {% endescapescript %}

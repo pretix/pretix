@@ -260,7 +260,9 @@ class EventMixin:
             Prefetch(
                 'quotas',
                 to_attr='active_quotas',
-                queryset=Quota.objects.using(settings.DATABASE_REPLICA).annotate(
+                queryset=Quota.objects.using(settings.DATABASE_REPLICA).filter(
+                    ignore_for_event_availability=False
+                ).annotate(
                     active_items=Subquery(sq_active_item, output_field=models.TextField()),
                     active_variations=Subquery(sq_active_variation, output_field=models.TextField()),
                 ).exclude(
