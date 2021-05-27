@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-05-13 08:11+0000\n"
-"PO-Revision-Date: 2021-05-26 20:00+0000\n"
+"PO-Revision-Date: 2021-05-27 08:22+0000\n"
 "Last-Translator: Mohamed Tawfiq <mtawfiq@wafyapp.com>\n"
 "Language-Team: Arabic <https://translate.pretix.eu/projects/pretix/pretix-js/"
 "ar/>\n"
@@ -498,7 +498,7 @@ msgstr[5] "أخرى"
 
 #: pretix/static/pretixpresale/js/ui/cart.js:39
 msgid "The items in your cart are no longer reserved for you."
-msgstr "العناصر في سلة تسوقك لم تعد محجوزة لك."
+msgstr "لم تعد العناصر الموجودة في عربة التسوق الخاصة بك محجوزة لك."
 
 #: pretix/static/pretixpresale/js/ui/cart.js:41
 msgid "Cart expired"
