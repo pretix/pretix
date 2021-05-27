@@ -98,8 +98,7 @@
                                                     <div class="col-md-2 col-xs-6 price">
                                                         <p>
                                                         {% if c.price_included %}
-                                                            <span class="sr-only">{% trans "included in the price" context "price" %}</span>
-                                                            <span aria-hidden="true">{% trans "included" context "price" %}</span>
+                                                            <span class="sr-only">{% trans "free" context "price" %}</span>
                                                         {% elif item.free_price %}
                                                             {% blocktrans trimmed with price=item.min_price|money:event.currency %}
                                                                 from {{ price }}
@@ -192,8 +191,7 @@
                                                                         {% endblocktrans %}</small>
                                                                     {% endif %}
                                                                 {% else %}
-                                                                    <span class="sr-only">{% trans "included in the price" context "price" %}</span>
-                                                                    <span aria-hidden="true">{% trans "included" context "price" %}</span>
+                                                                    <span class="sr-only">{% trans "free" context "price" %}</span>
                                                                 {% endif %}
                                                             </div>
                                                             {% if var.cached_availability.0 == 100 or var.initial %}
@@ -306,8 +304,7 @@
                                                             {% endblocktrans %}</small>
                                                         {% endif %}
                                                     {% else %}
-                                                        <span class="sr-only">{% trans "included in the price" context "price" %}</span>
-                                                        <span aria-hidden="true">{% trans "included" context "price" %}</span>
+                                                        <span class="sr-only">{% trans "free" context "price" %}</span>
                                                     {% endif %}
                                                     </p>
                                                 </div>
