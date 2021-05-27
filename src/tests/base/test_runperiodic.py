@@ -26,4 +26,4 @@ from pretix.base.signals import periodic_task
 
 @pytest.mark.django_db
 def test_all_periodic_tasks():
-    periodic_task.send(sender=None)  # to trigger sendmail_run_rules
+    periodic_task.send(sender=None)
