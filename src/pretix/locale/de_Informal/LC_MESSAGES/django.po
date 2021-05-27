@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-05-27 12:05+0000\n"
-"PO-Revision-Date: 2021-05-26 10:00+0000\n"
-"Last-Translator: Lina-Caro <mail@carolin.kim>\n"
+"PO-Revision-Date: 2021-05-28 06:00+0000\n"
+"Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
 "Language: de_Informal\n"
@@ -418,7 +418,7 @@ msgstr ""
 
 #: pretix/base/email.py:563
 msgid "Mr Doe"
-msgstr ""
+msgstr "Herr Mustermann"
 
 #: pretix/base/exporter.py:159 pretix/base/exporter.py:285
 msgid "Export format"
@@ -3386,6 +3386,7 @@ msgstr "Varianten"
 #: pretix/control/templates/pretixcontrol/items/quotas.html:70
 msgid "Ignore this quota when determining event availability"
 msgstr ""
+"Ignoriere dieses Kontingent für die Gesamt-Verfügbarkeit der Veranstaltung"
 
 #: pretix/base/models/items.py:1522
 msgid ""
@@ -3394,6 +3395,10 @@ msgid ""
 "that is added to each event but should not stop the event from being shown "
 "as sold out."
 msgstr ""
+"Wenn diese Option aktiv ist, wird dieses Kontingent bei der Bestimmung der "
+"Gesamt-Verfügbarkeit im Veranstaltungskalender ignoriert. Dies ist z.B. "
+"nützlich für Zusatz-Artikel, die in jeder Veranstaltung verkauft werden, "
+"aber die Anzeige im Kalender nicht beeinflussen sollen."
 
 #: pretix/base/models/items.py:1529
 msgid "Close this quota permanently once it is sold out"
@@ -5788,6 +5793,7 @@ msgstr ""
 #: pretix/base/services/memberships.py:146
 msgid "You can only use a test mode membership for test mode tickets."
 msgstr ""
+"Du kannst eine Testmodus-Mitgliedschaft nur für Testmodus-Tickets nutzen."
 
 #: pretix/base/services/memberships.py:153
 #, python-brace-format
@@ -6259,16 +6265,17 @@ msgstr ""
 "Funktionen wie Mitgliedschaften."
 
 #: pretix/base/settings.py:127
-#, fuzzy
-#| msgid "Matched to the account based on the email address."
 msgid "Match orders based on email address"
-msgstr "Zum Kundenkonto auf Basis der E-Mail-Adresse zugeordnet"
+msgstr "Bestellungen auf Basis der E-Mail-Adresse Kundenkonten zuordnen"
 
 #: pretix/base/settings.py:128
 msgid ""
 "This will allow registered customers to access orders made with the same "
 "email address, even if the customer was not logged in during the purchase."
 msgstr ""
+"Diese Option erlaubt angemeldeten Kunden auf alle Bestellungen zuzugreifen, "
+"die mit der E-Mail-Adresse des Kundenkontos getätigt wurden, auch wenn der "
+"Kunde zum Kaufzeitpunkt nicht angemeldet war."
 
 #: pretix/base/settings.py:139
 msgid "Maximum number of items per order"
@@ -6552,10 +6559,8 @@ msgstr ""
 "normale Rechnungen verwendet."
 
 #: pretix/base/settings.py:487
-#, fuzzy
-#| msgid "Length of gift card codes"
 msgid "Length of ticket codes"
-msgstr "Code-Länge für Wertgutscheine"
+msgstr "Länge von Ticketcodes"
 
 #: pretix/base/settings.py:508
 msgid "Reservation period"
@@ -8391,7 +8396,7 @@ msgstr "Herr"
 #: pretix/base/settings.py:2484
 msgctxt "person_name_salutation"
 msgid "Mx"
-msgstr ""
+msgstr "divers"
 
 #: pretix/base/settings.py:2509 pretix/base/settings.py:2522
 #: pretix/base/settings.py:2538 pretix/base/settings.py:2588
@@ -11242,10 +11247,8 @@ msgid "A membership of this account has been changed."
 msgstr "Eine Mitgliedschaft in diesem Konto wurde geändert."
 
 #: pretix/control/logdisplay.py:328
-#, fuzzy
-#| msgid "A membership for this account has been added."
 msgid "A membership of this account has been deleted."
-msgstr "Eine Mitgliedschaft für dieses Konto wurde hinzugefügt."
+msgstr "Eine Mitgliedschaft für dieses Konto wurde gelöscht."
 
 #: pretix/control/logdisplay.py:329
 msgid "The account has been disabled and anonymized."
@@ -12529,6 +12532,8 @@ msgid ""
 "We've detected that you are using <strong>Microsoft Internet Explorer</"
 "strong>."
 msgstr ""
+"Wir haben erkannt, dass du <strong>Microsoft Internet Explorer</strong> "
+"verwendest."
 
 #: pretix/control/templates/pretixcontrol/base.html:327
 msgid ""
@@ -12537,12 +12542,19 @@ msgid ""
 "plan on no longer supporting Internet Explorer in our administrative backend "
 "in the next months."
 msgstr ""
+"Internet Explorer ist ein alter Browser, der viele moderne Internet-"
+"Technologien nicht unterstützt. Manche Funktionen funktionieren bereits "
+"jetzt nur eingeschränkt, aber wir planen in den nächsten Monaten die "
+"Unterstützung für Internet Explorer in unserem administrativen Backend "
+"vollständig einzustellen."
 
 #: pretix/control/templates/pretixcontrol/base.html:332
 msgid ""
 "We kindly ask you to move to one of our supported browsers, such as "
 "Microsoft Edge, Mozilla Firefox, Google Chrome, or Safari."
 msgstr ""
+"Wir bitten dich daher, einen unserer unterstützen Browser zu verwenden, wie "
+"z.B. Microsoft Edge, Mozilla Firefox, Google Chrome oder Safari."
 
 #: pretix/control/templates/pretixcontrol/base.html:341
 msgid ""
@@ -14191,16 +14203,14 @@ msgid "Rate"
 msgstr "Steuersatz"
 
 #: pretix/control/templates/pretixcontrol/event/tax_index.html:41
-#, fuzzy, python-format
-#| msgid "incl. %(rate)s%% %(name)s"
+#, python-format
 msgid "incl. %(rate)s %%"
-msgstr "inkl. %(rate)s%% %(name)s"
+msgstr "inkl. %(rate)s %%"
 
 #: pretix/control/templates/pretixcontrol/event/tax_index.html:43
-#, fuzzy, python-format
-#| msgid "incl. %(rate)s%% %(name)s"
+#, python-format
 msgid "excl. %(rate)s %%"
-msgstr "inkl. %(rate)s%% %(name)s"
+msgstr "zzgl. %(rate)s %%"
 
 #: pretix/control/templates/pretixcontrol/event/tickets.html:8
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:7
@@ -16757,21 +16767,17 @@ msgid "This action is irreversible."
 msgstr "Diese Aktion kann nicht rückgängig gemacht werden."
 
 #: pretix/control/templates/pretixcontrol/organizers/customer_membership_delete.html:15
-#, fuzzy
-#| msgid "Are you sure you want to delete this membership type?"
 msgid "Are you sure you want to delete this membership?"
-msgstr "Möchtest du den Mitgliedschafts-Typ wirklich löschen?"
+msgstr "Möchtest du die Mitgliedschaft wirklich löschen?"
 
 #: pretix/control/templates/pretixcontrol/organizers/customer_membership_delete.html:17
-#, fuzzy
-#| msgid ""
-#| "This membership type cannot be deleted since it has already been used."
 msgid ""
 "This membership cannot be deleted since it has been used in an order. Change "
 "its end date to the past instead."
 msgstr ""
-"Der Mitgliedschafts-Typ kann nicht gelöscht werden, da er bereits genutzt "
-"wurde."
+"Die Mitgliedschaft kann nicht gelöscht werden, da sie bereits für eine "
+"Bestellung genutzt wurde. Du kannst stattdessen das Enddatum der "
+"Mitgliedschaft in die Vergangenheit setzen."
 
 #: pretix/control/templates/pretixcontrol/organizers/customers.html:14
 msgid "No customer accounts have been created yet."
@@ -18633,28 +18639,20 @@ msgstr "Möchtest du den Eintrag <strong>%(entry)s</strong> wirklich löschen?"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/delete_bulk.html:4
 #: pretix/control/templates/pretixcontrol/waitinglist/delete_bulk.html:6
-#, fuzzy
-#| msgid "Delete entry"
 msgid "Delete entries"
-msgstr "Eintrag löschen"
+msgstr "Einträge löschen"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/delete_bulk.html:10
-#, fuzzy
-#| msgid "Are you sure you want to delete the following dates?"
 msgid "Are you sure you want to delete the following entries?"
-msgstr "Möchtest du die folgenden Termine wirklich löschen?"
+msgstr "Möchtest du die folgenden Einträge wirklich löschen?"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/delete_bulk.html:21
-#, fuzzy
-#| msgid ""
-#| "The following dates can't be deleted as they already have orders, but "
-#| "will be disabled instead."
 msgid ""
 "The following entries can't be deleted as they already have a voucher "
 "attached."
 msgstr ""
-"Die folgenden Termine können nicht gelöscht werden, da bereits Bestellungen "
-"vorliegen, aber werden stattdessen deaktiviert."
+"Die folgenden Einträge können nicht gelöscht werden, da für sie bereits ein "
+"Gutschein verschickt wurde."
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:11
 msgid ""
@@ -20072,7 +20070,7 @@ msgstr "Die ausgewählten Termine wurden gelöscht oder deaktiviert."
 
 #: pretix/control/views/subevents.py:876
 msgid "Please do not create more than 100.000 dates at once."
-msgstr ""
+msgstr "Bitte erstelle maximal 100.000 Termine auf einmal."
 
 #: pretix/control/views/subevents.py:1018
 msgctxt "subevent"
@@ -20237,10 +20235,8 @@ msgid "{num} vouchers have been created and sent out via email."
 msgstr "{num} Gutscheine wurden erstellt und per E-Mail verschickt."
 
 #: pretix/control/views/waitinglist.py:162
-#, fuzzy
-#| msgid "The selected entry has been deleted."
 msgid "The selected entries have been deleted."
-msgstr "Der ausgewählte Eintrag wurde gelöscht."
+msgstr "Die ausgewählten Einträge wurden gelöscht."
 
 #: pretix/control/views/waitinglist.py:175
 msgid ""
