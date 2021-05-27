@@ -191,6 +191,10 @@ $(function () {
     $(".has-error, .alert-danger").each(function () {
         $(this).closest("div.panel-collapse").collapse("show");
     });
+    $(".has-error").first().each(function(){
+        if ($(this).is(':input')) this.focus();
+        else $(":input", this).get(0).focus();
+    });
 
     $("#voucher-box").hide();
     $("#voucher-toggle").show();
