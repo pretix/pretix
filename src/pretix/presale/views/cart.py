@@ -620,7 +620,7 @@ class RedeemView(NoSearchIndexViewMixin, EventViewMixin, CartMixin, TemplateView
 
         if err:
             messages.error(request, _(err))
-            return redirect(self.get_index_url())
+            return redirect(self.get_index_url() + "?voucher_invalid")
 
         return super().dispatch(request, *args, **kwargs)
 
