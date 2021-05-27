@@ -107,13 +107,13 @@
     {% if request.event.testmode %}
         {% if request.sales_channel.testmode_supported %}
             <div class="alert alert-warning">
-                <p><strong><span class="sr-only">{% trans "Warning" %}:</span>
+                <p><strong><span class="sr-only">{% trans "Important" context "alert-messages" %}:</span>
                     {% trans "This ticket shop is currently in test mode. Please do not perform any real purchases as your order might be deleted without notice." %}
                 </strong></p>
             </div>
         {% else %}
             <div class="alert alert-danger">
-                <p><strong><span class="sr-only">{% trans "Warning" %}:</span>
+                <p><strong><span class="sr-only">{% trans "Important" context "alert-messages" %}:</span>
                     {% trans "Orders made through this sales channel cannot be deleted - even if the ticket shop is in test mode!" %}
                 </strong></p>
             </div>
@@ -121,7 +121,10 @@
     {% endif %}
     {% if messages %}
         {% for message in messages %}
-            <div class="alert {{ message.tags }}">
+            <div class="alert {{ message.tags }}"{% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %} id="error-message"{% endif %}>
+                {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}<span class="sr-only">{% trans "Error" context "alert-messages" %}:</span>{% endif %}
+                {% if message.level == DEFAULT_MESSAGE_LEVELS.WARNING %}<span class="sr-only">{% trans "Warning" context "alert-messages" %}:</span>{% endif %}
+                {% if message.level == DEFAULT_MESSAGE_LEVELS.INFO %}<span class="sr-only">{% trans "Information" context "alert-messages" %}:</span>{% endif %}
                 {{ message }}
             </div>
         {% endfor %}
