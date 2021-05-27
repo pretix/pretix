@@ -43,7 +43,7 @@ import vat_moss.exchange_rates
 from django.conf import settings
 from django.core.files.base import ContentFile
 from django.core.serializers.json import DjangoJSONEncoder
-from django.db import transaction
+from django.db import connection, transaction
 from django.db.models import Count
 from django.dispatch import receiver
 from django.utils import timezone
@@ -459,7 +459,7 @@ def send_invoices_to_organizer(sender, **kwargs):
         with transaction.atomic():
             qs = Invoice.objects.filter(
                 sent_to_organizer__isnull=True
-            ).prefetch_related('event').select_for_update(skip_locked=True)
+            ).prefetch_related('event').select_for_update(skip_locked=connection.features.has_select_for_update_skip_locked)
             for i in qs[:batch_size]:
                 if i.event.settings.invoice_email_organizer:
                     with language(i.event.settings.locale):
