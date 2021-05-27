@@ -244,13 +244,15 @@ $(function () {
 var waitingDialog = {
     show: function (message) {
         "use strict";
-        $("#loadingmodal").find("h3").html(message);
+        $("#loadingmodal h3").html(message);
         $("#loadingmodal .progress").hide();
         $("body").addClass("loading");
+        $("#loadingmodal").removeAttr("hidden");
     },
     hide: function () {
         "use strict";
         $("body").removeClass("loading");
+        $("#loadingmodal").attr("hidden", true);
     }
 };
 
