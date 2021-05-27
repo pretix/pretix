@@ -637,6 +637,11 @@ class Event(EventMixin, LoggedModel):
             Quota,
         )
 
+        #  Note: avoid self.set_active_plugins(), it causes trouble e.g. for the badges plugin.
+        #  Plugins can create data in installed() hook based on existing data of the event.
+        #  Calling set_active_plugins() results in defaults being created while actually data
+        #  should come from the copied event. Instead plugins should use event_copy_data to move
+        #  over their data.
         self.plugins = other.plugins
         self.is_public = other.is_public
         if other.date_admission:
