@@ -604,6 +604,17 @@ class StripeMethod(BasePaymentProvider):
         self._init_api()
         try:
             source = self._create_source(request, payment)
+
+        except stripe.error.IdempotencyError as e:
+            # Same thing happening twice – we don't want to record a failure, as that might prevent the
+            # other thread from succeeding.
+            if e.json_body and 'error' in e.json_body:
+                err = e.json_body['error']
+                logger.exception('Stripe error: %s' % str(err))
+            else:
+                logger.exception('Stripe error: %s' % str(e))
+            return
+
         except stripe.error.StripeError as e:
             if e.json_body and 'err' in e.json_body:
                 err = e.json_body['error']
@@ -806,6 +817,16 @@ class StripeCC(StripeMethod):
                 'message': err['message'],
             })
             raise PaymentException(_('Stripe reported an error with your card: %s') % err['message'])
+
+        except stripe.error.IdempotencyError as e:
+            # Same thing happening twice – we don't want to record a failure, as that might prevent the
+            # other thread from succeeding.
+            if e.json_body and 'error' in e.json_body:
+                err = e.json_body['error']
+                logger.exception('Stripe error: %s' % str(err))
+            else:
+                logger.exception('Stripe error: %s' % str(e))
+            return
 
         except stripe.error.StripeError as e:
             if e.json_body and 'error' in e.json_body:
@@ -1473,6 +1494,17 @@ class StripeWeChatPay(StripeMethod):
         self._init_api()
         try:
             source = self._create_source(request, payment)
+
+        except stripe.error.IdempotencyError as e:
+            # Same thing happening twice – we don't want to record a failure, as that might prevent the
+            # other thread from succeeding.
+            if e.json_body and 'error' in e.json_body:
+                err = e.json_body['error']
+                logger.exception('Stripe error: %s' % str(err))
+            else:
+                logger.exception('Stripe error: %s' % str(e))
+            return
+
         except stripe.error.StripeError as e:
             if e.json_body and 'err' in e.json_body:
                 err = e.json_body['error']
