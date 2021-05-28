@@ -75,14 +75,17 @@ $(function () {
         cart.init();
     }
 
-    $(".apply-voucher").hide();
-    $(".apply-voucher-toggle").click(function (e) {
-        this.setAttribute("aria-expanded", true);
-        $(".apply-voucher-toggle").hide();
-        $(".apply-voucher").show();
-        $(".apply-voucher input[type=text]").first().focus();
-        e.preventDefault();
-        return true;
+    $(".toggle-container").each(function() {
+        var summary = $(".toggle-summary", this);
+        var content = $("> :not(.toggle-summary)", this);
+        var toggle  = summary.find(".toggle").on("click", function(e) {
+            this.ariaExpanded = !this.ariaExpanded;
+            if (this.classList.contains("toggle-remove")) summary.attr("hidden", true);
+            content.show().find(":input:visible").first().focus();
+        });
+        if (toggle.attr("aria-expanded")) {
+            content.hide();
+        }
     });
 
     $(".cart-icon-details.collapse-lines").each(function () {

@@ -348,7 +348,7 @@
 </div>
 
 <div class="row cart-row">
-    <div class="col-md-8 col-sm-6 col-xs-12">
+    <div class="col-md-12">
     {% if not cart.is_ordered %}
         <p class="text-muted" id="cart-deadline" data-expires="{{ cart.first_expiry|date:"Y-m-d H:i:sO" }}">
             {% if cart.minutes_left > 0 or cart.seconds_left > 0 %}
@@ -369,27 +369,5 @@
         </p>
     {% endif %}
     </div>
-{% if editable and vouchers_exist and not cart.all_with_voucher %}
-    <div class="col-md-4 col-sm-6 col-xs-12">
-        <p class="text-right"><button class="js-only apply-voucher-toggle btn btn-default btn-xs" aria-expanded="false">
-            <span class="fa fa-tag" aria-hidden="true"></span> {% trans "Redeem a voucher" %}
-        </button></p>
-        <form action="{% eventurl event "presale:event.cart.voucher" cart_namespace=cart_namespace|default_if_none:"" %}"
-              data-asynctask-headline="{% trans "We're applying this voucher to your cart..." %}"
-              method="post" data-asynctask class="apply-voucher">
-            {% csrf_token %}
-            <label for="voucher_code" class="sr-only">{% trans "Voucher code" %}</label>
-            <div class="input-group">
-                <input type="text" class="form-control" name="voucher" id="voucher_code" placeholder="{% trans "Voucher code" %}" aria-label="{% trans "Voucher code" %}">
-                <span class="input-group-btn">
-                    <button class="btn btn-primary" type="submit">
-                        <span class="fa fa-check" aria-hidden="true"></span><span class="sr-only"> {% trans "Redeem voucher" %}</span>
-                    </button>
-                </span>
-            </div>
-        </form>
-    </div>
-{% endif %}
-
     <div class="clearfix"></div>
 </div>

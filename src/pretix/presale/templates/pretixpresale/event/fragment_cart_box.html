@@ -25,34 +25,45 @@
     <div>
         <div class="panel-body">
             {% include "pretixpresale/event/fragment_cart.html" with cart=cart event=request.event editable=True %}
-            <div class="row checkout-button-row">
-                <div class="col-md-4 col-sm-6 col-xs-12 hidden-xs">
+            <div class="checkout-button-row">
+                <form class="checkout-button-primary" method="get" action="{% eventurl request.event "presale:event.checkout.start" cart_namespace=cart_namespace  %}">
+                    <p><button class="btn btn-primary btn-lg" type="submit"{% if has_addon_choices or cart.total == 0 %} aria-label="{% trans "Continue with order process" %}"{% endif %}>
+                        <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+                        {% if has_addon_choices or cart.total == 0 %}
+                            {% trans "Continue" %}
+                        {% else %}
+                            {% trans "Proceed with checkout" %}
+                        {% endif %}
+                    </button></p>
+                </form>
+                <div class="checkout-button-secondary">
                     <form method="post" data-asynctask action="{% eventurl request.event "presale:event.cart.clear" cart_namespace=cart_namespace %}">
                         {% csrf_token %}
-                        <button class="btn btn-block btn-default btn-lg" type="submit">
-                            <i class="fa fa-close" aria-hidden="true"></i> {% trans "Empty cart" %}</button>
+                        <p><button class="btn btn-default" type="submit">
+                            <i class="fa fa-close" aria-hidden="true"></i> {% trans "Empty cart" %}</button></p>
                     </form>
+                {% if vouchers_exist and not cart.all_with_voucher %}
+                    <div class="toggle-container">
+                        <p class="toggle-summary"><button class="js-only toggle toggle-remove btn btn-default" aria-expanded="false">
+                            <span class="fa fa-tag" aria-hidden="true"></span> {% trans "Redeem a voucher" %}
+                        </button></p>
+                        <form action="{% eventurl event "presale:event.cart.voucher" cart_namespace=cart_namespace|default_if_none:"" %}"
+                              data-asynctask-headline="{% trans "We're applying this voucher to your cart..." %}"
+                              method="post" data-asynctask>
+                            {% csrf_token %}
+                            <label for="voucher_code" class="sr-only">{% trans "Voucher code" %}</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" name="voucher" id="voucher_code" placeholder="{% trans "Voucher code" %}" aria-label="{% trans "Voucher code" %}">
+                                <span class="input-group-btn">
+                                    <button class="btn btn-primary" type="submit">
+                                        <span class="fa fa-check" aria-hidden="true"></span><span class="sr-only"> {% trans "Redeem voucher" %}</span>
+                                    </button>
+                                </span>
+                            </div>
+                        </form>
+                    </div>
+                {% endif %}
                 </div>
-                <div class="col-md-4 col-sm-6 col-md-offset-4 col-xs-12">
-                    <form method="get" action="{% eventurl request.event "presale:event.checkout.start" cart_namespace=cart_namespace  %}">
-                        <button class="btn btn-block btn-primary btn-lg" type="submit"{% if has_addon_choices or cart.total == 0 %} aria-label="{% trans "Continue with order process" %}"{% endif %}>
-                            <i class="fa fa-shopping-cart" aria-hidden="true"></i>
-                            {% if has_addon_choices or cart.total == 0 %}
-                                {% trans "Continue" %}
-                            {% else %}
-                                {% trans "Proceed with checkout" %}
-                            {% endif %}
-                        </button>
-                    </form>
-                </div>
-                <div class="visible-xs-block col-xs-12">
-                    <form method="post" data-asynctask action="{% eventurl request.event "presale:event.cart.clear" cart_namespace=cart_namespace %}">
-                        {% csrf_token %}
-                        <button class="btn btn-block btn-default btn-lg" type="submit">
-                            <i class="fa fa-close" aria-hidden="true"></i> {% trans "Empty cart" %}</button>
-                    </form>
-                </div>
-                <div class="clearfix"></div>
             </div>
         </div>
     </div>
