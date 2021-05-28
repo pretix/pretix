@@ -7,10 +7,10 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-05-27 12:05+0000\n"
-"PO-Revision-Date: 2021-05-01 06:00+0000\n"
+"PO-Revision-Date: 2021-05-29 05:00+0000\n"
 "Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
-"Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/"
-">\n"
+"Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
+"\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -418,7 +418,7 @@ msgstr "Maak het geld over naar deze bankrekening: NL13 TEST 0123 4567 89"
 
 #: pretix/base/email.py:563
 msgid "Mr Doe"
-msgstr ""
+msgstr "Meneer Janssen"
 
 #: pretix/base/exporter.py:159 pretix/base/exporter.py:285
 msgid "Export format"
@@ -1918,10 +1918,8 @@ msgid "Individual customer"
 msgstr "Particuliere klant"
 
 #: pretix/base/forms/widgets.py:192
-#, fuzzy
-#| msgid "Business customer"
 msgid "Business or institutional customer"
-msgstr "Zakelijke klant"
+msgstr "Zakelijke of institutionele klant"
 
 #: pretix/base/invoice.py:79
 #, python-format
@@ -2293,30 +2291,22 @@ msgid "Exit"
 msgstr "Vertrek"
 
 #: pretix/base/models/customers.py:48
-#, fuzzy
-#| msgid "This account is inactive."
 msgid "Account active"
-msgstr "Dit account is uitgeschakeld."
+msgstr "Account actief"
 
 #: pretix/base/models/customers.py:49
-#, fuzzy
-#| msgid "Attendee e-mail address"
 msgid "Verified email address"
-msgstr "E-mailadres van aanwezige"
+msgstr "Geverifieerd e-mailadres"
 
 #: pretix/base/models/customers.py:50
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:46
-#, fuzzy
-#| msgid "Login"
 msgid "Last login"
-msgstr "Inloggen"
+msgstr "Laatste log-in"
 
 #: pretix/base/models/customers.py:51
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:44
-#, fuzzy
-#| msgid "Registration details"
 msgid "Registration date"
-msgstr "Aanmeldingsdetails"
+msgstr "Registratiedatum"
 
 #: pretix/base/models/devices.py:71 pretix/base/models/items.py:1171
 msgid "Internal identifier"
@@ -3016,34 +3006,32 @@ msgstr ""
 "waarde die overeenkomt met de productprijs."
 
 #: pretix/base/models/items.py:518 pretix/base/models/items.py:792
-#, fuzzy
-#| msgid "Team memberships"
 msgid "Require a valid membership"
-msgstr "Teamlidmaatschappen"
+msgstr "Vereis een geldig lidmaatschap"
 
 #: pretix/base/models/items.py:523
-#, fuzzy
-#| msgid "Team memberships"
 msgid "Allowed membership types"
-msgstr "Teamlidmaatschappen"
+msgstr "Toegestane lidmaatschapstypen"
 
 #: pretix/base/models/items.py:531
 msgid "This product creates a membership of type"
-msgstr ""
+msgstr "Dit product maakt een lidmaatschap aan van type"
 
 #: pretix/base/models/items.py:534
 msgid ""
 "The duration of the membership is the same as the duration of the event or "
 "event series date"
 msgstr ""
+"De duur van het lidmaatschap is gelijk aan de duur van het evenement of de "
+"datum in de evenementenreeks"
 
 #: pretix/base/models/items.py:538
 msgid "Membership duration in days"
-msgstr ""
+msgstr "Duur van lidmaatschap in dagen"
 
 #: pretix/base/models/items.py:542
 msgid "Membership duration in months"
-msgstr ""
+msgstr "Duur van lidmaatschap in maanden"
 
 #: pretix/base/models/items.py:550 pretix/base/models/items.py:1192
 #: pretix/control/forms/filter.py:361 pretix/control/forms/filter.py:1309
@@ -3093,10 +3081,8 @@ msgstr "Plaats"
 #: pretix/base/models/items.py:797 pretix/control/navigation.py:516
 #: pretix/control/templates/pretixcontrol/organizers/membershiptypes.html:4
 #: pretix/control/templates/pretixcontrol/organizers/membershiptypes.html:6
-#, fuzzy
-#| msgid "Team memberships"
 msgid "Membership types"
-msgstr "Teamlidmaatschappen"
+msgstr "Lidmaatschapstypes"
 
 #: pretix/base/models/items.py:804 pretix/base/models/vouchers.py:203
 #: pretix/base/models/waitinglist.py:95 pretix/base/orderimport.py:228
@@ -3398,7 +3384,7 @@ msgstr "Varianten"
 #: pretix/base/models/items.py:1521
 #: pretix/control/templates/pretixcontrol/items/quotas.html:70
 msgid "Ignore this quota when determining event availability"
-msgstr ""
+msgstr "Negeer dit quotum bij het bepalen of een evenement beschikbaar is"
 
 #: pretix/base/models/items.py:1522
 msgid ""
@@ -3407,6 +3393,11 @@ msgid ""
 "that is added to each event but should not stop the event from being shown "
 "as sold out."
 msgstr ""
+"Als deze optie is ingeschakeld wordt dit quotum genegeerd bij het bepalen of "
+"uw evenement als beschikbaar moet worden getoond in de evenementenkalender. "
+"Dit kan bijvoorbeeld nuttig zijn voor quota met handelswaar die aan elk "
+"evenement worden toegevoegd, maar die niet de status van het evenement in de "
+"kalender moeten beïnvloeden."
 
 #: pretix/base/models/items.py:1529
 msgid "Close this quota permanently once it is sold out"
@@ -3521,17 +3512,20 @@ msgstr "Belastingregel {val}"
 
 #: pretix/base/models/memberships.py:44
 msgid "Membership is transferable"
-msgstr ""
+msgstr "Lidmaatschap is overdraagbaar"
 
 #: pretix/base/models/memberships.py:45
 msgid ""
 "If this is selected, the membership can be used to purchase tickets for "
 "multiple persons. If not, the attendee name always needs to stay the same."
 msgstr ""
+"Als deze optie is ingeschakeld kan het lidmaatschap gebruikt worden om "
+"tickets voor meerdere personen aan te schaffen. Als deze optie niet is "
+"ingeschakeld moet de naam van de deelnemer altijd gelijk zijn."
 
 #: pretix/base/models/memberships.py:50
 msgid "Parallel usage is allowed"
-msgstr ""
+msgstr "Parallel gebruik is toegestaan"
 
 #: pretix/base/models/memberships.py:51
 msgid ""
@@ -3539,6 +3533,10 @@ msgid ""
 "events happening at the same time. Note that this will only check for an "
 "identical start time of the events, not for any overlap between events."
 msgstr ""
+"Als deze optie is ingeschakeld kan het lidmaatschap worden gebruikt om "
+"tickets te kopen voor evenementen die tegelijk plaatsvinden. Merk op dat "
+"deze controle alleen checkt of de starttijd van de evenementen gelijk zijn, "
+"en niet of de evenementen overlappen."
 
 #: pretix/base/models/memberships.py:56 pretix/base/models/vouchers.py:145
 #: pretix/control/views/vouchers.py:110
@@ -3547,19 +3545,15 @@ msgid "Maximum usages"
 msgstr "Maximum aantal keren te gebruiken"
 
 #: pretix/base/models/memberships.py:57
-#, fuzzy
-#| msgid "Number of times this voucher can be redeemed."
 msgid "Number of times this membership can be used in a purchase."
-msgstr "Aantal keren dat deze voucher kan worden ingewisseld."
+msgstr "Aantal keren dat dit lidmaatschap kan worden gebruikt in een aankoop."
 
 #: pretix/base/models/memberships.py:128
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:71
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:20
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:49
-#, fuzzy
-#| msgid "Members"
 msgid "Membership type"
-msgstr "Leden"
+msgstr "Lidmaatschapstype"
 
 #: pretix/base/models/orders.py:158
 msgid "pending"
@@ -3578,9 +3572,6 @@ msgid "canceled"
 msgstr "geannuleerd"
 
 #: pretix/base/models/orders.py:184 pretix/control/forms/orders.py:584
-#, fuzzy
-#| msgctxt "refund_source"
-#| msgid "Customer"
 msgid "Customer"
 msgstr "Klant"
 
@@ -3918,10 +3909,8 @@ msgstr ""
 "team toevoegt!"
 
 #: pretix/base/models/organizer.py:266
-#, fuzzy
-#| msgid "Enter custom amount"
 msgid "Can manage customer accounts"
-msgstr "Voer aangepast bedrag in"
+msgstr "Kan klantenaccounts beheren"
 
 #: pretix/base/models/organizer.py:270
 msgid "Can manage gift cards"
@@ -5251,10 +5240,8 @@ msgid "Seat: seat number"
 msgstr "Stoel: stoelnummer"
 
 #: pretix/base/pdf.py:404
-#, fuzzy
-#| msgid "Date and time"
 msgid "Date and time of first scan"
-msgstr "Datum en tijd"
+msgstr "Datum en tijd van eerste scan"
 
 #: pretix/base/pdf.py:445 pretix/base/pdf.py:483
 #, python-brace-format
@@ -5595,58 +5582,48 @@ msgstr "Onbekende reden"
 #: pretix/base/services/checkin.py:207
 #, python-brace-format
 msgid "Only allowed before {datetime}"
-msgstr ""
+msgstr "Alleen toegestaan voor {datetime}"
 
 #: pretix/base/services/checkin.py:209
 #, python-brace-format
 msgid "Only allowed after {datetime}"
-msgstr ""
+msgstr "Alleen toegestaan vanaf {datetime}"
 
 #: pretix/base/services/checkin.py:212
-#, fuzzy
-#| msgid "Filetype not allowed!"
 msgid "Ticket type not allowed"
-msgstr "Bestandstype niet toegestaan!"
+msgstr "Tickettype niet toegestaan"
 
 #: pretix/base/services/checkin.py:220
-#, fuzzy
-#| msgid "Number of days"
 msgid "number of days with an entry"
-msgstr "Aantal dagen"
+msgstr "aantal dagen met een binnenkomst"
 
 #: pretix/base/services/checkin.py:221
-#, fuzzy
-#| msgid "Number of tickets"
 msgid "number of entries"
-msgstr "Aantal tickets"
+msgstr "aantal binnenkomsten"
 
 #: pretix/base/services/checkin.py:222
-#, fuzzy
-#| msgid "Number of tickets"
 msgid "number of entries today"
-msgstr "Aantal tickets"
+msgstr "aantal binnenkomsten vandaag"
 
 #: pretix/base/services/checkin.py:227
 #, python-brace-format
 msgid "{variable} is not {value}"
-msgstr ""
+msgstr "{variable} is niet {value}"
 
 #: pretix/base/services/checkin.py:229
-#, fuzzy, python-brace-format
-#| msgid "Maximum value"
+#, python-brace-format
 msgid "Maximum {variable} exceeded"
-msgstr "Maximumwaarde"
+msgstr "Maximum {variable} bereikt"
 
 #: pretix/base/services/checkin.py:231
-#, fuzzy, python-brace-format
-#| msgid "Minimum value"
+#, python-brace-format
 msgid "Minimum {variable} exceeded"
-msgstr "Minimumwaarde"
+msgstr "Minimum {variable} bereikt"
 
 #: pretix/base/services/checkin.py:233
 #, python-brace-format
 msgid "{variable} is {value}"
-msgstr ""
+msgstr "{variable} is {value}"
 
 #: pretix/base/services/checkin.py:588
 msgid "This order position has been canceled."
@@ -5669,10 +5646,9 @@ msgid "You need to answer questions to complete this check-in."
 msgstr "U moet vragen beantwoorden om deze check-in te voltooien."
 
 #: pretix/base/services/checkin.py:639
-#, fuzzy, python-brace-format
-#| msgid "Voluntary lower refund explanation"
+#, python-brace-format
 msgid "Entry not permitted: {explanation}."
-msgstr "Uitleg voor vrijwillig lagere terugbetaling"
+msgstr "Binnenkomst niet toegestaan: {explanation}."
 
 #: pretix/base/services/checkin.py:684
 msgid "This ticket has already been redeemed."
@@ -5737,10 +5713,9 @@ msgid "Sample product A"
 msgstr "Voorbeeldproduct A"
 
 #: pretix/base/services/invoices.py:468
-#, fuzzy, python-brace-format
-#| msgid "Invoice number"
+#, python-brace-format
 msgid "New invoice: {number}"
-msgstr "Factuurnummer"
+msgstr "Nieuwe factuur: {number}"
 
 #: pretix/base/services/invoices.py:470
 #, python-brace-format
@@ -5752,6 +5727,12 @@ msgid ""
 "We are sending this email because you configured us to do so in your event "
 "settings."
 msgstr ""
+"Hallo,\n"
+"\n"
+"Er is een nieuwe factuur voor {event} aangemaakt, zie bijlage.\n"
+"\n"
+"U ontvangt deze e-mail omdat u in uw evenementsinstellingen hebt aangegeven "
+"deze e-mails te willen ontvangen."
 
 #: pretix/base/services/mail.py:242
 #, python-brace-format
@@ -5784,25 +5765,29 @@ msgid ""
 "You selected a membership for the product \"{product}\" which does not "
 "require a membership."
 msgstr ""
+"U koos een lidmaatschap voor het product \"{product}\", maar dit product "
+"vereist geen lidmaatschap."
 
 #: pretix/base/services/memberships.py:112
-#, fuzzy, python-brace-format
-#| msgid "You selected a product which is not available for sale."
+#, python-brace-format
 msgid ""
 "You selected the product \"{product}\" which requires an active membership "
 "to be selected."
-msgstr "U koos een product dat niet te koop is."
+msgstr ""
+"U koos het product \"{product}\", waarvoor een geldig lidmaatschap verplicht "
+"is."
 
 #: pretix/base/services/memberships.py:141
-#, fuzzy
-#| msgid "You cannot select an item that belongs to a different event."
 msgid ""
 "You selected a membership that is connected to a different customer account."
-msgstr "U kunt geen item kiezen dat bij een ander evenement hoort."
+msgstr ""
+"U koos een lidmaatschap dat is verbonden aan het account van een andere "
+"klant."
 
 #: pretix/base/services/memberships.py:146
 msgid "You can only use a test mode membership for test mode tickets."
 msgstr ""
+"U kunt alleen test-lidmaatschappen gebruiken voor tickets in de testmodus."
 
 #: pretix/base/services/memberships.py:153
 #, python-brace-format
@@ -5810,6 +5795,8 @@ msgid ""
 "You selected a membership that is valid from {start} to {end}, but selected "
 "an event taking place at {date}."
 msgstr ""
+"U koos een lidmaatschap dat geldig is van {start} tot {end}, maar het "
+"gekozen evenement vindt plaats op {date}."
 
 #: pretix/base/services/memberships.py:168
 #, python-brace-format
@@ -5817,6 +5804,8 @@ msgid ""
 "You selected a membership of type \"{type}\", which is not allowed for the "
 "product \"{product}\"."
 msgstr ""
+"U koos een lidmaatschap van het type \"{type}\", dat niet is toegestaan voor "
+"het product \"{product}\"."
 
 #: pretix/base/services/memberships.py:177
 #, python-brace-format
@@ -5824,6 +5813,8 @@ msgid ""
 "You are trying to use a membership of type \"{type}\" more than {number} "
 "times, which is the maximum amount."
 msgstr ""
+"U kunt een lidmaatschap van type \"{type}\" niet vaker dan {number} keren "
+"gebruiken."
 
 #: pretix/base/services/memberships.py:188
 #, python-brace-format
@@ -5832,6 +5823,9 @@ msgid ""
 "place at {date}, however you already used the same membership for a "
 "different ticket at the same time."
 msgstr ""
+"U probeert een lidmaatschap van type \"{type}\" te gebruiken voor een "
+"evenement dat plaatsvindt op \"{date}\", maar u heeft dit lidmaatschap al "
+"gebruikt voor een ander ticket op dezelfde tijd."
 
 #: pretix/base/services/orderimport.py:108
 #, python-brace-format
@@ -6249,28 +6243,30 @@ msgid "The voucher has been sent to {recipient}."
 msgstr "De voucher is verstuurd naar {recipient}."
 
 #: pretix/base/settings.py:116
-#, fuzzy
-#| msgid "All customers not checked in"
 msgid "Allow customers to create accounts"
-msgstr "Alle niet ingecheckte klanten"
+msgstr "Sta klanten toe om accounts aan te maken"
 
 #: pretix/base/settings.py:117
 msgid ""
 "This will allow customers to sign up for an account on your ticket shop. "
 "This is a prerequisite for some advanced features like memberships."
 msgstr ""
+"Dit zal klanten toestaan om een account aan te maken voor uw ticketwinkel. "
+"Dit is een vereiste voor bepaalde geavanceerde functies, zoals "
+"lidmaatschappen."
 
 #: pretix/base/settings.py:127
-#, fuzzy
-#| msgid "Attendee e-mail address"
 msgid "Match orders based on email address"
-msgstr "E-mailadres van aanwezige"
+msgstr "Koppel bestellingen aan klantenaccounts op basis van e-mailadres"
 
 #: pretix/base/settings.py:128
 msgid ""
 "This will allow registered customers to access orders made with the same "
 "email address, even if the customer was not logged in during the purchase."
 msgstr ""
+"Als deze optie is ingeschakeld zullen geregistreerde klanten bestellingen "
+"kunnen inzien die zijn gemaakt met het e-mailadres van hun account, zelfs "
+"als de klant bij de aankoop niet was ingelogd."
 
 #: pretix/base/settings.py:139
 msgid "Maximum number of items per order"
@@ -6558,10 +6554,8 @@ msgstr ""
 "gebruikt."
 
 #: pretix/base/settings.py:487
-#, fuzzy
-#| msgid "Length of gift card codes"
 msgid "Length of ticket codes"
-msgstr "Lengte van cadeauboncodes"
+msgstr "Lengte van ticketcodes"
 
 #: pretix/base/settings.py:508
 msgid "Reservation period"
@@ -6880,7 +6874,7 @@ msgstr ""
 
 #: pretix/base/settings.py:900
 msgid "Email address to receive a copy of each invoice"
-msgstr ""
+msgstr "Stuur een kopie van elke factuur naar e-mailadres"
 
 #: pretix/base/settings.py:901
 msgid ""
@@ -6888,6 +6882,10 @@ msgid ""
 "creation. You can use this for an automated import of invoices to your "
 "accounting system. The invoice will be the only attachment of the email."
 msgstr ""
+"Elke nieuw aangemaakte factuur zal kort na het aanmaken worden verzonden "
+"naar dit e-mailadres. U kunt dit bijvoorbeeld gebruiken voor het automatisch "
+"importeren van facturen in uw boekhoudsysteem. De factuur zal de enige "
+"bijlage van de e-mail zijn."
 
 #: pretix/base/settings.py:912
 msgid "Show items outside presale period"
@@ -7916,17 +7914,7 @@ msgstr ""
 "Organisatie van {event}"
 
 #: pretix/base/settings.py:1814
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Hello {attendee_name},\n"
-#| "\n"
-#| "you are registered for {event}.\n"
-#| "\n"
-#| "If you did not do so already, you can download your ticket here:\n"
-#| "{url}\n"
-#| "\n"
-#| "Best regards,\n"
-#| "Your {event} team"
+#, python-brace-format
 msgid ""
 "Hello {attendee_name},\n"
 "\n"
@@ -7990,6 +7978,23 @@ msgid ""
 "\n"
 "Your {organizer} team"
 msgstr ""
+"Hallo {name},\n"
+"\n"
+"U heeft u aangemeld voor een klantenaccount bij {organizer}.\n"
+"\n"
+"Klik op de volgende link om uw account te activeren en een wachtwoord in te "
+"stellen:\n"
+"\n"
+"{url}\n"
+"\n"
+"Deze link is één dag geldig.\n"
+"\n"
+"Als u niet uzelf heeft aangemeld voor dit account kunt u deze e-mail negeren."
+"\n"
+"\n"
+"Met vriendelijke groet,\n"
+"\n"
+"Het {organizer}-team"
 
 #: pretix/base/settings.py:1856
 #, python-brace-format
@@ -8010,6 +8015,22 @@ msgid ""
 "\n"
 "Your {organizer} team"
 msgstr ""
+"Hallo {name},\n"
+"\n"
+"U heeft aangevraagd om het e-mailadres van uw account bij {organizer} te "
+"veranderen.\n"
+"\n"
+"Klik op de volgende link om de wijziging te bevestigen:\n"
+"\n"
+"{url}\n"
+"\n"
+"Deze link is één dag geldig.\n"
+"\n"
+"Als u deze wijziging niet heeft aangevraagd kunt u deze e-mail negeren.\n"
+"\n"
+"Met vriendelijke groet,\n"
+"\n"
+"Het {organizer}-team"
 
 #: pretix/base/settings.py:1874
 #, python-brace-format
@@ -8030,6 +8051,22 @@ msgid ""
 "\n"
 "Your {organizer} team"
 msgstr ""
+"Hallo {name},\n"
+"\n"
+"U heeft een nieuw wachtwoord aangevraagd voor uw klantenaccount bij "
+"{organizer}.\n"
+"\n"
+"Klik op de volgende link om een nieuw wachtwoord in te stellen:\n"
+"\n"
+"{url}\n"
+"\n"
+"Deze link is één dag geldig.\n"
+"\n"
+"Als u geen nieuw wachtwoord heeft aangevraagd kunt u deze e-mail negeren.\n"
+"\n"
+"Met vriendelijke groet,\n"
+"\n"
+"Het {organizer}-team"
 
 #: pretix/base/settings.py:1926 pretix/base/settings.py:1933
 #: pretix/base/settings.py:1947 pretix/base/settings.py:1955
@@ -8511,17 +8548,14 @@ msgid "E-mails"
 msgstr "E-mails"
 
 #: pretix/base/shredder.py:196
-#, fuzzy
-#| msgid ""
-#| "This will remove all e-mail addresses from orders and attendees, as well "
-#| "as logged email contents."
 msgid ""
 "This will remove all e-mail addresses from orders and attendees, as well as "
 "logged email contents. This will also remove the association to customer "
 "accounts."
 msgstr ""
 "Dit zal alle e-mailadressen verwijderen van bestellingen en gasten, samen "
-"met opgeslagen emailinhoud."
+"met opgeslagen emailinhoud. Dit zal ook de bestellingen loskoppelen van "
+"klantenaccounts."
 
 #: pretix/base/shredder.py:242
 msgid ""
@@ -10192,7 +10226,7 @@ msgstr "Toon onafhankelijk van andere producten"
 
 #: pretix/control/forms/item.py:551
 msgid "No membership granted"
-msgstr ""
+msgstr "Geen lidmaatschap toegekend"
 
 #: pretix/control/forms/item.py:644
 #, python-format
@@ -10408,10 +10442,8 @@ msgstr "Zitplaats"
 #: pretix/control/templates/pretixcontrol/organizers/customer_membership_delete.html:5
 #: pretix/control/templates/pretixcontrol/organizers/customer_membership_delete.html:9
 #: pretix/presale/forms/checkout.py:213
-#, fuzzy
-#| msgid "Members"
 msgid "Membership"
-msgstr "Leden"
+msgstr "Lidmaatschap"
 
 #: pretix/control/forms/orders.py:303
 msgid "Including taxes, if any. Keep empty for the product's default price"
@@ -10443,10 +10475,8 @@ msgid "Split into new order"
 msgstr "Splitsen naar nieuwe bestelling"
 
 #: pretix/control/forms/orders.py:508
-#, fuzzy
-#| msgid "Team memberships"
 msgid "(No membership)"
-msgstr "Teamlidmaatschappen"
+msgstr "(Geen lidmaatschap)"
 
 #: pretix/control/forms/orders.py:539
 msgid "Remove this fee"
@@ -10694,13 +10724,8 @@ msgstr ""
 "meeste apparaten te ondersteunen."
 
 #: pretix/control/forms/organizer.py:365
-#, fuzzy
-#| msgid ""
-#| "This will be attached to every email. Available placeholders: {event}"
 msgid "This will be attached to every email."
-msgstr ""
-"Dit zal worden toegevoegd aan iedere e-mail. Beschikbare plaatsaanduidingen: "
-"{event}"
+msgstr "Dit zal worden toegevoegd aan iedere e-mail."
 
 #: pretix/control/forms/organizer.py:443
 msgctxt "webhooks"
@@ -10712,10 +10737,8 @@ msgid "Gift card value"
 msgstr "Waarde van cadeaubon"
 
 #: pretix/control/forms/organizer.py:524 pretix/presale/forms/customer.py:386
-#, fuzzy
-#| msgid "This security device is already registered."
 msgid "An account with this email address is already registered."
-msgstr "Dit beveiligingsapparaat is al geregistreerd."
+msgstr "Er is al een klantenaccount met dit e-mailadres geregistreerd."
 
 #: pretix/control/forms/renderers.py:54
 #: pretix/control/templates/pretixcontrol/items/question_edit.html:135
@@ -10965,10 +10988,9 @@ msgstr ""
 "({new_price})."
 
 #: pretix/control/logdisplay.py:82
-#, fuzzy, python-brace-format
-#| msgid "Position #{posid} created: {item} ({price})."
+#, python-brace-format
 msgid "Position #{posid}: Used membership changed."
-msgstr "Plaats #{posid} aangemaakt: {item} ({price})."
+msgstr "Plaats #{posid}: Gebruikt lidmaatschap aangepast."
 
 #: pretix/control/logdisplay.py:86
 #, python-brace-format
@@ -11182,73 +11204,48 @@ msgid "The webhook has been changed."
 msgstr "De webhook is aangepast."
 
 #: pretix/control/logdisplay.py:321 pretix/control/views/organizer.py:1645
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "The event date has been created."
 msgid "The membership type has been created."
-msgstr "De evenementsdatum is aangemaakt."
+msgstr "Het lidmaatschapstype is aangemaakt."
 
 #: pretix/control/logdisplay.py:322
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "The event date has been changed."
 msgid "The membership type has been changed."
-msgstr "De evenementsdatum is aangepast."
+msgstr "Het lidmaatschapstype is aangepast."
 
 #: pretix/control/logdisplay.py:323
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "The event date has been deleted."
 msgid "The membership type has been deleted."
-msgstr "De evenementsdatum is verwijderd."
+msgstr "Het lidmaatschapstype is verwijderd."
 
 #: pretix/control/logdisplay.py:324
-#, fuzzy
-#| msgid "The gate has been created."
 msgid "The account has been created."
-msgstr "De toegangslocatie is aangemaakt."
+msgstr "Het account is aangemaakt."
 
 #: pretix/control/logdisplay.py:325
-#, fuzzy
-#| msgid "The gate has been changed."
 msgid "The account has been changed."
-msgstr "De toegangslocatie is aangepast."
+msgstr "Het account is aangepast."
 
 #: pretix/control/logdisplay.py:326
-#, fuzzy
-#| msgid "Your account has been enabled."
 msgid "A membership for this account has been added."
-msgstr "Uw account is ingeschakeld."
+msgstr "Een lidmaatschap is toegevoegd aan dit account."
 
 #: pretix/control/logdisplay.py:327
-#, fuzzy
-#| msgid "An answer option has been changed."
 msgid "A membership of this account has been changed."
-msgstr "Een antwoordoptie is aangepast."
+msgstr "Een lidmaatschap van dit account is aangepast."
 
 #: pretix/control/logdisplay.py:328
-#, fuzzy
-#| msgid "Your account has been enabled."
 msgid "A membership of this account has been deleted."
-msgstr "Uw account is ingeschakeld."
+msgstr "Een lidmaatschap van dit account is verwijderd."
 
 #: pretix/control/logdisplay.py:329
-#, fuzzy
-#| msgid "Your account has been disabled."
 msgid "The account has been disabled and anonymized."
-msgstr "Uw account is uitgeschakeld."
+msgstr "Het account is uitgeschakeld en geanonimiseerd."
 
 #: pretix/control/logdisplay.py:330
-#, fuzzy
-#| msgid "The password has been reset."
 msgid "A new password has been requested."
-msgstr "Het wachtwoord is opnieuw ingesteld."
+msgstr "Een nieuw wachtwoord is aangevraagd."
 
 #: pretix/control/logdisplay.py:331
-#, fuzzy
-#| msgid "The password has been reset."
 msgid "A new password has been set."
-msgstr "Het wachtwoord is opnieuw ingesteld."
+msgstr "Een nieuw wachtwoord is ingesteld."
 
 #: pretix/control/logdisplay.py:332 pretix/control/logdisplay.py:367
 msgid "Sending of an email has failed."
@@ -11350,10 +11347,8 @@ msgstr ""
 "Het telefoonnummer is veranderd van \"{old_phone}\" naar \"{new_phone}\"."
 
 #: pretix/control/logdisplay.py:357
-#, fuzzy
-#| msgid "The question has been changed."
 msgid "The customer account has been changed."
-msgstr "De vraag is aangepast."
+msgstr "Het klantenaccount is aangepast."
 
 #: pretix/control/logdisplay.py:358
 msgid "The order locale has been changed."
@@ -12252,18 +12247,13 @@ msgstr "Webhooks"
 #: pretix/control/navigation.py:506
 #: pretix/control/templates/pretixcontrol/organizers/customers.html:6
 #: pretix/control/templates/pretixcontrol/organizers/customers.html:9
-#, fuzzy
-#| msgctxt "refund_source"
-#| msgid "Customer"
 msgid "Customers"
-msgstr "Klant"
+msgstr "Klanten"
 
 #: pretix/control/navigation.py:525
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:56
-#, fuzzy
-#| msgid "Customer actions"
 msgid "Customer accounts"
-msgstr "Klantacties"
+msgstr "Klantenaccounts"
 
 #: pretix/control/navigation.py:535 pretix/control/navigation.py:542
 msgid "Devices"
@@ -12532,6 +12522,8 @@ msgid ""
 "We've detected that you are using <strong>Microsoft Internet Explorer</"
 "strong>."
 msgstr ""
+"We hebben gedetecteerd dat u <strong>Microsoft Internet Explorer</strong> "
+"gebruikt."
 
 #: pretix/control/templates/pretixcontrol/base.html:327
 msgid ""
@@ -12540,12 +12532,19 @@ msgid ""
 "plan on no longer supporting Internet Explorer in our administrative backend "
 "in the next months."
 msgstr ""
+"Internet Explorer is een oude browser die veel moderne webtechnologieën niet "
+"ondersteunt. Sommige functies in onze administratieve backend werken "
+"mogelijk al niet goed, en we zijn van plan om over een aantal maanden "
+"Internet Explorer helemaal niet meer te ondersteunen in de backend."
 
 #: pretix/control/templates/pretixcontrol/base.html:332
 msgid ""
 "We kindly ask you to move to one of our supported browsers, such as "
 "Microsoft Edge, Mozilla Firefox, Google Chrome, or Safari."
 msgstr ""
+"We raden u aan om over te stappen op een van de browsers die we wel kunnen "
+"ondersteunen, zoals Microsoft Edge, Mozilla Firefox, Google Chrome, of "
+"Safari."
 
 #: pretix/control/templates/pretixcontrol/base.html:341
 msgid ""
@@ -12964,7 +12963,7 @@ msgstr "Bewerken"
 
 #: pretix/control/templates/pretixcontrol/checkin/list_edit.html:80
 msgid "Visualize"
-msgstr ""
+msgstr "Visualiseren"
 
 #: pretix/control/templates/pretixcontrol/checkin/lists.html:7
 msgid ""
@@ -14196,16 +14195,14 @@ msgid "Rate"
 msgstr "Belasting"
 
 #: pretix/control/templates/pretixcontrol/event/tax_index.html:41
-#, fuzzy, python-format
-#| msgid "incl. %(rate)s%% %(name)s"
+#, python-format
 msgid "incl. %(rate)s %%"
-msgstr "incl. %(rate)s%% %(name)s"
+msgstr "incl. %(rate)s %%"
 
 #: pretix/control/templates/pretixcontrol/event/tax_index.html:43
-#, fuzzy, python-format
-#| msgid "incl. %(rate)s%% %(name)s"
+#, python-format
 msgid "excl. %(rate)s %%"
-msgstr "incl. %(rate)s%% %(name)s"
+msgstr "excl. %(rate)s %%"
 
 #: pretix/control/templates/pretixcontrol/event/tickets.html:8
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:7
@@ -14929,20 +14926,16 @@ msgid "Additional settings"
 msgstr "Extra instellingen"
 
 #: pretix/control/templates/pretixcontrol/item/index.html:134
-#, fuzzy
-#| msgid "in days"
 msgid "days"
-msgstr "in dagen"
+msgstr "dagen"
 
 #: pretix/control/templates/pretixcontrol/item/index.html:135
-#, fuzzy
-#| msgid "month(s)"
 msgid "months"
-msgstr "maand(en)"
+msgstr "maanden"
 
 #: pretix/control/templates/pretixcontrol/item/index.html:137
 msgid "Membership duration after purchase"
-msgstr ""
+msgstr "Lidmaatschapsduur na aankoop"
 
 #: pretix/control/templates/pretixcontrol/item/index.html:166
 msgid "Product history"
@@ -15838,16 +15831,12 @@ msgstr "Annuleringsdatum"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:186
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:144
-#, fuzzy
-#| msgid "Customer actions"
 msgid "Customer account"
-msgstr "Klantacties"
+msgstr "Klantenaccount"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:198
-#, fuzzy
-#| msgid "Contact information"
 msgid "Contact email"
-msgstr "Contactgegevens"
+msgstr "Contact-e-mailadres"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:202
 msgid ""
@@ -16553,8 +16542,6 @@ msgstr "Verwijder filter"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:116
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:159
-#, fuzzy
-#| msgid "Order  paid / total"
 msgid "Order paid / total"
 msgstr "Bestelling betaald / totaal"
 
@@ -16664,10 +16651,9 @@ msgstr "Zoeken"
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:12
 #: pretix/control/templates/pretixcontrol/organizers/customer_edit.html:5
 #: pretix/control/templates/pretixcontrol/organizers/customer_edit.html:11
-#, fuzzy, python-format
-#| msgid "Custom fields"
+#, python-format
 msgid "Customer #%(id)s"
-msgstr "Aangepaste velden"
+msgstr "Klant #%(id)s"
 
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:21
 #: pretix/control/templates/pretixcontrol/organizers/customer_membership.html:15
@@ -16685,29 +16671,20 @@ msgstr "Details"
 #: pretix/control/templates/pretixcontrol/organizers/customers.html:37
 #: pretix/presale/templates/pretixpresale/event/checkout_customer.html:41
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:20
-#, fuzzy
-#| msgctxt "invoice"
-#| msgid "Customer VAT ID"
 msgid "Customer ID"
-msgstr "Btw-nummer van klant"
+msgstr "Klantnummer"
 
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:31
-#, fuzzy
-#| msgid "Disabled"
 msgid "disabled"
-msgstr "Uitgeschakeld"
+msgstr "uitgeschakeld"
 
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:33
-#, fuzzy
-#| msgid "Deactivate"
 msgid "not yet activated"
-msgstr "Deactiveren"
+msgstr "nog niet geactiveerd"
 
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:35
-#, fuzzy
-#| msgid "Inactive"
 msgid "active"
-msgstr "Inactief"
+msgstr "actief"
 
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:57
 #: pretix/control/templates/pretixcontrol/organizers/customer_anonymize.html:39
@@ -16717,100 +16694,85 @@ msgstr "Anonimiseren"
 
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:65
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:43
-#, fuzzy
-#| msgid "Members"
 msgid "Memberships"
-msgstr "Leden"
+msgstr "Lidmaatschappen"
 
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:72
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:22
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:50
-#, fuzzy
-#| msgid "Valid"
 msgid "Valid from"
-msgstr "Geldig"
+msgstr "Geldig van"
 
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:76
 #: pretix/control/templates/pretixcontrol/organizers/customer_membership.html:35
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:36
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:53
-#, fuzzy
-#| msgid "Use languages"
 msgid "Usages"
-msgstr "Gebruik talen"
+msgstr "Aantal keren gebruikt"
 
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:140
-#, fuzzy
-#| msgid "Team memberships"
 msgid "Add membership"
-msgstr "Teamlidmaatschappen"
+msgstr "Lidmaatschap toevoegen"
 
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:187
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:137
 msgid "Matched to the account based on the email address."
-msgstr ""
+msgstr "Aan het account gekoppeld op basis van het e-mailadres."
 
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:233
-#, fuzzy
-#| msgid "User history"
 msgid "Customer history"
-msgstr "Gebruikershistorie"
+msgstr "Klantgeschiedenis"
 
 #: pretix/control/templates/pretixcontrol/organizers/customer_anonymize.html:5
 #: pretix/control/templates/pretixcontrol/organizers/customer_anonymize.html:11
-#, fuzzy, python-format
-#| msgid "Anonymize user"
+#, python-format
 msgid "Anonymize customer #%(id)s"
-msgstr "Gebruiker anonimiseren"
+msgstr "Anonimiseer klant #%(id)s"
 
 #: pretix/control/templates/pretixcontrol/organizers/customer_anonymize.html:16
-#, fuzzy
-#| msgid "Are you sure you want to delete the gate?"
 msgid "Are you sure you want to anonymize this customer account?"
-msgstr "Weet u zeker dat u de toegangslocatie wilt verwijderen?"
+msgstr "Weet u zeker dat u dit klantaccount wilt anonimiseren?"
 
 #: pretix/control/templates/pretixcontrol/organizers/customer_anonymize.html:20
 msgid "All orders will be disconnected from this customer account."
-msgstr ""
+msgstr "Alle bestellingen zullen worden losgekoppeld van dit klantenaccount."
 
 #: pretix/control/templates/pretixcontrol/organizers/customer_anonymize.html:22
 msgid ""
 "The orders themselves will not be anonymized and can still contain personal "
 "information!"
 msgstr ""
+"De bestellingen zelf zullen niet worden geanonimiseerd en kunnen nog steeds "
+"persoonsgegevens bevatten!"
 
 #: pretix/control/templates/pretixcontrol/organizers/customer_anonymize.html:26
 msgid ""
 "The customer will no longer be able to log in and will lose access to any "
 "membership benefits."
 msgstr ""
+"De klant zal niet meer kunnen inloggen en zal geen gebruik meer kunnen maken "
+"van eventuele lidmaatschappen."
 
 #: pretix/control/templates/pretixcontrol/organizers/customer_anonymize.html:29
-#, fuzzy
-#| msgid "The transaction has been reversed."
 msgid "This action is irreversible."
-msgstr "De transactie is teruggeboekt."
+msgstr "Deze actie kan niet ongedaan worden gemaakt."
 
 #: pretix/control/templates/pretixcontrol/organizers/customer_membership_delete.html:15
-#, fuzzy
-#| msgid "Are you sure you want to delete the gate?"
 msgid "Are you sure you want to delete this membership?"
-msgstr "Weet u zeker dat u de toegangslocatie wilt verwijderen?"
+msgstr "Weet u zeker dat u dit lidmaatschap wilt verwijderen?"
 
 #: pretix/control/templates/pretixcontrol/organizers/customer_membership_delete.html:17
-#, fuzzy
-#| msgid "A voucher can not be deleted if it already has been redeemed."
 msgid ""
 "This membership cannot be deleted since it has been used in an order. Change "
 "its end date to the past instead."
 msgstr ""
-"Een voucher kan niet worden verwijderd wanneer de voucher al is verzilverd."
+"Dit lidmaatschap kan niet worden verwijderd, omdat het in een bestelling is "
+"gebruikt. Verander in plaats hiervan de einddatum van het lidmaatschap naar "
+"een datum in het verleden."
 
 #: pretix/control/templates/pretixcontrol/organizers/customers.html:14
-#, fuzzy
-#| msgid "No exports have been created yet."
 msgid "No customer accounts have been created yet."
-msgstr "Er zijn nog geen exports aangemaakt."
+msgstr "Er zijn nog geen klantenaccounts aangemaakt."
 
 #: pretix/control/templates/pretixcontrol/organizers/delete.html:5
 msgid "Delete organizer"
@@ -17131,54 +17093,39 @@ msgid "Organizer logs"
 msgstr "Organisatorlogs"
 
 #: pretix/control/templates/pretixcontrol/organizers/mail.html:28
-#, fuzzy
-#| msgid "Submit registration"
 msgid "Customer account registration"
-msgstr "Verstuur aanmelding"
+msgstr "Klantenaccount-registratie"
 
 #: pretix/control/templates/pretixcontrol/organizers/mail.html:31
-#, fuzzy
-#| msgid "Customer actions"
 msgid "Customer account email change"
-msgstr "Klantacties"
+msgstr "Verandering van het e-mailadres"
 
 #: pretix/control/templates/pretixcontrol/organizers/mail.html:34
-#, fuzzy
-#| msgid "Your current password"
 msgid "Customer account password reset"
-msgstr "Uw huidige wachtwoord"
+msgstr "Wachtwoord van klantenaccount opnieuw instellen"
 
 #: pretix/control/templates/pretixcontrol/organizers/membershiptype_delete.html:5
-#, fuzzy
-#| msgid "Team memberships"
 msgid "Delete membership type:"
-msgstr "Teamlidmaatschappen"
+msgstr "Verwijder lidmaatschapstype:"
 
 #: pretix/control/templates/pretixcontrol/organizers/membershiptype_delete.html:9
-#, fuzzy
-#| msgid "Are you sure you want to delete the gate?"
 msgid "Are you sure you want to delete this membership type?"
-msgstr "Weet u zeker dat u de toegangslocatie wilt verwijderen?"
+msgstr "Weet u zeker dat u dit lidmaatschapstype wilt verwijderen?"
 
 #: pretix/control/templates/pretixcontrol/organizers/membershiptype_delete.html:11
-#, fuzzy
-#| msgid "A voucher can not be deleted if it already has been redeemed."
 msgid "This membership type cannot be deleted since it has already been used."
 msgstr ""
-"Een voucher kan niet worden verwijderd wanneer de voucher al is verzilverd."
+"Dit lidmaatschapstype kan niet worden verwijderd, omdat het al een keer is "
+"gebruikt in een bestelling."
 
 #: pretix/control/templates/pretixcontrol/organizers/membershiptype_edit.html:6
-#, fuzzy
-#| msgid "Members"
 msgid "Membership type:"
-msgstr "Leden"
+msgstr "Lidmaatschapstype:"
 
 #: pretix/control/templates/pretixcontrol/organizers/membershiptype_edit.html:8
 #: pretix/control/templates/pretixcontrol/organizers/membershiptypes.html:21
-#, fuzzy
-#| msgid "Create a new event"
 msgid "Create a new membership type"
-msgstr "Nieuw evenement aanmaken"
+msgstr "Nieuw lidmaatschapstype aanmaken"
 
 #: pretix/control/templates/pretixcontrol/organizers/membershiptypes.html:8
 msgid ""
@@ -17187,11 +17134,17 @@ msgid ""
 "in one event, and require valid memberships to allow purchases in another "
 "event."
 msgstr ""
+"U kunt meerdere lidmaatschapstypen definiëren. Lidmaatschappen staan u toe "
+"om producten van verschillende evenementen te koppelen. U kunt een "
+"lidmaatschap verkopen als product in het ene evenement, en vervolgens een "
+"lidmaatschap vereisen om een product in een ander evenement te kopen."
 
 #: pretix/control/templates/pretixcontrol/organizers/membershiptypes.html:15
 msgid ""
 "This can be used to enable products like year passes, tickets of ten, etc."
 msgstr ""
+"Dit kan worden gebruikt om prijsmodellen zoals jaarkaarten of "
+"strippenkaarten mogelijk te maken."
 
 #: pretix/control/templates/pretixcontrol/organizers/properties.html:7
 msgid ""
@@ -18676,28 +18629,20 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/waitinglist/delete_bulk.html:4
 #: pretix/control/templates/pretixcontrol/waitinglist/delete_bulk.html:6
-#, fuzzy
-#| msgid "Delete entry"
 msgid "Delete entries"
-msgstr "Verwijder item"
+msgstr "Verwijder items"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/delete_bulk.html:10
-#, fuzzy
-#| msgid "Are you sure you want to delete the following dates?"
 msgid "Are you sure you want to delete the following entries?"
-msgstr "Weet u zeker dat u de volgende datums wilt verwijderen?"
+msgstr "Weet u zeker dat u de volgende items wilt verwijderen?"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/delete_bulk.html:21
-#, fuzzy
-#| msgid ""
-#| "The following dates can't be deleted as they already have orders, but "
-#| "will be disabled instead."
 msgid ""
 "The following entries can't be deleted as they already have a voucher "
 "attached."
 msgstr ""
-"De volgende datums kunnen niet worden verwijderd omdat er al bestellingen "
-"aan zijn verbonden. In plaats hiervan zullen de datums worden uitgeschakeld."
+"De volgende items kunnen niet worden verwijderd, omdat er al een voucher aan "
+"is toegewezen."
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:11
 msgid ""
@@ -18811,43 +18756,28 @@ msgid "Move to the end of the list"
 msgstr "Verplaats naar eind van de lijst"
 
 #: pretix/control/templatetags/hierarkey_form.py:67
-#, fuzzy
-#| msgid "Create a new organizer"
 msgid "Currently set on organizer level"
-msgstr "Nieuwe organisator aanmaken"
+msgstr "Momenteel ingesteld in de organisatorinstellingen"
 
 #: pretix/control/templatetags/hierarkey_form.py:67
-#, fuzzy
-#| msgid "Currently for sale"
 msgid "Currently set on global level"
-msgstr "Momenteel te koop"
+msgstr "Momenteel ingesteld in de globale instellingen"
 
 #: pretix/control/templatetags/hierarkey_form.py:70
-#, fuzzy
-#| msgid ""
-#| "These settings are currently set on organizer level. This way, you can "
-#| "easily change them for all of your events at the same time. You can "
-#| "either go to the organizer settings to change them or decouple them from "
-#| "the organizer account to change them for this event individually."
 msgid ""
 "These settings are currently set on organizer level. This way, you can "
 "easily change them for all of your events at the same time. You can either "
 "go to the organizer settings to change them for all your events or you can "
 "unlock them to change them for this event individually."
 msgstr ""
-"Deze instellingen zijn momenteel op het niveau van de organisator ingesteld. "
-"Hierdoor kunt u de instellingen gemakkelijk wijzigen voor al uw evenementen "
-"tegelijk. U kunt naar de organisatorinstellingen gaan om deze aan te passen, "
-"of u kunt de instellingen ontkoppelen van de organisatorinstellingen om ze "
-"alleen voor dit evenement aan te passen."
+"Deze instellingen zijn op dit moment ingesteld op organisatorniveau. "
+"Hierdoor kunt u de instellingen gemakkelijk aanpassen voor al uw evenementen "
+"tegelijk. Om deze instellingen aan te passen kunt u naar de "
+"organisatorinstellingen gaan om de instellingen aan te passen voor alle "
+"evenementen, of u kunt de instellingen loskoppelen om ze alleen voor dit "
+"evenement aan te passen."
 
 #: pretix/control/templatetags/hierarkey_form.py:74
-#, fuzzy
-#| msgid ""
-#| "These settings are currently set on global level. This way, you can "
-#| "easily change them for all organizers at the same time. You can either go "
-#| "to the global settings to change them or decouple them from the global "
-#| "settings to change them for this event individually."
 msgid ""
 "These settings are currently set on global level. This way, you can easily "
 "change them for all organizers at the same time. You can either go to the "
@@ -18856,27 +18786,21 @@ msgid ""
 msgstr ""
 "Deze instellingen zijn momenteel op het site-niveau ingesteld. Hierdoor kunt "
 "u de instellingen gemakkelijk wijzigen voor alle organisators tegelijk. U "
-"kunt naar de globale instellingen gaan om deze aan te passen, of u kunt de "
-"instellingen ontkoppelen van de globale instellingen om ze alleen voor deze "
-"organisator aan te passen."
+"kunt naar de globale instellingen gaan om deze voor alle organisators aan te "
+"passen, of u kunt de instellingen loskoppelen van de globale instellingen om "
+"ze alleen voor deze organisator aan te passen."
 
 #: pretix/control/templatetags/hierarkey_form.py:78
-#, fuzzy
-#| msgid "Blocked"
 msgid "Unlock"
-msgstr "Geblokkeerd"
+msgstr "Ontgrendelen"
 
 #: pretix/control/templatetags/hierarkey_form.py:79
-#, fuzzy
-#| msgid "Go to the organizer team settings"
 msgid "Go to organizer settings"
-msgstr "Ga naar instellingen van het organisatorteam"
+msgstr "Ga naar de organisatorinstellingen"
 
 #: pretix/control/templatetags/hierarkey_form.py:79
-#, fuzzy
-#| msgid "Global settings"
 msgid "Go to global settings"
-msgstr "Globale instellingen"
+msgstr "Ga naar de globale instellingen"
 
 #: pretix/control/views/__init__.py:166
 msgid "That page number is not an integer"
@@ -20078,16 +20002,12 @@ msgstr "De eigenschap is verwijderd."
 
 #: pretix/control/views/organizer.py:1718
 #: pretix/control/views/organizer.py:1919
-#, fuzzy
-#| msgid "The selected product has been deleted."
 msgid "The selected object has been deleted."
-msgstr "Het gekozen product is verwijderd."
+msgstr "Het gekozen object is verwijderd."
 
 #: pretix/control/views/organizer.py:1983
-#, fuzzy
-#| msgid "This user has been anonymized."
 msgid "The customer account has been anonymized."
-msgstr "De gebruiker is geanonimiseerd."
+msgstr "Het klantenaccount is geanonimiseerd."
 
 #: pretix/control/views/pdf.py:74
 msgid "The uploaded PDF file is too large."
@@ -20143,7 +20063,7 @@ msgstr "De geselecteerde datums zijn verwijderd of uitgeschakeld."
 
 #: pretix/control/views/subevents.py:876
 msgid "Please do not create more than 100.000 dates at once."
-msgstr ""
+msgstr "U kunt maximaal 100.000 datums tegelijk aanmaken."
 
 #: pretix/control/views/subevents.py:1018
 msgctxt "subevent"
@@ -20306,10 +20226,8 @@ msgid "{num} vouchers have been created and sent out via email."
 msgstr "{num} vouchers zijn aangemaakt en verstuurd via email."
 
 #: pretix/control/views/waitinglist.py:162
-#, fuzzy
-#| msgid "The selected entry has been deleted."
 msgid "The selected entries have been deleted."
-msgstr "De gekozen inschrijving is verwijderd."
+msgstr "De gekozen items zijn verwijderd."
 
 #: pretix/control/views/waitinglist.py:175
 msgid ""
@@ -22204,10 +22122,8 @@ msgid "WeChat Pay"
 msgstr "WeChat Pay"
 
 #: pretix/plugins/stripe/payment.py:295
-#, fuzzy
-#| msgid "Description"
 msgid "Destination"
-msgstr "Beschrijving"
+msgstr "Bestemmingsrekening"
 
 #: pretix/plugins/stripe/payment.py:321
 #, python-brace-format
@@ -22767,24 +22683,22 @@ msgid "Step"
 msgstr "Stap"
 
 #: pretix/presale/checkoutflow.py:234
-#, fuzzy
-#| msgid "Customer actions"
 msgctxt "checkoutflow"
 msgid "Customer account"
-msgstr "Klantacties"
+msgstr "Klantenaccount"
 
 #: pretix/presale/checkoutflow.py:350
-#, fuzzy
-#| msgid "Members"
 msgctxt "checkoutflow"
 msgid "Membership"
-msgstr "Leden"
+msgstr "Lidmaatschap"
 
 #: pretix/presale/checkoutflow.py:392 pretix/presale/checkoutflow.py:412
 msgid ""
 "Your cart includes a product that requires an active membership to be "
 "selected."
 msgstr ""
+"Uw winkelwagen bevat een product waarvoor u een geldig lidmaatschap moet "
+"hebben."
 
 #: pretix/presale/checkoutflow.py:431
 msgctxt "checkoutflow"
@@ -22877,21 +22791,16 @@ msgid "Please enter the same email address twice."
 msgstr "Voer twee keer hetzelfde e-mailadres in."
 
 #: pretix/presale/forms/customer.py:60
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "You need to select a date."
 msgid "You need to fill out all fields."
-msgstr "U moet een datum selecteren."
+msgstr "Vul alle velden in."
 
 #: pretix/presale/forms/customer.py:62
-#, fuzzy
-#| msgid "Please enter a correct email address and password."
 msgid "We have not found an account with this email address and password."
-msgstr "Voer een correct e-mailadres en wachtwoord in."
+msgstr ""
+"We kunnen geen klantenaccount met deze combinatie van e-mailadres en "
+"wachtwoord vinden."
 
 #: pretix/presale/forms/customer.py:64
-#, fuzzy
-#| msgid "This account is inactive."
 msgid "This account is disabled."
 msgstr "Dit account is uitgeschakeld."
 
