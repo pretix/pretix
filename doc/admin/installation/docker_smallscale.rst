@@ -26,7 +26,7 @@ installation guides):
 * `Docker`_
 * A SMTP server to send out mails, e.g. `Postfix`_ on your machine or some third-party server you have credentials for
 * A HTTP reverse proxy, e.g. `nginx`_ or Apache to allow HTTPS connections
-* A `PostgreSQL`_ 9.5+, `MySQL`_ 5.7+, or MariaDB 10.2.7+ database server
+* A `PostgreSQL`_ 9.6+, `MySQL`_ 5.7+, or MariaDB 10.2.7+ database server
 * A `redis`_ server
 
 We also recommend that you use a firewall, although this is not a pretix-specific recommendation. If you're new to
