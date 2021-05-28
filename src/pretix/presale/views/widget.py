@@ -131,7 +131,9 @@ def generate_widget_js(lang):
                 get_formats(), sort_keys=True, indent=2)),
             'plural': plural,
         })
-        code.append(template.render(context))
+        i18n_js = template.render(context)
+        i18n_js = i18n_js.replace('for (const ', 'for (var ')  # remove if we really want to break IE11 for good
+        code.append(i18n_js)
 
         files = [
             'vuejs/vue.js' if settings.DEBUG else 'vuejs/vue.min.js',
