@@ -1235,7 +1235,7 @@ class ItemUpdateGeneral(ItemDetailMixin, EventPermissionRequiredMixin, MetaDataE
                 'id': form.instance.pk
             }
             if serializer:
-                d.update(serializer(form.instance).data)
+                d.update(serializer(form.instance, context={'event': self.request.event}).data)
             self.get_object().log_action(
                 'pretix.event.item.{}.{}'.format(log_base, rm_verb), user=self.request.user, data=d
             )
