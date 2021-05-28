@@ -254,17 +254,18 @@ $(function () {
     $("select[id^=id_name_parts], input[id^=id_name_parts_], #id_email, #id_street, #id_company, #id_zipcode," +
         " #id_city, #id_country, #id_state").change(function () {
         if (copy_to_first_ticket) {
-            $(".questions-form").first().find("input[id*=attendee_email]").val($("#id_email").val());
-            $(".questions-form").first().find("input[id$=company]").val($("#id_company").val());
-            $(".questions-form").first().find("textarea[id$=street]").val($("#id_street").val());
-            $(".questions-form").first().find("input[id$=zipcode]").val($("#id_zipcode").val());
-            $(".questions-form").first().find("input[id$=city]").val($("#id_city").val());
+            var $first_ticket_form = $(".questions-form").first().find("[data-addonidx=0]");
+            $first_ticket_form.find("input[id*=attendee_email]").val($("#id_email").val());
+            $first_ticket_form.find("input[id$=company]").val($("#id_company").val());
+            $first_ticket_form.find("textarea[id$=street]").val($("#id_street").val());
+            $first_ticket_form.find("input[id$=zipcode]").val($("#id_zipcode").val());
+            $first_ticket_form.find("input[id$=city]").val($("#id_city").val());
 
-            $(".questions-form").first().find("select[id$=state]").val($("#id_state").val());
-            if ($(".questions-form").first().find("select[id$=country]").val() !== $("#id_country").val()) {
-                $(".questions-form").first().find("select[id$=country]").val($("#id_country").val()).trigger('change');
+            $first_ticket_form.find("select[id$=state]").val($("#id_state").val());
+            if ($first_ticket_form.find("select[id$=country]").val() !== $("#id_country").val()) {
+                $first_ticket_form.find("select[id$=country]").val($("#id_country").val()).trigger('change');
             }
-            $(".questions-form").first().find("[id*=attendee_name_parts]").each(function () {
+            $first_ticket_form.find("[id*=attendee_name_parts]").each(function () {
                 var parts = $(this).attr("id").split("_");
                 var num = parts[parts.length - 1];
                 $(this).val($("#id_name_parts_" + num).val());
