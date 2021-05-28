@@ -372,6 +372,8 @@ def test_item_detail_variations(token_client, organizer, event, team, item):
         "active": True,
         "description": None,
         "position": 0,
+        "require_membership": False,
+        "require_membership_types": [],
         "original_price": None
     }]
     res["has_variations"] = True
@@ -497,6 +499,8 @@ def test_item_create_with_variation(token_client, organizer, event, item, catego
                         "en": "Comment"
                     },
                     "active": True,
+                    "require_membership": False,
+                    "require_membership_types": [],
                     "description": None,
                     "position": 0,
                     "default_price": None,
@@ -1123,6 +1127,8 @@ TEST_VARIATIONS_RES = {
     "position": 0,
     "default_price": None,
     "price": "23.00",
+    "require_membership": False,
+    "require_membership_types": [],
     "original_price": None
 }
 
@@ -1134,6 +1140,8 @@ TEST_VARIATIONS_UPDATE = {
     "description": None,
     "position": 1,
     "default_price": "20.0",
+    "require_membership": False,
+    "require_membership_types": [],
     "original_price": None
 }
 

@@ -104,6 +104,8 @@ variations                            list of objects            A list with one
                                                                  for price calculations (or ``null``).
 ├ active                              boolean                    If ``false``, this variation will not be sold or shown.
 ├ description                         multi-lingual string       A public description of the variation. May contain
+├ require_membership                  boolean                    If ``true``, booking this variation requires an active membership.
+├ require_membership_types            list of integers           Internal IDs of membership types valid if ``require_membership`` is ``true``
                                                                  Markdown syntax or can be ``null``.
 └ position                            integer                    An integer, used for sorting
 addons                                list of objects            Definition of add-ons that can be chosen for this item.
@@ -135,6 +137,11 @@ meta_data                             object                     Values set for 
 .. versionchanged:: 3.10
 
    The attribute ``multi_allowed`` has been added to ``addons``.
+
+.. versionchanged:: 4.0
+
+   The attributes ``require_membership``, ``require_membership_types``, ``grant_membership_type``, ``grant_membership_duration_like_event``,
+    ``grant_membership_duration_days`` and ``grant_membership_duration_months`` have been added.
 
 Notes
 -----
@@ -221,6 +228,8 @@ Endpoints
                  "price": "10.00",
                  "original_price": null,
                  "active": true,
+                 "require_membership": false,
+                 "require_membership_types": [],
                  "description": null,
                  "position": 0
               },
@@ -230,6 +239,8 @@ Endpoints
                  "price": "23.00",
                  "original_price": null,
                  "active": true,
+                 "require_membership": false,
+                 "require_membership_types": [],
                  "description": null,
                  "position": 1
               }
@@ -323,6 +334,8 @@ Endpoints
              "price": "10.00",
              "original_price": null,
              "active": true,
+             "require_membership": false,
+             "require_membership_types": [],
              "description": null,
              "position": 0
           },
@@ -332,6 +345,8 @@ Endpoints
              "price": "23.00",
              "original_price": null,
              "active": true,
+             "require_membership": false,
+             "require_membership_types": [],
              "description": null,
              "position": 1
           }
@@ -405,6 +420,8 @@ Endpoints
              "price": "10.00",
              "original_price": null,
              "active": true,
+             "require_membership": false,
+             "require_membership_types": [],
              "description": null,
              "position": 0
           },
@@ -414,6 +431,8 @@ Endpoints
              "price": "23.00",
              "original_price": null,
              "active": true,
+             "require_membership": false,
+             "require_membership_types": [],
              "description": null,
              "position": 1
           }
@@ -476,6 +495,8 @@ Endpoints
              "price": "10.00",
              "original_price": null,
              "active": true,
+             "require_membership": false,
+             "require_membership_types": [],
              "description": null,
              "position": 0
           },
@@ -485,6 +506,8 @@ Endpoints
              "price": "23.00",
              "original_price": null,
              "active": true,
+             "require_membership": false,
+             "require_membership_types": [],
              "description": null,
              "position": 1
           }
@@ -578,6 +601,8 @@ Endpoints
              "price": "10.00",
              "original_price": null,
              "active": true,
+             "require_membership": false,
+             "require_membership_types": [],
              "description": null,
              "position": 0
           },
@@ -587,6 +612,8 @@ Endpoints
              "price": "23.00",
              "original_price": null,
              "active": true,
+             "require_membership": false,
+             "require_membership_types": [],
              "description": null,
              "position": 1
           }

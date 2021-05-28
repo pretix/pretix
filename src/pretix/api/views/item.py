@@ -152,6 +152,7 @@ class ItemVariationViewSet(viewsets.ModelViewSet):
     def get_serializer_context(self):
         ctx = super().get_serializer_context()
         ctx['item'] = self.item
+        ctx['event'] = self.request.event
         return ctx
 
     def perform_create(self, serializer):

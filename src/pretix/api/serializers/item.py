@@ -36,7 +36,8 @@ from decimal import Decimal
 
 from django.core.exceptions import ValidationError
 from django.db import transaction
-from django.utils.functional import cached_property
+from django.db.models import QuerySet
+from django.utils.functional import cached_property, lazy
 from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 
@@ -56,7 +57,12 @@ class InlineItemVariationSerializer(I18nAwareModelSerializer):
     class Meta:
         model = ItemVariation
         fields = ('id', 'value', 'active', 'description',
-                  'position', 'default_price', 'price', 'original_price')
+                  'position', 'default_price', 'price', 'original_price',
+                  'require_membership', 'require_membership_types',)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['require_membership_types'].queryset = lazy(lambda: self.context['event'].organizer.membership_types.all(), QuerySet)
 
 
 class ItemVariationSerializer(I18nAwareModelSerializer):
@@ -66,7 +72,12 @@ class ItemVariationSerializer(I18nAwareModelSerializer):
     class Meta:
         model = ItemVariation
         fields = ('id', 'value', 'active', 'description',
-                  'position', 'default_price', 'price', 'original_price')
+                  'position', 'default_price', 'price', 'original_price',
+                  'require_membership', 'require_membership_types',)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['require_membership_types'].queryset = self.context['event'].organizer.membership_types.all()
 
 
 class InlineItemBundleSerializer(serializers.ModelSerializer):
@@ -237,7 +248,10 @@ class ItemSerializer(I18nAwareModelSerializer):
         item = Item.objects.create(**validated_data)
 
         for variation_data in variations_data:
-            ItemVariation.objects.create(item=item, **variation_data)
+            require_membership_types = variation_data.pop('require_membership_types')
+            v = ItemVariation.objects.create(item=item, **variation_data)
+            if require_membership_types:
+                v.require_membership_types.add(*require_membership_types)
         for addon_data in addons_data:
             ItemAddOn.objects.create(base_item=item, **addon_data)
         for bundle_data in bundles_data:
