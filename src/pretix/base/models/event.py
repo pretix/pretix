@@ -254,15 +254,22 @@ class EventMixin:
         ).order_by().values_list('quotas__pk').annotate(
             items=GroupConcat('pk', delimiter=',')
         ).values('items')
+        quota_base_qs = Quota.objects.using(settings.DATABASE_REPLICA).filter(
+            ignore_for_event_availability=False
+        )
+
+        if cls is Event:
+            # Special case for the list of events: We only want to compute quotas for events if they are
+            # not an event series.
+            quota_base_qs = quota_base_qs.filter(subevent__isnull=True)
+
         return qs.annotate(
             has_paid_item=Exists(Item.objects.filter(event_id=OuterRef(cls._event_id), default_price__gt=0))
         ).prefetch_related(
             Prefetch(
                 'quotas',
                 to_attr='active_quotas',
-                queryset=Quota.objects.using(settings.DATABASE_REPLICA).filter(
-                    ignore_for_event_availability=False
-                ).annotate(
+                queryset=quota_base_qs.annotate(
                     active_items=Subquery(sq_active_item, output_field=models.TextField()),
                     active_variations=Subquery(sq_active_variation, output_field=models.TextField()),
                 ).exclude(
