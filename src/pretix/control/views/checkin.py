@@ -35,7 +35,7 @@
 import dateutil.parser
 from django.contrib import messages
 from django.db import transaction
-from django.db.models import Exists, Max, OuterRef, Subquery
+from django.db.models import Exists, Max, OuterRef, Prefetch, Subquery
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse
@@ -87,7 +87,11 @@ class CheckInListShow(EventPermissionRequiredMixin, PaginationMixin, ListView):
             auto_checked_in=Exists(
                 Checkin.objects.filter(position_id=OuterRef('pk'), list_id=self.list.pk, auto_checked_in=True)
             )
-        ).select_related('item', 'variation', 'order', 'addon_to')
+        ).select_related(
+            'item', 'variation', 'order', 'addon_to'
+        ).prefetch_related(
+            Prefetch('subevent', queryset=self.request.event.subevents.all())
+        )
         if self.list.subevent:
             qs = qs.filter(
                 subevent=self.list.subevent
