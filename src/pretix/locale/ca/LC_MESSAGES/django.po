@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-05-27 12:05+0000\n"
-"PO-Revision-Date: 2020-12-29 04:00+0000\n"
+"PO-Revision-Date: 2021-05-30 13:17+0000\n"
 "Last-Translator: albert <albert.serra.monner@gmail.com>\n"
 "Language-Team: Catalan <https://translate.pretix.eu/projects/pretix/pretix/"
 "ca/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 3.10.3\n"
+"X-Generator: Weblate 4.6\n"
 
 #: pretix/api/auth/devicesecurity.py:28
 msgid ""
@@ -358,22 +358,18 @@ msgid "Online shop"
 msgstr "Tenda en línia"
 
 #: pretix/base/context.py:45
-#, fuzzy, python-brace-format
-#| msgid "powered by <a %(a_attr)s>pretix</a>"
+#, python-brace-format
 msgid "powered by {name} based on <a {a_attr}>pretix</a>"
-msgstr "impulsat per <a %(a_attr)s>pretix</a>"
+msgstr "impulsat per {name} i basat en <a {a_attr}>pretix</a>"
 
 #: pretix/base/context.py:52
-#, fuzzy, python-format
-#| msgid "<a %(a_attr)s>event ticketing powered by pretix</a>"
+#, python-format
 msgid "<a %(a_attr)s>ticketing powered by pretix</a>"
-msgstr "<a %(a_attr)s>ticketing d'esdeveniments via pretix</a>"
+msgstr "<a %(a_attr)s>ticketing via pretix</a>"
 
 #: pretix/base/context.py:61
-#, fuzzy
-#| msgid "Voucher code"
 msgid "source code"
-msgstr "Codi de val"
+msgstr "codi font"
 
 #: pretix/base/email.py:182 pretix/control/views/main.py:291
 #: pretix/plugins/badges/apps.py:45 pretix/plugins/badges/models.py:48
@@ -419,7 +415,7 @@ msgstr ""
 
 #: pretix/base/email.py:563
 msgid "Mr Doe"
-msgstr ""
+msgstr "Sr Daixonses"
 
 #: pretix/base/exporter.py:159 pretix/base/exporter.py:285
 msgid "Export format"
@@ -992,25 +988,19 @@ msgstr "Incloure imports de pagament"
 
 #: pretix/base/exporters/orderlist.py:101
 msgid "Show multiple choice answers grouped in one column"
-msgstr ""
+msgstr "Mostra múltiples opcions de resposta agrupades en una columna"
 
 #: pretix/base/exporters/orderlist.py:110
-#, fuzzy
-#| msgid "Only send to customers of"
 msgid "Only include orders created on or after this date."
-msgstr "Enviar només a clients de"
+msgstr "Incloure només comandes creades a partir d'aquesta data."
 
 #: pretix/base/exporters/orderlist.py:117
-#, fuzzy
-#| msgid "Only send to customers of"
 msgid "Only include orders created on or before this date."
-msgstr "Enviar només a clients de"
+msgstr "Només incloure comandes creades abans d'aquesta data."
 
 #: pretix/base/exporters/orderlist.py:121
-#, fuzzy
-#| msgid "Start date"
 msgid "Start event date"
-msgstr "Data d'inici"
+msgstr "Data d'inici de l'esdeveniment"
 
 #: pretix/base/exporters/orderlist.py:124
 #: pretix/base/exporters/orderlist.py:132
@@ -1018,12 +1008,13 @@ msgid ""
 "Only include orders including at least one ticket for a date on or after "
 "this date. Will also include other dates in case of mixed orders!"
 msgstr ""
+"Només incloure comandes que continguin com a mínim un tiquet per una data "
+"igual o posterior a aquesta. També inclourà altres dates en cas de comandes "
+"combinades!"
 
 #: pretix/base/exporters/orderlist.py:129
-#, fuzzy
-#| msgid "Event date"
 msgid "End event date"
-msgstr "Data de l'esdeveniment"
+msgstr "Data final de l'acte"
 
 #: pretix/base/exporters/orderlist.py:268
 #: pretix/base/exporters/orderlist.py:433
@@ -1525,16 +1516,12 @@ msgstr "Emissor"
 
 #: pretix/base/exporters/orderlist.py:916 pretix/control/navigation.py:493
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:79
-#, fuzzy
-#| msgid "Gift card"
 msgid "Gift cards"
-msgstr "Targeta regal"
+msgstr "Targetes regal"
 
 #: pretix/base/exporters/orderlist.py:923
-#, fuzzy
-#| msgid "Show variants"
 msgid "Show value at"
-msgstr "Mostrar variants"
+msgstr "Mostrar valor a"
 
 #: pretix/base/exporters/orderlist.py:927
 #: pretix/base/exporters/orderlist.py:930 pretix/base/models/memberships.py:118
@@ -1560,21 +1547,21 @@ msgstr "Tots"
 
 #: pretix/base/exporters/orderlist.py:931 pretix/control/forms/filter.py:966
 msgid "Live"
-msgstr ""
+msgstr "En viu"
 
 #: pretix/base/exporters/orderlist.py:940 pretix/control/forms/filter.py:971
 #: pretix/control/forms/filter.py:974
 #: pretix/control/templates/pretixcontrol/pdf/index.html:353
 msgid "Empty"
-msgstr ""
+msgstr "Buit"
 
 #: pretix/base/exporters/orderlist.py:941 pretix/control/forms/filter.py:975
 msgid "Valid and with value"
-msgstr ""
+msgstr "Vàlid i amb valor"
 
 #: pretix/base/exporters/orderlist.py:942 pretix/control/forms/filter.py:976
 msgid "Expired and with value"
-msgstr ""
+msgstr "Expirat i amb valor"
 
 #: pretix/base/exporters/orderlist.py:943 pretix/control/forms/filter.py:195
 #: pretix/control/forms/filter.py:977 pretix/control/forms/filter.py:1467
@@ -1599,7 +1586,7 @@ msgstr "Data de caducitat"
 
 #: pretix/base/exporters/orderlist.py:983 pretix/control/forms/orders.py:759
 msgid "Special terms and conditions"
-msgstr ""
+msgstr "Termes i condicions especials"
 
 #: pretix/base/exporters/orderlist.py:984
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:37
@@ -1608,7 +1595,7 @@ msgstr ""
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/control.html:15
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:57
 msgid "Currency"
-msgstr ""
+msgstr "Moneda"
 
 #: pretix/base/exporters/orderlist.py:985
 #: pretix/control/templates/pretixcontrol/order/change.html:94
@@ -1755,38 +1742,42 @@ msgid "Please enter a shorter name."
 msgstr "Si us plau, introduïu un nom més curt."
 
 #: pretix/base/forms/questions.py:264
-#, fuzzy
-#| msgid "Internal reference"
 msgctxt "phonenumber"
 msgid "International area code"
-msgstr "Referència interna"
+msgstr "Codi d'àrea internacional"
 
 #: pretix/base/forms/questions.py:288
 msgctxt "phonenumber"
 msgid "Phone number (without international area code)"
-msgstr ""
+msgstr "Número de telèfon (sense el codi d'àrea internacional)"
 
 #: pretix/base/forms/questions.py:408
 msgid ""
 "You uploaded an image in landscape orientation. Please upload an image in "
 "portrait orientation."
 msgstr ""
+"Heu pujat una imatge apaïsada. Si us plau pugeu-ne una amb orientació "
+"vertical."
 
 #: pretix/base/forms/questions.py:411
 msgid "Please upload an image where the width is 3/4 of the height."
-msgstr ""
+msgstr "Si us plau pugeu una imatge on l'amplada sigui 3/4 parts de l'alçada."
 
 #: pretix/base/forms/questions.py:414
 msgid ""
 "The file you uploaded has a very large number of pixels, please upload an "
 "image no larger than 10000 x 10000 pixels."
 msgstr ""
+"El fitxer que heu pujat té massa píxels. Si us plau pugeu una imatge que no "
+"tingui més de 10000 x 10000 píxels."
 
 #: pretix/base/forms/questions.py:417
 msgid ""
 "Upload a valid image. The file you uploaded was either not an image or a "
 "corrupted image."
 msgstr ""
+"Pugeu una imatge vàlida. El fitxer que heu pujat o bé no és una imatge o bé "
+"està corromput."
 
 #: pretix/base/forms/questions.py:574 pretix/base/forms/questions.py:886
 msgid "Street and Number"
@@ -1908,10 +1899,8 @@ msgid "Smartphone with the Authenticator application"
 msgstr "Telèfon intel·ligent amb l'aplicació Authenticator"
 
 #: pretix/base/forms/user.py:171
-#, fuzzy
-#| msgid "U2F-compatible hardware token (e.g. Yubikey)"
 msgid "WebAuthn-compatible hardware token (e.g. Yubikey)"
-msgstr "Testimoni de maquinari compatible amb U2F (ex. Yubikey)"
+msgstr "Testimoni de maquinari compatible amb WebAuthn (ex. Yubikey)"
 
 #: pretix/base/forms/validators.py:62
 msgid ""
@@ -1935,10 +1924,8 @@ msgid "Individual customer"
 msgstr "Client individual"
 
 #: pretix/base/forms/widgets.py:192
-#, fuzzy
-#| msgid "Business customer"
 msgid "Business or institutional customer"
-msgstr "Client comercial"
+msgstr "Client comercial o institucional"
 
 #: pretix/base/invoice.py:79
 #, python-format
@@ -2307,30 +2294,22 @@ msgid "Exit"
 msgstr "Sortida"
 
 #: pretix/base/models/customers.py:48
-#, fuzzy
-#| msgid "This account is inactive."
 msgid "Account active"
-msgstr "Aquest compte és inactiu."
+msgstr "Compte actiu"
 
 #: pretix/base/models/customers.py:49
-#, fuzzy
-#| msgid "Attendee e-mail address"
 msgid "Verified email address"
-msgstr "Correu electrònic de l'assistent"
+msgstr "Correu electrònic verificat"
 
 #: pretix/base/models/customers.py:50
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:46
-#, fuzzy
-#| msgid "Login"
 msgid "Last login"
-msgstr "Iniciar sessió"
+msgstr "Darrera sessió"
 
 #: pretix/base/models/customers.py:51
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:44
-#, fuzzy
-#| msgid "Reservation period"
 msgid "Registration date"
-msgstr "Període de reserva"
+msgstr "Data de registre"
 
 #: pretix/base/models/devices.py:71 pretix/base/models/items.py:1171
 msgid "Internal identifier"
@@ -2610,10 +2589,8 @@ msgstr ""
 "El nom de la propietat només pot tenir lletres, números i guions baixos."
 
 #: pretix/base/models/event.py:1431
-#, fuzzy
-#| msgid "Default language"
 msgid "Default value"
-msgstr "Idioma predeterminat"
+msgstr "Valor predeterminat"
 
 #: pretix/base/models/event.py:1433
 #, fuzzy
@@ -2634,20 +2611,22 @@ msgid ""
 msgstr ""
 
 #: pretix/base/models/event.py:1441
-#, fuzzy
-#| msgid "Tax value"
 msgid "Valid values"
-msgstr "Valor fiscal"
+msgstr "Valors vàlids"
 
 #: pretix/base/models/event.py:1442
 msgid ""
 "If you keep this empty, any value is allowed. Otherwise, enter one possible "
 "value per line."
 msgstr ""
+"Si ho deixeu buit, es permet qualsevol valor. Altrament, poseu un valor "
+"permès a cada línia."
 
 #: pretix/base/models/event.py:1448
 msgid "A property can either be required or have a default value, not both."
 msgstr ""
+"Una propietat pot ser obligatòria o tenir un valor predeterminat, però no "
+"les dues coses alhora."
 
 #: pretix/base/models/event.py:1450
 #, fuzzy
@@ -3227,7 +3206,7 @@ msgstr "Dia i hora"
 
 #: pretix/base/models/items.py:1155
 msgid "Country code (ISO 3166-1 alpha-2)"
-msgstr ""
+msgstr "Codi de país (ISO 3166-1 alpha-2)"
 
 #: pretix/base/models/items.py:1167 pretix/base/models/items.py:1246
 #: pretix/base/orderimport.py:673 pretix/control/forms/item.py:84
@@ -3291,10 +3270,8 @@ msgstr "Valor mínim"
 #: pretix/base/models/items.py:1220 pretix/base/models/items.py:1223
 #: pretix/base/models/items.py:1226 pretix/base/models/items.py:1229
 #: pretix/base/models/items.py:1232 pretix/base/models/items.py:1235
-#, fuzzy
-#| msgid "Currently not supported in our apps"
 msgid "Currently not supported in our apps and during check-in"
-msgstr "Actualment no suportat a les nostres apps"
+msgstr "Actualment no suportat a les nostres apps i durant el check-in"
 
 #: pretix/base/models/items.py:1222 pretix/base/models/items.py:1228
 #: pretix/base/models/items.py:1234
@@ -3394,7 +3371,7 @@ msgstr "Variacions"
 #: pretix/base/models/items.py:1521
 #: pretix/control/templates/pretixcontrol/items/quotas.html:70
 msgid "Ignore this quota when determining event availability"
-msgstr ""
+msgstr "Ignorar aquesta quota quan es determini la disponibilitat de l'acte"
 
 #: pretix/base/models/items.py:1522
 msgid ""
@@ -3403,6 +3380,10 @@ msgid ""
 "that is added to each event but should not stop the event from being shown "
 "as sold out."
 msgstr ""
+"Si ho habiliteu, aquesta quota serà ignorada quan es determini la "
+"disponibilitat de l'acte en el calendari. Això és útil per exemple per "
+"merchandising que s'afegeixi a l'acte però que no hagi d'impedir que l'acte "
+"aparegui com a exhaurit."
 
 #: pretix/base/models/items.py:1529
 msgid "Close this quota permanently once it is sold out"
