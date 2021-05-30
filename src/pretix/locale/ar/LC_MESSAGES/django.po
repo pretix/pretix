@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-05-27 12:05+0000\n"
-"PO-Revision-Date: 2021-05-28 06:00+0000\n"
+"PO-Revision-Date: 2021-05-30 13:17+0000\n"
 "Last-Translator: Mohamed Tawfiq <mtawfiq@wafyapp.com>\n"
 "Language-Team: Arabic <https://translate.pretix.eu/projects/pretix/pretix/ar/"
 ">\n"
@@ -30,7 +30,7 @@ msgstr ""
 
 #: pretix/api/auth/devicesecurity.py:44
 msgid "pretixSCAN"
-msgstr "pretixSCAN"
+msgstr "بريتكس pretixSCAN"
 
 #: pretix/api/auth/devicesecurity.py:74
 msgid "pretixSCAN (kiosk mode, online only)"
@@ -38,7 +38,7 @@ msgstr "pretixSCAN (وضع kiosk، عبر الانترنت فقط)"
 
 #: pretix/api/auth/devicesecurity.py:102
 msgid "pretixPOS"
-msgstr "pretixPOS"
+msgstr "بريتكس pretixPOS"
 
 #: pretix/api/models.py:39
 msgid "Application name"
@@ -384,7 +384,7 @@ msgstr "بسيط مع الشعار"
 #: pretix/base/email.py:550 pretix/base/pdf.py:154 pretix/base/pdf.py:297
 #: pretix/base/services/invoices.py:400 pretix/control/views/event.py:729
 msgid "John Doe"
-msgstr "جون دوي"
+msgstr "جون دو"
 
 #: pretix/base/email.py:467
 msgid "Sample Corporation"
@@ -407,7 +407,6 @@ msgid "Please transfer money to this bank account: 9999-9999-9999-9999"
 msgstr "يرجى تحويل المبلغ إلى هذا الحساب المصرفي: 9999-9999-9999-9999"
 
 #: pretix/base/email.py:563
-#, fuzzy
 msgid "Mr Doe"
 msgstr "السيد دو"
 
@@ -2490,7 +2489,7 @@ msgid "You need to configure at least one quota to sell anything."
 msgstr "تحتاج إلى تحديد حصة واحدة على الأقل لبيع أي شيء."
 
 #: pretix/base/models/event.py:1032
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "You need to fill the meta parameter \"{property}\"."
 msgstr "تحتاج إلى ملء المعلومة الوصفية \"{property}\"."
 
@@ -3020,7 +3019,6 @@ msgstr "يظهر هذا في القوائم أسفل اسم العنصر."
 
 #: pretix/base/models/items.py:777 pretix/base/models/items.py:980
 #: pretix/base/models/items.py:1198
-#, fuzzy
 msgid "Position"
 msgstr "حالة"
 
@@ -3668,7 +3666,6 @@ msgid "created"
 msgstr "تم الإنشاء"
 
 #: pretix/base/models/orders.py:1737
-#, fuzzy
 msgctxt "refund_state"
 msgid "in transit"
 msgstr "قيد الإرسال"
@@ -5204,13 +5201,12 @@ msgid "Random (default, works with all pretix apps)"
 msgstr "عشوائي (افتراضي، يعمل مع جميع تطبيقات pretix)"
 
 #: pretix/base/secrets.py:134
-#, fuzzy
 msgid ""
 "pretix signature scheme 1 (for very large events, does not work with "
 "pretixSCAN on iOS and changes semantics of offline scanning – please refer "
 "to documentation or support for details)"
 msgstr ""
-"pretix مخطط التوقيع 1 (للأحداث الكبيرة جدا ، لا يعمل مع preixSCAN على iOS "
+"مخطط التوقيع1من pretix (للأحداث الكبيرة جدا ، لا يعمل مع preixSCAN على iOS "
 "ويغير دلالات المسح دون اتصال - يرجى الرجوع إلى التوثيق أو الدعم للحصول على "
 "التفاصيل)"
 
@@ -5397,25 +5393,24 @@ msgid "You can not select an add-on for the selected product."
 msgstr "لا يمكنك اختيار إضافة للمنتج المحدد."
 
 #: pretix/base/services/cart.py:130
-#, fuzzy
 msgid "You can not select two variations of the same add-on product."
 msgstr "لا يمكنك تحديد نوعين مختلفين من نفس منتج قائمة الإضافة."
 
 #: pretix/base/services/cart.py:131
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "You can select at most %(max)s add-ons from the category %(cat)s for the "
 "product %(base)s."
 msgstr ""
-"يمكنك الاختيار على الأكثر %(max)s الإضافات من فئة %(cat)s للمنتج %(base)s."
+"يمكنك الاختيار على الأكثر %(max)s من الإضافات لفئة %(cat)s للمنتج %(base)s."
 
 #: pretix/base/services/cart.py:132
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "You need to select at least %(min)s add-ons from the category %(cat)s for "
 "the product %(base)s."
 msgstr ""
-"تحتاج إلى اختيار على الأقل %(min)s الإضافات من فئة %(cat)s للمنتج %(base)s."
+"تحتاج إلى اختيار على الأقل %(min)s من الإضافات لفئة %(cat)s للمنتج %(base)s."
 
 #: pretix/base/services/cart.py:134
 #, python-format
@@ -5441,7 +5436,6 @@ msgid "Please select a valid seat."
 msgstr "الرجاء اختيار مقعد صالح."
 
 #: pretix/base/services/cart.py:139
-#, fuzzy
 msgid "You can not select a seat for this position."
 msgstr "لا يمكنك تحديد مقعد لهذا العنصر."
 
@@ -5477,9 +5471,8 @@ msgid "Ticket type not allowed"
 msgstr "نوع التذكرة غير مسموح به"
 
 #: pretix/base/services/checkin.py:220
-#, fuzzy
 msgid "number of days with an entry"
-msgstr "عدد الأيام مع الإدخال"
+msgstr "عدد الأيام التي تحتوي على إدخال"
 
 #: pretix/base/services/checkin.py:221
 msgid "number of entries"
@@ -5539,7 +5532,6 @@ msgid "This ticket has already been redeemed."
 msgstr "تم مسبقا استرداد هذه التذكرة."
 
 #: pretix/base/services/export.py:64 pretix/base/services/export.py:117
-#, fuzzy
 msgid "Your export did not contain any data."
 msgstr "تصديرك لا يحتوي على أي بيانات."
 
@@ -5944,7 +5936,6 @@ msgid ""
 msgstr "هذا منتج إضافي ، يرجى تحديد العنصر الأساسي الذي تجب الإضافة إليه."
 
 #: pretix/base/services/orders.py:1235
-#, fuzzy
 msgid ""
 "The selected base position does not allow you to add this product as an add-"
 "on."
@@ -6032,7 +6023,6 @@ msgid "The confirm code you entered was incorrect."
 msgstr "رمز التأكيد الذي أدخلته غير صحيح."
 
 #: pretix/base/services/shredder.py:122
-#, fuzzy
 msgid "Something happened in your event after the export, please try again."
 msgstr "حدث شيء ما في الفعالية الخاصة بك بعد التصدير ، يرجى المحاولة مرة أخرى."
 
@@ -6111,7 +6101,7 @@ msgstr ""
 #, fuzzy
 #| msgid "Verified email address"
 msgid "Match orders based on email address"
-msgstr "تم التحقق من عنوان البريد الإلكتروني"
+msgstr "ربط الطلبات بعنوان البريد الإلكتروني"
 
 #: pretix/base/settings.py:128
 msgid ""
@@ -6339,13 +6329,12 @@ msgid "Minimum length of invoice number after prefix"
 msgstr "الحد الأدنى لطول رقم الفاتورة بعد الاختصار"
 
 #: pretix/base/settings.py:428
-#, fuzzy
 msgid ""
 "The part of your invoice number after your prefix will be filled up with "
 "leading zeros up to this length, e.g. INV-001 or INV-00001."
 msgstr ""
 "سيتم ملء الجزء من رقم الفاتورة بعد رمز الاختصار الخاص بك بالأصفار حتى هذا "
-"الحد ، على سبيل المثال فاتورة-001 أو فاتورة -00001."
+"النحو ، على سبيل المثال فاتورة-001 أو فاتورة -00001."
 
 #: pretix/base/settings.py:437
 msgid "Generate invoices with consecutive numbers"
@@ -6362,14 +6351,6 @@ msgid "Invoice number prefix"
 msgstr "الرمز الذي يسبق رقم الفاتورة"
 
 #: pretix/base/settings.py:448
-#, fuzzy
-#| msgid ""
-#| "This will be prepended to invoice numbers. If you leave this field empty, "
-#| "your event slug will be used followed by a dash. Attention: If multiple "
-#| "events within the same organization use the same value in this field, "
-#| "they will share their number range, i.e. every full number will be used "
-#| "at most once over all of your events. This setting only affects future "
-#| "invoices."
 msgid ""
 "This will be prepended to invoice numbers. If you leave this field empty, "
 "your event slug will be used followed by a dash. Attention: If multiple "
@@ -6402,10 +6383,8 @@ msgstr ""
 "فسيتم استخدام نفس نظام الترقيم الذي قمت بتكوينه للفواتير العادية."
 
 #: pretix/base/settings.py:487
-#, fuzzy
-#| msgid "Length of gift card codes"
 msgid "Length of ticket codes"
-msgstr "طول رموز بطاقات الهدايا"
+msgstr "طول رموز التذاكر"
 
 #: pretix/base/settings.py:508
 msgid "Reservation period"
@@ -6422,9 +6401,8 @@ msgid ""
 msgstr "إعادة التوجيه مباشرة لتسجيل الخروج بعد إضافة منتج إلى سلة التسوق."
 
 #: pretix/base/settings.py:527
-#, fuzzy
 msgid "End of presale text"
-msgstr "نهاية نص عرض ما قبل البيع"
+msgstr "نهاية النص الخاص بعرض ما قبل البيع"
 
 #: pretix/base/settings.py:530
 msgid ""
@@ -6520,7 +6498,6 @@ msgid "Last date of payments"
 msgstr "آخر موعد للمدفوعات"
 
 #: pretix/base/settings.py:644
-#, fuzzy
 msgid ""
 "The last date any payments are accepted. This has precedence over the terms "
 "configured above. If you use the event series feature and an order contains "
@@ -6535,7 +6512,6 @@ msgid "Automatically expire unpaid orders"
 msgstr "إنهاء الطلبات غير المسددة تلقائيا"
 
 #: pretix/base/settings.py:656
-#, fuzzy
 msgid ""
 "If checked, all unpaid orders will automatically go from 'pending' to "
 "'expired' after the end of their payment deadline. This means that those "
@@ -6634,7 +6610,6 @@ msgid "Domestic tax ID"
 msgstr "معرف الضريبة المحلية"
 
 #: pretix/base/settings.py:814
-#, fuzzy
 msgid "e.g. tax number in Germany, ABN in Australia, …"
 msgstr "على سبيل المثال الرقم الضريبي في ألمانيا ، رقم العمل الأسترالي،…"
 
@@ -6718,7 +6693,6 @@ msgstr ""
 "المحاسبة الخاص بك. ستكون الفاتورة هي المرفق الوحيد بالبريد الإلكتروني."
 
 #: pretix/base/settings.py:912
-#, fuzzy
 msgid "Show items outside presale period"
 msgstr "إظهار العناصر خارج فترة عرض ما قبل البيع"
 
@@ -7089,7 +7063,6 @@ msgid "Keep a fixed cancellation fee"
 msgstr "احتفظ برسوم إلغاء ثابتة"
 
 #: pretix/base/settings.py:1355
-#, fuzzy
 msgid "Keep payment, shipping and service fees"
 msgstr "احتفظ برسوم السداد والشحن والخدمة"
 
@@ -7113,25 +7086,24 @@ msgid ""
 "However, if you want us to help keep the lights on here, please consider "
 "using the slider below to request a smaller refund. Thank you!"
 msgstr ""
-"إذا كنت تريد منا المساعدة من استمرار النشاط، فيرجى استخدام شريط التمرير "
+"إذا كنت تريد منا المساعدة في استمرار النشاط، فيرجى استخدام شريط التمرير "
 "أدناه لطلب استرداد مبلغ أقل. شكرا لك!"
 
 #: pretix/base/settings.py:1389
 #, fuzzy
 msgid "Voluntary lower refund explanation"
-msgstr "تفسير تخفيض المبلغ الطوعي"
+msgstr "تبرير تخفيض المبلغ الطوعي"
 
 #: pretix/base/settings.py:1392
-#, fuzzy
 msgid ""
 "This text will be shown in between the explanation of how the refunds work "
 "and the slider which your customers can use to choose the amount they would "
 "like to receive. You can use it e.g. to explain choosing a lower refund will "
 "help your organization."
 msgstr ""
-"سيظهر هذا النص ما بين شرح كيفية عمل المبالغ المستردة وشريط التمرير الذي يمكن "
-"لعملائك استخدامه لاختيار المبلغ الذي يرغبون في استلامه. يمكنك استخدامه على "
-"سبيل المثال لشرح اختيار استرداد أقل مما سيساعد مؤسستك."
+"سيظهر هذا النص ما بين كل من شرح كيفية عمل المبالغ المستردة وشريط التمرير "
+"الذي يمكن لعملائك استخدامه لاختيار المبلغ الذي يرغبون في استلامه. يمكنك "
+"استخدامه على سبيل المثال لشرح اختيار استرداد أقل مما سيساعد مؤسستك."
 
 #: pretix/base/settings.py:1407
 #, fuzzy
@@ -7185,7 +7157,6 @@ msgid "We'll show this publicly to allow attendees to contact you."
 msgstr "سيظهر هذا علنا للسماح للحاضرين بالاتصال بك."
 
 #: pretix/base/settings.py:1469 pretix/control/forms/event.py:1305
-#, fuzzy
 msgid "Imprint URL"
 msgstr "رابط موقع مقدم الخدمة"
 
@@ -7227,13 +7198,12 @@ msgid "Subject prefix"
 msgstr "الرمز الذي يسبق الموضوع"
 
 #: pretix/base/settings.py:1515
-#, fuzzy
 msgid ""
 "This will be prepended to the subject of all outgoing emails, formatted as "
 "[prefix]. Choose, for example, a short form of your event name."
 msgstr ""
-"سيتم إضافة هذا مسبقا إلى موضوع جميع رسائل البريد الإلكتروني الصادرة ، محدد ك "
-"[prefix]. اختر ، على سبيل المثال ، نموذجا قصيرا لاسم الفعالية الخاصة بك."
+"سيتم إضافة هذا مسبقا إلى موضوع جميع رسائل البريد الإلكتروني الصادرة ، محدد "
+"مثل [prefix]. اختر ، على سبيل المثال ، مسمى قصير لاسم الفعالية الخاصة بك."
 
 #: pretix/base/settings.py:1529
 msgid "Sender address"
@@ -7858,7 +7828,6 @@ msgstr ""
 #: pretix/base/settings.py:1947 pretix/base/settings.py:1955
 #: pretix/base/settings.py:1969 pretix/base/settings.py:1977
 #: pretix/base/settings.py:1991 pretix/base/settings.py:1998
-#, fuzzy
 msgid "Please enter the hexadecimal code of a color, e.g. #990000."
 msgstr "الرجاء إدخال رمز عشري للون على سبيل المثال # 990000."
 
@@ -7867,18 +7836,16 @@ msgid "Primary color"
 msgstr "لون أساسي"
 
 #: pretix/base/settings.py:1951
-#, fuzzy
 msgid "Accent color for success"
-msgstr "لون التمييز للإستمرار"
+msgstr "درجة لون لنجاح العملية"
 
 #: pretix/base/settings.py:1952
 msgid "We strongly suggest to use a shade of green."
 msgstr "نقترح بشدة استخدام الظل الأخضر."
 
 #: pretix/base/settings.py:1973
-#, fuzzy
 msgid "Accent color for errors"
-msgstr "لون التمييز للأخطاء"
+msgstr "درجة لون الأخطاء"
 
 #: pretix/base/settings.py:1974
 msgid "We strongly suggest to use a shade of red."
@@ -7898,7 +7865,6 @@ msgid "Font"
 msgstr "الخط"
 
 #: pretix/base/settings.py:2021
-#, fuzzy
 msgid "Only respected by modern browsers."
 msgstr "يستخدم للمتصفحات الحديثة فقط."
 
@@ -8036,8 +8002,6 @@ msgstr ""
 "سبيل المثال لشرح سبب حاجتك إلى معلومات منهم."
 
 #: pretix/base/settings.py:2236
-#, fuzzy
-#| msgid "Additional fee"
 msgid "Additional success message"
 msgstr "رسالة نجاح إضافية"
 
@@ -8070,7 +8034,6 @@ msgid "Allow creating a new team during event creation"
 msgstr "السماح بإنشاء فريق جديد أثناء إنشاء الفعالية"
 
 #: pretix/base/settings.py:2290
-#, fuzzy
 msgid ""
 "Users that do not have access to all events under this organizer, must "
 "select one of their teams to have access to the created event. This setting "
@@ -8087,7 +8050,6 @@ msgid "Event start time (descending)"
 msgstr "وقت بدء الفعالية (تنازلي)"
 
 #: pretix/base/settings.py:2364 pretix/base/settings.py:2374
-#, fuzzy
 msgid "Name (descending)"
 msgstr "الاسم (تنازلي)"
 
@@ -8097,9 +8059,8 @@ msgid "Date ordering"
 msgstr "ترتيب التاريخ"
 
 #: pretix/base/settings.py:2385
-#, fuzzy
 msgid "Link back to organizer overview on all event pages"
-msgstr "قم بنظرة عامة على المنظم في جميع صفحات الفعالية"
+msgstr "قم بنظرة عامة للمنظم للاطلاع على جميع صفحات الفعالية"
 
 #: pretix/base/settings.py:2394
 msgid "Homepage text"
@@ -8126,7 +8087,6 @@ msgid "Validity of gift card codes in years"
 msgstr "صلاحية رموز بطاقات الهدايا بالسنوات"
 
 #: pretix/base/settings.py:2421
-#, fuzzy
 msgid ""
 "If you set a number here, gift cards will by default expire at the end of "
 "the year after this many years. If you keep it empty, gift cards do not have "
@@ -8141,7 +8101,6 @@ msgid "Customers can choose their own seats"
 msgstr "يمكن للعملاء اختيار مقاعدهم الخاصة"
 
 #: pretix/base/settings.py:2431
-#, fuzzy
 msgid ""
 "If disabled, you will need to manually assign seats in the backend. Note "
 "that this can mean people will not know their seat after their purchase and "
@@ -8164,13 +8123,11 @@ msgid "Most common German titles"
 msgstr "العناوين الألمانية الأكثر شيوعا"
 
 #: pretix/base/settings.py:2482
-#, fuzzy
 msgctxt "person_name_salutation"
 msgid "Ms"
 msgstr "آنسة"
 
 #: pretix/base/settings.py:2483
-#, fuzzy
 msgctxt "person_name_salutation"
 msgid "Mr"
 msgstr "السيد"
@@ -8212,10 +8169,9 @@ msgstr "جون"
 #: pretix/base/settings.py:2581 pretix/base/settings.py:2595
 #: pretix/base/settings.py:2625 pretix/base/settings.py:2676
 #: pretix/base/settings.py:2695 pretix/base/settings.py:2719
-#, fuzzy
 msgctxt "person_name_sample"
 msgid "Doe"
-msgstr "دوي"
+msgstr "دو"
 
 #: pretix/base/settings.py:2521 pretix/base/settings.py:2537
 #: pretix/base/settings.py:2569 pretix/base/settings.py:2683
@@ -8241,18 +8197,15 @@ msgstr "الاسم الأوسط"
 
 #: pretix/base/settings.py:2635 pretix/base/settings.py:2646
 #: pretix/control/forms/organizer.py:409
-#, fuzzy
 msgctxt "person_name_sample"
 msgid "John Doe"
 msgstr "جون دو"
 
 #: pretix/base/settings.py:2641
-#, fuzzy
 msgid "Calling name"
 msgstr "اسم النداء"
 
 #: pretix/base/settings.py:2654
-#, fuzzy
 msgid "Latin transcription"
 msgstr "الإملاء بالحروف اللاتينية"
 
@@ -8269,8 +8222,6 @@ msgid "Mr"
 msgstr "السيد"
 
 #: pretix/base/settings.py:2705
-#, fuzzy
-#| msgid "Require customer name"
 msgctxt "person_name"
 msgid "Degree (after name)"
 msgstr "الدرجة (بعد الاسم)"
@@ -8287,7 +8238,6 @@ msgid ""
 msgstr "يجب أيضا تمكين لغتك الافتراضية للفعالية الخاصة بك (انظر المربع أعلاه)."
 
 #: pretix/base/settings.py:2825
-#, fuzzy
 msgid ""
 "You cannot require specifying attendee names if you do not ask for them."
 msgstr "لا يمكنك طلب تحديد أسماء الحضور إذا لم تطلبها."
@@ -8353,10 +8303,6 @@ msgid "Attendee info"
 msgstr "معلومات الحضور"
 
 #: pretix/base/shredder.py:277
-#, fuzzy
-#| msgid ""
-#| "This will remove all attendee names from order positions, as well as "
-#| "logged changes to them."
 msgid ""
 "This will remove all attendee names and postal addresses from order "
 "positions, as well as logged changes to them."
@@ -8416,7 +8362,6 @@ msgstr ""
 "ستتم إزالة جميع البيانات أو البيانات الشخصية فقط. لن يتم اقتراح أي تنزيل."
 
 #: pretix/base/templates/400.html:4 pretix/base/templates/400.html:8
-#, fuzzy
 msgid "Bad Request"
 msgstr "طلب سيء"
 
@@ -8427,7 +8372,6 @@ msgstr "لم نتمكن من تحليل طلبك."
 #: pretix/base/templates/400.html:12 pretix/base/templates/403.html:12
 #: pretix/base/templates/404.html:12 pretix/base/templates/500.html:22
 #: pretix/base/templates/csrffail.html:26
-#, fuzzy
 msgid "Take a step back"
 msgstr "عد للخلف"
 
@@ -8457,7 +8401,6 @@ msgid "Not found"
 msgstr "غير موجود"
 
 #: pretix/base/templates/404.html:9
-#, fuzzy
 msgid "I'm afraid we could not find the the resource you requested."
 msgstr "لم نتمكن من العثور على المورد الذي طلبته."
 
@@ -8510,7 +8453,7 @@ msgstr ""
 "بنا."
 
 #: pretix/base/templates/pretixbase/email/email_footer.html:3
-#, fuzzy, python-format
+#, python-format
 msgid "powered by <a %(a_attr)s>pretix</a>"
 msgstr "مدعوم من قبل <a %(a_attr)s>pretix</a>"
 
@@ -8705,7 +8648,6 @@ msgstr ""
 "لأسباب أمنية ، لضمان عدم اختراق متصفحك من قبل أطراف ثالثة."
 
 #: pretix/base/views/errors.py:45
-#, fuzzy
 msgid ""
 "If you have configured your browser to disable 'Referer' headers, please re-"
 "enable them, at least for this site, or for HTTPS connections, or for 'same-"
@@ -8725,7 +8667,6 @@ msgstr ""
 "من قبل أطراف ثالثة."
 
 #: pretix/base/views/errors.py:55
-#, fuzzy
 msgid ""
 "If you have configured your browser to disable cookies, please re-enable "
 "them, at least for this site, or for 'same-origin' requests."
@@ -8898,10 +8839,8 @@ msgid "You cannot choose the base domain of this installation."
 msgstr "لا يمكنك اختيار المجال الأساسي من هذا التثبيت."
 
 #: pretix/control/forms/event.py:386 pretix/control/forms/organizer.py:144
-#, fuzzy
-#| msgid "This domain is already in use for a different organizer."
 msgid "This domain is already in use for a different event or organizer."
-msgstr "هذا المجال هو بالفعل في استخدام لمنظم مختلفة."
+msgstr "هذا المجال يستخدمه منظم آخر."
 
 #: pretix/control/forms/event.py:457 pretix/control/forms/organizer.py:275
 msgid "Name format"
@@ -8938,10 +8877,8 @@ msgid "Free text input"
 msgstr "إدخال النص الحر"
 
 #: pretix/control/forms/event.py:608
-#, fuzzy
-#| msgid "Do not copy"
 msgid "Do not ask"
-msgstr "لا تنسخ"
+msgstr "لا تسأل"
 
 #: pretix/control/forms/event.py:609
 msgid "Ask, but do not require input"
@@ -9004,7 +8941,7 @@ msgstr ""
 #, fuzzy
 #| msgid "Sales channels to automatically check in"
 msgid "Sales channels for checkout emails"
-msgstr "قنوات المبيعات إلى الاختيار تلقائيا في"
+msgstr "قنوات البيع للبريد الإلكتروني الخاص بالدفع"
 
 #: pretix/control/forms/event.py:841
 msgid ""
@@ -9114,34 +9051,24 @@ msgid "Approved order"
 msgstr "أجل المعتمد"
 
 #: pretix/control/forms/event.py:1009
-#, fuzzy
-#| msgid ""
-#| "This will only be sent out for non-free orders. Free orders will receive "
-#| "the free order template from above instead."
 msgid ""
 "This will only be sent out for non-free orders. Free orders will receive the "
 "free order template from below instead."
 msgstr ""
-"لن يتم إرسال هذه خارج لأوامر غير حرة. وسوف تتلقى أوامر الحرة قالب النظام "
-"الحر من فوق بدلا من ذلك."
+"سيتم ارسال هذا للطلبات غير المجانية فقط. وسوف يتلقى أصحاب الطلبات المجانية "
+"بدلا من ذلك نموذج الطلب المجاني كما هو في الأسفل."
 
 #: pretix/control/forms/event.py:1013
-#, fuzzy
-#| msgid "Approved order"
 msgid "Approved free order"
-msgstr "أجل المعتمد"
+msgstr "طلب مجاني معتمد"
 
 #: pretix/control/forms/event.py:1016
-#, fuzzy
-#| msgid ""
-#| "This will only be sent out for non-free orders. Free orders will receive "
-#| "the free order template from above instead."
 msgid ""
 "This will only be sent out for free orders. Non-free orders will receive the "
 "non-free order template from above instead."
 msgstr ""
-"لن يتم إرسال هذه خارج لأوامر غير حرة. وسوف تتلقى أوامر الحرة قالب النظام "
-"الحر من فوق بدلا من ذلك."
+"سيتم ارسال هذا إلى الطلبات المجانية فقط. سيستلم أصحاب الطلبات غير المجانية "
+"نموذج الطلب غير المجاني كما هو في الأعلى."
 
 #: pretix/control/forms/event.py:1020
 msgid "Denied order"
@@ -9158,7 +9085,7 @@ msgstr "النائبة المتاحة: {list}"
 #, fuzzy
 #| msgid "Ticket code"
 msgid "Ticket code generator"
-msgstr "تذكرة التعليمات البرمجية"
+msgstr "إنشاء رمز التذكرة"
 
 #: pretix/control/forms/event.py:1090
 msgid "For advanced users, usually does not need to be changed."
@@ -9197,10 +9124,8 @@ msgid "No VAT"
 msgstr "لا ضريبه للقيمه المضافه"
 
 #: pretix/control/forms/event.py:1173
-#, fuzzy
-#| msgid "Filetype not allowed!"
 msgid "Sale not allowed"
-msgstr "الملف المطبوع سري!"
+msgstr "غير مسموح بالبيع"
 
 #: pretix/control/forms/event.py:1177
 #, fuzzy
@@ -9209,10 +9134,8 @@ msgid "Deviating tax rate"
 msgstr "معدل ضريبة المبيعات"
 
 #: pretix/control/forms/event.py:1182
-#, fuzzy
-#| msgid "Text on invoices"
 msgid "Text on invoice"
-msgstr "النص على الفواتير"
+msgstr "النص على الفاتورة"
 
 #: pretix/control/forms/event.py:1222
 msgid "Pre-selected voucher"
@@ -9322,10 +9245,8 @@ msgid "All orders"
 msgstr "جميع الطلبات"
 
 #: pretix/control/forms/filter.py:183
-#, fuzzy
-#| msgid "Paid orders"
 msgid "Valid orders"
-msgstr "طلبات مدفوعة."
+msgstr "طلبات صحيحة"
 
 #: pretix/control/forms/filter.py:184
 msgid "Paid (or canceled with paid fee)"
@@ -9345,38 +9266,28 @@ msgid "Pending or paid"
 msgstr "بانتظار أو المدفوعة"
 
 #: pretix/control/forms/filter.py:188
-#, fuzzy
-#| msgid "Cancellation"
 msgid "Cancellations"
-msgstr "إلغاء"
+msgstr "الإلغاءات"
 
 #: pretix/control/forms/filter.py:189
-#, fuzzy
-#| msgid "Canceled (paid fee)"
 msgid "Canceled (fully)"
-msgstr "إلغاء (الرسوم المدفوعة)"
+msgstr "إلغاء (كلي)"
 
 #: pretix/control/forms/filter.py:190
-#, fuzzy
-#| msgid "Canceled (or with paid fee)"
 msgid "Canceled (fully or with paid fee)"
-msgstr "إلغاء (أو مع رسوم المدفوعة)"
+msgstr "إلغاء (كلي أو مع رسوم المدفوعة)"
 
 #: pretix/control/forms/filter.py:191
-#, fuzzy
-#| msgid "Cancellation fee"
 msgid "Cancellation requested"
-msgstr "رسوم الإلغاء"
+msgstr "طلبات الإلغاء"
 
 #: pretix/control/forms/filter.py:192
 msgid "Fully canceled but invoice not canceled"
 msgstr ""
 
 #: pretix/control/forms/filter.py:194
-#, fuzzy
-#| msgid "Payment providers"
 msgid "Payment process"
-msgstr "مقدمي خدمات الدفع"
+msgstr "عملية الدفع"
 
 #: pretix/control/forms/filter.py:196
 #: pretix/control/templates/pretixcontrol/items/question.html:25
@@ -9393,33 +9304,29 @@ msgid "Overpaid"
 msgstr "زائدة"
 
 #: pretix/control/forms/filter.py:199
-#, fuzzy
-#| msgid "Mark as paid"
 msgid "Partially paid"
-msgstr "احتفالا ب المدفوعة"
+msgstr "مدفوع جزئيا"
 
 #: pretix/control/forms/filter.py:200
 #, fuzzy
 #| msgctxt "checkoutflow"
 #| msgid "Order confirmed"
 msgid "Underpaid (but confirmed)"
-msgstr "تم تاكيد الطلب"
+msgstr "(لكنها مؤكد)"
 
 #: pretix/control/forms/filter.py:201
 msgid "Pending (but fully paid)"
 msgstr "في انتظار (ولكن مدفوع بالكامل)"
 
 #: pretix/control/forms/filter.py:203
-#, fuzzy
-#| msgid "Order approval process"
 msgid "Approval process"
-msgstr "عملية الموافقة أجل"
+msgstr "عملية موافق عليها"
 
 #: pretix/control/forms/filter.py:204
 #, fuzzy
 #| msgid "Approval pending"
 msgid "Approved, payment pending"
-msgstr "في انتظار الموافقة"
+msgstr "موافق عليها، الدفع معلق"
 
 #: pretix/control/forms/filter.py:205
 #: pretix/control/templates/pretixcontrol/orders/fragment_order_status.html:7
@@ -9457,22 +9364,16 @@ msgid "Order placed at or after"
 msgstr ""
 
 #: pretix/control/forms/filter.py:488
-#, fuzzy
-#| msgid "New order placed"
 msgid "Order placed before"
-msgstr "النظام الجديد وضعت"
+msgstr "تم وضع الطلب قبل"
 
 #: pretix/control/forms/filter.py:517
-#, fuzzy
-#| msgid "Order payments and refunds"
 msgid "Minimal sum of payments and refunds"
-msgstr "المدفوعات النظام واسترداد"
+msgstr "الحد الأدنى للمدفوعات والاسترداد"
 
 #: pretix/control/forms/filter.py:522
-#, fuzzy
-#| msgid "Order payments and refunds"
 msgid "Maximal sum of payments and refunds"
-msgstr "المدفوعات النظام واسترداد"
+msgstr "الحد الأقصى للمدفوعات والاسترداد"
 
 #: pretix/control/forms/filter.py:564 pretix/control/forms/filter.py:569
 #: pretix/control/forms/filter.py:595 pretix/control/forms/filter.py:600
@@ -9485,7 +9386,7 @@ msgstr ""
 #, fuzzy
 #| msgid "Client secret"
 msgid "Ticket secret"
-msgstr "كلمة سر الزبون"
+msgstr "كلمة سر التذكرة"
 
 #: pretix/control/forms/filter.py:717 pretix/control/forms/filter.py:722
 #: pretix/control/forms/filter.py:1128 pretix/control/forms/filter.py:1133
@@ -9566,7 +9467,6 @@ msgstr "الأحد"
 #: pretix/control/forms/filter.py:1032 pretix/control/forms/filter.py:1034
 #: pretix/control/forms/filter.py:1068 pretix/control/forms/filter.py:1070
 #: pretix/control/forms/filter.py:1397 pretix/control/forms/filter.py:1399
-#, fuzzy
 msgid "Search query"
 msgstr "البحث في الاستفسارات"
 
@@ -9603,18 +9503,14 @@ msgid "All attendees"
 msgstr "جميع الحاضرين"
 
 #: pretix/control/forms/filter.py:1301
-#, fuzzy
-#| msgid "Checked in – {list}"
 msgctxt "checkin state"
 msgid "Checked in but left"
-msgstr "إيداعه - {list}"
+msgstr "سجل لكنه غادر"
 
 #: pretix/control/forms/filter.py:1302
-#, fuzzy
-#| msgid "Presale"
 msgctxt "checkin state"
 msgid "Present"
-msgstr "مبيعات"
+msgstr "حاضر"
 
 #: pretix/control/forms/filter.py:1303
 #: pretix/control/templates/pretixcontrol/checkin/index.html:140
@@ -9638,7 +9534,6 @@ msgid "No administrator"
 msgstr "لا المسؤول"
 
 #: pretix/control/forms/filter.py:1463
-#, fuzzy
 msgid "Valid"
 msgstr "ساري المفعول"
 
@@ -9785,10 +9680,8 @@ msgstr ""
 "هذا الملقم محليا."
 
 #: pretix/control/forms/global_settings.py:133
-#, fuzzy
-#| msgid "Change to"
 msgid "Changes to pretix"
-msgstr "تغيير"
+msgstr "تغيير في pretix"
 
 #: pretix/control/forms/global_settings.py:136
 msgid ""
@@ -9803,10 +9696,8 @@ msgid ""
 msgstr ""
 
 #: pretix/control/forms/global_settings.py:143
-#, fuzzy
-#| msgid "Usage overview"
 msgid "Usage of pretix"
-msgstr "نظرة عامة الاستخدام"
+msgstr "استخدام pretix"
 
 #: pretix/control/forms/global_settings.py:146
 msgid ""
@@ -9896,7 +9787,7 @@ msgstr ""
 #, fuzzy
 #| msgid "Your registration"
 msgid "Source code instructions"
-msgstr "تسجيلك"
+msgstr "تعليمات رمز المصدر"
 
 #: pretix/control/forms/global_settings.py:200
 msgid ""
@@ -9926,10 +9817,8 @@ msgstr ""
 "تحديد الاختلافات في الخطوة التالية."
 
 #: pretix/control/forms/item.py:298 pretix/control/forms/item.py:542
-#, fuzzy
-#| msgid "Product category"
 msgid "No category"
-msgstr "فئة المنتج"
+msgstr "ليس هناك فئة"
 
 #: pretix/control/forms/item.py:305
 msgid "No taxation"
@@ -10044,10 +9933,8 @@ msgid "Bundled products"
 msgstr "المنتجات المجمعة"
 
 #: pretix/control/forms/item.py:837
-#, fuzzy
-#| msgid "You added the same add-on category twice"
 msgid "You added the same bundled product twice."
-msgstr "لقد قمت بإضافة نفس إضافة على فئة مرتين"
+msgstr "لقد قمت بإضافة نفس حزمة المنتج مرتين"
 
 #: pretix/control/forms/item.py:843
 #: pretix/control/templates/pretixcontrol/item/include_bundles.html:23
@@ -10061,10 +9948,8 @@ msgid "inactive"
 msgstr "غير نشط"
 
 #: pretix/control/forms/orderimport.py:30
-#, fuzzy
-#| msgid "Import file"
 msgid "Import mode"
-msgstr "استيراد ملف"
+msgstr "وضع الاستيراد"
 
 #: pretix/control/forms/orderimport.py:32
 msgid "Create a separate order for each line"
@@ -10075,20 +9960,16 @@ msgid "Create one order with one position per line"
 msgstr ""
 
 #: pretix/control/forms/orderimport.py:39
-#, fuzzy
-#| msgid "Mark order as paid"
 msgid "Create orders as fully paid"
-msgstr "أجل إجعلها المدفوعة"
+msgstr "أنشئ الطلبات المدفوعة كليا"
 
 #: pretix/control/forms/orderimport.py:40
 msgid "Create orders as pending and still require payment"
 msgstr ""
 
 #: pretix/control/forms/orderimport.py:44
-#, fuzzy
-#| msgid "Show all test mode orders"
 msgid "Create orders as test mode orders"
-msgstr "عرض كل أوامر وضع الاختبار"
+msgstr "أنشئ الطلبات في وضع الإختبار"
 
 #: pretix/control/forms/orderimport.py:57
 #, python-brace-format
@@ -10123,10 +10004,8 @@ msgstr ""
 "بغض النظر عن إعدادات المدفوعات المتأخرة."
 
 #: pretix/control/forms/orders.py:151 pretix/control/forms/orders.py:195
-#, fuzzy
-#| msgid "Notify user by e-mail"
 msgid "Notify customer by email"
-msgstr "تنبيه المستخدم عن طريق البريد الإلكتروني"
+msgstr "تنبيه العميل عن طريق البريد الإلكتروني"
 
 #: pretix/control/forms/orders.py:158
 msgid "Keep a cancellation fee of"
@@ -10146,10 +10025,8 @@ msgstr ""
 "الإجمالية، وسيتم احتساب الضرائب تلقائيا."
 
 #: pretix/control/forms/orders.py:165
-#, fuzzy
-#| msgid "Generate cancellation"
 msgid "Generate cancellation for invoice"
-msgstr "توليد إلغاء"
+msgstr "إنشاء الإلغاء للفواتير"
 
 #: pretix/control/forms/orders.py:202
 msgid "Payment amount"
@@ -10169,10 +10046,8 @@ msgid "Re-calculate taxes"
 msgstr "الضرائب إعادة حساب"
 
 #: pretix/control/forms/orders.py:247
-#, fuzzy
-#| msgid "Re-calculate taxes"
 msgid "Do not re-calculate taxes"
-msgstr "الضرائب إعادة حساب"
+msgstr "لا تقم باعادة احتساب الضرائب"
 
 #: pretix/control/forms/orders.py:248
 msgid ""
@@ -10231,10 +10106,8 @@ msgstr "مقعد"
 #: pretix/control/templates/pretixcontrol/organizers/customer_membership_delete.html:5
 #: pretix/control/templates/pretixcontrol/organizers/customer_membership_delete.html:9
 #: pretix/presale/forms/checkout.py:213
-#, fuzzy
-#| msgid "Members"
 msgid "Membership"
-msgstr "أفراد"
+msgstr "عضويات"
 
 #: pretix/control/forms/orders.py:303
 msgid "Including taxes, if any. Keep empty for the product's default price"
@@ -10265,10 +10138,8 @@ msgid "Split into new order"
 msgstr "تنقسم إلى النظام الجديد"
 
 #: pretix/control/forms/orders.py:508
-#, fuzzy
-#| msgid "Team memberships"
 msgid "(No membership)"
-msgstr "عضوية فريق"
+msgstr "(لا توجد عضوية)"
 
 #: pretix/control/forms/orders.py:539
 msgid "Remove this fee"
@@ -10330,24 +10201,19 @@ msgid "You need to specify an amount for a partial refund."
 msgstr "تحتاج إلى تحديد مبلغ للحصول على رد جزئي."
 
 #: pretix/control/forms/orders.py:713
-#, fuzzy
-#| msgid "Cancel order"
 msgid "Cancel all dates"
-msgstr "الغاء الطلب"
+msgstr "إلغاء جميع التواريخ"
 
 #: pretix/control/forms/orders.py:732
-#, fuzzy
-#| msgctxt "amount_label"
-#| msgid "Automatically refund"
 msgid "Automatically refund money if possible"
-msgstr "تلقائيا استرداد"
+msgstr "استرد المبلغ تلقائيا إن أمكن الأمر"
 
 #: pretix/control/forms/orders.py:737
-#, fuzzy
-#| msgid "This payment method does not support automatic refunds."
 msgid ""
 "Create manual refund if the payment method does not support automatic refunds"
-msgstr "طريقة الدفع هذه لا يدعم استرداد التلقائي."
+msgstr ""
+"أنشاء الاسترداد اليدوي في حال كانت طريقة الدفع لا تدعم الاسترداد التلقائي "
+"للمبالغ"
 
 #: pretix/control/forms/orders.py:741
 msgid ""
@@ -10364,28 +10230,20 @@ msgid ""
 msgstr ""
 
 #: pretix/control/forms/orders.py:752
-#, fuzzy
-#| msgid "Gift card value"
 msgid "Gift card validity"
-msgstr "قيمة بطاقة هدية"
+msgstr "صلاحية بطاقة هدية"
 
 #: pretix/control/forms/orders.py:771
-#, fuzzy
-#| msgid "Keep a fixed cancellation fee"
 msgid "Keep a fixed cancellation fee per ticket"
-msgstr "الحفاظ على رسوم على إلغاء الثابتة"
+msgstr "الحفاظ على رسوم إلغاء الثابتة للتذكرة"
 
 #: pretix/control/forms/orders.py:772
-#, fuzzy
-#| msgid "Generate tickets for non-admission products"
 msgid "Free tickets and add-on products are not counted"
-msgstr "توليد تذاكر للمنتجات عدم قبول"
+msgstr "لا يتم احتساب التذاكر المجانية والمنتجات المضافة"
 
 #: pretix/control/forms/orders.py:782
-#, fuzzy
-#| msgid "Order fees"
 msgid "Keep fees"
-msgstr "رسوم الطلب"
+msgstr "احتفظ بالرسوم"
 
 #: pretix/control/forms/orders.py:785
 msgid ""
@@ -10396,16 +10254,12 @@ msgid ""
 msgstr ""
 
 #: pretix/control/forms/orders.py:791
-#, fuzzy
-#| msgid "Send out emails"
 msgid "Send information via email"
-msgstr "إرسال رسائل البريد الإلكتروني"
+msgstr "أرسل المعلومات إلى البريد الإلكتروني"
 
 #: pretix/control/forms/orders.py:797
-#, fuzzy
-#| msgid "Send out emails"
 msgid "Send information to waiting list"
-msgstr "إرسال رسائل البريد الإلكتروني"
+msgstr "أرسم المعلومات إلى قائمة الإنتظار"
 
 #: pretix/control/forms/orders.py:828 pretix/control/forms/orders.py:854
 #, python-brace-format
@@ -10467,18 +10321,14 @@ msgstr ""
 "فريق الفعالية {event}"
 
 #: pretix/control/forms/orders.py:898 pretix/plugins/sendmail/forms.py:117
-#, fuzzy
-#| msgid "Please select a specific variation of this product."
 msgctxt "subevent"
 msgid "Please either select a specific date or a date range, not both."
-msgstr "يرجى تحديد الاختلاف محددة لهذا المنتج."
+msgstr "الرجاء اختيار يوم محدد أو تواريخ تقريبية وليس الإثنان معا."
 
 #: pretix/control/forms/orders.py:900
-#, fuzzy
-#| msgid "Please select a specific variation of this product."
 msgctxt "subevent"
 msgid "Please either select all dates or a date range, not both."
-msgstr "يرجى تحديد الاختلاف محددة لهذا المنتج."
+msgstr "الرجاء اختيار كافة الأيام أو تاريخ تقريبي وليس الإثنان معا."
 
 #: pretix/control/forms/orders.py:902 pretix/plugins/sendmail/forms.py:119
 msgctxt "subevent"
@@ -10519,11 +10369,8 @@ msgstr ""
 "200x200px على الأقل لاستيعاب معظم الأجهزة."
 
 #: pretix/control/forms/organizer.py:365
-#, fuzzy
-#| msgid ""
-#| "This will be attached to every email. Available placeholders: {event}"
 msgid "This will be attached to every email."
-msgstr "وسيلحق هذا على كل البريد الإلكتروني. النائبة المتاحة: {event}"
+msgstr "سيرفق هذا مع كل بريد إلكتروني."
 
 #: pretix/control/forms/organizer.py:443
 msgctxt "webhooks"
@@ -10535,10 +10382,8 @@ msgid "Gift card value"
 msgstr "قيمة بطاقة هدية"
 
 #: pretix/control/forms/organizer.py:524 pretix/presale/forms/customer.py:386
-#, fuzzy
-#| msgid "This security device is already registered."
 msgid "An account with this email address is already registered."
-msgstr "مسجلة بالفعل هذا الجهاز الأمني."
+msgstr "هناك حساب مرتبط بهذا البريد الإلكتروني مسبقا."
 
 #: pretix/control/forms/renderers.py:54
 #: pretix/control/templates/pretixcontrol/items/question_edit.html:135
@@ -10554,13 +10399,11 @@ msgstr "اختياري"
 #| msgid "Change"
 msgctxt "form_bulk"
 msgid "change"
-msgstr "يتغيرون"
+msgstr "غير"
 
 #: pretix/control/forms/subevents.py:117
-#, fuzzy
-#| msgid "Current value"
 msgid "Keep the current values"
-msgstr "القيمة الحالية"
+msgstr "احتفظ بالقيمة الحالية"
 
 #: pretix/control/forms/subevents.py:134 pretix/control/forms/subevents.py:142
 msgid "Selection contains various values"
@@ -10773,10 +10616,9 @@ msgstr ""
 "موقف # {posid}: {old_item} ({old_price}) تغيرت إلى {new_item} ({new_price})."
 
 #: pretix/control/logdisplay.py:82
-#, fuzzy, python-brace-format
-#| msgid "Position #{posid} created: {item} ({price})."
+#, python-brace-format
 msgid "Position #{posid}: Used membership changed."
-msgstr "موقف # {posid} الانشاء: {item} ({price})."
+msgstr "حالة # {posid}: تم تغيير العضوية المستخدمة."
 
 #: pretix/control/logdisplay.py:86
 #, python-brace-format
@@ -10808,10 +10650,8 @@ msgid "Tax rule of fee #{fee} changed from {old_rule} to {new_rule}."
 msgstr "رسوم الضريبة {fee}تغيرت من {old_rule}إلى{new_rule}."
 
 #: pretix/control/logdisplay.py:124
-#, fuzzy
-#| msgid "The quota has been added."
 msgid "A fee has been added"
-msgstr "تمت إضافة الحصص."
+msgstr "تمت إضافة رسوم"
 
 #: pretix/control/logdisplay.py:126
 #, python-brace-format
@@ -10912,18 +10752,15 @@ msgstr ""
 "رفض نسح الحالة#{posid}قائمة\"{list}\"،نوع\"{type}\"خطأ الرمز\"{errorcode}\"."
 
 #: pretix/control/logdisplay.py:270
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Position #{posid} has been checked in at {datetime} for list \"{list}\"."
+#, python-brace-format
 msgid ""
 "Position #{posid} has been checked out at {datetime} for list \"{list}\"."
-msgstr "موقف # {posid} تم إيداعه في {datetime} لقائمة \"{list}\"."
+msgstr "حالة # {posid} تم التحقق في {datetime} للقائمة \"{list}\"."
 
 #: pretix/control/logdisplay.py:276
-#, fuzzy, python-brace-format
-#| msgid "Position #{posid} has been checked in for list \"{list}\"."
+#, python-brace-format
 msgid "Position #{posid} has been checked out for list \"{list}\"."
-msgstr "وقد تم التحقق من موقف # {posid} في لائحة \"{list}\"."
+msgstr "حالة # {posid} تم التحقق للقائمة \"{list}\"."
 
 #: pretix/control/logdisplay.py:282
 #, python-brace-format
@@ -10955,115 +10792,78 @@ msgstr ""
 "\"{list}\"."
 
 #: pretix/control/logdisplay.py:314
-#, fuzzy
-#| msgid "The product has been created."
 msgid "This object has been created by cloning."
-msgstr "تم إنشاء المنتج."
+msgstr "تم إنشاء هذا الكائن عبر النسخ."
 
 #: pretix/control/logdisplay.py:315
-#, fuzzy
-#| msgid "The order has been changed."
 msgid "The organizer has been changed."
-msgstr "تم تغيير النظام."
+msgstr "تم تغيير المنظم."
 
 #: pretix/control/logdisplay.py:316
-#, fuzzy
-#| msgid "The team settings have been changed."
 msgid "The organizer settings have been changed."
-msgstr "تم تغيير إعدادات الفريق."
+msgstr "تم تغيير إعدادات المنظم."
 
 #: pretix/control/logdisplay.py:317
-#, fuzzy
-#| msgid "The new organizer has been created."
 msgid "Gift card acceptance for another organizer has been added."
-msgstr "تم إنشاء منظم جديد."
+msgstr "تم إضافة قبول بطاقة الهدية لمنظم آخر."
 
 #: pretix/control/logdisplay.py:318
-#, fuzzy
-#| msgid "The new organizer has been created."
 msgid "Gift card acceptance for another organizer has been removed."
-msgstr "تم إنشاء منظم جديد."
+msgstr "تم إزالة قبول بطاقة هدية لمنظم آخر."
 
 #: pretix/control/logdisplay.py:319
-#, fuzzy
-#| msgid "The user has been created."
 msgid "The webhook has been created."
-msgstr "تم إنشاء المستخدم."
+msgstr "تم إنشاء خطاف الويب."
 
 #: pretix/control/logdisplay.py:320
-#, fuzzy
-#| msgid "The category has been changed."
 msgid "The webhook has been changed."
-msgstr "تم تغيير الفئة."
+msgstr "تم تغيير خطاف الويب."
 
 #: pretix/control/logdisplay.py:321 pretix/control/views/organizer.py:1645
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "The event date has been created."
 msgid "The membership type has been created."
-msgstr "تم إنشاء تاريخ الحدث."
+msgstr "تم انشاء نوع العضوية."
 
 #: pretix/control/logdisplay.py:322
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "The event date has been changed."
 msgid "The membership type has been changed."
-msgstr "تم تغيير تاريخ الحدث."
+msgstr "تم تغيير نوع العضوية."
 
 #: pretix/control/logdisplay.py:323
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "The event date has been deleted."
 msgid "The membership type has been deleted."
-msgstr "تم حذف تاريخ الحدث."
+msgstr "تم حذف نوع العضوية."
 
 #: pretix/control/logdisplay.py:324
-#, fuzzy
-#| msgid "The team has been created."
 msgid "The account has been created."
-msgstr "تم إنشاء فريق."
+msgstr "تم إنشاء الحساب."
 
 #: pretix/control/logdisplay.py:325
-#, fuzzy
-#| msgid "The category has been changed."
 msgid "The account has been changed."
-msgstr "تم تغيير الفئة."
+msgstr "تم تغيير الحساب."
 
 #: pretix/control/logdisplay.py:326
-#, fuzzy
-#| msgid "Your account has been enabled."
 msgid "A membership for this account has been added."
-msgstr "تم تمكين حسابك."
+msgstr "تم إضافة عضوية لهذا الحساب."
 
 #: pretix/control/logdisplay.py:327
-#, fuzzy
-#| msgid "An answer option has been changed."
 msgid "A membership of this account has been changed."
-msgstr "تم تغيير خيار الإجابة."
+msgstr "تم تغيير العضوية لهذا الحساب."
 
 #: pretix/control/logdisplay.py:328
-#, fuzzy
-#| msgid "Your account has been enabled."
 msgid "A membership of this account has been deleted."
-msgstr "تم تمكين حسابك."
+msgstr "تم حذف عضوية هذا الحساب."
 
 #: pretix/control/logdisplay.py:329
 #, fuzzy
 #| msgid "Your account has been disabled."
 msgid "The account has been disabled and anonymized."
-msgstr "تم تعطيل حسابك."
+msgstr "تم تعطيل الحساب وأصبح مجهول المصدر."
 
 #: pretix/control/logdisplay.py:330
-#, fuzzy
-#| msgid "The password has been reset."
 msgid "A new password has been requested."
-msgstr "وقد تم إعادة تعيين كلمة المرور."
+msgstr "تم طلب تعيين كلمة المرور جديدة."
 
 #: pretix/control/logdisplay.py:331
-#, fuzzy
-#| msgid "The password has been reset."
 msgid "A new password has been set."
-msgstr "وقد تم إعادة تعيين كلمة المرور."
+msgstr "تم تعيين كلمة المرور جديدة."
 
 #: pretix/control/logdisplay.py:332 pretix/control/logdisplay.py:367
 msgid "Sending of an email has failed."
@@ -11074,16 +10874,12 @@ msgid "The event's internal comment has been updated."
 msgstr "تم تحديث التعليق الداخلي للحدث."
 
 #: pretix/control/logdisplay.py:334
-#, fuzzy
-#| msgid "The refund has been canceled."
 msgid "The event has been canceled."
-msgstr "تم إلغاء استرداد."
+msgstr "تم إلغاء الفعالية."
 
 #: pretix/control/logdisplay.py:335
-#, fuzzy
-#| msgid "The event has been deleted."
 msgid "An event has been deleted."
-msgstr "الحدث تم الغائه."
+msgstr "تم حذف فعالية."
 
 #: pretix/control/logdisplay.py:336
 msgid "The order details have been changed."
@@ -11110,10 +10906,8 @@ msgid "The order has been marked as paid."
 msgstr "تم وضع علامة على الترتيب كما المدفوعة."
 
 #: pretix/control/logdisplay.py:342
-#, fuzzy
-#| msgid "The selected question has been deleted."
 msgid "The cancellation request has been deleted."
-msgstr "تم حذف السؤال المحدد."
+msgstr "تم حذف طلب الإلغاء."
 
 #: pretix/control/logdisplay.py:343
 msgid "The order has been refunded."
@@ -11125,10 +10919,8 @@ msgid "The order has been canceled."
 msgstr "تم إلغاء هذا الأمر."
 
 #: pretix/control/logdisplay.py:345 pretix/control/views/orders.py:1502
-#, fuzzy
-#| msgid "The order has been created."
 msgid "The order has been reactivated."
-msgstr "تم إنشاء هذا الأمر."
+msgstr "تم إعادة تنشيط الطلب."
 
 #: pretix/control/logdisplay.py:346
 #, python-brace-format
@@ -11171,10 +10963,8 @@ msgid ""
 msgstr "تم تغيير رقم الهاتف من\"{old_phone}\"إلى\"{new_phone}\"."
 
 #: pretix/control/logdisplay.py:357
-#, fuzzy
-#| msgid "The question has been changed."
 msgid "The customer account has been changed."
-msgstr "تم تغيير السؤال."
+msgstr "تم تغيير حساب العميل."
 
 #: pretix/control/logdisplay.py:358
 msgid "The order locale has been changed."
@@ -11224,10 +11014,8 @@ msgid "A custom email has been sent."
 msgstr "تم إرسال البريد الإلكتروني المخصص."
 
 #: pretix/control/logdisplay.py:371
-#, fuzzy
-#| msgid "A custom email has been sent."
 msgid "A custom email has been sent to an attendee."
-msgstr "تم إرسال البريد الإلكتروني المخصص."
+msgstr "تم إرسال البريد الإلكتروني المخصص لحاضر."
 
 #: pretix/control/logdisplay.py:372
 msgid ""
@@ -11247,13 +11035,9 @@ msgid ""
 msgstr "وقد تم إرسال بريد إلكتروني لإعلام المستخدم التي تم إلغاء الطلب."
 
 #: pretix/control/logdisplay.py:377
-#, fuzzy
-#| msgid ""
-#| "An email has been sent to notify the user that the order has been "
-#| "canceled."
 msgid ""
 "An email has been sent to notify the user that the event has been canceled."
-msgstr "وقد تم إرسال بريد إلكتروني لإعلام المستخدم التي تم إلغاء الطلب."
+msgstr "تم إرسال بريد إلكتروني لإعلام المستخدم بإلغاء الفعالية."
 
 #: pretix/control/logdisplay.py:379
 msgid ""
@@ -11314,10 +11098,9 @@ msgid "Payment {local_id} has been canceled."
 msgstr "تم إلغاء الدفع {local_id}."
 
 #: pretix/control/logdisplay.py:392
-#, fuzzy, python-brace-format
-#| msgid "Payment {local_id} has failed."
+#, python-brace-format
 msgid "Canceling payment {local_id} has failed."
-msgstr "فشلت الدفع {local_id}."
+msgstr "فشل إلغاء الدفع {local_id}."
 
 #: pretix/control/logdisplay.py:393
 #, python-brace-format
@@ -11611,10 +11394,8 @@ msgid "The event has been created."
 msgstr "تم إنشاء هذا الحدث."
 
 #: pretix/control/logdisplay.py:466
-#, fuzzy
-#| msgid "The event settings have been changed."
 msgid "The event details have been changed."
-msgstr "تم تغيير إعدادات الحدث."
+msgstr "تم تغيير تفاصيل الفعالية."
 
 #: pretix/control/logdisplay.py:467
 msgid "An answer option has been added to the question."
@@ -11673,22 +11454,16 @@ msgid "The team has been deleted."
 msgstr "تم حذف الفريق."
 
 #: pretix/control/logdisplay.py:481 pretix/control/views/organizer.py:1433
-#, fuzzy
-#| msgid "The team has been created."
 msgid "The gate has been created."
-msgstr "تم إنشاء فريق."
+msgstr "تم إنشاء البوابة."
 
 #: pretix/control/logdisplay.py:482
-#, fuzzy
-#| msgid "The category has been changed."
 msgid "The gate has been changed."
-msgstr "تم تغيير الفئة."
+msgstr "تم تغيير البوابة."
 
 #: pretix/control/logdisplay.py:483
-#, fuzzy
-#| msgid "The team has been deleted."
 msgid "The gate has been deleted."
-msgstr "تم حذف الفريق."
+msgstr "تم حذف البوابة."
 
 #: pretix/control/logdisplay.py:484
 msgctxt "subevent"
@@ -11696,12 +11471,9 @@ msgid "The event date has been deleted."
 msgstr "تم حذف تاريخ الحدث."
 
 #: pretix/control/logdisplay.py:485
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "The event date has been changed."
 msgctxt "subevent"
 msgid "The event date has been canceled."
-msgstr "تم تغيير تاريخ الحدث."
+msgstr "تم تغيير تاريخ الفعالية."
 
 #: pretix/control/logdisplay.py:486
 msgctxt "subevent"
@@ -11753,22 +11525,16 @@ msgid "The device has notified the server of an hardware or software update."
 msgstr "وقد أخطرت جهاز الخادم من تحديث الأجهزة أو البرامج."
 
 #: pretix/control/logdisplay.py:497
-#, fuzzy
-#| msgid "The team has been created."
 msgid "The gift card has been created."
-msgstr "تم إنشاء فريق."
+msgstr "تم إنشاء بطاقة هدية."
 
 #: pretix/control/logdisplay.py:498 pretix/control/views/organizer.py:1286
-#, fuzzy
-#| msgid "The team has been created."
 msgid "The gift card has been changed."
-msgstr "تم إنشاء فريق."
+msgstr "تم تغيير بطاقة الهدية."
 
 #: pretix/control/logdisplay.py:499
-#, fuzzy
-#| msgid "The manual transaction has been saved."
 msgid "A manual transaction has been performed."
-msgstr "تم حفظ المعاملة اليدوية."
+msgstr "تم إجراء عملية يدوية."
 
 #: pretix/control/logdisplay.py:523
 msgid "The settings of a payment provider have been changed."
@@ -11967,10 +11733,8 @@ msgid "Export"
 msgstr "تصدير"
 
 #: pretix/control/navigation.py:237
-#, fuzzy
-#| msgid "Import file"
 msgid "Import"
-msgstr "استيراد ملف"
+msgstr "استيراد"
 
 #: pretix/control/navigation.py:266
 msgid "All vouchers"
@@ -12053,7 +11817,7 @@ msgstr "الاختيار تحديث"
 #, fuzzy
 #| msgid "Tickets & check-in"
 msgid "License check"
-msgstr "تذاكر والتسجيل في مكتب الاستقبال"
+msgstr "فحص الرخصة"
 
 #: pretix/control/navigation.py:457
 #: pretix/control/templates/pretixcontrol/organizers/properties.html:5
@@ -12068,18 +11832,13 @@ msgstr "Webhooks"
 #: pretix/control/navigation.py:506
 #: pretix/control/templates/pretixcontrol/organizers/customers.html:6
 #: pretix/control/templates/pretixcontrol/organizers/customers.html:9
-#, fuzzy
-#| msgctxt "refund_source"
-#| msgid "Customer"
 msgid "Customers"
-msgstr "زبون"
+msgstr "عملاء"
 
 #: pretix/control/navigation.py:525
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:56
-#, fuzzy
-#| msgid "Customer actions"
 msgid "Customer accounts"
-msgstr "إجراءات العملاء"
+msgstr "حسابات العملاء"
 
 #: pretix/control/navigation.py:535 pretix/control/navigation.py:542
 msgid "Devices"
@@ -12445,22 +12204,16 @@ msgid "ZVT Terminal"
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:16
-#, fuzzy
-#| msgid "Line number"
 msgctxt "terminal_zvt"
 msgid "Trace number"
-msgstr "رقم السطر"
+msgstr "رقم التتبع"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:18
-#, fuzzy
-#| msgid "Payment date"
 msgctxt "terminal_zvt"
 msgid "Payment type"
-msgstr "يوم الدفع او الاستحقاق"
+msgstr "نوع الدفع"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:20
-#, fuzzy
-#| msgid "Additional text"
 msgctxt "terminal_zvt"
 msgid "Additional text"
 msgstr "نص إضافي"
@@ -12470,28 +12223,22 @@ msgstr "نص إضافي"
 #| msgid "Line number"
 msgctxt "terminal_zvt"
 msgid "Turnover number"
-msgstr "رقم السطر"
+msgstr "عدد غير الحاضرين"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:24
-#, fuzzy
-#| msgid "Seat {number}"
 msgctxt "terminal_zvt"
 msgid "Receipt number"
-msgstr "مقعد {number}"
+msgstr "رقم الايصال"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:26
-#, fuzzy
-#| msgid "Card type"
 msgctxt "terminal_zvt"
 msgid "Card type"
 msgstr "نوع البطاقة"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:28
-#, fuzzy
-#| msgid "Cart position"
 msgctxt "terminal_zvt"
 msgid "Card expiration"
-msgstr "موقف العربة"
+msgstr "تاريخ انتهاء البطاقة"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:33
 msgid "Transaction Code"
@@ -12521,28 +12268,22 @@ msgid "Card number"
 msgstr "رقم البطاقة"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:52
-#, fuzzy
-#| msgid "Transaction Code"
 msgid "Client Transaction Code"
-msgstr "كود المعاملة"
+msgstr "رمز معاملة العميل"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:55
 #, fuzzy
 #| msgid "Transaction Code"
 msgid "Server Transaction Code"
-msgstr "كود المعاملة"
+msgstr "رمز معاملة الخادم"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:61
-#, fuzzy
-#| msgid "Payment information"
 msgid "Payment Application"
-msgstr "معلومات الدفع"
+msgstr "طلبات الدفع"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:69
-#, fuzzy
-#| msgid "Transaction Code"
 msgid "Authorization Code"
-msgstr "كود المعاملة"
+msgstr "شفرة الترخيص"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html:7
 #: pretix/control/templates/pretixcontrol/checkin/index.html:11
@@ -12553,10 +12294,8 @@ msgid "Check-in list: %(name)s"
 msgstr "%(name)s: تحقق في قائمة"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html:16
-#, fuzzy
-#| msgid "pretixdesk configuration"
 msgid "Edit list configuration"
-msgstr "التكوين pretixdesk"
+msgstr "تعديل تشكيل القائمة"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html:22
 #: pretix/control/templates/pretixcontrol/orders/overview.html:20
@@ -12606,30 +12345,25 @@ msgid "unpaid"
 msgstr "غير مدفوع"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html:138
-#, fuzzy
-#| msgid "Checked in – {list}"
 msgid "Checked in but left"
-msgstr "إيداعه - {list}"
+msgstr "دخل ولكنه غادر"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html:143
 msgid "Checked in automatically"
 msgstr "إيداعه تلقائيا"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html:154
-#, fuzzy, python-format
-#| msgid "Last updated: %(date)s"
+#, python-format
 msgid "Exit: %(date)s"
-msgstr "آخر تحديث: %(date)s"
+msgstr "خروج: %(date)s"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html:167
 msgid "Check-In selected attendees"
 msgstr "تاريخ الوصول الحضور المختارة"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html:170
-#, fuzzy
-#| msgid "Check-In selected attendees"
 msgid "Check-Out selected attendees"
-msgstr "تاريخ الوصول الحضور المختارة"
+msgstr "مغادرة الحضور المختارون"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html:173
 msgid "Revert selected check-ins"
@@ -12777,7 +12511,7 @@ msgstr ""
 #, fuzzy
 #| msgid "Automated check-in"
 msgid "Custom check-in rule"
-msgstr "آلية الاختيار في"
+msgstr "آلية الدخول"
 
 #: pretix/control/templates/pretixcontrol/checkin/list_edit.html:74
 #: pretix/control/templates/pretixcontrol/event/mail_settings_fragment.html:27
@@ -13027,10 +12761,8 @@ msgid "Change notification settings"
 msgstr "إعدادات تغيير الإعلام"
 
 #: pretix/control/templates/pretixcontrol/event/cancel.html:43
-#, fuzzy
-#| msgid "Order changed"
 msgid "Order changes"
-msgstr "تغير ترتيب"
+msgstr "الترتيب يتغير"
 
 #: pretix/control/templates/pretixcontrol/event/cancel.html:45
 msgid ""
@@ -13042,10 +12774,8 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/event/dangerzone.html:5
 #: pretix/control/templates/pretixcontrol/event/live.html:131
 #: pretix/control/templates/pretixcontrol/event/settings.html:329
-#, fuzzy
-#| msgid "Can create events"
 msgid "Cancel or delete event"
-msgstr "يمكن إنشاء أحداث"
+msgstr "إلغاء أو حذف فعالية"
 
 #: pretix/control/templates/pretixcontrol/event/dangerzone.html:9
 #: pretix/control/templates/pretixcontrol/event/dangerzone.html:25
@@ -13064,10 +12794,8 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/event/dangerzone.html:47
 #: pretix/control/templates/pretixcontrol/orders/cancel.html:5
 #: pretix/control/templates/pretixcontrol/orders/cancel.html:7
-#, fuzzy
-#| msgid "Clone event"
 msgid "Cancel event"
-msgstr "الحدث استنساخ"
+msgstr "حذف فعالية"
 
 #: pretix/control/templates/pretixcontrol/event/dangerzone.html:38
 msgid ""
@@ -13183,10 +12911,8 @@ msgid "Geo coordinates updated"
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/event/fragment_geodata_autoupdate.html:7
-#, fuzzy
-#| msgid "Update comment"
 msgid "Update map?"
-msgstr "تحديث تعليق"
+msgstr "تحديث الخريطة؟"
 
 #: pretix/control/templates/pretixcontrol/event/fragment_timeline.html:5
 msgid "Your timeline"
@@ -13218,22 +12944,16 @@ msgid "Show pending refunds"
 msgstr "عرض استرداد انتظار"
 
 #: pretix/control/templates/pretixcontrol/event/index.html:40
-#, fuzzy
-#| msgid ""
-#| "This event contains <strong>pending refunds</strong> that you should take "
-#| "care of."
 msgid ""
 "This event contains <strong>requested cancellations</strong> that you should "
 "take care of."
 msgstr ""
-"يحتوي هذا الحدث على <strong> استرداد انتظار </strong> التي يجب أن تأخذ "
-"الرعاية."
+"تحتوي هذ الفعالية على طلب <strong> طلبات الإلغاء </strong> والتي يجب عليك "
+"العناية بها."
 
 #: pretix/control/templates/pretixcontrol/event/index.html:44
-#, fuzzy
-#| msgid "Show orders pending approval"
 msgid "Show orders requesting cancellation"
-msgstr "مشاهدة الأوامر المعلقة موافقة"
+msgstr "أظهر طلبات الإلغاء"
 
 #: pretix/control/templates/pretixcontrol/event/index.html:49
 msgid ""
@@ -13794,52 +13514,36 @@ msgid "Localization"
 msgstr "الموقع"
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:64
-#, fuzzy
-#| msgid "Attendee data"
 msgid "Customer and attendee data"
-msgstr "بيانات الحضور"
+msgstr "بيانات العملاء والحضور"
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:65
-#, fuzzy
-#| msgid "Customers can cancel their paid orders"
 msgid "Customer data (once per order)"
-msgstr "يمكن للعملاء إلغاء أوامر أموالها المدفوعة"
+msgstr "بيانات العميل (مرةواحدة للطلب)"
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:80
-#, fuzzy
-#| msgid "Sender address"
 msgid "Name and address"
-msgstr "عنوان المرسل"
+msgstr "الاسم والعنوان"
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:85
-#, fuzzy
-#| msgid "Invoice settings"
 msgid "See invoice settings"
-msgstr "ضبط فاتورة"
+msgstr "انظر إعدادات الفاتورة"
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:91
-#, fuzzy
-#| msgid "Is an admission ticket"
 msgid "Attendee data (once per admission ticket)"
-msgstr "هو تذكرة الدخول"
+msgstr "بيانات الحاضر (مرة واحدة خلال التسجيل للتذكرة)"
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:100
-#, fuzzy
-#| msgid "E-mail address verified"
 msgid "Custom fields"
-msgstr "عنوان البريد الإلكتروني التحقق منها"
+msgstr "حقول محددة"
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:105
-#, fuzzy
-#| msgid "Include questions"
 msgid "Manage questions"
-msgstr "وتشمل الأسئلة"
+msgstr "إدارة الأسئلة"
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:112
-#, fuzzy
-#| msgid "User settings"
 msgid "Other settings"
-msgstr "إعدادات المستخدم"
+msgstr "إعدادات أخرى"
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:118
 msgid "Texts"
@@ -13850,27 +13554,19 @@ msgid "Confirmation text"
 msgstr "نص تأكيد"
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:130
-#, fuzzy
-#| msgid ""
-#| "This text needs to be confirmed by the user before a purchase is "
-#| "possible. You could for example link your terms of service here. If you "
-#| "use the Pages feature to publish your terms of service, you don't need "
-#| "this setting since you can configure it there."
 msgid ""
 "These texts need to be confirmed by the user before a purchase is possible. "
 "You could for example link your terms of service here. If you use the Pages "
 "feature to publish your terms of service, you don't need this setting since "
 "you can configure it there."
 msgstr ""
-"يحتاج هذا النص إلى تأكيد من قبل المستخدم قبل شراء ممكن. هل يمكن على سبيل "
-"المثال ربط شروطكم الخدمة هنا. إذا كنت تستخدم ميزة الصفحات لنشر شروطكم "
-"الخدمة، لا تحتاج هذا الإعداد حيث يمكنك تكوين هناك."
+"تحتاج هذه النصوص إلى تأكيد من قبل المستخدم قبل إتاحة الشراء. يمكن على سبيل "
+"المثال وضع رابط لشروط الخدمة الخاصة بكم هنا. إذا كنت تستخدم ميزات الصفحات "
+"لنشر شروطكم الخدمة، فلن تحتاج إلى هذا الإعداد حيث يمكنك إنشاء ذلك هناك."
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:187
-#, fuzzy
-#| msgid "Confirmation text"
 msgid "Add confirmation text"
-msgstr "نص تأكيد"
+msgstr "أضف نص تأكيد"
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:201
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:63
@@ -13894,26 +13590,18 @@ msgid "Cart"
 msgstr "عربة التسوق"
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:261
-#, fuzzy
-#| msgid "Event metadata"
 msgid "Item metadata"
-msgstr "الفوقية الحدث"
+msgstr "عنصر بيانات وصفية"
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:263
-#, fuzzy
-#| msgid ""
-#| "You can here define a set of metadata properties (i.e. variables) that "
-#| "you can later set for your events and re-use in places like ticket "
-#| "layouts. This is an useful timesaver if you create lots and lots of "
-#| "events."
 msgid ""
 "You can here define a set of metadata properties (i.e. variables) that you "
 "can later set for your items and re-use in places like ticket layouts. This "
 "is an useful timesaver if you create lots and lots of items."
 msgstr ""
-"يمكنك هنا تحديد مجموعة من الخصائص الوصفية (أي المتغيرات) التي يمكن أن يحدد "
-"في وقت لاحق للأحداث وإعادة استخدامها في أماكن مثل تخطيطات التذاكر. هذا هو "
-"مرة المنقذ مفيدا إذا قمت بإنشاء الكثير والكثير من الأحداث."
+"يمكنك هنا تحديد مجموعة من الخصائص الوصفية (أي المتغيرات) التي يمكن أن تحددها "
+"لاحقا للوحدات أو تعيد استخدامها في أماكن مثل تخطيطات التذاكر. وهذا الخيار "
+"سيكون منقذا ومفيدا إذا قمت بإنشاء الكثير والكثير من الوحدات."
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:316
 msgid "Add property"
@@ -14004,10 +13692,8 @@ msgstr "إضافة قاعدة جديدة"
 
 #: pretix/control/templates/pretixcontrol/event/tax_edit.html:144
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:89
-#, fuzzy
-#| msgid "Change to"
 msgid "Change history"
-msgstr "تغيير"
+msgstr "تغيير السجل"
 
 #: pretix/control/templates/pretixcontrol/event/tax_index.html:9
 msgid "You haven't created any tax rules yet."
@@ -14023,16 +13709,14 @@ msgid "Rate"
 msgstr "معدل"
 
 #: pretix/control/templates/pretixcontrol/event/tax_index.html:41
-#, fuzzy, python-format
-#| msgid "incl. %(rate)s%% %(name)s"
+#, python-format
 msgid "incl. %(rate)s %%"
-msgstr "بما في ذلك %(rate)s%% %(name)s"
+msgstr "بما في ذلك %(rate)s%%"
 
 #: pretix/control/templates/pretixcontrol/event/tax_index.html:43
-#, fuzzy, python-format
-#| msgid "incl. %(rate)s%% %(name)s"
+#, python-format
 msgid "excl. %(rate)s %%"
-msgstr "بما في ذلك %(rate)s%% %(name)s"
+msgstr "بما في ذلك%(rate)s%%"
 
 #: pretix/control/templates/pretixcontrol/event/tickets.html:8
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:7
@@ -14066,16 +13750,12 @@ msgstr ""
 "المساعد إعدادات </A> وتفعيل واحد أو أكثر من تذكرة الناتج الإضافات."
 
 #: pretix/control/templates/pretixcontrol/event/tickets.html:62
-#, fuzzy
-#| msgid "Download ticket"
 msgid "Download time"
-msgstr "حمل تذكرة"
+msgstr "وقت التنزيل"
 
 #: pretix/control/templates/pretixcontrol/event/tickets.html:66
-#, fuzzy
-#| msgid "Ticket code"
 msgid "Ticket codes"
-msgstr "تذكرة التعليمات البرمجية"
+msgstr "رموز التذكرة"
 
 #: pretix/control/templates/pretixcontrol/event/widget.html:10
 msgid ""
@@ -14214,11 +13894,8 @@ msgstr ""
 "والنصوص التي تحتوي على اسم الحدث."
 
 #: pretix/control/templates/pretixcontrol/events/create_foundation.html:7
-#, fuzzy
-#| msgctxt "webhooks"
-#| msgid "Event types"
 msgid "Event type"
-msgstr "أنواع الأحداث"
+msgstr "نوع الفعالية"
 
 #: pretix/control/templates/pretixcontrol/events/create_foundation.html:13
 msgid "Singular event or non-event shop"
@@ -14392,35 +14069,26 @@ msgid ""
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/global_license.html:26
-#, fuzzy
-#| msgid "Price settings"
 msgid "License settings and check"
-msgstr "ضبط الأسعار"
+msgstr "فحص وإعدادات الرخصة"
 
 #: pretix/control/templates/pretixcontrol/global_license.html:29
-#, fuzzy
-#| msgid "Registration details"
 msgid "Installation details"
-msgstr "تفاصيل التسجيل"
+msgstr "تفاصيل التحميل"
 
 #: pretix/control/templates/pretixcontrol/global_license.html:40
-#, fuzzy
-#| msgctxt "checkoutflow"
-#| msgid "Your information"
 msgid "Public information"
-msgstr "معلوماتك"
+msgstr "معلومات عامة"
 
 #: pretix/control/templates/pretixcontrol/global_license.html:52
 #, fuzzy
 #| msgid "Save and show preview"
 msgid "Save and check"
-msgstr "حفظ وعرض المعاينة"
+msgstr "احفظ وافحص"
 
 #: pretix/control/templates/pretixcontrol/global_license.html:60
-#, fuzzy
-#| msgid "Update check results"
 msgid "Check results"
-msgstr "نتائج الاختيار تحديث"
+msgstr "تأكد من النتائج"
 
 #: pretix/control/templates/pretixcontrol/global_license.html:79
 msgid "The automated license check did not identify any issues."
@@ -14532,17 +14200,15 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/item/create.html:19
 #: pretix/control/templates/pretixcontrol/item/index.html:21
-#, fuzzy
-#| msgid "Product name"
 msgid "Product type"
-msgstr "اسم المنتج"
+msgstr "نوع المنتج"
 
 #: pretix/control/templates/pretixcontrol/item/create.html:25
 #: pretix/control/templates/pretixcontrol/item/index.html:27
 #, fuzzy
 #| msgid "All products"
 msgid "Admission product"
-msgstr "جميع المنتجات"
+msgstr "منتجات التسجيل"
 
 #: pretix/control/templates/pretixcontrol/item/create.html:27
 #: pretix/control/templates/pretixcontrol/item/index.html:29
@@ -14566,7 +14232,7 @@ msgstr ""
 #, fuzzy
 #| msgid "All products"
 msgid "Non-admission product"
-msgstr "جميع المنتجات"
+msgstr "منتجات غير مسجلة"
 
 #: pretix/control/templates/pretixcontrol/item/create.html:46
 #: pretix/control/templates/pretixcontrol/item/index.html:48
@@ -14581,16 +14247,12 @@ msgid "Examples: Merchandise, donations, gift cards, add-ons to a main ticket."
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/item/create.html:70
-#, fuzzy
-#| msgid "Product with variations"
 msgid "Product without variations"
-msgstr "المنتج مع وجود اختلافات"
+msgstr "المنتج بدن أنواع"
 
 #: pretix/control/templates/pretixcontrol/item/create.html:77
-#, fuzzy
-#| msgid "Product with variations"
 msgid "Product with multiple variations"
-msgstr "المنتج مع وجود اختلافات"
+msgstr "منتج بأنواع متعددة"
 
 #: pretix/control/templates/pretixcontrol/item/create.html:79
 msgid ""
