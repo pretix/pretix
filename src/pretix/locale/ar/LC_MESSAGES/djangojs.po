@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-05-27 12:05+0000\n"
-"PO-Revision-Date: 2021-05-27 08:22+0000\n"
+"PO-Revision-Date: 2021-05-30 13:17+0000\n"
 "Last-Translator: Mohamed Tawfiq <mtawfiq@wafyapp.com>\n"
 "Language-Team: Arabic <https://translate.pretix.eu/projects/pretix/pretix-js/"
 "ar/>\n"
@@ -110,7 +110,6 @@ msgid "Load more"
 msgstr "تحميل المزيد"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:42
-#, fuzzy
 msgid "Valid"
 msgstr "ساري المفعول"
 
@@ -444,8 +443,6 @@ msgid "None"
 msgstr "لا شيء"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:419
-#, fuzzy
-#| msgid "Search results"
 msgid "Search query"
 msgstr "البحث في الاستفسارات"
 
