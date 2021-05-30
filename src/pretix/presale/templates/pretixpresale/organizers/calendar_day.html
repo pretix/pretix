@@ -10,16 +10,16 @@
             {{ organizer_homepage_text | rich_text }}
         </div>
     {% endif %}
-    <h3>{{ date|date:"F Y" }}</h3>
+    <h3>{{ date|date:"DATE_FORMAT" }}</h3>
     <form class="form-inline" method="get" id="monthselform"
           action="{% eventurl request.organizer "presale:organizer.index" %}">
         {% for f, v in request.GET.items %}
-            {% if f != "week" and f != "year" %}
+            {% if f != "date" %}
                 <input type="hidden" name="{{ f }}" value="{{ v }}">
             {% endif %}
         {% endfor %}
         <div class="row">
-            <div class="col-md-4 col-sm-6 col-xs-12 text-left flip">
+            <div class="col-sm-4 hidden-xs text-left flip">
                 <div class="btn-group" role="group">
                     <a href="?{% url_replace request "style" "list" "week" "" "year" "" "month" "" "date" "" %}" type="button"
                        class="btn btn-default">
@@ -27,7 +27,7 @@
                         {% trans "List" %}
                     </a>
                     <a href="?{% url_replace request "style" "week" "month" "" "old" "" "date" "" %}" type="button"
-                       class="btn btn-default active">
+                       class="btn btn-default">
                         <span class="fa fa-calendar" aria-hidden="true"></span>
                         {% trans "Week" %}
                     </a>
@@ -38,66 +38,54 @@
                         {% trans "Month" %}
                     </a>
                     <a href="?{% url_replace request "style" "day" "week" "" "month" "" "old" "" "page" "" %}" type="button"
-                       class="btn btn-default">
+                       class="btn btn-default active">
                         <span class="fa fa-th" aria-hidden="true"></span>
                         {% trans "Day" %}
                     </a>
                 </div>
-                <a href="{% eventurl request.organizer "presale:organizer.ical" %}?{% url_replace request "locale" request.LANGUAGE_CODE "page" "" "old" "" "week" "" "style" "" "month" "" "year" "" %}"
+                <a href="{% eventurl request.organizer "presale:organizer.ical" %}?{% url_replace request "locale" request.LANGUAGE_CODE "page" "" "old" "" "week" "" "style" "" "month" "" "year" "" "date" "" %}"
                    class="btn btn-default">
                     <span class="fa fa-calendar-plus-o" aria-hidden="true"></span>
                     {% trans "iCal" %}
                 </a>
             </div>
-            <div class="col-md-4 col-sm-6 col-xs-12 text-center">
-                <select name="week" class="form-control select-calendar-week-short">
-                    {% for w in weeks %}
-                        <option value="{{ w.0.isocalendar.1 }}"
-                                {% if w.0.isocalendar.1 == date.isocalendar.1 %}selected{% endif %}>{% trans "W" %} {{ w.0.isocalendar.1 }}
-                            ({{ w.0|date:"SHORT_DATE_FORMAT" }} – {{ w.1|date:"SHORT_DATE_FORMAT" }})
-                        </option>
-                    {% endfor %}
-                </select>
-                <select name="year" class="form-control">
-                    {% for y in years %}
-                        <option value="{{ y }}" {% if y == date.isocalendar.0 %}selected{% endif %}>{{ y }}</option>
-                    {% endfor %}
-                </select>
+            <div class="col-sm-4 col-xs-12 text-center">
+                <input class="datepickerfield form-control" value="{{ date|date:"SHORT_DATE_FORMAT" }}" name="date">
                 <button type="submit" class="js-hidden btn btn-default">
                     {% trans "Go" %}
                 </button>
             </div>
-            <div class="col-md-4 hidden-sm hidden-xs text-right flip">
+            <div class="col-sm-4 hidden-xs text-right flip">
                 {% if has_before %}
-                    <a href="?{% url_replace request "year" before.isocalendar.0 "week" before.isocalendar.1 %}"
+                    <a href="?{% url_replace request "date" before.date.isoformat %}"
                        class="btn btn-default">
                         <span class="fa fa-arrow-left" aria-hidden="true"></span>
-                        {{ before|date:week_format }}
+                        {{ before|date:"SHORT_DATE_FORMAT" }}
                     </a>
                 {% endif %}
                 {% if has_after %}
-                    <a href="?{% url_replace request "year" after.isocalendar.0 "week" after.isocalendar.1 %}"
+                    <a href="?{% url_replace request "date" after.date.isoformat %}"
                        class="btn btn-default">
-                        {{ after|date:week_format }}
+                        {{ after|date:"SHORT_DATE_FORMAT" }}
                         <span class="fa fa-arrow-right" aria-hidden="true"></span>
                     </a>
                 {% endif %}
             </div>
         </div>
     </form>
-    {% include "pretixpresale/fragment_week_calendar.html" with show_avail=request.organizer.settings.event_list_availability %}
+    {% include "pretixpresale/fragment_day_calendar.html" with show_avail=request.organizer.settings.event_list_availability %}
     <div class="col-sm-4 visible-xs text-center">
         {% if has_before %}
-            <a href="?{% url_replace request "year" before.isocalendar.0 "week" before.isocalendar.1 %}"
+            <a href="?{% url_replace request "date" before.date.isoformat %}"
                class="btn btn-default">
                 <span class="fa fa-arrow-left" aria-hidden="true"></span>
-                {{ before|date:week_format }}
+                {{ before|date:"SHORT_DATE_FORMAT" }}
             </a>
         {% endif %}
         {% if has_after %}
-            <a href="?{% url_replace request "year" after.isocalendar.0 "week" after.isocalendar.1 %}"
+            <a href="?{% url_replace request "date" after.date.isoformat %}"
                class="btn btn-default">
-                {{ after|date:week_format }}
+                {{ after|date:"SHORT_DATE_FORMAT" }}
                 <span class="fa fa-arrow-right" aria-hidden="true"></span>
             </a>
         {% endif %}

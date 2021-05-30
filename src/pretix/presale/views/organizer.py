@@ -38,6 +38,7 @@ from collections import defaultdict
 from datetime import date, datetime, time, timedelta
 from urllib.parse import quote
 
+import dateutil
 import isoweek
 import pytz
 from django.conf import settings
@@ -376,6 +377,10 @@ class OrganizerIndex(OrganizerViewMixin, EventListMixin, ListView):
             cv = CalendarView()
             cv.request = request
             return cv.get(request, *args, **kwargs)
+        elif style == "day":
+            cv = DayCalendarView()
+            cv.request = request
+            return cv.get(request, *args, **kwargs)
         elif style == "week":
             cv = WeekCalendarView()
             cv.request = request
@@ -439,6 +444,11 @@ def add_events_for_days(request, baseqs, before, after, ebd, timezones):
                         if (date_to == date_from or (
                             date_to == date_from + timedelta(days=1) and datetime_to.time() < datetime_from.time()
                         )) and event.settings.show_times
+                        else None
+                    ),
+                    'time_end_today': (
+                        datetime_to.time().replace(tzinfo=None)
+                        if date_to == d and event.settings.show_times
                         else None
                     ),
                     'url': eventreverse(event, 'presale:event.index'),
@@ -519,6 +529,11 @@ def add_subevents_for_days(qs, before, after, ebd, timezones, event=None, cart_n
                         if (date_to == date_from or (
                             date_to == date_from + timedelta(days=1) and datetime_to.time() < datetime_from.time()
                         )) and s.show_times
+                        else None
+                    ),
+                    'time_end_today': (
+                        datetime_to.time().replace(tzinfo=None)
+                        if date_to == d and s.show_times
                         else None
                     ),
                     'event': se,
@@ -698,6 +713,155 @@ class WeekCalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
         ctx['multiple_timezones'] = self._multiple_timezones
 
         return ctx
+
+    def _events_by_day(self, before, after):
+        ebd = defaultdict(list)
+        timezones = set()
+        add_events_for_days(self.request, Event.annotated(self.request.organizer.events, 'web').using(
+            settings.DATABASE_REPLICA
+        ).filter(
+            sales_channels__contains=self.request.sales_channel.identifier
+        ), before, after, ebd, timezones)
+        add_subevents_for_days(filter_qs_by_attr(SubEvent.annotated(SubEvent.objects.filter(
+            event__organizer=self.request.organizer,
+            event__is_public=True,
+            event__live=True,
+            event__sales_channels__contains=self.request.sales_channel.identifier
+        ).prefetch_related(
+            'event___settings_objects', 'event__organizer___settings_objects'
+        )), self.request).using(settings.DATABASE_REPLICA), before, after, ebd, timezones)
+        self._multiple_timezones = len(timezones) > 1
+        return ebd
+
+
+class DayCalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
+    template_name = 'pretixpresale/organizers/calendar_day.html'
+
+    def _set_date_to_next_event(self):
+        next_ev = filter_qs_by_attr(Event.objects.using(settings.DATABASE_REPLICA).filter(
+            organizer=self.request.organizer,
+            live=True,
+            is_public=True,
+            date_from__gte=now(),
+            has_subevents=False
+        ), self.request).order_by('date_from').first()
+        next_sev = filter_qs_by_attr(SubEvent.objects.using(settings.DATABASE_REPLICA).filter(
+            event__organizer=self.request.organizer,
+            event__is_public=True,
+            event__live=True,
+            active=True,
+            is_public=True,
+            date_from__gte=now()
+        ), self.request).select_related('event').order_by('date_from').first()
+
+        datetime_from = None
+        if (next_ev and next_sev and next_sev.date_from < next_ev.date_from) or (next_sev and not next_ev):
+            datetime_from = next_sev.date_from
+            next_ev = next_sev.event
+        elif next_ev:
+            datetime_from = next_ev.date_from
+
+        if datetime_from:
+            tz = pytz.timezone(next_ev.settings.timezone)
+            self.date = datetime_from.astimezone(tz).date()
+        else:
+            tz = self.request.organizer.timezone
+            self.date = now().astimezone(tz).date()
+
+    def _set_date(self):
+        if 'date' in self.request.GET:
+            tz = self.request.organizer.timezone
+            try:
+                self.date = dateutil.parser.parse(self.request.GET.get('date')).date()
+            except ValueError:
+                self.date = now().astimezone(tz).date()
+        else:
+            self._set_date_to_next_event()
+
+    def get(self, request, *args, **kwargs):
+        self._set_date()
+        return super().get(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data()
+
+        before = datetime(
+            self.date.year, self.date.month, self.date.day, 0, 0, 0, tzinfo=UTC
+        ) - timedelta(days=1)
+        after = datetime(
+            self.date.year, self.date.month, self.date.day, 0, 0, 0, tzinfo=UTC
+        ) + timedelta(days=1)
+
+        ctx['date'] = self.date
+        ctx['before'] = before
+        ctx['after'] = after
+
+        ctx['has_before'], ctx['has_after'] = has_before_after(
+            self.request.organizer.events.filter(
+                sales_channels__contains=self.request.sales_channel.identifier
+            ),
+            SubEvent.objects.filter(
+                event__organizer=self.request.organizer,
+                event__is_public=True,
+                event__live=True,
+                event__sales_channels__contains=self.request.sales_channel.identifier
+            ),
+            before,
+            after,
+        )
+
+        ebd = self._events_by_day(before, after)
+        ctx['rows'] = self._rows_for_template(ebd[self.date])
+        ctx['multiple_timezones'] = self._multiple_timezones
+        return ctx
+
+    def _rows_for_template(self, events):
+        rows_by_collection = defaultdict(list)
+
+        # We work on a five minute raster
+        def time_to_column(t: time):
+            return t.hour * 60 + t.minute - (t.minute % 5)
+
+        if any(e['continued'] for e in events) or any(e['time'] is None for e in events):
+            first_column = time_to_column(time(0, 0))
+        else:
+            first_column = time_to_column(min(e['time'] for e in events))
+
+        if any(e.get('time_end_today') is None for e in events):
+            last_column = time_to_column(time(23, 59)) + 1
+        else:
+            last_column = time_to_column(max(e['time_end_today'] for e in events)) + 1
+
+        for e in events:
+            if e.get('time') and not e.get('continued'):
+                e['column_start'] = time_to_column(e.get('time'))
+            else:
+                e['column_start'] = 0
+
+            if e.get('time_end_today'):
+                e['column_end'] = time_to_column(e.get('time'))
+            else:
+                e['column_start'] = time_to_column(time(23, 59)) + 1
+
+            collection = e.event if isinstance(e, SubEvent) else None
+
+            placed_in_row = False
+            for row in rows_by_collection[collection]:
+                if any(e['column_start'] <= o['column_end'] and o['column_start'] <= e['column_end'] for o in row):
+                    continue
+                row.append(e)
+                placed_in_row = True
+
+            if not placed_in_row:
+                rows_by_collection[collection].append([row])
+
+        def sort_key(c):
+            collection, row = c
+            if collection is None:
+                return ''
+            else:
+                return str(collection.name)
+        return sorted(rows_by_collection.items(), key=sort_key), first_column, last_column
 
     def _events_by_day(self, before, after):
         ebd = defaultdict(list)

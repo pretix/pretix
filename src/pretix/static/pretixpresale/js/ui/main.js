@@ -315,7 +315,12 @@ $(function () {
     $("#monthselform select").change(function () {
         $(this).closest("form").get(0).submit();
     });
-
+    $("#monthselform input").on("dp.change", function () {
+        if ($(this).data("DateTimePicker")) {  // prevent submit after dp init
+            $(this).val($(this).data("DateTimePicker").date().format('YYYY-MM-DD'));
+            $(this).closest("form").get(0).submit();
+        }
+    });
     var update_cart_form = function () {
         var is_enabled = $(".product-row input[type=checkbox]:checked, .variations input[type=checkbox]:checked, .product-row input[type=radio]:checked, .variations input[type=radio]:checked").length;
         if (!is_enabled) {
