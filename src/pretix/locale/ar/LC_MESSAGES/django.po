@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-05-27 12:05+0000\n"
-"PO-Revision-Date: 2021-05-30 13:17+0000\n"
+"PO-Revision-Date: 2021-05-30 14:17+0000\n"
 "Last-Translator: Mohamed Tawfiq <mtawfiq@wafyapp.com>\n"
 "Language-Team: Arabic <https://translate.pretix.eu/projects/pretix/pretix/ar/"
 ">\n"
@@ -3326,7 +3326,7 @@ msgstr "متغيرات"
 #: pretix/base/models/items.py:1521
 #: pretix/control/templates/pretixcontrol/items/quotas.html:70
 msgid "Ignore this quota when determining event availability"
-msgstr ""
+msgstr "تجاهل هذه الحصة إذا أردت تحديد مدى توفر الفعالية"
 
 #: pretix/base/models/items.py:1522
 msgid ""
@@ -3335,6 +3335,9 @@ msgid ""
 "that is added to each event but should not stop the event from being shown "
 "as sold out."
 msgstr ""
+"إذا فعلت هذا الخيال، فسيتم تجاهل هذه الحصة عند تحديد مدى توفر الفعالية في "
+"تقويم الفعالية الخاص بك. قد يفيد هذا في حالات مثل المشتريات المضافة إلى كل "
+"فعالية ولكنه يجب ألا يمنع ظهور حالة الفعالية إذا كانت غير متوفرة."
 
 #: pretix/base/models/items.py:1529
 msgid "Close this quota permanently once it is sold out"
@@ -3591,9 +3594,8 @@ msgid "Your order: %(code)s"
 msgstr "طلبك هو: %(code)s"
 
 #: pretix/base/models/orders.py:1085
-#, fuzzy
 msgid "<file>"
-msgstr "<file>"
+msgstr "ملف <file>"
 
 #: pretix/base/models/orders.py:1187 pretix/base/models/orders.py:1195
 msgid "Empty, if this product is not an admission ticket"
