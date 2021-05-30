@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-05-27 12:05+0000\n"
-"PO-Revision-Date: 2021-05-29 05:00+0000\n"
+"PO-Revision-Date: 2021-05-31 11:26+0000\n"
 "Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
 "Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
 "\n"
@@ -8382,17 +8382,17 @@ msgstr "Meest voorkomende Duitse titels"
 #: pretix/base/settings.py:2482
 msgctxt "person_name_salutation"
 msgid "Ms"
-msgstr "Mevrouw"
+msgstr "Mevr."
 
 #: pretix/base/settings.py:2483
 msgctxt "person_name_salutation"
 msgid "Mr"
-msgstr "De heer"
+msgstr "Dhr."
 
 #: pretix/base/settings.py:2484
 msgctxt "person_name_salutation"
 msgid "Mx"
-msgstr ""
+msgstr "Mx."
 
 #: pretix/base/settings.py:2509 pretix/base/settings.py:2522
 #: pretix/base/settings.py:2538 pretix/base/settings.py:2588
@@ -22810,47 +22810,45 @@ msgid ""
 "link in the email we sent you. Click \"Reset password\" to receive a new "
 "email in case you cannot find it again."
 msgstr ""
+"U heeft nog geen wachtwoord ingesteld voor uw account. Klik op de link in de "
+"e-mail die we u hebben gestuurd om dit te doen. Als u deze e-mail niet meer "
+"kunt vinden kunt u een nieuwe link aanvragen door op \"Wachtwoord vergeten\" "
+"te klikken."
 
 #: pretix/presale/forms/customer.py:128
-#, fuzzy
-#| msgid "For security reasons, please wait 5 minutes before you try again."
 msgid ""
 "We've received a lot of registration requests from you, please wait 10 "
 "minutes before you try again."
 msgstr ""
-"Om veiligheidsredenen moet u vijf minuten wachten voor u dit opnieuw kunt "
-"proberen."
+"We hebben een groot aantal registratieverzoeken van u ontvangen. Wacht 10 "
+"minuten voor u dit opnieuw probeert."
 
 #: pretix/presale/forms/customer.py:130
 msgid ""
 "An account with this email address is already registered. Please try to log "
 "in or reset your password instead."
 msgstr ""
+"Er bestaat al een account met dit e-mailadres. Probeer in plaats van een "
+"nieuw account aanmaken in te loggen of uw wachtwoord opnieuw in te stellen."
 
 #: pretix/presale/forms/customer.py:215
 #, python-brace-format
 msgid "Activate your account at {organizer}"
-msgstr ""
+msgstr "Activeer uw account bij {organizer}"
 
 #: pretix/presale/forms/customer.py:271
-#, fuzzy
-#| msgid "For security reasons, please wait 5 minutes before you try again."
 msgid "For security reasons, please wait 10 minutes before you try again."
 msgstr ""
-"Om veiligheidsredenen moet u vijf minuten wachten voor u dit opnieuw kunt "
+"Om veiligheidsredenen moet u tien minuten wachten voor u dit opnieuw kunt "
 "proberen."
 
 #: pretix/presale/forms/customer.py:272
-#, fuzzy
-#| msgid "This combination of credentials is not known to our system."
 msgid "A user with this email address is not known in our system."
-msgstr ""
-"Deze combinatie van gebruikersnaam en wachtwoord is niet bekend in onze "
-"database."
+msgstr "Er bestaat geen klantenaccount met dit e-mailadres."
 
 #: pretix/presale/forms/customer.py:391
 msgid "Only required if you change your email address"
-msgstr ""
+msgstr "Alleen verplicht als u uw e-mailadres verandert"
 
 #: pretix/presale/forms/order.py:93 pretix/presale/forms/order.py:101
 #: pretix/presale/templates/pretixpresale/event/checkout_addons.html:172
@@ -23191,16 +23189,12 @@ msgid "Submit registration"
 msgstr "Verstuur aanmelding"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_customer.html:20
-#, fuzzy
-#| msgid "Enter custom amount"
 msgid "Log in with a customer account"
-msgstr "Voer aangepast bedrag in"
+msgstr "Inloggen met een klantenaccount"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_customer.html:30
-#, fuzzy
-#| msgid "You are currently logged in as <strong>%(user)s</strong>."
 msgid "You are currently logged in with the following credentials."
-msgstr "U bent momenteel ingelogd als <strong>%(user)s</strong>."
+msgstr "U bent momenteel ingelogd met de volgende gegevens."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_customer.html:48
 #, python-format
@@ -23209,19 +23203,18 @@ msgid ""
 "connect your order to your account. This will allow you to see all your "
 "orders in one place and access them at any time."
 msgstr ""
+"Als u al eerder een klantenaccount heeft aangemaakt bij %(org)s kunt u nu "
+"inloggen en de bestelling aan uw account koppelen. Dit staat u toe om al uw "
+"bestellingen op één plaats te bekijken."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_customer.html:60
 #: pretix/presale/templates/pretixpresale/organizers/customer_login.html:31
-#, fuzzy
-#| msgid "Repeat password"
 msgid "Reset password"
-msgstr "Herhaal wachtwoord"
+msgstr "Wachtwoord vergeten"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_customer.html:77
-#, fuzzy
-#| msgid "Create a new account"
 msgid "Create a new customer account"
-msgstr "Maak een nieuw account"
+msgstr "Maak een nieuw klantenaccount"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_customer.html:87
 #, python-format
@@ -23230,12 +23223,13 @@ msgid ""
 "password, so you can use the account for future orders at %(org)s. You can "
 "still go ahead with this purchase before you received the email."
 msgstr ""
+"We sturen u een e-mail met een link om uw account te activeren, zodat u het "
+"account voor toekomstige bestellingen bij %(org)s kunt gebruiken. U kunt "
+"deze bestelling afronden voordat u deze e-mail heeft ontvangen."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_customer.html:106
-#, fuzzy
-#| msgid "Continue in new tab"
 msgid "Continue as a guest"
-msgstr "Ga verder in een nieuw tabblad"
+msgstr "Ga verder als gast"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_customer.html:115
 msgid ""
@@ -23243,18 +23237,17 @@ msgid ""
 "will be able to access the details and status of your order any time through "
 "the secret link we will send you via email once the order is complete."
 msgstr ""
+"Het aanmaken van een klantenaccount is niet verplicht. Als u verdergaat als "
+"gast zult u de status en details van uw bestelling kunnen inzien via de "
+"geheime link die we u via e-mail sturen."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_membership.html:6
-#, fuzzy
-#| msgid ""
-#| "For some of the products in your cart, you can choose additional options "
-#| "before you continue."
 msgid ""
 "Some of the products in your cart can only be purchased if there is an "
 "active membership on your account."
 msgstr ""
-"Voor sommige van de producten in uw winkelwagen kunt u aanvullende opties "
-"kiezen voor u doorgaat."
+"Sommige van de producten in uw winkelwagen kunnen alleen gekocht worden als "
+"u een actief lidmaatschap heeft gekoppeld aan uw account."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_membership.html:38
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:98
@@ -23266,12 +23259,12 @@ msgid ""
 "Your account does not include an active membership that allows you to buy "
 "this product."
 msgstr ""
+"Uw account heeft geen actief lidmaatschap dat u toestaat om dit product te "
+"kopen."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_membership.html:70
-#, fuzzy
-#| msgid "Add-on products will not be counted."
 msgid "You will not be able to continue."
-msgstr "Add-onproducten zullen niet worden meegeteld."
+msgstr "U kunt niet doorgaan."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html:7
 msgid "Please select how you want to pay."
@@ -24258,22 +24251,16 @@ msgstr ""
 "                                                    "
 
 #: pretix/presale/templates/pretixpresale/fragment_login_status.html:5
-#, fuzzy
-#| msgid "Customer actions"
 msgid "customer account"
-msgstr "Klantacties"
+msgstr "klantenaccount"
 
 #: pretix/presale/templates/pretixpresale/fragment_login_status.html:8
-#, fuzzy
-#| msgid "Enter custom amount"
 msgid "View customer account"
-msgstr "Voer aangepast bedrag in"
+msgstr "Klantenaccount bekijken"
 
 #: pretix/presale/templates/pretixpresale/fragment_login_status.html:9
-#, fuzzy
-#| msgid "User profile only"
 msgid "View user profile"
-msgstr "Alleen gebruikersprofiel"
+msgstr "Gebruikersprofiel bekijken"
 
 #: pretix/presale/templates/pretixpresale/fragment_week_calendar.html:78
 #, python-format
@@ -24349,94 +24336,69 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_info.html:6
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:15
-#, fuzzy
-#| msgid "Account information changed"
 msgid "Account information"
-msgstr "Accountinformatie gewijzigd"
+msgstr "Accountinformatie"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_info.html:11
-#, fuzzy
-#| msgid "Change your information"
 msgid "Update your account information"
-msgstr "Klantgegevens veranderen"
+msgstr "Accountinformatie bewerken"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_login.html:11
 #, python-format
 msgid "Sign in to your account at %(org)s"
-msgstr ""
+msgstr "Log in bij uw klantenaccount voor %(org)s"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_login.html:26
 #: pretix/presale/templates/pretixpresale/organizers/customer_registration.html:20
-#, fuzzy
-#| msgid "Create a new account"
 msgid "Create account"
-msgstr "Maak een nieuw account"
+msgstr "Account aanmaken"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:7
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:10
-#, fuzzy
-#| msgid "Team memberships"
 msgid "Your membership"
-msgstr "Teamlidmaatschappen"
+msgstr "Uw lidmaatschap"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_password.html:6
 #: pretix/presale/templates/pretixpresale/organizers/customer_resetpw.html:6
 #: pretix/presale/templates/pretixpresale/organizers/customer_resetpw.html:11
 #: pretix/presale/templates/pretixpresale/organizers/customer_setpassword.html:6
-#, fuzzy
-#| msgid "Password recovery"
 msgid "Password reset"
-msgstr "Wachtwoord herstel"
+msgstr "Wachtwoordherstel"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_password.html:11
 #: pretix/presale/templates/pretixpresale/organizers/customer_setpassword.html:11
-#, fuzzy
-#| msgid "Set new password"
 msgid "Set a new password for your account"
-msgstr "Stel nieuw wachtwoord in"
+msgstr "Stel een nieuw wachtwoord voor uw account in"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:7
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:10
-#, fuzzy
-#| msgid "Stripe account"
 msgid "Your account"
-msgstr "Stripe-account"
+msgstr "Uw account"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:31
-#, fuzzy
-#| msgid "Change contact information"
 msgid "Change account information"
-msgstr "Contactgegevens veranderen"
+msgstr "Accountgegevens bewerken"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:35
-#, fuzzy
-#| msgid "Change answers"
 msgid "Change password"
-msgstr "Verander antwoorden"
+msgstr "Wachtwoord veranderen"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_registration.html:6
-#, fuzzy
-#| msgid "Your registration"
 msgid "Registration"
-msgstr "Uw aanmelding"
+msgstr "Registratie"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_registration.html:11
-#, fuzzy, python-format
-#| msgid "Create a new account"
+#, python-format
 msgid "Create a new account at %(org)s"
-msgstr "Maak een nieuw account"
+msgstr "Maak een nieuw account bij %(org)s"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_registration.html:24
-#, fuzzy
-#| msgid "Add product to an existing quota"
 msgid "Log in to an existing account"
-msgstr "Voeg product toe aan een bestaand quotum"
+msgstr "Inloggen bij een bestaand account"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_resetpw.html:20
-#, fuzzy
-#| msgid "Repeat new password"
 msgid "Request a new password"
-msgstr "Herhaal nieuw wachtwoord"
+msgstr "Nieuw wachtwoord aanvragen"
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:8
 msgid "Event list"
@@ -24543,36 +24505,36 @@ msgid ""
 "Your account has been created. Please follow the link in the email we sent "
 "you to activate your account and choose a password."
 msgstr ""
+"Uw account is aangemaakt. Klik op de link in de e-mail die we u hebben "
+"gestuurd om uw account te activeren en een wachtwoord in te stellen."
 
 #: pretix/presale/views/customer.py:191 pretix/presale/views/customer.py:194
 #: pretix/presale/views/customer.py:450 pretix/presale/views/customer.py:456
-#, fuzzy
-#| msgid "You entered an invalid number."
 msgid "You clicked an invalid link."
-msgstr "U voerde een ongeldig getal in."
+msgstr "U heeft op een ongeldige link geklikt."
 
 #: pretix/presale/views/customer.py:214
-#, fuzzy
-#| msgid "Your password has been changed."
 msgid "Your new password has been set! You can now use it to log in."
-msgstr "Uw wachtwoord is veranderd."
+msgstr ""
+"Uw nieuwe wachtwoord is ingesteld! U kunt nu het wachtwoord gebruiken om in "
+"te loggen."
 
 #: pretix/presale/views/customer.py:243
 #, python-brace-format
 msgid "Set a new password for your account at {organizer}"
-msgstr ""
+msgstr "Stel een nieuw wachtwoord in voor uw klantenaccount bij {organizer}"
 
 #: pretix/presale/views/customer.py:252
-#, fuzzy
-#| msgid "We sent out an e-mail containing further instructions."
 msgid ""
 "We've sent you an email with further instructions on resetting your password."
-msgstr "We hebben een e-mail met verdere instructies verstuurd."
+msgstr ""
+"We hebben u een e-mail gestuurd met verdere instructies voor het opnieuw "
+"instellen van uw wachtwoord."
 
 #: pretix/presale/views/customer.py:411
 #, python-brace-format
 msgid "Confirm email address for your account at {organizer}"
-msgstr ""
+msgstr "Bevestig uw e-mailadres voor uw klantenaccount bij {organizer}"
 
 #: pretix/presale/views/customer.py:418
 msgid ""
@@ -24580,12 +24542,13 @@ msgid ""
 "your email address. The email address of your account will be changed as "
 "soon as you click that link."
 msgstr ""
+"Uw wijzigingen zijn opgeslagen. We hebben u een e-mail gestuurd met een link "
+"om uw e-mailadres te bevestigen. Het e-mailadres van uw account zal worden "
+"veranderd zodra u op deze link klikt."
 
 #: pretix/presale/views/customer.py:466
-#, fuzzy
-#| msgid "Your cart has been updated."
 msgid "Your email address has been updated."
-msgstr "Uw winkelwagen is bijgewerkt."
+msgstr "Uw e-mailadres is bijgewerkt."
 
 #: pretix/presale/views/event.py:604
 msgid "Unknown event code or not authorized to access this event."
