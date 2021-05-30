@@ -3,7 +3,7 @@ input[type=number] {
 }
 @supports (-moz-appearance:none) {
   input[type=number] {
-    padding: 6px 2px; // decrease horizontal padding, as some versions of Firefox render the arrow-buttons on number inputs useless otherwise
+    padding-right: 2px; // decrease horizontal padding, as some versions of Firefox render the arrow-buttons on number inputs useless otherwise
   }
 }
 input[type=number]::-webkit-inner-spin-button, 
