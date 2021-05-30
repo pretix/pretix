@@ -20,6 +20,7 @@
 # <https://www.gnu.org/licenses/>.
 #
 import logging
+from importlib import import_module
 
 import celery.exceptions
 import pytz
@@ -204,7 +205,7 @@ class AsyncFormView(AsyncMixin, FormView):
     known_errortypes = ['ValidationError']
 
     def __init_subclass__(cls):
-        def async_execute(self, *, request_path, form_kwargs, locale, tz, organizer=None, event=None, user=None):
+        def async_execute(self, *, request_path, form_kwargs, locale, tz, organizer=None, event=None, user=None, session_key=None):
             view_instance = cls()
             form_kwargs['data'] = QueryDict(form_kwargs['data'])
             req = RequestFactory().post(
@@ -220,6 +221,10 @@ class AsyncFormView(AsyncMixin, FormView):
                 view_instance.request.organizer = organizer
             if user:
                 view_instance.request.user = User.objects.get(pk=user)
+            if session_key:
+                engine = import_module(settings.SESSION_ENGINE)
+                self.SessionStore = engine.SessionStore
+                view_instance.request.session = self.SessionStore(session_key)
 
             with translation.override(locale), timezone.override(pytz.timezone(tz)):
                 form_class = view_instance.get_form_class()
@@ -276,6 +281,8 @@ class AsyncFormView(AsyncMixin, FormView):
             kwargs['user'] = self.request.user.pk
         if hasattr(self.request, 'event'):
             kwargs['event'] = self.request.event.pk
+        if hasattr(self.request, 'session'):
+            kwargs['session_key'] = self.request.session.session_key
 
         try:
             res = type(self).async_execute.apply_async(kwargs=kwargs)
