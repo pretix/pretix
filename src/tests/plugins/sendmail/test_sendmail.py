@@ -84,6 +84,7 @@ def test_sendmail_simple_case(logged_in_client, sendmail_url, event, order, pos)
     djmail.outbox = []
     response = logged_in_client.post(sendmail_url,
                                      {'sendto': 'na',
+                                      'action': 'send',
                                       'recipients': 'orders',
                                       'items': pos.item_id,
                                       'subject_0': 'Test subject',
@@ -110,6 +111,7 @@ def test_sendmail_email_not_sent_if_order_not_match(logged_in_client, sendmail_u
     djmail.outbox = []
     response = logged_in_client.post(sendmail_url,
                                      {'sendto': 'p',
+                                      'action': 'send',
                                       'recipients': 'orders',
                                       'items': pos.item_id,
                                       'subject_0': 'Test subject',
@@ -144,6 +146,7 @@ def test_sendmail_invalid_data(logged_in_client, sendmail_url, event, order, pos
     djmail.outbox = []
     response = logged_in_client.post(sendmail_url,
                                      {'sendto': 'na',
+                                      'action': 'send',
                                       'recipients': 'orders',
                                       'items': pos.item_id,
                                       'subject_0': 'Test subject',
@@ -171,6 +174,7 @@ def test_sendmail_multi_locales(logged_in_client, sendmail_url, event, item):
 
     response = logged_in_client.post(sendmail_url,
                                      {'sendto': 'p',
+                                      'action': 'send',
                                       'recipients': 'orders',
                                       'items': item.pk,
                                       'subject_0': 'Test subject',
@@ -209,6 +213,7 @@ def test_sendmail_subevents(logged_in_client, sendmail_url, event, order, pos):
     djmail.outbox = []
     response = logged_in_client.post(sendmail_url,
                                      {'sendto': 'na',
+                                      'action': 'send',
                                       'recipients': 'orders',
                                       'items': pos.item_id,
                                       'subject_0': 'Test subject',
@@ -223,6 +228,7 @@ def test_sendmail_subevents(logged_in_client, sendmail_url, event, order, pos):
     djmail.outbox = []
     response = logged_in_client.post(sendmail_url,
                                      {'sendto': 'na',
+                                      'action': 'send',
                                       'recipients': 'orders',
                                       'items': pos.item_id,
                                       'subject_0': 'Test subject',
@@ -268,6 +274,7 @@ def test_sendmail_attendee_mails(logged_in_client, sendmail_url, event, order, p
     djmail.outbox = []
     response = logged_in_client.post(sendmail_url,
                                      {'sendto': 'na',
+                                      'action': 'send',
                                       'recipients': 'attendees',
                                       'items': pos.item_id,
                                       'subject_0': 'Test subject',
@@ -292,6 +299,7 @@ def test_sendmail_both_mails(logged_in_client, sendmail_url, event, order, pos):
     djmail.outbox = []
     response = logged_in_client.post(sendmail_url,
                                      {'sendto': 'na',
+                                      'action': 'send',
                                       'recipients': 'both',
                                       'items': pos.item_id,
                                       'subject_0': 'Test subject',
@@ -319,6 +327,7 @@ def test_sendmail_both_but_same_address(logged_in_client, sendmail_url, event, o
     djmail.outbox = []
     response = logged_in_client.post(sendmail_url,
                                      {'sendto': 'na',
+                                      'action': 'send',
                                       'recipients': 'both',
                                       'items': pos.item_id,
                                       'subject_0': 'Test subject',
@@ -343,6 +352,7 @@ def test_sendmail_attendee_fallback(logged_in_client, sendmail_url, event, order
     djmail.outbox = []
     response = logged_in_client.post(sendmail_url,
                                      {'sendto': 'na',
+                                      'action': 'send',
                                       'recipients': 'attendees',
                                       'items': pos.item_id,
                                       'subject_0': 'Test subject',
@@ -372,6 +382,7 @@ def test_sendmail_attendee_product_filter(logged_in_client, sendmail_url, event,
         djmail.outbox = []
         response = logged_in_client.post(sendmail_url,
                                          {'sendto': 'na',
+                                          'action': 'send',
                                           'recipients': 'attendees',
                                           'items': i2.pk,
                                           'subject_0': 'Test subject',
@@ -400,6 +411,7 @@ def test_sendmail_attendee_checkin_filter(logged_in_client, sendmail_url, event,
     djmail.outbox = []
     response = logged_in_client.post(sendmail_url,
                                      {'sendto': 'na',
+                                      'action': 'send',
                                       'recipients': 'attendees',
                                       'items': pos2.item_id,
                                       'filter_checkins': 'on',
@@ -418,6 +430,7 @@ def test_sendmail_attendee_checkin_filter(logged_in_client, sendmail_url, event,
     djmail.outbox = []
     response = logged_in_client.post(sendmail_url,
                                      {'sendto': 'na',
+                                      'action': 'send',
                                       'recipients': 'attendees',
                                       'items': pos2.item_id,
                                       'subject_0': 'Test subject',
@@ -437,6 +450,7 @@ def test_sendmail_attendee_checkin_filter(logged_in_client, sendmail_url, event,
     djmail.outbox = []
     response = logged_in_client.post(sendmail_url,
                                      {'sendto': 'na',
+                                      'action': 'send',
                                       'recipients': 'attendees',
                                       'items': pos2.item_id,
                                       'subject_0': 'Test subject',
@@ -456,6 +470,7 @@ def test_sendmail_attendee_checkin_filter(logged_in_client, sendmail_url, event,
     djmail.outbox = []
     response = logged_in_client.post(sendmail_url,
                                      {'sendto': 'na',
+                                      'action': 'send',
                                       'recipients': 'attendees',
                                       'items': pos2.item_id,
                                       'subject_0': 'Test subject',
@@ -477,6 +492,7 @@ def test_sendmail_attendee_checkin_filter(logged_in_client, sendmail_url, event,
     djmail.outbox = []
     response = logged_in_client.post(sendmail_url,
                                      {'sendto': 'na',
+                                      'action': 'send',
                                       'recipients': 'attendees',
                                       'items': pos2.item_id,
                                       'subject_0': 'Test subject',
