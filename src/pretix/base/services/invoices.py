@@ -480,7 +480,6 @@ def send_invoices_to_organizer(sender, **kwargs):
                             auto_email=True,
                         )
                     i.sent_to_organizer = True
-                    i.save(update_fields=['sent_to_organizer'])
                 else:
                     i.sent_to_organizer = False
                 i.save(update_fields=['sent_to_organizer'])
