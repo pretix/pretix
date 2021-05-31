@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-05-27 12:05+0000\n"
-"PO-Revision-Date: 2021-05-31 11:26+0000\n"
+"PO-Revision-Date: 2021-05-31 23:00+0000\n"
 "Last-Translator: Mohamed Tawfiq <mtawfiq@wafyapp.com>\n"
 "Language-Team: Arabic <https://translate.pretix.eu/projects/pretix/pretix/ar/"
 ">\n"
@@ -1316,7 +1316,7 @@ msgstr "البريد الإلكتروني للحاضر"
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html:8
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:156
 msgid "Voucher"
-msgstr "قسيمة"
+msgstr "كود الخصم"
 
 #: pretix/base/exporters/orderlist.py:570
 msgid "Pseudonymization ID"
@@ -1442,7 +1442,7 @@ msgstr "الطلبات المعلقة"
 
 #: pretix/base/exporters/orderlist.py:824
 msgid "Blocking vouchers"
-msgstr "حظر القسائم"
+msgstr "حظر كود الخصم"
 
 #: pretix/base/exporters/orderlist.py:825 pretix/control/views/item.py:857
 msgid "Current user's carts"
@@ -1612,14 +1612,14 @@ msgstr "جميع المدخلات"
 #: pretix/base/exporters/waitinglist.py:52
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:90
 msgid "Waiting for a voucher"
-msgstr "في انتظار قسيمة"
+msgstr "في انتظار كود الخصم"
 
 #: pretix/base/exporters/waitinglist.py:57
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:92
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:212
 #: pretix/control/views/waitinglist.py:295
 msgid "Voucher assigned"
-msgstr "تم تعيين القسيمة"
+msgstr "تم تعيين كود الخصم"
 
 #: pretix/base/exporters/waitinglist.py:62
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:95
@@ -1630,14 +1630,14 @@ msgstr "في انتظار الاسترداد"
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:208
 #: pretix/control/views/waitinglist.py:291
 msgid "Voucher redeemed"
-msgstr "تم استرداد القسيمة"
+msgstr "تم استرداد كود الخصم"
 
 #: pretix/base/exporters/waitinglist.py:78
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:101
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:210
 #: pretix/control/views/waitinglist.py:293
 msgid "Voucher expired"
-msgstr "قسيمة منتهية الصلاحية"
+msgstr "كود الخصم منتهية الصلاحية"
 
 #: pretix/base/exporters/waitinglist.py:109 pretix/base/pdf.py:102
 #: pretix/control/forms/event.py:1369
@@ -1675,7 +1675,7 @@ msgstr "الأولوية"
 #: pretix/presale/templates/pretixpresale/event/index.html:247
 #: pretix/presale/templates/pretixpresale/event/index.html:251
 msgid "Voucher code"
-msgstr "رمز القسيمة"
+msgstr "رمز كود الخصم"
 
 #: pretix/base/forms/auth.py:57 pretix/base/forms/auth.py:166
 msgid "Keep me logged in"
@@ -2816,15 +2816,15 @@ msgstr ""
 
 #: pretix/base/models/items.py:448
 msgid "This product can only be bought using a voucher."
-msgstr "لا يمكن شراء هذا المنتج إلا باستخدام قسيمة."
+msgstr "لا يمكن شراء هذا المنتج إلا باستخدام كود خصم."
 
 #: pretix/base/models/items.py:450
 msgid ""
 "To buy this product, the user needs a voucher that applies to this product "
 "either directly or via a quota."
 msgstr ""
-"لشراء هذا المنتج ، يحتاج المستخدم إلى قسيمة تنطبق على هذا المنتج إما مباشرة "
-"أو بواسطة حصة."
+"لشراء هذا المنتج ، يحتاج المستخدم إلى كود خصم ينطبق على هذا المنتج إما "
+"مباشرة أو بواسطة حصة."
 
 #: pretix/base/models/items.py:454
 msgid "Buying this product requires approval"
@@ -2845,14 +2845,14 @@ msgstr ""
 msgid ""
 "This product will only be shown if a voucher matching the product is "
 "redeemed."
-msgstr "سيظهر هذا المنتج فقط في حالة استرداد قسيمة مطابقة للمنتج."
+msgstr "سيظهر هذا المنتج فقط في حالة استرداد كود خصم مطابقة للمنتج."
 
 #: pretix/base/models/items.py:463
 msgid ""
 "This product will be hidden from the event page until the user enters a "
 "voucher that unlocks this product."
 msgstr ""
-"سيتم إخفاء هذا المنتج من صفحة الفعالية حتى يقوم المستخدم بإدخال قسيمة تسمح "
+"سيتم إخفاء هذا المنتج من صفحة الفعالية حتى يقوم المستخدم بإدخال كود خصم يسمح "
 "بظهور هذا المنتج."
 
 #: pretix/base/models/items.py:467
@@ -3407,7 +3407,7 @@ msgstr "طلب {val}"
 #: pretix/base/models/log.py:166
 #, python-brace-format
 msgid "Voucher {val}…"
-msgstr "قسيمة {val} …"
+msgstr "كود خصم {val} …"
 
 #: pretix/base/models/log.py:176
 #, python-brace-format
@@ -3575,12 +3575,12 @@ msgstr "المقعد \"{seat}\" لم يعد متاحا."
 #: pretix/base/models/orders.py:839
 #, python-brace-format
 msgid "The voucher \"{voucher}\" no longer has sufficient budget."
-msgstr "القسيمة \"{voucher}\" لم تعد بها ميزانية كافية."
+msgstr "كود خصم \"{voucher}\" لم يعد به ميزانية كافية."
 
 #: pretix/base/models/orders.py:840
 #, python-brace-format
 msgid "The voucher \"{voucher}\" has been used in the meantime."
-msgstr "القسيمة \"{voucher}\" تم استخدامها في هذه الأثناء."
+msgstr "يتم استخدام كود الخصم \"{voucher}\"في هذه الأثناء."
 
 #: pretix/base/models/orders.py:974 pretix/base/services/orders.py:914
 #: pretix/control/views/event.py:734
@@ -3871,11 +3871,11 @@ msgstr ""
 
 #: pretix/base/models/organizer.py:296
 msgid "Can view vouchers"
-msgstr "يسمح باستعراض القسائم"
+msgstr "يسمح باستعراض أكواد الخصم"
 
 #: pretix/base/models/organizer.py:300
 msgid "Can change vouchers"
-msgstr "يسمح بتغيير القسائم"
+msgstr "يسمح بتغيير أكواد الخصم"
 
 #: pretix/base/models/organizer.py:304
 #, python-format
@@ -4006,7 +4006,7 @@ msgstr "اخفض سعر المنتج بنسبة (%)"
 
 #: pretix/base/models/vouchers.py:146
 msgid "Number of times this voucher can be redeemed."
-msgstr "عدد المرات التي يمكن فيها استرداد هذه القسيمة."
+msgstr "عدد المرات التي يمكن فيها استرداد كود الخصم هذا."
 
 #: pretix/base/models/vouchers.py:150 pretix/control/views/vouchers.py:110
 msgid "Redeemed"
@@ -4022,9 +4022,9 @@ msgid ""
 "voucher across all usages. If this is sum reached, the voucher can no longer "
 "be used."
 msgstr ""
-"هذا هو الحد الأقصى للمبلغ النقدي الذي سيتم خصمه باستخدام هذه القسيمة في جميع "
-"الاستخدامات. إذا تم الوصول إلى هذا المبلغ ، فلن يعد من الممكن استخدام "
-"القسيمة."
+"هذا هو الحد الأقصى للمبلغ النقدي الذي سيتم خصمه باستخدام كود الخصم هذا في "
+"جميع الاستخدامات. إذا تم الوصول إلى هذا المبلغ ، فلن يعد من الممكن استخدام "
+"كود الخصم."
 
 #: pretix/base/models/vouchers.py:162
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:73
@@ -4044,8 +4044,8 @@ msgid ""
 "quotas, such that it is guaranteed that anyone with this voucher code does "
 "receive a ticket."
 msgstr ""
-"في حال التفعيل ، سيتم خصم هذه القسيمة من حصص المنتجات المتأثرة ، بحيث يتم "
-"ضمان حصول أي شخص لديه رمز هذه القسيمة على تذكرة."
+"في حال التفعيل ، سيتم خصم كود الخصم هذا من حصص المنتجات المتأثرة ، بحيث يتم "
+"ضمان حصول أي شخص لديه رمز كود الخصم هذا على تذكرة."
 
 #: pretix/base/models/vouchers.py:174
 msgid "Allow to bypass quota"
@@ -4056,8 +4056,8 @@ msgid ""
 "If activated, a holder of this voucher code can buy tickets, even if there "
 "are none left."
 msgstr ""
-"في حالة التفعيل ، يمكن لحامل رمز القسيمة شراء التذاكر ، حتى إذا لم يتبق منها "
-"شيء."
+"في حالة التفعيل ، يمكن لحامل رمز كود الخصم شراء التذاكر ، حتى إذا لم يتبق "
+"منها شيء."
 
 #: pretix/base/models/vouchers.py:180
 msgid "Price mode"
@@ -4065,12 +4065,12 @@ msgstr "وضع السعر"
 
 #: pretix/base/models/vouchers.py:186
 msgid "Voucher value"
-msgstr "قيمة القسيمة"
+msgstr "قيمة كود الخصم"
 
 #: pretix/base/models/vouchers.py:195 pretix/control/forms/vouchers.py:65
 msgid "This product is added to the user's cart if the voucher is redeemed."
 msgstr ""
-"يضاف هذا المنتج إلى عربة التسوق الخاصة بالمستخدم إذا تم استرداد القسيمة."
+"يضاف هذا المنتج إلى عربة التسوق الخاصة بالمستخدم إذا تم استرداد كود الخصم."
 
 #: pretix/base/models/vouchers.py:205
 msgid "This variation of the product select above is being used."
@@ -4079,7 +4079,7 @@ msgstr "يتم استخدام هذا النوع في المنتج المحدد �
 #: pretix/base/models/vouchers.py:214
 msgid ""
 "If enabled, the voucher is valid for any product affected by this quota."
-msgstr "في حالة التفعيل، تكون القسيمة صالحة لأي منتج متأثر بهذه الحصة."
+msgstr "في حالة التفعيل، يكون كود الخصم صالحا لأي منتج متأثر بهذه الحصة."
 
 #: pretix/base/models/vouchers.py:221
 msgid "Specific seat"
@@ -4098,19 +4098,19 @@ msgid ""
 "same value for multiple vouchers, you can get statistics on how many of them "
 "have been redeemed etc."
 msgstr ""
-"يمكنك استخدام هذا الحقل لتجميع العديد من القسائم معا. إذا أدخلت القيمة نفسها "
-"لقسائم متعددة ، يمكنك الحصول على إحصائيات حول عدد ما تم استبداله منها وما "
-"إلى ذلك."
+"يمكنك استخدام هذا الحقل لتجميع العديد من أكواد الخصم. إذا أدخلت القيمة نفسها "
+"لأكواد خصم متعددة ، يمكنك الحصول على إحصائيات حول عدد ما تم استبداله منها "
+"وما إلى ذلك."
 
 #: pretix/base/models/vouchers.py:237
 msgid "Shows hidden products that match this voucher"
-msgstr "تظهر المنتجات المخفية التي تطابق هذه القسيمة"
+msgstr "تظهر المنتجات المخفية التي تطابق كود الخصم هذا"
 
 #: pretix/base/models/vouchers.py:245 pretix/control/navigation.py:257
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:6
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:8
 msgid "Vouchers"
-msgstr "قسائم"
+msgstr "أكواد الخصم"
 
 #: pretix/base/models/vouchers.py:271
 msgid "You cannot select a quota that belongs to a different event."
@@ -4144,14 +4144,14 @@ msgstr ""
 
 #: pretix/base/models/vouchers.py:286
 msgid "It is currently not possible to create vouchers for add-on products."
-msgstr "لا يمكن حاليا إنشاء قسائم للمنتجات الإضافية."
+msgstr "لا يمكن حاليا إنشاء أكواد الخصم للمنتجات الإضافية."
 
 #: pretix/base/models/vouchers.py:288 pretix/base/models/vouchers.py:381
 msgid ""
 "You need to select a specific product or quota if this voucher should "
 "reserve tickets."
 msgstr ""
-"تحتاج إلى تحديد منتج أو حصة محددة إذا كانت هذه القسيمة مخصصة لحجز التذاكر."
+"تحتاج إلى تحديد منتج أو حصة محددة إذا كان كود الخصم هذا مخصصا لحجز التذاكر."
 
 #: pretix/base/models/vouchers.py:298
 #, python-format
@@ -4159,13 +4159,14 @@ msgid ""
 "This voucher has already been redeemed %(redeemed)s times. You cannot reduce "
 "the maximum number of usages below this number."
 msgstr ""
-"تم استرداد هذه القسيمة مسبقا %(redeemed)s مرة. لا يمكنك تقليل الحد الأقصى "
+"تم استرداد كود الخصم هذا مسبقا %(redeemed)s مرة. لا يمكنك تقليل الحد الأقصى "
 "لعدد الاستخدامات تحت هذا الرقم."
 
 #: pretix/base/models/vouchers.py:308 pretix/base/models/vouchers.py:366
 msgid ""
 "If you want this voucher to block quota, you need to select a specific date."
-msgstr "إذا كنت تريد من هذه القسيمة حجز حصة ، فأنت بحاجة إلى تحديد تاريخ محدد."
+msgstr ""
+"إذا كنت تريد من كود الخصم هذا حجز حصة ، فأنت بحاجة إلى تحديد تاريخ محدد."
 
 #: pretix/base/models/vouchers.py:310
 msgid "You can not select a subevent if your event is not an event series."
@@ -4177,12 +4178,12 @@ msgid ""
 "You cannot create a voucher that blocks quota as the selected product or "
 "quota is currently sold out or completely reserved."
 msgstr ""
-"لا يمكنك إنشاء قسيمة تمنع الحصة لأن المنتج أو الحصة المحددة تم بيعها حاليا "
+"لا يمكنك إنشاء كود خصم يمنع الحصة لأن المنتج أو الحصة المحددة تم بيعها حاليا "
 "أو حجزها بالكامل."
 
 #: pretix/base/models/vouchers.py:391
 msgid "A voucher with this code already exists."
-msgstr "توجد قسيمة مسبقا تحمل هذا الرمز."
+msgstr "يوجد كود الخصم مسبقا يحمل هذا الرمز."
 
 #: pretix/base/models/vouchers.py:398
 msgid "You need to choose a date if you select a seat."
@@ -4198,7 +4199,7 @@ msgstr "رقم المقعد المحدد \"{id}\" غير متواجد في هذ�
 msgid ""
 "The seat \"{id}\" is currently unavailable (blocked, already sold or a "
 "different voucher)."
-msgstr "المقعد \"{id}\" حاليا غير متاح (محجوب، مباع مسبقا أو في قسيمة أخرى)."
+msgstr "المقعد \"{id}\" حاليا غير متاح (محجوب، مباع مسبقا أو في كود خصم آخر)."
 
 #: pretix/base/models/vouchers.py:416
 msgid "You need to choose a specific product if you select a seat."
@@ -4206,7 +4207,7 @@ msgstr "يجب أن تختار منتجا محددا إذا اخترت مقعد�
 
 #: pretix/base/models/vouchers.py:419
 msgid "Seat-specific vouchers can only be used once."
-msgstr "يمكن استخدام القسائم الخاصة بالمقاعد مرة واحدة فقط."
+msgstr "يمكن استخدام أكود الخصم الخاصة بالمقاعد مرة واحدة فقط."
 
 #: pretix/base/models/vouchers.py:422
 #, python-brace-format
@@ -4224,7 +4225,7 @@ msgstr "على قائمة الانتظار منذ"
 
 #: pretix/base/models/waitinglist.py:80
 msgid "Assigned voucher"
-msgstr "قسيمة مخصصة"
+msgstr "كود خصم محدد"
 
 #: pretix/base/models/waitinglist.py:89
 msgid "The product the user waits for."
@@ -4248,7 +4249,7 @@ msgstr "هذا المنتج غير متوفر حاليا."
 
 #: pretix/base/models/waitinglist.py:151
 msgid "A voucher has already been sent to this person."
-msgstr "تم إرسال قسيمة إلى هذا الشخص سابقا."
+msgstr "تم إرسال كود خصم إلى هذا الشخص سابقا."
 
 #: pretix/base/models/waitinglist.py:153
 msgid "This entry is anonymized and can no longer be used."
@@ -4792,8 +4793,8 @@ msgid ""
 "You entered a voucher instead of a gift card. Vouchers can only be entered "
 "on the first page of the shop below the product selection."
 msgstr ""
-"لقد أدخلت قسيمة بدلا من بطاقة هدايا. يمكن إدخال القسائم فقط في الصفحة الأولى "
-"من المتجر أسفل اختيار المنتج."
+"لقد أدخلت كود خصم بدلا من بطاقة هدايا. يمكن إدخال أكواد الخصم فقط في الصفحة "
+"الأولى من المتجر أسفل اختيار المنتج."
 
 #: pretix/base/payment.py:1248 pretix/base/payment.py:1290
 msgid "This gift card is not known."
@@ -5310,12 +5311,12 @@ msgstr "السعر الذي تم إدخاله مرتفع جدا."
 
 #: pretix/base/services/cart.py:109
 msgid "This voucher code is not known in our database."
-msgstr "رمز القسيمة هذا غير معروف في قاعدة البيانات الخاصة بنا."
+msgstr "رمز كود الخصم هذا غير معروف في قاعدة البيانات الخاصة بنا."
 
 #: pretix/base/services/cart.py:110
 msgid ""
 "This voucher code has already been used the maximum number of times allowed."
-msgstr "تم استخدام رمز القسيمة هذا سابقا لأقصى عدد مسموح به من المرات."
+msgstr "تم استخدام رمز كود الخصم هذا سابقا لأقصى عدد مسموح به من المرات."
 
 #: pretix/base/services/cart.py:111
 #, python-format
@@ -5325,34 +5326,34 @@ msgid ""
 "or that you tried to redeem it before but did not complete the checkout "
 "process. You can try to use it again in %d minutes."
 msgstr ""
-"رمز القسيمة مقفل حاليا لأنه موجود مسبقا في سلة تسوق. قد يعني هذا أن شخصا آخر "
-"يسترد قيمة هذه القسيمة الآن ، أو أنك حاولت استردادها من قبل ولكنك لم تكمل "
+"رمز كود الخصم مقفل حاليا لأنه موجود مسبقا في سلة تسوق. قد يعني هذا أن شخصا "
+"آخر يسترد قيمة كود الخصم الآن ، أو أنك حاولت استرداده من قبل ولكنك لم تكمل "
 "عملية تسجيل الخروج. يمكنك محاولة استخدامه مرة أخرى خلال %d دقيقة."
 
 #: pretix/base/services/cart.py:115
 #, python-format
 msgid "This voucher code can only be redeemed %d more times."
-msgstr "يمكن فقط استرداد رمز القسيمة هذه %dمرات أخرى."
+msgstr "يمكن فقط استرداد رمز كود الخصم هذا %dمرات أخرى."
 
 #: pretix/base/services/cart.py:116
 msgid ""
 "You already used this voucher code. Remove the associated line from your "
 "cart if you want to use it for a different product."
 msgstr ""
-"لقد استخدمت سابقا رمز القسيمة هذا. قم بإزالة ‌‌السطر المرتبط بالرمز من سلة "
+"لقد استخدمت سابقا رمز كود الخصم هذا. قم بإزالة ‌‌السطر المرتبط بالرمز من سلة "
 "التسوق الخاصة بك إذا كنت تريد استخدامه لمنتج مختلف."
 
 #: pretix/base/services/cart.py:118
 msgid "This voucher is expired."
-msgstr "هذه القسيمة منتهية الصلاحية."
+msgstr "كود الخصم هذا منتهي الصلاحية."
 
 #: pretix/base/services/cart.py:119
 msgid "This voucher is not valid for this product."
-msgstr "هذه القسيمة غير صالحة لهذا المنتج."
+msgstr "كود الخصم هذا غير صالحة لهذا المنتج."
 
 #: pretix/base/services/cart.py:120
 msgid "This voucher is not valid for this seat."
-msgstr "هذه القسيمة غير صالحة لهذا المقعد."
+msgstr "كود الخصم هذا غير صالح لهذا المقعد."
 
 #: pretix/base/services/cart.py:121
 msgid ""
@@ -5360,22 +5361,22 @@ msgid ""
 "for. If you want to add something new to your cart using that voucher, you "
 "can do so with the voucher redemption option on the bottom of the page."
 msgstr ""
-"لم نعثر على أي عنصر في عربة التسوق الخاصة بك يمكننا استخدام هذه القسيمة من "
-"أجله. إذا كنت ترغب في إضافة شيء جديد إلى عربة التسوق الخاصة بك باستخدام هذه "
-"القسيمة، فيمكنك القيام بذلك باستخدام خيار استرداد القسيمة في أسفل الصفحة."
+"لم نعثر على أي عنصر في عربة التسوق الخاصة بك يمكننا استخدام كود الخصم هذا. "
+"إذا كنت ترغب في إضافة شيء جديد إلى عربة التسوق الخاصة بك باستخدام كود الخصم "
+"هذا، فيمكنك القيام بذلك باستخدام خيار استرداد كود الخصم في أسفل الصفحة."
 
 #: pretix/base/services/cart.py:125
 msgid "Your voucher is valid for a product that is currently not for sale."
-msgstr "قسيمتك صالحة لمنتج ليس معروضا للبيع حاليا."
+msgstr "كود الخصم صالح لمنتج ليس معروضا للبيع حاليا."
 
 #: pretix/base/services/cart.py:126
 msgctxt "subevent"
 msgid "This voucher is not valid for this event date."
-msgstr "هذه القسيمة غير صالحة لتاريخ هذه الفعالية."
+msgstr "كود الخصم هذا غير صالح لتاريخ هذه الفعالية."
 
 #: pretix/base/services/cart.py:127
 msgid "You need a valid voucher code to order this product."
-msgstr "تحتاج إلى رمز قسيمة صالح لطلب هذا المنتج."
+msgstr "تحتاج إلى رمز كود خصم صالح لطلب هذا المنتج."
 
 #: pretix/base/services/cart.py:128
 msgctxt "subevent"
@@ -5442,7 +5443,7 @@ msgid ""
 "You entered a gift card instead of a voucher. Gift cards can be entered "
 "later on when you're asked for your payment details."
 msgstr ""
-"لقد أدخلت بطاقة هدايا بدلا من قسيمة. يمكن إدخال بطاقات الهدايا لاحقا عندما "
+"لقد أدخلت بطاقة هدايا بدلا من كود خصم. يمكن إدخال بطاقات الهدايا لاحقا عندما "
 "يطلب منك تفاصيل الدفع الخاصة بك."
 
 #: pretix/base/services/checkin.py:151
@@ -5746,8 +5747,8 @@ msgid ""
 "The voucher code used for one of the items in your cart is not known in our "
 "database."
 msgstr ""
-"رمز القسيمة المستخدم لأحد العناصر الموجودة في سلة التسوق الخاصة بك غير معروف "
-"في قاعدة البيانات الخاصة بنا."
+"رمز كود الخصم المستخدم لأحد العناصر الموجودة في سلة التسوق الخاصة بك غير "
+"معروف في قاعدة البيانات الخاصة بنا."
 
 #: pretix/base/services/orders.py:117
 msgid ""
@@ -5755,39 +5756,40 @@ msgid ""
 "used the maximum number of times allowed. We removed this item from your "
 "cart."
 msgstr ""
-"تم استخدام رمز القسيمة المدخل لأحد العناصر الموجودة في سلة التسوق الخاصة بك "
-"سابقا وتجاوز عدد المرات المسموح به. أزلنا هذا العنصر من سلة التسوق الخاصة بك."
+"تم استخدام رمز كود الخصم المدخل لأحد العناصر الموجودة في سلة التسوق الخاصة "
+"بك سابقا وتجاوز عدد المرات المسموح به. أزلنا هذا العنصر من سلة التسوق الخاصة "
+"بك."
 
 #: pretix/base/services/orders.py:119
 msgid ""
 "The voucher code used for one of the items in your cart has already been too "
 "often. We adjusted the price of the item in your cart."
 msgstr ""
-"رمز القسيمة المستخدم لأحد العناصر في سلة التسوق الخاصة بك تم استخدامه كثيرا "
-"في السابق. قمنا بتعديل سعر العنصر في سلة التسوق الخاصة بك."
+"رمز كود الخصم المستخدم لأحد العناصر في سلة التسوق الخاصة بك تم استخدامه "
+"كثيرا في السابق. قمنا بتعديل سعر العنصر في سلة التسوق الخاصة بك."
 
 #: pretix/base/services/orders.py:121
 msgid ""
 "The voucher code used for one of the items in your cart is expired. We "
 "removed this item from your cart."
 msgstr ""
-"انتهت صلاحية رمز القسيمة المستخدم لأحد العناصر الموجودة في سلة التسوق الخاصة "
-"بك. أزلنا هذا العنصر من سلة التسوق الخاصة بك."
+"انتهت صلاحية رمز كود الخصم المستخدم لأحد العناصر الموجودة في سلة التسوق "
+"الخاصة بك. أزلنا هذا العنصر من سلة التسوق الخاصة بك."
 
 #: pretix/base/services/orders.py:123
 msgid ""
 "The voucher code used for one of the items in your cart is not valid for "
 "this item. We removed this item from your cart."
 msgstr ""
-"رمز القسيمة المستخدم لأحد العناصر الموجودة في سلة التسوق الخاصة بك غير صالح "
-"لهذا العنصر. أزلنا هذا العنصر من سلة التسوق الخاصة بك."
+"رمز كود الخصم المستخدم لأحد العناصر الموجودة في سلة التسوق الخاصة بك غير "
+"صالح لهذا العنصر. أزلنا هذا العنصر من سلة التسوق الخاصة بك."
 
 #: pretix/base/services/orders.py:125
 msgid ""
 "You need a valid voucher code to order one of the products in your cart. We "
 "removed this item from your cart."
 msgstr ""
-"أنت بحاجة إلى رمز قسيمة صالح لطلب أحد المنتجات في سلة التسوق الخاصة بك. "
+"أنت بحاجة إلى رمز كود خصم صالح لطلب أحد المنتجات في سلة التسوق الخاصة بك. "
 "أزلنا هذا العنصر من سلة التسوق الخاصة بك."
 
 #: pretix/base/services/orders.py:127
@@ -5999,7 +6001,7 @@ msgid ""
 "and is already used in a voucher."
 msgstr ""
 "لا يمكنك تغيير الخطة لأن المقعد \"%s\" غير موجود في الخطة الجديدة ومستخدم "
-"سابقا في القسيمة."
+"سابقا في كود خصم."
 
 #: pretix/base/services/shredder.py:107 pretix/control/views/shredder.py:85
 msgid ""
@@ -6076,7 +6078,7 @@ msgstr "المكونات الإضافية: %s"
 #: pretix/base/services/vouchers.py:56 pretix/control/logdisplay.py:423
 #, python-brace-format
 msgid "The voucher has been sent to {recipient}."
-msgstr "تم إرسال القسيمة إلى {recipient}."
+msgstr "تم إرسال كود الخصم إلى {recipient}."
 
 #: pretix/base/settings.py:116
 msgid "Allow customers to create accounts"
@@ -6770,6 +6772,7 @@ msgid "Enable waiting list"
 msgstr "تمكين قائمة الانتظار"
 
 #: pretix/base/settings.py:1041 pretix/control/forms/event.py:1288
+#, fuzzy
 msgid ""
 "Once a ticket is sold out, people can add themselves to a waiting list. As "
 "soon as a ticket becomes available again, it will be reserved for the first "
@@ -6785,6 +6788,7 @@ msgid "Automatic waiting list assignments"
 msgstr "مهام قائمة الانتظار التلقائية"
 
 #: pretix/base/settings.py:1053
+#, fuzzy
 msgid ""
 "If ticket capacity becomes free, automatically create a voucher and send it "
 "to the first person on the waiting list for that product. If this is not "
@@ -6802,6 +6806,7 @@ msgid "Waiting list response time"
 msgstr "وقت استجابة قائمة الانتظار"
 
 #: pretix/base/settings.py:1068
+#, fuzzy
 msgid ""
 "If a ticket voucher is sent to a person on the waiting list, it has to be "
 "redeemed within this number of hours until it expires and can be re-assigned "
@@ -7491,7 +7496,7 @@ msgstr ""
 "فريق{event}"
 
 #: pretix/base/settings.py:1717
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -7968,15 +7973,15 @@ msgstr ""
 
 #: pretix/base/settings.py:2210
 msgid "Voucher explanation"
-msgstr "تفسير قسيمة"
+msgstr "تفسير لكود الخصم"
 
 #: pretix/base/settings.py:2213
 msgid ""
 "This text will be shown next to the input for a voucher code. You can use it "
 "e.g. to explain how to obtain a voucher code."
 msgstr ""
-"سيظهر هذا النص بجانب إدخال رمز القسيمة. يمكنك استخدامه على سبيل المثال لشرح "
-"كيفية الحصول على رمز قسيمة."
+"سيظهر هذا النص بجانب إدخال رمز كود الخصم. يمكنك استخدامه على سبيل المثال "
+"لشرح كيفية الحصول على رمز قسيمة."
 
 #: pretix/base/settings.py:2223
 msgid "Attendee data explanation"
@@ -22907,16 +22912,16 @@ msgstr "يشمل ضرائب %(tax_sum)s"
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:315
 #: pretix/presale/templates/pretixpresale/event/index.html:238
 msgid "Redeem a voucher"
-msgstr "إستردد قسيمة"
+msgstr "إسترد كود الخصم"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:318
 msgid "We're applying this voucher to your cart..."
-msgstr "نقوم بتطبيق هذه القسيمة على عربة التسوق الخاصة بك ..."
+msgstr "نقوم بتطبيق كود الخصم على عربة التسوق الخاصة بك ..."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:326
 #: pretix/presale/templates/pretixpresale/event/index.html:257
 msgid "Redeem voucher"
-msgstr "استردد قسيمة"
+msgstr "استرد كود الخصم"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart_box.html:42
 #: pretix/presale/templates/pretixpresale/event/fragment_cart_box.html:59
@@ -23040,7 +23045,7 @@ msgstr "مجاني"
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:150
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:268
 msgid "Enter a voucher code below to buy this ticket."
-msgstr "أدخل رمز القسيمة أدناه لشراء هذه التذكرة."
+msgstr "أدخل رمز كود الخصم أدناه لشراء هذه التذكرة."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_quota_left.html:4
 #, python-format
@@ -23102,7 +23107,7 @@ msgstr "معلومات عامة ، أضف منتجات إلى سلة التسو�
 
 #: pretix/presale/templates/pretixpresale/event/index.html:47
 msgid "Please select a date to redeem your voucher."
-msgstr "الرجاء تحديد تاريخ لاسترداد القسيمة الخاصة بك."
+msgstr "الرجاء تحديد تاريخ استرداد كود الخصم الخاصة بك."
 
 #: pretix/presale/templates/pretixpresale/event/index.html:60
 msgid "View other date"
@@ -23637,17 +23642,17 @@ msgstr "قم بإرسال روابط"
 #: pretix/presale/templates/pretixpresale/event/voucher.html:9
 #: pretix/presale/templates/pretixpresale/event/voucher.html:16
 msgid "Voucher redemption"
-msgstr "استرداد القسيمة"
+msgstr "استرداد كود الخصم"
 
 #: pretix/presale/templates/pretixpresale/event/voucher.html:21
 msgid "This voucher is valid only for the following specific date and time."
-msgstr "هذه القسيمة صالحة فقط للتاريخ والوقت المحددين التاليين."
+msgstr "كود الخصم صالح فقط للتاريخ والوقت المحددين التاليين."
 
 #: pretix/presale/templates/pretixpresale/event/voucher.html:68
 msgid ""
 "You entered a voucher code that allows you to buy one of the following "
 "products at the specified price:"
-msgstr "لقد أدخلت رمز قسيمة يسمح لك بشراء أحد المنتجات التالية بالسعر المحدد:"
+msgstr "لقد أدخلت رمز كود خصم يسمح لك بشراء أحد المنتجات التالية بالسعر المحدد:"
 
 #: pretix/presale/templates/pretixpresale/event/voucher.html:127
 #, python-format
@@ -23902,7 +23907,7 @@ msgstr "الرجاء إدخال أرقام موجبة فقط."
 
 #: pretix/presale/views/cart.py:394
 msgid "We applied the voucher to as many products in your cart as we could."
-msgstr "طبقنا القسيمة على أكبر عدد ممكن من المنتجات في عربة التسوق الخاصة بك."
+msgstr "طبقنا كود الخصم على أكبر عدد ممكن من المنتجات في عربة التسوق الخاصة بك."
 
 #: pretix/presale/views/cart.py:416
 msgid "Your cart has been updated."
