@@ -209,7 +209,6 @@
                                                                         <input type="number" class="form-control input-item-count" placeholder="0" min="0"
                                                                                {% if var.initial %}value="{{ var.initial }}"{% endif %}
                                                                                max="{{ c.max_count }}"
-                                                                               pattern="\d*"
                                                                                id="cp_{{ form.cartpos.pk }}_variation_{{ item.id }}_{{ var.id }}"
                                                                                name="cp_{{ form.cartpos.pk }}_variation_{{ item.id }}_{{ var.id }}"
                                                                                aria-label="{% blocktrans with item=item.name var=var %}Quantity of {{ item }}, {{ var }} to order{% endblocktrans %}">
@@ -321,7 +320,6 @@
                                                             </label>
                                                         {% else %}
                                                             <input type="number" class="form-control input-item-count" placeholder="0" min="0"
-                                                                   pattern="\d*"
                                                                    max="{{ c.max_count }}"
                                                                    {% if item.initial %}value="{{ item.initial }}"{% endif %}
                                                                    name="cp_{{ form.cartpos.pk }}_item_{{ item.id }}"

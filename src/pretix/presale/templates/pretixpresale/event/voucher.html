@@ -212,7 +212,6 @@
                                                             </label>
                                                         {% else %}
                                                             <input type="number" class="form-control input-item-count" placeholder="0" min="0"
-                                                                    pattern="\d*"
                                                                     max="{{ item.order_max }}"
                                                                     id="variation_{{ item.id }}_{{ var.id }}"
                                                                     name="variation_{{ item.id }}_{{ var.id }}"
@@ -318,7 +317,6 @@
                                                 </label>
                                             {% else %}
                                                 <input type="number" class="form-control input-item-count" placeholder="0" min="0"
-                                                        pattern="\d*"
                                                         max="{{ item.order_max }}"
                                                         id="item_{{ item.id }}"
                                                         name="item_{{ item.id }}"
