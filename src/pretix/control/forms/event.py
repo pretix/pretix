@@ -40,7 +40,7 @@ from django import forms
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.core.validators import validate_email
-from django.db.models import Q
+from django.db.models import Prefetch, Q, prefetch_related_objects
 from django.forms import CheckboxSelectMultiple, formset_factory
 from django.urls import reverse
 from django.utils.html import escape
@@ -1065,6 +1065,10 @@ class MailSettingsForm(SMTPSettingsMixin, SettingsForm):
         self.fields['mail_html_renderer'].choices = [
             (r.identifier, r.verbose_name) for r in event.get_html_mail_renderers().values()
         ]
+
+        prefetch_related_objects([self.event.organizer], Prefetch('meta_properties'))
+        self.event.meta_values_cached = self.event.meta_values.select_related('property').all()
+
         for k, v in self.base_context.items():
             self._set_field_placeholders(k, v)
 

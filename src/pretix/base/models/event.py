@@ -641,6 +641,7 @@ class Event(EventMixin, LoggedModel):
 
     def copy_data_from(self, other):
         from pretix.presale.style import regenerate_css
+
         from ..signals import event_copy_data
         from . import (
             Item, ItemAddOn, ItemBundle, ItemCategory, ItemMetaValue, Question,
