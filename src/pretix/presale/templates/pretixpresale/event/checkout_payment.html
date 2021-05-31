@@ -13,9 +13,9 @@
         <div class="panel-group" id="payment_accordion">
             {% for p in providers %}
                 <div class="panel panel-default" data-total="{{ p.total|floatformat:2 }}">
-                    <label class="accordion-radio">
+                    <div class="accordion-radio">
                         <div class="panel-heading">
-                            <h4 class="panel-title">
+                            <p class="panel-title">
                                 {% if show_fees %}
                                     <strong class="pull-right flip">{% if p.fee < 0 %}-{% else %}+{% endif %} {{ p.fee|money:event.currency|cut:"-" }}</strong>
                                 {% endif %}
@@ -23,33 +23,39 @@
                                        title="{{ p.provider.public_name }}"
                                        data-parent="#payment_accordion"
                                        {% if selected == p.provider.identifier %}checked="checked"{% endif %}
+                                       id="input_payment_{{ p.provider.identifier }}"
+                                       aria-describedby="payment_{{ p.provider.identifier }}"
                                        data-toggle="radiocollapse" data-target="#payment_{{ p.provider.identifier }}"/>
-                                <strong>{{ p.provider.public_name }}</strong>
-                            </h4>
+                                <label for="input_payment_{{ p.provider.identifier }}"><strong>{{ p.provider.public_name }}</strong></label>
+                            </p>
                         </div>
-                    </label>
+                    </div>
                     <div id="payment_{{ p.provider.identifier }}"
                          class="panel-collapse collapsed {% if selected == p.provider.identifier %}in{% endif %}">
                         <div class="panel-body form-horizontal">
                             {% if request.event.testmode %}
                                 {% if p.provider.test_mode_message %}
                                     <div class="alert alert-info">
-                                        {{ p.provider.test_mode_message }}
+                                        <p>{{ p.provider.test_mode_message }}</p>
                                     </div>
                                     {% if not request.sales_channel.testmode_supported %}
                                         <div class="alert alert-danger">
+                                            <p>
                                             {% trans "This sales channel does not provide support for test mode." %}
                                             <strong>
                                                 {% trans "If you continue, you might pay an actual order with non-existing money!" %}
                                             </strong>
+                                            </p>
                                         </div>
                                     {% endif %}
                                 {% else %}
                                     <div class="alert alert-warning">
+                                        <p>
                                         {% trans "This payment provider does not provide support for test mode." %}
                                         <strong>
                                             {% trans "If you continue, actual money might be transferred." %}
                                         </strong>
+                                        </p>
                                     </div>
                                 {% endif %}
                             {% endif %}

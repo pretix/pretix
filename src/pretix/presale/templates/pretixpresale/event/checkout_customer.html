@@ -9,19 +9,19 @@
         {% csrf_token %}
         <div class="panel-group" id="customer">
             <div class="panel panel-default">
-                <label class="accordion-radio">
+                <div class="accordion-radio">
                     <div class="panel-heading">
-                        <h4 class="panel-title">
+                        <p class="panel-title">
                             <input type="radio" name="customer_mode" value="login"
                                     data-parent="#customer"
                                     {% if selected == "login" or not signup_allowed %}checked="checked"{% endif %}
+                                    id="input_customer_login"
+                                    aria-describedby="customer_login"
                                     data-toggle="radiocollapse" data-target="#customer_login"/>
-                            <strong>
-                                {% trans "Log in with a customer account" %}
-                            </strong>
-                        </h4>
+                            <label for="input_customer_login"><strong>{% trans "Log in with a customer account" %}</strong></label>
+                        </p>
                     </div>
-                </label>
+                </div>
                 <div id="customer_login"
                         class="panel-collapse collapsed {% if selected == "login" or not signup_allowed %}in{% endif %}">
                     <div class="panel-body form-horizontal">
@@ -67,19 +67,19 @@
             </div>
             {% if signup_allowed %}
                 <div class="panel panel-default">
-                    <label class="accordion-radio">
+                    <div class="accordion-radio">
                         <div class="panel-heading">
-                            <h4 class="panel-title">
+                            <p class="panel-title">
                                 <input type="radio" name="customer_mode" value="register"
                                         data-parent="#customer"
                                         {% if selected == "register" %}checked="checked"{% endif %}
+                                        if="input_customer_register"
+                                        aria-describedby="customer_register"
                                         data-toggle="radiocollapse" data-target="#customer_register"/>
-                                <strong>
-                                    {% trans "Create a new customer account" %}
-                                </strong>
-                            </h4>
+                                <label for="input_customer_register"><strong>{% trans "Create a new customer account" %}</strong></label>
+                            </p>
                         </div>
-                    </label>
+                    </div>
                     <div id="customer_register"
                             class="panel-collapse collapsed {% if selected == "register" %}in{% endif %}">
                         <div class="panel-body form-horizontal">
@@ -97,19 +97,19 @@
             {% endif %}
             {% if guest_allowed %}
                 <div class="panel panel-default">
-                    <label class="accordion-radio">
+                    <div class="accordion-radio">
                         <div class="panel-heading">
-                            <h4 class="panel-title">
+                            <p class="panel-title">
                                 <input type="radio" name="customer_mode" value="guest"
                                         data-parent="#customer"
                                         {% if selected == "guest" %}checked="checked"{% endif %}
+                                        id="input_customer_guest"
+                                        aria-describedby="customer_guest"
                                         data-toggle="radiocollapse" data-target="#customer_guest"/>
-                                <strong>
-                                    {% trans "Continue as a guest" %}
-                                </strong>
-                            </h4>
+                                <label for="input_customer_guest"><strong>{% trans "Continue as a guest" %}</strong></label=>
+                            </p>
                         </div>
-                    </label>
+                    </div>
                     <div id="customer_guest"
                             class="panel-collapse collapsed {% if selected == "guest" %}in{% endif %}">
                         <div class="panel-body form-horizontal">
