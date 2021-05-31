@@ -183,12 +183,14 @@ class SenderView(EventPermissionRequiredMixin, FormView):
 
         orders = orders.annotate(match_pos=Exists(opq)).filter(match_pos=True).distinct()
 
+        ocnt = orders.count()
+
         self.output = {}
-        if not orders:
+        if not ocnt:
             messages.error(self.request, _('There are no orders matching this selection.'))
             return self.get(self.request, *self.args, **self.kwargs)
 
-        if self.request.POST.get("action") == "preview":
+        if self.request.POST.get("action") != "send":
             for l in self.request.event.settings.locales:
                 with language(l, self.request.event.settings.region):
                     context_dict = TolerantDict()
@@ -209,6 +211,7 @@ class SenderView(EventPermissionRequiredMixin, FormView):
                         'html': preview_text,
                     }
 
+            self.order_count = ocnt
             return self.get(self.request, *self.args, **self.kwargs)
 
         kwargs = {
@@ -244,6 +247,7 @@ class SenderView(EventPermissionRequiredMixin, FormView):
     def get_context_data(self, *args, **kwargs):
         ctx = super().get_context_data(*args, **kwargs)
         ctx['output'] = getattr(self, 'output', None)
+        ctx['order_count'] = getattr(self, 'order_count', None)
         return ctx
 
 

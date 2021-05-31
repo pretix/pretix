@@ -1,6 +1,7 @@
 {% extends "pretixcontrol/event/base.html" %}
 {% load i18n %}
 {% load bootstrap3 %}
+{% load humanize %}
 {% block title %}{% trans "Send out emails" %}{% endblock %}
 {% block content %}
     <h1>{% trans "Send out emails" %}</h1>
@@ -38,7 +39,7 @@
             {% bootstrap_field form.subject layout='horizontal' %}
             {% bootstrap_field form.message layout='horizontal' %}
             {% bootstrap_field form.attachment layout='horizontal' %}
-            {% if request.method == "POST" %}
+            {% if output %}
             <fieldset>
             <legend>{% trans "E-mail preview" %}</legend>
                 <div class="tab-pane mail-preview-group">
@@ -52,11 +53,16 @@
             </fieldset>
             {% endif %}
             <div class="form-group submit-group">
-                <button type="submit" class="btn btn-default btn-save pull-left" name="action" value="preview">
+                <button type="submit" class="btn btn-default btn-save" name="action" value="preview">
                     {% trans "Preview email" %}
                 </button>
-                <button type="submit" class="btn btn-primary btn-save">
+                <button type="submit" class="btn btn-danger btn-save" name="action" value="send" {% if not output %}disabled{% endif %}>
                     {% trans "Send" %}
+                    {% if not output %}
+                        ({% trans "use preview first" %})
+                    {% else %}
+                        ({% blocktrans with number=order_count|intcomma %}{{ number }} orders{% endblocktrans %})
+                    {% endif %}
                 </button>
             </div>
         </form>
