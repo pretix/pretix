@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-05-27 12:05+0000\n"
-"PO-Revision-Date: 2021-04-24 21:00+0000\n"
-"Last-Translator: Alexander Dalen <alexdalen2@gmail.com>\n"
+"PO-Revision-Date: 2021-05-31 11:26+0000\n"
+"Last-Translator: zackern <zacker@zacker.no>\n"
 "Language-Team: Norwegian Bokmål <https://translate.pretix.eu/projects/pretix/"
 "pretix/nb_NO/>\n"
 "Language: nb_NO\n"
@@ -17,13 +17,15 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.4.2\n"
+"X-Generator: Weblate 4.6\n"
 
 #: pretix/api/auth/devicesecurity.py:28
 msgid ""
 "Full device access (reading and changing orders and gift cards, reading of "
 "products and settings)"
-msgstr "Full enhetsadgang"
+msgstr ""
+"Full enhetsadgang (se og endre ordre og gavekort, se produkter og "
+"innstillinger)"
 
 #: pretix/api/auth/devicesecurity.py:44
 msgid "pretixSCAN"
@@ -47,7 +49,7 @@ msgstr "Videresendings URL"
 
 #: pretix/api/models.py:43
 msgid "Allowed URIs list, space separated"
-msgstr "Tillatte URL lister, separer med mellomrom"
+msgstr "Tillatte URL lister, separert med mellomrom"
 
 #: pretix/api/models.py:46 pretix/plugins/paypal/payment.py:112
 msgid "Client ID"
@@ -55,11 +57,11 @@ msgstr "Klient ID"
 
 #: pretix/api/models.py:50
 msgid "Client secret"
-msgstr "Klient hemmelig"
+msgstr "Klient hemmelighet"
 
 #: pretix/api/models.py:97
 msgid "Enable webhook"
-msgstr "Muliggjør webhook"
+msgstr "Aktiver webhook"
 
 #: pretix/api/models.py:98
 #: pretix/control/templates/pretixcontrol/organizers/webhooks.html:36
@@ -353,25 +355,25 @@ msgstr "E-post"
 #: pretix/control/forms/__init__.py:398 pretix/presale/forms/customer.py:54
 #: pretix/presale/forms/customer.py:235
 msgid "Password"
-msgstr ""
+msgstr "Passord"
 
 #: pretix/base/channels.py:105
 msgid "Online shop"
-msgstr ""
+msgstr "Nettbutikk"
 
 #: pretix/base/context.py:45
 #, python-brace-format
 msgid "powered by {name} based on <a {a_attr}>pretix</a>"
-msgstr ""
+msgstr "drevet av {name} bassert på <a {a_attr}>pretix</a>"
 
 #: pretix/base/context.py:52
 #, python-format
 msgid "<a %(a_attr)s>ticketing powered by pretix</a>"
-msgstr ""
+msgstr "<a %(a_attr)s>billetter drevet av pretix</a>"
 
 #: pretix/base/context.py:61
 msgid "source code"
-msgstr ""
+msgstr "kildekode"
 
 #: pretix/base/email.py:182 pretix/control/views/main.py:291
 #: pretix/plugins/badges/apps.py:45 pretix/plugins/badges/models.py:48
@@ -381,25 +383,25 @@ msgstr ""
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/index.html:33
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/index.html:53
 msgid "Default"
-msgstr ""
+msgstr "standard"
 
 #: pretix/base/email.py:189
 msgid "Simple with logo"
-msgstr ""
+msgstr "Enkel med logo"
 
 #: pretix/base/email.py:463 pretix/base/email.py:529 pretix/base/email.py:545
 #: pretix/base/email.py:550 pretix/base/pdf.py:154 pretix/base/pdf.py:297
 #: pretix/base/services/invoices.py:400 pretix/control/views/event.py:729
 msgid "John Doe"
-msgstr ""
+msgstr "John Doe"
 
 #: pretix/base/email.py:467
 msgid "Sample Corporation"
-msgstr ""
+msgstr "Eksempel organisasjon"
 
 #: pretix/base/email.py:507
 msgid "Sample Admission Ticket"
-msgstr ""
+msgstr "Eksempel Adgang Billett"
 
 #: pretix/base/email.py:533
 msgid "An individual text with a reason can be inserted here."
@@ -407,39 +409,40 @@ msgstr ""
 
 #: pretix/base/email.py:537
 msgid "The amount has been charged to your card."
-msgstr ""
+msgstr "Beløpet har blitt trukket fra ditt kort."
 
 #: pretix/base/email.py:541
 msgid "Please transfer money to this bank account: 9999-9999-9999-9999"
-msgstr ""
+msgstr "Vennligst overfør penger til denne bankkontoen: 9999-9999-9999-9999"
 
 #: pretix/base/email.py:563
 msgid "Mr Doe"
-msgstr ""
+msgstr "Mr Doe"
 
 #: pretix/base/exporter.py:159 pretix/base/exporter.py:285
 msgid "Export format"
-msgstr ""
+msgstr "Eksporteringsformat"
 
 #: pretix/base/exporter.py:161
+#, fuzzy
 msgid "Excel (.xlsx)"
-msgstr ""
+msgstr "Excel (.xlsx)"
 
 #: pretix/base/exporter.py:162 pretix/base/exporter.py:277
 msgid "CSV (with commas)"
-msgstr ""
+msgstr "CSV (med komma)"
 
 #: pretix/base/exporter.py:163 pretix/base/exporter.py:278
 msgid "CSV (Excel-style)"
-msgstr ""
+msgstr "CSV (Excel-stil)"
 
 #: pretix/base/exporter.py:164 pretix/base/exporter.py:279
 msgid "CSV (with semicolons)"
-msgstr ""
+msgstr "CSV (med semikolon)"
 
 #: pretix/base/exporter.py:273
 msgid "Combined Excel (.xlsx)"
-msgstr ""
+msgstr "Kombinert Excel (.xlsx)"
 
 #: pretix/base/exporters/answers.py:52
 msgid "Answers to file upload questions"
@@ -450,7 +453,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/items/questions.html:3
 #: pretix/control/templates/pretixcontrol/items/questions.html:5
 msgid "Questions"
-msgstr ""
+msgstr "Spørsmål"
 
 #: pretix/base/exporters/dekodi.py:103
 #, python-brace-format
@@ -482,6 +485,9 @@ msgid ""
 "Only include invoices issued on or after this date. Note that the invoice "
 "date does not always correspond to the order or payment date."
 msgstr ""
+"Kun inkluder fakturaer utstedt på eller etter denne datoen. Husk at "
+"fakturadatoen ikke alltid stemmer overens med bestillings eller betalings "
+"datoen."
 
 #: pretix/base/exporters/dekodi.py:231 pretix/base/exporters/invoices.py:78
 #: pretix/base/exporters/orderlist.py:114
@@ -2930,7 +2936,7 @@ msgstr ""
 #: pretix/base/models/items.py:804 pretix/base/models/vouchers.py:203
 #: pretix/base/models/waitinglist.py:95 pretix/base/orderimport.py:228
 msgid "Product variation"
-msgstr ""
+msgstr "Produkt variasjon"
 
 #: pretix/base/models/items.py:805
 #: pretix/control/templates/pretixcontrol/item/create.html:64
@@ -21813,7 +21819,7 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/waiting.html:22
 msgid "We are processing your request …"
-msgstr ""
+msgstr "Vi gjennomfører forespørselen din…"
 
 #: pretix/presale/utils.py:170 pretix/presale/utils.py:293
 #: pretix/presale/utils.py:294
