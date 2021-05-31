@@ -52,7 +52,7 @@ from django.core.exceptions import ValidationError
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db.models import QuerySet
-from django.forms import Select
+from django.forms import Select, widgets
 from django.utils import translation
 from django.utils.formats import date_format
 from django.utils.html import escape
@@ -154,8 +154,9 @@ class NamePartsWidget(forms.MultiWidget):
                     final_attrs,
                     id='%s_%s' % (id_, i),
                     title=self.scheme['fields'][i][1],
-                    placeholder=self.scheme['fields'][i][1],
                 )
+                if not isinstance(widget, widgets.Select):
+                    these_attrs['placeholder'] = self.scheme['fields'][i][1]
                 if self.scheme['fields'][i][0] in REQUIRED_NAME_PARTS:
                     if self.field.required:
                         these_attrs['required'] = 'required'
