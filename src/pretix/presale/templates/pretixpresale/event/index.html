@@ -99,7 +99,7 @@
             <h2 class="content-header">
                 {{ event.name }}
                 {% if request.event.settings.show_dates_on_frontpage %}
-                    <small>{{ event.get_date_range_display }}</small>
+                    <small><time datetime="">{{ event.get_date_range_display }}</time></small>
                 {% endif %}
             </h2>
         {% endif %}
@@ -122,9 +122,13 @@
                         {% endblocktrans %}
                     {% endif %}
                 {% elif event.settings.presale_start_show_date %}
-                    {% blocktrans trimmed with date=ev.effective_presale_start|date:"SHORT_DATE_FORMAT" time=ev.effective_presale_start|time:"TIME_FORMAT" %}
+                    {% with date=ev.effective_presale_start|date:"SHORT_DATE_FORMAT" date_normalized=ev.effective_presale_start|date:"Y-m-d" %}
+                    {% with time=ev.effective_presale_start|time:"TIME_FORMAT" time_24h=ev.effective_presale_start|time:"H:i" %}
+                    {% blocktrans trimmed with date="<time datetime='"|add:date_normalized|add:"'>"|add:date|add:"</time>"|safe time="<time datetime='"|add:time_24h|add:"'>"|add:time|add:"</time>"|safe %}
                         The presale for this event will start on {{ date }} at {{ time }}.
                     {% endblocktrans %}
+                    {% endwith %}
+                    {% endwith %}
                 {% else %}
                     {% blocktrans trimmed %}
                         The presale for this event has not yet started.
@@ -150,32 +154,40 @@
                             {% if event.settings.show_times %}
                                 <br>
                                 <span data-time="{{ ev.date_from.isoformat }}" data-timezone="{{ request.event.timezone }}">
-                                    {% blocktrans trimmed with time=ev.date_from|date:"TIME_FORMAT" time_24=ev.date_from|time:"H:i" %}
-                                        Begin: <time datetime="{{ time_24 }}">{{ time }}</time>
+                                {% with time_human=ev.date_from|date:"TIME_FORMAT" time_24=ev.date_from|time:"H:i" %}
+                                    {% blocktrans trimmed with time='<time datetime="'|add:time_24|add:'">'|add:time_human|add:"</time>"|safe %}
+                                        Begin: {{ time }}
                                     {% endblocktrans %}
+                                {% endwith %}
                                 </span>
                                 {% if event.settings.show_date_to and ev.date_to %}
                                     <br>
                                     <span data-time="{{ ev.date_to.isoformat }}" data-timezone="{{ request.event.timezone }}">
-                                        {% blocktrans trimmed with time=ev.date_to|date:"TIME_FORMAT" time_24=ev.date_from|time:"H:i" %}
-                                            End: <time datetime="{{ time_24 }}">{{ time }}</time>
+                                    {% with time_human=ev.date_to|date:"TIME_FORMAT" time_24=ev.date_to|time:"H:i" %}
+                                        {% blocktrans trimmed with time='<time datetime="'|add:time_24|add:'">'|add:time_human|add:"</time>"|safe %}
+                                            End: {{ time }}
                                         {% endblocktrans %}
+                                    {% endwith %}
                                    </span>
                                 {% endif %}
                             {% endif %}
                             {% if ev.date_admission %}
                                 <br>
                                 {% if ev.date_admission|date:"SHORT_DATE_FORMAT" == ev.date_from|date:"SHORT_DATE_FORMAT" %}
-                                    <span data-time="{{ ev.date_admission.isoformat }}" data-timezone="{{ request.event.timezone }}">
-                                        {% blocktrans trimmed with time=ev.date_admission|date:"TIME_FORMAT" %}
+                                    <span data-time="{{ ev.date_admission.isoformat }}" data-timezone="{{ request.event.timezone }}">  
+                                    {% with time_human=ev.date_admission|date:"TIME_FORMAT" time_24=ev.date_admission|time:"H:i" %}
+                                        {% blocktrans trimmed with time='<time datetime="'|add:time_24|add:'">'|add:time_human|add:"</time>"|safe %}
                                             Admission: <time datetime="{{ time }}">{{ time }}</time>
                                         {% endblocktrans %}
+                                    {% endwith %}
                                     </span>
                                 {% else %}
                                     <span data-time="{{ ev.date_admission.isoformat }}" data-timezone="{{ request.event.timezone }}">
-                                        {% blocktrans trimmed with datetime=ev.date_admission|date:"SHORT_DATETIME_FORMAT" %}
-                                            Admission: <time datetime="{{ datetime }}">{{ datetime }}</time>
+                                    {% with datetime_human=ev.date_admission|date:"SHORT_DATETIME_FORMAT" datetime_iso=ev.date_admission|time:"Y-m-d H:i" %}
+                                        {% blocktrans trimmed with datetime='<time datetime="'|add:datetime_iso|add:'">'|add:datetime_human|add:"</time>"|safe %}
+                                            Admission: {{ datetime }}
                                         {% endblocktrans %}
+                                    {% endwith %}
                                     </span>
                                 {% endif %}
                             {% endif %}

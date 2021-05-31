@@ -89,9 +89,13 @@
                 <strong>{% blocktrans trimmed with total=pending_sum|money:request.event.currency %}
                     A payment of {{ total }} is still pending for this order.
                 {% endblocktrans %}</strong>
-                <strong>{% blocktrans trimmed with date=order|format_expires isodate=order.expires|date:"c" %}
-                    Please complete your payment before <time="{{ isodate }}">{{ date }}</time=>
-                {% endblocktrans %}</strong>
+                <strong>
+                {% with date_human=order|format_expires|safe date_iso=order.expires|date:"c" %}
+                    {% blocktrans trimmed with date='<time datetime="'|add:date_iso|add:'">'|add:date_human|add:"</time>"|safe %}
+                        Please complete your payment before {{ date }}
+                    {% endblocktrans %}
+                {% endwith %}
+                </strong>
                 {% if last_payment %}
                     {{ last_payment_info }}
                     {% if can_pay %}
