@@ -4,6 +4,11 @@
 {% load eventurl %}
 {% load urlreplace %}
 {% block title %}{% trans "Event overview" %}{% endblock %}
+{% block custom_header %}
+    <style nonce="{{ css_nonce }}">
+        {{ css }}
+    </style>
+{% endblock %}
 {% block content %}
     {% if organizer_homepage_text %}
         <div>

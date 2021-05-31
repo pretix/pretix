@@ -1,4 +1,4 @@
-.table-calendar, .week-calendar {
+.table-calendar, .week-calendar, .day-calendar {
   td, th {
     width: 14.29%;
   }
@@ -113,6 +113,49 @@
     display: none;
   }
 }
+
+.day-calendar-container {
+  overflow-x: auto;
+  padding-bottom: 10px;
+
+  .day-calendar {
+    display: grid;
+    grid-template-rows: 30px;
+    grid-template-columns: 150px;
+    grid-auto-columns: 1fr;
+
+    a {
+      margin: 2.5px;
+    }
+
+    .day-time-tick {
+      padding: 5px;
+      font-weight: bold;
+      &:nth-of-type(odd) {
+        background-color: $table-bg-accent;
+      }
+      &:hover {
+        background-color: $table-bg-hover;
+      }
+    }
+
+    .day-row-name-header {
+      grid-row: 1;
+      grid-column: 1;
+      background: white;
+      position: sticky;
+      left: 0;
+    }
+    .day-row-name {
+      font-weight: bold;
+      padding: 5px;
+      background: white;
+      position: sticky;
+      left: 0;
+    }
+  }
+}
+
 @media (min-width: $screen-md-min) {
   .week-calendar {
     display: flex;

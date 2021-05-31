@@ -31,11 +31,12 @@
 # Unless required by applicable law or agreed to in writing, software distributed under the Apache License 2.0 is
 # distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations under the License.
-
+import base64
 import calendar
 import hashlib
 from collections import defaultdict
 from datetime import date, datetime, time, timedelta
+from secrets import token_bytes
 from urllib.parse import quote
 
 import dateutil
@@ -739,19 +740,19 @@ class DayCalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
 
     def _set_date_to_next_event(self):
         next_ev = filter_qs_by_attr(Event.objects.using(settings.DATABASE_REPLICA).filter(
+            Q(date_from__gte=now()) | Q(date_to__isnull=False, date_to__gte=now()),
             organizer=self.request.organizer,
             live=True,
             is_public=True,
             date_from__gte=now(),
-            has_subevents=False
         ), self.request).order_by('date_from').first()
         next_sev = filter_qs_by_attr(SubEvent.objects.using(settings.DATABASE_REPLICA).filter(
+            Q(date_from__gte=now()) | Q(date_to__isnull=False, date_to__gte=now()),
             event__organizer=self.request.organizer,
             event__is_public=True,
             event__live=True,
             active=True,
             is_public=True,
-            date_from__gte=now()
         ), self.request).select_related('event').order_by('date_from').first()
 
         datetime_from = None
@@ -780,7 +781,10 @@ class DayCalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
 
     def get(self, request, *args, **kwargs):
         self._set_date()
-        return super().get(request, *args, **kwargs)
+        self.nonce = base64.b64encode(token_bytes(32)).decode()
+        r = super().get(request, *args, **kwargs)
+        r['Content-Security-Policy'] = f"style-src 'nonce-{self.nonce}'"
+        return r
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data()
@@ -811,49 +815,122 @@ class DayCalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
         )
 
         ebd = self._events_by_day(before, after)
-        ctx['rows'] = self._rows_for_template(ebd[self.date])
+        rows, starting_at, col_num = self._grid_for_template(ebd[self.date])
+
+        ctx['css'], ctx['time_ticks'] = self._generate_css(rows, starting_at, col_num)
+        ctx['css_nonce'] = self.nonce
+        ctx['collections'] = rows
         ctx['multiple_timezones'] = self._multiple_timezones
         return ctx
 
-    def _rows_for_template(self, events):
+    def _generate_css(self, collections, starting_at, col_num):
+        css = []
+        time_ticks = []
+
+        row_num = sum(len(rows) for series, rows in collections)
+        shortest_one = min([
+            min([
+                min([
+                    e['column_end'] - e['column_start'] + 1
+                    for e in row
+                ]) for row in rows
+            ])
+            for series, rows in collections
+        ])
+
+        # We don't want any events smaller than X, so we need to set max_width accordingly
+        min_width = col_num * 150 / min(shortest_one, 12)
+        css.append(
+            f'.day-calendar {{ '
+            f'  min-width: {min_width}px;'
+            f' }}'
+        )
+
+        # We want to print a time tick every time_tick_span columns. Let's choose the next big thing divisible by 15min
+        # based on our smallest box
+        time_tick_span = (shortest_one // 3 + 1) * 3
+        for i in range(0, col_num):
+            t = datetime.combine(date.today(), starting_at) + timedelta(minutes=i * 5)
+
+            if (t.hour * 60 + t.minute) % (time_tick_span * 5) == 0:
+                css.append(
+                    f'#time_tick_{len(time_ticks)} {{ '
+                    f'  grid-row-start: 1;'
+                    f'  grid-row-end: {row_num + 2};'
+                    f'  grid-column: {i + 2} / span {time_tick_span};'
+                    f' }}'
+                )
+                time_ticks.append(t)
+
+        rowcnt = 0
+        for series, rows in collections:
+            css.append(
+                f'#day_calendar_collection_{series.pk} {{ '
+                f'  grid-row: {rowcnt + 2} / span {len(rows)};'
+                f'  grid-column: 1;'
+                f' }}'
+            )
+            for row in rows:
+                for e in row:
+                    css.append(
+                        f'#{e["css_id"]} {{ '
+                        f'  grid-row: {rowcnt + 2};'
+                        f'  grid-column-start: {e["column_start"] + 2};'
+                        f'  grid-column-end: {e["column_end"] + 2};'
+                        f' }}'
+                    )
+                rowcnt += 1
+
+        return "\n".join(css), time_ticks
+
+    def _grid_for_template(self, events):
         rows_by_collection = defaultdict(list)
 
         # We work on a five minute raster
-        def time_to_column(t: time):
-            return t.hour * 60 + t.minute - (t.minute % 5)
+        def time_to_column(t: time, is_end=False):
+            if is_end:
+                return (t.hour * 60 + t.minute + (5 - t.minute % 5) - 1) // 5
+            return (t.hour * 60 + t.minute - (t.minute % 5)) // 5
 
         if any(e['continued'] for e in events) or any(e['time'] is None for e in events):
-            first_column = time_to_column(time(0, 0))
+            starting_at = time(0, 0)
         else:
-            first_column = time_to_column(min(e['time'] for e in events))
+            starting_at = min(e['time'] for e in events)
+        first_column = time_to_column(starting_at)
 
         if any(e.get('time_end_today') is None for e in events):
-            last_column = time_to_column(time(23, 59)) + 1
+            last_column = time_to_column(time(23, 59), is_end=True) - first_column
         else:
-            last_column = time_to_column(max(e['time_end_today'] for e in events)) + 1
+            last_column = time_to_column(max(e['time_end_today'] for e in events), is_end=True) - first_column
 
-        for e in events:
+        # We compute the column start and end of each event. Then, we sort the events into "collections": We sort
+        # all subevents from the same event series together, and we sort all non-series events into a "None" collection
+        # to show them as compact as possible. Then, we look if there's already an event in the collection that overlaps,
+        # in which case we need to split the collection into multiple rows.
+        for counter, e in enumerate(events):
+            e['css_id'] = f'day_calendar_{counter}'
             if e.get('time') and not e.get('continued'):
-                e['column_start'] = time_to_column(e.get('time'))
+                e['column_start'] = time_to_column(e.get('time')) - first_column
             else:
                 e['column_start'] = 0
 
             if e.get('time_end_today'):
-                e['column_end'] = time_to_column(e.get('time'))
+                e['column_end'] = max(time_to_column(e.get('time_end_today'), is_end=True), e['column_start']) - first_column
             else:
-                e['column_start'] = time_to_column(time(23, 59)) + 1
+                e['column_end'] = max(time_to_column(time(23, 59), is_end=True), e['column_start']) - first_column
 
-            collection = e.event if isinstance(e, SubEvent) else None
+            collection = e['event'].event if isinstance(e['event'], SubEvent) else None
 
             placed_in_row = False
             for row in rows_by_collection[collection]:
-                if any(e['column_start'] <= o['column_end'] and o['column_start'] <= e['column_end'] for o in row):
+                if any(e['column_start'] < o['column_end'] and o['column_start'] < e['column_end'] for o in row):
                     continue
                 row.append(e)
                 placed_in_row = True
+                break
 
             if not placed_in_row:
-                rows_by_collection[collection].append([row])
+                rows_by_collection[collection].append([e])
 
         def sort_key(c):
             collection, row = c
@@ -861,7 +938,7 @@ class DayCalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
                 return ''
             else:
                 return str(collection.name)
-        return sorted(rows_by_collection.items(), key=sort_key), first_column, last_column
+        return sorted(rows_by_collection.items(), key=sort_key), starting_at, last_column
 
     def _events_by_day(self, before, after):
         ebd = defaultdict(list)
