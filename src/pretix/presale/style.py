@@ -144,7 +144,7 @@ def regenerate_css(event):
         newname = default_storage.save(fname, ContentFile(css.encode('utf-8')))
         event.settings.set('presale_css_file', newname)
         event.settings.set('presale_css_checksum', checksum)
-        if old_fname and old_fname != newname:
+        if old_fname and old_fname != newname and f'/{event.slug}/' in old_fname:
             delete_old_file(old_fname)
 
     # widget.scss
@@ -156,7 +156,7 @@ def regenerate_css(event):
         newname = default_storage.save(fname, ContentFile(css.encode('utf-8')))
         event.settings.set('presale_widget_css_file', newname)
         event.settings.set('presale_widget_css_checksum', checksum)
-        if old_fname and old_fname != newname:
+        if old_fname and old_fname != newname and f'/{event.slug}/' in old_fname:
             delete_old_file(old_fname)
 
 

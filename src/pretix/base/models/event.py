@@ -640,6 +640,7 @@ class Event(EventMixin, LoggedModel):
         ), tz)
 
     def copy_data_from(self, other):
+        from pretix.presale.style import regenerate_css
         from ..signals import event_copy_data
         from . import (
             Item, ItemAddOn, ItemBundle, ItemCategory, ItemMetaValue, Question,
@@ -819,9 +820,14 @@ class Event(EventMixin, LoggedModel):
                 s.product = item_map[s.product_id]
             s.save()
 
+        has_custom_style = other.settings.presale_css_file or other.settings.presale_widget_css_file
         skip_settings = (
             'ticket_secrets_pretix_sig1_pubkey',
             'ticket_secrets_pretix_sig1_privkey',
+            'presale_css_file',
+            'presale_css_checksum',
+            'presale_widget_css_file',
+            'presale_widget_css_checksum',
         )
         for s in other.settings._objects.all():
             if s.key in skip_settings:
@@ -855,6 +861,9 @@ class Event(EventMixin, LoggedModel):
             tax_map=tax_map, category_map=category_map, item_map=item_map, variation_map=variation_map,
             question_map=question_map, checkin_list_map=checkin_list_map
         )
+
+        if has_custom_style:
+            regenerate_css.apply_async(args=(self.pk,))
 
     def get_payment_providers(self, cached=False) -> dict:
         """
