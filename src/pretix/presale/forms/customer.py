@@ -283,7 +283,7 @@ class ResetPasswordForm(forms.Form):
         if 'email' not in self.cleaned_data:
             return
         try:
-            self.customer = self.request.organizer.customers.get(email=self.cleaned_data['email'])
+            self.customer = self.request.organizer.customers.get(email=self.cleaned_data['email'].lower())
             return self.customer.email
         except Customer.DoesNotExist:
             # Yup, this is an information leak. But it prevents dozens of support requests – and even if we didn't
