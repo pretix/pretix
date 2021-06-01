@@ -34,7 +34,7 @@
 
 import django_filters
 from django.db import transaction
-from django.db.models import ProtectedError, Q
+from django.db.models import Prefetch, ProtectedError, Q
 from django.utils.timezone import now
 from django_filters.rest_framework import DjangoFilterBackend, FilterSet
 from django_scopes import scopes_disabled
@@ -49,9 +49,10 @@ from pretix.api.serializers.event import (
 )
 from pretix.api.views import ConditionalListView
 from pretix.base.models import (
-    CartPosition, Device, Event, TaxRule, TeamAPIToken,
+    CartPosition, Device, Event, SeatCategoryMapping, TaxRule, TeamAPIToken,
 )
 from pretix.base.models.event import SubEvent
+from pretix.base.services.quotas import QuotaAvailability
 from pretix.base.settings import SETTINGS_AFFECTING_CSS
 from pretix.helpers.dicts import merge_dicts
 from pretix.presale.style import regenerate_css
@@ -136,9 +137,42 @@ class EventViewSet(viewsets.ModelViewSet):
             )
 
         qs = filter_qs_by_attr(qs, self.request)
+
+        if 'with_availability_for' in self.request.GET:
+            qs = Event.annotated(qs, channel=self.request.GET.get('with_availability_for'))
+
         return qs.prefetch_related(
-            'meta_values', 'meta_values__property', 'seat_category_mappings'
+            'organizer',
+            'meta_values',
+            'meta_values__property',
+            'item_meta_properties',
+            Prefetch(
+                'seat_category_mappings',
+                to_attr='_seat_category_mappings',
+                queryset=SeatCategoryMapping.objects.filter(subevent=None)
+            ),
         )
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+
+        page = self.paginate_queryset(queryset)
+
+        if 'with_availability_for' in self.request.GET:
+            quotas_to_compute = []
+            qcache = {}
+            for se in page:
+                se._quota_cache = qcache
+                quotas_to_compute += se.active_quotas
+
+            if quotas_to_compute:
+                qa = QuotaAvailability()
+                qa.queue(*quotas_to_compute)
+                qa.compute(allow_cache=True)
+                qcache.update(qa.results)
+
+        serializer = self.get_serializer(page, many=True)
+        return self.get_paginated_response(serializer.data)
 
     def perform_update(self, serializer):
         current_live_value = serializer.instance.live
@@ -197,7 +231,6 @@ class EventViewSet(viewsets.ModelViewSet):
             except Event.DoesNotExist:
                 raise ValidationError('Event to copy from was not found')
 
-        print(copy_from, self.request.GET)
         new_event = serializer.save(organizer=self.request.organizer)
 
         if copy_from:
@@ -336,8 +369,18 @@ class SubEventViewSet(ConditionalListView, viewsets.ModelViewSet):
 
         qs = filter_qs_by_attr(qs, self.request)
 
+        if 'with_availability_for' in self.request.GET:
+            qs = SubEvent.annotated(qs, channel=self.request.GET.get('with_availability_for'))
+
         return qs.prefetch_related(
-            'subeventitem_set', 'subeventitemvariation_set', 'seat_category_mappings', 'meta_values'
+            'event',
+            'subeventitem_set',
+            'subeventitemvariation_set',
+            'meta_values',
+            Prefetch(
+                'seat_category_mappings',
+                to_attr='_seat_category_mappings',
+            ),
         )
 
     def list(self, request, **kwargs):
@@ -345,14 +388,24 @@ class SubEventViewSet(ConditionalListView, viewsets.ModelViewSet):
         queryset = self.filter_queryset(self.get_queryset())
 
         page = self.paginate_queryset(queryset)
-        if page is not None:
-            serializer = self.get_serializer(page, many=True)
-            resp = self.get_paginated_response(serializer.data)
-            resp['X-Page-Generated'] = date
-            return resp
 
-        serializer = self.get_serializer(queryset, many=True)
-        return Response(serializer.data, headers={'X-Page-Generated': date})
+        if 'with_availability_for' in self.request.GET:
+            quotas_to_compute = []
+            qcache = {}
+            for se in page:
+                se._quota_cache = qcache
+                quotas_to_compute += se.active_quotas
+
+            if quotas_to_compute:
+                qa = QuotaAvailability()
+                qa.queue(*quotas_to_compute)
+                qa.compute(allow_cache=True)
+                qcache.update(qa.results)
+
+        serializer = self.get_serializer(page, many=True)
+        resp = self.get_paginated_response(serializer.data)
+        resp['X-Page-Generated'] = date
+        return resp
 
     def perform_update(self, serializer):
         original_data = self.get_serializer(instance=serializer.instance).data

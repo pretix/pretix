@@ -152,6 +152,10 @@ def test_subevent_list(token_client, organizer, event, subevent):
         '/api/v1/organizers/{}/events/{}/subevents/?ends_after=2017-12-27T10:01:01Z'.format(organizer.slug, event.slug))
     assert [] == resp.data['results']
 
+    resp = token_client.get('/api/v1/organizers/{}/events/?with_availability_for=web'.format(organizer.slug))
+    assert resp.status_code == 200
+    assert resp.data['results'][0]['best_availability_state'] is None
+
 
 @pytest.mark.django_db
 def test_subevent_list_filter(token_client, organizer, event, subevent):

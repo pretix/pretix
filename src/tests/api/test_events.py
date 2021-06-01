@@ -177,6 +177,10 @@ def test_event_list(token_client, organizer, event):
     assert resp.status_code == 200
     assert [TEST_EVENT_RES] == resp.data['results']
 
+    resp = token_client.get('/api/v1/organizers/{}/events/?with_availability_for=web'.format(organizer.slug))
+    assert resp.status_code == 200
+    assert resp.data['results'][0]['best_availability_state'] is None
+
 
 @pytest.mark.django_db
 def test_event_list_filter(token_client, organizer, event):

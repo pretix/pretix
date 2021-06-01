@@ -42,6 +42,7 @@ from django.utils.functional import cached_property
 from django.utils.translation import gettext as _
 from django_countries.serializers import CountryFieldMixin
 from pytz import common_timezones
+from rest_framework import serializers
 from rest_framework.fields import ChoiceField, Field
 from rest_framework.relations import SlugRelatedField
 
@@ -93,9 +94,12 @@ class MetaPropertyField(Field):
 class SeatCategoryMappingField(Field):
 
     def to_representation(self, value):
-        qs = value.seat_category_mappings.all()
-        if isinstance(value, Event):
-            qs = qs.filter(subevent=None)
+        if hasattr(value, '_seat_category_mappings'):
+            qs = value._seat_category_mappings
+        else:
+            qs = value.seat_category_mappings.all()
+            if isinstance(value, Event):
+                qs = qs.filter(subevent=None)
         return {
             v.layout_category: v.product_id for v in qs
         }
@@ -156,6 +160,7 @@ class EventSerializer(I18nAwareModelSerializer):
     seat_category_mapping = SeatCategoryMappingField(source='*', required=False)
     timezone = TimeZoneField(required=False, choices=[(a, a) for a in common_timezones])
     valid_keys = ValidKeysField(source='*', read_only=True)
+    best_availability_state = serializers.IntegerField(allow_null=True, read_only=True)
 
     class Meta:
         model = Event
@@ -163,12 +168,14 @@ class EventSerializer(I18nAwareModelSerializer):
                   'date_to', 'date_admission', 'is_public', 'presale_start',
                   'presale_end', 'location', 'geo_lat', 'geo_lon', 'has_subevents', 'meta_data', 'seating_plan',
                   'plugins', 'seat_category_mapping', 'timezone', 'item_meta_properties', 'valid_keys',
-                  'sales_channels')
+                  'sales_channels', 'best_availability_state')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         if not hasattr(self.context['request'], 'event'):
             self.fields.pop('valid_keys')
+        if not self.context.get('request') or 'with_availability_for' not in self.context['request'].GET:
+            self.fields.pop('best_availability_state')
 
     def validate(self, data):
         data = super().validate(data)
@@ -441,13 +448,19 @@ class SubEventSerializer(I18nAwareModelSerializer):
     seat_category_mapping = SeatCategoryMappingField(source='*', required=False)
     event = SlugRelatedField(slug_field='slug', read_only=True)
     meta_data = MetaDataField(source='*')
+    best_availability_state = serializers.IntegerField(allow_null=True, read_only=True)
 
     class Meta:
         model = SubEvent
         fields = ('id', 'name', 'date_from', 'date_to', 'active', 'date_admission',
                   'presale_start', 'presale_end', 'location', 'geo_lat', 'geo_lon', 'event', 'is_public',
                   'frontpage_text', 'seating_plan', 'item_price_overrides', 'variation_price_overrides',
-                  'meta_data', 'seat_category_mapping', 'last_modified')
+                  'meta_data', 'seat_category_mapping', 'last_modified', 'best_availability_state')
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if not self.context.get('request') or 'with_availability_for' not in self.context['request'].GET:
+            self.fields.pop('best_availability_state')
 
     def validate(self, data):
         data = super().validate(data)

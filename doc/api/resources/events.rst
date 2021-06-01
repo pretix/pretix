@@ -84,6 +84,10 @@ Endpoints
 
     The ``clone_from`` parameter has been added to the event creation endpoint.
 
+.. versionchanged:: 4.1
+
+    The ``with_availability_for`` parameter has been added.
+
 .. http:get:: /api/v1/organizers/(organizer)/events/
 
    Returns a list of all events within a given organizer the authenticated user/token has access to.
@@ -162,6 +166,10 @@ Endpoints
         events having set their ``Format`` meta data to ``Seminar``, ``?attr[Format]=`` only those, that have no value
         set. Please note that this filter will respect default values set on organizer level.
    :query sales_channel: If set to a sales channel identifier, only events allowed to be sold on the specified sales channel are returned.
+   :query with_availability_for: If set to a sales channel identifier, the response will contain a special ``best_availability_state``
+                                 attribute with values of 100 for "tickets available", values less than 100 for "tickets sold out or reserved",
+                                 and ``null`` for "status unknown". These values might be served from a cache. This parameter can make the response
+                                 slow.
    :param organizer: The ``slug`` field of a valid organizer
    :statuscode 200: no error
    :statuscode 401: Authentication failure

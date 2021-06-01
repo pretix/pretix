@@ -82,6 +82,10 @@ Endpoints
 
     The sub-events resource can now be filtered by meta data attributes.
 
+.. versionchanged:: 4.1
+
+    The ``with_availability_for`` parameter has been added.
+
 .. http:get:: /api/v1/organizers/(organizer)/events/(event)/subevents/
 
    Returns a list of all sub-events of an event.
@@ -152,6 +156,10 @@ Endpoints
         only those sub-events having set their ``Format`` meta data to ``Seminar``, ``?attr[Format]=`` only those, that
         have no value set. Please note that this filter will respect default values set on 
         organizer or event level.
+   :query with_availability_for: If set to a sales channel identifier, the response will contain a special ``best_availability_state``
+                                 attribute with values of 100 for "tickets available", values less than 100 for "tickets sold out or reserved",
+                                 and ``null`` for "status unknown". These values might be served from a cache. This parameter can make the response
+                                 slow.
    :statuscode 200: no error
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer does not exist **or** you have no permission to view it.
