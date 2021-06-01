@@ -29,26 +29,34 @@
                     {{ ev.get_date_range_display_as_html }}
                     {% if event.settings.show_times %}
                         <br>
-                        {% blocktrans trimmed with time=ev.date_from|date:"TIME_FORMAT" %}
-                            Begin: {{ time }}
-                        {% endblocktrans %}
+                        {% with time_human=ev.date_from|date:"TIME_FORMAT" time_24=ev.date_from|time:"H:i" %}
+                            {% blocktrans trimmed with time='<time datetime="'|add:time_24|add:'">'|add:time_human|add:"</time>"|safe %}
+                                Begin: {{ time }}
+                            {% endblocktrans %}
+                        {% endwith %}
                         {% if event.settings.show_date_to and ev.date_to %}
                             <br>
-                            {% blocktrans trimmed with time=ev.date_to|date:"TIME_FORMAT" %}
-                                End: {{ time }}
-                            {% endblocktrans %}
+                            {% with time_human=ev.date_to|date:"TIME_FORMAT" time_24=ev.date_to|time:"H:i" %}
+                                {% blocktrans trimmed with time='<time datetime="'|add:time_24|add:'">'|add:time_human|add:"</time>"|safe %}
+                                    End: {{ time }}
+                                {% endblocktrans %}
+                            {% endwith %}
                         {% endif %}
                     {% endif %}
                     {% if ev.date_admission %}
                         <br>
                         {% if ev.date_admission|date:"SHORT_DATE_FORMAT" == ev.date_from|date:"SHORT_DATE_FORMAT" %}
-                            {% blocktrans trimmed with time=ev.date_admission|date:"TIME_FORMAT" %}
-                                Admission: {{ time }}
-                            {% endblocktrans %}
+                            {% with time_human=ev.date_admission|date:"TIME_FORMAT" time_24=ev.date_admission|time:"H:i" %}
+                                {% blocktrans trimmed with time='<time datetime="'|add:time_24|add:'">'|add:time_human|add:"</time>"|safe %}
+                                    Admission: {{ time }}
+                                {% endblocktrans %}
+                            {% endwith %}
                         {% else %}
-                            {% blocktrans trimmed with datetime=ev.date_admission|date:"SHORT_DATETIME_FORMAT" %}
-                                Admission: {{ datetime }}
-                            {% endblocktrans %}
+                            {% with datetime_human=ev.date_admission|date:"SHORT_DATETIME_FORMAT" datetime_iso=ev.date_admission|time:"Y-m-d H:i" %}
+                                {% blocktrans trimmed with datetime='<time datetime="'|add:datetime_iso|add:'">'|add:datetime_human|add:"</time>"|safe %}
+                                    Admission: {{ datetime }}
+                                {% endblocktrans %}
+                            {% endwith %}
                         {% endif %}
                     {% endif %}
                     <br>
