@@ -197,7 +197,7 @@ setup(
         'tqdm==4.*',
         'vobject==0.9.*',
         'pycountry',
-        'django-countries>=6.0',
+        'django-countries>=7.2',
         'pyuca',
         'defusedcsv>=1.1.0',
         'vat_moss_forked==2020.3.20.0.11.0',
