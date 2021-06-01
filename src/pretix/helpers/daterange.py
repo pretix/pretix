@@ -68,15 +68,17 @@ def daterange(df, dt, as_html=False):
         if df.year == dt.year and df.month == dt.month and df.day == dt.day:
             return format_html(base_format, _date(df, "DATE_FORMAT"))
         elif df.year == dt.year and df.month == dt.month:
-            return format_html(base_format, 
-                _date(df, "j"), 
-                " - ", 
+            return format_html(
+                base_format,
+                _date(df, "j"),
+                " - ",
                 "{} de {} de {}".format(_date(dt, "j"), _date(dt, "F"), _date(dt, "Y"))
             )
         elif df.year == dt.year:
-            return format_html(base_format, 
+            return format_html(
+                base_format,
                 "{} de {}".format(_date(df, "j"), _date(df, "F")),
-                " - ", 
+                " - ",
                 "{} de {} de {}".format(_date(dt, "j"), _date(dt, "F"), _date(dt, "Y"))
             )
 
@@ -85,7 +87,8 @@ def daterange(df, dt, as_html=False):
 
     if as_html:
         base_format = "<time datetime=\"{}\">{{}}</time>"
-        return format_html("{date_from} – {date_to}",
+        return format_html(
+            "{date_from} – {date_to}",
             date_from=format_html(base_format, _date(df, "Y-m-d"), _date(df, "DATE_FORMAT")),
             date_to=format_html(base_format, _date(dt, "Y-m-d"), _date(dt, "DATE_FORMAT")),
         )

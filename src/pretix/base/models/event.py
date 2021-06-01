@@ -155,7 +155,8 @@ class EventMixin:
         tz = tz or self.timezone
         if (not self.settings.show_date_to and not force_show_end) or not self.date_to:
             if as_html:
-                return format_html("<time datetime=\"{}\">{}</time>",
+                return format_html(
+                    "<time datetime=\"{}\">{}</time>",
                     _date(self.date_from.astimezone(tz), "Y-m-d"),
                     _date(self.date_from.astimezone(tz), "DATE_FORMAT"),
                 )
