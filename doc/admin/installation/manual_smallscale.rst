@@ -129,10 +129,13 @@ python installation::
     $ source /var/pretix/venv/bin/activate
     (venv)$ pip3 install -U pip setuptools wheel
 
-We now install pretix, its direct dependencies and gunicorn. Replace ``postgres`` with ``mysql`` in the following
-command if you're running MySQL::
+We now install pretix, its direct dependencies and gunicorn.
 
-    (venv)$ pip3 install "pretix[postgres]" gunicorn
+    (venv)$ pip3 install pretix gunicorn
+
+If you're running MySQL, also install the client library:
+
+    (venv)$ pip3 install mysqlclient
 
 Note that you need Python 3.6 or newer. You can find out your Python version using ``python -V``.
 
@@ -281,7 +284,7 @@ To upgrade to a new pretix release, pull the latest code changes and run the fol
 ``postgres`` with ``mysql`` if necessary)::
 
     $ source /var/pretix/venv/bin/activate
-    (venv)$ pip3 install -U pretix[postgres] gunicorn
+    (venv)$ pip3 install -U pretix gunicorn
     (venv)$ python -m pretix migrate
     (venv)$ python -m pretix rebuild
     (venv)$ python -m pretix updatestyles
