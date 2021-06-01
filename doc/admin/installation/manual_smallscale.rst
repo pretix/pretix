@@ -251,14 +251,14 @@ The following snippet is an example on how to configure a nginx proxy for pretix
         }
 
         location /static/ {
-            alias /var/pretix/venv/lib/python3.5/site-packages/pretix/static.dist/;
+            alias /var/pretix/venv/lib/python3.7/site-packages/pretix/static.dist/;
             access_log off;
             expires 365d;
             add_header Cache-Control "public";
         }
     }
 
-.. note:: Remember to replace the ``python3.5`` in the ``/static/`` path in the config 
+.. note:: Remember to replace the ``python3.7`` in the ``/static/`` path in the config 
           above with your python version.
 
 We recommend reading about setting `strong encryption settings`_ for your web server.
