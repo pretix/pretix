@@ -99,7 +99,7 @@
             <h2 class="content-header">
                 {{ event.name }}
                 {% if request.event.settings.show_dates_on_frontpage %}
-                    <small><time datetime="">{{ event.get_date_range_display }}</time></small>
+                    <small>{{ event.get_date_range_display_as_html }}</small>
                 {% endif %}
             </h2>
         {% endif %}
@@ -150,7 +150,7 @@
                     <div class="info-row">
                         <span class="fa fa-clock-o fa-fw" aria-hidden="true"></span>
                         <p><span class="sr-only">{% trans "When?" %}</span>
-                            <time datetime="{{ ev.date_from.isoformat }}">{{ ev.get_date_range_display }}</time>
+                            {{ ev.get_date_range_display_as_html }}
                             {% if event.settings.show_times %}
                                 <br>
                                 <span data-time="{{ ev.date_from.isoformat }}" data-timezone="{{ request.event.timezone }}">

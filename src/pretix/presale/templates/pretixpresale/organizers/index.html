@@ -81,7 +81,7 @@
                 <div class="col-md-3 col-xs-12">
 
                     {% if e.settings.show_dates_on_frontpage %}
-                        {{ e.daterange|default:e.get_date_range_display }}
+                        {{ e.daterange|default:e.get_date_range_display_as_html }}
                         {% if e.settings.show_times and not e.has_subevents %}
                             {% timezone e.tzname %}
                                 <br><small class="text-muted" data-time="{{ e.date_from.isoformat }}" data-timezone="{{ e.tzname }}">

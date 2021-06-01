@@ -33,36 +33,64 @@
 # License for the specific language governing permissions and limitations under the License.
 
 from django.template.defaultfilters import date as _date
+from django.utils.html import format_html
 from django.utils.translation import get_language, gettext_lazy as _
 
 
-def daterange(df, dt):
+def daterange(df, dt, as_html=False):
     lng = get_language()
+    if df.year == dt.year and df.month == dt.month and df.day == dt.day:
+        if as_html:
+            base_format = format_html("<time datetime=\"{}\">{{}}</time>", _date(df, "Y-m-d"))
+        else:
+            base_format = "{}"
+    else:
+        if as_html:
+            base_format = format_html("<time datetime=\"{}\">{{}}</time>{{}}<time datetime=\"{}\">{{}}</time>", _date(df, "Y-m-d"), _date(dt, "Y-m-d"))
+        else:
+            base_format = "{}{}{}"
 
     if lng.startswith("de"):
         if df.year == dt.year and df.month == dt.month and df.day == dt.day:
-            return "{}".format(_date(df, "j. F Y"))
+            return format_html(base_format, _date(df, "j. F Y"))
         elif df.year == dt.year and df.month == dt.month:
-            return "{}.–{}".format(_date(df, "j"), _date(dt, "j. F Y"))
+            return format_html(base_format, _date(df, "j."), "–", _date(dt, "j. F Y"))
         elif df.year == dt.year:
-            return "{} – {}".format(_date(df, "j. F"), _date(dt, "j. F Y"))
+            return format_html(base_format, _date(df, "j. F"), " – ", _date(dt, "j. F Y"))
     elif lng.startswith("en"):
         if df.year == dt.year and df.month == dt.month and df.day == dt.day:
-            return "{}".format(_date(df, "N jS, Y"))
+            return format_html(base_format, _date(df, "N jS, Y"))
         elif df.year == dt.year and df.month == dt.month:
-            return "{} – {}".format(_date(df, "N jS"), _date(dt, "jS, Y"))
+            return format_html(base_format, _date(df, "N jS"), " – ", _date(dt, "jS, Y"))
         elif df.year == dt.year:
-            return "{} – {}".format(_date(df, "N jS"), _date(dt, "N jS, Y"))
+            return format_html(base_format, _date(df, "N jS"), " – ", _date(dt, "N jS, Y"))
     elif lng.startswith("es"):
         if df.year == dt.year and df.month == dt.month and df.day == dt.day:
-            return "{}".format(_date(df, "DATE_FORMAT"))
+            return format_html(base_format, _date(df, "DATE_FORMAT"))
         elif df.year == dt.year and df.month == dt.month:
-            return "{} - {} de {} de {}".format(_date(df, "j"), _date(dt, "j"), _date(dt, "F"), _date(dt, "Y"))
+            return format_html(base_format, 
+                _date(df, "j"), 
+                " - ", 
+                "{} de {} de {}".format(_date(dt, "j"), _date(dt, "F"), _date(dt, "Y"))
+            )
         elif df.year == dt.year:
-            return "{} de {} - {} de {} de {}".format(_date(df, "j"), _date(df, "F"), _date(dt, "j"), _date(dt, "F"), _date(dt, "Y"))
+            return format_html(base_format, 
+                "{} de {}".format(_date(df, "j"), _date(df, "F")),
+                " - ", 
+                "{} de {} de {}".format(_date(dt, "j"), _date(dt, "F"), _date(dt, "Y"))
+            )
 
     if df.year == dt.year and df.month == dt.month and df.day == dt.day:
-        return _date(df, "DATE_FORMAT")
+        return format_html(base_format, _date(df, "DATE_FORMAT"))
+
+    if as_html:
+        base_format = "<time datetime=\"{}\">{{}}</time>"
+        return format_html("{date_from} – {date_to}",
+            date_from=format_html(base_format, _date(df, "Y-m-d"), _date(df, "DATE_FORMAT")),
+            date_to=format_html(base_format, _date(dt, "Y-m-d"), _date(dt, "DATE_FORMAT")),
+        )
+
     return _("{date_from} – {date_to}").format(
-        date_from=_date(df, "DATE_FORMAT"), date_to=_date(dt, "DATE_FORMAT")
+        date_from=_date(df, "DATE_FORMAT"),
+        date_to=_date(dt, "DATE_FORMAT"),
     )

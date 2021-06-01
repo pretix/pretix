@@ -80,7 +80,7 @@
                 <h1>
                     <a href="{% eventurl event "presale:event.index" cart_namespace=cart_namespace|default_if_none:"" %}" aria-label="{% trans 'Homepage' %}">{{ event.name }}</a>
                     {% if request.event.settings.show_dates_on_frontpage and not event.has_subevents %}
-                        <small>{{ event.get_date_range_display }}</small>
+                        <small>{{ event.get_date_range_display_as_html }}</small>
                     {% endif %}
                 </h1>
             {% endif %}

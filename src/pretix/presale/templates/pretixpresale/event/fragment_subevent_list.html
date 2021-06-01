@@ -9,7 +9,7 @@
             </div>
             <div class="col-md-4">
                 <span class="fa fa-calendar" aria-hidden="true"></span>
-                {{ subev.get_date_range_display }}
+                {{ subev.get_date_range_display_as_html }}
                 {% if event.settings.show_times %}
                     <span data-time="{{ subev.date_from.isoformat }}" data-timezone="{{ event.timezone }}" data-time-short>
                         <span class="fa fa-clock-o" aria-hidden="true"></span>

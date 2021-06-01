@@ -26,7 +26,7 @@
             <div class="info-row">
                 <span class="fa fa-clock-o fa-fw" aria-hidden="true"></span>
                 <p>
-                    {{ ev.get_date_range_display }}
+                    {{ ev.get_date_range_display_as_html }}
                     {% if event.settings.show_times %}
                         <br>
                         {% blocktrans trimmed with time=ev.date_from|date:"TIME_FORMAT" %}

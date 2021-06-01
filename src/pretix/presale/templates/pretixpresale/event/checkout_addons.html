@@ -29,7 +29,7 @@
                             {% if form.cartpos.subevent %}
                                 <p>
                                     <span class="fa fa-calendar" aria-hidden="true"></span>
-                                    {{ form.cartpos.subevent.name }} &middot; {{ form.cartpos.subevent.get_date_range_display }}
+                                    {{ form.cartpos.subevent.name }} &middot; {{ form.cartpos.subevent.get_date_range_display_as_html }}
                                     {% if form.cartpos.event.settings.show_times %}
                                         <span class="fa fa-clock-o" aria-hidden="true"></span>
                                         {{ form.cartpos.subevent.date_from|date:"TIME_FORMAT" }}
