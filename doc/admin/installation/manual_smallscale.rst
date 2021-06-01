@@ -51,7 +51,12 @@ Database
 --------
 
 Having the database server installed, we still need a database and a database user. We can create these with any kind
-of database managing tool or directly on our database's shell. For PostgreSQL, we would do::
+of database managing tool or directly on our database's shell. Please make sure that UTF8 is used as encoding for the
+best compatibility. You can check this with the following command::
+
+    # sudo -u postgres psql -c 'SHOW SERVER_ENCODING'
+
+For PostgreSQL database creation, we would do::
 
     # sudo -u postgres createuser pretix
     # sudo -u postgres createdb -O pretix pretix
