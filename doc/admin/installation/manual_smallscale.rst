@@ -133,7 +133,7 @@ We now install pretix, its direct dependencies and gunicorn.
 
     (venv)$ pip3 install pretix gunicorn
 
-If you're running MySQL, also install the client library:
+If you're running MySQL, also install the client library::
 
     (venv)$ pip3 install mysqlclient
 
