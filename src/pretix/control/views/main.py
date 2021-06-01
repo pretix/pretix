@@ -31,6 +31,7 @@
 # Unless required by applicable law or agreed to in writing, software distributed under the Apache License 2.0 is
 # distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations under the License.
+import re
 
 from django.conf import settings
 from django.contrib import messages
@@ -161,7 +162,14 @@ class EventWizard(SafeSessionWizardView):
                 initial['has_subevents'] = self.clone_from.has_subevents
             elif step == 'basics':
                 initial['name'] = self.clone_from.name
-                initial['slug'] = self.clone_from.slug + '-2'
+
+                if re.match('^.*-[0-9]+$', self.clone_from.slug):
+                    # slug-2 -> slug-3
+                    initial['slug'] = self.clone_from.slug.rsplit('-', 1)[0] + '-' + str(int(self.clone_from.slug.rsplit('-', 1)[1]) + 1)
+                else:
+                    # slug -> slug-2
+                    initial['slug'] = self.clone_from.slug + '-2'
+
                 initial['currency'] = self.clone_from.currency
                 initial['date_from'] = self.clone_from.date_from
                 initial['date_to'] = self.clone_from.date_to
