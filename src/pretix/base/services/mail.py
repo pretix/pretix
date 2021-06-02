@@ -176,8 +176,8 @@ def mail(email: Union[str, Sequence[str]], subject: str, template: Union[str, La
         subject = str(subject).format_map(TolerantDict(context))
         sender = (
             sender or
-            (event.settings.get('mail_from') if event else settings.MAIL_FROM) or
-            (organizer.settings.get('mail_from') if organizer else settings.MAIL_FROM) or
+            (event.settings.get('mail_from') if event else None) or
+            (organizer.settings.get('mail_from') if organizer else None) or
             settings.MAIL_FROM
         )
         if event:
