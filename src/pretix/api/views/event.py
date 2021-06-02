@@ -55,15 +55,18 @@ from pretix.base.models.event import SubEvent
 from pretix.base.services.quotas import QuotaAvailability
 from pretix.base.settings import SETTINGS_AFFECTING_CSS
 from pretix.helpers.dicts import merge_dicts
+from pretix.helpers.i18n import i18ncomp
 from pretix.presale.style import regenerate_css
 from pretix.presale.views.organizer import filter_qs_by_attr
 
 with scopes_disabled():
     class EventFilter(FilterSet):
+
         is_past = django_filters.rest_framework.BooleanFilter(method='is_past_qs')
         is_future = django_filters.rest_framework.BooleanFilter(method='is_future_qs')
         ends_after = django_filters.rest_framework.IsoDateTimeFilter(method='ends_after_qs')
         sales_channel = django_filters.rest_framework.CharFilter(method='sales_channel_qs')
+        search = django_filters.rest_framework.CharFilter(method='search_qs')
 
         class Meta:
             model = Event
@@ -107,6 +110,13 @@ with scopes_disabled():
 
         def sales_channel_qs(self, queryset, name, value):
             return queryset.filter(sales_channels__contains=value)
+
+        def search_qs(self, queryset, name, value):
+            return queryset.filter(
+                Q(name__icontains=i18ncomp(value))
+                | Q(slug__icontains=value)
+                | Q(location__icontains=i18ncomp(value))
+            )
 
 
 class EventViewSet(viewsets.ModelViewSet):
