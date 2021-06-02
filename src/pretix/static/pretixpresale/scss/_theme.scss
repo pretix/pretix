@@ -27,11 +27,11 @@
 .page-header-links > div.header-part {
   padding-top: 15px;
 
-  a {
+  a:link, a:visited {
     color: choose-contrast-color($body-bg, white, $link-color);
   }
-  a.active, .locales a.active {
-    border-bottom-color: choose-contrast-color($body-bg, white, $link-color) !important;
+  a:active, a:hover, a:focus {
+    color: choose-contrast-color($body-bg, white, $link-hover-color);
   }
 }
 

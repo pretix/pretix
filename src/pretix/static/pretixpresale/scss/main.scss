@@ -52,9 +52,6 @@ footer nav li:not(:first-child):before {
 }
 .locales, .loginstatus {
     display: inline;
-    a:hover {
-        border-bottom: 2px solid $gray-light;
-    }
     a.active {
         /*border-bottom: 2px solid $brand-primary;*/
         font-weight: bold;
