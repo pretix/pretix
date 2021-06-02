@@ -149,8 +149,8 @@ def reactivate_order(order: Order, force: bool=False, user: User=None, auth=None
         raise OrderError('The order was not canceled.')
 
     with order.event.lock() as now_dt:
-        is_available = force or order._is_still_available(now_dt, count_waitinglist=False, check_voucher_usage=True,
-                                                          check_memberships=True)
+        is_available = order._is_still_available(now_dt, count_waitinglist=False, check_voucher_usage=True,
+                                                 check_memberships=True, force=force)
         if is_available is True:
             if order.payment_refund_sum >= order.total:
                 order.status = Order.STATUS_PAID
@@ -222,8 +222,8 @@ def extend_order(order: Order, new_date: datetime, force: bool=False, user: User
         change(was_expired=False)
     else:
         with order.event.lock() as now_dt:
-            is_available = order._is_still_available(now_dt, count_waitinglist=False)
-            if is_available is True or force is True:
+            is_available = order._is_still_available(now_dt, count_waitinglist=False, force=force)
+            if is_available is True:
                 change(was_expired=True)
             else:
                 raise OrderError(is_available)
