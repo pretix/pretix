@@ -78,51 +78,51 @@
                 {% if line.has_questions %}
                     <dl>
                         {% if line.item.admission %}
-                        {% if event.settings.attendee_names_asked %}
-                            <dt class="sr-only">
-                                {% trans "Attendee name" %}
-                            </dt>
-                            <dd class="toplevel{% if event.settings.attendee_addresses_asked and not event.settings.attendee_emails_asked %} blank-after{% endif %}">
-                                <span data-toggle="tooltip" title="{% trans "Attendee name" %}">
-                                    {% if line.attendee_name %}{{ line.attendee_name }}{% else %}<em>{% trans "No attendee name provided" %}</em>{% endif %}
-                                </span>
-                            </dd>
-                        {% endif %}
-                        {% if event.settings.attendee_emails_asked and line.attendee_email %}
-                            <dt class="sr-only">
-                                {% trans "Attendee email" %}
-                            </dt>
-                            <dd class="toplevel{% if event.settings.attendee_addresses_asked %} blank-after{% endif %}">
-                                <span data-toggle="tooltip" title="{% trans "Attendee email" %}">
-                                    {{ line.attendee_email }}
-                                </span>
-                            </dd>
-                        {% endif %}
-                        {% if event.settings.attendee_company_asked and line.company %}
-                            <dt class="sr-only">
-                                {% trans "Attendee company" %}
-                            </dt>
-                            <dd class="toplevel">
-                                <span data-toggle="tooltip" title="{% trans "Attendee company" %}">
-                                    {{ line.company }}
-                                </span>
-                            </dd>
-                        {% endif %}
-                        {% if event.settings.attendee_addresses_asked %}
-                            {% if line.street or line.zipcode or line.city %}
+                            {% if event.settings.attendee_names_asked %}
                                 <dt class="sr-only">
-                                    {% trans "Attendee address" %}
+                                    {% trans "Attendee name" %}
                                 </dt>
-                                <dd class="toplevel">
-                                    <span data-toggle="tooltip" title="{% trans "Attendee address" %}">
-                                        {{ line.street|default_if_none:""|linebreaksbr }}<br>
-                                        {{ line.zipcode|default_if_none:"" }} {{ line.city|default_if_none:"" }}<br>
-                                        {{ line.country.name|default_if_none:"" }}
-                                        {% if line.state %}<br>{{ line.state }}{% endif %}
+                                <dd class="toplevel{% if event.settings.attendee_addresses_asked and not event.settings.attendee_emails_asked %} blank-after{% endif %}">
+                                    <span data-toggle="tooltip" title="{% trans "Attendee name" %}">
+                                        {% if line.attendee_name %}{{ line.attendee_name }}{% else %}<em>{% trans "No attendee name provided" %}</em>{% endif %}
                                     </span>
                                 </dd>
                             {% endif %}
-                        {% endif %}
+                            {% if event.settings.attendee_emails_asked and line.attendee_email %}
+                                <dt class="sr-only">
+                                    {% trans "Attendee email" %}
+                                </dt>
+                                <dd class="toplevel{% if event.settings.attendee_addresses_asked %} blank-after{% endif %}">
+                                    <span data-toggle="tooltip" title="{% trans "Attendee email" %}">
+                                        {{ line.attendee_email }}
+                                    </span>
+                                </dd>
+                            {% endif %}
+                            {% if event.settings.attendee_company_asked and line.company %}
+                                <dt class="sr-only">
+                                    {% trans "Attendee company" %}
+                                </dt>
+                                <dd class="toplevel">
+                                    <span data-toggle="tooltip" title="{% trans "Attendee company" %}">
+                                        {{ line.company }}
+                                    </span>
+                                </dd>
+                            {% endif %}
+                            {% if event.settings.attendee_addresses_asked %}
+                                {% if line.street or line.zipcode or line.city %}
+                                    <dt class="sr-only">
+                                        {% trans "Attendee address" %}
+                                    </dt>
+                                    <dd class="toplevel">
+                                        <span data-toggle="tooltip" title="{% trans "Attendee address" %}">
+                                            {{ line.street|default_if_none:""|linebreaksbr }}<br>
+                                            {{ line.zipcode|default_if_none:"" }} {{ line.city|default_if_none:"" }}<br>
+                                            {{ line.country.name|default_if_none:"" }}
+                                            {% if line.state %}<br>{{ line.state }}{% endif %}
+                                        </span>
+                                    </dd>
+                                {% endif %}
+                            {% endif %}
                         {% endif %}
                         {% for q in line.questions %}
                             <dt>{{ q.question }}</dt>
