@@ -77,30 +77,28 @@
                 {% endif %}
                 {% if line.has_questions %}
                     <dl>
-                        {% if line.item.admission and event.settings.attendee_names_asked %}
+                        {% if line.item.admission %}
+                        {% if event.settings.attendee_names_asked %}
                             <dt class="sr-only">
                                 {% trans "Attendee name" %}
                             </dt>
-                            <dd class="toplevel">
+                            <dd class="toplevel{% if event.settings.attendee_addresses_asked and not event.settings.attendee_emails_asked %} blank-after{% endif %}">
                                 <span data-toggle="tooltip" title="{% trans "Attendee name" %}">
                                     {% if line.attendee_name %}{{ line.attendee_name }}{% else %}<em>{% trans "No attendee name provided" %}</em>{% endif %}
                                 </span>
                             </dd>
                         {% endif %}
-                        {% if line.item.admission and event.settings.attendee_emails_asked and line.attendee_email %}
+                        {% if event.settings.attendee_emails_asked and line.attendee_email %}
                             <dt class="sr-only">
                                 {% trans "Attendee email" %}
                             </dt>
-                            <dd class="toplevel">
+                            <dd class="toplevel{% if event.settings.attendee_addresses_asked %} blank-after{% endif %}">
                                 <span data-toggle="tooltip" title="{% trans "Attendee email" %}">
                                     {{ line.attendee_email }}
                                 </span>
                             </dd>
                         {% endif %}
-                        {% if line.item.admission and event.settings.attendee_addresses_asked %}
-                            <br>
-                        {% endif %}
-                        {% if line.item.admission and event.settings.attendee_company_asked and line.company %}
+                        {% if event.settings.attendee_company_asked and line.company %}
                             <dt class="sr-only">
                                 {% trans "Attendee company" %}
                             </dt>
@@ -110,7 +108,7 @@
                                 </span>
                             </dd>
                         {% endif %}
-                        {% if line.item.admission and event.settings.attendee_addresses_asked %}
+                        {% if event.settings.attendee_addresses_asked %}
                             {% if line.street or line.zipcode or line.city %}
                                 <dt class="sr-only">
                                     {% trans "Attendee address" %}
@@ -124,6 +122,7 @@
                                     </span>
                                 </dd>
                             {% endif %}
+                        {% endif %}
                         {% endif %}
                         {% for q in line.questions %}
                             <dt>{{ q.question }}</dt>
