@@ -43,6 +43,7 @@ from django import template
 from django.conf import settings
 from django.core import signing
 from django.urls import reverse
+from django.utils.functional import SimpleLazyObject
 from django.utils.http import url_has_allowed_host_and_scheme
 from django.utils.safestring import mark_safe
 from tlds import tld_set
@@ -100,9 +101,9 @@ ALLOWED_ATTRIBUTES = {
 
 ALLOWED_PROTOCOLS = ['http', 'https', 'mailto', 'tel']
 
-URL_RE = build_url_re(tlds=sorted(tld_set, key=len, reverse=True))
+URL_RE = SimpleLazyObject(lambda: build_url_re(tlds=sorted(tld_set, key=len, reverse=True)))
 
-EMAIL_RE = build_email_re(tlds=sorted(tld_set, key=len, reverse=True))
+EMAIL_RE = SimpleLazyObject(lambda: build_email_re(tlds=sorted(tld_set, key=len, reverse=True)))
 
 
 def safelink_callback(attrs, new=False):
