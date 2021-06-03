@@ -156,7 +156,7 @@ class ScheduledMail(models.Model):
                                         log_entry_type='pretix.plugins.sendmail.rule.order.position.email.sent')
                         elif not o_sent and o.email:
                             o.send_mail(self.rule.subject, self.rule.template, email_ctx,
-                                        log_entry_type='pretix.plugins.sendmail.rule.order.email.set')
+                                        log_entry_type='pretix.plugins.sendmail.rule.order.email.sent')
                             o_sent = True
                     except SendMailException:
                         ...  # ¯\_(ツ)_/¯
