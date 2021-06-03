@@ -134,7 +134,7 @@ python installation::
     $ source /var/pretix/venv/bin/activate
     (venv)$ pip3 install -U pip setuptools wheel
 
-We now install pretix, its direct dependencies and gunicorn.
+We now install pretix, its direct dependencies and gunicorn::
 
     (venv)$ pip3 install pretix gunicorn
 
