@@ -194,6 +194,17 @@ def test_event_list_filter(token_client, organizer, event):
 
 
 @pytest.mark.django_db
+def test_event_list_name_filter(token_client, organizer, event):
+    resp = token_client.get('/api/v1/organizers/{}/events/?search=Dummy'.format(organizer.slug))
+    assert resp.status_code == 200
+    assert resp.data['count'] == 1
+
+    resp = token_client.get('/api/v1/organizers/{}/events/?search=notdummy'.format(organizer.slug))
+    assert resp.status_code == 200
+    assert resp.data['count'] == 0
+
+
+@pytest.mark.django_db
 def test_event_get(token_client, organizer, event):
     resp = token_client.get('/api/v1/organizers/{}/events/{}/'.format(organizer.slug, event.slug))
     res = copy.copy(TEST_EVENT_RES)

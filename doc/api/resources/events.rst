@@ -88,6 +88,8 @@ Endpoints
 
     The ``with_availability_for`` parameter has been added.
 
+    The ``search`` query parameter has been added to filter events by their slug, name, or location in any language.
+
 .. http:get:: /api/v1/organizers/(organizer)/events/
 
    Returns a list of all events within a given organizer the authenticated user/token has access to.
@@ -170,6 +172,7 @@ Endpoints
                                  attribute with values of 100 for "tickets available", values less than 100 for "tickets sold out or reserved",
                                  and ``null`` for "status unknown". These values might be served from a cache. This parameter can make the response
                                  slow.
+   :query search: Only return events matching a given search query.
    :param organizer: The ``slug`` field of a valid organizer
    :statuscode 200: no error
    :statuscode 401: Authentication failure
