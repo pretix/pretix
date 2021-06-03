@@ -78,7 +78,7 @@ class AuthenticationForm(forms.Form):
 
         if email is not None and password:
             try:
-                u = self.request.organizer.customers.get(email=email)
+                u = self.request.organizer.customers.get(email=email.lower())
             except Customer.DoesNotExist:
                 # Run the default password hasher once to reduce the timing
                 # difference between an existing and a nonexistent user (django #20760).
