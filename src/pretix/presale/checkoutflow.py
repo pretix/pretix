@@ -284,7 +284,7 @@ class CustomerStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
         self.request = request
 
         if request.POST.get("customer_mode") == 'login':
-            if 'customer' in self.cart_session:
+            if self.cart_session.get('customer'):
                 return redirect(self.get_next_url(request))
             elif request.customer:
                 self.cart_session['customer_mode'] = 'login'
