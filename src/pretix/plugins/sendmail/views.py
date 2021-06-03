@@ -58,7 +58,7 @@ from pretix.control.views import CreateView, PaginationMixin, UpdateView
 from pretix.plugins.sendmail.tasks import send_mails
 
 from . import forms
-from .models import Rule
+from .models import Rule, ScheduledMail
 
 logger = logging.getLogger('pretix.plugins.sendmail')
 
@@ -402,14 +402,14 @@ class ListRules(EventPermissionRequiredMixin, PaginationMixin, ListView):
     def get_queryset(self):
         return self.request.event.sendmail_rules.annotate(
             total_mails=Count('scheduledmail'),
-            sent_mails=Count('scheduledmail', filter=Q(scheduledmail__sent=True)),
+            sent_mails=Count('scheduledmail', filter=Q(scheduledmail__state=ScheduledMail.STATE_COMPLETED)),
             last_execution=Max(
                 'scheduledmail__computed_datetime',
-                filter=Q(scheduledmail__sent=True)
+                filter=Q(scheduledmail__state=ScheduledMail.STATE_COMPLETED)
             ),
             next_execution=Min(
                 'scheduledmail__computed_datetime',
-                filter=Q(scheduledmail__sent=False)
+                filter=Q(scheduledmail__state=ScheduledMail.STATE_SCHEDULED)
             ),
         ).prefetch_related(
             'limit_products'
