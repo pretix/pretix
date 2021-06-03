@@ -168,9 +168,9 @@ class Rule(models.Model):
     BOTH = "both"
 
     SEND_TO_CHOICES = [
-        (CUSTOMERS, _("Customers")),
-        (ATTENDEES, _("Attendees")),
-        (BOTH, _("Both customers and attendees"))
+        (CUSTOMERS, _("Everyone who created a ticket order")),
+        (ATTENDEES, _("Every attendee (falling back to the order contact when no attendee email address is given)")),
+        (BOTH, _('Both (all order contact addresses and all attendee email addresses)'))
     ]
 
     id = models.BigAutoField(primary_key=True)
@@ -197,7 +197,7 @@ class Rule(models.Model):
     offset_to_event_end = models.BooleanField(default=False, blank=True)  # no verbose name because not actually
     offset_is_after = models.BooleanField(default=False, blank=True)      # displayed in any forms
 
-    send_to = models.CharField(max_length=10, choices=SEND_TO_CHOICES, default=CUSTOMERS)
+    send_to = models.CharField(max_length=10, choices=SEND_TO_CHOICES, default=CUSTOMERS, verbose_name='Send email to')
 
     objects = ScopedManager(organizer='event__organizer')
 
