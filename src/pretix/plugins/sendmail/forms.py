@@ -304,7 +304,7 @@ class RuleForm(FormPlaceholderMixin, I18nModelForm):
             d['date_is_absolute'] = True
             d['send_offset_days'] = d['send_offset_time'] = None
         else:
-            if not (d.get('send_offset_days') and d.get('send_offset_time')):
+            if not (d.get('send_offset_days') is not None and d.get('send_offset_time') is not None):
                 raise ValidationError(_('Please specify the offset days and time'))
             d['offset_is_after'] = '_a' in dia
             d['offset_to_event_end'] = '_e' in dia
