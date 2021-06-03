@@ -865,11 +865,14 @@ def test_orderposition_list(token_client, organizer, event, order, item, subeven
     with scopes_disabled():
         cl = event.checkin_lists.create(name="Default")
         c = op.checkins.create(datetime=datetime.datetime(2017, 12, 26, 10, 0, 0, tzinfo=UTC), list=cl)
-    res['checkins'] = [{
+        op.checkins.create(datetime=datetime.datetime(2017, 12, 26, 10, 0, 0, tzinfo=UTC), list=cl, successful=False)
+    res['checkins'] = [{  # successful only
         'id': c.pk,
         'datetime': '2017-12-26T10:00:00Z',
         'list': cl.pk,
         'auto_checked_in': False,
+        'device': None,
+        'gate': None,
         'type': 'entry'
     }]
     resp = token_client.get(

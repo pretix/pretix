@@ -332,8 +332,8 @@ class Checkin(models.Model):
     )
     auto_checked_in = models.BooleanField(default=False)
 
-    objects = SuccessfulCheckinManager()
     all = ScopedManager(organizer='list__event__organizer')
+    objects = SuccessfulCheckinManager()
 
     class Meta:
         ordering = (('-datetime'),)

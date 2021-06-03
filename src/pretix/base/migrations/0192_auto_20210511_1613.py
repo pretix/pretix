@@ -7,7 +7,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('pretixbase', '0187_normalize_salutation'),
+        ('pretixbase', '0191_event_last_modified'),
     ]
 
     operations = [
@@ -48,6 +48,7 @@ class Migration(migrations.Migration):
         ),
         migrations.AddField(
             model_name='checkin',
+
             name='successful',
             field=models.BooleanField(default=True),
         ),

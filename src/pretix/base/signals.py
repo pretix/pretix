@@ -454,7 +454,9 @@ Arguments: ``checkin``
 
 This signal is sent out every time a check-in is created (i.e. an order position is marked as
 checked in). It is not send if the position was already checked in and is force-checked-in a second time.
-The check-in object is given as the first argument
+The check-in object is given as the first argument.
+
+For backwards compatibility reasons, this signal is only sent when a **successful** scan is saved.
 
 As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
 """

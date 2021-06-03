@@ -624,12 +624,6 @@ def perform_checkin(op: OrderPosition, clist: CheckinList, given_answers: dict, 
                 _('This order is not marked as paid.'),
                 'unpaid'
             )
-        elif require_answers and not force and questions_supported:
-            raise RequiredQuestionsError(
-                _('You need to answer questions to complete this check-in.'),
-                'incomplete',
-                require_answers
-            )
 
         if type == Checkin.TYPE_ENTRY and clist.rules and not force:
             rule_data = LazyRuleVars(op, clist, dt)
@@ -643,6 +637,13 @@ def perform_checkin(op: OrderPosition, clist: CheckinList, given_answers: dict, 
                     'rules',
                     reason=reason
                 )
+
+        if require_answers and not force and questions_supported:
+            raise RequiredQuestionsError(
+                _('You need to answer questions to complete this check-in.'),
+                'incomplete',
+                require_answers
+            )
 
         device = None
         if isinstance(auth, Device):
@@ -678,6 +679,7 @@ def perform_checkin(op: OrderPosition, clist: CheckinList, given_answers: dict, 
                 'forced': force or op.order.status != Order.STATUS_PAID,
                 'datetime': dt,
                 'type': type,
+                'answers': {k: v for k, v in given_answers.items()},
                 'list': clist.pk
             }, user=user, auth=auth)
             checkin_created.send(op.order.event, checkin=ci)

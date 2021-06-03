@@ -362,6 +362,42 @@ Endpoints
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer/event does not exist **or** you have no permission to delete this resource.
 
+.. http:post:: /api/v1/organizers/(organizer)/events/(event)/checkinlists/(list)/failed_checkins/
+
+   Stores a failed check-in. Only necessary for statistical purposes if you perform scan validation offline.
+
+   :<json boolean error_reason: One of ``canceled``, ``invalid``, ``unpaid``, ``product``, ``rules``, ``revoked``,
+                                ``incomplete``, ``already_redeemed``, or ``error``. Required.
+   :<json raw_barcode: The raw barcode you scanned. Required.
+   :<json datetime: Internal ID of an order position you matched. Optional.
+   :<json type: Type of scan, defaults to ``"entry"``.
+   :<json position: Internal ID of an order position you matched. Optional.
+   :<json raw_item: Internal ID of an item you matched. Optional.
+   :<json raw_variation: Internal ID of an item variationyou matched. Optional.
+   :<json raw_subevent: Internal ID of an event series date you matched. Optional.
+
+   **Example request**:
+
+   .. sourcecode:: http
+
+      POST /api/v1/organizers/bigevents/events/sampleconf/checkinlists/1/failed_checkins/ HTTP/1.1
+      Host: pretix.eu
+      Accept: application/json, text/javascript
+
+      {
+        "raw_barcode": "Pvrk50vUzQd0DhdpNRL4I4OcXsvg70uA",
+        "error_reason": "canceled"
+      }
+
+   :param organizer: The ``slug`` field of the organizer to fetch
+   :param event: The ``slug`` field of the event to fetch
+   :param list: The ID of the check-in list to save for
+   :statuscode 201: no error
+   :statuscode 400: Invalid request
+   :statuscode 401: Authentication failure
+   :statuscode 403: The requested organizer/event does not exist **or** you have no permission to view this resource.
+   :statuscode 404: The requested order position or check-in list does not exist.
+
 
 Order position endpoints
 ------------------------
@@ -424,6 +460,9 @@ Order position endpoints
             "checkins": [
               {
                 "list": 1,
+                "type": "entry",
+                "gate": null,
+                "device": 2,
                 "datetime": "2017-12-25T12:45:23Z",
                 "auto_checked_in": true
               }
@@ -535,6 +574,9 @@ Order position endpoints
           {
             "list": 1,
             "datetime": "2017-12-25T12:45:23Z",
+            "type": "entry",
+            "gate": null,
+            "device": 2,
             "auto_checked_in": true
           }
         ],

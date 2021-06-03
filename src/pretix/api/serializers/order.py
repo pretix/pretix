@@ -250,7 +250,30 @@ class AnswerSerializer(I18nAwareModelSerializer):
 class CheckinSerializer(I18nAwareModelSerializer):
     class Meta:
         model = Checkin
-        fields = ('id', 'datetime', 'list', 'auto_checked_in', 'type')
+        fields = ('id', 'datetime', 'list', 'auto_checked_in', 'gate', 'device', 'type')
+
+
+class FailedCheckinSerializer(I18nAwareModelSerializer):
+    error_reason = serializers.ChoiceField(choices=Checkin.REASONS, required=True, allow_null=False)
+    raw_barcode = serializers.CharField(required=True, allow_null=False)
+    position = serializers.PrimaryKeyRelatedField(queryset=OrderPosition.all.none(), required=False, allow_null=True)
+    raw_item = serializers.PrimaryKeyRelatedField(queryset=Item.objects.none(), required=False, allow_null=True)
+    raw_variation = serializers.PrimaryKeyRelatedField(queryset=ItemVariation.objects.none(), required=False, allow_null=True)
+    raw_subevent = serializers.PrimaryKeyRelatedField(queryset=SubEvent.objects.none(), required=False, allow_null=True)
+
+    class Meta:
+        model = Checkin
+        fields = ('error_reason', 'error_explanation', 'raw_barcode', 'raw_item', 'raw_variation',
+                  'raw_subevent', 'datetime', 'type', 'position')
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        event = self.context['event']
+        self.fields['raw_item'].queryset = event.items.all()
+        self.fields['raw_variation'].queryset = ItemVariation.objects.filter(item__event=event)
+        self.fields['position'].queryset = OrderPosition.all.filter(order__event=event)
+        if event.has_subevents:
+            self.fields['raw_subevent'].queryset = event.subevents.all()
 
 
 class OrderDownloadsField(serializers.Field):

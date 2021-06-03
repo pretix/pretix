@@ -427,6 +427,7 @@ def test_sendmail_attendee_checkin_filter(logged_in_client, sendmail_url, event,
                                       },
                                      follow=True)
     assert response.status_code == 200
+    print(response.rendered_content)
     assert 'alert-success' in response.rendered_content
     assert len(djmail.outbox) == 1
     assert djmail.outbox[0].to == ['attendee1@dummy.test']

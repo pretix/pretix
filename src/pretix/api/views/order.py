@@ -55,9 +55,9 @@ from pretix.api.serializers.order import (
 )
 from pretix.base.i18n import language
 from pretix.base.models import (
-    CachedCombinedTicket, CachedTicket, Device, Event, Invoice, InvoiceAddress,
-    Order, OrderFee, OrderPayment, OrderPosition, OrderRefund, Quota, SubEvent,
-    TaxRule, TeamAPIToken, generate_secret, Checkin,
+    CachedCombinedTicket, CachedTicket, Checkin, Device, Event, Invoice,
+    InvoiceAddress, Order, OrderFee, OrderPayment, OrderPosition, OrderRefund,
+    Quota, SubEvent, TaxRule, TeamAPIToken, generate_secret,
 )
 from pretix.base.models.orders import QuestionAnswer, RevokedTicketSecret
 from pretix.base.payment import PaymentException

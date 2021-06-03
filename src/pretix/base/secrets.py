@@ -39,7 +39,6 @@ from pretix.base.models import Item, ItemVariation, SubEvent
 from pretix.base.secretgenerators import pretix_sig1_pb2
 from pretix.base.signals import register_ticket_secret_generators
 
-
 ParsedSecret = namedtuple('AnalyzedSecret', 'item variation subevent attendee_name opaque_id')
 
 

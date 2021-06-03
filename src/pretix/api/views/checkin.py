@@ -21,6 +21,7 @@
 #
 import django_filters
 from django.core.exceptions import ValidationError
+from django.db import transaction
 from django.db.models import (
     Count, Exists, F, Max, OrderBy, OuterRef, Prefetch, Q, Subquery,
 )
@@ -34,11 +35,14 @@ from django_scopes import scopes_disabled
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.fields import DateTimeField
+from rest_framework.permissions import SAFE_METHODS
 from rest_framework.response import Response
 
 from pretix.api.serializers.checkin import CheckinListSerializer
 from pretix.api.serializers.item import QuestionSerializer
-from pretix.api.serializers.order import CheckinListOrderPositionSerializer
+from pretix.api.serializers.order import (
+    CheckinListOrderPositionSerializer, FailedCheckinSerializer,
+)
 from pretix.api.views import RichOrderingFilter
 from pretix.api.views.order import OrderPositionFilter
 from pretix.base.i18n import language
@@ -80,8 +84,14 @@ class CheckinListViewSet(viewsets.ModelViewSet):
     queryset = CheckinList.objects.none()
     filter_backends = (DjangoFilterBackend,)
     filterset_class = CheckinListFilter
-    permission = ('can_view_orders', 'can_checkin_orders',)
-    write_permission = 'can_change_event_settings'
+
+    def _get_permission_name(self, request):
+        if request.path.endswith('/failed_checkins/'):
+            return 'can_checkin_orders', 'can_change_orders'
+        elif request.method in SAFE_METHODS:
+            return 'can_view_orders', 'can_checkin_orders',
+        else:
+            return 'can_change_event_settings'
 
     def get_queryset(self):
         qs = self.request.event.checkin_lists.prefetch_related(
@@ -125,6 +135,49 @@ class CheckinListViewSet(viewsets.ModelViewSet):
             auth=self.request.auth,
         )
         super().perform_destroy(instance)
+
+    @action(detail=True, methods=['POST'], url_name='failed_checkins')
+    @transaction.atomic()
+    def failed_checkins(self, *args, **kwargs):
+        serializer = FailedCheckinSerializer(
+            data=self.request.data,
+            context={'event': self.request.event}
+        )
+        serializer.is_valid(raise_exception=True)
+        kwargs = {}
+
+        if not serializer.validated_data.get('position'):
+            kwargs['position'] = OrderPosition.all.filter(
+                secret=serializer.validated_data['raw_barcode']
+            ).first()
+
+        c = serializer.save(
+            list=self.get_object(),
+            successful=False,
+            forced=True,
+            device=self.request.auth if isinstance(self.request.auth, Device) else None,
+            gate=self.request.auth.gate if isinstance(self.request.auth, Device) else None,
+            **kwargs,
+        )
+        if c.position:
+            c.position.order.log_action('pretix.event.checkin.denied', data={
+                'position': c.position.id,
+                'positionid': c.position.positionid,
+                'errorcode': c.error_reason,
+                'reason_explanation': c.error_explanation,
+                'datetime': c.datetime,
+                'type': c.type,
+                'list': c.list.pk
+            }, user=self.request.user, auth=self.request.auth)
+        else:
+            self.request.event.log_action('pretix.event.checkin.unknown', data={
+                'datetime': c.datetime,
+                'type': c.type,
+                'list': c.list.pk,
+                'barcode': c.raw_barcode
+            }, user=self.request.user, auth=self.request.auth)
+
+        return Response(serializer.data, status=201)
 
     @action(detail=True, methods=['GET'])
     def status(self, *args, **kwargs):
