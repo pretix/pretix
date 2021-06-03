@@ -586,6 +586,16 @@ class StripeMethod(BasePaymentProvider):
             else:
                 err = {'message': str(e)}
                 logger.exception('Stripe error: %s' % str(e))
+
+            refund.info = err
+            refund.state = OrderRefund.REFUND_STATE_FAILED
+            refund.execution_date = now()
+            refund.save()
+            refund.order.log_action('pretix.event.order.refund.failed', {
+                'local_id': refund.local_id,
+                'provider': refund.provider,
+                'error': str(e)
+            })
             raise PaymentException(_('We had trouble communicating with Stripe. Please try again and contact '
                                      'support if the problem persists.'))
         except stripe.error.StripeError as err:
