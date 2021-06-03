@@ -138,6 +138,12 @@ def sendmail_run_rules(sender, **kwargs):
             if m.computed_datetime != previous:
                 m.save(update_fields=['last_computed', 'computed_datetime'])
 
+        mails.filter(
+            state=ScheduledMail.STATE_SCHEDULED,
+            computed_datetime__lte=timezone.now() - datetime.timedelta(days=2),
+        ).update(
+            state=ScheduledMail.STATE_MISSED
+        )
         for m_id in mails.filter(
             state__in=(ScheduledMail.STATE_SCHEDULED, ScheduledMail.STATE_FAILED),
             computed_datetime__gte=timezone.now() - datetime.timedelta(days=2),

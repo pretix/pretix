@@ -41,11 +41,13 @@ class ScheduledMail(models.Model):
     STATE_SCHEDULED = 'scheduled'
     STATE_FAILED = 'failed'
     STATE_COMPLETED = 'completed'
+    STATE_MISSED = 'missed'
 
     STATE_CHOICES = [
         (STATE_SCHEDULED, STATE_SCHEDULED),
         (STATE_FAILED, STATE_FAILED),
         (STATE_COMPLETED, STATE_COMPLETED),
+        (STATE_MISSED, STATE_MISSED),
     ]
 
     id = models.BigAutoField(primary_key=True)
