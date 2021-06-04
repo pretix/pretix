@@ -373,7 +373,7 @@ Endpoints
    :<json type: Type of scan, defaults to ``"entry"``.
    :<json position: Internal ID of an order position you matched. Optional.
    :<json raw_item: Internal ID of an item you matched. Optional.
-   :<json raw_variation: Internal ID of an item variationyou matched. Optional.
+   :<json raw_variation: Internal ID of an item variation you matched. Optional.
    :<json raw_subevent: Internal ID of an event series date you matched. Optional.
 
    **Example request**:
