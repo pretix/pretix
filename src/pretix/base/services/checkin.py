@@ -679,7 +679,7 @@ def perform_checkin(op: OrderPosition, clist: CheckinList, given_answers: dict, 
                 'forced': force or op.order.status != Order.STATUS_PAID,
                 'datetime': dt,
                 'type': type,
-                'answers': {k: v for k, v in given_answers.items()},
+                'answers': {k.pk: str(v) for k, v in given_answers.items()},
                 'list': clist.pk
             }, user=user, auth=auth)
             checkin_created.send(op.order.event, checkin=ci)
