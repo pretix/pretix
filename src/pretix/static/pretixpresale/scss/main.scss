@@ -27,7 +27,7 @@
 a, .btn-link {
     text-decoration: underline;
 }
-button:focus, a:focus, .btn:focus, summary:focus, input:focus, select:focus, textarea:focus, :focus {
+button:focus, a:focus, .btn:focus, summary:focus {
     outline: 2px solid $link-hover-color;
     outline-offset: 3px;
 }
