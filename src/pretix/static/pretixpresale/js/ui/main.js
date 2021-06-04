@@ -195,6 +195,23 @@ $(function () {
         if ($(this).is(':input')) this.focus();
         else $(":input", this).get(0).focus();
     });
+    $(".alert-danger").first().each(function() {
+        var content = $("<ul></ul>").click(function(e) {
+            var input = $(e.target.hash).get(0);
+            if (input) input.focus();
+            input.scrollIntoView({block: "center"});
+            e.preventDefault();
+        });
+        $(".has-error").each(function() {
+            var target = target = $(":input", this);
+            var desc = $("#" + target.attr("aria-describedby").split(' ', 1)[0]);
+            // multi-input fields have a role=group with aria-labelledby 
+            var label = this.hasAttribute("aria-labelledby") ? $("#" + this.getAttribute("aria-labelledby")) : $("[for="+target.attr("id")+"]");
+
+            content.append("<li><a href='#" + target.attr("id") + "'>" + label.get(0).childNodes[0].nodeValue + "</a>: "+desc.text()+"</li>");
+        });
+        $(this).append(content);
+    });
 
     $("#voucher-box").hide();
     $("#voucher-toggle").show();
