@@ -6,7 +6,7 @@
     <h1>{% trans "Automated email rules" %}</h1>
     <p>
         {% blocktrans trimmed %}
-            Email rules allow you to automatically sent emails to your customers at a specific time before or after
+            Email rules allow you to automatically send emails to your customers at a specific time before or after
             your event.
         {% endblocktrans %}
     </p>
@@ -33,6 +33,7 @@
                 {% for r in rules %}
                     <tr>
                         <td>
+                            {% if not r.enabled %}{% trans "(disabled)" %}{% endif %}
                             <strong><a href="{% url "plugins:sendmail:rule.update" organizer=request.organizer.slug event=request.event.slug rule=r.pk %}">{{ r.subject }}</a></strong>
                         </td>
                         <td>
