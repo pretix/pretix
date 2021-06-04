@@ -2,9 +2,12 @@
   td, th {
     width: 14.29%;
   }
-  h3 {
-    margin: 0;
-    font-size: 16px;
+  p {
+    margin-bottom: 0;
+  }
+  .events {
+    list-style: none;
+    padding: 0;
   }
   a.event {
     display: block;

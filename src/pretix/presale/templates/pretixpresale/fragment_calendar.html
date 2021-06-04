@@ -3,13 +3,13 @@
     <table class="table table-calendar">
         <thead>
         <tr>
-            <th>{{ weeks.1.0.date|date:"D" }}</th>
-            <th>{{ weeks.1.1.date|date:"D" }}</th>
-            <th>{{ weeks.1.2.date|date:"D" }}</th>
-            <th>{{ weeks.1.3.date|date:"D" }}</th>
-            <th>{{ weeks.1.4.date|date:"D" }}</th>
-            <th>{{ weeks.1.5.date|date:"D" }}</th>
-            <th>{{ weeks.1.6.date|date:"D" }}</th>
+            <th><span aria-hidden="true">{{ weeks.1.0.date|date:"D" }}</span><span class="sr-only">{{ weeks.1.0.date|date:"l" }}</span></th>
+            <th><span aria-hidden="true">{{ weeks.1.1.date|date:"D" }}</span><span class="sr-only">{{ weeks.1.1.date|date:"l" }}</span></th>
+            <th><span aria-hidden="true">{{ weeks.1.2.date|date:"D" }}</span><span class="sr-only">{{ weeks.1.2.date|date:"l" }}</span></th>
+            <th><span aria-hidden="true">{{ weeks.1.3.date|date:"D" }}</span><span class="sr-only">{{ weeks.1.3.date|date:"l" }}</span></th>
+            <th><span aria-hidden="true">{{ weeks.1.4.date|date:"D" }}</span><span class="sr-only">{{ weeks.1.4.date|date:"l" }}</span></th>
+            <th><span aria-hidden="true">{{ weeks.1.5.date|date:"D" }}</span><span class="sr-only">{{ weeks.1.5.date|date:"l" }}</span></th>
+            <th><span aria-hidden="true">{{ weeks.1.6.date|date:"D" }}</span><span class="sr-only">{{ weeks.1.6.date|date:"l" }}</span></th>
         </tr>
         </thead>
         <tbody>
@@ -19,10 +19,10 @@
                     {% if day %}
                         <td class="day {% if day.events %}has-events{% else %}no-events{% endif %}"
                             data-date="{{ day.date|date:"SHORT_DATE_FORMAT" }}">
-                            <h3>{{ day.day }}</h3>
-                            <div class="events">
+                            <p><time datetime="{{ day.date|date:"Y-m-d" }}">{{ day.day }}</time></p>
+                            <ul class="events">
                                 {% for event in day.events %}
-                                    <a class="event {% if event.continued %}continued{% else %} {% spaceless %}
+                                    <li><a class="event {% if event.continued %}continued{% else %} {% spaceless %}
     {% if event.event.presale_is_running and show_avail %}
         {% if event.event.best_availability_state == 100 %}
             available
@@ -56,9 +56,9 @@
                                                     {% if not show_names|default_if_none:True %}
                                                         <strong>
                                                     {% endif %}
-                                                    {{ event.time|date:"TIME_FORMAT" }}
+                                                    <time datetime="{{ event.time|date:"H:i" }}">{{ event.time|date:"TIME_FORMAT" }}</time>
                                                     {% if event.event.settings.show_date_to and event.time_end %}
-                                                        – {{ event.time_end|date:"TIME_FORMAT" }}
+                                                        <span aria-hidden="true">–</span><span class="sr-only">{% trans "until" context "timerange" %}</span> <time datetime="{{ event.time_end|date:"H:i" }}">{{ event.time_end|date:"TIME_FORMAT" }}</time>
                                                     {% endif %}
                                                     {% if not show_names|default_if_none:True %}
                                                         </strong>
@@ -89,17 +89,19 @@
                                                     <span class="fa fa-ticket" aria-hidden="true"></span> {% trans "Sale over" %}
                                                 {% elif event.event.settings.presale_start_show_date and event.event.presale_start %}
                                                     <span class="fa fa-ticket" aria-hidden="true"></span>
-                                                    {% blocktrans with start_date=event.event.presale_start|date:"SHORT_DATE_FORMAT" %}
+                                                    {% with date_human=event.event.presale_start|date:"SHORT_DATE_FORMAT" date_iso=event.event.presale_start|date:"c"  %}
+                                                    {% blocktrans with start_date="<time datetime='"|add:date_iso|add:"'>"|add:date_human|add:"</time>"|safe %}
                                                         from {{ start_date }}
                                                     {% endblocktrans %}
+                                                    {% endwith %}
                                                 {% else %}
                                                     <span class="fa fa-ticket" aria-hidden="true"></span> {% trans "Soon" %}
                                                 {% endif %}
                                             </span>
                                         {% endif %}
-                                    </a>
+                                    </a></li>
                                 {% endfor %}
-                            </div>
+                            </ul>
                         </td>
                     {% else %}
                         <td class="no-day"></td>
