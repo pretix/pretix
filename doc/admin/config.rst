@@ -311,7 +311,13 @@ is configured, memcached will be used for caching instead of redis.
 Translations
 ------------
 
-pretix comes with a number of translations. Some of them are marked as "incubating", which means
+pretix comes with a number of translations. All languages are enabled by default. If you want to limit
+the languages available in your installation, you can enable a set of languages like this::
+
+    [languages]
+    enabled=en,de
+
+Some of the languages them are marked as "incubating", which means
 they can usually only be selected in development mode. If you want to use them nevertheless, you
 can activate them like this::
 
