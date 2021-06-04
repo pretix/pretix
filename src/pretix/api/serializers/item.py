@@ -408,10 +408,19 @@ class QuestionSerializer(I18nAwareModelSerializer):
 
 
 class QuotaSerializer(I18nAwareModelSerializer):
+    available = serializers.BooleanField(read_only=True)
+    available_number = serializers.IntegerField(read_only=True)
 
     class Meta:
         model = Quota
-        fields = ('id', 'name', 'size', 'items', 'variations', 'subevent', 'closed', 'close_when_sold_out', 'release_after_exit')
+        fields = ('id', 'name', 'size', 'items', 'variations', 'subevent', 'closed', 'close_when_sold_out',
+                  'release_after_exit', 'available', 'available_number')
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if 'request' not in self.context or self.context['request'].GET.get('with_availability') != 'true':
+            del self.fields['available']
+            del self.fields['available_number']
 
     def validate(self, data):
         data = super().validate(data)

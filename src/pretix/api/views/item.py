@@ -477,6 +477,23 @@ class QuotaViewSet(ConditionalListView, viewsets.ModelViewSet):
     def get_queryset(self):
         return self.request.event.quotas.all()
 
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+
+        page = self.paginate_queryset(queryset)
+
+        if self.request.GET.get('with_availability') == 'true':
+            if page:
+                qa = QuotaAvailability()
+                qa.queue(*page)
+                qa.compute(allow_cache=False)
+                for q in page:
+                    q.available = qa.results[q][0] == Quota.AVAILABILITY_OK
+                    q.available_number = qa.results[q][1]
+
+        serializer = self.get_serializer(page, many=True)
+        return self.get_paginated_response(serializer.data)
+
     def perform_create(self, serializer):
         serializer.save(event=self.request.event)
         serializer.instance.log_action(
@@ -496,6 +513,7 @@ class QuotaViewSet(ConditionalListView, viewsets.ModelViewSet):
     def get_serializer_context(self):
         ctx = super().get_serializer_context()
         ctx['event'] = self.request.event
+        ctx['request'] = self.request
         return ctx
 
     def perform_update(self, serializer):

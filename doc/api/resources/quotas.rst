@@ -28,11 +28,21 @@ closed                                boolean                    Whether the quo
                                                                  field).
 release_after_exit                    boolean                    Whether the quota regains capacity as soon as some tickets
                                                                  have been scanned at an exit.
+available                             boolean                    Whether this quota is available. Only returned if ``with_availability=true``
+                                                                 is set on the request. Do not rely on this value for critical operations, it may be
+                                                                 slightly out of date.
+available_number                      integer                    Number of available tickets. Only returned if ``with_availability=true``
+                                                                 is set on the request. Do not rely on this value for critical operations, it may be
+                                                                 slightly out of date. ``null`` means unlimited.
 ===================================== ========================== =======================================================
 
 .. versionchanged:: 3.10
 
    The attribute ``release_after_exit`` has been added.
+
+.. versionchanged:: 4.1
+
+    The ``with_availability`` query parameter has been added.
 
 
 Endpoints
@@ -80,6 +90,7 @@ Endpoints
    :query string ordering: Manually set the ordering of results. Valid fields to be used are ``id`` and ``position``.
                            Default: ``position``
    :query integer subevent: Only return quotas of the sub-event with the given ID
+   :query string with_availability: Set to ``true`` to get availability information. Can lead to increased answer times.
    :param organizer: The ``slug`` field of the organizer to fetch
    :param event: The ``slug`` field of the event to fetch
    :statuscode 200: no error
@@ -120,6 +131,7 @@ Endpoints
    :param organizer: The ``slug`` field of the organizer to fetch
    :param event: The ``slug`` field of the event to fetch
    :param id: The ``id`` field of the quota to fetch
+   :query string with_availability: Set to ``true`` to get availability information. Can lead to increased answer times.
    :statuscode 200: no error
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer/event does not exist **or** you have no permission to view this resource.
