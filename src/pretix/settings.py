@@ -495,11 +495,14 @@ LANGUAGES_INCUBATING = {
 LANGUAGES_RTL = {
     'ar', 'hw'
 }
-
-if DEBUG:
-    LANGUAGES = ALL_LANGUAGES
-else:
-    LANGUAGES = [(k, v) for k, v in ALL_LANGUAGES if k not in LANGUAGES_INCUBATING]
+LANGUAGES = []
+LANGUAGES_ENABLED = [lang for lang in config.get("languages", "enabled", fallback='').split(',') if lang]
+for k, v in ALL_LANGUAGES:
+    if not DEBUG and k in LANGUAGES_INCUBATING:
+        continue
+    if LANGUAGES_ENABLED and k not in LANGUAGES_ENABLED:
+        continue
+    LANGUAGES.append((k, v))
 
 
 EXTRA_LANG_INFO = {
