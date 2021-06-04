@@ -1207,7 +1207,7 @@ class SubEventBulkEdit(SubEventQueryMixin, EventPermissionRequiredMixin, FormVie
                     change_data = {k: f.cleaned_data.get(k) for k in f.changed_data}
                     for se in subevents:
                         q = list(se.checkinlist_set.all())[qidx]
-                        for fname in ('name', 'all_products', 'include_pending', 'allow_entry_after_exit', 'ignore_for_event_availability'):
+                        for fname in ('name', 'all_products', 'include_pending', 'allow_entry_after_exit'):
                             setattr(q, fname, f.cleaned_data.get(fname))
                         q.save()
                         if 'limit_products' in f.changed_data:
@@ -1298,7 +1298,7 @@ class SubEventBulkEdit(SubEventQueryMixin, EventPermissionRequiredMixin, FormVie
                     change_data = {k: f.cleaned_data.get(k) for k in f.changed_data}
                     for se in subevents:
                         q = list(se.quotas.all())[qidx]
-                        for fname in ('size', 'name', 'release_after_exit'):
+                        for fname in ('size', 'name', 'release_after_exit', 'ignore_for_event_availability'):
                             setattr(q, fname, f.cleaned_data.get(fname))
                         q.save(clear_cache=False)
                         if 'itemvars' in f.changed_data:
