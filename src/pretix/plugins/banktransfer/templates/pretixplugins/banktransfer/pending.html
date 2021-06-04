@@ -16,33 +16,44 @@
 
 <div class="row">
     <div class="{% if settings.bank_details_type == "sepa" %}col-md-6{% else %}col-md-12{% endif %} col-xs-12">
-        <p>
             {% if settings.bank_details_type == "sepa" %}
-                <strong>{% trans "Account holder" %}:</strong> {{ settings.bank_details_sepa_name }}<br>
-                <strong>{% trans "IBAN" %}:</strong> {{ settings.bank_details_sepa_iban|ibanformat }}<br>
-                <strong>{% trans "BIC" %}:</strong> {{ settings.bank_details_sepa_bic }}<br>
-                <strong>{% trans "Bank" %}:</strong> {{ settings.bank_details_sepa_bank }}<br>
+                <dl class="dl-horizontal">
+                    <dt>{% trans "Account holder" %}:</dt><dd>{{ settings.bank_details_sepa_name }}</dt>
+                    <dt>{% trans "IBAN" %}:</dt><dd>{{ settings.bank_details_sepa_iban|ibanformat }}</dt>
+                    <dt>{% trans "BIC" %}:</dt><dd>{{ settings.bank_details_sepa_bic }}</dt>
+                    <dt>{% trans "Bank" %}:</dt><dd>{{ settings.bank_details_sepa_bank }}</dt>
+                {% if details %}
+                </dl>
+                {% endif %}
             {% endif %}
             {% if details %}
-                {{ details|linebreaksbr }}<br>
+                {{ details|rich_text }}
+                <dl class="dl-horizontal">
             {% endif %}
-            <strong>{% trans "Amount:" %}</strong> {{ amount|money:event.currency }}<br/>
-            <strong>{% trans "Reference code (important):" %} {{ code }}</strong>
-        </p>
+            {% if not settings.bank_details_type == "sepa" and not details %}
+                <dl class="dl-horizontal">
+            {% endif %}
+            <dt>{% trans "Amount:" %}</dt><dd>{{ amount|money:event.currency }}</dd>
+            <dt>{% trans "Reference code (important):" %}</dt><dd><b>{{ code }}</b></dd>
+        </dl>
         <p>
             {% trans "After you sent the bank transfer, you can close this window. We will send you an email as soon as we received your payment." %}
         </p>
     </div>
     {% if settings.bank_details_type == "sepa" %}
         <div class="col-md-3 col-sm-6 hidden-xs text-center">
-            BezahlCode<br>
-            <a href="bank://singlepaymentsepa?name={{ settings.bank_details_sepa_name|urlencode }}&iban={{ settings.bank_details_sepa_iban }}&bic={{ settings.bank_details_sepa_bic }}&amount={{ amount|commadecimal }}&reason={{ code }}&currency={{ event.currency }}">
+            <h4>BezahlCode</h4>
+            <p class="sr-only">{% trans "Scan the following image to open your banking app. This works only if your app supports BezahlCode. Please note: the QR-Code is dynamically generated in a canvas element and therefore cannot be saved as an image." %}</p>
+            <p>
+            <a aria-hidden="true" href="bank://singlepaymentsepa?name={{ settings.bank_details_sepa_name|urlencode }}&iban={{ settings.bank_details_sepa_iban }}&bic={{ settings.bank_details_sepa_bic }}&amount={{ amount|commadecimal }}&reason={{ code }}&currency={{ event.currency }}">
                 <script type="text/plain" data-size="150" data-replace-with-qr>bank://singlepaymentsepa?name={{ settings.bank_details_sepa_name|urlencode }}&iban={{ settings.bank_details_sepa_iban }}&bic={{ settings.bank_details_sepa_bic }}&amount={{ amount|commadecimal }}&reason={{ code }}&currency={{ event.currency }}</script>
             </a>
-            <p>&nbsp;</p>
+            <a class="sr-only" href="bank://singlepaymentsepa?name={{ settings.bank_details_sepa_name|urlencode }}&iban={{ settings.bank_details_sepa_iban }}&bic={{ settings.bank_details_sepa_bic }}&amount={{ amount|commadecimal }}&reason={{ code }}&currency={{ event.currency }}">{% trans "Open BezahlCode in your banking app" %}</a>
+            </p>
         </div>
         <div class="col-md-3 col-sm-6 hidden-xs text-center">
-            GiroCode / EPC-QR<br>
+            <h4>GiroCode / EPC-QR</h4>
+            <p class="sr-only">{% trans "Scan the following image to open your banking app. This works only if your app supports GiroCode / EPC-QR. Please note: the QR-Code is dynamically generated in a canvas element and therefore cannot be saved as an image." %}</p>
             <script type="text/plain" data-size="150" data-replace-with-qr>BCD
 002
 2
