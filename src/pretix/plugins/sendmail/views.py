@@ -209,6 +209,7 @@ class SenderView(EventPermissionRequiredMixin, FormView):
                     self.output[l] = {
                         'subject': _('Subject: {subject}').format(subject=preview_subject),
                         'html': preview_text,
+                        'attachment': form.cleaned_data.get('attachment')
                     }
 
             self.order_count = ocnt
@@ -248,7 +249,15 @@ class SenderView(EventPermissionRequiredMixin, FormView):
         ctx = super().get_context_data(*args, **kwargs)
         ctx['output'] = getattr(self, 'output', None)
         ctx['order_count'] = getattr(self, 'order_count', None)
+        ctx['is_preview'] = self.request.method == 'POST' and self.request.POST.get('action') == 'preview'
         return ctx
+
+    def get_form(self, form_class=None):
+        f = super().get_form(form_class)
+        if self.request.method == 'POST' and self.request.POST.get('action') == 'preview':
+            for fname, field in f.fields.items():
+                field.widget.attrs['disabled'] = 'disabled'
+        return f
 
 
 class EmailHistoryView(EventPermissionRequiredMixin, ListView):
