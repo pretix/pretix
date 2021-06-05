@@ -160,11 +160,13 @@ secret                                string                     Secret code pri
 addon_to                              integer                    Internal ID of the position this position is an add-on for (or ``null``)
 subevent                              integer                    ID of the date inside an event series this position belongs to (or ``null``).
 pseudonymization_id                   string                     A random ID, e.g. for use in lead scanning apps
-checkins                              list of objects            List of check-ins with this ticket
+checkins                              list of objects            List of **successful** check-ins with this ticket
 ├ id                                  integer                    Internal ID of the check-in event
 ├ list                                integer                    Internal ID of the check-in list
 ├ datetime                            datetime                   Time of check-in
 ├ type                                string                     Type of scan (defaults to ``entry``)
+├ gate                                integer                    Internal ID of the gate. Can be ``null``.
+├ device                              integer                    Internal ID of the device. Can be ``null``.
 └ auto_checked_in                     boolean                    Indicates if this check-in been performed automatically by the system
 downloads                             list of objects            List of ticket download options
 ├ output                              string                     Ticket output provider (e.g. ``pdf``, ``passbook``)
@@ -355,6 +357,8 @@ List of all orders
                   {
                     "list": 44,
                     "type": "entry",
+                    "gate": null,
+                    "device": 2,
                     "datetime": "2017-12-25T12:45:23Z",
                     "auto_checked_in": false
                   }
@@ -524,6 +528,8 @@ Fetching individual orders
               {
                 "list": 44,
                 "type": "entry",
+                "gate": null,
+                "device": 2,
                 "datetime": "2017-12-25T12:45:23Z",
                 "auto_checked_in": false
               }
@@ -1421,6 +1427,8 @@ List of all order positions
               {
                 "list": 44,
                 "type": "entry",
+                "gate": null,
+                "device": 2,
                 "datetime": "2017-12-25T12:45:23Z",
                 "auto_checked_in": false
               }
@@ -1527,6 +1535,8 @@ Fetching individual positions
           {
             "list": 44,
             "type": "entry",
+            "gate": null,
+            "device": 2,
             "datetime": "2017-12-25T12:45:23Z",
             "auto_checked_in": false
           }

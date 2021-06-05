@@ -596,7 +596,7 @@ class CSVCheckinList(CheckInListMixin, ListExporter):
 class CheckinLogList(ListExporter):
     name = "checkinlog"
     identifier = 'checkinlog'
-    verbose_name = gettext_lazy('Check-in log (all successful scans)')
+    verbose_name = gettext_lazy('Check-in log (all scans)')
 
     @property
     def additional_form_fields(self):
@@ -616,42 +616,53 @@ class CheckinLogList(ListExporter):
             _('Device'),
             _('Offline override'),
             _('Automatically checked in'),
+            _('Gate'),
+            _('Result'),
+            _('Error message'),
         ]
 
-        qs = Checkin.objects.filter(
-            position__order__event=self.event,
+        qs = Checkin.all.filter(
+            list__event=self.event,
         )
         if form_data.get('list'):
             qs = qs.filter(list_id=form_data.get('list'))
         if form_data.get('items'):
-            qs = qs.filter(position__item_id__in=form_data['items'])
+            if len(form_data['items']) != self.event.items.count():
+                qs = qs.filter(Q(position__item_id__in=form_data['items']) | Q(raw_item_id__in=form_data['items']))
+        if form_data.get('successful_only'):
+            qs = qs.filter(successful=True)
 
         yield self.ProgressSetTotal(total=qs.count())
 
         qs = qs.select_related(
-            'position__item', 'position__order', 'position__order__invoice_address', 'position', 'list', 'device'
+            'position__item', 'position__order', 'position__order__invoice_address', 'position', 'list', 'device',
+            'raw_item'
         ).order_by(
             'datetime'
         )
         for ci in qs.iterator():
-            try:
-                ia = ci.position.order.invoice_address
-            except InvoiceAddress.DoesNotExist:
-                ia = InvoiceAddress()
+            if ci.position:
+                try:
+                    ia = ci.position.order.invoice_address
+                except InvoiceAddress.DoesNotExist:
+                    ia = InvoiceAddress()
 
             yield [
                 date_format(ci.datetime.astimezone(self.timezone), 'SHORT_DATE_FORMAT'),
                 date_format(ci.datetime.astimezone(self.timezone), 'TIME_FORMAT'),
                 str(ci.list),
                 ci.get_type_display(),
-                ci.position.order.code,
-                ci.position.positionid,
-                ci.position.secret,
-                str(ci.position.item),
-                ci.position.attendee_name or ia.name,
-                str(ci.device),
+                ci.position.order.code if ci.position else '',
+                ci.position.positionid if ci.position else '',
+                ci.raw_barcode or ci.position.secret,
+                str(ci.position.item) if ci.position else (str(ci.raw_item) if ci.raw_item else ''),
+                (ci.position.attendee_name or ia.name) if ci.position else '',
+                str(ci.device) if ci.device else '',
                 _('Yes') if ci.forced else _('No'),
                 _('Yes') if ci.auto_checked_in else _('No'),
+                str(ci.gate or ''),
+                _('OK') if ci.successful else ci.get_error_reason_display(),
+                ci.error_explanation or ''
             ]
 
     def get_filename(self):
@@ -677,6 +688,12 @@ class CheckinLogList(ListExporter):
                          attrs={'class': 'scrolling-multiple-choice'}
                      ),
                      initial=self.event.items.all()
+                 )),
+                ('successful_only',
+                 forms.BooleanField(
+                     label=_('Successful scans only'),
+                     initial=True,
+                     required=False,
                  )),
             ]
         )

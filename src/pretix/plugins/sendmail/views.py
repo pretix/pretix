@@ -49,7 +49,7 @@ from django.views.generic import DeleteView, FormView, ListView
 
 from pretix.base.email import get_available_placeholders
 from pretix.base.i18n import LazyI18nString, language
-from pretix.base.models import LogEntry, Order, OrderPosition
+from pretix.base.models import Checkin, LogEntry, Order, OrderPosition
 from pretix.base.models.event import SubEvent
 from pretix.base.services.mail import TolerantDict
 from pretix.base.templatetags.rich_text import markdown_compile_email
@@ -141,12 +141,28 @@ class SenderView(EventPermissionRequiredMixin, FormView):
 
         if form.cleaned_data.get('filter_checkins'):
             ql = []
+
             if form.cleaned_data.get('not_checked_in'):
-                ql.append(Q(checkins__list_id=None))
+                opq = opq.alias(
+                    any_checkins=Exists(
+                        Checkin.all.filter(
+                            position_id=OuterRef('pk'),
+                            successful=True
+                        )
+                    )
+                )
+                ql.append(Q(any_checkins=False))
             if form.cleaned_data.get('checkin_lists'):
-                ql.append(Q(
-                    checkins__list_id__in=[i.pk for i in form.cleaned_data.get('checkin_lists', [])],
-                ))
+                opq = opq.alias(
+                    matching_checkins=Exists(
+                        Checkin.all.filter(
+                            position_id=OuterRef('pk'),
+                            list_id__in=[i.pk for i in form.cleaned_data.get('checkin_lists', [])],
+                            successful=True
+                        )
+                    )
+                )
+                ql.append(Q(matching_checkins=True))
             if len(ql) == 2:
                 opq = opq.filter(ql[0] | ql[1])
             elif ql:

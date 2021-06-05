@@ -566,7 +566,8 @@ def _save_answers(op, answers, given_answers):
 
 def perform_checkin(op: OrderPosition, clist: CheckinList, given_answers: dict, force=False,
                     ignore_unpaid=False, nonce=None, datetime=None, questions_supported=True,
-                    user=None, auth=None, canceled_supported=False, type=Checkin.TYPE_ENTRY):
+                    user=None, auth=None, canceled_supported=False, type=Checkin.TYPE_ENTRY,
+                    raw_barcode=None):
     """
     Create a checkin for this particular order position and check-in list. Fails with CheckInError if the check in is
     not valid at this time.
@@ -623,12 +624,6 @@ def perform_checkin(op: OrderPosition, clist: CheckinList, given_answers: dict, 
                 _('This order is not marked as paid.'),
                 'unpaid'
             )
-        elif require_answers and not force and questions_supported:
-            raise RequiredQuestionsError(
-                _('You need to answer questions to complete this check-in.'),
-                'incomplete',
-                require_answers
-            )
 
         if type == Checkin.TYPE_ENTRY and clist.rules and not force:
             rule_data = LazyRuleVars(op, clist, dt)
@@ -642,6 +637,13 @@ def perform_checkin(op: OrderPosition, clist: CheckinList, given_answers: dict, 
                     'rules',
                     reason=reason
                 )
+
+        if require_answers and not force and questions_supported:
+            raise RequiredQuestionsError(
+                _('You need to answer questions to complete this check-in.'),
+                'incomplete',
+                require_answers
+            )
 
         device = None
         if isinstance(auth, Device):
@@ -668,6 +670,7 @@ def perform_checkin(op: OrderPosition, clist: CheckinList, given_answers: dict, 
                 gate=device.gate if device else None,
                 nonce=nonce,
                 forced=force and not entry_allowed,
+                raw_barcode=raw_barcode,
             )
             op.order.log_action('pretix.event.checkin', data={
                 'position': op.id,
@@ -676,6 +679,7 @@ def perform_checkin(op: OrderPosition, clist: CheckinList, given_answers: dict, 
                 'forced': force or op.order.status != Order.STATUS_PAID,
                 'datetime': dt,
                 'type': type,
+                'answers': {k.pk: str(v) for k, v in given_answers.items()},
                 'list': clist.pk
             }, user=user, auth=auth)
             checkin_created.send(op.order.event, checkin=ci)

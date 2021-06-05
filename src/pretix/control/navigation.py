@@ -297,7 +297,15 @@ def get_event_navigation(request: HttpRequest):
                         'event': request.event.slug,
                         'organizer': request.event.organizer.slug,
                     }),
-                    'active': 'event.orders.checkin' in url.url_name,
+                    'active': 'event.orders.checkinlists' in url.url_name,
+                },
+                {
+                    'label': _('Check-in history'),
+                    'url': reverse('control:event.orders.checkins', kwargs={
+                        'event': request.event.slug,
+                        'organizer': request.event.organizer.slug,
+                    }),
+                    'active': 'event.orders.checkins' in url.url_name,
                 },
             ]
         })

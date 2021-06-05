@@ -48,15 +48,16 @@ from django.utils.formats import date_format, localize
 from django.utils.functional import cached_property
 from django.utils.timezone import get_current_timezone, make_aware, now
 from django.utils.translation import gettext, gettext_lazy as _, pgettext_lazy
+from django_scopes.forms import SafeModelChoiceField
 
 from pretix.base.channels import get_all_sales_channels
 from pretix.base.forms.widgets import (
     DatePickerWidget, SplitDateTimePickerWidget,
 )
 from pretix.base.models import (
-    Checkin, Event, EventMetaProperty, EventMetaValue, Invoice, InvoiceAddress,
-    Item, Order, OrderPayment, OrderPosition, OrderRefund, Organizer, Question,
-    QuestionAnswer, SubEvent,
+    Checkin, CheckinList, Device, Event, EventMetaProperty, EventMetaValue,
+    Gate, Invoice, InvoiceAddress, Item, Order, OrderPayment, OrderPosition,
+    OrderRefund, Organizer, Question, QuestionAnswer, SubEvent,
 )
 from pretix.base.signals import register_payment_providers
 from pretix.control.forms.widgets import Select2
@@ -1736,3 +1737,127 @@ class OverviewFilterForm(FilterForm):
             self.fields['subevent'].widget.choices = self.fields['subevent'].choices
         elif 'subevent':
             del self.fields['subevent']
+
+
+class CheckinFilterForm(FilterForm):
+    status = forms.ChoiceField(
+        label=_('Status'),
+        choices=(
+            ('', _('All check-ins')),
+            ('successful', _('Successful check-ins')),
+            ('unsuccessful', _('Unsuccessful check-ins')),
+        ),
+        required=False
+    )
+    type = forms.ChoiceField(
+        label=_('Scan type'),
+        choices=[
+            ('', _('All directions')),
+        ] + list(Checkin.CHECKIN_TYPES),
+        required=False
+    )
+    itemvar = forms.ChoiceField(
+        label=_("Product"),
+        required=False
+    )
+    device = SafeModelChoiceField(
+        label=_('Device'),
+        empty_label=_('All devices'),
+        queryset=Device.objects.none(),
+        required=False
+    )
+    gate = SafeModelChoiceField(
+        label=_('Gate'),
+        empty_label=_('All gates'),
+        queryset=Gate.objects.none(),
+        required=False
+    )
+    checkin_list = SafeModelChoiceField(queryset=CheckinList.objects.none(), required=False)  # overridden later
+    datetime_from = forms.SplitDateTimeField(
+        widget=SplitDateTimePickerWidget(attrs={
+        }),
+        label=pgettext_lazy('filter', 'Start date'),
+        required=False,
+    )
+    datetime_until = forms.SplitDateTimeField(
+        widget=SplitDateTimePickerWidget(attrs={
+        }),
+        label=pgettext_lazy('filter', 'End date'),
+        required=False,
+    )
+
+    def __init__(self, *args, **kwargs):
+        self.event = kwargs.pop('event')
+        super().__init__(*args, **kwargs)
+
+        self.fields['device'].queryset = self.event.organizer.devices.all()
+        self.fields['gate'].queryset = self.event.organizer.gates.all()
+
+        self.fields['checkin_list'].queryset = self.event.checkin_lists.all()
+        self.fields['checkin_list'].widget = Select2(
+            attrs={
+                'data-model-select2': 'generic',
+                'data-select2-url': reverse('control:event.orders.checkinlists.select2', kwargs={
+                    'event': self.event.slug,
+                    'organizer': self.event.organizer.slug,
+                }),
+                'data-placeholder': _('Check-in list'),
+            }
+        )
+        self.fields['checkin_list'].widget.choices = self.fields['checkin_list'].choices
+        self.fields['checkin_list'].label = _('Check-in list')
+
+        choices = [('', _('All products'))]
+        for i in self.event.items.prefetch_related('variations').all():
+            variations = list(i.variations.all())
+            if variations:
+                choices.append((str(i.pk), _('{product} – Any variation').format(product=i.name)))
+                for v in variations:
+                    choices.append(('%d-%d' % (i.pk, v.pk), '%s – %s' % (i.name, v.value)))
+            else:
+                choices.append((str(i.pk), i.name))
+        self.fields['itemvar'].choices = choices
+
+    def filter_qs(self, qs):
+        fdata = self.cleaned_data
+
+        if fdata.get('status'):
+            s = fdata.get('status')
+            if s == 'successful':
+                qs = qs.filter(successful=True)
+            elif s == 'unsuccessful':
+                qs = qs.filter(successful=False)
+
+        if fdata.get('type'):
+            qs = qs.filter(type=fdata.get('type'))
+
+        if fdata.get('itemvar'):
+            if '-' in fdata.get('itemvar'):
+                qs = qs.alias(
+                    item_id=Coalesce('raw_item_id', 'position__item_id'),
+                    variation_id=Coalesce('raw_variation_id', 'position__variation_id'),
+                ).filter(
+                    item_id=fdata.get('itemvar').split('-')[0],
+                    variation_id=fdata.get('itemvar').split('-')[1]
+                )
+            else:
+                qs = qs.alias(
+                    item_id=Coalesce('raw_item_id', 'position__item_id'),
+                ).filter(item_id=fdata.get('itemvar'))
+
+        if fdata.get('device'):
+            qs = qs.filter(device_id=fdata.get('device').pk)
+
+        if fdata.get('gate'):
+            qs = qs.filter(gate_id=fdata.get('gate').pk)
+
+        if fdata.get('checkin_list'):
+            qs = qs.filter(list_id=fdata.get('checkin_list').pk)
+
+        if fdata.get('datetime_from'):
+            qs = qs.filter(datetime__gte=fdata.get('datetime_from'))
+
+        if fdata.get('datetime_until'):
+            qs = qs.filter(datetime__lte=fdata.get('datetime_until'))
+
+        return qs

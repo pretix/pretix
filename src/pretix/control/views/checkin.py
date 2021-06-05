@@ -50,7 +50,7 @@ from pretix.base.models import Checkin, Order, OrderPosition
 from pretix.base.models.checkin import CheckinList
 from pretix.base.signals import checkin_created
 from pretix.control.forms.checkin import CheckinListForm
-from pretix.control.forms.filter import CheckInFilterForm
+from pretix.control.forms.filter import CheckInFilterForm, CheckinFilterForm
 from pretix.control.permissions import EventPermissionRequiredMixin
 from pretix.control.views import CreateView, PaginationMixin, UpdateView
 from pretix.helpers.models import modelcopy
@@ -371,3 +371,31 @@ class CheckinListDelete(EventPermissionRequiredMixin, DeleteView):
             'organizer': self.request.event.organizer.slug,
             'event': self.request.event.slug,
         })
+
+
+class CheckinListView(EventPermissionRequiredMixin, PaginationMixin, ListView):
+    model = Checkin
+    context_object_name = 'checkins'
+    permission = 'can_view_orders'
+    template_name = 'pretixcontrol/checkin/checkins.html'
+
+    def get_queryset(self):
+        qs = Checkin.all.filter(
+            list__event=self.request.event,
+        ).select_related(
+            'position', 'position', 'position__item', 'position__variation', 'position__subevent'
+        ).prefetch_related(
+            'list', 'gate'
+        )
+        if self.filter_form.is_valid():
+            qs = self.filter_form.filter_qs(qs)
+        return qs
+
+    @cached_property
+    def filter_form(self):
+        return CheckinFilterForm(data=self.request.GET, event=self.request.event)
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data()
+        ctx['filter_form'] = self.filter_form
+        return ctx

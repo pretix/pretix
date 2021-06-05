@@ -21,6 +21,7 @@ cancelled
 casted
 Ceph
 checkbox
+checkins
 checksum
 config
 contenttypes

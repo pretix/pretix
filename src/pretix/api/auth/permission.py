@@ -49,7 +49,9 @@ class EventPermission(BasePermission):
         if not request.user.is_authenticated and not isinstance(request.auth, (Device, TeamAPIToken)):
             return False
 
-        if request.method not in SAFE_METHODS and hasattr(view, 'write_permission'):
+        if hasattr(view, '_get_permission_name'):
+            required_permission = getattr(view, '_get_permission_name')(request)
+        elif request.method not in SAFE_METHODS and hasattr(view, 'write_permission'):
             required_permission = getattr(view, 'write_permission')
         elif hasattr(view, 'permission'):
             required_permission = getattr(view, 'permission')

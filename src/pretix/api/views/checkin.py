@@ -21,6 +21,7 @@
 #
 import django_filters
 from django.core.exceptions import ValidationError
+from django.db import transaction
 from django.db.models import (
     Count, Exists, F, Max, OrderBy, OuterRef, Prefetch, Q, Subquery,
 )
@@ -34,16 +35,20 @@ from django_scopes import scopes_disabled
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.fields import DateTimeField
+from rest_framework.permissions import SAFE_METHODS
 from rest_framework.response import Response
 
 from pretix.api.serializers.checkin import CheckinListSerializer
 from pretix.api.serializers.item import QuestionSerializer
-from pretix.api.serializers.order import CheckinListOrderPositionSerializer
+from pretix.api.serializers.order import (
+    CheckinListOrderPositionSerializer, FailedCheckinSerializer,
+)
 from pretix.api.views import RichOrderingFilter
 from pretix.api.views.order import OrderPositionFilter
 from pretix.base.i18n import language
 from pretix.base.models import (
-    CachedFile, Checkin, CheckinList, Event, Order, OrderPosition, Question,
+    CachedFile, Checkin, CheckinList, Device, Event, Order, OrderPosition,
+    Question,
 )
 from pretix.base.services.checkin import (
     CheckInError, RequiredQuestionsError, SQLLogic, perform_checkin,
@@ -79,8 +84,14 @@ class CheckinListViewSet(viewsets.ModelViewSet):
     queryset = CheckinList.objects.none()
     filter_backends = (DjangoFilterBackend,)
     filterset_class = CheckinListFilter
-    permission = ('can_view_orders', 'can_checkin_orders',)
-    write_permission = 'can_change_event_settings'
+
+    def _get_permission_name(self, request):
+        if request.path.endswith('/failed_checkins/'):
+            return 'can_checkin_orders', 'can_change_orders'
+        elif request.method in SAFE_METHODS:
+            return 'can_view_orders', 'can_checkin_orders',
+        else:
+            return 'can_change_event_settings'
 
     def get_queryset(self):
         qs = self.request.event.checkin_lists.prefetch_related(
@@ -124,6 +135,49 @@ class CheckinListViewSet(viewsets.ModelViewSet):
             auth=self.request.auth,
         )
         super().perform_destroy(instance)
+
+    @action(detail=True, methods=['POST'], url_name='failed_checkins')
+    @transaction.atomic()
+    def failed_checkins(self, *args, **kwargs):
+        serializer = FailedCheckinSerializer(
+            data=self.request.data,
+            context={'event': self.request.event}
+        )
+        serializer.is_valid(raise_exception=True)
+        kwargs = {}
+
+        if not serializer.validated_data.get('position'):
+            kwargs['position'] = OrderPosition.all.filter(
+                secret=serializer.validated_data['raw_barcode']
+            ).first()
+
+        c = serializer.save(
+            list=self.get_object(),
+            successful=False,
+            forced=True,
+            device=self.request.auth if isinstance(self.request.auth, Device) else None,
+            gate=self.request.auth.gate if isinstance(self.request.auth, Device) else None,
+            **kwargs,
+        )
+        if c.position:
+            c.position.order.log_action('pretix.event.checkin.denied', data={
+                'position': c.position.id,
+                'positionid': c.position.positionid,
+                'errorcode': c.error_reason,
+                'reason_explanation': c.error_explanation,
+                'datetime': c.datetime,
+                'type': c.type,
+                'list': c.list.pk
+            }, user=self.request.user, auth=self.request.auth)
+        else:
+            self.request.event.log_action('pretix.event.checkin.unknown', data={
+                'datetime': c.datetime,
+                'type': c.type,
+                'list': c.list.pk,
+                'barcode': c.raw_barcode
+            }, user=self.request.user, auth=self.request.auth)
+
+        return Response(serializer.data, status=201)
 
     @action(detail=True, methods=['GET'])
     def status(self, *args, **kwargs):
@@ -294,7 +348,7 @@ class CheckinListPositionViewSet(viewsets.ReadOnlyModelViewSet):
                     lookup='checkins',
                     queryset=Checkin.objects.filter(list_id=self.checkinlist.pk)
                 ),
-                'checkins', 'answers', 'answers__options', 'answers__question',
+                'answers', 'answers__options', 'answers__question',
                 Prefetch('addons', OrderPosition.objects.select_related('item', 'variation')),
                 Prefetch('order', Order.objects.select_related('invoice_address').prefetch_related(
                     Prefetch(
@@ -304,7 +358,8 @@ class CheckinListPositionViewSet(viewsets.ReadOnlyModelViewSet):
                     Prefetch(
                         'positions',
                         OrderPosition.objects.prefetch_related(
-                            'checkins', 'item', 'variation', 'answers', 'answers__options', 'answers__question',
+                            Prefetch('checkins', queryset=Checkin.objects.all()),
+                            'item', 'variation', 'answers', 'answers__options', 'answers__question',
                         )
                     )
                 ))
@@ -356,6 +411,17 @@ class CheckinListPositionViewSet(viewsets.ReadOnlyModelViewSet):
         else:
             dt = now()
 
+        common_checkin_args = dict(
+            raw_barcode=self.kwargs['pk'],
+            type=type,
+            list=self.checkinlist,
+            datetime=dt,
+            device=self.request.auth if isinstance(self.request.auth, Device) else None,
+            gate=self.request.auth.gate if isinstance(self.request.auth, Device) else None,
+            nonce=nonce,
+            forced=force,
+        )
+
         try:
             queryset = self.get_queryset(ignore_status=True, ignore_products=True)
             if self.kwargs['pk'].isnumeric():
@@ -371,6 +437,25 @@ class CheckinListPositionViewSet(viewsets.ReadOnlyModelViewSet):
                     'list': self.checkinlist.pk,
                     'barcode': self.kwargs['pk']
                 }, user=self.request.user, auth=self.request.auth)
+
+                for k, s in self.request.event.ticket_secret_generators.items():
+                    try:
+                        parsed = s.parse_secret(self.kwargs['pk'])
+                        common_checkin_args.update({
+                            'raw_item': parsed.item,
+                            'raw_variation': parsed.variation,
+                            'raw_subevent': parsed.subevent,
+                        })
+                    except:
+                        pass
+
+                Checkin.objects.create(
+                    position=None,
+                    successful=False,
+                    error_reason=Checkin.REASON_INVALID,
+                    **common_checkin_args,
+                )
+
                 raise Http404()
 
             op = revoked_matches[0].position
@@ -380,6 +465,12 @@ class CheckinListPositionViewSet(viewsets.ReadOnlyModelViewSet):
                 'list': self.checkinlist.pk,
                 'barcode': self.kwargs['pk']
             }, user=self.request.user, auth=self.request.auth)
+            Checkin.objects.create(
+                position=op,
+                successful=False,
+                error_reason=Checkin.REASON_REVOKED,
+                **common_checkin_args
+            )
 
         given_answers = {}
         if 'answers' in self.request.data:
@@ -409,6 +500,7 @@ class CheckinListPositionViewSet(viewsets.ReadOnlyModelViewSet):
                     user=self.request.user,
                     auth=self.request.auth,
                     type=type,
+                    raw_barcode=None,
                 )
             except RequiredQuestionsError as e:
                 return Response({
@@ -424,11 +516,19 @@ class CheckinListPositionViewSet(viewsets.ReadOnlyModelViewSet):
                     'position': op.id,
                     'positionid': op.positionid,
                     'errorcode': e.code,
+                    'reason_explanation': e.reason,
                     'force': force,
                     'datetime': dt,
                     'type': type,
                     'list': self.checkinlist.pk
                 }, user=self.request.user, auth=self.request.auth)
+                Checkin.objects.create(
+                    position=op,
+                    successful=False,
+                    error_reason=e.code,
+                    error_explanation=e.reason,
+                    **common_checkin_args,
+                )
                 return Response({
                     'status': 'error',
                     'reason': e.code,

@@ -432,6 +432,8 @@ def test_list_all_items_positions(token_client, organizer, event, clist, clist_a
             'list': clist_all.pk,
             'datetime': c.datetime.isoformat().replace('+00:00', 'Z'),
             'auto_checked_in': False,
+            'device': None,
+            'gate': None,
             'type': 'entry',
         }
     ]
@@ -472,6 +474,8 @@ def test_list_all_items_positions(token_client, organizer, event, clist, clist_a
             'list': clist_all.pk,
             'datetime': c.datetime.isoformat().replace('+00:00', 'Z'),
             'auto_checked_in': False,
+            'device': None,
+            'gate': None,
             'type': 'entry',
         }
     ]
@@ -1060,3 +1064,45 @@ def test_question_upload(token_client, organizer, clist, event, order, question)
     with scopes_disabled():
         assert order.positions.first().answers.get(question=question[0]).answer.startswith('file://')
         assert order.positions.first().answers.get(question=question[0]).file
+
+
+@pytest.mark.django_db
+def test_store_failed(token_client, organizer, clist, event, order):
+    with scopes_disabled():
+        p = order.positions.first()
+    resp = token_client.post('/api/v1/organizers/{}/events/{}/checkinlists/{}/failed_checkins/'.format(
+        organizer.slug, event.slug, clist.pk,
+    ), {
+        'raw_barcode': '123456',
+        'error_reason': 'invalid'
+    }, format='json')
+    assert resp.status_code == 201
+    with scopes_disabled():
+        assert Checkin.all.filter(successful=False).exists()
+
+    resp = token_client.post('/api/v1/organizers/{}/events/{}/checkinlists/{}/failed_checkins/'.format(
+        organizer.slug, event.slug, clist.pk,
+    ), {
+        'raw_barcode': '123456',
+        'position': p.pk,
+        'error_reason': 'unpaid'
+    }, format='json')
+    assert resp.status_code == 201
+    with scopes_disabled():
+        assert p.all_checkins.filter(successful=False).count() == 1
+
+    resp = token_client.post('/api/v1/organizers/{}/events/{}/checkinlists/{}/failed_checkins/'.format(
+        organizer.slug, event.slug, clist.pk,
+    ), {
+        'position': p.pk,
+        'error_reason': 'unpaid'
+    }, format='json')
+    assert resp.status_code == 400
+
+    resp = token_client.post('/api/v1/organizers/{}/events/{}/checkinlists/{}/failed_checkins/'.format(
+        organizer.slug, event.slug, clist.pk,
+    ), {
+        'raw_barcode': '123456',
+        'error_reason': 'unknown'
+    }, format='json')
+    assert resp.status_code == 400

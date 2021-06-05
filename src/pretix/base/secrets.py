@@ -22,6 +22,8 @@
 import base64
 import inspect
 import struct
+from collections import namedtuple
+from typing import Optional
 
 from cryptography.hazmat.backends.openssl.backend import Backend
 from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
@@ -36,6 +38,8 @@ from django.utils.translation import gettext_lazy as _
 from pretix.base.models import Item, ItemVariation, SubEvent
 from pretix.base.secretgenerators import pretix_sig1_pb2
 from pretix.base.signals import register_ticket_secret_generators
+
+ParsedSecret = namedtuple('AnalyzedSecret', 'item variation subevent attendee_name opaque_id')
 
 
 class BaseTicketSecretGenerator:
@@ -71,6 +75,14 @@ class BaseTicketSecretGenerator:
         secrets as well as all secrets of canceled tickets will need to go to a revocation list.
         """
         return False
+
+    def parse_secret(self, secret: str) -> Optional[ParsedSecret]:
+        """
+        Given a ``secret``, return an ``ParsedSecret`` with the information decoded from the secret, if possible.
+        Any value of ``ParsedSecret`` may be ``None``, and if parsing is not possible at all, you can ``None`` (as
+        the default implementation does).
+        """
+        return None
 
     def generate_secret(self, item: Item, variation: ItemVariation = None, subevent: SubEvent = None,
                         attendee_name: str = None, current_secret: str = None, force_invalidate=False) -> str:
@@ -180,6 +192,15 @@ class Sig1TicketSecretGenerator(BaseTicketSecretGenerator):
             return t
         except:
             return None
+
+    def parse_secret(self, secret: str) -> Optional[ParsedSecret]:
+        ticket = self._parse(secret)
+        if ticket:
+            item = self.event.items.filter(pk=ticket.item).first() if ticket.item else None
+            subevent = self.event.subevents.filter(pk=ticket.subevent).first() if ticket.subevent else None
+            variation = item.variations.filter(pk=ticket.variation).first() if item and ticket.subevent else None
+            opaque_id = ticket.seed
+            return self.ParsedSecret(item=item, subevent=subevent, variation=variation, opaque_id=opaque_id, attendee_name=None)
 
     def generate_secret(self, item: Item, variation: ItemVariation = None, subevent: SubEvent = None,
                         current_secret: str = None, force_invalidate=False):
