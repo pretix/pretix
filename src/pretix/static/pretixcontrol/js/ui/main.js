@@ -421,8 +421,10 @@ var form_handlers = function (el) {
         var $cb_tgl = $("<input>").attr("type", "checkbox").addClass("menu-checkbox");
         $lbl_tgl.append($("<label>").append($cb_tgl).append(gettext("Selected only")));
         $menu.append($("<span>").append($a_all).append(" / ").append($a_none))
-        $menu.append($inp_search);
-        $menu.append($lbl_tgl);
+        if (!$(this).is(".no-search")) {
+            $menu.append($inp_search);
+            $menu.append($lbl_tgl);
+        }
         $(this).prepend($menu);
 
         $(this).find(".choice-options-none").click(function (e) {
