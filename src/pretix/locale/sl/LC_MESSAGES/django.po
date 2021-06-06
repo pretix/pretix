@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-05-27 12:05+0000\n"
-"PO-Revision-Date: 2021-05-05 21:34+0000\n"
+"PO-Revision-Date: 2021-06-07 05:00+0000\n"
 "Last-Translator: lapor-kris <kristijan.tkalec@posteo.si>\n"
 "Language-Team: Slovenian <https://translate.pretix.eu/projects/pretix/pretix/"
 "sl/>\n"
@@ -412,7 +412,7 @@ msgstr "Prenesite denar na bančni račun: 9999-9999-9999-9999"
 
 #: pretix/base/email.py:563
 msgid "Mr Doe"
-msgstr ""
+msgstr "G. Novak"
 
 #: pretix/base/exporter.py:159 pretix/base/exporter.py:285
 msgid "Export format"
@@ -2282,10 +2282,8 @@ msgid "Exit"
 msgstr "Izhod"
 
 #: pretix/base/models/customers.py:48
-#, fuzzy
-#| msgid "This account is inactive."
 msgid "Account active"
-msgstr "Ta račun je neaktiven."
+msgstr "Račun je aktiven"
 
 #: pretix/base/models/customers.py:49
 #, fuzzy
@@ -2296,7 +2294,7 @@ msgstr "E-poštni naslov udeleženca"
 #: pretix/base/models/customers.py:50
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:46
 msgid "Last login"
-msgstr ""
+msgstr "Zadnja prijava"
 
 #: pretix/base/models/customers.py:51
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:44
@@ -2974,29 +2972,29 @@ msgstr ""
 
 #: pretix/base/models/items.py:518 pretix/base/models/items.py:792
 msgid "Require a valid membership"
-msgstr ""
+msgstr "Zahteva se veljavno članstvo"
 
 #: pretix/base/models/items.py:523
 msgid "Allowed membership types"
-msgstr ""
+msgstr "Dovoljene vrste članstva"
 
 #: pretix/base/models/items.py:531
 msgid "This product creates a membership of type"
-msgstr ""
+msgstr "Ta izdelek ustvari vrsto članstva"
 
 #: pretix/base/models/items.py:534
 msgid ""
 "The duration of the membership is the same as the duration of the event or "
 "event series date"
-msgstr ""
+msgstr "Trajanje članstva je enako trajanju dogodka ali seriji dogodkov"
 
 #: pretix/base/models/items.py:538
 msgid "Membership duration in days"
-msgstr ""
+msgstr "Trajanje članstva v dnevih"
 
 #: pretix/base/models/items.py:542
 msgid "Membership duration in months"
-msgstr ""
+msgstr "Trajanje članstva v mesecih"
 
 #: pretix/base/models/items.py:550 pretix/base/models/items.py:1192
 #: pretix/control/forms/filter.py:361 pretix/control/forms/filter.py:1309
@@ -3044,7 +3042,7 @@ msgstr "Pozicija"
 #: pretix/control/templates/pretixcontrol/organizers/membershiptypes.html:4
 #: pretix/control/templates/pretixcontrol/organizers/membershiptypes.html:6
 msgid "Membership types"
-msgstr ""
+msgstr "Vrste članstva"
 
 #: pretix/base/models/items.py:804 pretix/base/models/vouchers.py:203
 #: pretix/base/models/waitinglist.py:95 pretix/base/orderimport.py:228
@@ -3344,7 +3342,7 @@ msgstr "Variacije"
 #: pretix/base/models/items.py:1521
 #: pretix/control/templates/pretixcontrol/items/quotas.html:70
 msgid "Ignore this quota when determining event availability"
-msgstr ""
+msgstr "Ne upoštevajte te kvote pri določanju razpoložljivosti dogodka"
 
 #: pretix/base/models/items.py:1522
 msgid ""
@@ -3353,6 +3351,10 @@ msgid ""
 "that is added to each event but should not stop the event from being shown "
 "as sold out."
 msgstr ""
+"Če to omogočite, se ta kvota ne bo upoštevala pri določanju razpoložljivosti "
+"dogodka v koledarju dogodkov. To je uporabno npr. za blago, ki se doda "
+"vsakemu dogodku, vendar ne sme preprečiti, da bi bil dogodek prikazan kot "
+"razprodan."
 
 #: pretix/base/models/items.py:1529
 msgid "Close this quota permanently once it is sold out"
@@ -3464,17 +3466,19 @@ msgstr "Davčno pravilo {val}"
 
 #: pretix/base/models/memberships.py:44
 msgid "Membership is transferable"
-msgstr ""
+msgstr "Članstvo je prenosljivo"
 
 #: pretix/base/models/memberships.py:45
 msgid ""
 "If this is selected, the membership can be used to purchase tickets for "
 "multiple persons. If not, the attendee name always needs to stay the same."
 msgstr ""
+"Če je ta možnost izbrana, lahko članstvo uporabite za nakup vstopnic za več "
+"oseb. V nasprotnem primeru mora ime udeleženca vedno ostati enako."
 
 #: pretix/base/models/memberships.py:50
 msgid "Parallel usage is allowed"
-msgstr ""
+msgstr "Dovoljena je vzporedna uporaba"
 
 #: pretix/base/models/memberships.py:51
 msgid ""
@@ -3482,6 +3486,9 @@ msgid ""
 "events happening at the same time. Note that this will only check for an "
 "identical start time of the events, not for any overlap between events."
 msgstr ""
+"Če je ta možnost izbrana, lahko članstvo uporabite za nakup vstopnic za "
+"dogodke, ki se odvijajo istočasno. Upoštevajte, da se pri tem preveri le "
+"enak čas začetka dogodkov, ne pa tudi prekrivanja dogodkov."
 
 #: pretix/base/models/memberships.py:56 pretix/base/models/vouchers.py:145
 #: pretix/control/views/vouchers.py:110
@@ -5504,17 +5511,17 @@ msgstr ""
 #: pretix/base/services/checkin.py:151
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html:36
 msgid "Unknown reason"
-msgstr ""
+msgstr "Neznan razlog"
 
 #: pretix/base/services/checkin.py:207
 #, python-brace-format
 msgid "Only allowed before {datetime}"
-msgstr ""
+msgstr "Dovoljeno samo pred {datetime}"
 
 #: pretix/base/services/checkin.py:209
 #, python-brace-format
 msgid "Only allowed after {datetime}"
-msgstr ""
+msgstr "Dovoljeno samo po {datetime}"
 
 #: pretix/base/services/checkin.py:212
 #, fuzzy
@@ -5524,7 +5531,7 @@ msgstr "Prednaročilo se še ni začelo"
 
 #: pretix/base/services/checkin.py:220
 msgid "number of days with an entry"
-msgstr ""
+msgstr "število dni z vnosom"
 
 #: pretix/base/services/checkin.py:221
 #, fuzzy
@@ -5541,24 +5548,22 @@ msgstr "Prikaži preostalo število vstopnic"
 #: pretix/base/services/checkin.py:227
 #, python-brace-format
 msgid "{variable} is not {value}"
-msgstr ""
+msgstr "{variable} ni {value}"
 
 #: pretix/base/services/checkin.py:229
-#, fuzzy, python-brace-format
-#| msgid "Maximum value"
+#, python-brace-format
 msgid "Maximum {variable} exceeded"
-msgstr "Največja vrednost"
+msgstr "Najvišja {variable} je presežena"
 
 #: pretix/base/services/checkin.py:231
-#, fuzzy, python-brace-format
-#| msgid "Minimum value"
+#, python-brace-format
 msgid "Minimum {variable} exceeded"
-msgstr "Najmanjša vrednost"
+msgstr "Najmanjša {variable} je presežena"
 
 #: pretix/base/services/checkin.py:233
 #, python-brace-format
 msgid "{variable} is {value}"
-msgstr ""
+msgstr "{variable} je {value}"
 
 #: pretix/base/services/checkin.py:588
 #, fuzzy
@@ -5587,7 +5592,7 @@ msgstr "Za dokončanje te prijave morate odgovoriti na vprašanja."
 #: pretix/base/services/checkin.py:639
 #, python-brace-format
 msgid "Entry not permitted: {explanation}."
-msgstr ""
+msgstr "Vnos ni dovoljen: {explanation}."
 
 #: pretix/base/services/checkin.py:684
 msgid "This ticket has already been redeemed."
@@ -5651,10 +5656,9 @@ msgid "Sample product A"
 msgstr "Vzorčni izdelek A"
 
 #: pretix/base/services/invoices.py:468
-#, fuzzy, python-brace-format
-#| msgid "Invoice number"
+#, python-brace-format
 msgid "New invoice: {number}"
-msgstr "Številka računa"
+msgstr "Nov račun: {number}"
 
 #: pretix/base/services/invoices.py:470
 #, python-brace-format
@@ -5666,6 +5670,11 @@ msgid ""
 "We are sending this email because you configured us to do so in your event "
 "settings."
 msgstr ""
+"Zdravo,\n"
+"\n"
+"ustvarjen je bil nov račun za {event}, glej prilogo.\n"
+"\n"
+"To e-pošto pošiljamo, ker tako nastavili v nastavitvah dogodka."
 
 #: pretix/base/services/mail.py:242
 #, python-brace-format
@@ -5693,15 +5702,15 @@ msgstr "To e-pošto ste prejeli, ker ste oddali naročilo za {event}."
 msgid ""
 "You selected a membership for the product \"{product}\" which does not "
 "require a membership."
-msgstr ""
+msgstr "Izbrali ste članstvo za izdelek \"{product}\", ki ne zahteva članstva."
 
 #: pretix/base/services/memberships.py:112
-#, fuzzy, python-brace-format
-#| msgid "You selected a product which is not available for sale."
+#, python-brace-format
 msgid ""
 "You selected the product \"{product}\" which requires an active membership "
 "to be selected."
-msgstr "Izbrali ste izdelek, ki ni na voljo za prodajo."
+msgstr ""
+"Izbrali ste izdelek \"{product}\", za katerega je potrebno aktivno članstvo."
 
 #: pretix/base/services/memberships.py:141
 #, fuzzy
@@ -5713,6 +5722,7 @@ msgstr "Ne morete izbrati predmeta, ki pripada drugemu dogodku."
 #: pretix/base/services/memberships.py:146
 msgid "You can only use a test mode membership for test mode tickets."
 msgstr ""
+"Članstvo v testnem načinu lahko uporabite samo za vstopnice v testnem načinu."
 
 #: pretix/base/services/memberships.py:153
 #, python-brace-format
@@ -5720,6 +5730,8 @@ msgid ""
 "You selected a membership that is valid from {start} to {end}, but selected "
 "an event taking place at {date}."
 msgstr ""
+"Izbrali ste članstvo, ki velja od {start} do {end}, vendar ste izbrali "
+"dogodek, ki bo potekal na {date}."
 
 #: pretix/base/services/memberships.py:168
 #, python-brace-format
@@ -5727,6 +5739,8 @@ msgid ""
 "You selected a membership of type \"{type}\", which is not allowed for the "
 "product \"{product}\"."
 msgstr ""
+"Izbrali ste članstvo vrste \"{type}\", ki ni dovoljeno za izdelek \"{product}"
+"\"."
 
 #: pretix/base/services/memberships.py:177
 #, python-brace-format
@@ -5734,6 +5748,8 @@ msgid ""
 "You are trying to use a membership of type \"{type}\" more than {number} "
 "times, which is the maximum amount."
 msgstr ""
+"Članstvo vrste \"{type}\" poskušate uporabiti več kot {number} krat, kar je "
+"največje število."
 
 #: pretix/base/services/memberships.py:188
 #, python-brace-format
@@ -5742,6 +5758,9 @@ msgid ""
 "place at {date}, however you already used the same membership for a "
 "different ticket at the same time."
 msgstr ""
+"Poskušate uporabiti članstvo vrste \"{type}\" za dogodek, ki bo potekal na "
+"dan {date}, vendar ste isto članstvo ob istem času že uporabili za drugo "
+"vstopnico."
 
 #: pretix/base/services/orderimport.py:108
 #, python-brace-format
@@ -6156,6 +6175,8 @@ msgid ""
 "This will allow customers to sign up for an account on your ticket shop. "
 "This is a prerequisite for some advanced features like memberships."
 msgstr ""
+"Stranke se bodo lahko prijavile v vaši trgovini. To je predpogoj za nekatere "
+"napredne funkcije, kot je članstvo."
 
 #: pretix/base/settings.py:127
 #, fuzzy
@@ -6168,6 +6189,8 @@ msgid ""
 "This will allow registered customers to access orders made with the same "
 "email address, even if the customer was not logged in during the purchase."
 msgstr ""
+"To bo registriranim strankam omogočilo dostop do naročil, opravljenih z "
+"istim e-poštnim naslovom, tudi če stranka med nakupom ni bila prijavljena."
 
 #: pretix/base/settings.py:139
 msgid "Maximum number of items per order"
@@ -6542,12 +6565,14 @@ msgid ""
 "some countries by civil law. This will not effect the last date of payments "
 "configured below."
 msgstr ""
+"Če je ta možnost aktivirana in se rok plačila katerega koli naročila konča v "
+"soboto ali nedeljo, se namesto tega prenese na naslednji ponedeljek. To v "
+"nekaterih državah zahteva civilno pravo. To ne vpliva na zadnji datum "
+"plačila, ki je nastavljen spodaj."
 
 #: pretix/base/settings.py:619
-#, fuzzy
-#| msgid "Payment fee"
 msgid "Payment term in minutes"
-msgstr "Stroški plačila"
+msgstr "Rok plačila v minutah"
 
 #: pretix/base/settings.py:620
 msgid ""
@@ -6556,10 +6581,14 @@ msgid ""
 "methods. Please note that for technical reasons, the actual time frame might "
 "be a few minutes longer before the order is marked as expired."
 msgstr ""
+"Število minut po oddaji naročila, ko uporabnik mora plačati za ohranitev "
+"rezervacije. Uporabite samo, če ponujate izključno načine plačila v realnem "
+"času. Upoštevajte, da je zaradi tehničnih razlogov dejanski časovni okvir "
+"lahko nekaj minut daljši, preden je naročilo označeno kot poteklo."
 
 #: pretix/base/settings.py:643
 msgid "Last date of payments"
-msgstr ""
+msgstr "Zadnji datum plačil"
 
 #: pretix/base/settings.py:644
 msgid ""
@@ -6567,10 +6596,13 @@ msgid ""
 "configured above. If you use the event series feature and an order contains "
 "tickets for multiple dates, the earliest date will be used."
 msgstr ""
+"Zadnji datum sprejema kakršnih koli plačil. Ta ima prednost pred zgoraj "
+"nastavljenimi pogoji. Če uporabljate možnost serije dogodkov in naročilo "
+"vsebuje vstopnice za več datumov, bo uporabljen najzgodnejši datum."
 
 #: pretix/base/settings.py:655
 msgid "Automatically expire unpaid orders"
-msgstr ""
+msgstr "Samodejno iztekanje neplačanih naročil"
 
 #: pretix/base/settings.py:656
 msgid ""
@@ -6578,10 +6610,13 @@ msgid ""
 "'expired' after the end of their payment deadline. This means that those "
 "tickets go back to the pool and can be ordered by other people."
 msgstr ""
+"Če je ta možnost označena, se vsa neplačana naročila po izteku roka za "
+"plačilo samodejno spremenijo iz \"čakajočih\" v \"potekla\". To pomeni, da "
+"se te vstopnice vrnejo v bazen in jih lahko naročijo drugi uporabniki."
 
 #: pretix/base/settings.py:667
 msgid "Hide \"payment pending\" state on customer-facing pages"
-msgstr ""
+msgstr "Skrijte stanje \"čaka na plačilo\" na straneh, namenjenih strankam"
 
 #: pretix/base/settings.py:668
 msgid ""
@@ -6589,10 +6624,13 @@ msgid ""
 "but no indication of missing payment will be visible on the ticket pages of "
 "attendees who did not buy the ticket themselves."
 msgstr ""
+"Navodila za plačilo bodo še vedno prikazana primarni stranki, vendar na "
+"straneh z vstopnicami za udeležence, ki sami niso kupili vstopnice, ne bo "
+"viden noben podatek o manjkajočem plačilu."
 
 #: pretix/base/settings.py:687
 msgid "Accept late payments"
-msgstr ""
+msgstr "Sprejmi pozna plačila"
 
 #: pretix/base/settings.py:688
 msgid ""
@@ -6600,46 +6638,49 @@ msgid ""
 "enough capacity is available. No payments will ever be accepted after the "
 "'Last date of payments' configured above."
 msgstr ""
+"Sprejmi plačila za naročila, tudi če so v stanju \"poteklo\", če je na voljo "
+"dovolj zmogljivosti. Po zgoraj nastavljenem \"zadnjem datumu plačil\" ne bo "
+"sprejeto nobeno plačilo."
 
 #: pretix/base/settings.py:699
 msgid "Show start date"
-msgstr ""
+msgstr "Prikaži datum začetka"
 
 #: pretix/base/settings.py:700
 msgid "Show the presale start date before presale has started."
-msgstr ""
+msgstr "Prikaži datum začetka predprodaje, preden se predprodaja začne."
 
 #: pretix/base/settings.py:715 pretix/base/settings.py:726
 msgid "Do not generate invoices"
-msgstr ""
+msgstr "Ne ustvari računov"
 
 #: pretix/base/settings.py:716 pretix/base/settings.py:727
 msgid "Only manually in admin panel"
-msgstr ""
+msgstr "Samo ročno v skrbniških nastavitvah"
 
 #: pretix/base/settings.py:717 pretix/base/settings.py:728
 msgid "Automatically on user request"
-msgstr ""
+msgstr "Samodejno na zahtevo uporabnika"
 
 #: pretix/base/settings.py:718 pretix/base/settings.py:729
 msgid "Automatically for all created orders"
-msgstr ""
+msgstr "Samodejno za vsa ustvarjena naročila"
 
 #: pretix/base/settings.py:719 pretix/base/settings.py:730
 msgid "Automatically on payment or when required by payment method"
-msgstr ""
+msgstr "Samodejno ob plačilu ali ko to zahteva način plačila"
 
 #: pretix/base/settings.py:723
 msgid "Generate invoices"
-msgstr ""
+msgstr "Ustvari račune"
 
 #: pretix/base/settings.py:732
 msgid "Invoices will never be automatically generated for free orders."
-msgstr ""
+msgstr "Za brezplačna naročila se računi nikoli ne bodo samodejno ustvarili."
 
 #: pretix/base/settings.py:741
 msgid "Automatically cancel and reissue invoice on address changes"
-msgstr ""
+msgstr "Samodejno prekliči in ponovno izdaj račun ob spremembi naslova"
 
 #: pretix/base/settings.py:742
 msgid ""
@@ -6647,72 +6688,78 @@ msgid ""
 "will automatically be canceled and a new invoice will be issued. This "
 "setting does not affect changes made through the backend."
 msgstr ""
+"Če stranke spremenijo naslov na računu pri obstoječem naročilu, se račun "
+"samodejno prekliče in izda nov račun. Ta nastavitev ne vpliva na spremembe, "
+"opravljene prek zalednega dela."
 
 #: pretix/base/settings.py:757
 msgid "Address line"
-msgstr ""
+msgstr "Vrstica z naslovom"
 
 #: pretix/base/settings.py:761
 msgid "Albert Einstein Road 52"
-msgstr ""
+msgstr "Prešernova cesta 7"
 
 #: pretix/base/settings.py:813
 msgid "Domestic tax ID"
-msgstr ""
+msgstr "Domača davčna številka"
 
 #: pretix/base/settings.py:814
 msgid "e.g. tax number in Germany, ABN in Australia, …"
-msgstr ""
+msgstr "npr. davčna številka v Nemčiji, ABN v Avstraliji, …"
 
 #: pretix/base/settings.py:823
 msgid "EU VAT ID"
-msgstr ""
+msgstr "ID za DDV v EU"
 
 #: pretix/base/settings.py:836
 msgid "e.g. With this document, we sent you the invoice for your ticket order."
-msgstr ""
+msgstr "npr. S tem dokumentom smo vam poslali račun za vaše naročilo vstopnic."
 
 #: pretix/base/settings.py:839
 msgid "Introductory text"
-msgstr ""
+msgstr "Uvodno besedilo"
 
 #: pretix/base/settings.py:840
 msgid "Will be printed on every invoice above the invoice rows."
-msgstr ""
+msgstr "Izpisano bo na vsakem računu nad vrsticami računa."
 
 #: pretix/base/settings.py:853
 msgid ""
 "e.g. Thank you for your purchase! You can find more information on the event "
 "at ..."
 msgstr ""
+"npr. Zahvaljujemo se vam za nakup! Več informacij o dogodku najdete na ..."
 
 #: pretix/base/settings.py:856
 msgid "Additional text"
-msgstr ""
+msgstr "Dodatno besedilo"
 
 #: pretix/base/settings.py:857
 msgid "Will be printed on every invoice below the invoice total."
-msgstr ""
+msgstr "Izpisano bo na vsakem računu pod skupnim zneskom računa."
 
 #: pretix/base/settings.py:870
 msgid ""
 "e.g. your bank details, legal details like your VAT ID, registration "
 "numbers, etc."
 msgstr ""
+"npr. vaši bančni podatki, pravni podatki, kot so identifikacijska številka "
+"za DDV, registrske številke itd."
 
 #: pretix/base/settings.py:873
 msgid "Footer"
-msgstr ""
+msgstr "Noga"
 
 #: pretix/base/settings.py:874
 msgid ""
 "Will be printed centered and in a smaller font at the end of every invoice "
 "page."
-msgstr ""
+msgstr "Na koncu vsake strani računa bo izpisano na sredini in z manjšo pisavo."
 
 #: pretix/base/settings.py:887
 msgid "Attach invoices to emails"
-msgstr ""
+msgstr "Priloži račune e-pošti"
 
 #: pretix/base/settings.py:888
 msgid ""
@@ -6721,10 +6768,14 @@ msgid ""
 "on payment, they will be attached to the payment confirmation mail. If they "
 "are not automatically generated, they will not be attached to emails."
 msgstr ""
+"Če se računi samodejno ustvarijo za vsa naročila, bodo priloženi potrditveni "
+"pošti naročila. Če se računi samodejno ustvarijo ob plačilu, bodo priloženi "
+"k pošti s potrditvijo plačila. Če se računi ne ustvarijo samodejno, ne bodo "
+"priloženi k e-pošti."
 
 #: pretix/base/settings.py:900
 msgid "Email address to receive a copy of each invoice"
-msgstr ""
+msgstr "E-poštni naslov za prejemanje kopije vsakega računa"
 
 #: pretix/base/settings.py:901
 msgid ""
@@ -6744,15 +6795,15 @@ msgstr ""
 
 #: pretix/base/settings.py:933
 msgid "Available languages"
-msgstr ""
+msgstr "Razpoložljivi jeziki"
 
 #: pretix/base/settings.py:949 pretix/control/forms/event.py:126
 msgid "Default language"
-msgstr ""
+msgstr "Privzet jezik"
 
 #: pretix/base/settings.py:959
 msgid "Region"
-msgstr ""
+msgstr "Regija"
 
 #: pretix/base/settings.py:960
 msgid ""
@@ -13243,11 +13294,9 @@ msgid "Rate"
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/event/tax_index.html:41
-#, fuzzy, python-format
-#| msgctxt "invoice"
-#| msgid "Included taxes"
+#, python-format
 msgid "incl. %(rate)s %%"
-msgstr "Vključeni davki"
+msgstr "vključno z %(rate)s %%"
 
 #: pretix/control/templates/pretixcontrol/event/tax_index.html:43
 #, python-format
@@ -15512,10 +15561,9 @@ msgstr "Besedilo pomoči"
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:12
 #: pretix/control/templates/pretixcontrol/organizers/customer_edit.html:5
 #: pretix/control/templates/pretixcontrol/organizers/customer_edit.html:11
-#, fuzzy, python-format
-#| msgid "E-mail address verified"
+#, python-format
 msgid "Customer #%(id)s"
-msgstr "Email naslov preverjen"
+msgstr "Stranka #%(id)s"
 
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:21
 #: pretix/control/templates/pretixcontrol/organizers/customer_membership.html:15
@@ -22778,10 +22826,9 @@ msgid "Registration"
 msgstr "URIji za preusmeritev"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_registration.html:11
-#, fuzzy, python-format
-#| msgid "Creation date"
+#, python-format
 msgid "Create a new account at %(org)s"
-msgstr "Datum ustvarjenja"
+msgstr "Ustvarite nov račun pri %(org)s"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_registration.html:24
 msgid "Log in to an existing account"
