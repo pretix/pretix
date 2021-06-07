@@ -199,7 +199,7 @@ class Rule(models.Model):
     offset_to_event_end = models.BooleanField(default=False, blank=True)  # no verbose name because not actually
     offset_is_after = models.BooleanField(default=False, blank=True)      # displayed in any forms
 
-    send_to = models.CharField(max_length=10, choices=SEND_TO_CHOICES, default=CUSTOMERS, verbose_name='Send email to')
+    send_to = models.CharField(max_length=10, choices=SEND_TO_CHOICES, default=CUSTOMERS, verbose_name=_('Send email to'))
 
     enabled = models.BooleanField(
         default=True,
