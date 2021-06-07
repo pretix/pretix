@@ -369,7 +369,7 @@ Endpoints
    :<json boolean error_reason: One of ``canceled``, ``invalid``, ``unpaid``, ``product``, ``rules``, ``revoked``,
                                 ``incomplete``, ``already_redeemed``, or ``error``. Required.
    :<json raw_barcode: The raw barcode you scanned. Required.
-   :<json datetime: Internal ID of an order position you matched. Optional.
+   :<json datetime: Date and time of the scan. Optional.
    :<json type: Type of scan, defaults to ``"entry"``.
    :<json position: Internal ID of an order position you matched. Optional.
    :<json raw_item: Internal ID of an item you matched. Optional.
