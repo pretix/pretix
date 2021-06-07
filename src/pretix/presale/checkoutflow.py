@@ -255,6 +255,14 @@ class CustomerStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
         return f
 
     @cached_property
+    def signup_allowed(self):
+        return not any(
+            p.item.require_membership or
+            (p.variation and p.variation.require_membership)
+            for p in self.positions
+        )
+
+    @cached_property
     def guest_allowed(self):
         return not any(
             p.item.require_membership or
@@ -330,6 +338,7 @@ class CustomerStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
             self.cart_session.get('customer_mode', 'login' if self.request.customer else '')
         )
         ctx['guest_allowed'] = self.guest_allowed
+        ctx['signup_allowed'] = self.signup_allowed
 
         if 'customer' in self.cart_session:
             try:

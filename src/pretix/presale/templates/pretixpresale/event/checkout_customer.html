@@ -14,7 +14,7 @@
                         <h4 class="panel-title">
                             <input type="radio" name="customer_mode" value="login"
                                     data-parent="#customer"
-                                    {% if selected == "login" %}checked="checked"{% endif %}
+                                    {% if selected == "login" or not signup_allowed %}checked="checked"{% endif %}
                                     data-toggle="radiocollapse" data-target="#customer_login"/>
                             <strong>
                                 {% trans "Log in with a customer account" %}
@@ -23,7 +23,7 @@
                     </div>
                 </label>
                 <div id="customer_login"
-                        class="panel-collapse collapsed {% if selected == "login" %}in{% endif %}">
+                        class="panel-collapse collapsed {% if selected == "login" or not signup_allowed %}in{% endif %}">
                     <div class="panel-body form-horizontal">
                         {% if customer %}
                             <p>
@@ -65,34 +65,36 @@
                     </div>
                 </div>
             </div>
-            <div class="panel panel-default">
-                <label class="accordion-radio">
-                    <div class="panel-heading">
-                        <h4 class="panel-title">
-                            <input type="radio" name="customer_mode" value="register"
-                                    data-parent="#customer"
-                                    {% if selected == "register" %}checked="checked"{% endif %}
-                                    data-toggle="radiocollapse" data-target="#customer_register"/>
-                            <strong>
-                                {% trans "Create a new customer account" %}
-                            </strong>
-                        </h4>
-                    </div>
-                </label>
-                <div id="customer_register"
-                        class="panel-collapse collapsed {% if selected == "register" %}in{% endif %}">
-                    <div class="panel-body form-horizontal">
-                        {% bootstrap_form register_form layout="checkout" %}
-                        <p>
-                            {% blocktrans trimmed with org=request.organizer.name %}
-                                We will send you an email with a link to activate your account and set a password, so
-                                you can use the account for future orders at {{ org }}. You can still go ahead with this
-                                purchase before you received the email.
-                            {% endblocktrans %}
-                        </p>
+            {% if signup_allowed %}
+                <div class="panel panel-default">
+                    <label class="accordion-radio">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">
+                                <input type="radio" name="customer_mode" value="register"
+                                        data-parent="#customer"
+                                        {% if selected == "register" %}checked="checked"{% endif %}
+                                        data-toggle="radiocollapse" data-target="#customer_register"/>
+                                <strong>
+                                    {% trans "Create a new customer account" %}
+                                </strong>
+                            </h4>
+                        </div>
+                    </label>
+                    <div id="customer_register"
+                            class="panel-collapse collapsed {% if selected == "register" %}in{% endif %}">
+                        <div class="panel-body form-horizontal">
+                            {% bootstrap_form register_form layout="checkout" %}
+                            <p>
+                                {% blocktrans trimmed with org=request.organizer.name %}
+                                    We will send you an email with a link to activate your account and set a password, so
+                                    you can use the account for future orders at {{ org }}. You can still go ahead with this
+                                    purchase before you received the email.
+                                {% endblocktrans %}
+                            </p>
+                        </div>
                     </div>
                 </div>
-            </div>
+            {% endif %}
             {% if guest_allowed %}
                 <div class="panel panel-default">
                     <label class="accordion-radio">
