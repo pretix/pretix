@@ -321,7 +321,7 @@ $(function () {
         var $tr = $(this).closest(".table-calendar").find(".selected-day");
         $tr.find("td").html($(this).find(".events").html());
         $tr.find("td").prepend($("<h3>").text($(this).attr("data-date")));
-        $tr.show();
+        $tr.removeClass("hidden");
     });
 
     $(".print-this-page").on("click", function (e) {

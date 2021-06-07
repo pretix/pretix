@@ -69,9 +69,6 @@
       background: darken($brand-primary, 15%);
     }
   }
-  .selected-day {
-    display: none;
-  }
 }
 .week-calendar {
   .weekday {
@@ -120,6 +117,13 @@
     }
     .no-events {
       display: block;
+    }
+  }
+}
+@media (min-width: $screen-sm-min) {
+  .table-calendar, .week-calendar {
+    .selected-day {
+      display: none !important;
     }
   }
 }
