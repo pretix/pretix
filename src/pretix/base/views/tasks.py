@@ -205,11 +205,11 @@ class AsyncFormView(AsyncMixin, FormView):
     known_errortypes = ['ValidationError']
 
     def __init_subclass__(cls):
-        def async_execute(self, *, request_path, form_kwargs, locale, tz, organizer=None, event=None, user=None, session_key=None):
+        def async_execute(self, *, request_path, query_string, form_kwargs, locale, tz, organizer=None, event=None, user=None, session_key=None):
             view_instance = cls()
             form_kwargs['data'] = QueryDict(form_kwargs['data'])
             req = RequestFactory().post(
-                request_path,
+                request_path + '?' + query_string,
                 data=form_kwargs['data'].urlencode(),
                 content_type='application/x-www-form-urlencoded'
             )
@@ -271,6 +271,7 @@ class AsyncFormView(AsyncMixin, FormView):
         form_kwargs.pop('event', None)
         kwargs = {
             'request_path': self.request.path,
+            'query_string': self.request.GET.urlencode(),
             'form_kwargs': form_kwargs,
             'locale': get_language(),
             'tz': get_current_timezone().zone,
