@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-06-07 10:47+0000\n"
-"PO-Revision-Date: 2021-05-28 06:00+0000\n"
+"PO-Revision-Date: 2021-06-07 23:00+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
 ">\n"
@@ -2293,20 +2293,16 @@ msgid "Exit"
 msgstr "Ausgang"
 
 #: pretix/base/models/checkin.py:262
-#, fuzzy
-#| msgid "Unknown invoice."
 msgid "Unknown ticket"
-msgstr "Unbekannte Rechnung"
+msgstr "Unbekanntes Ticket"
 
 #: pretix/base/models/checkin.py:263
-#, fuzzy
-#| msgid "Ticket download"
 msgid "Ticket not paid"
-msgstr "Ticket-Download"
+msgstr "Ticket nicht bezahlt"
 
 #: pretix/base/models/checkin.py:264
 msgid "Forbidden by custom rule"
-msgstr ""
+msgstr "Von Regel abgelehnt"
 
 #: pretix/base/models/checkin.py:265
 #, fuzzy
