@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-05-27 12:05+0000\n"
+"POT-Creation-Date: 2021-06-07 10:48+0000\n"
 "PO-Revision-Date: 2020-06-12 20:00+0000\n"
 "Last-Translator: Frank <webappconcept@gmail.com>\n"
 "Language-Team: Italian <https://translate.pretix.eu/projects/pretix/pretix-"
@@ -172,8 +172,10 @@ msgid "Information required"
 msgstr ""
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:56
-msgid "Invalid ticket"
-msgstr ""
+#, fuzzy
+#| msgid "Unknown error."
+msgid "Unknown ticket"
+msgstr "Errore sconosciuto."
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:57
 msgid "Invalid product"
@@ -475,15 +477,15 @@ msgstr ""
 msgid "Selected only"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/main.js:832
+#: pretix/static/pretixcontrol/js/ui/main.js:834
 msgid "Use a different name internally"
 msgstr "Utilizza un nome diverso internamente"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:867
+#: pretix/static/pretixcontrol/js/ui/main.js:869
 msgid "Click to close"
 msgstr "Clicca per chiudere"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:908
+#: pretix/static/pretixcontrol/js/ui/main.js:910
 msgid "You have unsaved changes!"
 msgstr "Hai cambiamenti non salvati!"
 
@@ -539,22 +541,22 @@ msgstr "Ricevi indietro %(currency)s %(amount)s"
 msgid "Please enter the amount the organizer can keep."
 msgstr "Inserisci l'importo che l'organizzatore può trattenere."
 
-#: pretix/static/pretixpresale/js/ui/main.js:307
+#: pretix/static/pretixpresale/js/ui/main.js:308
 msgid "Please enter a quantity for one of the ticket types."
 msgstr "Inserisci la quantità per una tipologia di biglietto."
 
-#: pretix/static/pretixpresale/js/ui/main.js:343
+#: pretix/static/pretixpresale/js/ui/main.js:344
 #, fuzzy
 #| msgid "Cart expired"
 msgid "required"
 msgstr "Carrello scaduto"
 
-#: pretix/static/pretixpresale/js/ui/main.js:440
-#: pretix/static/pretixpresale/js/ui/main.js:458
+#: pretix/static/pretixpresale/js/ui/main.js:441
+#: pretix/static/pretixpresale/js/ui/main.js:459
 msgid "Time zone:"
 msgstr ""
 
-#: pretix/static/pretixpresale/js/ui/main.js:449
+#: pretix/static/pretixpresale/js/ui/main.js:450
 msgid "Your local time:"
 msgstr ""
 

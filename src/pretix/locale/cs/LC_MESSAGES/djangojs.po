@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-05-27 12:05+0000\n"
+"POT-Creation-Date: 2021-06-07 10:48+0000\n"
 "PO-Revision-Date: 2021-05-20 07:27+0000\n"
 "Last-Translator: Smejkal Vojtěch <me@vsmejkal.eu>\n"
 "Language-Team: Czech <https://translate.pretix.eu/projects/pretix/pretix-js/"
@@ -163,8 +163,8 @@ msgid "Information required"
 msgstr "Informace vyžadována"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:56
-msgid "Invalid ticket"
-msgstr "Neplatná vstupenka"
+msgid "Unknown ticket"
+msgstr ""
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:57
 msgid "Invalid product"
@@ -446,15 +446,15 @@ msgstr ""
 msgid "Selected only"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/main.js:832
+#: pretix/static/pretixcontrol/js/ui/main.js:834
 msgid "Use a different name internally"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/main.js:867
+#: pretix/static/pretixcontrol/js/ui/main.js:869
 msgid "Click to close"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/main.js:908
+#: pretix/static/pretixcontrol/js/ui/main.js:910
 msgid "You have unsaved changes!"
 msgstr ""
 
@@ -512,20 +512,20 @@ msgstr ""
 msgid "Please enter the amount the organizer can keep."
 msgstr ""
 
-#: pretix/static/pretixpresale/js/ui/main.js:307
+#: pretix/static/pretixpresale/js/ui/main.js:308
 msgid "Please enter a quantity for one of the ticket types."
 msgstr ""
 
-#: pretix/static/pretixpresale/js/ui/main.js:343
+#: pretix/static/pretixpresale/js/ui/main.js:344
 msgid "required"
 msgstr ""
 
-#: pretix/static/pretixpresale/js/ui/main.js:440
-#: pretix/static/pretixpresale/js/ui/main.js:458
+#: pretix/static/pretixpresale/js/ui/main.js:441
+#: pretix/static/pretixpresale/js/ui/main.js:459
 msgid "Time zone:"
 msgstr ""
 
-#: pretix/static/pretixpresale/js/ui/main.js:449
+#: pretix/static/pretixpresale/js/ui/main.js:450
 msgid "Your local time:"
 msgstr ""
 
@@ -773,3 +773,6 @@ msgstr "Listopad"
 #: pretix/static/pretixpresale/js/widget/widget.js:72
 msgid "December"
 msgstr "Prosinec"
+
+#~ msgid "Invalid ticket"
+#~ msgstr "Neplatná vstupenka"
