@@ -146,6 +146,7 @@ def sendmail_run_rules(sender, **kwargs):
         )
         for m_id in mails.filter(
             state__in=(ScheduledMail.STATE_SCHEDULED, ScheduledMail.STATE_FAILED),
+            rule__enabled=True,
             computed_datetime__gte=timezone.now() - datetime.timedelta(days=2),
             computed_datetime__lte=timezone.now(),
         ).values_list('pk', flat=True):
@@ -161,7 +162,7 @@ def sendmail_run_rules(sender, **kwargs):
             #   emails might be sent a second time. This isn't nice, but any solution would either
             #   require settings some arbitrary timeout for a process or risk not sending some
             #   emails at all. Under the assumption that system-level failures are rare and (more
-            #   importantly) usually don't happen multiple times in a row, this seems liek a
+            #   importantly) usually don't happen multiple times in a row, this seems like a
             #   good tradeoff.
             # - We never retry for more than two days.
 

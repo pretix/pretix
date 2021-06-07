@@ -231,7 +231,7 @@ class RuleForm(FormPlaceholderMixin, I18nModelForm):
         fields = ['subject', 'template',
                   'send_date', 'send_offset_days', 'send_offset_time',
                   'include_pending', 'all_products', 'limit_products',
-                  'send_to']
+                  'send_to', 'enabled']
 
         field_classes = {
             'subevent': SafeModelMultipleChoiceField,

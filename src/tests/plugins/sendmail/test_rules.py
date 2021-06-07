@@ -350,3 +350,14 @@ def test_sendmail_rule_only_send_once(event, order):
     assert len(djmail.outbox) == 1
     sendmail_run_rules(None)
     assert len(djmail.outbox) == 1
+
+
+@pytest.mark.django_db
+@scopes_disabled()
+def test_sendmail_rule_disabled(event, order):
+    djmail.outbox = []
+    event.sendmail_rules.create(send_date=dt_now - datetime.timedelta(hours=1), include_pending=True,
+                                subject='meow', template='meow meow meow', enabled=False)
+
+    sendmail_run_rules(None)
+    assert len(djmail.outbox) == 0

@@ -201,6 +201,12 @@ class Rule(models.Model):
 
     send_to = models.CharField(max_length=10, choices=SEND_TO_CHOICES, default=CUSTOMERS, verbose_name='Send email to')
 
+    enabled = models.BooleanField(
+        default=True,
+        verbose_name=_('Enabled'),
+        help_text=_('Only enabled rules are actually sent')
+    )
+
     objects = ScopedManager(organizer='event__organizer')
 
     def save(self, **kwargs):
