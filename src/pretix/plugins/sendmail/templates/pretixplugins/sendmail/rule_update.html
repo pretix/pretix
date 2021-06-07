@@ -10,6 +10,8 @@
             {% csrf_token %}
             {% bootstrap_form_errors form %}
 
+            {% bootstrap_field form.enabled layout='control' %}
+
             <fieldset>
                 <legend>{% trans "Content" %}</legend>
                 {% bootstrap_field form.subject layout='control' %}

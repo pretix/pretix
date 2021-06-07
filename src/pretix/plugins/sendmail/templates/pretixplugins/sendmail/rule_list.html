@@ -31,10 +31,11 @@
                 </thead>
                 <tbody>
                 {% for r in rules %}
-                    <tr>
+                    <tr{% if not r.enabled %} class="row-muted"{% endif %}>
                         <td>
-                            {% if not r.enabled %}{% trans "(disabled)" %}{% endif %}
+                            {% if not r.enabled %}<strike>{% endif %}
                             <strong><a href="{% url "plugins:sendmail:rule.update" organizer=request.organizer.slug event=request.event.slug rule=r.pk %}">{{ r.subject }}</a></strong>
+                            {% if not r.enabled %}</strike>{% endif %}
                         </td>
                         <td>
                             {{ r.get_send_to_display }}
