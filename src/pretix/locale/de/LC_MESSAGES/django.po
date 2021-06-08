@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-06-07 10:47+0000\n"
-"PO-Revision-Date: 2021-06-07 23:00+0000\n"
+"PO-Revision-Date: 2021-06-08 22:00+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
 ">\n"
@@ -2305,28 +2305,20 @@ msgid "Forbidden by custom rule"
 msgstr "Von Regel abgelehnt"
 
 #: pretix/base/models/checkin.py:265
-#, fuzzy
-#| msgid "Ticket layout changed."
 msgid "Ticket code revoked/changed"
-msgstr "Das Ticket-Layout wurde geändert."
+msgstr "Ticket-Code gesperrt/geändert"
 
 #: pretix/base/models/checkin.py:266
-#, fuzzy
-#| msgid "Action required"
 msgid "Information required"
-msgstr "Aktion erforderlich"
+msgstr "Infos benötigt"
 
 #: pretix/base/models/checkin.py:267
-#, fuzzy
-#| msgid "Ticket layouts"
 msgid "Ticket already used"
-msgstr "Ticket-Layouts"
+msgstr "Ticket bereits eingelöst"
 
 #: pretix/base/models/checkin.py:268
-#, fuzzy
-#| msgid "Internal Server Error"
 msgid "Server error"
-msgstr "Interner Serverfehler"
+msgstr "Serverfehler"
 
 #: pretix/base/models/customers.py:48
 msgid "Account active"
@@ -9955,22 +9947,16 @@ msgid "Date of last successful payment"
 msgstr "Datum der letzten Zahlung"
 
 #: pretix/control/forms/filter.py:1746
-#, fuzzy
-#| msgid "All check-in lists"
 msgid "All check-ins"
-msgstr "Alle Check-in-Listen"
+msgstr "Alle Check-Ins"
 
 #: pretix/control/forms/filter.py:1747
-#, fuzzy
-#| msgid "Successful payments"
 msgid "Successful check-ins"
-msgstr "Erfolgreiche Zahlungen"
+msgstr "Erfolgreiche Check-Ins"
 
 #: pretix/control/forms/filter.py:1748
-#, fuzzy
-#| msgid "Only successful payments"
 msgid "Unsuccessful check-ins"
-msgstr "Nur erfolgreiche Zahlungen"
+msgstr "Fehlgeschlagene Check-Ins"
 
 #: pretix/control/forms/filter.py:1753
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html:59
@@ -9979,10 +9965,8 @@ msgid "Scan type"
 msgstr "Scan-Typ"
 
 #: pretix/control/forms/filter.py:1755
-#, fuzzy
-#| msgid "All actions"
 msgid "All directions"
-msgstr "Alle Aktionen"
+msgstr "Alle Richtungen"
 
 #: pretix/control/forms/filter.py:1764
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html:62
@@ -9991,17 +9975,12 @@ msgid "Device"
 msgstr "Gerät"
 
 #: pretix/control/forms/filter.py:1765
-#, fuzzy
-#| msgid "All invoices"
 msgid "All devices"
-msgstr "Alle Rechnungen"
+msgstr "Alle Geräte"
 
 #: pretix/control/forms/filter.py:1771
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "All dates"
 msgid "All gates"
-msgstr "Alle Termine"
+msgstr "Alle Stationen"
 
 #: pretix/control/forms/filter.py:1779
 #, fuzzy
