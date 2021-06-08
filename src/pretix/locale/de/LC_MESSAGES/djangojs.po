@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-06-07 10:48+0000\n"
-"PO-Revision-Date: 2021-06-07 23:00+0000\n"
+"PO-Revision-Date: 2021-06-08 22:00+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix-js/"
 "de/>\n"
@@ -156,11 +156,11 @@ msgstr "Ausgang gespeichert"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:54
 msgid "Ticket already used"
-msgstr "Ticket bereits benutzt"
+msgstr "Ticket bereits eingelöst"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:55
 msgid "Information required"
-msgstr "Informationen benötigt"
+msgstr "Infos benötigt"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:56
 msgid "Unknown ticket"
@@ -176,7 +176,7 @@ msgstr "Eingang nicht erlaubt"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:60
 msgid "Ticket code revoked/changed"
-msgstr "Ticket gesperrt/geändert"
+msgstr "Ticket-Code gesperrt/geändert"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:61
 msgid "Order canceled"
