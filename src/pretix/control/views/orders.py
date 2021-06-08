@@ -2204,10 +2204,14 @@ class ExportDoView(EventPermissionRequiredMixin, ExportMixin, AsyncAction, Templ
             'organizer': self.request.event.organizer.slug
         }) + '?identifier=' + self.exporter.identifier
 
+    def get_check_url(self, task_id, ajax):
+        return self.request.path + '?async_id=%s&exporter=%s' % (task_id, self.exporter.identifier) + ('&ajax=1' if ajax else '')
+
     @cached_property
     def exporter(self):
+        d = getattr(self.request, self.request.method)
         for ex in self.exporters:
-            if ex.identifier == self.request.POST.get("exporter"):
+            if ex.identifier == d.get("exporter"):
                 return ex
 
     def get(self, request, *args, **kwargs):
