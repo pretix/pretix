@@ -1292,7 +1292,13 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
                     if pos.voucher:
                         Voucher.objects.filter(pk=pos.voucher.pk).update(redeemed=F('redeemed') + 1)
                     pos.save()
+                    seen_answers = set()
                     for answ_data in answers_data:
+                        # Workaround for a pretixPOS bug :-(
+                        if answ_data.get('question') in seen_answers:
+                            continue
+                        seen_answers.add(answ_data.get('question'))
+
                         options = answ_data.pop('options', [])
 
                         if isinstance(answ_data['answer'], File):
