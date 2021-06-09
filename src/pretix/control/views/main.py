@@ -190,7 +190,9 @@ class EventWizard(SafeSessionWizardView):
                         qs = qs.filter(
                             id__in=self.request.user.teams.filter(can_create_events=True).values_list('organizer', flat=True)
                         )
-                    initial['organizer'] = qs.get(slug=self.request.GET.get('organizer'))
+                    organizer = qs.get(slug=self.request.GET.get('organizer'))
+                    initial['organizer'] = organizer
+                    initial['locales'] = organizer.settings.locales
                 except Organizer.DoesNotExist:
                     pass
 

@@ -110,7 +110,9 @@ class EventWizardFoundationForm(forms.Form):
         self.fields['organizer'].widget.choices = self.fields['organizer'].choices
 
         if len(self.fields['organizer'].choices) == 1:
-            self.fields['organizer'].initial = self.fields['organizer'].queryset.first()
+            organizer = self.fields['organizer'].queryset.first()
+            self.fields['organizer'].initial = organizer
+            self.fields['locales'].initial = organizer.settings.locales
 
 
 class EventWizardBasicsForm(I18nModelForm):
