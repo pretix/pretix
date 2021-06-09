@@ -318,6 +318,7 @@ class WaitingListView(EventPermissionRequiredMixin, WaitingListQuerySetMixin, Pa
     def get_filename(self):
         return '{}_waitinglist'.format(self.request.event.slug)
 
+
 class EntryDelete(EventPermissionRequiredMixin, DeleteView):
     model = WaitingListEntry
     template_name = 'pretixcontrol/waitinglist/delete.html'
