@@ -2209,9 +2209,12 @@ class ExportDoView(EventPermissionRequiredMixin, ExportMixin, AsyncAction, Templ
 
     @cached_property
     def exporter(self):
-        d = getattr(self.request, self.request.method)
+        if self.request.method == "POST":
+            identifier = self.request.POST.get("exporter")
+        else:
+            identifier = self.request.GET.get("exporter")
         for ex in self.exporters:
-            if ex.identifier == d.get("exporter"):
+            if ex.identifier == identifier:
                 return ex
 
     def get(self, request, *args, **kwargs):
