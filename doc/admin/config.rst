@@ -319,6 +319,8 @@ to speed up various operations::
     The ``sentinels`` variable should be a json serialized list of sentinels,
     each being a list with the two elements hostname and port.
     You cannot provide a password within the location when using sentinels.
+    Note that the configuration format requires you to either place the entire
+    value on one line or make sure all values are indented by at least one space.
 
 ``password``
     If your redis setup doesn't require a password or you already specified it in the location you can omit this option.
