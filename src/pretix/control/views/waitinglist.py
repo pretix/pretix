@@ -312,9 +312,11 @@ class WaitingListView(EventPermissionRequiredMixin, WaitingListQuerySetMixin, Pa
             writer.writerow(row)
 
         r = HttpResponse(output.getvalue().encode("utf-8"), content_type='text/csv')
-        r['Content-Disposition'] = 'attachment; filename="waitinglist.csv"'
+        r['Content-Disposition'] = 'attachment; filename="{}.csv"'.format(self.get_filename())
         return r
 
+    def get_filename(self):
+        return '{}_waitinglist'.format(self.request.event.slug)
 
 class EntryDelete(EventPermissionRequiredMixin, DeleteView):
     model = WaitingListEntry
