@@ -174,7 +174,7 @@
                     <tr>
                         <td>
                             {% if "can_change_orders" in request.eventpermset %}
-                                <label aria-label="{% trans "select row for batch-operation" %}" class="batch-select-label"><input type="checkbox" name="entry" class="batch-select-checkbox" value="{{ s.pk }}"/></label>
+                                <label aria-label="{% trans "select row for batch-operation" %}" class="batch-select-label"><input type="checkbox" name="entry" class="batch-select-checkbox" value="{{ e.pk }}"/></label>
                             {% endif %}
                         </td>
                         {% if request.event.settings.waiting_list_names_asked %}
