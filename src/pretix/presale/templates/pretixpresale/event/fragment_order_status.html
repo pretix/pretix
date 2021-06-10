@@ -2,24 +2,27 @@
 {% load bootstrap3 %}
 {% if order.status == "n" %}
     {% if order.require_approval %}
-        <span class="label label-warning {{ class }}">{% trans "Approval pending" %}</span>
+        {% trans "Approval pending" %}
     {% elif order.total == 0 %}
-        <span class="label label-warning {{ class }}">{% trans "Confirmation pending" context "order state" %}</span>
+        {% trans "Confirmation pending" context "order state" %}
     {% elif event.settings.payment_pending_hidden %}
         {# intentionally left blank #}
     {% else %}
-        <span class="label label-warning {{ class }}">{% trans "Payment pending" %}</span>
+        {% trans "Payment pending" %}
+    {% endif %}
+    {% if not event.settings.payment_pending_hidden %}
+        <i class="{{ class }} fa fa-circle text-warning" aria-hidden="true"></i>
     {% endif %}
 {% elif order.status == "p" %}
     {% if order.count_positions == 0 %}
-        <span class="label label-info {{ class }}">{% trans "Canceled (paid fee)" %}</span>
+        {% trans "Canceled (paid fee)" %} <i class="{{ class }} fa fa-info-circle text-info" aria-hidden="true"></i>
     {% elif order.total == 0 %}
-        <span class="label label-success {{ class }}">{% trans "Confirmed" context "order state" %}</span>
+        {% trans "Confirmed" context "order state" %} <i class="{{ class }} fa fa-check-circle text-success" aria-hidden="true"></i>
     {% else %}
-        <span class="label label-success {{ class }}">{% trans "Paid" %}</span>
+        {% trans "Paid" %} <i class="{{ class }} fa fa-check-circle text-success" aria-hidden="true"></i>
     {% endif %}
 {% elif order.status == "e" %}
-    <span class="label label-danger {{ class }}">{% trans "Expired" %}</span>
+    {% trans "Expired" %}  <i class="{{ class }} fa fa-minus-circle text-danger" aria-hidden="true"></i>
 {% elif order.status == "c" %}
-    <span class="label label-danger {{ class }}">{% trans "Canceled" %}</span>
+    {% trans "Canceled" %} <i class="{{ class }} fa fa-times-circle text-danger" aria-hidden="true"></i>
 {% endif %}

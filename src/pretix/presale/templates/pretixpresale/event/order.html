@@ -63,10 +63,8 @@
             <div class="clearfix"></div>
         </div>
     {% endif %}
-    <h2>
-        {% blocktrans trimmed with code=order.code %}
-            Your order: {{ code }}
-        {% endblocktrans %}
+
+    <h2 class="h1">{% trans "Your order" %}
         {% if order.testmode %}
             <span class="label label-warning">{% trans "TEST MODE" %}</span>
         {% endif %}
@@ -75,9 +73,13 @@
                 {% trans "View in backend" %}
             </a>
         {% endif %}
-        {% include "pretixpresale/event/fragment_order_status.html" with order=order event=request.event class="pull-right flip" %}
-        <div class="clearfix"></div>
     </h2>
+    <dl class="lead order-details">
+        <dt class="text-muted">Order</dt>
+        <dd>{{ order.code }}</dd>
+        <dt class="sr-only">Status</dt>
+        <dd class="text-muted">{% include "pretixpresale/event/fragment_order_status.html" with order=order event=request.event class="status-dot" %}</dd>
+    </dl>
     {% if order.status == "n" and not order.require_approval %}
         <div class="panel panel-primary">
             <div class="panel-heading">

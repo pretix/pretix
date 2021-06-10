@@ -20,7 +20,18 @@
     line-height: 1.8em;
 }
 
-
+.order-details dt {
+    font-weight: normal;
+    float: left;
+    margin-right: .25em;
+}
+.order-details .status-dot {
+    font-size: 1.2em;
+}
+.text-warning { color: $brand-warning; }
+.text-info { color: $brand-info; }
+.text-success { color: $brand-success; }
+.text-danger { color: $brand-danger; }
 .btn {
     text-decoration: none;
 }

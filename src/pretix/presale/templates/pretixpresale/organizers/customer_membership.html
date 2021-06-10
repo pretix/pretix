@@ -74,10 +74,7 @@
                     </td>
                     <td class="text-right flip">
                         {% if op.canceled %}
-                            <span class="label label-danger">
-                                <span class="fa fa-times"></span>
-                                {% trans "Canceled" %}
-                            </span>
+                            {% trans "Canceled" %} <i class="{{ class }} fa fa-times-circle text-danger" aria-hidden="true"></i>
                         {% else %}
                             {% include "pretixcontrol/orders/fragment_order_status.html" with order=op.order %}
                         {% endif %}
