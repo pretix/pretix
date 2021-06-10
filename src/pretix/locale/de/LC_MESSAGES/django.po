@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-06-07 10:47+0000\n"
-"PO-Revision-Date: 2021-06-08 22:00+0000\n"
+"PO-Revision-Date: 2021-06-10 19:00+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
 ">\n"
@@ -9983,15 +9983,11 @@ msgid "All gates"
 msgstr "Alle Stationen"
 
 #: pretix/control/forms/filter.py:1779
-#, fuzzy
-#| msgid "Start date"
 msgctxt "filter"
 msgid "Start date"
 msgstr "Beginn"
 
 #: pretix/control/forms/filter.py:1785
-#, fuzzy
-#| msgid "End date"
 msgctxt "filter"
 msgid "End date"
 msgstr "Ende"
@@ -12314,10 +12310,8 @@ msgstr "Check-in-Listen"
 #: pretix/control/navigation.py:303
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html:4
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html:6
-#, fuzzy
-#| msgid "Check-in list"
 msgid "Check-in history"
-msgstr "Check-in-Liste"
+msgstr "Check-in-Protokoll"
 
 #: pretix/control/navigation.py:346
 #: pretix/control/templates/pretixcontrol/orders/search.html:7
@@ -12889,22 +12883,16 @@ msgid "Filter"
 msgstr "Filter"
 
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html:45
-#, fuzzy
-#| msgid "Your search did not match any check-in lists."
 msgid "Your search did not match any check-ins."
-msgstr "Ihre Filter treffen auf keine Check-in-Listen zu."
+msgstr "Ihre Filter treffen auf keine Check-ins zu."
 
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html:47
-#, fuzzy
-#| msgid "You haven't created any categories yet."
 msgid "You haven't scanned any tickets yet."
-msgstr "Sie haben bisher keine Kategorien angelegt."
+msgstr "Sie haben bisher keine Tickets gescannt."
 
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html:58
-#, fuzzy
-#| msgid "Name of bank"
 msgid "Time of scan"
-msgstr "Name der Bank"
+msgstr "Scan-Zeitpunkt"
 
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html:60
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:14
@@ -12925,10 +12913,8 @@ msgid "Additional entry scan: %(date)s"
 msgstr "Zusätzlicher Scan: %(date)s"
 
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html:80
-#, fuzzy
-#| msgid "live and in test mode"
 msgid "Failed in offline mode"
-msgstr "live und im Testmodus"
+msgstr "Im Offline-Modus fehlgeschlagen"
 
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html:83
 #: pretix/control/templates/pretixcontrol/order/index.html:339
@@ -12937,18 +12923,14 @@ msgid "Automatically checked in: %(date)s"
 msgstr "Automatisch eingecheckt: %(date)s"
 
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html:98
-#, fuzzy
-#| msgid "Successful payments"
 msgctxt "checkin_result"
 msgid "Successful"
-msgstr "Erfolgreiche Zahlungen"
+msgstr "Erfolgreich"
 
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html:103
-#, fuzzy
-#| msgid "Denied order"
 msgctxt "checkin_result"
 msgid "Denied"
-msgstr "Abgelehnte Bestellung"
+msgstr "Abgelehnt"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html:7
 #: pretix/control/templates/pretixcontrol/checkin/index.html:11
@@ -16102,10 +16084,9 @@ msgid "Ordered items"
 msgstr "Bestellte Produkte"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:329
-#, fuzzy, python-format
-#| msgid "Exit scan: %(date)s"
+#, python-format
 msgid "Denied scan: %(date)s"
-msgstr "Ausgangsscan: %(date)s"
+msgstr "Abgelehnter Scan: %(date)s"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:334
 #, python-format
@@ -21453,10 +21434,8 @@ msgid "Secret"
 msgstr "Secret"
 
 #: pretix/plugins/checkinlists/exporters.py:599
-#, fuzzy
-#| msgid "Check-in log (all successful scans)"
 msgid "Check-in log (all scans)"
-msgstr "Check-in-Protokoll (alle erfolgreichen Scans)"
+msgstr "Check-in-Protokoll (alle Scans)"
 
 #: pretix/plugins/checkinlists/exporters.py:617
 msgid "Offline override"
@@ -21469,13 +21448,11 @@ msgstr "Fehlermeldung"
 
 #: pretix/plugins/checkinlists/exporters.py:664
 msgid "OK"
-msgstr ""
+msgstr "OK"
 
 #: pretix/plugins/checkinlists/exporters.py:694
-#, fuzzy
-#| msgid "Successful payments"
 msgid "Successful scans only"
-msgstr "Erfolgreiche Zahlungen"
+msgstr "Nur erfolgreiche Scans"
 
 #: pretix/plugins/checkinlists/exporters.py:709
 msgid "All check-in lists"
@@ -21988,121 +21965,97 @@ msgstr "An Kunden mit Check-in auf Liste"
 
 #: pretix/plugins/sendmail/forms.py:283
 msgid "Type of schedule time"
-msgstr ""
+msgstr "Art der Zeitangabe"
 
 #: pretix/plugins/sendmail/forms.py:286
-#, fuzzy
-#| msgid "Absolute value"
 msgid "Absolute"
-msgstr "Fester Betrag"
+msgstr "Absolut"
 
 #: pretix/plugins/sendmail/forms.py:287
-#, fuzzy
-#| msgid "Required for events"
 msgid "Relative, before event start"
-msgstr "Pflichtfeld für Veranstaltungen"
+msgstr "Relativ, vor dem Veranstaltungsbeginn"
 
 #: pretix/plugins/sendmail/forms.py:288
-#, fuzzy
-#| msgid "Required for events"
 msgid "Relative, before event end"
-msgstr "Pflichtfeld für Veranstaltungen"
+msgstr "Relativ, vor dem Veranstaltungsende"
 
 #: pretix/plugins/sendmail/forms.py:289
-#, fuzzy
-#| msgid "Required for events"
 msgid "Relative, after event start"
-msgstr "Pflichtfeld für Veranstaltungen"
+msgstr "Relativ, nach dem Veranstaltungsbeginn"
 
 #: pretix/plugins/sendmail/forms.py:290
-#, fuzzy
-#| msgid "Relative date:"
 msgid "Relative, after event end"
-msgstr "Relativ:"
+msgstr "Relativ, nach dem Veranstaltungsende"
 
 #: pretix/plugins/sendmail/forms.py:303
-#, fuzzy
-#| msgid "Please choose a later date."
 msgid "Please specify the send date"
-msgstr "Bitte wählen Sie ein späteres Datum."
+msgstr "Bitte wählen Sie einen Versandzeitpunkt aus"
 
 #: pretix/plugins/sendmail/forms.py:308
-#, fuzzy
-#| msgid "Please enter the same password twice"
 msgid "Please specify the offset days and time"
-msgstr "Bitte geben Sie zweimal dasselbe Passwort ein"
+msgstr ""
+"Bitte geben Sie sowohl die Anzahl der Tage als auch die gewünschte Uhrzeit an"
 
 #: pretix/plugins/sendmail/forms.py:319
-#, fuzzy
-#| msgid "Please select a quota."
 msgid "Please specify a product"
-msgstr "Bitte wählen Sie ein Kontingent aus."
+msgstr "Bitte wählen Sie ein Produkt aus"
 
 #: pretix/plugins/sendmail/models.py:185
-#, fuzzy
-#| msgid "Limit to products"
 msgid "Limit products"
 msgstr "Auf Produkte beschränken"
 
 #: pretix/plugins/sendmail/models.py:190
 msgid "By default, only paid orders will receive the email"
-msgstr ""
+msgstr "Standardmäßig erhalten nur bezahlte Bestellungen die E-Mail"
 
 #: pretix/plugins/sendmail/models.py:194
-#, fuzzy
-#| msgid "End date"
 msgid "Send date"
-msgstr "Ende"
+msgstr "Versandtermin"
 
 #: pretix/plugins/sendmail/models.py:196
-#, fuzzy
-#| msgid "Number of days"
 msgid "Time of day"
-msgstr "Anzahl Tage"
+msgstr "Uhrzeit"
 
 #: pretix/plugins/sendmail/models.py:207
 msgid "Only enabled rules are actually sent"
-msgstr ""
+msgstr "Nur aktivierte E-Mails werden verschickt"
 
 #: pretix/plugins/sendmail/models.py:241
-#, fuzzy, python-brace-format
-#| msgid "Show dates with time"
+#, python-brace-format
 msgid "on {date} at {time}"
-msgstr "Zeige Uhrzeiten"
+msgstr "am {date} um {time}"
 
 #: pretix/plugins/sendmail/models.py:247
 #, python-format
 msgid "%(count)d day after event end at %(time)s"
 msgid_plural "%(count)d days after event end at %(time)s"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%(count)d Tag nach Veranstaltungsende um %(time)s"
+msgstr[1] "%(count)d Tage nach Veranstaltungsende um %(time)s"
 
 #: pretix/plugins/sendmail/models.py:256
 #, python-format
 msgid "%(count)d day before event end at %(time)s"
 msgid_plural "%(count)d days before event end at %(time)s"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%(count)d Tag vor Veranstaltungsende um %(time)s"
+msgstr[1] "%(count)d Tage vor Veranstaltungsende um %(time)s"
 
 #: pretix/plugins/sendmail/models.py:266
 #, python-format
 msgid "%(count)d day after event start at %(time)s"
 msgid_plural "%(count)d days after event start at %(time)s"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%(count)d Tag nach Veranstaltungsbeginn um %(time)s"
+msgstr[1] "%(count)d Tage nach Veranstaltungsbeginn um %(time)s"
 
 #: pretix/plugins/sendmail/models.py:275
 #, python-format
 msgid "%(count)d day before event start at %(time)s"
 msgid_plural "%(count)d days before event start at %(time)s"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%(count)d Tag vor Veranstaltungsbeginn um %(time)s"
+msgstr[1] "%(count)d Tage vor Veranstaltungsbeginn um %(time)s"
 
 #: pretix/plugins/sendmail/signals.py:94
-#, fuzzy
-#| msgid "Attendee email"
 msgid "Automated emails"
-msgstr "E-Mail Teilnehmer*in"
+msgstr "Automatisierte E-Mails"
 
 #: pretix/plugins/sendmail/signals.py:117
 msgid "Email was sent"
@@ -22117,28 +22070,24 @@ msgid "A ticket holder of this order received a mass email."
 msgstr "Ein Ticketinhaber dieser Bestellung hat eine Rundmail erhalten."
 
 #: pretix/plugins/sendmail/signals.py:120
-#, fuzzy
-#| msgid "What should happen to the order?"
 msgid "A scheduled email was sent to the order"
-msgstr "Was soll mit der Bestellung geschehen?"
+msgstr "Eine automatisierte E-Mail wurde an den Besteller verschickt"
 
 #: pretix/plugins/sendmail/signals.py:121
-#, fuzzy
-#| msgid "A custom email has been sent to an attendee."
 msgid "A scheduled email was sent to a ticket holder"
-msgstr "Eine individuelle E-Mail wurde an eine Teilnehmer*in verschickt."
+msgstr "Eine automatisierte E-Mail wurde an eine Teilnehmer*in verschickt."
 
 #: pretix/plugins/sendmail/signals.py:122
-#, fuzzy
-#| msgid "The tax rule has been deleted."
 msgid "An email rule was deleted"
-msgstr "Die Steuer-Regel wurde gelöscht."
+msgstr "Eine E-Mail-Automatisierung wurde gelöscht"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/history.html:8
 msgid ""
 "This page shows you all mass emails you sent out manually. It does not "
 "include emails sent out automatically."
 msgstr ""
+"Diese Seite zeigt alle manuell verschickten Massenmails. Sie enthält keine "
+"automatisch verschickten E-Mails."
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/history.html:25
 msgid "Sent to orders:"
@@ -22166,101 +22115,75 @@ msgstr "Neue Mail auf dieser Basis verschicken"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_create.html:4
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_create.html:6
-#, fuzzy
-#| msgid "Create a new user"
 msgid "Create Email Rule"
-msgstr "Neuen Benutzer erstellen"
+msgstr "Neue Regel erstellen"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_create.html:15
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_update.html:16
-#, fuzzy
-#| msgid "Contact:"
 msgid "Content"
-msgstr "Kontakt:"
+msgstr "Inhalt"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_delete.html:4
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_delete.html:6
-#, fuzzy
-#| msgid "Delete tax rule"
 msgid "Delete Email Rule"
-msgstr "Steuer-Regel löschen"
+msgstr "E-Mail-Regel löschen"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_delete.html:9
-#, fuzzy, python-format
-#| msgid ""
-#| "Are you sure you want to delete the date <strong>%(subevent)s</strong>?"
+#, python-format
 msgid "Are you sure you want to delete the rule <strong>%(subject)s</strong>?"
-msgstr "Möchten Sie den Termin <strong>%(subevent)s</strong> wirklich löschen?"
+msgstr "Möchten Sie die Regel <strong>%(subject)s</strong> wirklich löschen?"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:4
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:6
-#, fuzzy
-#| msgid "Attendee e-mail address"
 msgid "Automated email rules"
-msgstr "Teilnehmer*innen-E-Mail-Adresse"
+msgstr "Regeln für automatisierte E-Mails"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:8
 msgid ""
 "Email rules allow you to automatically send emails to your customers at a "
 "specific time before or after your event."
 msgstr ""
+"Regeln für automatisierte E-Mails erlauben Ihnen, Ihre Kunden automatisch zu "
+"einem bestimmten Zeitpunkt vor oder nach Ihrer Veranstaltung zu kontaktieren."
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:17
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:94
-#, fuzzy
-#| msgid "Create a new tax rule"
 msgid "Create a new rule"
-msgstr "Neue Steuer-Regel erstellen"
+msgstr "Neue Regel erstellen"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:24
-#, fuzzy
-#| msgid "Email was sent"
 msgid "Email subject"
-msgstr "E-Mail wurde verschickt"
+msgstr "E-Mail-Betreff"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:26
-#, fuzzy
-#| msgid "Reduced ticket"
 msgid "Scheduled time"
-msgstr "Ermäßigtes Ticket"
+msgstr "Geplanter Zeitpunkt"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:28
-#, fuzzy
-#| msgid "Event start date"
 msgctxt "subevent"
 msgid "Sent / Total dates"
-msgstr "Veranstaltungsbeginn"
+msgstr "Verschickt / Insgesamt Termine"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:47
-#, fuzzy
-#| msgid "Data selection"
 msgid "Next execution:"
-msgstr "Datenauswahl"
+msgstr "Nächste Ausführung:"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:51
-#, fuzzy
-#| msgid "(unknown)"
 msgid "unknown"
-msgstr "(unbekannt)"
+msgstr "unbekannt"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:55
-#, fuzzy
-#| msgid "Data selection"
 msgid "Last execution:"
-msgstr "Datenauswahl"
+msgstr "Letzte Ausführung:"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:89
-#, fuzzy
-#| msgid "You haven't created any tax rules yet."
 msgid "You haven't created any rules yet."
-msgstr "Sie haben noch keine Steuer-Regeln erstellt."
+msgstr "Sie haben bisher keine Regeln erstellt."
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_update.html:5
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_update.html:7
-#, fuzzy
-#| msgid "Update map?"
 msgid "Update Email Rule"
-msgstr "Übernehmen?"
+msgstr "E-Mail-Regel ändern"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_update.html:37
 msgid ""
@@ -22268,6 +22191,10 @@ msgid ""
 "your configured date. Typically, this will not be more than 10 minutes. Your "
 "email will never be sent earlier than the time you configured."
 msgstr ""
+"Aus technischen Gründen kann die E-Mail in der Praxis etwas nach dem "
+"konfigurierten Zeitpunkt verschickt werden. Üblicherweise beträgt dies nicht "
+"mehr als 10 Minuten. Die E-Mail wird niemals früher als zum angegebenen "
+"Zeitpunkt verschickt."
 
 #: pretix/plugins/sendmail/views.py:118
 msgid "You supplied an invalid log entry ID"
@@ -22288,16 +22215,12 @@ msgstr ""
 "Kontaktadressen von %d Bestellungen versendet."
 
 #: pretix/plugins/sendmail/views.py:347
-#, fuzzy
-#| msgid "The user has been created."
 msgid "Your rule has been created."
-msgstr "Der Benutzer wurde erstellt."
+msgstr "Ihre Regel wurde erstellt."
 
 #: pretix/plugins/sendmail/views.py:463
-#, fuzzy
-#| msgid "The selected tax rule has been deleted."
 msgid "The selected rule has been deleted."
-msgstr "Die ausgewählte Steuer-Regel wurde gelöscht."
+msgstr "Die ausgewählte Regel wurde gelöscht."
 
 #: pretix/plugins/statistics/apps.py:30 pretix/plugins/statistics/apps.py:33
 #: pretix/plugins/statistics/signals.py:37
