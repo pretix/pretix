@@ -43,18 +43,16 @@
     {% if settings.bank_details_type == "sepa" %}
         <div class="col-md-3 col-sm-6 hidden-xs text-center">
             <h4>BezahlCode</h4>
-            <p class="sr-only">{% trans "Scan the following image to open your banking app. This works only if your app supports BezahlCode. Please note: the QR-Code is dynamically generated in a canvas element and therefore cannot be saved as an image." %}</p>
             <p>
-            <a aria-hidden="true" href="bank://singlepaymentsepa?name={{ settings.bank_details_sepa_name|urlencode }}&iban={{ settings.bank_details_sepa_iban }}&bic={{ settings.bank_details_sepa_bic }}&amount={{ amount|commadecimal }}&reason={{ code }}&currency={{ event.currency }}">
-                <script type="text/plain" data-size="150" data-replace-with-qr>bank://singlepaymentsepa?name={{ settings.bank_details_sepa_name|urlencode }}&iban={{ settings.bank_details_sepa_iban }}&bic={{ settings.bank_details_sepa_bic }}&amount={{ amount|commadecimal }}&reason={{ code }}&currency={{ event.currency }}</script>
+            <a aria-label="{% trans "Open BezahlCode in your banking app" %}" href="bank://singlepaymentsepa?name={{ settings.bank_details_sepa_name|urlencode }}&iban={{ settings.bank_details_sepa_iban }}&bic={{ settings.bank_details_sepa_bic }}&amount={{ amount|commadecimal }}&reason={{ code }}&currency={{ event.currency }}">
+                <script type="text/plain" data-size="150" data-replace-with-qr data-desc="{% trans 'BezahlCode for your order. Scan this image with your banking app’s QR-Reader to start the payment process.' %}">bank://singlepaymentsepa?name={{ settings.bank_details_sepa_name|urlencode }}&iban={{ settings.bank_details_sepa_iban }}&bic={{ settings.bank_details_sepa_bic }}&amount={{ amount|commadecimal }}&reason={{ code }}&currency={{ event.currency }}</script>
             </a>
-            <a class="sr-only" href="bank://singlepaymentsepa?name={{ settings.bank_details_sepa_name|urlencode }}&iban={{ settings.bank_details_sepa_iban }}&bic={{ settings.bank_details_sepa_bic }}&amount={{ amount|commadecimal }}&reason={{ code }}&currency={{ event.currency }}">{% trans "Open BezahlCode in your banking app" %}</a>
             </p>
         </div>
         <div class="col-md-3 col-sm-6 hidden-xs text-center">
             <h4>GiroCode / EPC-QR</h4>
-            <p class="sr-only">{% trans "Scan the following image to open your banking app. This works only if your app supports GiroCode / EPC-QR. Please note: the QR-Code is dynamically generated in a canvas element and therefore cannot be saved as an image." %}</p>
-            <script type="text/plain" data-size="150" data-replace-with-qr>BCD
+            <p>
+            <script type="text/plain" data-size="150" data-replace-with-qr data-desc="{% trans 'GiroCode / EPC-QR for your order. Scan this image with your banking app’s QR-Reader to start the payment process.' %}">BCD
 002
 2
 SCT
@@ -67,6 +65,7 @@ SCT
 {{ code }}
 
             </script>
+            </p>
         </div>
         <div class="visible-xs-block text-center">
             <p>

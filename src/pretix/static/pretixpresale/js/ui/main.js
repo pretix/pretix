@@ -119,7 +119,7 @@ var form_handlers = function (el) {
                 width: $(this).attr("data-size") ? parseInt($(this).attr("data-size")) : 256,
                 height: $(this).attr("data-size") ? parseInt($(this).attr("data-size")) : 256,
             }
-        );
+        ).find("canvas").attr("role", "img").attr("aria-label", this.getAttribute("data-desc"));
     });
 
     el.find("input[data-exclusive-prefix]").each(function () {
