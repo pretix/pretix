@@ -26,6 +26,7 @@ from decimal import Decimal
 from itertools import groupby
 from smtplib import SMTPResponseException
 
+import css_inline
 from django.conf import settings
 from django.core.mail.backends.smtp import EmailBackend
 from django.db.models import Count
@@ -35,7 +36,6 @@ from django.utils.timezone import now
 from django.utils.translation import (
     get_language, gettext_lazy as _, pgettext_lazy,
 )
-from inlinestyler.utils import inline_css
 
 from pretix.base.i18n import (
     LazyCurrencyNumber, LazyDate, LazyExpiresDate, LazyNumber,
@@ -174,7 +174,11 @@ class TemplateBasedMailRenderer(BaseHTMLMailRenderer):
             htmlctx['ev'] = position.subevent or self.event
 
         tpl = get_template(self.template_name)
-        body_html = inline_css(tpl.render(htmlctx))
+        body_html = tpl.render(htmlctx)
+
+        inliner = css_inline.CSSInliner(remove_style_tags=True)
+        body_html = inliner.inline(body_html)
+
         return body_html
 
 
