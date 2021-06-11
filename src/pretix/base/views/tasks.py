@@ -106,7 +106,7 @@ class AsyncMixin:
         elif res.state == 'PROGRESS':
             data.update({
                 'started': True,
-                'percentage': res.result.get('value', 0)
+                'percentage': res.result.get('value', 0) if res.result else 0
             })
         elif res.state == 'STARTED':
             data.update({
