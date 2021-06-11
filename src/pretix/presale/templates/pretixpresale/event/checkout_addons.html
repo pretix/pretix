@@ -42,27 +42,31 @@
                                     {% if c.category.description %}
                                         {{ c.category.description|rich_text }}
                                     {% endif %}
-                                    <p>
                                         {% if c.min_count == c.max_count %}
+                                            <p>
                                             {% blocktrans trimmed count min_count=c.min_count %}
                                                 You need to choose exactly one option from this category.
                                             {% plural %}
                                                 You need to choose {{ min_count }} options from this category.
                                             {% endblocktrans %}
+                                            </p>
                                         {% elif c.min_count == 0 and c.max_count >= c.items|length and not c.multi_allowed %}
                                         {% elif c.min_count == 0 %}
+                                            <p>
                                             {% blocktrans trimmed count max_count=c.max_count %}
                                                 You can choose {{ max_count }} option from this category.
                                             {% plural %}
                                                 You can choose up to {{ max_count }} options from this category.
                                             {% endblocktrans %}
+                                            </p>
                                         {% else %}
+                                            <p>
                                             {% blocktrans trimmed with min_count=c.min_count max_count=c.max_count %}
                                                 You can choose between {{ min_count }} and {{ max_count }} options from
                                                 this category.
                                             {% endblocktrans %}
+                                            </p>
                                         {% endif %}
-                                    </p>
                                     {% for item in c.items %}
                                         {% if item.has_variations %}
                                             <article aria-labelledby="cp-{{ form.cartpos.pk }}-item-{{ item.pk }}-legend"{% if item.description %} aria-describedby="cp-{{ form.cartpos.pk }}-item-{{ item.pk }}-description"{% endif %} class="item-with-variations{% if event.settings.show_variations_expanded %} details-open{% endif %}" id="item-{{ item.pk }}">
