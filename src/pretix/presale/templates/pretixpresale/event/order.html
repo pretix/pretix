@@ -77,7 +77,7 @@
         <dt class="text-muted">Order</dt>
         <dd>{{ order.code }}</dd>
         <dt class="sr-only">Status</dt>
-        <dd class="text-muted">{% include "pretixpresale/event/fragment_order_status.html" with order=order event=request.event class="status-dot" %}</dd>
+        <dd class="text-muted">{% include "pretixpresale/event/fragment_order_status.html" with order=order event=request.event %}</dd>
     </dl>
     {% if order.status == "n" and not order.require_approval %}
         <div class="panel panel-primary">

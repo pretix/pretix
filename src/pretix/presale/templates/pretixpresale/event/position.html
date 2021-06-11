@@ -21,7 +21,7 @@
     </h2>
     <dl class="lead order-details">
         <dt class="sr-only">Status</dt>
-        <dd class="text-muted">{% include "pretixpresale/event/fragment_order_status.html" with order=order event=request.event class="status-dot" %}</dd>
+        <dd class="text-muted">{% include "pretixpresale/event/fragment_order_status.html" with order=order event=request.event %}</dd>
     </dl>
     {% eventsignal event "pretix.presale.signals.position_info_top" order=order position=position request=request %}
     {% include "pretixpresale/event/fragment_downloads.html" with position_page=True %}

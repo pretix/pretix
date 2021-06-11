@@ -11,18 +11,18 @@
         {% trans "Payment pending" %}
     {% endif %}
     {% if not event.settings.payment_pending_hidden %}
-        <i class="{{ class }} fa fa-circle text-warning" aria-hidden="true"></i>
+        <i class="status-dot fa fa-circle text-warning" aria-hidden="true"></i>
     {% endif %}
 {% elif order.status == "p" %}
     {% if order.count_positions == 0 %}
-        {% trans "Canceled (paid fee)" %} <i class="{{ class }} fa fa-info-circle text-info" aria-hidden="true"></i>
+        {% trans "Canceled (paid fee)" %} <i class="status-dot fa fa-info-circle text-info" aria-hidden="true"></i>
     {% elif order.total == 0 %}
-        {% trans "Confirmed" context "order state" %} <i class="{{ class }} fa fa-check-circle text-success" aria-hidden="true"></i>
+        {% trans "Confirmed" context "order state" %} <i class="status-dot fa fa-check-circle text-success" aria-hidden="true"></i>
     {% else %}
-        {% trans "Paid" %} <i class="{{ class }} fa fa-check-circle text-success" aria-hidden="true"></i>
+        {% trans "Paid" %} <i class="status-dot fa fa-check-circle text-success" aria-hidden="true"></i>
     {% endif %}
 {% elif order.status == "e" %}
-    {% trans "Expired" %}  <i class="{{ class }} fa fa-minus-circle text-danger" aria-hidden="true"></i>
+    {% trans "Expired" %}  <i class="status-dot fa fa-minus-circle text-danger" aria-hidden="true"></i>
 {% elif order.status == "c" %}
-    {% trans "Canceled" %} <i class="{{ class }} fa fa-times-circle text-danger" aria-hidden="true"></i>
+    {% trans "Canceled" %} <i class="status-dot fa fa-times-circle text-danger" aria-hidden="true"></i>
 {% endif %}
