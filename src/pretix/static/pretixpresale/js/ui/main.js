@@ -301,9 +301,9 @@ $(function () {
     // Subevent choice
     if ($(".subevent-toggle").length) {
         $(".subevent-list").hide();
-        $(".subevent-toggle").css("display", "block").click(function () {
+        $(".subevent-toggle").show().click(function () {
             $(".subevent-list").slideToggle(300);
-            $(".subevent-toggle").slideToggle(300)
+            $(this).slideToggle(300).attr("aria-expanded", true);
         });
     }
 
