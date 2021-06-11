@@ -1,8 +1,9 @@
 {% load i18n %}
 {% load eventurl %}
+<ul class="list-unstyled">
 {% for subev in subevent_list.subevent_list %}
-    <a href="{% if request.GET.voucher %}{% eventurl event "presale:event.redeem" cart_namespace=cart_namespace %}?voucher={{ request.GET.voucher|urlencode }}&subevent={{ subev.pk }}{% else %}{% eventurl event "presale:event.index" subevent=subev.id cart_namespace=cart_namespace %}{% endif %}"
-            class="subevent-row">
+    <li class="subevent-row">
+        <a href="{% if request.GET.voucher %}{% eventurl event "presale:event.redeem" cart_namespace=cart_namespace %}?voucher={{ request.GET.voucher|urlencode }}&subevent={{ subev.pk }}{% else %}{% eventurl event "presale:event.index" subevent=subev.id cart_namespace=cart_namespace %}{% endif %}">
         <div class="row">
             <div class="col-md-6">
                 <strong>{{ subev.name }}</strong>
@@ -13,7 +14,7 @@
                 {% if event.settings.show_times %}
                     <span data-time="{{ subev.date_from.isoformat }}" data-timezone="{{ event.timezone }}" data-time-short>
                         <span class="fa fa-clock-o" aria-hidden="true"></span>
-                        {{ subev.date_from|date:"TIME_FORMAT" }}
+                        <time datetime="{{ subev.date_from.isoformat }}">{{ subev.date_from|date:"TIME_FORMAT" }}</time>
                     </span>
                 {% endif %}
             </div>
@@ -47,5 +48,7 @@
                 {% endif %}
             </div>
         </div>
-    </a>
+        </a>
+    </li>
 {% endfor %}
+</ul>

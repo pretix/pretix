@@ -209,16 +209,18 @@ section.front-page {
     .row {
         margin: 0;
     }
-    a.subevent-row {
+    .label {
+        text-decoration: none;
+    }
+    .subevent-row a {
         display: block;
         color: $text-color;
         padding: 3px 0;
     }
-    a.subevent-row:nth-child(2n) {
+    .subevent-row:nth-child(2n) a {
         background-color: $gray-lighter;
     }
-    a.subevent-row:hover {
-        text-decoration: none;
+    .subevent-row:hover a {
         background-color: darken($gray-lighter, 10%);
     }
     .subevent-row .row > div {

@@ -10,18 +10,18 @@
     <div class="row">
         <div class="col-sm-4 hidden-xs text-left flip">
             <a href="?{% url_replace request "year" subevent_list.before.year "month" subevent_list.before.month %}"
-                    class="btn btn-default">
+                    class="btn btn-default" title="{% trans "Previous month" %}">
                 <span class="fa fa-arrow-left" aria-hidden="true"></span>
                 {{ subevent_list.before|date:"F Y" }}
             </a>
         </div>
-        <div class="col-sm-4 col-xs-12 text-center">
-            <select name="month" class="form-control">
+        <div class="col-sm-4 col-xs-12 text-center" role="group" aria-label="{% trans "Select month and year to show" %}">
+            <select name="month" class="form-control" aria-label="{% trans "Month" %}">
                 {% for m in subevent_list.months %}
                     <option value="{{ m|date:"m" }}" {% if m.month == subevent_list.date.month %}selected{% endif %}>{{ m|date:"F" }}</option>
                 {% endfor %}
             </select>
-            <select name="year" class="form-control">
+            <select name="year" class="form-control" aria-label="{% trans "Year" %}">
                 {% for y in subevent_list.years %}
                     <option value="{{ y }}" {% if y == subevent_list.date.year %}selected{% endif %}>{{ y }}</option>
                 {% endfor %}
@@ -31,7 +31,8 @@
             </button>
         </div>
         <div class="col-sm-4 hidden-xs text-right flip">
-            <a href="?{% url_replace request "year" subevent_list.after.year "month" subevent_list.after.month %}" class="btn btn-default">
+            <a href="?{% url_replace request "year" subevent_list.after.year "month" subevent_list.after.month %}" 
+                class="btn btn-default" title="{% trans "Next month" %}">
                 {{ subevent_list.after|date:"F Y" }}
                 <span class="fa fa-arrow-right" aria-hidden="true"></span>
             </a>

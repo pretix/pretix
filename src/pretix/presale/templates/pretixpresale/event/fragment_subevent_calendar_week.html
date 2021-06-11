@@ -10,18 +10,18 @@
     <div class="row">
         <div class="col-sm-4 hidden-xs text-left flip">
             <a href="?{% url_replace request "year" subevent_list.before.isocalendar.0 "week" subevent_list.before.isocalendar.1 %}"
-                    class="btn btn-default">
+                    class="btn btn-default" title="{% trans "previous week" %}">
                 <span class="fa fa-arrow-left" aria-hidden="true"></span>
-                {{ before|date:subevent_list.week_format }}
+                {{ subevent_list.before|date:subevent_list.week_format }}
             </a>
         </div>
-        <div class="col-sm-4 col-xs-12 text-center">
-            <select name="week" class="form-control select-calendar-week-short">
+        <div class="col-sm-4 col-xs-12 text-center" role="group" aria-label="{% trans "Select week and year to show" %}">
+            <select name="week" class="form-control select-calendar-week-short" aria-label="{% trans "Week" %}">
                 {% for w in subevent_list.weeks %}
                     <option value="{{ w.0.isocalendar.1 }}" {% if w.0.isocalendar.1 == subevent_list.date.isocalendar.1 %}selected{% endif %}>{% trans "W" %} {{ w.0.isocalendar.1 }} ({{ w.0|date:"SHORT_DATE_FORMAT" }} – {{ w.1|date:"SHORT_DATE_FORMAT" }})</option>
                 {% endfor %}
             </select>
-            <select name="year" class="form-control">
+            <select name="year" class="form-control" aria-label="{% trans "Year" %}">
                 {% for y in subevent_list.years %}
                     <option value="{{ y }}" {% if y == subevent_list.date.isocalendar.0 %}selected{% endif %}>{{ y }}</option>
                 {% endfor %}
@@ -32,7 +32,7 @@
         </div>
         <div class="col-sm-4 hidden-xs text-right flip">
             <a href="?{% url_replace request "year" subevent_list.after.isocalendar.0 "week" subevent_list.after.isocalendar.1 %}"
-                    class="btn btn-default">
+                    class="btn btn-default" title="{% trans "next week" %}">
                 {{ subevent_list.after|date:subevent_list.week_format }}
                 <span class="fa fa-arrow-right" aria-hidden="true"></span>
             </a>
