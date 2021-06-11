@@ -1,42 +1,48 @@
 {% load i18n %}
 {% load eventurl %}
 {% load urlreplace %}
-<form class="form-inline" method="get" id="monthselform" action="{% eventurl event "presale:event.index" cart_namespace=cart_namespace %}">
-    {% for f, v in request.GET.items %}
-        {% if f != "month" and f != "year" %}
-            <input type="hidden" name="{{ f }}" value="{{ v }}">
-        {% endif %}
-    {% endfor %}
     <div class="row">
         <div class="col-sm-4 hidden-xs text-left flip">
-            <a href="?{% url_replace request "year" subevent_list.before.year "month" subevent_list.before.month %}"
-                    class="btn btn-default" title="{% trans "Previous month" %}">
-                <span class="fa fa-arrow-left" aria-hidden="true"></span>
-                {{ subevent_list.before|date:"F Y" }}
-            </a>
+            <form method="get" action="?{% url_replace request "year" subevent_list.before.year "month" subevent_list.before.month %}">
+                <button class="btn btn-default" >
+                    <span class="fa fa-arrow-left" aria-hidden="true"></span>
+                    <span class="sr-only">{% trans "Select previous month" %},</span>
+                    <time datetime="{{ subevent_list.before|date:"Y-m" }}">{{ subevent_list.before|date:"F Y" }}</time>
+                </button>
+            </form>
         </div>
-        <div class="col-sm-4 col-xs-12 text-center" role="group" aria-label="{% trans "Select month and year to show" %}">
-            <select name="month" class="form-control" aria-label="{% trans "Month" %}">
-                {% for m in subevent_list.months %}
-                    <option value="{{ m|date:"m" }}" {% if m.month == subevent_list.date.month %}selected{% endif %}>{{ m|date:"F" }}</option>
+        <div class="col-sm-4 col-xs-12 text-center">
+            <form class="form-inline" method="get" id="monthselform" action="{% eventurl event "presale:event.index" cart_namespace=cart_namespace %}">
+                {% for f, v in request.GET.items %}
+                    {% if f != "month" and f != "year" %}
+                        <input type="hidden" name="{{ f }}" value="{{ v }}">
+                    {% endif %}
                 {% endfor %}
-            </select>
-            <select name="year" class="form-control" aria-label="{% trans "Year" %}">
-                {% for y in subevent_list.years %}
-                    <option value="{{ y }}" {% if y == subevent_list.date.year %}selected{% endif %}>{{ y }}</option>
-                {% endfor %}
-            </select>
-            <button type="submit" class="js-hidden btn btn-default">
-                {% trans "Go" %}
-            </button>
+                <div role="group" aria-label="{% trans "Select month and year to show" %}">
+                    <select name="month" class="form-control" aria-label="{% trans "Month" %}">
+                        {% for m in subevent_list.months %}
+                            <option value="{{ m|date:"m" }}" {% if m.month == subevent_list.date.month %}selected{% endif %}>{{ m|date:"F" }}</option>
+                        {% endfor %}
+                    </select>
+                    <select name="year" class="form-control" aria-label="{% trans "Year" %}">
+                        {% for y in subevent_list.years %}
+                            <option value="{{ y }}" {% if y == subevent_list.date.year %}selected{% endif %}>{{ y }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <button type="submit" class="js-hidden btn btn-default">
+                    {% trans "Go" %}
+                </button>
+            </form>
         </div>
         <div class="col-sm-4 hidden-xs text-right flip">
-            <a href="?{% url_replace request "year" subevent_list.after.year "month" subevent_list.after.month %}" 
-                class="btn btn-default" title="{% trans "Next month" %}">
-                {{ subevent_list.after|date:"F Y" }}
-                <span class="fa fa-arrow-right" aria-hidden="true"></span>
-            </a>
+            <form method="get" action="?{% url_replace request "year" subevent_list.after.year "month" subevent_list.after.month %}">
+                <button class="btn btn-default">
+                    <span class="sr-only">{% trans "Select next month" %},</span>
+                    <time datetime="{{ subevent_list.after|date:"Y-m" }}">{{ subevent_list.after|date:"F Y" }}</time>
+                    <span class="fa fa-arrow-right" aria-hidden="true"></span>
+                </button>
+            </form>
         </div>
     </div>
-</form>
 {% include "pretixpresale/fragment_calendar.html" with show_avail=event.settings.event_list_availability weeks=subevent_list.weeks show_names=subevent_list.show_names %}
