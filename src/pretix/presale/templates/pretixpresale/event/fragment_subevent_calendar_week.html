@@ -3,7 +3,14 @@
 {% load urlreplace %}
     <div class="row">
         <div class="col-sm-4 hidden-xs text-left flip">
-            <form method="get" action="?{% url_replace request "year" subevent_list.before.isocalendar.0 "week" subevent_list.before.isocalendar.1 %}">
+            <form method="get" action="{{ request.path }}">
+                {% for f, v in request.GET.items %}
+                    {% if f != "week" and f != "year" %}
+                        <input type="hidden" name="{{ f }}" value="{{ v }}">
+                    {% endif %}
+                {% endfor %}
+                <input type="hidden" name="week" value="{{ subevent_list.before.isocalendar.1 }}">
+                <input type="hidden" name="year" value="{{ subevent_list.before.isocalendar.0 }}">
                 <button class="btn btn-default">
                     <span class="fa fa-arrow-left" aria-hidden="true"></span>
                     <span class="sr-only">{% trans "Select previous week" %},</span>
@@ -36,7 +43,14 @@
             </form>
         </div>
         <div class="col-sm-4 hidden-xs text-right flip">
-            <form method="get" action="?{% url_replace request "year" subevent_list.after.isocalendar.0 "week" subevent_list.after.isocalendar.1 %}">
+            <form method="get" action="{{ request.path }}">
+            {% for f, v in request.GET.items %}
+                {% if f != "week" and f != "year" %}
+                    <input type="hidden" name="{{ f }}" value="{{ v }}">
+                {% endif %}
+            {% endfor %}
+                <input type="hidden" name="week" value="{{ subevent_list.after.isocalendar.1 }}">
+                <input type="hidden" name="year" value="{{ subevent_list.after.isocalendar.0 }}">
                 <button class="btn btn-default">
                     <span class="sr-only">{% trans "Select next week" %},</span>
                     <time datetime="{{ subevent_list.after|date:"Y-\WW" }}">{{ subevent_list.after|date:subevent_list.week_format }}</time>
