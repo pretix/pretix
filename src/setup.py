@@ -191,7 +191,6 @@ setup(
         'django-statici18n==1.9.*',
         'djangorestframework==3.12.*',
         'drf_ujson2==1.6.*',
-        'inlinestyler==0.2.*',
         'isoweek',
         'jsonschema',
         'kombu==4.6.*',
