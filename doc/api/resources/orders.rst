@@ -41,6 +41,7 @@ payment_date                          date                       **DEPRECATED AN
 payment_provider                      string                     **DEPRECATED AND INACCURATE** Payment provider used for this order
 total                                 money (string)             Total value of this order
 comment                               string                     Internal comment on this order
+custom_followup_at                    date                       Internal date for a custom follow-up action
 checkin_attention                     boolean                    If ``true``, the check-in app should show a warning
                                                                  that this ticket requires special attention if a ticket
                                                                  of this order is scanned.
@@ -122,6 +123,10 @@ last_modified                         datetime                   Last modificati
 .. versionchanged:: 4.0
 
    The ``customer`` attribute has been added.
+
+.. versionchanged:: 4.1
+
+   The ``custom_followup_at`` attribute has been added.
 
 
 .. _order-position-resource:
@@ -307,6 +312,7 @@ List of all orders
             "fees": [],
             "total": "23.00",
             "comment": "",
+            "custom_followup_at": null,
             "checkin_attention": false,
             "require_approval": false,
             "invoice_address": {
@@ -478,6 +484,7 @@ Fetching individual orders
         "fees": [],
         "total": "23.00",
         "comment": "",
+        "custom_followup_at": null,
         "checkin_attention": false,
         "require_approval": false,
         "invoice_address": {
@@ -643,6 +650,8 @@ Updating order fields
    * ``locale``
 
    * ``comment``
+
+   * ``custom_followup_at``
 
    * ``invoice_address`` (you always need to supply the full object, or ``null`` to delete the current address)
 
@@ -817,6 +826,7 @@ Creating orders
      charge will be created), this is just informative in case you *handled the payment already*.
    * ``payment_date`` (optional) – Date and time of the completion of the payment.
    * ``comment`` (optional)
+   * ``custom_followup_at`` (optional)
    * ``checkin_attention`` (optional)
    * ``invoice_address`` (optional)
 

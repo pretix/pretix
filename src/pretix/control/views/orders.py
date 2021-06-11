@@ -303,6 +303,7 @@ class OrderDetail(OrderView):
         ctx['invoices'] = list(self.order.invoices.all().select_related('event'))
         ctx['comment_form'] = CommentForm(initial={
             'comment': self.order.comment,
+            'custom_followup_at': self.order.custom_followup_at,
             'checkin_attention': self.order.checkin_attention
         })
         ctx['display_locale'] = dict(settings.LANGUAGES)[self.object.locale or self.request.event.settings.locale]
@@ -487,12 +488,21 @@ class OrderComment(OrderView):
                     'new_comment': form.cleaned_data.get('comment')
                 })
 
+            if form.cleaned_data.get('custom_followup_at') != self.order.custom_followup_at:
+                self.order.custom_followup_at = form.cleaned_data.get('custom_followup_at')
+                self.order.log_action('pretix.event.order.custom_followup_at', user=self.request.user, data={
+                    'new_custom_followup_at': form.cleaned_data.get('custom_followup_at')
+                })
+
             if form.cleaned_data.get('checkin_attention') != self.order.checkin_attention:
                 self.order.checkin_attention = form.cleaned_data.get('checkin_attention')
                 self.order.log_action('pretix.event.order.checkin_attention', user=self.request.user, data={
                     'new_value': form.cleaned_data.get('checkin_attention')
                 })
-            self.order.save(update_fields=['checkin_attention', 'comment'])
+            print(self.order.custom_followup_at)
+            self.order.save(update_fields=['checkin_attention', 'comment', 'custom_followup_at'])
+            self.order.refresh_from_db()
+            print(self.order.custom_followup_at)
             messages.success(self.request, _('The comment has been updated.'))
         else:
             messages.error(self.request, _('Could not update the comment.'))

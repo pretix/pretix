@@ -256,6 +256,7 @@ TEST_ORDER_RES = {
     "payment_provider": "banktransfer",
     "total": "23.00",
     "comment": "",
+    "custom_followup_at": None,
     "checkin_attention": False,
     "invoice_address": {
         "last_modified": "2017-12-01T10:00:00Z",
@@ -1739,6 +1740,7 @@ def test_order_create_simulate(token_client, organizer, event, item, quota, ques
         ],
         'total': '23.25',
         'comment': '',
+        "custom_followup_at": None,
         'invoice_address': {
             'is_business': False,
             'company': 'Sample company',
@@ -4202,6 +4204,7 @@ def test_order_update_allowed_fields(token_client, organizer, event, order):
             organizer.slug, event.slug, order.code
         ), format='json', data={
             'comment': 'Here is a comment',
+            'custom_followup_at': '2021-06-12',
             'checkin_attention': True,
             'email': 'foo@bar.com',
             'phone': '+4962219999',
@@ -4224,6 +4227,7 @@ def test_order_update_allowed_fields(token_client, organizer, event, order):
     assert resp.status_code == 200
     order.refresh_from_db()
     assert order.comment == 'Here is a comment'
+    assert order.custom_followup_at.isoformat() == '2021-06-12'
     assert order.checkin_attention
     assert order.email == 'foo@bar.com'
     assert order.phone == '+4962219999'
@@ -4236,6 +4240,7 @@ def test_order_update_allowed_fields(token_client, organizer, event, order):
     assert order.invoice_address.city == "Paris"
     with scopes_disabled():
         assert order.all_logentries().get(action_type='pretix.event.order.comment')
+        assert order.all_logentries().get(action_type='pretix.event.order.custom_followup_at')
         assert order.all_logentries().get(action_type='pretix.event.order.checkin_attention')
         assert order.all_logentries().get(action_type='pretix.event.order.contact.changed')
         assert order.all_logentries().get(action_type='pretix.event.order.phone.changed')
