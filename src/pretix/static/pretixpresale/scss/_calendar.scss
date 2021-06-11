@@ -20,10 +20,10 @@
     overflow-wrap: anywhere;
 
     &.continued {
-      background: #888;
+      background: #767676;
       opacity: 0.8;
       &:hover {
-        background: darken(#888, 15%);
+        background: darken(#767676, 15%);
         opacity: 1;
       }
     }
@@ -37,10 +37,10 @@
 
     &.over {
       opacity: 0.8;
-      background: #888;
+      background: #767676;
       &:hover {
         opacity: 1;
-        background: darken(#888, 15%);
+        background: darken(#767676, 15%);
       }
     }
 
