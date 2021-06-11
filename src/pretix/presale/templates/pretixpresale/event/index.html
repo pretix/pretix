@@ -8,6 +8,22 @@
 {% load eventsignal %}
 {% load rich_text %}
 
+{% block title %}
+    {% if "year" in request.GET %}
+        {% if list_type == "calendar" %}
+            {% blocktrans with datetime=date|date:"F Y" %}
+                Calendar for {{ datetime }}
+            {% endblocktrans %} ::
+        {% elif list_type == "week" %}
+            {% blocktrans with datetime=date|date:week_format %}
+                Calendar for {{ datetime }}
+            {% endblocktrans %} ::
+        {% endif %}
+    {% elif subevent %}
+        {{ subevent.get_date_range_display }}
+    {% endif %}
+{% endblock %}
+
 {% block custom_header %}
     {{ block.super }}
     <meta property="og:title" content="{{ ev.name }}" />
