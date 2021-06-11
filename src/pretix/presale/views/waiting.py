@@ -98,6 +98,14 @@ class WaitingView(EventViewMixin, FormView):
             messages.error(request, _("Waiting lists are disabled for this event."))
             return redirect(self.get_index_url())
 
+        if self.request.event.presale_has_ended:
+            messages.error(request, _("The presale period for this event is over."))
+            return redirect(self.get_index_url())
+
+        if not self.request.event.presale_is_running:
+            messages.error(request, _("The presale for this event has not yet started."))
+            return redirect(self.get_index_url())
+
         if not self.item_and_variation:
             messages.error(request, _("We could not identify the product you selected."))
             return redirect(self.get_index_url())

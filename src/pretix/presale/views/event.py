@@ -439,7 +439,8 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
         context['ev'] = self.subevent or self.request.event
         context['subevent'] = self.subevent
         context['cart'] = self.get_cart()
-        context['has_addon_choices'] = any(cp.has_addon_choices for cp in get_cart(self.request))\
+        context['has_addon_choices'] = any(cp.has_addon_choices for cp in get_cart(self.request))
+        context['allow_waitinglist'] = self.request.event.settings.waiting_list_enabled and context['ev'].presale_is_running
 
         if self.subevent:
             context['frontpage_text'] = str(self.subevent.frontpage_text)
