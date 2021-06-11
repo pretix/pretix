@@ -41,8 +41,10 @@
                         <nav class="locales" aria-label="{% trans "select language" %}">
                             <ul>
                             {% for l in languages %}
-                                <li><a href="{% url "presale:locale.set" %}?locale={{ l.code }}&next={{ request.path }}{% if request.META.QUERY_STRING %}%3F{{ request.META.QUERY_STRING|urlencode }}{% endif %}" class="{% if l.code == request.LANGUAGE_CODE %}active{% endif %}" rel="nofollow" lang="{{ l.code }}" hreflang="{{ l.code }}">
-                                    {{ l.name_local }}</a></li>
+                                <li><a href="{% url "presale:locale.set" %}?locale={{ l.code }}&next={{ request.path }}{% if request.META.QUERY_STRING %}%3F{{ request.META.QUERY_STRING|urlencode }}{% endif %}" class="{% if l.code == request.LANGUAGE_CODE %}active{% endif %}" rel="nofollow" lang="{{ l.code }}" hreflang="{{ l.code }}"
+                                    aria-label="{% language l.code %}{% blocktrans trimmed with language=l.name_local %}
+                                        Website in {{ language }}
+                                        {% endblocktrans %}{% endlanguage %}">{{ l.name_local }}</a></li>
                             {% endfor %}
                             </ul>
                         </nav>
@@ -92,8 +94,10 @@
                         <nav class="locales" aria-label="{% trans "select language" %}">
                             <ul>
                             {% for l in languages %}
-                                <li><a href="{% url "presale:locale.set" %}?locale={{ l.code }}&next={{ request.path }}{% if request.META.QUERY_STRING %}%3F{{ request.META.QUERY_STRING|urlencode }}{% endif %}" class="{% if l.code == request.LANGUAGE_CODE %}active{% endif %}" rel="nofollow">
-                                                                    {{ l.name_local }}</a></li>
+                                <li><a href="{% url "presale:locale.set" %}?locale={{ l.code }}&next={{ request.path }}{% if request.META.QUERY_STRING %}%3F{{ request.META.QUERY_STRING|urlencode }}{% endif %}" class="{% if l.code == request.LANGUAGE_CODE %}active{% endif %}" rel="nofollow" lang="{{ l.code }}" hreflang="{{ l.code }}"
+                                    aria-label="{% language l.code %}{% blocktrans trimmed with language=l.name_local %}
+                                        Website in {{ language }}
+                                        {% endblocktrans %}{% endlanguage %}">{{ l.name_local }}</a></li>
                             {% endfor %}
                             </ul>
                         </nav>
