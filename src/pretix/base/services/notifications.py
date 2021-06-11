@@ -19,11 +19,11 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
+import css_inline
 from django.conf import settings
 from django.template.loader import get_template
 from django.utils.timezone import override
 from django_scopes import scope, scopes_disabled
-from inlinestyler.utils import inline_css
 
 from pretix.base.i18n import language
 from pretix.base.models import LogEntry, NotificationSetting, User
@@ -131,7 +131,11 @@ def send_notification_mail(notification: Notification, user: User):
     }
 
     tpl_html = get_template('pretixbase/email/notification.html')
-    body_html = inline_css(tpl_html.render(ctx))
+
+    body_html = tpl_html.render(ctx)
+    inliner = css_inline.CSSInliner(remove_style_tags=True)
+    body_html = inliner.inline(body_html)
+
     tpl_plain = get_template('pretixbase/email/notification.txt')
     body_plain = tpl_plain.render(ctx)
 
