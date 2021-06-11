@@ -692,6 +692,16 @@ class OrderViewSet(viewsets.ModelViewSet):
                     }
                 )
 
+            if 'custom_followup_at' in self.request.data and serializer.instance.custom_followup_at != self.request.data.get('custom_followup_at'):
+                serializer.instance.log_action(
+                    'pretix.event.order.custom_followup_at',
+                    user=self.request.user,
+                    auth=self.request.auth,
+                    data={
+                        'new_custom_followup_at': self.request.data.get('custom_followup_at')
+                    }
+                )
+
             if 'checkin_attention' in self.request.data and serializer.instance.checkin_attention != self.request.data.get('checkin_attention'):
                 serializer.instance.log_action(
                     'pretix.event.order.checkin_attention',

@@ -205,6 +205,10 @@ class OrderFilterForm(FilterForm):
                 ('na', _('Approved, payment pending')),
                 ('pa', _('Approval pending')),
             )),
+            (_('Follow-up date'), (
+                ('custom_followup_at', _('Follow-up configured')),
+                ('custom_followup_due', _('Follow-up due')),
+            )),
             ('testmode', _('Test mode')),
         ),
         required=False,
@@ -323,6 +327,14 @@ class OrderFilterForm(FilterForm):
                 qs = qs.filter(
                     status=Order.STATUS_PENDING,
                     require_approval=False
+                )
+            elif s == 'custom_followup_at':
+                qs = qs.filter(
+                    custom_followup_at__isnull=False
+                )
+            elif s == 'custom_followup_due':
+                qs = qs.filter(
+                    custom_followup_at__lte=now().astimezone(get_current_timezone()).date()
                 )
             elif s == 'testmode':
                 qs = qs.filter(

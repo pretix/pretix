@@ -288,6 +288,7 @@ class OrderListExporter(MultiSheetListExporter):
         headers.append(_('Sales channel'))
         headers.append(_('Requires special attention'))
         headers.append(_('Comment'))
+        headers.append(_('Follow-up date'))
         headers.append(_('Positions'))
         headers.append(_('E-mail address verified'))
         headers.append(_('Payment providers'))
@@ -393,6 +394,7 @@ class OrderListExporter(MultiSheetListExporter):
             row.append(order.sales_channel)
             row.append(_('Yes') if order.checkin_attention else _('No'))
             row.append(order.comment or "")
+            row.append(order.custom_followup_at.strftime("%Y-%m-%d") if order.custom_followup_at else "")
             row.append(order.pcnt)
             row.append(_('Yes') if order.email_known_to_work else _('No'))
             row.append(', '.join([
@@ -574,6 +576,7 @@ class OrderListExporter(MultiSheetListExporter):
             _('Seat row'),
             _('Seat number'),
             _('Order comment'),
+            _('Follow-up date'),
         ]
 
         questions = list(Question.objects.filter(event__in=self.events))
@@ -677,6 +680,7 @@ class OrderListExporter(MultiSheetListExporter):
                     row += ['', '', '', '', '']
 
                 row.append(order.comment)
+                row.append(order.custom_followup_at.strftime("%Y-%m-%d") if order.custom_followup_at else "")
                 acache = {}
                 for a in op.answers.all():
                     # We do not want to localize Date, Time and Datetime question answers, as those can lead
@@ -780,7 +784,7 @@ class PaymentListExporter(ListExporter):
 
         headers = [
             _('Event slug'), _('Order'), _('Payment ID'), _('Creation date'), _('Completion date'), _('Status'),
-            _('Status code'), _('Amount'), _('Payment method'), _('Comment')
+            _('Status code'), _('Amount'), _('Payment method'), _('Comment'),
         ]
         yield headers
 

@@ -60,7 +60,7 @@ from django.utils.crypto import get_random_string
 from django.utils.encoding import escape_uri_path
 from django.utils.formats import date_format
 from django.utils.functional import cached_property
-from django.utils.timezone import make_aware, now
+from django.utils.timezone import get_current_timezone, make_aware, now
 from django.utils.translation import gettext_lazy as _, pgettext_lazy
 from django_countries.fields import Country
 from django_scopes import ScopedManager, scopes_disabled
@@ -217,6 +217,11 @@ class Order(LockModel, LoggedModel):
         help_text=_("The text entered in this field will not be visible to the user and is available for your "
                     "convenience.")
     )
+    custom_followup_at = models.DateField(
+        verbose_name=_("Follow-up date"),
+        help_text=_('We\'ll show you this order to be due for a follow-up on this day.'),
+        null=True, blank=True
+    )
     checkin_attention = models.BooleanField(
         verbose_name=_('Requires special attention'),
         default=False,
@@ -299,6 +304,10 @@ class Order(LockModel, LoggedModel):
         canceled positions as well.
         """
         return self.all_fees(manager='objects')
+
+    @property
+    def custom_followup_due(self):
+        return self.custom_followup_at and self.custom_followup_at <= now().astimezone(get_current_timezone()).date()
 
     @cached_property
     @scopes_disabled()

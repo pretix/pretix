@@ -890,10 +890,9 @@
                             <form class="form" method="post"
                                     action="{% url "control:event.order.comment" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}">
                                 {% csrf_token %}
-                                <div class="row">
-                                    {% bootstrap_field comment_form.comment layout="horizontal" show_help=True show_label=False horizontal_field_class="col-md-12" %}
-                                    {% bootstrap_field comment_form.checkin_attention layout="horizontal" show_help=True show_label=False horizontal_field_class="col-md-12" %}
-                                </div>
+                                {% bootstrap_field comment_form.comment show_help=True show_label=False %}
+                                {% bootstrap_field comment_form.custom_followup_at %}
+                                {% bootstrap_field comment_form.checkin_attention show_help=True show_label=False %}
                                 <button class="btn btn-default">
                                     {% trans "Update comment" %}
                                 </button>
