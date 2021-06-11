@@ -1,6 +1,7 @@
 {% load i18n %}
 <div class="table-responsive">
     <table class="table table-calendar">
+        <caption class="sr-only">{% trans "Calendar" %}</caption>
         <thead>
         <tr>
             <th><span aria-hidden="true">{{ weeks.1.0.date|date:"D" }}</span><span class="sr-only">{{ weeks.1.0.date|date:"l" }}</span></th>
