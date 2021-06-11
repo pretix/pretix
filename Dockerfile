@@ -41,17 +41,14 @@ ENV LC_ALL=C.UTF-8 \
     DJANGO_SETTINGS_MODULE=production_settings
 
 # To copy only the requirements files needed to install from PIP
-COPY src/requirements /pretix/src/requirements
-COPY src/requirements.txt /pretix/src
+COPY src/setup.py /pretix/src/setup.py
 RUN pip3 install -U \
         pip \
         setuptools \
         wheel && \
     cd /pretix/src && \
-    pip3 install \
-        -r requirements.txt \
-        -r requirements/memcached.txt \
-        -r requirements/mysql.txt \
+    PRETIX_DOCKER_BUILD=TRUE pip3 install \
+        -e ".[memcached,mysql]" \
         gunicorn django-extensions ipython && \
     rm -rf ~/.cache/pip
 

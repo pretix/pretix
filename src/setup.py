@@ -44,7 +44,13 @@ from os import path
 
 from setuptools import find_packages, setup
 
-from pretix import __version__
+try:
+    from pretix import __version__
+except:
+    if "PRETIX_DOCKER_BUILD" in os.environ:
+        __version__ = "0.0.0"  # this is a hack to allow calling this file early in our docker build to make use of caching
+    else:
+        raise
 
 CURRENT_PYTHON = sys.version_info[:2]
 REQUIRED_PYTHON = (3, 6)
@@ -92,6 +98,8 @@ def npm_install():
 
 class CustomBuild(build):
     def run(self):
+        if "PRETIX_DOCKER_BUILD" in os.environ:
+            return  # this is a hack to allow calling this file early in our docker build to make use of caching
         os.environ.setdefault("DJANGO_SETTINGS_MODULE", "pretix.settings")
         os.environ.setdefault("PRETIX_IGNORE_CONFLICTS", "True")
         import django
@@ -113,6 +121,8 @@ class CustomBuild(build):
 
 class CustomBuildExt(build_ext):
     def run(self):
+        if "PRETIX_DOCKER_BUILD" in os.environ:
+            return  # this is a hack to allow calling this file early in our docker build to make use of caching
         npm_install()
         build_ext.run(self)
 
@@ -131,7 +141,7 @@ setup(
     long_description=long_description,
     url='https://pretix.eu',
     author='Raphael Michel',
-    author_email='mail@raphaelmichel.de',
+    author_email='support@pretix.eu',
     license='GNU Affero General Public License v3 with Additional Terms',
     classifiers=[
         'Development Status :: 5 - Production/Stable',
@@ -143,99 +153,102 @@ setup(
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
-        'Framework :: Django :: 3.0'
+        'Framework :: Django :: 3.2'
     ],
 
     keywords='tickets web shop ecommerce',
     install_requires=[
-        'Django==3.2.*',
-        'djangorestframework==3.12.*',
-        'python-dateutil==2.8.*',
-        'isoweek',
-        'requests==2.25.*',
-        'pytz',
-        'django-bootstrap3==15.0.*',
-        'django-formset-js-improved==0.5.0.2',
-        'django-compressor==2.4.*',
-        'django-hierarkey==1.0.*,>=1.0.4',
-        'django-filter==2.4.*',
-        'django-scopes==1.2.*',
-        'reportlab>=3.5.65',
-        'Pillow==8.*',
-        'PyPDF2==1.26.*',
-        'django-libsass==0.8',
-        'libsass==0.20.*',
-        'django-otp==0.7.*,>=0.7.5',
-        'webauthn==0.4.*',
-        'python-u2flib-server==4.*',
-        'django-formtools==2.3',
-        'celery==4.4.*',
-        'kombu==4.6.*',
-        'django-statici18n==1.9.*',
-        'inlinestyler==0.2.*',
-        'BeautifulSoup4==4.8.*',
-        'slimit',
-        'lxml',
-        'static3==0.7.*',
-        'dj-static',
-        'csscompressor',
-        'django-markup',
-        'markdown==3.3.*',
-        'bleach==3.3.*',
-        'sentry-sdk==1.1.*',
-        'babel',
-        'paypalrestsdk==1.13.*',
-        'pycparser==2.13',
-        'django-redis==4.11.*',
-        'redis==3.4.*',
-        'stripe==2.42.*',
-        'chardet<3.1.0,>=3.0.2',
-        'mt-940==3.2',
-        'django-i18nfield==1.9.*,>=1.9.1',
-        'psycopg2-binary',
-        'django-mysql',
-        'tqdm==4.*',
-        'vobject==0.9.*',
-        'pycountry',
-        'django-countries>=7.2',
-        'pyuca',
-        'defusedcsv>=1.1.0',
-        'vat_moss_forked==2020.3.20.0.11.0',
-        'django-localflavor==3.0.*',
-        'jsonschema',
-        'django-hijack>=2.1.10,<2.2.0',
-        'openpyxl==3.0.*',
-        'django-oauth-toolkit==1.2.*',
-        'oauthlib==3.1.*',
-        'django-phonenumber-field==4.0.*',
-        'phonenumberslite==8.11.*',
-        'python-bidi==0.4.*',  # Support for Arabic in reportlab
         'arabic-reshaper==2.0.15',  # Support for Arabic in reportlab
-        'packaging',
-        'tlds>=2020041600',
-        'text-unidecode==1.*',
-        'protobuf==3.15.*',
+        'babel',
+        'BeautifulSoup4==4.8.*',
+        'bleach==3.3.*',
+        'celery==4.4.*',
+        'chardet<3.1.0,>=3.0.2',
         'cryptography>=3.4.2',
+        'csscompressor',
+        'defusedcsv>=1.1.0',
+        'dj-static',
+        'Django==3.2.*',
+        'django-bootstrap3==15.0.*',
+        'django-compressor==2.4.*',
+        'django-countries>=7.2',
+        'django-filter==2.4.*',
+        'django-formset-js-improved==0.5.0.2',
+        'django-formtools==2.3',
+        'django-hierarkey==1.0.*,>=1.0.4',
+        'django-hijack>=2.1.10,<2.2.0',
+        'django-i18nfield==1.9.*,>=1.9.1',
+        'django-libsass==0.8',
+        'django-localflavor==3.0.*',
+        'django-markup',
+        'django-mysql',
+        'django-oauth-toolkit==1.2.*',
+        'django-otp==0.7.*,>=0.7.5',
+        'django-phonenumber-field==4.0.*',
+        'django-redis==4.11.*',
+        'django-scopes==1.2.*',
+        'django-statici18n==1.9.*',
+        'djangorestframework==3.12.*',
+        'inlinestyler==0.2.*',
+        'isoweek',
+        'jsonschema',
+        'kombu==4.6.*',
+        'libsass==0.20.*',
+        'lxml',
+        'markdown==3.3.*',
+        'mt-940==3.2',
+        'oauthlib==3.1.*',
+        'openpyxl==3.0.*',
+        'packaging',
+        'paypalrestsdk==1.13.*',
+        'phonenumberslite==8.11.*',
+        'Pillow==8.*',
+        'protobuf==3.15.*',
+        'psycopg2-binary',
+        'pycountry',
+        'pycparser==2.13',
+        'PyPDF2==1.26.*',
+        'python-bidi==0.4.*',  # Support for Arabic in reportlab
+        'python-dateutil==2.8.*',
+        'python-u2flib-server==4.*',
+        'pytz',
+        'pyuca',
+        'redis==3.4.*',
+        'reportlab>=3.5.65',
+        'requests==2.25.*',
+        'sentry-sdk==1.1.*',
         'sepaxml==2.4.*,>=2.4.1',
+        'slimit',
+        'static3==0.7.*',
+        'stripe==2.42.*',
+        'text-unidecode==1.*',
+        'tlds>=2020041600',
+        'tqdm==4.*',
+        'vat_moss_forked==2020.3.20.0.11.0',
+        'vobject==0.9.*',
+        'webauthn==0.4.*',
     ],
     extras_require={
         'dev': [
+            'coverage',
+            'coveralls',
             'django-debug-toolbar==3.2.*',
+            'flake8==3.7.*',
+            'freezegun',
+            'isort',
+            'pep8-naming',
+            'potypo',
             'pycodestyle==2.5.*',
             'pyflakes==2.1.*',
-            'flake8==3.7.*',
-            'pep8-naming',
-            'coveralls',
-            'coverage',
-            'pytest==6.*',
+            'pytest-cache',
+            'pytest-cov',
             'pytest-django==4.*',
-            'pytest-xdist==1.31.*',
-            'isort',
             'pytest-mock==2.0.*',
             'pytest-rerunfailures==9.*',
+            'pytest-sugar',
+            'pytest-xdist==1.31.*',
+            'pytest==6.*',
             'responses',
-            'potypo',
-            'freezegun',
         ],
         'memcached': ['pylibmc'],
         'mysql': ['mysqlclient'],
