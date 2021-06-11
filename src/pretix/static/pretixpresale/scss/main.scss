@@ -218,7 +218,7 @@ body.loading .container {
 @media (min-width: $screen-md-min) {
     .thank-you {
         min-height: 170px;
-        width: 70%;
+        max-width: 59em;
         margin: auto;
 
         .fa {

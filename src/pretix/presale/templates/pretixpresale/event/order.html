@@ -26,9 +26,9 @@
         <div class="thank-you">
             <span class="fa fa-check-circle" aria-hidden="true"></span>
 
-            <h2>{% trans "Thank you!" %}</h2>
+            <h2 class="h1">{% trans "Thank you!" %}</h2>
             {% if order.status != 'p' %}
-                <p>
+                <p class="lead">
                     {% trans "Your order has been placed successfully. See below for details." %}<br>
                     {% if order.require_approval and order.total == 0 %}
                         <strong>
@@ -45,9 +45,9 @@
                     {% endif %}
                 </p>
             {% elif order.total == 0 %}
-                <p>{% trans "Your order has been processed successfully! See below for details." %}</p>
+                <p class="lead">{% trans "Your order has been processed successfully! See below for details." %}</p>
             {% else %}
-                <p>{% trans "We successfully received your payment. See below for details." %}</p>
+                <p class="lead">{% trans "We successfully received your payment. See below for details." %}</p>
             {% endif %}
             {% if request.event.settings.checkout_success_text %}
                 {{ request.event.settings.checkout_success_text|rich_text }}
@@ -60,7 +60,6 @@
                 also sent you an email containing the link to the address you specified.
             {% endblocktrans %}<br>
                 <code>{{ url }}</code></p>
-            <div class="clearfix"></div>
         </div>
     {% endif %}
 
