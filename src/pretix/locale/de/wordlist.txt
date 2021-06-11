@@ -155,6 +155,7 @@ MwSt
 name
 Nr
 number
+OK
 Open
 OpenCage
 OpenStreetMap
