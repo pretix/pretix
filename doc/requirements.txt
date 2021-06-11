@@ -1,4 +1,4 @@
--e ../src
+-e ../src/
 sphinx==2.3.*
 sphinx-rtd-theme
 sphinxcontrib-httpdomain
