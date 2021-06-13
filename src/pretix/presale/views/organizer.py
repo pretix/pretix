@@ -33,6 +33,7 @@
 # License for the specific language governing permissions and limitations under the License.
 
 import calendar
+import hashlib
 from collections import defaultdict
 from datetime import date, datetime, time, timedelta
 from urllib.parse import quote
@@ -40,6 +41,7 @@ from urllib.parse import quote
 import isoweek
 import pytz
 from django.conf import settings
+from django.core.cache import cache
 from django.db.models import Exists, Max, Min, OuterRef, Q
 from django.db.models.functions import Coalesce, Greatest
 from django.http import Http404, HttpResponse
@@ -305,6 +307,46 @@ class OrganizerIndex(OrganizerViewMixin, EventListMixin, ListView):
     context_object_name = 'events'
     template_name = 'pretixpresale/organizers/index.html'
     paginate_by = 30
+
+    def dispatch(self, request, *args, **kwargs):
+        # Nothing on this page is session-dependent except for the language and the customer login part,
+        # so we can cache pretty aggressively
+        cache_allowed = (
+            not getattr(request, 'customer', None) and not request.user.is_authenticated
+        )
+        cache_key_parts = [
+            request.method,
+            request.headers['Host'],
+            str(request.organizer.pk),
+            request.get_full_path(),
+            request.LANGUAGE_CODE,
+        ]
+        for c, v in request.COOKIES.items():
+            if c not in (settings.SESSION_COOKIE_NAME, settings.LANGUAGE_COOKIE_NAME, settings.CSRF_COOKIE_NAME):
+                cache_key_parts.append(f'{c}={v}')
+
+        cache_key = f'pretix.presale.views.organizer.OrganizerIndex:{hashlib.md5(":".join(cache_key_parts).encode()).hexdigest()}'
+        cache_timeout = 15
+
+        if not cache_allowed:
+            return super().dispatch(request, *args, **kwargs)
+
+        response = cache.get(cache_key)
+        if response is not None:
+            return response
+
+        response = super().dispatch(request, *kwargs, **kwargs)
+        if response.status_code >= 400:
+            return response
+
+        if hasattr(response, 'render') and callable(response.render):
+            def _store_to_cache(r):
+                cache.set(cache_key, r, cache_timeout)
+
+            response.add_post_render_callback(_store_to_cache)
+        else:
+            cache.set(cache_key, response, cache_timeout)
+        return response
 
     def get(self, request, *args, **kwargs):
         style = request.GET.get("style", request.organizer.settings.event_list_type)
