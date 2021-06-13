@@ -309,8 +309,8 @@ class OrganizerIndex(OrganizerViewMixin, EventListMixin, ListView):
     paginate_by = 30
 
     def dispatch(self, request, *args, **kwargs):
-        # Nothing on this page is session-dependent except for the language and the customer login part,
-        # so we can cache pretty aggressively
+        # In stock pretix, nothing on this page is session-dependent except for the language and the customer login part,
+        # so we can cache pretty aggressively if the user is anonymous.
         cache_allowed = (
             not getattr(request, 'customer', None) and not request.user.is_authenticated
         )
@@ -324,12 +324,12 @@ class OrganizerIndex(OrganizerViewMixin, EventListMixin, ListView):
         ]
         for c, v in request.COOKIES.items():
             # If the cookie is not one we know, it might be set by a plugin and we need to include it in the
-            # cache key to be safe.
+            # cache key to be safe. A known example includes plugins that e.g. store cookie banner state.
             if c not in (settings.SESSION_COOKIE_NAME, settings.LANGUAGE_COOKIE_NAME, settings.CSRF_COOKIE_NAME):
                 cache_key_parts.append(f'{c}={v}')
         for c, v in request.session.items():
             # If the session key is not one we know, it might be set by a plugin and we need to include it in the
-            # cache key to be safe.
+            # cache key to be safe. A known example would be the pretix-campaigns plugin setting the campaign ID.
             if (
                     not c.startswith('_auth') and
                     not c.startswith('pretix_auth_') and
@@ -337,9 +337,9 @@ class OrganizerIndex(OrganizerViewMixin, EventListMixin, ListView):
                     not c.startswith('current_cart_') and
                     not c.startswith('cart_') and
                     not c.startswith('payment_') and
-                    c not in ('carts', 'pinned_user_agent')
+                    c not in ('carts', 'payment', 'pinned_user_agent')
             ):
-                cache_key_parts.append(f'{c}={v}')
+                cache_key_parts.append(f'{c}={repr(v)}')
 
         cache_key = f'pretix.presale.views.organizer.OrganizerIndex:{hashlib.md5(":".join(cache_key_parts).encode()).hexdigest()}'
         cache_timeout = 15
