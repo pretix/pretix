@@ -716,6 +716,13 @@ class MailSettingsRendererPreview(MailSettingsPreview):
     def post(self, request, *args, **kwargs):
         return HttpResponse(status=405)
 
+    # get all supported placeholders with dummy values
+    def placeholders(self, item):
+        ctx = {}
+        for p in get_available_placeholders(self.request.event, MailSettingsForm.base_context[item]).values():
+            ctx[p.identifier] = str(p.render_sample(self.request.event))
+        return ctx
+
     def get(self, request, *args, **kwargs):
         v = str(request.event.settings.mail_text_order_placed)
         v = v.format_map(self.placeholders('mail_text_order_placed'))
