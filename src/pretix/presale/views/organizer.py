@@ -320,9 +320,24 @@ class OrganizerIndex(OrganizerViewMixin, EventListMixin, ListView):
             str(request.organizer.pk),
             request.get_full_path(),
             request.LANGUAGE_CODE,
+            self.request.sales_channel.identifier,
         ]
         for c, v in request.COOKIES.items():
+            # If the cookie is not one we know, it might be set by a plugin and we need to include it in the
+            # cache key to be safe.
             if c not in (settings.SESSION_COOKIE_NAME, settings.LANGUAGE_COOKIE_NAME, settings.CSRF_COOKIE_NAME):
+                cache_key_parts.append(f'{c}={v}')
+        for c, v in request.session.items():
+            # If the session key is not one we know, it might be set by a plugin and we need to include it in the
+            # cache key to be safe.
+            if (
+                    not c.startswith('_auth') and
+                    not c.startswith('current_cart_event') and
+                    not c.startswith('pretix_auth') and
+                    not c.startswith('cart_') and
+                    not c.startswith('payment_') and
+                    c not in ('carts', 'pinned_user_agent')
+            ):
                 cache_key_parts.append(f'{c}={v}')
 
         cache_key = f'pretix.presale.views.organizer.OrganizerIndex:{hashlib.md5(":".join(cache_key_parts).encode()).hexdigest()}'
