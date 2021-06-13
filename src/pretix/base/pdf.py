@@ -568,6 +568,8 @@ class Renderer:
 
     @classmethod
     def _register_fonts(cls):
+        if hasattr(cls, '_fonts_registered'):
+            return
         pdfmetrics.registerFont(TTFont('Open Sans', finders.find('fonts/OpenSans-Regular.ttf')))
         pdfmetrics.registerFont(TTFont('Open Sans I', finders.find('fonts/OpenSans-Italic.ttf')))
         pdfmetrics.registerFont(TTFont('Open Sans B', finders.find('fonts/OpenSans-Bold.ttf')))
@@ -581,6 +583,8 @@ class Renderer:
                 pdfmetrics.registerFont(TTFont(family + ' B', finders.find(styles['bold']['truetype'])))
             if 'bolditalic' in styles:
                 pdfmetrics.registerFont(TTFont(family + ' B I', finders.find(styles['bolditalic']['truetype'])))
+
+        cls._fonts_registered = True
 
     def _draw_poweredby(self, canvas: Canvas, op: OrderPosition, o: dict):
         content = o.get('content', 'dark')
