@@ -11,19 +11,23 @@
             background-position: top;
             background-repeat: repeat-x;
             font-family: "Open Sans", "OpenSans", "Helvetica Neue", Helvetica, Arial, sans-serif;
-            font-size: 14px;
+            font-size: 16px;
             line-height: 20px;
             color: #333;
             margin: 0;
             padding-top: 20px;
         }
 
-        table.layout > tr > td {
+        table.layout > tr > td,
+        table.layout > tbody > tr > td,
+        table.layout > thead > tr > td {
             background-color: white;
             padding: 0;
         }
 
-        table.layout > tr > td.header {
+        table.layout > tr > td.header,
+        table.layout > tbody > tr > td.header,
+        table.layout > thead > tr > td.header {
             padding: 0 20px;
             text-align: center;
         }
@@ -151,10 +155,14 @@
             font-size: 12px;
         }
 
-        .cart-table > tr > td:first-child {
+        .cart-table > tr > td:first-child,
+        .cart-table > tbody > tr > td:first-child,
+        .cart-table > thead > tr > td:first-child {
             width: 40px;
         }
-        .order-details > tr > td:first-child {
+        .order-details > tr > td:first-child,
+        .order-details > tbody > tr > td:first-child,
+        .order-details > thead > tr > td:first-child {
             width: 20%;
         }
         .order-details td {
