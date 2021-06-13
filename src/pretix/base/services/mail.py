@@ -45,7 +45,6 @@ from email.utils import formataddr
 from typing import Any, Dict, List, Sequence, Union
 from urllib.parse import urljoin, urlparse
 
-import cssutils
 import pytz
 import requests
 from bs4 import BeautifulSoup
@@ -79,7 +78,6 @@ from pretix.presale.ical import get_ical
 
 logger = logging.getLogger('pretix.base.mail')
 INVALID_ADDRESS = 'invalid-pretix-mail-address'
-cssutils.log.setLevel(logging.CRITICAL)
 
 
 class TolerantDict(dict):

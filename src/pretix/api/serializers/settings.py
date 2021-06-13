@@ -54,8 +54,8 @@ class SettingsSerializer(serializers.Serializer):
             f = DEFAULTS[fname]['serializer_class'](
                 **kwargs
             )
-            f._label = form_kwargs.get('label', fname)
-            f._help_text = form_kwargs.get('help_text')
+            f._label = str(form_kwargs.get('label', fname))
+            f._help_text = str(form_kwargs.get('help_text'))
             f.parent = self
             self.fields[fname] = f
 
