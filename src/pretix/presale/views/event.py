@@ -470,7 +470,7 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
 
     def _subevent_list_cachekey(self):
         cache_key_parts = [
-            self.request.headers['Host'],
+            self.request.host,
             str(self.request.event.pk),
             self.request.get_full_path(),
             self.request.LANGUAGE_CODE,

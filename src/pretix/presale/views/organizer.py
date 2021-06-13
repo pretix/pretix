@@ -316,7 +316,7 @@ class OrganizerIndex(OrganizerViewMixin, EventListMixin, ListView):
         )
         cache_key_parts = [
             request.method,
-            request.headers['Host'],
+            request.host,
             str(request.organizer.pk),
             request.get_full_path(),
             request.LANGUAGE_CODE,
@@ -332,8 +332,9 @@ class OrganizerIndex(OrganizerViewMixin, EventListMixin, ListView):
             # cache key to be safe.
             if (
                     not c.startswith('_auth') and
-                    not c.startswith('current_cart_event') and
-                    not c.startswith('pretix_auth') and
+                    not c.startswith('pretix_auth_') and
+                    not c.startswith('customer_auth_') and
+                    not c.startswith('current_cart_') and
                     not c.startswith('cart_') and
                     not c.startswith('payment_') and
                     c not in ('carts', 'pinned_user_agent')
