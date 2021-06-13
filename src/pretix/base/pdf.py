@@ -50,6 +50,7 @@ from django.conf import settings
 from django.contrib.staticfiles import finders
 from django.dispatch import receiver
 from django.utils.formats import date_format
+from django.utils.functional import SimpleLazyObject
 from django.utils.html import conditional_escape
 from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
@@ -551,6 +552,12 @@ def get_first_scan(op: OrderPosition):
     return ""
 
 
+reshaper = SimpleLazyObject(lambda: ArabicReshaper(configuration={
+    'delete_harakat': True,
+    'support_ligatures': False,
+}))
+
+
 class Renderer:
 
     def __init__(self, event, layout, background_file):
@@ -720,11 +727,6 @@ class Renderer:
 
         # reportlab does not support RTL, ligature-heavy scripts like Arabic. Therefore, we use ArabicReshaper
         # to resolve all ligatures and python-bidi to switch RTL texts.
-        configuration = {
-            'delete_harakat': True,
-            'support_ligatures': False,
-        }
-        reshaper = ArabicReshaper(configuration=configuration)
         try:
             text = "<br/>".join(get_display(reshaper.reshape(l)) for l in text.split("<br/>"))
         except:
