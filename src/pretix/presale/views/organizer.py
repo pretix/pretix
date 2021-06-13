@@ -310,7 +310,9 @@ class OrganizerIndex(OrganizerViewMixin, EventListMixin, ListView):
 
     def dispatch(self, request, *args, **kwargs):
         # In stock pretix, nothing on this page is session-dependent except for the language and the customer login part,
-        # so we can cache pretty aggressively if the user is anonymous.
+        # so we can cache pretty aggressively if the user is anonymous. Note that we deliberately implement the caching
+        # on the view layer, *after* all middlewares have been ran, so we have access to the computed locale, as well
+        # as the login status etc.
         cache_allowed = (
             not getattr(request, 'customer', None) and not request.user.is_authenticated
         )
