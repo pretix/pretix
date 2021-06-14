@@ -233,6 +233,11 @@ CACHES = {
 REAL_CACHE_USED = False
 SESSION_ENGINE = None
 
+# pretix includes caching options for some special situations where full HTML responses are cached. This might be
+# stressful for some cache setups so it is enabled by default and currently can't be enabled through pretix.cfg
+CACHE_LARGE_VALUES_ALLOWED = False
+CACHE_LARGE_VALUES_ALIAS = 'default'
+
 HAS_MEMCACHED = config.has_option('memcached', 'location')
 if HAS_MEMCACHED:
     REAL_CACHE_USED = True

@@ -1,6 +1,6 @@
 {% load i18n %}
 {% load eventurl %}
-{% for subev in subevent_list %}
+{% for subev in subevent_list.subevent_list %}
     <a href="{% if request.GET.voucher %}{% eventurl event "presale:event.redeem" cart_namespace=cart_namespace %}?voucher={{ request.GET.voucher|urlencode }}&subevent={{ subev.pk }}{% else %}{% eventurl event "presale:event.index" subevent=subev.id cart_namespace=cart_namespace %}{% endif %}"
             class="subevent-row">
         <div class="row">
