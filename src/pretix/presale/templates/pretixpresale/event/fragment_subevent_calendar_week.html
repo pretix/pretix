@@ -9,21 +9,21 @@
     {% endfor %}
     <div class="row">
         <div class="col-sm-4 hidden-xs text-left flip">
-            <a href="?{% url_replace request "year" before.isocalendar.0 "week" before.isocalendar.1 %}"
+            <a href="?{% url_replace request "year" subevent_list.before.isocalendar.0 "week" subevent_list.before.isocalendar.1 %}"
                     class="btn btn-default">
                 <span class="fa fa-arrow-left" aria-hidden="true"></span>
-                {{ before|date:week_format }}
+                {{ before|date:subevent_list.week_format }}
             </a>
         </div>
         <div class="col-sm-4 col-xs-12 text-center">
             <select name="week" class="form-control select-calendar-week-short">
-                {% for w in weeks %}
-                    <option value="{{ w.0.isocalendar.1 }}" {% if w.0.isocalendar.1 == date.isocalendar.1 %}selected{% endif %}>{% trans "W" %} {{ w.0.isocalendar.1 }} ({{ w.0|date:"SHORT_DATE_FORMAT" }} – {{ w.1|date:"SHORT_DATE_FORMAT" }})</option>
+                {% for w in subevent_list.weeks %}
+                    <option value="{{ w.0.isocalendar.1 }}" {% if w.0.isocalendar.1 == subevent_list.date.isocalendar.1 %}selected{% endif %}>{% trans "W" %} {{ w.0.isocalendar.1 }} ({{ w.0|date:"SHORT_DATE_FORMAT" }} – {{ w.1|date:"SHORT_DATE_FORMAT" }})</option>
                 {% endfor %}
             </select>
             <select name="year" class="form-control">
-                {% for y in years %}
-                    <option value="{{ y }}" {% if y == date.isocalendar.0 %}selected{% endif %}>{{ y }}</option>
+                {% for y in subevent_list.years %}
+                    <option value="{{ y }}" {% if y == subevent_list.date.isocalendar.0 %}selected{% endif %}>{{ y }}</option>
                 {% endfor %}
             </select>
             <button type="submit" class="js-hidden btn btn-default">
@@ -31,24 +31,24 @@
             </button>
         </div>
         <div class="col-sm-4 hidden-xs text-right flip">
-            <a href="?{% url_replace request "year" after.isocalendar.0 "week" after.isocalendar.1 %}"
+            <a href="?{% url_replace request "year" subevent_list.after.isocalendar.0 "week" subevent_list.after.isocalendar.1 %}"
                     class="btn btn-default">
-                {{ after|date:week_format }}
+                {{ subevent_list.after|date:subevent_list.week_format }}
                 <span class="fa fa-arrow-right" aria-hidden="true"></span>
             </a>
         </div>
     </div>
 </form>
-{% include "pretixpresale/fragment_week_calendar.html" with show_avail=event.settings.event_list_availability %}
+{% include "pretixpresale/fragment_week_calendar.html" with show_avail=event.settings.event_list_availability days=subevent_list.days %}
 <div class="col-sm-4 visible-xs text-center">
-    <a href="?{% url_replace request "year" before.isocalendar.0 "week" before.isocalendar.1 %}"
+    <a href="?{% url_replace request "year" subevent_list.before.isocalendar.0 "week" subevent_list.before.isocalendar.1 %}"
             class="btn btn-default">
         <span class="fa fa-arrow-left" aria-hidden="true"></span>
-        {{ before|date:week_format }}
+        {{ subevent_list.before|date:subevent_list.week_format }}
     </a>
-    <a href="?{% url_replace request "year" after.isocalendar.0 "week" after.isocalendar.1 %}"
+    <a href="?{% url_replace request "year" subevent_list.after.isocalendar.0 "week" subevent_list.after.isocalendar.1 %}"
             class="btn btn-default">
-        {{ after|date:week_format }}
+        {{ subevent_list.after|date:subevent_list.week_format }}
         <span class="fa fa-arrow-right" aria-hidden="true"></span>
     </a>
 </div>

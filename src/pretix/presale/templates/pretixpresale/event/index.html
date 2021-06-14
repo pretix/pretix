@@ -2,6 +2,7 @@
 {% load i18n %}
 {% load l10n %}
 {% load eventurl %}
+{% load cache %}
 {% load money %}
 {% load thumb %}
 {% load eventsignal %}
@@ -73,13 +74,15 @@
             </div>
             <div class="panel-body">
                 <div>
-                    {% if list_type == "calendar" %}
-                        {% include "pretixpresale/event/fragment_subevent_calendar.html" %}
-                    {% elif list_type == "week" %}
-                        {% include "pretixpresale/event/fragment_subevent_calendar_week.html" %}
-                    {% else %}
-                        {% include "pretixpresale/event/fragment_subevent_list.html" %}
-                    {% endif %}
+                    {% cache 15 subevent_lits subevent_list_cache_key %}
+                        {% if subevent_list.list_type == "calendar" %}
+                            {% include "pretixpresale/event/fragment_subevent_calendar.html" %}
+                        {% elif subevent_list.list_type == "week" %}
+                            {% include "pretixpresale/event/fragment_subevent_calendar_week.html" %}
+                        {% else %}
+                            {% include "pretixpresale/event/fragment_subevent_list.html" %}
+                        {% endif %}
+                    {% endcache %}
                 </div>
             </div>
         </div>
