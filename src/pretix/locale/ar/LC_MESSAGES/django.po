@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-06-07 10:47+0000\n"
-"PO-Revision-Date: 2021-06-14 18:00+0000\n"
+"PO-Revision-Date: 2021-06-14 18:45+0000\n"
 "Last-Translator: Abdullah <abdullah.gumaijan@gmail.com>\n"
 "Language-Team: Arabic <https://translate.pretix.eu/projects/pretix/pretix/ar/"
 ">\n"
@@ -1635,7 +1635,7 @@ msgstr "في انتظار الاسترداد"
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:208
 #: pretix/control/views/waitinglist.py:291
 msgid "Voucher redeemed"
-msgstr "تم استرداد كود الخصم"
+msgstr "تم استخدام كود الخصم"
 
 #: pretix/base/exporters/waitinglist.py:78
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:101
@@ -2488,7 +2488,7 @@ msgstr "ملاحظة داخلية"
 #: pretix/presale/templates/pretixpresale/organizers/index.html:102
 #: pretix/presale/views/widget.py:568
 msgid "Event series"
-msgstr "سلسلة الفعالية"
+msgstr "فعالية بأوقات مختلفة"
 
 #: pretix/base/models/event.py:502 pretix/base/payment.py:347
 msgid "Restrict to specific sales channels"
@@ -4057,11 +4057,11 @@ msgstr "اخفض سعر المنتج بنسبة (%)"
 
 #: pretix/base/models/vouchers.py:146
 msgid "Number of times this voucher can be redeemed."
-msgstr "عدد المرات التي يمكن فيها استرداد كود الخصم هذا."
+msgstr "عدد المرات التي يمكن فيها استخدام كود الخصم هذا."
 
 #: pretix/base/models/vouchers.py:150 pretix/control/views/vouchers.py:110
 msgid "Redeemed"
-msgstr "مسترد"
+msgstr "مستخدم"
 
 #: pretix/base/models/vouchers.py:154
 msgid "Maximum discount budget"
@@ -4083,7 +4083,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:24
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:51
 msgid "Valid until"
-msgstr "ساري المفعول حتى"
+msgstr "حتى تاريخ"
 
 #: pretix/base/models/vouchers.py:166 pretix/control/forms/filter.py:1477
 msgid "Reserve ticket from quota"
@@ -5577,7 +5577,7 @@ msgstr "تحتاج إلى الإجابة على الأسئلة لإكمال هذ
 
 #: pretix/base/services/checkin.py:688
 msgid "This ticket has already been redeemed."
-msgstr "تم مسبقا استرداد هذه التذكرة."
+msgstr "تم استخدام هذه التذكرة مسبقا."
 
 #: pretix/base/services/export.py:64 pretix/base/services/export.py:117
 msgid "Your export did not contain any data."
@@ -10676,7 +10676,7 @@ msgstr ""
 
 #: pretix/control/forms/vouchers.py:321
 msgid "Maximum usages per voucher"
-msgstr "الأعراف القصوى لكل قسيمة"
+msgstr "أقصى عدد للإستخدام لكل قسيمة"
 
 #: pretix/control/forms/vouchers.py:324
 msgid "Number of times times EACH of these vouchers can be redeemed."
@@ -16378,27 +16378,21 @@ msgstr "إخفاء هوية"
 
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:65
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:43
-#, fuzzy
-#| msgid "Members"
 msgid "Memberships"
-msgstr "أفراد"
+msgstr "العضويات"
 
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:72
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:22
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:50
-#, fuzzy
-#| msgid "Valid"
 msgid "Valid from"
-msgstr "ساري المفعول"
+msgstr "من تاريخ"
 
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:76
 #: pretix/control/templates/pretixcontrol/organizers/customer_membership.html:35
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:36
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:53
-#, fuzzy
-#| msgid "Use languages"
 msgid "Usages"
-msgstr "استخدام اللغات"
+msgstr "مرات الإستخدام"
 
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:140
 #, fuzzy
@@ -19611,7 +19605,7 @@ msgstr "غير صالح مع المدعوين المحدد."
 
 #: pretix/control/views/organizer.py:722
 msgid "The invite has been revoked."
-msgstr "وتم إبطال دعوة."
+msgstr "تم إبطال الدعوة."
 
 #: pretix/control/views/organizer.py:738
 msgid "The invite has been resent."
@@ -23123,7 +23117,7 @@ msgstr "تأكيدات"
 msgid ""
 "Your order requires approval by the event organizer before it can be "
 "confirmed and forms a valid contract."
-msgstr "يتطلب طلبك موافقة منظم الفعالية قبل تأكيده وتشكيل عقد صالح."
+msgstr "يتطلب طلبك موافقة منظم الفعالية قبل تأكيده."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:199
 msgid ""
@@ -23192,8 +23186,8 @@ msgid ""
 "the secret link we will send you via email once the order is complete."
 msgstr ""
 "لست مطالبا بإنشاء حساب. إذا تابعت كزائر ، فستتمكن من الوصول إلى تفاصيل وحالة "
-"طلبك في أي وقت من خلال الرابط السري الذي سنرسله إليك عبر البريد الإلكتروني "
-"بمجرد اكتمال الطلب."
+"طلبك في أي وقت من خلال الرابط الذي سنرسله إليك عبر البريد الإلكتروني بمجرد "
+"اكتمال الطلب."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_membership.html:6
 msgid ""
@@ -23369,10 +23363,10 @@ msgid "price"
 msgstr "السعر"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:292
-#, fuzzy, python-format
+#, python-format
 msgid "One product"
 msgid_plural "%(num)s products"
-msgstr[0] "صفر منتج"
+msgstr[0] "منتج واحد"
 msgstr[1] "منتج واحد"
 msgstr[2] "منتجان"
 msgstr[3] "بضعة منتجات %(num)s"
@@ -23387,7 +23381,7 @@ msgstr "يشمل ضرائب %(tax_sum)s"
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:315
 #: pretix/presale/templates/pretixpresale/event/index.html:238
 msgid "Redeem a voucher"
-msgstr "إسترد كود الخصم"
+msgstr "استخدم كود خصم"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:318
 msgid "We're applying this voucher to your cart..."
@@ -23396,12 +23390,12 @@ msgstr "نقوم بتطبيق كود الخصم على عربة التسوق ا�
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:326
 #: pretix/presale/templates/pretixpresale/event/index.html:257
 msgid "Redeem voucher"
-msgstr "استرد كود الخصم"
+msgstr "استخدم كود الخصم"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart_box.html:42
 #: pretix/presale/templates/pretixpresale/event/fragment_cart_box.html:59
 msgid "Empty cart"
-msgstr "عربة تسوق فارغة"
+msgstr "إلغاء الطلبات"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart_box.html:51
 #: pretix/presale/templates/pretixpresale/event/index.html:221
@@ -23719,9 +23713,8 @@ msgid ""
 "your order later. We also sent you an email containing the link to the "
 "address you specified."
 msgstr ""
-"يرجى وضع إشارة مرجعية أو حفظ الرابط لهذه الصفحة وتحديدا إذا كنت تريد الوصول "
-"إلى طلبك لاحقا. لقد أرسلنا لك أيضا رسالة بريد إلكتروني تحتوي على رابط "
-"العنوان الذي حددته."
+"تم إرسال رابط الطلب إلى بريدك الإلكتروني. كما يمكنك حفظ رابط هذه الصفحة إذا "
+"أردت الوصول إلى طلبك لاحقا."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:54
 msgid ""
@@ -23864,7 +23857,7 @@ msgstr "يمكنك إلغاء هذا الطلب ، لكنك لن تسترد ال
 #: pretix/presale/templates/pretixpresale/event/order.html:420
 #: pretix/presale/templates/pretixpresale/event/order.html:433
 msgid "This will invalidate all tickets in this order."
-msgstr "سيؤدي هذا إلى إبطال جميع التذاكر في هذا الطلب."
+msgstr "سيؤدي هذا إلى إلغاء جميع التذاكر في هذا الطلب."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:381
 #, python-format
