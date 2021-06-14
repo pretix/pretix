@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-06-07 10:47+0000\n"
-"PO-Revision-Date: 2021-05-31 23:00+0000\n"
-"Last-Translator: Mohamed Tawfiq <mtawfiq@wafyapp.com>\n"
+"PO-Revision-Date: 2021-06-14 18:00+0000\n"
+"Last-Translator: Abdullah <abdullah.gumaijan@gmail.com>\n"
 "Language-Team: Arabic <https://translate.pretix.eu/projects/pretix/pretix/ar/"
 ">\n"
 "Language: ar\n"
@@ -12034,7 +12034,7 @@ msgstr "تسجيل الدخول"
 
 #: pretix/control/templates/pretixcontrol/auth/login.html:38
 msgid "Lost password?"
-msgstr "كلمة مرور مفقودة؟"
+msgstr "نسيت كلمة المرور؟"
 
 #: pretix/control/templates/pretixcontrol/auth/login_2fa.html:9
 #: pretix/control/templates/pretixcontrol/user/reauth.html:9
@@ -23038,7 +23038,6 @@ msgstr "خطوة %(current)s of %(total)s: %(label)s"
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:12
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:57
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:58
-#, fuzzy
 msgid "Checkout"
 msgstr "الدفع"
 
@@ -23137,7 +23136,7 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:215
 msgid "Place binding order"
-msgstr "ضع طلبا ملزما"
+msgstr "تأكيد الطلب"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:217
 msgid "Submit registration"
@@ -23700,7 +23699,7 @@ msgstr "تمت معالجة طلبك بنجاح! انظر أدناه للحصو�
 #: pretix/presale/templates/pretixpresale/event/order.html:18
 #: pretix/presale/templates/pretixpresale/event/order.html:46
 msgid "We successfully received your payment. See below for details."
-msgstr "لقد تلقينا دفعتك بنجاح. انظر أدناه للحصول على التفاصيل."
+msgstr "تم الدفع بنجاح، تجد التفاصيل في الأسفل."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:35
 msgid ""
