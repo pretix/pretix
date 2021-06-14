@@ -214,7 +214,7 @@ class OrdersTest(BaseOrdersTest):
         assert response.status_code == 200
         doc = BeautifulSoup(response.content.decode(), "lxml")
         assert len(doc.select(".cart-row")) > 0
-        assert "pending" in doc.select(".label-warning")[0].text.lower()
+        assert "pending" in doc.select(".order-details")[0].text.lower()
         assert "Peter" in response.content.decode()
         assert "Lukas" not in response.content.decode()
 
@@ -226,7 +226,7 @@ class OrdersTest(BaseOrdersTest):
         assert response.status_code == 200
         doc = BeautifulSoup(response.content.decode(), "lxml")
         assert len(doc.select(".cart-row")) > 0
-        assert "pending" in doc.select(".label-warning")[0].text.lower()
+        assert "pending" in doc.select(".order-details")[0].text.lower()
         assert "Peter" in response.content.decode()
         assert "Lukas" not in response.content.decode()
 
