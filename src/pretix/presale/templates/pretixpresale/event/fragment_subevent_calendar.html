@@ -9,21 +9,21 @@
     {% endfor %}
     <div class="row">
         <div class="col-sm-4 hidden-xs text-left flip">
-            <a href="?{% url_replace request "year" subevent_list.before.year "month" subevent_list.before.month %}"
+            <a href="?{% url_replace request "year" before.year "month" before.month %}"
                     class="btn btn-default">
                 <span class="fa fa-arrow-left" aria-hidden="true"></span>
-                {{ subevent_list.before|date:"F Y" }}
+                {{ before|date:"F Y" }}
             </a>
         </div>
         <div class="col-sm-4 col-xs-12 text-center">
             <select name="month" class="form-control">
-                {% for m in subevent_list.months %}
-                    <option value="{{ m|date:"m" }}" {% if m == subevent_list.date.month %}selected{% endif %}>{{ m|date:"F" }}</option>
+                {% for m in months %}
+                    <option value="{{ m|date:"m" }}" {% if m == date %}selected{% endif %}>{{ m|date:"F" }}</option>
                 {% endfor %}
             </select>
             <select name="year" class="form-control">
-                {% for y in subevent_list.years %}
-                    <option value="{{ y }}" {% if y == subevent_list.date.year %}selected{% endif %}>{{ y }}</option>
+                {% for y in years %}
+                    <option value="{{ y }}" {% if y == date.year %}selected{% endif %}>{{ y }}</option>
                 {% endfor %}
             </select>
             <button type="submit" class="js-hidden btn btn-default">
@@ -31,11 +31,11 @@
             </button>
         </div>
         <div class="col-sm-4 hidden-xs text-right flip">
-            <a href="?{% url_replace request "year" subevent_list.after.year "month" subevent_list.after.month %}" class="btn btn-default">
-                {{ subevent_list.after|date:"F Y" }}
+            <a href="?{% url_replace request "year" after.year "month" after.month %}" class="btn btn-default">
+                {{ after|date:"F Y" }}
                 <span class="fa fa-arrow-right" aria-hidden="true"></span>
             </a>
         </div>
     </div>
 </form>
-{% include "pretixpresale/fragment_calendar.html" with show_avail=event.settings.event_list_availability weeks=subevent_list.weeks %}
+{% include "pretixpresale/fragment_calendar.html" with show_avail=event.settings.event_list_availability %}

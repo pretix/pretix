@@ -33,7 +33,6 @@
 # License for the specific language governing permissions and limitations under the License.
 
 import calendar
-import hashlib
 import sys
 from collections import defaultdict
 from datetime import date, datetime, timedelta
@@ -51,7 +50,6 @@ from django.http import Http404, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.decorators import method_decorator
 from django.utils.formats import get_format
-from django.utils.functional import SimpleLazyObject
 from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _, pgettext_lazy
 from django.views import View
@@ -450,8 +448,7 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
             context['frontpage_text'] = str(self.request.event.settings.frontpage_text)
 
         if self.request.event.has_subevents:
-            context['subevent_list'] = SimpleLazyObject(self._subevent_list_context)
-            context['subevent_list_cache_key'] = self._subevent_list_cachekey()
+            context.update(self._subevent_list_context())
 
         context['show_cart'] = (
             context['cart']['positions'] and (
@@ -467,17 +464,6 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
             context['cart_redirect'] = self.request.path
 
         return context
-
-    def _subevent_list_cachekey(self):
-        cache_key_parts = [
-            self.request.host,
-            str(self.request.event.pk),
-            self.request.get_full_path(),
-            self.request.LANGUAGE_CODE,
-            self.request.sales_channel.identifier,
-        ]
-        cache_key = f'pretix.presale.views.event.EventIndex.subevent_list_context:{hashlib.md5(":".join(cache_key_parts).encode()).hexdigest()}'
-        return cache_key
 
     def _subevent_list_context(self):
         voucher = None
