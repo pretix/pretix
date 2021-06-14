@@ -12,7 +12,7 @@
             <a href="?{% url_replace request "year" subevent_list.before.isocalendar.0 "week" subevent_list.before.isocalendar.1 %}"
                     class="btn btn-default">
                 <span class="fa fa-arrow-left" aria-hidden="true"></span>
-                {{ before|date:week_format }}
+                {{ before|date:subevent_list.week_format }}
             </a>
         </div>
         <div class="col-sm-4 col-xs-12 text-center">
@@ -33,7 +33,7 @@
         <div class="col-sm-4 hidden-xs text-right flip">
             <a href="?{% url_replace request "year" subevent_list.after.isocalendar.0 "week" subevent_list.after.isocalendar.1 %}"
                     class="btn btn-default">
-                {{ subevent_list.after|date:week_format }}
+                {{ subevent_list.after|date:subevent_list.week_format }}
                 <span class="fa fa-arrow-right" aria-hidden="true"></span>
             </a>
         </div>
@@ -44,11 +44,11 @@
     <a href="?{% url_replace request "year" subevent_list.before.isocalendar.0 "week" subevent_list.before.isocalendar.1 %}"
             class="btn btn-default">
         <span class="fa fa-arrow-left" aria-hidden="true"></span>
-        {{ subevent_list.before|date:week_format }}
+        {{ subevent_list.before|date:subevent_list.week_format }}
     </a>
     <a href="?{% url_replace request "year" subevent_list.after.isocalendar.0 "week" subevent_list.after.isocalendar.1 %}"
             class="btn btn-default">
-        {{ subevent_list.after|date:week_format }}
+        {{ subevent_list.after|date:subevent_list.week_format }}
         <span class="fa fa-arrow-right" aria-hidden="true"></span>
     </a>
 </div>
