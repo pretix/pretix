@@ -18,7 +18,7 @@
         <div class="col-sm-4 col-xs-12 text-center">
             <select name="month" class="form-control">
                 {% for m in subevent_list.months %}
-                    <option value="{{ m|date:"m" }}" {% if m == subevent_list.date.month %}selected{% endif %}>{{ m|date:"F" }}</option>
+                    <option value="{{ m|date:"m" }}" {% if m == subevent_list.date %}selected{% endif %}>{{ m|date:"F" }}</option>
                 {% endfor %}
             </select>
             <select name="year" class="form-control">
