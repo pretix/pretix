@@ -39,7 +39,7 @@
         </div>
     </div>
 </form>
-{% include "pretixpresale/fragment_week_calendar.html" with show_avail=event.settings.event_list_availability days=subevent_list.days %}
+{% include "pretixpresale/fragment_week_calendar.html" with show_avail=event.settings.event_list_availability days=subevent_list.days show_names=subevent_list.show_names %}
 <div class="col-sm-4 visible-xs text-center">
     <a href="?{% url_replace request "year" subevent_list.before.isocalendar.0 "week" subevent_list.before.isocalendar.1 %}"
             class="btn btn-default">
