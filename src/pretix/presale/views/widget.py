@@ -29,6 +29,7 @@ from urllib.parse import urljoin
 
 import isoweek
 import pytz
+from compressor.filters.jsmin import rJSMinFilter
 from django.conf import settings
 from django.contrib.staticfiles import finders
 from django.core.cache import cache
@@ -152,7 +153,9 @@ def generate_widget_js(lang):
         else:
             # Do not expose debugging variables
             code.append('})({});\n')
-    return ''.join(code)
+    code = ''.join(code)
+    code = rJSMinFilter(content=code).output()
+    return code
 
 
 @gzip_page
