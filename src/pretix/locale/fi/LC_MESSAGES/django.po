@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-06-07 10:47+0000\n"
-"PO-Revision-Date: 2021-02-15 05:00+0000\n"
+"PO-Revision-Date: 2021-06-17 00:00+0000\n"
 "Last-Translator: Jaakko Rinta-Filppula <jaakko@r-f.fi>\n"
 "Language-Team: Finnish <https://translate.pretix.eu/projects/pretix/pretix/"
 "fi/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.4.2\n"
+"X-Generator: Weblate 4.6\n"
 
 #: pretix/api/auth/devicesecurity.py:28
 msgid ""
@@ -120,10 +120,9 @@ msgid "Meta data property '{name}' does not exist."
 msgstr "Metatietoavainta '{name}' ei ole olemassa."
 
 #: pretix/api/serializers/event.py:223 pretix/api/serializers/event.py:516
-#, fuzzy, python-brace-format
-#| msgid "Meta data property '{name}' does not exist."
+#, python-brace-format
 msgid "Meta data property '{name}' does not allow value '{value}'."
-msgstr "Metatietoavainta '{name}' ei ole olemassa."
+msgstr "Metatietoavainta '{name}' ei salli arvoa '{value}'."
 
 #: pretix/api/serializers/event.py:266
 #, python-brace-format
@@ -349,22 +348,18 @@ msgid "Online shop"
 msgstr "Verkkokauppa"
 
 #: pretix/base/context.py:45
-#, fuzzy, python-brace-format
-#| msgid "powered by <a %(a_attr)s>pretix</a>"
+#, python-brace-format
 msgid "powered by {name} based on <a {a_attr}>pretix</a>"
-msgstr "powered by <a %(a_attr)s>pretix</a>"
+msgstr "powered by {name} based on <a {a_attr}>pretix</a>"
 
 #: pretix/base/context.py:52
-#, fuzzy, python-format
-#| msgid "<a %(a_attr)s>event ticketing powered by pretix</a>"
+#, python-format
 msgid "<a %(a_attr)s>ticketing powered by pretix</a>"
 msgstr "<a %(a_attr)s>lippukauppa-alustan tarjoaa pretix</a>"
 
 #: pretix/base/context.py:61
-#, fuzzy
-#| msgid "Voucher code"
 msgid "source code"
-msgstr "Kuponkikoodi"
+msgstr "lähdekoodi"
 
 #: pretix/base/email.py:182 pretix/control/views/main.py:299
 #: pretix/plugins/badges/apps.py:45 pretix/plugins/badges/models.py:48
@@ -976,20 +971,14 @@ msgid "Show multiple choice answers grouped in one column"
 msgstr ""
 
 #: pretix/base/exporters/orderlist.py:110
-#, fuzzy
-#| msgid "Only orders created in test mode can be deleted."
 msgid "Only include orders created on or after this date."
-msgstr "Vain testitilassa tehdyt tilaukset voidaan poistaa."
+msgstr "Sisällytä vain tällä päivämäärällä ja sen jälkeen tehdyt tilaukset."
 
 #: pretix/base/exporters/orderlist.py:117
-#, fuzzy
-#| msgid "Only orders created in test mode can be deleted."
 msgid "Only include orders created on or before this date."
-msgstr "Vain testitilassa tehdyt tilaukset voidaan poistaa."
+msgstr "Sisällytä vain tällä päivämäärällä ja sitä ennen tehdyt tilaukset."
 
 #: pretix/base/exporters/orderlist.py:121
-#, fuzzy
-#| msgid "Start date"
 msgid "Start event date"
 msgstr "Alkupäivämäärä"
 
@@ -1001,10 +990,8 @@ msgid ""
 msgstr ""
 
 #: pretix/base/exporters/orderlist.py:129
-#, fuzzy
-#| msgid "Event date"
 msgid "End event date"
-msgstr "Tapahtuman päivämäärä"
+msgstr "Loppupäivämäärä"
 
 #: pretix/base/exporters/orderlist.py:268
 #: pretix/base/exporters/orderlist.py:433
@@ -1513,10 +1500,8 @@ msgid "Gift cards"
 msgstr ""
 
 #: pretix/base/exporters/orderlist.py:923
-#, fuzzy
-#| msgid "Show variants"
 msgid "Show value at"
-msgstr "Näytä variaatiot"
+msgstr ""
 
 #: pretix/base/exporters/orderlist.py:927
 #: pretix/base/exporters/orderlist.py:930 pretix/base/models/memberships.py:118
@@ -1602,16 +1587,12 @@ msgid "Current value"
 msgstr ""
 
 #: pretix/base/exporters/orderlist.py:986
-#, fuzzy
-#| msgid "Creation date"
 msgid "Created in order"
-msgstr "Luontipäivämäärä"
+msgstr ""
 
 #: pretix/base/exporters/orderlist.py:987
-#, fuzzy
-#| msgid "Invoice number"
 msgid "Last invoice number of order"
-msgstr "Laskun numero"
+msgstr "Tilauksen viimeisin laskunumero"
 
 #: pretix/base/exporters/orderlist.py:988
 msgid "Last invoice date of order"
@@ -1732,11 +1713,9 @@ msgid "Please enter a shorter name."
 msgstr ""
 
 #: pretix/base/forms/questions.py:264
-#, fuzzy
-#| msgid "Internal reference"
 msgctxt "phonenumber"
 msgid "International area code"
-msgstr "Sisäinen viite"
+msgstr "Kansainvälinen maatunnus"
 
 #: pretix/base/forms/questions.py:288
 msgctxt "phonenumber"
@@ -1893,10 +1872,8 @@ msgid "Individual customer"
 msgstr "Henkilöasiakas"
 
 #: pretix/base/forms/widgets.py:192
-#, fuzzy
-#| msgid "Business customer"
 msgid "Business or institutional customer"
-msgstr "Yritysasiakas"
+msgstr "Yritys- tai yhdistysasiakas"
 
 #: pretix/base/invoice.py:79
 #, python-format
@@ -2251,54 +2228,40 @@ msgid "Exit"
 msgstr ""
 
 #: pretix/base/models/checkin.py:262
-#, fuzzy
-#| msgid "Download ticket"
 msgid "Unknown ticket"
-msgstr "Lataa lippu"
+msgstr "Tuntematon lippu"
 
 #: pretix/base/models/checkin.py:263
-#, fuzzy
-#| msgid "Ticket downloads"
 msgid "Ticket not paid"
-msgstr "Lippujen lataus"
+msgstr "Lippu maksamatta"
 
 #: pretix/base/models/checkin.py:264
 msgid "Forbidden by custom rule"
 msgstr ""
 
 #: pretix/base/models/checkin.py:265
-#, fuzzy
-#| msgid "Ticket check-in reverted"
 msgid "Ticket code revoked/changed"
-msgstr "Lipun lunastus peruutettu"
+msgstr "Lippukoodi peruttu/muutettu"
 
 #: pretix/base/models/checkin.py:266
 msgid "Information required"
 msgstr ""
 
 #: pretix/base/models/checkin.py:267
-#, fuzzy
-#| msgid "Ticket downloads"
 msgid "Ticket already used"
-msgstr "Lippujen lataus"
+msgstr "Lippu käytetty"
 
 #: pretix/base/models/checkin.py:268
-#, fuzzy
-#| msgid "Internal Server Error"
 msgid "Server error"
 msgstr "Palvelinvirhe"
 
 #: pretix/base/models/customers.py:48
-#, fuzzy
-#| msgid "Account settings"
 msgid "Account active"
-msgstr "Tilin asetukset"
+msgstr "Tili aktiivinen"
 
 #: pretix/base/models/customers.py:49
-#, fuzzy
-#| msgid "E-mail address"
 msgid "Verified email address"
-msgstr "Sähköpostiosoite"
+msgstr "Vahvistettu sähköpostiosoite"
 
 #: pretix/base/models/customers.py:50
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:46
@@ -2307,10 +2270,8 @@ msgstr ""
 
 #: pretix/base/models/customers.py:51
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:44
-#, fuzzy
-#| msgid "Creation date"
 msgid "Registration date"
-msgstr "Luontipäivämäärä"
+msgstr "Rekisteröintipäivämäärä"
 
 #: pretix/base/models/devices.py:71 pretix/base/models/items.py:1171
 msgid "Internal identifier"
@@ -2573,16 +2534,12 @@ msgid "The property name may only contain letters, numbers and underscores."
 msgstr ""
 
 #: pretix/base/models/event.py:1454
-#, fuzzy
-#| msgid "Default"
 msgid "Default value"
 msgstr "Oletusarvo"
 
 #: pretix/base/models/event.py:1456
-#, fuzzy
-#| msgid "Can change organizer settings"
 msgid "Can only be changed by organizer-level administrators"
-msgstr "Voi muuttaa järjestäjän asetuksia"
+msgstr "Vain järjestäjätason ylläpitäjät voivat muokata"
 
 #: pretix/base/models/event.py:1458
 msgid "Required for events"
@@ -2595,10 +2552,8 @@ msgid ""
 msgstr ""
 
 #: pretix/base/models/event.py:1464
-#, fuzzy
-#| msgid "Tax value"
 msgid "Valid values"
-msgstr "Verotusarvo"
+msgstr "Sallitut arvot"
 
 #: pretix/base/models/event.py:1465
 msgid ""
@@ -2611,10 +2566,8 @@ msgid "A property can either be required or have a default value, not both."
 msgstr ""
 
 #: pretix/base/models/event.py:1473
-#, fuzzy
-#| msgid "You cannot select a quota that belongs to a different event."
 msgid "You cannot set a default value that is not a valid value."
-msgstr "Et voi valita kiintiötä, joka kuuluu eri tapahtumaan."
+msgstr "Oletusarvon tulee olla sallittu arvo."
 
 #: pretix/base/models/fields.py:33
 msgid "No value can contain the delimiter character."
@@ -3188,10 +3141,8 @@ msgstr ""
 #: pretix/base/models/items.py:1220 pretix/base/models/items.py:1223
 #: pretix/base/models/items.py:1226 pretix/base/models/items.py:1229
 #: pretix/base/models/items.py:1232 pretix/base/models/items.py:1235
-#, fuzzy
-#| msgid "Question cannot depend on a question asked during check-in."
 msgid "Currently not supported in our apps and during check-in"
-msgstr "Kysymys ei voi riippua kysymyksestä, joka kysytään ilmoittautuessa."
+msgstr ""
 
 #: pretix/base/models/items.py:1222 pretix/base/models/items.py:1228
 #: pretix/base/models/items.py:1234
@@ -3424,10 +3375,8 @@ msgid "Maximum usages"
 msgstr "Enimmäiskäyttökerrat"
 
 #: pretix/base/models/memberships.py:57
-#, fuzzy
-#| msgid "Number of times this voucher can be redeemed."
 msgid "Number of times this membership can be used in a purchase."
-msgstr "Montako kertaa tämän kupongin voi käyttää."
+msgstr ""
 
 #: pretix/base/models/memberships.py:128
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:71
@@ -3453,9 +3402,6 @@ msgid "canceled"
 msgstr "peruutettu"
 
 #: pretix/base/models/orders.py:184 pretix/control/forms/orders.py:584
-#, fuzzy
-#| msgctxt "refund_source"
-#| msgid "Customer"
 msgid "Customer"
 msgstr "Asiakas"
 
@@ -3772,10 +3718,8 @@ msgid ""
 msgstr ""
 
 #: pretix/base/models/organizer.py:266
-#, fuzzy
-#| msgid "Can manage gift cards"
 msgid "Can manage customer accounts"
-msgstr "Voi hallita lahjakortteja"
+msgstr "Voi hallita asiakastilejä"
 
 #: pretix/base/models/organizer.py:270
 msgid "Can manage gift cards"
@@ -4730,16 +4674,12 @@ msgid "Sample product – sample variation"
 msgstr ""
 
 #: pretix/base/pdf.py:125
-#, fuzzy
-#| msgid "Product variation"
 msgid "Product variation description"
-msgstr "Tuotevariaatio"
+msgstr "Tuotevariaation kuvaus"
 
 #: pretix/base/pdf.py:126
-#, fuzzy
-#| msgid "Product variation"
 msgid "Sample product variation description"
-msgstr "Tuotevariaatio"
+msgstr "Tuotevariaation esimerkkikuvaus"
 
 #: pretix/base/pdf.py:133
 msgid "Ticket category"
@@ -4951,10 +4891,8 @@ msgid "Event organizer info text"
 msgstr ""
 
 #: pretix/base/pdf.py:353 pretix/base/pdf.py:354
-#, fuzzy
-#| msgid "Event end time"
 msgid "Event info text"
-msgstr "Tapahtuman loppumisajankohta"
+msgstr "Tapahtuman ohjeteksti"
 
 #: pretix/base/pdf.py:358
 msgid "Printing date"
@@ -5309,26 +5247,20 @@ msgid "Only allowed after {datetime}"
 msgstr ""
 
 #: pretix/base/services/checkin.py:212
-#, fuzzy
-#| msgid "Sale not allowed"
 msgid "Ticket type not allowed"
-msgstr "Myynti ei sallittu"
+msgstr "Lipputyyppi ei sallittu"
 
 #: pretix/base/services/checkin.py:220
 msgid "number of days with an entry"
 msgstr ""
 
 #: pretix/base/services/checkin.py:221
-#, fuzzy
-#| msgid "Number of tickets"
 msgid "number of entries"
-msgstr "Lippujen määrä"
+msgstr ""
 
 #: pretix/base/services/checkin.py:222
-#, fuzzy
-#| msgid "Number of tickets"
 msgid "number of entries today"
-msgstr "Lippujen määrä"
+msgstr ""
 
 #: pretix/base/services/checkin.py:227
 #, python-brace-format
@@ -5336,10 +5268,9 @@ msgid "{variable} is not {value}"
 msgstr ""
 
 #: pretix/base/services/checkin.py:229
-#, fuzzy, python-brace-format
-#| msgid "Maximum value"
+#, python-brace-format
 msgid "Maximum {variable} exceeded"
-msgstr "Suurin arvo"
+msgstr "Maksimiarvo {variable} ylitetty"
 
 #: pretix/base/services/checkin.py:231
 #, python-brace-format
@@ -5433,10 +5364,9 @@ msgid "Sample product A"
 msgstr ""
 
 #: pretix/base/services/invoices.py:468
-#, fuzzy, python-brace-format
-#| msgid "Invoice number"
+#, python-brace-format
 msgid "New invoice: {number}"
-msgstr "Laskun numero"
+msgstr "Uusi lasku: {number}"
 
 #: pretix/base/services/invoices.py:470
 #, python-brace-format
@@ -5483,11 +5413,9 @@ msgid ""
 msgstr ""
 
 #: pretix/base/services/memberships.py:141
-#, fuzzy
-#| msgid "You cannot select a quota that belongs to a different event."
 msgid ""
 "You selected a membership that is connected to a different customer account."
-msgstr "Et voi valita kiintiötä, joka kuuluu eri tapahtumaan."
+msgstr ""
 
 #: pretix/base/services/memberships.py:146
 msgid "You can only use a test mode membership for test mode tickets."
@@ -5869,10 +5797,8 @@ msgid ""
 msgstr ""
 
 #: pretix/base/settings.py:127
-#, fuzzy
-#| msgid "E-mail address"
 msgid "Match orders based on email address"
-msgstr "Sähköpostiosoite"
+msgstr ""
 
 #: pretix/base/settings.py:128
 msgid ""
@@ -6115,10 +6041,8 @@ msgid ""
 msgstr ""
 
 #: pretix/base/settings.py:487
-#, fuzzy
-#| msgid "Ticket codes"
 msgid "Length of ticket codes"
-msgstr "Lippukoodit"
+msgstr ""
 
 #: pretix/base/settings.py:508
 msgid "Reservation period"
@@ -6503,40 +6427,32 @@ msgid "Ask for a name when signing up to the waiting list."
 msgstr ""
 
 #: pretix/base/settings.py:1089
-#, fuzzy
-#| msgid "Username"
 msgid "Require name"
-msgstr "Käyttäjänimi"
+msgstr ""
 
 #: pretix/base/settings.py:1090
 msgid "Require a name when signing up to the waiting list.."
 msgstr ""
 
 #: pretix/base/settings.py:1100
-#, fuzzy
-#| msgid "Phone numbers"
 msgid "Ask for a phone number"
-msgstr "Puhelinnumerot"
+msgstr ""
 
 #: pretix/base/settings.py:1101
 msgid "Ask for a phone number when signing up to the waiting list."
 msgstr ""
 
 #: pretix/base/settings.py:1110
-#, fuzzy
-#| msgid "Phone numbers"
 msgid "Require phone number"
-msgstr "Puhelinnumerot"
+msgstr ""
 
 #: pretix/base/settings.py:1111
 msgid "Require a phone number when signing up to the waiting list.."
 msgstr ""
 
 #: pretix/base/settings.py:1121
-#, fuzzy
-#| msgid "Phone numbers"
 msgid "Phone number explanation"
-msgstr "Puhelinnumerot"
+msgstr ""
 
 #: pretix/base/settings.py:1124
 msgid ""
@@ -7148,17 +7064,7 @@ msgid ""
 msgstr ""
 
 #: pretix/base/settings.py:1814
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Hello,\n"
-#| "\n"
-#| "you bought a ticket for {event}.\n"
-#| "\n"
-#| "If you did not do so already, you can download your ticket here:\n"
-#| "{url}\n"
-#| "\n"
-#| "Best regards,\n"
-#| "Your {event} team"
+#, python-brace-format
 msgid ""
 "Hello {attendee_name},\n"
 "\n"
@@ -7170,9 +7076,9 @@ msgid ""
 "    Best regards,\n"
 "    Your {event} team"
 msgstr ""
-"Hei,\n"
+"Hei {attendee_name},\n"
 "\n"
-"ostit lipun tapahtumaan {event}.\n"
+"olet rekisteröitynyt tapahtumaan {event}.\n"
 "\n"
 "Jos et vielä ladannut lippuasi, voit tehdä sen täällä:\n"
 "{url}\n"
@@ -7873,11 +7779,8 @@ msgid "Order code:"
 msgstr "Tilauskoodi:"
 
 #: pretix/base/templates/pretixbase/email/order_details.html:30
-#, fuzzy
-#| msgctxt "payment_state"
-#| msgid "created"
 msgid "created by"
-msgstr "luotu"
+msgstr "luonut"
 
 #: pretix/base/templates/pretixbase/email/order_details.html:36
 #: pretix/base/templates/pretixbase/email/order_details.html:124
@@ -7917,10 +7820,8 @@ msgid "at"
 msgstr ""
 
 #: pretix/base/templates/source.html:5 pretix/base/templates/source.html:9
-#, fuzzy
-#| msgid "Voucher code"
 msgid "Source code"
-msgstr "Kuponkikoodi"
+msgstr "Lähdekoodi"
 
 #: pretix/base/templates/source.html:10
 msgid ""
@@ -8186,11 +8087,9 @@ msgid "Do not copy"
 msgstr "Älä kopioi"
 
 #: pretix/control/forms/event.py:310 pretix/control/forms/subevents.py:386
-#, fuzzy, python-brace-format
-#| msgctxt "subevent"
-#| msgid "Date {val}"
+#, python-brace-format
 msgid "Default ({value})"
-msgstr "Päivämäärä {val}"
+msgstr "Oletus ({val})"
 
 #: pretix/control/forms/event.py:362 pretix/control/forms/organizer.py:129
 msgid "Custom domain"
@@ -8931,22 +8830,16 @@ msgid "Date of last successful payment"
 msgstr ""
 
 #: pretix/control/forms/filter.py:1746
-#, fuzzy
-#| msgid "Check"
 msgid "All check-ins"
-msgstr "Tarkista"
+msgstr ""
 
 #: pretix/control/forms/filter.py:1747
-#, fuzzy
-#| msgid "Tickets & check-in"
 msgid "Successful check-ins"
-msgstr "Liput & ilmoittautuminen"
+msgstr ""
 
 #: pretix/control/forms/filter.py:1748
-#, fuzzy
-#| msgid "Tickets & check-in"
 msgid "Unsuccessful check-ins"
-msgstr "Liput & ilmoittautuminen"
+msgstr ""
 
 #: pretix/control/forms/filter.py:1753
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html:59
@@ -8955,10 +8848,8 @@ msgid "Scan type"
 msgstr ""
 
 #: pretix/control/forms/filter.py:1755
-#, fuzzy
-#| msgid "Redirection URIs"
 msgid "All directions"
-msgstr "Uudelleenohjausosoitteet"
+msgstr ""
 
 #: pretix/control/forms/filter.py:1764
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html:62
@@ -8967,27 +8858,19 @@ msgid "Device"
 msgstr ""
 
 #: pretix/control/forms/filter.py:1765
-#, fuzzy
-#| msgid "All invoices"
 msgid "All devices"
-msgstr "Kaikki laskut"
+msgstr "Kaikki laitteet"
 
 #: pretix/control/forms/filter.py:1771
-#, fuzzy
-#| msgid "All attendees"
 msgid "All gates"
-msgstr "Kaikki osallistujat"
+msgstr "Kaikki portit"
 
 #: pretix/control/forms/filter.py:1779
-#, fuzzy
-#| msgid "Start date"
 msgctxt "filter"
 msgid "Start date"
 msgstr "Alkupäivämäärä"
 
 #: pretix/control/forms/filter.py:1785
-#, fuzzy
-#| msgid "End date"
 msgctxt "filter"
 msgid "End date"
 msgstr "Loppupäivämäärä"
@@ -9076,10 +8959,8 @@ msgid ""
 msgstr ""
 
 #: pretix/control/forms/global_settings.py:133
-#, fuzzy
-#| msgid "Change history"
 msgid "Changes to pretix"
-msgstr "Muutoshistoria"
+msgstr "Pretix muutoshistoria"
 
 #: pretix/control/forms/global_settings.py:136
 msgid ""
@@ -9715,13 +9596,8 @@ msgid ""
 msgstr ""
 
 #: pretix/control/forms/organizer.py:365
-#, fuzzy
-#| msgid ""
-#| "This will be attached to every email. Available placeholders: {event}"
 msgid "This will be attached to every email."
-msgstr ""
-"Tämä liitetään jokaiseen sähköpostiviestiin. Käytettävissä olevat elementit: "
-"{event}"
+msgstr "Tämä liitetään jokaiseen sähköpostiviestiin."
 
 #: pretix/control/forms/organizer.py:443
 msgctxt "webhooks"
@@ -9733,10 +9609,8 @@ msgid "Gift card value"
 msgstr ""
 
 #: pretix/control/forms/organizer.py:524 pretix/presale/forms/customer.py:386
-#, fuzzy
-#| msgid "A voucher with this code already exists."
 msgid "An account with this email address is already registered."
-msgstr "Tämä kuponkikoodi on jo olemassa."
+msgstr ""
 
 #: pretix/control/forms/renderers.py:54
 #: pretix/control/templates/pretixcontrol/items/question_edit.html:135
@@ -9748,11 +9622,9 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html:48
 #: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html:193
 #: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html:280
-#, fuzzy
-#| msgid "Order changed"
 msgctxt "form_bulk"
 msgid "change"
-msgstr "Tilaus muuttunut"
+msgstr "muuta"
 
 #: pretix/control/forms/subevents.py:117
 msgid "Keep the current values"
@@ -9763,10 +9635,8 @@ msgid "Selection contains various values"
 msgstr ""
 
 #: pretix/control/forms/subevents.py:327
-#, fuzzy
-#| msgid "Available quota"
 msgid "Available_until"
-msgstr "Jäljellä oleva kiintiö"
+msgstr ""
 
 #: pretix/control/forms/subevents.py:446
 msgid "Exclude these dates instead of adding them."
@@ -10134,10 +10004,8 @@ msgid "This object has been created by cloning."
 msgstr ""
 
 #: pretix/control/logdisplay.py:315
-#, fuzzy
-#| msgid "The gate has been changed."
 msgid "The organizer has been changed."
-msgstr "Portti muutettu."
+msgstr ""
 
 #: pretix/control/logdisplay.py:316
 #, fuzzy
