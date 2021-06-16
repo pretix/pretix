@@ -453,6 +453,16 @@ def base_placeholders(sender, **kwargs):
             ),
         ),
         SimpleFunctionalMailTextPlaceholder(
+            'subevent', ['waiting_list_entry', 'event'],
+            lambda waiting_list_entry, event: str(waiting_list_entry.subevent or event),
+            lambda event: str(event if not event.has_subevents or not event.subevents.exists() else event.subevents.first())
+        ),
+        SimpleFunctionalMailTextPlaceholder(
+            'subevent_date_from', ['waiting_list_entry', 'event'],
+            lambda waiting_list_entry, event: (waiting_list_entry.subevent or event).get_date_from_display(),
+            lambda event: (event if not event.has_subevents or not event.subevents.exists() else event.subevents.first()).get_date_from_display()
+        ),
+        SimpleFunctionalMailTextPlaceholder(
             'url', ['waiting_list_entry', 'event'],
             lambda waiting_list_entry, event: build_absolute_uri(
                 event, 'presale:event.redeem'
