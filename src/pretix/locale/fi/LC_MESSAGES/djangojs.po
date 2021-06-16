@@ -8,16 +8,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-06-07 10:48+0000\n"
-"PO-Revision-Date: 2021-01-20 16:10+0000\n"
+"PO-Revision-Date: 2021-06-17 00:00+0000\n"
 "Last-Translator: Jaakko Rinta-Filppula <jaakko@r-f.fi>\n"
-"Language-Team: Finnish <https://translate.pretix.eu/projects/pretix/pretix-"
-"js/fi/>\n"
+"Language-Team: Finnish <https://translate.pretix.eu/projects/pretix/"
+"pretix-js/fi/>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 3.10.3\n"
+"X-Generator: Weblate 4.6\n"
 
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:56
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:62
@@ -145,7 +145,7 @@ msgstr "Jatka"
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:49
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:58
 msgid "Ticket not paid"
-msgstr ""
+msgstr "Lippu maksamatta"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:50
 msgid "This ticket is not yet paid. Do you want to continue anyways?"
@@ -165,17 +165,15 @@ msgstr ""
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:54
 msgid "Ticket already used"
-msgstr ""
+msgstr "Lippu käytetty"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:55
 msgid "Information required"
 msgstr ""
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:56
-#, fuzzy
-#| msgid "Unknown error."
 msgid "Unknown ticket"
-msgstr "Tuntematon virhe."
+msgstr "Tuntematon lippu"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:57
 msgid "Invalid product"
@@ -187,7 +185,7 @@ msgstr ""
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:60
 msgid "Ticket code revoked/changed"
-msgstr ""
+msgstr "Lippukoodi peruttu/muutettu"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:61
 msgid "Order canceled"
