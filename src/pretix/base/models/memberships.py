@@ -118,6 +118,10 @@ class Membership(models.Model):
         verbose_name=_('Test mode'),
         default=False
     )
+    canceled = models.BooleanField(
+        verbose_name=_('Canceled'),
+        default=False
+    )
     customer = models.ForeignKey(
         Customer,
         related_name='memberships',

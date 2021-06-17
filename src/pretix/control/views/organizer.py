@@ -1891,7 +1891,6 @@ class MembershipDeleteView(OrganizerDetailViewMixin, OrganizerPermissionRequired
     template_name = 'pretixcontrol/organizers/customer_membership_delete.html'
     permission = 'can_manage_customers'
     context_object_name = 'membership'
-    form_class = MembershipUpdateForm
 
     def get_object(self, queryset=None):
         return get_object_or_404(

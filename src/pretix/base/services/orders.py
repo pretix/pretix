@@ -177,6 +177,10 @@ def reactivate_order(order: Order, force: bool=False, user: User=None, auth=None
                         gc = GiftCard.objects.select_for_update().get(pk=gc.pk)
                         gc.transactions.create(value=position.price, order=order)
                         break
+
+                    for m in position.granted_memberships.all():
+                        m.canceled = False
+                        m.save()
         else:
             raise OrderError(is_available)
 
@@ -409,6 +413,10 @@ def _cancel_order(order, user=None, send_mail: bool=True, api_token=None, device
                     )
                 else:
                     gc.transactions.create(value=-position.price, order=order)
+
+            for m in position.granted_memberships.all():
+                m.canceled = True
+                m.save()
 
         if cancellation_fee:
             with order.event.lock():
@@ -1768,7 +1776,26 @@ class OrderChangeManager:
                     else:
                         gc.transactions.create(value=-op.position.price, order=self.order)
 
+                for m in op.position.granted_memberships.with_usages().all():
+                    m.canceled = True
+                    m.save()
+
                 for opa in op.position.addons.all():
+                    for gc in opa.issued_gift_cards.all():
+                        gc = GiftCard.objects.select_for_update().get(pk=gc.pk)
+                        if gc.value < opa.position.price:
+                            raise OrderError(_(
+                                'A position can not be canceled since the gift card {card} purchased in this order has '
+                                'already been redeemed.').format(
+                                card=gc.secret
+                            ))
+                        else:
+                            gc.transactions.create(value=-opa.position.price, order=self.order)
+
+                    for m in opa.granted_memberships.with_usages().all():
+                        m.canceled = True
+                        m.save()
+
                     self.order.log_action('pretix.event.order.changed.cancel', user=self.user, auth=self.auth, data={
                         'position': opa.pk,
                         'positionid': opa.positionid,

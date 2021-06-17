@@ -560,7 +560,7 @@ class MembershipUpdateForm(forms.ModelForm):
 
     class Meta:
         model = Membership
-        fields = ['testmode', 'membership_type', 'date_start', 'date_end', 'attendee_name_parts']
+        fields = ['testmode', 'membership_type', 'date_start', 'date_end', 'attendee_name_parts', 'canceled']
         field_classes = {
             'date_start': SplitDateTimeField,
             'date_end': SplitDateTimeField,

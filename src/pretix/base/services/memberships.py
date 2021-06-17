@@ -141,6 +141,11 @@ def validate_memberships_in_order(customer: Customer, positions: List[AbstractPo
                 _('You selected a membership that is connected to a different customer account.')
             )
 
+        if m.canceled:
+            raise ValidationError(
+                _('You selected membership that has been canceled.')
+            )
+
         if m.testmode != testmode:
             raise ValidationError(
                 _('You can only use a test mode membership for test mode tickets.')

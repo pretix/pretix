@@ -228,6 +228,27 @@ def test_validate_membership_ensure_locking(event, customer, membership, requiri
 
 
 @pytest.mark.django_db
+def test_validate_membership_canceled(event, customer, membership, requiring_ticket, membership_type):
+    with pytest.raises(ValidationError) as excinfo:
+        membership.canceled = True
+        membership.save()
+        validate_memberships_in_order(
+            customer,
+            [
+                CartPosition(
+                    item=requiring_ticket,
+                    used_membership=membership
+                )
+            ],
+            event,
+            lock=False,
+            ignored_order=None,
+            testmode=False,
+        )
+    assert "canceled" in str(excinfo.value)
+
+
+@pytest.mark.django_db
 def test_validate_membership_test_mode(event, customer, membership, requiring_ticket, membership_type):
     with pytest.raises(ValidationError) as excinfo:
         membership.testmode = True
