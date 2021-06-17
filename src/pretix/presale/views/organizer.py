@@ -881,7 +881,7 @@ class DayCalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
                     )
                 rowcnt += 1
 
-        return "\n".join(css), time_ticks
+        return "", time_ticks#"\n".join(css), time_ticks
 
     def _grid_for_template(self, events):
         rows_by_collection = defaultdict(list)

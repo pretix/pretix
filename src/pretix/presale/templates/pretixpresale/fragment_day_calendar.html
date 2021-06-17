@@ -1,24 +1,30 @@
 {% load i18n %}
 {% load eventurl %}
-<div class="day-calendar-container">
-<div class="day-calendar">
+<div class="day-calendar day-h-{{ time_ticks.0|date:"H" }} day-m-{{ time_ticks.0|date:"i" }} day-end-h-{{ time_ticks|last|date:"H" }} day-end-m-{{ time_ticks|last|date:"i" }}">
+    <h3 aria-hidden="true" class="day-row-name">{% trans "Time of day" %}</h3>
+    <ul aria-hidden="true" class="day-timeline ticks">
     {% for t in time_ticks %}
-        <div class="day-time-tick" id="time_tick_{{ forloop.counter0 }}">
-            {{ t|date:"TIME_FORMAT" }}
-        </div>
+        <li class="event-h-{{ t|date:"H" }} event-m-{{ t|date:"i" }}">{{ t|date:"TIME_FORMAT" }}</li>
     {% endfor %}
-    <div class="day-row-name-header">
-    </div>
+    </ul>
     {% for series, rows in collections %}
+        <h3 class="day-row-name">
         {% if series %}
-            <div class="day-row-name" id="day_calendar_collection_{{ series.pk }}">
-                <a href="{% eventurl series "presale:event.index" %}">
-                    {{ series.name }}
-                </a>
-            </div>
+            <a href="{% eventurl series "presale:event.index" %}">
+            {{ series.name }}
+            </a>
         {% endif %}
+        </h3>
+        <ul class="day-timeline">
+        {% for t in time_ticks %}
+            {% if not forloop.counter|divisibleby:2 %}
+                <li class="tick event-h-{{ t|date:"H" }} event-m-{{ t|date:"i" }}">&nbsp;</li>
+            {% endif %}
+        {% endfor %}
         {% for row in rows %}
             {% for event in row %}
+            <li class="event-h-{{ event.time|date:"H" }} event-m-{{ event.time|date:"i" }}
+                {% if event.time_end %}event-end-h-{{ event.time_end|date:"H" }} event-end-m-{{ event.time_end|date:"i" }}{% endif %}">
                 <a class="event {% if event.continued %}continued{% else %} {% spaceless %}
     {% if event.event.presale_is_running and show_avail %}
         {% if event.event.best_availability_state == 100 %}
@@ -39,7 +45,7 @@
     {% else %}
         soon
     {% endif %}
-{% endspaceless %}{% endif %}" id="{{ event.css_id }}"
+{% endspaceless %}{% endif %}"
                    href="{{ event.url }}">
                     {% if show_names|default_if_none:True %}
                         <span class="event-name">
@@ -97,8 +103,9 @@
                         </span>
                     {% endif %}
                 </a>
+            </li>
             {% endfor %}
         {% endfor %}
+        </ul>
     {% endfor %}
-</div>
 </div>
