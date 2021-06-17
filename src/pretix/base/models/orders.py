@@ -599,6 +599,8 @@ class Order(LockModel, LoggedModel):
             for gc in op.issued_gift_cards.all():
                 if gc.value != op.price:
                     return False
+            if op.granted_memberships.with_usages().filter(usages__gt=0):
+                return False
         if self.user_cancel_deadline and now() > self.user_cancel_deadline:
             return False
         if self.status == Order.STATUS_PENDING:

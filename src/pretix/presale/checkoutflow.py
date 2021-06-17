@@ -376,6 +376,7 @@ class MembershipStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
 
         memberships = list(self.cart_customer.memberships.with_usages().filter(
             Q(Q(membership_type__max_usages__isnull=True) | Q(usages__lt=F('membership_type__max_usages'))),
+            canceled=False
         ).select_related('membership_type'))
 
         for p in self.applicable_positions:

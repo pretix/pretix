@@ -1234,6 +1234,27 @@ class OrderTestCase(BaseQuotaTestCase):
         assert not self.order.user_cancel_allowed
 
     @classscope(attr='o')
+    def test_can_cancel_order_with_membership(self):
+        mt = self.event.organizer.membership_types.create(name="foo")
+        customer = self.event.organizer.customers.create()
+        self.order.customer = customer
+        self.order.save()
+        item1 = Item.objects.create(event=self.event, name="Ticket", default_price=23,
+                                    admission=True, allow_cancel=True, issue_giftcard=True)
+        p = OrderPosition.objects.create(order=self.order, item=item1,
+                                         variation=None, price=23)
+        m = customer.memberships.create(
+            membership_type=mt,
+            date_start=now(),
+            date_end=now(),
+            granted_in=p,
+        )
+        # yeah, doesn't really make sense on same order, but good enough for the test
+        OrderPosition.objects.create(order=self.order, item=item1,
+                                     variation=None, price=23, used_membership=m)
+        assert not self.order.user_cancel_allowed
+
+    @classscope(attr='o')
     def test_can_cancel_order_free(self):
         self.order.status = Order.STATUS_PAID
         self.order.total = Decimal('0.00')

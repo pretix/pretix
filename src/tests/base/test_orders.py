@@ -1167,6 +1167,23 @@ class OrderChangeManagerTests(TestCase):
         assert gc.value == Decimal('0.00')
 
     @classscope(attr='o')
+    def test_cancel_issued_membership(self):
+        mt = self.event.organizer.membership_types.create(name="foo")
+        customer = self.event.organizer.customers.create()
+        self.order.customer = customer
+        self.o.save()
+        m = customer.memberships.create(
+            membership_type=mt,
+            date_start=now(),
+            date_end=now(),
+            granted_in=self.order.positions.first(),
+        )
+        self.ocm.cancel(self.op1)
+        self.ocm.commit()
+        m.refresh_from_db()
+        assert m.canceled
+
+    @classscope(attr='o')
     def test_cancel_issued_giftcard_used(self):
         gc = self.o.issued_gift_cards.create(currency="EUR", issued_in=self.op1)
         gc.transactions.create(value=20)
@@ -2420,6 +2437,21 @@ class OrderChangeManagerTests(TestCase):
         assert op.secret != s
 
     @classscope(attr='o')
+    def test_cancel_order_membership(self):
+        mt = self.event.organizer.membership_types.create(name="foo")
+        customer = self.event.organizer.customers.create()
+        self.order.customer = customer
+        m = customer.memberships.create(
+            membership_type=mt,
+            date_start=now(),
+            date_end=now(),
+            granted_in=self.order.positions.first(),
+        )
+        cancel_order(self.order)
+        m.refresh_from_db()
+        assert m.canceled
+
+    @classscope(attr='o')
     def test_auto_change_payment_fee(self):
         fee2 = self.order.fees.create(fee_type=OrderFee.FEE_TYPE_SHIPPING, value=Decimal('0.50'))
         fee = self.order.fees.create(fee_type=OrderFee.FEE_TYPE_PAYMENT, value=Decimal('0.46'))
@@ -3019,3 +3051,20 @@ class OrderReactivateTest(TestCase):
         gc = self.o.issued_gift_cards.create(currency="EUR", issued_in=self.op1)
         reactivate_order(self.order)
         assert gc.value == 23
+
+    @classscope(attr='o')
+    def test_reactivate_membership(self):
+        mt = self.event.organizer.membership_types.create(name="foo")
+        customer = self.event.organizer.customers.create()
+        self.order.customer = customer
+        self.order.save()
+        m = customer.memberships.create(
+            membership_type=mt,
+            date_start=now(),
+            date_end=now(),
+            granted_in=self.order.positions.first(),
+            canceled=True,
+        )
+        reactivate_order(self.order)
+        m.refresh_from_db()
+        assert not m.canceled

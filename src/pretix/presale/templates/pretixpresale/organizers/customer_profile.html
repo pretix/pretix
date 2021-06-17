@@ -58,7 +58,9 @@
             {% for m in memberships %}
                 <tr>
                     <td>
+                        {% if m.canceled %}<del>{% endif %}
                         {{ m.membership_type.name }}
+                        {% if m.canceled %}</del>{% endif %}
                         {% if m.testmode %}<span class="label label-warning">{% trans "TEST MODE" %}</span>{% endif %}
                     </td>
                     <td>
