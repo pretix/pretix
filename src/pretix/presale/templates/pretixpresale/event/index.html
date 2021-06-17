@@ -37,7 +37,7 @@
                     {{ event.name }}
                 </h2>
             {% endif %}
-            {% if frontpage_text and not cart_namespace %}
+            {% if frontpage_text %}
                 <div>
                     {{ frontpage_text|rich_text }}
                 </div>
@@ -88,7 +88,7 @@
         </div>
         {% if subevent %}
             <h2 class="subevent-head">{{ subevent.name }}</h2>
-            {% if frontpage_text and not cart_namespace %}
+            {% if frontpage_text %}
                 <div>
                     {{ frontpage_text|rich_text }}
                 </div>
@@ -103,7 +103,7 @@
                 {% endif %}
             </h2>
         {% endif %}
-        {% if frontpage_text and not cart_namespace %}
+        {% if frontpage_text %}
             <div>
                 {{ frontpage_text|rich_text }}
             </div>
