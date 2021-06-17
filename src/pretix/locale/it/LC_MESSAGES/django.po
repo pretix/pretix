@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-06-07 10:47+0000\n"
-"PO-Revision-Date: 2020-06-26 18:00+0000\n"
+"PO-Revision-Date: 2021-06-17 16:10+0000\n"
 "Last-Translator: Frank <webappconcept@gmail.com>\n"
 "Language-Team: Italian <https://translate.pretix.eu/projects/pretix/pretix/"
 "it/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 3.10.3\n"
+"X-Generator: Weblate 4.6\n"
 
 #: pretix/api/auth/devicesecurity.py:28
 msgid ""
@@ -15601,12 +15601,11 @@ msgid "Sum over all pages"
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:189
-#, fuzzy, python-format
-#| msgid "Paid orders"
+#, python-format
 msgid "1 order"
 msgid_plural "%(s)s orders"
-msgstr[0] "Ordini pagati"
-msgstr[1] "Ordini pagati"
+msgstr[0] "1 ordine"
+msgstr[1] "%(s) ordini"
 
 #: pretix/control/templates/pretixcontrol/orders/overview.html:5
 #: pretix/control/templates/pretixcontrol/orders/overview.html:16
@@ -22412,11 +22411,9 @@ msgid "Payment pending"
 msgstr "Pagamento in attesa"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_order_status.html:17
-#, fuzzy
-#| msgid "Comment:"
 msgctxt "order state"
 msgid "Confirmed"
-msgstr "Commento:"
+msgstr "Confermato"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:16
 #, fuzzy
@@ -22444,7 +22441,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:150
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:268
 msgid "Enter a voucher code below to buy this ticket."
-msgstr ""
+msgstr "Inserisci il codice del voucher per comprare il biglietto."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_quota_left.html:4
 #, python-format
@@ -22481,7 +22478,7 @@ msgstr "Acquista"
 #: pretix/presale/templates/pretixpresale/organizers/index.html:114
 #: pretix/presale/views/widget.py:356
 msgid "Fully booked"
-msgstr ""
+msgstr "Tutto esaurito"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_list.html:41
 #: pretix/presale/templates/pretixpresale/organizers/index.html:123
@@ -22492,7 +22489,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_list.html:46
 #: pretix/presale/templates/pretixpresale/organizers/index.html:128
 msgid "Not yet on sale"
-msgstr ""
+msgstr "Non ancora in vendita"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:27
 msgid "Your cart, general information, add products to your cart"
@@ -22513,8 +22510,6 @@ msgid "View other date"
 msgstr "Vedi un'altra data"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:64
-#, fuzzy
-#| msgid "Choose date to buy a ticket"
 msgid "Choose date to book a ticket"
 msgstr "Scegli una data per acquistare un biglietto"
 
