@@ -38,6 +38,7 @@ import logging
 import os
 import sys
 from urllib.parse import urlparse
+from json import loads
 
 import django.conf.locale
 from django.utils.crypto import get_random_string
@@ -247,23 +248,35 @@ if HAS_MEMCACHED:
     }
 
 HAS_REDIS = config.has_option('redis', 'location')
+USE_REDIS_SENTINEL = config.has_option('redis', 'sentinels')
+HAS_REDIS_PASSWORD = config.has_option('redis', 'password')
 if HAS_REDIS:
+    OPTIONS = {
+        "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        "REDIS_CLIENT_KWARGS": {"health_check_interval": 30}
+    }
+
+    if USE_REDIS_SENTINEL:
+        DJANGO_REDIS_CONNECTION_FACTORY = "django_redis.pool.SentinelConnectionFactory"
+        OPTIONS["CLIENT_CLASS"] = "django_redis.client.SentinelClient"
+        OPTIONS["CONNECTION_POOL_CLASS"] = "redis.sentinel.SentinelConnectionPool"
+        # See https://github.com/jazzband/django-redis/issues/540
+        OPTIONS["SENTINEL_KWARGS"] = {"socket_timeout": 1}
+        OPTIONS["SENTINELS"] = [tuple(sentinel) for sentinel in loads(config.get('redis', 'sentinels'))]
+
+    if HAS_REDIS_PASSWORD:
+        OPTIONS["PASSWORD"] = config.get('redis', 'password')
+
     CACHES['redis'] = {
         "BACKEND": "django_redis.cache.RedisCache",
         "LOCATION": config.get('redis', 'location'),
-        "OPTIONS": {
-            "CLIENT_CLASS": "django_redis.client.DefaultClient",
-            "REDIS_CLIENT_KWARGS": {"health_check_interval": 30}
-        }
+        "OPTIONS": OPTIONS
     }
     CACHES['redis_sessions'] = {
         "BACKEND": "django_redis.cache.RedisCache",
         "LOCATION": config.get('redis', 'location'),
         "TIMEOUT": 3600 * 24 * 30,
-        "OPTIONS": {
-            "CLIENT_CLASS": "django_redis.client.DefaultClient",
-            "REDIS_CLIENT_KWARGS": {"health_check_interval": 30}
-        }
+        "OPTIONS": OPTIONS
     }
     if not HAS_MEMCACHED:
         CACHES['default'] = CACHES['redis']
@@ -279,9 +292,15 @@ if not SESSION_ENGINE:
         SESSION_ENGINE = "django.contrib.sessions.backends.db"
 
 HAS_CELERY = config.has_option('celery', 'broker')
+HAS_CELERY_BROKER_TRANSPORT_OPTS = config.has_option('celery', 'broker_transport_options')
+HAS_CELERY_BACKEND_TRANSPORT_OPTS = config.has_option('celery', 'backend_transport_options')
 if HAS_CELERY:
     CELERY_BROKER_URL = config.get('celery', 'broker')
     CELERY_RESULT_BACKEND = config.get('celery', 'backend')
+    if HAS_CELERY_BROKER_TRANSPORT_OPTS:
+        CELERY_BROKER_TRANSPORT_OPTIONS = loads(config.get('celery', 'broker_transport_options'))
+    if HAS_CELERY_BACKEND_TRANSPORT_OPTS:
+        CELERY_RESULT_BACKEND_TRANSPORT_OPTIONS = loads(config.get('celery', 'backend_transport_options'))
 else:
     CELERY_TASK_ALWAYS_EAGER = True
 
