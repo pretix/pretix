@@ -333,7 +333,7 @@ class OrganizerIndex(OrganizerViewMixin, EventListMixin, ListView):
         for c, v in request.COOKIES.items():
             # If the cookie is not one we know, it might be set by a plugin and we need to include it in the
             # cache key to be safe. A known example includes plugins that e.g. store cookie banner state.
-            if c not in (settings.SESSION_COOKIE_NAME, settings.LANGUAGE_COOKIE_NAME, settings.CSRF_COOKIE_NAME):
+            if c not in (settings.SESSION_COOKIE_NAME, settings.LANGUAGE_COOKIE_NAME, settings.CSRF_COOKIE_NAME) and not c.startswith('__'):
                 cache_key_parts.append(f'{c}={v}')
         for c, v in request.session.items():
             # If the session key is not one we know, it might be set by a plugin and we need to include it in the
