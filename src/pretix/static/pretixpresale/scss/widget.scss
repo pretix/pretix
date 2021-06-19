@@ -32,7 +32,7 @@
     font-weight: bold;
     padding: 0 15px;
   }
-  button, input[type="button"] {
+  button, input[type="button"], a.pretix-widget-button {
     overflow: visible;
     text-transform: none;
     cursor: pointer;
@@ -44,6 +44,7 @@
     background-image: none;
     border: 1px solid transparent;
     white-space: nowrap;
+    text-decoration: none;
     @include button-size($padding-base-vertical, $padding-base-horizontal, $font-size-base, $line-height-base, $btn-border-radius-base);
     @include user-select(none);
     @include button-variant($btn-primary-color, $btn-primary-bg, $btn-primary-border);
@@ -53,6 +54,7 @@
     &.active {
       &:focus,
       &.focus {
+        text-decoration: none;
         @include tab-focus;
       }
     }
@@ -132,6 +134,11 @@
     border: 2px solid $brand-danger;
     color: $brand-danger;
     border-radius: $alert-border-radius;
+  }
+
+  .pretix-widget-error-action {
+    padding: 10px;
+    text-align: center;
   }
 
   .pretix-widget-loading {

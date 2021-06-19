@@ -29,7 +29,12 @@ var strings = {
     'order_min': django.pgettext('widget', 'minimum amount to order: %s'),
     'exit': django.pgettext('widget', 'Close ticket shop'),
     'loading_error': django.pgettext('widget', 'The ticket shop could not be loaded.'),
+    'loading_error_429': django.pgettext('widget', 'There are currently a lot of users in this ticket shop. Please ' +
+        'open the shop in a new tab to continue.'),
+    'open_new_tab': django.pgettext('widget', 'Open ticket shop'),
     'cart_error': django.pgettext('widget', 'The cart could not be created. Please try again later'),
+    'cart_error_429': django.pgettext('widget', 'We could not create your cart, since there are currently too many ' +
+        'users in this ticket shop. Please click "Continue" to retry in a new tab.'),
     'waiting_list': django.pgettext('widget', 'Waiting list'),
     'cart_exists': django.pgettext('widget', 'You currently have an active cart for this event. If you select more' +
         ' products, they will be added to your existing cart.'),
@@ -528,6 +533,13 @@ var shared_methods = {
         }
     },
     buy_error_callback: function (xhr, data) {
+        if (xhr.status === 429 && typeof xhr.responseURL !== "undefined") {
+            this.$root.overlay.error_message = strings['cart_error_429'];
+            this.$root.overlay.frame_loading = false;
+            this.$root.overlay.error_url_after = this.$root.newTabTarget;
+            this.$root.overlay.error_url_after_new_tab = true;
+            return;
+        }
         if (xhr.status === 405 && typeof xhr.responseURL !== "undefined") {
             // Likely a redirect!
             this.$root.target_url = xhr.responseURL.substr(0, xhr.responseURL.indexOf("/cart/add") - 18);
@@ -710,8 +722,13 @@ Vue.component('pretix-overlay', {
         errorClose: function () {
             this.$root.error_message = null;
             this.$root.error_url_after = null;
+            this.$root.error_url_after_new_tab = false;
         },
         errorContinue: function () {
+            if (this.$root.error_url_after_new_tab) {
+                window.open(this.$root.error_url_after);
+                return;
+            }
             var iframe = this.$refs['frame-container'].children[0];
             iframe.src = this.$root.error_url_after;
             this.$root.frame_loading = true;
@@ -1250,6 +1267,9 @@ Vue.component('pretix-widget', {
         + '<resize-observer @notify="handleResize" />'
         + shared_loading_fragment
         + '<div class="pretix-widget-error-message" v-if="$root.error && $root.view !== \'event\'">{{ $root.error }}</div>'
+        + '<div class="pretix-widget-error-action" v-if="$root.error"><a :href="$root.newTabTarget" class="pretix-widget-button" target="_blank">'
+        + strings['open_new_tab']
+        + '</a></div>'
         + '<pretix-widget-event-form ref="formcomp" v-if="$root.view === \'event\'"></pretix-widget-event-form>'
         + '<pretix-widget-event-list v-if="$root.view === \'events\'"></pretix-widget-event-list>'
         + '<pretix-widget-event-calendar v-if="$root.view === \'weeks\'"></pretix-widget-event-calendar>'
@@ -1425,7 +1445,11 @@ var shared_root_methods = {
         }, function (error) {
             root.categories = [];
             root.currency = '';
-            root.error = strings['loading_error'];
+            if (error.status === 429) {
+                root.error = strings['loading_error_429'];
+            } else {
+                root.error = strings['loading_error'];
+            }
             if (root.loading > 0) {
                 root.loading--;
                 root.trigger_load_callback();
@@ -1514,6 +1538,13 @@ var shared_root_computed = {
         }
         return form_target
     },
+    newTabTarget: function () {
+        var target = this.target_url;
+        if (this.subevent) {
+            target = this.target_url + this.subevent + '/';
+        }
+        return target;
+    },
     useIframe: function () {
         return !this.disable_iframe && (this.skip_ssl || site_is_secure());
     },
@@ -1551,6 +1582,7 @@ var create_overlay = function (app) {
                 frame_loading: false,
                 frame_shown: false,
                 error_url_after: null,
+                error_url_after_new_tab: true,
                 error_message: null,
             }
         },
