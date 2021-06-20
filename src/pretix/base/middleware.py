@@ -214,7 +214,7 @@ def _render_csp(h):
 def _merge_csp(a, b):
     for k, v in a.items():
         if k in b:
-            a[k] += b[k]
+            a[k] += [i for i in b[k] if i not in a[k]]
 
     for k, v in b.items():
         if k not in a:
