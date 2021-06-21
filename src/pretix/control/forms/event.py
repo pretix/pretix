@@ -178,7 +178,7 @@ class EventWizardBasicsForm(I18nModelForm):
         self.locales = kwargs.get('locales')
         self.has_subevents = kwargs.pop('has_subevents')
         self.user = kwargs.pop('user')
-        kwargs.pop('session')
+        self.session = kwargs.pop('session')
         super().__init__(*args, **kwargs)
         if 'timezone' not in self.initial:
             self.initial['timezone'] = get_current_timezone_name()
@@ -193,7 +193,7 @@ class EventWizardBasicsForm(I18nModelForm):
             del self.fields['presale_end']
             del self.fields['date_to']
 
-        if self.has_control_rights(self.user, self.organizer):
+        if self.has_control_rights(self.user, self.organizer, self.session):
             del self.fields['team']
         else:
             self.fields['team'].queryset = self.user.teams.filter(organizer=self.organizer)
@@ -235,11 +235,11 @@ class EventWizardBasicsForm(I18nModelForm):
         return slug
 
     @staticmethod
-    def has_control_rights(user, organizer):
+    def has_control_rights(user, organizer, session):
         return user.teams.filter(
             organizer=organizer, all_events=True, can_change_event_settings=True, can_change_items=True,
             can_change_orders=True, can_change_vouchers=True
-        ).exists() or user.is_staff
+        ).exists() or user.has_active_staff_session(session.session_key)
 
 
 class EventChoiceMixin:
