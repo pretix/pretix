@@ -430,7 +430,7 @@ class CheckinListPositionViewSet(viewsets.ReadOnlyModelViewSet):
                 op = queryset.get(secret=self.kwargs['pk'])
         except OrderPosition.DoesNotExist:
             revoked_matches = list(self.request.event.revoked_secrets.filter(secret=self.kwargs['pk']))
-            if len(revoked_matches) == 0 or not force:
+            if len(revoked_matches) == 0:
                 self.request.event.log_action('pretix.event.checkin.unknown', data={
                     'datetime': dt,
                     'type': type,
@@ -455,22 +455,28 @@ class CheckinListPositionViewSet(viewsets.ReadOnlyModelViewSet):
                     error_reason=Checkin.REASON_INVALID,
                     **common_checkin_args,
                 )
-
                 raise Http404()
-
-            op = revoked_matches[0].position
-            op.order.log_action('pretix.event.checkin.revoked', data={
-                'datetime': dt,
-                'type': type,
-                'list': self.checkinlist.pk,
-                'barcode': self.kwargs['pk']
-            }, user=self.request.user, auth=self.request.auth)
-            Checkin.objects.create(
-                position=op,
-                successful=False,
-                error_reason=Checkin.REASON_REVOKED,
-                **common_checkin_args
-            )
+            else:
+                op = revoked_matches[0].position
+                op.order.log_action('pretix.event.checkin.revoked', data={
+                    'datetime': dt,
+                    'type': type,
+                    'list': self.checkinlist.pk,
+                    'barcode': self.kwargs['pk']
+                }, user=self.request.user, auth=self.request.auth)
+                Checkin.objects.create(
+                    position=op,
+                    successful=False,
+                    error_reason=Checkin.REASON_REVOKED,
+                    **common_checkin_args
+                )
+                return Response({
+                    'status': 'error',
+                    'reason': Checkin.REASON_REVOKED,
+                    'reason_explanation': None,
+                    'require_attention': False,
+                    'position': CheckinListOrderPositionSerializer(op, context=self.get_serializer_context()).data
+                }, status=400)
 
         given_answers = {}
         if 'answers' in self.request.data:
