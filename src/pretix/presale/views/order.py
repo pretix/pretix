@@ -872,8 +872,12 @@ class OrderCancelDo(EventViewMixin, OrderDetailMixin, AsyncAction, View):
             messages.error(request, _('You cannot cancel this order.'))
             return redirect(self.get_order_url())
         fee = None
+        require_approval = False
+        auto_refund = not self.request.event.settings.cancel_allow_user_paid_require_approval
         if self.order.status == Order.STATUS_PAID and self.order.total != Decimal('0.00'):
+            require_approval = self.request.event.settings.cancel_allow_user_paid_require_approval
             fee = self.order.user_cancel_fee
+            auto_refund = True
         if 'cancel_fee' in request.POST and self.request.event.settings.cancel_allow_user_paid_adjust_fees:
             fee = fee or Decimal('0.00')
             fee_in = re.sub('[^0-9.,]', '', request.POST.get('cancel_fee'))
@@ -901,7 +905,7 @@ class OrderCancelDo(EventViewMixin, OrderDetailMixin, AsyncAction, View):
                 self.request.POST.get('giftcard') == 'true'
             )
         )
-        if self.request.event.settings.cancel_allow_user_paid_require_approval:
+        if require_approval:
             self.order.cancellation_requests.create(
                 cancellation_fee=fee or Decimal('0.00'),
                 refund_as_giftcard=giftcard,
@@ -910,7 +914,7 @@ class OrderCancelDo(EventViewMixin, OrderDetailMixin, AsyncAction, View):
             return self.success(None)
         else:
             comment = gettext('Canceled by customer')
-            return self.do(self.order.pk, cancellation_fee=fee, try_auto_refund=True, refund_as_giftcard=giftcard,
+            return self.do(self.order.pk, cancellation_fee=fee, try_auto_refund=auto_refund, refund_as_giftcard=giftcard,
                            comment=comment)
 
     def get_context_data(self, **kwargs):

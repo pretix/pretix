@@ -112,15 +112,15 @@
         </div>
     {% endif %}
     {% eventsignal event "pretix.presale.signals.order_info_top" order=order request=request %}
+    {% if order.cancellation_requests.exists %}
+        <div class="alert alert-info">
+            {% blocktrans trimmed %}
+                We've received your request to cancel this order. Please stay patient while the event organizer
+                decides on the cancellation.
+            {% endblocktrans %}
+        </div>
+    {% endif %}
     {% if order.status == "p" or order.status == "c" %}
-        {% if order.cancellation_requests.exists %}
-            <div class="alert alert-info">
-                {% blocktrans trimmed %}
-                    We've received your request to cancel this order. Please stay patient while the event organizer
-                    decides on the cancellation.
-                {% endblocktrans %}
-            </div>
-        {% endif %}
         {% if refunds %}
             <div class="panel panel-primary">
                 <div class="panel-heading">
