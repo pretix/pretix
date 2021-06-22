@@ -2187,7 +2187,7 @@ class OrderPosition(AbstractPosition):
     def send_mail(self, subject: str, template: Union[str, LazyI18nString],
                   context: Dict[str, Any]=None, log_entry_type: str='pretix.event.order.email.sent',
                   user: User=None, headers: dict=None, sender: str=None, invoices: list=None,
-                  auth=None, attach_tickets=False):
+                  auth=None, attach_tickets=False, attach_ical=False):
         """
         Sends an email to the attendee. Basically, this method does two things:
 
@@ -2204,6 +2204,7 @@ class OrderPosition(AbstractPosition):
         :param headers: Dictionary with additional mail headers
         :param sender: Custom email sender.
         :param attach_tickets: Attach tickets of this order, if they are existing and ready to download
+        :param attach_ical: Attach relevant ICS files
         """
         from pretix.base.services.mail import (
             SendMailException, mail, render_mail,
@@ -2223,7 +2224,9 @@ class OrderPosition(AbstractPosition):
                     recipient, subject, template, context,
                     self.event, self.order.locale, order=self.order, headers=headers, sender=sender,
                     position=self,
-                    invoices=invoices, attach_tickets=attach_tickets
+                    invoices=invoices,
+                    attach_tickets=attach_tickets,
+                    attach_ical=attach_ical,
                 )
             except SendMailException:
                 raise
@@ -2238,6 +2241,7 @@ class OrderPosition(AbstractPosition):
                         'recipient': recipient,
                         'invoices': [i.pk for i in invoices] if invoices else [],
                         'attach_tickets': attach_tickets,
+                        'attach_ical': attach_ical,
                     }
                 )
 
