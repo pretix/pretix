@@ -1175,16 +1175,17 @@ class OrderChange(EventViewMixin, OrderDetailMixin, TemplateView):
     def positions(self):
         positions = list(
             self.order.positions.select_related('item', 'item__tax_rule').prefetch_related(
-                'item__quotas', 'item__variations', 'item__variations__quotas'
+                'item__variations',
             )
         )
+        quota_cache = {}
         try:
             ia = self.order.invoice_address
         except InvoiceAddress.DoesNotExist:
             ia = None
         for p in positions:
             p.form = OrderPositionChangeForm(prefix='op-{}'.format(p.pk), instance=p,
-                                             invoice_address=ia, event=self.request.event,
+                                             invoice_address=ia, event=self.request.event, quota_cache=quota_cache,
                                              data=self.request.POST if self.request.method == "POST" else None)
         return positions
 

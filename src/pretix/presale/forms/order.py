@@ -42,6 +42,7 @@ class OrderPositionChangeForm(forms.Form):
         invoice_address = kwargs.pop('invoice_address')
         initial = kwargs.get('initial', {})
         event = kwargs.pop('event')
+        quota_cache = kwargs.pop('quota_cache')
         kwargs['initial'] = initial
         if instance.variation_id:
             initial['itemvar'] = f'{instance.item_id}-{instance.variation_id}'
@@ -57,11 +58,17 @@ class OrderPositionChangeForm(forms.Form):
         variations = list(i.variations.all())
 
         if variations:
-            current_quotas = instance.variation.quotas.all() if instance.variation else instance.item.quotas.all()
+            current_quotas = (
+                instance.variation.quotas.filter(subevent=instance.subevent)
+                if instance.variation
+                else instance.item.quotas.all(subevent=instance.subevent)
+            )
             qa = QuotaAvailability()
             for v in variations:
-                qa.queue(*v.quotas.all())
+                quotas_to_compute = [q for q in v.quotas.filter(subevent=instance.subevent) if q not in quota_cache]
+                qa.queue(*quotas_to_compute)
             qa.compute()
+            quota_cache.update(qa.results)
 
             for v in variations:
 
@@ -73,7 +80,11 @@ class OrderPositionChangeForm(forms.Form):
                 if not v.active:
                     continue
 
-                q_res = [qa.results[q][0] != Quota.AVAILABILITY_OK for q in v.quotas.all() if q not in current_quotas]
+                q_res = [
+                    (qa.results[q] if q in qa.results else quota_cache[q])[0] != Quota.AVAILABILITY_OK
+                    for q in v.quotas.all()
+                    if q not in current_quotas
+                ]
                 if not v.quotas.all() or (q_res and any(q_res)):
                     continue
 
