@@ -161,6 +161,7 @@ class EventWizard(SafeSessionWizardView):
                 initial['locales'] = self.clone_from.settings.locales
                 initial['has_subevents'] = self.clone_from.has_subevents
             elif step == 'basics':
+                initial['request'] = self.request
                 initial['name'] = self.clone_from.name
 
                 if re.match('^.*-[0-9]+$', self.clone_from.slug):
@@ -270,7 +271,7 @@ class EventWizard(SafeSessionWizardView):
                 user=self.request.user,
             )
 
-            if not EventWizardBasicsForm.has_control_rights(self.request.user, event.organizer):
+            if not EventWizardBasicsForm.has_control_rights(self.request.user, event.organizer, self.request.session):
                 if basics_data["team"] is not None:
                     t = basics_data["team"]
                     t.limit_events.add(event)
