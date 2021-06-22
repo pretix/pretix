@@ -199,7 +199,9 @@ class AnswerSerializer(I18nAwareModelSerializer):
         return data
 
     def validate(self, data):
-        if data.get('question').type == Question.TYPE_FILE:
+        if not data.get('question'):
+            raise ValidationError('Question not specified.')
+        elif data.get('question').type == Question.TYPE_FILE:
             return self._handle_file_upload(data)
         elif data.get('question').type in (Question.TYPE_CHOICE, Question.TYPE_CHOICE_MULTIPLE):
             if not data.get('options'):
