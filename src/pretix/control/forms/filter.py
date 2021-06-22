@@ -1788,11 +1788,11 @@ class OverviewFilterForm(FilterForm):
 class CheckinFilterForm(FilterForm):
     status = forms.ChoiceField(
         label=_('Status'),
-        choices=(
+        choices=[
             ('', _('All check-ins')),
             ('successful', _('Successful check-ins')),
             ('unsuccessful', _('Unsuccessful check-ins')),
-        ),
+        ] + list(Checkin.REASONS),
         required=False
     )
     type = forms.ChoiceField(
@@ -1873,6 +1873,8 @@ class CheckinFilterForm(FilterForm):
                 qs = qs.filter(successful=True)
             elif s == 'unsuccessful':
                 qs = qs.filter(successful=False)
+            elif s:
+                qs = qs.filter(successful=False, error_reason=s)
 
         if fdata.get('type'):
             qs = qs.filter(type=fdata.get('type'))
