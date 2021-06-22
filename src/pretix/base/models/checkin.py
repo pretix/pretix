@@ -265,6 +265,7 @@ class Checkin(models.Model):
         (REASON_REVOKED, _('Ticket code revoked/changed')),
         (REASON_INCOMPLETE, _('Information required')),
         (REASON_ALREADY_REDEEMED, _('Ticket already used')),
+        (REASON_PRODUCT, _('Ticket type not allowed here')),
         (REASON_ERROR, _('Server error')),
     )
 
