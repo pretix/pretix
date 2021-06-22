@@ -227,7 +227,7 @@ def cancel_event(self, event: Event, subevent: int, auto_refund: bool,
             if not self.request.called_directly and counter % max(10, total // 100) == 0:
                 self.update_state(
                     state='PROGRESS',
-                    meta={'value': round(counter / total * 100, 2)}
+                    meta={'value': round(counter / total * 100 if total else 0, 2)}
                 )
         except LockTimeoutException:
             logger.exception("Could not cancel order")
@@ -285,7 +285,7 @@ def cancel_event(self, event: Event, subevent: int, auto_refund: bool,
             if not self.request.called_directly and counter % max(10, total // 100) == 0:
                 self.update_state(
                     state='PROGRESS',
-                    meta={'value': round(counter / total * 100, 2)}
+                    meta={'value': round(counter / total * 100 if total else 0, 2)}
                 )
 
     if send_waitinglist:
@@ -296,6 +296,6 @@ def cancel_event(self, event: Event, subevent: int, auto_refund: bool,
             if not self.request.called_directly and counter % max(10, total // 100) == 0:
                 self.update_state(
                     state='PROGRESS',
-                    meta={'value': round(counter / total * 100, 2)}
+                    meta={'value': round(counter / total * 100 if total else 0, 2)}
                 )
     return failed
