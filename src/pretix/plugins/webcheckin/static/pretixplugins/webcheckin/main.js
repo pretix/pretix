@@ -54,7 +54,7 @@ window.vapp = new Vue({
             'result.already_redeemed': gettext('Ticket already used'),
             'result.questions': gettext('Information required'),
             'result.invalid': gettext('Unknown ticket'),
-            'result.product': gettext('Invalid product'),
+            'result.product': gettext('Ticket type not allowed here'),
             'result.unpaid': gettext('Ticket not paid'),
             'result.rules': gettext('Entry not allowed'),
             'result.revoked': gettext('Ticket code revoked/changed'),
