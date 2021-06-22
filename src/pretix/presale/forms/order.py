@@ -65,7 +65,8 @@ class OrderPositionChangeForm(forms.Form):
             )
             qa = QuotaAvailability()
             for v in variations:
-                quotas_to_compute = [q for q in v.quotas.filter(subevent=instance.subevent) if q not in quota_cache]
+                v._quotas = v.quotas.filter(subevent=instance.subevent)
+                quotas_to_compute = [q for q in v._quotas if q not in quota_cache]
                 qa.queue(*quotas_to_compute)
             qa.compute()
             quota_cache.update(qa.results)
@@ -82,10 +83,10 @@ class OrderPositionChangeForm(forms.Form):
 
                 q_res = [
                     (qa.results[q] if q in qa.results else quota_cache[q])[0] != Quota.AVAILABILITY_OK
-                    for q in v.quotas.all()
+                    for q in v._quotas
                     if q not in current_quotas
                 ]
-                if not v.quotas.all() or (q_res and any(q_res)):
+                if not v._quotas or (q_res and any(q_res)):
                     continue
 
                 new_price = get_price(i, v, voucher=instance.voucher, subevent=instance.subevent,
