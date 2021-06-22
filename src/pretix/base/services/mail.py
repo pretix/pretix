@@ -626,6 +626,7 @@ def encoder_linelength(msg):
 
 
 def convert_image_to_cid(image_src, cid_id, verify_ssl=True):
+    image_src = image_src.strip()
     try:
         if image_src.startswith('data:image/'):
             image_type, image_content = image_src.split(',', 1)
