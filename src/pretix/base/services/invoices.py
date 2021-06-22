@@ -244,7 +244,9 @@ def build_invoice(invoice: Invoice) -> Invoice:
                 event_date_to=None if invoice.event.has_subevents else invoice.event.date_to,
                 tax_value=fee.tax_value,
                 tax_rate=fee.tax_rate,
-                tax_name=fee.tax_rule.name if fee.tax_rule else ''
+                tax_name=fee.tax_rule.name if fee.tax_rule else '',
+                fee_type=fee.fee_type,
+                fee_internal_type=fee.internal_type or None,
             )
 
             if fee.tax_rule and fee.tax_rule.is_reverse_charge(ia) and fee.value and not fee.tax_value:

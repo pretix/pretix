@@ -341,6 +341,7 @@ def test_positions(env):
     assert last.gross_value == fee.value
     assert last.tax_rate == fee.tax_rate
     assert last.tax_value == fee.tax_value
+    assert last.fee_type == 'payment'
     assert inv.invoice_to == ""
 
 

@@ -343,6 +343,8 @@ class InvoiceLine(models.Model):
     item = models.ForeignKey('Item', null=True, blank=True, on_delete=models.PROTECT)
     variation = models.ForeignKey('ItemVariation', null=True, blank=True, on_delete=models.PROTECT)
     attendee_name = models.TextField(null=True, blank=True)
+    fee_type = models.CharField(max_length=190, null=True, blank=True)
+    fee_internal_type = models.CharField(max_length=190, null=True, blank=True)
 
     @property
     def net_value(self):

@@ -58,6 +58,15 @@ lines                                 list of objects            The actual invo
                                                                  created before this field was introduced as well as for
                                                                  all lines not created by a product (e.g. a shipping or
                                                                  cancellation fee).
+├ fee_type                            string                     Fee type, e.g. ``shipping``, ``service``, ``payment``,
+                                                                 ``cancellation``, ``giftcard``, or ``other. Can be ``null`` for
+                                                                 all invoice lines
+                                                                 created before this field was introduced as well as for
+                                                                 all lines not created by a fee (e.g. a product).
+├ fee_internal_type                   string                     Additional fee type, e.g. type of payment provider. Can be ``null``
+                                                                 for all invoice lines
+                                                                 created before this field was introduced as well as for
+                                                                 all lines not created by a fee (e.g. a product).
 ├ event_date_from                     datetime                   Start date of the (sub)event this line was created for as it
                                                                  was set during invoice creation. Can be ``null`` for all invoice
                                                                  lines created before this was introduced as well as for lines in
@@ -96,6 +105,10 @@ internal_reference                    string                     Customer's refe
    The attribute ``invoice_to_*``, ``invoice_from_*``, ``custom_field``, ``lines.item``, ``lines.variation``, ``lines.event_date_from``,
    ``lines.event_date_to``, and ``lines.attendee_name`` have been added.
    ``refers`` now returns an invoice number including the prefix.
+
+.. versionchanged:: 4.1
+
+   The attributes ``fee_type`` and ``fee_internal_type`` have been added.
 
 
 Endpoints
@@ -162,6 +175,8 @@ Endpoints
                 "description": "Budget Ticket",
                 "item": 1234,
                 "variation": 245,
+                "fee_type": null,
+                "fee_internal_type": null,
                 "event_date_from": "2017-12-27T10:00:00Z",
                 "event_date_to": null,
                 "attendee_name": null,
@@ -248,6 +263,8 @@ Endpoints
             "description": "Budget Ticket",
             "item": 1234,
             "variation": 245,
+            "fee_type": null,
+            "fee_internal_type": null,
             "event_date_from": "2017-12-27T10:00:00Z",
             "event_date_to": null,
             "attendee_name": null,
