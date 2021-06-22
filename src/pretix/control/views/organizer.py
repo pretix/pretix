@@ -103,6 +103,7 @@ from pretix.control.signals import nav_organizer
 from pretix.control.views import PaginationMixin
 from pretix.helpers.dicts import merge_dicts
 from pretix.multidomain.urlreverse import build_absolute_uri
+from pretix.helpers.urls import build_absolute_uri as build_global_uri
 from pretix.presale.forms.customer import TokenGenerator
 from pretix.presale.style import regenerate_organizer_css
 
@@ -669,7 +670,7 @@ class TeamMemberView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin,
                     'user': self,
                     'organizer': self.request.organizer.name,
                     'team': instance.team.name,
-                    'url': build_absolute_uri('control:auth.invite', kwargs={
+                    'url': build_global_uri('control:auth.invite', kwargs={
                         'token': instance.token
                     })
                 },
