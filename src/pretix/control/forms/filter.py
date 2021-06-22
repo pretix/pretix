@@ -1049,6 +1049,26 @@ class CustomerFilterForm(FilterForm):
         }),
         required=False
     )
+    status = forms.ChoiceField(
+        label=_('Status'),
+        required=False,
+        choices=(
+            ('', _('All')),
+            ('active', _('active')),
+            ('disabled', _('disabled')),
+            ('unverified', _('not yet activated')),
+        )
+    )
+    memberships = forms.ChoiceField(
+        label=_('Memberships'),
+        required=False,
+        choices=(
+            ('', _('All')),
+            ('no', _('Has no memberships')),
+            ('any', _('Has any membership')),
+            ('valid', _('Has valid membership')),
+        )
+    )
 
     def __init__(self, *args, **kwargs):
         kwargs.pop('request')
@@ -1065,12 +1085,26 @@ class CustomerFilterForm(FilterForm):
                 | Q(identifier__istartswith=query)
             )
 
-            if fdata.get('ordering'):
-                qs = qs.order_by(self.get_order_by())
-            else:
-                qs = qs.order_by('-email')
+        if fdata.get('status') == 'active':
+            qs = qs.filter(is_active=True, is_verified=True)
+        elif fdata.get('status') == 'disabled':
+            qs = qs.filter(is_active=False)
+        elif fdata.get('status') == 'unverified':
+            qs = qs.filter(is_verified=False)
 
-        return qs
+        if fdata.get('memberships') == 'no':
+            qs = qs.filter(memberships__isnull=True)
+        elif fdata.get('memberships') == 'any':
+            qs = qs.filter(memberships__isnull=False)
+        elif fdata.get('memberships') == 'valid':
+            qs = qs.filter(memberships__date_start__lt=now(), memberships__date_end__gt=now(), memberships__canceled=False)
+
+        if fdata.get('ordering'):
+            qs = qs.order_by(self.get_order_by())
+        else:
+            qs = qs.order_by('-email')
+
+        return qs.distinct()
 
 
 class TeamFilterForm(FilterForm):

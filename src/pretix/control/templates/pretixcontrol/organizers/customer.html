@@ -91,7 +91,8 @@
                     {% for m in memberships %}
                         <tr>
                             <td>
-                                {% if m.canceled %}<del>{% endif %}
+                                {% if m.canceled %}
+                                    <del>{% endif %}
                                 {{ m.membership_type.name }}
                                 {% if m.canceled %}</del>{% endif %}
                                 {% if m.testmode %}<span class="label label-warning">{% trans "TEST MODE" %}</span>{% endif %}
@@ -143,17 +144,17 @@
                         </tr>
                     {% endfor %}
                     </tbody>
-                <tfoot>
-                <tr>
-                    <td colspan="7">
-                        <a href="{% url "control:organizer.customer.membership.add" organizer=request.organizer.slug customer=customer.identifier %}"
-                                class="btn btn-default">
-                            <i class="fa fa-plus"></i>
-                            {% trans "Add membership" %}
-                        </a>
-                    </td>
-                </tr>
-                </tfoot>
+                    <tfoot>
+                    <tr>
+                        <td colspan="7">
+                            <a href="{% url "control:organizer.customer.membership.add" organizer=request.organizer.slug customer=customer.identifier %}"
+                                    class="btn btn-default">
+                                <i class="fa fa-plus"></i>
+                                {% trans "Add membership" %}
+                            </a>
+                        </td>
+                    </tr>
+                    </tfoot>
                 </table>
             </div>
             <div class="panel panel-default items">
@@ -191,7 +192,7 @@
                             </td>
                             <td>
                             <span class="fa fa-{{ o.sales_channel_obj.icon }} text-muted"
-                                  data-toggle="tooltip" title="{% trans o.sales_channel_obj.verbose_name %}"></span>
+                                    data-toggle="tooltip" title="{% trans o.sales_channel_obj.verbose_name %}"></span>
                                 {{ o.datetime|date:"SHORT_DATETIME_FORMAT" }}
                                 {% if o.customer_id != customer.pk %}
                                     <span class="fa fa-link text-muted"
@@ -206,14 +207,14 @@
                                 {% endif %}
                                 {% if o.has_external_refund or o.has_pending_refund %}
                                     <span class="label label-danger">{% trans "REFUND PENDING" %}</span>
-                                    {% elif o.has_pending_refund %}
+                                {% elif o.has_pending_refund %}
                                     <span class="label label-warning">{% trans "REFUND PENDING" %}</span>
                                 {% endif %}
                                 {% if o.is_overpaid %}
                                     <span class="label label-warning">{% trans "OVERPAID" %}</span>
-                                    {% elif o.is_underpaid %}
+                                {% elif o.is_underpaid %}
                                     <span class="label label-danger">{% trans "UNDERPAID" %}</span>
-                                    {% elif o.is_pending_with_full_payment %}
+                                {% elif o.is_pending_with_full_payment %}
                                     <span class="label label-danger">{% trans "FULLY PAID" %}</span>
                                 {% endif %}
                                 {% if o.computed_payment_refund_sum == o.total or o.computed_payment_refund_sum == 0 %}
