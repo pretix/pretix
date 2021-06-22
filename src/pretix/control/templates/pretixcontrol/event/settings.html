@@ -250,6 +250,12 @@
             </fieldset>
             <fieldset>
                 <legend>{% trans "Waiting list" %}</legend>
+                <div class="alert alert-info">
+                    {% blocktrans trimmed %}
+                        The waiting list currently is not compatible with some advanced features of pretix such as
+                        seating plans, add-on products or product bundles.
+                    {% endblocktrans %}
+                </div>
                 {% bootstrap_field sform.waiting_list_enabled layout="control" %}
                 {% bootstrap_field sform.waiting_list_auto layout="control" %}
                 {% bootstrap_field sform.waiting_list_hours layout="control" %}
