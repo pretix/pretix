@@ -22,31 +22,41 @@
                     </h3>
                 </div>
                 <div class="panel-body">
-                    <dl class="dl-horizontal">
-                        <dt>{% trans "Customer ID" %}</dt>
-                        <dd>#{{ customer.identifier }}</dd>
-                        <dt>{% trans "Status" %}</dt>
-                        <dd>
-                            {% if not customer.is_active %}
-                                {% trans "disabled" %}
+                    <form action="" method="post">
+                        {% csrf_token %}
+                        <dl class="dl-horizontal">
+                            <dt>{% trans "Customer ID" %}</dt>
+                            <dd>#{{ customer.identifier }}</dd>
+                            <dt>{% trans "Status" %}</dt>
+                            <dd>
+                                {% if not customer.is_active %}
+                                    {% trans "disabled" %}
                                 {% elif not customer.is_verified %}
-                                {% trans "not yet activated" %}
-                            {% else %}
-                                {% trans "active" %}
-                            {% endif %}
-                        </dd>
-                        <dt>{% trans "E-mail" %}</dt>
-                        <dd>{{ customer.email|default_if_none:"" }}</dd>
-                        <dt>{% trans "Name" %}</dt>
-                        <dd>{{ customer.name }}</dd>
-                        <dt>{% trans "Locale" %}</dt>
-                        <dd>{{ display_locale }}</dd>
-                        <dt>{% trans "Registration date" %}</dt>
-                        <dd>{{ customer.date_joined|date:"SHORT_DATETIME_FORMAT" }}</dd>
-                        <dt>{% trans "Last login" %}</dt>
-                        <dd>{% if customer.last_login %}{{ customer.last_login|date:"SHORT_DATETIME_FORMAT" }}{% else %}
-                            –{% endif %}</dd>
-                    </dl>
+                                    {% trans "not yet activated" %}
+                                {% else %}
+                                    {% trans "active" %}
+                                {% endif %}
+                            </dd>
+                            <dt>{% trans "E-mail" %}</dt>
+                            <dd>
+                                {{ customer.email|default_if_none:"" }}
+                                {% if customer.email %}
+                                    <button type="submit" name="action" value="pwreset" class="btn btn-xs btn-default">
+                                    {% trans "Send password reset link" %}
+                                    </button>
+                                {% endif %}
+                            </dd>
+                            <dt>{% trans "Name" %}</dt>
+                            <dd>{{ customer.name }}</dd>
+                            <dt>{% trans "Locale" %}</dt>
+                            <dd>{{ display_locale }}</dd>
+                            <dt>{% trans "Registration date" %}</dt>
+                            <dd>{{ customer.date_joined|date:"SHORT_DATETIME_FORMAT" }}</dd>
+                            <dt>{% trans "Last login" %}</dt>
+                            <dd>{% if customer.last_login %}{{ customer.last_login|date:"SHORT_DATETIME_FORMAT" }}{% else %}
+                                –{% endif %}</dd>
+                        </dl>
+                    </form>
                     <div class="text-right">
                         <a href="{% url "control:organizer.customer.edit" organizer=request.organizer.slug customer=customer.identifier %}"
                                 class="btn btn-default">

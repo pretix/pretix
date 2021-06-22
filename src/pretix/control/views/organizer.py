@@ -102,7 +102,8 @@ from pretix.control.permissions import (
 from pretix.control.signals import nav_organizer
 from pretix.control.views import PaginationMixin
 from pretix.helpers.dicts import merge_dicts
-from pretix.helpers.urls import build_absolute_uri
+from pretix.multidomain.urlreverse import build_absolute_uri
+from pretix.presale.forms.customer import TokenGenerator
 from pretix.presale.style import regenerate_organizer_css
 
 
@@ -1762,6 +1763,34 @@ class CustomerDetailView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMi
             self.request.organizer.customers,
             identifier=self.kwargs.get('customer')
         )
+
+    def post(self, request, *args, **kwargs):
+        if request.POST.get('action') == 'pwreset':
+            self.customer.log_action('pretix.customer.password.resetrequested', {}, user=self.request.user)
+            ctx = self.customer.get_email_context()
+            token = TokenGenerator().make_token(self.customer)
+            ctx['url'] = build_absolute_uri(
+                self.request.organizer,
+                'presale:organizer.customer.recoverpw'
+            ) + '?id=' + self.customer.identifier + '&token=' + token
+            mail(
+                self.customer.email,
+                _('Set a new password for your account at {organizer}').format(organizer=self.request.organizer.name),
+                self.request.organizer.settings.mail_text_customer_reset,
+                ctx,
+                locale=self.customer.locale,
+                customer=self.customer,
+                organizer=self.request.organizer,
+            )
+            messages.success(
+                self.request,
+                _('We\'ve sent the customer an email with further instructions on resetting your password.')
+            )
+
+        return redirect(reverse('control:organizer.customer', kwargs={
+            'organizer': self.request.organizer.slug,
+            'customer': self.customer.identifier,
+        }))
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
