@@ -101,9 +101,6 @@ input[type=number]::-webkit-outer-spin-button {
   border: transparent;
 }
 
-.alert-primary, .alert-warning, .alert-info, .alert-success, .alert-danger {
-  color: #3b3b3b;
-}
 .panel-danger > .panel-heading, .panel-success > .panel-heading, .panel-default > .panel-heading, .panel-info > .panel-heading, .panel-warning > .panel-heading {
   color: #000000;
 }
@@ -143,37 +140,46 @@ input[type=number]::-webkit-outer-spin-button {
     text-rendering: auto; // optimizelegibility throws things off #1094
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    border-radius: 1px;
+    outline-width: 1px;
+    outline-style: solid;
   }
 }
 .sr-only.alert::before {
   background: none !important;
 }
 .alert-success::before {
-  background: $state-success-border;
+  background: $brand-success;
+  outline-color: $brand-success;
   content: "\f00c";
 }
 .alert-info::before {
-  background: $state-info-border;
+  background: $brand-info;
+  outline-color: $brand-info;
   content: "\f129";
 }
 .alert-warning::before {
-  background: $state-warning-border;
+  background: $brand-warning;
+  outline-color: $brand-warning;
   content: "\f071";
   font-size: 22px;
   padding-top: 14px;
 }
 .alert-legal::before {
-  background: $state-info-border;
+  background: $brand-info;
+  outline-color: $brand-info;
   content: "\f0e3";
 }
 .alert-danger::before {
-  background: $state-danger-border;
+  background: $brand-danger;
+  outline-color: $brand-danger;
   content: "\f071";
   font-size: 22px;
   padding-top: 14px;
 }
 .alert-primary::before {
   background: $brand-primary !important;
+  outline-color: $brand-primary;
 }
 .alert-primary {
   border-color: $brand-primary !important;
