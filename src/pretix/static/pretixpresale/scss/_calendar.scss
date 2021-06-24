@@ -68,10 +68,14 @@
     }
 
     &.reserved, &.soldout, {
-      background: $brand-danger;
+      background: lighten($brand-danger, 43%);
+      border-color: lighten($brand-danger, 30%);
+      border-left-color: $brand-danger;
+      color: darken($brand-danger, 5%);
 
       &:hover {
-        background: darken($brand-danger, 15%);
+        background: lighten($brand-danger, 45%);
+        border-color: $brand-danger;
       }
     }
 
