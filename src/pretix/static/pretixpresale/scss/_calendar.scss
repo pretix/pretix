@@ -11,44 +11,59 @@
   }
   a.event {
     display: block;
-    background: $brand-primary;
-    color: white;
-    border-radius: $border-radius-large;
+    background: lighten($brand-primary, 48%);
+    color: $brand-primary;
+    border-radius: $border-radius-base;
+    border-style: solid;
+    border-color: lighten($brand-primary, 30%);
+    border-width: 1px 1px 1px 12px;
+    border-left-color: inherit;
+
     padding: 3px 5px;
     margin-top: 3px;
     font-size: 12px;
     overflow-wrap: anywhere;
+    text-decoration: none;
 
-    &.continued {
-      background: #767676;
-      opacity: 0.8;
+    &:hover {
+      background: lighten($brand-primary, 50%);
+      border-color: $brand-primary;
+    }
+    &:focus {
+      outline-color: inherit;
+    }
+
+    &.continued, &.over {
+      background: lighten(#767676, 48%);
+      border-color: lighten(#767676, 30%);
+      border-left-color: #767676;
+      color: #767676;
       &:hover {
-        background: darken(#767676, 15%);
-        opacity: 1;
+        background: lighten(#767676, 50%);
+        border-color: #767676;
       }
     }
 
     &.soon {
-      opacity: 0.8;
+      background: lighten($brand-primary, 53%);
+      border-color: lighten($brand-primary, 40%);
+      border-left-color: lighten($brand-primary, 20%);
+      color: lighten($brand-primary, 5%);
       &:hover {
-        opacity: 1;
-      }
-    }
-
-    &.over {
-      opacity: 0.8;
-      background: #767676;
-      &:hover {
-        opacity: 1;
-        background: darken(#767676, 15%);
+        background: lighten($brand-primary, 55%);
+        border-color: lighten($brand-primary, 20%);
       }
     }
 
     &.available, {
-      background: $brand-success;
+      background: lighten($brand-success, 48%);
+      border-color: lighten($brand-success, 30%);
+      border-left-color: $brand-success;
+      color: darken($brand-success, 12%);
 
       &:hover {
-        background: darken($brand-success, 15%);
+        background: lighten($brand-success, 50%);
+        border-color: $brand-success;
       }
     }
 
@@ -66,11 +81,6 @@
     }
     .event-time, .event-status {
       display: block;
-    }
-
-    &:hover {
-      text-decoration: none;
-      background: darken($brand-primary, 15%);
     }
   }
 }
