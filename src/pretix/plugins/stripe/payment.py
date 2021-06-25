@@ -315,7 +315,7 @@ class StripeMethod(BasePaymentProvider):
         if self.settings.connect_client_id and not self.settings.secret_key:
             is_testmode = True
         else:
-            is_testmode = '_test_' in self.settings.secret_key
+            is_testmode = self.settings.secret_key and '_test_' in self.settings.secret_key
         if is_testmode:
             return mark_safe(
                 _('The Stripe plugin is operating in test mode. You can use one of <a {args}>many test '
