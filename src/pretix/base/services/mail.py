@@ -647,6 +647,7 @@ def convert_image_to_cid(image_src, cid_id, verify_ssl=True):
                 response.content, _subtype=guess_subtype)
 
         mime_image.add_header('Content-ID', '<%s>' % cid_id)
+        mime_image.add_header('Content-Disposition', 'inline; filename=%s' % cid_id)
 
         return mime_image
     except:
