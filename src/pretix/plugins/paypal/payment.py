@@ -533,6 +533,14 @@ class Paypal(BasePaymentProvider):
                         sale = paypalrestsdk.Sale.find(v['id'])
                         break
 
+            if not sale:
+                pp_payment = paypalrestsdk.Payment.find(refund.payment.info_data['id'])
+                for res in pp_payment.transactions[0].related_resources:
+                    for k, v in res.to_dict().items():
+                        if k == 'sale':
+                            sale = paypalrestsdk.Sale.find(v['id'])
+                            break
+
             pp_refund = sale.refund({
                 "amount": {
                     "total": self.format_price(refund.amount),
