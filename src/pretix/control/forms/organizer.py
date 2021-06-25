@@ -298,6 +298,7 @@ class OrganizerSettingsForm(SettingsForm):
         'giftcard_expiry_years',
         'locales',
         'region',
+        'meta_noindex',
         'event_team_provisioning',
         'primary_color',
         'theme_color_success',

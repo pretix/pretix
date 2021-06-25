@@ -7,6 +7,13 @@
 {% block thetitle %}
     {% block title %}{% endblock %}{% if url_name != "organizer.index" %} :: {% endif %}{{ organizer.name }}
 {% endblock %}
+{% block custom_header %}
+    {% if organizer.settings.meta_noindex %}
+        <meta name="robots" content="noindex, nofollow">
+    {% endif %}
+    <meta property="og:type" content="website" />
+    {{ block.super }}
+{% endblock %}
 {% block above %}
     {% if organizer.settings.locales|length > 1 or request.organizer.settings.customer_accounts %}
         {% if organizer.settings.theme_color_background|upper != "#FFFFFF" or organizer.settings.organizer_logo_image_large %}

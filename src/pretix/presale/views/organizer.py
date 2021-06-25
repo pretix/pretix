@@ -765,4 +765,6 @@ class OrganizerIcalDownload(OrganizerViewMixin, View):
         resp['Content-Disposition'] = 'attachment; filename="{}.ics"'.format(
             request.organizer.slug
         )
+        if request.organizer.settings.meta_noindex:
+            resp['X-Robots-Tag'] = 'noindex'
         return resp

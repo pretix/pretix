@@ -635,6 +635,8 @@ class EventIcalDownload(EventViewMixin, View):
         resp['Content-Disposition'] = 'attachment; filename="{}-{}-{}.ics"'.format(
             event.organizer.slug, event.slug, subevent.pk if subevent else '0',
         )
+        if event.settings.meta_noindex:
+            resp['X-Robots-Tag'] = 'noindex'
         return resp
 
 
