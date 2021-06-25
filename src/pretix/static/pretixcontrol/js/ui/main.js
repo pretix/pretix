@@ -866,7 +866,7 @@ $(function () {
                 height: 196
             }
         );
-        $div.append($(this).attr("data-qrcode").slice(10) + "…<br>");
+        $div.append($(this).attr("data-qrcode").slice(0, 10) + "…<br>");
         $div.append(gettext("Click to close"));
         $div.slideDown(200);
         $div.click(function (e) {
