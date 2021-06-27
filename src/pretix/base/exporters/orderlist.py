@@ -725,7 +725,7 @@ class OrderListExporter(MultiSheetListExporter):
                 row += [
                     order.sales_channel,
                     order.locale,
-                    row.append(_('Yes') if order.email_known_to_work else _('No'))
+                    _('Yes') if order.email_known_to_work else _('No')
                 ]
                 row.append(', '.join([
                     str(self.providers.get(p, p)) for p in sorted(set((op.payment_providers or '').split(',')))
