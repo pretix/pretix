@@ -172,9 +172,9 @@ class EventListMixin:
     def _set_month_to_next_subevent(self):
         tz = pytz.timezone(self.request.event.settings.timezone)
         next_sev = self.request.event.subevents.using(settings.DATABASE_REPLICA).filter(
+            Q(date_from__gte=now()) | Q(date_to__isnull=False, date_to__gte=now()),
             active=True,
             is_public=True,
-            date_from__gte=now()
         ).select_related('event').order_by('date_from').first()
 
         if next_sev:
@@ -187,19 +187,19 @@ class EventListMixin:
 
     def _set_month_to_next_event(self):
         next_ev = filter_qs_by_attr(Event.objects.using(settings.DATABASE_REPLICA).filter(
+            Q(date_from__gte=now()) | Q(date_to__isnull=False, date_to__gte=now()),
             organizer=self.request.organizer,
             live=True,
             is_public=True,
-            date_from__gte=now(),
             has_subevents=False
         ), self.request).order_by('date_from').first()
         next_sev = filter_qs_by_attr(SubEvent.objects.using(settings.DATABASE_REPLICA).filter(
+            Q(date_from__gte=now()) | Q(date_to__isnull=False, date_to__gte=now()),
             event__organizer=self.request.organizer,
             event__is_public=True,
             event__live=True,
             active=True,
             is_public=True,
-            date_from__gte=now()
         ), self.request).select_related('event').order_by('date_from').first()
 
         datetime_from = None
@@ -238,9 +238,9 @@ class EventListMixin:
     def _set_week_to_next_subevent(self):
         tz = pytz.timezone(self.request.event.settings.timezone)
         next_sev = self.request.event.subevents.using(settings.DATABASE_REPLICA).filter(
+            Q(date_from__gte=now()) | Q(date_to__isnull=False, date_to__gte=now()),
             active=True,
             is_public=True,
-            date_from__gte=now()
         ).select_related('event').order_by('date_from').first()
 
         if next_sev:
@@ -253,19 +253,19 @@ class EventListMixin:
 
     def _set_week_to_next_event(self):
         next_ev = filter_qs_by_attr(Event.objects.using(settings.DATABASE_REPLICA).filter(
+            Q(date_from__gte=now()) | Q(date_to__isnull=False, date_to__gte=now()),
             organizer=self.request.organizer,
             live=True,
             is_public=True,
-            date_from__gte=now(),
             has_subevents=False
         ), self.request).order_by('date_from').first()
         next_sev = filter_qs_by_attr(SubEvent.objects.using(settings.DATABASE_REPLICA).filter(
+            Q(date_from__gte=now()) | Q(date_to__isnull=False, date_to__gte=now()),
             event__organizer=self.request.organizer,
             event__is_public=True,
             event__live=True,
             active=True,
             is_public=True,
-            date_from__gte=now()
         ), self.request).select_related('event').order_by('date_from').first()
 
         datetime_from = None
