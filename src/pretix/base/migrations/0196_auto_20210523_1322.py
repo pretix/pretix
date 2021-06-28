@@ -9,7 +9,7 @@ import pretix.helpers.countries
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('pretixbase', '0188_delete_requiredaction'),
+        ('pretixbase', '0195_auto_20210622_1457'),
     ]
 
     operations = [
