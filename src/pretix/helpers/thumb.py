@@ -85,12 +85,20 @@ def create_thumbnail(sourcename, size):
     if crop:
         image = image.crop(crop)
 
+    if source.name.endswith('.jpg') or source.name.endswith('.jpeg'):
+        # Yields better file sizes for photos
+        target_ext = 'jpeg'
+        quality = 95
+    else:
+        target_ext = 'png'
+        quality = None
+
     checksum = hashlib.md5(image.tobytes()).hexdigest()
-    name = checksum + '.' + size.replace('^', 'c') + '.png'
+    name = checksum + '.' + size.replace('^', 'c') + '.' + target_ext
     buffer = BytesIO()
     if image.mode not in ("1", "L", "RGB", "RGBA"):
         image = image.convert('RGB')
-    image.save(fp=buffer, format='PNG')
+    image.save(fp=buffer, format=target_ext.upper(), quality=quality)
     imgfile = ContentFile(buffer.getvalue())
 
     t = Thumbnail.objects.create(source=sourcename, size=size)
