@@ -19,6 +19,7 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
+import datetime
 import re
 from collections import defaultdict
 from decimal import Decimal, DecimalException
@@ -40,7 +41,7 @@ from pretix.base.channels import get_all_sales_channels
 from pretix.base.forms.questions import guess_country
 from pretix.base.models import (
     ItemVariation, OrderPosition, Question, QuestionAnswer, QuestionOption,
-    Seat,
+    Seat, SubEvent,
 )
 from pretix.base.services.pricing import get_price
 from pretix.base.settings import (
@@ -160,6 +161,10 @@ class SubeventColumn(ImportColumn):
     verbose_name = pgettext_lazy('subevents', 'Date')
     default_value = None
 
+    def __init__(self, *args, **kwargs):
+        self._subevent_cache = {}
+        super().__init__(*args, **kwargs)
+
     @cached_property
     def subevents(self):
         return list(self.event.subevents.filter(active=True).order_by('date_from'))
@@ -172,6 +177,30 @@ class SubeventColumn(ImportColumn):
     def clean(self, value, previous_values):
         if not value:
             raise ValidationError(pgettext("subevent", "You need to select a date."))
+
+        if value in self._subevent_cache:
+            return self._subevent_cache[value]
+
+        input_formats = formats.get_format('DATETIME_INPUT_FORMATS', use_l10n=True)
+        for format in input_formats:
+            try:
+                d = datetime.datetime.strptime(value, format)
+                d = self.event.timezone.localize(d)
+                try:
+                    se = self.event.subevents.get(
+                        active=True,
+                        date_from__gt=d - datetime.timedelta(seconds=1),
+                        date_from__lt=d + datetime.timedelta(seconds=1),
+                    )
+                    self._subevent_cache[value] = se
+                    return se
+                except SubEvent.DoesNotExist:
+                    raise ValidationError(pgettext("subevent", "No matching date was found."))
+                except SubEvent.MultipleObjectsReturned:
+                    raise ValidationError(pgettext("subevent", "Multiple matching dates were found."))
+            except (ValueError, TypeError):
+                continue
+
         matches = [
             p for p in self.subevents
             if str(p.pk) == value or any(
@@ -181,6 +210,8 @@ class SubeventColumn(ImportColumn):
             raise ValidationError(pgettext("subevent", "No matching date was found."))
         if len(matches) > 1:
             raise ValidationError(pgettext("subevent", "Multiple matching dates were found."))
+
+        self._subevent_cache[value] = matches[0]
         return matches[0]
 
     def assign(self, value, order, position, invoice_address, **kwargs):

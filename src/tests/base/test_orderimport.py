@@ -20,6 +20,7 @@
 # <https://www.gnu.org/licenses/>.
 #
 import csv
+import datetime
 from decimal import Decimal
 from io import StringIO
 
@@ -68,6 +69,7 @@ def inputfile_factory():
             'G': 'US',
             'H': 'Texas',
             'I': 'Foo',
+            'J': '2021-06-28 11:00:00',
         },
         {
             'A': 'Daniel',
@@ -79,6 +81,7 @@ def inputfile_factory():
             'G': 'DE',
             'H': '',
             'I': 'Bar',
+            'J': '2021-06-28 11:00:00',
         },
         {
             'A': 'Anke',
@@ -90,10 +93,11 @@ def inputfile_factory():
             'G': 'AU',
             'H': '',
             'I': 'Foo,Bar',
+            'J': '2021-06-28 11:00:00',
         },
     ]
     f = StringIO()
-    w = csv.DictWriter(f, ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', "I"], dialect=csv.excel)
+    w = csv.DictWriter(f, ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'], dialect=csv.excel)
     w.writeheader()
     w.writerows(d)
     f.seek(0)
@@ -675,13 +679,30 @@ def test_import_subevent_required(user, event, item):
 
 @pytest.mark.django_db
 @scopes_disabled()
-def test_import_subevent(user, event, item):
+def test_import_subevent_by_name(user, event, item):
     settings = dict(DEFAULT_SETTINGS)
     event.has_subevents = True
     event.save()
     s = event.subevents.create(name='Test', date_from=now(), active=True)
     settings['item'] = 'static:{}'.format(item.pk)
     settings['subevent'] = 'csv:D'
+
+    import_orders.apply(
+        args=(event.pk, inputfile_factory().id, settings, 'en', user.pk)
+    ).get()
+    assert OrderPosition.objects.filter(subevent=s).count() == 3
+
+
+@pytest.mark.django_db
+@scopes_disabled()
+def test_import_subevent_by_date(user, event, item):
+    settings = dict(DEFAULT_SETTINGS)
+    event.has_subevents = True
+    event.save()
+    event.settings.timezone = 'Europe/Berlin'
+    s = event.subevents.create(name='Test', date_from=event.timezone.localize(datetime.datetime(2021, 6, 28, 11, 0, 0, 0)), active=True)
+    settings['item'] = 'static:{}'.format(item.pk)
+    settings['subevent'] = 'csv:J'
 
     import_orders.apply(
         args=(event.pk, inputfile_factory().id, settings, 'en', user.pk)
