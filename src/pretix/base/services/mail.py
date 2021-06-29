@@ -640,14 +640,14 @@ def convert_image_to_cid(image_src, cid_id, verify_ssl=True):
             image_src = normalize_image_url(image_src)
 
             path = urlparse(image_src).path
-            guess_subtype = os.path.splitext(path)[1][1:]
+            image_type = os.path.splitext(path)[1][1:]
 
             response = requests.get(image_src, verify=verify_ssl)
             mime_image = MIMEImage(
-                response.content, _subtype=guess_subtype)
+                response.content, _subtype=image_type)
 
         mime_image.add_header('Content-ID', '<%s>' % cid_id)
-        mime_image.add_header('Content-Disposition', 'inline; filename="%s"' % cid_id)
+        mime_image.add_header('Content-Disposition', 'inline;\n filename="{}.{}"'.format(cid_id, image_type))
 
         return mime_image
     except:
