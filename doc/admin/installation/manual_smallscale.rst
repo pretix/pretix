@@ -289,7 +289,7 @@ To upgrade to a new pretix release, pull the latest code changes and run the fol
 ``postgres`` with ``mysql`` if necessary)::
 
     $ source /var/pretix/venv/bin/activate
-    (venv)$ pip3 install -U pretix gunicorn
+    (venv)$ pip3 install -U --upgrade-strategy eager pretix gunicorn
     (venv)$ python -m pretix migrate
     (venv)$ python -m pretix rebuild
     (venv)$ python -m pretix updatestyles
