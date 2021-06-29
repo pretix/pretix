@@ -141,7 +141,14 @@ class Paypal(BasePaymentProvider):
                  help_text=_('Any value entered here will be added in front of the regular booking reference '
                              'containing the order number.'),
                  required=False,
-             ))
+             )),
+            ('postfix',
+             forms.CharField(
+                 label=_('Reference postfix'),
+                 help_text=_('Any value entered here will be added in front of the regular booking reference '
+                             'containing the order number.'),
+                 required=False,
+             )),
         ]
 
         d = OrderedDict(
@@ -288,11 +295,11 @@ class Paypal(BasePaymentProvider):
                         "item_list": {
                             "items": [
                                 {
-                                    "name": ('{} '.format(self.settings.prefix) if self.settings.prefix else '') +
-                                    __('Order for %s') % str(request.event),
-                                    "quantity": 1,
-                                    "price": self.format_price(cart['total']),
-                                    "currency": request.event.currency
+                                    "name": '{prefix}{orderstring}{postfix}'.format(
+                                        prefix=self.settings.prefix if self.settings.prefix else '',
+                                        orderstring=__('Order for %s') % str(request.event),
+                                        postfix=self.settings.postfix if self.settings.postfix else ''
+                                    ),
                                 }
                             ]
                         },
@@ -301,7 +308,12 @@ class Paypal(BasePaymentProvider):
                             "total": self.format_price(cart['total'])
                         },
                         "description": __('Event tickets for {event}').format(event=request.event.name),
-                        "payee": payee
+                        "payee": payee,
+                        "custom": '{prefix}{slug}{postfix}'.format(
+                            prefix=self.settings.prefix if self.settings.prefix else '',
+                            slug=request.event.slug.upper(),
+                            postfix=self.settings.postfix if self.settings.postfix else ''
+                        )
                     }
                 ]
             })
@@ -398,9 +410,13 @@ class Paypal(BasePaymentProvider):
                     "value": {
                         "items": [
                             {
-                                "name": ('{} '.format(self.settings.prefix) if self.settings.prefix else '') +
-                                __('Order {slug}-{code}').format(
-                                    slug=self.event.slug.upper(), code=payment_obj.order.code
+                                "name": '{prefix}{orderstring}{postfix}'.format(
+                                    prefix=self.settings.prefix if self.settings.prefix else '',
+                                    orderstring=__('Order {slug}-{code}').format(
+                                        slug=self.event.slug.upper(),
+                                        code=payment_obj.order.code
+                                    ),
+                                    postfix=self.settings.postfix if self.settings.postfix else ''
                                 ),
                                 "quantity": 1,
                                 "price": self.format_price(payment_obj.amount),
@@ -412,11 +428,14 @@ class Paypal(BasePaymentProvider):
                 {
                     "op": "replace",
                     "path": "/transactions/0/description",
-                    "value": ('{} '.format(self.settings.prefix) if self.settings.prefix else '') +
-                    __('Order {order} for {event}').format(
-                        event=request.event.name,
-                        order=payment_obj.order.code
-                    )
+                    "value": '{prefix}{orderstring}{postfix}'.format(
+                        prefix=self.settings.prefix if self.settings.prefix else '',
+                        orderstring=__('Order {order} for {event}').format(
+                            event=request.event.name,
+                            order=payment_obj.order.code
+                        ),
+                        postfix=self.settings.postfix if self.settings.postfix else ''
+                    ),
                 }
             ])
             try:
@@ -615,10 +634,13 @@ class Paypal(BasePaymentProvider):
                         "item_list": {
                             "items": [
                                 {
-                                    "name": ('{} '.format(self.settings.prefix) if self.settings.prefix else '') +
-                                    __('Order {slug}-{code}').format(
-                                        slug=self.event.slug.upper(),
-                                        code=payment_obj.order.code
+                                    "name": '{prefix}{orderstring}{postfix}'.format(
+                                        prefix=self.settings.prefix if self.settings.prefix else '',
+                                        orderstring=__('Order {slug}-{code}').format(
+                                            slug=self.event.slug.upper(),
+                                            code=payment_obj.order.code
+                                        ),
+                                        postfix=self.settings.postfix if self.settings.postfix else ''
                                     ),
                                     "quantity": 1,
                                     "price": self.format_price(payment_obj.amount),
@@ -630,12 +652,21 @@ class Paypal(BasePaymentProvider):
                             "currency": request.event.currency,
                             "total": self.format_price(payment_obj.amount)
                         },
-                        "description": ('{} '.format(self.settings.prefix) if self.settings.prefix else '') +
-                        __('Order {order} for {event}').format(
-                            event=request.event.name,
-                            order=payment_obj.order.code
+                        "description": '{prefix}{orderstring}{postfix}'.format(
+                            prefix=self.settings.prefix if self.settings.prefix else '',
+                            orderstring=__('Order {order} for {event}').format(
+                                event=request.event.name,
+                                order=payment_obj.order.code
+                            ),
+                            postfix=self.settings.postfix if self.settings.postfix else ''
                         ),
-                        "payee": payee
+                        "payee": payee,
+                        "custom": '{prefix}{slug}-{code}{postfix}'.format(
+                            prefix=self.settings.prefix if self.settings.prefix else '',
+                            slug=self.event.slug.upper(),
+                            code=payment_obj.order.code,
+                            postfix=self.settings.postfix if self.settings.postfix else ''
+                        ),
                     }
                 ]
             })
