@@ -57,7 +57,8 @@ from pretix.base.forms.widgets import (
 from pretix.base.models import (
     Checkin, CheckinList, Device, Event, EventMetaProperty, EventMetaValue,
     Gate, Invoice, InvoiceAddress, Item, Order, OrderPayment, OrderPosition,
-    OrderRefund, Organizer, Question, QuestionAnswer, SubEvent,
+    OrderRefund, Organizer, Question, QuestionAnswer, SubEvent, Team,
+    TeamAPIToken, TeamInvite,
 )
 from pretix.base.signals import register_payment_providers
 from pretix.control.forms.widgets import Select2
@@ -1130,11 +1131,25 @@ class TeamFilterForm(FilterForm):
         if fdata.get('query'):
             query = fdata.get('query')
             qs = qs.filter(
-                Q(name__icontains=query)
-                | Q(members__email__icontains=query)
-                | Q(members__fullname__icontains=query)
-                | Q(invites__email__icontains=query)
-                | Q(tokens__name__icontains=query)
+                Q(Exists(
+                    Team.members.through.objects.filter(
+                        Q(user__email__icontains=query) | Q(user__fullname__icontains=query),
+                        team_id=OuterRef('pk'),
+                    )
+                ))
+                | Q(Exists(
+                    TeamInvite.objects.filter(
+                        email__icontains=query,
+                        team_id=OuterRef('pk'),
+                    )
+                ))
+                | Q(Exists(
+                    TeamAPIToken.objects.filter(
+                        name__icontains=query,
+                        team_id=OuterRef('pk'),
+                    )
+                ))
+                | Q(name__icontains=query)
             )
 
         if fdata.get('ordering'):
