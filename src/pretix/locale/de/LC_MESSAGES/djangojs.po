@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-06-30 12:23+0000\n"
-"PO-Revision-Date: 2021-06-14 18:00+0000\n"
-"Last-Translator: digitalesIch <digitalesich@gmail.com>\n"
+"PO-Revision-Date: 2021-06-30 13:06+0000\n"
+"Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix-js/"
 "de/>\n"
 "Language: de\n"
@@ -167,10 +167,8 @@ msgid "Unknown ticket"
 msgstr "Unbekanntes Ticket"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:57
-#, fuzzy
-#| msgid "Entry not allowed"
 msgid "Ticket type not allowed here"
-msgstr "Eingang nicht erlaubt"
+msgstr "Ticketart hier nicht erlaubt"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:59
 msgid "Entry not allowed"
