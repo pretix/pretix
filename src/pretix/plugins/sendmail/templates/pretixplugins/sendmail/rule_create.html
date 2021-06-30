@@ -29,6 +29,18 @@
                 {% bootstrap_field form.send_date layout='horizontal' %}
                 {% bootstrap_field form.send_offset_days layout='horizontal' %}
                 {% bootstrap_field form.send_offset_time layout='horizontal' %}
+
+                <div class="form-group">
+                    <div class="col-md-9 col-md-offset-3">
+                        <div class="alert alert-info">
+                            {% blocktrans trimmed %}
+                                For technical reasons, the email might actually be sent a bit later than your
+                                configured date. Typically, this will not be more than 10 minutes. Your email
+                                will never be sent earlier than the time you configured.
+                            {% endblocktrans %}
+                        </div>
+                    </div>
+                </div>
             </fieldset>
 
             <div class="form-group submit-group">
