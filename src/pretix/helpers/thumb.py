@@ -20,6 +20,7 @@
 # <https://www.gnu.org/licenses/>.
 #
 import hashlib
+import math
 from io import BytesIO
 
 from django.core.files.base import ContentFile
@@ -39,6 +40,9 @@ def get_sizes(size, imgsize):
     if size.endswith('^'):
         crop = True
         size = size[:-1]
+    if "_" in size:
+        # ignore _ for min-size here
+        size = size.replace("_", "")
 
     if 'x' in size:
         size = [int(p) for p in size.split('x')]
@@ -80,10 +84,35 @@ def create_thumbnail(sourcename, size):
     # before we calc thumbnail, we need to check and apply EXIF-orientation
     image = ImageOps.exif_transpose(image)
 
-    scale, crop = get_sizes(size, image.size)
-    image = image.resize(scale, resample=LANCZOS)
+    new_size, crop = get_sizes(size, image.size)
+    image = image.resize(new_size, resample=LANCZOS)
     if crop:
         image = image.crop(crop)
+
+    if "_" in size:
+        min_width = 0
+        min_height = 0
+        if "x" in size:
+            sizes = size.split('x')
+            if sizes[0].endswith("_"):
+                min_width = int(sizes[0][:-1])
+            if sizes[1].endswith("_"):
+                min_height = int(sizes[1][:-1])
+        elif size.endswith("_"):
+            min_width = int(size[:-1])
+            min_height = min_width
+
+        if min_width > new_size[0] or min_height > new_size[1]:
+            padding = math.ceil(max(min_width - new_size[0], min_height - new_size[1]) / 2)
+            image = image.convert('RGB')
+            image = ImageOps.expand(image, border=padding, fill="white")
+
+            new_width = max(min_width, new_size[0])
+            new_height = max(min_height, new_size[1])
+            new_x = (image.width - new_width) // 2
+            new_y = (image.height - new_height) // 2
+
+            image = image.crop((new_x, new_y, new_x + new_width, new_y + new_height))
 
     if source.name.endswith('.jpg') or source.name.endswith('.jpeg'):
         # Yields better file sizes for photos
