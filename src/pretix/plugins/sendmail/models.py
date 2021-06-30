@@ -210,6 +210,7 @@ class Rule(models.Model):
     objects = ScopedManager(organizer='event__organizer')
 
     def save(self, **kwargs):
+        is_creation = not self.pk
         super().save(**kwargs)
 
         create_sms = []
@@ -223,16 +224,17 @@ class Rule(models.Model):
         else:
             ScheduledMail.objects.get_or_create(rule=self, event=self.event)
 
-        update_sms = []
-        for sm in self.scheduledmail_set.all():
-            if sm in create_sms:
-                continue
-            previous = sm.computed_datetime
-            sm.recompute()
-            if sm.computed_datetime != previous:
-                update_sms.append(sm)
+        if not is_creation:
+            update_sms = []
+            for sm in self.scheduledmail_set.prefetch_related('event').select_related('subevent'):
+                if sm in create_sms:
+                    continue
+                previous = sm.computed_datetime
+                sm.recompute()
+                if sm.computed_datetime != previous:
+                    update_sms.append(sm)
 
-        ScheduledMail.objects.bulk_update(update_sms, ['computed_datetime', 'last_computed'], 100)
+            ScheduledMail.objects.bulk_update(update_sms, ['computed_datetime', 'last_computed'], 100)
 
     @property
     def human_readable_time(self):
