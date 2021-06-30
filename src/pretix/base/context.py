@@ -30,7 +30,7 @@ from pretix.base.settings import GlobalSettingsObject
 from pretix.base.templatetags.safelink import safelink as sl
 
 
-def get_powered_by(safelink=True):
+def get_powered_by(request, safelink=True):
     gs = GlobalSettingsObject()
     d = gs.settings.license_check_input
     if d.get('poweredby_name'):
@@ -57,7 +57,7 @@ def get_powered_by(safelink=True):
 
     if d.get('base_license') == 'agpl':
         msg += ' (<a href="{}" target="_blank" rel="noopener">{}</a>)'.format(
-            reverse('source'),
+            request.build_absolute_uri(reverse('source')),
             gettext('source code')
         )
 
@@ -69,7 +69,7 @@ def contextprocessor(request):
         'rtl': getattr(request, 'LANGUAGE_CODE', 'en') in settings.LANGUAGES_RTL,
     }
     try:
-        ctx['poweredby'] = get_powered_by(safelink=True)
+        ctx['poweredby'] = get_powered_by(request, safelink=True)
     except Exception:
         ctx['poweredby'] = 'powered by <a href="https://pretix.eu/" target="_blank" rel="noopener">pretix</a>'
     if settings.DEBUG and 'runserver' not in sys.argv:

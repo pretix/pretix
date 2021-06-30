@@ -289,7 +289,7 @@ class WidgetAPIProductList(EventListMixin, View):
         return grps, display_add_to_cart, len(items)
 
     def post_process(self, data):
-        data['poweredby'] = get_powered_by(safelink=False)
+        data['poweredby'] = get_powered_by(self.request, safelink=False)
 
     def response(self, data):
         self.post_process(data)
