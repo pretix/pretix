@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-06-30 12:23+0000\n"
-"PO-Revision-Date: 2021-06-14 18:00+0000\n"
-"Last-Translator: digitalesIch <digitalesich@gmail.com>\n"
+"PO-Revision-Date: 2021-06-30 13:06+0000\n"
+"Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix-js/de_Informal/>\n"
 "Language: de_Informal\n"
@@ -156,7 +156,7 @@ msgstr "Ausgang gespeichert"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:54
 msgid "Ticket already used"
-msgstr "Ticket bereits benutzt"
+msgstr "Ticket bereits eingelöst"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:55
 msgid "Information required"
@@ -167,10 +167,8 @@ msgid "Unknown ticket"
 msgstr "Unbekanntes Ticket"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:57
-#, fuzzy
-#| msgid "Entry not allowed"
 msgid "Ticket type not allowed here"
-msgstr "Eingang nicht erlaubt"
+msgstr "Ticketart hier nicht erlaubt"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:59
 msgid "Entry not allowed"
