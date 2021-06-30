@@ -56,6 +56,9 @@ def get_sizes(size, imgsize):
         crop = True
         size = size[:-1]
 
+    if crop and "_" in size:
+        raise ThumbnailError('Size %s has errors: crop and minsize cannot be combined.' % size)
+
     min_width, min_height = get_minsize(size)
     if min_width or min_height:
         size = size.replace("_", "")
