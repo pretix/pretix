@@ -7,9 +7,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-06-30 12:23+0000\n"
-"PO-Revision-Date: 2021-06-22 07:37+0000\n"
-"Last-Translator: Raphael Michel <michel@rami.io>\n"
+"POT-Creation-Date: 2021-06-07 10:47+0000\n"
+"PO-Revision-Date: 2021-06-30 12:23+0000\n"
+"Last-Translator: Frank <webappconcept@gmail.com>\n"
 "Language-Team: Italian <https://translate.pretix.eu/projects/pretix/pretix/"
 "it/>\n"
 "Language: it\n"
@@ -22608,7 +22608,7 @@ msgstr "Vedi un'altra data"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:65
 msgid "Choose date to book a ticket"
-msgstr "Scegli una data per acquistare un biglietto"
+msgstr "Scegli una data per prenotare un biglietto"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:70
 msgctxt "subevent"
@@ -22679,7 +22679,7 @@ msgstr "Aggiungi al carrello"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:271
 msgid "If you already ordered a ticket"
-msgstr "Se hai già acquistato un biglietto"
+msgstr "Se hai già prenotato un biglietto"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:275
 msgid ""
