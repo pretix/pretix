@@ -19,11 +19,10 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
-from django import urls
-from django.conf import settings
+from PIL import Image
 
 from pretix.helpers.thumb import resize_image
-from PIL import Image
+
 
 def test_no_resize():
     img = Image.new('RGB', (40, 20))

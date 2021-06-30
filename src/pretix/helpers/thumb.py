@@ -34,8 +34,9 @@ from pretix.helpers.models import Thumbnail
 class ThumbnailError(Exception):
     pass
 
+
 def get_minsize(size):
-    if not "_" in size:
+    if "_" not in size:
         return (0, 0)
     min_width = 0
     min_height = 0
@@ -49,6 +50,7 @@ def get_minsize(size):
         min_width = int(size[:-1])
         min_height = min_width
     return (min_width, min_height)
+
 
 def get_sizes(size, imgsize):
     crop = False
