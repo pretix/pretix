@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-06-30 12:23+0000\n"
-"PO-Revision-Date: 2021-06-10 19:00+0000\n"
+"PO-Revision-Date: 2021-06-30 13:06+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
 ">\n"
@@ -1187,11 +1187,8 @@ msgstr "Kommentar"
 #: pretix/base/exporters/orderlist.py:291
 #: pretix/base/exporters/orderlist.py:579 pretix/base/models/orders.py:221
 #: pretix/control/forms/filter.py:209
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "All dates"
 msgid "Follow-up date"
-msgstr "Alle Termine"
+msgstr "Datum zur Wiedervorlage"
 
 #: pretix/base/exporters/orderlist.py:292
 #: pretix/control/templates/pretixcontrol/orders/index.html:119
@@ -2327,10 +2324,8 @@ msgid "Ticket already used"
 msgstr "Ticket bereits eingelöst"
 
 #: pretix/base/models/checkin.py:268
-#, fuzzy
-#| msgid "Ticket type not allowed"
 msgid "Ticket type not allowed here"
-msgstr "Ticketart nicht erlaubt"
+msgstr "Ticketart hier nicht erlaubt"
 
 #: pretix/base/models/checkin.py:269
 msgid "Server error"
@@ -3670,6 +3665,8 @@ msgstr ""
 #: pretix/base/models/orders.py:222
 msgid "We'll show you this order to be due for a follow-up on this day."
 msgstr ""
+"Wir zeigen diese Bestellung am ausgewählten Tag als fällig für eine weitere "
+"Aktion an."
 
 #: pretix/base/models/orders.py:228
 msgid ""
@@ -5869,10 +5866,8 @@ msgstr ""
 "gehört."
 
 #: pretix/base/services/memberships.py:146
-#, fuzzy
-#| msgid "The membership type has been changed."
 msgid "You selected membership that has been canceled."
-msgstr "Der Mitgliedschafts-Typ wurde geändert."
+msgstr "Sie haben eine stornierte Mitgliedschaft ausgewählt."
 
 #: pretix/base/services/memberships.py:151
 msgid "You can only use a test mode membership for test mode tickets."
@@ -9720,11 +9715,11 @@ msgstr "Freigabe ausstehend"
 
 #: pretix/control/forms/filter.py:210
 msgid "Follow-up configured"
-msgstr ""
+msgstr "Wiedervorlage gesetzt"
 
 #: pretix/control/forms/filter.py:211
 msgid "Follow-up due"
-msgstr ""
+msgstr "Wiedervorlage fällig"
 
 #: pretix/control/forms/filter.py:416 pretix/control/forms/filter.py:1374
 #: pretix/control/forms/filter.py:1589 pretix/control/forms/filter.py:1871
@@ -9883,22 +9878,16 @@ msgid "Memberships"
 msgstr "Mitgliedschaften"
 
 #: pretix/control/forms/filter.py:1068
-#, fuzzy
-#| msgid "Team memberships"
 msgid "Has no memberships"
-msgstr "Team-Mitgliedschaften"
+msgstr "Hat keine Mitgliedschaften"
 
 #: pretix/control/forms/filter.py:1069
-#, fuzzy
-#| msgid "Team memberships"
 msgid "Has any membership"
-msgstr "Team-Mitgliedschaften"
+msgstr "Hat irgendeine Mitgliedschaft"
 
 #: pretix/control/forms/filter.py:1070
-#, fuzzy
-#| msgid "Require a valid membership"
 msgid "Has valid membership"
-msgstr "Erfordere eine aktive Mitgliedschaft"
+msgstr "Hat eine aktive Mitgliedschaft"
 
 #: pretix/control/forms/filter.py:1174
 msgid "All events"
@@ -11595,10 +11584,8 @@ msgid "The order's internal comment has been updated."
 msgstr "Der interne Kommentar wurde geändert."
 
 #: pretix/control/logdisplay.py:363
-#, fuzzy
-#| msgid "The order of items has been updated."
 msgid "The order's follow-up date has been updated."
-msgstr "Die Reihenfolge der Produkte wurde gespeichert."
+msgstr "Das Datum zur Wiedervorlage wurde geändert."
 
 #: pretix/control/logdisplay.py:364
 msgid "The order's flag to require attention at check-in has been toggled."
@@ -14351,6 +14338,8 @@ msgid ""
 "The waiting list currently is not compatible with some advanced features of "
 "pretix such as seating plans, add-on products or product bundles."
 msgstr ""
+"Die Warteliste ist derzeit mit einigen fortgeschrittenen Funktionen von "
+"pretix wie z.B. Sitzplänen, Zusatzprodukten oder Produktpaketen inkompatibel."
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:270
 msgid "Item metadata"
@@ -16819,11 +16808,10 @@ msgstr "Bestellung bezahlt / gesamt"
 #: pretix/control/templates/pretixcontrol/orders/index.html:140
 #: pretix/control/templates/pretixcontrol/search/orders.html:73
 #: pretix/control/templates/pretixcontrol/search/orders.html:75
-#, fuzzy, python-format
-#| msgid "Exit: %(date)s"
+#, python-format
 msgctxt "followup"
 msgid "TODO %(date)s"
-msgstr "Ausgang: %(date)s"
+msgstr "TODO %(date)s"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:156
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:206
@@ -16955,10 +16943,8 @@ msgid "Customer ID"
 msgstr "Kundennummer"
 
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:45
-#, fuzzy
-#| msgid "Send password reset email"
 msgid "Send password reset link"
-msgstr "Passwort-Reset-Link per E-Mail verschicken"
+msgstr "Passwort-Reset-Link verschicken"
 
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:67
 #: pretix/control/templates/pretixcontrol/organizers/customer_anonymize.html:39
@@ -20288,15 +20274,11 @@ msgid "Set a new password for your account at {organizer}"
 msgstr "Setzen Sie ein neues Passwort für Ihr Kundenkonto bei {organizer}"
 
 #: pretix/control/views/organizer.py:1788
-#, fuzzy
-#| msgid ""
-#| "We've sent you an email with further instructions on resetting your "
-#| "password."
 msgid ""
 "We've sent the customer an email with further instructions on resetting your "
 "password."
 msgstr ""
-"Wir haben Ihnen eine E-Mail mit weiteren Instruktionen geschickt um Ihr "
+"Wir haben dem Kunden eine E-Mail mit weiteren Instruktionen geschickt um das "
 "Passwort zurückzusetzen."
 
 #: pretix/control/views/organizer.py:2012
