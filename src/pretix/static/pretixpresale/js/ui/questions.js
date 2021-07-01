@@ -119,35 +119,36 @@ function questions_init_profiles(el) {
         var $profilelist = $(this);
         var $formpart = $(this).parent().parent();
         $profilelist.find("button").on("click", function () {
-           var $btn = $(this);
-           var values = JSON.parse($btn.attr("data-stored-values"));
-           $formpart.find("input[name$=save]").prop("checked", false);
-           $formpart.find("input[name$=saved_id]").val($btn.attr("data-id"));
+            var $btn = $(this);
+            var values = JSON.parse($btn.attr("data-stored-values"));
+            $formpart.find("input[name$=save]").prop("checked", false);
+            $formpart.find("input[name$=saved_id]").val($btn.attr("data-id"));
 
-           for (var key of Object.keys(values)) {
-               var value = values[key];
-               var $field = $formpart.find("input[name$=" + key + "], textarea[name$=" + key + "], select[name$=" + key + "]");
+            // values.entries() would be nicer, but no IE-support
+            for (var key of Object.keys(values)) {
+                var value = values[key];
+                var $field = $formpart.find("input[name$=" + key + "], textarea[name$=" + key + "], select[name$=" + key + "]");
 
-               console.log(key, $field, value)
-               if (key === "is_business") {
-                   $formpart.find("input[name=is_business][value=business]").prop("checked", value)
-                   $formpart.find("input[name=is_business][value=individual]").prop("checked", !value)
-                   $formpart.find("input[name=is_business][value=individual]").trigger("change")
-               } else if ($field.length === 1 && $field.attr("type") === "checkbox") {
-                   $field.prop("checked", value)
-               } else if (!value) {
-                   continue;
-               } else {
-                   $field.val(value);
-                   $field.trigger("change")
-               }
+                console.log(key, $field, value)
+                if (key === "is_business") {
+                    $formpart.find("input[name=is_business][value=business]").prop("checked", value)
+                    $formpart.find("input[name=is_business][value=individual]").prop("checked", !value)
+                    $formpart.find("input[name=is_business][value=individual]").trigger("change")
+                } else if ($field.attr("type") === "checkbox") {
+                    $field.prop("checked", value)
+                } else if (!value) {
+                    continue;
+                } else {
+                    $field.val(value);
+                    $field.trigger("change")
+                }
 
-               // (invoice) address: state
-               // multiplechoice
-               // choice
-               // date
-               // time
-               // datetime
+                // (invoice) address: state
+                // multiplechoice
+                // choice
+                // date
+                // time
+                // datetime
            }
         });
     });
