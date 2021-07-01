@@ -236,14 +236,16 @@
                                         {% if i.is_cancellation %}{% trans "Cancellation" context "invoice" %}{% else %}{% trans "Invoice" %}{% endif %}
                                         {{ i.number }}</a> ({{ i.date|date:"SHORT_DATE_FORMAT" }})
                                     {% if not i.canceled %}
-                                        <form class="form-inline helper-display-inline" method="post"
-                                                action="{% url "control:event.order.regeninvoice" event=request.event.slug organizer=request.event.organizer.slug code=order.code id=i.pk %}">
-                                            {% csrf_token %}
-                                            <button class="btn btn-default btn-xs" data-toggle="tooltip"
-                                                title="{% trans 'Rebuild the invoice with updated data but the same invoice number.' %}">
-                                                {% trans "Regenerate" %}
-                                            </button>
-                                        </form>
+                                        {% if request.event.settings.invoice_regenerate_allowed %}
+                                            <form class="form-inline helper-display-inline" method="post"
+                                                    action="{% url "control:event.order.regeninvoice" event=request.event.slug organizer=request.event.organizer.slug code=order.code id=i.pk %}">
+                                                {% csrf_token %}
+                                                <button class="btn btn-default btn-xs" data-toggle="tooltip"
+                                                    title="{% trans 'Rebuild the invoice with updated data but the same invoice number.' %}">
+                                                    {% trans "Regenerate" %}
+                                                </button>
+                                            </form>
+                                        {% endif %}
                                         {% if not i.is_cancellation %}
                                             <form class="form-inline helper-display-inline" method="post"
                                                     action="{% url "control:event.order.reissueinvoice" event=request.event.slug organizer=request.event.organizer.slug code=order.code id=i.pk %}">

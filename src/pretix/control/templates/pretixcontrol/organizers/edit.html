@@ -81,6 +81,10 @@
                         {% bootstrap_field sform.giftcard_expiry_years layout="control" %}
                         {% bootstrap_field sform.giftcard_length layout="control" %}
                     </fieldset>
+                    <fieldset>
+                        <legend>{% trans "Invoices" %}</legend>
+                        {% bootstrap_field sform.invoice_regenerate_allowed layout="control" %}
+                    </fieldset>
                 </div>
             </div>
             <div class="col-xs-12 col-lg-2">

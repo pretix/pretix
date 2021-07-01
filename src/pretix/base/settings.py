@@ -744,6 +744,18 @@ DEFAULTS = {
                         "changes made through the backend."),
         )
     },
+    'invoice_regenerate_allowed': {
+        'default': 'False',
+        'type': bool,
+        'form_class': forms.BooleanField,
+        'serializer_class': serializers.BooleanField,
+        'form_kwargs': dict(
+            label=_("Allow to update existing invoices"),
+            help_text=_("By default, invoices can never again be changed once they are issued. In most countries, we "
+                        "recommend to leave this option turned off and always issue a new invoice if a change needs "
+                        "to be made."),
+        )
+    },
     'invoice_generate_sales_channels': {
         'default': json.dumps(['web']),
         'type': list

@@ -323,7 +323,7 @@ def generate_invoice(order: Order, trigger_pdf=True):
         order=order,
         event=order.event,
         organizer=order.event.organizer,
-        date=timezone.now().date(),
+        date=timezone.now().astimezone(order.event.timezone).date(),
     )
     invoice = build_invoice(invoice)
     if trigger_pdf:

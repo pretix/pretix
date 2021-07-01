@@ -25,6 +25,7 @@ import json
 from decimal import Decimal
 from unittest import mock
 
+import freezegun
 import pytest
 from django.core import mail as djmail
 from django.core.files.base import ContentFile
@@ -1112,15 +1113,17 @@ def test_invoice_detail(token_client, organizer, event, item, invoice):
 
 @pytest.mark.django_db
 def test_invoice_regenerate(token_client, organizer, event, invoice):
+    organizer.settings.invoice_regenerate_allowed = True
     with scopes_disabled():
         InvoiceAddress.objects.filter(order=invoice.order).update(company="ACME Ltd")
 
-    resp = token_client.post('/api/v1/organizers/{}/events/{}/invoices/{}/regenerate/'.format(
-        organizer.slug, event.slug, invoice.number
-    ))
-    assert resp.status_code == 204
-    invoice.refresh_from_db()
-    assert "ACME Ltd" in invoice.invoice_to
+    with freezegun.freeze_time("2017-12-10"):
+        resp = token_client.post('/api/v1/organizers/{}/events/{}/invoices/{}/regenerate/'.format(
+            organizer.slug, event.slug, invoice.number
+        ))
+        assert resp.status_code == 204
+        invoice.refresh_from_db()
+        assert "ACME Ltd" in invoice.invoice_to
 
 
 @pytest.mark.django_db
