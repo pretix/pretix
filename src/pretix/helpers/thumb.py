@@ -35,6 +35,48 @@ class ThumbnailError(Exception):
     pass
 
 
+"""
+
+# How "size" works:
+
+
+## normal resize
+
+image|thumb:"100x100" resizes the image proportionally to a maximum width and maximum height of 100px.
+I.e. an image of 200x100 will be resized to 100x50.
+An image of 40x80 will stay 40x80.
+
+
+## cropped resize with ^
+
+image|thumb:"100x100^" resizes the image proportionally to a minimum width and minimum height of 100px and then will be cropped to 100x100.
+I.e. an image of 300x200 will be resized to 150x100 and then cropped from center to 100x100.
+An image of 40x80 will stay 40x80.
+
+
+## min-size resize with _
+
+min-size-operator "_" works for width and height independently, so the following is possible:
+
+image|thumb:"100_x100" resizes the image to a maximum height of 100px (if it is lower, it does not upscale) and makes it at least 100px wide
+(if the resized image would be less than 100px wide it adds a white background to both sides to make it at least 100px wide).
+I.e. an image of 300x200 will be resized to 150x100.
+An image of 40x80 will stay 40x80 but padded with a white background to be 100x80.
+
+image|thumb:"100x100_" resizes the image to a maximum width of 100px (if it is lower, it does not upscale) and makes it at least 100px high
+(if the resized image would be less than 100px high it adds a white background to top and bottom to make it at least 100px high).
+I.e. an image of 400x200 will be resized to 100x50 and then padded from cener to be 100x100.
+An image of 40x80 will stay 40x80 but padded with a white background to be 40x100.
+
+image|thumb:"100_x100_" resizes the image proportionally to either a width or height of 100px – it takes the smaller side and resizes that to 100px,
+so the longer side will at least be 100px. So the resulting image will at least be 100px wide and at least 100px high. If the original image is bigger
+than 100x100 then no padding will occur. If the original image is smaller than 100x100, no resize will happen but padding to 100x100 will occur.
+I.e. an image of 400x200 will be resized to 200x100.
+An image of 40x80 will stay 40x80 but padded with a white background to be 100x100.
+
+"""
+
+
 def get_minsize(size):
     if "_" not in size:
         return (0, 0)
