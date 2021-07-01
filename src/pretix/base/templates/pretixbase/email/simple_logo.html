@@ -1,12 +1,18 @@
 {% load eventurl %}
 {% load i18n %}
 {% load thumb %}
-
-<!DOCTYPE html>
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, user-scalable=false">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{subject}}</title>
+<!--[if gte mso 9]><xml>
+<o:OfficeDocumentSettings>
+<o:AllowPNG/>
+<o:PixelsPerInch>96</o:PixelsPerInch>
+</o:OfficeDocumentSettings>
+</xml><![endif]-->
     <style type="text/css">
         body {
             background-color: #eee;
@@ -208,21 +214,17 @@
     <table width="100%"><tr><td align="center">
     <table width="600"><tr><td align="center"
     <![endif]-->
-    <table class="layout" width="600" border="0" cellspacing="0">
+    <table class="layout" style="max-width:600px" border="0" cellspacing="0">
         {% if event.settings.logo_image %}
-            <!--[if !mso]><!-- -->
             <tr>
                 <td style="line-height: 0; {% if event.settings.logo_image_large %}padding: 0;{% endif %}" align="center" class="logo">
                     {% if event.settings.logo_image_large %}
-                        <img src="{% if event.settings.logo_image|thumb:'1170x5000'|first == '/' %}{{ site_url }}{% endif %}{{ event.settings.logo_image|thumb:'1170x5000' }}" alt="{{ event.name }}"
-                             style="height: auto; max-width: 100%;" />
+                        <img src="{% if event.settings.logo_image|thumb:'600_x5000'|first == '/' %}{{ site_url }}{% endif %}{{ event.settings.logo_image|thumb:'600_x5000' }}" alt="{{ event.name }}" style="width:100%" />
                     {% else %}
-                        <img src="{% if event.settings.logo_image|thumb:'5000x120'|first == '/' %}{{ site_url }}{% endif %}{{ event.settings.logo_image|thumb:'5000x120' }}" alt="{{ event.name }}"
-                                style="height: auto; max-width: 100%;" />
+                        <img src="{% if event.settings.logo_image|thumb:'600_x120'|first == '/' %}{{ site_url }}{% endif %}{{ event.settings.logo_image|thumb:'600_x120' }}" alt="{{ event.name }}" style="width:100%" />
                     {% endif %}
                 </td>
             </tr>
-            <!--<![endif]-->
         {% endif %}
         <tr>
             <td class="header" align="center">

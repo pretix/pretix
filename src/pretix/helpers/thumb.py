@@ -20,6 +20,7 @@
 # <https://www.gnu.org/licenses/>.
 #
 import hashlib
+import math
 from io import BytesIO
 
 from django.core.files.base import ContentFile
@@ -34,11 +35,77 @@ class ThumbnailError(Exception):
     pass
 
 
+"""
+
+# How "size" works:
+
+
+## normal resize
+
+image|thumb:"100x100" resizes the image proportionally to a maximum width and maximum height of 100px.
+I.e. an image of 200x100 will be resized to 100x50.
+An image of 40x80 will stay 40x80.
+
+
+## cropped resize with ^
+
+image|thumb:"100x100^" resizes the image proportionally to a minimum width and minimum height of 100px and then will be cropped to 100x100.
+I.e. an image of 300x200 will be resized to 150x100 and then cropped from center to 100x100.
+An image of 40x80 will stay 40x80.
+
+
+## min-size resize with _
+
+min-size-operator "_" works for width and height independently, so the following is possible:
+
+image|thumb:"100_x100" resizes the image to a maximum height of 100px (if it is lower, it does not upscale) and makes it at least 100px wide
+(if the resized image would be less than 100px wide it adds a white background to both sides to make it at least 100px wide).
+I.e. an image of 300x200 will be resized to 150x100.
+An image of 40x80 will stay 40x80 but padded with a white background to be 100x80.
+
+image|thumb:"100x100_" resizes the image to a maximum width of 100px (if it is lower, it does not upscale) and makes it at least 100px high
+(if the resized image would be less than 100px high it adds a white background to top and bottom to make it at least 100px high).
+I.e. an image of 400x200 will be resized to 100x50 and then padded from cener to be 100x100.
+An image of 40x80 will stay 40x80 but padded with a white background to be 40x100.
+
+image|thumb:"100_x100_" resizes the image proportionally to either a width or height of 100px – it takes the smaller side and resizes that to 100px,
+so the longer side will at least be 100px. So the resulting image will at least be 100px wide and at least 100px high. If the original image is bigger
+than 100x100 then no padding will occur. If the original image is smaller than 100x100, no resize will happen but padding to 100x100 will occur.
+I.e. an image of 400x200 will be resized to 200x100.
+An image of 40x80 will stay 40x80 but padded with a white background to be 100x100.
+
+"""
+
+
+def get_minsize(size):
+    if "_" not in size:
+        return (0, 0)
+    min_width = 0
+    min_height = 0
+    if "x" in size:
+        sizes = size.split('x')
+        if sizes[0].endswith("_"):
+            min_width = int(sizes[0][:-1])
+        if sizes[1].endswith("_"):
+            min_height = int(sizes[1][:-1])
+    elif size.endswith("_"):
+        min_width = int(size[:-1])
+        min_height = min_width
+    return (min_width, min_height)
+
+
 def get_sizes(size, imgsize):
     crop = False
     if size.endswith('^'):
         crop = True
         size = size[:-1]
+
+    if crop and "_" in size:
+        raise ThumbnailError('Size %s has errors: crop and minsize cannot be combined.' % size)
+
+    min_width, min_height = get_minsize(size)
+    if min_width or min_height:
+        size = size.replace("_", "")
 
     if 'x' in size:
         size = [int(p) for p in size.split('x')]
@@ -46,6 +113,7 @@ def get_sizes(size, imgsize):
         size = [int(size), int(size)]
 
     if crop:
+        # currently crop and min-size cannot be combined
         wfactor = min(1, size[0] / imgsize[0])
         hfactor = min(1, size[1] / imgsize[1])
         if wfactor == hfactor:
@@ -61,12 +129,46 @@ def get_sizes(size, imgsize):
     else:
         wfactor = min(1, size[0] / imgsize[0])
         hfactor = min(1, size[1] / imgsize[1])
+        if min_width and min_height:
+            wfactor = max(wfactor, hfactor)
+            hfactor = wfactor
+        elif min_width:
+            wfactor = hfactor
+        elif min_height:
+            hfactor = wfactor
+
         if wfactor == hfactor:
             return (int(imgsize[0] * hfactor), int(imgsize[1] * wfactor)), None
         elif wfactor < hfactor:
             return (size[0], int(imgsize[1] * wfactor)), None
         else:
             return (int(imgsize[0] * hfactor), size[1]), None
+
+
+def resize_image(image, size):
+    # before we calc thumbnail, we need to check and apply EXIF-orientation
+    image = ImageOps.exif_transpose(image)
+
+    new_size, crop = get_sizes(size, image.size)
+    image = image.resize(new_size, resample=LANCZOS)
+    if crop:
+        image = image.crop(crop)
+
+    min_width, min_height = get_minsize(size)
+
+    if min_width > new_size[0] or min_height > new_size[1]:
+        padding = math.ceil(max(min_width - new_size[0], min_height - new_size[1]) / 2)
+        image = image.convert('RGB')
+        image = ImageOps.expand(image, border=padding, fill="white")
+
+        new_width = max(min_width, new_size[0])
+        new_height = max(min_height, new_size[1])
+        new_x = (image.width - new_width) // 2
+        new_y = (image.height - new_height) // 2
+
+        image = image.crop((new_x, new_y, new_x + new_width, new_y + new_height))
+
+    return image
 
 
 def create_thumbnail(sourcename, size):
@@ -77,13 +179,7 @@ def create_thumbnail(sourcename, size):
     except:
         raise ThumbnailError('Could not load image')
 
-    # before we calc thumbnail, we need to check and apply EXIF-orientation
-    image = ImageOps.exif_transpose(image)
-
-    scale, crop = get_sizes(size, image.size)
-    image = image.resize(scale, resample=LANCZOS)
-    if crop:
-        image = image.crop(crop)
+    image = resize_image(image, size)
 
     if source.name.endswith('.jpg') or source.name.endswith('.jpeg'):
         # Yields better file sizes for photos
