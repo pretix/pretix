@@ -89,6 +89,7 @@ def get_sizes(size, imgsize):
         hfactor = min(1, size[1] / imgsize[1])
         if min_width and min_height:
             wfactor = max(wfactor, hfactor)
+            hfactor = wfactor
         elif min_width:
             wfactor = hfactor
         elif min_height:

@@ -102,3 +102,9 @@ def test_minsize():
     width, height = img.size
     assert width == 10
     assert height == 30
+
+    img = Image.new('RGB', (20, 60))
+    img = resize_image(img, "10_x10_")
+    width, height = img.size
+    assert width == 10
+    assert height == 30
