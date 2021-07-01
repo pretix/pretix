@@ -757,7 +757,6 @@ class InvoiceSettingsForm(SettingsForm):
         'invoice_numbers_prefix_cancellations',
         'invoice_numbers_counter_length',
         'invoice_address_explanation_text',
-        'invoice_regenerate_allowed',
         'invoice_email_attachment',
         'invoice_email_organizer',
         'invoice_address_from_name',

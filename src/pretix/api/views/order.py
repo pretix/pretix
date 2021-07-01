@@ -1455,6 +1455,10 @@ class InvoiceViewSet(viewsets.ReadOnlyModelViewSet):
             raise PermissionDenied('Invoices may not be changed after they are created.')
         elif inv.shredded:
             raise PermissionDenied('The invoice file is no longer stored on the server.')
+        elif inv.sent_to_organizer:
+            raise PermissionDenied('The invoice file has already been exported.')
+        elif now().astimezone(self.request.event.timezone).date() - inv.date > datetime.timedelta(days=1):
+            raise PermissionDenied('The invoice file is too old to be regenerated.')
         else:
             inv = regenerate_invoice(inv)
             inv.order.log_action(

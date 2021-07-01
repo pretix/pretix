@@ -1334,6 +1334,10 @@ class OrderInvoiceRegenerate(OrderView):
                 messages.error(self.request, _('Invoices may not be changed after they are created.'))
             if inv.canceled:
                 messages.error(self.request, _('The invoice has already been canceled.'))
+            elif inv.sent_to_organizer:
+                messages.error(self.request, _('The invoice file has already been exported.'))
+            elif now().astimezone(self.request.event.timezone).date() - inv.date > timedelta(days=1):
+                messages.error(self.request, _('The invoice file is too old to be regenerated.'))
             elif inv.shredded:
                 messages.error(self.request, _('The invoice has been cleaned of personal data.'))
             else:
