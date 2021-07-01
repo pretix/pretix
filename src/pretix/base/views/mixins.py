@@ -253,7 +253,7 @@ class BaseQuestionsViewMixin:
             form.pos.meta_info = json.dumps(meta_info)
             form.pos.save()
 
-            if form.cleaned_data.get('save'):
+            if form.cleaned_data.get('save') and not failed:
                 prof.save()
                 self.cart_session[f'saved_attendee_profile_{form.pos.pk}'] = prof.pk
 
