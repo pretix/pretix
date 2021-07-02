@@ -60,7 +60,7 @@ COPY deployment/docker/nginx.conf /etc/nginx/nginx.conf
 COPY deployment/docker/production_settings.py /pretix/src/production_settings.py
 COPY src /pretix/src
 
-RUN cd /pretix/src && pip3 install .
+RUN cd /pretix/src && python setup.py install
 
 RUN chmod +x /usr/local/bin/pretix && \
     rm /etc/nginx/sites-enabled/default && \
