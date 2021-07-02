@@ -587,7 +587,12 @@ class InvoicePreview(EventPermissionRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         fname, ftype, fcontent = build_preview_invoice_pdf(request.event)
         resp = HttpResponse(fcontent, content_type=ftype)
-        resp['Content-Disposition'] = 'attachment; filename="{}"'.format(fname)
+        if settings.DEBUG:
+            # attachment is more secure as we're dealing with user-generated stuff here, but inline is much more convenient during debugging
+            resp['Content-Disposition'] = 'inline; filename="{}"'.format(fname)
+            resp._csp_ignore = True
+        else:
+            resp['Content-Disposition'] = 'attachment; filename="{}"'.format(fname)
         return resp
 
 
