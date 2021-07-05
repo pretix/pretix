@@ -36,6 +36,8 @@ from django.utils.translation import (
 from django_countries import countries
 from django_countries.fields import Country
 from i18nfield.strings import LazyI18nString
+from phonenumber_field.phonenumber import to_python
+from phonenumbers import SUPPORTED_REGIONS
 
 from pretix.base.channels import get_all_sales_channels
 from pretix.base.forms.questions import guess_country
@@ -154,6 +156,29 @@ class EmailColumn(ImportColumn):
 
     def assign(self, value, order, position, invoice_address, **kwargs):
         order.email = value
+
+
+class PhoneColumn(ImportColumn):
+    identifier = 'phone'
+    verbose_name = gettext_lazy('Phone number')
+
+    def clean(self, value, previous_values):
+        if value:
+            if self.event.settings.region in SUPPORTED_REGIONS:
+                region = self.event.settings.region
+            elif self.event.settings.locale[:2].upper() in SUPPORTED_REGIONS:
+                region = self.event.settings.locale[:2].upper()
+            else:
+                region = None
+
+            phone_number = to_python(value, region)
+            if not phone_number or not phone_number.is_valid():
+                raise ValidationError(_('Enter a valid phone number.'))
+            return phone_number
+        return value
+
+    def assign(self, value, order, position, invoice_address, **kwargs):
+        order.phone = value
 
 
 class SubeventColumn(ImportColumn):
@@ -756,6 +781,7 @@ def get_all_columns(event):
         default.append(SubeventColumn(event))
     default += [
         EmailColumn(event),
+        PhoneColumn(event),
         ItemColumn(event),
         Variation(event),
         InvoiceAddressCompany(event),

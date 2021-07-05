@@ -70,6 +70,7 @@ def inputfile_factory():
             'H': 'Texas',
             'I': 'Foo',
             'J': '2021-06-28 11:00:00',
+            'K': '06221/32177-50',
         },
         {
             'A': 'Daniel',
@@ -82,6 +83,7 @@ def inputfile_factory():
             'H': '',
             'I': 'Bar',
             'J': '2021-06-28 11:00:00',
+            'K': '+4962213217750',
         },
         {
             'A': 'Anke',
@@ -94,10 +96,11 @@ def inputfile_factory():
             'H': '',
             'I': 'Foo,Bar',
             'J': '2021-06-28 11:00:00',
+            'K': '',
         },
     ]
     f = StringIO()
-    w = csv.DictWriter(f, ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'], dialect=csv.excel)
+    w = csv.DictWriter(f, ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K'], dialect=csv.excel)
     w.writeheader()
     w.writerows(d)
     f.seek(0)
@@ -111,6 +114,7 @@ DEFAULT_SETTINGS = {
     'testmode': False,
     'status': 'paid',
     'email': 'empty',
+    'phone': 'empty',
     'variation': 'empty',
     'invoice_address_company': 'empty',
     'invoice_address_name_full_name': 'empty',
@@ -259,6 +263,35 @@ def test_import_email_invalid(user, event, item):
             args=(event.pk, inputfile_factory().id, settings, 'en', user.pk)
         ).get()
     assert 'Error while importing value "Dieter" for column "E-mail address" in line "1": Enter a valid email address.' in str(excinfo.value)
+
+
+@pytest.mark.django_db
+@scopes_disabled()
+def test_import_phone(user, event, item):
+    event.settings.region = 'DE'
+    settings = dict(DEFAULT_SETTINGS)
+    settings['item'] = 'static:{}'.format(item.pk)
+    settings['email'] = 'csv:C'
+    settings['phone'] = 'csv:K'
+    import_orders.apply(
+        args=(event.pk, inputfile_factory().id, settings, 'en', user.pk)
+    )
+    assert str(event.orders.get(email="schneider@example.org").phone) == "+4962213217750"
+    assert str(event.orders.get(email="daniel@example.org").phone) == "+4962213217750"
+    assert event.orders.filter(phone__isnull=True).count() == 1
+
+
+@pytest.mark.django_db
+@scopes_disabled()
+def test_import_phone_invalid(user, event, item):
+    settings = dict(DEFAULT_SETTINGS)
+    settings['item'] = 'static:{}'.format(item.pk)
+    settings['phone'] = 'csv:A'
+    with pytest.raises(DataImportError) as excinfo:
+        import_orders.apply(
+            args=(event.pk, inputfile_factory().id, settings, 'en', user.pk)
+        ).get()
+    assert 'Error while importing value "Dieter" for column "Phone number" in line "1": Enter a valid phone number.' in str(excinfo.value)
 
 
 @pytest.mark.django_db
