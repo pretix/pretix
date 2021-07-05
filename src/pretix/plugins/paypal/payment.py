@@ -156,6 +156,7 @@ class Paypal(BasePaymentProvider):
         )
 
         d.move_to_end('prefix')
+        d.move_to_end('postfix')
         d.move_to_end('_enabled', False)
         return d
 
