@@ -1004,6 +1004,11 @@ class Event(EventMixin, LoggedModel):
                 | Q(date_to__gte=now() - timedelta(hours=24))
             )
         )  # order_by doesn't make sense with I18nField
+        if ordering in ("date_ascending", "date_descending"):
+            # if primary order is by date, then order in database
+            # this allows to limit/slice results
+            return subevs.order_by(*orderfields)
+
         for f in reversed(orderfields):
             if f.startswith('-'):
                 subevs = sorted(subevs, key=attrgetter(f[1:]), reverse=True)
