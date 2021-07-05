@@ -95,7 +95,7 @@ class OAuthRefreshToken(AbstractRefreshToken):
 class WebHook(models.Model):
     organizer = models.ForeignKey('pretixbase.Organizer', on_delete=models.CASCADE, related_name='webhooks')
     enabled = models.BooleanField(default=True, verbose_name=_("Enable webhook"))
-    target_url = models.URLField(verbose_name=_("Target URL"))
+    target_url = models.URLField(verbose_name=_("Target URL"), max_length=255)
     all_events = models.BooleanField(default=True, verbose_name=_("All events (including newly created ones)"))
     limit_events = models.ManyToManyField('pretixbase.Event', verbose_name=_("Limit to events"), blank=True)
 
