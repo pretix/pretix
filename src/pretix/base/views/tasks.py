@@ -24,6 +24,7 @@ from importlib import import_module
 
 import celery.exceptions
 import pytz
+from celery import states
 from celery.result import AsyncResult
 from django.conf import settings
 from django.contrib import messages
@@ -61,7 +62,8 @@ class AsyncMixin:
         return {}
 
     def _return_ajax_result(self, res, timeout=.5):
-        if not res.ready():
+        ready = res.ready()
+        if not ready:
             try:
                 res.get(timeout=timeout, propagate=False)
             except celery.exceptions.TimeoutError:
@@ -75,7 +77,7 @@ class AsyncMixin:
                 })
                 return data
 
-        ready = res.ready()
+        state, info = res.state, res.info
         data = self._ajax_response_data()
         data.update({
             'async_id': res.id,
@@ -83,32 +85,32 @@ class AsyncMixin:
             'started': False,
         })
         if ready:
-            if res.successful() and not isinstance(res.info, Exception):
-                smes = self.get_success_message(res.info)
+            if state == states.SUCCESS and not isinstance(info, Exception):
+                smes = self.get_success_message(info)
                 if smes:
                     messages.success(self.request, smes)
                 # TODO: Do not store message if the ajax client states that it will not redirect
                 # but handle the message itself
                 data.update({
-                    'redirect': self.get_success_url(res.info),
+                    'redirect': self.get_success_url(info),
                     'success': True,
-                    'message': str(self.get_success_message(res.info))
+                    'message': str(self.get_success_message(info))
                 })
             else:
-                messages.error(self.request, self.get_error_message(res.info))
+                messages.error(self.request, self.get_error_message(info))
                 # TODO: Do not store message if the ajax client states that it will not redirect
                 # but handle the message itself
                 data.update({
                     'redirect': self.get_error_url(),
                     'success': False,
-                    'message': str(self.get_error_message(res.info))
+                    'message': str(self.get_error_message(info))
                 })
-        elif res.state == 'PROGRESS':
+        elif state == 'PROGRESS':
             data.update({
                 'started': True,
-                'percentage': res.result.get('value', 0) if isinstance(res.result, dict) else 0
+                'percentage': info.get('value', 0) if isinstance(info, dict) else 0
             })
-        elif res.state == 'STARTED':
+        elif state == 'STARTED':
             data.update({
                 'started': True,
             })
