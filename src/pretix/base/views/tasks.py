@@ -24,6 +24,7 @@ from importlib import import_module
 
 import celery.exceptions
 import pytz
+from celery import states
 from celery.result import AsyncResult
 from django.conf import settings
 from django.contrib import messages
@@ -84,7 +85,7 @@ class AsyncMixin:
             'started': False,
         })
         if ready:
-            if res.successful() and not isinstance(info, Exception):
+            if state == states.SUCCESS and not isinstance(info, Exception):
                 smes = self.get_success_message(info)
                 if smes:
                     messages.success(self.request, smes)
