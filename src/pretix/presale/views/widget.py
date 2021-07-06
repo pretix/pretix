@@ -550,7 +550,7 @@ class WidgetAPIProductList(EventListMixin, View):
                 data['has_more_events'] = False
                 if ordering in ("date_ascending", "date_descending"):
                     # fetch one more result than needed to check if more events exist
-                    evs = evs[offset:offset+limit+1]
+                    evs = evs[offset:offset + limit + 1]
                     if len(evs) > limit:
                         data['has_more_events'] = True
                         evs = evs[:limit]
