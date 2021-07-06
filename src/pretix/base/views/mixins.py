@@ -177,10 +177,14 @@ class BaseQuestionsViewMixin:
                             else:
                                 self._save_to_answer(field, field.answer, v)
                                 field.answer.save()
+                                if isinstance(field, forms.ModelMultipleChoiceField) or isinstance(field, forms.ModelChoiceField):
+                                    answer_value = {o.identifier: str(o) for o in field.answer.options.all()}
+                                else:
+                                    answer_value = str(field.answer.answer)
                                 prof.answers.append({
                                     'field_name': k,
                                     'field_label': str(field.label),
-                                    'value': str(field.answer.answer),
+                                    'value': answer_value,
                                     'question_type': field.question.type,
                                     'question_identifier': field.question.identifier,
                                 })
@@ -207,10 +211,15 @@ class BaseQuestionsViewMixin:
                                 )
                                 self._save_to_answer(field, answer, v)
                                 answer.save()
+
+                            if isinstance(field, forms.ModelMultipleChoiceField) or isinstance(field, forms.ModelChoiceField):
+                                answer_value = {o.identifier: str(o) for o in answer.options.all()}
+                            else:
+                                answer_value = str(answer.answer)
                             prof.answers.append({
                                 'field_name': k,
                                 'field_label': str(field.label),
-                                'value': str(answer.answer),
+                                'value': answer_value,
                                 'question_type': field.question.type,
                                 'question_identifier': field.question.identifier,
                             })

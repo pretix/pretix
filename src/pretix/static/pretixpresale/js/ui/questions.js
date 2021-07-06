@@ -135,12 +135,28 @@ function questions_init_profiles(el) {
                     $formpart.find("input[name=is_business][value=individual]").prop("checked", !value)
                     $formpart.find("input[name=is_business][value=individual]").trigger("change")
                 } else if ($field.attr("type") === "checkbox") {
-                    $field.prop("checked", value)
+                    if (value && typeof value !== 'string') {
+                        value = Object.keys(value);
+                        $field.each(function() {
+                            this.checked = value.indexOf(this.value) > -1;
+                        });
+                    }
+                    else {
+                        $field.prop("checked", value);
+                    }
+                } else if ($field.is("select")) {
+                    if (value && typeof value !== 'string') {
+                        value = Object.keys(value);
+                    }
+                    $field.find("option").each(function() {
+                        this.selected = this.value == value || (value && value.indexOf && value.indexOf(this.value) > -1);
+                    });
+                    //$field.trigger("change");
                 } else if (!value) {
                     continue;
                 } else {
                     $field.val(value);
-                    $field.trigger("change")
+                    $field.trigger("change");
                 }
 
                 // (invoice) address: state
