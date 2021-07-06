@@ -160,27 +160,10 @@ class BaseQuestionsViewMixin:
                         form.pos.attendee_name_parts = v if v else None
                         prof.attendee_name_parts = form.pos.attendee_name_parts
                         prof.attendee_name_cached = form.pos.attendee_name
-                    elif k == 'attendee_email':
-                        form.pos.attendee_email = v if v != '' else None
-                        prof.attendee_email = form.pos.attendee_email
-                    elif k == 'company':
-                        form.pos.company = v if v != '' else None
-                        prof.company = form.pos.company
-                    elif k == 'street':
-                        form.pos.street = v if v != '' else None
-                        prof.street = form.pos.street
-                    elif k == 'zipcode':
-                        form.pos.zipcode = v if v != '' else None
-                        prof.zipcode = form.pos.zipcode
-                    elif k == 'city':
-                        form.pos.city = v if v != '' else None
-                        prof.city = form.pos.city
-                    elif k == 'country':
-                        form.pos.country = v if v != '' else None
-                        prof.country = form.pos.country
-                    elif k == 'state':
-                        form.pos.state = v if v != '' else None
-                        prof.state = form.pos.state
+                    elif k in ('attendee_email', 'company', 'street', 'zipcode', 'city', 'country', 'state'):
+                        v = v if v != '' else None
+                        setattr(form.pos, k, v)
+                        setattr(prof, k, v)
                     elif k.startswith('question_'):
                         field = form.fields[k]
                         if hasattr(field, 'answer'):
