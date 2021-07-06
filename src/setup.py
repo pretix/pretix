@@ -178,7 +178,7 @@ setup(
         'django-formtools==2.3',
         'django-hierarkey==1.0.*,>=1.0.4',
         'django-hijack>=2.1.10,<2.2.0',
-        'django-i18nfield==1.9.*,>=1.9.2',
+        'django-i18nfield==1.9.*,>=1.9.3',
         'django-libsass==0.8',
         'django-localflavor==3.0.*',
         'django-markup',
