@@ -1417,13 +1417,12 @@ var shared_root_methods = {
                 root.name = data.name;
                 root.frontpage_text = data.frontpage_text;
             } else if (data.events !== undefined) {
-                root.events = data.events;
+                root.events = (root.events || []).concat(data.events);
                 root.weeks = undefined;
                 root.view = "events";
                 root.name = data.name;
                 root.frontpage_text = data.frontpage_text;
-                // TODO: root.has_more_events = data.has_more_events for indicating that more can be loaded
-                root.has_more_events = true;
+                root.has_more_events = data.has_more_events;
             } else {
                 root.view = "event";
                 root.name = data.name;

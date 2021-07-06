@@ -547,8 +547,14 @@ class WidgetAPIProductList(EventListMixin, View):
                     filter_qs_by_attr(self.request.event.subevents_annotated(self.request.sales_channel.identifier), self.request)
                 )
                 ordering = self.request.event.settings.get('frontpage_subevent_ordering', default='date_ascending', as_type=str)
+                data['has_more_events'] = False
                 if ordering in ("date_ascending", "date_descending"):
-                    evs = evs[offset:offset+limit]
+                    # fetch one more result than needed to check if more events exist
+                    evs = evs[offset:offset+limit+1]
+                    if len(evs) > limit:
+                        data['has_more_events'] = True
+                        evs = evs[:limit]
+
                 tz = pytz.timezone(request.event.settings.timezone)
                 if self.request.event.settings.event_list_available_only:
                     evs = [
