@@ -939,7 +939,7 @@ Vue.component('pretix-widget-event-list', {
         + '</div>'
         + '<div class="pretix-widget-event-description" v-if="$root.parent_stack.length > 0 && $root.frontpage_text" v-html="$root.frontpage_text"></div>'
         + '<pretix-widget-event-list-entry v-for="event in $root.events" :event="event" :key="event.url"></pretix-widget-event-list-entry>'
-        + '<div class="pretix-widget-event-list-load-more" v-if="$root.has_more_events"><button @click.prevent="load_more">'+strings.load_more+'</button></div>'
+        + '<p class="pretix-widget-event-list-load-more" v-if="$root.has_more_events"><button @click.prevent="load_more">'+strings.load_more+'</button></p>'
         + '</div>'),
     methods: {
         back_to_calendar: function () {
