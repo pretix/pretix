@@ -179,6 +179,8 @@ class BaseQuestionsViewMixin:
                                 field.answer.save()
                                 if isinstance(field, forms.ModelMultipleChoiceField) or isinstance(field, forms.ModelChoiceField):
                                     answer_value = {o.identifier: str(o) for o in field.answer.options.all()}
+                                elif isinstance(field, forms.BooleanField):
+                                    answer_value = bool(field.answer.answer)
                                 else:
                                     answer_value = str(field.answer.answer)
                                 prof.answers.append({
@@ -214,6 +216,8 @@ class BaseQuestionsViewMixin:
 
                             if isinstance(field, forms.ModelMultipleChoiceField) or isinstance(field, forms.ModelChoiceField):
                                 answer_value = {o.identifier: str(o) for o in answer.options.all()}
+                            elif isinstance(field, forms.BooleanField):
+                                answer_value = bool(answer.answer)
                             else:
                                 answer_value = str(answer.answer)
                             prof.answers.append({
