@@ -253,7 +253,13 @@ class AttendeeProfile(models.Model):
             self.country.name,
         ]
         for a in self.answers:
-            val = str(QuestionAnswer(question=Question(type=a.get('question_type')), answer=str(a.get('value'))))
+            value = a.get('value')
+            try:
+                value = ", ".join(value.values())
+            except AttributeError:
+                value = str(value)
+            answer = QuestionAnswer(question=Question(type=a.get('question_type')), answer=value)
+            val = str(answer)
             parts.append(f'{a["field_label"]}: {val}')
 
         return '\n'.join([str(p).strip() for p in parts if p and str(p).strip()])
