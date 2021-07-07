@@ -139,10 +139,11 @@ function questions_init_profiles(el) {
                         value = Object.keys(value);
                         $field.each(function() {
                             this.checked = value.indexOf(this.value) > -1;
+                            $(this).trigger("change");
                         });
                     }
                     else {
-                        $field.prop("checked", value);
+                        $field.prop("checked", value).trigger("change");
                     }
                 } else if ($field.is("select")) {
                     if (value && typeof value !== 'string') {
@@ -151,7 +152,7 @@ function questions_init_profiles(el) {
                     $field.find("option").each(function() {
                         this.selected = this.value == value || (value && value.indexOf && value.indexOf(this.value) > -1);
                     });
-                    //$field.trigger("change");
+                    $field.trigger("change");
                 } else if (!value) {
                     continue;
                 } else {
