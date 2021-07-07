@@ -520,6 +520,7 @@ class WidgetCartTest(CartTestMixin, TestCase):
                 'name': '30C3',
                 'frontpage_text': '',
                 'poweredby': '<a href="https://pretix.eu" target="_blank" rel="noopener">ticketing powered by pretix</a>',
+                'has_more_events': False,
                 'events': [
                     {'name': 'Present', 'date_range': 'Jan. 1, 2019 11:00', 'availability': {'color': 'none', 'text': '', 'reason': 'unknown'},
                      'event_url': 'http://example.com/ccc/30c3/', 'subevent': se1.pk, 'location': ''},
