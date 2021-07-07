@@ -138,8 +138,11 @@ function questions_init_profiles(el) {
                     if (value && typeof value !== 'string') {
                         value = Object.keys(value);
                         $field.each(function() {
-                            this.checked = value.indexOf(this.value) > -1;
-                            $(this).trigger("change");
+                            var checked = value.indexOf(this.value) > -1;
+                            if (checked != this.checked) {
+                                this.checked = checked;
+                                $(this).trigger("change");
+                            }
                         });
                     }
                     else {
