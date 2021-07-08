@@ -1417,7 +1417,7 @@ var shared_root_methods = {
                 root.name = data.name;
                 root.frontpage_text = data.frontpage_text;
             } else if (data.events !== undefined) {
-                root.events = (root.events || []).concat(data.events);
+                root.events = root.has_more_events && "has_more_events" in data && root.events ? root.events.concat(data.events) : data.events;
                 root.weeks = undefined;
                 root.view = "events";
                 root.name = data.name;
@@ -1658,7 +1658,7 @@ var create_widget = function (element) {
                 name: null,
                 date_range: null,
                 offset: 0,
-                has_more_events: true,
+                has_more_events: false,
                 frontpage_text: null,
                 filter: filter,
                 item_filter: items,
