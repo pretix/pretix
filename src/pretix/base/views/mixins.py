@@ -93,21 +93,21 @@ class BaseQuestionsViewMixin:
             for overrides in override_sets:
                 for question_name, question_field in form.fields.items():
                     if hasattr(question_field, 'question'):
-                        if question_field.question.identifier in overrides:
-                            if 'initial' in overrides[question_field.question.identifier]:
-                                question_field.initial = overrides[question_field.question.identifier]['initial']
-                            if 'disabled' in overrides[question_field.question.identifier]:
-                                question_field.disabled = overrides[question_field.question.identifier]['disabled']
-                            if 'validators' in overrides[question_field.question.identifier]:
-                                question_field.validators += overrides[question_field.question.identifier]['validators']
+                        src = overrides.get(question_field.question.identifier)
                     else:
-                        if question_name in overrides:
-                            if 'initial' in overrides[question_name]:
-                                question_field.initial = overrides[question_name]['initial']
-                            if 'disabled' in overrides[question_name]:
-                                question_field.disabled = overrides[question_name]['disabled']
-                            if 'validators' in overrides[question_name]:
-                                question_field.validators += overrides[question_name]['validators']
+                        src = overrides.get(question_name)
+                    if not src:
+                        continue
+
+                    if 'disabled' in src:
+                        question_field.disabled = src['disabled']
+                    if 'initial' in src:
+                        if question_field.disabled:
+                            question_field.initial = src['initial']
+                        else:
+                            question_field.initial = getattr(question_field, 'initial', None) or src['initial']
+                    if 'validators' in src:
+                        question_field.validators += src['validators']
 
             if len(form.fields) > 0:
                 formlist.append(form)
