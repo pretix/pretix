@@ -172,6 +172,15 @@
 
   .pretix-widget-loading svg {
     margin: 40px;
+    /*Fallback*/
+    position: absolute;
+    top: 50%;
+    margin-top: -64px;
+    /*Sticky*/
+    position: -webkit-sticky;
+    position: sticky;
+    top: Min(50vh, 50%);/* use uppercase M to use CSS-min and not SASS-min*/
+
     -webkit-animation: pretix-widget-spin 6s linear infinite;
     -moz-animation: pretix-widget-spin 6s linear infinite;
     animation: pretix-widget-spin 6s linear infinite;
