@@ -956,6 +956,7 @@ Vue.component('pretix-widget-event-list', {
             }
         },
         load_more: function () {
+            this.$root.append_events = true;
             this.$root.offset += 50;
             this.$root.reload();
         }
@@ -1417,7 +1418,8 @@ var shared_root_methods = {
                 root.name = data.name;
                 root.frontpage_text = data.frontpage_text;
             } else if (data.events !== undefined) {
-                root.events = root.has_more_events && "has_more_events" in data && root.events ? root.events.concat(data.events) : data.events;
+                root.events = root.append_events && root.events ? root.events.concat(data.events) : data.events;
+                root.append_events = false;
                 root.weeks = undefined;
                 root.view = "events";
                 root.name = data.name;
@@ -1659,6 +1661,7 @@ var create_widget = function (element) {
                 date_range: null,
                 offset: 0,
                 has_more_events: false,
+                append_events: false,
                 frontpage_text: null,
                 filter: filter,
                 item_filter: items,
