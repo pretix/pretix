@@ -958,6 +958,7 @@ Vue.component('pretix-widget-event-list', {
         load_more: function () {
             this.$root.append_events = true;
             this.$root.offset += 50;
+            this.$root.loading++;
             this.$root.reload();
         }
     }
