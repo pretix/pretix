@@ -266,6 +266,7 @@ class EventWizard(SafeSessionWizardView):
             event.testmode = True
             form_dict['basics'].save()
             event.set_active_plugins(settings.PRETIX_PLUGINS_DEFAULT.split(","), allow_restricted=True)
+            event.save(update_fields=['plugins'])
             event.log_action(
                 'pretix.event.added',
                 user=self.request.user,
