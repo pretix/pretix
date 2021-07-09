@@ -152,6 +152,9 @@ function questions_init_profiles(el) {
                     if (value && typeof value !== 'string') {
                         value = Object.keys(value);
                     }
+                    // save value as data-attribute so if external event changes select-element/options it can select correct entries
+                    // currently used when country => state changes
+                    $field.prop("data-selected-value", value);
                     $field.find("option").each(function() {
                         this.selected = this.value == value || (value && value.indexOf && value.indexOf(this.value) > -1);
                     });
