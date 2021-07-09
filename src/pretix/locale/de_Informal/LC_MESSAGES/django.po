@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-09 09:36+0000\n"
-"PO-Revision-Date: 2021-06-30 13:06+0000\n"
+"PO-Revision-Date: 2021-07-09 09:54+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
@@ -4561,10 +4561,8 @@ msgid "Invalid setting for column \"{header}\"."
 msgstr "Ungültige Einstellung für Spalte \"{header}\"."
 
 #: pretix/base/orderimport.py:176
-#, fuzzy
-#| msgid "You entered an invalid number."
 msgid "Enter a valid phone number."
-msgstr "Du hast eine ungültige Zahl eingegeben."
+msgstr "Bitte gib eine gültige Telefonnummer ein."
 
 #: pretix/base/orderimport.py:204 pretix/presale/views/waiting.py:123
 msgctxt "subevent"
@@ -6872,7 +6870,7 @@ msgstr ""
 
 #: pretix/base/settings.py:753
 msgid "Allow to update existing invoices"
-msgstr ""
+msgstr "Existierende Rechnungen dürfen neu generiert werden"
 
 #: pretix/base/settings.py:754
 msgid ""
@@ -6880,6 +6878,10 @@ msgid ""
 "most countries, we recommend to leave this option turned off and always "
 "issue a new invoice if a change needs to be made."
 msgstr ""
+"Standardmäßig können Rechnungen nach ihrer Erstellung nie wieder verändert "
+"werden. In den meisten Ländern sollte diese Option ausgeschaltet bleiben. "
+"Wenn Korrekturen nötig sind, kann stattdessen ein Stornobeleg und eine neue "
+"Rechnung erzeugt werden."
 
 #: pretix/base/settings.py:769
 msgid "Address line"
@@ -19957,22 +19959,19 @@ msgstr "Unbekannte Rechnung"
 #: pretix/control/views/orders.py:1334
 msgid "Invoices may not be changed after they are created."
 msgstr ""
+"Rechnungen dürfen nicht mehr verändert werden, nachdem sie erstellt wurden."
 
 #: pretix/control/views/orders.py:1336 pretix/control/views/orders.py:1365
 msgid "The invoice has already been canceled."
 msgstr "Die Rechnung wurde bereits storniert."
 
 #: pretix/control/views/orders.py:1338
-#, fuzzy
-#| msgid "The invoice has already been canceled."
 msgid "The invoice file has already been exported."
-msgstr "Die Rechnung wurde bereits storniert."
+msgstr "Die Rechnungsdatei wurde bereits exportiert."
 
 #: pretix/control/views/orders.py:1340
-#, fuzzy
-#| msgid "The invoice has been regenerated."
 msgid "The invoice file is too old to be regenerated."
-msgstr "Die Rechnung wurde neu generiert."
+msgstr "Die Rechnungsdatei ist zu alt, um neu generiert zu werden."
 
 #: pretix/control/views/orders.py:1342 pretix/control/views/orders.py:1367
 msgid "The invoice has been cleaned of personal data."
@@ -21592,21 +21591,15 @@ msgstr ""
 "eingetragen, der die Bestellnummer enthält."
 
 #: pretix/plugins/paypal/payment.py:147
-#, fuzzy
-#| msgid "Reference prefix"
 msgid "Reference postfix"
-msgstr "Verwendungszweck-Präfix"
+msgstr "Verwendungszweck-Postfix"
 
 #: pretix/plugins/paypal/payment.py:148
-#, fuzzy
-#| msgid ""
-#| "Any value entered here will be added in front of the regular booking "
-#| "reference containing the order number."
 msgid ""
 "Any value entered here will be added behind the regular booking reference "
 "containing the order number."
 msgstr ""
-"Der hier eingetragene Wert wird vor dem üblichen Verwendungszweck "
+"Der hier eingetragene Wert wird hinter dem üblichen Verwendungszweck "
 "eingetragen, der die Bestellnummer enthält."
 
 #: pretix/plugins/paypal/payment.py:178
@@ -24257,16 +24250,12 @@ msgid "We successfully received your payment. See below for details."
 msgstr "Wir haben deine Zahlung erfolgreich erhalten. Vielen Dank!"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:35
-#, fuzzy
-#| msgid ""
-#| "Please note that we still await approval by the event organizer before "
-#| "you can pay and complete this order."
 msgid ""
 "Please note that we still await approval by the event organizer before your "
 "order is confirmed."
 msgstr ""
-"Bitte beachten, dass wir noch auf eine Freigabe durch den Veranstalter "
-"warten, bevor du diese Bestellung bezahlen und damit abschließen kannst."
+"Bitte beachte, dass wir noch auf eine Freigabe durch den Veranstalter "
+"warten, bevor diese Bestellung bestätigt ist."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:39
 msgid ""
