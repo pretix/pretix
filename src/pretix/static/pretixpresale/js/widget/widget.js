@@ -855,6 +855,8 @@ Vue.component('pretix-widget-event-form', {
             this.$root.target_url = this.$root.parent_stack.pop();
             this.$root.error = null;
             this.$root.subevent = null;
+            this.$root.offset = 0;
+            this.$root.append_events = false;
             this.$root.trigger_load_callback();
             if (this.$root.events !== undefined && this.$root.events !== null) {
                 this.$root.view = "events";
@@ -943,6 +945,8 @@ Vue.component('pretix-widget-event-list', {
         + '</div>'),
     methods: {
         back_to_calendar: function () {
+            this.$root.offset = 0;
+            this.$root.append_events = false;
             if (this.$root.weeks) {
                 this.$root.events = undefined;
                 this.$root.view = "weeks";
