@@ -1242,7 +1242,7 @@ DEFAULTS = {
                 ('week', _('Week calendar')),
                 ('calendar', _('Month calendar')),
             ),
-            help_text=_('If your event series has more than 50 dates in the future, the list view can only be used if it is sorted by date.')
+            help_text=_('If your event series has more than 50 dates in the future, only the month or week calendar can be used.')
         ),
     },
     'event_list_available_only': {
