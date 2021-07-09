@@ -128,8 +128,20 @@ function questions_init_profiles(el) {
             for (var key of Object.keys(values)) {
                 var value = values[key];
                 var $field = $formpart.find("input[name$=" + key + "], textarea[name$=" + key + "], select[name$=" + key + "]");
+                if (!$field.length) {
+                    // value might be a timestamp
+                    var parts = value.split(" ");
+                    var selectors = [];
+                    for (var i = 0; i < parts.length; i++) {
+                        selectors.push("input[name$=" + key + "_" + i + "]")
+                    }
+                    $formpart.find(selectors.join(", ")).each(function(i) {
+                        // TODO: format date so date-picker accepts it
+                        $(this).val(parts[i]).trigger("blur");
+                    });
+                    return
+                }
 
-                console.log(key, $field, value)
                 if (key === "is_business") {
                     $formpart.find("input[name=is_business][value=business]").prop("checked", value)
                     $formpart.find("input[name=is_business][value=individual]").prop("checked", !value)
