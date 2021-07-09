@@ -30,7 +30,11 @@
             {% if order.status != 'p' %}
                 <p>
                     {% trans "Your order has been placed successfully. See below for details." %}<br>
-                    {% if order.require_approval %}
+                    {% if order.require_approval and order.total == 0 %}
+                        <strong>
+                            {% trans "Please note that we still await approval by the event organizer before your order is confirmed." %}
+                        </strong>
+                    {% elif order.require_approval %}
                         <strong>
                             {% trans "Please note that we still await approval by the event organizer before you can pay and complete this order." %}
                         </strong>
