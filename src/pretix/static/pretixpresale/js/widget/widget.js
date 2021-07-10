@@ -53,6 +53,7 @@ var strings = {
     'next_week': django.pgettext('widget', 'Next week'),
     'previous_week': django.pgettext('widget', 'Previous week'),
     'show_seating': django.pgettext('widget', 'Open seat selection'),
+    'load_more': django.pgettext('widget', 'Load more'),
     'days': {
         'MO': django.gettext('Mo'),
         'TU': django.gettext('Tu'),
@@ -854,6 +855,8 @@ Vue.component('pretix-widget-event-form', {
             this.$root.target_url = this.$root.parent_stack.pop();
             this.$root.error = null;
             this.$root.subevent = null;
+            this.$root.offset = 0;
+            this.$root.append_events = false;
             this.$root.trigger_load_callback();
             if (this.$root.events !== undefined && this.$root.events !== null) {
                 this.$root.view = "events";
@@ -938,9 +941,12 @@ Vue.component('pretix-widget-event-list', {
         + '</div>'
         + '<div class="pretix-widget-event-description" v-if="$root.parent_stack.length > 0 && $root.frontpage_text" v-html="$root.frontpage_text"></div>'
         + '<pretix-widget-event-list-entry v-for="event in $root.events" :event="event" :key="event.url"></pretix-widget-event-list-entry>'
+        + '<p class="pretix-widget-event-list-load-more" v-if="$root.has_more_events"><button @click.prevent="load_more">'+strings.load_more+'</button></p>'
         + '</div>'),
     methods: {
         back_to_calendar: function () {
+            this.$root.offset = 0;
+            this.$root.append_events = false;
             if (this.$root.weeks) {
                 this.$root.events = undefined;
                 this.$root.view = "weeks";
@@ -953,6 +959,12 @@ Vue.component('pretix-widget-event-list', {
                 this.$root.reload();
             }
         },
+        load_more: function () {
+            this.$root.append_events = true;
+            this.$root.offset += 50;
+            this.$root.loading++;
+            this.$root.reload();
+        }
     }
 });
 
@@ -1353,6 +1365,9 @@ var shared_root_methods = {
         } else {
             url = this.$root.target_url + 'widget/product_list?lang=' + lang;
         }
+        if (this.$root.offset) {
+            url += '&offset=' + this.$root.offset;
+        }
         if (this.$root.filter) {
             url += '&' + this.$root.filter;
         }
@@ -1408,11 +1423,13 @@ var shared_root_methods = {
                 root.name = data.name;
                 root.frontpage_text = data.frontpage_text;
             } else if (data.events !== undefined) {
-                root.events = data.events;
+                root.events = root.append_events && root.events ? root.events.concat(data.events) : data.events;
+                root.append_events = false;
                 root.weeks = undefined;
                 root.view = "events";
                 root.name = data.name;
                 root.frontpage_text = data.frontpage_text;
+                root.has_more_events = data.has_more_events;
             } else {
                 root.view = "event";
                 root.name = data.name;
@@ -1647,6 +1664,9 @@ var create_widget = function (element) {
                 currency: null,
                 name: null,
                 date_range: null,
+                offset: 0,
+                has_more_events: false,
+                append_events: false,
                 frontpage_text: null,
                 filter: filter,
                 item_filter: items,

@@ -422,7 +422,10 @@ class WidgetAPIProductList(EventListMixin, View):
         data['list_type'] = list_type
 
         if hasattr(self.request, 'event') and data['list_type'] not in ("calendar", "week"):
-            if self.request.event.subevents.filter(date_from__gt=now()).count() > 50:
+            # only allow list-view of more than 50 subevents if ordering is by data as this can be done in the database
+            # ordering by name is currently not supported in database due to I18NField-JSON
+            ordering = self.request.event.settings.get('frontpage_subevent_ordering', default='date_ascending', as_type=str)
+            if ordering not in ("date_ascending", "date_descending") and self.request.event.subevents.filter(date_from__gt=now()).count() > 50:
                 if self.request.event.settings.event_list_type not in ("calendar", "week"):
                     self.request.event.settings.event_list_type = "calendar"
                 data['list_type'] = list_type = 'calendar'
@@ -537,10 +540,21 @@ class WidgetAPIProductList(EventListMixin, View):
             for d in data['days']:
                 d['events'] = self._serialize_events(d['events'] or [])
         else:
+            offset = int(self.request.GET.get("offset", 0))
+            limit = 50
             if hasattr(self.request, 'event'):
                 evs = self.request.event.subevents_sorted(
                     filter_qs_by_attr(self.request.event.subevents_annotated(self.request.sales_channel.identifier), self.request)
                 )
+                ordering = self.request.event.settings.get('frontpage_subevent_ordering', default='date_ascending', as_type=str)
+                data['has_more_events'] = False
+                if ordering in ("date_ascending", "date_descending"):
+                    # fetch one more result than needed to check if more events exist
+                    evs = list(evs[offset:offset + limit + 1])
+                    if len(evs) > limit:
+                        data['has_more_events'] = True
+                        evs = evs[:limit]
+
                 tz = pytz.timezone(request.event.settings.timezone)
                 if self.request.event.settings.event_list_available_only:
                     evs = [
