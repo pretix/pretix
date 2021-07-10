@@ -86,7 +86,7 @@ def daterange(df, dt, as_html=False):
         return format_html(base_format, _date(df, "DATE_FORMAT"))
 
     if as_html:
-        base_format = "<time datetime=\"{}\">{{}}</time>"
+        base_format = "<time datetime=\"{}\">{}</time>"
         return format_html(
             "{date_from} – {date_to}",
             date_from=format_html(base_format, _date(df, "Y-m-d"), _date(df, "DATE_FORMAT")),
