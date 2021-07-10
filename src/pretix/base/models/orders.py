@@ -289,6 +289,7 @@ class Order(LockModel, LoggedModel):
         OrderPosition.all.filter(order=self, addon_to__isnull=False).delete()
         OrderPosition.all.filter(order=self).delete()
         OrderFee.all.filter(order=self).delete()
+        Transaction.objects.filter(order=self).delete()
         self.refunds.all().delete()
         self.payments.all().delete()
         self.event.cache.delete('complain_testmode_orders')
@@ -998,6 +999,66 @@ class Order(LockModel, LoggedModel):
             if not op.generate_ticket:
                 continue
             yield op
+
+    def create_transactions(self, is_new=False, positions=None, fees=None, dt_now=None, migrated=False):
+        dt_now = dt_now or now()
+
+        def key(obj):
+            if isinstance(obj, Transaction):
+                return (obj.positionid, obj.item_id, obj.variation_id, obj.subevent_id, obj.price, obj.tax_rate,
+                        obj.tax_rule_id, obj.tax_value, obj.fee_type, obj.internal_type)
+            elif isinstance(obj, OrderPosition):
+                return (obj.positionid, obj.item_id, obj.variation_id, obj.subevent_id, obj.price, obj.tax_rate,
+                        obj.tax_rule_id, obj.tax_value, None, None)
+            elif isinstance(obj, OrderFee):
+                return (None, None, None, None, obj.value, obj.tax_rate,
+                        obj.tax_rule_id, obj.tax_value, obj.fee_type, obj.internal_type)
+            raise ValueError('invalid state')  # noqa
+
+        # Count the transactions we already have
+        current_transaction_count = Counter()
+        if not is_new:
+            for t in self.transactions.all():
+                current_transaction_count[key(t)] += t.count
+
+        # Count the transactions we'd actually need
+        target_transaction_count = Counter()
+        if self.status in (Order.STATUS_PENDING, Order.STATUS_PAID) and not self.require_approval:
+            positions = self.positions.all() if positions is None else positions
+            for p in positions:
+                if p.canceled:
+                    continue
+                target_transaction_count[key(p)] += 1
+
+            fees = self.fees.all() if fees is None else fees
+            for f in fees:
+                if f.canceled:
+                    continue
+                target_transaction_count[key(f)] += 1
+
+        keys = set(target_transaction_count.keys()) | set(current_transaction_count.keys())
+        create = []
+        for k in keys:
+            positionid, itemid, variationid, subeventid, price, taxrate, taxruleid, taxvalue, feetype, internaltype = k
+            d = target_transaction_count[k] - current_transaction_count[k]
+            if d:
+                create.append(Transaction(
+                    order=self,
+                    datetime=dt_now,
+                    migrated=migrated,
+                    positionid=positionid,
+                    count=d,
+                    item_id=itemid,
+                    variation_id=variationid,
+                    subevent=subeventid,
+                    price=price,
+                    tax_rate=taxrate,
+                    tax_rule_id=taxruleid,
+                    tax_value=taxvalue,
+                    fee_type=feetype,
+                    internal_type=internaltype,
+                ))
+        Transaction.objects.bulk_create(create)
 
 
 def answerfile_name(instance, filename: str) -> str:
@@ -2104,6 +2165,7 @@ class OrderPosition(AbstractPosition):
             op._calculate_tax()
             op.positionid = i + 1
             op.save()
+            ops.append(op)
             cp_mapping[cartpos.pk] = op
             for answ in cartpos.answers.all():
                 answ.orderposition = op
@@ -2262,6 +2324,73 @@ class OrderPosition(AbstractPosition):
                 'pretix.event.order.email.resend', user=user, auth=auth,
                 attach_tickets=True
             )
+
+
+class Transaction(models.Model):
+    order = models.ForeignKey(
+        Order,
+        verbose_name=_("Order"),
+        related_name='transactions',
+        on_delete=models.PROTECT
+    )
+    datetime = models.DateTimeField(
+        verbose_name=_("Date"),
+        db_index=True,
+    )
+    migrated = models.BooleanField(
+        default=False
+    )
+    positionid = models.PositiveIntegerField(default=1, null=True, blank=True)
+    count = models.IntegerField(
+        default=1
+    )
+    item = models.ForeignKey(
+        Item,
+        null=True, blank=True,
+        verbose_name=_("Item"),
+        on_delete=models.PROTECT
+    )
+    variation = models.ForeignKey(
+        ItemVariation,
+        null=True, blank=True,
+        verbose_name=_("Variation"),
+        on_delete=models.PROTECT
+    )
+    subevent = models.ForeignKey(
+        SubEvent,
+        null=True, blank=True,
+        on_delete=models.PROTECT,
+        verbose_name=pgettext_lazy("subevent", "Date"),
+    )
+    price = models.DecimalField(
+        decimal_places=2, max_digits=10,
+        verbose_name=_("Price")
+    )
+    tax_rate = models.DecimalField(
+        max_digits=7, decimal_places=2,
+        verbose_name=_('Tax rate')
+    )
+    tax_rule = models.ForeignKey(
+        'TaxRule',
+        on_delete=models.PROTECT,
+        null=True, blank=True
+    )
+    tax_value = models.DecimalField(
+        max_digits=10, decimal_places=2,
+        verbose_name=_('Tax value')
+    )
+    fee_type = models.CharField(
+        max_length=100, choices=OrderFee.FEE_TYPES, null=True, blank=True
+    )
+    internal_type = models.CharField(max_length=255, null=True, blank=True)
+
+    class Meta:
+        ordering = 'datetime',
+
+    def save(self, *args, **kwargs):
+        if not self.fee_type and not self.item:
+            raise ValidationError('Should set either item or fee type')
+        return super().save(*args, **kwargs)
 
 
 class CartPosition(AbstractPosition):

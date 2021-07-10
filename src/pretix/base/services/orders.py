@@ -181,6 +181,7 @@ def reactivate_order(order: Order, force: bool=False, user: User=None, auth=None
                     for m in position.granted_memberships.all():
                         m.canceled = False
                         m.save()
+                order.create_transactions()
         else:
             raise OrderError(is_available)
 
@@ -202,6 +203,7 @@ def extend_order(order: Order, new_date: datetime, force: bool=False, user: User
     if new_date < now():
         raise OrderError(_('The new expiry date needs to be in the future.'))
 
+    @transaction.atomic
     def change(was_expired=True):
         order.expires = new_date
         if was_expired:
@@ -221,6 +223,7 @@ def extend_order(order: Order, new_date: datetime, force: bool=False, user: User
             num_invoices = order.invoices.filter(is_cancellation=False).count()
             if num_invoices > 0 and order.invoices.filter(is_cancellation=True).count() >= num_invoices and invoice_qualified(order):
                 generate_invoice(order)
+            order.create_transactions()
 
     if order.status == Order.STATUS_PENDING:
         change(was_expired=False)
@@ -262,6 +265,7 @@ def mark_order_expired(order, user=None, auth=None):
         i = order.invoices.filter(is_cancellation=False).last()
         if i and not i.refered.exists():
             generate_cancellation(i)
+        order.create_transactions()
 
     order_expired.send(order.event, order=order)
     return order
@@ -293,6 +297,7 @@ def approve_order(order, user=None, send_mail: bool=True, auth=None, force=False
                 p.confirm(send_mail=False, count_waitinglist=False, user=user, auth=auth, ignore_date=True, force=force)
             except Quota.QuotaExceededException:
                 raise OrderError(error_messages['unavailable'])
+        order.create_transactions()
 
     order_approved.send(order.event, order=order)
 
@@ -352,6 +357,7 @@ def deny_order(order, comment='', user=None, send_mail: bool=True, auth=None):
         for position in order.positions.all():
             if position.voucher:
                 Voucher.objects.filter(pk=position.voucher.pk).update(redeemed=Greatest(0, F('redeemed') - 1))
+        order.create_transactions()
 
     order_denied.send(order.event, order=order)
 
@@ -452,6 +458,7 @@ def _cancel_order(order, user=None, send_mail: bool=True, api_token=None, device
                 order.total = cancellation_fee
                 order.cancellation_date = now()
                 order.save(update_fields=['status', 'cancellation_date', 'total'])
+                order.create_transactions(positions=[])
 
             if cancel_invoice and i:
                 invoices.append(generate_invoice(order))
@@ -460,6 +467,7 @@ def _cancel_order(order, user=None, send_mail: bool=True, api_token=None, device
                 order.status = Order.STATUS_CANCELED
                 order.cancellation_date = now()
                 order.save(update_fields=['status', 'cancellation_date'])
+            order.create_transactions()
 
             for position in order.positions.all():
                 assign_ticket_secret(
@@ -904,7 +912,8 @@ def _create_order(event: Event, email: str, positions: List[CartPosition], now_d
                 fee=pf
             )
 
-        OrderPosition.transform_cart_positions(positions, order)
+        orderpositions = OrderPosition.transform_cart_positions(positions, order)
+        order.create_transactions(positions=orderpositions, fees=fees, is_new=True)
         order.log_action('pretix.event.order.placed')
         if order.require_approval:
             order.log_action('pretix.event.order.placed.require_approval')
@@ -2123,6 +2132,7 @@ class OrderChangeManager:
             if self.order.status in (Order.STATUS_PENDING, Order.STATUS_PAID):
                 self._reissue_invoice()
             self._clear_tickets_cache()
+            self.order.create_transactions()
             self.order.touch()
         self._check_paid_price_change()
         self._check_paid_to_free()
