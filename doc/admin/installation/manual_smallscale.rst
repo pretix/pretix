@@ -25,7 +25,7 @@ installation guides):
 * A HTTP reverse proxy, e.g. `nginx`_ or Apache to allow HTTPS connections
 * A `PostgreSQL`_ 9.6+, `MySQL`_ 5.7+, or MariaDB 10.2.7+ database server
 * A `redis`_ server
-* A `nodejs_` installation
+* A `nodejs`_ installation
 
 We also recommend that you use a firewall, although this is not a pretix-specific recommendation. If you're new to
 Linux and firewalls, we recommend that you start with `ufw`_.
