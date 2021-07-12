@@ -129,15 +129,20 @@ function questions_init_profiles(el) {
                 var value = values[key];
                 var $field = $formpart.find("input[name$=" + key + "], textarea[name$=" + key + "], select[name$=" + key + "]");
                 if (!$field.length) {
-                    // value might be a timestamp
+                    // no matching fields found, try with _0 multi-field format as value might be a timestamp
                     var parts = value.split(" ");
                     var selectors = [];
                     for (var i = 0; i < parts.length; i++) {
                         selectors.push("input[name$=" + key + "_" + i + "]")
                     }
                     $formpart.find(selectors.join(", ")).each(function(i) {
-                        // TODO: format date so date-picker accepts it
-                        $(this).val(parts[i]).trigger("blur");
+                        var $this = $(this);
+                        if ($this.hasClass("datepickerfield")) {
+                            $this.data('DateTimePicker').date(moment(value));
+                        }
+                        else {
+                            $this.val(parts[i]).trigger("change");
+                        }
                     });
                     return
                 }
