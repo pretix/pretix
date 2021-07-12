@@ -136,6 +136,8 @@ class ProcessView(EventPermissionRequiredMixin, AsyncAction, FormView):
         })
 
     def dispatch(self, request, *args, **kwargs):
+        if 'async_id' in request.GET and settings.HAS_CELERY:
+            return self.get_result(request)
         if not self.parsed:
             messages.error(request, _('We\'ve been unable to parse the uploaded file as a CSV file.'))
             return redirect(reverse('control:event.orders.import', kwargs={
