@@ -79,11 +79,6 @@
                 {% endif %}
             </div>
         </div>
-        {% for f, v in request.GET.items %}
-            {% if f != "month" and f != "year" %}
-                <input type="hidden" name="{{ f }}" value="{{ v }}">
-            {% endif %}
-        {% endfor %}
     </form>
     {% include "pretixpresale/fragment_week_calendar.html" with show_avail=request.organizer.settings.event_list_availability %}
     <div class="col-sm-4 visible-xs text-center">
