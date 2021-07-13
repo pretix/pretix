@@ -87,7 +87,8 @@ respectively, or ``null`` if there is no such page. You can use those URLs to re
 respective page.
 
 The field ``results`` contains a list of objects representing the first results. For most
-objects, every page contains 50 results.
+objects, every page contains 50 results. You can specify a lower pagination size using the
+``page_size`` query parameter, but no more than 50.
 
 Conditional fetching
 --------------------
