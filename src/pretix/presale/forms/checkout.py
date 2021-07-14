@@ -132,7 +132,7 @@ class InvoiceAddressForm(BaseInvoiceAddressForm):
             self.fields['save'] = forms.BooleanField(
                 label=_('Save address in my customer account for future purchases'),
                 required=False,
-                initial=True,
+                initial=False,
             )
 
 
@@ -161,7 +161,7 @@ class QuestionsForm(BaseQuestionsForm):
             self.fields['save'] = forms.BooleanField(
                 label=_('Save profile in my customer account for future purchases'),
                 required=False,
-                initial=True,
+                initial=False,
             )
 
 
