@@ -40,6 +40,7 @@ from django.conf import settings
 from django.contrib import messages
 from django.core.exceptions import ValidationError
 from django.core.validators import EmailValidator
+from django.core import serializers
 from django.db.models import F, Q
 from django.http import HttpResponseNotAllowed, JsonResponse
 from django.shortcuts import redirect
@@ -970,44 +971,51 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
         ctx['invoice_address_asked'] = self.address_asked
 
         if self.cart_customer:
-            ctx['addresses'] = self.cart_customer.stored_addresses.all()
+            if self.address_asked:
+                addresses = self.cart_customer.stored_addresses.all()
+                addresses_list = []
+                for a in addresses:
+                    data = {}
+                    if a.name_parts:
+                        scheme = PERSON_NAME_SCHEMES[self.request.event.settings.name_scheme]
+                        for i, (k, l, w) in enumerate(scheme["fields"]):
+                            data[f"name_parts_{i}"] = a.name_parts.get(k) or ""
+                        #data["name_parts"] = {k: v for k, v in a.name_parts.items() if not k.startswith('_')}
+
+                    data["is_business"] = "business" if a.is_business else "individual"
+
+                    for k in ("company", "street", "zipcode", "city", "country", "state", "vat_id", "custom_field", "internal_reference", "beneficiary"):
+                        v = getattr(a, k)
+                        if v:
+                            data[k] = str(v)
+                    addresses_list.append(data)
+
+                ctx['addresses_data'] = addresses_list
 
             profiles = list(self.cart_customer.attendee_profiles.all())
-            for form in self.forms:
-                form.profiles = []
-                for p in profiles:
-                    data = {}
+            profiles_list = []
+            for p in profiles:
+                data = {}
+                if p.attendee_name_parts:
+                    scheme = PERSON_NAME_SCHEMES[self.request.event.settings.name_scheme]
+                    for i, (k, l, w) in enumerate(scheme["fields"]):
+                        data[f"attendee_name_parts_{i}"] = p.attendee_name_parts.get(k) or ""
+                    #data["attendee_name_parts"] = {k: v for k, v in p.attendee_name_parts.items() if not k.startswith('_')}
 
-                    if p.attendee_name_parts:
-                        scheme = PERSON_NAME_SCHEMES[self.request.event.settings.name_scheme]
-                        for i, (k, l, w) in enumerate(scheme['fields']):
-                            data[f'attendee_name_parts_{i}'] = p.attendee_name_parts.get(k) or ''
+                for k in ("attendee_name_cached", "attendee_email", "company", "street", "zipcode", "city", "country", "state"):
+                    v = getattr(p, k)
+                    if v:
+                        data[k] = str(v)
 
-                    data.update({
-                        'attendee_email': p.attendee_email,
-                        'company': p.company,
-                        'street': p.street,
-                        'zipcode': p.zipcode,
-                        'city': p.city,
-                        'country': str(p.country) if p.country else None,
-                        'state': str(p.state) if p.state else None,
-                    })
 
-                    for k, f in form.fields.items():
-                        match_name = [a['value'] for a in p.answers if a['field_name'] == k]
-                        match_identifier = [a['value'] for a in p.answers if hasattr(f, 'question') and a['question_identifier'] == f.question.identifier]
-                        match_label = [a['value'] for a in p.answers if a['field_label'] == str(f.label)]
-                        if match_name:
-                            data[k] = match_name[0]
-                        elif match_identifier:
-                            data[k] = match_identifier[0]
-                        elif match_label:
-                            data[k] = match_label[0]
-
-                    form.profiles.append((p, data))
-
-            ctx['profiles'] = profiles
-
+                for a in p.answers:
+                    data[a["field_name"]] = {
+                        "label": a["field_label"],
+                        "value": a["value"],
+                        "identifier": a["question_identifier"],
+                    }
+                profiles_list.append(data)
+            ctx['profiles_data'] = profiles_list
         return ctx
 
 

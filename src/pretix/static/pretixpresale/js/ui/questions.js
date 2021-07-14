@@ -115,42 +115,116 @@ function questions_init_photos(el) {
 }
 
 function questions_init_profiles(el) {
-    el.find(".profile-list").each(function () {
-        var $profilelist = $(this);
-        var $formpart = $(this).parent().parent();
-        $profilelist.find("button").on("click", function () {
-            var $btn = $(this);
-            var values = JSON.parse($btn.attr("data-stored-values"));
-            $formpart.find("input[name$=save]").prop("checked", false);
-            $formpart.find("input[name$=saved_id]").val($btn.attr("data-id"));
-
-            // values.entries() would be nicer, but no IE-support
-            for (var key of Object.keys(values)) {
-                var value = values[key];
-                var $field = $formpart.find("input[name$=" + key + "], textarea[name$=" + key + "], select[name$=" + key + "]");
-                if (!$field.length) {
-                    // no matching fields found, try with _0 multi-field format as value might be a timestamp
-                    var parts = value.split(" ");
-                    var selectors = [];
-                    for (var i = 0; i < parts.length; i++) {
-                        selectors.push("input[name$=" + key + "_" + i + "]")
-                    }
-                    $formpart.find(selectors.join(", ")).each(function(i) {
-                        var $this = $(this);
-                        if ($this.hasClass("datepickerfield")) {
-                            $this.data('DateTimePicker').date(moment(value));
-                        }
-                        else {
-                            $this.val(parts[i]).trigger("change");
-                        }
-                    });
-                    return
+    /*
+    TODO:
+    - add dropdown for saved_id to select which profile/address to save to
+    – in the original profile, strikethrough which answer will be overwritten, followed by the new answer
+    – add new answers with a + in front
+    */
+    var profiles = JSON.parse(document.getElementById("profiles_json").textContent);
+    function matchProfiles(profiles, scope) {
+        var filtered = [];
+        var data;
+        for (var p of profiles) {
+            data = {};
+            for (var key of Object.keys(p)) {
+                if ($("[name$=" + key + "], [name$=" + key + "_0]", scope).length) {
+                    data[key] = p[key];
                 }
+            }
+            if (Object.keys(data).length) {
+                filtered.push(data);
+            }
+        };
+        return filtered;
+    }
+    function shallowEqual(object1, object2) {
+        var keys1 = Object.keys(object1);
+        var keys2 = Object.keys(object2);
 
-                if (key === "is_business") {
-                    $formpart.find("input[name=is_business][value=business]").prop("checked", value)
-                    $formpart.find("input[name=is_business][value=individual]").prop("checked", !value)
-                    $formpart.find("input[name=is_business][value=individual]").trigger("change")
+        if (keys1.length !== keys2.length) {
+            return false;
+        }
+
+        for (var key of keys1) {
+            if (object1[key] !== object2[key]) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+    function uniqueProfiles(profiles) {
+        return profiles.filter(function(p, index, arr) {
+            for (var o of arr) {
+                if (o != p && shallowEqual(o, p)) return false;
+            }
+            return true;
+        });
+    }
+
+    el.find(".profile-scope").each(function () {
+        // setup profile-select for each scope
+        // for each answer of each profile, find the matching input (name, identifier, label)
+        // if none found, remove answer from description (except attendee_name_cached vs attendee_name_parts?)
+        // filter profiles to unique profiles (could be)
+        // TODO:
+        // – show full auto-fill info in $desc when 
+        // - better UI when only one profile is available (no select)
+        // - add checkmark to button when filled in 
+        // - listen to all matched form fields for changes and remove chechmark if changed
+        var profiles_filtered = uniqueProfiles(matchProfiles(profiles, this));
+        if (!profiles_filtered.length) return;
+
+        var $formpart = $(this);
+        var $select = $formpart.find(".profile-select");
+        var $button = $formpart.find(".profile-apply");
+        var $desc = $formpart.find(".profile-desc");
+
+        var i = 0;
+        for (p of profiles_filtered) {
+            // TODO: create a „better“ label
+            // use name_cached if available, add as few info as possible to make a distinction
+            // between available profiles
+            // add fields in the order of questions?
+            var label = (++i) + ". ";
+            for (var key of Object.keys(p)) {
+                if (label.length > 32) continue;
+                label += (p[key]["value"] || p[key]) + ", ";
+            }
+            label += " …";
+            $select.append("<option>" + label + "</option>");
+        }
+        $select.change(function() {
+            // TODO: human readable description for profiles_filtered[this.selectedIndex]
+            $desc.html("Show description for " + this.selectedIndex);
+        }).trigger("change");
+        $button.click(function() {
+            var p = profiles_filtered[$select.get(0).selectedIndex];
+            Object.keys(p).forEach(function(key) {
+                var value = p[key];
+                if (value && typeof value !== 'string') {
+                    value = value.value;
+                }
+                var $field = $formpart.find('[name$="' + key + '"]');
+                if (!$field.length) {
+                    // no matching fields found, try with _0 multi-field format as value might be a timestamp or phone-number
+                    // TODO: also try matching with identifier or even label
+                    var $field_0 = $formpart.find('[name$="' + key + '_0"]');
+                    var $field_1 = $formpart.find('[name$="' + key + '_1"]');
+                    if (value.substr(0, 1) == "+") {
+                        // phone number
+                        var prefix = !$field_0.is("select") ? value.substr(0,2) : $field_0.get(0).options.find(function(o) {
+                            return value.startsWith(o.value);
+                        });
+                        var number = value.substr(prefix.length);
+                        $field_0.val(prefix).trigger("change");
+                        $field_1.val(number).trigger("change");
+                    }
+                    else if ($field_0.hasClass("datepickerfield")) {
+                        $field_0.data('DateTimePicker').date(moment(value));
+                        $field_1.data('DateTimePicker').date(moment(value));
+                    }
                 } else if ($field.attr("type") === "checkbox") {
                     if (value && typeof value !== 'string') {
                         value = Object.keys(value);
@@ -165,6 +239,9 @@ function questions_init_profiles(el) {
                     else {
                         $field.prop("checked", value).trigger("change");
                     }
+                } else if ($field.length > 1) {
+                    // radio-buttons
+                    $field.filter('[value="' + p[key] + '"]').prop("checked", true).trigger("change");
                 } else if ($field.is("select")) {
                     if (value && typeof value !== 'string') {
                         value = Object.keys(value);
@@ -176,20 +253,17 @@ function questions_init_profiles(el) {
                         this.selected = this.value == value || (value && value.indexOf && value.indexOf(this.value) > -1);
                     });
                     $field.trigger("change");
-                } else if (!value) {
-                    continue;
-                } else {
-                    $field.val(value);
-                    $field.trigger("change");
+                } else if (value) {
+                    if ($field.hasClass("datepickerfield")) {
+                        $field.data('DateTimePicker').date(moment(value));
+                    }
+                    else {
+                        $field.val(value).trigger("change");
+                    }
                 }
+            });
+        })
 
-                // (invoice) address: state
-                // multiplechoice
-                // choice
-                // date
-                // time
-                // datetime
-           }
-        });
+        $formpart.addClass("profile-select-initialized");
     });
 }

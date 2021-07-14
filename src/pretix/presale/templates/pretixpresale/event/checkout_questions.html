@@ -11,6 +11,9 @@
             You need to fill all fields that are marked with <span>*</span> to continue.
         {% endblocktrans %}
     </p>
+    {% if profiles_data %}
+        {{ profiles_data|json_script:"profiles_json" }}
+    {% endif %}
     <form class="form-horizontal" method="post" enctype="multipart/form-data">
         {% csrf_token %}
         <div class="panel-group" id="questions_group">
@@ -49,15 +52,22 @@
                                 </div>
                             {% endif %}
 
+                            {{ addresses_data|json_script:"addresses_json" }}
                             {% if addresses %}
+                                {{ addresses_data|json_script:"addresses_json" }}
+
                                 <div class="profile-list-wrapper">
-                                    <div role="group" class="profile-list">
+                                    <div role="group" aria-labelledby="" class="profile-list">
+                                        <h4 id="" class="sr-only">{% trans "Fill form section with stored data:" %}</h4>
                                         {% for ia in addresses %}
                                             <button type="button" class="btn btn-default" data-stored-values="{{ ia.for_js|attr_escapejson_dumps }}" data-id="{{ ia.pk }}">
-                                                <span class="sr-only">{% trans "Fill form section with stored data:" %}<br></span>
-                                                {{ ia.describe|splitlines|slice:":5"|joinlines|linebreaksbr }}
-                                                {% if ia.describe|splitlines|length > 5 %}
-                                                    <br>…
+                                                <b>{{ ia.describe|splitlines|slice:":1"|joinlines }}</b>
+                                                {% if ia.describe|splitlines|length > 1 %}
+                                                <br>
+                                                    {{ ia.describe|splitlines|slice:"1:5"|joinlines|linebreaksbr }}
+                                                    {% if ia.describe|splitlines|length > 5 %}
+                                                        <br>…
+                                                    {% endif %}
                                                 {% endif %}
                                             </button>
                                         {% endfor %}
@@ -155,22 +165,44 @@
                                         + {{ form.pos.item.name }}{% if form.pos.variation %} – {{ form.pos.variation.value }}{% endif %}
                                     </legend>
                                 {% endif %}
-                                <div data-idx="{{ forloop.parentloop.counter0 }}" data-addonidx="{{ forloop.counter0 }}">
-
-                                    {% if form.profiles %}
-                                        <div class="profile-list-wrapper">
-                                            <div role="group" class="profile-list">
+                                <div data-idx="{{ forloop.parentloop.counter0 }}" data-addonidx="{{ forloop.counter0 }}" class="profile-scope">
+                                    {% if profiles_data %}
+                                    <div class="form-group profile-select-container">
+                                        <label class="col-md-3 control-label" id="profile-list-{{ forloop.parentloop.counter0 }}-{{ forloop.counter0 }}">{% trans "Fill the form section below with …" %}</label>
+                                        <div class="col-md-9 form-control-text">
+                                            <p class="profile-select-control">
+                                                <select class="profile-select form-control"></select>
+                                                <button type="button" class="profile-apply btn btn-default"
+                                                    aria-describedby="profile-desc-{{ forloop.parentloop.counter0 }}-{{ forloop.counter0 }}">{% trans "fill the form section below" %}</button>
+                                            </p>
+                                            <p class="help-block profile-desc" id="profile-desc-{{ forloop.parentloop.counter0 }}-{{ forloop.counter0 }}"></p>
+                                            {% comment %}
+                                                <ul>
                                                 {% for ap, data in form.profiles %}
-                                                    <button type="button" class="btn btn-default" data-stored-values="{{ data|attr_escapejson_dumps }}" data-id="{{ ap.pk }}">
-                                                        <span class="sr-only">{% trans "Fill form section with stored data:" %}<br></span>
-                                                        {{ ap.describe|splitlines|slice:":6"|joinlines|linebreaksbr }}
-                                                        {% if ap.describe|splitlines|length > 6 %}
-                                                            <br>…
+                                                    <li>
+                                                        <span id="profile-desc-{{ forloop.parentloop.counter0 }}-{{ forloop.counter0 }}">
+                                                        <b>{{ ap.describe|splitlines|slice:":1"|joinlines }}</b>
+                                                        {% if ap.describe|splitlines|length > 1 %}
+                                                        <br>
+                                                            {{ ap.describe|splitlines|slice:"1:6"|joinlines|linebreaksbr }}
+                                                            {% if ap.describe|splitlines|length > 6 %}
+                                                                <br>…
+                                                            {% endif %}
                                                         {% endif %}
-                                                    </button>
+                                                        </span>
+                                                        <button type="button" class="btn btn-default btn-xs"
+                                                            data-stored-values="{{ data|attr_escapejson_dumps }}"
+                                                            data-id="{{ ap.pk }}"
+                                                            aria-describedby="profile-desc-{{ forloop.parentloop.counter0 }}-{{ forloop.counter0 }}">
+                                                            {% trans "fill form section" %}
+                                                        </button>
+                                                    </li>
                                                 {% endfor %}
-                                            </div>
+                                                </ul>
+                                                {% endcomment %}
                                         </div>
+                                    </div>
+                                    <hr>
                                     {% endif %}
 
                                     {% bootstrap_form form layout="checkout" %}
