@@ -125,42 +125,88 @@ function questions_init_profiles(el) {
     function matchProfiles(profiles, scope) {
         var filtered = [];
         var data;
+        var matched_field;
         for (var p of profiles) {
             data = {};
             for (var key of Object.keys(p)) {
-                if ($("[name$=" + key + "], [name$=" + key + "_0]", scope).length) {
-                    data[key] = p[key];
+                matched_field = getMatchingInput(key, p[key], scope);
+                if (matched_field) {
+                    // TODO: only add if no other field matches same fields?
+                    data[key] = {
+                        "answer": p[key],
+                        "field": matched_field
+                    };
                 }
             }
+            var equalMatchAvailable = filtered.findIndex(function(element) {
+                return matchesAreEqual(element, data);
+            });
+            console.log("equalMatchAvailable", equalMatchAvailable);
             if (Object.keys(data).length) {
                 filtered.push(data);
             }
         };
         return filtered;
     }
-    function shallowEqual(object1, object2) {
+    function matchesAreEqual(object1, object2) {
         var keys1 = Object.keys(object1);
         var keys2 = Object.keys(object2);
 
         if (keys1.length !== keys2.length) {
             return false;
         }
+        // TODO: recursive match on answer-value(s)
 
-        for (var key of keys1) {
-            if (object1[key] !== object2[key]) {
-                return false;
+        return false;
+    }
+
+    function getInputForLabel(label) {
+        if (label && label.getAttribute("for")) {
+            var input = document.getElementById(label.getAttribute("for"));
+            return input;
+        }
+        return null;
+    }
+    function getMatchingInput(key, answer, scope) {
+        var $label;
+        var $fields = $('[name$="' + key + '"], [name$="' + key + '_0"], [name$="' + key + '_1"]', scope);
+        if ($fields.length) return $fields;
+
+        if (answer.identifier) {
+            $label = $('[data-identifier="' + answer.identifier + '"]', scope);
+            var input = getInputForLabel($label.get(0));
+            if (input) return $(input);
+        }
+        for (var label of scope.getElementsByTagName("label")) {
+            if (label.textContent == answer.label) {
+                var input = getInputForLabel(label);
+                if (input) return $(input);
+                break;
             }
         }
-
-        return true;
+        return null;
     }
-    function uniqueProfiles(profiles) {
-        return profiles.filter(function(p, index, arr) {
-            for (var o of arr) {
-                if (o != p && shallowEqual(o, p)) return false;
+    function labelForProfile(p) {
+            // TODO: create a „better“ label
+            // - use name_cached if available
+            // - add as few info as possible to make a distinction between available profiles
+            // - add fields in the order of questions?
+            var label = "";
+            for (var key of Object.keys(p)) {
+                console.log(key, p[key]);
+                if (label.length > 32) break;
+                var answer = p[key].answer.value || p[key].answer
+                if (answer && typeof answer !== 'string') {
+                    for (var a of Object.keys(answer)) {
+                        label += answer[a] + ", ";
+                    }
+                }
+                else {
+                    label += answer + ", ";
+                }
             }
-            return true;
-        });
+            label += " …";
+            return label;
     }
 
     el.find(".profile-scope").each(function () {
@@ -173,8 +219,8 @@ function questions_init_profiles(el) {
         // - better UI when only one profile is available (no select)
         // - add checkmark to button when filled in 
         // - listen to all matched form fields for changes and remove chechmark if changed
-        var profiles_filtered = uniqueProfiles(matchProfiles(profiles, this));
-        if (!profiles_filtered.length) return;
+        var matched_profiles = matchProfiles(profiles, this);
+        if (!matched_profiles.length) return;
 
         var $formpart = $(this);
         var $select = $formpart.find(".profile-select");
@@ -182,54 +228,28 @@ function questions_init_profiles(el) {
         var $desc = $formpart.find(".profile-desc");
 
         var i = 0;
-        for (p of profiles_filtered) {
-            // TODO: create a „better“ label
-            // use name_cached if available, add as few info as possible to make a distinction
-            // between available profiles
-            // add fields in the order of questions?
-            var label = (++i) + ". ";
-            for (var key of Object.keys(p)) {
-                if (label.length > 32) continue;
-                label += (p[key]["value"] || p[key]) + ", ";
-            }
-            label += " …";
-            $select.append("<option>" + label + "</option>");
+        for (p of matched_profiles) {
+            $select.append("<option>" + (++i) + ". " + labelForProfile(p) + "</option>");
         }
         $select.change(function() {
-            // TODO: human readable description for profiles_filtered[this.selectedIndex]
-            $desc.html("Show description for " + this.selectedIndex);
+            // TODO: human readable description for matched_profiles[this.selectedIndex]
+            $desc.html("Show description for matched profile " + this.selectedIndex);
         }).trigger("change");
         $button.click(function() {
-            var p = profiles_filtered[$select.get(0).selectedIndex];
+            var p = matched_profiles[$select.get(0).selectedIndex];
             Object.keys(p).forEach(function(key) {
-                var value = p[key];
-                if (value && typeof value !== 'string') {
-                    value = value.value;
+                var answer = p[key].answer;
+                var $field = p[key].field;
+
+                if (answer && typeof answer !== 'string') {
+                    answer = answer.value;
                 }
-                var $field = $formpart.find('[name$="' + key + '"]');
-                if (!$field.length) {
-                    // no matching fields found, try with _0 multi-field format as value might be a timestamp or phone-number
-                    // TODO: also try matching with identifier or even label
-                    var $field_0 = $formpart.find('[name$="' + key + '_0"]');
-                    var $field_1 = $formpart.find('[name$="' + key + '_1"]');
-                    if (value.substr(0, 1) == "+") {
-                        // phone number
-                        var prefix = !$field_0.is("select") ? value.substr(0,2) : $field_0.get(0).options.find(function(o) {
-                            return value.startsWith(o.value);
-                        });
-                        var number = value.substr(prefix.length);
-                        $field_0.val(prefix).trigger("change");
-                        $field_1.val(number).trigger("change");
-                    }
-                    else if ($field_0.hasClass("datepickerfield")) {
-                        $field_0.data('DateTimePicker').date(moment(value));
-                        $field_1.data('DateTimePicker').date(moment(value));
-                    }
-                } else if ($field.attr("type") === "checkbox") {
-                    if (value && typeof value !== 'string') {
-                        value = Object.keys(value);
+                console.log(key, $field, answer);                
+                if ($field.attr("type") === "checkbox") {
+                    if (answer && typeof answer !== 'string') {
+                        answer = Object.keys(answer);
                         $field.each(function() {
-                            var checked = value.indexOf(this.value) > -1;
+                            var checked = answer.indexOf(this.value) > -1;
                             if (checked != this.checked) {
                                 this.checked = checked;
                                 $(this).trigger("change");
@@ -237,28 +257,44 @@ function questions_init_profiles(el) {
                         });
                     }
                     else {
-                        $field.prop("checked", value).trigger("change");
+                        $field.prop("checked", answer).trigger("change");
                     }
+                } else if ($field.attr("type") === "radio") {
+                    $field.filter('[value="' + answer + '"]').prop("checked", true).trigger("change");
                 } else if ($field.length > 1) {
-                    // radio-buttons
-                    $field.filter('[value="' + p[key] + '"]').prop("checked", true).trigger("change");
-                } else if ($field.is("select")) {
-                    if (value && typeof value !== 'string') {
-                        value = Object.keys(value);
+                    // multiple matching fields, could be phone number or datetime
+                    var $field_0 = $field.filter('[name$="_0"]');
+                    var $field_1 = $field.filter('[name$="_1"]');
+                    if (answer.substr(0, 1) == "+") {
+                        // phone number
+                        var prefix = !$field_0.is("select") ? answer.substr(0,2) : $field_0.get(0).options.find(function(o) {
+                            return answer.startsWith(o.value);
+                        });
+                        var number = answer.substr(prefix.length);
+                        $field_0.val(prefix).trigger("change");
+                        $field_1.val(number).trigger("change");
                     }
-                    // save value as data-attribute so if external event changes select-element/options it can select correct entries
+                    else if ($field_0.hasClass("datepickerfield")) {
+                        $field_0.data('DateTimePicker').date(moment(answer));
+                        $field_1.data('DateTimePicker').date(moment(answer));
+                    }
+                } else if ($field.is("select")) {
+                    if (answer && typeof answer !== 'string') {
+                        answer = Object.keys(answer);
+                    }
+                    // save answer as data-attribute so if external event changes select-element/options it can select correct entries
                     // currently used when country => state changes
-                    $field.prop("data-selected-value", value);
+                    $field.prop("data-selected-value", answer);
                     $field.find("option").each(function() {
-                        this.selected = this.value == value || (value && value.indexOf && value.indexOf(this.value) > -1);
+                        this.selected = this.value == answer || (answer && answer.indexOf && answer.indexOf(this.value) > -1);
                     });
                     $field.trigger("change");
-                } else if (value) {
+                } else if (answer) {
                     if ($field.hasClass("datepickerfield")) {
-                        $field.data('DateTimePicker').date(moment(value));
+                        $field.data('DateTimePicker').date(moment(answer));
                     }
                     else {
-                        $field.val(value).trigger("change");
+                        $field.val(answer).trigger("change");
                     }
                 }
             });
