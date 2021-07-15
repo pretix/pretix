@@ -235,8 +235,9 @@ function questions_init_profiles(el) {
             $select.append('<option value="' + p._pk + '">' + labelForProfile(p) + '</option>');
         }
         $select.change(function() {
-            $help.html("TODO: Show full description/diff of profile " + this.selectedIndex);
+            $help.html("TODO: Show full description/diff of profile " + (this.selectedIndex-1));
         }).trigger("change");
+        // TODO: bind to change-events of inputs inside this scope to update diff/profile-description
     }
 
 
