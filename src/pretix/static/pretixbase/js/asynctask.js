@@ -228,6 +228,17 @@ $(function () {
             }
         );
     });
+
+    window.addEventListener("pageshow", function (evt) {
+        // In Safari, if you submit an async task, then get redirected, then go back,
+        // Safari won't reload the HTML from disk cache but instead reuse the DOM of the
+        // previous request, thus not clearing the "loading" state.
+        if (evt.persisted && $("body").hasClass("loading")) {
+            setTimeout(function () {
+                window.location.reload();
+            }, 10);
+        }
+    }, false);
 });
 
 var waitingDialog = {
