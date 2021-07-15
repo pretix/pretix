@@ -37,7 +37,8 @@ from decimal import Decimal
 from typing import Any, Dict, Iterable, List, Tuple
 
 from django.db.models import (
-    Case, Count, DateTimeField, F, Max, OuterRef, Subquery, Sum, Value, When,
+    Case, Count, DateTimeField, F, Max, OuterRef, QuerySet, Subquery, Sum,
+    Value, When,
 )
 from django.utils.timezone import make_aware
 from django.utils.translation import gettext_lazy as _
@@ -120,7 +121,9 @@ def order_overview(
     ).order_by('category__position', 'category_id', 'position', 'name')
 
     qs = OrderPosition.all
-    if subevent:
+    if isinstance(subevent, (list, QuerySet)):
+        qs = qs.filter(subevent__in=subevent)
+    elif subevent:
         qs = qs.filter(subevent=subevent)
     if admission_only:
         qs = qs.filter(item__admission=True)
@@ -229,7 +232,7 @@ def order_overview(
     payment_cat_obj.name = _('Fees')
     payment_items = []
 
-    if not subevent and fees:
+    if subevent is None and fees:
         qs = OrderFee.all.filter(
             order__event=event
         ).annotate(
