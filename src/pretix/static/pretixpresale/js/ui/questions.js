@@ -191,13 +191,13 @@ function questions_init_profiles(el) {
     function labelForProfile(p) {
             // TODO: create a „better“ label
             // - use name_cached if available
-            // - add as few info as possible to make a distinction between available profiles
+            // - add as few info as possible to make a distinction between available profiles?
             // - add fields in the order of questions?
             var label = "";
             for (var key of Object.keys(p)) {
                 console.log(key, p[key]);
                 if (label.length > 32) break;
-                var answer = p[key].answer.value || p[key].answer
+                var answer = p[key].answer ? (p[key].answer.value || p[key].answer) : (p[key].value || p[key]);
                 if (answer && typeof answer !== 'string') {
                     for (var a of Object.keys(answer)) {
                         label += answer[a] + ", ";
