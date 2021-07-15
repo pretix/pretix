@@ -157,12 +157,12 @@ class QuestionsForm(BaseQuestionsForm):
         allow_save = kwargs.pop('allow_save', False)
         super().__init__(*args, **kwargs)
         if allow_save and self.fields:
-            self.fields['saved_id'] = forms.IntegerField(required=False, widget=forms.HiddenInput)
             self.fields['save'] = forms.BooleanField(
                 label=_('Save profile in my customer account for future purchases'),
                 required=False,
                 initial=False,
             )
+            self.fields['saved_id'] = forms.IntegerField(required=False, help_text=".", label=_("Select profile"), widget=forms.Select(choices=(("", _("Create new profile")),)))
 
 
 class AddOnRadioSelect(forms.RadioSelect):

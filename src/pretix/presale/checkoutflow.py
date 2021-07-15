@@ -995,7 +995,9 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
             profiles = list(self.cart_customer.attendee_profiles.all())
             profiles_list = []
             for p in profiles:
-                data = {}
+                data = {
+                    "_pk": p.pk,
+                }
                 if p.attendee_name_parts:
                     scheme = PERSON_NAME_SCHEMES[self.request.event.settings.name_scheme]
                     for i, (k, l, w) in enumerate(scheme["fields"]):

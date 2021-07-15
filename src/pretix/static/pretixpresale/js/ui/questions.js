@@ -211,7 +211,39 @@ function questions_init_profiles(el) {
             return label;
     }
 
+
+
+    function setupSaveToProfile(scope) {
+        var $checkbox = $('[name$="-save"]', scope);
+        var $select = $('[name$="-saved_id"]', scope);
+        var $checkboxContainer = $checkbox.closest(".form-group").addClass("profile-save");
+        var $selectContainer = $select.closest(".form-group").addClass("profile-save-id");
+        var $help = $selectContainer.find(".help-block");
+
+        var $container = $("<div class='profile-save-container'></div>");
+        $selectContainer.after($container);
+        $container.append($checkboxContainer);
+        $container.append($selectContainer);
+
+
+        $checkbox.change(function() {
+            if (this.checked) $selectContainer.slideDown();
+            else $selectContainer.slideUp();
+        });
+        if ($checkbox.get(0).checked) $checkbox.trigger("change");
+
+        for (var p of profiles) {
+            $select.append('<option value="' + p._pk + '">' + labelForProfile(p) + '</option>');
+        }
+        $select.change(function() {
+            $help.html("TODO: Show full description/diff of profile " + this.selectedIndex);
+        }).trigger("change");
+    }
+
+
     el.find(".profile-scope").each(function () {
+        setupSaveToProfile(this)
+
         // setup profile-select for each scope
         // for each answer of each profile, find the matching input (name, identifier, label)
         // if none found, remove answer from description (except attendee_name_cached vs attendee_name_parts?)
