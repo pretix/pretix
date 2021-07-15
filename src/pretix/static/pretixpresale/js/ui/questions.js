@@ -133,7 +133,7 @@ function questions_init_profiles(el) {
             for (var key of Object.keys(p)) {
                 matched_field = getMatchingInput(key, p[key], scope);
                 if (matched_field) {
-                    // TODO: only add if no other field matches same fields?
+                    // TODO: only add if no other answer matches same fields?
                     data[key] = {
                         "answer": p[key],
                         "field": matched_field
@@ -143,8 +143,7 @@ function questions_init_profiles(el) {
             var equalMatchAvailable = filtered.findIndex(function(element) {
                 return matchesAreEqual(element, data);
             });
-            console.log("equalMatchAvailable", equalMatchAvailable);
-            if (Object.keys(data).length) {
+            if (Object.keys(data).length && equalMatchAvailable) {
                 filtered.push(data);
             }
         };
@@ -267,7 +266,7 @@ function questions_init_profiles(el) {
         }
         $select.change(function() {
             // TODO: human readable description for matched_profiles[this.selectedIndex]
-            $desc.html("Show description for matched profile " + this.selectedIndex);
+            $desc.html("TODO: Show description for matched profile " + this.selectedIndex);
         }).trigger("change");
         $button.click(function() {
             var p = matched_profiles[$select.get(0).selectedIndex];
@@ -277,8 +276,7 @@ function questions_init_profiles(el) {
 
                 if (answer && typeof answer !== 'string') {
                     answer = answer.value;
-                }
-                console.log(key, $field, answer);                
+                }               
                 if ($field.attr("type") === "checkbox") {
                     if (answer && typeof answer !== 'string') {
                         answer = Object.keys(answer);
