@@ -121,7 +121,9 @@ function questions_init_profiles(el) {
     – in the original profile, strikethrough which answer will be overwritten, followed by the new answer
     – add new answers with a + in front
     */
-    var profiles = JSON.parse(document.getElementById("profiles_json").textContent);
+    var profiles_element = document.getElementById("profiles_json");
+    if (!profiles_element || !profiles_element.textContent) return;
+    var profiles = JSON.parse(profiles_element.textContent);
     function matchProfiles(profiles, scope) {
         var filtered = [];
         var data;
