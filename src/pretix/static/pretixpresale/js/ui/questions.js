@@ -300,10 +300,15 @@ function questions_init_profiles(el) {
                     var $field_0 = $field.filter('[name$="_0"]');
                     var $field_1 = $field.filter('[name$="_1"]');
                     if (answer.substr(0, 1) == "+") {
-                        // phone number
-                        var prefix = !$field_0.is("select") ? answer.substr(0,2) : $field_0.get(0).options.find(function(o) {
-                            return answer.startsWith(o.value);
-                        });
+                        var prefix = "";
+                        var options = $field_0.get(0).options;
+                        for (var i = 0; i < options.length; i++) {
+                            var v = options[i].value;
+                            if (v && answer.substr(0, v.length) == v) {
+                                prefix = v;
+                                break;
+                            }
+                        }
                         var number = answer.substr(prefix.length);
                         $field_0.val(prefix).trigger("change");
                         $field_1.val(number).trigger("change");
