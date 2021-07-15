@@ -105,10 +105,27 @@
 }
 .profile-select-container {
   display: none;
+  border-bottom: 1px solid $hr-border;
 }
-.profile-select-initialized .profile-select-container {
+.profile-save-container {
+  border-top: 1px solid $hr-border;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  margin-bottom: 30px;
+}
+.profile-save-container .help-block {
+  margin-bottom: 0;
+}
+.profile-save, .profile-save-id {
+  display: none;
+  margin-bottom: 0;
+  padding-bottom: .5em;
+}
+.profile-select-initialized .profile-select-container,
+.profile-select-initialized .profile-save {
   display: block;
 }
+
 .profile-select-control {
   display: flex;
   button {
