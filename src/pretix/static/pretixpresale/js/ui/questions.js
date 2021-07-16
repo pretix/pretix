@@ -162,11 +162,14 @@ function questions_init_profiles(el) {
     }
 
     function getInputForLabel(label) {
-        if (label && label.getAttribute("for")) {
-            var input = document.getElementById(label.getAttribute("for"));
-            return input;
+        if (!label) return null;
+        var input;
+        if (label.getAttribute("for")) {
+            input = document.getElementById(label.getAttribute("for"));
+            if (input) return input;
         }
-        return null;
+        // for grouped inputs like phone number the "label" is more a fieldset/legend
+        return label.closest(".form-group").querySelectorAll("select, input, textarea");
     }
     function getMatchingInput(key, answer, scope) {
         var $label;
@@ -187,16 +190,58 @@ function questions_init_profiles(el) {
         }
         return null;
     }
-    function labelForProfile(p) {
-            // TODO: create a „better“ label
-            // - use name_cached if available
-            // - add as few info as possible to make a distinction between available profiles?
-            // - add fields in the order of questions?
+
+    function getInputKeysInSourceOrder(p, scope) {
+        var element = scope.querySelector("input, select, textarea");
+        if (!element) return [];
+        var elements = element.form.elements;
+        var beenInScope = false;
+        var keys = []
+        for (var i = 0, element; element = elements[i++];) {
+            if (!element.name) continue;
+            if (!scope.contains(element)) {
+                if (beenInScope) break;
+                continue;
+            }
+            beenInScope = true;
+            var k = element.name.substr(element.name.indexOf("-") + 1);
+            if (!(k in p)) {
+                k = k.substr(0, k.lastIndexOf("_"));
+                if (!(k in p)) continue;
+            }
+            if (keys.indexOf(k) == -1) {
+                keys.push(k);
+            }
+        }
+        return keys;
+    }
+
+    function formatAnswerHumanReadable(answer) {
+        if (typeof answer == "string" || typeof answer == "number") return answer;
+        var value = answer.value;
+        if ("type" in answer) {
+            if (answer.type == "TEL") {
+                // TODO: format phone number with spaces?
+                return value;
+            }
+            if (answer.type == "W") {
+                return moment(value).format(document.body.getAttribute("data-datetimeformat"));
+            }
+            if (answer.type == "D") {//date
+                return moment(value).format(document.body.getAttribute("data-dateformat"));
+            } 
+        }
+        return value;
+    }
+
+    // TODO: add as few info as possible to make a distinction between available profiles?
+    function labelForProfile(p, profiles, scope = null) {
+            // add fields in source-order if scope (form section) is provided
+            var keys = scope ? getInputKeysInSourceOrder(p, scope) : Object.keys(p);
             var label = "";
-            for (var key of Object.keys(p)) {
-                console.log(key, p[key]);
-                if (label.length > 32) break;
-                var answer = p[key].answer ? (p[key].answer.value || p[key].answer) : (p[key].value || p[key]);
+            for (var key of keys) {
+                if (label.length > 48) break;
+                var answer = formatAnswerHumanReadable(p[key].answer || p[key]);
                 if (answer && typeof answer !== 'string') {
                     for (var a of Object.keys(answer)) {
                         label += answer[a] + ", ";
@@ -232,7 +277,7 @@ function questions_init_profiles(el) {
         if ($checkbox.get(0).checked) $checkbox.trigger("change");
 
         for (var p of profiles) {
-            $select.append('<option value="' + p._pk + '">' + labelForProfile(p) + '</option>');
+            $select.append('<option value="' + p._pk + '">' + labelForProfile(p, profiles) + '</option>');
         }
         $select.change(function() {
             $help.html("TODO: Show full description/diff of profile " + (this.selectedIndex-1));
@@ -263,7 +308,7 @@ function questions_init_profiles(el) {
 
         var i = 0;
         for (p of matched_profiles) {
-            $select.append("<option>" + (++i) + ". " + labelForProfile(p) + "</option>");
+            $select.append("<option>" + (++i) + ". " + labelForProfile(p, profiles, this) + "</option>");
         }
         $select.change(function() {
             // TODO: human readable description for matched_profiles[this.selectedIndex]

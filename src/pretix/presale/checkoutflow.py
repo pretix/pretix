@@ -1004,17 +1004,17 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
                         data[f"attendee_name_parts_{i}"] = p.attendee_name_parts.get(k) or ""
                     #data["attendee_name_parts"] = {k: v for k, v in p.attendee_name_parts.items() if not k.startswith('_')}
 
-                for k in ("attendee_name_cached", "attendee_email", "company", "street", "zipcode", "city", "country", "state"):
+                for k in ("attendee_email", "company", "street", "zipcode", "city", "country", "state"):
                     v = getattr(p, k)
                     if v:
                         data[k] = str(v)
-
 
                 for a in p.answers:
                     data[a["field_name"]] = {
                         "label": a["field_label"],
                         "value": a["value"],
                         "identifier": a["question_identifier"],
+                        "type": a["question_type"],
                     }
                 profiles_list.append(data)
             ctx['profiles_data'] = profiles_list
