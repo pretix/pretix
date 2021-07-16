@@ -559,7 +559,10 @@ class WidgetAPIProductList(EventListMixin, View):
                 if self.request.event.settings.event_list_available_only:
                     evs = [
                         se for se in evs
-                        if not se.presale_has_ended and se.best_availability_state >= Quota.AVAILABILITY_RESERVED
+                        if not se.presale_has_ended and (
+                            se.best_availability_state is not None and
+                            se.best_availability_state >= Quota.AVAILABILITY_RESERVED
+                        )
                     ]
 
                 data['events'] = [
