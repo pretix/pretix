@@ -156,6 +156,9 @@ event_patterns = [
     re_path(r'^widget/v1.css$', pretix.presale.views.widget.widget_css, name='event.widget.css'),
     re_path(r'^(?P<subevent>\d+)/widget/product_list$', pretix.presale.views.widget.WidgetAPIProductList.as_view(),
             name='event.widget.productlist'),
+
+    # Account management is done on org level, but we at least need a logout
+    re_path(r'^account/logout$', pretix.presale.views.customer.LogoutView.as_view(), name='organizer.customer.logout'),
 ]
 
 organizer_patterns = [

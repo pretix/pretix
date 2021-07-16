@@ -96,7 +96,11 @@ class LoginView(RedirectBackMixin, FormView):
 
     def get_success_url(self):
         url = self.get_redirect_url()
-        return url or eventreverse(self.request.organizer, 'presale:organizer.customer.profile', kwargs={})
+        if getattr(self.request, 'event_domain', False):
+            default_url = '/'
+        else:
+            default_url = eventreverse(self.request.organizer, 'presale:organizer.customer.profile', kwargs={})
+        return url or default_url
 
     def form_valid(self, form):
         """Security check complete. Log the user in."""
@@ -114,7 +118,10 @@ class LogoutView(View):
         return HttpResponseRedirect(next_page)
 
     def get_next_page(self):
-        next_page = eventreverse(self.request.organizer, 'presale:organizer.index', kwargs={})
+        if getattr(self.request, 'event_domain', False):
+            next_page = '/'
+        else:
+            next_page = eventreverse(self.request.organizer, 'presale:organizer.index', kwargs={})
 
         if (self.redirect_field_name in self.request.POST or
                 self.redirect_field_name in self.request.GET):
