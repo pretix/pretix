@@ -638,6 +638,20 @@ table td > .checkbox input[type="checkbox"] {
   .form-group {
     margin-bottom: 10px;
   }
+
+  label.control-label {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  .one-line-checkboxes {
+    div.checkbox {
+      display: inline-block;
+      margin-right: 10px;
+      margin-top: 0;
+    }
+  }
 }
 
 #rules-editor {

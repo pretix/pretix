@@ -52,7 +52,7 @@ from django_scopes.forms import SafeModelChoiceField
 
 from pretix.base.channels import get_all_sales_channels
 from pretix.base.forms.widgets import (
-    DatePickerWidget, SplitDateTimePickerWidget,
+    DatePickerWidget, SplitDateTimePickerWidget, TimePickerWidget,
 )
 from pretix.base.models import (
     Checkin, CheckinList, Device, Event, EventMetaProperty, EventMetaValue,
@@ -832,17 +832,34 @@ class SubEventFilterForm(FilterForm):
     date_from = forms.DateField(
         label=_('Date from'),
         required=False,
-        widget=DatePickerWidget,
+        widget=DatePickerWidget({
+            'placeholder': _('Date from'),
+        }),
     )
     date_until = forms.DateField(
         label=_('Date until'),
         required=False,
-        widget=DatePickerWidget,
+        widget=DatePickerWidget({
+            'placeholder': _('Date until'),
+        }),
     )
-    weekday = forms.ChoiceField(
+    time_from = forms.TimeField(
+        label=_('Time from'),
+        required=False,
+        widget=TimePickerWidget({
+            'placeholder': _('Date from'),
+        }),
+    )
+    time_until = forms.TimeField(
+        label=_('Time until'),
+        required=False,
+        widget=TimePickerWidget({
+            'placeholder': _('Time until'),
+        }),
+    )
+    weekday = forms.MultipleChoiceField(
         label=_('Weekday'),
         choices=(
-            ('', _('All days')),
             ('2', _('Monday')),
             ('3', _('Tuesday')),
             ('4', _('Wednesday')),
@@ -851,6 +868,7 @@ class SubEventFilterForm(FilterForm):
             ('7', _('Saturday')),
             ('1', _('Sunday')),
         ),
+        widget=forms.CheckboxSelectMultiple,
         required=False
     )
     query = forms.CharField(
@@ -899,7 +917,7 @@ class SubEventFilterForm(FilterForm):
             )
 
         if fdata.get('weekday'):
-            qs = qs.annotate(wday=ExtractWeekDay('date_from')).filter(wday=fdata.get('weekday'))
+            qs = qs.annotate(wday=ExtractWeekDay('date_from')).filter(wday__in=fdata.get('weekday'))
 
         if fdata.get('query'):
             query = fdata.get('query')
@@ -922,6 +940,14 @@ class SubEventFilterForm(FilterForm):
                 time(hour=0, minute=0, second=0, microsecond=0)
             ), get_current_timezone())
             qs = qs.filter(date_from__gte=date_start)
+
+        if fdata.get('time_until'):
+            qs = qs.filter(
+                Q(date_to__isnull=True, date_from__time__lte=fdata.get('time_until')) |
+                Q(date_to__isnull=False, date_to__time__lte=fdata.get('time_until'))
+            )
+        if fdata.get('time_from'):
+            qs = qs.filter(date_from__time__gte=fdata.get('time_from'))
 
         if fdata.get('ordering'):
             qs = qs.order_by(self.get_order_by())
