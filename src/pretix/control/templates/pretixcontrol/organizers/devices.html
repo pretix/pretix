@@ -1,6 +1,7 @@
 {% extends "pretixcontrol/organizers/base.html" %}
 {% load i18n %}
 {% load bootstrap3 %}
+{% load urlreplace %}
 {% block inner %}
     <h1>
         {% trans "Connected devices" %}
@@ -11,7 +12,7 @@
             your account.
         {% endblocktrans %}
     </p>
-    {% if devices|length == 0 %}
+    {% if devices|length == 0 and not filter_form.filtered %}
         <div class="empty-collection">
             <p>
                 {% blocktrans trimmed %}
@@ -23,6 +24,30 @@
                     class="btn btn-primary btn-lg"><i class="fa fa-plus"></i> {% trans "Connect a device" %}</a>
         </div>
     {% else %}
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">{% trans "Filter" %}</h3>
+            </div>
+            <form class="panel-body filter-form" action="" method="get">
+                <div class="row">
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                        {% bootstrap_field filter_form.query %}
+                    </div>
+                    <div class="col-md-3 col-sm-6 col-xs-12">
+                        {% bootstrap_field filter_form.gate %}
+                    </div>
+                    <div class="col-md-3 col-sm-6 col-xs-12">
+                        {% bootstrap_field filter_form.software_brand %}
+                    </div>
+                </div>
+                <div class="text-right">
+                    <button class="btn btn-primary btn-lg" type="submit">
+                        <span class="fa fa-filter"></span>
+                        {% trans "Filter" %}
+                    </button>
+                </div>
+            </form>
+        </div>
         <p>
             <a href="{% url "control:organizer.device.add" organizer=request.organizer.slug %}"
                     class="btn btn-default"><i class="fa fa-plus"></i> {% trans "Connect a device" %}</a>
@@ -31,11 +56,20 @@
             <table class="table table-condensed table-hover">
                 <thead>
                 <tr>
-                    <th>{% trans "Device ID" %}</th>
-                    <th>{% trans "Name" %}</th>
+                    <th>{% trans "Device ID" %}
+                        <a href="?{% url_replace request 'ordering' '-device_id' %}"><i class="fa fa-caret-down"></i></a>
+                        <a href="?{% url_replace request 'ordering' 'device_id' %}"><i class="fa fa-caret-up"></i></a></th>
+                    </th>
+                    <th>{% trans "Name" %}
+                        <a href="?{% url_replace request 'ordering' '-name' %}"><i class="fa fa-caret-down"></i></a>
+                        <a href="?{% url_replace request 'ordering' 'name' %}"><i class="fa fa-caret-up"></i></a></th>
+                    </th>
                     <th>{% trans "Hardware model" %}</th>
                     <th>{% trans "Software" %}</th>
-                    <th>{% trans "Setup date" %}</th>
+                    <th>{% trans "Setup date" %}
+                        <a href="?{% url_replace request 'ordering' '-initialized' %}"><i class="fa fa-caret-down"></i></a>
+                        <a href="?{% url_replace request 'ordering' 'initialized' %}"><i class="fa fa-caret-up"></i></a></th>
+                    </th>
                     <th>{% trans "Events" %}</th>
                     <th></th>
                 </tr>
@@ -50,8 +84,12 @@
                             {% if d.revoked %}<del>{% endif %}
                             {{ d.name }}
                             {% if d.revoked %}</del>{% endif %}
+                            {% if d.gate %}
+                                <br>
+                                <small class="text-muted">{{ d.gate.name }}</small>
+                            {% endif %}
                             <br>
-                            <small>{{ d.unique_serial }}</small>
+                            <small class="text-muted">{{ d.unique_serial }}</small>
                         </td>
                         <td>
                             {{ d.hardware_brand|default_if_none:"" }} {{ d.hardware_model|default_if_none:"" }}

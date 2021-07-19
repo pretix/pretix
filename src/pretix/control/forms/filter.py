@@ -42,7 +42,7 @@ from django.conf import settings
 from django.db.models import (
     Count, Exists, F, Max, Model, OrderBy, OuterRef, Q, QuerySet,
 )
-from django.db.models.functions import Coalesce, ExtractWeekDay
+from django.db.models.functions import Coalesce, ExtractWeekDay, Upper
 from django.urls import reverse, reverse_lazy
 from django.utils.formats import date_format, localize
 from django.utils.functional import cached_property
@@ -1948,5 +1948,70 @@ class CheckinFilterForm(FilterForm):
 
         if fdata.get('datetime_until'):
             qs = qs.filter(datetime__lte=fdata.get('datetime_until'))
+
+        return qs
+
+
+class DeviceFilterForm(FilterForm):
+    orders = {
+        'name': Upper('name'),
+        'device_id': 'device_id',
+        'initialized': F('initialized').asc(nulls_last=True),
+        '-initialized': F('initialized').desc(nulls_first=True),
+    }
+    query = forms.CharField(
+        label=_('Search query'),
+        widget=forms.TextInput(attrs={
+            'placeholder': _('Search query'),
+            'autofocus': 'autofocus'
+        }),
+        required=False
+    )
+    gate = forms.ModelChoiceField(
+        queryset=Gate.objects.none(),
+        label=_('Gate'),
+        empty_label=_('All gates'),
+        required=False,
+    )
+    software_brand = forms.ChoiceField(
+        label=_('Software'),
+        choices=[
+            ('', _('All')),
+        ],
+        required=False,
+    )
+
+    def __init__(self, *args, **kwargs):
+        request = kwargs.pop('request')
+        super().__init__(*args, **kwargs)
+        self.fields['gate'].queryset = request.organizer.gates.all()
+        self.fields['software_brand'].choices = [
+            ('', _('All')),
+        ] + [
+            (f['software_brand'], f['software_brand']) for f in
+            request.organizer.devices.order_by().values('software_brand').annotate(c=Count('*'))
+            if f['software_brand']
+        ]
+
+    def filter_qs(self, qs):
+        fdata = self.cleaned_data
+
+        if fdata.get('query'):
+            query = fdata.get('query')
+            qs = qs.filter(
+                Q(name__icontains=query)
+                | Q(unique_serial__icontains=query)
+                | Q(hardware_brand__icontains=query)
+                | Q(hardware_model__icontains=query)
+                | Q(software_brand__icontains=query)
+            )
+
+        if fdata.get('gate'):
+            qs = qs.filter(gate=fdata['gate'])
+
+        if fdata.get('ordering'):
+            qs = qs.order_by(self.get_order_by())
+        else:
+            qs = qs.order_by('-device_id')
 
         return qs

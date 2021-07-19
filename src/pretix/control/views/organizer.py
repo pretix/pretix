@@ -84,7 +84,7 @@ from pretix.base.signals import register_multievent_data_exporters
 from pretix.base.templatetags.rich_text import markdown_compile_email
 from pretix.base.views.tasks import AsyncAction
 from pretix.control.forms.filter import (
-    CustomerFilterForm, EventFilterForm, GiftCardFilterForm,
+    CustomerFilterForm, DeviceFilterForm, EventFilterForm, GiftCardFilterForm,
     OrganizerFilterForm, TeamFilterForm,
 )
 from pretix.control.forms.orders import ExporterForm
@@ -824,9 +824,21 @@ class DeviceListView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin,
     context_object_name = 'devices'
 
     def get_queryset(self):
-        return self.request.organizer.devices.prefetch_related(
-            'limit_events'
+        qs = self.request.organizer.devices.prefetch_related(
+            'limit_events', 'gate',
         ).order_by('revoked', '-device_id')
+        if self.filter_form.is_valid():
+            qs = self.filter_form.filter_qs(qs)
+        return qs
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['filter_form'] = self.filter_form
+        return ctx
+
+    @cached_property
+    def filter_form(self):
+        return DeviceFilterForm(data=self.request.GET, request=self.request)
 
 
 class DeviceCreateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, CreateView):
