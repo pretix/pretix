@@ -1352,7 +1352,7 @@ class EventFilterForm(FilterForm):
             )
 
 
-class CheckInFilterForm(FilterForm):
+class CheckinListAttendeeFilterForm(FilterForm):
     orders = {
         'code': ('order__code', 'item__name'),
         '-code': ('-order__code', '-item__name'),
@@ -1399,6 +1399,24 @@ class CheckInFilterForm(FilterForm):
         required=False,
         empty_label=_('All products')
     )
+    subevent = forms.ModelChoiceField(
+        label=pgettext_lazy('subevent', 'Date'),
+        queryset=SubEvent.objects.none(),
+        required=False,
+        empty_label=pgettext_lazy('subevent', 'All dates')
+    )
+    subevent_from = forms.SplitDateTimeField(
+        widget=SplitDateTimePickerWidget(attrs={
+        }),
+        label=pgettext_lazy('subevent', 'Date start from'),
+        required=False,
+    )
+    subevent_until = forms.SplitDateTimeField(
+        widget=SplitDateTimePickerWidget(attrs={
+        }),
+        label=pgettext_lazy('subevent', 'Date start until'),
+        required=False,
+    )
 
     def __init__(self, *args, **kwargs):
         self.event = kwargs.pop('event')
@@ -1408,6 +1426,24 @@ class CheckInFilterForm(FilterForm):
             self.fields['item'].queryset = self.event.items.all()
         else:
             self.fields['item'].queryset = self.list.limit_products.all()
+
+        if self.event.has_subevents:
+            self.fields['subevent'].queryset = self.event.subevents.all()
+            self.fields['subevent'].widget = Select2(
+                attrs={
+                    'data-model-select2': 'event',
+                    'data-select2-url': reverse('control:event.subevents.select2', kwargs={
+                        'event': self.event.slug,
+                        'organizer': self.event.organizer.slug,
+                    }),
+                    'data-placeholder': pgettext_lazy('subevent', 'All dates')
+                }
+            )
+            self.fields['subevent'].widget.choices = self.fields['subevent'].choices
+        else:
+            del self.fields['subevent']
+            del self.fields['subevent_from']
+            del self.fields['subevent_until']
 
     def filter_qs(self, qs):
         fdata = self.cleaned_data
@@ -1454,6 +1490,14 @@ class CheckInFilterForm(FilterForm):
 
         if fdata.get('item'):
             qs = qs.filter(item=fdata.get('item'))
+
+        if fdata.get('subevent'):
+            qs = qs.filter(subevent_id=fdata.get('subevent').pk)
+
+        if fdata.get('subevent_from'):
+            qs = qs.filter(subevent__date_from__gte=fdata.get('subevent_from'))
+        if fdata.get('subevent_until'):
+            qs = qs.filter(subevent__date_from__lte=fdata.get('subevent_until'))
 
         return qs
 

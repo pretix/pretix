@@ -50,7 +50,9 @@ from pretix.base.models import Checkin, Order, OrderPosition
 from pretix.base.models.checkin import CheckinList
 from pretix.base.signals import checkin_created
 from pretix.control.forms.checkin import CheckinListForm
-from pretix.control.forms.filter import CheckInFilterForm, CheckinFilterForm
+from pretix.control.forms.filter import (
+    CheckinFilterForm, CheckinListAttendeeFilterForm,
+)
 from pretix.control.permissions import EventPermissionRequiredMixin
 from pretix.control.views import CreateView, PaginationMixin, UpdateView
 from pretix.helpers.models import modelcopy
@@ -107,7 +109,7 @@ class CheckInListShow(EventPermissionRequiredMixin, PaginationMixin, ListView):
 
     @cached_property
     def filter_form(self):
-        return CheckInFilterForm(
+        return CheckinListAttendeeFilterForm(
             data=self.request.GET,
             event=self.request.event,
             list=self.list
