@@ -7,20 +7,23 @@
 {% block title %}{% trans "Refunds" %}{% endblock %}
 {% block content %}
     <h1>{% trans "Refunds" %}</h1>
-    <div class="row filter-form">
-        <form class="" action="" method="get">
-            <div class="col-md-5 col-xs-6">
-                {% bootstrap_field filter_form.status layout='inline' %}
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">{% trans "Filter" %}</h3>
+        </div>
+        <form class="panel-body filter-form" action="" method="get">
+            <div class="row">
+                <div class="col-md-6 col-xs-6">
+                    {% bootstrap_field filter_form.status %}
+                </div>
+                <div class="col-md-6 col-xs-6">
+                    {% bootstrap_field filter_form.provider %}
+                </div>
             </div>
-            <div class="col-md-5 col-xs-6">
-                {% bootstrap_field filter_form.provider layout='inline' %}
-            </div>
-            <div class="col-md-2 col-xs-12">
-                <button class="btn btn-primary btn-block" type="submit">
+            <div class="text-right">
+                <button class="btn btn-primary btn-lg" type="submit">
                     <span class="fa fa-filter"></span>
-                    <span class="hidden-md">
-                            {% trans "Filter" %}
-                        </span>
+                    {% trans "Filter" %}
                 </button>
             </div>
         </form>

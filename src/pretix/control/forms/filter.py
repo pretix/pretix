@@ -1008,7 +1008,7 @@ class GiftCardFilterForm(FilterForm):
         required=False
     )
     state = forms.ChoiceField(
-        label=_('Empty'),
+        label=_('Status'),
         choices=(
             ('', _('All')),
             ('empty', _('Empty')),
