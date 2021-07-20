@@ -1064,6 +1064,41 @@ def test_remove_seating_forbidden(token_client, organizer, event, item, seatingp
 
 
 @pytest.mark.django_db
+def test_remove_seating_canceled_seat(token_client, organizer, event, item, seatingplan, order_position):
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/'.format(organizer.slug, event.slug),
+        {
+            "seating_plan": seatingplan.pk,
+            "seat_category_mapping": {
+                "Stalls": item.pk
+            }
+        },
+        format='json'
+    )
+    assert resp.status_code == 200
+    event.refresh_from_db()
+    assert event.seating_plan == seatingplan
+    with scopes_disabled():
+        assert event.seats.count() == 3
+        assert event.seat_category_mappings.count() == 1
+
+        order_position.seat = event.seats.first()
+        order_position.canceled = True
+        order_position.save()
+
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/'.format(organizer.slug, event.slug),
+        {
+            "seating_plan": None
+        },
+        format='json'
+    )
+    assert resp.status_code == 200
+    order_position.refresh_from_db()
+    assert order_position.seat is None
+
+
+@pytest.mark.django_db
 def test_no_seating_for_series(token_client, organizer, event, item, seatingplan, order_position):
     event.has_subevents = True
     event.save()

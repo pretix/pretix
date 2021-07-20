@@ -41,7 +41,7 @@ class SeatProtected(LazyLocaleException):
 def validate_plan_change(event, subevent, plan):
     current_taken_seats = set(
         event.seats.select_related('product').annotate(
-            has_op=Exists(OrderPosition.objects.filter(
+            has_op=Exists(OrderPosition.all.filter(
                 seat=OuterRef('pk'),
                 canceled=False,
             ).exclude(
@@ -65,7 +65,7 @@ def validate_plan_change(event, subevent, plan):
 def generate_seats(event, subevent, plan, mapping, blocked_guids=None):
     current_seats = {}
     for s in event.seats.select_related('product').annotate(
-        has_op=Exists(OrderPosition.objects.filter(
+        has_op=Exists(OrderPosition.all.filter(
             seat=OuterRef('pk'),
             canceled=False,
         ).exclude(
@@ -133,7 +133,7 @@ def generate_seats(event, subevent, plan, mapping, blocked_guids=None):
 
     Seat.objects.bulk_create(create_seats)
     CartPosition.objects.filter(seat__in=[s.pk for s in current_seats.values()]).delete()
-    OrderPosition.objects.filter(
+    OrderPosition.all.filter(
         Q(canceled=True) | Q(order__status=Order.STATUS_CANCELED),
         seat__in=[s.pk for s in current_seats.values()],
     ).update(seat=None)
