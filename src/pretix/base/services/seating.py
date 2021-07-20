@@ -19,11 +19,11 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
-from django.db.models import Count, Q
+from django.db.models import Count, Exists, OuterRef, Q
 from django.utils.translation import gettext_lazy as _
 
 from pretix.base.i18n import LazyLocaleException
-from pretix.base.models import CartPosition, Seat
+from pretix.base.models import CartPosition, Order, OrderPosition, Seat
 
 
 class SeatProtected(LazyLocaleException):
@@ -41,7 +41,12 @@ class SeatProtected(LazyLocaleException):
 def validate_plan_change(event, subevent, plan):
     current_taken_seats = set(
         event.seats.select_related('product').annotate(
-            has_op=Count('orderposition')
+            has_op=Exists(OrderPosition.objects.filter(
+                seat=OuterRef('pk'),
+                canceled=False,
+            ).exclude(
+                order__status=Order.STATUS_CANCELED
+            ))
         ).annotate(has_v=Count('vouchers')).filter(
             subevent=subevent,
         ).filter(
@@ -60,7 +65,13 @@ def validate_plan_change(event, subevent, plan):
 def generate_seats(event, subevent, plan, mapping, blocked_guids=None):
     current_seats = {}
     for s in event.seats.select_related('product').annotate(
-            has_op=Count('orderposition'), has_v=Count('vouchers')
+        has_op=Exists(OrderPosition.objects.filter(
+            seat=OuterRef('pk'),
+            canceled=False,
+        ).exclude(
+            order__status=Order.STATUS_CANCELED
+        )),
+        has_v=Count('vouchers')
     ).filter(subevent=subevent).order_by():
         if s.seat_guid in current_seats:
             s.delete()  # Duplicates should not exist
@@ -122,4 +133,8 @@ def generate_seats(event, subevent, plan, mapping, blocked_guids=None):
 
     Seat.objects.bulk_create(create_seats)
     CartPosition.objects.filter(seat__in=[s.pk for s in current_seats.values()]).delete()
+    OrderPosition.objects.filter(
+        Q(canceled=True) | Q(order__status=Order.STATUS_CANCELED),
+        seat__in=[s.pk for s in current_seats.values()],
+    ).update(seat=None)
     Seat.objects.filter(pk__in=[s.pk for s in current_seats.values()]).delete()
