@@ -95,6 +95,8 @@ def import_orders(event: Event, fileid: str, settings: dict, locale: str, user) 
 
         # Run validation
         for i, record in enumerate(parsed):
+            if not any(record.values()):
+                continue
             values = {}
             for c in cols:
                 val = c.resolve(settings, record)
