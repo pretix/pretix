@@ -844,18 +844,14 @@ class SubEventFilterForm(FilterForm):
         }),
     )
     time_from = forms.TimeField(
-        label=_('Time from'),
+        label=_('Start time from'),
         required=False,
-        widget=TimePickerWidget({
-            'placeholder': _('Date from'),
-        }),
+        widget=TimePickerWidget({}),
     )
     time_until = forms.TimeField(
-        label=_('Time until'),
+        label=_('Start time until'),
         required=False,
-        widget=TimePickerWidget({
-            'placeholder': _('Time until'),
-        }),
+        widget=TimePickerWidget({}),
     )
     weekday = forms.MultipleChoiceField(
         label=_('Weekday'),
@@ -942,10 +938,7 @@ class SubEventFilterForm(FilterForm):
             qs = qs.filter(date_from__gte=date_start)
 
         if fdata.get('time_until'):
-            qs = qs.filter(
-                Q(date_to__isnull=True, date_from__time__lte=fdata.get('time_until')) |
-                Q(date_to__isnull=False, date_to__time__lte=fdata.get('time_until'))
-            )
+            qs = qs.filter(date_from__time__lte=fdata.get('time_until'))
         if fdata.get('time_from'):
             qs = qs.filter(date_from__time__gte=fdata.get('time_from'))
 
