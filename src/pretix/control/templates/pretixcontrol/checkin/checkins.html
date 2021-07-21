@@ -132,7 +132,7 @@
                                 {% if c.position.item %}
                                     <br>
                                     <small>
-                                        <a href="{% url "control:event.item" organizer=request.event.organizer.slug event=request.event.slug item=c.position.id %}">
+                                        <a href="{% url "control:event.item" organizer=request.event.organizer.slug event=request.event.slug item=c.position.item_id %}">
                                             {{ c.position.item }}{% if c.position.variation %} –
                                                 {{ c.position.variation }}{% endif %}
                                         </a>
