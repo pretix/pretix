@@ -337,6 +337,15 @@ def test_single_entry_forced_reentry(position, clist):
 
 
 @pytest.mark.django_db
+def test_exit_does_not_invalidate(position, clist):
+    perform_checkin(position, clist, {}, type=Checkin.TYPE_EXIT)
+    perform_checkin(position, clist, {})
+    perform_checkin(position, clist, {}, type=Checkin.TYPE_EXIT)
+
+    assert position.checkins.count() == 3
+
+
+@pytest.mark.django_db
 def test_multi_exit(position, clist):
     perform_checkin(position, clist, {})
     perform_checkin(position, clist, {}, type=Checkin.TYPE_EXIT)

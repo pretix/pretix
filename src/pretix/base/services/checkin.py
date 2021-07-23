@@ -649,15 +649,16 @@ def perform_checkin(op: OrderPosition, clist: CheckinList, given_answers: dict, 
         if isinstance(auth, Device):
             device = auth
 
-        last_ci = op.checkins.order_by('-datetime').filter(list=clist).only('type', 'nonce').first()
+        last_cis = list(op.checkins.order_by('-datetime').filter(list=clist).only('type', 'nonce'))
         entry_allowed = (
             type == Checkin.TYPE_EXIT or
             clist.allow_multiple_entries or
-            last_ci is None or
-            (clist.allow_entry_after_exit and last_ci.type == Checkin.TYPE_EXIT)
+            not last_cis or
+            all(c.type == Checkin.TYPE_EXIT for c in last_cis) or
+            (clist.allow_entry_after_exit and last_cis[0].type == Checkin.TYPE_EXIT)
         )
 
-        if nonce and ((last_ci and last_ci.nonce == nonce) or op.checkins.filter(type=type, list=clist, device=device, nonce=nonce).exists()):
+        if nonce and ((last_cis and last_cis[0].nonce == nonce) or op.checkins.filter(type=type, list=clist, device=device, nonce=nonce).exists()):
             return
 
         if entry_allowed or force:
