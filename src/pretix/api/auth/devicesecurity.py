@@ -70,9 +70,9 @@ class PretixScanSecurityProfile(AllowListSecurityProfile):
     )
 
 
-class PretixScanNoSyncSecurityProfile(AllowListSecurityProfile):
+class PretixScanNoSyncNoSearchSecurityProfile(AllowListSecurityProfile):
     identifier = 'pretixscan_online_kiosk'
-    verbose_name = _('pretixSCAN (kiosk mode, online only)')
+    verbose_name = _('pretixSCAN (kiosk mode, no order sync, no search)')
     allowlist = (
         ('GET', 'api-v1:version'),
         ('GET', 'api-v1:device.eventselection'),
@@ -91,6 +91,36 @@ class PretixScanNoSyncSecurityProfile(AllowListSecurityProfile):
         ('GET', 'api-v1:checkinlist-list'),
         ('GET', 'api-v1:checkinlist-status'),
         ('POST', 'api-v1:checkinlist-failed_checkins'),
+        ('POST', 'api-v1:checkinlistpos-redeem'),
+        ('GET', 'api-v1:revokedsecrets-list'),
+        ('GET', 'api-v1:orderposition-pdf_image'),
+        ('GET', 'api-v1:event.settings'),
+        ('POST', 'api-v1:upload'),
+    )
+
+
+class PretixScanNoSyncSecurityProfile(AllowListSecurityProfile):
+    identifier = 'pretixscan_online_noorders'
+    verbose_name = _('pretixSCAN (online only, no order sync)')
+    allowlist = (
+        ('GET', 'api-v1:version'),
+        ('GET', 'api-v1:device.eventselection'),
+        ('POST', 'api-v1:device.update'),
+        ('POST', 'api-v1:device.revoke'),
+        ('POST', 'api-v1:device.roll'),
+        ('GET', 'api-v1:event-list'),
+        ('GET', 'api-v1:event-detail'),
+        ('GET', 'api-v1:subevent-list'),
+        ('GET', 'api-v1:subevent-detail'),
+        ('GET', 'api-v1:itemcategory-list'),
+        ('GET', 'api-v1:item-list'),
+        ('GET', 'api-v1:question-list'),
+        ('GET', 'api-v1:badgelayout-list'),
+        ('GET', 'api-v1:badgeitem-list'),
+        ('GET', 'api-v1:checkinlist-list'),
+        ('GET', 'api-v1:checkinlist-status'),
+        ('POST', 'api-v1:checkinlist-failed_checkins'),
+        ('GET', 'api-v1:checkinlistpos-list'),
         ('POST', 'api-v1:checkinlistpos-redeem'),
         ('GET', 'api-v1:revokedsecrets-list'),
         ('GET', 'api-v1:orderposition-pdf_image'),
@@ -160,6 +190,7 @@ DEVICE_SECURITY_PROFILES = {
         FullAccessSecurityProfile,
         PretixScanSecurityProfile,
         PretixScanNoSyncSecurityProfile,
+        PretixScanNoSyncNoSearchSecurityProfile,
         PretixPosSecurityProfile,
     )
 }
