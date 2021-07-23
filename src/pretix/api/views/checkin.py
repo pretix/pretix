@@ -32,6 +32,7 @@ from django.utils.functional import cached_property
 from django.utils.timezone import now
 from django_filters.rest_framework import DjangoFilterBackend, FilterSet
 from django_scopes import scopes_disabled
+from packaging.version import parse
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.fields import DateTimeField
@@ -421,6 +422,7 @@ class CheckinListPositionViewSet(viewsets.ReadOnlyModelViewSet):
             nonce=nonce,
             forced=force,
         )
+        raw_barcode_for_checkin = None
 
         try:
             queryset = self.get_queryset(ignore_status=True, ignore_products=True)
@@ -455,7 +457,41 @@ class CheckinListPositionViewSet(viewsets.ReadOnlyModelViewSet):
                     error_reason=Checkin.REASON_INVALID,
                     **common_checkin_args,
                 )
-                raise Http404()
+
+                if force and isinstance(self.request.auth, Device):
+                    # There was a bug in libpretixsync: If you scanned a ticket in offline mode that was
+                    # valid at the time but no longer exists at time of upload, the device would retry to
+                    # upload the same scan over and over again. Since we can't update all devices quickly,
+                    # here's a dirty workaround to make it stop.
+                    try:
+                        brand = self.request.auth.software_brand
+                        ver = parse(self.request.auth.software_version)
+                        legacy_mode = (
+                            (brand == 'pretixSCANPROXY' and ver < parse('0.0.3')) or
+                            (brand == 'pretixSCAN Android' and ver < parse('1.11.2')) or
+                            (brand == 'pretixSCAN' and ver < parse('1.11.2'))
+                        )
+                        if legacy_mode:
+                            return Response({
+                                'status': 'error',
+                                'reason': Checkin.REASON_ALREADY_REDEEMED,
+                                'reason_explanation': None,
+                                'require_attention': False,
+                                '__warning': 'Compatibility hack active due to detected old pretixSCAN version',
+                            }, status=400)
+                    except:  # we don't care e.g. about invalid version numbers
+                        pass
+
+                return Response({
+                    'detail': 'Not found.',  # for backwards compatibility
+                    'status': 'error',
+                    'reason': Checkin.REASON_INVALID,
+                    'reason_explanation': None,
+                    'require_attention': False,
+                }, status=404)
+            elif revoked_matches and force:
+                op = revoked_matches[0].position
+                raw_barcode_for_checkin = self.kwargs['pk']
             else:
                 op = revoked_matches[0].position
                 op.order.log_action('pretix.event.checkin.revoked', data={
@@ -506,7 +542,8 @@ class CheckinListPositionViewSet(viewsets.ReadOnlyModelViewSet):
                     user=self.request.user,
                     auth=self.request.auth,
                     type=type,
-                    raw_barcode=None,
+                    raw_barcode=raw_barcode_for_checkin,
+                    from_revoked_secret=True,
                 )
             except RequiredQuestionsError as e:
                 return Response({

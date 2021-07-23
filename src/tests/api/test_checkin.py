@@ -1106,3 +1106,81 @@ def test_store_failed(token_client, organizer, clist, event, order):
         'error_reason': 'unknown'
     }, format='json')
     assert resp.status_code == 400
+
+
+@pytest.mark.django_db
+def test_redeem_unknown(token_client, organizer, clist, event, order):
+    resp = token_client.post('/api/v1/organizers/{}/events/{}/checkinlists/{}/positions/{}/redeem/'.format(
+        organizer.slug, event.slug, clist.pk, 'unknown_secret'
+    ), {
+        'force': True
+    }, format='json')
+    assert resp.status_code == 404
+    assert resp.data["status"] == "error"
+    assert resp.data["reason"] == "invalid"
+    with scopes_disabled():
+        assert not Checkin.objects.last()
+
+
+@pytest.mark.django_db
+def test_redeem_unknown_revoked(token_client, organizer, clist, event, order):
+    with scopes_disabled():
+        p = order.positions.first()
+        event.revoked_secrets.create(position=p, secret='revoked_secret')
+    resp = token_client.post('/api/v1/organizers/{}/events/{}/checkinlists/{}/positions/{}/redeem/'.format(
+        organizer.slug, event.slug, clist.pk, 'revoked_secret'
+    ), {
+    }, format='json')
+    assert resp.status_code == 400
+    assert resp.data["status"] == "error"
+    assert resp.data["reason"] == "revoked"
+    with scopes_disabled():
+        assert not Checkin.objects.last()
+
+
+@pytest.mark.django_db
+def test_redeem_unknown_revoked_force(token_client, organizer, clist, event, order):
+    with scopes_disabled():
+        p = order.positions.first()
+        event.revoked_secrets.create(position=p, secret='revoked_secret')
+    resp = token_client.post('/api/v1/organizers/{}/events/{}/checkinlists/{}/positions/{}/redeem/'.format(
+        organizer.slug, event.slug, clist.pk, 'revoked_secret'
+    ), {
+        'force': True
+    }, format='json')
+    assert resp.status_code == 201
+    assert resp.data["status"] == "ok"
+    with scopes_disabled():
+        assert Checkin.objects.last().forced
+
+
+@pytest.mark.django_db
+def test_redeem_unknown_legacy_device_bug(device, device_client, organizer, clist, event, order):
+    device.software_brand = "pretixSCAN"
+    device.software_version = "1.11.1"
+    device.save()
+    resp = device_client.post('/api/v1/organizers/{}/events/{}/checkinlists/{}/positions/{}/redeem/'.format(
+        organizer.slug, event.slug, clist.pk, 'unknown_secret'
+    ), {
+        'force': True
+    }, format='json')
+    print(resp.data)
+    assert resp.status_code == 400
+    assert resp.data["status"] == "error"
+    assert resp.data["reason"] == "already_redeemed"
+    with scopes_disabled():
+        assert not Checkin.objects.last()
+
+    device.software_brand = "pretixSCAN"
+    device.software_version = "1.11.2"
+    device.save()
+    resp = device_client.post('/api/v1/organizers/{}/events/{}/checkinlists/{}/positions/{}/redeem/'.format(
+        organizer.slug, event.slug, clist.pk, 'unknown_secret'
+    ), {
+        'force': True
+    }, format='json')
+    assert resp.status_code == 404
+    assert resp.data["status"] == "error"
+    assert resp.data["reason"] == "invalid"
+    with scopes_disabled():
+        assert not Checkin.objects.last()

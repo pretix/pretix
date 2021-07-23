@@ -45,7 +45,7 @@ def validate_plan_change(event, subevent, plan):
                 seat=OuterRef('pk'),
                 canceled=False,
             ).exclude(
-                order__status=Order.STATUS_CANCELED
+                order__status=(Order.STATUS_CANCELED, Order.STATUS_EXPIRED)
             ))
         ).annotate(has_v=Count('vouchers')).filter(
             subevent=subevent,
