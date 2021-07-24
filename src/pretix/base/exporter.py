@@ -47,12 +47,15 @@ from django.db.models import QuerySet
 from django.utils.formats import localize
 from django.utils.translation import gettext, gettext_lazy as _
 from openpyxl import Workbook
-from openpyxl.cell.cell import ILLEGAL_CHARACTERS_RE, KNOWN_TYPES
+from openpyxl.cell.cell import ILLEGAL_CHARACTERS_RE, KNOWN_TYPES, Cell
 
 from pretix.base.models import Event
 
 
 def excel_safe(val):
+    if isinstance(val, Cell):
+        return val
+
     if not isinstance(val, KNOWN_TYPES):
         val = str(val)
 
@@ -221,9 +224,13 @@ class ListExporter(BaseExporter):
                 writer.writerow(line)
             return self.get_filename() + '.csv', 'text/csv', output.getvalue().encode("utf-8")
 
+    def prepare_xlsx_sheet(self, ws):
+        pass
+
     def _render_xlsx(self, form_data, output_file=None):
         wb = Workbook(write_only=True)
         ws = wb.create_sheet()
+        self.prepare_xlsx_sheet(ws)
         try:
             ws.title = str(self.verbose_name)
         except:
