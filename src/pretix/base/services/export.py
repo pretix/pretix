@@ -56,7 +56,7 @@ def export(self, event: Event, fileid: str, provider: str, form_data: Dict[str, 
     with language(event.settings.locale, event.settings.region), override(event.settings.timezone):
         responses = register_data_exporters.send(event)
         for receiver, response in responses:
-            ex = response(event, set_progress)
+            ex = response(event, event.organizer, set_progress)
             if ex.identifier == provider:
                 d = ex.render(form_data)
                 if d is None:
@@ -70,12 +70,15 @@ def export(self, event: Event, fileid: str, provider: str, form_data: Dict[str, 
 
 
 @app.task(base=ProfiledOrganizerUserTask, throws=(ExportError,), bind=True)
-def multiexport(self, organizer: Organizer, user: User, device: int, token: int, fileid: str, provider: str, form_data: Dict[str, Any]) -> None:
+def multiexport(self, organizer: Organizer, user: User, device: int, token: int, fileid: str, provider: str,
+                form_data: Dict[str, Any], staff_session=False) -> None:
     if device:
         device = Device.objects.get(pk=device)
     if token:
         device = TeamAPIToken.objects.get(pk=token)
     allowed_events = (device or token or user).get_events_with_permission('can_view_orders')
+    if user and staff_session:
+        allowed_events = organizer.events.all()
 
     def set_progress(val):
         if not self.request.called_directly:
@@ -100,16 +103,19 @@ def multiexport(self, organizer: Organizer, user: User, device: int, token: int,
             timezone = settings.TIME_ZONE
             region = None
     with language(locale, region), override(timezone):
-        if isinstance(form_data['events'][0], str):
-            events = allowed_events.filter(slug__in=form_data.get('events'), organizer=organizer)
+        if form_data.get('events') is not None:
+            if isinstance(form_data['events'][0], str):
+                events = allowed_events.filter(slug__in=form_data.get('events'), organizer=organizer)
+            else:
+                events = allowed_events.filter(pk__in=form_data.get('events'))
         else:
-            events = allowed_events.filter(pk__in=form_data.get('events'))
+            events = allowed_events
         responses = register_multievent_data_exporters.send(organizer)
 
         for receiver, response in responses:
             if not response:
                 continue
-            ex = response(events, set_progress)
+            ex = response(events, organizer, set_progress)
             if ex.identifier == provider:
                 d = ex.render(form_data)
                 if d is None:

@@ -1318,7 +1318,7 @@ class ExportMixin:
         )
         responses = register_multievent_data_exporters.send(self.request.organizer)
         id = self.request.GET.get("identifier") or self.request.POST.get("exporter")
-        for ex in sorted([response(events) for r, response in responses if response], key=lambda ex: str(ex.verbose_name)):
+        for ex in sorted([response(events, self.request.organizer) for r, response in responses if response], key=lambda ex: str(ex.verbose_name)):
             if id and ex.identifier != id:
                 continue
 
@@ -1406,7 +1406,8 @@ class ExportDoView(OrganizerPermissionRequiredMixin, ExportMixin, AsyncAction, T
             provider=self.exporter.identifier,
             device=None,
             token=None,
-            form_data=self.exporter.form.cleaned_data
+            form_data=self.exporter.form.cleaned_data,
+            staff_session=self.request.user.has_active_staff_session(self.request.session.session_key)
         )
 
 

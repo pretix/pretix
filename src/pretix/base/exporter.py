@@ -70,8 +70,9 @@ class BaseExporter:
     This is the base class for all data exporters
     """
 
-    def __init__(self, event, progress_callback=lambda v: None):
+    def __init__(self, event, organizer, progress_callback=lambda v: None):
         self.event = event
+        self.organizer = organizer
         self.progress_callback = progress_callback
         self.is_multievent = isinstance(event, QuerySet)
         if isinstance(event, QuerySet):

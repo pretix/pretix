@@ -2175,7 +2175,7 @@ class ExportMixin:
     def exporters(self):
         exporters = []
         responses = register_data_exporters.send(self.request.event)
-        for ex in sorted([response(self.request.event) for r, response in responses], key=lambda ex: str(ex.verbose_name)):
+        for ex in sorted([response(self.request.event, self.request.organizer) for r, response in responses], key=lambda ex: str(ex.verbose_name)):
             if self.request.GET.get("identifier") and ex.identifier != self.request.GET.get("identifier"):
                 continue
 
