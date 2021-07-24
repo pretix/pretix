@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-09 09:36+0000\n"
-"PO-Revision-Date: 2020-09-23 17:00+0000\n"
+"PO-Revision-Date: 2021-07-24 14:00+0000\n"
 "Last-Translator: Svyatoslav <slava@digitalarthouse.eu>\n"
 "Language-Team: Russian <https://translate.pretix.eu/projects/pretix/pretix/"
 "ru/>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 3.10.3\n"
+"X-Generator: Weblate 4.6\n"
 
 #: pretix/api/auth/devicesecurity.py:28
 msgid ""
@@ -374,10 +374,8 @@ msgid "<a %(a_attr)s>ticketing powered by pretix</a>"
 msgstr "<a %(a_attr)s>event ticketing powered by pretix</a>"
 
 #: pretix/base/context.py:61
-#, fuzzy
-#| msgid "Voucher code"
 msgid "source code"
-msgstr "Код ваучера"
+msgstr "Промокод"
 
 #: pretix/base/email.py:186 pretix/control/views/main.py:302
 #: pretix/plugins/badges/apps.py:45 pretix/plugins/badges/models.py:48
@@ -1751,7 +1749,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/index.html:250
 #: pretix/presale/templates/pretixpresale/event/index.html:254
 msgid "Voucher code"
-msgstr "Код ваучера"
+msgstr "Промокод"
 
 #: pretix/base/forms/auth.py:57 pretix/base/forms/auth.py:166
 msgid "Keep me logged in"
@@ -2980,14 +2978,14 @@ msgstr ""
 
 #: pretix/base/models/items.py:448
 msgid "This product can only be bought using a voucher."
-msgstr "Этот продукт можно купить только с использованием ваучера."
+msgstr "Этот продукт можно купить только с использованием промокода."
 
 #: pretix/base/models/items.py:450
 msgid ""
 "To buy this product, the user needs a voucher that applies to this product "
 "either directly or via a quota."
 msgstr ""
-"Чтобы купить этот продукт, пользователю нужен ваучер, который "
+"Чтобы купить этот продукт, пользователю нужен промокод, который "
 "распространяется на этот продукт либо напрямую, либо через квоту."
 
 #: pretix/base/models/items.py:454
@@ -3011,8 +3009,8 @@ msgid ""
 "This product will only be shown if a voucher matching the product is "
 "redeemed."
 msgstr ""
-"Этот продукт будет показан только в том случае, если ваучер, соответствующий "
-"данному продукту, использован."
+"Этот продукт будет показан только в том случае, если промокод, "
+"соответствующий данному продукту, использован."
 
 #: pretix/base/models/items.py:463
 msgid ""
@@ -3020,7 +3018,7 @@ msgid ""
 "voucher that unlocks this product."
 msgstr ""
 "Этот продукт будет скрыт на странице мероприятия, пока пользователь не "
-"введёт ваучер, который разблокирует этот продукт."
+"введёт промокод, который разблокирует этот продукт."
 
 #: pretix/base/models/items.py:467
 msgid "Only sell this product as part of a bundle"
@@ -3602,7 +3600,7 @@ msgstr "Заказ {val}"
 #: pretix/base/models/log.py:166
 #, python-brace-format
 msgid "Voucher {val}…"
-msgstr "Ваучер {val}…"
+msgstr "Промокод {val}…"
 
 #: pretix/base/models/log.py:176
 #, python-brace-format
@@ -3663,10 +3661,8 @@ msgid "Maximum usages"
 msgstr ""
 
 #: pretix/base/models/memberships.py:57
-#, fuzzy
-#| msgid "Number of times this voucher can be redeemed."
 msgid "Number of times this membership can be used in a purchase."
-msgstr "Количество раз, которое этот ваучер может быть использован."
+msgstr "Количество раз, которое этот промокод может быть использован."
 
 #: pretix/base/models/memberships.py:122
 #: pretix/control/templates/pretixcontrol/items/question.html:26
@@ -3793,13 +3789,10 @@ msgid "The voucher \"{voucher}\" no longer has sufficient budget."
 msgstr ""
 
 #: pretix/base/models/orders.py:851
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "This voucher code has already been used the maximum number of times "
-#| "allowed."
+#, python-brace-format
 msgid "The voucher \"{voucher}\" has been used in the meantime."
 msgstr ""
-"Этот код ваучера уже был использован максимально допустимое количество раз."
+"Этот промокод уже был использован максимально допустимое количество раз."
 
 #: pretix/base/models/orders.py:985 pretix/base/services/orders.py:922
 #: pretix/control/views/event.py:746
@@ -4091,11 +4084,11 @@ msgstr ""
 
 #: pretix/base/models/organizer.py:296
 msgid "Can view vouchers"
-msgstr "Можно просматривать ваучеры"
+msgstr "Можно просматривать промокоды"
 
 #: pretix/base/models/organizer.py:300
 msgid "Can change vouchers"
-msgstr "Можно изменять ваучеры"
+msgstr "Можно изменять промокоды"
 
 #: pretix/base/models/organizer.py:304
 #, python-format
@@ -4232,7 +4225,7 @@ msgstr "Снизить цену продукта на (%)"
 
 #: pretix/base/models/vouchers.py:146
 msgid "Number of times this voucher can be redeemed."
-msgstr "Количество раз, которое этот ваучер может быть использован."
+msgstr "Количество раз, которое этот промокод может быть использован."
 
 #: pretix/base/models/vouchers.py:150 pretix/control/views/vouchers.py:110
 msgid "Redeemed"
@@ -4269,9 +4262,9 @@ msgid ""
 "quotas, such that it is guaranteed that anyone with this voucher code does "
 "receive a ticket."
 msgstr ""
-"Если данный параметр активирован, этот ваучер будет вычтен из "
+"Если данный параметр активирован, этот промокод будет вычтен из "
 "соответствующих квот продукта, так что гарантируется, что любой, у кого есть "
-"этот код ваучера, получит билет."
+"этот промокод, получит билет."
 
 #: pretix/base/models/vouchers.py:174
 msgid "Allow to bypass quota"
@@ -4282,7 +4275,7 @@ msgid ""
 "If activated, a holder of this voucher code can buy tickets, even if there "
 "are none left."
 msgstr ""
-"Если данный параметр активирован, владелец этого кода ваучера может покупать "
+"Если данный параметр активирован, владелец этого промокода может покупать "
 "билеты, даже если их не осталось."
 
 #: pretix/base/models/vouchers.py:180
@@ -4291,7 +4284,7 @@ msgstr "Ценовой режим"
 
 #: pretix/base/models/vouchers.py:186
 msgid "Voucher value"
-msgstr "Стоимость ваучера"
+msgstr "Стоимость промокода"
 
 #: pretix/base/models/vouchers.py:195 pretix/control/forms/vouchers.py:65
 msgid "This product is added to the user's cart if the voucher is redeemed."
@@ -4305,7 +4298,7 @@ msgstr "Используется этот вариант из вышеуказа
 msgid ""
 "If enabled, the voucher is valid for any product affected by this quota."
 msgstr ""
-"Если активирован данный параметр, ваучер действителен для любого продукта, "
+"Если активирован данный параметр, промокод действителен для любого продукта, "
 "на который распространяется данная квота."
 
 #: pretix/base/models/vouchers.py:221
@@ -23027,7 +23020,7 @@ msgstr "БЕСПЛАТНО"
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:150
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:268
 msgid "Enter a voucher code below to buy this ticket."
-msgstr "Введите код ваучера ниже, чтобы купить этот билет."
+msgstr "Введите промокод  ниже, чтобы купить этот билет."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_quota_left.html:4
 #, python-format
