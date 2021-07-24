@@ -81,6 +81,16 @@ a.btn, button.btn {
   border-top: 1px solid #ddd;
 }
 
+.nav-tabs {
+  border-bottom: 0px solid #ddd;
+}
+
+.tab-content {
+  border: 1px solid #ddd;
+  border-radius: 0px 5px 5px 5px;
+  padding: 5px 5px 0px 5px;
+}
+
 .splitdatetimerow {
   display: flex;
   flex-direction: row;
