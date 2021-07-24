@@ -1,5 +1,7 @@
 {% load i18n %}
+{% load humanize %}
 {% load urlreplace %}
+{% if is_paginated or page_obj.paginator.count > 1 %}
 <nav class="text-center pagination-container">
     <ul class="pagination">
         {% if is_paginated %}
@@ -11,7 +13,7 @@
                 </li>
             {% endif %}
             <li class="page-current"><a>
-                {% blocktrans trimmed with page=page_obj.number of=page_obj.paginator.num_pages count=page_obj.paginator.count %}
+                {% blocktrans trimmed with page=page_obj.number of=page_obj.paginator.num_pages count=page_obj.paginator.count|intcomma %}
                     Page {{ page }} of {{ of }} ({{ count }} elements)
                 {% endblocktrans %}
             </a></li>
@@ -25,7 +27,7 @@
         {% else %}
         {% if page_obj.paginator.count > 1 %}
                 <li class="page-current"><a>
-                    {% blocktrans trimmed with count=page_obj.paginator.count %}
+                    {% blocktrans trimmed with count=page_obj.paginator.count|intcomma %}
                         {{ count }} elements
                     {% endblocktrans %}
                 </a></li>
@@ -46,3 +48,4 @@
         </div>
     {% endif %}
 </nav>
+{% endif %}
