@@ -7,8 +7,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-09 09:37+0000\n"
-"PO-Revision-Date: 2021-05-31 11:26+0000\n"
-"Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
+"PO-Revision-Date: 2021-07-26 04:00+0000\n"
+"Last-Translator: Björn Out <out.bjorn@gmail.com>\n"
 "Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix-js/"
 "nl/>\n"
 "Language: nl\n"
@@ -162,16 +162,12 @@ msgid "Information required"
 msgstr "Informatie nodig"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:56
-#, fuzzy
-#| msgid "Unknown error."
 msgid "Unknown ticket"
-msgstr "Onbekende fout."
+msgstr "Onbekende ticket"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:57
-#, fuzzy
-#| msgid "Entry not allowed"
 msgid "Ticket type not allowed here"
-msgstr "Binnenkomst niet toegestaan"
+msgstr "Tickettype hier niet toegestaan"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:59
 msgid "Entry not allowed"
