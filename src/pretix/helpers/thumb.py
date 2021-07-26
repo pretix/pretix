@@ -149,7 +149,8 @@ def resize_image(image, size):
 
     if min_width > new_size[0] or min_height > new_size[1]:
         padding = math.ceil(max(min_width - new_size[0], min_height - new_size[1]) / 2)
-        image = image.convert('RGB')
+        if image.mode not in ("RGB", "RGBA"):
+            image = image.convert('RGB')
         image = ImageOps.expand(image, border=padding, fill="white")
 
         new_width = max(min_width, new_size[0])
