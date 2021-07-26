@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-09 09:36+0000\n"
-"PO-Revision-Date: 2021-07-24 14:00+0000\n"
-"Last-Translator: Svyatoslav <slava@digitalarthouse.eu>\n"
+"PO-Revision-Date: 2021-07-26 13:53+0000\n"
+"Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: Russian <https://translate.pretix.eu/projects/pretix/pretix/"
 "ru/>\n"
 "Language: ru\n"
@@ -3789,10 +3789,11 @@ msgid "The voucher \"{voucher}\" no longer has sufficient budget."
 msgstr ""
 
 #: pretix/base/models/orders.py:851
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "The voucher \"{voucher}\" has been used in the meantime."
 msgstr ""
-"Этот промокод уже был использован максимально допустимое количество раз."
+"Этот промокод \"{voucher}\" уже был использован максимально допустимое "
+"количество раз."
 
 #: pretix/base/models/orders.py:985 pretix/base/services/orders.py:922
 #: pretix/control/views/event.py:746
