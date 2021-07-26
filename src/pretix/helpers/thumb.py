@@ -54,18 +54,18 @@ I.e. an image of 300x200 will be resized to 150x100 and then cropped from center
 An image of 40x80 will stay 40x80.
 
 
-## min-size resize with _
+## exact-size resize with _
 
-min-size-operator "_" works for width and height independently, so the following is possible:
+exact-size-operator "_" works for width and height independently, so the following is possible:
 
-image|thumb:"100_x100" resizes the image to a maximum height of 100px (if it is lower, it does not upscale) and makes it at least 100px wide
+image|thumb:"100_x100" resizes the image to a maximum height of 100px (if it is lower, it does not upscale) and makes it exactly 100px wide
 (if the resized image would be less than 100px wide it adds a white background to both sides to make it at least 100px wide).
 I.e. an image of 300x200 will be resized to 150x100.
 An image of 40x80 will stay 40x80 but padded with a white background to be 100x80.
 
 image|thumb:"100x100_" resizes the image to a maximum width of 100px (if it is lower, it does not upscale) and makes it at least 100px high
 (if the resized image would be less than 100px high it adds a white background to top and bottom to make it at least 100px high).
-I.e. an image of 400x200 will be resized to 100x50 and then padded from cener to be 100x100.
+I.e. an image of 400x200 will be resized to 100x50 and then padded from center to be 100x100.
 An image of 40x80 will stay 40x80 but padded with a white background to be 40x100.
 
 image|thumb:"100_x100_" resizes the image proportionally to either a width or height of 100px – it takes the smaller side and resizes that to 100px,
@@ -103,9 +103,7 @@ def get_sizes(size, imgsize):
     if crop and "_" in size:
         raise ThumbnailError('Size %s has errors: crop and minsize cannot be combined.' % size)
 
-    min_width, min_height = get_minsize(size)
-    if min_width or min_height:
-        size = size.replace("_", "")
+    size = size.replace("_", "")
 
     if 'x' in size:
         size = [int(p) for p in size.split('x')]
@@ -129,13 +127,6 @@ def get_sizes(size, imgsize):
     else:
         wfactor = min(1, size[0] / imgsize[0])
         hfactor = min(1, size[1] / imgsize[1])
-        if min_width and min_height:
-            wfactor = max(wfactor, hfactor)
-            hfactor = wfactor
-        elif min_width:
-            wfactor = hfactor
-        elif min_height:
-            hfactor = wfactor
 
         if wfactor == hfactor:
             return (int(imgsize[0] * hfactor), int(imgsize[1] * wfactor)), None

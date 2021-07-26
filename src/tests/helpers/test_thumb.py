@@ -37,18 +37,6 @@ def test_no_resize():
     assert width == 40
     assert height == 20
 
-    img = Image.new('RGB', (40, 20))
-    img = resize_image(img, "10_x20")
-    width, height = img.size
-    assert width == 40
-    assert height == 20
-
-    img = Image.new('RGB', (40, 20))
-    img = resize_image(img, "40x10_")
-    width, height = img.size
-    assert width == 40
-    assert height == 20
-
 
 def test_resize():
     img = Image.new('RGB', (40, 20))
@@ -78,12 +66,18 @@ def test_crop():
     assert height == 10
 
 
-def test_minsize():
+def test_exactsize():
+    img = Image.new('RGB', (6912, 3456))
+    img = resize_image(img, "600_x5000")
+    width, height = img.size
+    assert width == 600
+    assert height == 300
+
     img = Image.new('RGB', (60, 20))
     img = resize_image(img, "10_x10")
     width, height = img.size
-    assert width == 30
-    assert height == 10
+    assert width == 10
+    assert height == 3
 
     img = Image.new('RGB', (10, 20))
     img = resize_image(img, "10_x10")
@@ -100,14 +94,14 @@ def test_minsize():
     img = Image.new('RGB', (20, 60))
     img = resize_image(img, "10x10_")
     width, height = img.size
-    assert width == 10
-    assert height == 30
+    assert width == 3
+    assert height == 10
 
     img = Image.new('RGB', (20, 60))
     img = resize_image(img, "10_x10_")
     width, height = img.size
     assert width == 10
-    assert height == 30
+    assert height == 10
 
     img = Image.new('RGB', (20, 60))
     img = resize_image(img, "100_x100_")
