@@ -80,7 +80,7 @@ def clean(d):
 
 @pytest.mark.django_db
 def test_csv_simple(event):
-    c = CSVCheckinList(event)
+    c = CSVCheckinList(event, organizer=event.organizer)
     _, _, content = c.render({
         'list': event.checkin_lists.first().pk,
         'secrets': True,
@@ -101,7 +101,7 @@ def test_csv_simple(event):
 
 @pytest.mark.django_db
 def test_csv_order_by_name_parts(event):  # noqa
-    c = CSVCheckinList(event)
+    c = CSVCheckinList(event, organizer=event.organizer)
     _, _, content = c.render({
         'list': event.checkin_lists.first().pk,
         'secrets': True,
@@ -118,7 +118,7 @@ def test_csv_order_by_name_parts(event):  # noqa
 "FOO","Mr Peter A Jones","Mr","Peter","A","Jones","Ticket","23.00","","","No","hutjztuxhkbtwnesv2suqv26k6ttytxx",
 "dummy@dummy.test","'+498912345678","","","2019-02-22","14:00:00","No","","","","","","","","","","",""
 """)
-    c = CSVCheckinList(event)
+    c = CSVCheckinList(event, organizer=event.organizer)
     _, _, content = c.render({
         'list': event.checkin_lists.first().pk,
         'secrets': True,
@@ -169,7 +169,7 @@ def test_csv_order_by_inherited_name_parts(event):  # noqa
             name_parts={"title": "Mr", "given_name": "Paul", "middle_name": "A", "family_name": "Jones", "_scheme": "title_given_middle_family"}
         )
 
-    c = CSVCheckinList(event)
+    c = CSVCheckinList(event, organizer=event.organizer)
     _, _, content = c.render({
         'list': event.checkin_lists.first().pk,
         'secrets': True,
@@ -186,7 +186,7 @@ def test_csv_order_by_inherited_name_parts(event):  # noqa
 "FOO","Mr Paul A Jones","Mr","Paul","A","Jones","Ticket","23.00","","","No","hutjztuxhkbtwnesv2suqv26k6ttytxx",
 "dummy@dummy.test","'+498912345678","FOOCORP","","2019-02-22","14:00:00","No","","","","","","","","","","",""
 """)
-    c = CSVCheckinList(event)
+    c = CSVCheckinList(event, organizer=event.organizer)
     _, _, content = c.render({
         'list': event.checkin_lists.first().pk,
         'secrets': True,
@@ -203,7 +203,7 @@ def test_csv_order_by_inherited_name_parts(event):  # noqa
 "FOO","Mr Paul A Jones","Mr","Paul","A","Jones","Ticket","23.00","","","No","hutjztuxhkbtwnesv2suqv26k6ttytxx",
 "dummy@dummy.test","'+498912345678","FOOCORP","","2019-02-22","14:00:00","No","","","","","","","","","","",""
 """)
-    c = CSVCheckinList(event)
+    c = CSVCheckinList(event, organizer=event.organizer)
     _, _, content = c.render({
         'list': event.checkin_lists.first().pk,
         'secrets': True,

@@ -79,7 +79,7 @@ def env():
 def test_generate_pdf(env):
     event, order, shirt = env
     event.badge_layouts.create(name="Default", default=True)
-    e = BadgeExporter(event)
+    e = BadgeExporter(event, organizer=event.organizer)
     with pytest.raises(OrderError):
         e.render({
             'items': [shirt.pk],
@@ -108,7 +108,7 @@ def test_generate_pdf(env):
 def test_generate_pdf_multi(env):
     event, order, shirt = env
     event.badge_layouts.create(name="Default", default=True)
-    e = BadgeExporter(event)
+    e = BadgeExporter(event, organizer=event.organizer)
     fname, ftype, buf = e.render({
         'items': [shirt.pk],
         'rendering': 'a4_a6l',
