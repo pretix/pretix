@@ -233,7 +233,7 @@ The following snippet is an example on how to configure a nginx proxy for pretix
         ssl_certificate_key /path/to/key.pem;
 
         location / {
-            proxy_pass http://localhost:8345/;
+            proxy_pass http://localhost:8345;
             proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
             proxy_set_header X-Forwarded-Proto https;
             proxy_set_header Host $http_host;
