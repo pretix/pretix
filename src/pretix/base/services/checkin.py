@@ -39,7 +39,7 @@ import dateutil
 import dateutil.parser
 import pytz
 from django.core.files import File
-from django.db import transaction
+from django.db import IntegrityError, transaction
 from django.db.models import (
     BooleanField, Count, ExpressionWrapper, F, IntegerField, OuterRef, Q,
     Subquery, Value,
@@ -512,6 +512,21 @@ class RequiredQuestionsError(Exception):
 
 
 def _save_answers(op, answers, given_answers):
+    def _create_answer(question, answer):
+        try:
+            return op.answers.create(question=question, answer=answer)
+        except IntegrityError:
+            # Since we prefill ``field.answer`` at form creation time, there's a possible race condition
+            # here if the user submits their scan a second time while the first one is still running,
+            # thus leading to duplicate QuestionAnswer objects. Since Django doesn't support UPSERT, the "proper"
+            # fix would be a transaction with select_for_update(), or at least fetching using get_or_create here
+            # again. However, both of these approaches have a significant performance overhead for *all* requests,
+            # while the issue happens very very rarely. So we opt for just catching the error and retrying properly.
+            qa = op.answers.get(question=question)
+            qa.answer = answer
+            qa.save(update_fields=['answer'])
+            qa.options.clear()
+
     written = False
     for q, a in given_answers.items():
         if not a:
@@ -528,7 +543,7 @@ def _save_answers(op, answers, given_answers):
                 written = True
                 qa.options.clear()
             else:
-                qa = op.answers.create(question=q, answer=str(a.answer))
+                qa = _create_answer(question=q, answer=str(a.answer))
             qa.options.add(a)
         elif isinstance(a, list):
             if q in answers:
@@ -538,13 +553,13 @@ def _save_answers(op, answers, given_answers):
                 written = True
                 qa.options.clear()
             else:
-                qa = op.answers.create(question=q, answer=", ".join([str(o) for o in a]))
+                qa = _create_answer(question=q, answer=", ".join([str(o) for o in a]))
             qa.options.add(*a)
         elif isinstance(a, File):
             if q in answers:
                 qa = answers[q]
             else:
-                qa = op.answers.create(question=q, answer=str(a))
+                qa = _create_answer(question=q, answer=str(a))
             qa.file.save(os.path.basename(a.name), a, save=False)
             qa.answer = 'file://' + qa.file.name
             qa.save()
@@ -555,7 +570,7 @@ def _save_answers(op, answers, given_answers):
                 qa.answer = str(a)
                 qa.save()
             else:
-                op.answers.create(question=q, answer=str(a))
+                _create_answer(question=q, answer=str(a))
             written = True
 
     if written:
