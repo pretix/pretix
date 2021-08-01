@@ -931,7 +931,6 @@ def test_question_choice_identifier(token_client, organizer, clist, event, order
     resp = token_client.post('/api/v1/organizers/{}/events/{}/checkinlists/{}/positions/{}/redeem/'.format(
         organizer.slug, event.slug, clist.pk, p.pk
     ), {'answers': {question[0].pk: str(question[1].identifier)}}, format='json')
-    print(resp.data)
     assert resp.status_code == 201
     assert resp.data['status'] == 'ok'
     with scopes_disabled():
