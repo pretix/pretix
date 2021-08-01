@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-09 09:36+0000\n"
-"PO-Revision-Date: 2021-08-01 10:19+0000\n"
+"PO-Revision-Date: 2021-08-01 15:39+0000\n"
 "Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
 "Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
 "\n"
@@ -3661,6 +3661,8 @@ msgstr "Tekst in dit veld is niet zichtbaar voor de gebruiker."
 #: pretix/base/models/orders.py:222
 msgid "We'll show you this order to be due for a follow-up on this day."
 msgstr ""
+"We zullen weergeven dat de bestelling een opvolgactie moet krijgen op deze "
+"dag."
 
 #: pretix/base/models/orders.py:228
 msgid ""
@@ -20273,7 +20275,7 @@ msgid ""
 "password."
 msgstr ""
 "We hebben de klant een e-mail gestuurd met verdere instructies voor het "
-"opnieuw instellen van uw wachtwoord."
+"opnieuw instellen van het wachtwoord."
 
 #: pretix/control/views/organizer.py:2012
 msgid "The customer account has been anonymized."
@@ -22055,7 +22057,7 @@ msgstr "Stuur naar ingecheckte klanten op lijst"
 
 #: pretix/plugins/sendmail/forms.py:283
 msgid "Type of schedule time"
-msgstr ""
+msgstr "Type tijdsaangave"
 
 #: pretix/plugins/sendmail/forms.py:286
 msgid "Absolute"
@@ -22082,10 +22084,8 @@ msgid "Please specify the send date"
 msgstr "Kies een verzenddatum alstublieft"
 
 #: pretix/plugins/sendmail/forms.py:308
-#, fuzzy
-#| msgid "Please enter the same password twice"
 msgid "Please specify the offset days and time"
-msgstr "Voer twee keer hetzelfde wachtwoord in"
+msgstr "Voer zowel het aantal dagen als de gewenste tijd in"
 
 #: pretix/plugins/sendmail/forms.py:319
 msgid "Please specify a product"
@@ -22263,11 +22263,9 @@ msgid "Scheduled time"
 msgstr "Geplande tijd"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:28
-#, fuzzy
-#| msgid "Event start date"
 msgctxt "subevent"
 msgid "Sent / Total dates"
-msgstr "Startdatum van het evenement"
+msgstr "Verstuurd / Alle subevenementen"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:47
 msgid "Next execution:"
