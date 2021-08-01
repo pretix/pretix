@@ -8,7 +8,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-09 09:36+0000\n"
 "PO-Revision-Date: 2021-08-01 10:19+0000\n"
-"Last-Translator: Björn Out <out.bjorn@gmail.com>\n"
+"Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
 "Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
 "\n"
 "Language: nl\n"
@@ -14330,6 +14330,9 @@ msgid ""
 "The waiting list currently is not compatible with some advanced features of "
 "pretix such as seating plans, add-on products or product bundles."
 msgstr ""
+"De wachtlijst is op dit moment niet te gebruiken met sommige geavanceerde "
+"functies van pretix zoals zitplaatsplattegronden, add-onproducten en "
+"productbundels."
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:270
 msgid "Item metadata"
@@ -16793,11 +16796,10 @@ msgstr "Bestelling betaald / totaal"
 #: pretix/control/templates/pretixcontrol/orders/index.html:140
 #: pretix/control/templates/pretixcontrol/search/orders.html:73
 #: pretix/control/templates/pretixcontrol/search/orders.html:75
-#, fuzzy, python-format
-#| msgid "Exit: %(date)s"
+#, python-format
 msgctxt "followup"
 msgid "TODO %(date)s"
-msgstr "Vertrek: %(date)s"
+msgstr "TODO %(date)s"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:156
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:206
