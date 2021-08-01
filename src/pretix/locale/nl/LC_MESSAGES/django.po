@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-09 09:36+0000\n"
-"PO-Revision-Date: 2021-07-26 04:00+0000\n"
+"PO-Revision-Date: 2021-08-01 10:19+0000\n"
 "Last-Translator: Björn Out <out.bjorn@gmail.com>\n"
 "Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
 "\n"
@@ -20266,16 +20266,12 @@ msgid "Set a new password for your account at {organizer}"
 msgstr "Stel een nieuw wachtwoord in voor uw klantenaccount bij {organizer}"
 
 #: pretix/control/views/organizer.py:1788
-#, fuzzy
-#| msgid ""
-#| "We've sent you an email with further instructions on resetting your "
-#| "password."
 msgid ""
 "We've sent the customer an email with further instructions on resetting your "
 "password."
 msgstr ""
-"We hebben u een e-mail gestuurd met verdere instructies voor het opnieuw "
-"instellen van uw wachtwoord."
+"We hebben de klant een e-mail gestuurd met verdere instructies voor het "
+"opnieuw instellen van uw wachtwoord."
 
 #: pretix/control/views/organizer.py:2012
 msgid "The customer account has been anonymized."
