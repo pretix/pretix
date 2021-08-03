@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-09 09:36+0000\n"
-"PO-Revision-Date: 2021-01-29 11:23+0000\n"
+"PO-Revision-Date: 2021-08-03 20:00+0000\n"
 "Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
 "Language-Team: Dutch (informal) <https://translate.pretix.eu/projects/pretix/"
 "pretix/nl_Informal/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 3.10.3\n"
+"X-Generator: Weblate 4.6\n"
 
 #: pretix/api/auth/devicesecurity.py:28
 msgid ""
@@ -124,10 +124,10 @@ msgid "Meta data property '{name}' does not exist."
 msgstr "Metadataeigenschap '{name}' bestaat niet."
 
 #: pretix/api/serializers/event.py:223 pretix/api/serializers/event.py:516
-#, fuzzy, python-brace-format
-#| msgid "Meta data property '{name}' does not exist."
+#, python-brace-format
 msgid "Meta data property '{name}' does not allow value '{value}'."
-msgstr "Metadataeigenschap '{name}' bestaat niet."
+msgstr ""
+"De waarde '{value}' is niet toegestaan voor de metadataeigenschap '{name}'."
 
 #: pretix/api/serializers/event.py:266
 #, python-brace-format
@@ -365,22 +365,18 @@ msgid "Online shop"
 msgstr "Online winkel"
 
 #: pretix/base/context.py:45
-#, fuzzy, python-brace-format
-#| msgid "powered by <a %(a_attr)s>pretix</a>"
+#, python-brace-format
 msgid "powered by {name} based on <a {a_attr}>pretix</a>"
-msgstr "mogelijk gemaakt door <a %(a_attr)s>pretix</a>"
+msgstr "mogelijk gemaakt door {name}, gebaseerd op <a {a_attr}>pretix</a>"
 
 #: pretix/base/context.py:52
-#, fuzzy, python-format
-#| msgid "<a %(a_attr)s>event ticketing powered by pretix</a>"
+#, python-format
 msgid "<a %(a_attr)s>ticketing powered by pretix</a>"
 msgstr "<a %(a_attr)s>kaartverkoop mogelijk gemaakt door pretix</a>"
 
 #: pretix/base/context.py:61
-#, fuzzy
-#| msgid "Voucher code"
 msgid "source code"
-msgstr "Vouchercode"
+msgstr "broncode"
 
 #: pretix/base/email.py:186 pretix/control/views/main.py:302
 #: pretix/plugins/badges/apps.py:45 pretix/plugins/badges/models.py:48
@@ -424,7 +420,7 @@ msgstr "Maak het geld over naar deze bankrekening: NL13 TEST 0123 4567 89"
 
 #: pretix/base/email.py:577
 msgid "Mr Doe"
-msgstr ""
+msgstr "Meneer Janssen"
 
 #: pretix/base/exporter.py:159 pretix/base/exporter.py:285
 msgid "Export format"
@@ -997,22 +993,16 @@ msgid "Show multiple choice answers grouped in one column"
 msgstr "Toon antwoorden voor meerkeuzevragen gegroepeerd in één kolom"
 
 #: pretix/base/exporters/orderlist.py:110
-#, fuzzy
-#| msgid "Only include tickets for dates on or after this date."
 msgid "Only include orders created on or after this date."
-msgstr "Alleen kaartjes voor subevenementen op of na deze datum."
+msgstr "Alleen bestellingen aangemaakt op of na deze datum."
 
 #: pretix/base/exporters/orderlist.py:117
-#, fuzzy
-#| msgid "Only include tickets for dates on or after this date."
 msgid "Only include orders created on or before this date."
-msgstr "Alleen kaartjes voor subevenementen op of na deze datum."
+msgstr "Alleen bestellingen gemaakt op of voor deze datum."
 
 #: pretix/base/exporters/orderlist.py:121
-#, fuzzy
-#| msgid "Start date"
 msgid "Start event date"
-msgstr "Begindatum"
+msgstr "Eerste evenementsdatum"
 
 #: pretix/base/exporters/orderlist.py:124
 #: pretix/base/exporters/orderlist.py:132
@@ -1020,12 +1010,13 @@ msgid ""
 "Only include orders including at least one ticket for a date on or after "
 "this date. Will also include other dates in case of mixed orders!"
 msgstr ""
+"Laat alleen bestellingen zien die ten minste één kaartje bevatten voor een "
+"subevenement op of na deze datum. Als zo'n bestelling kaartjes bevat voor "
+"andere datums zullen deze ook worden getoond!"
 
 #: pretix/base/exporters/orderlist.py:129
-#, fuzzy
-#| msgid "Event date"
 msgid "End event date"
-msgstr "Evenementdatum"
+msgstr "Laatste evenementsdatum"
 
 #: pretix/base/exporters/orderlist.py:268
 #: pretix/base/exporters/orderlist.py:435
@@ -1203,7 +1194,7 @@ msgstr "Opmerking"
 #| msgctxt "subevent"
 #| msgid "All dates"
 msgid "Follow-up date"
-msgstr "Alle data"
+msgstr "Datum voor opvolging"
 
 #: pretix/base/exporters/orderlist.py:292
 #: pretix/control/templates/pretixcontrol/orders/index.html:119
@@ -1543,10 +1534,8 @@ msgid "Gift cards"
 msgstr "Cadeaubonnen"
 
 #: pretix/base/exporters/orderlist.py:927
-#, fuzzy
-#| msgid "Show variants"
 msgid "Show value at"
-msgstr "Toon varianten"
+msgstr "Toon waarde op"
 
 #: pretix/base/exporters/orderlist.py:931
 #: pretix/base/exporters/orderlist.py:934 pretix/base/models/memberships.py:118
@@ -1633,22 +1622,16 @@ msgid "Current value"
 msgstr "Huidige waarde"
 
 #: pretix/base/exporters/orderlist.py:990
-#, fuzzy
-#| msgid "Free order"
 msgid "Created in order"
-msgstr "Gratis bestelling"
+msgstr "Aangemaakt in bestelling"
 
 #: pretix/base/exporters/orderlist.py:991
-#, fuzzy
-#| msgid "Invoice number prefix"
 msgid "Last invoice number of order"
-msgstr "Factuurnummer-prefix"
+msgstr "Laatste factuurnummer van bestelling"
 
 #: pretix/base/exporters/orderlist.py:992
-#, fuzzy
-#| msgid "Show expiration date of order"
 msgid "Last invoice date of order"
-msgstr "Toon verloopdatum van bestelling"
+msgstr "Laatste factuurdatum van bestelling"
 
 #: pretix/base/exporters/waitinglist.py:47
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:87
@@ -1769,38 +1752,42 @@ msgid "Please enter a shorter name."
 msgstr "Vul alsjeblieft een kortere naam in."
 
 #: pretix/base/forms/questions.py:264
-#, fuzzy
-#| msgid "Internal reference"
 msgctxt "phonenumber"
 msgid "International area code"
-msgstr "Interne referentie"
+msgstr "Landnummer"
 
 #: pretix/base/forms/questions.py:288
 msgctxt "phonenumber"
 msgid "Phone number (without international area code)"
-msgstr ""
+msgstr "Telefoonnummer (zonder landnummer)"
 
 #: pretix/base/forms/questions.py:408
 msgid ""
 "You uploaded an image in landscape orientation. Please upload an image in "
 "portrait orientation."
 msgstr ""
+"Je hebt een afbeelding in een liggend formaat geüpload. Upload een "
+"afbeelding met een staand formaat."
 
 #: pretix/base/forms/questions.py:411
 msgid "Please upload an image where the width is 3/4 of the height."
-msgstr ""
+msgstr "Upload een afbeelding waarbij de breedte 3/4 van de hoogte bedraagt."
 
 #: pretix/base/forms/questions.py:414
 msgid ""
 "The file you uploaded has a very large number of pixels, please upload an "
 "image no larger than 10000 x 10000 pixels."
 msgstr ""
+"Het bestand dat je uploadde heeft een te hoge resolutie. De maximale "
+"toegestane resolutie is 10000 x 10000 pixels."
 
 #: pretix/base/forms/questions.py:417
 msgid ""
 "Upload a valid image. The file you uploaded was either not an image or a "
 "corrupted image."
 msgstr ""
+"Upload een geldige afbeelding. Het bestand dat je uploadde was geen "
+"afbeelding of was een corrupte afbeelding."
 
 #: pretix/base/forms/questions.py:574 pretix/base/forms/questions.py:886
 msgid "Street and Number"
@@ -1950,7 +1937,7 @@ msgstr "Particuliere klant"
 #, fuzzy
 #| msgid "Business customer"
 msgid "Business or institutional customer"
-msgstr "Zakelijke klant"
+msgstr "Zakelijke of institutionele klant"
 
 #: pretix/base/invoice.py:79
 #, python-format
@@ -2322,76 +2309,54 @@ msgid "Exit"
 msgstr "Vertrek"
 
 #: pretix/base/models/checkin.py:262
-#, fuzzy
-#| msgid "Unknown invoice."
 msgid "Unknown ticket"
-msgstr "Onbekende factuur."
+msgstr "Onbekend kaartje"
 
 #: pretix/base/models/checkin.py:263
-#, fuzzy
-#| msgid "Ticket download"
 msgid "Ticket not paid"
-msgstr "Downloaden van kaartjes"
+msgstr "Kaartje niet betaald"
 
 #: pretix/base/models/checkin.py:264
 msgid "Forbidden by custom rule"
-msgstr ""
+msgstr "Verboden door regel"
 
 #: pretix/base/models/checkin.py:265
-#, fuzzy
-#| msgid "Ticket layout changed."
 msgid "Ticket code revoked/changed"
-msgstr "Kaartjeslay-out veranderd."
+msgstr "Kaartjescode ingetrokken/veranderd"
 
 #: pretix/base/models/checkin.py:266
-#, fuzzy
-#| msgid "Action required"
 msgid "Information required"
-msgstr "Handeling vereist"
+msgstr "Informatie nodig"
 
 #: pretix/base/models/checkin.py:267
-#, fuzzy
-#| msgid "Ticket layouts"
 msgid "Ticket already used"
-msgstr "Kaartjeslay-outs"
+msgstr "Kaartje al gebruikt"
 
 #: pretix/base/models/checkin.py:268
-#, fuzzy
-#| msgid "Filetype not allowed!"
 msgid "Ticket type not allowed here"
-msgstr "Bestandstype niet toegestaan!"
+msgstr "Kaartjestype hier niet toegestaan"
 
 #: pretix/base/models/checkin.py:269
-#, fuzzy
-#| msgid "Internal Server Error"
 msgid "Server error"
-msgstr "Interne serverfout"
+msgstr "Serverfout"
 
 #: pretix/base/models/customers.py:48
-#, fuzzy
-#| msgid "This account is inactive."
 msgid "Account active"
-msgstr "Dit account is uitgeschakeld."
+msgstr "Account actief"
 
 #: pretix/base/models/customers.py:49
-#, fuzzy
-#| msgid "Attendee e-mail address"
 msgid "Verified email address"
-msgstr "E-mailadres van gast"
+msgstr "Geverifieerd e-mailadres"
 
 #: pretix/base/models/customers.py:50
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:55
-#, fuzzy
-#| msgid "Login"
 msgid "Last login"
-msgstr "Inloggen"
+msgstr "Laatste log-in"
 
 #: pretix/base/models/customers.py:51
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:53
-#, fuzzy
-#| msgid "Registration details"
 msgid "Registration date"
-msgstr "Aanmeldingsdetails"
+msgstr "Registratiedatum"
 
 #: pretix/base/models/devices.py:71 pretix/base/models/items.py:1171
 msgid "Internal identifier"
@@ -2601,7 +2566,7 @@ msgstr "Je moet ten minste één quotum instellen om iets te verkopen."
 #: pretix/base/models/event.py:1054
 #, python-brace-format
 msgid "You need to fill the meta parameter \"{property}\"."
-msgstr ""
+msgstr "Je moet de meta-eigenschap \"{property}\" invullen."
 
 #: pretix/base/models/event.py:1159
 msgid ""
@@ -2679,50 +2644,49 @@ msgstr ""
 "onderstrepingstekens bevatten."
 
 #: pretix/base/models/event.py:1454
-#, fuzzy
-#| msgid "Default language"
 msgid "Default value"
-msgstr "Standaardtaal"
+msgstr "Standaardwaarde"
 
 #: pretix/base/models/event.py:1456
-#, fuzzy
-#| msgid "Can change organizer settings"
 msgid "Can only be changed by organizer-level administrators"
-msgstr "Kan organisatorinstellingen wijzigen"
+msgstr "Kan alleen worden gewijzigd door beheerders van deze organisator"
 
 #: pretix/base/models/event.py:1458
-#, fuzzy
-#| msgid "Search for events"
 msgid "Required for events"
-msgstr "Zoek naar evenementen"
+msgstr "Verplicht voor evenementen"
 
 #: pretix/base/models/event.py:1459
 msgid ""
 "If checked, an event can only be taken live if the property is set. In event "
 "series, its always optional to set a value for individual dates"
 msgstr ""
+"Als deze optie is ingeschakeld kan een evenement alleen live worden gezet "
+"als deze eigenschap een waarde heeft. In evenementenreeksen is het altijd "
+"optioneel om een waarde voor individuele datums in te stellen"
 
 #: pretix/base/models/event.py:1464
-#, fuzzy
-#| msgid "Total value"
 msgid "Valid values"
-msgstr "Totaalwaarde"
+msgstr "Toegestane waarden"
 
 #: pretix/base/models/event.py:1465
 msgid ""
 "If you keep this empty, any value is allowed. Otherwise, enter one possible "
 "value per line."
 msgstr ""
+"Voer hier een toegestane waarde per regel in. Als je dit veld leeg laat "
+"wordt iedere waarde toegestaan."
 
 #: pretix/base/models/event.py:1471
 msgid "A property can either be required or have a default value, not both."
 msgstr ""
+"Een eigenschap kan niet verplicht zijn en tegelijkertijd een standaardwaarde "
+"hebben."
 
 #: pretix/base/models/event.py:1473
-#, fuzzy
-#| msgid "You cannot select a quota that belongs to a different event."
 msgid "You cannot set a default value that is not a valid value."
-msgstr "Je kan geen quotum selecteren dat bij een ander evenement hoort."
+msgstr ""
+"Je kan geen standaardwaarde instellen die niet in de lijst met toegestane "
+"waarden staat."
 
 #: pretix/base/models/fields.py:33
 msgid "No value can contain the delimiter character."
@@ -3095,34 +3059,32 @@ msgstr ""
 "waarde die overeenkomt met de productprijs."
 
 #: pretix/base/models/items.py:518 pretix/base/models/items.py:792
-#, fuzzy
-#| msgid "Team memberships"
 msgid "Require a valid membership"
-msgstr "Teamlidmaatschappen"
+msgstr "Vereis een geldig lidmaatschap"
 
 #: pretix/base/models/items.py:523
-#, fuzzy
-#| msgid "Team memberships"
 msgid "Allowed membership types"
-msgstr "Teamlidmaatschappen"
+msgstr "Toegestane lidmaatschapstypen"
 
 #: pretix/base/models/items.py:531
 msgid "This product creates a membership of type"
-msgstr ""
+msgstr "Dit product maakt een lidmaatschap aan van type"
 
 #: pretix/base/models/items.py:534
 msgid ""
 "The duration of the membership is the same as the duration of the event or "
 "event series date"
 msgstr ""
+"De duur van het lidmaatschap is gelijk aan de duur van het evenement of de "
+"datum in de evenementenreeks"
 
 #: pretix/base/models/items.py:538
 msgid "Membership duration in days"
-msgstr ""
+msgstr "Duur van lidmaatschap in dagen"
 
 #: pretix/base/models/items.py:542
 msgid "Membership duration in months"
-msgstr ""
+msgstr "Duur van lidmaatschap in maanden"
 
 #: pretix/base/models/items.py:550 pretix/base/models/items.py:1192
 #: pretix/control/forms/filter.py:375 pretix/control/forms/filter.py:1371
@@ -3173,10 +3135,8 @@ msgstr "Plaats"
 #: pretix/base/models/items.py:797 pretix/control/navigation.py:524
 #: pretix/control/templates/pretixcontrol/organizers/membershiptypes.html:4
 #: pretix/control/templates/pretixcontrol/organizers/membershiptypes.html:6
-#, fuzzy
-#| msgid "Team memberships"
 msgid "Membership types"
-msgstr "Teamlidmaatschappen"
+msgstr "Lidmaatschapstypes"
 
 #: pretix/base/models/items.py:804 pretix/base/models/vouchers.py:203
 #: pretix/base/models/waitinglist.py:95 pretix/base/orderimport.py:284
@@ -3376,10 +3336,8 @@ msgstr "Minimumwaarde"
 #: pretix/base/models/items.py:1220 pretix/base/models/items.py:1223
 #: pretix/base/models/items.py:1226 pretix/base/models/items.py:1229
 #: pretix/base/models/items.py:1232 pretix/base/models/items.py:1235
-#, fuzzy
-#| msgid "Currently not supported in our apps"
 msgid "Currently not supported in our apps and during check-in"
-msgstr "Momenteel niet ondersteund in onze apps"
+msgstr "Momenteel niet ondersteund in onze apps en tijdens inchecken"
 
 #: pretix/base/models/items.py:1222 pretix/base/models/items.py:1228
 #: pretix/base/models/items.py:1234
@@ -3388,13 +3346,16 @@ msgstr "Maximumwaarde"
 
 #: pretix/base/models/items.py:1238
 msgid "Validate file to be a portrait"
-msgstr ""
+msgstr "Controleer dat bestand een afbeelding in portretformaat is"
 
 #: pretix/base/models/items.py:1239
 msgid ""
 "If checked, files must be images with an aspect ratio of 3:4. This is "
 "commonly used for photos printed on badges."
 msgstr ""
+"Als deze optie is ingeschakeld moeten de geüploade bestanden afbeeldingen "
+"met een aspectverhouding van 3:4 zijn. Dit wordt vaak gebruikt voor foto's "
+"die op badges worden afgedrukt."
 
 #: pretix/base/models/items.py:1291
 msgid "An answer to this question is required to proceed."
@@ -3479,7 +3440,7 @@ msgstr "Varianten"
 #: pretix/base/models/items.py:1521
 #: pretix/control/templates/pretixcontrol/items/quotas.html:70
 msgid "Ignore this quota when determining event availability"
-msgstr ""
+msgstr "Negeer dit quotum bij het bepalen of een evenement beschikbaar is"
 
 #: pretix/base/models/items.py:1522
 msgid ""
@@ -3488,6 +3449,11 @@ msgid ""
 "that is added to each event but should not stop the event from being shown "
 "as sold out."
 msgstr ""
+"Als deze optie is ingeschakeld wordt dit quotum genegeerd bij het bepalen of "
+"je evenement als beschikbaar moet worden getoond in de evenementenkalender. "
+"Dit kan bijvoorbeeld nuttig zijn voor quota met handelswaar die aan elk "
+"evenement worden toegevoegd, maar die niet de status van het evenement in de "
+"kalender moeten beïnvloeden."
 
 #: pretix/base/models/items.py:1529
 msgid "Close this quota permanently once it is sold out"
@@ -3602,17 +3568,20 @@ msgstr "Belastingregel {val}"
 
 #: pretix/base/models/memberships.py:44
 msgid "Membership is transferable"
-msgstr ""
+msgstr "Lidmaatschap is overdraagbaar"
 
 #: pretix/base/models/memberships.py:45
 msgid ""
 "If this is selected, the membership can be used to purchase tickets for "
 "multiple persons. If not, the attendee name always needs to stay the same."
 msgstr ""
+"Als deze optie is ingeschakeld kan het lidmaatschap gebruikt worden om "
+"kaartjes voor meerdere personen aan te schaffen. Als deze optie niet is "
+"ingeschakeld moet de naam van de deelnemer altijd gelijk zijn."
 
 #: pretix/base/models/memberships.py:50
 msgid "Parallel usage is allowed"
-msgstr ""
+msgstr "Parallel gebruik is toegestaan"
 
 #: pretix/base/models/memberships.py:51
 msgid ""
@@ -3620,6 +3589,10 @@ msgid ""
 "events happening at the same time. Note that this will only check for an "
 "identical start time of the events, not for any overlap between events."
 msgstr ""
+"Als deze optie is ingeschakeld kan het lidmaatschap worden gebruikt om "
+"kaartjes te kopen voor evenementen die tegelijk plaatsvinden. Merk op dat "
+"deze controle alleen checkt of de starttijd van de evenementen gelijk zijn, "
+"en niet of de evenementen overlappen."
 
 #: pretix/base/models/memberships.py:56 pretix/base/models/vouchers.py:145
 #: pretix/control/views/vouchers.py:110
@@ -3628,10 +3601,8 @@ msgid "Maximum usages"
 msgstr "Maximum aantal keren te gebruiken"
 
 #: pretix/base/models/memberships.py:57
-#, fuzzy
-#| msgid "Number of times this voucher can be redeemed."
 msgid "Number of times this membership can be used in a purchase."
-msgstr "Aantal keren dat deze voucher kan worden ingewisseld."
+msgstr "Aantal keren dat dit lidmaatschap kan worden gebruikt in een aankoop."
 
 #: pretix/base/models/memberships.py:122
 #: pretix/control/templates/pretixcontrol/items/question.html:26
@@ -3648,10 +3619,8 @@ msgstr "Geannuleerd"
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:81
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:20
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:49
-#, fuzzy
-#| msgid "Members"
 msgid "Membership type"
-msgstr "Leden"
+msgstr "Lidmaatschapstype"
 
 #: pretix/base/models/orders.py:158
 msgid "pending"
@@ -3670,9 +3639,6 @@ msgid "canceled"
 msgstr "geannuleerd"
 
 #: pretix/base/models/orders.py:184 pretix/control/forms/orders.py:585
-#, fuzzy
-#| msgctxt "refund_source"
-#| msgid "Customer"
 msgid "Customer"
 msgstr "Klant"
 
@@ -3701,6 +3667,8 @@ msgstr "Tekst in dit veld is niet zichtbaar voor de gebruiker."
 #: pretix/base/models/orders.py:222
 msgid "We'll show you this order to be due for a follow-up on this day."
 msgstr ""
+"We zullen weergeven dat de bestelling een opvolgactie moet krijgen op deze "
+"dag."
 
 #: pretix/base/models/orders.py:228
 msgid ""
@@ -4014,10 +3982,8 @@ msgstr ""
 "dit team toevoegt!"
 
 #: pretix/base/models/organizer.py:266
-#, fuzzy
-#| msgid "Enter custom amount"
 msgid "Can manage customer accounts"
-msgstr "Voer aangepast bedrag in"
+msgstr "Kan klantenaccounts beheren"
 
 #: pretix/base/models/organizer.py:270
 msgid "Can manage gift cards"
@@ -4040,10 +4006,8 @@ msgid "Can change orders"
 msgstr "Kan bestellingen wijzigen"
 
 #: pretix/base/models/organizer.py:290
-#, fuzzy
-#| msgid "Perform update checks"
 msgid "Can perform check-ins"
-msgstr "Voer updatechecks uit"
+msgstr "Kan kaartjes inchecken"
 
 #: pretix/base/models/organizer.py:291
 msgid ""
@@ -4051,6 +4015,9 @@ msgid ""
 "information about attendees. Users with \"can change orders\" can also "
 "perform check-ins."
 msgstr ""
+"Deze optie staat ook toe om te zoeken in de gastenlijst, wat zou kunnen "
+"worden gebruikt om privégegevens van gasten op te zoeken. Gebruikers met "
+"\"kan bestellingen wijzigen\" kunnen ook kaartjes inchecken."
 
 #: pretix/base/models/organizer.py:296
 msgid "Can view vouchers"
@@ -4597,10 +4564,8 @@ msgid "Invalid setting for column \"{header}\"."
 msgstr "Ongeldige instelling voor kolom \"{header}\"."
 
 #: pretix/base/orderimport.py:176
-#, fuzzy
-#| msgid "You entered an invalid number."
 msgid "Enter a valid phone number."
-msgstr "Je voerde een ongeldig getal in."
+msgstr "Voer een geldig telefoonnummer in."
 
 #: pretix/base/orderimport.py:204 pretix/presale/views/waiting.py:123
 msgctxt "subevent"
@@ -4921,12 +4886,7 @@ msgid "Payment process description in order confirmation emails"
 msgstr "Beschrijving van betalingsproces in bevestigingsmails"
 
 #: pretix/base/payment.py:1006
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "This text will be included for the {payment_info} placeholder in order "
-#| "confirmation mails. It should instruct the user on how to proceed with "
-#| "the payment. You can use the placeholders {order}, {total}, {currency} "
-#| "and {total_with_currency}."
+#, python-brace-format
 msgid ""
 "This text will be included for the {payment_info} placeholder in order "
 "confirmation mails. It should instruct the user on how to proceed with the "
@@ -4936,7 +4896,7 @@ msgstr ""
 "Deze tekst zal worden ingevoegd op de plaats van de {payment_info}-"
 "plaatsaanduiding in bevestigingsmails voor een bestelling. De tekst moet de "
 "gebruiker informeren hoe verder te gaan met de betaling. Je kan hier de "
-"plaatsaanduidingen {order}, {total}, {currency} en {total_with_currency} "
+"plaatsaanduidingen {order}, {amount}, {currency} en {amount_with_currency} "
 "gebruiken."
 
 #: pretix/base/payment.py:1013
@@ -4944,12 +4904,7 @@ msgid "Payment process description for pending orders"
 msgstr "Beschrijving van betalingsproces voor openstaande bestellingen"
 
 #: pretix/base/payment.py:1014
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "This text will be shown on the order confirmation page for pending "
-#| "orders. It should instruct the user on how to proceed with the payment. "
-#| "You can use the placeholders {order}, {total}, {currency} and "
-#| "{total_with_currency}."
+#, python-brace-format
 msgid ""
 "This text will be shown on the order confirmation page for pending orders. "
 "It should instruct the user on how to proceed with the payment. You can use "
@@ -4957,8 +4912,8 @@ msgid ""
 msgstr ""
 "Deze tekst zal worden getoond op de bevestigingspagina van openstaande "
 "bestellingen. De tekst moet de gebruiker informeren hoe verder te gaan met "
-"de betaling. Je kan hier de plaatsaanduidingen {order}, {total}, {currency} "
-"en {total_with_currency} gebruiken."
+"de betaling. Je kan hier de plaatsaanduidingen {order}, {amount}, {currency} "
+"en {amount_with_currency} gebruiken."
 
 #: pretix/base/payment.py:1063
 msgid "Offsetting"
@@ -5091,16 +5046,12 @@ msgid "Sample product – sample variation"
 msgstr "Voorbeeldproduct – voorbeeldvariant"
 
 #: pretix/base/pdf.py:126
-#, fuzzy
-#| msgid "Product description"
 msgid "Product variation description"
-msgstr "Productomschrijving"
+msgstr "Productvariantomschrijving"
 
 #: pretix/base/pdf.py:127
-#, fuzzy
-#| msgid "Sample product description"
 msgid "Sample product variation description"
-msgstr "Voorbeeld productomschrijving"
+msgstr "Voorbeeld productvariantomschrijving"
 
 #: pretix/base/pdf.py:134
 msgid "Ticket category"
@@ -5319,10 +5270,8 @@ msgid "Event organizer info text"
 msgstr "Informatietekst van de evenementorganisator"
 
 #: pretix/base/pdf.py:354 pretix/base/pdf.py:355
-#, fuzzy
-#| msgid "Event organizer info text"
 msgid "Event info text"
-msgstr "Informatietekst van de evenementorganisator"
+msgstr "Informatie over het evenement"
 
 #: pretix/base/pdf.py:359
 msgid "Printing date"
@@ -5366,10 +5315,8 @@ msgid "Seat: seat number"
 msgstr "Stoel: stoelnummer"
 
 #: pretix/base/pdf.py:405
-#, fuzzy
-#| msgid "Date and time"
 msgid "Date and time of first scan"
-msgstr "Datum en tijd"
+msgstr "Datum en tijd van eerste scan"
 
 #: pretix/base/pdf.py:446 pretix/base/pdf.py:484
 #, python-brace-format
@@ -5712,58 +5659,48 @@ msgstr "Onbekende reden"
 #: pretix/base/services/checkin.py:207
 #, python-brace-format
 msgid "Only allowed before {datetime}"
-msgstr ""
+msgstr "Alleen toegestaan voor {datetime}"
 
 #: pretix/base/services/checkin.py:209
 #, python-brace-format
 msgid "Only allowed after {datetime}"
-msgstr ""
+msgstr "Alleen toegestaan vanaf {datetime}"
 
 #: pretix/base/services/checkin.py:212
-#, fuzzy
-#| msgid "Filetype not allowed!"
 msgid "Ticket type not allowed"
-msgstr "Bestandstype niet toegestaan!"
+msgstr "Kaartjestype niet toegestaan"
 
 #: pretix/base/services/checkin.py:220
-#, fuzzy
-#| msgid "Number of days"
 msgid "number of days with an entry"
-msgstr "Aantal dagen"
+msgstr "aantal dagen met een binnenkomst"
 
 #: pretix/base/services/checkin.py:221
-#, fuzzy
-#| msgid "Number of tickets"
 msgid "number of entries"
-msgstr "Aantal kaartjes"
+msgstr "aantal binnenkomsten"
 
 #: pretix/base/services/checkin.py:222
-#, fuzzy
-#| msgid "Number of tickets"
 msgid "number of entries today"
-msgstr "Aantal kaartjes"
+msgstr "aantal binnenkomsten vandaag"
 
 #: pretix/base/services/checkin.py:227
 #, python-brace-format
 msgid "{variable} is not {value}"
-msgstr ""
+msgstr "{variable} is niet {value}"
 
 #: pretix/base/services/checkin.py:229
-#, fuzzy, python-brace-format
-#| msgid "Maximum value"
+#, python-brace-format
 msgid "Maximum {variable} exceeded"
-msgstr "Maximumwaarde"
+msgstr "Maximum {variable} bereikt"
 
 #: pretix/base/services/checkin.py:231
-#, fuzzy, python-brace-format
-#| msgid "Minimum value"
+#, python-brace-format
 msgid "Minimum {variable} exceeded"
-msgstr "Minimumwaarde"
+msgstr "Minimum {variable} bereikt"
 
 #: pretix/base/services/checkin.py:233
 #, python-brace-format
 msgid "{variable} is {value}"
-msgstr ""
+msgstr "{variable} is {value}"
 
 #: pretix/base/services/checkin.py:589
 msgid "This order position has been canceled."
@@ -5782,10 +5719,9 @@ msgid "This order is not marked as paid."
 msgstr "Deze bestelling is niet gemarkeerd als betaald."
 
 #: pretix/base/services/checkin.py:634
-#, fuzzy, python-brace-format
-#| msgid "Voluntary lower refund explanation"
+#, python-brace-format
 msgid "Entry not permitted: {explanation}."
-msgstr "Uitleg voor vrijwillig lagere terugbetaling"
+msgstr "Binnenkomst niet toegestaan: {explanation}."
 
 #: pretix/base/services/checkin.py:643
 msgid "You need to answer questions to complete this check-in."
@@ -5854,10 +5790,9 @@ msgid "Sample product A"
 msgstr "Voorbeeldproduct A"
 
 #: pretix/base/services/invoices.py:470
-#, fuzzy, python-brace-format
-#| msgid "Invoice number"
+#, python-brace-format
 msgid "New invoice: {number}"
-msgstr "Factuurnummer"
+msgstr "Nieuwe factuur: {number}"
 
 #: pretix/base/services/invoices.py:472
 #, python-brace-format
@@ -5869,6 +5804,12 @@ msgid ""
 "We are sending this email because you configured us to do so in your event "
 "settings."
 msgstr ""
+"Hallo,\n"
+"\n"
+"Er is een nieuwe factuur voor {event} aangemaakt, zie bijlage.\n"
+"\n"
+"Je ontvangt deze e-mail omdat je in jouw evenementsinstellingen hebt "
+"aangegeven deze e-mails te willen ontvangen."
 
 #: pretix/base/services/mail.py:240
 #, python-brace-format
@@ -5901,32 +5842,33 @@ msgid ""
 "You selected a membership for the product \"{product}\" which does not "
 "require a membership."
 msgstr ""
+"Je koos een lidmaatschap voor het product \"{product}\", maar dit product "
+"vereist geen lidmaatschap."
 
 #: pretix/base/services/memberships.py:112
-#, fuzzy, python-brace-format
-#| msgid "You selected a product which is not available for sale."
+#, python-brace-format
 msgid ""
 "You selected the product \"{product}\" which requires an active membership "
 "to be selected."
-msgstr "Je koos een product dat niet te koop is."
+msgstr ""
+"Je koos het product \"{product}\", hiervoor is een geldig lidmaatschap "
+"verplicht."
 
 #: pretix/base/services/memberships.py:141
-#, fuzzy
-#| msgid "You cannot select an item that belongs to a different event."
 msgid ""
 "You selected a membership that is connected to a different customer account."
-msgstr "Je kan geen item kiezen dat bij een ander evenement hoort."
+msgstr ""
+"Je koos een lidmaatschap dat is verbonden aan het account van een andere "
+"klant."
 
 #: pretix/base/services/memberships.py:146
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "The event date has been changed."
 msgid "You selected membership that has been canceled."
-msgstr "De evenementsdatum is aangepast."
+msgstr "Het lidmaadschap dat je hebt geselecteerd is geannuleerd."
 
 #: pretix/base/services/memberships.py:151
 msgid "You can only use a test mode membership for test mode tickets."
 msgstr ""
+"Je kunt alleen test-lidmaatschappen gebruiken voor tickets in de testmodus."
 
 #: pretix/base/services/memberships.py:158
 #, python-brace-format
@@ -5934,6 +5876,8 @@ msgid ""
 "You selected a membership that is valid from {start} to {end}, but selected "
 "an event taking place at {date}."
 msgstr ""
+"Je koos een lidmaatschap dat geldig is van {start} tot {end}, maar het "
+"gekozen evenement vindt plaats op {date}."
 
 #: pretix/base/services/memberships.py:173
 #, python-brace-format
@@ -5941,6 +5885,8 @@ msgid ""
 "You selected a membership of type \"{type}\", which is not allowed for the "
 "product \"{product}\"."
 msgstr ""
+"Je koos een lidmaatschap van het type \"{type}\", dat niet is toegestaan "
+"voor het product \"{product}\"."
 
 #: pretix/base/services/memberships.py:182
 #, python-brace-format
@@ -5948,6 +5894,8 @@ msgid ""
 "You are trying to use a membership of type \"{type}\" more than {number} "
 "times, which is the maximum amount."
 msgstr ""
+"Je kunt een lidmaatschap van type \"{type}\" niet vaker dan {number} keren "
+"gebruiken."
 
 #: pretix/base/services/memberships.py:193
 #, python-brace-format
@@ -5956,6 +5904,9 @@ msgid ""
 "place at {date}, however you already used the same membership for a "
 "different ticket at the same time."
 msgstr ""
+"Je probeert een lidmaatschap van type \"{type}\" te gebruiken voor een "
+"evenement dat plaatsvindt op \"{date}\", maar je hebt dit lidmaatschap al "
+"gebruikt voor een ander kaartje op dezelfde tijd."
 
 #: pretix/base/services/orderimport.py:108
 #, python-brace-format
@@ -6373,28 +6324,30 @@ msgid "The voucher has been sent to {recipient}."
 msgstr "De voucher is verstuurd naar {recipient}."
 
 #: pretix/base/settings.py:116
-#, fuzzy
-#| msgid "All customers not checked in"
 msgid "Allow customers to create accounts"
-msgstr "Alle niet ingecheckte klanten"
+msgstr "Sta klanten toe om accounts aan te maken"
 
 #: pretix/base/settings.py:117
 msgid ""
 "This will allow customers to sign up for an account on your ticket shop. "
 "This is a prerequisite for some advanced features like memberships."
 msgstr ""
+"Dit zal klanten toestaan om een account aan te maken voor je kaartjeswinkel. "
+"Dit is een vereiste voor bepaalde geavanceerde functies, zoals "
+"lidmaatschappen."
 
 #: pretix/base/settings.py:127
-#, fuzzy
-#| msgid "Attendee e-mail address"
 msgid "Match orders based on email address"
-msgstr "E-mailadres van gast"
+msgstr "Koppel bestellingen aan klantenaccounts op basis van e-mailadres"
 
 #: pretix/base/settings.py:128
 msgid ""
 "This will allow registered customers to access orders made with the same "
 "email address, even if the customer was not logged in during the purchase."
 msgstr ""
+"Als deze optie is ingeschakeld zullen geregistreerde klanten bestellingen "
+"kunnen inzien die zijn gemaakt met het e-mailadres van hun account, zelfs "
+"als de klant bij de aankoop niet was ingelogd."
 
 #: pretix/base/settings.py:139
 msgid "Maximum number of items per order"
@@ -6682,10 +6635,8 @@ msgstr ""
 "gebruikt."
 
 #: pretix/base/settings.py:487
-#, fuzzy
-#| msgid "Length of gift card codes"
 msgid "Length of ticket codes"
-msgstr "Lengte van cadeauboncodes"
+msgstr "Lengte van ticketcodes"
 
 #: pretix/base/settings.py:508
 msgid "Reservation period"
