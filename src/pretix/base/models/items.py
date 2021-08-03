@@ -1051,7 +1051,7 @@ class ItemBundle(models.Model):
     )
     count = models.PositiveIntegerField(
         default=1,
-        verbose_name=_('Number')
+        verbose_name=_('Quantity')
     )
     designated_price = models.DecimalField(
         default=Decimal('0.00'), blank=True,
