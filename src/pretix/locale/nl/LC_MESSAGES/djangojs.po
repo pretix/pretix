@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-08-04 17:18+0000\n"
-"PO-Revision-Date: 2021-08-03 20:00+0000\n"
+"PO-Revision-Date: 2021-08-05 04:00+0000\n"
 "Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
 "Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix-js/"
 "nl/>\n"
@@ -612,13 +612,13 @@ msgid ""
 "There are currently a lot of users in this ticket shop. Please open the shop "
 "in a new tab to continue."
 msgstr ""
-"Op dit moment zijn er veel gebruikers bezig in deze ticket winkel. Open de "
+"Op dit moment zijn er veel gebruikers bezig in deze ticketwinkel. Open de "
 "winkel in een nieuw tabblad om verder te gaan."
 
 #: pretix/static/pretixpresale/js/widget/widget.js:34
 msgctxt "widget"
 msgid "Open ticket shop"
-msgstr "Open de ticket winkel"
+msgstr "Open de ticketwinkel"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:35
 msgctxt "widget"
@@ -633,9 +633,9 @@ msgid ""
 "We could not create your cart, since there are currently too many users in "
 "this ticket shop. Please click \"Continue\" to retry in a new tab."
 msgstr ""
-"Je winkelmandje kon niet worden aangemaakt, omdat er op dit moment te veel "
-"gebruikers actief zijn in deze ticket winkel. Gelieve op \"verder gaan\" te "
-"klikken om het opnieuw te proberen in een nieuwe tabblad."
+"Uw winkelwagen kon niet worden aangemaakt omdat er op dit moment te veel "
+"gebruikers actief zijn in deze ticketwinkel. Klik op \"Doorgaan\" om dit "
+"opnieuw te proberen in een nieuw tabblad."
 
 #: pretix/static/pretixpresale/js/widget/widget.js:38
 msgctxt "widget"
@@ -727,8 +727,6 @@ msgid "Open seat selection"
 msgstr "Open stoelkeuze"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:56
-#, fuzzy
-#| msgid "Load more"
 msgctxt "widget"
 msgid "Load more"
 msgstr "Meer laden"
