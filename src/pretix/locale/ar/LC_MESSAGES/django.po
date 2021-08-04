@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-08-04 17:18+0000\n"
-"PO-Revision-Date: 2021-07-19 01:00+0000\n"
+"PO-Revision-Date: 2021-08-05 04:00+0000\n"
 "Last-Translator: Abdullah <abdullah.gumaijan@gmail.com>\n"
 "Language-Team: Arabic <https://translate.pretix.eu/projects/pretix/pretix/ar/"
 ">\n"
@@ -7502,7 +7502,7 @@ msgstr ""
 "{url}\n"
 "\n"
 "تحياتنا،\n"
-"فريق{event}"
+"فريق {event}"
 
 #: pretix/base/settings.py:1657
 #, python-brace-format
@@ -7525,7 +7525,7 @@ msgstr ""
 "{url}\n"
 "\n"
 "تحياتنا،\n"
-"فريق{event}"
+"فريق {event}"
 
 #: pretix/base/settings.py:1669
 #, python-brace-format
@@ -7548,7 +7548,7 @@ msgstr ""
 "{url}\n"
 "\n"
 "تحياتنا،\n"
-"فريق{event}"
+"فريق {event}"
 
 #: pretix/base/settings.py:1681
 #, python-brace-format
@@ -7575,7 +7575,7 @@ msgstr ""
 "{url}\n"
 "\n"
 "تحياتنا،\n"
-"فريق{event}"
+"فريق {event}"
 
 #: pretix/base/settings.py:1699
 #, python-brace-format
@@ -7625,10 +7625,10 @@ msgstr ""
 "{url}\n"
 "\n"
 "تحياتنا،\n"
-"فريق{event}"
+"فريق {event}"
 
 #: pretix/base/settings.py:1729
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -7670,7 +7670,7 @@ msgstr ""
 "باستخدام القسيمة خلال الوقت المحدد.\n"
 "\n"
 "تحياتنا،\n"
-"فريق{event}"
+"فريق {event}"
 
 #: pretix/base/settings.py:1752
 #, python-brace-format
@@ -7693,7 +7693,7 @@ msgstr ""
 "{url}\n"
 "\n"
 "تحياتنا،\n"
-"فريق{event}"
+"فريق {event}"
 
 #: pretix/base/settings.py:1764
 #, python-brace-format
@@ -7723,7 +7723,7 @@ msgstr ""
 "{url}\n"
 "\n"
 "تحياتنا،\n"
-"فريق{event}"
+"فريق {event}"
 
 #: pretix/base/settings.py:1780
 #, python-brace-format
@@ -7777,7 +7777,7 @@ msgstr ""
 "{url}\n"
 "\n"
 "تحياتنا،\n"
-"فريق{event}"
+"فريق {event}"
 
 #: pretix/base/settings.py:1808
 #, python-brace-format
@@ -7796,7 +7796,7 @@ msgstr ""
 "{url}\n"
 "\n"
 "تحياتنا،\n"
-"فريق{event}"
+"فريق {event}"
 
 #: pretix/base/settings.py:1826
 #, python-brace-format
@@ -7819,7 +7819,7 @@ msgstr ""
 "{url}\n"
 "\n"
 "تحياتنا،\n"
-"فريق{event}"
+"فريق {event}"
 
 #: pretix/base/settings.py:1838
 #, python-brace-format
@@ -7842,7 +7842,7 @@ msgstr ""
 "{url}\n"
 "\n"
 "تحياتنا،\n"
-"فريق{event}"
+"فريق {event}"
 
 #: pretix/base/settings.py:1850
 #, python-brace-format
