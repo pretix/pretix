@@ -136,8 +136,8 @@ function questions_init_profiles(el) {
         for (var p of profiles) {
             data = {};
             for (var key of Object.keys(p)) {
-                matched_field = getMatchingInput(key, p[key], scope);
-                if (matched_field) {
+                matched_field = key.startsWith("_") ? [] : getMatchingInput(key, p[key], scope);
+                if (key.startsWith("_") || matched_field) {
                     // TODO: only add if no other answer matches same fields?
                     data[key] = {
                         "answer": p[key],
@@ -265,6 +265,7 @@ function questions_init_profiles(el) {
             for (var key of keys) {
                 nrKeysProcessed++;
                 if (key.startsWith("_") || key.startsWith("attendee_name_part") || key.startsWith("name_part") || key == "is_business") continue;
+                if (key == "country") key = "_country_for_address";
                 value = p[key].answer || p[key];
 
                 if (key == "is_business") {

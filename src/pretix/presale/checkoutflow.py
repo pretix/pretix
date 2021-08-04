@@ -975,19 +975,22 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
                 addresses = self.cart_customer.stored_addresses.all()
                 addresses_list = []
                 for a in addresses:
-                    data = {}
+                    data = {
+                        "_country_for_address": a.country.name,
+                        "_state_for_address": a.state_for_address,
+                        "is_business": "business" if a.is_business else "individual",
+                    }
                     if a.name_parts:
                         scheme = PERSON_NAME_SCHEMES[self.request.event.settings.name_scheme]
                         for i, (k, l, w) in enumerate(scheme["fields"]):
                             data[f"name_parts_{i}"] = a.name_parts.get(k) or ""
                         #data["name_parts"] = {k: v for k, v in a.name_parts.items() if not k.startswith('_')}
 
-                    data["is_business"] = "business" if a.is_business else "individual"
-
-                    for k in ("name", "company", "street", "zipcode", "city", "country", "state", "vat_id", "custom_field", "internal_reference", "beneficiary"):
+                    for k in ("name", "company", "street", "zipcode", "city", "country", "state", "state_for_address", "vat_id", "custom_field", "internal_reference", "beneficiary"):
                         v = getattr(a, k)
                         if v:
                             data[k] = str(v)
+
                     addresses_list.append(data)
 
                 ctx['addresses_data'] = addresses_list
@@ -997,6 +1000,8 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
             for p in profiles:
                 data = {
                     "_pk": p.pk,
+                    "_country_for_address": p.country.name,
+                    "_state_for_address": p.state_for_address
                 }
                 if p.attendee_name_parts:
                     scheme = PERSON_NAME_SCHEMES[self.request.event.settings.name_scheme]
