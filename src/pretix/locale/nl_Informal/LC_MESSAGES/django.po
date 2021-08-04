@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-08-04 17:18+0000\n"
-"PO-Revision-Date: 2021-08-03 20:00+0000\n"
+"PO-Revision-Date: 2021-08-05 04:00+0000\n"
 "Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
 "Language-Team: Dutch (informal) <https://translate.pretix.eu/projects/pretix/"
 "pretix/nl_Informal/>\n"
@@ -4178,7 +4178,7 @@ msgstr "Aantal keren dat deze voucher kan worden ingewisseld."
 
 #: pretix/base/models/vouchers.py:150 pretix/control/views/vouchers.py:110
 msgid "Redeemed"
-msgstr "Ingewisseld"
+msgstr "Gebruikt"
 
 #: pretix/base/models/vouchers.py:154
 msgid "Maximum discount budget"
@@ -12686,7 +12686,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order_pay.html:27
 #: pretix/presale/templates/pretixpresale/event/order_pay_change.html:60
 msgid "Continue"
-msgstr "Verdergaan"
+msgstr "Doorgaan"
 
 #: pretix/control/templates/pretixcontrol/auth/oauth_authorization.html:8
 msgid "Authorize an application"
