@@ -1118,14 +1118,17 @@ class Event(EventMixin, LoggedModel):
         self.items.all().delete()
         self.subevents.all().delete()
 
-    def set_active_plugins(self, modules, allow_restricted=False):
+    def get_available_plugins(self):
         from pretix.base.plugins import get_all_plugins
 
-        plugins_active = self.get_plugins()
-        plugins_available = {
+        return {
             p.module: p for p in get_all_plugins(self)
             if not p.name.startswith('.') and getattr(p, 'visible', True)
         }
+
+    def set_active_plugins(self, modules, allow_restricted=False):
+        plugins_active = self.get_plugins()
+        plugins_available = self.get_available_plugins()
 
         enable = [m for m in modules if m not in plugins_active and m in plugins_available]
 
@@ -1154,6 +1157,10 @@ class Event(EventMixin, LoggedModel):
         if module in plugins_active:
             plugins_active.remove(module)
             self.set_active_plugins(plugins_active)
+
+            plugins_available = self.get_available_plugins()
+            if hasattr(plugins_available[module].app, 'uninstalled'):
+                getattr(plugins_available[module].app, 'uninstalled')(self)
 
         regenerate_css.apply_async(args=(self.pk,))
 
