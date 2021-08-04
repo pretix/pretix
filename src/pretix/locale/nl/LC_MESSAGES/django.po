@@ -7,10 +7,10 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-08-04 17:18+0000\n"
-"PO-Revision-Date: 2021-08-03 20:00+0000\n"
+"PO-Revision-Date: 2021-08-05 04:00+0000\n"
 "Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
-"Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/"
-">\n"
+"Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
+"\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -31,16 +31,12 @@ msgid "pretixSCAN"
 msgstr "pretixSCAN"
 
 #: pretix/api/auth/devicesecurity.py:75
-#, fuzzy
-#| msgid "pretixSCAN (kiosk mode, online only)"
 msgid "pretixSCAN (kiosk mode, no order sync, no search)"
-msgstr "pretixSCAN (kioskmodus, alleen online)"
+msgstr "pretixSCAN (kioskmodus, geen ordersynchronisatie, geen zoekfunctie)"
 
 #: pretix/api/auth/devicesecurity.py:104
-#, fuzzy
-#| msgid "pretixSCAN (kiosk mode, online only)"
 msgid "pretixSCAN (online only, no order sync)"
-msgstr "pretixSCAN (kioskmodus, alleen online)"
+msgstr "pretixSCAN (alleen online, geen ordersynchronisatie)"
 
 #: pretix/api/auth/devicesecurity.py:134
 msgid "pretixPOS"
@@ -3207,10 +3203,8 @@ msgid "Bundled variation"
 msgstr "Gebundelde variant"
 
 #: pretix/base/models/items.py:1054
-#, fuzzy
-#| msgid "quantity"
 msgid "Quantity"
-msgstr "hoeveelheid"
+msgstr "Hoeveelheid"
 
 #: pretix/base/models/items.py:1059
 msgid "Designated price part"
@@ -5029,10 +5023,8 @@ msgid "Order position number"
 msgstr "Plaatsnummer van bestelling"
 
 #: pretix/base/pdf.py:103
-#, fuzzy
-#| msgid "Order position number"
 msgid "Order code and position number"
-msgstr "Plaatsnummer van bestelling"
+msgstr "Bestelcode en plaatsnummer"
 
 #: pretix/base/pdf.py:109 pretix/base/services/tickets.py:100
 #: pretix/control/views/event.py:739 pretix/control/views/pdf.py:85
@@ -9846,16 +9838,12 @@ msgid "Date until"
 msgstr "Datum tot"
 
 #: pretix/control/forms/filter.py:847
-#, fuzzy
-#| msgid "Date from"
 msgid "Start time from"
-msgstr "Datum vanaf"
+msgstr "Starttijd vanaf"
 
 #: pretix/control/forms/filter.py:852
-#, fuzzy
-#| msgid "Date until"
 msgid "Start time until"
-msgstr "Datum tot"
+msgstr "Starttijd tot"
 
 #: pretix/control/forms/filter.py:857 pretix/control/forms/subevents.py:526
 #: pretix/control/forms/subevents.py:565
@@ -9986,18 +9974,14 @@ msgid "Not checked in"
 msgstr "Niet ingecheckt"
 
 #: pretix/control/forms/filter.py:1404
-#, fuzzy
-#| msgid "Date from"
 msgctxt "subevent"
 msgid "Date start from"
-msgstr "Datum vanaf"
+msgstr "Startdatum vanaf"
 
 #: pretix/control/forms/filter.py:1410
-#, fuzzy
-#| msgid "Date until"
 msgctxt "subevent"
 msgid "Date start until"
-msgstr "Datum tot"
+msgstr "Startdatum tot"
 
 #: pretix/control/forms/filter.py:1513 pretix/control/forms/filter.py:1516
 #: pretix/control/templates/pretixcontrol/users/index.html:52
