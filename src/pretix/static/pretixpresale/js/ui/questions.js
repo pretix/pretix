@@ -121,9 +121,20 @@ function questions_init_profiles(el) {
     – in the original profile, strikethrough which answer will be overwritten, followed by the new answer
     – add new answers with a + in front
     */
+    var profilesById = {};
+    function getProfilesById(id) {
+        if (!(id in profilesById)) {
+            var element = document.getElementById(id);
+            profilesById[id] = (!element || !element.textContent) ? {} : JSON.parse(element.textContent);
+        }
+        return profilesById[id];
+    }
+
     var profiles_element = document.getElementById("profiles_json");
+    var addresses_element = document.getElementById("addresses_json");
     if (!profiles_element || !profiles_element.textContent) return;
     var profiles = JSON.parse(profiles_element.textContent);
+
     function matchProfiles(profiles, scope) {
         var filtered = [];
         var data;
@@ -217,8 +228,10 @@ function questions_init_profiles(el) {
     }
 
     function formatAnswerHumanReadable(answer) {
-        if (typeof answer == "string" || typeof answer == "number") return answer;
+        if (typeof answer == "string") return answer;
+        if (typeof answer == "number") return answer.toString();
         var value = answer.value;
+        if (!value) return value;
         if ("type" in answer) {
             if (answer.type == "TEL") {
                 // TODO: format phone number with spaces?
@@ -231,35 +244,60 @@ function questions_init_profiles(el) {
                 return moment(value).format(document.body.getAttribute("data-dateformat"));
             } 
         }
-        return value;
+        var s = "";
+        for (var a of Object.keys(value)) {
+            s += value[a] + ", ";
+        }
+        return s;
     }
 
     // TODO: add as few info as possible to make a distinction between available profiles?
     function labelForProfile(p, profiles, scope = null) {
             // add fields in source-order if scope (form section) is provided
             var keys = scope ? getInputKeysInSourceOrder(p, scope) : Object.keys(p);
-            var label = "";
+            var parts = [];
+            var len = 0;
+            var nrKeysProcessed = 0;
+            var answer;
+            var value;
+            // treat names and is_business special
+            // TODO: if attendee_name_part_0 is in keys but not attendee_name, then add attendee_name to it
+            // add name accordingly if name_part_0 is in keys
             for (var key of keys) {
-                if (label.length > 48) break;
-                var answer = formatAnswerHumanReadable(p[key].answer || p[key]);
-                if (answer && typeof answer !== 'string') {
-                    for (var a of Object.keys(answer)) {
-                        label += answer[a] + ", ";
-                    }
+                nrKeysProcessed++;
+                if (key.startsWith("_") || key.startsWith("attendee_name_part") || key.startsWith("name_part") || key == "is_business") continue;
+                value = p[key].answer || p[key];
+
+                if (key == "is_business") {
+                    // special case for is_business: get label for human readable label
+                    answer = document.querySelector("[for='" + document.querySelector("[name='"+key+"'][value='"+value+"']").id + "']").textContent;
                 }
                 else {
-                    label += answer + ", ";
+                    answer = formatAnswerHumanReadable(value);
+                }
+
+                if (answer) {
+                    parts.push(answer);
+                    len += answer.length;
+                    if (len > 48) break;
                 }
             }
-            label += " …";
-            return label;
+            return parts.join(", ") + (nrKeysProcessed < keys.length ? ", …" : "");
+    }
+    function describeProfile(p) {
+        var desc = "TODO: Show description of profile.";
+        for (var key of Object.keys(p)) {
+            //desc += p[key] + "<br>";
+            console.log(p[key]);
+        }
+        return desc;
     }
 
 
 
-    function setupSaveToProfile(scope) {
-        var $checkbox = $('[name$="-save"]', scope);
-        var $select = $('[name$="-saved_id"]', scope);
+    function setupSaveToProfile(scope, profiles) {
+        var $checkbox = $('[name$="save"]', scope);
+        var $select = $('[name$="saved_id"]', scope);
         var $checkboxContainer = $checkbox.closest(".form-group").addClass("profile-save");
         var $selectContainer = $select.closest(".form-group").addClass("profile-save-id");
         var $help = $selectContainer.find(".help-block");
@@ -280,14 +318,16 @@ function questions_init_profiles(el) {
             $select.append('<option value="' + p._pk + '">' + labelForProfile(p, profiles) + '</option>');
         }
         $select.change(function() {
-            $help.html("TODO: Show full description/diff of profile " + (this.selectedIndex-1));
+            if (this.selectedIndex) $help.html(describeProfile(profiles[this.selectedIndex-1]));
+            else $help.html("");
         }).trigger("change");
         // TODO: bind to change-events of inputs inside this scope to update diff/profile-description
     }
 
 
     el.find(".profile-scope").each(function () {
-        setupSaveToProfile(this)
+        var profiles = getProfilesById(this.getAttribute("data-profiles-id") || "profiles_json");
+        setupSaveToProfile(this, profiles);
 
         // setup profile-select for each scope
         // for each answer of each profile, find the matching input (name, identifier, label)

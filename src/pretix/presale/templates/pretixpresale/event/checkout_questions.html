@@ -44,37 +44,51 @@
                             <i class="fa fa-angle-down collapse-indicator" aria-hidden="true"></i>
                         </h4>
                     </summary>
-                    <div id="invoice">
+                    {{ addresses_data|json_script:"addresses_json" }}
+                    <div id="invoice" class="profile-scope" data-profiles-id="addresses_json">
                         <div class="panel-body">
+                            {% if addresses_data %}
+                                <div class="form-group profile-select-container">
+                                    <label class="col-md-3 control-label" for="address-list-select">{% trans "Fill the form section below with …" %}</label>
+                                    <div class="col-md-9 form-control-text">
+                                        <p class="profile-select-control">
+                                            <select class="profile-select form-control" id="address-list-select"></select>
+                                            <button type="button" class="profile-apply btn btn-default"
+                                                aria-describedby="selected-address-desc">{% trans "fill the form section below" %}</button>
+                                        </p>
+                                        <p class="help-block profile-desc" id="selected-address-desc"></p>
+                                        {% comment %}
+                                            <ul>
+                                            {% for ap, data in form.profiles %}
+                                                <li>
+                                                    <span id="profile-desc-{{ forloop.parentloop.counter0 }}-{{ forloop.counter0 }}">
+                                                    <b>{{ ap.describe|splitlines|slice:":1"|joinlines }}</b>
+                                                    {% if ap.describe|splitlines|length > 1 %}
+                                                    <br>
+                                                        {{ ap.describe|splitlines|slice:"1:6"|joinlines|linebreaksbr }}
+                                                        {% if ap.describe|splitlines|length > 6 %}
+                                                            <br>…
+                                                        {% endif %}
+                                                    {% endif %}
+                                                    </span>
+                                                    <button type="button" class="btn btn-default btn-xs"
+                                                        data-stored-values="{{ data|attr_escapejson_dumps }}"
+                                                        data-id="{{ ap.pk }}"
+                                                        aria-describedby="profile-desc-{{ forloop.parentloop.counter0 }}-{{ forloop.counter0 }}">
+                                                        {% trans "fill form section" %}
+                                                    </button>
+                                                </li>
+                                            {% endfor %}
+                                            </ul>
+                                            {% endcomment %}
+                                    </div>
+                                </div>
+                            {% endif %}
                             {% if event.settings.invoice_address_explanation_text %}
                                 <div>
                                     {{ event.settings.invoice_address_explanation_text|rich_text }}
                                 </div>
                             {% endif %}
-
-                            {{ addresses_data|json_script:"addresses_json" }}
-                            {% if addresses %}
-                                {{ addresses_data|json_script:"addresses_json" }}
-
-                                <div class="profile-list-wrapper">
-                                    <div role="group" aria-labelledby="" class="profile-list">
-                                        <h4 id="" class="sr-only">{% trans "Fill form section with stored data:" %}</h4>
-                                        {% for ia in addresses %}
-                                            <button type="button" class="btn btn-default" data-stored-values="{{ ia.for_js|attr_escapejson_dumps }}" data-id="{{ ia.pk }}">
-                                                <b>{{ ia.describe|splitlines|slice:":1"|joinlines }}</b>
-                                                {% if ia.describe|splitlines|length > 1 %}
-                                                <br>
-                                                    {{ ia.describe|splitlines|slice:"1:5"|joinlines|linebreaksbr }}
-                                                    {% if ia.describe|splitlines|length > 5 %}
-                                                        <br>…
-                                                    {% endif %}
-                                                {% endif %}
-                                            </button>
-                                        {% endfor %}
-                                    </div>
-                                </div>
-                            {% endif %}
-
                             {% bootstrap_form invoice_form layout="checkout" %}
                         </div>
                     </div>
@@ -168,14 +182,14 @@
                                 <div data-idx="{{ forloop.parentloop.counter0 }}" data-addonidx="{{ forloop.counter0 }}" class="profile-scope">
                                     {% if profiles_data %}
                                     <div class="form-group profile-select-container">
-                                        <label class="col-md-3 control-label" id="profile-list-{{ forloop.parentloop.counter0 }}-{{ forloop.counter0 }}">{% trans "Fill the form section below with …" %}</label>
+                                        <label class="col-md-3 control-label" for="profile-select-{{ forloop.parentloop.counter0 }}-{{ forloop.counter0 }}">{% trans "Fill the form section below with …" %}</label>
                                         <div class="col-md-9 form-control-text">
                                             <p class="profile-select-control">
-                                                <select class="profile-select form-control"></select>
+                                                <select class="profile-select form-control" id="profile-select-{{ forloop.parentloop.counter0 }}-{{ forloop.counter0 }}"></select>
                                                 <button type="button" class="profile-apply btn btn-default"
-                                                    aria-describedby="profile-desc-{{ forloop.parentloop.counter0 }}-{{ forloop.counter0 }}">{% trans "fill the form section below" %}</button>
+                                                    aria-describedby="selected-profile-desc-{{ forloop.parentloop.counter0 }}-{{ forloop.counter0 }}">{% trans "fill the form section below" %}</button>
                                             </p>
-                                            <p class="help-block profile-desc" id="profile-desc-{{ forloop.parentloop.counter0 }}-{{ forloop.counter0 }}"></p>
+                                            <p class="help-block profile-desc" id="selected-profile-desc-{{ forloop.parentloop.counter0 }}-{{ forloop.counter0 }}"></p>
                                             {% comment %}
                                                 <ul>
                                                 {% for ap, data in form.profiles %}

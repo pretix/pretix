@@ -984,7 +984,7 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
 
                     data["is_business"] = "business" if a.is_business else "individual"
 
-                    for k in ("company", "street", "zipcode", "city", "country", "state", "vat_id", "custom_field", "internal_reference", "beneficiary"):
+                    for k in ("name", "company", "street", "zipcode", "city", "country", "state", "vat_id", "custom_field", "internal_reference", "beneficiary"):
                         v = getattr(a, k)
                         if v:
                             data[k] = str(v)
@@ -1004,7 +1004,7 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
                         data[f"attendee_name_parts_{i}"] = p.attendee_name_parts.get(k) or ""
                     #data["attendee_name_parts"] = {k: v for k, v in p.attendee_name_parts.items() if not k.startswith('_')}
 
-                for k in ("attendee_email", "company", "street", "zipcode", "city", "country", "state"):
+                for k in ("attendee_name", "attendee_email", "company", "street", "zipcode", "city", "country", "state"):
                     v = getattr(p, k)
                     if v:
                         data[k] = str(v)
