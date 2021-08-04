@@ -197,6 +197,7 @@ function questions_init_profiles(el) {
         return null;
     }
 
+    // TODO: this does not play well with the current matching as it only returns keys not other matched criteria
     function getInputKeysInSourceOrder(p, scope) {
         var element = scope.querySelector("input, select, textarea");
         if (!element) return [];
@@ -226,7 +227,6 @@ function questions_init_profiles(el) {
         if (typeof answer == "string") return answer;
         if (typeof answer == "number") return answer.toString();
         var value = answer.value;
-        if (!value) return value;
         if ("type" in answer) {
             if (answer.type == "TEL") {
                 // TODO: format phone number with spaces?
@@ -235,15 +235,20 @@ function questions_init_profiles(el) {
             if (answer.type == "W") {
                 return moment(value).format(document.body.getAttribute("data-datetimeformat"));
             }
-            if (answer.type == "D") {//date
+            if (answer.type == "D") {
                 return moment(value).format(document.body.getAttribute("data-dateformat"));
-            } 
+            }
+            if (answer.type == "H") {
+                var format = document.body.getAttribute("data-timeformat");
+                return moment(value, format).format(format);
+            }
+            if (answer.type == "B") {
+                return value ? gettext("Yes") : gettext("No");
+            }
         }
-        var s = "";
-        for (var a of Object.keys(value)) {
-            s += value[a] + ", ";
-        }
-        return s;
+        if (typeof value == "string") return value;
+
+        return Object.values(value).join(", ");
     }
 
     // TODO: add as few info as possible to make a distinction between available profiles?
@@ -267,7 +272,9 @@ function questions_init_profiles(el) {
                 if (key.startsWith("_") || key.startsWith("attendee_name_part") || key.startsWith("name_part") || key == "is_business") continue;
                 if (key == "country") key = "_country_for_address";
                 value = p[key].answer || p[key];
-
+                
+                answer = formatAnswerHumanReadable(value);
+                /*
                 if (key == "is_business") {
                     // special case for is_business: get label for human readable label
                     answer = document.querySelector("[for='" + document.querySelector("[name='"+key+"'][value='"+value+"']").id + "']").textContent;
@@ -275,6 +282,7 @@ function questions_init_profiles(el) {
                 else {
                     answer = formatAnswerHumanReadable(value);
                 }
+                */
 
                 if (answer) {
                     parts.push(answer);
@@ -285,17 +293,32 @@ function questions_init_profiles(el) {
             return parts.join(", ") + (nrKeysProcessed < keys.length ? ", …" : "");
     }
     function describeProfile(p) {
-        var desc = "TODO: Show description of profile.";
+        var lines = [
+            p["name"],
+            [p["attendee_name"], p["attendee_email"]].filter(v => v).join(", "),
+            p["company"],
+            [
+                p["street"],
+                [p["zipcode"], p["city"], p["_state_for_address"]].filter(v => v).join(" "),
+                p["_country_for_address"]
+            ].filter(v => v).join(", ")
+        ];
+        lines = lines.filter(line => line && line.trim());
+
+        var label;
+        // TODO: country need their values from the select fields
         for (var key of Object.keys(p)) {
-            //desc += p[key] + "<br>";
-            console.log(p[key]);
+            if (!key.startsWith("question_")) continue;
+            label = p[key]["label"];
+            lines.push(label + ("!?.:".split("").indexOf(label.slice(-1)) > -1 ? " " : ": ") + formatAnswerHumanReadable(p[key]))
         }
-        return desc;
+        return lines.join("<br>");
     }
 
 
 
     function setupSaveToProfile(scope, profiles) {
+        // TODO: change $select to a list of radio-buttons for multiline-display of profiles?
         var $checkbox = $('[name$="save"]', scope);
         var $select = $('[name$="saved_id"]', scope);
         var $checkboxContainer = $checkbox.closest(".form-group").addClass("profile-save");
@@ -318,6 +341,7 @@ function questions_init_profiles(el) {
             $select.append('<option value="' + p._pk + '">' + labelForProfile(p, profiles) + '</option>');
         }
         $select.change(function() {
+            // TODO: only describeProfile if profile label is truncated
             if (this.selectedIndex) $help.html(describeProfile(profiles[this.selectedIndex-1]));
             else $help.html("");
         }).trigger("change");
@@ -351,8 +375,7 @@ function questions_init_profiles(el) {
             $select.append("<option>" + (++i) + ". " + labelForProfile(p, profiles, this) + "</option>");
         }
         $select.change(function() {
-            // TODO: human readable description for matched_profiles[this.selectedIndex]
-            $desc.html("TODO: Show description for matched profile " + this.selectedIndex);
+            $desc.html(describeProfile(profiles[this.selectedIndex]));
         }).trigger("change");
         $button.click(function() {
             var p = matched_profiles[$select.get(0).selectedIndex];
