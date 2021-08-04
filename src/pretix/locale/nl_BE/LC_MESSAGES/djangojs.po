@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-07-09 09:37+0000\n"
+"POT-Creation-Date: 2021-08-04 17:18+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -247,7 +247,7 @@ msgid ""
 "page and try again."
 msgstr ""
 
-#: pretix/static/pretixbase/js/asynctask.js:251
+#: pretix/static/pretixbase/js/asynctask.js:262
 #: pretix/static/pretixcontrol/js/ui/main.js:34
 msgid "Close message"
 msgstr ""
@@ -701,78 +701,83 @@ msgctxt "widget"
 msgid "Open seat selection"
 msgstr ""
 
-#: pretix/static/pretixpresale/js/widget/widget.js:57
-msgid "Mo"
+#: pretix/static/pretixpresale/js/widget/widget.js:56
+msgctxt "widget"
+msgid "Load more"
 msgstr ""
 
 #: pretix/static/pretixpresale/js/widget/widget.js:58
-msgid "Tu"
+msgid "Mo"
 msgstr ""
 
 #: pretix/static/pretixpresale/js/widget/widget.js:59
-msgid "We"
+msgid "Tu"
 msgstr ""
 
 #: pretix/static/pretixpresale/js/widget/widget.js:60
-msgid "Th"
+msgid "We"
 msgstr ""
 
 #: pretix/static/pretixpresale/js/widget/widget.js:61
-msgid "Fr"
+msgid "Th"
 msgstr ""
 
 #: pretix/static/pretixpresale/js/widget/widget.js:62
-msgid "Sa"
+msgid "Fr"
 msgstr ""
 
 #: pretix/static/pretixpresale/js/widget/widget.js:63
+msgid "Sa"
+msgstr ""
+
+#: pretix/static/pretixpresale/js/widget/widget.js:64
 msgid "Su"
 msgstr ""
 
-#: pretix/static/pretixpresale/js/widget/widget.js:66
+#: pretix/static/pretixpresale/js/widget/widget.js:67
 msgid "January"
 msgstr ""
 
-#: pretix/static/pretixpresale/js/widget/widget.js:67
+#: pretix/static/pretixpresale/js/widget/widget.js:68
 msgid "February"
 msgstr ""
 
-#: pretix/static/pretixpresale/js/widget/widget.js:68
+#: pretix/static/pretixpresale/js/widget/widget.js:69
 msgid "March"
 msgstr ""
 
-#: pretix/static/pretixpresale/js/widget/widget.js:69
+#: pretix/static/pretixpresale/js/widget/widget.js:70
 msgid "April"
 msgstr ""
 
-#: pretix/static/pretixpresale/js/widget/widget.js:70
+#: pretix/static/pretixpresale/js/widget/widget.js:71
 msgid "May"
 msgstr ""
 
-#: pretix/static/pretixpresale/js/widget/widget.js:71
+#: pretix/static/pretixpresale/js/widget/widget.js:72
 msgid "June"
 msgstr ""
 
-#: pretix/static/pretixpresale/js/widget/widget.js:72
+#: pretix/static/pretixpresale/js/widget/widget.js:73
 msgid "July"
 msgstr ""
 
-#: pretix/static/pretixpresale/js/widget/widget.js:73
+#: pretix/static/pretixpresale/js/widget/widget.js:74
 msgid "August"
 msgstr ""
 
-#: pretix/static/pretixpresale/js/widget/widget.js:74
+#: pretix/static/pretixpresale/js/widget/widget.js:75
 msgid "September"
 msgstr ""
 
-#: pretix/static/pretixpresale/js/widget/widget.js:75
+#: pretix/static/pretixpresale/js/widget/widget.js:76
 msgid "October"
 msgstr ""
 
-#: pretix/static/pretixpresale/js/widget/widget.js:76
+#: pretix/static/pretixpresale/js/widget/widget.js:77
 msgid "November"
 msgstr ""
 
-#: pretix/static/pretixpresale/js/widget/widget.js:77
+#: pretix/static/pretixpresale/js/widget/widget.js:78
 msgid "December"
 msgstr ""

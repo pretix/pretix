@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-07-09 09:36+0000\n"
+"POT-Creation-Date: 2021-08-04 17:18+0000\n"
 "PO-Revision-Date: 2021-08-03 20:00+0000\n"
 "Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
 "Language-Team: Dutch (informal) <https://translate.pretix.eu/projects/pretix/"
@@ -32,10 +32,18 @@ msgid "pretixSCAN"
 msgstr "pretixSCAN"
 
 #: pretix/api/auth/devicesecurity.py:75
-msgid "pretixSCAN (kiosk mode, online only)"
+#, fuzzy
+#| msgid "pretixSCAN (kiosk mode, online only)"
+msgid "pretixSCAN (kiosk mode, no order sync, no search)"
 msgstr "pretixSCAN (kioskmodus, alleen online)"
 
 #: pretix/api/auth/devicesecurity.py:104
+#, fuzzy
+#| msgid "pretixSCAN (kiosk mode, online only)"
+msgid "pretixSCAN (online only, no order sync)"
+msgstr "pretixSCAN (kioskmodus, alleen online)"
+
+#: pretix/api/auth/devicesecurity.py:134
 msgid "pretixPOS"
 msgstr "pretixPOS"
 
@@ -95,7 +103,7 @@ msgstr ""
 msgid "The selected seat \"{seat}\" is not available."
 msgstr "De gekozen stoel \"{seat}\" is niet beschikbaar."
 
-#: pretix/api/serializers/checkin.py:65 pretix/base/models/event.py:1408
+#: pretix/api/serializers/checkin.py:65 pretix/base/models/event.py:1413
 #: pretix/base/models/items.py:1386 pretix/base/models/items.py:1625
 msgid "One or more items do not belong to this event."
 msgstr "Één of meer items horen niet bij dit evenement."
@@ -378,7 +386,7 @@ msgstr "<a %(a_attr)s>kaartverkoop mogelijk gemaakt door pretix</a>"
 msgid "source code"
 msgstr "broncode"
 
-#: pretix/base/email.py:186 pretix/control/views/main.py:302
+#: pretix/base/email.py:186 pretix/control/views/main.py:303
 #: pretix/plugins/badges/apps.py:45 pretix/plugins/badges/models.py:48
 #: pretix/plugins/badges/templates/pretixplugins/badges/index.html:35
 #: pretix/plugins/badges/templates/pretixplugins/badges/index.html:55
@@ -393,7 +401,7 @@ msgid "Simple with logo"
 msgstr "Simpel met logo"
 
 #: pretix/base/email.py:477 pretix/base/email.py:543 pretix/base/email.py:559
-#: pretix/base/email.py:564 pretix/base/pdf.py:155 pretix/base/pdf.py:298
+#: pretix/base/email.py:564 pretix/base/pdf.py:160 pretix/base/pdf.py:303
 #: pretix/base/services/invoices.py:402 pretix/control/views/event.py:741
 msgid "John Doe"
 msgstr "John Doe"
@@ -422,27 +430,27 @@ msgstr "Maak het geld over naar deze bankrekening: NL13 TEST 0123 4567 89"
 msgid "Mr Doe"
 msgstr "Meneer Janssen"
 
-#: pretix/base/exporter.py:159 pretix/base/exporter.py:285
+#: pretix/base/exporter.py:163 pretix/base/exporter.py:293
 msgid "Export format"
 msgstr "Exportformaat"
 
-#: pretix/base/exporter.py:161
+#: pretix/base/exporter.py:165
 msgid "Excel (.xlsx)"
 msgstr "Excel (.xlsx)"
 
-#: pretix/base/exporter.py:162 pretix/base/exporter.py:277
+#: pretix/base/exporter.py:166 pretix/base/exporter.py:285
 msgid "CSV (with commas)"
 msgstr "CSV (met komma's)"
 
-#: pretix/base/exporter.py:163 pretix/base/exporter.py:278
+#: pretix/base/exporter.py:167 pretix/base/exporter.py:286
 msgid "CSV (Excel-style)"
 msgstr "CSV (Excel-stijl)"
 
-#: pretix/base/exporter.py:164 pretix/base/exporter.py:279
+#: pretix/base/exporter.py:168 pretix/base/exporter.py:287
 msgid "CSV (with semicolons)"
 msgstr "CSV (met puntkomma's)"
 
-#: pretix/base/exporter.py:273
+#: pretix/base/exporter.py:281
 msgid "Combined Excel (.xlsx)"
 msgstr "Gecombineerde Excel (.xlsx)"
 
@@ -468,11 +476,11 @@ msgstr "Kaartje {event}-{code}"
 #: pretix/base/exporters/orderlist.py:833
 #: pretix/base/exporters/waitinglist.py:114
 #: pretix/base/models/memberships.py:143 pretix/control/forms/subevents.py:465
-#: pretix/control/templates/pretixcontrol/events/index.html:74
+#: pretix/control/templates/pretixcontrol/events/index.html:72
 #: pretix/control/templates/pretixcontrol/order/index.html:637
 #: pretix/control/templates/pretixcontrol/order/index.html:731
-#: pretix/control/templates/pretixcontrol/orders/refunds.html:52
-#: pretix/control/templates/pretixcontrol/organizers/detail.html:54
+#: pretix/control/templates/pretixcontrol/orders/refunds.html:55
+#: pretix/control/templates/pretixcontrol/organizers/detail.html:60
 #: pretix/control/templates/pretixcontrol/user/staff_session_edit.html:19
 #: pretix/control/templates/pretixcontrol/user/staff_session_list.html:18
 #: pretix/plugins/badges/exporters.py:277
@@ -496,8 +504,8 @@ msgstr ""
 #: pretix/base/exporters/orderlist.py:834
 #: pretix/base/exporters/waitinglist.py:115
 #: pretix/base/models/memberships.py:146
-#: pretix/control/templates/pretixcontrol/events/index.html:78
-#: pretix/control/templates/pretixcontrol/organizers/detail.html:56
+#: pretix/control/templates/pretixcontrol/events/index.html:76
+#: pretix/control/templates/pretixcontrol/organizers/detail.html:62
 #: pretix/control/templates/pretixcontrol/user/staff_session_edit.html:21
 #: pretix/control/templates/pretixcontrol/user/staff_session_list.html:20
 #: pretix/plugins/badges/exporters.py:284
@@ -517,18 +525,18 @@ msgstr ""
 
 #: pretix/base/exporters/invoices.py:86 pretix/base/models/orders.py:1420
 #: pretix/base/models/orders.py:1797 pretix/control/forms/filter.py:175
-#: pretix/control/forms/filter.py:1713
+#: pretix/control/forms/filter.py:1776
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:9
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:14
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:31
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:50
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:59
-#: pretix/control/templates/pretixcontrol/orders/refunds.html:47
+#: pretix/control/templates/pretixcontrol/orders/refunds.html:50
 msgid "Payment provider"
 msgstr "Betaalmethode"
 
 #: pretix/base/exporters/invoices.py:88 pretix/base/exporters/invoices.py:90
-#: pretix/control/forms/filter.py:177 pretix/control/forms/filter.py:1715
+#: pretix/control/forms/filter.py:177 pretix/control/forms/filter.py:1778
 msgid "All payment providers"
 msgstr "Alle betalingsproviders"
 
@@ -585,14 +593,14 @@ msgstr "Datum"
 #: pretix/base/exporters/orderlist.py:436
 #: pretix/base/exporters/orderlist.py:538 pretix/base/models/orders.py:166
 #: pretix/base/notifications.py:199 pretix/base/pdf.py:93
-#: pretix/control/templates/pretixcontrol/checkin/index.html:65
+#: pretix/control/templates/pretixcontrol/checkin/index.html:81
 #: pretix/control/templates/pretixcontrol/order/index.html:162
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:115
-#: pretix/control/templates/pretixcontrol/orders/index.html:46
-#: pretix/control/templates/pretixcontrol/orders/index.html:106
+#: pretix/control/templates/pretixcontrol/orders/index.html:45
+#: pretix/control/templates/pretixcontrol/orders/index.html:112
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:169
 #: pretix/control/templates/pretixcontrol/organizers/customer_membership.html:41
-#: pretix/control/templates/pretixcontrol/search/orders.html:41
+#: pretix/control/templates/pretixcontrol/search/orders.html:48
 #: pretix/plugins/badges/exporters.py:294
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:29
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:41
@@ -610,7 +618,7 @@ msgstr "Bestelcode"
 #: pretix/base/exporters/invoices.py:202 pretix/base/exporters/invoices.py:330
 #: pretix/base/models/waitinglist.py:72 pretix/base/orderimport.py:150
 #: pretix/control/forms/filter.py:507
-#: pretix/control/templates/pretixcontrol/users/index.html:37
+#: pretix/control/templates/pretixcontrol/users/index.html:42
 #: pretix/control/views/waitinglist.py:276
 msgid "E-mail address"
 msgstr "E-mailadres"
@@ -645,7 +653,7 @@ msgstr "Verzender van factuur:"
 #: pretix/base/exporters/orderlist.py:269
 #: pretix/base/exporters/waitinglist.py:106 pretix/base/forms/questions.py:978
 #: pretix/base/models/devices.py:66 pretix/base/models/devices.py:126
-#: pretix/base/models/event.py:1218 pretix/base/models/event.py:1452
+#: pretix/base/models/event.py:1223 pretix/base/models/event.py:1457
 #: pretix/base/models/items.py:1500 pretix/base/models/items.py:1666
 #: pretix/base/models/memberships.py:41 pretix/base/models/organizer.py:71
 #: pretix/base/models/seating.py:61 pretix/base/models/tax.py:128
@@ -653,17 +661,17 @@ msgstr "Verzender van factuur:"
 #: pretix/base/settings.py:2385 pretix/base/settings.py:2643
 #: pretix/control/forms/filter.py:569 pretix/control/forms/item.py:341
 #: pretix/control/forms/organizer.py:541
-#: pretix/control/templates/pretixcontrol/checkin/index.html:79
+#: pretix/control/templates/pretixcontrol/checkin/index.html:95
 #: pretix/control/templates/pretixcontrol/event/tax_index.html:26
 #: pretix/control/templates/pretixcontrol/oauth/app_list.html:12
 #: pretix/control/templates/pretixcontrol/oauth/authorized.html:17
 #: pretix/control/templates/pretixcontrol/order/index.html:844
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:49
-#: pretix/control/templates/pretixcontrol/organizers/customers.html:51
-#: pretix/control/templates/pretixcontrol/organizers/devices.html:35
+#: pretix/control/templates/pretixcontrol/organizers/customers.html:56
+#: pretix/control/templates/pretixcontrol/organizers/devices.html:63
 #: pretix/control/templates/pretixcontrol/organizers/membershiptypes.html:26
 #: pretix/control/templates/pretixcontrol/organizers/team_members.html:96
-#: pretix/control/templates/pretixcontrol/subevents/index.html:74
+#: pretix/control/templates/pretixcontrol/subevents/index.html:88
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:144
 #: pretix/control/views/waitinglist.py:276 pretix/plugins/badges/models.py:53
 #: pretix/plugins/badges/templates/pretixplugins/badges/index.html:34
@@ -1029,7 +1037,7 @@ msgid "Event slug"
 msgstr "Evenementsslug"
 
 #: pretix/base/exporters/orderlist.py:268 pretix/base/notifications.py:201
-#: pretix/control/templates/pretixcontrol/search/orders.html:53
+#: pretix/control/templates/pretixcontrol/search/orders.html:60
 #: pretix/plugins/reports/exporters.py:456
 #: pretix/plugins/reports/exporters.py:797
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:112
@@ -1043,22 +1051,23 @@ msgstr "Totaalbedrag van bestelling"
 #: pretix/base/exporters/orderlist.py:941
 #: pretix/base/exporters/waitinglist.py:118
 #: pretix/base/exporters/waitinglist.py:166 pretix/base/models/orders.py:172
-#: pretix/control/forms/filter.py:821 pretix/control/forms/filter.py:1054
-#: pretix/control/forms/filter.py:1172 pretix/control/forms/filter.py:1441
-#: pretix/control/forms/filter.py:1522 pretix/control/forms/filter.py:1805
+#: pretix/control/forms/filter.py:821 pretix/control/forms/filter.py:1004
+#: pretix/control/forms/filter.py:1073 pretix/control/forms/filter.py:1191
+#: pretix/control/forms/filter.py:1504 pretix/control/forms/filter.py:1585
+#: pretix/control/forms/filter.py:1868
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:39
-#: pretix/control/templates/pretixcontrol/checkin/index.html:82
-#: pretix/control/templates/pretixcontrol/events/index.html:86
+#: pretix/control/templates/pretixcontrol/checkin/index.html:98
+#: pretix/control/templates/pretixcontrol/events/index.html:84
 #: pretix/control/templates/pretixcontrol/order/index.html:640
 #: pretix/control/templates/pretixcontrol/order/index.html:736
-#: pretix/control/templates/pretixcontrol/orders/index.html:120
-#: pretix/control/templates/pretixcontrol/orders/refunds.html:62
+#: pretix/control/templates/pretixcontrol/orders/index.html:126
+#: pretix/control/templates/pretixcontrol/orders/refunds.html:65
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:30
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:174
 #: pretix/control/templates/pretixcontrol/organizers/customer_membership.html:46
-#: pretix/control/templates/pretixcontrol/organizers/detail.html:58
-#: pretix/control/templates/pretixcontrol/search/orders.html:56
-#: pretix/control/templates/pretixcontrol/subevents/index.html:85
+#: pretix/control/templates/pretixcontrol/organizers/detail.html:64
+#: pretix/control/templates/pretixcontrol/search/orders.html:63
+#: pretix/control/templates/pretixcontrol/subevents/index.html:99
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:155
 #: pretix/control/views/waitinglist.py:276
 #: pretix/plugins/reports/exporters.py:456
@@ -1073,9 +1082,9 @@ msgstr "Status"
 #: pretix/base/exporters/orderlist.py:268
 #: pretix/base/exporters/orderlist.py:438
 #: pretix/base/exporters/orderlist.py:541
-#: pretix/base/exporters/waitinglist.py:107 pretix/base/pdf.py:292
-#: pretix/control/templates/pretixcontrol/checkin/index.html:77
-#: pretix/control/templates/pretixcontrol/organizers/customers.html:48
+#: pretix/base/exporters/waitinglist.py:107 pretix/base/pdf.py:297
+#: pretix/control/templates/pretixcontrol/checkin/index.html:93
+#: pretix/control/templates/pretixcontrol/organizers/customers.html:53
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:146
 #: pretix/presale/templates/pretixpresale/event/checkout_customer.html:35
 msgid "Email"
@@ -1086,7 +1095,7 @@ msgstr "E-mail"
 #: pretix/base/exporters/orderlist.py:542
 #: pretix/base/exporters/waitinglist.py:108 pretix/base/models/items.py:1156
 #: pretix/base/models/orders.py:195 pretix/base/models/waitinglist.py:76
-#: pretix/base/orderimport.py:163 pretix/base/pdf.py:287
+#: pretix/base/orderimport.py:163 pretix/base/pdf.py:292
 #: pretix/control/templates/pretixcontrol/order/index.html:223
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:148
 #: pretix/control/views/waitinglist.py:276
@@ -1100,12 +1109,12 @@ msgstr "Telefoonnummer"
 #: pretix/base/exporters/orderlist.py:268
 #: pretix/base/exporters/orderlist.py:440
 #: pretix/base/exporters/orderlist.py:543 pretix/base/notifications.py:203
-#: pretix/control/forms/filter.py:1766
+#: pretix/control/forms/filter.py:1829
 #: pretix/control/templates/pretixcontrol/order/index.html:164
-#: pretix/control/templates/pretixcontrol/orders/index.html:112
+#: pretix/control/templates/pretixcontrol/orders/index.html:118
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:171
 #: pretix/control/templates/pretixcontrol/organizers/customer_membership.html:45
-#: pretix/control/templates/pretixcontrol/search/orders.html:50
+#: pretix/control/templates/pretixcontrol/search/orders.html:57
 #: pretix/plugins/checkinlists/exporters.py:466
 #: pretix/plugins/reports/exporters.py:393
 #: pretix/plugins/reports/exporters.py:456
@@ -1132,7 +1141,7 @@ msgstr "Aangepast adresveld"
 msgid "Date of last payment"
 msgstr "Datum van laatste betaling"
 
-#: pretix/base/exporters/orderlist.py:277 pretix/base/services/stats.py:229
+#: pretix/base/exporters/orderlist.py:277 pretix/base/services/stats.py:232
 msgid "Fees"
 msgstr "Toeslagen"
 
@@ -1197,7 +1206,7 @@ msgid "Follow-up date"
 msgstr "Datum voor opvolging"
 
 #: pretix/base/exporters/orderlist.py:292
-#: pretix/control/templates/pretixcontrol/orders/index.html:119
+#: pretix/control/templates/pretixcontrol/orders/index.html:125
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:173
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:113
 msgid "Positions"
@@ -1220,7 +1229,7 @@ msgstr "Soort kosten"
 
 #: pretix/base/exporters/orderlist.py:444
 #: pretix/base/exporters/orderlist.py:553 pretix/base/models/orders.py:1192
-#: pretix/base/orderimport.py:576 pretix/base/pdf.py:140
+#: pretix/base/orderimport.py:576 pretix/base/pdf.py:145
 #: pretix/control/templates/pretixcontrol/item/index.html:88
 #: pretix/control/templates/pretixcontrol/order/change.html:169
 #: pretix/control/templates/pretixcontrol/order/change.html:325
@@ -1243,7 +1252,7 @@ msgstr "Belastingregel"
 #: pretix/base/exporters/orderlist.py:449
 #: pretix/base/exporters/orderlist.py:454
 #: pretix/base/exporters/orderlist.py:599
-#: pretix/base/exporters/orderlist.py:603 pretix/base/pdf.py:297
+#: pretix/base/exporters/orderlist.py:603 pretix/base/pdf.py:302
 msgid "Invoice address name"
 msgstr "Naam factuuradres"
 
@@ -1257,10 +1266,11 @@ msgstr "Plaatsnummer"
 #: pretix/base/models/items.py:1496 pretix/base/models/orders.py:1174
 #: pretix/base/models/vouchers.py:136 pretix/base/models/waitinglist.py:57
 #: pretix/control/forms/event.py:1218 pretix/control/forms/filter.py:379
-#: pretix/control/forms/filter.py:1559 pretix/control/forms/filter.py:1673
-#: pretix/control/forms/filter.py:1757 pretix/control/forms/item.py:230
-#: pretix/control/forms/orders.py:308 pretix/control/forms/orders.py:360
-#: pretix/control/forms/orders.py:709 pretix/control/forms/vouchers.py:112
+#: pretix/control/forms/filter.py:1396 pretix/control/forms/filter.py:1622
+#: pretix/control/forms/filter.py:1736 pretix/control/forms/filter.py:1820
+#: pretix/control/forms/item.py:230 pretix/control/forms/orders.py:308
+#: pretix/control/forms/orders.py:360 pretix/control/forms/orders.py:709
+#: pretix/control/forms/vouchers.py:112
 #: pretix/control/templates/pretixcontrol/checkin/lists.html:75
 #: pretix/control/templates/pretixcontrol/items/quotas.html:51
 #: pretix/control/templates/pretixcontrol/order/change.html:104
@@ -1268,7 +1278,7 @@ msgstr "Plaatsnummer"
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:8
 #: pretix/control/templates/pretixcontrol/subevents/detail.html:7
 #: pretix/control/templates/pretixcontrol/subevents/detail.html:12
-#: pretix/control/templates/pretixcontrol/vouchers/index.html:126
+#: pretix/control/templates/pretixcontrol/vouchers/index.html:129
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:152
 #: pretix/control/views/waitinglist.py:280
 #: pretix/plugins/checkinlists/exporters.py:457
@@ -1282,15 +1292,15 @@ msgstr "Datum"
 
 #: pretix/base/exporters/orderlist.py:551 pretix/base/models/items.py:549
 #: pretix/base/models/vouchers.py:191 pretix/base/models/waitinglist.py:87
-#: pretix/base/orderimport.py:254 pretix/control/forms/filter.py:1565
-#: pretix/control/forms/filter.py:1821 pretix/control/forms/orders.py:283
+#: pretix/base/orderimport.py:254 pretix/control/forms/filter.py:1628
+#: pretix/control/forms/filter.py:1884 pretix/control/forms/orders.py:283
 #: pretix/control/forms/vouchers.py:63
-#: pretix/control/templates/pretixcontrol/checkin/checkins.html:61
+#: pretix/control/templates/pretixcontrol/checkin/checkins.html:66
 #: pretix/control/templates/pretixcontrol/item/base.html:3
 #: pretix/control/templates/pretixcontrol/order/change.html:130
-#: pretix/control/templates/pretixcontrol/orders/overview.html:65
+#: pretix/control/templates/pretixcontrol/orders/overview.html:68
 #: pretix/control/templates/pretixcontrol/organizers/customer_membership.html:44
-#: pretix/control/templates/pretixcontrol/vouchers/index.html:120
+#: pretix/control/templates/pretixcontrol/vouchers/index.html:123
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:150
 #: pretix/control/views/vouchers.py:109 pretix/control/views/waitinglist.py:276
 #: pretix/plugins/checkinlists/exporters.py:333
@@ -1312,7 +1322,7 @@ msgstr "Variant"
 #: pretix/base/exporters/orderlist.py:557
 #: pretix/base/exporters/orderlist.py:562 pretix/base/forms/questions.py:546
 #: pretix/base/models/orders.py:1196 pretix/base/orderimport.py:458
-#: pretix/base/pdf.py:154 pretix/control/forms/filter.py:592
+#: pretix/base/pdf.py:159 pretix/control/forms/filter.py:592
 #: pretix/control/forms/organizer.py:587
 #: pretix/control/templates/pretixcontrol/order/index.html:417
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:85
@@ -1329,7 +1339,7 @@ msgid "Attendee name"
 msgstr "Naam van gast"
 
 #: pretix/base/exporters/orderlist.py:564 pretix/base/forms/questions.py:552
-#: pretix/base/models/orders.py:1204 pretix/base/pdf.py:196
+#: pretix/base/models/orders.py:1204 pretix/base/pdf.py:201
 #: pretix/control/templates/pretixcontrol/order/index.html:422
 #: pretix/control/views/item.py:356
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:63
@@ -1410,7 +1420,7 @@ msgstr "Betalings-ID"
 #: pretix/base/exporters/orderlist.py:786
 #: pretix/base/exporters/orderlist.py:985
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:30
-#: pretix/control/templates/pretixcontrol/organizers/giftcards.html:54
+#: pretix/control/templates/pretixcontrol/organizers/giftcards.html:59
 msgid "Creation date"
 msgstr "Aanmaakdatum"
 
@@ -1428,7 +1438,7 @@ msgstr "Statuscode"
 #: pretix/base/models/orders.py:1774
 #: pretix/control/templates/pretixcontrol/order/index.html:641
 #: pretix/control/templates/pretixcontrol/order/index.html:737
-#: pretix/control/templates/pretixcontrol/orders/refunds.html:67
+#: pretix/control/templates/pretixcontrol/orders/refunds.html:70
 #: pretix/plugins/banktransfer/refund_export.py:46
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_assign.html:25
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:13
@@ -1518,7 +1528,7 @@ msgstr "Cadeaubonverzilveringen"
 #: pretix/control/templates/pretixcontrol/giftcards/payment.html:4
 #: pretix/control/templates/pretixcontrol/order/index.html:409
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:28
-#: pretix/control/templates/pretixcontrol/organizers/giftcards.html:51
+#: pretix/control/templates/pretixcontrol/organizers/giftcards.html:56
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:44
 msgid "Gift card code"
 msgstr "Cadeauboncode"
@@ -1539,52 +1549,52 @@ msgstr "Toon waarde op"
 
 #: pretix/base/exporters/orderlist.py:931
 #: pretix/base/exporters/orderlist.py:934 pretix/base/models/memberships.py:118
-#: pretix/control/forms/filter.py:213 pretix/control/forms/filter.py:976
-#: pretix/control/forms/filter.py:979
+#: pretix/control/forms/filter.py:213 pretix/control/forms/filter.py:995
+#: pretix/control/forms/filter.py:998
 #: pretix/control/templates/pretixcontrol/event/live.html:75
 msgid "Test mode"
 msgstr "Testmodus"
 
 #: pretix/base/exporters/orderlist.py:933
 #: pretix/base/exporters/orderlist.py:943 pretix/control/forms/filter.py:473
-#: pretix/control/forms/filter.py:823 pretix/control/forms/filter.py:978
-#: pretix/control/forms/filter.py:987 pretix/control/forms/filter.py:1057
-#: pretix/control/forms/filter.py:1067 pretix/control/forms/filter.py:1443
-#: pretix/control/forms/filter.py:1452 pretix/control/forms/filter.py:1524
-#: pretix/control/forms/filter.py:1537
+#: pretix/control/forms/filter.py:823 pretix/control/forms/filter.py:997
+#: pretix/control/forms/filter.py:1006 pretix/control/forms/filter.py:1076
+#: pretix/control/forms/filter.py:1086 pretix/control/forms/filter.py:1506
+#: pretix/control/forms/filter.py:1515 pretix/control/forms/filter.py:1587
+#: pretix/control/forms/filter.py:1600 pretix/control/forms/filter.py:2016
+#: pretix/control/forms/filter.py:2026
 #: pretix/control/templates/pretixcontrol/checkin/lists.html:106
 #: pretix/control/templates/pretixcontrol/checkin/lists.html:118
-#: pretix/control/templates/pretixcontrol/organizers/devices.html:74
-#: pretix/control/templates/pretixcontrol/organizers/teams.html:56
+#: pretix/control/templates/pretixcontrol/organizers/devices.html:112
+#: pretix/control/templates/pretixcontrol/organizers/teams.html:61
 #: pretix/control/templates/pretixcontrol/organizers/webhooks.html:51
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:62
 msgid "All"
 msgstr "Alle"
 
-#: pretix/base/exporters/orderlist.py:935 pretix/control/forms/filter.py:980
+#: pretix/base/exporters/orderlist.py:935 pretix/control/forms/filter.py:999
 msgid "Live"
 msgstr "Live"
 
-#: pretix/base/exporters/orderlist.py:944 pretix/control/forms/filter.py:985
-#: pretix/control/forms/filter.py:988
+#: pretix/base/exporters/orderlist.py:944 pretix/control/forms/filter.py:1007
 #: pretix/control/templates/pretixcontrol/pdf/index.html:353
 msgid "Empty"
 msgstr "Leeg"
 
-#: pretix/base/exporters/orderlist.py:945 pretix/control/forms/filter.py:989
+#: pretix/base/exporters/orderlist.py:945 pretix/control/forms/filter.py:1008
 msgid "Valid and with value"
 msgstr "Geldig en met waarde"
 
-#: pretix/base/exporters/orderlist.py:946 pretix/control/forms/filter.py:990
+#: pretix/base/exporters/orderlist.py:946 pretix/control/forms/filter.py:1009
 msgid "Expired and with value"
 msgstr "Verlopen en met waarde"
 
 #: pretix/base/exporters/orderlist.py:947 pretix/control/forms/filter.py:197
-#: pretix/control/forms/filter.py:991 pretix/control/forms/filter.py:1529
+#: pretix/control/forms/filter.py:1010 pretix/control/forms/filter.py:1592
 #: pretix/control/templates/pretixcontrol/items/question.html:24
 #: pretix/control/templates/pretixcontrol/orders/fragment_order_status.html:31
-#: pretix/control/templates/pretixcontrol/orders/overview.html:67
-#: pretix/control/templates/pretixcontrol/organizers/giftcards.html:76
+#: pretix/control/templates/pretixcontrol/orders/overview.html:70
+#: pretix/control/templates/pretixcontrol/organizers/giftcards.html:81
 #: pretix/plugins/reports/exporters.py:289
 #: pretix/presale/templates/pretixpresale/event/fragment_order_status.html:22
 msgid "Expired"
@@ -1596,7 +1606,7 @@ msgstr "Testcadeaubon"
 
 #: pretix/base/exporters/orderlist.py:986 pretix/base/models/giftcards.py:88
 #: pretix/control/templates/pretixcontrol/order/index.html:182
-#: pretix/control/templates/pretixcontrol/organizers/giftcards.html:57
+#: pretix/control/templates/pretixcontrol/organizers/giftcards.html:62
 msgid "Expiry date"
 msgstr "Verloopdatum"
 
@@ -1617,7 +1627,7 @@ msgstr "Munteenheid"
 #: pretix/control/templates/pretixcontrol/order/change.html:94
 #: pretix/control/templates/pretixcontrol/order/change.html:317
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:32
-#: pretix/control/templates/pretixcontrol/organizers/giftcards.html:60
+#: pretix/control/templates/pretixcontrol/organizers/giftcards.html:65
 msgid "Current value"
 msgstr "Huidige waarde"
 
@@ -1668,23 +1678,23 @@ msgstr "Voucher verzilverd"
 msgid "Voucher expired"
 msgstr "Voucher verlopen"
 
-#: pretix/base/exporters/waitinglist.py:109 pretix/base/pdf.py:103
+#: pretix/base/exporters/waitinglist.py:109 pretix/base/pdf.py:108
 #: pretix/control/forms/event.py:1375
 #: pretix/control/templates/pretixcontrol/items/index.html:33
 msgid "Product name"
 msgstr "Productnaam"
 
 #: pretix/base/exporters/waitinglist.py:112 pretix/base/models/event.py:419
-#: pretix/base/pdf.py:201 pretix/control/forms/filter.py:857
-#: pretix/control/forms/filter.py:859 pretix/control/forms/filter.py:1200
-#: pretix/control/forms/filter.py:1202
-#: pretix/control/templates/pretixcontrol/events/index.html:64
-#: pretix/control/templates/pretixcontrol/organizers/detail.html:52
+#: pretix/base/pdf.py:206 pretix/control/forms/filter.py:871
+#: pretix/control/forms/filter.py:873 pretix/control/forms/filter.py:1219
+#: pretix/control/forms/filter.py:1221
+#: pretix/control/templates/pretixcontrol/events/index.html:62
+#: pretix/control/templates/pretixcontrol/organizers/detail.html:58
 msgid "Event name"
 msgstr "Evenementsnaam"
 
 #: pretix/base/exporters/waitinglist.py:113 pretix/base/orderimport.py:186
-#: pretix/control/templates/pretixcontrol/checkin/index.html:70
+#: pretix/control/templates/pretixcontrol/checkin/index.html:86
 msgctxt "subevents"
 msgid "Date"
 msgstr "Datum"
@@ -1695,8 +1705,8 @@ msgid "Priority"
 msgstr "Prioriteit"
 
 #: pretix/base/exporters/waitinglist.py:119 pretix/base/models/vouchers.py:139
-#: pretix/control/templates/pretixcontrol/vouchers/index.html:19
-#: pretix/control/templates/pretixcontrol/vouchers/index.html:100
+#: pretix/control/templates/pretixcontrol/vouchers/index.html:18
+#: pretix/control/templates/pretixcontrol/vouchers/index.html:103
 #: pretix/control/views/vouchers.py:109 pretix/control/views/waitinglist.py:276
 #: pretix/plugins/checkinlists/exporters.py:465
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:321
@@ -2012,10 +2022,10 @@ msgstr ""
 
 #: pretix/base/invoice.py:429
 #: pretix/control/templates/pretixcontrol/base.html:278
-#: pretix/control/templates/pretixcontrol/checkin/index.html:102
+#: pretix/control/templates/pretixcontrol/checkin/index.html:118
 #: pretix/control/templates/pretixcontrol/order/index.html:23
-#: pretix/control/templates/pretixcontrol/orders/index.html:135
-#: pretix/control/templates/pretixcontrol/orders/refunds.html:83
+#: pretix/control/templates/pretixcontrol/orders/index.html:141
+#: pretix/control/templates/pretixcontrol/orders/refunds.html:86
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:98
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:187
 #: pretix/control/templates/pretixcontrol/organizers/customer_membership.html:10
@@ -2023,8 +2033,8 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/organizers/customer_membership_delete.html:10
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:11
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_edit.html:10
-#: pretix/control/templates/pretixcontrol/organizers/giftcards.html:73
-#: pretix/control/templates/pretixcontrol/search/orders.html:70
+#: pretix/control/templates/pretixcontrol/organizers/giftcards.html:78
+#: pretix/control/templates/pretixcontrol/search/orders.html:77
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:67
 #: pretix/presale/forms/checkout.py:235
 #: pretix/presale/templates/pretixpresale/event/order.html:71
@@ -2171,7 +2181,7 @@ msgstr "Standaardlijst"
 #: pretix/base/models/auth.py:126 pretix/base/models/customers.py:46
 #: pretix/base/models/orders.py:2334 pretix/base/settings.py:2654
 #: pretix/base/settings.py:2665
-#: pretix/control/templates/pretixcontrol/users/index.html:42
+#: pretix/control/templates/pretixcontrol/users/index.html:47
 msgid "Full name"
 msgstr "Volledige naam"
 
@@ -2204,8 +2214,8 @@ msgid "If turned off, you will not get any notifications."
 msgstr "Als dit is uitgeschakeld ontvang je geen enkele melding."
 
 #: pretix/base/models/auth.py:160
-#: pretix/control/templates/pretixcontrol/orders/index.html:109
-#: pretix/control/templates/pretixcontrol/search/orders.html:47
+#: pretix/control/templates/pretixcontrol/orders/index.html:115
+#: pretix/control/templates/pretixcontrol/search/orders.html:54
 #: pretix/control/templates/pretixcontrol/user/staff_session_edit.html:23
 #: pretix/control/templates/pretixcontrol/user/staff_session_list.html:15
 #: pretix/control/templates/pretixcontrol/users/form.html:4
@@ -2375,15 +2385,16 @@ msgstr ""
 msgid "This identifier is already used for a different question."
 msgstr "Dit kenmerk wordt al voor een andere vraag gebruikt."
 
-#: pretix/base/models/devices.py:112 pretix/control/forms/filter.py:1831
-#: pretix/control/templates/pretixcontrol/checkin/checkins.html:62
+#: pretix/base/models/devices.py:112 pretix/control/forms/filter.py:1894
+#: pretix/control/forms/filter.py:2009
+#: pretix/control/templates/pretixcontrol/checkin/checkins.html:67
 #: pretix/control/templates/pretixcontrol/organizers/gates.html:16
 #: pretix/plugins/checkinlists/exporters.py:619
 msgid "Gate"
 msgstr "Toegangslocatie"
 
 #: pretix/base/models/devices.py:130
-#: pretix/control/templates/pretixcontrol/organizers/devices.html:38
+#: pretix/control/templates/pretixcontrol/organizers/devices.html:69
 msgid "Setup date"
 msgstr "Installatiedatum"
 
@@ -2419,7 +2430,7 @@ msgid "The slug may only contain letters, numbers, dots and dashes."
 msgstr "De slug mag alleen letters, cijfers, punten en streepjes bevatten."
 
 #: pretix/base/models/event.py:435 pretix/base/models/organizer.py:87
-#: pretix/control/templates/pretixcontrol/organizers/index.html:40
+#: pretix/control/templates/pretixcontrol/organizers/index.html:47
 msgid "Short form"
 msgstr "Korte vorm"
 
@@ -2431,26 +2442,26 @@ msgstr "Winkel is live"
 msgid "Event currency"
 msgstr "Munteenheid van evenement"
 
-#: pretix/base/models/event.py:442 pretix/base/models/event.py:1220
+#: pretix/base/models/event.py:442 pretix/base/models/event.py:1225
 #: pretix/base/settings.py:2373 pretix/base/settings.py:2383
 #: pretix/control/forms/subevents.py:609
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:268
 msgid "Event start time"
 msgstr "Starttijd van het evenement"
 
-#: pretix/base/models/event.py:444 pretix/base/models/event.py:1222
-#: pretix/base/pdf.py:258 pretix/control/forms/subevents.py:614
+#: pretix/base/models/event.py:444 pretix/base/models/event.py:1227
+#: pretix/base/pdf.py:263 pretix/control/forms/subevents.py:614
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:270
 msgid "Event end time"
 msgstr "Eindtijd van het evenement"
 
-#: pretix/base/models/event.py:446 pretix/base/models/event.py:1224
+#: pretix/base/models/event.py:446 pretix/base/models/event.py:1229
 #: pretix/control/forms/subevents.py:619
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:274
 msgid "Admission time"
 msgstr "Toegangstijd"
 
-#: pretix/base/models/event.py:448 pretix/base/models/event.py:1213
+#: pretix/base/models/event.py:448 pretix/base/models/event.py:1218
 msgid "Show in lists"
 msgstr "Toon in lijsten"
 
@@ -2462,12 +2473,12 @@ msgstr ""
 "Als dit is ingeschakeld zal dit evenement zichtbaar zijn op de lijst van "
 "evenementen van jouw organisatoraccount."
 
-#: pretix/base/models/event.py:452 pretix/base/models/event.py:1227
+#: pretix/base/models/event.py:452 pretix/base/models/event.py:1232
 #: pretix/control/forms/subevents.py:98
 msgid "End of presale"
 msgstr "Einde van de voorverkoop"
 
-#: pretix/base/models/event.py:453 pretix/base/models/event.py:1228
+#: pretix/base/models/event.py:453 pretix/base/models/event.py:1233
 #: pretix/control/forms/subevents.py:99
 msgid ""
 "Optional. No products will be sold after this date. If you do not set this "
@@ -2476,26 +2487,26 @@ msgstr ""
 "Optioneel. Na deze datum worden geen producten meer verkocht. Als je deze "
 "waarde niet instelt eindigt de verkoop na de einddatum van je evenement."
 
-#: pretix/base/models/event.py:458 pretix/base/models/event.py:1233
+#: pretix/base/models/event.py:458 pretix/base/models/event.py:1238
 #: pretix/control/forms/subevents.py:92
 msgid "Start of presale"
 msgstr "Begin van de verkoop"
 
-#: pretix/base/models/event.py:459 pretix/base/models/event.py:1234
+#: pretix/base/models/event.py:459 pretix/base/models/event.py:1239
 #: pretix/control/forms/subevents.py:93
 msgid "Optional. No products will be sold before this date."
 msgstr "Optioneel. Er worden geen producten verkocht vóór deze datum."
 
-#: pretix/base/models/event.py:464 pretix/base/models/event.py:1239
+#: pretix/base/models/event.py:464 pretix/base/models/event.py:1244
 #: pretix/presale/templates/pretixpresale/event/index.html:140
 msgid "Location"
 msgstr "Locatie"
 
-#: pretix/base/models/event.py:467 pretix/base/models/event.py:1242
+#: pretix/base/models/event.py:467 pretix/base/models/event.py:1247
 msgid "Latitude"
 msgstr "Breedtegraad"
 
-#: pretix/base/models/event.py:475 pretix/base/models/event.py:1250
+#: pretix/base/models/event.py:475 pretix/base/models/event.py:1255
 msgid "Longitude"
 msgstr "Lengtegraad"
 
@@ -2509,12 +2520,12 @@ msgstr "Plugins"
 msgid "Internal comment"
 msgstr "Interne opmerking"
 
-#: pretix/base/models/event.py:491 pretix/base/pdf.py:206
-#: pretix/control/forms/event.py:249 pretix/control/forms/filter.py:1182
+#: pretix/base/models/event.py:491 pretix/base/pdf.py:211
+#: pretix/control/forms/event.py:249 pretix/control/forms/filter.py:1201
 #: pretix/control/templates/pretixcontrol/event/index.html:13
 #: pretix/control/views/dashboards.py:540
 #: pretix/presale/templates/pretixpresale/organizers/index.html:102
-#: pretix/presale/views/widget.py:571
+#: pretix/presale/views/widget.py:588
 msgid "Event series"
 msgstr "Evenementenreeks"
 
@@ -2533,7 +2544,7 @@ msgstr ""
 #: pretix/base/models/waitinglist.py:51 pretix/base/notifications.py:187
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:170
 #: pretix/control/templates/pretixcontrol/organizers/customer_membership.html:42
-#: pretix/control/templates/pretixcontrol/search/orders.html:44
+#: pretix/control/templates/pretixcontrol/search/orders.html:51
 #: pretix/presale/templates/pretixpresale/event/waitinglist.html:18
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:43
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:110
@@ -2544,14 +2555,14 @@ msgstr "Evenement"
 #: pretix/control/navigation.py:441
 #: pretix/control/templates/pretixcontrol/events/index.html:5
 #: pretix/control/templates/pretixcontrol/events/index.html:7
-#: pretix/control/templates/pretixcontrol/organizers/devices.html:39
-#: pretix/control/templates/pretixcontrol/organizers/teams.html:34
+#: pretix/control/templates/pretixcontrol/organizers/devices.html:73
+#: pretix/control/templates/pretixcontrol/organizers/teams.html:39
 #: pretix/control/templates/pretixcontrol/organizers/webhooks.html:37
-#: pretix/control/views/organizer.py:1335
+#: pretix/control/views/organizer.py:1347
 msgid "Events"
 msgstr "Evenementen"
 
-#: pretix/base/models/event.py:1046
+#: pretix/base/models/event.py:1051
 msgid ""
 "You have configured at least one paid product but have not enabled any "
 "payment methods."
@@ -2559,48 +2570,48 @@ msgstr ""
 "Je hebt ten minste één betaald product ingesteld maar geen betaalmethoden "
 "ingeschakeld."
 
-#: pretix/base/models/event.py:1049
+#: pretix/base/models/event.py:1054
 msgid "You need to configure at least one quota to sell anything."
 msgstr "Je moet ten minste één quotum instellen om iets te verkopen."
 
-#: pretix/base/models/event.py:1054
+#: pretix/base/models/event.py:1059
 #, python-brace-format
 msgid "You need to fill the meta parameter \"{property}\"."
 msgstr "Je moet de meta-eigenschap \"{property}\" invullen."
 
-#: pretix/base/models/event.py:1159
+#: pretix/base/models/event.py:1164
 msgid ""
 "Once created an event cannot change between an series and a single event."
 msgstr ""
 "Een evenement kan, wanneer aangemaakt, niet worden veranderd van een enkel "
 "evenement in een reeks of andersom."
 
-#: pretix/base/models/event.py:1165
+#: pretix/base/models/event.py:1170
 msgid "The event slug cannot be changed."
 msgstr "De slug van het evenement kan niet worden veranderd."
 
-#: pretix/base/models/event.py:1168
+#: pretix/base/models/event.py:1173
 msgid "This slug has already been used for a different event."
 msgstr "Deze slug wordt al voor een ander evenement gebruikt."
 
-#: pretix/base/models/event.py:1174
+#: pretix/base/models/event.py:1179
 msgid "The event cannot end before it starts."
 msgstr "Het evenement kan niet eindigen voor het begint."
 
-#: pretix/base/models/event.py:1180
+#: pretix/base/models/event.py:1185
 msgid "The event's presale cannot end before it starts."
 msgstr ""
 "De verkoopperiode van het evenement kan niet eindigen voordat de voorverkoop "
 "begint."
 
-#: pretix/base/models/event.py:1209 pretix/base/models/items.py:368
+#: pretix/base/models/event.py:1214 pretix/base/models/items.py:368
 #: pretix/base/models/items.py:768 pretix/control/forms/filter.py:824
-#: pretix/control/forms/filter.py:1444
-#: pretix/control/templates/pretixcontrol/users/index.html:46
+#: pretix/control/forms/filter.py:1507
+#: pretix/control/templates/pretixcontrol/users/index.html:51
 msgid "Active"
 msgstr "Actief"
 
-#: pretix/base/models/event.py:1210
+#: pretix/base/models/event.py:1215
 msgid ""
 "Only with this checkbox enabled, this date is visible in the frontend to "
 "users."
@@ -2608,7 +2619,7 @@ msgstr ""
 "Alleen wanneer dit selectievak is ingeschakeld is deze datum zichtbaar voor "
 "gebruikers."
 
-#: pretix/base/models/event.py:1214
+#: pretix/base/models/event.py:1219
 msgid ""
 "If selected, this event will show up publicly on the list of dates for your "
 "event."
@@ -2616,46 +2627,46 @@ msgstr ""
 "Als dit is ingeschakeld zal dit evenement zichtbaar zijn in de lijst met "
 "datums van deze evenementenreeks."
 
-#: pretix/base/models/event.py:1259 pretix/base/settings.py:2174
+#: pretix/base/models/event.py:1264 pretix/base/settings.py:2174
 msgid "Frontpage text"
 msgstr "Voorpaginatekst"
 
-#: pretix/base/models/event.py:1274
+#: pretix/base/models/event.py:1279
 msgid "Date in event series"
 msgstr "Datum in evenementenreeks"
 
-#: pretix/base/models/event.py:1275
+#: pretix/base/models/event.py:1280
 msgid "Dates in event series"
 msgstr "Datums in evenementenreeks"
 
-#: pretix/base/models/event.py:1414
+#: pretix/base/models/event.py:1419
 msgid "One or more variations do not belong to this event."
 msgstr "Één of meer varianten horen niet bij dit evenement."
 
-#: pretix/base/models/event.py:1444 pretix/base/models/items.py:1658
+#: pretix/base/models/event.py:1449 pretix/base/models/items.py:1658
 msgid "Can not contain spaces or special characters except underscores"
 msgstr ""
 "Mag geen spaties of speciale tekens bevatten, maar wel onderstrepingstekens"
 
-#: pretix/base/models/event.py:1449 pretix/base/models/items.py:1663
+#: pretix/base/models/event.py:1454 pretix/base/models/items.py:1663
 msgid "The property name may only contain letters, numbers and underscores."
 msgstr ""
 "De naam van de eigenschap mag alleen letters, cijfers en "
 "onderstrepingstekens bevatten."
 
-#: pretix/base/models/event.py:1454
+#: pretix/base/models/event.py:1459
 msgid "Default value"
 msgstr "Standaardwaarde"
 
-#: pretix/base/models/event.py:1456
+#: pretix/base/models/event.py:1461
 msgid "Can only be changed by organizer-level administrators"
 msgstr "Kan alleen worden gewijzigd door beheerders van deze organisator"
 
-#: pretix/base/models/event.py:1458
+#: pretix/base/models/event.py:1463
 msgid "Required for events"
 msgstr "Verplicht voor evenementen"
 
-#: pretix/base/models/event.py:1459
+#: pretix/base/models/event.py:1464
 msgid ""
 "If checked, an event can only be taken live if the property is set. In event "
 "series, its always optional to set a value for individual dates"
@@ -2664,11 +2675,11 @@ msgstr ""
 "als deze eigenschap een waarde heeft. In evenementenreeksen is het altijd "
 "optioneel om een waarde voor individuele datums in te stellen"
 
-#: pretix/base/models/event.py:1464
+#: pretix/base/models/event.py:1469
 msgid "Valid values"
 msgstr "Toegestane waarden"
 
-#: pretix/base/models/event.py:1465
+#: pretix/base/models/event.py:1470
 msgid ""
 "If you keep this empty, any value is allowed. Otherwise, enter one possible "
 "value per line."
@@ -2676,13 +2687,13 @@ msgstr ""
 "Voer hier een toegestane waarde per regel in. Als je dit veld leeg laat "
 "wordt iedere waarde toegestaan."
 
-#: pretix/base/models/event.py:1471
+#: pretix/base/models/event.py:1476
 msgid "A property can either be required or have a default value, not both."
 msgstr ""
 "Een eigenschap kan niet verplicht zijn en tegelijkertijd een standaardwaarde "
 "hebben."
 
-#: pretix/base/models/event.py:1473
+#: pretix/base/models/event.py:1478
 msgid "You cannot set a default value that is not a valid value."
 msgstr ""
 "Je kan geen standaardwaarde instellen die niet in de lijst met toegestane "
@@ -2748,7 +2759,7 @@ msgstr ""
 "koop. Ze kunnen alleen worden gekocht in combinatie met een product waarbij "
 "deze categorie is ingesteld als mogelijke bron van add-onproducten."
 
-#: pretix/base/models/items.py:108 pretix/base/pdf.py:133
+#: pretix/base/models/items.py:108 pretix/base/pdf.py:138
 #: pretix/control/templates/pretixcontrol/items/category.html:4
 #: pretix/control/templates/pretixcontrol/items/category.html:6
 msgid "Product category"
@@ -3087,7 +3098,7 @@ msgid "Membership duration in months"
 msgstr "Duur van lidmaatschap in maanden"
 
 #: pretix/base/models/items.py:550 pretix/base/models/items.py:1192
-#: pretix/control/forms/filter.py:375 pretix/control/forms/filter.py:1371
+#: pretix/control/forms/filter.py:375 pretix/control/forms/filter.py:1390
 #: pretix/control/forms/item.py:215 pretix/control/navigation.py:148
 #: pretix/control/navigation.py:157
 #: pretix/control/templates/pretixcontrol/checkin/lists.html:78
@@ -3201,9 +3212,11 @@ msgstr "Gebundeld item"
 msgid "Bundled variation"
 msgstr "Gebundelde variant"
 
-#: pretix/base/models/items.py:1054 pretix/base/models/items.py:1145
-msgid "Number"
-msgstr "Getal"
+#: pretix/base/models/items.py:1054
+#, fuzzy
+#| msgid "Quantity available"
+msgid "Quantity"
+msgstr "Hoeveelheid beschikbaar"
 
 #: pretix/base/models/items.py:1059
 msgid "Designated price part"
@@ -3237,6 +3250,10 @@ msgstr "De gekozen variant hoort niet bij dit product."
 #: pretix/base/models/items.py:1092
 msgid "The count needs to be equal to or greater than zero."
 msgstr "Het aantal moet gelijk zijn aan of groter zijn dan nul."
+
+#: pretix/base/models/items.py:1145
+msgid "Number"
+msgstr "Getal"
 
 #: pretix/base/models/items.py:1146
 msgid "Text (one line)"
@@ -3429,7 +3446,7 @@ msgid "Leave empty for an unlimited number of tickets."
 msgstr "Laat leeg voor een onbeperkt aantal kaartjes."
 
 #: pretix/base/models/items.py:1509 pretix/base/models/orders.py:1178
-#: pretix/control/templates/pretixcontrol/checkin/index.html:67
+#: pretix/control/templates/pretixcontrol/checkin/index.html:83
 msgid "Item"
 msgstr "Item"
 
@@ -3607,7 +3624,7 @@ msgstr "Aantal keren dat dit lidmaatschap kan worden gebruikt in een aankoop."
 #: pretix/base/models/memberships.py:122
 #: pretix/control/templates/pretixcontrol/items/question.html:26
 #: pretix/control/templates/pretixcontrol/orders/fragment_order_status.html:35
-#: pretix/control/templates/pretixcontrol/orders/overview.html:66
+#: pretix/control/templates/pretixcontrol/orders/overview.html:69
 #: pretix/control/templates/pretixcontrol/organizers/customer_membership.html:78
 #: pretix/plugins/reports/exporters.py:287
 #: pretix/presale/templates/pretixpresale/event/fragment_order_status.html:24
@@ -3935,8 +3952,8 @@ msgstr ""
 
 #: pretix/base/models/organizer.py:92 pretix/control/forms/event.py:98
 #: pretix/control/forms/event.py:104 pretix/control/forms/filter.py:728
-#: pretix/control/forms/filter.py:1187
-#: pretix/control/templates/pretixcontrol/events/index.html:68
+#: pretix/control/forms/filter.py:1206
+#: pretix/control/templates/pretixcontrol/events/index.html:66
 #: pretix/control/templates/pretixcontrol/organizers/base.html:4
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:9
 #: pretix/control/templates/pretixcontrol/organizers/mail.html:9
@@ -3951,7 +3968,7 @@ msgid "Organizers"
 msgstr "Organisatoren"
 
 #: pretix/base/models/organizer.py:245
-#: pretix/control/templates/pretixcontrol/organizers/teams.html:30
+#: pretix/control/templates/pretixcontrol/organizers/teams.html:35
 msgid "Team name"
 msgstr "Teamnaam"
 
@@ -4185,7 +4202,7 @@ msgstr ""
 msgid "Valid until"
 msgstr "Geldig tot"
 
-#: pretix/base/models/vouchers.py:166 pretix/control/forms/filter.py:1538
+#: pretix/base/models/vouchers.py:166 pretix/control/forms/filter.py:1601
 msgid "Reserve ticket from quota"
 msgstr "Reserveer kaartje uit quotum"
 
@@ -4241,7 +4258,7 @@ msgid "Specific seat"
 msgstr "Specifieke zitplaats"
 
 #: pretix/base/models/vouchers.py:225
-#: pretix/control/templates/pretixcontrol/vouchers/index.html:115
+#: pretix/control/templates/pretixcontrol/vouchers/index.html:118
 #: pretix/control/templates/pretixcontrol/vouchers/tags.html:42
 #: pretix/control/views/vouchers.py:110
 msgid "Tag"
@@ -4454,7 +4471,7 @@ msgctxt "subevent"
 msgid "Dates"
 msgstr "Datums"
 
-#: pretix/base/notifications.py:194 pretix/base/pdf.py:211
+#: pretix/base/notifications.py:194 pretix/base/pdf.py:216
 #: pretix/plugins/badges/exporters.py:295
 #: pretix/plugins/ticketoutputpdf/exporters.py:92
 msgid "Event date"
@@ -4656,7 +4673,7 @@ msgid "You entered an invalid number."
 msgstr "Je voerde een ongeldig getal in."
 
 #: pretix/base/orderimport.py:603
-#: pretix/control/templates/pretixcontrol/checkin/index.html:81
+#: pretix/control/templates/pretixcontrol/checkin/index.html:97
 #: pretix/control/templates/pretixcontrol/order/index.html:394
 msgid "Ticket code"
 msgstr "Kaartjescode"
@@ -5015,73 +5032,79 @@ msgstr "Kaartjescode (waarde van QR-code)"
 msgid "Order position number"
 msgstr "Plaatsnummer van bestelling"
 
-#: pretix/base/pdf.py:104 pretix/base/services/tickets.py:100
+#: pretix/base/pdf.py:103
+#, fuzzy
+#| msgid "Order position number"
+msgid "Order code and position number"
+msgstr "Plaatsnummer van bestelling"
+
+#: pretix/base/pdf.py:109 pretix/base/services/tickets.py:100
 #: pretix/control/views/event.py:739 pretix/control/views/pdf.py:85
 msgid "Sample product"
 msgstr "Voorbeeldproduct"
 
-#: pretix/base/pdf.py:108
+#: pretix/base/pdf.py:113
 msgid "Variation name"
 msgstr "Variantnaam"
 
-#: pretix/base/pdf.py:109
+#: pretix/base/pdf.py:114
 msgid "Sample variation"
 msgstr "Voorbeeldvariant"
 
-#: pretix/base/pdf.py:113
+#: pretix/base/pdf.py:118
 msgid "Product description"
 msgstr "Productomschrijving"
 
-#: pretix/base/pdf.py:114 pretix/base/services/tickets.py:101
+#: pretix/base/pdf.py:119 pretix/base/services/tickets.py:101
 #: pretix/control/views/event.py:740 pretix/control/views/pdf.py:86
 msgid "Sample product description"
 msgstr "Voorbeeld productomschrijving"
 
-#: pretix/base/pdf.py:118
+#: pretix/base/pdf.py:123
 msgid "Product name and variation"
 msgstr "Productnaam en variant"
 
-#: pretix/base/pdf.py:119
+#: pretix/base/pdf.py:124
 msgid "Sample product – sample variation"
 msgstr "Voorbeeldproduct – voorbeeldvariant"
 
-#: pretix/base/pdf.py:126
+#: pretix/base/pdf.py:131
 msgid "Product variation description"
 msgstr "Productvariantomschrijving"
 
-#: pretix/base/pdf.py:127
+#: pretix/base/pdf.py:132
 msgid "Sample product variation description"
 msgstr "Voorbeeld productvariantomschrijving"
 
-#: pretix/base/pdf.py:134
+#: pretix/base/pdf.py:139
 msgid "Ticket category"
 msgstr "Productcategorie"
 
-#: pretix/base/pdf.py:141 pretix/base/pdf.py:146
+#: pretix/base/pdf.py:146 pretix/base/pdf.py:151
 msgid "123.45 EUR"
 msgstr "123,45 EUR"
 
-#: pretix/base/pdf.py:145
+#: pretix/base/pdf.py:150
 msgid "Price including add-ons"
 msgstr "Prijs inclusief add-ons"
 
-#: pretix/base/pdf.py:159
+#: pretix/base/pdf.py:164
 #: pretix/control/templates/pretixcontrol/order/index.html:446
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:76
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:79
 msgid "Attendee company"
 msgstr "Bedrijf van gast"
 
-#: pretix/base/pdf.py:160 pretix/base/pdf.py:303
+#: pretix/base/pdf.py:165 pretix/base/pdf.py:308
 #: pretix/base/services/tickets.py:117 pretix/control/views/pdf.py:101
 msgid "Sample company"
 msgstr "Voorbeeldbedrijf"
 
-#: pretix/base/pdf.py:164
+#: pretix/base/pdf.py:169
 msgid "Full attendee address"
 msgstr "Volledig adres van gast"
 
-#: pretix/base/pdf.py:165
+#: pretix/base/pdf.py:170
 msgid ""
 "John Doe\n"
 "Sample company\n"
@@ -5095,155 +5118,155 @@ msgstr ""
 "1234AB Amsterdam\n"
 "Nederland"
 
-#: pretix/base/pdf.py:169
+#: pretix/base/pdf.py:174
 msgid "Attendee street"
 msgstr "Adres gast: straat"
 
-#: pretix/base/pdf.py:174
+#: pretix/base/pdf.py:179
 msgid "Attendee ZIP code"
 msgstr "Adres gast: postcode"
 
-#: pretix/base/pdf.py:179
+#: pretix/base/pdf.py:184
 msgid "Attendee city"
 msgstr "Adres gast: stad"
 
-#: pretix/base/pdf.py:184
+#: pretix/base/pdf.py:189
 msgid "Attendee state"
 msgstr "Adres gast: staat"
 
-#: pretix/base/pdf.py:189
+#: pretix/base/pdf.py:194
 msgid "Attendee country"
 msgstr "Land van gast"
 
-#: pretix/base/pdf.py:202 pretix/base/pdf.py:207
+#: pretix/base/pdf.py:207 pretix/base/pdf.py:212
 msgid "Sample event name"
 msgstr "Voorbeeld evenementnaam"
 
-#: pretix/base/pdf.py:212
+#: pretix/base/pdf.py:217
 msgid "May 31st, 2017"
 msgstr "31 mei 2017"
 
-#: pretix/base/pdf.py:216
+#: pretix/base/pdf.py:221
 msgid "Event date range"
 msgstr "Datumbereik evenement"
 
-#: pretix/base/pdf.py:217
+#: pretix/base/pdf.py:222
 msgid "May 31st – June 4th, 2017"
 msgstr "31 mei – 4 juni 2017"
 
-#: pretix/base/pdf.py:221
+#: pretix/base/pdf.py:226
 msgid "Event begin date and time"
 msgstr "Begindatum en tijd van evenement"
 
-#: pretix/base/pdf.py:222
+#: pretix/base/pdf.py:227
 msgid "2017-05-31 20:00"
 msgstr "31-05-2017 20:00"
 
-#: pretix/base/pdf.py:229
+#: pretix/base/pdf.py:234
 msgid "Event begin date"
 msgstr "Begindatum van evenement"
 
-#: pretix/base/pdf.py:230 pretix/base/pdf.py:251 pretix/base/pdf.py:360
+#: pretix/base/pdf.py:235 pretix/base/pdf.py:256 pretix/base/pdf.py:365
 msgid "2017-05-31"
 msgstr "31-05-2017"
 
-#: pretix/base/pdf.py:237
+#: pretix/base/pdf.py:242
 msgid "Event begin time"
 msgstr "Begintijd van evenement"
 
-#: pretix/base/pdf.py:238
+#: pretix/base/pdf.py:243
 msgid "20:00"
 msgstr "20:00"
 
-#: pretix/base/pdf.py:242
+#: pretix/base/pdf.py:247
 msgid "Event end date and time"
 msgstr "Einddatum en -tijd van het evenement"
 
-#: pretix/base/pdf.py:243
+#: pretix/base/pdf.py:248
 msgid "2017-05-31 22:00"
 msgstr "31-05-2017 22:00"
 
-#: pretix/base/pdf.py:250
+#: pretix/base/pdf.py:255
 msgid "Event end date"
 msgstr "Einddatum van het evenement"
 
-#: pretix/base/pdf.py:259
+#: pretix/base/pdf.py:264
 msgid "22:00"
 msgstr "22:00"
 
-#: pretix/base/pdf.py:266
+#: pretix/base/pdf.py:271
 msgid "Event admission date and time"
 msgstr "Toegangsdatum en tijd van evenement"
 
-#: pretix/base/pdf.py:267 pretix/base/pdf.py:368 pretix/base/pdf.py:406
+#: pretix/base/pdf.py:272 pretix/base/pdf.py:373 pretix/base/pdf.py:411
 msgid "2017-05-31 19:00"
 msgstr "31-05-2017 19:00"
 
-#: pretix/base/pdf.py:274
+#: pretix/base/pdf.py:279
 msgid "Event admission time"
 msgstr "Toegangstijd van evenement"
 
-#: pretix/base/pdf.py:275 pretix/base/pdf.py:376
+#: pretix/base/pdf.py:280 pretix/base/pdf.py:381
 msgid "19:00"
 msgstr "19:00"
 
-#: pretix/base/pdf.py:282
+#: pretix/base/pdf.py:287
 msgid "Event location"
 msgstr "Evenementlocatie"
 
-#: pretix/base/pdf.py:283 pretix/base/settings.py:806
+#: pretix/base/pdf.py:288 pretix/base/settings.py:806
 msgid "Random City"
 msgstr "Voorbeeldstad"
 
-#: pretix/base/pdf.py:302
+#: pretix/base/pdf.py:307
 msgid "Invoice address company"
 msgstr "Bedrijf factuuradres"
 
-#: pretix/base/pdf.py:307
+#: pretix/base/pdf.py:312
 msgid "Invoice address street"
 msgstr "Factuuradres: straat"
 
-#: pretix/base/pdf.py:308
+#: pretix/base/pdf.py:313
 msgid "Sesame Street 42"
 msgstr "Voorbeeldstraat 42"
 
-#: pretix/base/pdf.py:312
+#: pretix/base/pdf.py:317
 msgid "Invoice address ZIP code"
 msgstr "Factuuradres: postcode"
 
-#: pretix/base/pdf.py:313
+#: pretix/base/pdf.py:318
 msgid "12345"
 msgstr "1234 AB"
 
-#: pretix/base/pdf.py:317
+#: pretix/base/pdf.py:322
 msgid "Invoice address city"
 msgstr "Stad factuuradres"
 
-#: pretix/base/pdf.py:318 pretix/base/services/invoices.py:405
+#: pretix/base/pdf.py:323 pretix/base/services/invoices.py:405
 msgid "Sample city"
 msgstr "Voorbeeldstad"
 
-#: pretix/base/pdf.py:322
+#: pretix/base/pdf.py:327
 msgid "Invoice address state"
 msgstr "Factuuradres: staat"
 
-#: pretix/base/pdf.py:323
+#: pretix/base/pdf.py:328
 msgid "Sample State"
 msgstr "Voorbeeldstaat"
 
-#: pretix/base/pdf.py:327
+#: pretix/base/pdf.py:332
 msgid "Invoice address country"
 msgstr "Factuuradres: land"
 
-#: pretix/base/pdf.py:328
+#: pretix/base/pdf.py:333
 msgid "Atlantis"
 msgstr "Atlantis"
 
-#: pretix/base/pdf.py:332
+#: pretix/base/pdf.py:337
 msgid "List of Add-Ons"
 msgstr "Lijst met add-ons"
 
-#: pretix/base/pdf.py:333
+#: pretix/base/pdf.py:338
 msgid ""
 "Add-on 1\n"
 "Add-on 2"
@@ -5251,84 +5274,84 @@ msgstr ""
 "Add-on 1\n"
 "Add-on 2"
 
-#: pretix/base/pdf.py:344 pretix/control/forms/filter.py:940
-#: pretix/control/forms/filter.py:942
-#: pretix/control/templates/pretixcontrol/organizers/index.html:35
+#: pretix/base/pdf.py:349 pretix/control/forms/filter.py:959
+#: pretix/control/forms/filter.py:961
+#: pretix/control/templates/pretixcontrol/organizers/index.html:42
 msgid "Organizer name"
 msgstr "Naam van de organisator"
 
-#: pretix/base/pdf.py:345
+#: pretix/base/pdf.py:350
 msgid "Event organizer company"
 msgstr "Bedrijf dat het evenement organiseert"
 
-#: pretix/base/pdf.py:349
+#: pretix/base/pdf.py:354
 msgid "Organizer info text"
 msgstr "Informatietekst organisator"
 
-#: pretix/base/pdf.py:350
+#: pretix/base/pdf.py:355
 msgid "Event organizer info text"
 msgstr "Informatietekst van de evenementorganisator"
 
-#: pretix/base/pdf.py:354 pretix/base/pdf.py:355
+#: pretix/base/pdf.py:359 pretix/base/pdf.py:360
 msgid "Event info text"
 msgstr "Informatie over het evenement"
 
-#: pretix/base/pdf.py:359
+#: pretix/base/pdf.py:364
 msgid "Printing date"
 msgstr "Printdatum"
 
-#: pretix/base/pdf.py:367
+#: pretix/base/pdf.py:372
 msgid "Printing date and time"
 msgstr "Printdatum en -tijd"
 
-#: pretix/base/pdf.py:375
+#: pretix/base/pdf.py:380
 msgid "Printing time"
 msgstr "Printtijd"
 
-#: pretix/base/pdf.py:383
+#: pretix/base/pdf.py:388
 msgid "Seat: Full name"
 msgstr "Stoel: Volledige naam"
 
-#: pretix/base/pdf.py:384
+#: pretix/base/pdf.py:389
 msgid "Ground floor, Row 3, Seat 4"
 msgstr "Begane grond, Rij 3, Stoel 4"
 
-#: pretix/base/pdf.py:386 pretix/base/pdf.py:392
+#: pretix/base/pdf.py:391 pretix/base/pdf.py:397
 #: pretix/control/forms/orders.py:292
 msgid "General admission"
 msgstr "Vrije plaatskeuze"
 
-#: pretix/base/pdf.py:389
+#: pretix/base/pdf.py:394
 msgid "Seat: zone"
 msgstr "Stoel: gebied"
 
-#: pretix/base/pdf.py:390
+#: pretix/base/pdf.py:395
 msgid "Ground floor"
 msgstr "Begane grond"
 
-#: pretix/base/pdf.py:395
+#: pretix/base/pdf.py:400
 msgid "Seat: row"
 msgstr "Stoel: rij"
 
-#: pretix/base/pdf.py:400
+#: pretix/base/pdf.py:405
 msgid "Seat: seat number"
 msgstr "Stoel: stoelnummer"
 
-#: pretix/base/pdf.py:405
+#: pretix/base/pdf.py:410
 msgid "Date and time of first scan"
 msgstr "Datum en tijd van eerste scan"
 
-#: pretix/base/pdf.py:446 pretix/base/pdf.py:484
+#: pretix/base/pdf.py:451 pretix/base/pdf.py:489
 #, python-brace-format
 msgid "Question: {question}"
 msgstr "Vraag: {question}"
 
-#: pretix/base/pdf.py:485
+#: pretix/base/pdf.py:490
 #, python-brace-format
 msgid "<Answer: {question}>"
 msgstr "<Antwoord: {question}>"
 
-#: pretix/base/pdf.py:516 pretix/base/pdf.py:523
+#: pretix/base/pdf.py:521 pretix/base/pdf.py:528
 #: pretix/plugins/badges/exporters.py:297
 #: pretix/plugins/checkinlists/exporters.py:110
 #: pretix/plugins/checkinlists/exporters.py:440
@@ -5337,13 +5360,13 @@ msgstr "<Antwoord: {question}>"
 msgid "Attendee name: {part}"
 msgstr "Naam van gast: {part}"
 
-#: pretix/base/pdf.py:533
+#: pretix/base/pdf.py:538
 #, python-brace-format
 msgid "Invoice address name: {part}"
 msgstr "Naam factuuradres: {part}"
 
-#: pretix/base/pdf.py:767
-#: pretix/control/templates/pretixcontrol/checkin/checkins.html:61
+#: pretix/base/pdf.py:772
+#: pretix/control/templates/pretixcontrol/checkin/checkins.html:66
 #: pretix/plugins/ticketoutputpdf/ticketoutput.py:112
 msgid "Ticket"
 msgstr "Kaartje"
@@ -5702,36 +5725,36 @@ msgstr "Minimum {variable} bereikt"
 msgid "{variable} is {value}"
 msgstr "{variable} is {value}"
 
-#: pretix/base/services/checkin.py:589
+#: pretix/base/services/checkin.py:604
 msgid "This order position has been canceled."
 msgstr "Dit kaartje is geannuleerd."
 
-#: pretix/base/services/checkin.py:612
+#: pretix/base/services/checkin.py:627
 msgid "This order position has an invalid product for this check-in list."
 msgstr "Dit kaartje heeft een ongeldig product voor deze inchecklijst."
 
-#: pretix/base/services/checkin.py:617
+#: pretix/base/services/checkin.py:632
 msgid "This order position has an invalid date for this check-in list."
 msgstr "Deze positie heeft een ongeldig product voor deze inchecklijst."
 
-#: pretix/base/services/checkin.py:624
+#: pretix/base/services/checkin.py:639
 msgid "This order is not marked as paid."
 msgstr "Deze bestelling is niet gemarkeerd als betaald."
 
-#: pretix/base/services/checkin.py:634
+#: pretix/base/services/checkin.py:649
 #, python-brace-format
 msgid "Entry not permitted: {explanation}."
 msgstr "Binnenkomst niet toegestaan: {explanation}."
 
-#: pretix/base/services/checkin.py:643
+#: pretix/base/services/checkin.py:658
 msgid "You need to answer questions to complete this check-in."
 msgstr "Je moet vragen beantwoorden om deze check-in te voltooien."
 
-#: pretix/base/services/checkin.py:688
+#: pretix/base/services/checkin.py:704
 msgid "This ticket has already been redeemed."
 msgstr "Dit kaartje is al gebruikt."
 
-#: pretix/base/services/export.py:64 pretix/base/services/export.py:117
+#: pretix/base/services/export.py:64 pretix/base/services/export.py:123
 msgid "Your export did not contain any data."
 msgstr "Je export bevatte geen gegevens."
 
@@ -5908,7 +5931,7 @@ msgstr ""
 "evenement dat plaatsvindt op \"{date}\", maar je hebt dit lidmaatschap al "
 "gebruikt voor een ander kaartje op dezelfde tijd."
 
-#: pretix/base/services/orderimport.py:108
+#: pretix/base/services/orderimport.py:110
 #, python-brace-format
 msgid ""
 "Error while importing value \"{value}\" for column \"{column}\" in line "
@@ -5917,7 +5940,7 @@ msgstr ""
 "Fout bij het importeren van waarde \"{value}\" voor kolom \"{column}\" in "
 "regel \"{line}\": {message}"
 
-#: pretix/base/services/orderimport.py:140
+#: pretix/base/services/orderimport.py:142
 #, python-brace-format
 msgid "Invalid data in row {row}: {message}"
 msgstr "Ongeldige data op regel {row}: {message}"
@@ -6225,7 +6248,7 @@ msgstr ""
 "Er is iets misgegaan toen we het geld naar je over probeerden te maken. Neem "
 "contact op met de organisator van het evenement voor meer informatie."
 
-#: pretix/base/services/seating.py:56 pretix/base/services/seating.py:117
+#: pretix/base/services/seating.py:61 pretix/base/services/seating.py:128
 #, python-format
 msgid ""
 "You can not change the plan since seat \"%s\" is not present in the new plan "
@@ -6234,7 +6257,7 @@ msgstr ""
 "Je kan de plattegrond niet veranderen, omdat stoel \"%s\" niet aanwezig is "
 "in de nieuwe plattegrond, en deze stoel al is verkocht."
 
-#: pretix/base/services/seating.py:120
+#: pretix/base/services/seating.py:131
 #, python-format
 msgid ""
 "You can not change the plan since seat \"%s\" is not present in the new plan "
@@ -6263,7 +6286,7 @@ msgstr "De bevestigingscode die je invoerde was onjuist."
 msgid "Something happened in your event after the export, please try again."
 msgstr "Er is iets gebeurd in je evenement na de export, probeer het opnieuw."
 
-#: pretix/base/services/stats.py:207
+#: pretix/base/services/stats.py:210
 msgid "Uncategorized"
 msgstr "Ongecategoriseerd"
 
@@ -9084,10 +9107,11 @@ msgstr ""
 "tegelijkertijd."
 
 #: pretix/control/forms/checkin.py:90 pretix/control/forms/filter.py:382
-#: pretix/control/forms/filter.py:409 pretix/control/forms/filter.py:1562
-#: pretix/control/forms/filter.py:1582 pretix/control/forms/filter.py:1676
-#: pretix/control/forms/filter.py:1692 pretix/control/forms/filter.py:1760
-#: pretix/control/forms/filter.py:1795 pretix/control/forms/orders.py:711
+#: pretix/control/forms/filter.py:409 pretix/control/forms/filter.py:1399
+#: pretix/control/forms/filter.py:1432 pretix/control/forms/filter.py:1625
+#: pretix/control/forms/filter.py:1645 pretix/control/forms/filter.py:1739
+#: pretix/control/forms/filter.py:1755 pretix/control/forms/filter.py:1823
+#: pretix/control/forms/filter.py:1858 pretix/control/forms/orders.py:711
 #: pretix/control/forms/orders.py:887
 #: pretix/control/templates/pretixcontrol/event/fragment_subevent_choice_simple.html:5
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:52
@@ -9623,7 +9647,7 @@ msgstr "Betaald (of geannuleerd met betaalde toeslag)"
 #: pretix/control/forms/filter.py:187
 #: pretix/control/templates/pretixcontrol/items/question.html:21
 #: pretix/control/templates/pretixcontrol/orders/fragment_order_status.html:13
-#: pretix/control/templates/pretixcontrol/orders/overview.html:76
+#: pretix/control/templates/pretixcontrol/orders/overview.html:79
 #: pretix/plugins/reports/exporters.py:297
 msgid "Pending"
 msgstr "Openstaand"
@@ -9693,7 +9717,7 @@ msgstr "Goedgekeurd, wacht op betaling"
 
 #: pretix/control/forms/filter.py:207
 #: pretix/control/templates/pretixcontrol/orders/fragment_order_status.html:7
-#: pretix/control/templates/pretixcontrol/orders/overview.html:68
+#: pretix/control/templates/pretixcontrol/orders/overview.html:71
 #: pretix/plugins/reports/exporters.py:291
 #: pretix/presale/templates/pretixpresale/event/fragment_order_status.html:5
 msgid "Approval pending"
@@ -9707,8 +9731,8 @@ msgstr ""
 msgid "Follow-up due"
 msgstr ""
 
-#: pretix/control/forms/filter.py:416 pretix/control/forms/filter.py:1374
-#: pretix/control/forms/filter.py:1589 pretix/control/forms/filter.py:1871
+#: pretix/control/forms/filter.py:416 pretix/control/forms/filter.py:1393
+#: pretix/control/forms/filter.py:1652 pretix/control/forms/filter.py:1934
 #: pretix/control/forms/vouchers.py:146
 #: pretix/control/templates/pretixcontrol/items/question.html:29
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:104
@@ -9716,8 +9740,8 @@ msgstr ""
 msgid "All products"
 msgstr "Alle producten"
 
-#: pretix/control/forms/filter.py:420 pretix/control/forms/filter.py:1593
-#: pretix/control/forms/filter.py:1875 pretix/control/forms/vouchers.py:134
+#: pretix/control/forms/filter.py:420 pretix/control/forms/filter.py:1656
+#: pretix/control/forms/filter.py:1938 pretix/control/forms/vouchers.py:134
 #: pretix/control/views/typeahead.py:584
 #, python-brace-format
 msgid "{product} – Any variation"
@@ -9761,109 +9785,119 @@ msgid "Ticket secret"
 msgstr "Kaartjesgeheim"
 
 #: pretix/control/forms/filter.py:731 pretix/control/forms/filter.py:736
-#: pretix/control/forms/filter.py:1190 pretix/control/forms/filter.py:1195
+#: pretix/control/forms/filter.py:1209 pretix/control/forms/filter.py:1214
 msgid "All organizers"
 msgstr "Alle organisatoren"
 
-#: pretix/control/forms/filter.py:825 pretix/control/forms/filter.py:1176
+#: pretix/control/forms/filter.py:825 pretix/control/forms/filter.py:1195
 msgid "Shop live and presale running"
 msgstr "Winkel live en voorverkoop actief"
 
-#: pretix/control/forms/filter.py:826 pretix/control/forms/filter.py:1445
+#: pretix/control/forms/filter.py:826 pretix/control/forms/filter.py:1508
 msgid "Inactive"
 msgstr "Uitgeschakeld"
 
-#: pretix/control/forms/filter.py:827 pretix/control/forms/filter.py:1178
-#: pretix/control/templates/pretixcontrol/events/index.html:146
-#: pretix/control/templates/pretixcontrol/organizers/detail.html:102
-#: pretix/control/templates/pretixcontrol/subevents/index.html:135
+#: pretix/control/forms/filter.py:827 pretix/control/forms/filter.py:1197
+#: pretix/control/templates/pretixcontrol/events/index.html:144
+#: pretix/control/templates/pretixcontrol/organizers/detail.html:108
+#: pretix/control/templates/pretixcontrol/subevents/index.html:154
 msgid "Presale not started"
 msgstr "Verkoop nog niet begonnen"
 
-#: pretix/control/forms/filter.py:828 pretix/control/forms/filter.py:1179
-#: pretix/control/templates/pretixcontrol/events/index.html:144
-#: pretix/control/templates/pretixcontrol/organizers/detail.html:100
-#: pretix/control/templates/pretixcontrol/subevents/index.html:133
+#: pretix/control/forms/filter.py:828 pretix/control/forms/filter.py:1198
+#: pretix/control/templates/pretixcontrol/events/index.html:142
+#: pretix/control/templates/pretixcontrol/organizers/detail.html:106
+#: pretix/control/templates/pretixcontrol/subevents/index.html:152
 msgid "Presale over"
 msgstr "Verkoop afgelopen"
 
-#: pretix/control/forms/filter.py:833 pretix/control/forms/filter.py:1772
+#: pretix/control/forms/filter.py:833 pretix/control/forms/filter.py:836
+#: pretix/control/forms/filter.py:1835
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:73
 #: pretix/plugins/reports/exporters.py:590
 msgid "Date from"
 msgstr "Datum vanaf"
 
-#: pretix/control/forms/filter.py:838 pretix/control/forms/filter.py:1777
-#: pretix/plugins/reports/exporters.py:595
+#: pretix/control/forms/filter.py:840 pretix/control/forms/filter.py:843
+#: pretix/control/forms/filter.py:1840 pretix/plugins/reports/exporters.py:595
 msgid "Date until"
 msgstr "Datum tot"
 
-#: pretix/control/forms/filter.py:843 pretix/control/forms/subevents.py:526
+#: pretix/control/forms/filter.py:847
+#, fuzzy
+#| msgid "Date from"
+msgid "Start time from"
+msgstr "Datum vanaf"
+
+#: pretix/control/forms/filter.py:852
+#, fuzzy
+#| msgid "Date until"
+msgid "Start time until"
+msgstr "Datum tot"
+
+#: pretix/control/forms/filter.py:857 pretix/control/forms/subevents.py:526
 #: pretix/control/forms/subevents.py:565
 msgid "Weekday"
 msgstr "Weekdag"
 
-#: pretix/control/forms/filter.py:845
-msgid "All days"
-msgstr "Alle dagen"
-
-#: pretix/control/forms/filter.py:846
+#: pretix/control/forms/filter.py:859
 msgid "Monday"
 msgstr "Maandag"
 
-#: pretix/control/forms/filter.py:847
+#: pretix/control/forms/filter.py:860
 msgid "Tuesday"
 msgstr "Dinsdag"
 
-#: pretix/control/forms/filter.py:848
+#: pretix/control/forms/filter.py:861
 msgid "Wednesday"
 msgstr "Woensdag"
 
-#: pretix/control/forms/filter.py:849
+#: pretix/control/forms/filter.py:862
 msgid "Thursday"
 msgstr "Donderdag"
 
-#: pretix/control/forms/filter.py:850
+#: pretix/control/forms/filter.py:863
 msgid "Friday"
 msgstr "Vrijdag"
 
-#: pretix/control/forms/filter.py:851
+#: pretix/control/forms/filter.py:864
 msgid "Saturday"
 msgstr "Zaterdag"
 
-#: pretix/control/forms/filter.py:852
+#: pretix/control/forms/filter.py:865
 msgid "Sunday"
 msgstr "Zondag"
 
-#: pretix/control/forms/filter.py:996 pretix/control/forms/filter.py:998
-#: pretix/control/forms/filter.py:1046 pretix/control/forms/filter.py:1048
-#: pretix/control/forms/filter.py:1116 pretix/control/forms/filter.py:1118
-#: pretix/control/forms/filter.py:1459 pretix/control/forms/filter.py:1461
+#: pretix/control/forms/filter.py:1015 pretix/control/forms/filter.py:1017
+#: pretix/control/forms/filter.py:1065 pretix/control/forms/filter.py:1067
+#: pretix/control/forms/filter.py:1135 pretix/control/forms/filter.py:1137
+#: pretix/control/forms/filter.py:1522 pretix/control/forms/filter.py:1524
+#: pretix/control/forms/filter.py:2000 pretix/control/forms/filter.py:2002
 msgid "Search query"
 msgstr "Zoekopdracht"
 
-#: pretix/control/forms/filter.py:1058
+#: pretix/control/forms/filter.py:1077
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:37
 #, fuzzy
 #| msgid "Inactive"
 msgid "active"
 msgstr "Uitgeschakeld"
 
-#: pretix/control/forms/filter.py:1059
+#: pretix/control/forms/filter.py:1078
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:33
 #, fuzzy
 #| msgid "Disabled"
 msgid "disabled"
 msgstr "Uitgeschakeld"
 
-#: pretix/control/forms/filter.py:1060
+#: pretix/control/forms/filter.py:1079
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:35
 #, fuzzy
 #| msgid "Deactivate"
 msgid "not yet activated"
 msgstr "Deactiveren"
 
-#: pretix/control/forms/filter.py:1064
+#: pretix/control/forms/filter.py:1083
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:75
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:43
 #, fuzzy
@@ -9871,219 +9905,233 @@ msgstr "Deactiveren"
 msgid "Memberships"
 msgstr "Leden"
 
-#: pretix/control/forms/filter.py:1068
+#: pretix/control/forms/filter.py:1087
 #, fuzzy
 #| msgid "Team memberships"
 msgid "Has no memberships"
 msgstr "Teamlidmaatschappen"
 
-#: pretix/control/forms/filter.py:1069
+#: pretix/control/forms/filter.py:1088
 #, fuzzy
 #| msgid "Team memberships"
 msgid "Has any membership"
 msgstr "Teamlidmaatschappen"
 
-#: pretix/control/forms/filter.py:1070
+#: pretix/control/forms/filter.py:1089
 #, fuzzy
 #| msgid "Team memberships"
 msgid "Has valid membership"
 msgstr "Teamlidmaatschappen"
 
-#: pretix/control/forms/filter.py:1174
+#: pretix/control/forms/filter.py:1193
 msgid "All events"
 msgstr "Alle evenementen"
 
-#: pretix/control/forms/filter.py:1175
+#: pretix/control/forms/filter.py:1194
 msgid "Shop live"
 msgstr "Winkel is live"
 
-#: pretix/control/forms/filter.py:1177
+#: pretix/control/forms/filter.py:1196
 msgid "Shop not live"
 msgstr "Winkel is niet live"
 
-#: pretix/control/forms/filter.py:1180
+#: pretix/control/forms/filter.py:1199
 msgid "Single event running or in the future"
 msgstr "Enkel evenement bezig of in de toekomst"
 
-#: pretix/control/forms/filter.py:1181
+#: pretix/control/forms/filter.py:1200
 msgid "Single event in the past"
 msgstr "Enkel evenement in het verleden"
 
-#: pretix/control/forms/filter.py:1352 pretix/control/forms/filter.py:1354
+#: pretix/control/forms/filter.py:1371 pretix/control/forms/filter.py:1373
 msgid "Search attendee…"
 msgstr "Zoek gast…"
 
-#: pretix/control/forms/filter.py:1360
+#: pretix/control/forms/filter.py:1379
 msgid "Check-in status"
 msgstr "Incheckstatus"
 
-#: pretix/control/forms/filter.py:1362
+#: pretix/control/forms/filter.py:1381
 msgid "All attendees"
 msgstr "Alle gasten"
 
-#: pretix/control/forms/filter.py:1363
+#: pretix/control/forms/filter.py:1382
 msgctxt "checkin state"
 msgid "Checked in but left"
 msgstr "Ingecheckt en weer vertrokken"
 
-#: pretix/control/forms/filter.py:1364
+#: pretix/control/forms/filter.py:1383
 msgctxt "checkin state"
 msgid "Present"
 msgstr "Aanwezig"
 
-#: pretix/control/forms/filter.py:1365
-#: pretix/control/templates/pretixcontrol/checkin/index.html:140
+#: pretix/control/forms/filter.py:1384
+#: pretix/control/templates/pretixcontrol/checkin/index.html:156
 #: pretix/control/templates/pretixcontrol/checkin/lists.html:73
 #: pretix/plugins/checkinlists/exporters.py:442
 msgid "Checked in"
 msgstr "Ingecheckt"
 
-#: pretix/control/forms/filter.py:1366
-#: pretix/control/templates/pretixcontrol/checkin/index.html:135
+#: pretix/control/forms/filter.py:1385
+#: pretix/control/templates/pretixcontrol/checkin/index.html:151
 msgid "Not checked in"
 msgstr "Niet ingecheckt"
 
-#: pretix/control/forms/filter.py:1450 pretix/control/forms/filter.py:1453
-#: pretix/control/templates/pretixcontrol/users/index.html:47
+#: pretix/control/forms/filter.py:1404
+#, fuzzy
+#| msgid "Date from"
+msgctxt "subevent"
+msgid "Date start from"
+msgstr "Datum vanaf"
+
+#: pretix/control/forms/filter.py:1410
+#, fuzzy
+#| msgid "Date until"
+msgctxt "subevent"
+msgid "Date start until"
+msgstr "Datum tot"
+
+#: pretix/control/forms/filter.py:1513 pretix/control/forms/filter.py:1516
+#: pretix/control/templates/pretixcontrol/users/index.html:52
 msgid "Administrator"
 msgstr "Beheerder"
 
-#: pretix/control/forms/filter.py:1454
+#: pretix/control/forms/filter.py:1517
 msgid "No administrator"
 msgstr "Geen beheerder"
 
-#: pretix/control/forms/filter.py:1525
+#: pretix/control/forms/filter.py:1588
 msgid "Valid"
 msgstr "Geldig"
 
-#: pretix/control/forms/filter.py:1526
+#: pretix/control/forms/filter.py:1589
 msgid "Unredeemed"
 msgstr "Onverzilverd"
 
-#: pretix/control/forms/filter.py:1527
+#: pretix/control/forms/filter.py:1590
 msgid "Redeemed at least once"
 msgstr "Ten minste één keer verzilverd"
 
-#: pretix/control/forms/filter.py:1528
+#: pretix/control/forms/filter.py:1591
 msgid "Fully redeemed"
 msgstr "Volledig verzilverd"
 
-#: pretix/control/forms/filter.py:1530
+#: pretix/control/forms/filter.py:1593
 msgid "Redeemed and checked in with ticket"
 msgstr "Verzilverd en ingecheckt met kaartje"
 
-#: pretix/control/forms/filter.py:1535
+#: pretix/control/forms/filter.py:1598
 msgid "Quota handling"
 msgstr "Quotumgedrag"
 
-#: pretix/control/forms/filter.py:1539
+#: pretix/control/forms/filter.py:1602
 msgid "Allow to ignore quota"
 msgstr "Sta toe om quotum te negeren"
 
-#: pretix/control/forms/filter.py:1544 pretix/control/forms/filter.py:1546
+#: pretix/control/forms/filter.py:1607 pretix/control/forms/filter.py:1609
 msgid "Filter by tag"
 msgstr "Filteren op tag"
 
-#: pretix/control/forms/filter.py:1551 pretix/control/forms/filter.py:1553
+#: pretix/control/forms/filter.py:1614 pretix/control/forms/filter.py:1616
 msgid "Search voucher"
 msgstr "Zoek voucher"
 
-#: pretix/control/forms/filter.py:1599 pretix/control/forms/vouchers.py:125
+#: pretix/control/forms/filter.py:1662 pretix/control/forms/vouchers.py:125
 #: pretix/control/views/typeahead.py:592 pretix/control/views/typeahead.py:596
 #: pretix/control/views/vouchers.py:122
 #, python-brace-format
 msgid "Any product in quota \"{quota}\""
 msgstr "Ieder product in quotum \"{quota}\""
 
-#: pretix/control/forms/filter.py:1720
+#: pretix/control/forms/filter.py:1783
 msgid "Refund status"
 msgstr "Terugbetalingsstatus"
 
-#: pretix/control/forms/filter.py:1722
+#: pretix/control/forms/filter.py:1785
 msgid "All open refunds"
 msgstr "Alle openstaande terugbetalingen"
 
-#: pretix/control/forms/filter.py:1723
+#: pretix/control/forms/filter.py:1786
 msgid "All refunds"
 msgstr "Alle terugbetalingen"
 
-#: pretix/control/forms/filter.py:1763 pretix/plugins/reports/exporters.py:581
+#: pretix/control/forms/filter.py:1826 pretix/plugins/reports/exporters.py:581
 msgid "Date filter"
 msgstr "Datumfilter"
 
-#: pretix/control/forms/filter.py:1765 pretix/plugins/reports/exporters.py:583
+#: pretix/control/forms/filter.py:1828 pretix/plugins/reports/exporters.py:583
 msgid "Filter by…"
 msgstr "Filteren op…"
 
-#: pretix/control/forms/filter.py:1767 pretix/plugins/reports/exporters.py:585
+#: pretix/control/forms/filter.py:1830 pretix/plugins/reports/exporters.py:585
 msgid "Date of last successful payment"
 msgstr "Datum van laatste geslaagde betaling"
 
-#: pretix/control/forms/filter.py:1807
+#: pretix/control/forms/filter.py:1870
 #, fuzzy
 #| msgid "All check-in lists"
 msgid "All check-ins"
 msgstr "Alle inchecklijsten"
 
-#: pretix/control/forms/filter.py:1808
+#: pretix/control/forms/filter.py:1871
 #, fuzzy
 #| msgid "Successful payments"
 msgid "Successful check-ins"
 msgstr "Geslaagde betalingen"
 
-#: pretix/control/forms/filter.py:1809
+#: pretix/control/forms/filter.py:1872
 #, fuzzy
 #| msgid "Only successful payments"
 msgid "Unsuccessful check-ins"
 msgstr "Alleen geslaagde betalingen"
 
-#: pretix/control/forms/filter.py:1814
-#: pretix/control/templates/pretixcontrol/checkin/checkins.html:59
+#: pretix/control/forms/filter.py:1877
+#: pretix/control/templates/pretixcontrol/checkin/checkins.html:64
 #: pretix/plugins/checkinlists/exporters.py:610
 msgid "Scan type"
 msgstr "Scantype"
 
-#: pretix/control/forms/filter.py:1816
+#: pretix/control/forms/filter.py:1879
 #, fuzzy
 #| msgid "All actions"
 msgid "All directions"
 msgstr "Alle acties"
 
-#: pretix/control/forms/filter.py:1825
-#: pretix/control/templates/pretixcontrol/checkin/checkins.html:62
+#: pretix/control/forms/filter.py:1888
+#: pretix/control/templates/pretixcontrol/checkin/checkins.html:67
 #: pretix/plugins/checkinlists/exporters.py:616
 msgid "Device"
 msgstr "Apparaat"
 
-#: pretix/control/forms/filter.py:1826
+#: pretix/control/forms/filter.py:1889
 #, fuzzy
 #| msgid "All invoices"
 msgid "All devices"
 msgstr "Alle facturen"
 
-#: pretix/control/forms/filter.py:1832
+#: pretix/control/forms/filter.py:1895 pretix/control/forms/filter.py:2010
 #, fuzzy
 #| msgctxt "subevent"
 #| msgid "All dates"
 msgid "All gates"
 msgstr "Alle data"
 
-#: pretix/control/forms/filter.py:1840
+#: pretix/control/forms/filter.py:1903
 #, fuzzy
 #| msgid "Start date"
 msgctxt "filter"
 msgid "Start date"
 msgstr "Begindatum"
 
-#: pretix/control/forms/filter.py:1846
+#: pretix/control/forms/filter.py:1909
 #, fuzzy
 #| msgid "End date"
 msgctxt "filter"
 msgid "End date"
 msgstr "Einddatum"
 
-#: pretix/control/forms/filter.py:1865 pretix/control/forms/filter.py:1869
-#: pretix/control/templates/pretixcontrol/checkin/checkins.html:59
+#: pretix/control/forms/filter.py:1928 pretix/control/forms/filter.py:1932
+#: pretix/control/templates/pretixcontrol/checkin/checkins.html:64
 #: pretix/control/templates/pretixcontrol/checkin/list_edit.html:10
 #: pretix/control/templates/pretixcontrol/checkin/list_edit.html:17
 #: pretix/plugins/checkinlists/exporters.py:72
@@ -10093,6 +10141,11 @@ msgstr "Einddatum"
 #: pretix/plugins/checkinlists/exporters.py:678
 msgid "Check-in list"
 msgstr "Inchecklijst"
+
+#: pretix/control/forms/filter.py:2014
+#: pretix/control/templates/pretixcontrol/organizers/devices.html:68
+msgid "Software"
+msgstr "Software"
 
 #: pretix/control/forms/global_settings.py:59
 msgid "Additional footer text"
@@ -10608,7 +10661,7 @@ msgid "Add-on to"
 msgstr "Add-on voor"
 
 #: pretix/control/forms/orders.py:293
-#: pretix/control/templates/pretixcontrol/checkin/index.html:74
+#: pretix/control/templates/pretixcontrol/checkin/index.html:90
 #: pretix/control/templates/pretixcontrol/order/change.html:118
 #: pretix/control/views/vouchers.py:110
 #: pretix/presale/templates/pretixpresale/event/checkout_membership.html:24
@@ -11416,7 +11469,7 @@ msgstr "De gebruiker is aangemaakt."
 msgid "The webhook has been changed."
 msgstr "De toegangslocatie is aangepast."
 
-#: pretix/control/logdisplay.py:321 pretix/control/views/organizer.py:1647
+#: pretix/control/logdisplay.py:321 pretix/control/views/organizer.py:1660
 #, fuzzy
 #| msgctxt "subevent"
 #| msgid "The event date has been created."
@@ -12111,7 +12164,7 @@ msgstr "De teaminstellingen zijn aangepast."
 msgid "The team has been deleted."
 msgstr "Het team is verwijderd."
 
-#: pretix/control/logdisplay.py:482 pretix/control/views/organizer.py:1435
+#: pretix/control/logdisplay.py:482 pretix/control/views/organizer.py:1448
 msgid "The gate has been created."
 msgstr "De toegangslocatie is aangemaakt."
 
@@ -12188,7 +12241,7 @@ msgstr ""
 msgid "The gift card has been created."
 msgstr "De cadeaubon is aangemaakt."
 
-#: pretix/control/logdisplay.py:499 pretix/control/views/organizer.py:1288
+#: pretix/control/logdisplay.py:499 pretix/control/views/organizer.py:1300
 msgid "The gift card has been changed."
 msgstr "De cadeaubon is gewijzigd."
 
@@ -12875,7 +12928,7 @@ msgid "If this takes longer than a few minutes, please contact us."
 msgstr "Neem contact met ons op als dit langer dan een aantal minuten duurt."
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:4
-#: pretix/control/templates/pretixcontrol/organizers/devices.html:34
+#: pretix/control/templates/pretixcontrol/organizers/devices.html:59
 msgid "Device ID"
 msgstr "Apparaat-ID"
 
@@ -12969,87 +13022,103 @@ msgstr "Betalingsapp"
 msgid "Authorization Code"
 msgstr "Autorisatiecode"
 
-#: pretix/control/templates/pretixcontrol/checkin/checkins.html:36
-#: pretix/control/templates/pretixcontrol/checkin/index.html:44
+#: pretix/control/templates/pretixcontrol/checkin/checkins.html:9
+#: pretix/control/templates/pretixcontrol/checkin/checkins.html:41
+#: pretix/control/templates/pretixcontrol/checkin/index.html:32
+#: pretix/control/templates/pretixcontrol/checkin/index.html:60
 #: pretix/control/templates/pretixcontrol/event/logs.html:36
 #: pretix/control/templates/pretixcontrol/events/index.html:25
-#: pretix/control/templates/pretixcontrol/events/index.html:48
+#: pretix/control/templates/pretixcontrol/events/index.html:47
 #: pretix/control/templates/pretixcontrol/items/question.html:37
-#: pretix/control/templates/pretixcontrol/orders/overview.html:47
-#: pretix/control/templates/pretixcontrol/orders/refunds.html:22
-#: pretix/control/templates/pretixcontrol/organizers/customers.html:34
+#: pretix/control/templates/pretixcontrol/orders/index.html:54
+#: pretix/control/templates/pretixcontrol/orders/index.html:90
+#: pretix/control/templates/pretixcontrol/orders/overview.html:25
+#: pretix/control/templates/pretixcontrol/orders/overview.html:51
+#: pretix/control/templates/pretixcontrol/orders/refunds.html:12
+#: pretix/control/templates/pretixcontrol/orders/refunds.html:26
+#: pretix/control/templates/pretixcontrol/organizers/customers.html:22
+#: pretix/control/templates/pretixcontrol/organizers/customers.html:39
 #: pretix/control/templates/pretixcontrol/organizers/detail.html:23
-#: pretix/control/templates/pretixcontrol/organizers/detail.html:43
-#: pretix/control/templates/pretixcontrol/organizers/giftcards.html:38
-#: pretix/control/templates/pretixcontrol/organizers/index.html:18
+#: pretix/control/templates/pretixcontrol/organizers/detail.html:42
+#: pretix/control/templates/pretixcontrol/organizers/devices.html:29
+#: pretix/control/templates/pretixcontrol/organizers/devices.html:46
+#: pretix/control/templates/pretixcontrol/organizers/giftcards.html:26
+#: pretix/control/templates/pretixcontrol/organizers/giftcards.html:43
+#: pretix/control/templates/pretixcontrol/organizers/index.html:13
+#: pretix/control/templates/pretixcontrol/organizers/index.html:25
 #: pretix/control/templates/pretixcontrol/organizers/logs.html:22
-#: pretix/control/templates/pretixcontrol/organizers/teams.html:18
-#: pretix/control/templates/pretixcontrol/search/orders.html:33
-#: pretix/control/templates/pretixcontrol/subevents/index.html:44
-#: pretix/control/templates/pretixcontrol/users/index.html:22
-#: pretix/control/templates/pretixcontrol/vouchers/index.html:54
+#: pretix/control/templates/pretixcontrol/organizers/teams.html:12
+#: pretix/control/templates/pretixcontrol/organizers/teams.html:23
+#: pretix/control/templates/pretixcontrol/search/orders.html:13
+#: pretix/control/templates/pretixcontrol/search/orders.html:39
+#: pretix/control/templates/pretixcontrol/subevents/index.html:27
+#: pretix/control/templates/pretixcontrol/subevents/index.html:58
+#: pretix/control/templates/pretixcontrol/users/index.html:10
+#: pretix/control/templates/pretixcontrol/users/index.html:27
+#: pretix/control/templates/pretixcontrol/vouchers/index.html:26
+#: pretix/control/templates/pretixcontrol/vouchers/index.html:58
 #: pretix/control/templates/pretixcontrol/vouchers/tags.html:22
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:123
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:80
 msgid "Filter"
 msgstr "Filter"
 
-#: pretix/control/templates/pretixcontrol/checkin/checkins.html:45
+#: pretix/control/templates/pretixcontrol/checkin/checkins.html:50
 #, fuzzy
 #| msgid "Your search did not match any check-in lists."
 msgid "Your search did not match any check-ins."
 msgstr "Je zoekopdracht kwam niet overeen met inchecklijsten."
 
-#: pretix/control/templates/pretixcontrol/checkin/checkins.html:47
+#: pretix/control/templates/pretixcontrol/checkin/checkins.html:52
 #, fuzzy
 #| msgid "You haven't created any categories yet."
 msgid "You haven't scanned any tickets yet."
 msgstr "Je hebt nog geen categorieën aangemaakt."
 
-#: pretix/control/templates/pretixcontrol/checkin/checkins.html:58
+#: pretix/control/templates/pretixcontrol/checkin/checkins.html:63
 #, fuzzy
 #| msgid "Name of bank"
 msgid "Time of scan"
 msgstr "Naam van de bank"
 
-#: pretix/control/templates/pretixcontrol/checkin/checkins.html:60
+#: pretix/control/templates/pretixcontrol/checkin/checkins.html:65
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:14
 #: pretix/plugins/checkinlists/exporters.py:620
 msgid "Result"
 msgstr "Resultaat"
 
-#: pretix/control/templates/pretixcontrol/checkin/checkins.html:73
+#: pretix/control/templates/pretixcontrol/checkin/checkins.html:78
 #: pretix/control/templates/pretixcontrol/order/index.html:334
 #, python-format
 msgid "Automatically marked not present: %(date)s"
 msgstr "Automatisch als afwezig gemarkeerd: %(date)s"
 
-#: pretix/control/templates/pretixcontrol/checkin/checkins.html:77
+#: pretix/control/templates/pretixcontrol/checkin/checkins.html:82
 #: pretix/control/templates/pretixcontrol/order/index.html:339
 #, python-format
 msgid "Additional entry scan: %(date)s"
 msgstr "Extra ingangsscan: %(date)s"
 
-#: pretix/control/templates/pretixcontrol/checkin/checkins.html:80
+#: pretix/control/templates/pretixcontrol/checkin/checkins.html:85
 #, fuzzy
 #| msgid "live and in test mode"
 msgid "Failed in offline mode"
 msgstr "live en in testmodus"
 
-#: pretix/control/templates/pretixcontrol/checkin/checkins.html:83
+#: pretix/control/templates/pretixcontrol/checkin/checkins.html:88
 #: pretix/control/templates/pretixcontrol/order/index.html:341
 #, python-format
 msgid "Automatically checked in: %(date)s"
 msgstr "Automatisch ingecheckt: %(date)s"
 
-#: pretix/control/templates/pretixcontrol/checkin/checkins.html:98
+#: pretix/control/templates/pretixcontrol/checkin/checkins.html:103
 #, fuzzy
 #| msgid "Successful payments"
 msgctxt "checkin_result"
 msgid "Successful"
 msgstr "Geslaagde betalingen"
 
-#: pretix/control/templates/pretixcontrol/checkin/checkins.html:103
+#: pretix/control/templates/pretixcontrol/checkin/checkins.html:108
 #, fuzzy
 #| msgid "Denied order"
 msgctxt "checkin_result"
@@ -13078,41 +13147,41 @@ msgstr "PDF"
 msgid "CSV"
 msgstr "CSV"
 
-#: pretix/control/templates/pretixcontrol/checkin/index.html:52
+#: pretix/control/templates/pretixcontrol/checkin/index.html:68
 msgid "No attendee record was found."
 msgstr "Geen gast gevonden."
 
-#: pretix/control/templates/pretixcontrol/checkin/index.html:84
+#: pretix/control/templates/pretixcontrol/checkin/index.html:100
 #: pretix/control/templates/pretixcontrol/user/staff_session_edit.html:29
 msgid "Timestamp"
 msgstr "Timestamp"
 
-#: pretix/control/templates/pretixcontrol/checkin/index.html:99
+#: pretix/control/templates/pretixcontrol/checkin/index.html:115
 msgid "unpaid"
 msgstr "onbetaald"
 
-#: pretix/control/templates/pretixcontrol/checkin/index.html:138
+#: pretix/control/templates/pretixcontrol/checkin/index.html:154
 msgid "Checked in but left"
 msgstr "Ingecheckt maar vertrokken"
 
-#: pretix/control/templates/pretixcontrol/checkin/index.html:143
+#: pretix/control/templates/pretixcontrol/checkin/index.html:159
 msgid "Checked in automatically"
 msgstr "Automatisch ingecheckt"
 
-#: pretix/control/templates/pretixcontrol/checkin/index.html:154
+#: pretix/control/templates/pretixcontrol/checkin/index.html:170
 #, python-format
 msgid "Exit: %(date)s"
 msgstr "Vertrek: %(date)s"
 
-#: pretix/control/templates/pretixcontrol/checkin/index.html:167
+#: pretix/control/templates/pretixcontrol/checkin/index.html:183
 msgid "Check-In selected attendees"
 msgstr "Geselecteerde gasten inchecken"
 
-#: pretix/control/templates/pretixcontrol/checkin/index.html:170
+#: pretix/control/templates/pretixcontrol/checkin/index.html:186
 msgid "Check-Out selected attendees"
 msgstr "Geselecteerde gasten uitchecken"
 
-#: pretix/control/templates/pretixcontrol/checkin/index.html:173
+#: pretix/control/templates/pretixcontrol/checkin/index.html:189
 msgid "Revert selected check-ins"
 msgstr "Draai gekozen check-ins terug"
 
@@ -13159,7 +13228,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/order/refund_done.html:26
 #: pretix/control/templates/pretixcontrol/order/refund_process.html:55
 #: pretix/control/templates/pretixcontrol/order/refund_start.html:51
-#: pretix/control/templates/pretixcontrol/orders/refunds.html:104
+#: pretix/control/templates/pretixcontrol/orders/refunds.html:107
 #: pretix/control/templates/pretixcontrol/organizers/customer_anonymize.html:36
 #: pretix/control/templates/pretixcontrol/organizers/customer_membership_delete.html:22
 #: pretix/control/templates/pretixcontrol/organizers/device_revoke.html:21
@@ -13332,7 +13401,7 @@ msgstr "Maak een nieuwe inchecklijst"
 
 #: pretix/control/templates/pretixcontrol/checkin/lists.html:54
 #: pretix/control/templates/pretixcontrol/checkin/lists.html:65
-#: pretix/control/templates/pretixcontrol/organizers/devices.html:6
+#: pretix/control/templates/pretixcontrol/organizers/devices.html:7
 msgid "Connected devices"
 msgstr "Verbonden apparaten"
 
@@ -13361,8 +13430,9 @@ msgstr "Je aankomende evenementen"
 #: pretix/control/templates/pretixcontrol/events/create_base.html:4
 #: pretix/control/templates/pretixcontrol/events/create_base.html:6
 #: pretix/control/templates/pretixcontrol/events/index.html:19
-#: pretix/control/templates/pretixcontrol/events/index.html:57
-#: pretix/control/templates/pretixcontrol/organizers/detail.html:12
+#: pretix/control/templates/pretixcontrol/events/index.html:55
+#: pretix/control/templates/pretixcontrol/organizers/detail.html:13
+#: pretix/control/templates/pretixcontrol/organizers/detail.html:51
 msgid "Create a new event"
 msgstr "Nieuw evenement aanmaken"
 
@@ -14041,7 +14111,7 @@ msgid "Enabled"
 msgstr "Ingeschakeld"
 
 #: pretix/control/templates/pretixcontrol/event/payment.html:27
-#: pretix/control/templates/pretixcontrol/subevents/index.html:131
+#: pretix/control/templates/pretixcontrol/subevents/index.html:150
 #: pretix/control/templates/pretixcontrol/user/settings.html:53
 msgid "Disabled"
 msgstr "Uitgeschakeld"
@@ -14100,7 +14170,7 @@ msgid "Installed plugins"
 msgstr "Geïnstalleerde plugins"
 
 #: pretix/control/templates/pretixcontrol/event/plugins.html:10
-#: pretix/control/views/checkin.py:324 pretix/control/views/event.py:220
+#: pretix/control/views/checkin.py:326 pretix/control/views/event.py:220
 #: pretix/control/views/event.py:374 pretix/control/views/event.py:454
 #: pretix/control/views/event.py:493 pretix/control/views/event.py:656
 #: pretix/control/views/event.py:854 pretix/control/views/event.py:1189
@@ -14110,19 +14180,19 @@ msgstr "Geïnstalleerde plugins"
 #: pretix/control/views/item.py:1146 pretix/control/views/item.py:1275
 #: pretix/control/views/organizer.py:236 pretix/control/views/organizer.py:280
 #: pretix/control/views/organizer.py:449 pretix/control/views/organizer.py:592
-#: pretix/control/views/organizer.py:916 pretix/control/views/organizer.py:1062
-#: pretix/control/views/organizer.py:1474
-#: pretix/control/views/organizer.py:1565
-#: pretix/control/views/organizer.py:1686
-#: pretix/control/views/organizer.py:1871
-#: pretix/control/views/organizer.py:1910
-#: pretix/control/views/organizer.py:1986 pretix/control/views/subevents.py:480
+#: pretix/control/views/organizer.py:928 pretix/control/views/organizer.py:1074
+#: pretix/control/views/organizer.py:1487
+#: pretix/control/views/organizer.py:1578
+#: pretix/control/views/organizer.py:1699
+#: pretix/control/views/organizer.py:1884
+#: pretix/control/views/organizer.py:1923
+#: pretix/control/views/organizer.py:1999 pretix/control/views/subevents.py:480
 #: pretix/control/views/subevents.py:1578 pretix/control/views/user.py:216
 #: pretix/control/views/users.py:87 pretix/control/views/vouchers.py:252
 #: pretix/plugins/badges/views.py:131 pretix/plugins/sendmail/views.py:378
 #: pretix/plugins/stripe/views.py:632
 #: pretix/plugins/ticketoutputpdf/views.py:167
-#: pretix/presale/views/customer.py:370 pretix/presale/views/customer.py:422
+#: pretix/presale/views/customer.py:377 pretix/presale/views/customer.py:429
 msgid "Your changes have been saved."
 msgstr "Je wijzigingen zijn opgeslagen."
 
@@ -14411,8 +14481,8 @@ msgid "Add property"
 msgstr "Eigenschap toevoegen"
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:343
-#: pretix/control/templates/pretixcontrol/events/index.html:158
-#: pretix/control/templates/pretixcontrol/organizers/detail.html:115
+#: pretix/control/templates/pretixcontrol/events/index.html:156
+#: pretix/control/templates/pretixcontrol/organizers/detail.html:121
 msgid "Clone event"
 msgstr "Kopieer evenement"
 
@@ -14636,7 +14706,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/events/create_base.html:35
 #: pretix/control/templates/pretixcontrol/organizers/create.html:4
 #: pretix/control/templates/pretixcontrol/organizers/create.html:6
-#: pretix/control/templates/pretixcontrol/organizers/index.html:27
+#: pretix/control/templates/pretixcontrol/organizers/index.html:34
 msgid "Create a new organizer"
 msgstr "Nieuwe organisator aanmaken"
 
@@ -14778,36 +14848,36 @@ msgstr ""
 msgid "You currently do not have access to any events."
 msgstr "Je hebt momenteel geen toegang tot evenementen."
 
-#: pretix/control/templates/pretixcontrol/events/index.html:83
-#: pretix/control/templates/pretixcontrol/subevents/index.html:82
+#: pretix/control/templates/pretixcontrol/events/index.html:81
+#: pretix/control/templates/pretixcontrol/subevents/index.html:96
 msgid "Paid tickets per quota"
 msgstr "Betaalde kaartjes per quotum"
 
-#: pretix/control/templates/pretixcontrol/events/index.html:114
-#: pretix/control/templates/pretixcontrol/organizers/detail.html:82
+#: pretix/control/templates/pretixcontrol/events/index.html:112
+#: pretix/control/templates/pretixcontrol/organizers/detail.html:88
 msgid "Series"
 msgstr "Reeks"
 
-#: pretix/control/templates/pretixcontrol/events/index.html:134
-#: pretix/control/templates/pretixcontrol/subevents/index.html:123
+#: pretix/control/templates/pretixcontrol/events/index.html:132
+#: pretix/control/templates/pretixcontrol/subevents/index.html:142
 msgid "More quotas"
 msgstr "Meer quota"
 
-#: pretix/control/templates/pretixcontrol/events/index.html:142
-#: pretix/control/templates/pretixcontrol/organizers/detail.html:98
+#: pretix/control/templates/pretixcontrol/events/index.html:140
+#: pretix/control/templates/pretixcontrol/organizers/detail.html:104
 #: pretix/control/views/dashboards.py:529
 msgid "Shop disabled"
 msgstr "Winkel uitgeschakeld"
 
-#: pretix/control/templates/pretixcontrol/events/index.html:148
-#: pretix/control/templates/pretixcontrol/organizers/detail.html:104
-#: pretix/control/templates/pretixcontrol/subevents/index.html:137
+#: pretix/control/templates/pretixcontrol/events/index.html:146
+#: pretix/control/templates/pretixcontrol/organizers/detail.html:110
+#: pretix/control/templates/pretixcontrol/subevents/index.html:156
 #: pretix/control/views/dashboards.py:535
 msgid "On sale"
 msgstr "In de verkoop"
 
-#: pretix/control/templates/pretixcontrol/events/index.html:153
-#: pretix/control/templates/pretixcontrol/organizers/detail.html:109
+#: pretix/control/templates/pretixcontrol/events/index.html:151
+#: pretix/control/templates/pretixcontrol/organizers/detail.html:115
 msgid "Open event dashboard"
 msgstr "Open evenementsdashboard"
 
@@ -15399,7 +15469,7 @@ msgstr "Vraag bewerken"
 
 #: pretix/control/templates/pretixcontrol/items/question.html:20
 #: pretix/control/templates/pretixcontrol/orders/fragment_order_status.html:25
-#: pretix/control/templates/pretixcontrol/orders/overview.html:77
+#: pretix/control/templates/pretixcontrol/orders/overview.html:80
 #: pretix/plugins/checkinlists/exporters.py:448
 #: pretix/plugins/reports/exporters.py:297
 #: pretix/presale/templates/pretixpresale/event/fragment_order_status.html:19
@@ -15739,7 +15809,7 @@ msgstr "Bewerk een applicatie"
 #: pretix/control/templates/pretixcontrol/oauth/auth_revoke.html:4
 #: pretix/control/templates/pretixcontrol/oauth/auth_revoke.html:6
 #: pretix/control/templates/pretixcontrol/oauth/authorized.html:49
-#: pretix/control/templates/pretixcontrol/organizers/devices.html:95
+#: pretix/control/templates/pretixcontrol/organizers/devices.html:133
 msgid "Revoke access"
 msgstr "Toegang intrekken"
 
@@ -16293,8 +16363,8 @@ msgid "Taxes"
 msgstr "Belastingen"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:593
-#: pretix/control/templates/pretixcontrol/orders/overview.html:78
-#: pretix/control/templates/pretixcontrol/orders/overview.html:166
+#: pretix/control/templates/pretixcontrol/orders/overview.html:81
+#: pretix/control/templates/pretixcontrol/orders/overview.html:169
 #: pretix/plugins/reports/exporters.py:297
 #: pretix/plugins/reports/exporters.py:353
 #: pretix/plugins/reports/exporters.py:522
@@ -16348,7 +16418,7 @@ msgid "Create a refund"
 msgstr "Maak een terugbetaling aan"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:733
-#: pretix/control/templates/pretixcontrol/orders/refunds.html:57
+#: pretix/control/templates/pretixcontrol/orders/refunds.html:60
 msgid "Source"
 msgstr "Bron"
 
@@ -16357,18 +16427,18 @@ msgid "Cancel transfer"
 msgstr "Annuleer overschrijving"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:771
-#: pretix/control/templates/pretixcontrol/orders/refunds.html:109
+#: pretix/control/templates/pretixcontrol/orders/refunds.html:112
 msgid "Confirm as done"
 msgstr "Bevestig als klaar"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:778
-#: pretix/control/templates/pretixcontrol/orders/refunds.html:115
+#: pretix/control/templates/pretixcontrol/orders/refunds.html:118
 msgid "Ignore"
 msgstr "Negeer"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:784
 #: pretix/control/templates/pretixcontrol/order/refund_process.html:58
-#: pretix/control/templates/pretixcontrol/orders/refunds.html:120
+#: pretix/control/templates/pretixcontrol/orders/refunds.html:123
 msgid "Process refund"
 msgstr "Verwerk terugbetaling"
 
@@ -16837,84 +16907,84 @@ msgstr "Ga naar kaartjeswinkel"
 msgid "Search query:"
 msgstr "Zoekopdracht:"
 
-#: pretix/control/templates/pretixcontrol/orders/index.html:48
-#: pretix/control/templates/pretixcontrol/vouchers/index.html:21
+#: pretix/control/templates/pretixcontrol/orders/index.html:47
+#: pretix/control/templates/pretixcontrol/vouchers/index.html:20
 msgid "Go!"
 msgstr "Ga!"
 
-#: pretix/control/templates/pretixcontrol/orders/index.html:83
+#: pretix/control/templates/pretixcontrol/orders/index.html:86
 msgid "Advanced search"
 msgstr "Geavanceerde zoekopdracht"
 
-#: pretix/control/templates/pretixcontrol/orders/index.html:93
+#: pretix/control/templates/pretixcontrol/orders/index.html:99
 #, python-format
 msgid "List filtered by answers to question \"%(question)s\"."
 msgstr "Lijst gefilterd op antwoorden op vraag \"%(question)s\"."
 
-#: pretix/control/templates/pretixcontrol/orders/index.html:98
+#: pretix/control/templates/pretixcontrol/orders/index.html:104
 msgid "Remove filter"
 msgstr "Verwijder filter"
 
-#: pretix/control/templates/pretixcontrol/orders/index.html:116
+#: pretix/control/templates/pretixcontrol/orders/index.html:122
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:172
 #, fuzzy
 #| msgid "Order  paid / total"
 msgid "Order paid / total"
 msgstr "Bestelling betaald / totaal"
 
-#: pretix/control/templates/pretixcontrol/orders/index.html:138
-#: pretix/control/templates/pretixcontrol/orders/index.html:140
-#: pretix/control/templates/pretixcontrol/search/orders.html:73
-#: pretix/control/templates/pretixcontrol/search/orders.html:75
+#: pretix/control/templates/pretixcontrol/orders/index.html:144
+#: pretix/control/templates/pretixcontrol/orders/index.html:146
+#: pretix/control/templates/pretixcontrol/search/orders.html:80
+#: pretix/control/templates/pretixcontrol/search/orders.html:82
 #, fuzzy, python-format
 #| msgid "Exit: %(date)s"
 msgctxt "followup"
 msgid "TODO %(date)s"
 msgstr "Vertrek: %(date)s"
 
-#: pretix/control/templates/pretixcontrol/orders/index.html:156
+#: pretix/control/templates/pretixcontrol/orders/index.html:162
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:206
-#: pretix/control/templates/pretixcontrol/search/orders.html:88
+#: pretix/control/templates/pretixcontrol/search/orders.html:95
 msgid "CANCELLATION REQUESTED"
 msgstr "ANNULERING AANGEVRAAGD"
 
-#: pretix/control/templates/pretixcontrol/orders/index.html:159
-#: pretix/control/templates/pretixcontrol/orders/index.html:161
+#: pretix/control/templates/pretixcontrol/orders/index.html:165
+#: pretix/control/templates/pretixcontrol/orders/index.html:167
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:209
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:211
-#: pretix/control/templates/pretixcontrol/search/orders.html:91
-#: pretix/control/templates/pretixcontrol/search/orders.html:93
+#: pretix/control/templates/pretixcontrol/search/orders.html:98
+#: pretix/control/templates/pretixcontrol/search/orders.html:100
 msgid "REFUND PENDING"
 msgstr "OPENSTAANDE TERUGBETALING"
 
-#: pretix/control/templates/pretixcontrol/orders/index.html:164
+#: pretix/control/templates/pretixcontrol/orders/index.html:170
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:214
-#: pretix/control/templates/pretixcontrol/search/orders.html:96
+#: pretix/control/templates/pretixcontrol/search/orders.html:103
 msgid "OVERPAID"
 msgstr "OVERBETAALD"
 
-#: pretix/control/templates/pretixcontrol/orders/index.html:166
+#: pretix/control/templates/pretixcontrol/orders/index.html:172
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:216
-#: pretix/control/templates/pretixcontrol/search/orders.html:98
+#: pretix/control/templates/pretixcontrol/search/orders.html:105
 msgid "UNDERPAID"
 msgstr "ONDERBETAALD"
 
-#: pretix/control/templates/pretixcontrol/orders/index.html:168
+#: pretix/control/templates/pretixcontrol/orders/index.html:174
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:218
-#: pretix/control/templates/pretixcontrol/search/orders.html:100
+#: pretix/control/templates/pretixcontrol/search/orders.html:107
 msgid "FULLY PAID"
 msgstr "VOLLEDIG BETAALD"
 
-#: pretix/control/templates/pretixcontrol/orders/index.html:180
+#: pretix/control/templates/pretixcontrol/orders/index.html:186
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:230
 msgid "INVOICE NOT CANCELED"
 msgstr ""
 
-#: pretix/control/templates/pretixcontrol/orders/index.html:191
+#: pretix/control/templates/pretixcontrol/orders/index.html:197
 msgid "Sum over all pages"
 msgstr "Som over alle pagina's"
 
-#: pretix/control/templates/pretixcontrol/orders/index.html:194
+#: pretix/control/templates/pretixcontrol/orders/index.html:200
 #, python-format
 msgid "1 order"
 msgid_plural "%(s)s orders"
@@ -16938,7 +17008,7 @@ msgstr "Winst (bruto)"
 msgid "Revenue (net)"
 msgstr "Winst (netto)"
 
-#: pretix/control/templates/pretixcontrol/orders/overview.html:55
+#: pretix/control/templates/pretixcontrol/orders/overview.html:58
 msgctxt "subevent"
 msgid ""
 "If you select a single date, fees will not be listed here as it might not be "
@@ -16947,12 +17017,12 @@ msgstr ""
 "Als je een enkele datum selecteert zullen toeslagen hier niet getoond "
 "worden, omdat het onduidelijk kan zijn bij welke datum ze horen."
 
-#: pretix/control/templates/pretixcontrol/orders/overview.html:69
+#: pretix/control/templates/pretixcontrol/orders/overview.html:72
 #: pretix/plugins/reports/exporters.py:293
 msgid "Purchased"
 msgstr "Gekocht"
 
-#: pretix/control/templates/pretixcontrol/orders/overview.html:178
+#: pretix/control/templates/pretixcontrol/orders/overview.html:181
 msgid ""
 "If you click links in this column, you will only find orders that are "
 "canceled completely, while the numbers also include single canceled "
@@ -16962,11 +17032,11 @@ msgstr ""
 "helemaal zijn geannuleerd, maar de aantallen kunnen ook losse geannuleerde "
 "plaatsen binnen geldige bestellingen meetellen."
 
-#: pretix/control/templates/pretixcontrol/orders/refunds.html:31
+#: pretix/control/templates/pretixcontrol/orders/refunds.html:34
 msgid "No refunds are currently open."
 msgstr "Er zijn geen openstaande terugbetalingen."
 
-#: pretix/control/templates/pretixcontrol/orders/refunds.html:71
+#: pretix/control/templates/pretixcontrol/orders/refunds.html:74
 msgid "Actions"
 msgstr "Acties"
 
@@ -16985,9 +17055,9 @@ msgstr "Aangepaste velden"
 
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:21
 #: pretix/control/templates/pretixcontrol/organizers/customer_membership.html:15
-#: pretix/control/templates/pretixcontrol/organizers/customers.html:75
+#: pretix/control/templates/pretixcontrol/organizers/customers.html:80
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:23
-#: pretix/control/templates/pretixcontrol/organizers/giftcards.html:86
+#: pretix/control/templates/pretixcontrol/organizers/giftcards.html:91
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:15
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:89
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:90
@@ -16996,7 +17066,7 @@ msgid "Details"
 msgstr "Details"
 
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:28
-#: pretix/control/templates/pretixcontrol/organizers/customers.html:43
+#: pretix/control/templates/pretixcontrol/organizers/customers.html:48
 #: pretix/presale/templates/pretixpresale/event/checkout_customer.html:41
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:20
 #, fuzzy
@@ -17255,7 +17325,7 @@ msgstr ""
 "evenementsmetadata en POS-transacties zullen bewaard blijven tot je ze "
 "handmatig verwijdert."
 
-#: pretix/control/templates/pretixcontrol/organizers/devices.html:9
+#: pretix/control/templates/pretixcontrol/organizers/devices.html:10
 msgid ""
 "This menu allows you to connect hardware devices such as box office "
 "terminals or scanning terminals to your account."
@@ -17263,36 +17333,32 @@ msgstr ""
 "Dit menu staat je toe om hardware-apparaten (zoals kassa- of scanterminals) "
 "met je account te verbinden."
 
-#: pretix/control/templates/pretixcontrol/organizers/devices.html:17
+#: pretix/control/templates/pretixcontrol/organizers/devices.html:18
 msgid "You haven't connected any hardware devices yet."
 msgstr "Je hebt nog geen apparaten verbonden."
 
-#: pretix/control/templates/pretixcontrol/organizers/devices.html:23
-#: pretix/control/templates/pretixcontrol/organizers/devices.html:28
+#: pretix/control/templates/pretixcontrol/organizers/devices.html:24
+#: pretix/control/templates/pretixcontrol/organizers/devices.html:53
 msgid "Connect a device"
 msgstr "Verbind een apparaat"
 
-#: pretix/control/templates/pretixcontrol/organizers/devices.html:36
+#: pretix/control/templates/pretixcontrol/organizers/devices.html:67
 msgid "Hardware model"
 msgstr "Hardwaremodel"
 
-#: pretix/control/templates/pretixcontrol/organizers/devices.html:37
-msgid "Software"
-msgstr "Software"
-
-#: pretix/control/templates/pretixcontrol/organizers/devices.html:66
+#: pretix/control/templates/pretixcontrol/organizers/devices.html:104
 msgid "Not yet initialized"
 msgstr "Nog niet geïnstalleerd"
 
-#: pretix/control/templates/pretixcontrol/organizers/devices.html:69
+#: pretix/control/templates/pretixcontrol/organizers/devices.html:107
 msgid "Revoked"
 msgstr "ingetrokken"
 
-#: pretix/control/templates/pretixcontrol/organizers/devices.html:91
+#: pretix/control/templates/pretixcontrol/organizers/devices.html:129
 msgid "Connect"
 msgstr "Verbinden"
 
-#: pretix/control/templates/pretixcontrol/organizers/devices.html:100
+#: pretix/control/templates/pretixcontrol/organizers/devices.html:138
 #: pretix/control/templates/pretixcontrol/organizers/webhooks.html:70
 msgid "Logs"
 msgstr "Logs"
@@ -17390,15 +17456,15 @@ msgstr ""
 "cadeaubonnen aanmaken."
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcards.html:20
-#: pretix/control/templates/pretixcontrol/organizers/giftcards.html:45
+#: pretix/control/templates/pretixcontrol/organizers/giftcards.html:50
 msgid "Manually issue a gift card"
 msgstr "Handmatig cadeaubon aanmaken"
 
-#: pretix/control/templates/pretixcontrol/organizers/giftcards.html:101
+#: pretix/control/templates/pretixcontrol/organizers/giftcards.html:106
 msgid "Accepted gift cards of other organizers"
 msgstr "Geaccepteerde cadeaubonnen van andere organisators"
 
-#: pretix/control/templates/pretixcontrol/organizers/giftcards.html:103
+#: pretix/control/templates/pretixcontrol/organizers/giftcards.html:108
 msgid ""
 "If you have access to multiple organizer accounts, you can configure that "
 "ticket shops in this account will also accept gift codes issued through a "
@@ -17408,7 +17474,7 @@ msgstr ""
 "ticketwinkels in dit account ook cadeaubonnen accepteren die zijn uitgegeven "
 "door een ander organisatoraccount, en omgekeerd."
 
-#: pretix/control/templates/pretixcontrol/organizers/giftcards.html:119
+#: pretix/control/templates/pretixcontrol/organizers/giftcards.html:124
 msgid "You are currently not accepting gift cards from other organizers."
 msgstr "Je accepteert momenteel geen cadeaubonnen van andere organisators."
 
@@ -17553,7 +17619,7 @@ msgid "Team:"
 msgstr "Team:"
 
 #: pretix/control/templates/pretixcontrol/organizers/team_edit.html:8
-#: pretix/control/templates/pretixcontrol/organizers/teams.html:25
+#: pretix/control/templates/pretixcontrol/organizers/teams.html:30
 msgid "Create a new team"
 msgstr "Nieuw team aanmaken"
 
@@ -17624,11 +17690,11 @@ msgid "The list below shows all teams that exist within this organizer."
 msgstr ""
 "De lijst hieronder toont alle teams die bestaan binnen deze organisator."
 
-#: pretix/control/templates/pretixcontrol/organizers/teams.html:33
+#: pretix/control/templates/pretixcontrol/organizers/teams.html:38
 msgid "Members"
 msgstr "Leden"
 
-#: pretix/control/templates/pretixcontrol/organizers/teams.html:49
+#: pretix/control/templates/pretixcontrol/organizers/teams.html:54
 #, python-format
 msgid "+ %(count)s invited"
 msgstr "+ %(count)s uitgenodigd"
@@ -17696,18 +17762,18 @@ msgstr "Je hebt nog geen webhooks aangemaakt."
 msgid "Create webhook"
 msgstr "Maak webhook"
 
-#: pretix/control/templates/pretixcontrol/pagination.html:14
+#: pretix/control/templates/pretixcontrol/pagination.html:16
 #, python-format
 msgid "Page %(page)s of %(of)s (%(count)s elements)"
 msgstr "Pagina %(page)s van %(of)s (%(count)s elementen)"
 
-#: pretix/control/templates/pretixcontrol/pagination.html:28
+#: pretix/control/templates/pretixcontrol/pagination.html:30
 #: pretix/control/templates/pretixcontrol/pagination_huge.html:28
 #, python-format
 msgid "%(count)s elements"
 msgstr "%(count)s elementen"
 
-#: pretix/control/templates/pretixcontrol/pagination.html:38
+#: pretix/control/templates/pretixcontrol/pagination.html:40
 #: pretix/control/templates/pretixcontrol/pagination_huge.html:38
 msgid "Show per page:"
 msgstr "Toon per pagina:"
@@ -17952,7 +18018,7 @@ msgstr "pretix-logo"
 msgid "Dynamic image"
 msgstr ""
 
-#: pretix/control/templates/pretixcontrol/search/orders.html:109
+#: pretix/control/templates/pretixcontrol/search/orders.html:116
 msgid ""
 "We couldn't find any orders that you have access to and that match your "
 "search query."
@@ -18287,66 +18353,66 @@ msgid "You haven't created any dates for this event series yet."
 msgstr "Je hebt nog geen datums voor deze evenementenreeks aangemaakt."
 
 #: pretix/control/templates/pretixcontrol/subevents/index.html:18
-#: pretix/control/templates/pretixcontrol/subevents/index.html:53
+#: pretix/control/templates/pretixcontrol/subevents/index.html:67
 msgctxt "subevent"
 msgid "Create a new date"
 msgstr "Nieuwe datum aanmaken"
 
 #: pretix/control/templates/pretixcontrol/subevents/index.html:21
-#: pretix/control/templates/pretixcontrol/subevents/index.html:56
+#: pretix/control/templates/pretixcontrol/subevents/index.html:70
 msgctxt "subevent"
 msgid "Create many new dates"
 msgstr "Maak meerdere nieuwe datums"
 
-#: pretix/control/templates/pretixcontrol/subevents/index.html:70
+#: pretix/control/templates/pretixcontrol/subevents/index.html:84
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:140
 msgid "select all rows for batch-operation"
 msgstr ""
 
-#: pretix/control/templates/pretixcontrol/subevents/index.html:77
+#: pretix/control/templates/pretixcontrol/subevents/index.html:91
 msgid "Begin"
 msgstr "Begin"
 
-#: pretix/control/templates/pretixcontrol/subevents/index.html:98
+#: pretix/control/templates/pretixcontrol/subevents/index.html:112
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:166
 msgid "Select all results on other pages as well"
 msgstr ""
 
-#: pretix/control/templates/pretixcontrol/subevents/index.html:109
+#: pretix/control/templates/pretixcontrol/subevents/index.html:123
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:177
 msgid "select row for batch-operation"
 msgstr ""
 
-#: pretix/control/templates/pretixcontrol/subevents/index.html:150
+#: pretix/control/templates/pretixcontrol/subevents/index.html:169
 msgctxt "subevent"
 msgid "Use as a template for a new date"
 msgstr "Gebruik als sjabloon voor een nieuwe datum"
 
-#: pretix/control/templates/pretixcontrol/subevents/index.html:155
+#: pretix/control/templates/pretixcontrol/subevents/index.html:174
 msgctxt "subevent"
 msgid "Use as a template for many new dates"
 msgstr "Gebruik als sjabloon voor meerdere nieuwe datums"
 
-#: pretix/control/templates/pretixcontrol/subevents/index.html:170
-#: pretix/control/templates/pretixcontrol/vouchers/index.html:195
+#: pretix/control/templates/pretixcontrol/subevents/index.html:189
+#: pretix/control/templates/pretixcontrol/vouchers/index.html:198
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:264
 msgid "Delete selected"
 msgstr "Verwijder geselecteerde"
 
-#: pretix/control/templates/pretixcontrol/subevents/index.html:174
+#: pretix/control/templates/pretixcontrol/subevents/index.html:193
 #, fuzzy
 #| msgctxt "subevent"
 #| msgid "No date selected."
 msgid "Edit selected"
 msgstr "Geen datum geselecteerd."
 
-#: pretix/control/templates/pretixcontrol/subevents/index.html:177
+#: pretix/control/templates/pretixcontrol/subevents/index.html:196
 #, fuzzy
 #| msgid "Disable selected"
 msgid "Activate selected"
 msgstr "Schakel geselecteerde uit"
 
-#: pretix/control/templates/pretixcontrol/subevents/index.html:180
+#: pretix/control/templates/pretixcontrol/subevents/index.html:199
 #, fuzzy
 #| msgid "Delete selected"
 msgid "Deactivate selected"
@@ -18798,7 +18864,7 @@ msgstr "Gebruikershistorie"
 msgid "User created."
 msgstr "Gebruiker aangemaakt."
 
-#: pretix/control/templates/pretixcontrol/users/index.html:30
+#: pretix/control/templates/pretixcontrol/users/index.html:35
 msgid "Create a new user"
 msgstr "Maak een nieuwe gebruiker aan"
 
@@ -18909,43 +18975,43 @@ msgstr ""
 "lagere prijs. Ze kunnen daarnaast ook gebruikt worden om quotum te "
 "reserveren voor speciale gasten."
 
-#: pretix/control/templates/pretixcontrol/vouchers/index.html:64
+#: pretix/control/templates/pretixcontrol/vouchers/index.html:67
 msgid "Your search did not match any vouchers."
 msgstr "Je zoekopdracht kwam niet overeen met vouchers."
 
-#: pretix/control/templates/pretixcontrol/vouchers/index.html:66
+#: pretix/control/templates/pretixcontrol/vouchers/index.html:69
 msgid "You haven't created any vouchers yet."
 msgstr "Je hebt nog geen vouchers gemaakt."
 
-#: pretix/control/templates/pretixcontrol/vouchers/index.html:73
-#: pretix/control/templates/pretixcontrol/vouchers/index.html:80
+#: pretix/control/templates/pretixcontrol/vouchers/index.html:76
+#: pretix/control/templates/pretixcontrol/vouchers/index.html:83
 msgid "Create a new voucher"
 msgstr "Maak een nieuwe voucher aan"
 
-#: pretix/control/templates/pretixcontrol/vouchers/index.html:75
-#: pretix/control/templates/pretixcontrol/vouchers/index.html:83
+#: pretix/control/templates/pretixcontrol/vouchers/index.html:78
+#: pretix/control/templates/pretixcontrol/vouchers/index.html:86
 msgid "Create multiple new vouchers"
 msgstr "Maak meerdere nieuwe vouchers aan"
 
-#: pretix/control/templates/pretixcontrol/vouchers/index.html:86
+#: pretix/control/templates/pretixcontrol/vouchers/index.html:89
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:126
 msgid "Download list"
 msgstr "Download lijst"
 
-#: pretix/control/templates/pretixcontrol/vouchers/index.html:105
+#: pretix/control/templates/pretixcontrol/vouchers/index.html:108
 msgid "Redemptions"
 msgstr "Verzilveringen"
 
-#: pretix/control/templates/pretixcontrol/vouchers/index.html:110
+#: pretix/control/templates/pretixcontrol/vouchers/index.html:113
 msgid "Expiry"
 msgstr "Verloop"
 
-#: pretix/control/templates/pretixcontrol/vouchers/index.html:167
+#: pretix/control/templates/pretixcontrol/vouchers/index.html:170
 #, python-format
 msgid "Any product in quota \"%(quota)s\""
 msgstr "Elk product in quotum \"%(quota)s\""
 
-#: pretix/control/templates/pretixcontrol/vouchers/index.html:183
+#: pretix/control/templates/pretixcontrol/vouchers/index.html:186
 msgid "Use as a template for new vouchers"
 msgstr "Gebruik als sjabloon voor nieuwe vouchers"
 
@@ -19272,23 +19338,23 @@ msgstr "Probeer het opnieuw."
 msgid "Invalid code, please try again."
 msgstr "Ongeldige code, probeer het opnieuw."
 
-#: pretix/control/views/checkin.py:156
+#: pretix/control/views/checkin.py:158
 msgid "You do not have permission to perform this action."
 msgstr "Je hebt geen toestemming om deze actie uit te voeren."
 
-#: pretix/control/views/checkin.py:178
+#: pretix/control/views/checkin.py:180
 msgid "The selected check-ins have been reverted."
 msgstr "De gekozen check-ins zijn teruggedraaid."
 
-#: pretix/control/views/checkin.py:208
+#: pretix/control/views/checkin.py:210
 msgid "The selected tickets have been marked as checked in."
 msgstr "De geselecteerde kaartjes zijn aangemerkt als ingecheckt."
 
-#: pretix/control/views/checkin.py:291
+#: pretix/control/views/checkin.py:293
 msgid "The new check-in list has been created."
 msgstr "De nieuwe inchecklijst is aangemaakt."
 
-#: pretix/control/views/checkin.py:298 pretix/control/views/checkin.py:341
+#: pretix/control/views/checkin.py:300 pretix/control/views/checkin.py:343
 #: pretix/control/views/event.py:249 pretix/control/views/event.py:457
 #: pretix/control/views/event.py:496 pretix/control/views/event.py:659
 #: pretix/control/views/event.py:823 pretix/control/views/event.py:1147
@@ -19307,11 +19373,11 @@ msgstr "De nieuwe inchecklijst is aangemaakt."
 msgid "We could not save your changes. See below for details."
 msgstr "We konden je wijzigingen niet opslaan. Zie hieronder voor details."
 
-#: pretix/control/views/checkin.py:320 pretix/control/views/checkin.py:357
+#: pretix/control/views/checkin.py:322 pretix/control/views/checkin.py:359
 msgid "The requested list does not exist."
 msgstr "De gevraagde lijst bestaat niet."
 
-#: pretix/control/views/checkin.py:366
+#: pretix/control/views/checkin.py:368
 msgid "The selected list has been deleted."
 msgstr "De gekozen lijst is verwijderd."
 
@@ -19553,7 +19619,7 @@ msgstr "Het commentaar is bijgewerkt."
 msgid "Could not update the comment."
 msgstr "Kon de opmerking niet bijwerken."
 
-#: pretix/control/views/event.py:1112 pretix/control/views/main.py:310
+#: pretix/control/views/event.py:1112 pretix/control/views/main.py:311
 msgid "VAT"
 msgstr "Btw"
 
@@ -19801,7 +19867,7 @@ msgstr "Het gekozen product is uitgeschakeld."
 msgid "You do not have permission to clone this event."
 msgstr "Je hebt geen toestemming om dit evenement te kopiëren."
 
-#: pretix/control/views/main.py:280
+#: pretix/control/views/main.py:281
 #, python-brace-format
 msgid "Team {event}"
 msgstr "Team {event}"
@@ -19826,7 +19892,7 @@ msgstr "Upload geen bestanden groter dan 10MB."
 msgid "The import was successful."
 msgstr "De import is gelukt."
 
-#: pretix/control/views/orderimport.py:140
+#: pretix/control/views/orderimport.py:142
 msgid "We've been unable to parse the uploaded file as a CSV file."
 msgstr "We konden het geüploade bestand niet openen als een CSV-bestand."
 
@@ -20186,11 +20252,11 @@ msgstr ""
 msgid "There is no order with the given order code."
 msgstr "Er is geen bestelling met de gegeven bestelcode."
 
-#: pretix/control/views/orders.py:2243 pretix/control/views/organizer.py:1377
+#: pretix/control/views/orders.py:2243 pretix/control/views/organizer.py:1389
 msgid "The selected exporter was not found."
 msgstr "De gekozen exporteerder was niet gevonden."
 
-#: pretix/control/views/orders.py:2250 pretix/control/views/organizer.py:1383
+#: pretix/control/views/orders.py:2250 pretix/control/views/organizer.py:1395
 msgid "There was a problem processing your input. See below for error details."
 msgstr ""
 "Er was een probleem met het verwerken van je invoer. Zie onder voor details."
@@ -20245,15 +20311,15 @@ msgid "The team has been created. You can now add members to the team."
 msgstr "Het team is aangemaakt. Je kan nu leden aan het team toevoegen."
 
 #: pretix/control/views/organizer.py:561 pretix/control/views/organizer.py:596
-#: pretix/control/views/organizer.py:810 pretix/control/views/organizer.py:859
-#: pretix/control/views/organizer.py:920 pretix/control/views/organizer.py:1024
-#: pretix/control/views/organizer.py:1066
-#: pretix/control/views/organizer.py:1444
-#: pretix/control/views/organizer.py:1478
-#: pretix/control/views/organizer.py:1540
-#: pretix/control/views/organizer.py:1569
-#: pretix/control/views/organizer.py:1656
-#: pretix/control/views/organizer.py:1690
+#: pretix/control/views/organizer.py:810 pretix/control/views/organizer.py:871
+#: pretix/control/views/organizer.py:932 pretix/control/views/organizer.py:1036
+#: pretix/control/views/organizer.py:1078
+#: pretix/control/views/organizer.py:1457
+#: pretix/control/views/organizer.py:1491
+#: pretix/control/views/organizer.py:1553
+#: pretix/control/views/organizer.py:1582
+#: pretix/control/views/organizer.py:1669
+#: pretix/control/views/organizer.py:1703
 msgid "Your changes could not be saved."
 msgstr "Je wijzigingen konden niet worden opgeslagen."
 
@@ -20321,80 +20387,80 @@ msgstr ""
 "Kopieer dit geheim naar een veilige plaats. Je zal het hier niet opnieuw "
 "kunnen zien."
 
-#: pretix/control/views/organizer.py:940
+#: pretix/control/views/organizer.py:952
 msgid "This device has been set up successfully."
 msgstr "Het apparaat is succesvol geïnstalleerd."
 
-#: pretix/control/views/organizer.py:968
+#: pretix/control/views/organizer.py:980
 msgid "This device currently does not have access."
 msgstr "Dit apparaat heeft momenteel geen toegang."
 
-#: pretix/control/views/organizer.py:979
+#: pretix/control/views/organizer.py:991
 msgid "Access for this device has been revoked."
 msgstr "De toegang voor dit apparaat is ingetrokken."
 
-#: pretix/control/views/organizer.py:1126
+#: pretix/control/views/organizer.py:1138
 msgid "The selected gift card issuer has been added."
 msgstr "De gekozen cadeaukaartuitgever is toegevoegd."
 
-#: pretix/control/views/organizer.py:1140
+#: pretix/control/views/organizer.py:1152
 msgid "The selected gift card issuer has been removed."
 msgstr "De gekozen cadeaukaartuitgever is verwijderd."
 
-#: pretix/control/views/organizer.py:1173
-#: pretix/control/views/organizer.py:1206
+#: pretix/control/views/organizer.py:1185
+#: pretix/control/views/organizer.py:1218
 msgid "Gift cards are not allowed to have negative values."
 msgstr "Cadeaubonnen kunnen geen negatieve waarde hebben."
 
-#: pretix/control/views/organizer.py:1196
+#: pretix/control/views/organizer.py:1208
 msgid "The transaction could not be reversed."
 msgstr "De transactie kon niet worden teruggeboekt."
 
-#: pretix/control/views/organizer.py:1198
+#: pretix/control/views/organizer.py:1210
 msgid "The transaction has been reversed."
 msgstr "De transactie is teruggeboekt."
 
-#: pretix/control/views/organizer.py:1203
+#: pretix/control/views/organizer.py:1215
 msgid "Your input was invalid, please try again."
 msgstr "Je invoer was ongeldig, probeer het opnieuw."
 
-#: pretix/control/views/organizer.py:1220
+#: pretix/control/views/organizer.py:1232
 msgid "The manual transaction has been saved."
 msgstr "De handmatige transactie is opgeslagen."
 
-#: pretix/control/views/organizer.py:1252
+#: pretix/control/views/organizer.py:1264
 msgid "The gift card has been created and can now be used."
 msgstr "De cadeaubon is aangemaakt en kan nu worden gebruikt."
 
-#: pretix/control/views/organizer.py:1502
+#: pretix/control/views/organizer.py:1515
 msgid "The selected gate has been deleted."
 msgstr "De geselecteerde toegangslocatie is verwijderd."
 
-#: pretix/control/views/organizer.py:1531
+#: pretix/control/views/organizer.py:1544
 #, fuzzy
 #| msgid "The product has been created."
 msgid "The property has been created."
 msgstr "Het product is aangemaakt."
 
-#: pretix/control/views/organizer.py:1593
+#: pretix/control/views/organizer.py:1606
 #, fuzzy
 #| msgid "The selected product has been deleted."
 msgid "The selected property has been deleted."
 msgstr "Het gekozen product is verwijderd."
 
-#: pretix/control/views/organizer.py:1720
-#: pretix/control/views/organizer.py:1948
+#: pretix/control/views/organizer.py:1733
+#: pretix/control/views/organizer.py:1961
 #, fuzzy
 #| msgid "The selected product has been deleted."
 msgid "The selected object has been deleted."
 msgstr "Het gekozen product is verwijderd."
 
-#: pretix/control/views/organizer.py:1779 pretix/presale/views/customer.py:243
+#: pretix/control/views/organizer.py:1792 pretix/presale/views/customer.py:250
 #, python-brace-format
 msgid "Set a new password for your account at {organizer}"
 msgstr ""
 
-#: pretix/control/views/organizer.py:1788
+#: pretix/control/views/organizer.py:1801
 #, fuzzy
 #| msgid "We sent out an e-mail containing further instructions."
 msgid ""
@@ -20402,7 +20468,7 @@ msgid ""
 "password."
 msgstr "We hebben een e-mail met verdere instructies verstuurd."
 
-#: pretix/control/views/organizer.py:2012
+#: pretix/control/views/organizer.py:2025
 #, fuzzy
 #| msgid "This user has been anonymized."
 msgid "The customer account has been anonymized."
@@ -24407,19 +24473,19 @@ msgid "Other dates"
 msgstr "Andere datums"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:120
-#: pretix/presale/views/waiting.py:102 pretix/presale/views/widget.py:631
+#: pretix/presale/views/waiting.py:102 pretix/presale/views/widget.py:648
 msgid "The presale period for this event is over."
 msgstr "De voorverkoopperiode voor dit evenement is afgelopen."
 
 #: pretix/presale/templates/pretixpresale/event/index.html:125
-#: pretix/presale/views/widget.py:633
+#: pretix/presale/views/widget.py:650
 #, python-format
 msgid "The presale for this event will start on %(date)s at %(time)s."
 msgstr ""
 "De voorverkoopperiode voor dit evenement begint op %(date)s om %(time)s."
 
 #: pretix/presale/templates/pretixpresale/event/index.html:129
-#: pretix/presale/views/waiting.py:106 pretix/presale/views/widget.py:638
+#: pretix/presale/views/waiting.py:106 pretix/presale/views/widget.py:655
 msgid "The presale for this event has not yet started."
 msgstr "De voorverkoopperiode voor dit evenement is nog niet begonnen."
 
@@ -25111,7 +25177,7 @@ msgid "iCal"
 msgstr "iCal"
 
 #: pretix/presale/templates/pretixpresale/organizers/calendar.html:80
-#: pretix/presale/templates/pretixpresale/organizers/calendar_week.html:108
+#: pretix/presale/templates/pretixpresale/organizers/calendar_week.html:103
 msgid "Note that the events in this view are in different timezones."
 msgstr ""
 "Merk op dat de evenementen in dit overzicht in verschillende tijdzones zijn."
@@ -25307,45 +25373,45 @@ msgid "The presale for this event is over or has not yet started."
 msgstr ""
 "De verkoopperiode voor dit evenement is afgelopen of is nog niet begonnen."
 
-#: pretix/presale/views/customer.py:172
+#: pretix/presale/views/customer.py:179
 msgid ""
 "Your account has been created. Please follow the link in the email we sent "
 "you to activate your account and choose a password."
 msgstr ""
 
-#: pretix/presale/views/customer.py:191 pretix/presale/views/customer.py:194
-#: pretix/presale/views/customer.py:450 pretix/presale/views/customer.py:456
+#: pretix/presale/views/customer.py:198 pretix/presale/views/customer.py:201
+#: pretix/presale/views/customer.py:457 pretix/presale/views/customer.py:463
 #, fuzzy
 #| msgid "You entered an invalid number."
 msgid "You clicked an invalid link."
 msgstr "Je voerde een ongeldig getal in."
 
-#: pretix/presale/views/customer.py:214
+#: pretix/presale/views/customer.py:221
 #, fuzzy
 #| msgid "Your password has been changed."
 msgid "Your new password has been set! You can now use it to log in."
 msgstr "Je wachtwoord is veranderd."
 
-#: pretix/presale/views/customer.py:252
+#: pretix/presale/views/customer.py:259
 #, fuzzy
 #| msgid "We sent out an e-mail containing further instructions."
 msgid ""
 "We've sent you an email with further instructions on resetting your password."
 msgstr "We hebben een e-mail met verdere instructies verstuurd."
 
-#: pretix/presale/views/customer.py:411
+#: pretix/presale/views/customer.py:418
 #, python-brace-format
 msgid "Confirm email address for your account at {organizer}"
 msgstr ""
 
-#: pretix/presale/views/customer.py:418
+#: pretix/presale/views/customer.py:425
 msgid ""
 "Your changes have been saved. We've sent you an email with a link to update "
 "your email address. The email address of your account will be changed as "
 "soon as you click that link."
 msgstr ""
 
-#: pretix/presale/views/customer.py:466
+#: pretix/presale/views/customer.py:473
 #, fuzzy
 #| msgid "Your cart has been updated."
 msgid "Your email address has been updated."
@@ -25610,6 +25676,9 @@ msgstr "Schrijftoegang"
 msgid "Kosovo"
 msgstr "Kosovo"
 
+#~ msgid "All days"
+#~ msgstr "Alle dagen"
+
 #~ msgid "Administrative action required"
 #~ msgstr "Administratieve handeling vereist"
 
@@ -25656,7 +25725,6 @@ msgstr "Kosovo"
 #~ msgid "You do not have permission to do this"
 #~ msgstr "Je hebt geen toestemming om dit te doen"
 
-#, python-format
 #~ msgid ""
 #~ "The PayPal transaction %(payment)s has succeeded, but the order %(order)s "
 #~ "has already been paid by other means. Please double check and refund the "
@@ -25666,7 +25734,6 @@ msgstr "Kosovo"
 #~ "is al op een andere manier betaald. Controleer je informatie en betaal "
 #~ "het geld terug via de interface van PayPal."
 
-#, python-format
 #~ msgid ""
 #~ "The PayPal transaction %(payment)s has succeeded, but the order %(order)s "
 #~ "is expired and the product was sold out in the meantime. Therefore, the "
@@ -25678,7 +25745,6 @@ msgstr "Kosovo"
 #~ "niet worden geaccepteerd. Neem contact op met de klant en betaal de "
 #~ "bestelling terug via de interface van PayPal."
 
-#, python-format
 #~ msgid ""
 #~ "PayPal reported that the payment %(payment)s has been refunded or "
 #~ "reversed. Do you want to mark the matching order (%(order)s) as refunded?"
@@ -25686,7 +25752,6 @@ msgstr "Kosovo"
 #~ "PayPal meldde dat de betaling %(payment)s is terugbetaald of omgekeerd. "
 #~ "Wil je de bijbehorende bestelling (%(order)s) als terugbetaald aanmerken?"
 
-#, python-format
 #~ msgid ""
 #~ "The Stripe transaction <a %(stripe_href)s>%(charge)s</a> has succeeded, "
 #~ "but the order %(order)s has already been paid by other means. Please "
@@ -25697,7 +25762,6 @@ msgstr "Kosovo"
 #~ "Controleer je informatie en betaal het geld terug via de interface van "
 #~ "Stripe."
 
-#, python-format
 #~ msgid ""
 #~ "The Stripe transaction <a %(stripe_href)s>%(charge)s</a> has succeeded, "
 #~ "but the order %(order)s is expired and the product was sold out in the "
@@ -25710,7 +25774,6 @@ msgstr "Kosovo"
 #~ "contact op met de gebruiker en betaal het geld terug via de website van "
 #~ "Stripe."
 
-#, python-format
 #~ msgid ""
 #~ "Stripe reported that the transaction <a %(stripe_href)s>%(charge)s</a> "
 #~ "has been refunded. Do you want to refund mark the matching order "
