@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-08-04 17:18+0000\n"
-"PO-Revision-Date: 2021-08-03 20:00+0000\n"
+"PO-Revision-Date: 2021-08-05 04:00+0000\n"
 "Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
 "Language-Team: Dutch (informal) <https://translate.pretix.eu/projects/pretix/"
 "pretix-js/nl_Informal/>\n"
@@ -62,85 +62,76 @@ msgstr "Verbinding maken met je bank …"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:30
 msgid "Select a check-in list"
-msgstr ""
+msgstr "Kies een inchecklijst"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:31
 msgid "No active check-in lists found."
-msgstr ""
+msgstr "Geen actieve inchecklijsten gevonden."
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:32
 msgid "Switch check-in list"
-msgstr ""
+msgstr "Andere inchecklijst kiezen"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:33
 msgid "Search results"
-msgstr ""
+msgstr "Zoekresultaten"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:34
-#, fuzzy
-#| msgctxt "widget"
-#| msgid "Close ticket shop"
 msgid "No tickets found"
-msgstr "Sluit kaartjeswinkel"
+msgstr "Geen kaartjes gevonden"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:35
 msgid "Result"
-msgstr ""
+msgstr "Resultaat"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:36
 msgid "This ticket requires special attention"
-msgstr ""
+msgstr "Dit kaartje heeft speciale aandacht nodig"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:37
 msgid "Switch direction"
-msgstr ""
+msgstr "Richting veranderen"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:38
 msgid "Entry"
-msgstr ""
+msgstr "Binnenkomst"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:39
 msgid "Exit"
-msgstr ""
+msgstr "Vertrek"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:40
 msgid "Scan a ticket or search and press return…"
-msgstr ""
+msgstr "Scan een kaartje of voer een zoekterm in en druk op Enter…"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:41
 msgid "Load more"
-msgstr ""
+msgstr "Meer laden"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:42
 msgid "Valid"
-msgstr ""
+msgstr "Geldig"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:43
 msgid "Unpaid"
-msgstr ""
+msgstr "Niet betaald"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:44
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:45
 msgid "Canceled"
-msgstr ""
+msgstr "Geannuleerd"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:46
-#, fuzzy
-#| msgctxt "widget"
-#| msgid "Redeem"
 msgid "Redeemed"
-msgstr "Verzilveren"
+msgstr "Gebruikt"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:47
 msgid "Cancel"
-msgstr ""
+msgstr "Annuleren"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:48
-#, fuzzy
-#| msgctxt "widget"
-#| msgid "Continue"
 msgid "Continue"
-msgstr "Ga verder"
+msgstr "Doorgaan"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:49
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:58
@@ -149,19 +140,19 @@ msgstr "Kaartje niet betaald"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:50
 msgid "This ticket is not yet paid. Do you want to continue anyways?"
-msgstr ""
+msgstr "Dit kaartje is nog niet betaald. Wil je toch doorgaan?"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:51
 msgid "Additional information required"
-msgstr ""
+msgstr "Extra informatie nodig"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:52
 msgid "Valid ticket"
-msgstr ""
+msgstr "Geldig kaartje"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:53
 msgid "Exit recorded"
-msgstr ""
+msgstr "Vertrek opgeslagen"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:54
 msgid "Ticket already used"
@@ -181,7 +172,7 @@ msgstr "Kaartjestype hier niet toegestaan"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:59
 msgid "Entry not allowed"
-msgstr ""
+msgstr "Binnenkomst niet toegestaan"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:60
 msgid "Ticket code revoked/changed"
@@ -189,21 +180,19 @@ msgstr "Kaartjescode ingetrokken/veranderd"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:61
 msgid "Order canceled"
-msgstr ""
+msgstr "Bestelling geannuleerd"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:62
-#, fuzzy
-#| msgid "Check-in QR"
 msgid "Checked-in Tickets"
-msgstr "QR-code voor check-in"
+msgstr "Ingecheckte kaartjes"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:63
 msgid "Valid Tickets"
-msgstr ""
+msgstr "Geldige kaartjes"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:64
 msgid "Currently inside"
-msgstr ""
+msgstr "Op dit moment binnen"
 
 #: pretix/static/pretixbase/js/asynctask.js:43
 #: pretix/static/pretixbase/js/asynctask.js:119
@@ -342,10 +331,8 @@ msgid "Event admission"
 msgstr "Toegangstijd evenement"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:102
-#, fuzzy
-#| msgid "Current date and time"
 msgid "custom date and time"
-msgstr "Huidige datum en tijd"
+msgstr "Aangepaste datum en tijd"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:103
 msgid "custom time"
@@ -361,7 +348,7 @@ msgstr "Voorwaarde toevoegen"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:106
 msgid "minutes"
-msgstr ""
+msgstr "minuten"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:69
 msgid "Lead Scan QR"
@@ -389,10 +376,8 @@ msgid "Barcode area"
 msgstr "Barcodegebied"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:531
-#, fuzzy
-#| msgid "Barcode area"
 msgid "Image area"
-msgstr "Barcodegebied"
+msgstr "Afbeeldingsgebied"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:533
 msgid "Powered by pretix"
@@ -458,11 +443,11 @@ msgstr "Geen"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:419
 msgid "Search query"
-msgstr ""
+msgstr "Zoekopdracht"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:422
 msgid "Selected only"
-msgstr ""
+msgstr "Alleen geselecteerde"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:834
 msgid "Use a different name internally"
@@ -535,10 +520,8 @@ msgid "Please enter a quantity for one of the ticket types."
 msgstr "Voer een hoeveelheid voor een van de producten in."
 
 #: pretix/static/pretixpresale/js/ui/main.js:344
-#, fuzzy
-#| msgid "Cart expired"
 msgid "required"
-msgstr "Winkelwagen is verlopen"
+msgstr "verplicht"
 
 #: pretix/static/pretixpresale/js/ui/main.js:441
 #: pretix/static/pretixpresale/js/ui/main.js:459
@@ -632,14 +615,13 @@ msgid ""
 "There are currently a lot of users in this ticket shop. Please open the shop "
 "in a new tab to continue."
 msgstr ""
+"Op dit moment zijn er veel gebruikers bezig in deze kaartjeswinkel. Open de "
+"winkel in een nieuw tabblad om verder te gaan."
 
 #: pretix/static/pretixpresale/js/widget/widget.js:34
-#, fuzzy
-#| msgctxt "widget"
-#| msgid "Close ticket shop"
 msgctxt "widget"
 msgid "Open ticket shop"
-msgstr "Sluit kaartjeswinkel"
+msgstr "Open de kaartjeswinkel"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:35
 msgctxt "widget"
@@ -654,6 +636,9 @@ msgid ""
 "We could not create your cart, since there are currently too many users in "
 "this ticket shop. Please click \"Continue\" to retry in a new tab."
 msgstr ""
+"Je winkelmandje kon niet worden aangemaakt omdat er op dit moment te veel "
+"gebruikers actief zijn in deze kaartjeswinkel. Klik op \"Doorgaan\" om dit "
+"opnieuw te proberen in een nieuw tabblad."
 
 #: pretix/static/pretixpresale/js/widget/widget.js:38
 msgctxt "widget"
@@ -747,7 +732,7 @@ msgstr "Open stoelkeuze"
 #: pretix/static/pretixpresale/js/widget/widget.js:56
 msgctxt "widget"
 msgid "Load more"
-msgstr ""
+msgstr "Meer laden"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:58
 msgid "Mo"
