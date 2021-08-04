@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-09 09:36+0000\n"
-"PO-Revision-Date: 2021-08-01 15:39+0000\n"
+"PO-Revision-Date: 2021-08-03 20:00+0000\n"
 "Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
 "Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
 "\n"
@@ -1010,7 +1010,7 @@ msgid ""
 "this date. Will also include other dates in case of mixed orders!"
 msgstr ""
 "Laat alleen bestellingen zien die ten minste één ticket bevatten voor een "
-"subevenement op of na deze datum. Als zo'n bestelling ticket bevat voor "
+"subevenement op of na deze datum. Als zo'n bestelling tickets bevat voor "
 "andere datums zullen deze ook worden getoond!"
 
 #: pretix/base/exporters/orderlist.py:129
@@ -1190,7 +1190,7 @@ msgstr "Opmerking"
 #: pretix/base/exporters/orderlist.py:579 pretix/base/models/orders.py:221
 #: pretix/control/forms/filter.py:209
 msgid "Follow-up date"
-msgstr "Datums voor opvolging"
+msgstr "Datum voor opvolging"
 
 #: pretix/base/exporters/orderlist.py:292
 #: pretix/control/templates/pretixcontrol/orders/index.html:119
@@ -1775,8 +1775,8 @@ msgid ""
 "The file you uploaded has a very large number of pixels, please upload an "
 "image no larger than 10000 x 10000 pixels."
 msgstr ""
-"Het bestand dat u uploadde had een zeer grote hoeveelheid pixels. De "
-"maximale toegestane resolutie is 10000 x 10000 pixels."
+"Het bestand dat u uploadde heeft een te hoge resolutie. De maximale "
+"toegestane resolutie is 10000 x 10000 pixels."
 
 #: pretix/base/forms/questions.py:417
 msgid ""
@@ -2305,7 +2305,7 @@ msgstr "Vertrek"
 
 #: pretix/base/models/checkin.py:262
 msgid "Unknown ticket"
-msgstr "Onbekende ticket"
+msgstr "Onbekend ticket"
 
 #: pretix/base/models/checkin.py:263
 msgid "Ticket not paid"
@@ -5847,8 +5847,8 @@ msgid ""
 "You selected the product \"{product}\" which requires an active membership "
 "to be selected."
 msgstr ""
-"U koos het product \"{product}\", waarvoor een geldig lidmaatschap verplicht "
-"is."
+"U koos het product \"{product}\", hiervoor is een geldig lidmaatschap "
+"verplicht."
 
 #: pretix/base/services/memberships.py:141
 msgid ""
