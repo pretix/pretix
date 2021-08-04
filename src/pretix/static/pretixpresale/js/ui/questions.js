@@ -117,7 +117,6 @@ function questions_init_photos(el) {
 function questions_init_profiles(el) {
     /*
     TODO:
-    - add dropdown for saved_id to select which profile/address to save to
     – in the original profile, strikethrough which answer will be overwritten, followed by the new answer
     – add new answers with a + in front
     */
@@ -130,12 +129,7 @@ function questions_init_profiles(el) {
         return profilesById[id];
     }
 
-    var profiles_element = document.getElementById("profiles_json");
-    var addresses_element = document.getElementById("addresses_json");
-    if (!profiles_element || !profiles_element.textContent) return;
-    var profiles = JSON.parse(profiles_element.textContent);
-
-    function matchProfiles(profiles, scope) {
+    function matchProfilesToInputs(profiles, scope) {
         var filtered = [];
         var data;
         var matched_field;
@@ -151,6 +145,7 @@ function questions_init_profiles(el) {
                     };
                 }
             }
+            // only add data if no other profile matches the same values (e.g. only name matches, but has different addresses that are not asked)
             var equalMatchAvailable = filtered.findIndex(function(element) {
                 return matchesAreEqual(element, data);
             });
@@ -260,9 +255,13 @@ function questions_init_profiles(el) {
             var nrKeysProcessed = 0;
             var answer;
             var value;
-            // treat names and is_business special
-            // TODO: if attendee_name_part_0 is in keys but not attendee_name, then add attendee_name to it
-            // add name accordingly if name_part_0 is in keys
+            // treat names special: add cached name and ignore name_parts
+            if (("attendee_name_part_0" in keys) && !("attendee_name" in keys)) {
+                keys.unshift("attendee_name");
+            }
+            if (("name_part_0" in keys) && !("name" in keys)) {
+                keys.unshift("name");
+            }
             for (var key of keys) {
                 nrKeysProcessed++;
                 if (key.startsWith("_") || key.startsWith("attendee_name_part") || key.startsWith("name_part") || key == "is_business") continue;
@@ -338,7 +337,7 @@ function questions_init_profiles(el) {
         // - better UI when only one profile is available (no select)
         // - add checkmark to button when filled in 
         // - listen to all matched form fields for changes and remove chechmark if changed
-        var matched_profiles = matchProfiles(profiles, this);
+        var matched_profiles = matchProfilesToInputs(profiles, this);
         if (!matched_profiles.length) return;
 
         var $formpart = $(this);
