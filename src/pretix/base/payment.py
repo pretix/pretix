@@ -703,7 +703,7 @@ class BasePaymentProvider:
             try:
                 ia = order.invoice_address
             except InvoiceAddress.DoesNotExist:
-                return True
+                pass
             else:
                 if str(ia.country) not in restricted_countries:
                     return False
