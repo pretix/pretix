@@ -226,6 +226,7 @@ function questions_init_profiles(el) {
     function formatAnswerHumanReadable(answer) {
         if (typeof answer == "string") return answer;
         if (typeof answer == "number") return answer.toString();
+        if (!answer && answer !== false) return "";
         var value = answer.value;
         if ("type" in answer) {
             if (answer.type == "TEL") {
@@ -247,7 +248,7 @@ function questions_init_profiles(el) {
             }
         }
         if (typeof value == "string") return value;
-
+        if (!value) return "";
         return Object.values(value).join(", ");
     }
 
@@ -271,7 +272,7 @@ function questions_init_profiles(el) {
                 nrKeysProcessed++;
                 if (key == "_pk" || key.startsWith("attendee_name_parts") || key.startsWith("name_parts") || key == "is_business") continue;
                 if (key == "country") key = "_country_for_address";
-                value = p[key].answer || p[key];
+                value = p[key] ? p[key].answer : p[key];
                 
                 answer = formatAnswerHumanReadable(value);
                 /*
@@ -292,15 +293,18 @@ function questions_init_profiles(el) {
             }
             return parts.join(", ") + (nrKeysProcessed < keys.length ? ", …" : "");
     }
+    function getAnswer(a) {
+        return a ? a.answer : a;
+    }
     function describeProfile(p) {
         var lines = [
-            p["name"],
-            [p["attendee_name"], p["attendee_email"]].filter(v => v).join(", "),
-            p["company"],
+            getAnswer(p["_name"]),
+            [getAnswer(p["_attendee_name"]), getAnswer(p["attendee_email"])].filter(v => v).join(", "),
+            getAnswer(p["company"]),
             [
-                p["street"],
-                [p["zipcode"], p["city"], p["_state_for_address"]].filter(v => v).join(" "),
-                p["_country_for_address"]
+                getAnswer(p["street"]),
+                [getAnswer(p["zipcode"]), getAnswer(p["city"]), getAnswer(p["_state_for_address"])].filter(v => v).join(" "),
+                getAnswer(p["_country_for_address"])
             ].filter(v => v).join(", ")
         ];
         lines = lines.filter(line => line && line.trim());
@@ -309,8 +313,9 @@ function questions_init_profiles(el) {
         // TODO: country need their values from the select fields
         for (var key of Object.keys(p)) {
             if (!key.startsWith("question_")) continue;
-            label = p[key]["label"];
-            lines.push(label + ("!?.:".split("").indexOf(label.slice(-1)) > -1 ? " " : ": ") + formatAnswerHumanReadable(p[key]))
+            var answer = getAnswer(p[key]);
+            label = answer["label"];
+            lines.push(label + ("!?.:".split("").indexOf(label.slice(-1)) > -1 ? " " : ": ") + formatAnswerHumanReadable(answer))
         }
         return lines.join("<br>");
     }
@@ -368,20 +373,28 @@ function questions_init_profiles(el) {
         var matched_profiles = matchProfilesToInputs(profiles, this);
         if (!matched_profiles.length) return;
 
+        var selectedProfile = matched_profiles[0];
         var $formpart = $(this);
         var $select = $formpart.find(".profile-select");
         var $button = $formpart.find(".profile-apply");
         var $desc = $formpart.find(".profile-desc");
 
-        var i = 0;
-        for (p of matched_profiles) {
-            $select.append("<option>" + labelForProfile(p, profiles, this) + "</option>");
+        if (matched_profiles.length == 1) {
+            $formpart.find(".profile-select-control").hide();
+            $desc.html(describeProfile(selectedProfile)).addClass("single-profile-desc").after($button);
         }
-        $select.change(function() {
-            $desc.html(describeProfile(profiles[this.selectedIndex]));
-        }).trigger("change");
+        else {
+            for (p of matched_profiles) {
+                $select.append("<option>" + labelForProfile(p, matched_profiles, this) + "</option>");
+            }
+            $select.change(function() {
+                selectedProfile = matched_profiles[this.selectedIndex];
+                $desc.html(describeProfile(selectedProfile));
+            }).trigger("change");
+        }
+
         $button.click(function() {
-            var p = matched_profiles[$select.get(0).selectedIndex];
+            var p = selectedProfile;
             Object.keys(p).forEach(function(key) {
                 var answer = p[key].answer;
                 var $field = p[key].field;
