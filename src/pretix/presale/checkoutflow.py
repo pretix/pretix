@@ -40,7 +40,6 @@ from django.conf import settings
 from django.contrib import messages
 from django.core.exceptions import ValidationError
 from django.core.validators import EmailValidator
-from django.core import serializers
 from django.db.models import F, Q
 from django.http import HttpResponseNotAllowed, JsonResponse
 from django.shortcuts import redirect
@@ -985,9 +984,11 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
                         scheme = PERSON_NAME_SCHEMES[self.request.event.settings.name_scheme]
                         for i, (k, l, w) in enumerate(scheme["fields"]):
                             data[f"name_parts_{i}"] = a.name_parts.get(k) or ""
-                        #data["name_parts"] = {k: v for k, v in a.name_parts.items() if not k.startswith('_')}
 
-                    for k in ("name", "company", "street", "zipcode", "city", "country", "state", "state_for_address", "vat_id", "custom_field", "internal_reference", "beneficiary"):
+                    for k in (
+                        "name", "company", "street", "zipcode", "city", "country", "state",
+                        "state_for_address", "vat_id", "custom_field", "internal_reference", "beneficiary"
+                    ):
                         v = getattr(a, k)
                         if v:
                             data[k] = str(v)
@@ -1009,7 +1010,6 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
                     scheme = PERSON_NAME_SCHEMES[self.request.event.settings.name_scheme]
                     for i, (k, l, w) in enumerate(scheme["fields"]):
                         data[f"attendee_name_parts_{i}"] = p.attendee_name_parts.get(k) or ""
-                    #data["attendee_name_parts"] = {k: v for k, v in p.attendee_name_parts.items() if not k.startswith('_')}
 
                 for k in ("attendee_name", "attendee_email", "company", "street", "zipcode", "city", "country", "state"):
                     v = getattr(p, k)

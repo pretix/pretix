@@ -29,7 +29,7 @@ from django.utils.safestring import mark_safe
 from django.utils.translation import pgettext
 
 
-def render_label(content, label_for=None, label_class=None, label_title='', label_id='', optional=False, is_valid=None, attrs = {}):
+def render_label(content, label_for=None, label_class=None, label_title='', label_id='', optional=False, is_valid=None, attrs={}):
     """
     Render a label with content
     """
@@ -149,7 +149,7 @@ class CheckoutFieldRenderer(FieldRenderer):
             label_for=label_for,
             label_class=self.get_label_class(),
             label_id=label_id,
-            attrs = attrs,
+            attrs=attrs,
             optional=not required and not isinstance(self.widget, CheckboxInput),
             is_valid=is_valid
         ) + html
