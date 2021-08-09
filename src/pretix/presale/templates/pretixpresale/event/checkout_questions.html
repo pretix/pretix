@@ -56,10 +56,10 @@
                 <details class="panel panel-default" open>
                     <summary class="panel-heading">
                         <h4 class="panel-title">
-                            <strong>{{ pos.item.name }}</strong>
+                            <strong>{{ pos.item.name }}
                             {% if pos.variation %}
                                 – {{ pos.variation }}
-                            {% endif %}
+                            {% endif %}</strong>
                             {% if forloop.counter > 1 %}
                                 <span class="text-right flip">
                                     {% if event.settings.checkout_show_copy_answers_button %}
