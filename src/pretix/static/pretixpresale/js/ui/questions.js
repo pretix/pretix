@@ -375,7 +375,7 @@ function questions_init_profiles(el) {
 
         var i = 0;
         for (p of matched_profiles) {
-            $select.append("<option>" + (++i) + ". " + labelForProfile(p, profiles, this) + "</option>");
+            $select.append("<option>" + labelForProfile(p, profiles, this) + "</option>");
         }
         $select.change(function() {
             $desc.html(describeProfile(profiles[this.selectedIndex]));
