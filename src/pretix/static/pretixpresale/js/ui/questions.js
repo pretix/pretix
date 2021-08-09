@@ -124,7 +124,7 @@ function questions_init_profiles(el) {
     function getProfilesById(id) {
         if (!(id in profilesById)) {
             var element = document.getElementById(id);
-            profilesById[id] = (!element || !element.textContent) ? {} : JSON.parse(element.textContent);
+            profilesById[id] = (!element || !element.textContent) ? [] : JSON.parse(element.textContent);
         }
         return profilesById[id];
     }
@@ -319,10 +319,14 @@ function questions_init_profiles(el) {
 
     function setupSaveToProfile(scope, profiles) {
         // TODO: change $select to a list of radio-buttons for multiline-display of profiles?
-        var $checkbox = $('[name$="save"]', scope);
         var $select = $('[name$="saved_id"]', scope);
-        var $checkboxContainer = $checkbox.closest(".form-group").addClass("profile-save");
         var $selectContainer = $select.closest(".form-group").addClass("profile-save-id");
+        if (!profiles || !profiles.length) {
+            $selectContainer.hide();
+            return;
+        }
+        var $checkbox = $('[name$="save"]', scope);
+        var $checkboxContainer = $checkbox.closest(".form-group").addClass("profile-save");
         var $help = $selectContainer.find(".help-block");
 
         var $container = $("<div class='profile-save-container'></div>");
@@ -330,12 +334,10 @@ function questions_init_profiles(el) {
         $container.append($checkboxContainer);
         $container.append($selectContainer);
 
-
         $checkbox.change(function() {
             if (this.checked) $selectContainer.slideDown();
             else $selectContainer.slideUp();
         });
-        if ($checkbox.get(0).checked) $checkbox.trigger("change");
 
         for (var p of profiles) {
             $select.append('<option value="' + p._pk + '">' + labelForProfile(p, profiles) + '</option>');
@@ -345,6 +347,7 @@ function questions_init_profiles(el) {
             if (this.selectedIndex) $help.html(describeProfile(profiles[this.selectedIndex-1]));
             else $help.html("");
         }).trigger("change");
+        $checkbox.trigger("change");
         // TODO: bind to change-events of inputs inside this scope to update diff/profile-description
     }
 
