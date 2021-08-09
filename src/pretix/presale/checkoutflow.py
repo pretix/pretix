@@ -978,6 +978,7 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
                     data = {
                         "_country_for_address": a.country.name,
                         "_state_for_address": a.state_for_address,
+                        "_name": a.name,
                         "is_business": "business" if a.is_business else "individual",
                     }
                     if a.name_parts:
@@ -1001,7 +1002,8 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
                 data = {
                     "_pk": p.pk,
                     "_country_for_address": p.country.name,
-                    "_state_for_address": p.state_for_address
+                    "_state_for_address": p.state_for_address,
+                    "_attendee_name": p.attendee_name,
                 }
                 if p.attendee_name_parts:
                     scheme = PERSON_NAME_SCHEMES[self.request.event.settings.name_scheme]

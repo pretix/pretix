@@ -261,15 +261,15 @@ function questions_init_profiles(el) {
             var answer;
             var value;
             // treat names special: add cached name and ignore name_parts
-            if (("attendee_name_part_0" in keys) && !("attendee_name" in keys)) {
+            if (keys.includes("attendee_name_parts_0") && !keys.includes("attendee_name")) {
                 keys.unshift("attendee_name");
             }
-            if (("name_part_0" in keys) && !("name" in keys)) {
-                keys.unshift("name");
+            if (keys.includes("name_parts_0") && !keys.includes("name")) {
+                keys.unshift("_name");
             }
             for (var key of keys) {
                 nrKeysProcessed++;
-                if (key.startsWith("_") || key.startsWith("attendee_name_part") || key.startsWith("name_part") || key == "is_business") continue;
+                if (key == "_pk" || key.startsWith("attendee_name_parts") || key.startsWith("name_parts") || key == "is_business") continue;
                 if (key == "country") key = "_country_for_address";
                 value = p[key].answer || p[key];
                 
@@ -385,6 +385,7 @@ function questions_init_profiles(el) {
             Object.keys(p).forEach(function(key) {
                 var answer = p[key].answer;
                 var $field = p[key].field;
+                if (!$field || !$field.length) return;
 
                 if (answer && typeof answer !== 'string') {
                     answer = answer.value;
