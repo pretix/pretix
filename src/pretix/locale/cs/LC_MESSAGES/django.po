@@ -8,16 +8,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-08-04 17:18+0000\n"
-"PO-Revision-Date: 2021-02-16 06:00+0000\n"
-"Last-Translator: Ondřej Sokol <osokol@treesoft.cz>\n"
-"Language-Team: Czech <https://translate.pretix.eu/projects/pretix/pretix/cs/"
-">\n"
+"PO-Revision-Date: 2021-08-11 05:00+0000\n"
+"Last-Translator: Michael <michael.happl@gmx.at>\n"
+"Language-Team: Czech <https://translate.pretix.eu/projects/pretix/pretix/cs/>"
+"\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 4.4.2\n"
+"X-Generator: Weblate 4.6\n"
 
 #: pretix/api/auth/devicesecurity.py:28
 msgid ""
@@ -258,7 +258,7 @@ msgstr "Objednávka byla označena jako zaplacená"
 #: pretix/control/templates/pretixcontrol/event/mail.html:72
 #: pretix/control/views/orders.py:1227
 msgid "Order canceled"
-msgstr "Objednávka byla zrušena"
+msgstr "Objednávka zrušena"
 
 #: pretix/api/webhooks.py:216 pretix/base/notifications.py:257
 msgid "Order reactivated"
@@ -1290,7 +1290,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/waitinglist.html:10
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:44
 msgid "Product"
-msgstr ""
+msgstr "Produkt"
 
 #: pretix/base/exporters/orderlist.py:552
 #: pretix/base/exporters/waitinglist.py:110 pretix/base/models/orders.py:1184
@@ -1558,7 +1558,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/organizers/webhooks.html:51
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:62
 msgid "All"
-msgstr ""
+msgstr "Všechný"
 
 #: pretix/base/exporters/orderlist.py:935 pretix/control/forms/filter.py:999
 msgid "Live"
@@ -2268,37 +2268,31 @@ msgstr "Výstup"
 
 #: pretix/base/models/checkin.py:262
 msgid "Unknown ticket"
-msgstr ""
+msgstr "Neznámá vstupenka"
 
 #: pretix/base/models/checkin.py:263
-#, fuzzy
-#| msgid "Presale not started"
 msgid "Ticket not paid"
-msgstr "Předprodej zatím nezačal"
+msgstr "Vstupenka není zaplacena"
 
 #: pretix/base/models/checkin.py:264
 msgid "Forbidden by custom rule"
 msgstr ""
 
 #: pretix/base/models/checkin.py:265
-#, fuzzy
-#| msgid "Ticket check-in reverted"
 msgid "Ticket code revoked/changed"
-msgstr "Přijetí vstupenky odmítnuto"
+msgstr "Kód vstupenky změněn"
 
 #: pretix/base/models/checkin.py:266
 msgid "Information required"
-msgstr ""
+msgstr "Informace vyžadována"
 
 #: pretix/base/models/checkin.py:267
 msgid "Ticket already used"
 msgstr ""
 
 #: pretix/base/models/checkin.py:268
-#, fuzzy
-#| msgid "Presale not started"
 msgid "Ticket type not allowed here"
-msgstr "Předprodej zatím nezačal"
+msgstr "Typ vstupenky zde není povolen"
 
 #: pretix/base/models/checkin.py:269
 msgid "Server error"
@@ -3011,7 +3005,7 @@ msgstr ""
 #: pretix/base/models/items.py:804 pretix/base/models/vouchers.py:203
 #: pretix/base/models/waitinglist.py:95 pretix/base/orderimport.py:284
 msgid "Product variation"
-msgstr ""
+msgstr "Varianta produktu"
 
 #: pretix/base/models/items.py:805
 #: pretix/control/templates/pretixcontrol/item/create.html:64
@@ -5064,15 +5058,15 @@ msgstr ""
 
 #: pretix/base/reldate.py:35
 msgid "Event start"
-msgstr ""
+msgstr "Začátek akce"
 
 #: pretix/base/reldate.py:36
 msgid "Event end"
-msgstr ""
+msgstr "Konec akce"
 
 #: pretix/base/reldate.py:37
 msgid "Event admission"
-msgstr ""
+msgstr "Vstup na akci"
 
 #: pretix/base/reldate.py:38
 msgid "Presale start"
@@ -8805,7 +8799,7 @@ msgstr ""
 #: pretix/control/forms/filter.py:1522 pretix/control/forms/filter.py:1524
 #: pretix/control/forms/filter.py:2000 pretix/control/forms/filter.py:2002
 msgid "Search query"
-msgstr ""
+msgstr "Hledaný výraz"
 
 #: pretix/control/forms/filter.py:1077
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:37
@@ -16223,7 +16217,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:355
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:364
 msgid "minutes"
-msgstr ""
+msgstr "minuty"
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:360
 msgid "Break between slots"
@@ -20793,7 +20787,7 @@ msgstr ""
 
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/edit.html:23
 msgid "Ticket design"
-msgstr ""
+msgstr "Design vstupenky"
 
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/form.html:3
 msgid ""
@@ -21269,7 +21263,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:22
 #: pretix/presale/templates/pretixpresale/event/fragment_cart_box.html:18
 msgid "Cart expired"
-msgstr ""
+msgstr "Nákupní košík vypršel"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:40
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:43
@@ -21282,7 +21276,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:47
 #: pretix/presale/templates/pretixpresale/event/fragment_cart_box.html:34
 msgid "The items in your cart are no longer reserved for you."
-msgstr ""
+msgstr "Produkty v nákupním košíku již nejsou pro vás rezervovány."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:53
 #: pretix/presale/templates/pretixpresale/event/index.html:57
