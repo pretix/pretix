@@ -261,7 +261,7 @@ def register_default_webhook_events(sender, **kwargs):
         ),
         ParametrizedEventWebhookEvent(
             'pretix.event.deleted',
-            _('Event details changed'),
+            _('Event deleted'),
         ),
         ParametrizedSubEventWebhookEvent(
             'pretix.subevent.added',
