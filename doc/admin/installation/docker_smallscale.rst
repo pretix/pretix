@@ -39,6 +39,10 @@ Linux and firewalls, we recommend that you start with `ufw`_.
 .. warning:: We recommend **PostgreSQL**. If you go for MySQL, make sure you run **MySQL 5.7 or newer** or
              **MariaDB 10.2.7 or newer**.
 
+.. warning:: By default, using ufw in conjunction will not have any effect. Please make sure to either bind the exposed
+             ports of your docker container explicitly to 127.0.0.1 or configure docker to respect any set up firewall
+             rules.
+
 On this guide
 -------------
 
@@ -183,7 +187,7 @@ named ``/etc/systemd/system/pretix.service`` with the following content::
     TimeoutStartSec=0
     ExecStartPre=-/usr/bin/docker kill %n
     ExecStartPre=-/usr/bin/docker rm %n
-    ExecStart=/usr/bin/docker run --name %n -p 8345:80 \
+    ExecStart=/usr/bin/docker run --name %n -p 127.0.0.1:8345:80 \
         -v /var/pretix-data:/data \
         -v /etc/pretix:/etc/pretix \
         -v /var/run/redis:/var/run/redis \
