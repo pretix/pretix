@@ -503,7 +503,7 @@ DEFAULTS = {
         'type': int,
         'form_class': forms.IntegerField,
         'serializer_class': serializers.IntegerField,
-        'form_kwags': dict(
+        'form_kwargs': dict(
             min_value=0,
             label=_("Reservation period"),
             help_text=_("The number of minutes the items in a user's cart are reserved for this user."),
