@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-08-04 17:18+0000\n"
-"PO-Revision-Date: 2021-08-12 05:00+0000\n"
+"PO-Revision-Date: 2021-08-12 21:00+0000\n"
 "Last-Translator: amandajurno <amandajurno@gmail.com>\n"
 "Language-Team: Portuguese <https://translate.pretix.eu/projects/pretix/"
 "pretix/pt/>\n"
@@ -17949,7 +17949,7 @@ msgstr ""
 
 #: pretix/control/views/organizer.py:634
 msgid "The selected team cannot be deleted."
-msgstr ""
+msgstr "A equipe selecionada não pode ser deletada."
 
 #: pretix/control/views/organizer.py:697
 msgid ""
