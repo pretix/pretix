@@ -769,44 +769,55 @@ class Modern1Renderer(ClassicInvoiceRenderer):
         ]
 
     def _draw_metadata(self, canvas):
+        # Draws the "invoice number -- date" line. This has gotten a little more complicated since we
+        # encountered some events with very long invoice numbers. In this case, we automatically reduce
+        # the font size until it fits.
         begin_top = 100 * mm
 
-        textobject = canvas.beginText(self.left_margin, self.pagesize[1] - begin_top)
-        textobject.setFont(self.font_regular, 8)
-        textobject.textLine(pgettext('invoice', 'Order code'))
-        textobject.moveCursor(0, 5)
-        textobject.setFont(self.font_regular, 10)
-        textobject.textLine(self.invoice.order.full_code)
-        canvas.drawText(textobject)
-
-        if self.invoice.is_cancellation:
-            textobject = canvas.beginText(self.left_margin + 50 * mm, self.pagesize[1] - begin_top)
+        def _draw(label, value, value_size, x, width):
+            if canvas.stringWidth(value, self.font_regular, value_size) > width and value_size > 6:
+                return False
+            textobject = canvas.beginText(x, self.pagesize[1] - begin_top)
             textobject.setFont(self.font_regular, 8)
-            textobject.textLine(pgettext('invoice', 'Cancellation number'))
+            textobject.textLine(label)
             textobject.moveCursor(0, 5)
-            textobject.setFont(self.font_regular, 10)
-            textobject.textLine(self.invoice.number)
-            canvas.drawText(textobject)
+            textobject.setFont(self.font_regular, value_size)
+            textobject.textLine(value)
+            return textobject
 
-            textobject = canvas.beginText(self.left_margin + 100 * mm, self.pagesize[1] - begin_top)
-            textobject.setFont(self.font_regular, 8)
-            textobject.textLine(pgettext('invoice', 'Original invoice'))
-            textobject.moveCursor(0, 5)
-            textobject.setFont(self.font_regular, 10)
-            textobject.textLine(self.invoice.refers.number)
-            canvas.drawText(textobject)
-        else:
-            textobject = canvas.beginText(self.left_margin + 70 * mm, self.pagesize[1] - begin_top)
-            textobject.textLine(pgettext('invoice', 'Invoice number'))
-            textobject.moveCursor(0, 5)
-            textobject.setFont(self.font_regular, 10)
-            textobject.textLine(self.invoice.number)
-            canvas.drawText(textobject)
+        value_size = 10
+        while value_size >= 5:
+            objects = [
+                _draw(pgettext('invoice', 'Order code'), self.invoice.order.full_code, value_size, self.left_margin, 45 * mm)
+            ]
 
-        p = Paragraph(date_format(self.invoice.date, "DATE_FORMAT"), style=self.stylesheet['Normal'])
-        w = stringWidth(p.text, p.frags[0].fontName, p.frags[0].fontSize)
-        p.wrapOn(canvas, w, 15 * mm)
-        date_x = self.pagesize[0] - w - self.right_margin
+            p = Paragraph(
+                date_format(self.invoice.date, "DATE_FORMAT"),
+                style=ParagraphStyle(name=f'Normal{value_size}', fontName=self.font_regular, fontSize=value_size, leading=value_size * 1.2)
+            )
+            w = stringWidth(p.text, p.frags[0].fontName, p.frags[0].fontSize)
+            p.wrapOn(canvas, w, 15 * mm)
+            date_x = self.pagesize[0] - w - self.right_margin
+
+            if self.invoice.is_cancellation:
+                objects += [
+                    _draw(pgettext('invoice', 'Cancellation number'), self.invoice.number,
+                          value_size, self.left_margin + 50 * mm, 45 * mm),
+                    _draw(pgettext('invoice', 'Original invoice'), self.invoice.number,
+                          value_size, self.left_margin + 100 * mm, date_x - self.left_margin - 100 * mm - 5 * mm),
+                ]
+            else:
+                objects += [
+                    _draw(pgettext('invoice', 'Invoice number'), self.invoice.number,
+                          value_size, self.left_margin + 70 * mm, date_x - self.left_margin - 70 * mm - 5 * mm),
+                ]
+
+            if all(objects):
+                for o in objects:
+                    canvas.drawText(o)
+                break
+            value_size -= 1
+
         p.drawOn(canvas, date_x, self.pagesize[1] - begin_top - 10 - 6)
 
         textobject = canvas.beginText(date_x, self.pagesize[1] - begin_top)
