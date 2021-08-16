@@ -416,6 +416,73 @@ class SubEventsTest(SoupTest):
         assert ses[220].date_from.isoformat() == "2018-11-09T12:29:31+00:00"  # DST :)
         assert ses[-1].date_from.isoformat() == "2019-04-02T13:29:31+00:00"
 
+    def test_create_bulk_daily_ambiguous_time(self):
+        with scopes_disabled():
+            self.event1.subevents.all().delete()
+        self.event1.settings.timezone = 'Europe/Berlin'
+
+        doc = self.get_doc('/control/event/ccc/30c3/subevents/bulk_add')
+        assert doc.select("input[name=rruleformset-TOTAL_FORMS]")
+        doc = self.post_doc('/control/event/ccc/30c3/subevents/bulk_add', {
+            'rruleformset-TOTAL_FORMS': '1',
+            'rruleformset-INITIAL_FORMS': '0',
+            'rruleformset-MIN_NUM_FORMS': '0',
+            'rruleformset-MAX_NUM_FORMS': '1000',
+            'rruleformset-0-interval': '2',
+            'rruleformset-0-freq': 'daily',
+            'rruleformset-0-dtstart': '2021-10-29',
+            'rruleformset-0-yearly_same': 'on',
+            'rruleformset-0-yearly_bysetpos': '1',
+            'rruleformset-0-yearly_byweekday': 'MO',
+            'rruleformset-0-yearly_bymonth': '1',
+            'rruleformset-0-monthly_same': 'on',
+            'rruleformset-0-monthly_bysetpos': '1',
+            'rruleformset-0-monthly_byweekday': 'MO',
+            'rruleformset-0-end': 'until',
+            'rruleformset-0-count': '10',
+            'rruleformset-0-until': '2021-11-03',
+            'timeformset-TOTAL_FORMS': '2',
+            'timeformset-INITIAL_FORMS': '0',
+            'timeformset-MIN_NUM_FORMS': '1',
+            'timeformset-MAX_NUM_FORMS': '1000',
+            'timeformset-0-time_from': '00:00:00',
+            'timeformset-0-time_to': '02:30:00',
+            'timeformset-1-time_from': '02:30:00',
+            'timeformset-1-time_to': '00:00:00',
+            'name_0': 'Foo',
+            'active': 'on',
+            'frontpage_text_0': '',
+            'rel_presale_start_0': 'unset',
+            'rel_presale_start_1': '',
+            'rel_presale_start_2': '1',
+            'rel_presale_start_3': 'date_from',
+            'rel_presale_start_4': '',
+            'rel_presale_end_1': '',
+            'rel_presale_end_0': 'relative',
+            'rel_presale_end_2': '1',
+            'rel_presale_end_3': 'date_from',
+            'rel_presale_end_4': '02:30:00',
+            'quotas-TOTAL_FORMS': '1',
+            'quotas-INITIAL_FORMS': '0',
+            'quotas-MIN_NUM_FORMS': '0',
+            'quotas-MAX_NUM_FORMS': '1000',
+            'quotas-0-name': 'Q1',
+            'quotas-0-size': '50',
+            'quotas-0-itemvars': str(self.ticket.pk),
+            'checkinlist_set-TOTAL_FORMS': '0',
+            'checkinlist_set-INITIAL_FORMS': '0',
+            'checkinlist_set-MIN_NUM_FORMS': '0',
+            'checkinlist_set-MAX_NUM_FORMS': '1000',
+        })
+        assert doc.select(".alert-success")
+        with scopes_disabled():
+            ses = list(self.event1.subevents.order_by('date_from'))
+
+        assert [s.date_from.isoformat() for s in ses] == [
+            '2021-10-28T22:00:00+00:00', '2021-10-29T00:30:00+00:00', '2021-10-30T22:00:00+00:00', '2021-10-31T01:30:00+00:00',
+            '2021-11-01T23:00:00+00:00', '2021-11-02T01:30:00+00:00'
+        ]
+
     def test_create_bulk_exclude(self):
         with scopes_disabled():
             self.event1.subevents.all().delete()
