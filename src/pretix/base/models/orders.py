@@ -541,7 +541,7 @@ class Order(LockModel, LoggedModel):
             fee += self.event.settings.cancel_allow_user_paid_keep_percentage / Decimal('100.0') * (self.total - fee)
         if self.event.settings.cancel_allow_user_paid_keep:
             fee += self.event.settings.cancel_allow_user_paid_keep
-        return round_decimal(fee, self.event.currency)
+        return round_decimal(min(fee, self.total), self.event.currency)
 
     @property
     @scopes_disabled()

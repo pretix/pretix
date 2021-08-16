@@ -1417,6 +1417,10 @@ class OrderTestCase(BaseQuotaTestCase):
         self.order = Order.objects.get(pk=self.order.pk)
         assert self.order.user_cancel_fee == Decimal('9.10')
 
+        self.event.settings.cancel_allow_user_paid_keep = Decimal('100.00')
+        self.order = Order.objects.get(pk=self.order.pk)
+        assert self.order.user_cancel_fee == Decimal('48.00')
+
     @classscope(attr='o')
     def test_paid_order_underpaid(self):
         self.order.status = Order.STATUS_PAID
