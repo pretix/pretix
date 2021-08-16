@@ -38,5 +38,5 @@ def thumb(source, arg):
     try:
         return get_thumbnail(source, arg).thumb.url
     except:
-        logger.exception('Failed to create thumbnail')
+        logger.exception(f'Failed to create thumbnail of {source}')
         return default_storage.url(source)

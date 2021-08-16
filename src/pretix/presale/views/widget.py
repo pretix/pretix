@@ -208,7 +208,12 @@ def price_dict(item, price):
 
 
 def get_picture(event, picture):
-    return urljoin(build_absolute_uri(event, 'presale:event.index'), get_thumbnail(picture.name, '60x60^').thumb.url)
+    try:
+        thumb = get_thumbnail(picture.name, '60x60^').thumb.url
+    except:
+        logger.exception(f'Failed to create thumbnail of {picture.name}')
+        thumb = default_storage.url(picture.name)
+    return urljoin(build_absolute_uri(event, 'presale:event.index'), thumb)
 
 
 class WidgetAPIProductList(EventListMixin, View):

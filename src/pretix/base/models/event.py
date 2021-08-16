@@ -20,6 +20,7 @@
 # <https://www.gnu.org/licenses/>.
 #
 
+import logging
 # This file is based on an earlier version of pretix which was released under the Apache License 2.0. The full text of
 # the Apache License 2.0 can be obtained at <http://www.apache.org/licenses/LICENSE-2.0>.
 #
@@ -72,6 +73,8 @@ from pretix.helpers.thumb import get_thumbnail
 
 from ..settings import settings_hierarkey
 from .organizer import Organizer, Team
+
+logger = logging.getLogger(__name__)
 
 
 class EventMixin:
@@ -534,9 +537,17 @@ class Event(EventMixin, LoggedModel):
         logo_file = self.settings.get('logo_image', as_type=str, default='')[7:]
         og_file = self.settings.get('og_image', as_type=str, default='')[7:]
         if og_file:
-            img = get_thumbnail(og_file, '1200').thumb.url
+            try:
+                img = get_thumbnail(og_file, '1200').thumb.url
+            except:
+                logger.exception(f'Failed to create thumbnail of {og_file}')
+                img = default_storage.url(og_file)
         elif logo_file:
-            img = get_thumbnail(logo_file, '5000x120').thumb.url
+            try:
+                img = get_thumbnail(logo_file, '5000x1200').thumb.url
+            except:
+                logger.exception(f'Failed to create thumbnail of {logo_file}')
+                img = default_storage.url(logo_file)
         if img:
             return urljoin(build_absolute_uri(self, 'presale:event.index'), img)
 
