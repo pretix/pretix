@@ -511,6 +511,34 @@ class OrdersTest(BaseOrdersTest):
             assert not self.order.refunds.exists()
             assert not self.order.cancellation_requests.exists()
 
+    def test_orders_cancel_free_ignore_fixed_fee(self):
+        self.order.status = Order.STATUS_PAID
+        self.order.total = Decimal('0.00')
+        self.order.save()
+        with scopes_disabled():
+            self.order.payments.create(provider='testdummy_partialrefund', amount=self.order.total, state=OrderPayment.PAYMENT_STATE_CONFIRMED)
+        self.event.settings.cancel_allow_user_paid = True
+        self.event.settings.cancel_allow_user_paid_keep = Decimal('3.00')
+        self.event.settings.cancel_allow_user_paid_require_approval = True
+        self.event.settings.cancel_allow_user_paid_adjust_fees = True
+        response = self.client.get(
+            '/%s/%s/order/%s/%s/cancel' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret)
+        )
+        assert response.status_code == 200
+        response = self.client.post(
+            '/%s/%s/order/%s/%s/cancel/do' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret), {
+                'cancel_fee': '3.00'
+            }, follow=True)
+        self.assertRedirects(response,
+                             '/%s/%s/order/%s/%s/' % (self.orga.slug, self.event.slug, self.order.code,
+                                                      self.order.secret),
+                             target_status_code=200)
+        self.order.refresh_from_db()
+        assert self.order.status == Order.STATUS_CANCELED
+        with scopes_disabled():
+            assert not self.order.refunds.exists()
+            assert not self.order.cancellation_requests.exists()
+
     def test_orders_cancel_paid_fee_autorefund_gift_card_optional(self):
         self.order.status = Order.STATUS_PAID
         self.order.save()

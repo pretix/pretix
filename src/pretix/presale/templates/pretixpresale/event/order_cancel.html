@@ -21,7 +21,7 @@
             action="{% eventurl request.event "presale:event.order.cancel.do" secret=order.secret order=order.code %}"
             data-asynctask
             class="">
-        {% if request.event.settings.cancel_allow_user_paid_require_approval %}
+        {% if request.event.settings.cancel_allow_user_paid_require_approval and order.status == "p" and order.total != 0 %}
             <p>
                 {% blocktrans trimmed %}
                     You can request the cancellation of your order on this page. The event organizer will then decide
@@ -37,7 +37,7 @@
             </p>
         {% endif %}
 
-        {% if request.event.settings.cancel_allow_user_paid_adjust_fees %}
+        {% if request.event.settings.cancel_allow_user_paid_adjust_fees and order.status == "p" and order.total != 0 %}
             <p>
                 {% if cancel_fee %}
                     {% blocktrans trimmed with fee=order.user_cancel_fee|money:request.event.currency %}

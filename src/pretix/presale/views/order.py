@@ -878,7 +878,9 @@ class OrderCancelDo(EventViewMixin, OrderDetailMixin, AsyncAction, View):
             require_approval = self.request.event.settings.cancel_allow_user_paid_require_approval
             fee = self.order.user_cancel_fee
             auto_refund = True
-        if 'cancel_fee' in request.POST and self.request.event.settings.cancel_allow_user_paid_adjust_fees:
+        if self.order.total == Decimal('0.00'):
+            fee = Decimal('0.00')
+        elif 'cancel_fee' in request.POST and self.request.event.settings.cancel_allow_user_paid_adjust_fees:
             fee = fee or Decimal('0.00')
             fee_in = re.sub('[^0-9.,]', '', request.POST.get('cancel_fee'))
             try:
