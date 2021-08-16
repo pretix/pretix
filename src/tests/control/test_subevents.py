@@ -1116,10 +1116,7 @@ class SubEventsTest(SoupTest):
             '_bulk': ['__checkinlists'],
             'checkinlist_set-1-DELETE': 'on',
         })
-        print(doc)
-        print(fields)
         doc = self.post_doc('/control/event/ccc/30c3/subevents/bulk_edit', fields, follow=True)
-        print(doc)
         assert doc.select(".alert-success")
         with scopes_disabled():
             for se in [self.subevent1, self.subevent2]:
