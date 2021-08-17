@@ -218,3 +218,13 @@ def test_sendmail_rule_change(token_client, organizer, event, rule):
     rule.refresh_from_db()
 
     assert rule.enabled is False
+
+
+@scopes_disabled()
+@pytest.mark.django_db
+def test_sendmail_rule_delete(token_client, organizer, event, rule):
+    token_client.delete(
+        f'/api/v1/organizers/{organizer.slug}/events/{event.slug}/mailrules/{rule.pk}/'
+    )
+
+    assert Rule.objects.filter(pk=rule.pk).count() == 0
