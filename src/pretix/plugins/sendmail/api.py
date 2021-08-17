@@ -43,6 +43,7 @@ class RuleSerializer(I18nAwareModelSerializer):
         full_data = self.to_internal_value(self.to_representation(self.instance)) if self.instance else {}
         full_data.update(data)
 
+        # todo: better error messages
         if full_data.get('date_is_absolute') is not False:
             if any([k in data for k in ['offset_to_event_end', 'offset_is_after']]):
                 raise ValidationError('date_is_absolute and offset_* are mutually exclusive')

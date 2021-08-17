@@ -73,13 +73,15 @@ def test_sendmail_rule_detail(token_client, organizer, event, rule):
 
 
 @scopes_disabled()
-def create_rule(token_client, organizer, event, data, expected_failure=False):
+def create_rule(token_client, organizer, event, data, expected_failure=False, expected_failure_text=None):
     resp = token_client.post(
         f'/api/v1/organizers/{organizer.slug}/events/{event.slug}/mailrules/',
         data=data, format='json'
     )
     if expected_failure:
         assert resp.status_code == 400
+        if expected_failure_text:
+            assert expected_failure_text in resp.content.decode(resp.charset)
     else:
         assert resp.status_code == 201
         with scopes_disabled():
@@ -149,62 +151,86 @@ def test_sendmail_rule_create_full(token_client, organizer, event, item):
 @pytest.mark.django_db
 def test_sendmail_rule_create_invalid(token_client, organizer, event):
     invalid_examples = [
-        {
-            'subject': {'en': 'foo'},
-            'template': {'en': 'bar'},
-            'send_date': '2018-03-17T13:31Z',
-            'offset_to_event_end': True,  # needs explicit date_is_absolute=False and specified offset
-        },
-        {
-            'subject': {'en': 'foo'},
-            'template': {'en': 'bar'},
-            'send_date': '2018-03-17T13:31Z',
-            'offset_is_after': True,
-        },
-        {
-            'subject': {'en': 'foo'},
-            'template': {'en': 'bar'},
-            'send_date': '2018-03-17T13:31Z',
-            'date_is_absolute': False,
-        },
-        {
-            'subject': {'en': 'foo'},
-            'template': {'en': 'bar'},
-            'send_date': '2018-03-17T13:31Z',
-            'date_is_absolute': True,
-            'offset_to_event_end': True,
-            'send_offset_days': 2,
-            'send_offset_time': '09:30',
-        },
-        {
-            'subject': {'en': 'foo'},
-            'template': {'en': 'bar'},
-        },
-        {
-            'subject': {'en': 'foo'},
-            'template': {'en': 'bar'},
-            'date_is_absolute': False,
-            'offset_to_event_end': True,
-        },
-        {
-            'subject': {'en': 'foo'},
-            'template': {'en': 'bar'},
-            'send_date': '2018-03-17T13:31Z',
-            'date_is_absolute': False,
-            'offset_is_after': True,
-            'send_offset_days': 2,
-        },
-        {
-            'subject': {'en': 'foo'},
-            'template': {'en': 'bar'},
-            'date_is_absolute': False,
-            'offset_is_after': True,
-            'send_offset_time': '09:30',
-        }
+        (
+            {
+                'subject': {'en': 'foo'},
+                'template': {'en': 'bar'},
+                'send_date': '2018-03-17T13:31Z',
+                'offset_to_event_end': True,  # needs explicit date_is_absolute=False and specified offset
+            },
+            'date_is_absolute and offset_* are mutually exclusive'
+        ),
+        (
+            {
+                'subject': {'en': 'foo'},
+                'template': {'en': 'bar'},
+                'send_date': '2018-03-17T13:31Z',
+                'offset_is_after': True,
+            },
+            'date_is_absolute and offset_* are mutually exclusive'
+        ),
+        (
+            {
+                'subject': {'en': 'foo'},
+                'template': {'en': 'bar'},
+                'send_date': '2018-03-17T13:31Z',
+                'date_is_absolute': False,
+            },
+            'send_offset_days and send_offset_time are required'
+        ),
+        (
+            {
+                'subject': {'en': 'foo'},
+                'template': {'en': 'bar'},
+                'send_date': '2018-03-17T13:31Z',
+                'date_is_absolute': True,
+                'offset_to_event_end': True,
+                'send_offset_days': 2,
+                'send_offset_time': '09:30',
+            },
+            'date_is_absolute and offset_* are mutually exclusive'
+        ),
+        (
+            {
+                'subject': {'en': 'foo'},
+                'template': {'en': 'bar'},
+            },
+            'send_date is required for date_is_absolute=True'
+        ),
+        (
+            {
+                'subject': {'en': 'foo'},
+                'template': {'en': 'bar'},
+                'date_is_absolute': False,
+                'offset_to_event_end': True,
+            },
+            'send_offset_days and send_offset_time are required'
+        ),
+        (
+            {
+                'subject': {'en': 'foo'},
+                'template': {'en': 'bar'},
+                'send_date': '2018-03-17T13:31Z',
+                'date_is_absolute': False,
+                'offset_is_after': True,
+                'send_offset_days': 2,
+            },
+            'send_offset_days and send_offset_time are required'
+        ),
+        (
+            {
+                'subject': {'en': 'foo'},
+                'template': {'en': 'bar'},
+                'date_is_absolute': False,
+                'offset_is_after': True,
+                'send_offset_time': '09:30',
+            },
+            'send_offset_days and send_offset_time are required'
+        )
     ]
 
-    for data in invalid_examples:
-        create_rule(token_client, organizer, event, data, expected_failure=True)
+    for data, failure in invalid_examples:
+        create_rule(token_client, organizer, event, data, expected_failure=True, expected_failure_text=failure)
 
 
 @scopes_disabled()
