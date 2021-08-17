@@ -1376,7 +1376,7 @@ class SubEventBulkEdit(SubEventQueryMixin, EventPermissionRequiredMixin, FormVie
             *(f.name for f in CheckinList._meta.fields if f.name not in (
                 'id', 'event', 'limit_products', 'gates',
             ))
-        ).order_by('subevent_id')
+        ).order_by('subevent_id', 'name', 'pk')
 
         if not all_lists:
             return SubEvent.objects.none()
