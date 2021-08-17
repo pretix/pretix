@@ -81,3 +81,31 @@ class RuleViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         return Rule.objects.filter(event=self.request.event)
+
+    def perform_create(self, serializer):
+        super().perform_create(serializer)
+        serializer.instance.log_action(
+            'pretix.plugins.sendmail.rule.created',
+            user=self.request.user,
+            auth=self.request.auth,
+            data=self.request.data
+
+        )
+
+    def perform_update(self, serializer):
+        super().perform_update(serializer)
+        serializer.instance.log_action(
+            'pretix.plugins.sendmail.rule.updated',
+            user=self.request.user,
+            auth=self.request.auth,
+            data=self.request.data
+        )
+
+    def perform_destroy(self, instance):
+        instance.log_action(
+            'pretix.plugins.sendmail.rule.deleted',
+            user=self.request.user,
+            auth=self.request.auth,
+            data=self.request.data
+        )
+        super().perform_destroy(instance)
