@@ -218,6 +218,3 @@ def test_sendmail_rule_change(token_client, organizer, event, rule):
     rule.refresh_from_db()
 
     assert rule.enabled is False
-
-
-# f'/api/v1/organizers/{organizer.slug}/events/{event.slug}/mailrules/'
