@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-08-04 17:18+0000\n"
-"PO-Revision-Date: 2021-06-30 13:06+0000\n"
+"PO-Revision-Date: 2021-08-18 01:00+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix-js/"
 "de/>\n"
@@ -426,7 +426,6 @@ msgid "Your color has great contrast and is very easy to read!"
 msgstr "Diese Farbe hat einen sehr guten Kontrast und ist sehr gut zu lesen!"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:275
-#, fuzzy
 msgid "Your color has decent contrast and is probably good-enough to read!"
 msgstr ""
 "Diese Farbe hat einen ausreichenden Kontrast und ist wahrscheinlich gut zu "
@@ -622,14 +621,13 @@ msgid ""
 "There are currently a lot of users in this ticket shop. Please open the shop "
 "in a new tab to continue."
 msgstr ""
+"Es sind derzeit sehr viele Benutzer in diesem Ticketshop. Bitte öffnen Sie "
+"diesen Ticketshop in einem neuen Tab um fortzufahren."
 
 #: pretix/static/pretixpresale/js/widget/widget.js:34
-#, fuzzy
-#| msgctxt "widget"
-#| msgid "Close ticket shop"
 msgctxt "widget"
 msgid "Open ticket shop"
-msgstr "Ticket-Shop schließen"
+msgstr "Ticket-Shop öffnen"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:35
 msgctxt "widget"
@@ -642,6 +640,9 @@ msgid ""
 "We could not create your cart, since there are currently too many users in "
 "this ticket shop. Please click \"Continue\" to retry in a new tab."
 msgstr ""
+"Wir konnten Ihren Warenkorb nicht erstellen, da derzeit zu viele Nutzer in "
+"diesem Ticketshop sind. Bitte klicken Sie \"Weiter\" um es in einem neuen "
+"Tab erneut zu versuchen."
 
 #: pretix/static/pretixpresale/js/widget/widget.js:38
 msgctxt "widget"
@@ -733,8 +734,6 @@ msgid "Open seat selection"
 msgstr "Saalplan öffnen"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:56
-#, fuzzy
-#| msgid "Load more"
 msgctxt "widget"
 msgid "Load more"
 msgstr "Mehr laden"
