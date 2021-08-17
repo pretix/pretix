@@ -21,7 +21,7 @@
 #
 from django.core.exceptions import ValidationError
 from django_filters.rest_framework import DjangoFilterBackend, FilterSet
-from django_scopes import scopes_disabled, scope
+from django_scopes import scopes_disabled
 from rest_framework import viewsets
 from rest_framework.filters import OrderingFilter
 
