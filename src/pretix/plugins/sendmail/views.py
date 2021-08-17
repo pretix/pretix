@@ -188,6 +188,8 @@ class SenderView(EventPermissionRequiredMixin, FormView):
         self.output = {}
         if not ocnt:
             messages.error(self.request, _('There are no orders matching this selection.'))
+            self.request.POST = self.request.POST.copy()
+            self.request.POST.pop("action", "")
             return self.get(self.request, *self.args, **self.kwargs)
 
         if self.request.POST.get("action") != "send":
@@ -249,14 +251,15 @@ class SenderView(EventPermissionRequiredMixin, FormView):
         ctx = super().get_context_data(*args, **kwargs)
         ctx['output'] = getattr(self, 'output', None)
         ctx['order_count'] = getattr(self, 'order_count', None)
-        ctx['is_preview'] = self.request.method == 'POST' and self.request.POST.get('action') == 'preview'
+        ctx['is_preview'] = self.request.method == 'POST' and self.request.POST.get('action') == 'preview' and ctx['form'].is_valid()
         return ctx
 
     def get_form(self, form_class=None):
         f = super().get_form(form_class)
         if self.request.method == 'POST' and self.request.POST.get('action') == 'preview':
-            for fname, field in f.fields.items():
-                field.widget.attrs['disabled'] = 'disabled'
+            if f.is_valid():
+                for fname, field in f.fields.items():
+                    field.widget.attrs['disabled'] = 'disabled'
         return f
 
 

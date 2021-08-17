@@ -91,7 +91,11 @@
                     <button type="submit" class="btn btn-danger btn-save" name="action" value="send">
                         <span class="fa fa-send" aria-hidden="true"></span>
                         {% trans "Send" %}
-                        ({% blocktrans with number=order_count|default_if_none:0|intcomma %}{{ number }} orders{% endblocktrans %})
+                        ({% blocktrans trimmed with number=order_count|default_if_none:0|intcomma count c=order_count|default_if_none:0 %}
+                            {{ number }} matching order
+                        {% plural %}
+                            {{ number }} matching orders
+                        {% endblocktrans %})
                     </button>
                 {% endif %}
             </div>
