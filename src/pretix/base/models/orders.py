@@ -783,6 +783,7 @@ class Order(LockModel, LoggedModel):
     def ticket_download_available(self):
         return self.event.settings.ticket_download and (
             self.event.settings.ticket_download_date is None
+            or self.ticket_download_date is None
             or now() > self.ticket_download_date
         ) and (
             self.status == Order.STATUS_PAID
