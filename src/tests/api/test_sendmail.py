@@ -92,7 +92,7 @@ def test_sendmail_rule_create_min_fail(token_client, organizer, event):
     create_rule(
         token_client, organizer, event,
         data={
-            'subject': {'en': 'aaaa'}
+            'subject': {'en': 'not foobar'}
         },
         expected_failure=True
     )
@@ -105,7 +105,7 @@ def test_sendmail_rule_create_minimal(token_client, organizer, event):
         token_client, organizer, event,
         data={
             'subject': {'en': 'meow'},
-            'template': {'en': 'help me'},
+            'template': {'en': 'creative text here'},
             'send_date': '2018-03-17T13:31Z',
         }
     )
@@ -119,7 +119,7 @@ def test_sendmail_rule_create_full(token_client, organizer, event, item):
         token_client, organizer, event,
         data={
             'subject': {'en': 'mew'},
-            'template': {'en': 'i am in pain please send help'},
+            'template': {'en': 'foobar'},
             'all_products': False,
             'limit_products': [event.items.first().pk],
             'include_pending': True,
@@ -148,40 +148,62 @@ def test_sendmail_rule_create_full(token_client, organizer, event, item):
 @scopes_disabled()
 @pytest.mark.django_db
 def test_sendmail_rule_create_invalid(token_client, organizer, event):
-    data_but_more = [
+    invalid_examples = [
         {
-            'subject': {'en': 'meow'},
-            'template': {'en': 'help me'},
+            'subject': {'en': 'foo'},
+            'template': {'en': 'bar'},
             'send_date': '2018-03-17T13:31Z',
-            'offset_to_event_end': True,  # needs explicit date_is_absolute=False
+            'offset_to_event_end': True,  # needs explicit date_is_absolute=False and specified offset
         },
         {
-            'subject': {'en': 'meow'},
-            'template': {'en': 'help me'},
+            'subject': {'en': 'foo'},
+            'template': {'en': 'bar'},
             'send_date': '2018-03-17T13:31Z',
             'offset_is_after': True,
         },
-        # {
-        #     'subject': {'en': 'meow'},
-        #     'template': {'en': 'help me'},
-        #     'send_date': '2018-03-17T13:31Z',
-        #     'date_is_absolute': False,
-        # },
-        # {
-        #     'subject': {'en': 'meow'},
-        #     'template': {'en': 'help me'},
-        #     'send_date': '2018-03-17T13:31Z',
-        #
-        # },
-        # {
-        #     'subject': {'en': 'meow'},
-        #     'template': {'en': 'help me'},
-        #     'send_date': '2018-03-17T13:31Z',
-        #
-        # },
+        {
+            'subject': {'en': 'foo'},
+            'template': {'en': 'bar'},
+            'send_date': '2018-03-17T13:31Z',
+            'date_is_absolute': False,
+        },
+        {
+            'subject': {'en': 'foo'},
+            'template': {'en': 'bar'},
+            'send_date': '2018-03-17T13:31Z',
+            'date_is_absolute': True,
+            'offset_to_event_end': True,
+            'send_offset_days': 2,
+            'send_offset_time': '09:30',
+        },
+        {
+            'subject': {'en': 'foo'},
+            'template': {'en': 'bar'},
+        },
+        {
+            'subject': {'en': 'foo'},
+            'template': {'en': 'bar'},
+            'date_is_absolute': False,
+            'offset_to_event_end': True,
+        },
+        {
+            'subject': {'en': 'foo'},
+            'template': {'en': 'bar'},
+            'send_date': '2018-03-17T13:31Z',
+            'date_is_absolute': False,
+            'offset_is_after': True,
+            'send_offset_days': 2,
+        },
+        {
+            'subject': {'en': 'foo'},
+            'template': {'en': 'bar'},
+            'date_is_absolute': False,
+            'offset_is_after': True,
+            'send_offset_time': '09:30',
+        }
     ]
 
-    for data in data_but_more:
+    for data in invalid_examples:
         create_rule(token_client, organizer, event, data, expected_failure=True)
 
 

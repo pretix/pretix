@@ -37,7 +37,7 @@ class RuleSerializer(I18nAwareModelSerializer):
                   'offset_to_event_end', 'offset_is_after', 'send_to', 'enabled', 'event']
         read_only_fields = ['id', 'event']
 
-    def validate(self, data):
+    def validate(self, data):  # todo: check this logic, it's probably still flawed
         data = super().validate(data)
 
         full_data = self.to_internal_value(self.to_representation(self.instance)) if self.instance else {}
@@ -77,6 +77,7 @@ class RuleViewSet(viewsets.ModelViewSet):
     filterset_class = RuleFilter
     ordering = ('id',)
     ordering_fields = ('id',)
+    permission = 'can_change_event_settings'
 
     def get_queryset(self):
         return Rule.objects.filter(event=self.request.event)
