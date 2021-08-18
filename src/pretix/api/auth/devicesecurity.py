@@ -36,6 +36,7 @@ class AllowListSecurityProfile:
 
     def is_allowed(self, request):
         key = (request.method, f"{request.resolver_match.namespace}:{request.resolver_match.url_name}")
+        print(key)
         return key in self.allowlist
 
 
@@ -163,6 +164,7 @@ class PretixPosSecurityProfile(AllowListSecurityProfile):
         ('POST', 'api-v1:orderrefund-list'),
         ('POST', 'api-v1:orderrefund-done'),
         ('POST', 'api-v1:cartposition-list'),
+        ('POST', 'api-v1:cartposition-bulk-create'),
         ('GET', 'api-v1:checkinlist-list'),
         ('POST', 'api-v1:checkinlistpos-redeem'),
         ('POST', 'plugins:pretix_posbackend:order.posprintlog'),

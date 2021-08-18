@@ -73,53 +73,60 @@ class CartPositionCreateSerializer(I18nAwareModelSerializer):
                 minutes=self.context['event'].settings.get('reservation_time', as_type=int)
             )
 
-        with self.context['event'].lock():
-            new_quotas = (validated_data.get('variation').quotas.filter(subevent=validated_data.get('subevent'))
-                          if validated_data.get('variation')
-                          else validated_data.get('item').quotas.filter(subevent=validated_data.get('subevent')))
-            if len(new_quotas) == 0:
+        new_quotas = (validated_data.get('variation').quotas.filter(subevent=validated_data.get('subevent'))
+                      if validated_data.get('variation')
+                      else validated_data.get('item').quotas.filter(subevent=validated_data.get('subevent')))
+        if len(new_quotas) == 0:
+            raise ValidationError(
+                gettext_lazy('The product "{}" is not assigned to a quota.').format(
+                    str(validated_data.get('item'))
+                )
+            )
+        for quota in new_quotas:
+            avail = quota.availability(_cache=self.context['quota_cache'])
+            if avail[0] != Quota.AVAILABILITY_OK or (avail[1] is not None and avail[1] < 1):
                 raise ValidationError(
-                    gettext_lazy('The product "{}" is not assigned to a quota.').format(
-                        str(validated_data.get('item'))
+                    gettext_lazy('There is not enough quota available on quota "{}" to perform '
+                                 'the operation.').format(
+                        quota.name
                     )
                 )
-            for quota in new_quotas:
-                avail = quota.availability()
-                if avail[0] != Quota.AVAILABILITY_OK or (avail[1] is not None and avail[1] < 1):
-                    raise ValidationError(
-                        gettext_lazy('There is not enough quota available on quota "{}" to perform '
-                                     'the operation.').format(
-                            quota.name
-                        )
-                    )
-            attendee_name = validated_data.pop('attendee_name', '')
-            if attendee_name and not validated_data.get('attendee_name_parts'):
-                validated_data['attendee_name_parts'] = {
-                    '_legacy': attendee_name
-                }
 
-            seated = validated_data.get('item').seat_category_mappings.filter(subevent=validated_data.get('subevent')).exists()
-            if validated_data.get('seat'):
-                if not seated:
-                    raise ValidationError('The specified product does not allow to choose a seat.')
-                try:
-                    seat = self.context['event'].seats.get(seat_guid=validated_data['seat'], subevent=validated_data.get('subevent'))
-                except Seat.DoesNotExist:
-                    raise ValidationError('The specified seat does not exist.')
-                except Seat.MultipleObjectsReturned:
-                    raise ValidationError('The specified seat ID is not unique.')
-                else:
-                    validated_data['seat'] = seat
-                    if not seat.is_available(
-                        sales_channel=validated_data.get('sales_channel', 'web'),
-                        distance_ignore_cart_id=validated_data['cart_id'],
-                    ):
-                        raise ValidationError(gettext_lazy('The selected seat "{seat}" is not available.').format(seat=seat.name))
-            elif seated:
-                raise ValidationError('The specified product requires to choose a seat.')
+        for quota in new_quotas:
+            newsize = self.context['quota_cache'][quota.pk][1] - 1
+            self.context['quota_cache'][quota.pk] = (
+                Quota.AVAILABILITY_OK if newsize > 9 else Quota.AVAILABILITY_GONE,
+                newsize
+            )
 
-            validated_data.pop('sales_channel')
-            cp = CartPosition.objects.create(event=self.context['event'], **validated_data)
+        attendee_name = validated_data.pop('attendee_name', '')
+        if attendee_name and not validated_data.get('attendee_name_parts'):
+            validated_data['attendee_name_parts'] = {
+                '_legacy': attendee_name
+            }
+
+        seated = validated_data.get('item').seat_category_mappings.filter(subevent=validated_data.get('subevent')).exists()
+        if validated_data.get('seat'):
+            if not seated:
+                raise ValidationError('The specified product does not allow to choose a seat.')
+            try:
+                seat = self.context['event'].seats.get(seat_guid=validated_data['seat'], subevent=validated_data.get('subevent'))
+            except Seat.DoesNotExist:
+                raise ValidationError('The specified seat does not exist.')
+            except Seat.MultipleObjectsReturned:
+                raise ValidationError('The specified seat ID is not unique.')
+            else:
+                validated_data['seat'] = seat
+                if not seat.is_available(
+                    sales_channel=validated_data.get('sales_channel', 'web'),
+                    distance_ignore_cart_id=validated_data['cart_id'],
+                ):
+                    raise ValidationError(gettext_lazy('The selected seat "{seat}" is not available.').format(seat=seat.name))
+        elif seated:
+            raise ValidationError('The specified product requires to choose a seat.')
+
+        validated_data.pop('sales_channel')
+        cp = CartPosition.objects.create(event=self.context['event'], **validated_data)
 
         for answ_data in answers_data:
             options = answ_data.pop('options')

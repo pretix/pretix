@@ -784,3 +784,107 @@ def test_cartpos_create_unseated(token_client, organizer, event, item, quota, se
     )
     assert resp.status_code == 400
     assert resp.data == ['The specified product does not allow to choose a seat.']
+
+
+@pytest.mark.django_db
+def test_cartpos_create_bulk_simple(token_client, organizer, event, item, quota, question):
+    res = copy.deepcopy(CARTPOS_CREATE_PAYLOAD)
+    res['item'] = item.pk
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/cartpositions/bulk_create/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=[
+            res,
+            res
+        ]
+    )
+    assert resp.status_code == 200
+    assert len(resp.data['results']) == 2
+    assert resp.data['results'][0]['success']
+    assert resp.data['results'][1]['success']
+
+    with scopes_disabled():
+        assert CartPosition.objects.count() == 2
+        cp1 = CartPosition.objects.get(pk=resp.data['results'][0]['data']['id'])
+        cp2 = CartPosition.objects.get(pk=resp.data['results'][1]['data']['id'])
+    assert cp1.price == Decimal('23.00')
+    assert cp2.price == Decimal('23.00')
+
+
+@pytest.mark.django_db
+def test_cartpos_create_bulk_partial_validation_failure(token_client, organizer, event, item, quota, question):
+    res1 = copy.deepcopy(CARTPOS_CREATE_PAYLOAD)
+    res1['item'] = item.pk
+    res2 = copy.deepcopy(CARTPOS_CREATE_PAYLOAD)
+    res2['item'] = -1
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/cartpositions/bulk_create/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=[
+            res1,
+            res2
+        ]
+    )
+    assert resp.status_code == 200
+    assert len(resp.data['results']) == 2
+    assert resp.data['results'][0]['success']
+    assert not resp.data['results'][1]['success']
+    assert resp.data['results'][1]['errors'] == {'item': ['Invalid pk "-1" - object does not exist.']}
+
+    with scopes_disabled():
+        assert CartPosition.objects.count() == 1
+        cp1 = CartPosition.objects.get(pk=resp.data['results'][0]['data']['id'])
+    assert cp1.price == Decimal('23.00')
+
+
+@pytest.mark.django_db
+def test_cartpos_create_bulk_partial_quota_failure(token_client, organizer, event, item, quota, question):
+    quota.size = 1
+    quota.save()
+    res = copy.deepcopy(CARTPOS_CREATE_PAYLOAD)
+    res['item'] = item.pk
+    res['expires'] = (now() + datetime.timedelta(days=1)).isoformat()
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/cartpositions/bulk_create/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=[
+            res,
+            res
+        ]
+    )
+    assert resp.status_code == 200
+    assert len(resp.data['results']) == 2
+    assert resp.data['results'][0]['success']
+    assert not resp.data['results'][1]['success']
+    assert resp.data['results'][1]['errors'] == {'non_field_errors': ['There is not enough quota available on quota "Budget Quota" to perform the operation.']}
+
+    with scopes_disabled():
+        assert CartPosition.objects.count() == 1
+        cp1 = CartPosition.objects.get(pk=resp.data['results'][0]['data']['id'])
+    assert cp1.price == Decimal('23.00')
+
+
+@pytest.mark.django_db
+def test_cartpos_create_bulk_partial_seat_failure(token_client, organizer, event, item, quota, question, seat):
+    res = copy.deepcopy(CARTPOS_CREATE_PAYLOAD)
+    res['seat'] = seat.seat_guid
+    res['item'] = item.pk
+    res['expires'] = (now() + datetime.timedelta(days=1)).isoformat()
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/cartpositions/bulk_create/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=[
+            res,
+            res
+        ]
+    )
+    assert resp.status_code == 200
+    assert len(resp.data['results']) == 2
+    assert resp.data['results'][0]['success']
+    assert not resp.data['results'][1]['success']
+    assert resp.data['results'][1]['errors'] == {'non_field_errors': ['The selected seat "Seat A1" is not available.']}
+
+    with scopes_disabled():
+        assert CartPosition.objects.count() == 1
+        cp1 = CartPosition.objects.get(pk=resp.data['results'][0]['data']['id'])
+    assert cp1.price == Decimal('23.00')

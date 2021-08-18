@@ -243,6 +243,99 @@ Cart position endpoints
    :statuscode 403: The requested organizer/event does not exist **or** you have no permission to create this
          order.
 
+.. http:post:: /api/v1/organizers/(organizer)/events/(event)/cartpositions/bulk_create/
+
+   Creates multiple new cart position. This operation is deliberately not atomic, so each cart position can succeed
+   or fail individually, so the response code of the response is not the only thing to look at!
+
+   .. warning:: This endpoint is considered **experimental**. It might change at any time without prior notice.
+
+   .. warning:: The same limitations as with the regular creation endpoint apply.
+
+   **Example request**:
+
+   .. sourcecode:: http
+
+      POST /api/v1/organizers/bigevents/events/sampleconf/cartpositions/bulk_create/ HTTP/1.1
+      Host: pretix.eu
+      Accept: application/json, text/javascript
+      Content-Type: application/json
+
+      [
+        {
+          "item": 1,
+          "variation": null,
+          "price": "23.00",
+          "attendee_name_parts": {
+            "given_name": "Peter",
+            "family_name": "Miller"
+          },
+          "attendee_email": null,
+          "answers": [
+            {
+              "question": 1,
+              "answer": "23",
+              "options": []
+            }
+          ],
+          "subevent": null
+        },
+        {
+          "item": 1,
+          "variation": null,
+          "price": "23.00",
+          "attendee_name_parts": {
+            "given_name": "Maria",
+            "family_name": "Miller"
+          },
+          "attendee_email": null,
+          "answers": [
+            {
+              "question": 1,
+              "answer": "23",
+              "options": []
+            }
+          ],
+          "subevent": null
+        }
+      ]
+
+   **Example response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 200 OK
+      Vary: Accept
+      Content-Type: application/json
+
+      {
+        "results": [
+          {
+            "success": true,
+            "errors": null,
+            "data": {
+              "id": 1,
+              ...
+            },
+          },
+          {
+            "success": "false",
+            "errors": {
+              "non_field_errors": ["There is not enough quota available on quota \"Tickets\" to perform the operation."]
+            },
+            "data": null
+          }
+        ]
+      }
+
+   :param organizer: The ``slug`` field of the organizer of the event to create positions for
+   :param event: The ``slug`` field of the event to create positions for
+   :statuscode 200: See response for success
+   :statuscode 400: Your input could not be parsed
+   :statuscode 401: Authentication failure
+   :statuscode 403: The requested organizer/event does not exist **or** you have no permission to create this
+         order.
+
 .. http:delete:: /api/v1/organizers/(organizer)/events/(event)/cartpositions/(id)/
 
    Deletes a cart position, identified by its internal ID.
