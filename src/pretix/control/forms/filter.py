@@ -304,8 +304,8 @@ class OrderFilterForm(FilterForm):
             elif s == 'underpaid':
                 qs = Order.annotate_overpayments(qs, refunds=False, results=False, sums=True)
                 qs = qs.filter(
-                    status=Order.STATUS_PAID,
-                    pending_sum_t__gt=0
+                    Q(status=Order.STATUS_PAID, pending_sum_t__gt=0) |
+                    Q(status=Order.STATUS_CANCELED, pending_sum_rc__gt=0)
                 )
             elif s == 'cni':
                 i = Invoice.objects.filter(
