@@ -177,7 +177,7 @@ class MailForm(FormPlaceholderMixin, forms.Form):
         self.fields['sendto'] = forms.MultipleChoiceField(
             label=_("Send to customers with order status"),
             widget=forms.CheckboxSelectMultiple(
-                attrs={'class': 'scrolling-multiple-choice'}
+                attrs={'class': 'scrolling-multiple-choice no-search'}
             ),
             choices=choices
         )

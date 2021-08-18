@@ -153,7 +153,7 @@ class CachedFileInput(forms.ClearableFileInput):
 
         @property
         def is_img(self):
-            return any(self.file.filename.lower().endswith(e) for e in ('.jpg', '.jpeg', '.png', '.gif'))
+            return False  # thumbnailing doesn't work since the file isn't available publicly
 
         def __str__(self):
             return self.file.filename

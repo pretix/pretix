@@ -183,12 +183,16 @@ class SenderView(EventPermissionRequiredMixin, FormView):
 
         orders = orders.annotate(match_pos=Exists(opq)).filter(match_pos=True).distinct()
 
+        ocnt = orders.count()
+
         self.output = {}
-        if not orders:
+        if not ocnt:
             messages.error(self.request, _('There are no orders matching this selection.'))
+            self.request.POST = self.request.POST.copy()
+            self.request.POST.pop("action", "")
             return self.get(self.request, *self.args, **self.kwargs)
 
-        if self.request.POST.get("action") == "preview":
+        if self.request.POST.get("action") != "send":
             for l in self.request.event.settings.locales:
                 with language(l, self.request.event.settings.region):
                     context_dict = TolerantDict()
@@ -207,8 +211,10 @@ class SenderView(EventPermissionRequiredMixin, FormView):
                     self.output[l] = {
                         'subject': _('Subject: {subject}').format(subject=preview_subject),
                         'html': preview_text,
+                        'attachment': form.cleaned_data.get('attachment')
                     }
 
+            self.order_count = ocnt
             return self.get(self.request, *self.args, **self.kwargs)
 
         kwargs = {
@@ -244,7 +250,17 @@ class SenderView(EventPermissionRequiredMixin, FormView):
     def get_context_data(self, *args, **kwargs):
         ctx = super().get_context_data(*args, **kwargs)
         ctx['output'] = getattr(self, 'output', None)
+        ctx['order_count'] = getattr(self, 'order_count', None)
+        ctx['is_preview'] = self.request.method == 'POST' and self.request.POST.get('action') == 'preview' and ctx['form'].is_valid()
         return ctx
+
+    def get_form(self, form_class=None):
+        f = super().get_form(form_class)
+        if self.request.method == 'POST' and self.request.POST.get('action') == 'preview':
+            if f.is_valid():
+                for fname, field in f.fields.items():
+                    field.widget.attrs['disabled'] = 'disabled'
+        return f
 
 
 class EmailHistoryView(EventPermissionRequiredMixin, ListView):
