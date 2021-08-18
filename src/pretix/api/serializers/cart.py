@@ -93,9 +93,10 @@ class CartPositionCreateSerializer(I18nAwareModelSerializer):
                 )
 
         for quota in new_quotas:
-            newsize = self.context['quota_cache'][quota.pk][1] - 1
+            oldsize = self.context['quota_cache'][quota.pk][1]
+            newsize = oldsize - 1 if oldsize is not None else None
             self.context['quota_cache'][quota.pk] = (
-                Quota.AVAILABILITY_OK if newsize > 9 else Quota.AVAILABILITY_GONE,
+                Quota.AVAILABILITY_OK if newsize is None or newsize > 0 else Quota.AVAILABILITY_GONE,
                 newsize
             )
 
