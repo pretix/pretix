@@ -36,7 +36,6 @@ class AllowListSecurityProfile:
 
     def is_allowed(self, request):
         key = (request.method, f"{request.resolver_match.namespace}:{request.resolver_match.url_name}")
-        print(key)
         return key in self.allowlist
 
 
