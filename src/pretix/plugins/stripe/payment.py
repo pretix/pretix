@@ -664,7 +664,7 @@ class StripeMethod(BasePaymentProvider):
             return
         d = json.loads(obj.info)
         new = {}
-        if 'source' in d:
+        if d.get('source'):
             new['source'] = {
                 'id': d['source'].get('id'),
                 'type': d['source'].get('type'),
