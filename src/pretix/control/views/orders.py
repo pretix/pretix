@@ -1026,7 +1026,8 @@ class OrderRefundView(OrderView):
 
                 if any_success:
                     if self.start_form.cleaned_data.get('action') == 'mark_refunded':
-                        mark_order_refunded(self.order, user=self.request.user)
+                        if self.order.cancel_allowed():
+                            mark_order_refunded(self.order, user=self.request.user)
                     elif self.start_form.cleaned_data.get('action') == 'mark_pending':
                         if not (self.order.status == Order.STATUS_PAID and self.order.pending_sum <= 0):
                             self.order.status = Order.STATUS_PENDING
