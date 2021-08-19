@@ -41,7 +41,9 @@ from django.contrib import messages
 from django.core.exceptions import PermissionDenied
 from django.core.files import File
 from django.db import transaction
-from django.db.models import Count, Exists, F, OuterRef, Prefetch, Q
+from django.db.models import (
+    Count, Exists, F, OuterRef, Prefetch, ProtectedError, Q,
+)
 from django.forms.models import inlineformset_factory
 from django.http import (
     Http404, HttpResponse, HttpResponseBadRequest, HttpResponseRedirect,
@@ -1408,11 +1410,23 @@ class ItemDelete(EventPermissionRequiredMixin, DeleteView):
         success_url = self.get_success_url()
         o = self.get_object()
         if o.allow_delete():
-            CartPosition.objects.filter(addon_to__item=self.get_object()).delete()
-            self.get_object().cartposition_set.all().delete()
-            self.get_object().log_action('pretix.event.item.deleted', user=self.request.user)
-            self.get_object().delete()
-            messages.success(request, _('The selected product has been deleted.'))
+            try:
+                CartPosition.objects.filter(addon_to__item=self.get_object()).delete()
+                self.get_object().cartposition_set.all().delete()
+                self.get_object().log_action('pretix.event.item.deleted', user=self.request.user)
+                self.get_object().delete()
+            except ProtectedError:
+                o = self.get_object()
+                o.active = False
+                o.save()
+                o.log_action('pretix.event.item.changed', user=self.request.user, data={
+                    'active': False
+                })
+                messages.error(self.request, _('The product could not be deleted as some constraints (e.g. data created by '
+                                               'plug-ins) did not allow it. Deleting it could break reporting or other '
+                                               'functionality, so the procut has been disabled instead.'))
+            else:
+                messages.success(request, _('The selected product has been deleted.'))
             return HttpResponseRedirect(success_url)
         else:
             o = self.get_object()
