@@ -193,7 +193,7 @@ var widget_id = makeid(16);
 Vue.component('availbox', {
     template: ('<div class="pretix-widget-availability-box">'
         + '<div class="pretix-widget-availability-unavailable" v-if="require_voucher">'
-        + '<small>' + strings.voucher_required + '</small>'
+        + '<small><a @click.prevent="focus_voucher_field">' + strings.voucher_required + '</a></small>'
         + '</div>'
         + '<div class="pretix-widget-availability-unavailable"'
         + '       v-if="!require_voucher && avail[0] < 100 && avail[0] > 10">'
@@ -278,6 +278,11 @@ Vue.component('availbox', {
                 u += '&subevent=' + this.$root.subevent
             }
             return u
+        }
+    },
+    methods: {
+        focus_voucher_field: function () {
+            this.$root.$emit('focus_voucher_field')
         }
     }
 });
@@ -796,7 +801,7 @@ Vue.component('pretix-widget-event-form', {
         + '<h3 class="pretix-widget-voucher-headline">'+ strings['redeem_voucher'] +'</h3>'
         + '<div v-if="$root.voucher_explanation_text" class="pretix-widget-voucher-text">{{ $root.voucher_explanation_text }}</div>'
         + '<div class="pretix-widget-voucher-input-wrap">'
-        + '<input class="pretix-widget-voucher-input" type="text" v-model="$parent.voucher" name="voucher" placeholder="'+strings.voucher_code+'">'
+        + '<input class="pretix-widget-voucher-input" ref="voucherinput" type="text" v-model="$parent.voucher" name="voucher" placeholder="'+strings.voucher_code+'">'
         + '</div>'
         + '<input type="hidden" name="subevent" :value="$root.subevent" />'
         + '<input type="hidden" name="widget_data" :value="$root.widget_data_json" />'
@@ -815,10 +820,12 @@ Vue.component('pretix-widget-event-form', {
     },
     mounted: function() {
         this.$root.$on('amounts_changed', this.calculate_buy_disabled)
+        this.$root.$on('focus_voucher_field', this.focus_voucher_field)
         this.calculate_buy_disabled()
     },
     beforeDestroy: function() {
         this.$root.$off('amounts_changed', this.calculate_buy_disabled)
+        this.$root.$off('focus_voucher_field', this.focus_voucher_field)
     },
     computed: {
         buy_label: function () {
@@ -851,6 +858,10 @@ Vue.component('pretix-widget-event-form', {
         }
     },
     methods: {
+        focus_voucher_field: function() {
+            this.$refs.voucherinput.scrollIntoView(false)
+            this.$refs.voucherinput.focus()
+        },
         back_to_list: function() {
             this.$root.target_url = this.$root.parent_stack.pop();
             this.$root.error = null;
