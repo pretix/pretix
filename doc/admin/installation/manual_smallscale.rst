@@ -285,8 +285,7 @@ Updates
 
 .. warning:: While we try hard not to break things, **please perform a backup before every upgrade**.
 
-To upgrade to a new pretix release, pull the latest code changes and run the following commands (again, replace
-``postgres`` with ``mysql`` if necessary)::
+To upgrade to a new pretix release, pull the latest code changes and run the following commands::
 
     $ source /var/pretix/venv/bin/activate
     (venv)$ pip3 install -U --upgrade-strategy eager pretix gunicorn
