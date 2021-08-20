@@ -1992,6 +1992,7 @@ class CheckinFilterForm(FilterForm):
 class DeviceFilterForm(FilterForm):
     orders = {
         'name': Upper('name'),
+        '-name': Upper('name').desc(),
         'device_id': 'device_id',
         'initialized': F('initialized').asc(nulls_last=True),
         '-initialized': F('initialized').desc(nulls_first=True),
