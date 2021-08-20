@@ -57,30 +57,6 @@
                                                 aria-describedby="selected-address-desc">{% trans "fill the form section below" %}</button>
                                         </p>
                                         <p class="help-block profile-desc" id="selected-address-desc"></p>
-                                        {% comment %}
-                                            <ul>
-                                            {% for ap, data in form.profiles %}
-                                                <li>
-                                                    <span id="profile-desc-{{ forloop.parentloop.counter0 }}-{{ forloop.counter0 }}">
-                                                    <b>{{ ap.describe|splitlines|slice:":1"|joinlines }}</b>
-                                                    {% if ap.describe|splitlines|length > 1 %}
-                                                    <br>
-                                                        {{ ap.describe|splitlines|slice:"1:6"|joinlines|linebreaksbr }}
-                                                        {% if ap.describe|splitlines|length > 6 %}
-                                                            <br>…
-                                                        {% endif %}
-                                                    {% endif %}
-                                                    </span>
-                                                    <button type="button" class="btn btn-default btn-xs"
-                                                        data-stored-values="{{ data|attr_escapejson_dumps }}"
-                                                        data-id="{{ ap.pk }}"
-                                                        aria-describedby="profile-desc-{{ forloop.parentloop.counter0 }}-{{ forloop.counter0 }}">
-                                                        {% trans "fill form section" %}
-                                                    </button>
-                                                </li>
-                                            {% endfor %}
-                                            </ul>
-                                            {% endcomment %}
                                     </div>
                                 </div>
                             {% endif %}
@@ -190,30 +166,6 @@
                                                     aria-describedby="selected-profile-desc-{{ forloop.parentloop.counter0 }}-{{ forloop.counter0 }}">{% trans "fill the form section below" %}</button>
                                             </p>
                                             <p class="help-block profile-desc" id="selected-profile-desc-{{ forloop.parentloop.counter0 }}-{{ forloop.counter0 }}"></p>
-                                            {% comment %}
-                                                <ul>
-                                                {% for ap, data in form.profiles %}
-                                                    <li>
-                                                        <span id="profile-desc-{{ forloop.parentloop.counter0 }}-{{ forloop.counter0 }}">
-                                                        <b>{{ ap.describe|splitlines|slice:":1"|joinlines }}</b>
-                                                        {% if ap.describe|splitlines|length > 1 %}
-                                                        <br>
-                                                            {{ ap.describe|splitlines|slice:"1:6"|joinlines|linebreaksbr }}
-                                                            {% if ap.describe|splitlines|length > 6 %}
-                                                                <br>…
-                                                            {% endif %}
-                                                        {% endif %}
-                                                        </span>
-                                                        <button type="button" class="btn btn-default btn-xs"
-                                                            data-stored-values="{{ data|attr_escapejson_dumps }}"
-                                                            data-id="{{ ap.pk }}"
-                                                            aria-describedby="profile-desc-{{ forloop.parentloop.counter0 }}-{{ forloop.counter0 }}">
-                                                            {% trans "fill form section" %}
-                                                        </button>
-                                                    </li>
-                                                {% endfor %}
-                                                </ul>
-                                                {% endcomment %}
                                         </div>
                                     </div>
                                     {% endif %}
