@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-08-04 17:18+0000\n"
-"PO-Revision-Date: 2021-08-05 04:00+0000\n"
+"PO-Revision-Date: 2021-08-23 06:00+0000\n"
 "Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
 "Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
 "\n"
@@ -7132,7 +7132,7 @@ msgstr ""
 
 #: pretix/base/settings.py:1091
 msgid "Ask for a name"
-msgstr "Vraag om namen"
+msgstr "Vraag om een naam"
 
 #: pretix/base/settings.py:1092
 msgid "Ask for a name when signing up to the waiting list."
@@ -7140,7 +7140,7 @@ msgstr "Vraag om een naam bij het aanmelden voor de wachtlijst."
 
 #: pretix/base/settings.py:1101
 msgid "Require name"
-msgstr "Verplicht namen"
+msgstr "Naam opgeven verplicht"
 
 #: pretix/base/settings.py:1102
 msgid "Require a name when signing up to the waiting list.."
@@ -7158,7 +7158,7 @@ msgstr "Vraag om een telefoonnummer bij het inschrijven voor de wachtlijst."
 
 #: pretix/base/settings.py:1122
 msgid "Require phone number"
-msgstr "Verplicht telefoonnummer"
+msgstr "Telefoonnummer opgeven verplicht"
 
 #: pretix/base/settings.py:1123
 msgid "Require a phone number when signing up to the waiting list.."
@@ -8660,8 +8660,8 @@ msgid ""
 "logged email contents. This will also remove the association to customer "
 "accounts."
 msgstr ""
-"Dit zal alle e-mailadressen verwijderen van bestellingen en gasten, samen "
-"met opgeslagen emailinhoud. Dit zal ook de bestellingen loskoppelen van "
+"Dit zal alle e-mailadressen en opgeslagen e-mailinhoud verwijderen voor alle "
+"bestellingen en gasten. Dit zal ook de bestellingen loskoppelen van "
 "klantenaccounts."
 
 #: pretix/base/shredder.py:242
@@ -9739,7 +9739,7 @@ msgstr "Wachtend op goedkeuring"
 
 #: pretix/control/forms/filter.py:210
 msgid "Follow-up configured"
-msgstr "Opvolging ingesteld"
+msgstr "Aangemerkt voor opvolging"
 
 #: pretix/control/forms/filter.py:211
 msgid "Follow-up due"
@@ -9909,11 +9909,11 @@ msgstr "Lidmaatschappen"
 
 #: pretix/control/forms/filter.py:1087
 msgid "Has no memberships"
-msgstr "Heeft geen lidmaatschappen"
+msgstr "Heeft geen lidmaatschap"
 
 #: pretix/control/forms/filter.py:1088
 msgid "Has any membership"
-msgstr "Heeft enig lidmaatschap"
+msgstr "Heeft een lidmaatschap (gehad)"
 
 #: pretix/control/forms/filter.py:1089
 msgid "Has valid membership"
@@ -10093,7 +10093,7 @@ msgstr "Alle apparaten"
 
 #: pretix/control/forms/filter.py:1895 pretix/control/forms/filter.py:2010
 msgid "All gates"
-msgstr "Alle poortjes"
+msgstr "Alle toegangslocaties"
 
 #: pretix/control/forms/filter.py:1903
 msgctxt "filter"
