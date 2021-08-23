@@ -38,7 +38,7 @@ from decimal import ROUND_HALF_UP, Decimal
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.core.validators import MinLengthValidator
-from django.db import models
+from django.db import connection, models
 from django.db.models import F, OuterRef, Q, Subquery, Sum
 from django.db.models.functions import Coalesce
 from django.utils.crypto import get_random_string
@@ -72,6 +72,55 @@ def generate_code(prefix=None):
         code = _generate_random_code(prefix=prefix)
         if not Voucher.objects.filter(code__iexact=code).exists():
             return code
+
+
+def generate_codes(organizer, num=1, prefix=None):
+    codes = set()
+    batch_size = 500
+    if 'postgres' in settings.DATABASES['default']['ENGINE']:
+        batch_size = 5_000
+
+    """
+    We're trying to check if any of the requested codes already exists in the database. Generally, this is a
+
+        SELECT code FROM voucher WHERE code IN (…)
+
+    query. However, it turns out that this query get's rather slow if an organizer has lots of vouchers, even
+    with a organizer with just over 50_000 vouchers, we've seen that creating 20_000 new voucher codes took
+    just over 30 seconds. There's another way of doing this query on PostgreSQL, which is joining with a
+    temporary table
+
+        SELECT code FROM voucher INNER JOIN (VALUES …) vals(v) ON (code = v)
+
+    This is significantly faster, inserting 20_000 vouchers now takes 2-3s instead of 31s on the same dataset.
+    It's still slow, and removing the JOIN to the event table doesn't significantly speed it up. We might need
+    an entirely different approach at some point.
+    """
+
+    while len(codes) < num:
+        new_codes = set()
+        for i in range(min(num - len(codes), batch_size)):  # Work around SQLite's SQLITE_MAX_VARIABLE_NUMBER
+            new_codes.add(_generate_random_code(prefix=prefix))
+
+        if 'postgres' in settings.DATABASES['default']['ENGINE']:
+            with connection.cursor() as cursor:
+                args = list(new_codes) + [organizer.pk]
+                tmptable = "VALUES " + (", ".join(['(%s)'] * len(new_codes)))
+                cursor.execute(
+                    f'SELECT code '
+                    f'FROM "{Voucher._meta.db_table}" '
+                    f'INNER JOIN ({tmptable}) vals(v) ON ("{Voucher._meta.db_table}"."code" = "v")'
+                    f'INNER JOIN "{Event._meta.db_table}" ON ("{Voucher._meta.db_table}"."event_id" = "{Event._meta.db_table}"."id") '
+                    f'WHERE "{Event._meta.db_table}"."organizer_id" = %s',
+                    args
+                )
+                for row in cursor.fetchall():
+                    new_codes.remove(row[0])
+        else:
+            new_codes -= set([v['code'] for v in Voucher.objects.filter(code__in=new_codes).values('code')])
+
+        codes |= new_codes
+    return list(codes)
 
 
 class Voucher(LoggedModel):
