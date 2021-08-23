@@ -509,7 +509,7 @@ requiredaction_display = EventPluginSignal()
 
 event_copy_data = EventPluginSignal()
 """
-Arguments: "other", ``tax_map``, ``category_map``, ``item_map``, ``question_map``, ``variation_map``, ``checkin_list_map``
+Arguments: "other", ``tax_map``, ``category_map``, ``item_map``, ``question_map``, ``variation_map``, ``checkin_list_map``, ``quota_map``
 
 This signal is sent out when a new event is created as a clone of an existing event, i.e.
 the settings from the older event are copied to the newer one. You can listen to this
@@ -520,7 +520,7 @@ but you might need to modify that data.
 
 The ``sender`` keyword argument will contain the event of the **new** event. The ``other``
 keyword argument will contain the event to **copy from**. The keyword arguments
-``tax_map``, ``category_map``, ``item_map``, ``question_map``, ``variation_map`` and
+``tax_map``, ``category_map``, ``item_map``, ``question_map``, ``quota_map``, ``variation_map`` and
 ``checkin_list_map`` contain mappings from object IDs in the original event to objects
 in the new event of the respective types.
 """

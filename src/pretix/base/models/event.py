@@ -752,7 +752,9 @@ class Event(EventMixin, LoggedModel):
                 ia.bundled_variation = variation_map[ia.bundled_variation.pk]
             ia.save()
 
+        quota_map = {}
         for q in Quota.objects.filter(event=other, subevent__isnull=True).prefetch_related('items', 'variations'):
+            quota_map[q.pk] = q
             items = list(q.items.all())
             vars = list(q.variations.all())
             oldid = q.pk
@@ -876,7 +878,7 @@ class Event(EventMixin, LoggedModel):
         event_copy_data.send(
             sender=self, other=other,
             tax_map=tax_map, category_map=category_map, item_map=item_map, variation_map=variation_map,
-            question_map=question_map, checkin_list_map=checkin_list_map
+            question_map=question_map, checkin_list_map=checkin_list_map, quota_map=quota_map,
         )
 
         if has_custom_style:
