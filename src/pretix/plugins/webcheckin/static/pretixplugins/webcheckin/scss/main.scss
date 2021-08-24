@@ -84,7 +84,9 @@ a.searchresult {
       background: $brand-warning;
     }
   }
+}
 
+a.searchresult, .check-result {
   .secret {
     word-break: break-word;
     color: $text-muted;

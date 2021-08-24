@@ -31,7 +31,8 @@
           <div class="details">
             <h4>{{ checkResult.position.order }}-{{ checkResult.position.positionid }} {{ checkResult.position.attendee_name }}</h4>
             <strong v-if="checkResult.reason_explanation">{{ checkResult.reason_explanation }}<br></strong>
-            <span>{{ checkResultItemvar }}</span>
+            <span>{{ checkResultItemvar }}</span><br>
+            <span class="secret">{{ checkResult.position.secret }}</span>
             <span v-if="checkResult.position.seat"><br>{{ checkResult.position.seat.name }}</span>
           </div>
         </div>
