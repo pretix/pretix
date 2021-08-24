@@ -495,7 +495,7 @@ class Event(EventMixin, LoggedModel):
         default=False
     )
     seating_plan = models.ForeignKey('SeatingPlan', on_delete=models.PROTECT, null=True, blank=True,
-                                     related_name='events')
+                                     related_name='events', verbose_name=_('Seating plan'))
 
     last_modified = models.DateTimeField(
         auto_now=True, db_index=True
