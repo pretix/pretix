@@ -152,26 +152,11 @@ function questions_init_profiles(el) {
                     if (p[key]["type"]) data[key]["type"] = p[key]["type"];
                 }
             }
-            // only add data if no other profile matches the same values (e.g. only name matches, but has different addresses that are not asked)
-            var equalMatchAvailable = filtered.findIndex(function(element) {
-                return matchesAreEqual(element, data);
-            });
-            if (Object.keys(data).length && equalMatchAvailable) {
-                filtered.push(data);
-            }
+            // TODO: only add data if no other profile matches the same values,
+            // e.g. only name matches, but profiles have same name, but different addresses that are not asked
+            filtered.push(data);
         };
         return filtered;
-    }
-    function matchesAreEqual(object1, object2) {
-        var keys1 = Object.keys(object1);
-        var keys2 = Object.keys(object2);
-
-        if (keys1.length !== keys2.length) {
-            return false;
-        }
-        // TODO: recursive match on answer-value(s)
-
-        return false;
     }
 
     function getInputForLabel(label) {
@@ -202,32 +187,6 @@ function questions_init_profiles(el) {
             }
         }
         return null;
-    }
-
-    // TODO: this does not play well with the current matching as it only returns keys not other matched criteria
-    function getInputKeysInSourceOrder(p, scope) {
-        var element = scope.querySelector("input, select, textarea");
-        if (!element) return [];
-        var elements = element.form.elements;
-        var beenInScope = false;
-        var keys = []
-        for (var i = 0, element; element = elements[i++];) {
-            if (!element.name) continue;
-            if (!scope.contains(element)) {
-                if (beenInScope) break;
-                continue;
-            }
-            beenInScope = true;
-            var k = element.name.substr(element.name.indexOf("-") + 1);
-            if (!(k in p)) {
-                k = k.substr(0, k.lastIndexOf("_"));
-                if (!(k in p)) continue;
-            }
-            if (keys.indexOf(k) == -1) {
-                keys.push(k);
-            }
-        }
-        return keys;
     }
 
     function formatAnswerHumanReadable(answer) {
@@ -261,70 +220,44 @@ function questions_init_profiles(el) {
 
     // TODO: add as few info as possible to make a distinction between available profiles?
     function labelForProfile(p, profiles, scope = null) {
-            // add fields in source-order if scope (form section) is provided
-            var keys = scope ? getInputKeysInSourceOrder(p, scope) : Object.keys(p);
-            var parts = [];
-            var len = 0;
-            var nrKeysProcessed = 0;
-            var answer;
-            var value;
-            // treat names special: add cached name and ignore name_parts
-            if (keys.includes("attendee_name_parts_0") && !keys.includes("attendee_name")) {
-                keys.unshift("attendee_name");
-            }
-            if (keys.includes("name_parts_0") && !keys.includes("name")) {
-                keys.unshift("_name");
-            }
-            for (var key of keys) {
-                nrKeysProcessed++;
-                if (key == "_pk" || key.startsWith("attendee_name_parts") || key.startsWith("name_parts") || key == "is_business") continue;
-                if (key == "country") key = "_country_for_address";
-                value = p[key] ? p[key].answer : p[key];
-                
-                answer = formatAnswerHumanReadable(value);
-                /*
-                if (key == "is_business") {
-                    // special case for is_business: get label for human readable label
-                    answer = document.querySelector("[for='" + document.querySelector("[name='"+key+"'][value='"+value+"']").id + "']").textContent;
-                }
-                else {
-                    answer = formatAnswerHumanReadable(value);
-                }
-                */
-
-                if (answer) {
-                    parts.push(answer);
-                    len += answer.length;
-                    if (len > 48) break;
-                }
-            }
-            return parts.join(", ") + (nrKeysProcessed < keys.length ? ", …" : "");
+        var parts = describeProfile(p);
+        var label = parts.join(", ");
+        if (label.length > 48) {
+            var len = label.lastIndexOf(' ', 64);
+            label = label.substr(0, Math.max(len, 48)) + " …";
+        }
+        return label;
     }
     function getAnswer(a) {
-        return a ? a.answer : a;
+        if (!a) return "";
+        return a["value"] || a;
     }
     function describeProfile(p) {
+        if (!p) return [];
         var lines = [
-            getAnswer(p["_name"]),
-            [getAnswer(p["_attendee_name"]), getAnswer(p["attendee_email"])].filter(v => v).join(", "),
+            p["_name"],
+            [p["_attendee_name"], getAnswer(p["attendee_email"])].filter(v => v).join(", "),
             getAnswer(p["company"]),
             [
                 getAnswer(p["street"]),
-                [getAnswer(p["zipcode"]), getAnswer(p["city"]), getAnswer(p["_state_for_address"])].filter(v => v).join(" "),
-                getAnswer(p["_country_for_address"])
+                [getAnswer(p["zipcode"]), getAnswer(p["city"]), p["_state_for_address"]].filter(v => v).join(" "),
+                p["_country_for_address"]
             ].filter(v => v).join(", ")
         ];
         lines = lines.filter(line => line && line.trim());
 
+        var answer;
         var label;
-        // TODO: country need their values from the select fields
         for (var key of Object.keys(p)) {
             if (!key.startsWith("question_")) continue;
-            var answer = getAnswer(p[key]);
-            label = answer["label"];
+            answer = p[key];
+            label = answer["label"] || "";
             lines.push(label + ("!?.:".split("").indexOf(label.slice(-1)) > -1 ? " " : ": ") + formatAnswerHumanReadable(answer))
         }
-        return lines.join("<br>");
+        return lines;
+    }
+    function describeProfileHTML(p) {
+        return describeProfile(p).join("<br>");
     }
 
 
@@ -355,9 +288,8 @@ function questions_init_profiles(el) {
             $select.append('<option value="' + p._pk + '">' + labelForProfile(p, profiles) + '</option>');
         }
         $select.change(function() {
-            // TODO: only describeProfile if profile label is truncated
-            if (this.selectedIndex) $help.html(describeProfile(profiles[this.selectedIndex-1]));
-            else $help.html("");
+            // TODO: only describeProfileHTML if profile label is truncated
+            $help.html(describeProfileHTML(profiles[this.selectedIndex]));
         }).trigger("change");
         $checkbox.trigger("change");
         // TODO: bind to change-events of inputs inside this scope to update diff/profile-description
@@ -388,7 +320,7 @@ function questions_init_profiles(el) {
 
         if (matched_profiles.length == 1) {
             $formpart.find(".profile-select-control").hide();
-            $desc.html(describeProfile(selectedProfile)).addClass("single-profile-desc").after($button);
+            $desc.html(describeProfileHTML(selectedProfile)).addClass("single-profile-desc").after($button);
         }
         else {
             for (p of matched_profiles) {
@@ -396,7 +328,7 @@ function questions_init_profiles(el) {
             }
             $select.change(function() {
                 selectedProfile = matched_profiles[this.selectedIndex];
-                $desc.html(describeProfile(selectedProfile));
+                $desc.html(describeProfileHTML(selectedProfile));
             }).trigger("change");
         }
 
