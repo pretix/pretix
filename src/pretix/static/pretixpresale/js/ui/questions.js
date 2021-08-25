@@ -136,8 +136,13 @@ function questions_init_profiles(el) {
         for (var p of profiles) {
             data = {};
             for (var key of Object.keys(p)) {
-                matched_field = key.startsWith("_") ? [] : getMatchingInput(key, p[key], scope);
-                if (key.startsWith("_") || matched_field) {
+                if (key.startsWith("_")) {
+                    // treat internal keys special, such as _name, _pk, etc.
+                    data[key] = p[key]["value"] || p[key]
+                    continue;
+                }
+                matched_field = getMatchingInput(key, p[key], scope);
+                if (matched_field) {
                     // TODO: only add if no other answer matches same fields?
                     data[key] = {
                         "answer": p[key],

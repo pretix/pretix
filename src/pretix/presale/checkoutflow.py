@@ -986,7 +986,7 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
                             data[f"name_parts_{i}"] = a.name_parts.get(k) or ""
 
                     for k in (
-                        "name", "company", "street", "zipcode", "city", "country", "state",
+                        "company", "street", "zipcode", "city", "country", "state",
                         "state_for_address", "vat_id", "custom_field", "internal_reference", "beneficiary"
                     ):
                         v = getattr(a, k)
@@ -1011,7 +1011,7 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
                     for i, (k, l, w) in enumerate(scheme["fields"]):
                         data[f"attendee_name_parts_{i}"] = p.attendee_name_parts.get(k) or ""
 
-                for k in ("attendee_name", "attendee_email", "company", "street", "zipcode", "city", "country", "state"):
+                for k in ("attendee_email", "company", "street", "zipcode", "city", "country", "state"):
                     v = getattr(p, k)
                     if v:
                         data[k] = str(v)
