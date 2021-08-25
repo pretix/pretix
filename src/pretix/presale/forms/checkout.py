@@ -163,7 +163,7 @@ class QuestionsForm(BaseQuestionsForm):
         super().__init__(*args, **kwargs)
         if allow_save and self.fields:
             self.fields['save'] = forms.BooleanField(
-                label=_('Save profile in my customer account for future purchases'),
+                label=_('Save answers to my customer profiles for future purchases'),
                 required=False,
                 initial=False,
             )

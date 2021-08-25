@@ -126,7 +126,7 @@
                                 </div>
                             {% endif %}
                             {% if pos.subevent %}
-                                <div class="form-group">
+                                <div class="form-group{% if profiles_data %} profile-pre-select-date{% endif %}">
                                     <label class="col-md-3 control-label">
                                         {% trans "Date" context "subevent" %}
                                     </label>
@@ -158,14 +158,17 @@
                                 <div data-idx="{{ forloop.parentloop.counter0 }}" data-addonidx="{{ forloop.counter0 }}" class="profile-scope">
                                     {% if profiles_data %}
                                     <div class="form-group profile-select-container">
-                                        <label class="col-md-3 control-label" for="profile-select-{{ forloop.parentloop.counter0 }}-{{ forloop.counter0 }}">{% trans "Fill the form section below with …" %}</label>
-                                        <div class="col-md-9 form-control-text">
+                                        <label class="col-md-3 control-label" for="profile-select-{{ forloop.parentloop.counter0 }}-{{ forloop.counter0 }}">{% trans "Auto-fill with profile" %}</label>
+                                        <div class="col-md-9">
                                             <p class="profile-select-control">
                                                 <select class="profile-select form-control" id="profile-select-{{ forloop.parentloop.counter0 }}-{{ forloop.counter0 }}"></select>
-                                                <button type="button" class="profile-apply btn btn-default"
-                                                    aria-describedby="selected-profile-desc-{{ forloop.parentloop.counter0 }}-{{ forloop.counter0 }}">{% trans "fill the form section below" %}</button>
                                             </p>
                                             <p class="help-block profile-desc" id="selected-profile-desc-{{ forloop.parentloop.counter0 }}-{{ forloop.counter0 }}"></p>
+                                            <p>
+                                                <button type="button" class="profile-apply btn btn-default"
+                                                    aria-describedby="selected-profile-desc-{{ forloop.parentloop.counter0 }}-{{ forloop.counter0 }}"
+                                                >{% trans "fill the form" %}</button>
+                                            </p>
                                         </div>
                                     </div>
                                     {% endif %}
