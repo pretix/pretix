@@ -138,14 +138,14 @@ function questions_init_profiles(el) {
             for (var key of Object.keys(p)) {
                 if (key.startsWith("_")) {
                     // treat internal keys special, such as _name, _pk, etc.
-                    data[key] = p[key]["value"] || p[key]
+                    data[key] = p[key];
                     continue;
                 }
                 matched_field = getMatchingInput(key, p[key], scope);
                 if (matched_field) {
                     // TODO: only add if no other answer matches same fields?
                     data[key] = {
-                        "value": p[key]["value"] || p[key],
+                        "value": (typeof p[key] == "string") ? p[key] : p[key]["value"],
                         "field": matched_field
                     };
                     if (p[key]["label"]) data[key]["label"] = p[key]["label"];
@@ -338,15 +338,16 @@ function questions_init_profiles(el) {
         $button.click(function() {
             var p = selectedProfile;
             Object.keys(p).forEach(function(key) {
-                var answer = p[key].answer;
+                var answer = p[key].value;
                 var $field = p[key].field;
                 if (!$field || !$field.length) return;
-
-                if (answer && typeof answer !== 'string') {
-                    answer = answer.value;
-                }               
+              
                 if ($field.attr("type") === "checkbox") {
-                    if (answer && typeof answer !== 'string') {
+                    if (answer === true || answer === false) {
+                        // boolean
+                        $field.prop("checked", answer).trigger("change");
+                    }
+                    else if (typeof answer !== 'string') {
                         answer = Object.keys(answer);
                         $field.each(function() {
                             var checked = answer.indexOf(this.value) > -1;
@@ -355,9 +356,6 @@ function questions_init_profiles(el) {
                                 $(this).trigger("change");
                             }
                         });
-                    }
-                    else {
-                        $field.prop("checked", answer).trigger("change");
                     }
                 } else if ($field.attr("type") === "radio") {
                     $field.filter('[value="' + answer + '"]').prop("checked", true).trigger("change");
