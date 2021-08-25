@@ -113,11 +113,16 @@
   display: none;
   border-bottom: 1px solid $hr-border;
   background: $panel-footer-bg;
+  padding-bottom: 6px;
+}
+.profile-select-container:first-child {
+  margin-top: -15px;
+  padding-top: 15px;
 }
 .profile-save-container {
   border-top: 1px solid $hr-border;
   padding: 15px;
-  margin: 28px -15px -15px;
+  margin: 15px -15px -15px;
   background: $panel-footer-bg;
 }
 .profile-save-container .help-block {
@@ -136,10 +141,3 @@
   display: block;
 }
 
-.profile-select-control {
-  display: flex;
-  button {
-    flex: 200px 0 0;
-    margin-left: 10px;
-  }
-}

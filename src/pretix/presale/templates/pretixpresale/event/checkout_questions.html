@@ -49,14 +49,15 @@
                         <div class="panel-body">
                             {% if addresses_data %}
                                 <div class="form-group profile-select-container">
-                                    <label class="col-md-3 control-label" for="address-list-select">{% trans "Fill the form section below with …" %}</label>
+                                    <label class="col-md-3 control-label" for="address-list-select">{% trans "Auto-fill with profile" %}</label>
                                     <div class="col-md-9 form-control-text">
                                         <p class="profile-select-control">
                                             <select class="profile-select form-control" id="address-list-select"></select>
-                                            <button type="button" class="profile-apply btn btn-default"
-                                                aria-describedby="selected-address-desc">{% trans "fill the form section below" %}</button>
                                         </p>
                                         <p class="help-block profile-desc" id="selected-address-desc"></p>
+                                        <p><button type="button" class="profile-apply btn btn-default" aria-describedby="selected-address-desc">
+                                            <i class="fa fa-user-o" aria-hidden="true"></i> {% trans "Fill form" %}</button>
+                                        </p>
                                     </div>
                                 </div>
                             {% endif %}
@@ -167,7 +168,7 @@
                                             <p>
                                                 <button type="button" class="profile-apply btn btn-default"
                                                     aria-describedby="selected-profile-desc-{{ forloop.parentloop.counter0 }}-{{ forloop.counter0 }}"
-                                                >{% trans "fill the form" %}</button>
+                                                ><i class="fa fa-user-o" aria-hidden="true"></i> {% trans "Fill form" %}</button>
                                             </p>
                                         </div>
                                     </div>
