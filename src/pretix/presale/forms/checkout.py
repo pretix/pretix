@@ -130,7 +130,7 @@ class InvoiceAddressForm(BaseInvoiceAddressForm):
         if allow_save:
             self.fields['saved_id'] = forms.IntegerField(
                 required=False,
-                help_text=".",
+                help_text=" ",# non-breaking-space, will be overwritten by JavaScript, needed here for HTML-output
                 label=_("Save to address"),
                 widget=forms.Select(choices=(("", _("Create new address")),))
             )
@@ -169,7 +169,7 @@ class QuestionsForm(BaseQuestionsForm):
             )
             self.fields['saved_id'] = forms.IntegerField(
                 required=False,
-                help_text=".",
+                help_text=" ",# non-breaking-space, will be overwritten by JavaScript, needed here for HTML-output
                 label=_("Save to profile"),
                 widget=forms.Select(choices=(("", _("Create new profile")),))
             )
