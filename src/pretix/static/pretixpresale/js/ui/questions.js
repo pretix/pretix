@@ -145,9 +145,11 @@ function questions_init_profiles(el) {
                 if (matched_field) {
                     // TODO: only add if no other answer matches same fields?
                     data[key] = {
-                        "answer": p[key],
+                        "value": p[key]["value"] || p[key],
                         "field": matched_field
                     };
+                    if (p[key]["label"]) data[key]["label"] = p[key]["label"];
+                    if (p[key]["type"]) data[key]["type"] = p[key]["type"];
                 }
             }
             // only add data if no other profile matches the same values (e.g. only name matches, but has different addresses that are not asked)
