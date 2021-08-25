@@ -29,10 +29,11 @@ from django.utils.safestring import mark_safe
 from django.utils.translation import pgettext
 
 
-def render_label(content, label_for=None, label_class=None, label_title='', label_id='', optional=False, is_valid=None, attrs={}):
+def render_label(content, label_for=None, label_class=None, label_title='', label_id='', optional=False, is_valid=None, attrs=None):
     """
     Render a label with content
     """
+    attrs = attrs or {}
     if label_for:
         attrs['for'] = label_for
     if label_class:
