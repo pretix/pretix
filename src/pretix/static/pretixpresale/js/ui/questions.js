@@ -207,7 +207,7 @@ function questions_init_profiles(el) {
             }
             if (answer.type == "H") {
                 var format = document.body.getAttribute("data-timeformat");
-                return moment(value, "HH:MM:SS").format(format);
+                return moment(value, "HH:mm:ss").format(format);
             }
             if (answer.type == "B") {
                 return value ? gettext("Yes") : gettext("No");
