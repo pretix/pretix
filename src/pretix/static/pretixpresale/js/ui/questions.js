@@ -171,6 +171,7 @@ function questions_init_profiles(el) {
     }
     function getMatchingInput(key, answer, scope) {
         var $label;
+        // _0 and _1 are e.g. for phone-fields. name-fields have their parts/keys already split
         var $fields = $('[name$="' + key + '"], [name$="' + key + '_0"], [name$="' + key + '_1"]', scope);
         if ($fields.length) return $fields;
 
@@ -196,7 +197,7 @@ function questions_init_profiles(el) {
         var value = answer.value;
         if ("type" in answer) {
             if (answer.type == "TEL") {
-                // TODO: format phone number with spaces?
+                // TODO: format phone number with locale or use pre-formatted like with names?
                 return value;
             }
             if (answer.type == "W") {
