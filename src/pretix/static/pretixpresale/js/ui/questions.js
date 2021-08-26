@@ -282,8 +282,8 @@ function questions_init_profiles(el) {
     function labelForProfile(p, profiles, scope = null) {
         var parts = describeProfile(p);
         var label = parts.join(", ");
-        if (label.length > 48) {
-            var len = label.lastIndexOf(' ', 64);
+        if (label.length > 74) {
+            var len = label.lastIndexOf(' ', 74);
             label = label.substr(0, Math.max(len, 48)) + " …";
         }
         return label;
