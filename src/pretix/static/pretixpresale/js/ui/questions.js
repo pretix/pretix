@@ -338,10 +338,6 @@ function questions_init_profiles(el) {
     function setupSaveToProfile(scope, profiles) {
         var $select = $('[name$="saved_id"]', scope);
         var $selectContainer = $select.closest(".form-group").addClass("profile-save-id");
-        if (!profiles || !profiles.length) {
-            $selectContainer.hide();
-            return;
-        }
         var $checkbox = $('[name$="save"]', scope);
         var $checkboxContainer = $checkbox.closest(".form-group").addClass("profile-save");
         var $help = $selectContainer.find(".help-block");
@@ -350,6 +346,11 @@ function questions_init_profiles(el) {
         $selectContainer.after($container);
         $container.append($checkboxContainer);
         $container.append($selectContainer);
+        
+        if (!profiles || !profiles.length) {
+            $selectContainer.hide();
+            return;
+        }
 
         $checkbox.change(function() {
             if (this.checked) $selectContainer.slideDown();
