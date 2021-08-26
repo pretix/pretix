@@ -343,10 +343,11 @@ function questions_init_profiles(el) {
             else $selectContainer.slideUp();
         });
 
-        $select.prepend('<option value="" disabled>–</option>');
         for (var p of profiles) {
-            $select.prepend('<option value="' + p._pk + '">' + labelForProfile(p, profiles) + '</option>');
+            $select.append('<option value="' + p._pk + '">' + labelForProfile(p, profiles) + '</option>');
         }
+        $select.append('<option value="" disabled>–</option>');
+        $select.append($select.find("option").first());
         $select.get(0).selectedIndex = 0;
         $select.change(function() {
             // TODO: only describeProfileHTML if profile label is truncated
