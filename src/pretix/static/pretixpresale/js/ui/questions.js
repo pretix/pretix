@@ -116,9 +116,32 @@ function questions_init_photos(el) {
 
 function questions_init_profiles(el) {
     /*
-    TODO:
-    – in the original profile, strikethrough which answer will be overwritten, followed by the new answer
+    Auto-fill answers with profiles and addresses from customer account.
+
+    There are two types of profiles:
+    1. profiles for answers and 
+    2. profiles for invoice addesses
+
+    Both are handled the same way.
+
+    Each form section/fieldset has its own auto-fill and save to profile 
+    inputs. Each fieldset can define its own profiles by providing the 
+    HTML-attribute data-profiles-id, which defaults to "profiles_json".
+    Currently only the invoice address fieldset uses this to load a 
+    different set of profiles.
+
+    For each section each profile’s answers are matched to inputs inside
+    this section. Only matching ones are shown for auto-fill. If multiple
+    profiles only match the same inputs with the same values (e.g. name)
+    then only the first one is shown as showing multiple profile with the
+    same values is not helpful.
+
+    Feature-Idea:
+    – in the original profile description, strikethrough which answer
+      will be overwritten, followed by the new answer
     – add new answers with a + in front
+    – change <select> to a list of radio-buttons for multiline-display 
+      of profiles?
     */
     var profilesById = {};
     function getProfilesById(id) {
@@ -133,12 +156,18 @@ function questions_init_profiles(el) {
         var filtered = [];
         var data;
         var matched_field;
+        var addSpecialKey;
+        // special fields are used for substition with human readable or pre-formatted values
+        var addSpecialFieldMap = {
+            "country": "_country_for_address",
+            "state": "_state_for_address",
+            "name_parts_0": "_name",
+            "attendee_name_parts_0": "_attendee_name",
+        }
         for (var p of profiles) {
             data = {};
             for (var key of Object.keys(p)) {
                 if (key.startsWith("_")) {
-                    // treat internal keys special, such as _name, _pk, etc.
-                    data[key] = p[key];
                     continue;
                 }
                 matched_field = getMatchingInput(key, p[key], scope);
@@ -150,16 +179,46 @@ function questions_init_profiles(el) {
                     };
                     if (p[key]["label"]) data[key]["label"] = p[key]["label"];
                     if (p[key]["type"]) data[key]["type"] = p[key]["type"];
+                    if (addSpecialKey = addSpecialFieldMap[key]) {
+                        data[addSpecialKey] = p[addSpecialKey];
+                    }
                 }
             }
-            // TODO: only add data if no other profile matches the same values,
-            // e.g. only name matches, but profiles have same name, but different addresses that are not asked
             filtered.push(data);
         };
         return filtered;
     }
+    // For auto-fill with few inputs it could happen that multiple profiles 
+    // only match with the same fields that have the same values. It makes
+    // no sense to show multiple profiles if all fill the same value(s).
+    // Therefore filter profiles to unique ones.
+    function uniqueProfiles(profiles) {
+        var uniques = [];
+        var matchIndex;
+        for (var p of profiles) {
+            matchIndex = uniques.findIndex(function(element, index, array) {
+                return _profilesAreEqual(element, p);
+            });
+            if (matchIndex == -1) uniques.push(p);
+        }
+        return uniques;
+    }
+    function _profilesAreEqual(a, b) {
+        var keysA = Object.keys(a);
+        var keysB = Object.keys(b);
+        if (keysA.length != keysB.length) return false;
+        keysA.sort();
+        keysB.sort();
+        if (!keysA.every((val, index) => val === keysB[index])) return false;
+        if (!keysA.every((key, index) => a[key].value === b[key].value)) return false;
+        return true;
+    }
 
-    function getInputForLabel(label) {
+
+
+
+
+    function _getInputForLabel(label) {
         if (!label) return null;
         var input;
         if (label.getAttribute("for")) {
@@ -177,12 +236,12 @@ function questions_init_profiles(el) {
 
         if (answer.identifier) {
             $label = $('[data-identifier="' + answer.identifier + '"]', scope);
-            var input = getInputForLabel($label.get(0));
+            var input = _getInputForLabel($label.get(0));
             if (input) return $(input);
         }
         for (var label of scope.getElementsByTagName("label")) {
             if (label.textContent == answer.label) {
-                var input = getInputForLabel(label);
+                var input = _getInputForLabel(label);
                 if (input) return $(input);
                 break;
             }
@@ -264,7 +323,6 @@ function questions_init_profiles(el) {
 
 
     function setupSaveToProfile(scope, profiles) {
-        // TODO: change $select to a list of radio-buttons for multiline-display of profiles?
         var $select = $('[name$="saved_id"]', scope);
         var $selectContainer = $select.closest(".form-group").addClass("profile-save-id");
         if (!profiles || !profiles.length) {
@@ -295,42 +353,35 @@ function questions_init_profiles(el) {
             $help.html(describeProfileHTML(profiles[this.selectedIndex]));
         }).trigger("change");
         $checkbox.trigger("change");
-        // TODO: bind to change-events of inputs inside this scope to update diff/profile-description
     }
 
+    // setup auto-fill for each scope/fieldset
+    // match profile’s answers to inputs in scope
+    // if none match, do not show auto-fill
+    // if one matches, only show button to auto-fill
+    // else show select with profiles and button to auto-fill
+    function setupAutoFill(scope, profiles) {
+        var matchedProfiles = uniqueProfiles(matchProfilesToInputs(profiles, scope));
+        if (!matchedProfiles.length) {
+            $(".profile-select-container", scope).hide();
+            return;
+        }
 
-    el.find(".profile-scope").each(function () {
-        var profiles = getProfilesById(this.getAttribute("data-profiles-id") || "profiles_json");
-        setupSaveToProfile(this, profiles);
+        var selectedProfile = matchedProfiles[0];
+        var $select = $(".profile-select", scope);
+        var $button = $(".profile-apply", scope);
+        var $desc = $(".profile-desc", scope);
 
-        // setup profile-select for each scope
-        // for each answer of each profile, find the matching input (name, identifier, label)
-        // if none found, remove answer from description (except attendee_name_cached vs attendee_name_parts?)
-        // filter profiles to unique profiles (could be)
-        // TODO:
-        // – show full auto-fill info in $desc when 
-        // - better UI when only one profile is available (no select)
-        // - add checkmark to button when filled in 
-        // - listen to all matched form fields for changes and remove chechmark if changed
-        var matched_profiles = matchProfilesToInputs(profiles, this);
-        if (!matched_profiles.length) return;
-
-        var selectedProfile = matched_profiles[0];
-        var $formpart = $(this);
-        var $select = $formpart.find(".profile-select");
-        var $button = $formpart.find(".profile-apply");
-        var $desc = $formpart.find(".profile-desc");
-
-        if (matched_profiles.length == 1) {
-            $formpart.find(".profile-select-control").hide();
+        if (matchedProfiles.length == 1) {
+            $(".profile-select-control", scope).hide().parent().addClass("form-control-text");
             $desc.html(describeProfileHTML(selectedProfile)).addClass("single-profile-desc").after($button);
         }
         else {
-            for (p of matched_profiles) {
-                $select.append("<option>" + labelForProfile(p, matched_profiles, this) + "</option>");
+            for (p of matchedProfiles) {
+                $select.append("<option>" + labelForProfile(p, matchedProfiles, scope) + "</option>");
             }
             $select.change(function() {
-                selectedProfile = matched_profiles[this.selectedIndex];
+                selectedProfile = matchedProfiles[this.selectedIndex];
                 $desc.html(describeProfileHTML(selectedProfile));
             }).trigger("change");
         }
@@ -402,7 +453,15 @@ function questions_init_profiles(el) {
                 }
             });
         })
+    }
 
-        $formpart.addClass("profile-select-initialized");
+    // each fieldset is its own scope for auto-fill and save
+    el.find(".profile-scope").each(function () {
+        var profiles = getProfilesById(this.getAttribute("data-profiles-id") || "profiles_json");
+
+        setupSaveToProfile(this, profiles);
+        setupAutoFill(this, profiles);
+
+        this.classList.add("profile-select-initialized");
     });
 }
