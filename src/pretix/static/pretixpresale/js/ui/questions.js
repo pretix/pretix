@@ -321,6 +321,19 @@ function questions_init_profiles(el) {
     }
 
 
+    function _updateDescription(select, profile, $help) {
+        // show additional description if different from option-text
+        var label = select.options[select.selectedIndex].textContent;
+        var lines = describeProfile(profile);
+        if (label == lines.join(", ")) {
+            $help.slideUp(function() {
+                $help.html("");
+            });
+        }
+        else {
+            $help.html(lines.join("<br>")).slideDown();
+        }
+    }
 
     function setupSaveToProfile(scope, profiles) {
         var $select = $('[name$="saved_id"]', scope);
@@ -350,8 +363,7 @@ function questions_init_profiles(el) {
         $select.append($select.find("option").first());
         $select.get(0).selectedIndex = 0;
         $select.change(function() {
-            // TODO: only describeProfileHTML if profile label is truncated
-            $help.html(describeProfileHTML(profiles[this.selectedIndex]));
+            _updateDescription(this, profiles[this.selectedIndex], $help);
         }).trigger("change");
         $checkbox.trigger("change");
     }
@@ -371,19 +383,18 @@ function questions_init_profiles(el) {
         var selectedProfile = matchedProfiles[0];
         var $select = $(".profile-select", scope);
         var $button = $(".profile-apply", scope);
-        var $desc = $(".profile-desc", scope);
+        var $help = $(".profile-desc", scope);
 
         if (matchedProfiles.length == 1) {
             $(".profile-select-control", scope).hide().parent().addClass("form-control-text");
-            $desc.html(describeProfileHTML(selectedProfile)).addClass("single-profile-desc").after($button);
+            $help.html(describeProfileHTML(selectedProfile)).addClass("single-profile-desc").after($button);
         }
         else {
             for (p of matchedProfiles) {
                 $select.append("<option>" + labelForProfile(p, matchedProfiles, scope) + "</option>");
             }
             $select.change(function() {
-                selectedProfile = matchedProfiles[this.selectedIndex];
-                $desc.html(describeProfileHTML(selectedProfile));
+                _updateDescription(this, matchedProfiles[this.selectedIndex], $help);
             }).trigger("change");
         }
 
