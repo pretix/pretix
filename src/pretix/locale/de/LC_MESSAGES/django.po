@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-08-27 13:05+0000\n"
-"PO-Revision-Date: 2021-08-18 01:00+0000\n"
+"PO-Revision-Date: 2021-08-27 13:22+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
 ">\n"
@@ -319,10 +319,8 @@ msgid "Event details changed"
 msgstr "Veranstaltungsdetails geändert"
 
 #: pretix/api/webhooks.py:264
-#, fuzzy
-#| msgid "Event date"
 msgid "Event deleted"
-msgstr "Veranstaltungsdatum"
+msgstr "Veranstaltung gelöscht"
 
 #: pretix/api/webhooks.py:268
 msgctxt "subevent"
@@ -2526,10 +2524,8 @@ msgid "Event series"
 msgstr "Veranstaltungsreihe"
 
 #: pretix/base/models/event.py:498
-#, fuzzy
-#| msgid "Settings"
 msgid "Seating plan"
-msgstr "Einstellungen"
+msgstr "Sitzplan"
 
 #: pretix/base/models/event.py:505 pretix/base/payment.py:347
 msgid "Restrict to specific sales channels"
@@ -3895,7 +3891,7 @@ msgstr "Stornogebühr"
 
 #: pretix/base/models/orders.py:1919
 msgid "Insurance fee"
-msgstr ""
+msgstr "Versicherungsgebühr"
 
 #: pretix/base/models/orders.py:1920
 msgid "Other fees"
@@ -19781,17 +19777,15 @@ msgstr ""
 "Solange dies so ist, kann auch das Paket nicht mehr gekauft werden."
 
 #: pretix/control/views/item.py:1425
-#, fuzzy
-#| msgid ""
-#| "The order could not be deleted as some constraints (e.g. data created by "
-#| "plug-ins) do not allow it."
 msgid ""
 "The product could not be deleted as some constraints (e.g. data created by "
 "plug-ins) did not allow it. Deleting it could break reporting or other "
 "functionality, so the procut has been disabled instead."
 msgstr ""
-"Diese Bestellung konnte nicht gelöscht werden, da einige Bedingungen (z.B. "
-"von Plugins erstellte Daten) es nicht erlauben."
+"Das Produkt konnte nicht gelöscht werden, da einige Bedingungen (z.B. von "
+"Plugins erstellte Daten) es nicht erlauben. Ein Löschen des Produktes könnte "
+"Berichte oder Funktionen im System beschädigen, daher wurde das Produkt "
+"stattdessen deaktiviert."
 
 #: pretix/control/views/item.py:1429
 msgid "The selected product has been deleted."
@@ -19831,6 +19825,8 @@ msgid ""
 "We could not identify the character encoding of the CSV file. Some "
 "characters were replaced with a placeholder."
 msgstr ""
+"Wir konnten die Zeichenkodierung der CSV-Datei nicht erkennen. Einige "
+"Zeichen werden mit Platzhalterzeichen ersetzt."
 
 #: pretix/control/views/orderimport.py:140
 msgid "The import was successful."
@@ -22415,17 +22411,15 @@ msgid "Update Email Rule"
 msgstr "E-Mail-Regel ändern"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/send_form.html:81
-#, fuzzy
-#| msgid "You need to provide your name."
 msgid "You need to preview your email before you can send it."
-msgstr "Sie müssen einen Namen eingeben."
+msgstr "Sie müssen die Vorschau aufrufen bevor Sie die E-Mail absenden."
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/send_form.html:94
 #, python-format
 msgid "%(number)s matching order"
 msgid_plural "%(number)s matching orders"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%(number)s passende Bestellung"
+msgstr[1] "%(number)s passende Bestellungen"
 
 #: pretix/plugins/sendmail/views.py:118
 msgid "You supplied an invalid log entry ID"
