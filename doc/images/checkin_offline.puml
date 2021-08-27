@@ -1,0 +1,146 @@
+@startuml
+
+
+partition "data-based check" {
+    "Check based on local database" --> "Is the order in status PAID or PENDING\nand is the position not canceled?"
+    --> if "" then
+        -right->[no] "Return error CANCELED"
+    else
+        -down->[yes] "Is the product part of the check-in list?"
+        --> if "" then
+            -right->[no] "Return error PRODUCT"
+        else
+            -down->[yes] "Is the subevent part of the check-in list?"
+            --> if "" then
+                -right->[no] "Return error INVALID"
+                note bottom: TODO\ninconsistent\nwith online\ncheck
+            else
+                -down->[yes] "Is the order in status PAID?"
+                --> if "" then
+                    -right->[no] "Does the check-in list include pending orders?"
+                    --> if "" then
+                        -right->[no] "Return error UNPAID "
+                    else
+                        -down->[yes] "Is ignore_unpaid set?\n(Has the operator confirmed\nthe checkin?)"
+                        --> if "" then
+                            -right->[no] "Return error UNPAID "
+                        else
+                            -down->[yes] "Is this an entry or exit?"
+                        endif
+                    endif
+                else
+                    -down->[yes] "Is this an entry or exit?"
+                endif
+            endif
+        endif
+    endif
+
+    "Is this an entry or exit?" --> if "" then
+        -right->[entry] Evaluate custom logic (rules)
+        --> if "" then
+            -right->[error] "Return error RULES"
+        else
+            -down->[ok] "Are all required questions answered?"
+            --> if "" then
+                -right->[no] "Return error INCOMPLETE"
+            else
+                -down->[yes] "Does the check-in list allow multi-entry?"
+            endif
+        endif
+    else
+        -->[exit] "Return OK "
+    endif
+
+    "Does the check-in list allow multi-entry?" --> if "" then
+        -right->[yes] "Return OK"
+    else
+        -down->[no] "Is this the first checkin\nfor this ticket on this list?"
+        --> if "" then
+            -right->[yes] "Return OK"
+        else
+            -down->[no] "Are all previous checkins\nfor this ticket on this list exits?"
+            --> if "" then
+                -right->[yes] "Return OK"
+            else
+                -down->[no] "Does the check-in list\n allow entry after exit\nand is the last checkin\nan exit?"
+                --> if "" then
+                    -right->[yes] "Return OK"
+                else
+                    -down->[no] "Return error ALREADY_REDEEMED"
+                endif
+            endif
+        endif
+    endif
+}
+
+partition "dataless check" {
+    "Check based on secret content" --> "Does the secret decode with\nany supported scheme\nand has a valid signature?"
+
+    --> if "" then
+        -down->[yes] "Is the ticket secret on the revocation list?"
+        --> if "" then
+            -right->[yes] "Return error REVOKED"
+        else
+            -down->[no] "Is the product part of the check-in list? "
+            --> if "" then
+                -right->[no] "Return error PRODUCT "
+            else
+                -down->[yes] "Is the subevent part of the check-in list? "
+                --> if "" then
+                    -right->[no] "Return error INVALID  "
+                    note bottom: TODO\ninconsistent\nwith online\ncheck
+                else
+                  --> "Is this an entry or exit? "
+                endif
+            endif
+        endif
+    else
+        -right>[no] "Return error INVALID "
+    endif
+
+    "Is this an entry or exit? " --> if "" then
+        -right->[entry] "Evaluate custom logic (rules) "
+        --> if "" then
+            -right->[error] "Return error RULES "
+        else
+            -down->[ok] "Are all required questions answered? "
+            --> if "" then
+                -right->[no] "Return error INCOMPLETE "
+            else
+                -down->[yes] "Does the check-in list allow multi-entry? "
+            endif
+        endif
+    else
+        -->[exit] " Return OK "
+    endif
+
+    "Does the check-in list allow multi-entry? " --> if "" then
+        -right->[yes] "  Return OK  "
+    else
+        -down->[no] "Are any locally queued checkins for\nthis ticket of this list known?"
+        --> if "" then
+            -right->[no] "  Return OK  "
+        else
+            -down->[yes] "Are all locally queued checkins\nfor this ticket on this list exits? "
+            --> if "" then
+                -right->[yes] "  Return OK  "
+            else
+                -down->[no] "Does the check-in list\n allow entry after exit\nand is the last locally\nqueued checkin\nan exit? "
+                --> if "" then
+                    -right->[yes] "  Return OK  "
+                else
+                    -down->[no] "Return error ALREADY_REDEEMED "
+                endif
+            endif
+        endif
+    endif
+}
+
+(*) --> "Check if order position with\nscanned ticket secret exists"
+--> if "" then
+    -down->[yes] "Check based on local database"
+else
+    -->[no] "Check based on secret content"
+endif
+
+@enduml

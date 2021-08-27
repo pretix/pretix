@@ -8,6 +8,7 @@ Developer documentation
    setup
    contribution/index
    implementation/index
-   translation/index
+   algorithms/index
    api/index
    structure
+   translation/index

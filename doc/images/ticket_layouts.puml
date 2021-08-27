@@ -1,0 +1,52 @@
+@startuml
+
+(*) --> "Which implementation?"
+--> if "" then
+    -down->[pretixPOS] "Check for TicketLayoutItem with\nsales_channel=pretixpos [libpretixsync]"
+    --> if "" then
+        --> (*)
+    else
+        -->[not found] "Check for TicketLayoutItem with\nsales_channel=web [libpretixsync]"
+        --> if "" then
+            --> (*)
+        else
+            -->[not found] "Use event default [libpretixsync]"
+            --> (*)
+        endif
+    endif
+
+else
+    -right->[pretix] "Check for TicketLayoutItem with\nsales_channel=order.sales_channel"
+    --> if "" then
+        -right-> "Run override_layout plugin signal on result"
+    else
+        -down->[not found] "Check for TicketLayoutItem with\nsales_channel=web"
+        --> if "" then
+            --> "Run override_layout plugin signal on result"
+        else
+            -->[not found] "Use event default"
+            --> "Run override_layout plugin signal on result"
+        endif
+    endif
+endif
+
+
+"Run override_layout plugin signal on result" -> (*)
+
+
+partition pretix_shipping {
+  "Run override_layout plugin signal on result" --> "Check for ShippingLayoutItem with\nmethod=order.shipping_method"
+--> if "" then
+    --> (*)
+else
+    -down->[not found] "Check for ShippingMethod.layout"
+    --> if "" then
+        --> (*)
+    else
+        -down->[not found] "Keep original layout"
+        --> (*)
+    endif
+endif
+}
+
+@enduml

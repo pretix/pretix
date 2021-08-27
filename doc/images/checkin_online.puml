@@ -1,0 +1,92 @@
+@startuml
+
+(*) --> "Check if order position with\nscanned ticket secret exists"
+--> if "" then
+    -down->[yes] ===CHECK===
+else
+    -->[no] "Check if secret exists\nin revocation list"
+    --> if "" then
+        --> "Is this a forced upload?"
+        --> if "" then
+            -->[yes] ===CHECK===
+        else
+            -right->[no] "Return error REVOKED"
+        endif
+    else
+        -right->[no] "Return error INVALID"
+    endif
+
+endif
+
+
+===CHECK=== -down-> "Is the order in status PAID or PENDING\nand is the position not canceled?"
+--> if "" then
+    -right->[no] "Return error CANCELED"
+else
+    -down->[yes] "Is the product part of the check-in list?"
+    --> if "" then
+        -right->[no] "Return error PRODUCT"
+    else
+        -down->[yes] "Is the subevent part of the check-in list?"
+        --> if "" then
+            -right->[no] "Return error PRODUCT "
+        else
+            -down->[yes] "Is the order in status PAID\nor is this a forced upload?"
+            --> if "" then
+                -right->[no] "Does the check-in list include pending orders?"
+                --> if "" then
+                    -right->[no] "Return error UNPAID "
+                else
+                    -down->[yes] "Is ignore_unpaid set?\n(Has the operator confirmed\nthe checkin?)"
+                    --> if "" then
+                        -right->[no] "Return error UNPAID "
+                    else
+                        -down->[yes] "Is this an entry or exit?\nIs the upload forced?"
+                    endif
+                endif
+            else
+                -down->[yes] "Is this an entry or exit?\nIs the upload forced?"
+            endif
+        endif
+    endif
+endif
+
+"Is this an entry or exit?\nIs the upload forced?" --> if "" then
+    -right->[entry && not force] Evaluate custom logic (rules)
+    --> if "" then
+        -right->[error] "Return error RULES"
+    else
+        -down->[ok] "Are all required questions answered?"
+        --> if "" then
+            -right->[no && questions_supported] "Return error INCOMPLETE"
+        else
+            -down->[yes || not questions_supported] "Does the check-in list allow multi-entry?"
+        endif
+    endif
+else
+    -->[exit || force=true] "Return OK "
+endif
+
+"Does the check-in list allow multi-entry?" --> if "" then
+    -right->[yes] "Return OK"
+else
+    -down->[no] "Is this the first checkin\nfor this ticket on this list?"
+    --> if "" then
+        -right->[yes] "Return OK"
+    else
+        -down->[no] "Are all previous checkins\nfor this ticket on this list exits?"
+        --> if "" then
+            -right->[yes] "Return OK"
+        else
+            -down->[no] "Does the check-in list\n allow entry after exit\nand is the last checkin\nan exit?"
+            --> if "" then
+                -right->[yes] "Return OK"
+            else
+                -down->[no] "Return error ALREADY_REDEEMED"
+            endif
+        endif
+    endif
+endif
+
+
+@enduml

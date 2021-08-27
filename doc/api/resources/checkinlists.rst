@@ -604,6 +604,8 @@ Order position endpoints
    :statuscode 403: The requested organizer/event does not exist **or** you have no permission to view this resource.
    :statuscode 404: The requested order position or check-in list does not exist.
 
+.. _`rest-checkin-redeem`:
+
 .. http:post:: /api/v1/organizers/(organizer)/events/(event)/checkinlists/(list)/positions/(id)/redeem/
 
    Tries to redeem an order position, identified by its internal ID, i.e. checks the attendee in. This endpoint

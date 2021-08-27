@@ -597,6 +597,11 @@ def perform_checkin(op: OrderPosition, clist: CheckinList, given_answers: dict, 
     :param nonce: A random nonce to prevent race conditions.
     :param datetime: The datetime of the checkin, defaults to now.
     """
+
+    # !!!!!!!!!
+    # Update doc/images/checkin_online.puml if you make substantial changes here!
+    # !!!!!!!!!
+
     dt = datetime or now()
 
     if op.canceled or op.order.status not in (Order.STATUS_PAID, Order.STATUS_PENDING):
