@@ -217,7 +217,6 @@ function questions_init_profiles(el) {
 
 
 
-
     function _getInputForLabel(label) {
         if (!label) return null;
         var input;
