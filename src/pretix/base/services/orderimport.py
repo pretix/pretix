@@ -52,8 +52,7 @@ class DataImportError(LazyLocaleException):
         super().__init__(msg)
 
 
-def parse_csv(file, length=None, mode=None):
-    mode = mode or "strict"
+def parse_csv(file, length=None, mode="strict"):
     file.seek(0)
     data = file.read(length)
     try:
