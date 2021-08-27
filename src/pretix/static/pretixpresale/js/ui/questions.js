@@ -214,9 +214,6 @@ function questions_init_profiles(el) {
         return true;
     }
 
-
-
-
     function _getInputForLabel(label) {
         if (!label) return null;
         var input;
@@ -315,16 +312,19 @@ function questions_init_profiles(el) {
         }
         return lines;
     }
+    function escapeHTML(t) {
+        return $("<div>").text(t).get(0).innerHTML;
+    }
     function describeProfileHTML(p) {
-        return describeProfile(p).join("<br>");
+        return describeProfile(p).map(escapeHTML).join("<br>");
     }
 
 
     function _updateDescription(select, profile, $help) {
         // show additional description if different from option-text
         var label = select.options[select.selectedIndex].textContent;
-        var lines = describeProfile(profile);
-        if (label == lines.join(", ")) {
+        var lines = describeProfile(profile).map(escapeHTML);
+        if (label === lines.join(", ")) {
             $help.slideUp(function() {
                 $help.html("");
             });
@@ -357,7 +357,7 @@ function questions_init_profiles(el) {
         });
 
         for (var p of profiles) {
-            $select.append('<option value="' + p._pk + '">' + labelForProfile(p, profiles) + '</option>');
+            $select.append($('<option>').attr('value', p._pk).text(labelForProfile(p, profiles)));
         }
         $select.append('<option value="" disabled>–</option>');
         $select.append($select.find("option").first());
