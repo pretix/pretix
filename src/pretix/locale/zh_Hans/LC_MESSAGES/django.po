@@ -19660,7 +19660,7 @@ msgstr ""
 msgid ""
 "The product could not be deleted as some constraints (e.g. data created by "
 "plug-ins) did not allow it. Deleting it could break reporting or other "
-"functionality, so the procut has been disabled instead."
+"functionality, so the product has been disabled instead."
 msgstr "无法删除订单，因为某些约束（例如插件创建的数据）不允许删除。"
 
 #: pretix/control/views/item.py:1429

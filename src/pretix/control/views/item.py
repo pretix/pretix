@@ -1424,7 +1424,7 @@ class ItemDelete(EventPermissionRequiredMixin, DeleteView):
                 })
                 messages.error(self.request, _('The product could not be deleted as some constraints (e.g. data created by '
                                                'plug-ins) did not allow it. Deleting it could break reporting or other '
-                                               'functionality, so the procut has been disabled instead.'))
+                                               'functionality, so the product has been disabled instead.'))
             else:
                 messages.success(request, _('The selected product has been deleted.'))
             return HttpResponseRedirect(success_url)

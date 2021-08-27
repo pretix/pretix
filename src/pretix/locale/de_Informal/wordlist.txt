@@ -166,6 +166,7 @@ Pay
 PayPal
 PayPals
 PCI
+Platzhalterzeichen
 Play
 Plugin
 Plugins
