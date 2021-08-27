@@ -122,7 +122,8 @@ class ProcessView(EventPermissionRequiredMixin, AsyncAction, FormView):
         try:
             return parse_csv(self.file.file, 1024 * 1024)
         except UnicodeDecodeError:
-            messages.warning(self.request, 
+            messages.warning(
+                self.request,
                 _(
                     "We could not identify the character encoding of the CSV file. "
                     "Some characters were replaced with a placeholder."
