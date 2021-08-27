@@ -119,7 +119,16 @@ class ProcessView(EventPermissionRequiredMixin, AsyncAction, FormView):
 
     @cached_property
     def parsed(self):
-        return parse_csv(self.file.file, 1024 * 1024)
+        try:
+            return parse_csv(self.file.file, 1024 * 1024)
+        except UnicodeDecodeError:
+            messages.warning(self.request, 
+                _(
+                    "We could not identify the character encoding of the CSV file. "
+                    "Some characters were replaced with a placeholder."
+                )
+            )
+            return parse_csv(self.file.file, 1024 * 1024, "replace")
 
     def get(self, request, *args, **kwargs):
         if 'async_id' in request.GET and settings.HAS_CELERY:
