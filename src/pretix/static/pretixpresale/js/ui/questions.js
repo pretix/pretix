@@ -199,14 +199,14 @@ function questions_init_profiles(el) {
             matchIndex = uniques.findIndex(function(element, index, array) {
                 return _profilesAreEqual(element, p);
             });
-            if (matchIndex == -1) uniques.push(p);
+            if (matchIndex === -1) uniques.push(p);
         }
         return uniques;
     }
     function _profilesAreEqual(a, b) {
         var keysA = Object.keys(a);
         var keysB = Object.keys(b);
-        if (keysA.length != keysB.length) return false;
+        if (keysA.length !== keysB.length) return false;
         keysA.sort();
         keysB.sort();
         if (!keysA.every((val, index) => val === keysB[index])) return false;
@@ -236,7 +236,7 @@ function questions_init_profiles(el) {
             if (input) return $(input);
         }
         for (var label of scope.getElementsByTagName("label")) {
-            if (label.textContent == answer.label) {
+            if (label.textContent === answer.label) {
                 var input = _getInputForLabel(label);
                 if (input) return $(input);
                 break;
@@ -251,21 +251,21 @@ function questions_init_profiles(el) {
         if (!answer && answer !== false) return "";
         var value = answer.value;
         if ("type" in answer) {
-            if (answer.type == "TEL") {
+            if (answer.type === "TEL") {
                 // TODO: format phone number with locale or use pre-formatted like with names?
                 return value;
             }
-            if (answer.type == "W") {
+            if (answer.type === "W") {
                 return moment(value).format(document.body.getAttribute("data-datetimeformat"));
             }
-            if (answer.type == "D") {
+            if (answer.type === "D") {
                 return moment(value).format(document.body.getAttribute("data-dateformat"));
             }
-            if (answer.type == "H") {
+            if (answer.type === "H") {
                 var format = document.body.getAttribute("data-timeformat");
                 return moment(value, "HH:mm:ss").format(format);
             }
-            if (answer.type == "B") {
+            if (answer.type === "B") {
                 return value ? gettext("Yes") : gettext("No");
             }
         }
@@ -420,7 +420,7 @@ function questions_init_profiles(el) {
                         answer = Object.keys(answer);
                         $field.each(function() {
                             var checked = answer.indexOf(this.value) > -1;
-                            if (checked != this.checked) {
+                            if (checked !== this.checked) {
                                 this.checked = checked;
                                 $(this).trigger("change");
                             }
@@ -432,12 +432,12 @@ function questions_init_profiles(el) {
                     // multiple matching fields, could be phone number or datetime
                     var $field_0 = $field.filter('[name$="_0"]');
                     var $field_1 = $field.filter('[name$="_1"]');
-                    if (answer.substr(0, 1) == "+") {
+                    if (answer.substr(0, 1) === "+") {
                         var prefix = "";
                         var options = $field_0.get(0).options;
                         for (var i = 0; i < options.length; i++) {
                             var v = options[i].value;
-                            if (v && answer.substr(0, v.length) == v) {
+                            if (v && answer.substr(0, v.length) === v) {
                                 prefix = v;
                                 break;
                             }
@@ -458,7 +458,7 @@ function questions_init_profiles(el) {
                     // currently used when country => state changes
                     $field.prop("data-selected-value", answer);
                     $field.find("option").each(function() {
-                        this.selected = this.value == answer || (answer && answer.indexOf && answer.indexOf(this.value) > -1);
+                        this.selected = this.value === answer || (answer && answer.indexOf && answer.indexOf(this.value) > -1);
                     });
                     $field.trigger("change");
                 } else if (answer) {
