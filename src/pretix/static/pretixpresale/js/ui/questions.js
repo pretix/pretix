@@ -380,18 +380,19 @@ function questions_init_profiles(el) {
             return;
         }
 
-        var selectedProfile = matchedProfiles[0];
         var $select = $(".profile-select", scope);
         var $button = $(".profile-apply", scope);
         var $help = $(".profile-desc", scope);
 
-        if (matchedProfiles.length == 1) {
+        if (matchedProfiles.length === 1) {
             $(".profile-select-control", scope).hide().parent().addClass("form-control-text");
-            $help.html(describeProfileHTML(selectedProfile)).addClass("single-profile-desc").after($button);
+            $help.html(describeProfileHTML(matchedProfiles[0])).addClass("single-profile-desc").after($button);
         }
         else {
+            var i = 0;
             for (p of matchedProfiles) {
-                $select.append("<option>" + labelForProfile(p, matchedProfiles, scope) + "</option>");
+                $select.append($("<option>").text(labelForProfile(p, matchedProfiles, scope)).attr("value", i));
+                i++;
             }
             $select.change(function() {
                 _updateDescription(this, matchedProfiles[this.selectedIndex], $help);
@@ -399,7 +400,12 @@ function questions_init_profiles(el) {
         }
 
         $button.click(function() {
-            var p = selectedProfile;
+            var p;
+            if (matchedProfiles.length === 1) {
+                p = matchedProfiles[0];
+            } else {
+                p = matchedProfiles[parseInt($select.val())];
+            }
             Object.keys(p).forEach(function(key) {
                 var answer = p[key].value;
                 var $field = p[key].field;
