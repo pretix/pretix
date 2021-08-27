@@ -52,14 +52,15 @@ class DataImportError(LazyLocaleException):
         super().__init__(msg)
 
 
-def parse_csv(file, length=None):
+def parse_csv(file, length=None, mode="strict"):
+    file.seek(0)
     data = file.read(length)
     try:
         import chardet
         charset = chardet.detect(data)['encoding']
     except ImportError:
         charset = file.charset
-    data = data.decode(charset or 'utf-8')
+    data = data.decode(charset or "utf-8", mode)
     # If the file was modified on a Mac, it only contains \r as line breaks
     if '\r' in data and '\n' not in data:
         data = data.replace('\r', '\n')
