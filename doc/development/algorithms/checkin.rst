@@ -11,7 +11,7 @@ Server-side
 -----------
 
 The following diagram shows the series of checks executed on the server when a ticket is redeemed through the API.
-Some simplifications have been made, for example the de-duplication mechanism based on the ``nonce`` parameter
+Some simplifications have been made, for example the deduplication mechanism based on the ``nonce`` parameter
 to prevent re-uploads of the same scan is not shown.
 
 .. image:: /images/checkin_online.png
