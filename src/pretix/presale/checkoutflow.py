@@ -975,6 +975,7 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
                 addresses_list = []
                 for a in addresses:
                     data = {
+                        "_pk": a.pk,
                         "_country_for_address": a.country.name,
                         "_state_for_address": a.state_for_address,
                         "_name": a.name,
