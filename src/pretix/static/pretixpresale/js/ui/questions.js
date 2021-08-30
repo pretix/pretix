@@ -324,7 +324,7 @@ function questions_init_profiles(el) {
         // show additional description if different from option-text
         var label = select.options[select.selectedIndex].textContent;
         var lines = describeProfile(profile).map(escapeHTML);
-        if (label === lines.join(", ")) {
+        if (!lines.length || label === lines.join(", ")) {
             $help.slideUp(function() {
                 $help.html("");
             });
