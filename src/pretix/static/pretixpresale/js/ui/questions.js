@@ -184,7 +184,7 @@ function questions_init_profiles(el) {
                     }
                 }
             }
-            filtered.push(data);
+            if (Object.keys(data).length) filtered.push(data);
         };
         return filtered;
     }
