@@ -285,8 +285,8 @@ function questions_init_profiles(el) {
         return label;
     }
     function getAnswer(a) {
-        if (!a) return "";
-        return a["value"] || a;
+        if (typeof a == "string") return a;
+        return a && "value" in a ? a["value"] : "";
     }
     function describeProfile(p) {
         if (!p) return [];
@@ -458,7 +458,7 @@ function questions_init_profiles(el) {
                         this.selected = this.value === answer || (answer && answer.indexOf && answer.indexOf(this.value) > -1);
                     });
                     $field.trigger("change");
-                } else if (answer) {
+                } else {
                     if ($field.hasClass("datepickerfield")) {
                         $field.data('DateTimePicker').date(moment(answer));
                     }
