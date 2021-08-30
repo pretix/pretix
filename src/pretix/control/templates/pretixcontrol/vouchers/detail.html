@@ -10,12 +10,24 @@
         <div class="alert alert-warning">
             {% trans "This voucher already has been used. It is not recommended to modify it." %}
             <ul>
-            {% for order in voucher.distinct_orders %}
-                <li><a href="{% url "control:event.order" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}">
-                    {% blocktrans with code=order.code %}Order {{ code }}{% endblocktrans %}
-                </a></li>
-            {% endfor %}
+                {% for order in voucher.distinct_orders %}
+                    <li><a href="{% url "control:event.order" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}">
+                        {% blocktrans with code=order.code %}Order {{ code }}{% endblocktrans %}
+                    </a></li>
+                {% endfor %}
             </ul>
+        </div>
+    {% endif %}
+    {% if redeemed_in_carts %}
+        <div class="alert alert-warning">
+            {% blocktrans trimmed with number=redeemed_in_carts %}
+                This voucher is currently used in {{ number }} cart sessions and there might not be free to use until the cart sessions
+                expire.
+            {% endblocktrans %}
+            <p class="text-right">
+                <a href="{% url "control:event.voucher.deletecarts" organizer=request.event.organizer.slug event=request.event.slug voucher=voucher.id %}" class="btn btn-default"><i class="fa fa-trash"></i> {% trans "Remove cart positions" %}</a>
+            </p>
+            <div class="clear"></div>
         </div>
     {% endif %}
     <form action="" method="post" class="form-horizontal">

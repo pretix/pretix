@@ -50,6 +50,7 @@ from django.urls import resolve, reverse
 from django.utils.functional import cached_property
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
+from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import (
     CreateView, DeleteView, ListView, TemplateView, UpdateView, View,
@@ -181,6 +182,38 @@ class VoucherTags(EventPermissionRequiredMixin, TemplateView):
         return VoucherTagFilterForm(data=self.request.GET, event=self.request.event)
 
 
+class VoucherDeleteCarts(EventPermissionRequiredMixin, DeleteView):
+    model = Voucher
+    template_name = 'pretixcontrol/vouchers/delete_carts.html'
+    permission = 'can_change_vouchers'
+    context_object_name = 'voucher'
+
+    def get_object(self, queryset=None) -> Voucher:
+        try:
+            return self.request.event.vouchers.get(
+                id=self.kwargs['voucher']
+            )
+        except Voucher.DoesNotExist:
+            raise Http404(_("The requested voucher does not exist."))
+
+    @transaction.atomic
+    def delete(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        success_url = self.get_success_url()
+
+        self.object.log_action('pretix.voucher.carts.deleted', user=self.request.user)
+        CartPosition.objects.filter(addon_to__voucher=self.object).delete()
+        self.object.cartposition_set.all().delete()
+        messages.success(request, _('The selected cart positions have been removed.'))
+        return HttpResponseRedirect(success_url)
+
+    def get_success_url(self) -> str:
+        return reverse('control:event.vouchers', kwargs={
+            'organizer': self.request.event.organizer.slug,
+            'event': self.request.event.slug,
+        })
+
+
 class VoucherDelete(EventPermissionRequiredMixin, DeleteView):
     model = Voucher
     template_name = 'pretixcontrol/vouchers/delete.html'
@@ -261,6 +294,15 @@ class VoucherUpdate(EventPermissionRequiredMixin, UpdateView):
             'organizer': self.request.event.organizer.slug,
             'event': self.request.event.slug,
         })
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        redeemed_in_carts = CartPosition.objects.filter(
+            voucher=self.object, event=self.request.event,
+            expires__gte=now()
+        ).count()
+        ctx['redeemed_in_carts'] = redeemed_in_carts
+        return ctx
 
 
 class VoucherCreate(EventPermissionRequiredMixin, CreateView):

@@ -276,6 +276,8 @@ urlpatterns = [
         re_path(r'^vouchers/(?P<voucher>\d+)/$', vouchers.VoucherUpdate.as_view(), name='event.voucher'),
         re_path(r'^vouchers/(?P<voucher>\d+)/delete$', vouchers.VoucherDelete.as_view(),
                 name='event.voucher.delete'),
+        re_path(r'^vouchers/(?P<voucher>\d+)/deletecarts$', vouchers.VoucherDeleteCarts.as_view(),
+                name='event.voucher.deletecarts'),
         re_path(r'^vouchers/add$', vouchers.VoucherCreate.as_view(), name='event.vouchers.add'),
         re_path(r'^vouchers/go$', vouchers.VoucherGo.as_view(), name='event.vouchers.go'),
         re_path(r'^vouchers/bulk_add$', vouchers.VoucherBulkCreate.as_view(), name='event.vouchers.bulk'),
