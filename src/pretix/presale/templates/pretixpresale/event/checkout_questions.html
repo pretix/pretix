@@ -99,7 +99,7 @@
                                 {{ event.settings.attendee_data_explanation_text|rich_text }}
                             {% endif %}
                             {% if pos.seat %}
-                                <div class="form-group">
+                                <div class="form-group{% if profiles_data %} profile-pre-select-date{% endif %}">
                                     <label class="col-md-3 control-label">
                                         {% trans "Seat" %}
                                     </label>
@@ -113,7 +113,7 @@
                                 </div>
                             {% endif %}
                             {% if pos.addons.all %}
-                                <div class="form-group">
+                                <div class="form-group{% if profiles_data %} profile-pre-select-date{% endif %}">
                                     <label class="col-md-3 control-label">
                                         {% trans "Selected add-ons" %}
                                     </label>

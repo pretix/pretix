@@ -122,8 +122,11 @@
 .profile-save-container {
   border-top: 1px solid $hr-border;
   padding: 15px;
-  margin: 15px -15px -15px;
+  margin: 15px -15px;
   background: $panel-footer-bg;
+}
+.profile-scope:last-child .profile-save-container {
+  margin-bottom: -15px;
 }
 .profile-save-container .help-block {
   margin-bottom: 0;
