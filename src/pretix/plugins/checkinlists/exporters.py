@@ -619,6 +619,8 @@ class CheckinLogList(ListExporter):
             _('Gate'),
             _('Result'),
             _('Error message'),
+            _('Upload date'),
+            _('Upload time'),
         ]
 
         qs = Checkin.all.filter(
@@ -662,7 +664,9 @@ class CheckinLogList(ListExporter):
                 _('Yes') if ci.auto_checked_in else _('No'),
                 str(ci.gate or ''),
                 _('OK') if ci.successful else ci.get_error_reason_display(),
-                ci.error_explanation or ''
+                ci.error_explanation or '',
+                date_format(ci.created.astimezone(self.timezone), 'SHORT_DATE_FORMAT'),
+                date_format(ci.created.astimezone(self.timezone), 'TIME_FORMAT'),
             ]
 
     def get_filename(self):
