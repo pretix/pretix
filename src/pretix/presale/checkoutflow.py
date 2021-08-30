@@ -982,17 +982,30 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
                         "is_business": "business" if a.is_business else "individual",
                     }
                     if a.name_parts:
+                        name_parts = a.name_parts
+                        # map full_name to name_parts and vice versa
                         scheme = PERSON_NAME_SCHEMES[self.request.event.settings.name_scheme]
-                        for i, (k, l, w) in enumerate(scheme["fields"]):
-                            data[f"name_parts_{i}"] = a.name_parts.get(k) or ""
+                        available_keys = name_parts.keys()
+                        asked_keys = [k for (k, l, w) in scheme["fields"]]
+                        if not set(available_keys).intersection(asked_keys):
+                            if "full_name" in available_keys:
+                                name_keys = ("given_name", "family_name")
+                                name_split = name_parts.get("full_name").rsplit(" ", 1)
+                                name_parts = dict(zip(name_keys, name_split))
+                            elif "full_name" in asked_keys:
+                                name_parts = {
+                                    "full_name": a.name
+                                }
+                        for i, k in enumerate(asked_keys):
+                            data[f"name_parts_{i}"] = name_parts.get(k) or ""
 
                     for k in (
                         "company", "street", "zipcode", "city", "country", "state",
                         "state_for_address", "vat_id", "custom_field", "internal_reference", "beneficiary"
                     ):
-                        v = getattr(a, k)
-                        if v:
-                            data[k] = str(v)
+                        v = getattr(a, k) or ""
+                        # always add values for address even when empty
+                        data[k] = str(v)
 
                     addresses_list.append(data)
 
@@ -1008,14 +1021,28 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
                     "_attendee_name": p.attendee_name,
                 }
                 if p.attendee_name_parts:
+                    name_parts = p.attendee_name_parts
+                    # map full_name to name_parts and vice versa
                     scheme = PERSON_NAME_SCHEMES[self.request.event.settings.name_scheme]
-                    for i, (k, l, w) in enumerate(scheme["fields"]):
-                        data[f"attendee_name_parts_{i}"] = p.attendee_name_parts.get(k) or ""
+                    available_keys = name_parts.keys()
+                    asked_keys = [k for (k, l, w) in scheme["fields"]]
+                    if not set(available_keys).intersection(asked_keys):
+                        if "full_name" in available_keys:
+                            name_keys = ("given_name", "family_name")
+                            name_split = name_parts.get("full_name").rsplit(" ", 1)
+                            name_parts = dict(zip(name_keys, name_split))
+                        elif "full_name" in asked_keys:
+                            name_parts = {
+                                "full_name": p.attendee_name
+                            }
+
+                    for i, k in enumerate(asked_keys):
+                        data[f"attendee_name_parts_{i}"] = name_parts.get(k) or ""
 
                 for k in ("attendee_email", "company", "street", "zipcode", "city", "country", "state"):
-                    v = getattr(p, k)
-                    if v:
-                        data[k] = str(v)
+                    v = getattr(p, k) or ""
+                    # always add values for address even when empty
+                    data[k] = str(v)
 
                 for a in p.answers:
                     data[a["field_name"]] = {
