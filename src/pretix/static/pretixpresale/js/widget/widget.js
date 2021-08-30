@@ -1290,7 +1290,7 @@ Vue.component('pretix-widget', {
         + '<resize-observer @notify="handleResize" />'
         + shared_loading_fragment
         + '<div class="pretix-widget-error-message" v-if="$root.error && $root.view !== \'event\'">{{ $root.error }}</div>'
-        + '<div class="pretix-widget-error-action" v-if="$root.error"><a :href="$root.newTabTarget" class="pretix-widget-button" target="_blank">'
+        + '<div class="pretix-widget-error-action" v-if="$root.error && $root.connection_error"><a :href="$root.newTabTarget" class="pretix-widget-button" target="_blank">'
         + strings['open_new_tab']
         + '</a></div>'
         + '<pretix-widget-event-form ref="formcomp" v-if="$root.view === \'event\'"></pretix-widget-event-form>'
@@ -1417,6 +1417,7 @@ var shared_root_methods = {
                     return;
                 }
             }
+            root.connection_error = false;
             if (data.weeks !== undefined) {
                 root.weeks = data.weeks;
                 root.date = data.date;
@@ -1475,8 +1476,10 @@ var shared_root_methods = {
             root.currency = '';
             if (error.status === 429) {
                 root.error = strings['loading_error_429'];
+                root.connection_error = true;
             } else {
                 root.error = strings['loading_error'];
+                root.connection_error = true;
             }
             if (root.loading > 0) {
                 root.loading--;
@@ -1505,11 +1508,12 @@ var shared_root_methods = {
         }
     },
     choose_event: function (event) {
-        root.target_url = event.event_url;
+        this.$root.target_url = event.event_url;
         this.$root.error = null;
-        root.subevent = event.subevent;
-        root.loading++;
-        root.reload();
+        this.$root.connection_error = false;
+        this.$root.subevent = event.subevent;
+        this.$root.loading++;
+        this.$root.reload();
     }
 };
 
@@ -1689,6 +1693,7 @@ var create_widget = function (element) {
                 skip_ssl: skip_ssl,
                 disable_iframe: disable_iframe,
                 style: style,
+                connection_error: false,
                 error: null,
                 weeks: null,
                 days: null,
