@@ -291,9 +291,9 @@ function questions_init_profiles(el) {
     function describeProfile(p) {
         if (!p) return [];
         var lines = [
+            getAnswer(p["company"]),
             p["_name"],
             [p["_attendee_name"], getAnswer(p["attendee_email"])].filter(v => v).join(", "),
-            getAnswer(p["company"]),
             [
                 getAnswer(p["street"]),
                 [getAnswer(p["zipcode"]), getAnswer(p["city"]), p["_state_for_address"]].filter(v => v).join(" "),
