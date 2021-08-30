@@ -380,13 +380,14 @@ function questions_init_profiles(el) {
             return;
         }
 
+        var selectedProfile = matchedProfiles[0];
         var $select = $(".profile-select", scope);
         var $button = $(".profile-apply", scope);
         var $help = $(".profile-desc", scope);
 
         if (matchedProfiles.length === 1) {
             $(".profile-select-control", scope).hide().parent().addClass("form-control-text");
-            $help.html(describeProfileHTML(matchedProfiles[0])).addClass("single-profile-desc").after($button);
+            $help.html(describeProfileHTML(selectedProfile)).addClass("single-profile-desc").after($button);
         }
         else {
             var i = 0;
@@ -395,20 +396,16 @@ function questions_init_profiles(el) {
                 i++;
             }
             $select.change(function() {
-                _updateDescription(this, matchedProfiles[this.selectedIndex], $help);
+                selectedProfile = matchedProfiles[this.value];
+                _updateDescription(this, selectedProfile, $help);
             }).trigger("change");
         }
 
         $button.click(function() {
-            var p;
-            if (matchedProfiles.length === 1) {
-                p = matchedProfiles[0];
-            } else {
-                p = matchedProfiles[parseInt($select.val())];
-            }
-            Object.keys(p).forEach(function(key) {
-                var answer = p[key].value;
-                var $field = p[key].field;
+            Object.keys(selectedProfile).forEach(function(key) {
+                var answer = selectedProfile[key].value;
+                var $field = selectedProfile[key].field;
+                console.log("auto-fill", key, $field, "with", answer);
                 if (!$field || !$field.length) return;
               
                 if ($field.attr("type") === "checkbox") {
