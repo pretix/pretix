@@ -147,7 +147,7 @@
                             {% for form in forms %}
                                 {% if form.pos.item != pos.item %}
                                     {# Add-Ons #}
-                                    <legend>
+                                    <legend{% if profiles_data %} class="profile-add-on-legend"{% endif %}>
                                         {% if form.show_copy_answers_to_addon_button and event.settings.checkout_show_copy_answers_button %}
                                             <span class="pull-right flip">
                                                 <button type="button" data-id="{{ forloop.parentloop.counter0 }}" data-addonid="{{ forloop.counter0 }}" name="copy" class="js-copy-answers-addon btn btn-default btn-xs">{% trans "Copy answers" %}</button>
@@ -156,7 +156,7 @@
                                         + {{ form.pos.item.name }}{% if form.pos.variation %} – {{ form.pos.variation.value }}{% endif %}
                                     </legend>
                                 {% endif %}
-                                <div data-idx="{{ forloop.parentloop.counter0 }}" data-addonidx="{{ forloop.counter0 }}" class="profile-scope">
+                                <div data-idx="{{ forloop.parentloop.counter0 }}" data-addonidx="{{ forloop.counter0 }}" class="profile-scope{% if form.pos.item != pos.item %}{% if profiles_data %} profile-add-on{% endif %}{% endif %}">
                                     {% if profiles_data %}
                                     <div class="form-group profile-select-container">
                                         <label class="col-md-3 control-label" for="profile-select-{{ forloop.parentloop.counter0 }}-{{ forloop.counter0 }}">{% trans "Auto-fill with profile" %}</label>
