@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-26 09:20+0000\n"
 "PO-Revision-Date: 2023-05-30 21:20+0000\n"
-"Last-Translator: Angel Saiz Velasco <a.saiz.v@gmail.com>\n"
+"Last-Translator: ityd <yagoalonso@gmail.com>\n"
 "Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/pretix/"
 "es/>\n"
 "Language: es\n"
@@ -131,8 +131,7 @@ msgstr "pretixSCAN"
 
 #: pretix/api/auth/devicesecurity.py:90
 msgid "pretixSCAN (kiosk mode, no order sync, no search)"
-msgstr ""
-"pretixSCAN (modo quiosco, sin sincronización de pedidos, sin búsquedas)"
+msgstr "pretixSCAN (modo quiosco, sin sincronización de pedidos, sin búsquedas)"
 
 #: pretix/api/auth/devicesecurity.py:124
 msgid "pretixSCAN (online only, no order sync)"
