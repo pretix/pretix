@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-08-27 13:05+0000\n"
 "PO-Revision-Date: 2021-09-03 15:31+0000\n"
-"Last-Translator: Klevagruva <info@klevagruva.com>\n"
+"Last-Translator: Niklas Forsström <nikfor@student.chalmers.se>\n"
 "Language-Team: Swedish <https://translate.pretix.eu/projects/pretix/pretix/"
 "sv/>\n"
 "Language: sv\n"
@@ -29,11 +29,11 @@ msgstr ""
 
 #: pretix/api/auth/devicesecurity.py:44
 msgid "pretixSCAN"
-msgstr ""
+msgstr "pretixSCAN"
 
 #: pretix/api/auth/devicesecurity.py:75
 msgid "pretixSCAN (kiosk mode, no order sync, no search)"
-msgstr ""
+msgstr "pretixSCAN (kioskläge, ingen ordersync, ingen sökning)"
 
 #: pretix/api/auth/devicesecurity.py:104
 msgid "pretixSCAN (online only, no order sync)"
