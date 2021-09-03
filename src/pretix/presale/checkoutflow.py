@@ -1004,7 +1004,8 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
                         "state_for_address", "vat_id", "custom_field", "internal_reference", "beneficiary"
                     ):
                         v = getattr(a, k) or ""
-                        # always add values for address even when empty
+                        # always add all values of an address even when empty,
+                        # so an address always gets fully overwritten client-side
                         data[k] = str(v)
 
                     addresses_list.append(data)
@@ -1041,7 +1042,8 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
 
                 for k in ("attendee_email", "company", "street", "zipcode", "city", "country", "state"):
                     v = getattr(p, k) or ""
-                    # always add values for address even when empty
+                    # always add all values of an address even when empty,
+                    # so an address always gets fully overwritten client-side
                     data[k] = str(v)
 
                 for a in p.answers:
