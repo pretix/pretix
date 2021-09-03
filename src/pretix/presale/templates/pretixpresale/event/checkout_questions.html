@@ -44,7 +44,9 @@
                             <i class="fa fa-angle-down collapse-indicator" aria-hidden="true"></i>
                         </h4>
                     </summary>
-                    {{ addresses_data|json_script:"addresses_json" }}
+                    {% if addresses_data %}
+                        {{ addresses_data|json_script:"addresses_json" }}
+                    {% endif %}
                     <div id="invoice" class="profile-scope" data-profiles-id="addresses_json">
                         <div class="panel-body">
                             {% if addresses_data %}
