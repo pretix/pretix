@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-08-27 13:05+0000\n"
-"PO-Revision-Date: 2021-09-03 15:31+0000\n"
+"PO-Revision-Date: 2021-09-05 02:00+0000\n"
 "Last-Translator: Niklas Forsström <nikfor@student.chalmers.se>\n"
 "Language-Team: Swedish <https://translate.pretix.eu/projects/pretix/pretix/"
 "sv/>\n"
@@ -1416,12 +1416,12 @@ msgstr "Betalnings ID"
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:30
 #: pretix/control/templates/pretixcontrol/organizers/giftcards.html:59
 msgid "Creation date"
-msgstr ""
+msgstr "Skapelsedatum"
 
 #: pretix/base/exporters/orderlist.py:786
 #: pretix/control/templates/pretixcontrol/order/index.html:732
 msgid "Completion date"
-msgstr ""
+msgstr "Färdigställningsdatum"
 
 #: pretix/base/exporters/orderlist.py:787
 msgid "Status code"
@@ -1449,17 +1449,17 @@ msgstr "Betalnings metod"
 
 #: pretix/base/exporters/orderlist.py:823
 msgid "Quota availabilities"
-msgstr ""
+msgstr "Tillgänglighet av kvoteringar"
 
 #: pretix/base/exporters/orderlist.py:828
 #: pretix/control/templates/pretixcontrol/items/quotas.html:45
 msgid "Quota name"
-msgstr ""
+msgstr "Kvoteringsnamn"
 
 #: pretix/base/exporters/orderlist.py:828
 #: pretix/control/templates/pretixcontrol/items/quota.html:56
 msgid "Total quota"
-msgstr ""
+msgstr "Total kvot"
 
 #: pretix/base/exporters/orderlist.py:828
 #: pretix/control/templates/pretixcontrol/event/cancel.html:16
@@ -1473,7 +1473,7 @@ msgstr "Väntande beställningar"
 
 #: pretix/base/exporters/orderlist.py:828
 msgid "Blocking vouchers"
-msgstr ""
+msgstr "Blockerar kuponger"
 
 #: pretix/base/exporters/orderlist.py:829 pretix/control/views/item.py:859
 msgid "Current user's carts"
@@ -1568,7 +1568,7 @@ msgstr "Alla"
 
 #: pretix/base/exporters/orderlist.py:935 pretix/control/forms/filter.py:999
 msgid "Live"
-msgstr ""
+msgstr "Live"
 
 #: pretix/base/exporters/orderlist.py:944 pretix/control/forms/filter.py:1007
 #: pretix/control/templates/pretixcontrol/pdf/index.html:353
@@ -1911,6 +1911,8 @@ msgid ""
 "Only used for views that are not bound to an event. For all event views, the "
 "event timezone is used instead."
 msgstr ""
+"Används endast för vyer som inte är kopplade till ett event. Använd eventets "
+"tidszon för att se alla eventvyer"
 
 #: pretix/base/forms/user.py:168
 msgid "Device name"
@@ -1922,17 +1924,17 @@ msgstr "Enhetstyp"
 
 #: pretix/base/forms/user.py:170
 msgid "Smartphone with the Authenticator application"
-msgstr ""
+msgstr "Smartphone med autentiseringsapplikationen"
 
 #: pretix/base/forms/user.py:171
 msgid "WebAuthn-compatible hardware token (e.g. Yubikey)"
-msgstr ""
+msgstr "WebAuthn-kompatibel hårdvarutoken (ex. Yubikey)"
 
 #: pretix/base/forms/validators.py:62
 msgid ""
 "Invalid placeholder syntax: You used a different number of \"{\" than of "
 "\"}\"."
-msgstr ""
+msgstr "Felaktig syntax: du använde olika antal \"{\" och \"}\"."
 
 #: pretix/base/forms/validators.py:73
 #, python-format
