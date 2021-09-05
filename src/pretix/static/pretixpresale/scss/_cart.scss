@@ -66,6 +66,29 @@
             margin-top: 5px;
         }
     }
+
+    .cart-icon-details {
+        position: relative;
+        padding-left: 1.4em;
+        text-indent: 0;
+        .fa, svg {
+            position: absolute;
+            left: 0;
+            top: .22em;
+        }
+
+        &.collapse-lines {
+            .content {
+                display: block;
+                overflow: hidden;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+            }
+            a.collapse-handler {
+                cursor: pointer;
+            }
+        }
+    }
 }
 
 .apply-voucher {
