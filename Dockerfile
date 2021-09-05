@@ -1,9 +1,9 @@
-FROM python:3.8
+FROM python:3.9-bullseye
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
             build-essential \
-            default-libmysqlclient-dev \
+            libmariadb-dev \
             gettext \
             git \
             libffi-dev \
@@ -15,8 +15,7 @@ RUN apt-get update && \
             libxslt1-dev \
             locales \
             nginx \
-            python-dev \
-            python-virtualenv \
+            python3-virtualenv \
             python3-dev \
             sudo \
             supervisor \
