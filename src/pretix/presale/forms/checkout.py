@@ -124,6 +124,22 @@ class InvoiceAddressForm(BaseInvoiceAddressForm):
     required_css_class = 'required'
     vat_warning = True
 
+    def __init__(self, *args, **kwargs):
+        allow_save = kwargs.pop('allow_save', False)
+        super().__init__(*args, **kwargs)
+        if allow_save:
+            self.fields['saved_id'] = forms.IntegerField(
+                required=False,
+                help_text=" ",  # non-breaking-space, will be overwritten by JavaScript, needed here for HTML-output
+                label=_("Save to address"),
+                widget=forms.Select(choices=(("", _("Create new address")),))
+            )
+            self.fields['save'] = forms.BooleanField(
+                label=_('Save address in my customer account for future purchases'),
+                required=False,
+                initial=False,
+            )
+
 
 class InvoiceNameForm(InvoiceAddressForm):
 
@@ -141,6 +157,22 @@ class QuestionsForm(BaseQuestionsForm):
     as well as additional questions defined by the organizer.
     """
     required_css_class = 'required'
+
+    def __init__(self, *args, **kwargs):
+        allow_save = kwargs.pop('allow_save', False)
+        super().__init__(*args, **kwargs)
+        if allow_save and self.fields:
+            self.fields['save'] = forms.BooleanField(
+                label=_('Save answers to my customer profiles for future purchases'),
+                required=False,
+                initial=False,
+            )
+            self.fields['saved_id'] = forms.IntegerField(
+                required=False,
+                help_text=" ",  # non-breaking-space, will be overwritten by JavaScript, needed here for HTML-output
+                label=_("Save to profile"),
+                widget=forms.Select(choices=(("", _("Create new profile")),))
+            )
 
 
 class AddOnRadioSelect(forms.RadioSelect):

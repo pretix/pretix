@@ -322,6 +322,17 @@ h2 .label {
     }
 }
 
+.nav-tabs {
+    border-bottom: 0px solid #ddd;
+}
+.tab-content {
+    border: 1px solid #ddd;
+    border-radius: 0px 5px 5px 5px;
+    & .tab-pane > table {
+        margin: 0;
+    }
+}
+
 @for $i from 0 through 100 {
     .progress-bar-#{$i} { width: 1% * $i; }
 }

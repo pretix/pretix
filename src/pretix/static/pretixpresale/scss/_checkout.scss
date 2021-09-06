@@ -103,3 +103,56 @@
     font-weight: bold;
   }
 }
+.profile-pre-select {
+  background: $panel-footer-bg;
+  margin-top: -15px;
+  padding-top: 15px;
+}
+.profile-pre-select .addon-list {
+  margin-bottom: 0;
+}
+.profile-select-container {
+  display: none;
+  border-bottom: 1px solid $hr-border;
+  background: $panel-footer-bg;
+  padding-bottom: 6px;
+
+  margin-top: -15px;
+  padding-top: 15px;
+}
+.profile-save-container {
+  border-top: 1px solid $hr-border;
+  padding: 15px;
+  margin: 15px -15px;
+  background: $panel-footer-bg;
+}
+.profile-scope:last-child .profile-save-container {
+  margin-bottom: -15px;
+}
+.profile-save-container .help-block {
+  margin-bottom: 0;
+}
+.single-profile-desc {
+  margin-top: 0;
+}
+.profile-save, .profile-save-id {
+  display: none;
+  margin-bottom: 0;
+  padding-bottom: .5em;
+}
+.profile-select-initialized .profile-select-container,
+.profile-select-initialized .profile-save {
+  display: block;
+}
+.profile-none-matched .profile-select-container {
+  display: none;
+}
+
+.profile-add-on-legend {
+  margin-bottom: 0;
+  border-bottom: none;
+}
+.profile-add-on {
+  padding: 15px;
+  border: 1px solid $hr-border;
+}

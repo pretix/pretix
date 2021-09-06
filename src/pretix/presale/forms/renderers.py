@@ -29,11 +29,11 @@ from django.utils.safestring import mark_safe
 from django.utils.translation import pgettext
 
 
-def render_label(content, label_for=None, label_class=None, label_title='', label_id='', optional=False, is_valid=None):
+def render_label(content, label_for=None, label_class=None, label_title='', label_id='', optional=False, is_valid=None, attrs=None):
     """
     Render a label with content
     """
-    attrs = {}
+    attrs = attrs or {}
     if label_for:
         attrs['for'] = label_for
     if label_class:
@@ -118,6 +118,7 @@ class CheckoutFieldRenderer(FieldRenderer):
             widget.attrs["aria-describedby"] = " ".join(help_ids)
 
     def add_label(self, html):
+        attrs = {}
         label = self.get_label()
 
         if hasattr(self.field.field, '_show_required'):
@@ -141,11 +142,15 @@ class CheckoutFieldRenderer(FieldRenderer):
             label_for = self.field.id_for_label
             label_id = ""
 
+        if hasattr(self.field.field, 'question') and self.field.field.question.identifier:
+            attrs["data-identifier"] = self.field.field.question.identifier
+
         html = render_label(
             label,
             label_for=label_for,
             label_class=self.get_label_class(),
             label_id=label_id,
+            attrs=attrs,
             optional=not required and not isinstance(self.widget, CheckboxInput),
             is_valid=is_valid
         ) + html

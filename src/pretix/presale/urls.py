@@ -179,6 +179,8 @@ organizer_patterns = [
     re_path(r'^account/change$', pretix.presale.views.customer.ChangeInformationView.as_view(), name='organizer.customer.change'),
     re_path(r'^account/confirmchange$', pretix.presale.views.customer.ConfirmChangeView.as_view(), name='organizer.customer.change.confirm'),
     re_path(r'^account/membership/(?P<id>\d+)/$', pretix.presale.views.customer.MembershipUsageView.as_view(), name='organizer.customer.membership'),
+    re_path(r'^account/addresses/(?P<id>\d+)/delete$', pretix.presale.views.customer.AddressDeleteView.as_view(), name='organizer.customer.address.delete'),
+    re_path(r'^account/profiles/(?P<id>\d+)/delete$', pretix.presale.views.customer.ProfileDeleteView.as_view(), name='organizer.customer.profile.delete'),
     re_path(r'^account/$', pretix.presale.views.customer.ProfileView.as_view(), name='organizer.customer.profile'),
 ]
 

@@ -2,6 +2,8 @@
 {% load i18n %}
 {% load bootstrap3 %}
 {% load rich_text %}
+{% load lists %}
+{% load escapejson %}
 {% block inner %}
     <p>{% trans "Before we continue, we need you to answer some questions." %}</p>
     <p class="required-legend" aria-hidden="true">
@@ -9,6 +11,9 @@
             You need to fill all fields that are marked with <span>*</span> to continue.
         {% endblocktrans %}
     </p>
+    {% if profiles_data %}
+        {{ profiles_data|json_script:"profiles_json" }}
+    {% endif %}
     <form class="form-horizontal" method="post" enctype="multipart/form-data">
         {% csrf_token %}
         <div class="panel-group" id="questions_group">
@@ -39,8 +44,25 @@
                             <i class="fa fa-angle-down collapse-indicator" aria-hidden="true"></i>
                         </h4>
                     </summary>
-                    <div id="invoice">
+                    {% if addresses_data %}
+                        {{ addresses_data|json_script:"addresses_json" }}
+                    {% endif %}
+                    <div id="invoice" class="profile-scope" data-profiles-id="addresses_json">
                         <div class="panel-body">
+                            {% if addresses_data %}
+                                <div class="form-group profile-select-container">
+                                    <label class="col-md-3 control-label" for="address-list-select">{% trans "Auto-fill with address" %}</label>
+                                    <div class="col-md-9">
+                                        <p class="profile-select-control">
+                                            <select class="profile-select form-control" id="address-list-select"></select>
+                                        </p>
+                                        <p class="help-block profile-desc" id="selected-address-desc"></p>
+                                        <p><button type="button" class="profile-apply btn btn-default" aria-describedby="selected-address-desc"
+                                            ><i class="fa fa-address-card-o fa-lg" aria-hidden="true"></i>&nbsp; {% trans "Fill form" %}</button>
+                                        </p>
+                                    </div>
+                                </div>
+                            {% endif %}
                             {% if event.settings.invoice_address_explanation_text %}
                                 <div>
                                     {{ event.settings.invoice_address_explanation_text|rich_text }}
@@ -127,7 +149,7 @@
                             {% for form in forms %}
                                 {% if form.pos.item != pos.item %}
                                     {# Add-Ons #}
-                                    <legend>
+                                    <legend{% if profiles_data %} class="profile-add-on-legend"{% endif %}>
                                         {% if form.show_copy_answers_to_addon_button and event.settings.checkout_show_copy_answers_button %}
                                             <span class="pull-right flip">
                                                 <button type="button" data-id="{{ forloop.parentloop.counter0 }}" data-addonid="{{ forloop.counter0 }}" name="copy" class="js-copy-answers-addon btn btn-default btn-xs">{% trans "Copy answers" %}</button>
@@ -136,7 +158,24 @@
                                         + {{ form.pos.item.name }}{% if form.pos.variation %} – {{ form.pos.variation.value }}{% endif %}
                                     </legend>
                                 {% endif %}
-                                <div data-idx="{{ forloop.parentloop.counter0 }}" data-addonidx="{{ forloop.counter0 }}">
+                                <div data-idx="{{ forloop.parentloop.counter0 }}" data-addonidx="{{ forloop.counter0 }}" class="profile-scope{% if form.pos.item != pos.item %}{% if profiles_data %} profile-add-on{% endif %}{% endif %}">
+                                    {% if profiles_data %}
+                                    <div class="form-group profile-select-container">
+                                        <label class="col-md-3 control-label" for="profile-select-{{ forloop.parentloop.counter0 }}-{{ forloop.counter0 }}">{% trans "Auto-fill with profile" %}</label>
+                                        <div class="col-md-9">
+                                            <p class="profile-select-control">
+                                                <select class="profile-select form-control" id="profile-select-{{ forloop.parentloop.counter0 }}-{{ forloop.counter0 }}"></select>
+                                            </p>
+                                            <p class="help-block profile-desc" id="selected-profile-desc-{{ forloop.parentloop.counter0 }}-{{ forloop.counter0 }}"></p>
+                                            <p>
+                                                <button type="button" class="profile-apply btn btn-default"
+                                                    aria-describedby="selected-profile-desc-{{ forloop.parentloop.counter0 }}-{{ forloop.counter0 }}"
+                                                ><i class="fa fa-address-card-o fa-lg" aria-hidden="true"></i>&nbsp; {% trans "Fill form" %}</button>
+                                            </p>
+                                        </div>
+                                    </div>
+                                    {% endif %}
+
                                     {% bootstrap_form form layout="checkout" %}
                                 </div>
                             {% endfor %}

@@ -31,7 +31,7 @@
 # Unless required by applicable law or agreed to in writing, software distributed under the Apache License 2.0 is
 # distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations under the License.
-
+import copy
 import inspect
 from collections import defaultdict
 from decimal import Decimal
@@ -59,6 +59,7 @@ from pretix.base.services.cart import (
 )
 from pretix.base.services.memberships import validate_memberships_in_order
 from pretix.base.services.orders import perform_order
+from pretix.base.settings import PERSON_NAME_SCHEMES
 from pretix.base.signals import validate_cart_addons
 from pretix.base.templatetags.phone_format import phone_format
 from pretix.base.templatetags.rich_text import rich_text_snippet
@@ -227,7 +228,7 @@ class TemplateFlowStep(TemplateResponseMixin, BaseCheckoutFlowStep):
         raise NotImplementedError()
 
 
-class CustomerStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
+class CustomerStep(CartMixin, TemplateFlowStep):
     priority = 45
     identifier = "customer"
     template_name = "pretixpresale/event/checkout_customer.html"
@@ -352,7 +353,7 @@ class CustomerStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
         return ctx
 
 
-class MembershipStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
+class MembershipStep(CartMixin, TemplateFlowStep):
     priority = 47
     identifier = "membership"
     template_name = "pretixpresale/event/checkout_membership.html"
@@ -772,6 +773,9 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
                 'name_parts': self.cart_customer.name_parts
             })
 
+            if 'saved_invoice_address' in self.cart_session:
+                initial['saved_id'] = self.cart_session['saved_invoice_address']
+
         override_sets = self._contact_override_sets
         for overrides in override_sets:
             initial.update({
@@ -791,6 +795,7 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
                                    request=self.request,
                                    initial=initial,
                                    instance=self.invoice_address,
+                                   allow_save=bool(self.cart_customer),
                                    validate_vat_id=self.eu_reverse_charge_relevant, all_optional=self.all_optional)
         for name, field in f.fields.items():
             if wd_initial.get(name) and wd.get('fix', '') == 'true':
@@ -828,6 +833,23 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
         self.cart_session['contact_form_data'] = d
         if self.address_asked or self.request.event.settings.invoice_name_required:
             addr = self.invoice_form.save()
+
+            if self.cart_customer and self.invoice_form.cleaned_data.get('save'):
+                if self.invoice_form.cleaned_data.get('saved_id'):
+                    saved = InvoiceAddress.profiles.filter(
+                        customer=self.cart_customer, pk=self.invoice_form.cleaned_data.get('saved_id')
+                    ).first() or InvoiceAddress(customer=self.cart_customer)
+                else:
+                    saved = InvoiceAddress(customer=self.cart_customer)
+
+                for f in InvoiceAddress._meta.fields:
+                    if f.name not in ('order', 'customer', 'last_modified', 'pk', 'id'):
+                        val = getattr(addr, f.name)
+                        setattr(saved, f.name, copy.deepcopy(val))
+
+                saved.save()
+                self.cart_session['saved_invoice_address'] = saved.pk
+
             try:
                 diff = update_tax_rates(
                     event=request.event,
@@ -946,6 +968,93 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
         ctx['cart'] = self.get_cart()
         ctx['cart_session'] = self.cart_session
         ctx['invoice_address_asked'] = self.address_asked
+
+        if self.cart_customer:
+            if self.address_asked:
+                addresses = self.cart_customer.stored_addresses.all()
+                addresses_list = []
+                for a in addresses:
+                    data = {
+                        "_pk": a.pk,
+                        "_country_for_address": a.country.name,
+                        "_state_for_address": a.state_for_address,
+                        "_name": a.name,
+                        "is_business": "business" if a.is_business else "individual",
+                    }
+                    if a.name_parts:
+                        name_parts = a.name_parts
+                        # map full_name to name_parts and vice versa
+                        scheme = PERSON_NAME_SCHEMES[self.request.event.settings.name_scheme]
+                        available_keys = name_parts.keys()
+                        asked_keys = [k for (k, l, w) in scheme["fields"]]
+                        if not set(available_keys).intersection(asked_keys):
+                            if "full_name" in available_keys:
+                                name_keys = ("given_name", "family_name")
+                                name_split = name_parts.get("full_name").rsplit(" ", 1)
+                                name_parts = dict(zip(name_keys, name_split))
+                            elif "full_name" in asked_keys:
+                                name_parts = {
+                                    "full_name": a.name
+                                }
+                        for i, k in enumerate(asked_keys):
+                            data[f"name_parts_{i}"] = name_parts.get(k) or ""
+
+                    for k in (
+                        "company", "street", "zipcode", "city", "country", "state",
+                        "state_for_address", "vat_id", "custom_field", "internal_reference", "beneficiary"
+                    ):
+                        v = getattr(a, k) or ""
+                        # always add all values of an address even when empty,
+                        # so an address always gets fully overwritten client-side
+                        data[k] = str(v)
+
+                    addresses_list.append(data)
+
+                ctx['addresses_data'] = addresses_list
+
+            profiles = list(self.cart_customer.attendee_profiles.all())
+            profiles_list = []
+            for p in profiles:
+                data = {
+                    "_pk": p.pk,
+                    "_country_for_address": p.country.name,
+                    "_state_for_address": p.state_for_address,
+                    "_attendee_name": p.attendee_name,
+                }
+                if p.attendee_name_parts:
+                    name_parts = p.attendee_name_parts
+                    # map full_name to name_parts and vice versa
+                    scheme = PERSON_NAME_SCHEMES[self.request.event.settings.name_scheme]
+                    available_keys = name_parts.keys()
+                    asked_keys = [k for (k, l, w) in scheme["fields"]]
+                    if not set(available_keys).intersection(asked_keys):
+                        if "full_name" in available_keys:
+                            name_keys = ("given_name", "family_name")
+                            name_split = name_parts.get("full_name").rsplit(" ", 1)
+                            name_parts = dict(zip(name_keys, name_split))
+                        elif "full_name" in asked_keys:
+                            name_parts = {
+                                "full_name": p.attendee_name
+                            }
+
+                    for i, k in enumerate(asked_keys):
+                        data[f"attendee_name_parts_{i}"] = name_parts.get(k) or ""
+
+                for k in ("attendee_email", "company", "street", "zipcode", "city", "country", "state"):
+                    v = getattr(p, k) or ""
+                    # always add all values of an address even when empty,
+                    # so an address always gets fully overwritten client-side
+                    data[k] = str(v)
+
+                for a in p.answers:
+                    data[a["field_name"]] = {
+                        "label": a["field_label"],
+                        "value": a["value"],
+                        "identifier": a["question_identifier"],
+                        "type": a["question_type"],
+                    }
+                profiles_list.append(data)
+            ctx['profiles_data'] = profiles_list
         return ctx
 
 

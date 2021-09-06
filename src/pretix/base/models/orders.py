@@ -2334,6 +2334,12 @@ class CartPosition(AbstractPosition):
 class InvoiceAddress(models.Model):
     last_modified = models.DateTimeField(auto_now=True)
     order = models.OneToOneField(Order, null=True, blank=True, related_name='invoice_address', on_delete=models.CASCADE)
+    customer = models.ForeignKey(
+        Customer,
+        related_name='invoice_addresses',
+        null=True, blank=True,
+        on_delete=models.CASCADE
+    )
     is_business = models.BooleanField(default=False, verbose_name=_('Business customer'))
     company = models.CharField(max_length=255, blank=True, verbose_name=_('Company name'))
     name_cached = models.CharField(max_length=255, verbose_name=_('Full name'), blank=True)
@@ -2360,6 +2366,7 @@ class InvoiceAddress(models.Model):
     )
 
     objects = ScopedManager(organizer='order__event__organizer')
+    profiles = ScopedManager(organizer='customer__organizer')
 
     def save(self, **kwargs):
         if self.order:
@@ -2371,6 +2378,20 @@ class InvoiceAddress(models.Model):
             self.name_cached = ""
             self.name_parts = {}
         super().save(**kwargs)
+
+    def describe(self):
+        parts = [
+            self.company,
+            self.name,
+            self.street,
+            (self.zipcode or '') + ' ' + (self.city or '') + ' ' + (self.state_for_address or ''),
+            self.country.name,
+            self.vat_id,
+            self.custom_field,
+            self.internal_reference,
+            (_('Beneficiary') + ': ' + self.beneficiary) if self.beneficiary else '',
+        ]
+        return '\n'.join([str(p).strip() for p in parts if p and str(p).strip()])
 
     @property
     def is_empty(self):
@@ -2406,6 +2427,30 @@ class InvoiceAddress(models.Model):
         else:
             raise TypeError("Invalid name given.")
         return scheme['concatenation'](self.name_parts).strip()
+
+    def for_js(self):
+        d = {}
+
+        if self.name_parts:
+            if '_scheme' in self.name_parts:
+                scheme = PERSON_NAME_SCHEMES[self.name_parts['_scheme']]
+                for i, (k, l, w) in enumerate(scheme['fields']):
+                    d[f'name_parts_{i}'] = self.name_parts.get(k) or ''
+
+        d.update({
+            'company': self.company,
+            'is_business': self.is_business,
+            'street': self.street,
+            'zipcode': self.zipcode,
+            'city': self.city,
+            'country': str(self.country) if self.country else None,
+            'state': str(self.state) if self.state else None,
+            'vat_id': self.vat_id,
+            'custom_field': self.custom_field,
+            'internal_reference': self.internal_reference,
+            'beneficiary': self.beneficiary,
+        })
+        return d
 
 
 def cachedticket_name(instance, filename: str) -> str:

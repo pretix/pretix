@@ -36,6 +36,7 @@ from pretix.base.models import (
     CartPosition, InvoiceAddress, OrderPosition, Question, QuestionAnswer,
     QuestionOption,
 )
+from pretix.base.models.customers import AttendeeProfile
 from pretix.presale.signals import contact_form_fields_overrides
 
 
@@ -60,6 +61,9 @@ class BaseQuestionsViewMixin:
     def get_question_override_sets(self, position):
         return []
 
+    def question_form_kwargs(self, cr):
+        return {}
+
     @cached_property
     def forms(self):
         """
@@ -71,13 +75,16 @@ class BaseQuestionsViewMixin:
         for cr in self._positions_for_questions:
             cartpos = cr if isinstance(cr, CartPosition) else None
             orderpos = cr if isinstance(cr, OrderPosition) else None
+
+            kwargs = self.question_form_kwargs(cr)
             form = self.form_class(event=self.request.event,
                                    prefix=cr.id,
                                    cartpos=cartpos,
                                    orderpos=orderpos,
                                    all_optional=self.all_optional,
                                    data=(self.request.POST if self.request.method == 'POST' else None),
-                                   files=(self.request.FILES if self.request.method == 'POST' else None))
+                                   files=(self.request.FILES if self.request.method == 'POST' else None),
+                                   **kwargs)
             form.pos = cartpos or orderpos
             form.show_copy_answers_to_addon_button = form.pos.addon_to and (
                 set(form.pos.addon_to.item.questions.all()) & set(form.pos.item.questions.all()) or
@@ -136,25 +143,28 @@ class BaseQuestionsViewMixin:
             if not form.is_valid():
                 failed = True
             else:
+                if form.cleaned_data.get('saved_id'):
+                    prof = AttendeeProfile.objects.filter(
+                        customer=self.cart_customer, pk=form.cleaned_data.get('saved_id')
+                    ).first() or AttendeeProfile(customer=getattr(self, 'cart_customer', None))
+                    answers_key_to_index = {a.get('field_name'): i for i, a in enumerate(prof.answers)}
+                else:
+                    prof = AttendeeProfile(customer=getattr(self, 'cart_customer', None))
+                    answers_key_to_index = {}
+
                 # This form was correctly filled, so we store the data as
                 # answers to the questions / in the CartPosition object
                 for k, v in form.cleaned_data.items():
-                    if k == 'attendee_name_parts':
+                    if k in ('save', 'saved_id'):
+                        continue
+                    elif k == 'attendee_name_parts':
                         form.pos.attendee_name_parts = v if v else None
-                    elif k == 'attendee_email':
-                        form.pos.attendee_email = v if v != '' else None
-                    elif k == 'company':
-                        form.pos.company = v if v != '' else None
-                    elif k == 'street':
-                        form.pos.street = v if v != '' else None
-                    elif k == 'zipcode':
-                        form.pos.zipcode = v if v != '' else None
-                    elif k == 'city':
-                        form.pos.city = v if v != '' else None
-                    elif k == 'country':
-                        form.pos.country = v if v != '' else None
-                    elif k == 'state':
-                        form.pos.state = v if v != '' else None
+                        prof.attendee_name_parts = form.pos.attendee_name_parts
+                        prof.attendee_name_cached = form.pos.attendee_name
+                    elif k in ('attendee_email', 'company', 'street', 'zipcode', 'city', 'country', 'state'):
+                        v = v if v != '' else None
+                        setattr(form.pos, k, v)
+                        setattr(prof, k, v)
                     elif k.startswith('question_'):
                         field = form.fields[k]
                         if hasattr(field, 'answer'):
@@ -168,6 +178,23 @@ class BaseQuestionsViewMixin:
                             else:
                                 self._save_to_answer(field, field.answer, v)
                                 field.answer.save()
+                                if isinstance(field, forms.ModelMultipleChoiceField) or isinstance(field, forms.ModelChoiceField):
+                                    answer_value = {o.identifier: str(o) for o in field.answer.options.all()}
+                                elif isinstance(field, forms.BooleanField):
+                                    answer_value = bool(field.answer.answer)
+                                else:
+                                    answer_value = str(field.answer.answer)
+                                answer_dict = {
+                                    'field_name': k,
+                                    'field_label': str(field.label),
+                                    'value': answer_value,
+                                    'question_type': field.question.type,
+                                    'question_identifier': field.question.identifier,
+                                }
+                                if k in answers_key_to_index:
+                                    prof.answers[answers_key_to_index[k]] = answer_dict
+                                else:
+                                    prof.answers.append(answer_dict)
                         elif v != '' and v is not None:
                             answer = QuestionAnswer(
                                 cartposition=(form.pos if isinstance(form.pos, CartPosition) else None),
@@ -192,7 +219,27 @@ class BaseQuestionsViewMixin:
                                 self._save_to_answer(field, answer, v)
                                 answer.save()
 
+                            if isinstance(field, forms.ModelMultipleChoiceField) or isinstance(field, forms.ModelChoiceField):
+                                answer_value = {o.identifier: str(o) for o in answer.options.all()}
+                            elif isinstance(field, forms.BooleanField):
+                                answer_value = bool(answer.answer)
+                            else:
+                                answer_value = str(answer.answer)
+                            answer_dict = {
+                                'field_name': k,
+                                'field_label': str(field.label),
+                                'value': answer_value,
+                                'question_type': field.question.type,
+                                'question_identifier': field.question.identifier,
+                            }
+                            if k in answers_key_to_index:
+                                prof.answers[answers_key_to_index[k]] = answer_dict
+                            else:
+                                prof.answers.append(answer_dict)
+
                     else:
+                        field = form.fields[k]
+
                         meta_info.setdefault('question_form_data', {})
                         if v is None:
                             if k in meta_info['question_form_data']:
@@ -200,8 +247,25 @@ class BaseQuestionsViewMixin:
                         else:
                             meta_info['question_form_data'][k] = v
 
+                        answer_dict = {
+                            'field_name': k,
+                            'field_label': str(field.label),
+                            'value': str(v),
+                            'question_type': None,
+                            'question_identifier': None,
+                        }
+                        if k in answers_key_to_index:
+                            prof.answers[answers_key_to_index[k]] = answer_dict
+                        else:
+                            prof.answers.append(answer_dict)
+
             form.pos.meta_info = json.dumps(meta_info)
             form.pos.save()
+
+            if form.cleaned_data.get('save') and not failed:
+                prof.save()
+                self.cart_session[f'saved_attendee_profile_{form.pos.pk}'] = prof.pk
+
         return not failed
 
     def _save_to_answer(self, field, answer, value):

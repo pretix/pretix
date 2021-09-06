@@ -275,6 +275,7 @@ $(function () {
     attendee_address_fields.change(function () {
         copy_to_first_ticket = false;
     });
+    questions_init_profiles($("body"));
 
     // Subevent choice
     if ($(".subevent-toggle").length) {
@@ -407,10 +408,15 @@ $(function () {
                     if (counter > curCounter) {
                         return;  // Lost race
                     }
+                    var selected_value = dependent.prop("data-selected-value");
                     dependent.find("option").filter(function (t) {return !!$(this).attr("value")}).remove();
                     if (data.data.length > 0) {
                         $.each(data.data, function (k, s) {
-                            dependent.append($("<option>").attr("value", s.code).text(s.name));
+                            var o = $("<option>").attr("value", s.code).text(s.name);
+                            if (s.code == selected_value || (selected_value && selected_value.indexOf && selected_value.indexOf(s.code) > -1)) {
+                                o.prop("selected", true);
+                            }
+                            dependent.append(o);
                         });
                         dependent.closest(".form-group").show();
                         dependent.prop('required', dependency.prop("required"));

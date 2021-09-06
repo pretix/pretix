@@ -19,19 +19,21 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
+import pycountry
 from django.conf import settings
 from django.contrib.auth.hashers import (
     check_password, is_password_usable, make_password,
 )
 from django.db import models
 from django.utils.crypto import get_random_string, salted_hmac
-from django.utils.translation import gettext_lazy as _
+from django.utils.translation import gettext_lazy as _, pgettext_lazy
 from django_scopes import ScopedManager, scopes_disabled
 
 from pretix.base.banlist import banned
 from pretix.base.models.base import LoggedModel
 from pretix.base.models.organizer import Organizer
 from pretix.base.settings import PERSON_NAME_SCHEMES
+from pretix.helpers.countries import FastCountryField
 
 
 class Customer(LoggedModel):
@@ -88,6 +90,8 @@ class Customer(LoggedModel):
         self.all_logentries().update(data={}, shredded=True)
         self.orders.all().update(customer=None)
         self.memberships.all().update(attendee_name_parts=None)
+        self.attendee_profiles.all().delete()
+        self.invoice_addresses.all().delete()
 
     @scopes_disabled()
     def assign_identifier(self):
@@ -174,3 +178,88 @@ class Customer(LoggedModel):
                 continue
             ctx['name_%s' % f] = self.name_parts.get(f, '')
         return ctx
+
+    @property
+    def stored_addresses(self):
+        return self.invoice_addresses(manager='profiles')
+
+
+class AttendeeProfile(models.Model):
+    customer = models.ForeignKey(
+        Customer,
+        related_name='attendee_profiles',
+        on_delete=models.CASCADE
+    )
+    attendee_name_cached = models.CharField(
+        max_length=255,
+        verbose_name=_("Attendee name"),
+        blank=True, null=True,
+    )
+    attendee_name_parts = models.JSONField(
+        blank=True, default=dict
+    )
+    attendee_email = models.EmailField(
+        verbose_name=_("Attendee email"),
+        blank=True, null=True,
+    )
+    company = models.CharField(max_length=255, blank=True, verbose_name=_('Company name'), null=True)
+    street = models.TextField(verbose_name=_('Address'), blank=True, null=True)
+    zipcode = models.CharField(max_length=30, verbose_name=_('ZIP code'), blank=True, null=True)
+    city = models.CharField(max_length=255, verbose_name=_('City'), blank=True, null=True)
+    country = FastCountryField(verbose_name=_('Country'), blank=True, blank_label=_('Select country'), null=True)
+    state = models.CharField(max_length=255, verbose_name=pgettext_lazy('address', 'State'), blank=True, null=True)
+    answers = models.JSONField(default=list)
+
+    objects = ScopedManager(organizer='customer__organizer')
+
+    @property
+    def attendee_name(self):
+        if not self.attendee_name_parts:
+            return None
+        if '_legacy' in self.attendee_name_parts:
+            return self.attendee_name_parts['_legacy']
+        if '_scheme' in self.attendee_name_parts:
+            scheme = PERSON_NAME_SCHEMES[self.attendee_name_parts['_scheme']]
+        else:
+            scheme = PERSON_NAME_SCHEMES[self.customer.organizer.settings.name_scheme]
+        return scheme['concatenation'](self.attendee_name_parts).strip()
+
+    @property
+    def state_name(self):
+        sd = pycountry.subdivisions.get(code='{}-{}'.format(self.country, self.state))
+        if sd:
+            return sd.name
+        return self.state
+
+    @property
+    def state_for_address(self):
+        from pretix.base.settings import COUNTRIES_WITH_STATE_IN_ADDRESS
+        if not self.state or str(self.country) not in COUNTRIES_WITH_STATE_IN_ADDRESS:
+            return ""
+        if COUNTRIES_WITH_STATE_IN_ADDRESS[str(self.country)][1] == 'long':
+            return self.state_name
+        return self.state
+
+    def describe(self):
+        from .items import Question
+        from .orders import QuestionAnswer
+
+        parts = [
+            self.attendee_name,
+            self.attendee_email,
+            self.company,
+            self.street,
+            (self.zipcode or '') + ' ' + (self.city or '') + ' ' + (self.state_for_address or ''),
+            self.country.name,
+        ]
+        for a in self.answers:
+            value = a.get('value')
+            try:
+                value = ", ".join(value.values())
+            except AttributeError:
+                value = str(value)
+            answer = QuestionAnswer(question=Question(type=a.get('question_type')), answer=value)
+            val = str(answer)
+            parts.append(f'{a["field_label"]}: {val}')
+
+        return '\n'.join([str(p).strip() for p in parts if p and str(p).strip()])

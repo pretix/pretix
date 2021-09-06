@@ -34,9 +34,9 @@ from django.utils.translation import gettext_lazy as _
 from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_protect
 from django.views.decorators.debug import sensitive_post_parameters
-from django.views.generic import FormView, ListView, View
+from django.views.generic import DeleteView, FormView, ListView, View
 
-from pretix.base.models import Customer, Order, OrderPosition
+from pretix.base.models import Customer, InvoiceAddress, Order, OrderPosition
 from pretix.base.services.mail import mail
 from pretix.multidomain.urlreverse import build_absolute_uri, eventreverse
 from pretix.presale.forms.customer import (
@@ -299,6 +299,7 @@ class ProfileView(CustomerRequiredMixin, ListView):
         ctx['memberships'] = self.request.customer.memberships.with_usages().select_related(
             'membership_type', 'granted_in', 'granted_in__order', 'granted_in__order__event'
         )
+        ctx['invoice_addresses'] = InvoiceAddress.profiles.filter(customer=self.request.customer)
         ctx['is_paginated'] = True
 
         for m in ctx['memberships']:
@@ -351,6 +352,28 @@ class MembershipUsageView(CustomerRequiredMixin, ListView):
         ctx['membership'] = self.membership
         ctx['is_paginated'] = True
         return ctx
+
+
+class AddressDeleteView(CustomerRequiredMixin, DeleteView):
+    template_name = 'pretixpresale/organizers/customer_address_delete.html'
+    context_object_name = 'address'
+
+    def get_object(self, **kwargs):
+        return get_object_or_404(InvoiceAddress.profiles, customer=self.request.customer, pk=self.kwargs.get('id'))
+
+    def get_success_url(self):
+        return eventreverse(self.request.organizer, 'presale:organizer.customer.profile', kwargs={})
+
+
+class ProfileDeleteView(CustomerRequiredMixin, DeleteView):
+    template_name = 'pretixpresale/organizers/customer_profile_delete.html'
+    context_object_name = 'profile'
+
+    def get_object(self, **kwargs):
+        return get_object_or_404(self.request.customer.attendee_profiles, pk=self.kwargs.get('id'))
+
+    def get_success_url(self):
+        return eventreverse(self.request.organizer, 'presale:organizer.customer.profile', kwargs={})
 
 
 class ChangePasswordView(CustomerRequiredMixin, FormView):

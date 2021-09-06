@@ -1,0 +1,33 @@
+{% extends "pretixpresale/organizers/base.html" %}
+{% load i18n %}
+{% load eventurl %}
+{% block title %}{% trans "Delete profile" %}{% endblock %}
+{% block content %}
+    <h2>
+        {% trans "Delete profile" %}
+    </h2>
+    <form method="post">
+        {% csrf_token %}
+        <p>
+            {% trans "Do you really want to delete the following profile from your account?" %}
+        </p>
+        <address>
+            {{ profile.describe|linebreaksbr }}
+        </address>
+        <div class="row">
+            <div class="col-md-4 col-sm-6">
+                <a class="btn btn-block btn-default btn-lg"
+                   href="{% abseventurl request.organizer "presale:organizer.customer.profile" %}">
+                    {% trans "Go back" %}
+                </a>
+            </div>
+            <div class="col-md-4 col-md-offset-4 col-sm-6">
+                <button class="btn btn-block btn-danger btn-lg" type="submit">
+                    {% trans "Delete" %}
+                </button>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+
+    </form>
+{% endblock %}
