@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-27 13:05+0000\n"
+"POT-Creation-Date: 2021-09-06 18:51+0000\n"
 "PO-Revision-Date: 2020-01-24 08:00+0000\n"
 "Last-Translator: Prokaj Miklós <mixolid0@gmail.com>\n"
 "Language-Team: Hungarian <https://translate.pretix.eu/projects/pretix/pretix-"
@@ -501,10 +501,12 @@ msgid "Count"
 msgstr "Számítás"
 
 #: pretix/static/pretixcontrol/js/ui/question.js:136
+#: pretix/static/pretixpresale/js/ui/questions.js:269
 msgid "Yes"
 msgstr "Igen"
 
 #: pretix/static/pretixcontrol/js/ui/question.js:137
+#: pretix/static/pretixpresale/js/ui/questions.js:269
 msgid "No"
 msgstr "Nem"
 
@@ -546,22 +548,22 @@ msgstr "%(currency) %(price)-tól"
 msgid "Please enter the amount the organizer can keep."
 msgstr ""
 
-#: pretix/static/pretixpresale/js/ui/main.js:308
+#: pretix/static/pretixpresale/js/ui/main.js:309
 msgid "Please enter a quantity for one of the ticket types."
 msgstr "Adjon meg egy mennyiséget az egyik jegytípusból."
 
-#: pretix/static/pretixpresale/js/ui/main.js:344
+#: pretix/static/pretixpresale/js/ui/main.js:345
 #, fuzzy
 #| msgid "Cart expired"
 msgid "required"
 msgstr "A kosár lejárt"
 
-#: pretix/static/pretixpresale/js/ui/main.js:441
-#: pretix/static/pretixpresale/js/ui/main.js:459
+#: pretix/static/pretixpresale/js/ui/main.js:447
+#: pretix/static/pretixpresale/js/ui/main.js:465
 msgid "Time zone:"
 msgstr ""
 
-#: pretix/static/pretixpresale/js/ui/main.js:450
+#: pretix/static/pretixpresale/js/ui/main.js:456
 msgid "Your local time:"
 msgstr ""
 

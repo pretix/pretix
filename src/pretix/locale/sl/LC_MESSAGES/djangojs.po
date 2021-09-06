@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-27 13:05+0000\n"
+"POT-Creation-Date: 2021-09-06 18:51+0000\n"
 "PO-Revision-Date: 2019-08-27 08:00+0000\n"
 "Last-Translator: Bostjan Marusic <bostjan@brokenbones.si>\n"
 "Language-Team: Slovenian <https://translate.pretix.eu/projects/pretix/pretix-"
@@ -502,10 +502,12 @@ msgid "Count"
 msgstr "Seštevek"
 
 #: pretix/static/pretixcontrol/js/ui/question.js:136
+#: pretix/static/pretixpresale/js/ui/questions.js:269
 msgid "Yes"
 msgstr "Da"
 
 #: pretix/static/pretixcontrol/js/ui/question.js:137
+#: pretix/static/pretixpresale/js/ui/questions.js:269
 msgid "No"
 msgstr "Ne"
 
@@ -551,22 +553,22 @@ msgstr "od %(currency)s %(price)s"
 msgid "Please enter the amount the organizer can keep."
 msgstr ""
 
-#: pretix/static/pretixpresale/js/ui/main.js:308
+#: pretix/static/pretixpresale/js/ui/main.js:309
 msgid "Please enter a quantity for one of the ticket types."
 msgstr "Prosimo vnesite količino za eno od vrst vstopnic."
 
-#: pretix/static/pretixpresale/js/ui/main.js:344
+#: pretix/static/pretixpresale/js/ui/main.js:345
 #, fuzzy
 #| msgid "Cart expired"
 msgid "required"
 msgstr "Vsebina košarice je potekla"
 
-#: pretix/static/pretixpresale/js/ui/main.js:441
-#: pretix/static/pretixpresale/js/ui/main.js:459
+#: pretix/static/pretixpresale/js/ui/main.js:447
+#: pretix/static/pretixpresale/js/ui/main.js:465
 msgid "Time zone:"
 msgstr ""
 
-#: pretix/static/pretixpresale/js/ui/main.js:450
+#: pretix/static/pretixpresale/js/ui/main.js:456
 msgid "Your local time:"
 msgstr ""
 

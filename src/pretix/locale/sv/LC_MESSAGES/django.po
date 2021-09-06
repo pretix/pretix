@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-27 13:05+0000\n"
+"POT-Creation-Date: 2021-09-06 18:51+0000\n"
 "PO-Revision-Date: 2021-09-06 14:33+0000\n"
 "Last-Translator: Klevagruva <info@klevagruva.com>\n"
 "Language-Team: Swedish <https://translate.pretix.eu/projects/pretix/pretix/"
@@ -18,6 +18,37 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Weblate 4.6\n"
+
+#: htmlcov/pretix_control_views_dashboards_py.html:963
+#: pretix/control/templates/pretixcontrol/events/index.html:140
+#: pretix/control/templates/pretixcontrol/organizers/detail.html:104
+#: pretix/control/views/dashboards.py:529
+msgid "Shop disabled"
+msgstr "Butiken är inaktiverad"
+
+#: htmlcov/pretix_control_views_dashboards_py.html:965
+#: pretix/control/forms/filter.py:828 pretix/control/forms/filter.py:1198
+#: pretix/control/templates/pretixcontrol/events/index.html:142
+#: pretix/control/templates/pretixcontrol/organizers/detail.html:106
+#: pretix/control/templates/pretixcontrol/subevents/index.html:152
+msgid "Presale over"
+msgstr "Försäljning avslutad"
+
+#: htmlcov/pretix_control_views_dashboards_py.html:967
+#: pretix/control/forms/filter.py:827 pretix/control/forms/filter.py:1197
+#: pretix/control/templates/pretixcontrol/events/index.html:144
+#: pretix/control/templates/pretixcontrol/organizers/detail.html:108
+#: pretix/control/templates/pretixcontrol/subevents/index.html:154
+msgid "Presale not started"
+msgstr "Försäljningen har inte påbörjats"
+
+#: htmlcov/pretix_control_views_dashboards_py.html:969
+#: pretix/control/templates/pretixcontrol/events/index.html:146
+#: pretix/control/templates/pretixcontrol/organizers/detail.html:110
+#: pretix/control/templates/pretixcontrol/subevents/index.html:156
+#: pretix/control/views/dashboards.py:535
+msgid "On sale"
+msgstr "Försäljning pågår"
 
 #: pretix/api/auth/devicesecurity.py:28
 msgid ""
@@ -172,7 +203,7 @@ msgstr "Presentkorts-produkter bör inte vara entré-produkter samtidigt."
 msgid "Item meta data property '{name}' does not exist."
 msgstr "Meta data egenskap '{name}' finns inte."
 
-#: pretix/api/serializers/item.py:359
+#: pretix/api/serializers/item.py:365
 msgid ""
 "Updating options via PATCH/PUT is not supported. Please use the dedicated "
 "nested endpoint."
@@ -180,15 +211,15 @@ msgstr ""
 "Uppdatering av inställningar via PATCH/PUT stöds inte. Vänligen använd den "
 "dedikerade ändpunkten."
 
-#: pretix/api/serializers/item.py:373 pretix/control/forms/item.py:113
+#: pretix/api/serializers/item.py:379 pretix/control/forms/item.py:113
 msgid "Question cannot depend on a question asked during check-in."
 msgstr "Frågor kan inte bero på en fråga som ställs vid incheckningen."
 
-#: pretix/api/serializers/item.py:378 pretix/control/forms/item.py:118
+#: pretix/api/serializers/item.py:384 pretix/control/forms/item.py:118
 msgid "Circular dependency between questions detected."
 msgstr "Cirkulärt beroende mellan frågorna har upptäckts."
 
-#: pretix/api/serializers/item.py:383 pretix/control/forms/item.py:127
+#: pretix/api/serializers/item.py:389 pretix/control/forms/item.py:127
 msgid "This type of question cannot be asked during check-in."
 msgstr "Denna typ av fråga kan inte ställas vid incheckningen."
 
@@ -342,13 +373,13 @@ msgid "{system} User"
 msgstr "{system} Användare"
 
 #: pretix/base/auth.py:147 pretix/base/forms/auth.py:242
-#: pretix/base/models/auth.py:124 pretix/base/models/customers.py:44
+#: pretix/base/models/auth.py:124 pretix/base/models/customers.py:46
 #: pretix/base/models/notifications.py:46 pretix/base/models/orders.py:191
 #: pretix/control/navigation.py:81 pretix/control/navigation.py:472
 #: pretix/control/templates/pretixcontrol/event/settings.html:68
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:40
 #: pretix/plugins/checkinlists/exporters.py:453
-#: pretix/presale/checkoutflow.py:1096 pretix/presale/forms/checkout.py:60
+#: pretix/presale/checkoutflow.py:1205 pretix/presale/forms/checkout.py:60
 #: pretix/presale/forms/customer.py:50 pretix/presale/forms/customer.py:124
 #: pretix/presale/forms/customer.py:231 pretix/presale/forms/customer.py:275
 #: pretix/presale/forms/customer.py:318 pretix/presale/forms/user.py:40
@@ -358,7 +389,7 @@ msgid "E-mail"
 msgstr "Epost"
 
 #: pretix/base/auth.py:149 pretix/base/forms/auth.py:153
-#: pretix/base/forms/auth.py:205 pretix/base/models/customers.py:45
+#: pretix/base/forms/auth.py:205 pretix/base/models/customers.py:47
 #: pretix/control/forms/__init__.py:398 pretix/presale/forms/customer.py:54
 #: pretix/presale/forms/customer.py:235
 msgid "Password"
@@ -607,7 +638,7 @@ msgstr "Datum"
 #: pretix/plugins/reports/exporters.py:795
 #: pretix/plugins/ticketoutputpdf/exporters.py:91
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:42
-#: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:109
+#: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:60
 msgid "Order code"
 msgstr "Beställningsnummer"
 
@@ -629,7 +660,7 @@ msgstr "Avbokning av"
 
 #: pretix/base/exporters/invoices.py:205
 #: pretix/base/exporters/waitinglist.py:116 pretix/base/models/auth.py:136
-#: pretix/base/models/customers.py:55 pretix/control/forms/event.py:1223
+#: pretix/base/models/customers.py:57 pretix/control/forms/event.py:1223
 #: pretix/control/views/waitinglist.py:277
 msgid "Language"
 msgstr "Språk"
@@ -692,14 +723,16 @@ msgstr "Namn"
 #: pretix/base/exporters/orderlist.py:456
 #: pretix/base/exporters/orderlist.py:566
 #: pretix/base/exporters/orderlist.py:605 pretix/base/forms/questions.py:571
-#: pretix/base/models/orders.py:1229 pretix/base/models/orders.py:2341
-#: pretix/base/orderimport.py:351 pretix/base/orderimport.py:497
-#: pretix/control/forms/filter.py:573 pretix/control/forms/filter.py:604
+#: pretix/base/models/customers.py:206 pretix/base/models/orders.py:1229
+#: pretix/base/models/orders.py:2347 pretix/base/orderimport.py:351
+#: pretix/base/orderimport.py:497 pretix/control/forms/filter.py:573
+#: pretix/control/forms/filter.py:604
 #: pretix/control/templates/pretixcontrol/order/index.html:846
 #: pretix/plugins/checkinlists/exporters.py:476
 #: pretix/plugins/reports/exporters.py:751
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:99
 #: pretix/presale/templates/pretixpresale/event/order.html:317
+#: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:175
 msgid "Address"
 msgstr "Adress"
 
@@ -709,10 +742,11 @@ msgstr "Adress"
 #: pretix/base/exporters/orderlist.py:456
 #: pretix/base/exporters/orderlist.py:567
 #: pretix/base/exporters/orderlist.py:605 pretix/base/forms/questions.py:582
-#: pretix/base/models/orders.py:1230 pretix/base/models/orders.py:2342
-#: pretix/base/orderimport.py:362 pretix/base/orderimport.py:508
-#: pretix/base/settings.py:796 pretix/control/forms/filter.py:577
-#: pretix/control/forms/filter.py:608 pretix/control/views/item.py:392
+#: pretix/base/models/customers.py:207 pretix/base/models/orders.py:1230
+#: pretix/base/models/orders.py:2348 pretix/base/orderimport.py:362
+#: pretix/base/orderimport.py:508 pretix/base/settings.py:796
+#: pretix/control/forms/filter.py:577 pretix/control/forms/filter.py:608
+#: pretix/control/views/item.py:392
 #: pretix/plugins/checkinlists/exporters.py:477
 #: pretix/plugins/reports/exporters.py:752
 msgid "ZIP code"
@@ -724,10 +758,11 @@ msgstr "Postnummer"
 #: pretix/base/exporters/orderlist.py:456
 #: pretix/base/exporters/orderlist.py:568
 #: pretix/base/exporters/orderlist.py:605 pretix/base/forms/questions.py:590
-#: pretix/base/models/orders.py:1231 pretix/base/models/orders.py:2343
-#: pretix/base/orderimport.py:373 pretix/base/orderimport.py:519
-#: pretix/base/settings.py:808 pretix/control/forms/filter.py:582
-#: pretix/control/forms/filter.py:613 pretix/control/views/item.py:402
+#: pretix/base/models/customers.py:208 pretix/base/models/orders.py:1231
+#: pretix/base/models/orders.py:2349 pretix/base/orderimport.py:373
+#: pretix/base/orderimport.py:519 pretix/base/settings.py:808
+#: pretix/control/forms/filter.py:582 pretix/control/forms/filter.py:613
+#: pretix/control/views/item.py:402
 #: pretix/plugins/checkinlists/exporters.py:478
 #: pretix/plugins/reports/exporters.py:753
 msgid "City"
@@ -739,10 +774,11 @@ msgstr "Stad"
 #: pretix/base/exporters/orderlist.py:456
 #: pretix/base/exporters/orderlist.py:569
 #: pretix/base/exporters/orderlist.py:605 pretix/base/forms/questions.py:602
-#: pretix/base/models/orders.py:1232 pretix/base/models/orders.py:2344
-#: pretix/base/models/orders.py:2345 pretix/base/orderimport.py:389
-#: pretix/base/orderimport.py:535 pretix/base/settings.py:817
-#: pretix/control/forms/filter.py:587 pretix/control/forms/filter.py:618
+#: pretix/base/models/customers.py:209 pretix/base/models/orders.py:1232
+#: pretix/base/models/orders.py:2350 pretix/base/models/orders.py:2351
+#: pretix/base/orderimport.py:389 pretix/base/orderimport.py:535
+#: pretix/base/settings.py:817 pretix/control/forms/filter.py:587
+#: pretix/control/forms/filter.py:618
 #: pretix/control/templates/pretixcontrol/order/index.html:850
 #: pretix/control/views/item.py:412
 #: pretix/plugins/checkinlists/exporters.py:479
@@ -762,7 +798,7 @@ msgstr "Organisationsnummer"
 #: pretix/base/exporters/invoices.py:339 pretix/base/exporters/invoices.py:347
 #: pretix/base/exporters/orderlist.py:277
 #: pretix/base/exporters/orderlist.py:456
-#: pretix/base/exporters/orderlist.py:605 pretix/base/models/orders.py:2348
+#: pretix/base/exporters/orderlist.py:605 pretix/base/models/orders.py:2354
 #: pretix/base/orderimport.py:433
 #: pretix/control/templates/pretixcontrol/order/index.html:857
 #: pretix/plugins/reports/exporters.py:755
@@ -811,8 +847,9 @@ msgstr "Gatuadress"
 #: pretix/base/exporters/orderlist.py:456
 #: pretix/base/exporters/orderlist.py:570
 #: pretix/base/exporters/orderlist.py:605 pretix/base/forms/questions.py:626
-#: pretix/base/forms/questions.py:944 pretix/base/models/orders.py:1233
-#: pretix/base/models/orders.py:2347 pretix/base/orderimport.py:408
+#: pretix/base/forms/questions.py:944 pretix/base/models/customers.py:210
+#: pretix/base/models/orders.py:1233 pretix/base/models/orders.py:2353
+#: pretix/base/orderimport.py:408
 #: pretix/control/templates/pretixcontrol/order/index.html:853
 #: pretix/plugins/checkinlists/exporters.py:480
 #: pretix/plugins/reports/exporters.py:754
@@ -823,13 +860,13 @@ msgid "State"
 msgstr "Region"
 
 #: pretix/base/exporters/invoices.py:221 pretix/base/exporters/invoices.py:348
-#: pretix/base/models/orders.py:2358
+#: pretix/base/models/orders.py:2364 pretix/base/models/orders.py:2392
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:114
 msgid "Beneficiary"
 msgstr "Förmånstagare"
 
 #: pretix/base/exporters/invoices.py:222 pretix/base/exporters/invoices.py:349
-#: pretix/base/models/orders.py:2353 pretix/base/orderimport.py:444
+#: pretix/base/models/orders.py:2359 pretix/base/orderimport.py:444
 #: pretix/control/templates/pretixcontrol/order/index.html:877
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:121
 msgid "Internal reference"
@@ -885,13 +922,13 @@ msgstr "Faktura"
 #: pretix/base/exporters/orderlist.py:1009 pretix/base/models/orders.py:1095
 #: pretix/control/forms/filter.py:142 pretix/control/forms/filter.py:474
 #: pretix/control/forms/item.py:483 pretix/control/forms/subevents.py:118
-#: pretix/control/views/item.py:603 pretix/control/views/vouchers.py:127
-#: pretix/control/views/vouchers.py:128
+#: pretix/control/views/item.py:603 pretix/control/views/vouchers.py:128
+#: pretix/control/views/vouchers.py:129
 #: pretix/plugins/checkinlists/exporters.py:528
 #: pretix/plugins/checkinlists/exporters.py:531
 #: pretix/plugins/checkinlists/exporters.py:568
-#: pretix/plugins/checkinlists/exporters.py:661
-#: pretix/plugins/checkinlists/exporters.py:662
+#: pretix/plugins/checkinlists/exporters.py:663
+#: pretix/plugins/checkinlists/exporters.py:664
 msgid "Yes"
 msgstr "Ja"
 
@@ -902,13 +939,13 @@ msgstr "Ja"
 #: pretix/base/exporters/orderlist.py:1009 pretix/base/models/orders.py:1097
 #: pretix/control/forms/filter.py:142 pretix/control/forms/filter.py:475
 #: pretix/control/forms/item.py:484 pretix/control/forms/subevents.py:119
-#: pretix/control/views/item.py:603 pretix/control/views/vouchers.py:127
-#: pretix/control/views/vouchers.py:128
+#: pretix/control/views/item.py:603 pretix/control/views/vouchers.py:128
+#: pretix/control/views/vouchers.py:129
 #: pretix/plugins/checkinlists/exporters.py:528
 #: pretix/plugins/checkinlists/exporters.py:531
 #: pretix/plugins/checkinlists/exporters.py:568
-#: pretix/plugins/checkinlists/exporters.py:661
-#: pretix/plugins/checkinlists/exporters.py:662
+#: pretix/plugins/checkinlists/exporters.py:663
+#: pretix/plugins/checkinlists/exporters.py:664
 msgid "No"
 msgstr "Nej"
 
@@ -971,7 +1008,7 @@ msgstr "Beställningsdata"
 #: pretix/control/templates/pretixcontrol/orders/index.html:9
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:163
 #: pretix/plugins/reports/exporters.py:550
-#: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:103
+#: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:43
 msgid "Orders"
 msgstr "Beställningar"
 
@@ -1035,7 +1072,7 @@ msgstr "Förkortning för evenemanget"
 #: pretix/control/templates/pretixcontrol/search/orders.html:60
 #: pretix/plugins/reports/exporters.py:456
 #: pretix/plugins/reports/exporters.py:797
-#: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:112
+#: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:63
 msgid "Order total"
 msgstr "Beställningstotal"
 
@@ -1069,7 +1106,7 @@ msgstr "Beställningstotal"
 #: pretix/plugins/reports/exporters.py:797
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:61
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:46
-#: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:114
+#: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:65
 #: pretix/presale/templates/pretixpresale/organizers/index.html:67
 msgid "Status"
 msgstr "Status"
@@ -1095,7 +1132,7 @@ msgstr "E-post"
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:148
 #: pretix/control/views/waitinglist.py:276
 #: pretix/plugins/checkinlists/exporters.py:454
-#: pretix/presale/checkoutflow.py:1102 pretix/presale/forms/checkout.py:90
+#: pretix/presale/checkoutflow.py:1211 pretix/presale/forms/checkout.py:90
 #: pretix/presale/forms/waitinglist.py:69
 #: pretix/presale/templates/pretixpresale/event/order.html:305
 msgid "Phone number"
@@ -1117,7 +1154,7 @@ msgstr "Telefonnummer"
 #: pretix/plugins/reports/exporters.py:584
 #: pretix/plugins/reports/exporters.py:795
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:45
-#: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:111
+#: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:62
 msgid "Order date"
 msgstr "Beställningsdatum"
 
@@ -1185,7 +1222,7 @@ msgstr "Kräver speciell uppmärksamhet"
 #: pretix/control/forms/filter.py:511
 #: pretix/control/templates/pretixcontrol/order/index.html:795
 #: pretix/control/templates/pretixcontrol/user/staff_session_list.html:21
-#: pretix/control/views/vouchers.py:109
+#: pretix/control/views/vouchers.py:110
 #: pretix/plugins/banktransfer/refund_export.py:46
 #: pretix/plugins/checkinlists/exporters.py:469
 msgid "Comment"
@@ -1200,7 +1237,7 @@ msgstr "Uppföljningsdatum"
 #: pretix/base/exporters/orderlist.py:292
 #: pretix/control/templates/pretixcontrol/orders/index.html:125
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:173
-#: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:113
+#: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:64
 msgid "Positions"
 msgstr "Positioner"
 
@@ -1276,7 +1313,7 @@ msgstr "Positions-ID"
 #: pretix/plugins/checkinlists/exporters.py:457
 #: pretix/plugins/sendmail/forms.py:217
 #: pretix/presale/templates/pretixpresale/event/checkout_membership.html:52
-#: pretix/presale/templates/pretixpresale/event/checkout_questions.html:112
+#: pretix/presale/templates/pretixpresale/event/checkout_questions.html:134
 #: pretix/presale/templates/pretixpresale/event/order_change.html:29
 msgctxt "subevent"
 msgid "Date"
@@ -1294,7 +1331,7 @@ msgstr "Datum"
 #: pretix/control/templates/pretixcontrol/organizers/customer_membership.html:44
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:123
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:150
-#: pretix/control/views/vouchers.py:107 pretix/control/views/waitinglist.py:276
+#: pretix/control/views/vouchers.py:108 pretix/control/views/waitinglist.py:276
 #: pretix/plugins/checkinlists/exporters.py:333
 #: pretix/plugins/checkinlists/exporters.py:442
 #: pretix/plugins/checkinlists/exporters.py:614
@@ -1313,9 +1350,9 @@ msgstr "Variation"
 
 #: pretix/base/exporters/orderlist.py:557
 #: pretix/base/exporters/orderlist.py:562 pretix/base/forms/questions.py:546
-#: pretix/base/models/orders.py:1199 pretix/base/orderimport.py:458
-#: pretix/base/pdf.py:159 pretix/control/forms/filter.py:592
-#: pretix/control/forms/organizer.py:587
+#: pretix/base/models/customers.py:195 pretix/base/models/orders.py:1199
+#: pretix/base/orderimport.py:458 pretix/base/pdf.py:159
+#: pretix/control/forms/filter.py:592 pretix/control/forms/organizer.py:587
 #: pretix/control/templates/pretixcontrol/order/index.html:417
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:85
 #: pretix/control/views/item.py:346 pretix/plugins/badges/exporters.py:293
@@ -1326,12 +1363,13 @@ msgstr "Variation"
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:56
 #: pretix/presale/templates/pretixpresale/event/order_change.html:51
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:26
-#: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:52
+#: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:119
 msgid "Attendee name"
 msgstr "Namn på deltagare"
 
 #: pretix/base/exporters/orderlist.py:564 pretix/base/forms/questions.py:552
-#: pretix/base/models/orders.py:1207 pretix/base/pdf.py:201
+#: pretix/base/models/customers.py:202 pretix/base/models/orders.py:1207
+#: pretix/base/pdf.py:201
 #: pretix/control/templates/pretixcontrol/order/index.html:422
 #: pretix/control/views/item.py:358
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:63
@@ -1712,7 +1750,7 @@ msgstr "prioritet"
 #: pretix/base/exporters/waitinglist.py:119 pretix/base/models/vouchers.py:188
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:18
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:103
-#: pretix/control/views/vouchers.py:107 pretix/control/views/waitinglist.py:276
+#: pretix/control/views/vouchers.py:108 pretix/control/views/waitinglist.py:276
 #: pretix/plugins/checkinlists/exporters.py:465
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:321
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:323
@@ -1839,7 +1877,8 @@ msgstr "Din VAT-ID matchar inte det valda landet."
 #: pretix/base/forms/questions.py:1040
 #, fuzzy
 msgid "This VAT ID is not valid. Please re-check your input."
-msgstr "Den här moms-ID är inte giltig. Var snäll och kolla över din inmatning."
+msgstr ""
+"Den här moms-ID är inte giltig. Var snäll och kolla över din inmatning."
 
 #: pretix/base/forms/questions.py:1045
 #, fuzzy
@@ -1941,7 +1980,7 @@ msgstr "Felaktig syntax: du använde olika antal \"{\" och \"}\"."
 msgid "Invalid placeholder(s): %(value)s"
 msgstr ""
 
-#: pretix/base/forms/widgets.py:187 pretix/base/models/orders.py:2337
+#: pretix/base/forms/widgets.py:187 pretix/base/models/orders.py:2343
 msgid "Business customer"
 msgstr "Företag"
 
@@ -2043,12 +2082,12 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/organizers/giftcards.html:78
 #: pretix/control/templates/pretixcontrol/search/orders.html:77
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:67
-#: pretix/presale/forms/checkout.py:235
+#: pretix/presale/forms/checkout.py:267
 #: pretix/presale/templates/pretixpresale/event/order.html:71
 #: pretix/presale/templates/pretixpresale/event/position.html:14
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:58
-#: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:64
-#: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:128
+#: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:79
+#: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:131
 msgid "TEST MODE"
 msgstr "TESTLÄGE"
 
@@ -2181,8 +2220,8 @@ msgstr "Modern faktura återgivare (pretix 2.7)"
 msgid "Default list"
 msgstr "Standardlista"
 
-#: pretix/base/models/auth.py:126 pretix/base/models/customers.py:46
-#: pretix/base/models/orders.py:2339 pretix/base/settings.py:2654
+#: pretix/base/models/auth.py:126 pretix/base/models/customers.py:48
+#: pretix/base/models/orders.py:2345 pretix/base/settings.py:2654
 #: pretix/base/settings.py:2665
 #: pretix/control/templates/pretixcontrol/users/index.html:47
 msgid "Full name"
@@ -2247,7 +2286,7 @@ msgid "All products (including newly created ones)"
 msgstr "Alla produkter (inkl. nyligen skapade)"
 
 #: pretix/base/models/checkin.py:52 pretix/plugins/badges/exporters.py:248
-#: pretix/plugins/checkinlists/exporters.py:686
+#: pretix/plugins/checkinlists/exporters.py:690
 msgid "Limit to products"
 msgstr "Begränsa till produkter"
 
@@ -2358,23 +2397,34 @@ msgstr "Biljetttyp är inte godkänd här"
 msgid "Server error"
 msgstr "Server fel"
 
-#: pretix/base/models/customers.py:48
+#: pretix/base/models/customers.py:50
 msgid "Account active"
 msgstr "Konto aktivt"
 
-#: pretix/base/models/customers.py:49
+#: pretix/base/models/customers.py:51
 msgid "Verified email address"
 msgstr "Verifierad email adress"
 
-#: pretix/base/models/customers.py:50
+#: pretix/base/models/customers.py:52
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:55
 msgid "Last login"
 msgstr "Senast inloggad"
 
-#: pretix/base/models/customers.py:51
+#: pretix/base/models/customers.py:53
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:53
 msgid "Registration date"
 msgstr "Registrerings datum"
+
+#: pretix/base/models/customers.py:205 pretix/base/models/orders.py:1228
+#: pretix/base/models/orders.py:2344 pretix/base/settings.py:784
+msgid "Company name"
+msgstr ""
+
+#: pretix/base/models/customers.py:209 pretix/base/models/orders.py:1232
+#: pretix/base/models/orders.py:2351 pretix/base/settings.py:77
+#: pretix/plugins/stripe/payment.py:185
+msgid "Select country"
+msgstr ""
 
 #: pretix/base/models/devices.py:71 pretix/base/models/items.py:1171
 msgid "Internal identifier"
@@ -2561,7 +2611,7 @@ msgstr "Sälj bara biljetter för det här eventet på följande sälj kanaler."
 #: pretix/control/templates/pretixcontrol/search/orders.html:51
 #: pretix/presale/templates/pretixpresale/event/waitinglist.html:18
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:43
-#: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:110
+#: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:61
 msgid "Event"
 msgstr "Evenemang"
 
@@ -3548,7 +3598,7 @@ msgid ""
 msgstr ""
 
 #: pretix/base/models/memberships.py:56 pretix/base/models/vouchers.py:194
-#: pretix/control/views/vouchers.py:108
+#: pretix/control/views/vouchers.py:109
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:28
 msgid "Maximum usages"
 msgstr ""
@@ -3571,7 +3621,7 @@ msgstr "Avbruten"
 #: pretix/base/models/memberships.py:132
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:81
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:20
-#: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:49
+#: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:116
 msgid "Membership type"
 msgstr ""
 
@@ -3686,16 +3736,6 @@ msgstr ""
 
 #: pretix/base/models/orders.py:1201 pretix/base/models/orders.py:1209
 msgid "Empty, if this product is not an admission ticket"
-msgstr ""
-
-#: pretix/base/models/orders.py:1228 pretix/base/models/orders.py:2338
-#: pretix/base/settings.py:784
-msgid "Company name"
-msgstr ""
-
-#: pretix/base/models/orders.py:1232 pretix/base/models/orders.py:2345
-#: pretix/base/settings.py:77 pretix/plugins/stripe/payment.py:185
-msgid "Select country"
 msgstr ""
 
 #: pretix/base/models/orders.py:1393
@@ -3836,7 +3876,7 @@ msgstr ""
 #: pretix/base/models/orders.py:1926
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:65
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:103
-#: pretix/control/views/vouchers.py:108
+#: pretix/control/views/vouchers.py:109
 msgid "Value"
 msgstr ""
 
@@ -3861,11 +3901,11 @@ msgstr ""
 msgid "Cart positions"
 msgstr ""
 
-#: pretix/base/models/orders.py:2349
+#: pretix/base/models/orders.py:2355
 msgid "Only for business customers within the EU."
 msgstr ""
 
-#: pretix/base/models/orders.py:2354
+#: pretix/base/models/orders.py:2360
 msgid "This reference will be printed on your invoice for your convenience."
 msgstr ""
 
@@ -4085,7 +4125,7 @@ msgstr ""
 msgid "Number of times this voucher can be redeemed."
 msgstr ""
 
-#: pretix/base/models/vouchers.py:199 pretix/control/views/vouchers.py:108
+#: pretix/base/models/vouchers.py:199 pretix/control/views/vouchers.py:109
 msgid "Redeemed"
 msgstr ""
 
@@ -4102,9 +4142,9 @@ msgstr ""
 
 #: pretix/base/models/vouchers.py:211
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:83
-#: pretix/control/views/vouchers.py:107
+#: pretix/control/views/vouchers.py:108
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:24
-#: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:51
+#: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:118
 msgid "Valid until"
 msgstr ""
 
@@ -4157,7 +4197,7 @@ msgstr ""
 #: pretix/base/models/vouchers.py:274
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:118
 #: pretix/control/templates/pretixcontrol/vouchers/tags.html:42
-#: pretix/control/views/vouchers.py:108
+#: pretix/control/views/vouchers.py:109
 msgid "Tag"
 msgstr ""
 
@@ -9193,20 +9233,6 @@ msgstr ""
 msgid "Inactive"
 msgstr ""
 
-#: pretix/control/forms/filter.py:827 pretix/control/forms/filter.py:1197
-#: pretix/control/templates/pretixcontrol/events/index.html:144
-#: pretix/control/templates/pretixcontrol/organizers/detail.html:108
-#: pretix/control/templates/pretixcontrol/subevents/index.html:154
-msgid "Presale not started"
-msgstr "Försäljningen har inte påbörjats"
-
-#: pretix/control/forms/filter.py:828 pretix/control/forms/filter.py:1198
-#: pretix/control/templates/pretixcontrol/events/index.html:142
-#: pretix/control/templates/pretixcontrol/organizers/detail.html:106
-#: pretix/control/templates/pretixcontrol/subevents/index.html:152
-msgid "Presale over"
-msgstr "Försäljning avslutad"
-
 #: pretix/control/forms/filter.py:833 pretix/control/forms/filter.py:836
 #: pretix/control/forms/filter.py:1835
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:73
@@ -9296,7 +9322,7 @@ msgstr "Beställningen är bekräftad"
 
 #: pretix/control/forms/filter.py:1083
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:75
-#: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:43
+#: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:46
 msgid "Memberships"
 msgstr ""
 
@@ -9425,7 +9451,7 @@ msgstr ""
 
 #: pretix/control/forms/filter.py:1662 pretix/control/forms/vouchers.py:125
 #: pretix/control/views/typeahead.py:592 pretix/control/views/typeahead.py:596
-#: pretix/control/views/vouchers.py:120
+#: pretix/control/views/vouchers.py:121
 #, python-brace-format
 msgid "Any product in quota \"{quota}\""
 msgstr ""
@@ -9522,7 +9548,7 @@ msgstr "Slut datum"
 #: pretix/plugins/checkinlists/exporters.py:140
 #: pretix/plugins/checkinlists/exporters.py:420
 #: pretix/plugins/checkinlists/exporters.py:609
-#: pretix/plugins/checkinlists/exporters.py:678
+#: pretix/plugins/checkinlists/exporters.py:682
 msgid "Check-in list"
 msgstr ""
 
@@ -10001,9 +10027,9 @@ msgstr ""
 #: pretix/control/forms/orders.py:293
 #: pretix/control/templates/pretixcontrol/checkin/index.html:90
 #: pretix/control/templates/pretixcontrol/order/change.html:118
-#: pretix/control/views/vouchers.py:108
+#: pretix/control/views/vouchers.py:109
 #: pretix/presale/templates/pretixpresale/event/checkout_membership.html:24
-#: pretix/presale/templates/pretixpresale/event/checkout_questions.html:84
+#: pretix/presale/templates/pretixpresale/event/checkout_questions.html:106
 msgid "Seat"
 msgstr ""
 
@@ -10013,7 +10039,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/organizers/customer_membership.html:9
 #: pretix/control/templates/pretixcontrol/organizers/customer_membership_delete.html:5
 #: pretix/control/templates/pretixcontrol/organizers/customer_membership_delete.html:9
-#: pretix/presale/forms/checkout.py:213
+#: pretix/presale/forms/checkout.py:245
 msgid "Membership"
 msgstr ""
 
@@ -11906,7 +11932,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/checkout_customer.html:137
 #: pretix/presale/templates/pretixpresale/event/checkout_membership.html:91
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html:77
-#: pretix/presale/templates/pretixpresale/event/checkout_questions.html:157
+#: pretix/presale/templates/pretixpresale/event/checkout_questions.html:196
 #: pretix/presale/templates/pretixpresale/event/fragment_cart_box.html:49
 #: pretix/presale/templates/pretixpresale/event/order_pay.html:27
 #: pretix/presale/templates/pretixpresale/event/order_pay_change.html:60
@@ -11998,7 +12024,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/users/create.html:25
 #: pretix/control/templates/pretixcontrol/users/form.html:65
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html:91
-#: pretix/control/templates/pretixcontrol/vouchers/detail.html:98
+#: pretix/control/templates/pretixcontrol/vouchers/detail.html:110
 #: pretix/plugins/badges/templates/pretixplugins/badges/edit.html:35
 #: pretix/plugins/returnurl/templates/returnurl/settings.html:24
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_create.html:48
@@ -12455,6 +12481,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/user/2fa_regenemergency.html:17
 #: pretix/control/templates/pretixcontrol/vouchers/delete.html:12
 #: pretix/control/templates/pretixcontrol/vouchers/delete_bulk.html:33
+#: pretix/control/templates/pretixcontrol/vouchers/delete_carts.html:13
 #: pretix/control/templates/pretixcontrol/waitinglist/delete.html:12
 #: pretix/control/templates/pretixcontrol/waitinglist/delete_bulk.html:33
 #: pretix/plugins/badges/templates/pretixplugins/badges/delete.html:13
@@ -12490,11 +12517,16 @@ msgstr "Avbryt"
 #: pretix/control/templates/pretixcontrol/user/2fa_delete.html:21
 #: pretix/control/templates/pretixcontrol/vouchers/delete.html:15
 #: pretix/control/templates/pretixcontrol/vouchers/delete_bulk.html:36
+#: pretix/control/templates/pretixcontrol/vouchers/delete_carts.html:16
 #: pretix/control/templates/pretixcontrol/waitinglist/delete.html:15
 #: pretix/control/templates/pretixcontrol/waitinglist/delete_bulk.html:36
 #: pretix/plugins/badges/templates/pretixplugins/badges/delete.html:16
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_delete.html:15
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/delete.html:15
+#: pretix/presale/templates/pretixpresale/organizers/customer_address_delete.html:26
+#: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:188
+#: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:221
+#: pretix/presale/templates/pretixpresale/organizers/customer_profile_delete.html:26
 msgid "Delete"
 msgstr ""
 
@@ -13300,11 +13332,11 @@ msgstr ""
 #: pretix/control/views/organizer.py:1923
 #: pretix/control/views/organizer.py:1999 pretix/control/views/subevents.py:480
 #: pretix/control/views/subevents.py:1577 pretix/control/views/user.py:216
-#: pretix/control/views/users.py:87 pretix/control/views/vouchers.py:250
+#: pretix/control/views/users.py:87 pretix/control/views/vouchers.py:287
 #: pretix/plugins/badges/views.py:131 pretix/plugins/sendmail/views.py:394
 #: pretix/plugins/stripe/views.py:632
 #: pretix/plugins/ticketoutputpdf/views.py:167
-#: pretix/presale/views/customer.py:377 pretix/presale/views/customer.py:429
+#: pretix/presale/views/customer.py:400 pretix/presale/views/customer.py:452
 msgid "Your changes have been saved."
 msgstr "Dina ändringar har sparats."
 
@@ -13894,19 +13926,6 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/subevents/index.html:142
 msgid "More quotas"
 msgstr ""
-
-#: pretix/control/templates/pretixcontrol/events/index.html:140
-#: pretix/control/templates/pretixcontrol/organizers/detail.html:104
-#: pretix/control/views/dashboards.py:529
-msgid "Shop disabled"
-msgstr "Butiken är inaktiverad"
-
-#: pretix/control/templates/pretixcontrol/events/index.html:146
-#: pretix/control/templates/pretixcontrol/organizers/detail.html:110
-#: pretix/control/templates/pretixcontrol/subevents/index.html:156
-#: pretix/control/views/dashboards.py:535
-msgid "On sale"
-msgstr "Försäljning pågår"
 
 #: pretix/control/templates/pretixcontrol/events/index.html:151
 #: pretix/control/templates/pretixcontrol/organizers/detail.html:115
@@ -14965,13 +14984,13 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/order/change_questions.html:25
 #: pretix/control/templates/pretixcontrol/order/index.html:837
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:88
-#: pretix/presale/templates/pretixpresale/event/checkout_questions.html:35
+#: pretix/presale/templates/pretixpresale/event/checkout_questions.html:40
 #: pretix/presale/templates/pretixpresale/event/order_modify.html:29
 msgid "Invoice information"
 msgstr "Fakturainformation"
 
 #: pretix/control/templates/pretixcontrol/order/change_questions.html:26
-#: pretix/presale/templates/pretixpresale/event/checkout_questions.html:36
+#: pretix/presale/templates/pretixpresale/event/checkout_questions.html:41
 #: pretix/presale/templates/pretixpresale/event/order_modify.html:30
 msgid "(optional)"
 msgstr "(valfritt)"
@@ -15909,8 +15928,8 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/organizers/giftcards.html:91
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:15
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:89
-#: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:90
-#: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:152
+#: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:103
+#: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:157
 msgid "Details"
 msgstr "Detaljer"
 
@@ -15938,7 +15957,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:82
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:22
-#: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:50
+#: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:117
 #, fuzzy
 #| msgid "Paid orders"
 msgid "Valid from"
@@ -15947,7 +15966,7 @@ msgstr "Betalade beställningar"
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:86
 #: pretix/control/templates/pretixcontrol/organizers/customer_membership.html:35
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:36
-#: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:53
+#: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:120
 msgid "Usages"
 msgstr ""
 
@@ -15956,7 +15975,7 @@ msgid "Add membership"
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:200
-#: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:139
+#: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:90
 msgid "Matched to the account based on the email address."
 msgstr ""
 
@@ -16094,7 +16113,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/organizers/device_edit.html:24
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html:73
-#: pretix/control/templates/pretixcontrol/vouchers/detail.html:75
+#: pretix/control/templates/pretixcontrol/vouchers/detail.html:87
 msgid "Advanced settings"
 msgstr ""
 
@@ -17570,18 +17589,18 @@ msgid "Copy codes"
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html:39
-#: pretix/control/templates/pretixcontrol/vouchers/detail.html:27
+#: pretix/control/templates/pretixcontrol/vouchers/detail.html:39
 msgid "Voucher details"
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html:44
-#: pretix/control/templates/pretixcontrol/vouchers/detail.html:46
-#: pretix/control/views/vouchers.py:108
+#: pretix/control/templates/pretixcontrol/vouchers/detail.html:58
+#: pretix/control/views/vouchers.py:109
 msgid "Price effect"
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html:56
-#: pretix/control/templates/pretixcontrol/vouchers/detail.html:58
+#: pretix/control/templates/pretixcontrol/vouchers/detail.html:70
 msgid ""
 "If you choose \"any product\" for a specific quota and choose to reserve "
 "quota for this voucher above, the product can still be unavailable to the "
@@ -17614,6 +17633,27 @@ msgid ""
 "but they will be set to fully redeemed instead."
 msgstr ""
 
+#: pretix/control/templates/pretixcontrol/vouchers/delete_carts.html:4
+#: pretix/control/templates/pretixcontrol/vouchers/delete_carts.html:6
+#, fuzzy
+#| msgid "Event series"
+msgid "Delete carts"
+msgstr "Serie av evenemang"
+
+#: pretix/control/templates/pretixcontrol/vouchers/delete_carts.html:9
+#, python-format
+msgid ""
+"Are you sure you want to delete any cart positions with voucher <strong>"
+"%(voucher)s</strong>?"
+msgstr ""
+
+#: pretix/control/templates/pretixcontrol/vouchers/delete_carts.html:10
+msgid ""
+"This will silently remove products from the cart of a user currently making "
+"a purchase. This can be really confusing. Only use this if you know that the "
+"session is no longer in use."
+msgstr ""
+
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html:11
 msgid "This voucher already has been used. It is not recommended to modify it."
 msgstr ""
@@ -17623,11 +17663,24 @@ msgstr ""
 msgid "Order %(code)s"
 msgstr ""
 
-#: pretix/control/templates/pretixcontrol/vouchers/detail.html:32
+#: pretix/control/templates/pretixcontrol/vouchers/detail.html:23
+#, python-format
+msgid ""
+"This voucher is currently used in %(number)s cart sessions and there might "
+"not be free to use until the cart sessions expire."
+msgstr ""
+
+#: pretix/control/templates/pretixcontrol/vouchers/detail.html:28
+#, fuzzy
+#| msgid "Order positions"
+msgid "Remove cart positions"
+msgstr "Beställningsrad"
+
+#: pretix/control/templates/pretixcontrol/vouchers/detail.html:44
 msgid "Voucher link"
 msgstr ""
 
-#: pretix/control/templates/pretixcontrol/vouchers/detail.html:89
+#: pretix/control/templates/pretixcontrol/vouchers/detail.html:101
 msgid "Voucher history"
 msgstr ""
 
@@ -17952,8 +18005,10 @@ msgstr ""
 #: pretix/control/views/subevents.py:459 pretix/control/views/subevents.py:585
 #: pretix/control/views/subevents.py:1027
 #: pretix/control/views/subevents.py:1479 pretix/control/views/user.py:326
-#: pretix/plugins/badges/views.py:91 pretix/plugins/sendmail/views.py:334
-#: pretix/plugins/sendmail/views.py:398 pretix/plugins/stripe/views.py:635
+#: pretix/control/views/vouchers.py:266 pretix/control/views/vouchers.py:319
+#: pretix/control/views/vouchers.py:505 pretix/plugins/badges/views.py:91
+#: pretix/plugins/sendmail/views.py:334 pretix/plugins/sendmail/views.py:398
+#: pretix/plugins/stripe/views.py:635
 #: pretix/plugins/ticketoutputpdf/views.py:127
 msgid "We could not save your changes. See below for details."
 msgstr ""
@@ -18767,7 +18822,7 @@ msgstr ""
 msgid "The order has been changed."
 msgstr ""
 
-#: pretix/control/views/orders.py:1772 pretix/presale/checkoutflow.py:822
+#: pretix/control/views/orders.py:1772 pretix/presale/checkoutflow.py:827
 #: pretix/presale/views/order.py:748
 msgid ""
 "We had difficulties processing your input. Please review the errors below."
@@ -19191,44 +19246,52 @@ msgstr "Vi har skickat ut ett mail med vidare instruktioner."
 msgid "The new user has been created."
 msgstr "Den nya användaren har blivit skapad."
 
-#: pretix/control/views/vouchers.py:107
+#: pretix/control/views/vouchers.py:108
 msgid "Reserve quota"
 msgstr ""
 
-#: pretix/control/views/vouchers.py:107
+#: pretix/control/views/vouchers.py:108
 msgid "Bypass quota"
 msgstr ""
 
-#: pretix/control/views/vouchers.py:122
+#: pretix/control/views/vouchers.py:123
 msgid "Any product"
 msgstr "Några produkter"
 
-#: pretix/control/views/vouchers.py:196 pretix/control/views/vouchers.py:246
+#: pretix/control/views/vouchers.py:197 pretix/control/views/vouchers.py:229
+#: pretix/control/views/vouchers.py:283
 msgid "The requested voucher does not exist."
 msgstr "Den förfrågade kupongen existerar inte."
 
-#: pretix/control/views/vouchers.py:200 pretix/control/views/vouchers.py:210
+#: pretix/control/views/vouchers.py:207
+#, fuzzy
+#| msgctxt "subevent"
+#| msgid "The selected dates have been enabled."
+msgid "The selected cart positions have been removed."
+msgstr "Dom valda datumen har blivit aktiverade"
+
+#: pretix/control/views/vouchers.py:233 pretix/control/views/vouchers.py:243
 msgid "A voucher can not be deleted if it already has been redeemed."
 msgstr "En kupong kan inte raderas om den redan har blivit inlöst."
 
-#: pretix/control/views/vouchers.py:216
+#: pretix/control/views/vouchers.py:249
 msgid "The selected voucher has been deleted."
 msgstr "Den valda kupongen har blivit raderad."
 
-#: pretix/control/views/vouchers.py:299
+#: pretix/control/views/vouchers.py:349
 #, python-brace-format
 msgid "The new voucher has been created: {code}"
 msgstr "Den nya kupongen har skapats: {code}"
 
-#: pretix/control/views/vouchers.py:324
+#: pretix/control/views/vouchers.py:374
 msgid "There is no voucher with the given voucher code."
 msgstr "Det finns ingen kupong med den angivna kupongkoden."
 
-#: pretix/control/views/vouchers.py:440
+#: pretix/control/views/vouchers.py:490
 msgid "The new vouchers have been created."
 msgstr "Den nya kupongen har skapats."
 
-#: pretix/control/views/vouchers.py:507
+#: pretix/control/views/vouchers.py:561
 msgid "The selected vouchers have been deleted or disabled."
 msgstr "Den valda kupongen har raderats eller avaktiverats."
 
@@ -20200,15 +20263,25 @@ msgstr ""
 msgid "Error message"
 msgstr ""
 
-#: pretix/plugins/checkinlists/exporters.py:664
+#: pretix/plugins/checkinlists/exporters.py:622
+#, fuzzy
+#| msgid "Expired"
+msgid "Upload date"
+msgstr "Utgången"
+
+#: pretix/plugins/checkinlists/exporters.py:623
+msgid "Upload time"
+msgstr ""
+
+#: pretix/plugins/checkinlists/exporters.py:666
 msgid "OK"
 msgstr ""
 
-#: pretix/plugins/checkinlists/exporters.py:694
+#: pretix/plugins/checkinlists/exporters.py:698
 msgid "Successful scans only"
 msgstr ""
 
-#: pretix/plugins/checkinlists/exporters.py:709
+#: pretix/plugins/checkinlists/exporters.py:713
 msgid "All check-in lists"
 msgstr ""
 
@@ -21775,94 +21848,94 @@ msgstr "Biljettdesign"
 msgid "Check-in"
 msgstr "Kassa"
 
-#: pretix/presale/checkoutflow.py:102
+#: pretix/presale/checkoutflow.py:103
 msgctxt "checkoutflow"
 msgid "Step"
 msgstr "Steg"
 
-#: pretix/presale/checkoutflow.py:234
+#: pretix/presale/checkoutflow.py:235
 #, fuzzy
 #| msgid "Confirmations"
 msgctxt "checkoutflow"
 msgid "Customer account"
 msgstr "Bekräftelser"
 
-#: pretix/presale/checkoutflow.py:359
+#: pretix/presale/checkoutflow.py:360
 msgctxt "checkoutflow"
 msgid "Membership"
 msgstr ""
 
-#: pretix/presale/checkoutflow.py:402 pretix/presale/checkoutflow.py:422
+#: pretix/presale/checkoutflow.py:403 pretix/presale/checkoutflow.py:423
 msgid ""
 "Your cart includes a product that requires an active membership to be "
 "selected."
 msgstr ""
 
-#: pretix/presale/checkoutflow.py:441
+#: pretix/presale/checkoutflow.py:442
 msgctxt "checkoutflow"
 msgid "Add-on products"
 msgstr "Extra produkter"
 
-#: pretix/presale/checkoutflow.py:659
+#: pretix/presale/checkoutflow.py:660
 msgctxt "checkoutflow"
 msgid "Your information"
 msgstr "Din information"
 
-#: pretix/presale/checkoutflow.py:839
+#: pretix/presale/checkoutflow.py:861
 msgid ""
 "Unfortunately, based on the invoice address you entered, we're not able to "
 "sell you the selected products for tax-related legal reasons."
 msgstr ""
 
-#: pretix/presale/checkoutflow.py:845
+#: pretix/presale/checkoutflow.py:867
 msgid ""
 "Due to the invoice address you entered, we need to apply a different tax "
 "rate to your purchase and the price of the products in your cart has changed "
 "accordingly."
 msgstr ""
 
-#: pretix/presale/checkoutflow.py:858 pretix/presale/checkoutflow.py:864
+#: pretix/presale/checkoutflow.py:880 pretix/presale/checkoutflow.py:886
 msgid "Please enter a valid email address."
 msgstr "Ange en giltig epost."
 
-#: pretix/presale/checkoutflow.py:871
+#: pretix/presale/checkoutflow.py:893
 msgid "Please enter your invoicing address."
 msgstr "Ange din faktura-adress."
 
-#: pretix/presale/checkoutflow.py:875
+#: pretix/presale/checkoutflow.py:897
 msgid "Please enter your name."
 msgstr "Ange ditt namn."
 
-#: pretix/presale/checkoutflow.py:909 pretix/presale/checkoutflow.py:914
-#: pretix/presale/checkoutflow.py:919 pretix/presale/checkoutflow.py:924
-#: pretix/presale/checkoutflow.py:929
+#: pretix/presale/checkoutflow.py:931 pretix/presale/checkoutflow.py:936
+#: pretix/presale/checkoutflow.py:941 pretix/presale/checkoutflow.py:946
+#: pretix/presale/checkoutflow.py:951
 msgid "Please fill in answers to all required questions."
 msgstr "Vänligen svara på alla obligatoriska frågor."
 
-#: pretix/presale/checkoutflow.py:956
+#: pretix/presale/checkoutflow.py:1065
 msgctxt "checkoutflow"
 msgid "Payment"
 msgstr "Betalning"
 
-#: pretix/presale/checkoutflow.py:1001 pretix/presale/views/order.py:647
+#: pretix/presale/checkoutflow.py:1110 pretix/presale/views/order.py:647
 msgid "Please select a payment method."
 msgstr "Välj ett betalsätt."
 
-#: pretix/presale/checkoutflow.py:1025 pretix/presale/checkoutflow.py:1031
+#: pretix/presale/checkoutflow.py:1134 pretix/presale/checkoutflow.py:1140
 #: pretix/presale/views/order.py:427 pretix/presale/views/order.py:495
 msgid "The payment information you entered was incomplete."
 msgstr "Uppgifterna för betalning är inte kompletta."
 
-#: pretix/presale/checkoutflow.py:1062
+#: pretix/presale/checkoutflow.py:1171
 msgctxt "checkoutflow"
 msgid "Review order"
 msgstr "Granska beställning"
 
-#: pretix/presale/checkoutflow.py:1147
+#: pretix/presale/checkoutflow.py:1256
 msgid "You need to check all checkboxes on the bottom of the page."
 msgstr "Du måste kryssa i alla rutorna längst ner på sidan."
 
-#: pretix/presale/checkoutflow.py:1190
+#: pretix/presale/checkoutflow.py:1299
 msgid ""
 "There was an error sending the confirmation mail. Please try again later."
 msgstr ""
@@ -21882,6 +21955,36 @@ msgstr "Ange samma epost igen och var noggrann så att du skrivit den korrekt."
 #: pretix/presale/forms/checkout.py:120
 msgid "Please enter the same email address twice."
 msgstr "Ange samma epost två gånger."
+
+#: pretix/presale/forms/checkout.py:134
+#, fuzzy
+#| msgid "Street address"
+msgid "Save to address"
+msgstr "Gatuadress"
+
+#: pretix/presale/forms/checkout.py:135
+#, fuzzy
+#| msgid "Cancel order"
+msgid "Create new address"
+msgstr "Avbryt beställning"
+
+#: pretix/presale/forms/checkout.py:138
+msgid "Save address in my customer account for future purchases"
+msgstr ""
+
+#: pretix/presale/forms/checkout.py:166
+msgid "Save answers to my customer profiles for future purchases"
+msgstr ""
+
+#: pretix/presale/forms/checkout.py:173
+msgid "Save to profile"
+msgstr ""
+
+#: pretix/presale/forms/checkout.py:174
+#, fuzzy
+#| msgid "Cancel order"
+msgid "Create new profile"
+msgstr "Avbryt beställning"
 
 #: pretix/presale/forms/customer.py:60
 msgid "You need to fill out all fields."
@@ -22157,7 +22260,9 @@ msgstr "Det finns inga tillval på denna produkt."
 #: pretix/presale/templates/pretixpresale/event/checkout_customer.html:132
 #: pretix/presale/templates/pretixpresale/event/checkout_membership.html:86
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html:72
-#: pretix/presale/templates/pretixpresale/event/checkout_questions.html:152
+#: pretix/presale/templates/pretixpresale/event/checkout_questions.html:191
+#: pretix/presale/templates/pretixpresale/organizers/customer_address_delete.html:21
+#: pretix/presale/templates/pretixpresale/organizers/customer_profile_delete.html:21
 msgid "Go back"
 msgstr "Gå tillbaka"
 
@@ -22246,7 +22351,7 @@ msgid "Modify contact information"
 msgstr "Kontaktinformation"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:138
-#: pretix/presale/templates/pretixpresale/event/checkout_questions.html:18
+#: pretix/presale/templates/pretixpresale/event/checkout_questions.html:23
 #: pretix/presale/templates/pretixpresale/event/order_modify.html:33
 msgid "Contact information"
 msgstr "Kontaktinformation"
@@ -22341,7 +22446,7 @@ msgstr ""
 "fortsätter."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_membership.html:38
-#: pretix/presale/templates/pretixpresale/event/checkout_questions.html:98
+#: pretix/presale/templates/pretixpresale/event/checkout_questions.html:120
 msgid "Selected add-ons"
 msgstr "Valda tillval"
 
@@ -22387,26 +22492,41 @@ msgid ""
 msgstr ""
 "Gå till inställningar för betalningar och aktivera en eller flera betalsätt."
 
-#: pretix/presale/templates/pretixpresale/event/checkout_questions.html:6
+#: pretix/presale/templates/pretixpresale/event/checkout_questions.html:8
 msgid "Before we continue, we need you to answer some questions."
 msgstr "Innan vi kan fortsätta, måste du svara på några frågor."
 
-#: pretix/presale/templates/pretixpresale/event/checkout_questions.html:8
+#: pretix/presale/templates/pretixpresale/event/checkout_questions.html:10
 msgid ""
 "You need to fill all fields that are marked with <span>*</span> to continue."
 msgstr ""
 "Du måste svara på alla frågor som är markerade med <span>*</span> för att "
 "fortsätta."
 
-#: pretix/presale/templates/pretixpresale/event/checkout_questions.html:67
+#: pretix/presale/templates/pretixpresale/event/checkout_questions.html:54
+#, fuzzy
+#| msgid "E-mail address"
+msgid "Auto-fill with address"
+msgstr "E-postadress"
+
+#: pretix/presale/templates/pretixpresale/event/checkout_questions.html:61
+#: pretix/presale/templates/pretixpresale/event/checkout_questions.html:173
+msgid "Fill form"
+msgstr ""
+
+#: pretix/presale/templates/pretixpresale/event/checkout_questions.html:89
 msgid "Copy answers from above"
 msgstr "Kopiera svaren från ovanstående"
 
-#: pretix/presale/templates/pretixpresale/event/checkout_questions.html:133
+#: pretix/presale/templates/pretixpresale/event/checkout_questions.html:155
 #, fuzzy
 #| msgid "Copy answers from above"
 msgid "Copy answers"
 msgstr "Kopiera svaren från ovanstående"
+
+#: pretix/presale/templates/pretixpresale/event/checkout_questions.html:164
+msgid "Auto-fill with profile"
+msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/cookies.html:8
 msgid "Please continue in a new tab"
@@ -23373,6 +23493,17 @@ msgstr ""
 msgid "Note that the events in this view are in different timezones."
 msgstr ""
 
+#: pretix/presale/templates/pretixpresale/organizers/customer_address_delete.html:4
+#: pretix/presale/templates/pretixpresale/organizers/customer_address_delete.html:7
+#, fuzzy
+#| msgid "Street address"
+msgid "Delete address"
+msgstr "Gatuadress"
+
+#: pretix/presale/templates/pretixpresale/organizers/customer_address_delete.html:12
+msgid "Do you really want to delete the following address from your account?"
+msgstr ""
+
 #: pretix/presale/templates/pretixpresale/organizers/customer_info.html:6
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:15
 #, fuzzy
@@ -23435,6 +23566,45 @@ msgstr "Din information"
 #| msgid "Change order"
 msgid "Change password"
 msgstr "Updatera beställningen"
+
+#: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:49
+#, fuzzy
+#| msgid "Address"
+msgid "Addresses"
+msgstr "Adress"
+
+#: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:52
+#, fuzzy
+#| msgid "Attendee email"
+msgid "Attendee profiles"
+msgstr "Epost till deltagare"
+
+#: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:165
+msgid "No memberships are stored in your account."
+msgstr ""
+
+#: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:197
+msgid "No addresses are stored in your account."
+msgstr ""
+
+#: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:208
+msgid "Profile"
+msgstr ""
+
+#: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:230
+msgid "No attendee profiles are stored in your account."
+msgstr ""
+
+#: pretix/presale/templates/pretixpresale/organizers/customer_profile_delete.html:4
+#: pretix/presale/templates/pretixpresale/organizers/customer_profile_delete.html:7
+#, fuzzy
+#| msgid "Event series"
+msgid "Delete profile"
+msgstr "Serie av evenemang"
+
+#: pretix/presale/templates/pretixpresale/organizers/customer_profile_delete.html:12
+msgid "Do you really want to delete the following profile from your account?"
+msgstr ""
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_registration.html:6
 #, fuzzy
@@ -23558,7 +23728,7 @@ msgid ""
 msgstr ""
 
 #: pretix/presale/views/customer.py:198 pretix/presale/views/customer.py:201
-#: pretix/presale/views/customer.py:457 pretix/presale/views/customer.py:463
+#: pretix/presale/views/customer.py:480 pretix/presale/views/customer.py:486
 #, fuzzy
 #| msgid "You requested an invalid ticket output type."
 msgid "You clicked an invalid link."
@@ -23573,19 +23743,19 @@ msgid ""
 "We've sent you an email with further instructions on resetting your password."
 msgstr ""
 
-#: pretix/presale/views/customer.py:418
+#: pretix/presale/views/customer.py:441
 #, python-brace-format
 msgid "Confirm email address for your account at {organizer}"
 msgstr ""
 
-#: pretix/presale/views/customer.py:425
+#: pretix/presale/views/customer.py:448
 msgid ""
 "Your changes have been saved. We've sent you an email with a link to update "
 "your email address. The email address of your account will be changed as "
 "soon as you click that link."
 msgstr ""
 
-#: pretix/presale/views/customer.py:473
+#: pretix/presale/views/customer.py:496
 #, fuzzy
 #| msgid "Your changes have been saved."
 msgid "Your email address has been updated."

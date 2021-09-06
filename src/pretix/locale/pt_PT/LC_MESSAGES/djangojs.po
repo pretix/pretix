@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-27 13:05+0000\n"
+"POT-Creation-Date: 2021-09-06 18:51+0000\n"
 "PO-Revision-Date: 2020-10-27 06:00+0000\n"
 "Last-Translator: David Vaz <davidmgvaz@gmail.com>\n"
 "Language-Team: Portuguese (Portugal) <https://translate.pretix.eu/projects/"
@@ -491,10 +491,12 @@ msgid "Count"
 msgstr "Contagem"
 
 #: pretix/static/pretixcontrol/js/ui/question.js:136
+#: pretix/static/pretixpresale/js/ui/questions.js:269
 msgid "Yes"
 msgstr "Sim"
 
 #: pretix/static/pretixcontrol/js/ui/question.js:137
+#: pretix/static/pretixpresale/js/ui/questions.js:269
 msgid "No"
 msgstr "Não"
 
@@ -531,22 +533,22 @@ msgstr "Recebes %(currency)s %(amount)s de volta"
 msgid "Please enter the amount the organizer can keep."
 msgstr "Por favor insira o montante com que a organização pode ficar."
 
-#: pretix/static/pretixpresale/js/ui/main.js:308
+#: pretix/static/pretixpresale/js/ui/main.js:309
 msgid "Please enter a quantity for one of the ticket types."
 msgstr "Por favor insira a quantidade para um tipo de bilhetes."
 
-#: pretix/static/pretixpresale/js/ui/main.js:344
+#: pretix/static/pretixpresale/js/ui/main.js:345
 #, fuzzy
 #| msgid "Cart expired"
 msgid "required"
 msgstr "Carrinho expirado"
 
-#: pretix/static/pretixpresale/js/ui/main.js:441
-#: pretix/static/pretixpresale/js/ui/main.js:459
+#: pretix/static/pretixpresale/js/ui/main.js:447
+#: pretix/static/pretixpresale/js/ui/main.js:465
 msgid "Time zone:"
 msgstr "Fuso horário:"
 
-#: pretix/static/pretixpresale/js/ui/main.js:450
+#: pretix/static/pretixpresale/js/ui/main.js:456
 msgid "Your local time:"
 msgstr "Sua hora local:"
 

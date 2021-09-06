@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-27 13:05+0000\n"
+"POT-Creation-Date: 2021-09-06 18:51+0000\n"
 "PO-Revision-Date: 2021-06-14 18:45+0000\n"
 "Last-Translator: Abdullah <abdullah.gumaijan@gmail.com>\n"
 "Language-Team: Arabic <https://translate.pretix.eu/projects/pretix/pretix-js/"
@@ -471,10 +471,12 @@ msgid "Count"
 msgstr "احسب"
 
 #: pretix/static/pretixcontrol/js/ui/question.js:136
+#: pretix/static/pretixpresale/js/ui/questions.js:269
 msgid "Yes"
 msgstr "نعم"
 
 #: pretix/static/pretixcontrol/js/ui/question.js:137
+#: pretix/static/pretixpresale/js/ui/questions.js:269
 msgid "No"
 msgstr "لا"
 
@@ -518,20 +520,20 @@ msgstr "ستسترد %(currency)%(amount)"
 msgid "Please enter the amount the organizer can keep."
 msgstr "الرجاء إدخال المبلغ الذي يمكن للمنظم الاحتفاظ به."
 
-#: pretix/static/pretixpresale/js/ui/main.js:308
+#: pretix/static/pretixpresale/js/ui/main.js:309
 msgid "Please enter a quantity for one of the ticket types."
 msgstr "الرجاء إدخال عدد لأحد أنواع التذاكر."
 
-#: pretix/static/pretixpresale/js/ui/main.js:344
+#: pretix/static/pretixpresale/js/ui/main.js:345
 msgid "required"
 msgstr "مطلوب"
 
-#: pretix/static/pretixpresale/js/ui/main.js:441
-#: pretix/static/pretixpresale/js/ui/main.js:459
+#: pretix/static/pretixpresale/js/ui/main.js:447
+#: pretix/static/pretixpresale/js/ui/main.js:465
 msgid "Time zone:"
 msgstr "المنطقة الزمنية:"
 
-#: pretix/static/pretixpresale/js/ui/main.js:450
+#: pretix/static/pretixpresale/js/ui/main.js:456
 msgid "Your local time:"
 msgstr "التوقيت المحلي:"
 
