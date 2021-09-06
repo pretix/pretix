@@ -768,10 +768,11 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
             wd_initial = {}
         initial = dict(wd_initial)
 
-        if self.cart_customer and not self.invoice_address.pk:
-            initial.update({
-                'name_parts': self.cart_customer.name_parts
-            })
+        if self.cart_customer:
+            if not self.invoice_address.pk:
+                initial.update({
+                    'name_parts': self.cart_customer.name_parts
+                })
 
             if 'saved_invoice_address' in self.cart_session:
                 initial['saved_id'] = self.cart_session['saved_invoice_address']
