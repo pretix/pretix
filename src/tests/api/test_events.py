@@ -1225,12 +1225,28 @@ def test_patch_event_settings(token_client, organizer, event):
         resp = token_client.patch(
             '/api/v1/organizers/{}/events/{}/settings/'.format(organizer.slug, event.slug),
             {
-                'primary_color': '#ff0000'
+                'primary_color': '#ff0000',
+                'theme_color_background': '#ff0000',
             },
             format='json'
         )
         assert resp.status_code == 200
+        event.settings.flush()
         mocked.assert_any_call(args=(event.pk,))
+        assert event.settings.primary_color == '#ff0000'
+
+        resp = token_client.patch(
+            '/api/v1/organizers/{}/events/{}/settings/'.format(organizer.slug, event.slug),
+            {
+                'primary_color': None,
+                'theme_color_background': None,
+            },
+            format='json'
+        )
+        assert resp.status_code == 200
+        event.settings.flush()
+        assert event.settings.primary_color != '#ff0000'
+        assert 'primary_color' not in event.settings._cache()
 
         resp = token_client.patch(
             '/api/v1/organizers/{}/events/{}/settings/'.format(organizer.slug, event.slug),
