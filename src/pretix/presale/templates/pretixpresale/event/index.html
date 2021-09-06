@@ -74,7 +74,7 @@
             </div>
             <div class="panel-body">
                 <div>
-                    {% cache_large 15 subevent_lits subevent_list_cache_key %}
+                    {% cache_large 15 subevent_list subevent_list_cache_key %}
                         {% if subevent_list.list_type == "calendar" %}
                             {% include "pretixpresale/event/fragment_subevent_calendar.html" %}
                         {% elif subevent_list.list_type == "week" %}
