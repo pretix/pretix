@@ -31,7 +31,7 @@
 # Unless required by applicable law or agreed to in writing, software distributed under the Apache License 2.0 is
 # distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations under the License.
-
+import os.path
 from decimal import Decimal
 
 from django.core.exceptions import ValidationError
@@ -245,7 +245,10 @@ class ItemSerializer(I18nAwareModelSerializer):
         addons_data = validated_data.pop('addons') if 'addons' in validated_data else {}
         bundles_data = validated_data.pop('bundles') if 'bundles' in validated_data else {}
         meta_data = validated_data.pop('meta_data', None)
+        picture = validated_data.pop('picture', None)
         item = Item.objects.create(**validated_data)
+        if picture:
+            item.picture.save(os.path.basename(picture.name), picture)
 
         for variation_data in variations_data:
             require_membership_types = variation_data.pop('require_membership_types')
@@ -269,7 +272,10 @@ class ItemSerializer(I18nAwareModelSerializer):
 
     def update(self, instance, validated_data):
         meta_data = validated_data.pop('meta_data', None)
+        picture = validated_data.pop('picture', None)
         item = super().update(instance, validated_data)
+        if picture:
+            item.picture.save(os.path.basename(picture.name), picture)
 
         # Meta data
         if meta_data is not None:

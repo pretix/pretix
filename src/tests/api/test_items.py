@@ -31,13 +31,15 @@
 # Unless required by applicable law or agreed to in writing, software distributed under the Apache License 2.0 is
 # distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations under the License.
-
+import os
 import time
 from datetime import datetime, timedelta
 from decimal import Decimal
 from unittest import mock
 
 import pytest
+from django.conf import settings
+from django.core.files.base import ContentFile
 from django_countries.fields import Country
 from django_scopes import scopes_disabled
 from pytz import UTC
@@ -1022,6 +1024,80 @@ def test_item_update(token_client, organizer, event, item, category, item2, cate
     )
     assert resp.status_code == 400
     assert resp.content.decode() == '{"meta_data":["Item meta data property \'foo\' does not exist."]}'
+
+
+@pytest.mark.django_db
+def test_item_file_upload(token_client, organizer, event, item):
+    r = token_client.post(
+        '/api/v1/upload',
+        data={
+            'media_type': 'image/png',
+            'file': ContentFile('file.png', 'invalid png content')
+        },
+        format='upload',
+        HTTP_CONTENT_DISPOSITION='attachment; filename="file.png"',
+    )
+    assert r.status_code == 201
+    file_id_png = r.data['id']
+
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/items/{}/'.format(organizer.slug, event.slug, item.pk),
+        {
+            "picture": file_id_png,
+        },
+        format='json'
+    )
+    assert resp.status_code == 200
+    assert resp.data['picture'].startswith('http')
+    assert '/pub/' in resp.data['picture']
+    assert os.path.exists(os.path.join(settings.MEDIA_ROOT, resp.data['picture'].split('/media/')[1]))
+
+    r = token_client.post(
+        '/api/v1/upload',
+        data={
+            'media_type': 'image/png',
+            'file': ContentFile('file.png', 'invalid png content')
+        },
+        format='upload',
+        HTTP_CONTENT_DISPOSITION='attachment; filename="file.png"',
+    )
+    assert r.status_code == 201
+    file_id_png = r.data['id']
+
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/items/'.format(organizer.slug, event.slug),
+        {
+            "name": {
+                "en": "Ticket"
+            },
+            "active": True,
+            "sales_channels": ["web", "pretixpos"],
+            "picture": file_id_png,
+            "description": None,
+            "default_price": "23.00",
+            "free_price": False,
+            "admission": True,
+            "issue_giftcard": False,
+            "position": 0,
+            "available_from": None,
+            "available_until": None,
+            "require_voucher": False,
+            "hide_without_voucher": False,
+            "allow_cancel": True,
+            "min_per_order": None,
+            "max_per_order": None,
+            "checkin_attention": False,
+            "has_variations": True,
+            "meta_data": {
+                "day": "Wednesday"
+            }
+        },
+        format='json'
+    )
+    assert resp.status_code == 201
+    assert resp.data['picture'].startswith('http')
+    assert '/pub/' in resp.data['picture']
+    assert os.path.exists(os.path.join(settings.MEDIA_ROOT, resp.data['picture'].split('/media/')[1]))
 
 
 @pytest.mark.django_db

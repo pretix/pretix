@@ -1396,6 +1396,7 @@ def test_patch_event_settings_file(token_client, organizer, event):
     )
     assert resp.status_code == 200
     assert resp.data['logo_image'].startswith('http')
+    assert '/pub/' in resp.data['logo_image']
 
     resp = token_client.patch(
         '/api/v1/organizers/{}/events/{}/settings/'.format(organizer.slug, event.slug),
