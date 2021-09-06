@@ -147,9 +147,10 @@ class BaseQuestionsViewMixin:
                     prof = AttendeeProfile.objects.filter(
                         customer=self.cart_customer, pk=form.cleaned_data.get('saved_id')
                     ).first() or AttendeeProfile(customer=getattr(self, 'cart_customer', None))
-                    prof.answers = []
+                    answers_key_to_index = {a.get('field_name'): i for i, a in enumerate(prof.answers)}
                 else:
                     prof = AttendeeProfile(customer=getattr(self, 'cart_customer', None))
+                    answers_key_to_index = {}
 
                 # This form was correctly filled, so we store the data as
                 # answers to the questions / in the CartPosition object
@@ -183,13 +184,17 @@ class BaseQuestionsViewMixin:
                                     answer_value = bool(field.answer.answer)
                                 else:
                                     answer_value = str(field.answer.answer)
-                                prof.answers.append({
+                                answer_dict = {
                                     'field_name': k,
                                     'field_label': str(field.label),
                                     'value': answer_value,
                                     'question_type': field.question.type,
                                     'question_identifier': field.question.identifier,
-                                })
+                                }
+                                if k in answers_key_to_index:
+                                    prof.answers[answers_key_to_index[k]] = answer_dict
+                                else:
+                                    prof.answers.append(answer_dict)
                         elif v != '' and v is not None:
                             answer = QuestionAnswer(
                                 cartposition=(form.pos if isinstance(form.pos, CartPosition) else None),
@@ -220,13 +225,17 @@ class BaseQuestionsViewMixin:
                                 answer_value = bool(answer.answer)
                             else:
                                 answer_value = str(answer.answer)
-                            prof.answers.append({
+                            answer_dict = {
                                 'field_name': k,
                                 'field_label': str(field.label),
                                 'value': answer_value,
                                 'question_type': field.question.type,
                                 'question_identifier': field.question.identifier,
-                            })
+                            }
+                            if k in answers_key_to_index:
+                                prof.answers[answers_key_to_index[k]] = answer_dict
+                            else:
+                                prof.answers.append(answer_dict)
 
                     else:
                         field = form.fields[k]
@@ -238,13 +247,17 @@ class BaseQuestionsViewMixin:
                         else:
                             meta_info['question_form_data'][k] = v
 
-                        prof.answers.append({
+                        answer_dict = {
                             'field_name': k,
                             'field_label': str(field.label),
                             'value': str(v),
                             'question_type': None,
                             'question_identifier': None,
-                        })
+                        }
+                        if k in answers_key_to_index:
+                            prof.answers[answers_key_to_index[k]] = answer_dict
+                        else:
+                            prof.answers.append(answer_dict)
 
             form.pos.meta_info = json.dumps(meta_info)
             form.pos.save()
