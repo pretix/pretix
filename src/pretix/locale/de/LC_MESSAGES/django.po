@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-09-06 18:51+0000\n"
-"PO-Revision-Date: 2021-08-27 13:22+0000\n"
+"PO-Revision-Date: 2021-09-06 19:13+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
 ">\n"
@@ -18887,21 +18887,17 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/vouchers/delete_carts.html:4
 #: pretix/control/templates/pretixcontrol/vouchers/delete_carts.html:6
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "Delete dates"
 msgid "Delete carts"
-msgstr "Termine löschen"
+msgstr "Warenkörbe löschen"
 
 #: pretix/control/templates/pretixcontrol/vouchers/delete_carts.html:9
-#, fuzzy, python-format
-#| msgid ""
-#| "Are you sure you want to delete the voucher <strong>%(voucher)s</strong>?"
+#, python-format
 msgid ""
 "Are you sure you want to delete any cart positions with voucher <strong>"
 "%(voucher)s</strong>?"
 msgstr ""
-"Möchten Sie den Gutschein <strong>%(voucher)s</strong> wirklich löschen?"
+"Möchten Sie den alle Warenkorbpositionen mit Gutschein <strong>%(voucher)s</"
+"strong> wirklich löschen?"
 
 #: pretix/control/templates/pretixcontrol/vouchers/delete_carts.html:10
 msgid ""
@@ -18909,6 +18905,10 @@ msgid ""
 "a purchase. This can be really confusing. Only use this if you know that the "
 "session is no longer in use."
 msgstr ""
+"Dies entfernt still alle Produkte aus derzeit offenen Warenkörben, die "
+"diesen Gutschein benutzen. Dies kann für die Käufer sehr verwirrend sein, "
+"benutzen Sie diese Funktion daher nur, wenn Sie wissen, dass die offenen "
+"Warenkörbe nicht mehr benutzt werden."
 
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html:11
 msgid "This voucher already has been used. It is not recommended to modify it."
@@ -18927,12 +18927,12 @@ msgid ""
 "This voucher is currently used in %(number)s cart sessions and there might "
 "not be free to use until the cart sessions expire."
 msgstr ""
+"Dieser Gutschein wird derzeit von %(number)s Warenkorb-Sitzungen genutzt und "
+"kann daher ggf. nicht weiter genutzt werden, bis diese ablaufen."
 
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html:28
-#, fuzzy
-#| msgid "Cart positions"
 msgid "Remove cart positions"
-msgstr "Produkte im Warenkorb"
+msgstr "Warenkorb-Positionen löschen"
 
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html:44
 msgid "Voucher link"
@@ -20649,10 +20649,8 @@ msgid "The requested voucher does not exist."
 msgstr "Der ausgewählte Gutschein existiert nicht."
 
 #: pretix/control/views/vouchers.py:207
-#, fuzzy
-#| msgid "The selected gift card issuer has been removed."
 msgid "The selected cart positions have been removed."
-msgstr "Der ausgewählte Gutscheinaussteller wurde gelöscht."
+msgstr "Der ausgewählten Warenkorb-Positionen wurden gelöscht."
 
 #: pretix/control/views/vouchers.py:233 pretix/control/views/vouchers.py:243
 msgid "A voucher can not be deleted if it already has been redeemed."
@@ -21712,16 +21710,12 @@ msgid "Error message"
 msgstr "Fehlermeldung"
 
 #: pretix/plugins/checkinlists/exporters.py:622
-#, fuzzy
-#| msgid "Download date"
 msgid "Upload date"
-msgstr "Download-Datum"
+msgstr "Upload-Datum"
 
 #: pretix/plugins/checkinlists/exporters.py:623
-#, fuzzy
-#| msgid "Download time"
 msgid "Upload time"
-msgstr "Download-Zeitpunkt"
+msgstr "Upload-Zeitpunkt"
 
 #: pretix/plugins/checkinlists/exporters.py:666
 msgid "OK"
@@ -23494,36 +23488,28 @@ msgid "Please enter the same email address twice."
 msgstr "Bitte geben Sie zweimal dieselbe E-Mail-Adresse ein."
 
 #: pretix/presale/forms/checkout.py:134
-#, fuzzy
-#| msgid "Street address"
 msgid "Save to address"
-msgstr "Straße"
+msgstr "Speichern als Adresse"
 
 #: pretix/presale/forms/checkout.py:135
-#, fuzzy
-#| msgid "Create a new gate"
 msgid "Create new address"
-msgstr "Neue Station erstellen"
+msgstr "Neue Adresse erstellen"
 
 #: pretix/presale/forms/checkout.py:138
 msgid "Save address in my customer account for future purchases"
-msgstr ""
+msgstr "Adresse im Kundenkonto für zukünftige Buchungen speichern"
 
 #: pretix/presale/forms/checkout.py:166
 msgid "Save answers to my customer profiles for future purchases"
-msgstr ""
+msgstr "Antwort als Kundenprofil für zukünftige Buchungen speichern"
 
 #: pretix/presale/forms/checkout.py:173
-#, fuzzy
-#| msgid "View user profile"
 msgid "Save to profile"
-msgstr "Kundenprofil ansehen"
+msgstr "Speichern als Profil"
 
 #: pretix/presale/forms/checkout.py:174
-#, fuzzy
-#| msgid "Create new export file"
 msgid "Create new profile"
-msgstr "Neue Export-Datei erstellen"
+msgstr "Neues Profil erstellen"
 
 #: pretix/presale/forms/customer.py:60
 msgid "You need to fill out all fields."
@@ -24056,15 +24042,13 @@ msgstr ""
 "Alle mit einem <span>*</span> markierten Felder müssen ausgefüllt werden."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:54
-#, fuzzy
-#| msgid "E-mail address"
 msgid "Auto-fill with address"
-msgstr "E-Mail-Adresse"
+msgstr "Automatisch mit Adresse füllen"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:61
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:173
 msgid "Fill form"
-msgstr ""
+msgstr "Formular ausfüllen"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:89
 msgid "Copy answers from above"
@@ -24075,10 +24059,8 @@ msgid "Copy answers"
 msgstr "Antworten kopieren"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:164
-#, fuzzy
-#| msgid "Public profile"
 msgid "Auto-fill with profile"
-msgstr "Öffentliche Ansicht"
+msgstr "Automatisch mit Profil füllen"
 
 #: pretix/presale/templates/pretixpresale/event/cookies.html:8
 msgid "Please continue in a new tab"
@@ -25105,16 +25087,13 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_address_delete.html:4
 #: pretix/presale/templates/pretixpresale/organizers/customer_address_delete.html:7
-#, fuzzy
-#| msgid "Street address"
 msgid "Delete address"
-msgstr "Straße"
+msgstr "Adresse löschen"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_address_delete.html:12
-#, fuzzy
-#| msgid "Are you sure you want to delete the following dates?"
 msgid "Do you really want to delete the following address from your account?"
-msgstr "Möchten Sie die folgenden Termine wirklich löschen?"
+msgstr ""
+"Möchten Sie die folgende Adresse wirklich aus Ihrem Kundenkonto löschen?"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_info.html:6
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:15
@@ -25166,51 +25145,37 @@ msgid "Change password"
 msgstr "Passwort ändern"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:49
-#, fuzzy
-#| msgid "Address"
 msgid "Addresses"
-msgstr "Adresse"
+msgstr "Adressen"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:52
-#, fuzzy
-#| msgid "Attendee address"
 msgid "Attendee profiles"
-msgstr "Teilnehmer*innen-Adresse"
+msgstr "Teilnehmer*innen-Profile"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:165
 msgid "No memberships are stored in your account."
-msgstr ""
+msgstr "Keine Mitgliedschaften sind in Ihrem Kundenkonto gespeichert."
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:197
-#, fuzzy
-#| msgid "Set a new password for your account"
 msgid "No addresses are stored in your account."
-msgstr "Neues Passwort für Ihr Konto setzen"
+msgstr "Keine Adressen sind in Ihrem Kundenkonto gespeichert."
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:208
-#, fuzzy
-#| msgid "Public profile"
 msgid "Profile"
-msgstr "Öffentliche Ansicht"
+msgstr "Profil"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:230
-#, fuzzy
-#| msgid "Set a new password for your account"
 msgid "No attendee profiles are stored in your account."
-msgstr "Neues Passwort für Ihr Konto setzen"
+msgstr "Keine Profile sind in Ihrem Kundenkonto gespeichert."
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile_delete.html:4
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile_delete.html:7
-#, fuzzy
-#| msgid "Delete property:"
 msgid "Delete profile"
-msgstr "Eigenschaft löschen:"
+msgstr "Profil löschen"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile_delete.html:12
-#, fuzzy
-#| msgid "Are you sure you want to delete the following entries?"
 msgid "Do you really want to delete the following profile from your account?"
-msgstr "Möchten Sie die folgenden Einträge wirklich löschen?"
+msgstr "Möchten Sie das folgende Profil wirklich aus Ihrem Kundenkonto löschen?"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_registration.html:6
 msgid "Registration"
