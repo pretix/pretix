@@ -90,7 +90,6 @@ export default {
           graph.nodes_by_id[node_id] = {
             rule: rule,
             column: -1,
-            height: -1,
             children: [],
           }
           return [[node_id], [node_id]]
@@ -128,7 +127,6 @@ export default {
           graph.nodes_by_id[node_id] = {
             rule: rule,
             column: -1,
-            height: -1,
             children: [],
           }
           return [[node_id], [node_id]]
@@ -150,27 +148,7 @@ export default {
       }
       _set_column_to_min(graph.children.map(nid => graph.nodes_by_id[nid]), 0)
 
-      // Step 3: We compute the "height" of every node, which is the maximum number of descendent nodes in
-      // the same column
-      const _get_all_descendents = (node) => {
-        let result = [...node.children]
-        for (let cid of node.children) {
-          result.push(..._get_all_descendents(graph.nodes_by_id[cid]))
-        }
-        result = result.filter((v, idx, self) => self.indexOf(v) === idx)  // ensure uniqueness
-        return result
-      }
-      for (let node of [...Object.values(graph.nodes_by_id), graph]) {
-        const descendents = _get_all_descendents(node)
-        const descendents_by_column = {}
-        for (let descid of descendents) {
-          const col = graph.nodes_by_id[descid].column
-          descendents_by_column[col] = (descendents_by_column[col] || 0) + 1
-        }
-        node.height = Math.max(1, ...Object.values(descendents_by_column))
-      }
-
-      // Step 4: Align each node on a grid. The x position is already given by the column computed above, but we still
+      // Step 3: Align each node on a grid. The x position is already given by the column computed above, but we still
       // need the y position. This part of the algorithm is opinionated and probably not yet the nicest solution we
       // can use!
       const _set_y = (node, offset) => {
@@ -187,6 +165,12 @@ export default {
         return used
       }
       _set_y(graph, 0)
+
+      // Step 4: Compute the "height" of the graph by looking at the node with the highest y value
+      graph.height = 1
+      for (let node of [...Object.values(graph.nodes_by_id)]) {
+        graph.height = Math.max(graph.height, node.y + 1)
+      }
 
       return graph
     }
