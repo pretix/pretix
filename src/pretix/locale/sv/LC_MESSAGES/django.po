@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-08-27 13:05+0000\n"
-"PO-Revision-Date: 2021-09-05 02:00+0000\n"
-"Last-Translator: Niklas Forsström <nikfor@student.chalmers.se>\n"
+"PO-Revision-Date: 2021-09-06 09:00+0000\n"
+"Last-Translator: Klevagruva <info@klevagruva.com>\n"
 "Language-Team: Swedish <https://translate.pretix.eu/projects/pretix/pretix/"
 "sv/>\n"
 "Language: sv\n"
@@ -2301,7 +2301,7 @@ msgstr "Checka automatiskt ut alla vid"
 
 #: pretix/base/models/checkin.py:80
 msgid "Sales channels to automatically check in"
-msgstr ""
+msgstr "Sälj kanaler till automatisk check in"
 
 #: pretix/base/models/checkin.py:81
 msgid ""
@@ -2310,6 +2310,10 @@ msgid ""
 "be useful when tickets sold at the box office are not checked again before "
 "entry and should be considered validated directly upon purchase."
 msgstr ""
+"Alla föremål på den här check in listan kommer automatiskt checkas in när "
+"det är köpt genom någon av det valda säljkanalerna. Detta alternativet kan "
+"vara användbart när biljetter som säljs i biljettkontor inte dubbelkollas "
+"och borde ses som giltiga direkt vid köpet."
 
 #: pretix/base/models/checkin.py:247
 msgid "Entry"
@@ -2330,7 +2334,7 @@ msgstr "Biljetten är inte betald"
 
 #: pretix/base/models/checkin.py:264
 msgid "Forbidden by custom rule"
-msgstr ""
+msgstr "Förbjudet av anpassad regel"
 
 #: pretix/base/models/checkin.py:265
 #, fuzzy
@@ -2442,7 +2446,7 @@ msgstr ""
 
 #: pretix/base/models/event.py:440
 msgid "Shop is live"
-msgstr ""
+msgstr "Shoppen är live"
 
 #: pretix/base/models/event.py:442
 #, fuzzy
@@ -2542,7 +2546,7 @@ msgstr "Sittplatser"
 
 #: pretix/base/models/event.py:505 pretix/base/payment.py:347
 msgid "Restrict to specific sales channels"
-msgstr ""
+msgstr "Begränsad till specifika sälj kanaler"
 
 #: pretix/base/models/event.py:506
 msgid "Only sell tickets for this event on the following sales channels."
@@ -2636,23 +2640,24 @@ msgstr ""
 
 #: pretix/base/models/event.py:1284 pretix/base/settings.py:2174
 msgid "Frontpage text"
-msgstr ""
+msgstr "Framsida text"
 
 #: pretix/base/models/event.py:1299
 msgid "Date in event series"
-msgstr ""
+msgstr "Datum i event serie"
 
 #: pretix/base/models/event.py:1300
 msgid "Dates in event series"
-msgstr ""
+msgstr "Datum i event serie"
 
 #: pretix/base/models/event.py:1439
+#, fuzzy
 msgid "One or more variations do not belong to this event."
-msgstr ""
+msgstr "En eller flera variationer tillhör inte detta event"
 
 #: pretix/base/models/event.py:1469 pretix/base/models/items.py:1658
 msgid "Can not contain spaces or special characters except underscores"
-msgstr ""
+msgstr "Kan inte innehålla mellanslag eller andra symboler förutom understreck"
 
 #: pretix/base/models/event.py:1474 pretix/base/models/items.py:1663
 msgid "The property name may only contain letters, numbers and underscores."
