@@ -803,7 +803,7 @@ class Modern1Renderer(ClassicInvoiceRenderer):
                 objects += [
                     _draw(pgettext('invoice', 'Cancellation number'), self.invoice.number,
                           value_size, self.left_margin + 50 * mm, 45 * mm),
-                    _draw(pgettext('invoice', 'Original invoice'), self.invoice.number,
+                    _draw(pgettext('invoice', 'Original invoice'), self.invoice.refers.number,
                           value_size, self.left_margin + 100 * mm, date_x - self.left_margin - 100 * mm - 5 * mm),
                 ]
             else:
