@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-26 09:20+0000\n"
 "PO-Revision-Date: 2023-05-30 21:22+0000\n"
-"Last-Translator: ThanosTeste <testebasisth@unisystems.eu>\n"
+"Last-Translator: anonymous <noreply@weblate.org>\n"
 "Language-Team: Greek <https://translate.pretix.eu/projects/pretix/pretix/el/>"
 "\n"
 "Language: el\n"
@@ -7419,10 +7419,8 @@ msgstr ""
 #| msgid "You cannot select more than %s items per order."
 msgid "You cannot select more than %s item per order."
 msgid_plural "You cannot select more than %s items per order."
-msgstr[0] ""
-"Δεν μπορείτε να επιλέξετε περισσότερα από %s στοιχεία ανά παραγγελία."
-msgstr[1] ""
-"Δεν μπορείτε να επιλέξετε περισσότερα από %s στοιχεία ανά παραγγελία."
+msgstr[0] "Δεν μπορείτε να επιλέξετε περισσότερα από %s στοιχεία ανά παραγγελία."
+msgstr[1] "Δεν μπορείτε να επιλέξετε περισσότερα από %s στοιχεία ανά παραγγελία."
 
 #: pretix/base/services/cart.py:118 pretix/base/services/orders.py:1462
 #, fuzzy, python-format
@@ -15630,8 +15628,8 @@ msgstr ""
 msgid ""
 "The phone number has been changed from \"{old_phone}\" to \"{new_phone}\"."
 msgstr ""
-"Η διεύθυνση ηλεκτρονικού ταχυδρομείου έχει αλλάξει από \"{old_email}\" σε "
-"\"{new_email}\"."
+"Η διεύθυνση ηλεκτρονικού ταχυδρομείου έχει αλλάξει από \"{old_email}\" σε \""
+"{new_email}\"."
 
 #: pretix/control/logdisplay.py:395
 #, fuzzy
@@ -20256,8 +20254,8 @@ msgstr ""
 #| "Are you sure you want to delete the category <strong>%(name)s</strong>?"
 msgid "Are you sure you want to delete the discount <strong>%(name)s</strong>?"
 msgstr ""
-"Είστε βέβαιοι ότι θέλετε να διαγράψετε την κατηγορία <strong>%(name)s</"
-"strong>;"
+"Είστε βέβαιοι ότι θέλετε να διαγράψετε την κατηγορία "
+"<strong>%(name)s</strong>;"
 
 #: pretix/control/templates/pretixcontrol/items/discount_delete.html:25
 #, fuzzy, python-format
@@ -21795,9 +21793,8 @@ msgid ""
 msgstr ""
 "Λάβαμε ειδοποίηση οτι <strong> %(amount)s </strong> έχει γίνει επιστροφή "
 "χρημάτων μέσω <strong> %(method)s </strong> . Εάν αυτή η επιστροφή χρημάτων "
-"υποβληθεί σε επεξεργασία, η παραγγελία θα υποπληρωθεί από <strong> "
-"%(pending)s </strong>. Η συνολική παραγγελία είναι <strong> %(total)s </"
-"strong> ."
+"υποβληθεί σε επεξεργασία, η παραγγελία θα υποπληρωθεί από <strong> %(pending)"
+"s </strong>. Η συνολική παραγγελία είναι <strong> %(total)s </strong> ."
 
 #: pretix/control/templates/pretixcontrol/order/refund_process.html:30
 msgid "Since the order is already canceled, this will not affect its state."
@@ -22068,8 +22065,8 @@ msgid ""
 "Are you sure you want to delete the scheduled export <strong>%(export)s</"
 "strong>?"
 msgstr ""
-"Είστε βέβαιοι ότι θέλετε να διαγράψετε την ποσόστωση(quota) <strong> "
-"%(quota)s </strong> ;"
+"Είστε βέβαιοι ότι θέλετε να διαγράψετε την ποσόστωση(quota) <strong> %(quota)"
+"s </strong> ;"
 
 #: pretix/control/templates/pretixcontrol/orders/export_form.html:26
 #: pretix/control/templates/pretixcontrol/organizers/export_form.html:27
@@ -24821,8 +24818,8 @@ msgid ""
 "Are you sure you want to delete any cart positions with voucher "
 "<strong>%(voucher)s</strong>?"
 msgstr ""
-"Είστε βέβαιοι ότι θέλετε να διαγράψετε το κουπόνι <strong>%(voucher)s</"
-"strong>;"
+"Είστε βέβαιοι ότι θέλετε να διαγράψετε το κουπόνι "
+"<strong>%(voucher)s</strong>;"
 
 #: pretix/control/templates/pretixcontrol/vouchers/delete_carts.html:10
 msgid ""
@@ -32007,11 +32004,11 @@ msgid ""
 "to initiate the transfer manually. Please be patient as this might take a "
 "bit longer."
 msgstr ""
-"Με τη μέθοδο πληρωμής που χρησιμοποιήσατε, το ποσό επιστροφής "
-"%(amount)s<strong> δεν μπορεί να σας αποσταλεί αυτόματα </strong>. Αντ "
-"'αυτού, ο διοργανωτής εκδηλώσεων θα χρειαστεί να ξεκινήσει τη μεταφορά "
-"χειροκίνητα. Παρακαλούμε να είστε υπομονετικοί, καθώς αυτό μπορεί να "
-"διαρκέσει λίγο περισσότερο."
+"Με τη μέθοδο πληρωμής που χρησιμοποιήσατε, το ποσό επιστροφής %(amount)"
+"s<strong> δεν μπορεί να σας αποσταλεί αυτόματα </strong>. Αντ 'αυτού, ο "
+"διοργανωτής εκδηλώσεων θα χρειαστεί να ξεκινήσει τη μεταφορά χειροκίνητα. "
+"Παρακαλούμε να είστε υπομονετικοί, καθώς αυτό μπορεί να διαρκέσει λίγο "
+"περισσότερο."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_checkoutflow.html:2
 #, fuzzy
