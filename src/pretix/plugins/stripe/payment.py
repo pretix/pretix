@@ -356,7 +356,7 @@ class StripeMethod(BasePaymentProvider):
 
     def _connect_kwargs(self, payment):
         d = {}
-        if self.settings.connect_client_id and self.settings.connect_user_id:
+        if self.settings.connect_client_id and self.settings.connect_user_id and not self.settings.secret_key:
             fee = Decimal('0.00')
             if self.settings.get('connect_app_fee_percent', as_type=Decimal):
                 fee = round_decimal(self.settings.get('connect_app_fee_percent', as_type=Decimal) * payment.amount / Decimal('100.00'), self.event.currency)
@@ -381,7 +381,7 @@ class StripeMethod(BasePaymentProvider):
 
     @property
     def api_kwargs(self):
-        if self.settings.connect_client_id and self.settings.connect_user_id:
+        if self.settings.connect_client_id and self.settings.connect_user_id and not self.settings.secret_key:
             if self.settings.get('endpoint', 'live') == 'live' and not self.event.testmode:
                 kwargs = {
                     'api_key': self.settings.connect_secret_key,
