@@ -206,7 +206,7 @@ class VoucherForm(I18nModelForm):
             seats_given=data.get('seat') or data.get('seats'),
             block_quota=data.get('block_quota')
         )
-        if not self.instance.show_hidden_items and (
+        if not data.get('show_hidden_items') and (
             (self.instance.quota and all(i.hide_without_voucher for i in self.instance.quota.items.all()))
             or (self.instance.item and self.instance.item.hide_without_voucher)
         ):
