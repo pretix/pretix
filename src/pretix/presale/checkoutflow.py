@@ -768,7 +768,7 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
             wd_initial = {}
         initial = dict(wd_initial)
 
-        if self.cart_customer:
+        if self.cart_customer and not self.invoice_address.pk:
             initial.update({
                 'name_parts': self.cart_customer.name_parts
             })
@@ -779,7 +779,8 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
         override_sets = self._contact_override_sets
         for overrides in override_sets:
             initial.update({
-                k: v['initial'] for k, v in overrides.items() if 'initial' in v
+                k: v['initial'] for k, v in overrides.items()
+                if 'initial' in v and (v['disabled'] or not self.invoice_address.pk)
             })
 
         if not self.address_asked and self.request.event.settings.invoice_name_required:

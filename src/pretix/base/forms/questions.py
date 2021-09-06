@@ -976,7 +976,7 @@ class BaseInvoiceAddressForm(forms.ModelForm):
             scheme=event.settings.name_scheme,
             titles=event.settings.name_scheme_titles,
             label=_('Name'),
-            initial=(self.instance.name_parts if self.instance else self.instance.name_parts),
+            initial=self.instance.name_parts,
         )
         if event.settings.invoice_address_required and not event.settings.invoice_address_company_required and not self.all_optional:
             if not event.settings.invoice_name_required:
