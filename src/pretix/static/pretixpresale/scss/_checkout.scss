@@ -145,6 +145,9 @@
 .profile-select-initialized .profile-save {
   display: block;
 }
+.profile-none-matched .profile-select-container {
+  display: none;
+}
 
 .profile-add-on-legend {
   margin-bottom: 0;

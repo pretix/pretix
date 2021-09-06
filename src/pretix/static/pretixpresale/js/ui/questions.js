@@ -376,7 +376,12 @@ function questions_init_profiles(el) {
     function setupAutoFill(scope, profiles) {
         var matchedProfiles = uniqueProfiles(matchProfilesToInputs(profiles, scope));
         if (!matchedProfiles.length) {
-            $(".profile-select-container", scope).hide();
+            // Add-Ons sit on same level as scope, so a 
+            // scope.parent().filter(".profile-pre-select") does not work
+            // as it would select nodes of the parent product.
+            // Therefore use .prevUntil("legend") as an Add-On is
+            // offset by a <legend>
+            $(scope).addClass("profile-none-matched").prevUntil("legend").removeClass("profile-pre-select");
             return;
         }
 
