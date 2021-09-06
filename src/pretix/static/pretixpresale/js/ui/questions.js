@@ -405,7 +405,6 @@ function questions_init_profiles(el) {
             Object.keys(selectedProfile).forEach(function(key) {
                 var answer = selectedProfile[key].value;
                 var $field = selectedProfile[key].field;
-                console.log("auto-fill", key, $field, "with", answer);
                 if (!$field || !$field.length) return;
               
                 if ($field.attr("type") === "checkbox") {
