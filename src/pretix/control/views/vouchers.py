@@ -262,6 +262,10 @@ class VoucherUpdate(EventPermissionRequiredMixin, UpdateView):
     permission = 'can_change_vouchers'
     context_object_name = 'voucher'
 
+    def form_invalid(self, form):
+        messages.error(self.request, _('We could not save your changes. See below for details.'))
+        return super().form_invalid(form)
+
     def get_form_class(self):
         form_class = VoucherForm
         for receiver, response in voucher_form_class.send(self.request.event, cls=form_class):
@@ -310,6 +314,10 @@ class VoucherCreate(EventPermissionRequiredMixin, CreateView):
     template_name = 'pretixcontrol/vouchers/detail.html'
     permission = 'can_change_vouchers'
     context_object_name = 'voucher'
+
+    def form_invalid(self, form):
+        messages.error(self.request, _('We could not save your changes. See below for details.'))
+        return super().form_invalid(form)
 
     def get_form_class(self):
         form_class = VoucherForm
@@ -492,6 +500,10 @@ class VoucherBulkCreate(EventPermissionRequiredMixin, AsyncFormView):
         ctx = super().get_context_data(**kwargs)
         ctx['code_length'] = settings.ENTROPY['voucher_code']
         return ctx
+
+    def form_invalid(self, form):
+        messages.error(self.request, _('We could not save your changes. See below for details.'))
+        return super().form_invalid(form)
 
 
 class VoucherRNG(EventPermissionRequiredMixin, View):
