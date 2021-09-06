@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-08-27 13:05+0000\n"
-"PO-Revision-Date: 2021-09-02 20:20+0000\n"
-"Last-Translator: ityd <yagoalonso@gmail.com>\n"
+"PO-Revision-Date: 2021-09-06 09:00+0000\n"
+"Last-Translator: rauxenz <noquedandireccionesdisponibles@gmail.com>\n"
 "Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/pretix/"
 "es/>\n"
 "Language: es\n"
@@ -914,7 +914,7 @@ msgstr "Factura"
 #: pretix/plugins/checkinlists/exporters.py:661
 #: pretix/plugins/checkinlists/exporters.py:662
 msgid "Yes"
-msgstr "Si"
+msgstr "Sí"
 
 #: pretix/base/exporters/invoices.py:305 pretix/base/exporters/orderlist.py:395
 #: pretix/base/exporters/orderlist.py:399
@@ -2384,54 +2384,40 @@ msgid ""
 msgstr ""
 
 #: pretix/base/models/checkin.py:247
-#, fuzzy
-#| msgid "Country"
 msgid "Entry"
-msgstr "País"
+msgstr "Ingreso"
 
 #: pretix/base/models/checkin.py:248
 msgid "Exit"
 msgstr "Salida"
 
 #: pretix/base/models/checkin.py:262
-#, fuzzy
-#| msgid "Unknown invoice."
 msgid "Unknown ticket"
-msgstr "Factura desconocida."
+msgstr "Ticket no encontrado"
 
 #: pretix/base/models/checkin.py:263
-#, fuzzy
-#| msgid "Ticket download"
 msgid "Ticket not paid"
-msgstr "Descarga de tickets"
+msgstr "Ticket por pagar"
 
 #: pretix/base/models/checkin.py:264
 msgid "Forbidden by custom rule"
 msgstr ""
 
 #: pretix/base/models/checkin.py:265
-#, fuzzy
-#| msgid "Ticket layout changed."
 msgid "Ticket code revoked/changed"
-msgstr "Cambio en el diseño de los tickets."
+msgstr "Código de ticket revocado/cambiado"
 
 #: pretix/base/models/checkin.py:266
-#, fuzzy
-#| msgid "Action required"
 msgid "Information required"
-msgstr "Medidas necesarias"
+msgstr "Información requerida"
 
 #: pretix/base/models/checkin.py:267
-#, fuzzy
-#| msgid "Ticket layouts"
 msgid "Ticket already used"
-msgstr "Disposición de tickets"
+msgstr "Este ticket ya fue utilizado"
 
 #: pretix/base/models/checkin.py:268
-#, fuzzy
-#| msgid "Filetype not allowed!"
 msgid "Ticket type not allowed here"
-msgstr "Tipo de archivo no permitido!"
+msgstr "Tipo de ticket no está permitido"
 
 #: pretix/base/models/checkin.py:269
 #, fuzzy
@@ -3268,7 +3254,7 @@ msgstr "Membresía del equipo"
 #: pretix/base/models/items.py:804 pretix/base/models/vouchers.py:252
 #: pretix/base/models/waitinglist.py:95 pretix/base/orderimport.py:284
 msgid "Product variation"
-msgstr "Variación del producto"
+msgstr "Ver variaciones del producto"
 
 #: pretix/base/models/items.py:805
 #: pretix/control/templates/pretixcontrol/item/create.html:64
@@ -4315,7 +4301,7 @@ msgstr "Número de veces que se puede canjear este recibo."
 
 #: pretix/base/models/vouchers.py:199 pretix/control/views/vouchers.py:108
 msgid "Redeemed"
-msgstr "Redimido"
+msgstr "Canjeado"
 
 #: pretix/base/models/vouchers.py:203
 #, fuzzy
@@ -10373,7 +10359,7 @@ msgstr "Domingo"
 #: pretix/control/forms/filter.py:1522 pretix/control/forms/filter.py:1524
 #: pretix/control/forms/filter.py:2001 pretix/control/forms/filter.py:2003
 msgid "Search query"
-msgstr "Consulta de búsqueda"
+msgstr "Consultar búsqueda"
 
 #: pretix/control/forms/filter.py:1077
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:37
@@ -19100,10 +19086,8 @@ msgstr "Código de la tarjeta de regalo"
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:355
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:364
-#, fuzzy
-#| msgid "days before"
 msgid "minutes"
-msgstr "días antes"
+msgstr "minutos"
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:360
 msgid "Break between slots"
@@ -25032,7 +25016,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:47
 #: pretix/presale/templates/pretixpresale/event/fragment_cart_box.html:34
 msgid "The items in your cart are no longer reserved for you."
-msgstr "Los elementos en su carrito de compras han dejado de estar reservados."
+msgstr "Los elementos en su carrito de compras ya no se encuentran reservados."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:53
 #: pretix/presale/templates/pretixpresale/event/index.html:57
