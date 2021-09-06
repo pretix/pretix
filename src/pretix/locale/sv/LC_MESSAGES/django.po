@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-08-27 13:05+0000\n"
-"PO-Revision-Date: 2021-09-06 09:00+0000\n"
+"PO-Revision-Date: 2021-09-06 14:33+0000\n"
 "Last-Translator: Klevagruva <info@klevagruva.com>\n"
 "Language-Team: Swedish <https://translate.pretix.eu/projects/pretix/pretix/"
 "sv/>\n"
@@ -2672,7 +2672,7 @@ msgstr "Nettovärde"
 
 #: pretix/base/models/event.py:1481
 msgid "Can only be changed by organizer-level administrators"
-msgstr ""
+msgstr "Kan bara ändras av organizer-level administratör"
 
 #: pretix/base/models/event.py:1483
 #, fuzzy
@@ -2697,6 +2697,8 @@ msgid ""
 "If you keep this empty, any value is allowed. Otherwise, enter one possible "
 "value per line."
 msgstr ""
+"Om denna lämnas tom är vilket värde som helst tillåtet. annars, fyll i ett "
+"värde per linje."
 
 #: pretix/base/models/event.py:1496
 msgid "A property can either be required or have a default value, not both."
@@ -2713,6 +2715,7 @@ msgstr ""
 #: pretix/base/models/giftcards.py:79
 msgid "The gift card code may only contain letters, numbers, dots and dashes."
 msgstr ""
+"Presentkortets kod får bara innehålla bokstäver, siffror, punkter och streck."
 
 #: pretix/base/models/giftcards.py:91
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:39
@@ -2747,11 +2750,11 @@ msgstr ""
 
 #: pretix/base/models/items.py:94
 msgid "Category description"
-msgstr ""
+msgstr "Kategori beskrivning"
 
 #: pretix/base/models/items.py:101
 msgid "Products in this category are add-on products"
-msgstr ""
+msgstr "Produkter i den här kategorin är add-on produkter"
 
 #: pretix/base/models/items.py:102
 msgid ""
@@ -2759,24 +2762,27 @@ msgid ""
 "their own. They can only be bought in combination with a product that has "
 "this category configured as a possible source for add-ons."
 msgstr ""
+"Om vald, produkterna som tillhör denna kategori är inte till salu ensamma. "
+"Dom kan bara bli köpta med en produkt som har den här kategorin vald som "
+"möjlig källa för add-ons."
 
 #: pretix/base/models/items.py:108 pretix/base/pdf.py:138
 #: pretix/control/templates/pretixcontrol/items/category.html:4
 #: pretix/control/templates/pretixcontrol/items/category.html:6
 msgid "Product category"
-msgstr ""
+msgstr "Produkt kategori"
 
 #: pretix/base/models/items.py:109
 #: pretix/control/templates/pretixcontrol/items/categories.html:3
 #: pretix/control/templates/pretixcontrol/items/categories.html:5
 #: pretix/control/templates/pretixcontrol/items/categories.html:31
 msgid "Product categories"
-msgstr ""
+msgstr "Produkt kategorier"
 
 #: pretix/base/models/items.py:115
 #, python-brace-format
 msgid "{category} (Add-On products)"
-msgstr ""
+msgstr "{category} (Add-On produkter)"
 
 #: pretix/base/models/items.py:166 pretix/base/models/items.py:222
 msgid "Disable product for this date"
@@ -2789,12 +2795,12 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html:169
 #: pretix/control/templates/pretixcontrol/subevents/detail.html:147
 msgid "Available from"
-msgstr ""
+msgstr "tillgängliga från och med"
 
 #: pretix/base/models/items.py:170 pretix/base/models/items.py:226
 #: pretix/base/models/items.py:429
 msgid "This product will not be sold before the given date."
-msgstr ""
+msgstr "Den här produkten kommer inte säljas innan angivet datum."
 
 #: pretix/base/models/items.py:173 pretix/base/models/items.py:229
 #: pretix/base/models/items.py:432 pretix/base/payment.py:271
@@ -2803,31 +2809,33 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html:173
 #: pretix/control/templates/pretixcontrol/subevents/detail.html:151
 msgid "Available until"
-msgstr ""
+msgstr "Tillgänglig till och med"
 
 #: pretix/base/models/items.py:175 pretix/base/models/items.py:231
 #: pretix/base/models/items.py:434
 msgid "This product will not be sold after the given date."
-msgstr ""
+msgstr "Den här produkten kommer inte säljas efter det angivna datumet."
 
 #: pretix/base/models/items.py:354 pretix/base/models/items.py:957
 #: pretix/control/templates/pretixcontrol/items/index.html:38
 msgid "Category"
-msgstr ""
+msgstr "Kategori"
 
 #: pretix/base/models/items.py:355
 msgid ""
 "If you have many products, you can optionally sort them into categories to "
 "keep things organized."
 msgstr ""
+"Om du har mycket produkter kan du välja att sortera dom i kategorier för att "
+"hålla det organiserat."
 
 #: pretix/base/models/items.py:359
 msgid "Item name"
-msgstr ""
+msgstr "Föremåls namn"
 
 #: pretix/base/models/items.py:372
 msgid "This is shown below the product name in lists."
-msgstr ""
+msgstr "Detta visas under produktens namn i listor."
 
 #: pretix/base/models/items.py:376 pretix/base/models/items.py:782
 msgid "Default price"
@@ -3053,11 +3061,11 @@ msgstr ""
 
 #: pretix/base/models/items.py:538
 msgid "Membership duration in days"
-msgstr ""
+msgstr "medlemskaps varaktighet i dagar"
 
 #: pretix/base/models/items.py:542
 msgid "Membership duration in months"
-msgstr ""
+msgstr "Medlemskaps varaktighet i månader"
 
 #: pretix/base/models/items.py:550 pretix/base/models/items.py:1192
 #: pretix/control/forms/filter.py:375 pretix/control/forms/filter.py:1390
@@ -3087,7 +3095,7 @@ msgstr "Produktens kategori måste tillhöra samma event som produkten."
 
 #: pretix/base/models/items.py:720
 msgid "The item's tax rule must belong to the same event as the item."
-msgstr ""
+msgstr "Föremålets skatteregel måste tillhöra samma event som föremålet."
 
 #: pretix/base/models/items.py:726
 msgid "The item's availability cannot end before it starts."
@@ -3095,12 +3103,12 @@ msgstr "Produktens tillgänglighet kan inte ta slut innan det börjat."
 
 #: pretix/base/models/items.py:772
 msgid "This is shown below the variation name in lists."
-msgstr ""
+msgstr "Detta visas under variations namn i listor."
 
 #: pretix/base/models/items.py:777 pretix/base/models/items.py:980
 #: pretix/base/models/items.py:1198
 msgid "Position"
-msgstr ""
+msgstr "Position"
 
 #: pretix/base/models/items.py:797 pretix/control/navigation.py:524
 #: pretix/control/templates/pretixcontrol/organizers/membershiptypes.html:4
@@ -3128,37 +3136,39 @@ msgstr "Maximalt antal"
 
 #: pretix/base/models/items.py:970
 msgid "Add-Ons are included in the price"
-msgstr ""
+msgstr "Add-Ons är inkluderade i priset"
 
 #: pretix/base/models/items.py:971
 msgid ""
 "If selected, adding add-ons to this ticket is free, even if the add-ons "
 "would normally cost money individually."
 msgstr ""
+"Om vald är Add-Ons till den här biljetten gratis även om de vanligtvis "
+"kostar pengar."
 
 #: pretix/base/models/items.py:976
 msgid "Allow the same product to be selected multiple times"
-msgstr ""
+msgstr "Tillåt att samma produkt kan bli vald flera gånger"
 
 #: pretix/base/models/items.py:995
 msgid "The add-on's category must belong to the same event as the item."
-msgstr ""
+msgstr "Add-Ons kategori måste tillhöra samma event som produkten."
 
 #: pretix/base/models/items.py:1000
 msgid "The item already has an add-on of this category."
-msgstr ""
+msgstr "Produkten har redan en Add-On med den här kategorin."
 
 #: pretix/base/models/items.py:1005
 msgid "The minimum count needs to be equal to or greater than zero."
-msgstr ""
+msgstr "Det minimala antalet måste vara 0 eller högre."
 
 #: pretix/base/models/items.py:1010
 msgid "The maximum count needs to be equal to or greater than zero."
-msgstr ""
+msgstr "Det maximala antalet måste vara 0 eller högre."
 
 #: pretix/base/models/items.py:1015
 msgid "The maximum count needs to be greater than the minimum count."
-msgstr ""
+msgstr "Det maximala antalet måste vara större än det minimala antalet."
 
 #: pretix/base/models/items.py:1042
 msgid "Bundled item"
@@ -3170,7 +3180,7 @@ msgstr ""
 
 #: pretix/base/models/items.py:1054
 msgid "Quantity"
-msgstr ""
+msgstr "Kvantitet"
 
 #: pretix/base/models/items.py:1059
 msgid "Designated price part"
@@ -3198,15 +3208,15 @@ msgstr ""
 
 #: pretix/base/models/items.py:1092
 msgid "The count needs to be equal to or greater than zero."
-msgstr ""
+msgstr "Antalet måste vara 0 eller högre."
 
 #: pretix/base/models/items.py:1145
 msgid "Number"
-msgstr ""
+msgstr "Nummer"
 
 #: pretix/base/models/items.py:1146
 msgid "Text (one line)"
-msgstr ""
+msgstr "Text (en rad)"
 
 #: pretix/base/models/items.py:1147
 msgid "Multiline text"
@@ -3214,7 +3224,7 @@ msgstr ""
 
 #: pretix/base/models/items.py:1148
 msgid "Yes/No"
-msgstr ""
+msgstr "Ja/Nej"
 
 #: pretix/base/models/items.py:1149
 msgid "Choose one from a list"
@@ -3222,26 +3232,27 @@ msgstr ""
 
 #: pretix/base/models/items.py:1150
 msgid "Choose multiple from a list"
-msgstr ""
+msgstr "Välj flera från en lista"
 
 #: pretix/base/models/items.py:1151
 msgid "File upload"
-msgstr ""
+msgstr "Fil uppladdad"
 
 #: pretix/base/models/items.py:1153 pretix/base/reldate.py:183
 #: pretix/plugins/checkinlists/exporters.py:608
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_create.html:27
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_update.html:28
 msgid "Time"
-msgstr ""
+msgstr "Tid"
 
 #: pretix/base/models/items.py:1154
 msgid "Date and time"
-msgstr ""
+msgstr "Datum och tid"
 
 #: pretix/base/models/items.py:1155
+#, fuzzy
 msgid "Country code (ISO 3166-1 alpha-2)"
-msgstr ""
+msgstr "Landskod (ISO 3166-1 alpha-2)"
 
 #: pretix/base/models/items.py:1167 pretix/base/models/items.py:1246
 #: pretix/base/orderimport.py:729 pretix/control/forms/item.py:84
@@ -3249,19 +3260,19 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/items/question_edit.html:17
 #: pretix/control/templates/pretixcontrol/items/questions.html:21
 msgid "Question"
-msgstr ""
+msgstr "Fråga"
 
 #: pretix/base/models/items.py:1176
 msgid "Help text"
-msgstr ""
+msgstr "Hjälp text"
 
 #: pretix/base/models/items.py:1177
 msgid "If the question needs to be explained or clarified, do it here!"
-msgstr ""
+msgstr "Om frågan behöver bli förklarad eller förtydligad, gör det här!"
 
 #: pretix/base/models/items.py:1183
 msgid "Question type"
-msgstr ""
+msgstr "Typ av fråga"
 
 #: pretix/base/models/items.py:1187
 #: pretix/control/templates/pretixcontrol/items/questions.html:55
@@ -3270,7 +3281,7 @@ msgstr ""
 
 #: pretix/base/models/items.py:1194
 msgid "This question will be asked to buyers of the selected products"
-msgstr ""
+msgstr "Den här frågan kommer ställas till köpare för den valda produkten"
 
 #: pretix/base/models/items.py:1201
 msgid "Ask during check-in instead of in the ticket buying process"
@@ -3283,7 +3294,7 @@ msgstr ""
 #: pretix/base/models/items.py:1206
 #: pretix/control/templates/pretixcontrol/items/questions.html:66
 msgid "Hidden question"
-msgstr ""
+msgstr "Dold fråga"
 
 #: pretix/base/models/items.py:1207
 msgid "This question will only show up in the backend."
