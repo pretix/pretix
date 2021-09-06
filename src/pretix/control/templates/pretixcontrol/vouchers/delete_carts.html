@@ -1,0 +1,20 @@
+{% extends "pretixcontrol/items/base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% block title %}{% trans "Delete carts" %}{% endblock %}
+{% block inside %}
+    <h1>{% trans "Delete carts" %}</h1>
+    <form action="" method="post" class="form-horizontal">
+        {% csrf_token %}
+        <p>{% blocktrans %}Are you sure you want to delete any cart positions with voucher <strong>{{ voucher }}</strong>?{% endblocktrans %}</p>
+        <p>{% blocktrans %}This will silently remove products from the cart of a user currently making a purchase. This can be really confusing. Only use this if you know that the session is no longer in use.{% endblocktrans %}</p>
+        <div class="form-group submit-group">
+            <a href="{% url "control:event.vouchers" organizer=request.event.organizer.slug event=request.event.slug %}" class="btn btn-default btn-cancel">
+                {% trans "Cancel" %}
+            </a>
+            <button type="submit" class="btn btn-danger btn-save">
+                {% trans "Delete" %}
+            </button>
+        </div>
+    </form>
+{% endblock %}
