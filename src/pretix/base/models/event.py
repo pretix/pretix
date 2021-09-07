@@ -1284,7 +1284,7 @@ class SubEvent(EventMixin, LoggedModel):
         verbose_name=_("Frontpage text")
     )
     seating_plan = models.ForeignKey('SeatingPlan', on_delete=models.PROTECT, null=True, blank=True,
-                                     related_name='subevents')
+                                     related_name='subevents', verbose_name=_('Seating plan'))
 
     items = models.ManyToManyField('Item', through='SubEventItem')
     variations = models.ManyToManyField('ItemVariation', through='SubEventItemVariation')
