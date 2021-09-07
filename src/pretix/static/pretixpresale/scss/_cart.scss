@@ -84,8 +84,11 @@
                 white-space: nowrap;
                 text-overflow: ellipsis;
             }
-            a.collapse-handler {
+            .collapse-handler {
                 cursor: pointer;
+                display: inline;
+                padding: 0;
+                text-decoration: underline;
             }
         }
     }
