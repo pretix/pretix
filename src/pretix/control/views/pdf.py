@@ -58,7 +58,7 @@ class BaseEditorView(EventPermissionRequiredMixin, TemplateView):
     accepted_formats = (
         'application/pdf',
     )
-    maxfilesize = 1024 * 1024 * 10
+    maxfilesize = settings.FILE_UPLOAD_MAX_SIZE_IMAGE
     minfilesize = 10
     title = None
 

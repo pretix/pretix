@@ -20,6 +20,7 @@
 # <https://www.gnu.org/licenses/>.
 #
 import django_filters
+from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import transaction
 from django.db.models import (
@@ -603,7 +604,7 @@ class CheckinListPositionViewSet(viewsets.ReadOnlyModelViewSet):
         )
         if cf.type not in allowed_types:
             raise ValidationError('The submitted file "{fid}" has a file type that is not allowed in this field.'.format(fid=data))
-        if cf.file.size > 10 * 1024 * 1024:
+        if cf.file.size > settings.FILE_UPLOAD_MAX_SIZE_OTHER:
             raise ValidationError('The submitted file "{fid}" is too large to be used in this field.'.format(fid=data))
 
         return cf.file

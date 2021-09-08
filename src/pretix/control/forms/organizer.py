@@ -313,7 +313,7 @@ class OrganizerSettingsForm(SettingsForm):
     organizer_logo_image = ExtFileField(
         label=_('Header image'),
         ext_whitelist=(".png", ".jpg", ".gif", ".jpeg"),
-        max_size=10 * 1024 * 1024,
+        max_size=settings.FILE_UPLOAD_MAX_SIZE_IMAGE,
         required=False,
         help_text=_('If you provide a logo image, we will by default not show your organization name '
                     'in the page header. By default, we show your logo with a size of up to 1140x120 pixels. You '
@@ -324,7 +324,7 @@ class OrganizerSettingsForm(SettingsForm):
         label=_('Favicon'),
         ext_whitelist=(".ico", ".png", ".jpg", ".gif", ".jpeg"),
         required=False,
-        max_size=1 * 1024 * 1024,
+        max_size=settings.FILE_UPLOAD_MAX_SIZE_FAVICON,
         help_text=_('If you provide a favicon, we will show it instead of the default pretix icon. '
                     'We recommend a size of at least 200x200px to accommodate most devices.')
     )

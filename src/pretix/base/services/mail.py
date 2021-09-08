@@ -404,7 +404,7 @@ def mail_send_task(self, *args, to: List[str], subject: str, body: str, html: st
                                         logger.exception('Could not attach invoice to email')
                                         pass
 
-                            if attach_size < 4 * 1024 * 1024:
+                            if attach_size < settings.FILE_UPLOAD_MAX_SIZE_EMAIL_ATTACHMENT:
                                 # Do not attach more than 4MB, it will bounce way to often.
                                 for a in args:
                                     try:

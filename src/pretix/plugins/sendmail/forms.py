@@ -34,6 +34,7 @@
 # License for the specific language governing permissions and limitations under the License.
 
 from django import forms
+from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _, pgettext_lazy
@@ -89,7 +90,7 @@ class MailForm(FormPlaceholderMixin, forms.Form):
         ),
         help_text=_('Sending an attachment increases the chance of your email not arriving or being sorted into spam folders. We recommend only using PDFs '
                     'of no more than 2 MB in size.'),
-        max_size=10 * 1024 * 1024
+        max_size=settings.FILE_UPLOAD_MAX_SIZE_EMAIL_ATTACHMENT
     )  # TODO i18n
     items = forms.ModelMultipleChoiceField(
         widget=forms.CheckboxSelectMultiple(
