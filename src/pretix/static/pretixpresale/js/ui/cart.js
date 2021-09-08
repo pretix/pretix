@@ -92,7 +92,7 @@ $(function () {
                 .attr("aria-controls", $content.attr('id'))
                 .attr("aria-expanded", "false");
             $handler.on("click", function (ev) {
-                $content.html(original_html);
+                $content.html(original_html).removeClass("content");
                 $handler.attr("aria-expanded", "true").attr("aria-hidden", "true");
                 $handler.hide();
             });
