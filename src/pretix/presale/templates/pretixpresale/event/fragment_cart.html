@@ -44,7 +44,7 @@
                 {% if line.subevent.location %}
                 {% if not line.addon_to or line.addon_to.subevent_id != line.subevent_id %}
                     <div class="cart-icon-details collapse-lines" data-expand-text="{% trans "Show full location" %}">
-                        <span class="content text-muted">{{ line.subevent.location|linebreaksbr }}</span>
+                        <span class="content text-muted" id="full-location-{{ line.pk }}">{{ line.subevent.location|linebreaksbr }}</span>
                     </div>
                 {% endif %}
                 {% endif %}

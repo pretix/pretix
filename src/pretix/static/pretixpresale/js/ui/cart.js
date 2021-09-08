@@ -86,10 +86,15 @@ $(function () {
         var br_exp = /<br\s*\/?>/i;
         $content.text(original_html.split(br_exp).join(', '));
         if ($content.get(0).scrollWidth > $content.get(0).offsetWidth) {
-            var $handler = $("<button>").text($(this).attr("data-expand-text")).addClass("btn btn-link collapse-handler");
+            var $handler = $("<button>")
+                .text($(this).attr("data-expand-text"))
+                .addClass("btn btn-link collapse-handler")
+                .attr("aria-controls", $content.attr('id'))
+                .attr("aria-expanded", "false");
             $handler.on("click", function (ev) {
                 $content.html(original_html);
-                $(ev.target).remove();
+                $handler.attr("aria-expanded", "true").attr("aria-hidden", "true");
+                $handler.hide();
             });
             $(this).append($handler);
         }
