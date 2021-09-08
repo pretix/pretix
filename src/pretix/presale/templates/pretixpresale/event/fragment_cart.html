@@ -43,8 +43,7 @@
                 </div>
                 {% if line.subevent.location %}
                     <div class="cart-icon-details collapse-lines" data-expand-text="{% trans "Show full location" %}">
-                        <span class="fa fa-map-marker fa-fw" aria-hidden="true"></span>
-                        <span class="content">{{ line.subevent.location|linebreaksbr }}</span>
+                        <span class="content text-muted">{{ line.subevent.location|linebreaksbr }}</span>
                     </div>
                 {% endif %}
             {% endif %}
