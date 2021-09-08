@@ -927,31 +927,32 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
                     (not q.dependency_question_id or question_is_visible(q.dependency_question_id, q.dependency_values))
                 )
 
-            for q in cp.item.questions_to_ask:
-                if question_is_required(q) and q.id not in answ:
+            if not self.all_optional:
+                for q in cp.item.questions_to_ask:
+                    if question_is_required(q) and q.id not in answ:
+                        if warn:
+                            messages.warning(request, _('Please fill in answers to all required questions.'))
+                        return False
+                if cp.item.admission and self.request.event.settings.get('attendee_names_required', as_type=bool) \
+                        and not cp.attendee_name_parts:
                     if warn:
                         messages.warning(request, _('Please fill in answers to all required questions.'))
                     return False
-            if cp.item.admission and self.request.event.settings.get('attendee_names_required', as_type=bool) \
-                    and not cp.attendee_name_parts:
-                if warn:
-                    messages.warning(request, _('Please fill in answers to all required questions.'))
-                return False
-            if cp.item.admission and self.request.event.settings.get('attendee_emails_required', as_type=bool) \
-                    and cp.attendee_email is None:
-                if warn:
-                    messages.warning(request, _('Please fill in answers to all required questions.'))
-                return False
-            if cp.item.admission and self.request.event.settings.get('attendee_company_required', as_type=bool) \
-                    and cp.company is None:
-                if warn:
-                    messages.warning(request, _('Please fill in answers to all required questions.'))
-                return False
-            if cp.item.admission and self.request.event.settings.get('attendee_attendees_required', as_type=bool) \
-                    and (cp.street is None or cp.city is None or cp.country is None):
-                if warn:
-                    messages.warning(request, _('Please fill in answers to all required questions.'))
-                return False
+                if cp.item.admission and self.request.event.settings.get('attendee_emails_required', as_type=bool) \
+                        and cp.attendee_email is None:
+                    if warn:
+                        messages.warning(request, _('Please fill in answers to all required questions.'))
+                    return False
+                if cp.item.admission and self.request.event.settings.get('attendee_company_required', as_type=bool) \
+                        and cp.company is None:
+                    if warn:
+                        messages.warning(request, _('Please fill in answers to all required questions.'))
+                    return False
+                if cp.item.admission and self.request.event.settings.get('attendee_attendees_required', as_type=bool) \
+                        and (cp.street is None or cp.city is None or cp.country is None):
+                    if warn:
+                        messages.warning(request, _('Please fill in answers to all required questions.'))
+                    return False
 
             responses = question_form_fields.send(sender=self.request.event, position=cp)
             form_data = cp.meta_info_data.get('question_form_data', {})
