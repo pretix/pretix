@@ -156,6 +156,29 @@ class EventMixin:
             return _date(self.date_from.astimezone(tz), "DATE_FORMAT")
         return daterange(self.date_from.astimezone(tz), self.date_to.astimezone(tz))
 
+    def get_time_range_display(self, tz=None, force_show_end=False) -> str:
+        """
+        Returns a formatted string containing the start time and sometimes the end time
+        of the event with respect to the current locale and to the ``show_date_to``
+        setting. Dates are not shown. This is usually used in combination with get_date_range_display
+        """
+        tz = tz or self.timezone
+
+        show_date_to = self.date_to and (self.settings.show_date_to or force_show_end) and (
+            # Show date to if start and end are on the same day ("08:00-10:00")
+            self.date_to.astimezone(tz).date() == self.date_from.astimezone(tz).date() or
+            # Show date to if start and end are on consecutive days and less than 24h ("23:00-03:00")
+            (self.date_to.astimezone(tz).date() == self.date_from.astimezone(tz).date() + timedelta(days=1) and
+             self.date_to.astimezone(tz).time() < self.date_from.astimezone(tz).time())
+            # Do not show end time if this is a 5-day event because there's no way to make it understandable
+        )
+        if show_date_to:
+            return '{} – {}'.format(
+                _date(self.date_from.astimezone(tz), "TIME_FORMAT"),
+                _date(self.date_to.astimezone(tz), "TIME_FORMAT"),
+            )
+        return _date(self.date_from.astimezone(tz), "TIME_FORMAT")
+
     @property
     def timezone(self):
         return pytz.timezone(self.settings.timezone)

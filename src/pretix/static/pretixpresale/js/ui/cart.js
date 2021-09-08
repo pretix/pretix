@@ -79,4 +79,24 @@ $(function () {
         e.preventDefault();
         return true;
     });
+
+    $(".cart-icon-details.collapse-lines").each(function () {
+        var $content = $(this).find(".content");
+        var original_html = $content.html();
+        var br_exp = /<br\s*\/?>/i;
+        $content.text(original_html.split(br_exp).join(', '));
+        if ($content.get(0).scrollWidth > $content.get(0).offsetWidth) {
+            var $handler = $("<button>")
+                .text($(this).attr("data-expand-text"))
+                .addClass("btn btn-link collapse-handler")
+                .attr("aria-controls", $content.attr('id'))
+                .attr("aria-expanded", "false");
+            $handler.on("click", function (ev) {
+                $content.html(original_html);
+                $handler.attr("aria-expanded", "true").attr("aria-hidden", "true");
+                $handler.hide();
+            });
+            $(this).append($handler);
+        }
+    })
 });
