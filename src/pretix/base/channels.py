@@ -82,6 +82,13 @@ class SalesChannel:
         """
         return False
 
+    @property
+    def customer_accounts_supported(self) -> bool:
+        """
+        If this property is ``True``, checkout will show the customer login step.
+        """
+        return True
+
 
 def get_all_sales_channels():
     global _ALL_CHANNELS

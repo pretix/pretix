@@ -236,7 +236,7 @@ class CustomerStep(CartMixin, TemplateFlowStep):
     icon = 'user'
 
     def is_applicable(self, request):
-        return request.organizer.settings.customer_accounts
+        return request.organizer.settings.customer_accounts and request.sales_channel.customer_accounts_supported
 
     @cached_property
     def login_form(self):
