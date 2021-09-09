@@ -34,14 +34,13 @@
 import os.path
 from decimal import Decimal
 
+from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import transaction
 from django.db.models import QuerySet
-from django.conf import settings
 from django.utils.functional import cached_property, lazy
 from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
-
 
 from pretix.api.serializers.event import MetaDataField
 from pretix.api.serializers.fields import UploadedFileField
