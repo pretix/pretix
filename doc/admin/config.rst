@@ -444,9 +444,9 @@ You can configure the maximum file size for uploading various files::
     ; Max upload size for images in MiB, defaults to 10 MiB
     max_size_image = 12
     ; Max upload size for favicons in MiB, defaults to 1 MiB
-    max_size_image = 2
+    max_size_favicon = 2
     ; Max upload size for email attachments in MiB, defaults to 10 MiB
-    max_size_image = 15
+    max_size_email_attachment = 15
     ; Max upload size for other files in MiB, defaults to 10 MiB
     ; This includes all file upload type order questions
-    max_size_image = 100
+    max_size_other = 100
