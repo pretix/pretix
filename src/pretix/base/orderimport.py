@@ -678,9 +678,12 @@ class SeatColumn(ImportColumn):
         if value:
             try:
                 value = Seat.objects.get(
+                    event=self.event,
                     seat_guid=value,
                     subevent=previous_values.get('subevent')
                 )
+            except Seat.MultipleObjectsReturned:
+                raise ValidationError(_('Multiple matching seats were found.'))
             except Seat.DoesNotExist:
                 raise ValidationError(_('No matching seat was found.'))
             if not value.is_available() or value in self._cached:
