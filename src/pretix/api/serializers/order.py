@@ -26,6 +26,7 @@ from collections import Counter, defaultdict
 from decimal import Decimal
 
 import pycountry
+from django.conf import settings
 from django.core.files import File
 from django.db.models import F, Q
 from django.utils.timezone import now
@@ -191,7 +192,7 @@ class AnswerSerializer(I18nAwareModelSerializer):
         )
         if cf.type not in allowed_types:
             raise ValidationError('The submitted file "{fid}" has a file type that is not allowed in this field.'.format(fid=data))
-        if cf.file.size > 10 * 1024 * 1024:
+        if cf.file.size > settings.FILE_UPLOAD_MAX_SIZE_OTHER:
             raise ValidationError('The submitted file "{fid}" is too large to be used in this field.'.format(fid=data))
 
         data['options'] = []

@@ -34,6 +34,7 @@
 import os.path
 from decimal import Decimal
 
+from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import transaction
 from django.db.models import QuerySet
@@ -161,7 +162,7 @@ class ItemSerializer(I18nAwareModelSerializer):
     meta_data = MetaDataField(required=False, source='*')
     picture = UploadedFileField(required=False, allow_null=True, allowed_types=(
         'image/png', 'image/jpeg', 'image/gif'
-    ), max_size=10 * 1024 * 1024)
+    ), max_size=settings.FILE_UPLOAD_MAX_SIZE_IMAGE)
 
     class Meta:
         model = Item

@@ -434,3 +434,19 @@ pretix can make use of some external tools if they are installed. Currently, the
 
 .. _Python documentation: https://docs.python.org/3/library/configparser.html?highlight=configparser#supported-ini-file-structure
 .. _Celery documentation: http://docs.celeryproject.org/en/latest/userguide/configuration.html
+
+Maximum upload file sizes
+-------------------------
+
+You can configure the maximum file size for uploading various files::
+
+    [pretix_file_upload]
+    ; Max upload size for images in MiB, defaults to 10 MiB
+    max_size_image = 12
+    ; Max upload size for favicons in MiB, defaults to 1 MiB
+    max_size_favicon = 2
+    ; Max upload size for email attachments in MiB, defaults to 10 MiB
+    max_size_email_attachment = 15
+    ; Max upload size for other files in MiB, defaults to 10 MiB
+    ; This includes all file upload type order questions
+    max_size_other = 100

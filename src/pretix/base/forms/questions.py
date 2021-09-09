@@ -46,6 +46,7 @@ import vat_moss.errors
 import vat_moss.id
 from babel import Locale
 from django import forms
+from django.conf import settings
 from django.contrib import messages
 from django.core.exceptions import ValidationError
 from django.core.files.uploadedfile import SimpleUploadedFile
@@ -507,7 +508,7 @@ class PortraitImageField(SizeValidationMixin, ExtValidationMixin, forms.FileFiel
 
     def __init__(self, *args, **kwargs):
         kwargs.setdefault('ext_whitelist', (".png", ".jpg", ".jpeg", ".jfif", ".tif", ".tiff", ".bmp"))
-        kwargs.setdefault('max_size', 10 * 1024 * 1024)
+        kwargs.setdefault('max_size', settings.FILE_UPLOAD_MAX_SIZE_IMAGE)
         super().__init__(*args, **kwargs)
 
 
@@ -739,7 +740,7 @@ class BaseQuestionsForm(forms.Form):
                             ".pptx", ".ppt", ".doc", ".xlsx", ".xls", ".jfif", ".heic", ".heif", ".pages",
                             ".bmp", ".tif", ".tiff"
                         ),
-                        max_size=10 * 1024 * 1024,
+                        max_size=settings.FILE_UPLOAD_MAX_SIZE_OTHER,
                     )
             elif q.type == Question.TYPE_DATE:
                 attrs = {}
