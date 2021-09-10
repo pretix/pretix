@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-09-06 18:51+0000\n"
-"PO-Revision-Date: 2021-09-06 14:33+0000\n"
+"PO-Revision-Date: 2021-09-10 16:45+0000\n"
 "Last-Translator: Klevagruva <info@klevagruva.com>\n"
 "Language-Team: Swedish <https://translate.pretix.eu/projects/pretix/pretix/"
 "sv/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.6\n"
+"X-Generator: Weblate 4.8\n"
 
 #: htmlcov/pretix_control_views_dashboards_py.html:963
 #: pretix/control/templates/pretixcontrol/events/index.html:140
@@ -3021,6 +3021,9 @@ msgid ""
 "event apply. If this is unchecked, orders containing this product can not be "
 "canceled by users but only by you."
 msgstr ""
+"om vald, kommer vanliga annullering och beställningsändrings inställningar "
+"att gälla. Om den inte är vald kommer beställningar som innehåller denna "
+"produkt inte kunna annulleras av användare utan endast av dig."
 
 #: pretix/base/models/items.py:480
 msgid "Minimum amount per order"
@@ -9328,19 +9331,19 @@ msgstr ""
 
 #: pretix/control/forms/filter.py:1087
 msgid "Has no memberships"
-msgstr ""
+msgstr "Har inget medlemskap"
 
 #: pretix/control/forms/filter.py:1088
 msgid "Has any membership"
-msgstr ""
+msgstr "Har något medlemskap"
 
 #: pretix/control/forms/filter.py:1089
 msgid "Has valid membership"
-msgstr ""
+msgstr "Har giltigt medlemskap"
 
 #: pretix/control/forms/filter.py:1193
 msgid "All events"
-msgstr ""
+msgstr "Alla event"
 
 #: pretix/control/forms/filter.py:1194
 msgid "Shop live"
@@ -9360,7 +9363,7 @@ msgstr ""
 
 #: pretix/control/forms/filter.py:1371 pretix/control/forms/filter.py:1373
 msgid "Search attendee…"
-msgstr ""
+msgstr "Sök deltagare…"
 
 #: pretix/control/forms/filter.py:1379
 msgid "Check-in status"
@@ -9368,12 +9371,12 @@ msgstr ""
 
 #: pretix/control/forms/filter.py:1381
 msgid "All attendees"
-msgstr ""
+msgstr "Alla deltagare"
 
 #: pretix/control/forms/filter.py:1382
 msgctxt "checkin state"
 msgid "Checked in but left"
-msgstr ""
+msgstr "Checkade in men lämnade"
 
 #: pretix/control/forms/filter.py:1383
 #, fuzzy
@@ -9387,51 +9390,52 @@ msgstr "Förköp"
 #: pretix/control/templates/pretixcontrol/checkin/lists.html:73
 #: pretix/plugins/checkinlists/exporters.py:442
 msgid "Checked in"
-msgstr ""
+msgstr "Checkade in"
 
 #: pretix/control/forms/filter.py:1385
 #: pretix/control/templates/pretixcontrol/checkin/index.html:151
 msgid "Not checked in"
-msgstr ""
+msgstr "Har inte checkat in"
 
 #: pretix/control/forms/filter.py:1404
 msgctxt "subevent"
 msgid "Date start from"
-msgstr ""
+msgstr "datum start från"
 
 #: pretix/control/forms/filter.py:1410
 msgctxt "subevent"
 msgid "Date start until"
-msgstr ""
+msgstr "Datum startar fram till"
 
 #: pretix/control/forms/filter.py:1513 pretix/control/forms/filter.py:1516
 #: pretix/control/templates/pretixcontrol/users/index.html:52
 msgid "Administrator"
-msgstr ""
+msgstr "Administratör"
 
 #: pretix/control/forms/filter.py:1517
 msgid "No administrator"
-msgstr ""
+msgstr "Ingen administratör"
 
 #: pretix/control/forms/filter.py:1588
 msgid "Valid"
-msgstr ""
+msgstr "Giltig"
 
 #: pretix/control/forms/filter.py:1589
+#, fuzzy
 msgid "Unredeemed"
-msgstr ""
+msgstr "oförlösta"
 
 #: pretix/control/forms/filter.py:1590
 msgid "Redeemed at least once"
-msgstr ""
+msgstr "Inlöst minst en gång"
 
 #: pretix/control/forms/filter.py:1591
 msgid "Fully redeemed"
-msgstr ""
+msgstr "fullt inlöst"
 
 #: pretix/control/forms/filter.py:1593
 msgid "Redeemed and checked in with ticket"
-msgstr ""
+msgstr "Inlöst och checkat in med biljett"
 
 #: pretix/control/forms/filter.py:1598
 msgid "Quota handling"
@@ -9447,7 +9451,7 @@ msgstr ""
 
 #: pretix/control/forms/filter.py:1614 pretix/control/forms/filter.py:1616
 msgid "Search voucher"
-msgstr ""
+msgstr "Sök kupong"
 
 #: pretix/control/forms/filter.py:1662 pretix/control/forms/vouchers.py:125
 #: pretix/control/views/typeahead.py:592 pretix/control/views/typeahead.py:596
@@ -9458,7 +9462,7 @@ msgstr ""
 
 #: pretix/control/forms/filter.py:1783
 msgid "Refund status"
-msgstr ""
+msgstr "Återbetalningsstatus"
 
 #: pretix/control/forms/filter.py:1785
 msgid "All open refunds"
@@ -9466,7 +9470,7 @@ msgstr ""
 
 #: pretix/control/forms/filter.py:1786
 msgid "All refunds"
-msgstr ""
+msgstr "Alla återbetalningar"
 
 #: pretix/control/forms/filter.py:1826 pretix/plugins/reports/exporters.py:581
 msgid "Date filter"
@@ -9474,7 +9478,7 @@ msgstr ""
 
 #: pretix/control/forms/filter.py:1828 pretix/plugins/reports/exporters.py:583
 msgid "Filter by…"
-msgstr ""
+msgstr "Filtrera efter…"
 
 #: pretix/control/forms/filter.py:1830 pretix/plugins/reports/exporters.py:585
 msgid "Date of last successful payment"
