@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-09-06 18:51+0000\n"
-"PO-Revision-Date: 2020-11-13 07:45+0000\n"
+"PO-Revision-Date: 2021-09-13 09:48+0000\n"
 "Last-Translator: Mie Frydensbjerg <mif@aarhus.dk>\n"
 "Language-Team: Danish <https://translate.pretix.eu/projects/pretix/pretix/da/"
 ">\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 3.10.3\n"
+"X-Generator: Weblate 4.8\n"
 
 #: htmlcov/pretix_control_views_dashboards_py.html:963
 #: pretix/control/templates/pretixcontrol/events/index.html:140
@@ -1013,10 +1013,8 @@ msgid "No"
 msgstr "Nej"
 
 #: pretix/base/exporters/invoices.py:319
-#, fuzzy
-#| msgid "Minimum number"
 msgid "Line number"
-msgstr "Minimum antal"
+msgstr "Linjenummer"
 
 #: pretix/base/exporters/invoices.py:320 pretix/base/exporters/orderlist.py:443
 #: pretix/base/models/items.py:371 pretix/base/models/items.py:764
@@ -1055,10 +1053,8 @@ msgid "Tax name"
 msgstr "Navn"
 
 #: pretix/base/exporters/invoices.py:326
-#, fuzzy
-#| msgid "Event start time"
 msgid "Event start date"
-msgstr "Starttidspunkt"
+msgstr "Startdato"
 
 #: pretix/base/exporters/mail.py:52
 msgid "Email addresses (text file)"
@@ -1083,7 +1079,7 @@ msgstr "Bestillingsdato"
 #: pretix/plugins/reports/exporters.py:550
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:43
 msgid "Orders"
-msgstr "Bestillinger"
+msgstr "Ordrer"
 
 #: pretix/base/exporters/orderlist.py:80 pretix/base/models/orders.py:2066
 #: pretix/base/notifications.py:205
@@ -1098,7 +1094,7 @@ msgstr "Andre gebyrer"
 
 #: pretix/base/exporters/orderlist.py:89
 msgid "Only paid orders"
-msgstr "Kun betalte bestillinger"
+msgstr "Kun betalte ordrer"
 
 #: pretix/base/exporters/orderlist.py:95
 #, fuzzy
@@ -1218,10 +1214,8 @@ msgstr "E-mail"
 #: pretix/presale/checkoutflow.py:1211 pretix/presale/forms/checkout.py:90
 #: pretix/presale/forms/waitinglist.py:69
 #: pretix/presale/templates/pretixpresale/event/order.html:305
-#, fuzzy
-#| msgid "Minimum number"
 msgid "Phone number"
-msgstr "Minimum antal"
+msgstr "Telefonnummer"
 
 #: pretix/base/exporters/orderlist.py:268
 #: pretix/base/exporters/orderlist.py:440
@@ -1247,10 +1241,8 @@ msgstr "Bestillingsdato"
 #: pretix/base/exporters/orderlist.py:441
 #: pretix/base/exporters/orderlist.py:544
 #: pretix/plugins/checkinlists/exporters.py:467
-#, fuzzy
-#| msgid "Order date"
 msgid "Order time"
-msgstr "Bestillingsdato"
+msgstr "Bestillingstidspunkt"
 
 #: pretix/base/exporters/orderlist.py:277 pretix/base/settings.py:358
 #, fuzzy
@@ -1324,11 +1316,8 @@ msgstr "Kommentar"
 #: pretix/base/exporters/orderlist.py:291
 #: pretix/base/exporters/orderlist.py:579 pretix/base/models/orders.py:221
 #: pretix/control/forms/filter.py:209
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "All dates"
 msgid "Follow-up date"
-msgstr "Alle datoer"
+msgstr "Opfølgningsdato"
 
 #: pretix/base/exporters/orderlist.py:292
 #: pretix/control/templates/pretixcontrol/orders/index.html:125
@@ -1530,10 +1519,8 @@ msgid "Seat number"
 msgstr "Navn"
 
 #: pretix/base/exporters/orderlist.py:578
-#, fuzzy
-#| msgid "Order code"
 msgid "Order comment"
-msgstr "Bestillingskode"
+msgstr "Ordrekommentar"
 
 #: pretix/base/exporters/orderlist.py:745
 #, fuzzy
@@ -1574,25 +1561,17 @@ msgstr "Betalings-id"
 #: pretix/base/exporters/orderlist.py:985
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:30
 #: pretix/control/templates/pretixcontrol/organizers/giftcards.html:59
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "Create date"
 msgid "Creation date"
-msgstr "Opret dato"
+msgstr "Oprettelsesdato"
 
 #: pretix/base/exporters/orderlist.py:786
 #: pretix/control/templates/pretixcontrol/order/index.html:732
-#, fuzzy
-#| msgctxt "invoice"
-#| msgid "Cancellation date"
 msgid "Completion date"
-msgstr "Annulleringsdato"
+msgstr "Afslutningsdato"
 
 #: pretix/base/exporters/orderlist.py:787
-#, fuzzy
-#| msgid "Status"
 msgid "Status code"
-msgstr "Status"
+msgstr "Statuskode"
 
 #: pretix/base/exporters/orderlist.py:787
 #: pretix/base/exporters/orderlist.py:892 pretix/base/models/orders.py:1406
@@ -1615,10 +1594,8 @@ msgid "Payment method"
 msgstr "Betalingsmetode"
 
 #: pretix/base/exporters/orderlist.py:823
-#, fuzzy
-#| msgid "Quota availabilities (CSV)"
 msgid "Quota availabilities"
-msgstr "Kvotetilgængeligheder (CSV)"
+msgstr "Tilgængelige kvoter"
 
 #: pretix/base/exporters/orderlist.py:828
 #: pretix/control/templates/pretixcontrol/items/quotas.html:45
@@ -1667,10 +1644,8 @@ msgid "Waiting list"
 msgstr "Venteliste"
 
 #: pretix/base/exporters/orderlist.py:829
-#, fuzzy
-#| msgid "Expire order"
 msgid "Exited orders"
-msgstr "Marker bestilling som udløbet"
+msgstr "Afsluttede ordrer"
 
 #: pretix/base/exporters/orderlist.py:829
 msgid "Current availability"
@@ -1916,10 +1891,8 @@ msgid "Keep me logged in"
 msgstr "Husk mit login"
 
 #: pretix/base/forms/auth.py:60 pretix/base/forms/auth.py:257
-#, fuzzy
-#| msgid "This voucher code is not known in our database."
 msgid "This combination of credentials is not known to our system."
-msgstr "Denne voucherkode genkendes ikke."
+msgstr "Denne kombination af oplysninger er ikke kendt af vores system."
 
 #: pretix/base/forms/auth.py:61 pretix/base/forms/user.py:57
 #: pretix/presale/forms/customer.py:315 pretix/presale/forms/customer.py:385
@@ -6430,10 +6403,8 @@ msgid "The new expiry date needs to be in the future."
 msgstr "Den nye udløbsdato skal ligge i fremtiden."
 
 #: pretix/base/services/orders.py:278 pretix/base/services/orders.py:339
-#, fuzzy
-#| msgid "The order has been marked as paid."
 msgid "This order is not pending approval."
-msgstr "Bestillingen er blevet markeret som betalt."
+msgstr "Denne ordre afventer ikke godkendelse."
 
 #: pretix/base/services/orders.py:312
 #, fuzzy, python-format
@@ -10086,10 +10057,8 @@ msgstr "afventer"
 #: pretix/control/templates/pretixcontrol/orders/overview.html:71
 #: pretix/plugins/reports/exporters.py:291
 #: pretix/presale/templates/pretixpresale/event/fragment_order_status.html:5
-#, fuzzy
-#| msgid "pending"
 msgid "Approval pending"
-msgstr "afventer"
+msgstr "Godkendelse afventer"
 
 #: pretix/control/forms/filter.py:210
 msgid "Follow-up configured"
@@ -22749,10 +22718,8 @@ msgid "payment pending (except unapproved)"
 msgstr ""
 
 #: pretix/plugins/sendmail/forms.py:172 pretix/plugins/sendmail/views.py:292
-#, fuzzy
-#| msgid "pending"
 msgid "approval pending"
-msgstr "afventer"
+msgstr "Godkendelse afventer"
 
 #: pretix/plugins/sendmail/forms.py:175 pretix/plugins/sendmail/views.py:290
 msgid "pending with payment overdue"
@@ -24262,6 +24229,8 @@ msgid ""
 "This ticket shop is currently in test mode. Please do not perform any real "
 "purchases as your order might be deleted without notice."
 msgstr ""
+"Denne shop er i øjeblikket i testtilstand. Udfør ikke nogen reelle køb, da "
+"din ordre kan blive slettet uden varsel."
 
 #: pretix/presale/templates/pretixpresale/event/base.html:113
 #: pretix/presale/templates/pretixpresale/event/base.html:149
@@ -24467,16 +24436,12 @@ msgid "Please hang tight, we're finalizing your order!"
 msgstr "Hæng venligst på, mens vi gør din booking færdig!"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:28
-#, fuzzy
-#| msgid "Add a new ticket type"
 msgid "Add or remove tickets"
-msgstr "Tilføj ny billettype"
+msgstr "Tilføj eller fjern billetter"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:60
-#, fuzzy
-#| msgid "Invalid payments"
 msgid "Modify payment"
-msgstr "Ugyldige betalinger"
+msgstr "Redigér betaling"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:62
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:84
@@ -24485,16 +24450,12 @@ msgid "Modify"
 msgstr "Rediger"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:82
-#, fuzzy
-#| msgid "Invoice information"
 msgid "Modify invoice information"
-msgstr "Faktureringsoplysninger"
+msgstr "Rediger fakturaoplysninger"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:132
-#, fuzzy
-#| msgid "Contact information"
 msgid "Modify contact information"
-msgstr "Kontaktoplysninger"
+msgstr "Redigér kontaktoplysninger"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:138
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:23
@@ -24511,6 +24472,8 @@ msgid ""
 "Your order requires approval by the event organizer before it can be "
 "confirmed and forms a valid contract."
 msgstr ""
+"Din ordre kræver godkendelse af arrangøren, før den kan bekræftes, og der "
+"kan dannes en gyldig billet."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:199
 msgid ""
@@ -24518,20 +24481,21 @@ msgid ""
 "rejected your order. If your order was approved, we will send you a link "
 "that you can use to pay."
 msgstr ""
+"Vi sender dig en email, så snart arrangøren har godkendt eller afvist din "
+"ordre. Hvis din ordre bliver godkendt, sender vi dig et link, som du kan "
+"bruge til at betale."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:215
 msgid "Place binding order"
-msgstr "Gennemfør bestilling"
+msgstr "Placér bindende ordre"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:217
 msgid "Submit registration"
 msgstr "Send tilmelding"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_customer.html:20
-#, fuzzy
-#| msgid "Internal comment"
 msgid "Log in with a customer account"
-msgstr "Intern kommentar"
+msgstr "Log ind med en kundekonto"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_customer.html:30
 #, fuzzy
@@ -25127,12 +25091,16 @@ msgid ""
 "Please note that we still await approval by the event organizer before your "
 "order is confirmed."
 msgstr ""
+"Bemærk, at vi stadig venter på godkendelse fra arrangøren, før din ordre kan "
+"bekræftes."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:39
 msgid ""
 "Please note that we still await approval by the event organizer before you "
 "can pay and complete this order."
 msgstr ""
+"Bemærk, at vi stadig venter på godkendelse fra arrangøren, før du kan betale "
+"og fuldføre denne ordre."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:43
 msgid "Please note that we still await your payment to complete the process."
@@ -25249,10 +25217,8 @@ msgid "Request invoice"
 msgstr "Anmod om faktura"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:287
-#, fuzzy
-#| msgid "Change contact information"
 msgid "Change your information"
-msgstr "Skift kontaktoplysninger"
+msgstr "Ændr dine oplysninger"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:295
 #, fuzzy
