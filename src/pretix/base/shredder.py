@@ -314,14 +314,14 @@ class AttendeeInfoShredder(BaseDataShredder):
                         d['data'][i]['attendee_name_parts'] = {
                             '_legacy': '█'
                         }
-                if 'company' in row:
-                    d['data'][i]['company'] = '█'
-                if 'street' in row:
-                    d['data'][i]['street'] = '█'
-                if 'zipcode' in row:
-                    d['data'][i]['zipcode'] = '█'
-                if 'city' in row:
-                    d['data'][i]['city'] = '█'
+                    if 'company' in row:
+                        d['data'][i]['company'] = '█'
+                    if 'street' in row:
+                        d['data'][i]['street'] = '█'
+                    if 'zipcode' in row:
+                        d['data'][i]['zipcode'] = '█'
+                    if 'city' in row:
+                        d['data'][i]['city'] = '█'
                 le.data = json.dumps(d)
                 le.shredded = True
                 le.save(update_fields=['data', 'shredded'])
