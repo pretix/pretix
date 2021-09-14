@@ -572,7 +572,7 @@ def _check_positions(event: Event, now_dt: datetime, positions: List[CartPositio
         if cp.pk in deleted_positions:
             continue
 
-        if not cp.item.is_available() or (cp.variation and not cp.variation.active):
+        if not cp.item.is_available() or (cp.variation and not cp.variation.is_available()):
             err = err or error_messages['unavailable']
             delete(cp)
             continue
@@ -644,7 +644,7 @@ def _check_positions(event: Event, now_dt: datetime, positions: List[CartPositio
             err = err or error_messages['voucher_required']
             break
 
-        if cp.item.hide_without_voucher and (
+        if (cp.item.hide_without_voucher or (cp.variation and cp.variation.hide_without_voucher)) and (
                 cp.voucher is None or not cp.voucher.show_hidden_items or not cp.voucher.applies_to(cp.item, cp.variation)
         ) and not cp.is_bundled:
             delete(cp)

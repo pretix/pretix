@@ -832,4 +832,7 @@ details {
     opacity: 0;
     pointer-events: none;
   }
+  .variation-disabled {
+    text-decoration: line-through;
+  }
 }

@@ -956,6 +956,24 @@ class ItemVariation(models.Model):
     def is_only_variation(self):
         return ItemVariation.objects.filter(item=self.item).count() == 1
 
+    def is_available_by_time(self, now_dt: datetime=None) -> bool:
+        now_dt = now_dt or now()
+        if self.available_from and self.available_from > now_dt:
+            return False
+        if self.available_until and self.available_until < now_dt:
+            return False
+        return True
+
+    def is_available(self, now_dt: datetime=None) -> bool:
+        """
+        Returns whether this item is available according to its ``active`` flag
+        and its ``available_from`` and ``available_until`` fields
+        """
+        now_dt = now_dt or now()
+        if not self.active or not self.is_available_by_time(now_dt):
+            return False
+        return True
+
 
 class ItemAddOn(models.Model):
     """

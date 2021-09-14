@@ -268,6 +268,10 @@ class EventMixin:
         ).values('items')
         sq_active_variation = ItemVariation.objects.filter(
             Q(active=True)
+            & Q(sales_channels__contains=channel)
+            & Q(hide_without_voucher=False)
+            & Q(Q(available_from__isnull=True) | Q(available_from__lte=now()))
+            & Q(Q(available_until__isnull=True) | Q(available_until__gte=now()))
             & Q(item__active=True)
             & Q(Q(item__available_from__isnull=True) | Q(item__available_from__lte=now()))
             & Q(Q(item__available_until__isnull=True) | Q(item__available_until__gte=now()))

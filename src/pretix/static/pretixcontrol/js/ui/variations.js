@@ -16,6 +16,9 @@ $(function () {
             !!$el.find("input[name$=-available_from_0]").val() ||
             !!$el.find("input[name$=-available_until_0]").val()
         ));
+        $el.find(".variation-name").toggleClass("variation-disabled", !(
+            !!$el.find("input[name$=-active]").prop("checked")
+        ));
         $el.find(".variation-voucher").toggleClass("variation-icon-hidden", !(
             !!$el.find("input[name$=-hide_without_voucher]").prop("checked")
         ));
