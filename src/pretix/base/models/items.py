@@ -1620,6 +1620,8 @@ class Quota(LoggedModel):
 
     @staticmethod
     def clean_items(event, items, variations):
+        if not items:
+            return
         for item in items:
             if event != item.event:
                 raise ValidationError(_('One or more items do not belong to this event.'))
