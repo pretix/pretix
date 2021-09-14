@@ -166,7 +166,7 @@
                                             <br>
                                             <a href="{{ q.answer.frontend_file_url }}?token={% answer_token request q.answer %}" data-lightbox="order"
                                                     class="answer-thumb">
-                                                <img src="{{ q.answer.frontend_file_url }}?token={% answer_token request q.answer %}">
+                                                <img src="{{ q.answer.frontend_file_url }}?token={% answer_token request q.answer %}" alt="{% trans "The image you previously uploaded" %}">
                                             </a>
                                         {% endif %}
                                     {% elif q.type == "M" %}
