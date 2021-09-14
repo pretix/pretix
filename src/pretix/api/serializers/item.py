@@ -252,7 +252,7 @@ class ItemSerializer(I18nAwareModelSerializer):
             item.picture.save(os.path.basename(picture.name), picture)
 
         for variation_data in variations_data:
-            require_membership_types = variation_data.pop('require_membership_types')
+            require_membership_types = variation_data.pop('require_membership_types', [])
             v = ItemVariation.objects.create(item=item, **variation_data)
             if require_membership_types:
                 v.require_membership_types.add(*require_membership_types)
