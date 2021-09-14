@@ -219,15 +219,17 @@
                             method="post" data-asynctask>
                         {% csrf_token %}
                         <input type="hidden" name="id" value="{{ line.id }}" />
-                        <button class="btn btn-mini btn-link" title="{% blocktrans with item=line.item %}Remove one {{item}} from your basket{% endblocktrans %}">
-                            {% if line.seat %}
+                        {% if line.seat or line.count == 1 %}
+                            <button class="btn btn-mini btn-link" title="{% blocktrans with item=line.item %}Remove {{item}} from your basket{% endblocktrans %}">
                                 <i class="fa fa-trash" aria-hidden="true"></i>
                                 <span class="sr-only">{% blocktrans with item=line.item %}Remove {{item}} from your basket{% endblocktrans %}</span>
-                            {% else %}
+                            </button>
+                        {% else %}
+                            <button class="btn btn-mini btn-link" title="{% blocktrans with item=line.item %}Remove one {{item}} from your basket{% endblocktrans %}">
                                 <i class="fa fa-minus" aria-hidden="true"></i>
                                 <span class="sr-only">{% blocktrans with item=line.item count=line.count %}Remove one {{item}} from your basket. You currently have {{count }} in your basket.{% endblocktrans %}</span>
-                            {% endif %}
-                        </button>
+                            </button>
+                        {% endif %}
                     </form>
                     {% endif %}
                     {{ line.count }}
