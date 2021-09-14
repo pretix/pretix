@@ -46,7 +46,7 @@ td > .form-group > .checkbox {
   @include box-shadow(none);
 }
 
-div[data-formset-body], div[data-formset-form], div[data-nested-formset-form], div[data-nested-formset-body] {
+div[data-formset-body], div[data-formset-form], div[data-nested-formset-form], div[data-nested-formset-body], details[data-formset-form] {
   width: 100%;
 }
 
@@ -811,5 +811,25 @@ table td > .checkbox input[type="checkbox"] {
   }
   label:not(.control-label) {
     font-weight: normal;
+  }
+}
+
+details {
+  summary .chevron::before {
+    content: $fa-var-caret-right;
+  }
+  &[open] .chevron::before {
+    content: $fa-var-caret-down;
+  }
+}
+
+#item_variations {
+  summary small {
+    display: inline-block;
+    margin-left: 2.1em;
+  }
+  .variation-icon-hidden {
+    opacity: 0;
+    pointer-events: none;
   }
 }
