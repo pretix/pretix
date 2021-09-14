@@ -2,6 +2,13 @@
     /* Cart grid */
     padding: 10px 0;
 
+    .product>*:last-child {
+        margin-bottom: 0;
+    }
+    .product p+.dl-inline {
+        margin-top: -10px;
+    }
+
     .count form {
         display: inline;
     }
@@ -14,13 +21,19 @@
         line-height: 1;
     }
 
-    dl {
+    .dl-indented {
         padding-left: 20px;
-        margin-bottom: 0;
+        margin: 5px 0 0;
 
+        dt {
+            margin-top: 5px;
+        }
         dd:not(.toplevel) {
             padding-left: 20px;
         }
+    }
+    dt {
+        font-weight: normal;
     }
 
     margin-left: -15px;
@@ -53,14 +66,6 @@
         display: inline-block;
         padding-left: 10px;
         font-weight: bold;
-    }
-
-    dl {
-      margin: 5px 0;
-        dt {
-            font-weight: normal;
-            margin-top: 5px;
-        }
     }
 
     .cart-icon-details {

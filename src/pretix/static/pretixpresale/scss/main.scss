@@ -260,6 +260,9 @@ body.loading .container {
 .dl-horizontal dt  {
     white-space: normal;
 }
+.dl-inline dt, .dl-inline dd {
+    display: inline;
+}
 
 .collapse-indicator {
     -moz-transition: all 150ms ease-in 0s;
