@@ -59,7 +59,8 @@ class InlineItemVariationSerializer(I18nAwareModelSerializer):
         model = ItemVariation
         fields = ('id', 'value', 'active', 'description',
                   'position', 'default_price', 'price', 'original_price',
-                  'require_membership', 'require_membership_types',)
+                  'require_membership', 'require_membership_types', 'available_from', 'available_until',
+                  'sales_channels', 'hide_without_voucher',)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -74,7 +75,8 @@ class ItemVariationSerializer(I18nAwareModelSerializer):
         model = ItemVariation
         fields = ('id', 'value', 'active', 'description',
                   'position', 'default_price', 'price', 'original_price',
-                  'require_membership', 'require_membership_types',)
+                  'require_membership', 'require_membership_types', 'available_from', 'available_until',
+                  'sales_channels', 'hide_without_voucher',)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

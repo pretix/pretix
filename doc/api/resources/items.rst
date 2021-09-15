@@ -107,6 +107,18 @@ variations                            list of objects            A list with one
 ├ require_membership                  boolean                    If ``true``, booking this variation requires an active membership.
 ├ require_membership_types            list of integers           Internal IDs of membership types valid if ``require_membership`` is ``true``
                                                                  Markdown syntax or can be ``null``.
+├ sales_channels                      list of strings            Sales channels this variation is available on, such as
+                                                                 ``"web"`` or ``"resellers"``. Defaults to all existing sales channels.
+                                                                 The item-level list takes precedence, i.e. a sales
+                                                                 channel needs to be on both lists for the item to be
+                                                                 available.
+├ available_from                      datetime                   The first date time at which this variation can be bought
+                                                                 (or ``null``).
+├ available_until                     datetime                   The last date time at which this variation can be bought
+                                                                 (or ``null``).
+├ hide_without_voucher                boolean                    If ``true``, this variation is only shown during the voucher
+                                                                 redemption process, but not in the normal shop
+                                                                 frontend.
 └ position                            integer                    An integer, used for sorting
 addons                                list of objects            Definition of add-ons that can be chosen for this item.
                                                                  Only writable during creation,
@@ -230,6 +242,10 @@ Endpoints
                  "active": true,
                  "require_membership": false,
                  "require_membership_types": [],
+                 "sales_channels": ["web"],
+                 "available_from": null,
+                 "available_until": null,
+                 "hide_without_voucher": false,
                  "description": null,
                  "position": 0
               },
@@ -241,6 +257,10 @@ Endpoints
                  "active": true,
                  "require_membership": false,
                  "require_membership_types": [],
+                 "sales_channels": ["web"],
+                 "available_from": null,
+                 "available_until": null,
+                 "hide_without_voucher": false,
                  "description": null,
                  "position": 1
               }
@@ -337,6 +357,10 @@ Endpoints
              "require_membership": false,
              "require_membership_types": [],
              "description": null,
+             "sales_channels": ["web"],
+             "available_from": null,
+             "available_until": null,
+             "hide_without_voucher": false,
              "position": 0
           },
           {
@@ -347,6 +371,10 @@ Endpoints
              "active": true,
              "require_membership": false,
              "require_membership_types": [],
+             "sales_channels": ["web"],
+             "available_from": null,
+             "available_until": null,
+             "hide_without_voucher": false,
              "description": null,
              "position": 1
           }
@@ -422,6 +450,10 @@ Endpoints
              "active": true,
              "require_membership": false,
              "require_membership_types": [],
+             "sales_channels": ["web"],
+             "available_from": null,
+             "available_until": null,
+             "hide_without_voucher": false,
              "description": null,
              "position": 0
           },
@@ -433,6 +465,10 @@ Endpoints
              "active": true,
              "require_membership": false,
              "require_membership_types": [],
+             "sales_channels": ["web"],
+             "available_from": null,
+             "available_until": null,
+             "hide_without_voucher": false,
              "description": null,
              "position": 1
           }
@@ -497,6 +533,10 @@ Endpoints
              "active": true,
              "require_membership": false,
              "require_membership_types": [],
+             "sales_channels": ["web"],
+             "available_from": null,
+             "available_until": null,
+             "hide_without_voucher": false,
              "description": null,
              "position": 0
           },
@@ -508,6 +548,10 @@ Endpoints
              "active": true,
              "require_membership": false,
              "require_membership_types": [],
+             "sales_channels": ["web"],
+             "available_from": null,
+             "available_until": null,
+             "hide_without_voucher": false,
              "description": null,
              "position": 1
           }
@@ -603,6 +647,10 @@ Endpoints
              "active": true,
              "require_membership": false,
              "require_membership_types": [],
+             "sales_channels": ["web"],
+             "available_from": null,
+             "available_until": null,
+             "hide_without_voucher": false,
              "description": null,
              "position": 0
           },
@@ -614,6 +662,10 @@ Endpoints
              "active": true,
              "require_membership": false,
              "require_membership_types": [],
+             "sales_channels": ["web"],
+             "available_from": null,
+             "available_until": null,
+             "hide_without_voucher": false,
              "description": null,
              "position": 1
           }
