@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-09-06 18:51+0000\n"
-"PO-Revision-Date: 2021-09-13 21:00+0000\n"
+"PO-Revision-Date: 2021-09-15 11:22+0000\n"
 "Last-Translator: Mohamed Tawfiq <mtawfiq@wafyapp.com>\n"
 "Language-Team: Arabic <https://translate.pretix.eu/projects/pretix/pretix/ar/"
 ">\n"
@@ -12669,7 +12669,7 @@ msgstr "شفرة الترخيص"
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:123
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:80
 msgid "Filter"
-msgstr "منقي"
+msgstr "تصفية"
 
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html:50
 #, fuzzy
