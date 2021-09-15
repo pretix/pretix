@@ -84,7 +84,11 @@
         {% endif %}
 
         {% if refund_amount %}
-            {% if request.event.settings.cancel_allow_user_paid_refund_as_giftcard == "force" %}
+            {% if request.event.settings.cancel_allow_user_paid_refund_as_giftcard == "manually" %}
+                <strong>
+                    {% trans "The organizer will get in touch with you to clarify the details of your refund." %}
+                </strong>
+            {% elif request.event.settings.cancel_allow_user_paid_refund_as_giftcard == "force" %}
                 <strong>
                     {% trans "The refund will be issued in form of a gift card that you can use for further purchases." %}
                 </strong>

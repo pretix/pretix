@@ -1440,6 +1440,7 @@ DEFAULTS = {
                 ('off', _('All refunds are issued to the original payment method')),
                 ('option', _('Customers can choose between a gift card and a refund to their payment method')),
                 ('force', _('All refunds are issued as gift cards')),
+                ('manually', _('Do not handle refunds automatically at all')),
             ],
         ),
         'form_class': forms.ChoiceField,
@@ -1449,6 +1450,7 @@ DEFAULTS = {
                 ('off', _('All refunds are issued to the original payment method')),
                 ('option', _('Customers can choose between a gift card and a refund to their payment method')),
                 ('force', _('All refunds are issued as gift cards')),
+                ('manually', _('Do not handle refunds automatically at all')),
             ],
             widget=forms.RadioSelect,
             # When adding a new ordering, remember to also define it in the event model

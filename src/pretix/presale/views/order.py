@@ -873,11 +873,14 @@ class OrderCancelDo(EventViewMixin, OrderDetailMixin, AsyncAction, View):
             return redirect(self.get_order_url())
         fee = None
         require_approval = False
-        auto_refund = not self.request.event.settings.cancel_allow_user_paid_require_approval
+        auto_refund = (
+            not self.request.event.settings.cancel_allow_user_paid_require_approval
+            and self.request.event.settings.cancel_allow_user_paid_refund_as_giftcard != "manually"
+        )
         if self.order.status == Order.STATUS_PAID and self.order.total != Decimal('0.00'):
             require_approval = self.request.event.settings.cancel_allow_user_paid_require_approval
             fee = self.order.user_cancel_fee
-            auto_refund = True
+            auto_refund = self.request.event.settings.cancel_allow_user_paid_refund_as_giftcard != "manually"
         if self.order.total == Decimal('0.00'):
             fee = Decimal('0.00')
         elif 'cancel_fee' in request.POST and self.request.event.settings.cancel_allow_user_paid_adjust_fees:
