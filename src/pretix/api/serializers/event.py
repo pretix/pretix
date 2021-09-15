@@ -54,7 +54,7 @@ from pretix.base.models.items import SubEventItem, SubEventItemVariation
 from pretix.base.services.seating import (
     SeatProtected, generate_seats, validate_plan_change,
 )
-from pretix.base.settings import validate_event_settings
+from pretix.base.settings import LazyI18nStringList, validate_event_settings
 from pretix.base.signals import api_event_settings_fields
 
 logger = logging.getLogger(__name__)
@@ -789,6 +789,10 @@ class EventSettingsSerializer(SettingsSerializer):
         data = super().validate(data)
         settings_dict = self.instance.freeze()
         settings_dict.update(data)
+
+        if data.get('confirm_texts') is not None:
+            data['confirm_texts'] = LazyI18nStringList(data['confirm_texts'])
+
         validate_event_settings(self.event, settings_dict)
         return data
 

@@ -1212,7 +1212,12 @@ def test_patch_event_settings(token_client, organizer, event):
         resp = token_client.patch(
             '/api/v1/organizers/{}/events/{}/settings/'.format(organizer.slug, event.slug),
             {
-                'imprint_url': 'https://example.com'
+                'imprint_url': 'https://example.com',
+                'confirm_texts': [
+                    {
+                        'de': 'Ich bin mit den AGB einverstanden.'
+                    }
+                ]
             },
             format='json'
         )

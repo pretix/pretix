@@ -28,10 +28,14 @@ from pretix.base.reldate import RelativeDateWrapper
 
 class CustomJSONEncoder(I18nJSONEncoder):
     def default(self, obj):
+        from pretix.base.settings import LazyI18nStringList
+
         if isinstance(obj, RelativeDateWrapper):
             return obj.to_string()
         elif isinstance(obj, File):
             return obj.name
+        elif isinstance(obj, LazyI18nStringList):
+            return [s.data for s in obj.data]
         if isinstance(obj, PhoneNumber):
             return str(obj)
         else:
