@@ -455,6 +455,54 @@ class ItemDisplayTest(EventTestMixin, SoupTest):
         q.variations.add(var1)
         self._assert_variation_found()
 
+    def test_variation_available_from(self):
+        with scopes_disabled():
+            c = ItemCategory.objects.create(event=self.event, name="Entry tickets", position=0)
+            q = Quota.objects.create(event=self.event, name='Quota', size=None)
+            item = Item.objects.create(event=self.event, name='Early-bird ticket', category=c, default_price=0)
+            var1 = ItemVariation.objects.create(item=item, value='Red', available_from=now() - datetime.timedelta(days=1))
+            var2 = ItemVariation.objects.create(item=item, value='Blue', available_from=now() + datetime.timedelta(days=1))
+        q.items.add(item)
+        q.variations.add(var1)
+        q.variations.add(var2)
+        self._assert_variation_found()
+
+    def test_variation_available_until(self):
+        with scopes_disabled():
+            c = ItemCategory.objects.create(event=self.event, name="Entry tickets", position=0)
+            q = Quota.objects.create(event=self.event, name='Quota', size=None)
+            item = Item.objects.create(event=self.event, name='Early-bird ticket', category=c, default_price=0)
+            var1 = ItemVariation.objects.create(item=item, value='Red', available_until=now() + datetime.timedelta(days=1))
+            var2 = ItemVariation.objects.create(item=item, value='Blue', available_until=now() - datetime.timedelta(days=1))
+        q.items.add(item)
+        q.variations.add(var1)
+        q.variations.add(var2)
+        self._assert_variation_found()
+
+    def test_variation_hide_without_voucher(self):
+        with scopes_disabled():
+            c = ItemCategory.objects.create(event=self.event, name="Entry tickets", position=0)
+            q = Quota.objects.create(event=self.event, name='Quota', size=None)
+            item = Item.objects.create(event=self.event, name='Early-bird ticket', category=c, default_price=0)
+            var1 = ItemVariation.objects.create(item=item, value='Red')
+            var2 = ItemVariation.objects.create(item=item, value='Blue', hide_without_voucher=True)
+        q.items.add(item)
+        q.variations.add(var1)
+        q.variations.add(var2)
+        self._assert_variation_found()
+
+    def test_variation_sales_channel(self):
+        with scopes_disabled():
+            c = ItemCategory.objects.create(event=self.event, name="Entry tickets", position=0)
+            q = Quota.objects.create(event=self.event, name='Quota', size=None)
+            item = Item.objects.create(event=self.event, name='Early-bird ticket', category=c, default_price=0)
+            var1 = ItemVariation.objects.create(item=item, value='Red')
+            var2 = ItemVariation.objects.create(item=item, value='Blue', sales_channels=['foobar'])
+        q.items.add(item)
+        q.variations.add(var1)
+        q.variations.add(var2)
+        self._assert_variation_found()
+
     def _assert_variation_found(self):
         doc = self.get_doc('/%s/%s/' % (self.orga.slug, self.event.slug))
         self.assertIn("Early-bird", doc.select("section:nth-of-type(1) div:nth-of-type(1)")[0].text)
