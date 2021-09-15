@@ -120,7 +120,7 @@ class WebHookEventListener(models.Model):
 class WebHookCall(models.Model):
     webhook = models.ForeignKey('WebHook', on_delete=models.CASCADE, related_name='calls')
     datetime = models.DateTimeField(auto_now_add=True)
-    target_url = models.URLField()
+    target_url = models.URLField(max_length=255)
     action_type = models.CharField(max_length=255)
     is_retry = models.BooleanField(default=False)
     execution_time = models.FloatField(null=True)
