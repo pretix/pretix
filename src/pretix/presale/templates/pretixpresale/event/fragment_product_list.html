@@ -12,8 +12,6 @@
             {% if tup.0.description %}
                 <div id="category-info-{{ tup.0.id }}">{{ tup.0.description|localize|rich_text }}</div>
             {% endif %}
-        {% else %}
-            <h3 id="category-none" class="sr-only">{% trans "Uncategorized products" %}</h3>
         {% endif %}
         {% for item in tup.1 %}
             {% if item.has_variations %}
