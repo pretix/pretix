@@ -113,6 +113,13 @@ def get_grouped_items(event, subevent=None, voucher=None, channel='web', require
     if not event.settings.seating_choice:
         requires_seat = Value(0, output_field=IntegerField())
 
+    variation_q = (
+        Q(Q(available_from__isnull=True) | Q(available_from__lte=now())) &
+        Q(Q(available_until__isnull=True) | Q(available_until__gte=now()))
+    )
+    if not voucher or not voucher.show_hidden_items:
+        variation_q &= Q(hide_without_voucher=False)
+
     items = base_qs.using(settings.DATABASE_REPLICA).filter_available(channel=channel, voucher=voucher, allow_addons=allow_addons).select_related(
         'category', 'tax_rule',  # for re-grouping
         'hidden_if_available',
@@ -147,7 +154,11 @@ def get_grouped_items(event, subevent=None, voucher=None, channel='web', require
                          )
                      ),
                  ).filter(
-                     active=True, quotas__isnull=False, subevent_disabled=False
+                     variation_q,
+                     active=True,
+                     sales_channels__contains=channel,
+                     quotas__isnull=False,
+                     subevent_disabled=False
                  ).prefetch_related(
                      Prefetch('quotas',
                               to_attr='_subevent_quotas',

@@ -1331,6 +1331,7 @@ class ItemUpdateGeneral(ItemDetailMixin, EventPermissionRequiredMixin, MetaDataE
                                           "Your participants won't be able to buy the bundle unless you remove this "
                                           "item from it."))
 
+        ctx['sales_channels'] = get_all_sales_channels()
         return ctx
 
     @cached_property

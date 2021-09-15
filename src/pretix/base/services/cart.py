@@ -283,13 +283,16 @@ class CartManager:
                 if op.item.require_voucher and op.voucher is None:
                     raise CartError(error_messages['voucher_required'])
 
-                if op.item.hide_without_voucher and (op.voucher is None or not op.voucher.show_hidden_items):
+                if (
+                    (op.item.hide_without_voucher or (op.variation and op.variation.hide_without_voucher)) and
+                    (op.voucher is None or not op.voucher.show_hidden_items)
+                ):
                     raise CartError(error_messages['voucher_required'])
 
-            if not op.item.is_available() or (op.variation and not op.variation.active):
+            if not op.item.is_available() or (op.variation and not op.variation.is_available()):
                 raise CartError(error_messages['unavailable'])
 
-            if self._sales_channel not in op.item.sales_channels:
+            if self._sales_channel not in op.item.sales_channels or (op.variation and self._sales_channel not in op.variation.sales_channels):
                 raise CartError(error_messages['unavailable'])
 
             if op.subevent and op.item.pk in op.subevent.item_overrides and not op.subevent.item_overrides[op.item.pk].is_available():

@@ -880,6 +880,24 @@ class CartTest(CartTestMixin, TestCase):
         with scopes_disabled():
             self.assertEqual(CartPosition.objects.filter(cart_id=self.session_key, event=self.event).count(), 0)
 
+    def test_variation_wrong_sales_channel(self):
+        self.shirt_blue.sales_channels = ['bar']
+        self.shirt_blue.save()
+        self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
+            'variation_%d_%d' % (self.shirt.id, self.shirt_blue.id): '1',
+        }, follow=True)
+        with scopes_disabled():
+            self.assertEqual(CartPosition.objects.filter(cart_id=self.session_key, event=self.event).count(), 0)
+        self.shirt_blue.sales_channels = ['bar', 'web']
+        self.shirt_blue.save()
+        self.shirt.sales_channels = ['bar']
+        self.shirt.save()
+        self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
+            'variation_%d_%d' % (self.shirt.id, self.shirt_blue.id): '1',
+        }, follow=True)
+        with scopes_disabled():
+            self.assertEqual(CartPosition.objects.filter(cart_id=self.session_key, event=self.event).count(), 0)
+
     def test_other_sales_channel(self):
         self.ticket.sales_channels = ['bar']
         self.ticket.save()
@@ -962,6 +980,34 @@ class CartTest(CartTestMixin, TestCase):
                              target_status_code=200)
         doc = BeautifulSoup(response.rendered_content, "lxml")
         self.assertIn('more than', doc.select('.alert-danger')[0].text)
+        with scopes_disabled():
+            self.assertEqual(CartPosition.objects.filter(cart_id=self.session_key, event=self.event).count(), 0)
+
+    def test_variation_in_time_available(self):
+        self.shirt_blue.available_until = now() + timedelta(days=2)
+        self.shirt_blue.available_from = now() - timedelta(days=2)
+        self.shirt_blue.save()
+        self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
+            'variation_%d_%d' % (self.shirt.id, self.shirt_blue.id): '1',
+        }, follow=True)
+        with scopes_disabled():
+            self.assertEqual(CartPosition.objects.filter(cart_id=self.session_key, event=self.event).count(), 1)
+
+    def test_variation_no_longer_available(self):
+        self.shirt_blue.available_until = now() - timedelta(days=2)
+        self.shirt_blue.save()
+        self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
+            'variation_%d_%d' % (self.shirt.id, self.shirt_blue.id): '1',
+        }, follow=True)
+        with scopes_disabled():
+            self.assertEqual(CartPosition.objects.filter(cart_id=self.session_key, event=self.event).count(), 0)
+
+    def test_variation_not_yet_available(self):
+        self.shirt_blue.available_from = now() + timedelta(days=2)
+        self.shirt_blue.save()
+        self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
+            'variation_%d_%d' % (self.shirt.id, self.shirt_blue.id): '1',
+        }, follow=True)
         with scopes_disabled():
             self.assertEqual(CartPosition.objects.filter(cart_id=self.session_key, event=self.event).count(), 0)
 
@@ -1744,6 +1790,44 @@ class CartTest(CartTestMixin, TestCase):
     def test_hide_without_voucher_failed(self):
         self.shirt.hide_without_voucher = True
         self.shirt.save()
+        self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
+            'variation_%d_%d' % (self.shirt.id, self.shirt_red.id): '1',
+        }, follow=True)
+        with scopes_disabled():
+            objs = list(CartPosition.objects.filter(cart_id=self.session_key, event=self.event))
+        self.assertEqual(len(objs), 0)
+
+    def test_variation_hide_without_voucher(self):
+        with scopes_disabled():
+            v = Voucher.objects.create(item=self.shirt, event=self.event)
+        self.shirt_red.hide_without_voucher = True
+        self.shirt_red.save()
+        self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
+            'variation_%d_%d' % (self.shirt.id, self.shirt_red.id): '1',
+            '_voucher_code': v.code
+        }, follow=True)
+        with scopes_disabled():
+            objs = list(CartPosition.objects.filter(cart_id=self.session_key, event=self.event))
+        self.assertEqual(len(objs), 1)
+        self.assertEqual(objs[0].item, self.shirt)
+        self.assertEqual(objs[0].variation, self.shirt_red)
+
+    def test_variation_hide_without_voucher_failed_because_of_voucher(self):
+        with scopes_disabled():
+            v = Voucher.objects.create(item=self.shirt, event=self.event, show_hidden_items=False)
+        self.shirt_red.hide_without_voucher = True
+        self.shirt_red.save()
+        self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
+            'variation_%d_%d' % (self.shirt.id, self.shirt_red.id): '1',
+            '_voucher_code': v.code
+        }, follow=True)
+        with scopes_disabled():
+            objs = list(CartPosition.objects.filter(cart_id=self.session_key, event=self.event))
+        self.assertEqual(len(objs), 0)
+
+    def test_variation_hide_without_voucher_failed(self):
+        self.shirt_red.hide_without_voucher = True
+        self.shirt_red.save()
         self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
             'variation_%d_%d' % (self.shirt.id, self.shirt_red.id): '1',
         }, follow=True)

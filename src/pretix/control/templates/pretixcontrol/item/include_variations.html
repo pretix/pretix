@@ -1,37 +1,59 @@
 {% load i18n %}
 {% load bootstrap3 %}
 {% load formset_tags %}
-<div class="formset" data-formset data-formset-prefix="{{ formset.prefix }}">
+<div class="formset" data-formset data-formset-prefix="{{ formset.prefix }}" id="item_variations">
     {{ formset.management_form }}
     {% bootstrap_formset_errors formset %}
     <div data-formset-body>
         {% for form in formset %}
-            <div class="panel panel-default" data-formset-form>
+            <details class="panel panel-default" data-formset-form>
                 <div class="sr-only">
                     {{ form.id }}
                     {% bootstrap_field form.DELETE form_group_class="" layout="inline" %}
                     {% bootstrap_field form.ORDER form_group_class="" layout="inline" %}
                 </div>
-                <div class="panel-heading">
-                    <h4 class="panel-title">
-                        <div class="row">
-                            <div class="col-md-9">
-                                {% bootstrap_field form.value layout='inline' form_group_class="" %}
-                            </div>
-                            <div class="col-md-3 text-right flip">
-                                <button type="button" class="btn btn-default" data-formset-move-up-button>
-                                    <i class="fa fa-arrow-up"></i></button>
-                                <button type="button" class="btn btn-default" data-formset-move-down-button>
-                                    <i class="fa fa-arrow-down"></i></button>
-                                <button type="button" class="btn btn-danger" data-formset-delete-button>
-                                    <i class="fa fa-trash"></i></button>
-                                {% if form.instance.id %}
-                                    <br><small class="text-muted">#{{ form.instance.id }}</small>
-                                {% endif %}
-                            </div>
+                <summary class="panel-heading">
+                    <div class="row">
+                        <div class="col-md-4 col-xs-12">
+                            <strong class="panel-title">
+                                <span class="fa fa-fw chevron"></span>
+                                <span class="fa fa-warning text-danger hidden variation-error"></span>
+                                <span class="variation-name">
+                                    Variation name
+                                </span>
+                            </strong>
+                            <span class="fa fa-warning text-warning hidden variation-warning"></span>
+                            {% if form.instance.id %}
+                                <br>
+                                <small class="text-muted">#{{ form.instance.id }}</small>
+                            {% endif %}
                         </div>
-                    </h4>
-                </div>
+                        <div class="col-md-2 col-xs-6">
+                            <span class="fa fa-clock-o fa-fw text-muted variation-timeframe variation-icon-hidden" data-toggle="tooltip" title="{% trans "Only available in a limited timeframe" %}"></span>
+                            <span class="fa fa-tags fa-fw text-muted variation-voucher variation-icon-hidden" data-toggle="tooltip"
+                                    title="{% trans "Only visible with a voucher" %}"></span>
+                            <span class="fa fa-id-badge fa-fw text-muted variation-membership variation-icon-hidden" data-toggle="tooltip"
+                                    title="{% trans "Require a valid membership" %}"></span>
+                        </div>
+                        <div class="col-md-2 col-xs-6">
+                            {% for k, c in sales_channels.items %}
+                                <span class="fa fa-fw fa-{{ c.icon }} text-muted variation-channel-{{ k }} variation-icon-hidden"
+                                        data-toggle="tooltip" title="{% trans c.verbose_name %}"></span>
+                            {% endfor %}
+                        </div>
+                        <div class="col-md-1 col-xs-6 text-right flip variation-price">
+                            <!-- price will be inserted by JS here -->
+                        </div>
+                        <div class="col-md-3 col-xs-6 text-right flip">
+                            <button type="button" class="btn btn-default" data-formset-move-up-button>
+                                <i class="fa fa-arrow-up"></i></button>
+                            <button type="button" class="btn btn-default" data-formset-move-down-button>
+                                <i class="fa fa-arrow-down"></i></button>
+                            <button type="button" class="btn btn-danger" data-formset-delete-button>
+                                <i class="fa fa-trash"></i></button>
+                        </div>
+                    </div>
+                </summary>
                 <div class="panel-body form-horizontal">
                     {% if form.instance.pk and not form.instance.quotas.exists %}
                         <div class="alert alert-warning">
@@ -43,9 +65,14 @@
                     {% endif %}
                     {% bootstrap_form_errors form %}
                     {% bootstrap_field form.active layout="control" %}
+                    {% bootstrap_field form.value layout="control" %}
                     {% bootstrap_field form.default_price addon_after=request.event.currency layout="control" %}
                     {% bootstrap_field form.original_price addon_after=request.event.currency layout="control" %}
                     {% bootstrap_field form.description layout="control" %}
+                    {% bootstrap_field form.available_from layout="control" %}
+                    {% bootstrap_field form.available_until layout="control" %}
+                    {% bootstrap_field form.sales_channels layout="control" %}
+                    {% bootstrap_field form.hide_without_voucher layout="control" %}
                     {% if form.require_membership %}
                         {% bootstrap_field form.require_membership layout="control" %}
                         <div data-display-dependency="#{{ form.require_membership.id_for_label }}">
@@ -53,39 +80,69 @@
                         </div>
                     {% endif %}
                 </div>
-            </div>
+            </details>
         {% endfor %}
     </div>
     <script type="form-template" data-formset-empty-form>
         {% escapescript %}
-            <div class="panel panel-default" data-formset-form>
+            <details class="panel panel-default" data-formset-form open>
                 <div class="sr-only">
                     {{ formset.empty_form.id }}
                     {% bootstrap_field formset.empty_form.DELETE form_group_class="" layout="inline" %}
                     {% bootstrap_field formset.empty_form.ORDER form_group_class="" layout="inline" %}
                 </div>
-                <div class="panel-heading">
-                    <h4 class="panel-title">
-                        <div class="row">
-                            <div class="col-md-9">
-                                {% bootstrap_field formset.empty_form.value layout='inline' form_group_class="" %}
-                            </div>
-                            <div class="col-md-3 text-right flip">
-                                <button type="button" class="btn btn-default" data-formset-move-up-button>
-                                    <i class="fa fa-arrow-up"></i></button>
-                                <button type="button" class="btn btn-default" data-formset-move-down-button>
-                                    <i class="fa fa-arrow-down"></i></button>
-                                <button type="button" class="btn btn-danger" data-formset-delete-button>
-                                    <i class="fa fa-trash"></i></button>
-                            </div>
+                <summary class="panel-heading">
+                    <div class="row">
+                        <div class="col-md-4 col-xs-12">
+                            <strong class="panel-title">
+                                <span class="fa fa-fw chevron"></span>
+                                <span class="fa fa-warning text-danger hidden variation-error"></span>
+                                <span class="variation-name">
+                                    {% trans "New variation" %}
+                                </span>
+                            </strong>
+                            <span class="fa fa-warning text-warning hidden variation-warning"></span>
+                            {% if form.instance.id %}
+                                <br>
+                                <small class="text-muted">#{{ form.instance.id }}</small>
+                            {% endif %}
                         </div>
-                    </h4>
-                </div>
+                        <div class="col-md-2 col-xs-6">
+                            <span class="fa fa-clock-o fa-fw text-muted variation-timeframe variation-icon-hidden" data-toggle="tooltip" title="{% trans "Only available in a limited timeframe" %}"></span>
+                            <span class="fa fa-tags fa-fw text-muted variation-voucher variation-icon-hidden" data-toggle="tooltip"
+                                    title="{% trans "Only visible with a voucher" %}"></span>
+                            <span class="fa fa-id-badge fa-fw text-muted variation-membership variation-icon-hidden" data-toggle="tooltip"
+                                    title="{% trans "Require a valid membership" %}"></span>
+                        </div>
+                        <div class="col-md-2 col-xs-6">
+                            {% for k, c in sales_channels.items %}
+                                <span class="fa fa-fw fa-{{ c.icon }} text-muted variation-channel-{{ k }} variation-icon-hidden"
+                                        data-toggle="tooltip" title="{% trans c.verbose_name %}"></span>
+                            {% endfor %}
+                        </div>
+                        <div class="col-md-1 col-xs-6 text-right flip variation-price">
+                            <!-- price will be inserted by JS here -->
+                        </div>
+                        <div class="col-md-3 col-xs-6 text-right flip">
+                            <button type="button" class="btn btn-default" data-formset-move-up-button>
+                                <i class="fa fa-arrow-up"></i></button>
+                            <button type="button" class="btn btn-default" data-formset-move-down-button>
+                                <i class="fa fa-arrow-down"></i></button>
+                            <button type="button" class="btn btn-danger" data-formset-delete-button>
+                                <i class="fa fa-trash"></i></button>
+                        </div>
+                    </div>
+                </summary>
                 <div class="panel-body form-horizontal">
                     {% bootstrap_field formset.empty_form.active layout="control" %}
+                    {% bootstrap_field formset.empty_form.value layout="control" %}
                     {% bootstrap_field formset.empty_form.default_price addon_after=request.event.currency layout="control" %}
                     {% bootstrap_field formset.empty_form.original_price addon_after=request.event.currency layout="control" %}
                     {% bootstrap_field formset.empty_form.description layout="control" %}
+                    {% bootstrap_field formset.empty_form.available_from layout="control" %}
+                    {% bootstrap_field formset.empty_form.available_until layout="control" %}
+                    {% bootstrap_field formset.empty_form.sales_channels layout="control" %}
+                    {% bootstrap_field formset.empty_form.hide_without_voucher layout="control" %}
                     {% if formset.empty_form.require_membership %}
                         {% bootstrap_field formset.empty_form.require_membership layout="control" %}
                         <div data-display-dependency="#{{ formset.empty_form.require_membership.id_for_label }}">
@@ -93,7 +150,7 @@
                         </div>
                     {% endif %}
                 </div>
-            </div>
+            </details>
         {% endescapescript %}
     </script>
     <p>

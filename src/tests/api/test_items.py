@@ -44,6 +44,7 @@ from django_countries.fields import Country
 from django_scopes import scopes_disabled
 from pytz import UTC
 
+from pretix.base.channels import get_all_sales_channels
 from pretix.base.models import (
     CartPosition, InvoiceAddress, Item, ItemAddOn, ItemBundle, ItemCategory,
     ItemVariation, Order, OrderPosition, Question, QuestionOption, Quota,
@@ -376,6 +377,10 @@ def test_item_detail_variations(token_client, organizer, event, team, item):
         "position": 0,
         "require_membership": False,
         "require_membership_types": [],
+        "sales_channels": list(get_all_sales_channels().keys()),
+        "available_from": None,
+        "available_until": None,
+        "hide_without_voucher": False,
         "original_price": None
     }]
     res["has_variations"] = True
@@ -517,6 +522,7 @@ def test_item_create_with_variation(token_client, organizer, event, item, catego
         new_item = Item.objects.get(pk=resp.data['id'])
         assert new_item.variations.first().value.localize('de') == "Kommentar"
         assert new_item.variations.first().value.localize('en') == "Comment"
+        assert set(new_item.variations.first().sales_channels) == set(get_all_sales_channels().keys())
 
 
 @pytest.mark.django_db
@@ -1205,6 +1211,10 @@ TEST_VARIATIONS_RES = {
     "price": "23.00",
     "require_membership": False,
     "require_membership_types": [],
+    "sales_channels": list(get_all_sales_channels().keys()),
+    "available_from": None,
+    "available_until": None,
+    "hide_without_voucher": False,
     "original_price": None
 }
 
@@ -1218,6 +1228,10 @@ TEST_VARIATIONS_UPDATE = {
     "default_price": "20.0",
     "require_membership": False,
     "require_membership_types": [],
+    "sales_channels": ["web"],
+    "available_from": None,
+    "available_until": None,
+    "hide_without_voucher": False,
     "original_price": None
 }
 
@@ -1264,6 +1278,7 @@ def test_variations_create(token_client, organizer, event, item, variation):
         var = ItemVariation.objects.get(pk=resp.data['id'])
     assert var.position == 1
     assert var.price == 23.0
+    assert set(var.sales_channels) == set(get_all_sales_channels().keys())
 
 
 @pytest.mark.django_db
@@ -1302,6 +1317,7 @@ def test_variations_update(token_client, organizer, event, item, item3, variatio
                 "en": "ChildC2"
             },
             "position": 1,
+            "sales_channels": ["web"],
             "default_price": "20.00",
             "original_price": "50.00"
         },

@@ -27,6 +27,7 @@ from django.urls import reverse
 from django.utils.timezone import make_aware
 from django.utils.translation import pgettext_lazy
 
+from pretix.base.models import ItemVariation
 from pretix.base.reldate import RelativeDateWrapper
 from pretix.base.signals import timeline_events
 
@@ -237,6 +238,39 @@ def timeline_for_event(event, subevent=None):
                     'event': event.slug,
                     'organizer': event.organizer.slug,
                     'item': p.pk,
+                })
+            ))
+
+    for v in ItemVariation.objects.filter(
+        Q(available_from__isnull=False) | Q(available_until__isnull=False),
+        item__event=event
+    ).select_related('item'):
+        if v.available_from:
+            tl.append(TimelineEvent(
+                event=event, subevent=subevent,
+                datetime=v.available_from,
+                description=pgettext_lazy('timeline', 'Product variation "{product} – {variation}" becomes available').format(
+                    product=str(v.item),
+                    variation=str(v.value),
+                ),
+                edit_url=reverse('control:event.item', kwargs={
+                    'event': event.slug,
+                    'organizer': event.organizer.slug,
+                    'item': v.item.pk,
+                })
+            ))
+        if v.available_until:
+            tl.append(TimelineEvent(
+                event=event, subevent=subevent,
+                datetime=v.available_until,
+                description=pgettext_lazy('timeline', 'Product variation "{product} – {variation}" becomes unavailable').format(
+                    product=str(v.item),
+                    variation=str(v.value),
+                ),
+                edit_url=reverse('control:event.item', kwargs={
+                    'event': event.slug,
+                    'organizer': event.organizer.slug,
+                    'item': v.item.pk,
                 })
             ))
 

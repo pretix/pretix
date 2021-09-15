@@ -683,7 +683,20 @@ class ItemVariationForm(I18nModelForm):
         qs = kwargs.pop('membership_types')
         super().__init__(*args, **kwargs)
         change_decimal_field(self.fields['default_price'], self.event.currency)
+        self.fields['sales_channels'] = forms.MultipleChoiceField(
+            label=_('Sales channels'),
+            required=False,
+            choices=(
+                (c.identifier, c.verbose_name) for c in get_all_sales_channels().values()
+            ),
+            help_text=_('The sales channel selection for the product as a whole takes precedence, so if a sales channel is '
+                        'selected here but not on product level, the variation will not be available.'),
+            widget=forms.CheckboxSelectMultiple
+        )
+        if not self.instance.pk:
+            self.initial.setdefault('sales_channels', list(get_all_sales_channels().keys()))
 
+        self.fields['description'].widget.attrs['rows'] = 3
         if qs:
             self.fields['require_membership_types'].queryset = qs
         else:
@@ -700,9 +713,19 @@ class ItemVariationForm(I18nModelForm):
             'original_price',
             'description',
             'require_membership',
-            'require_membership_types'
+            'require_membership_types',
+            'available_from',
+            'available_until',
+            'sales_channels',
+            'hide_without_voucher',
         ]
+        field_classes = {
+            'available_from': SplitDateTimeField,
+            'available_until': SplitDateTimeField,
+        }
         widgets = {
+            'available_from': SplitDateTimePickerWidget(),
+            'available_until': SplitDateTimePickerWidget(attrs={'data-date-after': '#id_available_from_0'}),
             'require_membership_types': forms.CheckboxSelectMultiple(attrs={
                 'class': 'scrolling-multiple-choice'
             }),

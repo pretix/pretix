@@ -736,6 +736,11 @@ class Item(LoggedModel):
         return OrderedDict((k, v) for k, v in sorted(data.items(), key=lambda k: k[0]))
 
 
+def _all_sales_channels_identifiers():
+    from pretix.base.channels import get_all_sales_channels
+    return list(get_all_sales_channels().keys())
+
+
 class ItemVariation(models.Model):
     """
     A variation of a product. For example, if your item is 'T-Shirt'
@@ -761,7 +766,7 @@ class ItemVariation(models.Model):
     )
     value = I18nCharField(
         max_length=255,
-        verbose_name=_('Description')
+        verbose_name=_('Variation')
     )
     active = models.BooleanField(
         default=True,
@@ -796,6 +801,29 @@ class ItemVariation(models.Model):
         'MembershipType',
         verbose_name=_('Membership types'),
         blank=True,
+    )
+    available_from = models.DateTimeField(
+        verbose_name=_("Available from"),
+        null=True, blank=True,
+        help_text=_('This variation will not be sold before the given date.')
+    )
+    available_until = models.DateTimeField(
+        verbose_name=_("Available until"),
+        null=True, blank=True,
+        help_text=_('This variation will not be sold after the given date.')
+    )
+    sales_channels = fields.MultiStringField(
+        verbose_name=_('Sales channels'),
+        default=_all_sales_channels_identifiers,
+        help_text=_('The sales channel selection for the product as a whole takes precedence, so if a sales channel is '
+                    'selected here but not on product level, the variation will not be available.'),
+        blank=True,
+    )
+    hide_without_voucher = models.BooleanField(
+        verbose_name=_('This variation will only be shown if a voucher matching the product is redeemed.'),
+        default=False,
+        help_text=_('This variation will be hidden from the event page until the user enters a voucher '
+                    'that unlocks this variation.')
     )
 
     objects = ScopedManager(organizer='item__event__organizer')
@@ -927,6 +955,24 @@ class ItemVariation(models.Model):
 
     def is_only_variation(self):
         return ItemVariation.objects.filter(item=self.item).count() == 1
+
+    def is_available_by_time(self, now_dt: datetime=None) -> bool:
+        now_dt = now_dt or now()
+        if self.available_from and self.available_from > now_dt:
+            return False
+        if self.available_until and self.available_until < now_dt:
+            return False
+        return True
+
+    def is_available(self, now_dt: datetime=None) -> bool:
+        """
+        Returns whether this item is available according to its ``active`` flag
+        and its ``available_from`` and ``available_until`` fields
+        """
+        now_dt = now_dt or now()
+        if not self.active or not self.is_available_by_time(now_dt):
+            return False
+        return True
 
 
 class ItemAddOn(models.Model):
