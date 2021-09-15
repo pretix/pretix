@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-09-15 11:44+0000\n"
-"PO-Revision-Date: 2021-09-09 17:00+0000\n"
+"PO-Revision-Date: 2021-09-15 11:54+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
@@ -3167,16 +3167,12 @@ msgid "Membership types"
 msgstr "Mitgliedschafts-Typen"
 
 #: pretix/base/models/items.py:808
-#, fuzzy
-#| msgid "This product will not be sold before the given date."
 msgid "This variation will not be sold before the given date."
-msgstr "Dieses Produkt wird vor diesem Termin nicht verkauft."
+msgstr "Diese Variante wird vor diesem Termin nicht verkauft."
 
 #: pretix/base/models/items.py:813
-#, fuzzy
-#| msgid "This product will not be sold after the given date."
 msgid "This variation will not be sold after the given date."
-msgstr "Dieses Produkt wird nach diesem Termin nicht mehr verkauft."
+msgstr "Diese Variante wird nach diesem Termin nicht mehr verkauft."
 
 #: pretix/base/models/items.py:818 pretix/control/forms/item.py:692
 msgid ""
@@ -3184,30 +3180,25 @@ msgid ""
 "if a sales channel is selected here but not on product level, the variation "
 "will not be available."
 msgstr ""
+"Die auf Produktebene ausgewählten Verkaufskanäle haben Vorrang, d.h. wenn "
+"ein Verkaufskanal hier aktiviert ist aber nicht auf Produktebene, ist die "
+"Variante dennoch nicht verfügbar."
 
 #: pretix/base/models/items.py:823
-#, fuzzy
-#| msgid ""
-#| "This product will only be shown if a voucher matching the product is "
-#| "redeemed."
 msgid ""
 "This variation will only be shown if a voucher matching the product is "
 "redeemed."
 msgstr ""
-"Dieses Produkt wird nur angezeigt, wenn ein passender Gutschein eingelöst "
+"Diese Variante wird nur angezeigt, wenn ein passender Gutschein eingelöst "
 "wird."
 
 #: pretix/base/models/items.py:825
-#, fuzzy
-#| msgid ""
-#| "This product will be hidden from the event page until the user enters a "
-#| "voucher that unlocks this product."
 msgid ""
 "This variation will be hidden from the event page until the user enters a "
 "voucher that unlocks this variation."
 msgstr ""
-"Dieses Produkt wird auf der Veranstaltungsseite nicht angezeigt, es sei denn "
-"der Benutzer gibt einen zu diesem Produkt gehörenden Gutscheincode ein."
+"Diese Variante wird auf der Veranstaltungsseite nicht angezeigt, es sei denn "
+"der Benutzer gibt einen zu dieser Variante gehörenden Gutscheincode ein."
 
 #: pretix/base/models/items.py:832 pretix/base/models/vouchers.py:252
 #: pretix/base/models/waitinglist.py:95 pretix/base/orderimport.py:284
@@ -4752,11 +4743,8 @@ msgid "Please enter a valid sales channel."
 msgstr "Bitte gib einen gültigen Verkaufskanal ein."
 
 #: pretix/base/orderimport.py:686
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "Multiple matching dates were found."
 msgid "Multiple matching seats were found."
-msgstr "Mehrere passende Termine gefunden."
+msgstr "Mehrere passende Sitzplätze gefunden."
 
 #: pretix/base/orderimport.py:688
 msgid "No matching seat was found."
@@ -7556,7 +7544,7 @@ msgstr "Alle Erstattungen werden als Wertgutschein ausgegeben"
 
 #: pretix/base/settings.py:1443 pretix/base/settings.py:1453
 msgid "Do not handle refunds automatically at all"
-msgstr ""
+msgstr "Erstattungen nicht automatisch abwickeln"
 
 #: pretix/base/settings.py:1448
 #: pretix/control/templates/pretixcontrol/order/index.html:130
@@ -9088,20 +9076,16 @@ msgid "Product \"{name}\" becomes unavailable"
 msgstr "Produkt „{name}“ ist nicht mehr verfügbar"
 
 #: pretix/base/timeline.py:252
-#, fuzzy, python-brace-format
-#| msgctxt "timeline"
-#| msgid "Product \"{name}\" becomes available"
+#, python-brace-format
 msgctxt "timeline"
 msgid "Product variation \"{product} – {variation}\" becomes available"
-msgstr "Produkt „{name}“ ist verfügbar"
+msgstr "Produktvariante „{product} – {variation}“ ist verfügbar"
 
 #: pretix/base/timeline.py:266
-#, fuzzy, python-brace-format
-#| msgctxt "timeline"
-#| msgid "Product \"{name}\" becomes unavailable"
+#, python-brace-format
 msgctxt "timeline"
 msgid "Product variation \"{product} – {variation}\" becomes unavailable"
-msgstr "Produkt „{name}“ ist nicht mehr verfügbar"
+msgstr "Produktvariante „{product} – {variation}“ ist nicht mehr verfügbar"
 
 #: pretix/base/timeline.py:297
 #, python-brace-format
@@ -15348,10 +15332,8 @@ msgstr ""
 "du sie zu einem Kontingent hinzugefügt hast."
 
 #: pretix/control/templates/pretixcontrol/item/include_variations.html:101
-#, fuzzy
-#| msgid "Sample variation"
 msgid "New variation"
-msgstr "Beispielvariante"
+msgstr "Neue Variante"
 
 #: pretix/control/templates/pretixcontrol/item/include_variations.html:158
 msgid "Add a new variation"
@@ -24160,10 +24142,8 @@ msgstr ""
 "verfügbar."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:46
-#, fuzzy
-#| msgid "Show information"
 msgid "Show full location"
-msgstr "Informationen anzeigen"
+msgstr "Vollständigen Ort anzeigen"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:74
 msgid "No attendee name provided"
@@ -24840,6 +24820,8 @@ msgid ""
 "The organizer will get in touch with you to clarify the details of your "
 "refund."
 msgstr ""
+"Der Veranstalter wird Kontakt mit dir aufnehmen, um die Details der "
+"Rückerstattung zu klären."
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:97
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:118
