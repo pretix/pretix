@@ -481,10 +481,12 @@ $(function () {
 
 function copy_answers(elements, answers) {
    elements.not("[disabled], [readonly]").each(function (index) {
+        if (!this.name) return;
         var input = $(this),
             tagName = input.prop('tagName').toLowerCase(),
             attributeType = input.attr('type'),
             suffix = input.attr('name').split('-')[1];
+        if (input.closest(".js-do-not-copy-answers").length) return;
 
         switch (tagName) {
             case "textarea":
