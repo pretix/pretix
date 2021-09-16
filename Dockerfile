@@ -56,6 +56,7 @@ COPY deployment/docker/supervisord /etc/supervisord
 COPY deployment/docker/supervisord.all.conf /etc/supervisord.all.conf
 COPY deployment/docker/supervisord.web.conf /etc/supervisord.web.conf
 COPY deployment/docker/nginx.conf /etc/nginx/nginx.conf
+COPY deployment/docker/nginx-max-body-size.conf /etc/nginx/conf.d/nginx-max-body-size.conf
 COPY deployment/docker/production_settings.py /pretix/src/production_settings.py
 COPY src /pretix/src
 
