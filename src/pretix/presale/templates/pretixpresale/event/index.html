@@ -158,16 +158,16 @@
             <div>
                 {% if ev.location %}
                     <div class="info-row">
-                        <span class="fa fa-map-marker fa-fw" aria-hidden="true"></span>
-                        <p><span class="sr-only">{% trans "Where?" %}:</span>
+                        <span class="fa fa-map-marker fa-fw" aria-hidden="true" title="{% trans "Where does the event happen?" %}"></span>
+                        <p><span class="sr-only">{% trans "Where does the event happen?" %}</span>
                             {{ ev.location|linebreaksbr }}
                         </p>
                     </div>
                 {% endif %}
                 {% if ev.settings.show_dates_on_frontpage %}
                     <div class="info-row">
-                        <span class="fa fa-clock-o fa-fw" aria-hidden="true"></span>
-                        <p><span class="sr-only">{% trans "When?" %}</span>
+                        <span class="fa fa-clock-o fa-fw" aria-hidden="true" title="{% trans "When does the event happen?" %}"></span>
+                        <p><span class="sr-only">{% trans "When does the event happen?" %}</span>
                             {{ ev.get_date_range_display_as_html }}
                             {% if event.settings.show_times %}
                                 <br>
