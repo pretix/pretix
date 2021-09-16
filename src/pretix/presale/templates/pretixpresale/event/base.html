@@ -111,13 +111,13 @@
     {% if request.event.testmode %}
         {% if request.sales_channel.testmode_supported %}
             <div class="alert alert-warning">
-                <p><strong><span class="sr-only">{% trans "Important" context "alert-messages" %}:</span>
+                <p><strong><span class="sr-only">{% trans "Warning" context "alert-messages" %}:</span>
                     {% trans "This ticket shop is currently in test mode. Please do not perform any real purchases as your order might be deleted without notice." %}
                 </strong></p>
             </div>
         {% else %}
             <div class="alert alert-danger">
-                <p><strong><span class="sr-only">{% trans "Important" context "alert-messages" %}:</span>
+                <p><strong><span class="sr-only">{% trans "Warning" context "alert-messages" %}:</span>
                     {% trans "Orders made through this sales channel cannot be deleted - even if the ticket shop is in test mode!" %}
                 </strong></p>
             </div>
@@ -152,13 +152,13 @@
     {% if request.event.testmode %}
         {% if request.sales_channel.testmode_supported %}
             <div class="alert alert-testmode alert-warning">
-                <p><strong><span class="sr-only">{% trans "Important" context "alert-messages" %}:</span>
+                <p><strong><span class="sr-only">{% trans "Warning" context "alert-messages" %}:</span>
                     {% trans "This ticket shop is currently in test mode. Please do not perform any real purchases as your order might be deleted without notice." %}
                 </strong></p>
             </div>
         {% else %}
             <div class="alert alert-testmode alert-danger">
-                <p><strong><span class="sr-only">{% trans "Important" context "alert-messages" %}:</span>
+                <p><strong><span class="sr-only">{% trans "Warning" context "alert-messages" %}:</span>
                     {% trans "Orders made through this sales channel cannot be deleted - even if the ticket shop is in test mode!" %}
                 </strong></p>
             </div>
