@@ -89,6 +89,7 @@ $(function () {
             var $handler = $("<button>")
                 .text($(this).attr("data-expand-text"))
                 .addClass("btn btn-link collapse-handler")
+                .attr("type", "button")
                 .attr("aria-controls", $content.attr('id'))
                 .attr("aria-expanded", "false");
             $handler.on("click", function (ev) {
