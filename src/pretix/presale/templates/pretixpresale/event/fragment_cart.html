@@ -78,7 +78,7 @@
                             <div class="collapse-lines" data-expand-text="{% trans "Show full location" %}" aria-hidden="true">
                                 <span class="content text-muted" id="full-location-{{ line.pk }}">{{ line.subevent.location|linebreaksbr }}</span>
                             </div>
-                            <div class="sr-only">{{ line.subevent.location }}</div>
+                            <div class="sr-only">{{ line.subevent.location|linebreaksbr }}</div>
                         </dd>
                     </div>
                     {% endif %}
