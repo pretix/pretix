@@ -50,7 +50,7 @@
                     <div id="invoice" class="profile-scope" data-profiles-id="addresses_json">
                         <div class="panel-body">
                             {% if addresses_data %}
-                                <div class="form-group profile-select-container">
+                                <div class="form-group profile-select-container js-do-not-copy-answers">
                                     <label class="col-md-3 control-label" for="address-list-select">{% trans "Auto-fill with address" %}</label>
                                     <div class="col-md-9">
                                         <p class="profile-select-control">
@@ -160,7 +160,7 @@
                                 {% endif %}
                                 <div data-idx="{{ forloop.parentloop.counter0 }}" data-addonidx="{{ forloop.counter0 }}" class="profile-scope{% if form.pos.item != pos.item %}{% if profiles_data %} profile-add-on{% endif %}{% endif %}">
                                     {% if profiles_data %}
-                                    <div class="form-group profile-select-container">
+                                    <div class="form-group profile-select-container js-do-not-copy-answers">
                                         <label class="col-md-3 control-label" for="profile-select-{{ forloop.parentloop.counter0 }}-{{ forloop.counter0 }}">{% trans "Auto-fill with profile" %}</label>
                                         <div class="col-md-9">
                                             <p class="profile-select-control">

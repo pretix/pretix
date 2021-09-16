@@ -341,7 +341,7 @@ function questions_init_profiles(el) {
         var $checkboxContainer = $checkbox.closest(".form-group").addClass("profile-save");
         var $help = $selectContainer.find(".help-block");
 
-        var $container = $("<div class='profile-save-container'></div>");
+        var $container = $("<div class='profile-save-container js-do-not-copy-answers'></div>");
         $selectContainer.after($container);
         $container.append($checkboxContainer);
         $container.append($selectContainer);
