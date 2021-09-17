@@ -111,7 +111,7 @@
                                 {% endif %}
                             </td>
                             <td>
-                                {{ m.attendee_name }}
+                                {{ m.attendee_name|default_if_none:"" }}
                             </td>
                             <td>
                                 <div class="quotabox">
