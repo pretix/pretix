@@ -2093,7 +2093,8 @@ Your {organizer} team"""))
         'serializer_class': serializers.BooleanField,
         'form_kwargs': dict(
             label=_('Show event title even if a header image is present'),
-            help_text=_('The title will only be shown on the event front page.'),
+            help_text=_('The title will only be shown on the event front page. If no header image is uploaded for the event, but the header image '
+                        'from the organizer profile is used, this option will be ignored and the event title will always be shown.'),
         )
     },
     'organizer_logo_image': {
@@ -2125,6 +2126,15 @@ Your {organizer} team"""))
         'form_kwargs': dict(
             label=_('Use header image in its full size'),
             help_text=_('We recommend to upload a picture at least 1170 pixels wide.'),
+        )
+    },
+    'organizer_logo_image_inherit': {
+        'default': 'False',
+        'type': bool,
+        'form_class': forms.BooleanField,
+        'serializer_class': serializers.BooleanField,
+        'form_kwargs': dict(
+            label=_('Use header image also for events without an individually uploaded logo'),
         )
     },
     'og_image': {

@@ -122,6 +122,12 @@ def _default_context(request):
             ctx['css_file'] = default_storage.url(request.event.settings.presale_css_file)
 
         ctx['event_logo'] = request.event.settings.get('logo_image', as_type=str, default='')[7:]
+        ctx['event_logo_image_large'] = request.event.settings.logo_image_large
+        ctx['event_logo_show_title'] = request.event.settings.logo_image_show_title
+        if not ctx['event_logo'] and request.event.settings.organizer_logo_image_inherit and request.event.settings.organizer_logo_image:
+            ctx['event_logo'] = request.event.settings.get('organizer_logo_image', as_type=str, default='')[7:]
+            ctx['event_logo_image_large'] = request.event.settings.organizer_logo_image_large
+            ctx['event_logo_show_title'] = True
         try:
             ctx['social_image'] = request.event.cache.get_or_set(
                 'social_image_url',

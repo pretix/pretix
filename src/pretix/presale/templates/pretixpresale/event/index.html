@@ -32,7 +32,7 @@
 
     {% if request.event.has_subevents %}
         {% if not subevent %}
-            {% if event_logo and request.event.settings.logo_show_title %}
+            {% if event_logo and event_logo_show_title %}
                 <h2 class="content-header">
                     {{ event.name }}
                 </h2>
@@ -95,7 +95,7 @@
             {% endif %}
         {% endif %}
     {% else %}
-        {% if event_logo and request.event.settings.logo_show_title %}
+        {% if event_logo and event_logo_show_title %}
             <h2 class="content-header">
                 {{ event.name }}
                 {% if request.event.settings.show_dates_on_frontpage %}

@@ -33,9 +33,9 @@
             </div>
         </div>
     {% endif %}
-    <div class="container page-header-links {% if event.settings.theme_color_background|upper != "#FFFFFF" or event.settings.logo_image_large %}page-header-links-outside{% endif %}">
+    <div class="container page-header-links {% if event.settings.theme_color_background|upper != "#FFFFFF" or event_logo_image_large %}page-header-links-outside{% endif %}">
         {% if event.settings.locales|length > 1 or request.organizer.settings.customer_accounts %}
-            {% if event.settings.theme_color_background|upper != "#FFFFFF" or event.settings.logo_image_large %}
+            {% if event.settings.theme_color_background|upper != "#FFFFFF" or event_logo_image_large %}
                 <div class="pull-right header-part flip hidden-print">
                     {% if event.settings.locales|length > 1 %}
                         <nav class="locales" aria-label="{% trans "select language" %}">
@@ -62,9 +62,9 @@
     </div>
 {% endblock %}
 {% block page %}
-    <div class="page-header {% if event_logo and event.settings.logo_image_large %}logo-large{% endif %}">
-        <div class="{% if not event_logo or not event.settings.logo_image_large %}pull-left flip{% endif %}">
-            {% if event_logo and event.settings.logo_image_large %}
+    <div class="page-header {% if event_logo and event_logo_image_large %}logo-large{% endif %}">
+        <div class="{% if not event_logo or not event_logo_image_large %}pull-left flip{% endif %}">
+            {% if event_logo and event_logo_image_large %}
                 <a href="{% eventurl event "presale:event.index" cart_namespace=cart_namespace|default_if_none:"" %}"
                    title="{{ event.name }}">
                     <img src="{{ event_logo|thumb:'1170x5000' }}" alt="{{ event.name }}" class="event-logo" />
@@ -84,8 +84,8 @@
             {% endif %}
         </div>
         {% if event.settings.locales|length > 1 or request.organizer.settings.customer_accounts %}
-            {% if event.settings.theme_color_background|upper == "#FFFFFF" and not event.settings.logo_image_large %}
-                <div class="{% if not event_logo or not event.settings.logo_image_large %}pull-right flip{% endif %} loginbox hidden-print">
+            {% if event.settings.theme_color_background|upper == "#FFFFFF" and not event_logo_image_large %}
+                <div class="{% if not event_logo or not event_logo_image_large %}pull-right flip{% endif %} loginbox hidden-print">
                     {% if event.settings.locales|length > 1 %}
                         <nav class="locales" aria-label="{% trans "select language" %}">
                             {% for l in languages %}

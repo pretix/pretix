@@ -295,6 +295,7 @@ class OrganizerSettingsForm(SettingsForm):
         'organizer_homepage_text',
         'organizer_link_back',
         'organizer_logo_image_large',
+        'organizer_logo_image_inherit',
         'giftcard_length',
         'giftcard_expiry_years',
         'locales',

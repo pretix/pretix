@@ -295,6 +295,7 @@ class OrganizerSettingsSerializer(SettingsSerializer):
         'theme_color_background',
         'theme_round_borders',
         'primary_font',
+        'organizer_logo_image_inherit',
         'organizer_logo_image'
     ]
 
