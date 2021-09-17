@@ -36,9 +36,6 @@ import sys
 
 from django.core.management.base import OutputWrapper
 from django.core.management.commands.migrate import Command as Parent
-from ._migrations import monkeypatch_migrations
-
-monkeypatch_migrations()
 
 
 class OutputFilter(OutputWrapper):
