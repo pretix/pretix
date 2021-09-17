@@ -159,17 +159,17 @@
             </div>
         </div>
         {% if confirm_messages %}
-            <div class="panel panel-primary panel-confirm">
+            <div class="panel panel-primary panel-confirm" role="group" aria-labelledby="confirm_heading">
                 <div class="panel-heading">
-                    <h3 class="panel-title">
+                    <h3 class="panel-title" id="confirm_heading">
                         {% trans "Confirmations" %}
                     </h3>
                 </div>
                 <div class="panel-body">
                     {% for key, desc in confirm_messages.items %}
                         <div class="checkbox">
-                            <label>
-                                <input type="checkbox" class="checkbox" value="yes" name="confirm_{{ key }}" required>
+                            <label for="input_confirm_{{ key }}">
+                                <input type="checkbox" class="checkbox" value="yes" name="confirm_{{ key }}" id="input_confirm_{{ key }}" required>
                                 {{ desc|safe }}
                             </label>
                         </div>
