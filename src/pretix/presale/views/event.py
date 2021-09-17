@@ -354,6 +354,7 @@ def get_grouped_items(event, subevent=None, voucher=None, channel='web', require
                                       v.display_price.gross for v in item.available_variations])
                 item.max_price = max([v.display_price.net if event.settings.display_net_prices else
                                       v.display_price.gross for v in item.available_variations])
+                item.best_variation_availability = max([v.cached_availability[0] for v in item.available_variations])
 
             item._remove = not bool(item.available_variations)
 

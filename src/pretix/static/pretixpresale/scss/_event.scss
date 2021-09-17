@@ -24,10 +24,10 @@
     .availability-box {
         text-align: center;
 
-        &.gone {
+        &.gone, .gone {
             color: $alert-danger-text;
         }
-        &.unavailable {
+        &.unavailable, .unavailable {
             color: $alert-warning-text;
         }
     }
