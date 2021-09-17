@@ -184,7 +184,7 @@ class BusinessBooleanRadio(forms.RadioSelect):
         self.require_business = require_business
         if self.require_business:
             choices = (
-                ('business', _('Business customer')),
+                ('business', _('Business or institutional customer')),
             )
         else:
             choices = (
