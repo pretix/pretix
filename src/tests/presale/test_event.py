@@ -1063,6 +1063,41 @@ class WaitingListTest(EventTestMixin, SoupTest):
         with scopes_disabled():
             self.assertFalse(WaitingListEntry.objects.filter(email='foo@bar.com').exists())
 
+    def test_remove_valid(self):
+        with scopes_disabled():
+            v = self.event.vouchers.create(item=self.item, block_quota=True)
+            WaitingListEntry.objects.create(
+                event=self.event, item=self.item, email='bar@bar.com', voucher=v
+            )
+        response = self.client.get(
+            '/%s/%s/waitinglist/remove?voucher=%s' % (self.orga.slug, self.event.slug, v.code), {
+            }
+        )
+        self.assertEqual(response.status_code, 200)
+        response = self.client.post(
+            '/%s/%s/waitinglist/remove?voucher=%s' % (self.orga.slug, self.event.slug, v.code), {
+            }
+        )
+        self.assertEqual(response.status_code, 302)
+        v.refresh_from_db()
+        assert not v.is_active()
+
+    def test_remove_waiting_list_vouchers_only(self):
+        with scopes_disabled():
+            v = self.event.vouchers.create(item=self.item, block_quota=True)
+        response = self.client.get(
+            '/%s/%s/waitinglist/remove?voucher=%s' % (self.orga.slug, self.event.slug, v.code), {
+            }
+        )
+        self.assertEqual(response.status_code, 302)
+        response = self.client.post(
+            '/%s/%s/waitinglist/remove?voucher=%s' % (self.orga.slug, self.event.slug, v.code), {
+            }
+        )
+        self.assertEqual(response.status_code, 302)
+        v.refresh_from_db()
+        assert v.is_active()
+
 
 class DeadlineTest(EventTestMixin, TestCase):
     @scopes_disabled()

@@ -68,6 +68,7 @@ frame_wrapped_urls = [
     re_path(r'^(?P<subevent>[0-9]+)/seatingframe/$', pretix.presale.views.event.SeatingPlanView.as_view(),
             name='event.seatingplan'),
     re_path(r'^(?P<subevent>[0-9]+)/$', pretix.presale.views.event.EventIndex.as_view(), name='event.index'),
+    re_path(r'^waitinglist/remove$', pretix.presale.views.waiting.WaitingRemoveView.as_view(), name='event.waitinglist.remove'),
     re_path(r'^waitinglist', pretix.presale.views.waiting.WaitingView.as_view(), name='event.waitinglist'),
     re_path(r'^$', pretix.presale.views.event.EventIndex.as_view(), name='event.index'),
 ]

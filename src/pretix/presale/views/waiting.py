@@ -19,12 +19,16 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
+from datetime import timedelta
+
 from django.conf import settings
 from django.contrib import messages
+from django.db import transaction
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.decorators import method_decorator
+from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _, pgettext_lazy
-from django.views.generic import FormView
+from django.views.generic import FormView, TemplateView
 
 from pretix.base.models.event import SubEvent
 from pretix.base.templatetags.urlreplace import url_replace
@@ -32,7 +36,7 @@ from pretix.multidomain.urlreverse import eventreverse
 from pretix.presale.views import EventViewMixin
 
 from ...base.i18n import get_language_without_region
-from ...base.models import WaitingListEntry
+from ...base.models import Voucher, WaitingListEntry
 from ..forms.waitinglist import WaitingListForm
 from . import allow_frame_if_namespaced
 
@@ -123,6 +127,46 @@ class WaitingView(EventViewMixin, FormView):
         messages.success(self.request, _("We've added you to the waiting list. You will receive "
                                          "an email as soon as tickets get available again."))
         return super().form_valid(form)
+
+    def get_success_url(self):
+        return self.get_index_url()
+
+
+@method_decorator(allow_frame_if_namespaced, 'dispatch')
+class WaitingRemoveView(EventViewMixin, TemplateView):
+    template_name = 'pretixpresale/event/waitinglist_remove.html'
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['event'] = self.request.event
+        ctx['voucher'] = self.voucher
+        return ctx
+
+    def dispatch(self, request, *args, **kwargs):
+        self.request = request
+
+        try:
+            self.voucher = self.request.event.vouchers.get(
+                code=request.GET.get("voucher", ""),
+                waitinglistentries__isnull=False,
+            )
+        except Voucher.DoesNotExist:
+            messages.error(request, _("We could not find you on our waiting list."))
+            return redirect(self.get_index_url())
+
+        if not self.voucher.is_active():
+            messages.error(request, _("Your waiting list spot is no longer valid or already used. There's nothing more to do here."))
+            return redirect(self.get_index_url())
+
+        return super().dispatch(request, *args, **kwargs)
+
+    @transaction.atomic()
+    def post(self, request, *args, **kwargs):
+        self.voucher.valid_until = now() - timedelta(seconds=1)
+        self.voucher.save(update_fields=['valid_until'])
+        self.voucher.log_action('pretix.voucher.expired.waitinglist')
+        messages.success(request, _("Thank you very much! We will assign your spot on the waiting list to someone else."))
+        return redirect(self.get_index_url())
 
     def get_success_url(self):
         return self.get_index_url()

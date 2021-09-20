@@ -28,7 +28,7 @@ from django.utils.timezone import now
 from django_scopes import scopes_disabled
 
 from pretix.base.models import (
-    Event, SeatCategoryMapping, User, Voucher, WaitingListEntry,
+    Event, SeatCategoryMapping, User, WaitingListEntry,
 )
 from pretix.base.models.waitinglist import WaitingListException
 from pretix.base.services.tasks import EventTask
@@ -49,7 +49,7 @@ def assign_automatically(event: Event, user_id: int=None, subevent_id: int=None)
 
     for m in SeatCategoryMapping.objects.filter(event=event).select_related('subevent'):
         # See comment in WaitingListEntry.send_voucher() for rationale
-        free_seats = (m.subevent or event).free_seats().filter(product_id=m.product_id).count() - (Voucher.objects.filter(
+        free_seats = (m.subevent or event).free_seats().filter(product_id=m.product_id).count() - (event.vouchers.filter(
             Q(valid_until__isnull=True) | Q(valid_until__gte=now()),
             block_quota=True,
             item_id=m.product_id,

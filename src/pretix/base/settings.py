@@ -1746,6 +1746,12 @@ Please note that this link is only valid within the next {hours} hours!
 We will reassign the ticket to the next person on the list if you do not
 redeem the voucher within that timeframe.
 
+If you do NOT need a ticket any more, we kindly ask you to click the
+following link instead to let us know. This way, we can send the ticket
+to the next person waiting as quickly as possible:
+
+{url_remove}
+
 Best regards,
 Your {event} team"""))
     },
