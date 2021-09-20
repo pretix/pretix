@@ -363,11 +363,13 @@
                                 If you want to make changes to the products you bought, you can click on the button to change your order.
                             {% endblocktrans %}
                         </p>
+                        <p>
                         <a href="{% eventurl event 'presale:event.order.change' secret=order.secret order=order.code %}"
                                 class="btn btn-default">
                             <span class="fa fa-edit" aria-hidden="true"></span>
                             {% trans "Change order" %}
                         </a>
+                        </p>
                     </li>
                 {% endif %}
                 {% if user_cancel_allowed %}
@@ -431,11 +433,13 @@
                                     {% trans "This will invalidate all tickets in this order." %}
                                 </p>
                             {% endif %}
+                            <p>
                             <a href="{% eventurl event 'presale:event.order.cancel' secret=order.secret order=order.code %}"
                                     class="btn btn-danger">
                                 <span class="fa fa-remove" aria-hidden="true"></span>
                                 {% trans "Cancel order" %}
                             </a>
+                            </p>
                         {% else %}
                             <p>
                                 {% blocktrans trimmed %}
@@ -443,11 +447,13 @@
                                 {% endblocktrans %}
                                 {% trans "This will invalidate all tickets in this order." %}
                             </p>
+                            <p>
                             <a href="{% eventurl event 'presale:event.order.cancel' secret=order.secret order=order.code %}"
                                     class="btn btn-danger">
                                 <span class="fa fa-remove" aria-hidden="true"></span>
                                 {% trans "Cancel order" %}
                             </a>
+                            </p>
                         {% endif %}
                     </li>
                 {% endif %}
