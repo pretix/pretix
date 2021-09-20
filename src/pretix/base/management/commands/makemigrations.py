@@ -33,6 +33,7 @@
 # License for the specific language governing permissions and limitations under the License.
 
 from django.core.management.commands.makemigrations import Command as Parent
+
 from ._migrations import monkeypatch_migrations
 
 monkeypatch_migrations()
