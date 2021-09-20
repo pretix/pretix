@@ -41,15 +41,15 @@
         </p>
     </div>
     {% if settings.bank_details_type == "sepa" %}
-        <div class="col-md-3 col-sm-6 hidden-xs text-center">
+        <div class="col-md-3 col-sm-6 hidden-xs text-center js-only">
             <h4>BezahlCode</h4>
             <p>
-            <a aria-label="{% trans "Open BezahlCode in your banking app" %}" href="bank://singlepaymentsepa?name={{ settings.bank_details_sepa_name|urlencode }}&iban={{ settings.bank_details_sepa_iban }}&bic={{ settings.bank_details_sepa_bic }}&amount={{ amount|commadecimal }}&reason={{ code }}&currency={{ event.currency }}">
+            <a aria-label="{% trans "Open BezahlCode in your banking app to start the payment process." %}" href="bank://singlepaymentsepa?name={{ settings.bank_details_sepa_name|urlencode }}&iban={{ settings.bank_details_sepa_iban }}&bic={{ settings.bank_details_sepa_bic }}&amount={{ amount|commadecimal }}&reason={{ code }}&currency={{ event.currency }}">
                 <script type="text/plain" data-size="150" data-replace-with-qr data-desc="{% trans 'BezahlCode for your order. Scan this image with your banking app’s QR-Reader to start the payment process.' %}">bank://singlepaymentsepa?name={{ settings.bank_details_sepa_name|urlencode }}&iban={{ settings.bank_details_sepa_iban }}&bic={{ settings.bank_details_sepa_bic }}&amount={{ amount|commadecimal }}&reason={{ code }}&currency={{ event.currency }}</script>
             </a>
             </p>
         </div>
-        <div class="col-md-3 col-sm-6 hidden-xs text-center">
+        <div class="col-md-3 col-sm-6 hidden-xs text-center js-only">
             <h4>GiroCode / EPC-QR</h4>
             <p>
             <script type="text/plain" data-size="150" data-replace-with-qr data-desc="{% trans 'GiroCode / EPC-QR for your order. Scan this image with your banking app’s QR-Reader to start the payment process.' %}">BCD
