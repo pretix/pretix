@@ -195,7 +195,7 @@
                                     <span data-time="{{ ev.date_admission.isoformat }}" data-timezone="{{ request.event.timezone }}">  
                                     {% with time_human=ev.date_admission|date:"TIME_FORMAT" time_24=ev.date_admission|time:"H:i" %}
                                         {% blocktrans trimmed with time='<time datetime="'|add:time_24|add:'">'|add:time_human|add:"</time>"|safe %}
-                                            Admission: <time datetime="{{ time }}">{{ time }}</time>
+                                            Admission: {{ time }}
                                         {% endblocktrans %}
                                     {% endwith %}
                                     </span>
