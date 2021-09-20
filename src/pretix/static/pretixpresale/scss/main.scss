@@ -60,7 +60,8 @@ footer nav ul {
     list-style: none;
 }
 footer nav li:not(:first-child):before {
-    content: "•";
+    content: "·";
+    font-weight: bold;
     display: inline-block;
     width: 1.5em;
     text-align: center;
