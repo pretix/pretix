@@ -27,7 +27,7 @@
                 {% endif %}
             {% endif %}
             {% if details %}
-                {{ details|rich_text }}
+                {{ details|linebreaks }}
                 <dl class="dl-horizontal">
             {% endif %}
             {% if not settings.bank_details_type == "sepa" and not details %}

@@ -14,15 +14,18 @@
         <dt>{% trans "Bank" %}: </dt><dd>{{ settings.bank_details_sepa_bank }}</dd>
     </dl>
 {% endif %}
-<p>
-    {% if details %}
-        {{ details|linebreaksbr }}<br>
-    {% endif %}
-    {% if code %}
-        <strong>{% trans "Reference code (important):" %} {{ code }}</strong>
-    {% else %}
+
+{% if details %}
+    {{ details|linebreaks }}
+{% endif %}
+{% if code %}
+    <dl class="dl-horizontal">
+        <dt>{% trans "Reference code (important):" %} </dt><dd>{{ code }}</dd>
+    </dl>
+{% else %}
+    <p>
         <strong>
             {% trans "We will assign you a personal reference code to use after you completed the order." %}
         </strong>
-    {% endif %}
-</p>
+    </p>
+{% endif %}
