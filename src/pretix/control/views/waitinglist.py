@@ -50,7 +50,7 @@ from django.views import View
 from django.views.generic import ListView
 from django.views.generic.edit import DeleteView
 
-from pretix.base.models import Item, WaitingListEntry
+from pretix.base.models import Item, Voucher, WaitingListEntry
 from pretix.base.models.waitinglist import WaitingListException
 from pretix.base.services.waitinglist import assign_automatically
 from pretix.base.views.tasks import AsyncAction
@@ -239,6 +239,20 @@ class WaitingListView(EventPermissionRequiredMixin, WaitingListQuerySetMixin, Pa
                         if wle.variation
                         else wle.item.check_quotas(count_waitinglist=False, subevent=wle.subevent, _cache=quota_cache)
                     )
+                if wle.availability[0] == 100 and ev.seat_category_mappings.filter(product=wle.item).exists():
+                    # See comment in WaitingListEntry.send_voucher() for rationale
+                    free_seats = ev.free_seats().filter(product=wle.item).count() - (Voucher.objects.filter(
+                        Q(valid_until__isnull=True) | Q(valid_until__gte=now()),
+                        block_quota=True,
+                        item_id=wle.item_id,
+                        subevent=wle.subevent_id,
+                        waitinglistentries__isnull=False
+                    ).aggregate(free=Sum(F('max_usages') - F('redeemed')))['free'] or 0)
+                    wle.availability = (
+                        0 if free_seats == 0 else wle.availability[0],
+                        min(free_seats, wle.availability[1])
+                    )
+
                 itemvar_cache[(wle.item, wle.variation, wle.subevent)] = wle.availability
             if wle.availability[0] == 100:
                 any_avail = True

@@ -180,7 +180,7 @@ def get_grouped_items(event, subevent=None, voucher=None, channel='web', require
     ).order_by('category__position', 'category_id', 'position', 'name')
     if require_seat:
         items = items.filter(requires_seat__gt=0)
-    else:
+    elif require_seat is not None:
         items = items.filter(requires_seat=0)
 
     if filter_items:
@@ -427,14 +427,38 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
             self.request.event.cache.set('vouchers_exist', vouchers_exist)
         context['show_vouchers'] = context['vouchers_exist'] = vouchers_exist
 
+        context['ev'] = self.subevent or self.request.event
+        context['subevent'] = self.subevent
+
+        context['allow_waitinglist'] = self.request.event.settings.waiting_list_enabled and context['ev'].presale_is_running
+
         if not self.request.event.has_subevents or self.subevent:
             # Fetch all items
             items, display_add_to_cart = get_grouped_items(
                 self.request.event, self.subevent,
                 filter_items=self.request.GET.getlist('item'),
                 filter_categories=self.request.GET.getlist('category'),
+                require_seat=None,
                 channel=self.request.sales_channel.identifier
             )
+
+            context['waitinglist_seated'] = False
+            if context['allow_waitinglist']:
+                for i in items:
+                    if not i.allow_waitinglist or not i.requires_seat:
+                        continue
+
+                    if i.has_variations:
+                        for v in i.available_variations:
+                            if v.cached_availability[0] != Quota.AVAILABILITY_OK:
+                                context['waitinglist_seated'] = True
+                                break
+                    else:
+                        if i.cached_availability[0] != Quota.AVAILABILITY_OK:
+                            context['waitinglist_seated'] = True
+                            break
+
+            items = [i for i in items if not i.requires_seat]
             context['itemnum'] = len(items)
             context['allfree'] = all(
                 item.display_price.gross == Decimal('0.00') for item in items if not item.has_variations
@@ -450,11 +474,8 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
             context['items_by_category'] = item_group_by_category(items)
             context['display_add_to_cart'] = display_add_to_cart
 
-        context['ev'] = self.subevent or self.request.event
-        context['subevent'] = self.subevent
         context['cart'] = self.get_cart()
         context['has_addon_choices'] = any(cp.has_addon_choices for cp in get_cart(self.request))
-        context['allow_waitinglist'] = self.request.event.settings.waiting_list_enabled and context['ev'].presale_is_running
 
         if self.subevent:
             context['frontpage_text'] = str(self.subevent.frontpage_text)

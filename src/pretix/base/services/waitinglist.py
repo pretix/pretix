@@ -22,12 +22,14 @@
 import sys
 from datetime import timedelta
 
-from django.db.models import Exists, OuterRef, Q
+from django.db.models import Exists, F, OuterRef, Q, Sum
 from django.dispatch import receiver
 from django.utils.timezone import now
 from django_scopes import scopes_disabled
 
-from pretix.base.models import Event, User, WaitingListEntry
+from pretix.base.models import (
+    Event, SeatCategoryMapping, User, Voucher, WaitingListEntry,
+)
 from pretix.base.models.waitinglist import WaitingListException
 from pretix.base.services.tasks import EventTask
 from pretix.base.signals import periodic_task
@@ -43,6 +45,18 @@ def assign_automatically(event: Event, user_id: int=None, subevent_id: int=None)
 
     quota_cache = {}
     gone = set()
+    seats_available = {}
+
+    for m in SeatCategoryMapping.objects.filter(event=event).select_related('subevent'):
+        # See comment in WaitingListEntry.send_voucher() for rationale
+        free_seats = (m.subevent or event).free_seats().filter(product_id=m.product_id).count() - (Voucher.objects.filter(
+            Q(valid_until__isnull=True) | Q(valid_until__gte=now()),
+            block_quota=True,
+            item_id=m.product_id,
+            subevent=m.subevent_id,
+            waitinglistentries__isnull=False
+        ).aggregate(free=Sum(F('max_usages') - F('redeemed')))['free'] or 0)
+        seats_available[(m.product_id, m.subevent_id)] = free_seats
 
     qs = WaitingListEntry.objects.filter(
         event=event, voucher__isnull=True
@@ -70,6 +84,11 @@ def assign_automatically(event: Event, user_id: int=None, subevent_id: int=None)
                 gone.add((wle.item, wle.variation, wle.subevent))
                 continue
 
+            if (wle.item_id, wle.subevent_id) in seats_available:
+                if seats_available[wle.item_id, wle.subevent_id] < 1:
+                    gone.add((wle.item, wle.variation, wle.subevent))
+                    continue
+
             quotas = (wle.variation.quotas.filter(subevent=wle.subevent)
                       if wle.variation
                       else wle.item.quotas.filter(subevent=wle.subevent))
@@ -91,6 +110,9 @@ def assign_automatically(event: Event, user_id: int=None, subevent_id: int=None)
                         quota_cache[q.pk][0] if quota_cache[q.pk][0] > 1 else 0,
                         quota_cache[q.pk][1] - 1 if quota_cache[q.pk][1] is not None else sys.maxsize
                     )
+
+                if (wle.item_id, wle.subevent_id) in seats_available:
+                    seats_available[wle.item_id, wle.subevent_id] -= 1
             else:
                 gone.add((wle.item, wle.variation, wle.subevent))
 

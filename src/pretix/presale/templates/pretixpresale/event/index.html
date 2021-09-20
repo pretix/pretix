@@ -211,6 +211,30 @@
                         {% eventsignal event "pretix.presale.signals.render_seating_plan" request=request %}
                     {% endif %}
                 {% endif %}
+
+                {% if waitinglist_seated %}
+                    <aside class="front-page" aria-labelledby="waiting-list">
+                        <h3 id="waiting-list">{% trans "Waiting list" %}</h3>
+                        <div class="row">
+                            <div class="col-md-8 col-sm-6 col-xs-12">
+                                <p>
+                                    {% blocktrans trimmed %}
+                                        Some of the categories in the seating plan above are currently sold out. If you want, you can add yourself to the
+                                        waiting list. We will then notify if seats are available again.
+                                    {% endblocktrans %}
+                                </p>
+                            </div>
+                            <div class="col-md-4 col-sm-6 col-xs-12">
+                                <a href="{% eventurl event "presale:event.waitinglist" cart_namespace=cart_namespace|default_if_none:"" %}{% if subevent %}?subevent={{ subevent.pk }}{% endif %}" class="btn btn-default btn-block">
+                                    <span class="fa fa-plus-circle" aria-hidden="true"></span>
+                                    {% trans "Waiting list" %}
+                                </a>
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+                    </aside>
+                {% endif %}
+
                 {% include "pretixpresale/event/fragment_product_list.html" %}
                 {% if ev.presale_is_running and display_add_to_cart %}
                     <section class="front-page">
