@@ -223,7 +223,9 @@ body.loading .container {
     .thank-you {
         min-height: 170px;
         max-width: 59em;
-        margin: auto;
+        margin-left: auto;
+        margin-right: auto;
+        margin-bottom: 3em;
 
         .fa {
             float: left;
