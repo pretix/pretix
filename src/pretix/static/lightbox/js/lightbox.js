@@ -1,3 +1,12 @@
+/*
+
+WARNING! CUSTOMIZED!
+
+Added improvements for better A11y-support, 
+i.e. role, aria-labelledby, aria-modal and <button>
+
+*/
+
 /*!
  * Lightbox v2.8.1
  * by Lokesh Dhakar
