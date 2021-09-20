@@ -169,46 +169,6 @@
 
 
 
-/*
-
-.cart .checkout-button-row .btn {
-    width: 100%;
-}
-.cart .checkout-button-primary .btn {
-    padding-left: 1.5em;
-    padding-right: 1.5em;
-}
-
-@media (min-width: $screen-sm-min) {
-    .cart .checkout-button-row {
-        display: flex;
-        align-items: center;
-        padding-top: 0;
-        margin-left: - floor(($grid-gutter-width / 4));
-        margin-right: - floor(($grid-gutter-width / 4));
-        flex-wrap: wrap;
-    }
-    .cart .checkout-button-row > * {
-        padding-left: floor(($grid-gutter-width / 4));
-        padding-right: floor(($grid-gutter-width / 4));
-    }
-    .cart .checkout-button-primary {
-        order: 10;
-        flex: 3 1 auto;
-        text-align: right;
-        width: auto;
-    }
-    .cart .checkout-button-row > div,
-    .cart .checkout-button-row p {
-        margin-bottom: 0;
-    }
-    .cart .checkout-button-row .btn {
-        white-space: nowrap;
-        width: auto;
-    }
-}
-*/
-
 @media(max-width: $screen-sm-max) {
 
 
