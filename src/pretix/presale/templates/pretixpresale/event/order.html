@@ -63,7 +63,7 @@
         </div>
     {% endif %}
 
-    <h2 class="h1">{% trans "Your order" %}
+    <h2 class="h1">{% trans "Order" %} {{ order.code }}
         {% if order.testmode %}
             <span class="label label-warning">{% trans "TEST MODE" %}</span>
         {% endif %}
@@ -74,8 +74,6 @@
         {% endif %}
     </h2>
     <dl class="lead order-details">
-        <dt class="text-muted">Order</dt>
-        <dd>{{ order.code }}</dd>
         <dt class="sr-only">Status</dt>
         <dd class="text-muted">{% include "pretixpresale/event/fragment_order_status.html" with order=order event=request.event %}</dd>
     </dl>
