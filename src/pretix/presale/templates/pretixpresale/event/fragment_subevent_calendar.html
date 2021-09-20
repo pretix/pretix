@@ -1,24 +1,16 @@
 {% load i18n %}
 {% load eventurl %}
 {% load urlreplace %}
-    <div class="row">
-        <div class="col-sm-4 hidden-xs text-left flip">
-            <form method="get" action="{{ request.path }}">
-                {% for f, v in request.GET.items %}
-                    {% if f != "month" and f != "year" %}
-                        <input type="hidden" name="{{ f }}" value="{{ v }}">
-                    {% endif %}
-                {% endfor %}
-                <input type="hidden" name="month" value="{{ subevent_list.before.month }}">
-                <input type="hidden" name="year" value="{{ subevent_list.before.year }}">
-                <button class="btn btn-default" type="submit">
-                    <span class="fa fa-arrow-left" aria-hidden="true"></span>
-                    <span class="sr-only">{% trans "Select previous month" %},</span>
-                    <time datetime="{{ subevent_list.before|date:"Y-m" }}">{{ subevent_list.before|date:"F Y" }}</time>
-                </button>
-            </form>
-        </div>
-        <div class="col-sm-4 col-xs-12 text-center">
+<nav aria-label="{% trans "calendar navigation" %}">
+    <ul class="row calendar-nav">
+        <li class="col-sm-4 hidden-xs text-left flip">
+            <a href="?{% url_replace request "year" subevent_list.before.year "month" subevent_list.before.month %}"
+                    class="btn btn-default" aria-label="{% blocktrans with month=subevent_list.before|date:"F Y" %}Show previous month, {{ month }}{% endblocktrans %}">
+                <span class="fa fa-arrow-left" aria-hidden="true"></span>
+                {{ subevent_list.before|date:"F Y" }}
+            </a>
+        </li>
+        <li class="col-sm-4 col-xs-12 text-center">
             <form class="form-inline" method="get" id="monthselform" action="{% eventurl event "presale:event.index" cart_namespace=cart_namespace %}">
                 {% for f, v in request.GET.items %}
                     {% if f != "month" and f != "year" %}
@@ -41,22 +33,14 @@
                     {% trans "Go" %}
                 </button>
             </form>
-        </div>
-        <div class="col-sm-4 hidden-xs text-right flip">
-            <form method="get" action="{{ request.path }}">
-                {% for f, v in request.GET.items %}
-                    {% if f != "month" and f != "year" %}
-                        <input type="hidden" name="{{ f }}" value="{{ v }}">
-                    {% endif %}
-                {% endfor %}
-                <input type="hidden" name="month" value="{{ subevent_list.after.month }}">
-                <input type="hidden" name="year" value="{{ subevent_list.after.year }}">
-                <button class="btn btn-default">
-                    <span class="sr-only">{% trans "Select next month" %},</span>
-                    <time datetime="{{ subevent_list.after|date:"Y-m" }}">{{ subevent_list.after|date:"F Y" }}</time>
-                    <span class="fa fa-arrow-right" aria-hidden="true"></span>
-                </button>
-            </form>
-        </div>
-    </div>
+        </li>
+        <li class="col-sm-4 hidden-xs text-right flip">
+            <a href="?{% url_replace request "year" subevent_list.after.year "month" subevent_list.after.month %}"
+                class="btn btn-default" aria-label="{% blocktrans with month=subevent_list.after|date:"F Y" %}Show next month, {{ month }}{% endblocktrans %}">
+                {{ subevent_list.after|date:"F Y" }}
+                <span class="fa fa-arrow-right" aria-hidden="true"></span>
+            </a>
+        </li>
+    </ul>
+</nav>
 {% include "pretixpresale/fragment_calendar.html" with show_avail=event.settings.event_list_availability weeks=subevent_list.weeks show_names=subevent_list.show_names %}

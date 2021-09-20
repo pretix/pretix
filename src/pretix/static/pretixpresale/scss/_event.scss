@@ -214,10 +214,6 @@ section.front-page {
 .subevent-list {
     background-color: white;
 
-    form {
-        padding: 10px 0;
-    }
-
     .row {
         margin: 0;
     }
@@ -241,6 +237,16 @@ section.front-page {
         vertical-align: middle;
     }
 }
+
+.calendar-nav, .calendar-nav li {
+    list-style: none;
+    margin: 0;
+    padding: 0
+}
+.calendar-nav li {
+    padding: 10px 0;
+}
+
 .subevent-toggle {
     display: none;
 }
