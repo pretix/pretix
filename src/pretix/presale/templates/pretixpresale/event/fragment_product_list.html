@@ -305,7 +305,7 @@
                                     <input type="checkbox" value="1" {% if itemnum == 1 %}checked{% endif %}
                                            {% if not ev.presale_is_running %}disabled{% endif %}
                                            name="item_{{ item.id }}" id="item_{{ item.id }}"
-                                           aria-label="{% blocktrans with item=item.name %}Add {{ item }} to basket{% endblocktrans %}"
+                                           aria-label="{% blocktrans with item=item.name %}Add {{ item }} to cart{% endblocktrans %}"
                                            {% if item.description %} aria-describedby="item-{{ item.id }}-description"{% endif %}>
                                 </label>
                             {% else %}
