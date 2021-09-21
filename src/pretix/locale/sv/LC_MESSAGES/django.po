@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-09-15 11:44+0000\n"
-"PO-Revision-Date: 2021-09-10 16:45+0000\n"
+"PO-Revision-Date: 2021-09-21 19:00+0000\n"
 "Last-Translator: Klevagruva <info@klevagruva.com>\n"
 "Language-Team: Swedish <https://translate.pretix.eu/projects/pretix/pretix/"
 "sv/>\n"
@@ -15833,15 +15833,15 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/orders/import_start.html:22
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:35
 msgid "Import file"
-msgstr ""
+msgstr "Importera fil"
 
 #: pretix/control/templates/pretixcontrol/orders/import_start.html:26
 msgid "Start import"
-msgstr ""
+msgstr "Starta importering"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:13
 msgid "Nobody ordered a ticket yet."
-msgstr ""
+msgstr "Ingen har bokat biljetter än."
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:21
 msgid "Take your shop live"
@@ -15849,29 +15849,29 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:25
 msgid "Go to the ticket shop"
-msgstr ""
+msgstr "Gå till biljett shoppen"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:33
 msgid "Search query:"
-msgstr ""
+msgstr "Sök fråga:"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:47
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:20
 msgid "Go!"
-msgstr ""
+msgstr "Starta!"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:86
 msgid "Advanced search"
-msgstr ""
+msgstr "Avancerad sökning"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:99
 #, python-format
 msgid "List filtered by answers to question \"%(question)s\"."
-msgstr ""
+msgstr "Lista filtrerad efter svar på frågan \"%(question)s\"."
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:104
 msgid "Remove filter"
-msgstr ""
+msgstr "Ta bort filter"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:122
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:172
@@ -15936,17 +15936,17 @@ msgstr ""
 #, python-format
 msgid "1 order"
 msgid_plural "%(s)s orders"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "1 order"
+msgstr[1] "%(s)s ordrar"
 
 #: pretix/control/templates/pretixcontrol/orders/overview.html:5
 #: pretix/control/templates/pretixcontrol/orders/overview.html:16
 msgid "Order overview"
-msgstr ""
+msgstr "order översikt"
 
 #: pretix/control/templates/pretixcontrol/orders/overview.html:10
 msgid "Sales"
-msgstr ""
+msgstr "försäljningar"
 
 #: pretix/control/templates/pretixcontrol/orders/overview.html:11
 msgid "Revenue (gross)"
@@ -15966,7 +15966,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/orders/overview.html:72
 #: pretix/plugins/reports/exporters.py:293
 msgid "Purchased"
-msgstr ""
+msgstr "Köpta"
 
 #: pretix/control/templates/pretixcontrol/orders/overview.html:181
 msgid ""
@@ -15981,11 +15981,11 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/orders/refunds.html:74
 msgid "Actions"
-msgstr ""
+msgstr "Handlingar"
 
 #: pretix/control/templates/pretixcontrol/orders/search.html:19
 msgid "Search"
-msgstr ""
+msgstr "Sök"
 
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:6
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:12
@@ -15993,7 +15993,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/organizers/customer_edit.html:11
 #, python-format
 msgid "Customer #%(id)s"
-msgstr ""
+msgstr "Kund #%(id)s"
 
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:21
 #: pretix/control/templates/pretixcontrol/organizers/customer_membership.html:15
@@ -16027,7 +16027,7 @@ msgstr "Återställning av lösenord"
 #: pretix/control/templates/pretixcontrol/organizers/customer_anonymize.html:39
 #: pretix/control/templates/pretixcontrol/users/form.html:18
 msgid "Anonymize"
-msgstr ""
+msgstr "Gör anonym"
 
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:82
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:22
@@ -16042,11 +16042,11 @@ msgstr "Betalade beställningar"
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:36
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:120
 msgid "Usages"
-msgstr ""
+msgstr "Användning"
 
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:153
 msgid "Add membership"
-msgstr ""
+msgstr "Lägg till medlemskap"
 
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:200
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:90
