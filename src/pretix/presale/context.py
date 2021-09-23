@@ -123,7 +123,7 @@ def _default_context(request):
 
         ctx['event_logo'] = request.event.settings.get('logo_image', as_type=str, default='')[7:]
         ctx['event_logo_image_large'] = request.event.settings.logo_image_large
-        ctx['event_logo_show_title'] = request.event.settings.logo_image_show_title
+        ctx['event_logo_show_title'] = request.event.settings.logo_show_title
         if not ctx['event_logo'] and request.event.settings.organizer_logo_image_inherit and request.event.settings.organizer_logo_image:
             ctx['event_logo'] = request.event.settings.get('organizer_logo_image', as_type=str, default='')[7:]
             ctx['event_logo_image_large'] = request.event.settings.organizer_logo_image_large
