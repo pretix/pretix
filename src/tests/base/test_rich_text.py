@@ -42,6 +42,8 @@ from pretix.base.templatetags.rich_text import (
      '<a href="http://evilsite.com" rel="noopener" target="_blank">evilsite.com</a>'),
     ('cool-example.eu',
      '<a href="http://cool-example.eu" rel="noopener" target="_blank">cool-example.eu</a>'),
+    ('<a href="https://evilsite.com">Evil GmbH & Co. KG</a>',
+     '<a href="https://evilsite.com" rel="noopener" target="_blank">Evil GmbH &amp; Co. KG</a>'),
     ('<a href="https://evilsite.com">Evil Site</a>',
      '<a href="https://evilsite.com" rel="noopener" target="_blank">Evil Site</a>'),
     ('<a href="https://evilsite.com">evilsite.com</a>',
