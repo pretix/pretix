@@ -229,7 +229,8 @@ class SenderView(EventPermissionRequiredMixin, FormView):
             'checkin_lists': [i.pk for i in form.cleaned_data.get('checkin_lists')],
             'filter_checkins': form.cleaned_data.get('filter_checkins'),
         }
-        if form.cleaned_data.get('attachment') is not None:
+        attachment = form.cleaned_data.get('attachment')
+        if attachment is not None and attachment is not False:
             kwargs['attachments'] = [form.cleaned_data['attachment'].id]
 
         send_mails.apply_async(
