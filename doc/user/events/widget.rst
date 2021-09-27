@@ -4,8 +4,7 @@ Embeddable Widget
 =================
 
 If you want to show your ticket shop on your event website or blog, you can use our JavaScript widget. This way,
-users will not need to leave your site to buy their ticket in most cases. The widget will still open a new tab
-for the checkout if the user is on a mobile device.
+users will not need to leave your site to buy their ticket in most cases.
 
 To obtain the correct HTML code for embedding your event into your website, we recommend that you go to the "Widget"
 tab of your event's settings. You can specify some optional settings there (for example the language of the widget)
