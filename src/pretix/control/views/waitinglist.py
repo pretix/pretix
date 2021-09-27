@@ -50,7 +50,7 @@ from django.views import View
 from django.views.generic import ListView
 from django.views.generic.edit import DeleteView
 
-from pretix.base.models import Item, WaitingListEntry, Quota
+from pretix.base.models import Item, Quota, WaitingListEntry
 from pretix.base.models.waitinglist import WaitingListException
 from pretix.base.services.waitinglist import assign_automatically
 from pretix.base.views.tasks import AsyncAction

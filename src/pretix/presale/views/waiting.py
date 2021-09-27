@@ -30,7 +30,7 @@ from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _, pgettext_lazy
 from django.views.generic import FormView, TemplateView
 
-from pretix.base.models.event import SubEvent
+from pretix.base.models.event import Quota, SubEvent
 from pretix.base.templatetags.urlreplace import url_replace
 from pretix.multidomain.urlreverse import eventreverse
 from pretix.presale.views import EventViewMixin
