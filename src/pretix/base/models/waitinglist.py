@@ -171,7 +171,7 @@ class WaitingListEntry(LoggedModel):
                 Q(valid_until__isnull=True) | Q(valid_until__gte=now()),
                 block_quota=True,
                 item_id=self.item_id,
-                subevent=self.subevent_id,
+                subevent_id=self.subevent_id,
                 waitinglistentries__isnull=False
             ).aggregate(free=Sum(F('max_usages') - F('redeemed')))['free'] or 0)
             if not free_seats:

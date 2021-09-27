@@ -53,7 +53,7 @@ def assign_automatically(event: Event, user_id: int=None, subevent_id: int=None)
             Q(valid_until__isnull=True) | Q(valid_until__gte=now()),
             block_quota=True,
             item_id=m.product_id,
-            subevent=m.subevent_id,
+            subevent_id=m.subevent_id,
             waitinglistentries__isnull=False
         ).aggregate(free=Sum(F('max_usages') - F('redeemed')))['free'] or 0)
         seats_available[(m.product_id, m.subevent_id)] = free_seats
