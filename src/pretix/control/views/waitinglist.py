@@ -254,7 +254,7 @@ class WaitingListView(EventPermissionRequiredMixin, WaitingListQuerySetMixin, Pa
                     )
 
                 itemvar_cache[(wle.item, wle.variation, wle.subevent)] = wle.availability
-            if wle.availability[0] == 100:
+            if wle.availability[0] == Quota.AVAILABILITY_OK:
                 any_avail = True
 
         ctx['any_avail'] = any_avail
