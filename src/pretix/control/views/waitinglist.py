@@ -239,7 +239,7 @@ class WaitingListView(EventPermissionRequiredMixin, WaitingListQuerySetMixin, Pa
                         if wle.variation
                         else wle.item.check_quotas(count_waitinglist=False, subevent=wle.subevent, _cache=quota_cache)
                     )
-                if wle.availability[0] == 100 and ev.seat_category_mappings.filter(product=wle.item).exists():
+                if wle.availability[0] == Quota.AVAILABILITY_OK and ev.seat_category_mappings.filter(product=wle.item).exists():
                     # See comment in WaitingListEntry.send_voucher() for rationale
                     free_seats = ev.free_seats().filter(product=wle.item).count() - (self.request.event.vouchers.filter(
                         Q(valid_until__isnull=True) | Q(valid_until__gte=now()),
