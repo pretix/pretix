@@ -21,8 +21,9 @@
 #
 from datetime import timedelta
 
-from django.core.exceptions import ValidationError
+from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.db import models, transaction
+from django.db.models import F, Q, Sum
 from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _, pgettext_lazy
 from django_scopes import ScopedManager
@@ -114,9 +115,12 @@ class WaitingListEntry(LoggedModel):
         return '%s waits for %s' % (str(self.email), str(self.item))
 
     def clean(self):
-        WaitingListEntry.clean_duplicate(self.email, self.item, self.variation, self.subevent, self.pk)
-        WaitingListEntry.clean_itemvar(self.event, self.item, self.variation)
-        WaitingListEntry.clean_subevent(self.event, self.subevent)
+        try:
+            WaitingListEntry.clean_duplicate(self.email, self.item, self.variation, self.subevent, self.pk)
+            WaitingListEntry.clean_itemvar(self.event, self.item, self.variation)
+            WaitingListEntry.clean_subevent(self.event, self.subevent)
+        except ObjectDoesNotExist:
+            raise ValidationError('Invalid input')
 
     def save(self, *args, **kwargs):
         update_fields = kwargs.get('update_fields', [])
@@ -147,6 +151,34 @@ class WaitingListEntry(LoggedModel):
         )
         if availability[1] is None or availability[1] < 1:
             raise WaitingListException(_('This product is currently not available.'))
+
+        ev = self.subevent or self.event
+        if ev.seat_category_mappings.filter(product=self.item).exists():
+            # Generally, we advertise the waiting list to be based on quotas only. This makes it dangerous
+            # to use in combination with seating plans. If your event has 50 seats and a quota of 50 and
+            # default settings, everything is fine and the waiting list will work as usual. However, as soon
+            # as those two numbers diverge, either due to misconfiguration or due to intentional features such
+            # as our COVID-19 minimum distance feature, things get ugly. Theoretically, there could be
+            # significant quota available but not a single seat! The waiting list would happily send out vouchers
+            # which do not work at all. Generally, we consider this a "known bug" and not fixable with the current
+            # design of the waiting list and seating features.
+            # However, we've put in a simple safeguard that makes sure the waiting list on its own does not screw
+            # everything up. Specifically, we will not send out vouchers if the number of available seats is less
+            # than the number of valid vouchers *issued through the waiting list*. Things can still go wrong due to
+            # manually created vouchers, manually blocked seats or the minimum distance feature,  but this reduces
+            # the possible damage a bit.
+            num_free_seats_for_product = ev.free_seats().filter(product=self.item).count()
+            num_valid_vouchers_for_product = self.event.vouchers.filter(
+                Q(valid_until__isnull=True) | Q(valid_until__gte=now()),
+                block_quota=True,
+                item_id=self.item_id,
+                subevent_id=self.subevent_id,
+                waitinglistentries__isnull=False
+            ).aggregate(free=Sum(F('max_usages') - F('redeemed')))['free'] or 0
+            free_seats = num_free_seats_for_product - num_valid_vouchers_for_product
+            if not free_seats:
+                raise WaitingListException(_('No seat with this product is currently available.'))
+
         if self.voucher:
             raise WaitingListException(_('A voucher has already been sent to this person.'))
         if '@' not in self.email:

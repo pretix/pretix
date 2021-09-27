@@ -19,21 +19,24 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
+from datetime import timedelta
+
 from django.conf import settings
 from django.contrib import messages
+from django.db import transaction
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.decorators import method_decorator
-from django.utils.functional import cached_property
+from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _, pgettext_lazy
-from django.views.generic import FormView
+from django.views.generic import FormView, TemplateView
 
-from pretix.base.models.event import SubEvent
+from pretix.base.models import Quota, SubEvent
 from pretix.base.templatetags.urlreplace import url_replace
 from pretix.multidomain.urlreverse import eventreverse
 from pretix.presale.views import EventViewMixin
 
 from ...base.i18n import get_language_without_region
-from ...base.models import Item, ItemVariation, WaitingListEntry
+from ...base.models import Voucher, WaitingListEntry
 from ..forms.waitinglist import WaitingListForm
 from . import allow_frame_if_namespaced
 
@@ -47,17 +50,23 @@ class WaitingView(EventViewMixin, FormView):
         kwargs = super().get_form_kwargs()
         kwargs['event'] = self.request.event
         kwargs['instance'] = WaitingListEntry(
-            item=self.item_and_variation[0], variation=self.item_and_variation[1],
             event=self.request.event, locale=get_language_without_region(),
             subevent=self.subevent
         )
+        kwargs['channel'] = self.request.sales_channel.identifier
+        kwargs.setdefault('initial', {})
+        if 'var' in self.request.GET:
+            kwargs['initial']['itemvar'] = f'{self.request.GET.get("item")}-{self.request.GET.get("var")}'
+        else:
+            kwargs['initial']['itemvar'] = self.request.GET.get("item")
+        if getattr(self.request, 'customer', None):
+            kwargs['initial']['email'] = self.request.customer.email
         return kwargs
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         ctx['event'] = self.request.event
         ctx['subevent'] = self.subevent
-        ctx['item'], ctx['variation'] = self.item_and_variation
         return ctx
 
     def get(self, request, *args, **kwargs):
@@ -77,20 +86,6 @@ class WaitingView(EventViewMixin, FormView):
 
         return super().get(request, *args, **kwargs)
 
-    @cached_property
-    def item_and_variation(self):
-        try:
-            item = self.request.event.items.get(pk=self.request.GET.get('item'))
-            if 'var' in self.request.GET:
-                var = item.variations.get(pk=self.request.GET['var'])
-            elif item.has_variations:
-                return None
-            else:
-                var = None
-            return item, var
-        except (Item.DoesNotExist, ItemVariation.DoesNotExist, ValueError):
-            return None
-
     def dispatch(self, request, *args, **kwargs):
         self.request = request
 
@@ -106,14 +101,6 @@ class WaitingView(EventViewMixin, FormView):
             messages.error(request, _("The presale for this event has not yet started."))
             return redirect(self.get_index_url())
 
-        if not self.item_and_variation:
-            messages.error(request, _("We could not identify the product you selected."))
-            return redirect(self.get_index_url())
-
-        if not self.item_and_variation[0].allow_waitinglist:
-            messages.error(request, _("The waiting list is disabled for this product."))
-            return redirect(self.get_index_url())
-
         self.subevent = None
         if request.event.has_subevents:
             if 'subevent' in request.GET:
@@ -127,11 +114,11 @@ class WaitingView(EventViewMixin, FormView):
 
     def form_valid(self, form):
         availability = (
-            self.item_and_variation[1].check_quotas(count_waitinglist=True, subevent=self.subevent)
-            if self.item_and_variation[1]
-            else self.item_and_variation[0].check_quotas(count_waitinglist=True, subevent=self.subevent)
+            form.instance.variation.check_quotas(count_waitinglist=True, subevent=self.subevent)
+            if form.instance.variation
+            else form.instance.item.check_quotas(count_waitinglist=True, subevent=self.subevent)
         )
-        if availability[0] == 100:
+        if availability[0] == Quota.AVAILABILITY_OK:
             messages.error(self.request, _("You cannot add yourself to the waiting list as this product is currently "
                                            "available."))
             return redirect(self.get_index_url())
@@ -140,6 +127,46 @@ class WaitingView(EventViewMixin, FormView):
         messages.success(self.request, _("We've added you to the waiting list. You will receive "
                                          "an email as soon as tickets get available again."))
         return super().form_valid(form)
+
+    def get_success_url(self):
+        return self.get_index_url()
+
+
+@method_decorator(allow_frame_if_namespaced, 'dispatch')
+class WaitingRemoveView(EventViewMixin, TemplateView):
+    template_name = 'pretixpresale/event/waitinglist_remove.html'
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['event'] = self.request.event
+        ctx['voucher'] = self.voucher
+        return ctx
+
+    def dispatch(self, request, *args, **kwargs):
+        self.request = request
+
+        try:
+            self.voucher = self.request.event.vouchers.get(
+                code=request.GET.get("voucher", ""),
+                waitinglistentries__isnull=False,
+            )
+        except Voucher.DoesNotExist:
+            messages.error(request, _("We could not find you on our waiting list."))
+            return redirect(self.get_index_url())
+
+        if not self.voucher.is_active():
+            messages.error(request, _("Your waiting list spot is no longer valid or already used. There's nothing more to do here."))
+            return redirect(self.get_index_url())
+
+        return super().dispatch(request, *args, **kwargs)
+
+    @transaction.atomic()
+    def post(self, request, *args, **kwargs):
+        self.voucher.valid_until = now() - timedelta(seconds=1)
+        self.voucher.save(update_fields=['valid_until'])
+        self.voucher.log_action('pretix.voucher.expired.waitinglist')
+        messages.success(request, _("Thank you very much! We will assign your spot on the waiting list to someone else."))
+        return redirect(self.get_index_url())
 
     def get_success_url(self):
         return self.get_index_url()

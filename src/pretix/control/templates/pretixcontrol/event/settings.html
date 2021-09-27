@@ -256,8 +256,21 @@
                 <div class="alert alert-info">
                     {% blocktrans trimmed %}
                         The waiting list currently is not compatible with some advanced features of pretix such as
-                        seating plans, add-on products or product bundles.
+                        add-on products or product bundles.
                     {% endblocktrans %}
+                </div>
+                <div class="alert alert-info">
+                    {% blocktrans trimmed %}
+                        The waiting list determines availability mainly based on quotas. If you use a seating plan and your
+                        number of available seats is less than the available quota, you might run into situations where
+                        people are sent an email from the waiting list but still are unable to book a seat.
+                    {% endblocktrans %}
+                    <strong>
+                        {% blocktrans trimmed %}
+                            Specifically, this means the waiting list is not safe to use together with the minimum distance
+                            feature of our seating plan module.
+                        {% endblocktrans %}
+                    </strong>
                 </div>
                 {% bootstrap_field sform.waiting_list_enabled layout="control" %}
                 {% bootstrap_field sform.waiting_list_auto layout="control" %}

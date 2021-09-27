@@ -960,7 +960,8 @@ class WaitingListTest(EventTestMixin, SoupTest):
         self.assertIn('waiting list', response.rendered_content)
         response = self.client.post(
             '/%s/%s/waitinglist/?item=%d' % (self.orga.slug, self.event.slug, self.item.pk), {
-                'email': 'foo@bar.com'
+                'email': 'foo@bar.com',
+                'itemvar': str(self.item.pk)
             }
         )
         self.assertEqual(response.status_code, 302)
@@ -989,7 +990,8 @@ class WaitingListTest(EventTestMixin, SoupTest):
         self.assertIn('waiting list', response.rendered_content)
         response = self.client.post(
             '/%s/%s/waitinglist/?item=%d&subevent=%d' % (self.orga.slug, self.event.slug, self.item.pk, se1.pk), {
-                'email': 'foo@bar.com'
+                'email': 'foo@bar.com',
+                'itemvar': str(self.item.pk)
             }
         )
         self.assertEqual(response.status_code, 302)
@@ -1000,10 +1002,14 @@ class WaitingListTest(EventTestMixin, SoupTest):
             assert wle.subevent == se1
 
     def test_invalid_item(self):
-        response = self.client.get(
-            '/%s/%s/waitinglist/?item=%d' % (self.orga.slug, self.event.slug, self.item.pk + 1)
+        response = self.client.post(
+            '/%s/%s/waitinglist/' % (self.orga.slug, self.event.slug),
+            {
+                'email': 'foo@bar.com',
+                'itemvar': str(self.item.pk + 1),
+            }
         )
-        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.status_code, 200)
 
     def test_invalid_subevent(self):
         self.event.has_subevents = True
@@ -1028,10 +1034,11 @@ class WaitingListTest(EventTestMixin, SoupTest):
         self.q.save()
         response = self.client.post(
             '/%s/%s/waitinglist/?item=%d' % (self.orga.slug, self.event.slug, self.item.pk), {
-                'email': 'foo@bar.com'
+                'email': 'foo@bar.com',
+                'itemvar': str(self.item.pk)
             }
         )
-        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.status_code, 200)
         with scopes_disabled():
             self.assertFalse(WaitingListEntry.objects.filter(email='foo@bar.com').exists())
 
@@ -1048,12 +1055,48 @@ class WaitingListTest(EventTestMixin, SoupTest):
             q2.items.add(self.item)
         response = self.client.post(
             '/%s/%s/waitinglist/?item=%d&subevent=%d' % (self.orga.slug, self.event.slug, self.item.pk, se1.pk), {
-                'email': 'foo@bar.com'
+                'email': 'foo@bar.com',
+                'itemvar': str(self.item.pk),
+            }
+        )
+        self.assertEqual(response.status_code, 200)
+        with scopes_disabled():
+            self.assertFalse(WaitingListEntry.objects.filter(email='foo@bar.com').exists())
+
+    def test_remove_valid(self):
+        with scopes_disabled():
+            v = self.event.vouchers.create(item=self.item, block_quota=True)
+            WaitingListEntry.objects.create(
+                event=self.event, item=self.item, email='bar@bar.com', voucher=v
+            )
+        response = self.client.get(
+            '/%s/%s/waitinglist/remove?voucher=%s' % (self.orga.slug, self.event.slug, v.code), {
+            }
+        )
+        self.assertEqual(response.status_code, 200)
+        response = self.client.post(
+            '/%s/%s/waitinglist/remove?voucher=%s' % (self.orga.slug, self.event.slug, v.code), {
             }
         )
         self.assertEqual(response.status_code, 302)
+        v.refresh_from_db()
+        assert not v.is_active()
+
+    def test_remove_waiting_list_vouchers_only(self):
         with scopes_disabled():
-            self.assertFalse(WaitingListEntry.objects.filter(email='foo@bar.com').exists())
+            v = self.event.vouchers.create(item=self.item, block_quota=True)
+        response = self.client.get(
+            '/%s/%s/waitinglist/remove?voucher=%s' % (self.orga.slug, self.event.slug, v.code), {
+            }
+        )
+        self.assertEqual(response.status_code, 302)
+        response = self.client.post(
+            '/%s/%s/waitinglist/remove?voucher=%s' % (self.orga.slug, self.event.slug, v.code), {
+            }
+        )
+        self.assertEqual(response.status_code, 302)
+        v.refresh_from_db()
+        assert v.is_active()
 
 
 class DeadlineTest(EventTestMixin, TestCase):

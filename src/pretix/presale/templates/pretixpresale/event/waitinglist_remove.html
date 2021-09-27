@@ -1,0 +1,20 @@
+{% extends "pretixpresale/event/base.html" %}
+{% load i18n eventurl bootstrap3 %}
+{% block title %}{% trans "Waiting list" %}{% endblock %}
+{% block content %}
+    <h2>{% trans "Remove me from the waiting list" %}</h2>
+    <form action="" method="post">
+        {% csrf_token %}
+        <p>
+            {% blocktrans trimmed %}
+                You have been selected from our waiting list to buy a ticket. If you do not need the ticket any more, please be so kind and remove your ticket from the list
+                so we can pass it on to the next person waiting as quickly as possible!
+            {% endblocktrans %}
+        </p>
+        <p class="text-center">
+            <button type="submit" class="btn btn-danger btn-lg">
+                {% trans "Yes, remove my ticket" context "waitinglist" %}
+            </button>
+        </p>
+    </form>
+{% endblock %}

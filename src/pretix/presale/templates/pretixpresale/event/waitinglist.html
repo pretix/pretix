@@ -6,13 +6,6 @@
     <form action="" method="post">
         {% csrf_token %}
         <div class="form-horizontal">
-            <div class="form-group">
-                <label class="col-md-3 control-label" for="id_email">{% trans "Product" %}</label>
-                <div class="col-md-9">
-                    <input class="form-control" readonly="readonly"
-                           value="{{ item.name }}{% if variation %} – {{ variation.value }}{% endif %}">
-                </div>
-            </div>
             {% if subevent %}
                 <div class="form-group">
                     <label class="col-md-3 control-label" for="id_email">{% trans "Event" %}</label>

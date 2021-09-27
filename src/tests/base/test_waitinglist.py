@@ -69,6 +69,25 @@ class WaitingListTestCase(TestCase):
             wle.send_voucher()
 
     @classscope(attr='o')
+    def test_send_no_seat(self):
+        self.quota.items.add(self.item1)
+        self.quota.size = 10
+        self.quota.save()
+        self.event.seat_category_mappings.create(
+            layout_category='Stalls', product=self.item1
+        )
+        self.event.seats.create(seat_number="Foo", product=self.item1, seat_guid="Foo", blocked=True)
+        self.event.seats.create(seat_number="Bar", product=self.item1, seat_guid="Bar", blocked=True)
+        self.event.seats.create(seat_number="Baz", product=self.item1, seat_guid="Baz", blocked=True)
+        wle = WaitingListEntry.objects.create(
+            event=self.event, item=self.item1, email='foo@bar.com'
+        )
+        with self.assertRaises(WaitingListException):
+            wle.send_voucher()
+        self.event.seats.create(seat_number="Baz", product=self.item1, seat_guid="Baz", blocked=False)
+        wle.send_voucher()
+
+    @classscope(attr='o')
     def test_send_double(self):
         self.quota.variations.add(self.var1)
         self.quota.size = 1
