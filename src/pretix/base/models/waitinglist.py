@@ -167,13 +167,15 @@ class WaitingListEntry(LoggedModel):
             # than the number of valid vouchers *issued through the waiting list*. Things can still go wrong due to
             # manually created vouchers, manually blocked seats or the minimum distance feature,  but this reduces
             # the possible damage a bit.
-            free_seats = ev.free_seats().filter(product=self.item).count() - (self.event.vouchers.filter(
+            num_free_seats_for_product = ev.free_seats().filter(product=self.item).count()
+            num_valid_vouchers_for_product = self.event.vouchers.filter(
                 Q(valid_until__isnull=True) | Q(valid_until__gte=now()),
                 block_quota=True,
                 item_id=self.item_id,
                 subevent_id=self.subevent_id,
                 waitinglistentries__isnull=False
-            ).aggregate(free=Sum(F('max_usages') - F('redeemed')))['free'] or 0)
+            ).aggregate(free=Sum(F('max_usages') - F('redeemed')))['free'] or 0
+            free_seats = num_free_seats_for_product - num_valid_vouchers_for_product
             if not free_seats:
                 raise WaitingListException(_('No seat with this product is currently available.'))
 

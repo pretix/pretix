@@ -49,14 +49,15 @@ def assign_automatically(event: Event, user_id: int=None, subevent_id: int=None)
 
     for m in SeatCategoryMapping.objects.filter(event=event).select_related('subevent'):
         # See comment in WaitingListEntry.send_voucher() for rationale
-        free_seats = (m.subevent or event).free_seats().filter(product_id=m.product_id).count() - (event.vouchers.filter(
+        num_free_seets_for_product = (m.subevent or event).free_seats().filter(product_id=m.product_id).count()
+        num_valid_vouchers_for_product = event.vouchers.filter(
             Q(valid_until__isnull=True) | Q(valid_until__gte=now()),
             block_quota=True,
             item_id=m.product_id,
             subevent_id=m.subevent_id,
             waitinglistentries__isnull=False
-        ).aggregate(free=Sum(F('max_usages') - F('redeemed')))['free'] or 0)
-        seats_available[(m.product_id, m.subevent_id)] = free_seats
+        ).aggregate(free=Sum(F('max_usages') - F('redeemed')))['free'] or 0
+        seats_available[(m.product_id, m.subevent_id)] = num_free_seets_for_product - num_valid_vouchers_for_product
 
     qs = WaitingListEntry.objects.filter(
         event=event, voucher__isnull=True
