@@ -216,6 +216,7 @@ Security
 SEPA
 Shirts
 Signaturverfahren
+Sitzplanmoduls
 Social
 Sofort
 SOFORT
@@ -276,6 +277,7 @@ Veranstalterkonten
 Veranstalterkonto
 Veranstalterkontos
 Veranstaltername
+Veranstalterprofil
 Veranstalterseite
 Veranstalterübersicht
 Veranstaltungs
