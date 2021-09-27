@@ -249,7 +249,7 @@ class WaitingListView(EventPermissionRequiredMixin, WaitingListQuerySetMixin, Pa
                         waitinglistentries__isnull=False
                     ).aggregate(free=Sum(F('max_usages') - F('redeemed')))['free'] or 0)
                     wle.availability = (
-                        0 if free_seats == 0 else wle.availability[0],
+                        Quota.AVAILABILITY_GONE if free_seats == 0 else wle.availability[0],
                         min(free_seats, wle.availability[1])
                     )
 
