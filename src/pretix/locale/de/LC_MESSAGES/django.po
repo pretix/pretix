@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-09-27 18:48+0000\n"
-"PO-Revision-Date: 2021-09-15 11:54+0000\n"
+"PO-Revision-Date: 2021-09-27 19:47+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
 ">\n"
@@ -4515,10 +4515,8 @@ msgid "This product is currently not available."
 msgstr "Das ausgewählte Produkt ist im Moment nicht verfügbar."
 
 #: pretix/base/models/waitinglist.py:180
-#, fuzzy
-#| msgid "This product is currently not available."
 msgid "No seat with this product is currently available."
-msgstr "Das ausgewählte Produkt ist im Moment nicht verfügbar."
+msgstr "Es ist derzeit kein Sitzplatz mit diesem Produkt verfügbar."
 
 #: pretix/base/models/waitinglist.py:183
 msgid "A voucher has already been sent to this person."
@@ -7967,28 +7965,7 @@ msgstr ""
 "Das {event} Team"
 
 #: pretix/base/settings.py:1731
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Hello,\n"
-#| "\n"
-#| "you submitted yourself to the waiting list for {event},\n"
-#| "for the product {product}.\n"
-#| "\n"
-#| "We now have a ticket ready for you! You can redeem it in our ticket shop\n"
-#| "within the next {hours} hours by entering the following voucher code:\n"
-#| "\n"
-#| "{code}\n"
-#| "\n"
-#| "Alternatively, you can just click on the following link:\n"
-#| "\n"
-#| "{url}\n"
-#| "\n"
-#| "Please note that this link is only valid within the next {hours} hours!\n"
-#| "We will reassign the ticket to the next person on the list if you do not\n"
-#| "redeem the voucher within that timeframe.\n"
-#| "\n"
-#| "Best regards,\n"
-#| "Your {event} team"
+#, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -8037,6 +8014,14 @@ msgstr ""
 "ist! Wir werden das Ticket an die nächste Person auf der Warteliste "
 "weitergeben,\n"
 "wenn Sie den Gutschein nicht in diesem Zeitraum einlösen.\n"
+"\n"
+"Wenn Sie das Ticket NICHT mehr möchten, bitten wir Sie den folgenden Link zu "
+"klicken\n"
+"um uns Bescheid zu sagen. So können wir das Ticket schnellstmöglich an die "
+"nächste\n"
+"wartende Person auf der Warteliste weitergeben:\n"
+"\n"
+"{url_remove}\n"
 "\n"
 "Viele Grüße,\n"
 "Ihr {event} Team"
@@ -8408,6 +8393,10 @@ msgid ""
 "uploaded for the event, but the header image from the organizer profile is "
 "used, this option will be ignored and the event title will always be shown."
 msgstr ""
+"Der Titel wird nur auf der Startseite der Veranstaltung angezeigt. Wenn kein "
+"Header-Bild für die Veranstaltung hochgeladen ist, aber das Header-Bild aus "
+"dem Veranstalterprofil benutzt wird, wird diese Option ignoriert und der "
+"Veranstaltungstitel wird immer angezeigt."
 
 #: pretix/base/settings.py:2114 pretix/control/forms/organizer.py:319
 msgid ""
@@ -8427,6 +8416,8 @@ msgstr ""
 #: pretix/base/settings.py:2143
 msgid "Use header image also for events without an individually uploaded logo"
 msgstr ""
+"Benutze das Header-Bild auch für Veranstaltungen, für die kein eigenes "
+"Header-Bild hochgeladen wurde"
 
 #: pretix/base/settings.py:2151
 msgid "Social media image"
@@ -14553,16 +14544,12 @@ msgid "Cart"
 msgstr "Warenkorb"
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:257
-#, fuzzy
-#| msgid ""
-#| "The waiting list currently is not compatible with some advanced features "
-#| "of pretix such as seating plans, add-on products or product bundles."
 msgid ""
 "The waiting list currently is not compatible with some advanced features of "
 "pretix such as add-on products or product bundles."
 msgstr ""
 "Die Warteliste ist derzeit mit einigen fortgeschrittenen Funktionen von "
-"pretix wie z.B. Sitzplänen, Zusatzprodukten oder Produktpaketen inkompatibel."
+"pretix wie z.B. Zusatzprodukten oder Produktpaketen inkompatibel."
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:263
 msgid ""
@@ -14571,12 +14558,19 @@ msgid ""
 "quota, you might run into situations where people are sent an email from the "
 "waiting list but still are unable to book a seat."
 msgstr ""
+"Die Warteliste berechnet Verfügbarkeit hauptsächlich auf Basis von "
+"Kontingenten. Wenn Sie einen Sitzplan nutzen und die Anzahl der Sitze "
+"geringer ist als das verfügbare Kontingent, kann es Situationen geben in "
+"denen Personen eine E-Mail von der Warteliste erhalten aber trotzdem keinen "
+"Platz buchen können."
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:269
 msgid ""
 "Specifically, this means the waiting list is not safe to use together with "
 "the minimum distance feature of our seating plan module."
 msgstr ""
+"Insbesondere ist es nicht empfohlen, die Warteliste zusammen mit der "
+"Mindestabstands-Funktion unseres Sitzplanmoduls zu nutzen."
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:283
 msgid "Item metadata"
@@ -24584,12 +24578,13 @@ msgid ""
 "you want, you can add yourself to the waiting list. We will then notify if "
 "seats are available again."
 msgstr ""
+"Einige der Kategorien im obigen Sitzplan sind derzeit ausverkauft. Wenn Sie "
+"möchten, können Sie sich auf die Warteliste eintragen. Wir benachrichtigen "
+"Sie dann, wenn wieder Plätze verfügbar sind."
 
 #: pretix/presale/templates/pretixpresale/event/index.html:230
-#, fuzzy
-#| msgid "Enable waiting list"
 msgid "Join waiting list"
-msgstr "Warteliste aktivieren"
+msgstr "Warteliste beitreten"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:246
 #: pretix/presale/templates/pretixpresale/event/voucher.html:353
@@ -25142,10 +25137,8 @@ msgid "Add me to the list"
 msgstr "Zur Liste hinzufügen"
 
 #: pretix/presale/templates/pretixpresale/event/waitinglist_remove.html:5
-#, fuzzy
-#| msgid "Add me to the waiting list"
 msgid "Remove me from the waiting list"
-msgstr "Zur Warteliste hinzufügen"
+msgstr "Platz auf der Warteliste entfernen"
 
 #: pretix/presale/templates/pretixpresale/event/waitinglist_remove.html:9
 msgid ""
@@ -25153,13 +25146,15 @@ msgid ""
 "need the ticket any more, please be so kind and remove your ticket from the "
 "list so we can pass it on to the next person waiting as quickly as possible!"
 msgstr ""
+"Sie wurden von unserer Warteliste ausgewählt um ein Ticket zu erhalten. Wenn "
+"Sie das Ticket nicht mehr brauchen, helfen Sie uns indem Sie sich von der "
+"Warteliste entfernen, sodass wir das Ticket schnellstmöglich an die nächste "
+"wartende Person weitergeben können."
 
 #: pretix/presale/templates/pretixpresale/event/waitinglist_remove.html:16
-#, fuzzy
-#| msgid "Add or remove tickets"
 msgctxt "waitinglist"
 msgid "Yes, remove my ticket"
-msgstr "Tickets hinzufügen oder entfernen"
+msgstr "Ja, entferne mein Ticket."
 
 #: pretix/presale/templates/pretixpresale/fragment_calendar.html:92
 #, python-format
@@ -25654,22 +25649,24 @@ msgstr ""
 "wieder Tickets verfügbar sind."
 
 #: pretix/presale/views/waiting.py:154
-#, fuzzy
-#| msgid "Send information to waiting list"
 msgid "We could not find you on our waiting list."
-msgstr "Informationen an die Warteliste verschicken"
+msgstr "Wir konnten Sie nicht auf der Warteliste finden."
 
 #: pretix/presale/views/waiting.py:158
 msgid ""
 "Your waiting list spot is no longer valid or already used. There's nothing "
 "more to do here."
 msgstr ""
+"Ihr Platz auf der Warteliste ist nicht mehr gültig oder bereits benutzt. Es "
+"gibt hier nichts mehr zu tun."
 
 #: pretix/presale/views/waiting.py:168
 msgid ""
 "Thank you very much! We will assign your spot on the waiting list to someone "
 "else."
 msgstr ""
+"Vielen Dank! Wir teilen Ihren Platz auf der Warteliste einer anderen Person "
+"zu."
 
 #: pretix/presale/views/widget.py:311
 msgid "This ticket shop is currently disabled."
