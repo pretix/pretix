@@ -3,28 +3,28 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
+#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-09-27 18:48+0000\n"
-"PO-Revision-Date: 2020-01-26 04:00+0000\n"
-"Last-Translator: András Veres-Szentkirályi <vsza@vsza.hu>\n"
-"Language-Team: Hungarian <https://translate.pretix.eu/projects/pretix/pretix/"
-"hu/>\n"
-"Language: hu\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 3.5.1\n"
+"Plural-Forms: nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n == 2 && n % "
+"1 == 0) ? 1: (n % 10 == 0 && n % 1 == 0 && n > 10) ? 2 : 3;\n"
 
 #: htmlcov/pretix_control_views_dashboards_py.html:963
 #: pretix/control/templates/pretixcontrol/events/index.html:140
 #: pretix/control/templates/pretixcontrol/organizers/detail.html:104
 #: pretix/control/views/dashboards.py:529
 msgid "Shop disabled"
-msgstr "Áruház letiltva"
+msgstr ""
 
 #: htmlcov/pretix_control_views_dashboards_py.html:965
 #: pretix/control/forms/filter.py:828 pretix/control/forms/filter.py:1198
@@ -32,7 +32,7 @@ msgstr "Áruház letiltva"
 #: pretix/control/templates/pretixcontrol/organizers/detail.html:106
 #: pretix/control/templates/pretixcontrol/subevents/index.html:152
 msgid "Presale over"
-msgstr "Elővétel vége"
+msgstr ""
 
 #: htmlcov/pretix_control_views_dashboards_py.html:967
 #: pretix/control/forms/filter.py:827 pretix/control/forms/filter.py:1197
@@ -40,7 +40,7 @@ msgstr "Elővétel vége"
 #: pretix/control/templates/pretixcontrol/organizers/detail.html:108
 #: pretix/control/templates/pretixcontrol/subevents/index.html:154
 msgid "Presale not started"
-msgstr "Elővétel nem kezdődött el"
+msgstr ""
 
 #: htmlcov/pretix_control_views_dashboards_py.html:969
 #: pretix/control/templates/pretixcontrol/events/index.html:146
@@ -48,7 +48,7 @@ msgstr "Elővétel nem kezdődött el"
 #: pretix/control/templates/pretixcontrol/subevents/index.html:156
 #: pretix/control/views/dashboards.py:535
 msgid "On sale"
-msgstr "Eladó"
+msgstr ""
 
 #: pretix/api/auth/devicesecurity.py:28
 msgid ""
@@ -74,104 +74,101 @@ msgstr ""
 
 #: pretix/api/models.py:39
 msgid "Application name"
-msgstr "Alkalmazás név"
+msgstr ""
 
 #: pretix/api/models.py:42
 msgid "Redirection URIs"
-msgstr "Átirányítási URI-k"
+msgstr ""
 
 #: pretix/api/models.py:43
 msgid "Allowed URIs list, space separated"
-msgstr "Engedélyezett URI lista, szóközzel elválasztva"
+msgstr ""
 
 #: pretix/api/models.py:46 pretix/plugins/paypal/payment.py:112
 msgid "Client ID"
-msgstr "Kliens ID"
+msgstr ""
 
 #: pretix/api/models.py:50
 msgid "Client secret"
-msgstr "Kliens titok"
+msgstr ""
 
 #: pretix/api/models.py:97
 msgid "Enable webhook"
-msgstr "Webhook engedélyezése"
+msgstr ""
 
 #: pretix/api/models.py:98
 #: pretix/control/templates/pretixcontrol/organizers/webhooks.html:36
 msgid "Target URL"
-msgstr "Cél URL"
+msgstr ""
 
 #: pretix/api/models.py:99 pretix/base/models/devices.py:121
 #: pretix/base/models/organizer.py:247
 msgid "All events (including newly created ones)"
-msgstr "Összes esemény (új események is)"
+msgstr ""
 
 #: pretix/api/models.py:100 pretix/base/models/devices.py:122
 #: pretix/base/models/organizer.py:248
 msgid "Limit to events"
-msgstr "Események limitje"
+msgstr ""
 
 #: pretix/api/serializers/cart.py:81 pretix/api/serializers/order.py:1196
 msgid "The product \"{}\" is not assigned to a quota."
-msgstr "\"{}\" termékhez nincs kvóta rendelve."
+msgstr ""
 
 #: pretix/api/serializers/cart.py:89 pretix/api/serializers/order.py:1208
 msgid ""
 "There is not enough quota available on quota \"{}\" to perform the operation."
-msgstr "Nem áll elegendő \"{}\" kvóta rendelkezésre a művelet végrehajtásához."
+msgstr ""
 
 #: pretix/api/serializers/cart.py:125 pretix/api/serializers/order.py:1168
 #: pretix/base/services/orders.py:1245
 #, python-brace-format
 msgid "The selected seat \"{seat}\" is not available."
-msgstr "A kiválasztott \"{seat}\" ülés nem elérhető."
+msgstr ""
 
 #: pretix/api/serializers/checkin.py:65 pretix/base/models/event.py:1460
 #: pretix/base/models/items.py:1432 pretix/base/models/items.py:1673
 msgid "One or more items do not belong to this event."
-msgstr "Egy vagy több tétel nem ehhez az eseményhez tartozik."
+msgstr ""
 
 #: pretix/api/serializers/checkin.py:69 pretix/api/serializers/checkin.py:72
 #: pretix/base/models/items.py:1684 pretix/base/models/items.py:1687
 #: pretix/base/models/waitinglist.py:239 pretix/base/models/waitinglist.py:242
 msgid "The subevent does not belong to this event."
-msgstr "Az eseményhez nem tartozik részesemény."
+msgstr ""
 
 #: pretix/api/serializers/checkin.py:76
 msgid "Unknown sales channel."
-msgstr "Ismeretlen eladási csatorna."
+msgstr ""
 
 #: pretix/api/serializers/event.py:205
 msgid ""
 "Events cannot be created as 'live'. Quotas and payment must be added to the "
 "event before sales can go live."
 msgstr ""
-"Az eseményt nem lehet aktiválni. A kvóták és fizetés hozzáadása kötelező az "
-"eseményhez, az árusítás megkezdése előtt."
 
 #: pretix/api/serializers/event.py:220 pretix/api/serializers/event.py:513
 #, python-brace-format
 msgid "Meta data property '{name}' does not exist."
-msgstr "A {name} meta adat tulajdonsága nem létezik."
+msgstr ""
 
 #: pretix/api/serializers/event.py:223 pretix/api/serializers/event.py:516
-#, fuzzy, python-brace-format
-#| msgid "Meta data property '{name}' does not exist."
+#, python-brace-format
 msgid "Meta data property '{name}' does not allow value '{value}'."
-msgstr "A {name} meta adat tulajdonsága nem létezik."
+msgstr ""
 
 #: pretix/api/serializers/event.py:266
 #, python-brace-format
 msgid "Unknown plugin: '{name}'."
-msgstr "Ismeretlen plugin: '{name}'."
+msgstr ""
 
 #: pretix/api/serializers/item.py:117 pretix/control/forms/item.py:921
 msgid "The bundled item must not be the same item as the bundling one."
-msgstr "A csomag-termék nem lehet azonos a csomagba való termékkel."
+msgstr ""
 
 #: pretix/api/serializers/item.py:120 pretix/control/forms/item.py:923
 msgid "The bundled item must not have bundles on its own."
-msgstr "A csomag-termék nem tartalmazhat csomag-terméket."
+msgstr ""
 
 #: pretix/api/serializers/item.py:191
 msgid ""
@@ -190,10 +187,9 @@ msgid "Gift card products should not be admission products at the same time."
 msgstr ""
 
 #: pretix/api/serializers/item.py:242
-#, fuzzy, python-brace-format
-#| msgid "Meta data property '{name}' does not exist."
+#, python-brace-format
 msgid "Item meta data property '{name}' does not exist."
-msgstr "A {name} meta adat tulajdonsága nem létezik."
+msgstr ""
 
 #: pretix/api/serializers/item.py:368
 msgid ""
@@ -214,10 +210,8 @@ msgid "This type of question cannot be asked during check-in."
 msgstr ""
 
 #: pretix/api/serializers/order.py:1181 pretix/api/serializers/order.py:1188
-#, fuzzy
-#| msgid "The product \"{}\" is not assigned to a quota."
 msgid "The product \"{}\" is not available on this date."
-msgstr "\"{}\" termékhez nincs kvóta rendelve."
+msgstr ""
 
 #: pretix/api/serializers/organizer.py:120
 #: pretix/control/forms/organizer.py:496
@@ -265,10 +259,8 @@ msgstr ""
 
 #: pretix/api/views/order.py:597 pretix/base/services/cart.py:143
 #: pretix/base/services/orders.py:133 pretix/presale/views/order.py:755
-#, fuzzy
-#| msgid "The product \"{}\" is not assigned to a quota."
 msgid "One of the selected products is not available in the selected country."
-msgstr "\"{}\" termékhez nincs kvóta rendelve."
+msgstr ""
 
 #: pretix/api/webhooks.py:200 pretix/base/notifications.py:233
 msgid "New order placed"
@@ -331,27 +323,21 @@ msgid "Ticket check-in reverted"
 msgstr ""
 
 #: pretix/api/webhooks.py:256
-#, fuzzy
-#| msgid "Event list"
 msgid "Event created"
-msgstr "Eseménylista"
+msgstr ""
 
 #: pretix/api/webhooks.py:260
 msgid "Event details changed"
 msgstr ""
 
 #: pretix/api/webhooks.py:264
-#, fuzzy
-#| msgid "Event list"
 msgid "Event deleted"
-msgstr "Eseménylista"
+msgstr ""
 
 #: pretix/api/webhooks.py:268
-#, fuzzy
-#| msgid "Event list"
 msgctxt "subevent"
 msgid "Event series date added"
-msgstr "Eseménylista"
+msgstr ""
 
 #: pretix/api/webhooks.py:272
 msgctxt "subevent"
@@ -406,10 +392,8 @@ msgid "<a %(a_attr)s>ticketing powered by pretix</a>"
 msgstr ""
 
 #: pretix/base/context.py:61
-#, fuzzy
-#| msgid "Ticket design"
 msgid "source code"
-msgstr "Jegy design"
+msgstr ""
 
 #: pretix/base/email.py:186 pretix/control/views/main.py:303
 #: pretix/plugins/badges/apps.py:45 pretix/plugins/badges/models.py:48
@@ -920,7 +904,7 @@ msgstr ""
 #: pretix/plugins/checkinlists/exporters.py:663
 #: pretix/plugins/checkinlists/exporters.py:664
 msgid "Yes"
-msgstr "Igen"
+msgstr ""
 
 #: pretix/base/exporters/invoices.py:305 pretix/base/exporters/orderlist.py:395
 #: pretix/base/exporters/orderlist.py:399
@@ -937,7 +921,7 @@ msgstr "Igen"
 #: pretix/plugins/checkinlists/exporters.py:663
 #: pretix/plugins/checkinlists/exporters.py:664
 msgid "No"
-msgstr "Nem"
+msgstr ""
 
 #: pretix/base/exporters/invoices.py:319
 msgid "Line number"
@@ -1042,10 +1026,8 @@ msgid ""
 msgstr ""
 
 #: pretix/base/exporters/orderlist.py:129
-#, fuzzy
-#| msgid "Event list"
 msgid "End event date"
-msgstr "Eseménylista"
+msgstr ""
 
 #: pretix/base/exporters/orderlist.py:268
 #: pretix/base/exporters/orderlist.py:435
@@ -1380,31 +1362,23 @@ msgstr ""
 
 #: pretix/base/exporters/orderlist.py:573 pretix/base/orderimport.py:671
 #: pretix/plugins/checkinlists/exporters.py:470
-#, fuzzy
-#| msgid "Client ID"
 msgid "Seat ID"
-msgstr "Kliens ID"
+msgstr ""
 
 #: pretix/base/exporters/orderlist.py:574
 #: pretix/plugins/checkinlists/exporters.py:471
-#, fuzzy
-#| msgid "Client ID"
 msgid "Seat name"
-msgstr "Kliens ID"
+msgstr ""
 
 #: pretix/base/exporters/orderlist.py:575
 #: pretix/plugins/checkinlists/exporters.py:472
-#, fuzzy
-#| msgid "Client ID"
 msgid "Seat zone"
-msgstr "Kliens ID"
+msgstr ""
 
 #: pretix/base/exporters/orderlist.py:576
 #: pretix/plugins/checkinlists/exporters.py:473
-#, fuzzy
-#| msgid "Client ID"
 msgid "Seat row"
-msgstr "Kliens ID"
+msgstr ""
 
 #: pretix/base/exporters/orderlist.py:577
 #: pretix/plugins/checkinlists/exporters.py:474
@@ -1420,10 +1394,8 @@ msgid "Order payments and refunds"
 msgstr ""
 
 #: pretix/base/exporters/orderlist.py:753
-#, fuzzy
-#| msgid "Presale not started"
 msgid "Payment states"
-msgstr "Elővétel nem kezdődött el"
+msgstr ""
 
 #: pretix/base/exporters/orderlist.py:761
 msgid "Refund states"
@@ -1500,7 +1472,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/event/cancel.html:16
 #: pretix/control/views/item.py:835
 msgid "Paid orders"
-msgstr "Kifizetett megrendelések"
+msgstr ""
 
 #: pretix/base/exporters/orderlist.py:828 pretix/control/views/item.py:840
 msgid "Pending orders"
@@ -1537,10 +1509,8 @@ msgid "Waiting list"
 msgstr ""
 
 #: pretix/base/exporters/orderlist.py:829
-#, fuzzy
-#| msgid "Paid orders"
 msgid "Exited orders"
-msgstr "Kifizetett megrendelések"
+msgstr ""
 
 #: pretix/base/exporters/orderlist.py:829
 msgid "Current availability"
@@ -1605,7 +1575,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/organizers/webhooks.html:51
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:62
 msgid "All"
-msgstr "Összes"
+msgstr ""
 
 #: pretix/base/exporters/orderlist.py:935 pretix/control/forms/filter.py:999
 msgid "Live"
@@ -1667,10 +1637,8 @@ msgid "Current value"
 msgstr ""
 
 #: pretix/base/exporters/orderlist.py:990
-#, fuzzy
-#| msgid "Paid orders"
 msgid "Created in order"
-msgstr "Kifizetett megrendelések"
+msgstr ""
 
 #: pretix/base/exporters/orderlist.py:991
 msgid "Last invoice number of order"
@@ -1791,10 +1759,8 @@ msgid "Repeat password"
 msgstr ""
 
 #: pretix/base/forms/questions.py:245
-#, fuzzy
-#| msgid "Event list"
 msgid "Please enter a shorter name."
-msgstr "Eseménylista"
+msgstr ""
 
 #: pretix/base/forms/questions.py:265
 msgctxt "phonenumber"
@@ -2308,53 +2274,40 @@ msgid "Exit"
 msgstr ""
 
 #: pretix/base/models/checkin.py:262
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "Unknown date selected."
 msgid "Unknown ticket"
-msgstr "Ismeretlen dátum került kiválasztásra."
+msgstr ""
 
 #: pretix/base/models/checkin.py:263
-#, fuzzy
-#| msgid "Presale not started"
 msgid "Ticket not paid"
-msgstr "Elővétel nem kezdődött el"
+msgstr ""
 
 #: pretix/base/models/checkin.py:264
 msgid "Forbidden by custom rule"
 msgstr ""
 
 #: pretix/base/models/checkin.py:265
-#, fuzzy
-#| msgid "Ticket design"
 msgid "Ticket code revoked/changed"
-msgstr "Jegy design"
+msgstr ""
 
 #: pretix/base/models/checkin.py:266
-#, fuzzy
-#| msgid "Past events"
 msgid "Information required"
-msgstr "Elmúlt események"
+msgstr ""
 
 #: pretix/base/models/checkin.py:267
 msgid "Ticket already used"
 msgstr ""
 
 #: pretix/base/models/checkin.py:268
-#, fuzzy
-#| msgid "Presale not started"
 msgid "Ticket type not allowed here"
-msgstr "Elővétel nem kezdődött el"
+msgstr ""
 
 #: pretix/base/models/checkin.py:269
 msgid "Server error"
 msgstr ""
 
 #: pretix/base/models/customers.py:50
-#, fuzzy
-#| msgid "Count"
 msgid "Account active"
-msgstr "Számítás"
+msgstr ""
 
 #: pretix/base/models/customers.py:51
 msgid "Verified email address"
@@ -2367,10 +2320,8 @@ msgstr ""
 
 #: pretix/base/models/customers.py:53
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:53
-#, fuzzy
-#| msgid "Past events"
 msgid "Registration date"
-msgstr "Elmúlt események"
+msgstr ""
 
 #: pretix/base/models/customers.py:205 pretix/base/models/orders.py:1228
 #: pretix/base/models/orders.py:2344 pretix/base/settings.py:784
@@ -2665,10 +2616,8 @@ msgid ""
 msgstr ""
 
 #: pretix/base/models/event.py:1516
-#, fuzzy
-#| msgid "Paid orders"
 msgid "Valid values"
-msgstr "Kifizetett megrendelések"
+msgstr ""
 
 #: pretix/base/models/event.py:1517
 msgid ""
@@ -2852,10 +2801,8 @@ msgid "Show a waiting list for this ticket"
 msgstr ""
 
 #: pretix/base/models/items.py:410
-#, fuzzy
-#| msgid "Waiting lists are disabled for this event."
 msgid "This will only work if waiting lists are enabled for this event."
-msgstr "Az eseményhez jelenleg nem érhető el várólista."
+msgstr ""
 
 #: pretix/base/models/items.py:414 pretix/base/settings.py:1024
 #: pretix/control/forms/event.py:1288
@@ -3332,16 +3279,12 @@ msgid "Invalid number input."
 msgstr ""
 
 #: pretix/base/models/items.py:1391 pretix/base/models/items.py:1415
-#, fuzzy
-#| msgid "Event list"
 msgid "Please choose a later date."
-msgstr "Eseménylista"
+msgstr ""
 
 #: pretix/base/models/items.py:1393 pretix/base/models/items.py:1417
-#, fuzzy
-#| msgid "Event list"
 msgid "Please choose an earlier date."
-msgstr "Eseménylista"
+msgstr ""
 
 #: pretix/base/models/items.py:1396
 msgid "Invalid date input."
@@ -3459,7 +3402,7 @@ msgstr ""
 
 #: pretix/base/models/items.py:1682 pretix/base/models/waitinglist.py:237
 msgid "Subevent cannot be null for event series."
-msgstr "Az eseményhez tartozó részesemény nem maradhat üresen."
+msgstr ""
 
 #: pretix/base/models/log.py:156
 #, python-brace-format
@@ -4269,12 +4212,8 @@ msgid "This product is currently not available."
 msgstr ""
 
 #: pretix/base/models/waitinglist.py:180
-#, fuzzy
-#| msgid ""
-#| "You cannot add yourself to the waiting list as this product is currently "
-#| "available."
 msgid "No seat with this product is currently available."
-msgstr "Nem kerülhetsz fel a várólistára, mivel a termék jelenleg elérhető."
+msgstr ""
 
 #: pretix/base/models/waitinglist.py:183
 msgid "A voucher has already been sent to this person."
@@ -4431,7 +4370,7 @@ msgstr ""
 #: pretix/base/orderimport.py:204 pretix/presale/views/waiting.py:110
 msgctxt "subevent"
 msgid "You need to select a date."
-msgstr "Válassz egy dátumot."
+msgstr ""
 
 #: pretix/base/orderimport.py:223 pretix/base/orderimport.py:235
 msgctxt "subevent"
@@ -4460,11 +4399,8 @@ msgid "Multiple matching variations were found."
 msgstr ""
 
 #: pretix/base/orderimport.py:309
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "You need to select a date."
 msgid "You need to select a variation for this product."
-msgstr "Válassz egy dátumot."
+msgstr ""
 
 #: pretix/base/orderimport.py:321 pretix/base/orderimport.py:336
 #: pretix/base/orderimport.py:351 pretix/base/orderimport.py:362
@@ -4559,11 +4495,8 @@ msgid "You need to select a specific seat."
 msgstr ""
 
 #: pretix/base/orderimport.py:744 pretix/base/orderimport.py:752
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "No date selected."
 msgid "Ambiguous option selected."
-msgstr "Nincs dátum kiválasztva."
+msgstr ""
 
 #: pretix/base/payment.py:266
 msgid "Enable payment method"
@@ -5045,10 +4978,8 @@ msgid "Invoice address state"
 msgstr ""
 
 #: pretix/base/pdf.py:328
-#, fuzzy
-#| msgid "Presale not started"
 msgid "Sample State"
-msgstr "Elővétel nem kezdődött el"
+msgstr ""
 
 #: pretix/base/pdf.py:332
 msgid "Invoice address country"
@@ -5087,10 +5018,8 @@ msgid "Event organizer info text"
 msgstr ""
 
 #: pretix/base/pdf.py:359 pretix/base/pdf.py:360
-#, fuzzy
-#| msgid "Presale not started"
 msgid "Event info text"
-msgstr "Elővétel nem kezdődött el"
+msgstr ""
 
 #: pretix/base/pdf.py:364
 msgid "Printing date"
@@ -5216,10 +5145,8 @@ msgstr ""
 
 #: pretix/base/services/cancelevent.py:221
 #: pretix/base/services/cancelevent.py:279
-#, fuzzy
-#| msgid "Event list"
 msgid "Event canceled"
-msgstr "Eseménylista"
+msgstr ""
 
 #: pretix/base/services/cart.py:86 pretix/base/services/orders.py:112
 msgid ""
@@ -5447,10 +5374,8 @@ msgid "Only allowed after {datetime}"
 msgstr ""
 
 #: pretix/base/services/checkin.py:212
-#, fuzzy
-#| msgid "Presale not started"
 msgid "Ticket type not allowed"
-msgstr "Elővétel nem kezdődött el"
+msgstr ""
 
 #: pretix/base/services/checkin.py:220
 msgid "number of days with an entry"
@@ -5620,10 +5545,8 @@ msgid ""
 msgstr ""
 
 #: pretix/base/services/memberships.py:146
-#, fuzzy
-#| msgid "The selected seat \"{seat}\" is not available."
 msgid "You selected membership that has been canceled."
-msgstr "A kiválasztott \"{seat}\" ülés nem elérhető."
+msgstr ""
 
 #: pretix/base/services/memberships.py:151
 msgid "You can only use a test mode membership for test mode tickets."
@@ -6249,10 +6172,8 @@ msgid ""
 msgstr ""
 
 #: pretix/base/settings.py:487
-#, fuzzy
-#| msgid "Ticket design"
 msgid "Length of ticket codes"
-msgstr "Jegy design"
+msgstr ""
 
 #: pretix/base/settings.py:508
 msgid "Reservation period"
@@ -6298,10 +6219,8 @@ msgid "in minutes"
 msgstr ""
 
 #: pretix/base/settings.py:561
-#, fuzzy
-#| msgid "Presale not started"
 msgid "Set payment term"
-msgstr "Elővétel nem kezdődött el"
+msgstr ""
 
 #: pretix/base/settings.py:567
 msgid ""
@@ -6334,10 +6253,8 @@ msgid ""
 msgstr ""
 
 #: pretix/base/settings.py:619
-#, fuzzy
-#| msgid "Presale not started"
 msgid "Payment term in minutes"
-msgstr "Elővétel nem kezdődött el"
+msgstr ""
 
 #: pretix/base/settings.py:620
 msgid ""
@@ -7976,10 +7893,8 @@ msgid "Order code:"
 msgstr ""
 
 #: pretix/base/templates/pretixbase/email/order_details.html:30
-#, fuzzy
-#| msgid "Event list"
 msgid "created by"
-msgstr "Eseménylista"
+msgstr ""
 
 #: pretix/base/templates/pretixbase/email/order_details.html:36
 #: pretix/base/templates/pretixbase/email/order_details.html:124
@@ -8018,10 +7933,8 @@ msgid "at"
 msgstr ""
 
 #: pretix/base/templates/source.html:5 pretix/base/templates/source.html:9
-#, fuzzy
-#| msgid "Ticket design"
 msgid "Source code"
-msgstr "Jegy design"
+msgstr ""
 
 #: pretix/base/templates/source.html:10
 msgid ""
@@ -8540,10 +8453,8 @@ msgid "Available placeholders: {list}"
 msgstr ""
 
 #: pretix/control/forms/event.py:1095
-#, fuzzy
-#| msgid "Ticket design"
 msgid "Ticket code generator"
-msgstr "Jegy design"
+msgstr ""
 
 #: pretix/control/forms/event.py:1096
 msgid "For advanced users, usually does not need to be changed."
@@ -8582,10 +8493,8 @@ msgid "No VAT"
 msgstr ""
 
 #: pretix/control/forms/event.py:1179
-#, fuzzy
-#| msgid "Presale not started"
 msgid "Sale not allowed"
-msgstr "Elővétel nem kezdődött el"
+msgstr ""
 
 #: pretix/control/forms/event.py:1183
 msgid "Deviating tax rate"
@@ -8690,10 +8599,8 @@ msgid "All orders"
 msgstr ""
 
 #: pretix/control/forms/filter.py:185
-#, fuzzy
-#| msgid "Paid orders"
 msgid "Valid orders"
-msgstr "Kifizetett megrendelések"
+msgstr ""
 
 #: pretix/control/forms/filter.py:186
 msgid "Paid (or canceled with paid fee)"
@@ -8713,10 +8620,8 @@ msgid "Pending or paid"
 msgstr ""
 
 #: pretix/control/forms/filter.py:190
-#, fuzzy
-#| msgid "Past events"
 msgid "Cancellations"
-msgstr "Elmúlt események"
+msgstr ""
 
 #: pretix/control/forms/filter.py:191
 msgid "Canceled (fully)"
@@ -8735,10 +8640,8 @@ msgid "Fully canceled but invoice not canceled"
 msgstr ""
 
 #: pretix/control/forms/filter.py:196
-#, fuzzy
-#| msgid "Presale not started"
 msgid "Payment process"
-msgstr "Elővétel nem kezdődött el"
+msgstr ""
 
 #: pretix/control/forms/filter.py:198
 #: pretix/control/templates/pretixcontrol/items/question.html:25
@@ -8924,10 +8827,8 @@ msgstr ""
 
 #: pretix/control/forms/filter.py:1078
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:33
-#, fuzzy
-#| msgid "Shop disabled"
 msgid "disabled"
-msgstr "Áruház letiltva"
+msgstr ""
 
 #: pretix/control/forms/filter.py:1079
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:35
@@ -9111,10 +9012,8 @@ msgid "Scan type"
 msgstr ""
 
 #: pretix/control/forms/filter.py:1879
-#, fuzzy
-#| msgid "Redirection URIs"
 msgid "All directions"
-msgstr "Átirányítási URI-k"
+msgstr ""
 
 #: pretix/control/forms/filter.py:1888
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html:67
@@ -9136,11 +9035,9 @@ msgid "Start date"
 msgstr ""
 
 #: pretix/control/forms/filter.py:1909
-#, fuzzy
-#| msgid "Event list"
 msgctxt "filter"
 msgid "End date"
-msgstr "Eseménylista"
+msgstr ""
 
 #: pretix/control/forms/filter.py:1928 pretix/control/forms/filter.py:1932
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html:64
@@ -9231,10 +9128,8 @@ msgid ""
 msgstr ""
 
 #: pretix/control/forms/global_settings.py:133
-#, fuzzy
-#| msgid "Paid orders"
 msgid "Changes to pretix"
-msgstr "Kifizetett megrendelések"
+msgstr ""
 
 #: pretix/control/forms/global_settings.py:136
 msgid ""
@@ -9730,10 +9625,8 @@ msgid "You need to specify an amount for a partial refund."
 msgstr ""
 
 #: pretix/control/forms/orders.py:714
-#, fuzzy
-#| msgid "Past events"
 msgid "Cancel all dates"
-msgstr "Elmúlt események"
+msgstr ""
 
 #: pretix/control/forms/orders.py:733
 msgid "Automatically refund money if possible"
@@ -10281,16 +10174,12 @@ msgid "This object has been created by cloning."
 msgstr ""
 
 #: pretix/control/logdisplay.py:315
-#, fuzzy
-#| msgid "The selected seat \"{seat}\" is not available."
 msgid "The organizer has been changed."
-msgstr "A kiválasztott \"{seat}\" ülés nem elérhető."
+msgstr ""
 
 #: pretix/control/logdisplay.py:316
-#, fuzzy
-#| msgid "The selected seat \"{seat}\" is not available."
 msgid "The organizer settings have been changed."
-msgstr "A kiválasztott \"{seat}\" ülés nem elérhető."
+msgstr ""
 
 #: pretix/control/logdisplay.py:317
 msgid "Gift card acceptance for another organizer has been added."
@@ -10301,80 +10190,56 @@ msgid "Gift card acceptance for another organizer has been removed."
 msgstr ""
 
 #: pretix/control/logdisplay.py:319
-#, fuzzy
-#| msgid "The selected seat \"{seat}\" is not available."
 msgid "The webhook has been created."
-msgstr "A kiválasztott \"{seat}\" ülés nem elérhető."
+msgstr ""
 
 #: pretix/control/logdisplay.py:320
-#, fuzzy
-#| msgid "The selected seat \"{seat}\" is not available."
 msgid "The webhook has been changed."
-msgstr "A kiválasztott \"{seat}\" ülés nem elérhető."
+msgstr ""
 
 #: pretix/control/logdisplay.py:321 pretix/control/views/organizer.py:1660
-#, fuzzy
-#| msgid "The selected seat \"{seat}\" is not available."
 msgid "The membership type has been created."
-msgstr "A kiválasztott \"{seat}\" ülés nem elérhető."
+msgstr ""
 
 #: pretix/control/logdisplay.py:322
-#, fuzzy
-#| msgid "The selected seat \"{seat}\" is not available."
 msgid "The membership type has been changed."
-msgstr "A kiválasztott \"{seat}\" ülés nem elérhető."
+msgstr ""
 
 #: pretix/control/logdisplay.py:323
-#, fuzzy
-#| msgid "The selected seat \"{seat}\" is not available."
 msgid "The membership type has been deleted."
-msgstr "A kiválasztott \"{seat}\" ülés nem elérhető."
+msgstr ""
 
 #: pretix/control/logdisplay.py:324
-#, fuzzy
-#| msgid "The selected seat \"{seat}\" is not available."
 msgid "The account has been created."
-msgstr "A kiválasztott \"{seat}\" ülés nem elérhető."
+msgstr ""
 
 #: pretix/control/logdisplay.py:325
-#, fuzzy
-#| msgid "The selected seat \"{seat}\" is not available."
 msgid "The account has been changed."
-msgstr "A kiválasztott \"{seat}\" ülés nem elérhető."
+msgstr ""
 
 #: pretix/control/logdisplay.py:326
 msgid "A membership for this account has been added."
 msgstr ""
 
 #: pretix/control/logdisplay.py:327
-#, fuzzy
-#| msgid "The selected seat \"{seat}\" is not available."
 msgid "A membership of this account has been changed."
-msgstr "A kiválasztott \"{seat}\" ülés nem elérhető."
+msgstr ""
 
 #: pretix/control/logdisplay.py:328
-#, fuzzy
-#| msgid "The selected seat \"{seat}\" is not available."
 msgid "A membership of this account has been deleted."
-msgstr "A kiválasztott \"{seat}\" ülés nem elérhető."
+msgstr ""
 
 #: pretix/control/logdisplay.py:329
-#, fuzzy
-#| msgid "The selected seat \"{seat}\" is not available."
 msgid "The account has been disabled and anonymized."
-msgstr "A kiválasztott \"{seat}\" ülés nem elérhető."
+msgstr ""
 
 #: pretix/control/logdisplay.py:330
-#, fuzzy
-#| msgid "The selected seat \"{seat}\" is not available."
 msgid "A new password has been requested."
-msgstr "A kiválasztott \"{seat}\" ülés nem elérhető."
+msgstr ""
 
 #: pretix/control/logdisplay.py:331
-#, fuzzy
-#| msgid "The selected seat \"{seat}\" is not available."
 msgid "A new password has been set."
-msgstr "A kiválasztott \"{seat}\" ülés nem elérhető."
+msgstr ""
 
 #: pretix/control/logdisplay.py:332 pretix/control/logdisplay.py:368
 msgid "Sending of an email has failed."
@@ -10385,16 +10250,12 @@ msgid "The event's internal comment has been updated."
 msgstr ""
 
 #: pretix/control/logdisplay.py:334
-#, fuzzy
-#| msgid "The selected seat \"{seat}\" is not available."
 msgid "The event has been canceled."
-msgstr "A kiválasztott \"{seat}\" ülés nem elérhető."
+msgstr ""
 
 #: pretix/control/logdisplay.py:335
-#, fuzzy
-#| msgid "The selected seat \"{seat}\" is not available."
 msgid "An event has been deleted."
-msgstr "A kiválasztott \"{seat}\" ülés nem elérhető."
+msgstr ""
 
 #: pretix/control/logdisplay.py:336
 msgid "The order details have been changed."
@@ -10421,10 +10282,8 @@ msgid "The order has been marked as paid."
 msgstr ""
 
 #: pretix/control/logdisplay.py:342
-#, fuzzy
-#| msgid "The selected seat \"{seat}\" is not available."
 msgid "The cancellation request has been deleted."
-msgstr "A kiválasztott \"{seat}\" ülés nem elérhető."
+msgstr ""
 
 #: pretix/control/logdisplay.py:343
 msgid "The order has been refunded."
@@ -10436,10 +10295,8 @@ msgid "The order has been canceled."
 msgstr ""
 
 #: pretix/control/logdisplay.py:345 pretix/control/views/orders.py:1519
-#, fuzzy
-#| msgid "The selected seat \"{seat}\" is not available."
 msgid "The order has been reactivated."
-msgstr "A kiválasztott \"{seat}\" ülés nem elérhető."
+msgstr ""
 
 #: pretix/control/logdisplay.py:346
 #, python-brace-format
@@ -10481,10 +10338,8 @@ msgid ""
 msgstr ""
 
 #: pretix/control/logdisplay.py:357
-#, fuzzy
-#| msgid "The selected seat \"{seat}\" is not available."
 msgid "The customer account has been changed."
-msgstr "A kiválasztott \"{seat}\" ülés nem elérhető."
+msgstr ""
 
 #: pretix/control/logdisplay.py:358
 msgid "The order locale has been changed."
@@ -10509,10 +10364,8 @@ msgid "The order's internal comment has been updated."
 msgstr ""
 
 #: pretix/control/logdisplay.py:363
-#, fuzzy
-#| msgid "The selected seat \"{seat}\" is not available."
 msgid "The order's follow-up date has been updated."
-msgstr "A kiválasztott \"{seat}\" ülés nem elérhető."
+msgstr ""
 
 #: pretix/control/logdisplay.py:364
 msgid "The order's flag to require attention at check-in has been toggled."
@@ -10911,10 +10764,8 @@ msgid "The event has been created."
 msgstr ""
 
 #: pretix/control/logdisplay.py:467
-#, fuzzy
-#| msgid "The selected seat \"{seat}\" is not available."
 msgid "The event details have been changed."
-msgstr "A kiválasztott \"{seat}\" ülés nem elérhető."
+msgstr ""
 
 #: pretix/control/logdisplay.py:468
 msgid "An answer option has been added to the question."
@@ -10973,22 +10824,16 @@ msgid "The team has been deleted."
 msgstr ""
 
 #: pretix/control/logdisplay.py:482 pretix/control/views/organizer.py:1448
-#, fuzzy
-#| msgid "The selected seat \"{seat}\" is not available."
 msgid "The gate has been created."
-msgstr "A kiválasztott \"{seat}\" ülés nem elérhető."
+msgstr ""
 
 #: pretix/control/logdisplay.py:483
-#, fuzzy
-#| msgid "The selected seat \"{seat}\" is not available."
 msgid "The gate has been changed."
-msgstr "A kiválasztott \"{seat}\" ülés nem elérhető."
+msgstr ""
 
 #: pretix/control/logdisplay.py:484
-#, fuzzy
-#| msgid "The selected seat \"{seat}\" is not available."
 msgid "The gate has been deleted."
-msgstr "A kiválasztott \"{seat}\" ülés nem elérhető."
+msgstr ""
 
 #: pretix/control/logdisplay.py:485
 msgctxt "subevent"
@@ -10996,11 +10841,9 @@ msgid "The event date has been deleted."
 msgstr ""
 
 #: pretix/control/logdisplay.py:486
-#, fuzzy
-#| msgid "The selected seat \"{seat}\" is not available."
 msgctxt "subevent"
 msgid "The event date has been canceled."
-msgstr "A kiválasztott \"{seat}\" ülés nem elérhető."
+msgstr ""
 
 #: pretix/control/logdisplay.py:487
 msgctxt "subevent"
@@ -11056,10 +10899,8 @@ msgid "The gift card has been created."
 msgstr ""
 
 #: pretix/control/logdisplay.py:499 pretix/control/views/organizer.py:1300
-#, fuzzy
-#| msgid "The selected seat \"{seat}\" is not available."
 msgid "The gift card has been changed."
-msgstr "A kiválasztott \"{seat}\" ülés nem elérhető."
+msgstr ""
 
 #: pretix/control/logdisplay.py:500
 msgid "A manual transaction has been performed."
@@ -11289,10 +11130,8 @@ msgstr ""
 #: pretix/control/navigation.py:303
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html:4
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html:6
-#, fuzzy
-#| msgid "Paid orders"
 msgid "Check-in history"
-msgstr "Kifizetett megrendelések"
+msgstr ""
 
 #: pretix/control/navigation.py:346
 #: pretix/control/templates/pretixcontrol/orders/search.html:7
@@ -11722,11 +11561,9 @@ msgid "Trace number"
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:18
-#, fuzzy
-#| msgid "Presale not started"
 msgctxt "terminal_zvt"
 msgid "Payment type"
-msgstr "Elővétel nem kezdődött el"
+msgstr ""
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:20
 msgctxt "terminal_zvt"
@@ -11749,11 +11586,9 @@ msgid "Card type"
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:28
-#, fuzzy
-#| msgid "Cart expired"
 msgctxt "terminal_zvt"
 msgid "Card expiration"
-msgstr "A kosár lejárt"
+msgstr ""
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:33
 msgid "Transaction Code"
@@ -11791,10 +11626,8 @@ msgid "Server Transaction Code"
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:61
-#, fuzzy
-#| msgid "Application name"
 msgid "Payment Application"
-msgstr "Alkalmazás név"
+msgstr ""
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:69
 msgid "Authorization Code"
@@ -12316,10 +12149,8 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/event/dangerzone.html:47
 #: pretix/control/templates/pretixcontrol/orders/cancel.html:5
 #: pretix/control/templates/pretixcontrol/orders/cancel.html:7
-#, fuzzy
-#| msgid "Past events"
 msgid "Cancel event"
-msgstr "Elmúlt események"
+msgstr ""
 
 #: pretix/control/templates/pretixcontrol/event/dangerzone.html:38
 msgid ""
@@ -13154,10 +12985,8 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/event/tax_edit.html:144
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:95
-#, fuzzy
-#| msgid "Paid orders"
 msgid "Change history"
-msgstr "Kifizetett megrendelések"
+msgstr ""
 
 #: pretix/control/templates/pretixcontrol/event/tax_index.html:9
 msgid "You haven't created any tax rules yet."
@@ -13214,10 +13043,8 @@ msgid "Download time"
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/event/tickets.html:66
-#, fuzzy
-#| msgid "Ticket design"
 msgid "Ticket codes"
-msgstr "Jegy design"
+msgstr ""
 
 #: pretix/control/templates/pretixcontrol/event/widget.html:10
 msgid ""
@@ -13334,10 +13161,8 @@ msgid ""
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/events/create_foundation.html:7
-#, fuzzy
-#| msgid "Presale not started"
 msgid "Event type"
-msgstr "Elővétel nem kezdődött el"
+msgstr ""
 
 #: pretix/control/templates/pretixcontrol/events/create_foundation.html:13
 msgid "Singular event or non-event shop"
@@ -13939,7 +13764,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/items/question.html:69
 msgid "Count"
-msgstr "Számítás"
+msgstr ""
 
 #: pretix/control/templates/pretixcontrol/items/question.html:70
 msgid "Percentage"
@@ -14562,10 +14387,8 @@ msgid "Initiate a refund of %(amount)s"
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/order/index.html:124
-#, fuzzy
-#| msgid "Past events"
 msgid "Cancellation request"
-msgstr "Elmúlt események"
+msgstr ""
 
 #: pretix/control/templates/pretixcontrol/order/index.html:128
 msgid "The customer asked you to cancel the order with the following settings:"
@@ -14585,10 +14408,8 @@ msgid "Order details"
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/order/index.html:167
-#, fuzzy
-#| msgid "Past events"
 msgid "Cancellation date"
-msgstr "Elmúlt események"
+msgstr ""
 
 #: pretix/control/templates/pretixcontrol/order/index.html:186
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:144
@@ -14730,7 +14551,7 @@ msgstr ""
 #: pretix/plugins/reports/exporters.py:868
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:307
 msgid "Total"
-msgstr "Teljes"
+msgstr ""
 
 #: pretix/control/templates/pretixcontrol/order/index.html:603
 #: pretix/presale/templates/pretixpresale/event/order.html:208
@@ -14929,10 +14750,8 @@ msgid "Refund to original payment method"
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:37
-#, fuzzy
-#| msgid "Presale not started"
 msgid "Payment details"
-msgstr "Elővétel nem kezdődött el"
+msgstr ""
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:38
 msgid "Amount not refunded"
@@ -15381,10 +15200,8 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:82
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:22
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:117
-#, fuzzy
-#| msgid "Paid orders"
 msgid "Valid from"
-msgstr "Kifizetett megrendelések"
+msgstr ""
 
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:86
 #: pretix/control/templates/pretixcontrol/organizers/customer_membership.html:35
@@ -15403,10 +15220,8 @@ msgid "Matched to the account based on the email address."
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:246
-#, fuzzy
-#| msgid "Paid orders"
 msgid "Customer history"
-msgstr "Kifizetett megrendelések"
+msgstr ""
 
 #: pretix/control/templates/pretixcontrol/organizers/customer_anonymize.html:5
 #: pretix/control/templates/pretixcontrol/organizers/customer_anonymize.html:11
@@ -15435,10 +15250,8 @@ msgid ""
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/organizers/customer_anonymize.html:29
-#, fuzzy
-#| msgid "The selected seat \"{seat}\" is not available."
 msgid "This action is irreversible."
-msgstr "A kiválasztott \"{seat}\" ülés nem elérhető."
+msgstr ""
 
 #: pretix/control/templates/pretixcontrol/organizers/customer_membership_delete.html:15
 msgid "Are you sure you want to delete this membership?"
@@ -15451,10 +15264,8 @@ msgid ""
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/organizers/customers.html:14
-#, fuzzy
-#| msgid "The selected seat \"{seat}\" is not available."
 msgid "No customer accounts have been created yet."
-msgstr "A kiválasztott \"{seat}\" ülés nem elérhető."
+msgstr ""
 
 #: pretix/control/templates/pretixcontrol/organizers/delete.html:5
 msgid "Delete organizer"
@@ -16244,10 +16055,8 @@ msgid ""
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/shredder/download.html:41
-#, fuzzy
-#| msgid "Event list"
 msgid "Event short name"
-msgstr "Eseménylista"
+msgstr ""
 
 #: pretix/control/templates/pretixcontrol/shredder/download.html:46
 msgid "Step 3: Confirm download"
@@ -16422,11 +16231,9 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html:8
 #: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html:11
-#, fuzzy
-#| msgid "Past events"
 msgctxt "subevent"
 msgid "Change multiple dates"
-msgstr "Elmúlt események"
+msgstr ""
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html:13
 #, python-format
@@ -16540,25 +16347,16 @@ msgid "Delete selected"
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/subevents/index.html:193
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "No date selected."
 msgid "Edit selected"
-msgstr "Nincs dátum kiválasztva."
+msgstr ""
 
 #: pretix/control/templates/pretixcontrol/subevents/index.html:196
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "No date selected."
 msgid "Activate selected"
-msgstr "Nincs dátum kiválasztva."
+msgstr ""
 
 #: pretix/control/templates/pretixcontrol/subevents/index.html:199
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "No date selected."
 msgid "Deactivate selected"
-msgstr "Nincs dátum kiválasztva."
+msgstr ""
 
 #: pretix/control/templates/pretixcontrol/user/2fa_add.html:4
 #: pretix/control/templates/pretixcontrol/user/2fa_add.html:6
@@ -17790,10 +17588,8 @@ msgid "Some of the provided question ids are invalid."
 msgstr ""
 
 #: pretix/control/views/item.py:438
-#, fuzzy
-#| msgid "The selected seat \"{seat}\" is not available."
 msgid "Not all questions have been selected."
-msgstr "A kiválasztott \"{seat}\" ülés nem elérhető."
+msgstr ""
 
 #: pretix/control/views/item.py:469 pretix/control/views/item.py:629
 #: pretix/control/views/item.py:651
@@ -18129,16 +17925,12 @@ msgid "The invoice has already been canceled."
 msgstr ""
 
 #: pretix/control/views/orders.py:1339
-#, fuzzy
-#| msgid "The selected seat \"{seat}\" is not available."
 msgid "The invoice file has already been exported."
-msgstr "A kiválasztott \"{seat}\" ülés nem elérhető."
+msgstr ""
 
 #: pretix/control/views/orders.py:1341
-#, fuzzy
-#| msgid "The selected seat \"{seat}\" is not available."
 msgid "The invoice file is too old to be regenerated."
-msgstr "A kiválasztott \"{seat}\" ülés nem elérhető."
+msgstr ""
 
 #: pretix/control/views/orders.py:1343 pretix/control/views/orders.py:1368
 msgid "The invoice has been cleaned of personal data."
@@ -18381,16 +18173,12 @@ msgid "Gift cards are not allowed to have negative values."
 msgstr ""
 
 #: pretix/control/views/organizer.py:1208
-#, fuzzy
-#| msgid "The selected seat \"{seat}\" is not available."
 msgid "The transaction could not be reversed."
-msgstr "A kiválasztott \"{seat}\" ülés nem elérhető."
+msgstr ""
 
 #: pretix/control/views/organizer.py:1210
-#, fuzzy
-#| msgid "The selected seat \"{seat}\" is not available."
 msgid "The transaction has been reversed."
-msgstr "A kiválasztott \"{seat}\" ülés nem elérhető."
+msgstr ""
 
 #: pretix/control/views/organizer.py:1215
 msgid "Your input was invalid, please try again."
@@ -18405,29 +18193,21 @@ msgid "The gift card has been created and can now be used."
 msgstr ""
 
 #: pretix/control/views/organizer.py:1515
-#, fuzzy
-#| msgid "The selected seat \"{seat}\" is not available."
 msgid "The selected gate has been deleted."
-msgstr "A kiválasztott \"{seat}\" ülés nem elérhető."
+msgstr ""
 
 #: pretix/control/views/organizer.py:1544
-#, fuzzy
-#| msgid "The selected seat \"{seat}\" is not available."
 msgid "The property has been created."
-msgstr "A kiválasztott \"{seat}\" ülés nem elérhető."
+msgstr ""
 
 #: pretix/control/views/organizer.py:1606
-#, fuzzy
-#| msgid "The selected seat \"{seat}\" is not available."
 msgid "The selected property has been deleted."
-msgstr "A kiválasztott \"{seat}\" ülés nem elérhető."
+msgstr ""
 
 #: pretix/control/views/organizer.py:1733
 #: pretix/control/views/organizer.py:1961
-#, fuzzy
-#| msgid "The selected seat \"{seat}\" is not available."
 msgid "The selected object has been deleted."
-msgstr "A kiválasztott \"{seat}\" ülés nem elérhető."
+msgstr ""
 
 #: pretix/control/views/organizer.py:1792 pretix/presale/views/customer.py:250
 #, python-brace-format
@@ -18441,10 +18221,8 @@ msgid ""
 msgstr ""
 
 #: pretix/control/views/organizer.py:2025
-#, fuzzy
-#| msgid "The selected seat \"{seat}\" is not available."
 msgid "The customer account has been anonymized."
-msgstr "A kiválasztott \"{seat}\" ülés nem elérhető."
+msgstr ""
 
 #: pretix/control/views/pdf.py:74
 msgid "The uploaded PDF file is too large."
@@ -18488,11 +18266,9 @@ msgid "The selected dates have been disabled."
 msgstr ""
 
 #: pretix/control/views/subevents.py:633
-#, fuzzy
-#| msgid "The selected seat \"{seat}\" is not available."
 msgctxt "subevent"
 msgid "The selected dates have been enabled."
-msgstr "A kiválasztott \"{seat}\" ülés nem elérhető."
+msgstr ""
 
 #: pretix/control/views/subevents.py:654
 msgctxt "subevent"
@@ -18623,10 +18399,8 @@ msgid "The requested voucher does not exist."
 msgstr ""
 
 #: pretix/control/views/vouchers.py:207
-#, fuzzy
-#| msgid "The selected seat \"{seat}\" is not available."
 msgid "The selected cart positions have been removed."
-msgstr "A kiválasztott \"{seat}\" ülés nem elérhető."
+msgstr ""
 
 #: pretix/control/views/vouchers.py:233 pretix/control/views/vouchers.py:243
 msgid "A voucher can not be deleted if it already has been redeemed."
@@ -18659,10 +18433,8 @@ msgid "{num} vouchers have been created and sent out via email."
 msgstr ""
 
 #: pretix/control/views/waitinglist.py:162
-#, fuzzy
-#| msgid "The selected seat \"{seat}\" is not available."
 msgid "The selected entries have been deleted."
-msgstr "A kiválasztott \"{seat}\" ülés nem elérhető."
+msgstr ""
 
 #: pretix/control/views/waitinglist.py:175
 msgid ""
@@ -19118,10 +18890,8 @@ msgid ""
 msgstr ""
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/control.html:8
-#, fuzzy
-#| msgid "Count"
 msgid "Account"
-msgstr "Számítás"
+msgstr ""
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/control.html:22
 msgid "Transfer amount"
@@ -19367,10 +19137,8 @@ msgid "SEPA XML"
 msgstr ""
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:106
-#, fuzzy
-#| msgid "The selected seat \"{seat}\" is not available."
 msgid "No exports have been created yet."
-msgstr "A kiválasztott \"{seat}\" ülés nem elérhető."
+msgstr ""
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/sepa_export.html:10
 msgid "Export SEPA xml"
@@ -19416,7 +19184,7 @@ msgstr ""
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:80
 msgid "Comment:"
-msgstr "Megjegyzés:"
+msgstr ""
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:92
 msgid "No order code detected"
@@ -19525,10 +19293,8 @@ msgid ""
 msgstr ""
 
 #: pretix/plugins/banktransfer/views.py:703
-#, fuzzy
-#| msgid "The selected seat \"{seat}\" is not available."
 msgid "No valid orders have been found."
-msgstr "A kiválasztott \"{seat}\" ülés nem elérhető."
+msgstr ""
 
 #: pretix/plugins/banktransfer/views.py:736
 msgid ""
@@ -19595,10 +19361,8 @@ msgid "Error message"
 msgstr ""
 
 #: pretix/plugins/checkinlists/exporters.py:622
-#, fuzzy
-#| msgid "Event list"
 msgid "Upload date"
-msgstr "Eseménylista"
+msgstr ""
 
 #: pretix/plugins/checkinlists/exporters.py:623
 msgid "Upload time"
@@ -19803,10 +19567,8 @@ msgid ""
 msgstr ""
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/control.html:7
-#, fuzzy
-#| msgid "Sale soon"
 msgid "Sale ID"
-msgstr "Hamarosan kapható"
+msgstr ""
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/control.html:11
 msgid "Last update"
@@ -20108,10 +19870,8 @@ msgid "Relative, after event end"
 msgstr ""
 
 #: pretix/plugins/sendmail/forms.py:304
-#, fuzzy
-#| msgid "Event list"
 msgid "Please specify the send date"
-msgstr "Eseménylista"
+msgstr ""
 
 #: pretix/plugins/sendmail/forms.py:309
 msgid "Please specify the offset days and time"
@@ -20122,20 +19882,16 @@ msgid "Please specify a product"
 msgstr ""
 
 #: pretix/plugins/sendmail/models.py:185
-#, fuzzy
-#| msgid "Limit to events"
 msgid "Limit products"
-msgstr "Események limitje"
+msgstr ""
 
 #: pretix/plugins/sendmail/models.py:190
 msgid "By default, only paid orders will receive the email"
 msgstr ""
 
 #: pretix/plugins/sendmail/models.py:194
-#, fuzzy
-#| msgid "Event list"
 msgid "Send date"
-msgstr "Eseménylista"
+msgstr ""
 
 #: pretix/plugins/sendmail/models.py:196
 msgid "Time of day"
@@ -20203,10 +19959,8 @@ msgid "A scheduled email was sent to a ticket holder"
 msgstr ""
 
 #: pretix/plugins/sendmail/signals.py:124
-#, fuzzy
-#| msgid "The selected seat \"{seat}\" is not available."
 msgid "An email rule was deleted"
-msgstr "A kiválasztott \"{seat}\" ülés nem elérhető."
+msgstr ""
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/history.html:8
 msgid ""
@@ -20240,10 +19994,8 @@ msgstr ""
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_create.html:4
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_create.html:6
-#, fuzzy
-#| msgid "Paid orders"
 msgid "Create Email Rule"
-msgstr "Kifizetett megrendelések"
+msgstr ""
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_create.html:15
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_update.html:16
@@ -20282,10 +20034,8 @@ msgstr ""
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:17
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:94
-#, fuzzy
-#| msgid "Paid orders"
 msgid "Create a new rule"
-msgstr "Kifizetett megrendelések"
+msgstr ""
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:24
 msgid "Email subject"
@@ -20348,16 +20098,12 @@ msgid ""
 msgstr ""
 
 #: pretix/plugins/sendmail/views.py:364
-#, fuzzy
-#| msgid "The selected seat \"{seat}\" is not available."
 msgid "Your rule has been created."
-msgstr "A kiválasztott \"{seat}\" ülés nem elérhető."
+msgstr ""
 
 #: pretix/plugins/sendmail/views.py:480
-#, fuzzy
-#| msgid "The selected seat \"{seat}\" is not available."
 msgid "The selected rule has been deleted."
-msgstr "A kiválasztott \"{seat}\" ülés nem elérhető."
+msgstr ""
 
 #: pretix/plugins/statistics/apps.py:30 pretix/plugins/statistics/apps.py:33
 #: pretix/plugins/statistics/signals.py:37
@@ -20398,10 +20144,8 @@ msgid ""
 msgstr ""
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:67
-#, fuzzy
-#| msgid "Event overview"
 msgid "Seating Overview"
-msgstr "Esemény áttekintése"
+msgstr ""
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:74
 msgid "Sold Seats"
@@ -21055,7 +20799,7 @@ msgstr ""
 
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/edit.html:23
 msgid "Ticket design"
-msgstr "Jegy design"
+msgstr ""
 
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/form.html:3
 msgid ""
@@ -21247,10 +20991,8 @@ msgid "Save to address"
 msgstr ""
 
 #: pretix/presale/forms/checkout.py:135
-#, fuzzy
-#| msgid "Paid orders"
 msgid "Create new address"
-msgstr "Kifizetett megrendelések"
+msgstr ""
 
 #: pretix/presale/forms/checkout.py:138
 msgid "Save address in my customer account for future purchases"
@@ -21265,27 +21007,20 @@ msgid "Save to profile"
 msgstr ""
 
 #: pretix/presale/forms/checkout.py:174
-#, fuzzy
-#| msgid "Paid orders"
 msgid "Create new profile"
-msgstr "Kifizetett megrendelések"
+msgstr ""
 
 #: pretix/presale/forms/customer.py:60
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "You need to select a date."
 msgid "You need to fill out all fields."
-msgstr "Válassz egy dátumot."
+msgstr ""
 
 #: pretix/presale/forms/customer.py:62
 msgid "We have not found an account with this email address and password."
 msgstr ""
 
 #: pretix/presale/forms/customer.py:64
-#, fuzzy
-#| msgid "This ticket shop is currently disabled."
 msgid "This account is disabled."
-msgstr "A jegyvásárlás jelenleg le van tiltva."
+msgstr ""
 
 #: pretix/presale/forms/customer.py:65
 msgid ""
@@ -21334,19 +21069,12 @@ msgid "plus taxes"
 msgstr ""
 
 #: pretix/presale/forms/order.py:125
-#, fuzzy
-#| msgid ""
-#| "You cannot add yourself to the waiting list as this product is currently "
-#| "available."
 msgid "No other variation of this product is currently available for you."
-msgstr "Nem kerülhetsz fel a várólistára, mivel a termék jelenleg elérhető."
+msgstr ""
 
 #: pretix/presale/forms/order.py:129
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "You need to select a date."
 msgid "No other variations of this product exist."
-msgstr "Válassz egy dátumot."
+msgstr ""
 
 #: pretix/presale/forms/renderers.py:50
 msgctxt "form"
@@ -21359,11 +21087,9 @@ msgid "has errors"
 msgstr ""
 
 #: pretix/presale/forms/renderers.py:64
-#, fuzzy
-#| msgid "Cart expired"
 msgctxt "form"
 msgid "required"
-msgstr "A kosár lejárt"
+msgstr ""
 
 #: pretix/presale/ical.py:75
 #, python-brace-format
@@ -21570,7 +21296,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:22
 #: pretix/presale/templates/pretixpresale/event/fragment_cart_box.html:18
 msgid "Cart expired"
-msgstr "A kosár lejárt"
+msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:40
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:43
@@ -21583,7 +21309,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:47
 #: pretix/presale/templates/pretixpresale/event/fragment_cart_box.html:34
 msgid "The items in your cart are no longer reserved for you."
-msgstr "A kosárba helyezett termékek tovább nincsenek tovább foglalva."
+msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:53
 #: pretix/presale/templates/pretixpresale/event/index.html:57
@@ -21925,10 +21651,8 @@ msgid "Completed:"
 msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/fragment_checkoutflow.html:15
-#, fuzzy
-#| msgid "Comment:"
 msgid "Current:"
-msgstr "Megjegyzés:"
+msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/fragment_checkoutflow.html:29
 msgctxt "checkoutflow"
@@ -22301,10 +22025,8 @@ msgid ""
 msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/order.html:193
-#, fuzzy
-#| msgid "Paid orders"
 msgid "Change ordered items"
-msgstr "Kifizetett megrendelések"
+msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/order.html:195
 #: pretix/presale/templates/pretixpresale/event/order.html:289
@@ -22346,10 +22068,8 @@ msgid ""
 msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/order.html:362
-#, fuzzy
-#| msgid "Paid orders"
 msgid "Change order"
-msgstr "Kifizetett megrendelések"
+msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/order.html:372
 msgid ""
@@ -22674,7 +22394,7 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/index.html:7
 msgid "Hello!"
-msgstr "Szia!"
+msgstr ""
 
 #: pretix/presale/templates/pretixpresale/index.html:9
 #, python-format
@@ -22698,12 +22418,12 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/index.html:24
 msgid "Enjoy!"
-msgstr "Sok sikert!"
+msgstr ""
 
 #: pretix/presale/templates/pretixpresale/organizers/calendar.html:6
 #: pretix/presale/templates/pretixpresale/organizers/calendar_week.html:6
 msgid "Event overview"
-msgstr "Esemény áttekintése"
+msgstr ""
 
 #: pretix/presale/templates/pretixpresale/organizers/calendar.html:30
 #: pretix/presale/templates/pretixpresale/organizers/calendar_week.html:32
@@ -22721,12 +22441,12 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/organizers/calendar_week.html:44
 #: pretix/presale/templates/pretixpresale/organizers/index.html:50
 msgid "iCal"
-msgstr "iCal"
+msgstr ""
 
 #: pretix/presale/templates/pretixpresale/organizers/calendar.html:80
 #: pretix/presale/templates/pretixpresale/organizers/calendar_week.html:103
 msgid "Note that the events in this view are in different timezones."
-msgstr "Figyelj, hogy az itt látható események eltérő időzónában vannak."
+msgstr ""
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_address_delete.html:4
 #: pretix/presale/templates/pretixpresale/organizers/customer_address_delete.html:7
@@ -22775,20 +22495,16 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:7
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:10
-#, fuzzy
-#| msgid "Count"
 msgid "Your account"
-msgstr "Számítás"
+msgstr ""
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:31
 msgid "Change account information"
 msgstr ""
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:35
-#, fuzzy
-#| msgid "Paid orders"
 msgid "Change password"
-msgstr "Kifizetett megrendelések"
+msgstr ""
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:49
 msgid "Addresses"
@@ -22842,23 +22558,23 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:8
 msgid "Event list"
-msgstr "Eseménylista"
+msgstr ""
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:25
 msgid "Past events"
-msgstr "Elmúlt események"
+msgstr ""
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:27
 msgid "Upcoming events"
-msgstr "Következő események"
+msgstr ""
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:53
 msgid "Show upcoming"
-msgstr "Következő események megjelenítése"
+msgstr ""
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:55
 msgid "Show past events"
-msgstr "Elmúlt események megjelenítése"
+msgstr ""
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:137
 msgid "More info"
@@ -22879,7 +22595,7 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/waiting.html:22
 msgid "We are processing your request …"
-msgstr "A kérés feldolgozása folyamatban…"
+msgstr ""
 
 #: pretix/presale/utils.py:170 pretix/presale/utils.py:293
 #: pretix/presale/utils.py:294
@@ -22917,11 +22633,11 @@ msgstr ""
 
 #: pretix/presale/views/cart.py:419 pretix/presale/views/cart.py:444
 msgid "Your cart is now empty."
-msgstr "A kosarad üres."
+msgstr ""
 
 #: pretix/presale/views/cart.py:459
 msgid "The products have been successfully added to your cart."
-msgstr "A termékek sikeresen bekerültek a kosaradba."
+msgstr ""
 
 #: pretix/presale/views/cart.py:481 pretix/presale/views/event.py:404
 #: pretix/presale/views/widget.py:316
@@ -22930,11 +22646,11 @@ msgstr ""
 
 #: pretix/presale/views/checkout.py:55
 msgid "Your cart is empty"
-msgstr "A kosarad üres"
+msgstr ""
 
 #: pretix/presale/views/checkout.py:59
 msgid "The presale for this event is over or has not yet started."
-msgstr "Az elővétel ehhez eseményhez még nem kezdődött el."
+msgstr ""
 
 #: pretix/presale/views/customer.py:179
 msgid ""
@@ -22969,57 +22685,53 @@ msgid ""
 msgstr ""
 
 #: pretix/presale/views/customer.py:496
-#, fuzzy
-#| msgid "The selected seat \"{seat}\" is not available."
 msgid "Your email address has been updated."
-msgstr "A kiválasztott \"{seat}\" ülés nem elérhető."
+msgstr ""
 
 #: pretix/presale/views/event.py:652
 msgid "Unknown event code or not authorized to access this event."
-msgstr "Ismeretlen eseménykód vagy nincs jogod az eseményhez."
+msgstr ""
 
 #: pretix/presale/views/event.py:659
 msgctxt "subevent"
 msgid "No date selected."
-msgstr "Nincs dátum kiválasztva."
+msgstr ""
 
 #: pretix/presale/views/event.py:662
 msgctxt "subevent"
 msgid "Unknown date selected."
-msgstr "Ismeretlen dátum került kiválasztásra."
+msgstr ""
 
 #: pretix/presale/views/event.py:687 pretix/presale/views/event.py:695
 #: pretix/presale/views/event.py:698
 msgid "Please go back and try again."
-msgstr "Menj vissza és próbáld újra."
+msgstr ""
 
 #: pretix/presale/views/order.py:358 pretix/presale/views/order.py:423
 #: pretix/presale/views/order.py:491
 msgid "The payment for this order cannot be continued."
-msgstr "A rendeléshez tartozó fizetési folyamatot nem lehet folytatni."
+msgstr ""
 
 #: pretix/presale/views/order.py:363 pretix/presale/views/order.py:432
 #: pretix/presale/views/order.py:500 pretix/presale/views/order.py:539
 msgid "The payment is too late to be accepted."
-msgstr "A fizetés túl későn történt meg az elfogadáshoz."
+msgstr ""
 
 #: pretix/presale/views/order.py:446
-#, fuzzy
-#| msgid "The selected seat \"{seat}\" is not available."
 msgid "An invoice has been generated."
-msgstr "A kiválasztott \"{seat}\" ülés nem elérhető."
+msgstr ""
 
 #: pretix/presale/views/order.py:534
 msgid "The payment method for this order cannot be changed."
-msgstr "A rendeléshez tartozó fizetési mód nem változtatható meg."
+msgstr ""
 
 #: pretix/presale/views/order.py:545
 msgid "A payment is currently pending for this order."
-msgstr "A rendeléshez tartozó fizetés jelenleg függőben van."
+msgstr ""
 
 #: pretix/presale/views/order.py:808
 msgid "You cannot modify this order"
-msgstr "Nem módosíthatod ezt a rendelést"
+msgstr ""
 
 #: pretix/presale/views/order.py:895 pretix/presale/views/order.py:900
 #: pretix/presale/views/order.py:905
@@ -23031,24 +22743,20 @@ msgid "Canceled by customer"
 msgstr ""
 
 #: pretix/presale/views/order.py:932
-#, fuzzy
-#| msgid "The selected seat \"{seat}\" is not available."
 msgid "The cancellation has been requested."
-msgstr "A kiválasztott \"{seat}\" ülés nem elérhető."
+msgstr ""
 
 #: pretix/presale/views/order.py:986
 msgid "Ticket download is not (yet) enabled for this order."
-msgstr "A jegyek letöltése (még) nem engedélyezett ehhez a rendeléshez."
+msgstr ""
 
 #: pretix/presale/views/order.py:995
 msgid "Please click the link we sent you via email to download your tickets."
 msgstr ""
 
 #: pretix/presale/views/order.py:1154
-#, fuzzy
-#| msgid "You cannot modify this order"
 msgid "You cannot change this order."
-msgstr "Nem módosíthatod ezt a rendelést"
+msgstr ""
 
 #: pretix/presale/views/order.py:1258
 #, python-brace-format
@@ -23059,7 +22767,7 @@ msgstr ""
 
 #: pretix/presale/views/user.py:61
 msgid "We had difficulties processing your input."
-msgstr "Az általad beírt adatok feldolgozása nehézségekbe ütközött."
+msgstr ""
 
 #: pretix/presale/views/user.py:70
 #, python-brace-format
@@ -23072,37 +22780,33 @@ msgstr ""
 
 #: pretix/presale/views/user.py:83
 msgid "Your orders for {}"
-msgstr "{} rendeléseid"
+msgstr ""
 
 #: pretix/presale/views/user.py:91
 msgid "We have trouble sending emails right now, please check back later."
 msgstr ""
-"Jelenleg problémáink vannak az e-mail küldéssel, kérlek nézz vissza később."
 
 #: pretix/presale/views/user.py:94
 msgid ""
 "If there were any orders by this user, they will receive an email with their "
 "order codes."
 msgstr ""
-"Ha a felhasználónak vannak rendelései, emailt kap a rendelési kódokkal."
 
 #: pretix/presale/views/waiting.py:93
 msgid "Waiting lists are disabled for this event."
-msgstr "Az eseményhez jelenleg nem érhető el várólista."
+msgstr ""
 
 #: pretix/presale/views/waiting.py:122
 msgid ""
 "You cannot add yourself to the waiting list as this product is currently "
 "available."
-msgstr "Nem kerülhetsz fel a várólistára, mivel a termék jelenleg elérhető."
+msgstr ""
 
 #: pretix/presale/views/waiting.py:127
 msgid ""
 "We've added you to the waiting list. You will receive an email as soon as "
 "tickets get available again."
 msgstr ""
-"Felvettünk a várólistára. Amint elérhetővé válik a termék, kapni fogsz egy "
-"emailt."
 
 #: pretix/presale/views/waiting.py:154
 msgid "We could not find you on our waiting list."
@@ -23122,32 +22826,32 @@ msgstr ""
 
 #: pretix/presale/views/widget.py:311
 msgid "This ticket shop is currently disabled."
-msgstr "A jegyvásárlás jelenleg le van tiltva."
+msgstr ""
 
 #: pretix/presale/views/widget.py:325
 msgid "The selected date does not exist in this event series."
-msgstr "A kiválasztott dátum nem érvényes erre az eseménysorozatra."
+msgstr ""
 
 #: pretix/presale/views/widget.py:332
 msgid "This is not an event series."
-msgstr "Ez nem egy eseménysorozat."
+msgstr ""
 
 #: pretix/presale/views/widget.py:380
 #, python-format
 msgid "from %(start_date)s"
-msgstr "%(start_date)s-tól"
+msgstr ""
 
 #: pretix/settings.py:498
 msgid "English"
-msgstr "angol"
+msgstr ""
 
 #: pretix/settings.py:499
 msgid "German"
-msgstr "német"
+msgstr ""
 
 #: pretix/settings.py:500
 msgid "German (informal)"
-msgstr "német (informális)"
+msgstr ""
 
 #: pretix/settings.py:501
 msgid "Arabic"
@@ -23155,67 +22859,63 @@ msgstr ""
 
 #: pretix/settings.py:502
 msgid "Chinese (simplified)"
-msgstr "kínai (egyszerűsített)"
+msgstr ""
 
 #: pretix/settings.py:503
 msgid "Danish"
-msgstr "dán"
+msgstr ""
 
 #: pretix/settings.py:504
 msgid "Dutch"
-msgstr "holland"
+msgstr ""
 
 #: pretix/settings.py:505
 msgid "Dutch (informal)"
-msgstr "holland (informális)"
+msgstr ""
 
 #: pretix/settings.py:506
 msgid "French"
-msgstr "francia"
+msgstr ""
 
 #: pretix/settings.py:507
-#, fuzzy
-#| msgid "Danish"
 msgid "Finnish"
-msgstr "dán"
+msgstr ""
 
 #: pretix/settings.py:508
 msgid "Greek"
-msgstr "görög"
+msgstr ""
 
 #: pretix/settings.py:509
 msgid "Italian"
-msgstr "olasz"
+msgstr ""
 
 #: pretix/settings.py:510
 msgid "Latvian"
-msgstr "lett"
+msgstr ""
 
 #: pretix/settings.py:511
 msgid "Polish"
-msgstr "lengyel"
+msgstr ""
 
 #: pretix/settings.py:512
-#, fuzzy
-#| msgid "Portuguese (Brazil)"
 msgid "Portuguese (Portugal)"
-msgstr "portugál (brazil)"
+msgstr ""
 
 #: pretix/settings.py:513
 msgid "Portuguese (Brazil)"
-msgstr "portugál (brazil)"
+msgstr ""
 
 #: pretix/settings.py:514
 msgid "Russian"
-msgstr "orosz"
+msgstr ""
 
 #: pretix/settings.py:515
 msgid "Spanish"
-msgstr "spanyol"
+msgstr ""
 
 #: pretix/settings.py:516
 msgid "Turkish"
-msgstr "török"
+msgstr ""
 
 #: pretix/settings.py:830
 msgid "User profile only"
@@ -23223,34 +22923,12 @@ msgstr ""
 
 #: pretix/settings.py:831
 msgid "Read access"
-msgstr "Olvasási jog"
+msgstr ""
 
 #: pretix/settings.py:832
 msgid "Write access"
-msgstr "Írási jog"
+msgstr ""
 
 #: pretix/settings.py:842
 msgid "Kosovo"
 msgstr ""
-
-#~ msgid "We could not identify the product you selected."
-#~ msgstr "Nem tudtuk beazonosítani az általad választott terméket."
-
-#~ msgid "The waiting list is disabled for this product."
-#~ msgstr "A termékhez nem elérhető várólista."
-
-#, fuzzy
-#~| msgid "We had difficulties processing your input."
-#~ msgid "There was a problem processing your input:"
-#~ msgstr "Az általad beírt adatok feldolgozása nehézségekbe ütközött."
-
-#~ msgid "We already sent you an email in the last 24 hours."
-#~ msgstr "Már küldtünk neked emailt az elmúlt 24 órában."
-
-#, fuzzy
-#~| msgid "Read access"
-#~ msgid "Full access"
-#~ msgstr "Olvasási jog"
-
-#~ msgid "Sale soon"
-#~ msgstr "Hamarosan kapható"
