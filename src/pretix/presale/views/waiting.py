@@ -118,7 +118,7 @@ class WaitingView(EventViewMixin, FormView):
             if form.instance.variation
             else form.instance.item.check_quotas(count_waitinglist=True, subevent=self.subevent)
         )
-        if availability[0] == 100:
+        if availability[0] == Quota.AVAILABILITY_OK:
             messages.error(self.request, _("You cannot add yourself to the waiting list as this product is currently "
                                            "available."))
             return redirect(self.get_index_url())
