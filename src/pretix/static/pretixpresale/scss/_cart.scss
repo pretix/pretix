@@ -122,6 +122,10 @@
     padding-right: 1.5em;
 }
 
+.cart .row:last-child p:last-child {
+    margin-bottom: 0;
+}
+
 @media (min-width: $screen-xs-min) {
     .cart .checkout-button-secondary {
         display: flex;
