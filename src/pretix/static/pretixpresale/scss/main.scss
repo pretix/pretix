@@ -35,9 +35,11 @@
 h1 a, .btn {
     text-decoration: none;
 }
+/*
 a, .btn-link {
     text-decoration: underline;
 }
+*/
 /* bootstrap sets outline-offset with :active:focus so we need to match specifity of selector */
 /* see line 26, pretix/static/bootstrap/scss/bootstrap/_buttons.scss */
 button:focus, a:focus, .btn:focus, summary:focus,
