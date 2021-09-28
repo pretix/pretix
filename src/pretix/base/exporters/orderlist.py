@@ -129,7 +129,7 @@ class OrderListExporter(MultiSheetListExporter):
                  label=_('End event date'),
                  widget=forms.DateInput(attrs={'class': 'datepickerfield'}),
                  required=False,
-                 help_text=_('Only include orders including at least one ticket for a date on or after this date. '
+                 help_text=_('Only include orders including at least one ticket for a date on or before this date. '
                              'Will also include other dates in case of mixed orders!')
              )),
         ]
