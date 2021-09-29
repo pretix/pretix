@@ -9,7 +9,8 @@
         {% endif %}
         {% if allow_waitinglist and item.allow_waitinglist %}
             <br/>
-            <a class="with-plus-circle-before" href="{% eventurl event "presale:event.waitinglist" cart_namespace=cart_namespace|default_if_none:"" %}?item={{ item.pk }}{% if var %}&var={{ var.pk }}{% endif %}{% if subevent %}&subevent={{ subevent.pk }}{% endif %}">
+            <a href="{% eventurl event "presale:event.waitinglist" cart_namespace=cart_namespace|default_if_none:"" %}?item={{ item.pk }}{% if var %}&var={{ var.pk }}{% endif %}{% if subevent %}&subevent={{ subevent.pk }}{% endif %}">
+                <span class="fa fa-plus-circle" aria-hidden="true"></span>
                 {% trans "Waiting list" %}
             </a>
         {% endif %}
@@ -21,7 +22,8 @@
         {% trans "All remaining products are reserved but might become available again." %}
         {% if allow_waitinglist and item.allow_waitinglist %}
             <br/>
-            <a class="with-plus-circle-before" href="{% eventurl event "presale:event.waitinglist" cart_namespace=cart_namespace|default_if_none:"" %}?item={{ item.pk }}{% if var %}&var={{ var.pk }}{% endif %}{% if subevent %}&subevent={{ subevent.pk }}{% endif %}">
+            <a href="{% eventurl event "presale:event.waitinglist" cart_namespace=cart_namespace|default_if_none:"" %}?item={{ item.pk }}{% if var %}&var={{ var.pk }}{% endif %}{% if subevent %}&subevent={{ subevent.pk }}{% endif %}">
+                <span class="fa fa-plus-circle" aria-hidden="true"></span>
                 {% trans "Waiting list" %}
             </a>
         {% endif %}
