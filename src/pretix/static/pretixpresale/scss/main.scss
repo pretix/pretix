@@ -43,7 +43,7 @@ a, .btn-link {
 /* bootstrap sets outline-offset with :active:focus so we need to match specifity of selector */
 /* see line 26, pretix/static/bootstrap/scss/bootstrap/_buttons.scss */
 button:focus, a:focus, .btn:focus, summary:focus,
-button:active, a:active, .btn:active, summary:active,
+/*button:active, a:active, .btn:active, summary:active,*/
 button:active:focus, a:active:focus, .btn:active:focus, summary:active:focus {
     outline: 2px solid $link-hover-color;
     outline-offset: 2px;
