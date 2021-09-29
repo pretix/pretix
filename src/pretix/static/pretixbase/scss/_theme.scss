@@ -119,7 +119,7 @@ input[type=number]::-webkit-outer-spin-button {
   text-align: left;
 }
 .alert-legal {
-  border-color: $state-info-border;
+  @include alert-variant($alert-info-bg, $alert-info-border, $alert-info-text);
 }
 .alert-success, .alert-danger, .alert-info, .alert-warning, .alert-legal {
   position: relative;
