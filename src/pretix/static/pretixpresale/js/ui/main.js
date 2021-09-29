@@ -180,6 +180,11 @@ $(function () {
 
     $("body").removeClass("nojs");
 
+    $(".accordion-radio").click(function() {
+        var $input = $("input", this);
+        if (!$input.prop("checked")) $input.prop('checked', true).trigger("change");
+    });
+
     $("input[data-toggle=radiocollapse]").change(function () {
         $($(this).attr("data-parent")).find(".collapse.in").collapse('hide');
         $($(this).attr("data-target")).collapse('show');
