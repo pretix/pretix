@@ -227,7 +227,7 @@ function questions_init_profiles(el) {
     function getMatchingInput(key, answer, scope) {
         var $label;
         // _0 and _1 are e.g. for phone-fields. name-fields have their parts/keys already split
-        var $fields = $('[name$="' + key + '"], [name$="' + key + '_0"], [name$="' + key + '_1"]', scope);
+        var $fields = $('[name$="' + key + '"], [name$="' + key + '_0"], [name$="' + key + '_1"]', scope).not(":disabled");
         if ($fields.length) return $fields;
 
         if (answer.identifier) {
@@ -403,7 +403,9 @@ function questions_init_profiles(el) {
         // Add-Ons sit on same level as their parent product scope
         // Therefore use .prevUntil("legend") as an Add-On is
         // offset by a <legend>
-        $(scope).prevUntil("legend").addClass("profile-pre-select");
+        // if no <legend> is present – e.g. on invoice-address – the 
+        // containing <summary> would be selected, which is not what we want
+        $(scope).prevUntil("legend").not("summary").addClass("profile-pre-select");
 
         $button.click(function() {
             Object.keys(selectedProfile).forEach(function(key) {
