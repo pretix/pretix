@@ -100,7 +100,9 @@ input[type=number]::-webkit-outer-spin-button {
   background: transparent;
   border: transparent;
 }
-
+.panel-heading {
+  border-radius: 0;
+}
 .panel-danger > .panel-heading, .panel-success > .panel-heading, .panel-default > .panel-heading, .panel-info > .panel-heading, .panel-warning > .panel-heading {
   color: #000000;
 }
