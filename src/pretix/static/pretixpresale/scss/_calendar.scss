@@ -36,11 +36,11 @@
     &.continued, &.over {
       background: lighten(#767676, 48%);
       border-color: lighten(#767676, 30%);
-      border-left-color: #767676;
+      border-left-color: lighten(#767676, 30%);
       color: #767676;
       &:hover {
         background: lighten(#767676, 50%);
-        border-color: #767676;
+        border-color: lighten(#767676, 25%);
       }
     }
 
@@ -70,12 +70,12 @@
     &.reserved, &.soldout, {
       background: lighten($brand-danger, 43%);
       border-color: lighten($brand-danger, 30%);
-      border-left-color: $brand-danger;
+      border-left-color: lighten($brand-danger, 30%);
       color: darken($brand-danger, 5%);
 
       &:hover {
         background: lighten($brand-danger, 45%);
-        border-color: $brand-danger;
+        border-color: lighten($brand-danger, 25%);
       }
     }
 
