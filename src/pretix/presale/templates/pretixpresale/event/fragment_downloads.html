@@ -36,34 +36,30 @@
         </div>
     </div>
 {% elif can_download and download_buttons and order.count_positions %}
-    <div class="alert alert-info info-download">
+    <div class="info-download">
+        <h3 class="sr-only">{% trans "Ticket download" %}</h3>
         {% if cart.positions|length > 1 and can_download_multi %} {# never True on ticket page #}
-            {% blocktrans trimmed %}
+            <div>
+            {% for b in download_buttons %}
+                {% if b.multi %}
+                    <form action="{% eventurl event "presale:event.order.download.combined" secret=order.secret order=order.code output=b.identifier %}"
+                          method="post" data-asynctask data-asynctask-download class="download-btn-form">
+                        {% csrf_token %}
+                        <button type="submit"
+                                class="btn btn-lg {% if b.identifier == "pdf" %}btn-primary{% else %}btn-default{% endif %}">
+                            <span class="fa {{ b.icon }}" aria-hidden="true"></span> {{ b.multi_text }}
+                        </button>
+                    </form>
+                {% endif %}
+            {% endfor %}
+            </div>
+            <p class="help-block">
+                {% blocktrans trimmed %}
                 Please have your ticket ready when entering the event.
-            {% endblocktrans %}
-            <p class="info-download">
-                {% trans "Download all tickets at once:" %}
-                {% for b in download_buttons %}
-                    {% if b.multi %}
-                        <form action="{% eventurl event "presale:event.order.download.combined" secret=order.secret order=order.code output=b.identifier %}"
-                              method="post" data-asynctask data-asynctask-download class="download-btn-form">
-                            {% csrf_token %}
-                            <button type="submit"
-                                    class="btn btn-lg {% if b.identifier == "pdf" %}btn-primary{% else %}btn-default{% endif %}">
-                                <span class="fa {{ b.icon }}" aria-hidden="true"></span> {{ b.multi_text }}
-                            </button>
-                        </form>
-                    {% endif %}
-                {% endfor %}
+                {% endblocktrans %}
             </p>
         {% elif tickets_with_download|length == 1 %}
-            {% blocktrans trimmed %}
-                Please have your ticket ready when entering the event.
-            {% endblocktrans %}
-            {% blocktrans trimmed %}
-                Download your ticket here:
-            {% endblocktrans %}
-            <p class="info-download">
+            <div>
                 {% for b in download_buttons %}
                     <form action="{% if position_page and tickets_with_download.0.addon_to %}{% eventurl event "presale:event.order.position.download" secret=tickets_with_download.0.addon_to.web_secret order=order.code output=b.identifier pid=tickets_with_download.0.pk position=tickets_with_download.0.addon_to.positionid %}{% elif position_page %}{% eventurl event "presale:event.order.position.download" secret=tickets_with_download.0.web_secret order=order.code output=b.identifier pid=tickets_with_download.0.pk position=tickets_with_download.0.positionid %}{% else %}{% eventurl event "presale:event.order.download" secret=order.secret order=order.code output=b.identifier position=tickets_with_download.0.pk %}{% endif %}"
                           method="post" data-asynctask data-asynctask-download
@@ -75,14 +71,21 @@
                         </button>
                     </form>
                 {% endfor %}
+            </div>
+            <p class="help-block">
+                {% blocktrans trimmed %}
+                Please have your ticket ready when entering the event.
+                {% endblocktrans %}
             </p>
         {% else %}
+        <p class="text-muted">
             {% blocktrans trimmed %}
                 Please have your ticket ready when entering the event.
-            {% endblocktrans %}
+            {% endblocktrans %}<br>
             {% blocktrans trimmed %}
                 Download your tickets using the buttons below.
             {% endblocktrans %}
+        </p>
         {% endif %}
     </div>
     {% elif not download_buttons and ticket_download_date %}

@@ -290,8 +290,16 @@ h2.subevent-head {
     margin-bottom: 20px;
 }
 .info-download {
-    margin-top: 15px;
+    margin-top: 0;
+    margin-bottom: 30px;
 }
+.lead + .info-download {
+    margin-top: -15px;
+}
+.download-btn-form + .download-btn-form {
+    margin-left: .5em;
+}
+
 .refund-gift-card-code {
     font-size: 24px;
     font-family: $font-family-monospace;
