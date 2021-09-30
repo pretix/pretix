@@ -70,12 +70,12 @@
         <div class="{% if not event_logo or not event_logo_image_large %}pull-left flip{% endif %}">
             {% if event_logo and event_logo_image_large %}
                 <a href="{% eventurl event "presale:event.index" cart_namespace=cart_namespace|default_if_none:"" %}"
-                   aria-label="{% trans 'Homepage' %}">
+                   aria-label="{% trans 'Homepage' %}" title="{% trans 'Homepage' %}">
                     <img src="{{ event_logo|thumb:'1170x5000' }}" alt="" class="event-logo" />
                 </a>
             {% elif event_logo %}
                 <a href="{% eventurl event "presale:event.index" cart_namespace=cart_namespace|default_if_none:"" %}"
-                   aria-label="{% trans 'Homepage' %}">
+                   aria-label="{% trans 'Homepage' %}" title="{% trans 'Homepage' %}">
                     <img src="{{ event_logo|thumb:'5000x120' }}" alt="" class="event-logo" />
                 </a>
             {% else %}
