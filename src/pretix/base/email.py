@@ -540,6 +540,22 @@ def base_placeholders(sender, **kwargs):
             '    68CYU2H6ZTP3WLK5\n    7MB94KKPVEPSMVF2'
         ),
         SimpleFunctionalMailTextPlaceholder(
+            # join vouchers with two spaces at end of line so markdown-parser inserts a <br>
+            'voucher_url_list', ['event', 'voucher_list'],
+            lambda event, voucher_list: '  \n'.join([
+                build_absolute_uri(
+                    event, 'presale:event.redeem'
+                ) + '?voucher=' + c
+                for c in voucher_list
+            ]),
+            lambda event: '  \n'.join([
+                build_absolute_uri(
+                    event, 'presale:event.redeem'
+                ) + '?voucher=' + c
+                for c in ['68CYU2H6ZTP3WLK5', '7MB94KKPVEPSMVF2']
+            ]),
+        ),
+        SimpleFunctionalMailTextPlaceholder(
             'url', ['event', 'voucher_list'], lambda event, voucher_list: build_absolute_uri(event, 'presale:event.index', kwargs={
                 'event': event.slug,
                 'organizer': event.organizer.slug,
