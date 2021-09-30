@@ -6,6 +6,7 @@
 {% load eventsignal %}
 {% load rich_text %}
 {% for tup in items_by_category %}
+    <section aria-labelledby="category-{% if tup.0 %}{{ tup.0.id }}{% else %}none{% endif %}"{% if tup.0.description %} aria-describedby="category-info-{{ tup.0.id }}"{% endif %}>
         {% if tup.0 %}
             <h3 id="category-{{ tup.0.id }}">{{ tup.0.name }}</h3>
             {% if tup.0.description %}
@@ -325,4 +326,5 @@
                 </article>
             {% endif %}
         {% endfor %}
+    </section>
 {% endfor %}
