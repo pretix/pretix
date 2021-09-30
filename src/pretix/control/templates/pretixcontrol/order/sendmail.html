@@ -18,6 +18,10 @@
             {% bootstrap_field form.sendto layout='horizontal' %}
             {% bootstrap_field form.subject layout='horizontal' %}
             {% bootstrap_field form.message layout='horizontal' %}
+            {% bootstrap_field form.attach_tickets layout='horizontal' %}
+            {% if form.attach_invoices %}
+                {% bootstrap_field form.attach_invoices layout='horizontal' %}
+            {% endif %}
             {% if request.method == "POST" %}
                 <fieldset>
                     <legend>{% trans "E-mail preview" %}</legend>

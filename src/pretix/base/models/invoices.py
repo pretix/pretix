@@ -300,6 +300,9 @@ class Invoice(models.Model):
     def __repr__(self):
         return '<Invoice {} / {}>'.format(self.full_invoice_no, self.pk)
 
+    def __str__(self):
+        return self.full_invoice_no
+
 
 class InvoiceLine(models.Model):
     """

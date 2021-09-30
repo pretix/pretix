@@ -1982,7 +1982,9 @@ class OrderSendMail(EventPermissionRequiredMixin, OrderViewMixin, FormView):
                 order.send_mail(
                     form.cleaned_data['subject'], email_template,
                     email_context, 'pretix.event.order.email.custom_sent',
-                    self.request.user, auto_email=False
+                    self.request.user, auto_email=False,
+                    attach_tickets=form.cleaned_data.get('attach_tickets', False),
+                    invoices=form.cleaned_data.get('attach_invoices', []),
                 )
                 messages.success(self.request,
                                  _('Your message has been queued and will be sent to {}.'.format(order.email)))
@@ -2047,7 +2049,8 @@ class OrderPositionSendMail(OrderSendMail):
                     email_template,
                     email_context,
                     'pretix.event.order.position.email.custom_sent',
-                    self.request.user
+                    self.request.user,
+                    attach_tickets=form.cleaned_data.get('attach_tickets', False),
                 )
                 messages.success(self.request,
                                  _('Your message has been queued and will be sent to {}.'.format(position.attendee_email)))
