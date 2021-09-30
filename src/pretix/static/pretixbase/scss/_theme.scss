@@ -203,6 +203,19 @@ svg.svg-icon {
   opacity: 0.7;
 }
 
+.fa-background {
+  opacity: 0.3;
+}
+
+.fa-stack-small {
+  width: 1.6em;
+  height: 1em;
+  line-height: 1em;
+}
+.fa-stack-shifted {
+  left: 0.5em;
+}
+
 @include table-row-variant('success', lighten($brand-success, 40%));
 @include table-row-variant('info', lighten($brand-info, 30%));
 @include table-row-variant('warning', lighten($brand-warning, 40%));

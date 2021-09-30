@@ -234,7 +234,24 @@
                                 {% for i in invoices %}
                                     <a href="{% url "control:event.invoice.download" invoice=i.pk event=request.event.slug organizer=request.event.organizer.slug %}">
                                         {% if i.is_cancellation %}{% trans "Cancellation" context "invoice" %}{% else %}{% trans "Invoice" %}{% endif %}
-                                        {{ i.number }}</a> ({{ i.date|date:"SHORT_DATE_FORMAT" }})
+                                        {{ i.number }}</a>
+                                    ({{ i.date|date:"SHORT_DATE_FORMAT" }})
+                                    {% if i.sent_to_customer.year == 1970 %}
+                                        <span class="fa-stack fa-stack-small" data-toggle="tooltip" title="{% trans "We don't know if this invoice was emailed to the customer since it was created before our system tracked this information" %}">
+                                            <span class="fa fa-background fa-envelope text-muted fa-stack-1x"></span>
+                                            <span class="fa fa-question fa-stack-1x fa-stack-shifted"></span>
+                                        </span>
+                                    {% elif i.sent_to_customer %}
+                                        <span class="fa-stack fa-stack-small" data-toggle="tooltip" title="{% trans "Invoice was emailed to customer" %}">
+                                            <span class="fa fa-background fa-envelope text-muted fa-stack-1x"></span>
+                                            <span class="fa fa-check text-success fa-stack-1x fa-stack-shifted"></span>
+                                        </span>
+                                    {% else %}
+                                        <span class="fa-stack fa-stack-small" data-toggle="tooltip" title="{% trans "Invoice was not yet emailed to customer" %}">
+                                            <span class="fa fa-background fa-envelope text-muted fa-stack-1x"></span>
+                                            <span class="fa fa-ban text-danger fa-stack-1x fa-stack-shifted"></span>
+                                        </span>
+                                    {% endif %}
                                     {% if not i.canceled %}
                                         {% if request.event.settings.invoice_regenerate_allowed %}
                                             <form class="form-inline helper-display-inline" method="post"
@@ -268,6 +285,12 @@
                                         <br/>
                                     {% endif %}
                                 {% endfor %}
+                                {% if invoices_send_link %}
+                                    <br/>
+                                    <a class="btn btn-default btn-xs" href="{{ invoices_send_link }}">
+                                        {% trans "Email invoices" %}
+                                    </a>
+                                {% endif %}
                                 {% if can_generate_invoice %}
                                     <br/>
                                     <form class="form-inline helper-display-inline" method="post"

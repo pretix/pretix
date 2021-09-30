@@ -65,7 +65,7 @@ from django.utils.formats import date_format, get_format
 from django.utils.functional import cached_property
 from django.utils.http import is_safe_url
 from django.utils.timezone import make_aware, now
-from django.utils.translation import gettext, gettext_lazy as _
+from django.utils.translation import gettext, gettext_lazy as _, ngettext
 from django.views.generic import (
     DetailView, FormView, ListView, TemplateView, View,
 )
@@ -313,6 +313,27 @@ class OrderDetail(OrderView):
         ctx['download_buttons'] = self.download_buttons
         ctx['payment_refund_sum'] = self.order.payment_refund_sum
         ctx['pending_sum'] = self.order.pending_sum
+
+        unsent_invoices = [ii.pk for ii in ctx['invoices'] if not ii.sent_to_customer]
+        if unsent_invoices:
+            ctx['invoices_send_link'] = reverse('control:event.order.sendmail', kwargs={
+                'event': self.request.event.slug,
+                'organizer': self.request.event.organizer.slug,
+                'code': self.order.code
+            }) + '?' + urlencode({
+                'subject': ngettext('Your invoice', 'Your invoices', len(unsent_invoices)),
+                'message': ngettext(
+                    'Hello,\n\nplease find your invoice attached to this email.\n\n'
+                    'Your {event} team',
+                    'Hello,\n\nplease find your invoices attached to this email.\n\n'
+                    'Your {event} team',
+                    len(unsent_invoices)
+                ).format(
+                    event="{event}",
+                ),
+                'attach_invoices': unsent_invoices
+            }, doseq=True)
+
         return ctx
 
     @cached_property
@@ -1954,6 +1975,8 @@ class OrderSendMail(EventPermissionRequiredMixin, OrderViewMixin, FormView):
             kwargs['initial']['subject'] = self.request.GET.get('subject')
         if self.request.GET.get('message'):
             kwargs['initial']['message'] = self.request.GET.get('message')
+        if self.request.GET.getlist('attach_invoices'):
+            kwargs['initial']['attach_invoices'] = self.order.invoices.filter(pk__in=self.request.GET.getlist('attach_invoices'))
         return kwargs
 
     def form_invalid(self, form):
