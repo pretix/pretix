@@ -8,7 +8,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-09-27 18:49+0000\n"
 "PO-Revision-Date: 2021-10-01 23:00+0000\n"
-"Last-Translator: cpoisnel <chepoisnel@gmail.com>\n"
+"Last-Translator: Fabian Rodriguez <magicfab@legoutdulibre.com>\n"
 "Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix-js/"
 "fr/>\n"
 "Language: fr\n"
@@ -449,8 +449,7 @@ msgstr "Erreur inconnue."
 
 #: pretix/static/pretixcontrol/js/ui/main.js:271
 msgid "Your color has great contrast and is very easy to read!"
-msgstr ""
-"Votre choix de couleur est très facile à lire, il a un excellent contraste !"
+msgstr "Votre choix couleur a un bon contraste et il est très facile à lire!"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:275
 msgid "Your color has decent contrast and is probably good-enough to read!"
