@@ -70,7 +70,7 @@ class ContactForm(forms.Form):
 
         if self.event.settings.order_email_asked_twice:
             self.fields['email_repeat'] = forms.EmailField(
-                label=_('E-mail address (repeated)'),
+                label=_('Confirm E-mail'),
                 help_text=_('Please enter the same email address again to make sure you typed it correctly.'),
             )
 
