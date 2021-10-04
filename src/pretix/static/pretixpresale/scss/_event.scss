@@ -172,6 +172,12 @@ article.item-with-variations:last-child, .product-row:last-child {
 }
 section.front-page {
     margin-top: 30px;
+    position: sticky;
+    bottom: 0;
+    top: 100px;
+    padding: 10px 0;
+    background: rgba(255,255,255,.8);
+    z-index: 10;
 }
 .offline-banner {
     background: $brand-danger;
