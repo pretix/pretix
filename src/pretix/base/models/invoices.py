@@ -159,6 +159,8 @@ class Invoice(models.Model):
     # False: The invoice wasn't sent and never will, because sending was not configured at the time of the check.
     sent_to_organizer = models.BooleanField(null=True, blank=True)
 
+    sent_to_customer = models.DateTimeField(null=True, blank=True)
+
     file = models.FileField(null=True, blank=True, upload_to=invoice_filename, max_length=255)
 
     objects = ScopedManager(organizer='event__organizer')

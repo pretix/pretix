@@ -57,7 +57,7 @@ from django.core.mail import (
 from django.core.mail.message import SafeMIMEText
 from django.db import transaction
 from django.template.loader import get_template
-from django.utils.timezone import override
+from django.utils.timezone import now, override
 from django.utils.translation import gettext as _, pgettext
 from django_scopes import scope, scopes_disabled
 from i18nfield.strings import LazyI18nString
@@ -438,6 +438,7 @@ def mail_send_task(self, *args, to: List[str], subject: str, body: str, html: st
 
             email = email_filter.send_chained(event, 'message', message=email, order=order, user=user)
 
+        invoices_sent = []
         if invoices:
             invoices = Invoice.objects.filter(pk__in=invoices)
             for inv in invoices:
@@ -449,6 +450,7 @@ def mail_send_task(self, *args, to: List[str], subject: str, body: str, html: st
                                 inv.file.file.read(),
                                 'application/pdf'
                             )
+                        invoices_sent.append(inv)
                     except:
                         logger.exception('Could not attach invoice to email')
                         pass
@@ -558,6 +560,10 @@ def mail_send_task(self, *args, to: List[str], subject: str, body: str, html: st
                 )
             logger.exception('Error sending email')
             raise SendMailException('Failed to send an email to {}.'.format(to))
+        else:
+            for i in invoices_sent:
+                i.sent_to_customer = now()
+                i.save(update_fields=['sent_to_customer'])
 
 
 def mail_send(*args, **kwargs):

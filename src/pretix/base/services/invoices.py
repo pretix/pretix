@@ -291,6 +291,7 @@ def generate_cancellation(invoice: Invoice, trigger_pdf=True):
     cancellation.payment_provider_text = ''
     cancellation.file = None
     cancellation.sent_to_organizer = None
+    cancellation.sent_to_customer = None
     with language(invoice.locale, invoice.event.settings.region):
         cancellation.invoice_from = invoice.event.settings.get('invoice_address_from')
         cancellation.invoice_from_name = invoice.event.settings.get('invoice_address_from_name')
@@ -346,8 +347,8 @@ def invoice_pdf_task(invoice: int):
             i.file.delete()
         with language(i.locale, i.event.settings.region):
             fname, ftype, fcontent = i.event.invoice_renderer.generate(i)
-            i.file.save(fname, ContentFile(fcontent))
-            i.save()
+            i.file.save(fname, ContentFile(fcontent), save=False)
+            i.save(update_fields=['file'])
             return i.file.name
 
 
