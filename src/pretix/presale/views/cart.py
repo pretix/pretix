@@ -523,8 +523,18 @@ class RedeemView(NoSearchIndexViewMixin, EventViewMixin, CartMixin, TemplateView
         context['max_times'] = self.voucher.max_usages - self.voucher.redeemed
 
         # Fetch all items
-        items, display_add_to_cart = get_grouped_items(self.request.event, self.subevent,
-                                                       voucher=self.voucher, channel=self.request.sales_channel.identifier)
+        items, display_add_to_cart = get_grouped_items(
+            self.request.event,
+            self.subevent,
+            voucher=self.voucher,
+            channel=self.request.sales_channel.identifier,
+            memberships=(
+                self.request.customer.usable_memberships(
+                    for_event=self.subevent or self.request.event,
+                    testmode=self.request.event.testmode
+                ) if getattr(self.request, 'customer', None) else None
+            ),
+        )
 
         # Calculate how many options the user still has. If there is only one option, we can
         # check the box right away ;)

@@ -95,6 +95,7 @@ class MembershipQuerySet(models.QuerySet):
 
     def active(self, ev):
         return self.filter(
+            canceled=False,
             date_start__lte=ev.date_from,
             date_end__gte=ev.date_from
         )

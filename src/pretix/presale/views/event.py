@@ -100,7 +100,7 @@ def item_group_by_category(items):
 
 
 def get_grouped_items(event, subevent=None, voucher=None, channel='web', require_seat=0, base_qs=None, allow_addons=False,
-                      quota_cache=None, filter_items=None, filter_categories=None):
+                      quota_cache=None, filter_items=None, filter_categories=None, memberships=None):
     base_qs_set = base_qs is not None
     base_qs = base_qs if base_qs is not None else event.items
 
@@ -124,6 +124,7 @@ def get_grouped_items(event, subevent=None, voucher=None, channel='web', require
         'category', 'tax_rule',  # for re-grouping
         'hidden_if_available',
     ).prefetch_related(
+        'require_membership_types',
         Prefetch('quotas',
                  to_attr='_subevent_quotas',
                  queryset=event.quotas.using(settings.DATABASE_REPLICA).filter(subevent=subevent)),
@@ -160,6 +161,7 @@ def get_grouped_items(event, subevent=None, voucher=None, channel='web', require
                      quotas__isnull=False,
                      subevent_disabled=False
                  ).prefetch_related(
+                     'require_membership_types',
                      Prefetch('quotas',
                               to_attr='_subevent_quotas',
                               queryset=event.quotas.using(settings.DATABASE_REPLICA).filter(subevent=subevent))
@@ -240,6 +242,15 @@ def get_grouped_items(event, subevent=None, voucher=None, channel='web', require
                 item._remove = True
                 continue
 
+        if item.require_membership and item.require_membership_hidden:
+            print(
+                [m.membership_type in item.require_membership_types.all() for m in memberships] if memberships else [],
+                [(m.membership_type, item.require_membership_types.all()) for m in memberships] if memberships else [],
+            )
+            if not memberships or not any([m.membership_type in item.require_membership_types.all() for m in memberships]):
+                item._remove = True
+                continue
+
         item.description = str(item.description)
         for recv, resp in item_description.send(sender=event, item=item, variation=None):
             if resp:
@@ -290,6 +301,11 @@ def get_grouped_items(event, subevent=None, voucher=None, channel='web', require
             display_add_to_cart = display_add_to_cart or item.order_max > 0
         else:
             for var in item.available_variations:
+                if var.require_membership and var.require_membership_hidden:
+                    if not memberships or not any([m.membership_type in var.require_membership_types.all() for m in memberships]):
+                        var._remove = True
+                        continue
+
                 var.description = str(var.description)
                 for recv, resp in item_description.send(sender=event, item=item, variation=var):
                     if resp:
@@ -338,7 +354,7 @@ def get_grouped_items(event, subevent=None, voucher=None, channel='web', require
             item.available_variations = [
                 v for v in item.available_variations if v._subevent_quotas and (
                     not voucher or not voucher.quota_id or v in restrict_vars
-                )
+                ) and not getattr(v, '_remove', False)
             ]
 
             if event.settings.hide_sold_out:
@@ -439,7 +455,13 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
                 filter_items=self.request.GET.getlist('item'),
                 filter_categories=self.request.GET.getlist('category'),
                 require_seat=None,
-                channel=self.request.sales_channel.identifier
+                channel=self.request.sales_channel.identifier,
+                memberships=(
+                    self.request.customer.usable_memberships(
+                        for_event=self.subevent or self.request.event,
+                        testmode=self.request.event.testmode
+                    ) if getattr(self.request, 'customer', None) else None
+                ),
             )
 
             context['waitinglist_seated'] = False
