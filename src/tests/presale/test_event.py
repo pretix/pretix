@@ -195,6 +195,42 @@ class ItemDisplayTest(EventTestMixin, SoupTest):
         html = self.client.get('/%s/%s/' % (self.orga.slug, self.event.slug)).rendered_content
         self.assertNotIn("Early-bird", html)
 
+    def test_hidden_without_membership(self):
+        self.orga.settings.customer_accounts = True
+
+        with scopes_disabled():
+            mt = self.orga.membership_types.create(name="foo")
+            q = Quota.objects.create(event=self.event, name='Quota', size=2)
+            item = Item.objects.create(event=self.event, name='Early-bird ticket', default_price=0, active=True,
+                                       require_membership=True, require_membership_hidden=True)
+            item.require_membership_types.add(mt)
+            q.items.add(item)
+            customer = self.orga.customers.create(email='john@example.org', is_verified=True, is_active=True)
+            customer.set_password('foo')
+            customer.save()
+
+        html = self.client.get('/%s/%s/' % (self.orga.slug, self.event.slug)).rendered_content
+        self.assertNotIn("Early-bird", html)
+
+        r = self.client.post('/%s/account/login' % self.orga.slug, {
+            'email': 'john@example.org',
+            'password': 'foo',
+        })
+        assert r.status_code == 302
+
+        html = self.client.get('/%s/%s/' % (self.orga.slug, self.event.slug)).rendered_content
+        self.assertNotIn("Early-bird", html)
+
+        with scopes_disabled():
+            customer.memberships.create(
+                membership_type=mt,
+                date_start=self.event.date_from - datetime.timedelta(days=5),
+                date_end=self.event.date_from + datetime.timedelta(days=5),
+            )
+
+        html = self.client.get('/%s/%s/' % (self.orga.slug, self.event.slug)).rendered_content
+        self.assertIn("Early-bird", html)
+
     def test_simple_with_category(self):
         with scopes_disabled():
             c = ItemCategory.objects.create(event=self.event, name="Entry tickets", position=0)
