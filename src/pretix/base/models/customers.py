@@ -25,7 +25,7 @@ from django.contrib.auth.hashers import (
     check_password, is_password_usable, make_password,
 )
 from django.db import models
-from django.db.models import Q, F
+from django.db.models import F, Q
 from django.utils.crypto import get_random_string, salted_hmac
 from django.utils.translation import gettext_lazy as _, pgettext_lazy
 from django_scopes import ScopedManager, scopes_disabled
