@@ -222,7 +222,7 @@ class ItemDisplayTest(EventTestMixin, SoupTest):
         self.assertNotIn("Early-bird", html)
 
         with scopes_disabled():
-            customer.memberships.create(
+            m = customer.memberships.create(
                 membership_type=mt,
                 date_start=self.event.date_from - datetime.timedelta(days=5),
                 date_end=self.event.date_from + datetime.timedelta(days=5),
@@ -230,6 +230,23 @@ class ItemDisplayTest(EventTestMixin, SoupTest):
 
         html = self.client.get('/%s/%s/' % (self.orga.slug, self.event.slug)).rendered_content
         self.assertIn("Early-bird", html)
+
+        m.canceled = True
+        m.save()
+        html = self.client.get('/%s/%s/' % (self.orga.slug, self.event.slug)).rendered_content
+        self.assertNotIn("Early-bird", html)
+
+        m.canceled = False
+        m.testmode = True
+        m.save()
+        html = self.client.get('/%s/%s/' % (self.orga.slug, self.event.slug)).rendered_content
+        self.assertNotIn("Early-bird", html)
+
+        m.testmode = False
+        m.date_end = m.date_start
+        m.save()
+        html = self.client.get('/%s/%s/' % (self.orga.slug, self.event.slug)).rendered_content
+        self.assertNotIn("Early-bird", html)
 
     def test_simple_with_category(self):
         with scopes_disabled():
