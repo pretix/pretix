@@ -176,7 +176,7 @@ class Membership(models.Model):
         else:
             dt = now()
 
-        return dt >= self.date_start and dt <= self.date_end
+        return not self.canceled and dt >= self.date_start and dt <= self.date_end
 
     def allow_delete(self):
         return self.testmode and not self.orderposition_set.exists()

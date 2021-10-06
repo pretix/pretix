@@ -120,11 +120,16 @@ def get_grouped_items(event, subevent=None, voucher=None, channel='web', require
     if not voucher or not voucher.show_hidden_items:
         variation_q &= Q(hide_without_voucher=False)
 
+    if memberships is not None:
+        prefetch_membership_types = ['require_membership_types']
+    else:
+        prefetch_membership_types = []
+
     items = base_qs.using(settings.DATABASE_REPLICA).filter_available(channel=channel, voucher=voucher, allow_addons=allow_addons).select_related(
         'category', 'tax_rule',  # for re-grouping
         'hidden_if_available',
     ).prefetch_related(
-        'require_membership_types',
+        *prefetch_membership_types,
         Prefetch('quotas',
                  to_attr='_subevent_quotas',
                  queryset=event.quotas.using(settings.DATABASE_REPLICA).filter(subevent=subevent)),
@@ -161,7 +166,7 @@ def get_grouped_items(event, subevent=None, voucher=None, channel='web', require
                      quotas__isnull=False,
                      subevent_disabled=False
                  ).prefetch_related(
-                     'require_membership_types',
+                     *prefetch_membership_types,
                      Prefetch('quotas',
                               to_attr='_subevent_quotas',
                               queryset=event.quotas.using(settings.DATABASE_REPLICA).filter(subevent=subevent))
@@ -243,10 +248,6 @@ def get_grouped_items(event, subevent=None, voucher=None, channel='web', require
                 continue
 
         if item.require_membership and item.require_membership_hidden:
-            print(
-                [m.membership_type in item.require_membership_types.all() for m in memberships] if memberships else [],
-                [(m.membership_type, item.require_membership_types.all()) for m in memberships] if memberships else [],
-            )
             if not memberships or not any([m.membership_type in item.require_membership_types.all() for m in memberships]):
                 item._remove = True
                 continue
