@@ -706,6 +706,10 @@ h1 .label {
     }
 }
 
+.sortable-ghost {
+    background-color: $table-bg-hover;
+}
+
 .withoutjs {
     display: none !important;
 }

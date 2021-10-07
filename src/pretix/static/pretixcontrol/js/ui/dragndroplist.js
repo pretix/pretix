@@ -10,6 +10,7 @@ $(function () {
 
         Sortable.create(container.get(0), {
             handle: ".dnd-sort-handle",
+            ghostClass: "sortable-ghost",
             onSort: function (evt){
                 var container = $(evt.to),
                     ids = container.find("[data-dnd-id]").toArray().map(function (e) { return e.dataset.dndId; });
