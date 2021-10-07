@@ -2212,7 +2212,7 @@ class OrderPosition(AbstractPosition):
         :param attach_ical: Attach relevant ICS files
         """
         from pretix.base.services.mail import (
-            SendMailException, mail, render_mail,
+            SendMailException, TolerantDict, mail, render_mail,
         )
 
         if not self.attendee_email:
@@ -2225,6 +2225,7 @@ class OrderPosition(AbstractPosition):
             recipient = self.attendee_email
             try:
                 email_content = render_mail(template, context)
+                subject = str(subject).format_map(TolerantDict(context))
                 mail(
                     recipient, subject, template, context,
                     self.event, self.order.locale, order=self.order, headers=headers, sender=sender,
