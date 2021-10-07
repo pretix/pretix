@@ -166,7 +166,6 @@ def reorder_items(request, organizer, event):
         raise Http404(_("Some of the provided item ids are invalid."))
 
     item_categories = input_items.order_by('category__id').values_list('category__id', flat=True).distinct()
-    print(item_categories)
     if len(item_categories) > 1:
         raise Http404(_("You cannot reorder items spanning different categories."))
 
