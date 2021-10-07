@@ -152,6 +152,7 @@ def item_move_down(request, organizer, event, item):
                     organizer=request.event.organizer.slug,
                     event=request.event.slug)
 
+
 @transaction.atomic
 @event_permission_required("can_change_items")
 def reorder_items(request, organizer, event):
@@ -348,6 +349,7 @@ def category_move_down(request, organizer, event, category):
     return redirect('control:event.items.categories',
                     organizer=request.event.organizer.slug,
                     event=request.event.slug)
+
 
 @transaction.atomic
 @event_permission_required("can_change_items")
