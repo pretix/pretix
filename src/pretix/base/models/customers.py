@@ -25,6 +25,7 @@ from django.contrib.auth.hashers import (
     check_password, is_password_usable, make_password,
 )
 from django.db import models
+from django.db.models import F, Q
 from django.utils.crypto import get_random_string, salted_hmac
 from django.utils.translation import gettext_lazy as _, pgettext_lazy
 from django_scopes import ScopedManager, scopes_disabled
@@ -182,6 +183,12 @@ class Customer(LoggedModel):
     @property
     def stored_addresses(self):
         return self.invoice_addresses(manager='profiles')
+
+    def usable_memberships(self, for_event, testmode=False):
+        return self.memberships.active(for_event).with_usages().filter(
+            Q(membership_type__max_usages__isnull=True) | Q(usages__lt=F('membership_type__max_usages')),
+            testmode=testmode,
+        )
 
 
 class AttendeeProfile(models.Model):

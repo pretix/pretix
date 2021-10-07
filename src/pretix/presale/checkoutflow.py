@@ -499,7 +499,14 @@ class AddOnsStep(CartMixin, AsyncAction, TemplateFlowStep):
                         channel=self.request.sales_channel.identifier,
                         base_qs=iao.addon_category.items,
                         allow_addons=True,
-                        quota_cache=quota_cache
+                        quota_cache=quota_cache,
+                        memberships=(
+                            self.request.customer.usable_memberships(
+                                for_event=cartpos.subevent or self.request.event,
+                                testmode=self.request.event.testmode
+                            )
+                            if getattr(self.request, 'customer', None) else None
+                        ),
                     )
                     item_cache[ckey] = items
                 else:

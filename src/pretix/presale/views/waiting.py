@@ -54,6 +54,7 @@ class WaitingView(EventViewMixin, FormView):
             subevent=self.subevent
         )
         kwargs['channel'] = self.request.sales_channel.identifier
+        kwargs['customer'] = getattr(self.request, 'customer', None)
         kwargs.setdefault('initial', {})
         if 'var' in self.request.GET:
             kwargs['initial']['itemvar'] = f'{self.request.GET.get("item")}-{self.request.GET.get("var")}'
