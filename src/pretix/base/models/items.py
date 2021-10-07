@@ -810,8 +810,8 @@ class ItemVariation(models.Model):
     )
     require_membership_hidden = models.BooleanField(
         verbose_name=_('Hide without a valid membership'),
-        help_text=_('Do not show this unless the customer is logged in and has a valid membership. This also means this '
-                    'will never visible in e.g. the widget.'),
+        help_text=_('Do not show this unless the customer is logged in and has a valid membership. Be aware that '
+                    'this means it will never be visible in the widget.'),
         default=False,
     )
     available_from = models.DateTimeField(
