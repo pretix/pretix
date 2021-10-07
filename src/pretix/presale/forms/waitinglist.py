@@ -43,6 +43,7 @@ class WaitingListForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         self.event = kwargs.pop('event')
         self.channel = kwargs.pop('channel')
+        customer = kwargs.pop('customer')
         super().__init__(*args, **kwargs)
 
         choices = [
@@ -55,7 +56,7 @@ class WaitingListForm(forms.ModelForm):
                     for_event=self.instance.subevent or self.event,
                     testmode=self.request.event.testmode
                 )
-                if getattr(self.request, 'customer', None) else None
+                if customer else None
             ),
         )
         for i in items:
