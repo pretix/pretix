@@ -152,6 +152,35 @@ def item_move_down(request, organizer, event, item):
                     organizer=request.event.organizer.slug,
                     event=request.event.slug)
 
+@transaction.atomic
+@event_permission_required("can_change_items")
+def reorder_items(request, organizer, event):
+    try:
+        ids = json.loads(request.body.decode('utf-8'))['ids']
+    except (JSONDecodeError, KeyError, ValueError):
+        return HttpResponseBadRequest("expected JSON: {ids:[]}")
+
+    input_items = request.event.items.filter(id__in=[i for i in ids if i.isdigit()])
+
+    if input_items.count() != len([i for i in ids if i.isdigit()]):
+        raise Http404(_("Some of the provided item ids are invalid."))
+
+    item_categories = input_items.order_by('category__id').values_list('category__id', flat=True).distinct()
+    print(item_categories)
+    if len(item_categories) > 1:
+        raise Http404(_("You cannot reorder items spanning different categories."))
+
+    if input_items.count() != request.event.items.filter(category=item_categories[0]).count():
+        raise Http404(_("Not all items have been selected."))
+
+    for i in input_items:
+        pos = ids.index(str(i.pk))
+        if pos != i.position:  # Save unneccessary UPDATE queries
+            i.position = pos
+            i.save(update_fields=['position'])
+
+    return HttpResponse()
+
 
 class CategoryDelete(EventPermissionRequiredMixin, DeleteView):
     model = ItemCategory

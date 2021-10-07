@@ -239,6 +239,7 @@ urlpatterns = [
         re_path(r'^items/(?P<item>\d+)/$', item.ItemUpdateGeneral.as_view(), name='event.item'),
         re_path(r'^items/(?P<item>\d+)/up$', item.item_move_up, name='event.items.up'),
         re_path(r'^items/(?P<item>\d+)/down$', item.item_move_down, name='event.items.down'),
+        re_path(r'^items/reorder$', item.reorder_items, name='event.items.reorder'),
         re_path(r'^items/(?P<item>\d+)/delete$', item.ItemDelete.as_view(), name='event.items.delete'),
         re_path(r'^items/typeahead/meta/$', typeahead.item_meta_values, name='event.items.meta.typeahead'),
         re_path(r'^items/select2$', typeahead.items_select2, name='event.items.select2'),

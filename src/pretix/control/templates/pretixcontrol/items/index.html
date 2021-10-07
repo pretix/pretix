@@ -40,11 +40,11 @@
                     <th class="action-col-2"></th>
                 </tr>
                 </thead>
-                <tbody>
                 {% regroup items by category as cat_list %}
                 {% for c in cat_list %}
+                    <tbody data-dnd-url="{% url "control:event.items.reorder" organizer=request.event.organizer.slug event=request.event.slug %}">
                     {% for i in c.list %}
-                        <tr {% if not i.active %}class="row-muted"{% endif %}>
+                        <tr data-dnd-id="{{ i.id }}" {% if not i.active %}class="row-muted"{% endif %}>
                             <td><strong>
                                 {% if not i.active %}<strike>{% endif %}
                                 <a href="{% url "control:event.item" organizer=request.event.organizer.slug event=request.event.slug item=i.id %}">{{ i }}</a>
@@ -108,6 +108,8 @@
                                 <a href="{% url "control:event.items.up" organizer=request.event.organizer.slug event=request.event.slug item=i.id %}" class="btn btn-default btn-sm {% if forloop.counter0 == 0 and is_paginated and not page_obj.has_previous %}disabled{% endif %}"><i class="fa fa-arrow-up"></i></a>
                                 <a href="{% url "control:event.items.down" organizer=request.event.organizer.slug event=request.event.slug item=i.id %}" class="btn btn-default btn-sm {% if forloop.revcounter0 == 0 and is_paginated and not page_obj.has_next %}disabled{% endif %}"><i class="fa fa-arrow-down"></i></a>
                             </td>
+                            <td class="dnd-container">
+                            </td>
                             <td class="text-right flip col-actions">
                                 <a href="{% url "control:event.item" organizer=request.event.organizer.slug event=request.event.slug item=i.id %}" class="btn btn-default btn-sm"><i class="fa fa-edit"></i></a>
                                 <a href="{% url "control:event.items.add" organizer=request.event.organizer.slug event=request.event.slug %}?copy_from={{ i.id }}" class="btn btn-default btn-sm" title="{% trans "Clone" %}" data-toggle="tooltip"><i class="fa fa-copy"></i></a>
@@ -115,8 +117,8 @@
                             </td>
                         </tr>
                     {% endfor %}
+                    </tbody>
                 {% endfor %}
-                </tbody>
             </table>
         </div>
         {% include "pretixcontrol/pagination.html" %}
