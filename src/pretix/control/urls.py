@@ -250,6 +250,7 @@ urlpatterns = [
         re_path(r'^categories/(?P<category>\d+)/up$', item.category_move_up, name='event.items.categories.up'),
         re_path(r'^categories/(?P<category>\d+)/down$', item.category_move_down,
                 name='event.items.categories.down'),
+        re_path(r'^categories/reorder$', item.reorder_categories, name='event.items.categories.reorder'),
         re_path(r'^categories/(?P<category>\d+)/$', item.CategoryUpdate.as_view(),
                 name='event.items.categories.edit'),
         re_path(r'^categories/add$', item.CategoryCreate.as_view(), name='event.items.categories.add'),

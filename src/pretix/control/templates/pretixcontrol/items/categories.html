@@ -33,15 +33,17 @@
                     <th class="action-col-2"></th>
                 </tr>
                 </thead>
-                <tbody>
+                <tbody data-dnd-url="{% url "control:event.items.categories.reorder" organizer=request.event.organizer.slug event=request.event.slug %}">
                 {% for c in categories %}
-                    <tr>
+                    <tr data-dnd-id="{{ c.id }}">
                         <td>
                             <strong><a href="{% url "control:event.items.categories.edit" organizer=request.event.organizer.slug event=request.event.slug category=c.id %}">{{ c.internal_name|default:c.name }}</a></strong>
                         </td>
                         <td>
                             <a href="{% url "control:event.items.categories.up" organizer=request.event.organizer.slug event=request.event.slug category=c.id %}" class="btn btn-default btn-sm {% if forloop.counter0 == 0 and is_paginated and not page_obj.has_previous %}disabled{% endif %}"><i class="fa fa-arrow-up"></i></a>
                             <a href="{% url "control:event.items.categories.down" organizer=request.event.organizer.slug event=request.event.slug category=c.id %}" class="btn btn-default btn-sm {% if forloop.revcounter0 == 0 and is_paginated and not page_obj.has_next %}disabled{% endif %}"><i class="fa fa-arrow-down"></i></a>
+                        </td>
+                        <td class="dnd-container">
                         </td>
                         <td class="text-right flip">
                             <a href="{% url "control:event.items.categories.edit" organizer=request.event.organizer.slug event=request.event.slug category=c.id %}" class="btn btn-default btn-sm"><i class="fa fa-edit"></i></a>

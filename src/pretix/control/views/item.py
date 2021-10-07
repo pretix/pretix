@@ -321,6 +321,30 @@ def category_move_down(request, organizer, event, category):
                     organizer=request.event.organizer.slug,
                     event=request.event.slug)
 
+@transaction.atomic
+@event_permission_required("can_change_items")
+def reorder_categories(request, organizer, event):
+    try:
+        ids = json.loads(request.body.decode('utf-8'))['ids']
+    except (JSONDecodeError, KeyError, ValueError):
+        return HttpResponseBadRequest("expected JSON: {ids:[]}")
+
+    input_categories = request.event.categories.filter(id__in=[i for i in ids if i.isdigit()])
+
+    if input_categories.count() != len([i for i in ids if i.isdigit()]):
+        raise Http404(_("Some of the provided category ids are invalid."))
+
+    if input_categories.count() != request.event.categories.count():
+        raise Http404(_("Not all categories have been selected."))
+
+    for c in input_categories:
+        pos = ids.index(str(c.pk))
+        if pos != c.position:  # Save unneccessary UPDATE queries
+            c.position = pos
+            c.save(update_fields=['position'])
+
+    return HttpResponse()
+
 
 FakeQuestion = namedtuple(
     'FakeQuestion', 'id question position required'
