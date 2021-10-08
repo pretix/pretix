@@ -7,14 +7,14 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('pretixbase', '0195_auto_20210622_1457'),
+        ('pretixbase', '0199_auto_20211005_1050'),
     ]
 
     operations = [
         migrations.CreateModel(
             name='Transaction',
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False)),
+                ('id', models.BigAutoField(primary_key=True, serialize=False)),
                 ('datetime', models.DateTimeField(db_index=True)),
                 ('migrated', models.BooleanField(default=False)),
                 ('positionid', models.PositiveIntegerField(default=1, null=True)),

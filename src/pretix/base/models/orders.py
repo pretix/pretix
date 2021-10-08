@@ -2327,6 +2327,7 @@ class OrderPosition(AbstractPosition):
 
 
 class Transaction(models.Model):
+    id = models.BigAutoField(primary_key=True)
     order = models.ForeignKey(
         Order,
         verbose_name=_("Order"),
