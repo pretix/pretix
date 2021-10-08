@@ -161,16 +161,18 @@ def reorder_items(request, organizer, event):
     except (JSONDecodeError, KeyError, ValueError):
         return HttpResponseBadRequest("expected JSON: {ids:[]}")
 
-    input_items = request.event.items.filter(id__in=[i for i in ids if i.isdigit()])
+    input_items = list(request.event.items.filter(id__in=[i for i in ids if i.isdigit()]))
 
-    if input_items.count() != len([i for i in ids if i.isdigit()]):
+    if len(input_items) != len(ids):
         raise Http404(_("Some of the provided item ids are invalid."))
 
-    item_categories = input_items.order_by('category__id').values_list('category__id', flat=True).distinct()
+    item_categories = {i.category_id for i in input_items}
     if len(item_categories) > 1:
         raise Http404(_("You cannot reorder items spanning different categories."))
 
-    if input_items.count() != request.event.items.filter(category=item_categories[0]).count():
+    # get first and only category
+    item_category = next(iter(item_categories))
+    if len(input_items) != request.event.items.filter(category=item_category).count():
         raise Http404(_("Not all items have been selected."))
 
     for i in input_items:
@@ -359,12 +361,12 @@ def reorder_categories(request, organizer, event):
     except (JSONDecodeError, KeyError, ValueError):
         return HttpResponseBadRequest("expected JSON: {ids:[]}")
 
-    input_categories = request.event.categories.filter(id__in=[i for i in ids if i.isdigit()])
+    input_categories = list(request.event.categories.filter(id__in=[i for i in ids if i.isdigit()]))
 
-    if input_categories.count() != len([i for i in ids if i.isdigit()]):
+    if len(input_categories) != len(ids):
         raise Http404(_("Some of the provided category ids are invalid."))
 
-    if input_categories.count() != request.event.categories.count():
+    if len(input_categories) != request.event.categories.count():
         raise Http404(_("Not all categories have been selected."))
 
     for c in input_categories:
@@ -483,12 +485,14 @@ def reorder_questions(request, organizer, event):
     except (JSONDecodeError, KeyError, ValueError):
         return HttpResponseBadRequest("expected JSON: {ids:[]}")
 
-    input_questions = request.event.questions.filter(id__in=[i for i in ids if i.isdigit()])
+    # filter system_questions - normal questions are int/digit, system_questions strings
+    custom_question_ids = [i for i in ids if i.isdigit()]
+    input_questions = list(request.event.questions.filter(id__in=custom_question_ids))
 
-    if input_questions.count() != len([i for i in ids if i.isdigit()]):
+    if len(input_questions) != len(custom_question_ids):
         raise Http404(_("Some of the provided question ids are invalid."))
 
-    if input_questions.count() != request.event.questions.count():
+    if len(input_questions) != request.event.questions.count():
         raise Http404(_("Not all questions have been selected."))
 
     for q in input_questions:
