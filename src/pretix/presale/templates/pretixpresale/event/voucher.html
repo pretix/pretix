@@ -151,6 +151,9 @@
                                                         {{ var.description|localize|rich_text }}
                                                     </div>
                                                 {% endif %}
+                                                {% if item.do_show_quota_left %}
+                                                    {% include "pretixpresale/event/fragment_quota_left.html" with avail=var.cached_availability %}
+                                                {% endif %}
                                             </div>
                                             <div class="col-md-2 col-xs-6 price">
                                                 {% if var.original_price %}
@@ -256,6 +259,9 @@
                                             <div class="product-description">
                                                 {{ item.description|localize|rich_text }}
                                             </div>
+                                        {% endif %}
+                                        {% if item.do_show_quota_left %}
+                                            {% include "pretixpresale/event/fragment_quota_left.html" with avail=item.cached_availability %}
                                         {% endif %}
                                     </div>
                                 </div>
