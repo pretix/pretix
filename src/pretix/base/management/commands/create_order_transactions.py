@@ -21,7 +21,7 @@
 #
 
 from django.core.management.base import BaseCommand
-from django.db.models import Max, Q, F
+from django.db.models import F, Max, Q
 from django.utils.timezone import now
 from django_scopes import scopes_disabled
 from tqdm import tqdm

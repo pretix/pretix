@@ -80,10 +80,12 @@ from pretix.base.settings import PERSON_NAME_SCHEMES
 from pretix.base.signals import order_gracefully_delete
 
 from ...helpers.countries import CachedCountries, FastCountryField
+from ._transactions import (
+    _transactions_mark_order_clean, _transactions_mark_order_dirty,
+)
 from .base import LockModel, LoggedModel
 from .event import Event, SubEvent
 from .items import Item, ItemVariation, Question, QuestionOption, Quota
-from ._transactions import _transactions_mark_order_clean, _transactions_mark_order_dirty
 
 logger = logging.getLogger(__name__)
 
