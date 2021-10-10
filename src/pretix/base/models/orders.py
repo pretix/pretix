@@ -83,6 +83,7 @@ from ...helpers.countries import CachedCountries, FastCountryField
 from .base import LockModel, LoggedModel
 from .event import Event, SubEvent
 from .items import Item, ItemVariation, Question, QuestionOption, Quota
+from ._transactions import _transactions_mark_order_clean, _transactions_mark_order_dirty
 
 logger = logging.getLogger(__name__)
 
@@ -261,6 +262,10 @@ class Order(LockModel, LoggedModel):
 
     def __str__(self):
         return self.full_code
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.__initial_status_paid_or_pending = self.status in (Order.STATUS_PENDING, Order.STATUS_PAID) and not self.require_approval
 
     def gracefully_delete(self, user=None, auth=None):
         from . import GiftCard, GiftCardTransaction, Membership, Voucher
@@ -445,7 +450,12 @@ class Order(LockModel, LoggedModel):
             self.datetime = now()
         if not self.expires:
             self.set_expires()
-        super().save(**kwargs)
+
+        status_paid_or_pending = self.status in (Order.STATUS_PENDING, Order.STATUS_PAID) and not self.require_approval
+        if status_paid_or_pending != self.__initial_status_paid_or_pending or not self.pk:
+            _transactions_mark_order_dirty(self.pk, using=kwargs.get('using', None))
+
+        return super().save(**kwargs)
 
     def touch(self):
         self.save(update_fields=['last_modified'])
@@ -1003,23 +1013,11 @@ class Order(LockModel, LoggedModel):
     def create_transactions(self, is_new=False, positions=None, fees=None, dt_now=None, migrated=False):
         dt_now = dt_now or now()
 
-        def key(obj):
-            if isinstance(obj, Transaction):
-                return (obj.positionid, obj.item_id, obj.variation_id, obj.subevent_id, obj.price, obj.tax_rate,
-                        obj.tax_rule_id, obj.tax_value, obj.fee_type, obj.internal_type)
-            elif isinstance(obj, OrderPosition):
-                return (obj.positionid, obj.item_id, obj.variation_id, obj.subevent_id, obj.price, obj.tax_rate,
-                        obj.tax_rule_id, obj.tax_value, None, None)
-            elif isinstance(obj, OrderFee):
-                return (None, None, None, None, obj.value, obj.tax_rate,
-                        obj.tax_rule_id, obj.tax_value, obj.fee_type, obj.internal_type)
-            raise ValueError('invalid state')  # noqa
-
         # Count the transactions we already have
         current_transaction_count = Counter()
         if not is_new:
             for t in self.transactions.all():
-                current_transaction_count[key(t)] += t.count
+                current_transaction_count[Transaction.key(t)] += t.count
 
         # Count the transactions we'd actually need
         target_transaction_count = Counter()
@@ -1028,13 +1026,13 @@ class Order(LockModel, LoggedModel):
             for p in positions:
                 if p.canceled:
                     continue
-                target_transaction_count[key(p)] += 1
+                target_transaction_count[Transaction.key(p)] += 1
 
             fees = self.fees.all() if fees is None else fees
             for f in fees:
                 if f.canceled:
                     continue
-                target_transaction_count[key(f)] += 1
+                target_transaction_count[Transaction.key(f)] += 1
 
         keys = set(target_transaction_count.keys()) | set(current_transaction_count.keys())
         create = []
@@ -1050,7 +1048,7 @@ class Order(LockModel, LoggedModel):
                     count=d,
                     item_id=itemid,
                     variation_id=variationid,
-                    subevent=subeventid,
+                    subevent_id=subeventid,
                     price=price,
                     tax_rate=taxrate,
                     tax_rule_id=taxruleid,
@@ -1059,6 +1057,8 @@ class Order(LockModel, LoggedModel):
                     internal_type=internaltype,
                 ))
         Transaction.objects.bulk_create(create)
+        _transactions_mark_order_clean(self.pk)
+        return create
 
 
 def answerfile_name(instance, filename: str) -> str:
@@ -2019,6 +2019,11 @@ class OrderFee(models.Model):
     def net_value(self):
         return self.value - self.tax_value
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.__initial_transaction_key = Transaction.key(self)
+        self.__initial_canceled = self.canceled
+
     def __str__(self):
         if self.description:
             return '{} - {}'.format(self.get_fee_type_display(), self.description)
@@ -2057,6 +2062,10 @@ class OrderFee(models.Model):
         if self.tax_rate is None:
             self._calculate_tax()
         self.order.touch()
+
+        if Transaction.key(self) != self.__initial_transaction_key or self.canceled != self.__initial_canceled or not self.pk:
+            _transactions_mark_order_dirty(self.order_id, using=kwargs.get('using', None))
+
         return super().save(*args, **kwargs)
 
     def delete(self, **kwargs):
@@ -2071,7 +2080,7 @@ class OrderPosition(AbstractPosition):
     AbstractPosition.
 
     The default ``OrderPosition.objects`` manager only contains fees that are not ``canceled``. If
-    you ant all objects, you need to use ``OrderPosition.all`` instead.
+    you want all objects, you need to use ``OrderPosition.all`` instead.
 
     :param order: The order this position is a part of
     :type order: Order
@@ -2121,6 +2130,11 @@ class OrderPosition(AbstractPosition):
 
     all = ScopedManager(organizer='order__event__organizer')
     objects = ActivePositionManager()
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.__initial_transaction_key = Transaction.key(self)
+        self.__initial_canceled = self.canceled
 
     class Meta:
         verbose_name = _("Order position")
@@ -2231,6 +2245,9 @@ class OrderPosition(AbstractPosition):
         if not self.pseudonymization_id:
             self.assign_pseudonymization_id()
 
+        if Transaction.key(self) != self.__initial_transaction_key or self.canceled != self.__initial_canceled or not self.pk:
+            _transactions_mark_order_dirty(self.order_id, using=kwargs.get('using', None))
+
         return super().save(*args, **kwargs)
 
     @scopes_disabled()
@@ -2327,6 +2344,58 @@ class OrderPosition(AbstractPosition):
 
 
 class Transaction(models.Model):
+    """
+    Transactions are a data structure that is redundant on the first sight but makes it possible to create good
+    financial reporting.
+
+    To understand this, think of "orders" as something like a contractual relationship between the organizer and the
+    customer which requires to customer to pay some money and the organizer to provide a ticket.
+
+    The ``Order``, ``OrderPosition``, and ``OrderFee`` models combined give a representation of the current contractual
+    status of this relationship, i.e. how much and what is owed. The ``OrderPayment`` and ``OrderRefund`` models indicate
+    the "other side" of the relationship, i.e. how much of the financial obligation has been met so far.
+
+    However, while ``OrderPayment`` and ``OrderRefund`` objects are "final" and no longer change once they reached their
+    final state, ``Order``, ``OrderPosition`` and ``OrderFee`` are highly mutable and can chane at any time, e.g. if
+    the customer moves their booking to a different day or a discount is applied retroactively.
+
+    Therefore those models can be used to answer the question "how many tickets of type X have been sold for my event
+    as of today?" but they cannot accurately answer the question "how many tickets of type X have been sold for my event
+    as of last month?" because they lack this kind of historical information.
+
+    Transactions help here because they are "immutable copies" or "modification records" of call positions and fees
+    at the time of their creation and change. They only record data that is usually relevant for financial reporting,
+    such as amounts, prices, products and dates involved. They do not record data like attendee names etc.
+
+    Even before the introduction of the Transaction Model pretix *did* store historical data for auditability in the
+    LogEntry model. However, it's almost impossible to do efficient reporting on that data.
+
+    Transactions should never be generated manually but only through the ``order.create_transactions()``
+    method which should be called **within the same database transaction**.
+
+    The big downside of this approach is that you need to remember to update transaction records every time you change
+    or create orders in new code paths. The mechanism introduced in ``pretix.base.models._transactions`` as well as
+    the ``save()`` methods of ``Order``, ``OrderPosition`` and ``OrderFee`` intends to help you notice if you missed
+    it. The only thing this *doesn't* catch is usage of ``OrderPosition.objects.bulk_create`` (and likewise for
+    ``bulk_update`` and ``OrderFee``).
+
+    :param id: ID of the transaction
+    :param order: Order the transaction belongs to
+    :param datetime: Date and time of the transaction
+    :param migrated: Whether this object was reconstructed because the order was created before transactions where introduced
+    :param positionid: Affected Position ID, in case this transaction represents a change in an order position
+    :param count: An amount, multiplicator for price etc. For order positions this can *currently* only be -1 or +1, for
+                  fees it can also be more in special cases
+    :param item: ``Item``, in case this transaction represents a change in an order position
+    :param variation: ``ItemVariation``, in case this transaction represents a change in an order position
+    :param subevent: ``subevent``, in case this transaction represents a change in an order position
+    :param price: Price of the changed position
+    :param tax_rate: Tax rate of the changed position
+    :param tax_rule: Used tax rule
+    :param tax_value: Tax value in event currency
+    :param fee_type: Fee type code in case this transaction represents a change in an order fee
+    :param internal_type: Internal fee type in case this transaction represents a change in an order fee
+    """
     id = models.BigAutoField(primary_key=True)
     order = models.ForeignKey(
         Order,
@@ -2386,12 +2455,25 @@ class Transaction(models.Model):
     internal_type = models.CharField(max_length=255, null=True, blank=True)
 
     class Meta:
-        ordering = 'datetime',
+        ordering = 'datetime', 'pk'
 
     def save(self, *args, **kwargs):
         if not self.fee_type and not self.item:
             raise ValidationError('Should set either item or fee type')
         return super().save(*args, **kwargs)
+
+    @staticmethod
+    def key(obj):
+        if isinstance(obj, Transaction):
+            return (obj.positionid, obj.item_id, obj.variation_id, obj.subevent_id, obj.price, obj.tax_rate,
+                    obj.tax_rule_id, obj.tax_value, obj.fee_type, obj.internal_type)
+        elif isinstance(obj, OrderPosition):
+            return (obj.positionid, obj.item_id, obj.variation_id, obj.subevent_id, obj.price, obj.tax_rate,
+                    obj.tax_rule_id, obj.tax_value, None, None)
+        elif isinstance(obj, OrderFee):
+            return (None, None, None, None, obj.value, obj.tax_rate,
+                    obj.tax_rule_id, obj.tax_value, obj.fee_type, obj.internal_type)
+        raise ValueError('invalid state')  # noqa
 
 
 class CartPosition(AbstractPosition):

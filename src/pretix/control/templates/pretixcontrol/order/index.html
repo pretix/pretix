@@ -948,7 +948,15 @@
                             <tbody>
                             {% for t in transactions %}
                                 <tr class="{% if t.count < 0 %}danger{% endif %}">
-                                    <td>{{ t.datetime|date:"SHORT_DATETIME_FORMAT" }}</td>
+                                    <td>
+                                        {{ t.datetime|date:"SHORT_DATETIME_FORMAT" }}
+                                        {% if t.migrated %}
+                                            <span class="fa fa-warning text-warning"
+                                                  data-toggle="tooltip"
+                                                  title="{% trans 'This order was created before we introduced this table, therefore this data might be inaccurate.' %}"
+                                            ></span>
+                                        {% endif %}
+                                    </td>
                                     <td>
                                         {% if t.item %}
                                             {{ t.item }}

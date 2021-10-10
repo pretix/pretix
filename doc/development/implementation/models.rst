@@ -92,6 +92,9 @@ Carts and Orders
 .. autoclass:: pretix.base.models.OrderRefund
    :members:
 
+.. autoclass:: pretix.base.models.Transaction
+   :members:
+
 .. autoclass:: pretix.base.models.CartPosition
    :members:
 
