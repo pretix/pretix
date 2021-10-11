@@ -8,7 +8,6 @@ $(function () {
         container.find(".dnd-container").append(handle);
 
         Sortable.create(container.get(0), {
-            revertOnSpill: true,
             filter: ".sortable-disabled",
             handle: ".dnd-sort-handle",
             onMove: function (evt) {
