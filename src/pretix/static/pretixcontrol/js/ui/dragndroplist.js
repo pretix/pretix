@@ -13,7 +13,6 @@ $(function () {
             onMove: function (evt) {
                 return evt.related.className.indexOf('sortable-disabled') === -1;
             },
-            //ghostClass: "sortable-ghost",
             onStart: function (evt) {
                 container.addClass("sortable-dragarea");
                 container.parent().addClass("sortable-sorting");
