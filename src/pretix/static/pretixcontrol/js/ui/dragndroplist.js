@@ -3,9 +3,13 @@ $(function () {
     $("[data-dnd-url]").each(function(){
         var container = $(this),
             url = container.data("dnd-url"),
-            handle = $('<span class="btn btn-default btn-sm dnd-sort-handle"><i class="fa fa-arrows"></i></span>');
+            handle = $('<button class="btn btn-default btn-sm dnd-sort-handle"><i class="fa fa-arrows"></i></button>');
 
         container.find(".dnd-container").append(handle);
+        if (container.find("[data-dnd-id]").length < 2) {
+            handle.prop("disabled", "disabled");
+            return;
+        }
 
         Sortable.create(container.get(0), {
             filter: ".sortable-disabled",
