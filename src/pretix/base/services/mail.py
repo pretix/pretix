@@ -484,7 +484,7 @@ def mail_send_task(self, *args, to: List[str], subject: str, body: str, html: st
                     # See also https://docs.microsoft.com/en-us/exchange/troubleshoot/send-emails/smtp-submission-improvements
                     from django_redis import get_redis_connection
 
-                    redis_key = "pretix_mail_retry_" + hashlib.sha1(f"{getattr(backend, 'username', '_')}@{getattr(backend, 'host', '_')}").hexdigest()
+                    redis_key = "pretix_mail_retry_" + hashlib.sha1(f"{getattr(backend, 'username', '_')}@{getattr(backend, 'host', '_')}".encode()).hexdigest()
                     rc = get_redis_connection("redis")
                     cnt = rc.incr(redis_key)
                     rc.expire(redis_key, 300)
