@@ -42,8 +42,8 @@
                             <strong><a href="{% url "control:event.items.categories.edit" organizer=request.event.organizer.slug event=request.event.slug category=c.id %}">{{ c.internal_name|default:c.name }}</a></strong>
                         </td>
                         <td>
-                            <button formaction="{% url "control:event.items.categories.up" organizer=request.event.organizer.slug event=request.event.slug category=c.id %}" class="btn btn-default btn-sm"{% if forloop.counter0 == 0 and not page_obj.has_previous %} disabled{% endif %}><i class="fa fa-arrow-up"></i></button>
-                            <button formaction="{% url "control:event.items.categories.down" organizer=request.event.organizer.slug event=request.event.slug category=c.id %}" class="btn btn-default btn-sm"{% if forloop.revcounter0 == 0 and not page_obj.has_next %} disabled{% endif %}><i class="fa fa-arrow-down"></i></button>
+                            <button formaction="{% url "control:event.items.categories.up" organizer=request.event.organizer.slug event=request.event.slug category=c.id %}" class="btn btn-default btn-sm sortable-up"{% if forloop.counter0 == 0 and not page_obj.has_previous %} disabled{% endif %}><i class="fa fa-arrow-up"></i></button>
+                            <button formaction="{% url "control:event.items.categories.down" organizer=request.event.organizer.slug event=request.event.slug category=c.id %}" class="btn btn-default btn-sm sortable-down"{% if forloop.revcounter0 == 0 and not page_obj.has_next %} disabled{% endif %}><i class="fa fa-arrow-down"></i></button>
                             <span class="dnd-container"></span>
                         </td>
                         <td class="text-right flip">
