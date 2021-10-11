@@ -26,6 +26,8 @@
             <a href="{% url "control:event.items.add" organizer=request.event.organizer.slug event=request.event.slug %}"
                     class="btn btn-default"><i class="fa fa-plus"></i> {% trans "Create a new product" %}</a>
         </p>
+        <form method="post">
+            {% csrf_token %}
         <div class="table-responsive">
             <table class="table table-condensed table-hover">
                 <thead>
@@ -106,8 +108,8 @@
                             </td>
                             <td>{% if i.category %}{{ i.category.name }}{% endif %}</td>
                             <td>
-                                <a href="{% url "control:event.items.up" organizer=request.event.organizer.slug event=request.event.slug item=i.id %}" class="btn btn-default btn-sm {% if forloop.counter0 == 0 and is_paginated and not page_obj.has_previous %}disabled{% endif %}"><i class="fa fa-arrow-up"></i></a>
-                                <a href="{% url "control:event.items.down" organizer=request.event.organizer.slug event=request.event.slug item=i.id %}" class="btn btn-default btn-sm {% if forloop.revcounter0 == 0 and is_paginated and not page_obj.has_next %}disabled{% endif %}"><i class="fa fa-arrow-down"></i></a>
+                                <button formaction="{% url "control:event.items.up" organizer=request.event.organizer.slug event=request.event.slug item=i.id %}" class="btn btn-default btn-sm"{% if forloop.counter0 == 0 %} disabled{% endif %}><i class="fa fa-arrow-up"></i></button>
+                                <button formaction="{% url "control:event.items.down" organizer=request.event.organizer.slug event=request.event.slug item=i.id %}" class="btn btn-default btn-sm"{% if forloop.revcounter0 == 0 %} disabled{% endif %}><i class="fa fa-arrow-down"></i></button>
                                 <span class="dnd-container"></span>
                             </td>
                             <td class="text-right flip col-actions">
@@ -121,6 +123,7 @@
                 {% endfor %}
             </table>
         </div>
+        </form>
         {% include "pretixcontrol/pagination.html" %}
     {% endif %}
 {% endblock %}
