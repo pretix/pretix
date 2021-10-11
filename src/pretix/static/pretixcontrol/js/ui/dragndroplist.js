@@ -9,7 +9,20 @@ $(function () {
 
         Sortable.create(container.get(0), {
             revertOnSpill: true,
+            filter: ".sortable-disabled",
             handle: ".dnd-sort-handle",
+            onMove: function (evt) {
+                return evt.related.className.indexOf('sortable-disabled') === -1;
+            },
+            //ghostClass: "sortable-ghost",
+            onStart: function (evt) {
+                container.addClass("sortable-dragarea");
+                container.parent().addClass("sortable-sorting");
+            },
+            onEnd: function (evt) {
+                container.removeClass("sortable-dragarea");
+                container.parent().removeClass("sortable-sorting");
+            },
             onSort: function (evt){
                 var container = $(evt.to),
                     ids = container.find("[data-dnd-id]").toArray().map(function (e) { return e.dataset.dndId; });

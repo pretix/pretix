@@ -709,6 +709,16 @@ h1 .label {
 .sortable-chosen {
     background-color: $table-bg-hover;
 }
+tbody[data-dnd-url] {
+    transition: opacity 1s;
+}
+.sortable-sorting tbody:not(.sortable-dragarea) {
+    opacity: .4;
+}
+tbody th {
+    background: $table-bg-hover;
+}
+
 
 .withoutjs {
     display: none !important;

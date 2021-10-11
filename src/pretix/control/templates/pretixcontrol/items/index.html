@@ -44,6 +44,7 @@
                 {% for c in cat_list %}
                     <tbody data-dnd-url="{% url "control:event.items.reorder" organizer=request.event.organizer.slug event=request.event.slug %}">
                     {% for i in c.list %}
+                        {% if forloop.counter0 == 0 and i.category %}<tr class="sortable-disabled"><th colspan="8" scope="colgroup" class="text-muted">{{ i.category.name }}</th></tr>{% endif %}
                         <tr data-dnd-id="{{ i.id }}" {% if not i.active %}class="row-muted"{% endif %}>
                             <td><strong>
                                 {% if not i.active %}<strike>{% endif %}
