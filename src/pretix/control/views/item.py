@@ -53,6 +53,7 @@ from django.urls import resolve, reverse
 from django.utils.functional import cached_property
 from django.utils.timezone import now
 from django.utils.translation import gettext, gettext_lazy as _
+from django.views.decorators.http import require_http_methods
 from django.views.generic import ListView
 from django.views.generic.detail import DetailView, SingleObjectMixin
 from django.views.generic.edit import DeleteView
@@ -138,6 +139,7 @@ def item_move(request, item, up=True):
 
 
 @event_permission_required("can_change_items")
+@require_http_methods(["POST"])
 def item_move_up(request, organizer, event, item):
     item_move(request, item, up=True)
     return redirect('control:event.items',
@@ -146,6 +148,7 @@ def item_move_up(request, organizer, event, item):
 
 
 @event_permission_required("can_change_items")
+@require_http_methods(["POST"])
 def item_move_down(request, organizer, event, item):
     item_move(request, item, up=False)
     return redirect('control:event.items',
@@ -155,6 +158,7 @@ def item_move_down(request, organizer, event, item):
 
 @transaction.atomic
 @event_permission_required("can_change_items")
+@require_http_methods(["POST"])
 def reorder_items(request, organizer, event):
     try:
         ids = json.loads(request.body.decode('utf-8'))['ids']
@@ -338,6 +342,7 @@ def category_move(request, category, up=True):
 
 
 @event_permission_required("can_change_items")
+@require_http_methods(["POST"])
 def category_move_up(request, organizer, event, category):
     category_move(request, category, up=True)
     return redirect('control:event.items.categories',
@@ -346,6 +351,7 @@ def category_move_up(request, organizer, event, category):
 
 
 @event_permission_required("can_change_items")
+@require_http_methods(["POST"])
 def category_move_down(request, organizer, event, category):
     category_move(request, category, up=False)
     return redirect('control:event.items.categories',
@@ -355,6 +361,7 @@ def category_move_down(request, organizer, event, category):
 
 @transaction.atomic
 @event_permission_required("can_change_items")
+@require_http_methods(["POST"])
 def reorder_categories(request, organizer, event):
     try:
         ids = json.loads(request.body.decode('utf-8'))['ids']
@@ -479,6 +486,7 @@ class QuestionList(ListView):
 
 @transaction.atomic
 @event_permission_required("can_change_items")
+@require_http_methods(["POST"])
 def reorder_questions(request, organizer, event):
     try:
         ids = json.loads(request.body.decode('utf-8'))['ids']
