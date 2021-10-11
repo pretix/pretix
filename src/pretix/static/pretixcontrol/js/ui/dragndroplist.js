@@ -3,7 +3,7 @@ $(function () {
     $("[data-dnd-url]").each(function(){
         var container = $(this),
             url = container.data("dnd-url"),
-            handle = $('<button class="btn btn-default btn-sm dnd-sort-handle"><i class="fa fa-arrows"></i></button>');
+            handle = $('<button class="btn btn-default btn-sm dnd-sort-handle" type="button"><i class="fa fa-arrows"></i></button>');
 
         container.find(".dnd-container").append(handle);
         if (container.find("[data-dnd-id]").length < 2) {
