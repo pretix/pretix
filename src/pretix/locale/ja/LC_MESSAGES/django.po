@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-09-27 18:48+0000\n"
-"PO-Revision-Date: 2021-10-11 10:41+0000\n"
+"PO-Revision-Date: 2021-10-11 15:56+0000\n"
 "Last-Translator: DJG Bayern <pretix2021weblate@aruki.de>\n"
 "Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/pretix/"
 "ja/>\n"
@@ -1472,7 +1472,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/event/cancel.html:16
 #: pretix/control/views/item.py:835
 msgid "Paid orders"
-msgstr ""
+msgstr "支払い済みの注文"
 
 #: pretix/base/exporters/orderlist.py:828 pretix/control/views/item.py:840
 msgid "Pending orders"
@@ -19180,7 +19180,7 @@ msgstr ""
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:80
 msgid "Comment:"
-msgstr ""
+msgstr "注:"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:92
 msgid "No order code detected"
