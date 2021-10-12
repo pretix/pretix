@@ -271,105 +271,109 @@ def test_wrong_event(perf_patch, client, env, url):
     # a 404 error to prevent information leakage
     assert response.status_code == 404
 
+HTTP_POST = "post"
+HTTP_GET = "get"
 
 event_permission_urls = [
-    ("can_change_event_settings", "live/", 200),
-    ("can_change_event_settings", "delete/", 200),
-    ("can_change_event_settings", "dangerzone/", 200),
-    ("can_change_event_settings", "settings/", 200),
-    ("can_change_event_settings", "settings/plugins", 200),
-    ("can_change_event_settings", "settings/payment", 200),
-    ("can_change_event_settings", "settings/tickets", 200),
-    ("can_change_event_settings", "settings/email", 200),
-    ("can_change_event_settings", "settings/cancel", 200),
-    ("can_change_event_settings", "settings/invoice", 200),
-    ("can_change_event_settings", "settings/widget", 200),
-    ("can_change_event_settings", "settings/invoice/preview", 200),
-    ("can_change_event_settings", "settings/tax/", 200),
-    ("can_change_event_settings", "settings/tax/1/", 404),
-    ("can_change_event_settings", "settings/tax/add", 200),
-    ("can_change_event_settings", "settings/tax/1/delete", 404),
-    ("can_change_event_settings", "comment/", 405),
+    ("can_change_event_settings", "live/", 200, HTTP_GET),
+    ("can_change_event_settings", "delete/", 200, HTTP_GET),
+    ("can_change_event_settings", "dangerzone/", 200, HTTP_GET),
+    ("can_change_event_settings", "settings/", 200, HTTP_GET),
+    ("can_change_event_settings", "settings/plugins", 200, HTTP_GET),
+    ("can_change_event_settings", "settings/payment", 200, HTTP_GET),
+    ("can_change_event_settings", "settings/tickets", 200, HTTP_GET),
+    ("can_change_event_settings", "settings/email", 200, HTTP_GET),
+    ("can_change_event_settings", "settings/cancel", 200, HTTP_GET),
+    ("can_change_event_settings", "settings/invoice", 200, HTTP_GET),
+    ("can_change_event_settings", "settings/widget", 200, HTTP_GET),
+    ("can_change_event_settings", "settings/invoice/preview", 200, HTTP_GET),
+    ("can_change_event_settings", "settings/tax/", 200, HTTP_GET),
+    ("can_change_event_settings", "settings/tax/1/", 404, HTTP_GET),
+    ("can_change_event_settings", "settings/tax/add", 200, HTTP_GET),
+    ("can_change_event_settings", "settings/tax/1/delete", 404, HTTP_GET),
+    ("can_change_event_settings", "comment/", 405, HTTP_GET),
     # Lists are currently not access-controlled
     # ("can_change_items", "items/", 200),
-    ("can_change_items", "items/add", 200),
-    ("can_change_items", "items/1/up", 404),
-    ("can_change_items", "items/1/down", 404),
-    ("can_change_items", "items/1/delete", 404),
+    ("can_change_items", "items/add", 200, HTTP_GET),
+    ("can_change_items", "items/1/up", 404, HTTP_POST),
+    ("can_change_items", "items/1/down", 404, HTTP_POST),
+    ("can_change_items", "items/reorder", 400, HTTP_POST),
+    ("can_change_items", "items/1/delete", 404, HTTP_GET),
     # ("can_change_items", "categories/", 200),
     # We don't have to create categories and similar objects
     # for testing this, it is enough to test that a 404 error
     # is returned instead of a 403 one.
-    ("can_change_items", "categories/2/", 404),
-    ("can_change_items", "categories/2/delete", 404),
-    ("can_change_items", "categories/2/up", 404),
-    ("can_change_items", "categories/2/down", 404),
-    ("can_change_items", "categories/add", 200),
-    # ("can_change_items", "questions/", 200),
-    ("can_change_items", "questions/2/", 404),
-    ("can_change_items", "questions/2/delete", 404),
-    ("can_change_items", "questions/reorder", 400),
-    ("can_change_items", "questions/add", 200),
-    # ("can_change_items", "quotas/", 200),
-    ("can_change_items", "quotas/2/change", 404),
-    ("can_change_items", "quotas/2/delete", 404),
-    ("can_change_items", "quotas/add", 200),
-    ("can_change_event_settings", "subevents/", 200),
-    ("can_change_event_settings", "subevents/2/", 404),
-    ("can_change_event_settings", "subevents/2/delete", 404),
-    ("can_change_event_settings", "subevents/add", 200),
-    ("can_view_orders", "orders/overview/", 200),
-    ("can_view_orders", "orders/export/", 200),
-    ("can_view_orders", "orders/", 200),
-    ("can_view_orders", "orders/FOO/", 200),
-    ("can_change_orders", "orders/FOO/extend", 200),
-    ("can_change_orders", "orders/FOO/reactivate", 302),
-    ("can_change_orders", "orders/FOO/contact", 200),
-    ("can_change_orders", "orders/FOO/transition", 405),
-    ("can_change_orders", "orders/FOO/checkvatid", 405),
-    ("can_change_orders", "orders/FOO/resend", 405),
-    ("can_change_orders", "orders/FOO/invoice", 405),
-    ("can_change_orders", "orders/FOO/change", 200),
-    ("can_change_orders", "orders/FOO/approve", 200),
-    ("can_change_orders", "orders/FOO/deny", 200),
-    ("can_change_orders", "orders/FOO/delete", 302),
-    ("can_change_orders", "orders/FOO/comment", 405),
-    ("can_change_orders", "orders/FOO/locale", 200),
-    ("can_change_orders", "orders/FOO/sendmail", 200),
-    ("can_change_orders", "orders/FOO/1/sendmail", 404),
-    ("can_change_orders", "orders/import/", 200),
-    ("can_change_orders", "orders/import/0ab7b081-92d3-4480-82de-2f8b056fd32f/", 404),
-    ("can_view_orders", "orders/FOO/answer/5/", 404),
-    ("can_change_orders", "cancel/", 200),
-    ("can_change_vouchers", "vouchers/add", 200),
-    ("can_change_vouchers", "vouchers/bulk_add", 200),
-    ("can_view_vouchers", "vouchers/", 200),
-    ("can_view_vouchers", "vouchers/tags/", 200),
-    ("can_change_vouchers", "vouchers/1234/", 404),
-    ("can_change_vouchers", "vouchers/1234/delete", 404),
-    ("can_view_orders", "waitinglist/", 200),
-    ("can_change_orders", "waitinglist/auto_assign", 405),
-    ("can_change_orders", "waitinglist/action", 405),
-    ("can_view_orders", "checkins/", 200),
-    ("can_view_orders", "checkinlists/", 200),
-    ("can_view_orders", "checkinlists/1/", 404),
-    ("can_change_event_settings", "checkinlists/add", 200),
-    ("can_change_event_settings", "checkinlists/1/change", 404),
-    ("can_change_event_settings", "checkinlists/1/delete", 404),
+    ("can_change_items", "categories/2/", 404, HTTP_GET),
+    ("can_change_items", "categories/2/delete", 404, HTTP_GET),
+    ("can_change_items", "categories/2/up", 404, HTTP_POST),
+    ("can_change_items", "categories/2/down", 404, HTTP_POST),
+    ("can_change_items", "categories/reorder", 400, HTTP_POST),
+    ("can_change_items", "categories/add", 200, HTTP_GET),
+    # ("can_change_items", "questions/", 200, HTTP_GET),
+    ("can_change_items", "questions/2/", 404, HTTP_GET),
+    ("can_change_items", "questions/2/delete", 404, HTTP_GET),
+    ("can_change_items", "questions/reorder", 400, HTTP_POST),
+    ("can_change_items", "questions/add", 200, HTTP_GET),
+    # ("can_change_items", "quotas/", 200, HTTP_GET),
+    ("can_change_items", "quotas/2/change", 404, HTTP_GET),
+    ("can_change_items", "quotas/2/delete", 404, HTTP_GET),
+    ("can_change_items", "quotas/add", 200, HTTP_GET),
+    ("can_change_event_settings", "subevents/", 200, HTTP_GET),
+    ("can_change_event_settings", "subevents/2/", 404, HTTP_GET),
+    ("can_change_event_settings", "subevents/2/delete", 404, HTTP_GET),
+    ("can_change_event_settings", "subevents/add", 200, HTTP_GET),
+    ("can_view_orders", "orders/overview/", 200, HTTP_GET),
+    ("can_view_orders", "orders/export/", 200, HTTP_GET),
+    ("can_view_orders", "orders/", 200, HTTP_GET),
+    ("can_view_orders", "orders/FOO/", 200, HTTP_GET),
+    ("can_change_orders", "orders/FOO/extend", 200, HTTP_GET),
+    ("can_change_orders", "orders/FOO/reactivate", 302, HTTP_GET),
+    ("can_change_orders", "orders/FOO/contact", 200, HTTP_GET),
+    ("can_change_orders", "orders/FOO/transition", 405, HTTP_GET),
+    ("can_change_orders", "orders/FOO/checkvatid", 405, HTTP_GET),
+    ("can_change_orders", "orders/FOO/resend", 405, HTTP_GET),
+    ("can_change_orders", "orders/FOO/invoice", 405, HTTP_GET),
+    ("can_change_orders", "orders/FOO/change", 200, HTTP_GET),
+    ("can_change_orders", "orders/FOO/approve", 200, HTTP_GET),
+    ("can_change_orders", "orders/FOO/deny", 200, HTTP_GET),
+    ("can_change_orders", "orders/FOO/delete", 302, HTTP_GET),
+    ("can_change_orders", "orders/FOO/comment", 405, HTTP_GET),
+    ("can_change_orders", "orders/FOO/locale", 200, HTTP_GET),
+    ("can_change_orders", "orders/FOO/sendmail", 200, HTTP_GET),
+    ("can_change_orders", "orders/FOO/1/sendmail", 404, HTTP_GET),
+    ("can_change_orders", "orders/import/", 200, HTTP_GET),
+    ("can_change_orders", "orders/import/0ab7b081-92d3-4480-82de-2f8b056fd32f/", 404, HTTP_GET),
+    ("can_view_orders", "orders/FOO/answer/5/", 404, HTTP_GET),
+    ("can_change_orders", "cancel/", 200, HTTP_GET),
+    ("can_change_vouchers", "vouchers/add", 200, HTTP_GET),
+    ("can_change_vouchers", "vouchers/bulk_add", 200, HTTP_GET),
+    ("can_view_vouchers", "vouchers/", 200, HTTP_GET),
+    ("can_view_vouchers", "vouchers/tags/", 200, HTTP_GET),
+    ("can_change_vouchers", "vouchers/1234/", 404, HTTP_GET),
+    ("can_change_vouchers", "vouchers/1234/delete", 404, HTTP_GET),
+    ("can_view_orders", "waitinglist/", 200, HTTP_GET),
+    ("can_change_orders", "waitinglist/auto_assign", 405, HTTP_GET),
+    ("can_change_orders", "waitinglist/action", 405, HTTP_GET),
+    ("can_view_orders", "checkins/", 200, HTTP_GET),
+    ("can_view_orders", "checkinlists/", 200, HTTP_GET),
+    ("can_view_orders", "checkinlists/1/", 404, HTTP_GET),
+    ("can_change_event_settings", "checkinlists/add", 200, HTTP_GET),
+    ("can_change_event_settings", "checkinlists/1/change", 404, HTTP_GET),
+    ("can_change_event_settings", "checkinlists/1/delete", 404, HTTP_GET),
 
     # bank transfer
-    ("can_change_orders", "banktransfer/import/", 200),
-    ("can_change_orders", "banktransfer/job/1/", 404),
-    ("can_change_orders", "banktransfer/action/", 200),
-    ("can_change_orders", "banktransfer/refunds/", 200),
-    ("can_change_orders", "banktransfer/export/1/", 404),
-    ("can_change_orders", "banktransfer/sepa-export/1/", 404),
+    ("can_change_orders", "banktransfer/import/", 200, HTTP_GET),
+    ("can_change_orders", "banktransfer/job/1/", 404, HTTP_GET),
+    ("can_change_orders", "banktransfer/action/", 200, HTTP_GET),
+    ("can_change_orders", "banktransfer/refunds/", 200, HTTP_GET),
+    ("can_change_orders", "banktransfer/export/1/", 404, HTTP_GET),
+    ("can_change_orders", "banktransfer/sepa-export/1/", 404, HTTP_GET),
 ]
 
 
 @pytest.mark.django_db
-@pytest.mark.parametrize("perm,url,code", event_permission_urls)
-def test_wrong_event_permission(perf_patch, client, env, perm, url, code):
+@pytest.mark.parametrize("perm,url,code,http_method", event_permission_urls)
+def test_wrong_event_permission(perf_patch, client, env, perm, url, code, http_method):
     t = Team(
         organizer=env[2], all_events=True
     )
@@ -377,13 +381,16 @@ def test_wrong_event_permission(perf_patch, client, env, perm, url, code):
     t.save()
     t.members.add(env[1])
     client.login(email='dummy@dummy.dummy', password='dummy')
-    response = client.get('/control/event/dummy/dummy/' + url)
+    if http_method and http_method == HTTP_POST:
+        response = client.post('/control/event/dummy/dummy/' + url)
+    else:
+        response = client.get('/control/event/dummy/dummy/' + url)
     assert response.status_code == 403
 
 
 @pytest.mark.django_db
-@pytest.mark.parametrize("perm,url,code", event_permission_urls)
-def test_limited_event_permission_for_other_event(perf_patch, client, env, perm, url, code):
+@pytest.mark.parametrize("perm,url,code,http_method", event_permission_urls)
+def test_limited_event_permission_for_other_event(perf_patch, client, env, perm, url, code, http_method):
     event2 = Event.objects.create(
         organizer=env[2], name='Dummy', slug='dummy2',
         date_from=now(), plugins='pretix.plugins.banktransfer'
@@ -393,7 +400,10 @@ def test_limited_event_permission_for_other_event(perf_patch, client, env, perm,
     t.limit_events.add(event2)
 
     client.login(email='dummy@dummy.dummy', password='dummy')
-    response = client.get('/control/event/dummy/dummy/' + url)
+    if http_method and http_method == HTTP_POST:
+        response = client.post('/control/event/dummy/dummy/' + url)
+    else:
+        response = client.get('/control/event/dummy/dummy/' + url)
     assert response.status_code == 404
 
 
@@ -416,8 +426,8 @@ def test_current_permission(client, env):
 
 
 @pytest.mark.django_db
-@pytest.mark.parametrize("perm,url,code", event_permission_urls)
-def test_correct_event_permission_all_events(perf_patch, client, env, perm, url, code):
+@pytest.mark.parametrize("perm,url,code,http_method", event_permission_urls)
+def test_correct_event_permission_all_events(perf_patch, client, env, perm, url, code, http_method):
     t = Team(organizer=env[2], all_events=True)
     setattr(t, perm, True)
     t.save()
@@ -426,13 +436,16 @@ def test_correct_event_permission_all_events(perf_patch, client, env, perm, url,
     session = client.session
     session['pretix_auth_login_time'] = int(time.time())
     session.save()
-    response = client.get('/control/event/dummy/dummy/' + url)
+    if http_method and http_method == HTTP_POST:
+        response = client.post('/control/event/dummy/dummy/' + url)
+    else:
+        response = client.get('/control/event/dummy/dummy/' + url)
     assert response.status_code == code
 
 
 @pytest.mark.django_db
-@pytest.mark.parametrize("perm,url,code", event_permission_urls)
-def test_correct_event_permission_limited(perf_patch, client, env, perm, url, code):
+@pytest.mark.parametrize("perm,url,code,http_method", event_permission_urls)
+def test_correct_event_permission_limited(perf_patch, client, env, perm, url, code, http_method):
     t = Team(organizer=env[2])
     setattr(t, perm, True)
     t.save()
@@ -442,7 +455,10 @@ def test_correct_event_permission_limited(perf_patch, client, env, perm, url, co
     session = client.session
     session['pretix_auth_login_time'] = int(time.time())
     session.save()
-    response = client.get('/control/event/dummy/dummy/' + url)
+    if http_method and http_method == HTTP_POST:
+        response = client.post('/control/event/dummy/dummy/' + url)
+    else:
+        response = client.get('/control/event/dummy/dummy/' + url)
     assert response.status_code == code
 
 
