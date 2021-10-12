@@ -94,12 +94,12 @@ class CategoriesTest(ItemFormTest):
         self.assertIn("Entry tickets", doc.select("table > tbody > tr")[0].text)
         self.assertIn("T-Shirts", doc.select("table > tbody > tr")[1].text)
 
-        self.client.get('/control/event/%s/%s/categories/%s/down' % (self.orga1.slug, self.event1.slug, c1.id))
+        self.client.post('/control/event/%s/%s/categories/%s/down' % (self.orga1.slug, self.event1.slug, c1.id))
         doc = self.get_doc('/control/event/%s/%s/categories/' % (self.orga1.slug, self.event1.slug))
         self.assertIn("Entry tickets", doc.select("table > tbody > tr")[1].text)
         self.assertIn("T-Shirts", doc.select("table > tbody > tr")[0].text)
 
-        self.client.get('/control/event/%s/%s/categories/%s/up' % (self.orga1.slug, self.event1.slug, c1.id))
+        self.client.post('/control/event/%s/%s/categories/%s/up' % (self.orga1.slug, self.event1.slug, c1.id))
         doc = self.get_doc('/control/event/%s/%s/categories/' % (self.orga1.slug, self.event1.slug))
         self.assertIn("Entry tickets", doc.select("table > tbody > tr")[0].text)
         self.assertIn("T-Shirts", doc.select("table > tbody > tr")[1].text)

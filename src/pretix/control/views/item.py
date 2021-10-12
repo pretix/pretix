@@ -53,6 +53,7 @@ from django.urls import resolve, reverse
 from django.utils.functional import cached_property
 from django.utils.timezone import now
 from django.utils.translation import gettext, gettext_lazy as _
+from django.views.decorators.http import require_http_methods
 from django.views.generic import ListView
 from django.views.generic.detail import DetailView, SingleObjectMixin
 from django.views.generic.edit import DeleteView
@@ -138,6 +139,7 @@ def item_move(request, item, up=True):
 
 
 @event_permission_required("can_change_items")
+@require_http_methods(["POST"])
 def item_move_up(request, organizer, event, item):
     item_move(request, item, up=True)
     return redirect('control:event.items',
@@ -146,11 +148,44 @@ def item_move_up(request, organizer, event, item):
 
 
 @event_permission_required("can_change_items")
+@require_http_methods(["POST"])
 def item_move_down(request, organizer, event, item):
     item_move(request, item, up=False)
     return redirect('control:event.items',
                     organizer=request.event.organizer.slug,
                     event=request.event.slug)
+
+
+@transaction.atomic
+@event_permission_required("can_change_items")
+@require_http_methods(["POST"])
+def reorder_items(request, organizer, event):
+    try:
+        ids = json.loads(request.body.decode('utf-8'))['ids']
+    except (JSONDecodeError, KeyError, ValueError):
+        return HttpResponseBadRequest("expected JSON: {ids:[]}")
+
+    input_items = list(request.event.items.filter(id__in=[i for i in ids if i.isdigit()]))
+
+    if len(input_items) != len(ids):
+        raise Http404(_("Some of the provided item ids are invalid."))
+
+    item_categories = {i.category_id for i in input_items}
+    if len(item_categories) > 1:
+        raise Http404(_("You cannot reorder items spanning different categories."))
+
+    # get first and only category
+    item_category = next(iter(item_categories))
+    if len(input_items) != request.event.items.filter(category=item_category).count():
+        raise Http404(_("Not all items have been selected."))
+
+    for i in input_items:
+        pos = ids.index(str(i.pk))
+        if pos != i.position:  # Save unneccessary UPDATE queries
+            i.position = pos
+            i.save(update_fields=['position'])
+
+    return HttpResponse()
 
 
 class CategoryDelete(EventPermissionRequiredMixin, DeleteView):
@@ -307,6 +342,7 @@ def category_move(request, category, up=True):
 
 
 @event_permission_required("can_change_items")
+@require_http_methods(["POST"])
 def category_move_up(request, organizer, event, category):
     category_move(request, category, up=True)
     return redirect('control:event.items.categories',
@@ -315,11 +351,38 @@ def category_move_up(request, organizer, event, category):
 
 
 @event_permission_required("can_change_items")
+@require_http_methods(["POST"])
 def category_move_down(request, organizer, event, category):
     category_move(request, category, up=False)
     return redirect('control:event.items.categories',
                     organizer=request.event.organizer.slug,
                     event=request.event.slug)
+
+
+@transaction.atomic
+@event_permission_required("can_change_items")
+@require_http_methods(["POST"])
+def reorder_categories(request, organizer, event):
+    try:
+        ids = json.loads(request.body.decode('utf-8'))['ids']
+    except (JSONDecodeError, KeyError, ValueError):
+        return HttpResponseBadRequest("expected JSON: {ids:[]}")
+
+    input_categories = list(request.event.categories.filter(id__in=[i for i in ids if i.isdigit()]))
+
+    if len(input_categories) != len(ids):
+        raise Http404(_("Some of the provided category ids are invalid."))
+
+    if len(input_categories) != request.event.categories.count():
+        raise Http404(_("Not all categories have been selected."))
+
+    for c in input_categories:
+        pos = ids.index(str(c.pk))
+        if pos != c.position:  # Save unneccessary UPDATE queries
+            c.position = pos
+            c.save(update_fields=['position'])
+
+    return HttpResponse()
 
 
 FakeQuestion = namedtuple(
@@ -423,18 +486,21 @@ class QuestionList(ListView):
 
 @transaction.atomic
 @event_permission_required("can_change_items")
+@require_http_methods(["POST"])
 def reorder_questions(request, organizer, event):
     try:
         ids = json.loads(request.body.decode('utf-8'))['ids']
     except (JSONDecodeError, KeyError, ValueError):
         return HttpResponseBadRequest("expected JSON: {ids:[]}")
 
-    input_questions = request.event.questions.filter(id__in=[i for i in ids if i.isdigit()])
+    # filter system_questions - normal questions are int/digit, system_questions strings
+    custom_question_ids = [i for i in ids if i.isdigit()]
+    input_questions = list(request.event.questions.filter(id__in=custom_question_ids))
 
-    if input_questions.count() != len([i for i in ids if i.isdigit()]):
+    if len(input_questions) != len(custom_question_ids):
         raise Http404(_("Some of the provided question ids are invalid."))
 
-    if input_questions.count() != request.event.questions.count():
+    if len(input_questions) != request.event.questions.count():
         raise Http404(_("Not all questions have been selected."))
 
     for q in input_questions:
