@@ -271,6 +271,7 @@ def test_wrong_event(perf_patch, client, env, url):
     # a 404 error to prevent information leakage
     assert response.status_code == 404
 
+
 HTTP_POST = "post"
 HTTP_GET = "get"
 
