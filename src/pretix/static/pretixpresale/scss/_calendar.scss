@@ -143,7 +143,7 @@
 
   display: grid;
   gap: 2px;
-  --grid-cols: calc((var(--day-end-h) - var(--day-h)) * 12 + (var(--day-end-m) - var(--day-m)) / 5 + 6);
+  --grid-cols: calc((var(--day-end-h) - var(--day-h)) * 12 + (var(--day-end-m) - var(--day-m)) / 5);
   grid-template-columns: repeat(var(--grid-cols), minmax(3em, 1fr));
 
   --event-h: 0;

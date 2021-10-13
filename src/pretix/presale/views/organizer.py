@@ -815,73 +815,69 @@ class DayCalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
         )
 
         ebd = self._events_by_day(before, after)
-        rows, starting_at, col_num = self._grid_for_template(ebd[self.date])
+        time_ticks = self._get_time_ticks(ebd[self.date])
+        ctx['time_ticks'] = time_ticks
+        ctx['start'] = time_ticks[0]["start"]
+        ctx['end'] = time_ticks[-1]["end"]
 
-        ctx['css'], ctx['time_ticks'] = self._generate_css(rows, starting_at, col_num)
+        rows, starting_at, col_num = self._grid_for_template(ebd[self.date])
         ctx['css_nonce'] = self.nonce
         ctx['collections'] = rows
         ctx['multiple_timezones'] = self._multiple_timezones
         return ctx
 
-    def _generate_css(self, collections, starting_at, col_num):
-        css = []
-        time_ticks = []
+    def _get_date_range(self, events):
+        if any(e['continued'] for e in events) or any(e['time'] is None for e in events):
+            starting_at = time(0, 0)
+        else:
+            starting_at = min(e['time'] for e in events)
 
-        row_num = sum(len(rows) for series, rows in collections)
-        shortest_one = min([
-            min([
-                min([
-                    e['column_end'] - e['column_start'] + 1
-                    for e in row
-                ]) for row in rows
-            ])
-            for series, rows in collections
-        ])
+        if any(e.get('time_end_today') is None for e in events):
+            ending_at = time(24, 00)
+        else:
+            ending_at = max(e['time_end_today'] for e in events)
 
-        # We don't want any events smaller than X, so we need to set max_width accordingly
-        min_width = col_num * 150 / min(shortest_one, 12)
-        css.append(
-            f'.day-calendar {{ '
-            f'  min-width: {min_width}px;'
-            f' }}'
-        )
+        return starting_at, ending_at
 
-        # We want to print a time tick every time_tick_span columns. Let's choose the next big thing divisible by 15min
-        # based on our smallest box
-        time_tick_span = (shortest_one // 3 + 1) * 3
-        for i in range(0, col_num):
-            t = datetime.combine(date.today(), starting_at) + timedelta(minutes=i * 5)
+    def _get_time_ticks(self, events):
+        ticks = []
+        start, end = self._get_date_range(events)
+        # TODO: floor start to 0 or 30 minutes, ceil end to 0, 15, 30, 45 or 60 (next hour)
+        start = datetime.combine(date.today(), start)
+        end = datetime.combine(date.today(), end)
 
-            if (t.hour * 60 + t.minute) % (time_tick_span * 5) == 0:
-                css.append(
-                    f'#time_tick_{len(time_ticks)} {{ '
-                    f'  grid-row-start: 1;'
-                    f'  grid-row-end: {row_num + 2};'
-                    f'  grid-column: {i + 2} / span {time_tick_span};'
-                    f' }}'
-                )
-                time_ticks.append(t)
-
-        rowcnt = 0
-        for series, rows in collections:
-            css.append(
-                f'#day_calendar_collection_{series.pk} {{ '
-                f'  grid-row: {rowcnt + 2} / span {len(rows)};'
-                f'  grid-column: 1;'
-                f' }}'
+        durations = [
+            datetime.combine(
+                date.today(),
+                time(24, 00) if e.get('time_end_today') is None else e['time_end_today']
+            ) -
+            datetime.combine(
+                date.today(),
+                time(0, 0) if e['continued'] else e['time']
             )
-            for row in rows:
-                for e in row:
-                    css.append(
-                        f'#{e["css_id"]} {{ '
-                        f'  grid-row: {rowcnt + 2};'
-                        f'  grid-column-start: {e["column_start"] + 2};'
-                        f'  grid-column-end: {e["column_end"] + 2};'
-                        f' }}'
-                    )
-                rowcnt += 1
+            for e in events
+        ]
+        shortest_duration = min([int(d.total_seconds() / 60) for d in durations])
+        tick_durations = [15, 30, 60]#, 90, 120, 180]
 
-        return "", time_ticks#"\n".join(css), time_ticks
+        # Print a time tick every tick_duration. Pick the next big tick_duration based on shortest_duration
+        # if none is long enough, use a tick_duration of 60 minutes
+        tick_duration = next((duration for duration in tick_durations if duration > shortest_duration), 60)
+
+        tick_start = start
+        tick_end = None
+        while True:
+            tick_end = min(tick_start + timedelta(minutes=tick_duration), end)
+            tick = {
+                "start": tick_start,
+                "end": tick_end,
+            }
+            ticks.append(tick)
+            if tick_end >= end:
+                break
+            tick_start = tick_end
+
+        return ticks
 
     def _grid_for_template(self, events):
         rows_by_collection = defaultdict(list)
@@ -908,7 +904,6 @@ class DayCalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
         # to show them as compact as possible. Then, we look if there's already an event in the collection that overlaps,
         # in which case we need to split the collection into multiple rows.
         for counter, e in enumerate(events):
-            e['css_id'] = f'day_calendar_{counter}'
             if e.get('time') and not e.get('continued'):
                 e['column_start'] = time_to_column(e.get('time')) - first_column
             else:

@@ -1,10 +1,10 @@
 {% load i18n %}
 {% load eventurl %}
-<div class="day-calendar" data-start-time="{{ time_ticks.0|date:"H:i" }}" data-end-time="{{ time_ticks|last|date:"H:i" }}">
+<div class="day-calendar" data-start-time="{{ start|date:"H:i" }}" data-end-time="{{ end|date:"H:i" }}">
     <h3 aria-hidden="true" class="day-row-name">{% trans "Time of day" %}</h3>
     <ul aria-hidden="true" class="day-timeline ticks">
     {% for t in time_ticks %}
-        <li data-start-time="{{ t|date:"H:i" }}">{{ t|date:"TIME_FORMAT" }}</li>
+        <li data-start-time="{{ t.start|date:"H:i" }}" data-end-time="{{ t.end|date:"H:i" }}">{{ t.start|date:"TIME_FORMAT" }}</li>
     {% endfor %}
     </ul>
     {% for series, rows in collections %}
@@ -18,7 +18,7 @@
         <ul class="day-timeline">
         {% for t in time_ticks %}
             {% if not forloop.counter|divisibleby:2 %}
-                <li data-start-time="{{ t|date:"H:i" }}" class="tick">&nbsp;</li>
+                <li data-start-time="{{ t.start|date:"H:i" }}" data-end-time="{{ t.end|date:"H:i" }}" class="tick">&nbsp;</li>
             {% endif %}
         {% endfor %}
         {% for row in rows %}
