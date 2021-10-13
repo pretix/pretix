@@ -171,66 +171,66 @@
 }
 
 
-.day-h-00 {--day-h:  0}
-.day-h-01 {--day-h:  1}
-.day-h-02 {--day-h:  2}
-.day-h-03 {--day-h:  3}
-.day-h-04 {--day-h:  4}
-.day-h-05 {--day-h:  5}
-.day-h-06 {--day-h:  6}
-.day-h-07 {--day-h:  7}
-.day-h-08 {--day-h:  8}
-.day-h-09 {--day-h:  9}
-.day-h-10 {--day-h: 10}
-.day-h-11 {--day-h: 11}
-.day-h-12 {--day-h: 12}
-.day-h-13 {--day-h: 13}
-.day-h-14 {--day-h: 14}
-.day-h-15 {--day-h: 15}
-.day-h-16 {--day-h: 16}
-.day-h-17 {--day-h: 17}
-.day-h-18 {--day-h: 18}
-.day-h-19 {--day-h: 19}
-.day-h-20 {--day-h: 20}
-.day-h-21 {--day-h: 21}
-.day-h-22 {--day-h: 22}
-.day-h-23 {--day-h: 23}
+.day-calendar[data-start-time^="00"] {--day-h:  0}
+.day-calendar[data-start-time^="01"] {--day-h:  1}
+.day-calendar[data-start-time^="02"] {--day-h:  2}
+.day-calendar[data-start-time^="03"] {--day-h:  3}
+.day-calendar[data-start-time^="04"] {--day-h:  4}
+.day-calendar[data-start-time^="05"] {--day-h:  5}
+.day-calendar[data-start-time^="06"] {--day-h:  6}
+.day-calendar[data-start-time^="07"] {--day-h:  7}
+.day-calendar[data-start-time^="08"] {--day-h:  8}
+.day-calendar[data-start-time^="09"] {--day-h:  9}
+.day-calendar[data-start-time^="10"] {--day-h: 10}
+.day-calendar[data-start-time^="11"] {--day-h: 11}
+.day-calendar[data-start-time^="12"] {--day-h: 12}
+.day-calendar[data-start-time^="13"] {--day-h: 13}
+.day-calendar[data-start-time^="14"] {--day-h: 14}
+.day-calendar[data-start-time^="15"] {--day-h: 15}
+.day-calendar[data-start-time^="16"] {--day-h: 16}
+.day-calendar[data-start-time^="17"] {--day-h: 17}
+.day-calendar[data-start-time^="18"] {--day-h: 18}
+.day-calendar[data-start-time^="19"] {--day-h: 19}
+.day-calendar[data-start-time^="20"] {--day-h: 20}
+.day-calendar[data-start-time^="21"] {--day-h: 21}
+.day-calendar[data-start-time^="22"] {--day-h: 22}
+.day-calendar[data-start-time^="23"] {--day-h: 23}
 
-.day-m-00 {--day-m: 0}
-.day-m-15 {--day-m: 15}
-.day-m-30 {--day-m: 30}
-.day-m-45 {--day-m: 45}
+.day-calendar[data-start-time$="00"] {--day-m: 0}
+.day-calendar[data-start-time$="15"] {--day-m: 15}
+.day-calendar[data-start-time$="30"] {--day-m: 30}
+.day-calendar[data-start-time$="45"] {--day-m: 45}
 
-.day-end-h-00 {--day-end-h: 24}
-.day-end-h-01 {--day-end-h:  1}
-.day-end-h-02 {--day-end-h:  2}
-.day-end-h-03 {--day-end-h:  3}
-.day-end-h-04 {--day-end-h:  4}
-.day-end-h-05 {--day-end-h:  5}
-.day-end-h-06 {--day-end-h:  6}
-.day-end-h-07 {--day-end-h:  7}
-.day-end-h-08 {--day-end-h:  8}
-.day-end-h-09 {--day-end-h:  9}
-.day-end-h-10 {--day-end-h: 10}
-.day-end-h-11 {--day-end-h: 11}
-.day-end-h-12 {--day-end-h: 12}
-.day-end-h-13 {--day-end-h: 13}
-.day-end-h-14 {--day-end-h: 14}
-.day-end-h-15 {--day-end-h: 15}
-.day-end-h-16 {--day-end-h: 16}
-.day-end-h-17 {--day-end-h: 17}
-.day-end-h-18 {--day-end-h: 18}
-.day-end-h-19 {--day-end-h: 19}
-.day-end-h-20 {--day-end-h: 20}
-.day-end-h-21 {--day-end-h: 21}
-.day-end-h-22 {--day-end-h: 22}
-.day-end-h-23 {--day-end-h: 23}
-.day-end-h-24 {--day-end-h: 24}
+.day-calendar[data-end-time^="00"] {--day-end-h: 24}
+.day-calendar[data-end-time^="01"] {--day-end-h:  1}
+.day-calendar[data-end-time^="02"] {--day-end-h:  2}
+.day-calendar[data-end-time^="03"] {--day-end-h:  3}
+.day-calendar[data-end-time^="04"] {--day-end-h:  4}
+.day-calendar[data-end-time^="05"] {--day-end-h:  5}
+.day-calendar[data-end-time^="06"] {--day-end-h:  6}
+.day-calendar[data-end-time^="07"] {--day-end-h:  7}
+.day-calendar[data-end-time^="08"] {--day-end-h:  8}
+.day-calendar[data-end-time^="09"] {--day-end-h:  9}
+.day-calendar[data-end-time^="10"] {--day-end-h: 10}
+.day-calendar[data-end-time^="11"] {--day-end-h: 11}
+.day-calendar[data-end-time^="12"] {--day-end-h: 12}
+.day-calendar[data-end-time^="13"] {--day-end-h: 13}
+.day-calendar[data-end-time^="14"] {--day-end-h: 14}
+.day-calendar[data-end-time^="15"] {--day-end-h: 15}
+.day-calendar[data-end-time^="16"] {--day-end-h: 16}
+.day-calendar[data-end-time^="17"] {--day-end-h: 17}
+.day-calendar[data-end-time^="18"] {--day-end-h: 18}
+.day-calendar[data-end-time^="19"] {--day-end-h: 19}
+.day-calendar[data-end-time^="20"] {--day-end-h: 20}
+.day-calendar[data-end-time^="21"] {--day-end-h: 21}
+.day-calendar[data-end-time^="22"] {--day-end-h: 22}
+.day-calendar[data-end-time^="23"] {--day-end-h: 23}
+.day-calendar[data-end-time^="24"] {--day-end-h: 24}
 
-.day-end-m-00 {--day-end-m: 0}
-.day-end-m-15 {--day-end-m: 15}
-.day-end-m-30 {--day-end-m: 30}
-.day-end-m-45 {--day-end-m: 45}
+.day-calendar[data-end-time$="00"] {--day-end-m: 0}
+.day-calendar[data-end-time$="15"] {--day-end-m: 15}
+.day-calendar[data-end-time$="30"] {--day-end-m: 30}
+.day-calendar[data-end-time$="45"] {--day-end-m: 45}
 
 
 
@@ -238,81 +238,81 @@
 .overlap-2 {--offset-row: 3}
 .overlap-3 {--offset-row: 4}
 
-.event-m-00 {--event-m:  0}
-.event-m-05 {--event-m:  5}
-.event-m-10 {--event-m: 10}
-.event-m-15 {--event-m: 15}
-.event-m-20 {--event-m: 20}
-.event-m-25 {--event-m: 25}
-.event-m-30 {--event-m: 30}
-.event-m-35 {--event-m: 35}
-.event-m-40 {--event-m: 40}
-.event-m-45 {--event-m: 45}
-.event-m-50 {--event-m: 50}
-.event-m-55 {--event-m: 55}
+.day-timeline [data-start-time$="00"] {--event-m:  0}
+.day-timeline [data-start-time$="05"] {--event-m:  5}
+.day-timeline [data-start-time$="10"] {--event-m: 10}
+.day-timeline [data-start-time$="15"] {--event-m: 15}
+.day-timeline [data-start-time$="20"] {--event-m: 20}
+.day-timeline [data-start-time$="25"] {--event-m: 25}
+.day-timeline [data-start-time$="30"] {--event-m: 30}
+.day-timeline [data-start-time$="35"] {--event-m: 35}
+.day-timeline [data-start-time$="40"] {--event-m: 40}
+.day-timeline [data-start-time$="45"] {--event-m: 45}
+.day-timeline [data-start-time$="50"] {--event-m: 50}
+.day-timeline [data-start-time$="55"] {--event-m: 55}
 
-.event-h-00 {--event-h:  0}
-.event-h-01 {--event-h:  1}
-.event-h-02 {--event-h:  2}
-.event-h-03 {--event-h:  3}
-.event-h-04 {--event-h:  4}
-.event-h-05 {--event-h:  5}
-.event-h-06 {--event-h:  6}
-.event-h-07 {--event-h:  7}
-.event-h-08 {--event-h:  8}
-.event-h-09 {--event-h:  9}
-.event-h-10 {--event-h: 10}
-.event-h-11 {--event-h: 11}
-.event-h-12 {--event-h: 12}
-.event-h-13 {--event-h: 13}
-.event-h-14 {--event-h: 14}
-.event-h-15 {--event-h: 15}
-.event-h-16 {--event-h: 16}
-.event-h-17 {--event-h: 17}
-.event-h-18 {--event-h: 18}
-.event-h-19 {--event-h: 19}
-.event-h-20 {--event-h: 20}
-.event-h-21 {--event-h: 21}
-.event-h-22 {--event-h: 22}
-.event-h-23 {--event-h: 23}
+.day-timeline [data-start-time^="00"] {--event-h:  0}
+.day-timeline [data-start-time^="01"] {--event-h:  1}
+.day-timeline [data-start-time^="02"] {--event-h:  2}
+.day-timeline [data-start-time^="03"] {--event-h:  3}
+.day-timeline [data-start-time^="04"] {--event-h:  4}
+.day-timeline [data-start-time^="05"] {--event-h:  5}
+.day-timeline [data-start-time^="06"] {--event-h:  6}
+.day-timeline [data-start-time^="07"] {--event-h:  7}
+.day-timeline [data-start-time^="08"] {--event-h:  8}
+.day-timeline [data-start-time^="09"] {--event-h:  9}
+.day-timeline [data-start-time^="10"] {--event-h: 10}
+.day-timeline [data-start-time^="11"] {--event-h: 11}
+.day-timeline [data-start-time^="12"] {--event-h: 12}
+.day-timeline [data-start-time^="13"] {--event-h: 13}
+.day-timeline [data-start-time^="14"] {--event-h: 14}
+.day-timeline [data-start-time^="15"] {--event-h: 15}
+.day-timeline [data-start-time^="16"] {--event-h: 16}
+.day-timeline [data-start-time^="17"] {--event-h: 17}
+.day-timeline [data-start-time^="18"] {--event-h: 18}
+.day-timeline [data-start-time^="19"] {--event-h: 19}
+.day-timeline [data-start-time^="20"] {--event-h: 20}
+.day-timeline [data-start-time^="21"] {--event-h: 21}
+.day-timeline [data-start-time^="22"] {--event-h: 22}
+.day-timeline [data-start-time^="23"] {--event-h: 23}
 
-.event-end-m-00 {--event-end-m:  0}
-.event-end-m-05 {--event-end-m:  5}
-.event-end-m-10 {--event-end-m: 10}
-.event-end-m-15 {--event-end-m: 15}
-.event-end-m-20 {--event-end-m: 20}
-.event-end-m-25 {--event-end-m: 25}
-.event-end-m-30 {--event-end-m: 30}
-.event-end-m-35 {--event-end-m: 35}
-.event-end-m-40 {--event-end-m: 40}
-.event-end-m-45 {--event-end-m: 45}
-.event-end-m-50 {--event-end-m: 50}
-.event-end-m-55 {--event-end-m: 55}
+.day-timeline [data-end-time$="00"] {--event-end-m:  0}
+.day-timeline [data-end-time$="05"] {--event-end-m:  5}
+.day-timeline [data-end-time$="10"] {--event-end-m: 10}
+.day-timeline [data-end-time$="15"] {--event-end-m: 15}
+.day-timeline [data-end-time$="20"] {--event-end-m: 20}
+.day-timeline [data-end-time$="25"] {--event-end-m: 25}
+.day-timeline [data-end-time$="30"] {--event-end-m: 30}
+.day-timeline [data-end-time$="35"] {--event-end-m: 35}
+.day-timeline [data-end-time$="40"] {--event-end-m: 40}
+.day-timeline [data-end-time$="45"] {--event-end-m: 45}
+.day-timeline [data-end-time$="50"] {--event-end-m: 50}
+.day-timeline [data-end-time$="55"] {--event-end-m: 55}
 
-.event-end-h-00 {--event-end-h:  0}
-.event-end-h-01 {--event-end-h:  1}
-.event-end-h-02 {--event-end-h:  2}
-.event-end-h-03 {--event-end-h:  3}
-.event-end-h-04 {--event-end-h:  4}
-.event-end-h-05 {--event-end-h:  5}
-.event-end-h-06 {--event-end-h:  6}
-.event-end-h-07 {--event-end-h:  7}
-.event-end-h-08 {--event-end-h:  8}
-.event-end-h-09 {--event-end-h:  9}
-.event-end-h-10 {--event-end-h: 10}
-.event-end-h-11 {--event-end-h: 11}
-.event-end-h-12 {--event-end-h: 12}
-.event-end-h-13 {--event-end-h: 13}
-.event-end-h-14 {--event-end-h: 14}
-.event-end-h-15 {--event-end-h: 15}
-.event-end-h-16 {--event-end-h: 16}
-.event-end-h-17 {--event-end-h: 17}
-.event-end-h-18 {--event-end-h: 18}
-.event-end-h-19 {--event-end-h: 19}
-.event-end-h-20 {--event-end-h: 20}
-.event-end-h-21 {--event-end-h: 21}
-.event-end-h-22 {--event-end-h: 22}
-.event-end-h-23 {--event-end-h: 23}
+.day-timeline [data-end-time^="00"] {--event-end-h:  0}
+.day-timeline [data-end-time^="01"] {--event-end-h:  1}
+.day-timeline [data-end-time^="02"] {--event-end-h:  2}
+.day-timeline [data-end-time^="03"] {--event-end-h:  3}
+.day-timeline [data-end-time^="04"] {--event-end-h:  4}
+.day-timeline [data-end-time^="05"] {--event-end-h:  5}
+.day-timeline [data-end-time^="06"] {--event-end-h:  6}
+.day-timeline [data-end-time^="07"] {--event-end-h:  7}
+.day-timeline [data-end-time^="08"] {--event-end-h:  8}
+.day-timeline [data-end-time^="09"] {--event-end-h:  9}
+.day-timeline [data-end-time^="10"] {--event-end-h: 10}
+.day-timeline [data-end-time^="11"] {--event-end-h: 11}
+.day-timeline [data-end-time^="12"] {--event-end-h: 12}
+.day-timeline [data-end-time^="13"] {--event-end-h: 13}
+.day-timeline [data-end-time^="14"] {--event-end-h: 14}
+.day-timeline [data-end-time^="15"] {--event-end-h: 15}
+.day-timeline [data-end-time^="16"] {--event-end-h: 16}
+.day-timeline [data-end-time^="17"] {--event-end-h: 17}
+.day-timeline [data-end-time^="18"] {--event-end-h: 18}
+.day-timeline [data-end-time^="19"] {--event-end-h: 19}
+.day-timeline [data-end-time^="20"] {--event-end-h: 20}
+.day-timeline [data-end-time^="21"] {--event-end-h: 21}
+.day-timeline [data-end-time^="22"] {--event-end-h: 22}
+.day-timeline [data-end-time^="23"] {--event-end-h: 23}
 
 
 
