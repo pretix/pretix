@@ -102,7 +102,8 @@ class ItemList(ListView):
         ).annotate(
             var_count=Count('variations')
         ).prefetch_related("category").order_by(
-            'category__position', 'category', 'position'
+            F('category__position').desc(nulls_first=True),
+            'category', 'position'
         )
 
     def get_context_data(self, **kwargs):
