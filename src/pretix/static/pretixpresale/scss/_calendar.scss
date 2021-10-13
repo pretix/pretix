@@ -172,7 +172,7 @@
 }
 
 .ticks li, .tick {
-    grid-column-end: span 6 !important;
+    /*grid-column-end: span 6 !important;*/
     grid-row: 1 / 4 !important;
 }
 .ticks li:nth-of-type(odd), .tick {
