@@ -127,8 +127,17 @@
   --day-end-h: 23;
   --day-end-m: 0;
 
+  --col-size: 3em;
+
   overflow: scroll;
 }
+.ticks-size-15 {--col-size: 3em}
+.ticks-size-30 {--col-size: 2em}
+.ticks-size-60  {--col-size: 1em}
+.ticks-size-90  {--col-size: .5em}
+.ticks-size-120 {--col-size: .25em}
+.ticks-size-180 {--col-size: .125em}
+
 .day-row-name {
   position: sticky;
   left: 0;
@@ -144,7 +153,7 @@
   display: grid;
   gap: 2px;
   --grid-cols: calc((var(--day-end-h) - var(--day-h)) * 12 + (var(--day-end-m) - var(--day-m)) / 5);
-  grid-template-columns: repeat(var(--grid-cols), minmax(3em, 1fr));
+  grid-template-columns: repeat(var(--grid-cols), minmax(var(--col-size), 1fr));
 
   --event-h: 0;
   --event-m: 0;

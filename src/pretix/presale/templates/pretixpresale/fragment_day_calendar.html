@@ -1,6 +1,6 @@
 {% load i18n %}
 {% load eventurl %}
-<div class="day-calendar" data-start-time="{{ start|date:"H:i" }}" data-end-time="{{ end|date:"H:i" }}">
+<div class="day-calendar ticks-size-{{ticks_duration}}" data-start-time="{{ start|date:"H:i" }}" data-end-time="{{ end|date:"H:i" }}">
     <h3 aria-hidden="true" class="day-row-name">{% trans "Time of day" %}</h3>
     <ul aria-hidden="true" class="day-timeline ticks">
     {% for t in time_ticks %}

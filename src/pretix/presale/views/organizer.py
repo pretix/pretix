@@ -819,6 +819,7 @@ class DayCalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
         ctx['time_ticks'] = time_ticks
         ctx['start'] = time_ticks[0]["start"]
         ctx['end'] = time_ticks[-1]["end"]
+        ctx['ticks_duration'] = int((time_ticks[0]["end"] - time_ticks[0]["start"]).total_seconds() / 60)
 
         rows, starting_at, col_num = self._grid_for_template(ebd[self.date])
         ctx['css_nonce'] = self.nonce
@@ -858,11 +859,11 @@ class DayCalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
             for e in events
         ]
         shortest_duration = min([int(d.total_seconds() / 60) for d in durations])
-        tick_durations = [15, 30, 60]#, 90, 120, 180]
+        tick_durations = [15, 30, 60, 90, 120, 180]
 
         # Print a time tick every tick_duration. Pick the next big tick_duration based on shortest_duration
         # if none is long enough, use a tick_duration of 60 minutes
-        tick_duration = next((duration for duration in tick_durations if duration > shortest_duration), 60)
+        tick_duration = next((duration for duration in tick_durations if duration >= shortest_duration), 60)
 
         tick_start = start
         tick_end = None
