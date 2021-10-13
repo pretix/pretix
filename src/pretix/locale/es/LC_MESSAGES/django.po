@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-09-27 18:48+0000\n"
-"PO-Revision-Date: 2021-09-06 09:00+0000\n"
-"Last-Translator: rauxenz <noquedandireccionesdisponibles@gmail.com>\n"
+"PO-Revision-Date: 2021-10-13 19:00+0000\n"
+"Last-Translator: ityd <yagoalonso@gmail.com>\n"
 "Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/pretix/"
 "es/>\n"
 "Language: es\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.6\n"
+"X-Generator: Weblate 4.8\n"
 
 #: htmlcov/pretix_control_views_dashboards_py.html:963
 #: pretix/control/templates/pretixcontrol/events/index.html:140
@@ -59,10 +59,8 @@ msgstr ""
 "regalo, lectura de productos y configuraciones)"
 
 #: pretix/api/auth/devicesecurity.py:44
-#, fuzzy
-#| msgid "1. Download pretixdesk"
 msgid "pretixSCAN"
-msgstr "1. Descargar pretixdesk"
+msgstr "pretixSCAN"
 
 #: pretix/api/auth/devicesecurity.py:75
 msgid "pretixSCAN (kiosk mode, no order sync, no search)"
@@ -162,10 +160,9 @@ msgid "Meta data property '{name}' does not exist."
 msgstr "La meta propiedad '{name}' no existe."
 
 #: pretix/api/serializers/event.py:223 pretix/api/serializers/event.py:516
-#, fuzzy, python-brace-format
-#| msgid "Meta data property '{name}' does not exist."
+#, python-brace-format
 msgid "Meta data property '{name}' does not allow value '{value}'."
-msgstr "La meta propiedad '{name}' no existe."
+msgstr "La meta propiedad '{name}' no permite el valor '{value}'."
 
 #: pretix/api/serializers/event.py:266
 #, python-brace-format
@@ -1824,7 +1821,7 @@ msgstr "Prioridad"
 #: pretix/presale/templates/pretixpresale/event/index.html:274
 #: pretix/presale/templates/pretixpresale/event/index.html:278
 msgid "Voucher code"
-msgstr "Código del recibo"
+msgstr "Código del cupón"
 
 #: pretix/base/forms/auth.py:57 pretix/base/forms/auth.py:166
 msgid "Keep me logged in"
@@ -3323,15 +3320,11 @@ msgid ""
 msgstr ""
 
 #: pretix/base/models/items.py:823
-#, fuzzy
-#| msgid ""
-#| "This product will only be shown if a voucher matching the product is "
-#| "redeemed."
 msgid ""
 "This variation will only be shown if a voucher matching the product is "
 "redeemed."
 msgstr ""
-"Este producto sólo se mostrará si se canjea un recibo que coincida con el "
+"Este producto sólo se mostrará si se canjea un cupón que coincida con el "
 "producto."
 
 #: pretix/base/models/items.py:825
@@ -4386,7 +4379,7 @@ msgstr "Reducir el precio del producto en (%)"
 
 #: pretix/base/models/vouchers.py:195
 msgid "Number of times this voucher can be redeemed."
-msgstr "Número de veces que se puede canjear este recibo."
+msgstr "Número de veces que se puede canjear este cupón."
 
 #: pretix/base/models/vouchers.py:199 pretix/control/views/vouchers.py:109
 msgid "Redeemed"
@@ -4449,8 +4442,7 @@ msgstr "Valor del recibo"
 
 #: pretix/base/models/vouchers.py:244 pretix/control/forms/vouchers.py:65
 msgid "This product is added to the user's cart if the voucher is redeemed."
-msgstr ""
-"Este producto se añade al carrito del usuario si el recibo es canjeado."
+msgstr "Este producto se añade al carrito del usuario si el cupón es canjeado."
 
 #: pretix/base/models/vouchers.py:254
 msgid "This variation of the product select above is being used."
@@ -4480,8 +4472,8 @@ msgid ""
 "same value for multiple vouchers, you can get statistics on how many of them "
 "have been redeemed etc."
 msgstr ""
-"Puede utilizar este campo para agrupar multiples vales. Si introduce el "
-"mismo valor para varios vales, puede obtener estadísticas sobre cuántos de "
+"Puede utilizar este campo para agrupar múltiples cupones. Si introduce el "
+"mismo valor para varios cupones, puede obtener estadísticas sobre cuántos de "
 "ellos se han canjeado, etc."
 
 #: pretix/base/models/vouchers.py:286
@@ -4547,7 +4539,7 @@ msgid ""
 "This voucher has already been redeemed %(redeemed)s times. You cannot reduce "
 "the maximum number of usages below this number."
 msgstr ""
-"Este recibo ya ha sido redimido %(redeemed)s veces. No se puede reducir el "
+"Este cupón ya ha sido redimido %(redeemed)s veces. No se puede reducir el "
 "número máximo de usos por debajo de este número."
 
 #: pretix/base/models/vouchers.py:357 pretix/base/models/vouchers.py:415
@@ -5899,16 +5891,15 @@ msgid ""
 "or that you tried to redeem it before but did not complete the checkout "
 "process. You can try to use it again in %d minutes."
 msgstr ""
-"Este código de recibo está actualmente bloqueado ya que está contenido en un "
-"carrito de la compra. Esto puede significar que otra persona está canjeando "
-"este recibo ahora mismo, o que usted intentó canjearlo antes pero no "
-"completó el proceso de pago. Puede intentar utilizarlo de nuevo en %d "
-"minutos."
+"Este cupón está actualmente bloqueado ya que está contenido en un carrito de "
+"la compra. Esto puede significar que otra persona está canjeando este cupón "
+"ahora mismo, o que usted intentó canjearlo antes pero no completó el proceso "
+"de pago. Puede intentar utilizarlo de nuevo en %d minutos."
 
 #: pretix/base/services/cart.py:115
 #, python-format
 msgid "This voucher code can only be redeemed %d more times."
-msgstr "Este código de recibo sólo puede ser canjeado %d más veces."
+msgstr "Este cupón sólo puede ser canjeado %d más veces."
 
 #: pretix/base/services/cart.py:116
 msgid ""
@@ -6754,11 +6745,8 @@ msgid "The voucher has been sent to {recipient}."
 msgstr "El recibo ha sido creado."
 
 #: pretix/base/settings.py:116
-#, fuzzy
-#| msgctxt "amount_label"
-#| msgid "Automatically refund"
 msgid "Allow customers to create accounts"
-msgstr "Reembolso automático"
+msgstr "Permitir a los clientes crear cuenta"
 
 #: pretix/base/settings.py:117
 msgid ""
@@ -7583,7 +7571,7 @@ msgid ""
 "redeemed within this number of hours until it expires and can be re-assigned "
 "to the next person on the list."
 msgstr ""
-"Si un recibo de ticket es enviado a una persona en la lista de espera, tiene "
+"Si un cupón de ticket es enviado a una persona en la lista de espera, tiene "
 "que ser redimido dentro de este número de horas hasta que expire y puede ser "
 "reasignado a la siguiente persona en la lista."
 
@@ -8317,28 +8305,7 @@ msgstr ""
 "su equipo {event}"
 
 #: pretix/base/settings.py:1731
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Hello,\n"
-#| "\n"
-#| "you submitted yourself to the waiting list for {event},\n"
-#| "for the product {product}.\n"
-#| "\n"
-#| "We now have a ticket ready for you! You can redeem it in our ticket shop\n"
-#| "within the next {hours} hours by entering the following voucher code:\n"
-#| "\n"
-#| "{code}\n"
-#| "\n"
-#| "Alternatively, you can just click on the following link:\n"
-#| "\n"
-#| "{url}\n"
-#| "\n"
-#| "Please note that this link is only valid within the next {hours} hours!\n"
-#| "We will reassign the ticket to the next person on the list if you do not\n"
-#| "redeem the voucher within that timeframe.\n"
-#| "\n"
-#| "Best regards,\n"
-#| "Your {event} team"
+#, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -8374,8 +8341,7 @@ msgstr ""
 "\n"
 "Ahora tenemos un ticket listo para usted! Puede canjearlo en nuestra "
 "taquilla\n"
-"en las próximas {hours} horas introduciendo el siguiente código del "
-"recibo: \n"
+"en las próximas {hours} horas introduciendo el siguiente cupón : \n"
 "\n"
 "{code} \n"
 "\n"
@@ -25295,10 +25261,8 @@ msgid "Add or remove tickets"
 msgstr "Añadir un nuevo tipo de ticket"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:60
-#, fuzzy
-#| msgid "Cancel payment"
 msgid "Modify payment"
-msgstr "Cancelar el pago"
+msgstr "Modificar pago"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:62
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:84
@@ -25381,8 +25345,6 @@ msgid "Reset password"
 msgstr "Repetir contraseña"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_customer.html:78
-#, fuzzy
-#| msgid "Create a new account"
 msgid "Create a new customer account"
 msgstr "Crear una nueva cuenta"
 
@@ -25393,6 +25355,10 @@ msgid ""
 "password, so you can use the account for future orders at %(org)s. You can "
 "still go ahead with this purchase before you received the email."
 msgstr ""
+"Le enviaremos un correo electrónico con un enlace para activar su cuenta y "
+"establecer una contraseña, para que pueda usar la cuenta para pedidos "
+"futuros en %(org)s. Aún puede continuar con esta compra antes de recibir el "
+"correo electrónico."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_customer.html:108
 #, fuzzy
@@ -25406,6 +25372,10 @@ msgid ""
 "will be able to access the details and status of your order any time through "
 "the secret link we will send you via email once the order is complete."
 msgstr ""
+"No es necesario que cree una cuenta. Si procede como invitado, podrá acceder "
+"a los detalles y el estado de su pedido en cualquier momento a través del "
+"enlace secreto que le enviaremos por correo electrónico una vez que se "
+"complete el pedido."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_membership.html:6
 #, fuzzy
@@ -25634,32 +25604,30 @@ msgid "price"
 msgstr "Precio"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:309
-#, fuzzy, python-format
-#| msgid "Any product"
+#, python-format
 msgid "One product"
 msgid_plural "%(num)s products"
-msgstr[0] "Cualquier producto"
-msgstr[1] "Cualquier producto"
+msgstr[0] "Un producto"
+msgstr[1] "%(num)s productos"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:323
-#, fuzzy, python-format
-#| msgid "incl. %(rate)s%% taxes"
+#, python-format
 msgid "incl. %(tax_sum)s taxes"
-msgstr "incl. %(rate)s%% impuestos"
+msgstr "incl. %(tax_sum)s impuestos"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:332
 #: pretix/presale/templates/pretixpresale/event/index.html:265
 msgid "Redeem a voucher"
-msgstr "Canjee un recibo"
+msgstr "Canjear cupón de descuento"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:335
 msgid "We're applying this voucher to your cart..."
-msgstr ""
+msgstr "Estamos aplicando este cupón a tu compra..."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:343
 #: pretix/presale/templates/pretixpresale/event/index.html:284
 msgid "Redeem voucher"
-msgstr "Canjear recibo"
+msgstr "Canjear Cupón"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart_box.html:42
 #: pretix/presale/templates/pretixpresale/event/fragment_cart_box.html:59
@@ -25673,10 +25641,8 @@ msgid "Proceed with checkout"
 msgstr "Proceder con la compra"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_checkoutflow.html:13
-#, fuzzy
-#| msgid "Completion date"
 msgid "Completed:"
-msgstr "Fecha de finalización"
+msgstr "Completado:"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_checkoutflow.html:15
 #, fuzzy
@@ -25691,13 +25657,11 @@ msgstr "Orden confirmada"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:14
 msgid "Please check your email account, we've sent you your tickets."
-msgstr ""
+msgstr "Por favor, revisa tu correo, ya hemos enviado las entradas."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:16
-#, fuzzy
-#| msgid "Please enter your bank account details."
 msgid "Please check your email account, we've sent you an email."
-msgstr "Por favor ingrese los detalles de su cuenta bancaria."
+msgstr "Por favor, revisa tu correo, te hemos enviando un correo."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:21
 msgid ""
@@ -25705,48 +25669,43 @@ msgid ""
 "the order clicked the link in the email they received to confirm the email "
 "address is valid."
 msgstr ""
+"Puede descargar sus boletos aquí mismo tan pronto como la persona que "
+"realizó el pedido hizo clic en el enlace del correo electrónico que recibió "
+"para confirmar que la dirección de correo electrónico es válida."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:26
-#, fuzzy
-#| msgid "You will be able to download your tickets here starting on %(date)s."
 msgid ""
 "If you click the link in our email, you will be able to download your "
 "tickets here."
-msgstr "Podrás descargar tus entradas aquí a partir de %(date)s."
+msgstr ""
+"Si hace clic en el enlace que le hemos enviado a su correo, podrá descargar "
+"sus entradas aquí."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:30
 msgid ""
 "If the email has no attachment, click the link in our email and you will be "
 "able to download them from here."
 msgstr ""
+"Si el correo electrónico que le enviamos no tiene archivo adjunto, haga clic "
+"en el enlace de nuestro correo electrónico y podrá descargarlos desde aquí."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:41
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:60
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:80
-#, fuzzy
-#| msgid ""
-#| "You can download your tickets using the buttons below. Please have your "
-#| "ticket ready when entering the event."
 msgid "Please have your ticket ready when entering the event."
-msgstr ""
-"Puede descargar sus entradas usando los botones de abajo. Por favor tenga su "
-"ticket listo al entrar al evento."
+msgstr "Por favor tenga su ticket listo al entrar al evento."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:45
 msgid "Download all tickets at once:"
 msgstr "Descargue todos los tickets a la vez:"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:63
-#, fuzzy
-#| msgid "Download ticket"
 msgid "Download your ticket here:"
-msgstr "Descargar ticket"
+msgstr "Descargue sus entradas aquí:"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:83
-#, fuzzy
-#| msgid "Download all tickets at once:"
 msgid "Download your tickets using the buttons below."
-msgstr "Descargue todos los tickets a la vez:"
+msgstr "Descargue las entradas usando los botones debajo."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:91
 #, python-format
