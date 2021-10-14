@@ -859,7 +859,7 @@ class DayCalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
         return rastered_events
 
     def _get_shortest_duration(self, events):
-        midnight = time(0,0)
+        midnight = time(0, 0)
         durations = [
             datetime.combine(
                 date.today() if e.get('time_end_today') and e['time_end_today'] != midnight else date.today() + timedelta(days=1),
