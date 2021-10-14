@@ -914,6 +914,8 @@ class DayCalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
 
         return ticks
 
+    # TODO: this method is still based on initial custom CSS without CSS Custom Properties
+    # this needs to be reworked to overlaying events are marked as such
     def _grid_for_template(self, events):
         rows_by_collection = defaultdict(list)
 
