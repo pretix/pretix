@@ -161,19 +161,32 @@
   --event-end-m: 0;
 
   --offset-row: 1;
+  --total-rows: 1;
 }
+.day-timeline[data-cal-rows="2"] {--total-rows: 2}
+.day-timeline[data-cal-rows="3"] {--total-rows: 3}
+.day-timeline[data-cal-rows="4"] {--total-rows: 4}
+.day-timeline[data-cal-rows="5"] {--total-rows: 5}
+.day-timeline[data-cal-rows="6"] {--total-rows: 6}
+.day-timeline[data-cal-rows="7"] {--total-rows: 7}
+.day-timeline[data-cal-rows="8"] {--total-rows: 8}
+.day-timeline[data-cal-rows="9"] {--total-rows: 9}
+
+.day-timeline [data-cal-row="1"] {--offset-row: 2}
+.day-timeline [data-cal-row="2"] {--offset-row: 3}
+.day-timeline [data-cal-row="3"] {--offset-row: 4}
+
 .day-timeline > li {
   grid-column-start: calc(1 + (var(--event-h) - var(--day-h))*12 + (var(--event-m) - var(--day-m))/5);
   grid-column-end: calc(1 + (var(--event-end-h) - var(--day-h))*12 + (var(--event-end-m) - var(--day-m))/5);
-  grid-row: var(--offset-row) / span 2;
+  grid-row: var(--offset-row) / span 1;
 }
 .day-timeline > li:after {
   content: var(--event-h);
 }
 
 .ticks li, .tick {
-    /*grid-column-end: span 6 !important;*/
-    grid-row: 1 / 4 !important;
+    grid-row: 1 / span var(--total-rows) !important;
 }
 .ticks li:nth-of-type(odd), .tick {
     background-color: $table-bg-accent;
@@ -241,11 +254,6 @@
 .day-calendar[data-end-time$="30"] {--day-end-m: 30}
 .day-calendar[data-end-time$="45"] {--day-end-m: 45}
 
-
-
-.overlap-1 {--offset-row: 2}
-.overlap-2 {--offset-row: 3}
-.overlap-3 {--offset-row: 4}
 
 .day-timeline [data-start-time$="00"] {--event-m:  0}
 .day-timeline [data-start-time$="05"] {--event-m:  5}

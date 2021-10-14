@@ -15,7 +15,7 @@
             </a>
         {% endif %}
         </h3>
-        <ul class="day-timeline">
+        <ul class="day-timeline" data-cal-rows="{{rows|length}}">
         {% for t in time_ticks %}
             {% if not forloop.counter|divisibleby:2 %}
                 <li data-start-time="{{ t.start|date:"H:i" }}" data-end-time="{{ t.end|date:"H:i" }}" class="tick">&nbsp;</li>
@@ -23,7 +23,7 @@
         {% endfor %}
         {% for row in rows %}
             {% for event in row %}
-            <li data-start-time="{{ event.time_rastered|date:"H:i" }}"
+            <li data-cal-row="{{forloop.parentloop.counter0}}" data-start-time="{{ event.time_rastered|date:"H:i" }}"
                 {% if event.time_end_today_rastered %} data-end-time="{{ event.time_end_today_rastered|date:"H:i" }}"{% endif %}>
                 <a class="event {% if event.continued %}continued{% else %} {% spaceless %}
     {% if event.event.presale_is_running and show_avail %}
