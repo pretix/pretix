@@ -815,38 +815,32 @@ class DayCalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
         )
 
         ebd = self._events_by_day(before, after)
-        time_ticks = self._get_time_ticks(ebd[self.date])
-        ctx['time_ticks'] = time_ticks
-        ctx['start'] = time_ticks[0]["start"]
-        ctx['end'] = time_ticks[-1]["end"]
-        ctx['ticks_duration'] = int((time_ticks[0]["end"] - time_ticks[0]["start"]).total_seconds() / 60)
+        events = self._fit_events_to_raster(ebd[self.date])
 
-        rows, starting_at, col_num = self._grid_for_template(ebd[self.date])
+        start, end = self._get_date_range_rastered(events)
+        shortest_duration = self._get_shortest_duration(events).total_seconds() // 60
+
+        ctx['time_ticks'] = self._get_time_ticks(start, end, shortest_duration)
+        ctx['start'] = start
+        ctx['end'] = end
+        # size of each 5-minute slot in calendar is based on shortest event duration
+        ctx['shortest_duration_rastered'] = next((d for d in [15, 30, 60, 90, 120, 180] if d >= shortest_duration), 180)
+
+        rows, starting_at, col_num = self._grid_for_template(events)
         ctx['css_nonce'] = self.nonce
         ctx['collections'] = rows
         ctx['multiple_timezones'] = self._multiple_timezones
         return ctx
 
-    def _get_date_range(self, events):
-        if any(e['continued'] for e in events) or any(e['time'] is None for e in events):
-            starting_at = time(0, 0)
-        else:
-            starting_at = min(e['time'] for e in events)
+    def _fit_events_to_raster(self, events, raster_size=5):
+        for e in events:
+            if "time" in e:
+                e["time_rastered"] = e["time"].replace(minute=(e["time"].minute // raster_size) * raster_size)
+            if "time_end_today" in e:
+                e["time_end_today_rastered"] = e["time_end_today"].replace(minute=(e["time_end_today"].minute // raster_size) * raster_size)
+        return events
 
-        if any(e.get('time_end_today') is None for e in events):
-            ending_at = time(24, 00)
-        else:
-            ending_at = max(e['time_end_today'] for e in events)
-
-        return starting_at, ending_at
-
-    def _get_time_ticks(self, events):
-        ticks = []
-        start, end = self._get_date_range(events)
-        # TODO: floor start to 0 or 30 minutes, ceil end to 0, 15, 30, 45 or 60 (next hour)
-        start = datetime.combine(date.today(), start)
-        end = datetime.combine(date.today(), end)
-
+    def _get_shortest_duration(self, events):
         durations = [
             datetime.combine(
                 date.today(),
@@ -858,13 +852,30 @@ class DayCalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
             )
             for e in events
         ]
-        shortest_duration = min([int(d.total_seconds() / 60) for d in durations])
-        tick_durations = [15, 30, 60, 90, 120, 180]
+        return min([d for d in durations])
 
+    def _get_date_range_rastered(self, events):
+        if any(e['continued'] for e in events) or any(e['time'] is None for e in events):
+            starting_at = time(0, 0)
+        else:
+            starting_at = min(e['time_rastered'] for e in events)
+
+        if any(e.get('time_end_today') is None for e in events):
+            ending_at = time(24, 00)
+        else:
+            ending_at = max(e['time_end_today_rastered'] for e in events)
+
+        return starting_at, ending_at
+
+    def _get_time_ticks(self, start, end, shortest_duration):
+        ticks = []
+        tick_durations = [15, 30, 60]
         # Print a time tick every tick_duration. Pick the next big tick_duration based on shortest_duration
-        # if none is long enough, use a tick_duration of 60 minutes
-        tick_duration = next((duration for duration in tick_durations if duration >= shortest_duration), 60)
+        tick_duration = next((d for d in tick_durations if d >= shortest_duration), tick_durations[-1])
 
+        # convert time to datetime for timedelta calc
+        start = datetime.combine(date.today(), start)
+        end = datetime.combine(date.today(), end)
         tick_start = start
         tick_end = None
         while True:
