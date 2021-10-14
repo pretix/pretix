@@ -34,6 +34,7 @@
 import base64
 import calendar
 import hashlib
+import math
 from collections import defaultdict
 from datetime import date, datetime, time, timedelta
 from secrets import token_bytes
@@ -833,19 +834,38 @@ class DayCalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
         return ctx
 
     def _fit_events_to_raster(self, events, raster_size=5):
+        rastered_events = []
         for e in events:
-            if "time" in e:
+            if "time" in e and e["time"].minute % raster_size:
                 e["time_rastered"] = e["time"].replace(minute=(e["time"].minute // raster_size) * raster_size)
+            else:
+                e["time_rastered"] = e["time"]
+
             if "time_end_today" in e:
-                e["time_end_today_rastered"] = e["time_end_today"].replace(minute=(e["time_end_today"].minute // raster_size) * raster_size)
-        return events
+                if e["time_end_today"].minute % raster_size:
+                    minute = math.ceil(e["time_end_today"].minute / raster_size) * raster_size
+                    hour = e["time_end_today"].hour
+                    if minute > 59:
+                        minute = minute % 60
+                        hour = hour + 1
+                    e["time_end_today_rastered"] = e["time_end_today"].replace(minute=minute, hour=hour)
+                else:
+                    e["time_end_today_rastered"] = e["time_end_today"]
+            else:
+                e["time_end_today"] = e["time_end_today_rastered"] = time(0, 0)
+
+            rastered_events.append(e)
+
+        return rastered_events
 
     def _get_shortest_duration(self, events):
+        midnight = time(0,0)
         durations = [
             datetime.combine(
-                date.today(),
-                time(24, 00) if e.get('time_end_today') is None else e['time_end_today']
-            ) -
+                date.today() if e.get('time_end_today') and e['time_end_today'] != midnight else date.today() + timedelta(days=1),
+                e['time_end_today'] if e.get('time_end_today') else time(0, 0)
+            )
+            -
             datetime.combine(
                 date.today(),
                 time(0, 0) if e['continued'] else e['time']
@@ -861,7 +881,7 @@ class DayCalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
             starting_at = min(e['time_rastered'] for e in events)
 
         if any(e.get('time_end_today') is None for e in events):
-            ending_at = time(24, 00)
+            ending_at = time(0, 0)
         else:
             ending_at = max(e['time_end_today_rastered'] for e in events)
 
@@ -876,6 +896,9 @@ class DayCalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
         # convert time to datetime for timedelta calc
         start = datetime.combine(date.today(), start)
         end = datetime.combine(date.today(), end)
+        if end < start:
+            end = end + timedelta(days=1)
+
         tick_start = start
         tick_end = None
         while True:
