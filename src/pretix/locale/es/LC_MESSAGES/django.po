@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-09-27 18:48+0000\n"
-"PO-Revision-Date: 2021-10-13 19:00+0000\n"
-"Last-Translator: ityd <yagoalonso@gmail.com>\n"
+"PO-Revision-Date: 2021-10-15 09:14+0000\n"
+"Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/pretix/"
 "es/>\n"
 "Language: es\n"
@@ -8305,7 +8305,7 @@ msgstr ""
 "su equipo {event}"
 
 #: pretix/base/settings.py:1731
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
