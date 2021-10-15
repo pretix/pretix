@@ -181,6 +181,66 @@
 .day-timeline [data-concurrency="8"] {--offset-row: 8}
 .day-timeline [data-concurrency="9"] {--offset-row: 9}
 
+
+.day-timeline li {
+  --offset-start: 0;
+  --offset-end: 0;
+  --duration-rastered: 5;
+}
+.event {
+  --duration: calc(var(--duration-hour)*60 + var(--duration-minute));
+  margin-left: calc(var(--offset-start) / var(--duration) * 100%);
+  margin-right: calc(var(--offset-end) / var(--duration) * 100%);
+}
+
+.day-timeline [data-offset-start="1"] {--offset-start: 1}
+.day-timeline [data-offset-start="2"] {--offset-start: 2}
+.day-timeline [data-offset-start="3"] {--offset-start: 3}
+.day-timeline [data-offset-start="4"] {--offset-start: 4}
+
+.day-timeline [data-offset-end="1"] {--offset-end: 1}
+.day-timeline [data-offset-end="2"] {--offset-end: 2}
+.day-timeline [data-offset-end="3"] {--offset-end: 3}
+.day-timeline [data-offset-end="4"] {--offset-end: 4}
+
+.day-timeline [data-duration$="05"] {--duration-minute: 5}
+.day-timeline [data-duration$="10"] {--duration-minute: 10}
+.day-timeline [data-duration$="15"] {--duration-minute: 15}
+.day-timeline [data-duration$="20"] {--duration-minute: 20}
+.day-timeline [data-duration$="25"] {--duration-minute: 25}
+.day-timeline [data-duration$="30"] {--duration-minute: 30}
+.day-timeline [data-duration$="35"] {--duration-minute: 35}
+.day-timeline [data-duration$="40"] {--duration-minute: 40}
+.day-timeline [data-duration$="45"] {--duration-minute: 45}
+.day-timeline [data-duration$="50"] {--duration-minute: 50}
+.day-timeline [data-duration$="55"] {--duration-minute: 55}
+
+.day-timeline [data-duration^="01"] {--duration-hour: 1}
+.day-timeline [data-duration^="02"] {--duration-hour: 2}
+.day-timeline [data-duration^="03"] {--duration-hour: 3}
+.day-timeline [data-duration^="04"] {--duration-hour: 4}
+.day-timeline [data-duration^="05"] {--duration-hour: 5}
+.day-timeline [data-duration^="06"] {--duration-hour: 6}
+.day-timeline [data-duration^="07"] {--duration-hour: 7}
+.day-timeline [data-duration^="08"] {--duration-hour: 8}
+.day-timeline [data-duration^="09"] {--duration-hour: 9}
+.day-timeline [data-duration^="10"] {--duration-hour: 10}
+.day-timeline [data-duration^="11"] {--duration-hour: 11}
+.day-timeline [data-duration^="12"] {--duration-hour: 12}
+.day-timeline [data-duration^="13"] {--duration-hour: 13}
+.day-timeline [data-duration^="14"] {--duration-hour: 14}
+.day-timeline [data-duration^="15"] {--duration-hour: 15}
+.day-timeline [data-duration^="16"] {--duration-hour: 16}
+.day-timeline [data-duration^="17"] {--duration-hour: 17}
+.day-timeline [data-duration^="18"] {--duration-hour: 18}
+.day-timeline [data-duration^="19"] {--duration-hour: 19}
+.day-timeline [data-duration^="20"] {--duration-hour: 20}
+.day-timeline [data-duration^="21"] {--duration-hour: 21}
+.day-timeline [data-duration^="22"] {--duration-hour: 22}
+.day-timeline [data-duration^="23"] {--duration-hour: 23}
+.day-timeline [data-duration^="24"] {--duration-hour: 24}
+
+
 .day-timeline > li {
   grid-column-start: calc(1 + (var(--event-h) - var(--day-h))*12 + (var(--event-m) - var(--day-m))/5);
   grid-column-end: calc(1 + (var(--event-end-h) - var(--day-h))*12 + (var(--event-end-m) - var(--day-m))/5);

@@ -25,6 +25,9 @@
         {% for event in collection.events %}
             <li data-concurrency="{{ event.concurrency }}"
                 data-start-time="{{ event.time_rastered|date:"H:i" }}"
+                data-duration="{{ event.duration_rastered|date:"H:i" }}"
+                data-offset-start="{{ event.raster_offset_start }}"
+                data-offset-end="{{ event.raster_offset_end }}"
                 {% if event.time_end_today_rastered %} data-end-time="{{ event.time_end_today_rastered|date:"H:i" }}"{% endif %}>
                 <a class="event {% if event.continued %}continued{% else %} {% spaceless %}
     {% if event.event.presale_is_running and show_avail %}

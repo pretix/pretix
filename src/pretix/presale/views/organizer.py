@@ -838,12 +838,18 @@ class DayCalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
 
     def _fit_events_to_raster(self, events, raster_size=5):
         rastered_events = []
+        midnight = time(0, 0)
         for e in events:
-            if "time" in e and e["time"].minute % raster_size:
+            e["raster_offset_start"] = 0
+            if e["continued"]:
+                e["time_rastered"] = midnight
+            elif e["time"].minute % raster_size:
                 e["time_rastered"] = e["time"].replace(minute=(e["time"].minute // raster_size) * raster_size)
+                e["raster_offset_start"] = e["time"].minute % raster_size
             else:
                 e["time_rastered"] = e["time"]
 
+            e["raster_offset_end"] = 0
             if "time_end_today" in e:
                 if e["time_end_today"].minute % raster_size:
                     minute = math.ceil(e["time_end_today"].minute / raster_size) * raster_size
@@ -852,10 +858,22 @@ class DayCalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
                         minute = minute % 60
                         hour = hour + 1
                     e["time_end_today_rastered"] = e["time_end_today"].replace(minute=minute, hour=hour)
+                    e["raster_offset_end"] = raster_size - e["time_end_today"].minute % raster_size
                 else:
                     e["time_end_today_rastered"] = e["time_end_today"]
             else:
                 e["time_end_today"] = e["time_end_today_rastered"] = time(0, 0)
+
+            e["duration_rastered"] = datetime.utcfromtimestamp(
+                (datetime.combine(
+                    date.today() if e["time_end_today_rastered"] != midnight else date.today() + timedelta(days=1),
+                    e["time_end_today_rastered"]
+                ) - datetime.combine(
+                    date.today(),
+                    e['time_rastered']
+                )).total_seconds()
+            )
+
 
             rastered_events.append(e)
 
