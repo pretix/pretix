@@ -136,7 +136,7 @@
   position: sticky;
   left: 0;
   margin: 0;
-  padding: 0;
+  padding: 3px 8px 3px 0;
   background-color: rgba(255,255,255,.9);
   white-space: nowrap;
   z-index: 10;
@@ -267,9 +267,20 @@ concurrency has two meanings:
 .ticks li, .tick {
     grid-row: 1 / span var(--concurrency, 1) !important;
 }
+.ticks li {
+  padding: 8px 3px 5px;
+  line-height: 1;
+  border-top-left-radius: $border-radius-base;
+  border-top-right-radius: $border-radius-base;
+}
 .ticks li:nth-of-type(odd), .tick {
     background-color: $table-bg-accent;
 }
+.day-timeline:nth-last-of-type(1) li {
+  border-bottom-left-radius: $border-radius-base;
+  border-bottom-right-radius: $border-radius-base;
+}
+
 
 
 .event {

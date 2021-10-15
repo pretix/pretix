@@ -5,7 +5,8 @@
     <ul aria-hidden="true" class="day-timeline ticks">
     {% for t in time_ticks %}
         <li data-offset="{{ t.offset|date:"H:i" }}"
-            data-duration="{{ t.duration|date:"H:i" }}">{{ t.start|date:"TIME_FORMAT" }}</li>
+            data-duration="{{ t.duration|date:"H:i" }}"
+            class="text-muted">{{ t.start|date:"TIME_FORMAT" }}</li>
     {% endfor %}
     </ul>
     {% for series, collection in collections %}
