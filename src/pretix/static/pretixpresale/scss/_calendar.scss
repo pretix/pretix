@@ -163,18 +163,23 @@
   --offset-row: 1;
   --total-rows: 1;
 }
-.day-timeline[data-cal-rows="2"] {--total-rows: 2}
-.day-timeline[data-cal-rows="3"] {--total-rows: 3}
-.day-timeline[data-cal-rows="4"] {--total-rows: 4}
-.day-timeline[data-cal-rows="5"] {--total-rows: 5}
-.day-timeline[data-cal-rows="6"] {--total-rows: 6}
-.day-timeline[data-cal-rows="7"] {--total-rows: 7}
-.day-timeline[data-cal-rows="8"] {--total-rows: 8}
-.day-timeline[data-cal-rows="9"] {--total-rows: 9}
+.day-timeline[data-concurrency="2"] {--total-rows: 2}
+.day-timeline[data-concurrency="3"] {--total-rows: 3}
+.day-timeline[data-concurrency="4"] {--total-rows: 4}
+.day-timeline[data-concurrency="5"] {--total-rows: 5}
+.day-timeline[data-concurrency="6"] {--total-rows: 6}
+.day-timeline[data-concurrency="7"] {--total-rows: 7}
+.day-timeline[data-concurrency="8"] {--total-rows: 8}
+.day-timeline[data-concurrency="9"] {--total-rows: 9}
 
-.day-timeline [data-cal-row="1"] {--offset-row: 2}
-.day-timeline [data-cal-row="2"] {--offset-row: 3}
-.day-timeline [data-cal-row="3"] {--offset-row: 4}
+.day-timeline [data-concurrency="2"] {--offset-row: 2}
+.day-timeline [data-concurrency="3"] {--offset-row: 3}
+.day-timeline [data-concurrency="4"] {--offset-row: 4}
+.day-timeline [data-concurrency="5"] {--offset-row: 5}
+.day-timeline [data-concurrency="6"] {--offset-row: 6}
+.day-timeline [data-concurrency="7"] {--offset-row: 7}
+.day-timeline [data-concurrency="8"] {--offset-row: 8}
+.day-timeline [data-concurrency="9"] {--offset-row: 9}
 
 .day-timeline > li {
   grid-column-start: calc(1 + (var(--event-h) - var(--day-h))*12 + (var(--event-m) - var(--day-m))/5);

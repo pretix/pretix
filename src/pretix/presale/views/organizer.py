@@ -939,6 +939,18 @@ class DayCalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
             if not placed_in_row:
                 rows_by_collection[collection].append([e])
 
+        # flatten rows to one stream of events with attribute row
+        # for better keyboard-tab-order in html
+        for collection in rows_by_collection:
+            for i, row in enumerate(rows_by_collection[collection]):
+                concurrency = i+1
+                for e in row:
+                    e["concurrency"] = concurrency
+            rows_by_collection[collection] = {
+                "concurrency": len(rows_by_collection[collection]),
+                "events": sorted([e for row in rows_by_collection[collection] for e in row], key=lambda d: d['time']),
+            }
+
         def sort_key(c):
             collection, row = c
             if collection is None:

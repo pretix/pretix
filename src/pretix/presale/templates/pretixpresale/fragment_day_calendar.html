@@ -7,7 +7,7 @@
         <li data-start-time="{{ t.start|date:"H:i" }}" data-end-time="{{ t.end|date:"H:i" }}">{{ t.start|date:"TIME_FORMAT" }}</li>
     {% endfor %}
     </ul>
-    {% for series, rows in collections %}
+    {% for series, collection in collections %}
         <h3 class="day-row-name">
         {% if series %}
             <a href="{% eventurl series "presale:event.index" %}">
@@ -15,15 +15,16 @@
             </a>
         {% endif %}
         </h3>
-        <ul class="day-timeline" data-cal-rows="{{rows|length}}">
+        <ul class="day-timeline" data-concurrency="{{ collection.concurrency }}">
         {% for t in time_ticks %}
             {% if not forloop.counter|divisibleby:2 %}
                 <li data-start-time="{{ t.start|date:"H:i" }}" data-end-time="{{ t.end|date:"H:i" }}" class="tick">&nbsp;</li>
             {% endif %}
         {% endfor %}
-        {% for row in rows %}
-            {% for event in row %}
-            <li data-cal-row="{{forloop.parentloop.counter0}}" data-start-time="{{ event.time_rastered|date:"H:i" }}"
+
+        {% for event in collection.events %}
+            <li data-concurrency="{{ event.concurrency }}"
+                data-start-time="{{ event.time_rastered|date:"H:i" }}"
                 {% if event.time_end_today_rastered %} data-end-time="{{ event.time_end_today_rastered|date:"H:i" }}"{% endif %}>
                 <a class="event {% if event.continued %}continued{% else %} {% spaceless %}
     {% if event.event.presale_is_running and show_avail %}
@@ -104,7 +105,6 @@
                     {% endif %}
                 </a>
             </li>
-            {% endfor %}
         {% endfor %}
         </ul>
     {% endfor %}
