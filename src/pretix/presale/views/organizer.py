@@ -816,13 +816,13 @@ class DayCalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
         )
 
         ebd = self._events_by_day(before, after)
-        events = self._fit_events_to_raster(ebd[self.date])
+        events, start, end = self._rasterize_events(ebd[self.date])
         if not events:
             return ctx
 
-        start, end = self._get_date_range_rastered(events)
         shortest_duration = self._get_shortest_duration(events).total_seconds() // 60
 
+        ctx["calendar_duration"] = self._get_time_duration(start, end)
         ctx['time_ticks'] = self._get_time_ticks(start, end, shortest_duration)
         ctx['start'] = start
         ctx['end'] = end
@@ -836,8 +836,41 @@ class DayCalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
         ctx['multiple_timezones'] = self._multiple_timezones
         return ctx
 
-    def _fit_events_to_raster(self, events, raster_size=5):
+    def _get_time_duration(self, start, end):
+        midnight = time(0, 0)
+        return datetime.utcfromtimestamp(
+            (datetime.combine(
+                date.today() if end != midnight else date.today() + timedelta(days=1),
+                end
+            ) - datetime.combine(
+                date.today(),
+                start
+            )).total_seconds()
+        )
+
+    # currently based on minutes, might be factored into a helper class with a timedelta as raster?
+    def _floor_time(self, t, raster_size=5):
+        if t.minute % raster_size:
+            return t.replace(minute=(t.minute // raster_size) * raster_size)
+        return t
+
+    # currently based on minutes, might be factored into a helper class with a timedelta as raster?
+    def _ceil_time(self, t, raster_size=5):
+        if not t.minute % raster_size:
+            return t
+        minute = math.ceil(t.minute / raster_size) * raster_size
+        hour = t.hour
+        if minute > 59:
+            minute = minute % 60
+            hour = hour + 1
+        return t.replace(minute=minute, hour=hour)
+
+    def _rasterize_events(self, events, raster_size=5):
         rastered_events = []
+        start, end = self._get_time_range(events)
+        start = self._floor_time(start)
+        end = self._ceil_time(end)
+
         midnight = time(0, 0)
         for e in events:
             e["raster_offset_start"] = 0
@@ -874,10 +907,11 @@ class DayCalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
                 )).total_seconds()
             )
 
+            e["offset_rastered"] = self._get_time_duration(start, e["time_rastered"])
 
             rastered_events.append(e)
 
-        return rastered_events
+        return rastered_events, start, end
 
     def _get_shortest_duration(self, events):
         midnight = time(0, 0)
@@ -895,16 +929,16 @@ class DayCalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
         ]
         return min([d for d in durations])
 
-    def _get_date_range_rastered(self, events):
+    def _get_time_range(self, events):
         if any(e['continued'] for e in events) or any(e['time'] is None for e in events):
             starting_at = time(0, 0)
         else:
-            starting_at = min(e['time_rastered'] for e in events)
+            starting_at = min(e['time'] for e in events)
 
         if any(e.get('time_end_today') is None for e in events):
             ending_at = time(0, 0)
         else:
-            ending_at = max(e['time_end_today_rastered'] for e in events)
+            ending_at = max(e['time_end_today'] for e in events)
 
         return starting_at, ending_at
 
@@ -912,26 +946,28 @@ class DayCalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
         ticks = []
         tick_durations = [15, 30, 60]
         # Print a time tick every tick_duration. Pick the next big tick_duration based on shortest_duration
-        tick_duration = next((d for d in tick_durations if d >= shortest_duration), tick_durations[-1])
+        tick_duration = timedelta(minutes = next((d for d in tick_durations if d >= shortest_duration), tick_durations[-1]))
 
         # convert time to datetime for timedelta calc
+        # TODO: date.today should be replaced with currently displayed day as of daylight-savings having multiple hours twice
         start = datetime.combine(date.today(), start)
         end = datetime.combine(date.today(), end)
         if end < start:
             end = end + timedelta(days=1)
 
+        # important: due to daylight savings tick_start and offset need to be separate
         tick_start = start
-        tick_end = None
-        while True:
-            tick_end = min(tick_start + timedelta(minutes=tick_duration), end)
+        offset = datetime.utcfromtimestamp(0)
+        duration = datetime.utcfromtimestamp(tick_duration.total_seconds())
+        while tick_start < end:
             tick = {
                 "start": tick_start,
-                "end": tick_end,
+                "duration": duration,
+                "offset": offset,
             }
             ticks.append(tick)
-            if tick_end >= end:
-                break
-            tick_start = tick_end
+            tick_start += tick_duration
+            offset += tick_duration
 
         return ticks
 

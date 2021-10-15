@@ -145,6 +145,111 @@
   padding: 0;
   background-color: rgba(255,255,255,.9);
 }
+
+
+/*
+concurrency has two meanings:
+  on .day-timeline it means total nummber concurrently running events at any given time
+  on .day-timeline>li it means the current concurrency of this li-element
+[data-concurrency="1"] {--concurrency: 1}
+[data-concurrency="2"] {--concurrency: 2}
+[data-concurrency="3"] {--concurrency: 3}
+[data-concurrency="4"] {--concurrency: 4}
+[data-concurrency="5"] {--concurrency: 5}
+[data-concurrency="6"] {--concurrency: 6}
+[data-concurrency="7"] {--concurrency: 7}
+[data-concurrency="8"] {--concurrency: 8}
+[data-concurrency="9"] {--concurrency: 9}
+
+
+[data-offset^="01"] {--offset-hour: 1}
+[data-offset^="02"] {--offset-hour: 2}
+[data-offset^="03"] {--offset-hour: 3}
+[data-offset^="04"] {--offset-hour: 4}
+[data-offset^="05"] {--offset-hour: 5}
+[data-offset^="06"] {--offset-hour: 6}
+[data-offset^="07"] {--offset-hour: 7}
+[data-offset^="08"] {--offset-hour: 8}
+[data-offset^="09"] {--offset-hour: 9}
+[data-offset^="10"] {--offset-hour: 10}
+[data-offset^="11"] {--offset-hour: 11}
+[data-offset^="12"] {--offset-hour: 12}
+[data-offset^="13"] {--offset-hour: 13}
+[data-offset^="14"] {--offset-hour: 14}
+[data-offset^="15"] {--offset-hour: 15}
+[data-offset^="16"] {--offset-hour: 16}
+[data-offset^="17"] {--offset-hour: 17}
+[data-offset^="18"] {--offset-hour: 18}
+[data-offset^="19"] {--offset-hour: 19}
+[data-offset^="20"] {--offset-hour: 20}
+[data-offset^="21"] {--offset-hour: 21}
+[data-offset^="22"] {--offset-hour: 22}
+[data-offset^="23"] {--offset-hour: 23}
+[data-offset^="24"] {--offset-hour: 24}
+
+[data-offset$="05"] {--offset-minute: 5}
+[data-offset$="10"] {--offset-minute: 10}
+[data-offset$="15"] {--offset-minute: 15}
+[data-offset$="20"] {--offset-minute: 20}
+[data-offset$="25"] {--offset-minute: 25}
+[data-offset$="30"] {--offset-minute: 30}
+[data-offset$="35"] {--offset-minute: 35}
+[data-offset$="40"] {--offset-minute: 40}
+[data-offset$="45"] {--offset-minute: 45}
+[data-offset$="50"] {--offset-minute: 50}
+[data-offset$="55"] {--offset-minute: 55}
+
+/* minute based micro adjustment offset from 5-minute raster */
+[data-offset-start="1"] {--offset-start: 1}
+[data-offset-start="2"] {--offset-start: 2}
+[data-offset-start="3"] {--offset-start: 3}
+[data-offset-start="4"] {--offset-start: 4}
+
+[data-offset-end="1"] {--offset-end: 1}
+[data-offset-end="2"] {--offset-end: 2}
+[data-offset-end="3"] {--offset-end: 3}
+[data-offset-end="4"] {--offset-end: 4}
+
+
+[data-duration^="00"] {--duration-hour: 0}
+[data-duration^="01"] {--duration-hour: 1}
+[data-duration^="02"] {--duration-hour: 2}
+[data-duration^="03"] {--duration-hour: 3}
+[data-duration^="04"] {--duration-hour: 4}
+[data-duration^="05"] {--duration-hour: 5}
+[data-duration^="06"] {--duration-hour: 6}
+[data-duration^="07"] {--duration-hour: 7}
+[data-duration^="08"] {--duration-hour: 8}
+[data-duration^="09"] {--duration-hour: 9}
+[data-duration^="10"] {--duration-hour: 10}
+[data-duration^="11"] {--duration-hour: 11}
+[data-duration^="12"] {--duration-hour: 12}
+[data-duration^="13"] {--duration-hour: 13}
+[data-duration^="14"] {--duration-hour: 14}
+[data-duration^="15"] {--duration-hour: 15}
+[data-duration^="16"] {--duration-hour: 16}
+[data-duration^="17"] {--duration-hour: 17}
+[data-duration^="18"] {--duration-hour: 18}
+[data-duration^="19"] {--duration-hour: 19}
+[data-duration^="20"] {--duration-hour: 20}
+[data-duration^="21"] {--duration-hour: 21}
+[data-duration^="22"] {--duration-hour: 22}
+[data-duration^="23"] {--duration-hour: 23}
+[data-duration^="24"] {--duration-hour: 24}
+
+[data-duration$="00"] {--duration-minute: 0}
+[data-duration$="05"] {--duration-minute: 5}
+[data-duration$="10"] {--duration-minute: 10}
+[data-duration$="15"] {--duration-minute: 15}
+[data-duration$="20"] {--duration-minute: 20}
+[data-duration$="25"] {--duration-minute: 25}
+[data-duration$="30"] {--duration-minute: 30}
+[data-duration$="35"] {--duration-minute: 35}
+[data-duration$="40"] {--duration-minute: 40}
+[data-duration$="45"] {--duration-minute: 45}
+[data-duration$="50"] {--duration-minute: 50}
+[data-duration$="55"] {--duration-minute: 55}
+
 .day-timeline {
   list-style: none;
   margin: 0;
@@ -152,249 +257,29 @@
 
   display: grid;
   gap: 2px;
-  --grid-cols: calc((var(--day-end-h) - var(--day-h)) * 12 + (var(--day-end-m) - var(--day-m)) / 5);
-  grid-template-columns: repeat(var(--grid-cols), minmax(var(--col-size), 1fr));
-
-  --event-h: 0;
-  --event-m: 0;
-  --event-end-h: 0;
-  --event-end-m: 0;
-
-  --offset-row: 1;
-  --total-rows: 1;
+  --grid-cols: calc(var(--duration-hour, 0) * 12 + var(--duration-minute, 0) / 5);
+  grid-template-columns: repeat(var(--grid-cols), minmax(var(--col-size, 3em), 1fr));
+  grid-template-rows: repeat(var(--concurrency, 1), auto);
 }
-.day-timeline[data-concurrency="2"] {--total-rows: 2}
-.day-timeline[data-concurrency="3"] {--total-rows: 3}
-.day-timeline[data-concurrency="4"] {--total-rows: 4}
-.day-timeline[data-concurrency="5"] {--total-rows: 5}
-.day-timeline[data-concurrency="6"] {--total-rows: 6}
-.day-timeline[data-concurrency="7"] {--total-rows: 7}
-.day-timeline[data-concurrency="8"] {--total-rows: 8}
-.day-timeline[data-concurrency="9"] {--total-rows: 9}
-
-.day-timeline [data-concurrency="2"] {--offset-row: 2}
-.day-timeline [data-concurrency="3"] {--offset-row: 3}
-.day-timeline [data-concurrency="4"] {--offset-row: 4}
-.day-timeline [data-concurrency="5"] {--offset-row: 5}
-.day-timeline [data-concurrency="6"] {--offset-row: 6}
-.day-timeline [data-concurrency="7"] {--offset-row: 7}
-.day-timeline [data-concurrency="8"] {--offset-row: 8}
-.day-timeline [data-concurrency="9"] {--offset-row: 9}
-
-
-.day-timeline li {
-  --offset-start: 0;
-  --offset-end: 0;
-  --duration-rastered: 5;
-}
-.event {
-  --duration: calc(var(--duration-hour)*60 + var(--duration-minute));
-  margin-left: calc(var(--offset-start) / var(--duration) * 100%);
-  margin-right: calc(var(--offset-end) / var(--duration) * 100%);
-}
-
-.day-timeline [data-offset-start="1"] {--offset-start: 1}
-.day-timeline [data-offset-start="2"] {--offset-start: 2}
-.day-timeline [data-offset-start="3"] {--offset-start: 3}
-.day-timeline [data-offset-start="4"] {--offset-start: 4}
-
-.day-timeline [data-offset-end="1"] {--offset-end: 1}
-.day-timeline [data-offset-end="2"] {--offset-end: 2}
-.day-timeline [data-offset-end="3"] {--offset-end: 3}
-.day-timeline [data-offset-end="4"] {--offset-end: 4}
-
-.day-timeline [data-duration$="05"] {--duration-minute: 5}
-.day-timeline [data-duration$="10"] {--duration-minute: 10}
-.day-timeline [data-duration$="15"] {--duration-minute: 15}
-.day-timeline [data-duration$="20"] {--duration-minute: 20}
-.day-timeline [data-duration$="25"] {--duration-minute: 25}
-.day-timeline [data-duration$="30"] {--duration-minute: 30}
-.day-timeline [data-duration$="35"] {--duration-minute: 35}
-.day-timeline [data-duration$="40"] {--duration-minute: 40}
-.day-timeline [data-duration$="45"] {--duration-minute: 45}
-.day-timeline [data-duration$="50"] {--duration-minute: 50}
-.day-timeline [data-duration$="55"] {--duration-minute: 55}
-
-.day-timeline [data-duration^="01"] {--duration-hour: 1}
-.day-timeline [data-duration^="02"] {--duration-hour: 2}
-.day-timeline [data-duration^="03"] {--duration-hour: 3}
-.day-timeline [data-duration^="04"] {--duration-hour: 4}
-.day-timeline [data-duration^="05"] {--duration-hour: 5}
-.day-timeline [data-duration^="06"] {--duration-hour: 6}
-.day-timeline [data-duration^="07"] {--duration-hour: 7}
-.day-timeline [data-duration^="08"] {--duration-hour: 8}
-.day-timeline [data-duration^="09"] {--duration-hour: 9}
-.day-timeline [data-duration^="10"] {--duration-hour: 10}
-.day-timeline [data-duration^="11"] {--duration-hour: 11}
-.day-timeline [data-duration^="12"] {--duration-hour: 12}
-.day-timeline [data-duration^="13"] {--duration-hour: 13}
-.day-timeline [data-duration^="14"] {--duration-hour: 14}
-.day-timeline [data-duration^="15"] {--duration-hour: 15}
-.day-timeline [data-duration^="16"] {--duration-hour: 16}
-.day-timeline [data-duration^="17"] {--duration-hour: 17}
-.day-timeline [data-duration^="18"] {--duration-hour: 18}
-.day-timeline [data-duration^="19"] {--duration-hour: 19}
-.day-timeline [data-duration^="20"] {--duration-hour: 20}
-.day-timeline [data-duration^="21"] {--duration-hour: 21}
-.day-timeline [data-duration^="22"] {--duration-hour: 22}
-.day-timeline [data-duration^="23"] {--duration-hour: 23}
-.day-timeline [data-duration^="24"] {--duration-hour: 24}
-
 
 .day-timeline > li {
-  grid-column-start: calc(1 + (var(--event-h) - var(--day-h))*12 + (var(--event-m) - var(--day-m))/5);
-  grid-column-end: calc(1 + (var(--event-end-h) - var(--day-h))*12 + (var(--event-end-m) - var(--day-m))/5);
-  grid-row: var(--offset-row) / span 1;
-}
-.day-timeline > li:after {
-  content: var(--event-h);
+  grid-column: calc(1 + var(--offset-hour, 0)*12 + var(--offset-minute, 0)/5) / span calc(var(--duration-hour, 0)*12 + var(--duration-minute, 0)/5);
+  grid-row: var(--concurrency, 1) / span 1;
 }
 
 .ticks li, .tick {
-    grid-row: 1 / span var(--total-rows) !important;
+    grid-row: 1 / span var(--concurrency, 1) !important;
 }
 .ticks li:nth-of-type(odd), .tick {
     background-color: $table-bg-accent;
 }
 
 
-.day-calendar[data-start-time^="00"] {--day-h:  0}
-.day-calendar[data-start-time^="01"] {--day-h:  1}
-.day-calendar[data-start-time^="02"] {--day-h:  2}
-.day-calendar[data-start-time^="03"] {--day-h:  3}
-.day-calendar[data-start-time^="04"] {--day-h:  4}
-.day-calendar[data-start-time^="05"] {--day-h:  5}
-.day-calendar[data-start-time^="06"] {--day-h:  6}
-.day-calendar[data-start-time^="07"] {--day-h:  7}
-.day-calendar[data-start-time^="08"] {--day-h:  8}
-.day-calendar[data-start-time^="09"] {--day-h:  9}
-.day-calendar[data-start-time^="10"] {--day-h: 10}
-.day-calendar[data-start-time^="11"] {--day-h: 11}
-.day-calendar[data-start-time^="12"] {--day-h: 12}
-.day-calendar[data-start-time^="13"] {--day-h: 13}
-.day-calendar[data-start-time^="14"] {--day-h: 14}
-.day-calendar[data-start-time^="15"] {--day-h: 15}
-.day-calendar[data-start-time^="16"] {--day-h: 16}
-.day-calendar[data-start-time^="17"] {--day-h: 17}
-.day-calendar[data-start-time^="18"] {--day-h: 18}
-.day-calendar[data-start-time^="19"] {--day-h: 19}
-.day-calendar[data-start-time^="20"] {--day-h: 20}
-.day-calendar[data-start-time^="21"] {--day-h: 21}
-.day-calendar[data-start-time^="22"] {--day-h: 22}
-.day-calendar[data-start-time^="23"] {--day-h: 23}
-
-.day-calendar[data-start-time$="00"] {--day-m: 0}
-.day-calendar[data-start-time$="15"] {--day-m: 15}
-.day-calendar[data-start-time$="30"] {--day-m: 30}
-.day-calendar[data-start-time$="45"] {--day-m: 45}
-
-.day-calendar[data-end-time^="00"] {--day-end-h: 24}
-.day-calendar[data-end-time^="01"] {--day-end-h:  1}
-.day-calendar[data-end-time^="02"] {--day-end-h:  2}
-.day-calendar[data-end-time^="03"] {--day-end-h:  3}
-.day-calendar[data-end-time^="04"] {--day-end-h:  4}
-.day-calendar[data-end-time^="05"] {--day-end-h:  5}
-.day-calendar[data-end-time^="06"] {--day-end-h:  6}
-.day-calendar[data-end-time^="07"] {--day-end-h:  7}
-.day-calendar[data-end-time^="08"] {--day-end-h:  8}
-.day-calendar[data-end-time^="09"] {--day-end-h:  9}
-.day-calendar[data-end-time^="10"] {--day-end-h: 10}
-.day-calendar[data-end-time^="11"] {--day-end-h: 11}
-.day-calendar[data-end-time^="12"] {--day-end-h: 12}
-.day-calendar[data-end-time^="13"] {--day-end-h: 13}
-.day-calendar[data-end-time^="14"] {--day-end-h: 14}
-.day-calendar[data-end-time^="15"] {--day-end-h: 15}
-.day-calendar[data-end-time^="16"] {--day-end-h: 16}
-.day-calendar[data-end-time^="17"] {--day-end-h: 17}
-.day-calendar[data-end-time^="18"] {--day-end-h: 18}
-.day-calendar[data-end-time^="19"] {--day-end-h: 19}
-.day-calendar[data-end-time^="20"] {--day-end-h: 20}
-.day-calendar[data-end-time^="21"] {--day-end-h: 21}
-.day-calendar[data-end-time^="22"] {--day-end-h: 22}
-.day-calendar[data-end-time^="23"] {--day-end-h: 23}
-.day-calendar[data-end-time^="24"] {--day-end-h: 24}
-
-.day-calendar[data-end-time$="00"] {--day-end-m: 0}
-.day-calendar[data-end-time$="15"] {--day-end-m: 15}
-.day-calendar[data-end-time$="30"] {--day-end-m: 30}
-.day-calendar[data-end-time$="45"] {--day-end-m: 45}
-
-
-.day-timeline [data-start-time$="00"] {--event-m:  0}
-.day-timeline [data-start-time$="05"] {--event-m:  5}
-.day-timeline [data-start-time$="10"] {--event-m: 10}
-.day-timeline [data-start-time$="15"] {--event-m: 15}
-.day-timeline [data-start-time$="20"] {--event-m: 20}
-.day-timeline [data-start-time$="25"] {--event-m: 25}
-.day-timeline [data-start-time$="30"] {--event-m: 30}
-.day-timeline [data-start-time$="35"] {--event-m: 35}
-.day-timeline [data-start-time$="40"] {--event-m: 40}
-.day-timeline [data-start-time$="45"] {--event-m: 45}
-.day-timeline [data-start-time$="50"] {--event-m: 50}
-.day-timeline [data-start-time$="55"] {--event-m: 55}
-
-.day-timeline [data-start-time^="00"] {--event-h:  0}
-.day-timeline [data-start-time^="01"] {--event-h:  1}
-.day-timeline [data-start-time^="02"] {--event-h:  2}
-.day-timeline [data-start-time^="03"] {--event-h:  3}
-.day-timeline [data-start-time^="04"] {--event-h:  4}
-.day-timeline [data-start-time^="05"] {--event-h:  5}
-.day-timeline [data-start-time^="06"] {--event-h:  6}
-.day-timeline [data-start-time^="07"] {--event-h:  7}
-.day-timeline [data-start-time^="08"] {--event-h:  8}
-.day-timeline [data-start-time^="09"] {--event-h:  9}
-.day-timeline [data-start-time^="10"] {--event-h: 10}
-.day-timeline [data-start-time^="11"] {--event-h: 11}
-.day-timeline [data-start-time^="12"] {--event-h: 12}
-.day-timeline [data-start-time^="13"] {--event-h: 13}
-.day-timeline [data-start-time^="14"] {--event-h: 14}
-.day-timeline [data-start-time^="15"] {--event-h: 15}
-.day-timeline [data-start-time^="16"] {--event-h: 16}
-.day-timeline [data-start-time^="17"] {--event-h: 17}
-.day-timeline [data-start-time^="18"] {--event-h: 18}
-.day-timeline [data-start-time^="19"] {--event-h: 19}
-.day-timeline [data-start-time^="20"] {--event-h: 20}
-.day-timeline [data-start-time^="21"] {--event-h: 21}
-.day-timeline [data-start-time^="22"] {--event-h: 22}
-.day-timeline [data-start-time^="23"] {--event-h: 23}
-
-.day-timeline [data-end-time$="00"] {--event-end-m:  0}
-.day-timeline [data-end-time$="05"] {--event-end-m:  5}
-.day-timeline [data-end-time$="10"] {--event-end-m: 10}
-.day-timeline [data-end-time$="15"] {--event-end-m: 15}
-.day-timeline [data-end-time$="20"] {--event-end-m: 20}
-.day-timeline [data-end-time$="25"] {--event-end-m: 25}
-.day-timeline [data-end-time$="30"] {--event-end-m: 30}
-.day-timeline [data-end-time$="35"] {--event-end-m: 35}
-.day-timeline [data-end-time$="40"] {--event-end-m: 40}
-.day-timeline [data-end-time$="45"] {--event-end-m: 45}
-.day-timeline [data-end-time$="50"] {--event-end-m: 50}
-.day-timeline [data-end-time$="55"] {--event-end-m: 55}
-
-.day-timeline [data-end-time^="00"] {--event-end-h:  0}
-.day-timeline [data-end-time^="01"] {--event-end-h:  1}
-.day-timeline [data-end-time^="02"] {--event-end-h:  2}
-.day-timeline [data-end-time^="03"] {--event-end-h:  3}
-.day-timeline [data-end-time^="04"] {--event-end-h:  4}
-.day-timeline [data-end-time^="05"] {--event-end-h:  5}
-.day-timeline [data-end-time^="06"] {--event-end-h:  6}
-.day-timeline [data-end-time^="07"] {--event-end-h:  7}
-.day-timeline [data-end-time^="08"] {--event-end-h:  8}
-.day-timeline [data-end-time^="09"] {--event-end-h:  9}
-.day-timeline [data-end-time^="10"] {--event-end-h: 10}
-.day-timeline [data-end-time^="11"] {--event-end-h: 11}
-.day-timeline [data-end-time^="12"] {--event-end-h: 12}
-.day-timeline [data-end-time^="13"] {--event-end-h: 13}
-.day-timeline [data-end-time^="14"] {--event-end-h: 14}
-.day-timeline [data-end-time^="15"] {--event-end-h: 15}
-.day-timeline [data-end-time^="16"] {--event-end-h: 16}
-.day-timeline [data-end-time^="17"] {--event-end-h: 17}
-.day-timeline [data-end-time^="18"] {--event-end-h: 18}
-.day-timeline [data-end-time^="19"] {--event-end-h: 19}
-.day-timeline [data-end-time^="20"] {--event-end-h: 20}
-.day-timeline [data-end-time^="21"] {--event-end-h: 21}
-.day-timeline [data-end-time^="22"] {--event-end-h: 22}
-.day-timeline [data-end-time^="23"] {--event-end-h: 23}
+.event {
+  --duration: calc(var(--duration-hour, 0)*60 + var(--duration-minute));
+  margin-left: calc(var(--offset-start, 0) / var(--duration) * 100%);
+  margin-right: calc(var(--offset-end, 0) / var(--duration) * 100%);
+}
 
 
 
