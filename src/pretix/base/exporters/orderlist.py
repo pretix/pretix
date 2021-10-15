@@ -33,6 +33,7 @@
 # License for the specific language governing permissions and limitations under the License.
 
 from collections import OrderedDict
+from datetime import datetime, time
 from decimal import Decimal
 
 import dateutil
@@ -45,7 +46,7 @@ from django.db.models import (
 from django.db.models.functions import Coalesce, TruncDate
 from django.dispatch import receiver
 from django.utils.functional import cached_property
-from django.utils.timezone import get_current_timezone, now
+from django.utils.timezone import get_current_timezone, make_aware, now
 from django.utils.translation import gettext as _, gettext_lazy, pgettext
 
 from pretix.base.models import (
@@ -870,6 +871,78 @@ class QuotaListExporter(ListExporter):
         return '{}_quotas'.format(self.event.slug)
 
 
+def generate_GiftCardTransactionListExporter(organizer):  # hackhack
+    class GiftcardTransactionListExporter(ListExporter):
+        identifier = 'giftcardtransactionlist'
+        verbose_name = gettext_lazy('Gift card transactions')
+
+        @property
+        def additional_form_fields(self):
+            d = [
+                ('date_from',
+                 forms.DateField(
+                     label=_('Start date'),
+                     widget=forms.DateInput(attrs={'class': 'datepickerfield'}),
+                     required=False,
+                 )),
+                ('date_to',
+                 forms.DateField(
+                     label=_('End date'),
+                     widget=forms.DateInput(attrs={'class': 'datepickerfield'}),
+                     required=False,
+                 )),
+            ]
+            d = OrderedDict(d)
+            return d
+
+        def iterate_list(self, form_data):
+            qs = GiftCardTransaction.objects.filter(
+                card__issuer=organizer,
+            ).order_by('datetime').select_related('card', 'order', 'order__event')
+
+            if form_data.get('date_from'):
+                date_value = form_data.get('date_from')
+                if isinstance(date_value, str):
+                    date_value = dateutil.parser.parse(date_value).date()
+                qs = qs.filter(
+                    datetime__gte=make_aware(datetime.combine(date_value, time(0, 0, 0)), self.timezone)
+                )
+
+            if form_data.get('date_to'):
+                date_value = form_data.get('date_to')
+                if isinstance(date_value, str):
+                    date_value = dateutil.parser.parse(date_value).date()
+
+                qs = qs.filter(
+                    datetime__lte=make_aware(datetime.combine(date_value, time(23, 59, 59, 999)), self.timezone)
+                )
+
+            headers = [
+                _('Gift card code'),
+                _('Test mode'),
+                _('Date'),
+                _('Amount'),
+                _('Currency'),
+                _('Order'),
+            ]
+            yield headers
+
+            for obj in qs:
+                row = [
+                    obj.card.secret,
+                    _('TEST MODE') if obj.card.testmode else '',
+                    obj.datetime.astimezone(self.timezone).strftime('%Y-%m-%d %H:%M:%S'),
+                    obj.value,
+                    obj.card.currency,
+                    obj.order.full_code if obj.order else None,
+                ]
+                yield row
+
+        def get_filename(self):
+            return '{}_giftcardtransactions'.format(organizer.slug)
+    return GiftcardTransactionListExporter
+
+
 class GiftcardRedemptionListExporter(ListExporter):
     identifier = 'giftcardredemptionlist'
     verbose_name = gettext_lazy('Gift card redemptions')
@@ -1062,3 +1135,8 @@ def register_multievent_i_giftcardredemptionlist_exporter(sender, **kwargs):
 @receiver(register_multievent_data_exporters, dispatch_uid="multiexporter_giftcardlist")
 def register_multievent_i_giftcardlist_exporter(sender, **kwargs):
     return generate_GiftCardListExporter(sender)
+
+
+@receiver(register_multievent_data_exporters, dispatch_uid="multiexporter_giftcardtransactionlist")
+def register_multievent_i_giftcardtransactionlist_exporter(sender, **kwargs):
+    return generate_GiftCardTransactionListExporter(sender)
