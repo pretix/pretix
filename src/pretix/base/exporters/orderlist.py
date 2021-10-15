@@ -33,7 +33,7 @@
 # License for the specific language governing permissions and limitations under the License.
 
 from collections import OrderedDict
-from datetime import datetime, time
+from datetime import date, datetime, time
 from decimal import Decimal
 
 import dateutil
@@ -43,7 +43,7 @@ from django.db.models import (
     Case, CharField, Count, DateTimeField, F, IntegerField, Max, Min, OuterRef,
     Q, Subquery, Sum, When,
 )
-from django.db.models.functions import Coalesce, TruncDate
+from django.db.models.functions import Coalesce
 from django.dispatch import receiver
 from django.utils.functional import cached_property
 from django.utils.timezone import get_current_timezone, make_aware, now
@@ -182,41 +182,43 @@ class OrderListExporter(MultiSheetListExporter):
 
         if form_data.get('date_from'):
             date_value = form_data.get('date_from')
-            if isinstance(date_value, str):
+            if not isinstance(date_value, date):
                 date_value = dateutil.parser.parse(date_value).date()
+            datetime_value = make_aware(datetime.combine(date_value, time(0, 0, 0)), self.timezone)
 
-            annotations['date'] = TruncDate(f'{rel}datetime')
-            filters['date__gte'] = date_value
+            filters[f'{rel}datetime__gte'] = datetime_value
 
         if form_data.get('date_to'):
             date_value = form_data.get('date_to')
-            if isinstance(date_value, str):
+            if not isinstance(date_value, date):
                 date_value = dateutil.parser.parse(date_value).date()
+            datetime_value = make_aware(datetime.combine(date_value, time(23, 59, 59, 999999)), self.timezone)
 
-            annotations['date'] = TruncDate(f'{rel}datetime')
-            filters['date__lte'] = date_value
+            filters[f'{rel}datetime__lte'] = datetime_value
 
         if form_data.get('event_date_from'):
             date_value = form_data.get('event_date_from')
-            if isinstance(date_value, str):
+            if not isinstance(date_value, date):
                 date_value = dateutil.parser.parse(date_value).date()
+            datetime_value = make_aware(datetime.combine(date_value, time(0, 0, 0)), self.timezone)
 
             annotations['event_date_max'] = Case(
                 When(**{f'{rel}event__has_subevents': True}, then=Max(f'{rel}all_positions__subevent__date_from')),
                 default=F(f'{rel}event__date_from'),
             )
-            filters['event_date_max__gte'] = date_value
+            filters['event_date_max__gte'] = datetime_value
 
         if form_data.get('event_date_to'):
             date_value = form_data.get('event_date_to')
-            if isinstance(date_value, str):
+            if not isinstance(date_value, date):
                 date_value = dateutil.parser.parse(date_value).date()
+            datetime_value = make_aware(datetime.combine(date_value, time(23, 59, 59, 999999)), self.timezone)
 
             annotations['event_date_min'] = Case(
                 When(**{f'{rel}event__has_subevents': True}, then=Min(f'{rel}all_positions__subevent__date_from')),
                 default=F(f'{rel}event__date_from'),
             )
-            filters['event_date_min__lte'] = date_value
+            filters['event_date_min__lte'] = datetime_value
 
         if filters:
             return qs.annotate(**annotations).filter(**filters)
@@ -914,7 +916,7 @@ def generate_GiftCardTransactionListExporter(organizer):  # hackhack
                     date_value = dateutil.parser.parse(date_value).date()
 
                 qs = qs.filter(
-                    datetime__lte=make_aware(datetime.combine(date_value, time(23, 59, 59, 999)), self.timezone)
+                    datetime__lte=make_aware(datetime.combine(date_value, time(23, 59, 59, 999999)), self.timezone)
                 )
 
             headers = [
