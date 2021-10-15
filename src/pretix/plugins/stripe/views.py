@@ -273,7 +273,9 @@ def charge_webhook(event, event_json, charge_id, rso):
         payment = None
 
     with transaction.atomic():
-        if not payment:
+        if payment:
+            payment = OrderPayment.objects.select_for_update().get(pk=payment.pk)
+        else:
             payment = order.payments.filter(
                 info__icontains=charge['id'],
                 provider__startswith='stripe',
@@ -367,12 +369,14 @@ def source_webhook(event, event_json, source_id, rso):
                 return HttpResponse('Order not found', status=200)
             payment = None
 
-        if not payment:
+        if payment:
+            payment = OrderPayment.objects.select_for_update().get(pk=payment.pk)
+        else:
             payment = order.payments.filter(
                 info__icontains=src['id'],
                 provider__startswith='stripe',
                 amount=prov._amount_to_decimal(src['amount']) if src['amount'] is not None else order.total,
-            ).last()
+            ).select_for_update().last()
         if not payment:
             payment = order.payments.create(
                 state=OrderPayment.PAYMENT_STATE_CREATED,
@@ -462,13 +466,12 @@ class StripeOrderView:
                 raise Http404('')
             else:
                 raise Http404('')
+        self.payment = get_object_or_404(
+            self.order.payments,
+            pk=self.kwargs['payment'],
+            provider__startswith='stripe'
+        )
         return super().dispatch(request, *args, **kwargs)
-
-    @cached_property
-    def payment(self):
-        return get_object_or_404(self.order.payments,
-                                 pk=self.kwargs['payment'],
-                                 provider__startswith='stripe')
 
     @cached_property
     def pprov(self):
@@ -506,7 +509,7 @@ class ReturnView(StripeOrderView, View):
 
         with transaction.atomic():
             self.order.refresh_from_db()
-            self.payment.refresh_from_db()
+            self.payment = OrderPayment.objects.select_for_update().get(pk=self.payment.pk)
             if self.payment.state == OrderPayment.PAYMENT_STATE_CONFIRMED:
                 if 'payment_stripe_token' in request.session:
                     del request.session['payment_stripe_token']
