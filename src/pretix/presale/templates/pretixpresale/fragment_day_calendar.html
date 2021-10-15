@@ -1,6 +1,6 @@
 {% load i18n %}
 {% load eventurl %}
-<div class="day-calendar event-size-{{shortest_duration_rastered}}" data-duration="{{ calendar_duration|date:"H:i" }}">
+<div class="day-calendar shortest-duration-{{shortest_duration_rastered}}" data-duration="{{ calendar_duration|date:"H:i" }}">
     <h3 aria-hidden="true" class="day-row-name">{% trans "Time of day" %}</h3>
     <ul aria-hidden="true" class="day-timeline ticks">
     {% for t in time_ticks %}

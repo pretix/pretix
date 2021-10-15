@@ -121,22 +121,16 @@
   display: grid;
   grid-template-columns: auto auto;
   gap: 0;
-
-  --day-h: 9;
-  --day-m: 0;
-  --day-end-h: 23;
-  --day-end-m: 0;
-
-  --col-size: 3em;
-
   overflow: scroll;
 }
-.event-size-15 {--col-size: 3em}
-.event-size-30 {--col-size: 2em}
-.event-size-60  {--col-size: 1em}
-.event-size-90  {--col-size: .5em}
-.event-size-120 {--col-size: .25em}
-.event-size-180 {--col-size: .125em}
+.shortest-duration-5 {--col-min-size: 7em}
+.shortest-duration-10 {--col-min-size: 5em}
+.shortest-duration-15 {--col-min-size: 3em}
+.shortest-duration-30 {--col-min-size: 2em}
+.shortest-duration-60  {--col-min-size: 1em}
+.shortest-duration-90  {--col-min-size: .5em}
+.shortest-duration-120 {--col-min-size: .25em}
+.shortest-duration-180 {--col-min-size: .125em}
 
 .day-row-name {
   position: sticky;
@@ -151,6 +145,7 @@
 concurrency has two meanings:
   on .day-timeline it means total nummber concurrently running events at any given time
   on .day-timeline>li it means the current concurrency of this li-element
+*/
 [data-concurrency="1"] {--concurrency: 1}
 [data-concurrency="2"] {--concurrency: 2}
 [data-concurrency="3"] {--concurrency: 3}
@@ -258,7 +253,7 @@ concurrency has two meanings:
   display: grid;
   gap: 2px;
   --grid-cols: calc(var(--duration-hour, 0) * 12 + var(--duration-minute, 0) / 5);
-  grid-template-columns: repeat(var(--grid-cols), minmax(var(--col-size, 3em), 1fr));
+  grid-template-columns: repeat(var(--grid-cols), minmax(var(--col-min-size, 3em), 1fr));
   grid-template-rows: repeat(var(--concurrency, 1), auto);
 }
 

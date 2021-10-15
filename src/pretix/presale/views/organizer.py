@@ -827,7 +827,7 @@ class DayCalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
         ctx['start'] = start
         ctx['end'] = end
         # size of each 5-minute slot in calendar is based on shortest event duration
-        ctx['shortest_duration_rastered'] = next((d for d in [15, 30, 60, 90, 120, 180] if d >= shortest_duration), 180)
+        ctx['shortest_duration_rastered'] = next((d for d in [5, 10, 15, 30, 60, 90, 120, 180] if d >= shortest_duration), 180)
 
         ctx['events'] = events
 
