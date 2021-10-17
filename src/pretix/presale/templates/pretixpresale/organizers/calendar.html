@@ -18,7 +18,7 @@
             {% endif %}
         {% endfor %}
         <div class="row">
-            <div class="col-sm-4 col-xs-12 text-left flip">
+            <div class="col-md-4 col-sm-6 col-xs-12 text-left flip">
                 <div class="btn-group" role="group">
                     <a href="?{% url_replace request "style" "list" "week" "" "year" "" "month" "" %}" type="button" class="btn btn-default">
                         <span class="fa fa-list" aria-hidden="true"></span>
@@ -42,7 +42,7 @@
                     {% trans "iCal" %}
                 </a>
             </div>
-            <div class="col-sm-4 col-xs-12 text-center" role="group" aria-label="{% trans "Select month and year to show" %}">
+            <div class="col-md-4 col-sm-6 col-xs-12 text-center" role="group" aria-label="{% trans "Select month and year to show" %}">
                 <select name="month" class="form-control" aria-label="{% trans "Month" %}">
                     {% for m in months %}
                         <option value="{{ m|date:"m" }}" {% if m == date %}selected{% endif %}>{{ m|date:"F" }}</option>
@@ -57,7 +57,7 @@
                     {% trans "Go" %}
                 </button>
             </div>
-            <div class="col-sm-4 hidden-xs text-right flip">
+            <div class="col-md-4 hidden-sm hidden-xs text-right flip">
                 {% if has_before %}
                     <a href="?{% url_replace request "year" before.year "month" before.month %}" class="btn btn-default">
                         <span class="fa fa-arrow-left" aria-hidden="true"></span>
