@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-10-17 14:57+0000\n"
-"PO-Revision-Date: 2021-08-18 01:00+0000\n"
+"PO-Revision-Date: 2021-10-17 15:32+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix-js/"
 "de/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.6\n"
+"X-Generator: Weblate 4.8\n"
 
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:56
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:62
@@ -504,12 +504,13 @@ msgstr[0] "(ein weiterer Termin)"
 msgstr[1] "({num} weitere Termine)"
 
 #: pretix/static/pretixpresale/js/ui/cart.js:43
-#, fuzzy
-#| msgid "The items in your cart are no longer reserved for you."
 msgid ""
 "The items in your cart are no longer reserved for you. You can still "
 "complete your order as long as they’re available."
-msgstr "Die Produkte in Ihrem Warenkorb sind nicht mehr für Sie reserviert."
+msgstr ""
+"Die Produkte in Ihrem Warenkorb sind nicht mehr für Sie reserviert. Sie "
+"können die Bestellung trotzdem abschließen, solange die Produkte noch "
+"verfügbar sind."
 
 #: pretix/static/pretixpresale/js/ui/cart.js:45
 msgid "Cart expired"
