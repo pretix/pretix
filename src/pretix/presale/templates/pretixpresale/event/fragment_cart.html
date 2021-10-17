@@ -8,8 +8,11 @@
     <div class="sr-only" role="rowgroup">
         <div class="sr-only" role="row">
             <span role="columnheader" aria-sort="none">{% trans "Product" %}</span>
-            <span role="columnheader" aria-sort="none">{% trans "Quantity" %}</span>
-            <span role="columnheader" aria-sort="none">{% trans "Price per item" %}</span>
+            {% if download %}
+                <span role="columnheader" aria-sort="none">{% trans "Ticket download" %}</span>
+            {% else %}
+                <span role="columnheader" aria-sort="none">{% trans "Price per item" %}</span>
+            {% endif %}
             <span role="columnheader" aria-sort="none">{% trans "Price total" %}</span>
         </div>
     </div>
@@ -187,7 +190,7 @@
             </div>
 
             {% if download %}
-                <div role="cell" aria-colspan="2" class="download-desktop">
+                <div role="cell" class="download-desktop">
                 {% if line.generate_ticket %}
                     {% for b in download_buttons %}
                         <form action="{% if position_page and line.addon_to %}{% eventurl event "presale:event.order.position.download" secret=line.addon_to.web_secret order=order.code output=b.identifier pid=line.pk position=line.addon_to.positionid %}{% elif position_page %}{% eventurl event "presale:event.order.position.download" secret=line.web_secret order=order.code output=b.identifier pid=line.pk position=line.positionid %}{% else %}{% eventurl event "presale:event.order.download" secret=order.secret order=order.code output=b.identifier position=line.pk %}{% endif %}"
