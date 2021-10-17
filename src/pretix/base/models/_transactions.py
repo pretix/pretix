@@ -25,6 +25,7 @@ This module contains helper functions that are supposed to call out code paths m
 ``Order.create_transaction()`` by actively breaking them. Read the docstring of the ``Transaction`` class for a
 detailed reasoning why this exists.
 """
+import inspect
 import logging
 import os
 import threading
@@ -62,6 +63,18 @@ def _check_for_dirty_orders():
 
 
 def _transactions_mark_order_dirty(order_id, using=None):
+    if "PYTEST_CURRENT_TEST" in os.environ:
+        # We don't care about Order.objects.create() calls in test code so let's try to figure out if this is test code
+        # or not.
+        for frame in inspect.stack():
+            if 'pretix/base/models/orders' in frame.filename:
+                continue
+            elif 'test_' in frame.filename or 'conftest.py in frame.filename':
+                return
+            elif 'pretix/' in frame.filename or 'pretix_' in frame.filename:
+                # This went through non-test code, let's consider it non-test
+                break
+
     if getattr(dirty_transactions, 'order_ids', None) is None:
         dirty_transactions.order_ids = set()
     dirty_transactions.order_ids.add(order_id)

@@ -81,7 +81,7 @@ from pretix.base.signals import order_gracefully_delete
 
 from ...helpers.countries import CachedCountries, FastCountryField
 from ._transactions import (
-    _transactions_mark_order_clean, _transactions_mark_order_dirty,
+    _fail, _transactions_mark_order_clean, _transactions_mark_order_dirty,
 )
 from .base import LockModel, LoggedModel
 from .event import Event, SubEvent
@@ -267,7 +267,8 @@ class Order(LockModel, LoggedModel):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.__initial_status_paid_or_pending = self.status in (Order.STATUS_PENDING, Order.STATUS_PAID) and not self.require_approval
+        if 'require_approval' not in self.get_deferred_fields() and 'status' not in self.get_deferred_fields():
+            self.__initial_status_paid_or_pending = self.status in (Order.STATUS_PENDING, Order.STATUS_PAID) and not self.require_approval
 
     def gracefully_delete(self, user=None, auth=None):
         from . import GiftCard, GiftCardTransaction, Membership, Voucher
@@ -453,9 +454,18 @@ class Order(LockModel, LoggedModel):
         if not self.expires:
             self.set_expires()
 
-        status_paid_or_pending = self.status in (Order.STATUS_PENDING, Order.STATUS_PAID) and not self.require_approval
-        if status_paid_or_pending != self.__initial_status_paid_or_pending or not self.pk:
-            _transactions_mark_order_dirty(self.pk, using=kwargs.get('using', None))
+        update_fields = kwargs.get('update_fields', [])
+        if 'require_approval' not in self.get_deferred_fields() and 'status' not in self.get_deferred_fields():
+            status_paid_or_pending = self.status in (Order.STATUS_PENDING, Order.STATUS_PAID) and not self.require_approval
+            if status_paid_or_pending != self.__initial_status_paid_or_pending or not self.pk:
+                _transactions_mark_order_dirty(self.pk, using=kwargs.get('using', None))
+        elif (
+            not kwargs.get('force_save_with_deferred_fields', None) and
+            (not update_fields or ('require_approval' not in update_fields and 'status' not in update_fields))
+        ):
+            _fail("It is unsafe to call save() on an OrderFee with deferred fields since we can't check if you missed "
+                  "creating a transaction. Call save(force_save_with_deferred_fields=True) if you really want to do "
+                  "this.")
 
         return super().save(**kwargs)
 
@@ -2023,8 +2033,9 @@ class OrderFee(models.Model):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.__initial_transaction_key = Transaction.key(self)
-        self.__initial_canceled = self.canceled
+        if not self.get_deferred_fields():
+            self.__initial_transaction_key = Transaction.key(self)
+            self.__initial_canceled = self.canceled
 
     def __str__(self):
         if self.description:
@@ -2065,8 +2076,13 @@ class OrderFee(models.Model):
             self._calculate_tax()
         self.order.touch()
 
-        if Transaction.key(self) != self.__initial_transaction_key or self.canceled != self.__initial_canceled or not self.pk:
-            _transactions_mark_order_dirty(self.order_id, using=kwargs.get('using', None))
+        if not self.get_deferred_fields():
+            if Transaction.key(self) != self.__initial_transaction_key or self.canceled != self.__initial_canceled or not self.pk:
+                _transactions_mark_order_dirty(self.order_id, using=kwargs.get('using', None))
+        elif not kwargs.get('force_save_with_deferred_fields', None):
+            _fail("It is unsafe to call save() on an OrderFee with deferred fields since we can't check if you missed "
+                  "creating a transaction. Call save(force_save_with_deferred_fields=True) if you really want to do "
+                  "this.")
 
         return super().save(*args, **kwargs)
 
@@ -2135,8 +2151,9 @@ class OrderPosition(AbstractPosition):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.__initial_transaction_key = Transaction.key(self)
-        self.__initial_canceled = self.canceled
+        if not self.get_deferred_fields():
+            self.__initial_transaction_key = Transaction.key(self)
+            self.__initial_canceled = self.canceled
 
     class Meta:
         verbose_name = _("Order position")
@@ -2247,8 +2264,13 @@ class OrderPosition(AbstractPosition):
         if not self.pseudonymization_id:
             self.assign_pseudonymization_id()
 
-        if Transaction.key(self) != self.__initial_transaction_key or self.canceled != self.__initial_canceled or not self.pk:
-            _transactions_mark_order_dirty(self.order_id, using=kwargs.get('using', None))
+        if not self.get_deferred_fields():
+            if Transaction.key(self) != self.__initial_transaction_key or self.canceled != self.__initial_canceled or not self.pk:
+                _transactions_mark_order_dirty(self.order_id, using=kwargs.get('using', None))
+        elif not kwargs.get('force_save_with_deferred_fields', None):
+            _fail("It is unsafe to call save() on an OrderFee with deferred fields since we can't check if you missed "
+                  "creating a transaction. Call save(force_save_with_deferred_fields=True) if you really want to do "
+                  "this.")
 
         return super().save(*args, **kwargs)
 

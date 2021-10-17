@@ -187,6 +187,7 @@ def import_orders(event: Event, fileid: str, settings: dict, locale: str, user) 
                         user=user,
                         data={'source': 'import'}
                     )
+                    o.create_transactions(is_new=True, fees=[], positions=o._positions)
 
             for o in orders:
                 with language(o.locale, event.settings.region):
