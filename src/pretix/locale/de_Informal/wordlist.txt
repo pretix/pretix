@@ -60,6 +60,7 @@ Cronjob
 csv
 Customer
 Debug
+deliverability
 Di
 Do
 Doe
@@ -77,6 +78,7 @@ Einlassdatum
 Einlassuhrzeit
 email
 Enterprise
+EPC
 EPS
 Erstattungsbetrag
 Erstattungsliste
@@ -102,6 +104,7 @@ Geo
 geocoding
 gescannt
 ggf
+GiroCode
 giropay
 GPL
 Guide
@@ -185,6 +188,7 @@ pt
 px
 QR
 Rabattierung
+Reader
 Rechnungs
 Rechungsdatei
 Reddit
@@ -259,6 +263,7 @@ txt
 uhrzeit
 ungespeicherte
 unkategorisiert
+Unkategorisierte
 unlöschbar
 unlöschbaren
 untenstehende
