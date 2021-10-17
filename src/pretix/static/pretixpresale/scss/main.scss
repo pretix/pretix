@@ -20,6 +20,35 @@
     line-height: 1.8em;
 }
 
+.order-details dt {
+    font-weight: normal;
+    float: left;
+    margin-right: .25em;
+}
+.status-dot {
+    font-size: 1.2em;
+}
+.text-warning { color: $brand-warning; }
+.text-info { color: $brand-info; }
+.text-success { color: $brand-success; }
+.text-danger { color: $brand-danger; }
+h1 a, .btn {
+    text-decoration: none;
+}
+/*
+a, .btn-link {
+    text-decoration: underline;
+}
+*/
+/* bootstrap sets outline-offset with :active:focus so we need to match specifity of selector */
+/* see line 26, pretix/static/bootstrap/scss/bootstrap/_buttons.scss */
+button:focus, a:focus, .btn:focus, summary:focus,
+/*button:active, a:active, .btn:active, summary:active,*/
+button:active:focus, a:active:focus, .btn:active:focus, summary:active:focus {
+    outline: 2px solid $link-hover-color;
+    outline-offset: 2px;
+}
+
 footer {
     padding: 10px 0;
 }
@@ -27,23 +56,38 @@ footer nav {
     text-align: center;
     font-size: 11px;
 }
+footer nav ul {
+    display: flex;
+    justify-content: center;
+    list-style: none;
+}
+footer nav li:not(:first-child):before {
+    content: "·";
+    font-weight: bold;
+    display: inline-block;
+    width: 1.5em;
+    text-align: center;
+}
+
 .js-only {
     display: none;
 }
 .locales, .loginstatus {
     display: inline;
-    a {
-        text-decoration: none;
-    }
-    a:hover {
-        border-bottom: 2px solid $gray-light;
-    }
     a.active {
-        border-bottom: 2px solid $brand-primary;
+        /*border-bottom: 2px solid $brand-primary;*/
+        font-weight: bold;
     }
     img {
         vertical-align: baseline;
     }
+}
+.locales ul {
+    display: inline;
+    list-style: none;
+}
+.locales li {
+    display: inline;
 }
 .loginstatus a {
     margin-left: 10px;
@@ -181,8 +225,10 @@ body.loading .container {
 @media (min-width: $screen-md-min) {
     .thank-you {
         min-height: 170px;
-        width: 70%;
-        margin: auto;
+        max-width: 59em;
+        margin-left: auto;
+        margin-right: auto;
+        margin-bottom: 3em;
 
         .fa {
             float: left;
@@ -213,8 +259,14 @@ body.loading .container {
     }
 }
 
+.blank-after {
+    margin-bottom: 1em;
+}
 .dl-horizontal dt  {
     white-space: normal;
+}
+.dl-inline dt, .dl-inline dd {
+    display: inline;
 }
 
 .collapse-indicator {
@@ -231,7 +283,7 @@ body.loading .container {
     transform: rotate(180deg);
 }
 
-.panel-title a[data-toggle="collapse"], details h3.panel-title, details h4.panel-title {
+.panel-title a[data-toggle="collapse"], details .panel-title {
     display: flex;
     padding: 10px 15px;
     margin: -10px -15px;

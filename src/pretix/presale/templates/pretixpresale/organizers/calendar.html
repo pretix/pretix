@@ -42,13 +42,13 @@
                     {% trans "iCal" %}
                 </a>
             </div>
-            <div class="col-sm-4 col-xs-12 text-center">
-                <select name="month" class="form-control">
+            <div class="col-sm-4 col-xs-12 text-center" role="group" aria-label="{% trans "Select month and year to show" %}">
+                <select name="month" class="form-control" aria-label="{% trans "Month" %}">
                     {% for m in months %}
                         <option value="{{ m|date:"m" }}" {% if m == date %}selected{% endif %}>{{ m|date:"F" }}</option>
                     {% endfor %}
                 </select>
-                <select name="year" class="form-control">
+                <select name="year" class="form-control" aria-label="{% trans "Year" %}">
                     {% for y in years %}
                         <option value="{{ y }}" {% if y == date.year %}selected{% endif %}>{{ y }}</option>
                     {% endfor %}

@@ -22,8 +22,11 @@
                     {% if organizer.settings.locales|length > 1 %}
                         <nav class="locales" aria-label="{% trans "select language" %}">
                             {% for l in languages %}
-                                <a href="{% url "presale:locale.set" %}?locale={{ l.code }}&next={{ request.path }}%3F{{ request.META.QUERY_STRING|urlencode }}" class="{% if l.code == request.LANGUAGE_CODE %}active{% endif %}" rel="nofollow">
-                                    {{ l.name_local }}</a>
+                                <a href="{% url "presale:locale.set" %}?locale={{ l.code }}&next={{ request.path }}%3F{{ request.META.QUERY_STRING|urlencode }}" class="{% if l.code == request.LANGUAGE_CODE %}active{% endif %}" rel="nofollow"
+                                    lang="{{ l.code }}" hreflang="{{ l.code }}"
+                                    aria-label="{% language l.code %}{% blocktrans trimmed with language=l.name_local %}
+                                        Website in {{ language }}
+                                    {% endblocktrans %}{% endlanguage %}">{{ l.name_local }}</a>
                             {% endfor %}
                         </nav>
                     {% endif %}
@@ -56,8 +59,11 @@
                     {% if organizer.settings.locales|length > 1 %}
                         <nav class="locales" aria-label="{% trans "select language" %}">
                             {% for l in languages %}
-                                <a href="{% url "presale:locale.set" %}?locale={{ l.code }}&next={{ request.path }}%3F{{ request.META.QUERY_STRING|urlencode }}" class="{% if l.code == request.LANGUAGE_CODE %}active{% endif %}" rel="nofollow">
-                                    {{ l.name_local }}</a>
+                                <a href="{% url "presale:locale.set" %}?locale={{ l.code }}&next={{ request.path }}%3F{{ request.META.QUERY_STRING|urlencode }}" class="{% if l.code == request.LANGUAGE_CODE %}active{% endif %}" rel="nofollow"
+                                    lang="{{ l.code }}" hreflang="{{ l.code }}"
+                                    aria-label="{% language l.code %}{% blocktrans trimmed with language=l.name_local %}
+                                        Website in {{ language }}
+                                    {% endblocktrans %}{% endlanguage %}">{{ l.name_local }}</a>
                             {% endfor %}
                         </nav>
                     {% endif %}
@@ -79,10 +85,9 @@
 {% endblock %}
 {% block footernav %}
     {% if not request.event and request.organizer.settings.contact_mail %}
-        <a href="mailto:{{ request.organizer.settings.contact_mail }}">{% trans "Contact event organizer" %}</a> &middot;
+        <li><a href="mailto:{{ request.organizer.settings.contact_mail }}">{% trans "Contact event organizer" %}</a></li>
     {% endif %}
     {% if not request.event and request.organizer.settings.imprint_url %}
-        <a href="{% safelink request.organizer.settings.imprint_url %}" target="_blank" rel="noopener">{% trans "Imprint" %}</a>
-        &middot;
+        <li><a href="{% safelink request.organizer.settings.imprint_url %}" target="_blank" rel="noopener">{% trans "Imprint" %}</a></li>
     {% endif %}
 {% endblock %}

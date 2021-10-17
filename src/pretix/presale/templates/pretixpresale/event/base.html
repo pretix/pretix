@@ -39,10 +39,14 @@
                 <div class="pull-right header-part flip hidden-print">
                     {% if event.settings.locales|length > 1 %}
                         <nav class="locales" aria-label="{% trans "select language" %}">
+                            <ul>
                             {% for l in languages %}
-                                <a href="{% url "presale:locale.set" %}?locale={{ l.code }}&next={{ request.path }}{% if request.META.QUERY_STRING %}%3F{{ request.META.QUERY_STRING|urlencode }}{% endif %}" class="{% if l.code == request.LANGUAGE_CODE %}active{% endif %}" rel="nofollow" lang="{{ l.code }}" hreflang="{{ l.code }}">
-                                    {{ l.name_local }}</a>
+                                <li><a href="{% url "presale:locale.set" %}?locale={{ l.code }}&next={{ request.path }}{% if request.META.QUERY_STRING %}%3F{{ request.META.QUERY_STRING|urlencode }}{% endif %}" class="{% if l.code == request.LANGUAGE_CODE %}active{% endif %}" rel="nofollow" lang="{{ l.code }}" hreflang="{{ l.code }}"
+                                    aria-label="{% language l.code %}{% blocktrans trimmed with language=l.name_local %}
+                                        Website in {{ language }}
+                                        {% endblocktrans %}{% endlanguage %}">{{ l.name_local }}</a></li>
                             {% endfor %}
+                            </ul>
                         </nav>
                     {% endif %}
                     {% include "pretixpresale/fragment_login_status.html" %}
@@ -66,19 +70,19 @@
         <div class="{% if not event_logo or not event_logo_image_large %}pull-left flip{% endif %}">
             {% if event_logo and event_logo_image_large %}
                 <a href="{% eventurl event "presale:event.index" cart_namespace=cart_namespace|default_if_none:"" %}"
-                   title="{{ event.name }}">
-                    <img src="{{ event_logo|thumb:'1170x5000' }}" alt="{{ event.name }}" class="event-logo" />
+                   aria-label="{% trans 'Homepage' %}" title="{% trans 'Homepage' %}">
+                    <img src="{{ event_logo|thumb:'1170x5000' }}" alt="" class="event-logo" />
                 </a>
             {% elif event_logo %}
                 <a href="{% eventurl event "presale:event.index" cart_namespace=cart_namespace|default_if_none:"" %}"
-                        title="{{ event.name }}">
-                    <img src="{{ event_logo|thumb:'5000x120' }}" alt="{{ event.name }}" class="event-logo" />
+                   aria-label="{% trans 'Homepage' %}" title="{% trans 'Homepage' %}">
+                    <img src="{{ event_logo|thumb:'5000x120' }}" alt="" class="event-logo" />
                 </a>
             {% else %}
                 <h1>
-                    <a href="{% eventurl event "presale:event.index" cart_namespace=cart_namespace|default_if_none:"" %}">{{ event.name }}</a>
+                    <a href="{% eventurl event "presale:event.index" cart_namespace=cart_namespace|default_if_none:"" %}" aria-label="{% trans 'Homepage' %}">{{ event.name }}</a>
                     {% if request.event.settings.show_dates_on_frontpage and not event.has_subevents %}
-                        <small>{{ event.get_date_range_display }}</small>
+                        <small>{{ event.get_date_range_display_as_html }}</small>
                     {% endif %}
                 </h1>
             {% endif %}
@@ -88,10 +92,14 @@
                 <div class="{% if not event_logo or not event_logo_image_large %}pull-right flip{% endif %} loginbox hidden-print">
                     {% if event.settings.locales|length > 1 %}
                         <nav class="locales" aria-label="{% trans "select language" %}">
+                            <ul>
                             {% for l in languages %}
-                                <a href="{% url "presale:locale.set" %}?locale={{ l.code }}&next={{ request.path }}{% if request.META.QUERY_STRING %}%3F{{ request.META.QUERY_STRING|urlencode }}{% endif %}" class="{% if l.code == request.LANGUAGE_CODE %}active{% endif %}" rel="nofollow">
-                                    {{ l.name_local }}</a>
+                                <li><a href="{% url "presale:locale.set" %}?locale={{ l.code }}&next={{ request.path }}{% if request.META.QUERY_STRING %}%3F{{ request.META.QUERY_STRING|urlencode }}{% endif %}" class="{% if l.code == request.LANGUAGE_CODE %}active{% endif %}" rel="nofollow" lang="{{ l.code }}" hreflang="{{ l.code }}"
+                                    aria-label="{% language l.code %}{% blocktrans trimmed with language=l.name_local %}
+                                        Website in {{ language }}
+                                        {% endblocktrans %}{% endlanguage %}">{{ l.name_local }}</a></li>
                             {% endfor %}
+                            </ul>
                         </nav>
                     {% endif %}
                     {% include "pretixpresale/fragment_login_status.html" %}
@@ -103,22 +111,27 @@
     {% if request.event.testmode %}
         {% if request.sales_channel.testmode_supported %}
             <div class="alert alert-warning">
-                <strong>
+                <p><strong><span class="sr-only">{% trans "Warning" context "alert-messages" %}:</span>
                     {% trans "This ticket shop is currently in test mode. Please do not perform any real purchases as your order might be deleted without notice." %}
-                </strong>
+                </strong></p>
             </div>
         {% else %}
             <div class="alert alert-danger">
-                <strong>
+                <p><strong><span class="sr-only">{% trans "Warning" context "alert-messages" %}:</span>
                     {% trans "Orders made through this sales channel cannot be deleted - even if the ticket shop is in test mode!" %}
-                </strong>
+                </strong></p>
             </div>
         {% endif %}
     {% endif %}
     {% if messages %}
         {% for message in messages %}
-            <div class="alert {{ message.tags }}">
+            <div class="alert {{ message.tags }}"{% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %} id="error-message"{% endif %}>
+                <p>
+                {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}<span class="sr-only">{% trans "Error" context "alert-messages" %}:</span>{% endif %}
+                {% if message.level == DEFAULT_MESSAGE_LEVELS.WARNING %}<span class="sr-only">{% trans "Warning" context "alert-messages" %}:</span>{% endif %}
+                {% if message.level == DEFAULT_MESSAGE_LEVELS.INFO %}<span class="sr-only">{% trans "Information" context "alert-messages" %}:</span>{% endif %}
                 {{ message }}
+                </p>
             </div>
         {% endfor %}
     {% endif %}
@@ -139,25 +152,24 @@
     {% if request.event.testmode %}
         {% if request.sales_channel.testmode_supported %}
             <div class="alert alert-testmode alert-warning">
-                <strong>
+                <p><strong><span class="sr-only">{% trans "Warning" context "alert-messages" %}:</span>
                     {% trans "This ticket shop is currently in test mode. Please do not perform any real purchases as your order might be deleted without notice." %}
-                </strong>
+                </strong></p>
             </div>
         {% else %}
             <div class="alert alert-testmode alert-danger">
-                <strong>
+                <p><strong><span class="sr-only">{% trans "Warning" context "alert-messages" %}:</span>
                     {% trans "Orders made through this sales channel cannot be deleted - even if the ticket shop is in test mode!" %}
-                </strong>
+                </strong></p>
             </div>
         {% endif %}
     {% endif %}
 {% endblock %}
 {% block footernav %}
     {% if request.event.settings.contact_mail %}
-        <a href="mailto:{{ request.event.settings.contact_mail }}">{% trans "Contact event organizer" %}</a> &middot;
+        <li><a href="mailto:{{ request.event.settings.contact_mail }}">{% trans "Contact event organizer" %}</a></li>
     {% endif %}
     {% if request.event.settings.imprint_url %}
-        <a href="{% safelink request.event.settings.imprint_url %}" target="_blank" rel="noopener">{% trans "Imprint" %}</a>
-        &middot;
+        <li><a href="{% safelink request.event.settings.imprint_url %}" target="_blank" rel="noopener">{% trans "Imprint" %}</a></li>
     {% endif %}
 {% endblock %}

@@ -1,12 +1,10 @@
+.addons legend {
+    border-bottom: none;
+}
 .product-row {
-    .addons &:first-child {
-        border-top: 2px solid $table-border-color;
-    }
-    .addons &:last-child {
-        border-bottom: 2px solid $table-border-color;
-    }
-
-    &:last-child {
+    .addons & {
+        margin-left: -15px;
+        margin-right: -15px;
     }
     p  {
         margin-bottom: 0;
@@ -78,7 +76,7 @@
         display: block;
     }
     .price ins {
-        color: $brand-success;
+        color: $alert-success-text;
         font-size: 18px;
         font-weight: bold;
         text-decoration: none;
@@ -120,6 +118,9 @@ article.item-with-variations:last-child, .product-row:last-child {
         content: '';
         border-bottom: 2px solid $table-border-color;
     }
+}
+article.item-with-variations .product-row:last-child:after {
+    display: none;
 }
 
 .radio .variation-description {
@@ -170,7 +171,7 @@ article.item-with-variations:last-child, .product-row:last-child {
 .checkout-button-row {
     padding-top: 15px;
 }
-section.front-page {
+div.front-page {
     margin-top: 30px;
 }
 .offline-banner {
@@ -201,23 +202,21 @@ section.front-page {
 .subevent-list {
     background-color: white;
 
-    form {
-        padding: 10px 0;
-    }
-
     .row {
         margin: 0;
     }
-    a.subevent-row {
+    .label {
+        text-decoration: none;
+    }
+    .subevent-row a {
         display: block;
         color: $text-color;
         padding: 3px 0;
     }
-    a.subevent-row:nth-child(2n) {
+    .subevent-row:nth-child(2n) a {
         background-color: $gray-lighter;
     }
-    a.subevent-row:hover {
-        text-decoration: none;
+    .subevent-row:hover a {
         background-color: darken($gray-lighter, 10%);
     }
     .subevent-row .row > div {
@@ -226,6 +225,16 @@ section.front-page {
         vertical-align: middle;
     }
 }
+
+.calendar-nav, .calendar-nav li {
+    list-style: none;
+    margin: 0;
+    padding: 0
+}
+.calendar-nav li {
+    padding: 10px 0;
+}
+
 .subevent-toggle {
     display: none;
 }
@@ -269,8 +278,16 @@ h2.subevent-head {
     margin-bottom: 20px;
 }
 .info-download {
-    margin-top: 15px;
+    margin-top: 0;
+    margin-bottom: 30px;
 }
+.lead + .info-download {
+    margin-top: -15px;
+}
+.download-btn-form + .download-btn-form {
+    margin-left: .5em;
+}
+
 .refund-gift-card-code {
     font-size: 24px;
     font-family: $font-family-monospace;

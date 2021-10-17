@@ -24593,7 +24593,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order.html:18
 #: pretix/presale/templates/pretixpresale/event/order.html:50
 msgid "We successfully received your payment. See below for details."
-msgstr "Wir haben deine Zahlung erfolgreich erhalten. Vielen Dank!"
+msgstr "Wir haben deine Zahlung erfolgreich erhalten."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:35
 msgid ""

@@ -245,6 +245,7 @@ class CartMixin:
             'minutes_left': minutes_left,
             'seconds_left': seconds_left,
             'first_expiry': first_expiry,
+            'is_ordered': bool(order),
             'itemcount': sum(c.count for c in positions if not c.addon_to)
         }
 

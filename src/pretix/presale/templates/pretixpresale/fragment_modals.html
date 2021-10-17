@@ -1,15 +1,17 @@
 {% load i18n %}
 <div id="ajaxerr">
 </div>
-<div id="loadingmodal">
+<div id="loadingmodal" hidden aria-live="polite">
     <div class="modal-card">
         <div class="modal-card-icon">
             <i class="fa fa-cog big-rotating-icon" aria-hidden="true"></i>
         </div>
         <div class="modal-card-content">
-            <h3></h3>
-            <p class="text"></p>
-            <p class="status">{% trans "If this takes longer than a few minutes, please contact us." %}</p>
+            <h3 id="loadingmodal-label"></h3>
+            <div id="loadingmodal-description">
+                <p class="text"></p>
+                <p class="status">{% trans "If this takes longer than a few minutes, please contact us." %}</p>
+            </div>
         </div>
     </div>
 </div>

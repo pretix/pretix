@@ -6,21 +6,26 @@
     bank account, using a personal reference code:
 {% endblocktrans %}</p>
 
-<address>
-    {% if settings.bank_details_type == "sepa" %}
-        {% trans "Account holder" %}: {{ settings.bank_details_sepa_name }}<br>
-        {% trans "IBAN" %}: {{ settings.bank_details_sepa_iban|ibanformat }}<br>
-        {% trans "BIC" %}: {{ settings.bank_details_sepa_bic }}<br>
-        {% trans "Bank" %}: {{ settings.bank_details_sepa_bank }}<br>
-    {% endif %}
-    {% if details %}
-        {{ details|linebreaksbr }}<br>
-    {% endif %}
-    {% if code %}
-        <strong>{% trans "Reference code (important):" %} {{ code }}</strong>
-    {% else %}
+{% if settings.bank_details_type == "sepa" %}
+    <dl class="dl-horizontal">
+        <dt>{% trans "Account holder" %}: </dt><dd>{{ settings.bank_details_sepa_name }}</dd>
+        <dt>{% trans "IBAN" %}: </dt><dd>{{ settings.bank_details_sepa_iban|ibanformat }}</dd>
+        <dt>{% trans "BIC" %}: </dt><dd>{{ settings.bank_details_sepa_bic }}</dd>
+        <dt>{% trans "Bank" %}: </dt><dd>{{ settings.bank_details_sepa_bank }}</dd>
+    </dl>
+{% endif %}
+
+{% if details %}
+    {{ details|linebreaks }}
+{% endif %}
+{% if code %}
+    <dl class="dl-horizontal">
+        <dt>{% trans "Reference code (important):" %} </dt><dd><strong>{{ code }}</strong></dd>
+    </dl>
+{% else %}
+    <p>
         <strong>
             {% trans "We will assign you a personal reference code to use after you completed the order." %}
         </strong>
-    {% endif %}
-</address>
+    </p>
+{% endif %}

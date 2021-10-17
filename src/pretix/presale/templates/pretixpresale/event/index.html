@@ -8,6 +8,22 @@
 {% load eventsignal %}
 {% load rich_text %}
 
+{% block title %}
+    {% if "year" in request.GET %}
+        {% if list_type == "calendar" %}
+            {% blocktrans with datetime=date|date:"F Y" %}
+                Calendar for {{ datetime }}
+            {% endblocktrans %} ::
+        {% elif list_type == "week" %}
+            {% blocktrans with datetime=date|date:week_format %}
+                Calendar for {{ datetime }}
+            {% endblocktrans %} ::
+        {% endif %}
+    {% elif subevent %}
+        {{ subevent.get_date_range_display }} ::
+    {% endif %}
+{% endblock %}
+
 {% block custom_header %}
     {{ block.super }}
     <meta property="og:title" content="{{ ev.name }}" />
@@ -45,22 +61,24 @@
 
             {% if request.GET.voucher %}
                 <div class="alert alert-info">
-                    {% trans "Please select a date to redeem your voucher." %}
+                    <p>{% trans "Please select a date to redeem your voucher." %}</p>
                 </div>
             {% endif %}
         {% endif %}
 
         {% if subevent and "year" not in request.GET %}
+            <p>
             {% if show_cart %}
-                <a class="subevent-toggle btn btn-primary btn-block btn-lg" href="#subevent-list">
+                <button class="subevent-toggle btn btn-primary btn-block btn-lg" aria-expanded="false">
                     <span class="fa fa-reply" aria-hidden="true"></span>
                     {% trans "Add tickets for a different date" %}
-                </a>
+                </button>
             {% else %}
-                <a class="subevent-toggle btn btn-default btn-block" href="#subevent-list">
+                <button class="subevent-toggle btn btn-default btn-block" aria-expanded="false">
                     {% trans "View other date" %}
-                </a>
+                </button>
             {% endif %}
+            </p>
         {% else %}
             <h3>{% trans "Choose date to book a ticket" %}</h3>
         {% endif %}
@@ -99,7 +117,7 @@
             <h2 class="content-header">
                 {{ event.name }}
                 {% if request.event.settings.show_dates_on_frontpage %}
-                    <small>{{ event.get_date_range_display }}</small>
+                    <small>{{ event.get_date_range_display_as_html }}</small>
                 {% endif %}
             </h2>
         {% endif %}
@@ -122,11 +140,15 @@
                         {% endblocktrans %}
                     {% endif %}
                 {% elif event.settings.presale_start_show_date %}
-                    <span data-time="{{ ev.effective_presale_start.isoformat }}" data-timezone="{{ request.event.timezone }}">
-                        {% blocktrans trimmed with date=ev.effective_presale_start|date:"SHORT_DATE_FORMAT" time=ev.effective_presale_start|time:"TIME_FORMAT" %}
-                            The presale for this event will start on {{ date }} at {{ time }}.
-                        {% endblocktrans %}
-                    </span>
+                    {% with date=ev.effective_presale_start|date:"SHORT_DATE_FORMAT" date_normalized=ev.effective_presale_start|date:"Y-m-d" %}
+                    {% with time=ev.effective_presale_start|time:"TIME_FORMAT" time_24h=ev.effective_presale_start|time:"H:i" %}
+                        <span data-time="{{ ev.effective_presale_start.isoformat }}" data-timezone="{{ request.event.timezone }}">
+                            {% blocktrans trimmed with date="<time datetime='"|add:date_normalized|add:"'>"|add:date|add:"</time>"|safe time="<time datetime='"|add:time_24h|add:"'>"|add:time|add:"</time>"|safe %}
+                                The presale for this event will start on {{ date }} at {{ time }}.
+                            {% endblocktrans %}
+                        </span>
+                    {% endwith %}
+                    {% endwith %}
                 {% else %}
                     {% blocktrans trimmed %}
                         The presale for this event has not yet started.
@@ -138,46 +160,54 @@
             <div>
                 {% if ev.location %}
                     <div class="info-row">
-                        <span class="fa fa-map-marker fa-fw" aria-hidden="true"></span>
-                        <p><span class="sr-only">{% trans "Location" %}:</span>
+                        <span class="fa fa-map-marker fa-fw" aria-hidden="true" title="{% trans "Where does the event happen?" %}"></span>
+                        <p><span class="sr-only">{% trans "Where does the event happen?" %}</span>
                             {{ ev.location|linebreaksbr }}
                         </p>
                     </div>
                 {% endif %}
                 {% if ev.settings.show_dates_on_frontpage %}
                     <div class="info-row">
-                        <span class="fa fa-clock-o fa-fw" aria-hidden="true"></span>
-                        <p>
-                            {{ ev.get_date_range_display }}
+                        <span class="fa fa-clock-o fa-fw" aria-hidden="true" title="{% trans "When does the event happen?" %}"></span>
+                        <p><span class="sr-only">{% trans "When does the event happen?" %}</span>
+                            {{ ev.get_date_range_display_as_html }}
                             {% if event.settings.show_times %}
                                 <br>
                                 <span data-time="{{ ev.date_from.isoformat }}" data-timezone="{{ request.event.timezone }}">
-                                    {% blocktrans trimmed with time=ev.date_from|date:"TIME_FORMAT" %}
+                                {% with time_human=ev.date_from|date:"TIME_FORMAT" time_24=ev.date_from|time:"H:i" %}
+                                    {% blocktrans trimmed with time='<time datetime="'|add:time_24|add:'">'|add:time_human|add:"</time>"|safe %}
                                         Begin: {{ time }}
                                     {% endblocktrans %}
+                                {% endwith %}
                                 </span>
                                 {% if event.settings.show_date_to and ev.date_to %}
                                     <br>
                                     <span data-time="{{ ev.date_to.isoformat }}" data-timezone="{{ request.event.timezone }}">
-                                        {% blocktrans trimmed with time=ev.date_to|date:"TIME_FORMAT" %}
+                                    {% with time_human=ev.date_to|date:"TIME_FORMAT" time_24=ev.date_to|time:"H:i" %}
+                                        {% blocktrans trimmed with time='<time datetime="'|add:time_24|add:'">'|add:time_human|add:"</time>"|safe %}
                                             End: {{ time }}
                                         {% endblocktrans %}
+                                    {% endwith %}
                                    </span>
                                 {% endif %}
                             {% endif %}
                             {% if ev.date_admission %}
                                 <br>
                                 {% if ev.date_admission|date:"SHORT_DATE_FORMAT" == ev.date_from|date:"SHORT_DATE_FORMAT" %}
-                                    <span data-time="{{ ev.date_admission.isoformat }}" data-timezone="{{ request.event.timezone }}">
-                                        {% blocktrans trimmed with time=ev.date_admission|date:"TIME_FORMAT" %}
+                                    <span data-time="{{ ev.date_admission.isoformat }}" data-timezone="{{ request.event.timezone }}">  
+                                    {% with time_human=ev.date_admission|date:"TIME_FORMAT" time_24=ev.date_admission|time:"H:i" %}
+                                        {% blocktrans trimmed with time='<time datetime="'|add:time_24|add:'">'|add:time_human|add:"</time>"|safe %}
                                             Admission: {{ time }}
                                         {% endblocktrans %}
+                                    {% endwith %}
                                     </span>
                                 {% else %}
                                     <span data-time="{{ ev.date_admission.isoformat }}" data-timezone="{{ request.event.timezone }}">
-                                        {% blocktrans trimmed with datetime=ev.date_admission|date:"SHORT_DATETIME_FORMAT" %}
+                                    {% with datetime_human=ev.date_admission|date:"SHORT_DATETIME_FORMAT" datetime_iso=ev.date_admission|time:"Y-m-d H:i" %}
+                                        {% blocktrans trimmed with datetime='<time datetime="'|add:datetime_iso|add:'">'|add:datetime_human|add:"</time>"|safe %}
                                             Admission: {{ datetime }}
                                         {% endblocktrans %}
+                                    {% endwith %}
                                     </span>
                                 {% endif %}
                             {% endif %}
@@ -239,7 +269,7 @@
 
                 {% include "pretixpresale/event/fragment_product_list.html" %}
                 {% if ev.presale_is_running and display_add_to_cart %}
-                    <section class="front-page">
+                    <div class="front-page">
                         <div class="row">
                             <div class="col-md-4 col-md-offset-8 col-xs-12">
                                 <button class="btn btn-block btn-primary btn-lg" type="submit" id="btn-add-to-cart">
@@ -256,7 +286,7 @@
                             </div>
                             <div class="clearfix"></div>
                         </div>
-                    </section>
+                    </div>
                 {% endif %}
             </form>
         {% endif %}
@@ -273,11 +303,14 @@
             <form method="get" action="{% eventurl event "presale:event.redeem" cart_namespace=cart_namespace %}">
                 <div class="row row-voucher">
                     <div class="col-md-8 col-sm-6 col-xs-12">
-                        <label for="voucher" class="sr-only">{% trans "Voucher code" %}</label>
-                        <div class="input-group">
+                        <label for="voucher" class="sr-only">{% trans "Voucher code" %} 
+                            {% if "voucher_invalid" in request.GET %}<strong>{% trans "has error" context "form" %},</strong>{% endif %}
+                            <i>{% trans "required" context "form" %}</i></label>
+                        <div class="input-group{% if "voucher_invalid" in request.GET %} has-error{% endif %}">
                             <span class="input-group-addon"><i class="fa fa-ticket fa-fw" aria-hidden="true"></i></span>
-                            <input type="text" class="form-control" name="voucher" id="voucher"
-                                    placeholder="{% trans "Voucher code" %}">
+                            <input type="text" class="form-control{% if "voucher_invalid" in request.GET %} has-error{% endif %}" name="voucher" id="voucher"
+                                {% if "voucher_invalid" in request.GET %} aria-describedby="error-message"{% endif %}
+                                placeholder="{% trans "Voucher code" %}" required="required">
                         </div>
                     </div>
                     <input type="hidden" name="subevent" value="{{ subevent.id|default_if_none:"" }}" />

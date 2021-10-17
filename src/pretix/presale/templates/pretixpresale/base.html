@@ -57,17 +57,17 @@
         {% block footer %}
         {% endblock %}
         <nav aria-label="{% trans "Footer Navigation" %}">
-        {% block footernav %}
-        {% endblock %}
-        {% if footer_text %}
-            {{ footer_text }}
-            &middot;
-        {% endif %}
-        {% for f in footer %}
-            <a href="{% safelink f.url %}" target="_blank" rel="noopener">{{ f.label }}</a>
-            &middot;
-        {% endfor %}
-        {% include "pretixpresale/base_footer.html" %} {# removing or hiding this might be in violation of pretix' license #}
+            <ul>
+            {% block footernav %}
+            {% endblock %}
+            {% if footer_text %}
+                <li>{{ footer_text }}</li>
+            {% endif %}
+            {% for f in footer %}
+                <li><a href="{% safelink f.url %}" target="_blank" rel="noopener">{{ f.label }}</a></li>
+            {% endfor %}
+            {% include "pretixpresale/base_footer.html" %} {# removing or hiding this might be in violation of pretix' license #}
+            </ul>
         </nav>
     </footer>
 </div>

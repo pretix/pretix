@@ -35,16 +35,20 @@ var cart = {
         var now = cart._get_now();
         var diff_minutes = Math.floor(cart._deadline.diff(now) / 1000 / 60);
         var diff_seconds = Math.floor(cart._deadline.diff(now) / 1000 % 60);
+
+        if (diff_minutes < 2 || diff_minutes == 5) $("#cart-deadline").get(0).setAttribute("aria-live", "polite");
+        else $("#cart-deadline").get(0).removeAttribute("aria-live");
+
         if (diff_minutes < 0) {
-            $("#cart-deadline").text(gettext("The items in your cart are no longer reserved for you."));
+            $("#cart-deadline").text(gettext("The items in your cart are no longer reserved for you. You can still complete your order as long as they’re available."));
             $("#cart-deadline-short").text(
                 gettext("Cart expired")
             );
             window.clearInterval(cart._deadline_interval);
         } else {
             $("#cart-deadline").text(ngettext(
-                "The items in your cart are reserved for you for one minute.",
-                "The items in your cart are reserved for you for {num} minutes.",
+                "The items in your cart are reserved for you for one minute.",
+                "The items in your cart are reserved for you for {num} minutes.",
                 diff_minutes
             ).replace(/\{num\}/g, diff_minutes));
             $("#cart-deadline-short").text(
@@ -71,13 +75,17 @@ $(function () {
         cart.init();
     }
 
-    $(".apply-voucher").hide();
-    $(".apply-voucher-toggle").click(function (e) {
-        $(".apply-voucher-toggle").hide();
-        $(".apply-voucher").show();
-        $(".apply-voucher input[type=text]").first().focus();
-        e.preventDefault();
-        return true;
+    $(".toggle-container").each(function() {
+        var summary = $(".toggle-summary", this);
+        var content = $("> :not(.toggle-summary)", this);
+        var toggle  = summary.find(".toggle").on("click", function(e) {
+            this.ariaExpanded = !this.ariaExpanded;
+            if (this.classList.contains("toggle-remove")) summary.attr("hidden", true);
+            content.show().find(":input:visible").first().focus();
+        });
+        if (toggle.attr("aria-expanded")) {
+            content.hide();
+        }
     });
 
     $(".cart-icon-details.collapse-lines").each(function () {

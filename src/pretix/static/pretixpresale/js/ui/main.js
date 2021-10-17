@@ -119,7 +119,7 @@ var form_handlers = function (el) {
                 width: $(this).attr("data-size") ? parseInt($(this).attr("data-size")) : 256,
                 height: $(this).attr("data-size") ? parseInt($(this).attr("data-size")) : 256,
             }
-        );
+        ).find("canvas").attr("role", "img").attr("aria-label", this.getAttribute("data-desc"));
     });
 
     el.find("input[data-exclusive-prefix]").each(function () {
@@ -180,6 +180,11 @@ $(function () {
 
     $("body").removeClass("nojs");
 
+    $(".accordion-radio").click(function() {
+        var $input = $("input", this);
+        if (!$input.prop("checked")) $input.prop('checked', true).trigger("change");
+    });
+
     $("input[data-toggle=radiocollapse]").change(function () {
         $($(this).attr("data-parent")).find(".collapse.in").collapse('hide');
         $($(this).attr("data-target")).collapse('show');
@@ -190,6 +195,27 @@ $(function () {
     $("div.collapsed").removeClass("collapsed").addClass("collapse");
     $(".has-error, .alert-danger").each(function () {
         $(this).closest("div.panel-collapse").collapse("show");
+    });
+    $(".has-error").first().each(function(){
+        if ($(this).is(':input')) this.focus();
+        else $(":input", this).get(0).focus();
+    });
+    $(".alert-danger").first().each(function() {
+        var content = $("<ul></ul>").click(function(e) {
+            var input = $(e.target.hash).get(0);
+            if (input) input.focus();
+            input.scrollIntoView({block: "center"});
+            e.preventDefault();
+        });
+        $(".has-error").each(function() {
+            var target = target = $(":input", this);
+            var desc = $("#" + target.attr("aria-describedby").split(' ', 1)[0]);
+            // multi-input fields have a role=group with aria-labelledby 
+            var label = this.hasAttribute("aria-labelledby") ? $("#" + this.getAttribute("aria-labelledby")) : $("[for="+target.attr("id")+"]");
+
+            content.append("<li><a href='#" + target.attr("id") + "'>" + label.get(0).childNodes[0].nodeValue + "</a>: "+desc.text()+"</li>");
+        });
+        $(this).append(content);
     });
 
     $("#voucher-box").hide();
@@ -280,9 +306,9 @@ $(function () {
     // Subevent choice
     if ($(".subevent-toggle").length) {
         $(".subevent-list").hide();
-        $(".subevent-toggle").css("display", "block").click(function () {
+        $(".subevent-toggle").show().click(function () {
             $(".subevent-list").slideToggle(300);
-            $(".subevent-toggle").slideToggle(300)
+            $(this).slideToggle(300).attr("aria-expanded", true);
         });
     }
 
@@ -320,7 +346,7 @@ $(function () {
 
     $(".table-calendar td.has-events").click(function () {
         var $tr = $(this).closest(".table-calendar").find(".selected-day");
-        $tr.find("td").html($(this).find(".events").html());
+        $tr.find("td").html($(this).find(".events").clone());
         $tr.find("td").prepend($("<h3>").text($(this).attr("data-date")));
         $tr.removeClass("hidden");
     });

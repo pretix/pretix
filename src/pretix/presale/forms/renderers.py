@@ -103,7 +103,11 @@ class CheckoutFieldRenderer(FieldRenderer):
         if self.field_help:
             help_text_and_errors.append(self.field_help)
         for idx, text in enumerate(help_text_and_errors):
-            html += '<div class="help-block" id="help-for-{id}-{idx}">{text}</div>'.format(id=self.field.id_for_label, text=text, idx=idx)
+            if text.lower().startswith("<p>") or text.lower().startswith("<p "):
+                html_tag = "div"
+            else:
+                html_tag = "p"
+            html += '<{tag} class="help-block" id="help-for-{id}-{idx}">{text}</{tag}>'.format(id=self.field.id_for_label, text=text, idx=idx, tag=html_tag)
         return html
 
     def add_help_attrs(self, widget=None):

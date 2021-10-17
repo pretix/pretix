@@ -2,6 +2,13 @@
     /* Cart grid */
     padding: 10px 0;
 
+    .product>*:last-child {
+        margin-bottom: 0;
+    }
+    .product p+.dl-inline {
+        margin-top: -10px;
+    }
+
     .count form {
         display: inline;
     }
@@ -14,21 +21,23 @@
         line-height: 1;
     }
 
-    &.total {
-        border-top: 1px solid $table-border-color;
-    }
-
-    dl {
+    .dl-indented {
         padding-left: 20px;
-        margin-bottom: 0;
+        margin: 5px 0 0;
 
+        dt {
+            margin-top: 5px;
+        }
         dd:not(.toplevel) {
             padding-left: 20px;
         }
     }
+    dt {
+        font-weight: normal;
+    }
 
-    margin-left: 0;
-    margin-right: 0;
+    margin-left: -15px;
+    margin-right: -15px;
 
     &>div {
         position: relative;
@@ -59,14 +68,6 @@
         font-weight: bold;
     }
 
-    dl {
-      margin: 5px 0;
-        dt {
-            font-weight: normal;
-            margin-top: 5px;
-        }
-    }
-
     .cart-icon-details {
         position: relative;
         padding-left: 1.4em;
@@ -94,23 +95,88 @@
     }
 }
 
-.apply-voucher {
-    input {
-        height: 32px;
+.cart [role=rowgroup]:last-child {
+    border-top: 1px solid $table-border-color;
+}
+.cart .total strong {
+    font-size: $font-size-large;
+}
+
+
+.cart .checkout-button-secondary > :last-child p {
+    margin-bottom: 0;
+}
+
+.cart .checkout-button-row > div {
+    margin-bottom: 0;
+    width: 100%;
+}
+
+.cart .checkout-button-row .btn {
+    width: 100%;
+    white-space: nowrap;
+    min-height: 34px;
+}
+.cart .checkout-button-row .btn-primary {
+    padding-left: 1.5em;
+    padding-right: 1.5em;
+}
+
+.cart .row:last-child p:last-child {
+    margin-bottom: 0;
+}
+
+@media (min-width: $screen-xs-min) {
+    .cart .checkout-button-secondary {
+        display: flex;
+        align-items: center;
+        gap: floor(($grid-gutter-width / 2));
+    }
+    .cart .checkout-button-secondary > * {
+        flex: 1 0;
+    }
+    .cart .checkout-button-row > :last-child p {
+        margin-bottom: 0;
+    }
+}
+@media (min-width: $screen-sm-min) {
+    .cart .checkout-button-row .btn-primary {
+        width: auto;
+    }
+
+    .cart .checkout-button-row {
+        display: flex;
+        align-items: center;
+        flex-direction: row-reverse;
+        justify-content: space-between;
+        padding-top: 0;
+        margin-left: - floor(($grid-gutter-width / 4));
+        margin-right: - floor(($grid-gutter-width / 4));
+    }
+    .cart .checkout-button-row > * {
+        padding-left: floor(($grid-gutter-width / 4));
+        padding-right: floor(($grid-gutter-width / 4));
+        flex: 0;
+    }
+    .cart .checkout-button-primary p {
+        text-align: right;
+        margin-bottom: 0;
+    }
+    .cart .checkout-button-secondary > * {
+        flex: 1 0;
+    }
+    #voucher_code {
+        min-width: 10em;
     }
 }
 
+
+
+
 @media(max-width: $screen-sm-max) {
-    .cart .panel-body {
-        padding: 5px;
-        .checkout-button-row {
-            padding: 0 10px;
-        }
-        #cart-deadline {
-            display: block;
-            padding: 0 10px 5px;
-        }
-    }
+
+
+
     .cart-row {
         .download-desktop {
             clear: both;

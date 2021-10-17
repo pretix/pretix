@@ -43,18 +43,28 @@ def test_same_day_german():
     with translation.override('de'):
         df = date(2003, 2, 1)
         assert daterange(df, df) == "1. Februar 2003"
+        assert daterange(df, df, as_html=True) == '<time datetime="2003-02-01">1. Februar 2003</time>'
 
 
 def test_same_day_english():
     with translation.override('en'):
         df = date(2003, 2, 1)
         assert daterange(df, df) == "Feb. 1st, 2003"
+        assert daterange(df, df, as_html=True) == '<time datetime="2003-02-01">Feb. 1st, 2003</time>'
 
 
 def test_same_day_spanish():
     with translation.override('es'):
         df = date(2003, 2, 1)
         assert daterange(df, df) == "1 de Febrero de 2003"
+        assert daterange(df, df, as_html=True) == '<time datetime="2003-02-01">1 de Febrero de 2003</time>'
+
+
+def test_same_day_other_lang():
+    with translation.override('tr'):
+        df = date(2003, 2, 1)
+        assert daterange(df, df) == '01 Şubat 2003'
+        assert daterange(df, df, as_html=True) == '<time datetime="2003-02-01">01 Şubat 2003</time>'
 
 
 def test_same_month_german():
@@ -62,6 +72,7 @@ def test_same_month_german():
         df = date(2003, 2, 1)
         dt = date(2003, 2, 3)
         assert daterange(df, dt) == "1.–3. Februar 2003"
+        assert daterange(df, dt, as_html=True) == '<time datetime="2003-02-01">1.</time>–<time datetime="2003-02-03">3. Februar 2003</time>'
 
 
 def test_same_month_english():
@@ -69,6 +80,7 @@ def test_same_month_english():
         df = date(2003, 2, 1)
         dt = date(2003, 2, 3)
         assert daterange(df, dt) == "Feb. 1st – 3rd, 2003"
+        assert daterange(df, dt, as_html=True) == '<time datetime="2003-02-01">Feb. 1st</time> – <time datetime="2003-02-03">3rd, 2003</time>'
 
 
 def test_same_month_spanish():
@@ -76,6 +88,7 @@ def test_same_month_spanish():
         df = date(2003, 2, 1)
         dt = date(2003, 2, 3)
         assert daterange(df, dt) == "1 - 3 de Febrero de 2003"
+        assert daterange(df, dt, as_html=True) == '<time datetime="2003-02-01">1</time> - <time datetime="2003-02-03">3 de Febrero de 2003</time>'
 
 
 def test_same_year_german():
@@ -83,6 +96,7 @@ def test_same_year_german():
         df = date(2003, 2, 1)
         dt = date(2003, 4, 3)
         assert daterange(df, dt) == "1. Februar – 3. April 2003"
+        assert daterange(df, dt, as_html=True) == '<time datetime="2003-02-01">1. Februar</time> – <time datetime="2003-04-03">3. April 2003</time>'
 
 
 def test_same_year_english():
@@ -90,6 +104,7 @@ def test_same_year_english():
         df = date(2003, 2, 1)
         dt = date(2003, 4, 3)
         assert daterange(df, dt) == "Feb. 1st – April 3rd, 2003"
+        assert daterange(df, dt, as_html=True) == '<time datetime="2003-02-01">Feb. 1st</time> – <time datetime="2003-04-03">April 3rd, 2003</time>'
 
 
 def test_same_year_spanish():
@@ -97,6 +112,7 @@ def test_same_year_spanish():
         df = date(2003, 2, 1)
         dt = date(2003, 4, 3)
         assert daterange(df, dt) == "1 de Febrero - 3 de Abril de 2003"
+        assert daterange(df, dt, as_html=True) == '<time datetime="2003-02-01">1 de Febrero</time> - <time datetime="2003-04-03">3 de Abril de 2003</time>'
 
 
 def test_different_dates_german():
@@ -104,6 +120,7 @@ def test_different_dates_german():
         df = date(2003, 2, 1)
         dt = date(2005, 4, 3)
         assert daterange(df, dt) == "1. Februar 2003 – 3. April 2005"
+        assert daterange(df, dt, as_html=True) == '<time datetime="2003-02-01">1. Februar 2003</time> – <time datetime="2005-04-03">3. April 2005</time>'
 
 
 def test_different_dates_english():
@@ -111,6 +128,7 @@ def test_different_dates_english():
         df = date(2003, 2, 1)
         dt = date(2005, 4, 3)
         assert daterange(df, dt) == "Feb. 1, 2003 – April 3, 2005"
+        assert daterange(df, dt, as_html=True) == '<time datetime="2003-02-01">Feb. 1, 2003</time> – <time datetime="2005-04-03">April 3, 2005</time>'
 
 
 def test_different_dates_spanish():
@@ -118,3 +136,14 @@ def test_different_dates_spanish():
         df = date(2003, 2, 1)
         dt = date(2005, 4, 3)
         assert daterange(df, dt) == "1 de Febrero de 2003 – 3 de Abril de 2005"
+        assert daterange(df, dt, as_html=True) == '<time datetime="2003-02-01">1 de Febrero de 2003</time> – ' \
+                                                  '<time datetime="2005-04-03">3 de Abril de 2005</time>'
+
+
+def test_different_dates_other_lang():
+    with translation.override('tr'):
+        df = date(2003, 2, 1)
+        dt = date(2005, 4, 3)
+        assert daterange(df, dt) == "01 Şubat 2003 – 03 Nisan 2005"
+        assert daterange(df, dt, as_html=True) == '<time datetime="2003-02-01">01 Şubat 2003</time> – ' \
+                                                  '<time datetime="2005-04-03">03 Nisan 2005</time>'

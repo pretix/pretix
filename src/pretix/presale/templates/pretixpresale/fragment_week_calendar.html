@@ -4,11 +4,11 @@
         <details class="weekday {% if day.events %}has-events{% else %}no-events{% endif %} {% if day.today %}today{% endif %}"
                 data-date="{{ day.date|date:"SHORT_DATE_FORMAT" }}" open>
             <summary>
-                <h3><span class="fa fa-fw" aria-hidden="true"></span> {{ day.day_formatted }}</h3>
+                <h3><span class="fa fa-fw" aria-hidden="true"></span> <time datetime="{{ day.date|date:"Y-m-d" }}">{{ day.day_formatted }}</time></h3>
             </summary>
-            <div class="events">
+            <ul class="events">
                 {% for event in day.events %}
-                    <a class="event {% if event.continued %}continued{% else %} {% spaceless %}
+                    <li><a class="event {% if event.continued %}continued{% else %} {% spaceless %}
     {% if event.event.presale_is_running and show_avail %}
         {% if event.event.best_availability_state == 100 %}
             available
@@ -42,9 +42,9 @@
                                     {% if not show_names|default_if_none:True %}
                                         <strong>
                                     {% endif %}
-                                    {{ event.time|date:"TIME_FORMAT" }}
+                                    <time datetime="{{ event.time|date:"H:i" }}">{{ event.time|date:"TIME_FORMAT" }}</time>
                                     {% if event.time_end %}
-                                        – {{ event.time_end|date:"TIME_FORMAT" }}
+                                        <span aria-hidden="true">–</span><span class="sr-only">{% trans "until" context "timerange" %}</span> <time datetime="{{ event.time_end|date:"H:i" }}">{{ event.time_end|date:"TIME_FORMAT" }}</time>
                                     {% endif %}
                                     {% if not show_names|default_if_none:True %}
                                         </strong>
@@ -83,9 +83,9 @@
                                 {% endif %}
                             </span>
                         {% endif %}
-                    </a>
+                    </a></li>
                 {% endfor %}
-            </div>
+            </ul>
         </details>
     {% endfor %}
 </div>

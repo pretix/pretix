@@ -100,9 +100,8 @@ input[type=number]::-webkit-outer-spin-button {
   background: transparent;
   border: transparent;
 }
-
-.alert-primary, .alert-warning, .alert-info, .alert-success, .alert-danger {
-  color: #3b3b3b;
+.panel-heading {
+  border-radius: 0;
 }
 .panel-danger > .panel-heading, .panel-success > .panel-heading, .panel-default > .panel-heading, .panel-info > .panel-heading, .panel-warning > .panel-heading {
   color: #000000;
@@ -122,7 +121,7 @@ input[type=number]::-webkit-outer-spin-button {
   text-align: left;
 }
 .alert-legal {
-  border-color: $state-info-border;
+  @include alert-variant($alert-info-bg, $alert-info-border, $alert-info-text);
 }
 .alert-success, .alert-danger, .alert-info, .alert-warning, .alert-legal {
   position: relative;
@@ -166,6 +165,7 @@ input[type=number]::-webkit-outer-spin-button {
 }
 .alert-primary::before {
   background: $brand-primary !important;
+  outline-color: $brand-primary;
 }
 .alert-primary {
   border-color: $brand-primary !important;

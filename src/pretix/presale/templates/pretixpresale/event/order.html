@@ -26,9 +26,9 @@
         <div class="thank-you">
             <span class="fa fa-check-circle" aria-hidden="true"></span>
 
-            <h2>{% trans "Thank you!" %}</h2>
+            <h2 class="h1">{% trans "Thank you!" %}</h2>
             {% if order.status != 'p' %}
-                <p>
+                <p class="lead">
                     {% trans "Your order has been placed successfully. See below for details." %}<br>
                     {% if order.require_approval and order.total == 0 %}
                         <strong>
@@ -45,9 +45,9 @@
                     {% endif %}
                 </p>
             {% elif order.total == 0 %}
-                <p>{% trans "Your order has been processed successfully! See below for details." %}</p>
+                <p class="lead">{% trans "Your order has been processed successfully! See below for details." %}</p>
             {% else %}
-                <p>{% trans "We successfully received your payment. See below for details." %}</p>
+                <p class="lead">{% trans "We successfully received your payment. See below for details." %}</p>
             {% endif %}
             {% if request.event.settings.checkout_success_text %}
                 {{ request.event.settings.checkout_success_text|rich_text }}
@@ -60,13 +60,10 @@
                 also sent you an email containing the link to the address you specified.
             {% endblocktrans %}<br>
                 <code>{{ url }}</code></p>
-            <div class="clearfix"></div>
         </div>
     {% endif %}
-    <h2>
-        {% blocktrans trimmed with code=order.code %}
-            Your order: {{ code }}
-        {% endblocktrans %}
+
+    <h2 class="h1">{% trans "Order" %} {{ order.code }}
         {% if order.testmode %}
             <span class="label label-warning">{% trans "TEST MODE" %}</span>
         {% endif %}
@@ -75,9 +72,11 @@
                 {% trans "View in backend" %}
             </a>
         {% endif %}
-        {% include "pretixpresale/event/fragment_order_status.html" with order=order event=request.event class="pull-right flip" %}
-        <div class="clearfix"></div>
     </h2>
+    <dl class="lead order-details">
+        <dt class="sr-only">Status</dt>
+        <dd class="text-muted">{% include "pretixpresale/event/fragment_order_status.html" with order=order event=request.event %}</dd>
+    </dl>
     {% if order.status == "n" and not order.require_approval %}
         <div class="panel panel-primary">
             <div class="panel-heading">
@@ -86,12 +85,18 @@
                 </h3>
             </div>
             <div class="panel-body">
+                <p>
                 <strong>{% blocktrans trimmed with total=pending_sum|money:request.event.currency %}
                     A payment of {{ total }} is still pending for this order.
                 {% endblocktrans %}</strong>
-                <strong>{% blocktrans trimmed with date=order|format_expires %}
-                    Please complete your payment before {{ date }}
-                {% endblocktrans %}</strong>
+                <strong>
+                {% with date_human=order|format_expires|safe date_iso=order.expires|date:"c" %}
+                    {% blocktrans trimmed with date='<time datetime="'|add:date_iso|add:'">'|add:date_human|add:"</time>"|safe %}
+                        Please complete your payment before {{ date }}
+                    {% endblocktrans %}
+                {% endwith %}
+                </strong>
+                </p>
                 {% if last_payment %}
                     {{ last_payment_info }}
                     {% if can_pay %}
@@ -356,11 +361,13 @@
                                 If you want to make changes to the products you bought, you can click on the button to change your order.
                             {% endblocktrans %}
                         </p>
+                        <p>
                         <a href="{% eventurl event 'presale:event.order.change' secret=order.secret order=order.code %}"
                                 class="btn btn-default">
                             <span class="fa fa-edit" aria-hidden="true"></span>
                             {% trans "Change order" %}
                         </a>
+                        </p>
                     </li>
                 {% endif %}
                 {% if user_cancel_allowed %}
@@ -424,11 +431,13 @@
                                     {% trans "This will invalidate all tickets in this order." %}
                                 </p>
                             {% endif %}
+                            <p>
                             <a href="{% eventurl event 'presale:event.order.cancel' secret=order.secret order=order.code %}"
                                     class="btn btn-danger">
                                 <span class="fa fa-remove" aria-hidden="true"></span>
                                 {% trans "Cancel order" %}
                             </a>
+                            </p>
                         {% else %}
                             <p>
                                 {% blocktrans trimmed %}
@@ -436,11 +445,13 @@
                                 {% endblocktrans %}
                                 {% trans "This will invalidate all tickets in this order." %}
                             </p>
+                            <p>
                             <a href="{% eventurl event 'presale:event.order.cancel' secret=order.secret order=order.code %}"
                                     class="btn btn-danger">
                                 <span class="fa fa-remove" aria-hidden="true"></span>
                                 {% trans "Cancel order" %}
                             </a>
+                            </p>
                         {% endif %}
                     </li>
                 {% endif %}

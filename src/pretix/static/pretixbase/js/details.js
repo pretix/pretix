@@ -2,8 +2,8 @@
 
 setup_collapsible_details = function (el) {
     var isOpera = Object.prototype.toString.call(window.opera) == '[object Opera]';
-    el.find("details summary, details summary a[data-toggle=variations]").click(function (e) {
-        if (this.tagName !== "A" && $(e.target).closest("a, button").length > 0) {
+    el.find("details summary").click(function (e) {
+        if (this.tagName !== "A" && $(e.target).closest("a").length > 0) {
             return true;
         }
         var $details = $(this).closest("details");
@@ -57,6 +57,36 @@ setup_collapsible_details = function (el) {
             return false;
         });
     });
+
+    el.find("article button[data-toggle=variations]").click(function (e) {
+        var $button = $(this);
+        var $details = $button.closest("article");
+        var $detailsNotSummary = $(".variations", $details);
+        var isOpen = !$detailsNotSummary.prop("hidden");
+        if ($detailsNotSummary.is(':animated')) {
+            e.preventDefault();
+            return false;
+        }
+
+        var altLabel = $button.attr("data-label-alt");
+        $button.attr("data-label-alt", $button.text());
+        $button.text(altLabel);
+        $button.attr("aria-expanded", !isOpen);
+
+        if (isOpen) {
+            $details.removeClass("details-open");
+            $detailsNotSummary.stop().show().slideUp(500, function () {
+                $detailsNotSummary.prop("hidden", true);
+            });
+        } else {
+            $detailsNotSummary.prop("hidden", false).stop().hide();
+            $details.addClass("details-open");
+            $detailsNotSummary.slideDown();
+        }
+        e.preventDefault();
+        return false;
+    });
+    el.find(".variations-collapsed").prop("hidden", true);
 };
 
 $(function () {

@@ -19,10 +19,10 @@
         <div class="panel-group" id="questions_group">
             <details class="panel panel-default" open>
                 <summary class="panel-heading">
-                    <h4 class="panel-title">
+                    <h3 class="panel-title">
                         <strong>{% trans "Contact information" %}</strong>
                         <i class="fa fa-angle-down collapse-indicator" aria-hidden="true"></i>
-                    </h4>
+                    </h3>
                 </summary>
                 <div id="contact">
                     <div class="panel-body">
@@ -36,13 +36,13 @@
             {% if invoice_address_asked %}
                 <details class="panel panel-default" {% if event.settings.invoice_address_required or event.settings.invoice_name_required %}open{% endif %}>
                     <summary class="panel-heading">
-                        <h4 class="panel-title">
+                        <h3 class="panel-title">
                             <strong>{% trans "Invoice information" %}{% if not event.settings.invoice_address_required and not event.settings.invoice_name_required %}
                                 {% trans "(optional)" %}
                             {% endif %}</strong>
 
                             <i class="fa fa-angle-down collapse-indicator" aria-hidden="true"></i>
-                        </h4>
+                        </h3>
                     </summary>
                     {% if addresses_data %}
                         {{ addresses_data|json_script:"addresses_json" }}
@@ -77,7 +77,7 @@
             {% for pos, forms in formgroups %}
                 <details class="panel panel-default" open>
                     <summary class="panel-heading">
-                        <h4 class="panel-title">
+                        <h3 class="panel-title">
                             <strong>{{ pos.item.name }}
                             {% if pos.variation %}
                                 – {{ pos.variation }}
@@ -93,7 +93,7 @@
                             {% else %}
                                 <i class="fa fa-angle-down collapse-indicator" aria-hidden="true"></i>
                             {% endif %}
-                        </h4>
+                        </h3>
                     </summary>
                     <div>
                         <div class="panel-body questions-form">
@@ -135,7 +135,7 @@
                                     </label>
                                     <div class="col-md-9 form-control-text">
                                         <ul class="addon-list">
-                                            {{ pos.subevent.name }} &middot; {{ pos.subevent.get_date_range_display }}
+                                            {{ pos.subevent.name }} &middot; {{ pos.subevent.get_date_range_display_as_html }}
                                             {% if pos.event.settings.show_times %}
                                                 <span data-time="{{ pos.subevent.date_from.isoformat }}" data-timezone="{{ request.event.timezone }}">
                                                     <span class="fa fa-clock-o" aria-hidden="true"></span>
