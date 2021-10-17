@@ -337,12 +337,12 @@
             <div class="clearfix"></div>
         </div>
         <div role="row" class="row cart-row">
-            <div role="cell" class="product text-muted">
+            <div role="cell" class="product">
                 <strong>{% trans "Taxes" %}</strong>
             </div>
             <div role="cell" class="count hidden-xs hidden-sm"></div>
             <div role="cell" class="singleprice price"></div>
-            <div role="cell" class="totalprice price text-muted">
+            <div role="cell" class="totalprice price">
                 {{ cart.tax_total|money:event.currency }}
             </div>
             <div class="clearfix"></div>
