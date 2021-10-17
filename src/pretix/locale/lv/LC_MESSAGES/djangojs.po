@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-09-27 18:49+0000\n"
+"POT-Creation-Date: 2021-10-17 14:57+0000\n"
 "PO-Revision-Date: 2019-11-13 06:00+0000\n"
 "Last-Translator: Zane Smite <z.smite@riga-jurmala.com>\n"
 "Language-Team: Latvian <https://translate.pretix.eu/projects/pretix/pretix-"
@@ -208,6 +208,14 @@ msgstr ""
 msgid "Currently inside"
 msgstr ""
 
+#: pretix/static/lightbox/js/lightbox.js:90
+#: pretix/static/lightbox/js/lightbox.min.js:13
+#, fuzzy
+#| msgctxt "widget"
+#| msgid "Close"
+msgid "close"
+msgstr "Aizvērt"
+
 #: pretix/static/pretixbase/js/asynctask.js:43
 #: pretix/static/pretixbase/js/asynctask.js:119
 #, fuzzy
@@ -287,7 +295,7 @@ msgstr ""
 "aizņem ilgāk kā vienu minūti, lūdzu, pārbaudiet savu interneta savienojumu, "
 "pārlādējiet šo lapu un mēģiniet vēlreiz."
 
-#: pretix/static/pretixbase/js/asynctask.js:262
+#: pretix/static/pretixbase/js/asynctask.js:264
 #: pretix/static/pretixcontrol/js/ui/main.js:34
 msgid "Close message"
 msgstr "Aizvērt ziņu"
@@ -525,17 +533,25 @@ msgstr[0] "(neviens datums)"
 msgstr[1] "(vēl viens datums)"
 msgstr[2] "(vēl {num} datumi)"
 
-#: pretix/static/pretixpresale/js/ui/cart.js:39
-msgid "The items in your cart are no longer reserved for you."
+#: pretix/static/pretixpresale/js/ui/cart.js:43
+#, fuzzy
+#| msgid "The items in your cart are no longer reserved for you."
+msgid ""
+"The items in your cart are no longer reserved for you. You can still "
+"complete your order as long as they’re available."
 msgstr "Jūsu grozā saglabātajām precēm rezervācijas laiks ir beidzies."
 
-#: pretix/static/pretixpresale/js/ui/cart.js:41
+#: pretix/static/pretixpresale/js/ui/cart.js:45
 msgid "Cart expired"
 msgstr "Pirkumu groza rezervācijas laiks ir beidzies"
 
-#: pretix/static/pretixpresale/js/ui/cart.js:46
-msgid "The items in your cart are reserved for you for one minute."
-msgid_plural "The items in your cart are reserved for you for {num} minutes."
+#: pretix/static/pretixpresale/js/ui/cart.js:50
+#, fuzzy
+#| msgid "The items in your cart are reserved for you for one minute."
+#| msgid_plural ""
+#| "The items in your cart are reserved for you for {num} minutes."
+msgid "The items in your cart are reserved for you for one minute."
+msgid_plural "The items in your cart are reserved for you for {num} minutes."
 msgstr[0] "Preces jūsu grozā ir rezervētas nulle minūtes."
 msgstr[1] "Preces jūsu grozā ir rezervētas uz vienu minūti."
 msgstr[2] "Preces jūsu grozā ir rezervētas uz {num} minūtēm."
@@ -558,22 +574,22 @@ msgstr "no %(currency)s %(price)s"
 msgid "Please enter the amount the organizer can keep."
 msgstr ""
 
-#: pretix/static/pretixpresale/js/ui/main.js:309
+#: pretix/static/pretixpresale/js/ui/main.js:335
 msgid "Please enter a quantity for one of the ticket types."
 msgstr "Lūdzu, ievadiet nepieciešamo daudzumu izvēlētajam biļešu veidam."
 
-#: pretix/static/pretixpresale/js/ui/main.js:345
+#: pretix/static/pretixpresale/js/ui/main.js:371
 #, fuzzy
 #| msgid "Cart expired"
 msgid "required"
 msgstr "Pirkumu groza rezervācijas laiks ir beidzies"
 
-#: pretix/static/pretixpresale/js/ui/main.js:447
-#: pretix/static/pretixpresale/js/ui/main.js:465
+#: pretix/static/pretixpresale/js/ui/main.js:473
+#: pretix/static/pretixpresale/js/ui/main.js:491
 msgid "Time zone:"
 msgstr ""
 
-#: pretix/static/pretixpresale/js/ui/main.js:456
+#: pretix/static/pretixpresale/js/ui/main.js:482
 msgid "Your local time:"
 msgstr ""
 

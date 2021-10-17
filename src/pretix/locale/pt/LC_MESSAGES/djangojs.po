@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-09-27 18:49+0000\n"
+"POT-Creation-Date: 2021-10-17 14:57+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -193,6 +193,11 @@ msgstr ""
 msgid "Currently inside"
 msgstr ""
 
+#: pretix/static/lightbox/js/lightbox.js:90
+#: pretix/static/lightbox/js/lightbox.min.js:13
+msgid "close"
+msgstr ""
+
 #: pretix/static/pretixbase/js/asynctask.js:43
 #: pretix/static/pretixbase/js/asynctask.js:119
 msgid ""
@@ -248,7 +253,7 @@ msgid ""
 "page and try again."
 msgstr ""
 
-#: pretix/static/pretixbase/js/asynctask.js:262
+#: pretix/static/pretixbase/js/asynctask.js:264
 #: pretix/static/pretixcontrol/js/ui/main.js:34
 msgid "Close message"
 msgstr ""
@@ -473,17 +478,19 @@ msgid_plural "({num} more dates)"
 msgstr[0] ""
 msgstr[1] ""
 
-#: pretix/static/pretixpresale/js/ui/cart.js:39
-msgid "The items in your cart are no longer reserved for you."
+#: pretix/static/pretixpresale/js/ui/cart.js:43
+msgid ""
+"The items in your cart are no longer reserved for you. You can still "
+"complete your order as long as they’re available."
 msgstr ""
 
-#: pretix/static/pretixpresale/js/ui/cart.js:41
+#: pretix/static/pretixpresale/js/ui/cart.js:45
 msgid "Cart expired"
 msgstr ""
 
-#: pretix/static/pretixpresale/js/ui/cart.js:46
-msgid "The items in your cart are reserved for you for one minute."
-msgid_plural "The items in your cart are reserved for you for {num} minutes."
+#: pretix/static/pretixpresale/js/ui/cart.js:50
+msgid "The items in your cart are reserved for you for one minute."
+msgid_plural "The items in your cart are reserved for you for {num} minutes."
 msgstr[0] ""
 msgstr[1] ""
 
@@ -499,20 +506,20 @@ msgstr ""
 msgid "Please enter the amount the organizer can keep."
 msgstr ""
 
-#: pretix/static/pretixpresale/js/ui/main.js:309
+#: pretix/static/pretixpresale/js/ui/main.js:335
 msgid "Please enter a quantity for one of the ticket types."
 msgstr ""
 
-#: pretix/static/pretixpresale/js/ui/main.js:345
+#: pretix/static/pretixpresale/js/ui/main.js:371
 msgid "required"
 msgstr ""
 
-#: pretix/static/pretixpresale/js/ui/main.js:447
-#: pretix/static/pretixpresale/js/ui/main.js:465
+#: pretix/static/pretixpresale/js/ui/main.js:473
+#: pretix/static/pretixpresale/js/ui/main.js:491
 msgid "Time zone:"
 msgstr ""
 
-#: pretix/static/pretixpresale/js/ui/main.js:456
+#: pretix/static/pretixpresale/js/ui/main.js:482
 msgid "Your local time:"
 msgstr ""
 

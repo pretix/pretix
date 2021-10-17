@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-09-27 18:49+0000\n"
+"POT-Creation-Date: 2021-10-17 14:57+0000\n"
 "PO-Revision-Date: 2021-07-19 11:57+0000\n"
 "Last-Translator: dedecosta <dedecosta2@live.it>\n"
 "Language-Team: Italian <https://translate.pretix.eu/projects/pretix/pretix-"
@@ -194,6 +194,14 @@ msgstr "Biglietti validi"
 msgid "Currently inside"
 msgstr "Attualmente all'interno"
 
+#: pretix/static/lightbox/js/lightbox.js:90
+#: pretix/static/lightbox/js/lightbox.min.js:13
+#, fuzzy
+#| msgctxt "widget"
+#| msgid "Close"
+msgid "close"
+msgstr "Chiudi"
+
 #: pretix/static/pretixbase/js/asynctask.js:43
 #: pretix/static/pretixbase/js/asynctask.js:119
 msgid ""
@@ -261,7 +269,7 @@ msgstr ""
 "più di un minuto si prega di verificare la connessione internet e ricaricare "
 "la pagina per riprovare l'invio."
 
-#: pretix/static/pretixbase/js/asynctask.js:262
+#: pretix/static/pretixbase/js/asynctask.js:264
 #: pretix/static/pretixcontrol/js/ui/main.js:34
 msgid "Close message"
 msgstr "Messaggio di chiusura"
@@ -488,17 +496,25 @@ msgid_plural "({num} more dates)"
 msgstr[0] "(un'altra data)"
 msgstr[1] "({num} altre date)"
 
-#: pretix/static/pretixpresale/js/ui/cart.js:39
-msgid "The items in your cart are no longer reserved for you."
+#: pretix/static/pretixpresale/js/ui/cart.js:43
+#, fuzzy
+#| msgid "The items in your cart are no longer reserved for you."
+msgid ""
+"The items in your cart are no longer reserved for you. You can still "
+"complete your order as long as they’re available."
 msgstr "I prodotti nel tuo carrello non sono più disponibili."
 
-#: pretix/static/pretixpresale/js/ui/cart.js:41
+#: pretix/static/pretixpresale/js/ui/cart.js:45
 msgid "Cart expired"
 msgstr "Carrello scaduto"
 
-#: pretix/static/pretixpresale/js/ui/cart.js:46
-msgid "The items in your cart are reserved for you for one minute."
-msgid_plural "The items in your cart are reserved for you for {num} minutes."
+#: pretix/static/pretixpresale/js/ui/cart.js:50
+#, fuzzy
+#| msgid "The items in your cart are reserved for you for one minute."
+#| msgid_plural ""
+#| "The items in your cart are reserved for you for {num} minutes."
+msgid "The items in your cart are reserved for you for one minute."
+msgid_plural "The items in your cart are reserved for you for {num} minutes."
 msgstr[0] "Gli elementi nel tuo carrello sono riservati per 1 minuto."
 msgstr[1] "Gli elementi nel tuo carrello sono riservati per {num} minuti."
 
@@ -514,20 +530,20 @@ msgstr "Ricevi indietro %(currency)s %(amount)s"
 msgid "Please enter the amount the organizer can keep."
 msgstr "Inserisci l'importo che l'organizzatore può trattenere."
 
-#: pretix/static/pretixpresale/js/ui/main.js:309
+#: pretix/static/pretixpresale/js/ui/main.js:335
 msgid "Please enter a quantity for one of the ticket types."
 msgstr "Inserisci la quantità per una tipologia di biglietto."
 
-#: pretix/static/pretixpresale/js/ui/main.js:345
+#: pretix/static/pretixpresale/js/ui/main.js:371
 msgid "required"
 msgstr "richiesto"
 
-#: pretix/static/pretixpresale/js/ui/main.js:447
-#: pretix/static/pretixpresale/js/ui/main.js:465
+#: pretix/static/pretixpresale/js/ui/main.js:473
+#: pretix/static/pretixpresale/js/ui/main.js:491
 msgid "Time zone:"
 msgstr "Fuso orario:"
 
-#: pretix/static/pretixpresale/js/ui/main.js:456
+#: pretix/static/pretixpresale/js/ui/main.js:482
 msgid "Your local time:"
 msgstr "Ora locale:"
 

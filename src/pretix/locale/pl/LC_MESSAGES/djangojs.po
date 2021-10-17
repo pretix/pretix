@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-09-27 18:49+0000\n"
+"POT-Creation-Date: 2021-10-17 14:57+0000\n"
 "PO-Revision-Date: 2019-09-24 19:00+0000\n"
 "Last-Translator: Serge Bazanski <q3k@hackerspace.pl>\n"
 "Language-Team: Polish <https://translate.pretix.eu/projects/pretix/pretix-js/"
@@ -208,6 +208,14 @@ msgstr ""
 msgid "Currently inside"
 msgstr ""
 
+#: pretix/static/lightbox/js/lightbox.js:90
+#: pretix/static/lightbox/js/lightbox.min.js:13
+#, fuzzy
+#| msgctxt "widget"
+#| msgid "Close"
+msgid "close"
+msgstr "Zamknąć"
+
 #: pretix/static/pretixbase/js/asynctask.js:43
 #: pretix/static/pretixbase/js/asynctask.js:119
 #, fuzzy
@@ -288,7 +296,7 @@ msgstr ""
 "dłuższego niż minuta prosimy o sprawdzenie łączności z Internetem a "
 "następnie o przeładowanie strony i ponowienie próby."
 
-#: pretix/static/pretixbase/js/asynctask.js:262
+#: pretix/static/pretixbase/js/asynctask.js:264
 #: pretix/static/pretixcontrol/js/ui/main.js:34
 msgid "Close message"
 msgstr "Zamknięcie wiadomości"
@@ -522,17 +530,25 @@ msgstr[0] "(jedna data więcej)"
 msgstr[1] "({num} daty więcej)"
 msgstr[2] "({num} dat więcej)"
 
-#: pretix/static/pretixpresale/js/ui/cart.js:39
-msgid "The items in your cart are no longer reserved for you."
+#: pretix/static/pretixpresale/js/ui/cart.js:43
+#, fuzzy
+#| msgid "The items in your cart are no longer reserved for you."
+msgid ""
+"The items in your cart are no longer reserved for you. You can still "
+"complete your order as long as they’re available."
 msgstr "Przedmioty w koszyku nie są już zarezerwowane."
 
-#: pretix/static/pretixpresale/js/ui/cart.js:41
+#: pretix/static/pretixpresale/js/ui/cart.js:45
 msgid "Cart expired"
 msgstr "Koszyk wygasł"
 
-#: pretix/static/pretixpresale/js/ui/cart.js:46
-msgid "The items in your cart are reserved for you for one minute."
-msgid_plural "The items in your cart are reserved for you for {num} minutes."
+#: pretix/static/pretixpresale/js/ui/cart.js:50
+#, fuzzy
+#| msgid "The items in your cart are reserved for you for one minute."
+#| msgid_plural ""
+#| "The items in your cart are reserved for you for {num} minutes."
+msgid "The items in your cart are reserved for you for one minute."
+msgid_plural "The items in your cart are reserved for you for {num} minutes."
 msgstr[0] "Przedmioty w koszyku są zarezerwowane na jedną minutę."
 msgstr[1] "Przedmioty w koszyku są zarezerwowane na {num} minuty."
 msgstr[2] "Przedmioty w koszyku są zarezerwowane na {num} minut."
@@ -555,22 +571,22 @@ msgstr "od %(currency)s %(price)s"
 msgid "Please enter the amount the organizer can keep."
 msgstr ""
 
-#: pretix/static/pretixpresale/js/ui/main.js:309
+#: pretix/static/pretixpresale/js/ui/main.js:335
 msgid "Please enter a quantity for one of the ticket types."
 msgstr "Proszę wybrać liczbę dla jednego z typów biletów."
 
-#: pretix/static/pretixpresale/js/ui/main.js:345
+#: pretix/static/pretixpresale/js/ui/main.js:371
 #, fuzzy
 #| msgid "Cart expired"
 msgid "required"
 msgstr "Koszyk wygasł"
 
-#: pretix/static/pretixpresale/js/ui/main.js:447
-#: pretix/static/pretixpresale/js/ui/main.js:465
+#: pretix/static/pretixpresale/js/ui/main.js:473
+#: pretix/static/pretixpresale/js/ui/main.js:491
 msgid "Time zone:"
 msgstr ""
 
-#: pretix/static/pretixpresale/js/ui/main.js:456
+#: pretix/static/pretixpresale/js/ui/main.js:482
 msgid "Your local time:"
 msgstr ""
 
