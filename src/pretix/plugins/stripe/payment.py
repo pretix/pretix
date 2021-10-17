@@ -453,27 +453,25 @@ class StripeMethod(BasePaymentProvider):
             })
             raise PaymentException(_('Stripe reported an error with your card: %s') % err['message'])
 
-        # This is not an error we normally expect, however some payment methods like iDEAL will redirect
-        # the user back to our confirmation page at the same time from two devices: the web browser the
-        # purchase is executed from and the online banking app the payment is authorized from.
-        # In this case we will just log the idempotency error but not expose it to the user and just
-        # forward them back to their order page. There is a good chance that by the time the user hits
-        # the order page, the other request has gone through and the payment is confirmed.
-        except stripe.error.IdempotencyError as e:
-            if e.json_body and 'error' in e.json_body:
-                err = e.json_body['error']
-                logger.exception('Stripe error: %s' % str(err))
-            else:
-                logger.exception('Stripe error: %s' % str(e))
-            return
-
         except stripe.error.StripeError as e:
             if e.json_body and 'error' in e.json_body:
                 err = e.json_body['error']
                 logger.exception('Stripe error: %s' % str(err))
+
+                if err.get('code') == 'idempotency_key_in_use':
+                    # This is not an error we normally expect, however some payment methods like iDEAL will redirect
+                    # the user back to our confirmation page at the same time from two devices: the web browser the
+                    # purchase is executed from and the online banking app the payment is authorized from.
+                    # In this case we will just log the idempotency error but not expose it to the user and just
+                    # forward them back to their order page. There is a good chance that by the time the user hits
+                    # the order page, the other request has gone through and the payment is confirmed.
+                    # Usually however this should be prevented by SELECT FOR UPDATE calls!
+                    return
+
             else:
                 err = {'message': str(e)}
                 logger.exception('Stripe error: %s' % str(e))
+
             payment.fail(info={
                 'error': True,
                 'message': err['message'],
@@ -615,20 +613,15 @@ class StripeMethod(BasePaymentProvider):
         try:
             source = self._create_source(request, payment)
 
-        except stripe.error.IdempotencyError as e:
-            # Same thing happening twice – we don't want to record a failure, as that might prevent the
-            # other thread from succeeding.
-            if e.json_body and 'error' in e.json_body:
-                err = e.json_body['error']
-                logger.exception('Stripe error: %s' % str(err))
-            else:
-                logger.exception('Stripe error: %s' % str(e))
-            return
-
         except stripe.error.StripeError as e:
             if e.json_body and 'err' in e.json_body:
                 err = e.json_body['error']
                 logger.exception('Stripe error: %s' % str(err))
+
+                if err.get('code') == 'idempotency_key_in_use':
+                    # Same thing happening twice – we don't want to record a failure, as that might prevent the
+                    # other thread from succeeding.
+                    return
             else:
                 err = {'message': str(e)}
                 logger.exception('Stripe error: %s' % str(e))
@@ -828,20 +821,15 @@ class StripeCC(StripeMethod):
             })
             raise PaymentException(_('Stripe reported an error with your card: %s') % err['message'])
 
-        except stripe.error.IdempotencyError as e:
-            # Same thing happening twice – we don't want to record a failure, as that might prevent the
-            # other thread from succeeding.
-            if e.json_body and 'error' in e.json_body:
-                err = e.json_body['error']
-                logger.exception('Stripe error: %s' % str(err))
-            else:
-                logger.exception('Stripe error: %s' % str(e))
-            return
-
         except stripe.error.StripeError as e:
             if e.json_body and 'error' in e.json_body:
                 err = e.json_body['error']
                 logger.exception('Stripe error: %s' % str(err))
+
+                if err.get('code') == 'idempotency_key_in_use':
+                    # Same thing happening twice – we don't want to record a failure, as that might prevent the
+                    # other thread from succeeding.
+                    return
             else:
                 err = {'message': str(e)}
                 logger.exception('Stripe error: %s' % str(e))
@@ -1505,20 +1493,15 @@ class StripeWeChatPay(StripeMethod):
         try:
             source = self._create_source(request, payment)
 
-        except stripe.error.IdempotencyError as e:
-            # Same thing happening twice – we don't want to record a failure, as that might prevent the
-            # other thread from succeeding.
-            if e.json_body and 'error' in e.json_body:
-                err = e.json_body['error']
-                logger.exception('Stripe error: %s' % str(err))
-            else:
-                logger.exception('Stripe error: %s' % str(e))
-            return
-
         except stripe.error.StripeError as e:
             if e.json_body and 'err' in e.json_body:
                 err = e.json_body['error']
                 logger.exception('Stripe error: %s' % str(err))
+
+                if err.get('code') == 'idempotency_key_in_use':
+                    # Same thing happening twice – we don't want to record a failure, as that might prevent the
+                    # other thread from succeeding.
+                    return
             else:
                 err = {'message': str(e)}
                 logger.exception('Stripe error: %s' % str(e))

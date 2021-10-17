@@ -77,6 +77,7 @@
                         {% bootstrap_field form.require_membership layout="control" %}
                         <div data-display-dependency="#{{ form.require_membership.id_for_label }}">
                             {% bootstrap_field form.require_membership_types layout="control" %}
+                            {% bootstrap_field form.require_membership_hidden layout="control" %}
                         </div>
                     {% endif %}
                 </div>
@@ -147,6 +148,7 @@
                         {% bootstrap_field formset.empty_form.require_membership layout="control" %}
                         <div data-display-dependency="#{{ formset.empty_form.require_membership.id_for_label }}">
                             {% bootstrap_field formset.empty_form.require_membership_types layout="control" %}
+                            {% bootstrap_field formset.empty_form.require_membership_hidden layout="control" %}
                         </div>
                     {% endif %}
                 </div>

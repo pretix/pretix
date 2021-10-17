@@ -57,7 +57,8 @@ from pretix.base.forms.widgets import (
     DatePickerWidget, SplitDateTimePickerWidget,
 )
 from pretix.base.models import (
-    InvoiceAddress, ItemAddOn, Order, OrderFee, OrderPosition, TaxRule,
+    Invoice, InvoiceAddress, ItemAddOn, Order, OrderFee, OrderPosition,
+    TaxRule,
 )
 from pretix.base.models.event import SubEvent
 from pretix.base.services.pricing import get_price
@@ -609,6 +610,17 @@ class OrderMailForm(forms.Form):
         label=_("Subject"),
         required=True
     )
+    attach_tickets = forms.BooleanField(
+        label=_("Attach tickets"),
+        help_text=_("Will be ignored if all tickets in this order exceed a given size limit to ensure email deliverability."),
+        required=False
+    )
+    attach_invoices = forms.ModelMultipleChoiceField(
+        label=_("Attach invoices"),
+        widget=forms.CheckboxSelectMultiple,
+        required=False,
+        queryset=Invoice.objects.none()
+    )
 
     def _set_field_placeholders(self, fn, base_parameters):
         phs = [
@@ -641,6 +653,7 @@ class OrderMailForm(forms.Form):
             widget=forms.Textarea,
             initial=order.event.settings.mail_text_order_custom_mail.localize(order.locale),
         )
+        self.fields['attach_invoices'].queryset = order.invoices.all()
         self._set_field_placeholders('message', ['event', 'order'])
 
 
@@ -648,6 +661,7 @@ class OrderPositionMailForm(OrderMailForm):
     def __init__(self, *args, **kwargs):
         position = self.position = kwargs.pop('position')
         super().__init__(*args, **kwargs)
+        del self.fields['attach_invoices']
         self.fields['sendto'].initial = position.attendee_email
         self.fields['message'] = forms.CharField(
             label=_("Message"),

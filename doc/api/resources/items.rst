@@ -70,6 +70,8 @@ require_approval                      boolean                    If ``true``, or
                                                                  paid.
 require_bundling                      boolean                    If ``true``, this item is only available as part of bundles.
 require_membership                    boolean                    If ``true``, booking this item requires an active membership.
+require_membership_hidden             boolean                    If ``true`` and ``require_membership`` is set, this product will
+                                                                 be hidden from users without a valid membership.
 require_membership_types              list of integers           Internal IDs of membership types valid if ``require_membership`` is ``true``
 grant_membership_type                 integer                    If set to the internal ID of a membership type, purchasing this item will
                                                                  create a membership of the given type.
@@ -105,6 +107,8 @@ variations                            list of objects            A list with one
 ├ active                              boolean                    If ``false``, this variation will not be sold or shown.
 ├ description                         multi-lingual string       A public description of the variation. May contain
 ├ require_membership                  boolean                    If ``true``, booking this variation requires an active membership.
+├ require_membership_hidden           boolean                    If ``true`` and ``require_membership`` is set, this variation will
+                                                                 be hidden from users without a valid membership.
 ├ require_membership_types            list of integers           Internal IDs of membership types valid if ``require_membership`` is ``true``
                                                                  Markdown syntax or can be ``null``.
 ├ sales_channels                      list of strings            Sales channels this variation is available on, such as
@@ -154,6 +158,10 @@ meta_data                             object                     Values set for 
 
    The attributes ``require_membership``, ``require_membership_types``, ``grant_membership_type``, ``grant_membership_duration_like_event``,
     ``grant_membership_duration_days`` and ``grant_membership_duration_months`` have been added.
+
+.. versionchanged:: 4.4
+
+   The attributes ``require_membership_hidden`` attribute has been added.
 
 Notes
 -----

@@ -28,7 +28,7 @@
                             <br/><span class="fa fa-fw fa-envelope-o"></span> {{ log.parsed_data.recipient }}
                         {% endif %}
                     </p>
-                    {% if log.parsed_data.subject.items %}
+                    {% if log.parsed_data.message.items %}
                         <div class="alert alert-info">
                             {% blocktrans trimmed %}
                                 This email has been sent with an older version of pretix. We are therefore not able to

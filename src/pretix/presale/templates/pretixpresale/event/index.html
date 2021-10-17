@@ -142,9 +142,11 @@
                 {% elif event.settings.presale_start_show_date %}
                     {% with date=ev.effective_presale_start|date:"SHORT_DATE_FORMAT" date_normalized=ev.effective_presale_start|date:"Y-m-d" %}
                     {% with time=ev.effective_presale_start|time:"TIME_FORMAT" time_24h=ev.effective_presale_start|time:"H:i" %}
-                    {% blocktrans trimmed with date="<time datetime='"|add:date_normalized|add:"'>"|add:date|add:"</time>"|safe time="<time datetime='"|add:time_24h|add:"'>"|add:time|add:"</time>"|safe %}
-                        The presale for this event will start on {{ date }} at {{ time }}.
-                    {% endblocktrans %}
+                        <span data-time="{{ ev.effective_presale_start.isoformat }}" data-timezone="{{ request.event.timezone }}">
+                            {% blocktrans trimmed with date="<time datetime='"|add:date_normalized|add:"'>"|add:date|add:"</time>"|safe time="<time datetime='"|add:time_24h|add:"'>"|add:time|add:"</time>"|safe %}
+                                The presale for this event will start on {{ date }} at {{ time }}.
+                            {% endblocktrans %}
+                        </span>
                     {% endwith %}
                     {% endwith %}
                 {% else %}

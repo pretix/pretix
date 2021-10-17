@@ -95,6 +95,7 @@ class MembershipQuerySet(models.QuerySet):
 
     def active(self, ev):
         return self.filter(
+            canceled=False,
             date_start__lte=ev.date_from,
             date_end__gte=ev.date_from
         )
@@ -175,7 +176,7 @@ class Membership(models.Model):
         else:
             dt = now()
 
-        return dt >= self.date_start and dt <= self.date_end
+        return not self.canceled and dt >= self.date_start and dt <= self.date_end
 
     def allow_delete(self):
         return self.testmode and not self.orderposition_set.exists()

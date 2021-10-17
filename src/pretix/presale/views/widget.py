@@ -226,8 +226,17 @@ class WidgetAPIProductList(EventListMixin, View):
             qs = qs.filter(category__pk__in=self.request.GET.get('categories').split(","))
 
         items, display_add_to_cart = get_grouped_items(
-            self.request.event, subevent=self.subevent, voucher=self.voucher, channel=self.request.sales_channel.identifier,
-            base_qs=qs
+            self.request.event,
+            subevent=self.subevent,
+            voucher=self.voucher,
+            channel=self.request.sales_channel.identifier,
+            base_qs=qs,
+            memberships=(
+                self.request.customer.usable_memberships(
+                    for_event=self.subevent or self.request.event,
+                    testmode=self.request.event.testmode
+                ) if getattr(self.request, 'customer', None) else None
+            ),
         )
 
         grps = []

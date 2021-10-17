@@ -4,8 +4,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-09-27 18:48+0000\n"
-"PO-Revision-Date: 2020-09-15 17:00+0000\n"
-"Last-Translator: Martin Gross <martin@pc-coholic.de>\n"
+"PO-Revision-Date: 2021-10-08 06:00+0000\n"
+"Last-Translator: Adri <abecadesign@hotmail.com>\n"
 "Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix/fr/"
 ">\n"
 "Language: fr\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 3.10.3\n"
+"X-Generator: Weblate 4.8\n"
 
 #: htmlcov/pretix_control_views_dashboards_py.html:963
 #: pretix/control/templates/pretixcontrol/events/index.html:140
@@ -67,10 +67,8 @@ msgid "pretixSCAN (online only, no order sync)"
 msgstr ""
 
 #: pretix/api/auth/devicesecurity.py:134
-#, fuzzy
-#| msgid "pretix User"
 msgid "pretixPOS"
-msgstr "utilisateur pretix"
+msgstr "pretixPDV"
 
 #: pretix/api/models.py:39
 msgid "Application name"
@@ -158,10 +156,9 @@ msgid "Meta data property '{name}' does not exist."
 msgstr "La propriété de métadonnées'{name}1' n'existe pas."
 
 #: pretix/api/serializers/event.py:223 pretix/api/serializers/event.py:516
-#, fuzzy, python-brace-format
-#| msgid "Meta data property '{name}' does not exist."
+#, python-brace-format
 msgid "Meta data property '{name}' does not allow value '{value}'."
-msgstr "La propriété de métadonnées'{name}1' n'existe pas."
+msgstr "La propriété de métadonnées'{name}1' n'accepte pas la valeur {value}."
 
 #: pretix/api/serializers/event.py:266
 #, python-brace-format
@@ -281,10 +278,8 @@ msgstr "Il y a eu une erreur d'envoi du mail. Veuillez réessayer plus tard."
 
 #: pretix/api/views/order.py:597 pretix/base/services/cart.py:143
 #: pretix/base/services/orders.py:133 pretix/presale/views/order.py:755
-#, fuzzy
-#| msgid "The selected product is not active or has no price set."
 msgid "One of the selected products is not available in the selected country."
-msgstr "Le produit sélectionné n'est pas actif ou n' a pas de prix fixe."
+msgstr "Le produit sélectionné n'est pas disponible dans le pays séléctionné."
 
 #: pretix/api/webhooks.py:200 pretix/base/notifications.py:233
 msgid "New order placed"
@@ -347,22 +342,16 @@ msgid "Ticket check-in reverted"
 msgstr "L'enregistrement a été annulé"
 
 #: pretix/api/webhooks.py:256
-#, fuzzy
-#| msgid "Event date"
 msgid "Event created"
-msgstr "Date de l'événement"
+msgstr "Événement créé"
 
 #: pretix/api/webhooks.py:260
-#, fuzzy
-#| msgid "Event date range"
 msgid "Event details changed"
-msgstr "Plage de dates de l'événement"
+msgstr "Les détails de l'événement ont été modifiés"
 
 #: pretix/api/webhooks.py:264
-#, fuzzy
-#| msgid "Event date"
 msgid "Event deleted"
-msgstr "Date de l'événement"
+msgstr "Événement supprimé"
 
 #: pretix/api/webhooks.py:268
 #, fuzzy
@@ -430,10 +419,8 @@ msgid "<a %(a_attr)s>ticketing powered by pretix</a>"
 msgstr "généré par <a %(a_attr)s>pretix</a>"
 
 #: pretix/base/context.py:61
-#, fuzzy
-#| msgid "Voucher code"
 msgid "source code"
-msgstr "code de réduction"
+msgstr "code source"
 
 #: pretix/base/email.py:186 pretix/control/views/main.py:303
 #: pretix/plugins/badges/apps.py:45 pretix/plugins/badges/models.py:48
@@ -9570,10 +9557,8 @@ msgstr "Utilisateur créé."
 
 #: pretix/base/templates/pretixbase/email/order_details.html:36
 #: pretix/base/templates/pretixbase/email/order_details.html:124
-#, fuzzy
-#| msgid "Bancontact"
 msgid "Contact:"
-msgstr "Bancontact"
+msgstr "Contact :"
 
 #: pretix/base/templates/pretixbase/email/order_details.html:51
 #, fuzzy
@@ -9590,10 +9575,8 @@ msgstr ""
 "l'événement suivant:"
 
 #: pretix/base/templates/pretixbase/email/order_details.html:85
-#, fuzzy
-#| msgid "Order details"
 msgid "Details:"
-msgstr "Détails de la commande"
+msgstr "Détails :"
 
 #: pretix/base/templates/pretixbase/forms/widgets/portrait_image.html:10
 msgid "Upload photo"
@@ -18572,10 +18555,8 @@ msgid "Device overview"
 msgstr "Aperçu de l'événement"
 
 #: pretix/control/templates/pretixcontrol/organizers/device_edit.html:6
-#, fuzzy
-#| msgid "Device name"
 msgid "Device:"
-msgstr "Nom de l'appareil"
+msgstr "Appareil :"
 
 #: pretix/control/templates/pretixcontrol/organizers/device_edit.html:8
 #, fuzzy
@@ -18717,11 +18698,8 @@ msgid "Are you sure you want to delete the gate?"
 msgstr "Vous êtes sûr de vouloir supprimer l'équipe?"
 
 #: pretix/control/templates/pretixcontrol/organizers/gate_edit.html:6
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "Date: {}"
 msgid "Gate:"
-msgstr "Date: {}"
+msgstr "Porte : {}"
 
 #: pretix/control/templates/pretixcontrol/organizers/gate_edit.html:8
 #: pretix/control/templates/pretixcontrol/organizers/gates.html:11

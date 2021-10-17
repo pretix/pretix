@@ -59,7 +59,7 @@ class InlineItemVariationSerializer(I18nAwareModelSerializer):
         model = ItemVariation
         fields = ('id', 'value', 'active', 'description',
                   'position', 'default_price', 'price', 'original_price',
-                  'require_membership', 'require_membership_types', 'available_from', 'available_until',
+                  'require_membership', 'require_membership_types', 'require_membership_hidden', 'available_from', 'available_until',
                   'sales_channels', 'hide_without_voucher',)
 
     def __init__(self, *args, **kwargs):
@@ -75,7 +75,7 @@ class ItemVariationSerializer(I18nAwareModelSerializer):
         model = ItemVariation
         fields = ('id', 'value', 'active', 'description',
                   'position', 'default_price', 'price', 'original_price',
-                  'require_membership', 'require_membership_types', 'available_from', 'available_until',
+                  'require_membership', 'require_membership_types', 'require_membership_hidden', 'available_from', 'available_until',
                   'sales_channels', 'hide_without_voucher',)
 
     def __init__(self, *args, **kwargs):
@@ -175,7 +175,7 @@ class ItemSerializer(I18nAwareModelSerializer):
                   'min_per_order', 'max_per_order', 'checkin_attention', 'has_variations', 'variations',
                   'addons', 'bundles', 'original_price', 'require_approval', 'generate_tickets',
                   'show_quota_left', 'hidden_if_available', 'allow_waitinglist', 'issue_giftcard', 'meta_data',
-                  'require_membership', 'require_membership_types', 'grant_membership_type',
+                  'require_membership', 'require_membership_types', 'require_membership_hidden', 'grant_membership_type',
                   'grant_membership_duration_like_event', 'grant_membership_duration_days',
                   'grant_membership_duration_months')
         read_only_fields = ('has_variations',)

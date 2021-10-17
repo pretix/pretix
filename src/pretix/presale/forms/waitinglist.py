@@ -43,13 +43,21 @@ class WaitingListForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         self.event = kwargs.pop('event')
         self.channel = kwargs.pop('channel')
+        customer = kwargs.pop('customer')
         super().__init__(*args, **kwargs)
 
         choices = [
             ('', '')
         ]
         items, display_add_to_cart = get_grouped_items(
-            self.event, self.instance.subevent, require_seat=None
+            self.event, self.instance.subevent, require_seat=None,
+            memberships=(
+                self.request.customer.usable_memberships(
+                    for_event=self.instance.subevent or self.event,
+                    testmode=self.request.event.testmode
+                )
+                if customer else None
+            ),
         )
         for i in items:
             if not i.allow_waitinglist:

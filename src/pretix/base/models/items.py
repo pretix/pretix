@@ -523,6 +523,12 @@ class Item(LoggedModel):
         verbose_name=_('Allowed membership types'),
         blank=True,
     )
+    require_membership_hidden = models.BooleanField(
+        verbose_name=_('Hide without a valid membership'),
+        help_text=_('Do not show this unless the customer is logged in and has a valid membership. Be aware that '
+                    'this means it will never be visible in the widget.'),
+        default=False,
+    )
     grant_membership_type = models.ForeignKey(
         'MembershipType',
         null=True, blank=True,
@@ -801,6 +807,12 @@ class ItemVariation(models.Model):
         'MembershipType',
         verbose_name=_('Membership types'),
         blank=True,
+    )
+    require_membership_hidden = models.BooleanField(
+        verbose_name=_('Hide without a valid membership'),
+        help_text=_('Do not show this unless the customer is logged in and has a valid membership. Be aware that '
+                    'this means it will never be visible in the widget.'),
+        default=False,
     )
     available_from = models.DateTimeField(
         verbose_name=_("Available from"),

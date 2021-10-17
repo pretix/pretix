@@ -32,7 +32,7 @@
 # Unless required by applicable law or agreed to in writing, software distributed under the Apache License 2.0 is
 # distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations under the License.
-
+import hashlib
 import inspect
 import logging
 import os
@@ -57,7 +57,7 @@ from django.core.mail import (
 from django.core.mail.message import SafeMIMEText
 from django.db import transaction
 from django.template.loader import get_template
-from django.utils.timezone import override
+from django.utils.timezone import now, override
 from django.utils.translation import gettext as _, pgettext
 from django_scopes import scope, scopes_disabled
 from i18nfield.strings import LazyI18nString
@@ -438,6 +438,7 @@ def mail_send_task(self, *args, to: List[str], subject: str, body: str, html: st
 
             email = email_filter.send_chained(event, 'message', message=email, order=order, user=user)
 
+        invoices_sent = []
         if invoices:
             invoices = Invoice.objects.filter(pk__in=invoices)
             for inv in invoices:
@@ -449,6 +450,7 @@ def mail_send_task(self, *args, to: List[str], subject: str, body: str, html: st
                                 inv.file.file.read(),
                                 'application/pdf'
                             )
+                        invoices_sent.append(inv)
                     except:
                         logger.exception('Could not attach invoice to email')
                         pass
@@ -472,10 +474,30 @@ def mail_send_task(self, *args, to: List[str], subject: str, body: str, html: st
         try:
             backend.send_messages([email])
         except (smtplib.SMTPResponseException, smtplib.SMTPSenderRefused) as e:
-            if e.smtp_code in (101, 111, 421, 422, 431, 442, 447, 452):
-                # Most likely temporary, retry again (but pretty soon)
+            if e.smtp_code in (101, 111, 421, 422, 431, 432, 442, 447, 452):
+                if e.smtp_code == 432 and settings.HAS_REDIS:
+                    # This is likely Microsoft Exchange Online which has a pretty bad rate limit of max. 3 concurrent
+                    # SMTP connections which is *easily* exceeded with many celery threads. Just retrying with exponential
+                    # backoff won't be good enough if we have a lot of emails, instead we'll need to make sure our retry
+                    # intervals scatter such that the email won't all be retried at the same time again and cause the
+                    # same problem.
+                    # See also https://docs.microsoft.com/en-us/exchange/troubleshoot/send-emails/smtp-submission-improvements
+                    from django_redis import get_redis_connection
+
+                    redis_key = "pretix_mail_retry_" + hashlib.sha1(f"{getattr(backend, 'username', '_')}@{getattr(backend, 'host', '_')}".encode()).hexdigest()
+                    rc = get_redis_connection("redis")
+                    cnt = rc.incr(redis_key)
+                    rc.expire(redis_key, 300)
+
+                    max_retries = 10
+                    retry_after = 30 + cnt * 10
+                else:
+                    # Most likely some other kind of temporary failure, retry again (but pretty soon)
+                    max_retries = 5
+                    retry_after = 2 ** (self.request.retries * 3)  # max is 2 ** (4*3) = 4096 seconds = 68 minutes
+
                 try:
-                    self.retry(max_retries=5, countdown=2 ** (self.request.retries * 3))  # max is 2 ** (4*3) = 4096 seconds = 68 minutes
+                    self.retry(max_retries=max_retries, countdown=retry_after)
                 except MaxRetriesExceededError:
                     if log_target:
                         log_target.log_action(
@@ -558,6 +580,10 @@ def mail_send_task(self, *args, to: List[str], subject: str, body: str, html: st
                 )
             logger.exception('Error sending email')
             raise SendMailException('Failed to send an email to {}.'.format(to))
+        else:
+            for i in invoices_sent:
+                i.sent_to_customer = now()
+                i.save(update_fields=['sent_to_customer'])
 
 
 def mail_send(*args, **kwargs):

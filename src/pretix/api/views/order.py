@@ -92,6 +92,8 @@ with scopes_disabled():
         subevent_after = django_filters.IsoDateTimeFilter(method='subevent_after_qs')
         subevent_before = django_filters.IsoDateTimeFilter(method='subevent_before_qs')
         search = django_filters.CharFilter(method='search_qs')
+        item = django_filters.CharFilter(field_name='all_positions', lookup_expr='item_id')
+        variation = django_filters.CharFilter(field_name='all_positions', lookup_expr='variation_id')
 
         class Meta:
             model = Order
