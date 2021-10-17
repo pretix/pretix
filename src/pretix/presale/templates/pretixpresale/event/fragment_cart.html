@@ -115,7 +115,7 @@
                                 </dt>
                                 <dd class="toplevel{% if event.settings.attendee_addresses_asked and not event.settings.attendee_emails_asked %} blank-after{% endif %}">
                                     <span data-toggle="tooltip" title="{% trans "Attendee name" %}">
-                                        {% if line.attendee_name %}{{ line.attendee_name }}{% else %}<em>{% trans "No attendee name provided" %}</em>{% endif %}
+                                        {% if line.attendee_name %}{{ line.attendee_name }}{% else %}<em class="text-muted">{% trans "No attendee name provided" %}</em>{% endif %}
                                     </span>
                                 </dd>
                             {% endif %}
@@ -177,7 +177,7 @@
                                         {{ q.answer|linebreaksbr }}
                                     {% endif %}
                                 {% else %}
-                                    <em>{% trans "not answered" %}</em>
+                                    <em class="text-muted">{% trans "not answered" %}</em>
                                 {% endif %}
                             </dd>
                         {% endfor %}

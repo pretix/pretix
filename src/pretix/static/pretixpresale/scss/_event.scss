@@ -280,12 +280,15 @@ h2.subevent-head {
 .info-download {
     margin-top: 0;
     margin-bottom: 30px;
+    .download-btn-form + .download-btn-form {
+        margin-left: .5em;
+    }
+    button {
+        margin-top: .5em;
+    }
 }
 .lead + .info-download {
     margin-top: -15px;
-}
-.download-btn-form + .download-btn-form {
-    margin-left: .5em;
 }
 
 .refund-gift-card-code {

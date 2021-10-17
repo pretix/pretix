@@ -2,6 +2,7 @@
   display: flex;
   flex-direction: row;
   margin: 15px 0 13px 0;
+  padding: 0;
   list-style: none;
 
   .checkout-step {
@@ -160,4 +161,14 @@
 .profile-add-on {
   padding: 15px;
   border: 1px solid $hr-border;
+}
+.panel-heading-flex {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 10px;
+
+  .panel-heading-flex-gap {
+    flex: 1;
+  }
 }
