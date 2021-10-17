@@ -25969,7 +25969,7 @@ msgstr "Afficher les variantes"
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:241
 #, fuzzy
 #| msgid "Original price"
-msgid "Orignal price:"
+msgid "Original price:"
 msgstr "Facture originale"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_addons.html:159

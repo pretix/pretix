@@ -22554,7 +22554,7 @@ msgstr "Visa varianter"
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:241
 #, fuzzy
 #| msgid "Original price"
-msgid "Orignal price:"
+msgid "Original price:"
 msgstr "Original pris"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_addons.html:159

@@ -24666,7 +24666,7 @@ msgstr "Vis varianter"
 #, fuzzy
 #| msgctxt "invoice"
 #| msgid "Original invoice"
-msgid "Orignal price:"
+msgid "Original price:"
 msgstr "Oprindelig faktura"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_addons.html:159

@@ -22981,7 +22981,7 @@ msgstr "Показать варианты"
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:241
 #, fuzzy
 #| msgid "Original price"
-msgid "Orignal price:"
+msgid "Original price:"
 msgstr "Первоначальная цена"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_addons.html:159

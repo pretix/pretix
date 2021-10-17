@@ -149,7 +149,7 @@
                                                             <div class="col-md-2 col-xs-6 price">
                                                                 {% if not c.price_included %}
                                                                     {% if var.original_price %}
-                                                                        <del><span class="sr-only">{% trans "Orignal price:" %}</span>
+                                                                        <del><span class="sr-only">{% trans "Original price:" %}</span>
                                                                         {% if event.settings.display_net_prices %}
                                                                             {{ var.original_price.net|money:event.currency }}
                                                                         {% else %}
@@ -263,7 +263,7 @@
                                                     <p>
                                                     {% if not c.price_included %}
                                                         {% if item.original_price %}
-                                                            <del><span class="sr-only">{% trans "Orignal price:" %}</span>
+                                                            <del><span class="sr-only">{% trans "Original price:" %}</span>
                                                             {% if event.settings.display_net_prices %}
                                                                 {{ item.original_price.net|money:event.currency }}
                                                             {% else %}
