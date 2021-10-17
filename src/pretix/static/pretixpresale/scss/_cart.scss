@@ -170,13 +170,7 @@
     }
 }
 
-
-
-
 @media(max-width: $screen-sm-max) {
-
-
-
     .cart-row {
         .download-desktop {
             clear: both;
@@ -227,9 +221,6 @@
 
 #cart-deadline-short {
     font-variant-numeric: tabular-nums;
-}
-.cart-modify {
-    margin-left: 10px;
 }
 .btn-invisible {
     opacity: 0 !important;
