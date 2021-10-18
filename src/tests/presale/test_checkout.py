@@ -490,6 +490,10 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
             assert pos.price == Decimal('23.20')
             assert pos.tax_rate == Decimal('20.00')
             assert pos.tax_value == Decimal('3.87')
+            t = o.transactions.get()
+            assert t.price == Decimal('23.20')
+            assert t.tax_rate == Decimal('20.00')
+            assert t.tax_value == Decimal('3.87')
 
     def test_country_taxing_free_price_and_voucher(self):
         self._enable_country_specific_taxing()

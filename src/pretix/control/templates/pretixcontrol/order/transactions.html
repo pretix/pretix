@@ -1,0 +1,61 @@
+{% extends "pretixcontrol/event/base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% load money %}
+{% block title %}{% trans "Transaction history" %}{% endblock %}
+{% block content %}
+    <h1>
+        {% trans "Transaction history" %}
+        <a class="btn btn-link btn-lg"
+                href="{% url "control:event.order" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}">
+            {% blocktrans trimmed with order=order.code %}
+                Back to order {{ order }}
+            {% endblocktrans %}
+        </a>
+    </h1>
+    <table class="table table-condensed table-hover">
+        <thead>
+        <tr>
+            <th>{% trans "Date" %}</th>
+            <th>{% trans "Product" %}</th>
+            <th class="text-right flip">{% trans "Quantity" %}</th>
+            <th class="text-right flip">{% trans "Tax rate" %}</th>
+            <th class="text-right flip">{% trans "Tax value" %}</th>
+            <th class="text-right flip">{% trans "Price" %}</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for t in transactions %}
+            <tr class="{% if t.count < 0 %}text-danger{% endif %}">
+                <td>
+                    {{ t.datetime|date:"SHORT_DATETIME_FORMAT" }}
+                    {% if t.migrated %}
+                        <span class="fa fa-warning text-warning"
+                                data-toggle="tooltip"
+                                title="{% trans 'This order was created before we introduced this table, therefore this data might be inaccurate.' %}"
+                        ></span>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if t.item %}
+                        {{ t.item }}
+                        {% if t.variation %}
+                            – {{ t.variation }}
+                        {% endif %}
+                    {% endif %}
+                    {% if t.fee_type %}
+                        {{ t.get_fee_type_display }}
+                    {% endif %}
+                    {% if t.subevent %}
+                        <br>{{ t.subevent }}
+                    {% endif %}
+                </td>
+                <td class="text-right flip">{{ t.count }} &times;</td>
+                <td class="text-right flip">{{ t.tax_rate }} %</td>
+                <td class="text-right flip">{{ t.tax_value|money:request.event.currency }}</td>
+                <td class="text-right flip">{{ t.price|money:request.event.currency }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

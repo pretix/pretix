@@ -401,6 +401,18 @@ class OrderDetail(OrderView):
         }
 
 
+class OrderTransactions(OrderView):
+    template_name = 'pretixcontrol/order/transactions.html'
+    permission = 'can_view_orders'
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['transactions'] = self.order.transactions.select_related(
+            'item', 'variation', 'subevent'
+        ).order_by('datetime')
+        return ctx
+
+
 class OrderDownload(AsyncAction, OrderView):
     task = generate
     permission = 'can_view_orders'

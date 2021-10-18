@@ -1173,6 +1173,9 @@ def test_order_mark_paid_canceled(token_client, organizer, event, order):
 def test_order_mark_paid_expired_quota_free(token_client, organizer, event, order, quota):
     order.status = Order.STATUS_EXPIRED
     order.save()
+    with scopes_disabled():
+        order.create_transactions()
+        assert order.transactions.count() == 0
     resp = token_client.post(
         '/api/v1/organizers/{}/events/{}/orders/{}/mark_paid/'.format(
             organizer.slug, event.slug, order.code
@@ -1186,6 +1189,8 @@ def test_order_mark_paid_expired_quota_free(token_client, organizer, event, orde
     order.refresh_from_db()
     assert len(djmail.outbox) == 0
     assert order.status == Order.STATUS_PAID
+    with scopes_disabled():
+        assert order.transactions.count() == 2
 
 
 @pytest.mark.django_db
@@ -1223,6 +1228,9 @@ def test_order_mark_paid_locked(token_client, organizer, event, order):
 def test_order_reactivate(token_client, organizer, event, order, quota):
     order.status = Order.STATUS_CANCELED
     order.save()
+    with scopes_disabled():
+        order.create_transactions()
+        assert order.transactions.count() == 0
     resp = token_client.post(
         '/api/v1/organizers/{}/events/{}/orders/{}/reactivate/'.format(
             organizer.slug, event.slug, order.code
@@ -1230,6 +1238,8 @@ def test_order_reactivate(token_client, organizer, event, order, quota):
     )
     assert resp.status_code == 200
     assert resp.data['status'] == Order.STATUS_PENDING
+    with scopes_disabled():
+        assert order.transactions.count() == 2
 
 
 @pytest.mark.django_db
@@ -1244,6 +1254,9 @@ def test_order_reactivate_invalid(token_client, organizer, event, order):
 
 @pytest.mark.django_db
 def test_order_mark_canceled_pending(token_client, organizer, event, order):
+    with scopes_disabled():
+        order.create_transactions()
+        assert order.transactions.count() == 2
     djmail.outbox = []
     resp = token_client.post(
         '/api/v1/organizers/{}/events/{}/orders/{}/mark_canceled/'.format(
@@ -1253,6 +1266,8 @@ def test_order_mark_canceled_pending(token_client, organizer, event, order):
     assert resp.status_code == 200
     assert resp.data['status'] == Order.STATUS_CANCELED
     assert len(djmail.outbox) == 1
+    with scopes_disabled():
+        assert order.transactions.count() == 4
 
 
 @pytest.mark.django_db
@@ -1303,6 +1318,9 @@ def test_order_mark_paid_canceled_keep_fee(token_client, organizer, event, order
     order.status = Order.STATUS_PAID
     order.save()
     with scopes_disabled():
+        order.create_transactions()
+        assert order.transactions.count() == 2
+    with scopes_disabled():
         order.payments.create(state=OrderPayment.PAYMENT_STATE_CONFIRMED, amount=order.total)
     resp = token_client.post(
         '/api/v1/organizers/{}/events/{}/orders/{}/mark_canceled/'.format(
@@ -1316,6 +1334,8 @@ def test_order_mark_paid_canceled_keep_fee(token_client, organizer, event, order
     order.refresh_from_db()
     assert order.status == Order.STATUS_PAID
     assert order.total == Decimal('6.00')
+    with scopes_disabled():
+        assert order.transactions.count() == 4
 
 
 @pytest.mark.django_db
@@ -1502,6 +1522,9 @@ def test_order_extend_expired_quota_left(token_client, organizer, event, order, 
     order.save()
     quota.size = 2
     quota.save()
+    with scopes_disabled():
+        order.create_transactions()
+        assert order.transactions.count() == 0
     newdate = (now() + datetime.timedelta(days=20)).strftime("%Y-%m-%d")
     resp = token_client.post(
         '/api/v1/organizers/{}/events/{}/orders/{}/extend/'.format(
@@ -1514,12 +1537,17 @@ def test_order_extend_expired_quota_left(token_client, organizer, event, order, 
     order.refresh_from_db()
     assert order.status == Order.STATUS_PENDING
     assert order.expires.astimezone(event.timezone).strftime("%Y-%m-%d %H:%M:%S") == newdate[:10] + " 23:59:59"
+    with scopes_disabled():
+        assert order.transactions.count() == 2
 
 
 @pytest.mark.django_db
 def test_order_pending_approve(token_client, organizer, event, order):
     order.require_approval = True
     order.save()
+    with scopes_disabled():
+        order.create_transactions()
+        assert order.transactions.count() == 0
     resp = token_client.post(
         '/api/v1/organizers/{}/events/{}/orders/{}/approve/'.format(
             organizer.slug, event.slug, order.code
@@ -1528,6 +1556,8 @@ def test_order_pending_approve(token_client, organizer, event, order):
     assert resp.status_code == 200
     assert resp.data['status'] == Order.STATUS_PENDING
     assert not resp.data['require_approval']
+    with scopes_disabled():
+        assert order.transactions.count() == 2
 
 
 @pytest.mark.django_db
@@ -1690,6 +1720,8 @@ def test_order_create(token_client, organizer, event, item, quota, question):
         answ = pos.answers.first()
     assert answ.question == question
     assert answ.answer == "S"
+    with scopes_disabled():
+        assert o.transactions.count() == 2
 
 
 @pytest.mark.django_db

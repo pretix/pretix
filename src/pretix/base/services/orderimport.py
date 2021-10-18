@@ -33,6 +33,7 @@ from pretix.base.models import (
     CachedFile, Event, InvoiceAddress, Order, OrderPayment, OrderPosition,
     User,
 )
+from pretix.base.models.orders import Transaction
 from pretix.base.orderimport import get_all_columns
 from pretix.base.services.invoices import generate_invoice, invoice_qualified
 from pretix.base.services.tasks import ProfiledEventTask
@@ -146,6 +147,7 @@ def import_orders(event: Event, fileid: str, settings: dict, locale: str, user) 
         # quota check?
         with event.lock():
             with transaction.atomic():
+                save_transactions = []
                 for o in orders:
                     o.total = sum([c.price for c in o._positions])  # currently no support for fees
                     if o.total == Decimal('0.00'):
@@ -187,6 +189,8 @@ def import_orders(event: Event, fileid: str, settings: dict, locale: str, user) 
                         user=user,
                         data={'source': 'import'}
                     )
+                    save_transactions += o.create_transactions(is_new=True, fees=[], positions=o._positions, save=False)
+                Transaction.objects.bulk_create(save_transactions)
 
             for o in orders:
                 with language(o.locale, event.settings.region):

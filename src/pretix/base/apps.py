@@ -47,6 +47,7 @@ class PretixBaseConfig(AppConfig):
         from . import notifications  # NOQA
         from . import email  # NOQA
         from .services import auth, checkin, export, mail, tickets, cart, orderimport, orders, invoices, cleanup, update_check, quotas, notifications, vouchers  # NOQA
+        from .models import _transactions  # NOQA
         from django.conf import settings
 
         try:

@@ -52,18 +52,22 @@
                         {% if order.status == 'n' or order.status == 'e' %}
                             <a href="{% url "control:event.order.transition" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}?status=p"
                                     class="btn {% if overpaid >= 0 %}btn-success{% else %}btn-default{% endif %}">
+                                <span class="fa fa-check"></span>
                                 {% trans "Mark as paid" %}
                             </a>
                             <a href="{% url "control:event.order.extend" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}" class="btn btn-default">
+                                <span class="fa fa-clock-o"></span>
                                 {% trans "Extend payment term" %}
                             </a>
                         {% endif %}
                         {% if order.cancel_allowed %}
                             <a href="{% url "control:event.order.transition" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}?status=c" class="btn btn-default">
+                                <span class="fa fa-ban"></span>
                                 {% trans "Cancel order" %}
                             </a>
                         {% elif order.status == 'c' %}
                             <a href="{% url "control:event.order.reactivate" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}" class="btn btn-default">
+                                <span class="fa fa-reply"></span>
                                 {% trans "Reactivate order" %}
                             </a>
                         {% endif %}
@@ -71,10 +75,16 @@
 
                     <a href="{% eventurl request.event "presale:event.order" order=order.code secret=order.secret %}"
                             class="btn btn-default" target="_blank">
+                        <span class="fa fa-eye"></span>
                         {% trans "View order as user" %}
                     </a>
                     <a href="{% url "control:event.order.mail_history" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}" class="btn btn-default">
+                        <span class="fa fa-envelope-o"></span>
                         {% trans "View email history" %}
+                    </a>
+                    <a href="{% url "control:event.order.transactions" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}" class="btn btn-default">
+                        <span class="fa fa-list"></span>
+                        {% trans "View transaction history" %}
                     </a>
                 </div>
             </div>

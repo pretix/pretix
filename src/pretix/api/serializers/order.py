@@ -1404,6 +1404,7 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
                 state=OrderPayment.PAYMENT_STATE_CREATED
             )
 
+        order.create_transactions(is_new=True, fees=fees, positions=pos_map.values())
         return order
 
 

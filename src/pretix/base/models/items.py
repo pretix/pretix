@@ -693,9 +693,9 @@ class Item(LoggedModel):
         return res
 
     def allow_delete(self):
-        from pretix.base.models.orders import OrderPosition
+        from pretix.base.models.orders import OrderPosition, Transaction
 
-        return not OrderPosition.all.filter(item=self).exists()
+        return not Transaction.objects.filter(item=self).exists() and not OrderPosition.all.filter(item=self).exists()
 
     @property
     def includes_mixed_tax_rate(self):
@@ -958,10 +958,13 @@ class ItemVariation(models.Model):
         return self.position < other.position
 
     def allow_delete(self):
-        from pretix.base.models.orders import CartPosition, OrderPosition
+        from pretix.base.models.orders import (
+            CartPosition, OrderPosition, Transaction,
+        )
 
         return (
-            not OrderPosition.objects.filter(variation=self).exists()
+            not Transaction.objects.filter(variation=self).exists()
+            and not OrderPosition.objects.filter(variation=self).exists()
             and not CartPosition.objects.filter(variation=self).exists()
         )
 

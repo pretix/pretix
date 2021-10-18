@@ -162,10 +162,13 @@ class TaxRule(LoggedModel):
         pass
 
     def allow_delete(self):
-        from pretix.base.models.orders import OrderFee, OrderPosition
+        from pretix.base.models.orders import (
+            OrderFee, OrderPosition, Transaction,
+        )
 
         return (
-            not OrderFee.objects.filter(tax_rule=self, order__event=self.event).exists()
+            not Transaction.objects.filter(tax_rule=self, order__event=self.event).exists()
+            and not OrderFee.objects.filter(tax_rule=self, order__event=self.event).exists()
             and not OrderPosition.all.filter(tax_rule=self, order__event=self.event).exists()
             and not self.event.items.filter(tax_rule=self).exists()
             and self.event.settings.tax_rate_default != self
