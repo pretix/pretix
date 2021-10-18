@@ -1431,7 +1431,7 @@ class SubEvent(EventMixin, LoggedModel):
         return self.event.currency
 
     def allow_delete(self):
-        return not self.orderposition_set.exists()
+        return not self.orderposition_set.exists() and not self.transaction_set.exists()
 
     def delete(self, *args, **kwargs):
         clear_cache = kwargs.pop('clear_cache', False)
