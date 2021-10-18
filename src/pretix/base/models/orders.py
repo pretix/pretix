@@ -2515,6 +2515,14 @@ class Transaction(models.Model):
                     obj.tax_rule_id, obj.tax_value, obj.fee_type, obj.internal_type)
         raise ValueError('invalid state')  # noqa
 
+    @property
+    def full_price(self):
+        return self.price * self.count
+
+    @property
+    def full_tax_value(self):
+        return self.tax_value * self.count
+
 
 class CartPosition(AbstractPosition):
     """

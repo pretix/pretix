@@ -18,10 +18,11 @@
         <tr>
             <th>{% trans "Date" %}</th>
             <th>{% trans "Product" %}</th>
-            <th class="text-right flip">{% trans "Quantity" %}</th>
             <th class="text-right flip">{% trans "Tax rate" %}</th>
-            <th class="text-right flip">{% trans "Tax value" %}</th>
-            <th class="text-right flip">{% trans "Price" %}</th>
+            <th class="text-right flip">{% trans "Quantity" %}</th>
+            <th class="text-right flip">{% trans "Single price" %}</th>
+            <th class="text-right flip">{% trans "Total tax value" %}</th>
+            <th class="text-right flip">{% trans "Total price" %}</th>
         </tr>
         </thead>
         <tbody>
@@ -50,12 +51,31 @@
                         <br>{{ t.subevent }}
                     {% endif %}
                 </td>
-                <td class="text-right flip">{{ t.count }} &times;</td>
                 <td class="text-right flip">{{ t.tax_rate }} %</td>
-                <td class="text-right flip">{{ t.tax_value|money:request.event.currency }}</td>
+                <td class="text-right flip">{{ t.count }} &times;</td>
                 <td class="text-right flip">{{ t.price|money:request.event.currency }}</td>
+                <td class="text-right flip">{{ t.full_tax_value|money:request.event.currency }}</td>
+                <td class="text-right flip">{{ t.full_price|money:request.event.currency }}</td>
             </tr>
         {% endfor %}
         </tbody>
+    <tfoot>
+    <tr class="{% if t.count < 0 %}text-danger{% endif %}">
+        <td>
+            <strong>{% trans "Sum" %}</strong>
+        </td>
+        <td>
+        </td>
+        <td></td>
+        <td class="text-right flip">
+            <strong>
+                {{ sums.count }}
+            </strong>
+        </td>
+        <td></td>
+        <td class="text-right flip"><strong>{{ sums.full_tax_value|money:request.event.currency }}</strong></td>
+        <td class="text-right flip"><strong>{{ sums.full_price|money:request.event.currency }}</strong></td>
+    </tr>
+    </tfoot>
     </table>
 {% endblock %}

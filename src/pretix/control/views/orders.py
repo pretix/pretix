@@ -50,7 +50,7 @@ from django.core.exceptions import ValidationError
 from django.core.files import File
 from django.db import transaction
 from django.db.models import (
-    Count, Exists, IntegerField, OuterRef, Prefetch, ProtectedError, Q,
+    Count, Exists, F, IntegerField, OuterRef, Prefetch, ProtectedError, Q,
     Subquery, Sum,
 )
 from django.forms import formset_factory
@@ -410,6 +410,11 @@ class OrderTransactions(OrderView):
         ctx['transactions'] = self.order.transactions.select_related(
             'item', 'variation', 'subevent'
         ).order_by('datetime')
+        ctx['sums'] = self.order.transactions.aggregate(
+            count=Sum('count'),
+            full_price=Sum(F('count') * F('price')),
+            full_tax_value=Sum(F('count') * F('tax_value')),
+        )
         return ctx
 
 
