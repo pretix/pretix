@@ -26,6 +26,7 @@ from decimal import Decimal
 import pytest
 import pytz
 from django.core import mail as djmail
+from django.db.models import F, Sum
 from django.test import TestCase
 from django.utils.timezone import make_aware, now
 from django_countries.fields import Country
@@ -204,7 +205,19 @@ def test_expiring(event):
         datetime=now(), expires=now() - timedelta(days=10),
         total=12,
     )
+    ticket = Item.objects.create(event=event, name='Early-bird ticket',
+                                 default_price=Decimal('23.00'), admission=True)
+    OrderPosition.objects.create(
+        order=o1, item=ticket, variation=None,
+        price=Decimal("0.00"), attendee_name_parts={'full_name': "Peter"}, positionid=1
+    )
+    OrderPosition.objects.create(
+        order=o2, item=ticket, variation=None,
+        price=Decimal("12.00"), attendee_name_parts={'full_name': "Peter"}, positionid=1
+    )
     generate_invoice(o2)
+    o1.create_transactions()
+    o2.create_transactions()
     expire_orders(None)
     o1 = Order.objects.get(id=o1.id)
     assert o1.status == Order.STATUS_PENDING
@@ -212,6 +225,9 @@ def test_expiring(event):
     assert o2.status == Order.STATUS_EXPIRED
     assert o2.invoices.count() == 2
     assert o2.invoices.last().is_cancellation is True
+    assert o1.transactions.count() == 1
+    assert o2.transactions.count() == 2
+    assert o2.transactions.aggregate(s=Sum(F('price') * F('count')))['s'] == Decimal('0.00')
 
 
 @pytest.mark.django_db
@@ -222,8 +238,19 @@ def test_expiring_paid_invoice(event):
         datetime=now(), expires=now() - timedelta(days=10),
         total=12,
     )
+    ticket = Item.objects.create(event=event, name='Early-bird ticket',
+                                 default_price=Decimal('12.00'), admission=True)
+    q = event.quotas.create(name='Q', size=None)
+    q.items.add(ticket)
+    OrderPosition.objects.create(
+        order=o2, item=ticket, variation=None,
+        price=Decimal("12.00"), attendee_name_parts={'full_name': "Peter"}, positionid=1
+    )
     generate_invoice(o2)
+    o2.create_transactions()
+    assert o2.transactions.aggregate(s=Sum(F('price') * F('count')))['s'] == Decimal('12.00')
     expire_orders(None)
+    assert o2.transactions.aggregate(s=Sum(F('price') * F('count')))['s'] == Decimal('0.00')
     o2 = Order.objects.get(id=o2.id)
     assert o2.status == Order.STATUS_EXPIRED
     assert o2.invoices.count() == 2
@@ -232,6 +259,8 @@ def test_expiring_paid_invoice(event):
     ).confirm()
     assert o2.invoices.count() == 3
     assert o2.invoices.last().is_cancellation is False
+    assert o2.transactions.count() == 3
+    assert o2.transactions.aggregate(s=Sum(F('price') * F('count')))['s'] == Decimal('12.00')
 
 
 @pytest.mark.django_db
@@ -309,8 +338,17 @@ def test_approve(event):
         datetime=now(), expires=now() - timedelta(days=10),
         total=10, require_approval=True, locale='en'
     )
+    ticket = Item.objects.create(event=event, name='Early-bird ticket',
+                                 default_price=Decimal('23.00'), admission=True)
+    OrderPosition.objects.create(
+        order=o1, item=ticket, variation=None,
+        price=Decimal("23.00"), attendee_name_parts={'full_name': "Peter"}, positionid=1
+    )
+    o1.create_transactions()
+    assert o1.transactions.count() == 0
     approve_order(o1)
     o1.refresh_from_db()
+    assert o1.transactions.count() == 1
     assert o1.expires > now()
     assert o1.status == Order.STATUS_PENDING
     assert not o1.require_approval
@@ -609,6 +647,7 @@ class OrderCancelTests(TestCase):
                 order=self.order, item=self.ticket, variation=None,
                 price=Decimal("23.00"), attendee_name_parts={'full_name': "Dieter"}, positionid=2
             )
+            self.order.create_transactions()
             generate_invoice(self.order)
             djmail.outbox = []
 
@@ -659,6 +698,8 @@ class OrderCancelTests(TestCase):
         assert self.order.status == Order.STATUS_CANCELED
         assert self.order.all_logentries().last().action_type == 'pretix.event.order.canceled'
         assert self.order.invoices.count() == 2
+        assert self.order.transactions.count() == 4
+        assert self.order.transactions.aggregate(s=Sum(F('price') * F('count')))['s'] == Decimal('0.00')
 
     @classscope(attr='o')
     def test_cancel_paid_with_too_high_fee(self):
@@ -820,6 +861,8 @@ class OrderChangeManagerTests(TestCase):
                 order=self.order, item=self.ticket, variation=None,
                 price=Decimal("23.00"), attendee_name_parts={'full_name': "Dieter"}, positionid=2
             )
+            self.order.create_transactions(is_new=True)
+            assert self.order.transactions.count() == 2
             self.ocm = OrderChangeManager(self.order, None)
             self.quota = self.event.quotas.create(name='Test', size=None)
             self.quota.items.add(self.ticket)
@@ -899,6 +942,7 @@ class OrderChangeManagerTests(TestCase):
         self.order.refresh_from_db()
         assert self.op1.subevent == se2
         assert self.op1.item == self.shirt
+        assert self.order.transactions.count() == 4
 
     @classscope(attr='o')
     def test_change_subevent_success(self):
@@ -921,6 +965,7 @@ class OrderChangeManagerTests(TestCase):
         assert self.op1.price == Decimal('23.00')
         assert self.order.total == self.op1.price + self.op2.price
         assert self.op1.secret == s
+        assert self.order.transactions.count() == 4
 
     @classscope(attr='o')
     def test_change_subevent_success_change_secret(self):
@@ -944,6 +989,7 @@ class OrderChangeManagerTests(TestCase):
         assert self.op1.price == Decimal('23.00')
         assert self.order.total == self.op1.price + self.op2.price
         assert self.op1.secret != s
+        assert self.order.transactions.count() == 4
 
     @classscope(attr='o')
     def test_change_subevent_with_price_success(self):
@@ -965,6 +1011,7 @@ class OrderChangeManagerTests(TestCase):
         assert self.op1.subevent == se2
         assert self.op1.price == Decimal('12.00')
         assert self.order.total == self.op1.price + self.op2.price
+        assert self.order.transactions.count() == 4
 
     @classscope(attr='o')
     def test_change_subevent_sold_out(self):
@@ -983,6 +1030,7 @@ class OrderChangeManagerTests(TestCase):
             self.ocm.commit()
         self.op1.refresh_from_db()
         assert self.op1.subevent == se1
+        assert self.order.transactions.count() == 2
 
     @classscope(attr='o')
     def test_change_item_quota_required(self):
@@ -1004,6 +1052,7 @@ class OrderChangeManagerTests(TestCase):
         assert self.op1.tax_value == Decimal('3.67')
         assert self.op1.tax_rule == self.shirt.tax_rule
         assert self.op1.secret != s
+        assert self.order.transactions.count() == 4
 
     @classscope(attr='o')
     def test_change_item_keep_price(self):
@@ -1018,6 +1067,7 @@ class OrderChangeManagerTests(TestCase):
         assert self.op1.tax_value == Decimal('3.67')
         assert self.op1.tax_rule == self.shirt.tax_rule
         assert self.op1.secret == s
+        assert self.order.transactions.count() == 4
 
     @classscope(attr='o')
     def test_change_item_change_price_before_voucher(self):
@@ -1074,6 +1124,19 @@ class OrderChangeManagerTests(TestCase):
         assert round_decimal(self.op1.price * (1 - 100 / (100 + self.op1.tax_rate))) == self.op1.tax_value
         assert self.order.total == self.op1.price + self.op2.price
 
+        t0 = self.order.transactions.all()[0]
+        assert t0.item == self.ticket
+        assert t0.price == Decimal('23.00')
+        assert t0.count == 1
+        t1 = self.order.transactions.all()[2]
+        assert t1.item == self.ticket
+        assert t1.price == Decimal('23.00')
+        assert t1.count == -1
+        t2 = self.order.transactions.all()[3]
+        assert t2.item == self.shirt
+        assert t2.price == Decimal('12.00')
+        assert t2.count == 1
+
     @classscope(attr='o')
     def test_change_price_success(self):
         self.ocm.change_price(self.op1, Decimal('24.00'))
@@ -1109,6 +1172,7 @@ class OrderChangeManagerTests(TestCase):
         self.op1.refresh_from_db()
         assert self.op1.canceled
         assert self.op1.secret == s
+        assert self.order.transactions.count() == 3
 
     @classscope(attr='o')
     def test_cancel_success_changed_secret(self):
@@ -1284,6 +1348,7 @@ class OrderChangeManagerTests(TestCase):
         self.op2.refresh_from_db()
         assert self.op1.item == self.shirt
         assert self.op2.item == self.shirt
+        assert self.order.transactions.count() == 6
 
     @classscope(attr='o')
     def test_multiple_items_quotas_partially_full(self):
@@ -1394,6 +1459,7 @@ class OrderChangeManagerTests(TestCase):
         assert self.order.total == Decimal('48.00')
         assert self.order.pending_sum == Decimal('2.00')
         assert self.order.status == Order.STATUS_PENDING
+        assert self.order.transactions.count() == 4
 
     @classscope(attr='o')
     def test_change_paid_stays_paid_when_overpaid(self):
@@ -1436,6 +1502,7 @@ class OrderChangeManagerTests(TestCase):
         assert round_decimal(nop.price * (1 - 100 / (100 + self.shirt.tax_rule.rate))) == nop.tax_value
         assert self.order.total == self.op1.price + self.op2.price + nop.price
         assert nop.positionid == 3
+        assert self.order.transactions.count() == 3
 
     @classscope(attr='o')
     def test_add_item_net_price_success(self):
@@ -1615,6 +1682,7 @@ class OrderChangeManagerTests(TestCase):
             assert op.tax_rate == Decimal('100.00')
 
         assert self.order.total == Decimal('86.00') + fee.value
+        assert self.order.transactions.count() == 7
 
     @classscope(attr='o')
     def test_recalculate_country_rate_keep_gross(self):
@@ -2973,6 +3041,7 @@ class OrderReactivateTest(TestCase):
             self.quota.items.add(self.ticket)
             self.seat_a1 = self.event.seats.create(seat_number="A1", product=self.stalls, seat_guid="A1")
             generate_invoice(self.order)
+            self.order.create_transactions()
             djmail.outbox = []
 
     @classscope(attr='o')
@@ -2994,6 +3063,7 @@ class OrderReactivateTest(TestCase):
 
     @classscope(attr='o')
     def test_reactivate_paid(self):
+        assert self.order.transactions.aggregate(s=Sum(F('price') * F('count')))['s'] in (None, Decimal('0.00'))
         self.order.payments.create(state=OrderPayment.PAYMENT_STATE_CONFIRMED, amount=48.5)
         reactivate_order(self.order)
         self.order.refresh_from_db()
@@ -3001,6 +3071,7 @@ class OrderReactivateTest(TestCase):
         assert self.order.all_logentries().last().action_type == 'pretix.event.order.reactivated'
         assert self.order.invoices.count() == 3
         assert not self.order.cancellation_date
+        assert self.order.transactions.aggregate(s=Sum(F('price') * F('count')))['s'] == Decimal('46.00')
 
     @classscope(attr='o')
     def test_reactivate_sold_out(self):
