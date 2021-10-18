@@ -52,18 +52,22 @@
                         {% if order.status == 'n' or order.status == 'e' %}
                             <a href="{% url "control:event.order.transition" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}?status=p"
                                     class="btn {% if overpaid >= 0 %}btn-success{% else %}btn-default{% endif %}">
+                                <span class="fa fa-check"></span>
                                 {% trans "Mark as paid" %}
                             </a>
                             <a href="{% url "control:event.order.extend" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}" class="btn btn-default">
+                                <span class="fa fa-clock-o"></span>
                                 {% trans "Extend payment term" %}
                             </a>
                         {% endif %}
                         {% if order.cancel_allowed %}
                             <a href="{% url "control:event.order.transition" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}?status=c" class="btn btn-default">
+                                <span class="fa fa-ban"></span>
                                 {% trans "Cancel order" %}
                             </a>
                         {% elif order.status == 'c' %}
                             <a href="{% url "control:event.order.reactivate" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}" class="btn btn-default">
+                                <span class="fa fa-reply"></span>
                                 {% trans "Reactivate order" %}
                             </a>
                         {% endif %}
@@ -71,10 +75,16 @@
 
                     <a href="{% eventurl request.event "presale:event.order" order=order.code secret=order.secret %}"
                             class="btn btn-default" target="_blank">
+                        <span class="fa fa-eye"></span>
                         {% trans "View order as user" %}
                     </a>
                     <a href="{% url "control:event.order.mail_history" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}" class="btn btn-default">
+                        <span class="fa fa-envelope-o"></span>
                         {% trans "View email history" %}
+                    </a>
+                    <a href="{% url "control:event.order.transactions" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}" class="btn btn-default">
+                        <span class="fa fa-list"></span>
+                        {% trans "View transaction history" %}
                     </a>
                 </div>
             </div>
@@ -925,64 +935,6 @@
                     </div>
                 </div>
             </div>
-
-            <div class="panel panel-default items">
-                <div class="panel-heading">
-                    <h3 class="panel-title">
-                        {% trans "Transaction history" %}
-                    </h3>
-                </div>
-                <div class="panel-body">
-                    <div class="table-responsive">
-                        <table class="table table-condensed table-hover">
-                            <thead>
-                            <tr>
-                                <th>{% trans "Date" %}</th>
-                                <th>{% trans "Product" %}</th>
-                                <th class="text-right flip">{% trans "Quantity" %}</th>
-                                <th class="text-right flip">{% trans "Tax rate" %}</th>
-                                <th class="text-right flip">{% trans "Tax value" %}</th>
-                                <th class="text-right flip">{% trans "Price" %}</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {% for t in transactions %}
-                                <tr class="{% if t.count < 0 %}danger{% endif %}">
-                                    <td>
-                                        {{ t.datetime|date:"SHORT_DATETIME_FORMAT" }}
-                                        {% if t.migrated %}
-                                            <span class="fa fa-warning text-warning"
-                                                  data-toggle="tooltip"
-                                                  title="{% trans 'This order was created before we introduced this table, therefore this data might be inaccurate.' %}"
-                                            ></span>
-                                        {% endif %}
-                                    </td>
-                                    <td>
-                                        {% if t.item %}
-                                            {{ t.item }}
-                                            {% if t.variation %}
-                                                – {{ t.variation }}
-                                            {% endif %}
-                                        {% endif %}
-                                        {% if t.fee_type %}
-                                            {{ t.get_fee_type_display }}
-                                        {% endif %}
-                                        {% if t.subevent %}
-                                            <br>{{ t.subevent }}
-                                        {% endif %}
-                                    </td>
-                                    <td class="text-right flip">{{ t.count }} &times;</td>
-                                    <td class="text-right flip">{{ t.tax_rate }} %</td>
-                                    <td class="text-right flip">{{ t.tax_value|money:request.event.currency }}</td>
-                                    <td class="text-right flip">{{ t.price|money:request.event.currency }}</td>
-                                </tr>
-                            {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
         </div>
 
         <div class="col-xs-12 col-lg-2">

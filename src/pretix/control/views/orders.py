@@ -294,9 +294,6 @@ class OrderDetail(OrderView):
         ctx['event'] = self.request.event
         ctx['payments'] = self.order.payments.order_by('-created')
         ctx['refunds'] = self.order.refunds.select_related('payment').order_by('-created')
-        ctx['transactions'] = self.order.transactions.select_related(
-            'item', 'variation', 'subevent'
-        ).order_by('datetime')
         for p in ctx['payments']:
             if p.payment_provider:
                 p.html_info = (p.payment_provider.payment_control_render(self.request, p) or "").strip()
@@ -402,6 +399,18 @@ class OrderDetail(OrderView):
             'net_total': self.object.net_total,
             'tax_total': self.object.tax_total,
         }
+
+
+class OrderTransactions(OrderView):
+    template_name = 'pretixcontrol/order/transactions.html'
+    permission = 'can_view_orders'
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['transactions'] = self.order.transactions.select_related(
+            'item', 'variation', 'subevent'
+        ).order_by('datetime')
+        return ctx
 
 
 class OrderDownload(AsyncAction, OrderView):
