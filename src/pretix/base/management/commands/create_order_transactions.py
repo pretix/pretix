@@ -19,6 +19,7 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
+import time
 
 from django.core.management.base import BaseCommand
 from django.db.models import F, Max, Q
@@ -31,6 +32,16 @@ from pretix.base.models import Order
 
 class Command(BaseCommand):
     help = "Create missing order transactions"
+
+    def add_arguments(self, parser):
+        parser.add_argument(
+            "--slowdown",
+            dest="interval",
+            type=int,
+            default=0,
+            help="Interval for staggered execution. If set to a value different then zero, we will "
+                 "wait this many milliseconds between every order we process.",
+        )
 
     @scopes_disabled()
     def handle(self, *args, **options):
@@ -68,5 +79,6 @@ class Command(BaseCommand):
                 )
             if tn:
                 t += 1
+            time.sleep(options.get('slowdown', 0) / 1000)
 
         self.stderr.write(self.style.SUCCESS(f'Created transactions for {t} orders.'))
