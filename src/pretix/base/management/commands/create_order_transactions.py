@@ -36,19 +36,36 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         t = 0
         qs = Order.objects.annotate(
-            last_transaction=Max('transactions__datetime')
+            last_transaction=Max('transactions__created')
         ).filter(
-            Q(last_transaction__isnull=True) | Q(last_modified__gt=F('last_transaction'))
+            Q(last_transaction__isnull=True) | Q(last_modified__gt=F('last_transaction')),
+            require_approval=False,
         ).prefetch_related(
             'all_positions', 'all_fees'
         )
         for o in tqdm(qs):
-            tn = o.create_transactions(
-                positions=o.all_positions.all(),
-                fees=o.all_fees.all(),
-                dt_now=now() if o.last_transaction else o.datetime,
-                migrated=True
-            )
+            if o.last_transaction is None:
+                tn = o.create_transactions(
+                    positions=o.all_positions.all(),
+                    fees=o.all_fees.all(),
+                    dt_now=o.datetime,
+                    migrated=True,
+                    is_new=True,
+                    _backfill_before_cancellation=True,
+                )
+                o.create_transactions(
+                    positions=o.all_positions.all(),
+                    fees=o.all_fees.all(),
+                    dt_now=o.cancellation_date or (o.expires if o.status == Order.STATUS_EXPIRED else o.datetime),
+                    migrated=True,
+                )
+            else:
+                tn = o.create_transactions(
+                    positions=o.all_positions.all(),
+                    fees=o.all_fees.all(),
+                    dt_now=now(),
+                    migrated=True,
+                )
             if tn:
                 t += 1
 

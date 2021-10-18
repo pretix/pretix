@@ -1022,7 +1022,8 @@ class Order(LockModel, LoggedModel):
                 continue
             yield op
 
-    def create_transactions(self, is_new=False, positions=None, fees=None, dt_now=None, migrated=False):
+    def create_transactions(self, is_new=False, positions=None, fees=None, dt_now=None, migrated=False,
+                            _backfill_before_cancellation=False):
         dt_now = dt_now or now()
 
         # Count the transactions we already have
@@ -1033,16 +1034,16 @@ class Order(LockModel, LoggedModel):
 
         # Count the transactions we'd actually need
         target_transaction_count = Counter()
-        if self.status in (Order.STATUS_PENDING, Order.STATUS_PAID) and not self.require_approval:
+        if (_backfill_before_cancellation or self.status in (Order.STATUS_PENDING, Order.STATUS_PAID)) and not self.require_approval:
             positions = self.positions.all() if positions is None else positions
             for p in positions:
-                if p.canceled:
+                if p.canceled and not _backfill_before_cancellation:
                     continue
                 target_transaction_count[Transaction.key(p)] += 1
 
             fees = self.fees.all() if fees is None else fees
             for f in fees:
-                if f.canceled:
+                if f.canceled and not _backfill_before_cancellation:
                     continue
                 target_transaction_count[Transaction.key(f)] += 1
 
@@ -1541,6 +1542,7 @@ class OrderPayment(models.Model):
                 'message': can_be_paid
             }, user=user, auth=auth)
             raise Quota.QuotaExceededException(can_be_paid)
+        status_change = self.order.status != Order.STATUS_PENDING
         self.order.status = Order.STATUS_PAID
         self.order.save(update_fields=['status'])
 
@@ -1554,6 +1556,8 @@ class OrderPayment(models.Model):
         if overpaid:
             self.order.log_action('pretix.event.order.overpaid', {}, user=user, auth=auth)
         order_paid.send(self.order.event, order=self.order)
+        if status_change:
+            self.order.create_transactions()
 
     def fail(self, info=None, user=None, auth=None):
         """
@@ -2426,6 +2430,10 @@ class Transaction(models.Model):
         verbose_name=_("Order"),
         related_name='transactions',
         on_delete=models.PROTECT
+    )
+    created = models.DateTimeField(
+        auto_now_add=True,
+        db_index=True,
     )
     datetime = models.DateTimeField(
         verbose_name=_("Date"),
