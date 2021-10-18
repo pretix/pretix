@@ -30,6 +30,7 @@ import logging
 import os
 import threading
 
+from django.conf import settings
 from django.db import transaction
 
 dirty_transactions = threading.local()
@@ -46,6 +47,11 @@ def _fail(message):
     if fail_loudly:
         raise DirtyTransactionsForOrderException(message)
     else:
+        if settings.SENTRY_ENABLED:
+            import sentry_sdk
+
+            sentry_sdk.capture_message("You caught me!", "fatal")
+
         logger.warning(message, stack_info=True)
 
 
