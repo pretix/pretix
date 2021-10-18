@@ -26,7 +26,9 @@ Ctrl
 customizable
 Customizations
 datetime
+deliverability
 DSS
+EPC
 EPS
 favicon
 filetype
@@ -37,6 +39,7 @@ Geo
 geo
 geocoding
 gift
+GiroCode
 giropay
 GPL
 hostname
