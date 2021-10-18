@@ -454,6 +454,7 @@ class Order(LockModel, LoggedModel):
         if not self.expires:
             self.set_expires()
 
+        is_new = not self.pk
         update_fields = kwargs.get('update_fields', [])
         if 'require_approval' not in self.get_deferred_fields() and 'status' not in self.get_deferred_fields():
             status_paid_or_pending = self.status in (Order.STATUS_PENDING, Order.STATUS_PAID) and not self.require_approval
@@ -467,7 +468,12 @@ class Order(LockModel, LoggedModel):
                   "creating a transaction. Call save(force_save_with_deferred_fields=True) if you really want to do "
                   "this.")
 
-        return super().save(**kwargs)
+        r = super().save(**kwargs)
+
+        if is_new:
+            _transactions_mark_order_dirty(self.pk, using=kwargs.get('using', None))
+
+        return r
 
     def touch(self):
         self.save(update_fields=['last_modified'])
@@ -1023,7 +1029,7 @@ class Order(LockModel, LoggedModel):
             yield op
 
     def create_transactions(self, is_new=False, positions=None, fees=None, dt_now=None, migrated=False,
-                            _backfill_before_cancellation=False):
+                            _backfill_before_cancellation=False, save=True):
         dt_now = dt_now or now()
 
         # Count the transactions we already have
@@ -1069,7 +1075,8 @@ class Order(LockModel, LoggedModel):
                     fee_type=feetype,
                     internal_type=internaltype,
                 ))
-        Transaction.objects.bulk_create(create)
+        if save:
+            Transaction.objects.bulk_create(create)
         _transactions_mark_order_clean(self.pk)
         return create
 

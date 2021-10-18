@@ -13,60 +13,49 @@
             {% endblocktrans %}
         </a>
     </h1>
-    <div class="panel panel-default items">
-        <div class="panel-heading">
-            <h3 class="panel-title">
-                {% trans "Transaction history" %}
-            </h3>
-        </div>
-        <div class="panel-body">
-            <div class="table-responsive">
-                <table class="table table-condensed table-hover">
-                    <thead>
-                    <tr>
-                        <th>{% trans "Date" %}</th>
-                        <th>{% trans "Product" %}</th>
-                        <th class="text-right flip">{% trans "Quantity" %}</th>
-                        <th class="text-right flip">{% trans "Tax rate" %}</th>
-                        <th class="text-right flip">{% trans "Tax value" %}</th>
-                        <th class="text-right flip">{% trans "Price" %}</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {% for t in transactions %}
-                        <tr class="{% if t.count < 0 %}text-danger{% endif %}">
-                            <td>
-                                {{ t.datetime|date:"SHORT_DATETIME_FORMAT" }}
-                                {% if t.migrated %}
-                                    <span class="fa fa-warning text-warning"
-                                            data-toggle="tooltip"
-                                            title="{% trans 'This order was created before we introduced this table, therefore this data might be inaccurate.' %}"
-                                    ></span>
-                                {% endif %}
-                            </td>
-                            <td>
-                                {% if t.item %}
-                                    {{ t.item }}
-                                    {% if t.variation %}
-                                        – {{ t.variation }}
-                                    {% endif %}
-                                {% endif %}
-                                {% if t.fee_type %}
-                                    {{ t.get_fee_type_display }}
-                                {% endif %}
-                                {% if t.subevent %}
-                                    <br>{{ t.subevent }}
-                                {% endif %}
-                            </td>
-                            <td class="text-right flip">{{ t.count }} &times;</td>
-                            <td class="text-right flip">{{ t.tax_rate }} %</td>
-                            <td class="text-right flip">{{ t.tax_value|money:request.event.currency }}</td>
-                            <td class="text-right flip">{{ t.price|money:request.event.currency }}</td>
-                        </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
+    <table class="table table-condensed table-hover">
+        <thead>
+        <tr>
+            <th>{% trans "Date" %}</th>
+            <th>{% trans "Product" %}</th>
+            <th class="text-right flip">{% trans "Quantity" %}</th>
+            <th class="text-right flip">{% trans "Tax rate" %}</th>
+            <th class="text-right flip">{% trans "Tax value" %}</th>
+            <th class="text-right flip">{% trans "Price" %}</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for t in transactions %}
+            <tr class="{% if t.count < 0 %}text-danger{% endif %}">
+                <td>
+                    {{ t.datetime|date:"SHORT_DATETIME_FORMAT" }}
+                    {% if t.migrated %}
+                        <span class="fa fa-warning text-warning"
+                                data-toggle="tooltip"
+                                title="{% trans 'This order was created before we introduced this table, therefore this data might be inaccurate.' %}"
+                        ></span>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if t.item %}
+                        {{ t.item }}
+                        {% if t.variation %}
+                            – {{ t.variation }}
+                        {% endif %}
+                    {% endif %}
+                    {% if t.fee_type %}
+                        {{ t.get_fee_type_display }}
+                    {% endif %}
+                    {% if t.subevent %}
+                        <br>{{ t.subevent }}
+                    {% endif %}
+                </td>
+                <td class="text-right flip">{{ t.count }} &times;</td>
+                <td class="text-right flip">{{ t.tax_rate }} %</td>
+                <td class="text-right flip">{{ t.tax_value|money:request.event.currency }}</td>
+                <td class="text-right flip">{{ t.price|money:request.event.currency }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
 {% endblock %}

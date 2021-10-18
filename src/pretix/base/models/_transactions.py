@@ -52,7 +52,7 @@ def _fail(message):
 def _check_for_dirty_orders():
     if getattr(dirty_transactions, 'order_ids', None) is None:
         dirty_transactions.order_ids = set()
-    if dirty_transactions.order_ids:
+    if not dirty_transactions.order_ids and dirty_transactions.order_ids != {None}:
         _fail(
             "In the transaction that just ended, you created or modified an Order, OrderPosition, or OrderFee "
             "object in a way that you should have called `order.create_transactions()` afterwards. The transaction "
