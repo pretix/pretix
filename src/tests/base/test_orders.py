@@ -1124,15 +1124,15 @@ class OrderChangeManagerTests(TestCase):
         assert round_decimal(self.op1.price * (1 - 100 / (100 + self.op1.tax_rate))) == self.op1.tax_value
         assert self.order.total == self.op1.price + self.op2.price
 
-        t0 = self.order.transactions.all()[0]
+        t0 = self.order.transactions.filter(positionid=self.op1.positionid)[0]
         assert t0.item == self.ticket
         assert t0.price == Decimal('23.00')
         assert t0.count == 1
-        t1 = self.order.transactions.all()[2]
+        t1 = self.order.transactions.filter(positionid=self.op1.positionid)[1]
         assert t1.item == self.ticket
         assert t1.price == Decimal('23.00')
         assert t1.count == -1
-        t2 = self.order.transactions.all()[3]
+        t2 = self.order.transactions.filter(positionid=self.op1.positionid)[2]
         assert t2.item == self.shirt
         assert t2.price == Decimal('12.00')
         assert t2.count == 1

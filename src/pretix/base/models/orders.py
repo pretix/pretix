@@ -1075,6 +1075,7 @@ class Order(LockModel, LoggedModel):
                     fee_type=feetype,
                     internal_type=internaltype,
                 ))
+        create.sort(key=lambda t: (0 if t.count < 0 else 1, t.positionid or 0))
         if save:
             Transaction.objects.bulk_create(create)
         _transactions_mark_order_clean(self.pk)
