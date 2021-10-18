@@ -50,7 +50,7 @@ def _fail(message):
         if settings.SENTRY_ENABLED:
             import sentry_sdk
 
-            sentry_sdk.capture_message("You caught me!", "fatal")
+            sentry_sdk.capture_message(message, "fatal")
 
         logger.warning(message, stack_info=True)
 
