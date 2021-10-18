@@ -86,6 +86,12 @@ i.e. role, aria-labelledby, aria-modal and <button>
   // Build html for the lightbox and the overlay.
   // Attach event handlers to the new DOM elements. click click click
   Lightbox.prototype.build = function() {
+    var gettext = function (v) {
+      if (window.gettext) {
+        return window.gettext(v);
+      }
+      return v;
+    };
     var self = this;
     $('<div id="lightboxOverlay" class="lightboxOverlay"></div><div id="lightbox" class="lightbox" role="dialog" aria-labelledby="lightboxLabel" aria-modal="true"><div class="lb-outerContainer"><div class="lb-container"><img class="lb-image" src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" /><div class="lb-nav"><a class="lb-prev" href="" ></a><a class="lb-next" href="" ></a></div><div class="lb-loader"><a class="lb-cancel"></a></div></div></div><div class="lb-dataContainer"><div class="lb-data"><div class="lb-details" id="lightboxLabel"><span class="lb-caption"></span><span class="lb-number"></span></div><div class="lb-closeContainer"><button aria-label="'+gettext("close")+'" class="lb-close"></button></div></div></div></div>').appendTo($('body'));
 
