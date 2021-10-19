@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-10-17 14:56+0000\n"
-"PO-Revision-Date: 2021-10-18 19:00+0000\n"
-"Last-Translator: Tony Pavlik <kontakt@playton.cz>\n"
+"PO-Revision-Date: 2021-10-19 15:17+0000\n"
+"Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: Czech <https://translate.pretix.eu/projects/pretix/pretix/cs/>"
 "\n"
 "Language: cs\n"
@@ -2638,7 +2638,7 @@ msgstr "K prodeji čehokoli musíte nakonfigurovat alespoň jednu kvótu."
 #: pretix/base/models/event.py:1109
 #, python-brace-format
 msgid "You need to fill the meta parameter \"{property}\"."
-msgstr "Musíte vyplnit meta parametr \"{vlastnictví}\"."
+msgstr "Musíte vyplnit meta parametr \"{property}\"."
 
 #: pretix/base/models/event.py:1221
 msgid ""
@@ -5632,10 +5632,9 @@ msgid "Sample product A"
 msgstr ""
 
 #: pretix/base/services/invoices.py:471
-#, fuzzy, python-brace-format
-#| msgid "Invoice number"
+#, python-brace-format
 msgid "New invoice: {number}"
-msgstr "Číslo faktury"
+msgstr ""
 
 #: pretix/base/services/invoices.py:473
 #, python-brace-format
@@ -8377,10 +8376,9 @@ msgid "Do not copy"
 msgstr ""
 
 #: pretix/control/forms/event.py:312 pretix/control/forms/subevents.py:386
-#, fuzzy, python-brace-format
-#| msgid "Default list"
+#, python-brace-format
 msgid "Default ({value})"
-msgstr "Výchozí seznam"
+msgstr ""
 
 #: pretix/control/forms/event.py:364 pretix/control/forms/organizer.py:129
 msgid "Custom domain"
@@ -22151,10 +22149,9 @@ msgid "incl. %(tax_sum)s taxes"
 msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:388
-#, fuzzy, python-format
-#| msgid "The items in your cart are no longer reserved for you."
+#, python-format
 msgid "The items in your cart are reserved for you for %(minutes)s minutes."
-msgstr "Produkty v nákupním košíku již nejsou pro vás rezervovány."
+msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:392
 msgid ""
@@ -23217,10 +23214,9 @@ msgid "Registration"
 msgstr "Popis"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_registration.html:11
-#, fuzzy, python-format
-#| msgid "Create a new event"
+#, python-format
 msgid "Create a new account at %(org)s"
-msgstr "Vytvořit novou událost"
+msgstr ""
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_registration.html:24
 msgid "Log in to an existing account"
