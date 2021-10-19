@@ -53,32 +53,43 @@ class Command(BaseCommand):
             require_approval=False,
         ).prefetch_related(
             'all_positions', 'all_fees'
+        ).order_by(
+            'pk'
         )
-        for o in tqdm(qs):
-            if o.last_transaction is None:
-                tn = o.create_transactions(
-                    positions=o.all_positions.all(),
-                    fees=o.all_fees.all(),
-                    dt_now=o.datetime,
-                    migrated=True,
-                    is_new=True,
-                    _backfill_before_cancellation=True,
-                )
-                o.create_transactions(
-                    positions=o.all_positions.all(),
-                    fees=o.all_fees.all(),
-                    dt_now=o.cancellation_date or (o.expires if o.status == Order.STATUS_EXPIRED else o.datetime),
-                    migrated=True,
-                )
-            else:
-                tn = o.create_transactions(
-                    positions=o.all_positions.all(),
-                    fees=o.all_fees.all(),
-                    dt_now=now(),
-                    migrated=True,
-                )
-            if tn:
-                t += 1
-            time.sleep(options.get('slowdown', 0) / 1000)
+        last_pk = 0
+        with tqdm(total=qs.count()) as pbar:
+            while True:
+                batch = list(qs.filter(pk__gt=last_pk)[:5000])
+                if not batch:
+                    break
+
+                for o in batch:
+                    if o.last_transaction is None:
+                        tn = o.create_transactions(
+                            positions=o.all_positions.all(),
+                            fees=o.all_fees.all(),
+                            dt_now=o.datetime,
+                            migrated=True,
+                            is_new=True,
+                            _backfill_before_cancellation=True,
+                        )
+                        o.create_transactions(
+                            positions=o.all_positions.all(),
+                            fees=o.all_fees.all(),
+                            dt_now=o.cancellation_date or (o.expires if o.status == Order.STATUS_EXPIRED else o.datetime),
+                            migrated=True,
+                        )
+                    else:
+                        tn = o.create_transactions(
+                            positions=o.all_positions.all(),
+                            fees=o.all_fees.all(),
+                            dt_now=now(),
+                            migrated=True,
+                        )
+                    if tn:
+                        t += 1
+                    time.sleep(0)
+                    pbar.update(1)
+                last_pk = batch[-1].pk
 
         self.stderr.write(self.style.SUCCESS(f'Created transactions for {t} orders.'))
