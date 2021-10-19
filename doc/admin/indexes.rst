@@ -50,7 +50,7 @@ Here is the currently recommended set of commands::
     CREATE INDEX CONCURRENTLY pretix_addidx_orderpos_name
         ON pretixbase_orderposition
         USING gin (upper("attendee_name_cached") gin_trgm_ops);
-    CREATE INDEX CONCURRENTLY pretix_addidx_orderpos_scret
+    CREATE INDEX CONCURRENTLY pretix_addidx_orderpos_secret
         ON pretixbase_orderposition
         USING gin (upper("secret") gin_trgm_ops);
     CREATE INDEX CONCURRENTLY pretix_addidx_orderpos_email
