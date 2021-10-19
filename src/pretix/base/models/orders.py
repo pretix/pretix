@@ -1035,7 +1035,7 @@ class Order(LockModel, LoggedModel):
         # Count the transactions we already have
         current_transaction_count = Counter()
         if not is_new:
-            for t in self.transactions.all():
+            for t in Transaction.objects.filter(order=self):  # do not use related manager, we want to avoid cached data
                 current_transaction_count[Transaction.key(t)] += t.count
 
         # Count the transactions we'd actually need
