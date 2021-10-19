@@ -1709,6 +1709,17 @@ Best regards,
 Your {event} team"""))
     },
     'mail_days_order_expire_warning': {
+        'form_class': forms.IntegerField,
+        'serializer_class': serializers.IntegerField,
+        'serializer_kwargs': dict(
+            min_value=0,
+        ),
+        'form_kwargs': dict(
+            label=_("Number of days"),
+            min_value=0,
+            help_text=_("This email will be sent out this many days before the order expires. If the "
+                        "value is 0, the mail will never be sent.")
+        ),
         'type': int,
         'default': '3'
     },

@@ -704,6 +704,7 @@ class EventSettingsSerializer(SettingsSerializer):
         'payment_term_accept_late',
         'payment_explanation',
         'payment_pending_hidden',
+        'mail_days_order_expire_warning',
         'ticket_download',
         'ticket_download_date',
         'ticket_download_addons',
