@@ -25,7 +25,6 @@ from decimal import Decimal
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.formats import localize
-from django.utils.timezone import get_current_timezone, now
 from django.utils.translation import gettext_lazy as _, pgettext
 from i18nfield.fields import I18nCharField
 from i18nfield.strings import LazyI18nString
@@ -93,7 +92,7 @@ TAXED_ZERO = TaxedPrice(
 
 EU_COUNTRIES = {
     'AT', 'BE', 'BG', 'HR', 'CY', 'CZ', 'DK', 'EE', 'FI', 'FR', 'DE', 'GR', 'HU', 'IE', 'IT', 'LV', 'LT', 'LU', 'MT',
-    'NL', 'PL', 'PT', 'RO', 'SK', 'SI', 'ES', 'SE', 'GB'
+    'NL', 'PL', 'PT', 'RO', 'SK', 'SI', 'ES', 'SE',
 }
 EU_CURRENCIES = {
     'BG': 'BGN',
@@ -106,17 +105,21 @@ EU_CURRENCIES = {
     'RO': 'RON',
     'SE': 'SEK'
 }
+VAT_ID_COUNTRIES = EU_COUNTRIES | {'CH'}
 
 
 def is_eu_country(cc):
     cc = str(cc)
-    if cc == 'GB':
-        return now().astimezone(get_current_timezone()).year <= 2020
-    else:
-        return cc in EU_COUNTRIES
+    return cc in EU_COUNTRIES
+
+
+def ask_for_vat_id(cc):
+    cc = str(cc)
+    return cc in VAT_ID_COUNTRIES
 
 
 def cc_to_vat_prefix(country_code):
+    country_code = str(country_code)
     if country_code == 'GR':
         return 'EL'
     return country_code

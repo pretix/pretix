@@ -42,7 +42,6 @@ from datetime import datetime, time, timedelta
 from decimal import Decimal, DecimalException
 from urllib.parse import quote, urlencode
 
-import vat_moss.id
 from django import forms
 from django.conf import settings
 from django.contrib import messages
@@ -83,7 +82,7 @@ from pretix.base.models import (
 from pretix.base.models.orders import (
     CancellationRequest, OrderFee, OrderPayment, OrderPosition, OrderRefund,
 )
-from pretix.base.models.tax import cc_to_vat_prefix, is_eu_country
+from pretix.base.models.tax import is_eu_country
 from pretix.base.payment import PaymentException
 from pretix.base.secrets import assign_ticket_secret
 from pretix.base.services import tickets
@@ -103,6 +102,9 @@ from pretix.base.services.orders import (
     notify_user_changed_order, reactivate_order,
 )
 from pretix.base.services.stats import order_overview
+from pretix.base.services.tax import (
+    VATIDFinalError, VATIDTemporaryError, validate_vat_id,
+)
 from pretix.base.services.tickets import generate
 from pretix.base.signals import (
     order_modified, register_data_exporters, register_ticket_outputs,
@@ -1335,21 +1337,14 @@ class OrderCheckVATID(OrderView):
                                                'specified.'))
                 return redirect(self.get_order_url())
 
-            if ia.vat_id[:2] != cc_to_vat_prefix(str(ia.country)):
-                messages.error(self.request, _('Your VAT ID does not match the selected country.'))
-                return redirect(self.get_order_url())
-
             try:
-                result = vat_moss.id.validate(ia.vat_id)
-                if result:
-                    country_code, normalized_id, company_name = result
-                    ia.vat_id_validated = True
-                    ia.vat_id = normalized_id
-                    ia.save()
-            except vat_moss.errors.InvalidError:
-                messages.error(self.request, _('This VAT ID is not valid.'))
-            except vat_moss.errors.WebServiceUnavailableError:
-                logger.exception('VAT ID checking failed for country {}'.format(ia.country))
+                normalized_id = validate_vat_id(ia.vat_id, str(ia.country))
+                ia.vat_id_validated = True
+                ia.vat_id = normalized_id
+                ia.save()
+            except VATIDFinalError as e:
+                messages.error(self.request, e.message)
+            except VATIDTemporaryError:
                 messages.error(self.request, _('The VAT ID could not be checked, as the VAT checking service of '
                                                'the country is currently not available.'))
             else:
