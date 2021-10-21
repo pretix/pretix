@@ -6,13 +6,6 @@
     <form action="{{ request.get_full_path }}" method="post">
         {% csrf_token %}
         <div class="form-horizontal">
-            <div class="form-group">
-                <label class="col-md-3 control-label" for="input_product">{% trans "Product" %}</label>
-                <div class="col-md-9">
-                    <input id="input_product" class="form-control" readonly="readonly"
-                           value="{{ item.name }}{% if variation %} – {{ variation.value }}{% endif %}">
-                </div>
-            </div>
             {% if subevent %}
                 <div class="form-group">
                     <label class="col-md-3 control-label" for="input_subevent">{% trans "Event" %}</label>
