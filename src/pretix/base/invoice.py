@@ -595,7 +595,7 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
         table.setStyle(TableStyle(tstyledata))
         story.append(table)
 
-        story.append(Spacer(1, 15 * mm))
+        story.append(Spacer(1, 10 * mm))
 
         if self.invoice.payment_provider_text:
             story.append(Paragraph(
@@ -611,12 +611,14 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
                 self.invoice.additional_text,
                 self.stylesheet['Normal']
             ))
-            story.append(Spacer(1, 15 * mm))
+            story.append(Spacer(1, 5 * mm))
 
         tstyledata = [
             ('ALIGN', (1, 0), (-1, -1), 'RIGHT'),
             ('LEFTPADDING', (0, 0), (0, -1), 0),
             ('RIGHTPADDING', (-1, 0), (-1, -1), 0),
+            ('TOPPADDING', (0, 0), (-1, -1), 1),
+            ('BOTTOMPADDING', (0, 0), (-1, -1), 1),
             ('FONTSIZE', (0, 0), (-1, -1), 8),
             ('FONTNAME', (0, 0), (-1, -1), self.font_regular),
         ]
