@@ -9,6 +9,8 @@ If you host your own pretix instance, you also need to care about the availabili
 of your service and the safety of your data yourself. This page gives you some
 information that you might need to do so properly.
 
+.. _`backups`:
+
 Backups
 -------
 

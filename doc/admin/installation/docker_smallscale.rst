@@ -256,6 +256,8 @@ create an event and start selling tickets!
 
 You should probably read :ref:`maintainance` next.
 
+.. _`docker_updates`:
+
 Updates
 -------
 
@@ -270,6 +272,8 @@ Updates are fairly simple, but require at least a short downtime::
 Restarting the service can take a few seconds, especially if the update requires changes to the database.
 Replace ``stable`` above with a specific version number like ``1.0`` or with ``latest`` for the development
 version, if you want to.
+
+Make sure to also read :ref:`update_notes` and the release notes of the version you are updating to.
 
 .. _`docker_plugininstall`:
 

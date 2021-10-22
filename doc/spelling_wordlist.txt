@@ -17,6 +17,7 @@ bic
 BIC
 boolean
 booleans
+bugfix
 cancelled
 casted
 Ceph
@@ -77,6 +78,7 @@ mixin
 mixins
 multi
 multidomain
+multiplicator
 namespace
 namespaced
 namespaces

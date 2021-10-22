@@ -280,6 +280,8 @@ create an event and start selling tickets!
 
 You should probably read :ref:`maintainance` next.
 
+.. _`manual_updates`:
+
 Updates
 -------
 
@@ -294,6 +296,7 @@ To upgrade to a new pretix release, pull the latest code changes and run the fol
     (venv)$ python -m pretix updatestyles
     # systemctl restart pretix-web pretix-worker
 
+Make sure to also read :ref:`update_notes` and the release notes of the version you are updating to.
 
 .. _`manual_plugininstall`:
 

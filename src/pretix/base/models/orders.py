@@ -2392,7 +2392,7 @@ class Transaction(models.Model):
     the "other side" of the relationship, i.e. how much of the financial obligation has been met so far.
 
     However, while ``OrderPayment`` and ``OrderRefund`` objects are "final" and no longer change once they reached their
-    final state, ``Order``, ``OrderPosition`` and ``OrderFee`` are highly mutable and can chane at any time, e.g. if
+    final state, ``Order``, ``OrderPosition`` and ``OrderFee`` are highly mutable and can change at any time, e.g. if
     the customer moves their booking to a different day or a discount is applied retroactively.
 
     Therefore those models can be used to answer the question "how many tickets of type X have been sold for my event
