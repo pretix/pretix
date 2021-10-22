@@ -921,15 +921,17 @@ class BaseInvoiceAddressForm(forms.ModelForm):
         if not event.settings.invoice_address_vatid:
             del self.fields['vat_id']
         elif self.validate_vat_id:
-            self.fields['vat_id'].help_text = _(
-                'Optional, but depending on the country you reside in we might need to charge you '
-                'additional taxes if you do not enter it.'
-            )
+            self.fields['vat_id'].help_text = '<br/>'.join([
+                str(_('Optional, but depending on the country you reside in we might need to charge you '
+                      'additional taxes if you do not enter it.')),
+                str(_('If you are registered in Switzerland, you can enter your UID instead.')),
+            ])
         else:
-            self.fields['vat_id'].help_text = _(
-                'Optional, but you might be required for you to claim tax benefits on your invoice '
-                'depending on your country and the country of the seller.'
-            )
+            self.fields['vat_id'].help_text = '<br/>'.join([
+                str(_('Optional, but you might be required for you to claim tax benefits on your invoice '
+                      'depending on your country and the country of the seller.')),
+                str(_('If you are registered in Switzerland, you can enter your UID instead.')),
+            ])
 
         self.fields['country'].choices = CachedCountries()
 
