@@ -30,7 +30,7 @@ Upgrade to 4.4.0 or newer
 """""""""""""""""""""""""
 
 pretix 4.4 introduces a new data structure to store historical financial data. If you already have existing
-data in your database, you will need to backfill this data or you might get incorrect reports! This is not
+data in your database, you will need to back-fill this data or you might get incorrect reports! This is not
 done automatically as part of the usual update steps since it can take a while on large databases and you might
 want to do it in parallel while the system is already running again. Please execute the following command::
 
