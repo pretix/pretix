@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-10-17 14:56+0000\n"
-"PO-Revision-Date: 2019-09-24 19:00+0000\n"
-"Last-Translator: Serge Bazanski <q3k@hackerspace.pl>\n"
+"PO-Revision-Date: 2021-10-20 19:00+0000\n"
+"Last-Translator: Jacek Wielemborek <github@d33.pl>\n"
 "Language-Team: Polish <https://translate.pretix.eu/projects/pretix/pretix/pl/"
 ">\n"
 "Language: pl\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 3.5.1\n"
+"X-Generator: Weblate 4.8\n"
 
 #: htmlcov/pretix_control_views_dashboards_py.html:963
 #: pretix/control/templates/pretixcontrol/events/index.html:140
@@ -116,14 +116,14 @@ msgstr "Ogranicz do wydarzeń"
 
 #: pretix/api/serializers/cart.py:81 pretix/api/serializers/order.py:1196
 msgid "The product \"{}\" is not assigned to a quota."
-msgstr "Produkt \"{}\" nie jest jest przypisany do przydziału."
+msgstr "Produkt \"{}\" nie jest przypisany do przydziału."
 
 #: pretix/api/serializers/cart.py:89 pretix/api/serializers/order.py:1208
 msgid ""
 "There is not enough quota available on quota \"{}\" to perform the operation."
 msgstr ""
-"Nie ma wystarczający przydziału dostępnego w przydziale \"{}\" żeby dokonać "
-"tej operacji."
+"Nie ma wystarczającego przydziału dostępnego w puli \"{}\" żeby dokonać tej "
+"operacji."
 
 #: pretix/api/serializers/cart.py:125 pretix/api/serializers/order.py:1168
 #: pretix/base/services/orders.py:1245
@@ -144,17 +144,15 @@ msgid "The subevent does not belong to this event."
 msgstr "Podwydarzenie nie należy do tego wydarzenia."
 
 #: pretix/api/serializers/checkin.py:76
-#, fuzzy
-#| msgid "Sales channels"
 msgid "Unknown sales channel."
-msgstr "Kanały sprzedaży"
+msgstr "Nieznane kanały sprzedaży."
 
 #: pretix/api/serializers/event.py:205
 msgid ""
 "Events cannot be created as 'live'. Quotas and payment must be added to the "
 "event before sales can go live."
 msgstr ""
-"Wydarzenie nie może być oznaczone jako 'aktywne'. Przydziały i metoda "
+"Wydarzenie nie może być oznaczone jako \"aktywne\". Przydziały i metoda "
 "płatności muszą być dodane do wydarzenia zanim może rozpocząć się sprzedaż."
 
 #: pretix/api/serializers/event.py:220 pretix/api/serializers/event.py:513
@@ -163,10 +161,9 @@ msgid "Meta data property '{name}' does not exist."
 msgstr "Klucz metadanych '{name}' nie istnieje."
 
 #: pretix/api/serializers/event.py:223 pretix/api/serializers/event.py:516
-#, fuzzy, python-brace-format
-#| msgid "Meta data property '{name}' does not exist."
+#, python-brace-format
 msgid "Meta data property '{name}' does not allow value '{value}'."
-msgstr "Klucz metadanych '{name}' nie istnieje."
+msgstr "Klucz metadanych '{name}' nie przyjmuje wartości '{value}'."
 
 #: pretix/api/serializers/event.py:266
 #, python-brace-format
@@ -184,15 +181,11 @@ msgid "The bundled item must not have bundles on its own."
 msgstr ""
 
 #: pretix/api/serializers/item.py:191
-#, fuzzy
-#| msgid ""
-#| "Updating add-ons or variations via PATCH/PUT is not supported. Please use "
-#| "the dedicated nested endpoint."
 msgid ""
 "Updating add-ons, bundles, or variations via PATCH/PUT is not supported. "
 "Please use the dedicated nested endpoint."
 msgstr ""
-"Zmiana addonów lub wariavia via PATCH/PUT nie jest możliwa. Proszę użyć "
+"Zmiana addonów, ich kolekcji lub zmiany przez PATCH/PUT nie są możliwe. Użyj "
 "dedykowanego zagnieżdżonego endpointu."
 
 #: pretix/api/serializers/item.py:200 pretix/control/forms/item.py:566
@@ -231,13 +224,11 @@ msgstr "Wykryto zależność kołową pomiędzy pytaniami."
 
 #: pretix/api/serializers/item.py:392 pretix/control/forms/item.py:127
 msgid "This type of question cannot be asked during check-in."
-msgstr ""
+msgstr "Pytania tego typu nie mogą być zadawane podczas meldowania się."
 
 #: pretix/api/serializers/order.py:1181 pretix/api/serializers/order.py:1188
-#, fuzzy
-#| msgid "The product \"{}\" is not assigned to a quota."
 msgid "The product \"{}\" is not available on this date."
-msgstr "Produkt \"{}\" nie jest jest przypisany do przydziału."
+msgstr "Produkt \"{}\" nie jest przypisany do przydziału."
 
 #: pretix/api/serializers/organizer.py:120
 #: pretix/control/forms/organizer.py:496
