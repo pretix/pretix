@@ -42,7 +42,7 @@ from .notifications import NotificationSetting
 from .orders import (
     AbstractPosition, CachedCombinedTicket, CachedTicket, CartPosition,
     InvoiceAddress, Order, OrderFee, OrderPayment, OrderPosition, OrderRefund,
-    QuestionAnswer, RevokedTicketSecret, cachedcombinedticket_name,
+    QuestionAnswer, RevokedTicketSecret, Transaction, cachedcombinedticket_name,
     cachedticket_name, generate_position_secret, generate_secret,
 )
 from .organizer import (
