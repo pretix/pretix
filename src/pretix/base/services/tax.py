@@ -81,7 +81,7 @@ def _validate_vat_id_CH(vat_id, country_code):
     if vat_id[:3] != 'CHE':
         raise VATIDFinalError(_('Your VAT ID does not match the selected country.'))
 
-    vat_id = re.replace('HR', '').replace('MWST', '').sub('[^A-Z0-9]', '', vat_id)
+    vat_id = re.sub('[^A-Z0-9]', '', vat_id.replace('HR', '').replace('MWST', ''))
     try:
         transport = Transport(cache=SqliteCache())
         client = Client(

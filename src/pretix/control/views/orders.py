@@ -82,7 +82,7 @@ from pretix.base.models import (
 from pretix.base.models.orders import (
     CancellationRequest, OrderFee, OrderPayment, OrderPosition, OrderRefund,
 )
-from pretix.base.models.tax import is_eu_country
+from pretix.base.models.tax import ask_for_vat_id
 from pretix.base.payment import PaymentException
 from pretix.base.secrets import assign_ticket_secret
 from pretix.base.services import tickets
@@ -1332,9 +1332,8 @@ class OrderCheckVATID(OrderView):
                 messages.error(self.request, _('No country specified.'))
                 return redirect(self.get_order_url())
 
-            if not is_eu_country(ia.country):
-                messages.error(self.request, _('VAT ID could not be checked since a non-EU country has been '
-                                               'specified.'))
+            if not ask_for_vat_id(ia.country):
+                messages.error(self.request, _('VAT ID could not be checked since this country is not supported.'))
                 return redirect(self.get_order_url())
 
             try:
