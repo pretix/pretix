@@ -848,8 +848,7 @@ class OrderPositionViewSet(mixins.DestroyModelMixin, mixins.UpdateModelMixin, vi
         if self.request.query_params.get('pdf_data', 'false') == 'true':
             qs = qs.prefetch_related(
                 Prefetch('checkins', queryset=Checkin.objects.all()),
-                Prefetch('answers', queryset=QuestionAnswer.objects.order_by('answers__question__position')),
-                'answers__options', 'answers__question',
+                'answers', 'answers__options', 'answers__question',
                 Prefetch('addons', qs.select_related('item', 'variation')),
                 Prefetch('order', Order.objects.select_related('invoice_address').prefetch_related(
                     Prefetch(
