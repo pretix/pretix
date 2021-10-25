@@ -95,7 +95,7 @@ def _validate_vat_id_CH(vat_id, country_code):
         if e.message == 'Data_validation_failed':
             raise VATIDFinalError(_('This VAT ID is not valid. Please re-check your input.'))
         elif e.message == 'Request_limit_exceeded':
-            logger.exception('VAT ID checking failed for country {}'.format(country_code))
+            logger.exception('VAT ID checking failed for country {} due to request limit'.format(country_code))
             raise VATIDTemporaryError(_(
                 'Your VAT ID could not be checked, as the VAT checking service of '
                 'your country returned an incorrect result. We will therefore '
