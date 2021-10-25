@@ -373,7 +373,7 @@ DEFAULTS = {
         'form_kwargs': dict(
             label=_("Ask for VAT ID"),
             help_text=format_lazy(
-                _("Does only work if an invoice address is asked for. VAT ID is never required and only asked for "
+                _("Only works if an invoice address is asked for. VAT ID is never required and only requested from "
                   "business customers in the following countries: {countries}"),
                 countries=lazy(lambda *args: ', '.join(sorted(gettext(Country(cc).name) for cc in VAT_ID_COUNTRIES)), str)()
             ),
