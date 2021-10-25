@@ -19,6 +19,7 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
+import base64
 from collections import OrderedDict
 from urllib.parse import urlsplit
 
@@ -29,6 +30,7 @@ from django.middleware.common import CommonMiddleware
 from django.urls import get_script_prefix
 from django.utils import timezone, translation
 from django.utils.cache import patch_vary_headers
+from django.utils.crypto import get_random_string
 from django.utils.deprecation import MiddlewareMixin
 from django.utils.translation import LANGUAGE_SESSION_KEY
 from django.utils.translation.trans_real import (
@@ -226,6 +228,9 @@ class SecurityMiddleware(MiddlewareMixin):
         '/api/v1/docs/',
     )
 
+    def process_request(self, request: HttpRequest):
+        request.csp_nonce = base64.b64encode(get_random_string(length=128).encode()).decode()
+
     def process_response(self, request, resp):
         if settings.DEBUG and resp.status_code >= 400:
             # Don't use CSP on debug error page as it breaks of Django's fancy error
@@ -246,10 +251,10 @@ class SecurityMiddleware(MiddlewareMixin):
 
         h = {
             'default-src': ["{static}"],
-            'script-src': ['{static}', 'https://checkout.stripe.com', 'https://js.stripe.com'],
+            'script-src': ['{static}', 'https://checkout.stripe.com', 'https://js.stripe.com', "'nonce-{}'".format(request.csp_nonce)],
             'object-src': ["'none'"],
-            'frame-src': ['{static}', 'https://checkout.stripe.com', 'https://js.stripe.com'],
-            'style-src': ["{static}", "{media}"],
+            'frame-src': ['{static}', 'https://checkout.stripe.com', 'https://js.stripe.com', "'nonce-{}'".format(request.csp_nonce)],
+            'style-src': ["{static}", "{media}", "'nonce-{}'".format(request.csp_nonce)],
             'connect-src': ["{dynamic}", "{media}", "https://checkout.stripe.com"],
             'img-src': ["{static}", "{media}", "data:", "https://*.stripe.com"] + img_src,
             'font-src': ["{static}"],
