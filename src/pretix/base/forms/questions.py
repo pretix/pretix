@@ -928,8 +928,8 @@ class BaseInvoiceAddressForm(forms.ModelForm):
             ])
         else:
             self.fields['vat_id'].help_text = '<br/>'.join([
-                str(_('Optional, but you might be required for you to claim tax benefits on your invoice '
-                      'depending on your country and the country of the seller.')),
+                str(_('Optional, but it might be required for you to claim tax benefits on your invoice '
+                      'depending on your and the seller’s country of residence.')),
                 str(_('If you are registered in Switzerland, you can enter your UID instead.')),
             ])
 
