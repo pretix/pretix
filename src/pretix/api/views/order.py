@@ -214,7 +214,7 @@ class OrderViewSet(viewsets.ModelViewSet):
                     'positions',
                     opq.all().prefetch_related(
                         Prefetch('checkins', queryset=Checkin.objects.all()),
-                        'item', 'variation', 
+                        'item', 'variation',
                         Prefetch('answers', queryset=QuestionAnswer.objects.prefetch_related('options', 'question').order_by('question__position')),
                         'seat',
                     )
