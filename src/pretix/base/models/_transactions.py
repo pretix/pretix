@@ -60,10 +60,10 @@ def _check_for_dirty_orders():
         dirty_transactions.order_ids = set()
     if dirty_transactions.order_ids and dirty_transactions.order_ids != {None}:
         _fail(
-            "In the transaction that just ended, you created or modified an Order, OrderPosition, or OrderFee "
-            "object in a way that you should have called `order.create_transactions()` afterwards. The transaction "
-            "still went through and your data can be fixed with the `create_order_transactions` management command "
-            "but you should update your code to prevent this from happening."
+            f"In the transaction that just ended, you created or modified an Order, OrderPosition, or OrderFee "
+            f"object in a way that you should have called `order.create_transactions()` afterwards. The transaction "
+            f"still went through and your data can be fixed with the `create_order_transactions` management command "
+            f"but you should update your code to prevent this from happening. Affected order IDs: {dirty_transactions.order_ids}"
         )
     dirty_transactions.order_ids.clear()
 
