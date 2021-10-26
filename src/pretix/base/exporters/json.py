@@ -55,16 +55,20 @@ class JSONExporter(BaseExporter):
                     'name': str(self.event.organizer.name),
                     'slug': self.event.organizer.slug
                 },
+                'meta_data': self.event.meta_data,
                 'categories': [
                     {
                         'id': category.id,
                         'name': str(category.name),
+                        'description': str(category.description),
+                        'position': category.position,
                         'internal_name': category.internal_name
                     } for category in self.event.categories.all()
                 ],
                 'items': [
                     {
                         'id': item.id,
+                        'position': item.position,
                         'name': str(item.name),
                         'internal_name': str(item.internal_name),
                         'category': item.category_id,
@@ -73,13 +77,35 @@ class JSONExporter(BaseExporter):
                         'tax_name': str(item.tax_rule.name) if item.tax_rule else None,
                         'admission': item.admission,
                         'active': item.active,
+                        'sales_channels': item.sales_channels,
+                        'description': str(item.description),
+                        'available_from': item.available_from,
+                        'available_until': item.available_until,
+                        'require_voucher': item.require_voucher,
+                        'hide_without_voucher': item.hide_without_voucher,
+                        'allow_cancel': item.allow_cancel,
+                        'require_bundling': item.require_bundling,
+                        'min_per_order': item.min_per_order,
+                        'max_per_order': item.max_per_order,
+                        'checkin_attention': item.checkin_attention,
+                        'original_price': item.original_price,
+                        'issue_giftcard': item.issue_giftcard,
+                        'meta_data': item.meta_data,
+                        'require_membership': item.require_membership,
                         'variations': [
                             {
                                 'id': variation.id,
                                 'active': variation.active,
                                 'price': variation.default_price if variation.default_price is not None else
                                 item.default_price,
-                                'name': str(variation)
+                                'name': str(variation),
+                                'description': str(variation.description),
+                                'position': variation.position,
+                                'require_membership': variation.require_membership,
+                                'sales_channels': variation.sales_channels,
+                                'available_from': variation.available_from,
+                                'available_until': variation.available_until,
+                                'hide_without_voucher': variation.hide_without_voucher,
                             } for variation in item.variations.all()
                         ]
                     } for item in self.event.items.select_related('tax_rule').prefetch_related('variations')
@@ -87,7 +113,13 @@ class JSONExporter(BaseExporter):
                 'questions': [
                     {
                         'id': question.id,
+                        'identifier': question.identifier,
+                        'required': question.required,
                         'question': str(question.question),
+                        'position': question.position,
+                        'hidden': question.hidden,
+                        'ask_during_checkin': question.ask_during_checkin,
+                        'help_text': str(question.help_text),
                         'type': question.type
                     } for question in self.event.questions.all()
                 ],
@@ -95,7 +127,18 @@ class JSONExporter(BaseExporter):
                     {
                         'code': order.code,
                         'status': order.status,
+                        'customer': order.customer.identifier if order.customer else None,
+                        'testmode': order.testmode,
                         'user': order.email,
+                        'email': order.email,
+                        'phone': str(order.phone),
+                        'locale': order.locale,
+                        'comment': order.comment,
+                        'custom_followup_at': order.custom_followup_at,
+                        'require_approval': order.require_approval,
+                        'checkin_attention': order.checkin_attention,
+                        'sales_channel': order.sales_channel,
+                        'expires': order.expires,
                         'datetime': order.datetime,
                         'fees': [
                             {
@@ -108,11 +151,21 @@ class JSONExporter(BaseExporter):
                         'positions': [
                             {
                                 'id': position.id,
+                                'positionid': position.positionid,
                                 'item': position.item_id,
                                 'variation': position.variation_id,
+                                'subevent': position.subevent_id,
+                                'seat': position.seat.seat_guid if position.seat else None,
                                 'price': position.price,
+                                'tax_rate': position.tax_rate,
+                                'tax_value': position.tax_value,
                                 'attendee_name': position.attendee_name,
                                 'attendee_email': position.attendee_email,
+                                'company': position.company,
+                                'street': position.street,
+                                'zipcode': position.zipcode,
+                                'country': str(position.country) if position.country else None,
+                                'state': position.state,
                                 'secret': position.secret,
                                 'addon_to': position.addon_to_id,
                                 'answers': [
@@ -124,15 +177,30 @@ class JSONExporter(BaseExporter):
                             } for position in order.positions.all()
                         ]
                     } for order in
-                    self.event.orders.all().prefetch_related('positions', 'positions__answers', 'fees')
+                    self.event.orders.all().prefetch_related('positions', 'positions__answers', 'positions__seat', 'customer', 'fees')
                 ],
                 'quotas': [
                     {
                         'id': quota.id,
                         'size': quota.size,
+                        'subevent': quota.subevent_id,
                         'items': [item.id for item in quota.items.all()],
                         'variations': [variation.id for variation in quota.variations.all()],
                     } for quota in self.event.quotas.all().prefetch_related('items', 'variations')
+                ],
+                'subevents': [
+                    {
+                        'id': se.id,
+                        'name': str(se.name),
+                        'location': str(se.location),
+                        'date_from': se.date_from,
+                        'date_to': se.date_to,
+                        'date_admission': se.date_admission,
+                        'geo_lat': se.geo_lat,
+                        'geo_lon': se.geo_lon,
+                        'is_public': se.is_public,
+                        'meta_data': se.meta_data,
+                    } for se in self.event.subevents.all()
                 ]
             }
         }

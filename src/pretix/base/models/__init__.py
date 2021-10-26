@@ -42,8 +42,9 @@ from .notifications import NotificationSetting
 from .orders import (
     AbstractPosition, CachedCombinedTicket, CachedTicket, CartPosition,
     InvoiceAddress, Order, OrderFee, OrderPayment, OrderPosition, OrderRefund,
-    QuestionAnswer, RevokedTicketSecret, Transaction, cachedcombinedticket_name,
-    cachedticket_name, generate_position_secret, generate_secret,
+    QuestionAnswer, RevokedTicketSecret, Transaction,
+    cachedcombinedticket_name, cachedticket_name, generate_position_secret,
+    generate_secret,
 )
 from .organizer import (
     Organizer, Organizer_SettingsStore, Team, TeamAPIToken, TeamInvite,
