@@ -816,10 +816,10 @@ class DayCalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
         )
 
         ebd = self._events_by_day(before, after)
-        events, start, end = self._rasterize_events(ebd[self.date])
-        if not events:
+        if not ebd[self.date]:
             return ctx
 
+        events, start, end = self._rasterize_events(ebd[self.date])
         shortest_duration = self._get_shortest_duration(events).total_seconds() // 60
 
         ctx["calendar_duration"] = self._get_time_duration(start, end)
