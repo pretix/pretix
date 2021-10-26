@@ -840,10 +840,10 @@ class DayCalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
         midnight = time(0, 0)
         return datetime.utcfromtimestamp(
             (datetime.combine(
-                date.today() if end != midnight else date.today() + timedelta(days=1),
+                self.date if end != midnight else self.date + timedelta(days=1),
                 end
             ) - datetime.combine(
-                date.today(),
+                self.date,
                 start
             )).total_seconds()
         )
@@ -899,10 +899,10 @@ class DayCalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
 
             e["duration_rastered"] = datetime.utcfromtimestamp(
                 (datetime.combine(
-                    date.today() if e["time_end_today_rastered"] != midnight else date.today() + timedelta(days=1),
+                    self.date if e["time_end_today_rastered"] != midnight else self.date + timedelta(days=1),
                     e["time_end_today_rastered"]
                 ) - datetime.combine(
-                    date.today(),
+                    self.date,
                     e['time_rastered']
                 )).total_seconds()
             )
@@ -917,12 +917,12 @@ class DayCalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
         midnight = time(0, 0)
         durations = [
             datetime.combine(
-                date.today() if e.get('time_end_today') and e['time_end_today'] != midnight else date.today() + timedelta(days=1),
+                self.date if e.get('time_end_today') and e['time_end_today'] != midnight else self.date + timedelta(days=1),
                 e['time_end_today'] if e.get('time_end_today') else time(0, 0)
             )
             -
             datetime.combine(
-                date.today(),
+                self.date,
                 time(0, 0) if e['continued'] else e['time']
             )
             for e in events
@@ -950,8 +950,8 @@ class DayCalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
 
         # convert time to datetime for timedelta calc
         # TODO: date.today should be replaced with currently displayed day as of daylight-savings having multiple hours twice
-        start = datetime.combine(date.today(), start)
-        end = datetime.combine(date.today(), end)
+        start = datetime.combine(self.date, start)
+        end = datetime.combine(self.date, end)
         if end < start:
             end = end + timedelta(days=1)
 
