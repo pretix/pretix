@@ -197,15 +197,15 @@ concurrency has two meanings:
 [data-offset$="55"] {--offset-minute: 55}
 
 /* minute based micro adjustment offset from 5-minute raster */
-[data-offset-start="1"] {--offset-start: 1}
-[data-offset-start="2"] {--offset-start: 2}
-[data-offset-start="3"] {--offset-start: 3}
-[data-offset-start="4"] {--offset-start: 4}
+[data-offset-shift^="1"] {--offset-start: 1}
+[data-offset-shift^="2"] {--offset-start: 2}
+[data-offset-shift^="3"] {--offset-start: 3}
+[data-offset-shift^="4"] {--offset-start: 4}
 
-[data-offset-end="1"] {--offset-end: 1}
-[data-offset-end="2"] {--offset-end: 2}
-[data-offset-end="3"] {--offset-end: 3}
-[data-offset-end="4"] {--offset-end: 4}
+[data-offset-shift$="1"] {--offset-end: 1}
+[data-offset-shift$="2"] {--offset-end: 2}
+[data-offset-shift$="3"] {--offset-end: 3}
+[data-offset-shift$="4"] {--offset-end: 4}
 
 
 [data-duration^="00"] {--duration-hour: 0}

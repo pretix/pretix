@@ -873,16 +873,16 @@ class DayCalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
 
         midnight = time(0, 0)
         for e in events:
-            e["raster_offset_start"] = 0
+            e["offset_shift_start"] = 0
             if e["continued"]:
                 e["time_rastered"] = midnight
             elif e["time"].minute % raster_size:
                 e["time_rastered"] = e["time"].replace(minute=(e["time"].minute // raster_size) * raster_size)
-                e["raster_offset_start"] = e["time"].minute % raster_size
+                e["offset_shift_start"] = e["time"].minute % raster_size
             else:
                 e["time_rastered"] = e["time"]
 
-            e["raster_offset_end"] = 0
+            e["offset_shift_end"] = 0
             if "time_end_today" in e:
                 if e["time_end_today"].minute % raster_size:
                     minute = math.ceil(e["time_end_today"].minute / raster_size) * raster_size
@@ -891,7 +891,7 @@ class DayCalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
                         minute = minute % 60
                         hour = hour + 1
                     e["time_end_today_rastered"] = e["time_end_today"].replace(minute=minute, hour=hour)
-                    e["raster_offset_end"] = raster_size - e["time_end_today"].minute % raster_size
+                    e["offset_shift_end"] = raster_size - e["time_end_today"].minute % raster_size
                 else:
                     e["time_end_today_rastered"] = e["time_end_today"]
             else:
