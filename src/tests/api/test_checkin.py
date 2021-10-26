@@ -688,6 +688,19 @@ def test_by_secret_special_chars(token_client, organizer, clist, event, order):
 
 
 @pytest.mark.django_db
+def test_by_secret_special_chars_space_fallback(token_client, organizer, clist, event, order):
+    with scopes_disabled():
+        p = order.positions.first()
+    p.secret = "foo bar"
+    p.save()
+    resp = token_client.post('/api/v1/organizers/{}/events/{}/checkinlists/{}/positions/{}/redeem/'.format(
+        organizer.slug, event.slug, clist.pk, "foo+bar"
+    ), {}, format='json')
+    assert resp.status_code == 201
+    assert resp.data['status'] == 'ok'
+
+
+@pytest.mark.django_db
 def test_only_once(token_client, organizer, clist, event, order):
     with scopes_disabled():
         p = order.positions.first()

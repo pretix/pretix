@@ -430,7 +430,13 @@ class CheckinListPositionViewSet(viewsets.ReadOnlyModelViewSet):
             if self.kwargs['pk'].isnumeric():
                 op = queryset.get(Q(pk=self.kwargs['pk']) | Q(secret=self.kwargs['pk']))
             else:
-                op = queryset.get(secret=self.kwargs['pk'])
+                # In application/x-www-form-urlencoded, you can encodes space ' ' with '+' instead of '%20'.
+                # `id`, however, is part of a path where this technically is not allowed. Old versions of our
+                # scan apps still do it, so we try work around it!
+                try:
+                    op = queryset.get(secret=self.kwargs['pk'])
+                except OrderPosition.DoesNotExist:
+                    op = queryset.get(secret=self.kwargs['pk'].replace('+', ' '))
         except OrderPosition.DoesNotExist:
             revoked_matches = list(self.request.event.revoked_secrets.filter(secret=self.kwargs['pk']))
             if len(revoked_matches) == 0:
