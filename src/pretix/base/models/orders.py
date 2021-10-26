@@ -458,7 +458,7 @@ class Order(LockModel, LoggedModel):
         update_fields = kwargs.get('update_fields', [])
         if 'require_approval' not in self.get_deferred_fields() and 'status' not in self.get_deferred_fields():
             status_paid_or_pending = self.status in (Order.STATUS_PENDING, Order.STATUS_PAID) and not self.require_approval
-            if status_paid_or_pending != self.__initial_status_paid_or_pending or not self.pk:
+            if status_paid_or_pending != self.__initial_status_paid_or_pending:
                 _transactions_mark_order_dirty(self.pk, using=kwargs.get('using', None))
         elif (
             not kwargs.get('force_save_with_deferred_fields', None) and

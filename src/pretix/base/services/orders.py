@@ -284,6 +284,7 @@ def approve_order(order, user=None, send_mail: bool=True, auth=None, force=False
         order.require_approval = False
         order.set_expires(now(), order.event.subevents.filter(id__in=[p.subevent_id for p in order.positions.all()]))
         order.save(update_fields=['require_approval', 'expires'])
+        order.create_transactions()
 
         order.log_action('pretix.event.order.approved', user=user, auth=auth)
         if order.total == Decimal('0.00'):
@@ -297,7 +298,6 @@ def approve_order(order, user=None, send_mail: bool=True, auth=None, force=False
                 p.confirm(send_mail=False, count_waitinglist=False, user=user, auth=auth, ignore_date=True, force=force)
             except Quota.QuotaExceededException:
                 raise OrderError(error_messages['unavailable'])
-        order.create_transactions()
 
     order_approved.send(order.event, order=order)
 
@@ -424,6 +424,7 @@ def _cancel_order(order, user=None, send_mail: bool=True, api_token=None, device
                 m.canceled = True
                 m.save()
 
+        transaction_args = {}
         if cancellation_fee:
             with order.event.lock():
                 for position in order.positions.all():
@@ -458,7 +459,7 @@ def _cancel_order(order, user=None, send_mail: bool=True, api_token=None, device
                 order.total = cancellation_fee
                 order.cancellation_date = now()
                 order.save(update_fields=['status', 'cancellation_date', 'total'])
-                order.create_transactions(positions=[])
+                transaction_args['positions'] = []
 
             if cancel_invoice and i:
                 invoices.append(generate_invoice(order))
@@ -467,7 +468,6 @@ def _cancel_order(order, user=None, send_mail: bool=True, api_token=None, device
                 order.status = Order.STATUS_CANCELED
                 order.cancellation_date = now()
                 order.save(update_fields=['status', 'cancellation_date'])
-            order.create_transactions()
 
             for position in order.positions.all():
                 assign_ticket_secret(
@@ -479,6 +479,8 @@ def _cancel_order(order, user=None, send_mail: bool=True, api_token=None, device
         order.log_action('pretix.event.order.canceled', user=user, auth=api_token or oauth_application or device,
                          data={'cancellation_fee': cancellation_fee})
         order.cancellation_requests.all().delete()
+
+        order.create_transactions(*transaction_args)
 
         if send_mail:
             email_template = order.event.settings.mail_text_order_canceled
