@@ -34,6 +34,8 @@ register = template.Library()
 def money_filter(value: Decimal, arg='', hide_currency=False):
     if isinstance(value, (float, int)):
         value = Decimal(value)
+    if value is None:
+        value = Decimal('0.00')
     if not isinstance(value, Decimal):
         if value == '':
             return value
