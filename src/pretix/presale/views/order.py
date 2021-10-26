@@ -38,7 +38,7 @@ import json
 import mimetypes
 import os
 import re
-from collections import OrderedDict
+from collections import OrderedDict, defaultdict
 from decimal import Decimal
 
 from django import forms
@@ -65,6 +65,7 @@ from pretix.base.models.orders import (
     CachedCombinedTicket, InvoiceAddress, OrderFee, OrderPayment, OrderRefund,
     QuestionAnswer,
 )
+from pretix.base.models.tax import TaxedPrice
 from pretix.base.payment import PaymentException
 from pretix.base.services.invoices import (
     generate_cancellation, generate_invoice, invoice_pdf, invoice_pdf_task,
@@ -90,6 +91,7 @@ from pretix.presale.signals import question_form_fields_overrides
 from pretix.presale.views import (
     CartMixin, EventViewMixin, iframe_entry_view_wrapper,
 )
+from pretix.presale.views.event import get_grouped_items
 from pretix.presale.views.robots import NoSearchIndexViewMixin
 
 
@@ -1180,10 +1182,11 @@ class OrderChange(EventViewMixin, OrderDetailMixin, TemplateView):
     def positions(self):
         positions = list(
             self.order.positions.select_related('item', 'item__tax_rule').prefetch_related(
-                'item__variations',
+                'item__variations', 'addons',
             )
         )
         quota_cache = {}
+        item_cache = {}
         try:
             ia = self.order.invoice_address
         except InvoiceAddress.DoesNotExist:
@@ -1192,6 +1195,85 @@ class OrderChange(EventViewMixin, OrderDetailMixin, TemplateView):
             p.form = OrderPositionChangeForm(prefix='op-{}'.format(p.pk), instance=p,
                                              invoice_address=ia, event=self.request.event, quota_cache=quota_cache,
                                              data=self.request.POST if self.request.method == "POST" else None)
+
+            if p.addon_to_id is None:
+                p.addon_form = {
+                    'pos': p,
+                    'categories': []
+                }
+                current_addon_products = defaultdict(list)
+                for a in p.addons.all():
+                    # todo: if not a.is_bundled:
+                    current_addon_products[a.item_id, a.variation_id].append(a)
+
+                for iao in p.item.addons.all():
+                    ckey = '{}-{}'.format(p.subevent.pk if p.subevent else 0, iao.addon_category.pk)
+
+                    if ckey not in item_cache:
+                        # Get all items to possibly show
+                        items, _btn = get_grouped_items(
+                            self.request.event,
+                            subevent=p.subevent,
+                            voucher=None,
+                            channel=self.order.sales_channel,
+                            base_qs=iao.addon_category.items,
+                            allow_addons=True,
+                            quota_cache=quota_cache,
+                            memberships=(
+                                self.request.customer.usable_memberships(
+                                    for_event=p.subevent or self.request.event,
+                                    testmode=self.order.testmode
+                                )
+                                if self.order.customer else None
+                            ),
+                        )
+                        item_cache[ckey] = items
+                    else:
+                        items = item_cache[ckey]
+
+                    for i in items:
+                        i.allow_waitinglist = False
+
+                        if i.has_variations:
+                            for v in i.available_variations:
+                                v.initial = len(current_addon_products[i.pk, v.pk])
+                                if v.initial and i.free_price:
+                                    a = current_addon_products[i.pk, v.pk][0]
+                                    v.initial_price = TaxedPrice(
+                                        net=a.price - a.tax_value,
+                                        gross=a.price,
+                                        tax=a.tax_value,
+                                        name=a.item.tax_rule.name if a.item.tax_rule else "",
+                                        rate=a.tax_rate,
+                                    )
+                                else:
+                                    v.initial_price = v.display_price
+                            i.expand = any(v.initial for v in i.available_variations)
+                        else:
+                            i.initial = len(current_addon_products[i.pk, None])
+                            if i.initial and i.free_price:
+                                a = current_addon_products[i.pk, None][0]
+                                i.initial_price = TaxedPrice(
+                                    net=a.price - a.tax_value,
+                                    gross=a.price,
+                                    tax=a.tax_value,
+                                    name=a.item.tax_rule.name if a.item.tax_rule else "",
+                                    rate=a.tax_rate,
+                                )
+                            else:
+                                i.initial_price = i.display_price
+
+                    if items:
+                        p.addon_form['categories'].append({
+                            'category': iao.addon_category,
+                            'price_included': iao.price_included,
+                            'multi_allowed': iao.multi_allowed,
+                            'min_count': iao.min_count,
+                            'max_count': iao.max_count,
+                            'iao': iao,
+                            'items': items
+                        })
+
         return positions
 
     def _process_change(self, ocm):

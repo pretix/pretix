@@ -11,7 +11,7 @@
     </h2>
     <form method="post" href="">
         {% csrf_token %}
-        {% for position, positions in formgroups.items %}
+        {% for position, addon_positions in formgroups.items %}
             <div class="panel panel-default items">
                 <div class="panel-heading">
                     <h3 class="panel-title">
@@ -23,41 +23,44 @@
                 </div>
                 <div class="panel-body">
                     <div class="form-order-change form-horizontal">
-                        {% if position.subevent %}
-                            <div class="form-group">
-                                <label class="col-md-3 control-label">
-                                    {% trans "Date" context "subevent" %}
-                                </label>
-                                <div class="col-md-9 form-control-text">
-                                    <ul class="addon-list">
-                                        {{ pos.subevent.name }} &middot; {{ pos.subevent.get_date_range_display_as_html }}
-                                        {% if pos.event.settings.show_times %}
-                                            <span class="fa fa-clock-o" aria-hidden="true"></span>
-                                            {{ pos.subevent.date_from|date:"TIME_FORMAT" }}
-                                        {% endif %}
-                                    </ul>
-                                </div>
-                            </div>
-                        {% endif %}
-
-                        {% for p in positions %}
-                            {% if p.pk != position.pk %}
-                                {# Add-Ons #}
-                                <legend>+ {{ p.item.name }}{% if p.variation %} – {{ p.variation.value }}{% endif %}</legend>
-                            {% endif %}
-                            {% if p.attendee_name %}
+                        <div class="form-order-change-main">
+                            {% if position.subevent %}
                                 <div class="form-group">
                                     <label class="col-md-3 control-label">
-                                        {% trans "Attendee name" %}
+                                        {% trans "Date" context "subevent" %}
                                     </label>
                                     <div class="col-md-9 form-control-text">
-                                        {{ p.attendee_name }}
+                                        <ul class="addon-list">
+                                            {{ pos.subevent.name }} &middot; {{ pos.subevent.get_date_range_display_as_html }}
+                                            {% if pos.event.settings.show_times %}
+                                                <span class="fa fa-clock-o" aria-hidden="true"></span>
+                                                {{ pos.subevent.date_from|date:"TIME_FORMAT" }}
+                                            {% endif %}
+                                        </ul>
                                     </div>
                                 </div>
                             {% endif %}
-                            {% bootstrap_form p.form layout="checkout" %}
-                        {% endfor %}
+
+                            {% for p in addon_positions %}
+                                {% if p.pk != position.pk %}
+                                    {# Add-Ons #}
+                                    <legend>+ {{ p.item.name }}{% if p.variation %} – {{ p.variation.value }}{% endif %}</legend>
+                                {% endif %}
+                                {% if p.attendee_name %}
+                                    <div class="form-group">
+                                        <label class="col-md-3 control-label">
+                                            {% trans "Attendee name" %}
+                                        </label>
+                                        <div class="col-md-9 form-control-text">
+                                            {{ p.attendee_name }}
+                                        </div>
+                                    </div>
+                                {% endif %}
+                                {% bootstrap_form p.form layout="checkout" %}
+                            {% endfor %}
+                        </div>
                     </div>
+                    {% include "pretixpresale/event/fragment_addon_choice.html" with form=position.addon_form %}
                 </div>
             </div>
         {% endfor %}

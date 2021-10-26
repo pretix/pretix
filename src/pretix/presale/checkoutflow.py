@@ -475,7 +475,7 @@ class AddOnsStep(CartMixin, AsyncAction, TemplateFlowStep):
             'item__addons', 'item__addons__addon_category', 'addons', 'addons__variation',
         ).order_by('pk'):
             formsetentry = {
-                'cartpos': cartpos,
+                'pos': cartpos,
                 'item': cartpos.item,
                 'variation': cartpos.variation,
                 'categories': []
@@ -648,7 +648,7 @@ class AddOnsStep(CartMixin, AsyncAction, TemplateFlowStep):
 
                 for (i, v), (c, price) in selected.items():
                     data.append({
-                        'addon_to': f['cartpos'].pk,
+                        'addon_to': f['pos'].pk,
                         'item': i.pk,
                         'variation': v.pk if v else None,
                         'count': c,
