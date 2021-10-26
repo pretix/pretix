@@ -946,7 +946,7 @@ class DayCalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
         ticks = []
         tick_durations = [15, 30, 60]
         # Print a time tick every tick_duration. Pick the next big tick_duration based on shortest_duration
-        tick_duration = timedelta(minutes = next((d for d in tick_durations if d >= shortest_duration), tick_durations[-1]))
+        tick_duration = timedelta(minutes=next((d for d in tick_durations if d >= shortest_duration), tick_durations[-1]))
 
         # convert time to datetime for timedelta calc
         # TODO: date.today should be replaced with currently displayed day as of daylight-savings having multiple hours twice
@@ -997,7 +997,7 @@ class DayCalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
         # for better keyboard-tab-order in html
         for collection in rows_by_collection:
             for i, row in enumerate(rows_by_collection[collection]):
-                concurrency = i+1
+                concurrency = i + 1
                 for e in row:
                     e["concurrency"] = concurrency
             rows_by_collection[collection] = {
