@@ -2612,8 +2612,7 @@ class InvoiceAddress(models.Model):
     country = FastCountryField(verbose_name=_('Country'), blank=False, blank_label=_('Select country'),
                                countries=CachedCountries)
     state = models.CharField(max_length=255, verbose_name=pgettext_lazy('address', 'State'), blank=True)
-    vat_id = models.CharField(max_length=255, blank=True, verbose_name=_('VAT ID'),
-                              help_text=_('Only for business customers within the EU.'))
+    vat_id = models.CharField(max_length=255, blank=True, verbose_name=_('VAT ID'))
     vat_id_validated = models.BooleanField(default=False)
     custom_field = models.CharField(max_length=255, null=True, blank=True)
     internal_reference = models.TextField(

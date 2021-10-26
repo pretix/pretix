@@ -37,13 +37,10 @@ import json
 import logging
 from decimal import Decimal
 from io import BytesIO
-from urllib.error import HTTPError
 
 import dateutil.parser
 import pycountry
 import pytz
-import vat_moss.errors
-import vat_moss.id
 from babel import Locale
 from django import forms
 from django.conf import settings
@@ -76,8 +73,9 @@ from pretix.base.i18n import (
     get_babel_locale, get_language_without_region, language,
 )
 from pretix.base.models import InvoiceAddress, Question, QuestionOption
-from pretix.base.models.tax import (
-    EU_COUNTRIES, cc_to_vat_prefix, is_eu_country,
+from pretix.base.models.tax import VAT_ID_COUNTRIES, ask_for_vat_id
+from pretix.base.services.tax import (
+    VATIDFinalError, VATIDTemporaryError, validate_vat_id,
 )
 from pretix.base.settings import (
     COUNTRIES_WITH_STATE_IN_ADDRESS, PERSON_NAME_SALUTATIONS,
@@ -902,7 +900,7 @@ class BaseInvoiceAddressForm(forms.ModelForm):
                 'data-display-dependency': '#id_is_business_1',
                 'autocomplete': 'organization',
             }),
-            'vat_id': forms.TextInput(attrs={'data-display-dependency': '#id_is_business_1', 'data-countries-in-eu': ','.join(EU_COUNTRIES)}),
+            'vat_id': forms.TextInput(attrs={'data-display-dependency': '#id_is_business_1', 'data-countries-with-vat-id': ','.join(VAT_ID_COUNTRIES)}),
             'internal_reference': forms.TextInput,
         }
         labels = {
@@ -922,6 +920,18 @@ class BaseInvoiceAddressForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         if not event.settings.invoice_address_vatid:
             del self.fields['vat_id']
+        elif self.validate_vat_id:
+            self.fields['vat_id'].help_text = '<br/>'.join([
+                str(_('Optional, but depending on the country you reside in we might need to charge you '
+                      'additional taxes if you do not enter it.')),
+                str(_('If you are registered in Switzerland, you can enter your UID instead.')),
+            ])
+        else:
+            self.fields['vat_id'].help_text = '<br/>'.join([
+                str(_('Optional, but it might be required for you to claim tax benefits on your invoice '
+                      'depending on your and the seller’s country of residence.')),
+                str(_('If you are registered in Switzerland, you can enter your UID instead.')),
+            ])
 
         self.fields['country'].choices = CachedCountries()
 
@@ -953,7 +963,7 @@ class BaseInvoiceAddressForm(forms.ModelForm):
         self.fields['state'].widget.is_required = True
 
         # Without JavaScript the VAT ID field is not hidden, so we empty the field if a country outside the EU is selected.
-        if cc and not is_eu_country(cc) and fprefix + 'vat_id' in self.data:
+        if cc and not ask_for_vat_id(cc) and fprefix + 'vat_id' in self.data:
             self.data = self.data.copy()
             del self.data[fprefix + 'vat_id']
 
@@ -1003,7 +1013,7 @@ class BaseInvoiceAddressForm(forms.ModelForm):
         if not data.get('is_business'):
             data['company'] = ''
             data['vat_id'] = ''
-        if data.get('is_business') and not is_eu_country(data.get('country')):
+        if data.get('is_business') and not ask_for_vat_id(data.get('country')):
             data['vat_id'] = ''
         if self.event.settings.invoice_address_required:
             if data.get('is_business') and not data.get('company'):
@@ -1026,36 +1036,19 @@ class BaseInvoiceAddressForm(forms.ModelForm):
             # Do not save the country if it is the only field set -- we don't know the user even checked it!
             self.cleaned_data['country'] = ''
 
-        if data.get('vat_id') and is_eu_country(data.get('country')) and data.get('vat_id')[:2] != cc_to_vat_prefix(str(data.get('country'))):
-            raise ValidationError(_('Your VAT ID does not match the selected country.'))
-
         if self.validate_vat_id and self.instance.vat_id_validated and 'vat_id' not in self.changed_data:
             pass
-        elif self.validate_vat_id and data.get('is_business') and is_eu_country(data.get('country')) and data.get('vat_id'):
+        elif self.validate_vat_id and data.get('is_business') and ask_for_vat_id(data.get('country')) and data.get('vat_id'):
             try:
-                result = vat_moss.id.validate(data.get('vat_id'))
-                if result:
-                    country_code, normalized_id, company_name = result
-                    self.instance.vat_id_validated = True
-                    self.instance.vat_id = normalized_id
-            except (vat_moss.errors.InvalidError, ValueError):
-                raise ValidationError(_('This VAT ID is not valid. Please re-check your input.'))
-            except vat_moss.errors.WebServiceUnavailableError:
-                logger.exception('VAT ID checking failed for country {}'.format(data.get('country')))
+                normalized_id = validate_vat_id(data.get('vat_id'), str(data.get('country')))
+                self.instance.vat_id_validated = True
+                self.instance.vat_id = normalized_id
+            except VATIDFinalError as e:
+                raise ValidationError(e.message)
+            except VATIDTemporaryError as e:
                 self.instance.vat_id_validated = False
                 if self.request and self.vat_warning:
-                    messages.warning(self.request, _('Your VAT ID could not be checked, as the VAT checking service of '
-                                                     'your country is currently not available. We will therefore '
-                                                     'need to charge VAT on your invoice. You can get the tax amount '
-                                                     'back via the VAT reimbursement process.'))
-            except (vat_moss.errors.WebServiceError, HTTPError):
-                logger.exception('VAT ID checking failed for country {}'.format(data.get('country')))
-                self.instance.vat_id_validated = False
-                if self.request and self.vat_warning:
-                    messages.warning(self.request, _('Your VAT ID could not be checked, as the VAT checking service of '
-                                                     'your country returned an incorrect result. We will therefore '
-                                                     'need to charge VAT on your invoice. Please contact support to '
-                                                     'resolve this manually.'))
+                    messages.warning(self.request, e.message)
         else:
             self.instance.vat_id_validated = False
 

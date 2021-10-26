@@ -48,10 +48,12 @@ from django.core.validators import (
     MaxValueValidator, MinValueValidator, RegexValidator,
 )
 from django.db.models import Model
+from django.utils.functional import lazy
 from django.utils.text import format_lazy
 from django.utils.translation import (
-    gettext_lazy as _, gettext_noop, pgettext, pgettext_lazy,
+    gettext, gettext_lazy as _, gettext_noop, pgettext, pgettext_lazy,
 )
+from django_countries.fields import Country
 from hierarkey.models import GlobalSettingsBase, Hierarkey
 from i18nfield.forms import I18nFormField, I18nTextarea, I18nTextInput
 from i18nfield.strings import LazyI18nString
@@ -61,7 +63,7 @@ from pretix.api.serializers.fields import (
     ListMultipleChoiceField, UploadedFileField,
 )
 from pretix.api.serializers.i18n import I18nField
-from pretix.base.models.tax import TaxRule
+from pretix.base.models.tax import VAT_ID_COUNTRIES, TaxRule
 from pretix.base.reldate import (
     RelativeDateField, RelativeDateTimeField, RelativeDateWrapper,
     SerializerRelativeDateField, SerializerRelativeDateTimeField,
@@ -370,7 +372,11 @@ DEFAULTS = {
         'serializer_class': serializers.BooleanField,
         'form_kwargs': dict(
             label=_("Ask for VAT ID"),
-            help_text=_("Does only work if an invoice address is asked for. VAT ID is not required."),
+            help_text=format_lazy(
+                _("Only works if an invoice address is asked for. VAT ID is never required and only requested from "
+                  "business customers in the following countries: {countries}"),
+                countries=lazy(lambda *args: ', '.join(sorted(gettext(Country(cc).name) for cc in VAT_ID_COUNTRIES)), str)()
+            ),
             widget=forms.CheckboxInput(attrs={'data-checkbox-dependency': '#id_invoice_address_asked'}),
         )
     },

@@ -228,6 +228,7 @@ setup(
         'vat_moss_forked==2020.3.20.0.11.0',
         'vobject==0.9.*',
         'webauthn==0.4.*',
+        'zeep==4.1.*'
     ],
     extras_require={
         'dev': [
