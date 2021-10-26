@@ -58,14 +58,16 @@ def _fail(message):
 def _check_for_dirty_orders():
     if getattr(dirty_transactions, 'order_ids', None) is None:
         dirty_transactions.order_ids = set()
-    if dirty_transactions.order_ids and dirty_transactions.order_ids != {None}:
-        _fail(
-            f"In the transaction that just ended, you created or modified an Order, OrderPosition, or OrderFee "
-            f"object in a way that you should have called `order.create_transactions()` afterwards. The transaction "
-            f"still went through and your data can be fixed with the `create_order_transactions` management command "
-            f"but you should update your code to prevent this from happening. Affected order IDs: {dirty_transactions.order_ids}"
-        )
-    dirty_transactions.order_ids.clear()
+    try:
+        if dirty_transactions.order_ids and dirty_transactions.order_ids != {None}:
+            _fail(
+                f"In the transaction that just ended, you created or modified an Order, OrderPosition, or OrderFee "
+                f"object in a way that you should have called `order.create_transactions()` afterwards. The transaction "
+                f"still went through and your data can be fixed with the `create_order_transactions` management command "
+                f"but you should update your code to prevent this from happening. Affected order IDs: {dirty_transactions.order_ids}"
+            )
+    finally:
+        dirty_transactions.order_ids.clear()
 
 
 def _transactions_mark_order_dirty(order_id, using=None):
@@ -81,9 +83,9 @@ def _transactions_mark_order_dirty(order_id, using=None):
                 # This went through non-test code, let's consider it non-test
                 break
 
-    if getattr(dirty_transactions, 'order_ids', None) is None:
-        dirty_transactions.order_ids = set()
-    dirty_transactions.order_ids.add(order_id)
+    if order_id is None:
+        return
+
     conn = transaction.get_connection(using)
     if not conn.in_atomic_block:
         _fail(
@@ -92,8 +94,14 @@ def _transactions_mark_order_dirty(order_id, using=None):
             "doing it inside a database transaction!"
         )
 
+    if getattr(dirty_transactions, 'order_ids', None) is None:
+        dirty_transactions.order_ids = set()
+
     if _check_for_dirty_orders not in [func for savepoint_id, func in conn.run_on_commit]:
         transaction.on_commit(_check_for_dirty_orders, using)
+        dirty_transactions.order_ids.clear()  # This is necessary to clean up after old threads with rollbacked transactions
+
+    dirty_transactions.order_ids.add(order_id)
 
 
 def _transactions_mark_order_clean(order_id):
