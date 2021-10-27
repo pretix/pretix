@@ -506,6 +506,20 @@ $(function () {
         });
     }
 
+    // Day calendar
+    $(".day-calendar").each(function() {
+        // TODO:
+        // find current time-tick and scroll into view
+        // translate user’s local time to events time based on time zone
+        // loop through all ticks until it is later than current time, scroll to previous (or last if there is none later than current time) one
+        // currentTick.scrollIntoView()
+
+        // TODO:
+        // add vertical bar that reflects current time – update position every minute
+        // if current time later than end time (start + duration) or > 100%, do not show vertical bar
+        // get start time, calc delta of current time and place bar based on percentage of delta to duration of calender
+    });
+
     // Lightbox
     lightbox.init();
 });
