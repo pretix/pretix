@@ -16,18 +16,11 @@ html.rtl {
   .cart-row > div {
     float: right;
   }
-  .checkout-flow .checkout-step:last-child .checkout-step-bar-right, .checkout-flow .checkout-step:first-child .checkout-step-bar-left {
-    background: $gray-lighter;
+  .checkout-flow .checkout-step:before {
+    left: 50%;
   }
-  .checkout-flow .checkout-step.step-current .checkout-step-bar-left {
-    background: $gray-lighter;
-  }
-  .checkout-flow .checkout-step.step-current .checkout-step-bar-right,
-  .checkout-flow .checkout-step.step-done .checkout-step-bar-right, .checkout-flow .checkout-step.step-done .checkout-step-bar-left {
-    background: $brand-primary;
-  }
-  .checkout-flow .checkout-step:last-child .checkout-step-bar-left, .checkout-flow .checkout-step:first-child .checkout-step-bar-right {
-    background: transparent;
+  .checkout-flow .checkout-step:after {
+    left: 0;
   }
   .cart-modify {
     margin-left: 0;
