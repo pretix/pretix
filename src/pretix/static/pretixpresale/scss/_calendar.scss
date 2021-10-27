@@ -122,6 +122,7 @@
   grid-template-columns: 1fr 7fr;
   gap: 0;
   overflow: scroll;
+  margin-bottom: 15px;
 }
 .shortest-duration-5 {--col-min-size: 7em}
 .shortest-duration-10 {--col-min-size: 5em}
