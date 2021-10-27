@@ -122,7 +122,8 @@
   grid-template-columns: 1fr 7fr;
   gap: 0;
   overflow: scroll;
-  margin-bottom: 15px;
+  margin-bottom: 10px;
+  padding-bottom: 5px;  /* use padding to make space for link focus-outline */
 }
 .shortest-duration-5 {--col-min-size: 7em}
 .shortest-duration-10 {--col-min-size: 5em}
@@ -263,6 +264,9 @@ concurrency has two meanings:
 .day-timeline > li {
   grid-column: calc(1 + var(--offset-hour, 0)*12 + var(--offset-minute, 0)/5) / span calc(var(--duration-hour, 0)*12 + var(--duration-minute, 0)/5);
   grid-row: var(--concurrency, 1) / span 1;
+}
+.day-timeline > li:focus-within {
+  z-index: 2;  /* move to front so focus-outline overlays other elements */
 }
 
 .ticks li, .tick {
