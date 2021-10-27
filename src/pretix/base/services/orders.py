@@ -480,7 +480,7 @@ def _cancel_order(order, user=None, send_mail: bool=True, api_token=None, device
                          data={'cancellation_fee': cancellation_fee})
         order.cancellation_requests.all().delete()
 
-        order.create_transactions(*transaction_args)
+        order.create_transactions(**transaction_args)
 
         if send_mail:
             email_template = order.event.settings.mail_text_order_canceled
