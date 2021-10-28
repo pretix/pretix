@@ -36,7 +36,6 @@
         table.layout > tr > td.logo,
         table.layout > tbody > tr > td.logo,
         table.layout > thead > tr > td.logo {
-            border-top: 20px solid #eeeeee;/* change body.padding to border-top  */
             padding: {% if event.settings.logo_image_large %}0 0 0 0{% else %}20px 0 0 0{% endif %};
             line-height: 0;
         }
@@ -44,9 +43,6 @@
         table.layout > tr > td.header,
         table.layout > tbody > tr > td.header,
         table.layout > thead > tr > td.header {
-            {% if not event.settings.logo_image %}
-            border-top: 20px solid #eeeeee;/* change body.padding to border-top  */
-            {% endif %}
             padding: 0 20px;
             text-align: center;
         }
@@ -219,8 +215,8 @@
     <![endif]-->
 </head>
 <body align="center">
+    <table width="100%"><tr><td align="center" style="padding: 20px">
     <!--[if gte mso 9]>
-    <table width="100%"><tr><td align="center">
     <table width="600"><tr><td align="center"
     <![endif]-->
     <table class="layout" style="max-width:600px" border="0" cellspacing="0">
@@ -308,7 +304,7 @@
     <br/>
     <!--[if gte mso 9]>
     </td></tr></table>
-    </td></tr></table>
     <![endif]-->
+    </td></tr></table>
 </body>
 </html>
