@@ -424,7 +424,6 @@ def _cancel_order(order, user=None, send_mail: bool=True, api_token=None, device
                 m.canceled = True
                 m.save()
 
-        transaction_args = {}
         if cancellation_fee:
             with order.event.lock():
                 for position in order.positions.all():
@@ -459,7 +458,6 @@ def _cancel_order(order, user=None, send_mail: bool=True, api_token=None, device
                 order.total = cancellation_fee
                 order.cancellation_date = now()
                 order.save(update_fields=['status', 'cancellation_date', 'total'])
-                transaction_args['positions'] = []
 
             if cancel_invoice and i:
                 invoices.append(generate_invoice(order))
@@ -480,7 +478,7 @@ def _cancel_order(order, user=None, send_mail: bool=True, api_token=None, device
                          data={'cancellation_fee': cancellation_fee})
         order.cancellation_requests.all().delete()
 
-        order.create_transactions(**transaction_args)
+        order.create_transactions()
 
         if send_mail:
             email_template = order.event.settings.mail_text_order_canceled
