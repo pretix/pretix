@@ -233,9 +233,6 @@
         {% endif %}
         <tr>
             <td class="header" align="center">
-                <!--[if gte mso 9]>
-                    <table cellpadding="20"><tr><td align="center">
-                <![endif]-->
                 {% if event %}
                     <h2><a href="{% abseventurl event "presale:event.index" %}" target="_blank">{{ event.name }}</a>
                     </h2>
@@ -248,51 +245,30 @@
                 {% block header %}
                     <h1>{{ subject }}</h1>
                 {% endblock %}
-                <!--[if gte mso 9]>
-                    </td></tr></table>
-                <![endif]-->
             </td>
         </tr>
         <tr>
             <td class="containertd">
-                <!--[if gte mso 9]>
-                        <table cellpadding="20"><tr><td>
-                    <![endif]-->
                 <div class="content">
                     {{ body|safe }}
                 </div>
-                <!--[if gte mso 9]>
-                        </td></tr></table>
-                    <![endif]-->
             </td>
         </tr>
         {% if order %}
             <tr>
                 <td class="order containertd">
-                    <!--[if gte mso 9]>
-                        <table cellpadding="20"><tr><td>
-                    <![endif]-->
                     <div class="content">
                         {% include "pretixbase/email/order_details.html" %}
                     </div>
-                    <!--[if gte mso 9]>
-                        </td></tr></table>
-                    <![endif]-->
                 </td>
             </tr>
         {% endif %}
         {% if signature %}
             <tr>
                 <td class="order containertd">
-                    <!--[if gte mso 9]>
-                        <table cellpadding="20"><tr><td>
-                    <![endif]-->
                     <div class="content">
                         {{ signature | safe }}
                     </div>
-                    <!--[if gte mso 9]>
-                        </td></tr></table>
-                    <![endif]-->
                 </td>
             </tr>
         {% endif %}
