@@ -782,10 +782,7 @@ class DayCalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
 
     def get(self, request, *args, **kwargs):
         self._set_date()
-        self.nonce = base64.b64encode(token_bytes(32)).decode()
-        r = super().get(request, *args, **kwargs)
-        r['Content-Security-Policy'] = f"style-src 'nonce-{self.nonce}'"
-        return r
+        return super().get(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data()
@@ -831,7 +828,6 @@ class DayCalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
 
         ctx['events'] = events
 
-        ctx['css_nonce'] = self.nonce
         ctx['collections'] = self._grid_for_template(events)
         ctx['multiple_timezones'] = self._multiple_timezones
         return ctx
