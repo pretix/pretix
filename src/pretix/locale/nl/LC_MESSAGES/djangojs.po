@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-10-17 14:57+0000\n"
-"PO-Revision-Date: 2021-08-05 04:00+0000\n"
+"PO-Revision-Date: 2021-10-29 02:00+0000\n"
 "Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
 "Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix-js/"
 "nl/>\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.6\n"
+"X-Generator: Weblate 4.8\n"
 
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:56
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:62
@@ -195,11 +195,8 @@ msgstr "Op dit moment binnen"
 
 #: pretix/static/lightbox/js/lightbox.js:90
 #: pretix/static/lightbox/js/lightbox.min.js:13
-#, fuzzy
-#| msgctxt "widget"
-#| msgid "Close"
 msgid "close"
-msgstr "Sluiten"
+msgstr "sluiten"
 
 #: pretix/static/pretixbase/js/asynctask.js:43
 #: pretix/static/pretixbase/js/asynctask.js:119
@@ -496,27 +493,22 @@ msgstr[0] "(één andere datum)"
 msgstr[1] "({num} andere datums)"
 
 #: pretix/static/pretixpresale/js/ui/cart.js:43
-#, fuzzy
-#| msgid "The items in your cart are no longer reserved for you."
 msgid ""
 "The items in your cart are no longer reserved for you. You can still "
 "complete your order as long as they’re available."
-msgstr "De items in uw winkelwagen zijn niet meer voor u gereserveerd."
+msgstr ""
+"De items in uw winkelwagen zijn niet meer voor u gereserveerd. U kunt uw "
+"bestelling nog afronden, zolang de producten nog beschikbaar zijn."
 
 #: pretix/static/pretixpresale/js/ui/cart.js:45
 msgid "Cart expired"
 msgstr "Winkelwagen is verlopen"
 
 #: pretix/static/pretixpresale/js/ui/cart.js:50
-#, fuzzy
-#| msgid "The items in your cart are reserved for you for one minute."
-#| msgid_plural ""
-#| "The items in your cart are reserved for you for {num} minutes."
 msgid "The items in your cart are reserved for you for one minute."
 msgid_plural "The items in your cart are reserved for you for {num} minutes."
-msgstr[0] "De items in uw winkelwagen zijn nog één voor u gereserveerd."
-msgstr[1] ""
-"De items in uw winkelwagen zijn nog {num} minuten voor u gereserveerd."
+msgstr[0] "De items in uw winkelwagen zijn nog één minuut voor u gereserveerd."
+msgstr[1] "De items in uw winkelwagen zijn nog {num} minuten voor u gereserveerd."
 
 #: pretix/static/pretixpresale/js/ui/main.js:144
 msgid "The organizer keeps %(currency)s %(amount)s"
