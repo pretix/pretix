@@ -23,7 +23,7 @@
             line-height: 1.4;
             color: #333;
             margin: 0;
-            padding-top: 20px;
+            padding: 0;
         }
 
         table.layout > tr > td,
@@ -36,12 +36,17 @@
         table.layout > tr > td.logo,
         table.layout > tbody > tr > td.logo,
         table.layout > thead > tr > td.logo {
-            padding: 20px 0 0 0;
+            border-top: 20px solid #eeeeee;/* change body.padding to border-top  */
+            padding: {% if event.settings.logo_image_large %}0 0 0 0{% else %}20px 0 0 0{% endif %};
+            line-height: 0;
         }
 
         table.layout > tr > td.header,
         table.layout > tbody > tr > td.header,
         table.layout > thead > tr > td.header {
+            {% if not event.settings.logo_image %}
+            border-top: 20px solid #eeeeee;/* change body.padding to border-top  */
+            {% endif %}
             padding: 0 20px;
             text-align: center;
         }
@@ -221,7 +226,7 @@
     <table class="layout" style="max-width:600px" border="0" cellspacing="0">
         {% if event.settings.logo_image %}
             <tr>
-                <td style="line-height: 0; {% if event.settings.logo_image_large %}padding: 0;{% endif %}" align="center" class="logo">
+                <td align="center" class="logo">
                     {% if event.settings.logo_image_large %}
                         <img src="{% if event.settings.logo_image|thumb:'600_x5000'|first == '/' %}{{ site_url }}{% endif %}{{ event.settings.logo_image|thumb:'600_x5000' }}" alt="{{ event.name }}" style="width:100%" />
                     {% else %}
