@@ -508,16 +508,46 @@ $(function () {
 
     // Day calendar
     $(".day-calendar").each(function() {
-        // TODO:
-        // find current time-tick and scroll into view
-        // translate user’s local time to events time based on time zone
-        // loop through all ticks until it is later than current time, scroll to previous (or last if there is none later than current time) one
-        // currentTick.scrollIntoView()
+        var timezone = this.getAttribute("data-timezone");
+        var startTime = moment.tz(this.getAttribute("data-start"), timezone);
 
-        // TODO:
-        // add vertical bar that reflects current time – update position every minute
-        // if current time later than end time (start + duration) or > 100%, do not show vertical bar
-        // get start time, calc delta of current time and place bar based on percentage of delta to duration of calender
+        // TODO: every 15 minutes
+        var currentTime = moment().tz(timezone);
+        if (!currentTime.isSame(startTime, 'day')) {
+            console.log("Not on same day");
+            return;
+        }
+
+        // scroll to best matching tick
+        var currentTimeCmp = parseInt(currentTime.format("Hmm"), 10);
+        var ticks = this.querySelectorAll(".ticks li");
+        var currentTick;
+        var t;
+        for (var i=0, max=ticks.length; i < max; i++) {
+            currentTick = ticks[i]
+            t = parseInt(currentTick.getAttribute("data-start").replace(":", ""), 10);
+            if (t > currentTimeCmp) {
+                break;
+            }
+        }
+        currentTick.scrollIntoView();
+
+
+        // TODO: every minute
+        var currentTimeDelta = (currentTime - startTime)/1000;
+        if (currentTimeDelta < 0) {
+            console.log("Too early");
+            return;
+        }
+        var duration = this.getAttribute("data-duration").split(":").reduce(function(previousValue, currentValue, currentIndex) {
+            return previousValue + (currentIndex ? parseInt(currentValue, 10) * 60 : parseInt(currentValue, 10) * 60 * 60);
+        }, 0);
+        if (currentTimeDelta > duration) {
+            console.log("Too late");
+            return;
+        }
+        console.log(currentTimeDelta/duration);
+        // TODO: place vertical bar at width of h3 + (width of list)*(currentTimeDelta/duration)
     });
 
     // Lightbox

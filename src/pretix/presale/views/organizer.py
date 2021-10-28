@@ -822,8 +822,8 @@ class DayCalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
 
         ctx["calendar_duration"] = self._get_time_duration(start, end)
         ctx['time_ticks'] = self._get_time_ticks(start, end, shortest_duration)
-        ctx['start'] = start
-        ctx['end'] = end
+        ctx['start'] = datetime.combine(self.date, start)
+        #ctx['end'] = end
         # size of each 5-minute slot in calendar is based on shortest event duration
         ctx['shortest_duration_rastered'] = next((d for d in [5, 10, 15, 30, 60, 90, 120, 180] if d >= shortest_duration), 180)
 

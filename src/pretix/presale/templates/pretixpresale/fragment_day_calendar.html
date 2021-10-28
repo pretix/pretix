@@ -2,12 +2,14 @@
 {% load eventurl %}
 <div class="day-calendar shortest-duration-{{shortest_duration_rastered}}"
     data-duration="{{ calendar_duration|date:"H:i" }}"
+    data-start="{{ start|date:"c" }}"
     data-timezone="{{ cal_tz }}">
     <h3 aria-hidden="true" class="day-row-name"><span hidden>{% trans "Time of day" %}</span></h3>
     <ul aria-hidden="true" class="day-timeline ticks">
     {% for t in time_ticks %}
         <li data-offset="{{ t.offset|date:"H:i" }}"
             data-duration="{{ t.duration|date:"H:i" }}"
+            data-start="{{ t.start|date:"H:i" }}"
             class="text-muted">{{ t.start|date:"TIME_FORMAT" }}</li>
     {% endfor %}
     </ul>
