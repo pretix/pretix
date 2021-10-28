@@ -764,19 +764,19 @@ class DayCalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
             datetime_from = next_ev.date_from
 
         if datetime_from:
-            tz = pytz.timezone(next_ev.settings.timezone)
-            self.date = datetime_from.astimezone(tz).date()
+            self.tz = pytz.timezone(next_ev.settings.timezone)
+            self.date = datetime_from.astimezone(self.tz).date()
         else:
-            tz = self.request.organizer.timezone
-            self.date = now().astimezone(tz).date()
+            self.tz = self.request.organizer.timezone
+            self.date = now().astimezone(self.tz).date()
 
     def _set_date(self):
         if 'date' in self.request.GET:
-            tz = self.request.organizer.timezone
+            self.tz = self.request.organizer.timezone
             try:
                 self.date = dateutil.parser.parse(self.request.GET.get('date')).date()
             except ValueError:
-                self.date = now().astimezone(tz).date()
+                self.date = now().astimezone(self.tz).date()
         else:
             self._set_date_to_next_event()
 
@@ -795,6 +795,7 @@ class DayCalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
         ) + timedelta(days=1)
 
         ctx['date'] = self.date
+        ctx['cal_tz'] = self.tz
         ctx['before'] = before
         ctx['after'] = after
 
