@@ -2134,6 +2134,8 @@ class OrderChangeManager:
             self._clear_tickets_cache()
             self.order.touch()
             self.order.create_transactions()
+            if self.split_order:
+                self.split_order.create_transactions()
 
         if self.notify:
             notify_user_changed_order(
