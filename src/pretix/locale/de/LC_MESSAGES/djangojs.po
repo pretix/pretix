@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-10-17 14:57+0000\n"
+"POT-Creation-Date: 2021-10-29 10:10+0000\n"
 "PO-Revision-Date: 2021-10-25 15:40+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix-js/"
@@ -194,8 +194,7 @@ msgstr "Gültige Tickets"
 msgid "Currently inside"
 msgstr "Derzeit anwesend"
 
-#: pretix/static/lightbox/js/lightbox.js:90
-#: pretix/static/lightbox/js/lightbox.min.js:13
+#: pretix/static/lightbox/js/lightbox.js:96
 msgid "close"
 msgstr "schließen"
 

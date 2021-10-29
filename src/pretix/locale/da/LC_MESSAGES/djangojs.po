@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-10-17 14:57+0000\n"
+"POT-Creation-Date: 2021-10-29 10:10+0000\n"
 "PO-Revision-Date: 2021-09-13 09:48+0000\n"
 "Last-Translator: Mie Frydensbjerg <mif@aarhus.dk>\n"
 "Language-Team: Danish <https://translate.pretix.eu/projects/pretix/pretix-js/"
@@ -206,8 +206,7 @@ msgstr ""
 msgid "Currently inside"
 msgstr ""
 
-#: pretix/static/lightbox/js/lightbox.js:90
-#: pretix/static/lightbox/js/lightbox.min.js:13
+#: pretix/static/lightbox/js/lightbox.js:96
 #, fuzzy
 #| msgctxt "widget"
 #| msgid "Close"

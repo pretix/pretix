@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-10-17 14:57+0000\n"
+"POT-Creation-Date: 2021-10-29 10:10+0000\n"
 "PO-Revision-Date: 2021-10-29 02:00+0000\n"
 "Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
 "Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix-js/"
@@ -193,8 +193,7 @@ msgstr "Geldige tickets"
 msgid "Currently inside"
 msgstr "Op dit moment binnen"
 
-#: pretix/static/lightbox/js/lightbox.js:90
-#: pretix/static/lightbox/js/lightbox.min.js:13
+#: pretix/static/lightbox/js/lightbox.js:96
 msgid "close"
 msgstr "sluiten"
 
@@ -508,7 +507,8 @@ msgstr "Winkelwagen is verlopen"
 msgid "The items in your cart are reserved for you for one minute."
 msgid_plural "The items in your cart are reserved for you for {num} minutes."
 msgstr[0] "De items in uw winkelwagen zijn nog één minuut voor u gereserveerd."
-msgstr[1] "De items in uw winkelwagen zijn nog {num} minuten voor u gereserveerd."
+msgstr[1] ""
+"De items in uw winkelwagen zijn nog {num} minuten voor u gereserveerd."
 
 #: pretix/static/pretixpresale/js/ui/main.js:144
 msgid "The organizer keeps %(currency)s %(amount)s"
