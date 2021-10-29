@@ -97,6 +97,7 @@ Explorer
 FA
 Favicon
 Footer
+Galicisch
 gehostete
 geht's
 GENEXAMPLE
@@ -261,6 +262,7 @@ txt
 ÜBERZAHLT
 überzahlte
 uhrzeit
+UID
 ungespeicherte
 unkategorisiert
 Unkategorisierte

@@ -34,6 +34,7 @@ favicon
 filetype
 frontend
 frontpage
+Galician
 GENEXAMPLE
 Geo
 geo
@@ -106,6 +107,7 @@ TODO
 TOTP
 trustable
 txt
+UID
 uncanceled
 uncategorized
 undeletable
