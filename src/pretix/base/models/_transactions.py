@@ -36,7 +36,7 @@ from django.db import transaction
 dirty_transactions = threading.local()
 
 logger = logging.getLogger(__name__)
-fail_loudly = os.getenv('PRETIX_DIRTY_TRANSACTIONS_QUIET', 'false') not in ('true', 'True', 'on', '1')
+fail_loudly = os.getenv('PRETIX_DIRTY_TRANSACTIONS_QUIET', 'false' if settings.DEBUG else 'true') not in ('true', 'True', 'on', '1')
 
 
 class DirtyTransactionsForOrderException(Exception):

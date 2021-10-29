@@ -447,8 +447,8 @@ def test_invoice_numbers(env):
     # expected behaviour for switching between numbering formats or dealing with gaps
     assert inv1.invoice_no == '00001'
     assert inv2.invoice_no == '00002'
-    assert inv3.invoice_no == '{}-3'.format(order.code)
-    assert inv4.invoice_no == '{}-4'.format(order.code)
+    assert inv3.invoice_no == '{}-1'.format(order.code)
+    assert inv4.invoice_no == '{}-2'.format(order.code)
     assert inv5.invoice_no == '00003'
     assert inv6.invoice_no == '00004'
     assert inv7.invoice_no == '00005'
@@ -465,10 +465,10 @@ def test_invoice_numbers(env):
 
     # test Invoice.number, too
     assert inv1.number == '{}-00001'.format(event.slug.upper())
-    assert inv3.number == '{}-{}-3'.format(event.slug.upper(), order.code)
+    assert inv3.number == '{}-{}-1'.format(event.slug.upper(), order.code)
 
     assert invt1.number == '{}-TEST-00001'.format(event.slug.upper())
-    assert invt2.number == '{}-TEST-{}-2'.format(event.slug.upper(), testorder.code)
+    assert invt2.number == '{}-TEST-{}-1'.format(event.slug.upper(), testorder.code)
     assert invt3.number == '{}-TEST-00002'.format(event.slug.upper())
 
 
@@ -513,8 +513,8 @@ def test_invoice_number_prefixes(env):
 
     event.settings.set('invoice_numbers_consecutive', False)
     event2.settings.set('invoice_numbers_consecutive', False)
-    assert generate_invoice(order).number == 'shared_{}-6'.format(order.code)
-    assert generate_invoice(order2).number == 'shared_{}-6'.format(order2.code)
+    assert generate_invoice(order).number == 'shared_{}-1'.format(order.code)
+    assert generate_invoice(order2).number == 'shared_{}-1'.format(order2.code)
 
     event2.settings.set('invoice_numbers_prefix', 'inv_')
     event2.settings.set('invoice_numbers_prefix_cancellations', 'crd_')
@@ -524,6 +524,12 @@ def test_invoice_number_prefixes(env):
     assert i.number == 'inv_0001'
     assert generate_cancellation(i).number == 'crd_0001'
 
+    event2.settings.set('invoice_numbers_consecutive', False)
+    i = generate_invoice(order2)
+    assert i.number == f'inv_{order2.code}-1'
+    assert generate_cancellation(i).number == f'crd_{order2.code}-1'
+
+    event2.settings.set('invoice_numbers_consecutive', True)
     event2.settings.set('invoice_numbers_prefix', 'inv_%Y%m%d_')
     i = generate_invoice(order2)
     assert i.number == 'inv_%s_0001' % now().date().strftime('%Y%m%d')

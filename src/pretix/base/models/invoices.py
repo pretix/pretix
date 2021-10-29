@@ -237,7 +237,7 @@ class Invoice(models.Model):
     def _get_invoice_number_from_order(self):
         return '{order}-{count}'.format(
             order=self.order.code,
-            count=Invoice.objects.filter(event=self.event, order=self.order).count() + 1,
+            count=Invoice.objects.filter(event=self.event, prefix=self.prefix, invoice_no__startswith=f"{self.order.code}-", order=self.order).count() + 1,
         )
 
     def save(self, *args, **kwargs):
