@@ -31,13 +31,11 @@
 # Unless required by applicable law or agreed to in writing, software distributed under the Apache License 2.0 is
 # distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations under the License.
-import base64
 import calendar
 import hashlib
 import math
 from collections import defaultdict
 from datetime import date, datetime, time, timedelta
-from secrets import token_bytes
 from urllib.parse import quote
 
 import dateutil
@@ -823,7 +821,7 @@ class DayCalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
         ctx["calendar_duration"] = self._get_time_duration(start, end)
         ctx['time_ticks'] = self._get_time_ticks(start, end, shortest_duration)
         ctx['start'] = datetime.combine(self.date, start)
-        #ctx['end'] = end
+        # ctx['end'] = end
         # size of each 5-minute slot in calendar is based on shortest event duration
         ctx['shortest_duration_rastered'] = next((d for d in [5, 10, 15, 30, 60, 90, 120, 180] if d >= shortest_duration), 180)
 
