@@ -539,7 +539,7 @@ $(function () {
             return previousValue + (currentIndex ? parseInt(currentValue, 10) * 60 : parseInt(currentValue, 10) * 60 * 60);
         }, 0);
         function setCurrentTimeBar() {
-            var currentTimeDelta = (moment().tz(timezone) - startTime)/1000;
+            var currentTimeDelta = Math.floor((moment().tz(timezone) - startTime)/1000);
             if (currentTimeDelta < 0 || currentTimeDelta > duration) {
                 // Too early || Too late
                 window.clearInterval(currentTimeInterval);
