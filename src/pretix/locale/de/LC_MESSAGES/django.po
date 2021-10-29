@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-10-29 10:09+0000\n"
-"PO-Revision-Date: 2021-10-17 15:31+0000\n"
+"PO-Revision-Date: 2021-10-29 11:36+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
 ">\n"
@@ -1880,16 +1880,21 @@ msgid ""
 "Optional, but depending on the country you reside in we might need to charge "
 "you additional taxes if you do not enter it."
 msgstr ""
+"Optional, jedoch müssen wir abhängig vom Land, in dem Sie sich befinden, "
+"zusätzliche Steuern erheben, wenn Sie keine USt-ID-Nummer angeben."
 
 #: pretix/base/forms/questions.py:927 pretix/base/forms/questions.py:933
 msgid "If you are registered in Switzerland, you can enter your UID instead."
-msgstr ""
+msgstr "Wenn Sie in der Schweiz registriert sind, geben Sie bitte Ihre UID ein."
 
 #: pretix/base/forms/questions.py:931
 msgid ""
 "Optional, but it might be required for you to claim tax benefits on your "
 "invoice depending on your and the seller’s country of residence."
 msgstr ""
+"Optional, aber abhängig von Ihrem Land und dem Land des Verkäufers "
+"möglicherweise notwendig, damit Sie die Rechnung steuerlich geltend machen "
+"können."
 
 #: pretix/base/forms/questions.py:1020
 msgid "You need to provide a company name."
@@ -6677,6 +6682,9 @@ msgid ""
 "only requested from business customers in the following countries: "
 "{countries}"
 msgstr ""
+"Funktioniert nur, wenn auch nach einer Rechnungsadresse gefragt ist. Die USt-"
+"ID ist nie ein Pflichtfeld und wird nur von Firmenkunden aus folgenden "
+"Ländern abgefragt: {countries}"
 
 #: pretix/base/settings.py:389
 msgid "Invoice address explanation"
@@ -16340,10 +16348,8 @@ msgid "View email history"
 msgstr "E-Mail-Verlauf"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:87
-#, fuzzy
-#| msgid "View email history"
 msgid "View transaction history"
-msgstr "E-Mail-Verlauf"
+msgstr "Transaktionen ansehen"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:98
 msgid "Expire order"
@@ -16937,44 +16943,32 @@ msgstr "Absenden"
 
 #: pretix/control/templates/pretixcontrol/order/transactions.html:5
 #: pretix/control/templates/pretixcontrol/order/transactions.html:8
-#, fuzzy
-#| msgid "Transactions"
 msgid "Transaction history"
-msgstr "Transaktionen"
+msgstr "Transaktionsverlauf"
 
 #: pretix/control/templates/pretixcontrol/order/transactions.html:23
-#, fuzzy
-#| msgid "Original price"
 msgid "Single price"
-msgstr "Ursprünglicher Preis"
+msgstr "Einzelpreis"
 
 #: pretix/control/templates/pretixcontrol/order/transactions.html:24
-#, fuzzy
-#| msgid "Total value"
 msgid "Total tax value"
-msgstr "Gesamtbetrag"
+msgstr "Gesamt-Steuerbetrag"
 
 #: pretix/control/templates/pretixcontrol/order/transactions.html:25
-#, fuzzy
-#| msgid "Net price"
 msgid "Total price"
-msgstr "Nettopreis"
+msgstr "Gesamtbetrag"
 
 #: pretix/control/templates/pretixcontrol/order/transactions.html:36
-#, fuzzy
-#| msgid ""
-#| "This payment was created with an older version of pretix, therefore "
-#| "accurate data might not be available."
 msgid ""
 "This order was created before we introduced this table, therefore this data "
 "might be inaccurate."
 msgstr ""
-"Diese Zahlung wurde mit einer älteren pretix-Version erzeugt, daher sind "
-"vollständige und korrekte Daten gegebenenfalls nicht verfügbar."
+"Diese Bestellung wurde erstellt, bevor diese Tabelle eingeführt wurde. Die "
+"Daten können daher ungenau sein."
 
 #: pretix/control/templates/pretixcontrol/order/transactions.html:65
 msgid "Sum"
-msgstr ""
+msgstr "Summe"
 
 #: pretix/control/templates/pretixcontrol/orders/cancel.html:9
 msgid ""
@@ -20419,13 +20413,10 @@ msgid "No country specified."
 msgstr "Es wurde kein Land angegeben."
 
 #: pretix/control/views/orders.py:1336
-#, fuzzy
-#| msgid ""
-#| "VAT ID could not be checked since a non-EU country has been specified."
 msgid "VAT ID could not be checked since this country is not supported."
 msgstr ""
-"Die USt-ID-Nr. konnte nicht geprüft werden, da ein Nicht-EU-Land angegeben "
-"wurde."
+"Die USt-ID-Nr. konnte nicht geprüft werden, da dieses Land nicht unterstützt "
+"wird."
 
 #: pretix/control/views/orders.py:1347
 msgid ""
@@ -26213,7 +26204,7 @@ msgstr "Türkisch"
 
 #: pretix/settings.py:517
 msgid "Galician"
-msgstr ""
+msgstr "Galicisch"
 
 #: pretix/settings.py:831
 msgid "User profile only"
