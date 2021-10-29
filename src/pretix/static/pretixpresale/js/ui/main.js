@@ -550,8 +550,8 @@ $(function () {
             var offset = thisCalendar.querySelector("h3").getBoundingClientRect().width;
             currentTimeBar.css("left", offset + (thisCalendar.scrollWidth-offset)*(currentTimeDelta/duration));
         }
-        setCurrentTimeBar();
         currentTimeInterval = window.setInterval(setCurrentTimeBar, 60*1000);
+        setCurrentTimeBar();
     });
 
     // Lightbox
