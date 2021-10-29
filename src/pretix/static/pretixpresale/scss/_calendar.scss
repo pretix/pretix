@@ -118,6 +118,7 @@
 
 
 .day-calendar {
+  position: relative;
   display: grid;
   grid-template-columns: 1fr 7fr;
   gap: 0;
@@ -133,6 +134,16 @@
 .shortest-duration-90  {--col-min-size: .5em}
 .shortest-duration-120 {--col-min-size: .25em}
 .shortest-duration-180 {--col-min-size: .125em}
+
+.day-calendar .current-time-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 1px;
+  background-color: $brand-danger;
+  outline: 1px solid #fff;
+}
 
 .day-row-name {
   position: sticky;

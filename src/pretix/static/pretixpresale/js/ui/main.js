@@ -533,21 +533,27 @@ $(function () {
         currentTick.scrollIntoView();
 
 
-        // TODO: every minute
-        var currentTimeDelta = (currentTime - startTime)/1000;
-        if (currentTimeDelta < 0) {
-            console.log("Too early");
-            return;
-        }
+        var thisCalendar = this;
+        var currentTimeInterval;
+        var currentTimeBar = $('<div class="current-time-bar"></div>').appendTo(this);
         var duration = this.getAttribute("data-duration").split(":").reduce(function(previousValue, currentValue, currentIndex) {
             return previousValue + (currentIndex ? parseInt(currentValue, 10) * 60 : parseInt(currentValue, 10) * 60 * 60);
         }, 0);
-        if (currentTimeDelta > duration) {
-            console.log("Too late");
-            return;
+        function setCurrentTimeBar() {
+            console.log("neu platzieren");
+            var currentTimeDelta = (currentTime - startTime)/1000;
+            if (currentTimeDelta < 0 || currentTimeDelta > duration) {
+                // Too early || Too late
+                window.clearInterval(currentTimeInterval);
+                currentTimeBar.remove();
+                return;
+            }
+            
+            var offset = thisCalendar.querySelector("h3").getBoundingClientRect().width;
+            currentTimeBar.css("left", offset + (thisCalendar.scrollWidth-offset)*(currentTimeDelta/duration));
         }
-        console.log(currentTimeDelta/duration);
-        // TODO: place vertical bar at width of h3 + (width of list)*(currentTimeDelta/duration)
+        setCurrentTimeBar();
+        currentTimeInterval = window.setInterval(setCurrentTimeBar, 60*1000);
     });
 
     // Lightbox
