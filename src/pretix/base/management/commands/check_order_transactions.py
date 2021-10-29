@@ -43,7 +43,7 @@ class Command(BaseCommand):
                         order=OuterRef('pk')
                     ).order_by().values('order').annotate(p=Sum('price')).values('p'),
                     output_field=models.DecimalField(decimal_places=2, max_digits=10)
-                ), Value(Decimal(0)), output_field=models.DecimalField(decimal_places=2, max_digits=10)
+                ), Value(0), output_field=models.DecimalField(decimal_places=2, max_digits=10)
             ),
             fee_total=Coalesce(
                 Subquery(
@@ -51,7 +51,7 @@ class Command(BaseCommand):
                         order=OuterRef('pk')
                     ).order_by().values('order').annotate(p=Sum('value')).values('p'),
                     output_field=models.DecimalField(decimal_places=2, max_digits=10)
-                ), Value(Decimal(0)), output_field=models.DecimalField(decimal_places=2, max_digits=10)
+                ), Value(0), output_field=models.DecimalField(decimal_places=2, max_digits=10)
             ),
             tx_total=Coalesce(
                 Subquery(
@@ -59,12 +59,12 @@ class Command(BaseCommand):
                         order=OuterRef('pk')
                     ).order_by().values('order').annotate(p=Sum(F('price') * F('count'))).values('p'),
                     output_field=models.DecimalField(decimal_places=2, max_digits=10)
-                ), Value(Decimal(0)), output_field=models.DecimalField(decimal_places=2, max_digits=10)
+                ), Value(0), output_field=models.DecimalField(decimal_places=2, max_digits=10)
             ),
         ).annotate(
             correct_total=Case(
                 When(Q(status=Order.STATUS_CANCELED) | Q(status=Order.STATUS_EXPIRED) | Q(require_approval=True),
-                     then=Value(Decimal(0))),
+                     then=Value(0)),
                 default=F('position_total') + F('fee_total'),
                 output_field=models.DecimalField(decimal_places=2, max_digits=10)
             ),
@@ -73,6 +73,9 @@ class Command(BaseCommand):
             tx_total=F('correct_total')
         ).select_related('event')
         for o in qs:
+            if abs(o.tx_total - o.correct_total) < Decimal('0.00001') and abs(o.position_total + o.fee_total - o.total) < Decimal('0.00001'):
+                # Ignore SQLite which treats Decimals like floats…
+                continue
             print(f"Error in order {o.full_code}: status={o.status}, sum(positions)+sum(fees)={o.position_total + o.fee_total}, "
                   f"order.total={o.total}, sum(transactions)={o.tx_total}, expected={o.correct_total}")
 
