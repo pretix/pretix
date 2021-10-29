@@ -511,10 +511,9 @@ $(function () {
         var timezone = this.getAttribute("data-timezone");
         var startTime = moment.tz(this.getAttribute("data-start"), timezone);
 
-        // TODO: every 15 minutes
         var currentTime = moment().tz(timezone);
         if (!currentTime.isSame(startTime, 'day')) {
-            console.log("Not on same day");
+            // Not on same day
             return;
         }
 
