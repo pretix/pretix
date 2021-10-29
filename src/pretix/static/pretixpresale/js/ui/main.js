@@ -530,7 +530,7 @@ $(function () {
                 break;
             }
         }
-        currentTick.scrollIntoView();
+        currentTick.scrollIntoView({behavior:"smooth", inline: "center"});
 
 
         var thisCalendar = this;
