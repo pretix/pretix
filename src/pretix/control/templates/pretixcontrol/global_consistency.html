@@ -1,0 +1,33 @@
+{% extends "pretixcontrol/global_settings_base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+
+{% block inner %}
+    <h2>{% trans "Consistency checks" %}</h2>
+    <div class="table-responsive">
+
+        <table class="table">
+            <thead>
+            <tr>
+                <th>{% trans "Date" %}</th>
+                <th>{% trans "Check type" %}</th>
+                <th>{% trans "Result" %}</th>
+            </tr>
+            </thead>
+            <tbody>
+
+            {% for r in results %}
+                <tr class="{% if r.result == "error" %}danger{% elif r.result == "warning" %}warning{% endif %}">
+                    <td>{{ r.created|date:"SHORT_DATETIME_FORMAT" }}</td>
+                    <td>{{ r.check_type }}</td>
+                    <td>{{ r.get_result_display }}</td>
+                <td>
+                    <a href="{% url "control:global.consistency.detail" pk=r.pk %}" class="btn btn-default">{% trans "Show log" %}</a>
+                </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+
+        </table>
+    </div>
+{% endblock %}

@@ -1,0 +1,11 @@
+{% extends "pretixcontrol/global_settings_base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+
+{% block inner %}
+    <h2>{% trans "Consistency check" %}</h2>
+    <p>{{ result.created|date:"SHORT_DATETIME_FORMAT" }}</p>
+    <p>{{ result.check_type }}</p>
+    <p>{{ result.get_result_display }}</p>
+    <pre>{{ result.log }}</pre>
+{% endblock %}

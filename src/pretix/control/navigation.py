@@ -422,6 +422,11 @@ def get_global_navigation(request):
                     'url': reverse('control:global.license'),
                     'active': (url.url_name == 'global.license'),
                 },
+                {
+                    'label': _('Consistency check'),
+                    'url': reverse('control:global.consistency'),
+                    'active': (url.url_name == 'global.consistency'),
+                },
             ]
         })
 

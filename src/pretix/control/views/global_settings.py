@@ -39,9 +39,9 @@ from django.shortcuts import get_object_or_404, redirect, reverse
 from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
 from django.views import View
-from django.views.generic import FormView, TemplateView
+from django.views.generic import FormView, ListView, TemplateView, DetailView
 
-from pretix.base.models import LogEntry, OrderPayment, OrderRefund
+from pretix.base.models import Check, LogEntry, OrderPayment, OrderRefund
 from pretix.base.services.update_check import check_result_table, update_check
 from pretix.base.settings import GlobalSettingsObject
 from pretix.control.forms.global_settings import (
@@ -265,3 +265,15 @@ class LicenseCheckView(StaffMemberRequiredMixin, FormView):
                 ))
 
         return res
+
+
+class ConsistencyCheckListView(AdministratorPermissionRequiredMixin, ListView):
+    queryset = Check.objects.order_by('-created').defer('log')
+    context_object_name = 'results'
+    template_name = 'pretixcontrol/global_consistency.html'
+
+
+class ConsistencyCheckDetailView(AdministratorPermissionRequiredMixin, DetailView):
+    queryset = Check.objects.all()
+    context_object_name = 'result'
+    template_name = 'pretixcontrol/global_consistency_detail.html'

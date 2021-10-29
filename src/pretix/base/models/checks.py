@@ -26,41 +26,29 @@
 # This file may have since been changed and any changes are released under the terms of AGPLv3 as described above. A
 # full history of changes and contributors is available at <https://github.com/pretix/pretix>.
 #
-# This file contains Apache-licensed contributions copyrighted by: Tobias Kunze
+# This file contains Apache-licensed contributions copyrighted by: Jakob Schnell
 #
 # Unless required by applicable law or agreed to in writing, software distributed under the Apache License 2.0 is
 # distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations under the License.
+from django.db import models
+from django.utils.translation import gettext_lazy as _
 
-from django.apps import AppConfig
-
-
-class PretixBaseConfig(AppConfig):
-    name = 'pretix.base'
-    label = 'pretixbase'
-
-    def ready(self):
-        from . import exporter  # NOQA
-        from . import payment  # NOQA
-        from . import exporters  # NOQA
-        from . import invoice  # NOQA
-        from . import notifications  # NOQA
-        from . import email  # NOQA
-        from .services import auth, checkin, checks, export, mail, tickets, cart, orderimport, orders, invoices, cleanup, update_check, quotas, notifications, vouchers  # NOQA
-        from .models import _transactions  # NOQA
-        from django.conf import settings
-
-        try:
-            from .celery_app import app as celery_app  # NOQA
-        except ImportError:
-            pass
-
-        if hasattr(settings, 'RAVEN_CONFIG'):
-            from ..sentry import initialize
-            initialize()
+from pretix.base.models import LoggedModel
 
 
-try:
-    import pretix.celery_app as celery  # NOQA
-except ImportError:
-    pass
+class Check(LoggedModel):
+    RESULT_OK = 'ok'
+    RESULT_WARNING = 'warning'
+    RESULT_ERROR = 'error'
+
+    RESULTS = (
+        (RESULT_OK, _('OK')),
+        (RESULT_WARNING, _('Warning')),
+        (RESULT_ERROR, _('Error')),
+    )
+
+    created = models.DateTimeField(auto_now_add=True)
+    result = models.CharField(max_length=190, choices=RESULTS)
+    check_type = models.CharField(max_length=190)
+    log = models.TextField()
