@@ -67,3 +67,8 @@ $panel-default-heading-bg: #e5e5e5 !default;
 
 $body-bg: #FFFFFF !default;
 $main-box-bg: #FFFFFF;
+
+/* The following vars default to $body-bg in bootstrap, which we don't want */
+$nav-tabs-active-link-hover-bg: #FFFFFF;
+$nav-tabs-justified-active-link-border-color: #FFFFFF;
+$thumbnail-bg: #FFFFFF;
