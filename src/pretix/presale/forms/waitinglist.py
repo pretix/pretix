@@ -52,9 +52,9 @@ class WaitingListForm(forms.ModelForm):
         items, display_add_to_cart = get_grouped_items(
             self.event, self.instance.subevent, require_seat=None,
             memberships=(
-                self.request.customer.usable_memberships(
+                customer.usable_memberships(
                     for_event=self.instance.subevent or self.event,
-                    testmode=self.request.event.testmode
+                    testmode=self.event.testmode
                 )
                 if customer else None
             ),
