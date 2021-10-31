@@ -713,7 +713,8 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
                         initial=initial, all_optional=self.all_optional)
         if wd.get('email', '') and wd.get('fix', '') == "true" or self.cart_customer:
             f.fields['email'].disabled = True
-            f.fields['email_repeat'].disabled = True
+            if 'email_repeat' in f.fields:
+                f.fields['email_repeat'].disabled = True
 
         for overrides in override_sets:
             for fname, val in overrides.items():
