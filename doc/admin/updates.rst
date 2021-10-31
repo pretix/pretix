@@ -26,6 +26,13 @@ In addition to these standard update steps, the following list issues steps that
 to specific versions for pretix. If you're skipping versions, please read the instructions for every version in
 between as well.
 
+Upgrade to 3.17.0 or newer
+""""""""""""""""""""""""""
+
+pretix 3.17 introduces a dependency on ``nodejs``, so you should install it on your system::
+
+    # apt install nodejs npm
+
 Upgrade to 4.4.0 or newer
 """""""""""""""""""""""""
 
