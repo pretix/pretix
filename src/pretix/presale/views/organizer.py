@@ -878,7 +878,7 @@ class DayCalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
                 e["time_rastered"] = e["time"]
 
             e["offset_shift_end"] = 0
-            if "time_end_today" in e:
+            if "time_end_today" in e and e["time_end_today"]:
                 if e["time_end_today"].minute % raster_size:
                     minute = math.ceil(e["time_end_today"].minute / raster_size) * raster_size
                     hour = e["time_end_today"].hour
@@ -967,6 +967,7 @@ class DayCalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
         return ticks
 
     def _grid_for_template(self, events):
+        midnight = time(0,0)
         rows_by_collection = defaultdict(list)
 
         # We sort the events into "collections": all subevents from the same
@@ -979,7 +980,11 @@ class DayCalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
 
             placed_in_row = False
             for row in rows_by_collection[collection]:
-                if any(e['time_rastered'] < o['time_end_today_rastered'] and o['time_rastered'] < e['time_end_today_rastered'] for o in row):
+                if any(
+                    (e['time_rastered'] < o['time_end_today_rastered'] or o['time_end_today_rastered'] == midnight) and 
+                    (o['time_rastered'] < e['time_end_today_rastered'] or e['time_end_today_rastered'] == midnight) 
+                    for o in row
+                ):
                     continue
                 row.append(e)
                 placed_in_row = True
