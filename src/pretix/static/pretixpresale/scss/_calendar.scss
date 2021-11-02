@@ -138,8 +138,8 @@
 .day-calendar .current-time-bar {
   position: absolute;
   top: 0;
-  left: 0;
-  height: 100%;
+  left: -2px;
+  height: calc(100% - 5px);  /* remove 5px padding for link focus-outline */
   width: 1px;
   background-color: $brand-danger;
   outline: 1px solid #fff;

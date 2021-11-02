@@ -548,7 +548,7 @@ $(function () {
             }
             
             var offset = thisCalendar.querySelector("h3").getBoundingClientRect().width;
-            currentTimeBar.css("left", offset + (thisCalendar.scrollWidth-offset)*(currentTimeDelta/duration));
+            currentTimeBar.css("transform", "translateX(" + Math.round(offset + (thisCalendar.scrollWidth-offset)*(currentTimeDelta/duration)) + "px)");
         }
         currentTimeInterval = window.setInterval(setCurrentTimeBar, 60*1000);
         setCurrentTimeBar();
