@@ -14,16 +14,17 @@
 </o:OfficeDocumentSettings>
 </xml><![endif]-->
     <style type="text/css">
-        body {
+        body, .container {
             background-color: #eee;
-            background-position: top;
-            background-repeat: repeat-x;
             font-family: "Open Sans", "OpenSans", "Helvetica Neue", Helvetica, Arial, sans-serif;
             font-size: 16px;
             line-height: 1.4;
             color: #333;
             margin: 0;
             padding: 0;
+        }
+        .container {
+            padding: 20px;
         }
 
         table.layout > tr > td,
@@ -212,9 +213,9 @@
     <![endif]-->
 </head>
 <body align="center">
-    <table width="100%"><tr><td align="center" style="padding: 20px">
+    <table width="100%"><tr><td align="center" class="container">
     <!--[if gte mso 9]>
-    <table width="600"><tr><td align="center"
+    <table width="600"><tr><td align="center">
     <![endif]-->
     <table class="layout" style="max-width:600px" border="0" cellspacing="0">
         {% if event.settings.logo_image %}
