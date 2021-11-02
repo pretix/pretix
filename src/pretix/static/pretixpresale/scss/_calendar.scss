@@ -155,6 +155,9 @@
   z-index: 10;
 }
 
+.day-calendar a.event {
+  margin: 1px;
+}
 
 /*
 concurrency has two meanings:
@@ -266,7 +269,7 @@ concurrency has two meanings:
   padding: 0;
 
   display: grid;
-  gap: 2px;
+  gap: 0;
   --grid-cols: calc(var(--duration-hour, 0) * 12 + var(--duration-minute, 0) / 5);
   grid-template-columns: repeat(var(--grid-cols), minmax(var(--col-min-size, 3em), 1fr));
   grid-template-rows: repeat(var(--concurrency, 1), auto);
