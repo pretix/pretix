@@ -507,6 +507,10 @@ $(function () {
     }
 
     // Day calendar
+    $(".day-calendar [data-concurrency]").each(function() {
+        var c = parseInt(this.getAttribute("data-concurrency"), 10);
+        if (c > 9) this.style.setProperty('--concurrency', c);
+    })
     $(".day-calendar").each(function() {
         var timezone = this.getAttribute("data-timezone");
         var startTime = moment.tz(this.getAttribute("data-start"), timezone);
