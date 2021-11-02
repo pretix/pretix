@@ -967,7 +967,7 @@ class DayCalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
         return ticks
 
     def _grid_for_template(self, events):
-        midnight = time(0,0)
+        midnight = time(0, 0)
         rows_by_collection = defaultdict(list)
 
         # We sort the events into "collections": all subevents from the same
@@ -981,8 +981,8 @@ class DayCalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
             placed_in_row = False
             for row in rows_by_collection[collection]:
                 if any(
-                    (e['time_rastered'] < o['time_end_today_rastered'] or o['time_end_today_rastered'] == midnight) and 
-                    (o['time_rastered'] < e['time_end_today_rastered'] or e['time_end_today_rastered'] == midnight) 
+                    (e['time_rastered'] < o['time_end_today_rastered'] or o['time_end_today_rastered'] == midnight) and
+                    (o['time_rastered'] < e['time_end_today_rastered'] or e['time_end_today_rastered'] == midnight)
                     for o in row
                 ):
                     continue
