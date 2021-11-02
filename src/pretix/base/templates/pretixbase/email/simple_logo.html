@@ -14,16 +14,17 @@
 </o:OfficeDocumentSettings>
 </xml><![endif]-->
     <style type="text/css">
-        body {
+        body, .container {
             background-color: #eee;
-            background-position: top;
-            background-repeat: repeat-x;
             font-family: "Open Sans", "OpenSans", "Helvetica Neue", Helvetica, Arial, sans-serif;
             font-size: 16px;
             line-height: 1.4;
             color: #333;
             margin: 0;
-            padding-top: 20px;
+            padding: 0;
+        }
+        .container {
+            padding: 20px;
         }
 
         table.layout > tr > td,
@@ -36,7 +37,8 @@
         table.layout > tr > td.logo,
         table.layout > tbody > tr > td.logo,
         table.layout > thead > tr > td.logo {
-            padding: 20px 0 0 0;
+            padding: {% if event.settings.logo_image_large %}0 0 0 0{% else %}20px 0 0 0{% endif %};
+            mso-line-height-rule: at-least;
         }
 
         table.layout > tr > td.header,
@@ -112,10 +114,6 @@
             font-size: 12px;
         }
 
-        .content {
-            padding: 0 18px;
-        }
-
         ::selection {
             background: {{ color }};
             color: #FFF;
@@ -149,7 +147,7 @@
         table.layout > tr > td.containertd,
         table.layout > tbody > tr > td.containertd,
         table.layout > thead > tr > td.containertd {
-            padding: 15px 0;
+            padding: 20px;
         }
 
         a.button {
@@ -167,7 +165,8 @@
         }
 
         .order-button {
-            padding-top: 5px
+            padding-top: 5px;
+            text-align: center;
         }
         .order-button a.button {
             font-size: 12px;
@@ -214,14 +213,14 @@
     <![endif]-->
 </head>
 <body align="center">
+    <table width="100%"><tr><td align="center" class="container">
     <!--[if gte mso 9]>
-    <table width="100%"><tr><td align="center">
-    <table width="600"><tr><td align="center"
+    <table width="600"><tr><td align="center">
     <![endif]-->
     <table class="layout" style="max-width:600px" border="0" cellspacing="0">
         {% if event.settings.logo_image %}
             <tr>
-                <td style="line-height: 0; {% if event.settings.logo_image_large %}padding: 0;{% endif %}" align="center" class="logo">
+                <td align="center" class="logo">
                     {% if event.settings.logo_image_large %}
                         <img src="{% if event.settings.logo_image|thumb:'600_x5000'|first == '/' %}{{ site_url }}{% endif %}{{ event.settings.logo_image|thumb:'600_x5000' }}" alt="{{ event.name }}" style="width:100%" />
                     {% else %}
@@ -232,9 +231,6 @@
         {% endif %}
         <tr>
             <td class="header" align="center">
-                <!--[if gte mso 9]>
-                    <table cellpadding="20"><tr><td align="center">
-                <![endif]-->
                 {% if event %}
                     <h2><a href="{% abseventurl event "presale:event.index" %}" target="_blank">{{ event.name }}</a>
                     </h2>
@@ -247,51 +243,30 @@
                 {% block header %}
                     <h1>{{ subject }}</h1>
                 {% endblock %}
-                <!--[if gte mso 9]>
-                    </td></tr></table>
-                <![endif]-->
             </td>
         </tr>
         <tr>
             <td class="containertd">
-                <!--[if gte mso 9]>
-                        <table cellpadding="20"><tr><td>
-                    <![endif]-->
                 <div class="content">
                     {{ body|safe }}
                 </div>
-                <!--[if gte mso 9]>
-                        </td></tr></table>
-                    <![endif]-->
             </td>
         </tr>
         {% if order %}
             <tr>
                 <td class="order containertd">
-                    <!--[if gte mso 9]>
-                        <table cellpadding="20"><tr><td>
-                    <![endif]-->
                     <div class="content">
                         {% include "pretixbase/email/order_details.html" %}
                     </div>
-                    <!--[if gte mso 9]>
-                        </td></tr></table>
-                    <![endif]-->
                 </td>
             </tr>
         {% endif %}
         {% if signature %}
             <tr>
                 <td class="order containertd">
-                    <!--[if gte mso 9]>
-                        <table cellpadding="20"><tr><td>
-                    <![endif]-->
                     <div class="content">
                         {{ signature | safe }}
                     </div>
-                    <!--[if gte mso 9]>
-                        </td></tr></table>
-                    <![endif]-->
                 </td>
             </tr>
         {% endif %}
@@ -303,7 +278,7 @@
     <br/>
     <!--[if gte mso 9]>
     </td></tr></table>
-    </td></tr></table>
     <![endif]-->
+    </td></tr></table>
 </body>
 </html>
