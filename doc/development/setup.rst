@@ -26,7 +26,8 @@ Your should install the following on your system:
 * ``libssl`` (Debian package: ``libssl-dev``)
 * ``libxml2`` (Debian package ``libxml2-dev``)
 * ``libxslt`` (Debian package ``libxslt1-dev``)
-* ``libenchant1c2a`` (Debian package ``libenchant1c2a``)
+* ``libenchant1c2a`` (Debian package ``libenchant1c2a``) or if you use a debian version >= 11.1:
+* ``libenchant-2-2`` (Debian package ``libenchant-2-2``)
 * ``msgfmt`` (Debian package ``gettext``)
 * ``git``
 
@@ -54,6 +55,12 @@ Working with the code
 The first thing you need are all the main application's dependencies::
 
     cd src/
+    url -sL https://deb.nodesource.com/setup_12.x | sudo -E bash -
+    sudo apt install nodejs
+    url -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
+
+To add the path variable close and reopen your terminal. Now, run::
+
     pip3 install -e ".[dev]"
 
 Next, you need to copy the SCSS files from the source folder to the STATIC_ROOT directory::
