@@ -817,9 +817,11 @@ class DayCalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
 
         events, start, end = self._rasterize_events(ebd[self.date])
         shortest_duration = self._get_shortest_duration(events).total_seconds() // 60
+        # pick the next biggest tick_duration based on shortest_duration, max. 60 minutes
+        tick_duration = next((d for d in [15, 30, 60] if d >= shortest_duration), 60)
 
-        ctx["calendar_duration"] = self._get_time_duration(start, end)
-        ctx['time_ticks'] = self._get_time_ticks(start, end, shortest_duration)
+        ctx["calendar_duration"] = self._get_time_duration(start, self._ceil_time(end, raster_size=tick_duration))
+        ctx['time_ticks'] = self._get_time_ticks(start, end, tick_duration)
         ctx['start'] = datetime.combine(self.date, start)
         # ctx['end'] = end
         # size of each 5-minute slot in calendar is based on shortest event duration
@@ -937,20 +939,16 @@ class DayCalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
 
         return starting_at, ending_at
 
-    def _get_time_ticks(self, start, end, shortest_duration):
+    def _get_time_ticks(self, start, end, tick_duration):
         ticks = []
-        tick_durations = [15, 30, 60]
-        # Print a time tick every tick_duration. Pick the next big tick_duration based on shortest_duration
-        tick_duration = timedelta(minutes=next((d for d in tick_durations if d >= shortest_duration), tick_durations[-1]))
+        tick_duration = timedelta(minutes=tick_duration)
 
         # convert time to datetime for timedelta calc
-        # TODO: date.today should be replaced with currently displayed day as of daylight-savings having multiple hours twice
         start = datetime.combine(self.date, start)
         end = datetime.combine(self.date, end)
         if end < start:
             end = end + timedelta(days=1)
 
-        # important: due to daylight savings tick_start and offset need to be separate
         tick_start = start
         offset = datetime.utcfromtimestamp(0)
         duration = datetime.utcfromtimestamp(tick_duration.total_seconds())
