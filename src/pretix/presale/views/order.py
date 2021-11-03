@@ -44,6 +44,7 @@ from decimal import Decimal
 from django import forms
 from django.conf import settings
 from django.contrib import messages
+from django.core.exceptions import ValidationError
 from django.core.files import File
 from django.db import transaction
 from django.db.models import Exists, OuterRef, Q, Sum
@@ -74,6 +75,7 @@ from pretix.base.services.invoices import (
 from pretix.base.services.mail import SendMailException
 from pretix.base.services.orders import (
     OrderChangeManager, OrderError, cancel_order, change_payment_provider,
+    error_messages,
 )
 from pretix.base.services.pricing import get_price
 from pretix.base.services.tickets import generate, invalidate_cache
@@ -1317,7 +1319,56 @@ class OrderChange(EventViewMixin, OrderDetailMixin, TemplateView):
                 return False
         return True
 
-    def post(self, *args, **kwargs):
+    def _clean_category(self, form, category):
+        selected = {}
+        for i in category['items']:
+            if i.has_variations:
+                for v in i.available_variations:
+                    val = int(self.request.POST.get(f'cp_{form["pos"].pk}_variation_{i.pk}_{v.pk}') or '0')
+                    price = self.request.POST.get(f'cp_{form["pos"].pk}_variation_{i.pk}_{v.pk}_price') or '0'
+                    if val:
+                        selected[i, v] = val, price
+            else:
+                val = int(self.request.POST.get(f'cp_{form["pos"].pk}_item_{i.pk}') or '0')
+                price = self.request.POST.get(f'cp_{form["pos"].pk}_item_{i.pk}_price') or '0'
+                if val:
+                    selected[i, None] = val, price
+
+        if sum(a[0] for a in selected.values()) > category['max_count']:
+            # TODO: Proper pluralization
+            raise ValidationError(
+                _(error_messages['addon_max_count']),
+                'addon_max_count',
+                {
+                    'base': str(form['item'].name),
+                    'max': category['max_count'],
+                    'cat': str(category['category'].name),
+                }
+            )
+        elif sum(a[0] for a in selected.values()) < category['min_count']:
+            # TODO: Proper pluralization
+            raise ValidationError(
+                _(error_messages['addon_min_count']),
+                'addon_min_count',
+                {
+                    'base': str(form['item'].name),
+                    'min': category['min_count'],
+                    'cat': str(category['category'].name),
+                }
+            )
+        elif any(sum(v[0] for k, v in selected.items() if k[0] == i) > 1 for i in category['items']) and not category['multi_allowed']:
+            raise ValidationError(
+                _(error_messages['addon_no_multi']),
+                'addon_no_multi',
+                {
+                    'base': str(form['item'].name),
+                    'cat': str(category['category'].name),
+                }
+            )
+
+        return selected
+
+    def post(self, request, *args, **kwargs):
         was_paid = self.order.status == Order.STATUS_PAID
         ocm = OrderChangeManager(
             self.order,
@@ -1325,6 +1376,28 @@ class OrderChange(EventViewMixin, OrderDetailMixin, TemplateView):
             notify=True,
             reissue_invoice=True,
         )
+
+        addons_data = []
+        for p in self.positions:
+            if p.addon_to_id:
+                continue
+            for c in p.addon_form['categories']:
+                try:
+                    selected = self._clean_category(p.addon_form, c)
+                except ValidationError as e:
+                    messages.error(request, e.message % e.params if e.params else e.message)
+                    return self.get(request, *args, **kwargs)
+
+                for (i, v), (c, price) in selected.items():
+                    addons_data.append({
+                        'addon_to': p.pk,
+                        'item': i.pk,
+                        'variation': v.pk if v else None,
+                        'count': c,
+                        'price': price,
+                    })
+        ocm.set_addons(addons_data)
+
         form_valid = self._process_change(ocm)
 
         if not form_valid:
@@ -1349,4 +1422,4 @@ class OrderChange(EventViewMixin, OrderDetailMixin, TemplateView):
 
                 return redirect(self.get_order_url())
 
-        return self.get(*args, **kwargs)
+        return self.get(request, *args, **kwargs)

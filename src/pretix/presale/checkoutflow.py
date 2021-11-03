@@ -582,13 +582,13 @@ class AddOnsStep(CartMixin, AsyncAction, TemplateFlowStep):
         for i in category['items']:
             if i.has_variations:
                 for v in i.available_variations:
-                    val = int(self.request.POST.get(f'cp_{form["cartpos"].pk}_variation_{i.pk}_{v.pk}') or '0')
-                    price = self.request.POST.get(f'cp_{form["cartpos"].pk}_variation_{i.pk}_{v.pk}_price') or '0'
+                    val = int(self.request.POST.get(f'cp_{form["pos"].pk}_variation_{i.pk}_{v.pk}') or '0')
+                    price = self.request.POST.get(f'cp_{form["pos"].pk}_variation_{i.pk}_{v.pk}_price') or '0'
                     if val:
                         selected[i, v] = val, price
             else:
-                val = int(self.request.POST.get(f'cp_{form["cartpos"].pk}_item_{i.pk}') or '0')
-                price = self.request.POST.get(f'cp_{form["cartpos"].pk}_item_{i.pk}_price') or '0'
+                val = int(self.request.POST.get(f'cp_{form["pos"].pk}_item_{i.pk}') or '0')
+                price = self.request.POST.get(f'cp_{form["pos"].pk}_item_{i.pk}_price') or '0'
                 if val:
                     selected[i, None] = val, price
 
@@ -627,7 +627,7 @@ class AddOnsStep(CartMixin, AsyncAction, TemplateFlowStep):
             validate_cart_addons.send(
                 sender=self.event,
                 addons={k: v[0] for k, v in selected.items()},
-                base_position=form["cartpos"],
+                base_position=form["pos"],
                 iao=category['iao']
             )
         except CartError as e:

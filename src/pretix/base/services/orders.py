@@ -35,7 +35,7 @@
 
 import json
 import logging
-from collections import Counter, namedtuple
+from collections import Counter, defaultdict, namedtuple
 from datetime import datetime, time, timedelta
 from decimal import Decimal
 from typing import List, Optional
@@ -46,7 +46,7 @@ from django.core.cache import cache
 from django.core.exceptions import ValidationError
 from django.db import transaction
 from django.db.models import (
-    Exists, F, IntegerField, Max, Min, OuterRef, Q, Sum, Value,
+    Count, Exists, F, IntegerField, Max, Min, OuterRef, Q, Sum, Value,
 )
 from django.db.models.functions import Coalesce, Greatest
 from django.db.transaction import get_connection
@@ -73,7 +73,7 @@ from pretix.base.models.orders import (
     InvoiceAddress, OrderFee, OrderRefund, generate_secret,
 )
 from pretix.base.models.organizer import TeamAPIToken
-from pretix.base.models.tax import TaxRule
+from pretix.base.models.tax import TAXED_ZERO, TaxedPrice, TaxRule
 from pretix.base.payment import BasePaymentProvider, PaymentException
 from pretix.base.reldate import RelativeDateWrapper
 from pretix.base.secrets import assign_ticket_secret
@@ -131,6 +131,13 @@ error_messages = {
     'seat_invalid': _('One of the seats in your order was invalid, we removed the position from your cart.'),
     'seat_unavailable': _('One of the seats in your order has been taken in the meantime, we removed the position from your cart.'),
     'country_blocked': _('One of the selected products is not available in the selected country.'),
+    'not_for_sale': _('You selected a product which is not available for sale.'),
+    'addon_invalid_base': _('You can not select an add-on for the selected product.'),
+    'addon_duplicate_item': _('You can not select two variations of the same add-on product.'),
+    'addon_max_count': _('You can select at most %(max)s add-ons from the category %(cat)s for the product %(base)s.'),
+    'addon_min_count': _('You need to select at least %(min)s add-ons from the category %(cat)s for the '
+                         'product %(base)s.'),
+    'addon_no_multi': _('You can select every add-ons from the category %(cat)s for the product %(base)s at most once.'),
 }
 
 logger = logging.getLogger(__name__)
@@ -1472,7 +1479,7 @@ class OrderChangeManager:
         try:
             if price is None:
                 price = get_price(item, variation, subevent=subevent, invoice_address=self._invoice_address)
-            else:
+            elif not isinstance(price, TaxedPrice):
                 price = item.tax(price, base_price_is='gross', invoice_address=self._invoice_address)
         except TaxRule.SaleNotAllowed:
             raise OrderError(self.error_messages['tax_rule_country_blocked'])
@@ -1514,6 +1521,163 @@ class OrderChangeManager:
             self._invoice_dirty = True
 
         self._operations.append(self.SplitOperation(position))
+
+    def set_addons(self, addons):
+        if self._operations:
+            raise ValueError("Setting addons should be the first/only operation")
+
+        # Prepare various containers to hold data later
+        current_addons = defaultdict(lambda: defaultdict(list))  # OrderPos -> currently attached add-ons
+        input_addons = defaultdict(Counter)  # OrderPos -> final desired set of add-ons
+        selected_addons = defaultdict(Counter)  # OrderPos, ItemAddOn -> final desired set of add-ons
+        opcache = {}  # OrderPos.pk -> OrderPos
+        quota_diff = Counter()  # Quota -> Number of usages
+        available_categories = defaultdict(set)  # OrderPos -> Category IDs to choose from
+        price_included = defaultdict(dict)  # OrderPos -> CategoryID -> bool(price is included)
+        toplevel_op = self.order.positions.filter(
+            addon_to__isnull=True
+        ).prefetch_related(
+            'addons', 'item__addons', 'item__addons__addon_category'
+        ).select_related('item', 'variation')
+
+        _items_cache = {
+            i.pk: i
+            for i in self.event.items.select_related('category').prefetch_related(
+                'addons', 'bundles', 'addons__addon_category', 'quotas'
+            ).annotate(
+                has_variations=Count('variations'),
+            ).filter(
+                id__in=[a['item'] for a in addons]
+            ).order_by()
+        }
+        _variations_cache = {
+            v.pk: v
+            for v in ItemVariation.objects.filter(item__event=self.event).prefetch_related(
+                'quotas'
+            ).select_related('item', 'item__event').filter(
+                id__in=[a['variation'] for a in addons if a.get('variation')]
+            ).order_by()
+        }
+
+        # Prefill some of the cache containers
+        for op in toplevel_op:
+            if op.canceled:
+                continue
+            available_categories[op.pk] = {iao.addon_category_id for iao in op.item.addons.all()}
+            price_included[op.pk] = {iao.addon_category_id: iao.price_included for iao in op.item.addons.all()}
+            opcache[op.pk] = op
+            for a in op.addons.all():
+                if a.canceled:
+                    continue
+
+                # TODO: if not a.is_bundled:
+                current_addons[op][a.item_id, a.variation_id].append(a)
+
+        # Create operations, perform various checks
+        for a in addons:
+            # Check whether the specified items are part of what we just fetched from the database
+            # If they are not, the user supplied item IDs which either do not exist or belong to
+            # a different event
+            # TODO check if item and variation is for sale
+            if a['item'] not in _items_cache or (a['variation'] and a['variation'] not in _variations_cache):
+                raise OrderError(error_messages['not_for_sale'])
+
+            # TODO what if the product requires a membership?
+
+            # Only attach addons to things that are actually in this user's cart
+            if a['addon_to'] not in opcache:
+                raise OrderError(error_messages['addon_invalid_base'])
+
+            op = opcache[a['addon_to']]
+            item = _items_cache[a['item']]
+            variation = _variations_cache[a['variation']] if a['variation'] is not None else None
+
+            if item.category_id not in available_categories[op.pk]:
+                raise OrderError(error_messages['addon_invalid_base'])
+
+            # Fetch all quotas. If there are no quotas, this item is not allowed to be sold.
+            quotas = list(item.quotas.filter(subevent=op.subevent)
+                          if variation is None else variation.quotas.filter(subevent=op.subevent))
+            if not quotas:
+                raise OrderError(error_messages['unavailable'])
+
+            if (a['item'], a['variation']) in input_addons[op.id]:
+                raise OrderError(error_messages['addon_duplicate_item'])
+
+            input_addons[op.id][a['item'], a['variation']] = a.get('count', 1)
+            selected_addons[op.id, item.category_id][a['item'], a['variation']] = a.get('count', 1)
+
+            if price_included[op.pk].get(item.category_id):
+                price = TAXED_ZERO
+            else:
+                price = get_price(
+                    item, variation, voucher=None, custom_price=a.get('price'), subevent=op.subevent,
+                    custom_price_is_net=self.event.settings.display_net_prices,
+                    invoice_address=self._invoice_address,
+                )
+
+            if a.get('count', 1) > len(current_addons[op][a['item'], a['variation']]):
+                # This add-on is new, add it to the cart
+                for quota in quotas:
+                    quota_diff[quota] += a.get('count', 1) - len(current_addons[op][a['item'], a['variation']])
+
+                for i in range(a.get('count', 1) - len(current_addons[op][a['item'], a['variation']])):
+                    self.add_position(
+                        item=item, variation=variation, price=price,
+                        addon_to=op, subevent=op.subevent, seat=None,
+                    )
+                    # TODO: self._check_item_constraints(op, operations) ?
+
+        # Check constraints on the add-on combinations
+        for op in toplevel_op:
+            item = op.item
+            for iao in item.addons.all():
+                # todo: do not count bundled items
+                selected = selected_addons[op.id, iao.addon_category_id]
+                n_per_i = Counter()
+                for (i, v), c in selected.items():
+                    n_per_i[i] += c
+                if sum(selected.values()) > iao.max_count:
+                    # TODO: Proper i18n
+                    # TODO: Proper pluralization
+                    raise OrderError(
+                        error_messages['addon_max_count'],
+                        {
+                            'base': str(item.name),
+                            'max': iao.max_count,
+                            'cat': str(iao.addon_category.name),
+                        }
+                    )
+                elif sum(selected.values()) < iao.min_count:
+                    # TODO: Proper i18n
+                    # TODO: Proper pluralization
+                    raise OrderError(
+                        error_messages['addon_min_count'],
+                        {
+                            'base': str(item.name),
+                            'min': iao.min_count,
+                            'cat': str(iao.addon_category.name),
+                        }
+                    )
+                elif any(v > 1 for v in n_per_i.values()) and not iao.multi_allowed:
+                    raise OrderError(
+                        error_messages['addon_no_multi'],
+                        {
+                            'base': str(item.name),
+                            'cat': str(iao.addon_category.name),
+                        }
+                    )
+
+        # Detect removed add-ons and create RemoveOperations
+        for cp, al in list(current_addons.items()):
+            for k, v in al.items():
+                input_num = input_addons[cp.id].get(k, 0)
+                current_num = len(current_addons[cp].get(k, []))
+                if input_num < current_num:
+                    for a in current_addons[cp][k][:current_num - input_num]:
+                        if a.canceled:
+                            continue
+                        self.cancel(a)
 
     def _check_seats(self):
         for seat, diff in self._seatdiff.items():
@@ -2106,6 +2270,7 @@ class OrderChangeManager:
             # an order change can only be committed once
             raise OrderError(error_messages['internal'])
         self._committed = True
+        print(self._operations)
 
         if not self._operations:
             # Do nothing
