@@ -538,12 +538,15 @@ $(function () {
 
         var thisCalendar = this;
         var currentTimeInterval;
-        var currentTimeBar = $('<div class="current-time-bar"></div>').appendTo(this);
+        var currentTimeBar = $('<div class="current-time-bar" aria-hidden="true"><time><span class="current-time-hour"></span><span class="current-time-sep">:</span><span class="current-time-minute"></span></time></div>').appendTo(this);
+        var currentTimeHour = currentTimeBar.find(".current-time-hour");
+        var currentTimeMinute = currentTimeBar.find(".current-time-minute");
         var duration = this.getAttribute("data-duration").split(":").reduce(function(previousValue, currentValue, currentIndex) {
             return previousValue + (currentIndex ? parseInt(currentValue, 10) * 60 : parseInt(currentValue, 10) * 60 * 60);
         }, 0);
         function setCurrentTimeBar() {
-            var currentTimeDelta = Math.floor((moment().tz(timezone) - startTime)/1000);
+            var currentTime = moment().tz(timezone);
+            var currentTimeDelta = Math.floor((currentTime - startTime)/1000);
             if (currentTimeDelta < 0 || currentTimeDelta > duration) {
                 // Too early || Too late
                 window.clearInterval(currentTimeInterval);
@@ -553,8 +556,10 @@ $(function () {
             
             var offset = thisCalendar.querySelector("h3").getBoundingClientRect().width;
             currentTimeBar.css("transform", "translateX(" + Math.round(offset + (thisCalendar.scrollWidth-offset)*(currentTimeDelta/duration)) + "px)");
+            currentTimeHour.text(currentTime.format("HH"));
+            currentTimeMinute.text(currentTime.format("mm"));
         }
-        currentTimeInterval = window.setInterval(setCurrentTimeBar, 60*1000);
+        currentTimeInterval = window.setInterval(setCurrentTimeBar, 15*1000);
         setCurrentTimeBar();
     });
 

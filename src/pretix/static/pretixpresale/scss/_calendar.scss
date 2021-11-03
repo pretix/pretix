@@ -137,12 +137,37 @@
 
 .day-calendar .current-time-bar {
   position: absolute;
-  top: 0;
+  top: 4px;
   left: -2px;
-  height: calc(100% - 5px);  /* remove 5px padding for link focus-outline */
+  height: calc(100% - 10px);  /* remove 5px padding for link focus-outline */
   width: 1px;
-  background-color: $brand-danger;
+  background-color: $brand-primary;
   outline: 1px solid #fff;
+}
+.day-calendar .current-time-bar time {
+  background: $brand-primary;
+  position: absolute;
+  top: 0;
+  left: 0;
+  color: #fff;
+  padding: 1px 3px;
+}
+.day-calendar .current-time-sep {
+  animation: watch-blinker 2s step-end infinite;
+}
+@-webkit-keyframes watch-blinker {
+  0% { visibility: visible; }
+  75% { visibility: hidden; }
+}
+
+@-moz-keyframes watch-blinker {
+  0% { visibility: visible; }
+  75% { visibility: hidden; }
+}
+
+@keyframes watch-blinker {
+  0% { visibility: visible; }
+  75% { visibility: hidden; }
 }
 
 .day-row-name {
