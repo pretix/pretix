@@ -35,7 +35,7 @@ the pull request title will become the commit message on merge. We prefer mergin
 feature if the PR contains multiple commits that do not carry value to keep. If there is value in keeping the
 individual commits, we use "Rebase and merge" instead. Merge commits should be avoided.
 
-* The commit message should start with a single subject line and can optionally followed by a commit message body.
+* The commit message should start with a single subject line and can optionally be followed by a commit message body.
 
   * The subject line should be the shortest possible representation of what the commit changes. Someone who reviewed
     the commit a couple of weeks ago should able to immediately remember the commit based on the subject line and tell
