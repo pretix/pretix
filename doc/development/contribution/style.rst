@@ -1,3 +1,5 @@
+.. spelling:: Rebase rebasing
+
 Coding style and quality
 ========================
 
@@ -73,12 +75,12 @@ individual commits, we use "Rebase and merge" instead. Merge commits should be a
   second part of the message to avoid repetition of the word "fix". If your commit only partially resolves the issue, use
   "Refs #1234 -- Crash in order list" instead.
 
-* Applies to pretix employees only: If your commit references a sentry issue, please put it in parantheses at the end
+* Applies to pretix employees only: If your commit references a sentry issue, please put it in parentheses at the end
   of the subject line or inside the body ("Fix crash in order list (PRETIXEU-ABC)"). If your commit references a support
-  ticket, please put it in parantheses at the end of the subject line with a "Z#" prefix ("Fix crash in order list (Z#12345)").
+  ticket, please put it in parentheses at the end of the subject line with a "Z#" prefix ("Fix crash in order list (Z#12345)").
 
-* If your PR was open for a while and might casue conflicts on merge, please prefer rebasing it (``git rebase -i master``)
-  over merging ``master`` into your branch unless it is unfeasibly complicated.
+* If your PR was open for a while and might cause conflicts on merge, please prefer rebasing it (``git rebase -i master``)
+  over merging ``master`` into your branch unless it is prohibitively complicated.
 
 
 .. _PEP 8: https://legacy.python.org/dev/peps/pep-0008/
