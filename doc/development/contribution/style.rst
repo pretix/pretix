@@ -38,7 +38,7 @@ individual commits, we use "Rebase and merge" instead. Merge commits should be a
 * The commit message should start with a single subject line and can optionally be followed by a commit message body.
 
   * The subject line should be the shortest possible representation of what the commit changes. Someone who reviewed
-    the commit a couple of weeks ago should able to immediately remember the commit based on the subject line and tell
+    the commit should able to immediately remember the commit in a couple of weeks based on the subject line and tell
     it apart from other commits.
 
   * If there's additional useful information that we should keep, such as reasoning behind the commit, you can
