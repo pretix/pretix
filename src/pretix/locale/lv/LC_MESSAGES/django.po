@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-10-29 10:09+0000\n"
-"PO-Revision-Date: 2020-11-27 04:00+0000\n"
+"PO-Revision-Date: 2021-11-03 10:49+0000\n"
 "Last-Translator: Svyatoslav <slava@digitalarthouse.eu>\n"
 "Language-Team: Latvian <https://translate.pretix.eu/projects/pretix/pretix/"
 "lv/>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n % 10 == 0 || n % 100 >= 11 && n % 100 <= "
 "19) ? 0 : ((n % 10 == 1 && n % 100 != 11) ? 1 : 2);\n"
-"X-Generator: Weblate 3.10.3\n"
+"X-Generator: Weblate 4.8\n"
 
 #: pretix/api/auth/devicesecurity.py:28
 msgid ""
@@ -1532,7 +1532,7 @@ msgstr ""
 
 #: pretix/base/exporters/orderlist.py:831
 msgid "Blocking vouchers"
-msgstr "Bloķēt kuponus "
+msgstr "Bloķēt promokods"
 
 #: pretix/base/exporters/orderlist.py:832 pretix/control/views/item.py:926
 msgid "Current user's carts"
@@ -3015,7 +3015,7 @@ msgstr ""
 
 #: pretix/base/models/items.py:448
 msgid "This product can only be bought using a voucher."
-msgstr "Šo produktu var iegādāties tikai ar kuponu."
+msgstr "Šo produktu var iegādāties tikai ar promokodu."
 
 #: pretix/base/models/items.py:450
 msgid ""
@@ -3754,10 +3754,8 @@ msgid "Maximum usages"
 msgstr ""
 
 #: pretix/base/models/memberships.py:57
-#, fuzzy
-#| msgid "Number of times this voucher can be redeemed."
 msgid "Number of times this membership can be used in a purchase."
-msgstr "Cik reizes šo kuponu var izmantot."
+msgstr "Cik reizes šo promokodu var izmantot."
 
 #: pretix/base/models/memberships.py:123
 #: pretix/control/templates/pretixcontrol/items/question.html:26
@@ -4171,11 +4169,11 @@ msgstr ""
 
 #: pretix/base/models/organizer.py:296
 msgid "Can view vouchers"
-msgstr "Var apskatīt kuponus"
+msgstr "Var apskatīt promokodu"
 
 #: pretix/base/models/organizer.py:300
 msgid "Can change vouchers"
-msgstr "Var mainīt kuponus"
+msgstr "Var mainīt promokodi"
 
 #: pretix/base/models/organizer.py:304
 #, python-format
@@ -4307,7 +4305,7 @@ msgstr "Samaziniet produkta cenu par (%)"
 
 #: pretix/base/models/vouchers.py:195
 msgid "Number of times this voucher can be redeemed."
-msgstr "Cik reizes šo kuponu var izmantot."
+msgstr "Cik reizes šo promokodu var izmantot."
 
 #: pretix/base/models/vouchers.py:199 pretix/control/views/vouchers.py:109
 msgid "Redeemed"
@@ -4345,7 +4343,7 @@ msgid ""
 "receive a ticket."
 msgstr ""
 "Aktivizējot šo kuponu, tas tiks atņemts no attiecīgā produkta kvotām tā, ka "
-"tiek garantēts, ka ikviens, kam ir šis kupona kods, saņem biļeti."
+"tiek garantēts, ka ikviens, kam ir šis promokods, saņem biļeti."
 
 #: pretix/base/models/vouchers.py:223
 msgid "Allow to bypass quota"
@@ -4400,8 +4398,8 @@ msgid ""
 "have been redeemed etc."
 msgstr ""
 "Varat izmantot šo lauku, lai grupētu vairākus kuponus kopā. Ja vairākiem "
-"kuponiem ievadāt vienādu vērtību, varat iegūt statistiku par to, cik daudz "
-"no tiem ir izmantoti utt."
+"promokodiem ievadāt vienādu vērtību, varat iegūt statistiku par to, cik "
+"daudz no tiem ir izmantoti utt."
 
 #: pretix/base/models/vouchers.py:286
 msgid "Shows hidden products that match this voucher"
@@ -4446,7 +4444,7 @@ msgstr ""
 
 #: pretix/base/models/vouchers.py:335
 msgid "It is currently not possible to create vouchers for add-on products."
-msgstr "Pašlaik nav iespējams izveidot kuponus papildinājumu produktiem."
+msgstr "Pašlaik nav iespējams izveidot promokodi papildinājumu produktiem."
 
 #: pretix/base/models/vouchers.py:337 pretix/base/models/vouchers.py:430
 #, fuzzy
@@ -4480,8 +4478,8 @@ msgid ""
 "You cannot create a voucher that blocks quota as the selected product or "
 "quota is currently sold out or completely reserved."
 msgstr ""
-"Jūs nevarat izveidot kuponu, kas bloķētu kvotu, jo izvēlētais produkts vai "
-"kvota šobrīd ir izpārdota vai pilnībā rezervēta."
+"Jūs nevarat izveidot promokodu, kas bloķētu kvotu, jo izvēlētais produkts "
+"vai kvota šobrīd ir izpārdota vai pilnībā rezervēta."
 
 #: pretix/base/models/vouchers.py:440
 msgid "A voucher with this code already exists."
@@ -5181,7 +5179,7 @@ msgid ""
 "You entered a voucher instead of a gift card. Vouchers can only be entered "
 "on the first page of the shop below the product selection."
 msgstr ""
-"Dāvanu kartes vietā ievadījāt kuponu. Kuponus var ievadīt tikai veikala "
+"Dāvanu kartes vietā ievadījāt kuponu. Promokodi var ievadīt tikai veikala "
 "pirmajā lapā zem preces izvēles."
 
 #: pretix/base/payment.py:1248 pretix/base/payment.py:1290
@@ -5756,7 +5754,7 @@ msgid ""
 "or that you tried to redeem it before but did not complete the checkout "
 "process. You can try to use it again in %d minutes."
 msgstr ""
-"Šis kupona kods šobrīd ir bloķēts, jo tas jau ir ietverts grozā. Tas varētu "
+"Šis promokods šobrīd ir bloķēts, jo tas jau ir ietverts grozā. Tas varētu "
 "nozīmēt, ka kāds cits šobrīd izmanto šo kuponu vai arī jūs mēģinājāt to "
 "izpirkt iepriekš, bet nepabeidzāt norēķinu procesu. Jūs varat mēģināt to "
 "izmantot vēlreiz pēc %d minūtēm."
@@ -23534,7 +23532,7 @@ msgstr "Tukšs grozs"
 #: pretix/presale/templates/pretixpresale/event/fragment_cart_box.html:48
 #: pretix/presale/templates/pretixpresale/event/index.html:297
 msgid "Redeem a voucher"
-msgstr "Izmantot kuponu"
+msgstr "Izmantot promokodu"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart_box.html:51
 msgid "We're applying this voucher to your cart..."
@@ -23543,7 +23541,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/fragment_cart_box.html:59
 #: pretix/presale/templates/pretixpresale/event/index.html:319
 msgid "Redeem voucher"
-msgstr "Izmantot kuponu"
+msgstr "Izmantot promokodu"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_checkoutflow.html:2
 #, fuzzy
