@@ -70,7 +70,7 @@ logger = logging.getLogger(__name__)
 
 
 def _location_oneliner(loc):
-    return ', '.join([l.strip() for l in loc.splitlines() if l])
+    return ', '.join([l.strip() for l in loc.splitlines() if l and l.strip()])
 
 
 @transaction.atomic
