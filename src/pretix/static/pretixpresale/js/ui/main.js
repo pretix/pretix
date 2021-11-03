@@ -555,9 +555,16 @@ $(function () {
             }
             
             var offset = thisCalendar.querySelector("h3").getBoundingClientRect().width;
-            currentTimeBar.css("transform", "translateX(" + Math.round(offset + (thisCalendar.scrollWidth-offset)*(currentTimeDelta/duration)) + "px)");
+            var dx = Math.round(offset + (thisCalendar.scrollWidth-offset)*(currentTimeDelta/duration));
+            thisCalendar.style.setProperty('--current-time-offset', dx + "px");
             currentTimeHour.text(currentTime.format("HH"));
             currentTimeMinute.text(currentTime.format("mm"));
+            if (currentTimeBar.get(0).getBoundingClientRect().width + dx > thisCalendar.scrollWidth) {
+                currentTimeBar.addClass("swap-side");
+            }
+            else {
+                currentTimeBar.removeClass("swap-side");
+            }
         }
         currentTimeInterval = window.setInterval(setCurrentTimeBar, 15*1000);
         setCurrentTimeBar();

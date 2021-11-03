@@ -143,15 +143,34 @@
   width: 1px;
   background-color: $brand-primary;
   outline: 1px solid #fff;
+  transform: translateX(var(--current-time-offset, 0));
+}
+[dir=rtl] .day-calendar .current-time-bar {
+  left: auto;
+  right: -2px;
+  transform: translateX(calc(-1 * var(--current-time-offset, 0)));
 }
 .day-calendar .current-time-bar time {
   background: $brand-primary;
   position: absolute;
   top: 0;
-  left: 0;
   color: #fff;
   padding: 1px 3px;
+  width: 3.25em;
+  text-align: center;
 }
+.day-calendar .current-time-bar time,
+[dir=rtl] .day-calendar .current-time-bar.swap-side time {
+  left: 0;
+}
+.day-calendar .current-time-bar.swap-side time,
+[dir=rtl] .day-calendar .current-time-bar time {
+  left: auto;
+  right: 0;
+}
+
+
+
 .day-calendar .current-time-sep {
   animation: watch-blinker 2s step-end infinite;
 }
