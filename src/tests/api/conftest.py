@@ -207,4 +207,10 @@ def taxrule2(event2):
     return event2.tax_rules.create(name="VAT", rate=25)
 
 
+@pytest.fixture
+@scopes_disabled()
+def item(event):
+    return event.items.create(name='foo', default_price=3)
+
+
 utils.setup_databases = scopes_disabled()(utils.setup_databases)

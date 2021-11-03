@@ -365,7 +365,10 @@ class CreateRule(EventPermissionRequiredMixin, CreateView):
 
         form.instance.event = self.request.event
 
-        self.object = form.save()
+        with transaction.atomic():
+            self.object = form.save()
+            form.instance.log_action('pretix.plugins.sendmail.rule.added', user=self.request.user,
+                                     data=dict(form.cleaned_data))
 
         return redirect(
             'plugins:sendmail:rule.update',
@@ -391,8 +394,11 @@ class UpdateRule(EventPermissionRequiredMixin, UpdateView):
             'rule': self.object.pk,
         })
 
+    @transaction.atomic()
     def form_valid(self, form):
         messages.success(self.request, _('Your changes have been saved.'))
+        form.instance.log_action('pretix.plugins.sendmail.rule.changed', user=self.request.user,
+                                 data=dict(form.cleaned_data))
         return super().form_valid(form)
 
     def form_invalid(self, form):

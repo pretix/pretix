@@ -34,7 +34,10 @@
 
 from django.conf.urls import re_path
 
+from pretix.api.urls import event_router
+
 from . import views
+from .api import RuleViewSet
 
 urlpatterns = [
     re_path(r'^control/event/(?P<organizer>[^/]+)/(?P<event>[^/]+)/sendmail/$', views.SenderView.as_view(),
@@ -52,3 +55,4 @@ urlpatterns = [
     re_path(r'^control/event/(?P<organizer>[^/]+)/(?P<event>[^/]+)/sendmail/rules', views.ListRules.as_view(),
             name='rule.list'),
 ]
+event_router.register(r'sendmail_rules', RuleViewSet)

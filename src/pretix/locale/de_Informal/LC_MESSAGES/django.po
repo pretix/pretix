@@ -22735,7 +22735,7 @@ msgstr ""
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:17
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:94
 msgid "Create a new rule"
-msgstr "Neue Steuer-Regel erstellen"
+msgstr "Neue Regel erstellen"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:24
 msgid "Email subject"

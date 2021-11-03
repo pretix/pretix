@@ -34,6 +34,7 @@ from pretix.base.email import get_email_context
 from pretix.base.models import (
     Event, InvoiceAddress, Item, Order, OrderPosition, SubEvent,
 )
+from pretix.base.models.base import LoggingMixin
 from pretix.base.services.mail import SendMailException
 
 
@@ -164,7 +165,7 @@ class ScheduledMail(models.Model):
             self.last_successful_order_id = o.pk
 
 
-class Rule(models.Model):
+class Rule(models.Model, LoggingMixin):
     CUSTOMERS = "orders"
     ATTENDEES = "attendees"
     BOTH = "both"
