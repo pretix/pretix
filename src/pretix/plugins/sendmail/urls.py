@@ -55,4 +55,4 @@ urlpatterns = [
     re_path(r'^control/event/(?P<organizer>[^/]+)/(?P<event>[^/]+)/sendmail/rules', views.ListRules.as_view(),
             name='rule.list'),
 ]
-event_router.register(r'mailrules', RuleViewSet)
+event_router.register(r'sendmail_rules', RuleViewSet)

@@ -31,5 +31,6 @@ Resources and endpoints
    webhooks
    seatingplans
    exporters
+   sendmail_rules
    billing_invoices
    billing_var

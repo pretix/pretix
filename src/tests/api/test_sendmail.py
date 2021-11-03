@@ -28,7 +28,6 @@ TEST_RULE_RES = {
     'offset_is_after': False,
     'send_to': 'orders',
     'enabled': True,
-    'event': 1,
 }
 
 
@@ -38,7 +37,7 @@ def test_sendmail_rule_list(token_client, organizer, event, rule):
 
     res['id'] = rule.pk
 
-    resp = token_client.get(f'/api/v1/organizers/{organizer.slug}/events/{event.slug}/mailrules/')
+    resp = token_client.get(f'/api/v1/organizers/{organizer.slug}/events/{event.slug}/sendmail_rules/')
     assert resp.status_code == 200
     results = resp.data['results']
     assert res in results
@@ -53,11 +52,11 @@ def test_sendmail_rule_list(token_client, organizer, event, rule):
                          'enabled=false', f'id={rule.id}&enabled=false']
 
     for q in produces_result:
-        resp = token_client.get(f'/api/v1/organizers/{organizer.slug}/events/{event.slug}/mailrules/?{q}')
+        resp = token_client.get(f'/api/v1/organizers/{organizer.slug}/events/{event.slug}/sendmail_rules/?{q}')
         assert [res] == resp.data['results']
 
     for q in no_produce_result:
-        resp = token_client.get(f'/api/v1/organizers/{organizer.slug}/events/{event.slug}/mailrules/?{q}')
+        resp = token_client.get(f'/api/v1/organizers/{organizer.slug}/events/{event.slug}/sendmail_rules/?{q}')
         assert [] == resp.data['results']
 
 
@@ -66,7 +65,7 @@ def test_sendmail_rule_detail(token_client, organizer, event, rule):
     res = dict(TEST_RULE_RES)
     res['id'] = rule.pk
 
-    resp = token_client.get(f'/api/v1/organizers/{organizer.slug}/events/{event.slug}/mailrules/{rule.pk}/')
+    resp = token_client.get(f'/api/v1/organizers/{organizer.slug}/events/{event.slug}/sendmail_rules/{rule.pk}/')
 
     assert resp.status_code == 200
     assert res == resp.data
@@ -75,7 +74,7 @@ def test_sendmail_rule_detail(token_client, organizer, event, rule):
 @scopes_disabled()
 def create_rule(token_client, organizer, event, data, expected_failure=False, expected_failure_text=None):
     resp = token_client.post(
-        f'/api/v1/organizers/{organizer.slug}/events/{event.slug}/mailrules/',
+        f'/api/v1/organizers/{organizer.slug}/events/{event.slug}/sendmail_rules/',
         data=data, format='json'
     )
     if expected_failure:
@@ -237,7 +236,7 @@ def test_sendmail_rule_create_invalid(token_client, organizer, event):
 @pytest.mark.django_db
 def test_sendmail_rule_change(token_client, organizer, event, rule):
     token_client.patch(
-        f'/api/v1/organizers/{organizer.slug}/events/{event.slug}/mailrules/{rule.pk}/',
+        f'/api/v1/organizers/{organizer.slug}/events/{event.slug}/sendmail_rules/{rule.pk}/',
         data={'enabled': False}, format='json'
     )
 
@@ -250,7 +249,7 @@ def test_sendmail_rule_change(token_client, organizer, event, rule):
 @pytest.mark.django_db
 def test_sendmail_rule_delete(token_client, organizer, event, rule):
     token_client.delete(
-        f'/api/v1/organizers/{organizer.slug}/events/{event.slug}/mailrules/{rule.pk}/'
+        f'/api/v1/organizers/{organizer.slug}/events/{event.slug}/sendmail_rules/{rule.pk}/'
     )
 
     assert Rule.objects.filter(pk=rule.pk).count() == 0

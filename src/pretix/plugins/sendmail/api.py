@@ -34,16 +34,15 @@ class RuleSerializer(I18nAwareModelSerializer):
         model = Rule
         fields = ['id', 'subject', 'template', 'all_products', 'limit_products', 'include_pending',
                   'send_date', 'send_offset_days', 'send_offset_time', 'date_is_absolute',
-                  'offset_to_event_end', 'offset_is_after', 'send_to', 'enabled', 'event']
-        read_only_fields = ['id', 'event']
+                  'offset_to_event_end', 'offset_is_after', 'send_to', 'enabled']
+        read_only_fields = ['id']
 
-    def validate(self, data):  # todo: check this logic, it's probably still flawed
+    def validate(self, data):
         data = super().validate(data)
 
         full_data = self.to_internal_value(self.to_representation(self.instance)) if self.instance else {}
         full_data.update(data)
 
-        # todo: better error messages
         if full_data.get('date_is_absolute') is not False:
             if any([k in data for k in ['offset_to_event_end', 'offset_is_after']]):
                 raise ValidationError('date_is_absolute and offset_* are mutually exclusive')
@@ -51,7 +50,7 @@ class RuleSerializer(I18nAwareModelSerializer):
                 raise ValidationError('send_date is required for date_is_absolute=True')
         else:
             if not all([full_data.get(k) for k in ['send_offset_days', 'send_offset_time']]):
-                raise ValidationError('send_offset_days and send_offset_time are required')
+                raise ValidationError('send_offset_days and send_offset_time are required for date_is_absolute=False')
 
         if full_data.get('all_products') is False:
             if not full_data.get('limit_products'):
@@ -86,7 +85,7 @@ class RuleViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         super().perform_create(serializer)
         serializer.instance.log_action(
-            'pretix.plugins.sendmail.rule.created',
+            'pretix.plugins.sendmail.rule.added',
             user=self.request.user,
             auth=self.request.auth,
             data=self.request.data
@@ -96,7 +95,7 @@ class RuleViewSet(viewsets.ModelViewSet):
     def perform_update(self, serializer):
         super().perform_update(serializer)
         serializer.instance.log_action(
-            'pretix.plugins.sendmail.rule.updated',
+            'pretix.plugins.sendmail.rule.changed',
             user=self.request.user,
             auth=self.request.auth,
             data=self.request.data
