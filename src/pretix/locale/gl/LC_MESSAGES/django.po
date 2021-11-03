@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-10-29 10:09+0000\n"
-"PO-Revision-Date: 2021-10-29 11:52+0000\n"
-"Last-Translator: Raphael Michel <michel@rami.io>\n"
+"PO-Revision-Date: 2021-11-04 07:00+0000\n"
+"Last-Translator: Ismael Menéndez Fernández <ismael.menendez@balidea.com>\n"
 "Language-Team: Galician <https://translate.pretix.eu/projects/pretix/pretix/"
 "gl/>\n"
 "Language: gl\n"
@@ -307,9 +307,8 @@ msgstr "Orden marcada como pagada"
 #: pretix/base/notifications.py:251
 #: pretix/control/templates/pretixcontrol/event/mail.html:72
 #: pretix/control/views/orders.py:1268
-#, fuzzy
 msgid "Order canceled"
-msgstr "Orden cancelada"
+msgstr "Orde cancelada"
 
 #: pretix/api/webhooks.py:216 pretix/base/notifications.py:257
 #, fuzzy
@@ -1488,7 +1487,6 @@ msgstr "Fecha"
 #: pretix/presale/forms/order.py:36 pretix/presale/forms/waitinglist.py:78
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:10
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:45
-#, fuzzy
 msgid "Product"
 msgstr "Producto"
 
@@ -1678,9 +1676,8 @@ msgstr "Cuota total"
 #: pretix/base/exporters/orderlist.py:831
 #: pretix/control/templates/pretixcontrol/event/cancel.html:16
 #: pretix/control/views/item.py:902
-#, fuzzy
 msgid "Paid orders"
-msgstr "Órdenes pagadas"
+msgstr "Ordes pagadas"
 
 #: pretix/base/exporters/orderlist.py:831 pretix/control/views/item.py:907
 #, fuzzy
@@ -2614,48 +2611,40 @@ msgid ""
 msgstr ""
 
 #: pretix/base/models/checkin.py:247
-#, fuzzy
 msgid "Entry"
 msgstr "Ingreso"
 
 #: pretix/base/models/checkin.py:248
-#, fuzzy
 msgid "Exit"
-msgstr "Salida"
+msgstr "Saída"
 
 #: pretix/base/models/checkin.py:262
-#, fuzzy
 msgid "Unknown ticket"
-msgstr "Ticket no encontrado"
+msgstr "Non se atopou ticket"
 
 #: pretix/base/models/checkin.py:263
-#, fuzzy
 msgid "Ticket not paid"
-msgstr "Ticket por pagar"
+msgstr "Ticket pendente de pago"
 
 #: pretix/base/models/checkin.py:264
 msgid "Forbidden by custom rule"
 msgstr ""
 
 #: pretix/base/models/checkin.py:265
-#, fuzzy
 msgid "Ticket code revoked/changed"
 msgstr "Código de ticket revocado/cambiado"
 
 #: pretix/base/models/checkin.py:266
-#, fuzzy
 msgid "Information required"
 msgstr "Información requerida"
 
 #: pretix/base/models/checkin.py:267
-#, fuzzy
 msgid "Ticket already used"
-msgstr "Este ticket ya fue utilizado"
+msgstr "Este ticket xa foi utilizado"
 
 #: pretix/base/models/checkin.py:268
-#, fuzzy
 msgid "Ticket type not allowed here"
-msgstr "Tipo de ticket no está permitido"
+msgstr "Tipo de ticket non permitido"
 
 #: pretix/base/models/checkin.py:269
 #, fuzzy
@@ -4149,7 +4138,6 @@ msgstr "Número de veces que se puede canjear este recibo."
 #: pretix/plugins/reports/exporters.py:287
 #: pretix/presale/templates/pretixpresale/event/fragment_order_status.html:27
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:78
-#, fuzzy
 msgid "Canceled"
 msgstr "Cancelado"
 
@@ -4769,9 +4757,8 @@ msgid "Number of times this voucher can be redeemed."
 msgstr "Número de veces que se puede canjear este cupón."
 
 #: pretix/base/models/vouchers.py:199 pretix/control/views/vouchers.py:109
-#, fuzzy
 msgid "Redeemed"
-msgstr "Canjeado"
+msgstr "Trocado"
 
 #: pretix/base/models/vouchers.py:203
 #, fuzzy
@@ -11168,7 +11155,6 @@ msgid "No administrator"
 msgstr "Sin administrador"
 
 #: pretix/control/forms/filter.py:1588
-#, fuzzy
 msgid "Valid"
 msgstr "Válido"
 
@@ -14124,7 +14110,6 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/fragment_cart_box.html:33
 #: pretix/presale/templates/pretixpresale/event/order_pay.html:27
 #: pretix/presale/templates/pretixpresale/event/order_pay_change.html:60
-#, fuzzy
 msgid "Continue"
 msgstr "Continuar"
 
@@ -14566,7 +14551,6 @@ msgstr "Nombre del Banco"
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html:65
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:14
 #: pretix/plugins/checkinlists/exporters.py:620
-#, fuzzy
 msgid "Result"
 msgstr "Resultado"
 
@@ -14750,7 +14734,6 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order_pay.html:22
 #: pretix/presale/templates/pretixpresale/event/order_pay_change.html:54
 #: pretix/presale/templates/pretixpresale/event/order_pay_confirm.html:40
-#, fuzzy
 msgid "Cancel"
 msgstr "Cancelar"
 
@@ -18221,7 +18204,6 @@ msgstr "gravámenes"
 #: pretix/plugins/reports/exporters.py:522
 #: pretix/plugins/reports/exporters.py:868
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:356
-#, fuzzy
 msgid "Total"
 msgstr "Total"
 
@@ -24145,7 +24127,6 @@ msgid "Retry"
 msgstr "Reintentar"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:80
-#, fuzzy
 msgid "Comment:"
 msgstr "Comentario:"
 
@@ -28588,9 +28569,8 @@ msgid "Page %(page)s of %(of)s"
 msgstr "Página %(page)s de %(of)s"
 
 #: pretix/presale/templates/pretixpresale/waiting.html:22
-#, fuzzy
 msgid "We are processing your request …"
-msgstr "Estamos procesando su solicitud…"
+msgstr "Estamos procesando a sua solicitude…"
 
 #: pretix/presale/utils.py:170 pretix/presale/utils.py:293
 #: pretix/presale/utils.py:294
