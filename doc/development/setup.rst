@@ -51,14 +51,14 @@ the dependencies might fail::
 
 Working with the code
 ---------------------
-The first thing you need are a recent ``nodejs`` installation and all the main application's Python-level dependencies::::
+If you do not have a recent installation of ``nodejs``, install it now::
 
-    cd src/
     url -sL https://deb.nodesource.com/setup_17.x | sudo -E bash -
     sudo apt install nodejs
 
-To add the path variable close and reopen your terminal. Now, run::
+To make sure it is on your path variable, close and reopen your terminal. Now, install the Python-level dependencies of pretix::
 
+    cd src/
     pip3 install -e ".[dev]"
 
 Next, you need to copy the SCSS files from the source folder to the STATIC_ROOT directory::
