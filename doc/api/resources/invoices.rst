@@ -78,6 +78,12 @@ lines                                 list of objects            The actual invo
                                                                  an event series not created by a product (e.g. shipping or
                                                                  cancellation fees) as well as whenever the respective (sub)event
                                                                  has no end date set.
+├ event_location                      string                     Location of the (sub)event this line was created for as it
+                                                                 was set during invoice creation. Can be ``null`` for all invoice
+                                                                 lines created before this was introduced as well as for lines in
+                                                                 an event series not created by a product (e.g. shipping or
+                                                                 cancellation fees) as well as whenever the respective (sub)event
+                                                                 has no location set.
 ├ attendee_name                       string                     Attendee name at time of invoice creation. Can be ``null`` if no
                                                                  name was set or if names are configured to not be added to invoices.
 ├ gross_value                         money (string)             Price including taxes
@@ -109,6 +115,10 @@ internal_reference                    string                     Customer's refe
 .. versionchanged:: 4.1
 
    The attributes ``fee_type`` and ``fee_internal_type`` have been added.
+
+.. versionchanged:: 4.1
+
+   The attribute ``lines.event_location`` has been added.
 
 
 Endpoints
@@ -179,6 +189,7 @@ Endpoints
                 "fee_internal_type": null,
                 "event_date_from": "2017-12-27T10:00:00Z",
                 "event_date_to": null,
+                "event_location": "Heidelberg",
                 "attendee_name": null,
                 "gross_value": "23.00",
                 "tax_value": "0.00",
@@ -267,6 +278,7 @@ Endpoints
             "fee_internal_type": null,
             "event_date_from": "2017-12-27T10:00:00Z",
             "event_date_to": null,
+            "event_location": "Heidelberg",
             "attendee_name": null,
             "gross_value": "23.00",
             "tax_value": "0.00",

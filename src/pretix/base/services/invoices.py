@@ -69,6 +69,10 @@ from pretix.helpers.models import modelcopy
 logger = logging.getLogger(__name__)
 
 
+def _location_oneliner(loc):
+    return ', '.join([l.strip() for l in loc.splitlines() if l])
+
+
 @transaction.atomic
 def build_invoice(invoice: Invoice) -> Invoice:
     invoice.locale = invoice.event.settings.get('invoice_language', invoice.event.settings.locale)
@@ -176,11 +180,27 @@ def build_invoice(invoice: Invoice) -> Invoice:
         reverse_charge = False
 
         positions.sort(key=lambda p: p.sort_key)
+        fees = list(invoice.order.fees.all())
+
+        locations = {
+            str((p.subevent or invoice.event).location) if (p.subevent or invoice.event).location else None
+            for p in positions
+        }
+        if fees and invoice.event.has_subevents:
+            locations.add(None)
 
         tax_texts = []
+
+        if invoice.event.settings.invoice_event_location and len(locations) == 1 and list(locations)[0] is not None:
+            tax_texts.append(pgettext("invoice", "Event location: {location}").format(
+                location=_location_oneliner(str(list(locations)[0]))
+            ))
+
         for i, p in enumerate(positions):
             if not invoice.event.settings.invoice_include_free and p.price == Decimal('0.00') and not p.addon_c:
                 continue
+
+            location = str((p.subevent or invoice.event).location) if (p.subevent or invoice.event).location else None
 
             desc = str(p.item.name)
             if p.variation:
@@ -188,7 +208,10 @@ def build_invoice(invoice: Invoice) -> Invoice:
             if p.addon_to_id:
                 desc = "  + " + desc
             if invoice.event.settings.invoice_attendee_name and p.attendee_name:
-                desc += "<br />" + pgettext("invoice", "Attendee: {name}").format(name=p.attendee_name)
+                desc += "<br />" + pgettext("invoice", "Attendee: {name}").format(
+                    name=p.attendee_name
+                )
+
             for recv, resp in invoice_line_text.send(sender=invoice.event, position=p):
                 if resp:
                     desc += "<br/>" + resp
@@ -204,6 +227,12 @@ def build_invoice(invoice: Invoice) -> Invoice:
 
             if invoice.event.has_subevents:
                 desc += "<br />" + pgettext("subevent", "Date: {}").format(p.subevent)
+
+            if invoice.event.settings.invoice_event_location and location and len(locations) > 1:
+                desc += "<br />" + pgettext("invoice", "Event location: {location}").format(
+                    location=_location_oneliner(location)
+                )
+
             InvoiceLine.objects.create(
                 position=i,
                 invoice=invoice,
@@ -216,6 +245,7 @@ def build_invoice(invoice: Invoice) -> Invoice:
                 attendee_name=p.attendee_name if invoice.event.settings.invoice_attendee_name else None,
                 event_date_from=p.subevent.date_from if invoice.event.has_subevents else invoice.event.date_from,
                 event_date_to=p.subevent.date_to if invoice.event.has_subevents else invoice.event.date_to,
+                event_location=location if invoice.event.settings.invoice_event_location else None,
                 tax_rate=p.tax_rate, tax_name=p.tax_rule.name if p.tax_rule else ''
             )
 
@@ -228,7 +258,7 @@ def build_invoice(invoice: Invoice) -> Invoice:
                     tax_texts.append(tax_text)
 
         offset = len(positions)
-        for i, fee in enumerate(invoice.order.fees.all()):
+        for i, fee in enumerate(fees):
             if fee.fee_type == OrderFee.FEE_TYPE_OTHER and fee.description:
                 fee_title = fee.description
             else:
@@ -242,6 +272,12 @@ def build_invoice(invoice: Invoice) -> Invoice:
                 gross_value=fee.value,
                 event_date_from=None if invoice.event.has_subevents else invoice.event.date_from,
                 event_date_to=None if invoice.event.has_subevents else invoice.event.date_to,
+                event_location=(
+                    None if invoice.event.has_subevents
+                    else (str(invoice.event.location)
+                          if invoice.event.settings.invoice_event_location and invoice.event.location
+                          else None)
+                ),
                 tax_value=fee.tax_value,
                 tax_rate=fee.tax_rate,
                 tax_name=fee.tax_rule.name if fee.tax_rule else '',

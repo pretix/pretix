@@ -324,7 +324,6 @@ class InvoiceDataExporter(InvoiceExporterMixin, MultiSheetListExporter):
                 _('Tax rate'),
                 _('Tax name'),
                 _('Event start date'),
-
                 _('Date'),
                 _('Order code'),
                 _('E-mail address'),
@@ -348,6 +347,8 @@ class InvoiceDataExporter(InvoiceExporterMixin, MultiSheetListExporter):
                 _('Invoice recipient:') + ' ' + _('Beneficiary'),
                 _('Invoice recipient:') + ' ' + _('Internal reference'),
                 _('Payment providers'),
+                _('Event end date'),
+                _('Location'),
             ]
 
             p_providers = OrderPayment.objects.filter(
@@ -406,7 +407,9 @@ class InvoiceDataExporter(InvoiceExporterMixin, MultiSheetListExporter):
                     ', '.join([
                         str(self.providers.get(p, p)) for p in sorted(set((l.payment_providers or '').split(',')))
                         if p and p != 'free'
-                    ])
+                    ]),
+                    date_format(l.event_date_to, "SHORT_DATE_FORMAT") if l.event_date_to else "",
+                    l.event_location or "",
                 ]
 
     @cached_property

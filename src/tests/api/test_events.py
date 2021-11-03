@@ -106,7 +106,7 @@ TEST_EVENT_RES = {
     "is_public": True,
     "presale_start": None,
     "presale_end": None,
-    "location": None,
+    "location": {"en": "Heidelberg"},
     "geo_lat": None,
     "geo_lon": None,
     "slug": "dummy",
