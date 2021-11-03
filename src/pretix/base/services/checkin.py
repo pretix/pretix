@@ -736,7 +736,11 @@ def process_exit_all(sender, **kwargs):
         exit_all_at__isnull=False
     ).select_related('event', 'event__organizer')
     for cl in qs:
-        for p in cl.positions_inside:
+        positions = cl.positions_inside.filter(
+            Q(last_exit__isnull=True) | Q(last_exit__lte=cl.exit_all_at),
+            last_entry__lte=cl.exit_all_at,
+        )
+        for p in positions:
             with scope(organizer=cl.event.organizer):
                 ci = Checkin.objects.create(
                     position=p, list=cl, auto_checked_in=True, type=Checkin.TYPE_EXIT, datetime=cl.exit_all_at
@@ -748,6 +752,9 @@ def process_exit_all(sender, **kwargs):
             cl.event.settings.delete(f'autocheckin_dst_hack_{cl.pk}')
         try:
             cl.exit_all_at = make_aware(datetime.combine(d.date() + timedelta(days=1), d.time()), cl.event.timezone)
+        except pytz.exceptions.AmbiguousTimeError:
+            cl.exit_all_at = make_aware(datetime.combine(d.date() + timedelta(days=1), d.time()), cl.event.timezone,
+                                        is_dst=False)
         except pytz.exceptions.NonExistentTimeError:
             cl.event.settings.set(f'autocheckin_dst_hack_{cl.pk}', True)
             d += timedelta(hours=1)
