@@ -26,7 +26,7 @@ Your should install the following on your system:
 * ``libssl`` (Debian package: ``libssl-dev``)
 * ``libxml2`` (Debian package ``libxml2-dev``)
 * ``libxslt`` (Debian package ``libxslt1-dev``)
-* ``libenchant1c2a`` (Debian package ``libenchant1c2a``)
+* ``libenchant-2-2`` (Debian package ``libenchant-2-2``)
 * ``msgfmt`` (Debian package ``gettext``)
 * ``git``
 
@@ -51,7 +51,12 @@ the dependencies might fail::
 
 Working with the code
 ---------------------
-The first thing you need are all the main application's dependencies::
+If you do not have a recent installation of ``nodejs``, install it now::
+
+    url -sL https://deb.nodesource.com/setup_17.x | sudo -E bash -
+    sudo apt install nodejs
+
+To make sure it is on your path variable, close and reopen your terminal. Now, install the Python-level dependencies of pretix::
 
     cd src/
     pip3 install -e ".[dev]"
