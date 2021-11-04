@@ -196,7 +196,7 @@ def webhook(request, *args, **kwargs):
         objid = event_json['data']['object']['id']
         lookup_ids = [
             objid,
-            event_json['data']['object'].get('source', {}).get('id')
+            (event_json['data']['object'].get('source') or {}).get('id')
         ]
     elif event_json['data']['object']['object'] == "dispute":
         func = charge_webhook
