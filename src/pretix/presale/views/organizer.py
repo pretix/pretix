@@ -819,8 +819,8 @@ class DayCalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
         shortest_duration = self._get_shortest_duration(events).total_seconds() // 60
         # pick the next biggest tick_duration based on shortest_duration, max. 60 minutes
         tick_duration = next((d for d in [15, 30, 60] if d >= shortest_duration), 60)
-
-        ctx["calendar_duration"] = self._get_time_duration(start, self._ceil_time(end, raster_size=tick_duration))
+        calendar_duration = self._get_time_duration(start, self._ceil_time(end, raster_size=tick_duration))
+        ctx["calendar_duration"] = ":".join(["%02d" % i for i in (calendar_duration.days*24 + (calendar_duration.seconds//3600), (calendar_duration.seconds//60)%60)])
         ctx['time_ticks'] = self._get_time_ticks(start, end, tick_duration)
         ctx['start'] = datetime.combine(self.date, start)
         # ctx['end'] = end
@@ -835,14 +835,12 @@ class DayCalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
 
     def _get_time_duration(self, start, end):
         midnight = time(0, 0)
-        return datetime.utcfromtimestamp(
-            (datetime.combine(
-                self.date if end != midnight else self.date + timedelta(days=1),
-                end
-            ) - datetime.combine(
-                self.date,
-                start
-            )).total_seconds()
+        return datetime.combine(
+            self.date if end != midnight else self.date + timedelta(days=1),
+            end
+        ) - datetime.combine(
+            self.date,
+            start
         )
 
     # currently based on minutes, might be factored into a helper class with a timedelta as raster?
@@ -904,7 +902,7 @@ class DayCalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
                 )).total_seconds()
             )
 
-            e["offset_rastered"] = self._get_time_duration(start, e["time_rastered"])
+            e["offset_rastered"] = datetime.combine(self.date, time(0,0)) + self._get_time_duration(start, e["time_rastered"])
 
             rastered_events.append(e)
 
