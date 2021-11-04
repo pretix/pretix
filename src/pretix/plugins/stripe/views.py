@@ -194,20 +194,29 @@ def webhook(request, *args, **kwargs):
     if event_json['data']['object']['object'] == "charge":
         func = charge_webhook
         objid = event_json['data']['object']['id']
+        lookup_ids = [
+            objid,
+            event_json['data']['object'].get('source', {}).get('id')
+        ]
     elif event_json['data']['object']['object'] == "dispute":
         func = charge_webhook
         objid = event_json['data']['object']['charge']
+        lookup_ids = [objid]
     elif event_json['data']['object']['object'] == "source":
         func = source_webhook
         objid = event_json['data']['object']['id']
+        lookup_ids = [objid]
     elif event_json['data']['object']['object'] == "payment_intent":
         func = paymentintent_webhook
         objid = event_json['data']['object']['id']
+        lookup_ids = [objid]
     else:
         return HttpResponse("Not interested in this data type", status=200)
 
     try:
-        rso = ReferencedStripeObject.objects.select_related('order', 'order__event').get(reference=objid)
+        rso = ReferencedStripeObject.objects.select_related('order', 'order__event').get(
+            reference__in=[lid for lid in lookup_ids if lid]
+        )
         return func(rso.order.event, event_json, objid, rso)
     except ReferencedStripeObject.DoesNotExist:
         if event_json['data']['object']['object'] == "charge" and 'payment_intent' in event_json['data']['object']:
@@ -398,7 +407,6 @@ def source_webhook(event, event_json, source_id, rso):
                 prov._charge_source(None, source_id, payment)
             except PaymentException:
                 logger.exception('Webhook error')
-
         elif src.status == 'failed':
             payment.fail(info=str(src))
         elif src.status == 'canceled' and payment.state in (OrderPayment.PAYMENT_STATE_PENDING, OrderPayment.PAYMENT_STATE_CREATED):
