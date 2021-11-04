@@ -264,6 +264,7 @@ class Invoice(models.Model):
                     self.invoice_no = self._get_invoice_number_from_order()
                 try:
                     with transaction.atomic():
+                        self.full_invoice_no = self.prefix + self.invoice_no
                         return super().save(*args, **kwargs)
                 except DatabaseError:
                     # Suppress duplicate key errors and try again

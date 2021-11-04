@@ -522,7 +522,9 @@ def test_invoice_number_prefixes(env):
     event2.settings.set('invoice_numbers_counter_length', 4)
     i = generate_invoice(order2)
     assert i.number == 'inv_0001'
-    assert generate_cancellation(i).number == 'crd_0001'
+    ci = generate_cancellation(i)
+    assert ci.number == 'crd_0001'
+    assert ci.full_invoice_no == 'crd_0001'
 
     event2.settings.set('invoice_numbers_consecutive', False)
     i = generate_invoice(order2)
