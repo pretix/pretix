@@ -63,7 +63,7 @@ def scheduled_mail_create(sender, **kwargs):
         existing_rules = ScheduledMail.objects.filter(subevent=subevent).values_list('rule_id', flat=True)
         to_create = []
         for rule in event.sendmail_rules.all():
-            if rule.pk not in existing_rules:
+            if rule.pk not in existing_rules and subevent:
                 sm = ScheduledMail(rule=rule, event=event, subevent=subevent)
                 sm.recompute()
                 to_create.append(sm)

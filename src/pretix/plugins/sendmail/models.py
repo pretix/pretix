@@ -104,6 +104,8 @@ class ScheduledMail(models.Model):
             orders = orders.filter(
                 Exists(OrderPosition.objects.filter(order=OuterRef('pk'), subevent=self.subevent))
             )
+        elif e.has_subevents:
+            return  # This rule should not even exist
 
         if not self.rule.all_products:
             orders = orders.filter(
