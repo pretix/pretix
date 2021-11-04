@@ -75,7 +75,7 @@ from pretix.base.email import get_email_context
 from pretix.base.i18n import language
 from pretix.base.models import Customer, User
 from pretix.base.reldate import RelativeDateWrapper
-from pretix.base.services.locking import NoLockManager
+from pretix.base.services.locking import LOCK_TIMEOUT, NoLockManager
 from pretix.base.settings import PERSON_NAME_SCHEMES
 from pretix.base.signals import order_gracefully_delete
 
@@ -1665,7 +1665,7 @@ class OrderPayment(models.Model):
             ))
             return
 
-        if (self.order.status == Order.STATUS_PENDING and self.order.expires > now() + timedelta(hours=12)) or not lock:
+        if (self.order.status == Order.STATUS_PENDING and self.order.expires > now() + timedelta(seconds=LOCK_TIMEOUT * 2)) or not lock:
             # Performance optimization. In this case, there's really no reason to lock everything and an atomic
             # database transaction is more than enough.
             lockfn = NoLockManager
