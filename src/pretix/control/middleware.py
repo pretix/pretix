@@ -135,8 +135,8 @@ class PermissionMiddleware:
             if url_name not in ('user.reauth', 'auth.logout'):
                 return redirect(reverse('control:user.reauth') + '?next=' + quote(request.get_full_path()))
 
-        if request.user.has_compromised_password and url_name not in self.EXCEPTIONS_PW:
-             return redirect(reverse('control:user.settings'))
+        if request.user.needs_password_change and url_name not in self.EXCEPTIONS_PW:
+            return redirect(reverse('control:user.settings'))
 
         if not request.user.require_2fa and settings.PRETIX_OBLIGATORY_2FA \
                 and url_name not in self.EXCEPTIONS_2FA:

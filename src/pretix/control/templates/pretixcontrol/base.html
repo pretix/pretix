@@ -429,8 +429,8 @@
                         </div>
                     {% endif %}
 
-                    {% if request.user.has_compromised_password %}
-                        <div class="alert alert-danger">
+                    {% if request.user.needs_password_change %}
+                        <div class="alert alert-warning">
                             {% trans "You need to change your password." %}
                         </div>
                     {% endif %}

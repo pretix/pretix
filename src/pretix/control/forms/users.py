@@ -43,6 +43,8 @@ class UserEditForm(forms.ModelForm):
         'duplicate_identifier': _("There already is an account associated with this e-mail address. "
                                   "Please choose a different one."),
         'pw_mismatch': _("Please enter the same password twice"),
+        'pw_equal': _("You have entered the same password as your old one."
+                      "Please choose a different one.")
     }
 
     new_pw = forms.CharField(max_length=255,
@@ -70,7 +72,7 @@ class UserEditForm(forms.ModelForm):
             'require_2fa',
             'is_active',
             'is_staff',
-            'has_compromised_password',
+            'needs_password_change',
             'last_login'
         ]
 
