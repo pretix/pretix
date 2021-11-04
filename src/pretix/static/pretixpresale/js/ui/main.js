@@ -538,9 +538,17 @@ $(function () {
 
         var thisCalendar = this;
         var currentTimeInterval;
-        var currentTimeBar = $('<div class="current-time-bar" aria-hidden="true"><time><span class="current-time-hour"></span><span class="current-time-sep">:</span><span class="current-time-minute"></span></time></div>').appendTo(this);
-        var currentTimeHour = currentTimeBar.find(".current-time-hour");
-        var currentTimeMinute = currentTimeBar.find(".current-time-minute");
+
+        var timeFormat = document.body.getAttribute("data-timeformat");
+        var timeFormatParts = timeFormat.match(/([a-zA-Z_\s]+)([^a-zA-Z_\s])(.*)/);
+        if (!timeFormatParts) timeFormatParts = [timeFormat];
+        if (timeFormatParts.length > 1) timeFormatParts.shift();
+        var currentTimeBar = $('<div class="current-time-bar" aria-hidden="true"><time></time></div>').appendTo(this);
+        var currentTimeDisplay = currentTimeBar.find("time");
+        var currentTimeDisplayParts = [];
+        timeFormatParts.forEach(function(format) {
+            currentTimeDisplayParts.push([format, $("<span></span>").appendTo(currentTimeDisplay)])
+        }); 
         var duration = this.getAttribute("data-duration").split(":").reduce(function(previousValue, currentValue, currentIndex) {
             return previousValue + (currentIndex ? parseInt(currentValue, 10) * 60 : parseInt(currentValue, 10) * 60 * 60);
         }, 0);
@@ -557,8 +565,10 @@ $(function () {
             var offset = thisCalendar.querySelector("h3").getBoundingClientRect().width;
             var dx = Math.round(offset + (thisCalendar.scrollWidth-offset)*(currentTimeDelta/duration));
             thisCalendar.style.setProperty('--current-time-offset', dx + "px");
-            currentTimeHour.text(currentTime.format("HH"));
-            currentTimeMinute.text(currentTime.format("mm"));
+
+            currentTimeDisplayParts.forEach(function(part) {
+                part[1].text(currentTime.format(part[0]));
+            });
             if (currentTimeBar.get(0).getBoundingClientRect().width + dx > thisCalendar.scrollWidth) {
                 currentTimeBar.addClass("swap-side");
             }

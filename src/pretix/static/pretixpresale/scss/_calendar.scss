@@ -156,7 +156,7 @@
   top: 0;
   color: #fff;
   padding: 1px 3px;
-  width: 3.25em;
+  white-space: nowrap;
   text-align: center;
 }
 .day-calendar .current-time-bar time,
@@ -171,7 +171,7 @@
 
 
 
-.day-calendar .current-time-sep {
+.day-calendar .current-time-bar time span:nth-child(2) {
   animation: watch-blinker 2s step-end infinite;
 }
 @-webkit-keyframes watch-blinker {
