@@ -113,6 +113,8 @@ class User(AbstractBaseUser, PermissionsMixin, LoggingMixin):
     :type date_joined: datetime
     :param locale: The user's preferred locale code.
     :type locale: str
+    :param has_compromised_password: Whether this user's password is known to others and needs to be changed.
+    :type has_compromised_password: bool
     :param timezone: The user's preferred timezone.
     :type timezone: str
     """
@@ -130,6 +132,8 @@ class User(AbstractBaseUser, PermissionsMixin, LoggingMixin):
                                    verbose_name=_('Is site admin'))
     date_joined = models.DateTimeField(auto_now_add=True,
                                        verbose_name=_('Date joined'))
+    has_compromised_password = models.BooleanField(default=False,
+                                               verbose_name=_('Needs to change password on login'))
     locale = models.CharField(max_length=50,
                               choices=settings.LANGUAGES,
                               default=settings.LANGUAGE_CODE,

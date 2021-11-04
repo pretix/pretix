@@ -70,6 +70,7 @@ class UserEditForm(forms.ModelForm):
             'require_2fa',
             'is_active',
             'is_staff',
+            'has_compromised_password',
             'last_login'
         ]
 

@@ -429,6 +429,12 @@
                         </div>
                     {% endif %}
 
+                    {% if request.user.has_compromised_password %}
+                        <div class="alert alert-danger">
+                            {% trans "You need to change your password." %}
+                        </div>
+                    {% endif %}
+
                     {% block content %}
                     {% endblock %}
                     <footer>
