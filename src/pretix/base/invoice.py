@@ -395,7 +395,13 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
             return txt
 
         if not self.invoice.event.has_subevents and self.invoice.event.settings.show_dates_on_frontpage:
-            if self.invoice.event.settings.show_date_to and self.invoice.event.date_to:
+            tz = self.invoice.event.timezone
+            show_end_date = (
+                self.invoice.event.settings.show_date_to and
+                self.invoice.event.date_to and
+                self.invoice.event.date_to.astimezone(tz).date() != self.invoice.event.date_from.astimezone(tz).date()
+            )
+            if show_end_date:
                 p_str = (
                     shorten(self.invoice.event.name) + '\n' +
                     pgettext('invoice', '{from_date}\nuntil {to_date}').format(
