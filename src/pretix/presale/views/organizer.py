@@ -946,7 +946,7 @@ class DayCalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
         # convert time to datetime for timedelta calc
         start = datetime.combine(self.date, start)
         end = datetime.combine(self.date, end)
-        if end < start:
+        if end <= start:
             end = end + timedelta(days=1)
 
         tick_start = start
