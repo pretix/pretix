@@ -564,17 +564,16 @@ $(function () {
             
             var offset = thisCalendar.querySelector("h3").getBoundingClientRect().width;
             var dx = Math.round(offset + (thisCalendar.scrollWidth-offset)*(currentTimeDelta/duration));
-            thisCalendar.style.setProperty('--current-time-offset', dx + "px");
-
             currentTimeDisplayParts.forEach(function(part) {
                 part[1].text(currentTime.format(part[0]));
             });
-            if (currentTimeBar.get(0).getBoundingClientRect().width + dx > thisCalendar.scrollWidth) {
+            if (currentTimeDisplay.get(0).getBoundingClientRect().width + dx >= thisCalendar.scrollWidth) {
                 currentTimeBar.addClass("swap-side");
             }
             else {
                 currentTimeBar.removeClass("swap-side");
             }
+            thisCalendar.style.setProperty('--current-time-offset', dx + "px");
         }
         currentTimeInterval = window.setInterval(setCurrentTimeBar, 15*1000);
         setCurrentTimeBar();
