@@ -213,12 +213,12 @@ def webhook(request, *args, **kwargs):
     else:
         return HttpResponse("Not interested in this data type", status=200)
 
-    try:
-        rso = ReferencedStripeObject.objects.select_related('order', 'order__event').get(
-            reference__in=[lid for lid in lookup_ids if lid]
-        )
+    rso = ReferencedStripeObject.objects.select_related('order', 'order__event').filter(
+        reference__in=[lid for lid in lookup_ids if lid]
+    ).first()
+    if rso:
         return func(rso.order.event, event_json, objid, rso)
-    except ReferencedStripeObject.DoesNotExist:
+    else:
         if event_json['data']['object']['object'] == "charge" and 'payment_intent' in event_json['data']['object']:
             # If we receive a charge webhook *before* the payment intent webhook, we don't know the charge ID yet
             # and can't match it -- but we know the payment intent ID!
