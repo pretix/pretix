@@ -820,7 +820,12 @@ class DayCalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
         # pick the next biggest tick_duration based on shortest_duration, max. 60 minutes
         tick_duration = next((d for d in [15, 30, 60] if d >= shortest_duration), 60)
         calendar_duration = self._get_time_duration(start, self._ceil_time(end, raster_size=tick_duration))
-        ctx["calendar_duration"] = ":".join(["%02d" % i for i in (calendar_duration.days*24 + (calendar_duration.seconds//3600), (calendar_duration.seconds//60)%60)])
+        ctx["calendar_duration"] = ":".join([
+            "%02d" % i for i in (
+                (calendar_duration.days * 24) + (calendar_duration.seconds // 3600),
+                (calendar_duration.seconds // 60) % 60
+            )
+        ])
         ctx['time_ticks'] = self._get_time_ticks(start, end, tick_duration)
         ctx['start'] = datetime.combine(self.date, start)
         # ctx['end'] = end
@@ -902,7 +907,7 @@ class DayCalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
                 )).total_seconds()
             )
 
-            e["offset_rastered"] = datetime.combine(self.date, time(0,0)) + self._get_time_duration(start, e["time_rastered"])
+            e["offset_rastered"] = datetime.combine(self.date, time(0, 0)) + self._get_time_duration(start, e["time_rastered"])
 
             rastered_events.append(e)
 
@@ -998,7 +1003,7 @@ class DayCalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
                     e["concurrency"] = concurrency
             rows_by_collection[collection] = {
                 "concurrency": len(rows_by_collection[collection]),
-                "events": sorted([e for row in rows_by_collection[collection] for e in row], key=lambda d: d['time'] or time(0,0)),
+                "events": sorted([e for row in rows_by_collection[collection] for e in row], key=lambda d: d['time'] or time(0, 0)),
             }
 
         def sort_key(c):
