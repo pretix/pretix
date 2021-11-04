@@ -998,7 +998,7 @@ class DayCalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
                     e["concurrency"] = concurrency
             rows_by_collection[collection] = {
                 "concurrency": len(rows_by_collection[collection]),
-                "events": sorted([e for row in rows_by_collection[collection] for e in row], key=lambda d: d['time']),
+                "events": sorted([e for row in rows_by_collection[collection] for e in row], key=lambda d: d['time'] or time(0,0)),
             }
 
         def sort_key(c):
