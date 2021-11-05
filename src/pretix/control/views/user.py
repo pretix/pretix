@@ -226,6 +226,7 @@ class UserSettings(UpdateView):
         msgs = []
 
         if 'new_pw' in form.changed_data:
+            self.request.user.needs_password_change = False
             msgs.append(_('Your password has been changed.'))
 
         if 'email' in form.changed_data:
