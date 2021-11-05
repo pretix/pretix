@@ -734,6 +734,7 @@ class EventSettingsSerializer(SettingsSerializer):
         'invoice_numbers_prefix_cancellations',
         'invoice_numbers_counter_length',
         'invoice_attendee_name',
+        'invoice_event_location',
         'invoice_include_expire_date',
         'invoice_address_explanation_text',
         'invoice_email_attachment',

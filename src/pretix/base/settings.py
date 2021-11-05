@@ -310,6 +310,17 @@ DEFAULTS = {
             label=_("Show attendee names on invoices"),
         )
     },
+    'invoice_event_location': {
+        'default': 'False',
+        'type': bool,
+        'form_class': forms.BooleanField,
+        'serializer_class': serializers.BooleanField,
+        'form_kwargs': dict(
+            label=_("Show event location on invoices"),
+            help_text=_("The event location will be shown below the list of products if it is the same for all "
+                        "lines. It will be shown on every line if there are different locations.")
+        )
+    },
     'invoice_eu_currencies': {
         'default': 'True',
         'type': bool,

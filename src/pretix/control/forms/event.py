@@ -751,6 +751,7 @@ class InvoiceSettingsForm(SettingsForm):
         'invoice_reissue_after_modify',
         'invoice_generate',
         'invoice_attendee_name',
+        'invoice_event_location',
         'invoice_include_expire_date',
         'invoice_numbers_consecutive',
         'invoice_numbers_prefix',
