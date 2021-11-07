@@ -1,3 +1,7 @@
+/* before variables.scss because it only affects presale, not control */
+$body-bg: #f5f5f5 !default;
+
+/* imports */
 @import "../../pretixbase/scss/_variables.scss";
 @import "../../bootstrap/scss/_bootstrap_reduced.scss";
 @import "../../pretixbase/scss/_theme.scss";
