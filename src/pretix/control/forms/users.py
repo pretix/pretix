@@ -42,9 +42,7 @@ class UserEditForm(forms.ModelForm):
     error_messages = {
         'duplicate_identifier': _("There already is an account associated with this e-mail address. "
                                   "Please choose a different one."),
-        'pw_mismatch': _("Please enter the same password twice"),
-        'pw_equal': _("You have entered the same password as your old one."
-                      "Please choose a different one.")
+        'pw_mismatch': _("Please enter the same password twice")
     }
 
     new_pw = forms.CharField(max_length=255,
