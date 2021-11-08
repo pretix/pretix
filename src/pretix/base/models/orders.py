@@ -1310,6 +1310,7 @@ class AbstractPosition(models.Model):
     seat = models.ForeignKey(
         'Seat', null=True, blank=True, on_delete=models.PROTECT
     )
+    is_bundled = models.BooleanField(default=False)
 
     company = models.CharField(max_length=255, blank=True, verbose_name=_('Company name'), null=True)
     street = models.TextField(verbose_name=_('Address'), blank=True, null=True)
@@ -2566,7 +2567,6 @@ class CartPosition(AbstractPosition):
         max_digits=10, decimal_places=2,
         null=True, blank=True
     )
-    is_bundled = models.BooleanField(default=False)
 
     objects = ScopedManager(organizer='event__organizer')
 
