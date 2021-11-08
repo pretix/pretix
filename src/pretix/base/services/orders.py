@@ -113,17 +113,7 @@ error_messages = {
               'server was too busy. Please try again.'),
     'not_started': _('The presale period for this event has not yet started.'),
     'ended': _('The presale period has ended.'),
-    'voucher_invalid': _('The voucher code used for one of the items in your cart is not known in our database.'),
-    'voucher_redeemed': _('The voucher code used for one of the items in your cart has already been used the maximum '
-                          'number of times allowed. We removed this item from your cart.'),
-    'voucher_budget_used': _('The voucher code used for one of the items in your cart has already been too often. We '
-                             'adjusted the price of the item in your cart.'),
-    'voucher_expired': _('The voucher code used for one of the items in your cart is expired. We removed this item '
-                         'from your cart.'),
-    'voucher_invalid_item': _('The voucher code used for one of the items in your cart is not valid for this item. We '
-                              'removed this item from your cart.'),
-    'voucher_required': _('You need a valid voucher code to order one of the products in your cart. We removed this '
-                          'item from your cart.'),
+    'voucher_required': _('You need a valid voucher code to order one of the products.'),
     'some_subevent_not_started': _('The presale period for one of the events in your cart has not yet started. The '
                                    'affected positions have been removed from your cart.'),
     'some_subevent_ended': _('The presale period for one of the events in your cart has ended. The affected '
@@ -1603,6 +1593,38 @@ class OrderChangeManager:
 
             if (a['item'], a['variation']) in input_addons[op.id]:
                 raise OrderError(error_messages['addon_duplicate_item'])
+
+            if item.require_voucher or (op.item.hide_without_voucher or (op.variation and op.variation.hide_without_voucher)):
+                raise OrderError(error_messages['voucher_required'])
+
+            if not item.is_available() or (variation and not variation.is_available()):
+                raise OrderError(error_messages['unavailable'])
+
+            if self.order.sales_channel not in item.sales_channels or (
+                    variation and self.order.sales_channel not in variation.sales_channels):
+                raise OrderError(error_messages['unavailable'])
+
+            if op.subevent and item.pk in op.subevent.item_overrides and not op.subevent.item_overrides[op.item.pk].is_available():
+                raise OrderError(error_messages['not_for_sale'])
+
+            if op.subevent and variation and variation.pk in op.subevent.var_overrides and \
+                    not op.subevent.var_overrides[variation.pk].is_available():
+                raise OrderError(error_messages['not_for_sale'])
+
+            if item.has_variations and not variation:
+                raise OrderError(error_messages['not_for_sale'])
+
+            if variation and variation.item_id != item.pk:
+                raise OrderError(error_messages['not_for_sale'])
+
+            if op.subevent and op.subevent.presale_start and now() < op.subevent.presale_start:
+                raise OrderError(error_messages['not_started'])
+
+            if op.subevent and op.subevent.presale_has_ended:
+                raise OrderError(error_messages['ended'])
+
+            if item.require_bundling:
+                raise OrderError(error_messages['unavailable'])
 
             input_addons[op.id][a['item'], a['variation']] = a.get('count', 1)
             selected_addons[op.id, item.category_id][a['item'], a['variation']] = a.get('count', 1)

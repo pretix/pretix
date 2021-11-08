@@ -1428,6 +1428,9 @@ class OrderChange(EventViewMixin, OrderDetailMixin, TemplateView):
                         messages.success(self.request, _('The order has been changed.'))
 
                     return redirect(self.get_order_url())
+            elif not ocm._operations:
+                messages.info(self.request, _('You did not make any changes.'))
+                return redirect(self.get_order_url())
             else:
                 return render(request, 'pretixpresale/event/order_change_confirm.html', {
                     'operations': ocm._operations,
