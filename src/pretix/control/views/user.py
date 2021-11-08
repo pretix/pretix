@@ -244,7 +244,7 @@ class UserSettings(UpdateView):
         return sup
 
     def get_success_url(self):
-        return reverse('control:user.settings')
+        return self.request.GET.get('next', reverse('control:user.settings'))
 
 
 class UserHistoryView(ListView):
