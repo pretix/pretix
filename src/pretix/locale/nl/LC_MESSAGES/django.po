@@ -7,10 +7,10 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-10-29 10:09+0000\n"
-"PO-Revision-Date: 2021-10-29 02:00+0000\n"
+"PO-Revision-Date: 2021-11-09 03:00+0000\n"
 "Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
-"Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/"
-">\n"
+"Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
+"\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1884,16 +1884,20 @@ msgid ""
 "Optional, but depending on the country you reside in we might need to charge "
 "you additional taxes if you do not enter it."
 msgstr ""
+"Optioneel, maar afhankelijk van het land waarin u woont moeten we misschien "
+"extra belasting rekenen als u dit niet invoert."
 
 #: pretix/base/forms/questions.py:927 pretix/base/forms/questions.py:933
 msgid "If you are registered in Switzerland, you can enter your UID instead."
-msgstr ""
+msgstr "Als u in Zwitserland geregistreert bent kunt u hier uw UID invoeren."
 
 #: pretix/base/forms/questions.py:931
 msgid ""
 "Optional, but it might be required for you to claim tax benefits on your "
 "invoice depending on your and the seller’s country of residence."
 msgstr ""
+"Optioneel, maar afhankelijk van het land waarin u woont en het land van de "
+"verkoper heeft u dit misschien nodig om belasting terug te kunnen vragen."
 
 #: pretix/base/forms/questions.py:1020
 msgid "You need to provide a company name."
@@ -6665,6 +6669,9 @@ msgid ""
 "only requested from business customers in the following countries: "
 "{countries}"
 msgstr ""
+"Werkt alleen als er om een factuuradres wordt gevraagd. Btw-nummer is nooit "
+"verplicht en wordt alleen gevraagd aan zakelijke klanten in de volgende "
+"landen: {countries}"
 
 #: pretix/base/settings.py:389
 msgid "Invoice address explanation"
@@ -16306,10 +16313,8 @@ msgid "View email history"
 msgstr "Toon emailgeschiedenis"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:87
-#, fuzzy
-#| msgid "View email history"
 msgid "View transaction history"
-msgstr "Toon emailgeschiedenis"
+msgstr "Toon transactiegeschiedenis"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:98
 msgid "Expire order"
@@ -16902,44 +16907,32 @@ msgstr "Versturen"
 
 #: pretix/control/templates/pretixcontrol/order/transactions.html:5
 #: pretix/control/templates/pretixcontrol/order/transactions.html:8
-#, fuzzy
-#| msgid "Transactions"
 msgid "Transaction history"
-msgstr "Transacties"
+msgstr "Transactiegeschiedenis"
 
 #: pretix/control/templates/pretixcontrol/order/transactions.html:23
-#, fuzzy
-#| msgid "Original price"
 msgid "Single price"
-msgstr "Originele prijs"
+msgstr "Eenheidsprijs"
 
 #: pretix/control/templates/pretixcontrol/order/transactions.html:24
-#, fuzzy
-#| msgid "Total value"
 msgid "Total tax value"
-msgstr "Totaalwaarde"
+msgstr "Totale belastingwaarde"
 
 #: pretix/control/templates/pretixcontrol/order/transactions.html:25
-#, fuzzy
-#| msgid "Net price"
 msgid "Total price"
-msgstr "Nettoprijs"
+msgstr "Totaalbedrag"
 
 #: pretix/control/templates/pretixcontrol/order/transactions.html:36
-#, fuzzy
-#| msgid ""
-#| "This payment was created with an older version of pretix, therefore "
-#| "accurate data might not be available."
 msgid ""
 "This order was created before we introduced this table, therefore this data "
 "might be inaccurate."
 msgstr ""
-"Deze betaling is aangemaakt met een oudere versie van pretix, hierom kan "
-"nauwkeurige data mogelijk niet aanwezig zijn."
+"Deze bestelling is aangemaakt voordat deze tabel is aangemaakt. Hierom "
+"kunnen deze gegevens mogelijk onnauwkeurig zijn."
 
 #: pretix/control/templates/pretixcontrol/order/transactions.html:65
 msgid "Sum"
-msgstr ""
+msgstr "Som"
 
 #: pretix/control/templates/pretixcontrol/orders/cancel.html:9
 msgid ""
@@ -20378,13 +20371,10 @@ msgid "No country specified."
 msgstr "Geen land opgegeven."
 
 #: pretix/control/views/orders.py:1336
-#, fuzzy
-#| msgid ""
-#| "VAT ID could not be checked since a non-EU country has been specified."
 msgid "VAT ID could not be checked since this country is not supported."
 msgstr ""
-"Btw-nummer kon niet worden gecontroleerd, omdat een land van buiten de EU "
-"was opgegeven."
+"Btw-nummer kon niet worden gecontroleerd omdat dit land niet wordt "
+"ondersteund."
 
 #: pretix/control/views/orders.py:1347
 msgid ""
@@ -24955,6 +24945,9 @@ msgid ""
 "you want, you can add yourself to the waiting list. We will then notify if "
 "seats are available again."
 msgstr ""
+"Sommige van de categorieën in de stoelplattegrond zijn momenteel "
+"uitverkocht. Als u dit wilt kunt u uzelf op de wachtlijst zetten om een "
+"melding te krijgen als er weer plaatsen beschikbaar zijn."
 
 #: pretix/presale/templates/pretixpresale/event/index.html:262
 msgid "Join waiting list"
@@ -25321,6 +25314,8 @@ msgid ""
 "The organizer will get in touch with you to clarify the details of your "
 "refund."
 msgstr ""
+"De organisator zal contact met u opnemen om de details van uw terugbetaling "
+"uit te leggen."
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:97
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:118
@@ -26045,6 +26040,7 @@ msgid ""
 "Thank you very much! We will assign your spot on the waiting list to someone "
 "else."
 msgstr ""
+"Bedankt! We zullen uw plaats op de wachtlijst toewijzen aan iemand anders."
 
 #: pretix/presale/views/widget.py:320
 msgid "This ticket shop is currently disabled."
@@ -26141,7 +26137,7 @@ msgstr "Turks"
 
 #: pretix/settings.py:517
 msgid "Galician"
-msgstr ""
+msgstr "Gallisch"
 
 #: pretix/settings.py:831
 msgid "User profile only"
