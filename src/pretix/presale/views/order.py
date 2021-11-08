@@ -51,7 +51,7 @@ from django.db.models import Exists, OuterRef, Q, Sum
 from django.http import (
     FileResponse, Http404, HttpResponseRedirect, JsonResponse,
 )
-from django.shortcuts import get_object_or_404, redirect
+from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.decorators import method_decorator
 from django.utils.functional import cached_property
 from django.utils.timezone import now
@@ -1205,6 +1205,8 @@ class OrderChange(EventViewMixin, OrderDetailMixin, TemplateView):
                 }
                 current_addon_products = defaultdict(list)
                 for a in p.addons.all():
+                    if a.canceled:
+                        continue
                     # todo: if not a.is_bundled:
                     current_addon_products[a.item_id, a.variation_id].append(a)
 
@@ -1340,7 +1342,7 @@ class OrderChange(EventViewMixin, OrderDetailMixin, TemplateView):
                 _(error_messages['addon_max_count']),
                 'addon_max_count',
                 {
-                    'base': str(form['item'].name),
+                    'base': str(form['pos'].item.name),
                     'max': category['max_count'],
                     'cat': str(category['category'].name),
                 }
@@ -1351,7 +1353,7 @@ class OrderChange(EventViewMixin, OrderDetailMixin, TemplateView):
                 _(error_messages['addon_min_count']),
                 'addon_min_count',
                 {
-                    'base': str(form['item'].name),
+                    'base': str(form['pos'].item.name),
                     'min': category['min_count'],
                     'cat': str(category['category'].name),
                 }
@@ -1361,7 +1363,7 @@ class OrderChange(EventViewMixin, OrderDetailMixin, TemplateView):
                 _(error_messages['addon_no_multi']),
                 'addon_no_multi',
                 {
-                    'base': str(form['item'].name),
+                    'base': str(form['pos'].item.name),
                     'cat': str(category['category'].name),
                 }
             )
@@ -1404,22 +1406,43 @@ class OrderChange(EventViewMixin, OrderDetailMixin, TemplateView):
             messages.error(self.request, _('An error occurred. Please see the details below.'))
         else:
             try:
-                ocm.commit(check_quotas=True)
+                self._validate_total_diff(ocm)
             except OrderError as e:
                 messages.error(self.request, str(e))
-            else:
 
-                if self.order.status != Order.STATUS_PAID and was_paid:
-                    messages.success(self.request, _('The order has been changed. You can now proceed by paying the open amount of {amount}.').format(
-                        amount=money_filter(self.order.pending_sum, self.request.event.currency)
-                    ))
-                    return redirect(eventreverse(self.request.event, 'presale:event.order.pay.change', kwargs={
-                        'order': self.order.code,
-                        'secret': self.order.secret
-                    }))
+            if "confirm" in request.POST:
+                try:
+                    ocm.commit(check_quotas=True)
+                except OrderError as e:
+                    messages.error(self.request, str(e))
                 else:
-                    messages.success(self.request, _('The order has been changed.'))
+                    if self.order.status != Order.STATUS_PAID and was_paid:
+                        messages.success(self.request, _('The order has been changed. You can now proceed by paying the open amount of {amount}.').format(
+                            amount=money_filter(self.order.pending_sum, self.request.event.currency)
+                        ))
+                        return redirect(eventreverse(self.request.event, 'presale:event.order.pay.change', kwargs={
+                            'order': self.order.code,
+                            'secret': self.order.secret
+                        }))
+                    else:
+                        messages.success(self.request, _('The order has been changed.'))
 
-                return redirect(self.get_order_url())
+                    return redirect(self.get_order_url())
+            else:
+                return render(request, 'pretixpresale/event/order_change_confirm.html', {
+                    'operations': ocm._operations,
+                    'totaldiff': ocm._totaldiff,
+                    'order': self.order,
+                    'payment_refund_sum': self.order.payment_refund_sum,
+                    'new_pending_sum': self.order.pending_sum + ocm._totaldiff,
+                })
 
         return self.get(request, *args, **kwargs)
+
+    def _validate_total_diff(self, ocm):
+        if ocm._totaldiff < Decimal('0.00') and self.request.event.settings.change_allow_user_price == 'gte':
+            raise OrderError(_('You may not change your order in a way that reduces the total price.'))
+        if ocm._totaldiff <= Decimal('0.00') and self.request.event.settings.change_allow_user_price == 'gt':
+            raise OrderError(_('You may only change your order in a way that increases the total price.'))
+        if ocm._totaldiff != Decimal('0.00') and self.request.event.settings.change_allow_user_price == 'eq':
+            raise OrderError(_('You may not change your order in a way that changes the total price.'))

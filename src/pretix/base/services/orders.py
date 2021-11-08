@@ -1268,15 +1268,15 @@ class OrderChangeManager:
     ItemOperation = namedtuple('ItemOperation', ('position', 'item', 'variation'))
     SubeventOperation = namedtuple('SubeventOperation', ('position', 'subevent'))
     SeatOperation = namedtuple('SubeventOperation', ('position', 'seat'))
-    PriceOperation = namedtuple('PriceOperation', ('position', 'price'))
+    PriceOperation = namedtuple('PriceOperation', ('position', 'price', 'price_diff'))
     TaxRuleOperation = namedtuple('TaxRuleOperation', ('position', 'tax_rule'))
     MembershipOperation = namedtuple('MembershipOperation', ('position', 'membership'))
-    CancelOperation = namedtuple('CancelOperation', ('position',))
+    CancelOperation = namedtuple('CancelOperation', ('position', 'price_diff'))
     AddOperation = namedtuple('AddOperation', ('item', 'variation', 'price', 'addon_to', 'subevent', 'seat', 'membership'))
     SplitOperation = namedtuple('SplitOperation', ('position',))
-    FeeValueOperation = namedtuple('FeeValueOperation', ('fee', 'value'))
-    AddFeeOperation = namedtuple('AddFeeOperation', ('fee',))
-    CancelFeeOperation = namedtuple('CancelFeeOperation', ('fee',))
+    FeeValueOperation = namedtuple('FeeValueOperation', ('fee', 'value', 'price_diff'))
+    AddFeeOperation = namedtuple('AddFeeOperation', ('fee', 'price_diff'))
+    CancelFeeOperation = namedtuple('CancelFeeOperation', ('fee', 'price_diff'))
     RegenerateSecretOperation = namedtuple('RegenerateSecretOperation', ('position',))
 
     def __init__(self, order: Order, user=None, auth=None, notify=True, reissue_invoice=True):
@@ -1393,7 +1393,7 @@ class OrderChangeManager:
         if self.order.event.settings.invoice_include_free or price.gross != Decimal('0.00') or position.price != Decimal('0.00'):
             self._invoice_dirty = True
 
-        self._operations.append(self.PriceOperation(position, price))
+        self._operations.append(self.PriceOperation(position, price, price.gross - position.price))
 
     def change_tax_rule(self, position_or_fee, tax_rule: TaxRule):
         self._operations.append(self.TaxRuleOperation(position_or_fee, tax_rule))
@@ -1433,28 +1433,28 @@ class OrderChangeManager:
                     new_tax = tax_rule.tax(pos.price, base_price_is='gross', currency=self.event.currency,
                                            override_tax_rate=new_rate)
                 self._totaldiff += new_tax.gross - pos.price
-                self._operations.append(self.PriceOperation(pos, new_tax))
+                self._operations.append(self.PriceOperation(pos, new_tax, new_tax.gross - pos.price))
 
     def cancel_fee(self, fee: OrderFee):
         self._totaldiff -= fee.value
-        self._operations.append(self.CancelFeeOperation(fee))
+        self._operations.append(self.CancelFeeOperation(fee, -fee.value))
         self._invoice_dirty = True
 
     def add_fee(self, fee: OrderFee):
         self._totaldiff += fee.value
         self._invoice_dirty = True
-        self._operations.append(self.AddFeeOperation(fee))
+        self._operations.append(self.AddFeeOperation(fee, fee.value))
 
     def change_fee(self, fee: OrderFee, value: Decimal):
         value = (fee.tax_rule or TaxRule.zero()).tax(value, base_price_is='gross')
         self._totaldiff += value.gross - fee.value
         self._invoice_dirty = True
-        self._operations.append(self.FeeValueOperation(fee, value))
+        self._operations.append(self.FeeValueOperation(fee, value, value.gross - fee.value))
 
     def cancel(self, position: OrderPosition):
         self._totaldiff -= position.price
         self._quotadiff.subtract(position.quotas)
-        self._operations.append(self.CancelOperation(position))
+        self._operations.append(self.CancelOperation(position, -position.price))
         if position.seat:
             self._seatdiff.subtract([position.seat])
 
@@ -2270,7 +2270,6 @@ class OrderChangeManager:
             # an order change can only be committed once
             raise OrderError(error_messages['internal'])
         self._committed = True
-        print(self._operations)
 
         if not self._operations:
             # Do nothing
