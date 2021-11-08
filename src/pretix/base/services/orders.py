@@ -1570,8 +1570,8 @@ class OrderChangeManager:
                 if a.canceled:
                     continue
 
-                # TODO: if not a.is_bundled:
-                current_addons[op][a.item_id, a.variation_id].append(a)
+                if not a.is_bundled:
+                    current_addons[op][a.item_id, a.variation_id].append(a)
 
         # Create operations, perform various checks
         for a in addons:
@@ -1632,7 +1632,6 @@ class OrderChangeManager:
         for op in toplevel_op:
             item = op.item
             for iao in item.addons.all():
-                # todo: do not count bundled items
                 selected = selected_addons[op.id, iao.addon_category_id]
                 n_per_i = Counter()
                 for (i, v), c in selected.items():

@@ -1207,8 +1207,8 @@ class OrderChange(EventViewMixin, OrderDetailMixin, TemplateView):
                 for a in p.addons.all():
                     if a.canceled:
                         continue
-                    # todo: if not a.is_bundled:
-                    current_addon_products[a.item_id, a.variation_id].append(a)
+                    if not a.is_bundled:
+                        current_addon_products[a.item_id, a.variation_id].append(a)
 
                 for iao in p.item.addons.all():
                     ckey = '{}-{}'.format(p.subevent.pk if p.subevent else 0, iao.addon_category.pk)
