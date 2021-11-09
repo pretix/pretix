@@ -427,7 +427,7 @@ class QuestionList(ListView):
                 )
             )
 
-        if self.request.event.settings.attendee_emails_asked:
+        if self.request.event.settings.attendee_company_asked:
             ctx['questions'].append(
                 FakeQuestion(
                     id='company',
