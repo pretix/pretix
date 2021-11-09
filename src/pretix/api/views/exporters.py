@@ -69,7 +69,7 @@ class ExportersMixin:
         cf = get_object_or_404(CachedFile, id=kwargs['cfid'])
         if cf.file:
             resp = ChunkBasedFileResponse(cf.file.file, content_type=cf.type)
-            resp['Content-Disposition'] = 'attachment; filename="{}"'.format(cf.filename)
+            resp['Content-Disposition'] = 'attachment; filename="{}"'.format(cf.filename).encode("ascii", "ignore")
             return resp
         elif not settings.HAS_CELERY:
             return Response(

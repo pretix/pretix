@@ -661,5 +661,5 @@ class AnswerDownload(EventViewMixin, View):
         resp['Content-Disposition'] = 'attachment; filename="{}-cart-{}"'.format(
             self.request.event.slug.upper(),
             os.path.basename(answer.file.name).split('.', 1)[1]
-        )
+        ).encode("ascii", "ignore")
         return resp

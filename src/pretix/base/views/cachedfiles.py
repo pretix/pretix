@@ -47,7 +47,7 @@ class DownloadView(TemplateView):
             return HttpResponse('1' if self.object.file else '0')
         elif self.object.file:
             resp = ChunkBasedFileResponse(self.object.file.file, content_type=self.object.type)
-            resp['Content-Disposition'] = 'attachment; filename="{}"'.format(self.object.filename)
+            resp['Content-Disposition'] = 'attachment; filename="{}"'.format(self.object.filename).encode('ascii', 'ignore')
             return resp
         else:
             return super().get(request, *args, **kwargs)
