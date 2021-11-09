@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-10-29 10:09+0000\n"
-"PO-Revision-Date: 2021-10-04 21:00+0000\n"
+"PO-Revision-Date: 2021-11-10 05:00+0000\n"
 "Last-Translator: Jaakko Rinta-Filppula <jaakko@r-f.fi>\n"
 "Language-Team: Finnish <https://translate.pretix.eu/projects/pretix/pretix/"
 "fi/>\n"
@@ -2953,10 +2953,8 @@ msgid "Allowed membership types"
 msgstr ""
 
 #: pretix/base/models/items.py:527 pretix/base/models/items.py:812
-#, fuzzy
-#| msgid "Has any membership"
 msgid "Hide without a valid membership"
-msgstr "On jäseniä"
+msgstr ""
 
 #: pretix/base/models/items.py:528 pretix/base/models/items.py:813
 msgid ""
@@ -7657,7 +7655,7 @@ msgstr ""
 #: pretix/base/settings.py:2713 pretix/base/settings.py:2731
 #: pretix/base/settings.py:2750
 msgid "Given name"
-msgstr ""
+msgstr "Etunimi"
 
 #: pretix/base/settings.py:2557 pretix/base/settings.py:2570
 #: pretix/base/settings.py:2586 pretix/base/settings.py:2602
@@ -7666,7 +7664,7 @@ msgstr ""
 #: pretix/base/settings.py:2714 pretix/base/settings.py:2732
 #: pretix/base/settings.py:2751
 msgid "Family name"
-msgstr ""
+msgstr "Sukunimi"
 
 #: pretix/base/settings.py:2561 pretix/base/settings.py:2577
 #: pretix/base/settings.py:2593 pretix/base/settings.py:2608
@@ -7703,11 +7701,11 @@ msgstr ""
 
 #: pretix/base/settings.py:2600 pretix/base/settings.py:2617
 msgid "First name"
-msgstr ""
+msgstr "Etunimi"
 
 #: pretix/base/settings.py:2601 pretix/base/settings.py:2618
 msgid "Middle name"
-msgstr ""
+msgstr "Toiset nimet"
 
 #: pretix/base/settings.py:2682 pretix/base/settings.py:2693
 #: pretix/control/forms/organizer.py:412
@@ -7717,7 +7715,7 @@ msgstr "Matti Meikäläinen"
 
 #: pretix/base/settings.py:2688
 msgid "Calling name"
-msgstr ""
+msgstr "Kutsumanimi"
 
 #: pretix/base/settings.py:2701
 msgid "Latin transcription"
@@ -9701,10 +9699,8 @@ msgid ""
 msgstr ""
 
 #: pretix/control/forms/orders.py:619
-#, fuzzy
-#| msgid "All invoices"
 msgid "Attach invoices"
-msgstr "Kaikki laskut"
+msgstr "Liitä laskut"
 
 #: pretix/control/forms/orders.py:645
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:25
@@ -14505,10 +14501,8 @@ msgid "View email history"
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/order/index.html:87
-#, fuzzy
-#| msgid "Show account history"
 msgid "View transaction history"
-msgstr "Näytä tilin historia"
+msgstr "Näytä toimenpidehistoria"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:98
 msgid "Expire order"
@@ -14582,10 +14576,8 @@ msgid ""
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/order/index.html:255
-#, fuzzy
-#| msgid "Canceled by customer"
 msgid "Invoice was emailed to customer"
-msgstr "Asiakkaan peruuttama"
+msgstr ""
 
 #: pretix/control/templates/pretixcontrol/order/index.html:260
 msgid "Invoice was not yet emailed to customer"
@@ -14615,10 +14607,8 @@ msgid "Cancel and reissue"
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/order/index.html:300
-#, fuzzy
-#| msgid "All invoices"
 msgid "Email invoices"
-msgstr "Kaikki laskut"
+msgstr "Lähetä laskut sähköpostilla"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:309
 #: pretix/control/templates/pretixcontrol/order/index.html:321
@@ -15062,10 +15052,8 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/order/transactions.html:5
 #: pretix/control/templates/pretixcontrol/order/transactions.html:8
-#, fuzzy
-#| msgid "Check-in history"
 msgid "Transaction history"
-msgstr "Ilmoittautumishistoria"
+msgstr ""
 
 #: pretix/control/templates/pretixcontrol/order/transactions.html:23
 #, fuzzy
@@ -22052,19 +22040,18 @@ msgid "incl. %(tax_sum)s taxes"
 msgstr "sis. %(tax_sum)s veroja"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:388
-#, fuzzy, python-format
-#| msgid "The items in your cart are reserved for you for %(minutes)s minutes."
+#, python-format
 msgid "The items in your cart are reserved for you for %(minutes)s minutes."
 msgstr ""
 "Ostoskorissasi olevat tuotteet on varattu sinulle %(minutes)s minuutiksi."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:392
-#, fuzzy
-#| msgid "The items in your cart are no longer reserved for you."
 msgid ""
 "The items in your cart are no longer reserved for you. You can still "
 "complete your order as long as they’re available."
-msgstr "Ostoskorissasi olevat tuotteet eivät ole enää varattu sinulle."
+msgstr ""
+"Ostoskorissasi olevat tuotteet eivät ole enää varattu sinulle. Voit silti "
+"suorittaa tilauksen loppuun niin kauan kuin tuotteita on saatavilla."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:396
 msgid "Overview of your ordered products."
@@ -22358,12 +22345,12 @@ msgstr "Tämän tapahtuman ennakkomyynti on päättynyt."
 #: pretix/presale/views/widget.py:664
 #, python-format
 msgid "The presale for this event will start on %(date)s at %(time)s."
-msgstr ""
+msgstr "Tämän tapahtuman myynti alkaa %(date)s klo %(time)s."
 
 #: pretix/presale/templates/pretixpresale/event/index.html:153
 #: pretix/presale/views/waiting.py:102 pretix/presale/views/widget.py:669
 msgid "The presale for this event has not yet started."
-msgstr ""
+msgstr "Tapahtuman myynti ei ole vielä alkanut."
 
 #: pretix/presale/templates/pretixpresale/event/index.html:163
 #: pretix/presale/templates/pretixpresale/event/index.html:164
