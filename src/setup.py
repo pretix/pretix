@@ -180,7 +180,7 @@ setup(
         'django-hijack>=2.1.10,<2.2.0',
         'django-i18nfield==1.9.*,>=1.9.3',
         'django-libsass==0.8',
-        'django-localflavor==3.0.*',
+        'django-localflavor>=3.0,<3.2',
         'django-markup',
         'django-mysql',
         'django-oauth-toolkit==1.2.*',
