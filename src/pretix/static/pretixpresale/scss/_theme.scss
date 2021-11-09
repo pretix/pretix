@@ -70,6 +70,8 @@ h2.content-header {
   .main-box {
     @if ($body-bg != #FFFFFF) {
       margin: 20px auto;
+      padding-left: 25px;
+      padding-right: 25px;
       border-radius: $border-radius-large;
     }
   }
@@ -85,6 +87,12 @@ h2.content-header {
   }
 
   .page-header.logo-large {
+    @if ($body-bg != #FFFFFF) {
+      margin-left: -25px;
+      margin-right: -25px;
+      padding-bottom: 25px;
+    }
+
     img {
       @if ($body-bg != #FFFFFF) {
         border-top-right-radius: $border-radius-large;
@@ -92,7 +100,14 @@ h2.content-header {
       }
     }
   }
+
   .page-header .loginbox {
     padding-top: 0;
+  }
+}
+
+footer {
+  @if ($body-bg != #FFFFFF) {
+    padding-bottom: 0;
   }
 }
