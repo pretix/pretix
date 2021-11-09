@@ -202,7 +202,7 @@ setup(
         'openpyxl==3.0.*',
         'packaging',
         'paypalrestsdk==1.13.*',
-        'phonenumberslite==8.11.*',
+        'phonenumberslite>=8.11,<8.13',
         'Pillow==8.*',
         'protobuf==3.15.*',
         'psycopg2-binary',
