@@ -163,7 +163,7 @@ setup(
         'BeautifulSoup4==4.8.*',
         'bleach==3.3.*',
         'celery==4.4.*',
-        'chardet<3.1.0,>=3.0.2',
+        'chardet>=3.0.2,<4.1.0',
         'cryptography>=3.4.2',
         'csscompressor',
         'css-inline==0.7.*',
