@@ -401,10 +401,10 @@ class QuestionList(ListView):
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
-        ctx['questions'] = list(ctx['questions'])
+        questions = []
 
         if self.request.event.settings.attendee_names_asked:
-            ctx['questions'].append(
+            questions.append(
                 FakeQuestion(
                     id='attendee_name_parts',
                     question=_('Attendee name'),
@@ -416,7 +416,7 @@ class QuestionList(ListView):
             )
 
         if self.request.event.settings.attendee_emails_asked:
-            ctx['questions'].append(
+            questions.append(
                 FakeQuestion(
                     id='attendee_email',
                     question=_('Attendee email'),
@@ -428,7 +428,7 @@ class QuestionList(ListView):
             )
 
         if self.request.event.settings.attendee_company_asked:
-            ctx['questions'].append(
+            questions.append(
                 FakeQuestion(
                     id='company',
                     question=_('Company'),
@@ -440,7 +440,7 @@ class QuestionList(ListView):
             )
 
         if self.request.event.settings.attendee_addresses_asked:
-            ctx['questions'].append(
+            questions.append(
                 FakeQuestion(
                     id='street',
                     question=_('Street'),
@@ -450,7 +450,7 @@ class QuestionList(ListView):
                     required=self.request.event.settings.attendee_addresses_required,
                 )
             )
-            ctx['questions'].append(
+            questions.append(
                 FakeQuestion(
                     id='zipcode',
                     question=_('ZIP code'),
@@ -460,7 +460,7 @@ class QuestionList(ListView):
                     required=self.request.event.settings.attendee_addresses_required,
                 )
             )
-            ctx['questions'].append(
+            questions.append(
                 FakeQuestion(
                     id='city',
                     question=_('City'),
@@ -470,7 +470,7 @@ class QuestionList(ListView):
                     required=self.request.event.settings.attendee_addresses_required,
                 )
             )
-            ctx['questions'].append(
+            questions.append(
                 FakeQuestion(
                     id='country',
                     question=_('Country'),
@@ -481,7 +481,9 @@ class QuestionList(ListView):
                 )
             )
 
-        ctx['questions'].sort(key=lambda q: q.position)
+        questions += list(ctx['questions'])
+        questions.sort(key=lambda q: q.position)
+        ctx['questions'] = questions
         return ctx
 
 
