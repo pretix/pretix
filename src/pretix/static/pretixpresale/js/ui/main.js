@@ -576,7 +576,7 @@ $(function () {
             thisCalendar.style.setProperty('--current-time-offset', dx + "px");
         }
         currentTimeInterval = window.setInterval(setCurrentTimeBar, 15*1000);
-        $(window).resize(setCurrentTimeBar);
+        $(window).on("resize", setCurrentTimeBar);
         setCurrentTimeBar();
     });
 
