@@ -569,9 +569,14 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
                 voucher,
             )
 
-            context['show_names'] = ebd.get('_subevents_different_names', False) or sum(
-                len(i) for i in ebd.values() if isinstance(i, list)
-            ) < 2
+            # Hide names of subevents in event series where it is always the same.  No need to show the name of the museum thousands of times
+            # in the calendar. We previously only looked at the current time range for this condition which caused weird side-effects, so we need
+            # an extra query to look at the entire series. For performance reasons, we have a limit on how many different names we look at.
+            context['show_names'] = sum(len(i) for i in ebd.values() if isinstance(i, list)) < 2 or self.request.event.cache.get_or_set(
+                'has_different_subevent_names',
+                lambda: len(set(str(n) for n in self.request.event.subevents.values_list('name', flat=True).annotate(c=Count('*'))[:250])) != 1,
+                timeout=120,
+            )
             context['weeks'] = weeks_for_template(ebd, self.year, self.month)
             context['months'] = [date(self.year, i + 1, 1) for i in range(12)]
             context['years'] = range(now().year - 2, now().year + 3)
@@ -598,9 +603,14 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
                 voucher,
             )
 
-            context['show_names'] = ebd.get('_subevents_different_names', False) or sum(
-                len(i) for i in ebd.values() if isinstance(i, list)
-            ) < 2
+            # Hide names of subevents in event series where it is always the same.  No need to show the name of the museum thousands of times
+            # in the calendar. We previously only looked at the current time range for this condition which caused weird side-effects, so we need
+            # an extra query to look at the entire series. For performance reasons, we have a limit on how many different names we look at.
+            context['show_names'] = sum(len(i) for i in ebd.values() if isinstance(i, list)) < 2 or self.request.event.cache.get_or_set(
+                'has_different_subevent_names',
+                lambda: len(set(str(n) for n in self.request.event.subevents.values_list('name', flat=True).annotate(c=Count('*'))[:250])) != 1,
+                timeout=120,
+            )
             context['days'] = days_for_template(ebd, week)
             context['weeks'] = [
                 (date_fromisocalendar(self.year, i + 1, 1), date_fromisocalendar(self.year, i + 1, 7))
