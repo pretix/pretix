@@ -197,7 +197,7 @@ setup(
         'libsass==0.20.*',
         'lxml',
         'markdown==3.3.*',
-        'mt-940==3.2',
+        'mt-940==4.23.0',
         'oauthlib==3.1.*',
         'openpyxl==3.0.*',
         'packaging',
