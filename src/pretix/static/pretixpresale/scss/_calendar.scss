@@ -210,6 +210,7 @@
 concurrency has two meanings:
   on .day-timeline it means total nummber concurrently running events at any given time
   on .day-timeline>li it means the current concurrency of this li-element
+if concurrency is higher than 9, JavaScript (currently in pretixpresale/js/ui/main.js) sets --concurrency accordingly
 */
 [data-concurrency="1"] {--concurrency: 1}
 [data-concurrency="2"] {--concurrency: 2}
