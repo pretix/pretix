@@ -40,7 +40,6 @@
 }
 
 .page-header.logo-large {
-  margin: 0 -15px;
 
   img {
     width: 100%;
@@ -62,6 +61,11 @@ h2.content-header {
 }
 
 @media (max-width: $screen-xs-max) {
+  .page-header.logo-large {
+    margin-left: -15px;
+    margin-right: -15px;
+    margin-top: 0;
+  }
   h2.content-header small {
     display: block;
   }
@@ -76,8 +80,10 @@ h2.content-header {
     }
   }
   .page-header-links-outside {
-    padding-left: 0;
-    padding-right: 0;
+    @if ($body-bg != #FFFFFF) {
+      padding-left: 0;
+      padding-right: 0;
+    }
   }
   .page-header-links > div.header-part {
     @if ($body-bg != #FFFFFF) {
@@ -87,10 +93,11 @@ h2.content-header {
   }
 
   .page-header.logo-large {
+    margin-top: 0;
+
     @if ($body-bg != #FFFFFF) {
       margin-left: -25px;
       margin-right: -25px;
-      padding-bottom: 25px;
     }
 
     img {
