@@ -787,7 +787,9 @@ class SessionTimeOutTest(TestCase):
         assert self.client.session['pretix_auth_last_used'] > t1
 
     def test_pinned_user_agent(self):
-        self.client.defaults['HTTP_USER_AGENT'] = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.140 Safari/537.36'
+        self.client.defaults['HTTP_USER_AGENT'] = 'Mozilla/5.0 (X11; Linux x86_64) ' \
+                                                  'AppleWebKit/537.36 (KHTML, like Gecko) ' \
+                                                  'Chrome/64.0.3282.140 Safari/537.36'
         response = self.client.get('/control/')
         self.assertEqual(response.status_code, 200)
 
@@ -927,3 +929,45 @@ class Obligatory2FATest(TestCase):
 
         response = self.client.get('/control/events/')
         assert response.status_code == 200
+
+
+class PasswordChangeRequiredTest(TestCase):
+    def setUp(self):
+        super().setUp()
+        self.user = User.objects.create_user('dummy@dummy.dummy', 'dummy')
+
+    def test_redirect_to_settings(self):
+        self.user.needs_password_change = True
+        self.user.save()
+        self.client.login(email='dummy@dummy.dummy', password='dummy')
+
+        response = self.client.get('/control/events/')
+
+        self.assertEqual(response.status_code, 302)
+        assert self.user.needs_password_change is True
+        self.assertIn('/control/settings?next=/control/events/', response['Location'])
+
+    def test_redirect_to_2fa_to_settings(self):
+        self.user.require_2fa = True
+        self.user.needs_password_change = True
+        self.user.save()
+
+        response = self.client.post('/control/login?next=/control/events/', {
+            'email': 'dummy@dummy.dummy',
+            'password': 'dummy',
+        })
+
+        self.assertEqual(response.status_code, 302)
+        self.assertIn('/control/login/2fa?next=/control/events/', response['Location'])
+
+        d = TOTPDevice.objects.create(user=self.user, name='test')
+        totp = TOTP(d.bin_key, d.step, d.t0, d.digits, d.drift)
+        totp.time = time.time()
+
+        self.client.post('/control/login/2fa?next=/control/events/'.format(d.pk), {
+            'token': str(totp.token())
+        })
+        response = self.client.get('/control/events/')
+
+        self.assertEqual(response.status_code, 302)
+        self.assertIn('/control/settings?next=/control/events/', response['Location'])

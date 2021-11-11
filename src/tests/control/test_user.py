@@ -51,8 +51,8 @@ from pretix.testutils.mock import mocker_context
 class UserSettingsTest(SoupTest):
     def setUp(self):
         super().setUp()
-        self.user = User.objects.create_user('dummy@dummy.dummy', 'dummy')
-        self.client.login(email='dummy@dummy.dummy', password='dummy')
+        self.user = User.objects.create_user('dummy@dummy.dummy', 'barfoofoo')
+        self.client.login(email='dummy@dummy.dummy', password='barfoofoo')
         doc = self.get_doc('/control/settings')
         self.form_data = extract_form_fields(doc.select('.container-fluid form')[0])
 
@@ -80,7 +80,7 @@ class UserSettingsTest(SoupTest):
     def test_change_email_success(self):
         doc = self.save({
             'email': 'foo@example.com',
-            'old_pw': 'dummy'
+            'old_pw': 'barfoofoo'
         })
         assert doc.select(".alert-success")
         self.user = User.objects.get(pk=self.user.pk)
@@ -90,7 +90,7 @@ class UserSettingsTest(SoupTest):
         User.objects.create_user('foo@example.com', 'foo')
         doc = self.save({
             'email': 'foo@example.com',
-            'old_pw': 'dummy'
+            'old_pw': 'barfoofoo'
         })
         assert doc.select(".alert-danger")
         self.user = User.objects.get(pk=self.user.pk)
@@ -112,7 +112,7 @@ class UserSettingsTest(SoupTest):
         self.save({
             'new_pw': 'foobarbar',
             'new_pw_repeat': 'foobarbar',
-            'old_pw': 'dummy',
+            'old_pw': 'barfoofoo',
         })
         pw = self.user.password
         self.user = User.objects.get(pk=self.user.pk)
@@ -122,7 +122,7 @@ class UserSettingsTest(SoupTest):
         doc = self.save({
             'new_pw': 'foobarbar',
             'new_pw_repeat': 'foobarbar',
-            'old_pw': 'dummy',
+            'old_pw': 'barfoofoo',
         })
         assert doc.select(".alert-success")
         self.user = User.objects.get(pk=self.user.pk)
@@ -132,7 +132,7 @@ class UserSettingsTest(SoupTest):
         doc = self.save({
             'new_pw': 'foo',
             'new_pw_repeat': 'foo',
-            'old_pw': 'dummy',
+            'old_pw': 'barfoofoo',
         })
         assert doc.select(".alert-danger")
         pw = self.user.password
@@ -143,7 +143,7 @@ class UserSettingsTest(SoupTest):
         doc = self.save({
             'new_pw': 'dummy123',
             'new_pw_repeat': 'dummy123',
-            'old_pw': 'dummy',
+            'old_pw': 'barfoofoo',
         })
         assert doc.select(".alert-danger")
         pw = self.user.password
@@ -154,12 +154,43 @@ class UserSettingsTest(SoupTest):
         doc = self.save({
             'new_pw': 'foooooooooooooo',
             'new_pw_repeat': 'baaaaaaaaaaaar',
-            'old_pw': 'dummy',
+            'old_pw': 'barfoofoo',
         })
         assert doc.select(".alert-danger")
         pw = self.user.password
         self.user = User.objects.get(pk=self.user.pk)
         assert self.user.password == pw
+
+    def test_change_password_require_new(self):
+        doc = self.save({
+            'new_pw': 'barfoofoo',
+            'new_pw_repeat': 'barfoofoo',
+            'old_pw': 'barfoofoo',
+        })
+        assert doc.select(".alert-danger")
+
+    def test_needs_password_change(self):
+        self.user.needs_password_change = True
+        self.user.save()
+        doc = self.save({
+            'email': 'foo@example.com',
+            'old_pw': 'barfoofoo'
+        })
+        assert doc.select(".alert-success")
+        assert doc.select(".alert-warning")
+        self.user.refresh_from_db()
+        assert self.user.needs_password_change is True
+
+    def test_needs_password_change_changed(self):
+        self.user.needs_password_change = True
+        self.user.save()
+        self.save({
+            'new_pw': 'foobarbar',
+            'new_pw_repeat': 'foobarbar',
+            'old_pw': 'barfoofoo'
+        })
+        self.user.refresh_from_db()
+        assert self.user.needs_password_change is False
 
 
 @pytest.fixture

@@ -429,6 +429,15 @@
                         </div>
                     {% endif %}
 
+                    {% if request.user.needs_password_change %}
+                        <div class="alert alert-warning">
+                            {% blocktrans trimmed %}
+                                For security reasons, please change your password before you continue. Afterwards you
+                                will be redirected to your original destination.
+                            {% endblocktrans %}
+                        </div>
+                    {% endif %}
+
                     {% block content %}
                     {% endblock %}
                     <footer>

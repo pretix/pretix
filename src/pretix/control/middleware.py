@@ -69,6 +69,11 @@ class PermissionMiddleware:
         "user.settings.notifications.off",
     )
 
+    EXCEPTIONS_FORCED_PW_CHANGE = (
+        "user.settings",
+        "auth.logout"
+    )
+
     EXCEPTIONS_2FA = (
         "user.settings.2fa",
         "user.settings.2fa.add",
@@ -129,6 +134,9 @@ class PermissionMiddleware:
         except SessionReauthRequired:
             if url_name not in ('user.reauth', 'auth.logout'):
                 return redirect(reverse('control:user.reauth') + '?next=' + quote(request.get_full_path()))
+
+        if request.user.needs_password_change and url_name not in self.EXCEPTIONS_FORCED_PW_CHANGE:
+            return redirect(reverse('control:user.settings') + '?next=' + quote(request.get_full_path()))
 
         if not request.user.require_2fa and settings.PRETIX_OBLIGATORY_2FA \
                 and url_name not in self.EXCEPTIONS_2FA:

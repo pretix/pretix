@@ -55,6 +55,7 @@ class UserSettingsForm(forms.ModelForm):
         'pw_current_wrong': _("The current password you entered was not correct."),
         'pw_mismatch': _("Please enter the same password twice"),
         'rate_limit': _("For security reasons, please wait 5 minutes before you try again."),
+        'pw_equal': _("Please choose a password different to your current one.")
     }
 
     old_pw = forms.CharField(max_length=255,
@@ -156,6 +157,12 @@ class UserSettingsForm(forms.ModelForm):
             raise forms.ValidationError(
                 self.error_messages['pw_current'],
                 code='pw_current'
+            )
+
+        if password1 and password1 == old_pw:
+            raise forms.ValidationError(
+                self.error_messages['pw_equal'],
+                code='pw_equal'
             )
 
         if password1:
