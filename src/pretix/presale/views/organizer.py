@@ -815,11 +815,13 @@ class DayCalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
         if not ebd[self.date]:
             return ctx
 
-        events, start, end = self._rasterize_events(ebd[self.date])
+        events = ebd[self.date]
         shortest_duration = self._get_shortest_duration(events).total_seconds() // 60
         # pick the next biggest tick_duration based on shortest_duration, max. 60 minutes
         tick_duration = next((d for d in [15, 30, 60] if d >= shortest_duration), 60)
-        calendar_duration = self._get_time_duration(start, self._ceil_time(end, raster_size=tick_duration))
+
+        events, start, end = self._rasterize_events(events, tick_duration=tick_duration)
+        calendar_duration = self._get_time_duration(start, end)
         ctx["calendar_duration"] = ":".join([
             "%02d" % i for i in (
                 (calendar_duration.days * 24) + (calendar_duration.seconds // 3600),
@@ -865,11 +867,11 @@ class DayCalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
             hour = hour + 1
         return t.replace(minute=minute, hour=hour)
 
-    def _rasterize_events(self, events, raster_size=5):
+    def _rasterize_events(self, events, tick_duration, raster_size=5):
         rastered_events = []
         start, end = self._get_time_range(events)
-        start = self._floor_time(start)
-        end = self._ceil_time(end)
+        start = self._floor_time(start, raster_size=tick_duration)
+        end = self._ceil_time(end, raster_size=tick_duration)
 
         midnight = time(0, 0)
         for e in events:
