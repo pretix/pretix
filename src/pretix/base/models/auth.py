@@ -133,7 +133,7 @@ class User(AbstractBaseUser, PermissionsMixin, LoggingMixin):
     date_joined = models.DateTimeField(auto_now_add=True,
                                        verbose_name=_('Date joined'))
     needs_password_change = models.BooleanField(default=False,
-                                                verbose_name=_('Needs to change password on login'))
+                                                verbose_name=_('Force user to select a new password'))
     locale = models.CharField(max_length=50,
                               choices=settings.LANGUAGES,
                               default=settings.LANGUAGE_CODE,

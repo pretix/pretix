@@ -787,8 +787,9 @@ class SessionTimeOutTest(TestCase):
         assert self.client.session['pretix_auth_last_used'] > t1
 
     def test_pinned_user_agent(self):
-        self.client.defaults[
-            'HTTP_USER_AGENT'] = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.140 Safari/537.36'
+        self.client.defaults['HTTP_USER_AGENT'] = 'Mozilla/5.0 (X11; Linux x86_64) ' \
+                                                  'AppleWebKit/537.36 (KHTML, like Gecko) ' \
+                                                  'Chrome/64.0.3282.140 Safari/537.36'
         response = self.client.get('/control/')
         self.assertEqual(response.status_code, 200)
 
@@ -940,7 +941,7 @@ class PasswordChangeRequiredTest(TestCase):
         self.user.save()
         self.client.login(email='dummy@dummy.dummy', password='dummy')
 
-        response = self.client.post('/control/events/')
+        response = self.client.get('/control/events/')
 
         self.assertEqual(response.status_code, 302)
         assert self.user.needs_password_change is True
@@ -966,7 +967,7 @@ class PasswordChangeRequiredTest(TestCase):
         self.client.post('/control/login/2fa?next=/control/events/'.format(d.pk), {
             'token': str(totp.token())
         })
-        response = self.client.post('/control/events/')
+        response = self.client.get('/control/events/')
 
         self.assertEqual(response.status_code, 302)
         self.assertIn('/control/settings?next=/control/events/', response['Location'])

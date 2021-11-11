@@ -244,7 +244,9 @@ class UserSettings(UpdateView):
         return sup
 
     def get_success_url(self):
-        return self.request.GET.get('next', reverse('control:user.settings'))
+        if "next" in self.request.GET and url_has_allowed_host_and_scheme(self.request.GET.get("next"), allowed_hosts=None):
+            return self.request.GET.get("next")
+        return reverse('control:user.settings')
 
 
 class UserHistoryView(ListView):
