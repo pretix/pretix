@@ -426,7 +426,7 @@ DEFAULTS = {
         )
     },
     'invoice_include_expire_date': {
-        'default': 'False',
+        'default': 'False',  # default for new events is True
         'type': bool,
         'form_class': forms.BooleanField,
         'serializer_class': serializers.BooleanField,
@@ -482,7 +482,7 @@ DEFAULTS = {
         )
     },
     'invoice_renderer': {
-        'default': 'classic',
+        'default': 'classic',  # default for new events is 'modern1'
         'type': str,
     },
     'ticket_secret_generator': {
@@ -908,7 +908,7 @@ DEFAULTS = {
         'type': str
     },
     'invoice_email_attachment': {
-        'default': 'False',
+        'default': 'False',  # default for new events is True
         'type': bool,
         'form_class': forms.BooleanField,
         'serializer_class': serializers.BooleanField,
@@ -1241,7 +1241,7 @@ DEFAULTS = {
         )
     },
     'event_list_type': {
-        'default': 'list',
+        'default': 'list',  # default for new events is 'calendar'
         'type': str,
         'form_class': forms.ChoiceField,
         'serializer_class': serializers.ChoiceField,
@@ -1985,7 +1985,7 @@ Your {organizer} team"""))
         ),
     },
     'theme_color_success': {
-        'default': '#50A167',
+        'default': '#50a167',
         'type': str,
         'form_class': forms.CharField,
         'serializer_class': serializers.CharField,
@@ -2007,7 +2007,7 @@ Your {organizer} team"""))
         ),
     },
     'theme_color_danger': {
-        'default': '#C44F4F',
+        'default': '#c44f4f',
         'type': str,
         'form_class': forms.CharField,
         'serializer_class': serializers.CharField,
@@ -2029,7 +2029,7 @@ Your {organizer} team"""))
         ),
     },
     'theme_color_background': {
-        'default': '#FFFFFF',
+        'default': '#f5f5f5',
         'type': str,
         'form_class': forms.CharField,
         'serializer_class': serializers.CharField,
@@ -2455,7 +2455,7 @@ Your {organizer} team"""))
         )
     },
     'name_scheme': {
-        'default': 'full',
+        'default': 'full',  # default for new events is 'given_family'
         'type': str
     },
     'giftcard_length': {
