@@ -470,7 +470,6 @@ def add_subevents_for_days(qs, before, after, ebd, timezones, event=None, cart_n
         if se.presale_is_running:
             quotas_to_compute += se.active_quotas
 
-    name = None
     qcache = {}
     if quotas_to_compute:
         qa = QuotaAvailability()
@@ -500,10 +499,6 @@ def add_subevents_for_days(qs, before, after, ebd, timezones, event=None, cart_n
         tz = pytz.timezone(s.timezone)
         datetime_from = se.date_from.astimezone(tz)
         date_from = datetime_from.date()
-        if name is None:
-            name = str(se.name)
-        elif str(se.name) != name:
-            ebd['_subevents_different_names'] = True
         if s.show_date_to and se.date_to:
             datetime_to = se.date_to.astimezone(tz)
             date_to = se.date_to.astimezone(tz).date()
