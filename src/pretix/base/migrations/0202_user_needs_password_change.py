@@ -6,7 +6,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('pretixbase', '0200_transaction'),
+        ('pretixbase', '0201_invoiceline_event_location'),
     ]
 
     operations = [
