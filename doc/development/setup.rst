@@ -53,7 +53,7 @@ Working with the code
 ---------------------
 If you do not have a recent installation of ``nodejs``, install it now::
 
-    url -sL https://deb.nodesource.com/setup_17.x | sudo -E bash -
+    curl -sL https://deb.nodesource.com/setup_17.x | sudo -E bash -
     sudo apt install nodejs
 
 To make sure it is on your path variable, close and reopen your terminal. Now, install the Python-level dependencies of pretix::
