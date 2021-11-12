@@ -473,9 +473,11 @@ $(function () {
     $("span[data-timezone], small[data-timezone]").each(function() {
         var t = moment.tz($(this).attr("data-time"), $(this).attr("data-timezone"))
         var tz = moment.tz.zone($(this).attr("data-timezone"))
+        var tpl = '<div class="tooltip" role="tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner text-nowrap"></div></div>';
 
         $(this).tooltip({
-            'title': gettext("Time zone:") + " " + tz.abbr(t)
+            "title": gettext("Time zone:") + " " + tz.abbr(t),
+            "template": tpl
         });
         if (t.tz(tz.name).format() !== t.tz(local_tz).format()) {
             var $add = $("<span>")
@@ -493,7 +495,8 @@ $(function () {
             }
             $add.insertAfter($(this));
             $add.tooltip({
-                'title': gettext("Time zone:") + " " + moment.tz.zone(local_tz).abbr(t),
+                "title": gettext("Time zone:") + " " + moment.tz.zone(local_tz).abbr(t),
+                "template": tpl
             });
         }
     });
