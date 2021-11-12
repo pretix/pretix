@@ -170,6 +170,13 @@
 }
 
 
+.day-calendar.no-headlines {
+  display: block;
+}
+.day-calendar.no-headlines h3 {
+  display: none;
+}
+
 
 .day-calendar .current-time-bar time span:nth-child(2) {
   animation: watch-blinker 2s step-end infinite;

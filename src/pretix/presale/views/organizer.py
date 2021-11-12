@@ -836,7 +836,9 @@ class DayCalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
 
         ctx['events'] = events
 
-        ctx['collections'] = self._grid_for_template(events)
+        events_by_series = self._grid_for_template(events)
+        ctx['collections'] = events_by_series
+        ctx['no_headlines'] = not any([series for series, events in events_by_series])
         ctx['multiple_timezones'] = self._multiple_timezones
         return ctx
 
