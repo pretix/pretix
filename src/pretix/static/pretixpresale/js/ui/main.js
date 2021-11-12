@@ -317,8 +317,7 @@ $(function () {
     });
     $("#monthselform input").on("dp.change", function () {
         if ($(this).data("DateTimePicker")) {  // prevent submit after dp init
-            $(this).val($(this).data("DateTimePicker").date().format('YYYY-MM-DD'));
-            $(this).closest("form").get(0).submit();
+            this.form.submit();
         }
     });
     var update_cart_form = function () {
