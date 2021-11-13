@@ -136,7 +136,7 @@ body.loading .container {
     font-size: 120px;
     color: $brand-primary;
 }
-#loadingmodal, #ajaxerr {
+#loadingmodal, #ajaxerr, #cookie-consent-modal {
     position: fixed;
     top: 0;
     left: 0;
@@ -156,9 +156,10 @@ body.loading .container {
 
     .modal-card {
         margin: 50px auto 0;
-        top: 50px;
         width: 90%;
         max-width: 600px;
+        max-height: calc(100vh - 100px);
+        overflow-y: auto;
         background: white;
         border-radius: $border-radius-large;
         box-shadow: 0 7px 14px 0 rgba(78, 50, 92, 0.1),0 3px 6px 0 rgba(0,0,0,.07);
@@ -178,10 +179,21 @@ body.loading .container {
             }
         }
     }
+
+    &#cookie-consent-modal {
+        background: rgba(255, 255, 255, .5);
+        opacity: 1;
+        visibility: visible;
+        .modal-card-content {
+            margin-left: 0;
+        }
+    }
 }
 @media (max-width: 700px) {
-    #loadingmodal, #ajaxerr {
+    #loadingmodal, #ajaxerr, #cookie-consent-modal {
         .modal-card {
+            margin: 25px auto 0;
+            max-height: calc(100vh - 50px - 20px);
             .modal-card-icon {
                 float: none;
                 width: 100%;

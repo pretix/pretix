@@ -1,4 +1,6 @@
 {% load i18n %}
+{% load rich_text %}
+{% load safelink %}
 <div id="ajaxerr">
 </div>
 <div id="loadingmodal" hidden aria-live="polite">
@@ -15,3 +17,45 @@
         </div>
     </div>
 </div>
+{% if request.organizer %}
+    <script type="text/plain" id="cookie-consent-storage-key">cookie-consent-{{ request.organizer.slug }}</script>
+    <div id="cookie-consent-modal" hidden aria-live="polite">
+        <div class="modal-card">
+            <div class="modal-card-content">
+                <h3 id="cookie-consent-modal-label"></h3>
+                <div id="cookie-consent-modal-description">
+                    {% with request.event|default:request.organizer as sh %}
+                        <h3>{{ sh.settings.cookie_consent_dialog_title }}</h3>
+                        {{ sh.settings.cookie_consent_dialog_text|rich_text }}
+                        {% if sh.settings.cookie_consent_dialog_text_secondary %}
+                            <div class="text-muted">
+                                {{ sh.settings.cookie_consent_dialog_text_secondary|rich_text }}
+                            </div>
+                        {% endif %}
+                        <div class="row">
+                            <div class="col-xs-12 col-md-6">
+                                <p>
+                                    <button type="button" class="btn btn-lg btn-block btn-primary" id="cookie-consent-button-no">
+                                        {{ sh.settings.cookie_consent_dialog_button_no }}
+                                    </button>
+                                </p>
+                            </div>
+                            <div class="col-xs-12 col-md-6">
+                                <p>
+                                    <button type="button" class="btn btn-lg btn-block btn-primary" id="cookie-consent-button-yes">
+                                        {{ sh.settings.cookie_consent_dialog_button_yes }}
+                                    </button>
+                                </p>
+                            </div>
+                        </div>
+                        {% if sh.settings.privacy_url %}
+                            <p class="text-center">
+                                <a href="{% safelink sh.settings.privacy_url %}" target="_blank" rel="noopener">{% trans "Privacy policy" %}</a>
+                            </p>
+                        {% endif %}
+                    {% endwith %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endif %}
