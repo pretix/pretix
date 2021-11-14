@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-10-29 10:09+0000\n"
-"PO-Revision-Date: 2021-11-09 03:00+0000\n"
+"PO-Revision-Date: 2021-11-15 00:00+0000\n"
 "Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
 "Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
 "\n"
@@ -22236,7 +22236,7 @@ msgstr "Laatste update"
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/control.html:13
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:53
 msgid "Total value"
-msgstr "Totaalwaarde"
+msgstr "Totaalbedrag"
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/pending.html:4
 msgid ""
@@ -23430,7 +23430,7 @@ msgstr ""
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html:29
 msgid ""
 "The payment transaction could not be completed for the following reason:"
-msgstr "De betalingstransactie kon om de volgende reden niet voltooid worden:"
+msgstr "De betaling kon om de volgende reden niet voltooid worden:"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/sca.html:5
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/sca_return.html:6
@@ -23489,7 +23489,7 @@ msgstr ""
 
 #: pretix/plugins/stripe/views.py:565 pretix/plugins/stripe/views.py:568
 msgid "Sorry, there was an error in the payment process."
-msgstr "Sorry, is iets misgegaan in het betalingsproces."
+msgstr "Sorry, er is iets misgegaan in het betalingsproces."
 
 #: pretix/plugins/ticketoutputpdf/apps.py:44
 #: pretix/plugins/ticketoutputpdf/apps.py:47
@@ -25533,6 +25533,10 @@ msgid ""
 "need the ticket any more, please be so kind and remove your ticket from the "
 "list so we can pass it on to the next person waiting as quickly as possible!"
 msgstr ""
+"U bent geselecteerd van onze wachtlijst om een ticket te kunnen kopen. Als u "
+"geen ticket meer wilt kopen willen we u vragen om uw plek op de wachtlijst "
+"op te geven, zodat we uw plaats sneller aan de volgende persoon op de "
+"wachtlijst kunnen aanbieden."
 
 #: pretix/presale/templates/pretixpresale/event/waitinglist_remove.html:16
 msgctxt "waitinglist"
