@@ -208,7 +208,7 @@ def _parse_csp(header):
 
 
 def _render_csp(h):
-    return "; ".join(k + ' ' + ' '.join(v) for k, v in h.items())
+    return "; ".join(k + ' ' + ' '.join(v) for k, v in h.items() if v)
 
 
 def _merge_csp(a, b):
