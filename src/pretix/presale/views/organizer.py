@@ -857,15 +857,15 @@ class DayCalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
 
     # currently based on minutes, might be factored into a helper class with a timedelta as raster?
     def _floor_time(self, t, raster_size=5):
-        minutes = t.hour*60 + t.minute
+        minutes = t.hour * 60 + t.minute
         if minutes % raster_size:
             minutes = minutes // raster_size
-            return t.replace(hour=minutes//60, minute=minutes%60)
+            return t.replace(hour=minutes // 60, minute=minutes % 60)
         return t
 
     # currently based on minutes, might be factored into a helper class with a timedelta as raster?
     def _ceil_time(self, t, raster_size=5):
-        minutes = t.hour*60 + t.minute
+        minutes = t.hour * 60 + t.minute
         if not minutes % raster_size:
             return t
         minutes = math.ceil(minutes / raster_size) * raster_size
