@@ -377,7 +377,7 @@ if concurrency is higher than 9, JavaScript (currently in pretixpresale/js/ui/ma
 
 
 
-.day-calendar .event {
+.day-calendar a.event {
   --duration: calc(var(--duration-hour, 0)*60 + var(--duration-minute));
   margin-left: calc(var(--offset-start, 0) / var(--duration) * 100%);
   margin-right: calc(var(--offset-end, 0) / var(--duration) * 100%);
