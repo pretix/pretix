@@ -267,36 +267,16 @@ if concurrency is higher than 9, JavaScript (currently in pretixpresale/js/ui/ma
 [data-offset$="50"] {--offset-minute: 50}
 [data-offset$="55"] {--offset-minute: 55}
 
-/* minute based micro adjustment offset from 15-minute raster */
+/* minute based micro adjustment offset from 5-minute raster */
 [data-offset-shift^="1"] {--offset-start: 1}
 [data-offset-shift^="2"] {--offset-start: 2}
 [data-offset-shift^="3"] {--offset-start: 3}
 [data-offset-shift^="4"] {--offset-start: 4}
-[data-offset-shift^="5"] {--offset-start: 5}
-[data-offset-shift^="6"] {--offset-start: 6}
-[data-offset-shift^="7"] {--offset-start: 7}
-[data-offset-shift^="8"] {--offset-start: 8}
-[data-offset-shift^="9"] {--offset-start: 9}
-[data-offset-shift^="10"] {--offset-start: 10}
-[data-offset-shift^="11"] {--offset-start: 11}
-[data-offset-shift^="12"] {--offset-start: 12}
-[data-offset-shift^="13"] {--offset-start: 13}
-[data-offset-shift^="14"] {--offset-start: 14}
 
 [data-offset-shift$="1"] {--offset-end: 1}
 [data-offset-shift$="2"] {--offset-end: 2}
 [data-offset-shift$="3"] {--offset-end: 3}
 [data-offset-shift$="4"] {--offset-end: 4}
-[data-offset-shift$="5"] {--offset-end: 5}
-[data-offset-shift$="6"] {--offset-end: 6}
-[data-offset-shift$="7"] {--offset-end: 7}
-[data-offset-shift$="8"] {--offset-end: 8}
-[data-offset-shift$="9"] {--offset-end: 9}
-[data-offset-shift$="10"] {--offset-end: 10}
-[data-offset-shift$="11"] {--offset-end: 11}
-[data-offset-shift$="12"] {--offset-end: 12}
-[data-offset-shift$="13"] {--offset-end: 13}
-[data-offset-shift$="14"] {--offset-end: 14}
 
 
 [data-duration^="00"] {--duration-hour: 0}
@@ -345,13 +325,13 @@ if concurrency is higher than 9, JavaScript (currently in pretixpresale/js/ui/ma
 
   display: grid;
   gap: 0;
-  --grid-cols: calc(var(--duration-hour, 0) * 4 + var(--duration-minute, 0) / 15);
+  --grid-cols: calc(var(--duration-hour, 0) * 12 + var(--duration-minute, 0) / 5);
   grid-template-columns: repeat(var(--grid-cols), minmax(var(--col-min-size, 3em), 1fr));
   grid-template-rows: repeat(var(--concurrency, 1), auto);
 }
 
 .day-timeline > li {
-  grid-column: calc(1 + var(--offset-hour, 0)*4 + var(--offset-minute, 0)/15) / span calc(var(--duration-hour, 0)*4 + var(--duration-minute, 0)/15);
+  grid-column: calc(1 + var(--offset-hour, 0)*12 + var(--offset-minute, 0)/5) / span calc(var(--duration-hour, 0)*12 + var(--duration-minute, 0)/5);
   grid-row: var(--concurrency, 1) / span 1;
 }
 .day-timeline > li:focus-within {
