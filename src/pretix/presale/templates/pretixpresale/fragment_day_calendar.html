@@ -34,7 +34,7 @@
         {% for event in collection.events %}
             <li data-offset="{{ event.offset_rastered|date:"H:i" }}"
                 data-offset-shift="{{ event.offset_shift_start }}:{{ event.offset_shift_end }}"
-                data-duration="{{ event.duration_rastered|date:"H:i" }}"
+                data-duration="{{ event.duration_rastered }}"
                 data-concurrency="{{ event.concurrency }}">
                 <a class="event {% if event.continued %}continued{% else %} {% spaceless %}
     {% if event.event.presale_is_running and show_avail %}

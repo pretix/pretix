@@ -822,12 +822,7 @@ class DayCalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
 
         events, start, end = self._rasterize_events(events, tick_duration=tick_duration)
         calendar_duration = self._get_time_duration(start, end)
-        ctx["calendar_duration"] = ":".join([
-            "%02d" % i for i in (
-                (calendar_duration.days * 24) + (calendar_duration.seconds // 3600),
-                (calendar_duration.seconds // 60) % 60
-            )
-        ])
+        ctx["calendar_duration"] = self._format_duration(calendar_duration)
         ctx['time_ticks'] = self._get_time_ticks(start, end, tick_duration)
         ctx['start'] = datetime.combine(self.date, start)
         # ctx['end'] = end
@@ -851,6 +846,14 @@ class DayCalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
             self.date,
             start
         )
+
+    def _format_duration(self, duration):
+        return ":".join([
+            "%02d" % i for i in (
+                (duration.days * 24) + (duration.seconds // 3600),
+                (duration.seconds // 60) % 60
+            )
+        ])
 
     # currently based on minutes, might be factored into a helper class with a timedelta as raster?
     def _floor_time(self, t, raster_size=5):
@@ -901,15 +904,13 @@ class DayCalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
             else:
                 e["time_end_today"] = e["time_end_today_rastered"] = time(0, 0)
 
-            e["duration_rastered"] = datetime.utcfromtimestamp(
-                (datetime.combine(
-                    self.date if e["time_end_today_rastered"] != midnight else self.date + timedelta(days=1),
-                    e["time_end_today_rastered"]
-                ) - datetime.combine(
-                    self.date,
-                    e['time_rastered']
-                )).total_seconds()
-            )
+            e["duration_rastered"] = self._format_duration(datetime.combine(
+                self.date if e["time_end_today_rastered"] != midnight else self.date + timedelta(days=1),
+                e["time_end_today_rastered"]
+            ) - datetime.combine(
+                self.date,
+                e['time_rastered']
+            ))
 
             e["offset_rastered"] = datetime.combine(self.date, time(0, 0)) + self._get_time_duration(start, e["time_rastered"])
 
