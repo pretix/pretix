@@ -459,6 +459,21 @@ class OrderChangeAddonsTest(BaseOrdersTest):
         )
         self.event.settings.change_allow_user_addons = True
 
+    def test_disabled(self):
+        self.event.settings.change_allow_user_addons = False
+        response = self.client.get(
+            '/%s/%s/order/%s/%s/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret)
+        )
+        assert response.status_code == 302
+
+    def test_no_config(self):
+        self.iao.base_item = self.shirt
+        self.iao.save()
+        response = self.client.get(
+            '/%s/%s/order/%s/%s/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret)
+        )
+        assert response.status_code == 302
+
     def test_no_change(self):
         response = self.client.get(
             '/%s/%s/order/%s/%s/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret)
@@ -591,8 +606,49 @@ class OrderChangeAddonsTest(BaseOrdersTest):
             assert a.item == self.workshop2
             assert a.variation == self.workshop2a
 
-    # test_new_payment_deadline
-    # test_not_allowed_if_no_addons
+    def test_paid_to_pending_expiry_date(self):
+        self.order.status = Order.STATUS_PAID
+        self.order.expires = now() - datetime.timedelta(days=12)
+        self.order.save()
+        with scopes_disabled():
+            self.order.payments.create(
+                provider="manual",
+                amount=self.order.total,
+                state=OrderPayment.PAYMENT_STATE_CONFIRMED,
+            )
+        response = self.client.get(
+            '/%s/%s/order/%s/%s/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret)
+        )
+        assert response.status_code == 200
+        assert 'Workshop 1' in response.content.decode()
+
+        doc = BeautifulSoup(response.content.decode(), "lxml")
+        assert doc.select(f'input[name=cp_{self.ticket_pos.pk}_item_{self.workshop1.pk}]')
+
+        response = self.client.post(
+            '/%s/%s/order/%s/%s/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
+            {
+                f'cp_{self.ticket_pos.pk}_item_{self.workshop1.pk}': '1'
+            },
+            follow=True
+        )
+        doc = BeautifulSoup(response.content.decode(), "lxml")
+        form_data = extract_form_fields(doc.select('.main-box form')[0])
+        form_data['confirm'] = 'true'
+        response = self.client.post(
+            '/%s/%s/order/%s/%s/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret), form_data, follow=True
+        )
+        assert 'alert-success' in response.content.decode()
+
+        with scopes_disabled():
+            new_pos = self.ticket_pos.addons.get()
+            assert new_pos.item == self.workshop1
+            assert new_pos.price == Decimal('12.00')
+            self.order.refresh_from_db()
+            assert self.order.total == Decimal('35.00')
+            assert self.order.pending_sum == Decimal('12.00')
+            assert self.order.expires > now()
+
     # test_required_questions
     # test_quota_sold_out
     # test_quota_sold_out_replace
