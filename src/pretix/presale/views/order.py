@@ -1449,3 +1449,12 @@ class OrderChange(EventViewMixin, OrderDetailMixin, TemplateView):
             raise OrderError(_('You may only change your order in a way that increases the total price.'))
         if ocm._totaldiff != Decimal('0.00') and self.request.event.settings.change_allow_user_price == 'eq':
             raise OrderError(_('You may not change your order in a way that changes the total price.'))
+
+        if ocm._totaldiff > Decimal('0.00') and self.order.status == Order.STATUS_PAID:
+            self.order.set_expires(
+                now(),
+                self.order.event.subevents.filter(id__in=self.order.positions.values_list('subevent_id', flat=True))
+            )
+            if self.order.expires < now():
+                raise OrderError(_('You may not change your order in a way that increases the total price since '
+                                   'payments are no longer being accepted for this event.'))

@@ -35,7 +35,7 @@ def fill_is_bundled(apps, schema_editor):
 
 class Migration(migrations.Migration):
     dependencies = [
-        ('pretixbase', '0202_orderposition_is_bundled'),
+        ('pretixbase', '0203_orderposition_is_bundled'),
     ]
 
     operations = [

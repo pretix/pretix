@@ -46,6 +46,11 @@
                         Allowing users to change their order is a feature under development. Therefore, currently only specific changes (such as changing the variation of a product) are possible. More options might be added later.
                     {% endblocktrans %}
                 </div>
+                <div class="alert alert-info">
+                    {% blocktrans trimmed %}
+                        If a change leads to a price change, there will not be a change to fees such as payment, service, or shipping fees, even though an additional payment might be required.
+                    {% endblocktrans %}
+                </div>
                 {% bootstrap_field form.change_allow_user_variation layout="control" %}
                 {% bootstrap_field form.change_allow_user_addons layout="control" %}
                 {% bootstrap_field form.change_allow_user_price layout="control" %}
