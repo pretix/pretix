@@ -1123,7 +1123,7 @@ class OrderChangeAddonsTest(BaseOrdersTest):
         doc = BeautifulSoup(response.content.decode(), "lxml")
         form_data = extract_form_fields(doc.select('.main-box form')[0])
         form_data['confirm'] = 'true'
-        response = self.client.post(
+        self.client.post(
             '/%s/%s/order/%s/%s/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret), form_data, follow=True
         )
 
@@ -1156,7 +1156,7 @@ class OrderChangeAddonsTest(BaseOrdersTest):
         doc = BeautifulSoup(response.content.decode(), "lxml")
         form_data = extract_form_fields(doc.select('.main-box form')[0])
         form_data['confirm'] = 'true'
-        response = self.client.post(
+        self.client.post(
             '/%s/%s/order/%s/%s/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret), form_data, follow=True
         )
 
@@ -1189,7 +1189,7 @@ class OrderChangeAddonsTest(BaseOrdersTest):
         doc = BeautifulSoup(response.content.decode(), "lxml")
         form_data = extract_form_fields(doc.select('.main-box form')[0])
         form_data['confirm'] = 'true'
-        response = self.client.post(
+        self.client.post(
             '/%s/%s/order/%s/%s/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret), form_data, follow=True
         )
 
