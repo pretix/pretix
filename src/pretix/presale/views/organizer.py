@@ -899,7 +899,7 @@ class DayCalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
                     hour = e["time_end_today"].hour
                     if minute > 59:
                         minute = minute % 60
-                        hour = hour + 1
+                        hour = (hour + 1) % 24
                     e["time_end_today_rastered"] = e["time_end_today"].replace(minute=minute, hour=hour)
                     e["offset_shift_end"] = raster_size - e["time_end_today"].minute % raster_size
                 else:
