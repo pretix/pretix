@@ -42,19 +42,36 @@
             <fieldset>
                 <legend>{% trans "Order changes" %}</legend>
                 <div class="alert alert-info">
-                    {% blocktrans trimmed %}
-                        Allowing users to change their order is a feature under development. Therefore, currently only specific changes (such as changing the variation of a product) are possible. More options might be added later.
-                    {% endblocktrans %}
-                </div>
-                <div class="alert alert-info">
-                    {% blocktrans trimmed %}
-                        If a change leads to a price change, there will not be a change to fees such as payment, service, or shipping fees, even though an additional payment might be required.
-                    {% endblocktrans %}
+                    <p>
+                        {% blocktrans trimmed %}
+                            Allowing customers to change their own orders is a complex process due to the many different options pretix provides. Therefore, this feature currently has the following
+                            limitations:
+                        {% endblocktrans %}
+                    </p>
+                    <ul>
+                        <li>{% trans "It is possible to switch to a different variation of the same product, but not to an entirely different product (except for add-on products)." %}</li>
+                        <li>{% trans "Changing the seat or the event date in an event series will become available in the future, but is not possible now." %}</li>
+                        <li>{% trans "If a change leads to a price change, there will not be a change to fees such as payment, service, or shipping fees, even though an additional payment might be required." %}</li>
+                        <li>{% trans "Customers currently cannot switch to a product variation or add an add-on product that requires them to use a voucher or membership." %}</li>
+                        <li>{% trans "Additional constraints and validation steps added by plugins are not enforced." %}</li>
+                    </ul>
                 </div>
                 {% bootstrap_field form.change_allow_user_variation layout="control" %}
                 {% bootstrap_field form.change_allow_user_addons layout="control" %}
-                {% bootstrap_field form.change_allow_user_price layout="control" %}
                 {% bootstrap_field form.change_allow_user_until layout="control" %}
+                {% bootstrap_field form.change_allow_user_price layout="control" %}
+                <div class="alert alert-info">
+                    <p>
+                        {% blocktrans trimmed %}
+                            If the change leads to a price reduction and automatic refunds are enabled for self-service cancellations,
+                            the system will try to refund the money automatically.
+                        {% endblocktrans %}
+                        {% blocktrans trimmed %}
+                            Refunds can be issued as a gift card if the respective option is set, but there is no customer choice between
+                            gift card and direct refund.
+                        {% endblocktrans %}
+                    </p>
+                </div>
             </fieldset>
         </div>
         <div class="form-group submit-group">

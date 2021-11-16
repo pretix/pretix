@@ -62,7 +62,9 @@
                             {% endfor %}
                         </div>
                     </div>
-                    {% include "pretixpresale/event/fragment_addon_choice.html" with form=position.addon_form %}
+                    {% if position.addon_form %}
+                        {% include "pretixpresale/event/fragment_addon_choice.html" with form=position.addon_form %}
+                    {% endif %}
                 </div>
             </div>
         {% endfor %}

@@ -46,6 +46,7 @@ from pretix.base.models import (
     Organizer, Question, Quota, SubEventItemVariation,
 )
 from pretix.base.models.orders import OrderPayment
+from pretix.base.reldate import RelativeDate, RelativeDateWrapper
 
 
 class BaseOrdersTest(TestCase):
@@ -791,6 +792,24 @@ class OrderChangeAddonsTest(BaseOrdersTest):
         self.workshop2a.save()
         self._assert_ws2a_not_allowed()
 
+    def test_forbidden_membership(self):
+        self.workshop2a.require_membership = True
+        self.workshop2a.save()
+        response = self.client.post(
+            '/%s/%s/order/%s/%s/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
+            {
+                f'cp_{self.ticket_pos.pk}_variation_{self.workshop2.pk}_{self.workshop2a.pk}': '1'
+            },
+            follow=True
+        )
+        doc = BeautifulSoup(response.content.decode(), "lxml")
+        form_data = extract_form_fields(doc.select('.main-box form')[0])
+        form_data['confirm'] = 'true'
+        response = self.client.post(
+            '/%s/%s/order/%s/%s/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret), form_data, follow=True
+        )
+        assert 'alert-danger' in response.content.decode()
+
     @scopes_disabled()
     def _subevent_setup(self):
         self.event.has_subevents = True
@@ -840,9 +859,13 @@ class OrderChangeAddonsTest(BaseOrdersTest):
         with scopes_disabled():
             assert self.ticket_pos.addons.count() == 0
 
-    def test_presale_last_payment_term(self):
-        self.event.presale_end = now() - datetime.timedelta(days=1)
-        self.event.save()
+    def test_presale_last_payment_term_only_relevant_if_additional_charge(self):
+        self.order.status = Order.STATUS_PAID
+        self.order.save()
+        self._subevent_setup()
+        self.event.settings.set('payment_term_last', RelativeDateWrapper(
+            RelativeDate(days_before=2, time=None, base_date_name='date_from', minutes_before=None)
+        ))
 
         response = self.client.get(
             '/%s/%s/order/%s/%s/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret)
@@ -858,19 +881,324 @@ class OrderChangeAddonsTest(BaseOrdersTest):
             follow=True
         )
         assert 'alert-danger' in response.content.decode()
-        assert 'has ended' in response.content.decode()
+        assert 'no longer being accepted' in response.content.decode()
 
         with scopes_disabled():
             assert self.ticket_pos.addons.count() == 0
 
+        self.workshop2a.default_price = Decimal('0.00')
+        self.workshop2a.save()
+
+        response = self.client.post(
+            '/%s/%s/order/%s/%s/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
+            {
+                f'cp_{self.ticket_pos.pk}_variation_{self.workshop2.pk}_{self.workshop2a.pk}': '1'
+            },
+            follow=True
+        )
+        doc = BeautifulSoup(response.content.decode(), "lxml")
+        form_data = extract_form_fields(doc.select('.main-box form')[0])
+        form_data['confirm'] = 'true'
+        response = self.client.post(
+            '/%s/%s/order/%s/%s/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret), form_data, follow=True
+        )
+        assert 'alert-success' in response.content.decode()
+
+        with scopes_disabled():
+            new_pos = self.ticket_pos.addons.get()
+            assert new_pos.item == self.workshop2
+            assert new_pos.price == Decimal('0.00')
+            self.order.refresh_from_db()
+            assert self.order.total == Decimal('23.00')
+
+    def test_multi_allowed_and_max_count_enforced(self):
+        response = self.client.post(
+            '/%s/%s/order/%s/%s/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
+            {
+                f'cp_{self.ticket_pos.pk}_variation_{self.workshop2.pk}_{self.workshop2a.pk}': '2'
+            },
+            follow=True
+        )
+        assert 'alert-danger' in response.content.decode()
+
+        self.iao.max_count = 2
+        self.iao.multi_allowed = True
+        self.iao.save()
+
+        response = self.client.post(
+            '/%s/%s/order/%s/%s/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
+            {
+                f'cp_{self.ticket_pos.pk}_variation_{self.workshop2.pk}_{self.workshop2a.pk}': '2'
+            },
+            follow=True
+        )
+        assert 'alert-danger' not in response.content.decode()
+
+        response = self.client.post(
+            '/%s/%s/order/%s/%s/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
+            {
+                f'cp_{self.ticket_pos.pk}_variation_{self.workshop2.pk}_{self.workshop2a.pk}': '3'
+            },
+            follow=True
+        )
+        assert 'alert-danger' in response.content.decode()
+
+    def test_min_count_enforced(self):
+        self.iao.min_count = 1
+        self.iao.save()
+
+        with scopes_disabled():
+            OrderPosition.objects.create(
+                order=self.order,
+                item=self.workshop1,
+                variation=None,
+                price=Decimal("12"),
+                addon_to=self.ticket_pos,
+                attendee_name_parts={'full_name': "Peter"}
+            )
+            self.order.total += Decimal("12")
+            self.order.save()
+
+        response = self.client.get(
+            '/%s/%s/order/%s/%s/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret)
+        )
+        assert response.status_code == 200
+        assert 'Workshop 1' in response.content.decode()
+
+        doc = BeautifulSoup(response.content.decode(), "lxml")
+        assert doc.select(f'input[name=cp_{self.ticket_pos.pk}_item_{self.workshop1.pk}]')[0].attrs['checked']
+
+        response = self.client.post(
+            '/%s/%s/order/%s/%s/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
+            {
+            },
+            follow=True
+        )
+        assert 'alert-danger' in response.content.decode()
+
+    def test_allow_user_price_gte(self):
+        self.event.settings.change_allow_user_price = 'gte'
+        with scopes_disabled():
+            OrderPosition.objects.create(
+                order=self.order,
+                item=self.workshop1,
+                variation=None,
+                price=Decimal("12"),
+                addon_to=self.ticket_pos,
+                attendee_name_parts={'full_name': "Peter"}
+            )
+            self.order.total += Decimal("12")
+            self.order.save()
+
+        response = self.client.post(
+            '/%s/%s/order/%s/%s/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
+            {
+            },
+            follow=True
+        )
+        assert 'alert-danger' in response.content.decode()
+        assert 'reduces' in response.content.decode()
+
+    def test_allow_user_price_eq(self):
+        self.event.settings.change_allow_user_price = 'eq'
+        response = self.client.post(
+            '/%s/%s/order/%s/%s/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
+            {
+                f'cp_{self.ticket_pos.pk}_variation_{self.workshop2.pk}_{self.workshop2a.pk}': '1'
+            },
+            follow=True
+        )
+        assert 'alert-danger' in response.content.decode()
+        assert 'changes' in response.content.decode()
+
+        self.workshop2a.default_price = Decimal('0.00')
+        self.workshop2a.save()
+
+        response = self.client.post(
+            '/%s/%s/order/%s/%s/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
+            {
+                f'cp_{self.ticket_pos.pk}_variation_{self.workshop2.pk}_{self.workshop2a.pk}': '1'
+            },
+            follow=True
+        )
+        assert 'alert-danger' not in response.content.decode()
+
+    def test_allow_user_price_gt(self):
+        self.event.settings.change_allow_user_price = 'gt'
+        response = self.client.post(
+            '/%s/%s/order/%s/%s/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
+            {
+                f'cp_{self.ticket_pos.pk}_variation_{self.workshop2.pk}_{self.workshop2a.pk}': '1'
+            },
+            follow=True
+        )
+        assert 'alert-danger' not in response.content.decode()
+
+        self.workshop2a.default_price = Decimal('0.00')
+        self.workshop2a.save()
+
+        response = self.client.post(
+            '/%s/%s/order/%s/%s/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
+            {
+                f'cp_{self.ticket_pos.pk}_variation_{self.workshop2.pk}_{self.workshop2a.pk}': '1'
+            },
+            follow=True
+        )
+        assert 'alert-danger' in response.content.decode()
+        assert 'increases' in response.content.decode()
+
+    def test_ignore_bundled_positions(self):
+        with scopes_disabled():
+            OrderPosition.objects.create(
+                order=self.order,
+                item=self.workshop1,
+                variation=None,
+                price=Decimal("12"),
+                addon_to=self.ticket_pos,
+                attendee_name_parts={'full_name': "Peter"}
+            )
+            self.order.total += Decimal("12")
+            OrderPosition.objects.create(
+                order=self.order,
+                item=self.workshop2,
+                variation=self.workshop2a,
+                is_bundled=True,
+                price=Decimal("12"),
+                addon_to=self.ticket_pos,
+                attendee_name_parts={'full_name': "Peter"}
+            )
+            self.order.total += Decimal("12")
+            self.order.save()
+
+        response = self.client.get(
+            '/%s/%s/order/%s/%s/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret)
+        )
+        assert response.status_code == 200
+        assert 'Workshop 1' in response.content.decode()
+
+        doc = BeautifulSoup(response.content.decode(), "lxml")
+        assert doc.select(f'input[name=cp_{self.ticket_pos.pk}_item_{self.workshop1.pk}]')[0].attrs['checked']
+
+        response = self.client.post(
+            '/%s/%s/order/%s/%s/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
+            {
+            },
+            follow=True
+        )
+        doc = BeautifulSoup(response.content.decode(), "lxml")
+        form_data = extract_form_fields(doc.select('.main-box form')[0])
+        form_data['confirm'] = 'true'
+        response = self.client.post(
+            '/%s/%s/order/%s/%s/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret), form_data, follow=True
+        )
+        assert 'alert-success' in response.content.decode()
+
+        with scopes_disabled():
+            a = self.ticket_pos.addons.get(item=self.workshop1)
+            assert a.canceled
+            a = self.ticket_pos.addons.get(item=self.workshop2)
+            assert not a.canceled
+            self.order.refresh_from_db()
+            assert self.order.total == Decimal('35.00')
+
+    def test_refund_auto(self):
+        self.event.settings.cancel_allow_user_paid_refund_as_giftcard = 'off'
+        with scopes_disabled():
+            OrderPosition.objects.create(
+                order=self.order,
+                item=self.workshop1,
+                variation=None,
+                price=Decimal("12"),
+                addon_to=self.ticket_pos,
+                attendee_name_parts={'full_name': "Peter"}
+            )
+            self.order.status = Order.STATUS_PAID
+            self.order.total += Decimal("12")
+            self.order.save()
+            self.order.payments.create(provider='testdummy_partialrefund', amount=self.order.total, state=OrderPayment.PAYMENT_STATE_CONFIRMED)
+
+        response = self.client.post(
+            '/%s/%s/order/%s/%s/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret), {}, follow=True
+        )
+        doc = BeautifulSoup(response.content.decode(), "lxml")
+        form_data = extract_form_fields(doc.select('.main-box form')[0])
+        form_data['confirm'] = 'true'
+        response = self.client.post(
+            '/%s/%s/order/%s/%s/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret), form_data, follow=True
+        )
+
+        with scopes_disabled():
+            a = self.ticket_pos.addons.get()
+            assert a.canceled
+            self.order.refresh_from_db()
+            assert self.order.total == Decimal('23.00')
+            assert self.order.refunds.exists()
+
+    def test_refund_manually(self):
+        self.event.settings.cancel_allow_user_paid_refund_as_giftcard = 'manually'
+        with scopes_disabled():
+            OrderPosition.objects.create(
+                order=self.order,
+                item=self.workshop1,
+                variation=None,
+                price=Decimal("12"),
+                addon_to=self.ticket_pos,
+                attendee_name_parts={'full_name': "Peter"}
+            )
+            self.order.status = Order.STATUS_PAID
+            self.order.total += Decimal("12")
+            self.order.save()
+            self.order.payments.create(provider='testdummy_partialrefund', amount=self.order.total, state=OrderPayment.PAYMENT_STATE_CONFIRMED)
+
+        response = self.client.post(
+            '/%s/%s/order/%s/%s/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret), {}, follow=True
+        )
+        doc = BeautifulSoup(response.content.decode(), "lxml")
+        form_data = extract_form_fields(doc.select('.main-box form')[0])
+        form_data['confirm'] = 'true'
+        response = self.client.post(
+            '/%s/%s/order/%s/%s/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret), form_data, follow=True
+        )
+
+        with scopes_disabled():
+            a = self.ticket_pos.addons.get()
+            assert a.canceled
+            self.order.refresh_from_db()
+            assert self.order.total == Decimal('23.00')
+            assert not self.order.refunds.exists()
+
+    def test_refund_giftcard(self):
+        self.event.settings.cancel_allow_user_paid_refund_as_giftcard = 'force'
+        with scopes_disabled():
+            OrderPosition.objects.create(
+                order=self.order,
+                item=self.workshop1,
+                variation=None,
+                price=Decimal("12"),
+                addon_to=self.ticket_pos,
+                attendee_name_parts={'full_name': "Peter"}
+            )
+            self.order.status = Order.STATUS_PAID
+            self.order.total += Decimal("12")
+            self.order.save()
+            self.order.payments.create(provider='testdummy_partialrefund', amount=self.order.total, state=OrderPayment.PAYMENT_STATE_CONFIRMED)
+
+        response = self.client.post(
+            '/%s/%s/order/%s/%s/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret), {}, follow=True
+        )
+        doc = BeautifulSoup(response.content.decode(), "lxml")
+        form_data = extract_form_fields(doc.select('.main-box form')[0])
+        form_data['confirm'] = 'true'
+        response = self.client.post(
+            '/%s/%s/order/%s/%s/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret), form_data, follow=True
+        )
+
+        with scopes_disabled():
+            a = self.ticket_pos.addons.get()
+            assert a.canceled
+            self.order.refresh_from_db()
+            assert self.order.total == Decimal('23.00')
+            r = self.order.refunds.get()
+            assert r.provider == 'giftcard'
+
     # test_required_questions
-    # test_membership
-    # test_last_payment_term
-    # test_addon_count_constraints
-    # test_addon_multi
-    # test_variation_change_and_addon_change
-    # test_allow_user_price_gte
-    # test_allow_user_price_gt
-    # test_allow_user_price_eq
-    # test_do_not_include_bundled
-    # test_refund

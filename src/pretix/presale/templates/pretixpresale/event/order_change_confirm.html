@@ -152,18 +152,44 @@
                     </tr>
                     <tr>
                         <td>
-                            <strong>{% trans "You will need to pay" %}</strong>
-                            <br>
-                            <span class="text-muted">
-                                {% trans "Your entire order will be considered unpaid until you paid this difference." %}
-                            </span>
+                            {% if new_pending_sum > 0 %}
+                                <strong>{% trans "You will need to pay" %}</strong>
+                                <br>
+                                <span class="text-muted">
+                                    {% trans "Your entire order will be considered unpaid until you paid this difference." %}
+                                </span>
+                            {% else %}
+                                <strong>{% trans "You will be refunded" %}</strong>
+                                <br>
+                                <span class="text-muted">
+                                    {% if request.event.settings.cancel_allow_user_paid_refund_as_giftcard == "manually" %}
+                                        {% trans "The organizer will get in touch with you to clarify the details of your refund." %}
+                                    {% elif request.event.settings.cancel_allow_user_paid_refund_as_giftcard == "force" %}
+                                        {% trans "The refund will be issued in form of a gift card that you can use for further purchases." %}
+                                    {% else %}
+                                        {% if can_auto_refund %}
+                                            {% blocktrans trimmed %}
+                                                The refund amount will automatically be sent back to your original payment method. Depending
+                                                on the payment method, please allow for up to two weeks before this appears on your
+                                                statement.
+                                            {% endblocktrans %}
+                                        {% else %}
+                                            {% blocktrans trimmed %}
+                                                With the payment method you used, the refund amount <strong>can not be sent back to you
+                                                automatically</strong>. Instead, the event organizer will need to initiate the transfer
+                                                manually. Please be patient as this might take a bit longer.
+                                            {% endblocktrans %}
+                                        {% endif %}
+                                    {% endif %}
+                                </span>
+                            {% endif %}
                         </td>
                         <td class="text-right flip">
                             <strong>
                                 {{ new_pending_sum|money:request.event.currency }}
                             </strong>
                         </td>
-                    </tr>
+                        </tr>
                     {% endif %}
                     </tfoot>
                 </table>
@@ -177,7 +203,7 @@
         <div class="row checkout-button-row">
             <div class="col-md-4">
                 <a class="btn btn-block btn-default btn-lg"
-                   href="{% eventurl request.event "presale:event.order.change" secret=order.secret order=order.code %}">
+                        href="{% eventurl request.event "presale:event.order.change" secret=order.secret order=order.code %}">
                     {% trans "Back" %}
                 </a>
             </div>

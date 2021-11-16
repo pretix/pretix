@@ -74,8 +74,8 @@ from pretix.base.services.invoices import (
 )
 from pretix.base.services.mail import SendMailException
 from pretix.base.services.orders import (
-    OrderChangeManager, OrderError, cancel_order, change_payment_provider,
-    error_messages,
+    OrderChangeManager, OrderError, _try_auto_refund, cancel_order,
+    change_payment_provider, error_messages,
 )
 from pretix.base.services.pricing import get_price
 from pretix.base.services.tickets import generate, invalidate_cache
@@ -1163,6 +1163,8 @@ class OrderChange(EventViewMixin, OrderDetailMixin, TemplateView):
     def formdict(self):
         storage = OrderedDict()
         for pos in self.positions:
+            if self.request.event.settings.change_allow_user_addons and pos.addon_to_id:
+                continue
             if pos.addon_to_id:
                 if pos.addon_to not in storage:
                     storage[pos.addon_to] = []
@@ -1198,7 +1200,7 @@ class OrderChange(EventViewMixin, OrderDetailMixin, TemplateView):
                                              invoice_address=ia, event=self.request.event, quota_cache=quota_cache,
                                              data=self.request.POST if self.request.method == "POST" else None)
 
-            if p.addon_to_id is None:
+            if p.addon_to_id is None and self.request.event.settings.change_allow_user_addons:
                 p.addon_form = {
                     'pos': p,
                     'categories': []
@@ -1381,7 +1383,7 @@ class OrderChange(EventViewMixin, OrderDetailMixin, TemplateView):
 
         addons_data = []
         for p in self.positions:
-            if p.addon_to_id:
+            if p.addon_to_id or not hasattr(p, 'addon_form'):
                 continue
             for c in p.addon_form['categories']:
                 try:
@@ -1420,6 +1422,18 @@ class OrderChange(EventViewMixin, OrderDetailMixin, TemplateView):
                 except OrderError as e:
                     messages.error(self.request, str(e))
                 else:
+                    if self.order.pending_sum < Decimal('0.00'):
+                        auto_refund = (
+                            not self.request.event.settings.cancel_allow_user_paid_require_approval
+                            and self.request.event.settings.cancel_allow_user_paid_refund_as_giftcard != "manually"
+                        )
+                        refund_as_giftcard = self.request.event.settings.cancel_allow_user_paid_refund_as_giftcard == 'force'
+                        if auto_refund:
+                            try:
+                                _try_auto_refund(self.order, refund_as_giftcard=refund_as_giftcard)
+                            except OrderError as e:
+                                messages.error(self.request, str(e))
+
                     if self.order.status != Order.STATUS_PAID and was_paid:
                         messages.success(self.request, _('The order has been changed. You can now proceed by paying the open amount of {amount}.').format(
                             amount=money_filter(self.order.pending_sum, self.request.event.currency)
@@ -1436,12 +1450,19 @@ class OrderChange(EventViewMixin, OrderDetailMixin, TemplateView):
                 messages.info(self.request, _('You did not make any changes.'))
                 return redirect(self.get_order_url())
             else:
+                new_pending_sum = self.order.pending_sum + ocm._totaldiff
+                can_auto_refund = False
+                if new_pending_sum < Decimal('0.00'):
+                    proposals = self.order.propose_auto_refunds(Decimal('-1.00') * new_pending_sum)
+                    can_auto_refund = sum(proposals.values()) == Decimal('-1.00') * new_pending_sum
+
                 return render(request, 'pretixpresale/event/order_change_confirm.html', {
                     'operations': ocm._operations,
                     'totaldiff': ocm._totaldiff,
                     'order': self.order,
                     'payment_refund_sum': self.order.payment_refund_sum,
-                    'new_pending_sum': self.order.pending_sum + ocm._totaldiff,
+                    'new_pending_sum': new_pending_sum,
+                    'can_auto_refund': can_auto_refund,
                 })
 
         return self.get(request, *args, **kwargs)

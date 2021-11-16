@@ -57,7 +57,7 @@ class OrderPositionChangeForm(forms.Form):
         pname = str(i)
         variations = list(i.variations.all())
 
-        if variations:
+        if variations and event.settings.change_allow_user_variation:
             current_quotas = (
                 instance.variation.quotas.filter(subevent=instance.subevent)
                 if instance.variation
@@ -126,6 +126,7 @@ class OrderPositionChangeForm(forms.Form):
         else:
             choices.append((str(i.pk), '%s' % pname))
             self.fields['itemvar'].widget.attrs['disabled'] = True
-            self.fields['itemvar'].help_text = _('No other variations of this product exist.')
+            if event.settings.change_allow_user_variation:
+                self.fields['itemvar'].help_text = _('No other variations of this product exist.')
 
         self.fields['itemvar'].choices = choices

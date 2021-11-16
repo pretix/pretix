@@ -1568,11 +1568,8 @@ class OrderChangeManager:
             # Check whether the specified items are part of what we just fetched from the database
             # If they are not, the user supplied item IDs which either do not exist or belong to
             # a different event
-            # TODO check if item and variation is for sale
             if a['item'] not in _items_cache or (a['variation'] and a['variation'] not in _variations_cache):
                 raise OrderError(error_messages['not_for_sale'])
-
-            # TODO what if the product requires a membership?
 
             # Only attach addons to things that are actually in this user's cart
             if a['addon_to'] not in opcache:
@@ -1648,7 +1645,6 @@ class OrderChangeManager:
                         item=item, variation=variation, price=price,
                         addon_to=op, subevent=op.subevent, seat=None,
                     )
-                    # TODO: self._check_item_constraints(op, operations) ?
 
         # Check constraints on the add-on combinations
         for op in toplevel_op:
