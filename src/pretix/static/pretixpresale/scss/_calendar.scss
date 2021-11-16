@@ -213,6 +213,12 @@
   display: inline;
 }
 
+[data-raster-size="5"]  {--raster-size: 5}
+[data-raster-size="10"] {--raster-size: 10}
+[data-raster-size="15"] {--raster-size: 15}
+[data-raster-size="30"] {--raster-size: 30}
+[data-raster-size="60"] {--raster-size: 60}
+
 /*
 concurrency has two meanings:
   on .day-timeline it means total nummber concurrently running events at any given time
@@ -325,13 +331,13 @@ if concurrency is higher than 9, JavaScript (currently in pretixpresale/js/ui/ma
 
   display: grid;
   gap: 0;
-  --grid-cols: calc(var(--duration-hour, 0) * 12 + var(--duration-minute, 0) / 5);
+  --grid-cols: calc(var(--duration-hour, 0) * 60/var(--raster-size, 5) + var(--duration-minute, 0) / var(--raster-size, 5));
   grid-template-columns: repeat(var(--grid-cols), minmax(var(--col-min-size, 3em), 1fr));
   grid-template-rows: repeat(var(--concurrency, 1), auto);
 }
 
 .day-timeline > li {
-  grid-column: calc(1 + var(--offset-hour, 0)*12 + var(--offset-minute, 0)/5) / span calc(var(--duration-hour, 0)*12 + var(--duration-minute, 0)/5);
+  grid-column: calc(1 + var(--offset-hour, 0)*60/var(--raster-size, 5) + var(--offset-minute, 0)/var(--raster-size, 5)) / span calc(var(--duration-hour, 0)*60/var(--raster-size, 5) + var(--duration-minute, 0)/var(--raster-size, 5));
   grid-row: var(--concurrency, 1) / span 1;
 }
 .day-timeline > li:focus-within {

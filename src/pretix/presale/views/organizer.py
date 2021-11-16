@@ -36,6 +36,7 @@ import hashlib
 import math
 from collections import defaultdict
 from datetime import date, datetime, time, timedelta
+from functools import reduce
 from urllib.parse import quote
 
 import dateutil
@@ -817,16 +818,18 @@ class DayCalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
 
         events = ebd[self.date]
         shortest_duration = self._get_shortest_duration(events).total_seconds() // 60
-        # pick the next biggest tick_duration based on shortest_duration, max. 60 minutes
-        tick_duration = next((d for d in [15, 30, 60, 120, 180] if d >= shortest_duration), 180)
+        # pick the next biggest tick_duration based on shortest_duration, max. 180 minutes
+        tick_duration = next((d for d in [5, 10, 15, 30, 60, 120, 180] if d >= shortest_duration), 180)
 
-        events, start, end = self._rasterize_events(events, tick_duration=tick_duration)
+        raster_size = min(self._get_raster_size(events), tick_duration)
+        events, start, end = self._rasterize_events(events, tick_duration=tick_duration, raster_size=raster_size)
         calendar_duration = self._get_time_duration(start, end)
         ctx["calendar_duration"] = self._format_duration(calendar_duration)
         ctx['time_ticks'] = self._get_time_ticks(start, end, tick_duration)
         ctx['start'] = datetime.combine(self.date, start)
+        ctx['raster_size'] = raster_size
         # ctx['end'] = end
-        # size of each 5-minute slot in calendar is based on shortest event duration
+        # size of each grid-column in calendar is based on shortest event duration
         ctx['shortest_duration_rastered'] = next((d for d in [5, 10, 15, 30, 60, 90, 120, 180] if d >= shortest_duration), 180)
 
         ctx['events'] = events
@@ -836,6 +839,21 @@ class DayCalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
         ctx['no_headlines'] = not any([series for series, events in events_by_series])
         ctx['multiple_timezones'] = self._multiple_timezones
         return ctx
+
+    # get best raster-size for min. # of columns in grid
+    # due to grid-col-calculations in CSS raster_size cannot be bigger than 60 (minutes)
+    def _get_raster_size(self, events):
+        # all start- and end-times (minute-part) except full hour
+        times = [
+            e["time"].minute for e in events if e["time"] and e["time"].minute
+        ] + [
+            e["time_end_today"].minute for e in events if "time_end_today" in e and e["time_end_today"] and e["time_end_today"].minute
+        ]
+        if not times:
+            # no time other than full hour, so raster can be 1 hour/60 minutes
+            return 60
+        gcd = reduce(math.gcd, set(times))
+        return next((d for d in [5, 10, 15, 30, 60] if d >= gcd), 60)
 
     def _get_time_duration(self, start, end):
         midnight = time(0, 0)
