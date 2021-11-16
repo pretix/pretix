@@ -859,7 +859,7 @@ class DayCalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
     def _floor_time(self, t, raster_size=5):
         minutes = t.hour * 60 + t.minute
         if minutes % raster_size:
-            minutes = minutes // raster_size
+            minutes = (minutes // raster_size) * raster_size
             return t.replace(hour=minutes // 60, minute=minutes % 60)
         return t
 
