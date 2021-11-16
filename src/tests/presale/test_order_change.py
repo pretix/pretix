@@ -43,7 +43,7 @@ from tests.base import extract_form_fields
 
 from pretix.base.models import (
     Event, Item, ItemAddOn, ItemCategory, ItemVariation, Order, OrderPosition,
-    Organizer, Question, Quota,
+    Organizer, Question, Quota, SubEventItemVariation,
 )
 from pretix.base.models.orders import OrderPayment
 
@@ -57,6 +57,7 @@ class BaseOrdersTest(TestCase):
         self.event = Event.objects.create(
             organizer=self.orga, name='30C3', slug='30c3',
             date_from=datetime.datetime(2013, 12, 26, tzinfo=datetime.timezone.utc),
+            presale_end=now() + datetime.timedelta(days=5),
             plugins='pretix.plugins.stripe,pretix.plugins.banktransfer,tests.testdummy',
             live=True
         )
@@ -448,8 +449,8 @@ class OrderChangeAddonsTest(BaseOrdersTest):
                                              category=self.workshopcat, default_price=Decimal('12.00'))
         self.workshop2 = Item.objects.create(event=self.event, name='Workshop 2',
                                              category=self.workshopcat, default_price=Decimal('12.00'))
-        self.workshop2a = ItemVariation.objects.create(item=self.workshop2, value='A')
-        self.workshop2b = ItemVariation.objects.create(item=self.workshop2, value='B')
+        self.workshop2a = ItemVariation.objects.create(item=self.workshop2, value='Workshop 2a')
+        self.workshop2b = ItemVariation.objects.create(item=self.workshop2, value='Workshop 2b')
         self.workshopquota.items.add(self.workshop1)
         self.workshopquota.items.add(self.workshop2)
         self.workshopquota.variations.add(self.workshop2a)
@@ -649,15 +650,221 @@ class OrderChangeAddonsTest(BaseOrdersTest):
             assert self.order.pending_sum == Decimal('12.00')
             assert self.order.expires > now()
 
+    def test_quota_sold_out(self):
+        self.workshopquota.size = 0
+        self.workshopquota.save()
+
+        response = self.client.get(
+            '/%s/%s/order/%s/%s/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret)
+        )
+        assert response.status_code == 200
+        assert 'Workshop 1' in response.content.decode()
+
+        doc = BeautifulSoup(response.content.decode(), "lxml")
+        assert not doc.select(f'input[name=cp_{self.ticket_pos.pk}_item_{self.workshop1.pk}]')
+
+        response = self.client.post(
+            '/%s/%s/order/%s/%s/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
+            {
+                f'cp_{self.ticket_pos.pk}_item_{self.workshop1.pk}': '1'
+            },
+            follow=True
+        )
+        doc = BeautifulSoup(response.content.decode(), "lxml")
+        form_data = extract_form_fields(doc.select('.main-box form')[0])
+        form_data['confirm'] = 'true'
+        response = self.client.post(
+            '/%s/%s/order/%s/%s/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret), form_data, follow=True
+        )
+        assert 'alert-danger' in response.content.decode()
+
+        with scopes_disabled():
+            assert self.ticket_pos.addons.count() == 0
+
+    def test_quota_sold_out_replace(self):
+        self.workshopquota.size = 1
+        self.workshopquota.save()
+
+        with scopes_disabled():
+            OrderPosition.objects.create(
+                order=self.order,
+                item=self.workshop1,
+                variation=None,
+                price=Decimal("12"),
+                addon_to=self.ticket_pos,
+                attendee_name_parts={'full_name': "Peter"}
+            )
+            self.order.total += Decimal("12")
+            self.order.save()
+
+        response = self.client.get(
+            '/%s/%s/order/%s/%s/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret)
+        )
+        assert response.status_code == 200
+        assert 'Workshop 1' in response.content.decode()
+
+        doc = BeautifulSoup(response.content.decode(), "lxml")
+        assert doc.select(f'input[name=cp_{self.ticket_pos.pk}_item_{self.workshop1.pk}]')[0].attrs['checked']
+        # TODO: Technically, it is allowed to do this change, although the frontend currently does not allow it
+        # We test for the backend behaviour anyways
+        assert not doc.select(f'input[name=cp_{self.ticket_pos.pk}_variation_{self.workshop2.pk}_{self.workshop2a.pk}]')
+
+        response = self.client.post(
+            '/%s/%s/order/%s/%s/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
+            {
+                f'cp_{self.ticket_pos.pk}_variation_{self.workshop2.pk}_{self.workshop2a.pk}': '1'
+            },
+            follow=True
+        )
+        doc = BeautifulSoup(response.content.decode(), "lxml")
+        form_data = extract_form_fields(doc.select('.main-box form')[0])
+        form_data['confirm'] = 'true'
+        response = self.client.post(
+            '/%s/%s/order/%s/%s/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret), form_data, follow=True
+        )
+        assert 'alert-success' in response.content.decode()
+
+        with scopes_disabled():
+            a = self.ticket_pos.addons.get(canceled=False)
+            assert a.item == self.workshop2
+            assert a.variation == self.workshop2a
+
+    def _assert_ws2a_not_allowed(self):
+        response = self.client.get(
+            '/%s/%s/order/%s/%s/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret)
+        )
+        assert response.status_code == 200
+        assert 'Workshop 2a' not in response.content.decode()
+
+        doc = BeautifulSoup(response.content.decode(), "lxml")
+        assert not doc.select(f'input[name=cp_{self.ticket_pos.pk}_variation_{self.workshop2.pk}_{self.workshop2a.pk}]')
+
+        response = self.client.post(
+            '/%s/%s/order/%s/%s/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
+            {
+                f'cp_{self.ticket_pos.pk}_variation_{self.workshop2.pk}_{self.workshop2a.pk}': '1'
+            },
+            follow=True
+        )
+        assert 'alert-danger' in response.content.decode() or 'alert-info' in response.content.decode()
+
+        with scopes_disabled():
+            assert self.ticket_pos.addons.count() == 0
+
+    def test_voucher_required(self):
+        self.workshop2.require_voucher = True
+        self.workshop2.save()
+        self._assert_ws2a_not_allowed()
+
+    def test_forbidden_require_bundling(self):
+        self.workshop2.require_bundling = True
+        self.workshop2.save()
+        self._assert_ws2a_not_allowed()
+
+    def test_forbidden_sales_channel(self):
+        self.workshop2.sales_channels = ['pretixpos']
+        self.workshop2.save()
+        self._assert_ws2a_not_allowed()
+
+    def test_forbidden_var_sales_channel(self):
+        self.workshop2a.sales_channels = ['pretixpos']
+        self.workshop2a.save()
+        self._assert_ws2a_not_allowed()
+
+    def test_forbidden_inactive(self):
+        self.workshop2.active = False
+        self.workshop2.save()
+        self._assert_ws2a_not_allowed()
+
+    def test_forbidden_var_inactive(self):
+        self.workshop2a.active = False
+        self.workshop2a.save()
+        self._assert_ws2a_not_allowed()
+
+    def test_forbidden_over(self):
+        self.workshop2.available_until = now() - datetime.timedelta(days=3)
+        self.workshop2.save()
+        self._assert_ws2a_not_allowed()
+
+    def test_forbidden_var_over(self):
+        self.workshop2a.available_until = now() - datetime.timedelta(days=3)
+        self.workshop2a.save()
+        self._assert_ws2a_not_allowed()
+
+    @scopes_disabled()
+    def _subevent_setup(self):
+        self.event.has_subevents = True
+        self.event.save()
+        se = self.event.subevents.create(name="Date", date_from=now())
+        self.ticket_pos.subevent = se
+        self.ticket_pos.save()
+        self.workshopquota.subevent = se
+        self.workshopquota.save()
+        return se
+
+    def test_forbidden_disabled_for_subevent(self):
+        se = self._subevent_setup()
+        response = self.client.get(
+            '/%s/%s/order/%s/%s/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret)
+        )
+        assert response.status_code == 200
+        assert 'Workshop 2' in response.content.decode()
+
+        doc = BeautifulSoup(response.content.decode(), "lxml")
+        assert doc.select(f'input[name=cp_{self.ticket_pos.pk}_variation_{self.workshop2.pk}_{self.workshop2a.pk}]')
+
+        SubEventItemVariation.objects.create(subevent=se, variation=self.workshop2a, disabled=True)
+
+        self._assert_ws2a_not_allowed()
+
+    def test_presale_has_ended(self):
+        self.event.presale_end = now() - datetime.timedelta(days=1)
+        self.event.save()
+
+        response = self.client.get(
+            '/%s/%s/order/%s/%s/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret)
+        )
+        assert response.status_code == 200
+        assert 'Workshop 2a' in response.content.decode()
+
+        response = self.client.post(
+            '/%s/%s/order/%s/%s/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
+            {
+                f'cp_{self.ticket_pos.pk}_variation_{self.workshop2.pk}_{self.workshop2a.pk}': '1'
+            },
+            follow=True
+        )
+        assert 'alert-danger' in response.content.decode()
+        assert 'has ended' in response.content.decode()
+
+        with scopes_disabled():
+            assert self.ticket_pos.addons.count() == 0
+
+    def test_presale_last_payment_term(self):
+        self.event.presale_end = now() - datetime.timedelta(days=1)
+        self.event.save()
+
+        response = self.client.get(
+            '/%s/%s/order/%s/%s/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret)
+        )
+        assert response.status_code == 200
+        assert 'Workshop 2a' in response.content.decode()
+
+        response = self.client.post(
+            '/%s/%s/order/%s/%s/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
+            {
+                f'cp_{self.ticket_pos.pk}_variation_{self.workshop2.pk}_{self.workshop2a.pk}': '1'
+            },
+            follow=True
+        )
+        assert 'alert-danger' in response.content.decode()
+        assert 'has ended' in response.content.decode()
+
+        with scopes_disabled():
+            assert self.ticket_pos.addons.count() == 0
+
     # test_required_questions
-    # test_quota_sold_out
-    # test_quota_sold_out_replace
-    # test_voucher_required
-    # test_forbidden_sales_channel
-    # test_forbidden_not_available
-    # test_forbidden_disabled_for_subevent
-    # test_forbidden_require_bundling
-    # test_presale_has_ended
+    # test_membership
     # test_last_payment_term
     # test_addon_count_constraints
     # test_addon_multi

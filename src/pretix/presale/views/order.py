@@ -1275,7 +1275,7 @@ class OrderChange(EventViewMixin, OrderDetailMixin, TemplateView):
                             'min_count': iao.min_count,
                             'max_count': iao.max_count,
                             'iao': iao,
-                            'items': items
+                            'items': [i for i in items if not i.require_voucher]
                         })
 
         return positions
@@ -1398,9 +1398,13 @@ class OrderChange(EventViewMixin, OrderDetailMixin, TemplateView):
                         'count': c,
                         'price': price,
                     })
-        ocm.set_addons(addons_data)
-
-        form_valid = self._process_change(ocm)
+        try:
+            ocm.set_addons(addons_data)
+        except OrderError as e:
+            messages.error(self.request, str(e))
+            form_valid = False
+        else:
+            form_valid = self._process_change(ocm)
 
         if not form_valid:
             messages.error(self.request, _('An error occurred. Please see the details below.'))

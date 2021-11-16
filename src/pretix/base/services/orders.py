@@ -1620,7 +1620,7 @@ class OrderChangeManager:
             if op.subevent and op.subevent.presale_start and now() < op.subevent.presale_start:
                 raise OrderError(error_messages['not_started'])
 
-            if op.subevent and op.subevent.presale_has_ended:
+            if (op.subevent and op.subevent.presale_has_ended) or self.event.presale_has_ended:
                 raise OrderError(error_messages['ended'])
 
             if item.require_bundling:
