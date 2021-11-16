@@ -20,11 +20,13 @@
 # <https://www.gnu.org/licenses/>.
 #
 import logging
+import os
 import re
 from urllib.error import HTTPError
 
 import vat_moss.errors
 import vat_moss.id
+from django.conf import settings
 from django.utils.translation import gettext_lazy as _
 from zeep import Client, Transport
 from zeep.cache import SqliteCache
@@ -83,7 +85,7 @@ def _validate_vat_id_CH(vat_id, country_code):
 
     vat_id = re.sub('[^A-Z0-9]', '', vat_id.replace('HR', '').replace('MWST', ''))
     try:
-        transport = Transport(cache=SqliteCache())
+        transport = Transport(cache=SqliteCache(os.path.join(settings.CACHE_DIR, "validate_vat_id_ch_zeep_cache.db")))
         client = Client(
             'https://www.uid-wse-a.admin.ch/V5.0/PublicServices.svc?wsdl',
             transport=transport

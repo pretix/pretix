@@ -67,6 +67,7 @@ DATA_DIR = config.get('pretix', 'datadir', fallback=os.environ.get('DATA_DIR', '
 LOG_DIR = os.path.join(DATA_DIR, 'logs')
 MEDIA_ROOT = os.path.join(DATA_DIR, 'media')
 PROFILE_DIR = os.path.join(DATA_DIR, 'profiles')
+CACHE_DIR = os.path.join(DATA_DIR, 'cache')
 
 if not os.path.exists(DATA_DIR):
     os.mkdir(DATA_DIR)
@@ -74,6 +75,8 @@ if not os.path.exists(LOG_DIR):
     os.mkdir(LOG_DIR)
 if not os.path.exists(MEDIA_ROOT):
     os.mkdir(MEDIA_ROOT)
+if not os.path.exists(CACHE_DIR):
+    os.mkdir(CACHE_DIR)
 
 if config.has_option('django', 'secret'):
     SECRET_KEY = config.get('django', 'secret')
