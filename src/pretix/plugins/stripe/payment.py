@@ -585,7 +585,7 @@ class StripeMethod(BasePaymentProvider):
                 err = {'message': str(e)}
                 logger.exception('Stripe error: %s' % str(e))
 
-            refund.info = err
+            refund.info_data = err
             refund.state = OrderRefund.REFUND_STATE_FAILED
             refund.execution_date = now()
             refund.save()
