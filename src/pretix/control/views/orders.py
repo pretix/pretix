@@ -1177,6 +1177,19 @@ class OrderTransition(OrderView):
         to = self.request.POST.get('status', '')
         if self.order.status in (Order.STATUS_PENDING, Order.STATUS_EXPIRED) and to == 'p' and self.mark_paid_form.is_valid():
             ps = self.mark_paid_form.cleaned_data['amount']
+
+            if ps == Decimal('0.00') and self.order.pending_sum <= Decimal('0.00'):
+                p = self.order.payments.filter(state=OrderPayment.PAYMENT_STATE_CONFIRMED).last()
+                if p:
+                    p._mark_order_paid(
+                        user=self.request.user,
+                        send_mail=self.mark_paid_form.cleaned_data['send_email'],
+                        force=self.mark_paid_form.cleaned_data.get('force', False),
+                        payment_refund_sum=self.order.payment_refund_sum,
+                    )
+                    messages.success(self.request, _('The order has been marked as paid.'))
+                    return redirect(self.get_order_url())
+
             try:
                 p = self.order.payments.get(
                     state__in=(OrderPayment.PAYMENT_STATE_PENDING, OrderPayment.PAYMENT_STATE_CREATED),

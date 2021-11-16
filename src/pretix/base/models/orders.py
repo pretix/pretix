@@ -1542,7 +1542,7 @@ class OrderPayment(models.Model):
         return self.order.event.get_payment_providers(cached=True).get(self.provider)
 
     @transaction.atomic()
-    def _mark_paid(self, force, count_waitinglist, user, auth, ignore_date=False, overpaid=False):
+    def _mark_paid_inner(self, force, count_waitinglist, user, auth, ignore_date=False, overpaid=False):
         from pretix.base.signals import order_paid
         can_be_paid = self.order._can_be_paid(count_waitinglist=count_waitinglist, ignore_date=ignore_date, force=force)
         if can_be_paid is not True:
@@ -1618,10 +1618,6 @@ class OrderPayment(models.Model):
         :type mail_text: str
         :raises Quota.QuotaExceededException: if the quota is exceeded and ``force`` is ``False``
         """
-        from pretix.base.services.invoices import (
-            generate_invoice, invoice_qualified,
-        )
-
         with transaction.atomic():
             locked_instance = OrderPayment.objects.select_for_update().get(pk=self.pk)
             if locked_instance.state == self.PAYMENT_STATE_CONFIRMED:
@@ -1665,6 +1661,14 @@ class OrderPayment(models.Model):
             ))
             return
 
+        self._mark_order_paid(count_waitinglist, send_mail, force, user, auth, mail_text, ignore_date, lock, payment_sum - refund_sum)
+
+    def _mark_order_paid(self, count_waitinglist=True, send_mail=True, force=False, user=None, auth=None, mail_text='',
+                         ignore_date=False, lock=True, payment_refund_sum=0):
+        from pretix.base.services.invoices import (
+            generate_invoice, invoice_qualified,
+        )
+
         if (self.order.status == Order.STATUS_PENDING and self.order.expires > now() + timedelta(seconds=LOCK_TIMEOUT * 2)) or not lock:
             # Performance optimization. In this case, there's really no reason to lock everything and an atomic
             # database transaction is more than enough.
@@ -1673,8 +1677,8 @@ class OrderPayment(models.Model):
             lockfn = self.order.event.lock
 
         with lockfn():
-            self._mark_paid(force, count_waitinglist, user, auth, overpaid=payment_sum - refund_sum > self.order.total,
-                            ignore_date=ignore_date)
+            self._mark_paid_inner(force, count_waitinglist, user, auth, overpaid=payment_refund_sum > self.order.total,
+                                  ignore_date=ignore_date)
 
         invoice = None
         if invoice_qualified(self.order):

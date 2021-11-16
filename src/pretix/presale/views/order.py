@@ -577,16 +577,22 @@ class OrderPayChangeMethod(EventViewMixin, OrderDetailMixin, TemplateView):
 
     @transaction.atomic()
     def mark_paid_free(self):
-        p = self.order.payments.create(
-            state=OrderPayment.PAYMENT_STATE_CREATED,
-            provider='manual',
-            amount=Decimal('0.00'),
-            fee=None
-        )
-        try:
-            p.confirm()
-        except SendMailException:
-            pass
+        p = self.order.payments.filter(state=OrderPayment.PAYMENT_STATE_CONFIRMED).last()
+        if not p:
+            p = self.order.payments.create(
+                state=OrderPayment.PAYMENT_STATE_CREATED,
+                provider='free',
+                amount=Decimal('0.00'),
+                fee=None
+            )
+            try:
+                p.confirm()
+            except SendMailException:
+                pass
+        else:
+            p._mark_order_paid(
+                payment_refund_sum=self.order.payment_refund_sum
+            )
 
     def get(self, request, *args, **kwargs):
         if self.order.pending_sum <= Decimal('0.00'):
