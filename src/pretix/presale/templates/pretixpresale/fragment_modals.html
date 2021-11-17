@@ -17,7 +17,7 @@
         </div>
     </div>
 </div>
-{% if request.organizer and cookie_providers %}
+{% if request.organizer and request.organizer.settings.cookie_consent and cookie_providers %}
     <script type="text/plain" id="cookie-consent-storage-key">cookie-consent-{{ request.organizer.slug }}</script>
     <div id="cookie-consent-modal" hidden aria-live="polite">
         <div class="modal-card">
@@ -35,11 +35,11 @@
                         <details id="cookie-consent-details">
                             <summary>
                                 <span class="fa fa-fw chevron"></span>
-                                {% trans "Detail settings" %}
+                                {% trans "Adjust settings in detail" %}
                             </summary>
                             <div class="checkbox">
                                 <label>
-                                    <input type="checkbox" name="functional" disabled checked="">
+                                    <input type="checkbox" disabled checked="">
                                     {% trans "Required cookies" %}<br>
                                     <span class="text-muted">
                                         {% trans "Functional cookies (e.g. shopping cart, login, payment, language preference) and technical cookies (e.g. security purposes)" %}
