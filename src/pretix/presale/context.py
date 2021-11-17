@@ -45,6 +45,7 @@ from pretix.base.settings import GlobalSettingsObject
 from pretix.helpers.i18n import (
     get_javascript_format_without_seconds, get_moment_locale,
 )
+from .cookies import get_cookie_providers
 
 from ..base.i18n import get_language_without_region
 from .signals import (
@@ -139,6 +140,8 @@ def _default_context(request):
 
         ctx['event'] = request.event
         ctx['languages'] = [get_language_info(code) for code in request.event.settings.locales]
+
+        ctx['cookie_providers'] = get_cookie_providers(request.event, request)
 
         if request.resolver_match:
             ctx['cart_namespace'] = request.resolver_match.kwargs.get('cart_namespace', '')

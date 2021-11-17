@@ -31,6 +31,17 @@ $(function () {
     }
     $("#cookie-consent-modal").hide()
   })
+  $("#cookie-consent-details").on("toggle", function (e) {
+    if ($("#cookie-consent-details").attr("open")) {
+      $("#cookie-consent-button-no").text(
+          $("#cookie-consent-button-no").attr("data-detail-text")
+      )
+    } else {
+      $("#cookie-consent-button-no").text(
+          $("#cookie-consent-button-no").attr("data-summary-text")
+      )
+    }
+  })
   $("#cookie-consent-reopen").on("click", function (e) {
     $("#cookie-consent-modal").show()
     e.preventDefault()

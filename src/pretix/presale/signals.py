@@ -401,3 +401,13 @@ This signal is sent out when the description of an item or variation is rendered
 additional text to the description. You are passed the ``item`` and ``variation`` and expected to return
 HTML.
 """
+
+register_cookie_providers = EventPluginSignal()
+"""
+Arguments: ``request``
+
+This signal is sent out to get all cookie providers that could set a cookie on this page, regardless of
+consent state. Receivers should return a list of pretix.presale.cookies.CookieProvider objects.
+
+As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
+"""

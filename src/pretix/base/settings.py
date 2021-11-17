@@ -2527,8 +2527,7 @@ Your {organizer} team"""))
         'default': LazyI18nString.from_gettext(gettext_noop(
             'We use cookies and similar technologies to gather data that allows us to improve this website and our '
             'offerings. If you do not agree, we will only use cookies if they are essential to providing the services '
-            'this website offers. This includes cookies used to store your cart and personal settings, cookies used for '
-            'payment processing, as well as cookies required for technical or security reasons.'
+            'this website offers.'
         )),
         'type': LazyI18nString,
         'serializer_class': I18nField,

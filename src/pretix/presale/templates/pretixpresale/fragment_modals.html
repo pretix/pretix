@@ -17,7 +17,7 @@
         </div>
     </div>
 </div>
-{% if request.organizer %}
+{% if request.organizer and cookie_providers %}
     <script type="text/plain" id="cookie-consent-storage-key">cookie-consent-{{ request.organizer.slug }}</script>
     <div id="cookie-consent-modal" hidden aria-live="polite">
         <div class="modal-card">
@@ -32,10 +32,33 @@
                                 {{ sh.settings.cookie_consent_dialog_text_secondary|rich_text }}
                             </div>
                         {% endif %}
+                        <details id="cookie-consent-details">
+                            <summary>
+                                <span class="fa fa-fw chevron"></span>
+                                {% trans "Detail settings" %}
+                            </summary>
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" name="functional" disabled checked="">
+                                    {% trans "Functional cookies" %}<br>
+                                    <span class="text-muted">{% trans "Used e.g. for shopping cart, login, payment, and security purposes" %}</span>
+                                </label>
+                            </div>
+                            {% for cp in cookie_providers %}
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" name="{{ cp.identifier }}">
+                                        {{ cp.provider_name }}<br>
+                                    </label>
+                                </div>
+                            {% endfor %}
+                        </details>
                         <div class="row">
                             <div class="col-xs-12 col-md-6">
                                 <p>
-                                    <button type="button" class="btn btn-lg btn-block btn-primary" id="cookie-consent-button-no">
+                                    <button type="button" class="btn btn-lg btn-block btn-primary" id="cookie-consent-button-no"
+                                            data-summary-text="{{ sh.settings.cookie_consent_dialog_button_no }}"
+                                            data-detail-text="{% trans "Save selection" %}">
                                         {{ sh.settings.cookie_consent_dialog_button_no }}
                                     </button>
                                 </p>

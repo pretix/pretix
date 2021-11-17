@@ -187,6 +187,15 @@ body.loading .container {
         .modal-card-content {
             margin-left: 0;
         }
+        details {
+            & > summary {
+                list-style: inherit;
+            }
+            & > summary::-webkit-details-marker {
+                display: inherit;
+            }
+            margin-bottom: 10px;
+        }
     }
 }
 @media (max-width: 700px) {
