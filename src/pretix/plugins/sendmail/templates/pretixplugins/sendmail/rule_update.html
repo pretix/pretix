@@ -10,8 +10,21 @@
             {% csrf_token %}
             {% bootstrap_form_errors form %}
 
-            {% bootstrap_field form.enabled layout='control' %}
+            {% if rule.total_mails == rule.sent_mails %}
+                <div class="alert alert-warning">
+                    {% if event.has_subevents %}
+                        {% trans "This email has already been sent for all existing dates. Changing it will have no effect unless you create additional dates in this event series." %}
+                    {% else %}
+                        {% trans "This email has already been sent. Changing it will have no effect." %}
+                    {% endif %}
+                </div>
+            {% elif rule.total_mails > 0 and event.has_subevents %}
+                <div class="alert alert-info">
+                    {% trans "This email has already been sent for some of the dates in your series. Changing it will only have an effect on dates for which the email has not yet been sent." %}
+                </div>
+            {% endif %}
 
+            {% bootstrap_field form.enabled layout='control' %}
             <fieldset>
                 <legend>{% trans "Content" %}</legend>
                 {% bootstrap_field form.subject layout='control' %}

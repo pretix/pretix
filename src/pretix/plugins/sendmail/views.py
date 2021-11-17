@@ -385,7 +385,14 @@ class UpdateRule(EventPermissionRequiredMixin, UpdateView):
     permission = 'can_change_event_settings'
 
     def get_object(self, queryset=None) -> Rule:
-        return get_object_or_404(Rule, event=self.request.event, id=self.kwargs['rule'])
+        return get_object_or_404(
+            Rule.objects.annotate(
+                total_mails=Count('scheduledmail'),
+                sent_mails=Count('scheduledmail', filter=Q(scheduledmail__state=ScheduledMail.STATE_COMPLETED)),
+            ),
+            event=self.request.event,
+            id=self.kwargs['rule']
+        )
 
     def get_success_url(self):
         return reverse('plugins:sendmail:rule.update', kwargs={
