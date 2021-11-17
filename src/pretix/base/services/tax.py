@@ -90,9 +90,7 @@ def _validate_vat_id_CH(vat_id, country_code):
             'https://www.uid-wse-a.admin.ch/V5.0/PublicServices.svc?wsdl',
             transport=transport
         )
-        if not client.service.ValidateUID(uid=vat_id):
-            raise VATIDFinalError(_('This VAT ID is not valid. Please re-check your input.'))
-        return vat_id
+        result = client.service.ValidateUID(uid=vat_id)
     except Fault as e:
         if e.message == 'Data_validation_failed':
             raise VATIDFinalError(_('This VAT ID is not valid. Please re-check your input.'))
@@ -120,6 +118,10 @@ def _validate_vat_id_CH(vat_id, country_code):
             'need to charge VAT on your invoice. You can get the tax amount '
             'back via the VAT reimbursement process.'
         ))
+    else:
+        if not result:
+            raise VATIDFinalError(_('This VAT ID is not valid. Please re-check your input.'))
+        return vat_id
 
 
 def validate_vat_id(vat_id, country_code):
