@@ -87,7 +87,7 @@ def _validate_vat_id_CH(vat_id, country_code):
     try:
         transport = Transport(cache=SqliteCache(os.path.join(settings.CACHE_DIR, "validate_vat_id_ch_zeep_cache.db")))
         client = Client(
-            'https://www.uid-wse-a.admin.ch/V5.0/PublicServices.svc?wsdl',
+            'https://www.uid-wse.admin.ch/V5.0/PublicServices.svc?wsdl',
             transport=transport
         )
         result = client.service.ValidateUID(uid=vat_id)
