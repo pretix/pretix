@@ -192,6 +192,7 @@ setup(
         'djangorestframework==3.12.*',
         'drf_ujson2==1.6.*',
         'isoweek',
+        'importlib_metadata==4.8.*',
         'jsonschema',
         'kombu==4.6.*',
         'libsass==0.20.*',
