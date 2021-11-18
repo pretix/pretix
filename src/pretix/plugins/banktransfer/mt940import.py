@@ -182,11 +182,11 @@ def parse(file):
             transaction_details = parse_transaction_details(td.replace("\n", ""))
 
             payer = {
-                'name': transaction_details.get('accountholder', ''),
+                'name': transaction_details.get('accountholder', '') or t.data.get('applicant_name', ''),
                 # In reality, these fields are sometimes IBANs and BICs, and sometimes legacy numbers. We don't
                 # really know (except for a syntax check) which will be performed anyways much later in the stack.
-                'iban': transaction_details.get('accountnumber', ''),
-                'bic': transaction_details.get('blz', ''),
+                'iban': transaction_details.get('accountnumber', '') or t.data.get('applicant_iban', ''),
+                'bic': transaction_details.get('blz', '') or t.data.get('applicant_bin', ''),
             }
             reference, eref = join_reference(transaction_details.get('reference', '').split('\n'), payer)
             if not eref:
@@ -200,11 +200,19 @@ def parse(file):
                 **{k: payer[k].strip() for k in ("iban", "bic") if payer.get(k)}
             })
         else:
+            payer = {
+                'payer': t.data.get('applicant_name', ''),
+                # In reality, these fields are sometimes IBANs and BICs, and sometimes legacy numbers. We don't
+                # really know (except for a syntax check) which will be performed anyways much later in the stack.
+                'iban': t.data.get('applicant_iban', ''),
+                'bic': t.data.get('applicant_bin', ''),
+            }
             result.append({
                 'reference': "\n".join([
-                    t.data.get(f) for f in ('transaction_details', 'customer_reference', 'bank_reference',
+                    t.data.get(f) for f in ('transaction_details', 'customer_reference', 'bank_reference', 'purpose',
                                             'extra_details', 'non_swift_text') if t.data.get(f, '')]),
                 'amount': str(round_decimal(t.data['amount'].amount)),
-                'date': t.data['date'].isoformat()
+                'date': t.data['date'].isoformat(),
+                **{k: payer[k].strip() for k in ("iban", "bic", "payer") if payer.get(k)}
             })
     return result
