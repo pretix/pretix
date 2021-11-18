@@ -161,7 +161,7 @@ setup(
         'arabic-reshaper==2.0.15',  # Support for Arabic in reportlab
         'babel',
         'BeautifulSoup4==4.8.*',
-        'bleach==3.3.*',
+        'bleach>=3.3,<4.2',
         'celery==4.4.*',
         'chardet>=3.0.2,<4.1.0',
         'cryptography>=3.4.2',
@@ -208,7 +208,7 @@ setup(
         'protobuf==3.15.*',
         'psycopg2-binary',
         'pycountry',
-        'pycparser==2.13',
+        'pycparser==2.21',
         'PyPDF2==1.26.*',
         'python-bidi==0.4.*',  # Support for Arabic in reportlab
         'python-dateutil==2.8.*',
