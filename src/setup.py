@@ -205,10 +205,10 @@ setup(
         'paypalrestsdk==1.13.*',
         'phonenumberslite>=8.11,<8.13',
         'Pillow==8.*',
-        'protobuf==3.15.*',
+        'protobuf>=3.15,<3.20',
         'psycopg2-binary',
         'pycountry',
-        'pycparser==2.13',
+        'pycparser==2.21',
         'PyPDF2==1.26.*',
         'python-bidi==0.4.*',  # Support for Arabic in reportlab
         'python-dateutil==2.8.*',
