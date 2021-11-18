@@ -185,7 +185,7 @@ setup(
         'django-mysql',
         'django-oauth-toolkit==1.2.*',
         'django-otp>=0.7,<1.2',
-        'django-phonenumber-field==4.0.*',
+        'django-phonenumber-field>=4.0,<6.1',
         'django-redis==5.0.*',
         'django-scopes==1.2.*',
         'django-statici18n>=1.9,<2.2',
