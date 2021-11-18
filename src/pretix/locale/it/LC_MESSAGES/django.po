@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-10-29 10:09+0000\n"
-"PO-Revision-Date: 2021-11-16 15:54+0000\n"
+"PO-Revision-Date: 2021-11-17 01:00+0000\n"
 "Last-Translator: +se <sebastiano@endsummercamp.org>\n"
 "Language-Team: Italian <https://translate.pretix.eu/projects/pretix/pretix/"
 "it/>\n"
@@ -9244,7 +9244,7 @@ msgstr "Prevendita non ancora attiva"
 #: pretix/control/templates/pretixcontrol/organizers/detail.html:106
 #: pretix/control/templates/pretixcontrol/subevents/index.html:152
 msgid "Presale over"
-msgstr "Prevendita esaurita"
+msgstr "Prevendita conclusa"
 
 #: pretix/control/forms/filter.py:833 pretix/control/forms/filter.py:836
 #: pretix/control/forms/filter.py:1835
@@ -18268,7 +18268,7 @@ msgstr "Nessuna data"
 #: pretix/presale/templates/pretixpresale/organizers/index.html:120
 #: pretix/presale/views/widget.py:385
 msgid "Sale over"
-msgstr ""
+msgstr "Prenotazioni chiuse"
 
 #: pretix/control/views/dashboards.py:533
 #: pretix/presale/templates/pretixpresale/fragment_calendar.html:99
@@ -18351,7 +18351,7 @@ msgstr ""
 
 #: pretix/control/views/event.py:697 pretix/control/views/organizer.py:320
 msgid "invalid item"
-msgstr ""
+msgstr "oggetto non valido"
 
 #: pretix/control/views/event.py:754
 msgid "Unknown e-mail renderer."
@@ -23346,7 +23346,7 @@ msgstr "Altre date"
 #: pretix/presale/templates/pretixpresale/event/index.html:138
 #: pretix/presale/views/waiting.py:98 pretix/presale/views/widget.py:662
 msgid "The presale period for this event is over."
-msgstr ""
+msgstr "Il periodo di prevendita per questo evento è concluso."
 
 #: pretix/presale/templates/pretixpresale/event/index.html:146
 #: pretix/presale/views/widget.py:664
@@ -24270,7 +24270,7 @@ msgstr "Il tuo carrello è vuoto"
 
 #: pretix/presale/views/checkout.py:59
 msgid "The presale for this event is over or has not yet started."
-msgstr ""
+msgstr "La prevendita pre questo evento è conclusa o non è ancora iniziata."
 
 #: pretix/presale/views/customer.py:179
 msgid ""
