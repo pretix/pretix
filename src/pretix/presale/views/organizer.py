@@ -829,8 +829,10 @@ class DayCalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
         ctx['start'] = datetime.combine(self.date, start)
         ctx['raster_size'] = raster_size
         # ctx['end'] = end
-        # size of each grid-column in calendar is based on shortest event duration
-        ctx['shortest_duration_rastered'] = next((d for d in [5, 10, 15, 30, 60, 90, 120, 180] if d >= shortest_duration), 180)
+        # size of each grid-column is based on shortest event duration and raster_size
+        # raster_size is based on start/end times, so it could happen we have a small raster but long running events
+        # raster_size will always be smaller or equals tick_duration
+        ctx['raster_to_shortest_ratio'] = round((8 * raster_size) / shortest_duration)
 
         ctx['events'] = events
 

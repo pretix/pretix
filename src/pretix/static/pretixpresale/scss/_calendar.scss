@@ -126,14 +126,14 @@
   margin-bottom: 10px;
   padding-bottom: 5px;  /* use padding to make space for link focus-outline */
 }
-.shortest-duration-5 {--col-min-size: 7em}
-.shortest-duration-10 {--col-min-size: 5em}
-.shortest-duration-15 {--col-min-size: 3em}
-.shortest-duration-30 {--col-min-size: 2em}
-.shortest-duration-60  {--col-min-size: 1em}
-.shortest-duration-90  {--col-min-size: .75em}
-.shortest-duration-120 {--col-min-size: .5em}
-.shortest-duration-180 {--col-min-size: .25em}
+.cal-size-8 {--col-min-size: 9em}
+.cal-size-7 {--col-min-size: 7.8em}
+.cal-size-6 {--col-min-size: 6.6em}
+.cal-size-5 {--col-min-size: 5.4em}
+.cal-size-4 {--col-min-size: 4.2em}
+.cal-size-3 {--col-min-size: 3em}
+.cal-size-2 {--col-min-size: 1.8em}
+.cal-size-1 {--col-min-size: 0.6em}
 
 .day-calendar .current-time-bar {
   position: absolute;

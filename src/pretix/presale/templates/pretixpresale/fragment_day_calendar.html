@@ -1,6 +1,6 @@
 {% load i18n %}
 {% load eventurl %}
-<div class="day-calendar shortest-duration-{{shortest_duration_rastered}}{% if no_headlines %} no-headlines{% endif %}"
+<div class="day-calendar cal-size-{{ raster_to_shortest_ratio }}{% if no_headlines %} no-headlines{% endif %}"
     data-raster-size="{{ raster_size }}"
     data-duration="{{ calendar_duration }}"
     data-start="{{ start|date:"c" }}"
