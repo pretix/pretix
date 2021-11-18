@@ -1600,7 +1600,7 @@ class OrderChangeManager:
             if (a['item'], a['variation']) in input_addons[op.id]:
                 raise OrderError(error_messages['addon_duplicate_item'])
 
-            if item.require_voucher or (op.item.hide_without_voucher or (op.variation and op.variation.hide_without_voucher)):
+            if item.require_voucher or op.item.hide_without_voucher or (op.variation and op.variation.hide_without_voucher):
                 raise OrderError(error_messages['voucher_required'])
 
             if not item.is_available() or (variation and not variation.is_available()):
