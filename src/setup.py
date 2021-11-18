@@ -161,7 +161,7 @@ setup(
         'arabic-reshaper==2.0.15',  # Support for Arabic in reportlab
         'babel',
         'BeautifulSoup4==4.8.*',
-        'bleach==3.3.*',
+        'bleach>=3.3,<4.2',
         'celery==4.4.*',
         'chardet>=3.0.2,<4.1.0',
         'cryptography>=3.4.2',
