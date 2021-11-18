@@ -840,9 +840,10 @@ class DayCalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
         ctx['multiple_timezones'] = self._multiple_timezones
         return ctx
 
-    # get best raster-size for min. # of columns in grid
-    # due to grid-col-calculations in CSS raster_size cannot be bigger than 60 (minutes)
     def _get_raster_size(self, events):
+        # get best raster-size for min. # of columns in grid
+        # due to grid-col-calculations in CSS raster_size cannot be bigger than 60 (minutes)
+
         # all start- and end-times (minute-part) except full hour
         times = [
             e["time"].minute for e in events if e["time"] and e["time"].minute
@@ -873,16 +874,16 @@ class DayCalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
             )
         ])
 
-    # currently based on minutes, might be factored into a helper class with a timedelta as raster?
     def _floor_time(self, t, raster_size=5):
+        # raster_size based on minutes, might be factored into a helper class with a timedelta as raster
         minutes = t.hour * 60 + t.minute
         if minutes % raster_size:
             minutes = (minutes // raster_size) * raster_size
             return t.replace(hour=minutes // 60, minute=minutes % 60)
         return t
 
-    # currently based on minutes, might be factored into a helper class with a timedelta as raster?
     def _ceil_time(self, t, raster_size=5):
+        # raster_size based on minutes, might be factored into a helper class with a timedelta as raster
         minutes = t.hour * 60 + t.minute
         if not minutes % raster_size:
             return t
