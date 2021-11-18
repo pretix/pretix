@@ -811,6 +811,134 @@ class OrderSearchFilterForm(OrderFilterForm):
         )
 
 
+class OrderPaymentSearchFilterForm(forms.Form):
+    payments = {'id', 'local_id', 'state', 'amount', 'order', 'created', 'payment_date', 'provider', 'info', 'fee'}
+
+    organizer = forms.ModelChoiceField(
+        label=_('Organizer'),
+        queryset=Organizer.objects.none(),
+        required=False,
+        empty_label=_('All organizers'),
+        widget=Select2(
+            attrs={
+                'data-model-select2': 'generic',
+                'data-select2-url': reverse_lazy('control:organizers.select2'),
+                'data-placeholder': _('All organizers')
+            }
+        ),
+    )
+    state = forms.ChoiceField(
+        label=_('Payment state'),
+        required=False,
+        choices=(
+            ('', _('All payment states')),
+            (OrderPayment.PAYMENT_STATE_CREATED, _('Created')),
+            (OrderPayment.PAYMENT_STATE_PENDING, _('Pending')),
+            (OrderPayment.PAYMENT_STATE_CONFIRMED, _('Confirmed')),
+            (OrderPayment.PAYMENT_STATE_FAILED, _('Failed')),
+            (OrderPayment.PAYMENT_STATE_CANCELED, _('Canceled')),
+            (OrderPayment.PAYMENT_STATE_REFUNDED, _('Refunded')),
+        ),
+    )
+    query = forms.CharField(
+        label=_('Search for…'),
+        widget=forms.TextInput(attrs={
+            'placeholder': _('Search for…'),
+            'autofocus': 'autofocus'
+        }),
+        required=False,
+    )
+    provider = forms.ChoiceField(
+        label=_('Payment provider'),
+        choices=[
+            ('', _('All payment providers')),
+        ],
+        required=False,
+    )
+
+    def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop('request')
+        super().__init__(*args, **kwargs)
+        if self.request.user.has_active_staff_session(self.request.session.session_key):
+            self.fields['organizer'].queryset = Organizer.objects.all()
+        else:
+            self.fields['organizer'].queryset = Organizer.objects.filter(
+                pk__in=self.request.user.teams.values_list('organizer', flat=True)
+            )
+        self.fields['provider'].choices += get_all_payment_providers()
+
+    def filter_qs(self, qs):
+        fdata = self.cleaned_data
+        # qs = super().filter_qs(qs)
+
+        if fdata.get('organizer'):
+            qs = qs.filter(event__organizer=fdata.get('organizer'))
+
+        if fdata.get('state'):
+            qs = qs.filter(state=fdata.get('state'))
+
+        if fdata.get('ordering'):
+            p = self.cleaned_data.get('ordering')
+            if p.startswith('-') and p not in self.orders:
+                return '-' + self.payments[p[1:]]  # todo
+            else:
+                return self.payments[p]  # todo
+
+        if fdata.get('provider'):
+            qs = qs.annotate(
+                has_payment_with_provider=Exists(
+                    OrderPayment.objects.filter(
+                        Q(order=OuterRef('pk')) & Q(provider=fdata.get('provider'))
+                    )
+                )
+            )
+            qs = qs.filter(has_payment_with_provider=1)
+
+        if fdata.get('query'):
+            u = fdata.get('query')
+
+            matching_invoices = Invoice.objects.filter(
+                Q(invoice_no__iexact=u)
+                | Q(invoice_no__iexact=u.zfill(5))
+                | Q(full_invoice_no__iexact=u)
+            ).values_list('order_id', flat=True)
+
+            matching_invoice_addresses = InvoiceAddress.objects.filter(
+                Q(
+                    Q(name_cached__icontains=u) | Q(company__icontains=u)
+                )
+            ).values_list('order_id', flat=True)
+
+            matching_payments = OrderPayment.objects.filter(Q(info__icontains=u)).values_list('id', flat=True)
+
+            matching_orders = OrderPayment.objects.filter(
+                Q(
+                    Q(order__code__icontains=u)
+                    | Q(id__icontains=u)
+                )
+            ).values_list('id', flat=True)
+
+            mainq = (
+                Q(pk__in=matching_invoices)
+                | Q(pk__in=matching_invoice_addresses)
+                | Q(pk__in=matching_invoices)
+                | Q(pk__in=matching_payments)
+                | Q(pk__in=matching_orders)
+            )
+
+            '''
+            amount, created, fee, fee_id, gift_card_transactions, id, info, local_id, migrated, order, order_id,
+            payment_date, provider, referencedpaypalobject, referencedstripeobject, refunds, state
+            '''
+            qs = qs.filter(mainq)
+
+        filters_by_property_name = {}
+        for f in filters_by_property_name.values():
+            qs = qs.filter(f)
+
+        return qs
+
+
 class SubEventFilterForm(FilterForm):
     orders = {
         'date_from': 'date_from',
