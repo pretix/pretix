@@ -188,7 +188,7 @@ setup(
         'django-phonenumber-field==4.0.*',
         'django-redis==5.0.*',
         'django-scopes==1.2.*',
-        'django-statici18n==1.9.*',
+        'django-statici18n>=1.9,<2.2',
         'djangorestframework==3.12.*',
         'drf_ujson2==1.6.*',
         'isoweek',
