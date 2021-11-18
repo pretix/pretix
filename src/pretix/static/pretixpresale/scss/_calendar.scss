@@ -122,7 +122,7 @@
   display: grid;
   grid-template-columns: 1fr 7fr;
   gap: 0;
-  overflow: scroll;
+  overflow-x: auto;
   margin-bottom: 10px;
   padding-bottom: 5px;  /* use padding to make space for link focus-outline */
 }
