@@ -208,7 +208,7 @@ setup(
         'protobuf==3.15.*',
         'psycopg2-binary',
         'pycountry',
-        'pycparser==2.13',
+        'pycparser==2.21',
         'PyPDF2==1.26.*',
         'python-bidi==0.4.*',  # Support for Arabic in reportlab
         'python-dateutil==2.8.*',
@@ -217,7 +217,7 @@ setup(
         'pyuca',
         'redis>=3.4,<3.6',
         'reportlab>=3.5.65',
-        'requests==2.25.*',
+        'requests>=2.25,<2.27',
         'sentry-sdk>=1.1,<1.5',
         'sepaxml==2.4.*,>=2.4.1',
         'slimit',
