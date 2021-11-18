@@ -242,7 +242,7 @@ setup(
             'pep8-naming',
             'potypo',
             'pycodestyle==2.5.*',
-            'pyflakes==2.1.*',
+            'pyflakes>=2.1,<2.5',
             'pytest-cache',
             'pytest-cov',
             'pytest-django==4.*',
