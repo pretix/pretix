@@ -161,7 +161,7 @@ setup(
         'arabic-reshaper==2.0.15',  # Support for Arabic in reportlab
         'babel',
         'BeautifulSoup4==4.8.*',
-        'bleach==3.3.*',
+        'bleach>=3.3,<4.2',
         'celery==4.4.*',
         'chardet>=3.0.2,<4.1.0',
         'cryptography>=3.4.2',
@@ -188,7 +188,7 @@ setup(
         'django-phonenumber-field==4.0.*',
         'django-redis==5.0.*',
         'django-scopes==1.2.*',
-        'django-statici18n==1.9.*',
+        'django-statici18n>=1.9,<2.2',
         'djangorestframework==3.12.*',
         'drf_ujson2==1.6.*',
         'isoweek',
