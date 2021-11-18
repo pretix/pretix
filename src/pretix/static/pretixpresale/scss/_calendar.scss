@@ -124,7 +124,7 @@
   gap: 0;
   overflow-x: auto;
   margin-bottom: 10px;
-  padding-bottom: 5px;  /* use padding to make space for link focus-outline */
+  padding-bottom: 16px;  /* use padding to make space for link focus-outline and overlayed scrollbar */
 }
 .cal-size-8 {--col-min-size: 9em}
 .cal-size-7 {--col-min-size: 7.8em}
