@@ -43,6 +43,7 @@ from django.db.models import Count, Exists, Max, Min, OuterRef, Q
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse
+from django.utils.functional import cached_property
 from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import DeleteView, FormView, ListView
@@ -385,7 +386,14 @@ class UpdateRule(EventPermissionRequiredMixin, UpdateView):
     permission = 'can_change_event_settings'
 
     def get_object(self, queryset=None) -> Rule:
-        return get_object_or_404(Rule, event=self.request.event, id=self.kwargs['rule'])
+        return get_object_or_404(
+            Rule.objects.annotate(
+                total_mails=Count('scheduledmail'),
+                sent_mails=Count('scheduledmail', filter=Q(scheduledmail__state=ScheduledMail.STATE_COMPLETED)),
+            ),
+            event=self.request.event,
+            id=self.kwargs['rule']
+        )
 
     def get_success_url(self):
         return reverse('plugins:sendmail:rule.update', kwargs={
@@ -485,3 +493,23 @@ class DeleteRule(EventPermissionRequiredMixin, DeleteView):
         self.object.delete()
         messages.success(self.request, _('The selected rule has been deleted.'))
         return HttpResponseRedirect(success_url)
+
+
+class ScheduleView(EventPermissionRequiredMixin, PaginationMixin, ListView):
+    template_name = 'pretixplugins/sendmail/rule_inspect.html'
+    model = ScheduledMail
+    context_object_name = 'scheduled_mails'
+
+    @cached_property
+    def rule(self):
+        return get_object_or_404(Rule, event=self.request.event, id=self.kwargs['rule'])
+
+    def get_queryset(self):
+        return self.rule.scheduledmail_set.select_related('subevent').order_by(
+            '-computed_datetime'
+        )
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['rule'] = self.rule
+        return ctx

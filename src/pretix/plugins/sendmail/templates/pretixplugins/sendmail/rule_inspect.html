@@ -1,0 +1,62 @@
+{% extends "pretixcontrol/event/base.html" %}
+{% load i18n %}
+{% load static %}
+{% block title %}{% trans "Inspect Email Rule" %}{% endblock %}
+{% block content %}
+    <h1>{% trans "Inspect Email Rule" %}</h1>
+    <p>
+        {% blocktrans trimmed %}
+            This page shows when your rule is planned to be sent.
+        {% endblocktrans %}
+    </p>
+    <dl class="dl-horizontal">
+        <dt>{% trans "Email subject" %}</dt>
+        <dd>{{ rule.subject }}</dd>
+        <dt>{% trans "Recipient" %}</dt>
+        <dd>{{ rule.get_send_to_display }}</dd>
+        <dt>{% trans "Scheduled time" %}</dt>
+        <dd>{{ rule.human_readable_time }}</dd>
+    </dl>
+
+    <div class="table-responsive">
+        <table class="table table-hover table-quotas">
+            <thead>
+            <tr>
+                <th>{% trans "Scheduled time" %}</th>
+                {% if request.event.has_subevents %}
+                    <th>{% trans "Date" context "subevent" %}</th>
+                {% endif %}
+                <th>{% trans "Status" %}</th>
+                <th>{% trans "Last schedule computation" %}</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for sm in scheduled_mails %}
+                <tr>
+                    <td>
+                        {{ sm.computed_datetime|date:"SHORT_DATETIME_FORMAT" }}
+                    </td>
+                    {% if request.event.has_subevents %}
+                        <td>
+                            <a href="{% url "control:event.subevent" organizer=request.event.organizer.slug event=request.event.slug subevent=sm.subevent.id %}?returnto={{ request.GET.urlencode|urlencode }}">
+                                {{ sm.subevent.name }}
+                            </a><br>
+                            {{ sm.get_date_range_display }}
+                        </td>
+                    {% endif %}
+                    <td>
+                        <span class="label {% if sm.state == "missed" %}label-warning{% elif sm.state == "failed" %}label-danger{% elif sm.state == "scheduled" %}label-info{% elif sm.state == "completed" %}label-success{% endif %}">
+                           {{ sm.get_state_display }}
+                        </span>
+                    </td>
+                    <td>
+                        {{ sm.last_computed|date:"SHORT_DATETIME_FORMAT" }}
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% include "pretixcontrol/pagination.html" %}
+{% endblock %}

@@ -22739,7 +22739,7 @@ msgstr "Neue Regel erstellen"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:24
 msgid "Email subject"
-msgstr "E-Mail wurde verschickt"
+msgstr "E-Mail-Betreff"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:26
 msgid "Scheduled time"
