@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-10-29 10:09+0000\n"
-"PO-Revision-Date: 2021-11-17 01:00+0000\n"
-"Last-Translator: +se <sebastiano@endsummercamp.org>\n"
+"PO-Revision-Date: 2021-11-20 03:00+0000\n"
+"Last-Translator: Marco Giacopuzzi <marco.giaco2000@gmail.com>\n"
 "Language-Team: Italian <https://translate.pretix.eu/projects/pretix/pretix/"
 "it/>\n"
 "Language: it\n"
@@ -32,16 +32,14 @@ msgid "pretixSCAN"
 msgstr "pretixSCAN"
 
 #: pretix/api/auth/devicesecurity.py:75
-#, fuzzy
-#| msgid "pretixSCAN (kiosk mode, online only)"
 msgid "pretixSCAN (kiosk mode, no order sync, no search)"
-msgstr "pretixSCAN (modalità kiosk, solo online)"
+msgstr ""
+"pretixSCAN (modalità chiosco, nessuna sincronizzazione degli ordini, nessuna "
+"ricerca)"
 
 #: pretix/api/auth/devicesecurity.py:104
-#, fuzzy
-#| msgid "pretixSCAN (kiosk mode, online only)"
 msgid "pretixSCAN (online only, no order sync)"
-msgstr "pretixSCAN (modalità kiosk, solo online)"
+msgstr "pretixSCAN (solo online, nessuna sincronizzazione degli ordini)"
 
 #: pretix/api/auth/devicesecurity.py:134
 msgid "pretixPOS"
@@ -323,10 +321,8 @@ msgid "Event details changed"
 msgstr "Dettagli evento modificati"
 
 #: pretix/api/webhooks.py:264
-#, fuzzy
-#| msgid "Event created"
 msgid "Event deleted"
-msgstr "Evento creato"
+msgstr "Evento eliminato"
 
 #: pretix/api/webhooks.py:268
 msgctxt "subevent"
@@ -1010,11 +1006,8 @@ msgid "Only paid orders"
 msgstr "Solo ordini pagati"
 
 #: pretix/base/exporters/orderlist.py:96
-#, fuzzy
-#| msgctxt "checkin"
-#| msgid "Include pending orders"
 msgid "Include payment amounts"
-msgstr "Includi ordini in attesa"
+msgstr "Includere gli importi dei pagamenti"
 
 #: pretix/base/exporters/orderlist.py:102
 msgid "Show multiple choice answers grouped in one column"
@@ -1037,18 +1030,20 @@ msgid ""
 "Only include orders including at least one ticket for a date on or after "
 "this date. Will also include other dates in case of mixed orders!"
 msgstr ""
+"Include solo gli ordini che includono almeno un biglietto per una data a "
+"partire da questa data. Includerà anche altre date in caso di ordini misti!"
 
 #: pretix/base/exporters/orderlist.py:130
-#, fuzzy
-#| msgid "End date"
 msgid "End event date"
-msgstr "Data di Fine"
+msgstr "Data di fine evento"
 
 #: pretix/base/exporters/orderlist.py:133
 msgid ""
 "Only include orders including at least one ticket for a date on or before "
 "this date. Will also include other dates in case of mixed orders!"
 msgstr ""
+"Include solo gli ordini che includono almeno un biglietto per una data a "
+"partire da questa data. Includerà anche altre date in caso di ordini misti!"
 
 #: pretix/base/exporters/orderlist.py:271
 #: pretix/base/exporters/orderlist.py:438
@@ -1243,10 +1238,9 @@ msgid "E-mail address verified"
 msgstr "Indirizzo email verificato"
 
 #: pretix/base/exporters/orderlist.py:301
-#, fuzzy, python-brace-format
-#| msgid "Payment method"
+#, python-brace-format
 msgid "Paid by {method}"
-msgstr "Metodo di pagamento"
+msgstr "Pagato con {method}"
 
 #: pretix/base/exporters/orderlist.py:445
 msgid "Fee type"
@@ -1414,10 +1408,8 @@ msgid "Seat number"
 msgstr "Numero di posto"
 
 #: pretix/base/exporters/orderlist.py:581
-#, fuzzy
-#| msgid "Order code"
 msgid "Order comment"
-msgstr "Codice ordine"
+msgstr "Commento all'ordine"
 
 #: pretix/base/exporters/orderlist.py:748
 msgid "Order payments and refunds"
@@ -1560,10 +1552,8 @@ msgid "Infinite"
 msgstr "Infinita"
 
 #: pretix/base/exporters/orderlist.py:879
-#, fuzzy
-#| msgid "Gift card redemptions"
 msgid "Gift card transactions"
-msgstr "Riscatti Gift Card"
+msgstr "Transazioni con carta regalo"
 
 #: pretix/base/exporters/orderlist.py:923
 #: pretix/base/exporters/orderlist.py:967
@@ -1584,7 +1574,7 @@ msgstr "Codice Gift Card"
 #: pretix/control/forms/filter.py:995 pretix/control/forms/filter.py:998
 #: pretix/control/templates/pretixcontrol/event/live.html:75
 msgid "Test mode"
-msgstr ""
+msgstr "Modalità di prova"
 
 #: pretix/base/exporters/orderlist.py:927
 #: pretix/base/exporters/orderlist.py:1063
@@ -1594,7 +1584,7 @@ msgstr ""
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/control.html:15
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:57
 msgid "Currency"
-msgstr ""
+msgstr "Valuta"
 
 #: pretix/base/exporters/orderlist.py:935 pretix/base/invoice.py:429
 #: pretix/control/templates/pretixcontrol/base.html:279
@@ -1619,7 +1609,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:79
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:132
 msgid "TEST MODE"
-msgstr "MODALITA' TEST"
+msgstr "MODALITÀ DI PROVA"
 
 #: pretix/base/exporters/orderlist.py:950
 msgid "Gift card redemptions"
@@ -1628,7 +1618,7 @@ msgstr "Riscatti Gift Card"
 #: pretix/base/exporters/orderlist.py:967
 #: pretix/control/templates/pretixcontrol/giftcards/payment.html:10
 msgid "Issuer"
-msgstr "Emettitore"
+msgstr "Emittente"
 
 #: pretix/base/exporters/orderlist.py:995 pretix/control/navigation.py:501
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:81
@@ -1658,20 +1648,20 @@ msgstr "Tutto"
 
 #: pretix/base/exporters/orderlist.py:1010 pretix/control/forms/filter.py:999
 msgid "Live"
-msgstr ""
+msgstr "In tempo reale"
 
 #: pretix/base/exporters/orderlist.py:1019 pretix/control/forms/filter.py:1007
 #: pretix/control/templates/pretixcontrol/pdf/index.html:353
 msgid "Empty"
-msgstr ""
+msgstr "Vuoto"
 
 #: pretix/base/exporters/orderlist.py:1020 pretix/control/forms/filter.py:1008
 msgid "Valid and with value"
-msgstr ""
+msgstr "Valido e con valore"
 
 #: pretix/base/exporters/orderlist.py:1021 pretix/control/forms/filter.py:1009
 msgid "Expired and with value"
-msgstr ""
+msgstr "Scaduto e con valore"
 
 #: pretix/base/exporters/orderlist.py:1022 pretix/control/forms/filter.py:197
 #: pretix/control/forms/filter.py:1010 pretix/control/forms/filter.py:1592
@@ -1682,7 +1672,7 @@ msgstr ""
 #: pretix/plugins/reports/exporters.py:289
 #: pretix/presale/templates/pretixpresale/event/fragment_order_status.html:25
 msgid "Expired"
-msgstr ""
+msgstr "Scaduto"
 
 #: pretix/base/exporters/orderlist.py:1059 pretix/base/models/giftcards.py:84
 msgid "Test mode card"
@@ -1692,11 +1682,11 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/order/index.html:192
 #: pretix/control/templates/pretixcontrol/organizers/giftcards.html:62
 msgid "Expiry date"
-msgstr ""
+msgstr "Data di scadenza"
 
 #: pretix/base/exporters/orderlist.py:1062 pretix/control/forms/orders.py:774
 msgid "Special terms and conditions"
-msgstr ""
+msgstr "Termini e condizioni particolari"
 
 #: pretix/base/exporters/orderlist.py:1064
 #: pretix/control/templates/pretixcontrol/order/change.html:94
@@ -1704,7 +1694,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:32
 #: pretix/control/templates/pretixcontrol/organizers/giftcards.html:65
 msgid "Current value"
-msgstr ""
+msgstr "Valore attuale"
 
 #: pretix/base/exporters/orderlist.py:1065
 #, fuzzy
@@ -1713,55 +1703,53 @@ msgid "Created in order"
 msgstr "Data di creazione"
 
 #: pretix/base/exporters/orderlist.py:1066
-#, fuzzy
-#| msgid "Invoice number"
 msgid "Last invoice number of order"
-msgstr "Numero fattura"
+msgstr "Ultimo numero di fattura dell'ordine"
 
 #: pretix/base/exporters/orderlist.py:1067
 msgid "Last invoice date of order"
-msgstr ""
+msgstr "Ultima data di fatturazione dell'ordine"
 
 #: pretix/base/exporters/waitinglist.py:47
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:87
 msgid "All entries"
-msgstr ""
+msgstr "Tutte le voci"
 
 #: pretix/base/exporters/waitinglist.py:52
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:90
 msgid "Waiting for a voucher"
-msgstr ""
+msgstr "In attesa di un Buono"
 
 #: pretix/base/exporters/waitinglist.py:57
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:92
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:212
 #: pretix/control/views/waitinglist.py:311
 msgid "Voucher assigned"
-msgstr ""
+msgstr "Buono assegnato"
 
 #: pretix/base/exporters/waitinglist.py:62
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:95
 msgid "Waiting for redemption"
-msgstr ""
+msgstr "In attesa di riscatto"
 
 #: pretix/base/exporters/waitinglist.py:70
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:208
 #: pretix/control/views/waitinglist.py:307
 msgid "Voucher redeemed"
-msgstr ""
+msgstr "Buono riscattato"
 
 #: pretix/base/exporters/waitinglist.py:78
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:101
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:210
 #: pretix/control/views/waitinglist.py:309
 msgid "Voucher expired"
-msgstr ""
+msgstr "Buono scaduto"
 
 #: pretix/base/exporters/waitinglist.py:109 pretix/base/pdf.py:108
 #: pretix/control/forms/event.py:1375
 #: pretix/control/templates/pretixcontrol/items/index.html:35
 msgid "Product name"
-msgstr ""
+msgstr "Nome del prodotto"
 
 #: pretix/base/exporters/waitinglist.py:112 pretix/base/models/event.py:459
 #: pretix/base/pdf.py:206 pretix/control/forms/filter.py:871
@@ -1770,7 +1758,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/events/index.html:62
 #: pretix/control/templates/pretixcontrol/organizers/detail.html:58
 msgid "Event name"
-msgstr ""
+msgstr "Nome dell'evento"
 
 #: pretix/base/exporters/waitinglist.py:113 pretix/base/orderimport.py:186
 #: pretix/control/templates/pretixcontrol/checkin/index.html:86
@@ -1781,7 +1769,7 @@ msgstr "Data"
 #: pretix/base/exporters/waitinglist.py:117
 #: pretix/control/views/waitinglist.py:293
 msgid "Priority"
-msgstr ""
+msgstr "Priorità"
 
 #: pretix/base/exporters/waitinglist.py:119 pretix/base/models/vouchers.py:188
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:18
