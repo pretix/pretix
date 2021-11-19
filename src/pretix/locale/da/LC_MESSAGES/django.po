@@ -4,8 +4,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-10-29 10:09+0000\n"
-"PO-Revision-Date: 2021-09-13 09:48+0000\n"
-"Last-Translator: Mie Frydensbjerg <mif@aarhus.dk>\n"
+"PO-Revision-Date: 2021-11-19 13:52+0000\n"
+"Last-Translator: Rasmus Kock Grusgaard <rasmus@grusgaard.com>\n"
 "Language-Team: Danish <https://translate.pretix.eu/projects/pretix/pretix/da/"
 ">\n"
 "Language: da\n"
@@ -3254,42 +3254,34 @@ msgstr ""
 #: pretix/base/models/items.py:507 pretix/base/models/items.py:828
 #: pretix/control/forms/event.py:853 pretix/control/forms/item.py:512
 #: pretix/control/forms/item.py:688
-#, fuzzy
-#| msgid "Save changes"
 msgid "Sales channels"
-msgstr "Gem ændringer"
+msgstr "Salgskanaler"
 
 #: pretix/base/models/items.py:512
-#, fuzzy
-#| msgid "The product the user waits for."
 msgid "This product is a gift card"
-msgstr "Produktet som brugere venter på."
+msgstr "Dette produkt er et gavekort"
 
 #: pretix/base/models/items.py:513
 msgid ""
 "When a customer buys this product, they will get a gift card with a value "
 "corresponding to the product price."
 msgstr ""
+"Når en kunde køber dette produkt modtager de et gavekort med en værdi, der "
+"svarer til produktets pris."
 
 #: pretix/base/models/items.py:518 pretix/base/models/items.py:803
 #: pretix/control/templates/pretixcontrol/item/include_variations.html:36
 #: pretix/control/templates/pretixcontrol/item/include_variations.html:116
-#, fuzzy
-#| msgid "Team memberships"
 msgid "Require a valid membership"
-msgstr "Team medlemskaber"
+msgstr "Kræver et gyldigt medlemskab"
 
 #: pretix/base/models/items.py:523
-#, fuzzy
-#| msgid "Team memberships"
 msgid "Allowed membership types"
-msgstr "Team medlemskaber"
+msgstr "Tilladte medlemskabstyper"
 
 #: pretix/base/models/items.py:527 pretix/base/models/items.py:812
-#, fuzzy
-#| msgid "Team memberships"
 msgid "Hide without a valid membership"
-msgstr "Team medlemskaber"
+msgstr "Skjul uden gyldigt medlemskab"
 
 #: pretix/base/models/items.py:528 pretix/base/models/items.py:813
 msgid ""
@@ -8923,10 +8915,8 @@ msgstr "Navn"
 #: pretix/base/settings.py:2649 pretix/base/settings.py:2663
 #: pretix/base/settings.py:2714 pretix/base/settings.py:2732
 #: pretix/base/settings.py:2751
-#, fuzzy
-#| msgid "Full name"
 msgid "Family name"
-msgstr "Fuldt navn"
+msgstr "Efternavn"
 
 #: pretix/base/settings.py:2561 pretix/base/settings.py:2577
 #: pretix/base/settings.py:2593 pretix/base/settings.py:2608
@@ -10323,35 +10313,35 @@ msgstr "Dato og tidspunkt"
 #: pretix/control/forms/filter.py:857 pretix/control/forms/subevents.py:526
 #: pretix/control/forms/subevents.py:565
 msgid "Weekday"
-msgstr ""
+msgstr "Ugedag"
 
 #: pretix/control/forms/filter.py:859
 msgid "Monday"
-msgstr ""
+msgstr "Mandag"
 
 #: pretix/control/forms/filter.py:860
 msgid "Tuesday"
-msgstr ""
+msgstr "Tirsdag"
 
 #: pretix/control/forms/filter.py:861
 msgid "Wednesday"
-msgstr ""
+msgstr "Onsdag"
 
 #: pretix/control/forms/filter.py:862
 msgid "Thursday"
-msgstr ""
+msgstr "Torsdag"
 
 #: pretix/control/forms/filter.py:863
 msgid "Friday"
-msgstr ""
+msgstr "Fredag"
 
 #: pretix/control/forms/filter.py:864
 msgid "Saturday"
-msgstr ""
+msgstr "Lørdag"
 
 #: pretix/control/forms/filter.py:865
 msgid "Sunday"
-msgstr ""
+msgstr "Søndag"
 
 #: pretix/control/forms/filter.py:1015 pretix/control/forms/filter.py:1017
 #: pretix/control/forms/filter.py:1065 pretix/control/forms/filter.py:1067
@@ -11570,7 +11560,7 @@ msgstr ""
 
 #: pretix/control/forms/subevents.py:454
 msgid "day(s)"
-msgstr ""
+msgstr "dag(e)"
 
 #: pretix/control/forms/subevents.py:459
 msgid "Interval"
@@ -11610,7 +11600,7 @@ msgstr "Dag"
 
 #: pretix/control/forms/subevents.py:527 pretix/control/forms/subevents.py:566
 msgid "Weekend day"
-msgstr ""
+msgstr "Weekend dag"
 
 #: pretix/control/forms/users.py:121 pretix/control/views/user.py:212
 msgid "Your changes could not be saved. See below for details."
@@ -15861,11 +15851,8 @@ msgid "Additional settings"
 msgstr "Yderligere indstillinger"
 
 #: pretix/control/templates/pretixcontrol/item/index.html:135
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "All dates"
 msgid "days"
-msgstr "Alle datoer"
+msgstr "dage"
 
 #: pretix/control/templates/pretixcontrol/item/index.html:136
 msgid "months"
@@ -23145,10 +23132,8 @@ msgid "Send date"
 msgstr "Sluttidspunkt"
 
 #: pretix/plugins/sendmail/models.py:196
-#, fuzzy
-#| msgid "Number of days"
 msgid "Time of day"
-msgstr "Antal dage"
+msgstr "Tid på dagen"
 
 #: pretix/plugins/sendmail/models.py:207
 msgid "Only enabled rules are actually sent"
@@ -25262,12 +25247,10 @@ msgstr ""
 "Bookingerne i din indkøbskurv er reserveret til dig i %(minutes)s minutter."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:392
-#, fuzzy
-#| msgid "The items in your cart are no longer reserved for you."
 msgid ""
 "The items in your cart are no longer reserved for you. You can still "
 "complete your order as long as they’re available."
-msgstr "Varerne i din kurv er ikke længere reserverede for dig."
+msgstr "Varerne i din indkøbskurv er ikke længere reserverede til dig."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:396
 msgid "Overview of your ordered products."
@@ -25489,7 +25472,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/organizers/calendar_week.html:32
 #: pretix/presale/templates/pretixpresale/organizers/index.html:39
 msgid "Week"
-msgstr ""
+msgstr "Uge"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_calendar_week.html:23
 #: pretix/presale/templates/pretixpresale/organizers/calendar_week.html:51
@@ -26490,7 +26473,7 @@ msgstr "Ingen arkiverede arrangementer fundet."
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:149
 msgid "No public upcoming events found."
-msgstr ""
+msgstr "Der blev ikke fundet nogen kommende offentlige begivenheder."
 
 #: pretix/presale/templates/pretixpresale/pagination.html:14
 #, python-format
