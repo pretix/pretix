@@ -343,10 +343,24 @@ def get_global_navigation(request):
             'icon': 'group',
         },
         {
-            'label': _('Order search'),
+            'label': _('Search'),
             'url': reverse('control:search.orders'),
-            'active': 'search.orders' in url.url_name,
+            'active': False,
             'icon': 'search',
+            'children': [
+                {
+                    'label': _('Order search'),
+                    'url': reverse('control:search.orders'),
+                    'active': 'search.orders' in url.url_name,
+                    'icon': 'search',
+                },
+                {
+                    'label': _('Payment search'),
+                    'url': reverse('control:search.payments'),
+                    'active': 'search.payments' in url.url_name,
+                    'icon': 'search',
+                },
+            ]
         },
         {
             'label': _('User settings'),
