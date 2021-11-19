@@ -65,6 +65,7 @@ class BaseOrdersTest(TestCase):
         self.event.settings.set('payment_banktransfer__enabled', True)
         self.event.settings.set('ticketoutput_testdummy__enabled', True)
 
+        self.tr = self.event.tax_rules.create(name="VAT", rate=10)
         self.category = ItemCategory.objects.create(event=self.event, name="Everything", position=0)
         self.quota_shirts = Quota.objects.create(event=self.event, name='Shirts', size=2)
         self.shirt = Item.objects.create(event=self.event, name='T-Shirt', category=self.category, default_price=12)
@@ -447,9 +448,11 @@ class OrderChangeAddonsTest(BaseOrdersTest):
         self.workshopcat = ItemCategory.objects.create(name="Workshops", is_addon=True, event=self.event)
         self.workshopquota = Quota.objects.create(event=self.event, name='Workshop 1', size=5)
         self.workshop1 = Item.objects.create(event=self.event, name='Workshop 1',
-                                             category=self.workshopcat, default_price=Decimal('12.00'))
+                                             category=self.workshopcat, default_price=Decimal('12.00'),
+                                             tax_rule=self.tr)
         self.workshop2 = Item.objects.create(event=self.event, name='Workshop 2',
-                                             category=self.workshopcat, default_price=Decimal('12.00'))
+                                             category=self.workshopcat, default_price=Decimal('12.00'),
+                                             tax_rule=self.tr)
         self.workshop2a = ItemVariation.objects.create(item=self.workshop2, value='Workshop 2a')
         self.workshop2b = ItemVariation.objects.create(item=self.workshop2, value='Workshop 2b')
         self.workshopquota.items.add(self.workshop1)
@@ -523,6 +526,79 @@ class OrderChangeAddonsTest(BaseOrdersTest):
             self.order.refresh_from_db()
             assert self.order.total == Decimal('35.00')
 
+    def test_add_addon_free_price(self):
+        self.workshop1.free_price = True
+        self.workshop1.save()
+
+        response = self.client.get(
+            '/%s/%s/order/%s/%s/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret)
+        )
+        assert response.status_code == 200
+        assert 'Workshop 1' in response.content.decode()
+
+        doc = BeautifulSoup(response.content.decode(), "lxml")
+        assert doc.select(f'input[name=cp_{self.ticket_pos.pk}_item_{self.workshop1.pk}]')
+
+        response = self.client.post(
+            '/%s/%s/order/%s/%s/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
+            {
+                f'cp_{self.ticket_pos.pk}_item_{self.workshop1.pk}': '1',
+                f'cp_{self.ticket_pos.pk}_item_{self.workshop1.pk}_price': '50.00',
+            },
+            follow=True
+        )
+        doc = BeautifulSoup(response.content.decode(), "lxml")
+        form_data = extract_form_fields(doc.select('.main-box form')[0])
+        form_data['confirm'] = 'true'
+        response = self.client.post(
+            '/%s/%s/order/%s/%s/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret), form_data, follow=True
+        )
+        assert 'alert-success' in response.content.decode()
+
+        with scopes_disabled():
+            new_pos = self.ticket_pos.addons.get()
+            assert new_pos.item == self.workshop1
+            assert new_pos.price == Decimal('50.00')
+            self.order.refresh_from_db()
+            assert self.order.total == Decimal('73.00')
+
+    def test_add_addon_free_price_net(self):
+        self.event.settings.display_net_prices = True
+        self.workshop1.free_price = True
+        self.workshop1.save()
+
+        response = self.client.get(
+            '/%s/%s/order/%s/%s/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret)
+        )
+        assert response.status_code == 200
+        assert 'Workshop 1' in response.content.decode()
+
+        doc = BeautifulSoup(response.content.decode(), "lxml")
+        assert doc.select(f'input[name=cp_{self.ticket_pos.pk}_item_{self.workshop1.pk}]')
+
+        response = self.client.post(
+            '/%s/%s/order/%s/%s/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
+            {
+                f'cp_{self.ticket_pos.pk}_item_{self.workshop1.pk}': '1',
+                f'cp_{self.ticket_pos.pk}_item_{self.workshop1.pk}_price': '50.00',
+            },
+            follow=True
+        )
+        doc = BeautifulSoup(response.content.decode(), "lxml")
+        form_data = extract_form_fields(doc.select('.main-box form')[0])
+        form_data['confirm'] = 'true'
+        response = self.client.post(
+            '/%s/%s/order/%s/%s/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret), form_data, follow=True
+        )
+        assert 'alert-success' in response.content.decode()
+
+        with scopes_disabled():
+            new_pos = self.ticket_pos.addons.get()
+            assert new_pos.item == self.workshop1
+            assert new_pos.price == Decimal('55.00')
+            self.order.refresh_from_db()
+            assert self.order.total == Decimal('78.00')
+
     def test_remove_addon(self):
         with scopes_disabled():
             OrderPosition.objects.create(
@@ -586,6 +662,63 @@ class OrderChangeAddonsTest(BaseOrdersTest):
 
         doc = BeautifulSoup(response.content.decode(), "lxml")
         assert doc.select(f'input[name=cp_{self.ticket_pos.pk}_item_{self.workshop1.pk}]')[0].attrs['checked']
+
+        response = self.client.post(
+            '/%s/%s/order/%s/%s/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
+            {
+                f'cp_{self.ticket_pos.pk}_item_{self.workshop1.pk}': '2',
+                f'cp_{self.ticket_pos.pk}_item_{self.workshop1.pk}_price': '100.00',
+            },
+            follow=True
+        )
+        doc = BeautifulSoup(response.content.decode(), "lxml")
+        form_data = extract_form_fields(doc.select('.main-box form')[0])
+        form_data['confirm'] = 'true'
+        response = self.client.post(
+            '/%s/%s/order/%s/%s/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret), form_data, follow=True
+        )
+        assert 'alert-success' in response.content.decode()
+
+        with scopes_disabled():
+            # only the price of the new addon is changed!
+            a = self.ticket_pos.addons.first()
+            assert a.item == self.workshop2
+            assert a.variation == self.workshop2a
+            assert a.price == Decimal('55.00')
+            a = self.ticket_pos.addons.first()
+            assert a.item == self.workshop2
+            assert a.variation == self.workshop2a
+            assert a.price == Decimal('110.00')
+
+    def test_add_existing_addon_free_price_net(self):
+        self.event.settings.display_net_prices = True
+        self.workshop1.free_price = True
+        self.workshop1.save()
+
+        with scopes_disabled():
+            OrderPosition.objects.create(
+                order=self.order,
+                item=self.workshop1,
+                variation=None,
+                price=Decimal("55"),
+                tax_rule=self.tr,
+                tax_rate=Decimal("10"),
+                tax_value=Decimal("5"),
+                addon_to=self.ticket_pos,
+                attendee_name_parts={'full_name': "Peter"}
+            )
+            self.order.total += Decimal("55")
+            self.order.save()
+
+        response = self.client.get(
+            '/%s/%s/order/%s/%s/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret)
+        )
+        assert response.status_code == 200
+        assert 'Workshop 1' in response.content.decode()
+
+        doc = BeautifulSoup(response.content.decode(), "lxml")
+        assert doc.select(f'input[name=cp_{self.ticket_pos.pk}_item_{self.workshop1.pk}]')[0].attrs['checked']
+        assert doc.select(f'input[name=cp_{self.ticket_pos.pk}_item_{self.workshop1.pk}_price]')[0].attrs['value'] == '50.00'
 
         response = self.client.post(
             '/%s/%s/order/%s/%s/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
@@ -1200,5 +1333,3 @@ class OrderChangeAddonsTest(BaseOrdersTest):
             assert self.order.total == Decimal('23.00')
             r = self.order.refunds.get()
             assert r.provider == 'giftcard'
-
-    # test_required_questions
