@@ -947,7 +947,7 @@ class DayCalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
             -
             datetime.combine(
                 self.date,
-                time(0, 0) if e['continued'] else e['time']
+                time(0, 0) if e['continued'] else (e['time'] or time(0, 0))
             )
             for e in events
         ]
