@@ -901,22 +901,30 @@ class OrderPaymentSearchFilterForm(forms.Form):
                 Q(invoice_no__iexact=u)
                 | Q(invoice_no__iexact=u.zfill(5))
                 | Q(full_invoice_no__iexact=u)
-            ).values_list('order_id', flat=True)
+            ).values_list('id', flat=True)
 
             matching_invoice_addresses = InvoiceAddress.objects.filter(
                 Q(
                     Q(name_cached__icontains=u) | Q(company__icontains=u)
                 )
-            ).values_list('order_id', flat=True)
+            ).values_list('id', flat=True)
 
             matching_payments = OrderPayment.objects.filter(Q(info__icontains=u)).values_list('id', flat=True)
+
+            if "-" in u:
+                code = (Q(order__event__slug__icontains=u.rsplit("-", 1)[0])
+                        & Q(order__code__icontains=Order.normalize_code(u.rsplit("-", 1)[1])))
+            else:
+                code = Q(order__code__icontains=Order.normalize_code(u))
 
             matching_orders = OrderPayment.objects.filter(
                 Q(
                     Q(order__code__icontains=u)
-                    | Q(id__icontains=u)
+                    | code
                 )
             ).values_list('id', flat=True)
+
+            matching_events = OrderPayment.objects.filter(Q(order__event__slug__icontains=u)).values_list('id', flat=True)
 
             mainq = (
                 Q(pk__in=matching_invoices)
@@ -924,6 +932,7 @@ class OrderPaymentSearchFilterForm(forms.Form):
                 | Q(pk__in=matching_invoices)
                 | Q(pk__in=matching_payments)
                 | Q(pk__in=matching_orders)
+                | Q(pk__in=matching_events)
             )
 
             '''
