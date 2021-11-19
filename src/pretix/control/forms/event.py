@@ -639,6 +639,7 @@ class CancelSettingsForm(SettingsForm):
         'change_allow_user_variation',
         'change_allow_user_price',
         'change_allow_user_until',
+        'change_allow_user_addons',
     ]
 
     def __init__(self, *args, **kwargs):

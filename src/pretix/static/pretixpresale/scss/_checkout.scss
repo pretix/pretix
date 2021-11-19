@@ -109,6 +109,13 @@
     font-weight: bold;
   }
 }
+.form-order-change-main {
+  border-bottom: 1px solid $hr-border;
+  background: $panel-footer-bg;
+
+  margin: -15px -15px 15px;
+  padding: 15px 15px 0;
+}
 .profile-pre-select {
   background: $panel-footer-bg;
   margin-top: -15px;

@@ -38,19 +38,20 @@ import json
 import mimetypes
 import os
 import re
-from collections import OrderedDict
+from collections import OrderedDict, defaultdict
 from decimal import Decimal
 
 from django import forms
 from django.conf import settings
 from django.contrib import messages
+from django.core.exceptions import ValidationError
 from django.core.files import File
 from django.db import transaction
 from django.db.models import Exists, OuterRef, Q, Sum
 from django.http import (
     FileResponse, Http404, HttpResponseRedirect, JsonResponse,
 )
-from django.shortcuts import get_object_or_404, redirect
+from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.decorators import method_decorator
 from django.utils.functional import cached_property
 from django.utils.timezone import now
@@ -65,6 +66,7 @@ from pretix.base.models.orders import (
     CachedCombinedTicket, InvoiceAddress, OrderFee, OrderPayment, OrderRefund,
     QuestionAnswer,
 )
+from pretix.base.models.tax import TaxedPrice
 from pretix.base.payment import PaymentException
 from pretix.base.services.invoices import (
     generate_cancellation, generate_invoice, invoice_pdf, invoice_pdf_task,
@@ -72,7 +74,8 @@ from pretix.base.services.invoices import (
 )
 from pretix.base.services.mail import SendMailException
 from pretix.base.services.orders import (
-    OrderChangeManager, OrderError, cancel_order, change_payment_provider,
+    OrderChangeManager, OrderError, _try_auto_refund, cancel_order,
+    change_payment_provider, error_messages,
 )
 from pretix.base.services.pricing import get_price
 from pretix.base.services.tickets import generate, invalidate_cache
@@ -90,6 +93,7 @@ from pretix.presale.signals import question_form_fields_overrides
 from pretix.presale.views import (
     CartMixin, EventViewMixin, iframe_entry_view_wrapper,
 )
+from pretix.presale.views.event import get_grouped_items
 from pretix.presale.views.robots import NoSearchIndexViewMixin
 
 
@@ -1165,6 +1169,8 @@ class OrderChange(EventViewMixin, OrderDetailMixin, TemplateView):
     def formdict(self):
         storage = OrderedDict()
         for pos in self.positions:
+            if self.request.event.settings.change_allow_user_addons and pos.addon_to_id:
+                continue
             if pos.addon_to_id:
                 if pos.addon_to not in storage:
                     storage[pos.addon_to] = []
@@ -1186,10 +1192,11 @@ class OrderChange(EventViewMixin, OrderDetailMixin, TemplateView):
     def positions(self):
         positions = list(
             self.order.positions.select_related('item', 'item__tax_rule').prefetch_related(
-                'item__variations',
+                'item__variations', 'addons',
             )
         )
         quota_cache = {}
+        item_cache = {}
         try:
             ia = self.order.invoice_address
         except InvoiceAddress.DoesNotExist:
@@ -1198,6 +1205,87 @@ class OrderChange(EventViewMixin, OrderDetailMixin, TemplateView):
             p.form = OrderPositionChangeForm(prefix='op-{}'.format(p.pk), instance=p,
                                              invoice_address=ia, event=self.request.event, quota_cache=quota_cache,
                                              data=self.request.POST if self.request.method == "POST" else None)
+
+            if p.addon_to_id is None and self.request.event.settings.change_allow_user_addons:
+                p.addon_form = {
+                    'pos': p,
+                    'categories': []
+                }
+                current_addon_products = defaultdict(list)
+                for a in p.addons.all():
+                    if a.canceled:
+                        continue
+                    if not a.is_bundled:
+                        current_addon_products[a.item_id, a.variation_id].append(a)
+
+                for iao in p.item.addons.all():
+                    ckey = '{}-{}'.format(p.subevent.pk if p.subevent else 0, iao.addon_category.pk)
+
+                    if ckey not in item_cache:
+                        # Get all items to possibly show
+                        items, _btn = get_grouped_items(
+                            self.request.event,
+                            subevent=p.subevent,
+                            voucher=None,
+                            channel=self.order.sales_channel,
+                            base_qs=iao.addon_category.items,
+                            allow_addons=True,
+                            quota_cache=quota_cache,
+                            memberships=(
+                                self.request.customer.usable_memberships(
+                                    for_event=p.subevent or self.request.event,
+                                    testmode=self.order.testmode
+                                )
+                                if self.order.customer else None
+                            ),
+                        )
+                        item_cache[ckey] = items
+                    else:
+                        items = item_cache[ckey]
+
+                    for i in items:
+                        i.allow_waitinglist = False
+
+                        if i.has_variations:
+                            for v in i.available_variations:
+                                v.initial = len(current_addon_products[i.pk, v.pk])
+                                if v.initial and i.free_price:
+                                    a = current_addon_products[i.pk, v.pk][0]
+                                    v.initial_price = TaxedPrice(
+                                        net=a.price - a.tax_value,
+                                        gross=a.price,
+                                        tax=a.tax_value,
+                                        name=a.item.tax_rule.name if a.item.tax_rule else "",
+                                        rate=a.tax_rate,
+                                    )
+                                else:
+                                    v.initial_price = v.display_price
+                            i.expand = any(v.initial for v in i.available_variations)
+                        else:
+                            i.initial = len(current_addon_products[i.pk, None])
+                            if i.initial and i.free_price:
+                                a = current_addon_products[i.pk, None][0]
+                                i.initial_price = TaxedPrice(
+                                    net=a.price - a.tax_value,
+                                    gross=a.price,
+                                    tax=a.tax_value,
+                                    name=a.item.tax_rule.name if a.item.tax_rule else "",
+                                    rate=a.tax_rate,
+                                )
+                            else:
+                                i.initial_price = i.display_price
+
+                    if items:
+                        p.addon_form['categories'].append({
+                            'category': iao.addon_category,
+                            'price_included': iao.price_included,
+                            'multi_allowed': iao.multi_allowed,
+                            'min_count': iao.min_count,
+                            'max_count': iao.max_count,
+                            'iao': iao,
+                            'items': [i for i in items if not i.require_voucher]
+                        })
+
         return positions
 
     def _process_change(self, ocm):
@@ -1241,7 +1329,56 @@ class OrderChange(EventViewMixin, OrderDetailMixin, TemplateView):
                 return False
         return True
 
-    def post(self, *args, **kwargs):
+    def _clean_category(self, form, category):
+        selected = {}
+        for i in category['items']:
+            if i.has_variations:
+                for v in i.available_variations:
+                    val = int(self.request.POST.get(f'cp_{form["pos"].pk}_variation_{i.pk}_{v.pk}') or '0')
+                    price = self.request.POST.get(f'cp_{form["pos"].pk}_variation_{i.pk}_{v.pk}_price') or '0'
+                    if val:
+                        selected[i, v] = val, price
+            else:
+                val = int(self.request.POST.get(f'cp_{form["pos"].pk}_item_{i.pk}') or '0')
+                price = self.request.POST.get(f'cp_{form["pos"].pk}_item_{i.pk}_price') or '0'
+                if val:
+                    selected[i, None] = val, price
+
+        if sum(a[0] for a in selected.values()) > category['max_count']:
+            # TODO: Proper pluralization
+            raise ValidationError(
+                _(error_messages['addon_max_count']),
+                'addon_max_count',
+                {
+                    'base': str(form['pos'].item.name),
+                    'max': category['max_count'],
+                    'cat': str(category['category'].name),
+                }
+            )
+        elif sum(a[0] for a in selected.values()) < category['min_count']:
+            # TODO: Proper pluralization
+            raise ValidationError(
+                _(error_messages['addon_min_count']),
+                'addon_min_count',
+                {
+                    'base': str(form['pos'].item.name),
+                    'min': category['min_count'],
+                    'cat': str(category['category'].name),
+                }
+            )
+        elif any(sum(v[0] for k, v in selected.items() if k[0] == i) > 1 for i in category['items']) and not category['multi_allowed']:
+            raise ValidationError(
+                _(error_messages['addon_no_multi']),
+                'addon_no_multi',
+                {
+                    'base': str(form['pos'].item.name),
+                    'cat': str(category['category'].name),
+                }
+            )
+
+        return selected
+
+    def post(self, request, *args, **kwargs):
         was_paid = self.order.status == Order.STATUS_PAID
         ocm = OrderChangeManager(
             self.order,
@@ -1249,28 +1386,106 @@ class OrderChange(EventViewMixin, OrderDetailMixin, TemplateView):
             notify=True,
             reissue_invoice=True,
         )
-        form_valid = self._process_change(ocm)
+
+        addons_data = []
+        for p in self.positions:
+            if p.addon_to_id or not hasattr(p, 'addon_form'):
+                continue
+            for c in p.addon_form['categories']:
+                try:
+                    selected = self._clean_category(p.addon_form, c)
+                except ValidationError as e:
+                    messages.error(request, e.message % e.params if e.params else e.message)
+                    return self.get(request, *args, **kwargs)
+
+                for (i, v), (c, price) in selected.items():
+                    addons_data.append({
+                        'addon_to': p.pk,
+                        'item': i.pk,
+                        'variation': v.pk if v else None,
+                        'count': c,
+                        'price': price,
+                    })
+        try:
+            ocm.set_addons(addons_data)
+        except OrderError as e:
+            messages.error(self.request, str(e))
+            form_valid = False
+        else:
+            form_valid = self._process_change(ocm)
 
         if not form_valid:
             messages.error(self.request, _('An error occurred. Please see the details below.'))
         else:
             try:
-                ocm.commit(check_quotas=True)
+                self._validate_total_diff(ocm)
             except OrderError as e:
                 messages.error(self.request, str(e))
-            else:
 
-                if self.order.status != Order.STATUS_PAID and was_paid:
-                    messages.success(self.request, _('The order has been changed. You can now proceed by paying the open amount of {amount}.').format(
-                        amount=money_filter(self.order.pending_sum, self.request.event.currency)
-                    ))
-                    return redirect(eventreverse(self.request.event, 'presale:event.order.pay.change', kwargs={
-                        'order': self.order.code,
-                        'secret': self.order.secret
-                    }))
+            if "confirm" in request.POST:
+                try:
+                    ocm.commit(check_quotas=True)
+                except OrderError as e:
+                    messages.error(self.request, str(e))
                 else:
-                    messages.success(self.request, _('The order has been changed.'))
+                    if self.order.pending_sum < Decimal('0.00'):
+                        auto_refund = (
+                            not self.request.event.settings.cancel_allow_user_paid_require_approval
+                            and self.request.event.settings.cancel_allow_user_paid_refund_as_giftcard != "manually"
+                        )
+                        refund_as_giftcard = self.request.event.settings.cancel_allow_user_paid_refund_as_giftcard == 'force'
+                        if auto_refund:
+                            try:
+                                _try_auto_refund(self.order, refund_as_giftcard=refund_as_giftcard)
+                            except OrderError as e:
+                                messages.error(self.request, str(e))
 
+                    if self.order.status != Order.STATUS_PAID and was_paid:
+                        messages.success(self.request, _('The order has been changed. You can now proceed by paying the open amount of {amount}.').format(
+                            amount=money_filter(self.order.pending_sum, self.request.event.currency)
+                        ))
+                        return redirect(eventreverse(self.request.event, 'presale:event.order.pay.change', kwargs={
+                            'order': self.order.code,
+                            'secret': self.order.secret
+                        }))
+                    else:
+                        messages.success(self.request, _('The order has been changed.'))
+
+                    return redirect(self.get_order_url())
+            elif not ocm._operations:
+                messages.info(self.request, _('You did not make any changes.'))
                 return redirect(self.get_order_url())
+            else:
+                new_pending_sum = self.order.pending_sum + ocm._totaldiff
+                can_auto_refund = False
+                if new_pending_sum < Decimal('0.00'):
+                    proposals = self.order.propose_auto_refunds(Decimal('-1.00') * new_pending_sum)
+                    can_auto_refund = sum(proposals.values()) == Decimal('-1.00') * new_pending_sum
 
-        return self.get(*args, **kwargs)
+                return render(request, 'pretixpresale/event/order_change_confirm.html', {
+                    'operations': ocm._operations,
+                    'totaldiff': ocm._totaldiff,
+                    'order': self.order,
+                    'payment_refund_sum': self.order.payment_refund_sum,
+                    'new_pending_sum': new_pending_sum,
+                    'can_auto_refund': can_auto_refund,
+                })
+
+        return self.get(request, *args, **kwargs)
+
+    def _validate_total_diff(self, ocm):
+        if ocm._totaldiff < Decimal('0.00') and self.request.event.settings.change_allow_user_price == 'gte':
+            raise OrderError(_('You may not change your order in a way that reduces the total price.'))
+        if ocm._totaldiff <= Decimal('0.00') and self.request.event.settings.change_allow_user_price == 'gt':
+            raise OrderError(_('You may only change your order in a way that increases the total price.'))
+        if ocm._totaldiff != Decimal('0.00') and self.request.event.settings.change_allow_user_price == 'eq':
+            raise OrderError(_('You may not change your order in a way that changes the total price.'))
+
+        if ocm._totaldiff > Decimal('0.00') and self.order.status == Order.STATUS_PAID:
+            self.order.set_expires(
+                now(),
+                self.order.event.subevents.filter(id__in=self.order.positions.values_list('subevent_id', flat=True))
+            )
+            if self.order.expires < now():
+                raise OrderError(_('You may not change your order in a way that increases the total price since '
+                                   'payments are no longer being accepted for this event.'))

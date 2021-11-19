@@ -1301,6 +1301,15 @@ DEFAULTS = {
             label=_("Customers can change the variation of the products they purchased"),
         )
     },
+    'change_allow_user_addons': {
+        'default': 'False',
+        'type': bool,
+        'form_class': forms.BooleanField,
+        'serializer_class': serializers.BooleanField,
+        'form_kwargs': dict(
+            label=_("Customers can change their selected add-on products"),
+        )
+    },
     'change_allow_user_price': {
         'default': 'gte',
         'type': str,

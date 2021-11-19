@@ -581,6 +581,7 @@ class Order(LockModel, LoggedModel):
         Returns whether or not this order can be canceled by the user.
         """
         from .checkin import Checkin
+        from .items import ItemAddOn
 
         if self.status not in (Order.STATUS_PENDING, Order.STATUS_PAID) or not self.count_positions:
             return False
@@ -606,7 +607,10 @@ class Order(LockModel, LoggedModel):
         if self.user_change_deadline and now() > self.user_change_deadline:
             return False
 
-        return self.event.settings.change_allow_user_variation and any([op.has_variations for op in positions])
+        return (
+            (self.event.settings.change_allow_user_variation and any([op.has_variations for op in positions])) or
+            (self.event.settings.change_allow_user_addons and ItemAddOn.objects.filter(base_item_id__in=[op.item_id for op in positions]).exists())
+        )
 
     @property
     @scopes_disabled()
@@ -1306,6 +1310,7 @@ class AbstractPosition(models.Model):
     seat = models.ForeignKey(
         'Seat', null=True, blank=True, on_delete=models.PROTECT
     )
+    is_bundled = models.BooleanField(default=False)
 
     company = models.CharField(max_length=255, blank=True, verbose_name=_('Company name'), null=True)
     street = models.TextField(verbose_name=_('Address'), blank=True, null=True)
@@ -2566,7 +2571,6 @@ class CartPosition(AbstractPosition):
         max_digits=10, decimal_places=2,
         null=True, blank=True
     )
-    is_bundled = models.BooleanField(default=False)
 
     objects = ScopedManager(organizer='event__organizer')
 
