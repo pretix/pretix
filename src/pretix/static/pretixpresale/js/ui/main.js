@@ -527,7 +527,6 @@ $(function () {
 
             $(".day-timeline > li", this).each(function() {
                 var s = window.getComputedStyle(this);
-                console.log(s.getPropertyValue('grid-column-start'));
 
                 var offset = this.getAttribute("data-offset").split(":");
                 var duration = this.getAttribute("data-duration").split(":");
