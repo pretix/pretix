@@ -26,7 +26,9 @@ from django.views.generic import ListView
 
 from pretix.base.models import Order, OrderPosition
 from pretix.base.models.orders import CancellationRequest, OrderPayment
-from pretix.control.forms.filter import OrderSearchFilterForm, OrderPaymentSearchFilterForm
+from pretix.control.forms.filter import (
+    OrderPaymentSearchFilterForm, OrderSearchFilterForm,
+)
 from pretix.control.views import LargeResultSetPaginator, PaginationMixin
 
 

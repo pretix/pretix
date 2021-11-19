@@ -42,56 +42,71 @@
             <thead>
             <tr>
                 <th>
-                    {% trans "Status" %}
-                    <a href="?{% url_replace request 'ordering' '-status' %}"><i class="fa fa-caret-down"></i></a>
-                    <a href="?{% url_replace request 'ordering' 'status' %}"><i class="fa fa-caret-up"></i></a>
-                </th>
-                <th>
-                    {% trans "Payment" %}
+                    #
                     <a href="?{% url_replace request 'ordering' '-payment' %}"><i class="fa fa-caret-down"></i></a>
                     <a href="?{% url_replace request 'ordering' 'payment' %}"><i class="fa fa-caret-up"></i></a>
                 </th>
                 <th>
-                    {% trans "Order" %}
+                    {% trans "Related order" %}
                     <a href="?{% url_replace request 'ordering' '-order' %}"><i class="fa fa-caret-down"></i></a>
                     <a href="?{% url_replace request 'ordering' 'order' %}"><i class="fa fa-caret-up"></i></a>
                 </th>
                 <th>
-                    {% trans "Amount" %}
-                    <a href="?{% url_replace request 'ordering' '-amount' %}"><i class="fa fa-caret-down"></i></a>
-                    <a href="?{% url_replace request 'ordering' 'amount' %}"><i class="fa fa-caret-up"></i></a>
+                    {% trans "Start date" %}
+                    <a href="?{% url_replace request 'ordering' '-sdate' %}"><i class="fa fa-caret-down"></i></a>
+                    <a href="?{% url_replace request 'ordering' 'sdate' %}"><i class="fa fa-caret-up"></i></a>
                 </th>
                 <th>
-                    {% trans "Fee" %}
-                    <a href="?{% url_replace request 'ordering' '-fee' %}"><i class="fa fa-caret-down"></i></a>
-                    <a href="?{% url_replace request 'ordering' 'fee' %}"><i class="fa fa-caret-up"></i></a>
+                    {% trans "Confirmation date" %}
+                    <a href="?{% url_replace request 'ordering' '-cdate' %}"><i class="fa fa-caret-down"></i></a>
+                    <a href="?{% url_replace request 'ordering' 'cdate' %}"><i class="fa fa-caret-up"></i></a>
                 </th>
                 <th>
-                    {% trans "Provider" %}
+                    {% trans "Payment method" %}
                     <a href="?{% url_replace request 'ordering' '-provider' %}"><i class="fa fa-caret-down"></i></a>
                     <a href="?{% url_replace request 'ordering' 'provider' %}"><i class="fa fa-caret-up"></i></a>
                 </th>
                 <th>
-                    {% trans "Date" %}
-                    <a href="?{% url_replace request 'ordering' '-date' %}"><i class="fa fa-caret-down"></i></a>
-                    <a href="?{% url_replace request 'ordering' 'date' %}"><i class="fa fa-caret-up"></i></a>
+                    {% trans "Status" %}
+                    <a href="?{% url_replace request 'ordering' '-status' %}"><i class="fa fa-caret-down"></i></a>
+                    <a href="?{% url_replace request 'ordering' 'status' %}"><i class="fa fa-caret-up"></i></a>
+                </th>
+                <th class="text-right flip">
+                    {% trans "Amount" %}
+                    <a href="?{% url_replace request 'ordering' '-amount' %}"><i class="fa fa-caret-down"></i></a>
+                    <a href="?{% url_replace request 'ordering' 'amount' %}"><i class="fa fa-caret-up"></i></a>
                 </th>
             </tr>
             </thead>
             <tbody>
             {% for p in payments %}
                 <tr>
-                    <td>{{ p.state }}</td>
                     <td>{{ p }}</td>
                     <td>{{ p.order }}</td>
-                    <td>{{ p.amount }}</td>
-                    <td>{{ p.fee }}</td>
-                    <td>{{ p.provider }}</td>
-                    <td>{{ p.created }}</td>
+                    <td>{{ p.created|date:"SHORT_DATETIME_FORMAT" }}</td>
+                    <td>{{ p.payment_date|date:"SHORT_DATETIME_FORMAT" }}</td>
+                    <td>{{ p.payment_provider.verbose_name }}</td>
+                    <td>
+                        <span class="label label-{% if p.state == "created" or p.state == "pending" %}warning{% elif p.state == "confirmed" %}success{% else %}danger{% endif %}">
+                            {{ p.get_state_display }}
+                        </span>
+                    </td>
+                    <td class="text-right flip">{{ p.amount|money:p.order.event.currency }}</td>
                 </tr>
+            {% if staff_session %}
+                <tr>
+                    <td colspan="1"></td>
+                    <td colspan="6">
+                        <a href="" class="btn btn-default btn-xs" data-expandpayment data-id="{{ p.pk }}">
+                            <span class="fa-eye fa fa-fw"></span>
+                            {% trans "Inspect" %}
+                        </a>
+                    </td>
+                </tr>
+            {% endif %}
             {% empty %}
                 <tr>
-                    <td colspan="6" class="text-center"><em>
+                    <td colspan="7" class="text-center"><em>
                         {% trans "We couldn't find any payments that you have access to and that match your search query." %}
                     </em></td>
                 </tr>
