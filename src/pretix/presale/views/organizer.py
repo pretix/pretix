@@ -31,13 +31,15 @@
 # Unless required by applicable law or agreed to in writing, software distributed under the Apache License 2.0 is
 # distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations under the License.
-
 import calendar
 import hashlib
+import math
 from collections import defaultdict
 from datetime import date, datetime, time, timedelta
+from functools import reduce
 from urllib.parse import quote
 
+import dateutil
 import isoweek
 import pytz
 from django.conf import settings
@@ -376,6 +378,10 @@ class OrganizerIndex(OrganizerViewMixin, EventListMixin, ListView):
             cv = CalendarView()
             cv.request = request
             return cv.get(request, *args, **kwargs)
+        elif style == "day":
+            cv = DayCalendarView()
+            cv.request = request
+            return cv.get(request, *args, **kwargs)
         elif style == "week":
             cv = WeekCalendarView()
             cv.request = request
@@ -439,6 +445,11 @@ def add_events_for_days(request, baseqs, before, after, ebd, timezones):
                         if (date_to == date_from or (
                             date_to == date_from + timedelta(days=1) and datetime_to.time() < datetime_from.time()
                         )) and event.settings.show_times
+                        else None
+                    ),
+                    'time_end_today': (
+                        datetime_to.time().replace(tzinfo=None)
+                        if date_to == d and event.settings.show_times
                         else None
                     ),
                     'url': eventreverse(event, 'presale:event.index'),
@@ -514,6 +525,11 @@ def add_subevents_for_days(qs, before, after, ebd, timezones, event=None, cart_n
                         if (date_to == date_from or (
                             date_to == date_from + timedelta(days=1) and datetime_to.time() < datetime_from.time()
                         )) and s.show_times
+                        else None
+                    ),
+                    'time_end_today': (
+                        datetime_to.time().replace(tzinfo=None)
+                        if date_to == d and s.show_times
                         else None
                     ),
                     'event': se,
@@ -693,6 +709,334 @@ class WeekCalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
         ctx['multiple_timezones'] = self._multiple_timezones
 
         return ctx
+
+    def _events_by_day(self, before, after):
+        ebd = defaultdict(list)
+        timezones = set()
+        add_events_for_days(self.request, Event.annotated(self.request.organizer.events, 'web').using(
+            settings.DATABASE_REPLICA
+        ).filter(
+            sales_channels__contains=self.request.sales_channel.identifier
+        ), before, after, ebd, timezones)
+        add_subevents_for_days(filter_qs_by_attr(SubEvent.annotated(SubEvent.objects.filter(
+            event__organizer=self.request.organizer,
+            event__is_public=True,
+            event__live=True,
+            event__sales_channels__contains=self.request.sales_channel.identifier
+        ).prefetch_related(
+            'event___settings_objects', 'event__organizer___settings_objects'
+        )), self.request).using(settings.DATABASE_REPLICA), before, after, ebd, timezones)
+        self._multiple_timezones = len(timezones) > 1
+        return ebd
+
+
+class DayCalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
+    template_name = 'pretixpresale/organizers/calendar_day.html'
+
+    def _set_date_to_next_event(self):
+        next_ev = filter_qs_by_attr(Event.objects.using(settings.DATABASE_REPLICA).filter(
+            Q(date_from__gte=now()) | Q(date_to__isnull=False, date_to__gte=now()),
+            organizer=self.request.organizer,
+            live=True,
+            is_public=True,
+            date_from__gte=now(),
+        ), self.request).order_by('date_from').first()
+        next_sev = filter_qs_by_attr(SubEvent.objects.using(settings.DATABASE_REPLICA).filter(
+            Q(date_from__gte=now()) | Q(date_to__isnull=False, date_to__gte=now()),
+            event__organizer=self.request.organizer,
+            event__is_public=True,
+            event__live=True,
+            active=True,
+            is_public=True,
+        ), self.request).select_related('event').order_by('date_from').first()
+
+        datetime_from = None
+        if (next_ev and next_sev and next_sev.date_from < next_ev.date_from) or (next_sev and not next_ev):
+            datetime_from = next_sev.date_from
+            next_ev = next_sev.event
+        elif next_ev:
+            datetime_from = next_ev.date_from
+
+        if datetime_from:
+            self.tz = pytz.timezone(next_ev.settings.timezone)
+            self.date = datetime_from.astimezone(self.tz).date()
+        else:
+            self.tz = self.request.organizer.timezone
+            self.date = now().astimezone(self.tz).date()
+
+    def _set_date(self):
+        if 'date' in self.request.GET:
+            self.tz = self.request.organizer.timezone
+            try:
+                self.date = dateutil.parser.parse(self.request.GET.get('date')).date()
+            except ValueError:
+                self.date = now().astimezone(self.tz).date()
+        else:
+            self._set_date_to_next_event()
+
+    def get(self, request, *args, **kwargs):
+        self._set_date()
+        return super().get(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data()
+
+        before = datetime(
+            self.date.year, self.date.month, self.date.day, 0, 0, 0, tzinfo=UTC
+        ) - timedelta(days=1)
+        after = datetime(
+            self.date.year, self.date.month, self.date.day, 0, 0, 0, tzinfo=UTC
+        ) + timedelta(days=1)
+
+        ctx['date'] = self.date
+        ctx['cal_tz'] = self.tz
+        ctx['before'] = before
+        ctx['after'] = after
+
+        ctx['has_before'], ctx['has_after'] = has_before_after(
+            self.request.organizer.events.filter(
+                sales_channels__contains=self.request.sales_channel.identifier
+            ),
+            SubEvent.objects.filter(
+                event__organizer=self.request.organizer,
+                event__is_public=True,
+                event__live=True,
+                event__sales_channels__contains=self.request.sales_channel.identifier
+            ),
+            before,
+            after,
+        )
+
+        ebd = self._events_by_day(before, after)
+        if not ebd[self.date]:
+            return ctx
+
+        events = ebd[self.date]
+        shortest_duration = self._get_shortest_duration(events).total_seconds() // 60
+        # pick the next biggest tick_duration based on shortest_duration, max. 180 minutes
+        tick_duration = next((d for d in [5, 10, 15, 30, 60, 120, 180] if d >= shortest_duration), 180)
+
+        raster_size = min(self._get_raster_size(events), tick_duration)
+        events, start, end = self._rasterize_events(events, tick_duration=tick_duration, raster_size=raster_size)
+        calendar_duration = self._get_time_duration(start, end)
+        ctx["calendar_duration"] = self._format_duration(calendar_duration)
+        ctx['time_ticks'] = self._get_time_ticks(start, end, tick_duration)
+        ctx['start'] = datetime.combine(self.date, start)
+        ctx['raster_size'] = raster_size
+        # ctx['end'] = end
+        # size of each grid-column is based on shortest event duration and raster_size
+        # raster_size is based on start/end times, so it could happen we have a small raster but long running events
+        # raster_size will always be smaller or equals tick_duration
+        ctx['raster_to_shortest_ratio'] = round((8 * raster_size) / shortest_duration)
+
+        ctx['events'] = events
+
+        events_by_series = self._grid_for_template(events)
+        ctx['collections'] = events_by_series
+        ctx['no_headlines'] = not any([series for series, events in events_by_series])
+        ctx['multiple_timezones'] = self._multiple_timezones
+        return ctx
+
+    def _get_raster_size(self, events):
+        # get best raster-size for min. # of columns in grid
+        # due to grid-col-calculations in CSS raster_size cannot be bigger than 60 (minutes)
+
+        # all start- and end-times (minute-part) except full hour
+        times = [
+            e["time"].minute for e in events if e["time"] and e["time"].minute
+        ] + [
+            e["time_end_today"].minute for e in events if "time_end_today" in e and e["time_end_today"] and e["time_end_today"].minute
+        ]
+        if not times:
+            # no time other than full hour, so raster can be 1 hour/60 minutes
+            return 60
+        gcd = reduce(math.gcd, set(times))
+        return next((d for d in [5, 10, 15, 30, 60] if d >= gcd), 60)
+
+    def _get_time_duration(self, start, end):
+        midnight = time(0, 0)
+        return datetime.combine(
+            self.date if end != midnight else self.date + timedelta(days=1),
+            end
+        ) - datetime.combine(
+            self.date,
+            start
+        )
+
+    def _format_duration(self, duration):
+        return ":".join([
+            "%02d" % i for i in (
+                (duration.days * 24) + (duration.seconds // 3600),
+                (duration.seconds // 60) % 60
+            )
+        ])
+
+    def _floor_time(self, t, raster_size=5):
+        # raster_size based on minutes, might be factored into a helper class with a timedelta as raster
+        minutes = t.hour * 60 + t.minute
+        if minutes % raster_size:
+            minutes = (minutes // raster_size) * raster_size
+            return t.replace(hour=minutes // 60, minute=minutes % 60)
+        return t
+
+    def _ceil_time(self, t, raster_size=5):
+        # raster_size based on minutes, might be factored into a helper class with a timedelta as raster
+        minutes = t.hour * 60 + t.minute
+        if not minutes % raster_size:
+            return t
+        minutes = math.ceil(minutes / raster_size) * raster_size
+        minute = minutes % 60
+        hour = minutes // 60
+        if hour > 23:
+            hour = hour % 24
+        return t.replace(minute=minute, hour=hour)
+
+    def _rasterize_events(self, events, tick_duration, raster_size=5):
+        rastered_events = []
+        start, end = self._get_time_range(events)
+        start = self._floor_time(start, raster_size=tick_duration)
+        end = self._ceil_time(end, raster_size=tick_duration)
+
+        midnight = time(0, 0)
+        for e in events:
+            e["offset_shift_start"] = 0
+            if e["continued"]:
+                e["time_rastered"] = midnight
+            elif e["time"].minute % raster_size:
+                e["time_rastered"] = e["time"].replace(minute=(e["time"].minute // raster_size) * raster_size)
+                e["offset_shift_start"] = e["time"].minute % raster_size
+            else:
+                e["time_rastered"] = e["time"]
+
+            e["offset_shift_end"] = 0
+            if "time_end_today" in e and e["time_end_today"]:
+                if e["time_end_today"].minute % raster_size:
+                    minute = math.ceil(e["time_end_today"].minute / raster_size) * raster_size
+                    hour = e["time_end_today"].hour
+                    if minute > 59:
+                        minute = minute % 60
+                        hour = (hour + 1) % 24
+                    e["time_end_today_rastered"] = e["time_end_today"].replace(minute=minute, hour=hour)
+                    e["offset_shift_end"] = raster_size - e["time_end_today"].minute % raster_size
+                else:
+                    e["time_end_today_rastered"] = e["time_end_today"]
+            else:
+                e["time_end_today"] = e["time_end_today_rastered"] = time(0, 0)
+
+            e["duration_rastered"] = self._format_duration(datetime.combine(
+                self.date if e["time_end_today_rastered"] != midnight else self.date + timedelta(days=1),
+                e["time_end_today_rastered"]
+            ) - datetime.combine(
+                self.date,
+                e['time_rastered']
+            ))
+
+            e["offset_rastered"] = datetime.combine(self.date, time(0, 0)) + self._get_time_duration(start, e["time_rastered"])
+
+            rastered_events.append(e)
+
+        return rastered_events, start, end
+
+    def _get_shortest_duration(self, events):
+        midnight = time(0, 0)
+        durations = [
+            datetime.combine(
+                self.date if e.get('time_end_today') and e['time_end_today'] != midnight else self.date + timedelta(days=1),
+                e['time_end_today'] if e.get('time_end_today') else time(0, 0)
+            )
+            -
+            datetime.combine(
+                self.date,
+                time(0, 0) if e['continued'] else e['time']
+            )
+            for e in events
+        ]
+        return min([d for d in durations])
+
+    def _get_time_range(self, events):
+        if any(e['continued'] for e in events) or any(e['time'] is None for e in events):
+            starting_at = time(0, 0)
+        else:
+            starting_at = min(e['time'] for e in events)
+
+        if any(e.get('time_end_today') is None for e in events):
+            ending_at = time(0, 0)
+        else:
+            ending_at = max(e['time_end_today'] for e in events)
+
+        return starting_at, ending_at
+
+    def _get_time_ticks(self, start, end, tick_duration):
+        ticks = []
+        tick_duration = timedelta(minutes=tick_duration)
+
+        # convert time to datetime for timedelta calc
+        start = datetime.combine(self.date, start)
+        end = datetime.combine(self.date, end)
+        if end <= start:
+            end = end + timedelta(days=1)
+
+        tick_start = start
+        offset = datetime.utcfromtimestamp(0)
+        duration = datetime.utcfromtimestamp(tick_duration.total_seconds())
+        while tick_start < end:
+            tick = {
+                "start": tick_start,
+                "duration": duration,
+                "offset": offset,
+            }
+            ticks.append(tick)
+            tick_start += tick_duration
+            offset += tick_duration
+
+        return ticks
+
+    def _grid_for_template(self, events):
+        midnight = time(0, 0)
+        rows_by_collection = defaultdict(list)
+
+        # We sort the events into "collections": all subevents from the same
+        # event series together and all non-series events into a "None"
+        # collection. Then, we look if there's already an event in the
+        # collection that overlaps, in which case we need to split the
+        # collection into multiple rows.
+        for counter, e in enumerate(events):
+            collection = e['event'].event if isinstance(e['event'], SubEvent) else None
+
+            placed_in_row = False
+            for row in rows_by_collection[collection]:
+                if any(
+                    (e['time_rastered'] < o['time_end_today_rastered'] or o['time_end_today_rastered'] == midnight) and
+                    (o['time_rastered'] < e['time_end_today_rastered'] or e['time_end_today_rastered'] == midnight)
+                    for o in row
+                ):
+                    continue
+                row.append(e)
+                placed_in_row = True
+                break
+
+            if not placed_in_row:
+                rows_by_collection[collection].append([e])
+
+        # flatten rows to one stream of events with attribute row
+        # for better keyboard-tab-order in html
+        for collection in rows_by_collection:
+            for i, row in enumerate(rows_by_collection[collection]):
+                concurrency = i + 1
+                for e in row:
+                    e["concurrency"] = concurrency
+            rows_by_collection[collection] = {
+                "concurrency": len(rows_by_collection[collection]),
+                "events": sorted([e for row in rows_by_collection[collection] for e in row], key=lambda d: d['time'] or time(0, 0)),
+            }
+
+        def sort_key(c):
+            collection, row = c
+            if collection is None:
+                return ''
+            else:
+                return str(collection.name)
+        return sorted(rows_by_collection.items(), key=sort_key)
 
     def _events_by_day(self, before, after):
         ebd = defaultdict(list)

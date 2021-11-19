@@ -1,0 +1,123 @@
+{% load i18n %}
+{% load eventurl %}
+<div class="day-calendar cal-size-{{ raster_to_shortest_ratio }}{% if no_headlines %} no-headlines{% endif %}"
+    data-raster-size="{{ raster_size }}"
+    data-duration="{{ calendar_duration }}"
+    data-start="{{ start|date:"c" }}"
+    data-timezone="{{ cal_tz }}">
+    <h3 aria-hidden="true" class="day-row-name"><span hidden>{% trans "Time of day" %}</span></h3>
+    <ul aria-hidden="true" class="day-timeline ticks">
+    {% for t in time_ticks %}
+        <li data-offset="{{ t.offset|date:"H:i" }}"
+            data-duration="{{ t.duration|date:"H:i" }}"
+            data-start="{{ t.start|date:"H:i" }}"
+            class="text-muted">{{ t.start|date:"TIME_FORMAT" }}</li>
+    {% endfor %}
+    </ul>
+    {% for series, collection in collections %}
+        <h3 class="day-row-name">
+        {% if series %}
+            <a href="{% eventurl series "presale:event.index" %}">
+            {{ series.name }}
+            </a>
+        {% else %}
+            <span class="sr-only">{% trans "Single events" context "day calendar" %}</span>
+        {% endif %}
+        </h3>
+        <ul class="day-timeline" data-concurrency="{{ collection.concurrency }}">
+        {% for t in time_ticks %}
+            {% if not forloop.counter|divisibleby:2 %}
+                <li data-offset="{{ t.offset|date:"H:i" }}"
+                    data-duration="{{ t.duration|date:"H:i" }}" class="tick">&nbsp;</li>
+            {% endif %}
+        {% endfor %}
+
+        {% for event in collection.events %}
+            <li data-offset="{{ event.offset_rastered|date:"H:i" }}"
+                data-offset-shift="{{ event.offset_shift_start }}:{{ event.offset_shift_end }}"
+                data-duration="{{ event.duration_rastered }}"
+                data-concurrency="{{ event.concurrency }}">
+                <a class="event {% if event.continued %}continued{% else %} {% spaceless %}
+    {% if event.event.presale_is_running and show_avail %}
+        {% if event.event.best_availability_state == 100 %}
+            available
+        {% elif event.event.settings.waiting_list_enabled and event.event.best_availability_state >= 0 %}
+            waitinglist
+        {% elif event.event.best_availability_state == 20 %}
+            reserved
+        {% elif event.event.best_availability_state < 20 %}
+            soldout
+        {% endif %}
+    {% elif event.event.presale_is_running %}
+        running
+    {% elif event.event.presale_has_ended %}
+        over
+    {% elif event.event.settings.presale_start_show_date and event.event.presale_start %}
+        soon
+    {% else %}
+        soon
+    {% endif %}
+{% endspaceless %}{% endif %}"
+                   href="{{ event.url }}">
+                    {% if show_names|default_if_none:True %}
+                        <span class="event-name">
+                                {{ event.event.name }}
+                            </span>
+                    {% endif %}
+                    {% if not event.continued %}
+                        {% if event.time %}
+                            <span class="event-time" data-time="{{ event.event.date_from.isoformat }}"
+                                  data-timezone="{{ event.timezone }}" data-time-short>
+                                    <span class="fa fa-clock-o" aria-hidden="true"></span>
+                                {% if not show_names|default_if_none:True %}
+                                    <strong>
+                                {% endif %}
+                                <time datetime="{{ event.time|date:"H:i" }}">{{ event.time|date:"TIME_FORMAT" }}</time>
+                                {% if event.time_end %}
+                                    <span role="img" aria-label="{% trans "to" context "timerange" %}">–</span>
+                                    <time datetime="{{ event.time_end|date:"H:i" }}">{{ event.time_end|date:"TIME_FORMAT" }}</time>
+                                {% endif %}
+                                {% if not show_names|default_if_none:True %}
+                                    </strong>
+                                {% endif %}
+                                {% if multiple_timezones %}
+                                    {{ event.timezone }}
+                                {% endif %}
+                                </span>
+                        {% endif %}
+                        <span class="event-status">
+                            {% if event.event.presale_is_running and show_avail %}
+                                {% if event.event.best_availability_state == 100 %}
+                                    <span class="fa fa-ticket" aria-hidden="true"></span> {% trans "Book now" %}
+                                    {% elif event.event.settings.waiting_list_enabled and event.event.best_availability_state >= 0 %}
+                                    <span class="fa fa-ticket" aria-hidden="true"></span> {% trans "Waiting list" %}
+                                    {% elif event.event.best_availability_state == 20 %}
+                                    <span class="fa fa-ticket" aria-hidden="true"></span> {% trans "Reserved" %}
+                                    {% elif event.event.best_availability_state < 20 %}
+                                    {% if event.event.has_paid_item %}
+                                        <span class="fa fa-ticket" aria-hidden="true"></span> {% trans "Sold out" %}
+                                    {% else %}
+                                        <span class="fa fa-ticket" aria-hidden="true"></span>
+                                        {% trans "Fully booked" %}
+                                    {% endif %}
+                                {% endif %}
+                            {% elif event.event.presale_is_running %}
+                                <span class="fa fa-ticket" aria-hidden="true"></span> {% trans "Book now" %}
+                                {% elif event.event.presale_has_ended %}
+                                <span class="fa fa-ticket" aria-hidden="true"></span> {% trans "Sale over" %}
+                                {% elif event.event.settings.presale_start_show_date and event.event.presale_start %}
+                                <span class="fa fa-ticket" aria-hidden="true"></span>
+                                {% blocktrans with start_date=event.event.presale_start|date:"SHORT_DATE_FORMAT" %}
+                                    from {{ start_date }}
+                                {% endblocktrans %}
+                            {% else %}
+                                <span class="fa fa-ticket" aria-hidden="true"></span> {% trans "Soon" %}
+                            {% endif %}
+                        </span>
+                    {% endif %}
+                </a>
+            </li>
+        {% endfor %}
+        </ul>
+    {% endfor %}
+</div>

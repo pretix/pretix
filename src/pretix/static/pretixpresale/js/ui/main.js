@@ -315,7 +315,11 @@ $(function () {
     $("#monthselform select").change(function () {
         $(this).closest("form").get(0).submit();
     });
-
+    $("#monthselform input").on("dp.change", function () {
+        if ($(this).data("DateTimePicker")) {  // prevent submit after dp init
+            this.form.submit();
+        }
+    });
     var update_cart_form = function () {
         var is_enabled = $(".product-row input[type=checkbox]:checked, .variations input[type=checkbox]:checked, .product-row input[type=radio]:checked, .variations input[type=radio]:checked").length;
         if (!is_enabled) {
@@ -468,9 +472,11 @@ $(function () {
     $("span[data-timezone], small[data-timezone]").each(function() {
         var t = moment.tz($(this).attr("data-time"), $(this).attr("data-timezone"))
         var tz = moment.tz.zone($(this).attr("data-timezone"))
+        var tpl = '<div class="tooltip" role="tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner text-nowrap"></div></div>';
 
         $(this).tooltip({
-            'title': gettext("Time zone:") + " " + tz.abbr(t)
+            "title": gettext("Time zone:") + " " + tz.abbr(t),
+            "template": tpl
         });
         if (t.tz(tz.name).format() !== t.tz(local_tz).format()) {
             var $add = $("<span>")
@@ -488,7 +494,8 @@ $(function () {
             }
             $add.insertAfter($(this));
             $add.tooltip({
-                'title': gettext("Time zone:") + " " + moment.tz.zone(local_tz).abbr(t),
+                "title": gettext("Time zone:") + " " + moment.tz.zone(local_tz).abbr(t),
+                "template": tpl
             });
         }
     });
@@ -500,6 +507,80 @@ $(function () {
             $(this).prop("open", false);
         });
     }
+
+    // Day calendar
+    $(".day-calendar [data-concurrency]").each(function() {
+        var c = parseInt(this.getAttribute("data-concurrency"), 10);
+        if (c > 9) this.style.setProperty('--concurrency', c);
+    })
+    $(".day-calendar").each(function() {
+        var timezone = this.getAttribute("data-timezone");
+        var startTime = moment.tz(this.getAttribute("data-start"), timezone);
+
+        var currentTime = moment().tz(timezone);
+        if (!currentTime.isSame(startTime, 'day')) {
+            // Not on same day
+            return;
+        }
+
+        // scroll to best matching tick
+        var currentTimeCmp = parseInt(currentTime.format("Hmm"), 10);
+        var ticks = this.querySelectorAll(".ticks li");
+        var currentTick;
+        var t;
+        for (var i=0, max=ticks.length; i < max; i++) {
+            currentTick = ticks[i]
+            t = parseInt(currentTick.getAttribute("data-start").replace(":", ""), 10);
+            if (t > currentTimeCmp) {
+                break;
+            }
+        }
+        currentTick.scrollIntoView({behavior:"smooth", inline: "center"});
+
+
+        var thisCalendar = this;
+        var currentTimeInterval;
+
+        var timeFormat = document.body.getAttribute("data-timeformat");
+        var timeFormatParts = timeFormat.match(/([a-zA-Z_\s]+)([^a-zA-Z_\s])(.*)/);
+        if (!timeFormatParts) timeFormatParts = [timeFormat];
+        if (timeFormatParts.length > 1) timeFormatParts.shift();
+        var currentTimeBar = $('<div class="current-time-bar" aria-hidden="true"><time></time></div>').appendTo(this);
+        var currentTimeDisplay = currentTimeBar.find("time");
+        var currentTimeDisplayParts = [];
+        timeFormatParts.forEach(function(format) {
+            currentTimeDisplayParts.push([format, $("<span></span>").appendTo(currentTimeDisplay)])
+        }); 
+        var duration = this.getAttribute("data-duration").split(":").reduce(function(previousValue, currentValue, currentIndex) {
+            return previousValue + (currentIndex ? parseInt(currentValue, 10) * 60 : parseInt(currentValue, 10) * 60 * 60);
+        }, 0);
+        function setCurrentTimeBar() {
+            var currentTime = moment().tz(timezone);
+            var currentTimeDelta = Math.floor((currentTime - startTime)/1000);
+            if (currentTimeDelta < 0 || currentTimeDelta > duration) {
+                // Too early || Too late
+                window.clearInterval(currentTimeInterval);
+                currentTimeBar.remove();
+                return;
+            }
+            
+            var offset = thisCalendar.querySelector("h3").getBoundingClientRect().width;
+            var dx = Math.round(offset + (thisCalendar.scrollWidth-offset)*(currentTimeDelta/duration));
+            currentTimeDisplayParts.forEach(function(part) {
+                part[1].text(currentTime.format(part[0]));
+            });
+            if (currentTimeDisplay.get(0).getBoundingClientRect().width + dx >= thisCalendar.scrollWidth) {
+                currentTimeBar.addClass("swap-side");
+            }
+            else {
+                currentTimeBar.removeClass("swap-side");
+            }
+            thisCalendar.style.setProperty('--current-time-offset', dx + "px");
+        }
+        currentTimeInterval = window.setInterval(setCurrentTimeBar, 15*1000);
+        $(window).on("resize", setCurrentTimeBar);
+        setCurrentTimeBar();
+    });
 
     // Lightbox
     lightbox.init();

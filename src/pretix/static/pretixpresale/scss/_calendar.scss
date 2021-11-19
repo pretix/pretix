@@ -1,4 +1,4 @@
-.table-calendar, .week-calendar {
+.table-calendar, .week-calendar, .day-calendar {
   td, th {
     width: 14.29%;
   }
@@ -113,6 +113,266 @@
     display: none;
   }
 }
+
+
+
+
+.day-calendar {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 7fr;
+  gap: 0;
+  overflow-x: auto;
+  margin-bottom: 10px;
+  padding-bottom: 16px;  /* use padding to make space for link focus-outline and overlayed scrollbar */
+}
+.cal-size-8 {--col-min-size: 9em}
+.cal-size-7 {--col-min-size: 7.8em}
+.cal-size-6 {--col-min-size: 6.6em}
+.cal-size-5 {--col-min-size: 5.4em}
+.cal-size-4 {--col-min-size: 4.2em}
+.cal-size-3 {--col-min-size: 3em}
+.cal-size-2 {--col-min-size: 1.8em}
+.cal-size-1 {--col-min-size: 0.6em}
+.cal-size-0 {--col-min-size: 0.6em}
+
+.day-calendar .current-time-bar {
+  position: absolute;
+  top: 4px;
+  left: -2px;
+  height: calc(100% - 10px);  /* remove 5px padding for link focus-outline */
+  width: 1px;
+  background-color: $brand-primary;
+  outline: 1px solid #fff;
+  transform: translateX(var(--current-time-offset, 0));
+}
+[dir=rtl] .day-calendar .current-time-bar {
+  left: auto;
+  right: -2px;
+  transform: translateX(calc(-1 * var(--current-time-offset, 0)));
+}
+.day-calendar .current-time-bar time {
+  background: $brand-primary;
+  position: absolute;
+  top: 0;
+  color: #fff;
+  padding: 1px 3px;
+  white-space: nowrap;
+  text-align: center;
+}
+.day-calendar .current-time-bar time,
+[dir=rtl] .day-calendar .current-time-bar.swap-side time {
+  left: 0;
+}
+.day-calendar .current-time-bar.swap-side time,
+[dir=rtl] .day-calendar .current-time-bar time {
+  left: auto;
+  right: 0;
+}
+
+
+.day-calendar.no-headlines {
+  display: block;
+}
+.day-calendar.no-headlines h3 {
+  display: none;
+}
+
+
+.day-calendar .current-time-bar time span:nth-child(2) {
+  animation: watch-blinker 2s step-end infinite;
+}
+@-webkit-keyframes watch-blinker {
+  0% { visibility: visible; }
+  75% { visibility: hidden; }
+}
+
+@-moz-keyframes watch-blinker {
+  0% { visibility: visible; }
+  75% { visibility: hidden; }
+}
+
+@keyframes watch-blinker {
+  0% { visibility: visible; }
+  75% { visibility: hidden; }
+}
+
+.day-row-name {
+  position: sticky;
+  left: 0;
+  margin: 0;
+  padding: 3px 8px 3px 0;
+  background-color: rgba(255,255,255,.9);
+  white-space: nowrap;
+  z-index: 10;
+}
+
+.day-calendar a.event {
+  margin: 1px;
+}
+.day-calendar a.event .event-time {
+  display: inline;
+}
+
+[data-raster-size="5"]  {--raster-size: 5}
+[data-raster-size="10"] {--raster-size: 10}
+[data-raster-size="15"] {--raster-size: 15}
+[data-raster-size="30"] {--raster-size: 30}
+[data-raster-size="60"] {--raster-size: 60}
+
+/*
+concurrency has two meanings:
+  on .day-timeline it means total nummber concurrently running events at any given time
+  on .day-timeline>li it means the current concurrency of this li-element
+if concurrency is higher than 9, JavaScript (currently in pretixpresale/js/ui/main.js) sets --concurrency accordingly
+*/
+[data-concurrency="1"] {--concurrency: 1}
+[data-concurrency="2"] {--concurrency: 2}
+[data-concurrency="3"] {--concurrency: 3}
+[data-concurrency="4"] {--concurrency: 4}
+[data-concurrency="5"] {--concurrency: 5}
+[data-concurrency="6"] {--concurrency: 6}
+[data-concurrency="7"] {--concurrency: 7}
+[data-concurrency="8"] {--concurrency: 8}
+[data-concurrency="9"] {--concurrency: 9}
+
+
+[data-offset^="01"] {--offset-hour: 1}
+[data-offset^="02"] {--offset-hour: 2}
+[data-offset^="03"] {--offset-hour: 3}
+[data-offset^="04"] {--offset-hour: 4}
+[data-offset^="05"] {--offset-hour: 5}
+[data-offset^="06"] {--offset-hour: 6}
+[data-offset^="07"] {--offset-hour: 7}
+[data-offset^="08"] {--offset-hour: 8}
+[data-offset^="09"] {--offset-hour: 9}
+[data-offset^="10"] {--offset-hour: 10}
+[data-offset^="11"] {--offset-hour: 11}
+[data-offset^="12"] {--offset-hour: 12}
+[data-offset^="13"] {--offset-hour: 13}
+[data-offset^="14"] {--offset-hour: 14}
+[data-offset^="15"] {--offset-hour: 15}
+[data-offset^="16"] {--offset-hour: 16}
+[data-offset^="17"] {--offset-hour: 17}
+[data-offset^="18"] {--offset-hour: 18}
+[data-offset^="19"] {--offset-hour: 19}
+[data-offset^="20"] {--offset-hour: 20}
+[data-offset^="21"] {--offset-hour: 21}
+[data-offset^="22"] {--offset-hour: 22}
+[data-offset^="23"] {--offset-hour: 23}
+[data-offset^="24"] {--offset-hour: 24}
+
+[data-offset$="05"] {--offset-minute: 5}
+[data-offset$="10"] {--offset-minute: 10}
+[data-offset$="15"] {--offset-minute: 15}
+[data-offset$="20"] {--offset-minute: 20}
+[data-offset$="25"] {--offset-minute: 25}
+[data-offset$="30"] {--offset-minute: 30}
+[data-offset$="35"] {--offset-minute: 35}
+[data-offset$="40"] {--offset-minute: 40}
+[data-offset$="45"] {--offset-minute: 45}
+[data-offset$="50"] {--offset-minute: 50}
+[data-offset$="55"] {--offset-minute: 55}
+
+/* minute based micro adjustment offset from 5-minute raster */
+[data-offset-shift^="1"] {--offset-start: 1}
+[data-offset-shift^="2"] {--offset-start: 2}
+[data-offset-shift^="3"] {--offset-start: 3}
+[data-offset-shift^="4"] {--offset-start: 4}
+
+[data-offset-shift$="1"] {--offset-end: 1}
+[data-offset-shift$="2"] {--offset-end: 2}
+[data-offset-shift$="3"] {--offset-end: 3}
+[data-offset-shift$="4"] {--offset-end: 4}
+
+
+[data-duration^="00"] {--duration-hour: 0}
+[data-duration^="01"] {--duration-hour: 1}
+[data-duration^="02"] {--duration-hour: 2}
+[data-duration^="03"] {--duration-hour: 3}
+[data-duration^="04"] {--duration-hour: 4}
+[data-duration^="05"] {--duration-hour: 5}
+[data-duration^="06"] {--duration-hour: 6}
+[data-duration^="07"] {--duration-hour: 7}
+[data-duration^="08"] {--duration-hour: 8}
+[data-duration^="09"] {--duration-hour: 9}
+[data-duration^="10"] {--duration-hour: 10}
+[data-duration^="11"] {--duration-hour: 11}
+[data-duration^="12"] {--duration-hour: 12}
+[data-duration^="13"] {--duration-hour: 13}
+[data-duration^="14"] {--duration-hour: 14}
+[data-duration^="15"] {--duration-hour: 15}
+[data-duration^="16"] {--duration-hour: 16}
+[data-duration^="17"] {--duration-hour: 17}
+[data-duration^="18"] {--duration-hour: 18}
+[data-duration^="19"] {--duration-hour: 19}
+[data-duration^="20"] {--duration-hour: 20}
+[data-duration^="21"] {--duration-hour: 21}
+[data-duration^="22"] {--duration-hour: 22}
+[data-duration^="23"] {--duration-hour: 23}
+[data-duration^="24"] {--duration-hour: 24}
+
+[data-duration$="00"] {--duration-minute: 0}
+[data-duration$="05"] {--duration-minute: 5}
+[data-duration$="10"] {--duration-minute: 10}
+[data-duration$="15"] {--duration-minute: 15}
+[data-duration$="20"] {--duration-minute: 20}
+[data-duration$="25"] {--duration-minute: 25}
+[data-duration$="30"] {--duration-minute: 30}
+[data-duration$="35"] {--duration-minute: 35}
+[data-duration$="40"] {--duration-minute: 40}
+[data-duration$="45"] {--duration-minute: 45}
+[data-duration$="50"] {--duration-minute: 50}
+[data-duration$="55"] {--duration-minute: 55}
+
+.day-timeline {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+
+  display: grid;
+  gap: 0;
+  --grid-cols: calc(var(--duration-hour, 0) * 60/var(--raster-size, 5) + var(--duration-minute, 0) / var(--raster-size, 5));
+  grid-template-columns: repeat(var(--grid-cols), minmax(var(--col-min-size, 3em), 1fr));
+  grid-template-rows: repeat(var(--concurrency, 1), auto);
+}
+
+.day-timeline > li {
+  grid-column: calc(1 + var(--offset-hour, 0)*60/var(--raster-size, 5) + var(--offset-minute, 0)/var(--raster-size, 5)) / span calc(var(--duration-hour, 0)*60/var(--raster-size, 5) + var(--duration-minute, 0)/var(--raster-size, 5));
+  grid-row: var(--concurrency, 1) / span 1;
+}
+.day-timeline > li:focus-within {
+  z-index: 2;  /* move to front so focus-outline overlays other elements */
+}
+
+.ticks li, .tick {
+    grid-row: 1 / span var(--concurrency, 1) !important;
+}
+.ticks li {
+  padding: 8px 3px 5px;
+  line-height: 1;
+  border-top-left-radius: $border-radius-base;
+  border-top-right-radius: $border-radius-base;
+}
+.ticks li:nth-of-type(odd), .tick {
+    background-color: $table-bg-accent;
+}
+.day-timeline:nth-last-of-type(1) li {
+  border-bottom-left-radius: $border-radius-base;
+  border-bottom-right-radius: $border-radius-base;
+}
+
+
+
+.day-calendar a.event {
+  --duration: calc(var(--duration-hour, 0)*60 + var(--duration-minute));
+  margin-left: calc(var(--offset-start, 0) / var(--duration) * 100%);
+  margin-right: calc(var(--offset-end, 0) / var(--duration) * 100%);
+}
+
+
+
+
 @media (min-width: $screen-md-min) {
   .week-calendar {
     display: flex;
