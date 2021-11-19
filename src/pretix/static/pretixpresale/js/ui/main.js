@@ -512,7 +512,32 @@ $(function () {
     $(".day-calendar [data-concurrency]").each(function() {
         var c = parseInt(this.getAttribute("data-concurrency"), 10);
         if (c > 9) this.style.setProperty('--concurrency', c);
-    })
+    });
+    (function() {
+        var s = window.getComputedStyle($(".day-timeline > li").get(0));
+
+        if (s.getPropertyValue('grid-column-start') != "auto") return;
+        // Fix Chrome not being able to use calc-division in grid
+        $(".day-calendar").each(function() {
+            var rasterSize = this.getAttribute("data-raster-size");
+            var duration = this.getAttribute("data-duration").split(":");
+            var cols = duration[0]*60/rasterSize + duration[1]/rasterSize;
+
+            $(".day-timeline", this).css("grid-template-columns", "repeat(" + cols + ", minmax(var(--col-min-size, 3em), 1fr))");
+
+            $(".day-timeline > li", this).each(function() {
+                var s = window.getComputedStyle(this);
+                console.log(s.getPropertyValue('grid-column-start'));
+
+                var offset = this.getAttribute("data-offset").split(":");
+                var duration = this.getAttribute("data-duration").split(":");
+
+                var columnStart = 1 + offset[0]*60/rasterSize + offset[1]/rasterSize;
+                var columnSpan = duration[0]*60/rasterSize + duration[1]/rasterSize
+                this.style.gridColumn = columnStart + " / span " + columnSpan;
+            });
+        });
+    })();
     $(".day-calendar").each(function() {
         var timezone = this.getAttribute("data-timezone");
         var startTime = moment.tz(this.getAttribute("data-start"), timezone);
