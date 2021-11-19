@@ -1043,6 +1043,7 @@ def test_order_mark_paid_overpaid_expired(client, env):
         o.save()
         o.payments.create(state=OrderPayment.PAYMENT_STATE_CONFIRMED, amount=o.total * 2)
         assert o.pending_sum == -1 * o.total
+        assert o.payments.count() == 2
         q = Quota.objects.create(event=env[0], size=0)
         q.items.add(env[3])
 
@@ -1057,7 +1058,7 @@ def test_order_mark_paid_overpaid_expired(client, env):
     with scopes_disabled():
         o = Order.objects.get(id=env[2].id)
         assert o.status == Order.STATUS_PAID
-        assert o.payments.last().amount == 0
+        assert o.payments.count() == 2
         assert o.pending_sum == -1 * o.total
 
 
