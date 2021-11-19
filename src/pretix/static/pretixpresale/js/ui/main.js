@@ -513,7 +513,7 @@ $(function () {
         var c = parseInt(this.getAttribute("data-concurrency"), 10);
         if (c > 9) this.style.setProperty('--concurrency', c);
     });
-    (function() {
+    $(".day-calendar").each(function() {
         var s = window.getComputedStyle($(".day-timeline > li").get(0));
 
         if (s.getPropertyValue('grid-column-start') != "auto") return;
@@ -536,8 +536,7 @@ $(function () {
                 this.style.gridColumn = columnStart + " / span " + columnSpan;
             });
         });
-    })();
-    $(".day-calendar").each(function() {
+
         var timezone = this.getAttribute("data-timezone");
         var startTime = moment.tz(this.getAttribute("data-start"), timezone);
 
