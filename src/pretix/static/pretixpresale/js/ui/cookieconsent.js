@@ -21,6 +21,16 @@ $(function () {
     if (!storage_val) {
         show_dialog = true
         storage_val = {}
+
+        if ($("#cookie-consent-from-widget").length) {
+            var consented = JSON.parse($("#cookie-consent-from-widget").text())
+            $("#cookie-consent-details input[type=checkbox][name]").each(function () {
+                storage_val[$(this).attr("name")] = consented.indexOf($(this).attr("name")) > -1
+                $(this).prop("checked", consented.indexOf($(this).attr("name")) > -1)
+            })
+            window.localStorage[storage_key] = JSON.stringify(storage_val)
+            show_dialog = false
+        }
     } else {
         storage_val = JSON.parse(storage_val)
         $("#cookie-consent-details input[type=checkbox][name]").each(function () {
@@ -56,7 +66,9 @@ $(function () {
 
     _set_button_text()
     if (show_dialog) {
-        $("#cookie-consent-modal").show();
+        // We use .css() instead of .show() because of some weird issue that only occurs in Firefox
+        // and only within the widget.
+        $("#cookie-consent-modal").css("display", "block");
     }
 
     $("#cookie-consent-button-yes").on("click", function () {

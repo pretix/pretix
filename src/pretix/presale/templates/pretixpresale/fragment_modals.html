@@ -1,6 +1,7 @@
 {% load i18n %}
 {% load rich_text %}
 {% load safelink %}
+{% load escapejson %}
 <div id="ajaxerr">
 </div>
 <div id="loadingmodal" hidden aria-live="polite">
@@ -19,8 +20,11 @@
 </div>
 {% if request.organizer and request.organizer.settings.cookie_consent %}
     <script type="text/plain" id="cookie-consent-storage-key">cookie-consent-{{ request.organizer.slug }}</script>
+    {% if cookie_consent_from_widget %}
+        {{ cookie_consent_from_widget|json_script:"cookie-consent-from-widget" }}
+    {% endif %}
     {% if cookie_providers %}
-        <div id="cookie-consent-modal" hidden aria-live="polite">
+        <div id="cookie-consent-modal" aria-live="polite">
             <div class="modal-card">
                 <div class="modal-card-content">
                     <h3 id="cookie-consent-modal-label"></h3>

@@ -31,7 +31,6 @@
 # Unless required by applicable law or agreed to in writing, software distributed under the Apache License 2.0 is
 # distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations under the License.
-
 import logging
 
 from django.conf import settings
@@ -52,6 +51,7 @@ from .signals import (
     footer_link, global_footer_link, global_html_footer, global_html_head,
     global_html_page_header, html_footer, html_head, html_page_header,
 )
+from .views.cart import cart_session, get_or_create_cart_id
 
 logger = logging.getLogger(__name__)
 
@@ -142,6 +142,10 @@ def _default_context(request):
         ctx['languages'] = [get_language_info(code) for code in request.event.settings.locales]
 
         ctx['cookie_providers'] = get_cookie_providers(request.event, request)
+        if get_or_create_cart_id(request, create=False):
+            c = cart_session(request)
+            if c["widget_data"].get("consent"):
+                ctx['cookie_consent_from_widget'] = c["widget_data"].get("consent").split(",")
 
         if request.resolver_match:
             ctx['cart_namespace'] = request.resolver_match.kwargs.get('cart_namespace', '')

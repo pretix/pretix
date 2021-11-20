@@ -309,6 +309,10 @@ Currently, the following attributes are understood by pretix itself:
   always be modified. Note that this is not a security feature and can easily be overridden by users, so do not rely
   on this for authentication.
 
+* If ``data-consent="…"`` is given, the cookie consent mechanism will be initialized with consent for the given cookie
+  providers. All other providers will be disabled, no consent dialog will be shown. This is useful if you already
+  asked the user for consent and don't want them to be asked again. Example: ``data-consent="facebook,google_analytics"``
+
 Any configured pretix plugins might understand more data fields. For example, if the appropriate plugins on pretix
 Hosted or pretix Enterprise are active, you can pass the following fields:
 
