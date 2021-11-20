@@ -407,7 +407,7 @@ register_cookie_providers = EventPluginSignal()
 Arguments: ``request``
 
 This signal is sent out to get all cookie providers that could set a cookie on this page, regardless of
-consent state. Receivers should return a list of pretix.presale.cookies.CookieProvider objects.
+consent state. Receivers should return a list of ``pretix.presale.cookies.CookieProvider`` objects.
 
 As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
 """

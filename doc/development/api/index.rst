@@ -17,6 +17,7 @@ Contents:
    shredder
    import
    customview
+   cookieconsent
    auth
    general
    quality
