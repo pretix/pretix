@@ -17,90 +17,92 @@
         </div>
     </div>
 </div>
-{% if request.organizer and request.organizer.settings.cookie_consent and cookie_providers %}
+{% if request.organizer and request.organizer.settings.cookie_consent %}
     <script type="text/plain" id="cookie-consent-storage-key">cookie-consent-{{ request.organizer.slug }}</script>
-    <div id="cookie-consent-modal" hidden aria-live="polite">
-        <div class="modal-card">
-            <div class="modal-card-content">
-                <h3 id="cookie-consent-modal-label"></h3>
-                <div id="cookie-consent-modal-description">
-                    {% with request.event|default:request.organizer as sh %}
-                        <h3>{{ sh.settings.cookie_consent_dialog_title }}</h3>
-                        {{ sh.settings.cookie_consent_dialog_text|rich_text }}
-                        {% if sh.settings.cookie_consent_dialog_text_secondary %}
-                            <div class="text-muted">
-                                {{ sh.settings.cookie_consent_dialog_text_secondary|rich_text }}
-                            </div>
-                        {% endif %}
-                        <details id="cookie-consent-details">
-                            <summary>
-                                <span class="fa fa-fw chevron"></span>
-                                {% trans "Adjust settings in detail" %}
-                            </summary>
-                            <div class="checkbox">
-                                <label>
-                                    <input type="checkbox" disabled checked="">
-                                    {% trans "Required cookies" %}<br>
-                                    <span class="text-muted">
-                                        {% trans "Functional cookies (e.g. shopping cart, login, payment, language preference) and technical cookies (e.g. security purposes)" %}
-                                    </span>
-                                </label>
-                            </div>
-                            {% for cp in cookie_providers %}
+    {% if cookie_providers %}
+        <div id="cookie-consent-modal" hidden aria-live="polite">
+            <div class="modal-card">
+                <div class="modal-card-content">
+                    <h3 id="cookie-consent-modal-label"></h3>
+                    <div id="cookie-consent-modal-description">
+                        {% with request.event|default:request.organizer as sh %}
+                            <h3>{{ sh.settings.cookie_consent_dialog_title }}</h3>
+                            {{ sh.settings.cookie_consent_dialog_text|rich_text }}
+                            {% if sh.settings.cookie_consent_dialog_text_secondary %}
+                                <div class="text-muted">
+                                    {{ sh.settings.cookie_consent_dialog_text_secondary|rich_text }}
+                                </div>
+                            {% endif %}
+                            <details id="cookie-consent-details">
+                                <summary>
+                                    <span class="fa fa-fw chevron"></span>
+                                    {% trans "Adjust settings in detail" %}
+                                </summary>
                                 <div class="checkbox">
                                     <label>
-                                        <input type="checkbox" name="{{ cp.identifier }}">
-                                        {{ cp.provider_name }}<br>
+                                        <input type="checkbox" disabled checked="">
+                                        {% trans "Required cookies" %}<br>
                                         <span class="text-muted">
-                                            {% for c in cp.usage_classes %}
-                                                {% if forloop.counter0 > 0 %}&middot; {% endif %}
-                                                {% if c.value == 1 %}
-                                                    {% trans "Functionality" context "cookie_usage" %}
-                                                {% elif c.value == 2 %}
-                                                    {% trans "Analytics" context "cookie_usage" %}
-                                                {% elif c.value == 3 %}
-                                                    {% trans "Marketing" context "cookie_usage" %}
-                                                {% elif c.value == 4 %}
-                                                    {% trans "Social features" context "cookie_usage" %}
-                                                {% endif %}
-                                            {% endfor %}
-                                            {% if cp.privacy_url %}
-                                                &middot;
-                                                <a href="{% safelink cp.privacy_url %}" target="_blank">
-                                                    {% trans "Privacy policy" %}
-                                                </a>
-                                            {% endif %}
+                                            {% trans "Functional cookies (e.g. shopping cart, login, payment, language preference) and technical cookies (e.g. security purposes)" %}
                                         </span>
                                     </label>
                                 </div>
-                            {% endfor %}
-                        </details>
-                        <div class="row">
-                            <div class="col-xs-12 col-md-6">
-                                <p>
-                                    <button type="button" class="btn btn-lg btn-block btn-primary" id="cookie-consent-button-no"
-                                            data-summary-text="{{ sh.settings.cookie_consent_dialog_button_no }}"
-                                            data-detail-text="{% trans "Save selection" %}">
-                                        {{ sh.settings.cookie_consent_dialog_button_no }}
-                                    </button>
-                                </p>
+                                {% for cp in cookie_providers %}
+                                    <div class="checkbox">
+                                        <label>
+                                            <input type="checkbox" name="{{ cp.identifier }}">
+                                            {{ cp.provider_name }}<br>
+                                            <span class="text-muted">
+                                                {% for c in cp.usage_classes %}
+                                                    {% if forloop.counter0 > 0 %}&middot; {% endif %}
+                                                    {% if c.value == 1 %}
+                                                        {% trans "Functionality" context "cookie_usage" %}
+                                                    {% elif c.value == 2 %}
+                                                        {% trans "Analytics" context "cookie_usage" %}
+                                                    {% elif c.value == 3 %}
+                                                        {% trans "Marketing" context "cookie_usage" %}
+                                                    {% elif c.value == 4 %}
+                                                        {% trans "Social features" context "cookie_usage" %}
+                                                    {% endif %}
+                                                {% endfor %}
+                                                {% if cp.privacy_url %}
+                                                    &middot;
+                                                    <a href="{% safelink cp.privacy_url %}" target="_blank">
+                                                        {% trans "Privacy policy" %}
+                                                    </a>
+                                                {% endif %}
+                                            </span>
+                                        </label>
+                                    </div>
+                                {% endfor %}
+                            </details>
+                            <div class="row">
+                                <div class="col-xs-12 col-md-6">
+                                    <p>
+                                        <button type="button" class="btn btn-lg btn-block btn-primary" id="cookie-consent-button-no"
+                                                data-summary-text="{{ sh.settings.cookie_consent_dialog_button_no }}"
+                                                data-detail-text="{% trans "Save selection" %}">
+                                            {{ sh.settings.cookie_consent_dialog_button_no }}
+                                        </button>
+                                    </p>
+                                </div>
+                                <div class="col-xs-12 col-md-6">
+                                    <p>
+                                        <button type="button" class="btn btn-lg btn-block btn-primary" id="cookie-consent-button-yes">
+                                            {{ sh.settings.cookie_consent_dialog_button_yes }}
+                                        </button>
+                                    </p>
+                                </div>
                             </div>
-                            <div class="col-xs-12 col-md-6">
-                                <p>
-                                    <button type="button" class="btn btn-lg btn-block btn-primary" id="cookie-consent-button-yes">
-                                        {{ sh.settings.cookie_consent_dialog_button_yes }}
-                                    </button>
+                            {% if sh.settings.privacy_url %}
+                                <p class="text-center">
+                                    <a href="{% safelink sh.settings.privacy_url %}" target="_blank" rel="noopener">{% trans "Privacy policy" %}</a>
                                 </p>
-                            </div>
-                        </div>
-                        {% if sh.settings.privacy_url %}
-                            <p class="text-center">
-                                <a href="{% safelink sh.settings.privacy_url %}" target="_blank" rel="noopener">{% trans "Privacy policy" %}</a>
-                            </p>
-                        {% endif %}
-                    {% endwith %}
+                            {% endif %}
+                        {% endwith %}
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    {% endif %}
 {% endif %}

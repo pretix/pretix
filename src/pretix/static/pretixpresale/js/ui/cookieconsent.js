@@ -1,8 +1,20 @@
 /*global $ */
 
-window.__pretix_cookie_update_listeners = window.__pretix_cookie_update_listeners || []
-
 $(function () {
+    function _send_event(type) {
+        // Event() is not supported by IE11
+        var e = document.createEvent('Event')
+        e.initEvent(type, true, true)
+        document.dispatchEvent(e)
+    }
+
+    if ($("#cookie-consent-storage-key").length) {
+        window.__pretix_cookie_consent = {}
+    } else {
+        window.__pretix_cookie_consent = null
+        return
+    }
+
     var storage_key = $("#cookie-consent-storage-key").text()
     var storage_val = window.localStorage[storage_key]
     var show_dialog = false
@@ -20,6 +32,8 @@ $(function () {
             }
         })
     }
+    window.__pretix_cookie_consent = storage_val
+    _send_event('pretix:cookie-consent-updated')
 
     function _set_button_text () {
         if ($("#cookie-consent-details input[type=checkbox][name]:checked").length > 0) {
@@ -53,9 +67,8 @@ $(function () {
         })
 
         window.localStorage[storage_key] = JSON.stringify(new_value)
-        for (var k of window.__pretix_cookie_update_listeners) {
-            k.call(this, window.localStorage[storage_key])
-        }
+        window.__pretix_cookie_consent = new_value
+        _send_event('pretix:cookie-consent-updated')
         $("#cookie-consent-modal").hide()
     })
     $("#cookie-consent-button-no").on("click", function () {
@@ -65,9 +78,8 @@ $(function () {
         })
 
         window.localStorage[storage_key] = JSON.stringify(new_value)
-        for (var k of window.__pretix_cookie_update_listeners) {
-            k.call(this, window.localStorage[storage_key])
-        }
+        window.__pretix_cookie_consent = new_value
+        _send_event('pretix:cookie-consent-updated')
         $("#cookie-consent-modal").hide()
     })
     $("#cookie-consent-details input").on("change", _set_button_text)
