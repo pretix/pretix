@@ -204,11 +204,10 @@
   padding: 3px 8px 3px 0;
   background-color: rgba(255,255,255,.9);
   z-index: 10;
-  max-width: 12em;
-  width: 20vw;/* % in a grid context scales to the width of this element in grid */
-  max-width: 12em;
+  width: 20vw;/* % in a grid context scales to the width of this element in grid => vw with max-width */
+  max-width: 15em;
   min-width: 8em;
-  overflow: visible;
+  overflow-wrap: break-word;
 }
 
 .day-calendar a.event {
