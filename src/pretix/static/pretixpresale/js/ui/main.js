@@ -516,9 +516,8 @@ $(function () {
     $(".day-calendar").each(function() {
         var s = window.getComputedStyle($(".day-timeline > li").get(0));
 
-        if (s.getPropertyValue('grid-column-start') != "auto") return;
-        // Fix Chrome not being able to use calc-division in grid
-        $(".day-calendar").each(function() {
+        if (s.getPropertyValue('grid-column-start') == "auto") {
+            // Fix Chrome not being able to use calc-division in grid
             var rasterSize = this.getAttribute("data-raster-size");
             var duration = this.getAttribute("data-duration").split(":");
             var cols = duration[0]*60/rasterSize + duration[1]/rasterSize;
@@ -535,7 +534,7 @@ $(function () {
                 var columnSpan = duration[0]*60/rasterSize + duration[1]/rasterSize
                 this.style.gridColumn = columnStart + " / span " + columnSpan;
             });
-        });
+        }
 
         var timezone = this.getAttribute("data-timezone");
         var startTime = moment.tz(this.getAttribute("data-start"), timezone);
