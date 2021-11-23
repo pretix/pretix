@@ -144,7 +144,7 @@ def _default_context(request):
         ctx['cookie_providers'] = get_cookie_providers(request.event, request)
         if get_or_create_cart_id(request, create=False):
             c = cart_session(request)
-            if c["widget_data"].get("consent"):
+            if "widget_data" in c and c["widget_data"].get("consent"):
                 ctx['cookie_consent_from_widget'] = c["widget_data"].get("consent").split(",")
 
         if request.resolver_match:
