@@ -44,9 +44,9 @@ from pretix.base.settings import GlobalSettingsObject
 from pretix.helpers.i18n import (
     get_javascript_format_without_seconds, get_moment_locale,
 )
-from .cookies import get_cookie_providers
 
 from ..base.i18n import get_language_without_region
+from .cookies import get_cookie_providers
 from .signals import (
     footer_link, global_footer_link, global_html_footer, global_html_head,
     global_html_page_header, html_footer, html_head, html_page_header,
