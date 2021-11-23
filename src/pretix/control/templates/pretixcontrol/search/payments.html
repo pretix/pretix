@@ -43,8 +43,6 @@
             <tr>
                 <th>
                     #
-                    <a href="?{% url_replace request 'ordering' '-payment' %}"><i class="fa fa-caret-down"></i></a>
-                    <a href="?{% url_replace request 'ordering' 'payment' %}"><i class="fa fa-caret-up"></i></a>
                 </th>
                 <th>
                     {% trans "Related order" %}
@@ -53,13 +51,13 @@
                 </th>
                 <th>
                     {% trans "Start date" %}
-                    <a href="?{% url_replace request 'ordering' '-sdate' %}"><i class="fa fa-caret-down"></i></a>
-                    <a href="?{% url_replace request 'ordering' 'sdate' %}"><i class="fa fa-caret-up"></i></a>
+                    <a href="?{% url_replace request 'ordering' '-created' %}"><i class="fa fa-caret-down"></i></a>
+                    <a href="?{% url_replace request 'ordering' 'created' %}"><i class="fa fa-caret-up"></i></a>
                 </th>
                 <th>
                     {% trans "Confirmation date" %}
-                    <a href="?{% url_replace request 'ordering' '-cdate' %}"><i class="fa fa-caret-down"></i></a>
-                    <a href="?{% url_replace request 'ordering' 'cdate' %}"><i class="fa fa-caret-up"></i></a>
+                    <a href="?{% url_replace request 'ordering' '-payment_date' %}"><i class="fa fa-caret-down"></i></a>
+                    <a href="?{% url_replace request 'ordering' 'payment_date' %}"><i class="fa fa-caret-up"></i></a>
                 </th>
                 <th>
                     {% trans "Payment method" %}
@@ -68,8 +66,8 @@
                 </th>
                 <th>
                     {% trans "Status" %}
-                    <a href="?{% url_replace request 'ordering' '-status' %}"><i class="fa fa-caret-down"></i></a>
-                    <a href="?{% url_replace request 'ordering' 'status' %}"><i class="fa fa-caret-up"></i></a>
+                    <a href="?{% url_replace request 'ordering' '-state' %}"><i class="fa fa-caret-down"></i></a>
+                    <a href="?{% url_replace request 'ordering' 'state' %}"><i class="fa fa-caret-up"></i></a>
                 </th>
                 <th class="text-right flip">
                     {% trans "Amount" %}

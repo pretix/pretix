@@ -812,7 +812,9 @@ class OrderSearchFilterForm(OrderFilterForm):
 
 
 class OrderPaymentSearchFilterForm(forms.Form):
-    payments = {'id', 'local_id', 'state', 'amount', 'order', 'created', 'payment_date', 'provider', 'info', 'fee'}
+    payments = {'id': 'id', 'local_id': 'local_id', 'state': 'state', 'amount': 'amount', 'order': 'order',
+                'created': 'created', 'payment_date': 'payment_date', 'provider': 'provider', 'info': 'info',
+                'fee': 'fee'}
 
     organizer = forms.ModelChoiceField(
         label=_('Organizer'),
@@ -859,30 +861,32 @@ class OrderPaymentSearchFilterForm(forms.Form):
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop('request')
         super().__init__(*args, **kwargs)
+
+        self.fields['ordering'] = forms.ChoiceField(
+            choices=sum([
+                [(a, a), ('-' + a, '-' + a)]
+                for a in self.payments.keys()
+            ], []),
+            required=False
+        )
+
         if self.request.user.has_active_staff_session(self.request.session.session_key):
             self.fields['organizer'].queryset = Organizer.objects.all()
         else:
             self.fields['organizer'].queryset = Organizer.objects.filter(
                 pk__in=self.request.user.teams.values_list('organizer', flat=True)
             )
+
         self.fields['provider'].choices += get_all_payment_providers()
 
     def filter_qs(self, qs):
         fdata = self.cleaned_data
-        # qs = super().filter_qs(qs)
 
         if fdata.get('organizer'):
             qs = qs.filter(event__organizer=fdata.get('organizer'))
 
         if fdata.get('state'):
             qs = qs.filter(state=fdata.get('state'))
-
-        if fdata.get('ordering'):
-            p = self.cleaned_data.get('ordering')
-            if p.startswith('-') and p not in self.orders:
-                return '-' + self.payments[p[1:]]  # todo
-            else:
-                return self.payments[p]  # todo
 
         if fdata.get('provider'):
             qs = qs.annotate(
@@ -944,6 +948,13 @@ class OrderPaymentSearchFilterForm(forms.Form):
         filters_by_property_name = {}
         for f in filters_by_property_name.values():
             qs = qs.filter(f)
+
+        if fdata.get('ordering'):
+            p = self.cleaned_data.get('ordering')
+            if p.startswith('-') and p not in self.payments:
+                qs = qs.order_by('-' + self.payments[p[1:]])
+            else:
+                qs = qs.order_by(self.payments[p])
 
         return qs
 
