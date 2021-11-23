@@ -75,6 +75,13 @@ footer nav li:not(:first-child):before {
     width: 1.5em;
     text-align: center;
 }
+footer nav .btn-link {
+    display: inline;
+    padding: 0;
+    margin: 0;
+    font-size: 11px;
+    vertical-align: baseline;
+}
 
 .js-only {
     display: none;

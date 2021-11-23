@@ -91,7 +91,7 @@
         <li><a href="{% safelink request.organizer.settings.privacy_url %}" target="_blank" rel="noopener">{% trans "Privacy policy" %}</a></li>
     {% endif %}
     {% if not request.event and request.organizer.settings.cookie_consent and cookie_providers %}
-        <li><a href="#" id="cookie-consent-reopen">{% trans "Cookie settings" %}</a></li>
+        <li><button type="button" class="btn btn-link" id="cookie-consent-reopen">{% trans "Cookie settings" %}</button></li>
     {% endif %}
     {% if not request.event and request.organizer.settings.imprint_url %}
         <li><a href="{% safelink request.organizer.settings.imprint_url %}" target="_blank" rel="noopener">{% trans "Imprint" %}</a></li>
