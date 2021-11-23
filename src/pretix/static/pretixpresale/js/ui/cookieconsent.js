@@ -8,12 +8,16 @@ $(function () {
         return;
     }
 
-    function _send_event(type) {
+    function update_consent(consent) {
+        window.localStorage[storage_key] = JSON.stringify(consent);
+        window.pretix.cookie_consent = consent;
+
         // Event() is not supported by IE11
         var e = document.createEvent('Event')
-        e.initEvent(type, true, true)
+        e.initEvent('pretix:cookie-consent:change', true, true)
         document.dispatchEvent(e)
     }
+
     var storage_val = window.localStorage[storage_key];
     var show_dialog = !storage_val;
     var consent_checkboxes = $("#cookie-consent-details input[type=checkbox][name]");
@@ -36,12 +40,10 @@ $(function () {
             consent_checkboxes.each(function () {
                 this.checked = storage_val[this.name] = consented.indexOf(this.name) > -1;
             })
-            window.localStorage[storage_key] = JSON.stringify(storage_val)
             show_dialog = false
         }
     }
-    window.pretix.cookie_consent = storage_val;
-    _send_event('pretix:cookie-consent:change');
+    update_consent(storage_val);
 
     function _set_button_text () {
         var btn = $("#cookie-consent-button-no");
@@ -50,11 +52,6 @@ $(function () {
             btn.attr("data-detail-text") : 
             btn.attr("data-summary-text")
         );
-    }
-    function update_consent(consent) {
-        window.localStorage[storage_key] = JSON.stringify(consent);
-        window.pretix.cookie_consent = consent;
-        _send_event('pretix:cookie-consent:change');
     }
 
     var n_checked = consent_checkboxes.filter(":checked").length;
