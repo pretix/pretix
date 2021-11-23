@@ -12,9 +12,10 @@ $(function () {
         window.localStorage[storage_key] = JSON.stringify(consent);
         window.pretix.cookie_consent = consent;
 
-        // Event() is not supported by IE11
-        var e = document.createEvent('Event')
-        e.initEvent('pretix:cookie-consent:change', true, true)
+        // Event() is not supported by IE11, see ployfill here:
+        // https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent/CustomEvent#polyfill
+        var e = document.createEvent('CustomEvent');
+        e.initCustomEvent('pretix:cookie-consent:change', true, true, consent);
         document.dispatchEvent(e)
     }
 
