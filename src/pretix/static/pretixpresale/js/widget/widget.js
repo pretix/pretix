@@ -1591,7 +1591,7 @@ var shared_root_computed = {
                     has_priced = true;
                 } else {
                     cnt_items++;
-                    has_priced = has_priced || item.price.gross != "0.00";
+                    has_priced = has_priced || item.price.gross != "0.00" || item.free_price;
                 }
             }
         }
