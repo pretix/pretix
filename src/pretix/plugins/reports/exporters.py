@@ -159,7 +159,9 @@ class ReportlabExportMixin:
         return settings.PRETIX_INSTANCE_NAME
 
     def get_left_header_string(self):
-        if self.event.has_subevents:
+        if self.is_multievent:
+            return str(self.organizer.name)
+        elif self.event.has_subevents:
             return "%s – %s" % (self.event.organizer.name, self.event.name)
         else:
             return "%s – %s – %s" % (self.event.organizer.name, self.event.name,
