@@ -18,14 +18,26 @@
                 <div class="col-md-3 col-sm-6 col-xs-12">
                     {% bootstrap_field filter_form.query %}
                 </div>
-                <div class="col-md-2 col-sm-6 col-xs-12">
-                    {% bootstrap_field filter_form.state %}
+                <div class="col-md-3 col-sm-6 col-xs-12">
+                    {% bootstrap_field filter_form.event %}
                 </div>
                 <div class="col-md-3 col-sm-6 col-xs-12">
                     {% bootstrap_field filter_form.organizer %}
                 </div>
-                <div class="col-md-2 col-xs-6">
+                <div class="col-md-3 col-sm-6 col-xs-12">
+                    {% bootstrap_field filter_form.state %}
+                </div>
+                <div class="col-md-3 col-xs-6">
                     {% bootstrap_field filter_form.provider %}
+                </div>
+                <div class="col-md-3 col-sm-6 col-xs-12">
+                    {% bootstrap_field filter_form.start %}
+                </div>
+                <div class="col-md-3 col-sm-6 col-xs-12">
+                    {% bootstrap_field filter_form.until %}
+                </div>
+                <div class="col-md-3 col-sm-6 col-xs-12">
+                    {% bootstrap_field filter_form.mode %}
                 </div>
             </div>
             <div class="text-right flip">
@@ -42,7 +54,7 @@
             <thead>
             <tr>
                 <th>
-                    #
+                    {% trans "Payment code" %}
                 </th>
                 <th>
                     {% trans "Related order" %}
@@ -64,15 +76,15 @@
                     <a href="?{% url_replace request 'ordering' '-provider' %}"><i class="fa fa-caret-down"></i></a>
                     <a href="?{% url_replace request 'ordering' 'provider' %}"><i class="fa fa-caret-up"></i></a>
                 </th>
-                <th>
-                    {% trans "Status" %}
-                    <a href="?{% url_replace request 'ordering' '-state' %}"><i class="fa fa-caret-down"></i></a>
-                    <a href="?{% url_replace request 'ordering' 'state' %}"><i class="fa fa-caret-up"></i></a>
-                </th>
                 <th class="text-right flip">
                     {% trans "Amount" %}
                     <a href="?{% url_replace request 'ordering' '-amount' %}"><i class="fa fa-caret-down"></i></a>
                     <a href="?{% url_replace request 'ordering' 'amount' %}"><i class="fa fa-caret-up"></i></a>
+                </th>
+                <th class="text-right flip">
+                    {% trans "Status" %}
+                    <a href="?{% url_replace request 'ordering' '-state' %}"><i class="fa fa-caret-down"></i></a>
+                    <a href="?{% url_replace request 'ordering' 'state' %}"><i class="fa fa-caret-up"></i></a>
                 </th>
             </tr>
             </thead>
@@ -80,16 +92,23 @@
             {% for p in payments %}
                 <tr>
                     <td>{{ p }}</td>
-                    <td>{{ p.order }}</td>
+                    <td>
+                        <a href="{% url "control:event.order" event=p.order.event.slug organizer=p.order.event.organizer.slug code=p.order.code %}">
+                            {{ p.order.event.slug|upper }}-{{ p.order.code }}
+                        </a>
+                        {% if p.order.testmode %}
+                            <span class="label label-warning">{% trans "TEST MODE" %}</span>
+                        {% endif %}
+                    </td>
                     <td>{{ p.created|date:"SHORT_DATETIME_FORMAT" }}</td>
                     <td>{{ p.payment_date|date:"SHORT_DATETIME_FORMAT" }}</td>
                     <td>{{ p.payment_provider.verbose_name }}</td>
-                    <td>
+                    <td class="text-right flip">{{ p.amount|money:p.order.event.currency }}</td>
+                    <td class="text-right flip">
                         <span class="label label-{% if p.state == "created" or p.state == "pending" %}warning{% elif p.state == "confirmed" %}success{% else %}danger{% endif %}">
                             {{ p.get_state_display }}
                         </span>
                     </td>
-                    <td class="text-right flip">{{ p.amount|money:p.order.event.currency }}</td>
                 </tr>
             {% if staff_session %}
                 <tr>

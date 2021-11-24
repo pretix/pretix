@@ -816,6 +816,21 @@ class OrderPaymentSearchFilterForm(forms.Form):
                 'created': 'created', 'payment_date': 'payment_date', 'provider': 'provider', 'info': 'info',
                 'fee': 'fee'}
 
+    query = forms.CharField(
+        label=_('Search for…'),
+        widget=forms.TextInput(attrs={
+            'placeholder': _('Search for…'),
+            'autofocus': 'autofocus'
+        }),
+        required=False,
+    )
+    event = forms.ChoiceField(
+        label=_('Event'),
+        choices=[
+            ('', _('All events')),
+        ],
+        required=False,
+    )
     organizer = forms.ModelChoiceField(
         label=_('Organizer'),
         queryset=Organizer.objects.none(),
@@ -842,20 +857,25 @@ class OrderPaymentSearchFilterForm(forms.Form):
             (OrderPayment.PAYMENT_STATE_REFUNDED, _('Refunded')),
         ),
     )
-    query = forms.CharField(
-        label=_('Search for…'),
-        widget=forms.TextInput(attrs={
-            'placeholder': _('Search for…'),
-            'autofocus': 'autofocus'
-        }),
-        required=False,
-    )
     provider = forms.ChoiceField(
         label=_('Payment provider'),
         choices=[
             ('', _('All payment providers')),
         ],
         required=False,
+    )
+    start = forms.DateTimeField(
+        label=_('From'),
+        required=False,
+    )
+    until = forms.DateTimeField(
+        label=_('Until'),
+        required=False,
+    )
+    mode = forms.BooleanField(
+        label=_('Include events in test mode'),
+        required=False,
+        initial=True,
     )
 
     def __init__(self, *args, **kwargs):
