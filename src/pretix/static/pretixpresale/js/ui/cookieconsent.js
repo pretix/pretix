@@ -56,9 +56,7 @@ $(function () {
         );
     }
 
-    var n_checked = consent_checkboxes.filter(":checked").length;
-    var n_total = consent_checkboxes.length;
-    if (n_checked !== n_total && n_checked !== 0) {
+    if (consent_checkboxes.filter(":checked").length) {
         $("#cookie-consent-details").prop("open", true).find("> *:not(summary)").show();
     }
 
