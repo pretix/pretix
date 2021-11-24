@@ -2,14 +2,10 @@
 
 $(function () {
     window.pretix = window.pretix || {};
-    var storage_key = $("#cookie-consent-storage-key").text()
-    if (!storage_key) {
-        window.pretix.cookie_consent = null;
-        return;
-    }
 
+    var storage_key = $("#cookie-consent-storage-key").text();
     function update_consent(consent) {
-        window.localStorage[storage_key] = JSON.stringify(consent);
+        if (storage_key) window.localStorage[storage_key] = JSON.stringify(consent);
         window.pretix.cookie_consent = consent;
 
         // Event() is not supported by IE11, see ployfill here:
@@ -17,6 +13,11 @@ $(function () {
         var e = document.createEvent('CustomEvent');
         e.initCustomEvent('pretix:cookie-consent:change', true, true, consent);
         document.dispatchEvent(e)
+    }
+
+    if (!storage_key) {
+        update_consent(null);
+        return;
     }
 
     var storage_val = window.localStorage[storage_key];
