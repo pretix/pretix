@@ -5,8 +5,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-10-29 10:09+0000\n"
-"PO-Revision-Date: 2021-10-29 11:36+0000\n"
-"Last-Translator: Raphael Michel <michel@rami.io>\n"
+"PO-Revision-Date: 2021-11-24 16:00+0000\n"
+"Last-Translator: Eva-Maria Obermann <obermann@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
 ">\n"
 "Language: de\n"
@@ -22518,12 +22518,12 @@ msgstr "Nur an Kunden von"
 #: pretix/plugins/sendmail/forms.py:117
 msgctxt "subevent"
 msgid "Only send to customers of dates starting at or after"
-msgstr "Nur an Kunden für Terminen beginnend um oder nach"
+msgstr "Nur an Kunden für Termine beginnend um oder nach"
 
 #: pretix/plugins/sendmail/forms.py:122
 msgctxt "subevent"
 msgid "Only send to customers of dates starting before"
-msgstr "Nur an Kunden von Terminen beginnend bevor"
+msgstr "Nur an Kunden von Terminen beginnend vor"
 
 #: pretix/plugins/sendmail/forms.py:127
 msgctxt "subevent"
