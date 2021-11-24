@@ -87,13 +87,13 @@ as Facebook's Pixel, you can integrate it like this:
 
 .. code-block:: javascript
 
-     var pretix_consent = (window.pretix || {}).cookie_consent
-     if (pretix_consent !== null && !(pretix_consent || {}).facebook) {
+     var consent = (window.pretix || {}).cookie_consent;
+     if (consent !== null && !(consent || {}).facebook) {
          fbq('consent', 'revoke');
      }
      fbq('init', ...);
      document.addEventListener('pretix:cookie-consent:change', function (e) {
-         fbq('consent', window.pretix.cookie_consent.facebook ? 'grant' : 'revoke')
+         fbq('consent', (e.detail || {}).facebook ? 'grant' : 'revoke');
      })
 
 If you have a JavaScript function that you only want to load if consent for a specific ``identifier``
@@ -101,24 +101,19 @@ is given, you can wrap it like this:
 
 .. code-block:: javascript
 
-     var pretix_consent = (window.pretix || {}).cookie_consent
-     if (typeof pretix_consent === "undefined") {
-         // Cookie consent tool has not loaded yet, wait for it to load, then try again
-         document.addEventListener('pretix:cookie-consent:change', function () {
-             execute_function()
-         })
-     } else if (pretix_consent === null) {
-         // Cookie consent tool is disabled
-         execute_function()
-     } else {
-         // Cookie tool is available
-         if (pretix_consent[identifier] === true) {
-             execute_function()
-         } else {
-             document.addEventListener('pretix:cookie-consent:change', function () {
-                 if (window.pretix.cookie_consent[identifier] === true) {
-                     execute_function()
-                 }
-             })
-         }
+     var consent_identifier = "youridentifier";
+     var consent = (window.pretix || {}).cookie_consent;
+     if (consent === null || (consent || {})[consent_identifier] === true) {
+         // Cookie consent tool is either disabled or consent is given
+         addScriptElement(src);
+         return;
      }
+
+     // Either cookie consent tool has not loaded yet or consent is not given
+     document.addEventListener('pretix:cookie-consent:change', function onChange(e) {
+         var consent = e.detail || {};
+         if (consent === null || consent[consent_identifier] === true) {
+             addScriptElement(src);
+             document.removeEventListener('pretix:cookie-consent:change', onChange);
+         }
+     })
