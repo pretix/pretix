@@ -73,7 +73,8 @@ $(function () {
         var consent_all = this.id == "cookie-consent-button-yes";
         consent_checkboxes.each(function () {
             consent[this.name] = this.checked = consent_all || this.checked;
-        })
+        });
+        if (consent_all) _set_button_text();
         update_consent(consent);
     });
     consent_checkboxes.on("change", _set_button_text);
