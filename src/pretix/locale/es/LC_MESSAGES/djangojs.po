@@ -8,16 +8,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-10-29 10:10+0000\n"
-"PO-Revision-Date: 2021-09-06 09:00+0000\n"
-"Last-Translator: rauxenz <noquedandireccionesdisponibles@gmail.com>\n"
-"Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/pretix-"
-"js/es/>\n"
+"PO-Revision-Date: 2021-11-25 21:00+0000\n"
+"Last-Translator: Ismael Menéndez Fernández <ismael.menendez@balidea.com>\n"
+"Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/"
+"pretix-js/es/>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.6\n"
+"X-Generator: Weblate 4.8\n"
 
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:56
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:62
@@ -195,9 +195,6 @@ msgid "Currently inside"
 msgstr "Actualmente adentro"
 
 #: pretix/static/lightbox/js/lightbox.js:96
-#, fuzzy
-#| msgctxt "widget"
-#| msgid "Close"
 msgid "close"
 msgstr "Cerrar"
 
@@ -501,26 +498,22 @@ msgstr[0] "(una fecha más)"
 msgstr[1] "({num} más fechas)"
 
 #: pretix/static/pretixpresale/js/ui/cart.js:43
-#, fuzzy
-#| msgid "The items in your cart are no longer reserved for you."
 msgid ""
 "The items in your cart are no longer reserved for you. You can still "
 "complete your order as long as they’re available."
-msgstr "Los elementos en su carrito de compras ya no se encuentran reservados."
+msgstr ""
+"Los elementos en su carrito de compras ya no se encuentran reservados. "
+"Puedes seguir añadiendo más productos mientras estén disponibles."
 
 #: pretix/static/pretixpresale/js/ui/cart.js:45
 msgid "Cart expired"
 msgstr "El carrito de compras ha expirado"
 
 #: pretix/static/pretixpresale/js/ui/cart.js:50
-#, fuzzy
-#| msgid "The items in your cart are reserved for you for one minute."
-#| msgid_plural ""
-#| "The items in your cart are reserved for you for {num} minutes."
 msgid "The items in your cart are reserved for you for one minute."
 msgid_plural "The items in your cart are reserved for you for {num} minutes."
 msgstr[0] ""
-"Los elementos en su carrito de compras se han reservado por un minuto."
+"Los elementos en su carrito de compras se han reservado por {num} minutos."
 msgstr[1] ""
 "Los elementos en su carrito de compras se han reservado por {num} minutos."
 
