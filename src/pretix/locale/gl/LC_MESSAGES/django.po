@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-10-29 10:09+0000\n"
-"PO-Revision-Date: 2021-11-04 07:00+0000\n"
+"PO-Revision-Date: 2021-11-25 21:00+0000\n"
 "Last-Translator: Ismael Menéndez Fernández <ismael.menendez@balidea.com>\n"
 "Language-Team: Galician <https://translate.pretix.eu/projects/pretix/pretix/"
 "gl/>\n"
@@ -308,7 +308,7 @@ msgstr "Orden marcada como pagada"
 #: pretix/control/templates/pretixcontrol/event/mail.html:72
 #: pretix/control/views/orders.py:1268
 msgid "Order canceled"
-msgstr "Orde cancelada"
+msgstr "Pedido cancelado"
 
 #: pretix/api/webhooks.py:216 pretix/base/notifications.py:257
 #, fuzzy
@@ -1023,9 +1023,8 @@ msgstr "Factura"
 #: pretix/plugins/checkinlists/exporters.py:568
 #: pretix/plugins/checkinlists/exporters.py:663
 #: pretix/plugins/checkinlists/exporters.py:664
-#, fuzzy
 msgid "Yes"
-msgstr "Sí"
+msgstr "Si"
 
 #: pretix/base/exporters/invoices.py:305 pretix/base/exporters/orderlist.py:398
 #: pretix/base/exporters/orderlist.py:402
@@ -1041,9 +1040,8 @@ msgstr "Sí"
 #: pretix/plugins/checkinlists/exporters.py:568
 #: pretix/plugins/checkinlists/exporters.py:663
 #: pretix/plugins/checkinlists/exporters.py:664
-#, fuzzy
 msgid "No"
-msgstr "No"
+msgstr "Non"
 
 #: pretix/base/exporters/invoices.py:319
 #, fuzzy
@@ -1488,7 +1486,7 @@ msgstr "Fecha"
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:10
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:45
 msgid "Product"
-msgstr "Producto"
+msgstr "Produto"
 
 #: pretix/base/exporters/orderlist.py:555
 #: pretix/base/exporters/waitinglist.py:110 pretix/base/models/items.py:775
@@ -1836,7 +1834,6 @@ msgstr "Mostrar variantes"
 #: pretix/control/templates/pretixcontrol/organizers/teams.html:61
 #: pretix/control/templates/pretixcontrol/organizers/webhooks.html:51
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:62
-#, fuzzy
 msgid "All"
 msgstr "Todos"
 
@@ -2612,7 +2609,7 @@ msgstr ""
 
 #: pretix/base/models/checkin.py:247
 msgid "Entry"
-msgstr "Ingreso"
+msgstr "Acceso"
 
 #: pretix/base/models/checkin.py:248
 msgid "Exit"
@@ -2620,11 +2617,11 @@ msgstr "Saída"
 
 #: pretix/base/models/checkin.py:262
 msgid "Unknown ticket"
-msgstr "Non se atopou ticket"
+msgstr "Tícket descoñecido"
 
 #: pretix/base/models/checkin.py:263
 msgid "Ticket not paid"
-msgstr "Ticket pendente de pago"
+msgstr "Tícket pendente de pago"
 
 #: pretix/base/models/checkin.py:264
 msgid "Forbidden by custom rule"
@@ -2632,19 +2629,19 @@ msgstr ""
 
 #: pretix/base/models/checkin.py:265
 msgid "Ticket code revoked/changed"
-msgstr "Código de ticket revocado/cambiado"
+msgstr "Código de tícket revogado/cambiado"
 
 #: pretix/base/models/checkin.py:266
 msgid "Information required"
-msgstr "Información requerida"
+msgstr "Información requirida"
 
 #: pretix/base/models/checkin.py:267
 msgid "Ticket already used"
-msgstr "Este ticket xa foi utilizado"
+msgstr "Este tícket xa foi utilizado"
 
 #: pretix/base/models/checkin.py:268
 msgid "Ticket type not allowed here"
-msgstr "Tipo de ticket non permitido"
+msgstr "Tipo de tícket non permitido"
 
 #: pretix/base/models/checkin.py:269
 #, fuzzy
@@ -3614,9 +3611,8 @@ msgstr ""
 
 #: pretix/base/models/items.py:844 pretix/base/models/vouchers.py:252
 #: pretix/base/models/waitinglist.py:96 pretix/base/orderimport.py:284
-#, fuzzy
 msgid "Product variation"
-msgstr "Ver variaciones del producto"
+msgstr "Ver variacións do produto"
 
 #: pretix/base/models/items.py:845
 #: pretix/control/templates/pretixcontrol/item/create.html:64
@@ -6140,19 +6136,16 @@ msgid "Ticket"
 msgstr "Ticket"
 
 #: pretix/base/reldate.py:35
-#, fuzzy
 msgid "Event start"
-msgstr "Inicio del evento"
+msgstr "Comezo do evento"
 
 #: pretix/base/reldate.py:36
-#, fuzzy
 msgid "Event end"
-msgstr "Fin del evento"
+msgstr "Fin do evento"
 
 #: pretix/base/reldate.py:37
-#, fuzzy
 msgid "Event admission"
-msgstr "Admisión al evento"
+msgstr "Admisión ao evento"
 
 #: pretix/base/reldate.py:38
 #, fuzzy
@@ -11020,9 +11013,8 @@ msgstr "Domingo"
 #: pretix/control/forms/filter.py:1135 pretix/control/forms/filter.py:1137
 #: pretix/control/forms/filter.py:1522 pretix/control/forms/filter.py:1524
 #: pretix/control/forms/filter.py:2001 pretix/control/forms/filter.py:2003
-#, fuzzy
 msgid "Search query"
-msgstr "Consultar búsqueda"
+msgstr "Consultar unha procura"
 
 #: pretix/control/forms/filter.py:1077
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:37
@@ -17181,9 +17173,8 @@ msgid "You need to assign the question to a product to collect answers."
 msgstr "Es necesario asignar la pregunta a un producto para obtener respuestas."
 
 #: pretix/control/templates/pretixcontrol/items/question.html:69
-#, fuzzy
 msgid "Count"
-msgstr "Cantidad"
+msgstr "Cantidade"
 
 #: pretix/control/templates/pretixcontrol/items/question.html:70
 msgid "Percentage"
@@ -20280,7 +20271,6 @@ msgstr "Código de la tarjeta de regalo"
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:355
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:364
-#, fuzzy
 msgid "minutes"
 msgstr "minutos"
 
@@ -26133,9 +26123,8 @@ msgid "Ticket layout: %(name)s"
 msgstr "Disposición de tickets: %(name)s"
 
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/edit.html:23
-#, fuzzy
 msgid "Ticket design"
-msgstr "Diseño del ticket"
+msgstr "Deseño do tícket"
 
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/form.html:3
 #, fuzzy
@@ -26817,9 +26806,8 @@ msgstr "Su carrito"
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:28
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:26
 #: pretix/presale/templates/pretixpresale/event/fragment_cart_box.html:18
-#, fuzzy
 msgid "Cart expired"
-msgstr "El carrito de compras ha expirado"
+msgstr "O carro da compra caducou"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:44
 #: pretix/presale/templates/pretixpresale/event/index.html:74
@@ -27271,11 +27259,12 @@ msgstr ""
 "minutos."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:392
-#, fuzzy
 msgid ""
 "The items in your cart are no longer reserved for you. You can still "
 "complete your order as long as they’re available."
-msgstr "Los elementos en su carrito de compras ya no se encuentran reservados."
+msgstr ""
+"Os artigos da túa cesta xa non están reservados para ti. Aínda podes "
+"completar o teu pedido mentres estean dispoñibles."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:396
 msgid "Overview of your ordered products."
@@ -28570,7 +28559,7 @@ msgstr "Página %(page)s de %(of)s"
 
 #: pretix/presale/templates/pretixpresale/waiting.html:22
 msgid "We are processing your request …"
-msgstr "Estamos procesando a sua solicitude…"
+msgstr "Estamos procesando a súa solicitude…"
 
 #: pretix/presale/utils.py:170 pretix/presale/utils.py:293
 #: pretix/presale/utils.py:294
