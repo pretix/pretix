@@ -161,9 +161,7 @@ class PaymentSearch(PaginationMixin, ListView):
 
         if not self.request.user.has_active_staff_session(self.request.session.session_key):
             qs = qs.filter(
-                # TODO
-                #  Q(event_id__in=
-                #  self.request.user.get_events_with_permission('can_view_orders').values_list('id', flat=True))
+                Q(order__event_id__in=self.request.user.get_events_with_permission('can_view_orders').values_list('id', flat=True))
             )
 
         if self.filter_form.is_valid():
