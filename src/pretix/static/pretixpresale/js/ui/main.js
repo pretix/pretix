@@ -218,6 +218,10 @@ $(function () {
         $(this).append(content);
     });
 
+    $(".overlay-remove").on("click", function() {
+        $(this).closest(".contains-overlay").find(".overlay").fadeOut();
+    });
+
     $("#voucher-box").hide();
     $("#voucher-toggle").show();
     $("#voucher-toggle a").click(function () {

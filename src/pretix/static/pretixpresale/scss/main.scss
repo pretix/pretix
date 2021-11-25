@@ -129,6 +129,29 @@ a:hover .panel-primary > .panel-heading {
     }
 }
 
+.contains-overlay {
+    position: relative;
+}
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: $gray-lightest;
+}
+.overlay-centered {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.overlay-centered .overlay-content {
+  max-width: 35em;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 body.loading .container {
     -webkit-filter: blur(2px);
     -moz-filter: blur(2px);
