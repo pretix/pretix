@@ -824,12 +824,11 @@ class OrderPaymentSearchFilterForm(forms.Form):
         }),
         required=False,
     )
-    event = forms.ChoiceField(
+    event = forms.ModelChoiceField(
         label=_('Event'),
-        choices=[
-            ('', _('All events')),
-        ],
+        queryset=Event.objects.none(),
         required=False,
+        empty_label=_('All events'),
     )
     organizer = forms.ModelChoiceField(
         label=_('Organizer'),
@@ -892,18 +891,31 @@ class OrderPaymentSearchFilterForm(forms.Form):
 
         if self.request.user.has_active_staff_session(self.request.session.session_key):
             self.fields['organizer'].queryset = Organizer.objects.all()
+            self.fields['event'].queryset = Event.objects.all()
+
         else:
             self.fields['organizer'].queryset = Organizer.objects.filter(
                 pk__in=self.request.user.teams.values_list('organizer', flat=True)
             )
+            self.fields['event'].queryset = Event.objects.filter(
+                organizer__in=self.request.user.teams.values_list('organizer', flat=True)
+            )
 
         self.fields['provider'].choices += get_all_payment_providers()
+
+        # todo:
+        # self.fields['mode']
+        # self.fields['start']
+        # self.fields['until']
 
     def filter_qs(self, qs):
         fdata = self.cleaned_data
 
+        if fdata.get('event'):
+            qs = qs.filter(order__event=fdata.get('event'))
+
         if fdata.get('organizer'):
-            qs = qs.filter(event__organizer=fdata.get('organizer'))
+            qs = qs.filter(order__event__organizer=fdata.get('organizer'))
 
         if fdata.get('state'):
             qs = qs.filter(state=fdata.get('state'))
