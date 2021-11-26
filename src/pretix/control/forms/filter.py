@@ -938,13 +938,13 @@ class OrderPaymentSearchFilterForm(forms.Form):
                 Q(invoice_no__iexact=u)
                 | Q(invoice_no__iexact=u.zfill(5))
                 | Q(full_invoice_no__iexact=u)
-            ).values_list('id', flat=True)
+            ).values_list('order_id', flat=True)
 
             matching_invoice_addresses = InvoiceAddress.objects.filter(
                 Q(
                     Q(name_cached__icontains=u) | Q(company__icontains=u)
                 )
-            ).values_list('id', flat=True)
+            ).values_list('order_id', flat=True)
 
             matching_payments = OrderPayment.objects.filter(Q(info__icontains=u)).values_list('id', flat=True)
 
@@ -961,15 +961,26 @@ class OrderPaymentSearchFilterForm(forms.Form):
                 )
             ).values_list('id', flat=True)
 
-            matching_events = OrderPayment.objects.filter(Q(order__event__slug__icontains=u)).values_list('id', flat=True)
+            matching_events = OrderPayment.objects.filter(
+                Q(order__event__slug__icontains=u)
+                | Q(order__event__name__icontains=u)
+            ).values_list('id', flat=True)
+
+            if isinstance(u, (int, float, Decimal)):
+                matching_amounts = OrderPayment.objects.filter(Q(amount=u)).values_list('id', flat=True)
+            else:
+                matching_amounts = OrderPayment.objects.none()
+
+            matching_info = OrderPayment.objects.filter(Q(info__icontains=u)).values_list('id', flat=True)
 
             mainq = (
-                Q(pk__in=matching_invoices)
-                | Q(pk__in=matching_invoice_addresses)
-                | Q(pk__in=matching_invoices)
+                Q(order__id__in=matching_invoices)
+                | Q(order__id__in=matching_invoice_addresses)
                 | Q(pk__in=matching_payments)
                 | Q(pk__in=matching_orders)
                 | Q(pk__in=matching_events)
+                | Q(pk__in=matching_amounts)
+                | Q(pk__in=matching_info)
             )
 
             '''
