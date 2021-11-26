@@ -904,12 +904,13 @@ class OrderPaymentSearchFilterForm(forms.Form):
         self.fields['provider'].choices += get_all_payment_providers()
 
         # todo:
-        # self.fields['mode']
         # self.fields['start']
         # self.fields['until']
 
     def filter_qs(self, qs):
         fdata = self.cleaned_data
+
+        qs = qs.filter(order__event__testmode=fdata.get('mode'))
 
         if fdata.get('event'):
             qs = qs.filter(order__event=fdata.get('event'))
