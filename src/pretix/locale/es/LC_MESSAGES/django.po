@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-10-29 10:09+0000\n"
-"PO-Revision-Date: 2021-11-25 21:00+0000\n"
-"Last-Translator: Ismael Menéndez Fernández <ismael.menendez@balidea.com>\n"
+"PO-Revision-Date: 2021-11-28 05:00+0000\n"
+"Last-Translator: Angel Saiz Velasco <a.saiz.v@gmail.com>\n"
 "Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/pretix/"
 "es/>\n"
 "Language: es\n"
@@ -163,11 +163,8 @@ msgstr ""
 "ésta se aplica al canjear la tarjeta."
 
 #: pretix/api/serializers/item.py:205 pretix/control/forms/item.py:572
-#, fuzzy
-#| msgid "You cannot select a quota and a specific product at the same time."
 msgid "Gift card products should not be admission products at the same time."
-msgstr ""
-"No se puede seleccionar una cuota y un producto específico al mismo tiempo."
+msgstr "Las tarjetas de regalo no pueden ser entradas a la misma vez."
 
 #: pretix/api/serializers/item.py:242
 #, fuzzy, python-brace-format
@@ -196,14 +193,11 @@ msgid "This type of question cannot be asked during check-in."
 msgstr "Este tipo de pregunta no se puede hacer durante el registro."
 
 #: pretix/api/serializers/order.py:1181 pretix/api/serializers/order.py:1188
-#, fuzzy
-#| msgid "The product \"{}\" is not assigned to a quota."
 msgid "The product \"{}\" is not available on this date."
-msgstr "El producto \"{}\" no tiene asignada una cuota."
+msgstr "El producto \"{}\" no esta disponible en esta fecha."
 
 #: pretix/api/serializers/organizer.py:120
 #: pretix/control/forms/organizer.py:496
-#, fuzzy
 msgid ""
 "A gift card with the same secret already exists in your or an affiliated "
 "organizer account."
@@ -330,25 +324,19 @@ msgid "Event deleted"
 msgstr "Evento eliminado"
 
 #: pretix/api/webhooks.py:268
-#, fuzzy
-#| msgid "Event begin date and time"
 msgctxt "subevent"
 msgid "Event series date added"
-msgstr "Fecha y hora de inicio de evento"
+msgstr "Fecha de inicio de la serie de eventos creada"
 
 #: pretix/api/webhooks.py:272
-#, fuzzy
-#| msgid "Event date range"
 msgctxt "subevent"
 msgid "Event series date changed"
-msgstr "Rango de fechas de evento"
+msgstr "Fechas de la serie de eventos cambiadas"
 
 #: pretix/api/webhooks.py:276
-#, fuzzy
-#| msgid "Event begin date and time"
 msgctxt "subevent"
 msgid "Event series date deleted"
-msgstr "Fecha y hora de inicio de evento"
+msgstr "Fechas de la serie de eventos borradas"
 
 #: pretix/base/auth.py:138
 #, python-brace-format
