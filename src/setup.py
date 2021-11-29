@@ -228,7 +228,7 @@ setup(
         'tqdm==4.*',
         'vat_moss_forked==2020.3.20.0.11.0',
         'vobject==0.9.*',
-        'webauthn==0.4.*',
+        'webauthn>=0.4,<1.2',
         'zeep==4.1.*'
     ],
     extras_require={
@@ -236,7 +236,7 @@ setup(
             'coverage',
             'coveralls',
             'django-debug-toolbar==3.2.*',
-            'flake8==3.7.*',
+            'flake8>=3.7,<4.1',
             'freezegun',
             'isort',
             'pep8-naming',
