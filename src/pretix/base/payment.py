@@ -192,6 +192,15 @@ class BasePaymentProvider:
         return self.verbose_name
 
     @property
+    def confirm_button_name(self) -> str:
+        """
+        A label for the "confirm" button on the last page before a payment is started. This
+        is **not** used in the regular checkout flow, but only if the payment method is selected
+        for an existing order later on.
+        """
+        return _("Pay now")
+
+    @property
     def identifier(self) -> str:
         """
         A short and unique identifier for this payment provider.

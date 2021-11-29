@@ -62,6 +62,8 @@ The provider class
 
    .. autoattribute:: public_name
 
+   .. autoattribute:: confirm_button_name
+
    .. autoattribute:: is_enabled
 
    .. autoattribute:: priority
