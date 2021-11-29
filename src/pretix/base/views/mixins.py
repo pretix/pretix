@@ -356,19 +356,28 @@ class OrderQuestionsViewMixin(BaseQuestionsViewMixin):
         return override_sets
 
     @cached_property
+    def vat_id_validation_enabled(self):
+        return any([p.item.tax_rule and (p.item.tax_rule.eu_reverse_charge or p.item.tax_rule.custom_rules)
+                    for p in self.positions])
+
+    @cached_property
     def invoice_form(self):
         if not self.address_asked and self.request.event.settings.invoice_name_required:
             f = self.invoice_name_form_class(
                 data=self.request.POST if self.request.method == "POST" else None,
                 event=self.request.event,
-                instance=self.invoice_address, validate_vat_id=False,
+                instance=self.invoice_address,
+                validate_vat_id=False,
+                request=self.request,
                 all_optional=self.all_optional
             )
         elif self.address_asked:
             f = self.invoice_form_class(
                 data=self.request.POST if self.request.method == "POST" else None,
                 event=self.request.event,
-                instance=self.invoice_address, validate_vat_id=False,
+                instance=self.invoice_address,
+                validate_vat_id=self.vat_id_validation_enabled,
+                request=self.request,
                 all_optional=self.all_optional,
             )
         else:

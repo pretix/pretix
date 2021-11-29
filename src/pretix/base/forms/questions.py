@@ -1044,7 +1044,11 @@ class BaseInvoiceAddressForm(forms.ModelForm):
                 self.instance.vat_id_validated = True
                 self.instance.vat_id = normalized_id
             except VATIDFinalError as e:
-                raise ValidationError(e.message)
+                if self.all_optional:
+                    self.instance.vat_id_validated = False
+                    messages.warning(self.request, e.message)
+                else:
+                    raise ValidationError(e.message)
             except VATIDTemporaryError as e:
                 self.instance.vat_id_validated = False
                 if self.request and self.vat_warning:
