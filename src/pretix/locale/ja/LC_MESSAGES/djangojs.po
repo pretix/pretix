@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-10-29 10:10+0000\n"
+"POT-Creation-Date: 2021-11-29 08:28+0000\n"
 "PO-Revision-Date: 2021-10-11 15:56+0000\n"
 "Last-Translator: DJG Bayern <pretix2021weblate@aruki.de>\n"
 "Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/pretix-"
@@ -504,20 +504,20 @@ msgstr ""
 msgid "Please enter the amount the organizer can keep."
 msgstr ""
 
-#: pretix/static/pretixpresale/js/ui/main.js:335
+#: pretix/static/pretixpresale/js/ui/main.js:339
 msgid "Please enter a quantity for one of the ticket types."
 msgstr ""
 
-#: pretix/static/pretixpresale/js/ui/main.js:371
+#: pretix/static/pretixpresale/js/ui/main.js:375
 msgid "required"
 msgstr ""
 
-#: pretix/static/pretixpresale/js/ui/main.js:473
-#: pretix/static/pretixpresale/js/ui/main.js:491
+#: pretix/static/pretixpresale/js/ui/main.js:478
+#: pretix/static/pretixpresale/js/ui/main.js:497
 msgid "Time zone:"
 msgstr ""
 
-#: pretix/static/pretixpresale/js/ui/main.js:482
+#: pretix/static/pretixpresale/js/ui/main.js:488
 msgid "Your local time:"
 msgstr ""
 

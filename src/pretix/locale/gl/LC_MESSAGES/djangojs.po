@@ -7,11 +7,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-10-29 10:10+0000\n"
+"POT-Creation-Date: 2021-11-29 08:28+0000\n"
 "PO-Revision-Date: 2021-11-25 21:00+0000\n"
 "Last-Translator: Ismael Menéndez Fernández <ismael.menendez@balidea.com>\n"
-"Language-Team: Galician <https://translate.pretix.eu/projects/pretix/"
-"pretix-js/gl/>\n"
+"Language-Team: Galician <https://translate.pretix.eu/projects/pretix/pretix-"
+"js/gl/>\n"
 "Language: gl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -511,7 +511,8 @@ msgstr "O carro da compra caducou"
 msgid "The items in your cart are reserved for you for one minute."
 msgid_plural "The items in your cart are reserved for you for {num} minutes."
 msgstr[0] "Os artigos da túa cesta están reservados para ti durante un minuto."
-msgstr[1] "Os artigos da túa cesta están reservados para ti durante {num} minutos."
+msgstr[1] ""
+"Os artigos da túa cesta están reservados para ti durante {num} minutos."
 
 #: pretix/static/pretixpresale/js/ui/main.js:144
 msgid "The organizer keeps %(currency)s %(amount)s"
@@ -525,20 +526,20 @@ msgstr "Obtés %(currency)s %(price)s de volta"
 msgid "Please enter the amount the organizer can keep."
 msgstr "Por favor, ingrese a cantidade que pode conservar o organizador."
 
-#: pretix/static/pretixpresale/js/ui/main.js:335
+#: pretix/static/pretixpresale/js/ui/main.js:339
 msgid "Please enter a quantity for one of the ticket types."
 msgstr "Por favor, introduza un valor para cada tipo de entrada."
 
-#: pretix/static/pretixpresale/js/ui/main.js:371
+#: pretix/static/pretixpresale/js/ui/main.js:375
 msgid "required"
 msgstr "campo requirido"
 
-#: pretix/static/pretixpresale/js/ui/main.js:473
-#: pretix/static/pretixpresale/js/ui/main.js:491
+#: pretix/static/pretixpresale/js/ui/main.js:478
+#: pretix/static/pretixpresale/js/ui/main.js:497
 msgid "Time zone:"
 msgstr "Zona horaria:"
 
-#: pretix/static/pretixpresale/js/ui/main.js:482
+#: pretix/static/pretixpresale/js/ui/main.js:488
 msgid "Your local time:"
 msgstr "A súa hora local:"
 
