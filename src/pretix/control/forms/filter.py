@@ -878,7 +878,7 @@ class OrderPaymentSearchFilterForm(forms.Form):
         }),
     )
     mode = forms.BooleanField(
-        label=_('Include events in test mode'),
+        label=_('Include payments from events in test mode'),
         required=False,
         initial=True,
     )
