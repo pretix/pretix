@@ -863,13 +863,19 @@ class OrderPaymentSearchFilterForm(forms.Form):
         ],
         required=False,
     )
-    start = forms.DateTimeField(
-        label=_('From'),
+    date_from = forms.DateField(
+        label=_('Date from'),
         required=False,
+        widget=DatePickerWidget({
+            'placeholder': _('Date from'),
+        }),
     )
-    until = forms.DateTimeField(
-        label=_('Until'),
+    date_until = forms.DateField(
+        label=_('Date until'),
         required=False,
+        widget=DatePickerWidget({
+            'placeholder': _('Date until'),
+        }),
     )
     mode = forms.BooleanField(
         label=_('Include events in test mode'),
@@ -902,15 +908,22 @@ class OrderPaymentSearchFilterForm(forms.Form):
             )
 
         self.fields['provider'].choices += get_all_payment_providers()
-
-        # todo:
-        # self.fields['start']
-        # self.fields['until']
+        self.fields['date_from'].widget = DatePickerWidget()
+        self.fields['date_until'].widget = DatePickerWidget()
 
     def filter_qs(self, qs):
         fdata = self.cleaned_data
 
         qs = qs.filter(order__event__testmode=fdata.get('mode'))
+
+        if fdata.get('date_from'):
+            qs = qs.filter(created__gte=fdata.get('date_from'))
+
+        if fdata.get('date_until'):
+            qs = qs.filter(
+                Q(created__lte=fdata.get('date_until'))
+                | Q(payment_date__lte=fdata.get('date_until'))
+            )
 
         if fdata.get('event'):
             qs = qs.filter(order__event=fdata.get('event'))
