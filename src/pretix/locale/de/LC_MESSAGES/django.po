@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-30 16:13+0000\n"
-"PO-Revision-Date: 2021-11-29 09:29+0000\n"
+"PO-Revision-Date: 2021-11-30 16:48+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
 ">\n"
@@ -7695,19 +7695,16 @@ msgstr ""
 
 #: pretix/base/settings.py:1520
 msgid "Privacy Policy URL"
-msgstr ""
+msgstr "URL zur Datenschutzerklärung"
 
 #: pretix/base/settings.py:1521
-#, fuzzy
-#| msgid ""
-#| "This should point e.g. to a part of your website that has your contact "
-#| "details and legal information."
 msgid ""
 "This should point e.g. to a part of your website that explains how you use "
 "data gathered in your ticket shop."
 msgstr ""
-"Dies sollte bspw. ein Link zu einem Teil Ihrer Website sein, auf dem "
-"Kontaktdaten und rechtliche Informationen zu finden sind."
+"Dies sollte bspw. ein Link zu einem Teil Ihrer Website sein, auf dem Sie "
+"beschreiben, wie Sie persönliche Daten nutzen, die Sie in Ihrem Ticketshop "
+"sammeln."
 
 #: pretix/base/settings.py:1542
 msgid "Attach ticket files"
@@ -8709,19 +8706,19 @@ msgstr ""
 
 #: pretix/base/settings.py:2508
 msgid "Enable cookie consent management features"
-msgstr ""
+msgstr "Cookie-Consent-Management aktivieren"
 
 #: pretix/base/settings.py:2514
 msgid ""
 "By clicking \"Accept all cookies\", you agree to the storing of cookies and "
 "use of similar technologies on your device."
 msgstr ""
+"Wenn Sie \"Alle akzeptieren\" klicken, erklären Sie sich mit der Speicherung "
+"von Cookies und der Nutzung vergleichbarer Technologien einverstanden."
 
 #: pretix/base/settings.py:2521
-#, fuzzy
-#| msgid "Additional text"
 msgid "Dialog text"
-msgstr "Zusätzlicher Text"
+msgstr "Dialog-Text"
 
 #: pretix/base/settings.py:2528
 msgid ""
@@ -8730,44 +8727,39 @@ msgid ""
 "use cookies if they are essential to providing the services this website "
 "offers."
 msgstr ""
+"Wir nutzen Cookies und vergleichbare Technologien um Daten zu sammeln, die "
+"uns erlauben, diese Website und unsere Angebote zu verbessern. Wenn Sie "
+"damit nicht einverstanden sind, werden wir Cookies nur benutzen, wenn sie "
+"zwingend erforderlich sind um die Funktionen zu realisieren, die diese Seite "
+"anbietet."
 
 #: pretix/base/settings.py:2536
 msgid "Secondary dialog text"
-msgstr ""
+msgstr "Sekundärer Dialog-Text"
 
 #: pretix/base/settings.py:2542
-#, fuzzy
-#| msgid "Price settings"
 msgid "Privacy settings"
-msgstr "Preis"
+msgstr "Datenschutz-Einstellungen"
 
 #: pretix/base/settings.py:2547
-#, fuzzy
-#| msgid "Allowed titles"
 msgid "Dialog title"
-msgstr "Zur Auswahl stehende Titel"
+msgstr "Dialog-Titel"
 
 #: pretix/base/settings.py:2553
 msgid "Accept all cookies"
-msgstr ""
+msgstr "Alle akzeptieren"
 
 #: pretix/base/settings.py:2558
-#, fuzzy
-#| msgid "Product variation description"
 msgid "\"Accept\" button description"
-msgstr "Beschreibung der Produktvariante"
+msgstr "Beschriftung \"Akzeptieren\"-Button"
 
 #: pretix/base/settings.py:2564
-#, fuzzy
-#| msgid "Required question"
 msgid "Required cookies only"
-msgstr "Antwort erforderlich"
+msgstr "Nur erforderliche Cookies"
 
 #: pretix/base/settings.py:2569
-#, fuzzy
-#| msgid "Product variation description"
 msgid "\"Reject\" button description"
-msgstr "Beschreibung der Produktvariante"
+msgstr "Beschriftung \"Ablehnen\"-Button"
 
 #: pretix/base/settings.py:2579
 msgid "Customers can choose their own seats"
@@ -17802,7 +17794,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:86
 msgid "Privacy"
-msgstr ""
+msgstr "Datenschutz"
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:90
 msgid ""
@@ -17810,6 +17802,9 @@ msgid ""
 "before you are allowed to use cookies or similar technology for analytics, "
 "tracking, payment, or similar purposes."
 msgstr ""
+"Einige Jurisdiktionen wie z.B. die EU erfordern die Einwilligung des "
+"Benutzers, bevor Cookies oder ähnliche Technologien für Analyse, Tracking, "
+"Zahlung oder ähnliche Zwecke verwendet werden dürfen."
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:97
 msgid ""
@@ -17818,6 +17813,10 @@ msgid ""
 "security. Therefore, cookies set by pretix itself do not require consent in "
 "all jurisdictions that we are aware of."
 msgstr ""
+"pretix selbst verwendet nur Cookies, die essentiell sind um die Leistungen "
+"von pretix technisch mit einem angemessenen Sicherheitsniveau umzusetzen. "
+"Die von pretix gesetzten Cookies erfordern daher in den uns bekannten "
+"Jurisdiktionen keine Einwilligung."
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:105
 msgid ""
@@ -17825,6 +17824,9 @@ msgid ""
 "affect if you use <strong>plugins</strong> that require additional cookies "
 "<strong>and</strong> participate in our cookie consent mechanism."
 msgstr ""
+"Die Einstellungen auf dieser Seite greifen daher <strong>nur</strong>, wenn "
+"Sie <strong>Plugins</strong> nutzen, die zusätzliche Cookies erfordern "
+"<strong>und</strong> an unserem Cookie-Consent-Mechanismus teilnehmen."
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:112
 msgid ""
@@ -17834,6 +17836,12 @@ msgid ""
 "usage, the legal details in your specific jurisdiction, or the agreements "
 "you have with third parties such as payment or tracking providers."
 msgstr ""
+"Trotzdem bleibt es Ihre Verantwortung, dass Ihr Ticket-Shop allen "
+"anwendbaren Gesetzen entspricht. Wir versuchen mit diesen Einstellungen zu "
+"helfen, aber können keine Haftung übernehmen, da wir unter anderem die "
+"genaue Konfiguration Ihres Ticketshops, die rechtlichen Details der "
+"anwendbaren Jurisdiktion und die Vereinbarungen zwischen Ihnen und den "
+"eingesetzten Drittanbietern nicht kennen."
 
 #: pretix/control/templates/pretixcontrol/organizers/gate_delete.html:5
 msgid "Delete gate:"
@@ -24344,14 +24352,12 @@ msgstr "Veranstalter kontaktieren"
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:103
 #: pretix/presale/templates/pretixpresale/organizers/base.html:91
 msgid "Privacy policy"
-msgstr ""
+msgstr "Datenschutzerklärung"
 
 #: pretix/presale/templates/pretixpresale/event/base.html:176
 #: pretix/presale/templates/pretixpresale/organizers/base.html:94
-#, fuzzy
-#| msgid "Invoice settings"
 msgid "Cookie settings"
-msgstr "Rechnungseinstellungen"
+msgstr "Cookie-Einstellungen"
 
 #: pretix/presale/templates/pretixpresale/event/base.html:179
 #: pretix/presale/templates/pretixpresale/organizers/base.html:97
@@ -26087,49 +26093,43 @@ msgstr "Kundenprofil ansehen"
 
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:43
 msgid "Adjust settings in detail"
-msgstr ""
+msgstr "Detail-Einstellungen"
 
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:48
-#, fuzzy
-#| msgid "Required for events"
 msgid "Required cookies"
-msgstr "Pflichtfeld für Veranstaltungen"
+msgstr "Erforderliche Cookies"
 
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:50
 msgid ""
 "Functional cookies (e.g. shopping cart, login, payment, language preference) "
 "and technical cookies (e.g. security purposes)"
 msgstr ""
+"Funktionale Cookies (z.B. Warenkorb, Login, Zahlung, Sprachauswahl) und "
+"technische Cookies (z.B. Sicherheitsmechanismen)"
 
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:63
 msgctxt "cookie_usage"
 msgid "Functionality"
-msgstr ""
+msgstr "Funktionalität"
 
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:65
 msgctxt "cookie_usage"
 msgid "Analytics"
-msgstr ""
+msgstr "Analyse"
 
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:67
-#, fuzzy
-#| msgid "Start editing"
 msgctxt "cookie_usage"
 msgid "Marketing"
-msgstr "Editor starten"
+msgstr "Marketing"
 
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:69
-#, fuzzy
-#| msgid "API features"
 msgctxt "cookie_usage"
 msgid "Social features"
-msgstr "API-Funktionen"
+msgstr "Soziale Funktionen"
 
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:88
-#, fuzzy
-#| msgid "Data selection"
 msgid "Save selection"
-msgstr "Datenauswahl"
+msgstr "Auswahl speichern"
 
 #: pretix/presale/templates/pretixpresale/fragment_week_calendar.html:78
 #, python-format
