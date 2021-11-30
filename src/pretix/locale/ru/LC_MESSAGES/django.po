@@ -7,9 +7,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-11-30 16:13+0000\n"
-"PO-Revision-Date: 2021-08-09 13:10+0000\n"
-"Last-Translator: Svyatoslav <slava@digitalarthouse.eu>\n"
+"POT-Creation-Date: 2021-11-29 08:27+0000\n"
+"PO-Revision-Date: 2021-11-30 16:12+0000\n"
+"Last-Translator: Ilona Zilgalve <i.zilgalve@riga-jurmala.com>\n"
 "Language-Team: Russian <https://translate.pretix.eu/projects/pretix/pretix/"
 "ru/>\n"
 "Language: ru\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.6\n"
+"X-Generator: Weblate 4.8\n"
 
 #: pretix/api/auth/devicesecurity.py:28
 msgid ""
@@ -365,7 +365,7 @@ msgstr "Электронная почта"
 #: pretix/control/forms/__init__.py:398 pretix/presale/forms/customer.py:54
 #: pretix/presale/forms/customer.py:235
 msgid "Password"
-msgstr ""
+msgstr "Пароль"
 
 #: pretix/base/channels.py:112
 msgid "Online shop"
@@ -492,7 +492,7 @@ msgstr "Билет на мероприятие {event}-{code}"
 #: pretix/plugins/checkinlists/exporters.py:458
 #: pretix/plugins/ticketoutputpdf/exporters.py:74
 msgid "Start date"
-msgstr ""
+msgstr "Дата начала"
 
 #: pretix/base/exporters/dekodi.py:226 pretix/base/exporters/invoices.py:73
 msgid ""
@@ -518,7 +518,7 @@ msgstr ""
 #: pretix/plugins/checkinlists/exporters.py:459
 #: pretix/plugins/ticketoutputpdf/exporters.py:81
 msgid "End date"
-msgstr ""
+msgstr "Дата окончания"
 
 #: pretix/base/exporters/dekodi.py:234 pretix/base/exporters/invoices.py:81
 msgid ""
@@ -539,12 +539,12 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:59
 #: pretix/control/templates/pretixcontrol/orders/refunds.html:50
 msgid "Payment provider"
-msgstr ""
+msgstr "Плательщик"
 
 #: pretix/base/exporters/invoices.py:88 pretix/base/exporters/invoices.py:90
 #: pretix/control/forms/filter.py:177 pretix/control/forms/filter.py:1778
 msgid "All payment providers"
-msgstr ""
+msgstr "Все поставщики платежных услуг"
 
 #: pretix/base/exporters/invoices.py:95
 msgid ""
@@ -622,7 +622,7 @@ msgstr "Дата"
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:43
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:60
 msgid "Order code"
-msgstr ""
+msgstr "Код заказа"
 
 #: pretix/base/exporters/invoices.py:202 pretix/base/exporters/invoices.py:329
 #: pretix/base/models/waitinglist.py:73 pretix/base/orderimport.py:150
@@ -630,7 +630,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/users/index.html:42
 #: pretix/control/views/waitinglist.py:292
 msgid "E-mail address"
-msgstr ""
+msgstr "Адрес электронной почты"
 
 #: pretix/base/exporters/invoices.py:203 pretix/base/exporters/invoices.py:330
 msgid "Invoice type"
@@ -645,7 +645,7 @@ msgstr "Отмена"
 #: pretix/base/models/customers.py:58 pretix/control/forms/event.py:1225
 #: pretix/control/views/waitinglist.py:293
 msgid "Language"
-msgstr ""
+msgstr "Язык"
 
 #: pretix/base/exporters/invoices.py:206 pretix/base/exporters/invoices.py:207
 #: pretix/base/exporters/invoices.py:208 pretix/base/exporters/invoices.py:209
@@ -732,7 +732,7 @@ msgstr "Адрес"
 #: pretix/plugins/checkinlists/exporters.py:477
 #: pretix/plugins/reports/exporters.py:754
 msgid "ZIP code"
-msgstr ""
+msgstr "ЗИП код"
 
 #: pretix/base/exporters/invoices.py:209 pretix/base/exporters/invoices.py:217
 #: pretix/base/exporters/invoices.py:335 pretix/base/exporters/invoices.py:343
@@ -748,7 +748,7 @@ msgstr ""
 #: pretix/plugins/checkinlists/exporters.py:478
 #: pretix/plugins/reports/exporters.py:755
 msgid "City"
-msgstr ""
+msgstr "Город"
 
 #: pretix/base/exporters/invoices.py:210 pretix/base/exporters/invoices.py:218
 #: pretix/base/exporters/invoices.py:336 pretix/base/exporters/invoices.py:344
@@ -990,7 +990,7 @@ msgstr "Адреса электронной почты (текстовый фа�
 #: pretix/base/exporters/mail.py:74 pretix/plugins/reports/exporters.py:384
 #: pretix/plugins/reports/exporters.py:564
 msgid "Filter by status"
-msgstr ""
+msgstr "Фильтр по статусу"
 
 #: pretix/base/exporters/orderlist.py:71
 msgid "Order data"
@@ -1004,7 +1004,7 @@ msgstr "Данные заказа"
 #: pretix/plugins/reports/exporters.py:552
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:43
 msgid "Orders"
-msgstr ""
+msgstr "Заказы"
 
 #: pretix/base/exporters/orderlist.py:81 pretix/base/models/orders.py:2181
 #: pretix/base/notifications.py:205
@@ -1020,10 +1020,8 @@ msgid "Only paid orders"
 msgstr "Только оплаченные заказы"
 
 #: pretix/base/exporters/orderlist.py:96
-#, fuzzy
-#| msgid "Enable payment method"
 msgid "Include payment amounts"
-msgstr "Активировать способ оплаты"
+msgstr "Включить суммы платежа"
 
 #: pretix/base/exporters/orderlist.py:102
 msgid "Show multiple choice answers grouped in one column"
@@ -1050,10 +1048,8 @@ msgid ""
 msgstr ""
 
 #: pretix/base/exporters/orderlist.py:130
-#, fuzzy
-#| msgid "Event date"
 msgid "End event date"
-msgstr "Дата мероприятия"
+msgstr "Дата окончания мероприятия"
 
 #: pretix/base/exporters/orderlist.py:133
 msgid ""
@@ -1069,7 +1065,7 @@ msgstr ""
 #: pretix/base/exporters/waitinglist.py:111 pretix/control/forms/event.py:1271
 #: pretix/control/forms/organizer.py:94
 msgid "Event slug"
-msgstr ""
+msgstr "Название мероприятия"
 
 #: pretix/base/exporters/orderlist.py:271 pretix/base/notifications.py:201
 #: pretix/control/templates/pretixcontrol/search/orders.html:60
@@ -1077,7 +1073,7 @@ msgstr ""
 #: pretix/plugins/reports/exporters.py:799
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:63
 msgid "Order total"
-msgstr ""
+msgstr "Весь заказ"
 
 #: pretix/base/exporters/orderlist.py:271
 #: pretix/base/exporters/orderlist.py:440
@@ -1139,10 +1135,8 @@ msgstr ""
 #: pretix/presale/checkoutflow.py:1224 pretix/presale/forms/checkout.py:90
 #: pretix/presale/forms/waitinglist.py:106
 #: pretix/presale/templates/pretixpresale/event/order.html:310
-#, fuzzy
-#| msgid "Line number"
 msgid "Phone number"
-msgstr "Номер строки"
+msgstr "Номер телефона"
 
 #: pretix/base/exporters/orderlist.py:271
 #: pretix/base/exporters/orderlist.py:443
@@ -1162,16 +1156,14 @@ msgstr "Номер строки"
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:46
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:62
 msgid "Order date"
-msgstr ""
+msgstr "Дата заказа"
 
 #: pretix/base/exporters/orderlist.py:272
 #: pretix/base/exporters/orderlist.py:444
 #: pretix/base/exporters/orderlist.py:547
 #: pretix/plugins/checkinlists/exporters.py:467
-#, fuzzy
-#| msgid "Order date:"
 msgid "Order time"
-msgstr "Дата заказа:"
+msgstr "Время заказа:"
 
 #: pretix/base/exporters/orderlist.py:280 pretix/base/settings.py:371
 #, fuzzy
@@ -1541,7 +1533,7 @@ msgstr "Оплаченные заказы"
 
 #: pretix/base/exporters/orderlist.py:831 pretix/control/views/item.py:909
 msgid "Pending orders"
-msgstr ""
+msgstr "Заказы в ожидании"
 
 #: pretix/base/exporters/orderlist.py:831
 msgid "Blocking vouchers"
