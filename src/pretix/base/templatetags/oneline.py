@@ -24,6 +24,8 @@ from django import template
 register = template.Library()
 
 
-@register.simple_tag
+@register.filter
 def oneline(value):
-    return ', '.join([l.strip() for l in value.splitlines() if l and l.strip()])
+    if not value:
+        return ''
+    return ', '.join([l.strip() for l in str(value).splitlines() if l and l.strip()])
