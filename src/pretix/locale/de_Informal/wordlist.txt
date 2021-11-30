@@ -55,6 +55,7 @@ Chrome
 Choice
 CONFIRM
 Connect
+Consent
 Copyleft
 Cronjob
 csv
@@ -253,6 +254,7 @@ Toolbar
 TODO
 TOTP
 Trace
+Tracking
 Turnover
 txt
 überbuchen
