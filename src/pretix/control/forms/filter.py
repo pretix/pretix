@@ -959,7 +959,7 @@ class OrderPaymentSearchFilterForm(forms.Form):
                 )
             ).values_list('order_id', flat=True)
 
-            matching_payments = OrderPayment.objects.filter(Q(info__icontains=u)).values_list('id', flat=True)
+            matching_payments = OrderPayment.objects.filter(info__icontains=u).values_list('id', flat=True)
 
             if "-" in u:
                 code = (Q(order__event__slug__icontains=u.rsplit("-", 1)[0])
@@ -969,8 +969,9 @@ class OrderPaymentSearchFilterForm(forms.Form):
 
             matching_orders = OrderPayment.objects.filter(
                 Q(
-                    Q(order__code__icontains=u)
-                    | code
+                    code
+                    | Q(order__email__icontains=u)
+                    | Q(order__comment__icontains=u)
                 )
             ).values_list('id', flat=True)
 
@@ -979,12 +980,27 @@ class OrderPaymentSearchFilterForm(forms.Form):
                 | Q(order__event__name__icontains=u)
             ).values_list('id', flat=True)
 
-            if isinstance(u, (int, float, Decimal)):
-                matching_amounts = OrderPayment.objects.filter(Q(amount=u)).values_list('id', flat=True)
+            def is_decimal(value):
+                result = True
+                parts = value.split('.', maxsplit=1)
+                for part in parts:
+                    result = result & part.isdecimal()
+                return result
+
+            if is_decimal(u):
+                matching_amounts = OrderPayment.objects.filter(amount=Decimal(u)).values_list('id', flat=True)
             else:
                 matching_amounts = OrderPayment.objects.none()
 
-            matching_info = OrderPayment.objects.filter(Q(info__icontains=u)).values_list('id', flat=True)
+            matching_info = OrderPayment.objects.filter(info__icontains=u).values_list('id', flat=True)
+
+            matching_positions = OrderPosition.objects.filter(
+                Q(
+                    Q(attendee_name_cached__icontains=u) | Q(attendee_email__icontains=u)
+                    | Q(secret__istartswith=u)
+                    | Q(pseudonymization_id__istartswith=u)
+                )
+            ).values_list('order', flat=True)
 
             mainq = (
                 Q(order__id__in=matching_invoices)
@@ -994,6 +1010,7 @@ class OrderPaymentSearchFilterForm(forms.Form):
                 | Q(pk__in=matching_events)
                 | Q(pk__in=matching_amounts)
                 | Q(pk__in=matching_info)
+                | Q(order__in=matching_positions)
             )
 
             '''
