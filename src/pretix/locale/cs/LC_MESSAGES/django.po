@@ -7,11 +7,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-11-30 16:13+0000\n"
-"PO-Revision-Date: 2021-10-19 15:17+0000\n"
-"Last-Translator: Raphael Michel <michel@rami.io>\n"
-"Language-Team: Czech <https://translate.pretix.eu/projects/pretix/pretix/cs/"
-">\n"
+"POT-Creation-Date: 2021-11-29 08:27+0000\n"
+"PO-Revision-Date: 2021-11-30 16:12+0000\n"
+"Last-Translator: Tonda Pavlík <reklamy@playton.cz>\n"
+"Language-Team: Czech <https://translate.pretix.eu/projects/pretix/pretix/cs/>"
+"\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -161,7 +161,7 @@ msgstr ""
 
 #: pretix/api/serializers/item.py:205 pretix/control/forms/item.py:572
 msgid "Gift card products should not be admission products at the same time."
-msgstr ""
+msgstr "Dárkové karty by neměly být zároveň vstupné."
 
 #: pretix/api/serializers/item.py:242
 #, python-brace-format
@@ -961,7 +961,7 @@ msgstr "Začátek akce"
 
 #: pretix/base/exporters/invoices.py:350 pretix/base/pdf.py:255
 msgid "Event end date"
-msgstr ""
+msgstr "Datum ukončení akce"
 
 #: pretix/base/exporters/invoices.py:351 pretix/base/models/event.py:504
 #: pretix/base/models/event.py:1303
@@ -1038,16 +1038,12 @@ msgid "End event date"
 msgstr "Datum konce akce"
 
 #: pretix/base/exporters/orderlist.py:133
-#, fuzzy
-#| msgid ""
-#| "Only include orders including at least one ticket for a date on or after "
-#| "this date. Will also include other dates in case of mixed orders!"
 msgid ""
 "Only include orders including at least one ticket for a date on or before "
 "this date. Will also include other dates in case of mixed orders!"
 msgstr ""
 "Zahrňte pouze objednávky zahrnující alespoň jednu vstupenku na datum k "
-"tomuto datu nebo po tomto datu. V případě smíšených objednávek bude "
+"tomuto datu nebo před tímto datem. V případě smíšených objednávek bude "
 "obsahovat také další data!"
 
 #: pretix/base/exporters/orderlist.py:271
@@ -1398,10 +1394,8 @@ msgstr "Název sedadla"
 
 #: pretix/base/exporters/orderlist.py:578
 #: pretix/plugins/checkinlists/exporters.py:472
-#, fuzzy
-#| msgid "Client ID"
 msgid "Seat zone"
-msgstr "Klientské ID"
+msgstr "Sedací zóna"
 
 #: pretix/base/exporters/orderlist.py:579
 #: pretix/plugins/checkinlists/exporters.py:473
@@ -1557,10 +1551,8 @@ msgid "Infinite"
 msgstr "Nekonečno"
 
 #: pretix/base/exporters/orderlist.py:879
-#, fuzzy
-#| msgid "Gift card redemptions"
 msgid "Gift card transactions"
-msgstr "Použítí darkové karty"
+msgstr "Transakce u dárkové karty"
 
 #: pretix/base/exporters/orderlist.py:923
 #: pretix/base/exporters/orderlist.py:967
@@ -1892,16 +1884,20 @@ msgid ""
 "Optional, but depending on the country you reside in we might need to charge "
 "you additional taxes if you do not enter it."
 msgstr ""
+"Nepovinné, ale v závislosti na zemi, ve které sídlíte, vám možná budeme "
+"muset účtovat další poplatky na daních, pokud ji nezadáte."
 
 #: pretix/base/forms/questions.py:927 pretix/base/forms/questions.py:933
 msgid "If you are registered in Switzerland, you can enter your UID instead."
-msgstr ""
+msgstr "Pokud jste registrováni ve Švýcarsku, můžete místo toho zadat své UID."
 
 #: pretix/base/forms/questions.py:931
 msgid ""
 "Optional, but it might be required for you to claim tax benefits on your "
 "invoice depending on your and the seller’s country of residence."
 msgstr ""
+"Nepovinné, ale může být vyžadováno, abyste na faktuře uplatnili daňové "
+"výhody v závislosti na vaší zemi a zemi bydliště prodejce."
 
 #: pretix/base/forms/questions.py:1020
 msgid "You need to provide a company name."
@@ -2125,7 +2121,7 @@ msgstr "Daňová sazba"
 #: pretix/base/invoice.py:545
 msgctxt "invoice"
 msgid "Net"
-msgstr ""
+msgstr "Netto"
 
 #: pretix/base/invoice.py:546
 msgctxt "invoice"
@@ -2468,9 +2464,8 @@ msgstr ""
 "objednávek, číslech faktur a referencích bankovních převodů."
 
 #: pretix/base/models/event.py:471 pretix/base/models/organizer.py:83
-#, fuzzy
 msgid "The slug may only contain letters, numbers, dots and dashes."
-msgstr "Slimák může obsahovat pouze písmena, číslice, tečky a pomlčky."
+msgstr "Krátká forma může obsahovat pouze písmena, číslice, tečky a pomlčky."
 
 #: pretix/base/models/event.py:475 pretix/base/models/organizer.py:87
 #: pretix/control/templates/pretixcontrol/organizers/index.html:47
@@ -2668,15 +2663,15 @@ msgstr ""
 
 #: pretix/base/models/event.py:1323 pretix/base/settings.py:2240
 msgid "Frontpage text"
-msgstr ""
+msgstr "Text na přední straně"
 
 #: pretix/base/models/event.py:1338
 msgid "Date in event series"
-msgstr ""
+msgstr "Datum v sérii událostí"
 
 #: pretix/base/models/event.py:1339
 msgid "Dates in event series"
-msgstr ""
+msgstr "Data v sérii událostí"
 
 #: pretix/base/models/event.py:1478
 msgid "One or more variations do not belong to this event."
@@ -2684,11 +2679,11 @@ msgstr ""
 
 #: pretix/base/models/event.py:1508 pretix/base/models/items.py:1721
 msgid "Can not contain spaces or special characters except underscores"
-msgstr ""
+msgstr "Nesmí obsahovat mezery ani speciální znaky kromě podtržítek"
 
 #: pretix/base/models/event.py:1513 pretix/base/models/items.py:1726
 msgid "The property name may only contain letters, numbers and underscores."
-msgstr ""
+msgstr "Název vlastnosti může obsahovat pouze písmena, čísla a podtržítka."
 
 #: pretix/base/models/event.py:1518
 #, fuzzy
@@ -2758,7 +2753,7 @@ msgstr ""
 
 #: pretix/base/models/items.py:86
 msgid "Category name"
-msgstr ""
+msgstr "Název kategorie"
 
 #: pretix/base/models/items.py:89 pretix/base/models/items.py:362
 msgid "Internal name"
@@ -2771,11 +2766,11 @@ msgstr ""
 
 #: pretix/base/models/items.py:94
 msgid "Category description"
-msgstr ""
+msgstr "Podrobnosti kategorie"
 
 #: pretix/base/models/items.py:101
 msgid "Products in this category are add-on products"
-msgstr ""
+msgstr "Produkty v této kategorii jsou doplňkové"
 
 #: pretix/base/models/items.py:102
 msgid ""
@@ -2783,24 +2778,27 @@ msgid ""
 "their own. They can only be bought in combination with a product that has "
 "this category configured as a possible source for add-ons."
 msgstr ""
+"Pokud je vybráno, produkty patřící do této kategorie nejsou samostatně "
+"prodejné. Lze je zakoupit pouze v kombinaci s produktem, který má tuto "
+"kategorii nakonfigurovanou jako možný zdroj doplňků."
 
 #: pretix/base/models/items.py:108 pretix/base/pdf.py:138
 #: pretix/control/templates/pretixcontrol/items/category.html:4
 #: pretix/control/templates/pretixcontrol/items/category.html:6
 msgid "Product category"
-msgstr ""
+msgstr "Kategorie produktu"
 
 #: pretix/base/models/items.py:109
 #: pretix/control/templates/pretixcontrol/items/categories.html:3
 #: pretix/control/templates/pretixcontrol/items/categories.html:5
 #: pretix/control/templates/pretixcontrol/items/categories.html:33
 msgid "Product categories"
-msgstr ""
+msgstr "Kategorie produktu"
 
 #: pretix/base/models/items.py:115
 #, python-brace-format
 msgid "{category} (Add-On products)"
-msgstr ""
+msgstr "{category} (doplňkové produkty)"
 
 #: pretix/base/models/items.py:166 pretix/base/models/items.py:222
 msgid "Disable product for this date"
@@ -2813,12 +2811,12 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html:169
 #: pretix/control/templates/pretixcontrol/subevents/detail.html:147
 msgid "Available from"
-msgstr ""
+msgstr "dostupný z"
 
 #: pretix/base/models/items.py:170 pretix/base/models/items.py:226
 #: pretix/base/models/items.py:429
 msgid "This product will not be sold before the given date."
-msgstr ""
+msgstr "Tento produkt nebude před uvedeným datem prodáván."
 
 #: pretix/base/models/items.py:173 pretix/base/models/items.py:229
 #: pretix/base/models/items.py:432 pretix/base/models/items.py:823
@@ -2827,35 +2825,37 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html:173
 #: pretix/control/templates/pretixcontrol/subevents/detail.html:151
 msgid "Available until"
-msgstr ""
+msgstr "K dispozici do"
 
 #: pretix/base/models/items.py:175 pretix/base/models/items.py:231
 #: pretix/base/models/items.py:434
 msgid "This product will not be sold after the given date."
-msgstr ""
+msgstr "Tento produkt nebude po uvedeném datu prodáván."
 
 #: pretix/base/models/items.py:354 pretix/base/models/items.py:1018
 #: pretix/control/templates/pretixcontrol/items/index.html:40
 msgid "Category"
-msgstr ""
+msgstr "Kategorie"
 
 #: pretix/base/models/items.py:355
 msgid ""
 "If you have many products, you can optionally sort them into categories to "
 "keep things organized."
 msgstr ""
+"Máte-li mnoho produktů, můžete je volitelně roztřídit do kategorií, abyste "
+"měli věci uspořádané."
 
 #: pretix/base/models/items.py:359
 msgid "Item name"
-msgstr ""
+msgstr "Název položky"
 
 #: pretix/base/models/items.py:372
 msgid "This is shown below the product name in lists."
-msgstr ""
+msgstr "To je zobrazeno pod názvem produktu v seznamech."
 
 #: pretix/base/models/items.py:376 pretix/base/models/items.py:793
 msgid "Default price"
-msgstr ""
+msgstr "Výchozí cena"
 
 #: pretix/base/models/items.py:377
 msgid ""
@@ -2863,10 +2863,13 @@ msgid ""
 "each of the variations. If a variation does not have a special price or if "
 "you do not have variations, this price will be used."
 msgstr ""
+"Pokud má tento produkt více variant, můžete pro každou z variant nastavit "
+"různé ceny. Pokud varianta nemá speciální cenu nebo pokud nemáte varianty, "
+"bude použita tato cena."
 
 #: pretix/base/models/items.py:384
 msgid "Free price input"
-msgstr ""
+msgstr "Zadání ceny zdarma"
 
 #: pretix/base/models/items.py:385
 msgid ""
@@ -2876,18 +2879,23 @@ msgid ""
 "event. This is currently not supported for products that are bought as an "
 "add-on to other products."
 msgstr ""
+"Pokud je tato možnost aktivní, vaši uživatelé si mohou cenu vybrat sami. "
+"Výše nakonfigurovaná cena je pak interpretována jako minimální cena, kterou "
+"musí uživatel zadat. Toto můžete použít např. získat další dary pro vaši "
+"akci. To v současnosti není podporováno u produktů, které jsou zakoupeny "
+"jako doplněk k jiným produktům."
 
 #: pretix/base/models/items.py:392
 msgid "Sales tax"
-msgstr ""
+msgstr "Prodejní daň"
 
 #: pretix/base/models/items.py:397
 msgid "Is an admission ticket"
-msgstr ""
+msgstr "Je vstupenkou"
 
 #: pretix/base/models/items.py:399
 msgid "Whether or not buying this product allows a person to enter your event"
-msgstr ""
+msgstr "Zda nákup tohoto produktu umožní osobě vstoupit na vaši událost"
 
 #: pretix/base/models/items.py:405
 msgid "Generate tickets"
@@ -2912,7 +2920,7 @@ msgstr ""
 
 #: pretix/base/models/items.py:422
 msgid "Product picture"
-msgstr ""
+msgstr "Obrázek produktu"
 
 #: pretix/base/models/items.py:440
 msgid "Only show after sellout of"
@@ -2929,13 +2937,15 @@ msgstr ""
 
 #: pretix/base/models/items.py:448
 msgid "This product can only be bought using a voucher."
-msgstr ""
+msgstr "Tento produkt lze zakoupit pouze pomocí voucheru."
 
 #: pretix/base/models/items.py:450
 msgid ""
 "To buy this product, the user needs a voucher that applies to this product "
 "either directly or via a quota."
 msgstr ""
+"K nákupu tohoto produktu potřebuje uživatel voucher, který se vztahuje na "
+"tento produkt buď přímo, nebo prostřednictvím kvóty."
 
 #: pretix/base/models/items.py:454
 msgid "Buying this product requires approval"
@@ -2954,6 +2964,8 @@ msgid ""
 "This product will only be shown if a voucher matching the product is "
 "redeemed."
 msgstr ""
+"Tento produkt se zobrazí pouze v případě, že bude uplatněn voucher "
+"odpovídající produktu."
 
 #: pretix/base/models/items.py:463
 msgid ""
@@ -2985,7 +2997,7 @@ msgstr ""
 
 #: pretix/base/models/items.py:480
 msgid "Minimum amount per order"
-msgstr ""
+msgstr "Minimální množství na objednávku"
 
 #: pretix/base/models/items.py:482
 msgid ""
@@ -3876,7 +3888,7 @@ msgstr ""
 
 #: pretix/base/models/orders.py:2612
 msgid "Business customer"
-msgstr ""
+msgstr "Obchodní zákazník"
 
 #: pretix/base/models/orders.py:2628
 msgid "This reference will be printed on your invoice for your convenience."
@@ -9771,7 +9783,7 @@ msgstr ""
 #: pretix/plugins/reports/exporters.py:576
 #: pretix/plugins/reports/exporters.py:799
 msgid "Payment date"
-msgstr ""
+msgstr "Datum splatnosti"
 
 #: pretix/control/forms/orders.py:246
 msgid "Re-calculate taxes"
