@@ -2,6 +2,7 @@
 ABN
 AGPL
 Alipay
+analytics
 anonymize
 anonymized
 authenticator
