@@ -67,20 +67,20 @@ The variable will generally have one of the following states:
 
 .. rst-class:: rest-resource-table
 
-===================================================== =====================================================
-State                                                 Interpretation
-===================================================== =====================================================
-``pretix.cookie_consent === undefined``               Your JavaScript has loaded before the cookie consent
-                                                      script. Wait for the event to be fired, then try again,
-                                                      do not yet set a cookie.
-``pretix.cookie_consent === null``                    The cookie consent mechanism has not been enabled. This
-                                                      usually means that you can set cookies however you like.
-``pretix.cookie_consent[identifier] === undefined``   The cookie consent mechanism is loaded, but has no data
-                                                      on your cookie yet, wait for the event to be fired, do not
-                                                      yet set a cookie.
-``pretix.cookie_consent[identifier] === true``        The user has consented to your cookie.
-``pretix.cookie_consent[identifier] === false``       The user has actively rejected your cookie.
-===================================================== =====================================================
+================================================================ =====================================================
+State                                                            Interpretation
+================================================================ =====================================================
+``pretix === undefined || pretix.cookie_consent === undefined``  Your JavaScript has loaded before the cookie consent
+                                                                 script. Wait for the event to be fired, then try again,
+                                                                 do not yet set a cookie.
+``pretix.cookie_consent === null``                               The cookie consent mechanism has not been enabled. This
+                                                                 usually means that you can set cookies however you like.
+``pretix.cookie_consent[identifier] === undefined``              The cookie consent mechanism is loaded, but has no data
+                                                                 on your cookie yet, wait for the event to be fired, do not
+                                                                 yet set a cookie.
+``pretix.cookie_consent[identifier] === true``                   The user has consented to your cookie.
+``pretix.cookie_consent[identifier] === false``                  The user has actively rejected your cookie.
+================================================================ =====================================================
 
 If you are integrating e.g. a tracking provider with native cookie consent support such
 as Facebook's Pixel, you can integrate it like this:
