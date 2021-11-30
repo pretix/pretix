@@ -307,8 +307,14 @@ class OrganizerSettingsForm(SettingsForm):
         'theme_color_danger',
         'theme_color_background',
         'theme_round_borders',
-        'primary_font'
-
+        'primary_font',
+        'privacy_url',
+        'cookie_consent',
+        'cookie_consent_dialog_title',
+        'cookie_consent_dialog_text',
+        'cookie_consent_dialog_text_secondary',
+        'cookie_consent_dialog_button_yes',
+        'cookie_consent_dialog_button_no',
     ]
 
     organizer_logo_image = ExtFileField(

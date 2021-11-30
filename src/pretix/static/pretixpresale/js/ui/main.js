@@ -218,6 +218,16 @@ $(function () {
         $(this).append(content);
     });
 
+    $("[data-click-to-load]").on("click", function(e) {
+        var target = document.getElementById(this.getAttribute("data-click-to-load"));
+        target.src = this.href;
+        target.focus();
+        e.preventDefault();
+    });
+    $(".overlay-remove").on("click", function() {
+        $(this).closest(".contains-overlay").find(".overlay").fadeOut();
+    });
+
     $("#voucher-box").hide();
     $("#voucher-toggle").show();
     $("#voucher-toggle a").click(function () {

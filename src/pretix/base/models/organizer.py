@@ -97,9 +97,20 @@ class Organizer(LoggedModel):
         return self.name
 
     def save(self, *args, **kwargs):
+        is_new = not self.pk
         obj = super().save(*args, **kwargs)
-        self.get_cache().clear()
+        if is_new:
+            self.set_defaults()
+        else:
+            self.get_cache().clear()
         return obj
+
+    def set_defaults(self):
+        """
+        This will be called after organizer creation.
+        This way, we can use this to introduce new default settings to pretix that do not affect existing organizers.
+        """
+        self.settings.cookie_consent = True
 
     def get_cache(self):
         """

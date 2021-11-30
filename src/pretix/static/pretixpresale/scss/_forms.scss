@@ -132,6 +132,15 @@ a.btn, button.btn {
   }
 }
 
+details {
+  summary .chevron::before {
+    content: $fa-var-caret-right;
+  }
+  &[open] .chevron::before {
+    content: $fa-var-caret-down;
+  }
+}
+
 
 @media(max-width: $screen-xs-max) {
   .nameparts-form-group {

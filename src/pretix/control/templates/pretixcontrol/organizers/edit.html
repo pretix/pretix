@@ -83,6 +83,49 @@
                         {% bootstrap_field sform.giftcard_length layout="control" %}
                     </fieldset>
                     <fieldset>
+                        <legend>{% trans "Privacy" %}</legend>
+                        {% bootstrap_field sform.privacy_url layout="control" %}
+                        <div class="alert alert-legal">
+                            <p>
+                                {% blocktrans trimmed %}
+                                    Some jurisdictions, including the European Union, require user consent before you
+                                    are allowed to use cookies or similar technology for analytics, tracking, payment,
+                                    or similar purposes.
+                                {% endblocktrans %}
+                            </p>
+                            <p>
+                                {% blocktrans trimmed %}
+                                    pretix itself only ever sets cookies that are required to provide the service
+                                    requested by the user or to maintain an appropriate level of security. Therefore,
+                                    cookies set by pretix itself do not require consent in all jurisdictions that we
+                                    are aware of.
+                                {% endblocktrans %}
+                            </p>
+                            <p>
+                                {% blocktrans trimmed %}
+                                    Therefore, the settings on this page will <strong>only</strong> have an affect
+                                    if you use <strong>plugins</strong> that require additional cookies
+                                    <strong>and</strong> participate in our cookie consent mechanism.
+                                {% endblocktrans %}
+                            </p>
+                            <p>
+                                <strong>{% blocktrans trimmed %}
+                                    Ultimately, it is your responsibility to make sure you comply with all relevant
+                                    laws. We try to help by providing these settings, but we cannot assume liability
+                                    since we do not know the exact configuration of your pretix usage, the legal details
+                                    in your specific jurisdiction, or the agreements you have with third parties such as
+                                    payment or tracking providers.
+                                {% endblocktrans %}</strong>
+                            </p>
+                        </div>
+                        {% bootstrap_field sform.cookie_consent layout="control" %}
+                        {% bootstrap_field sform.cookie_consent_dialog_title layout="control" %}
+                        {% bootstrap_field sform.cookie_consent_dialog_text layout="control" %}
+                        {% bootstrap_field sform.cookie_consent_dialog_text_secondary layout="control" %}
+                        {% bootstrap_field sform.cookie_consent_dialog_button_yes layout="control" %}
+                        {% bootstrap_field sform.cookie_consent_dialog_button_no layout="control" %}
+                    </fieldset>
+                    <fieldset>
                         <legend>{% trans "Invoices" %}</legend>
                         {% bootstrap_field sform.invoice_regenerate_allowed layout="control" %}
                     </fieldset>

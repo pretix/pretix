@@ -75,6 +75,13 @@ footer nav li:not(:first-child):before {
     width: 1.5em;
     text-align: center;
 }
+footer nav .btn-link {
+    display: inline;
+    padding: 0;
+    margin: 0;
+    font-size: 11px;
+    vertical-align: baseline;
+}
 
 .js-only {
     display: none;
@@ -122,6 +129,29 @@ a:hover .panel-primary > .panel-heading {
     }
 }
 
+.contains-overlay {
+    position: relative;
+}
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: $gray-lightest;
+}
+.overlay-centered {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.overlay-centered .overlay-content {
+  max-width: 35em;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 body.loading .container {
     -webkit-filter: blur(2px);
     -moz-filter: blur(2px);
@@ -136,7 +166,7 @@ body.loading .container {
     font-size: 120px;
     color: $brand-primary;
 }
-#loadingmodal, #ajaxerr {
+#loadingmodal, #ajaxerr, #cookie-consent-modal {
     position: fixed;
     top: 0;
     left: 0;
@@ -156,9 +186,10 @@ body.loading .container {
 
     .modal-card {
         margin: 50px auto 0;
-        top: 50px;
         width: 90%;
         max-width: 600px;
+        max-height: calc(100vh - 100px);
+        overflow-y: auto;
         background: white;
         border-radius: $border-radius-large;
         box-shadow: 0 7px 14px 0 rgba(78, 50, 92, 0.1),0 3px 6px 0 rgba(0,0,0,.07);
@@ -178,10 +209,31 @@ body.loading .container {
             }
         }
     }
+
+    &#cookie-consent-modal {
+        background: rgba(255, 255, 255, .5);
+        opacity: 1;
+        visibility: visible;
+        display: none;
+        .modal-card-content {
+            margin-left: 0;
+        }
+        details {
+            & > summary {
+                list-style: inherit;
+            }
+            & > summary::-webkit-details-marker {
+                display: inherit;
+            }
+            margin-bottom: 10px;
+        }
+    }
 }
 @media (max-width: 700px) {
-    #loadingmodal, #ajaxerr {
+    #loadingmodal, #ajaxerr, #cookie-consent-modal {
         .modal-card {
+            margin: 25px auto 0;
+            max-height: calc(100vh - 50px - 20px);
             .modal-card-icon {
                 float: none;
                 width: 100%;
