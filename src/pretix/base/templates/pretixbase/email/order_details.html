@@ -1,5 +1,6 @@
 {% load eventurl %}
 {% load i18n %}
+{% load oneline %}
 
 {% if position %}
     <div class="order-info">
@@ -106,6 +107,10 @@
                                         {{ groupkey.2.get_date_range_display }}
                                         {% if event.settings.show_times %}
                                             {{ groupkey.2.date_from|date:"TIME_FORMAT" }}
+                                        {% endif %}
+                                        {% if groupkey.2.location %}
+                                            <br>
+                                            {{ groupkey.2.location|oneline }}
                                         {% endif %}
                                     {% endif %}
                                     {% if groupkey.3 %} {# attendee name #}
