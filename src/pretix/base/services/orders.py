@@ -2317,10 +2317,10 @@ class OrderChangeManager:
                 except TaxRule.SaleNotAllowed:
                     raise OrderError(self.error_messages['tax_rule_country_blocked'])
             self._recalculate_total_and_payment_fee()
-            if self.order.status in (Order.STATUS_PENDING, Order.STATUS_PAID):
-                self._reissue_invoice()
             self._check_paid_price_change()
             self._check_paid_to_free()
+            if self.order.status in (Order.STATUS_PENDING, Order.STATUS_PAID):
+                self._reissue_invoice()
             self._clear_tickets_cache()
             self.order.touch()
             self.order.create_transactions()
