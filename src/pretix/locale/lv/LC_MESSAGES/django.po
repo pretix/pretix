@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-29 08:27+0000\n"
-"PO-Revision-Date: 2021-11-30 16:12+0000\n"
+"PO-Revision-Date: 2021-12-01 11:40+0000\n"
 "Last-Translator: Ilona Zilgalve <i.zilgalve@riga-jurmala.com>\n"
 "Language-Team: Latvian <https://translate.pretix.eu/projects/pretix/pretix/"
 "lv/>\n"
@@ -2838,7 +2838,7 @@ msgstr "Pēc norādītā datuma šī prece vairs netiks pārdota."
 #: pretix/base/models/items.py:354 pretix/base/models/items.py:1018
 #: pretix/control/templates/pretixcontrol/items/index.html:40
 msgid "Category"
-msgstr ""
+msgstr "Kategorija"
 
 #: pretix/base/models/items.py:355
 msgid ""
@@ -2918,11 +2918,11 @@ msgstr ""
 #: pretix/base/models/items.py:414 pretix/base/settings.py:1041
 #: pretix/control/forms/event.py:1290
 msgid "Show number of tickets left"
-msgstr ""
+msgstr "Parādīt atlikušās biļetes"
 
 #: pretix/base/models/items.py:415
 msgid "Publicly show how many tickets are still available."
-msgstr "Publiski parādīt, cik biļešu joprojām ir pieejamas. "
+msgstr "Publiski parādīt, cik biļešu joprojām ir pieejamas."
 
 #: pretix/base/models/items.py:422
 msgid "Product picture"
@@ -2930,7 +2930,7 @@ msgstr "Produkta attēls"
 
 #: pretix/base/models/items.py:440
 msgid "Only show after sellout of"
-msgstr "Rādīt tikai pēc biļešu izpirkšanas uz "
+msgstr "Rādīt tikai pēc biļešu izpirkšanas uz"
 
 #: pretix/base/models/items.py:441
 msgid ""
@@ -23223,7 +23223,7 @@ msgstr "Nosūtīt"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_customer.html:20
 msgid "Log in with a customer account"
-msgstr ""
+msgstr "Reģistrēties izveidotajā lietotāja profilā"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_customer.html:29
 msgid "You are currently logged in with the following credentials."
