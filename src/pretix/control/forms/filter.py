@@ -828,7 +828,13 @@ class OrderPaymentSearchFilterForm(forms.Form):
         label=_('Event'),
         queryset=Event.objects.none(),
         required=False,
-        empty_label=_('All events'),
+        widget=Select2(
+            attrs={
+                'data-model-select2': 'event',
+                'data-select2-url': reverse_lazy('control:events.typeahead'),
+                'data-placeholder': _('All events')
+            }
+        )
     )
     organizer = forms.ModelChoiceField(
         label=_('Organizer'),
