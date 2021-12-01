@@ -917,12 +917,20 @@ class OrderPaymentSearchFilterForm(forms.Form):
         qs = qs.filter(order__event__testmode=fdata.get('mode'))
 
         if fdata.get('date_from'):
-            qs = qs.filter(created__gte=fdata.get('date_from'))
+            date_start = make_aware(datetime.combine(
+                fdata.get('date_from'),
+                time(hour=0, minute=0, second=0, microsecond=0)
+            ), get_current_timezone())
+            qs = qs.filter(created__gte=date_start)
 
         if fdata.get('date_until'):
+            date_end = make_aware(datetime.combine(
+                fdata.get('date_until') + timedelta(days=1),
+                time(hour=0, minute=0, second=0, microsecond=0)
+            ), get_current_timezone())
             qs = qs.filter(
-                Q(created__lte=fdata.get('date_until'))
-                | Q(payment_date__lte=fdata.get('date_until'))
+                Q(created__lte=date_end) |
+                Q(payment_date__lte=date_end)
             )
 
         if fdata.get('event'):
