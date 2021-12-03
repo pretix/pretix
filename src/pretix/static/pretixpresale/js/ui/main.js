@@ -567,7 +567,7 @@ $(function () {
             currentTick = ticks[i]
             t = parseInt(currentTick.getAttribute("data-start").replace(":", ""), 10);
             if (t > currentTimeCmp) {
-                currentTick = ticks[Math.max(--i, 0)]
+                currentTick = ticks[Math.max(i-1, 0)]
                 break;
             }
         }
