@@ -1033,10 +1033,6 @@ class OrderPaymentSearchFilterForm(forms.Form):
             '''
             qs = qs.filter(mainq)
 
-        filters_by_property_name = {}
-        for f in filters_by_property_name.values():
-            qs = qs.filter(f)
-
         if fdata.get('ordering'):
             p = self.cleaned_data.get('ordering')
             if p.startswith('-') and p not in self.payments:
