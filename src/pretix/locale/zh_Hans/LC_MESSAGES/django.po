@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-30 16:13+0000\n"
-"PO-Revision-Date: 2021-01-10 18:00+0000\n"
-"Last-Translator: Li Thomas <lmy013@outlook.com>\n"
+"PO-Revision-Date: 2021-12-03 08:37+0000\n"
+"Last-Translator: ExtremeX-BB <qq754163444@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://translate.pretix.eu/projects/"
 "pretix/pretix/zh_Hans/>\n"
 "Language: zh_Hans\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 3.10.3\n"
+"X-Generator: Weblate 4.8\n"
 
 #: pretix/api/auth/devicesecurity.py:28
 msgid ""
@@ -30,10 +30,8 @@ msgid "pretixSCAN"
 msgstr "pretix 扫码端"
 
 #: pretix/api/auth/devicesecurity.py:75
-#, fuzzy
-#| msgid "pretixSCAN (kiosk mode, online only)"
 msgid "pretixSCAN (kiosk mode, no order sync, no search)"
-msgstr "pretix 扫码器（展台模式-仅在线）"
+msgstr "pretix 扫码器（展台模式-没有订单同步-没有搜索）"
 
 #: pretix/api/auth/devicesecurity.py:104
 #, fuzzy
@@ -254,7 +252,7 @@ msgstr "过去标为已付款"
 #: pretix/control/templates/pretixcontrol/event/mail.html:72
 #: pretix/control/views/orders.py:1281
 msgid "Order canceled"
-msgstr "已取消的订单"
+msgstr "订单已经取消"
 
 #: pretix/api/webhooks.py:216 pretix/base/notifications.py:257
 msgid "Order reactivated"
@@ -1019,13 +1017,11 @@ msgstr "只能删除在测试模式下创建的订单。"
 #, fuzzy
 #| msgid "Only orders created in test mode can be deleted."
 msgid "Only include orders created on or before this date."
-msgstr "只能删除在测试模式下创建的订单。"
+msgstr "仅包括在此日期或之前创建的订单。"
 
 #: pretix/base/exporters/orderlist.py:122
-#, fuzzy
-#| msgid "Start date"
 msgid "Start event date"
-msgstr "开始日期"
+msgstr "活动开始日期"
 
 #: pretix/base/exporters/orderlist.py:125
 msgid ""
@@ -1034,10 +1030,8 @@ msgid ""
 msgstr ""
 
 #: pretix/base/exporters/orderlist.py:130
-#, fuzzy
-#| msgid "Event date"
 msgid "End event date"
-msgstr "活动日期"
+msgstr "活动日期结束日期"
 
 #: pretix/base/exporters/orderlist.py:133
 msgid ""
@@ -2388,16 +2382,12 @@ msgid "Exit"
 msgstr "退出"
 
 #: pretix/base/models/checkin.py:262
-#, fuzzy
-#| msgid "Unknown invoice."
 msgid "Unknown ticket"
-msgstr "未知发票。"
+msgstr "未知的票。"
 
 #: pretix/base/models/checkin.py:263
-#, fuzzy
-#| msgid "Ticket download"
 msgid "Ticket not paid"
-msgstr "票证下载"
+msgstr "票未支付"
 
 #: pretix/base/models/checkin.py:264
 msgid "Forbidden by custom rule"
@@ -2416,16 +2406,12 @@ msgid "Information required"
 msgstr "需要采取的行动"
 
 #: pretix/base/models/checkin.py:267
-#, fuzzy
-#| msgid "Ticket layouts"
 msgid "Ticket already used"
-msgstr "票证布局"
+msgstr "票已经被使用过"
 
 #: pretix/base/models/checkin.py:268
-#, fuzzy
-#| msgid "Filetype not allowed!"
 msgid "Ticket type not allowed here"
-msgstr "文件类型不被允许！"
+msgstr "不允许的票类型"
 
 #: pretix/base/models/checkin.py:269
 #, fuzzy
@@ -3268,7 +3254,7 @@ msgstr "此产品将在活动页面中隐藏，直到用户输入解锁此产品
 #: pretix/base/models/items.py:844 pretix/base/models/vouchers.py:252
 #: pretix/base/models/waitinglist.py:96 pretix/base/orderimport.py:284
 msgid "Product variation"
-msgstr "产品变量"
+msgstr "产品变化"
 
 #: pretix/base/models/items.py:845
 #: pretix/control/templates/pretixcontrol/item/create.html:64
@@ -3731,7 +3717,7 @@ msgstr "此优惠券可兑换的次数。"
 #: pretix/presale/templates/pretixpresale/event/fragment_order_status.html:27
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:78
 msgid "Canceled"
-msgstr "取消"
+msgstr "已被取消"
 
 #: pretix/base/models/memberships.py:133
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:81
