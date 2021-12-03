@@ -389,7 +389,7 @@ class UpdateRule(EventPermissionRequiredMixin, UpdateView):
         return get_object_or_404(
             Rule.objects.annotate(
                 total_mails=Count('scheduledmail'),
-                sent_mails=Count('scheduledmail', filter=Q(scheduledmail__state=ScheduledMail.STATE_COMPLETED)),
+                sent_mails=Count('scheduledmail', filter=Q(scheduledmail__state__in=(ScheduledMail.STATE_COMPLETED, ScheduledMail.STATE_MISSED))),
             ),
             event=self.request.event,
             id=self.kwargs['rule']
