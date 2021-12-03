@@ -93,7 +93,7 @@
             <tbody>
             {% for p in payments %}
                 <tr>
-                    <td>{{ p }}</td>
+                    <td>{{ p.full_id }}</td>
                     <td>
                         <a href="{% url "control:event.order" event=p.order.event.slug organizer=p.order.event.organizer.slug code=p.order.code %}">
                             {{ p.order.full_code }}
