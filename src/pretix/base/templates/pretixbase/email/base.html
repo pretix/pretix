@@ -85,9 +85,6 @@
             -webkit-hyphens: auto;
             hyphens: auto;
         }
-        p:last-child {
-            margin-bottom: 0;
-        }
 
         .footer {
             padding: 10px;
@@ -116,6 +113,9 @@
             width: 100%;
             height: auto;
         }
+        .content {
+            text-align: left;
+        }
 
         .content table {
             width: 100%;
@@ -142,7 +142,8 @@
         }
 
         .order-button {
-            padding-top: 5px
+            padding-top: 5px;
+            text-align: center;
         }
         .order-button a.button {
             font-size: 12px;
@@ -173,7 +174,7 @@
             body {
                 direction: rtl;
             }
-            .content table td {
+            .content {
                 text-align: right;
             }
         {% endif %}
