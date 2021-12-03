@@ -21,8 +21,7 @@
 #
 from urllib.parse import urlencode
 
-from django.contrib.messages import get_messages
-from django.contrib.messages import constants as messages
+from django.contrib.messages import constants as messages, get_messages
 from django.core.exceptions import PermissionDenied
 from django.dispatch import receiver
 from django.shortcuts import redirect
