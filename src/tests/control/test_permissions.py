@@ -194,6 +194,7 @@ organizer_urls = [
     'organizer/abc/webhook/1/edit',
     'organizer/abc/webhook/1/logs',
     'organizer/abc/customers',
+    'organizer/abc/customer/add',
     'organizer/abc/customer/1/',
     'organizer/abc/giftcards',
     'organizer/abc/giftcard/add',
