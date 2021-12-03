@@ -567,10 +567,13 @@ $(function () {
             currentTick = ticks[i]
             t = parseInt(currentTick.getAttribute("data-start").replace(":", ""), 10);
             if (t > currentTimeCmp) {
+                currentTick = ticks[Math.max(i-1, 0)]
                 break;
             }
         }
-        currentTick.scrollIntoView({behavior:"smooth", inline: "center"});
+        if (currentTick.offsetLeft > 0.66*this.offsetWidth) {
+            this.scrollLeft = Math.max(currentTick.offsetLeft - this.offsetWidth/2, 0);
+        }
 
 
         var thisCalendar = this;
