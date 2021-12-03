@@ -194,7 +194,7 @@ urlpatterns = [
     re_path(r'^events/typeahead/$', typeahead.event_list, name='events.typeahead'),
     re_path(r'^events/typeahead/meta/$', typeahead.meta_values, name='events.meta.typeahead'),
     re_path(r'^search/orders/$', search.OrderSearch.as_view(), name='search.orders'),
-    re_path(r'^search/payments$', search.PaymentSearch.as_view(), name='search.payments'),
+    re_path(r'^search/payments/$', search.PaymentSearch.as_view(), name='search.payments'),
     re_path(r'^event/(?P<organizer>[^/]+)/(?P<event>[^/]+)/', include([
         re_path(r'^$', dashboards.event_index, name='event.index'),
         re_path(r'^widgets.json$', dashboards.event_index_widgets_lazy, name='event.index.widgets'),
