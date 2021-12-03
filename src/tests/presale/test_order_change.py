@@ -463,6 +463,7 @@ class OrderChangeAddonsTest(BaseOrdersTest):
             base_item=self.ticket, addon_category=self.workshopcat, max_count=1, min_count=0, multi_allowed=False
         )
         self.event.settings.change_allow_user_addons = True
+        self.event.settings.change_allow_user_price = 'any'
 
     def test_disabled(self):
         self.event.settings.change_allow_user_addons = False
