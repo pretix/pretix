@@ -2,15 +2,23 @@
 {% load i18n %}
 {% load bootstrap3 %}
 {% block title %}
-    {% blocktrans trimmed with id=customer.identifier %}
-        Customer #{{ id }}
-    {% endblocktrans %}
-{% endblock %}
-{% block inner %}
-    <h1>
+    {% if not customer.id %}
+        {% trans "New customer" %}
+    {% else %}
         {% blocktrans trimmed with id=customer.identifier %}
             Customer #{{ id }}
         {% endblocktrans %}
+    {% endif %}
+{% endblock %}
+{% block inner %}
+    <h1>
+        {% if not customer.id %}
+            {% trans "New customer" %}
+        {% else %}
+            {% blocktrans trimmed with id=customer.identifier %}
+                Customer #{{ id }}
+            {% endblocktrans %}
+        {% endif %}
     </h1>
     <form class="form-horizontal" action="" method="post">
         {% csrf_token %}

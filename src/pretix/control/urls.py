@@ -133,6 +133,8 @@ urlpatterns = [
             name='organizer.membershiptype.delete'),
     re_path(r'^organizer/(?P<organizer>[^/]+)/customers$', organizer.CustomerListView.as_view(), name='organizer.customers'),
     re_path(r'^organizer/(?P<organizer>[^/]+)/customers/select2$', typeahead.customer_select2, name='organizer.customers.select2'),
+    re_path(r'^organizer/(?P<organizer>[^/]+)/customer/add$',
+            organizer.CustomerCreateView.as_view(), name='organizer.customer.create'),
     re_path(r'^organizer/(?P<organizer>[^/]+)/customer/(?P<customer>[^/]+)/$',
             organizer.CustomerDetailView.as_view(), name='organizer.customer'),
     re_path(r'^organizer/(?P<organizer>[^/]+)/customer/(?P<customer>[^/]+)/edit$',

@@ -565,6 +565,13 @@ class CustomerUpdateForm(forms.ModelForm):
         return self.cleaned_data
 
 
+class CustomerCreateForm(CustomerUpdateForm):
+
+    class Meta:
+        model = Customer
+        fields = ['identifier', 'is_active', 'name_parts', 'email', 'is_verified', 'locale']
+
+
 class MembershipUpdateForm(forms.ModelForm):
 
     class Meta:
