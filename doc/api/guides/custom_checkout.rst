@@ -97,7 +97,8 @@ For example, if you want users to be redirected to ``https://example.org/order/r
 either enter ``https://example.org`` or ``https://example.org/order/``.
 
 The user will be redirected back to your page instead of pretix' order confirmation page after the payment,
-**regardless of whether it was successful or not**. Make sure you use our API to check if the payment actually
+**regardless of whether it was successful or not**. We will append an ``error=…`` query parameter with an error
+message, but you should not rely on that and instead make sure you use our API to check if the payment actually
 worked! Your final URL could look like this::
 
     https://test.pretix.eu/democon/3vjrh/order/NSLEZ/ujbrnsjzbq4dzhck/pay/123/?return_url=https%3A%2F%2Fexample.org%2Forder%2Freturn%3Ftx_id%3D1234

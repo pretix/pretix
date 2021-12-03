@@ -19,6 +19,10 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
+from urllib.parse import urlencode
+
+from django.contrib.messages import get_messages
+from django.contrib.messages import constants as messages
 from django.core.exceptions import PermissionDenied
 from django.dispatch import receiver
 from django.shortcuts import redirect
@@ -43,7 +47,25 @@ def returnurl_process_request(sender, request, **kwargs):
         key = 'order_{}_{}_{}_return_url'.format(urlkwargs.get('organizer', '-'), urlkwargs.get('event', '-'),
                                                  urlkwargs['order'])
         if urlname == 'event.order' and key in request.session:
-            r = redirect(request.session.get(key))
+            url = request.session.get(key)
+
+            query = []
+            storage = get_messages(request)
+            for message in storage:
+                if message.level == messages.ERROR:
+                    query.append(('error', str(message)))
+                elif message.level == messages.WARNING:
+                    query.append(('warning', str(message)))
+                if message.level == messages.INFO:
+                    query.append(('info', str(message)))
+                if message.level == messages.SUCCESS:
+                    query.append(('success', str(message)))
+            if query:
+                if '?' in url:
+                    url += '&' + urlencode(query)
+                else:
+                    url += '?' + urlencode(query)
+            r = redirect(url)
             del request.session[key]
             return r
         elif urlname != 'event.order' and 'return_url' in request.GET:
