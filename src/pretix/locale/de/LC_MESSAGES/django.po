@@ -5,8 +5,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-30 16:13+0000\n"
-"PO-Revision-Date: 2021-11-30 16:48+0000\n"
-"Last-Translator: Raphael Michel <michel@rami.io>\n"
+"PO-Revision-Date: 2021-12-04 01:00+0000\n"
+"Last-Translator: Eva-Maria Obermann <obermann@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
 ">\n"
 "Language: de\n"
@@ -1315,7 +1315,7 @@ msgstr "Position"
 #: pretix/presale/templates/pretixpresale/event/order_change.html:32
 msgctxt "subevent"
 msgid "Date"
-msgstr "Termin"
+msgstr "Datum"
 
 #: pretix/base/exporters/orderlist.py:554 pretix/base/models/items.py:555
 #: pretix/base/models/vouchers.py:240 pretix/base/models/waitinglist.py:88
