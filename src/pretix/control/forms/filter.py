@@ -852,15 +852,7 @@ class OrderPaymentSearchFilterForm(forms.Form):
     state = forms.ChoiceField(
         label=_('Payment state'),
         required=False,
-        choices=(
-            ('', _('All payment states')),
-            (OrderPayment.PAYMENT_STATE_CREATED, _('Created')),
-            (OrderPayment.PAYMENT_STATE_PENDING, _('Pending')),
-            (OrderPayment.PAYMENT_STATE_CONFIRMED, _('Confirmed')),
-            (OrderPayment.PAYMENT_STATE_FAILED, _('Failed')),
-            (OrderPayment.PAYMENT_STATE_CANCELED, _('Canceled')),
-            (OrderPayment.PAYMENT_STATE_REFUNDED, _('Refunded')),
-        ),
+        choices=[('', _('All payment states'))] + list(OrderPayment.PAYMENT_STATES),
     )
     provider = forms.ChoiceField(
         label=_('Payment provider'),
@@ -883,11 +875,6 @@ class OrderPaymentSearchFilterForm(forms.Form):
             'placeholder': _('Date until'),
         }),
     )
-    mode = forms.BooleanField(
-        label=_('Include payments from events in test mode'),
-        required=False,
-        initial=True,
-    )
 
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop('request')
@@ -909,18 +896,12 @@ class OrderPaymentSearchFilterForm(forms.Form):
             self.fields['organizer'].queryset = Organizer.objects.filter(
                 pk__in=self.request.user.teams.values_list('organizer', flat=True)
             )
-            self.fields['event'].queryset = Event.objects.filter(
-                organizer__in=self.request.user.teams.values_list('organizer', flat=True)
-            )
+            self.fields['event'].queryset = self.request.user.get_events_with_permission('can_view_orders')
 
         self.fields['provider'].choices += get_all_payment_providers()
-        self.fields['date_from'].widget = DatePickerWidget()
-        self.fields['date_until'].widget = DatePickerWidget()
 
     def filter_qs(self, qs):
         fdata = self.cleaned_data
-
-        qs = qs.filter(order__event__testmode=fdata.get('mode'))
 
         if fdata.get('date_from'):
             date_start = make_aware(datetime.combine(
@@ -935,8 +916,8 @@ class OrderPaymentSearchFilterForm(forms.Form):
                 time(hour=0, minute=0, second=0, microsecond=0)
             ), get_current_timezone())
             qs = qs.filter(
-                Q(created__lte=date_end) |
-                Q(payment_date__lte=date_end)
+                Q(created__lt=date_end) |
+                Q(payment_date__lt=date_end)
             )
 
         if fdata.get('event'):
@@ -949,14 +930,7 @@ class OrderPaymentSearchFilterForm(forms.Form):
             qs = qs.filter(state=fdata.get('state'))
 
         if fdata.get('provider'):
-            qs = qs.annotate(
-                has_payment_with_provider=Exists(
-                    OrderPayment.objects.filter(
-                        Q(order=OuterRef('pk')) & Q(provider=fdata.get('provider'))
-                    )
-                )
-            )
-            qs = qs.filter(has_payment_with_provider=1)
+            qs = qs.filter(provider=fdata.get('provider'))
 
         if fdata.get('query'):
             u = fdata.get('query')

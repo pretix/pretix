@@ -210,4 +210,4 @@ class PaymentSearch(PaginationMixin, ListView):
         """
         return qs.only(
             'id', 'local_id', 'state', 'amount', 'order', 'created', 'payment_date', 'provider', 'info', 'fee'
-        ).select_related('order')
+        ).prefetch_related('order', 'order__event')

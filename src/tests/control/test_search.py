@@ -177,6 +177,7 @@ class PaymentSearchTest(SoupTest):
         super().setUp()
         self.user = User.objects.create_user('dummy@dummy.dummy', 'dummy')
         self.orga1 = Organizer.objects.create(name='CCC', slug='ccc')
+        self.orga2 = Organizer.objects.create(name='NoOrga', slug='no')
         self.event1 = Event.objects.create(
             organizer=self.orga1, name='30C3', slug='30c3',
             date_from=datetime.datetime(2013, 12, 26, tzinfo=datetime.timezone.utc),
@@ -210,8 +211,40 @@ class PaymentSearchTest(SoupTest):
             state=OrderPayment.PAYMENT_STATE_CONFIRMED,
             amount=Decimal("14"),
             order=o1,
-            provider="manual",
+            provider="giftcard",
             info="{test payment order 1}"
+        )
+        OrderPayment.objects.create(
+            local_id=1,
+            state=OrderPayment.PAYMENT_STATE_REFUNDED,
+            amount=Decimal("14"),
+            order=o1,
+            provider="manual",
+            info="{refunded payment}"
+        )
+        OrderPayment.objects.create(
+            local_id=1,
+            state=OrderPayment.PAYMENT_STATE_CANCELED,
+            amount=Decimal("14"),
+            order=o1,
+            provider="manual",
+            info="{canceled payment}"
+        )
+        OrderPayment.objects.create(
+            local_id=1,
+            state=OrderPayment.PAYMENT_STATE_FAILED,
+            amount=Decimal("14"),
+            order=o1,
+            provider="manual",
+            info="{failed payment}"
+        )
+        OrderPayment.objects.create(
+            local_id=1,
+            state=OrderPayment.PAYMENT_STATE_PENDING,
+            amount=Decimal("14"),
+            order=o1,
+            provider="manual",
+            info="{pending payment}"
         )
 
         o2 = Order.objects.create(
@@ -246,21 +279,21 @@ class PaymentSearchTest(SoupTest):
         self.client.login(email='dummy@dummy.dummy', password='dummy')
 
     def test_team_limit_event(self):
-        resp = self.client.get('/control/search/payments').content.decode()
+        resp = self.client.get('/control/search/payments/').content.decode()
         assert 'FO1' in resp
         assert 'FO2' not in resp
 
     def test_team_limit_event_wrong_permission(self):
         self.team.can_view_orders = False
         self.team.save()
-        resp = self.client.get('/control/search/payments').content.decode()
+        resp = self.client.get('/control/search/payments/').content.decode()
         assert 'FO1' not in resp
         assert 'FO2' not in resp
 
     def test_team_all_events(self):
         self.team.all_events = True
         self.team.save()
-        resp = self.client.get('/control/search/payments').content.decode()
+        resp = self.client.get('/control/search/payments/').content.decode()
         assert 'FO1' in resp
         assert 'FO2' in resp
 
@@ -268,13 +301,13 @@ class PaymentSearchTest(SoupTest):
         self.team.all_events = True
         self.team.can_view_orders = False
         self.team.save()
-        resp = self.client.get('/control/search/payments').content.decode()
+        resp = self.client.get('/control/search/payments/').content.decode()
         assert 'FO1' not in resp
         assert 'FO2' not in resp
 
     def test_team_none(self):
         self.team.members.clear()
-        resp = self.client.get('/control/search/payments').content.decode()
+        resp = self.client.get('/control/search/payments/').content.decode()
         assert 'FO1' not in resp
         assert 'FO2' not in resp
 
@@ -283,63 +316,100 @@ class PaymentSearchTest(SoupTest):
         self.user.staffsession_set.create(date_start=now(), session_key=self.client.session.session_key)
         self.user.save()
         self.team.members.clear()
-        resp = self.client.get('/control/search/payments').content.decode()
+        resp = self.client.get('/control/search/payments/').content.decode()
         assert 'FO1' in resp
         assert 'FO2' in resp
 
     def test_filter_email(self):
-        resp = self.client.get('/control/search/payments?query=dummy1@dummy').content.decode()
+        resp = self.client.get('/control/search/payments/?query=dummy1@dummy').content.decode()
         assert 'FO1' in resp
-        resp = self.client.get('/control/search/payments?query=dummynope').content.decode()
+        resp = self.client.get('/control/search/payments/?query=dummynope').content.decode()
         assert 'FO1' not in resp
 
     def test_filter_attendee_name(self):
-        resp = self.client.get('/control/search/payments?query=Pete').content.decode()
+        resp = self.client.get('/control/search/payments/?query=Pete').content.decode()
         assert 'FO1' in resp
-        resp = self.client.get('/control/search/payments?query=Mark').content.decode()
+        resp = self.client.get('/control/search/payments/?query=Mark').content.decode()
         assert 'FO1' not in resp
 
     def test_filter_attendee_email(self):
-        resp = self.client.get('/control/search/payments?query=att.com').content.decode()
+        resp = self.client.get('/control/search/payments/?query=att.com').content.decode()
         assert 'FO1' in resp
-        resp = self.client.get('/control/search/payments?query=nope.com').content.decode()
+        resp = self.client.get('/control/search/payments/?query=nope.com').content.decode()
         assert 'FO1' not in resp
 
     def test_filter_invoice_address(self):
-        resp = self.client.get('/control/search/payments?query=Ltd').content.decode()
+        resp = self.client.get('/control/search/payments/?query=Ltd').content.decode()
         assert 'FO1' in resp
-        resp = self.client.get('/control/search/payments?query=Miller').content.decode()
+        resp = self.client.get('/control/search/payments/?query=Miller').content.decode()
         assert 'FO1' in resp
-        resp = self.client.get('/control/search/payments?query=Mark').content.decode()
+        resp = self.client.get('/control/search/payments/?query=Mark').content.decode()
         assert 'FO1' not in resp
 
     def test_filter_code(self):
-        resp = self.client.get('/control/search/payments?query=FO1').content.decode()
+        resp = self.client.get('/control/search/payments/?query=FO1').content.decode()
         assert '30C3-FO1' in resp
-        resp = self.client.get('/control/search/payments?query=30c3-FO1').content.decode()
+        resp = self.client.get('/control/search/payments/?query=30c3-FO1').content.decode()
         assert '30C3-FO1' in resp
-        resp = self.client.get('/control/search/payments?query=30C3-fO1A').content.decode()
+        resp = self.client.get('/control/search/payments/?query=30C3-fO1A').content.decode()
         assert '30C3-FO1' in resp
-        resp = self.client.get('/control/search/payments?query=30C3-fo14').content.decode()
+        resp = self.client.get('/control/search/payments/?query=30C3-fo14').content.decode()
         assert '30C3-FO1' in resp
-        resp = self.client.get('/control/search/payments?query=31c3-FO1').content.decode()
+        resp = self.client.get('/control/search/payments/?query=31c3-FO1').content.decode()
         assert '30C3-FO1' not in resp
-        resp = self.client.get('/control/search/payments?query=FO2').content.decode()
+        resp = self.client.get('/control/search/payments/?query=FO2').content.decode()
         assert '30C3-FO1' not in resp
 
     def test_filter_amount(self):
         self.team.all_events = True
         self.team.save()
-        resp = self.client.get('/control/search/payments?query=14').content.decode()
+        resp = self.client.get('/control/search/payments/?query=14').content.decode()
         assert 'FO1' in resp
         assert 'FO2' not in resp
-        resp = self.client.get('/control/search/payments?query=15.00').content.decode()
+        resp = self.client.get('/control/search/payments/?query=15.00').content.decode()
         assert 'FO1' not in resp
         assert 'FO2' in resp
 
     def test_filter_info(self):
         self.team.all_events = True
         self.team.save()
-        resp = self.client.get('/control/search/payments?query=order 1').content.decode()
+        resp = self.client.get('/control/search/payments/?query=order 1').content.decode()
         assert 'FO1' in resp
         assert 'FO2' not in resp
+
+    def test_filter_event(self):
+        self.team.all_events = True
+        self.team.save()
+        resp = self.client.get('/control/search/payments/?event=1').content.decode()
+        assert "FO1" in resp
+        assert "FO2" not in resp
+
+    def test_filter_state(self):
+        self.user.is_staff = True
+        self.user.staffsession_set.create(date_start=now(), session_key=self.client.session.session_key)
+        self.user.save()
+
+        confirmed = OrderPayment.PAYMENT_STATE_CONFIRMED
+        resp = self.client.get('/control/search/payments/?state=' + confirmed).content.decode()
+        assert "P-1" in resp
+        assert "P-2" not in resp
+        assert "P-3" not in resp
+        assert "P-4" not in resp
+        assert "P-5" not in resp
+        assert "P-6" not in resp
+
+    def test_filter_provider(self):
+        resp = self.client.get('/control/search/payments/?state=giftcard').content.decode()
+        assert "P-1" in resp
+        assert "P-2" not in resp
+        assert "P-3" not in resp
+        assert "P-4" not in resp
+        assert "P-5" not in resp
+        assert "P-6" not in resp
+
+    def test_filter_query_event(self):
+        self.team.all_events = True
+        self.team.save()
+        resp = self.client.get('/control/search/payments/?query=30C3').content.decode()
+        assert "FO1" in resp
+        assert "FO2" not in resp
