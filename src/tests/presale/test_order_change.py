@@ -1134,6 +1134,18 @@ class OrderChangeAddonsTest(BaseOrdersTest):
         assert 'alert-danger' in response.content.decode()
         assert 'reduces' in response.content.decode()
 
+        response = self.client.post(
+            '/%s/%s/order/%s/%s/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
+            {
+                'confirm': 'true'
+            },
+            follow=True
+        )
+        assert 'alert-danger' in response.content.decode()
+        assert 'reduces' in response.content.decode()
+        self.order.refresh_from_db()
+        assert self.order.total == Decimal('35.00')
+
     def test_allow_user_price_eq(self):
         self.event.settings.change_allow_user_price = 'eq'
         response = self.client.post(

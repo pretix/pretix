@@ -1421,6 +1421,7 @@ class OrderChange(EventViewMixin, OrderDetailMixin, TemplateView):
                 self._validate_total_diff(ocm)
             except OrderError as e:
                 messages.error(self.request, str(e))
+                return self.get(request, *args, **kwargs)
 
             if "confirm" in request.POST:
                 try:
