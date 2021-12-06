@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-30 16:13+0000\n"
-"PO-Revision-Date: 2021-10-18 19:00+0000\n"
-"Last-Translator: Tony Pavlik <kontakt@playton.cz>\n"
+"PO-Revision-Date: 2021-12-06 23:00+0000\n"
+"Last-Translator: Ondřej Sokol <osokol@treesoft.cz>\n"
 "Language-Team: Czech <https://translate.pretix.eu/projects/pretix/pretix-js/"
 "cs/>\n"
 "Language: cs\n"
@@ -184,7 +184,7 @@ msgstr "Objednávka zrušena"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:62
 msgid "Checked-in Tickets"
-msgstr "Odbavené vstupenky"
+msgstr "Vyřízené vstupenky"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:63
 msgid "Valid Tickets"
@@ -192,7 +192,7 @@ msgstr "Platné vstupenky"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:64
 msgid "Currently inside"
-msgstr "Právě uvnitř"
+msgstr "Aktuálně uvnitř"
 
 #: pretix/static/lightbox/js/lightbox.js:96
 msgid "close"
@@ -439,7 +439,7 @@ msgstr ""
 
 #: pretix/static/pretixcontrol/js/ui/main.js:417
 msgid "All"
-msgstr "Všechný"
+msgstr "Všechny"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:418
 msgid "None"
@@ -683,7 +683,7 @@ msgstr "Uplatnit"
 #: pretix/static/pretixpresale/js/widget/widget.js:44
 msgctxt "widget"
 msgid "Voucher code"
-msgstr "Kód voucheru"
+msgstr "Kód poukázky"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:45
 msgctxt "widget"
