@@ -27,6 +27,7 @@ from django_scopes import scopes_disabled
 from tests.base import SoupTest, extract_form_fields
 
 from pretix.base.models import Event, Organizer, Team, User
+from pretix.testutils.mock import mocker_context
 
 
 @pytest.fixture
@@ -97,3 +98,15 @@ class OrganizerTest(SoupTest):
         self.orga1.settings.flush()
         assert self.orga1.settings.primary_color == "#33c33c"
         assert called
+
+    def test_email_settings(self):
+        with mocker_context() as mocker:
+            mocked = mocker.patch('pretix.control.views.organizer.test_custom_smtp_backend')
+            doc = self.get_doc('/control/organizer/%s/settings/email' % self.orga1.slug)
+            data = extract_form_fields(doc.select("form")[0])
+            data['test'] = '1'
+            doc = self.post_doc('/control/organizer/%s/settings/email' % self.orga1.slug,
+                                data, follow=True)
+            assert doc.select('.alert-success')
+            self.event1.settings.flush()
+            assert mocked.called

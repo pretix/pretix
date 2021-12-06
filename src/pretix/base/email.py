@@ -25,6 +25,7 @@ from datetime import timedelta
 from decimal import Decimal
 from itertools import groupby
 from smtplib import SMTPResponseException
+from typing import TypeVar
 
 import css_inline
 from django.conf import settings
@@ -49,23 +50,23 @@ from pretix.base.templatetags.rich_text import markdown_compile_email
 
 logger = logging.getLogger('pretix.base.email')
 
+T = TypeVar("T", bound=EmailBackend)
 
-class CustomSMTPBackend(EmailBackend):
 
-    def test(self, from_addr):
-        try:
-            self.open()
-            self.connection.ehlo_or_helo_if_needed()
-            (code, resp) = self.connection.mail(from_addr, [])
-            if code != 250:
-                logger.warn('Error testing mail settings, code %d, resp: %s' % (code, resp))
-                raise SMTPResponseException(code, resp)
-            (code, resp) = self.connection.rcpt('testdummy@pretix.eu')
-            if (code != 250) and (code != 251):
-                logger.warn('Error testing mail settings, code %d, resp: %s' % (code, resp))
-                raise SMTPResponseException(code, resp)
-        finally:
-            self.close()
+def test_custom_smtp_backend(backend: T, from_addr: str) -> None:
+    try:
+        backend.open()
+        backend.connection.ehlo_or_helo_if_needed()
+        (code, resp) = backend.connection.mail(from_addr, [])
+        if code != 250:
+            logger.warning('Error testing mail settings, code %d, resp: %s' % (code, resp))
+            raise SMTPResponseException(code, resp)
+        (code, resp) = backend.connection.rcpt('testdummy@pretix.eu')
+        if (code != 250) and (code != 251):
+            logger.warning('Error testing mail settings, code %d, resp: %s' % (code, resp))
+            raise SMTPResponseException(code, resp)
+    finally:
+        backend.close()
 
 
 class BaseHTMLMailRenderer:

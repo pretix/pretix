@@ -64,6 +64,7 @@ from django.views.generic import (
 from pretix.api.models import WebHook
 from pretix.base.auth import get_auth_backends
 from pretix.base.channels import get_all_sales_channels
+from pretix.base.email import test_custom_smtp_backend
 from pretix.base.i18n import language
 from pretix.base.models import (
     CachedFile, Customer, Device, Gate, GiftCard, Invoice, LogEntry,
@@ -265,7 +266,7 @@ class OrganizerMailSettings(OrganizerSettingsFormView):
             if request.POST.get('test', '0').strip() == '1':
                 backend = self.request.organizer.get_mail_backend(force_custom=True, timeout=10)
                 try:
-                    backend.test(self.request.organizer.settings.mail_from)
+                    test_custom_smtp_backend(backend, self.request.organizer.settings.mail_from)
                 except Exception as e:
                     messages.warning(self.request, _('An error occurred while contacting the SMTP server: %s') % str(e))
                 else:

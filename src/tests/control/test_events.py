@@ -501,8 +501,7 @@ class EventsTest(SoupTest):
 
     def test_email_settings(self):
         with mocker_context() as mocker:
-            mocked = mocker.patch('pretix.base.email.CustomSMTPBackend.test')
-
+            mocked = mocker.patch('pretix.control.views.event.test_custom_smtp_backend')
             doc = self.get_doc('/control/event/%s/%s/settings/email' % (self.orga1.slug, self.event1.slug))
             data = extract_form_fields(doc.select("form")[0])
             data['test'] = '1'
