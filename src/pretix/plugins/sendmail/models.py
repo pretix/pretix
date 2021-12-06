@@ -71,7 +71,7 @@ class ScheduledMail(models.Model):
         super().save(**kwargs)
 
     def recompute(self):
-        if self.state in (self.STATE_COMPLETED, self.STATE_MISSED):
+        if self.state == self.STATE_COMPLETED:
             return
 
         if self.rule.date_is_absolute:
