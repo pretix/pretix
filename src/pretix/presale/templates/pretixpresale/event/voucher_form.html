@@ -1,0 +1,14 @@
+{% extends "pretixpresale/event/base.html" %}
+{% load i18n %}
+{% load l10n %}
+{% load money %}
+{% load eventurl %}
+{% load eventsignal %}
+{% load thumb %}
+{% load rich_text %}
+{% block title %}{% trans "Voucher redemption" %}{% endblock %}
+
+{% block content %}
+    <h2>{% trans "Redeem a voucher" %}</h2>
+    {% include "pretixpresale/event/fragment_voucher_form.html" %}
+{% endblock %}

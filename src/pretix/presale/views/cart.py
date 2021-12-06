@@ -43,12 +43,12 @@ from django.contrib import messages
 from django.core.cache import caches
 from django.db.models import Q
 from django.http import FileResponse, Http404, JsonResponse
-from django.shortcuts import get_object_or_404, redirect
+from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import translation
 from django.utils.crypto import get_random_string
 from django.utils.decorators import method_decorator
 from django.utils.functional import cached_property
-from django.utils.http import is_safe_url
+from django.utils.http import is_safe_url, url_has_allowed_host_and_scheme
 from django.utils.timezone import now
 from django.utils.translation import gettext as _
 from django.views.decorators.clickjacking import xframe_options_exempt
@@ -606,7 +606,7 @@ class RedeemView(NoSearchIndexViewMixin, EventViewMixin, CartMixin, TemplateView
                 else:
                     err = error_messages['voucher_invalid']
         else:
-            return redirect(self.get_index_url())
+            return render(request, 'pretixpresale/event/voucher_form.html')
 
         if request.event.presale_start and now() < request.event.presale_start:
             err = error_messages['not_started']
@@ -630,9 +630,14 @@ class RedeemView(NoSearchIndexViewMixin, EventViewMixin, CartMixin, TemplateView
 
         if err:
             messages.error(request, _(err))
-            return redirect(self.get_index_url() + "?voucher_invalid")
+            return redirect(self.get_next_url() + "?voucher_invalid")
 
         return super().dispatch(request, *args, **kwargs)
+
+    def get_next_url(self):
+        if "next" in self.request.GET and url_has_allowed_host_and_scheme(self.request.GET.get("next"), allowed_hosts=None):
+            return self.request.GET.get("next")
+        return self.get_index_url()
 
     def get(self, request, *args, **kwargs):
         if 'iframe' in request.GET and 'require_cookie' not in request.GET:

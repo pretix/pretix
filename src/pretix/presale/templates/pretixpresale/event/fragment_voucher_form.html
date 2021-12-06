@@ -1,0 +1,31 @@
+{% load i18n %}
+{% load eventurl %}
+{% load rich_text %}
+{% if event.settings.voucher_explanation_text %}
+    <div>
+        {{ event.settings.voucher_explanation_text|rich_text }}
+    </div>
+{% endif %}
+<form method="get" action="{% eventurl event "presale:event.redeem" cart_namespace=cart_namespace %}">
+    <div class="row row-voucher">
+        <div class="col-md-8 col-sm-6 col-xs-12">
+            <label for="voucher" class="sr-only">{% trans "Voucher code" %}
+                {% if "voucher_invalid" in request.GET %}<strong>{% trans "has error" context "form" %},</strong>{% endif %}
+                <i>{% trans "required" context "form" %}</i></label>
+            <div class="input-group{% if "voucher_invalid" in request.GET %} has-error{% endif %}">
+                <span class="input-group-addon"><i class="fa fa-ticket fa-fw" aria-hidden="true"></i></span>
+                <input type="text" class="form-control{% if "voucher_invalid" in request.GET %} has-error{% endif %}" name="voucher" id="voucher"
+                        {% if "voucher_invalid" in request.GET %} aria-describedby="error-message"{% endif %}
+                       placeholder="{% trans "Voucher code" %}" required="required">
+            </div>
+        </div>
+        <input type="hidden" name="subevent" value="{{ subevent.id|default_if_none:"" }}" />
+        <input type="hidden" name="next" value="{{ request.path }}" />
+        <div class="col-md-4 col-sm-6 col-xs-12">
+            <button class="btn btn-block btn-primary" type="submit">
+                {% trans "Redeem voucher" %}
+            </button>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+</form>
