@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-29 08:27+0000\n"
-"PO-Revision-Date: 2021-11-30 16:12+0000\n"
-"Last-Translator: Tonda Pavlík <reklamy@playton.cz>\n"
+"PO-Revision-Date: 2021-12-06 23:00+0000\n"
+"Last-Translator: Ondřej Sokol <osokol@treesoft.cz>\n"
 "Language-Team: Czech <https://translate.pretix.eu/projects/pretix/pretix/cs/>"
 "\n"
 "Language: cs\n"
@@ -1643,7 +1643,7 @@ msgstr "Zobrazit hodnotu v"
 #: pretix/control/templates/pretixcontrol/organizers/webhooks.html:51
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:62
 msgid "All"
-msgstr "Všechný"
+msgstr "Všechny"
 
 #: pretix/base/exporters/orderlist.py:1010 pretix/control/forms/filter.py:999
 msgid "Live"
@@ -1867,7 +1867,7 @@ msgstr "Ulice a číslo popisné"
 #: pretix/base/forms/questions.py:608 pretix/base/forms/questions.py:938
 msgctxt "address"
 msgid "Select state"
-msgstr "Vyberte kraj"
+msgstr "Vyberte stát"
 
 #: pretix/base/forms/questions.py:839 pretix/base/forms/questions.py:870
 #: pretix/base/forms/questions.py:1029 pretix/base/payment.py:86
@@ -2365,7 +2365,7 @@ msgstr "Informace vyžadována"
 
 #: pretix/base/models/checkin.py:267
 msgid "Ticket already used"
-msgstr "Vstupenka byla již použita"
+msgstr "Vstupenka již byla použita"
 
 #: pretix/base/models/checkin.py:268
 msgid "Ticket type not allowed here"
@@ -3608,7 +3608,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/fragment_order_status.html:27
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:78
 msgid "Canceled"
-msgstr ""
+msgstr "Zrušeno"
 
 #: pretix/base/models/memberships.py:133
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:81
@@ -4112,7 +4112,7 @@ msgstr ""
 
 #: pretix/base/models/vouchers.py:199 pretix/control/views/vouchers.py:109
 msgid "Redeemed"
-msgstr ""
+msgstr "Uplatněno"
 
 #: pretix/base/models/vouchers.py:203
 msgid "Maximum discount budget"
@@ -9233,7 +9233,7 @@ msgstr ""
 
 #: pretix/control/forms/filter.py:1588
 msgid "Valid"
-msgstr ""
+msgstr "Potrvzeno"
 
 #: pretix/control/forms/filter.py:1589
 msgid "Unredeemed"
@@ -11658,7 +11658,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order_pay.html:27
 #: pretix/presale/templates/pretixpresale/event/order_pay_change.html:60
 msgid "Continue"
-msgstr ""
+msgstr "Pokračovat"
 
 #: pretix/control/templates/pretixcontrol/auth/oauth_authorization.html:8
 msgid "Authorize an application"
@@ -12043,7 +12043,7 @@ msgstr "Časové pásmo"
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:14
 #: pretix/plugins/checkinlists/exporters.py:620
 msgid "Result"
-msgstr ""
+msgstr "Výsledek"
 
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html:78
 #: pretix/control/templates/pretixcontrol/order/index.html:366
@@ -12208,7 +12208,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order_pay_change.html:54
 #: pretix/presale/templates/pretixpresale/event/order_pay_confirm.html:40
 msgid "Cancel"
-msgstr ""
+msgstr "Zrušit"
 
 #: pretix/control/templates/pretixcontrol/checkin/list_delete.html:21
 #: pretix/control/templates/pretixcontrol/event/delete.html:30
@@ -15031,7 +15031,7 @@ msgstr ""
 #: pretix/plugins/reports/exporters.py:870
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:356
 msgid "Total"
-msgstr ""
+msgstr "Celkem"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:635
 #: pretix/presale/templates/pretixpresale/event/order.html:213
@@ -23800,7 +23800,7 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/waiting.html:22
 msgid "We are processing your request …"
-msgstr ""
+msgstr "Zpracováváme váš požadavek …"
 
 #: pretix/presale/utils.py:170 pretix/presale/utils.py:293
 #: pretix/presale/utils.py:294
