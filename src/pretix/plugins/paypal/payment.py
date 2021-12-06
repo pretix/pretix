@@ -83,6 +83,8 @@ class PaypalSettingsHolder(BasePaymentProvider):
     is_enabled = False
     is_meta = True
     payment_form_fields = OrderedDict([])
+    BN = 'ramiioGmbH_Cart_PPCP'
+    partnerID = 'G6R2B9YXADKWW'  # TODO: Sandbox/Live
 
     @property
     def settings_form_fields(self):
@@ -265,54 +267,39 @@ class PaypalSettingsHolder(BasePaymentProvider):
 
         return settings_content
 
-    # Legacy PayPal
-    def payment_control_render(self, request: HttpRequest, payment: OrderPayment):
-        template = get_template('pretixplugins/paypal/control_legacy.html')
-        sale_id = None
-        for trans in payment.info_data.get('transactions', []):
-            for res in trans.get('related_resources', []):
-                if 'sale' in res and 'id' in res['sale']:
-                    sale_id = res['sale']['id']
-        ctx = {'request': request, 'event': self.event, 'settings': self.settings,
-               'payment_info': payment.info_data, 'order': payment.order, 'sale_id': sale_id}
-        return template.render(ctx)
-
-    # Legacy PayPal
-    def payment_control_render_short(self, payment: OrderPayment) -> str:
-        return payment.info_data.get('payer', {}).get('payer_info', {}).get('email', '')
-
-
-
-class PaypalMethod(BasePaymentProvider):
-    identifier = ''
-    method = ''
-
-    def __init__(self, event: Event):
-        super().__init__(event)
-        self.settings = SettingsSandbox('payment', 'paypal', event)
-        self.BN = 'ramiioGmbH_Cart_PPCP'
-        self.partnerID = 'G6R2B9YXADKWW' # TODO: Sandbox/Live
-
-    @property
-    def settings_form_fields(self):
-        return {}
-
-    @property
-    def is_enabled(self) -> bool:
-        return self.settings.get('_enabled', as_type=bool) and self.settings.get('method_{}'.format(self.method),
-                                                                                 as_type=bool)
-
-    @property
-    def test_mode_message(self):
+    def init_api(self):
+        # PayPal Connect (legacy) || ISU
         if self.settings.connect_client_id and not self.settings.secret:
-            # in OAuth mode, sandbox mode needs to be set global
-            is_sandbox = self.settings.connect_endpoint == 'sandbox'
+            if 'sandbox' in self.settings.connect_endpoint:
+                env = SandboxEnvironment(
+                    client_id=self.settings.connect_client_id,
+                    client_secret=self.settings.connect_secret_key,
+                    merchant_id=self.settings.get('isu_merchant_id', self.settings.get('connect_user_id', None)),
+                    partner_id=self.BN
+                )
+            else:
+                env = LiveEnvironment(
+                    client_id=self.settings.connect_client_id,
+                    client_secret=self.settings.connect_secret_key,
+                    merchant_id=self.settings.get('isu_merchant_id', self.settings.get('connect_user_id', None)),
+                    partner_id=self.BN
+                )
+        # Manual API integration
         else:
-            is_sandbox = self.settings.get('endpoint') == 'sandbox'
-        if is_sandbox:
-            return _('The PayPal sandbox is being used, you can test without actually sending money but you will need a '
-                     'PayPal sandbox user to log in.')
-        return None
+            if 'sandbox' in self.settings.get('endpoint'):
+                env = SandboxEnvironment(
+                    client_id=self.settings.get('client_id'),
+                    client_secret=self.settings.get('secret'),
+                    partner_id=self.BN
+                )
+            else:
+                env = LiveEnvironment(
+                    client_id=self.settings.get('client_id'),
+                    client_secret=self.settings.get('secret'),
+                    partner_id=self.BN
+                )
+
+        self.client = PayPalHttpClient(env)
 
     def get_isu_referral_url(self, request):
         request.session['payment_paypal_isu_event'] = request.event.pk
@@ -367,6 +354,55 @@ class PaypalMethod(BasePaymentProvider):
             if link.rel == rel:
                 return link
 
+        return None
+
+    # Legacy PayPal
+    def payment_control_render(self, request: HttpRequest, payment: OrderPayment):
+        template = get_template('pretixplugins/paypal/control_legacy.html')
+        sale_id = None
+        for trans in payment.info_data.get('transactions', []):
+            for res in trans.get('related_resources', []):
+                if 'sale' in res and 'id' in res['sale']:
+                    sale_id = res['sale']['id']
+        ctx = {'request': request, 'event': self.event, 'settings': self.settings,
+               'payment_info': payment.info_data, 'order': payment.order, 'sale_id': sale_id}
+        return template.render(ctx)
+
+    # Legacy PayPal
+    def payment_control_render_short(self, payment: OrderPayment) -> str:
+        return payment.info_data.get('payer', {}).get('payer_info', {}).get('email', '')
+
+
+
+class PaypalMethod(BasePaymentProvider):
+    identifier = ''
+    method = ''
+
+    def __init__(self, event: Event):
+        super().__init__(event)
+        self.settings = SettingsSandbox('payment', 'paypal', event)
+        self.BN = 'ramiioGmbH_Cart_PPCP'
+        self.partnerID = 'G6R2B9YXADKWW' # TODO: Sandbox/Live
+
+    @property
+    def settings_form_fields(self):
+        return {}
+
+    @property
+    def is_enabled(self) -> bool:
+        return self.settings.get('_enabled', as_type=bool) and self.settings.get('method_{}'.format(self.method),
+                                                                                 as_type=bool)
+
+    @property
+    def test_mode_message(self):
+        if self.settings.connect_client_id and not self.settings.secret:
+            # in OAuth mode, sandbox mode needs to be set global
+            is_sandbox = self.settings.connect_endpoint == 'sandbox'
+        else:
+            is_sandbox = self.settings.get('endpoint') == 'sandbox'
+        if is_sandbox:
+            return _('The PayPal sandbox is being used, you can test without actually sending money but you will need a '
+                     'PayPal sandbox user to log in.')
         return None
 
     def is_allowed(self, request: HttpRequest, total: Decimal = None) -> bool:
