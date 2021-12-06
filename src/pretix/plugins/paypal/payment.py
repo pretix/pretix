@@ -31,7 +31,7 @@
 # Unless required by applicable law or agreed to in writing, software distributed under the Apache License 2.0 is
 # distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations under the License.
-
+import hashlib
 import json
 import logging
 import urllib.parse
@@ -46,20 +46,28 @@ from django.core import signing
 from django.http import HttpRequest
 from django.template.loader import get_template
 from django.urls import reverse
+from django.utils.crypto import get_random_string
+from django.utils.safestring import mark_safe
 from django.utils.timezone import now
 from django.utils.translation import gettext as __, gettext_lazy as _
+from django_countries import countries
 from i18nfield.strings import LazyI18nString
-from paypalrestsdk.exceptions import BadRequest, UnauthorizedAccess
-from paypalrestsdk.openid_connect import Tokeninfo
+from paypalcheckoutsdk.orders import OrdersCreateRequest, OrdersGetRequest, OrdersPatchRequest, OrdersCaptureRequest
+from paypalhttp import HttpError
 
+from pretix import settings
 from pretix.base.decimal import round_decimal
 from pretix.base.models import Event, Order, OrderPayment, OrderRefund, Quota
 from pretix.base.payment import BasePaymentProvider, PaymentException
 from pretix.base.services.mail import SendMailException
 from pretix.base.settings import SettingsSandbox
 from pretix.helpers.urls import build_absolute_uri as build_global_uri
-from pretix.multidomain.urlreverse import build_absolute_uri
+from pretix.multidomain.urlreverse import build_absolute_uri, eventreverse
+from pretix.plugins.paypal.client.core.paypal_http_client import PayPalHttpClient
 from pretix.plugins.paypal.models import ReferencedPayPalObject
+
+from pretix.plugins.paypal.client.core.environment import SandboxEnvironment, LiveEnvironment
+from pretix.plugins.paypal.client.customer.partner_referral_create_request import PartnerReferralCreateRequest
 
 logger = logging.getLogger('pretix.plugins.paypal')
 
@@ -69,32 +77,17 @@ SUPPORTED_CURRENCIES = ['AUD', 'BRL', 'CAD', 'CZK', 'DKK', 'EUR', 'HKD', 'HUF', 
 LOCAL_ONLY_CURRENCIES = ['INR']
 
 
-class Paypal(BasePaymentProvider):
+class PaypalSettingsHolder(BasePaymentProvider):
     identifier = 'paypal'
     verbose_name = _('PayPal')
-    payment_form_fields = OrderedDict([
-    ])
-
-    def __init__(self, event: Event):
-        super().__init__(event)
-        self.settings = SettingsSandbox('payment', 'paypal', event)
-
-    @property
-    def test_mode_message(self):
-        if self.settings.connect_client_id and not self.settings.secret:
-            # in OAuth mode, sandbox mode needs to be set global
-            is_sandbox = self.settings.connect_endpoint == 'sandbox'
-        else:
-            is_sandbox = self.settings.get('endpoint') == 'sandbox'
-        if is_sandbox:
-            return _('The PayPal sandbox is being used, you can test without actually sending money but you will need a '
-                     'PayPal sandbox user to log in.')
-        return None
+    is_enabled = False
+    is_meta = True
+    payment_form_fields = OrderedDict([])
 
     @property
     def settings_form_fields(self):
-        if self.settings.connect_client_id and not self.settings.secret:
-            # PayPal connect
+        # PayPal connect (legacy) || ISU
+        if self.settings.connect_client_id and self.settings.connect_secret_key and not self.settings.secret:
             if self.settings.connect_user_id:
                 fields = [
                     ('connect_user_id',
@@ -103,8 +96,17 @@ class Paypal(BasePaymentProvider):
                          disabled=True
                      )),
                 ]
+            elif self.settings.isu_merchant_id:
+                fields = [
+                    ('isu_merchant_id',
+                     forms.CharField(
+                         label=_('PayPal Merchant ID'),
+                         disabled=True
+                     )),
+                ]
             else:
                 return {}
+        # Manual API integration
         else:
             fields = [
                 ('client_id',
@@ -134,6 +136,49 @@ class Paypal(BasePaymentProvider):
                  )),
             ]
 
+        methods = [
+            ('method_wallet',
+             forms.BooleanField(
+                 label=_('PayPal'),
+                 required=False,
+                 help_text=_('ToDo: Explain that PayPal is always required (APM-only is not possible) since PayPal will be fallback.')
+             )),
+            ('method_apm',
+             forms.BooleanField(
+                 label=_('Alternative Payment Methods'),
+                 help_text=_('ToDo: Explain APMs'),
+                 required=False,
+                 widget=forms.CheckboxInput(
+                     attrs={
+                         'data-checkbox-dependency': '#id_payment_paypal_method_wallet',
+                     }
+                 )
+             )),
+            ('disable_method_sepa',
+             forms.BooleanField(
+                 label=_('Disable SEPA Direct Debit'),
+                 help_text=_('ToDo: Explain why one might want to disable SEPA'),
+                 required=False,
+                 widget=forms.CheckboxInput(
+                     attrs={
+                         'data-checkbox-dependency': '#id_payment_paypal_method_apm',
+                     }
+                 )
+             )),
+            ('enable_method_paylater',
+             forms.BooleanField(
+                 label=_('Enable Buy Now Pay Later'),
+                 help_text=_('ToDo: Explain why one might want to enable paylater'),
+                 required=False,
+                 widget=forms.CheckboxInput(
+                     attrs={
+                         'data-checkbox-dependency': '#id_payment_paypal_method_apm',
+                     }
+                 )
+             )),
+
+        ]
+
         extra_fields = [
             ('prefix',
              forms.CharField(
@@ -151,8 +196,20 @@ class Paypal(BasePaymentProvider):
              )),
         ]
 
+        if settings.DEBUG:
+            allcountries = list(countries)
+            allcountries.insert(0, ('', _('-- Automatic --')))
+
+            extra_fields.append(
+                ('debug_buyer_country',
+                 forms.ChoiceField(
+                     choices=allcountries,
+                     label=mark_safe('<kbd>DEBUG</kbd> {}'.format(_('Buyer country'))),
+                 )),
+            )
+
         d = OrderedDict(
-            fields + extra_fields + list(super().settings_form_fields.items())
+            fields + methods + extra_fields + list(super().settings_form_fields.items())
         )
 
         d.move_to_end('prefix')
@@ -160,25 +217,21 @@ class Paypal(BasePaymentProvider):
         d.move_to_end('_enabled', False)
         return d
 
-    def get_connect_url(self, request):
-        request.session['payment_paypal_oauth_event'] = request.event.pk
-
-        self.init_api()
-        return Tokeninfo.authorize_url({'scope': 'openid profile email'})
-
     def settings_content_render(self, request):
         settings_content = ""
-        if self.settings.connect_client_id and not self.settings.secret:
-            # Use PayPal connect
-            if not self.settings.connect_user_id:
+        if self.settings.connect_client_id and self.settings.connect_secret_key and not self.settings.secret:
+            # Use ISU
+            if not self.settings.isu_merchant_id:
+                isu_referral_url = self.get_isu_referral_url(request)
                 settings_content = (
                     "<p>{}</p>"
-                    "<a href='{}' class='btn btn-primary btn-lg'>{}</a>"
+                    "<a href='{}' class='btn btn-primary btn-lg {}'>{}</a>"
                 ).format(
                     _('To accept payments via PayPal, you will need an account at PayPal. By clicking on the '
                       'following button, you can either create a new PayPal account connect pretix to an existing '
                       'one.'),
-                    self.get_connect_url(request),
+                    isu_referral_url,
+                    'disabled' if not isu_referral_url else '',
                     _('Connect with {icon} PayPal').format(icon='<i class="fa fa-paypal"></i>')
                 )
             else:
@@ -191,12 +244,6 @@ class Paypal(BasePaymentProvider):
                     }),
                     _('Disconnect from PayPal')
                 )
-        else:
-            settings_content = "<div class='alert alert-info'>%s<br /><code>%s</code></div>" % (
-                _('Please configure a PayPal Webhook to the following endpoint in order to automatically cancel orders '
-                  'when payments are refunded externally.'),
-                build_global_uri('plugins:paypal:webhook')
-            )
 
         if self.event.currency not in SUPPORTED_CURRENCIES:
             settings_content += (
@@ -218,114 +265,183 @@ class Paypal(BasePaymentProvider):
 
         return settings_content
 
+    # Legacy PayPal
+    def payment_control_render(self, request: HttpRequest, payment: OrderPayment):
+        template = get_template('pretixplugins/paypal/control_legacy.html')
+        sale_id = None
+        for trans in payment.info_data.get('transactions', []):
+            for res in trans.get('related_resources', []):
+                if 'sale' in res and 'id' in res['sale']:
+                    sale_id = res['sale']['id']
+        ctx = {'request': request, 'event': self.event, 'settings': self.settings,
+               'payment_info': payment.info_data, 'order': payment.order, 'sale_id': sale_id}
+        return template.render(ctx)
+
+    # Legacy PayPal
+    def payment_control_render_short(self, payment: OrderPayment) -> str:
+        return payment.info_data.get('payer', {}).get('payer_info', {}).get('email', '')
+
+
+
+class PaypalMethod(BasePaymentProvider):
+    identifier = ''
+    method = ''
+
+    def __init__(self, event: Event):
+        super().__init__(event)
+        self.settings = SettingsSandbox('payment', 'paypal', event)
+        self.BN = 'ramiioGmbH_Cart_PPCP'
+        self.partnerID = 'G6R2B9YXADKWW' # TODO: Sandbox/Live
+
+    @property
+    def settings_form_fields(self):
+        return {}
+
+    @property
+    def is_enabled(self) -> bool:
+        return self.settings.get('_enabled', as_type=bool) and self.settings.get('method_{}'.format(self.method),
+                                                                                 as_type=bool)
+
+    @property
+    def test_mode_message(self):
+        if self.settings.connect_client_id and not self.settings.secret:
+            # in OAuth mode, sandbox mode needs to be set global
+            is_sandbox = self.settings.connect_endpoint == 'sandbox'
+        else:
+            is_sandbox = self.settings.get('endpoint') == 'sandbox'
+        if is_sandbox:
+            return _('The PayPal sandbox is being used, you can test without actually sending money but you will need a '
+                     'PayPal sandbox user to log in.')
+        return None
+
+    def get_isu_referral_url(self, request):
+        request.session['payment_paypal_isu_event'] = request.event.pk
+        request.session['payment_paypal_isu_tracking_id'] = get_random_string(length=127)
+
+        self.init_api()
+
+        req = PartnerReferralCreateRequest()
+
+        req.request_body({
+            "operations": [
+                {
+                    "operation": "API_INTEGRATION",
+                    "api_integration_preference": {
+                        "rest_api_integration": {
+                            "integration_method": "PAYPAL",
+                            "integration_type": "THIRD_PARTY",
+                            "third_party_details": {
+                                "features": [
+                                    "PAYMENT",
+                                    "REFUND",
+                                    "ADVANCED_TRANSACTIONS_SEARCH",
+                                    "TRACKING_SHIPMENT_READWRITE",
+                                    "ACCESS_MERCHANT_INFORMATION"
+                                ],
+                            }
+                        }
+                    }
+                }
+            ],
+            "products": [
+                "EXPRESS_CHECKOUT"
+            ],
+            "partner_config_override": {
+                "partner_logo_url": "https://pretix.eu/static/pretixbase/img/pretix-logo.svg",
+                "return_url": build_global_uri('plugins:paypal:oauth.return')
+            },
+            "tracking_id": request.session['payment_paypal_isu_tracking_id'],
+            "preferred_language_code": request.user.locale
+        })
+
+        try:
+            response = self.client.execute(req)
+        except IOError as ioe:
+            if isinstance(ioe, HttpError):
+                messages.error(request, _('An error occurred during connecting with PayPal, please try again.'))
+        else:
+            return self.get_link(response.result.links, 'action_url').href
+
+    def get_link(self, links, rel):
+        for link in links:
+            if link.rel == rel:
+                return link
+
+        return None
+
     def is_allowed(self, request: HttpRequest, total: Decimal = None) -> bool:
         return super().is_allowed(request, total) and self.event.currency in SUPPORTED_CURRENCIES
 
     def init_api(self):
+        # PayPal Connect (legacy) || ISU
         if self.settings.connect_client_id and not self.settings.secret:
-            paypalrestsdk.set_config(
-                mode="sandbox" if "sandbox" in self.settings.connect_endpoint else 'live',
-                client_id=self.settings.connect_client_id,
-                client_secret=self.settings.connect_secret_key,
-                openid_client_id=self.settings.connect_client_id,
-                openid_client_secret=self.settings.connect_secret_key,
-                openid_redirect_uri=urllib.parse.quote(build_global_uri('plugins:paypal:oauth.return')))
+            if 'sandbox' in self.settings.connect_endpoint:
+                env = SandboxEnvironment(
+                    client_id=self.settings.connect_client_id,
+                    client_secret=self.settings.connect_secret_key,
+                    merchant_id=self.settings.get('isu_merchant_id', self.settings.get('connect_user_id', None)),
+                    partner_id=self.BN
+                )
+            else:
+                env = LiveEnvironment(
+                    client_id=self.settings.connect_client_id,
+                    client_secret=self.settings.connect_secret_key,
+                    merchant_id=self.settings.get('isu_merchant_id', self.settings.get('connect_user_id', None)),
+                    partner_id=self.BN
+                )
+        # Manual API integration
         else:
-            paypalrestsdk.set_config(
-                mode="sandbox" if "sandbox" in self.settings.get('endpoint') else 'live',
-                client_id=self.settings.get('client_id'),
-                client_secret=self.settings.get('secret'))
+            if 'sandbox' in self.settings.get('endpoint'):
+                env = SandboxEnvironment(
+                    client_id=self.settings.get('client_id'),
+                    client_secret=self.settings.get('secret'),
+                    partner_id=self.BN
+                )
+            else:
+                env = LiveEnvironment(
+                    client_id=self.settings.get('client_id'),
+                    client_secret=self.settings.get('secret'),
+                    partner_id=self.BN
+                )
+
+        self.client = PayPalHttpClient(env)
 
     def payment_is_valid_session(self, request):
-        return (request.session.get('payment_paypal_id', '') != ''
-                and request.session.get('payment_paypal_payer', '') != '')
+        return request.session.get('payment_paypal_oid', '') != ''
 
     def payment_form_render(self, request) -> str:
         template = get_template('pretixplugins/paypal/checkout_payment_form.html')
-        ctx = {'request': request, 'event': self.event, 'settings': self.settings}
+        ctx = {'request': request, 'event': self.event, 'settings': self.settings, 'method': self.method}
         return template.render(ctx)
 
     def checkout_prepare(self, request, cart):
-        self.init_api()
-        kwargs = {}
-        if request.resolver_match and 'cart_namespace' in request.resolver_match.kwargs:
-            kwargs['cart_namespace'] = request.resolver_match.kwargs['cart_namespace']
+        paypal_order_id = request.POST.get('payment_paypal_{}_oid'.format(self.method), None)
 
-        try:
-            if request.event.settings.payment_paypal_connect_user_id:
-                try:
-                    tokeninfo = Tokeninfo.create_with_refresh_token(request.event.settings.payment_paypal_connect_refresh_token)
-                except BadRequest as ex:
-                    ex = json.loads(ex.content)
-                    messages.error(request, '{}: {} ({})'.format(
-                        _('We had trouble communicating with PayPal'),
-                        ex['error_description'],
-                        ex['correlation_id'])
-                    )
-                    return
+        # PayPal OID has been previously generated through XHR and onApprove() has fired
+        if paypal_order_id and paypal_order_id == request.session.get('payment_paypal_oid', None):
+            self.init_api()
+            req = OrdersGetRequest(paypal_order_id)
 
-                # Even if the token has been refreshed, calling userinfo() can fail. In this case we just don't
-                # get the userinfo again and use the payment_paypal_connect_user_id that we already have on file
-                try:
-                    userinfo = tokeninfo.userinfo()
-                    request.event.settings.payment_paypal_connect_user_id = userinfo.email
-                except UnauthorizedAccess:
-                    pass
-
-                payee = {
-                    "email": request.event.settings.payment_paypal_connect_user_id,
-                    # If PayPal ever offers a good way to get the MerchantID via the Identifity API,
-                    # we should use it instead of the merchant's eMail-address
-                    # "merchant_id": request.event.settings.payment_paypal_connect_user_id,
-                }
+            try:
+                response = self.client.execute(req)
+            except IOError as ioe:
+                if isinstance(ioe, HttpError):
+                    messages.warning(request, _('We had trouble communicating with PayPal'))
+                    return False
             else:
-                payee = {}
-
-            payment = paypalrestsdk.Payment({
-                'header': {'PayPal-Partner-Attribution-Id': 'ramiioSoftwareentwicklung_SP'},
-                'intent': 'sale',
-                'payer': {
-                    "payment_method": "paypal",
-                },
-                "redirect_urls": {
-                    "return_url": build_absolute_uri(request.event, 'plugins:paypal:return', kwargs=kwargs),
-                    "cancel_url": build_absolute_uri(request.event, 'plugins:paypal:abort', kwargs=kwargs),
-                },
-                "transactions": [
-                    {
-                        "item_list": {
-                            "items": [
-                                {
-                                    "name": '{prefix}{orderstring}{postfix}'.format(
-                                        prefix='{} '.format(self.settings.prefix) if self.settings.prefix else '',
-                                        orderstring=__('Order for %s') % str(request.event),
-                                        postfix=' {}'.format(self.settings.postfix) if self.settings.postfix else ''
-                                    ),
-                                    "quantity": 1,
-                                    "price": self.format_price(cart['total']),
-                                    "currency": request.event.currency
-                                }
-                            ]
-                        },
-                        "amount": {
-                            "currency": request.event.currency,
-                            "total": self.format_price(cart['total'])
-                        },
-                        "description": __('Event tickets for {event}').format(event=request.event.name),
-                        "payee": payee,
-                        "custom": '{prefix}{slug}{postfix}'.format(
-                            prefix='{} '.format(self.settings.prefix) if self.settings.prefix else '',
-                            slug=request.event.slug.upper(),
-                            postfix=' {}'.format(self.settings.postfix) if self.settings.postfix else ''
-                        )
-                    }
-                ]
-            })
-            request.session['payment_paypal_payment'] = None
-            return self._create_payment(request, payment)
-        except paypalrestsdk.exceptions.ConnectionError as e:
-            messages.error(request, _('We had trouble communicating with PayPal'))
-            logger.exception('Error on creating payment: ' + str(e))
+                if response.result.status == 'APPROVED':
+                    return True
+            messages.warning(request, _('Something went wrong when requesting the payment status. Please try again.'))
+            return False
+        # onApprove has fired, but we don't have a matching OID in the session - manipulation/something went wrong.
+        elif paypal_order_id:
+            messages.warning(request, _('We had trouble communicating with PayPal'))
+            return False
+        else:
+            # We don't have an XHR-generated OID, nor a onApprove-fired OID.
+            # Probably no active JavaScript; this won't work
+            messages.warning(request, _('You may need to enable JavaScript for PayPal payments.'))
+            return False
 
     def format_price(self, value):
         return str(round_decimal(value, self.event.currency, {
@@ -359,26 +475,123 @@ class Paypal(BasePaymentProvider):
     def abort_pending_allowed(self):
         return False
 
-    def _create_payment(self, request, payment):
-        if payment.create():
-            if payment.state not in ('created', 'approved', 'pending'):
-                messages.error(request, _('We had trouble communicating with PayPal'))
-                logger.error('Invalid payment state: ' + str(payment))
-                return
-            request.session['payment_paypal_id'] = payment.id
-            for link in payment.links:
-                if link.method == "REDIRECT" and link.rel == "approval_url":
-                    if request.session.get('iframe_session', False):
-                        signer = signing.Signer(salt='safe-redirect')
-                        return (
-                            build_absolute_uri(request.event, 'plugins:paypal:redirect') + '?url=' +
-                            urllib.parse.quote(signer.sign(link.href))
-                        )
-                    else:
-                        return str(link.href)
+    def _create_paypal_order(self, request, payment=None, cart=None):
+        self.init_api()
+        kwargs = {}
+        if request.resolver_match and 'cart_namespace' in request.resolver_match.kwargs:
+            kwargs['cart_namespace'] = request.resolver_match.kwargs['cart_namespace']
+
+        # PayPal Connect (legacy)
+        if request.event.settings.payment_paypal_connect_user_id:
+            payee = {
+                "email": request.event.settings.payment_paypal_connect_user_id,
+            }
+        # ISU
+        elif request.event.settings.payment_paypal_isu_merchant_id:
+            payee = {
+                "merchant_id": request.event.settings.payment_paypal_isu_merchant_id,
+            }
+        # Manual API integration
         else:
-            messages.error(request, _('We had trouble communicating with PayPal'))
-            logger.error('Error on creating payment: ' + str(payment.error))
+            payee = {}
+
+        if payment and not cart:
+            value = self.format_price(payment.amount)
+            currency = payment.order.event.currency
+            description = '{prefix}{orderstring}{postfix}'.format(
+                prefix='{} '.format(self.settings.prefix) if self.settings.prefix else '',
+                orderstring=__('Order {order} for {event}').format(
+                    event=request.event.name,
+                    order=payment.order.code
+                ),
+                postfix=' {}'.format(self.settings.postfix) if self.settings.postfix else ''
+            )
+            custom_id = '{prefix}{slug}-{code}{postfix}'.format(
+                prefix='{} '.format(self.settings.prefix) if self.settings.prefix else '',
+                slug=self.event.slug.upper(),
+                code=payment.order.code,
+                postfix=' {}'.format(self.settings.postfix) if self.settings.postfix else ''
+            )
+            request.session['payment_paypal_payment'] = payment.pk
+        elif cart and not payment:
+            value = self.format_price(cart['total'])
+            currency = request.event.currency
+            description = __('Event tickets for {event}').format(event=request.event.name)
+            custom_id = '{prefix}{slug}{postfix}'.format(
+                prefix='{} '.format(self.settings.prefix) if self.settings.prefix else '',
+                slug=request.event.slug.upper(),
+                postfix=' {}'.format(self.settings.postfix) if self.settings.postfix else ''
+            )
+            request.session['payment_paypal_payment'] = None
+        else:
+            pass
+
+        paymentreq = OrdersCreateRequest()
+        paymentreq.request_body({
+            'intent': 'CAPTURE',
+            #'payer': {},  # We could transmit PII (email, name, address, etc.)
+            'purchase_units': [{
+                'amount': {
+                    'currency_code': currency,
+                    'value': value,
+                },
+                'payee': payee,
+                'description': description,
+                'custom_id': custom_id,
+                #'shipping': {},  # Include Shipping information?
+            }],
+            'application_context': {
+                'locale': request.LANGUAGE_CODE,
+                'shipping_preference': 'NO_SHIPPING',  # 'SET_PROVIDED_ADDRESS',  # Do not set on non-ship order?
+                'user_action': 'CONTINUE',
+                'return_url': build_absolute_uri(request.event, 'plugins:paypal:return', kwargs=kwargs),
+                'cancel_url': build_absolute_uri(request.event, 'plugins:paypal:abort', kwargs=kwargs),
+            },
+        })
+
+        try:
+            response = self.client.execute(paymentreq)
+        except IOError as ioe:
+            if isinstance(ioe, HttpError):
+                messages.error(request, _('We had trouble communicating with PayPal'))
+        else:
+            if response.result.status not in ('CREATED', 'PAYER_ACTION_REQUIRED'):
+                messages.error(request, _('We had trouble communicating with PayPal'))
+                logger.error('Invalid payment state: ' + str(paymentreq))
+                return
+
+            request.session['payment_paypal_oid'] = response.result.id
+            return response.result
+
+    def _create_payment(self, request, paymentreq):
+        try:
+            response = self.client.execute(paymentreq)
+        except IOError as ioe:
+            if isinstance(ioe, HttpError):
+                messages.error(request, _('We had trouble communicating with PayPal'))
+        else:
+            if response.result.status not in ('CREATED', 'SAVED', 'APPROVED', 'COMPLETED', 'PAYER_ACTION_REQUIRED'):
+                messages.error(request, _('We had trouble communicating with PayPal'))
+                logger.error('Invalid payment state: ' + str(paymentreq))
+                return
+            request.session['payment_paypal_id'] = response.result.id
+
+            link = '{href}&fundingSource={method}'.format(
+                href=self.get_link(
+                    response.result.links,
+                    'payer-action' if response.result.status == 'PAYER_ACTION_REQUIRED' else 'approve'
+                ).href,
+                method=self.method
+            )
+
+            if request.session.get('iframe_session', False):
+                signer = signing.Signer(salt='safe-redirect')
+                return (
+                        build_absolute_uri(request.event, 'plugins:paypal:redirect') + '?url=' +
+                        urllib.parse.quote(signer.sign(link))
+                )
+            else:
+                return str(link)
 
     def checkout_confirm_render(self, request) -> str:
         """
@@ -390,104 +603,108 @@ class Paypal(BasePaymentProvider):
         return template.render(ctx)
 
     def execute_payment(self, request: HttpRequest, payment: OrderPayment):
-        if (request.session.get('payment_paypal_id', '') == '' or request.session.get('payment_paypal_payer', '') == ''):
-            raise PaymentException(_('We were unable to process your payment. See below for details on how to '
-                                     'proceed.'))
+        try:
+            if request.session.get('payment_paypal_oid', '') == '':
+                raise PaymentException(_('We were unable to process your payment. See below for details on how to '
+                                         'proceed.'))
 
-        self.init_api()
-        pp_payment = paypalrestsdk.Payment.find(request.session.get('payment_paypal_id'))
-        ReferencedPayPalObject.objects.get_or_create(order=payment.order, payment=payment, reference=pp_payment.id)
-        if str(pp_payment.transactions[0].amount.total) != str(payment.amount) or pp_payment.transactions[0].amount.currency \
-                != self.event.currency:
-            logger.error('Value mismatch: Payment %s vs paypal trans %s' % (payment.id, str(pp_payment)))
-            raise PaymentException(_('We were unable to process your payment. See below for details on how to '
-                                     'proceed.'))
-
-        return self._execute_payment(pp_payment, request, payment)
-
-    def _execute_payment(self, payment, request, payment_obj):
-        if payment.state == 'created':
-            payment.replace([
-                {
-                    "op": "replace",
-                    "path": "/transactions/0/item_list",
-                    "value": {
-                        "items": [
-                            {
-                                "name": '{prefix}{orderstring}{postfix}'.format(
-                                    prefix='{} '.format(self.settings.prefix) if self.settings.prefix else '',
-                                    orderstring=__('Order {slug}-{code}').format(
-                                        slug=self.event.slug.upper(),
-                                        code=payment_obj.order.code
-                                    ),
-                                    postfix=' {}'.format(self.settings.postfix) if self.settings.postfix else ''
-                                ),
-                                "quantity": 1,
-                                "price": self.format_price(payment_obj.amount),
-                                "currency": payment_obj.order.event.currency
-                            }
-                        ]
-                    }
-                },
-                {
-                    "op": "replace",
-                    "path": "/transactions/0/description",
-                    "value": '{prefix}{orderstring}{postfix}'.format(
-                        prefix='{} '.format(self.settings.prefix) if self.settings.prefix else '',
-                        orderstring=__('Order {order} for {event}').format(
-                            event=request.event.name,
-                            order=payment_obj.order.code
-                        ),
-                        postfix=' {}'.format(self.settings.postfix) if self.settings.postfix else ''
-                    ),
-                }
-            ])
+            self.init_api()
+            req = OrdersGetRequest(request.session.get('payment_paypal_oid'))
             try:
-                payment.execute({"payer_id": request.session.get('payment_paypal_payer')})
-            except paypalrestsdk.exceptions.ConnectionError as e:
-                messages.error(request, _('We had trouble communicating with PayPal'))
-                logger.exception('Error on creating payment: ' + str(e))
+                response = self.client.execute(req)
+            except IOError as ioe:
+                if isinstance(ioe, HttpError):
+                    raise PaymentException(_('We had trouble communicating with PayPal'))
+            else:
+                pp_captured_order = response.result
 
-        for trans in payment.transactions:
-            for rr in trans.related_resources:
-                if hasattr(rr, 'sale') and rr.sale:
-                    if rr.sale.state == 'pending':
-                        messages.warning(request, _('PayPal has not yet approved the payment. We will inform you as '
-                                                    'soon as the payment completed.'))
-                        payment_obj.info = json.dumps(payment.to_dict())
-                        payment_obj.state = OrderPayment.PAYMENT_STATE_PENDING
-                        payment_obj.save()
+            ReferencedPayPalObject.objects.get_or_create(order=payment.order, payment=payment, reference=pp_captured_order.id)
+            if str(pp_captured_order.purchase_units[0].amount.value) != str(payment.amount) or \
+                    pp_captured_order.purchase_units[0].amount.currency_code != self.event.currency:
+                logger.error('Value mismatch: Payment %s vs paypal trans %s' % (payment.id, str(pp_captured_order)))
+                raise PaymentException(_('We were unable to process your payment. See below for details on how to '
+                                         'proceed.'))
+
+            if pp_captured_order.status == 'APPROVED':
+                patchreq = OrdersPatchRequest(pp_captured_order.id)
+                patchreq.request_body([
+                    {
+                        "op": "replace",
+                        "path": "/purchase_units/@reference_id=='default'/custom_id",
+                        "value": '{prefix}{orderstring}{postfix}'.format(
+                            prefix='{} '.format(self.settings.prefix) if self.settings.prefix else '',
+                            orderstring=__('Order {slug}-{code}').format(
+                                slug=self.event.slug.upper(),
+                                code=payment.order.code
+                            ),
+                            postfix=' {}'.format(self.settings.postfix) if self.settings.postfix else ''
+                        ),
+                    },
+                    {
+                        "op": "replace",
+                        "path": "/purchase_units/@reference_id=='default'/description",
+                        "value": '{prefix}{orderstring}{postfix}'.format(
+                            prefix='{} '.format(self.settings.prefix) if self.settings.prefix else '',
+                            orderstring=__('Order {order} for {event}').format(
+                                event=request.event.name,
+                                order=payment.order.code
+                            ),
+                            postfix=' {}'.format(self.settings.postfix) if self.settings.postfix else ''
+                        ),
+                    }
+                ])
+                try:
+                    self.client.execute(patchreq)
+                except IOError as ioe:
+                    if isinstance(ioe, HttpError):
+                        messages.error(request, _('We had trouble communicating with PayPal'))
                         return
 
-        payment_obj.refresh_from_db()
-        if payment.state == 'pending':
-            messages.warning(request, _('PayPal has not yet approved the payment. We will inform you as soon as the '
-                                        'payment completed.'))
-            payment_obj.info = json.dumps(payment.to_dict())
-            payment_obj.state = OrderPayment.PAYMENT_STATE_PENDING
-            payment_obj.save()
-            return
+                capturereq = OrdersCaptureRequest(pp_captured_order.id)
 
-        if payment.state != 'approved':
-            payment_obj.fail(info=payment.to_dict())
-            logger.error('Invalid state: %s' % str(payment))
-            raise PaymentException(_('We were unable to process your payment. See below for details on how to '
-                                     'proceed.'))
+                try:
+                    response = self.client.execute(capturereq)
+                except IOError as ioe:
+                    if isinstance(ioe, HttpError):
+                        messages.error(request, _('We had trouble communicating with PayPal'))
+                        return
+                else:
+                    pp_captured_order = response.result
 
-        if payment_obj.state == OrderPayment.PAYMENT_STATE_CONFIRMED:
-            logger.warning('PayPal success event even though order is already marked as paid')
-            return
+            for purchaseunit in pp_captured_order.purchase_units:
+                for capture in purchaseunit.payments.captures:
+                    if capture.status == 'PENDING':
+                        messages.warning(request, _('PayPal has not yet approved the payment. We will inform you as '
+                                                    'soon as the payment completed.'))
+                        payment.info = json.dumps(pp_captured_order.dict())
+                        payment.state = OrderPayment.PAYMENT_STATE_PENDING
+                        payment.save()
+                        return
 
-        try:
-            payment_obj.info = json.dumps(payment.to_dict())
-            payment_obj.save(update_fields=['info'])
-            payment_obj.confirm()
-        except Quota.QuotaExceededException as e:
-            raise PaymentException(str(e))
+            payment.refresh_from_db()
 
-        except SendMailException:
-            messages.warning(request, _('There was an error sending the confirmation mail.'))
-        return None
+            if pp_captured_order.status != 'COMPLETED':
+                payment.fail(info=pp_captured_order.dict())
+                logger.error('Invalid state: %s' % str(pp_captured_order))
+                raise PaymentException(_('We were unable to process your payment. See below for details on how to '
+                                            'proceed.'))
+
+            if payment.state == OrderPayment.PAYMENT_STATE_CONFIRMED:
+                logger.warning('PayPal success event even though order is already marked as paid')
+                return
+
+            try:
+                payment.info = json.dumps(pp_captured_order.dict())
+                payment.save(update_fields=['info'])
+                payment.confirm()
+            except Quota.QuotaExceededException as e:
+                raise PaymentException(str(e))
+
+            except SendMailException:
+                messages.warning(request, _('There was an error sending the confirmation mail.'))
+            return None
+        finally:
+            del request.session['payment_paypal_oid']
 
     def payment_pending_render(self, request, payment) -> str:
         retry = True
@@ -525,17 +742,16 @@ class Paypal(BasePaymentProvider):
 
     def payment_control_render(self, request: HttpRequest, payment: OrderPayment):
         template = get_template('pretixplugins/paypal/control.html')
-        sale_id = None
-        for trans in payment.info_data.get('transactions', []):
-            for res in trans.get('related_resources', []):
-                if 'sale' in res and 'id' in res['sale']:
-                    sale_id = res['sale']['id']
+
         ctx = {'request': request, 'event': self.event, 'settings': self.settings,
-               'payment_info': payment.info_data, 'order': payment.order, 'sale_id': sale_id}
+               'payment_info': payment.info_data, 'order': payment.order}
         return template.render(ctx)
 
     def payment_control_render_short(self, payment: OrderPayment) -> str:
-        return payment.info_data.get('payer', {}).get('payer_info', {}).get('email', '')
+        return '{} / {}'.format(
+            payment.info_data.get('id', ''),
+            payment.info_data.get('payer', {}).get('email_address', '')
+        )
 
     def payment_partial_refund_supported(self, payment: OrderPayment):
         # Paypal refunds are possible for 180 days after purchase:
@@ -590,95 +806,34 @@ class Paypal(BasePaymentProvider):
             refund.info = json.dumps(pp_refund.to_dict())
             refund.done()
 
-    def payment_prepare(self, request, payment_obj):
-        self.init_api()
+    def payment_prepare(self, request, payment):
+        paypal_order_id = request.POST.get('payment_paypal_{}_oid'.format(self.method), None)
 
-        try:
-            if request.event.settings.payment_paypal_connect_user_id:
-                try:
-                    tokeninfo = Tokeninfo.create_with_refresh_token(request.event.settings.payment_paypal_connect_refresh_token)
-                except BadRequest as ex:
-                    ex = json.loads(ex.content)
-                    messages.error(request, '{}: {} ({})'.format(
-                        _('We had trouble communicating with PayPal'),
-                        ex['error_description'],
-                        ex['correlation_id'])
-                    )
-                    return
+        # PayPal OID has been previously generated through XHR and onApprove() has fired
+        if paypal_order_id and paypal_order_id == request.session.get('payment_paypal_oid', None):
+            self.init_api()
+            req = OrdersGetRequest(paypal_order_id)
 
-                # Even if the token has been refreshed, calling userinfo() can fail. In this case we just don't
-                # get the userinfo again and use the payment_paypal_connect_user_id that we already have on file
-                try:
-                    userinfo = tokeninfo.userinfo()
-                    request.event.settings.payment_paypal_connect_user_id = userinfo.email
-                except UnauthorizedAccess:
-                    pass
-
-                payee = {
-                    "email": request.event.settings.payment_paypal_connect_user_id,
-                    # If PayPal ever offers a good way to get the MerchantID via the Identifity API,
-                    # we should use it instead of the merchant's eMail-address
-                    # "merchant_id": request.event.settings.payment_paypal_connect_user_id,
-                }
+            try:
+                response = self.client.execute(req)
+            except IOError as ioe:
+                if isinstance(ioe, HttpError):
+                    messages.warning(request, _('We had trouble communicating with PayPal'))
+                    return False
             else:
-                payee = {}
-
-            payment = paypalrestsdk.Payment({
-                'header': {'PayPal-Partner-Attribution-Id': 'ramiioSoftwareentwicklung_SP'},
-                'intent': 'sale',
-                'payer': {
-                    "payment_method": "paypal",
-                },
-                "redirect_urls": {
-                    "return_url": build_absolute_uri(request.event, 'plugins:paypal:return'),
-                    "cancel_url": build_absolute_uri(request.event, 'plugins:paypal:abort'),
-                },
-                "transactions": [
-                    {
-                        "item_list": {
-                            "items": [
-                                {
-                                    "name": '{prefix}{orderstring}{postfix}'.format(
-                                        prefix='{} '.format(self.settings.prefix) if self.settings.prefix else '',
-                                        orderstring=__('Order {slug}-{code}').format(
-                                            slug=self.event.slug.upper(),
-                                            code=payment_obj.order.code
-                                        ),
-                                        postfix=' {}'.format(self.settings.postfix) if self.settings.postfix else ''
-                                    ),
-                                    "quantity": 1,
-                                    "price": self.format_price(payment_obj.amount),
-                                    "currency": payment_obj.order.event.currency
-                                }
-                            ]
-                        },
-                        "amount": {
-                            "currency": request.event.currency,
-                            "total": self.format_price(payment_obj.amount)
-                        },
-                        "description": '{prefix}{orderstring}{postfix}'.format(
-                            prefix='{} '.format(self.settings.prefix) if self.settings.prefix else '',
-                            orderstring=__('Order {order} for {event}').format(
-                                event=request.event.name,
-                                order=payment_obj.order.code
-                            ),
-                            postfix=' {}'.format(self.settings.postfix) if self.settings.postfix else ''
-                        ),
-                        "payee": payee,
-                        "custom": '{prefix}{slug}-{code}{postfix}'.format(
-                            prefix='{} '.format(self.settings.prefix) if self.settings.prefix else '',
-                            slug=self.event.slug.upper(),
-                            code=payment_obj.order.code,
-                            postfix=' {}'.format(self.settings.postfix) if self.settings.postfix else ''
-                        ),
-                    }
-                ]
-            })
-            request.session['payment_paypal_payment'] = payment_obj.pk
-            return self._create_payment(request, payment)
-        except paypalrestsdk.exceptions.ConnectionError as e:
-            messages.error(request, _('We had trouble communicating with PayPal'))
-            logger.exception('Error on creating payment: ' + str(e))
+                if response.result.status == 'APPROVED':
+                    return True
+            messages.warning(request, _('Something went wrong when requesting the payment status. Please try again.'))
+            return False
+        # onApprove has fired, but we don't have a matching OID in the session - manipulation/something went wrong.
+        elif paypal_order_id:
+            messages.warning(request, _('We had trouble communicating with PayPal'))
+            return False
+        else:
+            # We don't have an XHR-generated OID, nor a onApprove-fired OID.
+            # Probably no active JavaScript; this won't work
+            messages.warning(request, _('You may need to enable JavaScript for PayPal payments.'))
+            return False
 
     def shred_payment_info(self, obj):
         if obj.info:
@@ -734,3 +889,43 @@ class Paypal(BasePaymentProvider):
                 return super().render_invoice_text(order, payment)
 
         return self.settings.get('_invoice_text', as_type=LazyI18nString, default='')
+
+
+class PaypalWallet(PaypalMethod):
+    identifier = 'paypal_wallet'
+    verbose_name = _('PayPal Wallet')
+    public_name = _('PayPal')
+    method = 'wallet'
+
+
+class PaypalAPM(PaypalMethod):
+    identifier = 'paypal_apm'
+    verbose_name = _('PayPal APM')
+    public_name = _('Loading alternative payment methods...')
+    method = 'apm'
+
+    def payment_is_valid_session(self, request):
+        # Since APMs request the OID by XHR at a later point, no need to check anything here
+        return True
+
+    def checkout_prepare(self, request, cart):
+        return True
+
+    def payment_prepare(self, request, payment):
+        return True
+
+    def execute_payment(self, request: HttpRequest, payment: OrderPayment):
+        post_oid = request.POST.get('payment_paypal_{}_oid'.format(self.method), None)
+
+        if not post_oid:
+            paypal_order = self._create_paypal_order(request, payment, None)
+            payment.info = json.dumps(paypal_order.dict())
+            payment.save(update_fields=['info'])
+
+            return eventreverse(self.event, 'plugins:paypal:pay', kwargs={
+                'order': payment.order.code,
+                'payment': payment.pk,
+                'hash': hashlib.sha1(payment.order.secret.lower().encode()).hexdigest(),
+            })
+        elif post_oid and post_oid == request.session.get('payment_paypal_oid', None):
+            super().execute_payment(request, payment)

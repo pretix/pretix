@@ -1,0 +1,45 @@
+{% extends "pretixpresale/event/base.html" %}
+{% load i18n %}
+{% load eventurl %}
+{% load static %}
+{% block title %}{% trans "Pay order" %}{% endblock %}
+{% block custom_header %}
+    {{ block.super }}
+    {% if oid %}
+        <script type="text/plain" id="paypal_oid">{{ oid }}</script>
+    {% endif %}
+{% endblock %}
+{% block content %}
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title">
+                {% blocktrans trimmed with code=order.code %}
+                    Pay order: {{ code }}
+                {% endblocktrans %}
+            </h3>
+        </div>
+        <div class="panel-body" id="paymentcontainer">
+            <form action="" method="post" class="form-horizontal" enctype="multipart/form-data">
+                {% csrf_token %}
+                <noscript>
+                    <div class="alert alert-warning">
+                        {% trans "Please turn on JavaScript." %}
+                    </div>
+                </noscript>
+                <p>{% trans "Please use the button/form below to complete your payment." %}</p>
+                <div id="paypal-button-container" data-paypage="paypal_apm"></div>
+                <input type="hidden" name="payment_paypal_{{ method }}_oid" value="{{ oid }}" id="payment_paypal_{{ method }}_oid" />
+                <input type="hidden" name="payment_paypal_{{ method }}_payer" value="" id="payment_paypal_{{ method }}_payer" />
+            </form>
+        </div>
+    </div>
+    <div class="row checkout-button-row">
+        <div class="col-md-4">
+            <a class="btn btn-block btn-default btn-lg"
+               href="{% eventurl request.event "presale:event.order" secret=order.secret order=order.code %}">
+                {% trans "Cancel" %}
+            </a>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+{% endblock %}

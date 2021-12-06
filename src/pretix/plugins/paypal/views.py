@@ -31,7 +31,7 @@
 # Unless required by applicable law or agreed to in writing, software distributed under the Apache License 2.0 is
 # distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations under the License.
-
+import hashlib
 import json
 import logging
 from decimal import Decimal
@@ -41,24 +41,58 @@ import paypalrestsdk.exceptions
 from django.contrib import messages
 from django.core import signing
 from django.db.models import Sum
-from django.http import HttpResponse, HttpResponseBadRequest
+from django.http import HttpResponse, HttpResponseBadRequest, Http404, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
+from django.utils.decorators import method_decorator
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.clickjacking import xframe_options_exempt
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
+from django.views.generic import TemplateView
 from django_scopes import scopes_disabled
-from paypalrestsdk.openid_connect import Tokeninfo
+from paypalhttp import HttpError
 
 from pretix.base.models import Event, Order, OrderPayment, OrderRefund, Quota
 from pretix.base.payment import PaymentException
 from pretix.control.permissions import event_permission_required
 from pretix.multidomain.urlreverse import eventreverse
+from pretix.plugins.paypal.client.customer.partners_merchantintegrations_get_request import \
+    PartnersMerchantIntegrationsGetRequest
 from pretix.plugins.paypal.models import ReferencedPayPalObject
-from pretix.plugins.paypal.payment import Paypal
+from pretix.plugins.paypal.payment import PaypalMethod as Paypal, PaypalMethod
+from pretix.presale.views import get_cart, get_cart_total
 
 logger = logging.getLogger('pretix.plugins.paypal')
+
+
+class PaypalOrderView:
+    def dispatch(self, request, *args, **kwargs):
+        try:
+            self.order = request.event.orders.get(code=kwargs['order'])
+            if hashlib.sha1(self.order.secret.lower().encode()).hexdigest() != kwargs['hash'].lower():
+                raise Http404('Unknown order')
+        except Order.DoesNotExist:
+            # Do a hash comparison as well to harden timing attacks
+            if 'abcdefghijklmnopq'.lower() == hashlib.sha1('abcdefghijklmnopq'.encode()).hexdigest():
+                raise Http404('Unknown order')
+            else:
+                raise Http404('Unknown order')
+        return super().dispatch(request, *args, **kwargs)
+
+    @property
+    def payment(self):
+        return get_object_or_404(
+            self.order.payments,
+            pk=self.kwargs['payment'],
+            provider__istartswith='paypal',
+        )
+
+    def _redirect_to_order(self):
+        return redirect(eventreverse(self.request.event, 'presale:event.order', kwargs={
+            'order': self.order.code,
+            'secret': self.order.secret
+        }) + ('?paid=yes' if self.order.status == Order.STATUS_PAID else ''))
 
 
 @xframe_options_exempt
@@ -76,30 +110,116 @@ def redirect_view(request, *args, **kwargs):
     return r
 
 
+# ToDo: cart-namespacing for widget?
+@method_decorator(csrf_exempt, name='dispatch')
+@method_decorator(xframe_options_exempt, 'dispatch')
+class XHRView(TemplateView):
+    template_name = ''
+
+    def post(self, request, *args, **kwargs):
+        if 'order' in self.kwargs:
+            order = self.request.event.orders.filter(code=self.kwargs['order']).select_related('event').first()
+            if order:
+                if order.secret.lower() == self.kwargs['secret'].lower():
+                    pass
+                else:
+                    order = None
+        else:
+            order = None
+
+        # urlkwargs = {}
+        # if 'cart_namespace' in kwargs:
+        #     urlkwargs['cart_namespace'] = kwargs['cart_namespace']
+
+        prov = PaypalMethod(request.event)
+
+        if order:
+            cart = {
+                'positions': order.positions,
+                'total': order.pending_sum
+            }
+        else:
+            cart = {
+                'positions': get_cart(request),
+                'total': get_cart_total(request)
+            }
+
+        paypal_order = prov._create_paypal_order(request, None, cart)
+        r = JsonResponse(paypal_order.dict())
+        r._csp_ignore = True
+        return r
+
+
+@method_decorator(xframe_options_exempt, 'dispatch')
+class PayView(PaypalOrderView, TemplateView):
+    template_name = ''
+
+    def get(self, request, *args, **kwargs):
+        if self.payment.state not in [OrderPayment.PAYMENT_STATE_CREATED, OrderPayment.PAYMENT_STATE_PENDING]:
+            return self._redirect_to_order()
+        else:
+            r = render(request, 'pretixplugins/paypal/pay.html', self.get_context_data())
+            return r
+
+    def post(self, request, *args, **kwargs):
+        self.payment.payment_provider.execute_payment(request, self.payment)
+        return self._redirect_to_order()
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+
+        ctx['order'] = self.order
+        ctx['oid'] = self.payment.info_data['id']
+        ctx['method'] = self.payment.payment_provider.method
+        return ctx
+
+
 @scopes_disabled()
-def oauth_return(request, *args, **kwargs):
-    if 'payment_paypal_oauth_event' not in request.session:
+def isu_return(request, *args, **kwargs):
+    getparams = ['merchantId', 'merchantIdInPayPal', 'permissionsGranted', 'accountStatus', 'consentStatus', 'productIntentID', 'isEmailConfirmed']
+    sessionparams = ['payment_paypal_isu_event', 'payment_paypal_isu_tracking_id']
+    if not any(k in request.GET for k in getparams) or not any(k in request.session for k in sessionparams):
         messages.error(request, _('An error occurred during connecting with PayPal, please try again.'))
         return redirect(reverse('control:index'))
 
-    event = get_object_or_404(Event, pk=request.session['payment_paypal_oauth_event'])
+    event = get_object_or_404(Event, pk=request.session['payment_paypal_isu_event'])
 
     prov = Paypal(event)
     prov.init_api()
 
-    try:
-        tokeninfo = Tokeninfo.create(request.GET.get('code'))
-        userinfo = Tokeninfo.create_with_refresh_token(tokeninfo['refresh_token']).userinfo()
-    except paypalrestsdk.exceptions.ConnectionError:
-        logger.exception('Failed to obtain OAuth token')
-        messages.error(request, _('An error occurred during connecting with PayPal, please try again.'))
-    else:
-        messages.success(request,
-                         _('Your PayPal account is now connected to pretix. You can change the settings in '
-                           'detail below.'))
+    req = PartnersMerchantIntegrationsGetRequest(
+        prov.partnerID,
+        request.GET.get('merchantIdInPayPal')
+    )
 
-        event.settings.payment_paypal_connect_refresh_token = tokeninfo['refresh_token']
-        event.settings.payment_paypal_connect_user_id = userinfo.email
+    try:
+        response = prov.client.execute(req)
+    except IOError as ioe:
+        if isinstance(ioe, HttpError):
+            print(ioe.status_code)
+    else:
+        params = ['merchant_id', 'tracking_id', 'payments_receivable', 'primary_email_confirmed']
+        if not any(k in response.result for k in params):
+            if 'message' in response.result:
+                messages.error(request, response.result.message)
+            else:
+                messages.error(request, _('An error occurred during connecting with PayPal, please try again.'))
+        else:
+            if response.result.tracking_id != request.session['payment_paypal_isu_tracking_id']:
+                messages.error(request, _('An error occurred during connecting with PayPal, please try again.'))
+            else:
+                messages.success(request,
+                                 _('Your PayPal account is now connected to pretix. You can change the settings in '
+                                   'detail below.'))
+
+                event.settings.payment_paypal_isu_merchant_id = response.result.merchant_id
+
+                # Just for good measure: Let's keep a copy of the granted scopes
+                for integration in response.result.oauth_integrations:
+                    if integration.integration_type == 'OAUTH_THIRD_PARTY':
+                        for third_party in integration.oauth_third_party:
+                            if third_party.partner_client_id == prov.client.environment.client_id:
+                                event.settings.payment_paypal_isu_scopes = third_party.scopes
 
     return redirect(reverse('control:event.settings.payment.provider', kwargs={
         'organizer': event.organizer.slug,
@@ -124,7 +244,7 @@ def success(request, *args, **kwargs):
     else:
         payment = None
 
-    if pid == request.session.get('payment_paypal_id', None):
+    if request.session.get('payment_paypal_id', None):
         if payment:
             prov = Paypal(request.event)
             try:
@@ -280,9 +400,11 @@ def webhook(request, *args, **kwargs):
 
 @event_permission_required('can_change_event_settings')
 @require_POST
-def oauth_disconnect(request, **kwargs):
+def isu_disconnect(request, **kwargs):
     del request.event.settings.payment_paypal_connect_refresh_token
     del request.event.settings.payment_paypal_connect_user_id
+    del request.event.settings.payment_paypal_isu_merchant_id
+    del request.event.settings.payment_paypal_isu_scopes
     request.event.settings.payment_paypal__enabled = False
     messages.success(request, _('Your PayPal account has been disconnected.'))
 
