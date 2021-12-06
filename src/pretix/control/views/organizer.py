@@ -89,8 +89,8 @@ from pretix.control.forms.filter import (
 )
 from pretix.control.forms.orders import ExporterForm
 from pretix.control.forms.organizer import (
-    CustomerUpdateForm, DeviceForm, EventMetaPropertyForm, GateForm,
-    GiftCardCreateForm, GiftCardUpdateForm, MailSettingsForm,
+    CustomerCreateForm, CustomerUpdateForm, DeviceForm, EventMetaPropertyForm,
+    GateForm, GiftCardCreateForm, GiftCardUpdateForm, MailSettingsForm,
     MembershipTypeForm, MembershipUpdateForm, OrganizerDeleteForm,
     OrganizerForm, OrganizerSettingsForm, OrganizerUpdateForm, TeamForm,
     WebHookForm,
@@ -1861,6 +1861,35 @@ class CustomerDetailView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMi
             o.sales_channel_obj = scs[o.sales_channel]
 
         return ctx
+
+
+class CustomerCreateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, CreateView):
+    template_name = 'pretixcontrol/organizers/customer_edit.html'
+    permission = 'can_manage_customers'
+    context_object_name = 'customer'
+    form_class = CustomerCreateForm
+
+    def get_form_kwargs(self):
+        ctx = super().get_form_kwargs()
+        c = Customer(organizer=self.request.organizer)
+        c.assign_identifier()
+        ctx['instance'] = c
+        return ctx
+
+    def form_valid(self, form):
+        r = super().form_valid(form)
+        form.instance.log_action('pretix.customer.created', user=self.request.user, data={
+            k: getattr(form.instance, k)
+            for k in form.changed_data
+        })
+        messages.success(self.request, _('Your changes have been saved.'))
+        return r
+
+    def get_success_url(self):
+        return reverse('control:organizer.customer', kwargs={
+            'organizer': self.request.organizer.slug,
+            'customer': self.object.identifier,
+        })
 
 
 class CustomerUpdateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, UpdateView):
