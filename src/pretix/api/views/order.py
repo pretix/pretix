@@ -94,6 +94,7 @@ with scopes_disabled():
         search = django_filters.CharFilter(method='search_qs')
         item = django_filters.CharFilter(field_name='all_positions', lookup_expr='item_id')
         variation = django_filters.CharFilter(field_name='all_positions', lookup_expr='variation_id')
+        subevent = django_filters.CharFilter(field_name='all_positions', lookup_expr='subevent_id')
 
         class Meta:
             model = Order
