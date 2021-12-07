@@ -273,6 +273,7 @@ class PaymentSearchTest(SoupTest):
         )
 
         self.team = Team.objects.create(organizer=self.orga1, can_view_orders=True)
+        self.team2 = Team.objects.create(organizer=self.orga2, can_view_orders=True)
         self.team.members.add(self.user)
         self.team.limit_events.add(self.event1)
 
@@ -383,6 +384,20 @@ class PaymentSearchTest(SoupTest):
         resp = self.client.get('/control/search/payments/?event=1').content.decode()
         assert "FO1" in resp
         assert "FO2" not in resp
+
+    def test_filter_organizer(self):
+        self.team2.members.add(self.user)
+        self.user.save()
+
+        b = str(self.orga1.pk)
+        resp = self.client.get('/control/search/payments/?organizer=' + b).content.decode()
+        print(resp)
+        assert "FO1" in resp
+
+        b = str(self.orga2.pk)
+        resp = self.client.get('/control/search/payments/?organizer=' + b).content.decode()
+        print(resp)
+        assert "FO1" not in resp
 
     def test_filter_state(self):
         self.user.is_staff = True
