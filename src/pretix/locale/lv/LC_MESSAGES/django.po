@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-29 08:27+0000\n"
-"PO-Revision-Date: 2021-12-01 11:40+0000\n"
+"PO-Revision-Date: 2021-12-07 23:00+0000\n"
 "Last-Translator: Ilona Zilgalve <i.zilgalve@riga-jurmala.com>\n"
 "Language-Team: Latvian <https://translate.pretix.eu/projects/pretix/pretix/"
 "lv/>\n"
@@ -24050,8 +24050,6 @@ msgid "View other date"
 msgstr "Skatīt citu datumu"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:83
-#, fuzzy
-#| msgid "Choose date to buy a ticket"
 msgid "Choose date to book a ticket"
 msgstr "Izvēlieties datumu, lai iegādātos biļeti"
 
@@ -24079,12 +24077,12 @@ msgstr "Šī pasākuma iepriekšpārdošana vēl nav sākusies."
 #: pretix/presale/templates/pretixpresale/event/index.html:163
 #: pretix/presale/templates/pretixpresale/event/index.html:164
 msgid "Where does the event happen?"
-msgstr ""
+msgstr "Kur notiek pasākums?"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:171
 #: pretix/presale/templates/pretixpresale/event/index.html:172
 msgid "When does the event happen?"
-msgstr ""
+msgstr "Kad notiek pasākums?"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:178
 #: pretix/presale/templates/pretixpresale/event/voucher.html:33
@@ -24127,18 +24125,19 @@ msgid ""
 "you want, you can add yourself to the waiting list. We will then notify if "
 "seats are available again."
 msgstr ""
+"Dažu kategoriju biļetes ir izpārdotas. Ja vēlaties, variet pievienoties "
+"gaidīšanas rindai. Mēs informēsim, ja šīs kategorijas vietas būs atkal "
+"pieejamas."
 
 #: pretix/presale/templates/pretixpresale/event/index.html:262
-#, fuzzy
-#| msgid "Waiting list"
 msgid "Join waiting list"
-msgstr "Gaidīšanas rinda"
+msgstr "Pievienoties gaidīšanas rindai"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:278
 #: pretix/presale/templates/pretixpresale/event/voucher.html:365
 msgctxt "free_tickets"
 msgid "Register"
-msgstr ""
+msgstr "Turpināt"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:283
 #: pretix/presale/templates/pretixpresale/event/voucher.html:370
@@ -24148,7 +24147,7 @@ msgstr "Pievienot grozam"
 #: pretix/presale/templates/pretixpresale/event/index.html:307
 msgctxt "form"
 msgid "has error"
-msgstr ""
+msgstr "ir kļūda"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:330
 msgid "If you already ordered a ticket"
@@ -24196,16 +24195,12 @@ msgstr ""
 "zemāk."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:35
-#, fuzzy
-#| msgid ""
-#| "Please note that we still await approval by the event organizer before "
-#| "you can pay and complete this order."
 msgid ""
 "Please note that we still await approval by the event organizer before your "
 "order is confirmed."
 msgstr ""
 "Lūdzu, ņemiet vērā, ka mēs joprojām gaidām pasākuma organizatora "
-"apstiprinājumu, pirms jūs varēsiet samaksāt un pabeigt šo pasūtījumu."
+"apstiprinājumu, pirms jūs varēsiet pabeigt šo pasūtījumu."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:39
 msgid ""
@@ -24264,6 +24259,8 @@ msgid ""
 "We've received your request to cancel this order. Please stay patient while "
 "the event organizer decides on the cancellation."
 msgstr ""
+"Esam saņēmuši pieprasījumu par šī pasūtījuma atcelšanu. Lūdzu sagaidiet "
+"pasākuma organizatora apstiprinājumu atcelšanai."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:144
 #, python-format
@@ -24271,10 +24268,8 @@ msgid "A refund of %(amount)s will be sent out to you soon, please be patient."
 msgstr "Drīz jums tiks nosūtīta %(amount)s atmaksa. Lūdzu, esiet pacietīgs/a."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:151
-#, fuzzy
-#| msgid "Imprint"
 msgid "Print"
-msgstr "Kontaktinformācija"
+msgstr "Drukāt"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:153
 #, python-format
@@ -24282,17 +24277,18 @@ msgid ""
 "We've issued your refund of %(amount)s as a gift card. On your next purchase "
 "with us, you can use the following gift card code during payment:"
 msgstr ""
+"Esam atgriezuši Jums 1%(amount)s Dāvanu kartes veidā. Lūgums izmantot šo "
+"Dāvanu kartes kodu Jūsu turpmākajiem pirkumiem mūsu veikalā:"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:163
 #, python-format
 msgid "The current value of your gift card is %(value)s."
-msgstr ""
+msgstr "Dāvanu kartes vērtība šobrīd ir %(value)s."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:170
-#, fuzzy, python-format
-#| msgid "This gift card is not known."
+#, python-format
 msgid "This gift card is valid until %(expiry)s."
-msgstr "Šī dāvanu karte nav zināma."
+msgstr "Šī dāvanu karte ir derīga līdz 1%(expiry)s."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:181
 #, python-format
@@ -24304,10 +24300,8 @@ msgstr ""
 "uzgaidīt līdz 14 dienām, līdz atmaksa parādīsies jūsu izrakstā."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:198
-#, fuzzy
-#| msgid "Cancel order"
 msgid "Change ordered items"
-msgstr "Atcelt pasūtījumu"
+msgstr "Mainīt pasūtījuma detaļas"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:200
 #: pretix/presale/templates/pretixpresale/event/order.html:294
@@ -24318,6 +24312,7 @@ msgstr "Mainīt informāciju"
 msgid ""
 "You need to select a payment method above before you can request an invoice."
 msgstr ""
+"Jums jāizvēlas maksāšanas veids, kas augstāk, pirms jūs pieprasāt rēķinu."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:271
 #: pretix/presale/templates/pretixpresale/event/order.html:278
@@ -24326,11 +24321,8 @@ msgid "Request invoice"
 msgstr "Pieprasīt rēķinu"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:292
-#, fuzzy
-#| msgctxt "checkoutflow"
-#| msgid "Your information"
 msgid "Change your information"
-msgstr "Jūsu informācija"
+msgstr "Mainīt Jūsu informāciju"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:300
 #, fuzzy
@@ -24344,11 +24336,9 @@ msgid "Internal Reference"
 msgstr "Iekšējā atsauce"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:353
-#, fuzzy
-#| msgid "Can change orders"
 msgctxt "action"
 msgid "Change or cancel your order"
-msgstr "Var mainīt pasūtījumus"
+msgstr "Mainīt vai atcelt pasūtījumu"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:360
 msgid ""
