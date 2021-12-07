@@ -64,12 +64,10 @@
             Your payment will be processed by Stripe, Inc. Your credit card data will be transmitted directly to
             Stripe and never touches our servers.
         {% endblocktrans %}
-        <input type="hidden" name="stripe_total" value="{{ total }}" id="stripe_total"/>
-        <input type="hidden" name="stripe_payment_method_id" value="{{ request.session.payment_stripe_payment_method_id }}" id="stripe_payment_method_id"/>
-        <input type="hidden" name="stripe_card_last4" value="{{ request.session.payment_stripe_last4 }}"
-                id="stripe_card_last4"/>
-        <input type="hidden" name="stripe_card_brand" value="{{ request.session.payment_stripe_brand }}"
-                id="stripe_card_brand"/>
-        <input type="hidden" id="stripe_currency" value="{{ event.currency }}"/>
+        <input type="hidden" name="stripe_card_total" value="{{ total }}" id="stripe_card_total"/>
+        <input type="hidden" name="stripe_card_payment_method_id" value="{{ request.session.payment_stripe_card_payment_method_id }}" id="stripe_card_payment_method_id"/>
+        <input type="hidden" name="stripe_card_last4" value="{{ request.session.payment_stripe_last4 }}" id="stripe_card_last4"/>
+        <input type="hidden" name="stripe_card_brand" value="{{ request.session.payment_stripe_brand }}" id="stripe_card_brand"/>
+        <input type="hidden" id="stripe_card_currency" value="{{ event.currency }}"/>
     </p>
 </div>
