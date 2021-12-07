@@ -812,9 +812,9 @@ class OrderSearchFilterForm(OrderFilterForm):
 
 
 class OrderPaymentSearchFilterForm(forms.Form):
-    payments = {'id': 'id', 'local_id': 'local_id', 'state': 'state', 'amount': 'amount', 'order': 'order',
-                'created': 'created', 'payment_date': 'payment_date', 'provider': 'provider', 'info': 'info',
-                'fee': 'fee'}
+    orders = {'id': 'id', 'local_id': 'local_id', 'state': 'state', 'amount': 'amount', 'order': 'order',
+              'created': 'created', 'payment_date': 'payment_date', 'provider': 'provider', 'info': 'info',
+              'fee': 'fee'}
 
     query = forms.CharField(
         label=_('Search for…'),
@@ -883,7 +883,7 @@ class OrderPaymentSearchFilterForm(forms.Form):
         self.fields['ordering'] = forms.ChoiceField(
             choices=sum([
                 [(a, a), ('-' + a, '-' + a)]
-                for a in self.payments.keys()
+                for a in self.orders.keys()
             ], []),
             required=False
         )
@@ -1009,10 +1009,10 @@ class OrderPaymentSearchFilterForm(forms.Form):
 
         if fdata.get('ordering'):
             p = self.cleaned_data.get('ordering')
-            if p.startswith('-') and p not in self.payments:
-                qs = qs.order_by('-' + self.payments[p[1:]])
+            if p.startswith('-') and p not in self.orders:
+                qs = qs.order_by('-' + self.orders[p[1:]])
             else:
-                qs = qs.order_by(self.payments[p])
+                qs = qs.order_by(self.orders[p])
 
         return qs
 
