@@ -2018,6 +2018,15 @@ class DeviceFilterForm(FilterForm):
         ],
         required=False,
     )
+    state = forms.ChoiceField(
+        label=_('Device Status'),
+        choices=[
+            ('', _('All Devices')),
+            ('active', _('Active Devices')),
+            ('revoked', _('Revoked Devices'))
+        ],
+        required=False
+    )
 
     def __init__(self, *args, **kwargs):
         request = kwargs.pop('request')
@@ -2046,6 +2055,11 @@ class DeviceFilterForm(FilterForm):
 
         if fdata.get('gate'):
             qs = qs.filter(gate=fdata['gate'])
+
+        if fdata.get('state') == 'active':
+            qs = qs.filter(revoked=False)
+        elif fdata.get('state') == 'revoked':
+            qs = qs.filter(revoked=True)
 
         if fdata.get('ordering'):
             qs = qs.order_by(self.get_order_by())
