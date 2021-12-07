@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-29 08:27+0000\n"
-"PO-Revision-Date: 2021-12-01 11:40+0000\n"
+"PO-Revision-Date: 2021-12-07 23:00+0000\n"
 "Last-Translator: Ilona Zilgalve <i.zilgalve@riga-jurmala.com>\n"
 "Language-Team: Russian <https://translate.pretix.eu/projects/pretix/pretix/"
 "ru/>\n"
@@ -24208,8 +24208,6 @@ msgid "View other date"
 msgstr "Посмотреть другую дату"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:83
-#, fuzzy
-#| msgid "Choose date to buy a ticket"
 msgid "Choose date to book a ticket"
 msgstr "Выберите дату, чтобы купить билет"
 
