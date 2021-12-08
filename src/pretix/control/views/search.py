@@ -153,7 +153,6 @@ class PaymentSearch(PaginationMixin, ListView):
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data()
         ctx['filter_form'] = self.filter_form
-
         return ctx
 
     def get_queryset(self):
