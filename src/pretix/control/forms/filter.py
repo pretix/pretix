@@ -862,24 +862,31 @@ class OrderPaymentSearchFilterForm(forms.Form):
         required=False,
     )
     created_from = forms.DateField(
-        label=_('Payment created from'),
+        label=_('Ordered from'),
         required=False,
         widget=DatePickerWidget,
     )
     created_until = forms.DateField(
-        label=_('Payment created until'),
+        label=_('Ordered until'),
         required=False,
         widget=DatePickerWidget,
     )
     completed_from = forms.DateField(
-        label=_('Payment completed from'),
+        label=_('Paid from'),
         required=False,
         widget=DatePickerWidget,
     )
     completed_until = forms.DateField(
-        label=_('Payment completed until'),
+        label=_('Paid until'),
         required=False,
         widget=DatePickerWidget,
+    )
+    amount = forms.CharField(
+        label=_('Amount'),
+        required=False,
+        widget=forms.NumberInput(attrs={
+            'placeholder': _('Amount'),
+        }),
     )
 
     def __init__(self, *args, **kwargs):
@@ -964,8 +971,6 @@ class OrderPaymentSearchFilterForm(forms.Form):
                 )
             ).values_list('order_id', flat=True)
 
-            matching_payments = OrderPayment.objects.filter(info__icontains=u).values_list('id', flat=True)
-
             if "-" in u:
                 code = (Q(order__event__slug__icontains=u.rsplit("-", 1)[0])
                         & Q(order__code__icontains=Order.normalize_code(u.rsplit("-", 1)[1])))
@@ -980,10 +985,16 @@ class OrderPaymentSearchFilterForm(forms.Form):
                 )
             ).values_list('id', flat=True)
 
-            matching_events = OrderPayment.objects.filter(
-                Q(order__event__slug__icontains=u)
-                | Q(order__event__name__icontains=u)
-            ).values_list('id', flat=True)
+            mainq = (
+                Q(order__id__in=matching_invoices)
+                | Q(order__id__in=matching_invoice_addresses)
+                | Q(pk__in=matching_orders)
+            )
+
+            qs = qs.filter(mainq)
+
+        if fdata.get('amount'):
+            amount = fdata.get('amount')
 
             def is_decimal(value):
                 result = True
@@ -992,37 +1003,8 @@ class OrderPaymentSearchFilterForm(forms.Form):
                     result = result & part.isdecimal()
                 return result
 
-            if is_decimal(u):
-                matching_amounts = OrderPayment.objects.filter(amount=Decimal(u)).values_list('id', flat=True)
-            else:
-                matching_amounts = OrderPayment.objects.none()
-
-            matching_info = OrderPayment.objects.filter(info__icontains=u).values_list('id', flat=True)
-
-            matching_positions = OrderPosition.objects.filter(
-                Q(
-                    Q(attendee_name_cached__icontains=u) | Q(attendee_email__icontains=u)
-                    | Q(secret__istartswith=u)
-                    | Q(pseudonymization_id__istartswith=u)
-                )
-            ).values_list('order', flat=True)
-
-            mainq = (
-                Q(order__id__in=matching_invoices)
-                | Q(order__id__in=matching_invoice_addresses)
-                | Q(pk__in=matching_payments)
-                | Q(pk__in=matching_orders)
-                | Q(pk__in=matching_events)
-                | Q(pk__in=matching_amounts)
-                | Q(pk__in=matching_info)
-                | Q(order__in=matching_positions)
-            )
-
-            '''
-            amount, created, fee, fee_id, gift_card_transactions, id, info, local_id, migrated, order, order_id,
-            payment_date, provider, referencedpaypalobject, referencedstripeobject, refunds, state
-            '''
-            qs = qs.filter(mainq)
+            if is_decimal(amount):
+                qs = qs.filter(amount=Decimal(amount))
 
         if fdata.get('ordering'):
             p = self.cleaned_data.get('ordering')

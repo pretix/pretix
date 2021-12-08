@@ -327,16 +327,10 @@ class PaymentSearchTest(SoupTest):
         resp = self.client.get('/control/search/payments/?query=dummynope').content.decode()
         assert 'FO1' not in resp
 
-    def test_filter_attendee_name(self):
+    def test_filter_invoice_name(self):
         resp = self.client.get('/control/search/payments/?query=Pete').content.decode()
         assert 'FO1' in resp
         resp = self.client.get('/control/search/payments/?query=Mark').content.decode()
-        assert 'FO1' not in resp
-
-    def test_filter_attendee_email(self):
-        resp = self.client.get('/control/search/payments/?query=att.com').content.decode()
-        assert 'FO1' in resp
-        resp = self.client.get('/control/search/payments/?query=nope.com').content.decode()
         assert 'FO1' not in resp
 
     def test_filter_invoice_address(self):
@@ -364,19 +358,12 @@ class PaymentSearchTest(SoupTest):
     def test_filter_amount(self):
         self.team.all_events = True
         self.team.save()
-        resp = self.client.get('/control/search/payments/?query=14').content.decode()
+        resp = self.client.get('/control/search/payments/?amount=14').content.decode()
         assert 'FO1' in resp
         assert 'FO2' not in resp
-        resp = self.client.get('/control/search/payments/?query=15.00').content.decode()
+        resp = self.client.get('/control/search/payments/?amount=15.00').content.decode()
         assert 'FO1' not in resp
         assert 'FO2' in resp
-
-    def test_filter_info(self):
-        self.team.all_events = True
-        self.team.save()
-        resp = self.client.get('/control/search/payments/?query=order 1').content.decode()
-        assert 'FO1' in resp
-        assert 'FO2' not in resp
 
     def test_filter_event(self):
         self.team.all_events = True
@@ -421,10 +408,3 @@ class PaymentSearchTest(SoupTest):
         assert "P-4" not in resp
         assert "P-5" not in resp
         assert "P-6" not in resp
-
-    def test_filter_query_event(self):
-        self.team.all_events = True
-        self.team.save()
-        resp = self.client.get('/control/search/payments/?query=30C3').content.decode()
-        assert "FO1" in resp
-        assert "FO2" not in resp
