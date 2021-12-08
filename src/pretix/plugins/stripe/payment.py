@@ -54,7 +54,6 @@ from django.utils.safestring import mark_safe
 from django.utils.timezone import now
 from django.utils.translation import gettext, gettext_lazy as _, pgettext
 from django_countries import countries
-from localflavor.generic import forms as localforms
 
 from pretix import __version__
 from pretix.base.decimal import round_decimal
@@ -226,12 +225,12 @@ class StripeSettingsHolder(BasePaymentProvider):
                      label=_('SEPA Direct Debit'),
                      disabled=self.event.currency != 'EUR',
                      help_text=(
-                             _('Needs to be enabled in your Stripe account first.') +
-                             '<div class="alert alert-warning">%s</div>' % _(
-                         'SEPA Direct Debit payments via Stripe are <strong>not</strong> processed '
-                         'instantly but might take up to <strong>14 days</strong> to be confirmed in some cases. '
-                         'Please only activate this payment method if your payment term allows for this lag.'
-                     )),
+                         _('Needs to be enabled in your Stripe account first.') +
+                         '<div class="alert alert-warning">%s</div>' % _(
+                             'SEPA Direct Debit payments via Stripe are <strong>not</strong> processed '
+                             'instantly but might take up to <strong>14 days</strong> to be confirmed in some cases. '
+                             'Please only activate this payment method if your payment term allows for this lag.'
+                         )),
                      required=False,
                  )),
                 ('sepa_creditor_name',
@@ -1067,7 +1066,7 @@ class StripeSEPADirectDebit(StripePaymentIntentMethod):
                          }
                      ),
                  )),
-        ])
+            ])
 
     def _payment_intent_kwargs(self, request, payment):
         return {
