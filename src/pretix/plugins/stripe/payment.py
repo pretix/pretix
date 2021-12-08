@@ -962,8 +962,8 @@ class StripeCC(StripePaymentIntentMethod):
         return template.render(ctx)
 
     def checkout_prepare(self, request, cart):
-        request.session['payment_stripe_brand'] = request.POST.get('stripe_card_brand', '')
-        request.session['payment_stripe_last4'] = request.POST.get('stripe_card_last4', '')
+        request.session['payment_stripe_card_brand'] = request.POST.get('stripe_card_brand', '')
+        request.session['payment_stripe_card_last4'] = request.POST.get('stripe_card_last4', '')
 
         return super().checkout_prepare(request, cart)
 
@@ -1083,6 +1083,21 @@ class StripeSEPADirectDebit(StripePaymentIntentMethod):
                 },
             }
         }
+
+    def checkout_prepare(self, request, cart):
+        request.session['payment_stripe_sepa_debit_last4'] = request.POST.get('stripe_sepa_debit_last4', '')
+        request.session['payment_stripe_sepa_debit_bank'] = request.POST.get('stripe_sepa_debit_bank', '')
+
+        return super().checkout_prepare(request, cart)
+
+    def execute_payment(self, request: HttpRequest, payment: OrderPayment):
+        try:
+            super().execute_payment(request, payment)
+        finally:
+            fields = ['accountname', 'line1', 'postal_code', 'city', 'country']
+            for field in fields:
+                if 'payment_stripe_sepa_debit_{}'.format(field) in request.session:
+                    del request.session['payment_stripe_sepa_debit_{}'.format(field)]
 
 
 class StripeGiropay(StripeMethod):
