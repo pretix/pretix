@@ -896,6 +896,11 @@ class OrderRefundView(OrderView):
                             if self.request.POST.get('manual_state') == 'done'
                             else OrderRefund.REFUND_STATE_CREATED
                         ),
+                        execution_date=(
+                            now()
+                            if self.request.POST.get('manual_state') == 'done'
+                            else None
+                        ),
                         amount=manual_value,
                         comment=comment,
                         provider='manual'
