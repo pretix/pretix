@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-29 08:27+0000\n"
-"PO-Revision-Date: 2021-12-07 23:00+0000\n"
+"PO-Revision-Date: 2021-12-08 08:41+0000\n"
 "Last-Translator: Ilona Zilgalve <i.zilgalve@riga-jurmala.com>\n"
 "Language-Team: Latvian <https://translate.pretix.eu/projects/pretix/pretix/"
 "lv/>\n"
@@ -3209,16 +3209,12 @@ msgid ""
 msgstr ""
 
 #: pretix/base/models/items.py:835
-#, fuzzy
-#| msgid ""
-#| "This product will only be shown if a voucher matching the product is "
-#| "redeemed."
 msgid ""
 "This variation will only be shown if a voucher matching the product is "
 "redeemed."
 msgstr ""
-"Šis produkts tiks parādīts pircējam tikai tad, ja tiks ievadīts kupona kods, "
-"kas atbilst precei."
+"Šis produkts tiks parādīts pircējam tikai tad, ja tiks ievadītais kupona "
+"kods, kas atbilst precei, ir izmantots."
 
 #: pretix/base/models/items.py:837
 #, fuzzy
@@ -4238,7 +4234,7 @@ msgstr "Samaziniet produkta cenu par (%)"
 
 #: pretix/base/models/vouchers.py:195
 msgid "Number of times this voucher can be redeemed."
-msgstr "Cik reizes šo promokodu var izmantot."
+msgstr "Reizes, cik reizes šo promokodu var izmantot."
 
 #: pretix/base/models/vouchers.py:199 pretix/control/views/vouchers.py:109
 msgid "Redeemed"
@@ -4300,7 +4296,7 @@ msgstr "Kupona vērtība"
 
 #: pretix/base/models/vouchers.py:244 pretix/control/forms/vouchers.py:65
 msgid "This product is added to the user's cart if the voucher is redeemed."
-msgstr ""
+msgstr "Šis produkts ir pievienots pirkuma grozam, ja kupons ir izmantots."
 
 #: pretix/base/models/vouchers.py:254
 msgid "This variation of the product select above is being used."
@@ -7780,6 +7776,33 @@ msgid ""
 "Best regards,\n"
 "Your {event} team"
 msgstr ""
+"Labdien,\n"
+"\n"
+"Jūs esiet pieteicies gaidīšanas rindā {event} koncertam,\n"
+"{product} produktam.\n"
+"\n"
+"Šie produkti tagad ir atkal pieejami! Jūs variet tos iegādāties mūsu biļešu "
+"veikalā\n"
+"turpmāko {hours} stundu laikā, ievadot sekojošu kupona kodu:\n"
+"\n"
+"{code}\n"
+"\n"
+"Vai arī sekojiet šai saitei:\n"
+"\n"
+"{url}\n"
+"\n"
+"Šī saite ir aktīva tikai turpmākās {hours} stundas!\n"
+"Mēs pārsūtīsim šīs biļetes nākamajai personai rindā, ja Jūs\n"
+"neizmantosiet kuponu noteiktajā laikā.\n"
+"\n"
+"Ja NEvēlaties izmantot šīs biļetes, lūgums nospiest uz \n"
+"sekojošu saiti, kas zemāk. Šajā gadījumā mēs varēsim pēc iespējas ātrāk\n"
+"biļetes piedāvāt nākamajai personai gaidīšanas sarakstā:\n"
+"\n"
+"{url_remove}\n"
+"\n"
+"Ar sveicieniem,\n"
+"{event} komanda."
 
 #: pretix/base/settings.py:1808
 #, python-brace-format
@@ -10860,6 +10883,19 @@ msgid ""
 "\n"
 "Your {event} team"
 msgstr ""
+"Labdien,\n"
+"\n"
+"Šajā e-pastā nosūtām Jums vienu vai vairākus kuponus uz {event}:\n"
+"\n"
+"{voucher_list}\n"
+"\n"
+"Jūs tos variet izmantot mūsu biļešu e-veikalā:\n"
+"\n"
+"{url}\n"
+"\n"
+"Ar sveicieniem,\n"
+"\n"
+"{event} komanda."
 
 #: pretix/control/forms/vouchers.py:277
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_create.html:20
@@ -23768,7 +23804,7 @@ msgstr "Tukšs grozs"
 #: pretix/presale/templates/pretixpresale/event/fragment_cart_box.html:48
 #: pretix/presale/templates/pretixpresale/event/index.html:297
 msgid "Redeem a voucher"
-msgstr "Izmantot promokodu"
+msgstr "Izmantot kuponu/promokodu"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart_box.html:51
 msgid "We're applying this voucher to your cart..."
@@ -23777,7 +23813,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/fragment_cart_box.html:59
 #: pretix/presale/templates/pretixpresale/event/index.html:319
 msgid "Redeem voucher"
-msgstr "Izmantot promokodu"
+msgstr "Izmantot kuponu/promokodu"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_checkoutflow.html:2
 #, fuzzy
