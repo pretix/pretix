@@ -30,11 +30,19 @@
                 <div class="col-md-3 col-sm-6 col-xs-12">
                     {% bootstrap_field filter_form.provider %}
                 </div>
+            </div>
+            <div class="row">
                 <div class="col-md-3 col-sm-6 col-xs-12">
-                    {% bootstrap_field filter_form.date_from %}
+                    {% bootstrap_field filter_form.created_from %}
                 </div>
                 <div class="col-md-3 col-sm-6 col-xs-12">
-                    {% bootstrap_field filter_form.date_until %}
+                    {% bootstrap_field filter_form.created_until %}
+                </div>
+                <div class="col-md-3 col-sm-6 col-xs-12">
+                    {% bootstrap_field filter_form.completed_from %}
+                </div>
+                <div class="col-md-3 col-sm-6 col-xs-12">
+                    {% bootstrap_field filter_form.completed_from %}
                 </div>
             </div>
             <div class="text-right flip">

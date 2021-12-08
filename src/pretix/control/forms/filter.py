@@ -861,19 +861,25 @@ class OrderPaymentSearchFilterForm(forms.Form):
         ],
         required=False,
     )
-    date_from = forms.DateField(
-        label=_('Date from'),
+    created_from = forms.DateField(
+        label=_('Payment created from'),
         required=False,
-        widget=DatePickerWidget({
-            'placeholder': _('Date from'),
-        }),
+        widget=DatePickerWidget,
     )
-    date_until = forms.DateField(
-        label=_('Date until'),
+    created_until = forms.DateField(
+        label=_('Payment created until'),
         required=False,
-        widget=DatePickerWidget({
-            'placeholder': _('Date until'),
-        }),
+        widget=DatePickerWidget,
+    )
+    completed_from = forms.DateField(
+        label=_('Payment completed from'),
+        required=False,
+        widget=DatePickerWidget,
+    )
+    completed_until = forms.DateField(
+        label=_('Payment completed until'),
+        required=False,
+        widget=DatePickerWidget,
     )
 
     def __init__(self, *args, **kwargs):
@@ -903,22 +909,33 @@ class OrderPaymentSearchFilterForm(forms.Form):
     def filter_qs(self, qs):
         fdata = self.cleaned_data
 
-        if fdata.get('date_from'):
+        if fdata.get('created_from'):
             date_start = make_aware(datetime.combine(
-                fdata.get('date_from'),
+                fdata.get('created_from'),
                 time(hour=0, minute=0, second=0, microsecond=0)
             ), get_current_timezone())
             qs = qs.filter(created__gte=date_start)
 
-        if fdata.get('date_until'):
+        if fdata.get('created_until'):
             date_end = make_aware(datetime.combine(
-                fdata.get('date_until') + timedelta(days=1),
+                fdata.get('created_until') + timedelta(days=1),
                 time(hour=0, minute=0, second=0, microsecond=0)
             ), get_current_timezone())
-            qs = qs.filter(
-                Q(created__lt=date_end) |
-                Q(payment_date__lt=date_end)
-            )
+            qs = qs.filter(created__lt=date_end)
+
+        if fdata.get('completed_from'):
+            date_start = make_aware(datetime.combine(
+                fdata.get('completed_from'),
+                time(hour=0, minute=0, second=0, microsecond=0)
+            ), get_current_timezone())
+            qs = qs.filter(payment_date__gte=date_start)
+
+        if fdata.get('completed_until'):
+            date_end = make_aware(datetime.combine(
+                fdata.get('completed_until') + timedelta(days=1),
+                time(hour=0, minute=0, second=0, microsecond=0)
+            ), get_current_timezone())
+            qs = qs.filter(payment_date__lt=date_end)
 
         if fdata.get('event'):
             qs = qs.filter(order__event=fdata.get('event'))
