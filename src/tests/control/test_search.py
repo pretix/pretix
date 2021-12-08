@@ -368,7 +368,8 @@ class PaymentSearchTest(SoupTest):
     def test_filter_event(self):
         self.team.all_events = True
         self.team.save()
-        resp = self.client.get('/control/search/payments/?event=1').content.decode()
+        event_id = str(self.event1.pk)
+        resp = self.client.get('/control/search/payments/?event=' + event_id).content.decode()
         assert "FO1" in resp
         assert "FO2" not in resp
 
