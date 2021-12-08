@@ -58,7 +58,7 @@ from django_countries import countries
 from pretix import __version__
 from pretix.base.decimal import round_decimal
 from pretix.base.forms import SecretKeySettingsField
-from pretix.base.models import Event, OrderPayment, OrderRefund, Quota
+from pretix.base.models import Event, Order, OrderPayment, OrderRefund, Quota
 from pretix.base.payment import BasePaymentProvider, PaymentException
 from pretix.base.plugins import get_all_plugins
 from pretix.base.services.mail import SendMailException
@@ -74,6 +74,7 @@ from pretix.plugins.stripe.models import (
 from pretix.plugins.stripe.tasks import (
     get_stripe_account_key, stripe_verify_domain,
 )
+from pretix.presale.views.cart import cart_session
 
 logger = logging.getLogger('pretix.plugins.stripe')
 
@@ -1002,14 +1003,16 @@ class StripeSEPADirectDebit(StripePaymentIntentMethod):
     public_name = _('SEPA Debit')
     method = 'sepa_debit'
 
-    def payment_form_render(self, request) -> str:
+    def payment_form_render(self, request: HttpRequest, total: Decimal, order: Order=None) -> str:
+        cs = cart_session(request)
+
         template = get_template('pretixplugins/stripe/checkout_payment_form_sepadirectdebit.html')
         ctx = {
             'request': request,
             'event': self.event,
             'settings': self.settings,
             'form': self.payment_form(request),
-            'email': 'foo@bar.com'
+            'email': order.email if order else cs.get('email', '')
         }
         return template.render(ctx)
 
