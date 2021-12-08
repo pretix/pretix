@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-29 08:27+0000\n"
-"PO-Revision-Date: 2021-12-07 23:00+0000\n"
+"PO-Revision-Date: 2021-12-08 22:00+0000\n"
 "Last-Translator: Ilona Zilgalve <i.zilgalve@riga-jurmala.com>\n"
 "Language-Team: Russian <https://translate.pretix.eu/projects/pretix/pretix/"
 "ru/>\n"
@@ -4161,10 +4161,8 @@ msgstr ""
 "будьте осторожны с тем, кого вы добавите в эту команду!"
 
 #: pretix/base/models/organizer.py:277
-#, fuzzy
-#| msgid "Can manage gift cards"
 msgid "Can manage customer accounts"
-msgstr "Можно управлять подарочными сертификатами"
+msgstr "Можно управлять аккаунтом пользователя"
 
 #: pretix/base/models/organizer.py:281
 msgid "Can manage gift cards"
@@ -6142,11 +6140,10 @@ msgid ""
 msgstr "Вы выбрали продукт, который не доступен для продажи."
 
 #: pretix/base/services/memberships.py:141
-#, fuzzy
-#| msgid "You cannot select an item that belongs to a different event."
 msgid ""
 "You selected a membership that is connected to a different customer account."
-msgstr "Вы не можете выбрать продукт, который относится к другому мероприятию."
+msgstr ""
+"Вы не можете выбрать продукт, который относится к аккаунту пользователя."
 
 #: pretix/base/services/memberships.py:146
 #, fuzzy
@@ -6625,10 +6622,8 @@ msgid "The voucher has been sent to {recipient}."
 msgstr ""
 
 #: pretix/base/settings.py:118
-#, fuzzy
-#| msgid "Download ticket"
 msgid "Allow customers to create accounts"
-msgstr "Скачать билет"
+msgstr "Разрешить клиентам создавать аккаунт"
 
 #: pretix/base/settings.py:119
 msgid ""
@@ -23386,11 +23381,11 @@ msgstr "Отправить"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_customer.html:20
 msgid "Log in with a customer account"
-msgstr ""
+msgstr "Войдите в аккаунт"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_customer.html:29
 msgid "You are currently logged in with the following credentials."
-msgstr ""
+msgstr "В настоящее время вы вошли в систему со следующими учетными данными."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_customer.html:47
 #, python-format
@@ -23399,19 +23394,18 @@ msgid ""
 "connect your order to your account. This will allow you to see all your "
 "orders in one place and access them at any time."
 msgstr ""
+"Если вы ранее создавали аккаунт в %(org)s , вы можете войти в систему и "
+"связать свой заказ со своим аккаунтом. Это позволит вам видеть все свои "
+"заказы в одном месте и получать к ним доступ в любое время."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_customer.html:59
 #: pretix/presale/templates/pretixpresale/organizers/customer_login.html:31
-#, fuzzy
-#| msgid "Repeat password"
 msgid "Reset password"
-msgstr "Повторите пароль"
+msgstr "Сброс пароля"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_customer.html:77
-#, fuzzy
-#| msgid "Date and time"
 msgid "Create a new customer account"
-msgstr "Дата и время"
+msgstr "Создать новый аккаунт клиента"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_customer.html:86
 #, python-format
@@ -23420,6 +23414,10 @@ msgid ""
 "password, so you can use the account for future orders at %(org)s. You can "
 "still go ahead with this purchase before you received the email."
 msgstr ""
+"Мы отправим вам электронное письмо со ссылкой для активации вашего аккаунта "
+"и установки пароля, чтобы вы могли использовать аккаунт для будущих заказов "
+"на %(org)s. Вы по-прежнему можете совершить эту покупку до того, как "
+"получите электронное письмо."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_customer.html:107
 msgid "Continue as a guest"
@@ -23431,18 +23429,18 @@ msgid ""
 "will be able to access the details and status of your order any time through "
 "the secret link we will send you via email once the order is complete."
 msgstr ""
+"От вас не требуется создавать аккаунт. Если вы продолжите без регистрации, "
+"вы сможете получить доступ к деталям и статусу вашего заказа в любое время "
+"через секретную ссылку, которую мы отправим вам по электронной почте после "
+"завершения заказа."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_membership.html:6
-#, fuzzy
-#| msgid ""
-#| "For some of the products in your cart, you can choose additional options "
-#| "before you continue."
 msgid ""
 "Some of the products in your cart can only be purchased if there is an "
 "active membership on your account."
 msgstr ""
-"Для некоторых продуктов в вашей корзине вы можете выбрать дополнительные "
-"опции, прежде чем продолжить."
+"Некоторые продукты в вашей корзине можно приобрести только при наличии "
+"активного членства в вашем аккаунте ."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_membership.html:38
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:120
@@ -23454,12 +23452,12 @@ msgid ""
 "Your account does not include an active membership that allows you to buy "
 "this product."
 msgstr ""
+"В вашем аккаунте нет активного членства, которое позволяет вам покупать этот "
+"продукт."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_membership.html:70
-#, fuzzy
-#| msgid "You do not have access to this page."
 msgid "You will not be able to continue."
-msgstr "У вас нет доступа к этой странице."
+msgstr "Вы не сможете продолжить."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html:7
 msgid "Please select how you want to pay."
@@ -23516,7 +23514,7 @@ msgstr "Адрес электронной почты посетителя"
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:61
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:173
 msgid "Fill form"
-msgstr ""
+msgstr "Заполнить форму"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:89
 msgid "Copy answers from above"
@@ -23530,7 +23528,7 @@ msgstr "Скопируйте ответы сверху"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:164
 msgid "Auto-fill with profile"
-msgstr ""
+msgstr "Автозаполнение профилем"
 
 #: pretix/presale/templates/pretixpresale/event/cookies.html:8
 msgid "Please continue in a new tab"
@@ -23992,20 +23990,12 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:57
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:76
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:82
-#, fuzzy
-#| msgid ""
-#| "You can download your tickets using the buttons below. Please have your "
-#| "ticket ready when entering the event."
 msgid "Please have your ticket ready when entering the event."
-msgstr ""
-"Вы можете скачать свои билеты, используя кнопки ниже. Пожалуйста, предъявите "
-"билет при входе на мероприятие."
+msgstr "Пожалуйста, предъявите билет при входе на мероприятие."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:85
-#, fuzzy
-#| msgid "Download all tickets at once:"
 msgid "Download your tickets using the buttons below."
-msgstr "Скачать все билеты сразу:"
+msgstr "Скачать все билеты, используя кнопки ниже."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:94
 #, python-format
@@ -24013,23 +24003,18 @@ msgid "You will be able to download your tickets here starting on %(date)s."
 msgstr "Вы сможете скачать свои билеты здесь, начиная с %(date)s."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_order_status.html:7
-#, fuzzy
-#| msgid "Confirmations"
 msgctxt "order state"
 msgid "Confirmation pending"
-msgstr "Подтверждения"
+msgstr "Ожидается подтверждение"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_order_status.html:11
 msgid "Payment pending"
-msgstr "Платёж не завершён"
+msgstr "Ожидается платёж"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_order_status.html:20
-#, fuzzy
-#| msgctxt "payment_state"
-#| msgid "confirmed"
 msgctxt "order state"
 msgid "Confirmed"
-msgstr "подтверждено"
+msgstr "Подтверждено"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:9
 #, fuzzy
@@ -24084,12 +24069,12 @@ msgstr "Образец варианта"
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_calendar.html:8
 #, python-format
 msgid "Show previous month, %(month)s"
-msgstr ""
+msgstr "Показать предыдущий месяц, %(month)s"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_calendar.html:20
 #: pretix/presale/templates/pretixpresale/organizers/calendar.html:50
 msgid "Select month and year to show"
-msgstr ""
+msgstr "Выберите месяц и год для отображения"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_calendar.html:21
 #: pretix/presale/templates/pretixpresale/organizers/calendar.html:36
@@ -24098,13 +24083,13 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/organizers/calendar_week.html:38
 #: pretix/presale/templates/pretixpresale/organizers/index.html:44
 msgid "Month"
-msgstr ""
+msgstr "Месяц"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_calendar.html:26
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_calendar_week.html:26
 #: pretix/presale/templates/pretixpresale/organizers/calendar.html:56
 msgid "Year"
-msgstr ""
+msgstr "Год"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_calendar.html:33
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_calendar_week.html:33
@@ -24117,7 +24102,7 @@ msgstr "Перейти"
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_calendar.html:39
 #, python-format
 msgid "Show next month, %(month)s"
-msgstr ""
+msgstr "Показать в следующий месяц, %(month)s"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_calendar_week.html:8
 #, python-format
