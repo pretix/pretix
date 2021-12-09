@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-29 08:27+0000\n"
-"PO-Revision-Date: 2021-12-08 22:00+0000\n"
+"PO-Revision-Date: 2021-12-09 15:49+0000\n"
 "Last-Translator: Ilona Zilgalve <i.zilgalve@riga-jurmala.com>\n"
 "Language-Team: Russian <https://translate.pretix.eu/projects/pretix/pretix/"
 "ru/>\n"
@@ -732,7 +732,7 @@ msgstr "Адрес"
 #: pretix/plugins/checkinlists/exporters.py:477
 #: pretix/plugins/reports/exporters.py:754
 msgid "ZIP code"
-msgstr "ЗИП код"
+msgstr "Почтовый индекс"
 
 #: pretix/base/exporters/invoices.py:209 pretix/base/exporters/invoices.py:217
 #: pretix/base/exporters/invoices.py:335 pretix/base/exporters/invoices.py:343
@@ -887,7 +887,7 @@ msgstr "Информация о платеже"
 #: pretix/control/templates/pretixcontrol/event/payment.html:10
 #: pretix/control/views/event.py:323
 msgid "Payment providers"
-msgstr ""
+msgstr "Плательщики"
 
 #: pretix/base/exporters/invoices.py:285 pretix/base/exporters/invoices.py:388
 msgid "Cancellation"
@@ -944,7 +944,7 @@ msgstr "Описание"
 
 #: pretix/base/exporters/invoices.py:321 pretix/control/forms/orders.py:304
 msgid "Gross price"
-msgstr ""
+msgstr "Валовая стоимость"
 
 #: pretix/base/exporters/invoices.py:322
 msgid "Net price"
@@ -1443,16 +1443,12 @@ msgid "Order payments and refunds"
 msgstr "Оплата заказов и возвраты"
 
 #: pretix/base/exporters/orderlist.py:756
-#, fuzzy
-#| msgid "Payment fee"
 msgid "Payment states"
-msgstr "Платёжный сбор"
+msgstr "Состояние платежа"
 
 #: pretix/base/exporters/orderlist.py:764
-#, fuzzy
-#| msgid "Refund requested"
 msgid "Refund states"
-msgstr "Запрошен возврат"
+msgstr "Состояние возвратa"
 
 #: pretix/base/exporters/orderlist.py:789
 #: pretix/base/exporters/orderlist.py:928
@@ -1466,25 +1462,25 @@ msgstr "Запрошен возврат"
 #: pretix/plugins/checkinlists/exporters.py:331
 #: pretix/presale/templates/pretixpresale/event/order.html:66
 msgid "Order"
-msgstr ""
+msgstr "Заказ"
 
 #: pretix/base/exporters/orderlist.py:789
 #: pretix/base/exporters/orderlist.py:967
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/control.html:5
 msgid "Payment ID"
-msgstr ""
+msgstr "ID платежа"
 
 #: pretix/base/exporters/orderlist.py:789
 #: pretix/base/exporters/orderlist.py:1060
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:30
 #: pretix/control/templates/pretixcontrol/organizers/giftcards.html:59
 msgid "Creation date"
-msgstr ""
+msgstr "Дата создания"
 
 #: pretix/base/exporters/orderlist.py:789
 #: pretix/control/templates/pretixcontrol/order/index.html:764
 msgid "Completion date"
-msgstr ""
+msgstr "Дата завершения"
 
 #: pretix/base/exporters/orderlist.py:790
 msgid "Status code"
