@@ -349,13 +349,13 @@ def get_global_navigation(request):
             'icon': 'search',
             'children': [
                 {
-                    'label': _('Order search'),
+                    'label': _('Orders'),
                     'url': reverse('control:search.orders'),
                     'active': 'search.orders' in url.url_name,
                     'icon': 'search',
                 },
                 {
-                    'label': _('Payment search'),
+                    'label': _('Payments'),
                     'url': reverse('control:search.payments'),
                     'active': 'search.payments' in url.url_name,
                     'icon': 'search',

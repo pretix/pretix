@@ -862,12 +862,12 @@ class OrderPaymentSearchFilterForm(forms.Form):
         required=False,
     )
     created_from = forms.DateField(
-        label=_('Ordered from'),
+        label=_('Payment created from'),
         required=False,
         widget=DatePickerWidget,
     )
     created_until = forms.DateField(
-        label=_('Ordered until'),
+        label=_('Payment created until'),
         required=False,
         widget=DatePickerWidget,
     )
@@ -972,23 +972,23 @@ class OrderPaymentSearchFilterForm(forms.Form):
             ).values_list('order_id', flat=True)
 
             if "-" in u:
-                code = (Q(order__event__slug__icontains=u.rsplit("-", 1)[0])
-                        & Q(order__code__icontains=Order.normalize_code(u.rsplit("-", 1)[1])))
+                code = (Q(event__slug__icontains=u.rsplit("-", 1)[0])
+                        & Q(code__icontains=Order.normalize_code(u.rsplit("-", 1)[1])))
             else:
-                code = Q(order__code__icontains=Order.normalize_code(u))
+                code = Q(code__icontains=Order.normalize_code(u))
 
-            matching_orders = OrderPayment.objects.filter(
+            matching_orders = Order.objects.filter(
                 Q(
                     code
-                    | Q(order__email__icontains=u)
-                    | Q(order__comment__icontains=u)
+                    | Q(email__icontains=u)
+                    | Q(comment__icontains=u)
                 )
             ).values_list('id', flat=True)
 
             mainq = (
                 Q(order__id__in=matching_invoices)
                 | Q(order__id__in=matching_invoice_addresses)
-                | Q(pk__in=matching_orders)
+                | Q(order__id__in=matching_orders)
             )
 
             qs = qs.filter(mainq)
@@ -1012,6 +1012,8 @@ class OrderPaymentSearchFilterForm(forms.Form):
                 qs = qs.order_by('-' + self.orders[p[1:]])
             else:
                 qs = qs.order_by(self.orders[p])
+        else:
+            qs = qs.order_by('-created')
 
         return qs
 

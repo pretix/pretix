@@ -207,6 +207,4 @@ class PaymentSearch(PaginationMixin, ListView):
         leading to lots of unnecessary queries. Due to the way prefetch_related works differently, it
         will only create one shared Django object.
         """
-        return qs.only(
-            'id', 'local_id', 'state', 'amount', 'order', 'created', 'payment_date', 'provider', 'info', 'fee'
-        ).prefetch_related('order', 'order__event')
+        return qs.prefetch_related('order', 'order__event', 'order__event__organizer')
