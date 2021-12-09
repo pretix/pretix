@@ -36,6 +36,7 @@ import string
 from datetime import date, datetime, time
 
 import pytz
+from django.conf import settings
 from django.core.mail import get_connection
 from django.core.validators import MinLengthValidator, RegexValidator
 from django.db import models
@@ -195,16 +196,15 @@ class Organizer(LoggedModel):
         Returns an email server connection, either by using the system-wide connection
         or by returning a custom one based on the organizer's settings.
         """
-        from pretix.base.email import CustomSMTPBackend
-
         if self.settings.smtp_use_custom or force_custom:
-            return CustomSMTPBackend(host=self.settings.smtp_host,
-                                     port=self.settings.smtp_port,
-                                     username=self.settings.smtp_username,
-                                     password=self.settings.smtp_password,
-                                     use_tls=self.settings.smtp_use_tls,
-                                     use_ssl=self.settings.smtp_use_ssl,
-                                     fail_silently=False, timeout=timeout)
+            return get_connection(backend=settings.EMAIL_CUSTOM_SMTP_BACKEND,
+                                  host=self.settings.smtp_host,
+                                  port=self.settings.smtp_port,
+                                  username=self.settings.smtp_username,
+                                  password=self.settings.smtp_password,
+                                  use_tls=self.settings.smtp_use_tls,
+                                  use_ssl=self.settings.smtp_use_ssl,
+                                  fail_silently=False, timeout=timeout)
         else:
             return get_connection(fail_silently=False)
 

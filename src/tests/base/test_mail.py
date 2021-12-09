@@ -81,7 +81,34 @@ def test_send_mail_with_event_sender(env):
     assert len(djmail.outbox) == 1
     assert djmail.outbox[0].to == [user.email]
     assert djmail.outbox[0].subject == 'Test subject'
-    assert djmail.outbox[0].from_email == 'Dummy <foo@bar>'
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize("smtp_use_custom", (True, False))
+def test_send_mail_custom_event_smtp(env, smtp_use_custom):
+    djmail.outbox = []
+    event, user, organizer = env
+    event.settings.set("smtp_use_custom", smtp_use_custom)
+
+    mail('dummy@dummy.dummy', 'Test subject', 'mailtest.txt', {}, event=event)
+
+    assert len(djmail.outbox) == 1
+    assert djmail.outbox[0].to == [user.email]
+    assert djmail.outbox[0].subject == 'Test subject'
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize("smtp_use_custom", (True, False))
+def test_send_mail_custom_organizer_smtp(env, smtp_use_custom):
+    djmail.outbox = []
+    event, user, organizer = env
+    organizer.settings.set("smtp_use_custom", smtp_use_custom)
+
+    mail('dummy@dummy.dummy', 'Test subject', 'mailtest.txt', {}, organizer=organizer)
+
+    assert len(djmail.outbox) == 1
+    assert djmail.outbox[0].to == [user.email]
+    assert djmail.outbox[0].subject == 'Test subject'
 
 
 @pytest.mark.django_db

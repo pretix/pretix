@@ -65,7 +65,9 @@ from i18nfield.utils import I18nJSONEncoder
 from pytz import timezone
 
 from pretix.base.channels import get_all_sales_channels
-from pretix.base.email import get_available_placeholders
+from pretix.base.email import (
+    get_available_placeholders, test_custom_smtp_backend,
+)
 from pretix.base.models import Event, LogEntry, Order, TaxRule, Voucher
 from pretix.base.models.event import EventMetaValue
 from pretix.base.services import tickets
@@ -641,7 +643,7 @@ class MailSettings(EventSettingsViewMixin, EventSettingsFormView):
             if request.POST.get('test', '0').strip() == '1':
                 backend = self.request.event.get_mail_backend(force_custom=True, timeout=10)
                 try:
-                    backend.test(self.request.event.settings.mail_from)
+                    test_custom_smtp_backend(backend, self.request.event.settings.mail_from)
                 except Exception as e:
                     messages.warning(self.request, _('An error occurred while contacting the SMTP server: %s') % str(e))
                 else:
