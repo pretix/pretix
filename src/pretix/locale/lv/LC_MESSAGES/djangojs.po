@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-29 08:28+0000\n"
-"PO-Revision-Date: 2021-11-30 16:12+0000\n"
+"PO-Revision-Date: 2021-12-09 15:49+0000\n"
 "Last-Translator: Ilona Zilgalve <i.zilgalve@riga-jurmala.com>\n"
 "Language-Team: Latvian <https://translate.pretix.eu/projects/pretix/"
 "pretix-js/lv/>\n"
@@ -38,7 +38,7 @@ msgstr "Pieteiktie pasūtījumi"
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:15
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:39
 msgid "Paid orders"
-msgstr "Samaksātie rēķini"
+msgstr "Apmaksātie pasūtījumi"
 
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:27
 msgid "Total revenue"
@@ -124,7 +124,7 @@ msgstr "Atcelts"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:46
 msgid "Redeemed"
-msgstr "Atgriezts"
+msgstr "Izpirkts"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:47
 msgid "Cancel"
@@ -177,7 +177,7 @@ msgstr "Ieeja nav atļauta"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:60
 msgid "Ticket code revoked/changed"
-msgstr "Biļetes kods izmainīts"
+msgstr "Biļetes kods atsaukts/izmainīts"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:61
 msgid "Order canceled"
@@ -205,8 +205,8 @@ msgid ""
 "Your request is currently being processed. Depending on the size of your "
 "event, this might take up to a few minutes."
 msgstr ""
-"Jūsu pieprasījums tiek apstrādāts. Atkarībā no pieprasījuma izmēra, process "
-"var aizņemt līdz dažām minūtēm."
+"Jūsu pieprasījums tiek apstrādāts. Atkarībā no pasākuma lieluma, process var "
+"aizņemt līdz dažām minūtēm."
 
 #: pretix/static/pretixbase/js/asynctask.js:48
 #: pretix/static/pretixbase/js/asynctask.js:124
@@ -298,7 +298,7 @@ msgstr "Produkts"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:63
 msgid "Product variation"
-msgstr "Produkta veidi"
+msgstr "Produkta variācija"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:67
 msgid "Current date and time"
@@ -504,8 +504,8 @@ msgid ""
 "The items in your cart are no longer reserved for you. You can still "
 "complete your order as long as they’re available."
 msgstr ""
-"Jūsu grozā saglabātajām precēm rezervācijas laiks ir beidzies. Jūs joprojām "
-"variet pabeigt savu pasūtījumu, kamēr preces ir pieejamas."
+"Jūsu grozā esošās preces jums vairs nav rezervētas. Jūs joprojām variet "
+"pabeigt pasūtījumu, kamēr tās ir pieejamas."
 
 #: pretix/static/pretixpresale/js/ui/cart.js:45
 msgid "Cart expired"
