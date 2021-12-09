@@ -2019,11 +2019,11 @@ class DeviceFilterForm(FilterForm):
         required=False,
     )
     state = forms.ChoiceField(
-        label=_('Device Status'),
+        label=_('Device status'),
         choices=[
-            ('', _('All Devices')),
-            ('active', _('Active Devices')),
-            ('revoked', _('Revoked Devices'))
+            ('', _('All devices')),
+            ('active', _('Active devices')),
+            ('revoked', _('Revoked devices'))
         ],
         required=False
     )
