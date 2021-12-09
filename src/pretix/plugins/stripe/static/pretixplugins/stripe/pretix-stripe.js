@@ -27,8 +27,8 @@ var pretixstripe = {
                     $("#stripe_card_brand").val(result.paymentMethod.card.brand);
                     $("#stripe_card_last4").val(result.paymentMethod.card.last4);
                 }
-                if (method === 'sepa') {
-                    //$("#stripe_sepa_bank").val(...);
+                if (method === 'sepa_debit') {
+                    $("#stripe_sepa_debit_last4").val(result.paymentMethod.sepa_debit.last4);
                 }
                 // and submit
                 $form.get(0).submit();
@@ -164,7 +164,7 @@ var pretixstripe = {
                         pretixstripe.paymentRequest.canMakePayment().then(function (result) {
                             if (result) {
                                 pretixstripe.paymentRequestButton.mount('#stripe-payment-request-button');
-                                $('#stripe-elements .stripe-or').removeClass("hidden");
+                                $('#stripe-card-elements .stripe-or').removeClass("hidden");
                                 $('#stripe-payment-request-button').parent().removeClass("hidden");
                             } else {
                                 $('#stripe-payment-request-button').hide();
@@ -254,7 +254,7 @@ $(function () {
         function (e) {
             $("#stripe_card_payment_method_id").val("");
             $("#stripe-current-card").slideUp();
-            $("#stripe-elements").slideDown();
+            $("#stripe-card-elements").slideDown();
 
             e.preventDefault();
             return false;
@@ -262,7 +262,26 @@ $(function () {
     );
 
     if ($("#stripe-current-card").length) {
-        $("#stripe-elements").hide();
+        $("#stripe-card-elements").hide();
+    }
+
+    $("#stripe_other_account").click(
+        function (e) {
+            $("#stripe_sepa_debit_payment_method_id").val("");
+            $("#stripe-current-account").slideUp();
+            // We're using a css-selector here instead of the id-selector,
+            // as we're hiding Stripe Elements *and* Django form fields
+            $('.stripe-sepa_debit-form').slideDown();
+
+            e.preventDefault();
+            return false;
+        }
+    );
+
+    if ($("#stripe-current-account").length) {
+        // We're using a css-selector here instead of the id-selector,
+        // as we're hiding Stripe Elements *and* Django form fields
+        $('.stripe-sepa_debit-form').hide();
     }
 
     $('.stripe-container').closest("form").submit(

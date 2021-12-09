@@ -32,7 +32,6 @@ from pretix.base.forms import SecretKeySettingsField
 from pretix.base.settings import settings_hierarkey
 from pretix.base.signals import (
     logentry_display, register_global_settings, register_payment_providers,
-    requiredaction_display,
 )
 from pretix.control.signals import nav_organizer
 from pretix.plugins.stripe.forms import StripeKeyValidator
@@ -163,25 +162,6 @@ def register_global_settings(sender, **kwargs):
             required=False,
         )),
     ])
-
-
-@receiver(signal=requiredaction_display, dispatch_uid="stripe_requiredaction_display")
-def pretixcontrol_action_display(sender, action, request, **kwargs):
-    # DEPRECATED
-    if not action.action_type.startswith('pretix.plugins.stripe'):
-        return
-
-    data = json.loads(action.data)
-
-    if action.action_type == 'pretix.plugins.stripe.refund':
-        template = get_template('pretixplugins/stripe/action_refund.html')
-    elif action.action_type == 'pretix.plugins.stripe.overpaid':
-        template = get_template('pretixplugins/stripe/action_overpaid.html')
-    elif action.action_type == 'pretix.plugins.stripe.double':
-        template = get_template('pretixplugins/stripe/action_double.html')
-
-    ctx = {'data': data, 'event': sender, 'action': action}
-    return template.render(ctx, request)
 
 
 @receiver(nav_organizer, dispatch_uid="stripe_nav_organizer")
