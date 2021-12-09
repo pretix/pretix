@@ -850,9 +850,9 @@ class OrderPaymentSearchFilterForm(forms.Form):
         ),
     )
     state = forms.ChoiceField(
-        label=_('Payment state'),
+        label=_('State'),
         required=False,
-        choices=[('', _('All payment states'))] + list(OrderPayment.PAYMENT_STATES),
+        choices=[('', _('All payments'))] + list(OrderPayment.PAYMENT_STATES),
     )
     provider = forms.ChoiceField(
         label=_('Payment provider'),
