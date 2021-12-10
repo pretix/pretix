@@ -14,7 +14,7 @@
     <form class="form-inline" method="get" id="monthselform"
           action="{% eventurl request.organizer "presale:organizer.index" %}">
         {% for f, v in request.GET.items %}
-            {% if f != "week" and f != "year" %}
+            {% if f != "date" %}
                 <input type="hidden" name="{{ f }}" value="{{ v }}">
             {% endif %}
         {% endfor %}
@@ -23,18 +23,18 @@
                 {% include "pretixpresale/fragment_calendar_nav.html" with date=date request=request style=request.GET.style|default_if_none:"list" %}
             </div>
             <div class="col-md-4 col-sm-6 col-xs-12 text-center">
-                <select name="week" class="form-control select-calendar-week-short">
-                    {% for w in weeks %}
-                        <option value="{{ w.0.isocalendar.1 }}"
-                                {% if w.0.isocalendar.1 == date.isocalendar.1 %}selected{% endif %}>{% trans "W" %} {{ w.0.isocalendar.1 }}
+                <select name="date" class="form-control">
+                {% for weeks_per_year in weeks %}
+                    <optgroup label="{{ weeks_per_year.0.0.year }}">
+                    {% for w in weeks_per_year %}
+                        <option value="{{ w.0.isocalendar.0 }}-W{{ w.0.isocalendar.1 }}"
+                                {% if w.0.isocalendar.0 == date.isocalendar.0 and w.0.isocalendar.1 == date.isocalendar.1 %}selected{% endif %}>
+                                {{ w.0|date:"WEEK_FORMAT" }}
                             ({{ w.0|date:"SHORT_DATE_FORMAT" }} – {{ w.1|date:"SHORT_DATE_FORMAT" }})
                         </option>
                     {% endfor %}
-                </select>
-                <select name="year" class="form-control">
-                    {% for y in years %}
-                        <option value="{{ y }}" {% if y == date.isocalendar.0 %}selected{% endif %}>{{ y }}</option>
-                    {% endfor %}
+                    </optgroup>
+                {% endfor %}
                 </select>
                 <button type="submit" class="js-hidden btn btn-default">
                     {% trans "Go" %}
@@ -42,14 +42,14 @@
             </div>
             <div class="col-md-4 hidden-sm hidden-xs text-right flip">
                 {% if has_before %}
-                    <a href="?{% url_replace request "year" before.isocalendar.0 "week" before.isocalendar.1 %}"
+                    <a href="?{% url_replace request "date" before|date:"Y-\WW" %}"
                        class="btn btn-default">
                         <span class="fa fa-arrow-left" aria-hidden="true"></span>
                         {{ before|date:week_format }}
                     </a>
                 {% endif %}
                 {% if has_after %}
-                    <a href="?{% url_replace request "year" after.isocalendar.0 "week" after.isocalendar.1 %}"
+                    <a href="?{% url_replace request "date" after|date:"Y-\WW" %}"
                        class="btn btn-default">
                         {{ after|date:week_format }}
                         <span class="fa fa-arrow-right" aria-hidden="true"></span>
