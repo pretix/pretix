@@ -13,7 +13,7 @@
     <h3>{{ date|date:"F Y" }}</h3>
     <form class="form-inline" method="get" id="monthselform" action="{% eventurl request.organizer "presale:organizer.index" %}">
         {% for f, v in request.GET.items %}
-            {% if f != "month" and f != "year" and f != "date" %}
+            {% if f != "date" %}
                 <input type="hidden" name="{{ f }}" value="{{ v }}">
             {% endif %}
         {% endfor %}
