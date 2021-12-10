@@ -51,11 +51,6 @@
             <span class="fa fa-calendar-plus-o" aria-hidden="true"></span>
             {% trans "iCal" %}
         </a>
-        {% if "old" in request.GET %}
-            <a href="?{% url_replace request "old" "" %}" class="btn btn-link">{% trans "Show upcoming" %}</a>
-        {% else %}
-            <a href="?{% url_replace request "old" "1" %}" class="btn btn-link">{% trans "Show past events" %}</a>
-        {% endif %}
     </div>
     <div class="event-list">
         <div class="row hidden-xs hidden-sm">
@@ -144,11 +139,11 @@
         {% empty %}
             {% if "old" in request.GET %}
                 <div class="col-md-12">
-                    <em>{% trans "No archived events found." %}</em>
+                    <p><em>{% trans "No archived events found." %} <a href="?{% url_replace request "old" "" %}">{% trans "Show upcoming" %}</a></em></p>
                 </div>
             {% else %}
                 <div class="col-md-12">
-                    <em>{% trans "No public upcoming events found." %}</em>
+                    <p><em>{% trans "No public upcoming events found." %} <a href="?{% url_replace request "old" "1" %}">{% trans "Show past events" %}</a></em></p>
                 </div>
             {% endif %}
         {% endfor %}
