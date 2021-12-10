@@ -231,6 +231,14 @@ class EventListMixin:
             except ValueError:
                 self.year = now().year
                 self.month = now().month
+        elif 'date' in self.request.GET:
+            self.tz = self.request.organizer.timezone
+            try:
+                date = dateutil.parser.parse(self.request.GET.get('date')).date()
+            except ValueError:
+                date = now().astimezone(self.tz).date()
+            self.year = date.year
+            self.month = date.month
         else:
             if hasattr(self.request, 'event'):
                 self._set_month_to_next_subevent()

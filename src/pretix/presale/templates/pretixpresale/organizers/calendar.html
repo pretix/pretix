@@ -13,7 +13,7 @@
     <h3>{{ date|date:"F Y" }}</h3>
     <form class="form-inline" method="get" id="monthselform" action="{% eventurl request.organizer "presale:organizer.index" %}">
         {% for f, v in request.GET.items %}
-            {% if f != "month" and f != "year" %}
+            {% if f != "month" and f != "year" and f != "date" %}
                 <input type="hidden" name="{{ f }}" value="{{ v }}">
             {% endif %}
         {% endfor %}
@@ -44,16 +44,15 @@
                     {% trans "iCal" %}
                 </a>
             </div>
-            <div class="col-md-4 col-sm-6 col-xs-12 text-center" role="group" aria-label="{% trans "Select month and year to show" %}">
-                <select name="month" class="form-control" aria-label="{% trans "Month" %}">
+            <div class="col-md-4 col-sm-6 col-xs-12 text-center" role="group" aria-label="{% trans "Select month to show" %}">
+                <select name="date" class="form-control" aria-label="{% trans "Month" %}">
+                {% for y in years %}
+                    <optgroup label="{{ y }}">
                     {% for m in months %}
-                        <option value="{{ m|date:"m" }}" {% if m == date %}selected{% endif %}>{{ m|date:"F" }}</option>
+                        <option value="{{ y }}-{{ m|date:"m" }}" {% if m.month == date.month and y == date.year %}selected{% endif %}>{{ m|date:"F" }} {{ y }}</option>
                     {% endfor %}
-                </select>
-                <select name="year" class="form-control" aria-label="{% trans "Year" %}">
-                    {% for y in years %}
-                        <option value="{{ y }}" {% if y == date.year %}selected{% endif %}>{{ y }}</option>
-                    {% endfor %}
+                    </optgroup>
+                {% endfor %}
                 </select>
                 <button type="submit" class="js-hidden btn btn-default">
                     {% trans "Go" %}
