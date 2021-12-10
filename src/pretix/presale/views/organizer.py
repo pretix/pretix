@@ -727,7 +727,7 @@ class WeekCalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
         )
 
         ctx['days'] = days_for_template(ebd, week)
-        years = (self.year-1, self.year, self.year+1)
+        years = (self.year - 1, self.year, self.year + 1)
         weeks = []
         for year in years:
             weeks += [
