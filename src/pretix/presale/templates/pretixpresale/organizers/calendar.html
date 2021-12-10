@@ -60,13 +60,13 @@
             </div>
             <div class="col-md-4 hidden-sm hidden-xs text-right flip">
                 {% if has_before %}
-                    <a href="?{% url_replace request "year" before.year "month" before.month %}" class="btn btn-default">
+                    <a href="?{% url_replace request "date" before|date:"Y-m" %}" class="btn btn-default">
                         <span class="fa fa-arrow-left" aria-hidden="true"></span>
                         {{ before|date:"F Y" }}
                     </a>
                 {% endif %}
                 {% if has_after %}
-                    <a href="?{% url_replace request "year" after.year "month" after.month %}" class="btn btn-default">
+                    <a href="?{% url_replace request "date" after|date:"Y-m" %}" class="btn btn-default">
                         <span class="fa fa-arrow-right" aria-hidden="true"></span>
                         {{ after|date:"F Y" }}
                     </a>
