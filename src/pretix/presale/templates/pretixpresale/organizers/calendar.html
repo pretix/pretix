@@ -19,30 +19,7 @@
         {% endfor %}
         <div class="row">
             <div class="col-md-4 col-sm-6 col-xs-12 text-left flip">
-                <div class="btn-group" role="group">
-                    <a href="?{% url_replace request "style" "list" "week" "" "year" "" "month" "" "date" "" %}" type="button" class="btn btn-default">
-                        <span class="fa fa-list hidden-xs" aria-hidden="true"></span>
-                        {% trans "List" %}
-                    </a>
-                    <a href="?{% url_replace request "style" "week" "old" "" "month" "" "year" "" "date" "" %}" type="button"
-                            class="btn btn-default">
-                        {% trans "Week" %}
-                    </a>
-                    <a href="?{% url_replace request "style" "calendar" "old" "" "week" "" "date" "" %}"
-                            type="button"
-                            class="btn btn-default active">
-                        {% trans "Month" %}
-                    </a>
-                    <a href="?{% url_replace request "style" "day" "week" "" "month" "" "old" "" "page" "" %}" type="button"
-                       class="btn btn-default">
-                        {% trans "Day" %}
-                    </a>
-                </div>
-                <a href="{% eventurl request.organizer "presale:organizer.ical" %}?{% url_replace request "locale" request.LANGUAGE_CODE "page" "" "old" "" "week" "" "style" "" "month" "" "year" "" %}"
-                        class="btn btn-default">
-                    <span class="fa fa-calendar-plus-o" aria-hidden="true"></span>
-                    {% trans "iCal" %}
-                </a>
+                {% include "pretixpresale/fragment_calendar_nav.html" with date=date request=request style=request.GET.style|default_if_none:"list" %}
             </div>
             <div class="col-md-4 col-sm-6 col-xs-12 text-center" role="group" aria-label="{% trans "Select month to show" %}">
                 <select name="date" class="form-control" aria-label="{% trans "Month" %}">
