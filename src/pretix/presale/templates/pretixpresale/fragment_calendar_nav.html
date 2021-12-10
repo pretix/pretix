@@ -5,7 +5,6 @@
 <div class="btn-group" role="group">
     <a href="?{% url_replace request "style" "list" "date" "" %}" type="button" 
             class="btn btn-default{% if style == "list" %} active{% endif %}">
-        <span class="fa fa-list hidden-xs" aria-hidden="true"></span>
         {% trans "List" %}
     </a>
     <a href="?{% url_replace request "style" "week" "old" "" "page" "" "date" date|date:"Y-\WW" %}" type="button"
