@@ -18,10 +18,10 @@
             {% endif %}
         {% endfor %}
         <div class="row">
-            <div class="col-md-4 col-sm-6 col-xs-12 text-left flip">
+            <div class="col-md-5 col-sm-6 col-xs-12 text-left flip">
                 {% include "pretixpresale/fragment_calendar_nav.html" with date=date request=request style=request.GET.style|default_if_none:"list" %}
             </div>
-            <div class="col-md-4 col-sm-6 col-xs-12 text-center" role="group" aria-label="{% trans "Select month to show" %}">
+            <div class="col-md-2 col-sm-6 col-xs-12 text-center" role="group" aria-label="{% trans "Select month to show" %}">
                 <select name="date" class="form-control" aria-label="{% trans "Month" %}">
                 {% for y in years %}
                     <optgroup label="{{ y }}">
@@ -35,7 +35,7 @@
                     {% trans "Go" %}
                 </button>
             </div>
-            <div class="col-md-4 hidden-sm hidden-xs text-right flip">
+            <div class="col-md-5 hidden-sm hidden-xs text-right flip">
                 {% if has_before %}
                     <a href="?{% url_replace request "date" before|date:"Y-m" %}" class="btn btn-default">
                         <span class="fa fa-arrow-left" aria-hidden="true"></span>
