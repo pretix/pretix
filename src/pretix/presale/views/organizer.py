@@ -37,7 +37,7 @@ import math
 from collections import defaultdict
 from datetime import date, datetime, time, timedelta
 from functools import reduce
-from urllib.parse import quote
+from urllib.parse import quote, urlencode
 
 import dateutil
 import isoweek
@@ -47,6 +47,7 @@ from django.core.cache import caches
 from django.db.models import Exists, Max, Min, OuterRef, Q
 from django.db.models.functions import Coalesce, Greatest
 from django.http import Http404, HttpResponse
+from django.shortcuts import redirect
 from django.utils.decorators import method_decorator
 from django.utils.formats import date_format, get_format
 from django.utils.timezone import get_current_timezone, now
@@ -609,6 +610,11 @@ class CalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
 
     def get(self, request, *args, **kwargs):
         self._set_month_year()
+        keys = ("month", "year")
+        if all(k in request.GET for k in keys):
+            get_params = {k: v for k, v in request.GET.items() if k not in keys}
+            get_params["date"] = "%s-%s" % (self.year, self.month)
+            return redirect(self.request.path + "?" + urlencode(get_params))
         return super().get(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
