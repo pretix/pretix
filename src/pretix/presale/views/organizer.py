@@ -298,7 +298,7 @@ class EventListMixin:
         if hasattr(self.request, 'event') and self.subevent:
             tz = pytz.timezone(self.request.event.settings.timezone)
             self.year = self.subevent.date_from.astimezone(tz).year
-            self.month = self.subevent.date_from.astimezone(tz).month
+            self.week = self.subevent.date_from.astimezone(tz).isocalendar()[1]
         if 'year' in self.request.GET and 'week' in self.request.GET:
             try:
                 self.year = int(self.request.GET.get('year'))
@@ -306,6 +306,14 @@ class EventListMixin:
             except ValueError:
                 self.year = now().isocalendar()[0]
                 self.week = now().isocalendar()[1]
+        elif 'date' in self.request.GET:
+            self.tz = self.request.organizer.timezone
+            try:
+                iso = dateutil.parser.isoparse(self.request.GET.get('date')).isocalendar()
+            except ValueError:
+                iso = now().astimezone(self.tz).isocalendar()
+            self.year = iso[0]
+            self.week = iso[1]
         else:
             if hasattr(self.request, 'event'):
                 self._set_week_to_next_subevent()
@@ -679,6 +687,12 @@ class WeekCalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
 
     def get(self, request, *args, **kwargs):
         self._set_week_year()
+        # redirect old week-year-URLs to new date-URLs
+        keys = ("week", "year")
+        if all(k in request.GET for k in keys):
+            get_params = {k: v for k, v in request.GET.items() if k not in keys}
+            get_params["date"] = "%s-W%02d" % (self.year, self.week)
+            return redirect(self.request.path + "?" + urlencode(get_params))
         return super().get(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
