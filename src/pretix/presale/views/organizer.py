@@ -610,6 +610,7 @@ class CalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
 
     def get(self, request, *args, **kwargs):
         self._set_month_year()
+        # redirect old month-year-URLs to new date-URLs
         keys = ("month", "year")
         if all(k in request.GET for k in keys):
             get_params = {k: v for k, v in request.GET.items() if k not in keys}
