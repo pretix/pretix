@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-30 16:13+0000\n"
 "PO-Revision-Date: 2021-12-13 21:00+0000\n"
-"Last-Translator: Yuriko Matsunami <y.matsunami@enobyte.com>\n"
+"Last-Translator: DJG Bayern <pretix2021weblate@aruki.de>\n"
 "Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/"
 "pretix-js/ja/>\n"
 "Language: ja\n"
@@ -203,7 +203,7 @@ msgstr ""
 
 #: pretix/static/lightbox/js/lightbox.js:96
 msgid "close"
-msgstr ""
+msgstr "閉じる"
 
 #: pretix/static/pretixbase/js/asynctask.js:43
 #: pretix/static/pretixbase/js/asynctask.js:119
