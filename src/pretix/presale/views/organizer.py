@@ -713,7 +713,6 @@ class WeekCalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
                 for i in range(53 if date(year, 12, 31).isocalendar()[1] == 53 else 52)
             ]
         ctx['weeks'] = [[w for w in weeks if w[0].year == year] for year in years]
-        ctx['years'] = range(now().year - 2, now().year + 3)
         ctx['week_format'] = get_format('WEEK_FORMAT')
         if ctx['week_format'] == 'WEEK_FORMAT':
             ctx['week_format'] = WEEK_FORMAT
