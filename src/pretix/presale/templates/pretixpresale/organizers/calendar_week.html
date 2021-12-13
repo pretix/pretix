@@ -42,14 +42,14 @@
             </div>
             <div class="col-md-4 col-sm-2 col-xs-4 text-right flip">
                 {% if has_before %}
-                    <a href="?{% url_replace request "date" before|date:"Y-\WW" %}"
+                    <a href="?{% url_replace request "date" before|date:"o-\WW" %}"
                        class="btn btn-default" aria-label="{{ before|date:week_format }}">
                         <span class="fa fa-arrow-left" aria-hidden="true"></span>
                         <span class="hidden-sm hidden-xs">{{ before|date:week_format }}</span>
                     </a>
                 {% endif %}
                 {% if has_after %}
-                    <a href="?{% url_replace request "date" after|date:"Y-\WW" %}"
+                    <a href="?{% url_replace request "date" after|date:"o-\WW" %}"
                        class="btn btn-default" aria-label="{{ after|date:week_format }}">
                         <span class="hidden-sm hidden-xs">{{ after|date:week_format }}</span>
                         <span class="fa fa-arrow-right" aria-hidden="true"></span>
@@ -61,14 +61,14 @@
     {% include "pretixpresale/fragment_week_calendar.html" with show_avail=request.organizer.settings.event_list_availability %}
     <div class="col-sm-12 visible-sm visible-xs text-center">
         {% if has_before %}
-            <a href="?{% url_replace request "date" before|date:"Y-\WW" %}"
+            <a href="?{% url_replace request "date" before|date:"o-\WW" %}"
                class="btn btn-default">
                 <span class="fa fa-arrow-left" aria-hidden="true"></span>
                 {{ before|date:week_format }}
             </a>
         {% endif %}
         {% if has_after %}
-            <a href="?{% url_replace request "date" after|date:"Y-\WW" %}"
+            <a href="?{% url_replace request "date" after|date:"o-\WW" %}"
                class="btn btn-default">
                 {{ after|date:week_format }}
                 <span class="fa fa-arrow-right" aria-hidden="true"></span>
