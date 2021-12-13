@@ -182,7 +182,7 @@ var pretixpaypal = {
                     return $("#payment_paypal_" + pretixpaypal.method.method + "_oid");
                 } else if (window.location.pathname.endsWith("/pay/change")) {
                     let url = window.location.pathname.split('order')
-                    var xhrurl = url[0] + 'paypal/' + url[1].split('pay/change')[0] + 'xhr/'
+                    var xhrurl = url[0] + 'paypal' + url[1].split('pay/change')[0] + 'xhr/'
                 } else {
                     var xhrurl = window.location.pathname.split('checkout/')[0] + 'paypal/xhr/'
                 }
