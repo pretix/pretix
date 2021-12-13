@@ -30,7 +30,7 @@
             </div>
             <form class="panel-body filter-form" action="" method="get">
                 <div class="row">
-                    <div class="col-md-6 col-sm-6 col-xs-12">
+                    <div class="col-md-4 col-sm-6 col-xs-12">
                         {% bootstrap_field filter_form.query %}
                     </div>
                     <div class="col-md-3 col-sm-6 col-xs-12">
@@ -38,6 +38,9 @@
                     </div>
                     <div class="col-md-3 col-sm-6 col-xs-12">
                         {% bootstrap_field filter_form.software_brand %}
+                    </div>
+                    <div class="col-md-2 col-sm-6 col-xs-12">
+                        {% bootstrap_field filter_form.state %}
                     </div>
                 </div>
                 <div class="text-right">
