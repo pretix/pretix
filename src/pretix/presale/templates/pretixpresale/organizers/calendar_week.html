@@ -22,7 +22,7 @@
             <div class="col-md-4 col-sm-6 col-xs-12 text-left flip">
                 {% include "pretixpresale/fragment_calendar_nav.html" with date=date request=request style="week" %}
             </div>
-            <div class="col-md-4 col-sm-6 col-xs-12 text-center">
+            <div class="col-md-4 col-sm-4 col-xs-8 text-center">
                 <select name="date" class="form-control">
                 {% for weeks_per_year in weeks %}
                     <optgroup label="{{ weeks_per_year.0.0.year }}">
@@ -40,18 +40,18 @@
                     {% trans "Go" %}
                 </button>
             </div>
-            <div class="col-md-4 hidden-sm hidden-xs text-right flip">
+            <div class="col-md-4 col-sm-2 col-xs-4 text-right flip">
                 {% if has_before %}
                     <a href="?{% url_replace request "date" before|date:"Y-\WW" %}"
-                       class="btn btn-default">
+                       class="btn btn-default" aria-label="{{ before|date:week_format }}">
                         <span class="fa fa-arrow-left" aria-hidden="true"></span>
-                        {{ before|date:week_format }}
+                        <span class="hidden-sm hidden-xs">{{ before|date:week_format }}</span>
                     </a>
                 {% endif %}
                 {% if has_after %}
                     <a href="?{% url_replace request "date" after|date:"Y-\WW" %}"
-                       class="btn btn-default">
-                        {{ after|date:week_format }}
+                       class="btn btn-default" aria-label="{{ after|date:week_format }}">
+                        <span class="hidden-sm hidden-xs">{{ after|date:week_format }}</span>
                         <span class="fa fa-arrow-right" aria-hidden="true"></span>
                     </a>
                 {% endif %}

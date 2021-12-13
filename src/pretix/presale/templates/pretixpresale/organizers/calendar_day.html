@@ -22,24 +22,24 @@
             <div class="col-md-5 col-sm-6 col-xs-12 text-left flip">
                 {% include "pretixpresale/fragment_calendar_nav.html" with date=date request=request style="day" %}
             </div>
-            <div class="col-md-2 col-sm-4 col-xs-12 text-center">
+            <div class="col-md-2 col-sm-4 col-xs-8 text-center">
                 <input class="datepickerfield form-control" value="{{ date|date:"SHORT_DATE_FORMAT" }}" name="date">
                 <button type="submit" class="js-hidden btn btn-default">
                     {% trans "Go" %}
                 </button>
             </div>
-            <div class="col-md-5 col-sm-2 hidden-xs text-right flip">
+            <div class="col-md-5 col-sm-2 col-xs-4 text-right flip">
                 {% if has_before %}
                     <a href="?{% url_replace request "date" before.date.isoformat %}"
                        class="btn btn-default" aria-label="{{ before|date:"SHORT_DATE_FORMAT" }}">
                         <span class="fa fa-arrow-left" aria-hidden="true"></span>
-                        <span class="hidden-sm">{{ before|date:"SHORT_DATE_FORMAT" }}</span>
+                        <span class="hidden-sm hidden-xs">{{ before|date:"SHORT_DATE_FORMAT" }}</span>
                     </a>
                 {% endif %}
                 {% if has_after %}
                     <a href="?{% url_replace request "date" after.date.isoformat %}"
                        class="btn btn-default" aria-label="{{ after|date:"SHORT_DATE_FORMAT" }}">
-                        <span class="hidden-sm">{{ after|date:"SHORT_DATE_FORMAT" }}</span>
+                        <span class="hidden-sm hidden-xs">{{ after|date:"SHORT_DATE_FORMAT" }}</span>
                         <span class="fa fa-arrow-right" aria-hidden="true"></span>
                     </a>
                 {% endif %}
