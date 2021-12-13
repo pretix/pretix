@@ -22,6 +22,10 @@ td > .form-group > .checkbox {
   padding-top: 7px;
 }
 
+.form-inline .form-control {
+  max-width: 100%;
+}
+
 .has-success .form-control {
   border-color: #cccccc;
 }
