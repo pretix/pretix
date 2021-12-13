@@ -221,23 +221,11 @@ class EventListMixin:
             self.month = now().month
 
     def _set_month_year(self):
-        if hasattr(self.request, 'event') and self.subevent:
-            tz = pytz.timezone(self.request.event.settings.timezone)
-            self.year = self.subevent.date_from.astimezone(tz).year
-            self.month = self.subevent.date_from.astimezone(tz).month
-        if 'year' in self.request.GET and 'month' in self.request.GET:
-            try:
-                self.year = int(self.request.GET.get('year'))
-                self.month = int(self.request.GET.get('month'))
-            except ValueError:
-                self.year = now().year
-                self.month = now().month
-        elif 'date' in self.request.GET:
-            self.tz = self.request.organizer.timezone
+        if 'date' in self.request.GET:
             try:
                 date = dateutil.parser.parse(self.request.GET.get('date')).date()
             except ValueError:
-                date = now().astimezone(self.tz).date()
+                date = now().date()
             self.year = date.year
             self.month = date.month
         else:
@@ -295,23 +283,11 @@ class EventListMixin:
             self.week = now().isocalendar()[1]
 
     def _set_week_year(self):
-        if hasattr(self.request, 'event') and self.subevent:
-            tz = pytz.timezone(self.request.event.settings.timezone)
-            self.year = self.subevent.date_from.astimezone(tz).year
-            self.week = self.subevent.date_from.astimezone(tz).isocalendar()[1]
-        if 'year' in self.request.GET and 'week' in self.request.GET:
-            try:
-                self.year = int(self.request.GET.get('year'))
-                self.week = int(self.request.GET.get('week'))
-            except ValueError:
-                self.year = now().isocalendar()[0]
-                self.week = now().isocalendar()[1]
-        elif 'date' in self.request.GET:
-            self.tz = self.request.organizer.timezone
+        if 'date' in self.request.GET:
             try:
                 iso = dateutil.parser.isoparse(self.request.GET.get('date')).isocalendar()
             except ValueError:
-                iso = now().astimezone(self.tz).isocalendar()
+                iso = now().isocalendar()
             self.year = iso[0]
             self.week = iso[1]
         else:
@@ -617,13 +593,14 @@ class CalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
     template_name = 'pretixpresale/organizers/calendar.html'
 
     def get(self, request, *args, **kwargs):
-        self._set_month_year()
         # redirect old month-year-URLs to new date-URLs
         keys = ("month", "year")
         if all(k in request.GET for k in keys):
             get_params = {k: v for k, v in request.GET.items() if k not in keys}
-            get_params["date"] = "%s-%s" % (self.year, self.month)
+            get_params["date"] = "%s-%s" % (request.GET.get("year"), request.GET.get("month"))
             return redirect(self.request.path + "?" + urlencode(get_params))
+
+        self._set_month_year()
         return super().get(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -686,13 +663,14 @@ class WeekCalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
     template_name = 'pretixpresale/organizers/calendar_week.html'
 
     def get(self, request, *args, **kwargs):
-        self._set_week_year()
         # redirect old week-year-URLs to new date-URLs
         keys = ("week", "year")
         if all(k in request.GET for k in keys):
             get_params = {k: v for k, v in request.GET.items() if k not in keys}
-            get_params["date"] = "%s-W%02d" % (self.year, self.week)
+            get_params["date"] = "%s-W%02d" % (request.GET.get("year"), request.GET.get("week"))
             return redirect(self.request.path + "?" + urlencode(get_params))
+
+        self._set_week_year()
         return super().get(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
