@@ -20,7 +20,7 @@
         {% endfor %}
         <div class="row">
             <div class="col-md-5 col-sm-6 col-xs-12 text-left flip">
-                {% include "pretixpresale/fragment_calendar_nav.html" with date=date request=request style=request.GET.style|default_if_none:"list" %}
+                {% include "pretixpresale/fragment_calendar_nav.html" with date=date request=request style="day" %}
             </div>
             <div class="col-md-2 col-sm-4 col-xs-12 text-center">
                 <input class="datepickerfield form-control" value="{{ date|date:"SHORT_DATE_FORMAT" }}" name="date">

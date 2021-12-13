@@ -20,7 +20,7 @@
         {% endfor %}
         <div class="row">
             <div class="col-md-4 col-sm-6 col-xs-12 text-left flip">
-                {% include "pretixpresale/fragment_calendar_nav.html" with date=date request=request style=request.GET.style|default_if_none:"list" %}
+                {% include "pretixpresale/fragment_calendar_nav.html" with date=date request=request style="week" %}
             </div>
             <div class="col-md-4 col-sm-6 col-xs-12 text-center">
                 <select name="date" class="form-control">
