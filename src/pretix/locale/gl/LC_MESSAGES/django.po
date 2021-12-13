@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-30 16:13+0000\n"
-"PO-Revision-Date: 2021-11-25 21:00+0000\n"
+"PO-Revision-Date: 2021-12-13 21:00+0000\n"
 "Last-Translator: Ismael Menéndez Fernández <ismael.menendez@balidea.com>\n"
 "Language-Team: Galician <https://translate.pretix.eu/projects/pretix/pretix/"
 "gl/>\n"
@@ -1953,9 +1953,8 @@ msgstr "Esperando la redención"
 #: pretix/base/exporters/waitinglist.py:70
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:208
 #: pretix/control/views/waitinglist.py:307
-#, fuzzy
 msgid "Voucher redeemed"
-msgstr "Cupón canjeado"
+msgstr "Cupón canxeado"
 
 #: pretix/base/exporters/waitinglist.py:78
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:101
@@ -3362,13 +3361,11 @@ msgstr ""
 "descuento que sólo están disponibles para grupos específicos."
 
 #: pretix/base/models/items.py:461
-#, fuzzy
 msgid ""
 "This product will only be shown if a voucher matching the product is "
 "redeemed."
 msgstr ""
-"Este producto sólo se mostrará si se canjea un recibo que coincida con el "
-"producto."
+"Este produto só se mostrará se se troca un recibo que coincida co produto."
 
 #: pretix/base/models/items.py:463
 #, fuzzy
@@ -3615,13 +3612,11 @@ msgid ""
 msgstr ""
 
 #: pretix/base/models/items.py:835
-#, fuzzy
 msgid ""
 "This variation will only be shown if a voucher matching the product is "
 "redeemed."
 msgstr ""
-"Este producto sólo se mostrará si se canjea un cupón que coincida con el "
-"producto."
+"Este produto só se mostrará se se troca un cupón que coincida co produto."
 
 #: pretix/base/models/items.py:837
 #, fuzzy
@@ -4771,9 +4766,8 @@ msgid "Reduce product price by (%)"
 msgstr "Reducir el precio del producto en (%)"
 
 #: pretix/base/models/vouchers.py:195
-#, fuzzy
 msgid "Number of times this voucher can be redeemed."
-msgstr "Número de veces que se puede canjear este cupón."
+msgstr "Número de veces que se pode trocar este cupón."
 
 #: pretix/base/models/vouchers.py:199 pretix/control/views/vouchers.py:109
 msgid "Redeemed"
@@ -4841,9 +4835,8 @@ msgid "Voucher value"
 msgstr "Valor del recibo"
 
 #: pretix/base/models/vouchers.py:244 pretix/control/forms/vouchers.py:65
-#, fuzzy
 msgid "This product is added to the user's cart if the voucher is redeemed."
-msgstr "Este producto se añade al carrito del usuario si el cupón es canjeado."
+msgstr "Este produto engádese ao carriño do usuario se o cupón é trocado."
 
 #: pretix/base/models/vouchers.py:254
 #, fuzzy
@@ -4872,15 +4865,14 @@ msgid "Tag"
 msgstr "Etiqueta"
 
 #: pretix/base/models/vouchers.py:277
-#, fuzzy
 msgid ""
 "You can use this field to group multiple vouchers together. If you enter the "
 "same value for multiple vouchers, you can get statistics on how many of them "
 "have been redeemed etc."
 msgstr ""
-"Puede utilizar este campo para agrupar múltiples cupones. Si introduce el "
-"mismo valor para varios cupones, puede obtener estadísticas sobre cuántos de "
-"ellos se han canjeado, etc."
+"Pode utilizar este campo para agrupar múltiples cupóns. Se introduce o mesmo "
+"valor para varios cupóns, pode obter estatísticas sobre cantos deles "
+"trocáronse, etc."
 
 #: pretix/base/models/vouchers.py:286
 #, fuzzy
@@ -4948,13 +4940,13 @@ msgstr ""
 "No se puede seleccionar una cuota y un producto específico al mismo tiempo."
 
 #: pretix/base/models/vouchers.py:347
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "This voucher has already been redeemed %(redeemed)s times. You cannot reduce "
 "the maximum number of usages below this number."
 msgstr ""
-"Este cupón ya ha sido redimido %(redeemed)s veces. No se puede reducir el "
-"número máximo de usos por debajo de este número."
+"Este cupón xa foi  usado %(redeemed)s veces. Non se pode reducir o número "
+"máximo de usos por baixo deste número."
 
 #: pretix/base/models/vouchers.py:357 pretix/base/models/vouchers.py:415
 #, fuzzy
@@ -6345,22 +6337,22 @@ msgstr ""
 "permitido."
 
 #: pretix/base/services/cart.py:111
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "This voucher code is currently locked since it is already contained in a "
 "cart. This might mean that someone else is redeeming this voucher right now, "
 "or that you tried to redeem it before but did not complete the checkout "
 "process. You can try to use it again in %d minutes."
 msgstr ""
-"Este cupón está actualmente bloqueado ya que está contenido en un carrito de "
-"la compra. Esto puede significar que otra persona está canjeando este cupón "
-"ahora mismo, o que usted intentó canjearlo antes pero no completó el proceso "
-"de pago. Puede intentar utilizarlo de nuevo en %d minutos."
+"Este cupón está actualmente bloqueado xa que está contido nun carriño da "
+"compra. Isto pode significar que outra persoa está a trocar este cupón agora "
+"mesmo, ou que vostede tentou trocalo antes pero non completou o proceso de "
+"pago. Pode tentar utilizalo de novo en %d minutos."
 
 #: pretix/base/services/cart.py:115
-#, fuzzy, python-format
+#, python-format
 msgid "This voucher code can only be redeemed %d more times."
-msgstr "Este cupón sólo puede ser canjeado %d más veces."
+msgstr "Este cupón só pode ser trocado %d máis veces."
 
 #: pretix/base/services/cart.py:116
 #, fuzzy
@@ -8105,15 +8097,14 @@ msgid "Waiting list response time"
 msgstr "Tiempo de respuesta de la lista de espera"
 
 #: pretix/base/settings.py:1097
-#, fuzzy
 msgid ""
 "If a ticket voucher is sent to a person on the waiting list, it has to be "
 "redeemed within this number of hours until it expires and can be re-assigned "
 "to the next person on the list."
 msgstr ""
-"Si un cupón de ticket es enviado a una persona en la lista de espera, tiene "
-"que ser redimido dentro de este número de horas hasta que expire y puede ser "
-"reasignado a la siguiente persona en la lista."
+"Se un cupón de  ticket é enviado a unha persoa na lista de espera, ten que "
+"ser  redimido dentro deste número de horas ata que expire e pode ser "
+"reatribuído á seguinte persoa na lista."
 
 #: pretix/base/settings.py:1108
 #, fuzzy
@@ -8861,7 +8852,7 @@ msgstr ""
 "su equipo {event}"
 
 #: pretix/base/settings.py:1779
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -8890,29 +8881,29 @@ msgid ""
 "Best regards,\n"
 "Your {event} team"
 msgstr ""
-"Hola, \n"
+"Ola, \n"
 "\n"
-"usted se sometió a la lista de espera para {event},\n"
-"para el producto {product}.\n"
+"vostede someteuse á lista de espera para { event},\n"
+"para o produto {product}.\n"
 "\n"
-"Ahora tenemos un ticket listo para usted! Puede canjearlo en nuestra "
-"taquilla\n"
-"en las próximas {hours} horas introduciendo el siguiente cupón : \n"
+"Agora temos un  ticket listo para vostede! Pode trocalo no noso despacho de "
+"billetes\n"
+"nas próximas {hours} horas introducindo o seguinte cupón : \n"
 "\n"
 "{code} \n"
 "\n"
-"También puede hacer clic en el siguiente enlace: \n"
+"Tamén pode facer  clic na seguinte ligazón: \n"
 "\n"
 "{url} \n"
 "\n"
-"Tenga en cuenta que este enlace sólo es válido dentro de las siguientes "
-"{hours} horas! \n"
-"vamos a reasignar el ticket a la siguiente persona en la lista si usted no "
-"canjea el vale \n"
-"dentro de ese plazo. \n"
+"Teña en conta que esta ligazón só é válido dentro das seguintes { hours} "
+"horas! \n"
+"imos reatribuír o  ticket á seguinte persoa na lista se vostede non troca o "
+"vale \n"
+"dentro dese prazo. \n"
 "\n"
-"Saludos cordiales , \n"
-"su equipo {event}"
+"Saúdos cordiais , \n"
+"o seu equipo {event}"
 
 #: pretix/base/settings.py:1808
 #, fuzzy, python-brace-format
@@ -12495,7 +12486,7 @@ msgid "Your voucher for {event}"
 msgstr "Tus ordenes para {}"
 
 #: pretix/control/forms/vouchers.py:271
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -12511,18 +12502,18 @@ msgid ""
 "\n"
 "Your {event} team"
 msgstr ""
-"Hola,\n"
+"Ola,\n"
 "\n"
-"desafortunadamente, rechazamos su solicitud de pedido para {event}. \n"
+"desafortunadamente, rexeitamos a súa solicitude de pedido para { event}. \n"
 "\n"
 "{comment} \n"
 "\n"
-"Puede ver los detalles de su pedido aquí: \n"
+"Pode ver os detalles do seu pedido aquí: \n"
 "\n"
 "{url} \n"
 "\n"
-"Saludos cordiales , \n"
-"su equipo {event}"
+"Saúdos cordiais , \n"
+"o seu equipo {event}"
 
 #: pretix/control/forms/vouchers.py:277
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_create.html:20
@@ -12554,9 +12545,8 @@ msgid "Maximum usages per voucher"
 msgstr "Usos máximos por recibo"
 
 #: pretix/control/forms/vouchers.py:324
-#, fuzzy
 msgid "Number of times times EACH of these vouchers can be redeemed."
-msgstr "Número de veces que CADA uno de estos vales puede ser canjeado."
+msgstr "Número de veces que CADA un destes vales pode ser trocado."
 
 #: pretix/control/forms/vouchers.py:333
 msgid "Specific seat IDs"
@@ -13366,9 +13356,9 @@ msgid "The voucher has been deleted."
 msgstr "El recibo fue eliminado."
 
 #: pretix/control/logdisplay.py:428
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The voucher has been redeemed in order {order_code}."
-msgstr "El recibo ha sido canjeado en orden {order_code}."
+msgstr "O recibo foi canxeado no pedido {order_code}."
 
 #: pretix/control/logdisplay.py:429
 #, fuzzy
@@ -21463,9 +21453,8 @@ msgid "You haven't added any tags to vouchers yet."
 msgstr "Aún no has añadido ninguna etiqueta a los vales."
 
 #: pretix/control/templates/pretixcontrol/vouchers/tags.html:43
-#, fuzzy
 msgid "Redeemed vouchers"
-msgstr "Vales canjeados"
+msgstr "Vales canxeados"
 
 #: pretix/control/templates/pretixcontrol/vouchers/tags.html:57
 #, fuzzy
@@ -23377,9 +23366,8 @@ msgid "The selected cart positions have been removed."
 msgstr "Se ha borrado la regla fiscal seleccionada."
 
 #: pretix/control/views/vouchers.py:233 pretix/control/views/vouchers.py:243
-#, fuzzy
 msgid "A voucher can not be deleted if it already has been redeemed."
-msgstr "Un recibo no se puede borrar si ya ha sido canjeado."
+msgstr "Un recibo non se pode borrar se xa foi canxeado."
 
 #: pretix/control/views/vouchers.py:249
 #, fuzzy
@@ -27606,9 +27594,8 @@ msgstr "Carrito vacío"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart_box.html:48
 #: pretix/presale/templates/pretixpresale/event/index.html:297
-#, fuzzy
 msgid "Redeem a voucher"
-msgstr "Canjear cupón de descuento"
+msgstr "Canxear cupón de desconto"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart_box.html:51
 #, fuzzy
@@ -27617,9 +27604,8 @@ msgstr "Estamos aplicando este cupón a tu compra..."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart_box.html:59
 #: pretix/presale/templates/pretixpresale/event/index.html:319
-#, fuzzy
 msgid "Redeem voucher"
-msgstr "Canjear Cupón"
+msgstr "Canxear Cupón"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_checkoutflow.html:2
 #, fuzzy
@@ -27890,9 +27876,8 @@ msgid "General information, add products to your cart"
 msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/index.html:64
-#, fuzzy
 msgid "Please select a date to redeem your voucher."
-msgstr "Por favor, seleccione una variación específica de este producto."
+msgstr "Por favor, seleccione unha variación específica deste produto."
 
 #: pretix/presale/templates/pretixpresale/event/index.html:78
 #, fuzzy
