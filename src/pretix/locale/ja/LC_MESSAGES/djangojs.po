@@ -8,10 +8,10 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-30 16:13+0000\n"
-"PO-Revision-Date: 2021-10-11 15:56+0000\n"
-"Last-Translator: DJG Bayern <pretix2021weblate@aruki.de>\n"
-"Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/pretix-"
-"js/ja/>\n"
+"PO-Revision-Date: 2021-12-13 21:00+0000\n"
+"Last-Translator: Yuriko Matsunami <y.matsunami@enobyte.com>\n"
+"Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/"
+"pretix-js/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -48,8 +48,9 @@ msgid "Contacting Stripe …"
 msgstr ""
 
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:60
+#, fuzzy
 msgid "Total"
-msgstr ""
+msgstr "合計"
 
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:152
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:183
@@ -74,7 +75,7 @@ msgstr ""
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:33
 msgid "Search results"
-msgstr ""
+msgstr "検索結果"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:34
 msgid "No tickets found"
@@ -85,20 +86,22 @@ msgid "Result"
 msgstr ""
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:36
+#, fuzzy
 msgid "This ticket requires special attention"
-msgstr ""
+msgstr "要注意チケット"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:37
+#, fuzzy
 msgid "Switch direction"
-msgstr ""
+msgstr "方向転換"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:38
 msgid "Entry"
-msgstr ""
+msgstr "入口"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:39
 msgid "Exit"
-msgstr ""
+msgstr "出口"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:40
 msgid "Scan a ticket or search and press return…"
@@ -110,16 +113,16 @@ msgstr ""
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:42
 msgid "Valid"
-msgstr ""
+msgstr "有効"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:43
 msgid "Unpaid"
-msgstr ""
+msgstr "未払い"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:44
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:45
 msgid "Canceled"
-msgstr ""
+msgstr "キャンセル"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:46
 msgid "Redeemed"
@@ -127,11 +130,12 @@ msgstr ""
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:47
 msgid "Cancel"
-msgstr ""
+msgstr "キャンセル"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:48
+#, fuzzy
 msgid "Continue"
-msgstr ""
+msgstr "次へ"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:49
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:58
@@ -139,16 +143,19 @@ msgid "Ticket not paid"
 msgstr ""
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:50
+#, fuzzy
 msgid "This ticket is not yet paid. Do you want to continue anyways?"
-msgstr ""
+msgstr "チケットの支払いが完了していません。このまま続けますか？"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:51
+#, fuzzy
 msgid "Additional information required"
-msgstr ""
+msgstr "追加情報が必要です"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:52
+#, fuzzy
 msgid "Valid ticket"
-msgstr ""
+msgstr "有効なチケット"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:53
 msgid "Exit recorded"
