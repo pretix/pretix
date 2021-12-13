@@ -2935,7 +2935,7 @@ class QuestionsTestCase(BaseCheckoutTestCase, TestCase):
             self.assertEqual(cr1.answers.filter(question=q2).count(), 1)
             self.assertFalse(cr2.answers.filter(question=q2).exists())
 
-    def _test_question_input(self, data, should_fail):
+    def _test_question_input(self, data, should_fail, try_with_initial=True):
         with scopes_disabled():
             cr1 = CartPosition.objects.create(
                 event=self.event, cart_id=self.session_key, item=self.ticket,
@@ -2954,13 +2954,15 @@ class QuestionsTestCase(BaseCheckoutTestCase, TestCase):
             self.assertRedirects(response, '/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug),
                                  target_status_code=200)
             with scopes_disabled():
-                cr1.answers.all().delete()
+                if try_with_initial:
+                    cr1.answers.all().delete()
 
-        with scopes_disabled():
-            for k, v in data.items():
-                a = cr1.answers.create(question=k, answer=str(v))
-                if k.type in ('M', 'C'):
-                    a.options.add(*k.options.filter(identifier__in=(v if isinstance(v, list) else [v])))
+        if try_with_initial:
+            with scopes_disabled():
+                for k, v in data.items():
+                    a = cr1.answers.create(question=k, answer=str(v))
+                    if k.type in ('M', 'C'):
+                        a.options.add(*k.options.filter(identifier__in=(v if isinstance(v, list) else [v])))
 
         response = self.client.get('/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug), follow=True)
         if should_fail:
@@ -3078,6 +3080,23 @@ class QuestionsTestCase(BaseCheckoutTestCase, TestCase):
             self.q2a: 'DEV',
             self.q3: 'True',
         }, should_fail=True)
+
+    def test_question_dependencies_hidden_question_not_saved_to_db(self):
+        self._setup_dependency_questions()
+        self._test_question_input({
+            self.q1: 'IT',
+            self.q2a: 'ADMIN',
+            self.q3: 'False',
+            self.q4b: 'No curly braces!'
+        }, should_fail=False, try_with_initial=False)
+
+        with scopes_disabled():
+            # We don't want QuestionAnswer objects to be created for questions we did not ask,
+            # especially not for boolean answers set to false.
+            assert QuestionAnswer.objects.filter(question=self.q1).exists()
+            assert QuestionAnswer.objects.filter(question=self.q2a).exists()
+            assert not QuestionAnswer.objects.filter(question=self.q3).exists()
+            assert not QuestionAnswer.objects.filter(question=self.q4b).exists()
 
     def test_question_dependencies_parent_not_required(self):
         self._setup_dependency_questions()

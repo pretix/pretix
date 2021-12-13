@@ -869,6 +869,12 @@ class BaseQuestionsForm(forms.Form):
                 if question_is_required(q) and not answer and answer != 0 and not field.errors:
                     raise ValidationError({'question_%d' % q.pk: [_('This field is required.')]})
 
+        # Strip invisible question from cleaned_data so they don't end up in the database
+        for q in question_cache.values():
+            answer = d.get('question_%d' % q.pk)
+            if q.dependency_question_id and not question_is_visible(q.dependency_question_id, q.dependency_values) and answer is not None:
+                d['question_%d' % q.pk] = None
+
         return d
 
 
