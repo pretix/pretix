@@ -3,54 +3,55 @@
 {% load urlreplace %}
 <nav aria-label="{% trans "calendar navigation" %}">
     <ul class="row calendar-nav">
-        <li class="col-sm-4 hidden-xs text-left flip">
-            <a href="?{% url_replace request "year" subevent_list.before.isocalendar.0 "week" subevent_list.before.isocalendar.1 %}"
+        <li class="col-sm-4 col-xs-2 text-left flip">
+            <a href="?{% url_replace request "date" subevent_list.before|date:"o-\WW" %}"
                 class="btn btn-default" aria-label="{% blocktrans with week=subevent_list.before|date:subevent_list.week_format %}Show previous week, {{ week }}{% endblocktrans %}">
                 <span class="fa fa-arrow-left" aria-hidden="true"></span>
-                {{ subevent_list.before|date:subevent_list.week_format }}
+                <span class="hidden-xs">{{ subevent_list.before|date:subevent_list.week_format }}</span>
             </a>
         </li>
-        <li class="col-sm-4 col-xs-12 text-center">
+        <li class="col-sm-4 col-xs-8 text-center">
             <form class="form-inline" method="get" id="monthselform" action="{% eventurl event "presale:event.index" cart_namespace=cart_namespace %}">
             {% for f, v in request.GET.items %}
-                {% if f != "week" and f != "year" %}
+                {% if f != "date" %}
                     <input type="hidden" name="{{ f }}" value="{{ v }}">
                 {% endif %}
             {% endfor %}
-                <div role="group" aria-label="{% trans "Select week and year to show" %}">
-                    <select name="week" class="form-control select-calendar-week-short" aria-label="{% trans "Week" %}">
-                        {% for w in subevent_list.weeks %}
-                            <option value="{{ w.0.isocalendar.1 }}" {% if w.0.isocalendar.1 == subevent_list.date.isocalendar.1 %}selected{% endif %}>{% trans "W" %} {{ w.0.isocalendar.1 }} ({{ w.0|date:"SHORT_DATE_FORMAT" }} – {{ w.1|date:"SHORT_DATE_FORMAT" }})</option>
-                        {% endfor %}
-                    </select>
-                    <select name="year" class="form-control" aria-label="{% trans "Year" %}">
-                        {% for y in subevent_list.years %}
-                            <option value="{{ y }}" {% if y == subevent_list.date.isocalendar.0 %}selected{% endif %}>{{ y }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
+                <select name="date" class="form-control" aria-label="{% trans "Select week to show" %}">
+                {% for weeks_per_year in subevent_list.weeks %}
+                    <optgroup label="{{ weeks_per_year.0.0.year }}">
+                    {% for w in weeks_per_year %}
+                        <option value="{{ w.0.isocalendar.0 }}-W{{ w.0.isocalendar.1 }}"
+                                {% if w.0.isocalendar.0 == subevent_list.date.isocalendar.0 and w.0.isocalendar.1 == subevent_list.date.isocalendar.1 %}selected{% endif %}>
+                                {{ w.0|date:"WEEK_FORMAT" }}
+                            ({{ w.0|date:"SHORT_DATE_FORMAT" }} – {{ w.1|date:"SHORT_DATE_FORMAT" }})
+                        </option>
+                    {% endfor %}
+                    </optgroup>
+                {% endfor %}
+                </select>
                 <button type="submit" class="js-hidden btn btn-default">
                     {% trans "Go" %}
                 </button>
             </form>
         </li>
-        <li class="col-sm-4 hidden-xs text-right flip">
-            <a href="?{% url_replace request "year" subevent_list.after.isocalendar.0 "week" subevent_list.after.isocalendar.1 %}"
+        <li class="col-sm-4 col-xs-2 text-right flip">
+            <a href="?{% url_replace request "date" subevent_list.after|date:"o-\WW" %}"
                 class="btn btn-default" aria-label="{% blocktrans with week=subevent_list.after|date:subevent_list.week_format %}Show next week, {{ week }}{% endblocktrans %}">
-                {{ subevent_list.after|date:subevent_list.week_format }}
+                <span class="hidden-xs">{{ subevent_list.after|date:subevent_list.week_format }}</span>
                 <span class="fa fa-arrow-right" aria-hidden="true"></span>
             </a>
         </li>
     </ul>
 </nav>
 {% include "pretixpresale/fragment_week_calendar.html" with show_avail=event.settings.event_list_availability days=subevent_list.days show_names=subevent_list.show_names %}
-<div class="col-sm-4 visible-xs text-center" aria-hidden="true">
-    <a href="?{% url_replace request "year" subevent_list.before.isocalendar.0 "week" subevent_list.before.isocalendar.1 %}"
+<div class="visible-xs text-center" aria-hidden="true">
+    <a href="?{% url_replace request "date" subevent_list.before|date:"o-\WW" %}"
             class="btn btn-default">
         <span class="fa fa-arrow-left" aria-hidden="true"></span>
         {{ subevent_list.before|date:subevent_list.week_format }}
     </a>
-    <a href="?{% url_replace request "year" subevent_list.after.isocalendar.0 "week" subevent_list.after.isocalendar.1 %}"
+    <a href="?{% url_replace request "date" subevent_list.after|date:"o-\WW" %}"
             class="btn btn-default">
         {{ subevent_list.after|date:subevent_list.week_format }}
         <span class="fa fa-arrow-right" aria-hidden="true"></span>
