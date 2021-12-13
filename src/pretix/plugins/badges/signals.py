@@ -102,6 +102,8 @@ def event_copy_data_receiver(sender, other, question_map, item_map, **kwargs):
                     newq = question_map.get(int(o['content'][9:]))
                     if newq:
                         o['content'] = 'question_{}'.format(newq.pk)
+
+        bl.layout = json.dumps(layout)
         bl.save()
 
         if bl.background and bl.background.name:
