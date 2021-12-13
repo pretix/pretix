@@ -667,7 +667,7 @@ class WeekCalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
         keys = ("week", "year")
         if all(k in request.GET for k in keys):
             get_params = {k: v for k, v in request.GET.items() if k not in keys}
-            get_params["date"] = "%s-W%02d" % (request.GET.get("year"), request.GET.get("week"))
+            get_params["date"] = "%s-W%s" % (request.GET.get("year"), request.GET.get("week"))
             return redirect(self.request.path + "?" + urlencode(get_params))
 
         self._set_week_year()
