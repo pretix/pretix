@@ -23,7 +23,7 @@
                 {% include "pretixpresale/fragment_calendar_nav.html" with date=date request=request style="week" %}
             </div>
             <div class="col-md-4 col-sm-4 col-xs-8 text-center">
-                <select name="date" class="form-control">
+                <select name="date" class="form-control" aria-label="{% trans "Select week to show" %}">
                 {% for weeks_per_year in weeks %}
                     <optgroup label="{{ weeks_per_year.0.0.year }}">
                     {% for w in weeks_per_year %}
