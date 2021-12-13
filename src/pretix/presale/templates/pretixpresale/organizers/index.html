@@ -26,9 +26,14 @@
     {% else %}
         <h3>{% trans "Upcoming events" %}</h3>
     {% endif %}
-    <div>
-        {% include "pretixpresale/fragment_calendar_nav.html" with date=date request=request style="list" %}
+    <div id="monthselform">
+        <div class="row">
+            <div class="col-md-12">
+                {% include "pretixpresale/fragment_calendar_nav.html" with date=date request=request style="list" %}
+            </div>
+        </div>
     </div>
+    {% if events %}
     <div class="event-list">
         <div class="row hidden-xs hidden-sm">
             <div class="col-md-5">
@@ -113,17 +118,13 @@
                     </a>
                 </div>
             </div>
-        {% empty %}
-            {% if "old" in request.GET %}
-                <div class="col-md-12">
-                    <p><em>{% trans "No archived events found." %} <a href="?{% url_replace request "old" "" %}">{% trans "Show upcoming" %}</a></em></p>
-                </div>
-            {% else %}
-                <div class="col-md-12">
-                    <p><em>{% trans "No public upcoming events found." %} <a href="?{% url_replace request "old" "1" %}">{% trans "Show past events" %}</a></em></p>
-                </div>
-            {% endif %}
         {% endfor %}
     </div>
+    {% endif %}
+    {% if "old" in request.GET %}
+        <p><em>{% if not events %}{% trans "No archived events found." %} {% endif %}<a href="?{% url_replace request "old" "" %}">{% trans "Show upcoming" %}</a></em></p>
+    {% else %}
+        <p><em>{% if not events %}{% trans "No public upcoming events found." %} {% endif %}<a href="?{% url_replace request "old" "1" %}">{% trans "Show past events" %}</a></em></p>
+    {% endif %}
     {% include "pretixpresale/pagination.html" %}
 {% endblock %}
