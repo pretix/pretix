@@ -7,7 +7,7 @@
             class="btn btn-default{% if style == "list" %} active{% endif %}">
         {% trans "List" %}
     </a>
-    <a href="?{% url_replace request "style" "week" "old" "" "page" "" "date" date|date:"Y-\WW" %}" type="button"
+    <a href="?{% url_replace request "style" "week" "old" "" "page" "" "date" date|date:"o-\WW" %}" type="button"
             class="btn btn-default{% if style == "week" %} active{% endif %}">
         {% trans "Week" %}
     </a>
