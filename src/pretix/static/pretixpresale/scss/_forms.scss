@@ -33,6 +33,10 @@ a.btn, button.btn {
   margin-right: 10px;
 }
 
+.form-inline .form-control {
+  max-width: 100%;
+}
+
 .form-control.is-focused {
   $color-rgba: rgba(red($input-border-focus), green($input-border-focus), blue($input-border-focus), .6);
   border-color: $input-border-focus;

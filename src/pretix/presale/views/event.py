@@ -39,6 +39,7 @@ from collections import defaultdict
 from datetime import date, datetime, timedelta
 from decimal import Decimal
 from importlib import import_module
+from urllib.parse import urlencode
 
 import isoweek
 import pytz
@@ -388,6 +389,20 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
     template_name = "pretixpresale/event/index.html"
 
     def get(self, request, *args, **kwargs):
+        # redirect old month-year-URLs to new date-URLs
+        keys = ("month", "year")
+        if all(k in request.GET for k in keys):
+            get_params = {k: v for k, v in request.GET.items() if k not in keys}
+            get_params["date"] = "%s-%s" % (request.GET.get("year"), request.GET.get("month"))
+            return redirect(self.request.path + "?" + urlencode(get_params))
+
+        # redirect old week-year-URLs to new date-URLs
+        keys = ("week", "year")
+        if all(k in request.GET for k in keys):
+            get_params = {k: v for k, v in request.GET.items() if k not in keys}
+            get_params["date"] = "%s-W%s" % (request.GET.get("year"), request.GET.get("week"))
+            return redirect(self.request.path + "?" + urlencode(get_params))
+
         from pretix.presale.views.cart import get_or_create_cart_id
 
         self.subevent = None
@@ -612,11 +627,14 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
                 timeout=120,
             )
             context['days'] = days_for_template(ebd, week)
-            context['weeks'] = [
-                (date_fromisocalendar(self.year, i + 1, 1), date_fromisocalendar(self.year, i + 1, 7))
-                for i in range(53 if date(self.year, 12, 31).isocalendar()[1] == 53 else 52)
-            ]
-            context['years'] = range(now().year - 2, now().year + 3)
+            years = (self.year - 1, self.year, self.year + 1)
+            weeks = []
+            for year in years:
+                weeks += [
+                    (date_fromisocalendar(year, i + 1, 1), date_fromisocalendar(year, i + 1, 7))
+                    for i in range(53 if date(year, 12, 31).isocalendar()[1] == 53 else 52)
+                ]
+            context['weeks'] = [[w for w in weeks if w[0].year == year] for year in years]
             context['week_format'] = get_format('WEEK_FORMAT')
             if context['week_format'] == 'WEEK_FORMAT':
                 context['week_format'] = WEEK_FORMAT

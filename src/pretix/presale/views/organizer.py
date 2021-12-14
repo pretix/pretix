@@ -37,7 +37,7 @@ import math
 from collections import defaultdict
 from datetime import date, datetime, time, timedelta
 from functools import reduce
-from urllib.parse import quote
+from urllib.parse import quote, urlencode
 
 import dateutil
 import isoweek
@@ -47,6 +47,7 @@ from django.core.cache import caches
 from django.db.models import Exists, Max, Min, OuterRef, Q
 from django.db.models.functions import Coalesce, Greatest
 from django.http import Http404, HttpResponse
+from django.shortcuts import redirect
 from django.utils.decorators import method_decorator
 from django.utils.formats import date_format, get_format
 from django.utils.timezone import get_current_timezone, now
@@ -220,17 +221,13 @@ class EventListMixin:
             self.month = now().month
 
     def _set_month_year(self):
-        if hasattr(self.request, 'event') and self.subevent:
-            tz = pytz.timezone(self.request.event.settings.timezone)
-            self.year = self.subevent.date_from.astimezone(tz).year
-            self.month = self.subevent.date_from.astimezone(tz).month
-        if 'year' in self.request.GET and 'month' in self.request.GET:
+        if 'date' in self.request.GET:
             try:
-                self.year = int(self.request.GET.get('year'))
-                self.month = int(self.request.GET.get('month'))
+                date = dateutil.parser.parse(self.request.GET.get('date')).date()
             except ValueError:
-                self.year = now().year
-                self.month = now().month
+                date = now().date()
+            self.year = date.year
+            self.month = date.month
         else:
             if hasattr(self.request, 'event'):
                 self._set_month_to_next_subevent()
@@ -286,17 +283,13 @@ class EventListMixin:
             self.week = now().isocalendar()[1]
 
     def _set_week_year(self):
-        if hasattr(self.request, 'event') and self.subevent:
-            tz = pytz.timezone(self.request.event.settings.timezone)
-            self.year = self.subevent.date_from.astimezone(tz).year
-            self.month = self.subevent.date_from.astimezone(tz).month
-        if 'year' in self.request.GET and 'week' in self.request.GET:
+        if 'date' in self.request.GET:
             try:
-                self.year = int(self.request.GET.get('year'))
-                self.week = int(self.request.GET.get('week'))
+                iso = dateutil.parser.isoparse(self.request.GET.get('date')).isocalendar()
             except ValueError:
-                self.year = now().isocalendar()[0]
-                self.week = now().isocalendar()[1]
+                iso = now().isocalendar()
+            self.year = iso[0]
+            self.week = iso[1]
         else:
             if hasattr(self.request, 'event'):
                 self._set_week_to_next_subevent()
@@ -600,6 +593,13 @@ class CalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
     template_name = 'pretixpresale/organizers/calendar.html'
 
     def get(self, request, *args, **kwargs):
+        # redirect old month-year-URLs to new date-URLs
+        keys = ("month", "year")
+        if all(k in request.GET for k in keys):
+            get_params = {k: v for k, v in request.GET.items() if k not in keys}
+            get_params["date"] = "%s-%s" % (request.GET.get("year"), request.GET.get("month"))
+            return redirect(self.request.path + "?" + urlencode(get_params))
+
         self._set_month_year()
         return super().get(request, *args, **kwargs)
 
@@ -663,6 +663,13 @@ class WeekCalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
     template_name = 'pretixpresale/organizers/calendar_week.html'
 
     def get(self, request, *args, **kwargs):
+        # redirect old week-year-URLs to new date-URLs
+        keys = ("week", "year")
+        if all(k in request.GET for k in keys):
+            get_params = {k: v for k, v in request.GET.items() if k not in keys}
+            get_params["date"] = "%s-W%s" % (request.GET.get("year"), request.GET.get("week"))
+            return redirect(self.request.path + "?" + urlencode(get_params))
+
         self._set_week_year()
         return super().get(request, *args, **kwargs)
 
@@ -698,11 +705,14 @@ class WeekCalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
         )
 
         ctx['days'] = days_for_template(ebd, week)
-        ctx['weeks'] = [
-            (date_fromisocalendar(self.year, i + 1, 1), date_fromisocalendar(self.year, i + 1, 7))
-            for i in range(53 if date(self.year, 12, 31).isocalendar()[1] == 53 else 52)
-        ]
-        ctx['years'] = range(now().year - 2, now().year + 3)
+        years = (self.year - 1, self.year, self.year + 1)
+        weeks = []
+        for year in years:
+            weeks += [
+                (date_fromisocalendar(year, i + 1, 1), date_fromisocalendar(year, i + 1, 7))
+                for i in range(53 if date(year, 12, 31).isocalendar()[1] == 53 else 52)
+            ]
+        ctx['weeks'] = [[w for w in weeks if w[0].year == year] for year in years]
         ctx['week_format'] = get_format('WEEK_FORMAT')
         if ctx['week_format'] == 'WEEK_FORMAT':
             ctx['week_format'] = WEEK_FORMAT

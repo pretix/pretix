@@ -1,0 +1,28 @@
+{% load i18n %}
+{% load eventurl %}
+{% load urlreplace %}
+
+<div class="btn-group" role="group">
+    <a href="?{% url_replace request "style" "list" "date" "" %}" type="button" 
+            class="btn btn-default{% if style == "list" %} active{% endif %}">
+        {% trans "List" %}
+    </a>
+    <a href="?{% if "date" in request.GET %}{% url_replace request "style" "week" "old" "" "page" "" "date" date|date:"o-\WW" %}{% else %}{% url_replace request "style" "week" "old" "" "page" "" %}{% endif %}" type="button"
+            class="btn btn-default{% if style == "week" %} active{% endif %}">
+        {% trans "Week" %}
+    </a>
+    <a href="?{% if "date" in request.GET %}{% url_replace request "style" "calendar" "old" "" "page" "" "date" date|date:"Y-m" %}{% else %}{% url_replace request "style" "calendar" "old" "" "page" "" %}{% endif %}"
+            type="button"
+            class="btn btn-default{% if style == "calendar" %} active{% endif %}">
+        {% trans "Month" %}
+    </a>
+    <a href="?{% if "date" in request.GET %}{% url_replace request "style" "day" "old" "" "page" ""  "date" date|date:"Y-m-d" %}{% else %}{% url_replace request "style" "day" "old" "" "page" ""  "date" %}{% endif %}" type="button"
+       class="btn btn-default{% if style == "day" %} active{% endif %}">
+        {% trans "Day" %}
+    </a>
+</div>
+<a href="{% eventurl request.organizer "presale:organizer.ical" %}?{% url_replace request "locale" request.LANGUAGE_CODE "page" "" "old" "" "style" "" "date" "" %}"
+        class="btn btn-default">
+    <span class="fa fa-calendar-plus-o" aria-hidden="true"></span>
+    {% trans "iCal" %}
+</a>

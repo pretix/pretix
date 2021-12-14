@@ -19,54 +19,27 @@
             {% endif %}
         {% endfor %}
         <div class="row">
-            <div class="col-sm-4 hidden-xs text-left flip">
-                <div class="btn-group" role="group">
-                    <a href="?{% url_replace request "style" "list" "week" "" "year" "" "month" "" "date" "" %}" type="button"
-                       class="btn btn-default">
-                        <span class="fa fa-list" aria-hidden="true"></span>
-                        {% trans "List" %}
-                    </a>
-                    <a href="?{% url_replace request "style" "week" "month" "" "old" "" "date" "" %}" type="button"
-                       class="btn btn-default">
-                        <span class="fa fa-calendar" aria-hidden="true"></span>
-                        {% trans "Week" %}
-                    </a>
-                    <a href="?{% url_replace request "style" "calendar" "week" "" "old" "" "year" "" "date" "" %}"
-                       type="button"
-                       class="btn btn-default">
-                        <span class="fa fa-calendar" aria-hidden="true"></span>
-                        {% trans "Month" %}
-                    </a>
-                    <a href="?{% url_replace request "style" "day" "week" "" "month" "" "old" "" "page" "" %}" type="button"
-                       class="btn btn-default active">
-                        <span class="fa fa-th" aria-hidden="true"></span>
-                        {% trans "Day" %}
-                    </a>
-                </div>
-                <a href="{% eventurl request.organizer "presale:organizer.ical" %}?{% url_replace request "locale" request.LANGUAGE_CODE "page" "" "old" "" "week" "" "style" "" "month" "" "year" "" "date" "" %}"
-                   class="btn btn-default">
-                    <span class="fa fa-calendar-plus-o" aria-hidden="true"></span>
-                    {% trans "iCal" %}
-                </a>
+            <div class="col-md-5 col-sm-6 col-xs-12 text-left flip">
+                {% include "pretixpresale/fragment_calendar_nav.html" with date=date request=request style="day" %}
             </div>
-            <div class="col-sm-4 col-xs-12 text-center">
+            <div class="col-md-2 col-sm-4 col-xs-8 text-center">
                 <input class="datepickerfield form-control" value="{{ date|date:"SHORT_DATE_FORMAT" }}" name="date">
                 <button type="submit" class="js-hidden btn btn-default">
                     {% trans "Go" %}
                 </button>
             </div>
-            <div class="col-sm-4 hidden-xs text-right flip">
+            <div class="col-md-5 col-sm-2 col-xs-4 text-right flip">
                 {% if has_before %}
                     <a href="?{% url_replace request "date" before.date.isoformat %}"
-                       class="btn btn-default">
+                       class="btn btn-default" aria-label="{{ before|date:"SHORT_DATE_FORMAT" }}">
                         <span class="fa fa-arrow-left" aria-hidden="true"></span>
-                        {{ before|date:"SHORT_DATE_FORMAT" }}
+                        <span class="hidden-sm hidden-xs">{{ before|date:"SHORT_DATE_FORMAT" }}</span>
                     </a>
                 {% endif %}
                 {% if has_after %}
                     <a href="?{% url_replace request "date" after.date.isoformat %}"
-                       class="btn btn-default">
-                        {{ after|date:"SHORT_DATE_FORMAT" }}
+                       class="btn btn-default" aria-label="{{ after|date:"SHORT_DATE_FORMAT" }}">
+                        <span class="hidden-sm hidden-xs">{{ after|date:"SHORT_DATE_FORMAT" }}</span>
                         <span class="fa fa-arrow-right" aria-hidden="true"></span>
                     </a>
                 {% endif %}
