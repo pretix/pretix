@@ -54,6 +54,7 @@ from pretix.base.templatetags.rich_text import (
      '<a href="https://goodsite.com.evilsite.com" rel="noopener" target="_blank">https://goodsite.com.evilsite.com</a>'),
     ('<a href="https://evilsite.com/deep/path">evilsite.com</a>',
      '<a href="https://evilsite.com/deep/path" rel="noopener" target="_blank">evilsite.com</a>'),
+    ('<a>broken</a>', '<a>broken</a>'),
 ])
 def test_linkify_abs(link):
     input, output = link

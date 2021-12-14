@@ -138,7 +138,7 @@ def truelink_callback(attrs, new=False):
     text = re.sub(r'[^a-zA-Z0-9.\-/_ ]', '', attrs.get('_text'))  # clean up link text
     url = attrs.get((None, 'href'), '/')
     href_url = urllib.parse.urlparse(url)
-    if URL_RE.match(text) and href_url.scheme not in ('tel', 'mailto'):
+    if (None, 'href') in attrs and URL_RE.match(text) and href_url.scheme not in ('tel', 'mailto'):
         # link text looks like a url
         if text.startswith('//'):
             text = 'https:' + text
@@ -157,6 +157,8 @@ def abslink_callback(attrs, new=False):
     Makes sure that all links will be absolute links and will be opened in a new page with no
     window.opener attribute.
     """
+    if (None, 'href') not in attrs:
+        return attrs
     url = attrs.get((None, 'href'), '/')
     if not url.startswith('mailto:') and not url.startswith('tel:'):
         attrs[None, 'href'] = urllib.parse.urljoin(settings.SITE_URL, url)
