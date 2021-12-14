@@ -19,14 +19,17 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
-from urllib.parse import quote
+from urllib.parse import quote, urlsplit, urlparse, urlencode, urlunparse, parse_qs
 
+from django.conf import settings
 from django.contrib import messages
+from django.core.exceptions import ImproperlyConfigured
 from django.core.signing import BadSignature, dumps, loads
 from django.db import transaction
 from django.db.models import Count, IntegerField, OuterRef, Q, Subquery
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect
+from django.utils.crypto import get_random_string
 from django.utils.decorators import method_decorator
 from django.utils.functional import cached_property
 from django.utils.http import url_has_allowed_host_and_scheme
@@ -35,9 +38,11 @@ from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_protect
 from django.views.decorators.debug import sensitive_post_parameters
 from django.views.generic import DeleteView, FormView, ListView, View
+from django_redis import get_redis_connection
 
 from pretix.base.models import Customer, InvoiceAddress, Order, OrderPosition
 from pretix.base.services.mail import mail
+from pretix.multidomain.models import KnownDomain
 from pretix.multidomain.urlreverse import build_absolute_uri, eventreverse
 from pretix.presale.forms.customer import (
     AuthenticationForm, ChangeInfoForm, ChangePasswordForm, RegistrationForm,
@@ -57,9 +62,14 @@ class RedirectBackMixin:
             self.redirect_field_name,
             self.request.GET.get(self.redirect_field_name, '')
         )
+        hosts = list(KnownDomain.objects.filter(event__organizer=self.request.organizer).values_list('domainname', flat=True))
+        siteurlsplit = urlsplit(settings.SITE_URL)
+        if siteurlsplit.port and siteurlsplit.port not in (80, 443):
+            hosts = ['%s:%d' % (h, siteurlsplit.port) for h in hosts]
+
         url_is_safe = url_has_allowed_host_and_scheme(
             url=redirect_to,
-            allowed_hosts=None,
+            allowed_hosts=hosts,
             require_https=self.request.is_secure(),
         )
         return redirect_to if url_is_safe else ''
@@ -96,11 +106,25 @@ class LoginView(RedirectBackMixin, FormView):
 
     def get_success_url(self):
         url = self.get_redirect_url()
-        if getattr(self.request, 'event_domain', False):
-            default_url = '/'
-        else:
-            default_url = eventreverse(self.request.organizer, 'presale:organizer.customer.profile', kwargs={})
-        return url or default_url
+
+        if not url:
+            return eventreverse(self.request.organizer, 'presale:organizer.customer.profile', kwargs={})
+
+        if self.request.GET.get("request_cross_domain_customer_auth") == "true":
+            if not settings.HAS_REDIS:
+                raise ImproperlyConfigured("Authentication for events on a different domain than the organizer is "
+                                           "only supported when redis is configured.")
+
+            otp = get_random_string(32)
+            rc = get_redis_connection("redis")
+            rc.setex(f'pretix_customer_cross_domain_auth_{self.request.organizer.pk}_{otp}', 60, self.request.session.session_key)
+
+            u = urlparse(url)
+            qsl = parse_qs(u.query)
+            qsl['cross_domain_customer_auth'] = otp
+            url = urlunparse((u.scheme, u.netloc, u.path, u.params, urlencode(qsl, doseq=True), u.fragment))
+
+        return url
 
     def form_valid(self, form):
         """Security check complete. Log the user in."""
@@ -119,25 +143,39 @@ class LogoutView(View):
 
     def get_next_page(self):
         if getattr(self.request, 'event_domain', False):
-            next_page = '/'
+            # After we cleared the cookies on this domain, redirect to the parent domain to clear cookies as well
+            next_page = eventreverse(self.request.organizer, 'presale:organizer.customer.logout', kwargs={})
+            if self.redirect_field_name in self.request.POST or self.redirect_field_name in self.request.GET:
+                after_next_page = self.request.POST.get(
+                    self.redirect_field_name,
+                    self.request.GET.get(self.redirect_field_name)
+                )
+                next_page += '?' + urlencode({
+                    'next': f'{self.request.scheme}://{self.request.get_host()}{after_next_page}'
+                })
         else:
             next_page = eventreverse(self.request.organizer, 'presale:organizer.index', kwargs={})
 
-        if (self.redirect_field_name in self.request.POST or
-                self.redirect_field_name in self.request.GET):
-            next_page = self.request.POST.get(
-                self.redirect_field_name,
-                self.request.GET.get(self.redirect_field_name)
-            )
-            url_is_safe = url_has_allowed_host_and_scheme(
-                url=next_page,
-                allowed_hosts=None,
-                require_https=self.request.is_secure(),
-            )
-            # Security check -- Ensure the user-originating redirection URL is
-            # safe.
-            if not url_is_safe:
-                next_page = self.request.path
+            if (self.redirect_field_name in self.request.POST or
+                    self.redirect_field_name in self.request.GET):
+                next_page = self.request.POST.get(
+                    self.redirect_field_name,
+                    self.request.GET.get(self.redirect_field_name)
+                )
+                hosts = list(KnownDomain.objects.filter(event__organizer=self.request.organizer).values_list('domainname', flat=True))
+                siteurlsplit = urlsplit(settings.SITE_URL)
+                if siteurlsplit.port and siteurlsplit.port not in (80, 443):
+                    hosts = ['%s:%d' % (h, siteurlsplit.port) for h in hosts]
+                url_is_safe = url_has_allowed_host_and_scheme(
+                    url=next_page,
+                    allowed_hosts=hosts,
+                    require_https=self.request.is_secure(),
+                )
+                # Security check -- Ensure the user-originating redirection URL is
+                # safe.
+                if not url_is_safe:
+                    next_page = self.request.path
+
         return next_page
 
 

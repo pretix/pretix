@@ -343,31 +343,45 @@ def get_or_create_cart_id(request, create=True):
     if current_id and current_id in request.session.get('carts', {}):
         if current_id != orig_current_id:
             request.session[session_keyname] = current_id
-        return current_id
-    else:
-        cart_data = {}
-        if prefix and 'take_cart_id' in request.GET and current_id:
-            new_id = current_id
-            cached_widget_data = widget_data_cache.get('widget_data_{}'.format(current_id))
-            if cached_widget_data:
-                cart_data['widget_data'] = cached_widget_data
+
+        cart_invalidated = (
+            request.session['carts'][current_id].get('customer_cart_tied_to_login', False) and
+            request.session['carts'][current_id].get('customer') and
+            (not request.customer or request.session['carts'][current_id].get('customer') != request.customer.pk)
+        )
+
+        if cart_invalidated:
+            # This cart was created with a login but the person is now logged out.
+            # Destroy the cart for privacy protection.
+            request.session['carts'][current_id] = {}
         else:
-            if not create:
-                return None
-            new_id = generate_cart_id(request, prefix=prefix)
+            return current_id
 
-        if 'widget_data' not in cart_data and 'widget_data' in request.GET:
-            try:
-                cart_data['widget_data'] = json.loads(request.GET.get('widget_data'))
-            except ValueError:
-                pass
+    cart_data = {}
+    if prefix and 'take_cart_id' in request.GET and current_id:
+        new_id = current_id
+        cached_widget_data = widget_data_cache.get('widget_data_{}'.format(current_id))
+        if cached_widget_data:
+            cart_data['widget_data'] = cached_widget_data
+    else:
+        if not create:
+            return None
+        new_id = generate_cart_id(request, prefix=prefix)
 
-        if 'carts' not in request.session:
-            request.session['carts'] = {}
-        if new_id not in request.session['carts']:
-            request.session['carts'][new_id] = cart_data
-        request.session[session_keyname] = new_id
-        return new_id
+    if 'widget_data' not in cart_data and 'widget_data' in request.GET:
+        try:
+            cart_data['widget_data'] = json.loads(request.GET.get('widget_data'))
+        except ValueError:
+            pass
+
+    if 'carts' not in request.session:
+        request.session['carts'] = {}
+
+    if new_id not in request.session['carts']:
+        request.session['carts'][new_id] = cart_data
+
+    request.session[session_keyname] = new_id
+    return new_id
 
 
 def cart_session(request):

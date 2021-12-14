@@ -298,11 +298,13 @@ class CustomerStep(CartMixin, TemplateFlowStep):
             elif request.customer:
                 self.cart_session['customer_mode'] = 'login'
                 self.cart_session['customer'] = request.customer.pk
+                self.cart_session['customer_cart_tied_to_login'] = True
                 return redirect(self.get_next_url(request))
             elif self.login_form.is_valid():
                 customer_login(self.request, self.login_form.get_customer())
                 self.cart_session['customer_mode'] = 'login'
                 self.cart_session['customer'] = self.login_form.get_customer().pk
+                self.cart_session['customer_cart_tied_to_login'] = True
                 return redirect(self.get_next_url(request))
             else:
                 return self.render()
@@ -311,6 +313,7 @@ class CustomerStep(CartMixin, TemplateFlowStep):
                 customer = self.register_form.create()
                 self.cart_session['customer_mode'] = 'login'
                 self.cart_session['customer'] = customer.pk
+                self.cart_session['customer_cart_tied_to_login'] = False
                 return redirect(self.get_next_url(request))
             else:
                 return self.render()
