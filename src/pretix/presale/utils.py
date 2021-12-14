@@ -48,7 +48,6 @@ from django.utils.functional import SimpleLazyObject
 from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
 from django.views.defaults import permission_denied
-from django_redis import get_redis_connection
 from django_scopes import scope
 
 from pretix.base.middleware import LocaleMiddleware
@@ -77,11 +76,13 @@ def get_customer(request):
         if session.get(dependency_key):
             sparent = SessionStore(session[dependency_key])
             try:
-                session = sparent.load()
+                sparent.load()
             except:
                 # parent session no longer exists
                 request._cached_customer = None
                 return
+            else:
+                session = sparent
 
         with scope(organizer=request.organizer):
             try:
@@ -120,27 +121,32 @@ def add_customer_to_request(request):
         # query parameter and make sure we invalidate it right away. Then, we look up
         # the users session on the main domain and store the dependency between the two
         # sessions.
-        rc = get_redis_connection("redis")
         otp = re.sub('[^a-zA-Z0-9]', '', request.GET['cross_domain_customer_auth'])
-        redis_key = f'pretix_customer_cross_domain_auth_{request.organizer.pk}_{otp}'
-        parent_session_key = rc.get(redis_key)
 
-        if parent_session_key:  # not already invalidated, expired, …
-            # Make sure the OTP can't be used again
-            rc.delete(redis_key)
+        otpstore = SessionStore(otp)
+        try:
+            otpstore.load()
+        except:
+            pass
+        else:
+            parent_session_key = otpstore.get(f'customer_cross_domain_auth_{request.organizer.pk}')
 
-            sparent = SessionStore(parent_session_key.decode())
-            try:
-                sparent.load()
-            except:
-                # parent session no longer exists
-                pass
-            else:
-                dependency_key = f'customer_auth_session_dependency:{request.organizer.pk}'
-                session_key = f'customer_auth_id:{request.organizer.pk}'
-                request.session[dependency_key] = parent_session_key.decode()
-                if session_key in request.session:
-                    del request.session[session_key]
+            if parent_session_key:  # not already invalidated, expired, …
+                # Make sure the OTP can't be used again
+                otpstore.delete()
+
+                sparent = SessionStore(parent_session_key)
+                try:
+                    sparent.load()
+                except:
+                    # parent session no longer exists
+                    pass
+                else:
+                    dependency_key = f'customer_auth_session_dependency:{request.organizer.pk}'
+                    session_key = f'customer_auth_id:{request.organizer.pk}'
+                    request.session[dependency_key] = parent_session_key
+                    if session_key in request.session:
+                        del request.session[session_key]
 
     request.customer = SimpleLazyObject(lambda: get_customer(request))
 

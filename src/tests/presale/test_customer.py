@@ -22,14 +22,17 @@
 import datetime
 from datetime import timedelta
 from decimal import Decimal
+from urllib.parse import parse_qs, urlparse
 
 import pytest
 from django.core import mail as djmail
 from django.core.signing import dumps
+from django.test import Client
 from django.utils.timezone import now
 from django_scopes import scopes_disabled
 
 from pretix.base.models import Event, Item, Order, OrderPosition, Organizer
+from pretix.multidomain.models import KnownDomain
 from pretix.presale.forms.customer import TokenGenerator
 
 
@@ -412,3 +415,152 @@ def test_login_per_org(env, client):
     })
     assert client.get('/bigevents/account/').status_code == 200
     assert client.get('/demo/account/').status_code == 302
+
+
+@pytest.fixture
+def client2():
+    # We need a second test client instance for cross domain stuff since the test client
+    # does not isolate sessions per-domain like browsers do
+    return Client()
+
+
+def _cross_domain_login(env, client, client2):
+    with scopes_disabled():
+        customer = env[0].customers.create(email='john@example.org', is_verified=True)
+        customer.set_password('foo')
+        customer.save()
+        KnownDomain.objects.create(domainname='org.test', organizer=env[0])
+        KnownDomain.objects.create(domainname='event.test', organizer=env[0], event=env[1])
+
+    # Log in on org domain
+    r = client.post('/account/login?next=https://event.test/redeem&request_cross_domain_customer_auth=true', {
+        'email': 'john@example.org',
+        'password': 'foo',
+    }, HTTP_HOST='org.test')
+    assert r.status_code == 302
+
+    u = urlparse(r.headers['Location'])
+    assert u.netloc == 'event.test'
+    assert u.path == '/redeem'
+    q = parse_qs(u.query)
+    assert 'cross_domain_customer_auth' in q
+
+    # Take session over to event domain
+    r = client2.get(f'/?{u.query}', HTTP_HOST='event.test')
+    assert r.status_code == 200
+    assert b'john@example.org' in r.content
+
+
+@pytest.mark.django_db
+def test_cross_domain_login(env, client, client2):
+    _cross_domain_login(env, client, client2)
+
+    # Logged in on org domain
+    r = client.get('/', HTTP_HOST='event.test')
+    assert r.status_code == 200
+    assert b'john@example.org' in r.content
+
+    # Logged in on event domain
+    r = client2.get('/', HTTP_HOST='org.test')
+    assert r.status_code == 200
+    assert b'john@example.org' in r.content
+
+
+@pytest.mark.django_db
+def test_cross_domain_logout_on_org_domain(env, client, client2):
+    _cross_domain_login(env, client, client2)
+
+    r = client.get('/account/logout', HTTP_HOST='org.test')
+    assert r.status_code == 302
+
+    # Logged out on org domain
+    r = client.get('/', HTTP_HOST='event.test')
+    assert r.status_code == 200
+    assert b'john@example.org' not in r.content
+
+    # Logged out on event domain
+    r = client2.get('/', HTTP_HOST='org.test')
+    assert r.status_code == 200
+    assert b'john@example.org' not in r.content
+
+
+@pytest.mark.django_db
+def test_cross_domain_logout_on_event_domain(env, client, client2):
+    _cross_domain_login(env, client, client2)
+
+    r = client2.get('/account/logout?next=/redeem', HTTP_HOST='event.test')
+    assert r.status_code == 302
+
+    u = urlparse(r.headers['Location'])
+    assert u.netloc == 'org.test'
+    assert u.path == '/account/logout'
+
+    r = client.get(f'{u.path}?{u.query}', HTTP_HOST='org.test')
+    assert r.status_code == 302
+    assert r.headers['Location'] == 'http://event.test/redeem'
+
+    # Logged out on org domain
+    r = client.get('/', HTTP_HOST='event.test')
+    assert r.status_code == 200
+    assert b'john@example.org' not in r.content
+
+    # Logged out on event domain
+    r = client2.get('/', HTTP_HOST='org.test')
+    assert r.status_code == 200
+    assert b'john@example.org' not in r.content
+
+
+@pytest.mark.django_db
+def test_cross_domain_login_otp_only_valid_once(env, client, client2):
+    with scopes_disabled():
+        customer = env[0].customers.create(email='john@example.org', is_verified=True)
+        customer.set_password('foo')
+        customer.save()
+        KnownDomain.objects.create(domainname='org.test', organizer=env[0])
+        KnownDomain.objects.create(domainname='event.test', organizer=env[0], event=env[1])
+
+    # Log in on org domain
+    r = client.post('/account/login?next=https://event.test/redeem&request_cross_domain_customer_auth=true', {
+        'email': 'john@example.org',
+        'password': 'foo',
+    }, HTTP_HOST='org.test')
+    assert r.status_code == 302
+
+    u = urlparse(r.headers['Location'])
+    assert u.netloc == 'event.test'
+    assert u.path == '/redeem'
+    q = parse_qs(u.query)
+    assert 'cross_domain_customer_auth' in q
+
+    # Take session over to event domain
+    r = client.get(f'/?{u.query}', HTTP_HOST='event.test')
+    assert r.status_code == 200
+    assert b'john@example.org' in r.content
+
+    # Try to use again
+    r = client2.get(f'/?{u.query}', HTTP_HOST='event.test')
+    assert r.status_code == 200
+    assert b'john@example.org' not in r.content
+
+
+@pytest.mark.django_db
+def test_cross_domain_login_validate_redirect_url(env, client, client2):
+    with scopes_disabled():
+        customer = env[0].customers.create(email='john@example.org', is_verified=True)
+        customer.set_password('foo')
+        customer.save()
+        KnownDomain.objects.create(domainname='org.test', organizer=env[0])
+        KnownDomain.objects.create(domainname='event.test', organizer=env[0], event=env[1])
+
+    # Log in on org domain
+    r = client.post('/account/login?next=https://evilcorp.test/redeem&request_cross_domain_customer_auth=true', {
+        'email': 'john@example.org',
+        'password': 'foo',
+    }, HTTP_HOST='org.test')
+    assert r.status_code == 302
+
+    u = urlparse(r.headers['Location'])
+    assert u.netloc == 'org.test'
+    assert u.path == '/account/'
+    q = parse_qs(u.query)
+    assert 'cross_domain_customer_auth' not in q

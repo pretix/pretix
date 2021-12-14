@@ -19,17 +19,18 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
-from urllib.parse import quote, urlsplit, urlparse, urlencode, urlunparse, parse_qs
+from importlib import import_module
+from urllib.parse import (
+    parse_qs, quote, urlencode, urljoin, urlparse, urlsplit, urlunparse,
+)
 
 from django.conf import settings
 from django.contrib import messages
-from django.core.exceptions import ImproperlyConfigured
 from django.core.signing import BadSignature, dumps, loads
 from django.db import transaction
 from django.db.models import Count, IntegerField, OuterRef, Q, Subquery
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect
-from django.utils.crypto import get_random_string
 from django.utils.decorators import method_decorator
 from django.utils.functional import cached_property
 from django.utils.http import url_has_allowed_host_and_scheme
@@ -38,7 +39,6 @@ from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_protect
 from django.views.decorators.debug import sensitive_post_parameters
 from django.views.generic import DeleteView, FormView, ListView, View
-from django_redis import get_redis_connection
 
 from pretix.base.models import Customer, InvoiceAddress, Order, OrderPosition
 from pretix.base.services.mail import mail
@@ -51,6 +51,8 @@ from pretix.presale.forms.customer import (
 from pretix.presale.utils import (
     customer_login, customer_logout, update_customer_session_auth_hash,
 )
+
+SessionStore = import_module(settings.SESSION_ENGINE).SessionStore
 
 
 class RedirectBackMixin:
@@ -111,13 +113,11 @@ class LoginView(RedirectBackMixin, FormView):
             return eventreverse(self.request.organizer, 'presale:organizer.customer.profile', kwargs={})
 
         if self.request.GET.get("request_cross_domain_customer_auth") == "true":
-            if not settings.HAS_REDIS:
-                raise ImproperlyConfigured("Authentication for events on a different domain than the organizer is "
-                                           "only supported when redis is configured.")
-
-            otp = get_random_string(32)
-            rc = get_redis_connection("redis")
-            rc.setex(f'pretix_customer_cross_domain_auth_{self.request.organizer.pk}_{otp}', 60, self.request.session.session_key)
+            otpstore = SessionStore()
+            otpstore[f'customer_cross_domain_auth_{self.request.organizer.pk}'] = self.request.session.session_key
+            otpstore.set_expiry(60)
+            otpstore.save(must_create=True)
+            otp = otpstore.session_key
 
             u = urlparse(url)
             qsl = parse_qs(u.query)
@@ -151,7 +151,7 @@ class LogoutView(View):
                     self.request.GET.get(self.redirect_field_name)
                 )
                 next_page += '?' + urlencode({
-                    'next': f'{self.request.scheme}://{self.request.get_host()}{after_next_page}'
+                    'next': urljoin(f'{self.request.scheme}://{self.request.get_host()}', after_next_page)
                 })
         else:
             next_page = eventreverse(self.request.organizer, 'presale:organizer.index', kwargs={})
