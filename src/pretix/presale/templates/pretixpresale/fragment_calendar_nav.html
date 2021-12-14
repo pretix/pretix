@@ -7,16 +7,16 @@
             class="btn btn-default{% if style == "list" %} active{% endif %}">
         {% trans "List" %}
     </a>
-    <a href="?{% url_replace request "style" "week" "old" "" "page" "" "date" date|date:"o-\WW" %}" type="button"
+    <a href="?{% if "date" in request.GET %}{% url_replace request "style" "week" "old" "" "page" "" "date" date|date:"o-\WW" %}{% else %}{% url_replace request "style" "week" "old" "" "page" "" %}{% endif %}" type="button"
             class="btn btn-default{% if style == "week" %} active{% endif %}">
         {% trans "Week" %}
     </a>
-    <a href="?{% url_replace request "style" "calendar" "old" "" "page" "" "date"  date|date:"Y-m" %}"
+    <a href="?{% if "date" in request.GET %}{% url_replace request "style" "calendar" "old" "" "page" "" "date" date|date:"Y-m" %}{% else %}{% url_replace request "style" "calendar" "old" "" "page" "" %}{% endif %}"
             type="button"
             class="btn btn-default{% if style == "calendar" %} active{% endif %}">
         {% trans "Month" %}
     </a>
-    <a href="?{% url_replace request "style" "day" "old" "" "page" ""  "date"  date|date:"Y-m-d" %}" type="button"
+    <a href="?{% if "date" in request.GET %}{% url_replace request "style" "day" "old" "" "page" ""  "date" date|date:"Y-m-d" %}{% else %}{% url_replace request "style" "day" "old" "" "page" ""  "date" %}{% endif %}" type="button"
        class="btn btn-default{% if style == "day" %} active{% endif %}">
         {% trans "Day" %}
     </a>
