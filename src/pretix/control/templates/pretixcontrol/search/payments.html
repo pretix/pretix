@@ -111,9 +111,10 @@
                 <tr>
                     <td>{{ p.full_id }}</td>
                     <td>
-                        <a href="{% url "control:event.order" event=p.order.event.slug organizer=p.order.event.organizer.slug code=p.order.code %}">
-                            {{ p.order.full_code }}
-                        </a>
+                        <strong>
+                            <a href="{% url "control:event.order" event=p.order.event.slug organizer=p.order.event.organizer.slug code=p.order.code %}">
+                                {{ p.order.full_code }}</a>
+                        </strong>
                         {% if p.order.testmode %}
                             <span class="label label-warning">{% trans "TEST MODE" %}</span>
                         {% endif %}
