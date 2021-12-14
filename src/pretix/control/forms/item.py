@@ -713,6 +713,7 @@ class ItemVariationForm(I18nModelForm):
             'default_price',
             'original_price',
             'description',
+            'require_approval',
             'require_membership',
             'require_membership_hidden',
             'require_membership_types',

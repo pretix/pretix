@@ -1158,7 +1158,7 @@ class PaymentStep(CartMixin, TemplateFlowStep):
         self.request = request
 
         for cartpos in get_cart(self.request):
-            if cartpos.item.require_approval:
+            if cartpos.item.require_approval or cartpos.variation.require_approval:
                 if 'payment' in self.cart_session:
                     del self.cart_session['payment']
                 return False
@@ -1203,7 +1203,7 @@ class ConfirmStep(CartMixin, AsyncAction, TemplateFlowStep):
         if self.payment_provider:
             ctx['payment'] = self.payment_provider.checkout_confirm_render(self.request)
             ctx['payment_provider'] = self.payment_provider
-        ctx['require_approval'] = any(cp.item.require_approval for cp in ctx['cart']['positions'])
+        ctx['require_approval'] = any(cp.item.require_approval or cp.variation.require_approval for cp in ctx['cart']['positions'])
         ctx['addr'] = self.invoice_address
         ctx['confirm_messages'] = self.confirm_messages
         ctx['cart_session'] = self.cart_session
