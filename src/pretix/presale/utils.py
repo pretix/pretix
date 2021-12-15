@@ -31,7 +31,7 @@
 # Unless required by applicable law or agreed to in writing, software distributed under the Apache License 2.0 is
 # distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations under the License.
-
+import re
 import warnings
 from importlib import import_module
 from urllib.parse import urljoin
@@ -64,17 +64,36 @@ def get_customer(request):
     if not hasattr(request, '_cached_customer'):
         session_key = f'customer_auth_id:{request.organizer.pk}'
         hash_session_key = f'customer_auth_hash:{request.organizer.pk}'
+        dependency_key = f'customer_auth_session_dependency:{request.organizer.pk}'
+
+        # By default, we look at the regular django session
+        session = request.session
+
+        # However, if an event uses a custom domain, the event is at a different domain
+        # than our actual session cookie. The login state is therefore not determined
+        # by our request session, but by the "parent session", the user's session on the
+        # organizer level. This approach guarantees e.g. a global logout feature.
+        if session.get(dependency_key):
+            sparent = SessionStore(session[dependency_key])
+            try:
+                sparent.load()
+            except:
+                # parent session no longer exists
+                request._cached_customer = None
+                return
+            else:
+                session = sparent
 
         with scope(organizer=request.organizer):
             try:
                 customer = request.organizer.customers.get(
                     is_active=True, is_verified=True,
-                    pk=request.session[session_key]
+                    pk=session[session_key]
                 )
             except (Customer.DoesNotExist, KeyError):
                 request._cached_customer = None
             else:
-                session_hash = request.session.get(hash_session_key)
+                session_hash = session.get(hash_session_key)
                 session_hash_verified = session_hash and constant_time_compare(
                     session_hash,
                     customer.get_session_auth_hash()
@@ -82,7 +101,7 @@ def get_customer(request):
                 if session_hash_verified:
                     request._cached_customer = customer
                 else:
-                    request.session.flush()
+                    session.flush()
                     request._cached_customer = None
 
     return request._cached_customer
@@ -96,12 +115,46 @@ def update_customer_session_auth_hash(request, customer):
 
 
 def add_customer_to_request(request):
+    if 'cross_domain_customer_auth' in request.GET and request.event_domain:
+        # The user is logged in on the main domain and now wants to take their session
+        # to a event-specific domain. We validate the one time token received via a
+        # query parameter and make sure we invalidate it right away. Then, we look up
+        # the users session on the main domain and store the dependency between the two
+        # sessions.
+        otp = re.sub('[^a-zA-Z0-9]', '', request.GET['cross_domain_customer_auth'])
+
+        otpstore = SessionStore(otp)
+        try:
+            otpstore.load()
+        except:
+            pass
+        else:
+            parent_session_key = otpstore.get(f'customer_cross_domain_auth_{request.organizer.pk}')
+
+            if parent_session_key:  # not already invalidated, expired, …
+                # Make sure the OTP can't be used again
+                otpstore.delete()
+
+                sparent = SessionStore(parent_session_key)
+                try:
+                    sparent.load()
+                except:
+                    # parent session no longer exists
+                    pass
+                else:
+                    dependency_key = f'customer_auth_session_dependency:{request.organizer.pk}'
+                    session_key = f'customer_auth_id:{request.organizer.pk}'
+                    request.session[dependency_key] = parent_session_key
+                    if session_key in request.session:
+                        del request.session[session_key]
+
     request.customer = SimpleLazyObject(lambda: get_customer(request))
 
 
 def customer_login(request, customer):
     session_key = f'customer_auth_id:{request.organizer.pk}'
     hash_session_key = f'customer_auth_hash:{request.organizer.pk}'
+    dependency_key = f'customer_auth_session_dependency:{request.organizer.pk}'
     session_auth_hash = customer.get_session_auth_hash()
 
     if session_key in request.session:
@@ -114,6 +167,7 @@ def customer_login(request, customer):
     else:
         request.session.cycle_key()
 
+    request.session.pop(dependency_key, None)
     request.session[session_key] = customer.pk
     request.session[hash_session_key] = session_auth_hash
     request.customer = customer
@@ -127,6 +181,12 @@ def customer_login(request, customer):
 def customer_logout(request):
     session_key = f'customer_auth_id:{request.organizer.pk}'
     hash_session_key = f'customer_auth_hash:{request.organizer.pk}'
+    dependency_key = f'customer_auth_session_dependency:{request.organizer.pk}'
+
+    # Remove dependency on parent session
+    request.session.pop(dependency_key, None)
+    # We do not remove the actual parent session as we have no way of e.g. cycling its ID.
+    # Instead, LogoutView will redirect the user to the logout of the parent session.
 
     # Remove user session
     customer_id = request.session.pop(session_key, None)
