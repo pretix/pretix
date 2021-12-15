@@ -811,6 +811,213 @@ class OrderSearchFilterForm(OrderFilterForm):
         )
 
 
+class OrderPaymentSearchFilterForm(forms.Form):
+    orders = {'id': 'id', 'local_id': 'local_id', 'state': 'state', 'amount': 'amount', 'order': 'order',
+              'created': 'created', 'payment_date': 'payment_date', 'provider': 'provider', 'info': 'info',
+              'fee': 'fee'}
+
+    query = forms.CharField(
+        label=_('Search for…'),
+        widget=forms.TextInput(attrs={
+            'placeholder': _('Search for…'),
+            'autofocus': 'autofocus'
+        }),
+        required=False,
+    )
+    event = forms.ModelChoiceField(
+        label=_('Event'),
+        queryset=Event.objects.none(),
+        required=False,
+        widget=Select2(
+            attrs={
+                'data-model-select2': 'event',
+                'data-select2-url': reverse_lazy('control:events.typeahead'),
+                'data-placeholder': _('All events')
+            }
+        )
+    )
+    organizer = forms.ModelChoiceField(
+        label=_('Organizer'),
+        queryset=Organizer.objects.none(),
+        required=False,
+        empty_label=_('All organizers'),
+        widget=Select2(
+            attrs={
+                'data-model-select2': 'generic',
+                'data-select2-url': reverse_lazy('control:organizers.select2'),
+                'data-placeholder': _('All organizers')
+            }
+        ),
+    )
+    state = forms.ChoiceField(
+        label=_('Status'),
+        required=False,
+        choices=[('', _('All payments'))] + list(OrderPayment.PAYMENT_STATES),
+    )
+    provider = forms.ChoiceField(
+        label=_('Payment provider'),
+        choices=[
+            ('', _('All payment providers')),
+        ],
+        required=False,
+    )
+    created_from = forms.DateField(
+        label=_('Payment created from'),
+        required=False,
+        widget=DatePickerWidget,
+    )
+    created_until = forms.DateField(
+        label=_('Payment created until'),
+        required=False,
+        widget=DatePickerWidget,
+    )
+    completed_from = forms.DateField(
+        label=_('Paid from'),
+        required=False,
+        widget=DatePickerWidget,
+    )
+    completed_until = forms.DateField(
+        label=_('Paid until'),
+        required=False,
+        widget=DatePickerWidget,
+    )
+    amount = forms.CharField(
+        label=_('Amount'),
+        required=False,
+        widget=forms.NumberInput(attrs={
+            'placeholder': _('Amount'),
+        }),
+    )
+
+    def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop('request')
+        super().__init__(*args, **kwargs)
+
+        self.fields['ordering'] = forms.ChoiceField(
+            choices=sum([
+                [(a, a), ('-' + a, '-' + a)]
+                for a in self.orders.keys()
+            ], []),
+            required=False
+        )
+
+        if self.request.user.has_active_staff_session(self.request.session.session_key):
+            self.fields['organizer'].queryset = Organizer.objects.all()
+            self.fields['event'].queryset = Event.objects.all()
+
+        else:
+            self.fields['organizer'].queryset = Organizer.objects.filter(
+                pk__in=self.request.user.teams.values_list('organizer', flat=True)
+            )
+            self.fields['event'].queryset = self.request.user.get_events_with_permission('can_view_orders')
+
+        self.fields['provider'].choices += get_all_payment_providers()
+
+    def filter_qs(self, qs):
+        fdata = self.cleaned_data
+
+        if fdata.get('created_from'):
+            date_start = make_aware(datetime.combine(
+                fdata.get('created_from'),
+                time(hour=0, minute=0, second=0, microsecond=0)
+            ), get_current_timezone())
+            qs = qs.filter(created__gte=date_start)
+
+        if fdata.get('created_until'):
+            date_end = make_aware(datetime.combine(
+                fdata.get('created_until') + timedelta(days=1),
+                time(hour=0, minute=0, second=0, microsecond=0)
+            ), get_current_timezone())
+            qs = qs.filter(created__lt=date_end)
+
+        if fdata.get('completed_from'):
+            date_start = make_aware(datetime.combine(
+                fdata.get('completed_from'),
+                time(hour=0, minute=0, second=0, microsecond=0)
+            ), get_current_timezone())
+            qs = qs.filter(payment_date__gte=date_start)
+
+        if fdata.get('completed_until'):
+            date_end = make_aware(datetime.combine(
+                fdata.get('completed_until') + timedelta(days=1),
+                time(hour=0, minute=0, second=0, microsecond=0)
+            ), get_current_timezone())
+            qs = qs.filter(payment_date__lt=date_end)
+
+        if fdata.get('event'):
+            qs = qs.filter(order__event=fdata.get('event'))
+
+        if fdata.get('organizer'):
+            qs = qs.filter(order__event__organizer=fdata.get('organizer'))
+
+        if fdata.get('state'):
+            qs = qs.filter(state=fdata.get('state'))
+
+        if fdata.get('provider'):
+            qs = qs.filter(provider=fdata.get('provider'))
+
+        if fdata.get('query'):
+            u = fdata.get('query')
+
+            matching_invoices = Invoice.objects.filter(
+                Q(invoice_no__iexact=u)
+                | Q(invoice_no__iexact=u.zfill(5))
+                | Q(full_invoice_no__iexact=u)
+            ).values_list('order_id', flat=True)
+
+            matching_invoice_addresses = InvoiceAddress.objects.filter(
+                Q(
+                    Q(name_cached__icontains=u) | Q(company__icontains=u)
+                )
+            ).values_list('order_id', flat=True)
+
+            if "-" in u:
+                code = (Q(event__slug__icontains=u.rsplit("-", 1)[0])
+                        & Q(code__icontains=Order.normalize_code(u.rsplit("-", 1)[1])))
+            else:
+                code = Q(code__icontains=Order.normalize_code(u))
+
+            matching_orders = Order.objects.filter(
+                Q(
+                    code
+                    | Q(email__icontains=u)
+                    | Q(comment__icontains=u)
+                )
+            ).values_list('id', flat=True)
+
+            mainq = (
+                Q(order__id__in=matching_invoices)
+                | Q(order__id__in=matching_invoice_addresses)
+                | Q(order__id__in=matching_orders)
+            )
+
+            qs = qs.filter(mainq)
+
+        if fdata.get('amount'):
+            amount = fdata.get('amount')
+
+            def is_decimal(value):
+                result = True
+                parts = value.split('.', maxsplit=1)
+                for part in parts:
+                    result = result & part.isdecimal()
+                return result
+
+            if is_decimal(amount):
+                qs = qs.filter(amount=Decimal(amount))
+
+        if fdata.get('ordering'):
+            p = self.cleaned_data.get('ordering')
+            if p.startswith('-') and p not in self.orders:
+                qs = qs.order_by('-' + self.orders[p[1:]])
+            else:
+                qs = qs.order_by(self.orders[p])
+        else:
+            qs = qs.order_by('-created')
+
+        return qs
+
+
 class SubEventFilterForm(FilterForm):
     orders = {
         'date_from': 'date_from',
