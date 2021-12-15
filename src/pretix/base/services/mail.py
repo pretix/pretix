@@ -35,6 +35,7 @@
 import hashlib
 import inspect
 import logging
+import mimetypes
 import os
 import re
 import smtplib
@@ -51,6 +52,7 @@ from bs4 import BeautifulSoup
 from celery import chain
 from celery.exceptions import MaxRetriesExceededError
 from django.conf import settings
+from django.core.files.storage import default_storage
 from django.core.mail import (
     EmailMultiAlternatives, SafeMIMEMultipart, get_connection,
 )
@@ -94,7 +96,7 @@ def mail(email: Union[str, Sequence[str]], subject: str, template: Union[str, La
          context: Dict[str, Any] = None, event: Event = None, locale: str = None, order: Order = None,
          position: OrderPosition = None, *, headers: dict = None, sender: str = None, organizer: Organizer = None,
          customer: Customer = None, invoices: Sequence = None, attach_tickets=False, auto_email=True, user=None,
-         attach_ical=False, attach_cached_files: Sequence = None):
+         attach_ical=False, attach_cached_files: Sequence = None, attach_other_files: list=None):
     """
     Sends out an email to a user. The mail will be sent synchronously or asynchronously depending on the installation.
 
@@ -141,6 +143,8 @@ def mail(email: Union[str, Sequence[str]], subject: str, template: Union[str, La
     :param customer: The user this email is sent to
 
     :param attach_cached_files: A list of cached file to attach to this email.
+
+    :param attach_other_files: A list of file paths on our storage to attach.
 
     :raises MailOrderException: on obvious, immediate failures. Not raising an exception does not necessarily mean
         that the email has been sent, just that it has been queued by the email backend.
@@ -301,6 +305,7 @@ def mail(email: Union[str, Sequence[str]], subject: str, template: Union[str, La
             organizer=organizer.pk if organizer else None,
             customer=customer.pk if customer else None,
             attach_cached_files=[(cf.id if isinstance(cf, CachedFile) else cf) for cf in attach_cached_files] if attach_cached_files else [],
+            attach_other_files=attach_other_files,
         )
 
         if invoices:
@@ -338,7 +343,8 @@ class CustomEmail(EmailMultiAlternatives):
 def mail_send_task(self, *args, to: List[str], subject: str, body: str, html: str, sender: str,
                    event: int = None, position: int = None, headers: dict = None, bcc: List[str] = None,
                    invoices: List[int] = None, order: int = None, attach_tickets=False, user=None,
-                   organizer=None, customer=None, attach_ical=False, attach_cached_files: List[int] = None) -> bool:
+                   organizer=None, customer=None, attach_ical=False, attach_cached_files: List[int] = None,
+                   attach_other_files: List[str] = None) -> bool:
     email = CustomEmail(subject, body, sender, to=to, bcc=bcc, headers=headers)
     if html is not None:
         html_message = SafeMIMEMultipart(_subtype='related', encoding=settings.DEFAULT_CHARSET)
@@ -454,6 +460,20 @@ def mail_send_task(self, *args, to: List[str], subject: str, body: str, html: st
                     except:
                         logger.exception('Could not attach invoice to email')
                         pass
+
+        if attach_other_files:
+            for fname in attach_other_files:
+                ftype, _ = mimetypes.guess_type(fname)
+                data = default_storage.open(fname).read()
+                try:
+                    email.attach(
+                        re.sub(r'^(.*)(\.[^.]+)(\.[^.]+)$', r'\1\3', os.path.basename(fname)),
+                        data,
+                        ftype
+                    )
+                except:
+                    logger.exception('Could not attach file to email')
+                    pass
 
         if attach_cached_files:
             for cf in CachedFile.objects.filter(id__in=attach_cached_files):
