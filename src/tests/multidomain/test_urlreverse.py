@@ -91,16 +91,17 @@ def test_event_custom_and_org_domain_front_page(env):
 
 @pytest.mark.django_db
 def test_event_org_domain_keep_port(env):
-    settings.SITE_URL = 'http://example.com:8081'
-    KnownDomain.objects.create(domainname='foobar', organizer=env[0])
-    assert eventreverse(env[1], 'presale:event.index') == 'http://foobar:8081/2015/'
+    with override_settings(SITE_URL='http://example.com:8081'):
+        KnownDomain.objects.create(domainname='foobar', organizer=env[0])
+        assert eventreverse(env[1], 'presale:event.index') == 'http://foobar:8081/2015/'
 
 
 @pytest.mark.django_db
 def test_event_org_domain_keep_scheme(env):
-    settings.SITE_URL = 'https://example.com'
-    KnownDomain.objects.create(domainname='foobar', organizer=env[0])
-    assert eventreverse(env[1], 'presale:event.index') == 'https://foobar/2015/'
+    with override_settings(SITE_URL='https://example.com'):
+        settings.SITE_URL = 'https://example.com'
+        KnownDomain.objects.create(domainname='foobar', organizer=env[0])
+        assert eventreverse(env[1], 'presale:event.index') == 'https://foobar/2015/'
 
 
 @pytest.mark.django_db
