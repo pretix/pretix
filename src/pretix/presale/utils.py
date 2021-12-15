@@ -115,7 +115,7 @@ def update_customer_session_auth_hash(request, customer):
 
 
 def add_customer_to_request(request):
-    if 'cross_domain_customer_auth' in request.GET:
+    if 'cross_domain_customer_auth' in request.GET and request.event_domain:
         # The user is logged in on the main domain and now wants to take their session
         # to a event-specific domain. We validate the one time token received via a
         # query parameter and make sure we invalidate it right away. Then, we look up
