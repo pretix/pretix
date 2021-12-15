@@ -1396,9 +1396,9 @@ var shared_root_methods = {
             url += "&cart_id=" + encodeURIComponent(cart_id);
         }
         if (this.$root.date !== null) {
-            url += "&year=" + this.$root.date.substr(0, 4) + "&month=" + this.$root.date.substr(5, 2);
+            url += "&date=" + this.$root.date.substr(0, 7);
         } else if (this.$root.week !== null) {
-            url += "&year=" + this.$root.week[0] + "&week=" + this.$root.week[1];
+            url += "&date=" + this.$root.week[0] + "-W" + this.$root.week[1];
         }
         if (this.$root.style !== null) {
             url = url + '&style=' + encodeURIComponent(this.$root.style);
