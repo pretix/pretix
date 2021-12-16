@@ -43,6 +43,7 @@ from django.core.validators import validate_email
 from django.db.models import Prefetch, Q, prefetch_related_objects
 from django.forms import CheckboxSelectMultiple, formset_factory
 from django.urls import reverse
+from django.utils.functional import cached_property
 from django.utils.html import escape
 from django.utils.safestring import mark_safe
 from django.utils.timezone import get_current_timezone_name
@@ -534,34 +535,39 @@ class EventSettingsForm(SettingsForm):
         'og_image',
     ]
 
+    def _resolve_virtual_keys_input(self, data, prefix=''):
+        # set all dependants of virtual_keys and
+        # delete all virtual_fields to prevent them from being saved
+        for virtual_key in self.virtual_keys:
+            if prefix + virtual_key not in data:
+                continue
+            base_key = prefix + virtual_key.rsplit('_', 2)[0]
+            asked_key = base_key + '_asked'
+            required_key = base_key + '_required'
+
+            if data[prefix + virtual_key] == 'optional':
+                data[asked_key] = True
+                data[required_key] = False
+            elif data[prefix + virtual_key] == 'required':
+                data[asked_key] = True
+                data[required_key] = True
+            # Explicitly check for 'do_not_ask'.
+            # Do not overwrite as default-behaviour when no value for virtual field is transmitted!
+            elif data[prefix + virtual_key] == 'do_not_ask':
+                data[asked_key] = False
+                data[required_key] = False
+
+            # hierarkey.forms cannot handle non-existent keys in cleaned_data => do not delete, but set to None
+            if not prefix:
+                data[virtual_key] = None
+        return data
+
     def clean(self):
         data = super().clean()
         settings_dict = self.event.settings.freeze()
         settings_dict.update(data)
 
-        # set all dependants of virtual_keys and
-        # delete all virtual_fields to prevent them from being saved
-        for virtual_key in self.virtual_keys:
-            if virtual_key not in data:
-                continue
-            base_key = virtual_key.rsplit('_', 2)[0]
-            asked_key = base_key + '_asked'
-            required_key = base_key + '_required'
-
-            if data[virtual_key] == 'optional':
-                data[asked_key] = True
-                data[required_key] = False
-            elif data[virtual_key] == 'required':
-                data[asked_key] = True
-                data[required_key] = True
-            # Explicitly check for 'do_not_ask'.
-            # Do not overwrite as default-behaviour when no value for virtual field is transmitted!
-            elif data[virtual_key] == 'do_not_ask':
-                data[asked_key] = False
-                data[required_key] = False
-
-            # hierarkey.forms cannot handle non-existent keys in cleaned_data => do not delete, but set to None
-            data[virtual_key] = None
+        data = self._resolve_virtual_keys_input(data)
 
         validate_event_settings(self.event, data)
         return data
@@ -620,6 +626,35 @@ class EventSettingsForm(SettingsForm):
                 self.initial[virtual_key] = 'optional'
             else:
                 self.initial[virtual_key] = 'do_not_ask'
+
+    @cached_property
+    def changed_data(self):
+        data = []
+
+        # We need to resolve the mapping between our "virtual" fields and the "real"fields here, otherwise
+        # they are detected as "changed" on every save even though they aren't.
+        in_data = self._resolve_virtual_keys_input(self.data.copy(), prefix=f'{self.prefix}-' if self.prefix else '')
+
+        for name, field in self.fields.items():
+            prefixed_name = self.add_prefix(name)
+            data_value = field.widget.value_from_datadict(in_data, self.files, prefixed_name)
+            if not field.show_hidden_initial:
+                # Use the BoundField's initial as this is the value passed to
+                # the widget.
+                initial_value = self[name].initial
+            else:
+                initial_prefixed_name = self.add_initial_prefix(name)
+                hidden_widget = field.hidden_widget()
+                try:
+                    initial_value = field.to_python(hidden_widget.value_from_datadict(
+                        self.data, self.files, initial_prefixed_name))
+                except ValidationError:
+                    # Always assume data has changed if validation fails.
+                    data.append(name)
+                    continue
+            if field.has_changed(initial_value, data_value):
+                data.append(name)
+        return data
 
 
 class CancelSettingsForm(SettingsForm):
