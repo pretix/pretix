@@ -180,7 +180,7 @@ $(function () {
 
     $("body").removeClass("nojs");
 
-    var scrollpos = sessionStorage.getItem('scrollpos');
+    var scrollpos = sessionStorage ? sessionStorage.getItem('scrollpos') : 0;
     if (scrollpos) {
         window.scrollTo(0, scrollpos);
         sessionStorage.removeItem('scrollpos');
