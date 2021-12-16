@@ -38,14 +38,14 @@
             <div class="col-md-5 col-sm-2 col-xs-4 text-right flip">
                 {% if has_before %}
                     <a href="?{% url_replace request "date" before|date:"Y-m" %}"
-                       class="btn btn-default" aria-label="{{ before|date:"F Y" }}">
+                       class="btn btn-default" data-save-scrollpos aria-label="{{ before|date:"F Y" }}">
                         <span class="fa fa-arrow-left" aria-hidden="true"></span>
                         <span class="hidden-sm hidden-xs">{{ before|date:"F Y" }}</span>
                     </a>
                 {% endif %}
                 {% if has_after %}
                     <a href="?{% url_replace request "date" after|date:"Y-m" %}"
-                       class="btn btn-default" aria-label="{{ after|date:"F Y" }}">
+                       class="btn btn-default" data-save-scrollpos aria-label="{{ after|date:"F Y" }}">
                         <span class="fa fa-arrow-right" aria-hidden="true"></span>
                         <span class="hidden-sm hidden-xs">{{ after|date:"F Y" }}</span>
                     </a>

@@ -43,14 +43,14 @@
             <div class="col-md-4 col-sm-2 col-xs-4 text-right flip">
                 {% if has_before %}
                     <a href="?{% url_replace request "date" before|date:"o-\WW" %}"
-                       class="btn btn-default" aria-label="{{ before|date:week_format }}">
+                       class="btn btn-default" data-save-scrollpos aria-label="{{ before|date:week_format }}">
                         <span class="fa fa-arrow-left" aria-hidden="true"></span>
                         <span class="hidden-sm hidden-xs">{{ before|date:week_format }}</span>
                     </a>
                 {% endif %}
                 {% if has_after %}
                     <a href="?{% url_replace request "date" after|date:"o-\WW" %}"
-                       class="btn btn-default" aria-label="{{ after|date:week_format }}">
+                       class="btn btn-default" data-save-scrollpos aria-label="{{ after|date:week_format }}">
                         <span class="hidden-sm hidden-xs">{{ after|date:week_format }}</span>
                         <span class="fa fa-arrow-right" aria-hidden="true"></span>
                     </a>
