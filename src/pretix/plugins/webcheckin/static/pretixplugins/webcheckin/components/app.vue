@@ -360,6 +360,9 @@ export default {
                 reason: 'invalid',
               }
             }
+            if (!response.ok && [401, 403].includes(response.status)) {
+              window.location.href = '/control/login?next=' + encodeURIComponent(window.location.pathname + window.location.search + window.location.hash);
+            }
             if (!response.ok && response.status != 400) {
               throw new Error("HTTP status " + response.status);
             }
@@ -448,7 +451,12 @@ export default {
 
       window.clearInterval(this.clearTimeout)
       fetch(this.$root.api.lists + this.checkinlist.id + '/positions/?ignore_status=true&expand=subevent&expand=item&expand=variation&check_rules=true&search=' + encodeURIComponent(this.query))
-          .then(response => response.json())
+          .then(response => {
+            if (!response.ok && [401, 403].includes(response.status)) {
+              window.location.href = '/control/login?next=' + encodeURIComponent(window.location.pathname + window.location.search + window.location.hash);
+            }
+            response.json()
+          })
           .then(data => {
             this.searchLoading = false
             if (data.results) {
