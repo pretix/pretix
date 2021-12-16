@@ -453,7 +453,7 @@ export default {
       fetch(this.$root.api.lists + this.checkinlist.id + '/positions/?ignore_status=true&expand=subevent&expand=item&expand=variation&check_rules=true&search=' + encodeURIComponent(this.query))
           .then(response => {
             if (!response.ok && [401, 403].includes(response.status)) {
-              window.location.href = '/control/login?next=' + window.location.pathname + window.location.hash;
+              window.location.href = '/control/login?next=' + encodeURIComponent(window.location.pathname + window.location.search + window.location.hash);
             }
             response.json()
           })
