@@ -37,4 +37,4 @@ def clean_filename(fname):
     "Terms.pdf.OybgvyAH.22c0583727d5bc.pdf" → "Terms.pdf"
     """
     ext = '.' + fname.split('.')[-1]
-    return fname.rsplit(ext, 2)[0] + ext
+    return fname.rsplit(ext + ".", 1)[0] + ext
