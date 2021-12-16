@@ -180,6 +180,12 @@ $(function () {
 
     $("body").removeClass("nojs");
 
+    var scrollpos = sessionStorage ? sessionStorage.getItem('scrollpos') : 0;
+    if (scrollpos) {
+        window.scrollTo(0, scrollpos);
+        sessionStorage.removeItem('scrollpos');
+    }
+
     $(".accordion-radio").click(function() {
         var $input = $("input", this);
         if (!$input.prop("checked")) $input.prop('checked', true).trigger("change");
@@ -321,12 +327,18 @@ $(function () {
             $(this).slideToggle(300).attr("aria-expanded", true);
         });
     }
-
+    if (sessionStorage) {
+        $("[data-save-scrollpos]").click(function () {
+            sessionStorage.setItem('scrollpos', window.scrollY);
+        });
+    }
     $("#monthselform select").change(function () {
-        $(this).closest("form").get(0).submit();
+        if (sessionStorage) sessionStorage.setItem('scrollpos', window.scrollY);
+        this.form.submit();
     });
     $("#monthselform input").on("dp.change", function () {
         if ($(this).data("DateTimePicker")) {  // prevent submit after dp init
+            if (sessionStorage) sessionStorage.setItem('scrollpos', window.scrollY);
             this.form.submit();
         }
     });
