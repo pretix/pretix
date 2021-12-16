@@ -75,6 +75,7 @@ from pretix.base.services.tasks import TransactionAwareTask
 from pretix.base.services.tickets import get_tickets_for_order
 from pretix.base.signals import email_filter, global_email_filter
 from pretix.celery_app import app
+from pretix.helpers.hierarkey import clean_filename
 from pretix.multidomain.urlreverse import build_absolute_uri
 from pretix.presale.ical import get_ical
 
@@ -467,7 +468,7 @@ def mail_send_task(self, *args, to: List[str], subject: str, body: str, html: st
                 data = default_storage.open(fname).read()
                 try:
                     email.attach(
-                        re.sub(r'^(.*)(\.[^.]+)(\.[^.]+)$', r'\1\3', os.path.basename(fname)),
+                        clean_filename(os.path.basename(fname)),
                         data,
                         ftype
                     )
