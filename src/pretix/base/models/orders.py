@@ -950,7 +950,7 @@ class Order(LockModel, LoggedModel):
                   context: Dict[str, Any]=None, log_entry_type: str='pretix.event.order.email.sent',
                   user: User=None, headers: dict=None, sender: str=None, invoices: list=None,
                   auth=None, attach_tickets=False, position: 'OrderPosition'=None, auto_email=True,
-                  attach_ical=False):
+                  attach_ical=False, attach_other_files: list=None):
         """
         Sends an email to the user that placed this order. Basically, this method does two things:
 
@@ -994,7 +994,8 @@ class Order(LockModel, LoggedModel):
                     recipient, subject, template, context,
                     self.event, self.locale, self, headers=headers, sender=sender,
                     invoices=invoices, attach_tickets=attach_tickets,
-                    position=position, auto_email=auto_email, attach_ical=attach_ical
+                    position=position, auto_email=auto_email, attach_ical=attach_ical,
+                    attach_other_files=attach_other_files,
                 )
             except SendMailException:
                 raise
@@ -2316,7 +2317,7 @@ class OrderPosition(AbstractPosition):
     def send_mail(self, subject: str, template: Union[str, LazyI18nString],
                   context: Dict[str, Any]=None, log_entry_type: str='pretix.event.order.email.sent',
                   user: User=None, headers: dict=None, sender: str=None, invoices: list=None,
-                  auth=None, attach_tickets=False, attach_ical=False):
+                  auth=None, attach_tickets=False, attach_ical=False, attach_other_files: list=None):
         """
         Sends an email to the attendee. Basically, this method does two things:
 
@@ -2357,6 +2358,7 @@ class OrderPosition(AbstractPosition):
                     invoices=invoices,
                     attach_tickets=attach_tickets,
                     attach_ical=attach_ical,
+                    attach_other_files=attach_other_files,
                 )
             except SendMailException:
                 raise

@@ -872,6 +872,7 @@ class MailSettingsForm(SMTPSettingsMixin, SettingsForm):
         'mail_from_name',
         'mail_attach_ical',
         'mail_attach_tickets',
+        'mail_attachment_new_order',
     ]
 
     mail_sales_channel_placed_paid = forms.MultipleChoiceField(

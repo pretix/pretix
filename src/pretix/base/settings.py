@@ -1687,6 +1687,30 @@ You can change your order details and view the status of your order at
 Best regards,
 Your {event} team"""))
     },
+    'mail_attachment_new_order': {
+        'default': None,
+        'type': File,
+        'form_class': ExtFileField,
+        'form_kwargs': dict(
+            label=_('Attachment for new orders'),
+            ext_whitelist=(".pdf",),
+            max_size=settings.FILE_UPLOAD_MAX_SIZE_EMAIL_AUTO_ATTACHMENT,
+            help_text=_('This file will be attached to the first email that we send for every new order. Therefore it will be '
+                        'combined with the "Placed order", "Free order", or "Received order" texts from above. It will be sent '
+                        'to both order contacts and attendees. You can use this e.g. to send your terms of service. Do not use '
+                        'it to send non-public information as this file might be sent before payment is confirmed or the order '
+                        'is approved. To avoid this vital email going to spam, you can only upload PDF files of up to {size} MB.').format(
+                size=settings.FILE_UPLOAD_MAX_SIZE_EMAIL_AUTO_ATTACHMENT // (1024 * 1024),
+            )
+        ),
+        'serializer_class': UploadedFileField,
+        'serializer_kwargs': dict(
+            allowed_types=[
+                'application/pdf'
+            ],
+            max_size=settings.FILE_UPLOAD_MAX_SIZE_EMAIL_AUTO_ATTACHMENT,
+        )
+    },
     'mail_send_order_placed_attendee': {
         'type': bool,
         'default': 'False'
