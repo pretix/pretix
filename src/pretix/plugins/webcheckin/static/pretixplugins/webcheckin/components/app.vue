@@ -361,7 +361,7 @@ export default {
               }
             }
             if (!response.ok && [401, 403].includes(response.status)) {
-              window.location.href = '/control/login?next=' + window.location.pathname + window.location.hash;
+              window.location.href = '/control/login?next=' + encodeURIComponent(window.location.pathname + window.location.search + window.location.hash);
             }
             if (!response.ok && response.status != 400) {
               throw new Error("HTTP status " + response.status);
