@@ -118,6 +118,27 @@ class SettingsForm(i18nfield.forms.I18nFormMixin, HierarkeyForm):
                 self.cleaned_data[k] = self.initial[k]
         return super().save()
 
+    def clean(self):
+        d = super().clean()
+
+        # There is logic in HierarkeyForm.save() to only persist fields that changed. HierarkeyForm determines if
+        # something changed by comparing `self._s.get(name)` to `value`. This leaves an edge case open for multi-lingual
+        # text fields. On the very first load, the initial value in `self._s.get(name)` will be a LazyGettextProxy-based
+        # string. However, only some of the languages are usually visible, so even if the user does not change anything
+        # at all, it will be considered a changed value and stored. We do not want that, as it makes it very hard to add
+        # languages to an organizer/event later on. So we trick it and make sure nothing gets changed in that situation.
+        for name, field in self.fields.items():
+            if isinstance(field, i18nfield.forms.I18nFormField):
+                value = d.get(name)
+                if not value:
+                    continue
+
+                current = self._s.get(name, as_type=type(value))
+                if name not in self.changed_data:
+                    d[name] = current
+
+        return d
+
     def get_new_filename(self, name: str) -> str:
         from pretix.base.models import Event
 
