@@ -942,9 +942,9 @@ def _order_placed_email(event: Event, order: Order, pprov: BasePaymentProvider, 
             invoices=[invoice] if invoice and event.settings.invoice_email_attachment else [],
             attach_tickets=True,
             attach_ical=event.settings.mail_attach_ical,
-            attach_other_files=filter(lambda a: a, [
+            attach_other_files=[a for a in [
                 event.settings.get('mail_attachment_new_order', as_type=str, default='')[len('file://'):]
-            ]),
+            ] if a],
         )
     except SendMailException:
         logger.exception('Order received email could not be sent')
@@ -962,9 +962,9 @@ def _order_placed_email_attendee(event: Event, order: Order, position: OrderPosi
             attach_tickets=True,
             position=position,
             attach_ical=event.settings.mail_attach_ical,
-            attach_other_files=filter(lambda a: a, [
+            attach_other_files=[a for a in [
                 event.settings.get('mail_attachment_new_order', as_type=str, default='')[len('file://'):]
-            ]),
+            ] if a],
         )
     except SendMailException:
         logger.exception('Order received email could not be sent to attendee')
