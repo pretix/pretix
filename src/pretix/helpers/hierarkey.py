@@ -1,7 +1,7 @@
 def clean_filename(fname):
     """
     hierarkey.forms.SettingsForm appends a random value to every filename. However, it keeps the
-    extension around "twice". Tis leads to:
+    extension around "twice". This leads to:
 
     "Terms.pdf" → "Terms.pdf.OybgvyAH.pdf"
 
