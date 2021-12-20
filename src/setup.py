@@ -158,7 +158,7 @@ setup(
 
     keywords='tickets web shop ecommerce',
     install_requires=[
-        'arabic-reshaper==2.0.15',  # Support for Arabic in reportlab
+        'arabic-reshaper==2.1.3',  # Support for Arabic in reportlab
         'babel',
         'BeautifulSoup4==4.8.*',
         'bleach==4.1.*',
