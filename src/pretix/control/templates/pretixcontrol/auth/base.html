@@ -1,6 +1,5 @@
 {% load compress %}
 {% load i18n %}
-{% load hijack_tags %}
 {% load static %}
 <!DOCTYPE html>
 <html{% if rtl %} dir="rtl" class="rtl"{% endif %}>
@@ -39,7 +38,7 @@
             </div>
         {% endfor %}
     {% endif %}
-    {% if request|is_hijacked %}
+    {% if request.user.is_hijacked %}
         <div class="impersonate-warning">
             <span class="fa fa-user-secret"></span>
             {% blocktrans with user=request.user%}You are currently working on behalf of {{ user }}.{% endblocktrans %}

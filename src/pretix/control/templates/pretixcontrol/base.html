@@ -1,7 +1,6 @@
 {% load compress %}
 {% load static %}
 {% load i18n %}
-{% load hijack_tags %}
 {% load statici18n %}
 {% load eventsignal %}
 {% load eventurl %}
@@ -351,7 +350,7 @@
                     </ul>
                 </div>
             {% endif %}
-            {% if request|is_hijacked %}
+            {% if request.user.is_hijacked %}
                 <div class="impersonate-warning">
                     <span class="fa fa-user-secret"></span>
                     {% blocktrans with user=request.user%}You are currently working on behalf of {{ user }}.{% endblocktrans %}

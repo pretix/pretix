@@ -43,7 +43,6 @@ from django.urls import get_script_prefix, resolve, reverse
 from django.utils.encoding import force_str
 from django.utils.translation import gettext as _
 from django_scopes import scope
-from hijack.templatetags.hijack_tags import is_hijacked
 
 from pretix.base.models import Event, Organizer
 from pretix.base.models.auth import SuperuserPermissionSet, User
@@ -183,7 +182,7 @@ class AuditLogMiddleware:
 
     def __call__(self, request):
         if request.path.startswith(get_script_prefix() + 'control') and request.user.is_authenticated:
-            if is_hijacked(request):
+            if getattr(request.user, "is_hijacked", False):
                 hijack_history = request.session.get('hijack_history', False)
                 hijacker = get_object_or_404(User, pk=hijack_history[0])
                 ss = hijacker.get_active_staff_session(request.session.get('hijacker_session'))
