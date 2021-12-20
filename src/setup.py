@@ -171,7 +171,7 @@ setup(
         'dj-static',
         'Django==3.2.*',
         'django-bootstrap3==15.0.*',
-        'django-compressor==2.4.*',
+        'django-compressor>=2.4,<3.2',
         'django-countries>=7.2',
         'django-filter==21.1',
         'django-formset-js-improved==0.5.0.2',
