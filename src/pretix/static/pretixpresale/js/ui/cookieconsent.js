@@ -20,6 +20,13 @@ $(function () {
         return;
     }
 
+    if (!window.localStorage) {
+        // Consent not supported. Even IE8 supports it, so we're on a weird embedded device.
+        // Let's just say we don't consent then.
+        update_consent({})
+        return;
+    }
+
     var storage_val = window.localStorage[storage_key];
     var show_dialog = !storage_val;
     var consent_checkboxes = $("#cookie-consent-details input[type=checkbox][name]");
