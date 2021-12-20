@@ -136,11 +136,15 @@ DEFAULTS = {
         'type': int,
         'form_class': forms.IntegerField,
         'serializer_class': serializers.IntegerField,
+        'serializer_kwargs': dict(
+            min_value=1,
+        ),
         'form_kwargs': dict(
             min_value=1,
+            required=True,
             label=_("Maximum number of items per order"),
             help_text=_("Add-on products will not be counted.")
-        )
+        ),
     },
     'display_net_prices': {
         'default': 'False',
@@ -440,9 +444,11 @@ DEFAULTS = {
         'type': int,
         'form_class': forms.IntegerField,
         'serializer_class': serializers.IntegerField,
+        'serializer_kwargs': dict(),
         'form_kwargs': dict(
             label=_("Minimum length of invoice number after prefix"),
             help_text=_("The part of your invoice number after your prefix will be filled up with leading zeros up to this length, e.g. INV-001 or INV-00001."),
+            required=True,
         )
     },
     'invoice_numbers_consecutive': {
@@ -506,6 +512,7 @@ DEFAULTS = {
                 MinValueValidator(12),
                 MaxValueValidator(64),
             ],
+            required=True,
             widget=forms.NumberInput(
                 attrs={
                     'min': '12',
@@ -520,9 +527,13 @@ DEFAULTS = {
         'type': int,
         'form_class': forms.IntegerField,
         'serializer_class': serializers.IntegerField,
+        'serializer_kwargs': dict(
+            min_value=0,
+        ),
         'form_kwargs': dict(
             min_value=0,
             label=_("Reservation period"),
+            required=True,
             help_text=_("The number of minutes the items in a user's cart are reserved for this user."),
         )
     },
@@ -577,6 +588,7 @@ DEFAULTS = {
         'form_kwargs': dict(
             label=_("Set payment term"),
             widget=forms.RadioSelect,
+            required=True,
             choices=(
                 ('days', _("in days")),
                 ('minutes', _("in minutes"))
@@ -1091,9 +1103,13 @@ DEFAULTS = {
         'type': int,
         'serializer_class': serializers.IntegerField,
         'form_class': forms.IntegerField,
+        'serializer_kwargs': dict(
+            min_value=1,
+        ),
         'form_kwargs': dict(
             label=_("Waiting list response time"),
             min_value=1,
+            required=True,
             help_text=_("If a ticket voucher is sent to a person on the waiting list, it has to be redeemed within this "
                         "number of hours until it expires and can be re-assigned to the next person on the list."),
             widget=forms.NumberInput(),
