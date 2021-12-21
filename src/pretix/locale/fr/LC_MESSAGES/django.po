@@ -4,8 +4,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-30 16:13+0000\n"
-"PO-Revision-Date: 2021-10-08 06:00+0000\n"
-"Last-Translator: Adri <abecadesign@hotmail.com>\n"
+"PO-Revision-Date: 2021-12-21 19:00+0000\n"
+"Last-Translator: cpoisnel <chepoisnel@gmail.com>\n"
 "Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix/fr/"
 ">\n"
 "Language: fr\n"
@@ -122,12 +122,12 @@ msgstr ""
 #: pretix/api/serializers/event.py:220 pretix/api/serializers/event.py:513
 #, python-brace-format
 msgid "Meta data property '{name}' does not exist."
-msgstr "La propriété de métadonnées'{name}1' n'existe pas."
+msgstr "La propriété de métadonnées'{name}' n'existe pas."
 
 #: pretix/api/serializers/event.py:223 pretix/api/serializers/event.py:516
 #, python-brace-format
 msgid "Meta data property '{name}' does not allow value '{value}'."
-msgstr "La propriété de métadonnées'{name}1' n'accepte pas la valeur {value}."
+msgstr "La propriété de métadonnées'{name}' n'accepte pas la valeur {value}."
 
 #: pretix/api/serializers/event.py:266
 #, python-brace-format
@@ -169,7 +169,7 @@ msgstr "Cartes cadeaux ne peuvent pas être des billets d'entrée."
 #: pretix/api/serializers/item.py:242
 #, python-brace-format
 msgid "Item meta data property '{name}' does not exist."
-msgstr "La propriété de métadonnées '{name}1' n'existe pas."
+msgstr "La propriété de métadonnées '{name}' n'existe pas."
 
 #: pretix/api/serializers/item.py:368
 msgid ""
