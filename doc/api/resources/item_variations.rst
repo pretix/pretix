@@ -24,6 +24,9 @@ active                                boolean                    If ``false``, t
 description                           multi-lingual string       A public description of the variation. May contain
                                                                  Markdown syntax or can be ``null``.
 position                              integer                    An integer, used for sorting
+require_approval                      boolean                    If ``true``, orders with this variation will need to be
+                                                                 approved by the event organizer before they can be
+                                                                 paid.
 require_membership                    boolean                    If ``true``, booking this variation requires an active membership.
 require_membership_hidden             boolean                    If ``true`` and ``require_membership`` is set, this variation will
                                                                  be hidden from users without a valid membership.
@@ -76,6 +79,7 @@ Endpoints
               "en": "S"
             },
             "active": true,
+            "require_approval": false,
             "require_membership": false,
             "require_membership_hidden": false,
             "require_membership_types": [],
@@ -97,6 +101,7 @@ Endpoints
               "en": "L"
             },
             "active": true,
+            "require_approval": false,
             "require_membership": false,
             "require_membership_hidden": false,
             "require_membership_types": [],
@@ -147,6 +152,7 @@ Endpoints
         "price": "10.00",
         "original_price": null,
         "active": true,
+        "require_approval": false,
         "require_membership": false,
         "require_membership_hidden": false,
         "require_membership_types": [],
@@ -183,6 +189,7 @@ Endpoints
         "value": {"en": "Student"},
         "default_price": "10.00",
         "active": true,
+        "require_approval": false,
         "require_membership": false,
         "require_membership_hidden": false,
         "require_membership_types": [],
@@ -209,6 +216,7 @@ Endpoints
         "price": "10.00",
         "original_price": null,
         "active": true,
+        "require_approval": false,
         "require_membership": false,
         "require_membership_hidden": false,
         "require_membership_types": [],
@@ -266,6 +274,7 @@ Endpoints
         "price": "10.00",
         "original_price": null,
         "active": false,
+        "require_approval": false,
         "require_membership": false,
         "require_membership_hidden": false,
         "require_membership_types": [],
