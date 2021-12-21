@@ -203,4 +203,4 @@ Then, please contact support@pretix.eu and we will enable DKIM for your domain o
 
 
 .. _Sender Policy Framework: https://en.wikipedia.org/wiki/Sender_Policy_Framework
-.. _SPF specification: http://www.openspf.org/SPF_Record_Syntax
+.. _SPF specification: http://www.open-spf.org/SPF_Record_Syntax
