@@ -527,6 +527,7 @@ def test_item_create_with_variation(token_client, organizer, event, item, catego
         new_item = Item.objects.get(pk=resp.data['id'])
         assert new_item.variations.first().value.localize('de') == "Kommentar"
         assert new_item.variations.first().value.localize('en') == "Comment"
+        assert new_item.variations.first().require_approval is True
         assert set(new_item.variations.first().sales_channels) == set(get_all_sales_channels().keys())
 
 
