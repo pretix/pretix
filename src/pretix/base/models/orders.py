@@ -1444,7 +1444,7 @@ class AbstractPosition(models.Model):
     def requires_approval(self):
         if self.item.require_approval:
             return True
-        if self.variation is not None and self.variation.require_approval:
+        if self.variation and self.variation.require_approval:
             return True
         return False
 
