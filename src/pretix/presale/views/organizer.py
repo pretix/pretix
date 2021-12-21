@@ -63,7 +63,7 @@ from pretix.base.models import (
 from pretix.base.services.quotas import QuotaAvailability
 from pretix.helpers.compat import date_fromisocalendar
 from pretix.helpers.daterange import daterange
-from pretix.helpers.formats.en.formats import WEEK_FORMAT
+from pretix.helpers.formats.en.formats import WEEK_FORMAT, SHORT_MONTH_DAY_FORMAT
 from pretix.multidomain.urlreverse import eventreverse
 from pretix.presale.ical import get_ical
 from pretix.presale.views import OrganizerViewMixin
@@ -716,6 +716,9 @@ class WeekCalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
         ctx['week_format'] = get_format('WEEK_FORMAT')
         if ctx['week_format'] == 'WEEK_FORMAT':
             ctx['week_format'] = WEEK_FORMAT
+        ctx['short_month_day_format'] = get_format('SHORT_MONTH_DAY_FORMAT')
+        if ctx['short_month_day_format'] == 'SHORT_MONTH_DAY_FORMAT':
+            ctx['short_month_day_format'] = SHORT_MONTH_DAY_FORMAT
         ctx['multiple_timezones'] = self._multiple_timezones
 
         return ctx

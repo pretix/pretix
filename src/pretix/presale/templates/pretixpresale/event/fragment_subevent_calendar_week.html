@@ -24,7 +24,7 @@
                         <option value="{{ w.0.isocalendar.0 }}-W{{ w.0.isocalendar.1 }}"
                                 {% if w.0.isocalendar.0 == subevent_list.date.isocalendar.0 and w.0.isocalendar.1 == subevent_list.date.isocalendar.1 %}selected{% endif %}>
                                 {{ w.0|date:subevent_list.week_format }}
-                            ({{ w.0|date:"MONTH_DAY_FORMAT" }} – {{ w.1|date:"MONTH_DAY_FORMAT" }})
+                            ({{ w.0|date:subevent_list.short_month_day_format }} – {{ w.1|date:subevent_list.short_month_day_format }})
                         </option>
                     {% endfor %}
                     </optgroup>

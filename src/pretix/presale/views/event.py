@@ -77,7 +77,7 @@ from pretix.presale.views.organizer import (
     filter_qs_by_attr, weeks_for_template,
 )
 
-from ...helpers.formats.en.formats import WEEK_FORMAT
+from ...helpers.formats.en.formats import WEEK_FORMAT, SHORT_MONTH_DAY_FORMAT
 from . import (
     CartMixin, EventViewMixin, allow_frame_if_namespaced, get_cart,
     iframe_entry_view_wrapper,
@@ -638,6 +638,9 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
             context['week_format'] = get_format('WEEK_FORMAT')
             if context['week_format'] == 'WEEK_FORMAT':
                 context['week_format'] = WEEK_FORMAT
+            context['short_month_day_format'] = get_format('SHORT_MONTH_DAY_FORMAT')
+            if context['short_month_day_format'] == 'SHORT_MONTH_DAY_FORMAT':
+                context['short_month_day_format'] = SHORT_MONTH_DAY_FORMAT
         else:
             context['subevent_list'] = self.request.event.subevents_sorted(
                 filter_qs_by_attr(self.request.event.subevents_annotated(self.request.sales_channel.identifier).using(settings.DATABASE_REPLICA), self.request)
