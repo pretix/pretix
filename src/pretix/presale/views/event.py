@@ -77,7 +77,7 @@ from pretix.presale.views.organizer import (
     filter_qs_by_attr, weeks_for_template,
 )
 
-from ...helpers.formats.en.formats import WEEK_FORMAT, SHORT_MONTH_DAY_FORMAT
+from ...helpers.formats.en.formats import SHORT_MONTH_DAY_FORMAT, WEEK_FORMAT
 from . import (
     CartMixin, EventViewMixin, allow_frame_if_namespaced, get_cart,
     iframe_entry_view_wrapper,

@@ -63,7 +63,9 @@ from pretix.base.models import (
 from pretix.base.services.quotas import QuotaAvailability
 from pretix.helpers.compat import date_fromisocalendar
 from pretix.helpers.daterange import daterange
-from pretix.helpers.formats.en.formats import WEEK_FORMAT, SHORT_MONTH_DAY_FORMAT
+from pretix.helpers.formats.en.formats import (
+    SHORT_MONTH_DAY_FORMAT, WEEK_FORMAT,
+)
 from pretix.multidomain.urlreverse import eventreverse
 from pretix.presale.ical import get_ical
 from pretix.presale.views import OrganizerViewMixin
