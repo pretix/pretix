@@ -5,7 +5,7 @@ $(function () {
 
     var storage_key = $("#cookie-consent-storage-key").text();
     function update_consent(consent) {
-        if (storage_key) window.localStorage[storage_key] = JSON.stringify(consent);
+        if (storage_key && window.localStorage) window.localStorage[storage_key] = JSON.stringify(consent);
         window.pretix.cookie_consent = consent;
 
         // Event() is not supported by IE11, see ployfill here:
