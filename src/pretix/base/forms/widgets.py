@@ -86,14 +86,6 @@ class TimePickerWidget(forms.TimeInput):
 
 class UploadedFileWidget(forms.ClearableFileInput):
     def __init__(self, *args, **kwargs):
-        # Browsers can't recognize that the server already has a file uploaded
-        # Don't mark this input as being required if we already have an answer
-        # (this needs to be done via the attrs, otherwise we wouldn't get the "required" star on the field label)
-        attrs = kwargs.get('attrs', {})
-        if kwargs.get('required') and kwargs.get('initial'):
-            attrs.update({'required': None})
-        kwargs.update({'attrs': attrs})
-
         self.position = kwargs.pop('position')
         self.event = kwargs.pop('event')
         self.answer = kwargs.pop('answer')
@@ -124,6 +116,15 @@ class UploadedFileWidget(forms.ClearableFileInput):
                 return eventreverse(self.event, 'presale:event.cart.download.answer', kwargs={
                     'answer': self.answer.pk,
                 })
+
+    def get_context(self, name, value, attrs):
+        # Browsers can't recognize that the server already has a file uploaded
+        # Don't mark this input as being required if we already have an answer
+        # (this needs to be done via the attrs, otherwise we wouldn't get the "required" star on the field label)
+        ctx = super().get_context(name, value, attrs)
+        if ctx['widget']['is_initial']:
+            ctx['widget']['attrs']['required'] = False
+        return ctx
 
     def format_value(self, value):
         if self.is_initial(value):
