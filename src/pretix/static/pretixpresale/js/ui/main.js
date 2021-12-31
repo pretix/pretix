@@ -131,6 +131,11 @@ var form_handlers = function (el) {
         });
     });
 
+    el.find('.select2-static').select2({
+      theme: "bootstrap",
+      language: $("body").attr("data-select2-locale"),
+    });
+
     el.find("input[name*=question], select[name*=question]").change(questions_toggle_dependent);
     questions_toggle_dependent();
     questions_init_photos(el);

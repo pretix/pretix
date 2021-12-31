@@ -706,7 +706,7 @@ class BaseQuestionsForm(forms.Form):
                     queryset=q.options,
                     label=label, required=required,
                     help_text=help_text,
-                    widget=forms.Select,
+                    widget=forms.Select(attrs={'class': 'select2-static'}),
                     to_field_name='identifier',
                     empty_label='',
                     initial=initial.options.first() if initial else None,
