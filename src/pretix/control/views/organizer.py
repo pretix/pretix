@@ -1195,6 +1195,10 @@ class GiftCardDetailView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMi
                         'retry': True,
                     })
                 )
+                t.order.log_action('pretix.event.order.payment.started', {
+                    'local_id': r.local_id,
+                    'provider': r.provider
+                }, user=request.user)
                 try:
                     r.payment_provider.execute_payment(request, r)
                 except PaymentException as e:
