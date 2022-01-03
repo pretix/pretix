@@ -35,6 +35,7 @@
 from collections import OrderedDict
 from datetime import datetime, time, timedelta
 
+import bleach
 import dateutil.parser
 from django import forms
 from django.db.models import (
@@ -374,8 +375,8 @@ class PDFCheckinList(ReportlabExportMixin, CheckInListMixin, BaseExporter):
                 CBFlowable(bool(op.last_checked_in)),
                 '✘' if op.order.status != Order.STATUS_PAID else '✔',
                 op.order.code,
-                Paragraph(name, self.get_style()),
-                Paragraph(item, self.get_style()),
+                Paragraph(bleach.clean(str(name), tags=['br']).strip().replace('<br>', '<br/>'), self.get_style()),
+                Paragraph(bleach.clean(str(item), tags=['br']).strip().replace('<br>', '<br/>'), self.get_style()),
             ]
             acache = {}
             if op.addon_to:
@@ -395,6 +396,7 @@ class PDFCheckinList(ReportlabExportMixin, CheckInListMixin, BaseExporter):
                     acache[a.question_id] = str(a)
             for q in questions:
                 txt = acache.get(q.pk, '')
+                txt = bleach.clean(txt, tags=['br']).strip().replace('<br>', '<br/>')
                 p = Paragraph(txt, self.get_style())
                 while p.wrap(colwidths[len(row)], 5000)[1] > 50 * mm:
                     txt = txt[:len(txt) - 50] + "..."
