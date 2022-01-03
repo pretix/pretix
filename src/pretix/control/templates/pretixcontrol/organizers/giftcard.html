@@ -57,6 +57,7 @@
                 </div>
                 <form class="" method="post" action="">
                     {% csrf_token %}
+                    <button type="submit" class="hidden">Add</button> <!-- Required because pressing enter in the text fields will submit the first button -->
                     <table class="panel-body table">
                         <thead>
                         <tr>
@@ -101,7 +102,7 @@
                             </td>
                             <td class="text-right form-inline">
                                 <input type="text" class="form-control input-sm" placeholder="{% trans "Value" %}" name="value">
-                                <button class="btn btn-primary">
+                                <button type="submit" class="btn btn-primary">
                                     <span class="fa fa-plus"></span>
                                 </button>
                             </td>
