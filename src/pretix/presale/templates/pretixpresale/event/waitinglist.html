@@ -23,6 +23,11 @@
                             If tickets become available again, we will inform the first persons on the waiting list. If we notify you, you'll have {{ hours }} hours time to buy a ticket until we assign it to the next person on the list.
                         {% endblocktrans %}
                     </p>
+                    <p class="help-block">
+                        {% blocktrans trimmed with hours=event.settings.waiting_list_hours %}
+                            Note that you will only receive one ticket. If you need multiple tickets, you need to add yourself to the waiting list multiple times with different email addresses. There is no guarantee that you will receive a certain number of tickets.
+                        {% endblocktrans %}
+                    </p>
                     <p>
                         <button type="submit" class="btn btn-primary">
                             {% trans "Add me to the list" %}
