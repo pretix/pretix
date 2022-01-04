@@ -173,7 +173,7 @@ def create_thumbnail(sourcename, size):
 
     image = resize_image(image, size)
 
-    if source.name.endswith('.jpg') or source.name.endswith('.jpeg'):
+    if source.name.lower().endswith('.jpg') or source.name.lower().endswith('.jpeg'):
         # Yields better file sizes for photos
         target_ext = 'jpeg'
         quality = 95
@@ -184,6 +184,8 @@ def create_thumbnail(sourcename, size):
     checksum = hashlib.md5(image.tobytes()).hexdigest()
     name = checksum + '.' + size.replace('^', 'c') + '.' + target_ext
     buffer = BytesIO()
+    if image.mode == "P" and source.name.lower().endswith('.png'):
+        image = image.convert('RGBA')
     if image.mode not in ("1", "L", "RGB", "RGBA"):
         image = image.convert('RGB')
     image.save(fp=buffer, format=target_ext.upper(), quality=quality)
