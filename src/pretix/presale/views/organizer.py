@@ -553,7 +553,7 @@ def add_subevents_for_days(qs, before, after, ebd, timezones, event=None, cart_n
 
 
 def sort_ev(e):
-    return e['time'] or time(0, 0, 0), str(e['event'])
+    return e['time'] or time(0, 0, 0), str(e['event'].name)
 
 
 def days_for_template(ebd, week):
