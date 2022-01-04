@@ -1,10 +1,11 @@
 {% load i18n %}
+{% load date_fast %}
 <div class="week-calendar">
     {% for day in days %}
         <details class="weekday {% if day.events %}has-events{% else %}no-events{% endif %} {% if day.today %}today{% endif %}"
-                data-date="{{ day.date|date:"SHORT_DATE_FORMAT" }}" open>
+                data-date="{{ day.date|date_fast:"SHORT_DATE_FORMAT" }}" open>
             <summary>
-                <h3><span class="fa fa-fw" aria-hidden="true"></span> <time datetime="{{ day.date|date:"Y-m-d" }}">{{ day.day_formatted }}</time></h3>
+                <h3><span class="fa fa-fw" aria-hidden="true"></span> <time datetime="{{ day.date|date_fast:"Y-m-d" }}">{{ day.day_formatted }}</time></h3>
             </summary>
             <ul class="events">
                 {% for event in day.events %}
@@ -42,9 +43,9 @@
                                     {% if not show_names|default_if_none:True %}
                                         <strong>
                                     {% endif %}
-                                    <time datetime="{{ event.time|date:"H:i" }}">{{ event.time|date:"TIME_FORMAT" }}</time>
+                                    <time datetime="{{ event.time|date_fast:"H:i" }}">{{ event.time|date_fast:"TIME_FORMAT" }}</time>
                                     {% if event.time_end %}
-                                        <span aria-hidden="true">–</span><span class="sr-only">{% trans "until" context "timerange" %}</span> <time datetime="{{ event.time_end|date:"H:i" }}">{{ event.time_end|date:"TIME_FORMAT" }}</time>
+                                        <span aria-hidden="true">–</span><span class="sr-only">{% trans "until" context "timerange" %}</span> <time datetime="{{ event.time_end|date_fast:"H:i" }}">{{ event.time_end|date_fast:"TIME_FORMAT" }}</time>
                                     {% endif %}
                                     {% if not show_names|default_if_none:True %}
                                         </strong>
@@ -75,7 +76,7 @@
                                     <span class="fa fa-ticket" aria-hidden="true"></span> {% trans "Sale over" %}
                                 {% elif event.event.settings.presale_start_show_date and event.event.presale_start %}
                                     <span class="fa fa-ticket" aria-hidden="true"></span>
-                                    {% blocktrans with start_date=event.event.presale_start|date:"SHORT_DATE_FORMAT" %}
+                                    {% blocktrans with start_date=event.event.presale_start|date_fast:"SHORT_DATE_FORMAT" %}
                                         from {{ start_date }}
                                     {% endblocktrans %}
                                 {% else %}

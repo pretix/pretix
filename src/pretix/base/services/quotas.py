@@ -113,10 +113,8 @@ class QuotaAvailability:
         be a few minutes outdated. In this case, you may not rely on the results in the ``count_*`` properties.
         """
         now_dt = now_dt or now()
-        quotas = list(set(self._queue))
-        quotas_original = list(self._queue)
-        self._queue.clear()
-        if not quotas:
+        quota_ids_set = {q.id for q in self._queue}
+        if not quota_ids_set:
             return
 
         if allow_cache:
@@ -129,7 +127,7 @@ class QuotaAvailability:
             elif settings.HAS_REDIS:
                 rc = get_redis_connection("redis")
                 quotas_by_event = defaultdict(list)
-                for q in quotas_original:
+                for q in [_q for _q in self._queue if _q.id in quota_ids_set]:
                     quotas_by_event[q.event_id].append(q)
 
                 for eventid, evquotas in quotas_by_event.items():
@@ -139,15 +137,18 @@ class QuotaAvailability:
                             data = [rv for rv in redisval.decode().split(',')]
                             # Except for some rare situations, we don't want to use cache entries older than 2 minutes
                             if time.time() - int(data[2]) < 120 or allow_cache_stale:
-                                quotas_original.remove(q)
-                                quotas.remove(q)
+                                quota_ids_set.remove(q.id)
                                 if data[1] == "None":
                                     self.results[q] = int(data[0]), None
                                 else:
                                     self.results[q] = int(data[0]), int(data[1])
 
-        if not quotas:
+        if not quota_ids_set:
             return
+
+        quotas = [_q for _q in self._queue if _q.id in quota_ids_set]
+        quotas_original = list(quotas)
+        self._queue.clear()
 
         self._compute(quotas, now_dt)
 
@@ -284,15 +285,16 @@ class QuotaAvailability:
         seq = Q(subevent_id__in=subevents)
         if None in subevents:
             seq |= Q(subevent__isnull=True)
+        quota_ids = {q.pk for q in quotas}
         op_lookup = OrderPosition.objects.filter(
             order__status__in=[Order.STATUS_PAID, Order.STATUS_PENDING],
             order__event_id__in=events,
         ).filter(seq).filter(
             Q(
                 Q(variation_id__isnull=True) &
-                Q(item_id__in={i['item_id'] for i in q_items if self._quota_objects[i['quota_id']] in quotas})
+                Q(item_id__in={i['item_id'] for i in q_items if i['quota_id'] in quota_ids})
             ) | Q(
-                variation_id__in={i['itemvariation_id'] for i in q_vars if self._quota_objects[i['quota_id']] in quotas})
+                variation_id__in={i['itemvariation_id'] for i in q_vars if i['quota_id'] in quota_ids})
         ).order_by()
         if any(q.release_after_exit for q in quotas):
             op_lookup = op_lookup.annotate(
@@ -359,6 +361,7 @@ class QuotaAvailability:
             func = 'GREATEST'
 
         subevents = {q.subevent_id for q in quotas}
+        quota_ids = {q.pk for q in quotas}
         seq = Q(subevent_id__in=subevents)
         if None in subevents:
             seq |= Q(subevent__isnull=True)
@@ -370,10 +373,9 @@ class QuotaAvailability:
             Q(
                 Q(
                     Q(variation_id__isnull=True) &
-                    Q(item_id__in={i['item_id'] for i in q_items if self._quota_objects[i['quota_id']] in quotas})
+                    Q(item_id__in={i['item_id'] for i in q_items if i['quota_id'] in quota_ids})
                 ) | Q(
-                    variation_id__in={i['itemvariation_id'] for i in q_vars if
-                                      self._quota_objects[i['quota_id']] in quotas}
+                    variation_id__in={i['itemvariation_id'] for i in q_vars if i['quota_id'] in quota_ids}
                 ) | Q(
                     quota_id__in=[q.pk for q in quotas]
                 )
@@ -398,6 +400,7 @@ class QuotaAvailability:
     def _compute_carts(self, quotas, q_items, q_vars, size_left, now_dt):
         events = {q.event_id for q in quotas}
         subevents = {q.subevent_id for q in quotas}
+        quota_ids = {q.pk for q in quotas}
         seq = Q(subevent_id__in=subevents)
         if None in subevents:
             seq |= Q(subevent__isnull=True)
@@ -413,9 +416,9 @@ class QuotaAvailability:
             Q(
                 Q(
                     Q(variation_id__isnull=True) &
-                    Q(item_id__in={i['item_id'] for i in q_items if self._quota_objects[i['quota_id']] in quotas})
+                    Q(item_id__in={i['item_id'] for i in q_items if i['quota_id'] in quota_ids})
                 ) | Q(
-                    variation_id__in={i['itemvariation_id'] for i in q_vars if self._quota_objects[i['quota_id']] in quotas}
+                    variation_id__in={i['itemvariation_id'] for i in q_vars if i['quota_id'] in quota_ids}
                 )
             )
         ).order_by().values('item_id', 'subevent_id', 'variation_id').annotate(c=Count('*'))
@@ -434,6 +437,7 @@ class QuotaAvailability:
     def _compute_waitinglist(self, quotas, q_items, q_vars, size_left):
         events = {q.event_id for q in quotas}
         subevents = {q.subevent_id for q in quotas}
+        quota_ids = {q.pk for q in quotas}
         seq = Q(subevent_id__in=subevents)
         if None in subevents:
             seq |= Q(subevent__isnull=True)
@@ -444,9 +448,8 @@ class QuotaAvailability:
             Q(
                 Q(
                     Q(variation_id__isnull=True) &
-                    Q(item_id__in={i['item_id'] for i in q_items if self._quota_objects[i['quota_id']] in quotas})
-                ) | Q(variation_id__in={i['itemvariation_id'] for i in q_vars if
-                                        self._quota_objects[i['quota_id']] in quotas})
+                    Q(item_id__in={i['item_id'] for i in q_items if i['quota_id'] in quota_ids})
+                ) | Q(variation_id__in={i['itemvariation_id'] for i in q_vars if i['quota_id'] in quota_ids})
             )
         ).order_by().values('item_id', 'subevent_id', 'variation_id').annotate(c=Count('*'))
         for line in w_lookup:

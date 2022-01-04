@@ -32,9 +32,10 @@
 # distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations under the License.
 
-from django.template.defaultfilters import date as _date
 from django.utils.html import format_html
 from django.utils.translation import get_language, gettext_lazy as _
+
+from pretix.helpers.templatetags.date_fast import date_fast as _date
 
 
 def daterange(df, dt, as_html=False):

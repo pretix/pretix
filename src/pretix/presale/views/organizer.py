@@ -44,7 +44,7 @@ import isoweek
 import pytz
 from django.conf import settings
 from django.core.cache import caches
-from django.db.models import Exists, Max, Min, OuterRef, Q
+from django.db.models import Exists, Max, Min, OuterRef, Prefetch, Q
 from django.db.models.functions import Coalesce, Greatest
 from django.http import Http404, HttpResponse
 from django.shortcuts import redirect
@@ -58,7 +58,7 @@ from pytz import UTC
 
 from pretix.base.i18n import language
 from pretix.base.models import (
-    Event, EventMetaValue, Quota, SubEvent, SubEventMetaValue,
+    Event, EventMetaValue, Organizer, Quota, SubEvent, SubEventMetaValue,
 )
 from pretix.base.services.quotas import QuotaAvailability
 from pretix.helpers.compat import date_fromisocalendar
@@ -416,7 +416,11 @@ def add_events_for_days(request, baseqs, before, after, ebd, timezones):
     ).order_by(
         'date_from'
     ).prefetch_related(
-        '_settings_objects', 'organizer___settings_objects'
+        '_settings_objects',
+        Prefetch(
+            'organizer',
+            queryset=Organizer.objects.prefetch_related('_settings_objects')
+        )
     )
     if hasattr(request, 'organizer'):
         qs = filter_qs_by_attr(qs, request)
@@ -553,7 +557,7 @@ def add_subevents_for_days(qs, before, after, ebd, timezones, event=None, cart_n
 
 
 def sort_ev(e):
-    return e['time'] or time(0, 0, 0), str(e['event'])
+    return e['time'] or time(0, 0, 0), str(e['event'].name)
 
 
 def days_for_template(ebd, week):
@@ -655,7 +659,16 @@ class CalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
             event__live=True,
             event__sales_channels__contains=self.request.sales_channel.identifier
         ).prefetch_related(
-            'event___settings_objects', 'event__organizer___settings_objects'
+            Prefetch(
+                'event',
+                queryset=Event.objects.prefetch_related(
+                    '_settings_objects',
+                    Prefetch(
+                        'organizer',
+                        queryset=Organizer.objects.prefetch_related('_settings_objects')
+                    )
+                )
+            )
         )), self.request).using(settings.DATABASE_REPLICA), before, after, ebd, timezones)
         self._multiple_timezones = len(timezones) > 1
         return ebd
@@ -739,7 +752,16 @@ class WeekCalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
             event__live=True,
             event__sales_channels__contains=self.request.sales_channel.identifier
         ).prefetch_related(
-            'event___settings_objects', 'event__organizer___settings_objects'
+            Prefetch(
+                'event',
+                queryset=Event.objects.prefetch_related(
+                    '_settings_objects',
+                    Prefetch(
+                        'organizer',
+                        queryset=Organizer.objects.prefetch_related('_settings_objects')
+                    )
+                )
+            )
         )), self.request).using(settings.DATABASE_REPLICA), before, after, ebd, timezones)
         self._multiple_timezones = len(timezones) > 1
         return ebd
@@ -1068,7 +1090,16 @@ class DayCalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
             event__live=True,
             event__sales_channels__contains=self.request.sales_channel.identifier
         ).prefetch_related(
-            'event___settings_objects', 'event__organizer___settings_objects'
+            Prefetch(
+                'event',
+                queryset=Event.objects.prefetch_related(
+                    '_settings_objects',
+                    Prefetch(
+                        'organizer',
+                        queryset=Organizer.objects.prefetch_related('_settings_objects')
+                    )
+                )
+            )
         )), self.request).using(settings.DATABASE_REPLICA), before, after, ebd, timezones)
         self._multiple_timezones = len(timezones) > 1
         return ebd
@@ -1089,7 +1120,11 @@ class OrganizerIcalDownload(OrganizerViewMixin, View):
             ).order_by(
                 'date_from'
             ).prefetch_related(
-                '_settings_objects', 'organizer___settings_objects'
+                '_settings_objects',
+                Prefetch(
+                    'organizer',
+                    queryset=Organizer.objects.prefetch_related('_settings_objects')
+                )
             )
         )
         events += list(
@@ -1104,7 +1139,16 @@ class OrganizerIcalDownload(OrganizerViewMixin, View):
                 ),
                 request
             ).prefetch_related(
-                'event___settings_objects', 'event__organizer___settings_objects'
+                Prefetch(
+                    'event',
+                    queryset=Event.objects.prefetch_related(
+                        '_settings_objects',
+                        Prefetch(
+                            'organizer',
+                            queryset=Organizer.objects.prefetch_related('_settings_objects')
+                        )
+                    )
+                )
             ).order_by(
                 'date_from'
             )
