@@ -1,16 +1,17 @@
 {% load i18n %}
+{% load date_fast %}
 <div class="table-responsive">
     <table class="table table-calendar">
         <caption class="sr-only">{% trans "Calendar" %}</caption>
         <thead>
         <tr>
-            <th><span aria-hidden="true">{{ weeks.1.0.date|date:"D" }}</span><span class="sr-only">{{ weeks.1.0.date|date:"l" }}</span></th>
-            <th><span aria-hidden="true">{{ weeks.1.1.date|date:"D" }}</span><span class="sr-only">{{ weeks.1.1.date|date:"l" }}</span></th>
-            <th><span aria-hidden="true">{{ weeks.1.2.date|date:"D" }}</span><span class="sr-only">{{ weeks.1.2.date|date:"l" }}</span></th>
-            <th><span aria-hidden="true">{{ weeks.1.3.date|date:"D" }}</span><span class="sr-only">{{ weeks.1.3.date|date:"l" }}</span></th>
-            <th><span aria-hidden="true">{{ weeks.1.4.date|date:"D" }}</span><span class="sr-only">{{ weeks.1.4.date|date:"l" }}</span></th>
-            <th><span aria-hidden="true">{{ weeks.1.5.date|date:"D" }}</span><span class="sr-only">{{ weeks.1.5.date|date:"l" }}</span></th>
-            <th><span aria-hidden="true">{{ weeks.1.6.date|date:"D" }}</span><span class="sr-only">{{ weeks.1.6.date|date:"l" }}</span></th>
+            <th><span aria-hidden="true">{{ weeks.1.0.date|date_fast:"D" }}</span><span class="sr-only">{{ weeks.1.0.date|date_fast:"l" }}</span></th>
+            <th><span aria-hidden="true">{{ weeks.1.1.date|date_fast:"D" }}</span><span class="sr-only">{{ weeks.1.1.date|date_fast:"l" }}</span></th>
+            <th><span aria-hidden="true">{{ weeks.1.2.date|date_fast:"D" }}</span><span class="sr-only">{{ weeks.1.2.date|date_fast:"l" }}</span></th>
+            <th><span aria-hidden="true">{{ weeks.1.3.date|date_fast:"D" }}</span><span class="sr-only">{{ weeks.1.3.date|date_fast:"l" }}</span></th>
+            <th><span aria-hidden="true">{{ weeks.1.4.date|date_fast:"D" }}</span><span class="sr-only">{{ weeks.1.4.date|date_fast:"l" }}</span></th>
+            <th><span aria-hidden="true">{{ weeks.1.5.date|date_fast:"D" }}</span><span class="sr-only">{{ weeks.1.5.date|date_fast:"l" }}</span></th>
+            <th><span aria-hidden="true">{{ weeks.1.6.date|date_fast:"D" }}</span><span class="sr-only">{{ weeks.1.6.date|date_fast:"l" }}</span></th>
         </tr>
         </thead>
         <tbody>
@@ -19,8 +20,8 @@
                 {% for day in week %}
                     {% if day %}
                         <td class="day {% if day.events %}has-events{% else %}no-events{% endif %}"
-                            data-date="{{ day.date|date:"SHORT_DATE_FORMAT" }}">
-                            <p><time datetime="{{ day.date|date:"Y-m-d" }}">{{ day.day }}</time></p>
+                            data-date="{{ day.date|date_fast:"SHORT_DATE_FORMAT" }}">
+                            <p><time datetime="{{ day.date|date_fast:"Y-m-d" }}">{{ day.day }}</time></p>
                             <ul class="events">
                                 {% for event in day.events %}
                                     <li><a class="event {% if event.continued %}continued{% else %} {% spaceless %}
@@ -57,9 +58,9 @@
                                                     {% if not show_names|default_if_none:True %}
                                                         <strong>
                                                     {% endif %}
-                                                    <time datetime="{{ event.time|date:"H:i" }}">{{ event.time|date:"TIME_FORMAT" }}</time>
+                                                    <time datetime="{{ event.time|date_fast:"H:i" }}">{{ event.time|date_fast:"TIME_FORMAT" }}</time>
                                                     {% if event.event.settings.show_date_to and event.time_end %}
-                                                        <span aria-hidden="true">–</span><span class="sr-only">{% trans "until" context "timerange" %}</span> <time datetime="{{ event.time_end|date:"H:i" }}">{{ event.time_end|date:"TIME_FORMAT" }}</time>
+                                                        <span aria-hidden="true">–</span><span class="sr-only">{% trans "until" context "timerange" %}</span> <time datetime="{{ event.time_end|date_fast:"H:i" }}">{{ event.time_end|date_fast:"TIME_FORMAT" }}</time>
                                                     {% endif %}
                                                     {% if not show_names|default_if_none:True %}
                                                         </strong>
@@ -90,7 +91,7 @@
                                                     <span class="fa fa-ticket" aria-hidden="true"></span> {% trans "Sale over" %}
                                                 {% elif event.event.settings.presale_start_show_date and event.event.presale_start %}
                                                     <span class="fa fa-ticket" aria-hidden="true"></span>
-                                                    {% with date_human=event.event.presale_start|date:"SHORT_DATE_FORMAT" date_iso=event.event.presale_start|date:"c"  %}
+                                                    {% with date_human=event.event.presale_start|date_fast:"SHORT_DATE_FORMAT" date_iso=event.event.presale_start|date_fast:"c"  %}
                                                     {% blocktrans with start_date="<time datetime='"|add:date_iso|add:"'>"|add:date_human|add:"</time>"|safe %}
                                                         from {{ start_date }}
                                                     {% endblocktrans %}
