@@ -36,6 +36,7 @@ import uuid
 from collections import Counter, defaultdict, namedtuple
 from datetime import datetime, time, timedelta
 from decimal import Decimal
+from time import sleep
 from typing import List, Optional
 
 from celery.exceptions import MaxRetriesExceededError
@@ -76,6 +77,7 @@ from pretix.celery_app import app
 from pretix.presale.signals import (
     checkout_confirm_messages, fee_calculation_for_cart,
 )
+from pretix.testutils.middleware import storage as debug_storage
 
 
 class CartError(Exception):
@@ -1080,6 +1082,9 @@ class CartManager:
         self._operations.sort(key=lambda a: self.order[type(a)])
         seats_seen = set()
 
+        if 'sleep-after-quota-check' in debug_storage.debugflags:
+            sleep(2)
+
         for iop, op in enumerate(self._operations):
             if isinstance(op, self.RemoveOperation):
                 if op.position.expires > self.now_dt:
@@ -1337,6 +1342,7 @@ class CartManager:
                 self._extend_expiry_of_valid_existing_positions()
                 err = self._perform_operations() or err
                 self.recompute_final_prices_and_taxes()
+
             if err:
                 raise CartError(err)
 

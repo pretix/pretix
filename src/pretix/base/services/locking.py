@@ -42,6 +42,7 @@ from django.db import transaction
 from django.utils.timezone import now
 
 from pretix.base.models import EventLock
+from pretix.testutils.middleware import storage as debug_storage
 
 logger = logging.getLogger('pretix.base.locking')
 LOCK_TIMEOUT = 120
@@ -91,6 +92,8 @@ def lock_event(event):
     """
     if hasattr(event, '_lock') and event._lock:
         return True
+    if 'skip-locking' in debug_storage.debugflags:
+        return True
 
     if settings.HAS_REDIS:
         return lock_event_redis(event)
@@ -106,6 +109,8 @@ def release_event(event):
 
     :raises LockReleaseException: if we do not own the lock
     """
+    if 'skip-locking' in debug_storage.debugflags:
+        return True
     if not hasattr(event, '_lock') or not event._lock:
         raise LockReleaseException('Lock is not owned by this thread')
     if settings.HAS_REDIS:
