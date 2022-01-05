@@ -73,6 +73,7 @@
                     {% bootstrap_field form.available_until layout="control" %}
                     {% bootstrap_field form.sales_channels layout="control" %}
                     {% bootstrap_field form.hide_without_voucher layout="control" %}
+                    {% bootstrap_field form.require_approval layout="control" %}
                     {% if form.require_membership %}
                         {% bootstrap_field form.require_membership layout="control" %}
                         <div data-display-dependency="#{{ form.require_membership.id_for_label }}">
@@ -144,6 +145,7 @@
                     {% bootstrap_field formset.empty_form.available_until layout="control" %}
                     {% bootstrap_field formset.empty_form.sales_channels layout="control" %}
                     {% bootstrap_field formset.empty_form.hide_without_voucher layout="control" %}
+                    {% bootstrap_field formset.empty_form.require_approval layout="control" %}
                     {% if formset.empty_form.require_membership %}
                         {% bootstrap_field formset.empty_form.require_membership layout="control" %}
                         <div data-display-dependency="#{{ formset.empty_form.require_membership.id_for_label }}">

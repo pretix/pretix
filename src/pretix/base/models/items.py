@@ -764,6 +764,9 @@ class ItemVariation(models.Model):
     :type default_price: decimal.Decimal
     :param original_price: The item's "original" price. Will not be used for any calculations, will just be shown.
     :type original_price: decimal.Decimal
+    :param require_approval: If set to ``True``, orders containing this variation can only be processed and paid after
+    approval by an administrator
+    :type require_approval: bool
     """
     item = models.ForeignKey(
         Item,
@@ -799,6 +802,13 @@ class ItemVariation(models.Model):
         help_text=_('If set, this will be displayed next to the current price to show that the current price is a '
                     'discounted one. This is just a cosmetic setting and will not actually impact pricing.')
     )
+    require_approval = models.BooleanField(
+        verbose_name=_('Require approval'),
+        default=False,
+        help_text=_('If this variation is part of an order, the order will be put into an "approval" state and '
+                    'will need to be confirmed by you before it can be paid and completed. You can use this e.g. for '
+                    'discounted tickets that are only available to specific groups.'),
+    )
     require_membership = models.BooleanField(
         verbose_name=_('Require a valid membership'),
         default=False,
@@ -832,7 +842,7 @@ class ItemVariation(models.Model):
         blank=True,
     )
     hide_without_voucher = models.BooleanField(
-        verbose_name=_('This variation will only be shown if a voucher matching the product is redeemed.'),
+        verbose_name=_('Show only if a matching voucher is redeemed.'),
         default=False,
         help_text=_('This variation will be hidden from the event page until the user enters a voucher '
                     'that unlocks this variation.')

@@ -376,6 +376,7 @@ def test_item_detail_variations(token_client, organizer, event, team, item):
         "active": True,
         "description": None,
         "position": 0,
+        "require_approval": False,
         "require_membership": False,
         "require_membership_hidden": False,
         "require_membership_types": [],
@@ -508,6 +509,7 @@ def test_item_create_with_variation(token_client, organizer, event, item, catego
                         "en": "Comment"
                     },
                     "active": True,
+                    "require_approval": True,
                     "require_membership": False,
                     "require_membership_hidden": False,
                     "require_membership_types": [],
@@ -525,6 +527,7 @@ def test_item_create_with_variation(token_client, organizer, event, item, catego
         new_item = Item.objects.get(pk=resp.data['id'])
         assert new_item.variations.first().value.localize('de') == "Kommentar"
         assert new_item.variations.first().value.localize('en') == "Comment"
+        assert new_item.variations.first().require_approval is True
         assert set(new_item.variations.first().sales_channels) == set(get_all_sales_channels().keys())
 
 
@@ -1212,6 +1215,7 @@ TEST_VARIATIONS_RES = {
     "position": 0,
     "default_price": None,
     "price": "23.00",
+    "require_approval": False,
     "require_membership": False,
     "require_membership_hidden": False,
     "require_membership_types": [],
@@ -1230,6 +1234,7 @@ TEST_VARIATIONS_UPDATE = {
     "description": None,
     "position": 1,
     "default_price": "20.0",
+    "require_approval": False,
     "require_membership": False,
     "require_membership_hidden": False,
     "require_membership_types": [],

@@ -1442,6 +1442,13 @@ class AbstractPosition(models.Model):
         lines = [r.strip() for r in lines if r]
         return '\n'.join(lines).strip()
 
+    def requires_approval(self):
+        if self.item.require_approval:
+            return True
+        if self.variation and self.variation.require_approval:
+            return True
+        return False
+
 
 class OrderPayment(models.Model):
     """

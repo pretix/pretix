@@ -2797,6 +2797,46 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
         with scopes_disabled():
             self.assertEqual(Order.objects.first().locale, 'de')
 
+    def test_variation_require_approval(self):
+        self.workshop2a.require_approval = True
+        self.workshop2a.save()
+        with scopes_disabled():
+            cr1 = CartPosition.objects.create(
+                event=self.event, cart_id=self.session_key, item=self.workshop2, variation=self.workshop2a,
+                price=0, expires=now() + timedelta(minutes=10)
+            )
+
+        response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
+        doc = BeautifulSoup(response.content.decode(), "lxml")
+        self.assertEqual(len(doc.select(".thank-you")), 1)
+        with scopes_disabled():
+            self.assertFalse(CartPosition.objects.filter(id=cr1.id).exists())
+            self.assertEqual(Order.objects.count(), 1)
+            self.assertEqual(Order.objects.first().status, Order.STATUS_PENDING)
+            self.assertTrue(Order.objects.first().require_approval)
+            self.assertEqual(OrderPosition.objects.count(), 1)
+            self.assertEqual(Invoice.objects.count(), 0)
+
+    def test_item_with_variations_require_approval(self):
+        self.workshop2.require_approval = True
+        self.workshop2.save()
+        with scopes_disabled():
+            cr1 = CartPosition.objects.create(
+                event=self.event, cart_id=self.session_key, item=self.workshop2, variation=self.workshop2a,
+                price=0, expires=now() + timedelta(minutes=10)
+            )
+
+        response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
+        doc = BeautifulSoup(response.content.decode(), "lxml")
+        self.assertEqual(len(doc.select(".thank-you")), 1)
+        with scopes_disabled():
+            self.assertFalse(CartPosition.objects.filter(id=cr1.id).exists())
+            self.assertEqual(Order.objects.count(), 1)
+            self.assertEqual(Order.objects.first().status, Order.STATUS_PENDING)
+            self.assertTrue(Order.objects.first().require_approval)
+            self.assertEqual(OrderPosition.objects.count(), 1)
+            self.assertEqual(Invoice.objects.count(), 0)
+
 
 class QuestionsTestCase(BaseCheckoutTestCase, TestCase):
 

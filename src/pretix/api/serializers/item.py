@@ -58,8 +58,9 @@ class InlineItemVariationSerializer(I18nAwareModelSerializer):
     class Meta:
         model = ItemVariation
         fields = ('id', 'value', 'active', 'description',
-                  'position', 'default_price', 'price', 'original_price',
-                  'require_membership', 'require_membership_types', 'require_membership_hidden', 'available_from', 'available_until',
+                  'position', 'default_price', 'price', 'original_price', 'require_approval',
+                  'require_membership', 'require_membership_types',
+                  'require_membership_hidden', 'available_from', 'available_until',
                   'sales_channels', 'hide_without_voucher',)
 
     def __init__(self, *args, **kwargs):
@@ -74,8 +75,9 @@ class ItemVariationSerializer(I18nAwareModelSerializer):
     class Meta:
         model = ItemVariation
         fields = ('id', 'value', 'active', 'description',
-                  'position', 'default_price', 'price', 'original_price',
-                  'require_membership', 'require_membership_types', 'require_membership_hidden', 'available_from', 'available_until',
+                  'position', 'default_price', 'price', 'original_price', 'require_approval',
+                  'require_membership', 'require_membership_types',
+                  'require_membership_hidden', 'available_from', 'available_until',
                   'sales_channels', 'hide_without_voucher',)
 
     def __init__(self, *args, **kwargs):
