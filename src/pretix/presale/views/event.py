@@ -101,7 +101,8 @@ def item_group_by_category(items):
 
 
 def get_grouped_items(event, subevent=None, voucher=None, channel='web', require_seat=0, base_qs=None, allow_addons=False,
-                      quota_cache=None, filter_items=None, filter_categories=None, memberships=None):
+                      quota_cache=None, filter_items=None, filter_categories=None, memberships=None,
+                      ignore_hide_sold_out_for_item_ids=None):
     base_qs_set = base_qs is not None
     base_qs = base_qs if base_qs is not None else event.items
 
@@ -273,7 +274,9 @@ def get_grouped_items(event, subevent=None, voucher=None, channel='web', require
                     item.check_quotas(subevent=subevent, _cache=quota_cache, include_bundled=True)
                 )
 
-            if event.settings.hide_sold_out and item.cached_availability[0] < Quota.AVAILABILITY_RESERVED:
+            if not (
+                    ignore_hide_sold_out_for_item_ids and item.pk in ignore_hide_sold_out_for_item_ids
+            ) and event.settings.hide_sold_out and item.cached_availability[0] < Quota.AVAILABILITY_RESERVED:
                 item._remove = True
                 continue
 
@@ -359,7 +362,7 @@ def get_grouped_items(event, subevent=None, voucher=None, channel='web', require
                 ) and not getattr(v, '_remove', False)
             ]
 
-            if event.settings.hide_sold_out:
+            if not (ignore_hide_sold_out_for_item_ids and item.pk in ignore_hide_sold_out_for_item_ids) and event.settings.hide_sold_out:
                 item.available_variations = [v for v in item.available_variations
                                              if v.cached_availability[0] >= Quota.AVAILABILITY_RESERVED]
 

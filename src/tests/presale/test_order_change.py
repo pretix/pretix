@@ -818,6 +818,30 @@ class OrderChangeAddonsTest(BaseOrdersTest):
         with scopes_disabled():
             assert self.ticket_pos.addons.count() == 0
 
+    def test_quota_hide_sold_out_do_not_hide_initial(self):
+        self.event.settings.hide_sold_out = True
+        self.workshopquota.size = 1
+        self.workshopquota.save()
+
+        with scopes_disabled():
+            OrderPosition.objects.create(
+                order=self.order,
+                item=self.workshop1,
+                variation=None,
+                price=Decimal("12"),
+                addon_to=self.ticket_pos,
+                attendee_name_parts={'full_name': "Peter"}
+            )
+            self.order.total += Decimal("12")
+            self.order.save()
+
+        response = self.client.get(
+            '/%s/%s/order/%s/%s/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret)
+        )
+        assert response.status_code == 200
+        assert 'Workshop 1' in response.content.decode()
+        assert 'Workshop 2' not in response.content.decode()
+
     def test_quota_sold_out_replace(self):
         self.workshopquota.size = 1
         self.workshopquota.save()

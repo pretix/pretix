@@ -1238,6 +1238,7 @@ class OrderChange(EventViewMixin, OrderDetailMixin, TemplateView):
                                 )
                                 if self.order.customer else None
                             ),
+                            ignore_hide_sold_out_for_item_ids={k[0] for k in current_addon_products.keys()}
                         )
                         item_cache[ckey] = items
                     else:
