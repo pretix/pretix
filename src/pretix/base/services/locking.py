@@ -59,7 +59,7 @@ def pg_lock_key(obj):
     if not keyspace:
         raise ValueError(f"No key space defined for locking objects of type {type(obj)}")
     assert isinstance(objectid, int)
-    key = objectid << 10 & keyspace
+    key = (objectid << 10) | keyspace
     return key
 
 
