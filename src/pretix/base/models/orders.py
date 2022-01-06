@@ -75,7 +75,6 @@ from pretix.base.email import get_email_context
 from pretix.base.i18n import language
 from pretix.base.models import Customer, User
 from pretix.base.reldate import RelativeDateWrapper
-from pretix.base.services.locking import LOCK_TIMEOUT, NoLockManager
 from pretix.base.settings import PERSON_NAME_SCHEMES
 from pretix.base.signals import order_gracefully_delete
 
