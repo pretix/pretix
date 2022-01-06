@@ -1290,6 +1290,9 @@ class CartManager:
                     p.save()
                 _save_answers(p, {}, p._answers)
         CartPosition.objects.bulk_create([p for p in new_cart_positions if not getattr(p, '_answers', None) and not p.pk])
+
+        if 'sleep-before-commit' in debug_storage.debugflags:
+            sleep(2)
         return err
 
     def recompute_final_prices_and_taxes(self):

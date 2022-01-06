@@ -68,9 +68,3 @@ def quota(event, item):
     )
     q.items.add(item)
     return q
-
-
-@pytest.fixture(name='live_server', scope='function')
-def _live_server(live_server):
-    # See https://github.com/pytest-dev/pytest-django/issues/454
-    return live_server
