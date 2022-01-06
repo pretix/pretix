@@ -4,7 +4,6 @@ import aiohttp
 import pytest
 from asgiref.sync import sync_to_async
 from django_scopes import scopes_disabled
-from lxml import html
 
 from pretix.base.models import CartPosition
 
@@ -12,13 +11,7 @@ from pretix.base.models import CartPosition
 @pytest.fixture
 async def session(live_server, event):
     async with aiohttp.ClientSession() as session:
-        r = await session.get(
-            f"{live_server}/{event.organizer.slug}/{event.slug}/",
-        )
-        text = await r.text()
-        tree = html.fromstring(text)
-        csrftoken = tree.find('.//input[@name="csrfmiddlewaretoken"]').get('value')
-        yield session, csrftoken
+        yield session
 
 
 async def post(session, url, data):
@@ -30,14 +23,12 @@ async def post(session, url, data):
 async def test_quota_race_condition_happens_if_we_disable_locks(live_server, session, event, item, quota):
     # This test exists to ensure that our test setup makes sense. If it fails, all tests down below
     # might be useless.
-    session, csrftoken = session
     quota.size = 1
     await sync_to_async(quota.save)()
 
-    url = f"/{event.organizer.slug}/{event.slug}/cart/add?_debug_flag=skip-locking&_debug_flag=sleep-after-quota-check"
+    url = f"/{event.organizer.slug}/{event.slug}/cart/add?_debug_flag=skip-csrf&_debug_flag=skip-locking&_debug_flag=sleep-after-quota-check"
     payload = {
         f'item_{item.pk}': '1',
-        'csrfmiddlewaretoken': csrftoken,
     }
 
     r1, r2 = await asyncio.gather(
@@ -51,14 +42,12 @@ async def test_quota_race_condition_happens_if_we_disable_locks(live_server, ses
 
 @pytest.mark.asyncio
 async def test_cart_race_condition_prevented_by_locks(live_server, session, event, item, quota):
-    session, csrftoken = session
     quota.size = 1
     await sync_to_async(quota.save)()
 
-    url = f"/{event.organizer.slug}/{event.slug}/cart/add?_debug_flag=sleep-after-quota-check"
+    url = f"/{event.organizer.slug}/{event.slug}/cart/add?_debug_flag=skip-csrf&_debug_flag=sleep-after-quota-check"
     payload = {
         f'item_{item.pk}': '1',
-        'csrfmiddlewaretoken': csrftoken,
     }
 
     r1, r2 = await asyncio.gather(

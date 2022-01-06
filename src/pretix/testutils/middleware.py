@@ -13,4 +13,8 @@ class DebugFlagMiddleware:
             storage.debugflags = request.GET.getlist('_debug_flag')
         else:
             storage.debugflags = []
+
+        if 'skip-csrf' in storage.debugflags:
+            request.csrf_processing_done = True
+
         return self.get_response(request)
