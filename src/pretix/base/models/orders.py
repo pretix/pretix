@@ -1442,10 +1442,12 @@ class AbstractPosition(models.Model):
         lines = [r.strip() for r in lines if r]
         return '\n'.join(lines).strip()
 
-    def requires_approval(self):
+    def requires_approval(self, invoice_address=None):
         if self.item.require_approval:
             return True
         if self.variation and self.variation.require_approval:
+            return True
+        if self.item.tax_rule and self.item.tax_rule._require_approval(invoice_address):
             return True
         return False
 

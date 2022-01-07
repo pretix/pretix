@@ -337,6 +337,13 @@ class TaxRule(LoggedModel):
 
         return False
 
+    def _require_approval(self, invoice_address):
+        if self._custom_rules:
+            rule = self.get_matching_rule(invoice_address)
+            if rule.get('action', 'vat') == 'require_approval':
+                return True
+        return False
+
     def _tax_applicable(self, invoice_address):
         if self._custom_rules:
             rule = self.get_matching_rule(invoice_address)

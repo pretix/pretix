@@ -490,6 +490,7 @@ class OrganizerCreate(CreateView):
             organizer=form.instance, name=_('Administrators'),
             all_events=True, can_create_events=True, can_change_teams=True, can_manage_gift_cards=True,
             can_change_organizer_settings=True, can_change_event_settings=True, can_change_items=True,
+            can_manage_customers=True,
             can_view_orders=True, can_change_orders=True, can_view_vouchers=True, can_change_vouchers=True
         )
         t.members.add(self.request.user)
