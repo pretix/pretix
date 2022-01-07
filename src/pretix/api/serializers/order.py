@@ -1426,7 +1426,7 @@ class InlineInvoiceLineSerializer(I18nAwareModelSerializer):
 
     class Meta:
         model = InvoiceLine
-        fields = ('position', 'description', 'item', 'variation', 'attendee_name', 'event_date_from',
+        fields = ('position', 'description', 'item', 'variation', 'subevent', 'attendee_name', 'event_date_from',
                   'event_date_to', 'gross_value', 'tax_value', 'tax_rate', 'tax_name', 'fee_type',
                   'fee_internal_type', 'event_location')
 
