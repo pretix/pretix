@@ -59,7 +59,7 @@ lines                                 list of objects            The actual invo
                                                                  all lines not created by a product (e.g. a shipping or
                                                                  cancellation fee).
 ├ subevent                            integer                    Event series date ID used to create this line. Note that everything
-                                                                 about the subvevent might have changed since the creation
+                                                                 about the subevent might have changed since the creation
                                                                  of the invoice. Can be ``null`` for all invoice lines
                                                                  created before this field was introduced as well as for
                                                                  all lines not created by a product (e.g. a shipping or
