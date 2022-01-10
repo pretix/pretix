@@ -856,7 +856,7 @@ def _create_order(event: Event, email: str, positions: List[CartPosition], now_d
             total=total,
             testmode=True if sales_channel.testmode_supported and event.testmode else False,
             meta_info=json.dumps(meta_info or {}),
-            require_approval=any(p.requires_approval() for p in positions),
+            require_approval=any(p.requires_approval(invoice_address=address) for p in positions),
             sales_channel=sales_channel.identifier,
             customer=customer,
         )
@@ -2071,7 +2071,7 @@ class OrderChangeManager:
         split_order.code = None
         split_order.datetime = now()
         split_order.secret = generate_secret()
-        split_order.require_approval = self.order.require_approval and any(p.requires_approval() for p in split_positions)
+        split_order.require_approval = self.order.require_approval and any(p.requires_approval(invoice_address=self._invoice_address) for p in split_positions)
         split_order.save()
         split_order.log_action('pretix.event.order.changed.split_from', user=self.user, auth=self.auth, data={
             'original_order': self.order.code
