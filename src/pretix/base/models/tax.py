@@ -211,7 +211,7 @@ class TaxRule(LoggedModel):
             rule = self.get_matching_rule(invoice_address)
             if rule.get('action', 'vat') == 'block':
                 raise self.SaleNotAllowed()
-            if rule.get('action', 'vat') == 'vat' and rule.get('rate') is not None:
+            if rule.get('action', 'vat') in ('vat', 'require_approval') and rule.get('rate') is not None:
                 return Decimal(rule.get('rate'))
         return Decimal(self.rate)
 
@@ -349,7 +349,7 @@ class TaxRule(LoggedModel):
             rule = self.get_matching_rule(invoice_address)
             if rule.get('action', 'vat') == 'block':
                 raise self.SaleNotAllowed()
-            return rule.get('action', 'vat') == 'vat'
+            return rule.get('action', 'vat') in ('vat', 'require_approval')
 
         if not self.eu_reverse_charge:
             # No reverse charge rules? Always apply VAT!

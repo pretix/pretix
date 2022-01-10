@@ -478,6 +478,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
             assert not CartPosition.objects.filter(pk=cr1.pk).exists()
             o = Order.objects.last()
             assert o.require_approval
+            assert o.positions.first().tax_rate == Decimal('19.00')
 
     def _test_country_taxing(self):
         self._enable_country_specific_taxing()
