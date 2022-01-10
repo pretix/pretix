@@ -1020,6 +1020,7 @@ TEST_INVOICE_RES = {
         {
             "position": 1,
             "description": "Budget Ticket<br />Attendee: Peter",
+            'subevent': None,
             'event_date_from': '2017-12-27T10:00:00Z',
             'event_date_to': None,
             'event_location': None,
@@ -1036,6 +1037,7 @@ TEST_INVOICE_RES = {
         {
             "position": 2,
             "description": "Payment fee",
+            'subevent': None,
             'event_date_from': '2017-12-27T10:00:00Z',
             'event_date_to': None,
             'event_location': None,
@@ -4440,6 +4442,7 @@ def test_order_create_invoice(token_client, organizer, event, order):
             {
                 'position': 1,
                 'description': 'Budget Ticket<br />Attendee: Peter',
+                'subevent': None,
                 'event_date_from': '2017-12-27T10:00:00Z',
                 'event_date_to': None,
                 'event_location': None,
@@ -4456,6 +4459,7 @@ def test_order_create_invoice(token_client, organizer, event, order):
             {
                 'position': 2,
                 'description': 'Payment fee',
+                'subevent': None,
                 'event_date_from': '2017-12-27T10:00:00Z',
                 'event_date_to': None,
                 'event_location': None,

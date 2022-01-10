@@ -58,6 +58,12 @@ lines                                 list of objects            The actual invo
                                                                  created before this field was introduced as well as for
                                                                  all lines not created by a product (e.g. a shipping or
                                                                  cancellation fee).
+├ subevent                            integer                    Event series date ID used to create this line. Note that everything
+                                                                 about the subevent might have changed since the creation
+                                                                 of the invoice. Can be ``null`` for all invoice lines
+                                                                 created before this field was introduced as well as for
+                                                                 all lines not created by a product (e.g. a shipping or
+                                                                 cancellation fee) as well as for all events that are not a series.
 ├ fee_type                            string                     Fee type, e.g. ``shipping``, ``service``, ``payment``,
                                                                  ``cancellation``, ``giftcard``, or ``other. Can be ``null`` for
                                                                  all invoice lines
@@ -119,6 +125,10 @@ internal_reference                    string                     Customer's refe
 .. versionchanged:: 4.1
 
    The attribute ``lines.event_location`` has been added.
+
+.. versionchanged:: 4.6
+
+   The attribute ``lines.subevent`` has been added.
 
 
 Endpoints
@@ -185,6 +195,7 @@ Endpoints
                 "description": "Budget Ticket",
                 "item": 1234,
                 "variation": 245,
+                "subevent": null,
                 "fee_type": null,
                 "fee_internal_type": null,
                 "event_date_from": "2017-12-27T10:00:00Z",
@@ -274,6 +285,7 @@ Endpoints
             "description": "Budget Ticket",
             "item": 1234,
             "variation": 245,
+            "subevent": null,
             "fee_type": null,
             "fee_internal_type": null,
             "event_date_from": "2017-12-27T10:00:00Z",
