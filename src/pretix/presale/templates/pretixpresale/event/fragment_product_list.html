@@ -182,7 +182,8 @@
                                                        {% if not ev.presale_is_running %}disabled{% endif %}
                                                        id="variation_{{ item.id }}_{{ var.id }}"
                                                        name="variation_{{ item.id }}_{{ var.id }}"
-                                                       title="{% blocktrans with item=item.name var=var.name %}Do you want to order {{ item }}, {{ var }}?{% endblocktrans %}">
+                                                       aria-label="{% blocktrans with item=item.name var=var %}Add {{ item }}, {{ var }} to cart{% endblocktrans %}"
+                                                       {% if var.description %} aria-describedby="item-{{ item.pk }}-{{ var.pk }}-description"{% endif %}>
                                                <i class="fa fa-cart-plus fa-lg" aria-hidden="true"></i>
                                             </label>
                                         {% else %}
