@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-30 16:13+0000\n"
-"PO-Revision-Date: 2022-01-10 20:00+0000\n"
+"PO-Revision-Date: 2022-01-11 19:00+0000\n"
 "Last-Translator: Aya Yabuki <a.yabuki@enobyte.com>\n"
 "Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/"
 "pretix-js/ja/>\n"
@@ -64,15 +64,15 @@ msgstr "銀行へお問い合わせ"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:30
 msgid "Select a check-in list"
-msgstr ""
+msgstr "チェックインリストを選択してください"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:31
 msgid "No active check-in lists found."
-msgstr ""
+msgstr "アクティブなチェックインリストは見つかりません。"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:32
 msgid "Switch check-in list"
-msgstr ""
+msgstr "チェックインリストを切り替え"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:33
 msgid "Search results"
@@ -80,16 +80,15 @@ msgstr "検索結果"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:34
 msgid "No tickets found"
-msgstr ""
+msgstr "チケットが見つかりません"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:35
 msgid "Result"
-msgstr ""
+msgstr "結果"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:36
-#, fuzzy
 msgid "This ticket requires special attention"
-msgstr "要注意チケット"
+msgstr "このチケットは特別な対応が必要です"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:37
 #, fuzzy
@@ -106,11 +105,11 @@ msgstr "出口"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:40
 msgid "Scan a ticket or search and press return…"
-msgstr ""
+msgstr "チケットのスキャンや検索を行い、エンターキーで確定してください"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:41
 msgid "Load more"
-msgstr ""
+msgstr "もっと見る"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:42
 msgid "Valid"
@@ -141,10 +140,9 @@ msgstr "次へ"
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:49
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:58
 msgid "Ticket not paid"
-msgstr ""
+msgstr "チケット未払い"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:50
-#, fuzzy
 msgid "This ticket is not yet paid. Do you want to continue anyways?"
 msgstr "チケットの支払いが完了していません。このまま続けますか？"
 
@@ -160,47 +158,55 @@ msgstr "有効なチケット"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:53
 msgid "Exit recorded"
-msgstr ""
+msgstr "記録を保存"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:54
+#, fuzzy
 msgid "Ticket already used"
-msgstr ""
+msgstr "チケットは既に使用済み"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:55
+#, fuzzy
 msgid "Information required"
-msgstr ""
+msgstr "情報が必要"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:56
+#, fuzzy
 msgid "Unknown ticket"
-msgstr ""
+msgstr "未発券のチケット"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:57
+#, fuzzy
 msgid "Ticket type not allowed here"
-msgstr ""
+msgstr "ここでは使用できないチケットの種類"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:59
+#, fuzzy
 msgid "Entry not allowed"
-msgstr ""
+msgstr "入力不可"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:60
 msgid "Ticket code revoked/changed"
-msgstr ""
+msgstr "チケットコードのブロック/変更"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:61
+#, fuzzy
 msgid "Order canceled"
-msgstr ""
+msgstr "注文の取り消し"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:62
+#, fuzzy
 msgid "Checked-in Tickets"
-msgstr ""
+msgstr "チェックインチケット"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:63
 msgid "Valid Tickets"
-msgstr ""
+msgstr "有効なチケット"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:64
+#, fuzzy
 msgid "Currently inside"
-msgstr ""
+msgstr "現在の状況"
 
 #: pretix/static/lightbox/js/lightbox.js:96
 msgid "close"
@@ -211,7 +217,7 @@ msgstr "閉じる"
 msgid ""
 "Your request is currently being processed. Depending on the size of your "
 "event, this might take up to a few minutes."
-msgstr ""
+msgstr "お客様のリクエストは現在処理中です。イベントの規模により、数分かかる場合があります。"
 
 #: pretix/static/pretixbase/js/asynctask.js:48
 #: pretix/static/pretixbase/js/asynctask.js:124
