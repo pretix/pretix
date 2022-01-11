@@ -183,6 +183,7 @@
                                                        id="variation_{{ item.id }}_{{ var.id }}"
                                                        name="variation_{{ item.id }}_{{ var.id }}"
                                                        title="{% blocktrans with item=item.name var=var.name %}Do you want to order {{ item }}, {{ var }}?{% endblocktrans %}">
+                                               <i class="fa fa-cart-plus fa-lg" aria-hidden="true"></i>
                                             </label>
                                         {% else %}
                                             <input type="number" class="form-control input-item-count" placeholder="0" min="0"
@@ -307,6 +308,7 @@
                                            name="item_{{ item.id }}" id="item_{{ item.id }}"
                                            aria-label="{% blocktrans with item=item.name %}Add {{ item }} to cart{% endblocktrans %}"
                                            {% if item.description %} aria-describedby="item-{{ item.id }}-description"{% endif %}>
+                                           <i class="fa fa-cart-plus fa-lg" aria-hidden="true"></i>
                                 </label>
                             {% else %}
                                 <input type="number" class="form-control input-item-count" placeholder="0" min="0"
