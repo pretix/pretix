@@ -634,6 +634,16 @@ $(function () {
 
     // Lightbox
     lightbox.init();
+
+    // free-range price input auto-check checkbox
+    $(".input-item-price").each(function() {
+        var input = document.getElementById("item_" + this.id.substr("price-item-".length));
+        if (input && input.type == "checkbox") {
+            $(this).on("change", function() {
+                input.checked = true;
+            });
+        }
+    });
 });
 
 function copy_answers(elements, answers) {
