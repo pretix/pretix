@@ -89,6 +89,7 @@ class Customer(LoggedModel):
         self.name_parts = {}
         self.name_cached = ''
         self.email = None
+        self.phone = None
         self.save()
         self.all_logentries().update(data={}, shredded=True)
         self.orders.all().update(customer=None)
