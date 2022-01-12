@@ -24,6 +24,10 @@
                 </dd>
                 <dt>{% trans "Name" %}</dt>
                 <dd>{{ customer.name }}</dd>
+                {% if customer.phone %}
+                <dt>{% trans "Phone" %}</dt>
+                <dd>{{ customer.phone }}</dd>
+                {% endif %}
             </dl>
             <div class="text-right">
                 <a href="{% eventurl request.organizer "presale:organizer.customer.change" %}"

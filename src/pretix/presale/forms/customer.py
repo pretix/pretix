@@ -31,8 +31,11 @@ from django.contrib.auth.password_validation import (
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
+from phonenumber_field.formfields import PhoneNumberField
 
-from pretix.base.forms.questions import NamePartsFormField
+from pretix.base.forms.questions import (
+    NamePartsFormField, WrappedPhoneNumberPrefixWidget,
+)
 from pretix.base.i18n import get_language_without_region
 from pretix.base.models import Customer
 from pretix.base.services.mail import mail
@@ -394,7 +397,7 @@ class ChangeInfoForm(forms.ModelForm):
 
     class Meta:
         model = Customer
-        fields = ('name_parts', 'email')
+        fields = ('name_parts', 'email', 'phone')
 
     def __init__(self, request=None, *args, **kwargs):
         self.request = request
@@ -406,6 +409,11 @@ class ChangeInfoForm(forms.ModelForm):
             scheme=request.organizer.settings.name_scheme,
             titles=request.organizer.settings.name_scheme_titles,
             label=_('Name'),
+        )
+        self.fields['phone'] = PhoneNumberField(
+            label=_('Phone'),
+            required=False,
+            widget=WrappedPhoneNumberPrefixWidget()
         )
 
     def clean_password_current(self):
