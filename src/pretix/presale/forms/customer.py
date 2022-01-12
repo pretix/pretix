@@ -126,6 +126,11 @@ class RegistrationForm(forms.Form):
     email = forms.EmailField(
         label=_("E-mail"),
     )
+    phone = PhoneNumberField(
+        label=_('Phone'),
+        required=False,
+        widget=WrappedPhoneNumberPrefixWidget()
+    )
 
     error_messages = {
         'rate_limit': _("We've received a lot of registration requests from you, please wait 10 minutes before you try again."),
@@ -139,6 +144,12 @@ class RegistrationForm(forms.Form):
     def __init__(self, request=None, *args, **kwargs):
         self.request = request
         super().__init__(*args, **kwargs)
+
+        if request.event:
+            if not request.event.settings.order_phone_asked:
+                self.fields.pop('phone')
+            elif request.event.settings.order_phone_required:
+                self.fields['phone'].required = True
 
         self.fields['name_parts'] = NamePartsFormField(
             max_length=255,
