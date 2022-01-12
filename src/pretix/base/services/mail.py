@@ -77,7 +77,7 @@ from pretix.base.signals import email_filter, global_email_filter
 from pretix.celery_app import app
 from pretix.helpers.hierarkey import clean_filename
 from pretix.multidomain.urlreverse import build_absolute_uri
-from pretix.presale.ical import get_ical
+from pretix.presale.ical import get_private_icals
 
 logger = logging.getLogger('pretix.base.mail')
 INVALID_ADDRESS = 'invalid-pretix-mail-address'
@@ -429,18 +429,7 @@ def mail_send_task(self, *args, to: List[str], subject: str, body: str, html: st
                                     }
                                 )
                         if attach_ical:
-                            ical_events = set()
-                            if event.has_subevents:
-                                if position:
-                                    ical_events.add(position.subevent)
-                                else:
-                                    for p in order.positions.all():
-                                        ical_events.add(p.subevent)
-                            else:
-                                ical_events.add(order.event)
-
-                            for i, e in enumerate(ical_events):
-                                cal = get_ical([e])
+                            for i, cal in enumerate(get_private_icals(event, [position] if position else order.positions.all())):
                                 email.attach('event-{}.ics'.format(i), cal.serialize(), 'text/calendar')
 
             email = email_filter.send_chained(event, 'message', message=email, order=order, user=user)

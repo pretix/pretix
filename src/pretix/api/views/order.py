@@ -659,12 +659,13 @@ class OrderViewSet(viewsets.ModelViewSet):
 
                 _order_placed_email(
                     request.event, order, payment.payment_provider if payment else None, email_template,
-                    log_entry, invoice, payment
+                    log_entry, invoice, payment, is_free=free_flow
                 )
                 if email_attendees:
                     for p in order.positions.all():
                         if p.addon_to_id is None and p.attendee_email and p.attendee_email != order.email:
-                            _order_placed_email_attendee(request.event, order, p, email_attendees_template, log_entry)
+                            _order_placed_email_attendee(request.event, order, p, email_attendees_template, log_entry,
+                                                         is_free=free_flow)
 
                 if not free_flow and order.status == Order.STATUS_PAID and payment:
                     payment._send_paid_mail(invoice, None, '')

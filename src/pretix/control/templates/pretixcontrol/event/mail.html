@@ -21,8 +21,13 @@
                 {% endpropagated %}
                 {% bootstrap_field form.mail_prefix layout="control" %}
                 {% bootstrap_field form.mail_attach_tickets layout="control" %}
-                {% bootstrap_field form.mail_attach_ical layout="control" %}
                 {% bootstrap_field form.mail_sales_channel_placed_paid layout="control" %}
+            </fieldset>
+            <fieldset>
+                <legend>{% trans "Calender invites" %}</legend>
+                {% bootstrap_field form.mail_attach_ical layout="control" %}
+                {% bootstrap_field form.mail_attach_ical_paid_only layout="control" %}
+                {% bootstrap_field form.mail_attach_ical_description layout="control" %}
             </fieldset>
             <fieldset>
                 <legend>{% trans "E-mail design" %}</legend>

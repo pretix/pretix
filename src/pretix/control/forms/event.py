@@ -873,6 +873,8 @@ class MailSettingsForm(SMTPSettingsMixin, SettingsForm):
         'mail_attach_ical',
         'mail_attach_tickets',
         'mail_attachment_new_order',
+        'mail_attach_ical_paid_only',
+        'mail_attach_ical_description',
     ]
 
     mail_sales_channel_placed_paid = forms.MultipleChoiceField(
@@ -1080,7 +1082,8 @@ class MailSettingsForm(SMTPSettingsMixin, SettingsForm):
         'mail_text_download_reminder_attendee': ['event', 'order', 'position'],
         'mail_text_resend_link': ['event', 'order'],
         'mail_text_waiting_list': ['event', 'waiting_list_entry'],
-        'mail_text_resend_all_links': ['event', 'orders']
+        'mail_text_resend_all_links': ['event', 'orders'],
+        'mail_attach_ical_description': ['event', 'event_or_subevent'],
     }
 
     def _set_field_placeholders(self, fn, base_parameters):
