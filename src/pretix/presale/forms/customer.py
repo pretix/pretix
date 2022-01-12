@@ -145,10 +145,11 @@ class RegistrationForm(forms.Form):
         self.request = request
         super().__init__(*args, **kwargs)
 
-        if request.event:
-            if not request.event.settings.order_phone_asked:
+        event = getattr(request, "event", None)
+        if event:
+            if not event.settings.order_phone_asked:
                 self.fields.pop('phone')
-            elif request.event.settings.order_phone_required:
+            elif event.settings.order_phone_required:
                 self.fields['phone'].required = True
 
         self.fields['name_parts'] = NamePartsFormField(
