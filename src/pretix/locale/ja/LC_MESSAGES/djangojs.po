@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-30 16:13+0000\n"
-"PO-Revision-Date: 2022-01-11 19:00+0000\n"
+"PO-Revision-Date: 2022-01-12 09:19+0000\n"
 "Last-Translator: Aya Yabuki <a.yabuki@enobyte.com>\n"
 "Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/"
 "pretix-js/ja/>\n"
@@ -226,18 +226,22 @@ msgstr ""
 
 #: pretix/static/pretixbase/js/asynctask.js:54
 #: pretix/static/pretixbase/js/asynctask.js:130
+#, fuzzy
 msgid ""
 "Your request arrived on the server but we still wait for it to be processed. "
 "If this takes longer than two minutes, please contact us or go back in your "
 "browser and try again."
 msgstr ""
+"お客様のリクエストはサーバーに到着しましたが、まだ処理待ちの状態です。2分以上かかる場合は、弊社にお問い合わせいただくか、ブラウザを戻して再度お試しくださ"
+"い。"
 
 #: pretix/static/pretixbase/js/asynctask.js:89
 #: pretix/static/pretixbase/js/asynctask.js:175
 #: pretix/static/pretixbase/js/asynctask.js:180
 #: pretix/static/pretixcontrol/js/ui/mail.js:24
+#, fuzzy
 msgid "An error of type {code} occurred."
-msgstr ""
+msgstr "{code} のエラーが発生しました。"
 
 #: pretix/static/pretixbase/js/asynctask.js:92
 msgid ""
