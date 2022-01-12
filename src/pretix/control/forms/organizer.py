@@ -44,12 +44,15 @@ from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _, pgettext_lazy
 from django_scopes.forms import SafeModelMultipleChoiceField
 from i18nfield.forms import I18nFormField, I18nTextarea
+from phonenumber_field.formfields import PhoneNumberField
 from pytz import common_timezones
 
 from pretix.api.models import WebHook
 from pretix.api.webhooks import get_all_webhook_events
 from pretix.base.forms import I18nModelForm, PlaceholderValidator, SettingsForm
-from pretix.base.forms.questions import NamePartsFormField
+from pretix.base.forms.questions import (
+    NamePartsFormField, WrappedPhoneNumberPrefixWidget,
+)
 from pretix.base.forms.widgets import SplitDateTimePickerWidget
 from pretix.base.models import (
     Customer, Device, EventMetaProperty, Gate, GiftCard, Membership,
@@ -535,11 +538,15 @@ class CustomerUpdateForm(forms.ModelForm):
 
     class Meta:
         model = Customer
-        fields = ['is_active', 'name_parts', 'email', 'is_verified', 'locale']
+        fields = ['is_active', 'name_parts', 'email', 'is_verified', 'phone', 'locale']
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-
+        self.fields['phone'] = PhoneNumberField(
+            label=_('Phone'),
+            required=False,
+            widget=WrappedPhoneNumberPrefixWidget()
+        )
         self.fields['name_parts'] = NamePartsFormField(
             max_length=255,
             required=False,
