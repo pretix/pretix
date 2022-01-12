@@ -179,7 +179,9 @@
 										{% if var.order_max == 1 %}
                                             <label class="item-checkbox-label">
                                                 <input type="checkbox" value="1"
+                                                    {% if item.free_price %}
                                                        data-checked-onchange="price-variation-{{ item.pk }}-{{ var.pk }}"
+                                                    {% endif %}
                                                        {% if not ev.presale_is_running %}disabled{% endif %}
                                                        id="variation_{{ item.id }}_{{ var.id }}"
                                                        name="variation_{{ item.id }}_{{ var.id }}"
@@ -306,7 +308,9 @@
 							{% if item.order_max == 1 %}
                                 <label class="item-checkbox-label">
                                     <input type="checkbox" value="1" {% if itemnum == 1 %}checked{% endif %}
+                                        {% if item.free_price %}
                                            data-checked-onchange="price-item-{{ item.pk }}"
+                                        {% endif %}
                                            {% if not ev.presale_is_running %}disabled{% endif %}
                                            name="item_{{ item.id }}" id="item_{{ item.id }}"
                                            aria-label="{% blocktrans with item=item.name %}Add {{ item }} to cart{% endblocktrans %}"
