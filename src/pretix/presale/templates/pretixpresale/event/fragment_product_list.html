@@ -174,15 +174,20 @@
                                     <div class="col-md-2 col-xs-6 availability-box unavailable">
                                         <p><small><a href="#voucher">{% trans "Enter a voucher code below to buy this ticket." %}</a></small></p>
                                     </div>
-                                    {% elif var.cached_availability.0 == 100 %}
+                                {% elif var.cached_availability.0 == 100 %}
                                     <div class="col-md-2 col-xs-6 availability-box available">
 										{% if var.order_max == 1 %}
                                             <label class="item-checkbox-label">
                                                 <input type="checkbox" value="1"
+                                                    {% if item.free_price %}
+                                                       data-checked-onchange="price-variation-{{ item.pk }}-{{ var.pk }}"
+                                                    {% endif %}
                                                        {% if not ev.presale_is_running %}disabled{% endif %}
                                                        id="variation_{{ item.id }}_{{ var.id }}"
                                                        name="variation_{{ item.id }}_{{ var.id }}"
-                                                       title="{% blocktrans with item=item.name var=var.name %}Do you want to order {{ item }}, {{ var }}?{% endblocktrans %}">
+                                                       aria-label="{% blocktrans with item=item.name var=var %}Add {{ item }}, {{ var }} to cart{% endblocktrans %}"
+                                                       {% if var.description %} aria-describedby="item-{{ item.pk }}-{{ var.pk }}-description"{% endif %}>
+                                               <i class="fa fa-cart-plus fa-lg" aria-hidden="true"></i>
                                             </label>
                                         {% else %}
                                             <input type="number" class="form-control input-item-count" placeholder="0" min="0"
@@ -303,10 +308,14 @@
 							{% if item.order_max == 1 %}
                                 <label class="item-checkbox-label">
                                     <input type="checkbox" value="1" {% if itemnum == 1 %}checked{% endif %}
+                                        {% if item.free_price %}
+                                           data-checked-onchange="price-item-{{ item.pk }}"
+                                        {% endif %}
                                            {% if not ev.presale_is_running %}disabled{% endif %}
                                            name="item_{{ item.id }}" id="item_{{ item.id }}"
                                            aria-label="{% blocktrans with item=item.name %}Add {{ item }} to cart{% endblocktrans %}"
                                            {% if item.description %} aria-describedby="item-{{ item.id }}-description"{% endif %}>
+                                           <i class="fa fa-cart-plus fa-lg" aria-hidden="true"></i>
                                 </label>
                             {% else %}
                                 <input type="number" class="form-control input-item-count" placeholder="0" min="0"
