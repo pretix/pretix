@@ -697,7 +697,7 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
                 self.cart_session.get('email', '') or
                 wd.get('email', '')
             ),
-            'phone': wd.get('phone', None)
+            'phone': self.cart_session.get('phone', '') or wd.get('phone', None)
         }
         initial.update(self.cart_session.get('contact_form_data', {}))
 
@@ -709,6 +709,8 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
         if self.cart_customer:
             initial['email'] = self.cart_customer.email
             initial['email_repeat'] = self.cart_customer.email
+            if not initial['phone']:
+                initial['phone'] = str(self.cart_customer.phone)
 
         f = ContactForm(data=self.request.POST if self.request.method == "POST" else None,
                         event=self.request.event,
