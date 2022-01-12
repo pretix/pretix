@@ -90,6 +90,7 @@ def test_trigger(client, user):
         responses.POST, 'https://pretix.eu/.update_check/',
         callback=request_callback_updatable,
         content_type='application/json',
+        match_querystring=None,  # https://github.com/getsentry/responses/issues/464
     )
 
     user.is_staff = True

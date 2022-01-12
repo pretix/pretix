@@ -74,6 +74,7 @@ def test_update_check_disabled():
         responses.POST, 'https://pretix.eu/.update_check/',
         callback=request_callback_disallowed,
         content_type='application/json',
+        match_querystring=None,  # https://github.com/getsentry/responses/issues/464
     )
     update_check.update_check.apply(throw=True)
 
@@ -85,6 +86,7 @@ def test_update_check_sent_no_updates():
         responses.POST, 'https://pretix.eu/.update_check/',
         callback=request_callback_not_updatable,
         content_type='application/json',
+        match_querystring=None,  # https://github.com/getsentry/responses/issues/464
     )
     update_check.update_check.apply(throw=True)
     gs = GlobalSettingsObject()
@@ -100,6 +102,7 @@ def test_update_check_sent_updates():
         responses.POST, 'https://pretix.eu/.update_check/',
         callback=request_callback_updatable,
         content_type='application/json',
+        match_querystring=None,  # https://github.com/getsentry/responses/issues/464
     )
     update_check.update_check.apply(throw=True)
     gs = GlobalSettingsObject()
@@ -118,6 +121,7 @@ def test_update_check_mail_sent():
         responses.POST, 'https://pretix.eu/.update_check/',
         callback=request_callback_updatable,
         content_type='application/json',
+        match_querystring=None,  # https://github.com/getsentry/responses/issues/464
     )
     update_check.update_check.apply(throw=True)
 
@@ -137,6 +141,7 @@ def test_update_check_mail_sent_only_after_change():
             responses.POST, 'https://pretix.eu/.update_check/',
             callback=request_callback_updatable,
             content_type='application/json',
+            match_querystring=None,  # https://github.com/getsentry/responses/issues/464
         )
 
         update_check.update_check.apply(throw=True)
@@ -150,6 +155,7 @@ def test_update_check_mail_sent_only_after_change():
             responses.POST, 'https://pretix.eu/.update_check/',
             callback=request_callback_not_updatable,
             content_type='application/json',
+            match_querystring=None,  # https://github.com/getsentry/responses/issues/464
         )
 
         update_check.update_check.apply(throw=True)
@@ -160,6 +166,7 @@ def test_update_check_mail_sent_only_after_change():
             responses.POST, 'https://pretix.eu/.update_check/',
             callback=request_callback_updatable,
             content_type='application/json',
+            match_querystring=None,  # https://github.com/getsentry/responses/issues/464
         )
 
         update_check.update_check.apply(throw=True)
@@ -202,6 +209,7 @@ def test_result_table_up2date():
         responses.POST, 'https://pretix.eu/.update_check/',
         callback=request_callback_not_updatable,
         content_type='application/json',
+        match_querystring=None,  # https://github.com/getsentry/responses/issues/464
     )
     update_check.update_check.apply(throw=True)
     tbl = update_check.check_result_table()

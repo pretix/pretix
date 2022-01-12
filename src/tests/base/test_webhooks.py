@@ -93,6 +93,7 @@ def test_webhook_trigger_event_specific(event, order, webhook, monkeypatch_on_co
         responses.POST, 'https://google.com',
         callback=lambda r: (200, {}, 'ok'),
         content_type='application/json',
+        match_querystring=None,  # https://github.com/getsentry/responses/issues/464
     )
 
     with transaction.atomic():
