@@ -102,7 +102,7 @@ def build_invoice(invoice: Invoice) -> Invoice:
             payment = ""
         if invoice.event.settings.invoice_include_expire_date and invoice.order.status == Order.STATUS_PENDING:
             if payment:
-                payment += "<br />"
+                payment += "<br /><br />"
             payment += pgettext("invoice", "Please complete your payment before {expire_date}.").format(
                 expire_date=date_format(invoice.order.expires, "SHORT_DATE_FORMAT")
             )
