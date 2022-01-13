@@ -4,8 +4,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-11-30 16:13+0000\n"
-"PO-Revision-Date: 2021-11-19 13:52+0000\n"
-"Last-Translator: Rasmus Kock Grusgaard <rasmus@grusgaard.com>\n"
+"PO-Revision-Date: 2022-01-13 22:00+0000\n"
+"Last-Translator: Mikkel Ricky <rimi@aarhus.dk>\n"
 "Language-Team: Danish <https://translate.pretix.eu/projects/pretix/pretix/da/"
 ">\n"
 "Language: da\n"
@@ -19914,7 +19914,7 @@ msgstr "Opret flere nye vouchere"
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:89
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:126
 msgid "Download list"
-msgstr "Donwload liste"
+msgstr "Download liste"
 
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:108
 msgid "Redemptions"
