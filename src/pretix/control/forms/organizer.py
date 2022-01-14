@@ -542,18 +542,13 @@ class CustomerUpdateForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        if self.instance.phone:
-            initial = self.instance.phone
-        elif self.instance.organizer.settings.region or self.instance.locale:
+        if not self.instance.phone and (self.instance.organizer.settings.region or self.instance.locale):
             country_code = self.instance.organizer.settings.region or get_country_by_locale(self.instance.locale)
-            initial = "+{}.".format(get_phone_prefix(country_code))
-        else:
-            initial = None
+            self.initial['phone'] = "+{}.".format(get_phone_prefix(country_code))
 
         self.fields['phone'] = PhoneNumberField(
             label=_('Phone'),
             required=False,
-            initial=initial,
             widget=WrappedPhoneNumberPrefixWidget()
         )
         self.fields['name_parts'] = NamePartsFormField(
