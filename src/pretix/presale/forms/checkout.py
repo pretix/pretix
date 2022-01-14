@@ -75,18 +75,9 @@ class ContactForm(forms.Form):
             )
 
         if self.event.settings.order_phone_asked:
+            if not self.initial.get('phone'):
+                self.initial['phone'] = "+{}.".format(guess_phone_prefix(event))
             initial = self.initial.pop('phone', None)
-            if initial:
-                try:
-                    initial = PhoneNumber().from_string(initial)
-                except NumberParseException:
-                    initial = None
-
-            if not initial:
-                try:
-                    initial = "+{}.".format(guess_phone_prefix(self.event))
-                except NumberParseException:
-                    pass
 
             self.fields['phone'] = PhoneNumberField(
                 label=_('Phone number'),
