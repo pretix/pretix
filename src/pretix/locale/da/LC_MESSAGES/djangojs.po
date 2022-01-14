@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-11-30 16:13+0000\n"
+"POT-Creation-Date: 2022-01-14 14:33+0000\n"
 "PO-Revision-Date: 2021-09-13 09:48+0000\n"
 "Last-Translator: Mie Frydensbjerg <mif@aarhus.dk>\n"
 "Language-Team: Danish <https://translate.pretix.eu/projects/pretix/pretix-js/"
@@ -563,22 +563,22 @@ msgstr "fra %(currency)s %(price)s"
 msgid "Please enter the amount the organizer can keep."
 msgstr ""
 
-#: pretix/static/pretixpresale/js/ui/main.js:349
+#: pretix/static/pretixpresale/js/ui/main.js:361
 msgid "Please enter a quantity for one of the ticket types."
 msgstr ""
 
-#: pretix/static/pretixpresale/js/ui/main.js:385
+#: pretix/static/pretixpresale/js/ui/main.js:397
 #, fuzzy
 #| msgid "Cart expired"
 msgid "required"
 msgstr "Kurv udløbet"
 
-#: pretix/static/pretixpresale/js/ui/main.js:488
-#: pretix/static/pretixpresale/js/ui/main.js:507
+#: pretix/static/pretixpresale/js/ui/main.js:500
+#: pretix/static/pretixpresale/js/ui/main.js:519
 msgid "Time zone:"
 msgstr "Tidszone:"
 
-#: pretix/static/pretixpresale/js/ui/main.js:498
+#: pretix/static/pretixpresale/js/ui/main.js:510
 msgid "Your local time:"
 msgstr "Din lokaltid:"
 
