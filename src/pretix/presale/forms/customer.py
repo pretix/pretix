@@ -35,6 +35,7 @@ from phonenumber_field.formfields import PhoneNumberField
 
 from pretix.base.forms.questions import (
     NamePartsFormField, WrappedPhoneNumberPrefixWidget,
+    get_country_by_locale, get_phone_prefix,
 )
 from pretix.base.i18n import get_language_without_region
 from pretix.base.models import Customer
@@ -142,6 +143,9 @@ class RegistrationForm(forms.Form):
 
         event = getattr(request, "event", None)
         if event and event.settings.order_phone_asked:
+            if event.settings.region or event.organizer.settings.region :
+                country_code = event.settings.region or event.organizer.settings.region
+                self.initial['phone'] = "+{}.".format(get_phone_prefix(country_code))
             self.fields['phone'] = PhoneNumberField(
                 label=_('Phone'),
                 required=event.settings.order_phone_required,
@@ -418,6 +422,11 @@ class ChangeInfoForm(forms.ModelForm):
             titles=request.organizer.settings.name_scheme_titles,
             label=_('Name'),
         )
+
+        if not self.initial.get('phone') and (request.organizer.settings.region or self.instance.locale):
+            country_code = self.instance.organizer.settings.region or get_country_by_locale(self.instance.locale)
+            self.initial['phone'] = "+{}.".format(get_phone_prefix(country_code))
+
         self.fields['phone'] = PhoneNumberField(
             label=_('Phone'),
             required=False,
