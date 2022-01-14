@@ -143,7 +143,7 @@ class RegistrationForm(forms.Form):
 
         event = getattr(request, "event", None)
         if event and event.settings.order_phone_asked:
-            if event.settings.region or event.organizer.settings.region :
+            if event.settings.region or event.organizer.settings.region:
                 country_code = event.settings.region or event.organizer.settings.region
                 self.initial['phone'] = "+{}.".format(get_phone_prefix(country_code))
             self.fields['phone'] = PhoneNumberField(

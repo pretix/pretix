@@ -23,13 +23,11 @@ from django import forms
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.utils.translation import gettext_lazy as _
 from phonenumber_field.formfields import PhoneNumberField
-from phonenumbers.data import _COUNTRY_CODE_TO_REGION_CODE
 
 from pretix.base.forms.questions import (
-    NamePartsFormField, WrappedPhoneNumberPrefixWidget, guess_country,
+    NamePartsFormField, WrappedPhoneNumberPrefixWidget,
     guess_phone_prefix,
 )
-from pretix.base.i18n import get_babel_locale, language
 from pretix.base.models import Quota, WaitingListEntry
 from pretix.presale.views.event import get_grouped_items
 
