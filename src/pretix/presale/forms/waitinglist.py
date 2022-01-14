@@ -25,8 +25,7 @@ from django.utils.translation import gettext_lazy as _
 from phonenumber_field.formfields import PhoneNumberField
 
 from pretix.base.forms.questions import (
-    NamePartsFormField, WrappedPhoneNumberPrefixWidget,
-    guess_phone_prefix,
+    NamePartsFormField, WrappedPhoneNumberPrefixWidget, guess_phone_prefix,
 )
 from pretix.base.models import Quota, WaitingListEntry
 from pretix.presale.views.event import get_grouped_items
