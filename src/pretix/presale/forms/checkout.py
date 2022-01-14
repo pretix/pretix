@@ -48,7 +48,7 @@ from phonenumbers.data import _COUNTRY_CODE_TO_REGION_CODE
 
 from pretix.base.forms.questions import (
     BaseInvoiceAddressForm, BaseQuestionsForm, WrappedPhoneNumberPrefixWidget,
-    guess_country,
+    guess_country, guess_phone_prefix,
 )
 from pretix.base.i18n import get_babel_locale, language
 from pretix.base.validators import EmailBanlistValidator
@@ -75,27 +75,29 @@ class ContactForm(forms.Form):
             )
 
         if self.event.settings.order_phone_asked:
-            with language(get_babel_locale()):
-                default_country = guess_country(self.event)
-                default_prefix = None
-                for prefix, values in _COUNTRY_CODE_TO_REGION_CODE.items():
-                    if str(default_country) in values:
-                        default_prefix = prefix
+            initial = self.initial.pop('phone', None)
+            if initial:
                 try:
-                    initial = self.initial.pop('phone', None)
-                    initial = PhoneNumber().from_string(initial) if initial else "+{}.".format(default_prefix)
+                    initial = PhoneNumber().from_string(initial)
                 except NumberParseException:
                     initial = None
-                self.fields['phone'] = PhoneNumberField(
-                    label=_('Phone number'),
-                    required=self.event.settings.order_phone_required,
-                    help_text=self.event.settings.checkout_phone_helptext,
-                    # We now exploit an implementation detail in PhoneNumberPrefixWidget to allow us to pass just
-                    # a country code but no number as an initial value. It's a bit hacky, but should be stable for
-                    # the future.
-                    initial=initial,
-                    widget=WrappedPhoneNumberPrefixWidget()
-                )
+
+            if not initial:
+                try:
+                    initial = "+{}.".format(guess_phone_prefix(self.event))
+                except NumberParseException:
+                    pass
+
+            self.fields['phone'] = PhoneNumberField(
+                label=_('Phone number'),
+                required=self.event.settings.order_phone_required,
+                help_text=self.event.settings.checkout_phone_helptext,
+                # We now exploit an implementation detail in PhoneNumberPrefixWidget to allow us to pass just
+                # a country code but no number as an initial value. It's a bit hacky, but should be stable for
+                # the future.
+                initial=initial,
+                widget=WrappedPhoneNumberPrefixWidget()
+            )
 
         if not self.request.session.get('iframe_session', False):
             # There is a browser quirk in Chrome that leads to incorrect initial scrolling in iframes if there

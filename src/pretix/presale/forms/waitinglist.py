@@ -26,7 +26,8 @@ from phonenumber_field.formfields import PhoneNumberField
 from phonenumbers.data import _COUNTRY_CODE_TO_REGION_CODE
 
 from pretix.base.forms.questions import (
-    NamePartsFormField, WrappedPhoneNumberPrefixWidget, guess_country,
+    NamePartsFormField, WrappedPhoneNumberPrefixWidget,
+    guess_country, guess_phone_prefix,
 )
 from pretix.base.i18n import get_babel_locale, language
 from pretix.base.models import Quota, WaitingListEntry
@@ -93,21 +94,15 @@ class WaitingListForm(forms.ModelForm):
             del self.fields['name_parts']
 
         if event.settings.waiting_list_phones_asked:
-            with language(get_babel_locale()):
-                default_country = guess_country(self.event)
-                for prefix, values in _COUNTRY_CODE_TO_REGION_CODE.items():
-                    if str(default_country) in values and not self.initial.get('phone'):
-                        # We now exploit an implementation detail in PhoneNumberPrefixWidget to allow us to pass just
-                        # a country code but no number as an initial value. It's a bit hacky, but should be stable for
-                        # the future.
-                        self.initial['phone'] = "+{}.".format(prefix)
+            if not self.initial.get('phone'):
+                self.initial['phone'] = "+{}.".format(guess_phone_prefix(event))
 
-                self.fields['phone'] = PhoneNumberField(
-                    label=_("Phone number"),
-                    required=event.settings.waiting_list_phones_required,
-                    help_text=event.settings.waiting_list_phones_explanation_text,
-                    widget=WrappedPhoneNumberPrefixWidget()
-                )
+            self.fields['phone'] = PhoneNumberField(
+                label=_("Phone number"),
+                required=event.settings.waiting_list_phones_required,
+                help_text=event.settings.waiting_list_phones_explanation_text,
+                widget=WrappedPhoneNumberPrefixWidget()
+            )
         else:
             del self.fields['phone']
 
