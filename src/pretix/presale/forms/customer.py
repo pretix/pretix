@@ -34,8 +34,8 @@ from django.utils.translation import gettext_lazy as _
 from phonenumber_field.formfields import PhoneNumberField
 
 from pretix.base.forms.questions import (
-    NamePartsFormField, WrappedPhoneNumberPrefixWidget,
-    get_country_by_locale, get_phone_prefix,
+    NamePartsFormField, WrappedPhoneNumberPrefixWidget, get_country_by_locale,
+    get_phone_prefix,
 )
 from pretix.base.i18n import get_language_without_region
 from pretix.base.models import Customer

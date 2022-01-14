@@ -42,15 +42,11 @@ from django.utils.html import escape
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
 from phonenumber_field.formfields import PhoneNumberField
-from phonenumber_field.phonenumber import PhoneNumber
-from phonenumbers import NumberParseException
-from phonenumbers.data import _COUNTRY_CODE_TO_REGION_CODE
 
 from pretix.base.forms.questions import (
     BaseInvoiceAddressForm, BaseQuestionsForm, WrappedPhoneNumberPrefixWidget,
-    guess_country, guess_phone_prefix,
+    guess_phone_prefix,
 )
-from pretix.base.i18n import get_babel_locale, language
 from pretix.base.validators import EmailBanlistValidator
 from pretix.presale.signals import contact_form_fields
 
@@ -76,7 +72,7 @@ class ContactForm(forms.Form):
 
         if self.event.settings.order_phone_asked:
             if not self.initial.get('phone'):
-                self.initial['phone'] = "+{}.".format(guess_phone_prefix(event))
+                self.initial['phone'] = "+{}.".format(guess_phone_prefix(self.event))
             initial = self.initial.pop('phone', None)
 
             self.fields['phone'] = PhoneNumberField(
