@@ -48,8 +48,10 @@
                             </dd>
                             <dt>{% trans "Name" %}</dt>
                             <dd>{{ customer.name }}</dd>
+                        {% if customer.phone %}
                             <dt>{% trans "Phone" %}</dt>
                             <dd>{{ customer.phone }}</dd>
+                        {% endif %}
                             <dt>{% trans "Locale" %}</dt>
                             <dd>{{ display_locale }}</dd>
                             <dt>{% trans "Registration date" %}</dt>
