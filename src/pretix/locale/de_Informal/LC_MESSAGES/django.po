@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-01-14 14:32+0000\n"
-"PO-Revision-Date: 2021-11-30 16:48+0000\n"
+"PO-Revision-Date: 2022-01-14 15:08+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
@@ -3217,25 +3217,17 @@ msgid "Position"
 msgstr "Position"
 
 #: pretix/base/models/items.py:806
-#, fuzzy
-#| msgid "New order requires approval"
 msgid "Require approval"
-msgstr "Neue Bestellungen mit erforderlicher Freigabe"
+msgstr "Freigabe erforderlich"
 
 #: pretix/base/models/items.py:808
-#, fuzzy
-#| msgid ""
-#| "If this product is part of an order, the order will be put into an "
-#| "\"approval\" state and will need to be confirmed by you before it can be "
-#| "paid and completed. You can use this e.g. for discounted tickets that are "
-#| "only available to specific groups."
 msgid ""
 "If this variation is part of an order, the order will be put into an "
 "\"approval\" state and will need to be confirmed by you before it can be "
 "paid and completed. You can use this e.g. for discounted tickets that are "
 "only available to specific groups."
 msgstr ""
-"Wenn dieses Produkt Teil einer Bestellung ist, wird die Bestellung nicht "
+"Wenn diese Variante Teil einer Bestellung ist, wird die Bestellung nicht "
 "direkt freigegeben, sondern muss von dir bestätigt werden, bevor sie bezahlt "
 "und abgeschlossen werden kann. Du kannst das z.B. für Tickets nutzen, die "
 "nur für bestimmte Mitglieder zur Verfügung stehen."
@@ -3265,14 +3257,8 @@ msgstr ""
 "Variante dennoch nicht verfügbar."
 
 #: pretix/base/models/items.py:845
-#, fuzzy
-#| msgid ""
-#| "This product will only be shown if a voucher matching the product is "
-#| "redeemed."
 msgid "Show only if a matching voucher is redeemed."
-msgstr ""
-"Dieses Produkt wird nur angezeigt, wenn ein passender Gutschein eingelöst "
-"wird."
+msgstr "Nur anzeigen, wenn ein passender Gutschein eingelöst wird."
 
 #: pretix/base/models/items.py:847
 msgid ""
@@ -6720,19 +6706,10 @@ msgid "Ask for beneficiary"
 msgstr "Nach abweichendem Leistungsempfänger fragen"
 
 #: pretix/base/settings.py:375
-#, fuzzy
-#| msgid "Custom address field"
 msgid "Custom recipient field"
-msgstr "Zusätzliches Adressfeld"
+msgstr "Zusätzliches Empfängerfeld"
 
 #: pretix/base/settings.py:377
-#, fuzzy
-#| msgid ""
-#| "If you want to add a custom text field, e.g. for a country-specific "
-#| "registration number, to your invoice address form, please fill in the "
-#| "label here. This label will both be used for asking the user to input "
-#| "their details as well as for displaying the value on the invoice. The "
-#| "field will not be required."
 msgid ""
 "If you want to add a custom text field, e.g. for a country-specific "
 "registration number, to your invoice address form, please fill in the label "
@@ -6740,11 +6717,12 @@ msgid ""
 "details as well as for displaying the value on the invoice. It will be shown "
 "on the invoice below the headline. The field will not be required."
 msgstr ""
-"Wenn du ein zusätzliches Textfeld zur Adresse hinzufügen willst, z.B. für "
-"eine landesspezifische Registrierungsnummer, trage hier bitte die "
+"Wenn du ein zusätzliches Textfeld zum Adressformular hinzufügen willst, z.B. "
+"für eine landesspezifische Registrierungsnummer, trage hier bitte die "
 "Bezeichnung des Feldes ein. Die Bezeichnung wird sowohl bei der Abfrage der "
-"Adresse des Nutzers als auch bei der Anzeige auf der Rechnung verwendet. Das "
-"Feld ist kein Pflichtfeld."
+"Adresse des Nutzers als auch bei der Anzeige auf der Rechnung verwendet. Auf "
+"der Rechnung wird es nicht als Teil der Adresse, sondern unter der "
+"Überschrift angezeigt. Das Feld ist kein Pflichtfeld."
 
 #: pretix/base/settings.py:390
 msgid "Ask for VAT ID"
@@ -7964,7 +7942,7 @@ msgstr ""
 #, fuzzy
 #| msgid "Split into new order"
 msgid "Attachment for new orders"
-msgstr "In neue Bestellung abspalten"
+msgstr "Anhang für neue Bestellungen"
 
 #: pretix/base/settings.py:1715
 #, python-brace-format
@@ -7977,6 +7955,15 @@ msgid ""
 "before payment is confirmed or the order is approved. To avoid this vital "
 "email going to spam, you can only upload PDF files of up to {size} MB."
 msgstr ""
+"Diese Datei wird an die erste E-Mail angehängt, die wir beim Eingang einer "
+"neuen Bestellung verschicken. Sie kann daher mit den Textvorlagen \"Getätigte"
+" Bestellung\", \"Kostenlose Bestellung\" oder \"Erhaltene Bestellung\" von "
+"oben auftreten. Sie wird ggf. sowohl an Besteller*innen als auch Teilnehmer*"
+"innen verschickt. Nicht geeignet zum Versand nicht-öffentlicher "
+"Informationen, da die Datei unabhängig davon verschickt wird, ob die "
+"Bestellung bezahlt oder freigegeben ist. Um zu vermeiden, dass diese "
+"wichtige E-Mail nicht ankommt, können nur PDF-Dateien mit maximal {size} MB "
+"Größe verwendet werden."
 
 #: pretix/base/settings.py:1737
 #, python-brace-format
@@ -9884,7 +9871,7 @@ msgstr "Verkauf nicht erlaubt"
 #, fuzzy
 #| msgid "New order requires approval"
 msgid "Order requires approval"
-msgstr "Neue Bestellungen mit erforderlicher Freigabe"
+msgstr "Bestellung erfordert Freigabe"
 
 #: pretix/control/forms/event.py:1222
 msgid "Deviating tax rate"
@@ -10164,34 +10151,24 @@ msgid "All events"
 msgstr "Alle Veranstaltungen"
 
 #: pretix/control/forms/filter.py:855
-#, fuzzy
-#| msgid "All payment providers"
 msgid "All payments"
-msgstr "Alle Zahlungsmethoden"
+msgstr "Alle Zahlungen"
 
 #: pretix/control/forms/filter.py:865
-#, fuzzy
-#| msgid "Payment date"
 msgid "Payment created from"
-msgstr "Zahlungsdatum"
+msgstr "Zahlung erstellt von"
 
 #: pretix/control/forms/filter.py:870
-#, fuzzy
-#| msgid "Payment amount"
 msgid "Payment created until"
-msgstr "Zahlbetrag"
+msgstr "Zahlung erstellt bis"
 
 #: pretix/control/forms/filter.py:875
-#, fuzzy
-#| msgid "Valid from"
 msgid "Paid from"
-msgstr "Gültig ab"
+msgstr "Bezahlt von"
 
 #: pretix/control/forms/filter.py:880
-#, fuzzy
-#| msgid "Valid until"
 msgid "Paid until"
-msgstr "Gültig bis"
+msgstr "Bezahlt bis"
 
 #: pretix/control/forms/filter.py:1032 pretix/control/forms/filter.py:1402
 msgid "Shop live and presale running"
@@ -10510,22 +10487,16 @@ msgid "Software"
 msgstr "Software"
 
 #: pretix/control/forms/filter.py:2229
-#, fuzzy
-#| msgid "Devices"
 msgid "Device status"
-msgstr "Geräte"
+msgstr "Gerätestatus"
 
 #: pretix/control/forms/filter.py:2232
-#, fuzzy
-#| msgid "All devices"
 msgid "Active devices"
-msgstr "Alle Geräte"
+msgstr "Aktive Geräte"
 
 #: pretix/control/forms/filter.py:2233
-#, fuzzy
-#| msgid "Revoke device access:"
 msgid "Revoked devices"
-msgstr "Gerätezugriff entziehen:"
+msgstr "Gesperrte Geräte"
 
 #: pretix/control/forms/global_settings.py:59
 msgid "Additional footer text"
@@ -14537,10 +14508,8 @@ msgid "Order approval process"
 msgstr "Freigabeprozess"
 
 #: pretix/control/templates/pretixcontrol/event/mail.html:85
-#, fuzzy
-#| msgid "Attachment"
 msgid "Attachments"
-msgstr "Anhang"
+msgstr "Anhänge"
 
 #: pretix/control/templates/pretixcontrol/event/mail.html:89
 #: pretix/control/templates/pretixcontrol/organizers/mail.html:39
@@ -17678,10 +17647,8 @@ msgstr "Diese Aktion kann nicht rückgängig gemacht werden."
 
 #: pretix/control/templates/pretixcontrol/organizers/customer_edit.html:6
 #: pretix/control/templates/pretixcontrol/organizers/customer_edit.html:16
-#, fuzzy
-#| msgid "Any customer"
 msgid "New customer"
-msgstr "Beliebiger Kunde"
+msgstr "Neuer Kunde"
 
 #: pretix/control/templates/pretixcontrol/organizers/customer_membership_delete.html:15
 msgid "Are you sure you want to delete this membership?"
@@ -17702,10 +17669,8 @@ msgstr "Es wurden bisher keine Kundenkonten erstellt."
 
 #: pretix/control/templates/pretixcontrol/organizers/customers.html:19
 #: pretix/control/templates/pretixcontrol/organizers/customers.html:48
-#, fuzzy
-#| msgid "Create a new user"
 msgid "Create a new customer"
-msgstr "Neuen Benutzer erstellen"
+msgstr "Neues Kundenkonto erstellen"
 
 #: pretix/control/templates/pretixcontrol/organizers/delete.html:5
 msgid "Delete organizer"
@@ -18590,21 +18555,15 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/search/payments.html:7
 #: pretix/control/templates/pretixcontrol/search/payments.html:9
-#, fuzzy
-#| msgid "Payments"
 msgid "Payment search"
-msgstr "Zahlungen"
+msgstr "Zahlungssuche"
 
 #: pretix/control/templates/pretixcontrol/search/payments.html:155
-#, fuzzy
-#| msgid ""
-#| "We couldn't find any orders that you have access to and that match your "
-#| "search query."
 msgid ""
 "We couldn't find any payments that you have access to and that match your "
 "search query."
 msgstr ""
-"Wir konnten keine Bestellungen finden, zu denen du Zugriff hast, und auf die "
+"Wir konnten keine Zahlungen finden, zu denen du Zugriff hast, und auf die "
 "deine Suchbegriffe passen."
 
 #: pretix/control/templates/pretixcontrol/select2_widget.html:9
@@ -25256,10 +25215,8 @@ msgstr "Vorherigen Monat %(month)s anzeigen"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_calendar.html:20
 #: pretix/presale/templates/pretixpresale/organizers/calendar.html:24
-#, fuzzy
-#| msgid "Select month and year to show"
 msgid "Select month to show"
-msgstr "Monat und Jahr zur Anzeige auswählen"
+msgstr "Monat zur Anzeige auswählen"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_calendar.html:30
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_calendar_week.html:34
@@ -25281,10 +25238,8 @@ msgstr "Vorherige Woche %(week)s anzeigen"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_calendar_week.html:20
 #: pretix/presale/templates/pretixpresale/organizers/calendar_week.html:26
-#, fuzzy
-#| msgid "Select week and year to show"
 msgid "Select week to show"
-msgstr "Woche und Jahr zur Anzeige auswählen"
+msgstr "Woche zur Anzeige auswählen"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_calendar_week.html:40
 #, python-format
@@ -26112,6 +26067,10 @@ msgid ""
 "email addresses. There is no guarantee that you will receive a certain "
 "number of tickets."
 msgstr ""
+"Beachte bitte, dass du nur ein Ticket erhältst. Wenn du mehrere Tickets "
+"benötigst, kannst du dich mit verschiedenen E-Mail-Adressen mehrfach "
+"eintragen. Es gibt jedoch keine Garantie, dass du eine bestimme Anzahl an "
+"Tickets erhältst."
 
 #: pretix/presale/templates/pretixpresale/event/waitinglist.html:33
 msgid "Add me to the list"
