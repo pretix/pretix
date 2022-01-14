@@ -51,7 +51,7 @@ from pretix.api.models import WebHook
 from pretix.api.webhooks import get_all_webhook_events
 from pretix.base.forms import I18nModelForm, PlaceholderValidator, SettingsForm
 from pretix.base.forms.questions import (
-    NamePartsFormField, WrappedPhoneNumberPrefixWidget,
+    NamePartsFormField, WrappedPhoneNumberPrefixWidget, get_phone_prefix, get_country_by_locale,
 )
 from pretix.base.forms.widgets import SplitDateTimePickerWidget
 from pretix.base.models import (
@@ -542,9 +542,18 @@ class CustomerUpdateForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        if self.instance.phone:
+            initial = self.instance.phone
+        elif self.instance.organizer.settings.region or self.instance.locale:
+            country_code = self.instance.organizer.settings.region or get_country_by_locale(self.instance.locale)
+            initial = "+{}.".format(get_phone_prefix(country_code))
+        else:
+            initial = None
+
         self.fields['phone'] = PhoneNumberField(
             label=_('Phone'),
             required=False,
+            initial=initial,
             widget=WrappedPhoneNumberPrefixWidget()
         )
         self.fields['name_parts'] = NamePartsFormField(
