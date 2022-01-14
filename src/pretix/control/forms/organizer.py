@@ -51,7 +51,8 @@ from pretix.api.models import WebHook
 from pretix.api.webhooks import get_all_webhook_events
 from pretix.base.forms import I18nModelForm, PlaceholderValidator, SettingsForm
 from pretix.base.forms.questions import (
-    NamePartsFormField, WrappedPhoneNumberPrefixWidget, get_phone_prefix, get_country_by_locale,
+    NamePartsFormField, WrappedPhoneNumberPrefixWidget, get_country_by_locale,
+    get_phone_prefix,
 )
 from pretix.base.forms.widgets import SplitDateTimePickerWidget
 from pretix.base.models import (

@@ -338,6 +338,7 @@ def guess_country(event):
         country = get_country_by_locale(get_language_without_region())
     return country
 
+
 def get_country_by_locale(locale):
     country = None
     valid_countries = countries.countries
@@ -353,16 +354,19 @@ def get_country_by_locale(locale):
             country = Country(locale.upper())
     return country
 
+
 def guess_phone_prefix(event):
     with language(get_babel_locale()):
         country = str(guess_country(event))
         return get_phone_prefix(country)
+
 
 def get_phone_prefix(country):
     for prefix, values in _COUNTRY_CODE_TO_REGION_CODE.items():
         if country in values:
             return prefix
     return None
+
 
 class QuestionCheckboxSelectMultiple(forms.CheckboxSelectMultiple):
     option_template_name = 'pretixbase/forms/widgets/checkbox_option_with_links.html'
