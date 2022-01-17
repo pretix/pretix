@@ -48,6 +48,11 @@ def get_ical(events):
             })
 
         vevent = cal.add('vevent')
+        vevent.add('organizer')
+        vevent.organizer.value = 'mailto:{organizermail}'.format(
+            organizermail=event.settings.get('contact_mail', settings.MAIL_FROM)
+        )
+        vevent.organizer.cn_param = str(event.organizer.name)
         vevent.add('summary').value = str(ev.name)
         vevent.add('dtstamp').value = creation_time
         if ev.location:
