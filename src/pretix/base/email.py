@@ -300,7 +300,6 @@ def get_email_context(**kwargs):
         for v in val:
             if all(rp in kwargs for rp in v.required_context):
                 ctx[v.identifier] = v.render(kwargs)
-                print(v.identifier, v.render(kwargs))
     return ctx
 
 
