@@ -77,7 +77,7 @@ class ContactForm(forms.Form):
                     # We now exploit an implementation detail in PhoneNumberPrefixWidget to allow us to pass just
                     # a country code but no number as an initial value. It's a bit hacky, but should be stable for
                     # the future.
-                    self.initial['phone'] = "+{}.".format()
+                    self.initial['phone'] = "+{}.".format(phone_prefix)
 
             self.fields['phone'] = PhoneNumberField(
                 label=_('Phone number'),
