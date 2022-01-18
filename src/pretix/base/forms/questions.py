@@ -333,21 +333,39 @@ class WrappedPhoneNumberPrefixWidget(PhoneNumberPrefixWidget):
 def guess_country(event):
     # Try to guess the initial country from either the country of the merchant
     # or the locale. This will hopefully save at least some users some scrolling :)
-    locale = get_language_without_region()
     country = event.settings.region or event.settings.invoice_address_from_country
     if not country:
-        valid_countries = countries.countries
-        if '-' in locale:
-            parts = locale.split('-')
-            # TODO: does this actually work?
-            if parts[1].upper() in valid_countries:
-                country = Country(parts[1].upper())
-            elif parts[0].upper() in valid_countries:
-                country = Country(parts[0].upper())
-        else:
-            if locale.upper() in valid_countries:
-                country = Country(locale.upper())
+        country = get_country_by_locale(get_language_without_region())
     return country
+
+
+def get_country_by_locale(locale):
+    country = None
+    valid_countries = countries.countries
+    if '-' in locale:
+        parts = locale.split('-')
+        # TODO: does this actually work?
+        if parts[1].upper() in valid_countries:
+            country = Country(parts[1].upper())
+        elif parts[0].upper() in valid_countries:
+            country = Country(parts[0].upper())
+    else:
+        if locale.upper() in valid_countries:
+            country = Country(locale.upper())
+    return country
+
+
+def guess_phone_prefix(event):
+    with language(get_babel_locale()):
+        country = str(guess_country(event))
+        return get_phone_prefix(country)
+
+
+def get_phone_prefix(country):
+    for prefix, values in _COUNTRY_CODE_TO_REGION_CODE.items():
+        if country in values:
+            return prefix
+    return None
 
 
 class QuestionCheckboxSelectMultiple(forms.CheckboxSelectMultiple):
@@ -780,25 +798,26 @@ class BaseQuestionsForm(forms.Form):
                 if q.valid_datetime_max:
                     field.validators.append(MaxDateTimeValidator(q.valid_datetime_max))
             elif q.type == Question.TYPE_PHONENUMBER:
-                with language(get_babel_locale()):
-                    default_country = guess_country(event)
-                    default_prefix = None
-                    for prefix, values in _COUNTRY_CODE_TO_REGION_CODE.items():
-                        if str(default_country) in values:
-                            default_prefix = prefix
+                if initial:
                     try:
-                        initial = PhoneNumber().from_string(initial.answer) if initial else "+{}.".format(default_prefix)
+                        initial = PhoneNumber().from_string(initial.answer)
                     except NumberParseException:
                         initial = None
-                    field = PhoneNumberField(
-                        label=label, required=required,
-                        help_text=help_text,
-                        # We now exploit an implementation detail in PhoneNumberPrefixWidget to allow us to pass just
-                        # a country code but no number as an initial value. It's a bit hacky, but should be stable for
-                        # the future.
-                        initial=initial,
-                        widget=WrappedPhoneNumberPrefixWidget()
-                    )
+
+                if not initial:
+                    phone_prefix = guess_phone_prefix(event)
+                    if phone_prefix:
+                        initial = "+{}.".format(phone_prefix)
+
+                field = PhoneNumberField(
+                    label=label, required=required,
+                    help_text=help_text,
+                    # We now exploit an implementation detail in PhoneNumberPrefixWidget to allow us to pass just
+                    # a country code but no number as an initial value. It's a bit hacky, but should be stable for
+                    # the future.
+                    initial=initial,
+                    widget=WrappedPhoneNumberPrefixWidget()
+                )
             field.question = q
             if answers:
                 # Cache the answer object for later use
