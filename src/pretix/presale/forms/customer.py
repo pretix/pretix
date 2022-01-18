@@ -145,7 +145,9 @@ class RegistrationForm(forms.Form):
         if event and event.settings.order_phone_asked:
             if event.settings.region or event.organizer.settings.region:
                 country_code = event.settings.region or event.organizer.settings.region
-                self.initial['phone'] = "+{}.".format(get_phone_prefix(country_code))
+                phone_prefix = get_phone_prefix(country_code)
+                if phone_prefix:
+                    self.initial['phone'] = "+{}.".format(phone_prefix)
             self.fields['phone'] = PhoneNumberField(
                 label=_('Phone'),
                 required=event.settings.order_phone_required,
@@ -425,7 +427,9 @@ class ChangeInfoForm(forms.ModelForm):
 
         if not self.initial.get('phone') and (request.organizer.settings.region or self.instance.locale):
             country_code = self.instance.organizer.settings.region or get_country_by_locale(self.instance.locale)
-            self.initial['phone'] = "+{}.".format(get_phone_prefix(country_code))
+            phone_prefix = get_phone_prefix(country_code)
+            if phone_prefix:
+                self.initial['phone'] = "+{}.".format(phone_prefix)
 
         self.fields['phone'] = PhoneNumberField(
             label=_('Phone'),

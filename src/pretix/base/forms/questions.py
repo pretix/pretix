@@ -805,7 +805,9 @@ class BaseQuestionsForm(forms.Form):
                         initial = None
 
                 if not initial:
-                    initial = "+{}.".format(guess_phone_prefix(event))
+                    phone_prefix = guess_phone_prefix(event)
+                    if phone_prefix:
+                        initial = "+{}.".format(phone_prefix)
 
                 field = PhoneNumberField(
                     label=label, required=required,

@@ -545,7 +545,9 @@ class CustomerUpdateForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         if not self.instance.phone and (self.instance.organizer.settings.region or self.instance.locale):
             country_code = self.instance.organizer.settings.region or get_country_by_locale(self.instance.locale)
-            self.initial['phone'] = "+{}.".format(get_phone_prefix(country_code))
+            phone_prefix = get_phone_prefix(country_code)
+            if phone_prefix:
+                self.initial['phone'] = "+{}.".format(phone_prefix)
 
         self.fields['phone'] = PhoneNumberField(
             label=_('Phone'),

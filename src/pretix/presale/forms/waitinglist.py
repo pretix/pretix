@@ -92,7 +92,9 @@ class WaitingListForm(forms.ModelForm):
 
         if event.settings.waiting_list_phones_asked:
             if not self.initial.get('phone'):
-                self.initial['phone'] = "+{}.".format(guess_phone_prefix(event))
+                phone_prefix = guess_phone_prefix(event)
+                if phone_prefix:
+                    self.initial['phone'] = "+{}.".format(phone_prefix)
 
             self.fields['phone'] = PhoneNumberField(
                 label=_("Phone number"),

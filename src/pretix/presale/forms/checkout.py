@@ -72,17 +72,17 @@ class ContactForm(forms.Form):
 
         if self.event.settings.order_phone_asked:
             if not self.initial.get('phone'):
-                self.initial['phone'] = "+{}.".format(guess_phone_prefix(self.event))
-            initial = self.initial.pop('phone', None)
+                phone_prefix = guess_phone_prefix(self.event)
+                if phone_prefix:
+                    # We now exploit an implementation detail in PhoneNumberPrefixWidget to allow us to pass just
+                    # a country code but no number as an initial value. It's a bit hacky, but should be stable for
+                    # the future.
+                    self.initial['phone'] = "+{}.".format()
 
             self.fields['phone'] = PhoneNumberField(
                 label=_('Phone number'),
                 required=self.event.settings.order_phone_required,
                 help_text=self.event.settings.checkout_phone_helptext,
-                # We now exploit an implementation detail in PhoneNumberPrefixWidget to allow us to pass just
-                # a country code but no number as an initial value. It's a bit hacky, but should be stable for
-                # the future.
-                initial=initial,
                 widget=WrappedPhoneNumberPrefixWidget()
             )
 
