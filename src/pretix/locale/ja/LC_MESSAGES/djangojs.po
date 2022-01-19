@@ -8,10 +8,10 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-01-14 14:33+0000\n"
-"PO-Revision-Date: 2022-01-13 22:00+0000\n"
+"PO-Revision-Date: 2022-01-19 21:00+0000\n"
 "Last-Translator: Yuriko Matsunami <y.matsunami@enobyte.com>\n"
-"Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/pretix-"
-"js/ja/>\n"
+"Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/"
+"pretix-js/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -167,14 +167,12 @@ msgid "Unknown ticket"
 msgstr "不明なチケット"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:57
-#, fuzzy
 msgid "Ticket type not allowed here"
 msgstr "この種類のチケットは使用できません"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:59
-#, fuzzy
 msgid "Entry not allowed"
-msgstr "入力禁止"
+msgstr "入力できません"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:60
 msgid "Ticket code revoked/changed"
@@ -193,9 +191,8 @@ msgid "Valid Tickets"
 msgstr "有効なチケット"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:64
-#, fuzzy
 msgid "Currently inside"
-msgstr "現在の状況"
+msgstr "現在オンラインです"
 
 #: pretix/static/lightbox/js/lightbox.js:96
 msgid "close"
@@ -282,19 +279,16 @@ msgstr "Ctrl-Cを押してコピー！"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:10
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:16
-#, fuzzy
 msgid "is one of"
-msgstr "は　の　一つです"
+msgstr "の一つです"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:22
-#, fuzzy
 msgid "is before"
-msgstr "は以前"
+msgstr "の前"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:26
-#, fuzzy
 msgid "is after"
-msgstr "はその後"
+msgstr "の後"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:59
 msgid "Product"
@@ -309,81 +303,72 @@ msgid "Current date and time"
 msgstr "現在の日時"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:71
-#, fuzzy
 msgid "Number of previous entries"
 msgstr "これまでの入力件数"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:75
-#, fuzzy
 msgid "Number of previous entries since midnight"
-msgstr "夜中から現在までの入力件数"
+msgstr "０時から現在までの入力件数"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:79
-#, fuzzy
 msgid "Number of days with a previous entry"
 msgstr "これまでの入力日数"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:97
 msgid "All of the conditions below (AND)"
-msgstr ""
+msgstr "以下全ての条件（と）"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:98
-#, fuzzy
 msgid "At least one of the conditions below (OR)"
-msgstr "以下の条件の内、最低限１つ（または）"
+msgstr "以下の条件のうち、最低１つ（または）"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:99
-#, fuzzy
 msgid "Event start"
 msgstr "イベント開始"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:100
-#, fuzzy
 msgid "Event end"
 msgstr "イベント終了"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:101
-#, fuzzy
 msgid "Event admission"
-msgstr "入場"
+msgstr "イベントの入場"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:102
 msgid "custom date and time"
-msgstr ""
+msgstr "日時確定"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:103
 msgid "custom time"
-msgstr ""
+msgstr "時刻確定"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:104
 msgid "Tolerance (minutes)"
-msgstr ""
+msgstr "許容誤差（分）"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:105
 msgid "Add condition"
 msgstr "条件を追加"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:106
-#, fuzzy
 msgid "minutes"
 msgstr "分"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:69
 msgid "Lead Scan QR"
-msgstr ""
+msgstr "QRコード読み込み"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:71
-#, fuzzy
 msgid "Check-in QR"
 msgstr "チェックイン用QRコード"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:313
 msgid "The PDF background file could not be loaded for the following reason:"
-msgstr ""
+msgstr "以下の理由によりPDFファイルの読み込みに失敗しました："
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:521
 msgid "Group of objects"
-msgstr ""
+msgstr "オブジェクトグループ"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:527
 msgid "Text object"
@@ -398,7 +383,6 @@ msgid "Image area"
 msgstr "画像エリア"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:533
-#, fuzzy
 msgid "Powered by pretix"
 msgstr "Pretixのイベントチケット売り場"
 
@@ -441,24 +425,19 @@ msgstr "色彩のコントラストが良く読みやすいです！"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:275
 msgid "Your color has decent contrast and is probably good-enough to read!"
-msgstr ""
+msgstr "色彩のコントラストは読むのに十分です！"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:279
-#, fuzzy
 msgid ""
 "Your color has bad contrast for text on white background, please choose a "
 "darker shade."
-msgstr ""
-"このテキストカラーは白い背景とのコントラストがよくありません。暗い色に選び直"
-"してください。"
+msgstr "このテキストカラーは白い背景とのコントラストがよくありません。暗い色に選び直してください。"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:417
-#, fuzzy
 msgid "All"
 msgstr "全"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:418
-#, fuzzy
 msgid "None"
 msgstr "ない"
 
@@ -468,7 +447,7 @@ msgstr "検索ワード"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:422
 msgid "Selected only"
-msgstr ""
+msgstr "選択したもののみ"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:834
 msgid "Use a different name internally"
@@ -507,7 +486,7 @@ msgstr "いいえ"
 #: pretix/static/pretixcontrol/js/ui/subevent.js:111
 msgid "(one more date)"
 msgid_plural "({num} more dates)"
-msgstr[0] ""
+msgstr[0] "({num} 他の日程)"
 
 #: pretix/static/pretixpresale/js/ui/cart.js:43
 msgid ""
@@ -524,19 +503,21 @@ msgstr "カートの有効期限が切れています"
 #: pretix/static/pretixpresale/js/ui/cart.js:50
 msgid "The items in your cart are reserved for you for one minute."
 msgid_plural "The items in your cart are reserved for you for {num} minutes."
-msgstr[0] ""
+msgstr[0] "カート内の商品の予約は {num} 分以内に完了します。"
 
 #: pretix/static/pretixpresale/js/ui/main.js:144
+#, fuzzy
 msgid "The organizer keeps %(currency)s %(amount)s"
-msgstr ""
+msgstr "イベント開催者には%(currency)s %(amount)sが与えられます"
 
 #: pretix/static/pretixpresale/js/ui/main.js:152
+#, fuzzy
 msgid "You get %(currency)s %(amount)s back"
-msgstr ""
+msgstr "お客様には %(currency)s %(amount)s が払い戻されます"
 
 #: pretix/static/pretixpresale/js/ui/main.js:168
 msgid "Please enter the amount the organizer can keep."
-msgstr ""
+msgstr "イベント開催者が受け取る料金を入力してください。"
 
 #: pretix/static/pretixpresale/js/ui/main.js:361
 msgid "Please enter a quantity for one of the ticket types."
@@ -573,7 +554,7 @@ msgstr "登録"
 #: pretix/static/pretixpresale/js/widget/widget.js:20
 msgctxt "widget"
 msgid "Reserved"
-msgstr ""
+msgstr "予約完了"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:21
 msgctxt "widget"
@@ -583,17 +564,17 @@ msgstr "無料"
 #: pretix/static/pretixpresale/js/widget/widget.js:22
 msgctxt "widget"
 msgid "from %(currency)s %(price)s"
-msgstr ""
+msgstr "%(currency)s %(price)sから"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:23
 msgctxt "widget"
 msgid "incl. %(rate)s% %(taxname)s"
-msgstr ""
+msgstr "%(rate)s% %(taxname)s込"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:24
 msgctxt "widget"
 msgid "plus %(rate)s% %(taxname)s"
-msgstr ""
+msgstr "%(rate)s% %(taxname)s抜"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:25
 msgctxt "widget"
@@ -609,19 +590,18 @@ msgstr "税抜"
 #, javascript-format
 msgctxt "widget"
 msgid "currently available: %s"
-msgstr ""
+msgstr "現在%s使用可能"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:28
-#, fuzzy
 msgctxt "widget"
 msgid "Only available with a voucher"
 msgstr "クーポンをお持ちの方のみ"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:29
-#, javascript-format
+#, fuzzy, javascript-format
 msgctxt "widget"
 msgid "minimum amount to order: %s"
-msgstr ""
+msgstr "ご注文いただける最小値：%s"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:30
 msgctxt "widget"
@@ -643,26 +623,21 @@ msgstr ""
 "行してください。"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:34
-#, fuzzy
 msgctxt "widget"
 msgid "Open ticket shop"
-msgstr "チケットショップ開店"
+msgstr "チケットショップを開く"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:35
-#, fuzzy
 msgctxt "widget"
 msgid "The cart could not be created. Please try again later"
-msgstr "カートを作れませんでした。再試行してください。"
+msgstr "カートの作成に失敗しました。再試行してください。"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:36
-#, fuzzy
 msgctxt "widget"
 msgid ""
 "We could not create your cart, since there are currently too many users in "
 "this ticket shop. Please click \"Continue\" to retry in a new tab."
-msgstr ""
-"現在チケットショップが混み合っているため、お客様のカートを作ることができませ"
-"んでした。新しいタブで「次へ」をクリックしてください。"
+msgstr "現在チケットショップが混雑しているため、お客様のカートを作ることができませんでした。新しいタブを開き「次へ」をクリックしてください。"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:38
 msgctxt "widget"
@@ -674,7 +649,7 @@ msgctxt "widget"
 msgid ""
 "You currently have an active cart for this event. If you select more "
 "products, they will be added to your existing cart."
-msgstr ""
+msgstr "お客様のカートはイベントの申し込みに有効です。商品を選択し、カートへ追加してください。"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:41
 msgctxt "widget"
@@ -707,9 +682,10 @@ msgid "Continue"
 msgstr "続ける"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:47
+#, fuzzy
 msgctxt "widget"
 msgid "See variations"
-msgstr ""
+msgstr "他の種類を見る"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:48
 msgctxt "widget"
@@ -747,9 +723,10 @@ msgid "Previous week"
 msgstr "前週"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:55
+#, fuzzy
 msgctxt "widget"
 msgid "Open seat selection"
-msgstr ""
+msgstr "ルームプランを開く"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:56
 msgctxt "widget"
