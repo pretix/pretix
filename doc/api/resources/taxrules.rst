@@ -16,14 +16,21 @@ Field                                 Type                       Description
 ===================================== ========================== =======================================================
 id                                    integer                    Internal ID of the tax rule
 name                                  multi-lingual string       The tax rules' name
+internal_name                         string                     An optional name that is only used in the backend
 rate                                  decimal (string)           Tax rate in percent
 price_includes_tax                    boolean                    If ``true`` (default), tax is assumed to be included in
                                                                  the specified product price
 eu_reverse_charge                     boolean                    If ``true``, EU reverse charge rules are applied
 home_country                          string                     Merchant country (required for reverse charge), can be
                                                                  ``null`` or empty string
+keep_gross_if_rate_changes            boolean                    If ``true``, changes of the tax rate based on custom
+                                                                 rules keep the gross price constant (default is ``false``)
 ===================================== ========================== =======================================================
 
+
+.. versionchanged:: 4.6
+
+    The ``internal_name`` and ``keep_gross_if_rate_changes`` attributes have been added.
 
 Endpoints
 ---------
@@ -56,9 +63,11 @@ Endpoints
           {
             "id": 1,
             "name": {"en": "VAT"},
+            "internal_name": "VAT",
             "rate": "19.00",
             "price_includes_tax": true,
             "eu_reverse_charge": false,
+            "keep_gross_if_rate_changes": false,
             "home_country": "DE"
           }
         ]
@@ -94,9 +103,11 @@ Endpoints
       {
         "id": 1,
         "name": {"en": "VAT"},
+        "internal_name": "VAT",
         "rate": "19.00",
         "price_includes_tax": true,
         "eu_reverse_charge": false,
+        "keep_gross_if_rate_changes": false,
         "home_country": "DE"
       }
 
@@ -140,9 +151,11 @@ Endpoints
       {
         "id": 1,
         "name": {"en": "VAT"},
+        "internal_name": "VAT",
         "rate": "19.00",
         "price_includes_tax": true,
         "eu_reverse_charge": false,
+        "keep_gross_if_rate_changes": false,
         "home_country": "DE"
       }
 
@@ -185,9 +198,11 @@ Endpoints
       {
         "id": 1,
         "name": {"en": "VAT"},
+        "internal_name": "VAT",
         "rate": "20.00",
         "price_includes_tax": true,
         "eu_reverse_charge": false,
+        "keep_gross_if_rate_changes": false,
         "home_country": "DE"
       }
 

@@ -145,7 +145,7 @@
                                 <strong>{% trans "Tax rule" %}</strong>
                             </div>
                             <div class="col-sm-5">
-                                {{ position.tax_rule.name }} ({{ position.tax_rule.rate }} %)
+                                {{ position.tax_rule.internal_name|default:position.tax_rule.name }} ({{ position.tax_rule.rate }} %)
                             </div>
                             <div class="col-sm-4 field-container">
                                 {% bootstrap_field position.form.tax_rule layout='inline' %}

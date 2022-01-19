@@ -426,10 +426,10 @@ class CartManager:
                 if not cp.includes_tax:
                     price = self._get_price(cp.item, cp.variation, cp.voucher, cp.price, cp.subevent,
                                             cp_is_net=True, bundled_sum=bundled_sum)
-                    price = TaxedPrice(net=price.net, gross=price.net, rate=0, tax=0, name='')
+                    price = TaxedPrice(net=price.net, gross=price.net, rate=Decimal('0'), tax=Decimal('0'), name='')
                     pbv = self._get_price(cp.item, cp.variation, None, cp.price, cp.subevent,
                                           cp_is_net=True, bundled_sum=bundled_sum)
-                    pbv = TaxedPrice(net=pbv.net, gross=pbv.net, rate=0, tax=0, name='')
+                    pbv = TaxedPrice(net=pbv.net, gross=pbv.net, rate=Decimal('0'), tax=Decimal('0'), name='')
                 else:
                     price = self._get_price(cp.item, cp.variation, cp.voucher, cp.price, cp.subevent,
                                             bundled_sum=bundled_sum)
@@ -1106,10 +1106,11 @@ def update_tax_rates(event: Event, cart_id: str, invoice_address: InvoiceAddress
         rate = pos.item.tax_rule.tax_rate_for(invoice_address)
 
         if pos.tax_rate != rate:
-            current_net = pos.price - pos.tax_value
-            new_gross = pos.item.tax(current_net, base_price_is='net', invoice_address=invoice_address).gross
-            totaldiff += new_gross - pos.price
-            pos.price = new_gross
+            if not pos.item.tax_rule.keep_gross_if_rate_changes:
+                current_net = pos.price - pos.tax_value
+                new_gross = pos.item.tax(current_net, base_price_is='net', invoice_address=invoice_address).gross
+                totaldiff += new_gross - pos.price
+                pos.price = new_gross
             pos.includes_tax = rate != Decimal('0.00')
             pos.override_tax_rate = rate
             pos.save(update_fields=['price', 'includes_tax', 'override_tax_rate'])

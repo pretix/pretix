@@ -351,6 +351,42 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
             ia = InvoiceAddress.objects.get(pk=self.client.session['carts'][self.session_key].get('invoice_address'))
         assert not ia.vat_id_validated
 
+    def test_reverse_charge_keep_gross(self):
+        self.tr19.eu_reverse_charge = True
+        self.tr19.keep_gross_if_rate_changes = True
+        self.tr19.home_country = Country('DE')
+        self.tr19.save()
+        self.event.settings.invoice_address_vatid = True
+
+        with scopes_disabled():
+            cr1 = CartPosition.objects.create(
+                event=self.event, cart_id=self.session_key, item=self.ticket,
+                price=23, expires=now() + timedelta(minutes=10)
+            )
+
+        with mock.patch('vat_moss.id.validate') as mock_validate:
+            mock_validate.return_value = ('AT', 'AT123456', 'Foo')
+            self.client.post('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), {
+                'is_business': 'business',
+                'company': 'Foo',
+                'name': 'Bar',
+                'street': 'Baz',
+                'zipcode': '12345',
+                'city': 'Here',
+                'country': 'AT',
+                'vat_id': 'AT123456',
+                'email': 'admin@localhost'
+            }, follow=True)
+
+        cr1.refresh_from_db()
+        assert cr1.price == Decimal('23.00')
+        assert cr1.tax_rate == Decimal('0.00')
+        assert cr1.tax_value == Decimal('0.00')
+
+        with scopes_disabled():
+            ia = InvoiceAddress.objects.get(pk=self.client.session['carts'][self.session_key].get('invoice_address'))
+        assert ia.vat_id_validated
+
     def test_custom_tax_rules(self):
         self.tr19.custom_rules = json.dumps([
             {'country': 'AT', 'address_type': 'business_vat_id', 'action': 'reverse'},
@@ -1875,6 +1911,26 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
         with scopes_disabled():
             cr1 = CartPosition.objects.get(id=cr1.id)
             self.assertEqual(cr1.price, round_decimal(Decimal('24.00') / Decimal('1.19')))
+
+    def test_confirm_price_not_changed_reverse_charge_keep_gross(self):
+        self._enable_reverse_charge()
+        self.tr19.keep_gross_if_rate_changes = True
+        self.tr19.save()
+        with scopes_disabled():
+            CartPosition.objects.create(
+                event=self.event, cart_id=self.session_key, item=self.ticket,
+                price=23, expires=now() - timedelta(minutes=10)
+            )
+        self._set_session('payment', 'banktransfer')
+
+        response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
+        doc = BeautifulSoup(response.content.decode(), "lxml")
+        self.assertEqual(len(doc.select(".thank-you")), 1)
+        with scopes_disabled():
+            op = OrderPosition.objects.get()
+            self.assertEqual(op.price, Decimal('23.00'))
+            self.assertEqual(op.tax_value, Decimal('0.00'))
+            self.assertEqual(op.tax_rate, Decimal('0.00'))
 
     def test_confirm_price_changed(self):
         self.ticket.default_price = 24

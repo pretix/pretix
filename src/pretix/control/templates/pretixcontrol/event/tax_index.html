@@ -33,7 +33,7 @@
                     <tr>
                         <td>
                             <strong><a href="{% url "control:event.settings.tax.edit" organizer=request.event.organizer.slug event=request.event.slug rule=tr.id %}">
-                                {{ tr.name }}
+                                {{ tr.internal_name|default:tr.name }}
                             </a></strong>
                         </td>
                         <td>

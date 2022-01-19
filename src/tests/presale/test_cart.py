@@ -3519,6 +3519,39 @@ class CartBundleTest(CartTestMixin, TestCase):
         assert not a.includes_tax
 
     @classscope(attr='orga')
+    def test_reverse_charge_bundled_add_keep_gross_price(self):
+        ia = InvoiceAddress.objects.create(
+            is_business=True, vat_id='ATU1234567', vat_id_validated=True,
+            country=Country('AT')
+        )
+        tr19 = self.event.tax_rules.create(name='VAT', rate=Decimal('19.00'))
+        tr7 = self.event.tax_rules.create(name='VAT', rate=Decimal('7.00'), eu_reverse_charge=True, home_country=Country('DE'),
+                                          keep_gross_if_rate_changes=True)
+        self.ticket.tax_rule = tr19
+        self.ticket.save()
+        self.trans.tax_rule = tr7
+        self.trans.save()
+
+        self.cm.invoice_address = ia
+        self.cm.add_new_items([
+            {
+                'item': self.ticket.pk,
+                'variation': None,
+                'count': 1
+            }
+        ])
+        self.cm.commit()
+
+        cp = CartPosition.objects.filter(addon_to__isnull=True).get()
+        a = CartPosition.objects.filter(addon_to__isnull=False).get()
+        assert cp.price == Decimal('21.50')
+        assert cp.tax_rate == Decimal('19.00')
+        assert cp.includes_tax
+        assert a.price == Decimal('1.50')
+        assert a.tax_rate == Decimal('0.00')
+        assert not a.includes_tax
+
+    @classscope(attr='orga')
     def test_reverse_charge_bundled_add(self):
         ia = InvoiceAddress.objects.create(
             is_business=True, vat_id='ATU1234567', vat_id_validated=True,

@@ -1249,7 +1249,7 @@ TaxRuleLineFormSet = formset_factory(
 class TaxRuleForm(I18nModelForm):
     class Meta:
         model = TaxRule
-        fields = ['name', 'rate', 'price_includes_tax', 'eu_reverse_charge', 'home_country']
+        fields = ['name', 'rate', 'price_includes_tax', 'eu_reverse_charge', 'home_country', 'internal_name', 'keep_gross_if_rate_changes']
 
 
 class WidgetCodeForm(forms.Form):
