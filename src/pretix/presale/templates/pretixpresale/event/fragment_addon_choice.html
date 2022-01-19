@@ -285,7 +285,9 @@
                             {% if c.max_count == 1 or not c.multi_allowed %}
                                 <label class="item-checkbox-label">
                                     <input type="checkbox" value="1"
-                                            {% if c.max_count == 1 and c.min_count == 1 and c.items|length == 1 or item.initial %}
+                                            {% if c.max_count == 1 and c.min_count == 1 and c.items|length == 1 %}
+                                                checked="checked"
+                                            {% elif item.initial %}
                                                 checked="checked"
                                             {% endif %}
                                             name="cp_{{ form.pos.pk }}_item_{{ item.id }}"
