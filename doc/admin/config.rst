@@ -282,7 +282,7 @@ You can use an existing memcached server as pretix's caching backend::
 ``location``
     The location of memcached, either a host:port combination or a socket file.
 
-If no memcached is configured, pretix will use Django's built-in local-memory caching method.
+If no memcached is configured, pretix will use redis for caching. If neither is configured, pretix will not use any caching.
 
 .. note:: If you use memcached and you deploy pretix across multiple servers, you should use *one*
           shared memcached instance, not multiple ones, because cache invalidations would not be
