@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-01-14 14:32+0000\n"
-"PO-Revision-Date: 2021-10-11 15:56+0000\n"
+"PO-Revision-Date: 2022-01-19 21:00+0000\n"
 "Last-Translator: DJG Bayern <pretix2021weblate@aruki.de>\n"
 "Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/pretix/"
 "ja/>\n"
@@ -27,15 +27,15 @@ msgstr ""
 
 #: pretix/api/auth/devicesecurity.py:44
 msgid "pretixSCAN"
-msgstr ""
+msgstr "pretixSCAN"
 
 #: pretix/api/auth/devicesecurity.py:75
 msgid "pretixSCAN (kiosk mode, no order sync, no search)"
-msgstr ""
+msgstr "pretixSCAN (キオスク・モード, 注文シンクなし,検索なし)"
 
 #: pretix/api/auth/devicesecurity.py:104
 msgid "pretixSCAN (online only, no order sync)"
-msgstr ""
+msgstr "pretixSCAN (オンラインのみ, 注文シンクなし)"
 
 #: pretix/api/auth/devicesecurity.py:134
 msgid "pretixPOS"
@@ -43,7 +43,7 @@ msgstr ""
 
 #: pretix/api/models.py:39
 msgid "Application name"
-msgstr ""
+msgstr "アプリケーション名"
 
 #: pretix/api/models.py:42
 msgid "Redirection URIs"
