@@ -287,7 +287,7 @@
                                     <input type="checkbox" value="1"
                                             {% if c.max_count == 1 and c.min_count == 1 and c.items|length == 1 %}
                                                 checked="checked"
-                                                disabled="disabled"
+                                                required="required"
                                             {% elif item.initial %}
                                                 checked="checked"
                                             {% endif %}
