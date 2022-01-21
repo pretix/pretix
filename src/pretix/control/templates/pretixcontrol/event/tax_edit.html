@@ -24,6 +24,7 @@
                     <fieldset>
                         <legend>{% trans "General" %}</legend>
                         {% bootstrap_field form.name layout="control" %}
+                        {% bootstrap_field form.internal_name layout="control" %}
                         {% bootstrap_field form.rate addon_after="%" layout="control" %}
                         {% bootstrap_field form.price_includes_tax layout="control" %}
                     </fieldset>
@@ -39,6 +40,7 @@
                         </div>
                         {% bootstrap_field form.eu_reverse_charge layout="control" %}
                         {% bootstrap_field form.home_country layout="control" %}
+                        {% bootstrap_field form.keep_gross_if_rate_changes layout="control" %}
                         <h3>{% trans "Custom taxation rules" %}</h3>
                         <div class="alert alert-warning">
                             {% blocktrans trimmed %}

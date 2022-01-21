@@ -452,7 +452,7 @@ class OrderPositionChangeForm(forms.Form):
 
     @staticmethod
     def taxrule_label_from_instance(obj):
-        return f"{obj.name} ({obj.rate} %)"
+        return f"{obj.internal_name or obj.name} ({obj.rate} %)"
 
     def __init__(self, *args, **kwargs):
         instance = kwargs.pop('instance')

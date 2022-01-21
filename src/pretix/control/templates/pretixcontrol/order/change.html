@@ -145,7 +145,12 @@
                                 <strong>{% trans "Tax rule" %}</strong>
                             </div>
                             <div class="col-sm-5">
-                                {{ position.tax_rule.name }} ({{ position.tax_rule.rate }} %)
+                                {% if position.tax_rule.internal_name %}
+                                    {{ position.tax_rule.internal_name }}
+                                {% else %}
+                                    {{ position.tax_rule.name }}
+                                {% endif %}
+                                ({{ position.tax_rule.rate }} %)
                             </div>
                             <div class="col-sm-4 field-container">
                                 {% bootstrap_field position.form.tax_rule layout='inline' %}

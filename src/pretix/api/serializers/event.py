@@ -637,7 +637,7 @@ class SubEventSerializer(I18nAwareModelSerializer):
 class TaxRuleSerializer(CountryFieldMixin, I18nAwareModelSerializer):
     class Meta:
         model = TaxRule
-        fields = ('id', 'name', 'rate', 'price_includes_tax', 'eu_reverse_charge', 'home_country')
+        fields = ('id', 'name', 'rate', 'price_includes_tax', 'eu_reverse_charge', 'home_country', 'internal_name', 'keep_gross_if_rate_changes')
 
 
 class EventSettingsSerializer(SettingsSerializer):

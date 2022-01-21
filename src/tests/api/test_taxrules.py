@@ -27,6 +27,8 @@ from django_scopes import scopes_disabled
 from pretix.base.models import TaxRule
 
 TEST_TAXRULE_RES = {
+    'internal_name': None,
+    'keep_gross_if_rate_changes': False,
     'name': {'en': 'VAT'},
     'rate': '19.00',
     'price_includes_tax': True,
