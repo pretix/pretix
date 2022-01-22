@@ -19,6 +19,7 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
+import dns.resolver
 from django.conf import settings
 from django.contrib import messages
 from django.core.mail import get_connection
@@ -27,13 +28,12 @@ from django.utils.crypto import get_random_string
 from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import TemplateView
-import dns.resolver
 
 from pretix.base.email import test_custom_smtp_backend
 from pretix.base.models import Event
 from pretix.base.services.mail import mail
 from pretix.control.forms.filter import OrganizerFilterForm
-from pretix.control.forms.mailsetup import SMTPMailForm, SimpleMailForm
+from pretix.control.forms.mailsetup import SimpleMailForm, SMTPMailForm
 
 
 class MailSettingsSetupView(TemplateView):

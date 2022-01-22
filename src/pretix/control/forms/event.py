@@ -64,7 +64,8 @@ from pretix.base.settings import (
     PERSON_NAME_SCHEMES, PERSON_NAME_TITLE_GROUPS, validate_event_settings,
 )
 from pretix.control.forms import (
-    MultipleLanguagesWidget, SlugWidget, SplitDateTimeField, SplitDateTimePickerWidget,
+    MultipleLanguagesWidget, SlugWidget, SplitDateTimeField,
+    SplitDateTimePickerWidget,
 )
 from pretix.control.forms.widgets import Select2
 from pretix.helpers.countries import CachedCountries

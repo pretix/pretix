@@ -49,6 +49,7 @@ from django.utils.translation import gettext_lazy as _
 from django_scopes.forms import SafeModelMultipleChoiceField
 
 from ...base.forms import I18nModelForm
+
 # Import for backwards compatibility with okd import paths
 from ...base.forms.widgets import (  # noqa
     DatePickerWidget, SplitDateTimePickerWidget, TimePickerWidget,
