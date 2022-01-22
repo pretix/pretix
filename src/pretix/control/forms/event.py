@@ -64,8 +64,7 @@ from pretix.base.settings import (
     PERSON_NAME_SCHEMES, PERSON_NAME_TITLE_GROUPS, validate_event_settings,
 )
 from pretix.control.forms import (
-    MultipleLanguagesWidget, SlugWidget, SMTPSettingsMixin, SplitDateTimeField,
-    SplitDateTimePickerWidget,
+    MultipleLanguagesWidget, SlugWidget, SplitDateTimeField, SplitDateTimePickerWidget,
 )
 from pretix.control.forms.widgets import Select2
 from pretix.helpers.countries import CachedCountries
@@ -865,10 +864,9 @@ def contains_web_channel_validate(val):
         raise ValidationError(_("The online shop must be selected to receive these emails."))
 
 
-class MailSettingsForm(SMTPSettingsMixin, SettingsForm):
+class MailSettingsForm(SettingsForm):
     auto_fields = [
         'mail_prefix',
-        'mail_from',
         'mail_from_name',
         'mail_attach_ical',
         'mail_attach_tickets',

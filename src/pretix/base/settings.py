@@ -1589,7 +1589,7 @@ DEFAULTS = {
         'type': str
     },
     'mail_from': {
-        'default': settings.MAIL_FROM,
+        'default': settings.MAIL_FROM_ORGANIZERS,
         'type': str,
         'form_class': forms.EmailField,
         'serializer_class': serializers.EmailField,

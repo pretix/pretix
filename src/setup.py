@@ -190,6 +190,7 @@ setup(
         'django-scopes==1.2.*',
         'django-statici18n==2.1.*',
         'djangorestframework==3.12.*',
+        'dnspython==2.2.*',
         'drf_ujson2==1.6.*',
         'isoweek',
         'jsonschema',

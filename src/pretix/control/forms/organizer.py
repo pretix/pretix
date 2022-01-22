@@ -60,9 +60,7 @@ from pretix.base.models import (
     MembershipType, Organizer, Team,
 )
 from pretix.base.settings import PERSON_NAME_SCHEMES, PERSON_NAME_TITLE_GROUPS
-from pretix.control.forms import (
-    ExtFileField, SMTPSettingsMixin, SplitDateTimeField,
-)
+from pretix.control.forms import ExtFileField, SplitDateTimeField
 from pretix.control.forms.event import (
     SafeEventMultipleChoiceField, multimail_validate,
 )
@@ -358,9 +356,8 @@ class OrganizerSettingsForm(SettingsForm):
         ]
 
 
-class MailSettingsForm(SMTPSettingsMixin, SettingsForm):
+class MailSettingsForm(SettingsForm):
     auto_fields = [
-        'mail_from',
         'mail_from_name',
     ]
 

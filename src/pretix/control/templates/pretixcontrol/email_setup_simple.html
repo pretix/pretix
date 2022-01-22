@@ -1,0 +1,79 @@
+{% extends basetpl %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% load hierarkey_form %}
+{% load static %}
+{% block title %}{% trans "Organizer" %}{% endblock %}
+{% block content %}
+    <h1>{% trans "E-mail sending" %}</h1>
+    <form action="" method="post" class="form-horizontal">
+        {% csrf_token %}
+        {% for k, v in request.POST.items %}
+            <input type="hidden" name="{{ k }}" value="{{ v }}">
+        {% endfor %}
+        <input type="hidden" name="state" value="save">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <p class="panel-title">
+                    <strong>{% trans "Use system email server with a custom sender address" %}</strong>
+                </p>
+            </div>
+            <div class="panel-body form-horizontal">
+                {% if spf_warning %}
+                    <div class="alert alert-warning">
+                        <p>
+                            {{ spf_warning }}
+                        </p>
+                        {% if spf_record %}
+                            <p>
+                                {% trans "This is the SPF record we found on your domain:" %}
+                            </p>
+                            <pre><code>{{ spf_record }}</code></pre>
+                            <p>
+                                {% trans "To fix this, include the following part before the last word:" %}
+                            </p>
+                            <pre><code>{{ spf_key }}</code></pre>
+                        {% else %}
+                            <p>
+                                {% trans "Your new SPF record could look like this:" %}
+                            </p>
+                            <pre><code>v=spf1 a mx {{ spf_key }} ~all</code></pre>
+                        {% endif %}
+                        <p>
+                            {% trans "Please keep in mind that updates to DNS might require multiple hours to take effect." %}
+                        </p>
+                    </div>
+                {% elif spf_key %}
+                    <div class="alert alert-success">
+                        {% blocktrans trimmed %}
+                            We found an SPF record on your domain that includes this system. Great!
+                        {% endblocktrans %}
+                    </div>
+                {% endif %}
+                {% if verification %}
+                    <h3>{% trans "Verification" %}</h3>
+                    <p>
+                        {% blocktrans trimmed with recp=recp %}
+                            We've sent an email to {{ recp }} with a confirmation code to verify that this email address
+                            is owned by you. Please enter the verification code below:
+                        {% endblocktrans %}
+                    </p>
+                    <div class="form-group">
+                        <label class="col-md-3 control-label" for="id_verification">
+                            {% trans "Verification code" %}
+                        </label>
+                        <div class="col-md-9">
+                            <input type="text" name="verification" class="form-control">
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="form-group submit-group">
+            <button type="submit" class="btn btn-primary btn-save">
+                {% trans "Save" %}
+            </button>
+        </div>
+    </form>
+{% endblock %}
