@@ -210,7 +210,7 @@ class MailSettingsSetupView(TemplateView):
                             'smtp.gmail.com': _(
                                 'We recommend not using Google Mail for transactional emails. If you try sending many '
                                 'emails in a short amount of time, e.g. when sending information to all your ticket '
-                                'buyers, there is a high change Google will not deliver all of your emails since they '
+                                'buyers, there is a high chance Google will not deliver all of your emails since they '
                                 'impose a maximum number of emails per time period.'
                             ),
                         }.get(self.smtp_form.cleaned_data['smtp_host']),
