@@ -183,7 +183,7 @@ setup(
         'django-localflavor==3.1',
         'django-markup',
         'django-mysql',
-        'django-oauth-toolkit==1.2.*',
+        'django-oauth-toolkit>=1.2,<1.8',
         'django-otp==1.1.*',
         'django-phonenumber-field==6.0.*',
         'django-redis==5.0.*',
