@@ -58,6 +58,7 @@ class AuthenticationForm(forms.Form):
         label=_("Password"),
         strip=False,
         widget=forms.PasswordInput(attrs={'autocomplete': 'current-password'}),
+        max_length=4096,
     )
 
     error_messages = {
@@ -251,11 +252,13 @@ class SetPasswordForm(forms.Form):
     password = forms.CharField(
         label=_('Password'),
         widget=forms.PasswordInput(attrs={'minlength': '8', 'autocomplete': 'new-password'}),
+        max_length=4096,
         required=True
     )
     password_repeat = forms.CharField(
         label=_('Repeat password'),
         widget=forms.PasswordInput(attrs={'minlength': '8', 'autocomplete': 'new-password'}),
+        max_length=4096,
     )
 
     def __init__(self, customer=None, *args, **kwargs):
@@ -343,11 +346,13 @@ class ChangePasswordForm(forms.Form):
     password = forms.CharField(
         label=_('New password'),
         widget=forms.PasswordInput,
+        max_length=4096,
         required=True
     )
     password_repeat = forms.CharField(
         label=_('Repeat password'),
         widget=forms.PasswordInput(attrs={'minlength': '8', 'autocomplete': 'new-password'}),
+        max_length=4096,
     )
 
     def __init__(self, customer, *args, **kwargs):
@@ -406,6 +411,7 @@ class ChangeInfoForm(forms.ModelForm):
         label=_('Your current password'),
         widget=forms.PasswordInput,
         help_text=_('Only required if you change your email address'),
+        max_length=4096,
         required=False
     )
 
