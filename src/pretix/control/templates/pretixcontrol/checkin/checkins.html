@@ -74,17 +74,17 @@
                             {{ c.datetime|date:"SHORT_DATETIME_FORMAT" }}
                             {% if c.type == "exit" %}
                                 {% if c.auto_checked_in %}
-                                    <span class="fa fa-fw fa-hourglass-end" data-toggle="tooltip_html"
+                                    <span class="fa fa-fw fa-hourglass-end" data-toggle="tooltip"
                                           title="{% blocktrans trimmed with date=c.datetime|date:'SHORT_DATETIME_FORMAT' %}Automatically marked not present: {{ date }}{% endblocktrans %}"></span>
                                 {% endif %}
                             {% elif c.forced and c.successful %}
-                                <span class="fa fa-fw fa-warning" data-toggle="tooltip_html"
+                                <span class="fa fa-fw fa-warning" data-toggle="tooltip"
                                       title="{% blocktrans trimmed with date=c.datetime|date:'SHORT_DATETIME_FORMAT' %}Additional entry scan: {{ date }}{% endblocktrans %}"></span>
                             {% elif c.forced and not c.successful %}
                                 <br>
                                 <small class="text-muted">{% trans "Failed in offline mode" %}</small>
                             {% elif c.auto_checked_in %}
-                                <span class="fa fa-fw fa-magic" data-toggle="tooltip_html"
+                                <span class="fa fa-fw fa-magic" data-toggle="tooltip"
                                       title="{% blocktrans trimmed with date=c.datetime|date:'SHORT_DATETIME_FORMAT' %}Automatically checked in: {{ date }}{% endblocktrans %}"></span>
                             {% endif %}
                         </td>
