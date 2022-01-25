@@ -1,0 +1,26 @@
+{% extends "error.html" %}
+{% load i18n %}
+{% load rich_text %}
+{% load static %}
+{% block title %}{% trans "Redirect" %}{% endblock %}
+{% block content %}
+<i class="fa fa-link fa-fw big-icon"></i>
+<div class="error-details">
+    <h1>{% trans "Redirect" %}</h1>
+    <h3>
+        {% blocktrans trimmed with host="<strong>"|add:hostname|add:"</strong>"|safe %}
+        The link you clicked on wants to redirect you to a destination on the website {{ host }}.
+        {% endblocktrans %}
+        {% blocktrans trimmed %}
+        Please only proceed if you trust this website to be safe.
+        {% endblocktrans %}
+    </h3>
+    <p>
+        <a href="{{ url }}" class="btn btn-primary btn-lg">
+            {% blocktrans trimmed with host=hostname %}
+            Proceed to {{ host }}
+            {% endblocktrans %}
+        </a>
+    </p>
+</div>
+{% endblock %}
