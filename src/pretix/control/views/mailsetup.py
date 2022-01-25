@@ -31,12 +31,11 @@ from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import TemplateView
 
-from pretix.base.email import test_custom_smtp_backend
+from pretix.base import email
 from pretix.base.models import Event
 from pretix.base.services.mail import mail
 from pretix.control.forms.filter import OrganizerFilterForm
 from pretix.control.forms.mailsetup import SimpleMailForm, SMTPMailForm
-
 
 logger = logging.getLogger(__name__)
 
@@ -52,7 +51,6 @@ def get_spf_record(hostname):
 
 
 def _check_spf_record(not_found_lookup_parts, spf_record, depth):
-    print(spf_record, not_found_lookup_parts)
     if depth > 10:  # prevent infinite loops
         return
 
@@ -81,7 +79,7 @@ def check_spf_record(lookup, spf_record):
     include: directives recursively
     """
     not_found_lookup_parts = set(lookup.split(" "))
-    not_found_lookup_parts = _check_spf_record(not_found_lookup_parts, spf_record, 0)
+    _check_spf_record(not_found_lookup_parts, spf_record, 0)
     return not not_found_lookup_parts
 
 
@@ -120,7 +118,7 @@ class MailSettingsSetupView(TemplateView):
             ctx['mode'] = self.request.POST.get('mode')
         elif self.object.settings.smtp_use_custom:
             ctx['mode'] = 'smtp'
-        elif 'mail_from' in self.object.settings._cache() and self.object.settings.mail_from != settings.MAIL_FROM_ORGANIZERS:
+        elif self.object.settings.mail_from not in (settings.MAIL_FROM_ORGANIZERS, settings.MAIL_FROM):
             ctx['mode'] = 'simple'
         else:
             ctx['mode'] = 'system'
@@ -141,6 +139,20 @@ class MailSettingsSetupView(TemplateView):
             del self.object.settings.smtp_port
             del self.object.settings.smtp_username
             del self.object.settings.smtp_password
+            del self.object.settings.smtp_use_tls
+            del self.object.settings.smtp_use_ssl
+            messages.success(request, _('Your changes have been saved.'))
+            return redirect(self.get_success_url())
+
+        elif request.POST.get('mode') == 'reset':
+            del self.object.settings.mail_from
+            del self.object.settings.smtp_use_custom
+            del self.object.settings.smtp_host
+            del self.object.settings.smtp_port
+            del self.object.settings.smtp_username
+            del self.object.settings.smtp_password
+            del self.object.settings.smtp_use_tls
+            del self.object.settings.smtp_use_ssl
             messages.success(request, _('Your changes have been saved.'))
             return redirect(self.get_success_url())
 
@@ -148,16 +160,19 @@ class MailSettingsSetupView(TemplateView):
             if not self.simple_form.is_valid():
                 return super().get(request, *args, **kwargs)
 
-            session_key = f'sender_mail_verification_code_{self.request.path}'
+            session_key = f'sender_mail_verification_code_{self.request.path}_{self.simple_form.cleaned_data.get("mail_from")}'
             allow_save = (
-                (not settings.MAIL_CUSTOM_SENDER_VERIFICATION_REQUIRED and not settings.MAIL_CUSTOM_SENDER_SPF_STRING) or
-                'verification' in self.request.POST and self.request.POST.get('verification', '') == self.request.session.get(session_key, None)
+                (not settings.MAIL_CUSTOM_SENDER_VERIFICATION_REQUIRED or
+                 ('verification' in self.request.POST and self.request.POST.get('verification', '') == self.request.session.get(session_key, None))) and
+                (not settings.MAIL_CUSTOM_SENDER_SPF_STRING or self.request.POST.get('state') == 'save')
             )
 
             if allow_save:
                 for k, v in self.simple_form.cleaned_data.items():
                     self.object.settings.set(k, v)
                 self.log_action(self.simple_form.cleaned_data)
+                if session_key in request.session:
+                    del request.session[session_key]
                 messages.success(request, _('Your changes have been saved.'))
                 return redirect(self.get_success_url())
 
@@ -192,6 +207,7 @@ class MailSettingsSetupView(TemplateView):
                         'pretixcontrol/email/email_setup.txt',
                         {
                             'code': self.request.session[session_key],
+                            'address': self.simple_form.cleaned_data.get('mail_from'),
                             'instance': settings.PRETIX_INSTANCE_NAME,
                         },
                         None,
@@ -238,7 +254,7 @@ class MailSettingsSetupView(TemplateView):
                     timeout=10,
                 )
                 try:
-                    test_custom_smtp_backend(backend, self.smtp_form.cleaned_data.get('mail_from'))
+                    email.test_custom_smtp_backend(backend, self.smtp_form.cleaned_data.get('mail_from'))
                 except Exception as e:
                     messages.error(self.request, _('An error occurred while contacting the SMTP server: %s') % str(e))
                     return self.get(request, *args, **kwargs)

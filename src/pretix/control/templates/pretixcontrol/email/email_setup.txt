@@ -1,6 +1,6 @@
 {% load i18n %}{% blocktrans with code=code instance=instance %}Hello,
 
-someone requested to use this email address as a sender address on {{ instance }}.
+someone requested to use {{ address }} as a sender address on {{ instance }}.
 This will allow them to send emails that are shown to originate from this email address.
 If that was you, please enter the following confirmation code:
 

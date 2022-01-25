@@ -36,8 +36,10 @@
                             <dd>{{ object.settings.mail_from_name|default_if_none:object.name }}
                                 &lt;{{ default_sender_address }}&gt;
                             </dd>
-                            <dt>{% trans "Reply-To" context "mail_header" %}</dt>
-                            <dd>{{ object.settings.contact_mail }}</dd>
+                            {% if object.settings.contact_mail %}
+                                <dt>{% trans "Reply-To" context "mail_header" %}</dt>
+                                <dd>{{ object.settings.contact_mail }}</dd>
+                            {% endif %}
                         </dl>
                     </div>
                 </div>
@@ -96,6 +98,24 @@
                     </div>
                 </div>
             </div>
+            {% if request.event %}
+                <div class="panel panel-default">
+                    <div class="accordion-radio">
+                        <div class="panel-heading">
+                            <p class="panel-title">
+                                <input type="radio" name="mode" value="reset"
+                                       data-parent="#reset"
+                                       id="input_mode_reset"
+                                       data-toggle="radiocollapse" data-target="#mode_reset"/>
+                                <label for="input_mode_reset"><strong>{% trans "Reset to organizer settings" %}</strong></label>
+                            </p>
+                        </div>
+                    </div>
+                    <div id="mode_reset"
+                         class="panel-collapse collapsed {% if mode == "reset" %}in{% endif %}">
+                    </div>
+                </div>
+            {% endif %}
         </div>
 
         <div class="form-group submit-group">

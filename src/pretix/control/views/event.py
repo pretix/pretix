@@ -638,8 +638,7 @@ class MailSettings(EventSettingsViewMixin, EventSettingsFormView):
                         k: form.cleaned_data.get(k) for k in form.changed_data
                     }
                 )
-            else:
-                messages.success(self.request, _('Your changes have been saved.'))
+            messages.success(self.request, _('Your changes have been saved.'))
             return redirect(self.get_success_url())
         else:
             messages.error(self.request, _('We could not save your changes. See below for details.'))

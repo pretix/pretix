@@ -262,7 +262,6 @@ class OrganizerMailSettings(OrganizerSettingsFormView):
                         k: form.cleaned_data.get(k) for k in form.changed_data
                     }
                 )
-            else:
                 messages.success(self.request, _('Your changes have been saved.'))
             return redirect(self.get_success_url())
         else:

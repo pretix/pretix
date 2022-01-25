@@ -12,8 +12,11 @@
         <div class="tabbed-form">
             <fieldset>
                 <legend>{% trans "General" %}</legend>
+                {% bootstrap_field form.mail_prefix layout="control" %}
+                {% bootstrap_field form.mail_attach_tickets layout="control" %}
+                {% bootstrap_field form.mail_attach_ical layout="control" %}
                 {% url "control:organizer.settings.mail" organizer=request.organizer.slug as org_url %}
-                {% propagated request.event org_url "mail_from" "mail_from_name" "mail_text_signature" "mail_bcc" "smtp_use_custom" "smtp_host" "smtp_port" "smtp_username" "smtp_password" "smtp_use_tls" "smtp_use_ssl" %}
+                {% propagated request.event org_url "mail_from" "smtp_use_custom" "smtp_host" "smtp_port" "smtp_username" "smtp_password" "smtp_use_tls" "smtp_use_ssl" %}
                     <div class="form-group">
                         <label class="col-md-3 control-label">
                             {% trans "Sending method" %}
@@ -46,13 +49,12 @@
                             </a>
                         </div>
                     </div>
+                {% endpropagated %}
+                {% propagated request.event org_url "mail_from_name" "mail_text_signature" "mail_bcc" %}
                     {% bootstrap_field form.mail_from_name layout="control" %}
                     {% bootstrap_field form.mail_text_signature layout="control" %}
                     {% bootstrap_field form.mail_bcc layout="control" %}
                 {% endpropagated %}
-                {% bootstrap_field form.mail_prefix layout="control" %}
-                {% bootstrap_field form.mail_attach_tickets layout="control" %}
-                {% bootstrap_field form.mail_attach_ical layout="control" %}
                 {% bootstrap_field form.mail_sales_channel_placed_paid layout="control" %}
             </fieldset>
             <fieldset>
