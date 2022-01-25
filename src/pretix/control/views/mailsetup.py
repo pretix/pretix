@@ -19,6 +19,8 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
+import logging
+
 import dns.resolver
 from django.conf import settings
 from django.contrib import messages
@@ -34,6 +36,53 @@ from pretix.base.models import Event
 from pretix.base.services.mail import mail
 from pretix.control.forms.filter import OrganizerFilterForm
 from pretix.control.forms.mailsetup import SimpleMailForm, SMTPMailForm
+
+
+logger = logging.getLogger(__name__)
+
+
+def get_spf_record(hostname):
+    try:
+        for resp in dns.resolver.resolve(hostname, 'TXT'):
+            data = b''.join(resp.strings).decode()
+            if data.lower().strip().startswith('v=spf1 '):  # RFC7208, section 4.5
+                return data
+    except:
+        logger.exception("Could not fetch SPF record")
+
+
+def _check_spf_record(not_found_lookup_parts, spf_record, depth):
+    print(spf_record, not_found_lookup_parts)
+    if depth > 10:  # prevent infinite loops
+        return
+
+    parts = spf_record.lower().split(" ")  # RFC 7208, section 4.6.1
+
+    for p in parts:
+        try:
+            not_found_lookup_parts.remove(p)
+        except KeyError:
+            pass
+
+    if not not_found_lookup_parts:  # save some DNS requests if we already found everything
+        return
+
+    for p in parts:
+        if p.startswith('include:') or p.startswith('+include:'):
+            _, hostname = p.split(':')
+            rec_record = get_spf_record(hostname)
+            if rec_record:
+                _check_spf_record(not_found_lookup_parts, rec_record, depth + 1)
+
+
+def check_spf_record(lookup, spf_record):
+    """
+    Check that all parts of lookup appear somewhere in the given SPF record, resolving
+    include: directives recursively
+    """
+    not_found_lookup_parts = set(lookup.split(" "))
+    not_found_lookup_parts = _check_spf_record(not_found_lookup_parts, spf_record, 0)
+    return not not_found_lookup_parts
 
 
 class MailSettingsSetupView(TemplateView):
@@ -116,13 +165,7 @@ class MailSettingsSetupView(TemplateView):
             spf_record = None
             if settings.MAIL_CUSTOM_SENDER_SPF_STRING:
                 hostname = self.simple_form.cleaned_data['mail_from'].split('@')[-1]
-                try:
-                    for resp in dns.resolver.resolve(hostname, 'TXT'):
-                        data = b''.join(resp.strings).decode()
-                        if 'v=spf' in data.lower():
-                            spf_record = data
-                except:
-                    pass
+                spf_record = get_spf_record(hostname)
                 if not spf_record:
                     spf_warning = _(
                         'We could not find an SPF record set for the domain you are trying to use. You can still '
@@ -130,7 +173,7 @@ class MailSettingsSetupView(TemplateView):
                         'strongly recommend setting an SPF record on the domain. You can do so through the DNS '
                         'settings at the provider you registered your domain with.'
                     )
-                elif settings.MAIL_CUSTOM_SENDER_SPF_STRING not in spf_record:
+                elif not check_spf_record(settings.MAIL_CUSTOM_SENDER_SPF_STRING, spf_record):
                     spf_warning = _(
                         'We found an SPF record set for the domain you are trying to use, but it does not include this '
                         'system\'s email server. This means that there is a very high chance most of the emails will be '
