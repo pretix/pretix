@@ -1,6 +1,6 @@
 {% load i18n %}
 <div class="quotabox availability" data-toggle="tooltip_html" data-placement="top"
-        title="{% trans "Quota:" %} {{ q.name }}<br>{% blocktrans with date=q.cached_availability_time|date:"SHORT_DATETIME_FORMAT" %}Numbers as of {{ date }}{% endblocktrans %}">
+        title="{% trans "Quota:" %} {{ q.name|force_escape|force_escape }}<br>{% blocktrans with date=q.cached_availability_time|date:"SHORT_DATETIME_FORMAT" %}Numbers as of {{ date }}{% endblocktrans %}">
     {% if q.size|default_if_none:"NONE" == "NONE" %}
         <div class="progress">
             <div class="progress-bar progress-bar-success progress-bar-100">
