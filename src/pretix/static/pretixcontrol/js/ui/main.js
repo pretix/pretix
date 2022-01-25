@@ -675,7 +675,21 @@ $(function () {
 
     $('[data-toggle="tooltip"]').tooltip();
     $('[data-toggle="tooltip_html"]').tooltip({
-        'html': true
+        'html': true,
+        'whiteList': {
+            // Global attributes allowed on any supplied element below.
+            '*': ['class', 'dir', 'id', 'lang', 'role'],
+            b: [],
+            br: [],
+            code: [],
+            div: [],  // required for template
+            h3: ['class', 'role'],  // required for template
+            i: [],
+            small: [],
+            span: [],
+            strong: [],
+            u: [],
+        }
     });
 
     var url = document.location.toString();
