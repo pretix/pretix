@@ -24,6 +24,21 @@ import urllib.parse
 from django.core import signing
 from django.http import HttpResponseBadRequest, HttpResponseRedirect
 from django.urls import reverse
+from django.shortcuts import render
+
+
+def _is_samesite_referer(request):
+    referer = request.META.get('HTTP_REFERER')
+    if referer is None:
+        return False
+
+    referer = urllib.parse.urlparse(referer)
+
+    # Make sure we have a valid URL for Referer.
+    if '' in (referer.scheme, referer.netloc):
+        return False
+
+    return (referer.scheme, referer.netloc) == (request.scheme, request.get_host())
 
 
 def redir_view(request):
@@ -32,6 +47,14 @@ def redir_view(request):
         url = signer.unsign(request.GET.get('url', ''))
     except signing.BadSignature:
         return HttpResponseBadRequest('Invalid parameter')
+
+    if not _is_samesite_referer(request):
+        u = urllib.parse.urlparse(url)
+        return render(request, 'pretixbase/redirect.html', {
+            'hostname': u.hostname,
+            'url': url,
+        })
+
     r = HttpResponseRedirect(url)
     r['X-Robots-Tag'] = 'noindex'
     return r
