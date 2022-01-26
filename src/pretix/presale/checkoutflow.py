@@ -513,7 +513,11 @@ class AddOnsStep(CartMixin, AsyncAction, TemplateFlowStep):
                     )
                     item_cache[ckey] = items
                 else:
-                    items = item_cache[ckey]
+                    # We can use the cache to prevent a database fetch, but we need separate Python objects
+                    # or our things below like setting `i.initial` will do the wrong thing.
+                    items = [copy.copy(i) for i in item_cache[ckey]]
+                    for i in items:
+                        i.available_variations = [copy.copy(v) for v in i.available_variations]
 
                 for i in items:
                     i.allow_waitinglist = False
