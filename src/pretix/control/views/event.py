@@ -65,9 +65,7 @@ from i18nfield.utils import I18nJSONEncoder
 from pytz import timezone
 
 from pretix.base.channels import get_all_sales_channels
-from pretix.base.email import (
-    get_available_placeholders, test_custom_smtp_backend,
-)
+from pretix.base.email import get_available_placeholders
 from pretix.base.models import Event, LogEntry, Order, TaxRule, Voucher
 from pretix.base.models.event import EventMetaValue
 from pretix.base.services import tickets
@@ -83,6 +81,7 @@ from pretix.control.forms.event import (
     TicketSettingsForm, WidgetCodeForm,
 )
 from pretix.control.permissions import EventPermissionRequiredMixin
+from pretix.control.views.mailsetup import MailSettingsSetupView
 from pretix.control.views.user import RecentAuthenticationRequiredMixin
 from pretix.helpers.database import rolledback_transaction
 from pretix.multidomain.urlreverse import get_event_domain
@@ -639,27 +638,27 @@ class MailSettings(EventSettingsViewMixin, EventSettingsFormView):
                         k: form.cleaned_data.get(k) for k in form.changed_data
                     }
                 )
-
-            if request.POST.get('test', '0').strip() == '1':
-                backend = self.request.event.get_mail_backend(force_custom=True, timeout=10)
-                try:
-                    test_custom_smtp_backend(backend, self.request.event.settings.mail_from)
-                except Exception as e:
-                    messages.warning(self.request, _('An error occurred while contacting the SMTP server: %s') % str(e))
-                else:
-                    if form.cleaned_data.get('smtp_use_custom'):
-                        messages.success(self.request, _('Your changes have been saved and the connection attempt to '
-                                                         'your SMTP server was successful.'))
-                    else:
-                        messages.success(self.request, _('We\'ve been able to contact the SMTP server you configured. '
-                                                         'Remember to check the "use custom SMTP server" checkbox, '
-                                                         'otherwise your SMTP server will not be used.'))
-            else:
-                messages.success(self.request, _('Your changes have been saved.'))
+            messages.success(self.request, _('Your changes have been saved.'))
             return redirect(self.get_success_url())
         else:
             messages.error(self.request, _('We could not save your changes. See below for details.'))
             return self.get(request)
+
+
+class MailSettingsSetup(EventPermissionRequiredMixin, MailSettingsSetupView):
+    permission = 'can_change_event_settings'
+    basetpl = 'pretixcontrol/event/base.html'
+
+    def get_success_url(self) -> str:
+        return reverse('control:event.settings.mail', kwargs={
+            'organizer': self.request.event.organizer.slug,
+            'event': self.request.event.slug
+        })
+
+    def log_action(self, data):
+        self.request.event.log_action(
+            'pretix.event.settings', user=self.request.user, data=data
+        )
 
 
 class MailSettingsPreview(EventPermissionRequiredMixin, View):

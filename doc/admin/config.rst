@@ -220,12 +220,30 @@ Example::
 ``user``, ``password``
     The SMTP user data to use for the connection. Empty by default.
 
+``tls``, ``ssl``
+    Use STARTTLS or SSL for the SMTP connection. Off by default.
+
 ``from``
     The email address to set as ``From`` header in outgoing emails by the system.
     Default: ``pretix@localhost``
 
-``tls``, ``ssl``
-    Use STARTTLS or SSL for the SMTP connection. Off by default.
+``from_notifications``
+    The email address to set as ``From`` header in admin notification emails by the system.
+    Defaults to the value of ``from``.
+
+``from_organizers``
+    The email address to set as ``From`` header in outgoing emails by the system sent on behalf of organizers.
+    Defaults to the value of ``from``.
+
+``custom_sender_verification_required``
+    If this is on (the default), organizers need to verify email addresses they want to use as senders in their event.
+
+``custom_sender_spf_string``
+    If this is set to a valid SPF string, pretix will show a warning if organizers use a sender address from a domain
+    that does not include this value.
+
+``custom_smtp_allow_private_networks``
+    If this is off (the default), custom SMTP servers cannot be private network addresses.
 
 ``admins``
     Comma-separated list of email addresses that should receive a report about every error code 500 thrown by pretix.

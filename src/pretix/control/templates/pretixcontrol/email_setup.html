@@ -1,0 +1,127 @@
+{% extends basetpl %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% load hierarkey_form %}
+{% load static %}
+{% block title %}{% trans "Organizer" %}{% endblock %}
+{% block content %}
+    <h1>{% trans "E-mail sending" %}</h1>
+    <form action="" method="post" class="form-horizontal">
+        {% csrf_token %}
+        <div class="panel-group" id="email">
+            <div class="panel panel-default">
+                <div class="accordion-radio">
+                    <div class="panel-heading">
+                        <p class="panel-title">
+                            <input type="radio" name="mode" value="system"
+                                   data-parent="#email"
+                                   {% if mode == "system" %}checked="checked"{% endif %}
+                                   id="input_mode_system"
+                                   data-toggle="radiocollapse" data-target="#mode_system"/>
+                            <label for="input_mode_system"><strong>{% trans "Use system default" %}</strong></label>
+                        </p>
+                    </div>
+                </div>
+                <div id="mode_system"
+                     class="panel-collapse collapsed {% if mode == "system" %}in{% endif %}">
+                    <div class="panel-body form-horizontal">
+                        <p>
+                            {% blocktrans trimmed %}
+                                E-mails will be sent through the system's default server. They will show the following
+                                sender information:
+                            {% endblocktrans %}
+                        </p>
+                        <dl class="dl-horizontal">
+                            <dt>{% trans "From" context "mail_header" %}</dt>
+                            <dd>{{ object.settings.mail_from_name|default_if_none:object.name }}
+                                &lt;{{ default_sender_address }}&gt;
+                            </dd>
+                            {% if object.settings.contact_mail %}
+                                <dt>{% trans "Reply-To" context "mail_header" %}</dt>
+                                <dd>{{ object.settings.contact_mail }}</dd>
+                            {% endif %}
+                        </dl>
+                    </div>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="accordion-radio">
+                    <div class="panel-heading">
+                        <p class="panel-title">
+                            <input type="radio" name="mode" value="simple"
+                                   data-parent="#email"
+                                   {% if mode == "simple" %}checked="checked"{% endif %}
+                                   id="input_mode_simple"
+                                   data-toggle="radiocollapse" data-target="#mode_simple"/>
+                            <label for="input_mode_simple"><strong>{% trans "Use system email server with a custom sender address" %}</strong></label>
+                        </p>
+                    </div>
+                </div>
+                <div id="mode_simple"
+                     class="panel-collapse collapsed {% if mode == "simple" %}in{% endif %}">
+                    <div class="panel-body form-horizontal">
+                        <p>
+                            {% blocktrans trimmed %}
+                                E-mails will be sent through the system's default server but with your own sender
+                                address.
+                                This will make your emails look more personalized and coming directly from you, but it
+                                also might require some extra steps to ensure good deliverability.
+                            {% endblocktrans %}
+                        </p>
+                        {% bootstrap_form simple_form layout="control" %}
+                    </div>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="accordion-radio">
+                    <div class="panel-heading">
+                        <p class="panel-title">
+                            <input type="radio" name="mode" value="smtp"
+                                   data-parent="#email"
+                                   {% if mode == "smtp" %}checked="checked"{% endif %}
+                                   id="input_mode_smtp"
+                                   data-toggle="radiocollapse" data-target="#mode_smtp"/>
+                            <label for="input_mode_smtp"><strong>{% trans "Use a custom SMTP server" %}</strong></label>
+                        </p>
+                    </div>
+                </div>
+                <div id="mode_smtp"
+                     class="panel-collapse collapsed {% if mode == "smtp" %}in{% endif %}">
+                    <div class="panel-body form-horizontal">
+                        <p>
+                            {% blocktrans trimmed %}
+                                For full customization, you can configure your own SMTP server that will be used for
+                                email sending.
+                            {% endblocktrans %}
+                        </p>
+                        {% bootstrap_form smtp_form layout="control" %}
+                    </div>
+                </div>
+            </div>
+            {% if request.event %}
+                <div class="panel panel-default">
+                    <div class="accordion-radio">
+                        <div class="panel-heading">
+                            <p class="panel-title">
+                                <input type="radio" name="mode" value="reset"
+                                       data-parent="#reset"
+                                       id="input_mode_reset"
+                                       data-toggle="radiocollapse" data-target="#mode_reset"/>
+                                <label for="input_mode_reset"><strong>{% trans "Reset to organizer settings" %}</strong></label>
+                            </p>
+                        </div>
+                    </div>
+                    <div id="mode_reset"
+                         class="panel-collapse collapsed {% if mode == "reset" %}in{% endif %}">
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="form-group submit-group">
+            <button type="submit" class="btn btn-primary btn-save">
+                {% trans "Continue" %}
+            </button>
+        </div>
+    </form>
+{% endblock %}
