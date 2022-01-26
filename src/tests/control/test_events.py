@@ -577,7 +577,7 @@ class EventsTest(SoupTest):
         data = extract_form_fields(doc.select("form")[0])
         data['verification'] = 'AAAA'
         doc = self.post_doc(
-            '/control/organizer/%s/settings/email/setup' % self.orga1.slug,
+            '/control/event/%s/%s/settings/email/setup' % (self.orga1.slug, self.event1.slug),
             data,
             follow=True
         )
@@ -641,6 +641,7 @@ class EventsTest(SoupTest):
 
     def test_email_setup_smtp(self):
         self.monkeypatch.setattr("pretix.base.email.test_custom_smtp_backend", lambda b, a: None)
+        self.monkeypatch.setattr("socket.gethostbyname", lambda h: "8.8.8.8")
         doc = self.post_doc(
             '/control/event/%s/%s/settings/email/setup' % (self.orga1.slug, self.event1.slug),
             {
@@ -672,6 +673,7 @@ class EventsTest(SoupTest):
         def fail(a, b):
             raise SMTPResponseException(400, 'Auth denied')
         self.monkeypatch.setattr("pretix.base.email.test_custom_smtp_backend", fail)
+        self.monkeypatch.setattr("socket.gethostbyname", lambda h: "8.8.8.8")
         doc = self.post_doc(
             '/control/event/%s/%s/settings/email/setup' % (self.orga1.slug, self.event1.slug),
             {

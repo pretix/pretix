@@ -227,6 +227,7 @@ class OrganizerTest(SoupTest):
 
     def test_email_setup_smtp(self):
         self.monkeypatch.setattr("pretix.base.email.test_custom_smtp_backend", lambda b, a: None)
+        self.monkeypatch.setattr("socket.gethostbyname", lambda h: "8.8.8.8")
         doc = self.post_doc(
             '/control/organizer/%s/settings/email/setup' % self.orga1.slug,
             {
@@ -258,6 +259,7 @@ class OrganizerTest(SoupTest):
         def fail(a, b):
             raise SMTPResponseException(400, 'Auth denied')
         self.monkeypatch.setattr("pretix.base.email.test_custom_smtp_backend", fail)
+        self.monkeypatch.setattr("socket.gethostbyname", lambda h: "8.8.8.8")
         doc = self.post_doc(
             '/control/organizer/%s/settings/email/setup' % self.orga1.slug,
             {
