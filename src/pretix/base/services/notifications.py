@@ -148,7 +148,7 @@ def send_notification_mail(notification: Notification, user: User):
         ),
         'body': body_plain,
         'html': body_html,
-        'sender': settings.MAIL_FROM_NOTIFICATIONS,
+        'sender': settings.MAIL_FROM,
         'headers': {},
         'user': user.pk
     })

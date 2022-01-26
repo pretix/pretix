@@ -665,13 +665,13 @@ class Event(EventMixin, LoggedModel):
 
         return locking.LockManager(self)
 
-    def get_mail_backend(self, timeout=None):
+    def get_mail_backend(self, timeout=None, force_custom=False):
         """
         Returns an email server connection, either by using the system-wide connection
         or by returning a custom one based on the event's settings.
         """
 
-        if self.settings.smtp_use_custom:
+        if self.settings.smtp_use_custom or force_custom:
             return get_connection(backend=settings.EMAIL_CUSTOM_SMTP_BACKEND,
                                   host=self.settings.smtp_host,
                                   port=self.settings.smtp_port,

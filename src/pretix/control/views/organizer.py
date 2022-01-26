@@ -64,6 +64,7 @@ from django.views.generic import (
 from pretix.api.models import WebHook
 from pretix.base.auth import get_auth_backends
 from pretix.base.channels import get_all_sales_channels
+from pretix.base.email import test_custom_smtp_backend
 from pretix.base.i18n import language
 from pretix.base.models import (
     CachedFile, Customer, Device, Gate, GiftCard, Invoice, LogEntry,
@@ -101,7 +102,6 @@ from pretix.control.permissions import (
 )
 from pretix.control.signals import nav_organizer
 from pretix.control.views import PaginationMixin
-from pretix.control.views.mailsetup import MailSettingsSetupView
 from pretix.helpers.dicts import merge_dicts
 from pretix.helpers.urls import build_absolute_uri as build_global_uri
 from pretix.multidomain.urlreverse import build_absolute_uri
@@ -262,26 +262,27 @@ class OrganizerMailSettings(OrganizerSettingsFormView):
                         k: form.cleaned_data.get(k) for k in form.changed_data
                     }
                 )
+
+            if request.POST.get('test', '0').strip() == '1':
+                backend = self.request.organizer.get_mail_backend(force_custom=True, timeout=10)
+                try:
+                    test_custom_smtp_backend(backend, self.request.organizer.settings.mail_from)
+                except Exception as e:
+                    messages.warning(self.request, _('An error occurred while contacting the SMTP server: %s') % str(e))
+                else:
+                    if form.cleaned_data.get('smtp_use_custom'):
+                        messages.success(self.request, _('Your changes have been saved and the connection attempt to '
+                                                         'your SMTP server was successful.'))
+                    else:
+                        messages.success(self.request, _('We\'ve been able to contact the SMTP server you configured. '
+                                                         'Remember to check the "use custom SMTP server" checkbox, '
+                                                         'otherwise your SMTP server will not be used.'))
+            else:
                 messages.success(self.request, _('Your changes have been saved.'))
             return redirect(self.get_success_url())
         else:
             messages.error(self.request, _('We could not save your changes. See below for details.'))
             return self.get(request)
-
-
-class MailSettingsSetup(OrganizerPermissionRequiredMixin, MailSettingsSetupView):
-    permission = 'can_change_organizer_settings'
-    basetpl = 'pretixcontrol/base.html'
-
-    def get_success_url(self):
-        return reverse('control:organizer.settings.mail', kwargs={
-            'organizer': self.request.organizer.slug,
-        })
-
-    def log_action(self, data):
-        self.request.organizer.log_action(
-            'pretix.organizer.settings', user=self.request.user, data=data
-        )
 
 
 class MailSettingsPreview(OrganizerPermissionRequiredMixin, View):

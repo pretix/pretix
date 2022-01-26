@@ -11,45 +11,13 @@
     <h1>{% trans "E-mail settings" %}</h1>
 
     <form action="" method="post" class="form-horizontal" enctype="multipart/form-data"
-          mail-preview-url="{% url "control:organizer.settings.mail.preview" organizer=request.organizer.slug %}">
+            mail-preview-url="{% url "control:organizer.settings.mail.preview" organizer=request.organizer.slug %}">
         {% csrf_token %}
         {% bootstrap_form_errors form %}
         <div class="tabbed-form">
             <fieldset>
                 <legend>{% trans "General" %}</legend>
-                <div class="form-group">
-                    <label class="col-md-3 control-label">
-                        {% trans "Sending method" %}
-                    </label>
-                    <div class="col-md-9 static-form-row-with-btn">
-                        {% if request.organizer.settings.smtp_use_custom %}
-                            {% trans "Custom SMTP server" %}: {{ request.organizer.settings.smtp_host }}
-                        {% else %}
-                            {% trans "System-provided email server" %}
-                        {% endif %}
-                        &nbsp;&nbsp;
-                        <a href="{% url "control:organizer.settings.mail.setup" organizer=request.organizer.slug %}"
-                           class="btn btn-default">
-                            <span class="fa fa-edit"></span>
-                            {% trans "Edit" %}
-                        </a>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-md-3 control-label">
-                        {% trans "Sender address" %}
-                    </label>
-                    <div class="col-md-9 static-form-row-with-btn">
-                        {{ request.organizer.settings.mail_from }}
-                        &nbsp;&nbsp;
-                        <a href="{% url "control:organizer.settings.mail.setup" organizer=request.organizer.slug %}"
-                           class="btn btn-default">
-                            <span class="fa fa-edit"></span>
-                            {% trans "Edit" %}
-                        </a>
-                    </div>
-                </div>
-
+                {% bootstrap_field form.mail_from layout="control" %}
                 {% bootstrap_field form.mail_from_name layout="control" %}
                 {% bootstrap_field form.mail_text_signature layout="control" %}
                 {% bootstrap_field form.mail_bcc layout="control" %}
@@ -67,10 +35,23 @@
                     {% include "pretixcontrol/event/mail_settings_fragment.html" with pid="reset" title=title_reset items="mail_text_customer_reset" %}
                 </div>
             </fieldset>
+            <fieldset>
+                <legend>{% trans "SMTP settings" %}</legend>
+                {% bootstrap_field form.smtp_use_custom layout="control" %}
+                {% bootstrap_field form.smtp_host layout="control" %}
+                {% bootstrap_field form.smtp_port layout="control" %}
+                {% bootstrap_field form.smtp_username layout="control" %}
+                {% bootstrap_field form.smtp_password layout="control" %}
+                {% bootstrap_field form.smtp_use_tls layout="control" %}
+                {% bootstrap_field form.smtp_use_ssl layout="control" %}
+            </fieldset>
         </div>
         <div class="form-group submit-group">
             <button type="submit" class="btn btn-primary btn-save">
                 {% trans "Save" %}
+            </button>
+            <button type="submit" class="btn btn-default btn-save pull-left" name="test" value="1">
+                {% trans "Save and test custom SMTP connection" %}
             </button>
         </div>
     </form>

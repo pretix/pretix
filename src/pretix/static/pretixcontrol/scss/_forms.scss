@@ -21,9 +21,6 @@ td > .form-group > .checkbox {
 .static-form-row {
   padding-top: 7px;
 }
-.static-form-row-with-btn {
-  padding-top: 3px;
-}
 
 .form-inline .form-control {
   max-width: 100%;
@@ -343,7 +340,6 @@ input[type=number].short {
 .propagated-settings-box.locked {
   .propagated-settings-form {
     opacity: 0.7;
-    pointer-events: none;
   }
   .panel-body.help-text {
     border-bottom: 1px solid $panel-default-heading-bg;
