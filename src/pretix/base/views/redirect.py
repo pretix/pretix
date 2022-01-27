@@ -23,8 +23,8 @@ import urllib.parse
 
 from django.core import signing
 from django.http import HttpResponseBadRequest, HttpResponseRedirect
-from django.urls import reverse
 from django.shortcuts import render
+from django.urls import reverse
 
 
 def _is_samesite_referer(request):
