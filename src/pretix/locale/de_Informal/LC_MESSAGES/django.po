@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-01-27 10:01+0000\n"
-"PO-Revision-Date: 2022-01-14 15:08+0000\n"
+"PO-Revision-Date: 2022-01-27 10:46+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
@@ -4202,7 +4202,7 @@ msgstr "Platz {number}"
 
 #: pretix/base/models/tax.py:145
 msgid "Official name"
-msgstr ""
+msgstr "Offizieller Name"
 
 #: pretix/base/models/tax.py:146
 msgid "Should be short, e.g. \"VAT\""
@@ -4217,6 +4217,8 @@ msgid ""
 "Keep gross amount constant if the tax rate changes based on the invoice "
 "address"
 msgstr ""
+"Behalte Bruttobetrag statt Nettobetrag konstant bei wenn sich der Steuersatz "
+"aufgrund der Rechnungsadresse ändert"
 
 #: pretix/base/models/tax.py:163
 msgid "Use EU reverse charge taxation rules"
@@ -7958,8 +7960,6 @@ msgstr ""
 "Das {event} Team"
 
 #: pretix/base/settings.py:1712
-#, fuzzy
-#| msgid "Split into new order"
 msgid "Attachment for new orders"
 msgstr "Anhang für neue Bestellungen"
 
@@ -9275,8 +9275,6 @@ msgstr "Datum"
 
 #: pretix/base/templates/pretixbase/redirect.html:5
 #: pretix/base/templates/pretixbase/redirect.html:9
-#, fuzzy
-#| msgid "Redirection"
 msgid "Redirect"
 msgstr "Weiterleitung"
 
@@ -9286,16 +9284,18 @@ msgid ""
 "The link you clicked on wants to redirect you to a destination on the "
 "website %(host)s."
 msgstr ""
+"Der Link, den du angeklickt hast, möchte dich zu einem Ziel auf der Website "
+"%(host)s weiterleiten."
 
 #: pretix/base/templates/pretixbase/redirect.html:14
 msgid "Please only proceed if you trust this website to be safe."
 msgstr ""
+"Bitte fahre nur fort, wenn du diese Website für vertrauenswürdig hältst."
 
 #: pretix/base/templates/pretixbase/redirect.html:20
-#, fuzzy, python-format
-#| msgid "Proceed with checkout"
+#, python-format
 msgid "Proceed to %(host)s"
-msgstr "Zur Kasse"
+msgstr "Weiter zu %(host)s"
 
 #: pretix/base/templates/source.html:5 pretix/base/templates/source.html:9
 msgid "Source code"
@@ -9865,8 +9865,6 @@ msgid "Sale not allowed"
 msgstr "Verkauf nicht erlaubt"
 
 #: pretix/control/forms/event.py:1217
-#, fuzzy
-#| msgid "New order requires approval"
 msgid "Order requires approval"
 msgstr "Bestellung erfordert Freigabe"
 
@@ -10922,12 +10920,12 @@ msgid ""
 "You are not allowed to use this mail server, please choose one with a public "
 "IP address instead."
 msgstr ""
+"Du kannst diesen Mailserver nicht verwenden, bitte wähle einen mit einer "
+"öffentlichen IP-Adresse."
 
 #: pretix/control/forms/mailsetup.py:92
-#, fuzzy
-#| msgid "We were unable to parse your request."
 msgid "We were unable to resolve this hostname."
-msgstr "Wir konnten die Eingabe nicht verarbeiten."
+msgstr "Wir konnten diesen Hostnamen nicht auflösen."
 
 #: pretix/control/forms/orderimport.py:30
 msgid "Import mode"
@@ -13885,6 +13883,21 @@ msgid ""
 "\n"
 "Your %(instance)s team\n"
 msgstr ""
+"Hallo,\n"
+"\n"
+"jemand hat angefragt, die Adresse %(address)s als Absenderadresse auf "
+"%(instance)s zu nutzen.\n"
+"Hierdurch könnten dann E-Mails verschickt werden, die diese Adresse als "
+"Absender tragen.\n"
+"Wenn du das warst, gib bitte folgenden Bestätigungscode ein:\n"
+"\n"
+"%(code)s\n"
+"\n"
+"Wenn du das nicht warst, kannst du diese E-Mail gefahrlos ignorieren.\n"
+"\n"
+"Viele Grüße,\n"
+"\n"
+"Dein Team von %(instance)s\n"
 
 #: pretix/control/templates/pretixcontrol/email/forgot.txt:1
 #, python-format
@@ -13990,37 +14003,35 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/email_setup.html:8
 #: pretix/control/templates/pretixcontrol/email_setup_simple.html:8
 #: pretix/control/templates/pretixcontrol/email_setup_smtp.html:8
-#, fuzzy
-#| msgid "E-mail settings"
 msgid "E-mail sending"
-msgstr "E-Mail-Einstellungen"
+msgstr "E-Mail-Versand"
 
 #: pretix/control/templates/pretixcontrol/email_setup.html:21
-#, fuzzy
-#| msgid "pretix default"
 msgid "Use system default"
-msgstr "pretix-Standard"
+msgstr "System-Standard benutzen"
 
 #: pretix/control/templates/pretixcontrol/email_setup.html:29
 msgid ""
 "E-mails will be sent through the system's default server. They will show the "
 "following sender information:"
 msgstr ""
+"E-Mails werden über den Standardserver dieses Systems verschickt. Folgende "
+"Absenderinformation wird angezeigt:"
 
 #: pretix/control/templates/pretixcontrol/email_setup.html:35
 msgctxt "mail_header"
 msgid "From"
-msgstr ""
+msgstr "Von"
 
 #: pretix/control/templates/pretixcontrol/email_setup.html:40
 msgctxt "mail_header"
 msgid "Reply-To"
-msgstr ""
+msgstr "Antwort an"
 
 #: pretix/control/templates/pretixcontrol/email_setup.html:56
 #: pretix/control/templates/pretixcontrol/email_setup_simple.html:18
 msgid "Use system email server with a custom sender address"
-msgstr ""
+msgstr "Eigene Absenderadresse mit System-Mailserver benutzen"
 
 #: pretix/control/templates/pretixcontrol/email_setup.html:64
 msgid ""
@@ -14029,11 +14040,13 @@ msgid ""
 "directly from you, but it also might require some extra steps to ensure good "
 "deliverability."
 msgstr ""
+"E-Mails werden durch den Standard-Mailserver des Systems verschickt, jedoch "
+"mit deiner Absenderadresse. Dadurch sehen die E-Mails personalisierter aus "
+"und kommen direkt von dir, jedoch sind ggf. zusätzliche Schritte notwendig, "
+"um Probleme bei der Zustellung zu vermeiden."
 
 #: pretix/control/templates/pretixcontrol/email_setup.html:84
 #: pretix/control/templates/pretixcontrol/email_setup_smtp.html:18
-#, fuzzy
-#| msgid "Use custom SMTP server"
 msgid "Use a custom SMTP server"
 msgstr "Eigenen SMTP-Server verwenden"
 
@@ -14042,40 +14055,41 @@ msgid ""
 "For full customization, you can configure your own SMTP server that will be "
 "used for email sending."
 msgstr ""
+"Du kannst deinen eigenen SMTP-Server hinterlegen, um den E-Mail-Versand "
+"komplett über von dir kontrollierte Infrastruktur abzuwickeln."
 
 #: pretix/control/templates/pretixcontrol/email_setup.html:110
-#, fuzzy
-#| msgid "Go to organizer settings"
 msgid "Reset to organizer settings"
-msgstr "Zu den Veranstalter-Einstellungen"
+msgstr "Auf Veranstalter-Einstellungen zurücksetzen"
 
 #: pretix/control/templates/pretixcontrol/email_setup_simple.html:29
 msgid "This is the SPF record we found on your domain:"
-msgstr ""
+msgstr "Wir haben diesen SPF-Eintrag für deine Domain gefunden:"
 
 #: pretix/control/templates/pretixcontrol/email_setup_simple.html:33
 msgid "To fix this, include the following part before the last word:"
-msgstr ""
+msgstr "Um dies zu beheben, füge vor dem letzten Wort folgenden Teil ein:"
 
 #: pretix/control/templates/pretixcontrol/email_setup_simple.html:38
 msgid "Your new SPF record could look like this:"
-msgstr ""
+msgstr "Dein neuer SPF-Eintrag könnte z.B. so aussehen:"
 
 #: pretix/control/templates/pretixcontrol/email_setup_simple.html:43
 msgid ""
 "Please keep in mind that updates to DNS might require multiple hours to take "
 "effect."
 msgstr ""
+"Bitte denke daran, dass DNS-Änderungen teilweise mehrere Stunden benötigen, "
+"bis sie wirksam werden."
 
 #: pretix/control/templates/pretixcontrol/email_setup_simple.html:48
 msgid "We found an SPF record on your domain that includes this system. Great!"
 msgstr ""
+"Wir haben einen SPF-Eintrag gefunden, der dieses System enthält. Klasse!"
 
 #: pretix/control/templates/pretixcontrol/email_setup_simple.html:54
-#, fuzzy
-#| msgid "Verification failed"
 msgid "Verification"
-msgstr "Verifikation fehlgeschlagen"
+msgstr "Verifikation"
 
 #: pretix/control/templates/pretixcontrol/email_setup_simple.html:56
 #, python-format
@@ -14083,18 +14097,21 @@ msgid ""
 "We've sent an email to %(recp)s with a confirmation code to verify that this "
 "email address is owned by you. Please enter the verification code below:"
 msgstr ""
+"Wir haben eine E-Mail an %(recp)s mit einem Bestätigungscode geschickt um zu "
+"verifizieren, dass diese E-Mail-Adresse wirklich dir gehört. Bitte gib den "
+"Bestätigungscode hier ein:"
 
 #: pretix/control/templates/pretixcontrol/email_setup_simple.html:63
-#, fuzzy
-#| msgid "Verification failed"
 msgid "Verification code"
-msgstr "Verifikation fehlgeschlagen"
+msgstr "Bestätigungscode"
 
 #: pretix/control/templates/pretixcontrol/email_setup_smtp.html:23
 msgid ""
 "A test connection to your SMTP server was successful. You can now save your "
 "new settings to put them in use."
 msgstr ""
+"Eine Test-Verbindung zu deinem SMTP-Server war erfolgreich. Du kannst deine "
+"Einstellungen nun speichern, damit diese verwendet werden."
 
 #: pretix/control/templates/pretixcontrol/event/cancel.html:5
 msgid "Cancellation settings"
@@ -14640,22 +14657,18 @@ msgstr "E-Mail-Einstellungen"
 
 #: pretix/control/templates/pretixcontrol/event/mail.html:22
 #: pretix/control/templates/pretixcontrol/organizers/mail.html:22
-#, fuzzy
-#| msgid "Refund method"
 msgid "Sending method"
-msgstr "Erstattungsweg"
+msgstr "Versandmethode"
 
 #: pretix/control/templates/pretixcontrol/event/mail.html:26
 #: pretix/control/templates/pretixcontrol/organizers/mail.html:26
-#, fuzzy
-#| msgid "Use custom SMTP server"
 msgid "Custom SMTP server"
-msgstr "Eigenen SMTP-Server verwenden"
+msgstr "Eigener SMTP-Server"
 
 #: pretix/control/templates/pretixcontrol/event/mail.html:28
 #: pretix/control/templates/pretixcontrol/organizers/mail.html:28
 msgid "System-provided email server"
-msgstr ""
+msgstr "System-Mailserver"
 
 #: pretix/control/templates/pretixcontrol/event/mail.html:61
 msgid "E-mail design"
@@ -20653,6 +20666,12 @@ msgid ""
 "domain. You can do so through the DNS settings at the provider you "
 "registered your domain with."
 msgstr ""
+"Wir konnten keinen SPF-Eintrag für die verwendete Domain finden. Du kannst "
+"trotzdem fortfahren, aber es gibt eine große Chance, dass die E-Mails beim "
+"Empfänger in den Spam-Ordner sortiert werden oder nicht ankommen. Wir "
+"empfehlen daher dringend einen SPF-Eintrag zu setzen. Dies kannst du in den "
+"DNS-Einstellungen des Providers vornehmen, bei dem die Domain registriert "
+"wurde."
 
 #: pretix/control/views/mailsetup.py:194
 msgid ""
@@ -20662,19 +20681,20 @@ msgid ""
 "update the DNS settings of your domain to include this system in the SPF "
 "record."
 msgstr ""
+"Wir haben einen SPF-Eintrag für die verwendete Domain gefunden, aber er "
+"enthält den Mailserver dieses Systems nicht. Du kannst trotzdem fortfahren, "
+"aber es gibt eine große Chance, dass die E-Mails beim Empfänger in den Spam-"
+"Ordner sortiert werden oder nicht ankommen. Du solltest die DNS-"
+"Einstellungen deiner Domain ändern, sodass dieses System im SPF-Eintrag "
+"vorkommt."
 
 #: pretix/control/views/mailsetup.py:202
-#, fuzzy
-#| msgid "The registration could not be completed. Please try again."
 msgid "The verification code was incorrect, please try again."
-msgstr ""
-"Die Registrierung konnte nicht bestätigt werden. Bitte versuche es erneut."
+msgstr "Der Bestätigungscode war falsch, bitte erneut versuchen."
 
 #: pretix/control/views/mailsetup.py:207
-#, fuzzy
-#| msgid "Sender address"
 msgid "Sender address verification"
-msgstr "Absender-Adresse"
+msgstr "Absender-Adresse verifizieren"
 
 #: pretix/control/views/mailsetup.py:260
 #, python-format
@@ -20689,6 +20709,11 @@ msgid ""
 "all of your emails since they impose a maximum number of emails per time "
 "period."
 msgstr ""
+"Wir empfehlen, Google Mail nicht für transaktionale Mails zu verwenden. Wenn "
+"du versuchst, viele Mails in kurzer Zeit zu verschicken, z.B. wenn du "
+"Informationen an alle deine Ticketkäufer schickst, gibt es ein hohes Risiko, "
+"dass Google die Mails nicht zustellt, da Google ein Maximum an E-Mails pro "
+"Zeitperiode festsetzt."
 
 #: pretix/control/views/main.py:217
 msgid "You do not have permission to clone this event."
@@ -26077,16 +26102,14 @@ msgid "Change price of position #%(positionid)s from %(old)s to %(new)s"
 msgstr "Ändere Preis von Position %(positionid)s von %(old)s zu %(new)s"
 
 #: pretix/presale/templates/pretixpresale/event/order_change_confirm.html:85
-#, fuzzy, python-format
-#| msgid "Add position #%(positionid)s (%(item)s – %(variation)s)"
+#, python-format
 msgid "Add position (%(item)s – %(variation)s)"
-msgstr "Füge neue Position #%(positionid)s hinzu (%(item)s – %(variation)s)"
+msgstr "Füge neue Position hinzu (%(item)s – %(variation)s)"
 
 #: pretix/presale/templates/pretixpresale/event/order_change_confirm.html:89
-#, fuzzy, python-format
-#| msgid "Add position #%(positionid)s (%(item)s)"
+#, python-format
 msgid "Add position (%(item)s)"
-msgstr "Füge neue Position #%(positionid)s hinzu (%(item)s)"
+msgstr "Füge neue Position hinzu (%(item)s)"
 
 #: pretix/presale/templates/pretixpresale/event/order_change_confirm.html:96
 #, python-format
