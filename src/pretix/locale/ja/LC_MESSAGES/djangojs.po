@@ -7,11 +7,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-01-14 14:33+0000\n"
+"POT-Creation-Date: 2022-01-27 10:02+0000\n"
 "PO-Revision-Date: 2022-01-19 21:00+0000\n"
 "Last-Translator: Yuriko Matsunami <y.matsunami@enobyte.com>\n"
-"Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/"
-"pretix-js/ja/>\n"
+"Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/pretix-"
+"js/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -431,7 +431,9 @@ msgstr "色彩のコントラストは読むのに十分です！"
 msgid ""
 "Your color has bad contrast for text on white background, please choose a "
 "darker shade."
-msgstr "このテキストカラーは白い背景とのコントラストがよくありません。暗い色に選び直してください。"
+msgstr ""
+"このテキストカラーは白い背景とのコントラストがよくありません。暗い色に選び直"
+"してください。"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:417
 msgid "All"
@@ -449,15 +451,15 @@ msgstr "検索ワード"
 msgid "Selected only"
 msgstr "選択したもののみ"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:834
+#: pretix/static/pretixcontrol/js/ui/main.js:848
 msgid "Use a different name internally"
 msgstr "内部で別の名前を使用してください"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:870
+#: pretix/static/pretixcontrol/js/ui/main.js:884
 msgid "Click to close"
 msgstr "クリックして閉じる"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:911
+#: pretix/static/pretixcontrol/js/ui/main.js:925
 msgid "You have unsaved changes!"
 msgstr "保存されていない変更があります！"
 
@@ -637,7 +639,9 @@ msgctxt "widget"
 msgid ""
 "We could not create your cart, since there are currently too many users in "
 "this ticket shop. Please click \"Continue\" to retry in a new tab."
-msgstr "現在チケットショップが混雑しているため、お客様のカートを作ることができませんでした。新しいタブを開き「次へ」をクリックしてください。"
+msgstr ""
+"現在チケットショップが混雑しているため、お客様のカートを作ることができません"
+"でした。新しいタブを開き「次へ」をクリックしてください。"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:38
 msgctxt "widget"
@@ -649,7 +653,9 @@ msgctxt "widget"
 msgid ""
 "You currently have an active cart for this event. If you select more "
 "products, they will be added to your existing cart."
-msgstr "お客様のカートはイベントの申し込みに有効です。商品を選択し、カートへ追加してください。"
+msgstr ""
+"お客様のカートはイベントの申し込みに有効です。商品を選択し、カートへ追加して"
+"ください。"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:41
 msgctxt "widget"
