@@ -932,7 +932,7 @@ def _create_order(event: Event, email: str, positions: List[CartPosition], now_d
 
 
 def _order_placed_email(event: Event, order: Order, pprov: BasePaymentProvider, email_template, log_entry: str,
-                        invoice, payment: OrderPayment):
+                        invoice, payment: OrderPayment, is_free=False):
     email_context = get_email_context(event=event, order=order, payment=payment if pprov else None)
     email_subject = _('Your order: %(code)s') % {'code': order.code}
     try:
@@ -941,7 +941,7 @@ def _order_placed_email(event: Event, order: Order, pprov: BasePaymentProvider, 
             log_entry,
             invoices=[invoice] if invoice and event.settings.invoice_email_attachment else [],
             attach_tickets=True,
-            attach_ical=event.settings.mail_attach_ical,
+            attach_ical=event.settings.mail_attach_ical and (not event.settings.mail_attach_ical_paid_only or is_free),
             attach_other_files=[a for a in [
                 event.settings.get('mail_attachment_new_order', as_type=str, default='')[len('file://'):]
             ] if a],
@@ -950,7 +950,7 @@ def _order_placed_email(event: Event, order: Order, pprov: BasePaymentProvider, 
         logger.exception('Order received email could not be sent')
 
 
-def _order_placed_email_attendee(event: Event, order: Order, position: OrderPosition, email_template, log_entry: str):
+def _order_placed_email_attendee(event: Event, order: Order, position: OrderPosition, email_template, log_entry: str, is_free=False):
     email_context = get_email_context(event=event, order=order, position=position)
     email_subject = _('Your event registration: %(code)s') % {'code': order.code}
 
@@ -961,7 +961,7 @@ def _order_placed_email_attendee(event: Event, order: Order, position: OrderPosi
             invoices=[],
             attach_tickets=True,
             position=position,
-            attach_ical=event.settings.mail_attach_ical,
+            attach_ical=event.settings.mail_attach_ical and (not event.settings.mail_attach_ical_paid_only or is_free),
             attach_other_files=[a for a in [
                 event.settings.get('mail_attachment_new_order', as_type=str, default='')[len('file://'):]
             ] if a],
@@ -1070,11 +1070,13 @@ def _perform_order(event: Event, payment_provider: str, position_ids: List[str],
             email_attendees_template = event.settings.mail_text_order_placed_attendee
 
         if sales_channel in event.settings.mail_sales_channel_placed_paid:
-            _order_placed_email(event, order, pprov, email_template, log_entry, invoice, payment)
+            _order_placed_email(event, order, pprov, email_template, log_entry, invoice, payment,
+                                is_free=free_order_flow)
             if email_attendees:
                 for p in order.positions.all():
                     if p.addon_to_id is None and p.attendee_email and p.attendee_email != order.email:
-                        _order_placed_email_attendee(event, order, p, email_attendees_template, log_entry)
+                        _order_placed_email_attendee(event, order, p, email_attendees_template, log_entry,
+                                                     is_free=free_order_flow)
 
     return order.id
 

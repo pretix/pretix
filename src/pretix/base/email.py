@@ -33,6 +33,7 @@ from django.core.mail.backends.smtp import EmailBackend
 from django.db.models import Count
 from django.dispatch import receiver
 from django.template.loader import get_template
+from django.utils.formats import date_format
 from django.utils.timezone import now
 from django.utils.translation import (
     get_language, gettext_lazy as _, pgettext_lazy,
@@ -454,6 +455,15 @@ def base_placeholders(sender, **kwargs):
             ),
         ),
         SimpleFunctionalMailTextPlaceholder(
+            'event_location', ['event_or_subevent'], lambda event_or_subevent: str(event_or_subevent.location or ''),
+            lambda event: str(event.location or ''),
+        ),
+        SimpleFunctionalMailTextPlaceholder(
+            'event_admission_time', ['event_or_subevent'],
+            lambda event_or_subevent: date_format(event_or_subevent.date_admission, 'TIME_FORMAT') if event_or_subevent.date_admission else '',
+            lambda event: date_format(event.date_admission, 'TIME_FORMAT') if event.date_admission else '',
+        ),
+        SimpleFunctionalMailTextPlaceholder(
             'subevent', ['waiting_list_entry', 'event'],
             lambda waiting_list_entry, event: str(waiting_list_entry.subevent or event),
             lambda event: str(event if not event.has_subevents or not event.subevents.exists() else event.subevents.first())
@@ -620,6 +630,10 @@ def base_placeholders(sender, **kwargs):
     for k, v in sender.meta_data.items():
         ph.append(SimpleFunctionalMailTextPlaceholder(
             'meta_%s' % k, ['event'], lambda event, k=k: event.meta_data[k],
+            v
+        ))
+        ph.append(SimpleFunctionalMailTextPlaceholder(
+            'meta_%s' % k, ['event_or_subevent'], lambda event_or_subevent, k=k: event_or_subevent.meta_data[k],
             v
         ))
 

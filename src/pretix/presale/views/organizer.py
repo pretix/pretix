@@ -67,7 +67,7 @@ from pretix.helpers.formats.en.formats import (
     SHORT_MONTH_DAY_FORMAT, WEEK_FORMAT,
 )
 from pretix.multidomain.urlreverse import eventreverse
-from pretix.presale.ical import get_ical
+from pretix.presale.ical import get_public_ical
 from pretix.presale.views import OrganizerViewMixin
 
 
@@ -1159,9 +1159,9 @@ class OrganizerIcalDownload(OrganizerViewMixin, View):
 
         if 'locale' in request.GET and request.GET.get('locale') in dict(settings.LANGUAGES):
             with language(request.GET.get('locale'), self.request.organizer.settings.region):
-                cal = get_ical(events)
+                cal = get_public_ical(events)
         else:
-            cal = get_ical(events)
+            cal = get_public_ical(events)
 
         resp = HttpResponse(cal.serialize(), content_type='text/calendar')
         resp['Content-Disposition'] = 'attachment; filename="{}.ics"'.format(

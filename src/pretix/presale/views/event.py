@@ -70,7 +70,7 @@ from pretix.base.models.items import (
 from pretix.base.services.quotas import QuotaAvailability
 from pretix.helpers.compat import date_fromisocalendar
 from pretix.multidomain.urlreverse import eventreverse
-from pretix.presale.ical import get_ical
+from pretix.presale.ical import get_public_ical
 from pretix.presale.signals import item_description
 from pretix.presale.views.organizer import (
     EventListMixin, add_subevents_for_days, days_for_template,
@@ -719,7 +719,7 @@ class EventIcalDownload(EventViewMixin, View):
                 raise Http404(pgettext_lazy('subevent', 'Unknown date selected.'))
 
         event = self.request.event
-        cal = get_ical([subevent or event])
+        cal = get_public_ical([subevent or event])
 
         resp = HttpResponse(cal.serialize(), content_type='text/calendar')
         resp['Content-Disposition'] = 'attachment; filename="{}-{}-{}.ics"'.format(

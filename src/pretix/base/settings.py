@@ -1573,6 +1573,32 @@ DEFAULTS = {
             help_text=_("If enabled, we will attach an .ics calendar file to order confirmation emails."),
         )
     },
+    'mail_attach_ical_paid_only': {
+        'default': 'False',
+        'type': bool,
+        'form_class': forms.BooleanField,
+        'serializer_class': serializers.BooleanField,
+        'form_kwargs': dict(
+            label=_("Attach calendar files only after order has been paid"),
+            help_text=_("Use this if you e.g. put a private access link into the calendar file to make sure people only "
+                        "receive it after their payment was confirmed."),
+        )
+    },
+    'mail_attach_ical_description': {
+        'default': '',
+        'type': LazyI18nString,
+        'form_class': I18nFormField,
+        'form_kwargs': dict(
+            label=_("Event description"),
+            widget=I18nTextarea,
+            help_text=_(
+                "You can use this to share information with your attendees, such as travel information or the link to a digital event. "
+                "If you keep it empty, we will put a link to the event shop, the admission time, and your organizer name in there. "
+                "We do not allow using placeholders with sensitive person-specific data as calendar entries are often shared with an "
+                "unspecified number of people."
+            ),
+        )
+    },
     'mail_prefix': {
         'default': None,
         'type': str,
