@@ -142,7 +142,7 @@ If you're running MySQL, also install the client library::
 
     (venv)$ pip3 install mysqlclient
 
-Note that you need Python 3.6 or newer. You can find out your Python version using ``python -V``.
+Note that you need Python 3.7 or newer. You can find out your Python version using ``python -V``.
 
 We also need to create a data directory::
 
@@ -259,14 +259,14 @@ The following snippet is an example on how to configure a nginx proxy for pretix
         }
 
         location /static/ {
-            alias /var/pretix/venv/lib/python3.7/site-packages/pretix/static.dist/;
+            alias /var/pretix/venv/lib/python3.10/site-packages/pretix/static.dist/;
             access_log off;
             expires 365d;
             add_header Cache-Control "public";
         }
     }
 
-.. note:: Remember to replace the ``python3.7`` in the ``/static/`` path in the config 
+.. note:: Remember to replace the ``python3.10`` in the ``/static/`` path in the config
           above with your python version.
 
 We recommend reading about setting `strong encryption settings`_ for your web server.

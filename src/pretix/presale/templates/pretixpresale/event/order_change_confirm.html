@@ -82,12 +82,12 @@
                             <tr>
                                 <td>
                                     {% if op.variation %}
-                                        {% blocktrans trimmed with positionid=op.position.positionid item=op.item.name variation=op.variation.value %}
-                                            Add position #{{ positionid }} ({{ item }} – {{ variation }})
+                                        {% blocktrans trimmed with item=op.item.name variation=op.variation.value %}
+                                            Add position ({{ item }} – {{ variation }})
                                         {% endblocktrans %}
                                     {% else %}
-                                        {% blocktrans trimmed with positionid=op.position.positionid item=op.item.name %}
-                                            Add position #{{ positionid }} ({{ item }})
+                                        {% blocktrans trimmed with item=op.item.name %}
+                                            Add position ({{ item }})
                                         {% endblocktrans %}
                                     {% endif %}
                                     {% if op.addon_to %}

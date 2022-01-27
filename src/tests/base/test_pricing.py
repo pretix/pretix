@@ -26,6 +26,7 @@ import pytest
 from django.utils.timezone import now
 from django_countries.fields import Country
 
+from pretix.base.decimal import round_decimal
 from pretix.base.models import Event, InvoiceAddress, Organizer
 from pretix.base.models.items import SubEventItem, SubEventItemVariation
 from pretix.base.services.pricing import get_price
@@ -379,3 +380,77 @@ def test_country_specific_rule_gross_based(item):
         country=Country('BE')
     )
     assert get_price(item, invoice_address=ia).gross == Decimal('168.06')
+
+
+@pytest.mark.django_db
+def test_country_specific_rule_net_based_but_keep_gross_if_rate_changes(item):
+    item.default_price = Decimal('100.00')
+    item.tax_rule = item.event.tax_rules.create(
+        rate=Decimal('19.00'), price_includes_tax=False, keep_gross_if_rate_changes=True,
+        custom_rules=json.dumps([
+            {'country': 'BE', 'address_type': '', 'action': 'vat', 'rate': '100.00'}
+        ])
+    )
+    ia = InvoiceAddress(
+        is_business=True, vat_id="EU1234", vat_id_validated=True,
+        country=Country('BE')
+    )
+    p = get_price(item, invoice_address=ia)
+    assert p.gross == Decimal('119.00')
+    assert p.rate == Decimal('100.00')
+    assert p.tax == Decimal('59.50')
+
+
+@pytest.mark.django_db
+def test_country_specific_rule_net_based_subtract_bundled(item):
+    item.default_price = Decimal('100.00')
+    item.tax_rule = item.event.tax_rules.create(
+        rate=Decimal('19.00'), price_includes_tax=False,
+        custom_rules=json.dumps([
+            {'country': 'BE', 'address_type': '', 'action': 'vat', 'rate': '100.00'}
+        ])
+    )
+    ia = InvoiceAddress(
+        is_business=True, vat_id="EU1234", vat_id_validated=True,
+        country=Country('BE')
+    )
+    assert get_price(item, invoice_address=ia, bundled_sum=Decimal('20.00')).gross == (
+        round_decimal((Decimal('119.00') - Decimal('20.00')) / Decimal('1.19')) * Decimal('2')
+    )
+
+
+@pytest.mark.django_db
+def test_country_specific_rule_gross_based_subtract_bundled(item):
+    item.default_price = Decimal('100.00')
+    item.tax_rule = item.event.tax_rules.create(
+        rate=Decimal('19.00'), price_includes_tax=True,
+        custom_rules=json.dumps([
+            {'country': 'BE', 'address_type': '', 'action': 'vat', 'rate': '100.00'}
+        ])
+    )
+    ia = InvoiceAddress(
+        is_business=True, vat_id="EU1234", vat_id_validated=True,
+        country=Country('BE')
+    )
+    assert get_price(item, invoice_address=ia, bundled_sum=Decimal('20.00')).gross == (
+        round_decimal((Decimal('100.00') - Decimal('20.00')) / Decimal('1.19')) * Decimal('2')
+    )
+
+
+@pytest.mark.django_db
+def test_country_specific_rule_net_based_but_keep_gross_if_rate_changes_subtract_bundled(item):
+    item.default_price = Decimal('100.00')
+    item.tax_rule = item.event.tax_rules.create(
+        rate=Decimal('19.00'), price_includes_tax=False, keep_gross_if_rate_changes=True,
+        custom_rules=json.dumps([
+            {'country': 'BE', 'address_type': '', 'action': 'vat', 'rate': '100.00'}
+        ])
+    )
+    ia = InvoiceAddress(
+        is_business=True, vat_id="EU1234", vat_id_validated=True,
+        country=Country('BE')
+    )
+    p = get_price(item, invoice_address=ia, bundled_sum=Decimal('20.00'))
+    assert p.gross == Decimal('99.00')
+    assert p.rate == Decimal('100.00')
+    assert p.tax == Decimal('49.50')

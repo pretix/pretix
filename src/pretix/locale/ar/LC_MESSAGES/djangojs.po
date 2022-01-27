@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-11-30 16:13+0000\n"
+"POT-Creation-Date: 2022-01-27 10:02+0000\n"
 "PO-Revision-Date: 2021-09-15 11:22+0000\n"
 "Last-Translator: Mohamed Tawfiq <mtawfiq@wafyapp.com>\n"
 "Language-Team: Arabic <https://translate.pretix.eu/projects/pretix/pretix-js/"
@@ -453,15 +453,15 @@ msgstr "البحث في الاستفسارات"
 msgid "Selected only"
 msgstr "المختارة فقط"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:834
+#: pretix/static/pretixcontrol/js/ui/main.js:848
 msgid "Use a different name internally"
 msgstr "قم باستخدم اسم مختلف داخليا"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:870
+#: pretix/static/pretixcontrol/js/ui/main.js:884
 msgid "Click to close"
 msgstr "اضغط لاغلاق الصفحة"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:911
+#: pretix/static/pretixcontrol/js/ui/main.js:925
 msgid "You have unsaved changes!"
 msgstr "لم تقم بحفظ التعديلات!"
 
@@ -535,20 +535,20 @@ msgstr "ستسترد %(currency)%(amount)"
 msgid "Please enter the amount the organizer can keep."
 msgstr "الرجاء إدخال المبلغ الذي يمكن للمنظم الاحتفاظ به."
 
-#: pretix/static/pretixpresale/js/ui/main.js:349
+#: pretix/static/pretixpresale/js/ui/main.js:361
 msgid "Please enter a quantity for one of the ticket types."
 msgstr "الرجاء إدخال عدد لأحد أنواع التذاكر."
 
-#: pretix/static/pretixpresale/js/ui/main.js:385
+#: pretix/static/pretixpresale/js/ui/main.js:397
 msgid "required"
 msgstr "مطلوب"
 
-#: pretix/static/pretixpresale/js/ui/main.js:488
-#: pretix/static/pretixpresale/js/ui/main.js:507
+#: pretix/static/pretixpresale/js/ui/main.js:500
+#: pretix/static/pretixpresale/js/ui/main.js:519
 msgid "Time zone:"
 msgstr "المنطقة الزمنية:"
 
-#: pretix/static/pretixpresale/js/ui/main.js:498
+#: pretix/static/pretixpresale/js/ui/main.js:510
 msgid "Your local time:"
 msgstr "التوقيت المحلي:"
 

@@ -700,7 +700,7 @@ def _check_positions(event: Event, now_dt: datetime, positions: List[CartPositio
                                 invoice_address=address, force_custom_price=True, max_discount=max_discount)
                 changed_prices[cp.pk] = bprice
             else:
-                bundled_sum = 0
+                bundled_sum = Decimal('0.00')
                 if not cp.addon_to_id:
                     for bundledp in cp.addons.all():
                         if bundledp.is_bundled:

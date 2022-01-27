@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-11-30 16:13+0000\n"
+"POT-Creation-Date: 2022-01-27 10:02+0000\n"
 "PO-Revision-Date: 2021-11-25 21:00+0000\n"
 "Last-Translator: Ismael Menéndez Fernández <ismael.menendez@balidea.com>\n"
 "Language-Team: Galician <https://translate.pretix.eu/projects/pretix/pretix-"
@@ -455,15 +455,15 @@ msgstr "Consultar unha procura"
 msgid "Selected only"
 msgstr "Soamente seleccionados"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:834
+#: pretix/static/pretixcontrol/js/ui/main.js:848
 msgid "Use a different name internally"
 msgstr "Usar un nome diferente internamente"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:870
+#: pretix/static/pretixcontrol/js/ui/main.js:884
 msgid "Click to close"
 msgstr "Click para cerrar"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:911
+#: pretix/static/pretixcontrol/js/ui/main.js:925
 msgid "You have unsaved changes!"
 msgstr "Tes cambios sen gardar!"
 
@@ -526,20 +526,20 @@ msgstr "Obtés %(currency)s %(price)s de volta"
 msgid "Please enter the amount the organizer can keep."
 msgstr "Por favor, ingrese a cantidade que pode conservar o organizador."
 
-#: pretix/static/pretixpresale/js/ui/main.js:349
+#: pretix/static/pretixpresale/js/ui/main.js:361
 msgid "Please enter a quantity for one of the ticket types."
 msgstr "Por favor, introduza un valor para cada tipo de entrada."
 
-#: pretix/static/pretixpresale/js/ui/main.js:385
+#: pretix/static/pretixpresale/js/ui/main.js:397
 msgid "required"
 msgstr "campo requirido"
 
-#: pretix/static/pretixpresale/js/ui/main.js:488
-#: pretix/static/pretixpresale/js/ui/main.js:507
+#: pretix/static/pretixpresale/js/ui/main.js:500
+#: pretix/static/pretixpresale/js/ui/main.js:519
 msgid "Time zone:"
 msgstr "Zona horaria:"
 
-#: pretix/static/pretixpresale/js/ui/main.js:498
+#: pretix/static/pretixpresale/js/ui/main.js:510
 msgid "Your local time:"
 msgstr "A súa hora local:"
 

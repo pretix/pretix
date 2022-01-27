@@ -25,3 +25,7 @@ from django.apps import AppConfig
 class PretixHelpersConfig(AppConfig):
     name = 'pretix.helpers'
     label = 'pretixhelpers'
+
+    def ready(self):
+        from .monkeypatching import monkeypatch_all_at_ready
+        monkeypatch_all_at_ready()

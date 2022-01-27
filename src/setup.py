@@ -150,9 +150,9 @@ setup(
         'Topic :: Internet :: WWW/HTTP :: Dynamic Content',
         'Environment :: Web Environment',
         'License :: OSI Approved :: GNU Affero General Public License v3',
-        'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
+        'Programming Language :: Python :: 3.9',
         'Framework :: Django :: 3.2'
     ],
 
@@ -190,6 +190,7 @@ setup(
         'django-scopes==1.2.*',
         'django-statici18n==2.1.*',
         'djangorestframework==3.12.*',
+        'dnspython<2.0',  # do not upgrade, causes issues with eventlet / gunicorn 19 and we cannot upgrade gunicorn right now
         'drf_ujson2==1.6.*',
         'isoweek',
         'jsonschema',
@@ -204,7 +205,7 @@ setup(
         'packaging',
         'paypalrestsdk==1.13.*',
         'phonenumberslite==8.12.*',
-        'Pillow==8.*',
+        'Pillow==9.*',
         'protobuf==3.19.*',
         'psycopg2-binary',
         'pycountry',

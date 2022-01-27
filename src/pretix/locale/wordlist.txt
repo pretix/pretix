@@ -29,6 +29,7 @@ Customizations
 datetime
 deliverability
 DSS
+DNS
 EPC
 EPS
 favicon
@@ -106,6 +107,7 @@ timesaver
 timezones
 TODO
 TOTP
+transactional
 trustable
 txt
 UID

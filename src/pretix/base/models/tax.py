@@ -81,6 +81,15 @@ class TaxedPrice:
             name=self.name,
         )
 
+    def __eq__(self, other):
+        return (
+            self.gross == other.gross and
+            self.net == other.net and
+            self.tax == other.tax and
+            self.rate == other.rate and
+            self.name == other.name
+        )
+
 
 TAXED_ZERO = TaxedPrice(
     gross=Decimal('0.00'),
@@ -127,8 +136,13 @@ def cc_to_vat_prefix(country_code):
 
 class TaxRule(LoggedModel):
     event = models.ForeignKey('Event', related_name='tax_rules', on_delete=models.CASCADE)
+    internal_name = models.CharField(
+        verbose_name=_('Internal name'),
+        max_length=190,
+        null=True, blank=True,
+    )
     name = I18nCharField(
-        verbose_name=_('Name'),
+        verbose_name=_('Official name'),
         help_text=_('Should be short, e.g. "VAT"'),
         max_length=190,
     )
@@ -140,6 +154,10 @@ class TaxRule(LoggedModel):
     price_includes_tax = models.BooleanField(
         verbose_name=_("The configured product prices include the tax amount"),
         default=True,
+    )
+    keep_gross_if_rate_changes = models.BooleanField(
+        verbose_name=_("Keep gross amount constant if the tax rate changes based on the invoice address"),
+        default=False,
     )
     eu_reverse_charge = models.BooleanField(
         verbose_name=_("Use EU reverse charge taxation rules"),
@@ -198,6 +216,8 @@ class TaxRule(LoggedModel):
             s = _('plus {rate}% {name}').format(rate=self.rate, name=self.name)
         if self.eu_reverse_charge:
             s += ' ({})'.format(_('reverse charge enabled'))
+        if self.internal_name:
+            return f'{self.internal_name} ({s})'
         return str(s)
 
     @property
@@ -228,13 +248,19 @@ class TaxRule(LoggedModel):
             rate = override_tax_rate
         elif invoice_address:
             adjust_rate = self.tax_rate_for(invoice_address)
-            if (adjust_rate == gross_price_is_tax_rate or force_fixed_gross_price) and base_price_is == 'gross':
+            if (adjust_rate == gross_price_is_tax_rate or force_fixed_gross_price or self.keep_gross_if_rate_changes) and base_price_is == 'gross':
                 rate = adjust_rate
             elif adjust_rate != rate:
-                normal_price = self.tax(base_price, base_price_is, currency, subtract_from_gross=subtract_from_gross)
-                base_price = normal_price.net
-                base_price_is = 'net'
-                subtract_from_gross = Decimal('0.00')
+                if self.keep_gross_if_rate_changes:
+                    normal_price = self.tax(base_price, base_price_is, currency, subtract_from_gross=subtract_from_gross)
+                    base_price = normal_price.gross
+                    base_price_is = 'gross'
+                    subtract_from_gross = Decimal('0.00')
+                else:
+                    normal_price = self.tax(base_price, base_price_is, currency, subtract_from_gross=subtract_from_gross)
+                    base_price = normal_price.net
+                    base_price_is = 'net'
+                    subtract_from_gross = Decimal('0.00')
                 rate = adjust_rate
 
         if rate == Decimal('0.00'):

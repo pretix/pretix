@@ -1108,13 +1108,15 @@ class DayCalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
 @method_decorator(cache_page(300), name='dispatch')
 class OrganizerIcalDownload(OrganizerViewMixin, View):
     def get(self, request, *args, **kwargs):
+        cutoff = now() - timedelta(days=31)
         events = list(
             filter_qs_by_attr(
                 self.request.organizer.events.filter(
+                    Q(date_from__gt=cutoff) | Q(date_to__gt=cutoff),
                     is_public=True,
                     live=True,
                     has_subevents=False,
-                    sales_channels__contains=self.request.sales_channel.identifier
+                    sales_channels__contains=self.request.sales_channel.identifier,
                 ),
                 request
             ).order_by(
@@ -1130,6 +1132,7 @@ class OrganizerIcalDownload(OrganizerViewMixin, View):
         events += list(
             filter_qs_by_attr(
                 SubEvent.objects.filter(
+                    Q(date_from__gt=cutoff) | Q(date_to__gt=cutoff),
                     event__organizer=self.request.organizer,
                     event__is_public=True,
                     event__live=True,

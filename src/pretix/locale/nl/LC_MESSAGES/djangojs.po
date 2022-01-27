@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-11-30 16:13+0000\n"
+"POT-Creation-Date: 2022-01-27 10:02+0000\n"
 "PO-Revision-Date: 2021-10-29 02:00+0000\n"
 "Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
 "Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix-js/"
@@ -451,15 +451,15 @@ msgstr "Zoekopdracht"
 msgid "Selected only"
 msgstr "Alleen geselecteerde"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:834
+#: pretix/static/pretixcontrol/js/ui/main.js:848
 msgid "Use a different name internally"
 msgstr "Gebruik intern een andere naam"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:870
+#: pretix/static/pretixcontrol/js/ui/main.js:884
 msgid "Click to close"
 msgstr "Klik om te sluiten"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:911
+#: pretix/static/pretixcontrol/js/ui/main.js:925
 msgid "You have unsaved changes!"
 msgstr "U heeft nog niet opgeslagen wijzigingen!"
 
@@ -522,20 +522,20 @@ msgstr "U krijgt %(currency)s %(amount)s terug"
 msgid "Please enter the amount the organizer can keep."
 msgstr "Voer het bedrag in dat de organisator mag houden."
 
-#: pretix/static/pretixpresale/js/ui/main.js:349
+#: pretix/static/pretixpresale/js/ui/main.js:361
 msgid "Please enter a quantity for one of the ticket types."
 msgstr "Voer een hoeveelheid voor een van de producten in."
 
-#: pretix/static/pretixpresale/js/ui/main.js:385
+#: pretix/static/pretixpresale/js/ui/main.js:397
 msgid "required"
 msgstr "verplicht"
 
-#: pretix/static/pretixpresale/js/ui/main.js:488
-#: pretix/static/pretixpresale/js/ui/main.js:507
+#: pretix/static/pretixpresale/js/ui/main.js:500
+#: pretix/static/pretixpresale/js/ui/main.js:519
 msgid "Time zone:"
 msgstr "Tijdzone:"
 
-#: pretix/static/pretixpresale/js/ui/main.js:498
+#: pretix/static/pretixpresale/js/ui/main.js:510
 msgid "Your local time:"
 msgstr "Uw lokale tijd:"
 

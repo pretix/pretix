@@ -29,6 +29,7 @@ from django.db.models import F, Q
 from django.utils.crypto import get_random_string, salted_hmac
 from django.utils.translation import gettext_lazy as _, pgettext_lazy
 from django_scopes import ScopedManager, scopes_disabled
+from phonenumber_field.modelfields import PhoneNumberField
 
 from pretix.base.banlist import banned
 from pretix.base.models.base import LoggedModel
@@ -45,6 +46,7 @@ class Customer(LoggedModel):
     organizer = models.ForeignKey(Organizer, related_name='customers', on_delete=models.CASCADE)
     identifier = models.CharField(max_length=190, db_index=True, unique=True)
     email = models.EmailField(db_index=True, null=True, blank=False, verbose_name=_('E-mail'), max_length=190)
+    phone = PhoneNumberField(null=True, blank=True, verbose_name=_('Phone number'))
     password = models.CharField(verbose_name=_('Password'), max_length=128)
     name_cached = models.CharField(max_length=255, verbose_name=_('Full name'), blank=True)
     name_parts = models.JSONField(default=dict)
@@ -87,6 +89,7 @@ class Customer(LoggedModel):
         self.name_parts = {}
         self.name_cached = ''
         self.email = None
+        self.phone = None
         self.save()
         self.all_logentries().update(data={}, shredded=True)
         self.orders.all().update(customer=None)

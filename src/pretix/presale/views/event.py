@@ -592,7 +592,7 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
             # an extra query to look at the entire series. For performance reasons, we have a limit on how many different names we look at.
             context['show_names'] = sum(len(i) for i in ebd.values() if isinstance(i, list)) < 2 or self.request.event.cache.get_or_set(
                 'has_different_subevent_names',
-                lambda: len(set(str(n) for n in self.request.event.subevents.values_list('name', flat=True).annotate(c=Count('*'))[:250])) != 1,
+                lambda: len(set(str(n) for n in self.request.event.subevents.order_by().values_list('name', flat=True).annotate(c=Count('*'))[:250])) != 1,
                 timeout=120,
             )
             context['weeks'] = weeks_for_template(ebd, self.year, self.month)
@@ -626,7 +626,7 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
             # an extra query to look at the entire series. For performance reasons, we have a limit on how many different names we look at.
             context['show_names'] = sum(len(i) for i in ebd.values() if isinstance(i, list)) < 2 or self.request.event.cache.get_or_set(
                 'has_different_subevent_names',
-                lambda: len(set(str(n) for n in self.request.event.subevents.values_list('name', flat=True).annotate(c=Count('*'))[:250])) != 1,
+                lambda: len(set(str(n) for n in self.request.event.subevents.order_by().values_list('name', flat=True).annotate(c=Count('*'))[:250])) != 1,
                 timeout=120,
             )
             context['days'] = days_for_template(ebd, week)

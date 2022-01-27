@@ -64,7 +64,7 @@ from pretix.base.settings import (
     PERSON_NAME_SCHEMES, PERSON_NAME_TITLE_GROUPS, validate_event_settings,
 )
 from pretix.control.forms import (
-    MultipleLanguagesWidget, SlugWidget, SMTPSettingsMixin, SplitDateTimeField,
+    MultipleLanguagesWidget, SlugWidget, SplitDateTimeField,
     SplitDateTimePickerWidget,
 )
 from pretix.control.forms.widgets import Select2
@@ -865,10 +865,9 @@ def contains_web_channel_validate(val):
         raise ValidationError(_("The online shop must be selected to receive these emails."))
 
 
-class MailSettingsForm(SMTPSettingsMixin, SettingsForm):
+class MailSettingsForm(SettingsForm):
     auto_fields = [
         'mail_prefix',
-        'mail_from',
         'mail_from_name',
         'mail_attach_ical',
         'mail_attach_tickets',
@@ -1252,7 +1251,7 @@ TaxRuleLineFormSet = formset_factory(
 class TaxRuleForm(I18nModelForm):
     class Meta:
         model = TaxRule
-        fields = ['name', 'rate', 'price_includes_tax', 'eu_reverse_charge', 'home_country']
+        fields = ['name', 'rate', 'price_includes_tax', 'eu_reverse_charge', 'home_country', 'internal_name', 'keep_gross_if_rate_changes']
 
 
 class WidgetCodeForm(forms.Form):

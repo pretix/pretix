@@ -1,0 +1,42 @@
+{% extends basetpl %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% load hierarkey_form %}
+{% load static %}
+{% block title %}{% trans "Organizer" %}{% endblock %}
+{% block content %}
+    <h1>{% trans "E-mail sending" %}</h1>
+    <form action="" method="post" class="form-horizontal">
+        {% csrf_token %}
+        {% for k, v in request.POST.items %}
+            <input type="hidden" name="{{ k }}" value="{{ v }}">
+        {% endfor %}
+        <input type="hidden" name="state" value="save">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <p class="panel-title">
+                    <strong>{% trans "Use a custom SMTP server" %}</strong>
+                </p>
+            </div>
+            <div class="panel-body form-horizontal">
+                <div class="alert alert-success">
+                    {% blocktrans trimmed %}
+                        A test connection to your SMTP server was successful. You can now save your new settings
+                        to put them in use.
+                    {% endblocktrans %}
+                </div>
+                {% if known_host_problem %}
+                    <div class="alert alert-warning">
+                        {{ known_host_problem }}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="form-group submit-group">
+            <button type="submit" class="btn btn-primary btn-save">
+                {% trans "Save" %}
+            </button>
+        </div>
+    </form>
+{% endblock %}

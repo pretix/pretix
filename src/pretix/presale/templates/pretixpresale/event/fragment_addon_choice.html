@@ -285,7 +285,12 @@
                             {% if c.max_count == 1 or not c.multi_allowed %}
                                 <label class="item-checkbox-label">
                                     <input type="checkbox" value="1"
-                                            {% if item.initial %}checked="checked"{% endif %}
+                                            {% if c.max_count == 1 and c.min_count == 1 and c.items|length == 1 %}
+                                                checked="checked"
+                                                required="required"
+                                            {% elif item.initial %}
+                                                checked="checked"
+                                            {% endif %}
                                             name="cp_{{ form.pos.pk }}_item_{{ item.id }}"
                                             id="cp_{{ form.pos.pk }}_item_{{ item.id }}"
                                             aria-label="{% blocktrans with item=item.name %}Add {{ item }} to cart{% endblocktrans %}"

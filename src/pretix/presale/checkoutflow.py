@@ -513,7 +513,11 @@ class AddOnsStep(CartMixin, AsyncAction, TemplateFlowStep):
                     )
                     item_cache[ckey] = items
                 else:
-                    items = item_cache[ckey]
+                    # We can use the cache to prevent a database fetch, but we need separate Python objects
+                    # or our things below like setting `i.initial` will do the wrong thing.
+                    items = [copy.copy(i) for i in item_cache[ckey]]
+                    for i in items:
+                        i.available_variations = [copy.copy(v) for v in i.available_variations]
 
                 for i in items:
                     i.allow_waitinglist = False
@@ -697,7 +701,7 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
                 self.cart_session.get('email', '') or
                 wd.get('email', '')
             ),
-            'phone': wd.get('phone', None)
+            'phone': self.cart_session.get('phone', '') or wd.get('phone', None)
         }
         initial.update(self.cart_session.get('contact_form_data', {}))
 
@@ -709,6 +713,8 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
         if self.cart_customer:
             initial['email'] = self.cart_customer.email
             initial['email_repeat'] = self.cart_customer.email
+            if not initial['phone'] and self.cart_customer.phone:
+                initial['phone'] = self.cart_customer.phone
 
         f = ContactForm(data=self.request.POST if self.request.method == "POST" else None,
                         event=self.request.event,

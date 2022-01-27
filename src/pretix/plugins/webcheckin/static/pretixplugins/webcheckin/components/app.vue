@@ -455,7 +455,7 @@ export default {
             if (!response.ok && [401, 403].includes(response.status)) {
               window.location.href = '/control/login?next=' + encodeURIComponent(window.location.pathname + window.location.search + window.location.hash);
             }
-            response.json()
+            return response.json()
           })
           .then(data => {
             this.searchLoading = false

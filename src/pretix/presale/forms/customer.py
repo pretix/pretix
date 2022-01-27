@@ -31,8 +31,12 @@ from django.contrib.auth.password_validation import (
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
+from phonenumber_field.formfields import PhoneNumberField
 
-from pretix.base.forms.questions import NamePartsFormField
+from pretix.base.forms.questions import (
+    NamePartsFormField, WrappedPhoneNumberPrefixWidget, get_country_by_locale,
+    get_phone_prefix,
+)
 from pretix.base.i18n import get_language_without_region
 from pretix.base.models import Customer
 from pretix.base.services.mail import mail
@@ -54,6 +58,7 @@ class AuthenticationForm(forms.Form):
         label=_("Password"),
         strip=False,
         widget=forms.PasswordInput(attrs={'autocomplete': 'current-password'}),
+        max_length=4096,
     )
 
     error_messages = {
@@ -136,6 +141,19 @@ class RegistrationForm(forms.Form):
     def __init__(self, request=None, *args, **kwargs):
         self.request = request
         super().__init__(*args, **kwargs)
+
+        event = getattr(request, "event", None)
+        if event and event.settings.order_phone_asked:
+            if event.settings.region or event.organizer.settings.region:
+                country_code = event.settings.region or event.organizer.settings.region
+                phone_prefix = get_phone_prefix(country_code)
+                if phone_prefix:
+                    self.initial['phone'] = "+{}.".format(phone_prefix)
+            self.fields['phone'] = PhoneNumberField(
+                label=_('Phone'),
+                required=event.settings.order_phone_required,
+                widget=WrappedPhoneNumberPrefixWidget()
+            )
 
         self.fields['name_parts'] = NamePartsFormField(
             max_length=255,
@@ -234,11 +252,13 @@ class SetPasswordForm(forms.Form):
     password = forms.CharField(
         label=_('Password'),
         widget=forms.PasswordInput(attrs={'minlength': '8', 'autocomplete': 'new-password'}),
+        max_length=4096,
         required=True
     )
     password_repeat = forms.CharField(
         label=_('Repeat password'),
         widget=forms.PasswordInput(attrs={'minlength': '8', 'autocomplete': 'new-password'}),
+        max_length=4096,
     )
 
     def __init__(self, customer=None, *args, **kwargs):
@@ -326,11 +346,13 @@ class ChangePasswordForm(forms.Form):
     password = forms.CharField(
         label=_('New password'),
         widget=forms.PasswordInput,
+        max_length=4096,
         required=True
     )
     password_repeat = forms.CharField(
         label=_('Repeat password'),
         widget=forms.PasswordInput(attrs={'minlength': '8', 'autocomplete': 'new-password'}),
+        max_length=4096,
     )
 
     def __init__(self, customer, *args, **kwargs):
@@ -389,12 +411,13 @@ class ChangeInfoForm(forms.ModelForm):
         label=_('Your current password'),
         widget=forms.PasswordInput,
         help_text=_('Only required if you change your email address'),
+        max_length=4096,
         required=False
     )
 
     class Meta:
         model = Customer
-        fields = ('name_parts', 'email')
+        fields = ('name_parts', 'email', 'phone')
 
     def __init__(self, request=None, *args, **kwargs):
         self.request = request
@@ -406,6 +429,18 @@ class ChangeInfoForm(forms.ModelForm):
             scheme=request.organizer.settings.name_scheme,
             titles=request.organizer.settings.name_scheme_titles,
             label=_('Name'),
+        )
+
+        if not self.initial.get('phone') and (request.organizer.settings.region or self.instance.locale):
+            country_code = self.instance.organizer.settings.region or get_country_by_locale(self.instance.locale)
+            phone_prefix = get_phone_prefix(country_code)
+            if phone_prefix:
+                self.initial['phone'] = "+{}.".format(phone_prefix)
+
+        self.fields['phone'] = PhoneNumberField(
+            label=_('Phone'),
+            required=False,
+            widget=WrappedPhoneNumberPrefixWidget()
         )
 
     def clean_password_current(self):

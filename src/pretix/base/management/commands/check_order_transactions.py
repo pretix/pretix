@@ -23,7 +23,9 @@ from decimal import Decimal
 
 from django.core.management.base import BaseCommand
 from django.db import models
-from django.db.models import Case, F, OuterRef, Q, Subquery, Sum, Value, When
+from django.db.models import (
+    Case, Count, F, OuterRef, Q, Subquery, Sum, Value, When,
+)
 from django.db.models.functions import Coalesce
 from django_scopes import scopes_disabled
 
@@ -45,6 +47,18 @@ class Command(BaseCommand):
                     output_field=models.DecimalField(decimal_places=2, max_digits=10)
                 ), Value(0), output_field=models.DecimalField(decimal_places=2, max_digits=10)
             ),
+            position_cnt=Case(
+                When(Q(status__in=('e', 'c')) | Q(require_approval=True), then=Value(0)),
+                default=Coalesce(
+                    Subquery(
+                        OrderPosition.objects.filter(
+                            order=OuterRef('pk')
+                        ).order_by().values('order').annotate(p=Count('*')).values('p'),
+                        output_field=models.IntegerField()
+                    ), Value(0), output_field=models.IntegerField()
+                ),
+                output_field=models.IntegerField()
+            ),
             fee_total=Coalesce(
                 Subquery(
                     OrderFee.objects.filter(
@@ -61,6 +75,15 @@ class Command(BaseCommand):
                     output_field=models.DecimalField(decimal_places=2, max_digits=10)
                 ), Value(0), output_field=models.DecimalField(decimal_places=2, max_digits=10)
             ),
+            tx_cnt=Coalesce(
+                Subquery(
+                    Transaction.objects.filter(
+                        order=OuterRef('pk'),
+                        item__isnull=False,
+                    ).order_by().values('order').annotate(p=Sum(F('count'))).values('p'),
+                    output_field=models.DecimalField(decimal_places=2, max_digits=10)
+                ), Value(0), output_field=models.DecimalField(decimal_places=2, max_digits=10)
+            ),
         ).annotate(
             correct_total=Case(
                 When(Q(status=Order.STATUS_CANCELED) | Q(status=Order.STATUS_EXPIRED) | Q(require_approval=True),
@@ -70,13 +93,15 @@ class Command(BaseCommand):
             ),
         ).exclude(
             total=F('position_total') + F('fee_total'),
-            tx_total=F('correct_total')
+            tx_total=F('correct_total'),
+            tx_cnt=F('position_cnt')
         ).select_related('event')
         for o in qs:
-            if abs(o.tx_total - o.correct_total) < Decimal('0.00001') and abs(o.position_total + o.fee_total - o.total) < Decimal('0.00001'):
+            if abs(o.tx_total - o.correct_total) < Decimal('0.00001') and abs(o.position_total + o.fee_total - o.total) < Decimal('0.00001') \
+                    and o.tx_cnt == o.position_cnt:
                 # Ignore SQLite which treats Decimals like floats…
                 continue
             print(f"Error in order {o.full_code}: status={o.status}, sum(positions)+sum(fees)={o.position_total + o.fee_total}, "
-                  f"order.total={o.total}, sum(transactions)={o.tx_total}, expected={o.correct_total}")
+                  f"order.total={o.total}, sum(transactions)={o.tx_total}, expected={o.correct_total}, pos_cnt={o.position_cnt}, tx_pos_cnt={o.tx_cnt}")
 
         self.stderr.write(self.style.SUCCESS(f'Check completed.'))
