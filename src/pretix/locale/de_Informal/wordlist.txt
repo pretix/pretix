@@ -1,6 +1,7 @@
 2FA
 ABN
 Absenderadresse
+Absenderinformation
 Absendername
 Admin
 Adminbereich
@@ -62,6 +63,7 @@ csv
 Customer
 Debug
 deliverability
+DNS
 Di
 Do
 Doe
@@ -228,6 +230,7 @@ Sofort
 SOFORT
 Sorry
 Source
+SPF
 SSL
 STARTTLS
 Steuerschuldnerschaft
@@ -255,6 +258,7 @@ TODO
 TOTP
 Trace
 Tracking
+transaktionale
 Turnover
 txt
 überbuchen
