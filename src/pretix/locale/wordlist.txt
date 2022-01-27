@@ -29,6 +29,7 @@ Customizations
 datetime
 deliverability
 DSS
+DNS
 EPC
 EPS
 favicon
