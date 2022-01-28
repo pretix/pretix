@@ -165,9 +165,20 @@ class TemplateBasedMailRenderer(BaseHTMLMailRenderer):
                 has_addons=Count('addons')
             ))
             htmlctx['cart'] = [(k, list(v)) for k, v in groupby(
-                positions, key=lambda op: (
-                    op.item, op.variation, op.subevent, op.attendee_name,
-                    (op.pk if op.addon_to_id else None), (op.pk if op.has_addons else None)
+                sorted(
+                    positions,
+                    key=lambda op: (
+                        (op.addon_to.positionid if op.addon_to_id else op.positionid),
+                        op.positionid
+                    )
+                ),
+                key=lambda op: (
+                    op.item,
+                    op.variation,
+                    op.subevent,
+                    op.attendee_name,
+                    (op.pk if op.addon_to_id else None),
+                    (op.pk if op.has_addons else None)
                 )
             )]
 
