@@ -1,3 +1,5 @@
+.. _secret_generators:
+
 Ticket secret generators
 ========================
 
