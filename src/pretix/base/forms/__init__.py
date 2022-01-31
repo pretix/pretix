@@ -130,7 +130,10 @@ class SettingsForm(i18nfield.forms.I18nFormMixin, HierarkeyForm):
         # languages to an organizer/event later on. So we trick it and make sure nothing gets changed in that situation.
         for name, field in self.fields.items():
             if isinstance(field, SecretKeySettingsField) and d.get(name) == SECRET_REDACTED and not self.initial.get(name):
-                self.add_error(name, _('Due to technical reasons you cannot set inputs, that need to be masked (e.g. passwords), to %(value)s.') % {'value': SECRET_REDACTED})
+                self.add_error(
+                    name,
+                    _('Due to technical reasons you cannot set inputs, that need to be masked (e.g. passwords), to %(value)s.') % {'value': SECRET_REDACTED}
+                )
 
             if isinstance(field, i18nfield.forms.I18nFormField):
                 value = d.get(name)
