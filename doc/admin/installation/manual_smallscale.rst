@@ -34,9 +34,6 @@ Linux and firewalls, we recommend that you start with `ufw`_.
           SSL certificates can be obtained for free these days. We also *do not* provide support for HTTP-only
           installations except for evaluation purposes.
 
-.. warning:: We recommend **PostgreSQL**. If you go for MySQL, make sure you run **MySQL 5.7 or newer** or
-             **MariaDB 10.2.7 or newer**.
-
 Unix user
 ---------
 
@@ -49,6 +46,9 @@ In this guide, all code lines prepended with a ``#`` symbol are commands that yo
 
 Database
 --------
+
+.. warning:: **Please use PostgreSQL for all new installations**. If you need to go for MySQL, make sure you run
+             **MySQL 5.7 or newer** or **MariaDB 10.2.7 or newer**.
 
 Having the database server installed, we still need a database and a database user. We can create these with any kind
 of database managing tool or directly on our database's shell. Please make sure that UTF8 is used as encoding for the
@@ -64,6 +64,8 @@ For PostgreSQL database creation, we would do::
 When using MySQL, make sure you set the character set of the database to ``utf8mb4``, e.g. like this::
 
     mysql > CREATE DATABASE pretix DEFAULT CHARACTER SET utf8mb4 DEFAULT COLLATE utf8mb4_unicode_ci;
+
+You will also need to make sure that ``sql_mode`` in your ``my.cnf`` file does **not** include ``ONLY_FULL_GROUP_BY``.
 
 Package dependencies
 --------------------

@@ -36,9 +36,6 @@ Linux and firewalls, we recommend that you start with `ufw`_.
           SSL certificates can be obtained for free these days. We also *do not* provide support for HTTP-only
           installations except for evaluation purposes.
 
-.. warning:: We recommend **PostgreSQL**. If you go for MySQL, make sure you run **MySQL 5.7 or newer** or
-             **MariaDB 10.2.7 or newer**.
-
 .. warning:: By default, using `ufw` in conjunction will not have any effect. Please make sure to either bind the exposed
              ports of your docker container explicitly to 127.0.0.1 or configure docker to respect any set up firewall
              rules.
@@ -60,6 +57,9 @@ directory writable to the user that runs pretix inside the docker container::
 
 Database
 --------
+
+.. warning:: **Please use PostgreSQL for all new installations**. If you need to go for MySQL, make sure you run
+             **MySQL 5.7 or newer** or **MariaDB 10.2.7 or newer**.
 
 Next, we need a database and a database user. We can create these with any kind of database managing tool or directly on
 our database's shell. Please make sure that UTF8 is used as encoding for the best compatibility. You can check this with
@@ -90,6 +90,8 @@ For MySQL, you can either also use network-based connections or mount the ``/var
 When using MySQL, make sure you set the character set of the database to ``utf8mb4``, e.g. like this::
 
     mysql > CREATE DATABASE pretix DEFAULT CHARACTER SET utf8mb4 DEFAULT COLLATE utf8mb4_unicode_ci;
+
+You will also need to make sure that ``sql_mode`` in your ``my.cnf`` file does **not** include ``ONLY_FULL_GROUP_BY``.
 
 Redis
 -----
