@@ -38,6 +38,7 @@ import i18nfield.forms
 from django import forms
 from django.forms.models import ModelFormMetaclass
 from django.utils.crypto import get_random_string
+from django.utils.translation import gettext_lazy as _
 from formtools.wizard.views import SessionWizardView
 from hierarkey.forms import HierarkeyForm
 
@@ -128,6 +129,9 @@ class SettingsForm(i18nfield.forms.I18nFormMixin, HierarkeyForm):
         # at all, it will be considered a changed value and stored. We do not want that, as it makes it very hard to add
         # languages to an organizer/event later on. So we trick it and make sure nothing gets changed in that situation.
         for name, field in self.fields.items():
+            if isinstance(field, SecretKeySettingsField) and d.get(name) == SECRET_REDACTED and not self.initial.get(name):
+                self.add_error(name, _('Due to technical reasons you cannot set inputs, that need to be masked (e.g. passwords), to %(value)s.') % {'value': SECRET_REDACTED})
+
             if isinstance(field, i18nfield.forms.I18nFormField):
                 value = d.get(name)
                 if not value:
