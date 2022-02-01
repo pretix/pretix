@@ -97,6 +97,8 @@ else:
             f.write(SECRET_KEY)
 
 # Adjustable settings
+LANGUAGE_CODE = config.get('locale', 'default', fallback='en')
+TIME_ZONE = config.get('locale', 'timezone', fallback='UTC')
 
 debug_fallback = "runserver" in sys.argv
 DEBUG = config.getboolean('django', 'debug', fallback=debug_fallback)
@@ -130,6 +132,7 @@ DATABASES = {
         'HOST': config.get('database', 'host', fallback=''),
         'PORT': config.get('database', 'port', fallback=''),
         'CONN_MAX_AGE': 0 if db_backend == 'sqlite3' else 120,
+        'TIME_ZONE': TIME_ZONE,
         'OPTIONS': db_options,
         'TEST': {
             'CHARSET': 'utf8mb4',
@@ -148,6 +151,7 @@ if config.has_section('replica'):
         'HOST': config.get('replica', 'host', fallback=DATABASES['default']['HOST']),
         'PORT': config.get('replica', 'port', fallback=DATABASES['default']['PORT']),
         'CONN_MAX_AGE': 0 if db_backend == 'sqlite3' else 120,
+        'TIME_ZONE': TIME_ZONE,
         'OPTIONS': db_options,
         'TEST': {
             'CHARSET': 'utf8mb4',
@@ -209,9 +213,6 @@ CURRENCY_PLACES = {
 }
 
 ALLOWED_HOSTS = ['*']
-
-LANGUAGE_CODE = config.get('locale', 'default', fallback='en')
-TIME_ZONE = config.get('locale', 'timezone', fallback='UTC')
 
 MAIL_FROM = SERVER_EMAIL = DEFAULT_FROM_EMAIL = config.get('mail', 'from', fallback='pretix@localhost')
 MAIL_FROM_NOTIFICATIONS = config.get('mail', 'from_notifications', fallback=MAIL_FROM)
