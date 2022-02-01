@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-01-27 10:01+0000\n"
-"PO-Revision-Date: 2020-01-26 04:00+0000\n"
-"Last-Translator: András Veres-Szentkirályi <vsza@vsza.hu>\n"
+"PO-Revision-Date: 2022-02-01 22:00+0000\n"
+"Last-Translator: Jozsef Ebenspanger <j.ebenspanger@mso-mg.de>\n"
 "Language-Team: Hungarian <https://translate.pretix.eu/projects/pretix/pretix/"
 "hu/>\n"
 "Language: hu\n"
@@ -17,29 +17,33 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 3.5.1\n"
+"X-Generator: Weblate 4.8\n"
 
 #: pretix/api/auth/devicesecurity.py:28
 msgid ""
 "Full device access (reading and changing orders and gift cards, reading of "
 "products and settings)"
 msgstr ""
+"Teljes eszköz hozzáférés (rendelések és ajándékutalványok olvasása és "
+"módosítása, termékek és beállítások beolvasása)"
 
 #: pretix/api/auth/devicesecurity.py:44
+#, fuzzy
 msgid "pretixSCAN"
-msgstr ""
+msgstr "pretixSCAN"
 
 #: pretix/api/auth/devicesecurity.py:75
 msgid "pretixSCAN (kiosk mode, no order sync, no search)"
-msgstr ""
+msgstr "pretixSCAN (kioszk mód, nincs rendelés szinkronizálás, nincs keresés)"
 
 #: pretix/api/auth/devicesecurity.py:104
 msgid "pretixSCAN (online only, no order sync)"
-msgstr ""
+msgstr "pretixSCAN (csak online, nincs rendelés szinkronizálás)"
 
 #: pretix/api/auth/devicesecurity.py:134
+#, fuzzy
 msgid "pretixPOS"
-msgstr ""
+msgstr "pretixPOS"
 
 #: pretix/api/models.py:39
 msgid "Application name"
@@ -124,10 +128,9 @@ msgid "Meta data property '{name}' does not exist."
 msgstr "A {name} meta adat tulajdonsága nem létezik."
 
 #: pretix/api/serializers/event.py:223 pretix/api/serializers/event.py:516
-#, fuzzy, python-brace-format
-#| msgid "Meta data property '{name}' does not exist."
+#, python-brace-format
 msgid "Meta data property '{name}' does not allow value '{value}'."
-msgstr "A {name} meta adat tulajdonsága nem létezik."
+msgstr "A {name} meta adat értéke nem lehet {value}."
 
 #: pretix/api/serializers/event.py:266
 #, python-brace-format
