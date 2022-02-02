@@ -1392,31 +1392,34 @@ class OrderChange(EventViewMixin, OrderDetailMixin, TemplateView):
             reissue_invoice=True,
         )
 
-        addons_data = []
-        for p in self.positions:
-            if p.addon_to_id or not hasattr(p, 'addon_form'):
-                continue
-            for c in p.addon_form['categories']:
-                try:
-                    selected = self._clean_category(p.addon_form, c)
-                except ValidationError as e:
-                    messages.error(request, e.message % e.params if e.params else e.message)
-                    return self.get(request, *args, **kwargs)
+        form_valid = True
+        if self.request.event.settings.change_allow_user_addons:
+            addons_data = []
+            for p in self.positions:
+                if p.addon_to_id or not hasattr(p, 'addon_form'):
+                    continue
+                for c in p.addon_form['categories']:
+                    try:
+                        selected = self._clean_category(p.addon_form, c)
+                    except ValidationError as e:
+                        messages.error(request, e.message % e.params if e.params else e.message)
+                        return self.get(request, *args, **kwargs)
 
-                for (i, v), (c, price) in selected.items():
-                    addons_data.append({
-                        'addon_to': p.pk,
-                        'item': i.pk,
-                        'variation': v.pk if v else None,
-                        'count': c,
-                        'price': price,
-                    })
-        try:
-            ocm.set_addons(addons_data)
-        except OrderError as e:
-            messages.error(self.request, str(e))
-            form_valid = False
-        else:
+                    for (i, v), (c, price) in selected.items():
+                        addons_data.append({
+                            'addon_to': p.pk,
+                            'item': i.pk,
+                            'variation': v.pk if v else None,
+                            'count': c,
+                            'price': price,
+                        })
+            try:
+                ocm.set_addons(addons_data)
+            except OrderError as e:
+                messages.error(self.request, str(e))
+                form_valid = False
+
+        if form_valid:
             form_valid = self._process_change(ocm)
 
         if not form_valid:
