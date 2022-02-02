@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-01-27 10:01+0000\n"
-"PO-Revision-Date: 2021-12-14 12:26+0000\n"
-"Last-Translator: Raphael Michel <michel@rami.io>\n"
+"PO-Revision-Date: 2022-02-02 15:59+0000\n"
+"Last-Translator: Ismael Menéndez Fernández <ismael.menendez@balidea.com>\n"
 "Language-Team: Galician <https://translate.pretix.eu/projects/pretix/pretix/"
 "gl/>\n"
 "Language: gl\n"
@@ -3257,7 +3257,6 @@ msgstr ""
 "especial o si no tiene variaciones, se utilizará este precio."
 
 #: pretix/base/models/items.py:384
-#, fuzzy
 msgid "Free price input"
 msgstr "Entrada de precio gratuita"
 
@@ -5595,7 +5594,6 @@ msgstr ""
 "son sin recargo."
 
 #: pretix/base/payment.py:908
-#, fuzzy
 msgid "Free of charge"
 msgstr "Gratis"
 
@@ -10424,7 +10422,6 @@ msgid "Ask for {fields}, display like {example}"
 msgstr "Pregunta por {fields}, despliega como {example}"
 
 #: pretix/control/forms/event.py:585 pretix/control/forms/organizer.py:350
-#, fuzzy
 msgid "Free text input"
 msgstr "Entrada de precio gratuita"
 
@@ -12265,9 +12262,8 @@ msgid "Keep a fixed cancellation fee per ticket"
 msgstr "Mantener una tarifa de cancelación fija"
 
 #: pretix/control/forms/orders.py:787
-#, fuzzy
 msgid "Free tickets and add-on products are not counted"
-msgstr "Generar tickets para productos no admitidos"
+msgstr "Xerar tickets para productos non admitidos"
 
 #: pretix/control/forms/orders.py:797
 #, fuzzy
@@ -15973,16 +15969,14 @@ msgid "Paid order"
 msgstr "Orden de pago"
 
 #: pretix/control/templates/pretixcontrol/event/mail.html:91
-#, fuzzy
 msgid "Free order"
 msgstr "Pedido gratuito"
 
 #: pretix/control/templates/pretixcontrol/event/mail.html:94
 #: pretix/control/templates/pretixcontrol/order/index.html:226
 #: pretix/control/templates/pretixcontrol/order/index.html:467
-#, fuzzy
 msgid "Resend link"
-msgstr "Reenviar enlace"
+msgstr "Reenviar ligazón"
 
 #: pretix/control/templates/pretixcontrol/event/mail.html:100
 #, fuzzy
@@ -20050,9 +20044,8 @@ msgid "invited, pending response"
 msgstr "invitado, pendiente de respuesta"
 
 #: pretix/control/templates/pretixcontrol/organizers/team_members.html:55
-#, fuzzy
 msgid "resend invite"
-msgstr "Reenviar enlace"
+msgstr "Reenviar ligazón"
 
 #: pretix/control/templates/pretixcontrol/organizers/team_members.html:73
 #, fuzzy
@@ -20871,9 +20864,8 @@ msgid "select all rows for batch-operation"
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/subevents/index.html:91
-#, fuzzy
 msgid "Begin"
-msgstr "Comenzar"
+msgstr "Comeza"
 
 #: pretix/control/templates/pretixcontrol/subevents/index.html:112
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:166
@@ -25846,7 +25838,6 @@ msgid "Blocked Seats"
 msgstr ""
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:86
-#, fuzzy
 msgid "Free Seats"
 msgstr "Pedido gratuito"
 
@@ -27109,9 +27100,8 @@ msgstr "Confirmaciones"
 
 #: pretix/presale/templates/pretixpresale/event/base.html:170
 #: pretix/presale/templates/pretixpresale/organizers/base.html:88
-#, fuzzy
 msgid "Contact event organizer"
-msgstr "Contactar con el organizador del evento"
+msgstr "Contactar co organizador do evento"
 
 #: pretix/presale/templates/pretixpresale/event/base.html:173
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:75
@@ -27530,7 +27520,7 @@ msgstr "cantidad mínima a pedir: %(num)s"
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:62
 msgctxt "price"
 msgid "free"
-msgstr ""
+msgstr "gratis"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:76
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:51
@@ -27650,9 +27640,8 @@ msgstr "No hay complementos disponibles para este producto."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_availability.html:6
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:71
-#, fuzzy
 msgid "FULLY BOOKED"
-msgstr "PAGADO COMPLETAMENTE"
+msgstr "TODO VENDIDO/RESERVADO"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_availability.html:8
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:73
@@ -27951,7 +27940,6 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/voucher.html:139
 #: pretix/presale/templates/pretixpresale/event/voucher.html:187
 #: pretix/presale/templates/pretixpresale/event/voucher.html:295
-#, fuzzy
 msgctxt "price"
 msgid "FREE"
 msgstr "GRATIS"
@@ -28038,9 +28026,8 @@ msgstr "Reservar ahora"
 #: pretix/presale/templates/pretixpresale/fragment_week_calendar.html:70
 #: pretix/presale/templates/pretixpresale/organizers/index.html:93
 #: pretix/presale/views/widget.py:373
-#, fuzzy
 msgid "Fully booked"
-msgstr "Redimido en su totalidad"
+msgstr "Todo vendido/reservado"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_list.html:42
 #: pretix/presale/templates/pretixpresale/organizers/index.html:102
@@ -28091,10 +28078,9 @@ msgid "Choose date to book a ticket"
 msgstr "Elija la fecha para comprar un ticket"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:88
-#, fuzzy
 msgctxt "subevent"
 msgid "Other dates"
-msgstr "Otras características"
+msgstr "Outras datas"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:138
 #: pretix/presale/views/waiting.py:98 pretix/presale/views/widget.py:662
@@ -28126,13 +28112,13 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/index.html:178
 #: pretix/presale/templates/pretixpresale/event/voucher.html:33
-#, fuzzy, python-format
+#, python-format
 msgid "Begin: %(time)s"
 msgstr "Inicio: %(time)s"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:187
 #: pretix/presale/templates/pretixpresale/event/voucher.html:40
-#, fuzzy, python-format
+#, python-format
 msgid "End: %(time)s"
 msgstr "Fin: %(time)s"
 
@@ -28150,9 +28136,8 @@ msgstr "Entrada: %(datetime)s"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:220
 #: pretix/presale/templates/pretixpresale/event/voucher.html:68
-#, fuzzy
 msgid "Add to Calendar"
-msgstr "Añadir al Calendario"
+msgstr "Engadir ao calendario"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:233
 #: pretix/presale/templates/pretixpresale/event/seatingplan.html:23
@@ -28187,30 +28172,26 @@ msgid "Add to cart"
 msgstr "Agregar al carrito"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:304
-#, fuzzy
 msgid "If you already ordered a ticket"
-msgstr "Si ya ha pedido un ticket"
+msgstr "Se xa pediu un ticket"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:308
-#, fuzzy
 msgid ""
 "If you want to see or change the status and details of your order, click on "
 "the link in one of the emails we sent you during the order process. If you "
 "cannot find the link, click on the following button to request the link to "
 "your order to be sent to you again."
 msgstr ""
-"Si desea ver o cambiar el estado y los detalles de su pedido, haga clic en "
-"el enlace de uno de los correos electrónicos que le enviamos durante el "
-"proceso de pedido. Si no puede encontrar el enlace, haga clic en el "
-"siguiente botón para solicitar que se le envíe de nuevo el enlace a su "
-"pedido."
+"Se desexa ver ou cambiar o estado e os detalles do seu pedido, faga  clic na "
+"ligazón dun dos correos electrónicos que lle enviamos durante o proceso de "
+"pedido. Se non pode atopar a ligazón, faga clic no seguinte botón para "
+"solicitar que se lle envíe de novo a ligazón ao seu pedido."
 
 #: pretix/presale/templates/pretixpresale/event/index.html:317
 #: pretix/presale/templates/pretixpresale/event/resend_link.html:4
 #: pretix/presale/templates/pretixpresale/event/resend_link.html:11
-#, fuzzy
 msgid "Resend order links"
-msgstr "Reenviar los links de la orden"
+msgstr "Reenviar liganzóns do pedido"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:12
 #: pretix/presale/templates/pretixpresale/event/order.html:29
