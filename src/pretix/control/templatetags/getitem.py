@@ -29,4 +29,7 @@ def getitem_filter(value, itemname):
     if not value:
         return ''
 
+    if itemname not in value:
+        return ''
+
     return value[itemname]
