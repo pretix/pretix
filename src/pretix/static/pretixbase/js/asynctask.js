@@ -215,11 +215,17 @@ $(function () {
             'this page and try again.'
         ));
 
+
+        console.log($(this).get(0))
+        var formData = new FormData($(this).get(0))
+        formData.append('ajax', '1');
         $.ajax(
             {
                 'type': 'POST',
                 'url': $(this).attr('action'),
-                'data': $(this).serialize() + '&ajax=1',
+                'data': formData,
+                processData: false,
+                contentType: false,
                 'success': async_task_callback,
                 'error': async_task_error,
                 'context': this,
