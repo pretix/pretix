@@ -54,7 +54,7 @@ class OrderPositionChangeForm(forms.Form):
         choices = []
 
         i = instance.item
-        pname = str(i)
+        pname = str(i.name)
         variations = list(i.variations.all())
 
         if variations and event.settings.change_allow_user_variation:
