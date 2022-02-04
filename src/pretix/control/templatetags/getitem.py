@@ -29,4 +29,9 @@ def getitem_filter(value, itemname):
     if not value:
         return ''
 
-    return value.get(itemname, '')
+    try:
+        return value[itemname]
+    except KeyError:
+        return ''
+    except TypeError:
+        return ''
