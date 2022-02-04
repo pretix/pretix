@@ -579,7 +579,7 @@ def mail_send_task(self, *args, to: List[str], subject: str, body: str, html: st
                             }
                         )
                     raise e
-            if logger:
+            if log_target:
                 log_target.log_action(
                     'pretix.email.error',
                     data={
