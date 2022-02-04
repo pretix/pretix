@@ -1594,21 +1594,22 @@ class OrderChangeManager:
 
             op = opcache[a['addon_to']]
             item = _items_cache[a['item']]
+            subevent = op.subevent  # for now, we might lift this requirement later
             variation = _variations_cache[a['variation']] if a['variation'] is not None else None
 
             if item.category_id not in available_categories[op.pk]:
                 raise OrderError(error_messages['addon_invalid_base'])
 
             # Fetch all quotas. If there are no quotas, this item is not allowed to be sold.
-            quotas = list(item.quotas.filter(subevent=op.subevent)
-                          if variation is None else variation.quotas.filter(subevent=op.subevent))
+            quotas = list(item.quotas.filter(subevent=subevent)
+                          if variation is None else variation.quotas.filter(subevent=subevent))
             if not quotas:
                 raise OrderError(error_messages['unavailable'])
 
             if (a['item'], a['variation']) in input_addons[op.id]:
                 raise OrderError(error_messages['addon_duplicate_item'])
 
-            if item.require_voucher or op.item.hide_without_voucher or (op.variation and op.variation.hide_without_voucher):
+            if item.require_voucher or item.hide_without_voucher or (variation and variation.hide_without_voucher):
                 raise OrderError(error_messages['voucher_required'])
 
             if not item.is_available() or (variation and not variation.is_available()):
@@ -1618,11 +1619,11 @@ class OrderChangeManager:
                     variation and self.order.sales_channel not in variation.sales_channels):
                 raise OrderError(error_messages['unavailable'])
 
-            if op.subevent and item.pk in op.subevent.item_overrides and not op.subevent.item_overrides[op.item.pk].is_available():
+            if subevent and item.pk in subevent.item_overrides and not subevent.item_overrides[item.pk].is_available():
                 raise OrderError(error_messages['not_for_sale'])
 
-            if op.subevent and variation and variation.pk in op.subevent.var_overrides and \
-                    not op.subevent.var_overrides[variation.pk].is_available():
+            if subevent and variation and variation.pk in subevent.var_overrides and \
+                    not subevent.var_overrides[variation.pk].is_available():
                 raise OrderError(error_messages['not_for_sale'])
 
             if item.has_variations and not variation:
@@ -1631,10 +1632,10 @@ class OrderChangeManager:
             if variation and variation.item_id != item.pk:
                 raise OrderError(error_messages['not_for_sale'])
 
-            if op.subevent and op.subevent.presale_start and now() < op.subevent.presale_start:
+            if subevent and subevent.presale_start and now() < subevent.presale_start:
                 raise OrderError(error_messages['not_started'])
 
-            if (op.subevent and op.subevent.presale_has_ended) or self.event.presale_has_ended:
+            if (subevent and subevent.presale_has_ended) or self.event.presale_has_ended:
                 raise OrderError(error_messages['ended'])
 
             if item.require_bundling:
