@@ -205,6 +205,7 @@ class AsyncFormView(AsyncMixin, FormView):
     Also, all form keyword arguments except ``instance`` need to be serializable.
     """
     known_errortypes = ['ValidationError']
+    task_base = ProfiledEventTask
 
     def __init_subclass__(cls):
         def async_execute(self, *, request_path, query_string, form_kwargs, locale, tz, organizer=None, event=None, user=None, session_key=None):
@@ -222,7 +223,7 @@ class AsyncFormView(AsyncMixin, FormView):
             elif organizer:
                 view_instance.request.organizer = organizer
             if user:
-                view_instance.request.user = User.objects.get(pk=user)
+                view_instance.request.user = User.objects.get(pk=user) if isinstance(user, int) else user
             if session_key:
                 engine = import_module(settings.SESSION_ENGINE)
                 self.SessionStore = engine.SessionStore
@@ -231,7 +232,7 @@ class AsyncFormView(AsyncMixin, FormView):
             with translation.override(locale), timezone.override(pytz.timezone(tz)):
                 form_class = view_instance.get_form_class()
                 if form_kwargs.get('instance'):
-                    cls.model.objects.get(pk=form_kwargs['instance'])
+                    form_kwargs['instance'] = cls.model.objects.get(pk=form_kwargs['instance'])
 
                 form_kwargs = view_instance.get_async_form_kwargs(form_kwargs, organizer, event)
                 form = form_class(**form_kwargs)
@@ -239,7 +240,7 @@ class AsyncFormView(AsyncMixin, FormView):
                 return view_instance.async_form_valid(self, form)
 
         cls.async_execute = app.task(
-            base=ProfiledEventTask,
+            base=cls.task_base,
             bind=True,
             name=cls.__module__ + '.' + cls.__name__ + '.async_execute',
             throws=(ValidationError,)
