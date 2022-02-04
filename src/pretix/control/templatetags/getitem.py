@@ -29,4 +29,4 @@ def getitem_filter(value, itemname):
     if not value:
         return ''
 
-    return value[itemname]
+    return value.get(itemname, '')
