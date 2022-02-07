@@ -55,6 +55,7 @@ from paypalhttp import HttpError
 
 from pretix.base.models import Event, Order, OrderPayment, OrderRefund, Quota
 from pretix.base.payment import PaymentException
+from pretix.base.settings import GlobalSettingsObject
 from pretix.control.permissions import event_permission_required
 from pretix.multidomain.urlreverse import eventreverse
 from pretix.plugins.paypal.client.customer.partners_merchantintegrations_get_request import \
@@ -184,11 +185,12 @@ def isu_return(request, *args, **kwargs):
 
     event = get_object_or_404(Event, pk=request.session['payment_paypal_isu_event'])
 
+    gs = GlobalSettingsObject()
     prov = Paypal(event)
     prov.init_api()
 
     req = PartnersMerchantIntegrationsGetRequest(
-        prov.partnerID,
+        gs.get('payment_paypal_connect_partner_merchant_id'),
         request.GET.get('merchantIdInPayPal')
     )
 

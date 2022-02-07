@@ -76,15 +76,20 @@ def pretixcontrol_logentry_display(sender, logentry, **kwargs):
 def register_global_settings(sender, **kwargs):
     return OrderedDict([
         ('payment_paypal_connect_client_id', forms.CharField(
-            label=_('PayPal Connect: Client ID'),
+            label=_('PayPal ISU/Connect: Client ID'),
             required=False,
         )),
         ('payment_paypal_connect_secret_key', SecretKeySettingsField(
-            label=_('PayPal Connect: Secret key'),
+            label=_('PayPal ISU/Connect: Secret key'),
+            required=False,
+        )),
+        ('payment_paypal_connect_partner_merchant_id', forms.CharField(
+            label=_('PayPal ISU/Connect: Partner Merchant ID'),
+            help_text=_('This is not the BN-code, but rather the ID of the merchant account which holds branding information for ISU.'),
             required=False,
         )),
         ('payment_paypal_connect_endpoint', forms.ChoiceField(
-            label=_('PayPal Connect Endpoint'),
+            label=_('PayPal ISU/Connect Endpoint'),
             initial='live',
             choices=(
                 ('live', 'Live'),

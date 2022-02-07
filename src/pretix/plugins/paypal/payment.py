@@ -84,7 +84,6 @@ class PaypalSettingsHolder(BasePaymentProvider):
     is_meta = True
     payment_form_fields = OrderedDict([])
     BN = 'ramiioGmbH_Cart_PPCP'
-    partnerID = 'G6R2B9YXADKWW'  # TODO: Sandbox/Live
 
     @property
     def settings_form_fields(self):
@@ -382,7 +381,6 @@ class PaypalMethod(BasePaymentProvider):
         super().__init__(event)
         self.settings = SettingsSandbox('payment', 'paypal', event)
         self.BN = 'ramiioGmbH_Cart_PPCP'
-        self.partnerID = 'G6R2B9YXADKWW' # TODO: Sandbox/Live
 
     @property
     def settings_form_fields(self):
