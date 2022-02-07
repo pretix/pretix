@@ -78,12 +78,15 @@ LOCAL_ONLY_CURRENCIES = ['INR']
 
 
 class PaypalSettingsHolder(BasePaymentProvider):
-    identifier = 'paypal'
+    identifier = 'paypal_settings'
     verbose_name = _('PayPal')
     is_enabled = False
     is_meta = True
     payment_form_fields = OrderedDict([])
-    BN = 'ramiioGmbH_Cart_PPCP'
+
+    def __init__(self, event: Event):
+        super().__init__(event)
+        self.settings = SettingsSandbox('payment', 'paypal', event)
 
     @property
     def settings_form_fields(self):
@@ -266,45 +269,12 @@ class PaypalSettingsHolder(BasePaymentProvider):
 
         return settings_content
 
-    def init_api(self):
-        # PayPal Connect (legacy) || ISU
-        if self.settings.connect_client_id and not self.settings.secret:
-            if 'sandbox' in self.settings.connect_endpoint:
-                env = SandboxEnvironment(
-                    client_id=self.settings.connect_client_id,
-                    client_secret=self.settings.connect_secret_key,
-                    merchant_id=self.settings.get('isu_merchant_id', self.settings.get('connect_user_id', None)),
-                    partner_id=self.BN
-                )
-            else:
-                env = LiveEnvironment(
-                    client_id=self.settings.connect_client_id,
-                    client_secret=self.settings.connect_secret_key,
-                    merchant_id=self.settings.get('isu_merchant_id', self.settings.get('connect_user_id', None)),
-                    partner_id=self.BN
-                )
-        # Manual API integration
-        else:
-            if 'sandbox' in self.settings.get('endpoint'):
-                env = SandboxEnvironment(
-                    client_id=self.settings.get('client_id'),
-                    client_secret=self.settings.get('secret'),
-                    partner_id=self.BN
-                )
-            else:
-                env = LiveEnvironment(
-                    client_id=self.settings.get('client_id'),
-                    client_secret=self.settings.get('secret'),
-                    partner_id=self.BN
-                )
-
-        self.client = PayPalHttpClient(env)
-
     def get_isu_referral_url(self, request):
+        pprov = PaypalMethod(request.event)
         request.session['payment_paypal_isu_event'] = request.event.pk
         request.session['payment_paypal_isu_tracking_id'] = get_random_string(length=127)
 
-        self.init_api()
+        pprov.init_api()
 
         req = PartnerReferralCreateRequest()
 
@@ -341,7 +311,7 @@ class PaypalSettingsHolder(BasePaymentProvider):
         })
 
         try:
-            response = self.client.execute(req)
+            response = pprov.client.execute(req)
         except IOError as ioe:
             if isinstance(ioe, HttpError):
                 messages.error(request, _('An error occurred during connecting with PayPal, please try again.'))
@@ -372,15 +342,14 @@ class PaypalSettingsHolder(BasePaymentProvider):
         return payment.info_data.get('payer', {}).get('payer_info', {}).get('email', '')
 
 
-
 class PaypalMethod(BasePaymentProvider):
     identifier = ''
     method = ''
+    BN = 'ramiioGmbH_Cart_PPCP'
 
     def __init__(self, event: Event):
         super().__init__(event)
         self.settings = SettingsSandbox('payment', 'paypal', event)
-        self.BN = 'ramiioGmbH_Cart_PPCP'
 
     @property
     def settings_form_fields(self):
@@ -926,8 +895,8 @@ class PaypalMethod(BasePaymentProvider):
 
 
 class PaypalWallet(PaypalMethod):
-    identifier = 'paypal_wallet'
-    verbose_name = _('PayPal Wallet')
+    identifier = 'paypal'
+    verbose_name = _('PayPal')
     public_name = _('PayPal')
     method = 'wallet'
 
