@@ -196,6 +196,7 @@ var pretixpaypal = {
                 });
             },
             onApprove: function (data, actions) {
+                waitingDialog.show(gettext("Confirming your payment …"));
                 pretixpaypal.order_id = data.orderID;
                 pretixpaypal.payer_id = data.payerID;
 
