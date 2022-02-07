@@ -542,7 +542,7 @@ class PaypalMethod(BasePaymentProvider):
                 ),
                 postfix=' {}'.format(self.settings.postfix) if self.settings.postfix else ''
             )
-            custom_id = '{prefix}{slug}-{code}{postfix}'.format(
+            invoice_id = '{prefix}{slug}-{code}{postfix}'.format(
                 prefix='{} '.format(self.settings.prefix) if self.settings.prefix else '',
                 slug=self.event.slug.upper(),
                 code=payment.order.code,
@@ -553,7 +553,7 @@ class PaypalMethod(BasePaymentProvider):
             value = self.format_price(cart['total'])
             currency = request.event.currency
             description = __('Event tickets for {event}').format(event=request.event.name)
-            custom_id = '{prefix}{slug}{postfix}'.format(
+            invoice_id = '{prefix}{slug}{postfix}'.format(
                 prefix='{} '.format(self.settings.prefix) if self.settings.prefix else '',
                 slug=request.event.slug.upper(),
                 postfix=' {}'.format(self.settings.postfix) if self.settings.postfix else ''
@@ -573,7 +573,7 @@ class PaypalMethod(BasePaymentProvider):
                 },
                 'payee': payee,
                 'description': description,
-                'custom_id': custom_id,
+                'invoice_id': invoice_id,
                 #'shipping': {},  # Include Shipping information?
             }],
             'application_context': {
@@ -666,7 +666,7 @@ class PaypalMethod(BasePaymentProvider):
                 patchreq.request_body([
                     {
                         "op": "replace",
-                        "path": "/purchase_units/@reference_id=='default'/custom_id",
+                        "path": "/purchase_units/@reference_id=='default'/invoice_id",
                         "value": '{prefix}{orderstring}{postfix}'.format(
                             prefix='{} '.format(self.settings.prefix) if self.settings.prefix else '',
                             orderstring=__('Order {slug}-{code}').format(
