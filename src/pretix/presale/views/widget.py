@@ -134,6 +134,7 @@ def generate_widget_js(lang):
         })
         i18n_js = template.render(context)
         i18n_js = i18n_js.replace('for (const ', 'for (var ')  # remove if we really want to break IE11 for good
+        i18n_js = i18n_js.replace(r"value.includes(", r"-1 != value.indexOf(")  # remove if we really want to break IE11 for good
         code.append(i18n_js)
 
         files = [
