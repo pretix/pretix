@@ -434,9 +434,10 @@ class VoucherBulkCreate(EventPermissionRequiredMixin, AsyncFormView):
 
         def process_batch(batch_vouchers, voucherids):
             Voucher.objects.bulk_create(batch_vouchers)
-            if not connection.features.can_return_rows_from_bulk_insert or True:
+            if not connection.features.can_return_rows_from_bulk_insert:
+                from_db = list(self.request.event.vouchers.filter(code__in=[v.code for v in batch_vouchers]))
                 batch_vouchers.clear()
-                batch_vouchers = list(self.request.event.vouchers.filter(code__in=[v.code for v in batch_vouchers]))
+                batch_vouchers += from_db
 
             log_entries = []
             for v in batch_vouchers:
