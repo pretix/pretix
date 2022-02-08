@@ -1926,6 +1926,28 @@ def test_order_create_autocheckin(token_client, organizer, event, item, quota, q
 
 
 @pytest.mark.django_db
+def test_order_create_require_approval(token_client, organizer, event, item, quota, question):
+    res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
+    res['require_approval'] = True
+    res['send_email'] = True
+    res['positions'][0]['item'] = item.pk
+    res['positions'][0]['answers'][0]['question'] = question.pk
+    djmail.outbox = []
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 201
+    with scopes_disabled():
+        o = Order.objects.get(code=resp.data['code'])
+        assert o.require_approval
+    assert len(djmail.outbox) == 1
+    assert djmail.outbox[0].subject == "Your order: {}".format(resp.data['code'])
+    assert "approval" in djmail.outbox[0].body
+
+
+@pytest.mark.django_db
 def test_order_create_invoice_address_optional(token_client, organizer, event, item, quota, question):
     res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
     res['positions'][0]['item'] = item.pk

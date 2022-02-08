@@ -646,7 +646,11 @@ class OrderViewSet(viewsets.ModelViewSet):
                     payment and order.total == Decimal('0.00') and order.status == Order.STATUS_PAID and
                     not order.require_approval and payment.provider == "free"
                 )
-                if free_flow:
+                if order.require_approval:
+                    email_template = request.event.settings.mail_text_order_placed_require_approval
+                    log_entry = 'pretix.event.order.email.order_placed_require_approval'
+                    email_attendees = False
+                elif free_flow:
                     email_template = request.event.settings.mail_text_order_free
                     log_entry = 'pretix.event.order.email.order_free'
                     email_attendees = request.event.settings.mail_send_order_free_attendee

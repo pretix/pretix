@@ -839,6 +839,7 @@ Creating orders
    * ``comment`` (optional)
    * ``custom_followup_at`` (optional)
    * ``checkin_attention`` (optional)
+   * ``require_approval`` (optional)
    * ``invoice_address`` (optional)
 
       * ``company``

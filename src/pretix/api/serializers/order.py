@@ -935,6 +935,7 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
     force = serializers.BooleanField(default=False, required=False)
     payment_date = serializers.DateTimeField(required=False, allow_null=True)
     send_email = serializers.BooleanField(default=False, required=False)
+    require_approval = serializers.BooleanField(default=False, required=False)
     simulate = serializers.BooleanField(default=False, required=False)
     customer = serializers.SlugRelatedField(slug_field='identifier', queryset=Customer.objects.none(), required=False)
 
@@ -947,7 +948,7 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
         model = Order
         fields = ('code', 'status', 'testmode', 'email', 'phone', 'locale', 'payment_provider', 'fees', 'comment', 'sales_channel',
                   'invoice_address', 'positions', 'checkin_attention', 'payment_info', 'payment_date', 'consume_carts',
-                  'force', 'send_email', 'simulate', 'customer', 'custom_followup_at')
+                  'force', 'send_email', 'simulate', 'customer', 'custom_followup_at', 'require_approval')
 
     def validate_payment_provider(self, pp):
         if pp is None:
@@ -1219,6 +1220,8 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
             order.set_expires(subevents=[p.get('subevent') for p in positions_data])
             order.meta_info = "{}"
             order.total = Decimal('0.00')
+            if validated_data.get('require_approval') is not None:
+                order.require_approval = validated_data['require_approval']
             if simulate:
                 order = WrappedModel(order)
                 order.last_modified = now()
