@@ -628,8 +628,8 @@ class ItemUpdateForm(I18nModelForm):
             }),
             'generate_tickets': TicketNullBooleanSelect(),
             'show_quota_left': ShowQuotaNullBooleanSelect(),
-            'max_per_order': forms.widgets.NumberInput(attrs={'min':0}),
-            'min_per_order': forms.widgets.NumberInput(attrs={'min':0}),
+            'max_per_order': forms.widgets.NumberInput(attrs={'min': 0}),
+            'min_per_order': forms.widgets.NumberInput(attrs={'min': 0}),
         }
 
 
