@@ -14,6 +14,26 @@ function ngettext(singular, plural, count) {
     return plural;
 }
 
+function formatPrice(price, currency, locale) {
+    if (!window.Intl || !Intl.NumberFormat) return price;
+    if (isNaN(price) && price.replace) {
+        price = price.replace(".", "").replace(",", ".")
+    }
+
+    if (currency === undefined) {
+        currency = $("[data-currency]").data("currency")
+    }
+    if (locale === undefined) {
+        locale = $("[data-locale]").data("locale") || $("[data-pretixlocale]").data("pretixlocale");
+    }
+    var opt = currency ? {style: "currency", currency: currency} : null;
+    try {
+        return new Intl.NumberFormat(locale, opt).format(price)
+    } catch (error) {
+        return price
+    }
+}
+
 var waitingDialog = {
     show: function (message) {
         "use strict";
