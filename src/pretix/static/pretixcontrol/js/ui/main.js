@@ -17,7 +17,10 @@ function ngettext(singular, plural, count) {
 function formatPrice(price, currency, locale) {
     if (!window.Intl || !Intl.NumberFormat) return price;
     if (isNaN(price) && price.replace) {
-        price = price.replace(".", "").replace(",", ".")
+        price = price.replace(/\s/g, "")
+        if (price.indexOf(",") > -1) {
+            price = price.replace(/\./g, "").replace(",", ".")
+        }
     }
 
     if (currency === undefined) {
