@@ -38,7 +38,7 @@ function formatPrice(price, currency, locale) {
         // to hopefully get a parsable number
         nf.formatToParts(1234.567).forEach(function(part) {
             if (replacements.hasOwnProperty(part.type)) {
-                priceToFormat = priceToFormat.replaceAll(part.value, replacements[part.key])
+                priceToFormat = priceToFormat.replaceAll(part.value, replacements[part.type])
             }
         });
         if (isNaN(priceToFormat)) return price
