@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-01-27 10:01+0000\n"
-"PO-Revision-Date: 2022-01-19 21:00+0000\n"
-"Last-Translator: DJG Bayern <pretix2021weblate@aruki.de>\n"
+"PO-Revision-Date: 2022-02-11 23:00+0000\n"
+"Last-Translator: kackey621 <a.kusama@icloud.com>\n"
 "Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/pretix/"
 "ja/>\n"
 "Language: ja\n"
@@ -23,7 +23,7 @@ msgstr ""
 msgid ""
 "Full device access (reading and changing orders and gift cards, reading of "
 "products and settings)"
-msgstr ""
+msgstr "フルアクセス権限（読み出し・書き出しを含むすべての操作を許可）"
 
 #: pretix/api/auth/devicesecurity.py:44
 msgid "pretixSCAN"
@@ -39,7 +39,7 @@ msgstr "pretixSCAN (オンラインのみ, 注文シンクなし)"
 
 #: pretix/api/auth/devicesecurity.py:134
 msgid "pretixPOS"
-msgstr ""
+msgstr "pretixPOS"
 
 #: pretix/api/models.py:39
 msgid "Application name"
@@ -47,23 +47,23 @@ msgstr "アプリケーション名"
 
 #: pretix/api/models.py:42
 msgid "Redirection URIs"
-msgstr ""
+msgstr "リダイレクト先URI"
 
 #: pretix/api/models.py:43
 msgid "Allowed URIs list, space separated"
-msgstr ""
+msgstr "ホワイトURI（スペース区切り）"
 
 #: pretix/api/models.py:46 pretix/plugins/paypal/payment.py:112
 msgid "Client ID"
-msgstr ""
+msgstr "クライアントID"
 
 #: pretix/api/models.py:50
 msgid "Client secret"
-msgstr ""
+msgstr "クライアントシークレット"
 
 #: pretix/api/models.py:97
 msgid "Enable webhook"
-msgstr ""
+msgstr "Webhockを有効化"
 
 #: pretix/api/models.py:98
 #: pretix/control/templates/pretixcontrol/organizers/webhooks.html:36
@@ -73,16 +73,16 @@ msgstr "ターゲット URL"
 #: pretix/api/models.py:99 pretix/base/models/devices.py:121
 #: pretix/base/models/organizer.py:258
 msgid "All events (including newly created ones)"
-msgstr ""
+msgstr "すべてのイベント（最近作成されたイベントを含む）"
 
 #: pretix/api/models.py:100 pretix/base/models/devices.py:122
 #: pretix/base/models/organizer.py:259
 msgid "Limit to events"
-msgstr ""
+msgstr "イベント上限"
 
 #: pretix/api/serializers/cart.py:81 pretix/api/serializers/order.py:1196
 msgid "The product \"{}\" is not assigned to a quota."
-msgstr ""
+msgstr "この商品（\"{}\"）は割り当てられていません。"
 
 #: pretix/api/serializers/cart.py:89 pretix/api/serializers/order.py:1208
 msgid ""
