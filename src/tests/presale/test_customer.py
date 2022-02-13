@@ -358,11 +358,11 @@ def test_change_email(env, client):
     assert customer.email == 'john@example.org'
     assert len(djmail.outbox) == 1
 
-    dumps({
+    token = dumps({
         'customer': customer.pk,
         'email': 'john@example.com'
     }, salt='pretix.presale.views.customer.ChangeInformationView')
-    r = client.get('/bigevents/account/confirmchange?token={token}')
+    r = client.get(f'/bigevents/account/confirmchange?token={token}')
     assert r.status_code == 302
     customer.refresh_from_db()
     assert customer.email == 'john@example.com'
