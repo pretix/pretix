@@ -14,6 +14,43 @@ function ngettext(singular, plural, count) {
     return plural;
 }
 
+function formatPrice(price, currency, locale) {
+    if (!window.Intl || !Intl.NumberFormat) return price;
+    var priceToFormat = price
+    if (currency === undefined) {
+        currency = $("[data-currency]").data("currency")
+    }
+    if (locale === undefined) {
+        locale = $("[data-locale]").data("locale") || $("[data-pretixlocale]").data("pretixlocale");
+    }
+
+    var opt = currency ? {style: "currency", currency: currency} : null;
+    var nf = new Intl.NumberFormat(locale, opt)
+
+    if (isNaN(priceToFormat) && priceToFormat.replaceAll) {
+        // price is not a number, try to reformat based on locale/currency-format
+        var replacements = {
+            group: "",
+            decimal: "."
+        }
+        // format a dummy number to get parts of formatting and
+        // replace group and decimal according to replacements
+        // to hopefully get a parsable number
+        nf.formatToParts(1234.567).forEach(function(part) {
+            if (replacements.hasOwnProperty(part.type)) {
+                priceToFormat = priceToFormat.replaceAll(part.value, replacements[part.type])
+            }
+        });
+        if (isNaN(priceToFormat)) return price
+    }
+
+    try {
+        return nf.format(priceToFormat)
+    } catch (error) {
+        return price
+    }
+}
+
 var waitingDialog = {
     show: function (message) {
         "use strict";
