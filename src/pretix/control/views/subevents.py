@@ -1470,7 +1470,7 @@ class SubEventBulkEdit(SubEventQueryMixin, EventPermissionRequiredMixin, FormVie
             form.is_valid() and
             self.quota_formset.is_valid() and
             (not self.list_formset or self.list_formset.is_valid()) and
-            all(f.is_valid() for f in self.itemvar_forms)and
+            all(f.is_valid() for f in self.itemvar_forms) and
             all(f.is_valid() for f in self.meta_forms)
         )
         if is_valid:

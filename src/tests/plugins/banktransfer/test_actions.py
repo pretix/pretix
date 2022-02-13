@@ -134,7 +134,7 @@ def test_comment(env, client):
                                            amount=12, date='unknown')
     client.login(email='dummy@dummy.dummy', password='dummy')
     r = json.loads(client.post('/control/event/{}/{}/banktransfer/action/'.format(env[0].organizer.slug, env[0].slug), {
-        'action_{}'.format(trans.pk): 'comment:This is my comment'.format(env[2].code)
+        'action_{}'.format(trans.pk): 'comment:This is my comment'
     }).content.decode('utf-8'))
     assert r['status'] == 'ok'
     trans.refresh_from_db()

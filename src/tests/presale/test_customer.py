@@ -151,13 +151,13 @@ def test_org_login_logout(env, client):
     })
     assert r.status_code == 302
 
-    r = client.get(f'/bigevents/account/')
+    r = client.get('/bigevents/account/')
     assert r.status_code == 200
 
     r = client.get('/bigevents/account/logout')
     assert r.status_code == 302
 
-    r = client.get(f'/bigevents/account/')
+    r = client.get('/bigevents/account/')
     assert r.status_code == 302
 
 
@@ -288,7 +288,7 @@ def test_org_order_list(env, client):
     })
     assert r.status_code == 302
 
-    r = client.get(f'/bigevents/account/')
+    r = client.get('/bigevents/account/')
     assert r.status_code == 200
     content = r.content.decode()
     assert o1.code not in content
@@ -297,7 +297,7 @@ def test_org_order_list(env, client):
 
     env[0].settings.customer_accounts_link_by_email = True
 
-    r = client.get(f'/bigevents/account/')
+    r = client.get('/bigevents/account/')
     assert r.status_code == 200
     content = r.content.decode()
     assert o1.code not in content
@@ -318,7 +318,7 @@ def test_change_name(env, client):
     })
     assert r.status_code == 302
 
-    r = client.post(f'/bigevents/account/change', {
+    r = client.post('/bigevents/account/change', {
         'name_parts_0': 'John Doe',
         'email': 'john@example.org',
     })
@@ -340,7 +340,7 @@ def test_change_email(env, client):
     })
     assert r.status_code == 302
 
-    r = client.post(f'/bigevents/account/change', {
+    r = client.post('/bigevents/account/change', {
         'name_parts_0': 'John Doe',
         'email': 'john@example.com'
     })
@@ -348,7 +348,7 @@ def test_change_email(env, client):
     customer.refresh_from_db()
     assert customer.email == 'john@example.org'
 
-    r = client.post(f'/bigevents/account/change', {
+    r = client.post('/bigevents/account/change', {
         'name_parts_0': 'John Doe',
         'email': 'john@example.com',
         'password_current': 'foo',
@@ -358,11 +358,11 @@ def test_change_email(env, client):
     assert customer.email == 'john@example.org'
     assert len(djmail.outbox) == 1
 
-    token = dumps({
+    dumps({
         'customer': customer.pk,
         'email': 'john@example.com'
     }, salt='pretix.presale.views.customer.ChangeInformationView')
-    r = client.get(f'/bigevents/account/confirmchange?token={token}')
+    r = client.get('/bigevents/account/confirmchange?token={token}')
     assert r.status_code == 302
     customer.refresh_from_db()
     assert customer.email == 'john@example.com'
@@ -381,7 +381,7 @@ def test_change_pw(env, client):
     })
     assert r.status_code == 302
 
-    r = client.post(f'/bigevents/account/password', {
+    r = client.post('/bigevents/account/password', {
         'password_current': 'invalid',
         'password': 'aYLBRNg4',
         'password_repeat': 'aYLBRNg4',
@@ -390,7 +390,7 @@ def test_change_pw(env, client):
     customer.refresh_from_db()
     assert customer.check_password('foo')
 
-    r = client.post(f'/bigevents/account/password', {
+    r = client.post('/bigevents/account/password', {
         'password_current': 'foo',
         'password': 'aYLBRNg4',
         'password_repeat': 'aYLBRNg4',

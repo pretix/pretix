@@ -174,11 +174,11 @@ def test_card_detail_view_transact_invalid_value(organizer, admin_user, gift_car
 @pytest.mark.django_db
 def test_manage_acceptance(organizer, organizer2, admin_user, gift_card, client, team2):
     client.login(email='dummy@dummy.dummy', password='dummy')
-    client.post('/control/organizer/dummy/giftcards'.format(gift_card.pk), {
+    client.post('/control/organizer/dummy/giftcards', {
         'add': organizer2.slug
     })
     assert organizer.gift_card_issuer_acceptance.filter(issuer=organizer2).exists()
-    client.post('/control/organizer/dummy/giftcards'.format(gift_card.pk), {
+    client.post('/control/organizer/dummy/giftcards', {
         'del': organizer2.slug
     })
     assert not organizer.gift_card_issuer_acceptance.filter(issuer=organizer2).exists()
@@ -187,7 +187,7 @@ def test_manage_acceptance(organizer, organizer2, admin_user, gift_card, client,
 @pytest.mark.django_db
 def test_manage_acceptance_permission_required(organizer, organizer2, admin_user, gift_card, client):
     client.login(email='dummy@dummy.dummy', password='dummy')
-    client.post('/control/organizer/dummy/giftcards'.format(gift_card.pk), {
+    client.post('/control/organizer/dummy/giftcards', {
         'add': organizer2.slug
     })
     assert not organizer.gift_card_issuer_acceptance.filter(issuer=organizer2).exists()

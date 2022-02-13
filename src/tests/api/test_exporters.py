@@ -115,7 +115,7 @@ def test_org_list(token_client, organizer, event):
     resp = token_client.get('/api/v1/organizers/{}/exporters/'.format(organizer.slug))
     assert resp.status_code == 200
     assert c in resp.data['results']
-    resp = token_client.get('/api/v1/organizers/{}/exporters/orderlist/'.format(organizer.slug, event.slug))
+    resp = token_client.get('/api/v1/organizers/{}/exporters/orderlist/'.format(organizer.slug))
     assert resp.status_code == 200
     assert c == resp.data
 

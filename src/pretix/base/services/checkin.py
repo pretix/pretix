@@ -373,22 +373,22 @@ class SQLLogic:
                 ).astimezone(pytz.UTC))
             elif values[0] == 'date_from':
                 return Coalesce(
-                    F(f'subevent__date_from'),
-                    F(f'order__event__date_from'),
+                    F('subevent__date_from'),
+                    F('order__event__date_from'),
                 )
             elif values[0] == 'date_to':
                 return Coalesce(
-                    F(f'subevent__date_to'),
-                    F(f'subevent__date_from'),
-                    F(f'order__event__date_to'),
-                    F(f'order__event__date_from'),
+                    F('subevent__date_to'),
+                    F('subevent__date_from'),
+                    F('order__event__date_to'),
+                    F('order__event__date_from'),
                 )
             elif values[0] == 'date_admission':
                 return Coalesce(
-                    F(f'subevent__date_admission'),
-                    F(f'subevent__date_from'),
-                    F(f'order__event__date_admission'),
-                    F(f'order__event__date_from'),
+                    F('subevent__date_admission'),
+                    F('subevent__date_from'),
+                    F('order__event__date_admission'),
+                    F('order__event__date_from'),
                 )
             else:
                 raise ValueError(f'Unknown time type {values[0]}')

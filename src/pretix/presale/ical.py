@@ -156,7 +156,7 @@ def get_private_icals(event, positions):
 
         vevent.add('uid').value = 'pretix-{}-{}-{}@{}'.format(
             event.organizer.slug,
-            event.organizer.slug, event.slug,
+            event.slug,
             ev.pk if not isinstance(ev, Event) else '0',
             urlparse(url).netloc
         )

@@ -221,7 +221,7 @@ class CheckinList(LoggedModel):
             return rules
 
         if operator in ('or', 'and') and seen_nonbool:
-            raise ValidationError(f'You cannot use OR/AND logic on a level below a comparison operator.')
+            raise ValidationError('You cannot use OR/AND logic on a level below a comparison operator.')
 
         for v in values:
             cls.validate_rules(v, seen_nonbool=seen_nonbool or operator not in ('or', 'and'), depth=depth + 1)

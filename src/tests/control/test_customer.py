@@ -145,7 +145,7 @@ def test_customer_anonymize(organizer, admin_user, customer, client, order):
 @pytest.mark.django_db
 def test_list_of_membership_types(organizer, admin_user, client, customer, membership_type):
     client.login(email='dummy@dummy.dummy', password='dummy')
-    resp = client.get('/control/organizer/dummy/membershiptypes'.format(customer.identifier))
+    resp = client.get('/control/organizer/dummy/membershiptypes')
     c = resp.content.decode()
     assert 'Week pass' in c
 

@@ -104,4 +104,4 @@ class Command(BaseCommand):
             print(f"Error in order {o.full_code}: status={o.status}, sum(positions)+sum(fees)={o.position_total + o.fee_total}, "
                   f"order.total={o.total}, sum(transactions)={o.tx_total}, expected={o.correct_total}, pos_cnt={o.position_cnt}, tx_pos_cnt={o.tx_cnt}")
 
-        self.stderr.write(self.style.SUCCESS(f'Check completed.'))
+        self.stderr.write(self.style.SUCCESS('Check completed.'))

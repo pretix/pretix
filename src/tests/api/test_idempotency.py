@@ -133,10 +133,10 @@ def test_ignore_get(token_client, organizer, event):
 
 @pytest.mark.django_db
 def test_ignore_outside_api(token_client, organizer):
-    resp = token_client.post('/control/login'.format(organizer.slug),
+    resp = token_client.post('/control/login',
                              PAYLOAD, format='json', HTTP_X_IDEMPOTENCY_KEY='foo')
     assert resp.status_code == 200
-    resp = token_client.post('/control/invalid/'.format(organizer.slug),
+    resp = token_client.post('/control/invalid/',
                              PAYLOAD, format='json', HTTP_X_IDEMPOTENCY_KEY='foo')
     assert resp.status_code == 302
 
