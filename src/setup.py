@@ -243,7 +243,7 @@ setup(
             'pep8-naming==0.12.*',
             'potypo',
             'pycodestyle==2.8.*',
-            'pyflakes==2.4../pretix/base/models/checkin.py*',
+            'pyflakes==2.4.*',
             'pytest-cache',
             'pytest-cov',
             'pytest-django==4.*',
