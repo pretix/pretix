@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-01-27 10:02+0000\n"
+"POT-Creation-Date: 2022-02-14 14:39+0000\n"
 "PO-Revision-Date: 2021-11-25 21:00+0000\n"
 "Last-Translator: Ismael Menéndez Fernández <ismael.menendez@balidea.com>\n"
 "Language-Team: Galician <https://translate.pretix.eu/projects/pretix/pretix-"
@@ -265,8 +265,8 @@ msgstr ""
 "dun minuto, por favor, revise a súa conexión a Internet, recargue a páxina e "
 "inténteo de novo."
 
-#: pretix/static/pretixbase/js/asynctask.js:264
-#: pretix/static/pretixcontrol/js/ui/main.js:34
+#: pretix/static/pretixbase/js/asynctask.js:270
+#: pretix/static/pretixcontrol/js/ui/main.js:71
 msgid "Close message"
 msgstr "Cerrar mensaxe"
 
@@ -417,21 +417,21 @@ msgstr "Houbo un erro."
 msgid "Generating messages …"
 msgstr "Xerando mensaxes…"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:70
+#: pretix/static/pretixcontrol/js/ui/main.js:107
 msgid "Unknown error."
 msgstr "Erro descoñecido."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:271
+#: pretix/static/pretixcontrol/js/ui/main.js:308
 msgid "Your color has great contrast and is very easy to read!"
 msgstr "A túa cor ten moito contraste e é moi doada de ler!"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:275
+#: pretix/static/pretixcontrol/js/ui/main.js:312
 msgid "Your color has decent contrast and is probably good-enough to read!"
 msgstr ""
 "A túa cor ten un contraste axeitado e probablemente sexa suficientemente "
 "lexible!"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:279
+#: pretix/static/pretixcontrol/js/ui/main.js:316
 msgid ""
 "Your color has bad contrast for text on white background, please choose a "
 "darker shade."
@@ -439,31 +439,31 @@ msgstr ""
 "A túa cor ten mal contraste para un texto con fondo branco. Por favor, "
 "escolle un ton máis escuro."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:417
+#: pretix/static/pretixcontrol/js/ui/main.js:454
 msgid "All"
 msgstr "Todos"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:418
+#: pretix/static/pretixcontrol/js/ui/main.js:455
 msgid "None"
 msgstr "Ningún"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:419
+#: pretix/static/pretixcontrol/js/ui/main.js:456
 msgid "Search query"
 msgstr "Consultar unha procura"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:422
+#: pretix/static/pretixcontrol/js/ui/main.js:459
 msgid "Selected only"
 msgstr "Soamente seleccionados"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:848
+#: pretix/static/pretixcontrol/js/ui/main.js:885
 msgid "Use a different name internally"
 msgstr "Usar un nome diferente internamente"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:884
+#: pretix/static/pretixcontrol/js/ui/main.js:921
 msgid "Click to close"
 msgstr "Click para cerrar"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:925
+#: pretix/static/pretixcontrol/js/ui/main.js:962
 msgid "You have unsaved changes!"
 msgstr "Tes cambios sen gardar!"
 

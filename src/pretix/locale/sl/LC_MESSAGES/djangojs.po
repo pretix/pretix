@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-01-27 10:02+0000\n"
+"POT-Creation-Date: 2022-02-14 14:39+0000\n"
 "PO-Revision-Date: 2019-08-27 08:00+0000\n"
 "Last-Translator: Bostjan Marusic <bostjan@brokenbones.si>\n"
 "Language-Team: Slovenian <https://translate.pretix.eu/projects/pretix/pretix-"
@@ -292,8 +292,8 @@ msgstr ""
 "preverite vašo internetno povezavo in nato ponovno naložite spletno stran in "
 "poskusite znova."
 
-#: pretix/static/pretixbase/js/asynctask.js:264
-#: pretix/static/pretixcontrol/js/ui/main.js:34
+#: pretix/static/pretixbase/js/asynctask.js:270
+#: pretix/static/pretixcontrol/js/ui/main.js:71
 msgid "Close message"
 msgstr "Zapri obvestilo"
 
@@ -448,19 +448,19 @@ msgstr "Prišlo je do napake."
 msgid "Generating messages …"
 msgstr "Pripravljam sporočilo …"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:70
+#: pretix/static/pretixcontrol/js/ui/main.js:107
 msgid "Unknown error."
 msgstr "Neznana napaka."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:271
+#: pretix/static/pretixcontrol/js/ui/main.js:308
 msgid "Your color has great contrast and is very easy to read!"
 msgstr "Vaša barva ima dober kontrast in je lepo čitljiva!"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:275
+#: pretix/static/pretixcontrol/js/ui/main.js:312
 msgid "Your color has decent contrast and is probably good-enough to read!"
 msgstr "Vaša barva ima zadovoljiv kontrast in je berljiva!"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:279
+#: pretix/static/pretixcontrol/js/ui/main.js:316
 msgid ""
 "Your color has bad contrast for text on white background, please choose a "
 "darker shade."
@@ -468,31 +468,31 @@ msgstr ""
 "Vaša barva ima slab kontrast za besedilo na belem ozadju. Izberite temnejši "
 "odtenek."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:417
+#: pretix/static/pretixcontrol/js/ui/main.js:454
 msgid "All"
 msgstr "Vse"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:418
+#: pretix/static/pretixcontrol/js/ui/main.js:455
 msgid "None"
 msgstr "Nič"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:419
+#: pretix/static/pretixcontrol/js/ui/main.js:456
 msgid "Search query"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/main.js:422
+#: pretix/static/pretixcontrol/js/ui/main.js:459
 msgid "Selected only"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/main.js:848
+#: pretix/static/pretixcontrol/js/ui/main.js:885
 msgid "Use a different name internally"
 msgstr "Uporabite drugo interno ime"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:884
+#: pretix/static/pretixcontrol/js/ui/main.js:921
 msgid "Click to close"
 msgstr "Kliknite za zapiranje"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:925
+#: pretix/static/pretixcontrol/js/ui/main.js:962
 msgid "You have unsaved changes!"
 msgstr ""
 

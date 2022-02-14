@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-01-27 10:02+0000\n"
+"POT-Creation-Date: 2022-02-14 14:39+0000\n"
 "PO-Revision-Date: 2021-09-15 11:22+0000\n"
 "Last-Translator: Mohamed Tawfiq <mtawfiq@wafyapp.com>\n"
 "Language-Team: Arabic <https://translate.pretix.eu/projects/pretix/pretix-js/"
@@ -268,8 +268,8 @@ msgstr ""
 "نعمل الآن على ارسال طلبك إلى الخادم، إذا أستغرقت العملية أكثر من دقيقة، يرجى "
 "التحقق من اتصالك بالإنترنت ثم أعد تحميل الصفحة مرة أخرى."
 
-#: pretix/static/pretixbase/js/asynctask.js:264
-#: pretix/static/pretixcontrol/js/ui/main.js:34
+#: pretix/static/pretixbase/js/asynctask.js:270
+#: pretix/static/pretixcontrol/js/ui/main.js:71
 msgid "Close message"
 msgstr "أغلق الرسالة"
 
@@ -419,49 +419,49 @@ msgstr "حدث خطأ."
 msgid "Generating messages …"
 msgstr "توليد الرسائل …"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:70
+#: pretix/static/pretixcontrol/js/ui/main.js:107
 msgid "Unknown error."
 msgstr "خطأ غير معروف."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:271
+#: pretix/static/pretixcontrol/js/ui/main.js:308
 msgid "Your color has great contrast and is very easy to read!"
 msgstr "اللون يتمتع بتباين كبير وتسهل قراءته!"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:275
+#: pretix/static/pretixcontrol/js/ui/main.js:312
 msgid "Your color has decent contrast and is probably good-enough to read!"
 msgstr "اللون يحظى بتباين معقول ويمكن أن يكون مناسب للقراءة!"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:279
+#: pretix/static/pretixcontrol/js/ui/main.js:316
 msgid ""
 "Your color has bad contrast for text on white background, please choose a "
 "darker shade."
 msgstr "تباين اللون سيئ للخلفية البيضاء، الرجاء اختيار لون غامق."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:417
+#: pretix/static/pretixcontrol/js/ui/main.js:454
 msgid "All"
 msgstr "الكل"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:418
+#: pretix/static/pretixcontrol/js/ui/main.js:455
 msgid "None"
 msgstr "لا شيء"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:419
+#: pretix/static/pretixcontrol/js/ui/main.js:456
 msgid "Search query"
 msgstr "البحث في الاستفسارات"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:422
+#: pretix/static/pretixcontrol/js/ui/main.js:459
 msgid "Selected only"
 msgstr "المختارة فقط"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:848
+#: pretix/static/pretixcontrol/js/ui/main.js:885
 msgid "Use a different name internally"
 msgstr "قم باستخدم اسم مختلف داخليا"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:884
+#: pretix/static/pretixcontrol/js/ui/main.js:921
 msgid "Click to close"
 msgstr "اضغط لاغلاق الصفحة"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:925
+#: pretix/static/pretixcontrol/js/ui/main.js:962
 msgid "You have unsaved changes!"
 msgstr "لم تقم بحفظ التعديلات!"
 
