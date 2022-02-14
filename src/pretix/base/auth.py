@@ -94,6 +94,9 @@ class BaseAuthBackend:
         This method will be called after the user filled in the login form. ``request`` will contain
         the current request and ``form_data`` the input for the form fields defined in ``login_form_fields``.
         You are expected to either return a ``User`` object (if login was successful) or ``None``.
+
+        You are expected to either return a ``User`` object (if login was successful) or ``None``. You should
+        obtain this user object using ``User.objects.get_or_create_for_backend``.
         """
         return
 
@@ -104,7 +107,9 @@ class BaseAuthBackend:
         reverse proxy, you can directly return a ``User`` object that will be logged in.
 
         ``request`` will contain the current request.
-        You are expected to either return a ``User`` object (if login was successful) or ``None``.
+
+        You are expected to either return a ``User`` object (if login was successful) or ``None``. You should
+        obtain this user object using ``User.objects.get_or_create_for_backend``.
         """
         return
 
