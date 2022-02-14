@@ -189,7 +189,7 @@ setup(
         'django-redis==5.0.*',
         'django-scopes==1.2.*',
         'django-statici18n==2.1.*',
-        'djangorestframework==3.12.*',
+        'djangorestframework==3.13.*',
         'dnspython<2.0',  # do not upgrade, causes issues with eventlet / gunicorn 19 and we cannot upgrade gunicorn right now
         'drf_ujson2==1.6.*',
         'isoweek',
@@ -218,7 +218,7 @@ setup(
         'pyuca',
         'redis==3.5.*',
         'reportlab==3.6.*',
-        'requests==2.26.*',
+        'requests>=2.26,<2.28',
         'sentry-sdk==1.5.*',
         'sepaxml==2.4.*,>=2.4.1',
         'slimit',
