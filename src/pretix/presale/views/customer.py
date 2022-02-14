@@ -203,6 +203,7 @@ class RegistrationView(RedirectBackMixin, FormView):
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
         kwargs['request'] = self.request
+        kwargs['standalone'] = True
         return kwargs
 
     def get_success_url(self):

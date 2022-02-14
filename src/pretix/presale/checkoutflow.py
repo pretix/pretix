@@ -282,6 +282,7 @@ class CustomerStep(CartMixin, TemplateFlowStep):
             ),
             prefix='register',
             request=self.request,
+            standalone=False,
         )
         for field in f.fields.values():
             field._show_required = field.required

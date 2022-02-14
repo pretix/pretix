@@ -25,7 +25,7 @@ from decimal import Decimal
 from urllib.parse import parse_qs, urlparse
 
 import pytest
-from django.core import mail as djmail
+from django.core import mail as djmail, signing
 from django.core.signing import dumps
 from django.test import Client
 from django.utils.timezone import now
@@ -71,10 +71,13 @@ def test_disabled(env, client):
 
 @pytest.mark.django_db
 def test_org_register(env, client):
+    signer = signing.TimestampSigner(salt='customer-registration-captcha-127.0.0.1')
     r = client.post('/bigevents/account/register', {
         'email': 'john@example.org',
         'name_parts_0': 'John Doe',
-    })
+        'challenge': signer.sign('1+2'),
+        'response': '3',
+    }, REMOTE_ADDR='127.0.0.1')
     assert r.status_code == 302
     assert len(djmail.outbox) == 1
     with scopes_disabled():

@@ -21,6 +21,7 @@
 #
 import hashlib
 import ipaddress
+import random
 
 from django import forms
 from django.conf import settings
@@ -29,6 +30,7 @@ from django.contrib.auth.password_validation import (
     password_validators_help_texts, validate_password,
 )
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
+from django.core import signing
 from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 from phonenumber_field.formfields import PhoneNumberField
@@ -140,6 +142,8 @@ class RegistrationForm(forms.Form):
 
     def __init__(self, request=None, *args, **kwargs):
         self.request = request
+        self.standalone = kwargs.pop('standalone')
+        self.signer = signing.TimestampSigner(salt=f'customer-registration-captcha-{get_client_ip(request)}')
         super().__init__(*args, **kwargs)
 
         event = getattr(request, "event", None)
@@ -162,6 +166,32 @@ class RegistrationForm(forms.Form):
             titles=request.organizer.settings.name_scheme_titles,
             label=_('Name'),
         )
+
+        if self.standalone:
+            # In the setandalone registration form, we add a simple CAPTCHA. We don't expect
+            # this to actually turn away and motivated attacker, it's mainly a protection
+            # against spam bots looking for contact forms. Since the standalone registration
+            # form is one of the simplest public forms we have in the application it is the
+            # most common target for untargeted bots.
+            a = random.randint(1, 9)
+            b = random.randint(1, 9)
+            if 'challenge' in self.data:
+                try:
+                    a, b = self.signer.unsign(self.data.get('challenge'), max_age=3600).split('+')
+                    a, b = int(a), int(b)
+                except:
+                    pass
+            self.fields['challenge'] = forms.CharField(
+                widget=forms.HiddenInput,
+                initial=self.signer.sign(f'{a}+{b}')
+
+            )
+            self.fields['response'] = forms.IntegerField(
+                label=_('What is the result of {num1} + {num2}?').format(
+                    num1=a, num2=b,
+                ),
+                min_value=0,
+            )
 
     @cached_property
     def ratelimit_key(self):
@@ -192,6 +222,19 @@ class RegistrationForm(forms.Form):
                 raise forms.ValidationError(
                     {'email': self.error_messages['duplicate']},
                     code='duplicate',
+                )
+
+        if self.standalone:
+            expect = -1
+            try:
+                a, b = self.signer.unsign(self.cleaned_data.get('challenge'), max_age=3600).split('+')
+                expect = int(a) + int(b)
+            except:
+                pass
+            if self.cleaned_data.get('response') != expect:
+                raise forms.ValidationError(
+                    {'response': _('Please enter the correct result.')},
+                    code='challenge_invalid'
                 )
 
         if not self.cleaned_data.get('email'):
