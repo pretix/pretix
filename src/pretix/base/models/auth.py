@@ -115,6 +115,11 @@ class UserManager(BaseUserManager):
             raise ValueError('You need to supply a custom, unique identifier for this user.')
         if email is None:
             raise ValueError('You need to supply an email address for this user.')
+        if 'auth_backend_identifier' in set_always or 'auth_backend_identifier' in set_on_creation or \
+                'auth_backend' in set_always or 'auth_backend' in set_always:
+            raise ValueError('You may not update auth_backend/auth_backend_identifier.')
+        if len(identifier) > 190:
+            raise ValueError('The user identifier must not be more than 190 characters.')
 
         # Always update the email address
         set_always.update({'email': email})

@@ -30,7 +30,9 @@ or create a new one.
 There are a few rules you need to follow:
 
 * You **MUST** have some kind of identifier for a user that is globally unique and **SHOULD** never change, even if the
-  user's name or email address changes. This could e.g. be the ID of the user in an external database.
+  user's name or email address changes. This could e.g. be the ID of the user in an external database. The identifier
+  must not be longer than 190 characters. If you worry your backend might generated longer identifiers, consider
+  using a hash function to trim them to a constant length.
 
 * You **SHOULD** not allow users created by other authentication backends to log in through your code, and you **MUST**
   only create, modify or return users with ``auth_backend`` set to your backend.
