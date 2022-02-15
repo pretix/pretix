@@ -44,7 +44,7 @@ import dateutil.parser
 import pytz
 from django.conf import settings
 from django.core.exceptions import ValidationError
-from django.core.validators import RegexValidator
+from django.core.validators import MinValueValidator, RegexValidator
 from django.db import models
 from django.db.models import Q
 from django.utils import formats
@@ -479,12 +479,14 @@ class Item(LoggedModel):
     min_per_order = models.IntegerField(
         verbose_name=_('Minimum amount per order'),
         null=True, blank=True,
+        validators=[MinValueValidator(0)],
         help_text=_('This product can only be bought if it is added to the cart at least this many times. If you keep '
                     'the field empty or set it to 0, there is no special limit for this product.')
     )
     max_per_order = models.IntegerField(
         verbose_name=_('Maximum amount per order'),
         null=True, blank=True,
+        validators=[MinValueValidator(0)],
         help_text=_('This product can only be bought at most this many times within one order. If you keep the field '
                     'empty or set it to 0, there is no special limit for this product. The limit for the maximum '
                     'number of items in the whole order applies regardless.')
