@@ -19,3 +19,4 @@ If you want to **create** a plugin, please go to the
    digital
    imported_secrets
    webinar
+   presale-saml
