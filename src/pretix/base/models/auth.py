@@ -107,8 +107,8 @@ class UserManager(BaseUserManager):
         :param backend: The `identifier` attribute of the authentication backend
         :param identifier: The unique, immutable identifier of this user, max. 190 characters
         :param email: The user's email address
-        :param set_always: A dictionary of fields to set on the user model if it's newly created
-        :param set_on_creation: A dictionary of fields to update on the user model on every login
+        :param set_always: A dictionary of fields to update on the user model on every login
+        :param set_on_creation: A dictionary of fields to set on the user model if it's newly created
         :return: A `User` instance.
         """
         if identifier is None:
