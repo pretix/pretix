@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-02-14 14:39+0000\n"
-"PO-Revision-Date: 2022-02-04 13:07+0000\n"
+"PO-Revision-Date: 2022-02-16 12:28+0000\n"
 "Last-Translator: Ismael Menéndez Fernández <ismael.menendez@balidea.com>\n"
 "Language-Team: Galician <https://translate.pretix.eu/projects/pretix/pretix/"
 "gl/>\n"
@@ -2006,9 +2006,8 @@ msgstr "Prioridad"
 #: pretix/presale/templates/pretixpresale/event/fragment_cart_box.html:56
 #: pretix/presale/templates/pretixpresale/event/fragment_voucher_form.html:12
 #: pretix/presale/templates/pretixpresale/event/fragment_voucher_form.html:19
-#, fuzzy
 msgid "Voucher code"
-msgstr "Código del cupón"
+msgstr "Código do cupón"
 
 #: pretix/base/forms/__init__.py:135
 #, python-format
@@ -3556,9 +3555,8 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/items/questions.html:26
 #: pretix/control/templates/pretixcontrol/items/quotas.html:49
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:27
-#, fuzzy
 msgid "Products"
-msgstr "Productos"
+msgstr "Produtos"
 
 #: pretix/base/models/items.py:715
 #, fuzzy
@@ -5013,9 +5011,8 @@ msgstr ""
 "seleccionado o la cuota está agotada o completamente reservada."
 
 #: pretix/base/models/vouchers.py:440
-#, fuzzy
 msgid "A voucher with this code already exists."
-msgstr "Ya existe un recibo con este código."
+msgstr "Xa existe un recibo con este código."
 
 #: pretix/base/models/vouchers.py:447
 #, fuzzy
@@ -5085,14 +5082,12 @@ msgid "Waiting list entries"
 msgstr "Entradas a la lista de espera"
 
 #: pretix/base/models/waitinglist.py:153
-#, fuzzy
 msgid "This product is currently not available."
-msgstr "El producto no se encuentra actualmente disponible."
+msgstr "O produto non se atopa actualmente dispoñible."
 
 #: pretix/base/models/waitinglist.py:180
-#, fuzzy
 msgid "No seat with this product is currently available."
-msgstr "El producto no se encuentra actualmente disponible."
+msgstr "O produto non se atopa actualmente dispoñible."
 
 #: pretix/base/models/waitinglist.py:183
 #, fuzzy
@@ -6352,17 +6347,14 @@ msgid "The entered price is to high."
 msgstr "El precio introducido es demasiado alto."
 
 #: pretix/base/services/cart.py:109
-#, fuzzy
 msgid "This voucher code is not known in our database."
-msgstr "Este código de recibo no se conoce en nuestra base de datos."
+msgstr "Este código de desconto non se coñece na nosa base de datos."
 
 #: pretix/base/services/cart.py:110
-#, fuzzy
 msgid ""
 "This voucher code has already been used the maximum number of times allowed."
 msgstr ""
-"Este código de recibo ya ha sido utilizado el máximo número de veces "
-"permitido."
+"Este código de desconto xa foi utilizado o máximo número de veces permitido."
 
 #: pretix/base/services/cart.py:111
 #, python-format
@@ -6383,13 +6375,12 @@ msgid "This voucher code can only be redeemed %d more times."
 msgstr "Este cupón só pode ser trocado %d máis veces."
 
 #: pretix/base/services/cart.py:116
-#, fuzzy
 msgid ""
 "You already used this voucher code. Remove the associated line from your "
 "cart if you want to use it for a different product."
 msgstr ""
-"Ya ha utilizado este código de recibo. Elimine la línea asociada de su "
-"carrito si desea utilizarlo para un producto diferente."
+"Xa utilizou este código de desconto. Elimine a liña asociada do seu carriño "
+"se desexa utilizalo para un produto diferente."
 
 #: pretix/base/services/cart.py:118
 #, fuzzy
@@ -6426,9 +6417,8 @@ msgid "This voucher is not valid for this event date."
 msgstr "Este recibo no es válido para esta fecha de evento."
 
 #: pretix/base/services/cart.py:127
-#, fuzzy
 msgid "You need a valid voucher code to order this product."
-msgstr "Necesita un código de recibo válido para pedir este producto."
+msgstr "Necesita un código de desconto válido para pedir este produto."
 
 #: pretix/base/services/cart.py:128
 #, fuzzy
@@ -6840,57 +6830,51 @@ msgid "The presale period has ended."
 msgstr "El período de preventa ha terminado."
 
 #: pretix/base/services/orders.py:116
-#, fuzzy
 msgid ""
 "The voucher code used for one of the items in your cart is not known in our "
 "database."
 msgstr ""
-"El código del recibo utilizado para uno de los artículos de su carrito no es "
-"conocido en nuestra base de datos."
+"O código de desconto utilizado para un dos artigos do seu carriño non é "
+"coñecido na nosa base de datos."
 
 #: pretix/base/services/orders.py:117
-#, fuzzy
 msgid ""
 "The voucher code used for one of the items in your cart has already been "
 "used the maximum number of times allowed. We removed this item from your "
 "cart."
 msgstr ""
-"El código de recibo utilizado para uno de los artículos de su carrito ya ha "
-"sido utilizado el máximo número de veces permitido. Hemos quitado este "
-"artículo de su carrito."
+"O código de desconto utilizado para un dos artigos do seu carriño xa foi "
+"utilizado o máximo número de veces permitido. Quitamos este artigo do seu "
+"carriño."
 
 #: pretix/base/services/orders.py:119
-#, fuzzy
 msgid ""
 "The voucher code used for one of the items in your cart has already been too "
 "often. We adjusted the price of the item in your cart."
 msgstr ""
-"El código de recibo utilizado para uno de los artículos de su carrito ya ha "
-"sido utilizado el máximo número de veces permitido. Hemos quitado este "
-"artículo de su carrito."
+"O código do desconto utilizado para un dos artigos do seu carriño xa foi "
+"utilizado o máximo número de veces permitido. Quitamos este artigo do seu "
+"carriño."
 
 #: pretix/base/services/orders.py:121
-#, fuzzy
 msgid ""
 "The voucher code used for one of the items in your cart is expired. We "
 "removed this item from your cart."
 msgstr ""
-"El código del recibo utilizado para uno de los artículos de su carrito ha "
-"caducado. Hemos quitado este artículo de su carrito."
+"O código de desconto utilizado para un dos artigos do seu carriño caducou. "
+"Quitamos este artigo do seu carriño."
 
 #: pretix/base/services/orders.py:123
-#, fuzzy
 msgid ""
 "The voucher code used for one of the items in your cart is not valid for "
 "this item. We removed this item from your cart."
 msgstr ""
-"El código de descuento utilizado para uno de los artículos de su carrito no "
-"es válido para este artículo. Hemos quitado este artículo de su carrito."
+"O código de desconto utilizado para un dos artigos do seu carriño non é "
+"válido para este artigo. Quitamos este artigo do seu carriño."
 
 #: pretix/base/services/orders.py:125
-#, fuzzy
 msgid "You need a valid voucher code to order one of the products."
-msgstr "Necesita un código de recibo válido para pedir este producto."
+msgstr "Necesita un código de recibo válido para pedir este produto."
 
 #: pretix/base/services/orders.py:126
 #, fuzzy
@@ -10758,9 +10742,8 @@ msgstr ""
 "tiene problemas, intente usar este modo de compatibilidad."
 
 #: pretix/control/forms/event.py:1299
-#, fuzzy
 msgid "The given voucher code does not exist."
-msgstr "El código del recibo no existe."
+msgstr "O código de desconto non existe."
 
 #: pretix/control/forms/event.py:1306 pretix/control/forms/organizer.py:92
 #: pretix/control/views/shredder.py:163
@@ -12645,9 +12628,8 @@ msgid "Invalid value in row {number}."
 msgstr ""
 
 #: pretix/control/forms/vouchers.py:386
-#, fuzzy
 msgid "A voucher with one of these codes already exists."
-msgstr "Ya existe un recibo con uno de estos códigos."
+msgstr "Xa existe un recibo cun destes códigos de desconto."
 
 #: pretix/control/forms/vouchers.py:389
 #, fuzzy
@@ -16918,9 +16900,9 @@ msgid "Numbers as of %(date)s"
 msgstr "Cifras en %(date)s"
 
 #: pretix/control/templates/pretixcontrol/fragment_quota_box_paid.html:3
-#, fuzzy, python-format
+#, python-format
 msgid "Currently available: %(num)s"
-msgstr "Actualmente disponible: %(num)s"
+msgstr "Actualmente dispoñible: %(num)s"
 
 #: pretix/control/templates/pretixcontrol/giftcards/checkout.html:4
 msgid ""
@@ -18494,9 +18476,8 @@ msgstr "Primer escaneado: %(date)s"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:388
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:49
-#, fuzzy
 msgid "Voucher code used:"
-msgstr "Código de recibo utilizado:"
+msgstr "Código de desconto utilizado:"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:390
 #, python-format
@@ -21452,9 +21433,8 @@ msgid "Create multiple vouchers"
 msgstr "Crear múltiples vales"
 
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html:12
-#, fuzzy
 msgid "Voucher codes"
-msgstr "Códigos promocionales"
+msgstr "Códigos de desconto"
 
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html:17
 #, fuzzy
@@ -23598,9 +23578,8 @@ msgid "The new voucher has been created: {code}"
 msgstr "Se ha creado el nuevo documento: {code}"
 
 #: pretix/control/views/vouchers.py:374
-#, fuzzy
 msgid "There is no voucher with the given voucher code."
-msgstr "No hay ningún recibo con el código brindado."
+msgstr "Non hai ningún recibo co código de desconto indicado."
 
 #: pretix/control/views/vouchers.py:492
 #, fuzzy
@@ -27918,9 +27897,10 @@ msgstr "GRATIS"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:175
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:304
-#, fuzzy
 msgid "Enter a voucher code below to buy this ticket."
-msgstr "Ingrese un código de recibo a continuación para comprar este ticket."
+msgstr ""
+"Ingrese un código de cupón de desconto a continuación para comprar este "
+"produto."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:263
 #, python-format
@@ -27928,9 +27908,9 @@ msgid "Set price in %(currency)s for %(item)s"
 msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/fragment_quota_left.html:4
-#, fuzzy, python-format
+#, python-format
 msgid "%(num)s currently available"
-msgstr "%(num)s actualmente disponible"
+msgstr "%(num)s actualmente dispoñibles"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_calendar.html:4
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_calendar_week.html:4
@@ -28759,13 +28739,12 @@ msgid "This voucher is valid only for the following specific date and time."
 msgstr "Este recibo no es válido para esta fecha de evento."
 
 #: pretix/presale/templates/pretixpresale/event/voucher.html:76
-#, fuzzy
 msgid ""
 "You entered a voucher code that allows you to buy one of the following "
 "products at the specified price:"
 msgstr ""
-"Ha introducido un código de recibo que le permite comprar uno de los "
-"siguientes productos al precio especificado:"
+"Introduciu un código de recibo que lle permite comprar un dos seguintes "
+"produtos ao prezo especificado:"
 
 #: pretix/presale/templates/pretixpresale/event/voucher.html:135
 #, fuzzy, python-format
