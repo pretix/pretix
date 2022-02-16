@@ -177,10 +177,11 @@ class Customer(LoggedModel):
             'organizer': self.organizer.name,
         }
         name_scheme = PERSON_NAME_SCHEMES[self.organizer.settings.name_scheme]
+        from pretix.base.email import get_name_parts_localized
         for f, l, w in name_scheme['fields']:
             if f == 'full_name':
                 continue
-            ctx['name_%s' % f] = self.name_parts.get(f, '')
+            ctx['name_%s' % f] = get_name_parts_localized(self.name_parts, f)
         return ctx
 
     @property
