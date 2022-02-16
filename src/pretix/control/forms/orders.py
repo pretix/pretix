@@ -612,7 +612,7 @@ class OrderMailForm(forms.Form):
     )
     attach_tickets = forms.BooleanField(
         label=_("Attach tickets"),
-        help_text=_("Will be ignored if all tickets in this order exceed a given size limit to ensure email deliverability."),
+        help_text=_("Will be ignored if tickets exceed a given size limit to ensure email deliverability."),
         required=False
     )
     attach_invoices = forms.ModelMultipleChoiceField(

@@ -53,6 +53,7 @@
                 {% bootstrap_field form.subject layout='horizontal' %}
                 {% bootstrap_field form.message layout='horizontal' %}
                 {% bootstrap_field form.attachment layout='horizontal' %}
+                {% bootstrap_field form.attach_tickets layout='horizontal' %}
             </fieldset>
             {% if is_preview %}
             <fieldset>
@@ -65,10 +66,16 @@
                             {% if out.attachment %}
                                 <p>
                                     <a href="{% url 'cachedfile.download' id=out.attachment.id %}" class="btn btn-default"
-                                        target="_blank">
+                                            target="_blank">
                                         <span class="fa fa-file" aria-hidden="true"></span>
                                         {{ out.attachment.filename }}
                                     </a>
+                                </p>
+                            {% endif %}
+                            {% if form.cleaned_data.attach_tickets %}
+                                <p>
+                                    <span class="fa fa-file" aria-hidden="true"></span>
+                                    {% trans "Tickets" %}
                                 </p>
                             {% endif %}
                         </div>

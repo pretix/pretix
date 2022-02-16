@@ -132,6 +132,11 @@ class MailForm(FormPlaceholderMixin, forms.Form):
         label=pgettext_lazy('subevent', 'Only send to customers with orders created before'),
         required=False,
     )
+    attach_tickets = forms.BooleanField(
+        label=_("Attach tickets"),
+        help_text=_("Will be ignored if tickets exceed a given size limit to ensure email deliverability."),
+        required=False
+    )
 
     def clean(self):
         d = super().clean()
