@@ -934,7 +934,7 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
     consume_carts = serializers.ListField(child=serializers.CharField(), required=False)
     force = serializers.BooleanField(default=False, required=False)
     payment_date = serializers.DateTimeField(required=False, allow_null=True)
-    send_email = serializers.BooleanField(default=False, required=False)
+    send_email = serializers.BooleanField(default=False, required=False, allow_null=True)
     require_approval = serializers.BooleanField(default=False, required=False)
     simulate = serializers.BooleanField(default=False, required=False)
     customer = serializers.SlugRelatedField(slug_field='identifier', queryset=Customer.objects.none(), required=False)
@@ -1042,6 +1042,8 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
         force = validated_data.pop('force', False)
         simulate = validated_data.pop('simulate', False)
         self._send_mail = validated_data.pop('send_email', False)
+        if self._send_mail is None:
+            self._send_mail = validated_data.get('sales_channel') in self.context['event'].settings.mail_sales_channel_placed_paid
 
         if 'invoice_address' in validated_data:
             iadata = validated_data.pop('invoice_address')

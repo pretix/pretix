@@ -3555,6 +3555,36 @@ def test_order_create_send_emails_free(token_client, organizer, event, item, quo
 
 
 @pytest.mark.django_db
+def test_order_create_send_emails_based_on_sales_channel(token_client, organizer, event, item, quota, question):
+    res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
+    res['positions'][0]['item'] = item.pk
+    res['positions'][0]['price'] = '0.00'
+    res['payment_provider'] = 'free'
+    del res['fees']
+    res['positions'][0]['answers'][0]['question'] = question.pk
+    res['send_email'] = None
+    djmail.outbox = []
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 201
+    assert len(djmail.outbox) == 1
+    assert djmail.outbox[0].subject == "Your order: {}".format(resp.data['code'])
+
+    event.settingsmail_sales_channel_placed_paid = []
+    djmail.outbox = []
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 201
+    assert len(djmail.outbox) == 1
+
+
+@pytest.mark.django_db
 def test_order_create_send_emails_paid(token_client, organizer, event, item, quota, question):
     res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
     res['positions'][0]['item'] = item.pk
