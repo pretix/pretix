@@ -172,6 +172,7 @@ class Customer(LoggedModel):
         return salted_hmac(key_salt, payload).hexdigest()
 
     def get_email_context(self):
+        from pretix.base.email import get_name_parts_localized
         ctx = {
             'name': self.name,
             'organizer': self.organizer.name,
@@ -180,7 +181,7 @@ class Customer(LoggedModel):
         for f, l, w in name_scheme['fields']:
             if f == 'full_name':
                 continue
-            ctx['name_%s' % f] = self.name_parts.get(f, '')
+            ctx['name_%s' % f] = get_name_parts_localized(self.name_parts, f)
         return ctx
 
     @property
