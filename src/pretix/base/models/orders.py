@@ -976,7 +976,7 @@ class Order(LockModel, LoggedModel):
             SendMailException, TolerantDict, mail, render_mail,
         )
 
-        if not self.email:
+        if not self.email and not (position and position.attendee_email):
             return
 
         for k, v in self.event.meta_data.items():
@@ -1724,10 +1724,10 @@ class OrderPayment(models.Model):
             email_context = get_email_context(event=self.order.event, order=self.order, position=position)
             email_subject = _('Event registration confirmed: %(code)s') % {'code': self.order.code}
             try:
-                self.order.send_mail(
+                position.send_mail(
                     email_subject, email_template, email_context,
                     'pretix.event.order.email.order_paid', user,
-                    invoices=[], position=position,
+                    invoices=[],
                     attach_tickets=True,
                     attach_ical=self.order.event.settings.mail_attach_ical
                 )

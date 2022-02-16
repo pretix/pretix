@@ -955,12 +955,11 @@ def _order_placed_email_attendee(event: Event, order: Order, position: OrderPosi
     email_subject = _('Your event registration: %(code)s') % {'code': order.code}
 
     try:
-        order.send_mail(
+        position.send_mail(
             email_subject, email_template, email_context,
             log_entry,
             invoices=[],
             attach_tickets=True,
-            position=position,
             attach_ical=event.settings.mail_attach_ical and (not event.settings.mail_attach_ical_paid_only or is_free),
             attach_other_files=[a for a in [
                 event.settings.get('mail_attachment_new_order', as_type=str, default='')[len('file://'):]
