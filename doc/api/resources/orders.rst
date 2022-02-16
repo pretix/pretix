@@ -899,7 +899,7 @@ Creating orders
 
    * ``force`` (optional). If set to ``true``, quotas will be ignored.
    * ``send_email`` (optional). If set to ``true``, the same emails will be sent as for a regular order, regardless of
-     whether these emails are enabled for certain sales channels. If set to ``null``, behaviour will be controlled by pretix'
+     whether these emails are enabled for certain sales channels. If set to ``null``, behavior will be controlled by pretix'
      settings based on the sales channels (added in pretix 4.7). Defaults to ``false``.
      Used to be ``send_mail`` before pretix 3.14.
 
