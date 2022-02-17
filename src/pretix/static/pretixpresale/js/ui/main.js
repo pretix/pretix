@@ -219,7 +219,10 @@ $(function () {
             // multi-input fields have a role=group with aria-labelledby 
             var label = this.hasAttribute("aria-labelledby") ? $("#" + this.getAttribute("aria-labelledby")) : $("[for="+target.attr("id")+"]");
 
-            content.append("<li><a href='#" + target.attr("id") + "'>" + label.get(0).childNodes[0].nodeValue + "</a>: "+desc.text()+"</li>");
+            var $li = $("<li>");
+            $li.text(": " + desc.text())
+            $li.prepend($("<a>").attr("href", "#" + target.attr("id")).text(label.get(0).childNodes[0].nodeValue))
+            content.append($li);
         });
         $(this).append(content);
     });
