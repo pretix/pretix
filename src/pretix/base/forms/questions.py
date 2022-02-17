@@ -674,7 +674,7 @@ class BaseQuestionsForm(forms.Form):
                     label=label, required=required,
                     min_value=q.valid_number_min or Decimal('0.00'),
                     max_value=q.valid_number_max,
-                    help_text=q.help_text,
+                    help_text=help_text,
                     initial=initial.answer if initial else None,
                 )
             elif q.type == Question.TYPE_STRING:

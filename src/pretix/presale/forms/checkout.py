@@ -51,6 +51,7 @@ from pretix.base.forms.questions import (
     guess_country,
 )
 from pretix.base.i18n import get_babel_locale, language
+from pretix.base.templatetags.rich_text import rich_text
 from pretix.base.validators import EmailBanlistValidator
 from pretix.presale.signals import contact_form_fields
 
@@ -89,7 +90,7 @@ class ContactForm(forms.Form):
                 self.fields['phone'] = PhoneNumberField(
                     label=_('Phone number'),
                     required=self.event.settings.order_phone_required,
-                    help_text=self.event.settings.checkout_phone_helptext,
+                    help_text=rich_text(self.event.settings.checkout_phone_helptext),
                     # We now exploit an implementation detail in PhoneNumberPrefixWidget to allow us to pass just
                     # a country code but no number as an initial value. It's a bit hacky, but should be stable for
                     # the future.
@@ -102,7 +103,7 @@ class ContactForm(forms.Form):
             # is an autofocus field. Who would have thought… See e.g. here:
             # https://floatboxjs.com/forum/topic.php?post=8440&usebb_sid=2e116486a9ec6b7070e045aea8cded5b#post8440
             self.fields['email'].widget.attrs['autofocus'] = 'autofocus'
-        self.fields['email'].help_text = self.event.settings.checkout_email_helptext
+        self.fields['email'].help_text = rich_text(self.event.settings.checkout_email_helptext)
 
         responses = contact_form_fields.send(self.event, request=self.request)
         for r, response in responses:
