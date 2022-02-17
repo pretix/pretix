@@ -1697,7 +1697,7 @@ class Quota(LoggedModel):
             if event != item.event:
                 raise ValidationError(_('One or more items do not belong to this event.'))
             if item.has_variations:
-                if not any(var.item == item for var in variations):
+                if not variations or not any(var.item == item for var in variations):
                     raise ValidationError(_('One or more items has variations but none of these are in the variations list.'))
 
     @staticmethod
