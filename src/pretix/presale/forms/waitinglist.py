@@ -28,6 +28,7 @@ from pretix.base.forms.questions import (
     NamePartsFormField, WrappedPhoneNumberPrefixWidget, guess_phone_prefix,
 )
 from pretix.base.models import Quota, WaitingListEntry
+from pretix.base.templatetags.rich_text import rich_text
 from pretix.presale.views.event import get_grouped_items
 
 
@@ -99,7 +100,7 @@ class WaitingListForm(forms.ModelForm):
             self.fields['phone'] = PhoneNumberField(
                 label=_("Phone number"),
                 required=event.settings.waiting_list_phones_required,
-                help_text=event.settings.waiting_list_phones_explanation_text,
+                help_text=rich_text(event.settings.waiting_list_phones_explanation_text),
                 widget=WrappedPhoneNumberPrefixWidget()
             )
         else:
