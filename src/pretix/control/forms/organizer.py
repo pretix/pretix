@@ -422,6 +422,7 @@ class MailSettingsForm(SettingsForm):
                 if f == 'full_name':
                     continue
                 placeholders['name_%s' % f] = name_scheme['sample'][f]
+            placeholders['name_for_salutation'] = _("Mr Doe")
         return placeholders
 
     def _set_field_placeholders(self, fn, base_parameters):

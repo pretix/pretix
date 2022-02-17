@@ -182,6 +182,12 @@ class Customer(LoggedModel):
             if f == 'full_name':
                 continue
             ctx['name_%s' % f] = get_name_parts_localized(self.name_parts, f)
+
+        if "concatenation_for_salutation" in name_scheme:
+            ctx['name_for_salutation'] = name_scheme["concatenation_for_salutation"](self.name_parts)
+        else:
+            ctx['name_for_salutation'] = name_scheme["concatenation"](self.name_parts)
+
         return ctx
 
     @property
