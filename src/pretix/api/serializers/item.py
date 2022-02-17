@@ -251,9 +251,12 @@ class ItemSerializer(I18nAwareModelSerializer):
         bundles_data = validated_data.pop('bundles') if 'bundles' in validated_data else {}
         meta_data = validated_data.pop('meta_data', None)
         picture = validated_data.pop('picture', None)
+        require_membership_types = validated_data.pop('require_membership_types', [])
         item = Item.objects.create(**validated_data)
         if picture:
             item.picture.save(os.path.basename(picture.name), picture)
+        if require_membership_types:
+            item.require_membership_types.add(*require_membership_types)
 
         for variation_data in variations_data:
             require_membership_types = variation_data.pop('require_membership_types', [])

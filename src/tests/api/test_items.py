@@ -434,7 +434,7 @@ def test_item_detail_bundles(token_client, organizer, event, team, item, categor
 
 
 @pytest.mark.django_db
-def test_item_create(token_client, organizer, event, item, category, taxrule):
+def test_item_create(token_client, organizer, event, item, category, taxrule, membership_type):
     resp = token_client.post(
         '/api/v1/organizers/{}/events/{}/items/'.format(organizer.slug, event.slug),
         {
@@ -462,6 +462,7 @@ def test_item_create(token_client, organizer, event, item, category, taxrule):
             "max_per_order": None,
             "checkin_attention": False,
             "has_variations": True,
+            "require_membership_types": [membership_type.pk],
             "meta_data": {
                 "day": "Wednesday"
             }
@@ -472,6 +473,7 @@ def test_item_create(token_client, organizer, event, item, category, taxrule):
     with scopes_disabled():
         assert Item.objects.get(pk=resp.data['id']).sales_channels == ["web", "pretixpos"]
         assert Item.objects.get(pk=resp.data['id']).meta_data == {'day': 'Wednesday'}
+        assert Item.objects.get(pk=resp.data['id']).require_membership_types.count() == 1
 
 
 @pytest.mark.django_db
