@@ -45,6 +45,8 @@ def validate_plan_change(event, subevent, plan):
                 seat=OuterRef('pk'),
                 canceled=False,
             ).exclude(
+                order__event=event,
+                subevent=subevent,
                 order__status=(Order.STATUS_CANCELED, Order.STATUS_EXPIRED)
             ))
         ).annotate(has_v=Count('vouchers')).filter(
@@ -67,6 +69,8 @@ def generate_seats(event, subevent, plan, mapping, blocked_guids=None):
     for s in event.seats.select_related('product').annotate(
         has_op=Exists(OrderPosition.all.filter(
             seat=OuterRef('pk'),
+            order__event=event,
+            subevent=subevent,
             canceled=False,
         ).exclude(
             order__status=Order.STATUS_CANCELED
