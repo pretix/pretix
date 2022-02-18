@@ -33,7 +33,6 @@
 # License for the specific language governing permissions and limitations under the License.
 
 import io
-import re
 import tempfile
 from collections import OrderedDict, namedtuple
 from decimal import Decimal
@@ -46,26 +45,13 @@ from django.conf import settings
 from django.db.models import QuerySet
 from django.utils.formats import localize
 from django.utils.translation import gettext, gettext_lazy as _
-from openpyxl import Workbook
-from openpyxl.cell.cell import ILLEGAL_CHARACTERS_RE, KNOWN_TYPES, Cell
 
 from pretix.base.models import Event
+from pretix.helpers.safe_openpyxl import (  # NOQA: backwards compatibility for plugins using excel_safe
+    SafeWorkbook, remove_invalid_excel_chars as excel_safe,
+)
 
-
-def excel_safe(val):
-    if isinstance(val, Cell):
-        return val
-
-    if not isinstance(val, KNOWN_TYPES):
-        val = str(val)
-
-    if isinstance(val, bytes):
-        val = val.decode("utf-8", errors="ignore")
-
-    if isinstance(val, str):
-        val = re.sub(ILLEGAL_CHARACTERS_RE, '', val)
-
-    return val
+__ = excel_safe  # just so the compatbility import above is "used" and doesn't get removed by linter
 
 
 class BaseExporter:
@@ -228,7 +214,7 @@ class ListExporter(BaseExporter):
         pass
 
     def _render_xlsx(self, form_data, output_file=None):
-        wb = Workbook(write_only=True)
+        wb = SafeWorkbook(write_only=True)
         ws = wb.create_sheet()
         self.prepare_xlsx_sheet(ws)
         try:
@@ -242,7 +228,7 @@ class ListExporter(BaseExporter):
                 total = line.total
                 continue
             ws.append([
-                excel_safe(val) for val in line
+                val for val in line
             ])
             if total:
                 counter += 1
@@ -347,7 +333,7 @@ class MultiSheetListExporter(ListExporter):
             return self.get_filename() + '.csv', 'text/csv', output.getvalue().encode("utf-8")
 
     def _render_xlsx(self, form_data, output_file=None):
-        wb = Workbook(write_only=True)
+        wb = SafeWorkbook(write_only=True)
         n_sheets = len(self.sheets)
         for i_sheet, (s, l) in enumerate(self.sheets):
             ws = wb.create_sheet(str(l))
@@ -361,8 +347,7 @@ class MultiSheetListExporter(ListExporter):
                     total = line.total
                     continue
                 ws.append([
-                    excel_safe(val)
-                    for val in line
+                    val for val in line
                 ])
                 if total:
                     counter += 1
