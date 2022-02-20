@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-26 09:20+0000\n"
 "PO-Revision-Date: 2023-05-30 21:20+0000\n"
-"Last-Translator: dedecosta <dedecosta2@live.it>\n"
+"Last-Translator: Emanuele Signoretta <signorettae@gmail.com>\n"
 "Language-Team: Italian <https://translate.pretix.eu/projects/pretix/pretix/"
 "it/>\n"
 "Language: it\n"
@@ -29160,8 +29160,7 @@ msgstr "La richiesta di cancellazione è stata inviata."
 
 #: pretix/presale/views/order.py:1038
 msgid "Ticket download is not (yet) enabled for this order."
-msgstr ""
-"Il download dei biglietti non è (ancora) disponibile per questo ordine."
+msgstr "Il download dei biglietti non è (ancora) disponibile per questo ordine."
 
 #: pretix/presale/views/order.py:1047
 msgid "Please click the link we sent you via email to download your tickets."
