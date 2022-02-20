@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-26 09:20+0000\n"
 "PO-Revision-Date: 2023-05-30 21:24+0000\n"
-"Last-Translator: Tobias Sundgren <syrgas@gmail.com>\n"
+"Last-Translator: MaLund13 <mart.lund13@gmail.com>\n"
 "Language-Team: Swedish <https://translate.pretix.eu/projects/pretix/pretix/"
 "sv/>\n"
 "Language: sv\n"
@@ -3866,8 +3866,7 @@ msgstr "Kan inte innehålla mellanslag eller andra symboler förutom understreck
 
 #: pretix/base/models/event.py:1628 pretix/base/models/items.py:1998
 msgid "The property name may only contain letters, numbers and underscores."
-msgstr ""
-"Egenskapens namn får bara innehålla bokstäver, siffror och understreck."
+msgstr "Egenskapens namn får bara innehålla bokstäver, siffror och understreck."
 
 #: pretix/base/models/event.py:1633
 #, fuzzy
