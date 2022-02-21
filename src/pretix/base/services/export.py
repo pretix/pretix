@@ -56,6 +56,8 @@ def export(self, event: Event, fileid: str, provider: str, form_data: Dict[str, 
     with language(event.settings.locale, event.settings.region), override(event.settings.timezone):
         responses = register_data_exporters.send(event)
         for receiver, response in responses:
+            if not response:
+                continue
             ex = response(event, event.organizer, set_progress)
             if ex.identifier == provider:
                 d = ex.render(form_data)
