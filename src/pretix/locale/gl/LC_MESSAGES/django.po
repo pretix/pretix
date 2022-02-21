@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-26 09:20+0000\n"
 "PO-Revision-Date: 2023-05-30 21:27+0000\n"
-"Last-Translator: Raphael Michel <michel@rami.io>\n"
+"Last-Translator: Ismael Menéndez Fernández <ismael.menendez@balidea.com>\n"
 "Language-Team: Galician <https://translate.pretix.eu/projects/pretix/pretix/"
 "gl/>\n"
 "Language: gl\n"
@@ -257,8 +257,7 @@ msgstr "A propiedade do meta dato do produto  '{name}' non existe."
 
 #: pretix/api/serializers/item.py:182 pretix/control/forms/item.py:1082
 msgid "The bundled item must not be the same item as the bundling one."
-msgstr ""
-"O artigo incluído no paquete non debe ser o mesmo que o propio paquete."
+msgstr "O artigo incluído no paquete non debe ser o mesmo que o propio paquete."
 
 #: pretix/api/serializers/item.py:185 pretix/control/forms/item.py:1084
 msgid "The bundled item must not have bundles on its own."
@@ -6173,8 +6172,7 @@ msgstr "Esta entrada es anónima y ya no se puede utilizar."
 #: pretix/base/models/waitinglist.py:197
 #, python-brace-format
 msgid "Automatically created from waiting list entry for {email}"
-msgstr ""
-"Creado automaticamente a partir da entrada en listaxe de agarda {email}"
+msgstr "Creado automaticamente a partir da entrada en listaxe de agarda {email}"
 
 #: pretix/base/models/waitinglist.py:291
 #, fuzzy
@@ -10824,8 +10822,8 @@ msgid ""
 msgstr ""
 "Ola  {name},\n"
 "\n"
-"pedicu un cambio no seu enderezo de correo electrónico da conta "
-"{organizer}!\n"
+"pedicu un cambio no seu enderezo de correo electrónico da conta {organizer}!"
+"\n"
 "\n"
 "Para confrimar o cambio, por favor, prema aquí:\n"
 "\n"
