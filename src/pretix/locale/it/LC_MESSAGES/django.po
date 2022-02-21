@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-02-14 14:39+0000\n"
-"PO-Revision-Date: 2022-02-21 08:00+0000\n"
-"Last-Translator: Marco Giacopuzzi <marco.giaco2000@gmail.com>\n"
+"PO-Revision-Date: 2022-02-21 16:00+0000\n"
+"Last-Translator: Emanuele Signoretta <signorettae@gmail.com>\n"
 "Language-Team: Italian <https://translate.pretix.eu/projects/pretix/pretix/"
 "it/>\n"
 "Language: it\n"
@@ -622,7 +622,7 @@ msgstr "Data"
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:43
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:64
 msgid "Order code"
-msgstr "Numero di ordine"
+msgstr "Codice ordine"
 
 #: pretix/base/exporters/invoices.py:202 pretix/base/exporters/invoices.py:329
 #: pretix/base/models/waitinglist.py:73 pretix/base/orderimport.py:150
@@ -1637,7 +1637,7 @@ msgstr "Valuta"
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:83
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:136
 msgid "TEST MODE"
-msgstr "MODALITÀ DI PROVA"
+msgstr "MODALITA' DI TEST"
 
 #: pretix/base/exporters/orderlist.py:952
 msgid "Gift card redemptions"
@@ -1809,7 +1809,7 @@ msgstr "Priorità"
 #: pretix/presale/templates/pretixpresale/event/fragment_voucher_form.html:12
 #: pretix/presale/templates/pretixpresale/event/fragment_voucher_form.html:19
 msgid "Voucher code"
-msgstr "Codice voucher"
+msgstr "Codice del voucher"
 
 #: pretix/base/forms/__init__.py:135
 #, python-format
@@ -5303,7 +5303,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html:66
 #: pretix/plugins/ticketoutputpdf/ticketoutput.py:112
 msgid "Ticket"
-msgstr ""
+msgstr "Biglietto"
 
 #: pretix/base/reldate.py:35
 msgid "Event start"
@@ -10336,7 +10336,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/checkout_membership.html:24
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:106
 msgid "Seat"
-msgstr ""
+msgstr "Posto"
 
 #: pretix/control/forms/orders.py:297
 #: pretix/control/templates/pretixcontrol/order/change.html:162
@@ -12861,7 +12861,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order_pay_change.html:54
 #: pretix/presale/templates/pretixpresale/event/order_pay_confirm.html:40
 msgid "Cancel"
-msgstr "Cancella"
+msgstr "Annulla"
 
 #: pretix/control/templates/pretixcontrol/checkin/list_delete.html:21
 #: pretix/control/templates/pretixcontrol/event/delete.html:30
@@ -13875,7 +13875,7 @@ msgstr ""
 #: pretix/plugins/ticketoutputpdf/views.py:167
 #: pretix/presale/views/customer.py:439 pretix/presale/views/customer.py:491
 msgid "Your changes have been saved."
-msgstr "I tuoi cambiamenti sono stati salvati."
+msgstr "Le tue modifiche sono state salvate."
 
 #: pretix/control/templates/pretixcontrol/event/plugins.html:25
 #, python-format
@@ -18748,9 +18748,7 @@ msgstr ""
 #: pretix/plugins/stripe/views.py:646
 #: pretix/plugins/ticketoutputpdf/views.py:127
 msgid "We could not save your changes. See below for details."
-msgstr ""
-"Non abbiamo potuto salvare i tuoi cambiamenti. Scorri in basso per i "
-"dettagli."
+msgstr "Non abbiamo potuto salvare le tue modifiche. Leggi i dettagli sotto."
 
 #: pretix/control/views/checkin.py:322 pretix/control/views/checkin.py:359
 msgid "The requested list does not exist."
@@ -22073,7 +22071,7 @@ msgstr ""
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:109
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:111
 msgid "Available"
-msgstr ""
+msgstr "Disponibile"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:116
 msgid "On Sale"
@@ -24309,7 +24307,7 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/order.html:368
 msgid "Change order"
-msgstr "Modifica ordine"
+msgstr "Cambia ordine"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:379
 msgid ""
