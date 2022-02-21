@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-02-14 14:39+0000\n"
-"PO-Revision-Date: 2022-02-21 16:00+0000\n"
-"Last-Translator: Ismael Menéndez Fernández <ismael.menendez@balidea.com>\n"
+"PO-Revision-Date: 2022-02-21 17:13+0000\n"
+"Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: Galician <https://translate.pretix.eu/projects/pretix/pretix/"
 "gl/>\n"
 "Language: gl\n"
@@ -375,7 +375,7 @@ msgstr "Tenda en liña"
 #: pretix/base/context.py:45
 #, python-brace-format
 msgid "powered by {name} based on <a {a_attr}>pretix</a>"
-msgstr "Impulsado por pretix"
+msgstr ""
 
 #: pretix/base/context.py:52
 #, fuzzy, python-format
@@ -9979,9 +9979,9 @@ msgid "Please only proceed if you trust this website to be safe."
 msgstr ""
 
 #: pretix/base/templates/pretixbase/redirect.html:20
-#, fuzzy, python-format
+#, python-format
 msgid "Proceed to %(host)s"
-msgstr "Proceder con la compra"
+msgstr ""
 
 #: pretix/base/templates/source.html:5 pretix/base/templates/source.html:9
 #, fuzzy
@@ -28481,14 +28481,14 @@ msgid "Change price of position #%(positionid)s from %(old)s to %(new)s"
 msgstr "El precio de la posición %(positionid)s cambió de %(old)s a %(new)s"
 
 #: pretix/presale/templates/pretixpresale/event/order_change_confirm.html:85
-#, fuzzy, python-format
+#, python-format
 msgid "Add position (%(item)s – %(variation)s)"
-msgstr "Cantidad de %(item)s - %(var)s al pedido"
+msgstr "Cantidad de %(item)s - %(variation)s al pedido"
 
 #: pretix/presale/templates/pretixpresale/event/order_change_confirm.html:89
-#, fuzzy, python-format
+#, python-format
 msgid "Add position (%(item)s)"
-msgstr "Add-On a la posición #%(posid)s"
+msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/order_change_confirm.html:96
 #, python-format
