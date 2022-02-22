@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-02-14 14:39+0000\n"
-"PO-Revision-Date: 2022-02-22 12:58+0000\n"
+"PO-Revision-Date: 2022-02-22 22:00+0000\n"
 "Last-Translator: Ismael Menéndez Fernández <ismael.menendez@balidea.com>\n"
 "Language-Team: Galician <https://translate.pretix.eu/projects/pretix/pretix/"
 "gl/>\n"
@@ -1242,17 +1242,15 @@ msgstr "Comentario"
 #: pretix/base/exporters/orderlist.py:294
 #: pretix/base/exporters/orderlist.py:583 pretix/base/models/orders.py:224
 #: pretix/control/forms/filter.py:209
-#, fuzzy
 msgid "Follow-up date"
-msgstr "Todas las fechas"
+msgstr "Data de seguimento"
 
 #: pretix/base/exporters/orderlist.py:295
 #: pretix/control/templates/pretixcontrol/orders/index.html:125
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:177
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:68
-#, fuzzy
 msgid "Positions"
-msgstr "Posiciones"
+msgstr "Posicións"
 
 #: pretix/base/exporters/orderlist.py:296
 #: pretix/base/exporters/orderlist.py:613 pretix/base/models/orders.py:255
@@ -1263,7 +1261,7 @@ msgstr "Correo electrónico verificado"
 #: pretix/base/exporters/orderlist.py:301
 #, python-brace-format
 msgid "Paid by {method}"
-msgstr ""
+msgstr "Pagado por"
 
 #: pretix/base/exporters/orderlist.py:445
 #, fuzzy
@@ -1282,9 +1280,8 @@ msgstr "Tipo de tarifa"
 #: pretix/control/templates/pretixcontrol/subevents/detail.html:137
 #: pretix/plugins/checkinlists/exporters.py:334
 #: pretix/plugins/checkinlists/exporters.py:444
-#, fuzzy
 msgid "Price"
-msgstr "Precio"
+msgstr "Prezo"
 
 #: pretix/base/exporters/orderlist.py:449
 #: pretix/base/exporters/orderlist.py:558
@@ -1300,13 +1297,12 @@ msgstr "Norma fiscal"
 #: pretix/base/exporters/orderlist.py:603
 #: pretix/base/exporters/orderlist.py:607 pretix/base/pdf.py:302
 msgid "Invoice address name"
-msgstr "Dirección de facturación"
+msgstr "Enderezo de facturación"
 
 #: pretix/base/exporters/orderlist.py:542
 #: pretix/plugins/checkinlists/exporters.py:614
-#, fuzzy
 msgid "Position ID"
-msgstr "ID de la Posición"
+msgstr "ID da posición"
 
 #: pretix/base/exporters/orderlist.py:550
 #: pretix/base/exporters/orderlist.py:837 pretix/base/models/checkin.py:54
@@ -1334,10 +1330,9 @@ msgstr "ID de la Posición"
 #: pretix/presale/templates/pretixpresale/event/checkout_membership.html:52
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:134
 #: pretix/presale/templates/pretixpresale/event/order_change.html:32
-#, fuzzy
 msgctxt "subevent"
 msgid "Date"
-msgstr "Fecha"
+msgstr "Data"
 
 #: pretix/base/exporters/orderlist.py:554 pretix/base/models/items.py:555
 #: pretix/base/models/vouchers.py:240 pretix/base/models/waitinglist.py:88
@@ -1367,9 +1362,8 @@ msgstr "Produto"
 #: pretix/base/exporters/orderlist.py:555
 #: pretix/base/exporters/waitinglist.py:110 pretix/base/models/items.py:778
 #: pretix/base/models/orders.py:1274 pretix/base/models/orders.py:2486
-#, fuzzy
 msgid "Variation"
-msgstr "Variacion"
+msgstr "Variación"
 
 #: pretix/base/exporters/orderlist.py:560
 #: pretix/base/exporters/orderlist.py:565 pretix/base/forms/questions.py:575
@@ -1397,9 +1391,8 @@ msgstr "Nome do asistente"
 #: pretix/control/views/item.py:422
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:124
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:127
-#, fuzzy
 msgid "Attendee email"
-msgstr "Correo electrónico del participante"
+msgstr "Correo electrónico do asistente"
 
 #: pretix/base/exporters/orderlist.py:574 pretix/base/models/vouchers.py:293
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html:5
@@ -1411,65 +1404,54 @@ msgid "Voucher"
 msgstr "Recibo"
 
 #: pretix/base/exporters/orderlist.py:575
-#, fuzzy
 msgid "Pseudonymization ID"
-msgstr "ID Seudónimo"
+msgstr "ID Pseudónimo"
 
 #: pretix/base/exporters/orderlist.py:576 pretix/control/forms/filter.py:622
 #: pretix/control/templates/pretixcontrol/order/change.html:194
-#, fuzzy
 msgid "Ticket secret"
-msgstr "ticket secreto:"
+msgstr "Billete segredo"
 
 #: pretix/base/exporters/orderlist.py:577 pretix/base/orderimport.py:671
 #: pretix/plugins/checkinlists/exporters.py:472
-#, fuzzy
 msgid "Seat ID"
-msgstr "Asiento"
+msgstr "Identificación de asento"
 
 #: pretix/base/exporters/orderlist.py:578
 #: pretix/plugins/checkinlists/exporters.py:473
-#, fuzzy
 msgid "Seat name"
-msgstr "Nombre del equipo"
+msgstr "Nome do asento"
 
 #: pretix/base/exporters/orderlist.py:579
 #: pretix/plugins/checkinlists/exporters.py:474
-#, fuzzy
 msgid "Seat zone"
-msgstr "Nombre del equipo"
+msgstr "Zona do asento"
 
 #: pretix/base/exporters/orderlist.py:580
 #: pretix/plugins/checkinlists/exporters.py:475
-#, fuzzy
 msgid "Seat row"
-msgstr "Asiento: fila"
+msgstr "Asento: fila"
 
 #: pretix/base/exporters/orderlist.py:581
 #: pretix/plugins/checkinlists/exporters.py:476
-#, fuzzy
 msgid "Seat number"
-msgstr "Asiento {number}"
+msgstr "Asento {number}"
 
 #: pretix/base/exporters/orderlist.py:582
-#, fuzzy
 msgid "Order comment"
-msgstr "Código de la orden"
+msgstr "Código do pedido"
 
 #: pretix/base/exporters/orderlist.py:750
-#, fuzzy
 msgid "Order payments and refunds"
-msgstr "Pagos y reintegros de la orden"
+msgstr "Pagamentos de pedidos e reembolsos"
 
 #: pretix/base/exporters/orderlist.py:758
-#, fuzzy
 msgid "Payment states"
-msgstr "Fecha de pago"
+msgstr "Estado do pagamento"
 
 #: pretix/base/exporters/orderlist.py:766
-#, fuzzy
 msgid "Refund states"
-msgstr "Estado del reembolso"
+msgstr "Estado do reembolso"
 
 #: pretix/base/exporters/orderlist.py:791
 #: pretix/base/exporters/orderlist.py:930
@@ -1483,36 +1465,31 @@ msgstr "Estado del reembolso"
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:15
 #: pretix/plugins/checkinlists/exporters.py:332
 #: pretix/presale/templates/pretixpresale/event/order.html:66
-#, fuzzy
 msgid "Order"
-msgstr "Orden"
+msgstr "Pedido"
 
 #: pretix/base/exporters/orderlist.py:791
 #: pretix/base/exporters/orderlist.py:969
 #: pretix/control/templates/pretixcontrol/search/payments.html:75
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/control.html:5
-#, fuzzy
 msgid "Payment ID"
-msgstr "ID de pago"
+msgstr "ID de pagamento"
 
 #: pretix/base/exporters/orderlist.py:791
 #: pretix/base/exporters/orderlist.py:1062
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:30
 #: pretix/control/templates/pretixcontrol/organizers/giftcards.html:59
-#, fuzzy
 msgid "Creation date"
-msgstr "Fecha de creación"
+msgstr "Data de creación"
 
 #: pretix/base/exporters/orderlist.py:791
 #: pretix/control/templates/pretixcontrol/order/index.html:764
-#, fuzzy
 msgid "Completion date"
-msgstr "Fecha de finalización"
+msgstr "Data de finalización"
 
 #: pretix/base/exporters/orderlist.py:792
-#, fuzzy
 msgid "Status code"
-msgstr "Código del estado"
+msgstr "Código de estado"
 
 #: pretix/base/exporters/orderlist.py:792
 #: pretix/base/exporters/orderlist.py:928
@@ -1526,46 +1503,40 @@ msgstr "Código del estado"
 #: pretix/plugins/banktransfer/refund_export.py:46
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_assign.html:25
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:13
-#, fuzzy
 msgid "Amount"
-msgstr "Monto"
+msgstr "Cantidade"
 
 #: pretix/base/exporters/orderlist.py:792
 #: pretix/control/templates/pretixcontrol/order/index.html:671
 #: pretix/control/templates/pretixcontrol/order/index.html:766
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:84
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_confirm.html:19
-#, fuzzy
 msgid "Payment method"
-msgstr "Método de pago"
+msgstr "Método de pagamento"
 
 #: pretix/base/exporters/orderlist.py:828
-#, fuzzy
 msgid "Quota availabilities"
-msgstr "Disponibilidad de cuotas"
+msgstr "Dispoñibilidade de cotas"
 
 #: pretix/base/exporters/orderlist.py:833
 #: pretix/control/templates/pretixcontrol/items/quotas.html:45
-#, fuzzy
 msgid "Quota name"
-msgstr "Nombre de cuota"
+msgstr "Nome da cota"
 
 #: pretix/base/exporters/orderlist.py:833
 #: pretix/control/templates/pretixcontrol/items/quota.html:56
-#, fuzzy
 msgid "Total quota"
-msgstr "Cuota total"
+msgstr "Cota total"
 
 #: pretix/base/exporters/orderlist.py:833
 #: pretix/control/templates/pretixcontrol/event/cancel.html:16
 #: pretix/control/views/item.py:904
 msgid "Paid orders"
-msgstr "Ordes pagadas"
+msgstr "Pedidos pagados"
 
 #: pretix/base/exporters/orderlist.py:833 pretix/control/views/item.py:909
-#, fuzzy
 msgid "Pending orders"
-msgstr "Órdenes pendientes"
+msgstr "Pedidos pendentes"
 
 #: pretix/base/exporters/orderlist.py:833
 #, fuzzy
