@@ -509,7 +509,7 @@ class PaypalMethod(BasePaymentProvider):
                 ),
                 postfix=' {}'.format(self.settings.postfix) if self.settings.postfix else ''
             )
-            invoice_id = '{prefix}{slug}-{code}{postfix}'.format(
+            custom_id = '{prefix}{slug}-{code}{postfix}'.format(
                 prefix='{} '.format(self.settings.prefix) if self.settings.prefix else '',
                 slug=self.event.slug.upper(),
                 code=payment.order.code,
@@ -517,10 +517,10 @@ class PaypalMethod(BasePaymentProvider):
             )
             request.session['payment_paypal_payment'] = payment.pk
         elif cart and not payment:
-            value = self.format_price(cart['total'])
+            value = self.format_price(cart['total'] + cart['fee'])
             currency = request.event.currency
             description = __('Event tickets for {event}').format(event=request.event.name)
-            invoice_id = '{prefix}{slug}{postfix}'.format(
+            custom_id = '{prefix}{slug}{postfix}'.format(
                 prefix='{} '.format(self.settings.prefix) if self.settings.prefix else '',
                 slug=request.event.slug.upper(),
                 postfix=' {}'.format(self.settings.postfix) if self.settings.postfix else ''
@@ -540,7 +540,7 @@ class PaypalMethod(BasePaymentProvider):
                 },
                 'payee': payee,
                 'description': description,
-                'invoice_id': invoice_id,
+                'custom_id': custom_id,
                 #'shipping': {},  # Include Shipping information?
             }],
             'application_context': {
@@ -633,7 +633,7 @@ class PaypalMethod(BasePaymentProvider):
                 patchreq.request_body([
                     {
                         "op": "replace",
-                        "path": "/purchase_units/@reference_id=='default'/invoice_id",
+                        "path": "/purchase_units/@reference_id=='default'/custom_id",
                         "value": '{prefix}{orderstring}{postfix}'.format(
                             prefix='{} '.format(self.settings.prefix) if self.settings.prefix else '',
                             orderstring=__('Order {slug}-{code}').format(

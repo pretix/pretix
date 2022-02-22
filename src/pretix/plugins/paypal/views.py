@@ -135,14 +135,22 @@ class XHRView(TemplateView):
         prov = PaypalMethod(request.event)
 
         if order:
+            lp = order.payments.last()
+            if lp and lp.state not in (OrderPayment.PAYMENT_STATE_CONFIRMED, OrderPayment.PAYMENT_STATE_REFUNDED):
+                fee = lp.fee.value - prov.calculate_fee(order.pending_sum - lp.fee.value)
+            else:
+                fee = prov.calculate_fee(order.pending_sum)
+
             cart = {
                 'positions': order.positions,
-                'total': order.pending_sum
+                'total': order.pending_sum,
+                'fee': fee,
             }
         else:
             cart = {
                 'positions': get_cart(request),
-                'total': get_cart_total(request)
+                'total': get_cart_total(request),
+                'fee': prov.calculate_fee(get_cart_total(request)),
             }
 
         paypal_order = prov._create_paypal_order(request, None, cart)
@@ -190,7 +198,7 @@ def isu_return(request, *args, **kwargs):
     prov.init_api()
 
     req = PartnersMerchantIntegrationsGetRequest(
-        gs.get('payment_paypal_connect_partner_merchant_id'),
+        gs.settings.get('payment_paypal_connect_partner_merchant_id'),
         request.GET.get('merchantIdInPayPal')
     )
 
@@ -226,7 +234,7 @@ def isu_return(request, *args, **kwargs):
     return redirect(reverse('control:event.settings.payment.provider', kwargs={
         'organizer': event.organizer.slug,
         'event': event.slug,
-        'provider': 'paypal'
+        'provider': 'paypal_settings'
     }))
 
 
@@ -413,5 +421,5 @@ def isu_disconnect(request, **kwargs):
     return redirect(reverse('control:event.settings.payment.provider', kwargs={
         'organizer': request.event.organizer.slug,
         'event': request.event.slug,
-        'provider': 'paypal'
+        'provider': 'paypal_settings'
     }))

@@ -124,16 +124,16 @@ var pretixpaypal = {
             pretixpaypal.renderAPMs();
         }
 
-        $("input[name=payment][value^='paypal_']").change(function () {
+        $("input[name=payment][value^='paypal']").change(function () {
             pretixpaypal.renderButton($(this).val());
         });
 
-        $("input[name=payment]").not("[value^='paypal_']").change(function () {
+        $("input[name=payment]").not("[value^='paypal']").change(function () {
             pretixpaypal.restore();
         });
 
-        if ($("input[name=payment][value^='paypal_']").is(':checked') || $(".payment-redo-form").length) {
-            pretixpaypal.renderButton($("input[name=payment][value^='paypal_']:checked").val());
+        if ($("input[name=payment][value^='paypal']").is(':checked') || $(".payment-redo-form").length) {
+            pretixpaypal.renderButton($("input[name=payment][value^='paypal']:checked").val());
         }
 
         if ($('#paypal-button-container').data('paypage')) {
@@ -152,7 +152,12 @@ var pretixpaypal = {
     },
 
     renderButton: function (method) {
-        pretixpaypal.method = pretixpaypal.method_map[method.split('paypal_').at(-1)];
+        if (method === 'paypal') {
+            method = "wallet"
+        } else {
+            method = method.split('paypal_').at(-1)
+        }
+        pretixpaypal.method = pretixpaypal.method_map[method];
 
         if (pretixpaypal.method.method === 'apm' && !pretixpaypal.paypage) {
             pretixpaypal.restore();
@@ -204,7 +209,7 @@ var pretixpaypal = {
                 var $form = $(selectorstub + "_oid").closest("form");
                 // Insert the tokens into the form so it gets submitted to the server
                 $(selectorstub + "_oid").val(pretixpaypal.order_id);
-                $(selectorstub +  "_payer").val(pretixpaypal.payer_id);
+                $(selectorstub + "_payer").val(pretixpaypal.payer_id);
                 // and submit
                 $form.get(0).submit();
 
