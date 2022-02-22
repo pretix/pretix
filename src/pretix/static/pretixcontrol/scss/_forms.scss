@@ -285,6 +285,11 @@ input[type=number].short {
     height: 200px;
     margin: 0;
   }
+  /* fix leaflet overlay datetime-picker, see https://github.com/pretix/pretix/issues/2480 */
+  .leaflet-top,
+  .leaflet-bottom {
+    z-index: 900;
+  }
 }
 .metadata-group {
   .form-group {
