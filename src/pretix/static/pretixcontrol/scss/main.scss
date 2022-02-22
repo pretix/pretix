@@ -22,6 +22,11 @@
 .bootstrap-datetimepicker-widget table td span {
     line-height: 1.8em;
 }
+/* fix leaflet overlay datetime-picker, see https://github.com/pretix/pretix/issues/2480 */
+.leaflet-top,
+.leaflet-bottom {
+  z-index: 900;
+}
 
 footer {
     text-align: center;
