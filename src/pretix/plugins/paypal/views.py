@@ -41,7 +41,9 @@ import paypalrestsdk.exceptions
 from django.contrib import messages
 from django.core import signing
 from django.db.models import Sum
-from django.http import HttpResponse, HttpResponseBadRequest, Http404, JsonResponse
+from django.http import (
+    Http404, HttpResponse, HttpResponseBadRequest, JsonResponse,
+)
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils.decorators import method_decorator
@@ -58,10 +60,11 @@ from pretix.base.payment import PaymentException
 from pretix.base.settings import GlobalSettingsObject
 from pretix.control.permissions import event_permission_required
 from pretix.multidomain.urlreverse import eventreverse
-from pretix.plugins.paypal.client.customer.partners_merchantintegrations_get_request import \
-    PartnersMerchantIntegrationsGetRequest
+from pretix.plugins.paypal.client.customer.partners_merchantintegrations_get_request import (
+    PartnersMerchantIntegrationsGetRequest,
+)
 from pretix.plugins.paypal.models import ReferencedPayPalObject
-from pretix.plugins.paypal.payment import PaypalMethod as Paypal, PaypalMethod
+from pretix.plugins.paypal.payment import PaypalMethod, PaypalMethod as Paypal
 from pretix.presale.views import get_cart, get_cart_total
 
 logger = logging.getLogger('pretix.plugins.paypal')
@@ -239,7 +242,6 @@ def isu_return(request, *args, **kwargs):
 
 
 def success(request, *args, **kwargs):
-    pid = request.GET.get('paymentId')
     token = request.GET.get('token')
     payer = request.GET.get('PayerID')
     request.session['payment_paypal_token'] = token

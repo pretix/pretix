@@ -24,7 +24,8 @@ from django.conf.urls import include, re_path
 from pretix.multidomain import event_url
 
 from .views import (
-    abort, isu_disconnect, isu_return, redirect_view, success, webhook, PayView, XHRView,
+    PayView, XHRView, abort, isu_disconnect, isu_return, redirect_view,
+    success, webhook,
 )
 
 event_patterns = [

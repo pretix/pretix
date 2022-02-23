@@ -32,7 +32,7 @@ from django.utils.translation import gettext_lazy as _
 
 from pretix import settings
 from pretix.base.forms import SecretKeySettingsField
-from pretix.base.middleware import _parse_csp, _merge_csp, _render_csp
+from pretix.base.middleware import _merge_csp, _parse_csp, _render_csp
 from pretix.base.settings import settings_hierarkey
 from pretix.base.signals import (
     logentry_display, register_global_settings, register_payment_providers,
@@ -43,7 +43,7 @@ from pretix.presale.signals import html_head, process_response
 
 @receiver(register_payment_providers, dispatch_uid="payment_paypal")
 def register_payment_provider(sender, **kwargs):
-    from .payment import PaypalSettingsHolder, PaypalWallet, PaypalAPM
+    from .payment import PaypalAPM, PaypalSettingsHolder, PaypalWallet
     return [PaypalSettingsHolder, PaypalWallet, PaypalAPM]
 
 

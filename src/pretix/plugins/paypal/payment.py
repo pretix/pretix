@@ -50,8 +50,11 @@ from django.utils.timezone import now
 from django.utils.translation import gettext as __, gettext_lazy as _
 from django_countries import countries
 from i18nfield.strings import LazyI18nString
-from paypalcheckoutsdk.orders import OrdersCreateRequest, OrdersGetRequest, OrdersPatchRequest, OrdersCaptureRequest
-from paypalcheckoutsdk.payments import CapturesRefundRequest, CapturesGetRequest
+from paypalcheckoutsdk.orders import (
+    OrdersCaptureRequest, OrdersCreateRequest, OrdersGetRequest,
+    OrdersPatchRequest,
+)
+from paypalcheckoutsdk.payments import CapturesRefundRequest
 from paypalhttp import HttpError
 
 from pretix import settings
@@ -62,11 +65,16 @@ from pretix.base.services.mail import SendMailException
 from pretix.base.settings import SettingsSandbox
 from pretix.helpers.urls import build_absolute_uri as build_global_uri
 from pretix.multidomain.urlreverse import build_absolute_uri, eventreverse
-from pretix.plugins.paypal.client.core.paypal_http_client import PayPalHttpClient
+from pretix.plugins.paypal.client.core.environment import (
+    LiveEnvironment, SandboxEnvironment,
+)
+from pretix.plugins.paypal.client.core.paypal_http_client import (
+    PayPalHttpClient,
+)
+from pretix.plugins.paypal.client.customer.partner_referral_create_request import (
+    PartnerReferralCreateRequest,
+)
 from pretix.plugins.paypal.models import ReferencedPayPalObject
-
-from pretix.plugins.paypal.client.core.environment import SandboxEnvironment, LiveEnvironment
-from pretix.plugins.paypal.client.customer.partner_referral_create_request import PartnerReferralCreateRequest
 
 logger = logging.getLogger('pretix.plugins.paypal')
 
@@ -517,7 +525,7 @@ class PaypalMethod(BasePaymentProvider):
         paymentreq = OrdersCreateRequest()
         paymentreq.request_body({
             'intent': 'CAPTURE',
-            #'payer': {},  # We could transmit PII (email, name, address, etc.)
+            # 'payer': {},  # We could transmit PII (email, name, address, etc.)
             'purchase_units': [{
                 'amount': {
                     'currency_code': currency,
@@ -526,7 +534,7 @@ class PaypalMethod(BasePaymentProvider):
                 'payee': payee,
                 'description': description,
                 'custom_id': custom_id,
-                #'shipping': {},  # Include Shipping information?
+                # 'shipping': {},  # Include Shipping information?
             }],
             'application_context': {
                 'locale': request.LANGUAGE_CODE,
@@ -575,8 +583,8 @@ class PaypalMethod(BasePaymentProvider):
             if request.session.get('iframe_session', False):
                 signer = signing.Signer(salt='safe-redirect')
                 return (
-                        build_absolute_uri(request.event, 'plugins:paypal:redirect') + '?url=' +
-                        urllib.parse.quote(signer.sign(link))
+                    build_absolute_uri(request.event, 'plugins:paypal:redirect') + '?url=' +
+                    urllib.parse.quote(signer.sign(link))
                 )
             else:
                 return str(link)
@@ -674,8 +682,9 @@ class PaypalMethod(BasePaymentProvider):
             if pp_captured_order.status != 'COMPLETED':
                 payment.fail(info=pp_captured_order.dict())
                 logger.error('Invalid state: %s' % str(pp_captured_order))
-                raise PaymentException(_('We were unable to process your payment. See below for details on how to '
-                                            'proceed.'))
+                raise PaymentException(
+                    _('We were unable to process your payment. See below for details on how to proceed.')
+                )
 
             if payment.state == OrderPayment.PAYMENT_STATE_CONFIRMED:
                 logger.warning('PayPal success event even though order is already marked as paid')
@@ -766,8 +775,6 @@ class PaypalMethod(BasePaymentProvider):
 
     def execute_refund(self, refund: OrderRefund):
         self.init_api()
-
-        #req = CapturesRefundRequest(request.session.get('payment_paypal_oid'))
 
         try:
             pp_payment = None

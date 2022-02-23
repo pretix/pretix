@@ -1,12 +1,6 @@
-try:
-    from urllib import quote  # Python 2.X
-except ImportError:
-    from urllib.parse import quote  # Python 3+
-
-
 class PartnerReferralCreateRequest:
     """
-    Creates an Partner Referral.
+    Creates a Partner Referral.
     """
     def __init__(self):
         self.verb = "POST"
@@ -17,8 +11,6 @@ class PartnerReferralCreateRequest:
 
     def prefer(self, prefer):
         self.headers["Prefer"] = str(prefer)
-
-
 
     def request_body(self, order):
         self.body = order

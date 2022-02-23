@@ -1,4 +1,7 @@
-from paypalcheckoutsdk.core import PayPalHttpClient as VendorPayPalHttpClient, AccessTokenRequest, RefreshTokenRequest
+from paypalcheckoutsdk.core import (
+    AccessTokenRequest, PayPalHttpClient as VendorPayPalHttpClient,
+    RefreshTokenRequest,
+)
 
 
 class PayPalHttpClient(VendorPayPalHttpClient):

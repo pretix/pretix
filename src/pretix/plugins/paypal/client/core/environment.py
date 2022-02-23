@@ -1,11 +1,10 @@
 import jwt
-
 from paypalcheckoutsdk.core import PayPalEnvironment as VendorPayPalEnvironment
 
 
 class PayPalEnvironment(VendorPayPalEnvironment):
-    def __init__(self, client_id, client_secret, apiUrl, webUrl, merchant_id, partner_id):
-        super(PayPalEnvironment, self).__init__(client_id, client_secret, apiUrl, webUrl)
+    def __init__(self, client_id, client_secret, api_url, web_url, merchant_id, partner_id):
+        super(PayPalEnvironment, self).__init__(client_id, client_secret, api_url, web_url)
         self.merchant_id = merchant_id
         self.partner_id = partner_id
 
@@ -26,11 +25,11 @@ class SandboxEnvironment(PayPalEnvironment):
     def __init__(self, client_id, client_secret, merchant_id=None, partner_id=None):
         super(SandboxEnvironment, self).__init__(
             client_id,
-             client_secret,
-             PayPalEnvironment.SANDBOX_API_URL,
-             PayPalEnvironment.SANDBOX_WEB_URL,
-             merchant_id,
-             partner_id
+            client_secret,
+            PayPalEnvironment.SANDBOX_API_URL,
+            PayPalEnvironment.SANDBOX_WEB_URL,
+            merchant_id,
+            partner_id
         )
 
 
