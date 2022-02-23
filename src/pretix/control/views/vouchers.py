@@ -56,7 +56,7 @@ from django.views.generic import (
     CreateView, DeleteView, ListView, TemplateView, UpdateView, View,
 )
 
-from pretix.base.models import CartPosition, LogEntry, OrderPosition, Voucher
+from pretix.base.models import CartPosition, LogEntry, Voucher
 from pretix.base.models.vouchers import generate_codes
 from pretix.base.services.locking import NoLockManager
 from pretix.base.services.vouchers import vouchers_send
@@ -550,7 +550,7 @@ class VoucherBulkAction(EventPermissionRequiredMixin, View):
             for obj in self.objects:
                 if obj.allow_delete():
                     obj.log_action('pretix.voucher.deleted', user=self.request.user)
-                    OrderPosition.objects.filter(addon_to__voucher=obj).delete()
+                    CartPosition.objects.filter(addon_to__voucher=obj).delete()
                     obj.cartposition_set.all().delete()
                     obj.delete()
                 else:
