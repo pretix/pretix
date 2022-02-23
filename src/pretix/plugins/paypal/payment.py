@@ -38,8 +38,6 @@ import urllib.parse
 from collections import OrderedDict
 from decimal import Decimal
 
-import paypalrestsdk
-import paypalrestsdk.exceptions
 from django import forms
 from django.contrib import messages
 from django.core import signing
@@ -53,6 +51,7 @@ from django.utils.translation import gettext as __, gettext_lazy as _
 from django_countries import countries
 from i18nfield.strings import LazyI18nString
 from paypalcheckoutsdk.orders import OrdersCreateRequest, OrdersGetRequest, OrdersPatchRequest, OrdersCaptureRequest
+from paypalcheckoutsdk.payments import CapturesRefundRequest, CapturesGetRequest
 from paypalhttp import HttpError
 
 from pretix import settings
@@ -768,47 +767,66 @@ class PaypalMethod(BasePaymentProvider):
     def execute_refund(self, refund: OrderRefund):
         self.init_api()
 
+        #req = CapturesRefundRequest(request.session.get('payment_paypal_oid'))
+
         try:
-            sale = None
-            for res in refund.payment.info_data['transactions'][0]['related_resources']:
-                for k, v in res.items():
-                    if k == 'sale':
-                        sale = paypalrestsdk.Sale.find(v['id'])
+            pp_payment = None
+            # Legacy PayPal - migrate the payment info_data first
+            if "intent" in refund.payment.info_data:
+                req = OrdersGetRequest(refund.payment.info_data['cart'])
+                response = self.client.execute(req)
+                refund.payment.info = json.dumps(response.result.dict())
+                refund.payment.save(update_fields=['info'])
+                refund.refresh_from_db()
+
+            for res in refund.payment.info_data['purchase_units'][0]['payments']['captures']:
+                if res['status'] in ['COMPLETED', 'PARTIALLY_REFUNDED']:
+                    pp_payment = res['id']
+                    break
+
+            if not pp_payment:
+                req = OrdersGetRequest(refund.payment.info_data['id'])
+                response = self.client.execute(req)
+                for res in response.result.purchase_units[0].payments.captures:
+                    if res['status'] in ['COMPLETED', 'PARTIALLY_REFUNDED']:
+                        pp_payment = res.id
                         break
 
-            if not sale:
-                pp_payment = paypalrestsdk.Payment.find(refund.payment.info_data['id'])
-                for res in pp_payment.transactions[0].related_resources:
-                    for k, v in res.to_dict().items():
-                        if k == 'sale':
-                            sale = paypalrestsdk.Sale.find(v['id'])
-                            break
-
-            pp_refund = sale.refund({
+            req = CapturesRefundRequest(pp_payment)
+            req.request_body({
                 "amount": {
-                    "total": self.format_price(refund.amount),
-                    "currency": refund.order.event.currency
+                    "value": self.format_price(refund.amount),
+                    "currency_code": refund.order.event.currency
                 }
             })
-        except paypalrestsdk.exceptions.ConnectionError as e:
+            response = self.client.execute(req)
+        except IOError as ioe:
             refund.order.log_action('pretix.event.order.refund.failed', {
                 'local_id': refund.local_id,
                 'provider': refund.provider,
-                'error': str(e)
+                'error': str(ioe)
             })
-            raise PaymentException(_('Refunding the amount via PayPal failed: {}').format(str(e)))
-        if not pp_refund.success():
-            refund.order.log_action('pretix.event.order.refund.failed', {
-                'local_id': refund.local_id,
-                'provider': refund.provider,
-                'error': str(pp_refund.error)
-            })
-            raise PaymentException(_('Refunding the amount via PayPal failed: {}').format(pp_refund.error))
-        else:
-            sale = paypalrestsdk.Payment.find(refund.payment.info_data['id'])
-            refund.payment.info = json.dumps(sale.to_dict())
-            refund.info = json.dumps(pp_refund.to_dict())
+            raise PaymentException(_('Refunding the amount via PayPal failed: {}').format(str(ioe)))
+        if response.result.status == 'COMPLETED':
+            req = OrdersGetRequest(refund.payment.info_data['id'])
+            response = self.client.execute(req)
+            refund.payment.info = json.dumps(response.result.dict())
+            refund.info = json.dumps(response.result.dict())
             refund.done()
+        elif response.result.status == 'PENDING':
+            req = OrdersGetRequest(refund.payment.info_data['id'])
+            response = self.client.execute(req)
+            refund.payment.info = json.dumps(response.result.dict())
+            refund.info = json.dumps(response.result.dict())
+            refund.state = OrderRefund.REFUND_STATE_TRANSIT
+            refund.save()
+        else:
+            refund.order.log_action('pretix.event.order.refund.failed', {
+                'local_id': refund.local_id,
+                'provider': refund.provider,
+                'error': str(response.result.status_details.reason)
+            })
+            raise PaymentException(_('Refunding the amount via PayPal failed: {}').format(response.result.status_details.reason))
 
     def payment_prepare(self, request, payment):
         paypal_order_id = request.POST.get('payment_paypal_{}_oid'.format(self.method), None)
