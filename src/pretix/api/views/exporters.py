@@ -132,7 +132,7 @@ class EventExportersViewSet(ExportersMixin, viewsets.ViewSet):
     def exporters(self):
         exporters = []
         responses = register_data_exporters.send(self.request.event)
-        for ex in sorted([response(self.request.event, self.request.organizer) for r, response in responses], key=lambda ex: str(ex.verbose_name)):
+        for ex in sorted([response(self.request.event, self.request.organizer) for r, response in responses if response], key=lambda ex: str(ex.verbose_name)):
             ex._serializer = JobRunSerializer(exporter=ex)
             exporters.append(ex)
         return exporters
