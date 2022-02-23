@@ -200,7 +200,7 @@ setup(
         'markdown==3.3.4',  # 3.3.5 requires importlib-metadata>=4.4, but django-bootstrap3 requires importlib-metadata<3.
         # We can upgrade markdown again once django-bootstrap3 upgrades or once we drop Python 3.6 and 3.7
         'mt-940==4.23.*',
-        'oauthlib==3.1.*',
+        'oauthlib>=3.1,<3.3',
         'openpyxl==3.0.*',
         'packaging',
         'paypalrestsdk==1.13.*',
