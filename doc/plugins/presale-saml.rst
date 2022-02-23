@@ -1,4 +1,10 @@
 .. highlight:: ini
+.. spelling::
+
+   IdP
+   skIDentity
+   ePA
+   NPA
 
 Presale SAML Authentication
 ===========================
@@ -19,7 +25,7 @@ Plugin installation and initial configuration
 .. note:: If you are a customer of our hosted `pretix.eu`_ offering, you can
           skip this section.
 
-The plugin is installed as any other plugin in the pretix eco-system. As a
+The plugin is installed as any other plugin in the pretix ecosystem. As a
 pretix system administrator, please follow the instructions in the the
 :ref:`Administrator documentation <admindocs>`.
 
@@ -61,16 +67,16 @@ Global Level
           Organizer Level settings.
 
 As a user with administrative privileges, please activate them by clicking the
-``Admin Mode`` button in the top right hand corner.
+`Admin Mode` button in the top right hand corner.
 
-You should now see a new menu-item titled ``SAML`` appear.
+You should now see a new menu-item titled `SAML` appear.
 
 Organizer Level
 ^^^^^^^^^^^^^^^
 
 Navigate to the organizer settings in the pretix backend. In the navigation
-bar, you will find a menu-item titled ``SAML`` if your user has the ``Can
-change organizer settings`` permission.
+bar, you will find a menu-item titled `SAML` if your user has the `Can
+change organizer settings` permission.
 
 
 .. note:: If you are a customer of our hosted `pretix.eu`_ offering, the menu
@@ -186,7 +192,7 @@ Basic settings
 ^^^^^^^^^^^^^^
 
 Once the plugin has been enabled for a pretix event using the Plugins-menu from
-the event's settings, a new ``SAML`` menu item will show up.
+the event's settings, a new *SAML* menu item will show up.
 
 On this page, the actual authentication can be configured.
 
@@ -271,7 +277,7 @@ as a SAML attribute, pretix will save the value of said attribute into the quest
 All the same as in the above section on E-Mail addresses, those fields become
 non-editable by the user.
 
-Please be aware that some speciality question types might not be compatible with
+Please be aware that some specialty question types might not be compatible with
 the SAML attributes due to specific format requirements. If in doubt (or if the
 checkout fails/the information is not properly saved), try setting the question
 type to a simple type like "Text (one line)".
@@ -282,7 +288,7 @@ Notes and configuration examples
 Requesting SAML 1.0 and 2.0 attributes from an academic IdP
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-This requestes the ``eduPersonPrincipalName`` (also sometimes called EPPN),
+This requests the ``eduPersonPrincipalName`` (also sometimes called EPPN),
 ``email``, ``givenName`` and ``sn`` both in SAML 1.0 and SAML 2.0 attributes.
 
 .. sourcecode:: json
@@ -358,7 +364,7 @@ Requesting skIDentity attributes for electronic identity cards
 
 This requests the basic ``eIdentifier``, ``IDType``, ``IDIssuer``, and
 ``NameID`` from the `skIDentity`_ SAML service, which are available for
-electronic ID cards such as the german ePA/NPA. (Other attributes such as
+electronic ID cards such as the German ePA/NPA. (Other attributes such as
 the name and address are available at additional cost from the IdP).
 
 .. sourcecode:: json
