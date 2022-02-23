@@ -32,9 +32,9 @@
                                                 {% endblocktrans %}</p>
                                         {% endif %}
                                         <p>{{ plugin.description }}</p>
-                                        {% if plugin.restricted and not request.user.is_staff %}
+                                        {% if plugin.restricted and plugin.module not in request.event.settings.allowed_restricted_plugins %}
                                             <span class="text-muted">
-                                                {% trans "This plugin needs to be enabled by a system administrator for your event." %}
+                                                {% trans "This plugin needs to be enabled by a system administrator for your account." %}
                                             </span>
                                         {% endif %}
                                         {% if plugin.app.compatibility_errors %}
@@ -62,7 +62,7 @@
                                         {% if plugin.app.compatibility_errors %}
                                             <button class="btn disabled btn-block btn-default"
                                                     disabled="disabled">{% trans "Incompatible" %}</button>
-                                            {% elif plugin.restricted and not staff_session %}
+                                            {% elif plugin.restricted and plugin.module not in request.event.settings.allowed_restricted_plugins %}
                                             <button class="btn disabled btn-block btn-default"
                                                     disabled="disabled">{% trans "Not available" %}</button>
                                             {% elif plugin.module in plugins_active %}

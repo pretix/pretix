@@ -286,6 +286,7 @@ class OrganizerSettingsForm(SettingsForm):
         required=False,
     )
     auto_fields = [
+        'allowed_restricted_plugins',
         'customer_accounts',
         'customer_accounts_link_by_email',
         'invoice_regenerate_allowed',
@@ -339,7 +340,12 @@ class OrganizerSettingsForm(SettingsForm):
     )
 
     def __init__(self, *args, **kwargs):
+        is_admin = kwargs.pop('is_admin', False)
         super().__init__(*args, **kwargs)
+
+        if not is_admin:
+            del self.fields['allowed_restricted_plugins']
+
         self.fields['name_scheme'].choices = (
             (k, _('Ask for {fields}, display like {example}').format(
                 fields=' + '.join(str(vv[1]) for vv in v['fields']),

@@ -354,19 +354,17 @@ class EventPlugins(EventSettingsViewMixin, EventPermissionRequiredMixin, Templat
         }
 
         with transaction.atomic():
-            allow_restricted = request.user.has_active_staff_session(request.session.session_key)
-
             for key, value in request.POST.items():
                 if key.startswith("plugin:"):
                     module = key.split(":")[1]
                     if value == "enable" and module in plugins_available:
                         if getattr(plugins_available[module], 'restricted', False):
-                            if not allow_restricted:
+                            if module not in request.event.settings.allowed_restricted_plugins:
                                 continue
 
                         self.request.event.log_action('pretix.event.plugins.enabled', user=self.request.user,
                                                       data={'plugin': module})
-                        self.object.enable_plugin(module, allow_restricted=allow_restricted)
+                        self.object.enable_plugin(module, allow_restricted=request.event.settings.allowed_restricted_plugins)
                     else:
                         self.request.event.log_action('pretix.event.plugins.disabled', user=self.request.user,
                                                       data={'plugin': module})
@@ -1415,7 +1413,7 @@ class QuickSetupView(FormView):
             })
             quota.items.add(*items)
 
-        self.request.event.set_active_plugins(plugins_active, allow_restricted=True)
+        self.request.event.set_active_plugins(plugins_active, allow_restricted=plugins_active)
         self.request.event.save()
         messages.success(self.request, _('Your changes have been saved. You can now go on with looking at the details '
                                          'or take your event live to start selling!'))
