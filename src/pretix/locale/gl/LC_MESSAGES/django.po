@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-02-14 14:39+0000\n"
-"PO-Revision-Date: 2022-02-23 08:46+0000\n"
-"Last-Translator: Ismael Menéndez Fernández <ismael.menendez@balidea.com>\n"
+"PO-Revision-Date: 2022-02-23 08:48+0000\n"
+"Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: Galician <https://translate.pretix.eu/projects/pretix/pretix/"
 "gl/>\n"
 "Language: gl\n"
@@ -1261,7 +1261,7 @@ msgstr "Correo electrónico verificado"
 #: pretix/base/exporters/orderlist.py:301
 #, python-brace-format
 msgid "Paid by {method}"
-msgstr "Pagado por"
+msgstr "Pagado por {method}"
 
 #: pretix/base/exporters/orderlist.py:445
 #, fuzzy
@@ -1826,8 +1826,6 @@ msgid ""
 "Due to technical reasons you cannot set inputs, that need to be masked (e.g. "
 "passwords), to %(value)s."
 msgstr ""
-"Debido a razóns técnicas, non podes establecer entradas, necesitan "
-"enmascararse (con contrasinais, por exemplo), a valores."
 
 #: pretix/base/forms/auth.py:57 pretix/base/forms/auth.py:168
 msgid "Keep me logged in"
