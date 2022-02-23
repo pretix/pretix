@@ -919,6 +919,9 @@ class PaypalAPM(PaypalMethod):
         return True
 
     def execute_payment(self, request: HttpRequest, payment: OrderPayment):
+        # This is a workaround to not have APMs be written to the database with identifier paypal_apm.
+        # Since all transactions - APM or not - look the same and are handled the same, we want to keep all PayPal
+        # transactions under the "paypal"-identifier - no matter what the customer might have selected.
         payment.provider = "paypal"
         payment.save(update_fields=["provider"])
 
