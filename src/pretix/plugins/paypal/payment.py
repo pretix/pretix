@@ -918,17 +918,15 @@ class PaypalAPM(PaypalMethod):
         return True
 
     def execute_payment(self, request: HttpRequest, payment: OrderPayment):
-        post_oid = request.POST.get('payment_paypal_{}_oid'.format(self.method), None)
+        payment.provider = "paypal"
+        payment.save(update_fields=["provider"])
 
-        if not post_oid:
-            paypal_order = self._create_paypal_order(request, payment, None)
-            payment.info = json.dumps(paypal_order.dict())
-            payment.save(update_fields=['info'])
+        paypal_order = self._create_paypal_order(request, payment, None)
+        payment.info = json.dumps(paypal_order.dict())
+        payment.save(update_fields=['info'])
 
-            return eventreverse(self.event, 'plugins:paypal:pay', kwargs={
-                'order': payment.order.code,
-                'payment': payment.pk,
-                'hash': hashlib.sha1(payment.order.secret.lower().encode()).hexdigest(),
-            })
-        elif post_oid and post_oid == request.session.get('payment_paypal_oid', None):
-            super().execute_payment(request, payment)
+        return eventreverse(self.event, 'plugins:paypal:pay', kwargs={
+            'order': payment.order.code,
+            'payment': payment.pk,
+            'hash': hashlib.sha1(payment.order.secret.lower().encode()).hexdigest(),
+        })

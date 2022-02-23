@@ -205,7 +205,8 @@ var pretixpaypal = {
                 pretixpaypal.order_id = data.orderID;
                 pretixpaypal.payer_id = data.payerID;
 
-                let selectorstub = "#payment_paypal_" + pretixpaypal.method.method;
+                let method = pretixpaypal.paypage ? "wallet" : pretixpaypal.method.method;
+                let selectorstub = "#payment_paypal_" + method;
                 var $form = $(selectorstub + "_oid").closest("form");
                 // Insert the tokens into the form so it gets submitted to the server
                 $(selectorstub + "_oid").val(pretixpaypal.order_id);
