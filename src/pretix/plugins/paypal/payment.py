@@ -325,22 +325,6 @@ class PaypalSettingsHolder(BasePaymentProvider):
 
         return None
 
-    # Legacy PayPal
-    def payment_control_render(self, request: HttpRequest, payment: OrderPayment):
-        template = get_template('pretixplugins/paypal/control_legacy.html')
-        sale_id = None
-        for trans in payment.info_data.get('transactions', []):
-            for res in trans.get('related_resources', []):
-                if 'sale' in res and 'id' in res['sale']:
-                    sale_id = res['sale']['id']
-        ctx = {'request': request, 'event': self.event, 'settings': self.settings,
-               'payment_info': payment.info_data, 'order': payment.order, 'sale_id': sale_id}
-        return template.render(ctx)
-
-    # Legacy PayPal
-    def payment_control_render_short(self, payment: OrderPayment) -> str:
-        return payment.info_data.get('payer', {}).get('payer_info', {}).get('email', '')
-
 
 class PaypalMethod(BasePaymentProvider):
     identifier = ''
@@ -744,17 +728,32 @@ class PaypalMethod(BasePaymentProvider):
         }
 
     def payment_control_render(self, request: HttpRequest, payment: OrderPayment):
-        template = get_template('pretixplugins/paypal/control.html')
+        # Legacy PayPal info-data
+        if 'intent' in payment.info_data:
+            template = get_template('pretixplugins/paypal/control_legacy.html')
+            sale_id = None
+            for trans in payment.info_data.get('transactions', []):
+                for res in trans.get('related_resources', []):
+                    if 'sale' in res and 'id' in res['sale']:
+                        sale_id = res['sale']['id']
+            ctx = {'request': request, 'event': self.event, 'settings': self.settings,
+                   'payment_info': payment.info_data, 'order': payment.order, 'sale_id': sale_id}
+        else:
+            template = get_template('pretixplugins/paypal/control.html')
+            ctx = {'request': request, 'event': self.event, 'settings': self.settings,
+                   'payment_info': payment.info_data, 'order': payment.order}
 
-        ctx = {'request': request, 'event': self.event, 'settings': self.settings,
-               'payment_info': payment.info_data, 'order': payment.order}
         return template.render(ctx)
 
     def payment_control_render_short(self, payment: OrderPayment) -> str:
-        return '{} / {}'.format(
-            payment.info_data.get('id', ''),
-            payment.info_data.get('payer', {}).get('email_address', '')
-        )
+        # Legacy PayPal info-data
+        if 'intent' in payment.info_data:
+            return payment.info_data.get('payer', {}).get('payer_info', {}).get('email', '')
+        else:
+            return '{} / {}'.format(
+                payment.info_data.get('id', ''),
+                payment.info_data.get('payer', {}).get('email_address', '')
+            )
 
     def payment_partial_refund_supported(self, payment: OrderPayment):
         # Paypal refunds are possible for 180 days after purchase:
