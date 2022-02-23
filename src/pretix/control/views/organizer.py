@@ -407,6 +407,7 @@ class OrganizerUpdate(OrganizerPermissionRequiredMixin, UpdateView):
         return OrganizerSettingsForm(
             obj=self.object,
             prefix='settings',
+            is_admin=self.request.user.has_active_staff_session(self.request.session.session_key),
             data=self.request.POST if self.request.method == 'POST' else None,
             files=self.request.FILES if self.request.method == 'POST' else None
         )

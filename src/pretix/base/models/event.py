@@ -1179,21 +1179,21 @@ class Event(EventMixin, LoggedModel):
             if not p.name.startswith('.') and getattr(p, 'visible', True)
         }
 
-    def set_active_plugins(self, modules, allow_restricted=False):
+    def set_active_plugins(self, modules, allow_restricted=frozenset()):
         plugins_active = self.get_plugins()
         plugins_available = self.get_available_plugins()
 
         enable = [m for m in modules if m not in plugins_active and m in plugins_available]
 
         for module in enable:
-            if getattr(plugins_available[module].app, 'restricted', False) and not allow_restricted:
+            if getattr(plugins_available[module].app, 'restricted', False) and module not in allow_restricted:
                 modules.remove(module)
             elif hasattr(plugins_available[module].app, 'installed'):
                 getattr(plugins_available[module].app, 'installed')(self)
 
         self.plugins = ",".join(modules)
 
-    def enable_plugin(self, module, allow_restricted=False):
+    def enable_plugin(self, module, allow_restricted=frozenset()):
         plugins_active = self.get_plugins()
         from pretix.presale.style import regenerate_css
 

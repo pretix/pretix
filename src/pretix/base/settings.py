@@ -94,6 +94,25 @@ def primary_font_kwargs():
     }
 
 
+def restricted_plugin_kwargs():
+    from pretix.base.plugins import get_all_plugins
+
+    plugins_available = [
+        (p.module, p.name) for p in get_all_plugins(None)
+        if (
+            not p.name.startswith('.') and
+            getattr(p, 'visible', True) and
+            getattr(p, 'restricted', False) and
+            not hasattr(p, 'is_available')  # this means you should not really use restricted and is_available
+        )
+    ]
+    return {
+        'widget': forms.CheckboxSelectMultiple,
+        'label': _("Allow usage of restricted plugins"),
+        'choices': plugins_available,
+    }
+
+
 class LazyI18nStringList(UserList):
     def __init__(self, init_list=None):
         super().__init__()
@@ -109,6 +128,13 @@ class LazyI18nStringList(UserList):
 
 
 DEFAULTS = {
+    'allowed_restricted_plugins': {
+        'default': [],
+        'type': list,
+        'form_class': forms.MultipleChoiceField,
+        'serializer_class': serializers.MultipleChoiceField,
+        'form_kwargs': lambda: restricted_plugin_kwargs(),
+    },
     'customer_accounts': {
         'default': 'False',
         'type': bool,

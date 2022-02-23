@@ -92,6 +92,7 @@ those will be displayed but not block the plugin execution.
 
 The ``AppConfig`` class may implement a method ``is_available(event)`` that checks if a plugin
 is available for a specific event. If not, it will not be shown in the plugin list of that event.
+You should not define ``is_available`` and ``restricted`` on the same plugin.
 
 Plugin registration
 -------------------
