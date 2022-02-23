@@ -8,10 +8,10 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-02-14 14:39+0000\n"
-"PO-Revision-Date: 2021-12-06 23:00+0000\n"
-"Last-Translator: Ondřej Sokol <osokol@treesoft.cz>\n"
-"Language-Team: Czech <https://translate.pretix.eu/projects/pretix/pretix/cs/"
-">\n"
+"PO-Revision-Date: 2022-02-23 22:00+0000\n"
+"Last-Translator: Tonda Pavlík <reklamy@playton.cz>\n"
+"Language-Team: Czech <https://translate.pretix.eu/projects/pretix/pretix/cs/>"
+"\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1842,10 +1842,8 @@ msgid "Repeat password"
 msgstr "Opakovat heslo"
 
 #: pretix/base/forms/questions.py:196
-#, fuzzy
-#| msgid "Please enter a shorter name."
 msgid "Please do not use special characters in names."
-msgstr "Prosím uveďte kratší jméno."
+msgstr "Ve jméně není dovoleno používat speciální znaky."
 
 #: pretix/base/forms/questions.py:255
 msgid "Please enter a shorter name."
@@ -1956,7 +1954,7 @@ msgstr "Heslo, které jste zadali, nebylo správné."
 
 #: pretix/base/forms/user.py:58
 msgid "Please choose a password different to your current one."
-msgstr ""
+msgstr "Prosím zvolte heslo, které je jiné, než vaše aktuální heslo."
 
 #: pretix/base/forms/user.py:63 pretix/presale/forms/customer.py:385
 #: pretix/presale/forms/customer.py:454
@@ -2245,10 +2243,8 @@ msgid "Date joined"
 msgstr "Datum vytvoření"
 
 #: pretix/base/models/auth.py:136
-#, fuzzy
-#| msgid "Repeat new password"
 msgid "Force user to select a new password"
-msgstr "Zopakovat heslo"
+msgstr "Donutit uživatele pro vytvoření nového hesla"
 
 #: pretix/base/models/auth.py:143
 msgid "Timezone"
@@ -2404,14 +2400,10 @@ msgid "Server error"
 msgstr "Chyba serveru"
 
 #: pretix/base/models/customers.py:53
-#, fuzzy
-#| msgid "Is active"
 msgid "Account active"
 msgstr "Účet je aktivní"
 
 #: pretix/base/models/customers.py:54
-#, fuzzy
-#| msgid "E-mail address"
 msgid "Verified email address"
 msgstr "Ověřená e-mailová adresa"
 
@@ -2438,7 +2430,7 @@ msgstr "Vyberte zemi"
 
 #: pretix/base/models/devices.py:71 pretix/base/models/items.py:1242
 msgid "Internal identifier"
-msgstr ""
+msgstr "Neplatný identifikátor"
 
 #: pretix/base/models/devices.py:72 pretix/base/models/items.py:1243
 msgid ""
@@ -2653,11 +2645,11 @@ msgstr ""
 
 #: pretix/base/models/event.py:1230
 msgid "The event slug cannot be changed."
-msgstr ""
+msgstr "Shluk událostí nemůže byt změněn."
 
 #: pretix/base/models/event.py:1233
 msgid "This slug has already been used for a different event."
-msgstr ""
+msgstr "Shluk událostí již byl použit pro jinou akci."
 
 #: pretix/base/models/event.py:1239
 msgid "The event cannot end before it starts."
@@ -2704,7 +2696,7 @@ msgstr "Data v sérii událostí"
 
 #: pretix/base/models/event.py:1479
 msgid "One or more variations do not belong to this event."
-msgstr ""
+msgstr "Jedna nebo více variant nepatří k této akci."
 
 #: pretix/base/models/event.py:1509 pretix/base/models/items.py:1731
 msgid "Can not contain spaces or special characters except underscores"
@@ -2715,70 +2707,72 @@ msgid "The property name may only contain letters, numbers and underscores."
 msgstr "Název vlastnosti může obsahovat pouze písmena, čísla a podtržítka."
 
 #: pretix/base/models/event.py:1519
-#, fuzzy
-#| msgid "Default list"
 msgid "Default value"
-msgstr "Výchozí seznam"
+msgstr "Výchozí hodnota"
 
 #: pretix/base/models/event.py:1521
 msgid "Can only be changed by organizer-level administrators"
-msgstr ""
+msgstr "Může být změněno pouze organizačními administrátory"
 
 #: pretix/base/models/event.py:1523
-#, fuzzy
-#| msgid "External refund of payment"
 msgid "Required for events"
-msgstr "Externí vrácení platby"
+msgstr "Povinné pro akce"
 
 #: pretix/base/models/event.py:1524
 msgid ""
 "If checked, an event can only be taken live if the property is set. In event "
 "series, its always optional to set a value for individual dates"
 msgstr ""
+"Pokud je tato možnost zaškrtnuta, událost může být zobrazena pouze v "
+"případě, že je tato vlastnost nastavena. V vícedenních událostech je "
+"nastavení hodnoty pro jednotlivá data vždy volitelné"
 
 #: pretix/base/models/event.py:1529
 msgid "Valid values"
-msgstr ""
+msgstr "Platné hodnoty"
 
 #: pretix/base/models/event.py:1530
 msgid ""
 "If you keep this empty, any value is allowed. Otherwise, enter one possible "
 "value per line."
 msgstr ""
+"Pokud necháte tuto hodnotu prázdnou, je povolena jakákoli hodnota. V opačném "
+"případě zadejte jednu možnou hodnotu na řádek."
 
 #: pretix/base/models/event.py:1536
 msgid "A property can either be required or have a default value, not both."
 msgstr ""
+"Vlastnost může být buď povinná, nebo může mít výchozí hodnotu, nikoli obojí."
 
 #: pretix/base/models/event.py:1538
 msgid "You cannot set a default value that is not a valid value."
-msgstr ""
+msgstr "Nelze nastavit výchozí hodnotu, která není platnou hodnotou."
 
 #: pretix/base/models/fields.py:33
 msgid "No value can contain the delimiter character."
-msgstr ""
+msgstr "Žádná hodnota nesmí obsahovat znak oddělovače."
 
 #: pretix/base/models/giftcards.py:79
 msgid "The gift card code may only contain letters, numbers, dots and dashes."
-msgstr ""
+msgstr "Dárková poukázka může obsahovat pouze písmena, čísla, tečky a čárky."
 
 #: pretix/base/models/giftcards.py:91
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:39
 msgctxt "giftcard"
 msgid "Special terms and conditions"
-msgstr ""
+msgstr "Speciální podmínky"
 
 #: pretix/base/models/invoices.py:179
 #, python-format
 msgctxt "invoice"
 msgid "Tax ID: %s"
-msgstr ""
+msgstr "DIČ: %s"
 
 #: pretix/base/models/invoices.py:185 pretix/base/services/invoices.py:141
 #, python-format
 msgctxt "invoice"
 msgid "VAT-ID: %s"
-msgstr ""
+msgstr "IČO: %s"
 
 #: pretix/base/models/items.py:86
 msgid "Category name"
@@ -2787,12 +2781,13 @@ msgstr "Název kategorie"
 #: pretix/base/models/items.py:89 pretix/base/models/items.py:362
 #: pretix/base/models/tax.py:140
 msgid "Internal name"
-msgstr ""
+msgstr "Interní jméno"
 
 #: pretix/base/models/items.py:90 pretix/base/models/items.py:363
 msgid ""
 "If you set this, this will be used instead of the public name in the backend."
 msgstr ""
+"Pokud tuto hodnotu nastavíte, bude v backendu použita místo veřejného jména."
 
 #: pretix/base/models/items.py:94
 msgid "Category description"
@@ -2832,7 +2827,7 @@ msgstr "{category} (doplňkové produkty)"
 
 #: pretix/base/models/items.py:166 pretix/base/models/items.py:222
 msgid "Disable product for this date"
-msgstr ""
+msgstr "Deaktivovat produkt pro toto datum"
 
 #: pretix/base/models/items.py:168 pretix/base/models/items.py:224
 #: pretix/base/models/items.py:427 pretix/base/models/items.py:828
@@ -2929,11 +2924,11 @@ msgstr "Zda nákup tohoto produktu umožní osobě vstoupit na vaši událost"
 
 #: pretix/base/models/items.py:405
 msgid "Generate tickets"
-msgstr ""
+msgstr "Vygenerovat lístky"
 
 #: pretix/base/models/items.py:409
 msgid "Show a waiting list for this ticket"
-msgstr ""
+msgstr "Zobrazit čekací listinu pro tento lístek"
 
 #: pretix/base/models/items.py:410
 msgid "This will only work if waiting lists are enabled for this event."
