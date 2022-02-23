@@ -627,7 +627,9 @@ class ItemUpdateForm(I18nModelForm):
                 'class': 'scrolling-multiple-choice'
             }),
             'generate_tickets': TicketNullBooleanSelect(),
-            'show_quota_left': ShowQuotaNullBooleanSelect()
+            'show_quota_left': ShowQuotaNullBooleanSelect(),
+            'max_per_order': forms.widgets.NumberInput(attrs={'min': 0}),
+            'min_per_order': forms.widgets.NumberInput(attrs={'min': 0}),
         }
 
 
