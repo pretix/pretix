@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-02-14 14:39+0000\n"
-"PO-Revision-Date: 2022-02-23 08:53+0000\n"
+"PO-Revision-Date: 2022-02-23 09:13+0000\n"
 "Last-Translator: Ismael Menéndez Fernández <ismael.menendez@balidea.com>\n"
 "Language-Team: Galician <https://translate.pretix.eu/projects/pretix/pretix/"
 "gl/>\n"
@@ -4920,13 +4920,12 @@ msgid "Please select a specific variation of this product."
 msgstr "Por favor, seleccione una variación específica de este producto."
 
 #: pretix/base/models/waitinglist.py:249
-#, fuzzy
 msgid ""
 "You are already on this waiting list! We will notify you as soon as we have "
 "a ticket available for you."
 msgstr ""
-"Usted ya está en esta lista de espera! Le notificaremos tan pronto como "
-"tengamos un ticket disponible para usted."
+"Xa está na listaxe de agarda! Avisarémolo en canto teñamos un billete "
+"dispoñible para vostede."
 
 #: pretix/base/notifications.py:192 pretix/control/navigation.py:137
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:20
@@ -7863,9 +7862,8 @@ msgid "Show variations of a product expanded by default"
 msgstr "Mostrar variaciones de un producto expandido por defecto"
 
 #: pretix/base/settings.py:1082
-#, fuzzy
 msgid "Enable waiting list"
-msgstr "Habilitar lista de espera"
+msgstr "Habilitar listaxe de agarda"
 
 #: pretix/base/settings.py:1083 pretix/control/forms/event.py:1335
 #, fuzzy
@@ -7903,9 +7901,8 @@ msgstr ""
 "automáticamente."
 
 #: pretix/base/settings.py:1111
-#, fuzzy
 msgid "Waiting list response time"
-msgstr "Tiempo de respuesta de la lista de espera"
+msgstr "Tempo de resposta da listaxe de agarda"
 
 #: pretix/base/settings.py:1114
 msgid ""
@@ -7923,9 +7920,8 @@ msgid "Ask for a name"
 msgstr "Solicitar los nombres de los asistentes"
 
 #: pretix/base/settings.py:1126
-#, fuzzy
 msgid "Ask for a name when signing up to the waiting list."
-msgstr "Se ha modificado una entrada en la lista de espera."
+msgstr "Modificouse unha entrada na listaxe de agarda."
 
 #: pretix/base/settings.py:1135
 #, fuzzy
@@ -9538,13 +9534,12 @@ msgstr ""
 "asistentes, así como los contenidos de correo electrónico registrados."
 
 #: pretix/base/shredder.py:242
-#, fuzzy
 msgid ""
 "This will remove all names, email addresses, and phone numbers from the "
 "waiting list."
 msgstr ""
-"Esto eliminará todas las direcciones de correo electrónico de la lista de "
-"espera."
+"Isto eliminará todos os enderezos de coreo e números de teléfono da listaxe "
+"de agarda."
 
 #: pretix/base/shredder.py:275
 #, fuzzy
@@ -15763,9 +15758,8 @@ msgid "Payment reminder"
 msgstr "Recordatorio de pago"
 
 #: pretix/control/templates/pretixcontrol/event/mail.html:108
-#, fuzzy
 msgid "Waiting list notification"
-msgstr "Notificación de lista de espera"
+msgstr "Notificación da listaxe de agarda"
 
 #: pretix/control/templates/pretixcontrol/event/mail.html:114
 #, fuzzy
@@ -21460,13 +21454,13 @@ msgid "Delete entry"
 msgstr "Borrar entrada"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/delete.html:9
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Are you sure you want to delete the following waiting list entry <strong>"
 "%(entry)s</strong>?"
 msgstr ""
-"¿Está seguro de que desea eliminar la siguiente entrada de la lista de "
-"espera <strong>%(entry)s</strong>?"
+"Está seguro de que desexa eliminar a seguinte entrada da listaxe de agarda "
+"<strong>%(entry)s</strong>?"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/delete_bulk.html:4
 #: pretix/control/templates/pretixcontrol/waitinglist/delete_bulk.html:6
@@ -22290,9 +22284,8 @@ msgid "Exit scans"
 msgstr "Primer escaneado: %(date)s"
 
 #: pretix/control/views/item.py:923
-#, fuzzy
 msgid "Vouchers and waiting list reservations"
-msgstr "Reservas de vales y listas de espera"
+msgstr "Reservas de vales e listaxes de agarda"
 
 #: pretix/control/views/item.py:938
 #, fuzzy
@@ -22300,9 +22293,8 @@ msgid "Available quota"
 msgstr "Cuota disponible"
 
 #: pretix/control/views/item.py:944
-#, fuzzy
 msgid "Waiting list (pending)"
-msgstr "Lista de espera (pendiente)"
+msgstr "Listaxe de agarda (pendente)"
 
 #: pretix/control/views/item.py:951
 #, fuzzy
@@ -23409,9 +23401,8 @@ msgstr ""
 #: pretix/control/views/waitinglist.py:179
 #: pretix/control/views/waitinglist.py:192
 #: pretix/control/views/waitinglist.py:205
-#, fuzzy
 msgid "Waiting list entry not found."
-msgstr "Entrada en lista de espera no encontrada."
+msgstr "Entrada na listaxe de agarda non atopada."
 
 #: pretix/control/views/waitinglist.py:189
 #, fuzzy
@@ -27900,9 +27891,8 @@ msgid ""
 msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/index.html:262
-#, fuzzy
 msgid "Join waiting list"
-msgstr "Habilitar lista de espera"
+msgstr "Habilitar listaxe de agarda"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:278
 #: pretix/presale/templates/pretixpresale/event/voucher.html:365
@@ -28562,16 +28552,15 @@ msgid "Add me to the waiting list"
 msgstr "Agregarme á listaxe de agarda"
 
 #: pretix/presale/templates/pretixpresale/event/waitinglist.html:22
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "If tickets become available again, we will inform the first persons on the "
 "waiting list. If we notify you, you'll have %(hours)s hours time to buy a "
 "ticket until we assign it to the next person on the list."
 msgstr ""
-"Si las entradas vuelven a estar disponibles, informaremos a las primeras "
-"personas en la lista de espera. Si le notificamos, tendrá %(hours)s de "
-"tiempo para comprar un ticket hasta que se lo asignemos a la siguiente "
-"persona en la lista."
+"Se as entradas volven estar dispoñibles, informaremos ás primeiras persoas "
+"na listaxe de agarda. Se recibe unha notificación, terá %(hours)s de tempo "
+"para mercar un billete ata que llo asignemos á seguinte persoa na listaxe."
 
 #: pretix/presale/templates/pretixpresale/event/waitinglist.html:27
 msgid ""
