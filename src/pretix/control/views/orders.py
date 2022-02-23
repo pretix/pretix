@@ -2215,12 +2215,10 @@ class OrderGo(EventPermissionRequiredMixin, View):
             return redirect('control:event.order', event=request.event.slug, organizer=request.event.organizer.slug,
                             code=order.code)
         except Order.DoesNotExist:
-            try:
-                i = self.request.event.invoices.get(Q(invoice_no=code) | Q(full_invoice_no=code))
+            i = self.request.event.invoices.filter(Q(invoice_no=code) | Q(full_invoice_no=code)).first()
+            if i:
                 return redirect('control:event.order', event=request.event.slug, organizer=request.event.organizer.slug,
                                 code=i.order.code)
-            except Invoice.DoesNotExist:
-                pass
 
             messages.error(request, _('There is no order with the given order code.'))
             return redirect('control:event.orders', event=request.event.slug, organizer=request.event.organizer.slug)
