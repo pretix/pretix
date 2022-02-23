@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-02-14 14:39+0000\n"
-"PO-Revision-Date: 2022-02-23 09:13+0000\n"
+"PO-Revision-Date: 2022-02-23 22:00+0000\n"
 "Last-Translator: Ismael Menéndez Fernández <ismael.menendez@balidea.com>\n"
 "Language-Team: Galician <https://translate.pretix.eu/projects/pretix/pretix/"
 "gl/>\n"
@@ -1870,14 +1870,12 @@ msgid "Repeat password"
 msgstr "Repetir contraseña"
 
 #: pretix/base/forms/questions.py:196
-#, fuzzy
 msgid "Please do not use special characters in names."
-msgstr "Ingrese su nombre."
+msgstr "Por favor, non utilice caracteres especiais nos nomes."
 
 #: pretix/base/forms/questions.py:255
-#, fuzzy
 msgid "Please enter a shorter name."
-msgstr "Ingrese su nombre."
+msgstr "Por favor, introduza un nome máis curto"
 
 #: pretix/base/forms/questions.py:275
 #, fuzzy
@@ -1952,14 +1950,12 @@ msgid ""
 msgstr ""
 
 #: pretix/base/forms/questions.py:1056
-#, fuzzy
 msgid "You need to provide a company name."
-msgstr "Debe proveer el nombre de una compañía."
+msgstr "Debe figurar o nome dunha compañía"
 
 #: pretix/base/forms/questions.py:1058
-#, fuzzy
 msgid "You need to provide your name."
-msgstr "Debe especificar su nombre."
+msgstr "Debe especificar o seu nome"
 
 #: pretix/base/forms/user.py:51 pretix/control/forms/users.py:43
 #, fuzzy
@@ -2022,9 +2018,8 @@ msgstr ""
 "las vistas de eventos, se utiliza la zona horaria de eventos."
 
 #: pretix/base/forms/user.py:175
-#, fuzzy
 msgid "Device name"
-msgstr "Nombre del dispositivo"
+msgstr "Nombre do dispositivo"
 
 #: pretix/base/forms/user.py:176
 #, fuzzy
@@ -2302,9 +2297,8 @@ msgstr "Lista predeterminada"
 #: pretix/base/models/orders.py:2625 pretix/base/settings.py:2858
 #: pretix/base/settings.py:2869
 #: pretix/control/templates/pretixcontrol/users/index.html:47
-#, fuzzy
 msgid "Full name"
-msgstr "Nombre completo"
+msgstr "Nome completo"
 
 #: pretix/base/models/auth.py:130
 #, fuzzy
@@ -2844,10 +2838,8 @@ msgstr ""
 "No puede tener caracteres espacios o caracteres especiales excepto guión bajo"
 
 #: pretix/base/models/event.py:1514 pretix/base/models/items.py:1736
-#, fuzzy
 msgid "The property name may only contain letters, numbers and underscores."
-msgstr ""
-"El nombre de la propiedad puede solo contener letras, números y guión bajo."
+msgstr "O nome da propiedade só pode conter letras, números e guións baixos."
 
 #: pretix/base/models/event.py:1519
 #, fuzzy
@@ -2922,23 +2914,20 @@ msgid "VAT-ID: %s"
 msgstr "IVA-ID: %s"
 
 #: pretix/base/models/items.py:86
-#, fuzzy
 msgid "Category name"
-msgstr "Nombre de la categoría"
+msgstr "Nome da categoría"
 
 #: pretix/base/models/items.py:89 pretix/base/models/items.py:362
 #: pretix/base/models/tax.py:140
-#, fuzzy
 msgid "Internal name"
-msgstr "Nombre interno"
+msgstr "Nome interno"
 
 #: pretix/base/models/items.py:90 pretix/base/models/items.py:363
-#, fuzzy
 msgid ""
 "If you set this, this will be used instead of the public name in the backend."
 msgstr ""
-"Si configura esta opción, se utilizará en lugar del nombre público en el "
-"módulo de servicio."
+"Se configura esta opción, utilizarase no canto do nome público no módulo de "
+"servizo."
 
 #: pretix/base/models/items.py:94
 #, fuzzy
@@ -3035,14 +3024,12 @@ msgstr ""
 "para mantenerlos organizados."
 
 #: pretix/base/models/items.py:359
-#, fuzzy
 msgid "Item name"
-msgstr "Nombre del artículo"
+msgstr "Nome do artigo"
 
 #: pretix/base/models/items.py:372
-#, fuzzy
 msgid "This is shown below the product name in lists."
-msgstr "Esto es mostrado debajo del nombre del producto en listas."
+msgstr "Amósase debaixo do nome do produto nas listaxes."
 
 #: pretix/base/models/items.py:376 pretix/base/models/items.py:796
 #, fuzzy
@@ -4360,9 +4347,8 @@ msgstr "Organizadores"
 
 #: pretix/base/models/organizer.py:256
 #: pretix/control/templates/pretixcontrol/organizers/teams.html:35
-#, fuzzy
 msgid "Team name"
-msgstr "Nombre del equipo"
+msgstr "Nome do equipo"
 
 #: pretix/base/models/organizer.py:257
 #: pretix/control/templates/pretixcontrol/organizers/team_members.html:13
@@ -4493,7 +4479,7 @@ msgstr "Asiento {number}"
 
 #: pretix/base/models/tax.py:145
 msgid "Official name"
-msgstr ""
+msgstr "Nome oficial"
 
 #: pretix/base/models/tax.py:146
 #, fuzzy
@@ -4561,9 +4547,9 @@ msgid "incl. {rate}% {name}"
 msgstr "incl. {rate}% {name}"
 
 #: pretix/base/models/tax.py:216
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "plus {rate}% {name}"
-msgstr "más {rate}% {name}"
+msgstr "máis {rate}% {name}"
 
 #: pretix/base/models/tax.py:218
 #: pretix/control/templates/pretixcontrol/event/tax_index.html:46
@@ -5406,9 +5392,8 @@ msgstr ""
 "pagada en el backend después de que haya sido creada."
 
 #: pretix/base/payment.py:1004 pretix/plugins/banktransfer/payment.py:144
-#, fuzzy
 msgid "Payment method name"
-msgstr "Nombre del método de pago"
+msgstr "Nome do método de pagamento"
 
 #: pretix/base/payment.py:1008
 #, fuzzy
@@ -5585,9 +5570,8 @@ msgid "Sample product"
 msgstr "Producto de muestra"
 
 #: pretix/base/pdf.py:113
-#, fuzzy
 msgid "Variation name"
-msgstr "Nombre de la variación"
+msgstr "Nome da variación"
 
 #: pretix/base/pdf.py:114
 #, fuzzy
@@ -5606,9 +5590,8 @@ msgid "Sample product description"
 msgstr "Descripción de ejemplo del producto"
 
 #: pretix/base/pdf.py:123
-#, fuzzy
 msgid "Product name and variation"
-msgstr "Nombre del producto y variación"
+msgstr "Nome do produto e variación"
 
 #: pretix/base/pdf.py:124
 #, fuzzy
@@ -5699,9 +5682,8 @@ msgid "Attendee country"
 msgstr "Correo electrónico del participante"
 
 #: pretix/base/pdf.py:207 pretix/base/pdf.py:212
-#, fuzzy
 msgid "Sample event name"
-msgstr "Nombre de evento de ejemplo"
+msgstr "Nome do evento de exemplo"
 
 #: pretix/base/pdf.py:217
 #, fuzzy
@@ -5862,9 +5844,8 @@ msgstr ""
 #: pretix/base/pdf.py:349 pretix/control/forms/filter.py:1166
 #: pretix/control/forms/filter.py:1168
 #: pretix/control/templates/pretixcontrol/organizers/index.html:42
-#, fuzzy
 msgid "Organizer name"
-msgstr "Nombre del organizador"
+msgstr "Nome do organizador"
 
 #: pretix/base/pdf.py:350
 #, fuzzy
@@ -5902,9 +5883,8 @@ msgid "Printing time"
 msgstr "Hora de impresión"
 
 #: pretix/base/pdf.py:388
-#, fuzzy
 msgid "Seat: Full name"
-msgstr "Nombre completo"
+msgstr "Nome completo"
 
 #: pretix/base/pdf.py:389
 #, fuzzy
@@ -5959,12 +5939,12 @@ msgstr "<Respuesta: {question}>"
 #: pretix/plugins/ticketoutputpdf/exporters.py:94
 #, python-brace-format
 msgid "Attendee name: {part}"
-msgstr "Nome: {part}"
+msgstr "Nome do asistente: {part}"
 
 #: pretix/base/pdf.py:538
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Invoice address name: {part}"
-msgstr "Nombre para dirección de facturación: {part}"
+msgstr "Nome para o enderezo de facturación: {part}"
 
 #: pretix/base/pdf.py:772
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html:66
@@ -7093,20 +7073,16 @@ msgstr ""
 "que este es el precio que hay que pagar"
 
 #: pretix/base/settings.py:171
-#, fuzzy
 msgid "Ask for attendee names"
-msgstr "Solicitar los nombres de los asistentes"
+msgstr "Solicitar os nomes dos asistentes"
 
 #: pretix/base/settings.py:172
-#, fuzzy
 msgid "Ask for a name for all tickets which include admission to the event."
-msgstr ""
-"Pida un nombre para todas las entradas que incluyan la entrada al evento."
+msgstr "Pida un nome para todas as entradas que inclúan entrada ao evento."
 
 #: pretix/base/settings.py:181
-#, fuzzy
 msgid "Require attendee names"
-msgstr "Requieren nombres de participantes"
+msgstr "Require nome dos asistentes"
 
 #: pretix/base/settings.py:182
 #, fuzzy
@@ -7915,18 +7891,16 @@ msgstr ""
 "reatribuído á seguinte persoa na lista."
 
 #: pretix/base/settings.py:1125
-#, fuzzy
 msgid "Ask for a name"
-msgstr "Solicitar los nombres de los asistentes"
+msgstr "Solicitar os nomes dos asistentes"
 
 #: pretix/base/settings.py:1126
 msgid "Ask for a name when signing up to the waiting list."
 msgstr "Modificouse unha entrada na listaxe de agarda."
 
 #: pretix/base/settings.py:1135
-#, fuzzy
 msgid "Require name"
-msgstr "Se requiere el nombre del cliente"
+msgstr "Requírese nome do cliente"
 
 #: pretix/base/settings.py:1136
 #, fuzzy
@@ -8451,6 +8425,16 @@ msgid ""
 "Best regards,\n"
 "Your {event} team"
 msgstr ""
+"Ola  {attendee_name},\n"
+"\n"
+"Rexistrácheste  para {event} con éxito.\n"
+"\n"
+"Podes ver os detalles e o estado da túa entrada aquí:\n"
+"\n"
+"{url}\n"
+"\n"
+"Cordialmente,\n"
+"O equipo de {event}"
 
 #: pretix/base/settings.py:1689
 #, fuzzy, python-brace-format
@@ -8555,7 +8539,7 @@ msgid ""
 msgstr ""
 
 #: pretix/base/settings.py:1763
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "Hello {attendee_name},\n"
 "\n"
@@ -8567,15 +8551,15 @@ msgid ""
 "Best regards,\n"
 "Your {event} team"
 msgstr ""
-"Hola {attendee_name}, \n"
+"Ola  {attendee_name}, \n"
 "\n"
-"su pedido para {event} ha sido cambiado. \n"
+"O pedido para {event} cambiou. \n"
 "\n"
-"Puede ver el estado de su pedido en\n"
+"Pode ver o estado do seu pedido en\n"
 "{url} \n"
 "\n"
-"Saludos cordiales , \n"
-"su equipo {event}"
+"Saúdos cordiais, \n"
+"O equipo de {event}"
 
 #: pretix/base/settings.py:1775
 #, fuzzy, python-brace-format
@@ -8628,7 +8612,7 @@ msgstr ""
 "su equipo {event}"
 
 #: pretix/base/settings.py:1805
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "Hello {attendee_name},\n"
 "\n"
@@ -8640,15 +8624,15 @@ msgid ""
 "Best regards,\n"
 "Your {event} team"
 msgstr ""
-"Hola {attendee_name},\n"
+"Ola {attendee_name},\n"
 "\n"
-"la entrada para {event} solicitada ha sido ya pagada.\n"
+"A entrada para{event} que solicitou está xa pagada.\n"
 "\n"
-"Los detalles y el estado del pedido se pueden consultar aquí:\n"
+"Os detalles e o estado do seu pedido pódense consultar aquí:\n"
 "{url} \n"
 "\n"
-"Saludos cordiales , \n"
-"El equipo de {event}"
+"Saúdos cordiais, \n"
+"O equipo de {event}"
 
 #: pretix/base/settings.py:1822 pretix/control/forms/event.py:992
 #: pretix/control/forms/event.py:1035 pretix/plugins/sendmail/models.py:201
@@ -8722,6 +8706,27 @@ msgid ""
 "Best regards,\n"
 "Your {event} team"
 msgstr ""
+"Ola, \n"
+"\n"
+"Inscribícheste na listaxe de agarda para  {event} \n"
+"\n"
+"na modalidade de  {product}.\n"
+"\n"
+"Quedou dispoñible algunha praza. Podes conseguila durante  \n"
+"as próximas {hours} introducindo o seguinte cupón\n"
+"\n"
+"{code}\n"
+"\n"
+"Tamén podes premer na seguinte ligazón:\n"
+"\n"
+"{url}\n"
+"\n"
+"Repara en que esta ligazón só é válida dentro das seguintes  {hours}  horas!"
+"\n"
+"En caso de que non troques este cupón, reasignarémolo á seguinte persoa na "
+"listaxe de agarda.\n"
+"\n"
+"Saúdos cordiais"
 
 #: pretix/base/settings.py:1875
 #, fuzzy, python-brace-format
@@ -8852,7 +8857,7 @@ msgstr ""
 "su equipo {event}"
 
 #: pretix/base/settings.py:1949
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "Hello {attendee_name},\n"
 "\n"
@@ -8864,15 +8869,15 @@ msgid ""
 "    Best regards,\n"
 "    Your {event} team"
 msgstr ""
-"Hola {attendee_name},\n"
+"Ola {attendee_name},\n"
 "\n"
-"está registrado en {event}.\n"
+"Rexistrouse en  {event}.\n"
 "\n"
-"Si aún no lo ha hecho, puede descargar su entrada aquí :\n"
+"Se aínda non o fixo, pode descargar a súa entrada aquí:\n"
 "{url} \n"
 "\n"
-"Saludos cordiales , \n"
-"su equipo {event}"
+"Saúdos cordiais, \n"
+"O equipo de {event}"
 
 #: pretix/base/settings.py:1961
 #, fuzzy, python-brace-format
@@ -8916,6 +8921,21 @@ msgid ""
 "\n"
 "Your {organizer} team"
 msgstr ""
+"Ola {name},\n"
+"\n"
+"grazas por rexistrarse nunha conta en {organizer}!\n"
+"\n"
+"Para activar a súa conta e obter un contrasinal, prema aquí:\n"
+"\n"
+"{url}\n"
+"\n"
+"Esta ligazón é válida só durante un día.\n"
+"\n"
+"Se non se rexistrou, por favor, ignora este correo.\n"
+"\n"
+"Saúdos cordiais,\n"
+"\n"
+"O teu equipo de {organizer}"
 
 #: pretix/base/settings.py:1991
 #, python-brace-format
@@ -8936,6 +8956,22 @@ msgid ""
 "\n"
 "Your {organizer} team"
 msgstr ""
+"Ola  {name},\n"
+"\n"
+"pedicu un cambio no seu enderezo de correo electrónico da conta {organizer}!"
+"\n"
+"\n"
+"Para confrimar o cambio, por favor, prema aquí:\n"
+"\n"
+"{url}\n"
+"\n"
+"A ligazón só é válida por un día.\n"
+"\n"
+"Se non pediu isto, por favor, ignora este correo.\n"
+"\n"
+"Saúdos cordiais,\n"
+"\n"
+"O equipo de {organizer}"
 
 #: pretix/base/settings.py:2009
 #, python-brace-format
@@ -8956,6 +8992,21 @@ msgid ""
 "\n"
 "Your {organizer} team"
 msgstr ""
+"Ola {name},\n"
+"\n"
+"pediu un novo contrasinal para a súa conta en {organizer}!\n"
+"\n"
+"Para conseguir un novo contrasinal, prema aquí:\n"
+"\n"
+"{url}\n"
+"\n"
+"Esta ligazón é válida só para un día.\n"
+"\n"
+"Se non pediu un novo contrasinal, por favor, ignore este correo.\n"
+"\n"
+"Saúdos cordiais,\n"
+"\n"
+"O equipo de {organizer}"
 
 #: pretix/base/settings.py:2061 pretix/base/settings.py:2068
 #: pretix/base/settings.py:2082 pretix/base/settings.py:2090
@@ -28569,6 +28620,10 @@ msgid ""
 "email addresses. There is no guarantee that you will receive a certain "
 "number of tickets."
 msgstr ""
+"Repare en que só recibirá un só billete. Se necesitase varios, debe "
+"adherirse á listaxe de agarda varias veces con diferentes enderezos de "
+"correo electrónico. Aínda que isto non garante que recibas un número "
+"concreto de entradas."
 
 #: pretix/presale/templates/pretixpresale/event/waitinglist.html:33
 #, fuzzy
