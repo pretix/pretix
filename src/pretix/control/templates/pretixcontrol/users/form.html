@@ -38,6 +38,14 @@
                             <input name="text" value="{{ backend }}" class="form-control" disabled>
                         </div>
                     </div>
+                    {% if user.auth_backend_identifier %}
+                        <div class="form-group">
+                            <label class="col-md-3 control-label">{% trans "External identifier" %}</label>
+                            <div class="col-md-9">
+                                <input name="text" value="{{ user.auth_backend_identifier }}" class="form-control" disabled>
+                            </div>
+                        </div>
+                    {% endif %}
                     {% bootstrap_field form.email layout='control' %}
                     {% if form.new_pw %}
                         {% bootstrap_field form.new_pw layout='control' %}

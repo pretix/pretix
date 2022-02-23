@@ -44,7 +44,7 @@ from django.contrib.auth.models import (
 )
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.contenttypes.models import ContentType
-from django.db import models
+from django.db import IntegrityError, models, transaction
 from django.db.models import Q
 from django.utils.crypto import get_random_string, salted_hmac
 from django.utils.timezone import now
@@ -59,6 +59,10 @@ from pretix.base.i18n import language
 from pretix.helpers.urls import build_absolute_uri
 
 from .base import LoggingMixin
+
+
+class EmailAddressTakenError(IntegrityError):
+    pass
 
 
 class UserManager(BaseUserManager):
@@ -82,6 +86,116 @@ class UserManager(BaseUserManager):
         user.set_password(password)
         user.save()
         return user
+
+    def get_or_create_for_backend(self, backend, identifier, email, set_always, set_on_creation):
+        """
+        This method should be used by third-party authentication backends to log in a user.
+        It either returns an already existing user or creates a new user.
+
+        In pretix 4.7 and earlier, email addresses were the only property to identify a user with.
+        Starting with pretix 4.8, backends SHOULD instead use a unique, immutable identifier
+        based on their backend data store to allow for changing email addresses.
+
+        This method transparently handles the conversion of old user accounts and adds the
+        backend identifier to their database record.
+
+        This method will never return users managed by a different authentication backend.
+        If you try to create an account with an email address already blocked by a different
+        authentication backend, :py:class:`EmailAddressTakenError` will be raised. In this case,
+        you should display a message to the user.
+
+        :param backend: The `identifier` attribute of the authentication backend
+        :param identifier: The unique, immutable identifier of this user, max. 190 characters
+        :param email: The user's email address
+        :param set_always: A dictionary of fields to update on the user model on every login
+        :param set_on_creation: A dictionary of fields to set on the user model if it's newly created
+        :return: A `User` instance.
+        """
+        if identifier is None:
+            raise ValueError('You need to supply a custom, unique identifier for this user.')
+        if email is None:
+            raise ValueError('You need to supply an email address for this user.')
+        if 'auth_backend_identifier' in set_always or 'auth_backend_identifier' in set_on_creation or \
+                'auth_backend' in set_always or 'auth_backend' in set_on_creation:
+            raise ValueError('You may not update auth_backend/auth_backend_identifier.')
+        if len(identifier) > 190:
+            raise ValueError('The user identifier must not be more than 190 characters.')
+
+        # Always update the email address
+        set_always.update({'email': email})
+
+        # First, check if we find the user based on it's backend-specific authenticator
+        try:
+            u = self.get(
+                auth_backend=backend,
+                auth_backend_identifier=identifier,
+            )
+            dirty = False
+            for k, v in set_always.items():
+                if getattr(u, k) != v:
+                    setattr(u, k, v)
+                    dirty = True
+            if dirty:
+                try:
+                    with transaction.atomic():
+                        u.save(update_fields=set_always.keys())
+                except IntegrityError:
+                    # This might only raise IntegrityError if the email address is used
+                    # by someone else
+                    raise EmailAddressTakenError()
+            return u
+        except self.model.DoesNotExist:
+            pass
+
+        # Second, check if we find the user based on their email address and this backend
+        try:
+            u = self.get(
+                auth_backend=backend,
+                auth_backend_identifier__isnull=True,
+                email=email,
+            )
+            u.auth_backend_identifier = identifier
+            for k, v in set_always.items():
+                setattr(u, k, v)
+            try:
+                with transaction.atomic():
+                    u.save(update_fields=['auth_backend_identifier'] + list(set_always.keys()))
+                return u
+            except IntegrityError:
+                # This might only raise IntegrityError if this code is being executed twice
+                # and runs into a race condition, this mechanism is taken from Django's
+                # get_or_create
+                try:
+                    return self.get(
+                        auth_backend=backend,
+                        auth_backend_identifier=identifier,
+                    )
+                except self.model.DoesNotExist:
+                    pass
+                raise
+        except self.model.DoesNotExist:
+            pass
+
+        # Third, create a new user
+        u = User(
+            auth_backend=backend,
+            auth_backend_identifier=identifier,
+            **set_on_creation,
+            **set_always,
+        )
+        try:
+            u.save(force_insert=True)
+            return u
+        except IntegrityError:
+            # This might either be a race condition or the email address is taken
+            # by a different backend
+            try:
+                return self.get(
+                    auth_backend=backend,
+                    auth_backend_identifier=identifier,
+                )
+            except self.model.DoesNotExist:
+                raise EmailAddressTakenError()
 
 
 def generate_notifications_token():
@@ -117,6 +231,10 @@ class User(AbstractBaseUser, PermissionsMixin, LoggingMixin):
     :type needs_password_change: bool
     :param timezone: The user's preferred timezone.
     :type timezone: str
+    :param auth_backend: The identifier of the authentication backend plugin responsible for managing this user.
+    :type auth_backend: str
+    :param auth_backend_identifier: The native identifier of the user provided by a non-native authentication backend.
+    :type auth_backend_identifier: str
     """
 
     USERNAME_FIELD = 'email'
@@ -152,6 +270,7 @@ class User(AbstractBaseUser, PermissionsMixin, LoggingMixin):
     )
     notifications_token = models.CharField(max_length=255, default=generate_notifications_token)
     auth_backend = models.CharField(max_length=255, default='native')
+    auth_backend_identifier = models.CharField(max_length=190, db_index=True, null=True, blank=True)
     session_token = models.CharField(max_length=32, default=generate_session_token)
 
     objects = UserManager()
@@ -164,6 +283,7 @@ class User(AbstractBaseUser, PermissionsMixin, LoggingMixin):
         verbose_name = _("User")
         verbose_name_plural = _("Users")
         ordering = ('email',)
+        unique_together = (('auth_backend', 'auth_backend_identifier'),)
 
     def save(self, *args, **kwargs):
         self.email = self.email.lower()
