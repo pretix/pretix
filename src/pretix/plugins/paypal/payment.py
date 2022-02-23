@@ -730,7 +730,7 @@ class PaypalMethod(BasePaymentProvider):
 
     def payment_control_render(self, request: HttpRequest, payment: OrderPayment):
         # Legacy PayPal info-data
-        if 'intent' in payment.info_data:
+        if 'purchase_units' not in payment.info_data:
             template = get_template('pretixplugins/paypal/control_legacy.html')
             sale_id = None
             for trans in payment.info_data.get('transactions', []):
@@ -748,7 +748,7 @@ class PaypalMethod(BasePaymentProvider):
 
     def payment_control_render_short(self, payment: OrderPayment) -> str:
         # Legacy PayPal info-data
-        if 'intent' in payment.info_data:
+        if 'purchase_units' not in payment.info_data:
             return payment.info_data.get('payer', {}).get('payer_info', {}).get('email', '')
         else:
             return '{} / {}'.format(
@@ -772,7 +772,7 @@ class PaypalMethod(BasePaymentProvider):
         try:
             pp_payment = None
             # Legacy PayPal - migrate the payment info_data first
-            if "intent" in refund.payment.info_data:
+            if "purchase_units" not in refund.payment.info_data:
                 req = OrdersGetRequest(refund.payment.info_data['cart'])
                 response = self.client.execute(req)
                 refund.payment.info = json.dumps(response.result.dict())
