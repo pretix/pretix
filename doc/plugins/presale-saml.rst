@@ -207,7 +207,7 @@ On this page, the actual authentication can be configured.
 
     An Attribute RegEx of ``{}`` will allow any authenticated user to pass.
 
-    A RegEx of ``{ "affiliation": "(employee@pretix.eu|staff@pretix.eu)" }`` will
+    A RegEx of ``{ "affiliation": "^(employee@pretix.eu|staff@pretix.eu)$" }`` will
     only allow user to pass which have the ``affiliation`` attribute and whose
     attribute either matches ``employee@pretix.eu`` or ``staff@pretix.eu``.
 
