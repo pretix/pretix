@@ -160,7 +160,7 @@ setup(
     install_requires=[
         'arabic-reshaper==2.1.3',  # Support for Arabic in reportlab
         'babel',
-        'BeautifulSoup4==4.8.*',
+        'BeautifulSoup4==4.10.*',
         'bleach==4.1.*',
         'celery==4.4.*',
         'chardet==4.0.*',
@@ -190,7 +190,7 @@ setup(
         'django-scopes==1.2.*',
         'django-statici18n==2.1.*',
         'djangorestframework==3.13.*',
-        'dnspython<2.0',  # do not upgrade, causes issues with eventlet / gunicorn 19 and we cannot upgrade gunicorn right now
+        'dnspython<3.0',  # do not upgrade, causes issues with eventlet / gunicorn 19 and we cannot upgrade gunicorn right now
         'drf_ujson2==1.6.*',
         'isoweek',
         'jsonschema',
@@ -218,7 +218,7 @@ setup(
         'pyuca',
         'redis==3.5.*',
         'reportlab==3.6.*',
-        'requests==2.26.*',
+        'requests==2.27.*',
         'sentry-sdk==1.5.*',
         'sepaxml==2.4.*,>=2.4.1',
         'slimit',
