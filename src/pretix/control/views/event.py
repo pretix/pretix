@@ -332,11 +332,19 @@ class EventPlugins(EventSettingsViewMixin, EventPermissionRequiredMixin, Templat
             (c, labels.get(c, c), list(plist))
             for c, plist
             in groupby(
-                sorted(plugins, key=lambda p: str(getattr(p, 'category', _('Other')))),
+                sorted(
+                    plugins,
+                    key=lambda p: (
+                        str(getattr(p, 'category', _('Other'))),
+                        (0 if getattr(p, 'featured', False) else 1),
+                        str(p.name).lower().replace('pretix ', '')
+                    ),
+                ),
                 lambda p: str(getattr(p, 'category', _('Other')))
             )
         ], key=lambda c: (order.index(c[0]), c[1]) if c[0] in order else (999, str(c[1])))
         context['plugins_active'] = self.object.get_plugins()
+        context['show_meta'] = settings.PRETIX_PLUGINS_SHOW_META
         return context
 
     def get(self, request, *args, **kwargs):

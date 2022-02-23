@@ -1,8 +1,15 @@
 {% extends "pretixcontrol/event/settings_base.html" %}
 {% load i18n %}
+{% load static %}
 {% load bootstrap3 %}
 {% block inside %}
-    <h1>{% trans "Installed plugins" %}</h1>
+    <h1>{% trans "Available plugins" %}</h1>
+    <p>
+        {% blocktrans trimmed %}
+            On this page, you can choose plugins you want to enable for your event. Plugins might bring additional
+            software functionality, connect your event to third-party services, or apply other forms of customizations.
+        {% endblocktrans %}
+    </p>
     <form action="" method="post" class="form-horizontal form-plugins">
         {% csrf_token %}
         {% if "success" in request.GET %}
@@ -14,66 +21,98 @@
             {% for cat, catlabel, plist in plugins %}
                 <fieldset>
                     <legend>{{ catlabel }}</legend>
-                    <div class="table-responsive">
+                    <div class="row">
+                        {% for plugin in plist %}
+                            {% if plugin.featured %}
+                                <div class="col-sm-12 col-lg-6">
+                                    <div class="panel panel-default">
+                                        <div class="panel-body featured-plugin">
+                                            {% if plugin.picture %}
+                                                <div class="col-sm-12 col-md-4 featured-plugin-picture">
+                                                    <img src="{% static plugin.picture %}"
+                                                         class="plugin-picture-large">
+                                                </div>
+                                            {% endif %}
+                                            <div class="col-sm-12 featured-plugin-text">
+                                                <h4>
+                                                    {{ plugin.name }}
+                                                    {% if plugin.module in plugins_active %}
+                                                        <span class="label label-success">
+                                                        <span class="fa fa-check" aria-hidden="true"></span>
+                                                            {% trans "Active" %}
+                                                        </span>
+                                                    {% endif %}
+                                                </h4>
+                                                {% include "pretixcontrol/event/fragment_plugin_description.html" with plugin=plugin %}
+                                            </div>
+                                            {% if plugin.app.compatibility_errors %}
+                                                <div class="featured-plugin-action text-center">
+                                                    <em>{% trans "Incompatible" %}</em>
+                                                </div>
+                                            {% elif plugin.restricted and plugin.module not in request.event.settings.allowed_restricted_plugins %}
+                                                <div class="featured-plugin-action text-center">
+                                                    <em>{% trans "Not available" %}</em>
+                                                </div>
+                                            {% elif plugin.module in plugins_active %}
+                                                <div class="featured-plugin-action text-right flip">
+                                                    <button class="btn btn-default btn-lg" name="plugin:{{ plugin.module }}"
+                                                            value="disable">{% trans "Disable" %}</button>
+                                                </div>
+                                            {% else %}
+                                                <div class="featured-plugin-action text-right flip">
+                                                    <button class="btn btn-primary btn-lg" name="plugin:{{ plugin.module }}"
+                                                            value="enable">{% trans "Enable" %}</button>
+                                                </div>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                    <div class="table-responsive table-plugins">
                         <table class="table">
                             {% for plugin in plist %}
-                                <tr class="{% if plugin.app.compatibility_errors %}warning{% elif plugin.module in plugins_active %}success{% else %}default{% endif %}">
-                                    <td>
-                                        <strong>{{ plugin.name }}</strong>
-                                        {% if plugin.author %}
-                                            <p class="meta text-muted">
-                                                {% blocktrans trimmed with v=plugin.version a=plugin.author %}
-                                                    Version {{ v }} by <em>{{ a }}</em>
-                                                {% endblocktrans %}</p>
-                                        {% else %}
-                                            <p class="meta text-muted">
-                                                {% blocktrans trimmed with v=plugin.version a=plugin.author %}
-                                                    Version {{ v }}
-                                                {% endblocktrans %}</p>
-                                        {% endif %}
-                                        <p>{{ plugin.description }}</p>
-                                        {% if plugin.restricted and plugin.module not in request.event.settings.allowed_restricted_plugins %}
-                                            <span class="text-muted">
-                                                {% trans "This plugin needs to be enabled by a system administrator for your account." %}
-                                            </span>
-                                        {% endif %}
+                                {% if not plugin.featured %}
+                                    <tr class="{% if plugin.app.compatibility_errors %}warning{% else %}default{% endif %}">
+                                        <td {% if plugin.picture %}class="picture-column"{% endif %}>
+                                            {% if plugin.picture %}
+                                                <img src="{% static plugin.picture %}" class="plugin-picture-small">
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            <h4>
+                                                {{ plugin.name }}
+                                                {% if plugin.module in plugins_active %}
+                                                    <span class="label label-success">
+                                                    <span class="fa fa-check" aria-hidden="true"></span>
+                                                        {% trans "Active" %}
+                                                    </span>
+                                                {% endif %}
+                                            </h4>
+                                            {% include "pretixcontrol/event/fragment_plugin_description.html" with plugin=plugin %}
+                                        </td>
                                         {% if plugin.app.compatibility_errors %}
-                                            <div class="alert alert-warning">
-                                                {% trans "This plugin cannot be enabled for the following reasons:" %}
-                                                <ul>
-                                                    {% for e in plugin.app.compatibility_errors %}
-                                                        <li>{{ e }}</li>
-                                                    {% endfor %}
-                                                </ul>
-                                            </div>
-                                        {% endif %}
-                                        {% if plugin.app.compatibility_warnings %}
-                                            <div class="alert alert-warning">
-                                                {% trans "This plugin reports the following problems:" %}
-                                                <ul>
-                                                    {% for e in plugin.app.compatibility_warnings %}
-                                                        <li>{{ e }}</li>
-                                                    {% endfor %}
-                                                </ul>
-                                            </div>
-                                        {% endif %}
-                                    </td>
-                                    <td class="text-right flip" width="20%">
-                                        {% if plugin.app.compatibility_errors %}
-                                            <button class="btn disabled btn-block btn-default"
-                                                    disabled="disabled">{% trans "Incompatible" %}</button>
-                                            {% elif plugin.restricted and plugin.module not in request.event.settings.allowed_restricted_plugins %}
-                                            <button class="btn disabled btn-block btn-default"
-                                                    disabled="disabled">{% trans "Not available" %}</button>
-                                            {% elif plugin.module in plugins_active %}
-                                            <button class="btn btn-default btn-block" name="plugin:{{ plugin.module }}"
-                                                    value="disable">{% trans "Disable" %}</button>
+                                            <td class="text-center" width="20%">
+                                                <em>{% trans "Incompatible" %}</em>
+                                            </td>
+                                        {% elif plugin.restricted and plugin.module not in request.event.settings.allowed_restricted_plugins %}
+                                            <td class="text-center" width="20%">
+                                                <em>{% trans "Not available" %}</em>
+                                            </td>
+                                        {% elif plugin.module in plugins_active %}
+                                            <td class="text-right flip" width="20%">
+                                                <button class="btn btn-default btn-lg" name="plugin:{{ plugin.module }}"
+                                                        value="disable">{% trans "Disable" %}</button>
+                                            </td>
                                         {% else %}
-                                            <button class="btn btn-default btn-block" name="plugin:{{ plugin.module }}"
-                                                    value="enable">{% trans "Enable" %}</button>
+                                            <td class="text-right flip" width="20%">
+                                                <button class="btn btn-primary btn-lg" name="plugin:{{ plugin.module }}"
+                                                        value="enable">{% trans "Enable" %}</button>
+                                            </td>
                                         {% endif %}
-                                    </td>
-                                </tr>
+                                    </tr>
+                                {% endif %}
                             {% endfor %}
                         </table>
                     </div>

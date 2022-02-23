@@ -65,6 +65,9 @@ Example::
     A comma-separated list of plugins that are not available even though they are installed.
     Defaults to an empty string.
 
+``plugins_show_meta``
+    Whether to show authors and versions of plugins, defaults to ``off``.
+
 ``auth_backends``
     A comma-separated list of available auth backends. Defaults to ``pretix.base.auth.NativeAuthBackend``.
 

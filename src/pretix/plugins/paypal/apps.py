@@ -48,6 +48,8 @@ class PaypalApp(AppConfig):
         author = _("the pretix team")
         version = version
         category = 'PAYMENT'
+        featured = True
+        picture = 'pretixplugins/paypal/paypal_logo.svg'
         description = _("This plugin allows you to receive payments via PayPal")
 
     def ready(self):

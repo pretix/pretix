@@ -49,6 +49,8 @@ description        string               A more verbose description of what your 
 category           string               Category of a plugin. Either one of ``"FEATURE"``, ``"PAYMENT"``,
                                         ``"INTEGRATION"``, ``"CUSTOMIZATION"``, ``"FORMAT"``, or ``"API"``,
                                         or any other string.
+picture            string (optional)    Path to a picture resolvable through the static file system.
+featured           boolean (optional)   ``False`` by default, can promote a plugin if it's something many users will want, use carefully.
 visible            boolean (optional)   ``True`` by default, can hide a plugin so it cannot be normally activated.
 restricted         boolean (optional)   ``False`` by default, restricts a plugin such that it can only be enabled
                                         for an event by system administrators / superusers.
@@ -74,8 +76,10 @@ A working example would be:
             name = _("PayPal")
             author = _("the pretix team")
             version = '1.0.0'
-            category = 'PAYMENT
+            category = 'PAYMENT'
+            picture = 'pretix_paypal/paypal_logo.svg'
             visible = True
+            featured = False
             restricted = False
             description = _("This plugin allows you to receive payments via PayPal")
             compatibility = "pretix>=2.7.0"

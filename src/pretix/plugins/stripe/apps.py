@@ -35,6 +35,8 @@ class StripeApp(AppConfig):
         author = _("the pretix team")
         version = version
         category = 'PAYMENT'
+        featured = True
+        picture = 'pretixplugins/stripe/stripe_logo.svg'
         description = _("This plugin allows you to receive credit card payments " +
                         "via Stripe")
 
