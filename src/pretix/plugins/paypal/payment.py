@@ -382,12 +382,14 @@ class PaypalMethod(BasePaymentProvider):
                 env = SandboxEnvironment(
                     client_id=self.settings.get('client_id'),
                     client_secret=self.settings.get('secret'),
+                    merchant_id=None,
                     partner_id=self.BN
                 )
             else:
                 env = LiveEnvironment(
                     client_id=self.settings.get('client_id'),
                     client_secret=self.settings.get('secret'),
+                    merchant_id=None,
                     partner_id=self.BN
                 )
 
