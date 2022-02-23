@@ -27,7 +27,7 @@
                     </div>
                 </noscript>
                 <p>{% trans "Please use the button/form below to complete your payment." %}</p>
-                <div id="paypal-button-container" data-paypage="paypal_apm"></div>
+                <div id="paypal-button-container" data-paypage="paypal_apm" class="text-center"></div>
                 <input type="hidden" name="payment_paypal_{{ method }}_oid" value="{{ oid }}" id="payment_paypal_{{ method }}_oid" />
                 <input type="hidden" name="payment_paypal_{{ method }}_payer" value="" id="payment_paypal_{{ method }}_payer" />
             </form>
