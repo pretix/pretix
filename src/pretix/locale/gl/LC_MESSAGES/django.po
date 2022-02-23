@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-02-14 14:39+0000\n"
-"PO-Revision-Date: 2022-02-22 22:00+0000\n"
+"PO-Revision-Date: 2022-02-23 08:46+0000\n"
 "Last-Translator: Ismael Menéndez Fernández <ismael.menendez@balidea.com>\n"
 "Language-Team: Galician <https://translate.pretix.eu/projects/pretix/pretix/"
 "gl/>\n"
@@ -1544,9 +1544,8 @@ msgid "Blocking vouchers"
 msgstr "Vales bloqueados"
 
 #: pretix/base/exporters/orderlist.py:834 pretix/control/views/item.py:928
-#, fuzzy
 msgid "Current user's carts"
-msgstr "Carrito actual del usuario"
+msgstr "Carriño actual do usuario/a"
 
 #: pretix/base/exporters/orderlist.py:834
 #: pretix/base/exporters/waitinglist.py:41 pretix/base/shredder.py:240
@@ -1568,19 +1567,16 @@ msgstr "Carrito actual del usuario"
 #: pretix/presale/templates/pretixpresale/fragment_week_calendar.html:63
 #: pretix/presale/templates/pretixpresale/organizers/index.html:86
 #: pretix/presale/views/widget.py:363
-#, fuzzy
 msgid "Waiting list"
-msgstr "Lista de espera"
+msgstr "Listaxe de agarda"
 
 #: pretix/base/exporters/orderlist.py:834
-#, fuzzy
 msgid "Exited orders"
-msgstr "Vencimiento de la orden"
+msgstr "Vencemento do pedido"
 
 #: pretix/base/exporters/orderlist.py:834
-#, fuzzy
 msgid "Current availability"
-msgstr "Disponibilidad actual"
+msgstr "Dispoñibilidade actual"
 
 #: pretix/base/exporters/orderlist.py:851
 #: pretix/base/exporters/orderlist.py:858
@@ -1591,9 +1587,8 @@ msgid "Infinite"
 msgstr "Infinito"
 
 #: pretix/base/exporters/orderlist.py:881
-#, fuzzy
 msgid "Gift card transactions"
-msgstr "Amortizaciones de tarjetas de regalo"
+msgstr "Amortizacións de tarxetas de regalo"
 
 #: pretix/base/exporters/orderlist.py:925
 #: pretix/base/exporters/orderlist.py:969
@@ -1604,9 +1599,8 @@ msgstr "Amortizaciones de tarjetas de regalo"
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:28
 #: pretix/control/templates/pretixcontrol/organizers/giftcards.html:56
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:104
-#, fuzzy
 msgid "Gift card code"
-msgstr "Código de la tarjeta de regalo"
+msgstr "Código da tarxeta de regalo"
 
 #: pretix/base/exporters/orderlist.py:926
 #: pretix/base/exporters/orderlist.py:1008
@@ -1614,9 +1608,8 @@ msgstr "Código de la tarjeta de regalo"
 #: pretix/base/models/memberships.py:119 pretix/control/forms/filter.py:213
 #: pretix/control/forms/filter.py:1202 pretix/control/forms/filter.py:1205
 #: pretix/control/templates/pretixcontrol/event/live.html:75
-#, fuzzy
 msgid "Test mode"
-msgstr "Modo prueba"
+msgstr "Modo proba"
 
 #: pretix/base/exporters/orderlist.py:929
 #: pretix/base/exporters/orderlist.py:1065
@@ -1625,9 +1618,8 @@ msgstr "Modo prueba"
 #: pretix/plugins/banktransfer/refund_export.py:46
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/control.html:15
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:57
-#, fuzzy
 msgid "Currency"
-msgstr "Moneda"
+msgstr "Moeda"
 
 #: pretix/base/exporters/orderlist.py:937 pretix/base/invoice.py:435
 #: pretix/control/templates/pretixcontrol/base.html:278
@@ -1652,14 +1644,12 @@ msgstr "Moneda"
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:59
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:83
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:136
-#, fuzzy
 msgid "TEST MODE"
-msgstr "MODO DE PRUEBA"
+msgstr "MODO DE PROBA"
 
 #: pretix/base/exporters/orderlist.py:952
-#, fuzzy
 msgid "Gift card redemptions"
-msgstr "Amortizaciones de tarjetas de regalo"
+msgstr "Amortizacións de tarxetas de regalo"
 
 #: pretix/base/exporters/orderlist.py:969
 #: pretix/control/templates/pretixcontrol/giftcards/payment.html:10
@@ -1669,14 +1659,12 @@ msgstr "Emisor"
 
 #: pretix/base/exporters/orderlist.py:997 pretix/control/navigation.py:515
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:81
-#, fuzzy
 msgid "Gift cards"
-msgstr "Tarjeta de regalo"
+msgstr "Tarxeta de regalo"
 
 #: pretix/base/exporters/orderlist.py:1004
-#, fuzzy
 msgid "Show value at"
-msgstr "Mostrar variantes"
+msgstr "Amosar variantes"
 
 #: pretix/base/exporters/orderlist.py:1010
 #: pretix/base/exporters/orderlist.py:1020 pretix/control/forms/filter.py:473
@@ -1702,17 +1690,16 @@ msgstr "En Vivo"
 
 #: pretix/base/exporters/orderlist.py:1021 pretix/control/forms/filter.py:1214
 #: pretix/control/templates/pretixcontrol/pdf/index.html:353
-#, fuzzy
 msgid "Empty"
-msgstr "Etiqueta vacía"
+msgstr "Etiqueta baleira"
 
 #: pretix/base/exporters/orderlist.py:1022 pretix/control/forms/filter.py:1215
 msgid "Valid and with value"
-msgstr ""
+msgstr "Válido e con valor"
 
 #: pretix/base/exporters/orderlist.py:1023 pretix/control/forms/filter.py:1216
 msgid "Expired and with value"
-msgstr ""
+msgstr "Expirado e con valor"
 
 #: pretix/base/exporters/orderlist.py:1024 pretix/control/forms/filter.py:197
 #: pretix/control/forms/filter.py:1217 pretix/control/forms/filter.py:1799
@@ -1722,62 +1709,52 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/organizers/giftcards.html:81
 #: pretix/plugins/reports/exporters.py:291
 #: pretix/presale/templates/pretixpresale/event/fragment_order_status.html:25
-#, fuzzy
 msgid "Expired"
-msgstr "expirado"
+msgstr "Expirado"
 
 #: pretix/base/exporters/orderlist.py:1061 pretix/base/models/giftcards.py:84
-#, fuzzy
 msgid "Test mode card"
-msgstr "Tarjeta de prueba"
+msgstr "Tarxeta de proba"
 
 #: pretix/base/exporters/orderlist.py:1063 pretix/base/models/giftcards.py:88
 #: pretix/control/templates/pretixcontrol/order/index.html:192
 #: pretix/control/templates/pretixcontrol/organizers/giftcards.html:62
-#, fuzzy
 msgid "Expiry date"
-msgstr "Fecha de caducidad"
+msgstr "Data de caducidade"
 
 #: pretix/base/exporters/orderlist.py:1064 pretix/control/forms/orders.py:774
-#, fuzzy
 msgid "Special terms and conditions"
-msgstr "Términos y condiciones especiales"
+msgstr "Termos e condicións especiais"
 
 #: pretix/base/exporters/orderlist.py:1066
 #: pretix/control/templates/pretixcontrol/order/change.html:94
 #: pretix/control/templates/pretixcontrol/order/change.html:322
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:32
 #: pretix/control/templates/pretixcontrol/organizers/giftcards.html:65
-#, fuzzy
 msgid "Current value"
-msgstr "Temas de actualidad"
+msgstr "Valor actual"
 
 #: pretix/base/exporters/orderlist.py:1067
-#, fuzzy
 msgid "Created in order"
-msgstr "Pedido gratuito"
+msgstr "Creado no pedido"
 
 #: pretix/base/exporters/orderlist.py:1068
-#, fuzzy
 msgid "Last invoice number of order"
-msgstr "Prefijo del número de factura"
+msgstr "Último número da factura do pedido"
 
 #: pretix/base/exporters/orderlist.py:1069
-#, fuzzy
 msgid "Last invoice date of order"
-msgstr "Mostrar ordenes pagadas de más"
+msgstr "Data da última factura do pedido"
 
 #: pretix/base/exporters/waitinglist.py:47
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:87
-#, fuzzy
 msgid "All entries"
-msgstr "Todas las entradas"
+msgstr "Todas as entradas"
 
 #: pretix/base/exporters/waitinglist.py:52
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:90
-#, fuzzy
 msgid "Waiting for a voucher"
-msgstr "Esperando un recibo"
+msgstr "Agardando un recibo"
 
 #: pretix/base/exporters/waitinglist.py:57
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:92
@@ -1789,30 +1766,27 @@ msgstr "Documento asignado"
 
 #: pretix/base/exporters/waitinglist.py:62
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:95
-#, fuzzy
 msgid "Waiting for redemption"
-msgstr "Esperando la redención"
+msgstr "Agardando reembolso"
 
 #: pretix/base/exporters/waitinglist.py:70
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:208
 #: pretix/control/views/waitinglist.py:307
 msgid "Voucher redeemed"
-msgstr "Cupón canxeado"
+msgstr "Cupón trocado"
 
 #: pretix/base/exporters/waitinglist.py:78
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:101
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:210
 #: pretix/control/views/waitinglist.py:309
-#, fuzzy
 msgid "Voucher expired"
-msgstr "El comprobante ha expirado"
+msgstr "Expirou o comprobante"
 
 #: pretix/base/exporters/waitinglist.py:109 pretix/base/pdf.py:108
 #: pretix/control/forms/event.py:1416
 #: pretix/control/templates/pretixcontrol/items/index.html:35
-#, fuzzy
 msgid "Product name"
-msgstr "Nombre del producto"
+msgstr "Nome do produto"
 
 #: pretix/base/exporters/waitinglist.py:112 pretix/base/models/event.py:459
 #: pretix/base/pdf.py:206 pretix/control/forms/filter.py:1078
@@ -1820,22 +1794,19 @@ msgstr "Nombre del producto"
 #: pretix/control/forms/filter.py:1428
 #: pretix/control/templates/pretixcontrol/events/index.html:62
 #: pretix/control/templates/pretixcontrol/organizers/detail.html:58
-#, fuzzy
 msgid "Event name"
-msgstr "Nombre del evento"
+msgstr "Nome do evento"
 
 #: pretix/base/exporters/waitinglist.py:113 pretix/base/orderimport.py:186
 #: pretix/control/templates/pretixcontrol/checkin/index.html:86
-#, fuzzy
 msgctxt "subevents"
 msgid "Date"
-msgstr "Fecha"
+msgstr "Data"
 
 #: pretix/base/exporters/waitinglist.py:117
 #: pretix/control/views/waitinglist.py:293
-#, fuzzy
 msgid "Priority"
-msgstr "Prioridad"
+msgstr "Prioridade"
 
 #: pretix/base/exporters/waitinglist.py:119 pretix/base/models/vouchers.py:188
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:18
@@ -1855,36 +1826,32 @@ msgid ""
 "Due to technical reasons you cannot set inputs, that need to be masked (e.g. "
 "passwords), to %(value)s."
 msgstr ""
+"Debido a razóns técnicas, non podes establecer entradas, necesitan "
+"enmascararse (con contrasinais, por exemplo), a valores."
 
 #: pretix/base/forms/auth.py:57 pretix/base/forms/auth.py:168
-#, fuzzy
 msgid "Keep me logged in"
-msgstr "Mantenerme logueado"
+msgstr "Manterme rexistrado"
 
 #: pretix/base/forms/auth.py:60 pretix/base/forms/auth.py:261
-#, fuzzy
 msgid "This combination of credentials is not known to our system."
-msgstr "Nuestro sistema no reconoce esta combinación de credenciales."
+msgstr "Esta combinación de credenciais é descoñecida para o noso sistema"
 
 #: pretix/base/forms/auth.py:61 pretix/base/forms/user.py:57
 #: pretix/presale/forms/customer.py:378 pretix/presale/forms/customer.py:450
-#, fuzzy
 msgid "For security reasons, please wait 5 minutes before you try again."
 msgstr ""
-"Por razones de seguridad, por favor espere 5 minutos antes de intentarlo de "
-"nuevo."
+"Por razóns de seguridade, agarde cinco minutos antes de volver intentalo."
 
 #: pretix/base/forms/auth.py:62 pretix/base/forms/auth.py:262
-#, fuzzy
 msgid "This account is inactive."
-msgstr "Esta cuenta está inactiva."
+msgstr "Esta conta non está activa"
 
 #: pretix/base/forms/auth.py:145
-#, fuzzy
 msgid ""
 "You already registered with that email address, please use the login form."
 msgstr ""
-"Ya está registrado con este correo electrónico, por favor, use el formulario "
+"Xa está rexistrado con este correo electrónico, por favor, use o formulario "
 "de autenticación."
 
 #: pretix/base/forms/auth.py:146 pretix/base/forms/auth.py:204
@@ -28599,9 +28566,8 @@ msgid "Amount of %(item)s to order"
 msgstr "Importe de %(item)s a pedir"
 
 #: pretix/presale/templates/pretixpresale/event/waitinglist.html:5
-#, fuzzy
 msgid "Add me to the waiting list"
-msgstr "Agregarme a la lista de espera"
+msgstr "Agregarme á listaxe de agarda"
 
 #: pretix/presale/templates/pretixpresale/event/waitinglist.html:22
 #, fuzzy, python-format
@@ -28629,9 +28595,8 @@ msgid "Add me to the list"
 msgstr "Agregar a la lista"
 
 #: pretix/presale/templates/pretixpresale/event/waitinglist_remove.html:5
-#, fuzzy
 msgid "Remove me from the waiting list"
-msgstr "Agregarme a la lista de espera"
+msgstr "Agregarme á listaxe de agarda"
 
 #: pretix/presale/templates/pretixpresale/event/waitinglist_remove.html:9
 msgid ""
