@@ -45,7 +45,8 @@ class PropagatedNode(Node):
             <div class="propagated-settings-box locked panel panel-default">
                 <div class="panel-heading">
                     <input type="hidden" name="_settings_ignore" value="{fnames}">
-                    <button class="btn btn-default pull-right btn-xs" name="decouple" value="{fnames}" data-action="unlink">
+                    <input type="hidden" name="decouple" value="">
+                    <button type="button" class="btn btn-default pull-right btn-xs" value="{fnames}" data-action="unlink">
                         <span class="fa fa-unlock"></span> {text_unlink}
                     </button>
                     <h4 class="panel-title">

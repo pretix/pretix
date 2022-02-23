@@ -765,6 +765,7 @@ $(function () {
 
     $(".propagated-settings-box button[data-action=unlink]").click(function (ev) {
         var $box = $(this).closest(".propagated-settings-box");
+        $box.find("input[name=decouple]").val($(this).val());
         $box.find("[data-propagated-locked]").prop("readonly", false);
         $box.removeClass("locked").addClass("unlocked");
         ev.preventDefault();
