@@ -220,10 +220,11 @@ body.loading .container {
         }
         details {
             & > summary {
-                list-style: inherit;
+                list-style: none;
             }
-            & > summary::-webkit-details-marker {
-                display: inherit;
+            & > summary::-webkit-details-marker,
+            & > summary::marker {
+                display: none;
             }
             margin-bottom: 10px;
         }
