@@ -45,7 +45,7 @@ Attribute          Type                 Description
 name               string               The human-readable name of your plugin
 author             string               Your name
 version            string               A human-readable version code of your plugin
-description        string               A more verbose description of what your plugin does.
+description        string               A more verbose description of what your plugin does. May contain HTML.
 category           string               Category of a plugin. Either one of ``"FEATURE"``, ``"PAYMENT"``,
                                         ``"INTEGRATION"``, ``"CUSTOMIZATION"``, ``"FORMAT"``, or ``"API"``,
                                         or any other string.
@@ -54,6 +54,8 @@ featured           boolean (optional)   ``False`` by default, can promote a plug
 visible            boolean (optional)   ``True`` by default, can hide a plugin so it cannot be normally activated.
 restricted         boolean (optional)   ``False`` by default, restricts a plugin such that it can only be enabled
                                         for an event by system administrators / superusers.
+experimental       boolean (optional)   ``False`` by default, marks a plugin as an experimental feature in the plugins list.
+picture            string (optional)    Path to a picture resolvable through the static file system.
 compatibility      string               Specifier for compatible pretix versions.
 ================== ==================== ===========================================================
 

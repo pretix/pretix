@@ -18,69 +18,33 @@
             </div>
         {% endif %}
         <div class="tabbed-form">
-            {% for cat, catlabel, plist in plugins %}
+            {% for cat, catlabel, plist, has_pictures in plugins %}
                 <fieldset>
                     <legend>{{ catlabel }}</legend>
-                    <div class="row">
+                    <div class="plugin-list">
                         {% for plugin in plist %}
-                            {% if plugin.featured %}
-                                <div class="col-sm-12 col-lg-6">
-                                    <div class="panel panel-default">
-                                        <div class="panel-body featured-plugin">
-                                            {% if plugin.picture %}
-                                                <div class="col-sm-12 col-md-4 featured-plugin-picture">
-                                                    <img src="{% static plugin.picture %}"
-                                                         class="plugin-picture-large">
-                                                </div>
-                                            {% endif %}
-                                            <div class="col-sm-12 featured-plugin-text">
-                                                <h4>
-                                                    {{ plugin.name }}
-                                                    {% if plugin.module in plugins_active %}
-                                                        <span class="label label-success">
-                                                        <span class="fa fa-check" aria-hidden="true"></span>
-                                                            {% trans "Active" %}
-                                                        </span>
-                                                    {% endif %}
-                                                </h4>
-                                                {% include "pretixcontrol/event/fragment_plugin_description.html" with plugin=plugin %}
+                            <div class="plugin-container plugin-container-half">
+                                <div class="panel panel-default panel-plugin {% if plugin.featured %}featured-plugin{% endif %}">
+                                    <div class="panel-body">
+                                        {% if plugin.picture %}
+                                            <img src="{% static plugin.picture %}" class="plugin-picture">
+                                        {% elif not plugin.featured and has_pictures %}
+                                            <div class="plugin-picture">
                                             </div>
-                                            {% if plugin.app.compatibility_errors %}
-                                                <div class="featured-plugin-action text-center">
-                                                    <em>{% trans "Incompatible" %}</em>
-                                                </div>
-                                            {% elif plugin.restricted and plugin.module not in request.event.settings.allowed_restricted_plugins %}
-                                                <div class="featured-plugin-action text-center">
-                                                    <em>{% trans "Not available" %}</em>
-                                                </div>
-                                            {% elif plugin.module in plugins_active %}
-                                                <div class="featured-plugin-action text-right flip">
-                                                    <button class="btn btn-default btn-lg" name="plugin:{{ plugin.module }}"
-                                                            value="disable">{% trans "Disable" %}</button>
-                                                </div>
-                                            {% else %}
-                                                <div class="featured-plugin-action text-right flip">
-                                                    <button class="btn btn-primary btn-lg" name="plugin:{{ plugin.module }}"
-                                                            value="enable">{% trans "Enable" %}</button>
-                                                </div>
+                                        {% endif %}
+                                        <div class="plugin-text">
+                                            {% if plugin.featured %}
+                                                <span class="text-muted">
+                                                    <span class="fa fa-thumbs-up" aria-hidden="true"></span>
+                                                    {% trans "Top recommendation" %}<br>
+                                                </span>
                                             {% endif %}
-                                        </div>
-                                    </div>
-                                </div>
-                            {% endif %}
-                        {% endfor %}
-                    </div>
-                    <div class="table-responsive table-plugins">
-                        <table class="table">
-                            {% for plugin in plist %}
-                                {% if not plugin.featured %}
-                                    <tr class="{% if plugin.app.compatibility_errors %}warning{% else %}default{% endif %}">
-                                        <td {% if plugin.picture %}class="picture-column"{% endif %}>
-                                            {% if plugin.picture %}
-                                                <img src="{% static plugin.picture %}" class="plugin-picture-small">
+                                            {% if plugin.experimental %}
+                                                <span class="text-muted">
+                                                    <span class="fa fa-flask" aria-hidden="true"></span>
+                                                    {% trans "Experimental feature" %}<br>
+                                                </span>
                                             {% endif %}
-                                        </td>
-                                        <td>
                                             <h4>
                                                 {{ plugin.name }}
                                                 {% if plugin.module in plugins_active %}
@@ -91,30 +55,30 @@
                                                 {% endif %}
                                             </h4>
                                             {% include "pretixcontrol/event/fragment_plugin_description.html" with plugin=plugin %}
-                                        </td>
+                                        </div>
                                         {% if plugin.app.compatibility_errors %}
-                                            <td class="text-center" width="20%">
-                                                <em>{% trans "Incompatible" %}</em>
-                                            </td>
+                                            <div class="plugin-action text-center">
+                                                <span class="text-muted">{% trans "Incompatible" %}</span>
+                                            </div>
                                         {% elif plugin.restricted and plugin.module not in request.event.settings.allowed_restricted_plugins %}
-                                            <td class="text-center" width="20%">
-                                                <em>{% trans "Not available" %}</em>
-                                            </td>
+                                            <div class="plugin-action text-center">
+                                                <span class="text-muted">{% trans "Not available" %}</span>
+                                            </div>
                                         {% elif plugin.module in plugins_active %}
-                                            <td class="text-right flip" width="20%">
+                                            <div class="plugin-action text-right flip">
                                                 <button class="btn btn-default btn-lg" name="plugin:{{ plugin.module }}"
                                                         value="disable">{% trans "Disable" %}</button>
-                                            </td>
+                                            </div>
                                         {% else %}
-                                            <td class="text-right flip" width="20%">
+                                            <div class="plugin-action text-right flip">
                                                 <button class="btn btn-primary btn-lg" name="plugin:{{ plugin.module }}"
                                                         value="enable">{% trans "Enable" %}</button>
-                                            </td>
+                                            </div>
                                         {% endif %}
-                                    </tr>
-                                {% endif %}
-                            {% endfor %}
-                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
                     </div>
                 </fieldset>
             {% endfor %}

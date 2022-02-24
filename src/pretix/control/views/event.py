@@ -328,20 +328,24 @@ class EventPlugins(EventSettingsViewMixin, EventPermissionRequiredMixin, Templat
             'FORMAT': _('Output and export formats'),
             'API': _('API features'),
         }
-        context['plugins'] = sorted([
-            (c, labels.get(c, c), list(plist))
-            for c, plist
-            in groupby(
-                sorted(
-                    plugins,
-                    key=lambda p: (
-                        str(getattr(p, 'category', _('Other'))),
-                        (0 if getattr(p, 'featured', False) else 1),
-                        str(p.name).lower().replace('pretix ', '')
-                    ),
+
+        plugins_grouped = groupby(
+            sorted(
+                plugins,
+                key=lambda p: (
+                    str(getattr(p, 'category', _('Other'))),
+                    (0 if getattr(p, 'featured', False) else 1),
+                    str(p.name).lower().replace('pretix ', '')
                 ),
-                lambda p: str(getattr(p, 'category', _('Other')))
-            )
+            ),
+            lambda p: str(getattr(p, 'category', _('Other')))
+        )
+        plugins_grouped = [(c, list(plist)) for c, plist in plugins_grouped]
+
+        context['plugins'] = sorted([
+            (c, labels.get(c, c), plist, any(getattr(p, 'picture', None) for p in plist))
+            for c, plist
+            in plugins_grouped
         ], key=lambda c: (order.index(c[0]), c[1]) if c[0] in order else (999, str(c[1])))
         context['plugins_active'] = self.object.get_plugins()
         context['show_meta'] = settings.PRETIX_PLUGINS_SHOW_META
