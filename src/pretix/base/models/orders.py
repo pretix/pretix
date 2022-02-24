@@ -1275,7 +1275,7 @@ class AbstractPosition(models.Model):
         verbose_name=_("Variation"),
         on_delete=models.PROTECT
     )
-    price_before_voucher = models.DecimalField(
+    price_before_voucher = models.DecimalField(  # todo: remove
         decimal_places=2, max_digits=10, null=True,
     )
     price = models.DecimalField(
@@ -2580,12 +2580,32 @@ class CartPosition(AbstractPosition):
         verbose_name=_("Expiration date"),
         db_index=True
     )
-    includes_tax = models.BooleanField(
+    includes_tax = models.BooleanField(  # todo: remove
         default=True
     )
-    override_tax_rate = models.DecimalField(
+    override_tax_rate = models.DecimalField(  # todo: remove
         max_digits=10, decimal_places=2,
         null=True, blank=True
+    )
+
+    tax_rate = models.DecimalField(
+        max_digits=7, decimal_places=2, default=Decimal('0.00'),
+        verbose_name=_('Tax rate')
+    )
+    listed_price = models.DecimalField(
+        decimal_places=2, max_digits=10, null=True,
+    )
+    price_after_voucher = models.DecimalField(
+        decimal_places=2, max_digits=10, null=True,
+    )
+    custom_price_input = models.DecimalField(
+        decimal_places=2, max_digits=10, null=True,
+    )
+    custom_price_input_is_net = models.BooleanField(
+        default=False,
+    )
+    line_price_gross = models.DecimalField(
+        decimal_places=2, max_digits=10, null=True,
     )
 
     objects = ScopedManager(organizer='event__organizer')
@@ -2600,16 +2620,8 @@ class CartPosition(AbstractPosition):
         )
 
     @property
-    def tax_rate(self):
-        if self.includes_tax:
-            if self.override_tax_rate is not None:
-                return self.override_tax_rate
-            return self.item.tax(self.price, base_price_is='gross').rate
-        else:
-            return Decimal('0.00')
-
-    @property
     def tax_value(self):
+        # todo: compute from self.tax_rate
         if self.includes_tax:
             return self.item.tax(self.price, override_tax_rate=self.override_tax_rate, base_price_is='gross').tax
         else:

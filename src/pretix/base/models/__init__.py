@@ -39,6 +39,7 @@ from .items import (
 from .log import LogEntry
 from .memberships import Membership, MembershipType
 from .notifications import NotificationSetting
+from .offers import Offer
 from .orders import (
     AbstractPosition, CachedCombinedTicket, CachedTicket, CartPosition,
     InvoiceAddress, Order, OrderFee, OrderPayment, OrderPosition, OrderRefund,
