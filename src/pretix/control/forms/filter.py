@@ -1881,7 +1881,7 @@ class VoucherFilterForm(FilterForm):
             if s == '<>':
                 qs = qs.filter(Q(tag__isnull=True) | Q(tag=''))
             elif s[0] == '"' and s[-1] == '"':
-                qs = qs.filter(tag__iexact=s[1:-1])
+                qs = qs.filter(tag__exact=s[1:-1])
             else:
                 qs = qs.filter(tag__icontains=s)
 
