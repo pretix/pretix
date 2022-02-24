@@ -26,7 +26,7 @@ import jsonschema
 from django.contrib.staticfiles import finders
 from django.core.exceptions import ValidationError
 from django.db import models
-from django.db.models import Exists, F, OuterRef, Q, Value
+from django.db.models import Exists, F, OuterRef, Q, Subquery, Value
 from django.db.models.functions import Power
 from django.utils.deconstruct import deconstructible
 from django.utils.timezone import now
@@ -281,10 +281,26 @@ class Seat(models.Model):
             q = Q(has_order=True) | Q(has_voucher=True)
             if ignore_cart is not True:
                 q |= Q(has_cart=True)
+
+            # The following looks like it makes no sense. Why wouldn't we just use ``Value(self.x)``, we already now
+            # the value? The reason is that x and y are floating point values generated from our JSON files. As it turns
+            # out, PostgreSQL MIGHT store floating point values with a different precision based on the underlying system
+            # architecture. So if we generate e.g. 670.247128887222289 from the JSON file and store it to the database,
+            # PostgreSQL will store it as 670.247128887222289 internally. However if we query it again, we only get
+            # 670.247128887222 back. But if we do calculations with a field in PostgreSQL itself, it uses the full
+            # precision for the calculation.
+            # We don't actually care about the results with this precision, but we care that the results from this
+            # function are exactly the same as from event.free_seats(), so we do this subquery trick to deal with
+            # PostgreSQL's internal values in both cases.
+            # In the long run, we probably just want to round the numbers on insert...
+            # See also https://www.postgresql.org/docs/11/runtime-config-client.html#GUC-EXTRA-FLOAT-DIGITS
+            self_x = Subquery(Seat.objects.filter(pk=self.pk).values('x'))
+            self_y = Subquery(Seat.objects.filter(pk=self.pk).values('y'))
+
             qs_closeby_taken = qs_annotated.annotate(
                 distance=(
-                    Power(F('x') - Value(self.x), Value(2), output_field=models.FloatField()) +
-                    Power(F('y') - Value(self.y), Value(2), output_field=models.FloatField())
+                    Power(F('x') - self_x, Value(2), output_field=models.FloatField()) +
+                    Power(F('y') - self_y, Value(2), output_field=models.FloatField())
                 )
             ).exclude(pk=self.pk).filter(
                 q,
