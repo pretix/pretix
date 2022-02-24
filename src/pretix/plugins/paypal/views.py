@@ -34,13 +34,9 @@
 import hashlib
 import json
 import logging
-from decimal import Decimal
 
-import paypalrestsdk
-import paypalrestsdk.exceptions
 from django.contrib import messages
 from django.core import signing
-from django.db.models import Sum
 from django.http import (
     Http404, HttpResponse, HttpResponseBadRequest, JsonResponse,
 )
@@ -53,9 +49,10 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from django.views.generic import TemplateView
 from django_scopes import scopes_disabled
+from paypalcheckoutsdk.orders import OrdersGetRequest
 from paypalhttp import HttpError
 
-from pretix.base.models import Event, Order, OrderPayment, OrderRefund, Quota
+from pretix.base.models import Event, Order, OrderPayment, Quota
 from pretix.base.payment import PaymentException
 from pretix.base.settings import GlobalSettingsObject
 from pretix.control.permissions import event_permission_required
@@ -310,18 +307,15 @@ def webhook(request, *args, **kwargs):
     # We do not check the signature, we just use it as a trigger to look the charge up.
     if 'resource_type' not in event_json:
         return HttpResponse("Invalid body, no resource_type given", status=400)
-    if event_json['resource_type'] not in ('sale', 'refund'):
+    if event_json['resource_type'] != "checkout-order":
         return HttpResponse("Not interested in this resource type", status=200)
 
-    if event_json['resource_type'] == 'sale':
-        saleid = event_json['resource']['id']
-    else:
-        saleid = event_json['resource']['sale_id']
+    payloadid = event_json['resource']['id']
 
     try:
-        refs = [saleid]
-        if event_json['resource'].get('parent_payment'):
-            refs.append(event_json['resource'].get('parent_payment'))
+        refs = [payloadid]
+        if event_json['resource'].get('supplementary_data', {}).get('related_ids', {}).get('order_id'):
+            refs.append(event_json['resource'].get('supplementary_data').get('related_ids').get('order_id'))
 
         rso = ReferencedPayPalObject.objects.select_related('order', 'order__event').get(
             reference__in=refs
@@ -338,8 +332,8 @@ def webhook(request, *args, **kwargs):
     prov.init_api()
 
     try:
-        sale = paypalrestsdk.Sale.find(saleid)
-    except paypalrestsdk.exceptions.ConnectionError:
+        sale = prov.client.execute(OrdersGetRequest(payloadid)).result
+    except IOError:
         logger.exception('PayPal error on webhook. Event data: %s' % str(event_json))
         return HttpResponse('Sale not found', status=500)
 
@@ -350,58 +344,28 @@ def webhook(request, *args, **kwargs):
                                                info__icontains=sale['id'])
         payment = None
         for p in payments:
-            payment_info = p.info_data
-            for res in payment_info['transactions'][0]['related_resources']:
-                for k, v in res.items():
-                    if k == 'sale' and v['id'] == sale['id']:
-                        payment = p
-                        break
+            # Legacy PayPal info-data
+            if "purchase_units" not in p.info_data:
+                req = OrdersGetRequest(p.info_data['cart'])
+                response = prov.client.execute(req)
+                p.info = json.dumps(response.result.dict())
+                p.save(update_fields=['info'])
+                p.refresh_from_db()
+
+            for res in p.info_data['purchase_units'][0]['payments']['captures']:
+                if res['status'] in ['COMPLETED', 'PARTIALLY_REFUNDED'] and res['id'] == sale['id']:
+                    payment = p
+                    break
 
     if not payment:
         return HttpResponse('Payment not found', status=200)
 
     payment.order.log_action('pretix.plugins.paypal.event', data=event_json)
 
-    if payment.state == OrderPayment.PAYMENT_STATE_CONFIRMED and sale['state'] in ('partially_refunded', 'refunded'):
-        if event_json['resource_type'] == 'refund':
-            try:
-                refund = paypalrestsdk.Refund.find(event_json['resource']['id'])
-            except paypalrestsdk.exceptions.ConnectionError:
-                logger.exception('PayPal error on webhook. Event data: %s' % str(event_json))
-                return HttpResponse('Refund not found', status=500)
-
-            known_refunds = {r.info_data.get('id'): r for r in payment.refunds.all()}
-            if refund['id'] not in known_refunds:
-                payment.create_external_refund(
-                    amount=abs(Decimal(refund['amount']['total'])),
-                    info=json.dumps(refund.to_dict() if not isinstance(refund, dict) else refund)
-                )
-            elif known_refunds.get(refund['id']).state in (
-                    OrderRefund.REFUND_STATE_CREATED, OrderRefund.REFUND_STATE_TRANSIT) and refund['state'] == 'completed':
-                known_refunds.get(refund['id']).done()
-
-            if 'total_refunded_amount' in refund:
-                known_sum = payment.refunds.filter(
-                    state__in=(OrderRefund.REFUND_STATE_DONE, OrderRefund.REFUND_STATE_TRANSIT,
-                               OrderRefund.REFUND_STATE_CREATED, OrderRefund.REFUND_SOURCE_EXTERNAL)
-                ).aggregate(s=Sum('amount'))['s'] or Decimal('0.00')
-                total_refunded_amount = Decimal(refund['total_refunded_amount']['value'])
-                if known_sum < total_refunded_amount:
-                    payment.create_external_refund(
-                        amount=total_refunded_amount - known_sum
-                    )
-        elif sale['state'] == 'refunded':
-            known_sum = payment.refunds.filter(
-                state__in=(OrderRefund.REFUND_STATE_DONE, OrderRefund.REFUND_STATE_TRANSIT,
-                           OrderRefund.REFUND_STATE_CREATED, OrderRefund.REFUND_SOURCE_EXTERNAL)
-            ).aggregate(s=Sum('amount'))['s'] or Decimal('0.00')
-
-            if known_sum < payment.amount:
-                payment.create_external_refund(
-                    amount=payment.amount - known_sum
-                )
-    elif payment.state in (OrderPayment.PAYMENT_STATE_PENDING, OrderPayment.PAYMENT_STATE_CREATED,
-                           OrderPayment.PAYMENT_STATE_CANCELED, OrderPayment.PAYMENT_STATE_FAILED) and sale['state'] == 'completed':
+    if payment.state in (
+            OrderPayment.PAYMENT_STATE_PENDING, OrderPayment.PAYMENT_STATE_CREATED,
+            OrderPayment.PAYMENT_STATE_CANCELED, OrderPayment.PAYMENT_STATE_FAILED
+    ) and sale['status'] == 'COMPLETED':
         try:
             payment.confirm()
         except Quota.QuotaExceededException:

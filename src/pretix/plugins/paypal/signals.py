@@ -61,6 +61,7 @@ def pretixcontrol_logentry_display(sender, logentry, **kwargs):
         'PAYMENT.SALE.REFUNDED': _('Payment refunded.'),
         'PAYMENT.SALE.REVERSED': _('Payment reversed.'),
         'PAYMENT.SALE.PENDING': _('Payment pending.'),
+        'CHECKOUT.ORDER.APPROVED': _('Order approved.'),
     }
 
     if event_type in plains:
