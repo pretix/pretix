@@ -58,12 +58,14 @@ from django_countries import countries
 from pretix import __version__
 from pretix.base.decimal import round_decimal
 from pretix.base.forms import SecretKeySettingsField
-from pretix.base.models import Event, OrderPayment, OrderRefund, Quota
+from pretix.base.models import Event, Order, OrderPayment, OrderRefund, Quota
 from pretix.base.payment import BasePaymentProvider, PaymentException
 from pretix.base.plugins import get_all_plugins
 from pretix.base.services.mail import SendMailException
 from pretix.base.settings import SettingsSandbox
 from pretix.helpers import OF_SELF
+from pretix.helpers.countries import CachedCountries
+from pretix.helpers.http import get_client_ip as get_client_ip
 from pretix.helpers.urls import build_absolute_uri as build_global_uri
 from pretix.multidomain.urlreverse import build_absolute_uri, eventreverse
 from pretix.plugins.stripe.forms import StripeKeyValidator
@@ -73,6 +75,7 @@ from pretix.plugins.stripe.models import (
 from pretix.plugins.stripe.tasks import (
     get_stripe_account_key, stripe_verify_domain,
 )
+from pretix.presale.views.cart import cart_session
 
 logger = logging.getLogger('pretix.plugins.stripe')
 
@@ -234,10 +237,36 @@ class StripeSettingsHolder(BasePaymentProvider):
 
         d = OrderedDict(
             fields + [
-                ('method_cc',
+                ('method_card',
                  forms.BooleanField(
                      label=_('Credit card payments'),
                      required=False,
+                 )),
+                ('method_sepa_debit',
+                 forms.BooleanField(
+                     label=_('SEPA Direct Debit'),
+                     disabled=self.event.currency != 'EUR',
+                     help_text=(
+                         _('Needs to be enabled in your Stripe account first.') +
+                         '<div class="alert alert-warning">%s</div>' % _(
+                             'SEPA Direct Debit payments via Stripe are <strong>not</strong> processed '
+                             'instantly but might take up to <strong>14 days</strong> to be confirmed in some cases. '
+                             'Please only activate this payment method if your payment term allows for this lag.'
+                         )),
+                     required=False,
+                 )),
+                ('sepa_creditor_name',
+                 forms.CharField(
+                     label=_('SEPA Creditor Mandate Name'),
+                     disabled=self.event.currency != 'EUR',
+                     help_text=_('Please provide your SEPA Creditor Mandate Name, that will be displayed to the user.'),
+                     required=False,
+                     widget=forms.TextInput(
+                         attrs={
+                             'data-display-dependency': '#id_payment_stripe_method_sepa_debit',
+                             'data-required-if': '#id_payment_stripe_method_sepa_debit'
+                         }
+                     ),
                  )),
                 ('method_giropay',
                  forms.BooleanField(
@@ -741,37 +770,19 @@ class StripeMethod(BasePaymentProvider):
                 le.save(update_fields=['data', 'shredded'])
 
 
-class StripeCC(StripeMethod):
-    identifier = 'stripe'
-    verbose_name = _('Credit card via Stripe')
-    public_name = _('Credit card')
-    method = 'cc'
-
-    def payment_form_render(self, request, total) -> str:
-        account = get_stripe_account_key(self)
-        if not RegisteredApplePayDomain.objects.filter(account=account, domain=request.host).exists():
-            stripe_verify_domain.apply_async(args=(self.event.pk, request.host))
-
-        template = get_template('pretixplugins/stripe/checkout_payment_form_cc.html')
-        ctx = {
-            'request': request,
-            'event': self.event,
-            'total': self._decimal_to_int(total),
-            'settings': self.settings,
-            'is_moto': self.is_moto(request)
-        }
-        return template.render(ctx)
+class StripePaymentIntentMethod(StripeMethod):
+    identifier = ''
+    method = ''
 
     def payment_is_valid_session(self, request):
-        return request.session.get('payment_stripe_payment_method_id', '') != ''
+        return request.session.get('payment_stripe_{}_payment_method_id'.format(self.method), '') != ''
 
     def checkout_prepare(self, request, cart):
-        payment_method_id = request.POST.get('stripe_payment_method_id', '')
-        request.session['payment_stripe_payment_method_id'] = payment_method_id
-        request.session['payment_stripe_brand'] = request.POST.get('stripe_card_brand', '')
-        request.session['payment_stripe_last4'] = request.POST.get('stripe_card_last4', '')
+        payment_method_id = request.POST.get('stripe_{}_payment_method_id'.format(self.method), '')
+        request.session['payment_stripe_{}_payment_method_id'.format(self.method)] = payment_method_id
+
         if payment_method_id == '':
-            messages.warning(request, _('You may need to enable JavaScript for Stripe payments.'))
+            messages.warning(request, _('You may need to enable JavaScript for Stripe payments.2'))
             return False
         return True
 
@@ -779,21 +790,13 @@ class StripeCC(StripeMethod):
         try:
             return self._handle_payment_intent(request, payment)
         finally:
-            del request.session['payment_stripe_payment_method_id']
+            del request.session['payment_stripe_{}_payment_method_id'.format(self.method)]
 
     def is_moto(self, request, payment=None) -> bool:
-        # We don't have a payment yet when checking if we should display the MOTO-flag
-        # However, before we execute the payment, we absolutely have to check if the request-SalesChannel as well as the
-        # order are tagged as a reseller-transaction. Else, a user with a valid reseller-session might be able to place
-        # a MOTO transaction trough the WebShop.
+        return False
 
-        moto = self.settings.get('reseller_moto', False, as_type=bool) and \
-            request.sales_channel.identifier == 'resellers'
-
-        if payment:
-            return moto and payment.order.sales_channel == 'resellers'
-
-        return moto
+    def _payment_intent_kwargs(self, request, payment):
+        return {}
 
     def _handle_payment_intent(self, request, payment, intent=None):
         self._init_api()
@@ -803,6 +806,7 @@ class StripeCC(StripeMethod):
                 params = {}
                 params.update(self._connect_kwargs(payment))
                 params.update(self.api_kwargs)
+                params.update(self._payment_intent_kwargs(request, payment))
 
                 if self.is_moto(request, payment):
                     params.update({
@@ -816,7 +820,8 @@ class StripeCC(StripeMethod):
                 intent = stripe.PaymentIntent.create(
                     amount=self._get_amount(payment),
                     currency=self.event.currency.lower(),
-                    payment_method=request.session['payment_stripe_payment_method_id'],
+                    payment_method=request.session['payment_stripe_{}_payment_method_id'.format(self.method)],
+                    payment_method_types=[self.method],
                     confirmation_method='manual',
                     confirm=True,
                     description='{event}-{code}'.format(
@@ -830,7 +835,7 @@ class StripeCC(StripeMethod):
                         'code': payment.order.code
                     },
                     # TODO: Is this sufficient?
-                    idempotency_key=str(self.event.id) + payment.order.code + request.session['payment_stripe_payment_method_id'],
+                    idempotency_key=str(self.event.id) + payment.order.code + request.session['payment_stripe_{}_payment_method_id'.format(self.method)],
                     return_url=build_absolute_uri(self.event, 'plugins:stripe:sca.return', kwargs={
                         'order': payment.order.code,
                         'payment': payment.pk,
@@ -977,6 +982,48 @@ class StripeCC(StripeMethod):
             raise PaymentException(_('We had trouble communicating with Stripe. Please try again and get in touch '
                                      'with us if this problem persists.'))
 
+
+class StripeCC(StripePaymentIntentMethod):
+    identifier = 'stripe'
+    verbose_name = _('Credit card via Stripe')
+    public_name = _('Credit card')
+    method = 'card'
+
+    def payment_form_render(self, request, total) -> str:
+        account = get_stripe_account_key(self)
+        if not RegisteredApplePayDomain.objects.filter(account=account, domain=request.host).exists():
+            stripe_verify_domain.apply_async(args=(self.event.pk, request.host))
+
+        template = get_template('pretixplugins/stripe/checkout_payment_form_card.html')
+        ctx = {
+            'request': request,
+            'event': self.event,
+            'total': self._decimal_to_int(total),
+            'settings': self.settings,
+            'is_moto': self.is_moto(request)
+        }
+        return template.render(ctx)
+
+    def checkout_prepare(self, request, cart):
+        request.session['payment_stripe_card_brand'] = request.POST.get('stripe_card_brand', '')
+        request.session['payment_stripe_card_last4'] = request.POST.get('stripe_card_last4', '')
+
+        return super().checkout_prepare(request, cart)
+
+    def is_moto(self, request, payment=None) -> bool:
+        # We don't have a payment yet when checking if we should display the MOTO-flag
+        # However, before we execute the payment, we absolutely have to check if the request-SalesChannel as well as the
+        # order are tagged as a reseller-transaction. Else, a user with a valid reseller-session might be able to place
+        # a MOTO transaction trough the WebShop.
+
+        moto = self.settings.get('reseller_moto', False, as_type=bool) and \
+            request.sales_channel.identifier == 'resellers'
+
+        if payment:
+            return moto and payment.order.sales_channel == 'resellers'
+
+        return moto
+
     def payment_presale_render(self, payment: OrderPayment) -> str:
         pi = payment.info_data or {}
         try:
@@ -991,6 +1038,109 @@ class StripeCC(StripeMethod):
                f'{card.get("brand", "").title()} ' \
                f'************{card.get("last4", "****")}, ' \
                f'{_("expires {month}/{year}").format(month=card.get("exp_month"), year=card.get("exp_year"))}'
+
+
+class StripeSEPADirectDebit(StripePaymentIntentMethod):
+    identifier = 'stripe_sepa_debit'
+    verbose_name = _('SEPA Debit via Stripe')
+    public_name = _('SEPA Debit')
+    method = 'sepa_debit'
+
+    def payment_form_render(self, request: HttpRequest, total: Decimal, order: Order=None) -> str:
+        cs = cart_session(request)
+
+        template = get_template('pretixplugins/stripe/checkout_payment_form_sepadirectdebit.html')
+        ctx = {
+            'request': request,
+            'event': self.event,
+            'settings': self.settings,
+            'form': self.payment_form(request),
+            'email': order.email if order else cs.get('email', '')
+        }
+        return template.render(ctx)
+
+    @property
+    def payment_form_fields(self):
+        return OrderedDict(
+            [
+                ('accountname',
+                 forms.CharField(
+                     label=_('Account Holder Name'),
+                 )),
+                ('line1',
+                 forms.CharField(
+                     label=_('Account Holder Street'),
+                     required=False,
+                     widget=forms.TextInput(
+                         attrs={
+                             'data-display-dependency': '#stripe_sepa_debit_country',
+                             'data-required-if': '#stripe_sepa_debit_country'
+                         }
+                     ),
+                 )),
+                ('postal_code',
+                 forms.CharField(
+                     label=_('Account Holder Postal Code'),
+                     required=False,
+                     widget=forms.TextInput(
+                         attrs={
+                             'data-display-dependency': '#stripe_sepa_debit_country',
+                             'data-required-if': '#stripe_sepa_debit_country'
+                         }
+                     ),
+                 )),
+                ('city',
+                 forms.CharField(
+                     label=_('Account Holder City'),
+                     required=False,
+                     widget=forms.TextInput(
+                         attrs={
+                             'data-display-dependency': '#stripe_sepa_debit_country',
+                             'data-required-if': '#stripe_sepa_debit_country'
+                         }
+                     ),
+                 )),
+                ('country',
+                 forms.ChoiceField(
+                     label=_('Account Holder Country'),
+                     required=False,
+                     choices=CachedCountries(),
+                     widget=forms.Select(
+                         attrs={
+                             'data-display-dependency': '#stripe_sepa_debit_country',
+                             'data-required-if': '#stripe_sepa_debit_country'
+                         }
+                     ),
+                 )),
+            ])
+
+    def _payment_intent_kwargs(self, request, payment):
+        return {
+            'mandate_data': {
+                'customer_acceptance': {
+                    'type': 'online',
+                    'online': {
+                        'ip_address': get_client_ip(request),
+                        'user_agent': request.META['HTTP_USER_AGENT'],
+                    }
+                },
+            }
+        }
+
+    def checkout_prepare(self, request, cart):
+        request.session['payment_stripe_sepa_debit_last4'] = request.POST.get('stripe_sepa_debit_last4', '')
+        request.session['payment_stripe_sepa_debit_bank'] = request.POST.get('stripe_sepa_debit_bank', '')
+
+        return super().checkout_prepare(request, cart)
+
+    def execute_payment(self, request: HttpRequest, payment: OrderPayment):
+        try:
+            super().execute_payment(request, payment)
+        finally:
+            fields = ['accountname', 'line1', 'postal_code', 'city', 'country']
+            for field in fields:
+                if 'payment_stripe_sepa_debit_{}'.format(field) in request.session:
+                    del request.session['payment_stripe_sepa_debit_{}'.format(field)]
 
 
 class StripeGiropay(StripeMethod):

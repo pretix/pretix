@@ -17,6 +17,12 @@
                     <dd>{{ payment_info.source.owner.name }}</dd>
                 {% endif %}
             {% endif %}
+            {% if payment_info.source.type == "sepa_debit" %}
+                <dt>{% trans "Bank" %}</dt>
+                <dd>{{ payment_info.source.sepadirectdebit.bank_name }}</dd>
+                <dt>{% trans "Payer name" %}</dt>
+                <dd>{{ payment_info.source.owner.verified_name|default:payment_info.source.owner.name }}</dd>
+            {% endif %}
             {% if payment_info.source.type == "giropay" %}
                 <dt>{% trans "Bank" %}</dt>
                 <dd>{{ payment_info.source.giropay.bank_name }} ({{ payment_info.source.giropay.bic }})</dd>

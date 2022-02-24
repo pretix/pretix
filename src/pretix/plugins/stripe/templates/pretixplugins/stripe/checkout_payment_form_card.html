@@ -1,0 +1,73 @@
+{% load i18n %}
+
+<div class="form-horizontal stripe-container">
+    {% if is_moto %}
+        <h1>
+            <span class="label label-info pull-right flip" data-toggle="tooltip_html" title="{% trans "This transaction will be marked as Mail Order/Telephone Order, exempting it from Strong Customer Authentication (SCA) whenever possible" %}">MOTO</span>
+        </h1>
+        <div class="clearfix"></div>
+    {% endif %}
+
+    <div class="stripe-errors sr-only">
+
+    </div>
+    <noscript>
+        <div class="alert alert-warning">
+            {% trans "For a credit card payment, please turn on JavaScript." %}
+        </div>
+    </noscript>
+
+    {% if request.session.payment_stripe_card_payment_method_id %}
+        <div id="stripe-current-card">
+            <p>{% blocktrans trimmed %}
+                You already entered a card number that we will use to charge the payment amount.
+            {% endblocktrans %}</p>
+            <dl class="dl-horizontal">
+                <dt>{% trans "Card type" %}</dt>
+                <dd id="stripe_card_brand_display">{{ request.session.payment_stripe_card_brand }}</dd>
+                <dt>{% trans "Card number" %}</dt>
+                <dd>
+                    **** **** ****
+                    <span id="stripe_card_last4_display">{{ request.session.payment_stripe_card_last4 }}</span>
+                    <button class="btn btn-xs btn-default" id="stripe_other_card" type="button">
+                        {% trans "Use a different card" %}
+                    </button>
+                </dd>
+            </dl>
+        </div>
+    {% endif %}
+
+    <div class="row equal" id="stripe-card-elements">
+        <div class="col-md-5 vcenter stripe-card-holder">
+            <div id="stripe-card" class="form-control">
+                <span class="fa fa-spinner fa-spin"></span>
+                <!-- a Stripe Element will be inserted here. -->
+            </div>
+        </div>
+        <div class="col-md-1 hidden stripe-or">
+            <div class="hr">
+                <div class="sep">
+                    <div class="sepText">{% trans "OR" %}</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-5 vcenter hidden stripe-payment-request-button-container">
+            <div id="stripe-payment-request-button">
+                <span class="fa fa-spinner fa-spin"></span>
+                <!-- A Stripe Element will be inserted here. -->
+            </div>
+        </div>
+    </div>
+
+    <p class="help-block">
+        {% blocktrans trimmed %}
+            Your payment will be processed by Stripe, Inc. Your credit card data will be transmitted directly to
+            Stripe and never touches our servers.
+        {% endblocktrans %}
+        <input type="hidden" name="stripe_card_total" value="{{ total }}" id="stripe_card_total"/>
+        <input type="hidden" name="stripe_card_payment_method_id" value="{{ request.session.payment_stripe_card_payment_method_id }}" id="stripe_card_payment_method_id"/>
+        <input type="hidden" name="stripe_card_last4" value="{{ request.session.payment_stripe_card_last4 }}" id="stripe_card_last4"/>
+        <input type="hidden" name="stripe_card_brand" value="{{ request.session.payment_stripe_card_brand }}" id="stripe_card_brand"/>
+        <input type="hidden" id="stripe_card_currency" value="{{ event.currency }}"/>
+    </p>
+</div>
