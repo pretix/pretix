@@ -79,6 +79,57 @@ from pretix.presale.views.cart import cart_session
 
 logger = logging.getLogger('pretix.plugins.stripe')
 
+# State of the payment methods
+#
+# Source: https://stripe.com/docs/payments/payment-methods/overview
+# Last Update: 24.02.2022
+#
+# Cards
+# - Credit and Debit Cards: ✓
+# - Apple, Google Pay: ✓
+#
+# Bank debits
+# - ACH Debit: ✗
+# - Canadian PADs: ✗
+# - BACS Direct Debit: ✗
+# - SEPA Direct Debit: ✓
+# - BECS Direct Debit: ✗
+#
+# Bank redirects
+# - Bancontact: ✓
+# - BLIK: ✗
+# - EPS: ✓
+# - giropay: ✓
+# - iDEAL: ✓
+# - P24: ✓
+# - Sofort: ✓
+#
+# Bank transfers
+# - ACH Bank Transfer: ✗
+# - SEPA Bank Transfer: ✗
+# - UK Bank Transfer: ✗
+# - Multibanco: ✗
+# - Furikomi (Japan): ✗
+#
+# Buy now, pay later
+# - Klarna: ✗
+# - Afterpay/Clearpay: ✗
+# - Affirm: ✗
+#
+# Vouchers
+# - Konbini: ✗
+# - OXXO: ✗
+# - Boleto: ✗
+#
+# Wallets
+# - Apple Pay: ✓ (Cards)
+# - Google Pay: ✓ (Cards)
+# - Microsoft Pay: ✓ (Cards)
+# - Secure Remote Commerce: ✗
+# - Alipay: ✓
+# - WeChat Pay: ✓
+# - GrabPay: ✓
+
 
 class StripeSettingsHolder(BasePaymentProvider):
     identifier = 'stripe_settings'
