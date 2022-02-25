@@ -8,16 +8,16 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-02-25 10:05+0000\n"
-"PO-Revision-Date: 2022-02-14 15:41+0100\n"
+"PO-Revision-Date: 2022-02-25 10:20+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
-"Language: de\n"
+"Language: de_Informal\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Poedit 3.0\n"
+"X-Generator: Weblate 4.8\n"
 
 #: pretix/api/auth/devicesecurity.py:28
 msgid ""
@@ -1808,6 +1808,8 @@ msgid ""
 "Due to technical reasons you cannot set inputs, that need to be masked (e.g. "
 "passwords), to %(value)s."
 msgstr ""
+"Aus technischen Gründen kannst du passwort-ähnliche Felder nicht auf %(value)"
+"s setzen."
 
 #: pretix/base/forms/auth.py:57 pretix/base/forms/auth.py:168
 msgid "Keep me logged in"
@@ -6548,7 +6550,7 @@ msgstr "Der Gutschein wurde an {recipient} verschickt."
 
 #: pretix/base/settings.py:111
 msgid "Allow usage of restricted plugins"
-msgstr ""
+msgstr "Erlaubte Nutzung eingeschränkter Erweiterungen"
 
 #: pretix/base/settings.py:144
 msgid "Allow customers to create accounts"
@@ -7784,13 +7786,16 @@ msgstr ""
 
 #: pretix/base/settings.py:1608
 msgid "Attach calendar files only after order has been paid"
-msgstr ""
+msgstr "Kalenderdateien erst anhängen nachdem die Bestellung bezahlt wurde"
 
 #: pretix/base/settings.py:1609
 msgid ""
 "Use this if you e.g. put a private access link into the calendar file to "
 "make sure people only receive it after their payment was confirmed."
 msgstr ""
+"Diese Option sollte aktiv sein, wenn z.B. ein privater Zugangslink in der "
+"Kalenderdatei verschickt wird, damit dieser nicht zugänglich wird, bevor die "
+"Zahlung bestätigt wurde."
 
 #: pretix/base/settings.py:1618
 msgid "Event description"
@@ -7805,6 +7810,12 @@ msgid ""
 "data as calendar entries are often shared with an unspecified number of "
 "people."
 msgstr ""
+"Du kannst dieses Feld benutzen um zusätzliche Informationen mit deinen "
+"Teilnehmer*innen zu teilen, wie z.B. Anreiseinfos oder den Link zu einer "
+"digitalen Veranstaltung. Wenn das Feld leer ist, fügen wir automatisch einen "
+"Link zum Ticketshop, die Einlass-Uhrzeit und den Veranstalter hier ein. Es "
+"sind keine Platzhalter mit sensiblen personenbezogenen Daten erlaubt, da "
+"Kalendereinträge oft für eine größeren Anzahl von Personen einsehbar sind."
 
 #: pretix/base/settings.py:1634
 msgid "Subject prefix"
@@ -9035,13 +9046,8 @@ msgstr ""
 "Das letzte Zahlungsdatum kann nicht vor dem Ende des Vorverkaufs liegen."
 
 #: pretix/base/shredder.py:73 pretix/base/shredder.py:76
-#, fuzzy
-#| msgid ""
-#| "Your event needs to be over for at least 30 days to use this feature."
 msgid "Your event needs to be over to use this feature."
-msgstr ""
-"Die Veranstaltung muss mindestens 30 Tage beendet sein, damit diese Funktion "
-"bereitsteht."
+msgstr "Die Veranstaltung muss beendet sein, damit diese Funktion bereitsteht."
 
 #: pretix/base/shredder.py:78
 msgid "Your ticket shop needs to be offline to use this feature."
@@ -11205,16 +11211,12 @@ msgid "Attach tickets"
 msgstr "Tickets anhängen"
 
 #: pretix/control/forms/orders.py:615 pretix/plugins/sendmail/forms.py:137
-#, fuzzy
-#| msgid ""
-#| "Will be ignored if all tickets in this order exceed a given size limit to "
-#| "ensure email deliverability."
 msgid ""
 "Will be ignored if tickets exceed a given size limit to ensure email "
 "deliverability."
 msgstr ""
-"Wird ignoriert, wenn die Tickets in dieser Bestellung ein bestimmtes "
-"Größenlimit überschreiten um die Zustellung sicherzustellen."
+"Wird ignoriert, wenn die Tickets ein bestimmtes Größenlimit überschreiten um "
+"die Zustellung sicherzustellen."
 
 #: pretix/control/forms/orders.py:619
 msgid "Attach invoices"
@@ -14890,13 +14892,10 @@ msgid "Version %(v)s"
 msgstr "Version %(v)s"
 
 #: pretix/control/templates/pretixcontrol/event/plugins.html:37
-#, fuzzy
-#| msgid ""
-#| "This plugin needs to be enabled by a system administrator for your event."
 msgid ""
 "This plugin needs to be enabled by a system administrator for your account."
 msgstr ""
-"Dieses Plugin muss von einem Systemadministrator für die Veranstaltung "
+"Dieses Plugin muss von einem Systemadministrator für deinen Account "
 "aktiviert werden."
 
 #: pretix/control/templates/pretixcontrol/event/plugins.html:42
@@ -19647,10 +19646,8 @@ msgid "Authentication backend"
 msgstr "Authentifizierungsmechanismus"
 
 #: pretix/control/templates/pretixcontrol/users/form.html:43
-#, fuzzy
-#| msgid "Internal identifier"
 msgid "External identifier"
-msgstr "Interne Referenz"
+msgstr "Externe Referenz"
 
 #: pretix/control/templates/pretixcontrol/users/form.html:59
 msgid "Team memberships"
