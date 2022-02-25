@@ -152,12 +152,23 @@ class PaypalSettingsHolder(BasePaymentProvider):
              forms.BooleanField(
                  label=_('PayPal'),
                  required=False,
-                 help_text=_('ToDo: Explain that PayPal is always required (APM-only is not possible) since PayPal will be fallback.')
+                 help_text=_(
+                     'Even if a customer choses an Alternative Payment Method, they will always have the option to '
+                     'revert back to paying with their PayPal account. For this reason, this payment method is always '
+                     'active.'
+                 ),
+                 disabled=True,
              )),
             ('method_apm',
              forms.BooleanField(
                  label=_('Alternative Payment Methods'),
-                 help_text=_('ToDo: Explain APMs'),
+                 help_text=_(
+                     'In addition to payments through a PayPal account, you can also offer your customers the option '
+                     'to pay with credit cards and other, local payment methods such as SOFORT, giropay, iDEAL, and '
+                     'many more - even when they do not have a PayPal account. Eligible payment methods will be '
+                     'determined based on the shoppers location. For german merchants, this is the direct successor '
+                     'of PayPal Plus.'
+                 ),
                  required=False,
                  widget=forms.CheckboxInput(
                      attrs={
@@ -168,7 +179,12 @@ class PaypalSettingsHolder(BasePaymentProvider):
             ('disable_method_sepa',
              forms.BooleanField(
                  label=_('Disable SEPA Direct Debit'),
-                 help_text=_('ToDo: Explain why one might want to disable SEPA'),
+                 help_text=_(
+                     'While most payment methods cannot be recalled by a customer without outlining their exact grief '
+                     'with the merchants, SEPA Direct Debit can be recalled with the press of a button. For that '
+                     'reason - and depending on the nature of your event - you might want to disabled the option of '
+                     'SEPA Direct Debit payments in order to reduce the risk of costly chargebacks.'
+                 ),
                  required=False,
                  widget=forms.CheckboxInput(
                      attrs={
@@ -179,7 +195,11 @@ class PaypalSettingsHolder(BasePaymentProvider):
             ('enable_method_paylater',
              forms.BooleanField(
                  label=_('Enable Buy Now Pay Later'),
-                 help_text=_('ToDo: Explain why one might want to enable paylater'),
+                 help_text=_(
+                     'Offer your customers the possibility to buy now (up to 1.000€) and pay in 30 days while getting '
+                     'your money right away. Please contact your PayPal account manager to discuss your eligibility '
+                     'before activating this feature.'
+                 ),
                  required=False,
                  widget=forms.CheckboxInput(
                      attrs={

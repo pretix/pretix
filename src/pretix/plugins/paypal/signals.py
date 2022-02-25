@@ -161,6 +161,7 @@ def signal_process_response(sender, request: HttpRequest, response: HttpResponse
 
 
 settings_hierarkey.add_default('payment_paypal_debug_buyer_country', '', str)
+settings_hierarkey.add_default('payment_paypal_method_wallet', True, bool)
 
 
 def _nonce(request):

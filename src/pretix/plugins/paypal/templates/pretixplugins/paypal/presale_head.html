@@ -12,6 +12,9 @@
 {% if disable_funding %}
     <script type="text/plain" id="paypal_disable_funding">{{ disable_funding }}</script>
 {% endif %}
+{% if enable_funding %}
+    <script type="text/plain" id="paypal_enable_funding">{{ enable_funding }}</script>
+{% endif %}
 {% if debug %}
     <script type="text/plain" id="paypal_buyer_country">{{ settings.debug_buyer_country }}</script>
 {% endif %}
