@@ -51,7 +51,6 @@ from django.views.decorators.http import require_POST
 from django.views.generic import TemplateView
 from django_scopes import scopes_disabled
 from paypalcheckoutsdk.orders import OrdersGetRequest
-from paypalhttp import HttpError
 
 from pretix.base.models import Event, Order, OrderPayment, Quota
 from pretix.base.payment import PaymentException
@@ -198,16 +197,15 @@ def isu_return(request, *args, **kwargs):
     prov = Paypal(event)
     prov.init_api()
 
-    req = PartnersMerchantIntegrationsGetRequest(
-        gs.settings.get('payment_paypal_connect_partner_merchant_id'),
-        request.GET.get('merchantIdInPayPal')
-    )
-
     try:
+        req = PartnersMerchantIntegrationsGetRequest(
+            gs.settings.get('payment_paypal_connect_partner_merchant_id'),
+            request.GET.get('merchantIdInPayPal')
+        )
         response = prov.client.execute(req)
-    except IOError as ioe:
-        if isinstance(ioe, HttpError):
-            print(ioe.status_code)
+    except IOError as e:
+        messages.error(request, _('An error occurred during connecting with PayPal, please try again.'))
+        logger.error('PartnersMerchantIntegrationsGetRequest: {}'.format(str(e)))
     else:
         params = ['merchant_id', 'tracking_id', 'payments_receivable', 'primary_email_confirmed']
         if not any(k in response.result for k in params):
@@ -219,9 +217,16 @@ def isu_return(request, *args, **kwargs):
             if response.result.tracking_id != request.session['payment_paypal_isu_tracking_id']:
                 messages.error(request, _('An error occurred during connecting with PayPal, please try again.'))
             else:
-                messages.success(request,
-                                 _('Your PayPal account is now connected to pretix. You can change the settings in '
-                                   'detail below.'))
+                if request.GET.get("isEmailConfirmed") == "false":  # Yes - literal!
+                    messages.warning(
+                        request,
+                        _('The E-Mail address on your PayPal account has not yet been confirmed. You will need to do '
+                          'this before you can start accepting payments.')
+                    )
+                messages.success(
+                    request,
+                    _('Your PayPal account is now connected to pretix. You can change the settings in detail below.')
+                )
 
                 event.settings.payment_paypal_isu_merchant_id = response.result.merchant_id
 
