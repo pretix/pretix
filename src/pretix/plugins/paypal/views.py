@@ -353,11 +353,15 @@ def webhook(request, *args, **kwargs):
         for p in payments:
             # Legacy PayPal info-data
             if "purchase_units" not in p.info_data:
-                req = OrdersGetRequest(p.info_data['cart'])
-                response = prov.client.execute(req)
-                p.info = json.dumps(response.result.dict())
-                p.save(update_fields=['info'])
-                p.refresh_from_db()
+                try:
+                    req = OrdersGetRequest(p.info_data['cart'])
+                    response = prov.client.execute(req)
+                    p.info = json.dumps(response.result.dict())
+                    p.save(update_fields=['info'])
+                    p.refresh_from_db()
+                except IOError:
+                    logger.exception('PayPal error on webhook. Event data: %s' % str(event_json))
+                    return HttpResponse('Could not retrieve Order Data', status=500)
 
             for res in p.info_data['purchase_units'][0]['payments']['captures']:
                 if res['status'] in ['COMPLETED', 'PARTIALLY_REFUNDED'] and res['id'] == sale['id']:
