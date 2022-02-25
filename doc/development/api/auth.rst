@@ -42,7 +42,7 @@ There are a few rules you need to follow:
 
 ``User.objects.get_or_create_for_backend`` will follow these rules for you automatically. It works like this:
 
-.. autoclass:: pretix.base.models.UserManager
+.. autoclass:: pretix.base.models.auth.UserManager
    :members: get_or_create_for_backend
 
 The backend interface
