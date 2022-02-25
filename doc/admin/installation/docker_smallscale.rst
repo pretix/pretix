@@ -108,6 +108,18 @@ Now restart redis-server::
 
     # systemctl restart redis-server
 
+In this setup, systemd will delete ``/var/run/redis`` on every redis restart, which will cause issues with pretix. To
+prevent this, you can execute::
+
+   # systemctl edit redis-server
+
+And insert the following::
+
+    [Service]
+    # Keep the directory around so that pretix.service in docker does not need to be
+    # restarted when redis is restarted.
+    RuntimeDirectoryPreserve=yes
+
 .. warning:: Setting the socket permissions to 777 is a possible security problem. If you have untrusted users on your
              system or have high security requirements, please don't do this and let redis listen to a TCP socket
              instead. We recommend the socket approach because the TCP socket in combination with docker's networking
