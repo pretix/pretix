@@ -824,21 +824,22 @@ class PaypalMethod(BasePaymentProvider):
 
         try:
             pp_payment = None
-            # Legacy PayPal - migrate the payment info_data first
+            payment_info_data = None
+            # Legacy PayPal - get up to date info data first
             if "purchase_units" not in refund.payment.info_data:
                 req = OrdersGetRequest(refund.payment.info_data['cart'])
                 response = self.client.execute(req)
-                refund.payment.info = json.dumps(response.result.dict())
-                refund.payment.save(update_fields=['info'])
-                refund.refresh_from_db()
+                payment_info_data = response.result.dict()
+            else:
+                payment_info_data = refund.payment.info_data
 
-            for res in refund.payment.info_data['purchase_units'][0]['payments']['captures']:
+            for res in payment_info_data['purchase_units'][0]['payments']['captures']:
                 if res['status'] in ['COMPLETED', 'PARTIALLY_REFUNDED']:
                     pp_payment = res['id']
                     break
 
             if not pp_payment:
-                req = OrdersGetRequest(refund.payment.info_data['id'])
+                req = OrdersGetRequest(payment_info_data['id'])
                 response = self.client.execute(req)
                 for res in response.result.purchase_units[0].payments.captures:
                     if res['status'] in ['COMPLETED', 'PARTIALLY_REFUNDED']:
@@ -862,15 +863,13 @@ class PaypalMethod(BasePaymentProvider):
             logger.error('execute_refund: {}'.format(str(e)))
             raise PaymentException(_('Refunding the amount via PayPal failed: {}').format(str(e)))
         if response.result.status == 'COMPLETED':
-            req = OrdersGetRequest(refund.payment.info_data['id'])
+            req = OrdersGetRequest(payment_info_data['id'])
             response = self.client.execute(req)
-            refund.payment.info = json.dumps(response.result.dict())
             refund.info = json.dumps(response.result.dict())
             refund.done()
         elif response.result.status == 'PENDING':
-            req = OrdersGetRequest(refund.payment.info_data['id'])
+            req = OrdersGetRequest(payment_info_data['id'])
             response = self.client.execute(req)
-            refund.payment.info = json.dumps(response.result.dict())
             refund.info = json.dumps(response.result.dict())
             refund.state = OrderRefund.REFUND_STATE_TRANSIT
             refund.save()
