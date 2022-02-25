@@ -739,25 +739,49 @@ class PaypalMethod(BasePaymentProvider):
 
     def matching_id(self, payment: OrderPayment):
         sale_id = None
-        for trans in payment.info_data.get('transactions', []):
-            for res in trans.get('related_resources', []):
-                if 'sale' in res and 'id' in res['sale']:
-                    sale_id = res['sale']['id']
+
+        # Legacy PayPal info-data
+        if 'purchase_units' not in payment.info_data:
+            for trans in payment.info_data.get('transactions', []):
+                for res in trans.get('related_resources', []):
+                    if 'sale' in res and 'id' in res['sale']:
+                        sale_id = res['sale']['id']
+        else:
+            for trans in payment.info_data.get('purchase_units', []):
+                for res in trans.get('payments', {}).get('captures', []):
+                    sale_id = res['id']
+
         return sale_id or payment.info_data.get('id', None)
 
     def api_payment_details(self, payment: OrderPayment):
         sale_id = None
-        for trans in payment.info_data.get('transactions', []):
-            for res in trans.get('related_resources', []):
-                if 'sale' in res and 'id' in res['sale']:
-                    sale_id = res['sale']['id']
-        return {
-            "payer_email": payment.info_data.get('payer', {}).get('payer_info', {}).get('email'),
-            "payer_id": payment.info_data.get('payer', {}).get('payer_info', {}).get('payer_id'),
-            "cart_id": payment.info_data.get('cart', None),
-            "payment_id": payment.info_data.get('id', None),
-            "sale_id": sale_id,
-        }
+
+        # Legacy PayPal info-data
+        if 'purchase_units' not in payment.info_data:
+            for trans in payment.info_data.get('transactions', []):
+                for res in trans.get('related_resources', []):
+                    if 'sale' in res and 'id' in res['sale']:
+                        sale_id = res['sale']['id']
+
+            return {
+                "payer_email": payment.info_data.get('payer', {}).get('payer_info', {}).get('email'),
+                "payer_id": payment.info_data.get('payer', {}).get('payer_info', {}).get('payer_id'),
+                "cart_id": payment.info_data.get('cart', None),
+                "payment_id": payment.info_data.get('id', None),
+                "sale_id": sale_id,
+            }
+        else:
+            for trans in payment.info_data.get('purchase_units', []):
+                for res in trans.get('payments', {}).get('captures', []):
+                    sale_id = res['id']
+
+            return {
+                "payer_email": payment.info_data.get('payer', {}).get('email_address'),
+                "payer_id": payment.info_data.get('payer', {}).get('payer_id'),
+                "cart_id": payment.info_data.get('id', None),
+                "payment_id": sale_id,
+                "sale_id": sale_id,
+            }
 
     def payment_control_render(self, request: HttpRequest, payment: OrderPayment):
         # Legacy PayPal info-data
