@@ -55,7 +55,6 @@ from paypalcheckoutsdk.orders import (
     OrdersPatchRequest,
 )
 from paypalcheckoutsdk.payments import CapturesRefundRequest
-from paypalhttp import HttpError
 
 from pretix import settings
 from pretix.base.decimal import round_decimal
@@ -304,50 +303,49 @@ class PaypalSettingsHolder(BasePaymentProvider):
 
     def get_isu_referral_url(self, request):
         pprov = PaypalMethod(request.event)
+        pprov.init_api()
+
         request.session['payment_paypal_isu_event'] = request.event.pk
         request.session['payment_paypal_isu_tracking_id'] = get_random_string(length=127)
 
-        pprov.init_api()
+        try:
+            req = PartnerReferralCreateRequest()
 
-        req = PartnerReferralCreateRequest()
-
-        req.request_body({
-            "operations": [
-                {
-                    "operation": "API_INTEGRATION",
-                    "api_integration_preference": {
-                        "rest_api_integration": {
-                            "integration_method": "PAYPAL",
-                            "integration_type": "THIRD_PARTY",
-                            "third_party_details": {
-                                "features": [
-                                    "PAYMENT",
-                                    "REFUND",
-                                    "ADVANCED_TRANSACTIONS_SEARCH",
-                                    "TRACKING_SHIPMENT_READWRITE",
-                                    "ACCESS_MERCHANT_INFORMATION"
-                                ],
+            req.request_body({
+                "operations": [
+                    {
+                        "operation": "API_INTEGRATION",
+                        "api_integration_preference": {
+                            "rest_api_integration": {
+                                "integration_method": "PAYPAL",
+                                "integration_type": "THIRD_PARTY",
+                                "third_party_details": {
+                                    "features": [
+                                        "PAYMENT",
+                                        "REFUND",
+                                        "ADVANCED_TRANSACTIONS_SEARCH",
+                                        "TRACKING_SHIPMENT_READWRITE",
+                                        "ACCESS_MERCHANT_INFORMATION"
+                                    ],
+                                }
                             }
                         }
                     }
-                }
-            ],
-            "products": [
-                "EXPRESS_CHECKOUT"
-            ],
-            "partner_config_override": {
-                "partner_logo_url": "https://pretix.eu/static/pretixbase/img/pretix-logo.svg",
-                "return_url": build_global_uri('plugins:paypal:oauth.return')
-            },
-            "tracking_id": request.session['payment_paypal_isu_tracking_id'],
-            "preferred_language_code": request.user.locale
-        })
-
-        try:
+                ],
+                "products": [
+                    "EXPRESS_CHECKOUT"
+                ],
+                "partner_config_override": {
+                    "partner_logo_url": "https://pretix.eu/static/pretixbase/img/pretix-logo.svg",
+                    "return_url": build_global_uri('plugins:paypal:oauth.return')
+                },
+                "tracking_id": request.session['payment_paypal_isu_tracking_id'],
+                "preferred_language_code": request.user.locale
+            })
             response = pprov.client.execute(req)
-        except IOError as ioe:
-            if isinstance(ioe, HttpError):
-                messages.error(request, _('An error occurred during connecting with PayPal, please try again.'))
+        except IOError as e:
+            messages.error(request, _('An error occurred during connecting with PayPal, please try again.'))
+            logger.error('PartnerReferralCreateRequest: {}'.format(str(e)))
         else:
             return self.get_link(response.result.links, 'action_url').href
 
@@ -442,14 +440,14 @@ class PaypalMethod(BasePaymentProvider):
         # PayPal OID has been previously generated through XHR and onApprove() has fired
         if paypal_order_id and paypal_order_id == request.session.get('payment_paypal_oid', None):
             self.init_api()
-            req = OrdersGetRequest(paypal_order_id)
 
             try:
+                req = OrdersGetRequest(paypal_order_id)
                 response = self.client.execute(req)
-            except IOError as ioe:
-                if isinstance(ioe, HttpError):
-                    messages.warning(request, _('We had trouble communicating with PayPal'))
-                    return False
+            except IOError as e:
+                messages.warning(request, _('We had trouble communicating with PayPal'))
+                logger.error('OrdersGetRequest: {}'.format(str(e)))
+                return False
             else:
                 if response.result.status == 'APPROVED':
                     return True
@@ -548,34 +546,33 @@ class PaypalMethod(BasePaymentProvider):
         else:
             pass
 
-        paymentreq = OrdersCreateRequest()
-        paymentreq.request_body({
-            'intent': 'CAPTURE',
-            # 'payer': {},  # We could transmit PII (email, name, address, etc.)
-            'purchase_units': [{
-                'amount': {
-                    'currency_code': currency,
-                    'value': value,
-                },
-                'payee': payee,
-                'description': description,
-                'custom_id': custom_id,
-                # 'shipping': {},  # Include Shipping information?
-            }],
-            'application_context': {
-                'locale': request.LANGUAGE_CODE,
-                'shipping_preference': 'NO_SHIPPING',  # 'SET_PROVIDED_ADDRESS',  # Do not set on non-ship order?
-                'user_action': 'CONTINUE',
-                'return_url': build_absolute_uri(request.event, 'plugins:paypal:return', kwargs=kwargs),
-                'cancel_url': build_absolute_uri(request.event, 'plugins:paypal:abort', kwargs=kwargs),
-            },
-        })
-
         try:
+            paymentreq = OrdersCreateRequest()
+            paymentreq.request_body({
+                'intent': 'CAPTURE',
+                # 'payer': {},  # We could transmit PII (email, name, address, etc.)
+                'purchase_units': [{
+                    'amount': {
+                        'currency_code': currency,
+                        'value': value,
+                    },
+                    'payee': payee,
+                    'description': description,
+                    'custom_id': custom_id,
+                    # 'shipping': {},  # Include Shipping information?
+                }],
+                'application_context': {
+                    'locale': request.LANGUAGE_CODE,
+                    'shipping_preference': 'NO_SHIPPING',  # 'SET_PROVIDED_ADDRESS',  # Do not set on non-ship order?
+                    'user_action': 'CONTINUE',
+                    'return_url': build_absolute_uri(request.event, 'plugins:paypal:return', kwargs=kwargs),
+                    'cancel_url': build_absolute_uri(request.event, 'plugins:paypal:abort', kwargs=kwargs),
+                },
+            })
             response = self.client.execute(paymentreq)
-        except IOError as ioe:
-            if isinstance(ioe, HttpError):
-                messages.error(request, _('We had trouble communicating with PayPal'))
+        except IOError as e:
+            messages.error(request, _('We had trouble communicating with PayPal'))
+            logger.error('OrdersCreateRequest: {}'.format(str(e)))
         else:
             if response.result.status not in ('CREATED', 'PAYER_ACTION_REQUIRED'):
                 messages.error(request, _('We had trouble communicating with PayPal'))
@@ -588,9 +585,9 @@ class PaypalMethod(BasePaymentProvider):
     def _create_payment(self, request, paymentreq):
         try:
             response = self.client.execute(paymentreq)
-        except IOError as ioe:
-            if isinstance(ioe, HttpError):
-                messages.error(request, _('We had trouble communicating with PayPal'))
+        except IOError as e:
+            messages.error(request, _('We had trouble communicating with PayPal'))
+            logger.error('_create_payment: {}'.format(str(e)))
         else:
             if response.result.status not in ('CREATED', 'SAVED', 'APPROVED', 'COMPLETED', 'PAYER_ACTION_REQUIRED'):
                 messages.error(request, _('We had trouble communicating with PayPal'))
@@ -631,12 +628,12 @@ class PaypalMethod(BasePaymentProvider):
                                          'proceed.'))
 
             self.init_api()
-            req = OrdersGetRequest(request.session.get('payment_paypal_oid'))
             try:
+                req = OrdersGetRequest(request.session.get('payment_paypal_oid'))
                 response = self.client.execute(req)
-            except IOError as ioe:
-                if isinstance(ioe, HttpError):
-                    raise PaymentException(_('We had trouble communicating with PayPal'))
+            except IOError as e:
+                raise PaymentException(_('We had trouble communicating with PayPal'))
+                logger.error('OrdersGetRequest: {}'.format(str(e)))
             else:
                 pp_captured_order = response.result
 
@@ -648,48 +645,47 @@ class PaypalMethod(BasePaymentProvider):
                                          'proceed.'))
 
             if pp_captured_order.status == 'APPROVED':
-                patchreq = OrdersPatchRequest(pp_captured_order.id)
-                patchreq.request_body([
-                    {
-                        "op": "replace",
-                        "path": "/purchase_units/@reference_id=='default'/custom_id",
-                        "value": '{prefix}{orderstring}{postfix}'.format(
-                            prefix='{} '.format(self.settings.prefix) if self.settings.prefix else '',
-                            orderstring=__('Order {slug}-{code}').format(
-                                slug=self.event.slug.upper(),
-                                code=payment.order.code
-                            ),
-                            postfix=' {}'.format(self.settings.postfix) if self.settings.postfix else ''
-                        ),
-                    },
-                    {
-                        "op": "replace",
-                        "path": "/purchase_units/@reference_id=='default'/description",
-                        "value": '{prefix}{orderstring}{postfix}'.format(
-                            prefix='{} '.format(self.settings.prefix) if self.settings.prefix else '',
-                            orderstring=__('Order {order} for {event}').format(
-                                event=request.event.name,
-                                order=payment.order.code
-                            ),
-                            postfix=' {}'.format(self.settings.postfix) if self.settings.postfix else ''
-                        ),
-                    }
-                ])
                 try:
+                    patchreq = OrdersPatchRequest(pp_captured_order.id)
+                    patchreq.request_body([
+                        {
+                            "op": "replace",
+                            "path": "/purchase_units/@reference_id=='default'/custom_id",
+                            "value": '{prefix}{orderstring}{postfix}'.format(
+                                prefix='{} '.format(self.settings.prefix) if self.settings.prefix else '',
+                                orderstring=__('Order {slug}-{code}').format(
+                                    slug=self.event.slug.upper(),
+                                    code=payment.order.code
+                                ),
+                                postfix=' {}'.format(self.settings.postfix) if self.settings.postfix else ''
+                            ),
+                        },
+                        {
+                            "op": "replace",
+                            "path": "/purchase_units/@reference_id=='default'/description",
+                            "value": '{prefix}{orderstring}{postfix}'.format(
+                                prefix='{} '.format(self.settings.prefix) if self.settings.prefix else '',
+                                orderstring=__('Order {order} for {event}').format(
+                                    event=request.event.name,
+                                    order=payment.order.code
+                                ),
+                                postfix=' {}'.format(self.settings.postfix) if self.settings.postfix else ''
+                            ),
+                        }
+                    ])
                     self.client.execute(patchreq)
-                except IOError as ioe:
-                    if isinstance(ioe, HttpError):
-                        messages.error(request, _('We had trouble communicating with PayPal'))
-                        return
-
-                capturereq = OrdersCaptureRequest(pp_captured_order.id)
+                except IOError as e:
+                    messages.error(request, _('We had trouble communicating with PayPal'))
+                    logger.error('OrdersPatchRequest: {}'.format(str(e)))
+                    return
 
                 try:
+                    capturereq = OrdersCaptureRequest(pp_captured_order.id)
                     response = self.client.execute(capturereq)
-                except IOError as ioe:
-                    if isinstance(ioe, HttpError):
-                        messages.error(request, _('We had trouble communicating with PayPal'))
-                        return
+                except IOError as e:
+                    messages.error(request, _('We had trouble communicating with PayPal'))
+                    logger.error('OrdersCaptureRequest: {}'.format(str(e)))
+                    return
                 else:
                     pp_captured_order = response.result
 
@@ -833,13 +829,14 @@ class PaypalMethod(BasePaymentProvider):
                 }
             })
             response = self.client.execute(req)
-        except IOError as ioe:
+        except IOError as e:
             refund.order.log_action('pretix.event.order.refund.failed', {
                 'local_id': refund.local_id,
                 'provider': refund.provider,
-                'error': str(ioe)
+                'error': str(e)
             })
-            raise PaymentException(_('Refunding the amount via PayPal failed: {}').format(str(ioe)))
+            logger.error('execute_refund: {}'.format(str(e)))
+            raise PaymentException(_('Refunding the amount via PayPal failed: {}').format(str(e)))
         if response.result.status == 'COMPLETED':
             req = OrdersGetRequest(refund.payment.info_data['id'])
             response = self.client.execute(req)
@@ -867,14 +864,14 @@ class PaypalMethod(BasePaymentProvider):
         # PayPal OID has been previously generated through XHR and onApprove() has fired
         if paypal_order_id and paypal_order_id == request.session.get('payment_paypal_oid', None):
             self.init_api()
-            req = OrdersGetRequest(paypal_order_id)
 
             try:
+                req = OrdersGetRequest(paypal_order_id)
                 response = self.client.execute(req)
-            except IOError as ioe:
-                if isinstance(ioe, HttpError):
-                    messages.warning(request, _('We had trouble communicating with PayPal'))
-                    return False
+            except IOError as e:
+                messages.warning(request, _('We had trouble communicating with PayPal'))
+                logger.error('OrdersGetRequest: {}'.format(str(e)))
+                return False
             else:
                 if response.result.status == 'APPROVED':
                     return True
