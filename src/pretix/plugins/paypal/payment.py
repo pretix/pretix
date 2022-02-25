@@ -252,7 +252,7 @@ class PaypalSettingsHolder(BasePaymentProvider):
         settings_content = ""
         if self.settings.connect_client_id and self.settings.connect_secret_key and not self.settings.secret:
             # Use ISU
-            if not self.settings.isu_merchant_id:
+            if not any([self.settings.isu_merchant_id, self.settings.connect_user_id]):
                 isu_referral_url = self.get_isu_referral_url(request)
                 settings_content = (
                     "<p>{}</p>"
@@ -275,6 +275,12 @@ class PaypalSettingsHolder(BasePaymentProvider):
                     }),
                     _('Disconnect from PayPal')
                 )
+        else:
+            settings_content = "<div class='alert alert-info'>%s<br /><code>%s</code></div>" % (
+                _('Please configure a PayPal Webhook to the following endpoint in order to automatically cancel orders '
+                  'when payments are refunded externally.'),
+                build_global_uri('plugins:paypal:webhook')
+            )
 
         if self.event.currency not in SUPPORTED_CURRENCIES:
             settings_content += (
