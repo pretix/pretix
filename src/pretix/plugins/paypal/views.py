@@ -184,6 +184,7 @@ class PayView(PaypalOrderView, TemplateView):
 
 
 @scopes_disabled()
+@event_permission_required('can_change_event_settings')
 def isu_return(request, *args, **kwargs):
     getparams = ['merchantId', 'merchantIdInPayPal', 'permissionsGranted', 'accountStatus', 'consentStatus', 'productIntentID', 'isEmailConfirmed']
     sessionparams = ['payment_paypal_isu_event', 'payment_paypal_isu_tracking_id']
