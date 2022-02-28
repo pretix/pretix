@@ -166,7 +166,7 @@ class UserAnonymizeView(AdministratorPermissionRequiredMixin, RecentAuthenticati
         self.object.fullname = ""
         self.object.is_active = False
         self.object.notifications_send = False
-        self.object.auth_backend = None
+        self.object.auth_backend = 'anonymized'
         self.object.auth_backend_identifier = None
         self.object.save()
         for le in self.object.all_logentries.filter(action_type="pretix.user.settings.changed"):
