@@ -499,6 +499,23 @@ class User(AbstractBaseUser, PermissionsMixin, LoggingMixin):
         )
 
     @scopes_disabled()
+    def get_organizers_with_any_permission(self, request=None):
+        """
+        Returns a queryset of organizers the user has any permissions to.
+
+        :param request: The current request (optional). Required to detect staff sessions properly.
+        :return: Iterable of Organizers
+        """
+        from .event import Organizer
+
+        if request and self.has_active_staff_session(request.session.session_key):
+            return Organizer.objects.all()
+
+        return Organizer.objects.filter(
+            id__in=self.teams.values_list('organizer', flat=True)
+        )
+
+    @scopes_disabled()
     def get_organizers_with_permission(self, permission, request=None):
         """
         Returns a queryset of organizers the user has a specific permissions to.
