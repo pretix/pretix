@@ -90,13 +90,16 @@
                         {% for groupkey, positions in cart %}
                             <tr>
                                 <td>
-                                    {% if not groupkey.4 %} {# is addon #}
+                                    {% if not groupkey.4 %} {# is not addon #}
                                         {{ positions|length }}x
                                     {% endif %}
                                 </td>
                                 <td>
                                     {% if groupkey.4 %} {# is addon #}
                                         +
+                                        {% if positions|length > 1 %}
+                                            {{ positions|length }}x
+                                        {% endif %}
                                     {% endif %}
                                     {{ groupkey.0.name }}{% if groupkey.1 %} – {{ groupkey.1.value }}{% endif %}
                                     {% if groupkey.2 %} {# subevent #}

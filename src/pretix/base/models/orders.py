@@ -1330,6 +1330,10 @@ class AbstractPosition(models.Model):
         else:
             return {}
 
+    @property
+    def item_and_variation(self):
+        return self.item, self.variation
+
     @meta_info_data.setter
     def meta_info_data(self, d):
         self.meta_info = json.dumps(d)

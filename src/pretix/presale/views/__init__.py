@@ -35,7 +35,7 @@
 from collections import defaultdict
 from datetime import datetime, timedelta
 from decimal import Decimal
-from functools import wraps
+from functools import wraps, partial
 from itertools import groupby
 
 from django.conf import settings
@@ -145,7 +145,7 @@ class CartMixin:
         # Group items of the same variation
         # We do this by list manipulations instead of a GROUP BY query, as
         # Django is unable to join related models in a .values() query
-        def keyfunc(pos):
+        def keyfunc(pos, for_sorting=False):
             if isinstance(pos, OrderPosition):
                 if pos.addon_to_id:
                     i = pos.addon_to.positionid
@@ -167,12 +167,11 @@ class CartMixin:
 
             if downloads \
                     or pos.pk in has_addons \
-                    or pos.addon_to_id \
                     or pos.item.issue_giftcard \
                     or (answers and (has_attendee_data or bool(pos.item.questions.all()))):  # do not use .exists() to re-use prefetch cache
                 return (
                     # standalone positions are grouped by main product position id, addons below them also sorted by position id
-                    i, addon_penalty, pos.pk,
+                    i, addon_penalty, pos.positionid if isinstance(pos, OrderPosition) else pos.pk,
                     # all other places are only used for positions that can be grouped. We just put zeros.
                 ) + (0, ) * 10
 
@@ -180,13 +179,23 @@ class CartMixin:
             category_key = (pos.item.category.position, pos.item.category.id) if pos.item.category is not None else (0, 0)
             item_key = pos.item.position, pos.item_id
             variation_key = (pos.variation.position, pos.variation.id) if pos.variation is not None else (0, 0)
+            grp = category_key + item_key + variation_key + (pos.price, (pos.voucher_id or 0), (pos.subevent_id or 0), (pos.seat_id or 0))
+            if pos.addon_to_id:
+                if for_sorting:
+                    ii = pos.positionid if isinstance(pos, OrderPosition) else pos.pk
+                else:
+                    ii = 0
+                print(pos, pos.positionid, i, addon_penalty, ii)
+                return (
+                    i, addon_penalty, ii,
+                ) + category_key + item_key + variation_key + (pos.price, (pos.voucher_id or 0), (pos.subevent_id or 0), (pos.seat_id or 0))
             return (
                 # These are grouped by attributes so we don't put any position ids
                 0, 0, 0,
-            ) + category_key + item_key + variation_key + (pos.price, (pos.voucher_id or 0), (pos.subevent_id or 0), (pos.seat_id or 0))
+            ) + grp
 
         positions = []
-        for k, g in groupby(sorted(lcp, key=keyfunc), key=keyfunc):
+        for k, g in groupby(sorted(lcp, key=partial(keyfunc, for_sorting=True)), key=keyfunc):
             g = list(g)
             group = g[0]
             group.count = len(g)

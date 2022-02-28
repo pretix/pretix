@@ -177,7 +177,7 @@ class TemplateBasedMailRenderer(BaseHTMLMailRenderer):
                     op.variation,
                     op.subevent,
                     op.attendee_name,
-                    (op.pk if op.addon_to_id else None),
+                    op.addon_to_id,
                     (op.pk if op.has_addons else None)
                 )
             )]
