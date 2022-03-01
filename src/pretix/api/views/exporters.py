@@ -147,7 +147,11 @@ class OrganizerExportersViewSet(ExportersMixin, viewsets.ViewSet):
     @cached_property
     def exporters(self):
         exporters = []
-        events = (self.request.auth or self.request.user).get_events_with_permission('can_view_orders', request=self.request).filter(
+        if isinstance(self.request.auth, (Device, TeamAPIToken)):
+            perm_holder = self.request.auth
+        else:
+            perm_holder = self.request.user
+        events = perm_holder.get_events_with_permission('can_view_orders', request=self.request).filter(
             organizer=self.request.organizer
         )
         responses = register_multievent_data_exporters.send(self.request.organizer)
