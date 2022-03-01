@@ -185,7 +185,6 @@ class CartMixin:
                     ii = pos.positionid if isinstance(pos, OrderPosition) else pos.pk
                 else:
                     ii = 0
-                print(pos, pos.positionid, i, addon_penalty, ii)
                 return (
                     i, addon_penalty, ii,
                 ) + category_key + item_key + variation_key + (pos.price, (pos.voucher_id or 0), (pos.subevent_id or 0), (pos.seat_id or 0))
