@@ -101,7 +101,6 @@ def restricted_plugin_kwargs():
         (p.module, p.name) for p in get_all_plugins(None)
         if (
             not p.name.startswith('.') and
-            getattr(p, 'visible', True) and
             getattr(p, 'restricted', False) and
             not hasattr(p, 'is_available')  # this means you should not really use restricted and is_available
         )
