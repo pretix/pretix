@@ -204,8 +204,8 @@
                     {% endfor %}
                 {% endif %}
                 </div>
-            {% elif line.addon_to and line.count == 1 %}
-                <div role="cell" class="count">&nbsp;</div>
+            {% elif line.addon_to %}
+                <div role="cell" class="count">{% if line.count == 1 %}&nbsp;{% else %}{{ line.count }}{% endif %}</div>
                 <div role="cell" class="singleprice price">
                     {% if event.settings.display_net_prices %}
                         {{ line.net_price|money:event.currency }}

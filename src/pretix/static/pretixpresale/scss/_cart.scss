@@ -12,7 +12,7 @@
     .count form {
         display: inline;
     }
-    .price, .count, .download-desktop {
+    .price, .download-desktop {
         text-align: right;
     }
     .price small,
@@ -55,6 +55,7 @@
     }
     .count {
         width: percentage((2 / $grid-columns));
+        text-align: center;
     }
     .singleprice, .totalprice {
         width: percentage((3 / $grid-columns));
