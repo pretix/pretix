@@ -35,7 +35,7 @@
 from collections import defaultdict
 from datetime import datetime, timedelta
 from decimal import Decimal
-from functools import wraps, partial
+from functools import partial, wraps
 from itertools import groupby
 
 from django.conf import settings
