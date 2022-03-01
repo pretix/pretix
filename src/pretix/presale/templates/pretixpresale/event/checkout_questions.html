@@ -121,8 +121,9 @@
                                     </label>
                                     <div class="col-md-9 form-control-text">
                                         <ul class="addon-list">
-                                            {% for a in pos.addons.all %}
-                                                <li>{{ a.item.name }}{% if a.variation %} – {{ a.variation.value }}{% endif %}</li>
+                                            {% regroup pos.addons.all by item_and_variation as addons_by_itemvar %}
+                                            {% for group in addons_by_itemvar %}
+                                                <li>{% if group.list|length > 1 %}{{ group.list|length }}&times; {% endif %}{{ group.grouper.0.name }}{% if group.grouper.1 %} – {{ group.grouper.1.value }}{% endif %}</li>
                                             {% endfor %}
                                         </ul>
                                     </div>
