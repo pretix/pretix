@@ -8,10 +8,10 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-02-25 10:05+0000\n"
-"PO-Revision-Date: 2022-02-21 16:00+0000\n"
+"PO-Revision-Date: 2022-03-03 07:00+0000\n"
 "Last-Translator: MaLund13 <mart.lund13@gmail.com>\n"
-"Language-Team: Swedish <https://translate.pretix.eu/projects/pretix/pretix-"
-"js/sv/>\n"
+"Language-Team: Swedish <https://translate.pretix.eu/projects/pretix/"
+"pretix-js/sv/>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -66,7 +66,7 @@ msgstr "Välj en incheckningslista"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:31
 msgid "No active check-in lists found."
-msgstr "Inga aktiva incheckningslistor hittades"
+msgstr "Inga aktiva incheckningslistor hittades."
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:32
 msgid "Switch check-in list"
@@ -130,83 +130,73 @@ msgid "Cancel"
 msgstr "Avbryt"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:48
-#, fuzzy
-#| msgctxt "widget"
-#| msgid "Continue"
 msgid "Continue"
 msgstr "Fortsätt"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:49
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:58
 msgid "Ticket not paid"
-msgstr ""
+msgstr "Biljetten är inte betald"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:50
 msgid "This ticket is not yet paid. Do you want to continue anyways?"
-msgstr ""
+msgstr "Biljetten är ännu inte betald. Vill du ändå fortsätta?"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:51
 msgid "Additional information required"
-msgstr ""
+msgstr "Ytterligare information krävs"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:52
 msgid "Valid ticket"
-msgstr ""
+msgstr "Giltig biljett"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:53
 msgid "Exit recorded"
-msgstr ""
+msgstr "Utgång har registrerats"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:54
 msgid "Ticket already used"
-msgstr ""
+msgstr "Biljetten har redan använts"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:55
 msgid "Information required"
-msgstr ""
+msgstr "Information krävs"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:56
-#, fuzzy
-#| msgid "Unknown error."
 msgid "Unknown ticket"
-msgstr "Okänt fel."
+msgstr "Okänd biljett"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:57
 msgid "Ticket type not allowed here"
-msgstr ""
+msgstr "Biljettypen gäller ej här"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:59
 msgid "Entry not allowed"
-msgstr ""
+msgstr "Inträde är inte tillåtet"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:60
 msgid "Ticket code revoked/changed"
-msgstr ""
+msgstr "Biljettkoden har spärrats/ändrats"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:61
 msgid "Order canceled"
-msgstr ""
+msgstr "Beställningen har avbokats"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:62
-#, fuzzy
-#| msgid "Check-in QR"
 msgid "Checked-in Tickets"
-msgstr "QR-kod för att Checka in"
+msgstr "Incheckade biljetter"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:63
 msgid "Valid Tickets"
-msgstr ""
+msgstr "Giltiga biljetter"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:64
 msgid "Currently inside"
-msgstr ""
+msgstr "För tillfället närvarande"
 
 #: pretix/static/lightbox/js/lightbox.js:96
-#, fuzzy
-#| msgctxt "widget"
-#| msgid "Close"
 msgid "close"
-msgstr "Stäng"
+msgstr "stäng"
 
 #: pretix/static/pretixbase/js/asynctask.js:43
 #: pretix/static/pretixbase/js/asynctask.js:119
@@ -344,10 +334,8 @@ msgid "Event admission"
 msgstr "Tillträde till evenemang"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:102
-#, fuzzy
-#| msgid "Current date and time"
 msgid "custom date and time"
-msgstr "Aktuellt datum och tid"
+msgstr "anpassat datum och tid"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:103
 msgid "custom time"
@@ -363,7 +351,7 @@ msgstr "Lägg till villkor"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:106
 msgid "minutes"
-msgstr ""
+msgstr "minuter"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:69
 msgid "Lead Scan QR"
@@ -390,10 +378,8 @@ msgid "Barcode area"
 msgstr "QR-kod-område"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:531
-#, fuzzy
-#| msgid "Barcode area"
 msgid "Image area"
-msgstr "QR-kod-område"
+msgstr "Bildområde"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:533
 msgid "Powered by pretix"
@@ -401,7 +387,7 @@ msgstr "Drivs av pretix"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:535
 msgid "Object"
-msgstr "Object"
+msgstr "Objekt"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:539
 msgid "Ticket design"
@@ -458,11 +444,11 @@ msgstr "Ingen"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:456
 msgid "Search query"
-msgstr ""
+msgstr "Sökterm"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:459
 msgid "Selected only"
-msgstr ""
+msgstr "Endast valda"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:886
 msgid "Use a different name internally"
@@ -505,26 +491,22 @@ msgstr[0] "(ytterligare ett datum)"
 msgstr[1] "({num} fler datum)"
 
 #: pretix/static/pretixpresale/js/ui/cart.js:43
-#, fuzzy
-#| msgid "The items in your cart are no longer reserved for you."
 msgid ""
 "The items in your cart are no longer reserved for you. You can still "
 "complete your order as long as they’re available."
-msgstr "Varorna i din varukorg är inte längre reserverade för dig."
+msgstr ""
+"Varorna i din varukorg är inte längre reserverade för dig. Du kan dock "
+"genomföra din order så länge varorna fortfarande är tillgängliga."
 
 #: pretix/static/pretixpresale/js/ui/cart.js:45
 msgid "Cart expired"
 msgstr "Varukorgen har gått ut"
 
 #: pretix/static/pretixpresale/js/ui/cart.js:50
-#, fuzzy
-#| msgid "The items in your cart are reserved for you for one minute."
-#| msgid_plural ""
-#| "The items in your cart are reserved for you for {num} minutes."
 msgid "The items in your cart are reserved for you for one minute."
 msgid_plural "The items in your cart are reserved for you for {num} minutes."
-msgstr[0] "Artiklarna i din varukorg är reserverade i en minut."
-msgstr[1] "Artiklarna i din varukorg är reserverade i {num} minuter."
+msgstr[0] "Artiklarna i din varukorg är reserverade för dig i en minut."
+msgstr[1] "Artiklarna i din varukorg är reserverade för dig i {num} minuter."
 
 #: pretix/static/pretixpresale/js/ui/main.js:144
 msgid "The organizer keeps %(currency)s %(amount)s"
@@ -543,10 +525,8 @@ msgid "Please enter a quantity for one of the ticket types."
 msgstr "Vänligen ange en kvantitet för en av biljettyperna."
 
 #: pretix/static/pretixpresale/js/ui/main.js:397
-#, fuzzy
-#| msgid "Cart expired"
 msgid "required"
-msgstr "Varukorgen har gått ut"
+msgstr "obligatorisk"
 
 #: pretix/static/pretixpresale/js/ui/main.js:500
 #: pretix/static/pretixpresale/js/ui/main.js:519
@@ -640,14 +620,13 @@ msgid ""
 "There are currently a lot of users in this ticket shop. Please open the shop "
 "in a new tab to continue."
 msgstr ""
+"Biljettbutiken används just nu av många. Vänligen öppna butiken i en ny flik "
+"för att fortsätta."
 
 #: pretix/static/pretixpresale/js/widget/widget.js:34
-#, fuzzy
-#| msgctxt "widget"
-#| msgid "Close ticket shop"
 msgctxt "widget"
 msgid "Open ticket shop"
-msgstr "Stäng biljettshop"
+msgstr "Öppna biljettbutik"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:35
 msgctxt "widget"
@@ -660,6 +639,9 @@ msgid ""
 "We could not create your cart, since there are currently too many users in "
 "this ticket shop. Please click \"Continue\" to retry in a new tab."
 msgstr ""
+"Vi kunde inte skapa din varukorg, då det just nu är många användare i den "
+"här biljettbutiken. Klicka på \"Fortsätt\" för att försöka på nytt i en ny "
+"flik."
 
 #: pretix/static/pretixpresale/js/widget/widget.js:38
 msgctxt "widget"
@@ -753,7 +735,7 @@ msgstr "Ingen platsbokning"
 #: pretix/static/pretixpresale/js/widget/widget.js:56
 msgctxt "widget"
 msgid "Load more"
-msgstr ""
+msgstr "Ladda mer"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:58
 msgid "Mo"
