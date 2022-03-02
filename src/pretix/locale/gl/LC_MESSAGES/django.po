@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-02-25 10:05+0000\n"
-"PO-Revision-Date: 2022-03-02 07:52+0000\n"
+"PO-Revision-Date: 2022-03-03 07:00+0000\n"
 "Last-Translator: Ismael Menéndez Fernández <ismael.menendez@balidea.com>\n"
 "Language-Team: Galician <https://translate.pretix.eu/projects/pretix/pretix/"
 "gl/>\n"
@@ -6063,15 +6063,14 @@ msgstr ""
 "cantidad que seleccionó. Por favor vea abajo para más detalles."
 
 #: pretix/base/services/cart.py:96
-#, fuzzy, python-format
+#, python-format
 msgid "You cannot select more than %s items per order."
-msgstr "No se pueden seleccionar más de %s posiciones por pedido."
+msgstr "Non se poden seleccionar máis de % s entradas por pedido."
 
 #: pretix/base/services/cart.py:97
-#, fuzzy, python-format
+#, python-format
 msgid "You cannot select more than %(max)s items of the product %(product)s."
-msgstr ""
-"No puede seleccionar más de %(max)s elementos del producto %(product)s."
+msgstr "Non pode seleccionar máis de %(max) s entradas do tipo %(product)s."
 
 #: pretix/base/services/cart.py:98
 #, fuzzy, python-format
@@ -6593,13 +6592,13 @@ msgid "Your cart is empty."
 msgstr "O seu pedido está baleiro."
 
 #: pretix/base/services/orders.py:110
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "You cannot select more than %(max)s items of the product %(product)s. We "
 "removed the surplus items from your cart."
 msgstr ""
-"No puede seleccionar más de %(max)s elementos del producto %(product)s. "
-"Hemos retirado los artículos sobrantes de su carrito."
+"Non pode seleccionar máis de %(max) s entradas do tipo %(product)s. "
+"Retiramos as entradas sobrantes do seu carriño."
 
 #: pretix/base/services/orders.py:115
 msgid "The presale period has ended."
@@ -10083,10 +10082,9 @@ msgstr "Tipo de archivo no permitido!"
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:52
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:114
 #: pretix/plugins/sendmail/forms.py:113
-#, fuzzy
 msgctxt "subevent"
 msgid "All dates"
-msgstr "Todas las fechas"
+msgstr "Todas as datas"
 
 #: pretix/control/forms/event.py:80
 #, fuzzy
@@ -24868,13 +24866,12 @@ msgstr ""
 "favor, inténtelo de nuevo o póngase en contacto con nosotros."
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/pending.html:8
-#, fuzzy
 msgid ""
 "We're waiting for an answer from PayPal regarding your payment. Please "
 "contact us, if this takes more than a few hours."
 msgstr ""
-"Estamos esperando una respuesta de PayPal con respecto a su pago. Póngase en "
-"contacto con nosotros, si esto tarda más de unas horas."
+"Estamos a esperar unha resposta de PayPal con respecto ao seu pago. Póñase "
+"en contacto connosco, se isto tarda máis dunhas horas."
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/redirect.html:17
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/redirect.html:17
@@ -26251,13 +26248,12 @@ msgid "MOTO"
 msgstr ""
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html:4
-#, fuzzy
 msgid ""
 "We're waiting for an answer from the payment provider regarding your "
 "payment. Please contact us if this takes more than a few days."
 msgstr ""
-"Estamos esperando una respuesta del proveedor de pagos con respecto a su "
-"pago. Póngase en contacto con nosotros si esto tarda más de unos días."
+"Estamos a esperar unha resposta do provedor de pagos con respecto ao seu "
+"pago. Póñase en contacto connosco se isto tarda máis duns días."
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html:9
 #, fuzzy
@@ -26929,9 +26925,8 @@ msgstr ""
 "adicionales antes de continuar."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_addons.html:13
-#, fuzzy
 msgid "We're now trying to book these add-ons for you!"
-msgstr "¡Estamos tratando de registrar estos complementos para ti!"
+msgstr "Estamos a tratar de rexistrar estes complementos para ti!"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_addons.html:20
 #, fuzzy
@@ -26992,9 +26987,8 @@ msgid "Please review the details below and confirm your order."
 msgstr "Por favor, revise os detalles a continuación e confirme o seu pedido."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:13
-#, fuzzy
 msgid "Please hang tight, we're finalizing your order!"
-msgstr "¡Porfavor espera, estamos finalizando tu orden!"
+msgstr "Por favor espera, estamos a finalizar o teu pedido!"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:32
 #, fuzzy
@@ -27497,9 +27491,8 @@ msgid "The image you previously uploaded"
 msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:220
-#, fuzzy
 msgid "Okay, we're removing that…"
-msgstr "Entendido, estamos removiendo eso…"
+msgstr "Entendido, estamos a quitar iso…"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:225
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:227
@@ -27520,9 +27513,8 @@ msgid ""
 msgstr "Quitar %(item)s do seu carriño. Agora ten %(count)s no seu carriño."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:240
-#, fuzzy
 msgid "We're trying to reserve another one for you!"
-msgstr "¡Estamos tratando de reservar otro para ti!"
+msgstr "Estamos a tratar de reservar outro para ti!"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:241
 #: pretix/presale/templates/pretixpresale/event/index.html:234
@@ -27550,11 +27542,11 @@ msgstr ""
 "Engadir un %(item)s mais ao pedido. Agora mesmo tes %(count)s no teu pedido."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:358
-#, fuzzy, python-format
+#, python-format
 msgid "One product"
 msgid_plural "%(num)s products"
-msgstr[0] "Un producto"
-msgstr[1] "%(num)s productos"
+msgstr[0] "Unha entrada"
+msgstr[1] "%(num)s entradas"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:372
 #, fuzzy, python-format
@@ -27918,9 +27910,8 @@ msgstr "Engadir ao calendario"
 #: pretix/presale/templates/pretixpresale/event/index.html:233
 #: pretix/presale/templates/pretixpresale/event/seatingplan.html:23
 #: pretix/presale/templates/pretixpresale/event/voucher.html:84
-#, fuzzy
 msgid "We're now trying to reserve this for you!"
-msgstr "¡Estamos tratando de reservar esto para ti!"
+msgstr "Estamos a tratar de reservar isto para ti!"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:253
 msgid ""
