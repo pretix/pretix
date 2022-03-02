@@ -1,0 +1,28 @@
+@startuml
+
+partition "For every cart position" {
+    (*) --> "Get default price from product"
+    --> if "Product has variations?" then
+        -->[yes] "Override with price from variation"
+        --> if "Event series?" then
+            -->[yes] "Override with price from subevent"
+            -down-> "Store as listed_price"
+        else
+            -down->[no] "Store as listed_price"
+        endif
+    else
+        -down->[no] "Store as listed_price"
+    endif
+    --> if "Voucher applied?" then
+        -->[yes] "Apply voucher pricing"
+        --> "Store as price_after_voucher"
+    else
+        -->[no] "Store as price_after_voucher"
+    endif
+    --> "Apply custom price if product allows\nApply tax rule\nSubtract bundled products"
+    --> "Store as line_price (gross), tax_rate"
+}
+--> "Apply offers engine"
+--> "Store as price (gross)"
+
+@enduml
