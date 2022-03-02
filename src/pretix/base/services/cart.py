@@ -58,7 +58,9 @@ from pretix.base.models.tax import TAXED_ZERO, TaxedPrice, TaxRule
 from pretix.base.reldate import RelativeDateWrapper
 from pretix.base.services.checkin import _save_answers
 from pretix.base.services.locking import LockTimeoutException, NoLockManager
-from pretix.base.services.pricing import get_listed_price, get_price, get_line_price
+from pretix.base.services.pricing import (
+    get_line_price, get_listed_price, get_price,
+)
 from pretix.base.services.quotas import QuotaAvailability
 from pretix.base.services.tasks import ProfiledEventTask
 from pretix.base.settings import PERSON_NAME_SCHEMES, LazyI18nStringList
@@ -620,7 +622,7 @@ class CartManager:
                 price_after_voucher = listed_price
             custom_price = None
             if item.free_price and i.get('price'):
-                custom_price = Decimal(str(custom_price).replace(",", "."))
+                custom_price = Decimal(str(i.get('price')).replace(",", "."))
                 if custom_price > 100000000:
                     raise ValueError('price_too_high')
 
@@ -728,16 +730,19 @@ class CartManager:
             input_addons[cp.id][a['item'], a['variation']] = a.get('count', 1)
             selected_addons[cp.id, item.category_id][a['item'], a['variation']] = a.get('count', 1)
 
-            if price_included[cp.pk].get(item.category_id):
-                price = TAXED_ZERO
-            else:
-                price = self._get_price(item, variation, None, a.get('price'), cp.subevent)
+            listed_price = get_listed_price(item, variation, cp.subevent)
+            custom_price = None
+            if item.free_price and a.get('price'):
+                custom_price = Decimal(str(a.get('price')).replace(",", "."))
+                if custom_price > 100000000:
+                    raise ValueError('price_too_high')
 
             # Fix positions with wrong price (TODO: happens out-of-cartmanager-transaction and therefore a little hacky)
             for ca in current_addons[cp][a['item'], a['variation']]:
-                if ca.price != price.gross:
-                    ca.price = price.gross
-                    ca.save(update_fields=['price'])
+                if ca.listed_price != listed_price:
+                    ca.listed_price = ca.listed_price
+                    ca.price_after_voucher = ca.price_after_voucher
+                    ca.save(update_fields=['listed_price', 'price_after_voucher'])
 
             if a.get('count', 1) > len(current_addons[cp][a['item'], a['variation']]):
                 # This add-on is new, add it to the cart
@@ -746,9 +751,18 @@ class CartManager:
 
                 op = self.AddOperation(
                     count=a.get('count', 1) - len(current_addons[cp][a['item'], a['variation']]),
-                    item=item, variation=variation, price=price, voucher=None, quotas=quotas,
-                    addon_to=cp, subevent=cp.subevent, includes_tax=bool(price.rate), bundled=[], seat=None,
-                    price_before_voucher=None
+                    item=item,
+                    variation=variation,
+                    voucher=None,
+                    quotas=quotas,
+                    addon_to=cp,
+                    subevent=cp.subevent,
+                    bundled=[],
+                    seat=None,
+                    listed_price=listed_price,
+                    price_after_voucher=listed_price,
+                    custom_price_input=custom_price,
+                    custom_price_input_is_net=self.event.settings.display_net_prices,
                 )
                 self._check_item_constraints(op, operations)
                 operations.append(op)
