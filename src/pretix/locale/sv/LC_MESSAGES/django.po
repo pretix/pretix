@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-02-25 10:05+0000\n"
-"PO-Revision-Date: 2022-02-21 16:00+0000\n"
+"PO-Revision-Date: 2022-03-03 07:00+0000\n"
 "Last-Translator: MaLund13 <mart.lund13@gmail.com>\n"
 "Language-Team: Swedish <https://translate.pretix.eu/projects/pretix/pretix/"
 "sv/>\n"
@@ -266,7 +266,7 @@ msgstr "Beställning markerad som betald"
 #: pretix/control/templates/pretixcontrol/event/mail.html:111
 #: pretix/control/views/orders.py:1286
 msgid "Order canceled"
-msgstr "Beställning avbruten"
+msgstr "Beställningen har avbokats"
 
 #: pretix/api/webhooks.py:216 pretix/base/notifications.py:257
 msgid "Order reactivated"
@@ -1822,6 +1822,8 @@ msgid ""
 "Due to technical reasons you cannot set inputs, that need to be masked (e.g. "
 "passwords), to %(value)s."
 msgstr ""
+"På grund av tekniska skäl kan du inte ange fält som behöver maskeras (t.ex. "
+"lösenord) till %(value)s."
 
 #: pretix/base/forms/auth.py:57 pretix/base/forms/auth.py:168
 msgid "Keep me logged in"
@@ -1951,6 +1953,8 @@ msgid ""
 "Optional, but it might be required for you to claim tax benefits on your "
 "invoice depending on your and the seller’s country of residence."
 msgstr ""
+"Valfritt, men beroende på ditt och säljarens bosättningsland kan detta "
+"krävas för att kunna göra skattemässigt anspråk på fakturan."
 
 #: pretix/base/forms/questions.py:1058
 msgid "You need to provide a company name."
@@ -2233,6 +2237,8 @@ msgid ""
 "Using the conversion rate of 1:{rate} as published by the European Central "
 "Bank on {date}, this corresponds to:"
 msgstr ""
+"Med växlingskursen 1:{rate} från den Europeiska Centralbanken den {date}, "
+"motsvarar detta:"
 
 #: pretix/base/invoice.py:713
 #, python-brace-format
@@ -2241,6 +2247,8 @@ msgid ""
 "Using the conversion rate of 1:{rate} as published by the European Central "
 "Bank on {date}, the invoice total corresponds to {total}."
 msgstr ""
+"Med växlingskursen 1:{rate} från den Europeiska Centralbanken den {date}, "
+"motsvarar den totala fakturan {total}."
 
 #: pretix/base/invoice.py:726
 msgid "Modern Invoice Renderer (pretix 2.7)"
@@ -2341,7 +2349,7 @@ msgstr ""
 #: pretix/base/models/checkin.py:60 pretix/control/navigation.py:571
 #: pretix/control/templates/pretixcontrol/organizers/gates.html:5
 msgid "Gates"
-msgstr ""
+msgstr "Gater"
 
 #: pretix/base/models/checkin.py:61
 #, fuzzy
@@ -2410,10 +2418,8 @@ msgid "Forbidden by custom rule"
 msgstr "Förbjudet av anpassad regel"
 
 #: pretix/base/models/checkin.py:265
-#, fuzzy
-#| msgid "Ticket check-in reverted"
 msgid "Ticket code revoked/changed"
-msgstr "Biljettincheckningen har återställts"
+msgstr "Biljettkoden har spärrats/ändrats"
 
 #: pretix/base/models/checkin.py:266
 msgid "Information required"
@@ -2421,11 +2427,11 @@ msgstr "Information krävs"
 
 #: pretix/base/models/checkin.py:267
 msgid "Ticket already used"
-msgstr "Biljetten är redan använd"
+msgstr "Biljetten har redan använts"
 
 #: pretix/base/models/checkin.py:268
 msgid "Ticket type not allowed here"
-msgstr "Biljetttyp är inte godkänd här"
+msgstr "Biljettypen gäller ej här"
 
 #: pretix/base/models/checkin.py:269
 msgid "Server error"
@@ -2526,7 +2532,7 @@ msgstr "Förkortningen kan endast innehålla, bokstäver, nummer och streck."
 #: pretix/base/models/event.py:475 pretix/base/models/organizer.py:88
 #: pretix/control/templates/pretixcontrol/organizers/index.html:47
 msgid "Short form"
-msgstr ""
+msgstr "Kortform"
 
 #: pretix/base/models/event.py:477
 msgid "Shop is live"
@@ -2768,6 +2774,9 @@ msgid ""
 "If checked, an event can only be taken live if the property is set. In event "
 "series, its always optional to set a value for individual dates"
 msgstr ""
+"När detta är ikryssat, kan ett evenemang endast publiceras när ett värde "
+"angetts. I en serie evenemang är det alltid valfritt att välja ett värde för "
+"respektive datum."
 
 #: pretix/base/models/event.py:1529
 #, fuzzy
@@ -2832,6 +2841,8 @@ msgstr "Internt namn"
 msgid ""
 "If you set this, this will be used instead of the public name in the backend."
 msgstr ""
+"Om du väljer detta, kommer det användas istället för det offentliga namnet i "
+"backenden."
 
 #: pretix/base/models/items.py:94
 msgid "Category description"
@@ -2938,7 +2949,7 @@ msgstr ""
 
 #: pretix/base/models/items.py:384
 msgid "Free price input"
-msgstr ""
+msgstr "Valfri prisangivelse"
 
 #: pretix/base/models/items.py:385
 msgid ""
@@ -3377,7 +3388,7 @@ msgstr "Kvantitet"
 
 #: pretix/base/models/items.py:1132
 msgid "Designated price part"
-msgstr ""
+msgstr "Utvald prisandel"
 
 #: pretix/base/models/items.py:1133
 msgid ""
@@ -3386,6 +3397,10 @@ msgid ""
 "taxation, but can be kept blank otherwise. This value will NOT be added to "
 "the base item's price."
 msgstr ""
+"Om detta är valt, kommer det visas att den sammanslagna produkten är orsaken "
+"till det givna värdet av det totala bruttopriset. Detta kan vara viktigt i "
+"fall med blandade momssatser, men kan annars lämnas tomt. Detta värde kommer "
+"INTE läggas på grundproduktens pris."
 
 #: pretix/base/models/items.py:1156
 msgid "The bundled item must belong to the same event as the item."
@@ -3536,7 +3551,7 @@ msgstr "Ogiltigt alternativ valt."
 
 #: pretix/base/models/items.py:1406
 msgid "The number is to low."
-msgstr ""
+msgstr "Talet är för lågt."
 
 #: pretix/base/models/items.py:1408
 msgid "The number is to high."
@@ -3902,7 +3917,7 @@ msgstr "<fil>"
 
 #: pretix/base/models/orders.py:1288 pretix/base/models/orders.py:1296
 msgid "Empty, if this product is not an admission ticket"
-msgstr ""
+msgstr "Tom, om denna produkt inte är en tillträdesbiljett"
 
 #: pretix/base/models/orders.py:1490
 msgctxt "payment_state"
@@ -4046,7 +4061,7 @@ msgstr "Värde"
 
 #: pretix/base/models/orders.py:2190
 msgid "Order position"
-msgstr ""
+msgstr "Beställd produkt"
 
 #: pretix/base/models/orders.py:2394 pretix/base/services/orders.py:955
 #, python-format
@@ -4059,11 +4074,11 @@ msgstr "Varukorgs-ID (t.ex. sessions-ID)"
 
 #: pretix/base/models/orders.py:2589
 msgid "Cart position"
-msgstr ""
+msgstr "Produkt i varukorgen"
 
 #: pretix/base/models/orders.py:2590
 msgid "Cart positions"
-msgstr ""
+msgstr "Produkter i varukorgen"
 
 #: pretix/base/models/orders.py:2623
 msgid "Business customer"
@@ -4229,7 +4244,7 @@ msgstr "Bör vara kort, t.ex. \"Moms\""
 
 #: pretix/base/models/tax.py:155
 msgid "The configured product prices include the tax amount"
-msgstr ""
+msgstr "De konfigurerade produktpriserna inkluderar moms"
 
 #: pretix/base/models/tax.py:159
 msgid ""
@@ -4634,12 +4649,12 @@ msgstr "Total (netto)"
 
 #: pretix/base/notifications.py:202
 msgid "Pending amount"
-msgstr ""
+msgstr "Väntande belopp"
 
 #: pretix/base/notifications.py:204 pretix/control/forms/filter.py:182
 #: pretix/control/forms/orderimport.py:37
 msgid "Order status"
-msgstr ""
+msgstr "Beställningsstatus"
 
 #: pretix/base/notifications.py:222
 #, fuzzy
@@ -4651,27 +4666,27 @@ msgstr "Extra produkter"
 #: pretix/base/notifications.py:223
 #: pretix/base/templates/pretixbase/email/order_details.html:144
 msgid "View order details"
-msgstr ""
+msgstr "Visa beställningsdetaljer"
 
 #: pretix/base/notifications.py:234
 #, python-brace-format
 msgid "A new order has been placed: {order.code}"
-msgstr ""
+msgstr "En ny beställning har lagts: {order.code}"
 
 #: pretix/base/notifications.py:240
 #, python-brace-format
 msgid "A new order has been placed that requires approval: {order.code}"
-msgstr ""
+msgstr "En ny beställning som kräver godkännande har lagts: {order.code}"
 
 #: pretix/base/notifications.py:246
 #, python-brace-format
 msgid "Order {order.code} has been marked as paid."
-msgstr ""
+msgstr "Beställning {order.code} har markerats som betald."
 
 #: pretix/base/notifications.py:252
 #, python-brace-format
 msgid "Order {order.code} has been canceled."
-msgstr ""
+msgstr "Beställning {order.code} har avbokats."
 
 #: pretix/base/notifications.py:258
 #, fuzzy, python-brace-format
@@ -9806,7 +9821,7 @@ msgstr ""
 #: pretix/control/forms/filter.py:1729 pretix/control/forms/filter.py:1731
 #: pretix/control/forms/filter.py:2208 pretix/control/forms/filter.py:2210
 msgid "Search query"
-msgstr ""
+msgstr "Sökterm"
 
 #: pretix/control/forms/filter.py:1284
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:37
@@ -17965,7 +17980,7 @@ msgstr "Dina ändringar har sparats."
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:355
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:364
 msgid "minutes"
-msgstr ""
+msgstr "minuter"
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:360
 msgid "Break between slots"
@@ -23987,12 +24002,12 @@ msgid "The items in your cart are reserved for you for %(minutes)s minutes."
 msgstr "Varorna i din varukorg är reserverade för dig i %(minutes)s minuter."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:392
-#, fuzzy
-#| msgid "The items in your cart are no longer reserved for you."
 msgid ""
 "The items in your cart are no longer reserved for you. You can still "
 "complete your order as long as they’re available."
-msgstr "Varorna i din varukorg är inte längre reserverade för dig."
+msgstr ""
+"Varorna i din varukorg är inte längre reserverade för dig. Du kan dock "
+"genomföra din order så länge varorna fortfarande är tillgängliga."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:396
 msgid "Overview of your ordered products."
