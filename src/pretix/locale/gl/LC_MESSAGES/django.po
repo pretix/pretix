@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-02-25 10:05+0000\n"
-"PO-Revision-Date: 2022-02-24 12:54+0000\n"
-"Last-Translator: Raphael Michel <michel@rami.io>\n"
+"PO-Revision-Date: 2022-03-02 07:52+0000\n"
+"Last-Translator: Ismael Menéndez Fernández <ismael.menendez@balidea.com>\n"
 "Language-Team: Galician <https://translate.pretix.eu/projects/pretix/pretix/"
 "gl/>\n"
 "Language: gl\n"
@@ -6111,13 +6111,12 @@ msgstr ""
 "afectadas han sido eliminadas de su carrito."
 
 #: pretix/base/services/cart.py:106 pretix/base/services/orders.py:128
-#, fuzzy
 msgid ""
 "The presale period for one of the events in your cart has ended. The "
 "affected positions have been removed from your cart."
 msgstr ""
-"El período de preventa de uno de los eventos de su carrito ha finalizado. "
-"Las posiciones afectadas han sido eliminadas de su carrito."
+"Este evento non está en período de preventa. As posicións afectadas foron "
+"eliminadas do seu carriño."
 
 #: pretix/base/services/cart.py:108
 #, fuzzy
@@ -6603,9 +6602,8 @@ msgstr ""
 "Hemos retirado los artículos sobrantes de su carrito."
 
 #: pretix/base/services/orders.py:115
-#, fuzzy
 msgid "The presale period has ended."
-msgstr "El período de preventa ha terminado."
+msgstr "O período de preventa rematou."
 
 #: pretix/base/services/orders.py:116
 msgid ""
@@ -6655,13 +6653,12 @@ msgid "You need a valid voucher code to order one of the products."
 msgstr "Necesita un código de recibo válido para pedir este produto."
 
 #: pretix/base/services/orders.py:126
-#, fuzzy
 msgid ""
 "The presale period for one of the events in your cart has not yet started. "
 "The affected positions have been removed from your cart."
 msgstr ""
-"El período de preventa de uno de los eventos de su carrito aún no ha "
-"comenzado. Las posiciones afectadas han sido eliminadas de su carrito."
+"Este evento non está en período de preventa. As posicións afectadas foron "
+"eliminadas do seu carriño."
 
 #: pretix/base/services/orders.py:130
 #, fuzzy
