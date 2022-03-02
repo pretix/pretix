@@ -53,7 +53,7 @@ from pretix.base.models.items import (
     ItemAddOn, ItemBundle, SubEventItem, SubEventItemVariation,
 )
 from pretix.base.services.cart import (
-    CartError, CartManager, error_messages, update_tax_rates,
+    CartError, CartManager, error_messages,
 )
 from pretix.testutils.scope import classscope
 from pretix.testutils.sessions import get_cart_session_key
@@ -1557,7 +1557,8 @@ class CartTest(CartTestMixin, TestCase):
         self.assertEqual(objs[0].item, self.ticket)
         self.assertIsNone(objs[0].variation)
         self.assertEqual(objs[0].price, Decimal('21.00'))
-        self.assertEqual(objs[0].price_before_voucher, Decimal('23.00'))
+        self.assertEqual(objs[0].listed_price, Decimal('23.00'))
+        self.assertEqual(objs[0].price_after_voucher, Decimal('20.70'))
 
     def test_voucher_free_price_before_voucher_cap(self):
         with scopes_disabled():
@@ -1582,7 +1583,8 @@ class CartTest(CartTestMixin, TestCase):
         self.assertEqual(objs[0].item, self.ticket)
         self.assertIsNone(objs[0].variation)
         self.assertEqual(objs[0].price, Decimal('41.00'))
-        self.assertEqual(objs[0].price_before_voucher, Decimal('41.00'))
+        self.assertEqual(objs[0].listed_price, Decimal('23.00'))
+        self.assertEqual(objs[0].price_after_voucher, Decimal('20.70'))
 
     def test_voucher_free_price_lower_bound(self):
         with scopes_disabled():
@@ -1607,7 +1609,8 @@ class CartTest(CartTestMixin, TestCase):
         self.assertEqual(objs[0].item, self.ticket)
         self.assertIsNone(objs[0].variation)
         self.assertEqual(objs[0].price, Decimal('20.70'))
-        self.assertEqual(objs[0].price_before_voucher, Decimal('23.00'))
+        self.assertEqual(objs[0].listed_price, Decimal('23.00'))
+        self.assertEqual(objs[0].price_after_voucher, Decimal('20.70'))
 
     def test_voucher_redemed(self):
         with scopes_disabled():
@@ -2054,11 +2057,11 @@ class CartTest(CartTestMixin, TestCase):
                 price=23, expires=now() + timedelta(minutes=10)
             )
             v2 = Voucher.objects.create(
-                event=self.event, price_mode='set', quota=self.quota_all, value=Decimal('4.00'), max_usages=100
+                event=self.event, price_mode='set', quota=self.quota_all, value=Decimal('8.00'), max_usages=100
             )
             cp2 = CartPosition.objects.create(
                 event=self.event, cart_id=self.session_key, item=self.shirt, variation=self.shirt_blue,
-                price=150, expires=now() + timedelta(minutes=10), voucher=v2
+                price=8, expires=now() + timedelta(minutes=10), voucher=v2
             )
             v = Voucher.objects.create(
                 event=self.event, price_mode='set', quota=self.quota_all, value=Decimal('4.00'), max_usages=100
@@ -2073,7 +2076,7 @@ class CartTest(CartTestMixin, TestCase):
             assert cp1.voucher == v
             assert cp1.price == Decimal('4.00')
             assert cp2.voucher == v2
-            assert cp2.price == Decimal('150.00')
+            assert cp2.price == Decimal('8.00')
 
     """
     def test_voucher_apply_only_positive(self):
@@ -2836,7 +2839,9 @@ class CartAddonTest(CartTestMixin, TestCase):
         self.cm.commit()
         cp1.refresh_from_db()
         assert cp1.expires > now()
-        assert cp1.price_before_voucher == Decimal('23.00')
+        assert cp1.listed_price == Decimal('23.00')
+        assert cp1.price_after_voucher == Decimal('20.00')
+        assert cp1.price == Decimal('20.00')
 
 
 class CartBundleTest(CartTestMixin, TestCase):
@@ -2911,7 +2916,8 @@ class CartBundleTest(CartTestMixin, TestCase):
         assert cp.price == 23 - 1.5
         assert cp.addons.count() == 1
         assert cp.voucher == v
-        assert cp.price_before_voucher == 23 - 1.5
+        assert cp.listed_price == 23
+        assert cp.price_after_voucher == 23
         a = cp.addons.get()
         assert a.item == self.trans
         assert a.price == 1.5
@@ -2934,7 +2940,8 @@ class CartBundleTest(CartTestMixin, TestCase):
         assert cp.price == 23 - 1.5 - 1.5
         assert cp.addons.count() == 1
         assert cp.voucher == v
-        assert cp.price_before_voucher == 23 - 1.5
+        assert cp.listed_price == 23
+        assert cp.price_after_voucher == 23 - 1.5
         a = cp.addons.get()
         assert a.item == self.trans
         assert a.price == 1.5
@@ -3221,13 +3228,11 @@ class CartBundleTest(CartTestMixin, TestCase):
         assert cp.tax_rate == Decimal('19.00')
         assert cp.tax_value == Decimal('3.43')
         assert cp.addons.count() == 1
-        assert cp.includes_tax
         a = cp.addons.first()
         assert a.item == self.trans
         assert a.price == 1.5
         assert a.tax_rate == Decimal('7.00')
         assert a.tax_value == Decimal('0.10')
-        assert a.includes_tax
 
     @classscope(attr='orga')
     def test_one_bundled_one_addon(self):
@@ -3421,15 +3426,14 @@ class CartBundleTest(CartTestMixin, TestCase):
             event=self.event, cart_id=self.session_key, item=self.trans, addon_to=cp,
             price=1.5, expires=now() - timedelta(minutes=10), is_bundled=True
         )
-        update_tax_rates(self.event, self.session_key, ia)
+        self.cm.invoice_address = ia
+        self.cm.recompute_final_prices_and_taxes()
         cp.refresh_from_db()
         a.refresh_from_db()
         assert cp.price == Decimal('21.50')
         assert cp.tax_rate == Decimal('19.00')
-        assert cp.includes_tax
         assert a.price == Decimal('1.40')
         assert a.tax_rate == Decimal('0.00')
-        assert not a.includes_tax
 
         self.cm.invoice_address = ia
         self.cm.commit()
@@ -3438,10 +3442,8 @@ class CartBundleTest(CartTestMixin, TestCase):
         a.refresh_from_db()
         assert cp.price == Decimal('21.50')
         assert cp.tax_rate == Decimal('19.00')
-        assert cp.includes_tax
         assert a.price == Decimal('1.40')
         assert a.tax_rate == 0
-        assert not a.includes_tax
 
     @classscope(attr='orga')
     def test_expired_reverse_charge_all(self):
@@ -3464,15 +3466,14 @@ class CartBundleTest(CartTestMixin, TestCase):
             event=self.event, cart_id=self.session_key, item=self.trans, addon_to=cp,
             price=1.5, expires=now() - timedelta(minutes=10), is_bundled=True
         )
-        update_tax_rates(self.event, self.session_key, ia)
+        self.cm.invoice_address = ia
+        self.cm.recompute_final_prices_and_taxes()
         cp.refresh_from_db()
         a.refresh_from_db()
         assert cp.price == Decimal('18.07')
         assert cp.tax_rate == Decimal('0.00')
-        assert not cp.includes_tax
         assert a.price == Decimal('1.40')
         assert a.tax_rate == Decimal('0.00')
-        assert not a.includes_tax
 
         self.cm.invoice_address = ia
         self.cm.commit()
@@ -3481,10 +3482,8 @@ class CartBundleTest(CartTestMixin, TestCase):
         a.refresh_from_db()
         assert cp.price == Decimal('18.07')
         assert cp.tax_rate == Decimal('0.00')
-        assert not cp.includes_tax
         assert a.price == Decimal('1.40')
         assert a.tax_rate == Decimal('0.00')
-        assert not a.includes_tax
 
     @classscope(attr='orga')
     def test_reverse_charge_all_add(self):
@@ -3513,10 +3512,8 @@ class CartBundleTest(CartTestMixin, TestCase):
         a = CartPosition.objects.filter(addon_to__isnull=False).get()
         assert cp.price == Decimal('18.07')
         assert cp.tax_rate == Decimal('0.00')
-        assert not cp.includes_tax
         assert a.price == Decimal('1.40')
         assert a.tax_rate == Decimal('0.00')
-        assert not a.includes_tax
 
     @classscope(attr='orga')
     def test_reverse_charge_bundled_add_keep_gross_price(self):
@@ -3546,10 +3543,8 @@ class CartBundleTest(CartTestMixin, TestCase):
         a = CartPosition.objects.filter(addon_to__isnull=False).get()
         assert cp.price == Decimal('21.50')
         assert cp.tax_rate == Decimal('19.00')
-        assert cp.includes_tax
         assert a.price == Decimal('1.50')
         assert a.tax_rate == Decimal('0.00')
-        assert not a.includes_tax
 
     @classscope(attr='orga')
     def test_reverse_charge_bundled_add(self):
@@ -3578,10 +3573,8 @@ class CartBundleTest(CartTestMixin, TestCase):
         a = CartPosition.objects.filter(addon_to__isnull=False).get()
         assert cp.price == Decimal('21.50')
         assert cp.tax_rate == Decimal('19.00')
-        assert cp.includes_tax
         assert a.price == Decimal('1.40')
         assert a.tax_rate == Decimal('0.00')
-        assert not a.includes_tax
 
     @classscope(attr='orga')
     def test_expired_country_taxing_only_bundled(self):
@@ -3606,17 +3599,16 @@ class CartBundleTest(CartTestMixin, TestCase):
         )
         a = CartPosition.objects.create(
             event=self.event, cart_id=self.session_key, item=self.trans, addon_to=cp,
-            price=1.47, expires=now() - timedelta(minutes=10), is_bundled=True, override_tax_rate=Decimal('5.00')
+            price=1.47, expires=now() - timedelta(minutes=10), is_bundled=True, tax_rate=Decimal('5.00')
         )
-        update_tax_rates(self.event, self.session_key, ia)
+        self.cm.invoice_address = ia
+        self.cm.recompute_final_prices_and_taxes()
         cp.refresh_from_db()
         a.refresh_from_db()
         assert cp.price == Decimal('21.50')
         assert cp.tax_rate == Decimal('19.00')
-        assert cp.includes_tax
         assert a.price == Decimal('1.47')
         assert a.tax_rate == Decimal('5.00')
-        assert a.includes_tax
 
         self.cm.invoice_address = ia
         self.cm.commit()
@@ -3625,10 +3617,8 @@ class CartBundleTest(CartTestMixin, TestCase):
         a.refresh_from_db()
         assert cp.price == Decimal('21.50')
         assert cp.tax_rate == Decimal('19.00')
-        assert cp.includes_tax
         assert a.price == Decimal('1.47')
         assert a.tax_rate == Decimal('5.00')
-        assert a.includes_tax
 
     @classscope(attr='orga')
     def test_expired_country_tax_all(self):
@@ -3654,21 +3644,20 @@ class CartBundleTest(CartTestMixin, TestCase):
 
         cp = CartPosition.objects.create(
             event=self.event, cart_id=self.session_key, item=self.ticket,
-            price=21.68, expires=now() - timedelta(minutes=10), override_tax_rate=Decimal('20.00')
+            price=21.68, expires=now() - timedelta(minutes=10), tax_rate=Decimal('20.00')
         )
         a = CartPosition.objects.create(
             event=self.event, cart_id=self.session_key, item=self.trans, addon_to=cp,
-            price=1.47, expires=now() - timedelta(minutes=10), is_bundled=True, override_tax_rate=Decimal('5.00')
+            price=1.47, expires=now() - timedelta(minutes=10), is_bundled=True, tax_rate=Decimal('5.00')
         )
-        update_tax_rates(self.event, self.session_key, ia)
+        self.cm.invoice_address = ia
+        self.cm.recompute_final_prices_and_taxes()
         cp.refresh_from_db()
         a.refresh_from_db()
         assert cp.price == Decimal('21.68')
         assert cp.tax_rate == Decimal('20.00')
-        assert cp.includes_tax
         assert a.price == Decimal('1.47')
         assert a.tax_rate == Decimal('5.00')
-        assert a.includes_tax
 
         self.cm.invoice_address = ia
         self.cm.commit()
@@ -3677,10 +3666,8 @@ class CartBundleTest(CartTestMixin, TestCase):
         a.refresh_from_db()
         assert cp.price == Decimal('21.68')
         assert cp.tax_rate == Decimal('20.0')
-        assert cp.includes_tax
         assert a.price == Decimal('1.47')
         assert a.tax_rate == Decimal('5.00')
-        assert a.includes_tax
 
     @classscope(attr='orga')
     def test_country_tax_all_add(self):
@@ -3718,10 +3705,8 @@ class CartBundleTest(CartTestMixin, TestCase):
         a = CartPosition.objects.filter(addon_to__isnull=False).get()
         assert cp.price == Decimal('21.68')
         assert cp.tax_rate == Decimal('20.00')
-        assert cp.includes_tax
         assert a.price == Decimal('1.47')
         assert a.tax_rate == Decimal('5.00')
-        assert a.includes_tax
 
     @classscope(attr='orga')
     def test_country_tax_bundled_add(self):
@@ -3754,10 +3739,8 @@ class CartBundleTest(CartTestMixin, TestCase):
         a = CartPosition.objects.filter(addon_to__isnull=False).get()
         assert cp.price == Decimal('21.50')
         assert cp.tax_rate == Decimal('19.00')
-        assert cp.includes_tax
         assert a.price == Decimal('1.47')
         assert a.tax_rate == Decimal('5.00')
-        assert a.includes_tax
 
 
 class CartSeatingTest(CartTestMixin, TestCase):

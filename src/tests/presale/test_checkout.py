@@ -539,7 +539,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
 
         cr1.refresh_from_db()
         assert cr1.price == Decimal('23.20')
-        assert cr1.override_tax_rate == Decimal('20.00')
+        assert cr1.tax_rate == Decimal('20.00')
         assert cr1.tax_value == Decimal('3.87')
         return cr1
 
@@ -572,7 +572,8 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
         with scopes_disabled():
             cr1 = CartPosition.objects.create(
                 event=self.event, cart_id=self.session_key, item=self.ticket,
-                price=23, expires=now() + timedelta(minutes=10),
+                price=23, listed_price=23, price_after_voucher=23, custom_price_input=23, custom_price_input_is_net=False,
+                expires=now() + timedelta(minutes=10),
                 voucher=self.event.vouchers.create()
             )
 
@@ -621,21 +622,80 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
             cr = CartPosition.objects.get(cart_id=self.session_key)
             assert cr.price == Decimal('21.26')
 
-    def test_free_price_net_price_reverse_charge_keep_gross(self):
+    def test_free_price_net_price_reverse_charge_keep_gross_but_enforce_min(self):
         # This is an end-to-end test of a very confusing case in which the event is set to
+        # "show net prices" but the tax rate is set to "keep gross if rate changes" in
+        # combination of free prices.
+        # This means the user will be greeted with a display price of "23 EUR + VAT". If they
+        # then adjust the price to pay more, e.g. "24 EUR", it will be interpreted as a net
+        # value (since the event is set to shown net values). The cart position is therefore
+        # created with a gross price of 28.56 EUR. Then, the user enters their invoice address, which
+        # triggers reverse charge. The tax is now removed, and the price would be reverted to "24.00 + 0%",
+        # however that is now lower than the minimum price of "27.37 incl VAT", so the price is raised to 27.37.
+        self.event.settings.display_net_prices = True
+        self.ticket.free_price = True
+        self.ticket.save()
+        self.tr19.eu_reverse_charge = True
+        self.tr19.keep_gross_if_rate_changes = True
+        self.tr19.price_includes_tax = False
+        self.tr19.home_country = Country('DE')
+        self.tr19.save()
+        self.event.settings.invoice_address_vatid = True
+
+        response = self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
+            'item_%d' % self.ticket.id: '1',
+            'price_%d' % self.ticket.id: '24.00',
+        }, follow=True)
+        self.assertRedirects(response, '/%s/%s/?require_cookie=true' % (self.orga.slug, self.event.slug),
+                             target_status_code=200)
+
+        with scopes_disabled():
+            cr1 = CartPosition.objects.get()
+            assert cr1.listed_price == Decimal('23.00')
+            assert cr1.custom_price_input == Decimal('24.00')
+            assert cr1.custom_price_input_is_net
+            assert cr1.price == Decimal('28.56')
+            assert cr1.tax_rate == Decimal('19.00')
+
+        with mock.patch('vat_moss.id.validate') as mock_validate:
+            mock_validate.return_value = ('AT', 'AT123456', 'Foo')
+            self.client.post('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), {
+                'is_business': 'business',
+                'company': 'Foo',
+                'name': 'Bar',
+                'street': 'Baz',
+                'zipcode': '12345',
+                'city': 'Here',
+                'country': 'AT',
+                'vat_id': 'AT123456',
+                'email': 'admin@localhost'
+            }, follow=True)
+
+        cr1.refresh_from_db()
+        assert cr1.price == Decimal('27.37')
+        assert cr1.tax_rate == Decimal('0.00')
+
+        self._set_session('payment', 'banktransfer')
+
+        response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
+        doc = BeautifulSoup(response.content.decode(), "lxml")
+        self.assertEqual(len(doc.select(".thank-you")), 1)
+        with scopes_disabled():
+            op = OrderPosition.objects.get()
+            self.assertEqual(op.price, Decimal('27.37'))
+            self.assertEqual(op.tax_value, Decimal('0.00'))
+            self.assertEqual(op.tax_rate, Decimal('0.00'))
+
+    def test_free_price_net_price_reverse_charge_keep_gross(self):
+        # This is the slightly happier case of the previous test in which the event is set to
         # "show net prices" but the tax rate is set to "keep gross if rate changes" in
         # combination of free prices.
         # This means the user will be greeted with a display price of "23 EUR + VAT". If they
         # then adjust the price to pay more, e.g. "40 EUR", it will be interpreted as a net
         # value (since the event is set to shown net values). The cart position is therefore
         # created with a gross price of 47.60 EUR. Then, the user enters their invoice address, which
-        # triggers reverse charge. The tax is now removed, but since the tax rule is set to
-        # keep the gross price the same, the user will still need to pay 47.60 EUR (incl 0% VAT),
-        # instead of the 40 EUR the maybe wanted in the first place.
-        # While confusing, this behaviour is technically correct and the correct answer to anyone
-        # complaining about this is "do not turn display_net_prices and keep_gross_if_rate_changes
-        # on at the same time" (display_net_prices only makes sense if you're targeting a B2B
-        # audience in which case keep_gross_if_rate_changes is useless or even harmful).
+        # triggers reverse charge. The tax is now removed, and the price is reverted to "40.00 + 0%"
+        # since that was the user's original intent.
         self.event.settings.display_net_prices = True
         self.ticket.free_price = True
         self.ticket.save()
@@ -655,6 +715,9 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
 
         with scopes_disabled():
             cr1 = CartPosition.objects.get()
+            assert cr1.listed_price == Decimal('23.00')
+            assert cr1.custom_price_input == Decimal('40.00')
+            assert cr1.custom_price_input_is_net
             assert cr1.price == Decimal('47.60')
             assert cr1.tax_rate == Decimal('19.00')
 
@@ -673,7 +736,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
             }, follow=True)
 
         cr1.refresh_from_db()
-        assert cr1.price == Decimal('47.60')
+        assert cr1.price == Decimal('40.00')
         assert cr1.tax_rate == Decimal('0.00')
 
         self._set_session('payment', 'banktransfer')
@@ -683,7 +746,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
         self.assertEqual(len(doc.select(".thank-you")), 1)
         with scopes_disabled():
             op = OrderPosition.objects.get()
-            self.assertEqual(op.price, Decimal('47.60'))
+            self.assertEqual(op.price, Decimal('40.00'))
             self.assertEqual(op.tax_value, Decimal('0.00'))
             self.assertEqual(op.tax_rate, Decimal('0.00'))
 
@@ -3109,7 +3172,7 @@ class QuestionsTestCase(BaseCheckoutTestCase, TestCase):
             )
             cr2 = CartPosition.objects.create(
                 event=self.event, cart_id=self.session_key, item=self.ticket,
-                price=20, expires=now() + timedelta(minutes=10)
+                price=23, expires=now() + timedelta(minutes=10)
             )
         response = self.client.get('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")

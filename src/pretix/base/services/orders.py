@@ -706,12 +706,13 @@ def _check_positions(event: Event, now_dt: datetime, positions: List[CartPositio
                         if bundledp.is_bundled:
                             bundled_sum += changed_prices.get(bundledp.pk, bundledp.price)
 
-                price = get_price(cp.item, cp.variation, cp.voucher, cp.price, cp.subevent, custom_price_is_net=False,
+                price = get_price(cp.item, cp.variation, cp.voucher, cp.custom_price_input, cp.subevent, custom_price_is_net=cp.custom_price_input_is_net,
                                   addon_to=cp.addon_to, invoice_address=address, bundled_sum=bundled_sum,
-                                  max_discount=max_discount, custom_price_is_tax_rate=cp.override_tax_rate)
-                pbv = get_price(cp.item, cp.variation, None, cp.price, cp.subevent, custom_price_is_net=False,
+                                  max_discount=max_discount)
+                print("old", cp.price, "custom", cp.custom_price_input, "new", price)
+                pbv = get_price(cp.item, cp.variation, None, cp.custom_price_input, cp.subevent, custom_price_is_net=cp.custom_price_input_is_net,
                                 addon_to=cp.addon_to, invoice_address=address, bundled_sum=bundled_sum,
-                                max_discount=max_discount, custom_price_is_tax_rate=cp.override_tax_rate)
+                                max_discount=max_discount)
         except TaxRule.SaleNotAllowed:
             err = err or error_messages['country_blocked']
             cp.delete()
@@ -904,6 +905,7 @@ def _create_order(event: Event, email: str, positions: List[CartPosition], now_d
         # The only *known* case where this happens is if a gift card is used in two concurrent sessions.
         if shown_total is not None:
             if Decimal(shown_total) != pending_sum:
+                print("diff", shown_total, pending_sum)
                 raise OrderError(
                     _('While trying to place your order, we noticed that the order total has changed. Either one of '
                       'the prices changed just now, or a gift card you used has been used in the meantime. Please '

@@ -59,7 +59,7 @@ from pretix.base.reldate import RelativeDateWrapper
 from pretix.base.services.checkin import _save_answers
 from pretix.base.services.locking import LockTimeoutException, NoLockManager
 from pretix.base.services.pricing import (
-    get_line_price, get_listed_price, get_price,
+    get_line_price, get_listed_price, get_price, is_included_for_free,
 )
 from pretix.base.services.quotas import QuotaAvailability
 from pretix.base.services.tasks import ProfiledEventTask
@@ -181,8 +181,8 @@ class CartManager:
 
     @property
     def positions(self):
-        return CartPosition.objects.filter(
-            Q(cart_id=self.cart_id) & Q(event=self.event)
+        return self.event.cartposition_set.filter(
+            Q(cart_id=self.cart_id)
         ).select_related('item', 'subevent')
 
     def _is_seated(self, item, subevent):
@@ -730,7 +730,10 @@ class CartManager:
             input_addons[cp.id][a['item'], a['variation']] = a.get('count', 1)
             selected_addons[cp.id, item.category_id][a['item'], a['variation']] = a.get('count', 1)
 
-            listed_price = get_listed_price(item, variation, cp.subevent)
+            if is_included_for_free(item, cp):
+                listed_price = Decimal('0.00')
+            else:
+                listed_price = get_listed_price(item, variation, cp.subevent)
             custom_price = None
             if item.free_price and a.get('price'):
                 custom_price = Decimal(str(a.get('price')).replace(",", "."))
@@ -743,6 +746,11 @@ class CartManager:
                     ca.listed_price = ca.listed_price
                     ca.price_after_voucher = ca.price_after_voucher
                     ca.save(update_fields=['listed_price', 'price_after_voucher'])
+                if ca.custom_price_input != custom_price:
+                    ca.custom_price_input = custom_price
+                    ca.custom_price_input_is_net = self.event.settings.display_net_prices
+                    ca.price_after_voucher = ca.price_after_voucher
+                    ca.save(update_fields=['custom_price_input', 'custom_price_input'])
 
             if a.get('count', 1) > len(current_addons[cp][a['item'], a['variation']]):
                 # This add-on is new, add it to the cart
@@ -1141,6 +1149,50 @@ class CartManager:
 
         return False
 
+    def recompute_final_prices_and_taxes(self):
+        positions = sorted(list(self.positions), key=lambda op: -(op.addon_to_id or 0))
+        diff = Decimal('0.00')
+        for cp in positions:
+            if cp.listed_price is None:
+                # migration from old system? also used in unit tests
+                listed_price = get_listed_price(cp.item, cp.variation, cp.subevent)
+                if cp.voucher:
+                    price_after_voucher = cp.voucher.calculate_price(listed_price)
+                else:
+                    price_after_voucher = listed_price
+                if cp.is_bundled:
+                    bundle = cp.addon_to.item.bundles.filter(bundled_item=cp.item, bundled_variation=cp.variation).first()
+                    if bundle:
+                        listed_price = bundle.designated_price
+                        price_after_voucher = bundle.designated_price
+                custom_price = None
+                if cp.item.free_price:
+                    custom_price = cp.price
+                    if custom_price > 100000000:
+                        raise ValueError('price_too_high')
+                cp.listed_price = listed_price
+                cp.price_after_voucher = price_after_voucher
+                cp.custom_price_input = custom_price
+                cp.custom_price_input_is_net = not cp.includes_tax
+                cp.save(update_fields=['listed_price', 'price_after_voucher', 'custom_price_input',
+                                       'custom_price_input_is_net'])
+
+            line_price = get_line_price(
+                price_after_voucher=cp.price_after_voucher,
+                custom_price_input=cp.custom_price_input,
+                custom_price_input_is_net=cp.custom_price_input_is_net,
+                tax_rule=cp.item.tax_rule,
+                invoice_address=self.invoice_address,
+                bundled_sum=sum([b.price_after_voucher for b in positions if b.addon_to_id == cp.pk and b.is_bundled]),
+            )
+            if line_price.gross != cp.line_price_gross or line_price.rate != cp.tax_rate or cp.price != line_price.gross:
+                diff += line_price.gross - cp.price
+                cp.line_price_gross = line_price.gross
+                cp.price = line_price.gross
+                cp.tax_rate = line_price.rate
+                cp.save(update_fields=['line_price_gross', 'tax_rate', 'price'])
+        return diff
+
     def commit(self):
         self._check_presale_dates()
         self._check_max_cart_size()
@@ -1158,31 +1210,9 @@ class CartManager:
                 self.now_dt = now_dt
                 self._extend_expiry_of_valid_existing_positions()
                 err = self._perform_operations() or err
+                self.recompute_final_prices_and_taxes()
             if err:
                 raise CartError(err)
-
-
-def update_tax_rates(event: Event, cart_id: str, invoice_address: InvoiceAddress):
-    positions = CartPosition.objects.filter(
-        cart_id=cart_id, event=event
-    ).select_related('item', 'item__tax_rule')
-    totaldiff = Decimal('0.00')
-    for pos in positions:
-        if not pos.item.tax_rule:
-            continue
-        rate = pos.item.tax_rule.tax_rate_for(invoice_address)
-
-        if pos.tax_rate != rate:
-            if not pos.item.tax_rule.keep_gross_if_rate_changes:
-                current_net = pos.price - pos.tax_value
-                new_gross = pos.item.tax(current_net, base_price_is='net', invoice_address=invoice_address).gross
-                totaldiff += new_gross - pos.price
-                pos.price = new_gross
-            pos.includes_tax = rate != Decimal('0.00')
-            pos.override_tax_rate = rate
-            pos.save(update_fields=['price', 'includes_tax', 'override_tax_rate'])
-
-    return totaldiff
 
 
 def get_fees(event, request, total, invoice_address, provider, positions):

@@ -39,7 +39,7 @@ def get_price(item: Item, variation: ItemVariation = None,
     if is_included_for_free(item, addon_to):
         return TAXED_ZERO
 
-    price = get_listed_price(item, variation, subevent, addon_to)
+    price = get_listed_price(item, variation, subevent)
 
     if voucher:
         price = voucher.calculate_price(price, max_discount=max_discount)
@@ -72,11 +72,10 @@ def get_price(item: Item, variation: ItemVariation = None,
         price = tax_rule.tax(price, invoice_address=invoice_address)
 
         if custom_price_is_net:
-            price = tax_rule.tax(max(custom_price, price.net), base_price_is='net',
+            price = tax_rule.tax(max(custom_price, price.net), base_price_is='net', override_tax_rate=price.rate,
                                  invoice_address=invoice_address, subtract_from_gross=bundled_sum)
         else:
-            price = tax_rule.tax(max(custom_price, price.gross), base_price_is='gross',
-                                 gross_price_is_tax_rate=custom_price_is_tax_rate,
+            price = tax_rule.tax(max(custom_price, price.gross), base_price_is='gross', override_tax_rate=price.rate,
                                  invoice_address=invoice_address, subtract_from_gross=bundled_sum)
     else:
         price = tax_rule.tax(price, invoice_address=invoice_address, subtract_from_gross=bundled_sum)
@@ -124,12 +123,13 @@ def get_line_price(price_after_voucher: Decimal, custom_price_input: Decimal, cu
         )
     if custom_price_input:
         price = tax_rule.tax(price_after_voucher, invoice_address=invoice_address)
+        print("max", custom_price_input, price)
 
         if custom_price_input_is_net:
-            price = tax_rule.tax(max(custom_price_input, price.net), base_price_is='net',
+            price = tax_rule.tax(max(custom_price_input, price.net), base_price_is='net', override_tax_rate=price.rate,
                                  invoice_address=invoice_address, subtract_from_gross=bundled_sum)
         else:
-            price = tax_rule.tax(max(custom_price_input, price.gross), base_price_is='gross',
+            price = tax_rule.tax(max(custom_price_input, price.gross), base_price_is='gross', override_tax_rate=price.rate,
                                  invoice_address=invoice_address, subtract_from_gross=bundled_sum)
     else:
         price = tax_rule.tax(price_after_voucher, invoice_address=invoice_address, subtract_from_gross=bundled_sum)

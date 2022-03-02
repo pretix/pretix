@@ -2621,11 +2621,9 @@ class CartPosition(AbstractPosition):
 
     @property
     def tax_value(self):
-        # todo: compute from self.tax_rate
-        if self.includes_tax:
-            return self.item.tax(self.price, override_tax_rate=self.override_tax_rate, base_price_is='gross').tax
-        else:
-            return Decimal('0.00')
+        net = round_decimal(self.price - (self.price * (1 - 100 / (100 + self.tax_rate))),
+                            self.event.currency)
+        return self.price - net
 
 
 class InvoiceAddress(models.Model):
