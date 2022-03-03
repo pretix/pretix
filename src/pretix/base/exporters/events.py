@@ -37,11 +37,9 @@ from django.utils.formats import date_format
 from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 
-from ..exporter import ListExporter
-from ..signals import (
-    register_multievent_data_exporters,
-)
 from ...control.forms.filter import get_all_payment_providers
+from ..exporter import ListExporter
+from ..signals import register_multievent_data_exporters
 
 
 class EventDataExporter(ListExporter):
