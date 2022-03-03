@@ -24,7 +24,6 @@
     {% if settings.favicon %}
         <link rel="icon" href="{{ settings.favicon|thumb:'16x16^' }}">
         <link rel="shortcut icon" href="{{ settings.favicon|thumb:'16x16^' }}">
-        <link rel="icon" type="image/png" sizes="194x194" href="{{ settings.favicon|thumb:'194x194^' }}">
         <link rel="icon" type="image/png" sizes="16x16" href="{{ settings.favicon|thumb:'16x16^' }}">
         <link rel="icon" type="image/png" sizes="32x32" href="{{ settings.favicon|thumb:'32x32^' }}">
         <link rel="icon" type="image/png" sizes="192x192" href="{% settings.favicon|thumb:'192x192^' %}">
@@ -34,7 +33,6 @@
     {% else %}
         <link rel="icon" href="{% static "pretixbase/img/favicon.ico" %}">
         <link rel="shortcut icon" href="{% static "pretixbase/img/favicon.ico" %}">
-        <link rel="icon" type="image/png" sizes="194x194" href="{% static "pretixbase/img/icons/favicon-194x194.png" %}">
         <link rel="icon" type="image/png" sizes="16x16" href="{% static "pretixbase/img/icons/favicon-16x16.png" %}">
         <link rel="icon" type="image/png" sizes="32x32" href="{% static "pretixbase/img/icons/favicon-32x32.png" %}">
         <link rel="icon" type="image/png" sizes="192x192" href="{% static "pretixbase/img/icons/android-chrome-192x192.png" %}">
