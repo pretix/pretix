@@ -482,6 +482,9 @@ class OrderPositionChangeForm(forms.Form):
         self.fields['tax_rule'].queryset = instance.event.tax_rules.all()
         self.fields['tax_rule'].label_from_instance = self.taxrule_label_from_instance
 
+        if instance.addon_to_id:
+            del self.fields['operation_split']
+
         if not instance.seat and not (
                 instance.item.seat_category_mappings.filter(subevent=instance.subevent).exists()
         ):

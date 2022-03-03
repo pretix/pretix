@@ -1760,7 +1760,7 @@ class OrderChange(OrderView):
                 if p.form.cleaned_data['tax_rule'] and p.form.cleaned_data['tax_rule'] != p.tax_rule:
                     ocm.change_tax_rule(p, p.form.cleaned_data['tax_rule'])
 
-                if p.form.cleaned_data['operation_split']:
+                if p.form.cleaned_data.get('operation_split'):
                     ocm.split(p)
 
                 if p.form.cleaned_data['operation_secret']:

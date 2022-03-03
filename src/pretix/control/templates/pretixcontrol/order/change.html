@@ -202,10 +202,12 @@
                         </div>
 
                         {% bootstrap_field position.form.operation_cancel layout='inline' %}
-                        {% bootstrap_field position.form.operation_split layout='inline' %}
+                        {% if position.form.operation_split %}
+                            {% bootstrap_field position.form.operation_split layout='inline' %}
+                        {% endif %}
                         {% if position.addons.exists %}
                             <em class="text-danger">
-                                {% trans "Removing this position will also remove all add-ons to this position." %}
+                                {% trans "Removing or splitting this position will also remove or split all add-ons to this position." %}
                             </em>
                         {% endif %}
                     </div>
