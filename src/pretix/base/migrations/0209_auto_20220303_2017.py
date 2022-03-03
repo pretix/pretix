@@ -50,7 +50,7 @@ class Migration(migrations.Migration):
             name='Discount',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False)),
-                ('internal_name', models.CharField(max_length=255, null=True)),
+                ('internal_name', models.CharField(max_length=255)),
                 ('position', models.PositiveIntegerField(default=0)),
                 ('sales_channels', pretix.base.models.fields.MultiStringField(default=['web'])),
                 ('available_from', models.DateTimeField(blank=True, null=True)),
@@ -62,7 +62,7 @@ class Migration(migrations.Migration):
                 ('benefit_discount_matching_percent', models.DecimalField(decimal_places=2, default=Decimal('0.00'), max_digits=10)),
                 ('benefit_only_apply_to_cheapest_n_matches', models.PositiveIntegerField(null=True)),
                 ('condition_limit_products', models.ManyToManyField(to='pretixbase.Item')),
-                ('event', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='offers', to='pretixbase.event')),
+                ('event', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='discounts', to='pretixbase.event')),
             ],
             options={
                 'abstract': False,

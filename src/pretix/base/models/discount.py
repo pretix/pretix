@@ -24,11 +24,10 @@ from decimal import Decimal
 
 from django.db import models
 from django.utils.translation import gettext_lazy as _, pgettext_lazy
+from django_scopes import ScopedManager
 
 from pretix.base.models import fields
 from pretix.base.models.base import LoggedModel
-
-from .event import Event
 
 
 class Discount(LoggedModel):
@@ -42,14 +41,13 @@ class Discount(LoggedModel):
     )
 
     event = models.ForeignKey(
-        Event,
+        'Event',
         on_delete=models.CASCADE,
-        related_name='offers',
+        related_name='discounts',
     )
     internal_name = models.CharField(
         verbose_name=_("Internal name"),
-        help_text=_("If you set this, this will be used instead of the public name in the backend."),
-        blank=True, null=True, max_length=255
+        max_length=255
     )
     position = models.PositiveIntegerField(
         default=0,
@@ -58,7 +56,7 @@ class Discount(LoggedModel):
     sales_channels = fields.MultiStringField(
         verbose_name=_('Sales channels'),
         default=['web'],
-        blank=True,
+        blank=False,
     )
 
     available_from = models.DateTimeField(
@@ -73,11 +71,12 @@ class Discount(LoggedModel):
     subevent_mode = models.CharField(
         verbose_name=_('Event series handling'),
         max_length=50,
+        default=SUBEVENT_MODE_MIXED,
         choices=SUBEVENT_MODE_CHOICES,
     )
 
-    condition_all_products = models.BooleanField(default=True, verbose_name=_("All products (including newly created ones)"))
-    condition_limit_products = models.ManyToManyField('Item', verbose_name=_("Limit to products"), blank=True)
+    condition_all_products = models.BooleanField(default=True, verbose_name=_("Apply to all products (including newly created ones)"))
+    condition_limit_products = models.ManyToManyField('Item', verbose_name=_("Apply to specific products"), blank=True)
     condition_min_count = models.PositiveIntegerField(
         verbose_name=_('Minimum number of matching products'),
         default=0,
@@ -96,7 +95,7 @@ class Discount(LoggedModel):
         default=Decimal('0.00'),
     )
     benefit_only_apply_to_cheapest_n_matches = models.PositiveIntegerField(
-        verbose_name=_('Apply discount to this many of the matching products'),
+        verbose_name=_('Apply discount only to this number of matching products'),
         null=True, blank=True,
     )
 
@@ -104,3 +103,18 @@ class Discount(LoggedModel):
     # - max_usages_per_order
     # - promote_to_user_if_almost_satisfied
     # - require_customer_account
+
+    objects = ScopedManager(organizer='event__organizer')
+
+    class Meta:
+        ordering = ('position', 'id')
+
+    def __str__(self):
+        return self.internal_name
+
+    @property
+    def sortkey(self):
+        return self.position, self.id
+
+    def __lt__(self, other) -> bool:
+        return self.sortkey < other.sortkey

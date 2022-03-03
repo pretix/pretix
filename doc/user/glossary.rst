@@ -84,7 +84,9 @@ going to develop around pretix, for example connect to pretix through our API, y
      - A voucher is a code that can be used for multiple purposes: To grant a discount to specific customers, to only
        show certain products to certain customers, or to keep a seat open for someone specific even though you are
        sold out. If a voucher is used to apply a discount, the price of the purchased product is reduced by the
-       discounted amount. Vouchers are connected to a specific event.
+   * - | |:gb:| **(Automatic) Discount**
+       | |:de:| (Automatischer) Rabatt
+     - Discounts can be used to automatically provide discounts to customers if their cart satisfies a certain condition.
    * - | |:gb:| **Gift card**
        | |:de:| Wertgutschein
      - A :ref:`gift card <giftcards>` is a coupon representing an exact amount of money that can be used for purchases

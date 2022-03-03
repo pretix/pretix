@@ -1,0 +1,54 @@
+{% extends "pretixcontrol/items/base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% block title %}{% trans "Automatic discount" %}{% endblock %}
+{% block inside %}
+    <h1>{% trans "Automatic discount" %}</h1>
+    <form action="" method="post" class="form-horizontal">
+        {% csrf_token %}
+        {% bootstrap_form_errors form %}
+        <div class="row">
+            <div class="col-xs-12{% if discount %} col-lg-10{% endif %}">
+                <fieldset>
+                    <legend>{% trans "General information" %}</legend>
+                    {% bootstrap_field form.internal_name layout="control" %}
+                    {% bootstrap_field form.available_from layout="control" %}
+                    {% bootstrap_field form.available_until layout="control" %}
+                    {% bootstrap_field form.sales_channels layout="control" %}
+                </fieldset>
+                <fieldset>
+                    <legend>{% trans "Condition" context "discount" %}</legend>
+                    {% bootstrap_field form.condition_all_products layout="control" %}
+                    {% bootstrap_field form.condition_limit_products layout="control" %}
+                    {% bootstrap_field form.condition_min_count layout="control" %}
+                    {% bootstrap_field form.condition_min_value layout="control" addon_after=request.event.currency %}
+                    {% if form.subevent_mode %}
+                        {% bootstrap_field form.subevent_mode layout="control" %}
+                    {% endif %}
+                </fieldset>
+                <fieldset>
+                    <legend>{% trans "Benefit" context "discount" %}</legend>
+                    {% bootstrap_field form.benefit_discount_matching_percent layout="control" %}
+                    {% bootstrap_field form.benefit_only_apply_to_cheapest_n_matches layout="control" %}
+                </fieldset>
+            </div>
+            {% if discount %}
+                <div class="col-xs-12 col-lg-2">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">
+                                {% trans "Discount history" %}
+                            </h3>
+                        </div>
+                        {% include "pretixcontrol/includes/logs.html" with obj=discount %}
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+        <div class="form-group submit-group">
+            <button type="submit" class="btn btn-primary btn-save">
+                {% trans "Save" %}
+            </button>
+        </div>
+    </form>
+{% endblock %}

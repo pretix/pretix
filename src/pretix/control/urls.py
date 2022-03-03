@@ -37,9 +37,9 @@ from django.conf.urls import include, re_path
 from django.views.generic.base import RedirectView
 
 from pretix.control.views import (
-    auth, checkin, dashboards, event, geo, global_settings, item, main, oauth,
-    orderimport, orders, organizer, pdf, search, shredder, subevents,
-    typeahead, user, users, vouchers, waitinglist,
+    auth, checkin, dashboards, discounts, event, geo, global_settings, item,
+    main, oauth, orderimport, orders, organizer, pdf, search, shredder,
+    subevents, typeahead, user, users, vouchers, waitinglist,
 )
 
 urlpatterns = [
@@ -277,6 +277,16 @@ urlpatterns = [
         re_path(r'^quotas/(?P<quota>\d+)/delete$', item.QuotaDelete.as_view(),
                 name='event.items.quotas.delete'),
         re_path(r'^quotas/add$', item.QuotaCreate.as_view(), name='event.items.quotas.add'),
+        re_path(r'^discounts/$', discounts.DiscountList.as_view(), name='event.items.discounts'),
+        re_path(r'^discounts/(?P<discount>\d+)/delete$', discounts.DiscountDelete.as_view(),
+                name='event.items.discounts.delete'),
+        re_path(r'^discounts/(?P<discount>\d+)/up$', discounts.discount_move_up, name='event.items.discounts.up'),
+        re_path(r'^discounts/(?P<discount>\d+)/down$', discounts.discount_move_down,
+                name='event.items.discounts.down'),
+        re_path(r'^discounts/reorder$', discounts.reorder_discounts, name='event.items.discounts.reorder'),
+        re_path(r'^discounts/(?P<discount>\d+)/$', discounts.DiscountUpdate.as_view(),
+                name='event.items.discounts.edit'),
+        re_path(r'^discounts/add$', discounts.DiscountCreate.as_view(), name='event.items.discounts.add'),
         re_path(r'^vouchers/$', vouchers.VoucherList.as_view(), name='event.vouchers'),
         re_path(r'^vouchers/tags/$', vouchers.VoucherTags.as_view(), name='event.vouchers.tags'),
         re_path(r'^vouchers/rng$', vouchers.VoucherRNG.as_view(), name='event.vouchers.rng'),

@@ -89,6 +89,13 @@ class SalesChannel:
         """
         return True
 
+    @property
+    def discounts_supported(self) -> bool:
+        """
+        If this property is ``True``, this sales channel can be selected for automatic discounts.
+        """
+        return True
+
 
 def get_all_sales_channels():
     global _ALL_CHANNELS
