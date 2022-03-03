@@ -347,7 +347,7 @@ def pretixcontrol_logentry_display(sender: Event, logentry: LogEntry, **kwargs):
         'pretix.event.order.placed': _('The order has been created.'),
         'pretix.event.order.placed.require_approval': _('The order requires approval before it can continue to be processed.'),
         'pretix.event.order.approved': _('The order has been approved.'),
-        'pretix.event.order.denied': _('The order has been denied.'),
+        'pretix.event.order.denied': _('The order has been denied (comment: "{comment}").'),
         'pretix.event.order.contact.changed': _('The email address has been changed from "{old_email}" '
                                                 'to "{new_email}".'),
         'pretix.event.order.contact.confirmed': _('The email address has been confirmed to be working (the user clicked on a link '
