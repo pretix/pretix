@@ -55,7 +55,7 @@ from pretix.base.models import Customer, Order
 from pretix.base.models.orders import InvoiceAddress, OrderPayment
 from pretix.base.models.tax import TaxedPrice, TaxRule
 from pretix.base.services.cart import (
-    CartError, error_messages, get_fees, set_cart_addons, CartManager,
+    CartError, CartManager, error_messages, get_fees, set_cart_addons,
 )
 from pretix.base.services.memberships import validate_memberships_in_order
 from pretix.base.services.orders import perform_order

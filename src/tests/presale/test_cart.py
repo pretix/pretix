@@ -52,9 +52,7 @@ from pretix.base.models import (
 from pretix.base.models.items import (
     ItemAddOn, ItemBundle, SubEventItem, SubEventItemVariation,
 )
-from pretix.base.services.cart import (
-    CartError, CartManager, error_messages,
-)
+from pretix.base.services.cart import CartError, CartManager, error_messages
 from pretix.testutils.scope import classscope
 from pretix.testutils.sessions import get_cart_session_key
 

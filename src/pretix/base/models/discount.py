@@ -20,39 +20,18 @@
 # <https://www.gnu.org/licenses/>.
 #
 
-import sys
-import uuid
-from collections import Counter, OrderedDict
-from datetime import date, datetime, time
-from decimal import Decimal, DecimalException
-from typing import Tuple
+from decimal import Decimal
 
-import dateutil.parser
-import pytz
-from django.conf import settings
-from django.core.exceptions import ValidationError
-from django.core.validators import RegexValidator
 from django.db import models
-from django.db.models import Q
-from django.utils import formats
-from django.utils.crypto import get_random_string
-from django.utils.functional import cached_property
-from django.utils.timezone import is_naive, make_aware, now
 from django.utils.translation import gettext_lazy as _, pgettext_lazy
-from django_countries.fields import Country
-from django_redis import get_redis_connection
-from django_scopes import ScopedManager
-from i18nfield.fields import I18nCharField, I18nTextField
 
 from pretix.base.models import fields
 from pretix.base.models.base import LoggedModel
-from pretix.base.models.fields import MultiStringField
-from pretix.base.models.tax import TaxedPrice
 
-from .event import Event, SubEvent
+from .event import Event
 
 
-class Offer(LoggedModel):
+class Discount(LoggedModel):
     SUBEVENT_MODE_MIXED = 'mixed'
     SUBEVENT_MODE_SAME = 'same'
     SUBEVENT_MODE_DISTINCT = 'distinct'
