@@ -1527,6 +1527,8 @@ class OrderChangeManager:
             self._invoice_dirty = True
 
         self._operations.append(self.SplitOperation(position))
+        for a in position.addons.all():
+            self._operations.append(self.SplitOperation(a))
 
     def set_addons(self, addons):
         if self._operations:

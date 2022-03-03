@@ -1783,6 +1783,37 @@ class OrderChangeManagerTests(TestCase):
         assert not o2.invoices.exists()
 
     @classscope(attr='o')
+    def test_split_include_addons(self):
+        self.shirt.category = self.event.categories.create(name='Add-ons', is_addon=True)
+        self.ticket.addons.create(addon_category=self.shirt.category)
+        self.ocm.add_position(self.shirt, None, Decimal('13.00'), self.op2)
+        self.ocm.commit()
+        self.order.refresh_from_db()
+        self.ocm = OrderChangeManager(self.order, None)
+        a = self.order.positions.get(addon_to=self.op2)
+
+        old_secret = self.op2.secret
+        self.ocm.split(self.op2)
+        self.ocm.commit()
+        self.order.refresh_from_db()
+        self.op2.refresh_from_db()
+        a.refresh_from_db()
+        assert self.order.total == Decimal('23.00')
+        assert self.order.positions.count() == 1
+        assert self.op2.order != self.order
+        o2 = self.op2.order
+        assert o2.total == Decimal('36.00')
+        assert o2.positions.count() == 2
+        assert o2.code != self.order.code
+        assert o2.secret != self.order.secret
+        assert o2.datetime > self.order.datetime
+        assert a.addon_to == self.op2
+        assert a.order == o2
+        assert self.op2.secret != old_secret
+        assert not self.order.invoices.exists()
+        assert not o2.invoices.exists()
+
+    @classscope(attr='o')
     def test_split_require_approval(self):
         self.op2.item.require_approval = True
         self.op2.item.save()
