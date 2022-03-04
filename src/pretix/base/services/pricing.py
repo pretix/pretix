@@ -20,12 +20,16 @@
 # <https://www.gnu.org/licenses/>.
 #
 from decimal import Decimal
+from typing import List, Tuple, Optional
+
+from django.db.models import Q
+from django.utils.timezone import now
 
 from pretix.base.decimal import round_decimal
 from pretix.base.models import (
     AbstractPosition, InvoiceAddress, Item, ItemAddOn, ItemVariation, Voucher,
 )
-from pretix.base.models.event import SubEvent
+from pretix.base.models.event import SubEvent, Event
 from pretix.base.models.tax import TAXED_ZERO, TaxedPrice, TaxRule
 
 
@@ -134,3 +138,30 @@ def get_line_price(price_after_voucher: Decimal, custom_price_input: Decimal, cu
         price = tax_rule.tax(price_after_voucher, invoice_address=invoice_address, subtract_from_gross=bundled_sum)
 
     return price
+
+
+def apply_discounts(event: Event, sales_channel: str,
+                    positions: List[Tuple[int, Optional[int], Decimal, bool, bool]]) -> List[Decimal]:
+    """
+    Applies any dynamic discounts to a cart
+
+    :param event: Event the cart belongs to
+    :param sales_channel: Sales channel the cart was created with
+    :param positions: Tuple of the form ``(item_id, subevent_id, line_price_gross, is_addon_to, is_bundled)``
+    :return: A list of new gross prices in the same order as the input
+    """
+    new_prices = {}
+
+    discount_qs = event.discounts.filter(
+        Q(available_from__isnull=True) | Q(available_from__lte=now()),
+        Q(available_until__isnull=True) | Q(available_until__gte=now()),
+        sales_channels__contains=sales_channel,
+    ).prefetch_related('condition_limit_products').order_by('position', 'pk')
+    for discount in discount_qs:
+        new_prices.update(discount.apply({
+            idx: (item_id, subevent_id, line_price_gross, is_addon_to)
+            for idx, (item_id, subevent_id, line_price_gross, is_addon_to, is_bundled) in enumerate(positions)
+            if not is_bundled and idx not in new_prices
+        }))
+
+    return [new_prices.get(idx, p[2]) for idx, p in enumerate(positions)]

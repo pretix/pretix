@@ -36,7 +36,7 @@ Guarantees on listed prices
 ---------------------------
 
 One goal of all further logic is that if a user sees a listed price, they are guaranteed to get the product at that
-price as long as they complete their purchase within the cart expiration timeframe. For example, if the cart expiration
+price as long as they complete their purchase within the cart expiration time frame. For example, if the cart expiration
 time is set to 30 minutes and someone puts a item listed at €23 in their cart at 4pm, they can still complete checkout
 at €23 until 4.30pm, even if the organizer decides to raise the price to €25 at 4.10pm. If they complete checkout after
 4.30pm, their cart will be adjusted to the new price and the user will see a warning that the price has changed.
@@ -64,7 +64,7 @@ Vouchers
 """"""""
 
 As a first step, the cart is checked for any voucher that should be applied to the position. If such a voucher exists,
-it's discount (percentual or fixed) is applied to the listed price. The result of this is stored to ``price_after_voucher``.
+it's discount (percentage or fixed) is applied to the listed price. The result of this is stored to ``price_after_voucher``.
 Since ``listed_price`` naive, ``price_after_voucher`` is naive as well. As a consequence, if you have a voucher configured
 to "set the price to €10", it depends on ``TaxRule.price_includes_tax`` again whether this is €10 including or excluding
 taxes.

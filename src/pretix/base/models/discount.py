@@ -21,11 +21,15 @@
 #
 
 from decimal import Decimal
+from itertools import groupby
+from typing import Dict, Tuple, Optional
 
+from django.core.validators import MinValueValidator
 from django.db import models
 from django.utils.translation import gettext_lazy as _, pgettext_lazy
 from django_scopes import ScopedManager
 
+from pretix.base.decimal import round_decimal
 from pretix.base.models import fields
 from pretix.base.models.base import LoggedModel
 
@@ -61,11 +65,13 @@ class Discount(LoggedModel):
 
     available_from = models.DateTimeField(
         verbose_name=_("Available from"),
-        null=True, blank=True,
+        null=True,
+        blank=True,
     )
     available_until = models.DateTimeField(
         verbose_name=_("Available until"),
-        null=True, blank=True,
+        null=True,
+        blank=True,
     )
 
     subevent_mode = models.CharField(
@@ -75,8 +81,15 @@ class Discount(LoggedModel):
         choices=SUBEVENT_MODE_CHOICES,
     )
 
-    condition_all_products = models.BooleanField(default=True, verbose_name=_("Apply to all products (including newly created ones)"))
-    condition_limit_products = models.ManyToManyField('Item', verbose_name=_("Apply to specific products"), blank=True)
+    condition_all_products = models.BooleanField(
+        default=True,
+        verbose_name=_("Apply to all products (including newly created ones)")
+    )
+    condition_limit_products = models.ManyToManyField(
+        'Item',
+        verbose_name=_("Apply to specific products"),
+        blank=True
+    )
     condition_apply_to_addons = models.BooleanField(
         default=True,
         verbose_name=_("Apply to add-on products"),
@@ -101,7 +114,10 @@ class Discount(LoggedModel):
     )
     benefit_only_apply_to_cheapest_n_matches = models.PositiveIntegerField(
         verbose_name=_('Apply discount only to this number of matching products'),
-        null=True, blank=True,
+        help_text=_('Keep the field empty to apply the discount to all matching products.'),
+        null=True,
+        blank=True,
+        validators=[MinValueValidator(1)],
     )
 
     # more feature ideas:
@@ -123,3 +139,75 @@ class Discount(LoggedModel):
 
     def __lt__(self, other) -> bool:
         return self.sortkey < other.sortkey
+
+    def apply(self, positions: Dict[int, Tuple[int, Optional[int], Decimal, bool]]) -> Dict[int, Decimal]:
+        """
+        Tries to apply this discount to a cart
+
+        :param positions: Dictionary mapping IDs to tuples of the form
+                          ``(item_id, subevent_id, line_price_gross, is_addon_to)``.
+                          Bundled positions may not be included.
+
+        :return: A dictionary mapping keys from the input dictionary to new prices. All positions
+                 contained in this dictionary are considered "consumed" and should not be considered
+                 by other discounts.
+        """
+        result = {}
+
+        limit_products = set()
+        if not self.condition_all_products:
+            limit_products = {p.pk for p in self.condition_limit_products.all()}
+
+        # First, filter out everything not even covered by our product scope
+        initial_candidates = [
+            idx
+            for idx, (item_id, subevent_id, line_price_gross, is_addon_to) in positions.items()
+            if (
+                (self.condition_all_products or item_id in limit_products) and
+                (self.condition_apply_to_addons or not is_addon_to)
+            )
+        ]
+
+        # Second, if subevent_mode is set, we ned multiple passes
+        if self.subevent_mode == self.SUBEVENT_MODE_MIXED:
+            candidate_groups = [initial_candidates]
+        elif self.subevent_mode == self.SUBEVENT_MODE_SAME:
+            def key(idx):
+                return positions[idx][1]  # subevent_id
+
+            _groups = groupby(sorted(initial_candidates, key=key), key=key)
+            candidate_groups = [list(g) for k, g in _groups]
+        elif self.subevent_mode == self.SUBEVENT_MODE_DISTINCT:
+            # todo: aaargh
+            raise NotImplementedError()
+            candidate_groups = []
+
+        for idx_group in candidate_groups:
+            if self.condition_min_count and len(idx_group) < self.condition_min_count:
+                continue
+            if self.condition_min_value and sum(positions[idx][2] for idx in idx_group) < self.condition_min_value:
+                continue
+
+            if self.benefit_only_apply_to_cheapest_n_matches:
+                idx_group = sorted(idx_group, key=lambda idx: (positions[idx][2], idx))  # sort by line_price
+
+                # Prevent over-consuming of items, i.e. if our discount is "buy 2, get 1 free", we only
+                # want to match multiples of 3
+                consume_idx = idx_group[:len(idx_group) // self.condition_min_count * self.condition_min_count]
+                benefit_idx = idx_group[:len(idx_group) // self.condition_min_count]
+            else:
+                consume_idx = idx_group
+                benefit_idx = idx_group
+
+            for idx in benefit_idx:
+                previous_price = positions[idx][2]
+                new_price = round_decimal(
+                    previous_price * (Decimal('100.00') - self.benefit_discount_matching_percent) / Decimal('100.00'),
+                    self.event.currency,
+                )
+                result[idx] = new_price
+
+            for idx in consume_idx:
+                result.setdefault(idx, positions[idx][2])
+
+        return result

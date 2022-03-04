@@ -59,7 +59,7 @@ from pretix.base.reldate import RelativeDateWrapper
 from pretix.base.services.checkin import _save_answers
 from pretix.base.services.locking import LockTimeoutException, NoLockManager
 from pretix.base.services.pricing import (
-    get_line_price, get_listed_price, get_price, is_included_for_free,
+    get_line_price, get_listed_price, get_price, is_included_for_free, apply_discounts,
 )
 from pretix.base.services.quotas import QuotaAvailability
 from pretix.base.services.tasks import ProfiledEventTask
@@ -1190,16 +1190,24 @@ class CartManager:
                 cp.tax_rate = line_price.rate
                 cp.save(update_fields=['line_price_gross', 'tax_rate'])
 
-        apply_discounts(self.event, positions)
+        new_prices = apply_discounts(
+            self.event,
+            self._sales_channel,
+            [
+                (cp.item_id, cp.subevent_id, cp.line_price_gross, bool(cp.addon_to), cp.is_bundled)
+                for cp in positions
+            ]
+        )
 
-        for p in positions
-        if cp.price != line_price.gross:
-            diff += line_price.gross - cp.price
-            cp.price = line_price.gross
-            cp.save(update_fields=['price'])
-            return diff
+        for cp, new_price in zip(positions, new_prices):
+            if cp.price != new_price:
+                diff += new_price - cp.price
+                cp.price = new_price
+                cp.save(update_fields=['price'])
 
-def commit(self):
+        return diff
+
+    def commit(self):
         self._check_presale_dates()
         self._check_max_cart_size()
         self._calculate_expiry()
