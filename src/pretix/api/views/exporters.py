@@ -161,8 +161,12 @@ class OrganizerExportersViewSet(ExportersMixin, viewsets.ViewSet):
         return exporters
 
     def get_serializer_kwargs(self):
+        if isinstance(self.request.auth, (Device, TeamAPIToken)):
+            perm_holder = self.request.auth
+        else:
+            perm_holder = self.request.user
         return {
-            'events': self.request.auth.get_events_with_permission('can_view_orders', request=self.request).filter(
+            'events': perm_holder.get_events_with_permission('can_view_orders', request=self.request).filter(
                 organizer=self.request.organizer
             )
         }
