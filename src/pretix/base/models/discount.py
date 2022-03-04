@@ -168,18 +168,21 @@ class Discount(LoggedModel):
             )
         ]
 
-        # Second, if subevent_mode is set, we ned multiple passes
+        # Second, if subevent_mode is set, we need to group the cart first
         if self.subevent_mode == self.SUBEVENT_MODE_MIXED:
+            # Nothing to do
             candidate_groups = [initial_candidates]
+
         elif self.subevent_mode == self.SUBEVENT_MODE_SAME:
+            # Make groups of positions with the same subevent
             def key(idx):
                 return positions[idx][1]  # subevent_id
 
             _groups = groupby(sorted(initial_candidates, key=key), key=key)
             candidate_groups = [list(g) for k, g in _groups]
+
         elif self.subevent_mode == self.SUBEVENT_MODE_DISTINCT:
-            # todo: aaargh
-            raise NotImplementedError()
+            #
             candidate_groups = []
 
         for idx_group in candidate_groups:
@@ -187,13 +190,20 @@ class Discount(LoggedModel):
                 continue
             if self.condition_min_value and sum(positions[idx][2] for idx in idx_group) < self.condition_min_value:
                 continue
+            if any(idx in result for idx in idx_group):  # a group overlapping with this group was already used
+                continue
 
             if self.benefit_only_apply_to_cheapest_n_matches:
                 idx_group = sorted(idx_group, key=lambda idx: (positions[idx][2], idx))  # sort by line_price
 
                 # Prevent over-consuming of items, i.e. if our discount is "buy 2, get 1 free", we only
-                # want to match multiples of 3
-                consume_idx = idx_group[:len(idx_group) // self.condition_min_count * self.condition_min_count]
+                # want to match multiples of 3, at least if we don't violate condition_min_value that way
+                for consume_num in range(len(idx_group) // self.condition_min_count * self.condition_min_count, len(idx_group) + 1):
+                    if sum(positions[idx][2] for idx in idx_group[:consume_num]) >= self.condition_min_value:
+                        consume_idx = idx_group[:consume_num]
+                        break
+                else:
+                    consume_idx = idx_group
                 benefit_idx = idx_group[:len(idx_group) // self.condition_min_count]
             else:
                 consume_idx = idx_group
