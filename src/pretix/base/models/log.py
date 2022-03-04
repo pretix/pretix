@@ -138,8 +138,8 @@ class LogEntry(models.Model):
     @cached_property
     def display_object(self):
         from . import (
-            Discount, Event, Item, ItemCategory, Order, Question, Quota, SubEvent,
-            TaxRule, Voucher,
+            Discount, Event, Item, ItemCategory, Order, Question, Quota,
+            SubEvent, TaxRule, Voucher,
         )
 
         try:

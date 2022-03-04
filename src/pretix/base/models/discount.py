@@ -22,7 +22,7 @@
 
 from decimal import Decimal
 from itertools import groupby
-from typing import Dict, Tuple, Optional
+from typing import Dict, Optional, Tuple
 
 from django.core.validators import MinValueValidator
 from django.db import models

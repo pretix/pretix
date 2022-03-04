@@ -20,7 +20,7 @@
 # <https://www.gnu.org/licenses/>.
 #
 from decimal import Decimal
-from typing import List, Tuple, Optional
+from typing import List, Optional, Tuple
 
 from django.db.models import Q
 from django.utils.timezone import now
@@ -29,7 +29,7 @@ from pretix.base.decimal import round_decimal
 from pretix.base.models import (
     AbstractPosition, InvoiceAddress, Item, ItemAddOn, ItemVariation, Voucher,
 )
-from pretix.base.models.event import SubEvent, Event
+from pretix.base.models.event import Event, SubEvent
 from pretix.base.models.tax import TAXED_ZERO, TaxedPrice, TaxRule
 
 

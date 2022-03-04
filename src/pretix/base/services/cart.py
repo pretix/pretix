@@ -59,7 +59,8 @@ from pretix.base.reldate import RelativeDateWrapper
 from pretix.base.services.checkin import _save_answers
 from pretix.base.services.locking import LockTimeoutException, NoLockManager
 from pretix.base.services.pricing import (
-    get_line_price, get_listed_price, get_price, is_included_for_free, apply_discounts,
+    apply_discounts, get_line_price, get_listed_price, get_price,
+    is_included_for_free,
 )
 from pretix.base.services.quotas import QuotaAvailability
 from pretix.base.services.tasks import ProfiledEventTask
