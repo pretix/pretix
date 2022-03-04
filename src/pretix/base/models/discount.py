@@ -77,12 +77,17 @@ class Discount(LoggedModel):
 
     condition_all_products = models.BooleanField(default=True, verbose_name=_("Apply to all products (including newly created ones)"))
     condition_limit_products = models.ManyToManyField('Item', verbose_name=_("Apply to specific products"), blank=True)
+    condition_apply_to_addons = models.BooleanField(
+        default=True,
+        verbose_name=_("Apply to add-on products"),
+        help_text=_("Discounts never apply to bundled products"),
+    )
     condition_min_count = models.PositiveIntegerField(
         verbose_name=_('Minimum number of matching products'),
         default=0,
     )
     condition_min_value = models.DecimalField(
-        verbose_name=_('Minimum value of matching products'),
+        verbose_name=_('Minimum gross value of matching products'),
         decimal_places=2,
         max_digits=10,
         default=Decimal('0.00'),

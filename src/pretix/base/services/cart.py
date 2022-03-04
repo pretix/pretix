@@ -1185,15 +1185,21 @@ class CartManager:
                 invoice_address=self.invoice_address,
                 bundled_sum=sum([b.price_after_voucher for b in positions if b.addon_to_id == cp.pk and b.is_bundled]),
             )
-            if line_price.gross != cp.line_price_gross or line_price.rate != cp.tax_rate or cp.price != line_price.gross:
-                diff += line_price.gross - cp.price
+            if line_price.gross != cp.line_price_gross or line_price.rate != cp.tax_rate:
                 cp.line_price_gross = line_price.gross
-                cp.price = line_price.gross
                 cp.tax_rate = line_price.rate
-                cp.save(update_fields=['line_price_gross', 'tax_rate', 'price'])
-        return diff
+                cp.save(update_fields=['line_price_gross', 'tax_rate'])
 
-    def commit(self):
+        apply_discounts(self.event, positions)
+
+        for p in positions
+        if cp.price != line_price.gross:
+            diff += line_price.gross - cp.price
+            cp.price = line_price.gross
+            cp.save(update_fields=['price'])
+            return diff
+
+def commit(self):
         self._check_presale_dates()
         self._check_max_cart_size()
         self._calculate_expiry()

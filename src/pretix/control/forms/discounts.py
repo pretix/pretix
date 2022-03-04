@@ -43,6 +43,7 @@ class DiscountForm(I18nModelForm):
             'condition_limit_products',
             'condition_min_count',
             'condition_min_value',
+            'condition_apply_to_addons',
             'benefit_discount_matching_percent',
             'benefit_only_apply_to_cheapest_n_matches',
         ]
