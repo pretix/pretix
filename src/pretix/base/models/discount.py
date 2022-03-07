@@ -20,10 +20,12 @@
 # <https://www.gnu.org/licenses/>.
 #
 
+from collections import defaultdict
 from decimal import Decimal
 from itertools import groupby
 from typing import Dict, Optional, Tuple
 
+from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator
 from django.db import models
 from django.utils.translation import gettext_lazy as _, pgettext_lazy
@@ -140,6 +142,77 @@ class Discount(LoggedModel):
     def __lt__(self, other) -> bool:
         return self.sortkey < other.sortkey
 
+    def clean(self):
+        super().clean()
+
+        # We forbid a few combinations of settings, because we don't think they are neccessary and at the same
+        # time they introduce edge cases, in which it becomes almost impossible to compute the discount optimally
+        # and also very hard to understand for the user what is going on.
+
+        if self.condition_min_count and self.condition_min_value:
+            raise ValidationError(
+                _('You can either set a minimum number of matching products or a minimum value, not both.')
+            )
+
+        if self.condition_min_value and self.benefit_only_apply_to_cheapest_n_matches:
+            raise ValidationError(
+                _('You cannot apply the discount only to some of the matched products if you are matching '
+                  'on a minimum value.')
+            )
+
+        if self.subevent_mode == self.SUBEVENT_MODE_DISTINCT and self.condition_min_value:
+            raise ValidationError(
+                _('You cannot apply the discount only to bookings of different dates if you are matching '
+                  'on a minimum value.')
+            )
+
+    def _apply_min_value(self, positions, idx_group, result):
+        if self.condition_min_value and sum(positions[idx][2] for idx in idx_group) < self.condition_min_value:
+            return
+
+        if self.condition_min_count or self.benefit_only_apply_to_cheapest_n_matches:
+            raise ValueError('Validation invariant violated.')
+
+        for idx in idx_group:
+            previous_price = positions[idx][2]
+            new_price = round_decimal(
+                previous_price * (Decimal('100.00') - self.benefit_discount_matching_percent) / Decimal('100.00'),
+                self.event.currency,
+            )
+            result[idx] = new_price
+
+    def _apply_min_count(self, positions, idx_group, result):
+        if len(idx_group) < self.condition_min_count:
+            return
+
+        if not self.condition_min_count or self.condition_min_value:
+            raise ValueError('Validation invariant violated.')
+
+        if self.benefit_only_apply_to_cheapest_n_matches:
+            if not self.condition_min_count:
+                raise ValueError('Validation invariant violated.')
+
+            idx_group = sorted(idx_group, key=lambda idx: (positions[idx][2], idx))  # sort by line_price
+
+            # Prevent over-consuming of items, i.e. if our discount is "buy 2, get 1 free", we only
+            # want to match multiples of 3
+            consume_idx = idx_group[:len(idx_group) // self.condition_min_count * self.condition_min_count]
+            benefit_idx = idx_group[:len(idx_group) // self.condition_min_count * self.benefit_only_apply_to_cheapest_n_matches]
+        else:
+            consume_idx = idx_group
+            benefit_idx = idx_group
+
+        for idx in benefit_idx:
+            previous_price = positions[idx][2]
+            new_price = round_decimal(
+                previous_price * (Decimal('100.00') - self.benefit_discount_matching_percent) / Decimal('100.00'),
+                self.event.currency,
+            )
+            result[idx] = new_price
+
+        for idx in consume_idx:
+            result.setdefault(idx, positions[idx][2])
+
     def apply(self, positions: Dict[int, Tuple[int, Optional[int], Decimal, bool]]) -> Dict[int, Decimal]:
         """
         Tries to apply this discount to a cart
@@ -168,56 +241,92 @@ class Discount(LoggedModel):
             )
         ]
 
-        # Second, if subevent_mode is set, we need to group the cart first
-        if self.subevent_mode == self.SUBEVENT_MODE_MIXED:
-            # Nothing to do
-            candidate_groups = [initial_candidates]
+        if self.subevent_mode == self.SUBEVENT_MODE_MIXED:  # also applies to non-series events
+            if self.condition_min_count:
+                self._apply_min_count(positions, initial_candidates, result)
+            else:
+                self._apply_min_value(positions, initial_candidates, result)
 
         elif self.subevent_mode == self.SUBEVENT_MODE_SAME:
-            # Make groups of positions with the same subevent
             def key(idx):
                 return positions[idx][1]  # subevent_id
+
+            # Build groups of candidates with the same subevent, then apply our regular algorithm
+            # to each group
 
             _groups = groupby(sorted(initial_candidates, key=key), key=key)
             candidate_groups = [list(g) for k, g in _groups]
 
+            for g in candidate_groups:
+                if self.condition_min_count:
+                    self._apply_min_count(positions, g, result)
+                else:
+                    self._apply_min_value(positions, g, result)
+
         elif self.subevent_mode == self.SUBEVENT_MODE_DISTINCT:
-            #
+            if self.condition_min_value:
+                raise ValueError('Validation invariant violated.')
+
+            # Build optimal groups of candidates with distinct subevents, then apply our regular algorithm
+            # to each group. Optimal, in this case, means:
+            # - First try to build as many groups of size condition_min_count as possible while trying to
+            #   balance out the cheapest products so that they are not all in the same group
+            # - Then add remaining positions to existing groups if possible
             candidate_groups = []
 
-        for idx_group in candidate_groups:
-            if self.condition_min_count and len(idx_group) < self.condition_min_count:
-                continue
-            if self.condition_min_value and sum(positions[idx][2] for idx in idx_group) < self.condition_min_value:
-                continue
-            if any(idx in result for idx in idx_group):  # a group overlapping with this group was already used
-                continue
+            # Build a list of subevent IDs in descending order of frequency
+            subevent_to_idx = defaultdict(list)
+            for idx, p in positions.items():
+                subevent_to_idx[p[1]].append(idx)
+            for v in subevent_to_idx.values():
+                v.sort(key=lambda idx: positions[idx][2])
+            subevent_order = sorted(list(subevent_to_idx.keys()), key=lambda s: len(subevent_to_idx[s]), reverse=True)
 
-            if self.benefit_only_apply_to_cheapest_n_matches:
-                idx_group = sorted(idx_group, key=lambda idx: (positions[idx][2], idx))  # sort by line_price
+            # Build groups of exactly condition_min_count distinct subevents
+            current_group = []
+            while True:
+                # Build a list of candidates, which is a list of all positions belonging to a subevent of the
+                # maximum cardinality, where the cardinality of a subevent is defined as the number of tickets
+                # for that subevent that are not yet part of any group
+                candidates = []
+                cardinality = None
+                for se, l in subevent_to_idx.items():
+                    l = [ll for ll in l if ll not in current_group]
+                    if cardinality and len(l) != cardinality:
+                        continue
+                    if se not in {positions[idx][1] for idx in current_group}:
+                        candidates += l
+                        cardinality = len(l)
 
-                # Prevent over-consuming of items, i.e. if our discount is "buy 2, get 1 free", we only
-                # want to match multiples of 3, at least if we don't violate condition_min_value that way
-                for consume_num in range(len(idx_group) // self.condition_min_count * self.condition_min_count, len(idx_group) + 1):
-                    if sum(positions[idx][2] for idx in idx_group[:consume_num]) >= self.condition_min_value:
-                        consume_idx = idx_group[:consume_num]
-                        break
+                if not candidates:
+                    break
+
+                # Sort the list by prices, then pick one. For "buy 2 get 1 free" we apply a "pick 1 from the start
+                # and 2 from the end" scheme to optimize price distribution among groups
+                candidates = sorted(candidates, key=lambda idx: positions[idx][2])
+                if len(current_group) < (self.benefit_only_apply_to_cheapest_n_matches or 0):
+                    candidate = candidates[0]
                 else:
-                    consume_idx = idx_group
-                benefit_idx = idx_group[:len(idx_group) // self.condition_min_count]
-            else:
-                consume_idx = idx_group
-                benefit_idx = idx_group
+                    candidate = candidates[-1]
 
-            for idx in benefit_idx:
-                previous_price = positions[idx][2]
-                new_price = round_decimal(
-                    previous_price * (Decimal('100.00') - self.benefit_discount_matching_percent) / Decimal('100.00'),
-                    self.event.currency,
-                )
-                result[idx] = new_price
+                current_group.append(candidate)
 
-            for idx in consume_idx:
-                result.setdefault(idx, positions[idx][2])
+                # Only add full groups to the list of groups
+                if len(current_group) >= max(self.condition_min_count, 1):
+                    candidate_groups.append(current_group)
+                    for c in current_group:
+                        subevent_to_idx[positions[c][1]].remove(c)
+                    current_group = []
 
+            # Distribute "leftovers"
+            for se in subevent_order:
+                if subevent_to_idx[se]:
+                    for group in candidate_groups:
+                        if se not in {positions[idx][1] for idx in group}:
+                            group.append(subevent_to_idx[se].pop())
+                            if not subevent_to_idx[se]:
+                                break
+
+            for g in candidate_groups:
+                self._apply_min_count(positions, g, result)
         return result

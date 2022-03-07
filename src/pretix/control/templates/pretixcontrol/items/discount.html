@@ -21,11 +21,28 @@
                     {% bootstrap_field form.condition_all_products layout="control" %}
                     {% bootstrap_field form.condition_limit_products layout="control" %}
                     {% bootstrap_field form.condition_apply_to_addons layout="control" %}
-                    {% bootstrap_field form.condition_min_count layout="control" %}
-                    {% bootstrap_field form.condition_min_value layout="control" addon_after=request.event.currency %}
                     {% if form.subevent_mode %}
                         {% bootstrap_field form.subevent_mode layout="control" %}
                     {% endif %}
+                    <div class="form-group form-alternatives">
+                        <label class="col-md-3 control-label">
+                            {% trans "Minimum cart content" %}<br>
+                            <span class="optional">{% trans "Optional" %}</span>
+                        </label>
+                        <div class="col-md-4">
+                            {% bootstrap_field form.condition_min_count form_group_class="" %}
+                        </div>
+                        <div class="col-md-1 text-center condition-or" data-display-dependency="#id_subevent_mode_2" data-inverse>
+                            <div class="hr">
+                                <div class="sep">
+                                    <div class="sepText">{% trans "OR" %}</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4" data-display-dependency="#id_subevent_mode_2" data-inverse>
+                            {% bootstrap_field form.condition_min_value form_group_class="" %}
+                        </div>
+                    </div>
                 </fieldset>
                 <fieldset>
                     <legend>{% trans "Benefit" context "discount" %}</legend>

@@ -849,6 +849,7 @@ details {
     text-decoration: line-through;
   }
 }
+
 .select2-container [aria-multiselectable] .select2-results__option span span::before {
   content: "";
   font-family: FontAwesome;
@@ -859,4 +860,47 @@ details {
 }
 .select2-container [aria-multiselectable] .select2-results__option[aria-selected=true] span span::before {
   content: ""
+}
+
+.form-alternatives {
+  div .control-label {
+    text-align: left;
+  }
+}
+.condition-or {
+  .sepText {
+    width: 75px;
+    background: #FFFFFF;
+    margin: -15px 0 0 -38px;
+    padding: 5px 0;
+    position: absolute;
+    top: 50%;
+    text-align: center;
+  }
+
+  .hr {
+    width:2px;
+    height:64px;
+    background-color: #DDDDDD;
+    position:inherit;
+    top:12px;
+    left:50%;
+    z-index:10;
+  }
+}
+
+@media (max-width: $screen-sm-max) {
+  .condition-or {
+    .hr {
+      width: 100%;
+      height: 2px;
+      left: 0px;
+      top: 4px;
+      margin: 15px 0 15px 0;
+    }
+
+    .sepText {
+      left: 50%;
+    }
+  }
 }

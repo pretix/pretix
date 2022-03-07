@@ -19,6 +19,8 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
+from decimal import Decimal
+
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 
@@ -60,6 +62,11 @@ class DiscountForm(I18nModelForm):
                 'data-inverse-dependency': '<[name$=all_products]',
                 'class': 'scrolling-multiple-choice',
             }),
+            'benefit_only_apply_to_cheapest_n_matches': forms.NumberInput(
+                attrs={
+                    'data-display-dependency': '#id_condition_min_count',
+                }
+            )
         }
 
     def __init__(self, *args, **kwargs):
@@ -79,3 +86,13 @@ class DiscountForm(I18nModelForm):
 
         if not self.event.has_subevents:
             del self.fields['subevent_mode']
+
+    def clean(self):
+        d = super().clean()
+        if d.get('condition_min_value') and d.get('benefit_only_apply_to_cheapest_n_matches'):
+            # field is hidden by JS
+            d['benefit_only_apply_to_cheapest_n_matches'] = None
+        if d.get('subevent_mode') == Discount.SUBEVENT_MODE_DISTINCT and d.get('condition_min_value'):
+            # field is hidden by JS
+            d['condition_min_value'] = Decimal('0.00')
+        return d
