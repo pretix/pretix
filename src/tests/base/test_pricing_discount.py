@@ -27,7 +27,7 @@ import pytest
 from django.utils.timezone import now
 from django_scopes import scopes_disabled
 
-from pretix.base.models import Event, Organizer, Discount
+from pretix.base.models import Discount, Event, Organizer
 from pretix.base.services.pricing import apply_discounts
 
 
@@ -1012,6 +1012,3 @@ def test_available_until(event, item):
     )
 
     assert sorted(apply_discounts(event, 'web', positions)) == [Decimal('50.00'), Decimal('50.00')]
-
-    # todo: available_from/until
-    # todo: condition_limit_products

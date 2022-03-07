@@ -11,7 +11,7 @@ For example, prices change when
 * The user adds an invoice address that triggers a change in taxation
 * The user chooses a custom price for an add-on product and adjusts the price later on
 * The user adds a voucher to their cart
-* An offer is applied to perform an automated discount
+* An automatic discount is applied
 
 For the purposes of this page, we're making a distinction between "naive prices" (which are just a plain number like 23.00), and
 "taxed prices" (which are a combination of a net price, a tax rate, and a gross price, like 19.33 + 19% = 23.00).
@@ -91,12 +91,88 @@ result, depending on ``custom_price_input_is_net``. If the comparison yields tha
 will be called again . Then, ``bundled_sum`` will be subtracted from the gross price and the result is stored like
 above.
 
-Offers
-======
+The computation of ``line_price_gross`` from ``price_after_voucher``, ``custom_price_input``, and tax settings
+is repeated after every change of anything in the cart or after every change of the invoice address.
 
-TBD
+Discounts
+---------
+
+After ``line_price_gross`` has been computed for all positions, the discount engine will run to apply any automatic
+discounts. Organizers can add rules for automatic discounts in the pretix backend. These rules are ordered and
+will be applied in order. Every cart position can only be "used" by one discount rule. "Used" can either mean that
+the price of the position was actually discounted, but it can also mean that the position was required to enable
+a discount for a different position, e.g. in case of a "buy 3 for the price of 2" offer.
+
+The algorithm for applying an individual discount rule first starts with eliminating all products that do not match
+the rule based on its product scope. Then, the algorithm is handled differently for different configurations.
+
+Case 1: Discount based on minimum value without respect to subevents
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+* Check whether the gross sum of all positions is at least ``condition_min_value``, otherwise abort.
+
+* Reduce the price of all positions by ``benefit_discount_matching_percent``.
+
+* Mark all positions as "used" to hide them from further rules
+
+Case 2: Discount based on minimum number of tickets without respect to subevents
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+* Check whether the number of all positions is at least ``condition_min_count``, otherwise abort.
+
+* If ``benefit_only_apply_to_cheapest_n_maches`` is set,
+
+    * Sort all positions by price.
+    * Reduce the price of the first ``n_positions // condition_min_count * benefit_only_apply_to_cheapest_n_matches`` positions by ``benefit_discount_matching_percent``.
+    * Mark the first ``n_positions // condition_min_count * condition_min_count`` as "used" to hide them from further rules.
+    * Mark all positions as "used" to hide them from further rules.
+
+* Else,
+
+    * Reduce the price of all positions by ``benefit_discount_matching_percent``.
+    * Mark all positions as "used" to hide them from further rules.
+
+Case 3: Discount only for products of the same subevent
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+* Split the cart into groups based on the subevent.
+
+* Proceed with case 1 or 2 for every group.
+
+Case 4: Discount only for products of distinct subevents
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+* Let ``subevents`` be a list of distinct subevents in the cart.
+
+* Let ``positions[subevent]`` be a list of positions for every subevent.
+
+* Let ``current_group`` be the current group and ``groups`` the list of all groups.
+
+* Repeat
+
+    * Order ``subevents`` by the length of their ``positions[subevent]`` list, starting with the longest list.
+      Do not count positions that are part of ``current_group`` already.
+
+    * Let ``candidates`` be the concatenation of all ``positions[subevent]`` lists with the same length as the
+      longest list.
+
+    * If ``candidates`` is empty, abort the repetition.
+
+    * Order ``candidates`` by their price, starting with the lowest price.
+
+    * Pick one entry from ``candidates`` and put it into ``current_group``. If ``current_group`` is shorter than
+      ``benefit_only_apply_to_cheapest_n_matches``, we pick from the start (lowest price), otherwise we pick from
+      the end (highest price)
+
+    * If ``current_group`` is now ``condition_min_count``, remove all entries from ``current_group`` from
+      ``positions[…]``, add ``current_group`` to ``groups``, and reset ``current_group`` to an empty group.
+
+* For every position still left in a ``positions[…]`` list, try if there is any ``group`` in groups that it can
+  still be added to without violating the rule of distinct subevents
+
+* For every group in ``groups``, proceed with case 1 or 2.
 
 Flowchart
-=========
+---------
 
 .. image:: /images/cart_pricing.png

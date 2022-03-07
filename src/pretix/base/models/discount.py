@@ -113,6 +113,7 @@ class Discount(LoggedModel):
         decimal_places=2,
         max_digits=10,
         default=Decimal('0.00'),
+        validators=[MinValueValidator(Decimal('0.00'))],
     )
     benefit_only_apply_to_cheapest_n_matches = models.PositiveIntegerField(
         verbose_name=_('Apply discount only to this number of matching products'),

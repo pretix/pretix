@@ -22,7 +22,7 @@ partition "For every cart position" {
     --> "Apply custom price if product allows\nApply tax rule\nSubtract bundled products"
     --> "Store as line_price (gross), tax_rate"
 }
---> "Apply offers engine"
+--> "Apply discount engine"
 --> "Store as price (gross)"
 
 @enduml
