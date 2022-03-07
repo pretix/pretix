@@ -20,6 +20,7 @@
 # <https://www.gnu.org/licenses/>.
 #
 import copy
+from datetime import timedelta
 from decimal import Decimal
 
 import pytest
@@ -43,6 +44,11 @@ def event():
 @pytest.fixture
 def item(event):
     return event.items.create(name='Ticket', default_price=Decimal('23.00'))
+
+
+@pytest.fixture
+def item2(event):
+    return event.items.create(name='Ticket II', default_price=Decimal('50.00'))
 
 
 @pytest.fixture
@@ -126,7 +132,7 @@ distinct_min_count_two_free = (
 )
 
 
-testcases = [
+testcases_single_rule = [
     # mixed + min_count + matching_percent
     (
         mixed_min_count_matching_percent,
@@ -656,10 +662,270 @@ testcases = [
             Decimal('6.00'),
         )
     ),
+
+    # Unconditional
+    (
+        (
+            Discount(condition_min_count=1, benefit_discount_matching_percent=20),
+        ),
+        (
+            (1, 1, Decimal('100.00'), False, False),
+        ),
+        (
+            Decimal('80.00'),
+        )
+    ),
+    (
+        (
+            Discount(
+                condition_min_count=1,
+                benefit_discount_matching_percent=100,
+                benefit_only_apply_to_cheapest_n_matches=1
+            ),
+        ),
+        (
+            (1, 1, Decimal('100.00'), False, False),
+            (1, 1, Decimal('100.00'), False, False),
+        ),
+        (
+            Decimal('0.00'),
+            Decimal('0.00'),
+        )
+    ),
+
+    # Apply partial discount to partial items
+    (
+        (
+            Discount(
+                condition_min_count=3,
+                benefit_discount_matching_percent=20,
+                benefit_only_apply_to_cheapest_n_matches=2
+            ),
+        ),
+        (
+            (1, 1, Decimal('100.00'), False, False),
+            (1, 1, Decimal('100.00'), False, False),
+            (1, 1, Decimal('100.00'), False, False),
+        ),
+        (
+            Decimal('100.00'),
+            Decimal('80.00'),
+            Decimal('80.00'),
+        )
+    ),
+
+    # Addon handling
+    (
+        (
+            Discount(
+                condition_min_count=3,
+                benefit_discount_matching_percent=20,
+            ),
+        ),
+        (
+            (1, 1, Decimal('100.00'), False, False),
+            (1, 1, Decimal('100.00'), True, False),
+            (1, 1, Decimal('100.00'), True, False),
+        ),
+        (
+            Decimal('80.00'),
+            Decimal('80.00'),
+            Decimal('80.00'),
+        )
+    ),
+    (
+        (
+            Discount(
+                condition_min_count=3,
+                benefit_discount_matching_percent=20,
+                condition_apply_to_addons=False,
+            ),
+        ),
+        (
+            (1, 1, Decimal('100.00'), False, False),
+            (1, 1, Decimal('100.00'), False, False),
+            (1, 1, Decimal('100.00'), False, False),
+            (1, 1, Decimal('100.00'), True, False),
+            (1, 1, Decimal('100.00'), True, False),
+        ),
+        (
+            Decimal('80.00'),
+            Decimal('80.00'),
+            Decimal('80.00'),
+            Decimal('100.00'),
+            Decimal('100.00'),
+        )
+    ),
+    (
+        (
+            Discount(
+                condition_min_count=3,
+                benefit_discount_matching_percent=20,
+                condition_apply_to_addons=False,
+            ),
+        ),
+        (
+            (1, 1, Decimal('100.00'), False, False),
+            (1, 1, Decimal('100.00'), True, False),
+            (1, 1, Decimal('100.00'), True, False),
+        ),
+        (
+            Decimal('100.00'),
+            Decimal('100.00'),
+            Decimal('100.00'),
+        )
+    ),
+
+    # Ignore bundled
+    (
+        (
+            Discount(
+                condition_min_count=3,
+                benefit_discount_matching_percent=20,
+                condition_apply_to_addons=False,
+            ),
+        ),
+        (
+            (1, 1, Decimal('100.00'), False, False),
+            (1, 1, Decimal('100.00'), True, True),
+            (1, 1, Decimal('100.00'), True, True),
+        ),
+        (
+            Decimal('100.00'),
+            Decimal('100.00'),
+            Decimal('100.00'),
+        )
+    ),
 ]
 
 
-@pytest.mark.parametrize("discounts,positions,expected", testcases)
+testcases_multiple_rules = [
+    # min_count consumes all discounted
+    (
+        (
+            Discount(
+                condition_min_count=2,
+                benefit_discount_matching_percent=20,
+            ),
+            Discount(
+                condition_min_count=1,
+                benefit_discount_matching_percent=50,
+            ),
+        ),
+        (
+            (1, 1, Decimal('100.00'), False, False),
+            (1, 1, Decimal('100.00'), False, False),
+            (1, 1, Decimal('100.00'), False, False),
+        ),
+        (
+            Decimal('80.00'),
+            Decimal('80.00'),
+            Decimal('80.00'),
+        )
+    ),
+    # reordered
+    (
+        (
+            Discount(
+                condition_min_count=1,
+                benefit_discount_matching_percent=50,
+                position=2,
+            ),
+            Discount(
+                condition_min_count=2,
+                benefit_discount_matching_percent=20,
+                position=1,
+            ),
+        ),
+        (
+            (1, 1, Decimal('100.00'), False, False),
+            (1, 1, Decimal('100.00'), False, False),
+            (1, 1, Decimal('100.00'), False, False),
+        ),
+        (
+            Decimal('80.00'),
+            Decimal('80.00'),
+            Decimal('80.00'),
+        )
+    ),
+    # min_count does not consume uneven numbers if not required
+    (
+        (
+            Discount(
+                condition_min_count=2,
+                benefit_discount_matching_percent=20,
+                benefit_only_apply_to_cheapest_n_matches=1
+            ),
+            Discount(
+                condition_min_count=1,
+                benefit_discount_matching_percent=50,
+            ),
+        ),
+        (
+            (1, 1, Decimal('100.00'), False, False),
+            (1, 1, Decimal('100.00'), False, False),
+            (1, 1, Decimal('100.00'), False, False),
+        ),
+        (
+            Decimal('100.00'),
+            Decimal('80.00'),
+            Decimal('50.00'),
+        )
+    ),
+    (
+        (
+            Discount(
+                condition_min_count=2,
+                benefit_discount_matching_percent=20,
+                benefit_only_apply_to_cheapest_n_matches=1
+            ),
+            Discount(
+                condition_min_count=1,
+                benefit_discount_matching_percent=50,
+            ),
+        ),
+        (
+            (1, 1, Decimal('100.00'), False, False),
+            (1, 1, Decimal('100.00'), False, False),
+            (1, 1, Decimal('100.00'), False, False),
+            (1, 1, Decimal('100.00'), False, False),
+            (1, 1, Decimal('100.00'), False, False),
+        ),
+        (
+            Decimal('100.00'),
+            Decimal('80.00'),
+            Decimal('100.00'),
+            Decimal('80.00'),
+            Decimal('50.00'),
+        )
+    ),
+    # min_value consumes all matching
+    (
+        (
+            Discount(
+                condition_min_value=Decimal('5.00'),
+                benefit_discount_matching_percent=20,
+            ),
+            Discount(
+                condition_min_count=1,
+                benefit_discount_matching_percent=50,
+            ),
+        ),
+        (
+            (1, 1, Decimal('100.00'), False, False),
+            (1, 1, Decimal('100.00'), False, False),
+            (1, 1, Decimal('100.00'), False, False),
+        ),
+        (
+            Decimal('80.00'),
+            Decimal('80.00'),
+            Decimal('80.00'),
+        )
+    ),
+]
+
+
+@pytest.mark.parametrize("discounts,positions,expected", testcases_single_rule + testcases_multiple_rules)
 @pytest.mark.django_db
 @scopes_disabled()
 def test_discount_evaluation(event, item, subevent, discounts, positions, expected):
@@ -670,13 +936,82 @@ def test_discount_evaluation(event, item, subevent, discounts, positions, expect
         d.full_clean()
         d.save()
     new_prices = apply_discounts(event, 'web', positions)
-    print(new_prices)
     assert sorted(new_prices) == sorted(expected)
 
-# todo: condition-less discount
-# todo: apply_to_cheapest with != 100
-# todo: evaluation order
-# todo: sales_channels
-# todo: available_from/until
-# todo: condition_limit_products
-# todo: condition_apply_to_addons
+
+@pytest.mark.django_db
+@scopes_disabled()
+def test_limit_products(event, item, item2):
+    d1 = Discount(event=event, condition_min_count=2, benefit_discount_matching_percent=20, condition_all_products=False)
+    d1.save()
+    d1.condition_limit_products.add(item2)
+    d2 = Discount(event=event, condition_min_count=2, benefit_discount_matching_percent=50, condition_all_products=True)
+    d2.save()
+
+    positions = (
+        (item.pk, None, Decimal('100.00'), False, False),
+        (item.pk, None, Decimal('100.00'), False, False),
+        (item2.pk, None, Decimal('100.00'), False, False),
+        (item2.pk, None, Decimal('100.00'), False, False),
+    )
+    expected = (
+        Decimal('80.00'),
+        Decimal('80.00'),
+        Decimal('50.00'),
+        Decimal('50.00'),
+    )
+
+    new_prices = apply_discounts(event, 'web', positions)
+    assert sorted(new_prices) == sorted(expected)
+
+
+@pytest.mark.django_db
+@scopes_disabled()
+def test_sales_channels(event, item):
+    d1 = Discount(event=event, condition_min_count=2, benefit_discount_matching_percent=20, sales_channels=['resellers'])
+    d1.save()
+    d2 = Discount(event=event, condition_min_count=2, benefit_discount_matching_percent=50, sales_channels=['web', 'resellers'])
+    d2.save()
+
+    positions = (
+        (item.pk, None, Decimal('100.00'), False, False),
+        (item.pk, None, Decimal('100.00'), False, False),
+    )
+
+    assert sorted(apply_discounts(event, 'resellers', positions)) == [Decimal('80.00'), Decimal('80.00')]
+    assert sorted(apply_discounts(event, 'web', positions)) == [Decimal('50.00'), Decimal('50.00')]
+
+
+@pytest.mark.django_db
+@scopes_disabled()
+def test_available_from(event, item):
+    d1 = Discount(event=event, condition_min_count=2, benefit_discount_matching_percent=20, available_from=now() + timedelta(days=1))
+    d1.save()
+    d2 = Discount(event=event, condition_min_count=2, benefit_discount_matching_percent=50, available_from=now() - timedelta(days=1))
+    d2.save()
+
+    positions = (
+        (item.pk, None, Decimal('100.00'), False, False),
+        (item.pk, None, Decimal('100.00'), False, False),
+    )
+
+    assert sorted(apply_discounts(event, 'web', positions)) == [Decimal('50.00'), Decimal('50.00')]
+
+
+@pytest.mark.django_db
+@scopes_disabled()
+def test_available_until(event, item):
+    d1 = Discount(event=event, condition_min_count=2, benefit_discount_matching_percent=20, available_until=now() - timedelta(days=1))
+    d1.save()
+    d2 = Discount(event=event, condition_min_count=2, benefit_discount_matching_percent=50, available_until=now() + timedelta(days=1))
+    d2.save()
+
+    positions = (
+        (item.pk, None, Decimal('100.00'), False, False),
+        (item.pk, None, Decimal('100.00'), False, False),
+    )
+
+    assert sorted(apply_discounts(event, 'web', positions)) == [Decimal('50.00'), Decimal('50.00')]
+
+    # todo: available_from/until
+    # todo: condition_limit_products

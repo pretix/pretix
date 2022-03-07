@@ -154,6 +154,11 @@ class Discount(LoggedModel):
                 _('You can either set a minimum number of matching products or a minimum value, not both.')
             )
 
+        if not self.condition_min_count and not self.condition_min_value:
+            raise ValidationError(
+                _('You need to either set a minimum number of matching products or a minimum value.')
+            )
+
         if self.condition_min_value and self.benefit_only_apply_to_cheapest_n_matches:
             raise ValidationError(
                 _('You cannot apply the discount only to some of the matched products if you are matching '
