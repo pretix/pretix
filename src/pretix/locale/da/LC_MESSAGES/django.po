@@ -4,8 +4,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-02-25 10:05+0000\n"
-"PO-Revision-Date: 2022-01-13 22:00+0000\n"
-"Last-Translator: Mikkel Ricky <rimi@aarhus.dk>\n"
+"PO-Revision-Date: 2022-03-07 23:00+0000\n"
+"Last-Translator: Anna-itk <abc@aarhus.dk>\n"
 "Language-Team: Danish <https://translate.pretix.eu/projects/pretix/pretix/da/"
 ">\n"
 "Language: da\n"
@@ -20778,6 +20778,8 @@ msgid ""
 "Your changes have been saved. Please note that it can take a short period of "
 "time until your changes become active."
 msgstr ""
+"Dine ændringer er gemt. Bemærk at det kan tage et øjeblik før ændringerne "
+"aktiveres."
 
 #: pretix/control/views/event.py:325
 #, fuzzy
@@ -20919,7 +20921,7 @@ msgstr ""
 #: pretix/control/views/global_settings.py:88
 #: pretix/control/views/global_settings.py:153
 msgid "Your changes have not been saved, see below for errors."
-msgstr ""
+msgstr "Dine ændringer er ikke blevet gemt, se  evt. fejl nedenfor"
 
 #: pretix/control/views/global_settings.py:193
 msgid ""
