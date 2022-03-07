@@ -65,9 +65,18 @@
                     {% for d in discounts %}
                         <tr data-dnd-id="{{ d.id }}">
                             <td>
-                                <strong><a
-                                        href="{% url "control:event.items.discounts.edit" organizer=request.event.organizer.slug event=request.event.slug discount=d.id %}">
-                                    {{ d.internal_name }}</a></strong>
+                                {% if d.active %}
+                                   <strong>
+                                {% else %}
+                                    <del>
+                                {% endif %}
+                                    <a  href="{% url "control:event.items.discounts.edit" organizer=request.event.organizer.slug event=request.event.slug discount=d.id %}">
+                                    {{ d.internal_name }}</a>
+                                {% if d.active %}
+                                    </strong>
+                                {% else %}
+                                    </del>
+                                {% endif %}
                             </td>
                             <td>
                                 {% for k, c in sales_channels.items %}

@@ -1314,6 +1314,10 @@ class AbstractPosition(models.Model):
     )
     is_bundled = models.BooleanField(default=False)
 
+    discount = models.ForeignKey(
+        'Discount', null=True, blank=True, on_delete=models.RESTRICT
+    )
+
     company = models.CharField(max_length=255, blank=True, verbose_name=_('Company name'), null=True)
     street = models.TextField(verbose_name=_('Address'), blank=True, null=True)
     zipcode = models.CharField(max_length=30, verbose_name=_('ZIP code'), blank=True, null=True)

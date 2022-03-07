@@ -36,6 +36,7 @@ class DiscountForm(I18nModelForm):
         model = Discount
         localized_fields = '__all__'
         fields = [
+            'active',
             'internal_name',
             'sales_channels',
             'available_from',

@@ -37,7 +37,7 @@ from django.views.decorators.http import require_http_methods
 from django.views.generic import ListView
 from django.views.generic.edit import DeleteView
 
-from pretix.base.models import Discount
+from pretix.base.models import CartPosition, Discount
 from pretix.control.forms.discounts import DiscountForm
 from pretix.control.permissions import (
     EventPermissionRequiredMixin, event_permission_required,
@@ -54,6 +54,14 @@ class DiscountDelete(EventPermissionRequiredMixin, DeleteView):
     permission = 'can_change_items'
     context_object_name = 'discount'
 
+    def get_context_data(self, *args, **kwargs) -> dict:
+        context = super().get_context_data(*args, **kwargs)
+        context['possible'] = self.is_allowed()
+        return context
+
+    def is_allowed(self) -> bool:
+        return not self.get_object().orderposition_set.exists()
+
     def get_object(self, queryset=None) -> Discount:
         try:
             return self.request.event.discounts.get(
@@ -66,9 +74,19 @@ class DiscountDelete(EventPermissionRequiredMixin, DeleteView):
     def delete(self, request, *args, **kwargs):
         self.object = self.get_object()
         success_url = self.get_success_url()
-        self.object.log_action('pretix.event.discount.deleted', user=self.request.user)
-        self.object.delete()
-        messages.success(request, _('The selected discount has been deleted.'))
+        if self.object.allow_delete():
+            CartPosition.objects.filter(discount=self.object).update(discount=None)
+            self.object.log_action('pretix.event.discount.deleted', user=self.request.user)
+            self.object.delete()
+            messages.success(request, _('The selected discount has been deleted.'))
+        else:
+            o = self.get_object()
+            o.active = False
+            o.save()
+            o.log_action('pretix.event.discount.changed', user=self.request.user, data={
+                'active': False
+            })
+            messages.success(request, _('The selected discount has been deactivated.'))
         return HttpResponseRedirect(success_url)
 
     def get_success_url(self) -> str:

@@ -148,7 +148,7 @@ def apply_discounts(event: Event, sales_channel: str,
     :param event: Event the cart belongs to
     :param sales_channel: Sales channel the cart was created with
     :param positions: Tuple of the form ``(item_id, subevent_id, line_price_gross, is_addon_to, is_bundled)``
-    :return: A list of new gross prices in the same order as the input
+    :return: A list of ``(new_gross_price, discount)`` tuples in the same order as the input
     """
     new_prices = {}
 
@@ -156,12 +156,16 @@ def apply_discounts(event: Event, sales_channel: str,
         Q(available_from__isnull=True) | Q(available_from__lte=now()),
         Q(available_until__isnull=True) | Q(available_until__gte=now()),
         sales_channels__contains=sales_channel,
+        active=True,
     ).prefetch_related('condition_limit_products').order_by('position', 'pk')
     for discount in discount_qs:
-        new_prices.update(discount.apply({
+        result = discount.apply({
             idx: (item_id, subevent_id, line_price_gross, is_addon_to)
             for idx, (item_id, subevent_id, line_price_gross, is_addon_to, is_bundled) in enumerate(positions)
             if not is_bundled and idx not in new_prices
-        }))
+        })
+        for k in result.keys():
+            result[k] = (result[k], discount)
+        new_prices.update(result)
 
-    return [new_prices.get(idx, p[2]) for idx, p in enumerate(positions)]
+    return [new_prices.get(idx, (p[2], None)) for idx, p in enumerate(positions)]

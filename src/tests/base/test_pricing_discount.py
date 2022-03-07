@@ -935,7 +935,7 @@ def test_discount_evaluation(event, item, subevent, discounts, positions, expect
         d.internal_name = 'Discount'
         d.full_clean()
         d.save()
-    new_prices = apply_discounts(event, 'web', positions)
+    new_prices = [p for p, d in apply_discounts(event, 'web', positions)]
     assert sorted(new_prices) == sorted(expected)
 
 
@@ -961,7 +961,7 @@ def test_limit_products(event, item, item2):
         Decimal('50.00'),
     )
 
-    new_prices = apply_discounts(event, 'web', positions)
+    new_prices = [p for p, d in apply_discounts(event, 'web', positions)]
     assert sorted(new_prices) == sorted(expected)
 
 
@@ -978,8 +978,8 @@ def test_sales_channels(event, item):
         (item.pk, None, Decimal('100.00'), False, False),
     )
 
-    assert sorted(apply_discounts(event, 'resellers', positions)) == [Decimal('80.00'), Decimal('80.00')]
-    assert sorted(apply_discounts(event, 'web', positions)) == [Decimal('50.00'), Decimal('50.00')]
+    assert sorted([p for p, d in apply_discounts(event, 'resellers', positions)]) == [Decimal('80.00'), Decimal('80.00')]
+    assert sorted([p for p, d in apply_discounts(event, 'web', positions)]) == [Decimal('50.00'), Decimal('50.00')]
 
 
 @pytest.mark.django_db
@@ -995,7 +995,7 @@ def test_available_from(event, item):
         (item.pk, None, Decimal('100.00'), False, False),
     )
 
-    assert sorted(apply_discounts(event, 'web', positions)) == [Decimal('50.00'), Decimal('50.00')]
+    assert sorted([p for p, d in apply_discounts(event, 'web', positions)]) == [Decimal('50.00'), Decimal('50.00')]
 
 
 @pytest.mark.django_db
@@ -1011,4 +1011,4 @@ def test_available_until(event, item):
         (item.pk, None, Decimal('100.00'), False, False),
     )
 
-    assert sorted(apply_discounts(event, 'web', positions)) == [Decimal('50.00'), Decimal('50.00')]
+    assert sorted([p for p, d in apply_discounts(event, 'web', positions)]) == [Decimal('50.00'), Decimal('50.00')]

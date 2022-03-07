@@ -51,6 +51,10 @@ class Discount(LoggedModel):
         on_delete=models.CASCADE,
         related_name='discounts',
     )
+    active = models.BooleanField(
+        verbose_name=_("Active"),
+        default=True,
+    )
     internal_name = models.CharField(
         verbose_name=_("Internal name"),
         max_length=255
@@ -232,6 +236,9 @@ class Discount(LoggedModel):
                  by other discounts.
         """
         result = {}
+
+        if not self.active:
+            return result
 
         limit_products = set()
         if not self.condition_all_products:

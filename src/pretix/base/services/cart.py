@@ -1191,7 +1191,7 @@ class CartManager:
                 cp.tax_rate = line_price.rate
                 cp.save(update_fields=['line_price_gross', 'tax_rate'])
 
-        new_prices = apply_discounts(
+        discount_results = apply_discounts(
             self.event,
             self._sales_channel,
             [
@@ -1200,11 +1200,12 @@ class CartManager:
             ]
         )
 
-        for cp, new_price in zip(positions, new_prices):
-            if cp.price != new_price:
+        for cp, (new_price, discount) in zip(positions, discount_results):
+            if cp.price != new_price or cp.discount_id != (discount.pk if discount else None):
                 diff += new_price - cp.price
                 cp.price = new_price
-                cp.save(update_fields=['price'])
+                cp.discount = discount
+                cp.save(update_fields=['price', 'discount'])
 
         return diff
 
