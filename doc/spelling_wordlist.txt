@@ -103,6 +103,7 @@ prepending
 preprocessor
 presale
 pretix
+pretixLEAD
 pretixSCAN
 pretixdroid
 pretixPOS

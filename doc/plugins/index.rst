@@ -1,3 +1,5 @@
+.. _`plugin-docs`:
+
 Plugin documentation
 ====================
 
@@ -10,13 +12,13 @@ If you want to **create** a plugin, please go to the
    :maxdepth: 2
 
    list
-   pretixdroid
    banktransfer
    ticketoutputpdf
    badges
    campaigns
    certificates
    digital
+   exhibitors
    imported_secrets
    webinar
    presale-saml
