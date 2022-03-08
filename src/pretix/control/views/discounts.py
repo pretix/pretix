@@ -56,11 +56,8 @@ class DiscountDelete(EventPermissionRequiredMixin, DeleteView):
 
     def get_context_data(self, *args, **kwargs) -> dict:
         context = super().get_context_data(*args, **kwargs)
-        context['possible'] = self.is_allowed()
+        context['possible'] = self.object.allow_delete()
         return context
-
-    def is_allowed(self) -> bool:
-        return not self.get_object().orderposition_set.exists()
 
     def get_object(self, queryset=None) -> Discount:
         try:

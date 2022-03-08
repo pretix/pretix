@@ -1,3 +1,5 @@
+.. _`algorithms-pricing`:
+
 Pricing algorithms
 ==================
 

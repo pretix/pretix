@@ -147,34 +147,44 @@ class Discount(LoggedModel):
     def __lt__(self, other) -> bool:
         return self.sortkey < other.sortkey
 
-    def clean(self):
-        super().clean()
-
+    @classmethod
+    def validate_config(cls, data):
         # We forbid a few combinations of settings, because we don't think they are neccessary and at the same
         # time they introduce edge cases, in which it becomes almost impossible to compute the discount optimally
         # and also very hard to understand for the user what is going on.
-
-        if self.condition_min_count and self.condition_min_value:
+        if data.get('condition_min_count') and data.get('condition_min_value'):
             raise ValidationError(
                 _('You can either set a minimum number of matching products or a minimum value, not both.')
             )
 
-        if not self.condition_min_count and not self.condition_min_value:
+        if not data.get('condition_min_count') and not data.get('condition_min_value'):
             raise ValidationError(
                 _('You need to either set a minimum number of matching products or a minimum value.')
             )
 
-        if self.condition_min_value and self.benefit_only_apply_to_cheapest_n_matches:
+        if data.get('condition_min_value') and data.get('benefit_only_apply_to_cheapest_n_matches'):
             raise ValidationError(
                 _('You cannot apply the discount only to some of the matched products if you are matching '
                   'on a minimum value.')
             )
 
-        if self.subevent_mode == self.SUBEVENT_MODE_DISTINCT and self.condition_min_value:
+        if data.get('subevent_mode') == cls.SUBEVENT_MODE_DISTINCT and data.get('condition_min_value'):
             raise ValidationError(
                 _('You cannot apply the discount only to bookings of different dates if you are matching '
                   'on a minimum value.')
             )
+
+    def allow_delete(self):
+        return not self.orderposition_set.exists()
+
+    def clean(self):
+        super().clean()
+        Discount.validate_config({
+            'condition_min_count': self.condition_min_count,
+            'condition_min_value': self.condition_min_value,
+            'benefit_only_apply_to_cheapest_n_matches': self.benefit_only_apply_to_cheapest_n_matches,
+            'subevent_mode': self.subevent_mode,
+        })
 
     def _apply_min_value(self, positions, idx_group, result):
         if self.condition_min_value and sum(positions[idx][2] for idx in idx_group) < self.condition_min_value:
