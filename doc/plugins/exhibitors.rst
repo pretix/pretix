@@ -338,7 +338,7 @@ REST API Endpoints
 
    Delete an exhibitor.
 
-   .. warning:: This deletes all lead scan data and deassociates all vouchers (the vouchers are not deleted).
+   .. warning:: This deletes all lead scan data and removes all connections to vouchers (the vouchers are not deleted).
 
    **Example request**:
 
