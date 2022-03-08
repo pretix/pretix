@@ -1,6 +1,11 @@
 Resources and endpoints
 =======================
 
+With a few exceptions, this only lists resources bundled in the pretix core modules.
+Additional endpoints are provided by pretix plugins. Some of them are documented
+at :ref:`plugin-docs`.
+
+
 .. toctree::
    :maxdepth: 2
 
