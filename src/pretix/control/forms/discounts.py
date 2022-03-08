@@ -22,7 +22,7 @@
 from decimal import Decimal
 
 from django import forms
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from pretix.base.channels import get_all_sales_channels
 from pretix.base.forms import I18nModelForm
