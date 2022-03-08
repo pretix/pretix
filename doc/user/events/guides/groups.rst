@@ -16,7 +16,7 @@ Next, either select **Apply to all products** or create a selection of products 
 For a **percentual group discount** similar to "if you buy at least 5 tickets, you get 20 percent off", set
 **Minimum number of matching products** to "5" and **Percentual discount on matching products** to "20.00".
 
-For a **buy-X-get-Y discount**, e.g. "if you buy 4 tickets, you get the 5th one free", set
+For a **buy-X-get-Y discount**, e.g. "if you buy 5 tickets, you get one free", set
 **Minimum number of matching products** to "5", **Percentual discount on matching products** to "100.00", and
 **Apply discount only to this number of matching products** to "1".
 
