@@ -19,11 +19,17 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
+import pyuca
+from babel.core import Locale
 from django.core.cache import cache
+from django.utils import translation
 from django_countries import Countries
 from django_countries.fields import CountryField
+from phonenumbers.data import _COUNTRY_CODE_TO_REGION_CODE
 
-from pretix.base.i18n import get_language_without_region
+from pretix.base.i18n import get_language_without_region, get_babel_locale
+
+_collator = pyuca.Collator()
 
 
 class CachedCountries(Countries):
@@ -83,3 +89,35 @@ class FastCountryField(CountryField):
             *self._check_multiple(),
             *self._check_max_length_attribute(**kwargs),
         ]
+
+
+_cached_phone_prefixes = {}
+
+
+def get_phone_prefixes_sorted_and_localized():
+    language = get_babel_locale()  # changed from default implementation that used the django locale
+
+    cache_key = "phoneprefixes:all:{}".format(language)
+    if cache_key in _cached_phone_prefixes:
+        return _cached_phone_prefixes[cache_key]
+
+    val = cache.get(cache_key)
+    if val:
+        _cached_phone_prefixes[cache_key] = val
+        return val
+
+    val = []
+
+    locale = Locale(translation.to_locale(language))
+    for prefix, values in _COUNTRY_CODE_TO_REGION_CODE.items():
+        prefix = "+%d" % prefix
+        for country_code in values:
+            country_name = locale.territories.get(country_code)
+            if country_name:
+                val.append((prefix, "{} {}".format(country_name, prefix)))
+
+    val = sorted(val, key=lambda item: _collator.sort_key(item[1]))
+
+    _cached_phone_prefixes[cache_key] = val
+    cache.set(cache_key, val, 3600 * 24 * 30)
+    return val
