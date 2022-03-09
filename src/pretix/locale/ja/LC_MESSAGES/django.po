@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-02-25 10:05+0000\n"
 "PO-Revision-Date: 2022-03-09 16:11+0000\n"
-"Last-Translator: Yuriko Matsunami <y.matsunami@enobyte.com>\n"
+"Last-Translator: DJG Bayern <pretix2021weblate@aruki.de>\n"
 "Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/pretix/"
 "ja/>\n"
 "Language: ja\n"
@@ -172,7 +172,7 @@ msgstr "質問は、チェックイン時に問われた質問に依存しては
 
 #: pretix/api/serializers/item.py:392 pretix/control/forms/item.py:118
 msgid "Circular dependency between questions detected."
-msgstr ""
+msgstr "課題間の相互依存性が認識された。"
 
 #: pretix/api/serializers/item.py:397 pretix/control/forms/item.py:127
 msgid "This type of question cannot be asked during check-in."
