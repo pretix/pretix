@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-02-25 10:05+0000\n"
 "PO-Revision-Date: 2022-03-09 22:00+0000\n"
-"Last-Translator: DJG Bayern <pretix2021weblate@aruki.de>\n"
+"Last-Translator: Yuriko Matsunami <y.matsunami@enobyte.com>\n"
 "Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/pretix/"
 "ja/>\n"
 "Language: ja\n"
@@ -180,64 +180,64 @@ msgstr "このタイプの質問は、チェックイン時に行うことはで
 
 #: pretix/api/serializers/order.py:1184 pretix/api/serializers/order.py:1191
 msgid "The product \"{}\" is not available on this date."
-msgstr ""
+msgstr "その日程に製品\"{}\"のお取り扱いはありません。"
 
 #: pretix/api/serializers/organizer.py:120
 #: pretix/control/forms/organizer.py:510
 msgid ""
 "A gift card with the same secret already exists in your or an affiliated "
 "organizer account."
-msgstr ""
+msgstr "同じコードの引換券が既にイベントカートにあります。"
 
 #: pretix/api/serializers/organizer.py:202
 #: pretix/control/views/organizer.py:669
 msgid "pretix account invitation"
-msgstr ""
+msgstr "pretixアカウントへのご招待"
 
 #: pretix/api/serializers/organizer.py:224
 #: pretix/control/views/organizer.py:768
 msgid "This user already has been invited for this team."
-msgstr ""
+msgstr "このユーザーは既にチームへの招待を受け取っています。"
 
 #: pretix/api/serializers/organizer.py:240
 #: pretix/control/views/organizer.py:785
 msgid "This user already has permissions for this team."
-msgstr ""
+msgstr "このユーザーは既にチームへの参加を承認されています。"
 
 #: pretix/api/views/oauth.py:106 pretix/control/logdisplay.py:416
 #, python-brace-format
 msgid ""
 "The application \"{application_name}\" has been authorized to access your "
 "account."
-msgstr ""
+msgstr "申請者 \"{application_name}\"はあなたのアカウントへのアクセス権を持っています。"
 
 #: pretix/api/views/order.py:493 pretix/control/views/orders.py:1320
 #: pretix/presale/views/order.py:708 pretix/presale/views/order.py:781
 msgid "You cannot generate an invoice for this order."
-msgstr ""
+msgstr "この注文には請求書を発行することができません。"
 
 #: pretix/api/views/order.py:498 pretix/control/views/orders.py:1322
 #: pretix/presale/views/order.py:710 pretix/presale/views/order.py:783
 msgid "An invoice for this order already exists."
-msgstr ""
+msgstr "この注文の請求書は発行済です。"
 
 #: pretix/api/views/order.py:524 pretix/control/views/orders.py:1446
 #: pretix/control/views/users.py:141
 msgid "There was an error sending the mail. Please try again later."
-msgstr ""
+msgstr "メールの送信に失敗しました。再送信してください。"
 
 #: pretix/api/views/order.py:602 pretix/base/services/cart.py:143
 #: pretix/base/services/orders.py:132 pretix/presale/views/order.py:765
 msgid "One of the selected products is not available in the selected country."
-msgstr ""
+msgstr "選択された国では、選択された商品のお取り扱いはございません。"
 
 #: pretix/api/webhooks.py:200 pretix/base/notifications.py:233
 msgid "New order placed"
-msgstr ""
+msgstr "新しい注文が入りました"
 
 #: pretix/api/webhooks.py:204 pretix/base/notifications.py:239
 msgid "New order requires approval"
-msgstr ""
+msgstr "リリースが必要な新規受注"
 
 #: pretix/api/webhooks.py:208 pretix/base/notifications.py:245
 msgid "Order marked as paid"
