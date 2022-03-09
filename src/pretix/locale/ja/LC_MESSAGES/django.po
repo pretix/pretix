@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-02-25 10:05+0000\n"
-"PO-Revision-Date: 2022-02-11 23:00+0000\n"
-"Last-Translator: kackey621 <a.kusama@icloud.com>\n"
+"PO-Revision-Date: 2022-03-09 16:11+0000\n"
+"Last-Translator: Yuriko Matsunami <y.matsunami@enobyte.com>\n"
 "Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/pretix/"
 "ja/>\n"
 "Language: ja\n"
@@ -87,88 +87,88 @@ msgstr "この商品（\"{}\"）は割り当てられていません。"
 #: pretix/api/serializers/cart.py:89 pretix/api/serializers/order.py:1211
 msgid ""
 "There is not enough quota available on quota \"{}\" to perform the operation."
-msgstr ""
+msgstr "\"{name}\"には、この変更を実行するための十分な容量が残っていません。"
 
 #: pretix/api/serializers/cart.py:125 pretix/api/serializers/order.py:1171
 #: pretix/base/services/orders.py:1267
 #, python-brace-format
 msgid "The selected seat \"{seat}\" is not available."
-msgstr ""
+msgstr "選択した \"{seat}\"はご利用になれません。"
 
 #: pretix/api/serializers/checkin.py:65 pretix/base/models/event.py:1473
 #: pretix/base/models/items.py:1459 pretix/base/models/items.py:1700
 msgid "One or more items do not belong to this event."
-msgstr ""
+msgstr "本イベントにおける一つ又は複数の製品のお取り扱いはございません。"
 
 #: pretix/api/serializers/checkin.py:69 pretix/api/serializers/checkin.py:72
 #: pretix/base/models/items.py:1711 pretix/base/models/items.py:1714
 #: pretix/base/models/waitinglist.py:239 pretix/base/models/waitinglist.py:242
 msgid "The subevent does not belong to this event."
-msgstr ""
+msgstr "この日程でのイベントではありません。"
 
 #: pretix/api/serializers/checkin.py:76
 msgid "Unknown sales channel."
-msgstr ""
+msgstr "不明な販路。"
 
 #: pretix/api/serializers/event.py:205
 msgid ""
 "Events cannot be created as 'live'. Quotas and payment must be added to the "
 "event before sales can go live."
-msgstr ""
+msgstr "在庫数や支払いの設定が完了していないため、イベントを「公開」することができません。"
 
 #: pretix/api/serializers/event.py:220 pretix/api/serializers/event.py:513
 #, python-brace-format
 msgid "Meta data property '{name}' does not exist."
-msgstr ""
+msgstr "メタデータ'{name}'が見つかりません。"
 
 #: pretix/api/serializers/event.py:223 pretix/api/serializers/event.py:516
 #, python-brace-format
 msgid "Meta data property '{name}' does not allow value '{value}'."
-msgstr ""
+msgstr "メタデータ'{name}'が '{value}'を許可していません。"
 
 #: pretix/api/serializers/event.py:266
 #, python-brace-format
 msgid "Unknown plugin: '{name}'."
-msgstr ""
+msgstr "不明なプラグイン： '{name}'。"
 
 #: pretix/api/serializers/item.py:119 pretix/control/forms/item.py:926
 msgid "The bundled item must not be the same item as the bundling one."
-msgstr ""
+msgstr "製品自体を含むことはできません。"
 
 #: pretix/api/serializers/item.py:122 pretix/control/forms/item.py:928
 msgid "The bundled item must not have bundles on its own."
-msgstr ""
+msgstr "製品は、他の製品を含む製品を含むことはできません。"
 
 #: pretix/api/serializers/item.py:193
 msgid ""
 "Updating add-ons, bundles, or variations via PATCH/PUT is not supported. "
 "Please use the dedicated nested endpoint."
-msgstr ""
+msgstr "種類、追加製品及び同梱物のPATCH/PUT による変更は無効です。別のリソースを利用してください。"
 
 #: pretix/api/serializers/item.py:202 pretix/control/forms/item.py:566
 msgid ""
 "Gift card products should not be associated with non-zero tax rates since "
 "sales tax will be applied when the gift card is redeemed."
-msgstr ""
+msgstr "引換券をご利用の際には、付加価値税が課されるため、税率を0％に設定する必要があります。"
 
 #: pretix/api/serializers/item.py:207 pretix/control/forms/item.py:572
 msgid "Gift card products should not be admission products at the same time."
-msgstr ""
+msgstr "引換券をお持ちの方は、同時に入場することはできません。"
 
 #: pretix/api/serializers/item.py:244
 #, python-brace-format
 msgid "Item meta data property '{name}' does not exist."
-msgstr ""
+msgstr "アイテムのメタデータ '{name}'は見つかりません。"
 
 #: pretix/api/serializers/item.py:373
 msgid ""
 "Updating options via PATCH/PUT is not supported. Please use the dedicated "
 "nested endpoint."
-msgstr ""
+msgstr "PATCH/PUTによるオプションの変更はできません。別のリソースを使用してください。"
 
 #: pretix/api/serializers/item.py:387 pretix/control/forms/item.py:113
 msgid "Question cannot depend on a question asked during check-in."
-msgstr ""
+msgstr "質問は、チェックイン時に問われた質問に依存してはなりません。"
 
 #: pretix/api/serializers/item.py:392 pretix/control/forms/item.py:118
 msgid "Circular dependency between questions detected."
