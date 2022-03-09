@@ -85,7 +85,9 @@ from pretix.base.templatetags.rich_text import rich_text
 from pretix.control.forms import (
     ExtFileField, ExtValidationMixin, SizeValidationMixin, SplitDateTimeField,
 )
-from pretix.helpers.countries import CachedCountries, get_phone_prefixes_sorted_and_localized
+from pretix.helpers.countries import (
+    CachedCountries, get_phone_prefixes_sorted_and_localized,
+)
 from pretix.helpers.escapejson import escapejson_attr
 from pretix.helpers.i18n import get_format_without_seconds
 from pretix.presale.signals import question_form_fields

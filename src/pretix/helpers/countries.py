@@ -27,7 +27,7 @@ from django_countries import Countries
 from django_countries.fields import CountryField
 from phonenumbers.data import _COUNTRY_CODE_TO_REGION_CODE
 
-from pretix.base.i18n import get_language_without_region, get_babel_locale
+from pretix.base.i18n import get_babel_locale, get_language_without_region
 
 _collator = pyuca.Collator()
 
