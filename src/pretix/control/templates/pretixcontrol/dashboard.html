@@ -56,7 +56,7 @@
             {% endfor %}
         </div>
         <p class="">
-            <a href="{% url "control:events" %}?ordering=date_from&status=-date_to" class="">
+            <a href="{% url "control:events" %}?ordering=date_from&status=date_past" class="">
                 {% trans "View all recent events" %}
             </a>
         </p>
