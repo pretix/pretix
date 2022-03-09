@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-02-25 10:05+0000\n"
-"PO-Revision-Date: 2022-03-03 07:00+0000\n"
+"PO-Revision-Date: 2022-03-09 22:00+0000\n"
 "Last-Translator: Ismael Menéndez Fernández <ismael.menendez@balidea.com>\n"
 "Language-Team: Galician <https://translate.pretix.eu/projects/pretix/pretix/"
 "gl/>\n"
@@ -4102,9 +4102,9 @@ msgstr ""
 
 #: pretix/base/models/orders.py:1022 pretix/base/services/orders.py:937
 #: pretix/control/views/event.py:745
-#, fuzzy, python-format
+#, python-format
 msgid "Your order: %(code)s"
-msgstr "Su pedido: %(code)s"
+msgstr "O seu pedido: %(code)s"
 
 #: pretix/base/models/orders.py:1186
 #, fuzzy
@@ -4957,9 +4957,8 @@ msgstr "Cambiar productos"
 
 #: pretix/base/notifications.py:223
 #: pretix/base/templates/pretixbase/email/order_details.html:144
-#, fuzzy
 msgid "View order details"
-msgstr "Ver detalles de la orden"
+msgstr "Ver detalles do pedido"
 
 #: pretix/base/notifications.py:234
 #, fuzzy, python-brace-format
@@ -6461,29 +6460,27 @@ msgid ""
 msgstr ""
 
 #: pretix/base/services/mail.py:246
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "You are receiving this email because someone placed an order for {event} for "
 "you."
 msgstr ""
-"Usted está recibiendo este correo electrónico porque realizó un pedido para "
-"{event}."
+"Vostede está a recibir este correo electrónico porque realizou un pedido "
+"para {event}."
 
 #: pretix/base/services/mail.py:250 pretix/base/services/mail.py:266
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "You can view your order details at the following URL:\n"
 "{orderurl}."
-msgstr ""
-"Puede ver los detalles de su pedido en la siguiente URL :\n"
-"{orderurl}."
+msgstr "Pode ver os detalles do seu pedido na seguinte dirección: {orderurl}."
 
 #: pretix/base/services/mail.py:262
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "You are receiving this email because you placed an order for {event}."
 msgstr ""
-"Usted está recibiendo este correo electrónico porque realizó un pedido para "
-"{event}."
+"Vostede está a recibir este correo electrónico porque realizou un pedido "
+"para {event}."
 
 #: pretix/base/services/memberships.py:104
 #, python-brace-format
@@ -9792,13 +9789,12 @@ msgstr ""
 "Haga clic aquí para desactivar todas las notificaciones inmediatamente:"
 
 #: pretix/base/templates/pretixbase/email/order_details.html:7
-#, fuzzy
 msgid ""
 "You are receiving this email because someone signed you up for the following "
 "event:"
 msgstr ""
-"Recibe este correo electrónico porque alguien le ha registrado en el "
-"siguiente evento:"
+"Vostede está a recibir este correo electrónico porque realizou un pedido "
+"para:"
 
 #: pretix/base/templates/pretixbase/email/order_details.html:12
 #: pretix/base/templates/pretixbase/email/order_details.html:62
@@ -9829,13 +9825,12 @@ msgid "View registration details"
 msgstr "Ver detalles del registro"
 
 #: pretix/base/templates/pretixbase/email/order_details.html:57
-#, fuzzy
 msgid ""
 "You are receiving this email because you placed an order for the following "
 "event:"
 msgstr ""
-"Usted está recibiendo este correo electrónico porque usted hizo un pedido "
-"para el siguiente evento:"
+"Vostede está a recibir este correo electrónico porque realizou un pedido "
+"para:."
 
 #: pretix/base/templates/pretixbase/email/order_details.html:86
 #, fuzzy
@@ -27965,9 +27960,8 @@ msgstr "Grazas!"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:14
 #: pretix/presale/templates/pretixpresale/event/order.html:32
-#, fuzzy
 msgid "Your order has been placed successfully. See below for details."
-msgstr "Su pedido se ha realizado con éxito. Ver abajo para más detalles."
+msgstr "O seu pedido realizouse con éxito. Ver abaixo para máis detalles."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:16
 #: pretix/presale/templates/pretixpresale/event/order.html:48
@@ -28014,14 +28008,13 @@ msgstr ""
 "ligazón á dirección que vostede especificou."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:58
-#, fuzzy
 msgid ""
 "Please save the following link if you want to access your order later. We "
 "also sent you an email containing the link to the address you specified."
 msgstr ""
-"Por favor, guarde el siguiente enlace si desea acceder a su pedido más "
-"tarde. También le enviamos un correo electrónico con el enlace a la "
-"dirección que usted especificó."
+"Por favor, garde el seguinte ligazón se desexa acceder ao seu pedido máis "
+"tarde. Tamén le enviamos un correo electrónico con el enlace á dirección que "
+"vostede especificou."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:72
 #: pretix/presale/templates/pretixpresale/event/position.html:18
@@ -28332,9 +28325,8 @@ msgid "Yes, request cancellation"
 msgstr "Generar cancelación"
 
 #: pretix/presale/templates/pretixpresale/event/order_change_confirm.html:19
-#, fuzzy
 msgid "Please confirm the following changes to your order."
-msgstr "Por favor, confirme los siguientes datos de pago."
+msgstr "Por favor, confirme os seguintes datos de pago."
 
 #: pretix/presale/templates/pretixpresale/event/order_change_confirm.html:24
 #, fuzzy
