@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-26 09:20+0000\n"
 "PO-Revision-Date: 2023-05-30 21:27+0000\n"
-"Last-Translator: anonymous <noreply@weblate.org>\n"
+"Last-Translator: Yuriko Matsunami <y.matsunami@enobyte.com>\n"
 "Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/pretix/"
 "ja/>\n"
 "Language: ja\n"
@@ -209,8 +209,7 @@ msgstr "不明な販路。"
 msgid ""
 "Events cannot be created as 'live'. Quotas and payment must be added to the "
 "event before sales can go live."
-msgstr ""
-"在庫数や支払いの設定が完了していないため、イベントを「公開」することができま"
+msgstr "在庫数や支払いの設定が完了していないため、イベントを「公開」することができま"
 "せん。"
 
 #: pretix/api/serializers/event.py:228 pretix/api/serializers/event.py:526
@@ -246,9 +245,8 @@ msgstr "製品は、他の製品を含む製品を含むことはできません
 msgid ""
 "Updating add-ons, bundles, or variations via PATCH/PUT is not supported. "
 "Please use the dedicated nested endpoint."
-msgstr ""
-"種類、追加製品及び同梱物のPATCH/PUT による変更は無効です。別のリソースを利用"
-"してください。"
+msgstr "種類、追加製品及び同梱物のPATCH/PUT "
+"による変更は無効です。別のリソースを利用してください。"
 
 #: pretix/api/serializers/item.py:270
 msgid "Only admission products can currently be personalized."
@@ -258,8 +256,7 @@ msgstr ""
 msgid ""
 "Gift card products should not be associated with non-zero tax rates since "
 "sales tax will be applied when the gift card is redeemed."
-msgstr ""
-"引換券をご利用の際には、付加価値税が課されるため、税率を0％に設定する必要があ"
+msgstr "引換券をご利用の際には、付加価値税が課されるため、税率を0％に設定する必要があ"
 "ります。"
 
 #: pretix/api/serializers/item.py:286 pretix/control/forms/item.py:614
@@ -270,8 +267,7 @@ msgstr "引換券をお持ちの方は、同時に入場することはできま
 msgid ""
 "Updating options via PATCH/PUT is not supported. Please use the dedicated "
 "nested endpoint."
-msgstr ""
-"PATCH/PUTによるオプションの変更はできません。別のリソースを使用してください。"
+msgstr "PATCH/PUTによるオプションの変更はできません。別のリソースを使用してください。"
 
 #: pretix/api/serializers/item.py:476 pretix/control/forms/item.py:118
 msgid "Question cannot depend on a question asked during check-in."
@@ -347,9 +343,8 @@ msgstr ""
 msgid ""
 "The application \"{application_name}\" has been authorized to access your "
 "account."
-msgstr ""
-"申請者 \"{application_name}\"はあなたのアカウントへのアクセス権を持っていま"
-"す。"
+msgstr "申請者 \"{application_name}\"はあなたのアカウントへのアクセス権を持っています"
+"。"
 
 #: pretix/api/views/order.py:538 pretix/control/views/orders.py:1340
 #: pretix/presale/views/order.py:747 pretix/presale/views/order.py:820
@@ -1103,8 +1098,7 @@ msgid ""
 "Only include invoices for orders that have at least one payment attempt with "
 "this payment provider. Note that this might include some invoices of orders "
 "which in the end have been fully or partially paid with a different provider."
-msgstr ""
-"この支払方法で少なくとも1回以上支払いを試みた注文の請求書のみ。注意：他の決済"
+msgstr "この支払方法で少なくとも1回以上支払いを試みた注文の請求書のみ。注意：他の決済"
 "会社で決済が終了した注文の請求書も含まれる場合があります。"
 
 #: pretix/base/exporters/invoices.py:125
