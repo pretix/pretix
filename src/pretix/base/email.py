@@ -310,7 +310,11 @@ def get_email_context(**kwargs):
             val = [val]
         for v in val:
             if all(rp in kwargs for rp in v.required_context):
-                ctx[v.identifier] = v.render(kwargs)
+                try:
+                    ctx[v.identifier] = v.render(kwargs)
+                except:
+                    ctx[v.identifier] = '(error)'
+                    logger.exception(f'Failed to process email placeholder {v.identifier}.')
     return ctx
 
 
