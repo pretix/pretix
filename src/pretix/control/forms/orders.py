@@ -746,16 +746,17 @@ class EventCancelForm(forms.Form):
     auto_refund = forms.BooleanField(
         label=_('Automatically refund money if possible'),
         initial=True,
-        required=False
+        required=False,
+        help_text=_('Only available for payment method that support automatic refunds.')
     )
     manual_refund = forms.BooleanField(
-        label=_('Create manual refund if the payment method does not support automatic refunds'),
-        widget=forms.CheckboxInput(attrs={'data-display-dependency': '#id_auto_refund'}),
+        label=_('Create refund in the manual refund to-do list'),
         initial=True,
         required=False,
-        help_text=_('If checked, all payments with a payment method not supporting automatic refunds will be on your '
-                    'manual refund to-do list. Do not check if you want to refund some of the orders by offsetting '
-                    'with different orders or issuing gift cards.')
+        help_text=_('Manual refunds will be created which will be listed in the manual refund to-do list. '
+                    'When combined with the automatic refund functionally, only payments with a payment method not '
+                    'supporting automatic refunds will be on your manual refund to-do list. Do not check if you want '
+                    'to refund some of the orders by offsetting with different orders or issuing gift cards.')
     )
     refund_as_giftcard = forms.BooleanField(
         label=_('Refund order value to a gift card instead instead of the original payment method'),

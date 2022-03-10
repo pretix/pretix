@@ -413,6 +413,37 @@ class EventCancelTests(TestCase):
         assert r.source == OrderRefund.REFUND_SOURCE_ADMIN
         assert r.payment == p1
 
+    @classscope(attr='o')
+    def test_cancel_refund_paid_only_manual(self):
+        gc = self.o.issued_gift_cards.create(currency="EUR")
+        self.order.payments.create(
+            amount=Decimal('20.00'),
+            state=OrderPayment.PAYMENT_STATE_CONFIRMED,
+            provider='giftcard',
+            info='{"gift_card": %d}' % gc.pk
+        )
+        self.order.payments.create(
+            amount=Decimal('26.00'),
+            state=OrderPayment.PAYMENT_STATE_CONFIRMED,
+            provider='manual',
+        )
+        self.order.status = Order.STATUS_PAID
+        self.order.save()
+
+        cancel_event(
+            self.event.pk, subevent=None, manual_refund=True,
+            auto_refund=False, keep_fee_fixed="0.00", keep_fee_percentage="0.00", keep_fee_per_ticket="",
+            send=False, send_subject="Event canceled", send_message="Event canceled :-(",
+            user=None
+        )
+
+        assert self.order.refunds.count() == 1
+        r = self.order.refunds.get(provider='manual')
+        assert r.state == OrderRefund.REFUND_STATE_CREATED
+        assert r.amount == Decimal('46.00')
+        assert r.source == OrderRefund.REFUND_SOURCE_ADMIN
+        assert r.payment is None
+
 
 class SubEventCancelTests(TestCase):
     def setUp(self):
