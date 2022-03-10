@@ -638,12 +638,13 @@ class Order(LockModel, LoggedModel):
                 return False
         if self.user_cancel_deadline and now() > self.user_cancel_deadline:
             return False
-        if self.status == Order.STATUS_PENDING:
-            return self.event.settings.cancel_allow_user
-        elif self.status == Order.STATUS_PAID:
+
+        if self.status == Order.STATUS_PAID or self.payment_refund_sum > Decimal('0.00'):
             if self.total == Decimal('0.00'):
                 return self.event.settings.cancel_allow_user
             return self.event.settings.cancel_allow_user_paid
+        elif self.status == Order.STATUS_PENDING:
+            return self.event.settings.cancel_allow_user
         return False
 
     def propose_auto_refunds(self, amount: Decimal, payments: list=None):

@@ -710,6 +710,21 @@ class OrdersTest(BaseOrdersTest):
         with scopes_disabled():
             assert self.order.refunds.count() == 0
 
+    def test_orders_cancel_forbidden_if_any_payment_made(self):
+        self.event.settings.set('cancel_allow_user', True)
+        self.event.settings.set('cancel_allow_user_paid', False)
+        with scopes_disabled():
+            self.order.payments.create(
+                state=OrderPayment.PAYMENT_STATE_CONFIRMED,
+                amount=12,
+                provider='manual',
+            )
+        self.client.post(
+            '/%s/%s/order/%s/%s/cancel/do' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret), {
+            }, follow=True)
+        self.order.refresh_from_db()
+        assert self.order.status == Order.STATUS_PENDING
+
     def test_orders_cancel_forbidden(self):
         self.event.settings.set('cancel_allow_user', False)
         self.client.post(
