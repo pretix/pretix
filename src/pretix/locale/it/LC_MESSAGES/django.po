@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-02-25 10:05+0000\n"
-"PO-Revision-Date: 2022-02-21 16:00+0000\n"
+"PO-Revision-Date: 2022-03-12 01:00+0000\n"
 "Last-Translator: Emanuele Signoretta <signorettae@gmail.com>\n"
 "Language-Team: Italian <https://translate.pretix.eu/projects/pretix/pretix/"
 "it/>\n"
@@ -25239,17 +25239,15 @@ msgstr ""
 
 #: pretix/presale/views/order.py:931
 msgid "Canceled by customer"
-msgstr ""
+msgstr "Cancellato dal cliente"
 
 #: pretix/presale/views/order.py:942
-#, fuzzy
-#| msgid "Order changed"
 msgid "The cancellation has been requested."
-msgstr "Ordine modificato"
+msgstr "La richiesta di cancellazione è stata inviata."
 
 #: pretix/presale/views/order.py:996
 msgid "Ticket download is not (yet) enabled for this order."
-msgstr "Il download dei biglietti non è ancora disponibile per questo ordine."
+msgstr "Il download dei biglietti non è (ancora) disponibile per questo ordine."
 
 #: pretix/presale/views/order.py:1005
 msgid "Please click the link we sent you via email to download your tickets."
@@ -25332,43 +25330,44 @@ msgid ""
 "We've added you to the waiting list. You will receive an email as soon as "
 "tickets get available again."
 msgstr ""
+"Ti abbiamo aggiunto alla lista d'attesa. Riceverai un'email non appena i "
+"biglietti saranno di nuovo disponibili."
 
 #: pretix/presale/views/waiting.py:155
-#, fuzzy
-#| msgid "Order information changed"
 msgid "We could not find you on our waiting list."
-msgstr "Informazioni dell'ordine modificate"
+msgstr "Non riusciamo a trovarti sulla nostra lista d'attesa."
 
 #: pretix/presale/views/waiting.py:159
 msgid ""
 "Your waiting list spot is no longer valid or already used. There's nothing "
 "more to do here."
 msgstr ""
+"Il tuo posto nella lista d'attesa non è più valido oppure è già stato usato. "
+"Non c'è molto altro da fare qui."
 
 #: pretix/presale/views/waiting.py:169
 msgid ""
 "Thank you very much! We will assign your spot on the waiting list to someone "
 "else."
 msgstr ""
+"Grazie mille! Assegneremo il tuo posto nella lista d'attesa a qualcun altro."
 
 #: pretix/presale/views/widget.py:321
 msgid "This ticket shop is currently disabled."
-msgstr ""
+msgstr "Il ticket shop è momentaneamente disabilitato."
 
 #: pretix/presale/views/widget.py:335
-#, fuzzy
-#| msgid "The subevent does not belong to this event."
 msgid "The selected date does not exist in this event series."
-msgstr "Il sotto-evento non appartiene a questo evento."
+msgstr "La data selezionata non esiste in questa serie di eventi."
 
 #: pretix/presale/views/widget.py:342
 msgid "This is not an event series."
-msgstr ""
+msgstr "Questa non è una serie di eventi."
 
 #: pretix/presale/views/widget.py:390
 #, python-format
 msgid "from %(start_date)s"
-msgstr ""
+msgstr "a partire dal %(start_date)s"
 
 #: pretix/settings.py:507
 msgid "English"
@@ -25380,31 +25379,31 @@ msgstr "Tedesco"
 
 #: pretix/settings.py:509
 msgid "German (informal)"
-msgstr ""
+msgstr "Tedesco (informale)"
 
 #: pretix/settings.py:510
 msgid "Arabic"
-msgstr ""
+msgstr "Arabo"
 
 #: pretix/settings.py:511
 msgid "Chinese (simplified)"
-msgstr ""
+msgstr "Cinese (semplificato)"
 
 #: pretix/settings.py:512
 msgid "Danish"
-msgstr ""
+msgstr "Danese"
 
 #: pretix/settings.py:513
 msgid "Dutch"
-msgstr ""
+msgstr "Olandese"
 
 #: pretix/settings.py:514
 msgid "Dutch (informal)"
-msgstr ""
+msgstr "Olandese (informale)"
 
 #: pretix/settings.py:515
 msgid "French"
-msgstr ""
+msgstr "Francese"
 
 #: pretix/settings.py:516
 msgid "Finnish"
