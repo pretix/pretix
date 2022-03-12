@@ -1156,40 +1156,10 @@ class CartManager:
         for cp in positions:
             if cp.listed_price is None:
                 # migration from old system? also used in unit tests
-                listed_price = get_listed_price(cp.item, cp.variation, cp.subevent)
-                if cp.voucher:
-                    price_after_voucher = cp.voucher.calculate_price(listed_price)
-                else:
-                    price_after_voucher = listed_price
-                if cp.is_bundled:
-                    bundle = cp.addon_to.item.bundles.filter(bundled_item=cp.item, bundled_variation=cp.variation).first()
-                    if bundle:
-                        listed_price = bundle.designated_price
-                        price_after_voucher = bundle.designated_price
-                custom_price = None
-                if cp.item.free_price:
-                    custom_price = cp.price
-                    if custom_price > 100000000:
-                        raise ValueError('price_too_high')
-                cp.listed_price = listed_price
-                cp.price_after_voucher = price_after_voucher
-                cp.custom_price_input = custom_price
-                cp.custom_price_input_is_net = not cp.includes_tax
-                cp.save(update_fields=['listed_price', 'price_after_voucher', 'custom_price_input',
-                                       'custom_price_input_is_net'])
+                cp.update_listed_price_and_voucher()
+                cp.migrate_free_price_if_necessary()
 
-            line_price = get_line_price(
-                price_after_voucher=cp.price_after_voucher,
-                custom_price_input=cp.custom_price_input,
-                custom_price_input_is_net=cp.custom_price_input_is_net,
-                tax_rule=cp.item.tax_rule,
-                invoice_address=self.invoice_address,
-                bundled_sum=sum([b.price_after_voucher for b in positions if b.addon_to_id == cp.pk and b.is_bundled]),
-            )
-            if line_price.gross != cp.line_price_gross or line_price.rate != cp.tax_rate:
-                cp.line_price_gross = line_price.gross
-                cp.tax_rate = line_price.rate
-                cp.save(update_fields=['line_price_gross', 'tax_rate'])
+            cp.update_line_price(self.invoice_address, [b for b in positions if b.addon_to_id == cp.pk and b.is_bundled])
 
         discount_results = apply_discounts(
             self.event,

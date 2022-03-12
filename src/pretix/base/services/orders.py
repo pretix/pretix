@@ -35,6 +35,7 @@
 
 import json
 import logging
+import sys
 from collections import Counter, defaultdict, namedtuple
 from datetime import datetime, time, timedelta
 from decimal import Decimal
@@ -68,7 +69,6 @@ from pretix.base.models import (
     Voucher,
 )
 from pretix.base.models.event import SubEvent
-from pretix.base.models.items import ItemBundle
 from pretix.base.models.orders import (
     InvoiceAddress, OrderFee, OrderRefund, generate_secret,
 )
@@ -86,7 +86,7 @@ from pretix.base.services.mail import SendMailException
 from pretix.base.services.memberships import (
     create_membership, validate_memberships_in_order,
 )
-from pretix.base.services.pricing import get_price
+from pretix.base.services.pricing import get_price, apply_discounts
 from pretix.base.services.quotas import QuotaAvailability
 from pretix.base.services.tasks import ProfiledEventTask, ProfiledTask
 from pretix.base.signals import (
@@ -565,7 +565,8 @@ def _check_positions(event: Event, now_dt: datetime, positions: List[CartPositio
     _check_date(event, now_dt)
 
     products_seen = Counter()
-    changed_prices = {}
+    q_avail = Counter()
+    v_avail = Counter()
     v_budget = {}
     deleted_positions = set()
     seats_seen = set()
@@ -582,6 +583,8 @@ def _check_positions(event: Event, now_dt: datetime, positions: List[CartPositio
             cp.delete()
 
     sorted_positions = sorted(positions, key=lambda s: -int(s.is_bundled))
+
+    # Check availability
     for i, cp in enumerate(sorted_positions):
         if cp.pk in deleted_positions:
             continue
@@ -601,28 +604,16 @@ def _check_positions(event: Event, now_dt: datetime, positions: List[CartPositio
             break
 
         if cp.voucher:
-            redeemed_in_carts = CartPosition.objects.filter(
-                Q(voucher=cp.voucher) & Q(event=event) & Q(expires__gte=now_dt)
-            ).exclude(pk=cp.pk)
-            v_avail = cp.voucher.max_usages - cp.voucher.redeemed - redeemed_in_carts.count()
-            if v_avail < 1:
+            if cp.voucher not in v_avail:
+                redeemed_in_carts = CartPosition.objects.filter(
+                    Q(voucher=cp.voucher) & Q(event=event) & Q(expires__gte=now_dt)
+                ).exclude(cart_id=cp.cart_id)
+                v_avail[cp.voucher] = cp.voucher.max_usages - cp.voucher.redeemed - redeemed_in_carts.count()
+            v_avail[cp.voucher] -= 1
+            if v_avail[cp.voucher] < 0:
                 err = err or error_messages['voucher_redeemed']
                 delete(cp)
                 continue
-
-            if cp.voucher.budget is not None:
-                if cp.voucher not in v_budget:
-                    v_budget[cp.voucher] = cp.voucher.budget - cp.voucher.budget_used()
-                disc = cp.price_before_voucher - cp.price
-                if disc > v_budget[cp.voucher]:
-                    new_disc = max(0, v_budget[cp.voucher])
-                    cp.price = cp.price + (disc - new_disc)
-                    cp.save()
-                    err = err or error_messages['voucher_budget_used']
-                    v_budget[cp.voucher] -= new_disc
-                    continue
-                else:
-                    v_budget[cp.voucher] -= disc
 
         if cp.subevent and cp.subevent.presale_start and now_dt < cp.subevent.presale_start:
             err = err or error_messages['some_subevent_not_started']
@@ -662,7 +653,6 @@ def _check_positions(event: Event, now_dt: datetime, positions: List[CartPositio
                 cp.voucher is None or not cp.voucher.show_hidden_items or not cp.voucher.applies_to(cp.item, cp.variation)
         ) and not cp.is_bundled:
             delete(cp)
-            cp.delete()
             err = error_messages['voucher_required']
             break
 
@@ -671,57 +661,14 @@ def _check_positions(event: Event, now_dt: datetime, positions: List[CartPositio
             # time, since we absolutely can not overbook a seat.
             if not cp.seat.is_available(ignore_cart=cp, ignore_voucher_id=cp.voucher_id, sales_channel=sales_channel):
                 err = err or error_messages['seat_unavailable']
-                cp.delete()
+                delete(cp)
                 continue
 
         if cp.expires >= now_dt and not cp.voucher:
             # Other checks are not necessary
             continue
 
-        max_discount = None
-        if cp.price_before_voucher is not None and cp.voucher in v_budget:
-            current_discount = cp.price_before_voucher - cp.price
-            max_discount = max(v_budget[cp.voucher] + current_discount, 0)
-
-        try:
-            if cp.is_bundled:
-                try:
-                    bundle = cp.addon_to.item.bundles.get(bundled_item=cp.item, bundled_variation=cp.variation)
-                    bprice = bundle.designated_price or 0
-                except ItemBundle.DoesNotExist:
-                    bprice = cp.price
-                except ItemBundle.MultipleObjectsReturned:
-                    raise OrderError("Invalid product configuration (duplicate bundle)")
-                price = get_price(cp.item, cp.variation, cp.voucher, bprice, cp.subevent, custom_price_is_net=False,
-                                  custom_price_is_tax_rate=cp.override_tax_rate,
-                                  invoice_address=address, force_custom_price=True, max_discount=max_discount)
-                pbv = get_price(cp.item, cp.variation, None, bprice, cp.subevent, custom_price_is_net=False,
-                                custom_price_is_tax_rate=cp.override_tax_rate,
-                                invoice_address=address, force_custom_price=True, max_discount=max_discount)
-                changed_prices[cp.pk] = bprice
-            else:
-                bundled_sum = Decimal('0.00')
-                if not cp.addon_to_id:
-                    for bundledp in cp.addons.all():
-                        if bundledp.is_bundled:
-                            bundled_sum += changed_prices.get(bundledp.pk, bundledp.price)
-
-                price = get_price(cp.item, cp.variation, cp.voucher, cp.custom_price_input, cp.subevent, custom_price_is_net=cp.custom_price_input_is_net,
-                                  addon_to=cp.addon_to, invoice_address=address, bundled_sum=bundled_sum,
-                                  max_discount=max_discount)
-                print("old", cp.price, "custom", cp.custom_price_input, "new", price)
-                pbv = get_price(cp.item, cp.variation, None, cp.custom_price_input, cp.subevent, custom_price_is_net=cp.custom_price_input_is_net,
-                                addon_to=cp.addon_to, invoice_address=address, bundled_sum=bundled_sum,
-                                max_discount=max_discount)
-        except TaxRule.SaleNotAllowed:
-            err = err or error_messages['country_blocked']
-            cp.delete()
-            continue
-
-        if max_discount is not None:
-            v_budget[cp.voucher] = v_budget[cp.voucher] + current_discount - (pbv.gross - price.gross)
-
-        if price is False or len(quotas) == 0:
+        if len(quotas) == 0:
             err = err or error_messages['unavailable']
             delete(cp)
             continue
@@ -743,41 +690,87 @@ def _check_positions(event: Event, now_dt: datetime, positions: List[CartPositio
                 delete(cp)
                 continue
 
-        if pbv is not None and pbv.gross != price.gross:
-            cp.price_before_voucher = pbv.gross
-        else:
-            cp.price_before_voucher = None
-
-        if price.gross != cp.price and not (cp.item.free_price and cp.price > price.gross):
-            cp.price = price.gross
-            cp.includes_tax = bool(price.rate)
-            cp.save()
-            err = err or error_messages['price_changed']
-            continue
-
         quota_ok = True
 
         ignore_all_quotas = cp.expires >= now_dt or (
-            cp.voucher and (cp.voucher.allow_ignore_quota or (cp.voucher.block_quota and cp.voucher.quota is None)))
+            cp.voucher and (
+                cp.voucher.allow_ignore_quota or (cp.voucher.block_quota and cp.voucher.quota is None)
+            )
+        )
 
         if not ignore_all_quotas:
             for quota in quotas:
                 if cp.voucher and cp.voucher.block_quota and cp.voucher.quota_id == quota.pk:
                     continue
-                avail = quota.availability(now_dt)
-                if avail[0] != Quota.AVAILABILITY_OK:
-                    # This quota is sold out/currently unavailable, so do not sell this at all
+                if quota not in q_avail:
+                    avail = quota.availability(now_dt)
+                    q_avail[quota] = avail[1] if avail[1] is not None else sys.maxsize
+                q_avail[quota] -= 1
+                if q_avail[quota] < 0:
                     err = err or error_messages['unavailable']
                     quota_ok = False
                     break
 
-        if quota_ok:
-            cp.expires = now_dt + timedelta(
-                minutes=event.settings.get('reservation_time', as_type=int))
-            cp.save()
-        else:
+        if not quota_ok:
             # Sorry, can't let you keep that!
             delete(cp)
+
+    # Check prices
+    sorted_positions = [cp for cp in sorted_positions if cp.pk and cp.pk not in deleted_positions]
+    old_total = sum(cp.price for cp in sorted_positions)
+    for i, cp in enumerate(sorted_positions):
+        if cp.listed_price is None:
+            # migration from pre-discount cart positions
+            cp.update_listed_price_and_voucher(max_discount=None)
+            cp.migrate_free_price_if_necessary()
+
+        # deal with max discount
+        max_discount = None
+        if cp.voucher and cp.voucher.budget is not None:
+            if cp.voucher not in v_budget:
+                v_budget[cp.voucher] = cp.voucher.budget - cp.voucher.budget_used()
+            max_discount = max(v_budget[cp.voucher], 0)
+
+        if cp.expires < now_dt or cp.listed_price is None:
+            # Guarantee on listed price is expired
+            cp.update_listed_price_and_voucher(max_discount=max_discount)
+        elif cp.voucher:
+            cp.update_listed_price_and_voucher(max_discount=max_discount, voucher_only=True)
+
+        if max_discount is not None:
+            v_budget[cp.voucher] = v_budget[cp.voucher] - (cp.listed_price - cp.price_after_voucher)
+
+        try:
+            cp.update_line_price(address, [b for b in sorted_positions if b.addon_to_id == cp.pk and b.is_bundled and b.pk and b.pk not in deleted_positions])
+        except TaxRule.SaleNotAllowed:
+            err = err or error_messages['country_blocked']
+            delete(cp)
+            continue
+
+    sorted_positions = [cp for cp in sorted_positions if cp.pk and cp.pk not in deleted_positions]
+    discount_results = apply_discounts(
+        event,
+        sales_channel,
+        [
+            (cp.item_id, cp.subevent_id, cp.line_price_gross, bool(cp.addon_to), cp.is_bundled)
+            for cp in sorted_positions
+        ]
+    )
+    for cp, (new_price, discount) in zip(sorted_positions, discount_results):
+        if cp.price != new_price or cp.discount_id != (discount.pk if discount else None):
+            cp.price = new_price
+            cp.discount = discount
+            cp.save(update_fields=['price', 'discount'])
+
+    new_total = sum(cp.price for cp in sorted_positions)
+    if old_total != new_total:
+        err = err or error_messages['price_changed']
+
+    # Store updated positions
+    for cp in sorted_positions:
+        cp.expires = now_dt + timedelta(
+            minutes=event.settings.get('reservation_time', as_type=int))
+        cp.save()
 
     if err:
         raise OrderError(err, errargs)
@@ -905,7 +898,6 @@ def _create_order(event: Event, email: str, positions: List[CartPosition], now_d
         # The only *known* case where this happens is if a gift card is used in two concurrent sessions.
         if shown_total is not None:
             if Decimal(shown_total) != pending_sum:
-                print("diff", shown_total, pending_sum)
                 raise OrderError(
                     _('While trying to place your order, we noticed that the order total has changed. Either one of '
                       'the prices changed just now, or a gift card you used has been used in the meantime. Please '
