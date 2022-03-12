@@ -212,7 +212,7 @@ class Discount(LoggedModel):
             if not self.condition_min_count:
                 raise ValueError('Validation invariant violated.')
 
-            idx_group = sorted(idx_group, key=lambda idx: (positions[idx][2], idx))  # sort by line_price
+            idx_group = sorted(idx_group, key=lambda idx: (positions[idx][2], -idx))  # sort by line_price
 
             # Prevent over-consuming of items, i.e. if our discount is "buy 2, get 1 free", we only
             # want to match multiples of 3
