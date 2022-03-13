@@ -25,6 +25,7 @@ body {
 }
 #toolbox[data-type] .position,
 #toolbox[data-type=barcodearea] .squaresize,
+#toolbox[data-type=barcodearea] .textcontent,
 #toolbox[data-type=imagearea] .rectsize,
 #toolbox[data-type=imagearea] .imagecontent,
 #toolbox[data-type=poweredby] .poweredby,

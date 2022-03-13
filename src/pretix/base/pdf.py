@@ -202,6 +202,11 @@ DEFAULT_VARIABLES = OrderedDict((
         "editor_sample": 'foo@bar.com',
         "evaluate": lambda op, order, ev: op.attendee_email or (op.addon_to.attendee_email if op.addon_to else '')
     }),
+    ("pseudonymization_id", {
+        "label": _("Pseudonymization ID (lead scanning)"),
+        "editor_sample": "GG89JUJDTA",
+        "evaluate": lambda orderposition, order, event: orderposition.pseudonymization_id,
+    }),
     ("event_name", {
         "label": _("Event name"),
         "editor_sample": _("Sample event name"),
@@ -616,12 +621,12 @@ class Renderer:
                          preserveAspectRatio=True, anchor='n',
                          mask='auto')
 
-    def _draw_barcodearea(self, canvas: Canvas, op: OrderPosition, o: dict):
+    def _draw_barcodearea(self, canvas: Canvas, op: OrderPosition, order: Order, o: dict):
         content = o.get('content', 'secret')
         if content == 'secret':
             content = op.secret
-        elif content == 'pseudonymization_id':
-            content = op.pseudonymization_id
+        else:
+            content = self._get_text_content(op, order, o)
 
         level = 'H'
         if len(content) > 32:
@@ -767,7 +772,7 @@ class Renderer:
                 if o.get('page', 1) != page + 1:
                     continue
                 if o['type'] == "barcodearea":
-                    self._draw_barcodearea(canvas, op, o)
+                    self._draw_barcodearea(canvas, op, order, o)
                 elif o['type'] == "imagearea":
                     self._draw_imagearea(canvas, op, order, o)
                 elif o['type'] == "textarea":
