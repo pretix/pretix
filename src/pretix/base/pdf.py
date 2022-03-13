@@ -55,6 +55,7 @@ from django.utils.functional import SimpleLazyObject
 from django.utils.html import conditional_escape
 from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
+from i18nfield.strings import LazyI18nString
 from PyPDF2 import PdfFileReader
 from pytz import timezone
 from reportlab.graphics import renderPDF
@@ -660,8 +661,11 @@ class Renderer:
         if not o['content']:
             return '(error)'
 
-        if o['content'] == 'other':
-            text = o['text']
+        if o['content'] == 'other' or o['content'] == 'other_i18n':
+            if o['content'] == 'other_i18n':
+                text = str(LazyI18nString(o['text_i18n']))
+            else:
+                text = o['text']
 
             def replace(x):
                 if x.group(1) not in self.variables:

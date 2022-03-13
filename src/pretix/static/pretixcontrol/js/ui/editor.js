@@ -169,6 +169,7 @@ var editor = {
                     downward: o.downward || false,
                     content: o.content,
                     text: o.text,
+                    text_i18n: o.text_i18n || {},
                     rotation: o.angle,
                     align: o.textAlign,
                 });
@@ -246,6 +247,9 @@ var editor = {
             }
             if (d.content === "other") {
                 o.setText(d.text);
+            } else if (d.content === "other_i18n") {
+                o.text_i18n = d.text_i18n
+                o.setText(d.text_i18n[Object.keys(d.text_i18n)[0]]);
             } else {
                 o.setText(editor._get_text_sample(d.content));
             }
@@ -391,6 +395,7 @@ var editor = {
         editor._update_toolbox();
 
         $("#toolbox-content-other").hide();
+        $("#toolbox-content-other-i18n").hide();
         $(".add-buttons button").prop('disabled', false);
 
         if (dump) {
@@ -489,8 +494,13 @@ var editor = {
             }
             $("#toolbox-content").val(o.content);
             $("#toolbox-content-other").toggle($("#toolbox-content").val() === "other");
+            $("#toolbox-content-other-i18n").toggle($("#toolbox-content").val() === "other_i18n");
             if (o.content === "other") {
                 $("#toolbox-content-other").val(o.text);
+            } else if (o.content === "other_i18n") {
+                $("#toolbox-content-other-i18n textarea").each(function () {
+                    $(this).val(o.text_i18n[$(this).attr("lang")] || '');
+                });
             } else {
                 $("#toolbox-content-other").val("");
             }
@@ -526,9 +536,15 @@ var editor = {
             o.nowhitespace = $("#toolbox-qrwhitespace").prop("checked") || false;
 
             $("#toolbox-content-other").toggle($("#toolbox-content").val() === "other");
+            $("#toolbox-content-other-i18n").toggle($("#toolbox-content").val() === "other_i18n");
             o.content = $("#toolbox-content").val();
             if ($("#toolbox-content").val() === "other") {
                 o.text = $("#toolbox-content-other").val();
+            } else if ($("#toolbox-content").val() === "other_i18n") {
+                o.text_i18n = {}
+                $("#toolbox-content-other-i18n textarea").each(function () {
+                    o.text_i18n[$(this).attr("lang")] = $(this).val();
+                });
             } else {
                 o.text = editor._get_text_sample($("#toolbox-content").val());
             }
@@ -574,9 +590,16 @@ var editor = {
             o.downward = $("#toolbox").find("button[data-action=downward]").is('.active');
             o.rotate(parseFloat($("#toolbox-textrotation").val()));
             $("#toolbox-content-other").toggle($("#toolbox-content").val() === "other");
+            $("#toolbox-content-other-i18n").toggle($("#toolbox-content").val() === "other_i18n");
             o.content = $("#toolbox-content").val();
             if ($("#toolbox-content").val() === "other") {
                 o.setText($("#toolbox-content-other").val());
+            } else if ($("#toolbox-content").val() === "other_i18n") {
+                o.text_i18n = {}
+                $("#toolbox-content-other-i18n textarea").each(function () {
+                    o.text_i18n[$(this).attr("lang")] = $(this).val();
+                });
+                o.setText($("#toolbox-content-other-i18n textarea").first().val());
             } else {
                 o.setText(editor._get_text_sample($("#toolbox-content").val()));
             }
