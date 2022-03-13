@@ -176,7 +176,7 @@ def webhook(request, *args, **kwargs):
     event_json = json.loads(event_body)
 
     # We do not check the signature, we just use it as a trigger to look the charge up.
-    if event_json['resource_type'] not in ('sale', 'refund'):
+    if not ('resource_type' in event_json) or (event_json['resource_type'] not in ('sale', 'refund')):
         return HttpResponse("Not interested in this resource type", status=200)
 
     if event_json['resource_type'] == 'sale':
