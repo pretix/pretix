@@ -384,10 +384,16 @@
                                         {% trans "Item attribute:" %} {{ p.name }}
                                     </option>
                                 {% endfor %}
+                                <option value="other_i18n">{% trans "Other… (multilingual)" %}</option>
                                 <option value="other">{% trans "Other…" %}</option>
                             </select>
                             <textarea type="text" value="" class="input-block-level form-control"
                                     id="toolbox-content-other"></textarea>
+                            <div class="i18n-form-group" id="toolbox-content-other-i18n">
+                                {% for l in request.event.settings.locales %}
+                                    <textarea id="toolbox-content-other-{{ l }}" rows="3" class="input-block-level form-control" title="{{ l }}" lang="{{ l }}"></textarea>
+                                {% endfor %}
+                            </div>
                         </div>
                     </div>
                 </div>
