@@ -367,9 +367,9 @@
                             </select>
                         </div>
                     </div>
-                    <div class="row control-group text">
+                    <div class="row control-group text textcontent">
                         <div class="col-sm-12">
-                            <label>{% trans "Text content" %}</label><br>
+                            <label>{% trans "Content" %}</label><br>
                             <select class="input-block-level form-control" id="toolbox-content">
                                 {% for varname, var in variables.items %}
                                     <option data-sample="{{ var.editor_sample }}" value="{{ varname }}">{{ var.label }}</option>
@@ -410,6 +410,12 @@
                             disabled>
                         <span class="fa fa-qrcode"></span>
                         {% trans "QR code for Lead Scanning" %}
+                    </button>
+                    <button class="btn btn-default btn-block" id="editor-add-qrcode-other"
+                            data-content="secret"
+                            disabled>
+                        <span class="fa fa-qrcode"></span>
+                        {% trans "Other QR code" %}
                     </button>
                     <button class="btn btn-default btn-block" id="editor-add-poweredby"
                             data-content="dark"

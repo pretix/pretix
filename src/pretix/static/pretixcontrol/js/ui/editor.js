@@ -66,9 +66,11 @@ fabric.Barcodearea = fabric.util.createClass(fabric.Rect, {
         ctx.font = '16px Helvetica';
         ctx.fillStyle = '#fff';
         if (this.content === "pseudonymization_id") {
-            ctx.fillText(gettext('Lead Scan QR'), -this.width / 2, -this.height / 2 + 20);
-        } else {
+            ctx.fillText(this.content, -this.width / 2, -this.height / 2 + 20);
+        } else if (!this.content || this.content === "secret") {
             ctx.fillText(gettext('Check-in QR'), -this.width / 2, -this.height / 2 + 20);
+        } else {
+            ctx.fillText(this.content, -this.width / 2, -this.height / 2 + 20);
         }
     },
 });
@@ -478,14 +480,18 @@ var editor = {
             $("#toolbox").find("button[data-action=right]").toggleClass('active', o.textAlign === 'right');
             $("#toolbox-textwidth").val(editor._px2mm(o.width).toFixed(2));
             $("#toolbox-textrotation").val((o.angle || 0.0).toFixed(1));
-            if (o.type === "textarea") {
-                $("#toolbox-content").val(o.content);
-                $("#toolbox-content-other").toggle($("#toolbox-content").val() === "other");
-                if (o.content === "other") {
-                    $("#toolbox-content-other").val(o.text);
-                } else {
-                    $("#toolbox-content-other").val("");
-                }
+        }
+
+        if (o.type === "textarea" || o.type === "barcodearea") {
+            if (!o.content && o.type == "barcodearea") {
+                o.content = "secret";
+            }
+            $("#toolbox-content").val(o.content);
+            $("#toolbox-content-other").toggle($("#toolbox-content").val() === "other");
+            if (o.content === "other") {
+                $("#toolbox-content-other").val(o.text);
+            } else {
+                $("#toolbox-content-other").val("");
             }
         }
     },
@@ -517,6 +523,14 @@ var editor = {
             o.setScaleY(1);
             o.set('top', new_top)
             o.nowhitespace = $("#toolbox-qrwhitespace").prop("checked") || false;
+
+            $("#toolbox-content-other").toggle($("#toolbox-content").val() === "other");
+            o.content = $("#toolbox-content").val();
+            if ($("#toolbox-content").val() === "other") {
+                o.text = $("#toolbox-content-other").val();
+            } else {
+                o.text = editor._get_text_sample($("#toolbox-content").val());
+            }
         } else if (o.type === "imagearea") {
             var new_w = editor._mm2px($("#toolbox-width").val());
             var new_h = editor._mm2px($("#toolbox-height").val());
@@ -674,6 +688,7 @@ var editor = {
             lockUniScaling: true,
             fill: '#666',
             content: $(this).attr("data-content"),
+            text: '',
             nowhitespace: true,
         });
         rect.setControlsVisibility({'mtr': false});
@@ -931,7 +946,7 @@ var editor = {
         editor.$fcv = $("#fabric-canvas");
         editor.$cva = $("#editor-canvas-area");
         editor._load_pdf();
-        $("#editor-add-qrcode, #editor-add-qrcode-lead").click(editor._add_qrcode);
+        $("#editor-add-qrcode, #editor-add-qrcode-lead, #editor-add-qrcode-other").click(editor._add_qrcode);
         $("#editor-add-image").click(editor._add_imagearea);
         $("#editor-add-text").click(editor._add_text);
         $("#editor-add-poweredby").click(function() {editor._add_poweredby("dark")});
