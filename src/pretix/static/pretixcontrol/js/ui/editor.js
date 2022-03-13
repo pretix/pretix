@@ -190,6 +190,7 @@ var editor = {
                     bottom: editor._px2mm(editor.pdf_viewport.height - o.height * o.scaleY - top).toFixed(2),
                     size: editor._px2mm(o.height * o.scaleY).toFixed(2),
                     content: o.content,
+                    text: o.text,
                     nowhitespace: o.nowhitespace || false,
                 });
             } else  if (o.type === "poweredby") {
