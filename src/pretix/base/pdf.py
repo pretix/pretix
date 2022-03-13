@@ -37,6 +37,7 @@ import hashlib
 import itertools
 import logging
 import os
+import re
 import subprocess
 import tempfile
 import uuid
@@ -624,6 +625,8 @@ class Renderer:
     def _draw_barcodearea(self, canvas: Canvas, op: OrderPosition, order: Order, o: dict):
         content = o.get('content', 'secret')
         if content == 'secret':
+            # do not use get_text_content because it uses a shortened version of secret
+            # and does not deal with our default value here properly
             content = op.secret
         else:
             content = self._get_text_content(op, order, o)
@@ -653,20 +656,42 @@ class Renderer:
                 return self._get_text_content(op, order, o, True)
 
         ev = self._get_ev(op, order)
+
         if not o['content']:
             return '(error)'
+
         if o['content'] == 'other':
-            return o['text']
+            text = o['text']
+
+            def replace(x):
+                if x.group(1) not in self.variables:
+                    return x.group(0)
+                if x.group(1) == 'secret':
+                    # Do not use shortened version
+                    return op.secret
+                try:
+                    return self.variables[x.group(1)]['evaluate'](op, order, ev)
+                except:
+                    logger.exception('Failed to process variable.')
+                    return '(error)'
+
+            # We do not use str.format like in emails so we (a) can evaluate lazily and (b) can re-implement this
+            # 1:1 on other platforms that render PDFs through our API (libpretixprint)
+            return re.sub(r'\{([a-zA-Z0-9_]+)\}', replace, text)
+
         elif o['content'].startswith('itemmeta:'):
             return op.item.meta_data.get(o['content'][9:]) or ''
+
         elif o['content'].startswith('meta:'):
             return ev.meta_data.get(o['content'][5:]) or ''
+
         elif o['content'] in self.variables:
             try:
                 return self.variables[o['content']]['evaluate'](op, order, ev)
             except:
                 logger.exception('Failed to process variable.')
                 return '(error)'
+
         return ''
 
     def _draw_imagearea(self, canvas: Canvas, op: OrderPosition, order: Order, o: dict):
