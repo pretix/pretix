@@ -102,11 +102,15 @@ var editor = {
     objects: [],
     history: [],
     clipboard: [],
+    pdf: null,
     pdf_page: null,
+    pdf_page_number: 1,
+    pdf_page_count: 1,
     pdf_scale: 1,
     pdf_viewport: null,
     _history_pos: 0,
     _history_modification_in_progress: false,
+    _other_page_objects: [],
     dirty: false,
     pdf_url: null,
     uploaded_file_id: null,
@@ -130,7 +134,7 @@ var editor = {
     },
 
     dump: function (objs) {
-        var d = [];
+        var d = !objs ? JSON.parse(JSON.stringify(editor._other_page_objects)) : [];
         objs = objs || editor.fabric.getObjects();
 
         for (var i in objs) {
@@ -149,6 +153,7 @@ var editor = {
                 }
                 d.push({
                     type: "textarea",
+                    page: editor.pdf_page_number,
                     locale: $("#pdf-info-locale").val(),
                     left: editor._px2mm(left).toFixed(2),
                     bottom: editor._px2mm(bottom).toFixed(2),
@@ -168,6 +173,7 @@ var editor = {
             } else  if (o.type === "imagearea") {
                 d.push({
                     type: "imagearea",
+                    page: editor.pdf_page_number,
                     left: editor._px2mm(left).toFixed(2),
                     bottom: editor._px2mm(editor.pdf_viewport.height - o.height * o.scaleY - top).toFixed(2),
                     height: editor._px2mm(o.height * o.scaleY).toFixed(2),
@@ -177,6 +183,7 @@ var editor = {
             } else  if (o.type === "barcodearea") {
                 d.push({
                     type: "barcodearea",
+                    page: editor.pdf_page_number,
                     left: editor._px2mm(left).toFixed(2),
                     bottom: editor._px2mm(editor.pdf_viewport.height - o.height * o.scaleY - top).toFixed(2),
                     size: editor._px2mm(o.height * o.scaleY).toFixed(2),
@@ -186,6 +193,7 @@ var editor = {
             } else  if (o.type === "poweredby") {
                 d.push({
                     type: "poweredby",
+                    page: editor.pdf_page_number,
                     left: editor._px2mm(left).toFixed(2),
                     bottom: editor._px2mm(editor.pdf_viewport.height - o.height * o.scaleY - top).toFixed(2),
                     size: editor._px2mm(o.height * o.scaleY).toFixed(2),
@@ -197,6 +205,11 @@ var editor = {
     },
 
     _add_from_data: function (d) {
+        var targetPage = d.page || 1;
+        if (targetPage !== editor.pdf_page_number) {
+            editor._other_page_objects.push(d);
+            return
+        }
         if (d.type === "barcodearea") {
             o = editor._add_qrcode();
             o.content = d.content;
@@ -251,6 +264,7 @@ var editor = {
 
     load: function(data) {
         editor.fabric.clear();
+        editor._other_page_objects = [];
         for (var i in data) {
             var d = data[i], o;
             editor._add_from_data(d);
@@ -268,6 +282,71 @@ var editor = {
         return $('#toolbox-content option[value='+key+']').attr('data-sample') || '';
     },
 
+    _load_page: function (page_number, dump) {
+        var previous_dump = editor._fabric_loaded ? editor.dump() : [];
+
+        // Fetch the required page
+        editor.pdf.getPage(page_number).then(function (page) {
+            console.log('Page loaded');
+            var canvas = document.getElementById('pdf-canvas');
+
+            var scale = editor.$cva.width() / page.getViewport(1.0).width;
+            var viewport = page.getViewport(scale);
+
+            // Prepare canvas using PDF page dimensions
+            var context = canvas.getContext('2d');
+            context.clearRect(0, 0, canvas.width, canvas.height);
+            canvas.height = viewport.height;
+            canvas.width = viewport.width;
+
+            editor.pdf_page = page;
+            editor.pdf_scale = scale;
+            editor.pdf_viewport = viewport;
+
+            // Render PDF page into canvas context
+            var renderContext = {
+                canvasContext: context,
+                viewport: viewport
+            };
+            var renderTask = page.render(renderContext);
+            renderTask.then(function () {
+                editor.pdf_page_number = page_number
+                editor._init_page_nav();
+
+                console.log('Page rendered');
+                if (dump || !editor._fabric_loaded) {
+                    editor._init_fabric(dump);
+                } else {
+                    editor.load(previous_dump);
+                }
+            });
+        });
+    },
+
+    _init_page_nav: function () {
+        if (editor.pdf_page_count === 1) {
+            $("#page_nav").hide();
+        } else {
+            $("#page_nav").html("");
+            for (i = 1; i <= editor.pdf_page_count; i++) {
+                var $li = $("<li>").addClass("nav-item");
+                var $a = $("<a>").text(i).attr("href", "#").attr("data-page", i).appendTo($li);
+                if (i === editor.pdf_page_number) {
+                    $li.addClass("active")
+                }
+                $("#page_nav").append($li)
+                $a.on("click", function (event) {
+                    console.log("switch to page", $(this).attr("data-page"));
+                    editor.fabric.deactivateAll();
+                    editor._load_page(parseInt($(this).attr("data-page")));
+                    event.preventDefault();
+                    return true;
+                })
+            }
+            $("#page_nav").show();
+        }
+    },
+
     _load_pdf: function (dump) {
         // TODO: Loading indicators
         var url = editor.pdf_url;
@@ -279,36 +358,13 @@ var editor = {
         loadingTask.promise.then(function (pdf) {
             console.log('PDF loaded');
 
-            // Fetch the first page
-            var pageNumber = 1;
-            pdf.getPage(pageNumber).then(function (page) {
-                console.log('Page loaded');
-                var canvas = document.getElementById('pdf-canvas');
-
-                var scale = editor.$cva.width() / page.getViewport(1.0).width;
-                var viewport = page.getViewport(scale);
-
-                // Prepare canvas using PDF page dimensions
-                var context = canvas.getContext('2d');
-                context.clearRect(0, 0, canvas.width, canvas.height);
-                canvas.height = viewport.height;
-                canvas.width = viewport.width;
-
-                editor.pdf_page = page;
-                editor.pdf_scale = scale;
-                editor.pdf_viewport = viewport;
-
-                // Render PDF page into canvas context
-                var renderContext = {
-                    canvasContext: context,
-                    viewport: viewport
-                };
-                var renderTask = page.render(renderContext);
-                renderTask.then(function () {
-                    console.log('Page rendered');
-                    editor._init_fabric(dump);
-                });
-            });
+            editor.pdf = pdf;
+            editor.pdf_page_count = pdf.numPages;
+            if (editor.pdf_page_count > 10) {
+                alert('Please do not upload files with more than 10 pages for performance reasons.')
+            }
+            editor._init_page_nav();
+            editor._load_page(1, dump);
         }, function (reason) {
             var msg = gettext('The PDF background file could not be loaded for the following reason:');
             editor._error(msg + ' ' + reason);
@@ -664,6 +720,7 @@ var editor = {
         editor._history_modification_in_progress = true;
         var objs = [];
         for (var i in editor.clipboard) {
+            editor.clipboard[i].page = editor.pdf_page_number;
             objs.push(editor._add_from_data(editor.clipboard[i]));
         }
         editor.fabric.discardActiveObject();

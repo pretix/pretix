@@ -754,20 +754,30 @@ class Renderer:
             p.drawOn(canvas, 0, -h - ad[1])
         canvas.restoreState()
 
-    def draw_page(self, canvas: Canvas, order: Order, op: OrderPosition, show_page=True):
-        for o in self.layout:
-            if o['type'] == "barcodearea":
-                self._draw_barcodearea(canvas, op, o)
-            elif o['type'] == "imagearea":
-                self._draw_imagearea(canvas, op, order, o)
-            elif o['type'] == "textarea":
-                self._draw_textarea(canvas, op, order, o)
-            elif o['type'] == "poweredby":
-                self._draw_poweredby(canvas, op, o)
-            if self.bg_pdf:
-                canvas.setPageSize((self.bg_pdf.getPage(0).mediaBox[2], self.bg_pdf.getPage(0).mediaBox[3]))
-        if show_page:
-            canvas.showPage()
+    def draw_page(self, canvas: Canvas, order: Order, op: OrderPosition, show_page=True, only_page=None):
+        page_count = self.bg_pdf.getNumPages()
+
+        if not only_page and not show_page:
+            raise ValueError("only_page=None and show_page=False cannot be combined")
+
+        for page in range(page_count):
+            if only_page and only_page != page + 1:
+                continue
+            for o in self.layout:
+                if o.get('page', 1) != page + 1:
+                    continue
+                if o['type'] == "barcodearea":
+                    self._draw_barcodearea(canvas, op, o)
+                elif o['type'] == "imagearea":
+                    self._draw_imagearea(canvas, op, order, o)
+                elif o['type'] == "textarea":
+                    self._draw_textarea(canvas, op, order, o)
+                elif o['type'] == "poweredby":
+                    self._draw_poweredby(canvas, op, o)
+                if self.bg_pdf:
+                    canvas.setPageSize((self.bg_pdf.getPage(page).mediaBox[2], self.bg_pdf.getPage(page).mediaBox[3]))
+            if show_page:
+                canvas.showPage()
 
     def render_background(self, buffer, title=_('Ticket')):
         if settings.PDFTK:
@@ -780,7 +790,7 @@ class Renderer:
                 subprocess.run([
                     settings.PDFTK,
                     os.path.join(d, 'front.pdf'),
-                    'background',
+                    'multibackground',
                     os.path.join(d, 'back.pdf'),
                     'output',
                     os.path.join(d, 'out.pdf'),
@@ -794,8 +804,8 @@ class Renderer:
             new_pdf = PdfFileReader(buffer)
             output = PdfFileWriter()
 
-            for page in new_pdf.pages:
-                bg_page = copy.copy(self.bg_pdf.getPage(0))
+            for i, page in enumerate(new_pdf.pages):
+                bg_page = copy.copy(self.bg_pdf.getPage(i))
                 bg_page.mergePage(page)
                 output.addPage(bg_page)
 

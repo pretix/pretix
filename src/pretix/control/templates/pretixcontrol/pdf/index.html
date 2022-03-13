@@ -23,7 +23,7 @@
     </script>
     <div class="row">
         <div class="col-md-9">
-            <div class="panel panel-default">
+            <div class="panel panel-default panel-pdf-editor">
                 <div class="panel-heading">
                     <div class="pull-right flip">
                         <div class="btn-group">
@@ -48,6 +48,8 @@
                     {% trans "Editor" %}
                 </div>
                 <div class="panel-body">
+                    <ul class="nav nav-pills" id="page_nav">
+                    </ul>
                     <div id="editor-canvas-area">
                         <canvas id="pdf-canvas"
                                 data-pdf-url="{{ pdf }}"
