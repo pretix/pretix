@@ -69,3 +69,10 @@ body {
     margin-top: 10px;
     margin-bottom: 0;
 }
+.panel-pdf-editor .panel-body {
+    padding: 0;
+}
+.panel-pdf-editor .panel-body .nav-pills {
+    padding: 15px;
+    background: #eee;
+}
