@@ -825,6 +825,11 @@ var editor = {
             case 46:  /* Delete */
                 editor._delete();
                 break;
+            case 65:  /* A */
+                if (e.ctrlKey) {
+                    editor._selectAll();
+                }
+                break;
             case 89:  /* Y */
                 if (e.ctrlKey) {
                     editor._redo();
@@ -869,6 +874,15 @@ var editor = {
         }
         editor.history.push(state);
         editor.dirty = true;
+    },
+
+    _selectAll: function () {
+        var group = new fabric.Group(editor.fabric.getObjects(), {
+            originX: 'center',
+            originY: 'center',
+        });
+        group.setCoords();
+        editor.fabric.setActiveGroup(group);
     },
 
     _undo: function undo() {
