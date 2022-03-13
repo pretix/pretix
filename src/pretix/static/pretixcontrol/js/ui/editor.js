@@ -827,6 +827,7 @@ var editor = {
         d = editor.dump();
         editor.fabric.dispose();
         editor._load_pdf(d);
+        $(".background-download-button").attr("href", url);
     },
 
     _source_show: function () {
