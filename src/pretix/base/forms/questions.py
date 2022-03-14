@@ -265,10 +265,11 @@ class WrappedPhonePrefixSelect(Select):
     def __init__(self, initial=None):
         choices = [("", "---------")]
 
-        for prefix, values in _COUNTRY_CODE_TO_REGION_CODE.items():
-            if initial and initial in values:
-                prefix = "+%d" % prefix
-                self.initial = prefix
+        if initial:
+            for prefix, values in _COUNTRY_CODE_TO_REGION_CODE.items():
+                if initial in values:
+                    self.initial = "+%d" % prefix
+                    break
         choices += get_phone_prefixes_sorted_and_localized()
         super().__init__(choices=choices, attrs={'aria-label': pgettext_lazy('phonenumber', 'International area code')})
 
