@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-02-25 10:05+0000\n"
-"PO-Revision-Date: 2022-03-09 22:00+0000\n"
+"PO-Revision-Date: 2022-03-15 00:00+0000\n"
 "Last-Translator: Yuriko Matsunami <y.matsunami@enobyte.com>\n"
 "Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/"
 "pretix-js/ja/>\n"
@@ -180,7 +180,7 @@ msgstr "チケットコードのブロック/変更"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:61
 msgid "Order canceled"
-msgstr "注文の取消し"
+msgstr "注文がキャンセルされました"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:62
 msgid "Checked-in Tickets"
