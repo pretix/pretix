@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-02-25 10:05+0000\n"
-"PO-Revision-Date: 2022-03-09 22:00+0000\n"
+"PO-Revision-Date: 2022-03-15 00:00+0000\n"
 "Last-Translator: Yuriko Matsunami <y.matsunami@enobyte.com>\n"
 "Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/pretix/"
 "ja/>\n"
@@ -241,87 +241,87 @@ msgstr "リリースが必要な新規受注"
 
 #: pretix/api/webhooks.py:208 pretix/base/notifications.py:245
 msgid "Order marked as paid"
-msgstr ""
+msgstr "支払い済みと表示された商品"
 
 #: pretix/api/webhooks.py:212 pretix/base/models/checkin.py:261
 #: pretix/base/notifications.py:251
 #: pretix/control/templates/pretixcontrol/event/mail.html:111
 #: pretix/control/views/orders.py:1286
 msgid "Order canceled"
-msgstr ""
+msgstr "注文がキャンセルされました"
 
 #: pretix/api/webhooks.py:216 pretix/base/notifications.py:257
 msgid "Order reactivated"
-msgstr ""
+msgstr "注文が再開されました"
 
 #: pretix/api/webhooks.py:220 pretix/base/notifications.py:263
 msgid "Order expired"
-msgstr ""
+msgstr "注文の有効期限が切れました"
 
 #: pretix/api/webhooks.py:224 pretix/base/notifications.py:269
 msgid "Order information changed"
-msgstr ""
+msgstr "注文情報が変更されました"
 
 #: pretix/api/webhooks.py:228 pretix/base/notifications.py:275
 msgid "Order contact address changed"
-msgstr ""
+msgstr "注文のEメールアドレスが変更されました"
 
 #: pretix/api/webhooks.py:232 pretix/base/notifications.py:281
 #: pretix/control/templates/pretixcontrol/event/mail.html:102
 msgid "Order changed"
-msgstr ""
+msgstr "注文が変更されました"
 
 #: pretix/api/webhooks.py:236 pretix/base/notifications.py:293
 msgid "External refund of payment"
-msgstr ""
+msgstr "外部からの払い戻し"
 
 #: pretix/api/webhooks.py:240
 msgid "Order approved"
-msgstr ""
+msgstr "注文初が発行されました"
 
 #: pretix/api/webhooks.py:244
 msgid "Order denied"
-msgstr ""
+msgstr "注文が中断されました"
 
 #: pretix/api/webhooks.py:248
 msgid "Ticket checked in"
-msgstr ""
+msgstr "チケットのチェックインが完了しました"
 
 #: pretix/api/webhooks.py:252
 msgid "Ticket check-in reverted"
-msgstr ""
+msgstr "チケットのチェックインが取り消されました"
 
 #: pretix/api/webhooks.py:256
 msgid "Event created"
-msgstr ""
+msgstr "イベントが作成されました"
 
 #: pretix/api/webhooks.py:260
 msgid "Event details changed"
-msgstr ""
+msgstr "イベントの詳細が変更されました"
 
 #: pretix/api/webhooks.py:264
 msgid "Event deleted"
-msgstr ""
+msgstr "イベントが削除されました"
 
 #: pretix/api/webhooks.py:268
 msgctxt "subevent"
 msgid "Event series date added"
-msgstr ""
+msgstr "イベント情報にデータが追加されました"
 
 #: pretix/api/webhooks.py:272
 msgctxt "subevent"
 msgid "Event series date changed"
-msgstr ""
+msgstr "イベンt情報の日程が変更されました"
 
 #: pretix/api/webhooks.py:276
 msgctxt "subevent"
 msgid "Event series date deleted"
-msgstr ""
+msgstr "イベント情報のデータが削除されました"
 
 #: pretix/base/auth.py:143
 #, python-brace-format
 msgid "{system} User"
-msgstr ""
+msgstr "{system} ユーザー"
 
 #: pretix/base/auth.py:152 pretix/base/forms/auth.py:246
 #: pretix/base/models/auth.py:244 pretix/base/models/customers.py:48
@@ -337,18 +337,18 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order.html:306
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:22
 msgid "E-mail"
-msgstr ""
+msgstr "Eメール"
 
 #: pretix/base/auth.py:154 pretix/base/forms/auth.py:153
 #: pretix/base/forms/auth.py:207 pretix/base/models/customers.py:50
 #: pretix/control/forms/mailsetup.py:55 pretix/presale/forms/customer.py:60
 #: pretix/presale/forms/customer.py:296
 msgid "Password"
-msgstr ""
+msgstr "パスワード"
 
 #: pretix/base/channels.py:112
 msgid "Online shop"
-msgstr ""
+msgstr "オンラインショップ"
 
 #: pretix/base/context.py:45
 #, python-brace-format
@@ -362,7 +362,7 @@ msgstr ""
 
 #: pretix/base/context.py:61
 msgid "source code"
-msgstr ""
+msgstr "ソースコード"
 
 #: pretix/base/email.py:199 pretix/control/views/main.py:303
 #: pretix/plugins/badges/apps.py:45 pretix/plugins/badges/models.py:48
@@ -372,49 +372,50 @@ msgstr ""
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/index.html:33
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/index.html:53
 msgid "Default"
-msgstr ""
+msgstr "デフォルト"
 
 #: pretix/base/email.py:206
 msgid "Simple with logo"
-msgstr ""
+msgstr "ロゴ入りのシンプルなもの"
 
 #: pretix/base/email.py:509 pretix/base/email.py:591 pretix/base/email.py:607
 #: pretix/base/email.py:612 pretix/base/pdf.py:160 pretix/base/pdf.py:303
 #: pretix/base/services/invoices.py:439 pretix/control/views/event.py:740
 msgid "John Doe"
-msgstr ""
+msgstr "山田太郎"
 
 #: pretix/base/email.py:513
 msgid "Sample Corporation"
-msgstr ""
+msgstr "サンプル株式会社"
 
 #: pretix/base/email.py:553
 msgid "Sample Admission Ticket"
-msgstr ""
+msgstr "サンプル用チケット"
 
 #: pretix/base/email.py:595
+#, fuzzy
 msgid "An individual text with a reason can be inserted here."
-msgstr ""
+msgstr "ここでユーザーの理由を述べることができる。"
 
 #: pretix/base/email.py:599
 msgid "The amount has been charged to your card."
-msgstr ""
+msgstr "その金額がカードに請求されました。"
 
 #: pretix/base/email.py:603
 msgid "Please transfer money to this bank account: 9999-9999-9999-9999"
-msgstr ""
+msgstr "金額を次の口座へお振込ください： 9999-9999-9999-9999"
 
 #: pretix/base/email.py:625 pretix/control/forms/organizer.py:431
 msgid "Mr Doe"
-msgstr ""
+msgstr "山田様"
 
 #: pretix/base/exporter.py:163 pretix/base/exporter.py:293
 msgid "Export format"
-msgstr ""
+msgstr "エクスポート形式"
 
 #: pretix/base/exporter.py:165
 msgid "Excel (.xlsx)"
-msgstr ""
+msgstr "Excel (.xlsx)"
 
 #: pretix/base/exporter.py:166 pretix/base/exporter.py:285
 msgid "CSV (with commas)"
@@ -434,19 +435,19 @@ msgstr ""
 
 #: pretix/base/exporters/answers.py:52
 msgid "Answers to file upload questions"
-msgstr ""
+msgstr "ファイルアップロードによる質問への回答"
 
 #: pretix/base/exporters/answers.py:61 pretix/base/models/items.py:1320
 #: pretix/control/navigation.py:182
 #: pretix/control/templates/pretixcontrol/items/questions.html:3
 #: pretix/control/templates/pretixcontrol/items/questions.html:5
 msgid "Questions"
-msgstr ""
+msgstr "質問"
 
 #: pretix/base/exporters/dekodi.py:103
 #, python-brace-format
 msgid "Event ticket {event}-{code}"
-msgstr ""
+msgstr "イベントチケット {event}-{code}"
 
 #: pretix/base/exporters/dekodi.py:223 pretix/base/exporters/invoices.py:70
 #: pretix/base/exporters/orderlist.py:108
@@ -468,13 +469,13 @@ msgstr ""
 #: pretix/plugins/checkinlists/exporters.py:460
 #: pretix/plugins/ticketoutputpdf/exporters.py:74
 msgid "Start date"
-msgstr ""
+msgstr "開始日"
 
 #: pretix/base/exporters/dekodi.py:226 pretix/base/exporters/invoices.py:73
 msgid ""
 "Only include invoices issued on or after this date. Note that the invoice "
 "date does not always correspond to the order or payment date."
-msgstr ""
+msgstr "この日以降に作成された請求書のみ。注意：請求書の日付は、必ずしも注文日や支払日と一致するわけではありません。"
 
 #: pretix/base/exporters/dekodi.py:231 pretix/base/exporters/invoices.py:78
 #: pretix/base/exporters/orderlist.py:115
@@ -492,13 +493,13 @@ msgstr ""
 #: pretix/plugins/checkinlists/exporters.py:461
 #: pretix/plugins/ticketoutputpdf/exporters.py:81
 msgid "End date"
-msgstr ""
+msgstr "終了日"
 
 #: pretix/base/exporters/dekodi.py:234 pretix/base/exporters/invoices.py:81
 msgid ""
 "Only include invoices issued on or before this date. Note that the invoice "
 "date does not always correspond to the order or payment date."
-msgstr ""
+msgstr "この日以前に作成された請求書のみ。注意：請求書の日付は、必ずしも注文日や支払日と一致するわけではありません。"
 
 #: pretix/base/exporters/invoices.py:86 pretix/base/models/orders.py:1520
 #: pretix/base/models/orders.py:1904 pretix/control/forms/filter.py:175
@@ -511,28 +512,28 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/orders/refunds.html:50
 #: pretix/control/templates/pretixcontrol/search/payments.html:93
 msgid "Payment provider"
-msgstr ""
+msgstr "支払い方法"
 
 #: pretix/base/exporters/invoices.py:88 pretix/base/exporters/invoices.py:90
 #: pretix/control/forms/filter.py:177 pretix/control/forms/filter.py:860
 #: pretix/control/forms/filter.py:1985
 msgid "All payment providers"
-msgstr ""
+msgstr "全てのお支払方法"
 
 #: pretix/base/exporters/invoices.py:95
 msgid ""
 "Only include invoices for orders that have at least one payment attempt with "
 "this payment provider. Note that this might include some invoices of orders "
 "which in the end have been fully or partially paid with a different provider."
-msgstr ""
+msgstr "この支払方法で少なくとも1回以上支払いを試みた注文の請求書のみ。注意：他の決済会社で決済が終了した注文の請求書も含まれる場合があります。"
 
 #: pretix/base/exporters/invoices.py:131
 msgid "All invoices"
-msgstr ""
+msgstr "全ての請求書"
 
 #: pretix/base/exporters/invoices.py:182
 msgid "Invoice data"
-msgstr ""
+msgstr "請求日"
 
 #: pretix/base/exporters/invoices.py:191 pretix/base/shredder.py:390
 #: pretix/control/templates/pretixcontrol/order/index.html:242
@@ -541,15 +542,16 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order.html:239
 #: pretix/presale/templates/pretixpresale/event/order.html:260
 msgid "Invoices"
-msgstr ""
+msgstr "請求書"
 
 #: pretix/base/exporters/invoices.py:192
+#, fuzzy
 msgid "Invoice lines"
-msgstr ""
+msgstr "インボイスライン"
 
 #: pretix/base/exporters/invoices.py:199 pretix/base/exporters/invoices.py:318
 msgid "Invoice number"
-msgstr ""
+msgstr "インボイス番号"
 
 #: pretix/base/exporters/invoices.py:200 pretix/base/exporters/invoices.py:327
 #: pretix/base/exporters/orderlist.py:927
@@ -564,7 +566,7 @@ msgstr ""
 #: pretix/plugins/checkinlists/exporters.py:609
 #: pretix/presale/templates/pretixpresale/organizers/index.html:43
 msgid "Date"
-msgstr ""
+msgstr "日付"
 
 #: pretix/base/exporters/invoices.py:201 pretix/base/exporters/invoices.py:328
 #: pretix/base/exporters/orderlist.py:271
@@ -591,7 +593,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:43
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:64
 msgid "Order code"
-msgstr ""
+msgstr "注文番号"
 
 #: pretix/base/exporters/invoices.py:202 pretix/base/exporters/invoices.py:329
 #: pretix/base/models/waitinglist.py:73 pretix/base/orderimport.py:150
@@ -599,22 +601,22 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/users/index.html:42
 #: pretix/control/views/waitinglist.py:292
 msgid "E-mail address"
-msgstr ""
+msgstr "Eメールアドレス"
 
 #: pretix/base/exporters/invoices.py:203 pretix/base/exporters/invoices.py:330
 msgid "Invoice type"
-msgstr ""
+msgstr "インボイスの種類"
 
 #: pretix/base/exporters/invoices.py:204 pretix/base/exporters/invoices.py:331
 msgid "Cancellation of"
-msgstr ""
+msgstr "のキャンセル"
 
 #: pretix/base/exporters/invoices.py:205
 #: pretix/base/exporters/waitinglist.py:116 pretix/base/models/auth.py:258
 #: pretix/base/models/customers.py:60 pretix/control/forms/event.py:1264
 #: pretix/control/views/waitinglist.py:293
 msgid "Language"
-msgstr ""
+msgstr "言語"
 
 #: pretix/base/exporters/invoices.py:206 pretix/base/exporters/invoices.py:207
 #: pretix/base/exporters/invoices.py:208 pretix/base/exporters/invoices.py:209
@@ -624,7 +626,7 @@ msgstr ""
 #: pretix/base/exporters/invoices.py:335 pretix/base/exporters/invoices.py:336
 #: pretix/base/exporters/invoices.py:337 pretix/base/exporters/invoices.py:338
 msgid "Invoice sender:"
-msgstr ""
+msgstr "請求書の送り手"
 
 #: pretix/base/exporters/invoices.py:206 pretix/base/exporters/invoices.py:214
 #: pretix/base/exporters/invoices.py:332 pretix/base/exporters/invoices.py:340
@@ -666,7 +668,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:25
 #: pretix/presale/templates/pretixpresale/organizers/index.html:40
 msgid "Name"
-msgstr ""
+msgstr "名前"
 
 #: pretix/base/exporters/invoices.py:207 pretix/base/exporters/invoices.py:333
 #: pretix/base/exporters/orderlist.py:279
@@ -684,7 +686,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order.html:322
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:180
 msgid "Address"
-msgstr ""
+msgstr "住所"
 
 #: pretix/base/exporters/invoices.py:208 pretix/base/exporters/invoices.py:216
 #: pretix/base/exporters/invoices.py:334 pretix/base/exporters/invoices.py:342
@@ -700,7 +702,7 @@ msgstr ""
 #: pretix/plugins/checkinlists/exporters.py:479
 #: pretix/plugins/reports/exporters.py:754
 msgid "ZIP code"
-msgstr ""
+msgstr "郵便番号"
 
 #: pretix/base/exporters/invoices.py:209 pretix/base/exporters/invoices.py:217
 #: pretix/base/exporters/invoices.py:335 pretix/base/exporters/invoices.py:343
@@ -716,7 +718,7 @@ msgstr ""
 #: pretix/plugins/checkinlists/exporters.py:480
 #: pretix/plugins/reports/exporters.py:755
 msgid "City"
-msgstr ""
+msgstr "都道府県"
 
 #: pretix/base/exporters/invoices.py:210 pretix/base/exporters/invoices.py:218
 #: pretix/base/exporters/invoices.py:336 pretix/base/exporters/invoices.py:344
@@ -738,11 +740,11 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:88
 #: pretix/presale/templates/pretixpresale/event/order.html:326
 msgid "Country"
-msgstr ""
+msgstr "国"
 
 #: pretix/base/exporters/invoices.py:211 pretix/base/exporters/invoices.py:337
 msgid "Tax ID"
-msgstr ""
+msgstr "税番号"
 
 #: pretix/base/exporters/invoices.py:212 pretix/base/exporters/invoices.py:220
 #: pretix/base/exporters/invoices.py:338 pretix/base/exporters/invoices.py:346
@@ -756,7 +758,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:95
 #: pretix/presale/templates/pretixpresale/event/order.html:333
 msgid "VAT ID"
-msgstr ""
+msgstr "付加価値税ID"
 
 #: pretix/base/exporters/invoices.py:213 pretix/base/exporters/invoices.py:214
 #: pretix/base/exporters/invoices.py:215 pretix/base/exporters/invoices.py:216
@@ -769,7 +771,7 @@ msgstr ""
 #: pretix/base/exporters/invoices.py:345 pretix/base/exporters/invoices.py:346
 #: pretix/base/exporters/invoices.py:347 pretix/base/exporters/invoices.py:348
 msgid "Invoice recipient:"
-msgstr ""
+msgstr "請求書の受取り手"
 
 #: pretix/base/exporters/invoices.py:213 pretix/base/exporters/invoices.py:339
 #: pretix/base/exporters/orderlist.py:272
@@ -786,11 +788,11 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:79
 #: pretix/presale/templates/pretixpresale/event/order.html:314
 msgid "Company"
-msgstr ""
+msgstr "企業"
 
 #: pretix/base/exporters/invoices.py:215 pretix/base/exporters/invoices.py:341
 msgid "Street address"
-msgstr ""
+msgstr "住所"
 
 #: pretix/base/exporters/invoices.py:219 pretix/base/exporters/invoices.py:345
 #: pretix/base/exporters/orderlist.py:279
@@ -813,38 +815,39 @@ msgstr ""
 #: pretix/base/models/orders.py:2643 pretix/base/models/orders.py:2671
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:99
 msgid "Beneficiary"
-msgstr ""
+msgstr "受益者"
 
 #: pretix/base/exporters/invoices.py:222 pretix/base/exporters/invoices.py:348
 #: pretix/base/models/orders.py:2638 pretix/base/orderimport.py:444
 #: pretix/control/templates/pretixcontrol/order/index.html:909
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:106
 msgid "Internal reference"
-msgstr ""
+msgstr "内部参考資料"
 
 #: pretix/base/exporters/invoices.py:223 pretix/control/forms/event.py:1217
+#, fuzzy
 msgid "Reverse charge"
-msgstr ""
+msgstr "リバースチャージ"
 
 #: pretix/base/exporters/invoices.py:224
 msgid "Shown foreign currency"
-msgstr ""
+msgstr "表示通貨"
 
 #: pretix/base/exporters/invoices.py:225
 msgid "Foreign currency rate"
-msgstr ""
+msgstr "為替レート 外貨"
 
 #: pretix/base/exporters/invoices.py:226
 msgid "Total value (with taxes)"
-msgstr ""
+msgstr "合計金額（税込み）"
 
 #: pretix/base/exporters/invoices.py:227
 msgid "Total value (without taxes)"
-msgstr ""
+msgstr "合計金額（税抜き）"
 
 #: pretix/base/exporters/invoices.py:228
 msgid "Payment matching IDs"
-msgstr ""
+msgstr "支払い割り当てのためのID"
 
 #: pretix/base/exporters/invoices.py:229 pretix/base/exporters/invoices.py:349
 #: pretix/base/exporters/orderlist.py:297
@@ -853,17 +856,17 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/event/payment.html:10
 #: pretix/control/views/event.py:324
 msgid "Payment providers"
-msgstr ""
+msgstr "お支払方法"
 
 #: pretix/base/exporters/invoices.py:285 pretix/base/exporters/invoices.py:388
 msgid "Cancellation"
-msgstr ""
+msgstr "取り消し"
 
 #: pretix/base/exporters/invoices.py:285 pretix/base/exporters/invoices.py:388
 #: pretix/control/templates/pretixcontrol/order/index.html:246
 #: pretix/presale/templates/pretixpresale/event/order.html:247
 msgid "Invoice"
-msgstr ""
+msgstr "請求書"
 
 #: pretix/base/exporters/invoices.py:305 pretix/base/exporters/orderlist.py:398
 #: pretix/base/exporters/orderlist.py:402
@@ -880,7 +883,7 @@ msgstr ""
 #: pretix/plugins/checkinlists/exporters.py:665
 #: pretix/plugins/checkinlists/exporters.py:666
 msgid "Yes"
-msgstr ""
+msgstr "はい"
 
 #: pretix/base/exporters/invoices.py:305 pretix/base/exporters/orderlist.py:398
 #: pretix/base/exporters/orderlist.py:402
@@ -897,30 +900,30 @@ msgstr ""
 #: pretix/plugins/checkinlists/exporters.py:665
 #: pretix/plugins/checkinlists/exporters.py:666
 msgid "No"
-msgstr ""
+msgstr "いいえ"
 
 #: pretix/base/exporters/invoices.py:319
 msgid "Line number"
-msgstr ""
+msgstr "行番号"
 
 #: pretix/base/exporters/invoices.py:320 pretix/base/exporters/orderlist.py:446
 #: pretix/base/models/items.py:371 pretix/base/models/items.py:787
 msgid "Description"
-msgstr ""
+msgstr "概要"
 
 #: pretix/base/exporters/invoices.py:321 pretix/control/forms/orders.py:304
 msgid "Gross price"
-msgstr ""
+msgstr "総価額"
 
 #: pretix/base/exporters/invoices.py:322
 msgid "Net price"
-msgstr ""
+msgstr "正味金額"
 
 #: pretix/base/exporters/invoices.py:323 pretix/base/exporters/orderlist.py:450
 #: pretix/base/exporters/orderlist.py:559 pretix/base/models/orders.py:2054
 #: pretix/base/models/orders.py:2169 pretix/base/models/orders.py:2510
 msgid "Tax value"
-msgstr ""
+msgstr "税"
 
 #: pretix/base/exporters/invoices.py:324 pretix/base/exporters/orderlist.py:448
 #: pretix/base/exporters/orderlist.py:557 pretix/base/models/orders.py:2045
@@ -930,37 +933,37 @@ msgstr ""
 #: pretix/plugins/reports/exporters.py:706
 #: pretix/plugins/reports/exporters.py:751
 msgid "Tax rate"
-msgstr ""
+msgstr "税率"
 
 #: pretix/base/exporters/invoices.py:325
 msgid "Tax name"
-msgstr ""
+msgstr "制御ルール"
 
 #: pretix/base/exporters/invoices.py:326
 msgid "Event start date"
-msgstr ""
+msgstr "イベント開始日"
 
 #: pretix/base/exporters/invoices.py:350 pretix/base/pdf.py:255
 msgid "Event end date"
-msgstr ""
+msgstr "イベント終了日"
 
 #: pretix/base/exporters/invoices.py:351 pretix/base/models/event.py:504
 #: pretix/base/models/event.py:1304
 msgid "Location"
-msgstr ""
+msgstr "イベント開催地"
 
 #: pretix/base/exporters/mail.py:52
 msgid "Email addresses (text file)"
-msgstr ""
+msgstr "Eメールアドレス（テクストファイル）"
 
 #: pretix/base/exporters/mail.py:74 pretix/plugins/reports/exporters.py:384
 #: pretix/plugins/reports/exporters.py:564
 msgid "Filter by status"
-msgstr ""
+msgstr "ステータスによる絞り込み"
 
 #: pretix/base/exporters/orderlist.py:71
 msgid "Order data"
-msgstr ""
+msgstr "ご注文日"
 
 #: pretix/base/exporters/orderlist.py:80 pretix/base/models/orders.py:262
 #: pretix/control/navigation.py:245 pretix/control/navigation.py:352
@@ -970,40 +973,40 @@ msgstr ""
 #: pretix/plugins/reports/exporters.py:552
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:47
 msgid "Orders"
-msgstr ""
+msgstr "ご注文内容"
 
 #: pretix/base/exporters/orderlist.py:81 pretix/base/models/orders.py:2191
 #: pretix/base/notifications.py:205
 msgid "Order positions"
-msgstr ""
+msgstr "受注ライン"
 
 #: pretix/base/exporters/orderlist.py:82
 msgid "Order fees"
-msgstr ""
+msgstr "金額"
 
 #: pretix/base/exporters/orderlist.py:90
 msgid "Only paid orders"
-msgstr ""
+msgstr "支払い済みの注文のみ"
 
 #: pretix/base/exporters/orderlist.py:96
 msgid "Include payment amounts"
-msgstr ""
+msgstr "支払った金額を表示"
 
 #: pretix/base/exporters/orderlist.py:102
 msgid "Show multiple choice answers grouped in one column"
-msgstr ""
+msgstr "多肢選択問題を1列にまとめる"
 
 #: pretix/base/exporters/orderlist.py:111
 msgid "Only include orders created on or after this date."
-msgstr ""
+msgstr "この日以降に作成された注文に限る。"
 
 #: pretix/base/exporters/orderlist.py:118
 msgid "Only include orders created on or before this date."
-msgstr ""
+msgstr "この日以前に作成された注文に限る。"
 
 #: pretix/base/exporters/orderlist.py:122
 msgid "Start event date"
-msgstr ""
+msgstr "一番初めの日付"
 
 #: pretix/base/exporters/orderlist.py:125
 msgid ""
