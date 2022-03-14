@@ -1275,9 +1275,6 @@ class AbstractPosition(models.Model):
         verbose_name=_("Variation"),
         on_delete=models.PROTECT
     )
-    price_before_voucher = models.DecimalField(  # todo: remove
-        decimal_places=2, max_digits=10, null=True,
-    )
     price = models.DecimalField(
         decimal_places=2, max_digits=10,
         verbose_name=_("Price")
@@ -2588,13 +2585,6 @@ class CartPosition(AbstractPosition):
     expires = models.DateTimeField(
         verbose_name=_("Expiration date"),
         db_index=True
-    )
-    includes_tax = models.BooleanField(  # todo: remove
-        default=True
-    )
-    override_tax_rate = models.DecimalField(  # todo: remove
-        max_digits=10, decimal_places=2,
-        null=True, blank=True
     )
 
     tax_rate = models.DecimalField(

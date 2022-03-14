@@ -37,9 +37,15 @@ from pretix.base.models import Quota, Seat
 from pretix.base.models.orders import CartPosition
 
 
+class TaxIncludedField(serializers.Field):
+    def to_representation(self, instance: CartPosition):
+        return not instance.custom_price_input_is_net
+
+
 class CartPositionSerializer(I18nAwareModelSerializer):
     answers = AnswerSerializer(many=True)
     seat = InlineSeatSerializer()
+    includes_tax = TaxIncludedField(source='*')
 
     class Meta:
         model = CartPosition
@@ -54,6 +60,7 @@ class CartPositionCreateSerializer(I18nAwareModelSerializer):
     attendee_name = serializers.CharField(required=False, allow_null=True)
     seat = serializers.CharField(required=False, allow_null=True)
     sales_channel = serializers.CharField(required=False, default='sales_channel')
+    includes_tax = serializers.BooleanField(required=False, allow_null=True)
 
     class Meta:
         model = CartPosition
@@ -127,6 +134,9 @@ class CartPositionCreateSerializer(I18nAwareModelSerializer):
             raise ValidationError('The specified product requires to choose a seat.')
 
         validated_data.pop('sales_channel')
+        validated_data['custom_price_input'] = validated_data['price']  # todo: does this make sense?
+        # todo: listed price, etc?
+        validated_data['custom_price_input_is_net'] = validated_data.pop('includes_tax')
         cp = CartPosition.objects.create(event=self.context['event'], **validated_data)
 
         for answ_data in answers_data:

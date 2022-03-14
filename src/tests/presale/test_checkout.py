@@ -3631,10 +3631,8 @@ class CheckoutBundleTest(BaseCheckoutTestCase, TestCase):
             price=2.5, expires=now() - timedelta(minutes=10), is_bundled=False
         )
         self.cp1.expires = now() - timedelta(minutes=10)
-        self.cp1.includes_tax = False
         self.cp1.save()
         self.bundled1.expires = now() - timedelta(minutes=10)
-        self.bundled1.includes_tax = False
         self.bundled1.save()
 
         oid = _perform_order(self.event, 'manual', [self.cp1.pk, self.bundled1.pk, a.pk], 'admin@example.org', 'en', None, {}, 'web')
@@ -3705,7 +3703,6 @@ class CheckoutBundleTest(BaseCheckoutTestCase, TestCase):
         self.cp1.save()
         self.bundled1.expires = now() - timedelta(minutes=10)
         self.bundled1.price = Decimal('1.40')
-        self.bundled1.includes_tax = False
         self.bundled1.save()
 
         oid = _perform_order(self.event, 'manual', [self.cp1.pk, self.bundled1.pk], 'admin@example.org', 'en', ia.pk, {}, 'web')
@@ -3736,11 +3733,9 @@ class CheckoutBundleTest(BaseCheckoutTestCase, TestCase):
         self.trans.save()
         self.cp1.expires = now() - timedelta(minutes=10)
         self.cp1.price = Decimal('18.07')
-        self.cp1.includes_tax = False
         self.cp1.save()
         self.bundled1.expires = now() - timedelta(minutes=10)
         self.bundled1.price = Decimal('1.40')
-        self.bundled1.includes_tax = False
         self.bundled1.save()
 
         oid = _perform_order(self.event, 'manual', [self.cp1.pk, self.bundled1.pk], 'admin@example.org', 'en', ia.pk, {}, 'web')
