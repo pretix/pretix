@@ -318,7 +318,12 @@ class WrappedPhoneNumberPrefixWidget(PhoneNumberPrefixWidget):
         silently deleting data.
         """
         if value:
-            if type(value) == PhoneNumber:
+            if isinstance(value, str):
+                try:
+                    value = PhoneNumber.from_string(value)
+                except:
+                    pass
+            if isinstance(value, PhoneNumber):
                 if value.country_code and value.national_number:
                     return [
                         "+%d" % value.country_code,
