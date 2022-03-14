@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-02-25 10:05+0000\n"
-"PO-Revision-Date: 2022-03-09 22:00+0000\n"
+"PO-Revision-Date: 2022-03-14 13:23+0000\n"
 "Last-Translator: Ismael Menéndez Fernández <ismael.menendez@balidea.com>\n"
 "Language-Team: Galician <https://translate.pretix.eu/projects/pretix/pretix/"
 "gl/>\n"
@@ -26973,9 +26973,8 @@ msgstr "Este archivo es de un evento diferente."
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:6
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:8
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:9
-#, fuzzy
 msgid "Review order"
-msgstr "Orden de revisión"
+msgstr "Revise o seu pedido"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:11
 msgid "Please review the details below and confirm your order."
@@ -26986,9 +26985,8 @@ msgid "Please hang tight, we're finalizing your order!"
 msgstr "Por favor espera, estamos a finalizar o teu pedido!"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:32
-#, fuzzy
 msgid "Add or remove tickets"
-msgstr "Añadir un nuevo tipo de ticket"
+msgstr "Añadir un novo tipo de ticket"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:45
 #, fuzzy
