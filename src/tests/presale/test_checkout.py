@@ -3873,11 +3873,11 @@ class CheckoutVoucherBudgetTest(BaseCheckoutTestCase, TestCase):
                                         valid_until=now() + timedelta(days=2), max_usages=999, redeemed=0)
         self.cp1 = CartPosition.objects.create(
             event=self.event, cart_id=self.session_key, item=self.ticket,
-            price_before_voucher=23, price=21.5, expires=now() + timedelta(minutes=10), voucher=self.v
+            price_after_voucher=21.5, listed_price=23, price=21.5, expires=now() + timedelta(minutes=10), voucher=self.v
         )
         self.cp2 = CartPosition.objects.create(
             event=self.event, cart_id=self.session_key, item=self.ticket,
-            price_before_voucher=23, price=21.5, expires=now() + timedelta(minutes=10), voucher=self.v
+            price_after_voucher=21.5, listed_price=23, price=21.5, expires=now() + timedelta(minutes=10), voucher=self.v
         )
 
     @scopes_disabled()
@@ -3887,7 +3887,7 @@ class CheckoutVoucherBudgetTest(BaseCheckoutTestCase, TestCase):
         o = Order.objects.get(pk=oid)
         op = o.positions.first()
         assert op.item == self.ticket
-        assert op.price_before_voucher == Decimal('23.00')
+        assert op.voucher_budget_use == Decimal('1.50')
 
     @scopes_disabled()
     def test_budget_exceeded_for_second_order(self):

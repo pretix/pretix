@@ -32,7 +32,7 @@ subevent_mode                            strings                    Determines h
                                                                     the same date), or ``"distinct"`` (discount is only applied
                                                                     for groups with no two same dates).
 condition_all_products                   boolean                    If ``true``, the discount applies to all items.
-condition_limit_producs                  list of integers           If ``condition_all_products`` is not set, this is a list
+condition_limit_products                 list of integers           If ``condition_all_products`` is not set, this is a list
                                                                     of internal item IDs that the discount applies to.
 condition_apply_to_addons                boolean                    If ``true``, the discount applies to add-on products as well,
                                                                     otherwise it only applies to top-level items. The discount never

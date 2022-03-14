@@ -1175,13 +1175,12 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
             # Calculate prices if not set
             for pos_data in positions_data:
                 pos = pos_data['__instance']
+                if pos.addon_to_id and is_included_for_free(pos.item, pos.addon_to):
+                    listed_price = Decimal('0.00')
+                else:
+                    listed_price = get_listed_price(pos.item, pos.variation, pos.subevent)
 
                 if pos.price is None:
-                    if pos.addon_to_id and is_included_for_free(pos.item, pos.addon_to):
-                        listed_price = Decimal('0.00')
-                    else:
-                        listed_price = get_listed_price(pos.item, pos.variation, pos.subevent)
-
                     if pos.voucher:
                         price_after_voucher = pos.voucher.calculate_price(listed_price)
                     else:
@@ -1199,8 +1198,14 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
                     # todo: voucher budget use
                     pos._auto_generated_price = True
                 else:
-                    # todo: voucher budget use?
+                    if pos.voucher:
+                        if not pos.item.tax_rule or pos.item.tax_rule.price_includes_tax:
+                            price_after_voucher = max(pos.price, pos.voucher.calculate_price(listed_price))
+                        else:
+                            price_after_voucher = max(pos.price - pos.tax_value, pos.voucher.calculate_price(listed_price))
                     pos._auto_generated_price = False
+                if pos.voucher:
+                    pos.voucher_budget_use = max(listed_price - price_after_voucher, Decimal('0.00'))
 
             order_positions = [pos_data['__instance'] for pos_data in positions_data]
             discount_results = apply_discounts(

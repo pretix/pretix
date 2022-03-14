@@ -938,7 +938,7 @@ def test_order_extend_expired_voucher_budget_ok(client, env):
         )
         p = o.positions.first()
         p.voucher = v
-        p.price_before_voucher = p.price
+        p.voucher_budget_use = Decimal('1.50')
         p.price -= Decimal('1.50')
         p.save()
 
@@ -969,7 +969,7 @@ def test_order_extend_expired_voucher_budget_fail(client, env):
         )
         p = o.positions.first()
         p.voucher = v
-        p.price_before_voucher = p.price
+        p.voucher_budget_use = Decimal('1.50')
         p.price -= Decimal('1.50')
         p.save()
 

@@ -924,7 +924,7 @@ class VoucherTestCase(BaseQuotaTestCase):
             datetime=now() - timedelta(days=5), expires=now() + timedelta(days=5), total=46,
         )
         OrderPosition.objects.create(order=order, item=self.item1, voucher=v, price=Decimal('20.00'),
-                                     price_before_voucher=Decimal('23.00'))
+                                     voucher_budget_use=Decimal('3.00'))
         assert v.budget_used() == Decimal('3.00')
 
         order = Order.objects.create(
@@ -932,7 +932,7 @@ class VoucherTestCase(BaseQuotaTestCase):
             datetime=now() - timedelta(days=5), expires=now() + timedelta(days=5), total=46,
         )
         OrderPosition.objects.create(order=order, item=self.item1, voucher=v, price=Decimal('20.00'),
-                                     price_before_voucher=Decimal('23.00'))
+                                     voucher_budget_use=Decimal('3.00'))
         assert v.budget_used() == Decimal('6.00')
 
 

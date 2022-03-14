@@ -86,7 +86,9 @@ from pretix.base.services.mail import SendMailException
 from pretix.base.services.memberships import (
     create_membership, validate_memberships_in_order,
 )
-from pretix.base.services.pricing import apply_discounts, get_price
+from pretix.base.services.pricing import (
+    apply_discounts, get_listed_price, get_price,
+)
 from pretix.base.services.quotas import QuotaAvailability
 from pretix.base.services.tasks import ProfiledEventTask, ProfiledTask
 from pretix.base.signals import (
@@ -1852,16 +1854,14 @@ class OrderChangeManager:
                 op.position.item = op.item
                 op.position.variation = op.variation
                 op.position._calculate_tax()
-                if op.position.price_before_voucher is not None and op.position.voucher and not op.position.addon_to_id:
-                    op.position.price_before_voucher = max(
-                        op.position.price,
-                        get_price(
-                            op.position.item, op.position.variation,
-                            subevent=op.position.subevent,
-                            custom_price=op.position.price,
-                            invoice_address=self._invoice_address
-                        ).gross
-                    )
+
+                if op.position.voucher_budget_use is not None and op.position.voucher and not op.position.addon_to_id:
+                    listed_price = get_listed_price(op.position.item, op.position.variation, op.position.subevent)
+                    if not op.position.item.tax_rule or op.position.item.tax_rule.price_includes_tax:
+                        price_after_voucher = max(op.position.price, op.position.voucher.calculate_price(listed_price))
+                    else:
+                        price_after_voucher = max(op.position.price - op.position.tax_value, op.position.voucher.calculate_price(listed_price))
+                    op.position.voucher_budget_use = max(listed_price - price_after_voucher, Decimal('0.00'))
                 assign_ticket_secret(
                     event=self.event, position=op.position, force_invalidate=False, save=False
                 )
@@ -1902,16 +1902,13 @@ class OrderChangeManager:
                 assign_ticket_secret(
                     event=self.event, position=op.position, force_invalidate=False, save=False
                 )
-                if op.position.price_before_voucher is not None and op.position.voucher and not op.position.addon_to_id:
-                    op.position.price_before_voucher = max(
-                        op.position.price,
-                        get_price(
-                            op.position.item, op.position.variation,
-                            subevent=op.position.subevent,
-                            custom_price=op.position.price,
-                            invoice_address=self._invoice_address
-                        ).gross
-                    )
+                if op.position.voucher_budget_use is not None and op.position.voucher and not op.position.addon_to_id:
+                    listed_price = get_listed_price(op.position.item, op.position.variation, op.position.subevent)
+                    if not op.position.item.tax_rule or op.position.item.tax_rule.price_includes_tax:
+                        price_after_voucher = max(op.position.price, op.position.voucher.calculate_price(listed_price))
+                    else:
+                        price_after_voucher = max(op.position.price - op.position.tax_value, op.position.voucher.calculate_price(listed_price))
+                    op.position.voucher_budget_use = max(listed_price - price_after_voucher, Decimal('0.00'))
                 op.position.save()
             elif isinstance(op, self.AddFeeOperation):
                 self.order.log_action('pretix.event.order.changed.addfee', user=self.user, auth=self.auth, data={

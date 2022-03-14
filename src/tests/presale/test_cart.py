@@ -1978,11 +1978,11 @@ class CartTest(CartTestMixin, TestCase):
         with scopes_disabled():
             cp1 = CartPosition.objects.create(
                 event=self.event, cart_id=self.session_key, item=self.ticket,
-                price=23, expires=now() + timedelta(minutes=10)
+                price=23, listed_price=23, price_after_voucher=23, expires=now() + timedelta(minutes=10)
             )
             cp2 = CartPosition.objects.create(
                 event=self.event, cart_id=self.session_key, item=self.shirt, variation=self.shirt_blue,
-                price=15, expires=now() + timedelta(minutes=10)
+                price=15, listed_price=15, price_after_voucher=15, expires=now() + timedelta(minutes=10)
             )
             v = Voucher.objects.create(
                 event=self.event, item=self.ticket, price_mode='set', value=Decimal('4.00')
@@ -2002,11 +2002,11 @@ class CartTest(CartTestMixin, TestCase):
         with scopes_disabled():
             cp1 = CartPosition.objects.create(
                 event=self.event, cart_id=self.session_key, item=self.ticket,
-                price=23, expires=now() + timedelta(minutes=10)
+                price=23, listed_price=23, price_after_voucher=23, expires=now() + timedelta(minutes=10)
             )
             cp2 = CartPosition.objects.create(
                 event=self.event, cart_id=self.session_key, item=self.shirt, variation=self.shirt_blue,
-                price=150, expires=now() + timedelta(minutes=10)
+                price=150, listed_price=150, price_after_voucher=150, expires=now() + timedelta(minutes=10)
             )
             v = Voucher.objects.create(
                 event=self.event, price_mode='set', value=Decimal('4.00'), max_usages=100, redeemed=99
@@ -2027,11 +2027,11 @@ class CartTest(CartTestMixin, TestCase):
         with scopes_disabled():
             cp1 = CartPosition.objects.create(
                 event=self.event, cart_id=self.session_key, item=self.ticket,
-                price=23, expires=now() + timedelta(minutes=10)
+                price=23, listed_price=23, price_after_voucher=23, expires=now() + timedelta(minutes=10)
             )
             cp2 = CartPosition.objects.create(
                 event=self.event, cart_id=self.session_key, item=self.shirt, variation=self.shirt_blue,
-                price=150, expires=now() + timedelta(minutes=10)
+                price=150, listed_price=150, price_after_voucher=150, expires=now() + timedelta(minutes=10)
             )
             v = Voucher.objects.create(
                 event=self.event, price_mode='set', quota=self.quota_all, value=Decimal('4.00'), max_usages=100
@@ -2052,7 +2052,7 @@ class CartTest(CartTestMixin, TestCase):
         with scopes_disabled():
             cp1 = CartPosition.objects.create(
                 event=self.event, cart_id=self.session_key, item=self.ticket,
-                price=23, expires=now() + timedelta(minutes=10)
+                price=23, listed_price=23, price_after_voucher=23, expires=now() + timedelta(minutes=10)
             )
             v2 = Voucher.objects.create(
                 event=self.event, price_mode='set', quota=self.quota_all, value=Decimal('8.00'), max_usages=100
@@ -2105,11 +2105,11 @@ class CartTest(CartTestMixin, TestCase):
         with scopes_disabled():
             cp1 = CartPosition.objects.create(
                 event=self.event, cart_id=self.session_key, item=self.ticket,
-                price=23, expires=now() + timedelta(minutes=10)
+                price=23, listed_price=23, price_after_voucher=23, expires=now() + timedelta(minutes=10)
             )
             cp2 = CartPosition.objects.create(
                 event=self.event, cart_id=self.session_key, item=self.shirt, variation=self.shirt_blue,
-                price=15, expires=now() + timedelta(minutes=10)
+                price=15, listed_price=15, price_after_voucher=15, expires=now() + timedelta(minutes=10)
             )
             v = Voucher.objects.create(
                 event=self.event, price_mode='set', value=Decimal('40.00'), max_usages=100,
@@ -2129,11 +2129,11 @@ class CartTest(CartTestMixin, TestCase):
         with scopes_disabled():
             cp1 = CartPosition.objects.create(
                 event=self.event, cart_id=self.session_key, item=self.ticket,
-                price=23, expires=now() + timedelta(minutes=10)
+                price=23, listed_price=23, price_after_voucher=23, expires=now() + timedelta(minutes=10)
             )
             cp2 = CartPosition.objects.create(
                 event=self.event, cart_id=self.session_key, item=self.shirt, variation=self.shirt_blue,
-                price=15, expires=now() + timedelta(minutes=10)
+                price=15, listed_price=15, price_after_voucher=15, expires=now() + timedelta(minutes=10)
             )
             v = Voucher.objects.create(
                 event=self.event, price_mode='set', value=Decimal('40.00'), max_usages=100, redeemed=100

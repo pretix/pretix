@@ -906,10 +906,10 @@ class Order(LockModel, LoggedModel):
                 if force:
                     continue
 
-                if op.voucher and op.voucher.budget is not None and op.price_before_voucher is not None:
+                if op.voucher and op.voucher.budget is not None and op.voucher_budget_use:
                     if op.voucher not in v_budget:
                         v_budget[op.voucher] = op.voucher.budget - op.voucher.budget_used()
-                    disc = op.price_before_voucher - op.price
+                    disc = op.voucher_budget_use
                     if disc > v_budget[op.voucher]:
                         raise Quota.QuotaExceededException(error_messages['voucher_budget'].format(
                             voucher=op.voucher.code
@@ -2164,6 +2164,9 @@ class OrderPosition(AbstractPosition):
         related_name='all_positions',
         on_delete=models.PROTECT
     )
+    voucher_budget_use = models.DecimalField(
+        max_digits=10, decimal_places=2, null=True, blank=True,
+    )
     tax_rate = models.DecimalField(
         max_digits=7, decimal_places=2,
         verbose_name=_('Tax rate')
@@ -2236,6 +2239,8 @@ class OrderPosition(AbstractPosition):
                 else:
                     setattr(op, f.name, getattr(cartpos, f.name))
             op._calculate_tax()
+            if cartpos.voucher:
+                op.voucher_budget_use = cartpos.listed_price - cartpos.price_after_voucher
             op.positionid = i + 1
             op.save()
             ops.append(op)

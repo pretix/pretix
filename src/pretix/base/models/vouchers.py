@@ -39,7 +39,7 @@ from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.core.validators import MinLengthValidator
 from django.db import connection, models
-from django.db.models import F, OuterRef, Q, Subquery, Sum
+from django.db.models import OuterRef, Q, Subquery, Sum
 from django.db.models.functions import Coalesce
 from django.utils.crypto import get_random_string
 from django.utils.timezone import now
@@ -530,6 +530,8 @@ class Voucher(LoggedModel):
         original price will be returned.
         """
         if self.value is not None:
+            if not isinstance(self.value, Decimal):
+                self.value = Decimal(self.value)
             if self.price_mode == 'set':
                 p = self.value
             elif self.price_mode == 'subtract':
@@ -569,21 +571,21 @@ class Voucher(LoggedModel):
     def annotate_budget_used_orders(cls, qs):
         opq = OrderPosition.objects.filter(
             voucher_id=OuterRef('pk'),
-            price_before_voucher__isnull=False,
+            voucher_budget_use__isnull=False,
             order__status__in=[
                 Order.STATUS_PAID,
                 Order.STATUS_PENDING
             ]
-        ).order_by().values('voucher_id').annotate(s=Sum(F('price_before_voucher') - F('price'))).values('s')
+        ).order_by().values('voucher_id').annotate(s=Sum('voucher_budget_use')).values('s')
         return qs.annotate(budget_used_orders=Coalesce(Subquery(opq, output_field=models.DecimalField(max_digits=10, decimal_places=2)), Decimal('0.00')))
 
     def budget_used(self):
         ops = OrderPosition.objects.filter(
             voucher=self,
-            price_before_voucher__isnull=False,
+            voucher_budget_use__isnull=False,
             order__status__in=[
                 Order.STATUS_PAID,
                 Order.STATUS_PENDING
             ]
-        ).aggregate(s=Sum(F('price_before_voucher') - F('price')))['s'] or Decimal('0.00')
+        ).aggregate(s=Sum('voucher_budget_use'))['s'] or Decimal('0.00')
         return ops
