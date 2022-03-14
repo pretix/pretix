@@ -86,7 +86,7 @@ from pretix.base.services.mail import SendMailException
 from pretix.base.services.memberships import (
     create_membership, validate_memberships_in_order,
 )
-from pretix.base.services.pricing import get_price, apply_discounts
+from pretix.base.services.pricing import apply_discounts, get_price
 from pretix.base.services.quotas import QuotaAvailability
 from pretix.base.services.tasks import ProfiledEventTask, ProfiledTask
 from pretix.base.signals import (

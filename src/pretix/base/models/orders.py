@@ -2630,7 +2630,9 @@ class CartPosition(AbstractPosition):
         return self.price - net
 
     def update_listed_price_and_voucher(self, voucher_only=False, max_discount=None):
-        from pretix.base.services.pricing import get_listed_price, is_included_for_free
+        from pretix.base.services.pricing import (
+            get_listed_price, is_included_for_free,
+        )
 
         if voucher_only:
             listed_price = self.listed_price
