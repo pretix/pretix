@@ -402,7 +402,7 @@ All API requests need to contain this access code as a header like this::
 Exhibitor profile
 """""""""""""""""
 
-Upon login and in regular intevals after that, the API should fetch the exhibitors profile.
+Upon login and in regular intervals after that, the API should fetch the exhibitors profile.
 This serves two purposes:
 
 * Checking if the authorization code is actually valid
