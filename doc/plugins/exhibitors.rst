@@ -8,9 +8,16 @@ module is also the basis of the pretixLEAD lead scanning application.
 .. note:: On pretix Hosted, using the lead scanning feature of the exhibitors plugin can add additional costs
           depending on your contract.
 
+The plugin exposes two APIs. One (REST API) is intended for bulk-data operations from the admin side, and one
+(App API) that is used by the pretixLEAD app.
 
-REST API Resource description
------------------------------
+REST API
+---------
+
+The REST API for exhibitors requires the usual :ref:`rest-auth`.
+
+Resources
+"""""""""
 
 The exhibitors plugin provides a HTTP API that allows you to create new exhibitors.
 
@@ -49,10 +56,13 @@ rating                                integer                    A rating of 0 t
 notes                                 string                     A note taken by the exhibitor after scanning
 tags                                  list of strings            Additional tags selected by the exhibitor
 first_upload                          datetime                   Date and time of the first upload of this lead
+data                                  list of objects            Attendee data set that may be shown to the exhibitor based o
+                                                                 the event's configuration. Each entry contains the fields ``id``, ``label``, and ``value``.
+device_name                           string                     User-defined name for the device used for scanning (or ``null``).
 ===================================== ========================== =======================================================
 
-REST API Endpoints
-------------------
+Endpoints
+"""""""""
 
 .. http:get:: /api/v1/organizers/(organizer)/events/(event)/exhibitors/
 
@@ -190,7 +200,14 @@ REST API Endpoints
             "rating": 1,
             "notes": "",
             "tags": [],
-            "first_upload": "2021-07-06T11:03:31.414491+01:00"
+            "first_upload": "2021-07-06T11:03:31.414491+01:00",
+            "data": [
+              {
+                "id": "attendee_name",
+                "label": "Attendee name",
+                "value": "Peter",
+              }
+            ]
           }
         ]
       }
@@ -361,3 +378,184 @@ REST API Endpoints
    :statuscode 204: no error
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer/event/exhibitor does not exist **or** you have no permission to change it
+
+
+App API
+-------
+
+The App API is used for communication between the pretixLEAD app and the pretix server.
+
+.. warning:: We consider this an internal API, it is not intended for external use. You may still use it, but
+             our :ref:`compatibility commitment <rest-compat>` does not apply.
+
+Authentication
+""""""""""""""
+
+Every exhibitor has an "access code", usually consisting of 8 alphanumeric uppercase characters.
+This access code is communicated to event exhibitors by the event organizers, so this is also what
+exhibitors should enter into a login screen.
+
+All API requests need to contain this access code as a header like this::
+
+    Authorization: Exhibitor ABCDE123
+
+Exhibitor profile
+"""""""""""""""""
+
+Upon login and in regular intervals after that, the API should fetch the exhibitors profile.
+This serves two purposes:
+
+* Checking if the authorization code is actually valid
+
+* Obtaining information that can be shown in the app
+
+The resource consists of the following fields:
+
+.. rst-class:: rest-resource-table
+
+===================================== ========================== =======================================================
+Field                                 Type                       Description
+===================================== ========================== =======================================================
+name                                  string                     Exhibitor name
+booth                                 string                     Booth number (or ``null``)
+event                                 object                     Object describing the event
+├ name                                multi-lingual string       Event name
+├ imprint_url                         string                     URL to legal notice page. If not ``null``, a button in the app should link to this page.
+├ privacy_url                         string                     URL to privacy notice page. If not ``null``, a button in the app should link to this page.
+├ help_url                            string                     URL to help page. If not ``null``, a button in the app should link to this page.
+├ logo_url                            string                     URL to event logo. If not ``null``, this logo may be shown in the app.
+├ slug                                string                     Event short form
+└ organizer                           string                     Organizer short form
+notes                                 boolean                    Specifies whether the exhibitor is allowed to take notes on leads
+tags                                  list of strings            List of tags the exhibitor can assign to their leads
+scan_types                            list of objects            Only used for a special case, fixed value that external API consumers should ignore
+===================================== ========================== =======================================================
+
+.. http:get:: /exhibitors/api/v1/profile
+
+   **Example request:**
+
+   .. sourcecode:: http
+
+    GET /exhibitors/api/v1/profile HTTP/1.1
+    Authorization: Exhibitor ABCDE123
+    Accept: application/json, text/javascript
+
+   **Example response:**
+
+   .. sourcecode:: http
+
+    HTTP/1.1 200 OK
+    Vary: Accept
+    Content-Type: application/json
+
+    {
+      "name": "Aperture Science",
+      "booth": "A2",
+      "event": {
+        "name": {"en": "Sample conference", "de": "Beispielkonferenz"},
+        "slug": "bigevents",
+        "imprint_url": null,
+        "privacy_url": null,
+        "help_url": null,
+        "logo_url": null,
+        "organizer": "sampleconf"
+      },
+      "notes": true,
+      "tags": ["foo", "bar"],
+      "scan_types": [
+        {
+          "key": "lead",
+          "label": "Lead Scanning"
+        }
+      ]
+    }
+
+   :statuscode 200: no error
+   :statuscode 401: Invalid authentication code
+
+Submitting a lead
+"""""""""""""""""
+
+After a ticket/badge is scanned, it should immediately be submitted to the server
+so the scan is stored and information about the person can be shown in the app. The same
+code can be submitted multiple times, so it's no problem to just submit it again after the
+exhibitor set a note or a rating (0-5) inside the app.
+
+On the request, you should set the following properties:
+
+* ``code`` with the scanned barcode
+* ``notes`` with the exhibitor's notes
+* ``scanned`` with the date and time of the actual scan (not the time of the upload)
+* ``scan_type`` set to ``lead`` statically
+* ``tags`` with the list of selected tags
+* ``rating`` with the rating assigned by the exhibitor
+* ``device_name`` with a user-specified name of the device used for scanning (max. 190 characters), or ``null``
+
+If you submit ``tags`` and ``rating`` to be ``null`` and ``notes`` to be ``""``, the server
+responds with the previously saved information and will not delete that information. If you
+supply other values, the information saved on the server will be overridden.
+
+The response will also contain ``tags``, ``rating``, and ``notes``. Additionally,
+it will include ``attendee`` with a list of ``fields`` that can be shown to the
+user. Each field has an internal ``id``, a human-readable ``label``, and a ``value`` (all strings).
+
+Note that the ``fields`` array can contain any number of dynamic keys!
+Depending on the exhibitors permission and event configuration this might be empty,
+or contain lots of details. The app should dynamically show these values (read-only)
+with the labels sent by the server.
+
+The request for this looks like this:
+
+.. http:post:: /exhibitors/api/v1/leads/
+
+   **Example request:**
+
+   .. sourcecode:: http
+
+    POST /exhibitors/api/v1/leads/ HTTP/1.1
+    Authorization: Exhibitor ABCDE123
+    Accept: application/json, text/javascript
+    Content-Type: application/json
+
+    {
+      "code": "qrcodecontent",
+      "notes": "Great customer, wants our newsletter",
+      "scanned": "2020-10-18T12:24:23.000+00:00",
+      "scan_type": "lead",
+      "tags": ["foo"],
+      "rating": 4
+    }
+
+   **Example response:**
+
+   .. sourcecode:: http
+
+    HTTP/1.1 201 Created
+    Vary: Accept
+    Content-Type: application/json
+
+    {
+      "attendee": {
+        "fields": [
+          {
+            "id": "attendee_name",
+            "label": "Name",
+            "value": "Jon Doe"
+          },
+          {
+            "id": "attendee_email",
+            "label": "Email",
+            "value": "test@example.com"
+          }
+         ]
+        },
+        "rating": 4,
+        "tags": ["foo"],
+        "notes": "Great customer, wants our newsletter"
+    }
+
+   :statuscode 200: No error, leads was not scanned for the first time
+   :statuscode 201: No error, leads was scanned for the first time
+   :statuscode 400: Invalid data submitted
+   :statuscode 401: Invalid authentication code

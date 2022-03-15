@@ -43,6 +43,8 @@ Possible permissions are:
 * Can view vouchers
 * Can change vouchers
 
+.. _`rest-compat`:
+
 Compatibility
 -------------
 
