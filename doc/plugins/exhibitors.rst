@@ -524,7 +524,8 @@ The request for this looks like this:
       "scanned": "2020-10-18T12:24:23.000+00:00",
       "scan_type": "lead",
       "tags": ["foo"],
-      "rating": 4
+      "rating": 4,
+      "device_name": "DEV1"
     }
 
    **Example response:**
