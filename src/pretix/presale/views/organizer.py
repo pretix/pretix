@@ -225,7 +225,7 @@ class EventListMixin:
     def _set_month_year(self):
         if 'date' in self.request.GET:
             try:
-                date = dateutil.parser.parse(self.request.GET.get('date')).date()
+                date = dateutil.parser.isoparse(self.request.GET.get('date')).date()
             except ValueError:
                 date = now().date()
             self.year = date.year
