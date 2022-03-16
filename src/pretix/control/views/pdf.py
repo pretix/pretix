@@ -23,6 +23,7 @@ import json
 import logging
 import mimetypes
 from datetime import timedelta
+from decimal import Decimal
 from io import BytesIO
 
 from django.conf import settings
@@ -82,15 +83,15 @@ class BaseEditorView(EventPermissionRequiredMixin, TemplateView):
         return None, f
 
     def _get_preview_position(self):
-        item = self.request.event.items.create(name=_("Sample product"), default_price=42.23,
+        item = self.request.event.items.create(name=_("Sample product"), default_price=Decimal('42.23'),
                                                description=_("Sample product description"))
-        item2 = self.request.event.items.create(name=_("Sample workshop"), default_price=23.40)
+        item2 = self.request.event.items.create(name=_("Sample workshop"), default_price=Decimal('23.40'))
 
         from pretix.base.models import Order
         order = self.request.event.orders.create(status=Order.STATUS_PENDING, datetime=now(),
                                                  email='sample@pretix.eu',
                                                  locale=self.request.event.settings.locale,
-                                                 expires=now(), code="PREVIEW1234", total=119)
+                                                 expires=now(), code="PREVIEW1234", total=Decimal('119.00'))
 
         scheme = PERSON_NAME_SCHEMES[self.request.event.settings.name_scheme]
         sample = {k: str(v) for k, v in scheme['sample'].items()}
