@@ -39,7 +39,8 @@ from django.utils.crypto import get_random_string
 from django.utils.timezone import now
 from django.utils.translation import gettext as _
 from django.views.generic import TemplateView
-from PyPDF2 import PdfFileWriter
+from PyPDF2 import PdfFileReader, PdfFileWriter
+from PyPDF2.utils import PdfReadError
 from reportlab.lib.units import mm
 
 from pretix.base.i18n import language
@@ -192,6 +193,17 @@ class BaseEditorView(EventPermissionRequiredMixin, TemplateView):
             c.file = fileobj
             c.save()
             c.refresh_from_db()
+
+            try:
+                bg_bytes = c.file.read()
+                PdfFileReader(BytesIO(bg_bytes), strict=False)
+            except PdfReadError as e:
+                return JsonResponse({
+                    "status": "error",
+                    "error": _('Unfortunately, we were unable to process this PDF file ({reason}).').format(
+                        reason=str(e)
+                    )
+                })
             return JsonResponse({
                 "status": "ok",
                 "id": c.id,
