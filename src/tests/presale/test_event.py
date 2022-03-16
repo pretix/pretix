@@ -314,7 +314,7 @@ class ItemDisplayTest(EventTestMixin, SoupTest):
         resp = self.client.get('/%s/%s/' % (self.orga.slug, self.event.slug))
         self.assertIn("Foo SE2", resp.rendered_content)
         self.assertNotIn("Foo SE1", resp.rendered_content)
-        resp = self.client.get('/%s/%s/?date=%d-%d' % (self.orga.slug, self.event.slug, se1.date_from.year, se1.date_from.month))
+        resp = self.client.get('/%s/%s/?date=%d-%02d' % (self.orga.slug, self.event.slug, se1.date_from.year, se1.date_from.month))
         self.assertIn("Foo SE1", resp.rendered_content)
         self.assertNotIn("Foo SE2", resp.rendered_content)
 
