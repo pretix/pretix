@@ -66,11 +66,9 @@ fabric.Barcodearea = fabric.util.createClass(fabric.Rect, {
         ctx.font = '16px Helvetica';
         ctx.fillStyle = '#fff';
         if (this.content === "pseudonymization_id") {
-            ctx.fillText(this.content, -this.width / 2, -this.height / 2 + 20);
-        } else if (!this.content || this.content === "secret") {
-            ctx.fillText(gettext('Check-in QR'), -this.width / 2, -this.height / 2 + 20);
+            ctx.fillText(gettext('Lead Scan QR'), -this.width / 2, -this.height / 2 + 20);
         } else {
-            ctx.fillText(this.content, -this.width / 2, -this.height / 2 + 20);
+            ctx.fillText(gettext('Check-in QR'), -this.width / 2, -this.height / 2 + 20);
         }
     },
 });
@@ -104,15 +102,11 @@ var editor = {
     objects: [],
     history: [],
     clipboard: [],
-    pdf: null,
     pdf_page: null,
-    pdf_page_number: 1,
-    pdf_page_count: 1,
     pdf_scale: 1,
     pdf_viewport: null,
     _history_pos: 0,
     _history_modification_in_progress: false,
-    _other_page_objects: [],
     dirty: false,
     pdf_url: null,
     uploaded_file_id: null,
@@ -136,7 +130,7 @@ var editor = {
     },
 
     dump: function (objs) {
-        var d = !objs ? JSON.parse(JSON.stringify(editor._other_page_objects)) : [];
+        var d = [];
         objs = objs || editor.fabric.getObjects();
 
         for (var i in objs) {
@@ -155,7 +149,6 @@ var editor = {
                 }
                 d.push({
                     type: "textarea",
-                    page: editor.pdf_page_number,
                     locale: $("#pdf-info-locale").val(),
                     left: editor._px2mm(left).toFixed(2),
                     bottom: editor._px2mm(bottom).toFixed(2),
@@ -169,14 +162,12 @@ var editor = {
                     downward: o.downward || false,
                     content: o.content,
                     text: o.text,
-                    text_i18n: o.text_i18n || {},
                     rotation: o.angle,
                     align: o.textAlign,
                 });
             } else  if (o.type === "imagearea") {
                 d.push({
                     type: "imagearea",
-                    page: editor.pdf_page_number,
                     left: editor._px2mm(left).toFixed(2),
                     bottom: editor._px2mm(editor.pdf_viewport.height - o.height * o.scaleY - top).toFixed(2),
                     height: editor._px2mm(o.height * o.scaleY).toFixed(2),
@@ -186,18 +177,15 @@ var editor = {
             } else  if (o.type === "barcodearea") {
                 d.push({
                     type: "barcodearea",
-                    page: editor.pdf_page_number,
                     left: editor._px2mm(left).toFixed(2),
                     bottom: editor._px2mm(editor.pdf_viewport.height - o.height * o.scaleY - top).toFixed(2),
                     size: editor._px2mm(o.height * o.scaleY).toFixed(2),
                     content: o.content,
-                    text: o.text,
                     nowhitespace: o.nowhitespace || false,
                 });
             } else  if (o.type === "poweredby") {
                 d.push({
                     type: "poweredby",
-                    page: editor.pdf_page_number,
                     left: editor._px2mm(left).toFixed(2),
                     bottom: editor._px2mm(editor.pdf_viewport.height - o.height * o.scaleY - top).toFixed(2),
                     size: editor._px2mm(o.height * o.scaleY).toFixed(2),
@@ -209,11 +197,6 @@ var editor = {
     },
 
     _add_from_data: function (d) {
-        var targetPage = d.page || 1;
-        if (targetPage !== editor.pdf_page_number) {
-            editor._other_page_objects.push(d);
-            return
-        }
         if (d.type === "barcodearea") {
             o = editor._add_qrcode();
             o.content = d.content;
@@ -247,9 +230,6 @@ var editor = {
             }
             if (d.content === "other") {
                 o.setText(d.text);
-            } else if (d.content === "other_i18n") {
-                o.text_i18n = d.text_i18n
-                o.setText(d.text_i18n[Object.keys(d.text_i18n)[0]]);
             } else {
                 o.setText(editor._get_text_sample(d.content));
             }
@@ -271,7 +251,6 @@ var editor = {
 
     load: function(data) {
         editor.fabric.clear();
-        editor._other_page_objects = [];
         for (var i in data) {
             var d = data[i], o;
             editor._add_from_data(d);
@@ -289,71 +268,6 @@ var editor = {
         return $('#toolbox-content option[value='+key+']').attr('data-sample') || '';
     },
 
-    _load_page: function (page_number, dump) {
-        var previous_dump = editor._fabric_loaded ? editor.dump() : [];
-
-        // Fetch the required page
-        editor.pdf.getPage(page_number).then(function (page) {
-            console.log('Page loaded');
-            var canvas = document.getElementById('pdf-canvas');
-
-            var scale = editor.$cva.width() / page.getViewport(1.0).width;
-            var viewport = page.getViewport(scale);
-
-            // Prepare canvas using PDF page dimensions
-            var context = canvas.getContext('2d');
-            context.clearRect(0, 0, canvas.width, canvas.height);
-            canvas.height = viewport.height;
-            canvas.width = viewport.width;
-
-            editor.pdf_page = page;
-            editor.pdf_scale = scale;
-            editor.pdf_viewport = viewport;
-
-            // Render PDF page into canvas context
-            var renderContext = {
-                canvasContext: context,
-                viewport: viewport
-            };
-            var renderTask = page.render(renderContext);
-            renderTask.then(function () {
-                editor.pdf_page_number = page_number
-                editor._init_page_nav();
-
-                console.log('Page rendered');
-                if (dump || !editor._fabric_loaded) {
-                    editor._init_fabric(dump);
-                } else {
-                    editor.load(previous_dump);
-                }
-            });
-        });
-    },
-
-    _init_page_nav: function () {
-        if (editor.pdf_page_count === 1) {
-            $("#page_nav").hide();
-        } else {
-            $("#page_nav").html("");
-            for (i = 1; i <= editor.pdf_page_count; i++) {
-                var $li = $("<li>").addClass("nav-item");
-                var $a = $("<a>").text(i).attr("href", "#").attr("data-page", i).appendTo($li);
-                if (i === editor.pdf_page_number) {
-                    $li.addClass("active")
-                }
-                $("#page_nav").append($li)
-                $a.on("click", function (event) {
-                    console.log("switch to page", $(this).attr("data-page"));
-                    editor.fabric.deactivateAll();
-                    editor._load_page(parseInt($(this).attr("data-page")));
-                    event.preventDefault();
-                    return true;
-                })
-            }
-            $("#page_nav").show();
-        }
-    },
-
     _load_pdf: function (dump) {
         // TODO: Loading indicators
         var url = editor.pdf_url;
@@ -365,13 +279,36 @@ var editor = {
         loadingTask.promise.then(function (pdf) {
             console.log('PDF loaded');
 
-            editor.pdf = pdf;
-            editor.pdf_page_count = pdf.numPages;
-            if (editor.pdf_page_count > 10) {
-                alert('Please do not upload files with more than 10 pages for performance reasons.')
-            }
-            editor._init_page_nav();
-            editor._load_page(1, dump);
+            // Fetch the first page
+            var pageNumber = 1;
+            pdf.getPage(pageNumber).then(function (page) {
+                console.log('Page loaded');
+                var canvas = document.getElementById('pdf-canvas');
+
+                var scale = editor.$cva.width() / page.getViewport(1.0).width;
+                var viewport = page.getViewport(scale);
+
+                // Prepare canvas using PDF page dimensions
+                var context = canvas.getContext('2d');
+                context.clearRect(0, 0, canvas.width, canvas.height);
+                canvas.height = viewport.height;
+                canvas.width = viewport.width;
+
+                editor.pdf_page = page;
+                editor.pdf_scale = scale;
+                editor.pdf_viewport = viewport;
+
+                // Render PDF page into canvas context
+                var renderContext = {
+                    canvasContext: context,
+                    viewport: viewport
+                };
+                var renderTask = page.render(renderContext);
+                renderTask.then(function () {
+                    console.log('Page rendered');
+                    editor._init_fabric(dump);
+                });
+            });
         }, function (reason) {
             var msg = gettext('The PDF background file could not be loaded for the following reason:');
             editor._error(msg + ' ' + reason);
@@ -395,7 +332,6 @@ var editor = {
         editor._update_toolbox();
 
         $("#toolbox-content-other").hide();
-        $("#toolbox-content-other-i18n").hide();
         $(".add-buttons button").prop('disabled', false);
 
         if (dump) {
@@ -486,23 +422,14 @@ var editor = {
             $("#toolbox").find("button[data-action=right]").toggleClass('active', o.textAlign === 'right');
             $("#toolbox-textwidth").val(editor._px2mm(o.width).toFixed(2));
             $("#toolbox-textrotation").val((o.angle || 0.0).toFixed(1));
-        }
-
-        if (o.type === "textarea" || o.type === "barcodearea") {
-            if (!o.content && o.type == "barcodearea") {
-                o.content = "secret";
-            }
-            $("#toolbox-content").val(o.content);
-            $("#toolbox-content-other").toggle($("#toolbox-content").val() === "other");
-            $("#toolbox-content-other-i18n").toggle($("#toolbox-content").val() === "other_i18n");
-            if (o.content === "other") {
-                $("#toolbox-content-other").val(o.text);
-            } else if (o.content === "other_i18n") {
-                $("#toolbox-content-other-i18n textarea").each(function () {
-                    $(this).val(o.text_i18n[$(this).attr("lang")] || '');
-                });
-            } else {
-                $("#toolbox-content-other").val("");
+            if (o.type === "textarea") {
+                $("#toolbox-content").val(o.content);
+                $("#toolbox-content-other").toggle($("#toolbox-content").val() === "other");
+                if (o.content === "other") {
+                    $("#toolbox-content-other").val(o.text);
+                } else {
+                    $("#toolbox-content-other").val("");
+                }
             }
         }
     },
@@ -534,20 +461,6 @@ var editor = {
             o.setScaleY(1);
             o.set('top', new_top)
             o.nowhitespace = $("#toolbox-qrwhitespace").prop("checked") || false;
-
-            $("#toolbox-content-other").toggle($("#toolbox-content").val() === "other");
-            $("#toolbox-content-other-i18n").toggle($("#toolbox-content").val() === "other_i18n");
-            o.content = $("#toolbox-content").val();
-            if ($("#toolbox-content").val() === "other") {
-                o.text = $("#toolbox-content-other").val();
-            } else if ($("#toolbox-content").val() === "other_i18n") {
-                o.text_i18n = {}
-                $("#toolbox-content-other-i18n textarea").each(function () {
-                    o.text_i18n[$(this).attr("lang")] = $(this).val();
-                });
-            } else {
-                o.text = editor._get_text_sample($("#toolbox-content").val());
-            }
         } else if (o.type === "imagearea") {
             var new_w = editor._mm2px($("#toolbox-width").val());
             var new_h = editor._mm2px($("#toolbox-height").val());
@@ -590,16 +503,9 @@ var editor = {
             o.downward = $("#toolbox").find("button[data-action=downward]").is('.active');
             o.rotate(parseFloat($("#toolbox-textrotation").val()));
             $("#toolbox-content-other").toggle($("#toolbox-content").val() === "other");
-            $("#toolbox-content-other-i18n").toggle($("#toolbox-content").val() === "other_i18n");
             o.content = $("#toolbox-content").val();
             if ($("#toolbox-content").val() === "other") {
                 o.setText($("#toolbox-content-other").val());
-            } else if ($("#toolbox-content").val() === "other_i18n") {
-                o.text_i18n = {}
-                $("#toolbox-content-other-i18n textarea").each(function () {
-                    o.text_i18n[$(this).attr("lang")] = $(this).val();
-                });
-                o.setText($("#toolbox-content-other-i18n textarea").first().val());
             } else {
                 o.setText(editor._get_text_sample($("#toolbox-content").val()));
             }
@@ -712,7 +618,6 @@ var editor = {
             lockUniScaling: true,
             fill: '#666',
             content: $(this).attr("data-content"),
-            text: '',
             nowhitespace: true,
         });
         rect.setControlsVisibility({'mtr': false});
@@ -759,7 +664,6 @@ var editor = {
         editor._history_modification_in_progress = true;
         var objs = [];
         for (var i in editor.clipboard) {
-            editor.clipboard[i].page = editor.pdf_page_number;
             objs.push(editor._add_from_data(editor.clipboard[i]));
         }
         editor.fabric.discardActiveObject();
@@ -825,11 +729,6 @@ var editor = {
             case 46:  /* Delete */
                 editor._delete();
                 break;
-            case 65:  /* A */
-                if (e.ctrlKey) {
-                    editor._selectAll();
-                }
-                break;
             case 89:  /* Y */
                 if (e.ctrlKey) {
                     editor._redo();
@@ -874,15 +773,6 @@ var editor = {
         }
         editor.history.push(state);
         editor.dirty = true;
-    },
-
-    _selectAll: function () {
-        var group = new fabric.Group(editor.fabric.getObjects(), {
-            originX: 'center',
-            originY: 'center',
-        });
-        group.setCoords();
-        editor.fabric.setActiveGroup(group);
     },
 
     _undo: function undo() {
@@ -937,7 +827,6 @@ var editor = {
         d = editor.dump();
         editor.fabric.dispose();
         editor._load_pdf(d);
-        $(".background-download-button").attr("href", url);
     },
 
     _source_show: function () {
@@ -984,7 +873,7 @@ var editor = {
         editor.$fcv = $("#fabric-canvas");
         editor.$cva = $("#editor-canvas-area");
         editor._load_pdf();
-        $("#editor-add-qrcode, #editor-add-qrcode-lead, #editor-add-qrcode-other").click(editor._add_qrcode);
+        $("#editor-add-qrcode, #editor-add-qrcode-lead").click(editor._add_qrcode);
         $("#editor-add-image").click(editor._add_imagearea);
         $("#editor-add-text").click(editor._add_text);
         $("#editor-add-poweredby").click(function() {editor._add_poweredby("dark")});

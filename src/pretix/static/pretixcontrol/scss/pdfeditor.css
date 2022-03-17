@@ -25,7 +25,6 @@ body {
 }
 #toolbox[data-type] .position,
 #toolbox[data-type=barcodearea] .squaresize,
-#toolbox[data-type=barcodearea] .textcontent,
 #toolbox[data-type=imagearea] .rectsize,
 #toolbox[data-type=imagearea] .imagecontent,
 #toolbox[data-type=poweredby] .poweredby,
@@ -69,11 +68,4 @@ body {
 .pdf-info .help-inline p {
     margin-top: 10px;
     margin-bottom: 0;
-}
-.panel-pdf-editor .panel-body {
-    padding: 0;
-}
-.panel-pdf-editor .panel-body .nav-pills {
-    padding: 15px;
-    background: #eee;
 }

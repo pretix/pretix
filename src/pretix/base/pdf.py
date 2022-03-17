@@ -37,7 +37,6 @@ import hashlib
 import itertools
 import logging
 import os
-import re
 import subprocess
 import tempfile
 import uuid
@@ -55,7 +54,6 @@ from django.utils.functional import SimpleLazyObject
 from django.utils.html import conditional_escape
 from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
-from i18nfield.strings import LazyI18nString
 from PyPDF2 import PdfFileReader
 from pytz import timezone
 from reportlab.graphics import renderPDF
@@ -203,11 +201,6 @@ DEFAULT_VARIABLES = OrderedDict((
         "label": _("Attendee email"),
         "editor_sample": 'foo@bar.com',
         "evaluate": lambda op, order, ev: op.attendee_email or (op.addon_to.attendee_email if op.addon_to else '')
-    }),
-    ("pseudonymization_id", {
-        "label": _("Pseudonymization ID (lead scanning)"),
-        "editor_sample": "GG89JUJDTA",
-        "evaluate": lambda orderposition, order, event: orderposition.pseudonymization_id,
     }),
     ("event_name", {
         "label": _("Event name"),
@@ -623,14 +616,12 @@ class Renderer:
                          preserveAspectRatio=True, anchor='n',
                          mask='auto')
 
-    def _draw_barcodearea(self, canvas: Canvas, op: OrderPosition, order: Order, o: dict):
+    def _draw_barcodearea(self, canvas: Canvas, op: OrderPosition, o: dict):
         content = o.get('content', 'secret')
         if content == 'secret':
-            # do not use get_text_content because it uses a shortened version of secret
-            # and does not deal with our default value here properly
             content = op.secret
-        else:
-            content = self._get_text_content(op, order, o)
+        elif content == 'pseudonymization_id':
+            content = op.pseudonymization_id
 
         level = 'H'
         if len(content) > 32:
@@ -657,45 +648,20 @@ class Renderer:
                 return self._get_text_content(op, order, o, True)
 
         ev = self._get_ev(op, order)
-
         if not o['content']:
             return '(error)'
-
-        if o['content'] == 'other' or o['content'] == 'other_i18n':
-            if o['content'] == 'other_i18n':
-                text = str(LazyI18nString(o['text_i18n']))
-            else:
-                text = o['text']
-
-            def replace(x):
-                if x.group(1) not in self.variables:
-                    return x.group(0)
-                if x.group(1) == 'secret':
-                    # Do not use shortened version
-                    return op.secret
-                try:
-                    return self.variables[x.group(1)]['evaluate'](op, order, ev)
-                except:
-                    logger.exception('Failed to process variable.')
-                    return '(error)'
-
-            # We do not use str.format like in emails so we (a) can evaluate lazily and (b) can re-implement this
-            # 1:1 on other platforms that render PDFs through our API (libpretixprint)
-            return re.sub(r'\{([a-zA-Z0-9_]+)\}', replace, text)
-
+        if o['content'] == 'other':
+            return o['text']
         elif o['content'].startswith('itemmeta:'):
             return op.item.meta_data.get(o['content'][9:]) or ''
-
         elif o['content'].startswith('meta:'):
             return ev.meta_data.get(o['content'][5:]) or ''
-
         elif o['content'] in self.variables:
             try:
                 return self.variables[o['content']]['evaluate'](op, order, ev)
             except:
                 logger.exception('Failed to process variable.')
                 return '(error)'
-
         return ''
 
     def _draw_imagearea(self, canvas: Canvas, op: OrderPosition, order: Order, o: dict):
@@ -788,30 +754,20 @@ class Renderer:
             p.drawOn(canvas, 0, -h - ad[1])
         canvas.restoreState()
 
-    def draw_page(self, canvas: Canvas, order: Order, op: OrderPosition, show_page=True, only_page=None):
-        page_count = self.bg_pdf.getNumPages()
-
-        if not only_page and not show_page:
-            raise ValueError("only_page=None and show_page=False cannot be combined")
-
-        for page in range(page_count):
-            if only_page and only_page != page + 1:
-                continue
-            for o in self.layout:
-                if o.get('page', 1) != page + 1:
-                    continue
-                if o['type'] == "barcodearea":
-                    self._draw_barcodearea(canvas, op, order, o)
-                elif o['type'] == "imagearea":
-                    self._draw_imagearea(canvas, op, order, o)
-                elif o['type'] == "textarea":
-                    self._draw_textarea(canvas, op, order, o)
-                elif o['type'] == "poweredby":
-                    self._draw_poweredby(canvas, op, o)
-                if self.bg_pdf:
-                    canvas.setPageSize((self.bg_pdf.getPage(page).mediaBox[2], self.bg_pdf.getPage(page).mediaBox[3]))
-            if show_page:
-                canvas.showPage()
+    def draw_page(self, canvas: Canvas, order: Order, op: OrderPosition, show_page=True):
+        for o in self.layout:
+            if o['type'] == "barcodearea":
+                self._draw_barcodearea(canvas, op, o)
+            elif o['type'] == "imagearea":
+                self._draw_imagearea(canvas, op, order, o)
+            elif o['type'] == "textarea":
+                self._draw_textarea(canvas, op, order, o)
+            elif o['type'] == "poweredby":
+                self._draw_poweredby(canvas, op, o)
+            if self.bg_pdf:
+                canvas.setPageSize((self.bg_pdf.getPage(0).mediaBox[2], self.bg_pdf.getPage(0).mediaBox[3]))
+        if show_page:
+            canvas.showPage()
 
     def render_background(self, buffer, title=_('Ticket')):
         if settings.PDFTK:
@@ -824,7 +780,7 @@ class Renderer:
                 subprocess.run([
                     settings.PDFTK,
                     os.path.join(d, 'front.pdf'),
-                    'multibackground',
+                    'background',
                     os.path.join(d, 'back.pdf'),
                     'output',
                     os.path.join(d, 'out.pdf'),
@@ -838,8 +794,8 @@ class Renderer:
             new_pdf = PdfFileReader(buffer)
             output = PdfFileWriter()
 
-            for i, page in enumerate(new_pdf.pages):
-                bg_page = copy.copy(self.bg_pdf.getPage(i))
+            for page in new_pdf.pages:
+                bg_page = copy.copy(self.bg_pdf.getPage(0))
                 bg_page.mergePage(page)
                 output.addPage(bg_page)
 

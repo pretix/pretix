@@ -23,7 +23,7 @@
     </script>
     <div class="row">
         <div class="col-md-9">
-            <div class="panel panel-default panel-pdf-editor">
+            <div class="panel panel-default">
                 <div class="panel-heading">
                     <div class="pull-right flip">
                         <div class="btn-group">
@@ -48,8 +48,6 @@
                     {% trans "Editor" %}
                 </div>
                 <div class="panel-body">
-                    <ul class="nav nav-pills" id="page_nav">
-                    </ul>
                     <div id="editor-canvas-area">
                         <canvas id="pdf-canvas"
                                 data-pdf-url="{{ pdf }}"
@@ -195,7 +193,7 @@
                             <span class="btn btn-default fileinput-button background-button">
                                 <i class="fa fa-upload"></i>
                                 <span>{% trans "Upload custom background" %}</span>
-                                <input id="fileupload" type="file" name="background" accept="application/pdf">
+                                <input id="fileupload" type="file" name="background">
                             </span>
                         </div>
                         <div class="col-sm-12 help-inline">
@@ -204,14 +202,6 @@
                                     After you changed the page size, you need to create a new empty background. If you
                                     want to use a custom background, it already needs to have the correct size.
                                 {% endblocktrans %}
-                            </p>
-                        </div>
-                        <div class="col-sm-12">
-                            <p>
-                                <a class="btn btn-default background-download-button" href="{{ pdf }}" target="_blank">
-                                    <i class="fa fa-download"></i>
-                                    <span>{% trans "Download current background" %}</span>
-                                </a>
                             </p>
                         </div>
                     </div>
@@ -367,9 +357,9 @@
                             </select>
                         </div>
                     </div>
-                    <div class="row control-group text textcontent">
+                    <div class="row control-group text">
                         <div class="col-sm-12">
-                            <label>{% trans "Content" %}</label><br>
+                            <label>{% trans "Text content" %}</label><br>
                             <select class="input-block-level form-control" id="toolbox-content">
                                 {% for varname, var in variables.items %}
                                     <option data-sample="{{ var.editor_sample }}" value="{{ varname }}">{{ var.label }}</option>
@@ -384,16 +374,10 @@
                                         {% trans "Item attribute:" %} {{ p.name }}
                                     </option>
                                 {% endfor %}
-                                <option value="other_i18n">{% trans "Other… (multilingual)" %}</option>
                                 <option value="other">{% trans "Other…" %}</option>
                             </select>
                             <textarea type="text" value="" class="input-block-level form-control"
                                     id="toolbox-content-other"></textarea>
-                            <div class="i18n-form-group" id="toolbox-content-other-i18n">
-                                {% for l in request.event.settings.locales %}
-                                    <textarea id="toolbox-content-other-{{ l }}" rows="3" class="input-block-level form-control" title="{{ l }}" lang="{{ l }}"></textarea>
-                                {% endfor %}
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -417,20 +401,13 @@
                         <span class="fa fa-qrcode"></span>
                         {% trans "QR code for Lead Scanning" %}
                     </button>
-                    <button class="btn btn-default btn-block" id="editor-add-qrcode-other"
-                            data-content="secret"
-                            disabled>
-                        <span class="fa fa-qrcode"></span>
-                        {% trans "Other QR code" %}
-                    </button>
                     <button class="btn btn-default btn-block" id="editor-add-poweredby"
                             data-content="dark"
                             disabled>
                         <span class="fa fa-image"></span>
                         {% trans "pretix Logo" %}
                     </button>
-                    <button class="btn btn-default btn-block" id="editor-add-image" disabled
-                        data-toggle="tooltip" title="{% trans "You can use this to add user-uploaded pictures from questions or pictures generated by plugins. If you want to embed a logo or other images, use a custom background instead." %}">
+                    <button class="btn btn-default btn-block" id="editor-add-image" disabled>
                         <span class="fa fa-image"></span>
                         {% trans "Dynamic image" %}
                     </button>

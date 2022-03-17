@@ -181,7 +181,7 @@ def render_pdf(event, positions, opt):
             offsety = opt['margins'][2] + (opt['rows'] - 1 - i // opt['cols']) * opt['offsets'][1]
             p.translate(offsetx, offsety)
             with language(op.order.locale, op.order.event.settings.region):
-                r.draw_page(p, op.order, op, show_page=False, only_page=1)
+                r.draw_page(p, op.order, op, show_page=False)
             p.translate(-offsetx, -offsety)
 
         if opt['pagesize']:
