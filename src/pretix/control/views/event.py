@@ -92,6 +92,7 @@ from ...base.i18n import language
 from ...base.models.items import (
     Item, ItemCategory, ItemMetaProperty, Question, Quota,
 )
+from ...base.services.mail import TolerantDict
 from ...base.settings import SETTINGS_AFFECTING_CSS, LazyI18nStringList
 from ..logdisplay import OVERVIEW_BANLIST
 from . import CreateView, PaginationMixin, UpdateView
@@ -729,7 +730,7 @@ class MailSettingsRendererPreview(MailSettingsPreview):
 
     def get(self, request, *args, **kwargs):
         v = str(request.event.settings.mail_text_order_placed)
-        v = v.format_map(self.placeholders('mail_text_order_placed'))
+        v = v.format_map(TolerantDict(self.placeholders('mail_text_order_placed')))
         renderers = request.event.get_html_mail_renderers()
         if request.GET.get('renderer') in renderers:
             with rolledback_transaction():
