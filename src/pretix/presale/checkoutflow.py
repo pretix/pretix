@@ -880,7 +880,6 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
                     sales_channel=request.sales_channel.identifier,
                 )
                 diff = cm.recompute_final_prices_and_taxes()
-                print("diff", diff)
             except TaxRule.SaleNotAllowed:
                 messages.error(request,
                                _("Unfortunately, based on the invoice address you entered, we're not able to sell you "
