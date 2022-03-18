@@ -217,6 +217,30 @@ def timeline_for_event(event, subevent=None):
                     })
                 ))
 
+    for d in event.discounts.filter(Q(available_from__isnull=False) | Q(available_until__isnull=False)):
+        if d.available_from:
+            tl.append(TimelineEvent(
+                event=event, subevent=subevent,
+                datetime=d.available_from,
+                description=pgettext_lazy('timeline', 'Discount "{name}" becomes active').format(name=str(d)),
+                edit_url=reverse('control:event.items.discounts.edit', kwargs={
+                    'event': event.slug,
+                    'organizer': event.organizer.slug,
+                    'discount': d.pk,
+                })
+            ))
+        if d.available_until:
+            tl.append(TimelineEvent(
+                event=event, subevent=subevent,
+                datetime=d.available_until,
+                description=pgettext_lazy('timeline', 'Discount "{name}" becomes inactive').format(name=str(d)),
+                edit_url=reverse('control:event.items.discounts.edit', kwargs={
+                    'event': event.slug,
+                    'organizer': event.organizer.slug,
+                    'discount': d.pk,
+                })
+            ))
+
     for p in event.items.filter(Q(available_from__isnull=False) | Q(available_until__isnull=False)):
         if p.available_from:
             tl.append(TimelineEvent(
