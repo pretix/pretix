@@ -2385,7 +2385,8 @@ def perform_order(self, event: Event, payment_provider: str, positions: List[str
 _unset = object()
 
 
-def _try_auto_refund(order, manual_refund=False, allow_partial=False, source=OrderRefund.REFUND_SOURCE_BUYER,
+def _try_auto_refund(order, auto_refund=True, manual_refund=False, allow_partial=False,
+                     source=OrderRefund.REFUND_SOURCE_BUYER,
                      refund_as_giftcard=False, giftcard_expires=_unset, giftcard_conditions=None, comment=None):
     notify_admin = False
     error = False
@@ -2395,9 +2396,9 @@ def _try_auto_refund(order, manual_refund=False, allow_partial=False, source=Ord
     if refund_amount <= Decimal('0.00'):
         return
 
+    can_auto_refund_sum = 0
+
     if refund_as_giftcard:
-        proposals = {}
-        can_auto_refund = True
         can_auto_refund_sum = refund_amount
         with transaction.atomic():
             giftcard = order.event.organizer.issued_gift_cards.create(
@@ -2437,42 +2438,41 @@ def _try_auto_refund(order, manual_refund=False, allow_partial=False, source=Ord
                 if r.state != OrderRefund.REFUND_STATE_DONE:
                     notify_admin = True
 
-    else:
+    elif auto_refund:
         proposals = order.propose_auto_refunds(refund_amount)
         can_auto_refund_sum = sum(proposals.values())
-        can_auto_refund = (allow_partial and can_auto_refund_sum) or can_auto_refund_sum == refund_amount
-    if can_auto_refund:
-        for p, value in proposals.items():
-            with transaction.atomic():
-                r = order.refunds.create(
-                    payment=p,
-                    source=source,
-                    state=OrderRefund.REFUND_STATE_CREATED,
-                    amount=value,
-                    comment=comment,
-                    provider=p.provider
-                )
-                order.log_action('pretix.event.order.refund.created', {
-                    'local_id': r.local_id,
-                    'provider': r.provider,
-                })
-
-            try:
-                r.payment_provider.execute_refund(r)
-            except PaymentException as e:
+        if (allow_partial and can_auto_refund_sum) or can_auto_refund_sum == refund_amount:
+            for p, value in proposals.items():
                 with transaction.atomic():
-                    r.state = OrderRefund.REFUND_STATE_FAILED
-                    r.save()
-                    order.log_action('pretix.event.order.refund.failed', {
+                    r = order.refunds.create(
+                        payment=p,
+                        source=source,
+                        state=OrderRefund.REFUND_STATE_CREATED,
+                        amount=value,
+                        comment=comment,
+                        provider=p.provider
+                    )
+                    order.log_action('pretix.event.order.refund.created', {
                         'local_id': r.local_id,
                         'provider': r.provider,
-                        'error': str(e)
                     })
-                error = True
-                notify_admin = True
-            else:
-                if r.state not in (OrderRefund.REFUND_STATE_TRANSIT, OrderRefund.REFUND_STATE_DONE):
+
+                try:
+                    r.payment_provider.execute_refund(r)
+                except PaymentException as e:
+                    with transaction.atomic():
+                        r.state = OrderRefund.REFUND_STATE_FAILED
+                        r.save()
+                        order.log_action('pretix.event.order.refund.failed', {
+                            'local_id': r.local_id,
+                            'provider': r.provider,
+                            'error': str(e)
+                        })
+                    error = True
                     notify_admin = True
+                else:
+                    if r.state not in (OrderRefund.REFUND_STATE_TRANSIT, OrderRefund.REFUND_STATE_DONE):
+                        notify_admin = True
 
     if refund_amount - can_auto_refund_sum > Decimal('0.00'):
         if manual_refund:
