@@ -27762,7 +27762,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/index.html:317
 #: pretix/presale/templates/pretixpresale/event/resend_link.html:4
 #: pretix/presale/templates/pretixpresale/event/resend_link.html:11
-msgid "Resend order links"
+msgid "Resend order link"
 msgstr "Renvoyer les liens de la commande"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:12

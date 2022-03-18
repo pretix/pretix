@@ -15873,7 +15873,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:45
 #, fuzzy
-#| msgid "Resend order links"
+#| msgid "Resend order link"
 msgid "Send password reset link"
 msgstr "Send bestillingslenke"
 
@@ -23066,7 +23066,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/index.html:317
 #: pretix/presale/templates/pretixpresale/event/resend_link.html:4
 #: pretix/presale/templates/pretixpresale/event/resend_link.html:11
-msgid "Resend order links"
+msgid "Resend order link"
 msgstr "Send bestillingslenke"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:12

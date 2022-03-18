@@ -25740,8 +25740,8 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/index.html:317
 #: pretix/presale/templates/pretixpresale/event/resend_link.html:4
 #: pretix/presale/templates/pretixpresale/event/resend_link.html:11
-msgid "Resend order links"
-msgstr "Links erneut senden"
+msgid "Resend order link"
+msgstr "Link erneut senden"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:12
 #: pretix/presale/templates/pretixpresale/event/order.html:29
