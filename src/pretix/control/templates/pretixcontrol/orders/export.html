@@ -11,7 +11,8 @@
         {% endif %}
     </h1>
     {% for e in exporters %}
-        <details class="panel panel-default" {% if "identifier" in request.GET or "exporter" in request.POST %}open{% endif %}>
+        <details class="panel panel-default"
+            {% if request.GET.identifier == e.identifier or request.POST.exporter == e.identifier %}open{% endif %}>
             <summary class="panel-heading">
                 <h3 class="panel-title">
                     {{ e.verbose_name }}

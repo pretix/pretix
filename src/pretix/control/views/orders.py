@@ -2242,7 +2242,7 @@ class ExportMixin:
             }
 
             ex.form = ExporterForm(
-                data=(self.request.POST if self.request.method == 'POST' else None),
+                data=(self.request.POST if self.request.method == 'POST' and self.request.POST.get("exporter") == ex.identifier else None),
                 prefix=ex.identifier,
                 initial=initial
             )
