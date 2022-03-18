@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-02-25 10:05+0000\n"
+"POT-Creation-Date: 2022-03-18 13:33+0000\n"
 "PO-Revision-Date: 2021-08-09 13:10+0000\n"
 "Last-Translator: Svyatoslav <slava@digitalarthouse.eu>\n"
 "Language-Team: Russian <https://translate.pretix.eu/projects/pretix/pretix-"
@@ -386,58 +386,54 @@ msgstr ""
 msgid "minutes"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:69
-msgid "Lead Scan QR"
-msgstr "Lead Scan QR"
-
 #: pretix/static/pretixcontrol/js/ui/editor.js:71
 msgid "Check-in QR"
 msgstr "QR-код для регистрации"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:313
+#: pretix/static/pretixcontrol/js/ui/editor.js:376
 msgid "The PDF background file could not be loaded for the following reason:"
 msgstr "Не удалось загрузить фоновый файл PDF по следующей причине:"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:521
+#: pretix/static/pretixcontrol/js/ui/editor.js:615
 msgid "Group of objects"
 msgstr "Группа объектов"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:527
+#: pretix/static/pretixcontrol/js/ui/editor.js:621
 msgid "Text object"
 msgstr "Текстовый объект"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:529
+#: pretix/static/pretixcontrol/js/ui/editor.js:623
 msgid "Barcode area"
 msgstr "Область штрих-кода"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:531
+#: pretix/static/pretixcontrol/js/ui/editor.js:625
 #, fuzzy
 #| msgid "Barcode area"
 msgid "Image area"
 msgstr "Область штрих-кода"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:533
+#: pretix/static/pretixcontrol/js/ui/editor.js:627
 msgid "Powered by pretix"
 msgstr "На базе pretix"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:535
+#: pretix/static/pretixcontrol/js/ui/editor.js:629
 msgid "Object"
 msgstr "Объект"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:539
+#: pretix/static/pretixcontrol/js/ui/editor.js:633
 msgid "Ticket design"
 msgstr "Дизайн билета"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:813
+#: pretix/static/pretixcontrol/js/ui/editor.js:923
 msgid "Saving failed."
 msgstr "Сохранить не удалось."
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:862
-#: pretix/static/pretixcontrol/js/ui/editor.js:901
+#: pretix/static/pretixcontrol/js/ui/editor.js:973
+#: pretix/static/pretixcontrol/js/ui/editor.js:1012
 msgid "Error while uploading your PDF file, please try again."
 msgstr "Ошибка при загрузке файла PDF, попробуйте ещё раз."
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:886
+#: pretix/static/pretixcontrol/js/ui/editor.js:997
 msgid "Do you really want to leave the editor without saving your changes?"
 msgstr "Вы действительно хотите выйти из редактора без сохранения изменений?"
 
@@ -567,22 +563,22 @@ msgstr "от %(currency)s %(price)s"
 msgid "Please enter the amount the organizer can keep."
 msgstr ""
 
-#: pretix/static/pretixpresale/js/ui/main.js:361
+#: pretix/static/pretixpresale/js/ui/main.js:364
 msgid "Please enter a quantity for one of the ticket types."
 msgstr "Пожалуйста, введите количество для одного из типов билетов."
 
-#: pretix/static/pretixpresale/js/ui/main.js:397
+#: pretix/static/pretixpresale/js/ui/main.js:400
 #, fuzzy
 #| msgid "Cart expired"
 msgid "required"
 msgstr "Срок действия корзины истёк"
 
-#: pretix/static/pretixpresale/js/ui/main.js:500
-#: pretix/static/pretixpresale/js/ui/main.js:519
+#: pretix/static/pretixpresale/js/ui/main.js:503
+#: pretix/static/pretixpresale/js/ui/main.js:522
 msgid "Time zone:"
 msgstr ""
 
-#: pretix/static/pretixpresale/js/ui/main.js:510
+#: pretix/static/pretixpresale/js/ui/main.js:513
 msgid "Your local time:"
 msgstr ""
 
@@ -859,6 +855,9 @@ msgstr "ноябрь"
 #: pretix/static/pretixpresale/js/widget/widget.js:78
 msgid "December"
 msgstr "декабрь"
+
+#~ msgid "Lead Scan QR"
+#~ msgstr "Lead Scan QR"
 
 #, fuzzy
 #~| msgid "Check-in QR"

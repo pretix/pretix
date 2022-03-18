@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-02-25 10:05+0000\n"
+"POT-Creation-Date: 2022-03-18 13:33+0000\n"
 "PO-Revision-Date: 2021-12-09 15:49+0000\n"
 "Last-Translator: Ilona Zilgalve <i.zilgalve@riga-jurmala.com>\n"
 "Language-Team: Latvian <https://translate.pretix.eu/projects/pretix/pretix-"
@@ -356,57 +356,53 @@ msgstr "Pievienot nosacījumu"
 msgid "minutes"
 msgstr "minūtes"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:69
-msgid "Lead Scan QR"
-msgstr "Galvenās skenēšanas QR"
-
 #: pretix/static/pretixcontrol/js/ui/editor.js:71
 msgid "Check-in QR"
 msgstr "Reģistrācijas QR"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:313
+#: pretix/static/pretixcontrol/js/ui/editor.js:376
 msgid "The PDF background file could not be loaded for the following reason:"
 msgstr "Fona PDF fails nevarēja ielādēties sekojoša iemesla dēļ:"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:521
+#: pretix/static/pretixcontrol/js/ui/editor.js:615
 msgid "Group of objects"
 msgstr "Objektu grupa"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:527
+#: pretix/static/pretixcontrol/js/ui/editor.js:621
 msgid "Text object"
 msgstr "Teksta objekts"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:529
+#: pretix/static/pretixcontrol/js/ui/editor.js:623
 msgid "Barcode area"
 msgstr "Svītru koda lauks"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:531
+#: pretix/static/pretixcontrol/js/ui/editor.js:625
 msgid "Image area"
 msgstr "Attēla lauks"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:533
+#: pretix/static/pretixcontrol/js/ui/editor.js:627
 msgid "Powered by pretix"
 msgstr "Pretix atbalstīts"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:535
+#: pretix/static/pretixcontrol/js/ui/editor.js:629
 msgid "Object"
 msgstr "Objekts"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:539
+#: pretix/static/pretixcontrol/js/ui/editor.js:633
 msgid "Ticket design"
 msgstr "Biļetes dizains"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:813
+#: pretix/static/pretixcontrol/js/ui/editor.js:923
 msgid "Saving failed."
 msgstr "Saglabāšana neizdevās."
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:862
-#: pretix/static/pretixcontrol/js/ui/editor.js:901
+#: pretix/static/pretixcontrol/js/ui/editor.js:973
+#: pretix/static/pretixcontrol/js/ui/editor.js:1012
 msgid "Error while uploading your PDF file, please try again."
 msgstr ""
 "Radusies kļūda augšupielādējot jūsu PDF failu, lūdzu, mēģiniet vēlreiz."
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:886
+#: pretix/static/pretixcontrol/js/ui/editor.js:997
 msgid "Do you really want to leave the editor without saving your changes?"
 msgstr ""
 "Vai jūs tiešām vēlaties iziet no rediģēšanas lauka bez veikto izmaiņu "
@@ -530,20 +526,20 @@ msgstr "Jūs saņemsiet %(valūta)s %(cena)s atpakaļ"
 msgid "Please enter the amount the organizer can keep."
 msgstr "Lūdzu ievadiet skaitu (summu), ko pasākuma organizators var paturēt."
 
-#: pretix/static/pretixpresale/js/ui/main.js:361
+#: pretix/static/pretixpresale/js/ui/main.js:364
 msgid "Please enter a quantity for one of the ticket types."
 msgstr "Lūdzu, ievadiet nepieciešamo daudzumu izvēlētajam biļešu veidam."
 
-#: pretix/static/pretixpresale/js/ui/main.js:397
+#: pretix/static/pretixpresale/js/ui/main.js:400
 msgid "required"
 msgstr "obligāts"
 
-#: pretix/static/pretixpresale/js/ui/main.js:500
-#: pretix/static/pretixpresale/js/ui/main.js:519
+#: pretix/static/pretixpresale/js/ui/main.js:503
+#: pretix/static/pretixpresale/js/ui/main.js:522
 msgid "Time zone:"
 msgstr "Laika zona:"
 
-#: pretix/static/pretixpresale/js/ui/main.js:510
+#: pretix/static/pretixpresale/js/ui/main.js:513
 msgid "Your local time:"
 msgstr "Vietējais laiks:"
 
@@ -823,6 +819,9 @@ msgstr "Novembris"
 #: pretix/static/pretixpresale/js/widget/widget.js:78
 msgid "December"
 msgstr "Decembris"
+
+#~ msgid "Lead Scan QR"
+#~ msgstr "Galvenās skenēšanas QR"
 
 #, fuzzy
 #~| msgid "Check-in QR"

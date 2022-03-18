@@ -7,11 +7,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-02-25 10:05+0000\n"
+"POT-Creation-Date: 2022-03-18 13:33+0000\n"
 "PO-Revision-Date: 2022-03-03 07:00+0000\n"
 "Last-Translator: MaLund13 <mart.lund13@gmail.com>\n"
-"Language-Team: Swedish <https://translate.pretix.eu/projects/pretix/"
-"pretix-js/sv/>\n"
+"Language-Team: Swedish <https://translate.pretix.eu/projects/pretix/pretix-"
+"js/sv/>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -353,56 +353,52 @@ msgstr "Lägg till villkor"
 msgid "minutes"
 msgstr "minuter"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:69
-msgid "Lead Scan QR"
-msgstr "Skanna QR-koden"
-
 #: pretix/static/pretixcontrol/js/ui/editor.js:71
 msgid "Check-in QR"
 msgstr "QR-kod för att Checka in"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:313
+#: pretix/static/pretixcontrol/js/ui/editor.js:376
 msgid "The PDF background file could not be loaded for the following reason:"
 msgstr "Bakgrunds-filen till PDFen kunde inte laddas av följande orsak:"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:521
+#: pretix/static/pretixcontrol/js/ui/editor.js:615
 msgid "Group of objects"
 msgstr "Grupp av objekt"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:527
+#: pretix/static/pretixcontrol/js/ui/editor.js:621
 msgid "Text object"
 msgstr "Textobjekt"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:529
+#: pretix/static/pretixcontrol/js/ui/editor.js:623
 msgid "Barcode area"
 msgstr "QR-kod-område"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:531
+#: pretix/static/pretixcontrol/js/ui/editor.js:625
 msgid "Image area"
 msgstr "Bildområde"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:533
+#: pretix/static/pretixcontrol/js/ui/editor.js:627
 msgid "Powered by pretix"
 msgstr "Drivs av pretix"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:535
+#: pretix/static/pretixcontrol/js/ui/editor.js:629
 msgid "Object"
 msgstr "Objekt"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:539
+#: pretix/static/pretixcontrol/js/ui/editor.js:633
 msgid "Ticket design"
 msgstr "Biljettdesign"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:813
+#: pretix/static/pretixcontrol/js/ui/editor.js:923
 msgid "Saving failed."
 msgstr "Misslyckades att spara."
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:862
-#: pretix/static/pretixcontrol/js/ui/editor.js:901
+#: pretix/static/pretixcontrol/js/ui/editor.js:973
+#: pretix/static/pretixcontrol/js/ui/editor.js:1012
 msgid "Error while uploading your PDF file, please try again."
 msgstr "Ett fel uppstod när du laddade upp din PDF-fil, vänligen försök igen."
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:886
+#: pretix/static/pretixcontrol/js/ui/editor.js:997
 msgid "Do you really want to leave the editor without saving your changes?"
 msgstr "Vill du verkligen lämna editorn utan att spara dina ändringar?"
 
@@ -520,20 +516,20 @@ msgstr "Du får %(amount)s %(currency)s tillbaka"
 msgid "Please enter the amount the organizer can keep."
 msgstr "Vänligen ange det belopp som arrangören kan behålla."
 
-#: pretix/static/pretixpresale/js/ui/main.js:361
+#: pretix/static/pretixpresale/js/ui/main.js:364
 msgid "Please enter a quantity for one of the ticket types."
 msgstr "Vänligen ange en kvantitet för en av biljettyperna."
 
-#: pretix/static/pretixpresale/js/ui/main.js:397
+#: pretix/static/pretixpresale/js/ui/main.js:400
 msgid "required"
 msgstr "obligatorisk"
 
-#: pretix/static/pretixpresale/js/ui/main.js:500
-#: pretix/static/pretixpresale/js/ui/main.js:519
+#: pretix/static/pretixpresale/js/ui/main.js:503
+#: pretix/static/pretixpresale/js/ui/main.js:522
 msgid "Time zone:"
 msgstr "Tidszon:"
 
-#: pretix/static/pretixpresale/js/ui/main.js:510
+#: pretix/static/pretixpresale/js/ui/main.js:513
 msgid "Your local time:"
 msgstr "Din lokala tid:"
 
@@ -812,6 +808,9 @@ msgstr "November"
 #: pretix/static/pretixpresale/js/widget/widget.js:78
 msgid "December"
 msgstr "December"
+
+#~ msgid "Lead Scan QR"
+#~ msgstr "Skanna QR-koden"
 
 #, fuzzy
 #~| msgid "Check-in QR"

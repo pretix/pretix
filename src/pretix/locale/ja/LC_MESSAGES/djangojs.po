@@ -7,11 +7,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-02-25 10:05+0000\n"
+"POT-Creation-Date: 2022-03-18 13:33+0000\n"
 "PO-Revision-Date: 2022-03-15 00:00+0000\n"
 "Last-Translator: Yuriko Matsunami <y.matsunami@enobyte.com>\n"
-"Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/"
-"pretix-js/ja/>\n"
+"Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/pretix-"
+"js/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -354,56 +354,52 @@ msgstr "条件を追加"
 msgid "minutes"
 msgstr "分"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:69
-msgid "Lead Scan QR"
-msgstr "QRコード読み込み"
-
 #: pretix/static/pretixcontrol/js/ui/editor.js:71
 msgid "Check-in QR"
 msgstr "チェックイン用QRコード"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:313
+#: pretix/static/pretixcontrol/js/ui/editor.js:376
 msgid "The PDF background file could not be loaded for the following reason:"
 msgstr "以下の理由によりPDFファイルの読み込みに失敗しました："
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:521
+#: pretix/static/pretixcontrol/js/ui/editor.js:615
 msgid "Group of objects"
 msgstr "オブジェクトグループ"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:527
+#: pretix/static/pretixcontrol/js/ui/editor.js:621
 msgid "Text object"
 msgstr "テキストオブジェクト"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:529
+#: pretix/static/pretixcontrol/js/ui/editor.js:623
 msgid "Barcode area"
 msgstr "バーコードエリア"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:531
+#: pretix/static/pretixcontrol/js/ui/editor.js:625
 msgid "Image area"
 msgstr "画像エリア"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:533
+#: pretix/static/pretixcontrol/js/ui/editor.js:627
 msgid "Powered by pretix"
 msgstr "Pretixのイベントチケット売り場"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:535
+#: pretix/static/pretixcontrol/js/ui/editor.js:629
 msgid "Object"
 msgstr "オブジェクト"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:539
+#: pretix/static/pretixcontrol/js/ui/editor.js:633
 msgid "Ticket design"
 msgstr "チケットのデザイン"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:813
+#: pretix/static/pretixcontrol/js/ui/editor.js:923
 msgid "Saving failed."
 msgstr "保存できませんでした。"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:862
-#: pretix/static/pretixcontrol/js/ui/editor.js:901
+#: pretix/static/pretixcontrol/js/ui/editor.js:973
+#: pretix/static/pretixcontrol/js/ui/editor.js:1012
 msgid "Error while uploading your PDF file, please try again."
 msgstr "PDFのアップロード中に問題が発生しました。再試行してください。"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:886
+#: pretix/static/pretixcontrol/js/ui/editor.js:997
 msgid "Do you really want to leave the editor without saving your changes?"
 msgstr "変更内容を保存せずに編集を終了しますか？"
 
@@ -519,20 +515,20 @@ msgstr "%(currency)s %(amount)s が払い戻されます"
 msgid "Please enter the amount the organizer can keep."
 msgstr "イベント開催者が受け取る料金を入力してください。"
 
-#: pretix/static/pretixpresale/js/ui/main.js:361
+#: pretix/static/pretixpresale/js/ui/main.js:364
 msgid "Please enter a quantity for one of the ticket types."
 msgstr "商品の総数を入力してください。"
 
-#: pretix/static/pretixpresale/js/ui/main.js:397
+#: pretix/static/pretixpresale/js/ui/main.js:400
 msgid "required"
 msgstr "必須"
 
-#: pretix/static/pretixpresale/js/ui/main.js:500
-#: pretix/static/pretixpresale/js/ui/main.js:519
+#: pretix/static/pretixpresale/js/ui/main.js:503
+#: pretix/static/pretixpresale/js/ui/main.js:522
 msgid "Time zone:"
 msgstr "タイムゾーン："
 
-#: pretix/static/pretixpresale/js/ui/main.js:510
+#: pretix/static/pretixpresale/js/ui/main.js:513
 msgid "Your local time:"
 msgstr "現地時間："
 
@@ -810,3 +806,6 @@ msgstr "１１月"
 #: pretix/static/pretixpresale/js/widget/widget.js:78
 msgid "December"
 msgstr "１２月"
+
+#~ msgid "Lead Scan QR"
+#~ msgstr "QRコード読み込み"
