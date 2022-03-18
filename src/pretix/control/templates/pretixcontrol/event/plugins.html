@@ -23,30 +23,29 @@
                     <legend>{{ catlabel }}</legend>
                     <div class="plugin-list">
                         {% for plugin in plist %}
-                            <div class="plugin-container plugin-container-half">
-                                <div class="panel panel-default panel-plugin {% if plugin.featured %}featured-plugin{% endif %}">
+                            <div class="plugin-container {% if plugin.featured %}featured-plugin{% endif %}">
+                            {% if plugin.featured %}
+                               <div class="panel panel-default">
                                     <div class="panel-body">
-                                        {% if plugin.picture %}
-                                            <img src="{% static plugin.picture %}" class="plugin-picture">
-                                        {% elif not plugin.featured and has_pictures %}
-                                            <div class="plugin-picture">
-                                            </div>
-                                        {% endif %}
+                            {% endif %}
                                         <div class="plugin-text">
+                                        {% if plugin.featured or plugin.experimental %}
+                                            <p class="text-muted">
                                             {% if plugin.featured %}
-                                                <span class="text-muted">
-                                                    <span class="fa fa-thumbs-up" aria-hidden="true"></span>
-                                                    {% trans "Top recommendation" %}<br>
-                                                </span>
+                                                <span class="fa fa-thumbs-up" aria-hidden="true"></span>
+                                                {% trans "Top recommendation" %}
                                             {% endif %}
                                             {% if plugin.experimental %}
-                                                <span class="text-muted">
-                                                    <span class="fa fa-flask" aria-hidden="true"></span>
-                                                    {% trans "Experimental feature" %}<br>
-                                                </span>
+                                                <span class="fa fa-flask" aria-hidden="true"></span>
+                                                {% trans "Experimental feature" %}
                                             {% endif %}
+                                            <p>
+                                        {% endif %}
+                                        {% if plugin.picture %}
+                                            <p><img src="{% static plugin.picture %}" class="plugin-picture"></p>
+                                        {% endif %}
                                             <h4>
-                                                {{ plugin.name }}
+                                                {{ plugin.name }} <span class="text-muted text-sm">{{ plugin.version }}</span>
                                                 {% if plugin.module in plugins_active %}
                                                     <span class="label label-success">
                                                     <span class="fa fa-check" aria-hidden="true"></span>
@@ -65,18 +64,20 @@
                                                 <span class="text-muted">{% trans "Not available" %}</span>
                                             </div>
                                         {% elif plugin.module in plugins_active %}
-                                            <div class="plugin-action text-right flip">
-                                                <button class="btn btn-default btn-lg" name="plugin:{{ plugin.module }}"
+                                            <div class="plugin-action flip">
+                                                <button class="btn btn-default{% if plugin.featured %} btn-lg{% endif %}" name="plugin:{{ plugin.module }}"
                                                         value="disable">{% trans "Disable" %}</button>
                                             </div>
                                         {% else %}
-                                            <div class="plugin-action text-right flip">
-                                                <button class="btn btn-primary btn-lg" name="plugin:{{ plugin.module }}"
+                                            <div class="plugin-action flip">
+                                                <button class="btn btn-primary{% if plugin.featured %} btn-lg{% endif %}" name="plugin:{{ plugin.module }}"
                                                         value="enable">{% trans "Enable" %}</button>
                                             </div>
                                         {% endif %}
+                            {% if plugin.featured %}
                                     </div>
                                 </div>
+                            {% endif %}
                             </div>
                         {% endfor %}
                     </div>
