@@ -2660,7 +2660,7 @@ class CartPosition(AbstractPosition):
             if custom_price > 100000000:
                 raise ValueError('price_too_high')
             self.custom_price_input = custom_price
-            self.custom_price_input_is_net = not self.includes_tax
+            self.custom_price_input_is_net = not False
             self.save(update_fields=['custom_price_input', 'custom_price_input_is_net'])
 
     def update_line_price(self, invoice_address, bundled_positions):

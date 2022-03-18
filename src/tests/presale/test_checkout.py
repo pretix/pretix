@@ -2106,7 +2106,8 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
         with scopes_disabled():
             cr1 = CartPosition.objects.create(
                 event=self.event, cart_id=self.session_key, item=self.ticket,
-                price=23, expires=now() - timedelta(minutes=10)
+                listed_price=23, price_after_voucher=23, custom_price_input=23, price=23,
+                expires=now() - timedelta(minutes=10)
             )
         self._set_session('payment', 'banktransfer')
 
