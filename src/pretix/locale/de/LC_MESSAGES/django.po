@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-03-21 15:59+0000\n"
-"PO-Revision-Date: 2022-02-25 10:55+0000\n"
+"PO-Revision-Date: 2022-03-21 16:46+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
 ">\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.8\n"
+"X-Generator: Weblate 4.11.2\n"
 "X-Poedit-Bookmarks: -1,-1,904,-1,-1,-1,-1,-1,-1,-1\n"
 
 #: pretix/api/auth/devicesecurity.py:28
@@ -525,10 +525,8 @@ msgstr ""
 "Rechnungsdatum korrespondiert nicht zwingend zum Bestell- oder Zahlungsdatum."
 
 #: pretix/base/exporters/events.py:47
-#, fuzzy
-#| msgid "Event date"
 msgid "Event data"
-msgstr "Veranstaltungsdatum"
+msgstr "Veranstaltungsdaten"
 
 #: pretix/base/exporters/events.py:55 pretix/base/exporters/waitinglist.py:112
 #: pretix/base/models/event.py:459 pretix/base/pdf.py:213
@@ -5322,10 +5320,8 @@ msgid "Attendee country"
 msgstr "Teilnehmer*innen-Land"
 
 #: pretix/base/pdf.py:208
-#, fuzzy
-#| msgid "Pseudonymization ID"
 msgid "Pseudonymization ID (lead scanning)"
-msgstr "Pseudonyme ID"
+msgstr "Pseudonyme ID (Lead-Scanning)"
 
 #: pretix/base/pdf.py:214 pretix/base/pdf.py:219
 msgid "Sample event name"
@@ -11306,22 +11302,16 @@ msgid "Automatically refund money if possible"
 msgstr "Geld automatisch zurückerstatten wenn möglich"
 
 #: pretix/control/forms/orders.py:753
-#, fuzzy
-#| msgid "This payment method does not support automatic refunds."
 msgid "Only available for payment method that support automatic refunds."
-msgstr "Diese Zahlungsmethode unterstützt keine automatische Erstattung."
+msgstr ""
+"Nur verfügbar für Zahlungsmethoden die automatische Erstattungen "
+"unterstützen."
 
 #: pretix/control/forms/orders.py:756
 msgid "Create refund in the manual refund to-do list"
-msgstr ""
+msgstr "Erstattung in der Todo-Liste für manuelle Erstattungen erzeugen"
 
 #: pretix/control/forms/orders.py:759
-#, fuzzy
-#| msgid ""
-#| "If checked, all payments with a payment method not supporting automatic "
-#| "refunds will be on your manual refund to-do list. Do not check if you "
-#| "want to refund some of the orders by offsetting with different orders or "
-#| "issuing gift cards."
 msgid ""
 "Manual refunds will be created which will be listed in the manual refund to-"
 "do list. When combined with the automatic refund functionally, only payments "
@@ -11329,11 +11319,13 @@ msgid ""
 "manual refund to-do list. Do not check if you want to refund some of the "
 "orders by offsetting with different orders or issuing gift cards."
 msgstr ""
-"Wenn diese Option aktiviert ist, werden Zahlungen mit einer Zahlungsart, die "
-"keine automatischen Erstattungen unterstützt, automatisch als manuelle "
-"Erstattungen auf Ihrer Erstattungsliste als \"zu erledigen\" auftauchen. "
-"Wählen Sie diese Option nicht, wenn Sie diese Bestellungen mit anderen "
-"Bestellungen verrechnen oder als Gutschein erstatten möchten."
+"Manuelle Erstattungen werden erstellt und in der Todo-Liste für manuelle "
+"Erstattungen angezeigt. Wenn diese Option mit der Option für automatische "
+"Erstattungen kombiniert wird, werden ausschließlich Zahlungen mit einer "
+"Zahlungsart, die keine automatischen Erstattungen unterstützt, automatisch "
+"als manuelle Erstattungen auf Ihrer Erstattungsliste als \"zu erledigen\" "
+"auftauchen. Wählen Sie diese Option nicht, wenn Sie diese Bestellungen mit "
+"anderen Bestellungen verrechnen oder als Gutschein erstatten möchten."
 
 #: pretix/control/forms/orders.py:765
 msgid ""
@@ -11743,10 +11735,9 @@ msgid "A voucher with one of these codes already exists."
 msgstr "Ein Gutschein mit einem der eingegebenen Codes existiert bereits."
 
 #: pretix/control/forms/vouchers.py:391
-#, fuzzy, python-brace-format
-#| msgid "The given voucher code does not exist."
+#, python-brace-format
 msgid "The voucher code {code} appears in your list twice."
-msgstr "Der ausgewählte Gutschein existiert nicht."
+msgstr "Der Gutscheincode {code} kommt in Ihrer Liste zweimal vor."
 
 #: pretix/control/forms/vouchers.py:395
 msgid ""
@@ -12119,10 +12110,9 @@ msgid "The order has been approved."
 msgstr "Die Bestellung wurde freigegeben."
 
 #: pretix/control/logdisplay.py:350
-#, fuzzy, python-brace-format
-#| msgid "The order has been denied."
+#, python-brace-format
 msgid "The order has been denied (comment: \"{comment}\")."
-msgstr "Die Bestellung wurde abgelehnt."
+msgstr "Die Bestellung wurde abgelehnt (Kommentar: \"{comment}\")."
 
 #: pretix/control/logdisplay.py:351
 #, python-brace-format
@@ -14489,10 +14479,9 @@ msgid "Update map?"
 msgstr "Übernehmen?"
 
 #: pretix/control/templates/pretixcontrol/event/fragment_plugin_description.html:5
-#, fuzzy, python-format
-#| msgid "Version %(v)s by <em>%(a)s</em>"
+#, python-format
 msgid "by <em>%(a)s</em>"
-msgstr "Version %(v)s von <em>%(a)s</em>"
+msgstr "von <em>%(a)s</em>"
 
 #: pretix/control/templates/pretixcontrol/event/fragment_plugin_description.html:14
 msgid ""
@@ -14929,10 +14918,8 @@ msgstr ""
 "Gebühren selbst zahlen müssen und nicht an Ihre Kunden weitergeben dürfen."
 
 #: pretix/control/templates/pretixcontrol/event/plugins.html:6
-#, fuzzy
-#| msgid "Available languages"
 msgid "Available plugins"
-msgstr "Verfügbare Sprachen"
+msgstr "Verfügbare Erweiterungen"
 
 #: pretix/control/templates/pretixcontrol/event/plugins.html:8
 msgid ""
@@ -14940,6 +14927,10 @@ msgid ""
 "Plugins might bring additional software functionality, connect your event to "
 "third-party services, or apply other forms of customizations."
 msgstr ""
+"Auf dieser Seite können Sie Erweiterungen auswählen, die Sie für Ihre "
+"Veranstaltung aktivieren wollen. Erweiterungen fügen der Software "
+"zusätzliche Funktionen hinzu, verbinden Ihre Veranstaltung mit anderen "
+"Online-Diensten oder nehmen andere Arten von Anpassungen vor."
 
 #: pretix/control/templates/pretixcontrol/event/plugins.html:17
 #: pretix/control/views/checkin.py:326 pretix/control/views/event.py:222
@@ -14973,14 +14964,11 @@ msgstr "Ihre Änderungen wurden gespeichert."
 
 #: pretix/control/templates/pretixcontrol/event/plugins.html:36
 msgid "Top recommendation"
-msgstr ""
+msgstr "Empfohlene Erweiterung"
 
 #: pretix/control/templates/pretixcontrol/event/plugins.html:40
-#, fuzzy
-#| msgctxt "cookie_usage"
-#| msgid "Social features"
 msgid "Experimental feature"
-msgstr "Soziale Funktionen"
+msgstr "Experimentelle Funktion"
 
 #: pretix/control/templates/pretixcontrol/event/plugins.html:63
 msgid "Incompatible"
@@ -16820,15 +16808,12 @@ msgid "including all taxes"
 msgstr "inklusive aller Steuern"
 
 #: pretix/control/templates/pretixcontrol/order/change.html:210
-#, fuzzy
-#| msgid ""
-#| "Removing this position will also remove all add-ons to this position."
 msgid ""
 "Removing or splitting this position will also remove or split all add-ons to "
 "this position."
 msgstr ""
-"Das Entfernen dieser Position wird auch alle zugehörigen Zusatzprodukte "
-"entfernen."
+"Das Entfernen oder Abspalten dieser Position wird auch alle zugehörigen "
+"Zusatzprodukte entfernen oder abspalten."
 
 #: pretix/control/templates/pretixcontrol/order/change.html:231
 #: pretix/control/templates/pretixcontrol/order/change.html:272
@@ -18801,10 +18786,8 @@ msgstr ""
 "muss dieser bereits die richtige Größe haben."
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:213
-#, fuzzy
-#| msgid "Upload custom background"
 msgid "Download current background"
-msgstr "Eigenen Hintergrund hochladen"
+msgstr "Aktuellen Hintergrund herunterladen"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:220
 msgid "Preferred language"
@@ -18883,7 +18866,7 @@ msgstr "Produkt-Eigenschaft:"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:387
 msgid "Other… (multilingual)"
-msgstr ""
+msgstr "Sonstiges… (mehrsprachig)"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:388
 msgid "Other…"
@@ -18902,10 +18885,8 @@ msgid "QR code for Lead Scanning"
 msgstr "QR-Code für Lead-Scanning"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:424
-#, fuzzy
-#| msgid "Order code"
 msgid "Other QR code"
-msgstr "Bestellnummer"
+msgstr "Anderer QR-Code"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:430
 msgid "pretix Logo"
@@ -18917,6 +18898,9 @@ msgid ""
 "generated by plugins. If you want to embed a logo or other images, use a "
 "custom background instead."
 msgstr ""
+"Sie können diese Funktion nutzen um dynamische Bilder z.B. aus Fragefeldern "
+"oder aus Erweiterungen hochzuladen. Wenn Sie ein Logo oder andere statische "
+"Bilder einbinden wollen, nutzen Sie stattdessen einen eigenen Hintergrund."
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:435
 msgid "Dynamic image"
@@ -21544,7 +21528,7 @@ msgstr "Bitte nur PDF-Dateien hochladen."
 #: pretix/control/views/pdf.py:203
 #, python-brace-format
 msgid "Unfortunately, we were unable to process this PDF file ({reason})."
-msgstr ""
+msgstr "Wir konnten diese PDF-Datei leider nicht verarbeiten ({reason})."
 
 #: pretix/control/views/shredder.py:148
 msgid "The selected data was deleted successfully."
@@ -21833,6 +21817,9 @@ msgid ""
 "download the badges in the backend or automatically print them with our "
 "check-in apps."
 msgstr ""
+"Automatisch Badges oder Namensschilder für Ihre Teilnehmer generieren. Sie "
+"können die Badges im Backend herunterladen oder automatisch mit unseren "
+"Check-in-Apps am Einlass ausdrucken."
 
 #: pretix/plugins/badges/exporters.py:77
 msgid "One badge per page"
@@ -22010,6 +21997,8 @@ msgid ""
 "Accept payments from your customers using classical wire transfer methods "
 "with your own bank account."
 msgstr ""
+"Nehmen Sie Zahlungen von Kunden per herkömmlicher Banküberweisung über Ihre "
+"eigenes Bankkonto entgegen."
 
 #: pretix/plugins/banktransfer/apps.py:53
 msgid ""
@@ -22827,13 +22816,8 @@ msgid "All check-in lists"
 msgstr "Alle Check-in-Listen"
 
 #: pretix/plugins/manualpayment/apps.py:37
-#, fuzzy
-#| msgid ""
-#| "This plugin adds a customizable payment method for manual processing."
 msgid "A fully customizable payment method for manual processing."
-msgstr ""
-"Diese Erweiterung fügt eine anpassbare Zahlungsmethode für manuelle Zahlung "
-"hinzu."
+msgstr "Eine vollständig anpassbare Zahlungsart für manuelle Abwicklung."
 
 #: pretix/plugins/paypal/apps.py:44 pretix/plugins/paypal/apps.py:47
 #: pretix/plugins/paypal/payment.py:74
@@ -22845,6 +22829,8 @@ msgid ""
 "Accept payments with your PayPal account. PayPal is one of the most popular "
 "payment methods world-wide."
 msgstr ""
+"Nehmen Sie Zahlungen mit Ihrem PayPal-Konto entgegen. PayPal ist eine der "
+"beliebtesten Zahlungsarten weltweit."
 
 #: pretix/plugins/paypal/payment.py:90
 msgid ""
@@ -23133,12 +23119,8 @@ msgid "Report exporter"
 msgstr "Berichts-Export"
 
 #: pretix/plugins/reports/apps.py:51
-#, fuzzy
-#| msgid ""
-#| "This plugin allows you to generate printable reports about your sales."
 msgid "Generate printable reports about your sales."
-msgstr ""
-"Dieses Plugin erlaubt, ausdruckbare Berichte über Ihre Verkäufe zu erstellen."
+msgstr "Erstellen Sie ausdruckbare Berichte über Ihre Verkaufszahlen."
 
 #: pretix/plugins/reports/exporters.py:154
 #, python-format
@@ -23259,6 +23241,7 @@ msgstr ""
 #: pretix/plugins/sendmail/apps.py:38
 msgid "Send out emails to all your customers or specific groups of customers."
 msgstr ""
+"Verschicken Sie E-Mails an alle Ihre Kunden oder bestimmte Kundengruppen."
 
 #: pretix/plugins/sendmail/forms.py:75 pretix/plugins/sendmail/models.py:208
 msgid "Send email to"
@@ -23695,6 +23678,8 @@ msgstr "Statistiken"
 #: pretix/plugins/statistics/apps.py:37
 msgid "Get a birds-eye view of your event sales with graphical statistics."
 msgstr ""
+"Behalten Sie den Überblick über Ihre Verkaufszahlen mit grafischen "
+"Statistiken."
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:19
 msgid "Orders by day"
@@ -23803,6 +23788,9 @@ msgid ""
 "Stripe supports payments via credit cards as well as many local payment "
 "methods such as giropay, iDEAL, Alipay,and many more."
 msgstr ""
+"Akzeptieren Sie Zahlungen über Stripe, einen weltweit beliebten "
+"Zahlungsdienstleister. PayPal unterstützt Zahlungen per Kreditkarte sowie "
+"viele lokale Zahlungsarten wie z.B. giropay, iDEAL, Alipay, und viele mehr."
 
 #: pretix/plugins/stripe/forms.py:40
 #, python-format
@@ -24395,6 +24383,8 @@ msgid ""
 "Issue tickets as PDF files, usable on any device. Our drag-and-drop editor "
 "allows you to customize the layout of the PDF files to your brand."
 msgstr ""
+"Erstellen Sie Tickets als PDF-Dateien, die überall eingesetzt werden können. "
+"Unser einfacher Layout-Editor erlaubt Ihnen die Anpassung an Ihr Design."
 
 #: pretix/plugins/ticketoutputpdf/exporters.py:59
 msgid "All PDF tickets in one file"
@@ -24534,7 +24524,7 @@ msgstr "Web-basierter Check-In"
 
 #: pretix/plugins/webcheckin/apps.py:38
 msgid "Turn your browser into a check-in device to perform access control."
-msgstr ""
+msgstr "Benutzen Sie Ihren Browser als Gerät für Ihre Einlasskontrolle."
 
 #: pretix/plugins/webcheckin/signals.py:36
 msgid "Web Check-in"
@@ -26454,10 +26444,8 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/resend_link.html:4
 #: pretix/presale/templates/pretixpresale/event/resend_link.html:11
-#, fuzzy
-#| msgid "Resend order link"
 msgid "Resend order links"
-msgstr "Link erneut senden"
+msgstr "Links erneut senden"
 
 #: pretix/presale/templates/pretixpresale/event/resend_link.html:15
 msgid ""
