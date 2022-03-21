@@ -48,7 +48,9 @@ class TicketOutputPdfApp(AppConfig):
         author = _("the pretix team")
         version = version
         category = 'FORMAT'
-        description = _("This plugin allows you to print out tickets as PDF files")
+        featured = True
+        description = _("Issue tickets as PDF files, usable on any device. Our drag-and-drop editor allows you to "
+                        "customize the layout of the PDF files to your brand.")
 
     def ready(self):
         from . import signals  # NOQA

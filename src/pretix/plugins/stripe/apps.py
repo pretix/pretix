@@ -35,8 +35,11 @@ class StripeApp(AppConfig):
         author = _("the pretix team")
         version = version
         category = 'PAYMENT'
-        description = _("This plugin allows you to receive credit card payments " +
-                        "via Stripe")
+        featured = True
+        picture = 'pretixplugins/stripe/stripe_logo.svg'
+        description = _("Accept payments via Stripe, a globally popular payment service provider. Stripe supports "
+                        "payments via credit cards as well as many local payment methods such as giropay, iDEAL, Alipay,"
+                        "and many more.")
 
     def ready(self):
         from . import signals, tasks  # NOQA

@@ -1,0 +1,36 @@
+{% load i18n %}
+{% if show_meta %}
+    {% if plugin.author %}
+        <p class="meta text-muted">
+            {% blocktrans trimmed with a=plugin.author %}
+                by <em>{{ a }}</em>
+            {% endblocktrans %}</p>
+    {% endif %}
+{% endif %}
+<p>{{ plugin.description|safe }}</p>
+{% if plugin.restricted and plugin.module not in request.event.settings.allowed_restricted_plugins %}
+    <p class="text-muted">
+        <span class="fa fa-info-circle" aria-hidden="true"></span>
+        {% trans "This plugin needs to be enabled by a system administrator for your account." %}
+    </p>
+{% endif %}
+{% if plugin.app.compatibility_errors %}
+    <div class="alert alert-warning">
+        {% trans "This plugin cannot be enabled for the following reasons:" %}
+        <ul>
+            {% for e in plugin.app.compatibility_errors %}
+                <li>{{ e }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endif %}
+{% if plugin.app.compatibility_warnings %}
+    <div class="alert alert-warning">
+        {% trans "This plugin reports the following problems:" %}
+        <ul>
+            {% for e in plugin.app.compatibility_warnings %}
+                <li>{{ e }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endif %}
