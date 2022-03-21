@@ -693,6 +693,10 @@ h1 .label {
     h4 {
         margin-top: 0;
     }
+    .plugin-picture {
+        width: auto;
+        height: 32px;
+    }
     .featured-plugin {
         flex: 1;
         min-width: 28em;
@@ -712,14 +716,8 @@ h1 .label {
             .plugin-text {
                 flex-grow: 1;
             }
-
             .plugin-picture {
-                width: auto;
                 height: 64px;
-                margin-top: 1em;
-            }
-
-            .plugin-action {
             }
         }
     }
