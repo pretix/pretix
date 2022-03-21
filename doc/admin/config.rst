@@ -66,7 +66,7 @@ Example::
     Defaults to an empty string.
 
 ``plugins_show_meta``
-    Whether to show authors and versions of plugins, defaults to ``off``.
+    Whether to show authors and versions of plugins, defaults to ``on``.
 
 ``auth_backends``
     A comma-separated list of available auth backends. Defaults to ``pretix.base.auth.NativeAuthBackend``.
