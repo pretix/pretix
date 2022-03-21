@@ -2229,8 +2229,9 @@ class ExportMixin:
     def exporters(self):
         exporters = []
         responses = register_data_exporters.send(self.request.event)
+        id = self.request.GET.get("identifier") or self.request.POST.get("exporter")
         for ex in sorted([response(self.request.event, self.request.organizer) for r, response in responses if response], key=lambda ex: str(ex.verbose_name)):
-            if self.request.GET.get("identifier") and ex.identifier != self.request.GET.get("identifier"):
+            if id and ex.identifier != id:
                 continue
 
             # Use form parse cycle to generate useful defaults
