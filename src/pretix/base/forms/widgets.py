@@ -42,6 +42,22 @@ from django.utils.timezone import get_current_timezone, now
 from django.utils.translation import gettext_lazy as _
 
 
+def replace_arabic_numbers(inp):
+    table = {
+        1632: 48,  # 0
+        1633: 49,  # 1
+        1634: 50,  # 2
+        1635: 51,  # 3
+        1636: 52,  # 4
+        1637: 53,  # 5
+        1638: 54,  # 6
+        1639: 55,  # 7
+        1640: 56,  # 8
+        1641: 57,  # 9
+    }
+    return inp.translate(table)
+
+
 class DatePickerWidget(forms.DateInput):
     def __init__(self, attrs=None, date_format=None):
         attrs = attrs or {}
@@ -61,6 +77,10 @@ class DatePickerWidget(forms.DateInput):
         date_attrs['placeholder'] = lazy(placeholder, str)
 
         forms.DateInput.__init__(self, date_attrs, date_format)
+
+    def value_from_datadict(self, data, files, name):
+        v = super().value_from_datadict(data, files, name)
+        return replace_arabic_numbers(v)
 
 
 class TimePickerWidget(forms.TimeInput):
@@ -82,6 +102,10 @@ class TimePickerWidget(forms.TimeInput):
         time_attrs['placeholder'] = lazy(placeholder, str)
 
         forms.TimeInput.__init__(self, time_attrs, time_format)
+
+    def value_from_datadict(self, data, files, name):
+        v = super().value_from_datadict(data, files, name)
+        return replace_arabic_numbers(v)
 
 
 class UploadedFileWidget(forms.ClearableFileInput):
@@ -178,6 +202,10 @@ class SplitDateTimePickerWidget(forms.SplitDateTimeWidget):
         )
         # Skip one hierarchy level
         forms.MultiWidget.__init__(self, widgets, attrs)
+
+    def value_from_datadict(self, data, files, name):
+        v = super().value_from_datadict(data, files, name)
+        return [replace_arabic_numbers(i) for i in v]
 
 
 class BusinessBooleanRadio(forms.RadioSelect):
