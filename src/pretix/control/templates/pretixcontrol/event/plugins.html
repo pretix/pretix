@@ -56,11 +56,11 @@
                                             {% include "pretixcontrol/event/fragment_plugin_description.html" with plugin=plugin %}
                                         </div>
                                         {% if plugin.app.compatibility_errors %}
-                                            <div class="plugin-action text-center">
+                                            <div class="plugin-action">
                                                 <span class="text-muted">{% trans "Incompatible" %}</span>
                                             </div>
                                         {% elif plugin.restricted and plugin.module not in request.event.settings.allowed_restricted_plugins %}
-                                            <div class="plugin-action text-center">
+                                            <div class="plugin-action">
                                                 <span class="text-muted">{% trans "Not available" %}</span>
                                             </div>
                                         {% elif plugin.module in plugins_active %}
