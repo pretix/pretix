@@ -50,7 +50,8 @@ class PaypalApp(AppConfig):
         category = 'PAYMENT'
         featured = True
         picture = 'pretixplugins/paypal/paypal_logo.svg'
-        description = _("This plugin allows you to receive payments via PayPal")
+        description = _("Accept payments with your PayPal account. PayPal is one of the most popular payment methods "
+                        "world-wide.")
 
     def ready(self):
         from . import signals  # NOQA

@@ -36,8 +36,8 @@ class BankTransferApp(AppConfig):
         category = 'PAYMENT'
         featured = True
         version = version
-        description = _("This plugin allows you to receive payments " +
-                        "via bank transfer.")
+        description = _("Accept payments from your customers using classical wire transfer methods with your own "
+                        "bank account.")
 
     def ready(self):
         from . import signals  # NOQA
