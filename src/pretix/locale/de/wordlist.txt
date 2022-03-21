@@ -78,6 +78,7 @@ Edge
 Eingangsscan
 Einlassbuchung
 Einlassdatum
+Einlasskontrolle
 Einlassuhrzeit
 email
 Enterprise
