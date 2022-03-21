@@ -43,6 +43,8 @@ from django.utils.translation import gettext_lazy as _
 
 
 def replace_arabic_numbers(inp):
+    if not isinstance(inp, str):
+        return inp
     table = {
         1632: 48,  # 0
         1633: 49,  # 1
