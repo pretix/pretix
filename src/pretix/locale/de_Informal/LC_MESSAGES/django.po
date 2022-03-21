@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-03-21 15:59+0000\n"
-"PO-Revision-Date: 2022-03-21 16:46+0000\n"
+"PO-Revision-Date: 2022-03-21 17:00+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
@@ -11293,7 +11293,7 @@ msgstr ""
 
 #: pretix/control/forms/orders.py:756
 msgid "Create refund in the manual refund to-do list"
-msgstr "Erstattung in der Todo-Liste für manuelle Erstattungen erzeugen"
+msgstr "Erstattung in der To-Do-Liste für manuelle Erstattungen erzeugen"
 
 #: pretix/control/forms/orders.py:759
 msgid ""
@@ -18871,7 +18871,7 @@ msgid ""
 "custom background instead."
 msgstr ""
 "Du kannst diese Funktion nutzen um dynamische Bilder z.B. aus Fragefeldern "
-"oder aus Erweiterungen hochzuladen. Wenn du ein Logo oder andere statische "
+"oder aus Erweiterungen einzubinden. Wenn du ein Logo oder andere statische "
 "Bilder einbinden willst, nutze stattdessen einen eigenen Hintergrund."
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:435
