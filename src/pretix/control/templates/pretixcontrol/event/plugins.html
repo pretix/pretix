@@ -45,7 +45,10 @@
                                             <p><img src="{% static plugin.picture %}" class="plugin-picture"></p>
                                         {% endif %}
                                             <h4>
-                                                {{ plugin.name }} <span class="text-muted text-sm">{{ plugin.version }}</span>
+                                                {{ plugin.name }}
+                                                {% if show_meta %}
+                                                    <span class="text-muted text-sm">{{ plugin.version }}</span>
+                                                {% endif %}
                                                 {% if plugin.module in plugins_active %}
                                                     <span class="label label-success">
                                                         <span class="fa fa-check" aria-hidden="true"></span>
