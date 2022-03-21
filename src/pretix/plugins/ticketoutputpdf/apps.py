@@ -48,6 +48,7 @@ class TicketOutputPdfApp(AppConfig):
         author = _("the pretix team")
         version = version
         category = 'FORMAT'
+        featured = True
         description = _("Issue tickets as PDF files, usable on any device. Our drag-and-drop editor allows you to "
                         "customize the layout of the PDF files to your brand.")
 
