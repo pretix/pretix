@@ -246,6 +246,7 @@
                                                             <input type="radio" name="_voucher_item"
                                                                     {% if options == 1 %}checked="checked"{% endif %}
                                                                     id="variation_{{ item.id }}_{{ var.id }}"
+                                                                    value="variation_{{ item.id }}_{{ var.id }}"
                                                                     aria-label="{% blocktrans with item=item.name var=var %}Add {{ item }}, {{ var }} to cart{% endblocktrans %}"
                                                                     {% if var.description %} aria-describedby="item-{{ item.pk }}-{{ var.pk }}-description"{% endif %}>
                                                         </label>
