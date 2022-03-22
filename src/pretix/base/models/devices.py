@@ -156,6 +156,9 @@ class Device(LoggedModel):
         null=True,
         blank=False
     )
+    info = models.JSONField(
+        null=True, blank=True,
+    )
 
     objects = ScopedManager(organizer='organizer')
 
