@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-03-21 15:59+0000\n"
-"PO-Revision-Date: 2022-03-17 19:00+0000\n"
+"PO-Revision-Date: 2022-03-22 22:00+0000\n"
 "Last-Translator: Ismael Menéndez Fernández <ismael.menendez@balidea.com>\n"
 "Language-Team: Galician <https://translate.pretix.eu/projects/pretix/pretix/"
 "gl/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.8\n"
+"X-Generator: Weblate 4.11.2\n"
 
 #: pretix/api/auth/devicesecurity.py:28
 msgid ""
@@ -28205,10 +28205,9 @@ msgid "Internal Reference"
 msgstr "Referencia interna"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:353
-#, fuzzy
 msgctxt "action"
 msgid "Change or cancel your order"
-msgstr "Modificación para todos los eventos"
+msgstr "Modificación ou cancelacións"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:360
 msgid ""
