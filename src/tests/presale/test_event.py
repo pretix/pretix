@@ -839,7 +839,7 @@ class VoucherRedeemItemDisplayTest(EventTestMixin, SoupTest):
         html = self.client.get('/%s/%s/redeem?voucher=%s' % (self.orga.slug, self.event.slug, self.v.code))
         assert "Early-bird" in html.rendered_content
         assert "10.00" in html.rendered_content
-        assert "<del>€14.00</del>" in html.rendered_content
+        assert re.search(r"<del>.*€14\.00.*</del>", html.rendered_content.replace("\n", ""))
 
     def test_fail_redeemed(self):
         self.v.redeemed = 1
