@@ -56,6 +56,7 @@ from pretix.base.models.orders import (
 from pretix.base.pdf import get_images, get_variables
 from pretix.base.services.cart import error_messages
 from pretix.base.services.locking import NoLockManager
+from pretix.base.services.orders import OrderError
 from pretix.base.services.pricing import get_price
 from pretix.base.settings import COUNTRIES_WITH_STATE_IN_ADDRESS
 from pretix.base.signals import register_ticket_outputs
@@ -395,33 +396,17 @@ class PdfDataSerializer(serializers.Field):
             return res
 
 
-class OrderPositionSerializer(I18nAwareModelSerializer):
-    checkins = CheckinSerializer(many=True, read_only=True)
+class OrderPositionInfoPatchSerializer(serializers.ModelSerializer):
     answers = AnswerSerializer(many=True)
-    downloads = PositionDownloadsField(source='*', read_only=True)
-    order = serializers.SlugRelatedField(slug_field='code', read_only=True)
-    pdf_data = PdfDataSerializer(source='*', read_only=True)
-    seat = InlineSeatSerializer(read_only=True)
     country = CompatibleCountryField(source='*')
     attendee_name = serializers.CharField(required=False)
 
     class Meta:
         model = OrderPosition
-        fields = ('id', 'order', 'positionid', 'item', 'variation', 'price', 'attendee_name', 'attendee_name_parts',
-                  'company', 'street', 'zipcode', 'city', 'country', 'state',
-                  'attendee_email', 'voucher', 'tax_rate', 'tax_value', 'secret', 'addon_to', 'subevent', 'checkins',
-                  'downloads', 'answers', 'tax_rule', 'pseudonymization_id', 'pdf_data', 'seat', 'canceled')
-        read_only_fields = (
-            'id', 'order', 'positionid', 'item', 'variation', 'price', 'voucher', 'tax_rate', 'tax_value', 'secret',
-            'addon_to', 'subevent', 'checkins', 'downloads', 'answers', 'tax_rule', 'pseudonymization_id', 'pdf_data',
-            'seat', 'canceled'
+        fields = (
+            'attendee_name', 'attendee_name_parts', 'company', 'street', 'zipcode', 'city', 'country',
+            'state', 'attendee_email', 'answers',
         )
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        request = self.context.get('request')
-        if request and (not request.query_params.get('pdf_data', 'false') == 'true' or 'can_view_orders' not in request.eventpermset):
-            self.fields.pop('pdf_data', None)
 
     def validate(self, data):
         if data.get('attendee_name') and data.get('attendee_name_parts'):
@@ -450,12 +435,6 @@ class OrderPositionSerializer(I18nAwareModelSerializer):
         return data
 
     def update(self, instance, validated_data):
-        # Even though all fields that shouldn't be edited are marked as read_only in the serializer
-        # (hopefully), we'll be extra careful here and be explicit about the model fields we update.
-        update_fields = [
-            'attendee_name_parts', 'company', 'street', 'zipcode', 'city', 'country',
-            'state', 'attendee_email',
-        ]
         answers_data = validated_data.pop('answers', None)
 
         name = validated_data.pop('attendee_name', '')
@@ -465,10 +444,10 @@ class OrderPositionSerializer(I18nAwareModelSerializer):
             }
 
         for attr, value in validated_data.items():
-            if attr in update_fields:
+            if attr in self.fields:
                 setattr(instance, attr, value)
 
-        instance.save(update_fields=update_fields)
+        instance.save(update_fields=list(validated_data.keys()))
 
         if answers_data is not None:
             qs_seen = set()
@@ -506,6 +485,135 @@ class OrderPositionSerializer(I18nAwareModelSerializer):
                     a.delete()
 
         return instance
+
+
+class OrderPositionChangeSerializer(serializers.ModelSerializer):
+    seat = serializers.CharField(source='seat.seat_guid', allow_null=True, required=False)
+
+    class Meta:
+        model = OrderPosition
+        fields = (
+            'item', 'variation', 'subevent', 'seat', 'price', 'tax_rule',
+        )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['item'].queryset = self.context['event'].items.all()
+        self.fields['subevent'].queryset = self.context['event'].subevents.all()
+        self.fields['tax_rule'].queryset = self.context['event'].tax_rules.all()
+
+    def validate_item(self, item):
+        if item.event != self.context['event']:
+            raise ValidationError(
+                'The specified item does not belong to this event.'
+            )
+        return item
+
+    def validate_subevent(self, subevent):
+        if self.context['event'].has_subevents:
+            if not subevent:
+                raise ValidationError(
+                    'You need to set a subevent.'
+                )
+            if subevent.event != self.context['event']:
+                raise ValidationError(
+                    'The specified subevent does not belong to this event.'
+                )
+        elif subevent:
+            raise ValidationError(
+                'You cannot set a subevent for this event.'
+            )
+        return subevent
+
+    def validate(self, data):
+        if data.get('item', self.instance.item):
+            if data.get('item', self.instance.item).has_variations:
+                if not data.get('variation', self.instance.variation):
+                    raise ValidationError({'variation': ['You should specify a variation for this item.']})
+                else:
+                    if data.get('variation', self.instance.variation).item != data.get('item', self.instance.item):
+                        raise ValidationError(
+                            {'variation': ['The specified variation does not belong to the specified item.']}
+                        )
+            elif data.get('variation', self.instance.variation):
+                raise ValidationError(
+                    {'variation': ['You cannot specify a variation for this item.']}
+                )
+
+        return data
+
+    def update(self, instance, validated_data):
+        ocm = self.context['ocm']
+        current_seat = {'seat_guid': instance.seat.seat_guid} if instance.seat else None
+        item = validated_data.get('item', instance.item)
+        variation = validated_data.get('variation', instance.variation)
+        subevent = validated_data.get('subevent', instance.subevent)
+        price = validated_data.get('price', instance.price)
+        seat = validated_data.get('seat', current_seat)
+        tax_rule = validated_data.get('tax_rule', instance.tax_rule)
+
+        change_item = None
+        if item != instance.item or variation != instance.variation:
+            change_item = (item, variation)
+
+        change_subevent = None
+        if self.context['event'].has_subevents and subevent != instance.subevent:
+            change_subevent = (subevent,)
+
+        try:
+            if change_item is not None and change_subevent is not None:
+                ocm.change_item_and_subevent(instance, *change_item, *change_subevent)
+            elif change_item is not None:
+                ocm.change_item(instance, *change_item)
+            elif change_subevent is not None:
+                ocm.change_subevent(instance, *change_subevent)
+
+            if seat != current_seat or change_subevent:
+                ocm.change_seat(instance, seat['seat_guid'] if seat else None)
+
+            if price != instance.price:
+                ocm.change_price(instance, price)
+
+            if tax_rule != instance.tax_rule:
+                ocm.change_tax_rule(instance, tax_rule)
+
+            ocm.commit()
+        except OrderError as e:
+            raise ValidationError(str(e))
+        instance.refresh_from_db()
+        return instance
+
+
+class OrderPositionSerializer(I18nAwareModelSerializer):
+    checkins = CheckinSerializer(many=True, read_only=True)
+    answers = AnswerSerializer(many=True)
+    downloads = PositionDownloadsField(source='*', read_only=True)
+    order = serializers.SlugRelatedField(slug_field='code', read_only=True)
+    pdf_data = PdfDataSerializer(source='*', read_only=True)
+    seat = InlineSeatSerializer(read_only=True)
+    country = CompatibleCountryField(source='*')
+    attendee_name = serializers.CharField(required=False)
+
+    class Meta:
+        model = OrderPosition
+        fields = ('id', 'order', 'positionid', 'item', 'variation', 'price', 'attendee_name', 'attendee_name_parts',
+                  'company', 'street', 'zipcode', 'city', 'country', 'state',
+                  'attendee_email', 'voucher', 'tax_rate', 'tax_value', 'secret', 'addon_to', 'subevent', 'checkins',
+                  'downloads', 'answers', 'tax_rule', 'pseudonymization_id', 'pdf_data', 'seat', 'canceled')
+        read_only_fields = (
+            'id', 'order', 'positionid', 'item', 'variation', 'price', 'voucher', 'tax_rate', 'tax_value', 'secret',
+            'addon_to', 'subevent', 'checkins', 'downloads', 'answers', 'tax_rule', 'pseudonymization_id', 'pdf_data',
+            'seat', 'canceled'
+        )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        request = self.context.get('request')
+        if request and (not request.query_params.get('pdf_data', 'false') == 'true' or 'can_view_orders' not in request.eventpermset):
+            self.fields.pop('pdf_data', None)
+
+    def validate(self, data):
+        raise TypeError("this serializer is readonly")
 
 
 class RequireAttentionField(serializers.Field):

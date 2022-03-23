@@ -51,7 +51,7 @@ from pretix.api.serializers.order import (
     OrderPaymentSerializer, OrderPositionSerializer,
     OrderRefundCreateSerializer, OrderRefundSerializer, OrderSerializer,
     PriceCalcSerializer, RevokedTicketSecretSerializer,
-    SimulatedOrderSerializer,
+    SimulatedOrderSerializer, OrderPositionInfoPatchSerializer, OrderPositionChangeSerializer,
 )
 from pretix.base.i18n import language
 from pretix.base.models import (
@@ -1082,11 +1082,36 @@ class OrderPositionViewSet(mixins.DestroyModelMixin, mixins.UpdateModelMixin, vi
                 {"detail": "Method \"PUT\" not allowed."},
                 status=status.HTTP_405_METHOD_NOT_ALLOWED,
             )
-        return super().update(request, *args, **kwargs)
 
-    def perform_update(self, serializer):
         with transaction.atomic():
-            old_data = self.get_serializer_class()(instance=serializer.instance, context=self.get_serializer_context()).data
+            instance = self.get_object()
+            ocm = OrderChangeManager(
+                order=instance.order,
+                user=request.user,
+                auth=request.auth,
+                notify=False,
+                reissue_invoice=False,
+            )
+
+            # Field that need to go through OrderChangeManager
+            serializer = OrderPositionChangeSerializer(
+                instance=instance,
+                context={'ocm': ocm, **self.get_serializer_context()},
+                partial=True,
+                data=request.data
+            )
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+
+            # Fields that can be easily patched
+            old_data = OrderPositionInfoPatchSerializer(instance=instance, context=self.get_serializer_context()).data
+            serializer = OrderPositionInfoPatchSerializer(
+                instance=instance,
+                context=self.get_serializer_context(),
+                partial=True,
+                data=request.data
+            )
+            serializer.is_valid(raise_exception=True)
             serializer.save()
             new_data = serializer.data
 
@@ -1109,9 +1134,10 @@ class OrderPositionViewSet(mixins.DestroyModelMixin, mixins.UpdateModelMixin, vi
                         ]
                     }
                 )
+                tickets.invalidate_cache.apply_async(kwargs={'event': serializer.instance.order.event.pk, 'order': serializer.instance.order.pk})
+                order_modified.send(sender=serializer.instance.order.event, order=serializer.instance.order)
 
-        tickets.invalidate_cache.apply_async(kwargs={'event': serializer.instance.order.event.pk, 'order': serializer.instance.order.pk})
-        order_modified.send(sender=serializer.instance.order.event, order=serializer.instance.order)
+        return Response(self.get_serializer_class()(instance=serializer.instance, context=self.get_serializer_context()).data)
 
 
 class PaymentViewSet(CreateModelMixin, viewsets.ReadOnlyModelViewSet):

@@ -3779,7 +3779,6 @@ def test_order_create_autopricing_voucher_budget_partially(token_client, organiz
             organizer.slug, event.slug
         ), format='json', data=res
     )
-    print(resp.data)
     assert resp.status_code == 201
     with scopes_disabled():
         o = Order.objects.get(code=resp.data['code'])
@@ -3829,7 +3828,6 @@ def test_order_create_voucher_budget_exceeded(token_client, organizer, event, it
             organizer.slug, event.slug
         ), format='json', data=res
     )
-    print(resp.data)
     assert resp.status_code == 400
     assert resp.data == {'positions': [{'voucher': ['The voucher has a remaining budget of 3.00, therefore a '
                                                     'discount of 4.00 can not be given.']}]}
@@ -4848,12 +4846,12 @@ def test_position_update_ignore_fields(token_client, organizer, event, order):
         '/api/v1/organizers/{}/events/{}/orderpositions/{}/'.format(
             organizer.slug, event.slug, op.pk
         ), format='json', data={
-            'price': '99.99'
+            'tax_rate': '99.99'
         }
     )
     assert resp.status_code == 200
     op.refresh_from_db()
-    assert op.price == Decimal('23.00')
+    assert op.tax_rate == Decimal('0.00')
 
 
 @pytest.mark.django_db
@@ -4871,7 +4869,7 @@ def test_position_update_only_partial(token_client, organizer, event, order):
 
 
 @pytest.mark.django_db
-def test_position_update(token_client, organizer, event, order, question):
+def test_position_update_info(token_client, organizer, event, order, question):
     with scopes_disabled():
         op = order.positions.first()
         question.type = Question.TYPE_CHOICE_MULTIPLE
@@ -5111,3 +5109,324 @@ def test_position_update_question_handling(token_client, organizer, event, order
         answ = op.answers.get()
     assert answ.file
     assert answ.answer.startswith("file://")
+
+
+@pytest.mark.django_db
+def test_position_update_change_item(token_client, organizer, event, order, quota):
+    with scopes_disabled():
+        item2 = event.items.create(name="Budget Ticket", default_price=23)
+        quota.items.add(item2)
+        op = order.positions.first()
+    payload = {
+        'item': item2.pk,
+    }
+    assert op.item != item2
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/orderpositions/{}/'.format(
+            organizer.slug, event.slug, op.pk
+        ), format='json', data=payload
+    )
+    assert resp.status_code == 200
+    op.refresh_from_db()
+    assert op.item == item2
+
+
+@pytest.mark.django_db
+def test_position_update_change_item_wrong_event(token_client, organizer, event, event2, order, quota):
+    with scopes_disabled():
+        item2 = event2.items.create(name="Budget Ticket", default_price=23)
+        quota.items.add(item2)
+        op = order.positions.first()
+    payload = {
+        'item': item2.pk,
+    }
+    assert op.item != item2
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/orderpositions/{}/'.format(
+            organizer.slug, event.slug, op.pk
+        ), format='json', data=payload
+    )
+    assert resp.status_code == 400
+    assert 'object does not exist.' in str(resp.data)
+
+
+@pytest.mark.django_db
+def test_position_update_change_item_no_quota(token_client, organizer, event, order):
+    with scopes_disabled():
+        item2 = event.items.create(name="Budget Ticket", default_price=23)
+        op = order.positions.first()
+    payload = {
+        'item': item2.pk,
+    }
+    assert op.item != item2
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/orderpositions/{}/'.format(
+            organizer.slug, event.slug, op.pk
+        ), format='json', data=payload
+    )
+    assert resp.status_code == 400
+    assert 'quota' in str(resp.data)
+
+
+@pytest.mark.django_db
+def test_position_update_change_item_variation(token_client, organizer, event, order, quota):
+    with scopes_disabled():
+        item2 = event.items.create(name="Budget Ticket", default_price=23)
+        v = item2.variations.create(value="foo")
+        quota.items.add(item2)
+        quota.variations.add(v)
+        op = order.positions.first()
+    payload = {
+        'item': item2.pk,
+        'variation': v.pk,
+    }
+    assert op.item != item2
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/orderpositions/{}/'.format(
+            organizer.slug, event.slug, op.pk
+        ), format='json', data=payload
+    )
+    assert resp.status_code == 200
+    op.refresh_from_db()
+    assert op.item == item2
+    assert op.variation == v
+
+
+@pytest.mark.django_db
+def test_position_update_change_item_variation_required(token_client, organizer, event, order, quota):
+    with scopes_disabled():
+        item2 = event.items.create(name="Budget Ticket", default_price=23)
+        v = item2.variations.create(value="foo")
+        quota.items.add(item2)
+        quota.variations.add(v)
+        op = order.positions.first()
+    payload = {
+        'item': item2.pk,
+    }
+    assert op.item != item2
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/orderpositions/{}/'.format(
+            organizer.slug, event.slug, op.pk
+        ), format='json', data=payload
+    )
+    assert resp.status_code == 400
+    assert 'variation' in str(resp.data)
+
+
+@pytest.mark.django_db
+def test_position_update_change_item_variation_mismatch(token_client, organizer, event, order, quota):
+    with scopes_disabled():
+        item2 = event.items.create(name="Budget Ticket", default_price=23)
+        v = item2.variations.create(value="foo")
+        item3 = event.items.create(name="Budget Ticket", default_price=23)
+        v3 = item3.variations.create(value="foo")
+        quota.items.add(item2)
+        quota.items.add(item3)
+        quota.variations.add(v)
+        quota.variations.add(v3)
+        op = order.positions.first()
+    payload = {
+        'item': item2.pk,
+        'variation': v3.pk,
+    }
+    assert op.item != item2
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/orderpositions/{}/'.format(
+            organizer.slug, event.slug, op.pk
+        ), format='json', data=payload
+    )
+    assert resp.status_code == 400
+    assert 'variation' in str(resp.data)
+
+
+@pytest.mark.django_db
+def test_position_update_change_subevent(token_client, organizer, event, order, quota, item, subevent):
+    with scopes_disabled():
+        se2 = event.subevents.create(name="Foobar", date_from=datetime.datetime(2017, 12, 27, 10, 0, 0, tzinfo=UTC))
+        q2 = se2.quotas.create(name="foo", size=1, event=event)
+        q2.items.add(item)
+        op = order.positions.first()
+        op.subevent = subevent
+        op.save()
+    payload = {
+        'subevent': se2.pk,
+    }
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/orderpositions/{}/'.format(
+            organizer.slug, event.slug, op.pk
+        ), format='json', data=payload
+    )
+    assert resp.status_code == 200
+    op.refresh_from_db()
+    assert op.subevent == se2
+
+
+@pytest.mark.django_db
+def test_position_update_change_subevent_quota_empty(token_client, organizer, event, order, quota, item, subevent):
+    with scopes_disabled():
+        se2 = event.subevents.create(name="Foobar", date_from=datetime.datetime(2017, 12, 27, 10, 0, 0, tzinfo=UTC))
+        q2 = se2.quotas.create(name="foo", size=0, event=event)
+        q2.items.add(item)
+        op = order.positions.first()
+        op.subevent = subevent
+        op.save()
+    payload = {
+        'subevent': se2.pk,
+    }
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/orderpositions/{}/'.format(
+            organizer.slug, event.slug, op.pk
+        ), format='json', data=payload
+    )
+    assert resp.status_code == 400
+    assert 'quota' in str(resp.data)
+
+
+@pytest.mark.django_db
+def test_position_update_change_seat(token_client, organizer, event, order, quota, item, seat):
+    with scopes_disabled():
+        seat2 = event.seats.create(seat_number="A2", product=item, seat_guid="A2")
+        op = order.positions.first()
+        op.seat = seat
+        op.save()
+    payload = {
+        'seat': seat2.seat_guid,
+    }
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/orderpositions/{}/'.format(
+            organizer.slug, event.slug, op.pk
+        ), format='json', data=payload
+    )
+    assert resp.status_code == 200
+    op.refresh_from_db()
+    assert op.seat == seat2
+
+
+@pytest.mark.django_db
+def test_position_update_unset_seat(token_client, organizer, event, order, quota, item, seat):
+    with scopes_disabled():
+        op = order.positions.first()
+        op.seat = seat
+        op.save()
+    payload = {
+        'seat': None,
+    }
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/orderpositions/{}/'.format(
+            organizer.slug, event.slug, op.pk
+        ), format='json', data=payload
+    )
+    assert resp.status_code == 200
+    op.refresh_from_db()
+    assert op.seat is None
+
+
+@pytest.mark.django_db
+def test_position_update_change_seat_taken(token_client, organizer, event, order, quota, item, seat):
+    with scopes_disabled():
+        seat2 = event.seats.create(seat_number="A2", product=item, seat_guid="A2", blocked=True)
+        op = order.positions.first()
+        op.seat = seat
+        op.save()
+    payload = {
+        'seat': seat2.seat_guid,
+    }
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/orderpositions/{}/'.format(
+            organizer.slug, event.slug, op.pk
+        ), format='json', data=payload
+    )
+    assert resp.status_code == 400
+    assert 'seat' in str(resp.data)
+
+
+@pytest.mark.django_db
+def test_position_update_change_subevent_keep_seat(token_client, organizer, event, order, quota, item, subevent, seat):
+    with scopes_disabled():
+        seat.subevent = subevent
+        seat.save()
+        se2 = event.subevents.create(name="Foobar", date_from=datetime.datetime(2017, 12, 27, 10, 0, 0, tzinfo=UTC))
+        seat2 = event.seats.create(seat_number="A1", product=item, seat_guid="A1", subevent=se2)
+        q2 = se2.quotas.create(name="foo", size=1, event=event)
+        q2.items.add(item)
+        op = order.positions.first()
+        op.subevent = subevent
+        op.seat = seat
+        op.save()
+    payload = {
+        'subevent': se2.pk,
+    }
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/orderpositions/{}/'.format(
+            organizer.slug, event.slug, op.pk
+        ), format='json', data=payload
+    )
+    assert resp.status_code == 200
+    op.refresh_from_db()
+    assert op.subevent == se2
+    assert op.seat == seat2
+
+
+@pytest.mark.django_db
+def test_position_update_change_subevent_missing_seat(token_client, organizer, event, order, quota, item, subevent, seat):
+    with scopes_disabled():
+        seat.subevent = subevent
+        seat.save()
+        se2 = event.subevents.create(name="Foobar", date_from=datetime.datetime(2017, 12, 27, 10, 0, 0, tzinfo=UTC))
+        q2 = se2.quotas.create(name="foo", size=1, event=event)
+        q2.items.add(item)
+        op = order.positions.first()
+        op.subevent = subevent
+        op.seat = seat
+        op.save()
+    payload = {
+        'subevent': se2.pk,
+    }
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/orderpositions/{}/'.format(
+            organizer.slug, event.slug, op.pk
+        ), format='json', data=payload
+    )
+    assert resp.status_code == 400
+    assert 'seat' in str(resp.data)
+
+
+@pytest.mark.django_db
+def test_position_update_change_price(token_client, organizer, event, order, quota):
+    with scopes_disabled():
+        op = order.positions.first()
+    payload = {
+        'price': Decimal('119.00')
+    }
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/orderpositions/{}/'.format(
+            organizer.slug, event.slug, op.pk
+        ), format='json', data=payload
+    )
+    assert resp.status_code == 200
+    op.refresh_from_db()
+    assert op.price == Decimal('119.00')
+    assert op.tax_rate == Decimal('0.00')
+    assert op.tax_value == Decimal('0.00')
+
+
+@pytest.mark.django_db
+def test_position_update_change_price_and_tax_rule(token_client, organizer, event, order, quota):
+    with scopes_disabled():
+        op = order.positions.first()
+        tr = event.tax_rules.create(rate=19)
+    payload = {
+        'price': Decimal('119.00'),
+        'tax_rule': tr.pk
+    }
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/orderpositions/{}/'.format(
+            organizer.slug, event.slug, op.pk
+        ), format='json', data=payload
+    )
+    assert resp.status_code == 200
+    op.refresh_from_db()
+    assert op.price == Decimal('119.00')
+    assert op.tax_rate == Decimal('19.00')
+    assert op.tax_value == Decimal('19.00')
+    assert op.tax_rule == tr

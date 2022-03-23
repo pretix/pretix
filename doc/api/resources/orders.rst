@@ -1675,6 +1675,21 @@ Manipulating individual positions
      and ``option_identifiers`` will be ignored. As a special case, you can submit the magic value
      ``"file:keep"`` as the answer to a file question to keep the current value without re-uploading it.
 
+   * ``item``
+
+   * ``variation``
+
+   * ``subevent``
+
+   * ``seat``
+
+   * ``price``
+
+   * ``tax_rule``
+
+   Changing parameters such as ``item`` or ``price`` will **not** automatically trigger creation of a new invoice,
+   you need to take care of that yourself.
+
    **Example request**:
 
    .. sourcecode:: http
