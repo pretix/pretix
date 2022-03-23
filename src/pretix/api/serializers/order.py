@@ -987,6 +987,60 @@ class OrderPositionCreateSerializer(I18nAwareModelSerializer):
         return data
 
 
+class OrderPositionCreateForExistingOrderSerializer(OrderPositionCreateSerializer):
+    order = serializers.SlugRelatedField(slug_field='code', queryset=Order.objects.none(), required=True, allow_null=False)
+    answers = AnswerCreateSerializer(many=True, required=False)
+    addon_to = serializers.IntegerField(required=False, allow_null=True)
+    secret = serializers.CharField(required=False)
+    attendee_name = serializers.CharField(required=False, allow_null=True)
+    seat = serializers.CharField(required=False, allow_null=True)
+    price = serializers.DecimalField(required=False, allow_null=True, decimal_places=2,
+                                     max_digits=10)
+    country = CompatibleCountryField(source='*')
+
+    class Meta:
+        model = OrderPosition
+        fields = ('order', 'item', 'variation', 'price', 'attendee_name', 'attendee_name_parts', 'attendee_email',
+                  'company', 'street', 'zipcode', 'city', 'country', 'state',
+                  'secret', 'addon_to', 'subevent', 'answers', 'seat')
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['order'].queryset = self.context['event'].orders.all()
+        self.fields['item'].queryset = self.context['event'].items.all()
+        self.fields['subevent'].queryset = self.context['event'].subevents.all()
+        self.fields['seat'].queryset = self.context['event'].seats.all()
+        self.fields['variation'].queryset = ItemVariation.objects.filter(item__event=self.context['event'])
+
+    def validate(self, data):
+        if data.get('addon_to'):
+            try:
+                data['addon_to'] = data['order'].positions.get(positionid=data['addon_to'])
+            except OrderPosition.DoesNotExist:
+                raise ValidationError({
+                    'addon_to': ['addon_to refers to an unknown position ID for this order.']
+                })
+        return data
+
+    def create(self, validated_data):
+        ocm = self.context['ocm']
+
+        try:
+            ocm.add_position(
+                item=validated_data['item'],
+                variation=validated_data.get('variation'),
+                price=validated_data.get('price'),
+                addon_to=validated_data.get('addon_to'),
+                subevent=validated_data.get('subevent'),
+                seat=validated_data.get('seat'),
+            )
+            ocm.commit()
+        except OrderError as e:
+            raise ValidationError(str(e))
+
+        return validated_data['order'].positions.order_by('-positionid').first()
+
+
 class CompatibleJSONField(serializers.JSONField):
     def to_internal_value(self, data):
         try:

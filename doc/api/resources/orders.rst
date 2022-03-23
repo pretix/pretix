@@ -1649,6 +1649,11 @@ Manipulating individual positions
 
    The ``PATCH`` method has been added for individual positions.
 
+.. versionchanged:: 4.8
+
+   The ``PATCH`` method now supports changing items, variations, subevents, seats, prices, and tax rules.
+   The ``POST`` endpoint to add individual positions has been added.
+
 .. http:patch:: /api/v1/organizers/(organizer)/events/(event)/orderpositions/(id)/
 
    Updates specific fields on an order position. Currently, only the following fields are supported:
@@ -1681,7 +1686,7 @@ Manipulating individual positions
 
    * ``subevent``
 
-   * ``seat``
+   * ``seat`` (specified as a string mapping to a ``string_guid``)
 
    * ``price``
 
@@ -1711,7 +1716,7 @@ Manipulating individual positions
       Vary: Accept
       Content-Type: application/json
 
-      (Full order resource, see above.)
+      (Full order position resource, see above.)
 
    :param organizer: The ``slug`` field of the organizer of the event
    :param event: The ``slug`` field of the event
@@ -1721,6 +1726,108 @@ Manipulating individual positions
    :statuscode 400: The order could not be updated due to invalid submitted data.
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer/event does not exist **or** you have no permission to update this order.
+
+.. http:delete:: /api/v1/organizers/(organizer)/events/(event)/orderpositions/(id)/
+
+   Deletes an order position, identified by its internal ID.
+
+   **Example request**:
+
+   .. sourcecode:: http
+
+      DELETE /api/v1/organizers/bigevents/events/sampleconf/orderpositions/23442/ HTTP/1.1
+      Host: pretix.eu
+      Accept: application/json, text/javascript
+
+   **Example response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 204 No Content
+      Vary: Accept
+
+   :param organizer: The ``slug`` field of the organizer to fetch
+   :param event: The ``slug`` field of the event to fetch
+   :param id: The ``id`` field of the order position to delete
+   :statuscode 204: no error
+   :statuscode 400: This position cannot be deleted (e.g. last position in order)
+   :statuscode 401: Authentication failure
+   :statuscode 403: The requested organizer/event does not exist **or** you have no permission to view this resource.
+   :statuscode 404: The requested order position does not exist.
+
+.. http:post:: /api/v1/organizers/(organizer)/events/(event)/orderpositions/
+
+   Adds a new position to an order. Currently, only the following fields are supported:
+
+   * ``order`` (mandatory, specified as a string mapping to a ``code``)
+
+   * ``addon_to`` (optional, specified as an integer mapping to the ``positionid`` of the parent position)
+
+   * ``item`` (mandatory)
+
+   * ``variation`` (mandatory depending on item)
+
+   * ``subevent`` (mandatory depending on event)
+
+   * ``seat`` (specified as a string mapping to a ``string_guid``, mandatory depending on event and item)
+
+   * ``price`` (default price will be used if unset)
+
+   * ``attendee_email``
+
+   * ``attendee_name_parts`` or ``attendee_name``
+
+   * ``company``
+
+   * ``street``
+
+   * ``zipcode``
+
+   * ``city``
+
+   * ``country``
+
+   * ``state``
+
+   * ``answers``: Validation is handled the same way as when creating orders through the API. You are therefore
+     expected to provide ``question``, ``answer``, and possibly ``options``. ``question_identifier``
+     and ``option_identifiers`` will be ignored. As a special case, you can submit the magic value
+     ``"file:keep"`` as the answer to a file question to keep the current value without re-uploading it.
+
+   This will **not** automatically trigger creation of a new invoice, yneed to take care of that yourself.
+
+   **Example request**:
+
+   .. sourcecode:: http
+
+      POST /api/v1/organizers/bigevents/events/sampleconf/orderpositions/ HTTP/1.1
+      Host: pretix.eu
+      Accept: application/json, text/javascript
+      Content-Type: application/json
+
+      {
+        "order": "ABC12",
+        "item": 5,
+        "addon_to": 1
+      }
+
+   **Example response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 201 Created
+      Vary: Accept
+      Content-Type: application/json
+
+      (Full order position resource, see above.)
+
+   :param organizer: The ``slug`` field of the organizer of the event
+   :param event: The ``slug`` field of the event
+
+   :statuscode 200: no error
+   :statuscode 400: The position could not be created due to invalid submitted data.
+   :statuscode 401: Authentication failure
+   :statuscode 403: The requested organizer/event does not exist **or** you have no permission to create this position.
 
 .. http:delete:: /api/v1/organizers/(organizer)/events/(event)/orderpositions/(id)/
 

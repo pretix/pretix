@@ -36,7 +36,7 @@ from django.utils.translation import gettext as _
 from django_filters.rest_framework import DjangoFilterBackend, FilterSet
 from django_scopes import scopes_disabled
 from PIL import Image
-from rest_framework import mixins, serializers, status, viewsets
+from rest_framework import serializers, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.exceptions import (
     APIException, NotFound, PermissionDenied, ValidationError,
@@ -52,6 +52,7 @@ from pretix.api.serializers.order import (
     OrderRefundCreateSerializer, OrderRefundSerializer, OrderSerializer,
     PriceCalcSerializer, RevokedTicketSecretSerializer,
     SimulatedOrderSerializer, OrderPositionInfoPatchSerializer, OrderPositionChangeSerializer,
+    OrderPositionCreateForExistingOrderSerializer,
 )
 from pretix.base.i18n import language
 from pretix.base.models import (
@@ -823,7 +824,7 @@ with scopes_disabled():
             }
 
 
-class OrderPositionViewSet(mixins.DestroyModelMixin, mixins.UpdateModelMixin, viewsets.ReadOnlyModelViewSet):
+class OrderPositionViewSet(viewsets.ModelViewSet):
     serializer_class = OrderPositionSerializer
     queryset = OrderPosition.all.none()
     filter_backends = (DjangoFilterBackend, OrderingFilter)
@@ -1074,6 +1075,63 @@ class OrderPositionViewSet(mixins.DestroyModelMixin, mixins.UpdateModelMixin, vi
             raise ValidationError(str(e))
         except Quota.QuotaExceededException as e:
             raise ValidationError(str(e))
+
+    def create(self, request, *args, **kwargs):
+        with transaction.atomic():
+            serializer = OrderPositionCreateForExistingOrderSerializer(
+                data=request.data,
+                context=self.get_serializer_context(),
+            )
+            serializer.is_valid(raise_exception=True)
+            order = serializer.validated_data['order']
+            ocm = OrderChangeManager(
+                order=order,
+                user=request.user,
+                auth=request.auth,
+                notify=False,
+                reissue_invoice=False,
+            )
+            serializer.context['ocm'] = ocm
+            serializer.save()
+
+            # Fields that can be easily patched after the position was added
+            old_data = OrderPositionInfoPatchSerializer(instance=serializer.instance, context=self.get_serializer_context()).data
+            serializer = OrderPositionInfoPatchSerializer(
+                instance=serializer.instance,
+                context=self.get_serializer_context(),
+                partial=True,
+                data=request.data
+            )
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+            new_data = serializer.data
+
+            if old_data != new_data:
+                log_data = self.request.data
+                if 'answers' in log_data:
+                    for a in new_data['answers']:
+                        log_data[f'question_{a["question"]}'] = a["answer"]
+                    log_data.pop('answers', None)
+                serializer.instance.order.log_action(
+                    'pretix.event.order.modified',
+                    user=self.request.user,
+                    auth=self.request.auth,
+                    data={
+                        'data': [
+                            dict(
+                                position=serializer.instance.pk,
+                                **log_data
+                            )
+                        ]
+                    }
+                )
+                tickets.invalidate_cache.apply_async(
+                    kwargs={'event': serializer.instance.order.event.pk, 'order': serializer.instance.order.pk})
+                order_modified.send(sender=serializer.instance.order.event, order=serializer.instance.order)
+        return Response(
+            OrderPositionSerializer(serializer.instance, context=self.get_serializer_context()).data,
+            status=status.HTTP_201_CREATED,
+        )
 
     def update(self, request, *args, **kwargs):
         partial = kwargs.get('partial', False)

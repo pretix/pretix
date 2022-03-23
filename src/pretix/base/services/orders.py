@@ -1467,7 +1467,7 @@ class OrderChangeManager:
         if self.order.event.settings.invoice_include_free or position.price != Decimal('0.00'):
             self._invoice_dirty = True
 
-    def add_position(self, item: Item, variation: ItemVariation, price: Decimal, addon_to: Order = None,
+    def add_position(self, item: Item, variation: ItemVariation, price: Decimal, addon_to: OrderPosition = None,
                      subevent: SubEvent = None, seat: Seat = None, membership: Membership = None):
         if isinstance(seat, str):
             if not seat:
@@ -1492,6 +1492,8 @@ class OrderChangeManager:
 
         if price is None:
             raise OrderError(self.error_messages['product_invalid'])
+        if item.variations.exists() and not variation:
+            raise OrderError(self.error_messages['product_without_variation'])
         if not addon_to and item.category and item.category.is_addon:
             raise OrderError(self.error_messages['addon_to_required'])
         if addon_to:

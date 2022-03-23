@@ -132,6 +132,7 @@ def order(event, item, taxrule, question):
             attendee_name_parts={"full_name": "Peter", "_scheme": "full"},
             secret="z3fsn8jyufm5kpk768q69gkbyr5f4h6w",
             pseudonymization_id="ABCDEFGHKL",
+            positionid=1,
         )
         OrderPosition.objects.create(
             order=o,
@@ -141,7 +142,8 @@ def order(event, item, taxrule, question):
             attendee_name_parts={"full_name": "Peter", "_scheme": "full"},
             secret="YBiYJrmF5ufiTLdV1iDf",
             pseudonymization_id="JKLM",
-            canceled=True
+            canceled=True,
+            positionid=2,
         )
         op.answers.create(question=question, answer='S')
         return o
@@ -5430,3 +5432,248 @@ def test_position_update_change_price_and_tax_rule(token_client, organizer, even
     assert op.tax_rate == Decimal('19.00')
     assert op.tax_value == Decimal('19.00')
     assert op.tax_rule == tr
+
+
+@pytest.mark.django_db
+def test_position_add_simple(token_client, organizer, event, order, quota, item):
+    with scopes_disabled():
+        assert order.positions.count() == 1
+    payload = {
+        'order': order.code,
+        'item': item.pk,
+    }
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orderpositions/'.format(
+            organizer.slug, event.slug,
+        ), format='json', data=payload
+    )
+    assert resp.status_code == 201
+    with scopes_disabled():
+        assert order.positions.count() == 2
+        op = order.positions.last()
+        assert op.item == item
+        assert op.price == item.default_price
+        assert op.positionid == 3
+
+
+@pytest.mark.django_db
+def test_position_add_price(token_client, organizer, event, order, quota, item):
+    with scopes_disabled():
+        assert order.positions.count() == 1
+    payload = {
+        'order': order.code,
+        'item': item.pk,
+        'price': '99.99'
+    }
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orderpositions/'.format(
+            organizer.slug, event.slug,
+        ), format='json', data=payload
+    )
+    assert resp.status_code == 201
+    with scopes_disabled():
+        assert order.positions.count() == 2
+        op = order.positions.last()
+        assert op.item == item
+        assert op.price == Decimal('99.99')
+        assert op.positionid == 3
+
+
+@pytest.mark.django_db
+def test_position_add_subevent(token_client, organizer, event, order, quota, item, subevent):
+    with scopes_disabled():
+        assert order.positions.count() == 1
+        quota.subevent = subevent
+        quota.save()
+    payload = {
+        'order': order.code,
+        'item': item.pk,
+        'subevent': subevent.pk,
+    }
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orderpositions/'.format(
+            organizer.slug, event.slug,
+        ), format='json', data=payload
+    )
+    assert resp.status_code == 201
+    with scopes_disabled():
+        assert order.positions.count() == 2
+        op = order.positions.last()
+        assert op.item == item
+        assert op.price == item.default_price
+        assert op.positionid == 3
+        assert op.subevent == subevent
+
+
+@pytest.mark.django_db
+def test_position_add_subevent_required(token_client, organizer, event, order, quota, item, subevent):
+    with scopes_disabled():
+        assert order.positions.count() == 1
+    payload = {
+        'order': order.code,
+        'item': item.pk,
+    }
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orderpositions/'.format(
+            organizer.slug, event.slug,
+        ), format='json', data=payload
+    )
+    assert resp.status_code == 400
+    assert 'subevent' in str(resp.data)
+
+
+@pytest.mark.django_db
+def test_position_add_quota_empty(token_client, organizer, event, order, quota, item):
+    with scopes_disabled():
+        assert order.positions.count() == 1
+        quota.size = 1
+        quota.save()
+    payload = {
+        'order': order.code,
+        'item': item.pk,
+    }
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orderpositions/'.format(
+            organizer.slug, event.slug,
+        ), format='json', data=payload
+    )
+    assert resp.status_code == 400
+    assert 'quota' in str(resp.data)
+
+
+@pytest.mark.django_db
+def test_position_add_seat(token_client, organizer, event, order, quota, item, seat):
+    with scopes_disabled():
+        assert order.positions.count() == 1
+    payload = {
+        'order': order.code,
+        'item': item.pk,
+        'seat': seat.seat_guid,
+    }
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orderpositions/'.format(
+            organizer.slug, event.slug,
+        ), format='json', data=payload
+    )
+    assert resp.status_code == 201
+    with scopes_disabled():
+        assert order.positions.count() == 2
+        op = order.positions.last()
+        assert op.item == item
+        assert op.price == item.default_price
+        assert op.positionid == 3
+        assert op.seat == seat
+
+
+@pytest.mark.django_db
+def test_position_add_seat_required(token_client, organizer, event, order, quota, item, seat):
+    with scopes_disabled():
+        assert order.positions.count() == 1
+    payload = {
+        'order': order.code,
+        'item': item.pk,
+    }
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orderpositions/'.format(
+            organizer.slug, event.slug,
+        ), format='json', data=payload
+    )
+    assert resp.status_code == 400
+    assert 'seat' in str(resp.data)
+
+
+@pytest.mark.django_db
+def test_position_add_addon_to(token_client, organizer, event, order, quota, item):
+    with scopes_disabled():
+        cat = event.categories.create(name="Workshops")
+        item2 = event.items.create(name="WS1", default_price=23, category=cat)
+        quota.items.add(item2)
+        item.addons.create(addon_category=cat)
+        assert order.positions.count() == 1
+    payload = {
+        'order': order.code,
+        'item': item2.pk,
+        'addon_to': 1,
+    }
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orderpositions/'.format(
+            organizer.slug, event.slug,
+        ), format='json', data=payload
+    )
+    assert resp.status_code == 201
+    with scopes_disabled():
+        assert order.positions.count() == 2
+        op = order.positions.last()
+        assert op.positionid == 3
+        assert op.addon_to.positionid == 1
+
+
+@pytest.mark.django_db
+def test_position_add_addon_to_canceled_position(token_client, organizer, event, order, quota, item):
+    with scopes_disabled():
+        cat = event.categories.create(name="Workshops")
+        item2 = event.items.create(name="WS1", default_price=23, category=cat)
+        quota.items.add(item2)
+        item.addons.create(addon_category=cat)
+        assert order.positions.count() == 1
+    payload = {
+        'order': order.code,
+        'item': item2.pk,
+        'addon_to': 2,
+    }
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orderpositions/'.format(
+            organizer.slug, event.slug,
+        ), format='json', data=payload
+    )
+    assert resp.status_code == 400
+    assert 'unknown position' in str(resp.data)
+
+
+@pytest.mark.django_db
+def test_position_add_addon_to_wrong_product(token_client, organizer, event, order, quota, item):
+    with scopes_disabled():
+        assert order.positions.count() == 1
+    payload = {
+        'order': order.code,
+        'item': item.pk,
+        'addon_to': 1,
+    }
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orderpositions/'.format(
+            organizer.slug, event.slug,
+        ), format='json', data=payload
+    )
+    assert resp.status_code == 400
+    assert 'selected base position does not allow you to add this product as an add-on' in str(resp.data)
+
+
+@pytest.mark.django_db
+def test_position_add_and_set_info(token_client, organizer, event, order, quota, question, item):
+    with scopes_disabled():
+        assert order.positions.count() == 1
+    payload = {
+        'order': order.code,
+        'item': item.pk,
+        'attendee_name': 'John Doe',
+        'answers': [
+            {
+                'question': question.pk,
+                'answer': 'FOOBAR',
+            },
+        ]
+    }
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orderpositions/'.format(
+            organizer.slug, event.slug,
+        ), format='json', data=payload
+    )
+    assert resp.status_code == 201
+    with scopes_disabled():
+        assert order.positions.count() == 2
+        op = order.positions.last()
+        assert op.item == item
+        assert op.price == item.default_price
+        assert op.positionid == 3
+        assert op.attendee_name == 'John Doe'
+        assert op.answers.count() == 1
