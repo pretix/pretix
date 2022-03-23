@@ -8,6 +8,7 @@
 {% block content %}
     <h1>
         {% trans "Refund order" %}
+        <small class="text-muted">{{ full_refund|money:request.event.currency }}</small>
         <a class="btn btn-link btn-lg"
                 href="{% url "control:event.order" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}">
             {% blocktrans trimmed with order=order.code %}

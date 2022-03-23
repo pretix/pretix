@@ -1123,6 +1123,7 @@ class OrderRefundView(OrderView):
         return render(self.request, 'pretixcontrol/order/refund_choose.html', {
             'payments': payments,
             'new_refunds': new_refunds,
+            'full_refund': full_refund,
             'remainder': to_refund,
             'order': self.order,
             'comment': comment,
