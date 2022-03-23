@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-03-21 15:59+0000\n"
-"PO-Revision-Date: 2022-03-23 01:44+0000\n"
+"PO-Revision-Date: 2022-03-23 08:15+0000\n"
 "Last-Translator: Michał Rokita <mrokita@mrokita.pl>\n"
 "Language-Team: Polish <https://translate.pretix.eu/projects/pretix/pretix/pl/"
 ">\n"
@@ -8215,6 +8215,8 @@ msgid ""
 "Make sure to enter a valid email address. We will send you an order "
 "confirmation including a link that you need to access your order later."
 msgstr ""
+"Upewnij się, że wprowadzasz poprawny adres email. Prześlemy Ci potwierdzenie "
+"zawierające link dający dostęp do Twojego zamówienia."
 
 #: pretix/base/settings.py:2433
 msgid "Help text of the email field"
@@ -12458,7 +12460,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order_pay.html:27
 #: pretix/presale/templates/pretixpresale/event/order_pay_change.html:60
 msgid "Continue"
-msgstr ""
+msgstr "Kontynuuj"
 
 #: pretix/control/templates/pretixcontrol/auth/oauth_authorization.html:8
 msgid "Authorize an application"
@@ -20807,6 +20809,8 @@ msgid ""
 "After completing your purchase, we will ask you to transfer the money to the "
 "following bank account, using a personal reference code:"
 msgstr ""
+"Po utworzeniu zamówienia, poprosimy o przelanie pieniędzy na następujące "
+"konto bankowe, umieszczając następujący kod w tytule przelewu:"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_payment_form.html:23
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:37
@@ -20818,6 +20822,7 @@ msgid ""
 "We will assign you a personal reference code to use after you completed the "
 "order."
 msgstr ""
+"Kod do umieszczenia w tytule zostanie przypisany po przesłaniu zamówienia."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/control.html:8
 #, fuzzy
@@ -23405,7 +23410,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/organizers/customer_address_delete.html:21
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile_delete.html:21
 msgid "Go back"
-msgstr ""
+msgstr "Wróć"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:7
 #, python-format
@@ -23610,12 +23615,12 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:8
 msgid "Before we continue, we need you to answer some questions."
-msgstr ""
+msgstr "Zanim przejdziemy dalej, potrzebujemy odpowiedzi na kilka pytań."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:10
 msgid ""
 "You need to fill all fields that are marked with <span>*</span> to continue."
-msgstr ""
+msgstr "Pola oznaczone <span>*</span>są wymagane."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:54
 #, fuzzy
