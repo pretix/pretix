@@ -99,7 +99,8 @@ following endpoint:
        "hardware_brand": "Samsung",
        "hardware_model": "Galaxy S",
        "software_brand": "pretixdroid",
-       "software_version": "4.1.0"
+       "software_version": "4.1.0",
+       "info": {"arbitrary": "data"}
    }
 
 You will receive a response equivalent to the response of your initialization request.
