@@ -255,7 +255,6 @@ class OrderFilterForm(FilterForm):
                 | Q(pk__in=matching_invoices)
                 | Q(pk__in=matching_positions)
                 | Q(pk__in=matching_invoice_addresses)
-                | Q(pk__in=matching_invoices)
             )
             for recv, q in order_search_filter_q.send(sender=getattr(self, 'event', None), query=u):
                 mainq = mainq | q
