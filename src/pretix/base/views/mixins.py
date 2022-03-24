@@ -58,7 +58,7 @@ class BaseQuestionsViewMixin:
     def _positions_for_questions(self):
         raise NotImplementedError()
 
-    def get_question_override_sets(self, position):
+    def get_question_override_sets(self, position, index):
         return []
 
     def question_form_kwargs(self, cr):
@@ -72,7 +72,7 @@ class BaseQuestionsViewMixin:
         submitted at once.
         """
         formlist = []
-        for cr in self._positions_for_questions:
+        for idx, cr in enumerate(self._positions_for_questions):
             cartpos = cr if isinstance(cr, CartPosition) else None
             orderpos = cr if isinstance(cr, OrderPosition) else None
 
@@ -96,7 +96,7 @@ class BaseQuestionsViewMixin:
                 ))
             )
 
-            override_sets = self.get_question_override_sets(cr)
+            override_sets = self.get_question_override_sets(cr, idx)
             for overrides in override_sets:
                 for question_name, question_field in form.fields.items():
                     if hasattr(question_field, 'question'):
