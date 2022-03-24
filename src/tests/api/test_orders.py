@@ -292,11 +292,13 @@ def test_order_list_filter_subevent_date(token_client, organizer, event, order, 
         p = order.positions.first()
         p.subevent = subevent
         p.save()
+        fee = order.fees.first()
     res["positions"][0]["item"] = item.pk
     res["positions"][0]["subevent"] = subevent.pk
     res["positions"][0]["answers"][0]["question"] = question.pk
     res["last_modified"] = order.last_modified.isoformat().replace('+00:00', 'Z')
     res["fees"][0]["tax_rule"] = taxrule.pk
+    res["fees"][0]["id"] = fee.pk
 
     resp = token_client.get('/api/v1/organizers/{}/events/{}/orders/?subevent_after={}'.format(
         organizer.slug, event.slug,
@@ -330,6 +332,7 @@ def test_order_list(token_client, organizer, event, order, item, taxrule, questi
     res = dict(TEST_ORDER_RES)
     with scopes_disabled():
         res["positions"][0]["id"] = order.positions.first().pk
+        res["fees"][0]["id"] = order.fees.first().pk
     res["positions"][0]["item"] = item.pk
     res["positions"][0]["answers"][0]["question"] = question.pk
     res["last_modified"] = order.last_modified.isoformat().replace('+00:00', 'Z')
@@ -403,6 +406,7 @@ def test_order_detail(token_client, organizer, event, order, item, taxrule, ques
     res = dict(TEST_ORDER_RES)
     with scopes_disabled():
         res["positions"][0]["id"] = order.positions.first().pk
+        res["fees"][0]["id"] = order.fees.first().pk
     res["positions"][0]["item"] = item.pk
     res["fees"][0]["tax_rule"] = taxrule.pk
     res["positions"][0]["answers"][0]["question"] = question.pk
@@ -1773,6 +1777,7 @@ def test_order_create_simulate(token_client, organizer, event, item, quota, ques
         'payment_provider': None,
         'fees': [
             {
+                'id': 0,
                 'fee_type': 'payment',
                 'value': '0.25',
                 'description': '',

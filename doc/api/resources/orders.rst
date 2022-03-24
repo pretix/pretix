@@ -68,6 +68,7 @@ positions                             list of objects            List of order p
                                                                  non-canceled positions are included.
 fees                                  list of objects            List of fees included in the order total. By default, only
                                                                  non-canceled fees are included.
+├ id                                  integer                    Internal ID of the fee record
 ├ fee_type                            string                     Type of fee (currently ``payment``, ``passbook``,
                                                                  ``other``)
 ├ value                               money (string)             Fee amount
