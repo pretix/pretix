@@ -51,8 +51,13 @@ from pretix.api.serializers.order import (
     OrderPaymentSerializer, OrderPositionSerializer,
     OrderRefundCreateSerializer, OrderRefundSerializer, OrderSerializer,
     PriceCalcSerializer, RevokedTicketSecretSerializer,
-    SimulatedOrderSerializer, OrderPositionInfoPatchSerializer, OrderPositionChangeSerializer,
+    SimulatedOrderSerializer,
+)
+from pretix.api.serializers.orderchange import (
+    OrderChangeOperationSerializer, OrderFeeChangeSerializer,
+    OrderPositionChangeSerializer,
     OrderPositionCreateForExistingOrderSerializer,
+    OrderPositionInfoPatchSerializer,
 )
 from pretix.base.i18n import language
 from pretix.base.models import (
@@ -782,6 +787,78 @@ class OrderViewSet(viewsets.ModelViewSet):
 
         with transaction.atomic():
             self.get_object().gracefully_delete(user=self.request.user if self.request.user.is_authenticated else None, auth=self.request.auth)
+
+    @action(detail=True, methods=['POST'])
+    def change(self, request, **kwargs):
+        order = self.get_object()
+
+        serializer = OrderChangeOperationSerializer(
+            context={'order': order, **self.get_serializer_context()},
+            data=request.data,
+        )
+        serializer.is_valid(raise_exception=True)
+
+        try:
+            ocm = OrderChangeManager(
+                order=order,
+                user=request.user,
+                auth=request.auth,
+                notify=serializer.validated_data.get('send_email', False),
+                reissue_invoice=serializer.validated_data.get('reissue_invoice', True),
+            )
+
+            canceled_positions = set()
+            for r in serializer.validated_data.get('cancel_positions', []):
+                ocm.cancel(r['position'])
+                canceled_positions.add(r['position'])
+
+            for r in serializer.validated_data.get('patch_positions', []):
+                if r['position'] in canceled_positions:
+                    continue
+                pos_serializer = OrderPositionChangeSerializer(
+                    context={'ocm': ocm, 'commit': False, 'event': request.event, **self.get_serializer_context()},
+                )
+                pos_serializer.update(r['position'], r['body'])
+
+            for r in serializer.validated_data.get('split_positions', []):
+                if r['position'] in canceled_positions:
+                    continue
+                ocm.split(r['position'])
+
+            for r in serializer.validated_data.get('create_positions', []):
+                pos_serializer = OrderPositionCreateForExistingOrderSerializer(
+                    context={'ocm': ocm, 'commit': False, 'event': request.event, **self.get_serializer_context()},
+                )
+                pos_serializer.create(r)
+
+            canceled_fees = set()
+            for r in serializer.validated_data.get('cancel_fees', []):
+                ocm.cancel_fee(r['fee'])
+                canceled_fees.add(r['fee'])
+
+            for r in serializer.validated_data.get('patch_fees', []):
+                if r['fee'] in canceled_fees:
+                    continue
+                pos_serializer = OrderFeeChangeSerializer(
+                    context={'ocm': ocm, 'commit': False, 'event': request.event, **self.get_serializer_context()},
+                )
+                pos_serializer.update(r['fee'], r['body'])
+
+            if serializer.validated_data.get('recalculate_taxes') == 'keep_net':
+                ocm.recalculate_taxes(keep='net')
+            elif serializer.validated_data.get('recalculate_taxes') == 'keep_gross':
+                ocm.recalculate_taxes(keep='gross')
+
+            ocm.commit()
+        except OrderError as e:
+            raise ValidationError(str(e))
+
+        order.refresh_from_db()
+        serializer = OrderSerializer(
+            instance=order,
+            context=self.get_serializer_context(),
+        )
+        return Response(serializer.data)
 
 
 with scopes_disabled():

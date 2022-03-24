@@ -5654,7 +5654,7 @@ def test_position_add_addon_to_wrong_product(token_client, organizer, event, ord
 
 
 @pytest.mark.django_db
-def test_position_add_and_set_info(token_client, organizer, event, order, quota, question, item):
+def test_position_add_and_set_info(token_client, organizer, event, order, question, item):
     with scopes_disabled():
         assert order.positions.count() == 1
     payload = {
@@ -5682,3 +5682,89 @@ def test_position_add_and_set_info(token_client, organizer, event, order, quota,
         assert op.positionid == 3
         assert op.attendee_name == 'John Doe'
         assert op.answers.count() == 1
+
+
+@pytest.mark.django_db
+def test_order_change_patch(token_client, organizer, event, order, quota):
+    with scopes_disabled():
+        item2 = event.items.create(name="Budget Ticket", default_price=23)
+        quota.items.add(item2)
+        p = order.positions.first()
+        f = order.fees.first()
+    payload = {
+        'patch_positions': [
+            {
+                'position': p.pk,
+                'body': {
+                    'item': item2.pk,
+                    'price': '99.44',
+                },
+            },
+        ],
+        'patch_fees': [
+            {
+                'fee': f.pk,
+                'body': {
+                    'value': '10.00',
+                }
+            }
+        ]
+    }
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/{}/change/'.format(
+            organizer.slug, event.slug, order.code,
+        ), format='json', data=payload
+    )
+    assert resp.status_code == 200
+    with scopes_disabled():
+        p.refresh_from_db()
+        assert p.price == Decimal('99.44')
+        assert p.item == item2
+        f.refresh_from_db()
+        assert f.value == Decimal('10.00')
+
+
+@pytest.mark.django_db
+def test_order_change_cancel_and_create(token_client, organizer, event, order, quota, item):
+    with scopes_disabled():
+        p = order.positions.first()
+        f = order.fees.first()
+    payload = {
+        'cancel_positions': [
+            {
+                'position': p.pk,
+            },
+        ],
+        'create_positions': [
+            {
+                'item': item.pk,
+                'price': '99.99'
+            },
+        ],
+        'cancel_fees': [
+            {
+                'fee': f.pk,
+            }
+        ]
+    }
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/{}/change/'.format(
+            organizer.slug, event.slug, order.code,
+        ), format='json', data=payload
+    )
+    assert resp.status_code == 200
+    with scopes_disabled():
+        p.refresh_from_db()
+        assert p.canceled
+        p_new = order.positions.last()
+        assert p_new != p
+        assert p_new.item == item
+        assert p_new.price == Decimal('99.99')
+        f.refresh_from_db()
+        assert f.canceled
+
+# todo: send_email
+# todo: reissue_invoice
+# todo: recalculate_taxes
+# todo: selection of positions/fees (right order, not canceled)
+# todo: change payload validation
