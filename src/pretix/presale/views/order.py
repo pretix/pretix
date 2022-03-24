@@ -729,7 +729,7 @@ class OrderModify(EventViewMixin, OrderDetailMixin, OrderQuestionsViewMixin, Tem
             return []
         return super().positions
 
-    def get_question_override_sets(self, order_position):
+    def get_question_override_sets(self, order_position, index):
         override_sets = [
             resp for recv, resp in question_form_fields_overrides.send(
                 self.request.event,

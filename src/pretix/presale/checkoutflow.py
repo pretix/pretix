@@ -735,9 +735,9 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
 
         return f
 
-    def get_question_override_sets(self, cart_position):
+    def get_question_override_sets(self, cart_position, index):
         o = []
-        if self.cart_customer:
+        if self.cart_customer and index == 0:
             o.append({
                 'attendee_name_parts': {
                     'initial': self.cart_customer.name_parts
