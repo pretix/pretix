@@ -180,6 +180,7 @@ class PretixPosSecurityProfile(AllowListSecurityProfile):
         ('POST', 'plugins:pretix_posbackend:posdebuglogentry-bulk-create'),
         ('GET', 'plugins:pretix_posbackend:poscashier-list'),
         ('POST', 'plugins:pretix_posbackend:stripeterminal.token'),
+        ('PUT', 'plugins:pretix_posbackend:file.upload'),
         ('GET', 'api-v1:revokedsecrets-list'),
         ('GET', 'api-v1:event.settings'),
         ('GET', 'plugins:pretix_seating:event.event'),
