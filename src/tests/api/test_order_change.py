@@ -1740,12 +1740,149 @@ def test_order_change_send_email_reissue_invoice(token_client, organizer, event,
             organizer.slug, event.slug, order.code,
         ), format='json', data=payload
     )
-    print(resp.data)
     assert resp.status_code == 200
     assert len(djmail.outbox) == 1
     with scopes_disabled():
         assert order.invoices.count() == 3
 
-# todo: recalculate_taxes
-# todo: selection of positions/fees (right order, not canceled)
-# todo: change payload validation
+
+@pytest.mark.django_db
+def test_order_change_recalculate_taxes(token_client, organizer, event, order, quota, item):
+    djmail.outbox = []
+    with scopes_disabled():
+        tax_rule = event.tax_rules.create(rate=7)
+        p = order.positions.first()
+        p.tax_rule = tax_rule
+        p.save()
+        assert p.tax_rate == 0
+    payload = {
+        'recalculate_taxes': 'keep_gross',
+    }
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/{}/change/'.format(
+            organizer.slug, event.slug, order.code,
+        ), format='json', data=payload
+    )
+    assert resp.status_code == 200
+
+    with scopes_disabled():
+        p.refresh_from_db()
+        assert p.tax_rule == tax_rule
+        assert p.tax_rate == Decimal('7.00')
+        assert p.price == Decimal('23.00')
+        assert p.tax_value == Decimal('1.50')
+
+    tax_rule.rate = 10
+    tax_rule.save()
+    payload = {
+        'recalculate_taxes': 'keep_net',
+    }
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/{}/change/'.format(
+            organizer.slug, event.slug, order.code,
+        ), format='json', data=payload
+    )
+    assert resp.status_code == 200
+
+    with scopes_disabled():
+        p.refresh_from_db()
+        assert p.tax_rule == tax_rule
+        assert p.tax_rate == Decimal('10.00')
+        assert p.price == Decimal('23.65')
+        assert p.tax_value == Decimal('2.15')
+
+
+@pytest.mark.django_db
+def test_order_change_split(token_client, organizer, event, order):
+    djmail.outbox = []
+    with scopes_disabled():
+        p_canceled = order.all_positions.filter(canceled=True).first()
+        p_canceled.canceled = False
+        p_canceled.save()
+        assert event.orders.count() == 1
+    payload = {
+        'split_positions': [
+            {'position': p_canceled.pk}
+        ]
+    }
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/{}/change/'.format(
+            organizer.slug, event.slug, order.code,
+        ), format='json', data=payload
+    )
+    assert resp.status_code == 200
+    with scopes_disabled():
+        assert event.orders.count() == 2
+
+
+@pytest.mark.django_db
+def test_order_change_invalid_input(token_client, organizer, event, order, quota, item, item2):
+    djmail.outbox = []
+    with scopes_disabled():
+        tax_rule = event.tax_rules.create(rate=7)
+        p = order.positions.first()
+        p_canceled = order.all_positions.filter(canceled=True).first()
+        f_canceled = order.all_fees.filter(canceled=True).first()
+        p.tax_rule = tax_rule
+        p.save()
+        assert p.tax_rate == 0
+    payload = {
+        'cancel_fees': [
+            {'fee': f_canceled.pk}
+        ]
+    }
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/{}/change/'.format(
+            organizer.slug, event.slug, order.code,
+        ), format='json', data=payload
+    )
+    assert 'does not exist' in str(resp.data)
+    assert resp.status_code == 400
+    payload = {
+        'patch_positions': [
+            {'position': p_canceled.pk, 'body': {'price': '99.00'}}
+        ],
+    }
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/{}/change/'.format(
+            organizer.slug, event.slug, order.code,
+        ), format='json', data=payload
+    )
+    assert 'does not exist' in str(resp.data)
+    assert resp.status_code == 400
+    payload = {
+        'patch_positions': [
+            {'position': p.pk, 'body': {'item': item2.pk}}
+        ],
+    }
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/{}/change/'.format(
+            organizer.slug, event.slug, order.code,
+        ), format='json', data=payload
+    )
+    assert 'does not exist' in str(resp.data)
+    assert resp.status_code == 400
+    payload = {
+        'cancel_positions': [
+            {'position': p.pk}
+        ],
+    }
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/{}/change/'.format(
+            organizer.slug, event.slug, order.code,
+        ), format='json', data=payload
+    )
+    assert 'empty' in str(resp.data)
+    assert resp.status_code == 400
+    payload = {
+        'split_positions': [
+            {'position': p.pk}
+        ],
+    }
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/{}/change/'.format(
+            organizer.slug, event.slug, order.code,
+        ), format='json', data=payload
+    )
+    assert 'empty' in str(resp.data)
+    assert resp.status_code == 400
