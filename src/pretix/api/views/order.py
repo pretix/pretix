@@ -801,7 +801,7 @@ class OrderViewSet(viewsets.ModelViewSet):
         try:
             ocm = OrderChangeManager(
                 order=order,
-                user=request.user,
+                user=self.request.user if self.request.user.is_authenticated else None,
                 auth=request.auth,
                 notify=serializer.validated_data.get('send_email', False),
                 reissue_invoice=serializer.validated_data.get('reissue_invoice', True),
@@ -1139,6 +1139,25 @@ class OrderPositionViewSet(viewsets.ModelViewSet):
                 )
                 return resp
 
+    @action(detail=True, methods=['POST'])
+    def regenerate_secrets(self, request, **kwargs):
+        instance = self.get_object()
+        try:
+            ocm = OrderChangeManager(
+                instance.order,
+                user=self.request.user if self.request.user.is_authenticated else None,
+                auth=self.request.auth,
+                notify=False,
+                reissue_invoice=False,
+            )
+            ocm.regenerate_secret(instance)
+            ocm.commit()
+        except OrderError as e:
+            raise ValidationError(str(e))
+        except Quota.QuotaExceededException as e:
+            raise ValidationError(str(e))
+        return self.retrieve(request, [], **kwargs)
+
     def perform_destroy(self, instance):
         try:
             ocm = OrderChangeManager(
@@ -1164,7 +1183,7 @@ class OrderPositionViewSet(viewsets.ModelViewSet):
             order = serializer.validated_data['order']
             ocm = OrderChangeManager(
                 order=order,
-                user=request.user,
+                user=self.request.user if self.request.user.is_authenticated else None,
                 auth=request.auth,
                 notify=False,
                 reissue_invoice=False,
@@ -1223,7 +1242,7 @@ class OrderPositionViewSet(viewsets.ModelViewSet):
             instance = self.get_object()
             ocm = OrderChangeManager(
                 order=instance.order,
-                user=request.user,
+                user=self.request.user if self.request.user.is_authenticated else None,
                 auth=request.auth,
                 notify=False,
                 reissue_invoice=False,

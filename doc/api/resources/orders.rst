@@ -740,6 +740,37 @@ Generating new secrets
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer/event does not exist **or** you have no permission to update this order.
 
+.. http:post:: /api/v1/organizers/(organizer)/events/(event)/orderpositions/(id)/regenerate_secrets/
+
+   Triggers generation of a new ``secret`` attribute for a single order position.
+
+   **Example request**:
+
+   .. sourcecode:: http
+
+      POST /api/v1/organizers/bigevents/events/sampleconf/orderpositions/23/regenerate_secrets/ HTTP/1.1
+      Host: pretix.eu
+      Accept: application/json, text/javascript
+
+   **Example response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 200 OK
+      Vary: Accept
+      Content-Type: application/json
+
+      (Full order position resource, see above.)
+
+   :param organizer: The ``slug`` field of the organizer of the event
+   :param event: The ``slug`` field of the event
+   :param code: The ``id`` field of the order position to update
+
+   :statuscode 200: no error
+   :statuscode 400: The order position could not be updated due to invalid submitted data.
+   :statuscode 401: Authentication failure
+   :statuscode 403: The requested organizer/event does not exist **or** you have no permission to update this order position.
+
 Deleting orders
 ---------------
 
@@ -1801,7 +1832,7 @@ Manipulating individual positions
      and ``option_identifiers`` will be ignored. As a special case, you can submit the magic value
      ``"file:keep"`` as the answer to a file question to keep the current value without re-uploading it.
 
-   This will **not** automatically trigger creation of a new invoice, yneed to take care of that yourself.
+   This will **not** automatically trigger creation of a new invoice, you need to take care of that yourself.
 
    **Example request**:
 

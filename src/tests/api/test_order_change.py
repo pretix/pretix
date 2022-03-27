@@ -523,6 +523,22 @@ def test_order_regenerate_secrets(token_client, organizer, event, order):
 
 
 @pytest.mark.django_db
+def test_position_regenerate_secrets(token_client, organizer, event, order):
+    with scopes_disabled():
+        p = order.positions.first()
+        ps = p.secret
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orderpositions/{}/regenerate_secrets/'.format(
+            organizer.slug, event.slug, p.pk,
+        ), format='json', data={}
+    )
+    assert resp.status_code == 200
+    p.refresh_from_db()
+    with scopes_disabled():
+        assert ps != p.secret
+
+
+@pytest.mark.django_db
 def test_order_resend_link(token_client, organizer, event, order):
     djmail.outbox = []
     resp = token_client.post(
