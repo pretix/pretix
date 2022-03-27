@@ -817,6 +817,7 @@ class OrderViewSet(viewsets.ModelViewSet):
                     continue
                 pos_serializer = OrderPositionChangeSerializer(
                     context={'ocm': ocm, 'commit': False, 'event': request.event, **self.get_serializer_context()},
+                    partial=True,
                 )
                 pos_serializer.update(r['position'], r['body'])
 

@@ -205,6 +205,9 @@ class OrderPositionChangeSerializer(serializers.ModelSerializer):
         self.fields['item'].queryset = self.context['event'].items.all()
         self.fields['subevent'].queryset = self.context['event'].subevents.all()
         self.fields['tax_rule'].queryset = self.context['event'].tax_rules.all()
+        if kwargs.get('partial'):
+            for k, v in self.fields.items():
+                self.fields[k].required = False
 
     def validate_item(self, item):
         if item.event != self.context['event']:
@@ -300,13 +303,13 @@ class PatchPositionSerializer(serializers.Serializer):
         return value
 
     def validate(self, data):
-        OrderPositionChangeSerializer(context=self.context).validate(data['body'], data['position'])
+        OrderPositionChangeSerializer(context=self.context, partial=True).validate(data['body'], data['position'])
         return data
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['position'].queryset = self.context['order'].positions.all()
-        self.fields['body'] = OrderPositionChangeSerializer(context=self.context)
+        self.fields['body'] = OrderPositionChangeSerializer(context=self.context, partial=True)
 
 
 class SelectPositionSerializer(serializers.Serializer):
@@ -388,3 +391,33 @@ class OrderChangeOperationSerializer(serializers.Serializer):
         self.fields['cancel_fees'] = SelectFeeSerializer(
             many=True, required=False, context=self.context
         )
+
+    def validate(self, data):
+        seen_positions = set()
+        for d in data.get('patch_positions', []):
+            print(d, seen_positions)
+            if d['position'] in seen_positions:
+                raise ValidationError({'patch_positions': ['You have specified the same object twice.']})
+            seen_positions.add(d['position'])
+        seen_positions = set()
+        for d in data.get('cancel_positions', []):
+            if d['position'] in seen_positions:
+                raise ValidationError({'cancel_positions': ['You have specified the same object twice.']})
+            seen_positions.add(d['position'])
+        seen_positions = set()
+        for d in data.get('split_positions', []):
+            if d['position'] in seen_positions:
+                raise ValidationError({'split_positions': ['You have specified the same object twice.']})
+            seen_positions.add(d['position'])
+        seen_fees = set()
+        for d in data.get('patch_fees', []):
+            if d['fee'] in seen_fees:
+                raise ValidationError({'patch_fees': ['You have specified the same object twice.']})
+            seen_positions.add(d['fee'])
+        seen_fees = set()
+        for d in data.get('cancel_fees', []):
+            if d['fee'] in seen_fees:
+                raise ValidationError({'cancel_fees': ['You have specified the same object twice.']})
+            seen_positions.add(d['fee'])
+
+        return data

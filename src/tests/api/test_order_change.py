@@ -1886,3 +1886,16 @@ def test_order_change_invalid_input(token_client, organizer, event, order, quota
     )
     assert 'empty' in str(resp.data)
     assert resp.status_code == 400
+    payload = {
+        'patch_positions': [
+            {'position': p.pk, 'body': {}},
+            {'position': p.pk, 'body': {}},
+        ],
+    }
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/{}/change/'.format(
+            organizer.slug, event.slug, order.code,
+        ), format='json', data=payload
+    )
+    assert 'twice' in str(resp.data)
+    assert resp.status_code == 400
