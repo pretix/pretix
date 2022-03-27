@@ -60,7 +60,7 @@ that your clients can deal with them properly:
 * Support of new HTTP methods for a given API endpoint
 * Support of new query parameters for a given API endpoint
 * New fields contained in API responses
-* Changed error message texts
+* Response body structure or message texts on failed requests (``4xx``, ``5xx`` respones codes)
 
 We treat the following types of changes as *backwards-incompatible*:
 
