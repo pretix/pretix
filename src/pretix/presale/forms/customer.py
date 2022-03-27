@@ -260,6 +260,7 @@ class RegistrationForm(forms.Form):
         customer = self.request.organizer.customers.create(
             email=self.cleaned_data['email'],
             name_parts=self.cleaned_data['name_parts'],
+            phone=self.cleaned_data.get('phone'),
             is_active=True,
             is_verified=False,
             locale=get_language_without_region(),
