@@ -12,7 +12,7 @@ import pretix.base.models.fields
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('pretixbase', '0208_auto_20220214_1632'),
+        ('pretixbase', '0209_device_info'),
     ]
 
     operations = [

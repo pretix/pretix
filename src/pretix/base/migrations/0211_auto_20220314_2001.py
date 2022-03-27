@@ -17,7 +17,7 @@ def migrate_voucher_budget_use(apps, schema_editor):
 
 class Migration(migrations.Migration):
     dependencies = [
-        ('pretixbase', '0209_auto_20220303_2017'),
+        ('pretixbase', '0210_auto_20220303_2017'),
     ]
 
     operations = [
