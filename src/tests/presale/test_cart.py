@@ -46,8 +46,9 @@ from tests.testdummy.signals import FoobarSalesChannel
 
 from pretix.base.decimal import round_decimal
 from pretix.base.models import (
-    CartPosition, Event, InvoiceAddress, Item, ItemCategory, ItemVariation,
-    Organizer, Question, QuestionAnswer, Quota, SeatingPlan, Voucher,
+    CartPosition, Discount, Event, InvoiceAddress, Item, ItemCategory,
+    ItemVariation, Organizer, Question, QuestionAnswer, Quota, SeatingPlan,
+    Voucher,
 )
 from pretix.base.models.items import (
     ItemAddOn, ItemBundle, SubEventItem, SubEventItemVariation,
@@ -2147,6 +2148,27 @@ class CartTest(CartTestMixin, TestCase):
             cp2.refresh_from_db()
             assert cp1.voucher is None
             assert cp2.voucher is None
+
+    def test_discount(self):
+        with scopes_disabled():
+            Discount.objects.create(event=self.event, condition_min_count=2, benefit_discount_matching_percent=20,
+                                    benefit_only_apply_to_cheapest_n_matches=1)
+        self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
+            'item_%d' % self.ticket.id: '1',
+        }, follow=True)
+        with scopes_disabled():
+            objs = list(CartPosition.objects.filter(cart_id=self.session_key, event=self.event))
+        self.assertEqual(len(objs), 1)
+        self.assertEqual(objs[0].item, self.ticket)
+        self.assertIsNone(objs[0].variation)
+        self.assertEqual(objs[0].price, 23)
+        self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
+            'item_%d' % self.ticket.id: '1',
+        }, follow=True)
+        with scopes_disabled():
+            objs = list(CartPosition.objects.filter(cart_id=self.session_key, event=self.event))
+        self.assertEqual(len(objs), 2)
+        self.assertEqual({objs[0].price, objs[1].price}, {Decimal('23.00'), Decimal('18.40')})
 
 
 class CartAddonTest(CartTestMixin, TestCase):

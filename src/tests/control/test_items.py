@@ -40,8 +40,8 @@ from django_scopes import scopes_disabled
 from tests.base import SoupTest, extract_form_fields
 
 from pretix.base.models import (
-    Event, Item, ItemCategory, ItemVariation, Order, OrderPosition, Organizer,
-    Question, Quota, Team, User,
+    Discount, Event, Item, ItemCategory, ItemVariation, Order, OrderPosition,
+    Organizer, Question, Quota, Team, User,
 )
 
 
@@ -695,3 +695,64 @@ class ItemsTest(ItemFormTest):
             i = Item.objects.get(name__icontains='New Item')
             q = Quota.objects.get(name__icontains='New Quota')
             assert q.items.filter(pk=i.pk).exists()
+
+
+class DiscountTest(ItemFormTest):
+
+    def test_create(self):
+        doc = self.get_doc('/control/event/%s/%s/discounts/add' % (self.orga1.slug, self.event1.slug))
+        form_data = extract_form_fields(doc.select('.container-fluid form')[0])
+        form_data['internal_name'] = 'Group discount'
+        form_data['condition_min_count'] = '2'
+        form_data['benefit_discount_matching_percent'] = '20'
+        doc = self.post_doc('/control/event/%s/%s/discounts/add' % (self.orga1.slug, self.event1.slug), form_data)
+        assert doc.select(".alert-success")
+        self.assertIn("Group discount", doc.select("#page-wrapper table")[0].text)
+
+    def test_update(self):
+        c = Discount.objects.create(event=self.event1, internal_name="2 for 1")
+        doc = self.get_doc('/control/event/%s/%s/discounts/%s/' % (self.orga1.slug, self.event1.slug, c.id))
+        form_data = extract_form_fields(doc.select('.container-fluid form')[0])
+        form_data['internal_name'] = 'Group discount'
+        form_data['condition_min_count'] = '2'
+        form_data['benefit_discount_matching_percent'] = '20'
+        doc = self.post_doc('/control/event/%s/%s/discounts/%s/' % (self.orga1.slug, self.event1.slug, c.id),
+                            form_data)
+        assert doc.select(".alert-success")
+        self.assertIn("Group discount", doc.select("#page-wrapper table")[0].text)
+        self.assertNotIn("2 for 1", doc.select("#page-wrapper table")[0].text)
+        with scopes_disabled():
+            assert str(Discount.objects.get(id=c.id).benefit_discount_matching_percent) == '20.00'
+
+    def test_sort(self):
+        with scopes_disabled():
+            c1 = Discount.objects.create(event=self.event1, internal_name="Group discount", condition_min_value=2,
+                                         benefit_discount_matching_percent=20)
+            Discount.objects.create(event=self.event1, internal_name="Big group", condition_min_value=5,
+                                    benefit_discount_matching_percent=40)
+        doc = self.get_doc('/control/event/%s/%s/discounts/' % (self.orga1.slug, self.event1.slug))
+        self.assertIn("Group discount", doc.select("table > tbody > tr")[0].text)
+        self.assertIn("Big group", doc.select("table > tbody > tr")[1].text)
+
+        self.client.post('/control/event/%s/%s/discounts/%s/down' % (self.orga1.slug, self.event1.slug, c1.id))
+        doc = self.get_doc('/control/event/%s/%s/discounts/' % (self.orga1.slug, self.event1.slug))
+        self.assertIn("Group discount", doc.select("table > tbody > tr")[1].text)
+        self.assertIn("Big group", doc.select("table > tbody > tr")[0].text)
+
+        self.client.post('/control/event/%s/%s/discounts/%s/up' % (self.orga1.slug, self.event1.slug, c1.id))
+        doc = self.get_doc('/control/event/%s/%s/discounts/' % (self.orga1.slug, self.event1.slug))
+        self.assertIn("Group discount", doc.select("table > tbody > tr")[0].text)
+        self.assertIn("Big group", doc.select("table > tbody > tr")[1].text)
+
+    def test_delete(self):
+        with scopes_disabled():
+            c = Discount.objects.create(event=self.event1, internal_name="Group discount", condition_min_value=2,
+                                        benefit_discount_matching_percent=20)
+        doc = self.get_doc('/control/event/%s/%s/discounts/%s/delete' % (self.orga1.slug, self.event1.slug, c.id))
+        form_data = extract_form_fields(doc.select('.container-fluid form')[0])
+        doc = self.post_doc('/control/event/%s/%s/discounts/%s/delete' % (self.orga1.slug, self.event1.slug, c.id),
+                            form_data)
+        assert doc.select(".alert-success")
+        self.assertNotIn("Group discount", doc.select("#page-wrapper")[0].text)
+        with scopes_disabled():
+            assert not Discount.objects.filter(id=c.id).exists()

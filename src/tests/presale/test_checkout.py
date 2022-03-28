@@ -39,9 +39,9 @@ from django_scopes import scopes_disabled
 
 from pretix.base.decimal import round_decimal
 from pretix.base.models import (
-    CartPosition, Event, Invoice, InvoiceAddress, Item, ItemCategory, Order,
-    OrderPayment, OrderPosition, Organizer, Question, QuestionAnswer, Quota,
-    SeatingPlan, Voucher,
+    CartPosition, Discount, Event, Invoice, InvoiceAddress, Item, ItemCategory,
+    Order, OrderPayment, OrderPosition, Organizer, Question, QuestionAnswer,
+    Quota, SeatingPlan, Voucher,
 )
 from pretix.base.models.items import (
     ItemAddOn, ItemBundle, ItemVariation, SubEventItem, SubEventItemVariation,
@@ -2407,6 +2407,48 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
             self.assertEqual(len(doc.select(".thank-you")), 1)
             self.assertEqual(Order.objects.count(), 1)
             self.assertEqual(OrderPosition.objects.count(), 1)
+
+    def test_discount_success(self):
+        with scopes_disabled():
+            Discount.objects.create(event=self.event, condition_min_count=2, benefit_discount_matching_percent=20)
+            CartPosition.objects.create(
+                event=self.event, cart_id=self.session_key, item=self.ticket,
+                listed_price=23, price_after_voucher=23, price=18.4, expires=now() - timedelta(minutes=10),
+            )
+            CartPosition.objects.create(
+                event=self.event, cart_id=self.session_key, item=self.ticket,
+                listed_price=23, price_after_voucher=23, price=18.4, expires=now() - timedelta(minutes=10),
+            )
+        self._set_session('payment', 'banktransfer')
+
+        response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
+        doc = BeautifulSoup(response.content.decode(), "lxml")
+        with scopes_disabled():
+            self.assertFalse(CartPosition.objects.filter(cart_id=self.session_key).exists())
+            self.assertEqual(len(doc.select(".thank-you")), 1)
+            self.assertEqual(Order.objects.count(), 1)
+            self.assertEqual(OrderPosition.objects.count(), 2)
+            self.assertEqual(OrderPosition.objects.filter(price=18.4).count(), 2)
+
+    def test_discount_changed(self):
+        with scopes_disabled():
+            Discount.objects.create(event=self.event, condition_min_count=2, benefit_discount_matching_percent=20)
+            cr1 = CartPosition.objects.create(
+                event=self.event, cart_id=self.session_key, item=self.ticket,
+                listed_price=23, price_after_voucher=23, price=23, expires=now() - timedelta(minutes=10),
+            )
+            CartPosition.objects.create(
+                event=self.event, cart_id=self.session_key, item=self.ticket,
+                listed_price=23, price_after_voucher=23, price=23, expires=now() - timedelta(minutes=10),
+            )
+        self._set_session('payment', 'banktransfer')
+
+        response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
+        doc = BeautifulSoup(response.content.decode(), "lxml")
+        self.assertEqual(len(doc.select(".alert-danger")), 1)
+        with scopes_disabled():
+            cr1 = CartPosition.objects.get(id=cr1.id)
+            self.assertEqual(cr1.price, Decimal('18.40'))
 
     def test_max_per_item_failed(self):
         self.quota_tickets.size = 3
