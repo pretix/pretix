@@ -102,7 +102,7 @@ class ItemList(ListView):
         ).annotate(
             var_count=Count('variations')
         ).prefetch_related("category").order_by(
-            F('category__position').desc(nulls_first=True),
+            F('category__position').asc(nulls_first=True),
             'category', 'position'
         )
 
