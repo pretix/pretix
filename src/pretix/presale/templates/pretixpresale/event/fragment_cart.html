@@ -94,6 +94,21 @@
                         </dd>
                     </div>
                 {% endif %}
+                {% if event.settings.show_checkin_number_user and line.checkin_count %}
+                    <div class="cart-icon-details">
+                        <dt class="sr-only">{% trans "Usage:" context "ticket_checkins" %}</dt>
+                        <dd class="text-success">
+                            <span class="fa fa-check-circle fa-fw text-success" aria-hidden="true"></span>
+                            <strong>
+                            {% blocktrans trimmed count count=line.checkin_count %}
+                                This ticket has been used once.
+                            {% plural %}
+                                This ticket has been used {{ count }} times.
+                            {% endblocktrans %}
+                            </strong>
+                        </dd>
+                    </div>
+                {% endif %}
                 {% if line.seat or line.voucher or line.subevent or line.used_membership%}
                     </dl>
                 {% endif %}

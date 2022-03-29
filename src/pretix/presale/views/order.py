@@ -47,7 +47,7 @@ from django.contrib import messages
 from django.core.exceptions import ValidationError
 from django.core.files import File
 from django.db import transaction
-from django.db.models import Exists, OuterRef, Q, Sum
+from django.db.models import Exists, OuterRef, Q, Sum, Subquery, Count
 from django.http import (
     FileResponse, Http404, HttpResponseRedirect, JsonResponse,
 )
@@ -60,7 +60,7 @@ from django.views.decorators.clickjacking import xframe_options_exempt
 from django.views.generic import TemplateView, View
 
 from pretix.base.models import (
-    CachedTicket, GiftCard, Invoice, Order, OrderPosition, Quota, TaxRule,
+    CachedTicket, GiftCard, Invoice, Order, OrderPosition, Quota, TaxRule, Checkin,
 )
 from pretix.base.models.orders import (
     CachedCombinedTicket, InvoiceAddress, OrderFee, OrderPayment, OrderRefund,
@@ -129,6 +129,12 @@ class OrderPositionDetailMixin(NoSearchIndexViewMixin):
             addon_to__isnull=True,
             order__code=self.kwargs['order'],
             positionid=self.kwargs['position']
+        ).annotate(
+            checkin_count=Subquery(
+                Checkin.objects.filter(
+                    successful=True, type=Checkin.TYPE_ENTRY, position_id=OuterRef('pk')
+                ).order_by().values('position').annotate(c=Count('*')).values('c')
+            )
         ).select_related('order', 'order__event').first()
         if p:
             if p.web_secret.lower() == self.kwargs['secret'].lower():
@@ -230,8 +236,15 @@ class OrderDetails(EventViewMixin, OrderDetailMixin, CartMixin, TicketPageMixin,
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         ctx['cart'] = self.get_cart(
-            answers=True, downloads=ctx['can_download'],
-            queryset=self.order.positions.prefetch_related('issued_gift_cards').select_related('tax_rule'),
+            answers=True,
+            downloads=ctx['can_download'],
+            queryset=self.order.positions.prefetch_related('issued_gift_cards').select_related('tax_rule').annotate(
+                checkin_count=Subquery(
+                    Checkin.objects.filter(
+                        successful=True, type=Checkin.TYPE_ENTRY, position_id=OuterRef('pk')
+                    ).order_by().values('position').annotate(c=Count('*')).values('c')
+                )
+            ),
             order=self.order
         )
         ctx['tickets_with_download'] = [p for p in ctx['cart']['positions'] if p.generate_ticket]

@@ -523,6 +523,7 @@ class EventSettingsForm(SettingsForm):
         'last_order_modification_date',
         'allow_modifications_after_checkin',
         'checkout_show_copy_answers_button',
+        'show_checkin_number_user',
         'primary_color',
         'theme_color_success',
         'theme_color_danger',
