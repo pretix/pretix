@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-03-21 15:59+0000\n"
-"PO-Revision-Date: 2022-03-07 23:00+0000\n"
+"PO-Revision-Date: 2022-03-29 21:00+0000\n"
 "Last-Translator: Anna-itk <abc@aarhus.dk>\n"
 "Language-Team: Danish <https://translate.pretix.eu/projects/pretix/pretix/da/"
 ">\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.8\n"
+"X-Generator: Weblate 4.11.2\n"
 
 #: pretix/api/auth/devicesecurity.py:28
 msgid ""
@@ -768,7 +768,7 @@ msgstr "Sprog"
 #: pretix/base/exporters/invoices.py:335 pretix/base/exporters/invoices.py:336
 #: pretix/base/exporters/invoices.py:337 pretix/base/exporters/invoices.py:338
 msgid "Invoice sender:"
-msgstr "Fakturaafsender"
+msgstr "Fakturaafsender:"
 
 #: pretix/base/exporters/invoices.py:206 pretix/base/exporters/invoices.py:214
 #: pretix/base/exporters/invoices.py:332 pretix/base/exporters/invoices.py:340
@@ -914,7 +914,7 @@ msgstr "CVR-nr."
 #: pretix/base/exporters/invoices.py:345 pretix/base/exporters/invoices.py:346
 #: pretix/base/exporters/invoices.py:347 pretix/base/exporters/invoices.py:348
 msgid "Invoice recipient:"
-msgstr "Fakturamodtager"
+msgstr "Fakturamodtager:"
 
 #: pretix/base/exporters/invoices.py:213 pretix/base/exporters/invoices.py:339
 #: pretix/base/exporters/orderlist.py:272
@@ -1879,7 +1879,7 @@ msgstr "Voucherkode"
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:210
 #: pretix/control/views/waitinglist.py:309
 msgid "Voucher expired"
-msgstr "Denne rabatkode er udløbet."
+msgstr "Denne rabatkode er udløbet"
 
 #: pretix/base/exporters/waitinglist.py:109 pretix/base/pdf.py:110
 #: pretix/control/forms/event.py:1416
@@ -3001,7 +3001,7 @@ msgstr "Vis en venteliste for denne billet"
 
 #: pretix/base/models/items.py:410
 msgid "This will only work if waiting lists are enabled for this event."
-msgstr "Dette virker kun, hvis venteliste er aktiveret for dette arrangement"
+msgstr "Dette virker kun, hvis venteliste er aktiveret for dette arrangement."
 
 #: pretix/base/models/items.py:414 pretix/base/settings.py:1079
 #: pretix/control/forms/event.py:1329
@@ -3475,7 +3475,7 @@ msgstr "Rediger spørgsmål"
 
 #: pretix/base/models/items.py:1280
 msgid "This question will only show up in the backend."
-msgstr "Dette spørgsmål vil kun blive vist i administrationen"
+msgstr "Dette spørgsmål vil kun blive vist i administrationen."
 
 #: pretix/base/models/items.py:1284
 #, fuzzy
@@ -3521,7 +3521,7 @@ msgstr "Ugyldig valgmulighed valgt."
 
 #: pretix/base/models/items.py:1406
 msgid "The number is to low."
-msgstr "Tallet er for lavt"
+msgstr "Tallet er for lavt."
 
 #: pretix/base/models/items.py:1408
 #, fuzzy
@@ -3556,7 +3556,7 @@ msgstr ""
 
 #: pretix/base/models/items.py:1451
 msgid "Unknown country code."
-msgstr "Ukendt landekode"
+msgstr "Ukendt landekode."
 
 #: pretix/base/models/items.py:1465
 #: pretix/control/templates/pretixcontrol/items/question.html:68
@@ -4472,7 +4472,7 @@ msgstr "Du skal vælge en produktvariant."
 #: pretix/base/models/vouchers.py:456
 #, python-brace-format
 msgid "The specified seat ID \"{id}\" does not exist for this event."
-msgstr "Sæde ID \"{id}\" eksisterer ikke for dette arrangement"
+msgstr "Sæde ID \"{id}\" eksisterer ikke for dette arrangement."
 
 #: pretix/base/models/vouchers.py:460
 #, python-brace-format
@@ -4494,7 +4494,7 @@ msgstr "Dette produkt vil ikke blive solgt efter denne dato."
 #: pretix/base/models/vouchers.py:471
 #, python-brace-format
 msgid "You need to choose the product \"{prod}\" for this seat."
-msgstr "Du skal vælge et produkt \"{prod}\" til dette sæde"
+msgstr "Du skal vælge et produkt \"{prod}\" til dette sæde."
 
 #: pretix/base/models/vouchers.py:474
 #, python-brace-format
@@ -4656,9 +4656,8 @@ msgid "Order {order.code} has been changed."
 msgstr ""
 
 #: pretix/base/notifications.py:287
-#, fuzzy
 msgid "Order has been overpaid"
-msgstr "Bestilling oprettet."
+msgstr "Bestilling oprettet"
 
 #: pretix/base/notifications.py:288
 #, fuzzy, python-brace-format
@@ -4690,9 +4689,8 @@ msgid "Invalid setting for column \"{header}\"."
 msgstr ""
 
 #: pretix/base/orderimport.py:176
-#, fuzzy
 msgid "Enter a valid phone number."
-msgstr "Spørg efter deltagernavn"
+msgstr "Spørg efter deltagernavn."
 
 #: pretix/base/orderimport.py:204 pretix/presale/views/waiting.py:111
 msgctxt "subevent"
@@ -4805,9 +4803,8 @@ msgid "Ticket code"
 msgstr "Billetdesign"
 
 #: pretix/base/orderimport.py:604
-#, fuzzy
 msgid "Generate automatically"
-msgstr "Tilbagebetal automatisk?"
+msgstr "Generér automatisk"
 
 #: pretix/base/orderimport.py:613
 msgid "You cannot assign a position secret that already exists."
@@ -5813,9 +5810,8 @@ msgid "Only allowed after {datetime}"
 msgstr ""
 
 #: pretix/base/services/checkin.py:212
-#, fuzzy
 msgid "Ticket type not allowed"
-msgstr "Filtype ikke tilladt!"
+msgstr "Filtype ikke tilladt"
 
 #: pretix/base/services/checkin.py:220
 #, fuzzy
@@ -5893,10 +5889,10 @@ msgid "Your export did not contain any data."
 msgstr "Du har ikke valgt nogen produkter."
 
 #: pretix/base/services/invoices.py:106
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgctxt "invoice"
 msgid "Please complete your payment before {expire_date}."
-msgstr "Gennemfør venligst betaling inden %(date)s"
+msgstr "Gennemfør venligst betaling inden %(date)s."
 
 #: pretix/base/services/invoices.py:117
 #, fuzzy, python-brace-format
@@ -6056,9 +6052,9 @@ msgid ""
 msgstr ""
 
 #: pretix/base/services/orderimport.py:144
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Invalid data in row {row}: {message}"
-msgstr "Ugyldig datoindtastning."
+msgstr "Ugyldig datoindtastning"
 
 #: pretix/base/services/orders.py:102
 msgid ""
@@ -6487,13 +6483,12 @@ msgstr ""
 "Vis nettopriser i stedet for bruttopriser på produktlisten (ikke anbefalet!)"
 
 #: pretix/base/settings.py:181
-#, fuzzy
 msgid ""
 "Independent of your choice, the cart will show gross prices as this is the "
 "price that needs to be paid."
 msgstr ""
 "Uafhængigt af dit valg, vil kurven vise bruttopriser idet det er prisen der "
-"faktisk skal betales"
+"faktisk skal betales."
 
 #: pretix/base/settings.py:196
 msgid "Ask for attendee names"
@@ -6583,11 +6578,10 @@ msgid "Ask for invoice address"
 msgstr "Spørg efter faktureringsadresse"
 
 #: pretix/base/settings.py:321
-#, fuzzy
 msgid "Do not ask for invoice address if an order is free"
 msgstr ""
 "Virker kun når der spørges efter faktureringsadresse. CVR-nr. er ikke "
-"påkrævet."
+"påkrævet"
 
 #: pretix/base/settings.py:330
 msgid "Require customer name"
@@ -6981,9 +6975,8 @@ msgid "e.g. tax number in Germany, ABN in Australia, …"
 msgstr ""
 
 #: pretix/base/settings.py:890
-#, fuzzy
 msgid "EU VAT ID"
-msgstr "CVR-nr."
+msgstr "CVR-nr"
 
 #: pretix/base/settings.py:903
 msgid "e.g. With this document, we sent you the invoice for your ticket order."
@@ -7213,9 +7206,8 @@ msgid "Require a phone number when signing up to the waiting list.."
 msgstr "En rabatkode er blevet sendt til en person på ventelisten."
 
 #: pretix/base/settings.py:1192
-#, fuzzy
 msgid "Phone number explanation"
-msgstr "Denne rabatkode er uløbet."
+msgstr "Telefonnummer forklaring"
 
 #: pretix/base/settings.py:1195
 msgid ""
@@ -7440,9 +7432,8 @@ msgid ""
 msgstr ""
 
 #: pretix/base/settings.py:1469
-#, fuzzy
 msgid "Voluntary lower refund explanation"
-msgstr "Denne rabatkode er uløbet."
+msgstr "Frivillig forklaring på lavere refundering"
 
 #: pretix/base/settings.py:1472
 msgid ""
@@ -8324,9 +8315,8 @@ msgid ""
 msgstr ""
 
 #: pretix/base/settings.py:2380
-#, fuzzy
 msgid "Voucher explanation"
-msgstr "Denne rabatkode er uløbet."
+msgstr "Denne rabatkode er uløbet"
 
 #: pretix/base/settings.py:2383
 msgid ""
@@ -8681,9 +8671,8 @@ msgid "Phone numbers"
 msgstr "Minimum antal"
 
 #: pretix/base/shredder.py:170
-#, fuzzy
 msgid "This will remove all phone numbers from orders."
-msgstr "Dette vil fjerne alle emailadresser fra ventelisten"
+msgstr "Dette vil fjerne alle emailadresser fra ventelisten."
 
 #: pretix/base/shredder.py:193
 #, fuzzy
@@ -8691,19 +8680,20 @@ msgid "E-mails"
 msgstr "E-mailadresse"
 
 #: pretix/base/shredder.py:195
-#, fuzzy
 msgid ""
 "This will remove all e-mail addresses from orders and attendees, as well as "
 "logged email contents. This will also remove the association to customer "
 "accounts."
-msgstr "Dette vil fjerne alle emailadresser fra ventelisten"
+msgstr ""
+"Dette vil fjerne alle mailadresser fra ordre og deltagere, så vel som alt "
+"logget mailindhold. Dette vil også fjerne tilknytningen til kundekonti."
 
 #: pretix/base/shredder.py:241
-#, fuzzy
 msgid ""
 "This will remove all names, email addresses, and phone numbers from the "
 "waiting list."
-msgstr "Dette vil fjerne alle emailadresser fra ventelisten"
+msgstr ""
+"Dette vil fjerne alle navne, mailadresser og telefonnumre fra ventelisten."
 
 #: pretix/base/shredder.py:274
 #, fuzzy
@@ -8711,11 +8701,12 @@ msgid "Attendee info"
 msgstr "Navn på deltager"
 
 #: pretix/base/shredder.py:276
-#, fuzzy
 msgid ""
 "This will remove all attendee names and postal addresses from order "
 "positions, as well as logged changes to them."
-msgstr "Dette vil fjerne alle emailadresser fra ventelisten"
+msgstr ""
+"Dette vil fjerne alle deltageres navne og postadresser fra ordrene, ligesom "
+"det også fjerner de ændringer vi har logget ifm. disse oplysninger."
 
 #: pretix/base/shredder.py:330
 #, fuzzy
@@ -8898,9 +8889,8 @@ msgid "Order code:"
 msgstr "Bestillingskode:"
 
 #: pretix/base/templates/pretixbase/email/order_details.html:31
-#, fuzzy
 msgid "created by"
-msgstr "Bruger oprettet."
+msgstr "Oprettet af"
 
 #: pretix/base/templates/pretixbase/email/order_details.html:37
 #: pretix/base/templates/pretixbase/email/order_details.html:132
@@ -8908,9 +8898,8 @@ msgid "Contact:"
 msgstr "Kontakt:"
 
 #: pretix/base/templates/pretixbase/email/order_details.html:52
-#, fuzzy
 msgid "View registration details"
-msgstr "Vis bestillingsdetaljer"
+msgstr "Vis registreringsdetaljer"
 
 #: pretix/base/templates/pretixbase/email/order_details.html:57
 msgid ""
@@ -8921,9 +8910,8 @@ msgstr ""
 "arrangement:"
 
 #: pretix/base/templates/pretixbase/email/order_details.html:86
-#, fuzzy
 msgid "Details:"
-msgstr "Bestillingsdetaljer"
+msgstr "Bestillingsdetaljer:"
 
 #: pretix/base/templates/pretixbase/forms/widgets/portrait_image.html:10
 msgid "Upload photo"
@@ -9021,10 +9009,9 @@ msgid "Customers can no longer modify their orders"
 msgstr "Tillad brugere at annullere ubetalte bestillinger"
 
 #: pretix/base/timeline.py:113
-#, fuzzy
 msgctxt "timeline"
 msgid "No more payments can be completed"
-msgstr "Betaling gennemført."
+msgstr "Der kan ikke afsluttes flere betalinger"
 
 #: pretix/base/timeline.py:125
 #, fuzzy
@@ -9505,14 +9492,12 @@ msgid "No VAT"
 msgstr ""
 
 #: pretix/control/forms/event.py:1219
-#, fuzzy
 msgid "Sale not allowed"
-msgstr "Filtype ikke tilladt!"
+msgstr "Filtype ikke tilladt"
 
 #: pretix/control/forms/event.py:1220
-#, fuzzy
 msgid "Order requires approval"
-msgstr "Bestilling oprettet."
+msgstr "Bestilling kræver godkendelse"
 
 #: pretix/control/forms/event.py:1224
 #, fuzzy
@@ -10368,9 +10353,8 @@ msgid ""
 msgstr ""
 
 #: pretix/control/forms/item.py:134
-#, fuzzy
 msgid "This field is required"
-msgstr "Dette felt er obligatorisk."
+msgstr "Dette felt er obligatorisk"
 
 #: pretix/control/forms/item.py:136
 msgid "Dependencies between questions are not supported during check-in."
@@ -11127,7 +11111,7 @@ msgstr "Weekend dag"
 
 #: pretix/control/forms/users.py:122 pretix/control/views/user.py:212
 msgid "Your changes could not be saved. See below for details."
-msgstr ""
+msgstr "Dine ændringer kunne ikke gemmes. Se detaljer nedenfor."
 
 #: pretix/control/forms/vouchers.py:154
 msgid "Specific seat ID"
@@ -12726,9 +12710,9 @@ msgid ""
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/auth/oauth_authorization.html:24
-#, fuzzy, python-format
+#, python-format
 msgid "You are currently logged in as <strong>%(user)s</strong>."
-msgstr "Er du sikker på du vil slette datoen <strong>%(subevent)s</strong>?"
+msgstr "Du er nu logget ind som <strong>%(user)s</strong>."
 
 #: pretix/control/templates/pretixcontrol/auth/oauth_authorization.html:28
 #, fuzzy
@@ -13194,9 +13178,8 @@ msgid "Checked in but left"
 msgstr "Tjekket ind – {list}"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html:159
-#, fuzzy
 msgid "Checked in automatically"
-msgstr "Tilbagebetal automatisk?"
+msgstr "Tjekket ind automatisk"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html:170
 #, fuzzy, python-format
@@ -13890,9 +13873,8 @@ msgid "Geo coordinates updated"
 msgstr "Ingen dato"
 
 #: pretix/control/templates/pretixcontrol/event/fragment_geodata_autoupdate.html:7
-#, fuzzy
 msgid "Update map?"
-msgstr "Opdater kommentar"
+msgstr "Opdatér kort?"
 
 #: pretix/control/templates/pretixcontrol/event/fragment_plugin_description.html:5
 #, fuzzy, python-format
@@ -15051,9 +15033,8 @@ msgid "License settings and check"
 msgstr "Prisindstillinger"
 
 #: pretix/control/templates/pretixcontrol/global_license.html:29
-#, fuzzy
 msgid "Installation details"
-msgstr "Fejl under registrering af enhed."
+msgstr "Fejl under registrering af enhed"
 
 #: pretix/control/templates/pretixcontrol/global_license.html:34
 #: pretix/control/templates/pretixcontrol/event/plugins.html:5
@@ -15875,11 +15856,8 @@ msgid "Approve order"
 msgstr "Marker bestilling som udløbet"
 
 #: pretix/control/templates/pretixcontrol/order/approve.html:10
-#, fuzzy
 msgid "Do you really want to approve this order?"
-msgstr ""
-"Er du sikker på at du vil refundere denne bestilling? Du kan ikke fortryde "
-"senere."
+msgstr "Er du sikker på at du vil godkende denne ordre?"
 
 #: pretix/control/templates/pretixcontrol/order/approve.html:20
 #: pretix/control/templates/pretixcontrol/order/cancel.html:36
@@ -16216,9 +16194,8 @@ msgid "Cancellation request"
 msgstr "Afbestillingsgebyr"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:138
-#, fuzzy
 msgid "The customer asked you to cancel the order with the following settings:"
-msgstr "Du kan annullere din bestilling ved at bruge knappen nedenfor."
+msgstr "Kunden har bedt dig om at aflyse ordren med følgende indstillinger:"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:145
 #, fuzzy
@@ -16525,11 +16502,8 @@ msgid "Mark order as paid"
 msgstr "Marker som betalt"
 
 #: pretix/control/templates/pretixcontrol/order/pay.html:20
-#, fuzzy
 msgid "Do you really want to create a manual payment for this order?"
-msgstr ""
-"Er du sikker på at du vil refundere denne bestilling? Du kan ikke fortryde "
-"senere."
+msgstr "Er du sikker på at du vil oprette en manuel betaling for denne ordre?"
 
 #: pretix/control/templates/pretixcontrol/order/pay.html:37
 #, fuzzy
@@ -16555,11 +16529,8 @@ msgid "Mark payment as complete"
 msgstr "Betaling gennemført."
 
 #: pretix/control/templates/pretixcontrol/order/pay_complete.html:20
-#, fuzzy
 msgid "Do you really want to mark this payment as complete?"
-msgstr ""
-"Er du sikker på at du vil refundere denne bestilling? Du kan ikke fortryde "
-"senere."
+msgstr "Er du sikker på at du vil markere denne betaling som afsluttet?"
 
 #: pretix/control/templates/pretixcontrol/order/reactivate.html:18
 msgid ""
@@ -16699,11 +16670,8 @@ msgid "Perform refund"
 msgstr "Udfør ændringer"
 
 #: pretix/control/templates/pretixcontrol/order/refund_done.html:20
-#, fuzzy
 msgid "Do you really want to mark this refund as complete?"
-msgstr ""
-"Er du sikker på at du vil refundere denne bestilling? Du kan ikke fortryde "
-"senere."
+msgstr "Er du sikker på at du vil markere denne refundering som afsluttet?"
 
 #: pretix/control/templates/pretixcontrol/order/refund_done.html:29
 #, fuzzy
@@ -16960,9 +16928,8 @@ msgid "Go to the ticket shop"
 msgstr "Gå til butikken"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:33
-#, fuzzy
 msgid "Search query:"
-msgstr "Find rabatkode"
+msgstr "Søgning:"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:47
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:20
@@ -17294,9 +17261,8 @@ msgid "System URL:"
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/organizers/device_connect.html:25
-#, fuzzy
 msgid "Token:"
-msgstr "Token"
+msgstr "Token:"
 
 #: pretix/control/templates/pretixcontrol/organizers/device_connect.html:31
 #, fuzzy
@@ -17304,9 +17270,8 @@ msgid "Device overview"
 msgstr "Arrangementsoverblik"
 
 #: pretix/control/templates/pretixcontrol/organizers/device_edit.html:6
-#, fuzzy
 msgid "Device:"
-msgstr "Enhedsnavn"
+msgstr "Enhedsnavn:"
 
 #: pretix/control/templates/pretixcontrol/organizers/device_edit.html:8
 #, fuzzy
@@ -17455,9 +17420,8 @@ msgid ""
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/organizers/gate_delete.html:5
-#, fuzzy
 msgid "Delete gate:"
-msgstr "Slet dato"
+msgstr "Slet dato:"
 
 #: pretix/control/templates/pretixcontrol/organizers/gate_delete.html:8
 #, fuzzy
@@ -17465,9 +17429,8 @@ msgid "Are you sure you want to delete the gate?"
 msgstr "Er du sikker på at du vil slette gruppen?"
 
 #: pretix/control/templates/pretixcontrol/organizers/gate_edit.html:6
-#, fuzzy
 msgid "Gate:"
-msgstr "Dato: {}"
+msgstr "Dato:"
 
 #: pretix/control/templates/pretixcontrol/organizers/gate_edit.html:8
 #: pretix/control/templates/pretixcontrol/organizers/gates.html:11
@@ -17581,9 +17544,8 @@ msgid "Customer account password reset"
 msgstr "Din nuværende adgangskode"
 
 #: pretix/control/templates/pretixcontrol/organizers/membershiptype_delete.html:5
-#, fuzzy
 msgid "Delete membership type:"
-msgstr "Team medlemskaber"
+msgstr "Slet medlemskabstype:"
 
 #: pretix/control/templates/pretixcontrol/organizers/membershiptype_delete.html:9
 #, fuzzy
@@ -17595,9 +17557,8 @@ msgid "This membership type cannot be deleted since it has already been used."
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/organizers/membershiptype_edit.html:6
-#, fuzzy
 msgid "Membership type:"
-msgstr "Medlemmer"
+msgstr "Medlemsskabstype:"
 
 #: pretix/control/templates/pretixcontrol/organizers/membershiptype_edit.html:8
 #: pretix/control/templates/pretixcontrol/organizers/membershiptypes.html:21
@@ -17637,9 +17598,8 @@ msgid "Property"
 msgstr "Tilføj egenskab"
 
 #: pretix/control/templates/pretixcontrol/organizers/property_delete.html:5
-#, fuzzy
 msgid "Delete property:"
-msgstr "Slet produkt"
+msgstr "Slet produkt:"
 
 #: pretix/control/templates/pretixcontrol/organizers/property_delete.html:8
 #, fuzzy
@@ -17647,9 +17607,8 @@ msgid "Are you sure you want to delete the property?"
 msgstr "Er du sikker på at du vil slette gruppen?"
 
 #: pretix/control/templates/pretixcontrol/organizers/property_edit.html:6
-#, fuzzy
 msgid "Property:"
-msgstr "Tilføj egenskab"
+msgstr "Tilføj egenskab:"
 
 #: pretix/control/templates/pretixcontrol/organizers/team_delete.html:5
 msgid "Delete team:"
@@ -18626,9 +18585,8 @@ msgid "Obligatory usage of two-factor authentication"
 msgstr "Deaktiver tofaktorgodkendelse"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_main.html:21
-#, fuzzy
 msgid "This system enforces the usage of two-factor authentication!"
-msgstr "Deaktiver tofaktorgodkendelse"
+msgstr "Dette system kræver brug af to-faktor godkendelse!"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_main.html:24
 msgid "Please set up at least one device below."
@@ -20310,7 +20268,7 @@ msgstr "Der var ingen ændringer til bestillingen."
 
 #: pretix/control/views/orders.py:2012 pretix/plugins/sendmail/views.py:125
 msgid "We could not send the email. See below for details."
-msgstr ""
+msgstr "Vi kunne ikke sende mailen. Se detaljer nedenfor."
 
 #: pretix/control/views/orders.py:2028 pretix/control/views/orders.py:2093
 #: pretix/plugins/sendmail/views.py:215 pretix/plugins/sendmail/views.py:362
@@ -21169,14 +21127,12 @@ msgid ""
 msgstr ""
 
 #: pretix/plugins/banktransfer/payment.py:210
-#, fuzzy
 msgid "Please fill out your bank account details."
-msgstr "Bankkontodetaljer"
+msgstr "Udfyld venligst dine bankkontodetaljer."
 
 #: pretix/plugins/banktransfer/payment.py:214
-#, fuzzy
 msgid "Please enter your bank account details."
-msgstr "Indtast venligst dit navn."
+msgstr "Indtast venligst dine kontooplysninger."
 
 #: pretix/plugins/banktransfer/payment.py:245
 #: pretix/plugins/banktransfer/payment.py:377
@@ -21218,9 +21174,8 @@ msgid "BIC (optional)"
 msgstr "(valgfri)"
 
 #: pretix/plugins/banktransfer/payment.py:422
-#, fuzzy
 msgid "Your input was invalid, please see below for details."
-msgstr "Prøv venligst igen."
+msgstr "Din indtastning var ugyldig, se venligst detaljer nedenfor."
 
 #: pretix/plugins/banktransfer/refund_export.py:46
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/control.html:5
@@ -21920,6 +21875,8 @@ msgid ""
 "We were unable to process your payment. See below for details on how to "
 "proceed."
 msgstr ""
+"Vi kunne ikke behandle din betaling. Se detaljer nedenfor ift. hvordan du "
+"skal fortsætte."
 
 #: pretix/plugins/paypal/payment.py:455 pretix/plugins/paypal/payment.py:464
 msgid ""
@@ -22324,9 +22281,8 @@ msgid "Relative, after event start"
 msgstr "Søg efter arrangementer"
 
 #: pretix/plugins/sendmail/forms.py:296
-#, fuzzy
 msgid "Relative, after event end"
-msgstr "Relativ dato:"
+msgstr "Relativt, efter eventets afslutning"
 
 #: pretix/plugins/sendmail/forms.py:309
 #, fuzzy
@@ -22567,9 +22523,8 @@ msgid "Sent / Total dates"
 msgstr "Starttidspunkt"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:47
-#, fuzzy
 msgid "Next execution:"
-msgstr "intet valgt"
+msgstr "Næste udførelse:"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:51
 #, fuzzy
@@ -22577,9 +22532,8 @@ msgid "unknown"
 msgstr "(ukendt)"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:55
-#, fuzzy
 msgid "Last execution:"
-msgstr "intet valgt"
+msgstr "Sidste udførelse:"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:77
 msgid "Inspect scheduled times"
@@ -23776,10 +23730,9 @@ msgstr "Tekst"
 #: pretix/presale/templates/pretixpresale/event/base.html:131
 #: pretix/presale/templates/pretixpresale/event/base.html:155
 #: pretix/presale/templates/pretixpresale/event/base.html:161
-#, fuzzy
 msgctxt "alert-messages"
 msgid "Warning"
-msgstr "Advarsel:"
+msgstr "Advarsel"
 
 #: pretix/presale/templates/pretixpresale/event/base.html:115
 #: pretix/presale/templates/pretixpresale/event/base.html:156
@@ -23844,9 +23797,8 @@ msgid "We're now trying to book these add-ons for you!"
 msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/checkout_addons.html:20
-#, fuzzy
 msgid "Add-ons:"
-msgstr "Tilføjelser"
+msgstr "Tilføjelser:"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_addons.html:49
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:194
@@ -23966,9 +23918,8 @@ msgid "Log in with a customer account"
 msgstr "Log ind med en kundekonto"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_customer.html:29
-#, fuzzy
 msgid "You are currently logged in with the following credentials."
-msgstr "Er du sikker på du vil slette datoen <strong>%(subevent)s</strong>?"
+msgstr "Du er nu logget ind med følgende oplysninger."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_customer.html:47
 #, python-format
@@ -24199,17 +24150,15 @@ msgstr "Vis varianter"
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:235
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:115
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:246
-#, fuzzy
 msgid "Original price:"
-msgstr "Oprindelig faktura"
+msgstr "Oprindelig pris:"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:128
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:242
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:125
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:256
-#, fuzzy
 msgid "New price:"
-msgstr "Standardpris"
+msgstr "Ny pris:"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:137
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:250
@@ -24318,20 +24267,17 @@ msgid "Price total"
 msgstr "Fakturatotal"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:37
-#, fuzzy
 msgid "Seat:"
-msgstr "Navn"
+msgstr "Sæde:"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:55
-#, fuzzy
 msgctxt "subevent"
 msgid "Date:"
-msgstr "Dato"
+msgstr "Dato:"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:78
-#, fuzzy
 msgid "Location:"
-msgstr "Lokation"
+msgstr "Lokation:"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:80
 #, fuzzy
@@ -24339,9 +24285,8 @@ msgid "Show full location"
 msgstr "Vis information"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:91
-#, fuzzy
 msgid "Membership:"
-msgstr "Medlemmer"
+msgstr "Medlemmer:"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:118
 #, fuzzy
@@ -24467,14 +24412,12 @@ msgid "Checkout steps"
 msgstr "Din bestilling"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_checkoutflow.html:12
-#, fuzzy
 msgid "Completed:"
-msgstr "Annulleringsdato"
+msgstr "Afsluttet:"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_checkoutflow.html:14
-#, fuzzy
 msgid "Current:"
-msgstr "Valuta"
+msgstr "Nuværende:"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_checkoutflow.html:26
 msgctxt "checkoutflow"
@@ -25082,9 +25025,8 @@ msgid "Enter custom amount"
 msgstr "Intern kommentar"
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:82
-#, fuzzy
 msgid "Refund amount:"
-msgstr "Tilbagebetal bestilling"
+msgstr "Refunderingsbeløb:"
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:89
 #: pretix/presale/templates/pretixpresale/event/order_change_confirm.html:166
@@ -25092,6 +25034,8 @@ msgid ""
 "The organizer will get in touch with you to clarify the details of your "
 "refund."
 msgstr ""
+"Arrangøren vil tage kontakt til dig for at afklare detaljerne omkring din "
+"refundering."
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:97
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:118
@@ -25283,7 +25227,7 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/order_pay_confirm.html:16
 msgid "Please confirm the following payment details."
-msgstr ""
+msgstr "Bekræft venligst følgende betalingsoplysninger."
 
 #: pretix/presale/templates/pretixpresale/event/order_pay_confirm.html:22
 #, python-format
@@ -25291,9 +25235,8 @@ msgid "Total: %(total)s"
 msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/position.html:7
-#, fuzzy
 msgid "Registration details"
-msgstr "Fejl under registrering af enhed."
+msgstr "Registreringsdetaljer"
 
 #: pretix/presale/templates/pretixpresale/event/position.html:10
 #, fuzzy
