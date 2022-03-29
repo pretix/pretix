@@ -1,0 +1,68 @@
+{% extends "pretixcontrol/event/base.html" %}
+{% load i18n %}
+{% load static %}
+{% load compress %}
+{% block title %}{% trans "PDF Editor" %}{% endblock %}
+{% block custom_header %}
+    {{ block.super }}
+    {% compress css %}
+        <link type="text/css" rel="stylesheet" href="{% static "pretixcontrol/scss/pdfeditor.css" %}">
+    {% endcompress %}
+    <link type="text/css" rel="stylesheet" href="{% url "control:pdf.css" %}">
+{% endblock %}
+{% block content %}
+    <h1>
+        {% trans "PDF Editor" %}
+        <small>{% trans "Available placeholders" %}</small>
+    </h1>
+    <p>
+        {% blocktrans trimmed %}
+            You can use placeholders in custom texts on tickets to enrich your text with individual data. Which
+            placeholders are available depends on your event settings, activated plugins, the selected product,
+            as well as user input.
+            This page lists all placeholders technically available for your event, however most of them can also
+            be empty in some cases depending on configuration.
+        {% endblocktrans %}
+    </p>
+    <div class="table-responsive">
+        <table class="table table-hover table-condensed">
+            <thead>
+            <tr>
+                <th>{% trans "Placeholder" %}</th>
+                <th>{% trans "Description" %}</th>
+                <th>{% trans "Formatting example" %}</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for varname, var in variables.items %}
+                {% if not var.hidden %}
+                    <tr>
+                        <td><code>{{ "{" }}{{ varname }}{{ "}" }}</code></td>
+                        <td>{{ var.label }}</td>
+                        <td>{{ var.editor_sample }}</td>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+            {% for p in request.organizer.meta_properties.all %}
+                <tr>
+                    <td><code>{{ "{" }}meta:{{ p.name }}{{ "}" }}</code></td>
+                    <td>
+                        {% trans "Event attribute:" %} {{ p.name }}
+                    </td>
+                    <td></td>
+                </tr>
+            {% endfor %}
+            {% for p in request.event.item_meta_properties.all %}
+                <tr>
+                    <td><code>{{ "{" }}itemmeta:{{ p.name }}{{ "}" }}</code></td>
+                    <td>
+                        {% trans "Item attribute:" %} {{ p.name }}
+                    </td>
+                    <td></td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
+

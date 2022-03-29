@@ -372,7 +372,9 @@
                             <label>{% trans "Content" %}</label><br>
                             <select class="input-block-level form-control" id="toolbox-content">
                                 {% for varname, var in variables.items %}
-                                    <option data-sample="{{ var.editor_sample }}" value="{{ varname }}">{{ var.label }}</option>
+                                    {% if not var.hidden %}
+                                        <option data-sample="{{ var.editor_sample }}" {% if var.migrate_from %}data-old-value="{{ var.migrate_from }}"{% endif %} value="{{ varname }}">{{ var.label }}</option>
+                                    {% endif %}
                                 {% endfor %}
                                 {% for p in request.organizer.meta_properties.all %}
                                     <option value="meta:{{ p.name }}">
@@ -394,6 +396,9 @@
                                     <textarea id="toolbox-content-other-{{ l }}" rows="3" class="input-block-level form-control" title="{{ l }}" lang="{{ l }}"></textarea>
                                 {% endfor %}
                             </div>
+                            <p class="help-block" id="toolbox-content-other-help">
+                                <a href="?placeholders=true" target="_blank">{% trans "Show available placeholders" %}</a>
+                            </p>
                         </div>
                     </div>
                 </div>
