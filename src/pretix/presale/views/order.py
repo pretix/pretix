@@ -125,18 +125,13 @@ class OrderDetailMixin(NoSearchIndexViewMixin):
 class OrderPositionDetailMixin(NoSearchIndexViewMixin):
     @cached_property
     def position(self):
-        p = OrderPosition.objects.filter(
+        qs = OrderPosition.objects.filter(
             order__event=self.request.event,
             addon_to__isnull=True,
             order__code=self.kwargs['order'],
             positionid=self.kwargs['position']
-        ).annotate(
-            checkin_count=Subquery(
-                Checkin.objects.filter(
-                    successful=True, type=Checkin.TYPE_ENTRY, position_id=OuterRef('pk')
-                ).order_by().values('position').annotate(c=Count('*')).values('c')
-            )
-        ).select_related('order', 'order__event').first()
+        ).select_related('order', 'order__event')
+        p = qs.first()
         if p:
             if p.web_secret.lower() == self.kwargs['secret'].lower():
                 return p
@@ -236,16 +231,21 @@ class OrderDetails(EventViewMixin, OrderDetailMixin, CartMixin, TicketPageMixin,
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
-        ctx['cart'] = self.get_cart(
-            answers=True,
-            downloads=ctx['can_download'],
-            queryset=self.order.positions.prefetch_related('issued_gift_cards').select_related('tax_rule').annotate(
+
+        qs = self.order.positions.prefetch_related('issued_gift_cards').select_related('tax_rule')
+        if self.request.event.settings.show_checkin_number_user:
+            qs = qs.annotate(
                 checkin_count=Subquery(
                     Checkin.objects.filter(
                         successful=True, type=Checkin.TYPE_ENTRY, position_id=OuterRef('pk')
                     ).order_by().values('position').annotate(c=Count('*')).values('c')
                 )
-            ),
+            )
+
+        ctx['cart'] = self.get_cart(
+            answers=True,
+            downloads=ctx['can_download'],
+            queryset=qs,
             order=self.order
         )
         ctx['tickets_with_download'] = [p for p in ctx['cart']['positions'] if p.generate_ticket]
@@ -342,14 +342,23 @@ class OrderPositionDetails(EventViewMixin, OrderPositionDetailMixin, CartMixin, 
         return buttons
 
     def get_context_data(self, **kwargs):
+        qs = self.order.positions.select_related('tax_rule').filter(
+            Q(pk=self.position.pk) | Q(addon_to__id=self.position.pk)
+        )
+        if self.request.event.settings.show_checkin_number_user:
+            qs = qs.annotate(
+                checkin_count=Subquery(
+                    Checkin.objects.filter(
+                        successful=True, type=Checkin.TYPE_ENTRY, position_id=OuterRef('pk')
+                    ).order_by().values('position').annotate(c=Count('*')).values('c')
+                )
+            )
         ctx = super().get_context_data(**kwargs)
         ctx['can_download_multi'] = False
         ctx['position'] = self.position
         ctx['cart'] = self.get_cart(
             answers=True, downloads=ctx['can_download'],
-            queryset=self.order.positions.select_related('tax_rule').filter(
-                Q(pk=self.position.pk) | Q(addon_to__id=self.position.pk)
-            ),
+            queryset=qs,
             order=self.order
         )
         ctx['tickets_with_download'] = [p for p in ctx['cart']['positions'] if p.generate_ticket]
