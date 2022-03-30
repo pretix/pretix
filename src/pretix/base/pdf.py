@@ -395,24 +395,24 @@ DEFAULT_VARIABLES = OrderedDict((
     ("seat", {
         "label": _("Seat: Full name"),
         "editor_sample": _("Ground floor, Row 3, Seat 4"),
-        "evaluate": lambda op, order, ev: str(op.seat if op.seat else
+        "evaluate": lambda op, order, ev: str(get_seat(op) if get_seat(op) else
                                               _('General admission') if ev.seating_plan_id is not None else "")
     }),
     ("seat_zone", {
         "label": _("Seat: zone"),
         "editor_sample": _("Ground floor"),
-        "evaluate": lambda op, order, ev: str(op.seat.zone_name if op.seat else
+        "evaluate": lambda op, order, ev: str(get_seat(op).zone_name if get_seat(op) else
                                               _('General admission') if ev.seating_plan_id is not None else "")
     }),
     ("seat_row", {
         "label": _("Seat: row"),
         "editor_sample": "3",
-        "evaluate": lambda op, order, ev: str(op.seat.row_name if op.seat else "")
+        "evaluate": lambda op, order, ev: str(get_seat(op).row_name if get_seat(op) else "")
     }),
     ("seat_number", {
         "label": _("Seat: seat number"),
         "editor_sample": 4,
-        "evaluate": lambda op, order, ev: str(op.seat.seat_number if op.seat else "")
+        "evaluate": lambda op, order, ev: str(get_seat(op).seat_number if get_seat(op) else "")
     }),
     ("first_scan", {
         "label": _("Date and time of first scan"),
@@ -599,6 +599,14 @@ def get_first_scan(op: OrderPosition):
             "SHORT_DATETIME_FORMAT"
         )
     return ""
+
+
+def get_seat(op: OrderPosition):
+    if op.seat_id:
+        return op.seat
+    if op.addon_to_id:
+        return op.addon_to.seat
+    return None
 
 
 reshaper = SimpleLazyObject(lambda: ArabicReshaper(configuration={
