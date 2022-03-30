@@ -47,7 +47,7 @@ from django.contrib import messages
 from django.core.exceptions import ValidationError
 from django.core.files import File
 from django.db import transaction
-from django.db.models import Exists, OuterRef, Q, Sum, Subquery, Count
+from django.db.models import Count, Exists, OuterRef, Q, Subquery, Sum
 from django.http import (
     FileResponse, Http404, HttpResponseRedirect, JsonResponse,
 )
@@ -60,7 +60,8 @@ from django.views.decorators.clickjacking import xframe_options_exempt
 from django.views.generic import TemplateView, View
 
 from pretix.base.models import (
-    CachedTicket, GiftCard, Invoice, Order, OrderPosition, Quota, TaxRule, Checkin,
+    CachedTicket, Checkin, GiftCard, Invoice, Order, OrderPosition, Quota,
+    TaxRule,
 )
 from pretix.base.models.orders import (
     CachedCombinedTicket, InvoiceAddress, OrderFee, OrderPayment, OrderRefund,
