@@ -68,6 +68,7 @@ positions                             list of objects            List of order p
                                                                  non-canceled positions are included.
 fees                                  list of objects            List of fees included in the order total. By default, only
                                                                  non-canceled fees are included.
+├ id                                  integer                    Internal ID of the fee record
 ├ fee_type                            string                     Type of fee (currently ``payment``, ``passbook``,
                                                                  ``other``)
 ├ value                               money (string)             Fee amount
@@ -135,6 +136,10 @@ last_modified                         datetime                   Last modificati
 .. versionchanged:: 4.6
 
    The ``subevent`` query parameters has been added.
+
+.. versionchanged:: 4.8
+
+   The ``order.fees.id`` attribute has been added.
 
 
 .. _order-position-resource:
@@ -734,6 +739,37 @@ Generating new secrets
    :statuscode 400: The order could not be updated due to invalid submitted data.
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer/event does not exist **or** you have no permission to update this order.
+
+.. http:post:: /api/v1/organizers/(organizer)/events/(event)/orderpositions/(id)/regenerate_secrets/
+
+   Triggers generation of a new ``secret`` attribute for a single order position.
+
+   **Example request**:
+
+   .. sourcecode:: http
+
+      POST /api/v1/organizers/bigevents/events/sampleconf/orderpositions/23/regenerate_secrets/ HTTP/1.1
+      Host: pretix.eu
+      Accept: application/json, text/javascript
+
+   **Example response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 200 OK
+      Vary: Accept
+      Content-Type: application/json
+
+      (Full order position resource, see above.)
+
+   :param organizer: The ``slug`` field of the organizer of the event
+   :param event: The ``slug`` field of the event
+   :param code: The ``id`` field of the order position to update
+
+   :statuscode 200: no error
+   :statuscode 400: The order position could not be updated due to invalid submitted data.
+   :statuscode 401: Authentication failure
+   :statuscode 403: The requested organizer/event does not exist **or** you have no permission to update this order position.
 
 Deleting orders
 ---------------
@@ -1642,12 +1678,19 @@ Order position ticket download
    :statuscode 409: The file is not yet ready and will now be prepared. Retry the request after waiting for a few
                     seconds.
 
+.. _rest-orderpositions-manipulate:
+
 Manipulating individual positions
 ---------------------------------
 
 .. versionchanged:: 3.15
 
    The ``PATCH`` method has been added for individual positions.
+
+.. versionchanged:: 4.8
+
+   The ``PATCH`` method now supports changing items, variations, subevents, seats, prices, and tax rules.
+   The ``POST`` endpoint to add individual positions has been added.
 
 .. http:patch:: /api/v1/organizers/(organizer)/events/(event)/orderpositions/(id)/
 
@@ -1675,6 +1718,21 @@ Manipulating individual positions
      and ``option_identifiers`` will be ignored. As a special case, you can submit the magic value
      ``"file:keep"`` as the answer to a file question to keep the current value without re-uploading it.
 
+   * ``item``
+
+   * ``variation``
+
+   * ``subevent``
+
+   * ``seat`` (specified as a string mapping to a ``string_guid``)
+
+   * ``price``
+
+   * ``tax_rule``
+
+   Changing parameters such as ``item`` or ``price`` will **not** automatically trigger creation of a new invoice,
+   you need to take care of that yourself.
+
    **Example request**:
 
    .. sourcecode:: http
@@ -1696,7 +1754,7 @@ Manipulating individual positions
       Vary: Accept
       Content-Type: application/json
 
-      (Full order resource, see above.)
+      (Full order position resource, see above.)
 
    :param organizer: The ``slug`` field of the organizer of the event
    :param event: The ``slug`` field of the event
@@ -1734,6 +1792,230 @@ Manipulating individual positions
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer/event does not exist **or** you have no permission to view this resource.
    :statuscode 404: The requested order position does not exist.
+
+.. http:post:: /api/v1/organizers/(organizer)/events/(event)/orderpositions/
+
+   Adds a new position to an order. Currently, only the following fields are supported:
+
+   * ``order`` (mandatory, specified as a string mapping to a ``code``)
+
+   * ``addon_to`` (optional, specified as an integer mapping to the ``positionid`` of the parent position)
+
+   * ``item`` (mandatory)
+
+   * ``variation`` (mandatory depending on item)
+
+   * ``subevent`` (mandatory depending on event)
+
+   * ``seat`` (specified as a string mapping to a ``string_guid``, mandatory depending on event and item)
+
+   * ``price`` (default price will be used if unset)
+
+   * ``attendee_email``
+
+   * ``attendee_name_parts`` or ``attendee_name``
+
+   * ``company``
+
+   * ``street``
+
+   * ``zipcode``
+
+   * ``city``
+
+   * ``country``
+
+   * ``state``
+
+   * ``answers``: Validation is handled the same way as when creating orders through the API. You are therefore
+     expected to provide ``question``, ``answer``, and possibly ``options``. ``question_identifier``
+     and ``option_identifiers`` will be ignored. As a special case, you can submit the magic value
+     ``"file:keep"`` as the answer to a file question to keep the current value without re-uploading it.
+
+   This will **not** automatically trigger creation of a new invoice, you need to take care of that yourself.
+
+   **Example request**:
+
+   .. sourcecode:: http
+
+      POST /api/v1/organizers/bigevents/events/sampleconf/orderpositions/ HTTP/1.1
+      Host: pretix.eu
+      Accept: application/json, text/javascript
+      Content-Type: application/json
+
+      {
+        "order": "ABC12",
+        "item": 5,
+        "addon_to": 1
+      }
+
+   **Example response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 201 Created
+      Vary: Accept
+      Content-Type: application/json
+
+      (Full order position resource, see above.)
+
+   :param organizer: The ``slug`` field of the organizer of the event
+   :param event: The ``slug`` field of the event
+
+   :statuscode 200: no error
+   :statuscode 400: The position could not be created due to invalid submitted data.
+   :statuscode 401: Authentication failure
+   :statuscode 403: The requested organizer/event does not exist **or** you have no permission to create this position.
+
+.. http:delete:: /api/v1/organizers/(organizer)/events/(event)/orderpositions/(id)/
+
+   Deletes an order position, identified by its internal ID.
+
+   **Example request**:
+
+   .. sourcecode:: http
+
+      DELETE /api/v1/organizers/bigevents/events/sampleconf/orderpositions/23442/ HTTP/1.1
+      Host: pretix.eu
+      Accept: application/json, text/javascript
+
+   **Example response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 204 No Content
+      Vary: Accept
+
+   :param organizer: The ``slug`` field of the organizer to fetch
+   :param event: The ``slug`` field of the event to fetch
+   :param id: The ``id`` field of the order position to delete
+   :statuscode 204: no error
+   :statuscode 400: This position cannot be deleted (e.g. last position in order)
+   :statuscode 401: Authentication failure
+   :statuscode 403: The requested organizer/event does not exist **or** you have no permission to view this resource.
+   :statuscode 404: The requested order position does not exist.
+
+Changing order contents
+-----------------------
+
+While you can :ref:`change positions individually <rest-orderpositions-manipulate>` sometimes it is necessary to make
+multiple changes to an order at once within one transaction. This makes it possible to e.g. swap the seats of two
+attendees in an order without running into conflicts. This interface also offers some possibilities not available
+otherwise, such as splitting an order or changing fees.
+
+.. versionchanged:: 4.8
+
+   This endpoint has been added to the system.
+
+.. http:post:: /api/v1/organizers/(organizer)/events/(event)/orders/(code)/change/
+
+   Performs a change operation on an order. You can supply the following fields:
+
+   * ``patch_positions``: A list of objects with the two keys ``position`` specifying an order position ID and
+     ``body`` specifying the desired changed values of the position (``item``, ``variation``, ``subevent``, ``seat``,
+     ``price``, ``tax_rule``).
+
+   * ``cancel_positions``: A list of objects with the single key ``position`` specifying an order position ID.
+
+   * ``split_positions``: A list of objects with the single key ``position`` specifying an order position ID.
+
+   * ``create_positions``: A list of objects describing new order positions with the same fields supported as when
+     creating them individually through the ``POST …/orderpositions/`` endpoint.
+
+   * ``patch_fees``: A list of objects with the two keys ``fee`` specifying an order fee ID and
+     ``body`` specifying the desired changed values of the position (``value``).
+
+   * ``cancel_fees``: A list of objects with the single key ``fee`` specifying an order fee ID.
+
+   * ``recalculate_taxes``: If set to ``"keep_net"``, all taxes will be recalculated based on the tax rule and invoice
+     address, the net price will be kept. If set to ``"keep_gross"``, the gross price will be kept. If set to ``null``
+     (the default) the taxes are not recalculated.
+
+   * ``send_email``: If set to ``true``, the customer will be notified about the change. Defaults to ``false``.
+
+   * ``reissue_invoice``: If set to ``true`` and an invoice exists for the order, it will be canceled and a new invoice
+     will be issued. Defaults to ``true``.
+
+   **Example request**:
+
+   .. sourcecode:: http
+
+      POST /api/v1/organizers/bigevents/events/sampleconf/orders/ABC12/ HTTP/1.1
+      Host: pretix.eu
+      Accept: application/json, text/javascript
+      Content-Type: application/json
+
+      {
+        "cancel_positions": [
+          {
+            "position": 12373
+          }
+        ],
+        "patch_positions": [
+          {
+            "position": 12374,
+            "body": {
+              "item": 12,
+              "variation": None,
+              "subevent": 562,
+              "seat": "seat-guid-2",
+              "price": "99.99",
+              "tax_rule": 15
+            }
+          }
+        ],
+        "split_positions": [
+          {
+            "position": 12375
+          }
+        ],
+        "create_positions": [
+          {
+            "item": 12,
+            "variation": None,
+            "subevent": 562,
+            "seat": "seat-guid-2",
+            "price": "99.99",
+            "addon_to": 12374,
+            "attendee_name": "Peter",
+          }
+        ],
+        "cancel_fees": [
+          {
+            "fee": 49
+          }
+        ],
+        "change_fees": [
+          {
+            "fee": 51,
+            "body": {
+              "value": "12.00"
+            }
+          }
+        ],
+        "reissue_invoice": true,
+        "send_email": true,
+        "recalculate_taxes": "keep_gross"
+      }
+
+   **Example response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 200 OK
+      Vary: Accept
+      Content-Type: application/json
+
+      (Full order position resource, see above.)
+
+   :param organizer: The ``slug`` field of the organizer of the event
+   :param event: The ``slug`` field of the event
+   :param code: The ``code`` field of the order to update
+
+   :statuscode 200: no error
+   :statuscode 400: The order could not be updated due to invalid submitted data.
+   :statuscode 401: Authentication failure
+   :statuscode 403: The requested organizer/event does not exist **or** you have no permission to update this order.
 
 
 Order payment endpoints

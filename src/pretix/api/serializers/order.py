@@ -424,88 +424,7 @@ class OrderPositionSerializer(I18nAwareModelSerializer):
             self.fields.pop('pdf_data', None)
 
     def validate(self, data):
-        if data.get('attendee_name') and data.get('attendee_name_parts'):
-            raise ValidationError(
-                {'attendee_name': ['Do not specify attendee_name if you specified attendee_name_parts.']}
-            )
-        if data.get('attendee_name_parts') and '_scheme' not in data.get('attendee_name_parts'):
-            data['attendee_name_parts']['_scheme'] = self.context['request'].event.settings.name_scheme
-
-        if data.get('country'):
-            if not pycountry.countries.get(alpha_2=data.get('country').code):
-                raise ValidationError(
-                    {'country': ['Invalid country code.']}
-                )
-
-        if data.get('state'):
-            cc = str(data.get('country') or self.instance.country or '')
-            if cc not in COUNTRIES_WITH_STATE_IN_ADDRESS:
-                raise ValidationError(
-                    {'state': ['States are not supported in country "{}".'.format(cc)]}
-                )
-            if not pycountry.subdivisions.get(code=cc + '-' + data.get('state')):
-                raise ValidationError(
-                    {'state': ['"{}" is not a known subdivision of the country "{}".'.format(data.get('state'), cc)]}
-                )
-        return data
-
-    def update(self, instance, validated_data):
-        # Even though all fields that shouldn't be edited are marked as read_only in the serializer
-        # (hopefully), we'll be extra careful here and be explicit about the model fields we update.
-        update_fields = [
-            'attendee_name_parts', 'company', 'street', 'zipcode', 'city', 'country',
-            'state', 'attendee_email',
-        ]
-        answers_data = validated_data.pop('answers', None)
-
-        name = validated_data.pop('attendee_name', '')
-        if name and not validated_data.get('attendee_name_parts'):
-            validated_data['attendee_name_parts'] = {
-                '_legacy': name
-            }
-
-        for attr, value in validated_data.items():
-            if attr in update_fields:
-                setattr(instance, attr, value)
-
-        instance.save(update_fields=update_fields)
-
-        if answers_data is not None:
-            qs_seen = set()
-            answercache = {
-                a.question_id: a for a in instance.answers.all()
-            }
-            for answ_data in answers_data:
-                options = answ_data.pop('options', [])
-                if answ_data['question'].pk in qs_seen:
-                    raise ValidationError(f'Question {answ_data["question"]} was sent twice.')
-                if answ_data['question'].pk in answercache:
-                    a = answercache[answ_data['question'].pk]
-                    if isinstance(answ_data['answer'], File):
-                        a.file.save(answ_data['answer'].name, answ_data['answer'], save=False)
-                        a.answer = 'file://' + a.file.name
-                    elif a.answer.startswith('file://') and answ_data['answer'] == "file:keep":
-                        pass  # keep current file
-                    else:
-                        for attr, value in answ_data.items():
-                            setattr(a, attr, value)
-                    a.save()
-                else:
-                    if isinstance(answ_data['answer'], File):
-                        an = answ_data.pop('answer')
-                        a = instance.answers.create(**answ_data, answer='')
-                        a.file.save(os.path.basename(an.name), an, save=False)
-                        a.answer = 'file://' + a.file.name
-                        a.save()
-                    else:
-                        a = instance.answers.create(**answ_data)
-                a.options.set(options)
-                qs_seen.add(a.question_id)
-            for qid, a in answercache.items():
-                if qid not in qs_seen:
-                    a.delete()
-
-        return instance
+        raise TypeError("this serializer is readonly")
 
 
 class RequireAttentionField(serializers.Field):
@@ -593,7 +512,7 @@ class OrderPaymentDateField(serializers.DateField):
 class OrderFeeSerializer(I18nAwareModelSerializer):
     class Meta:
         model = OrderFee
-        fields = ('fee_type', 'value', 'description', 'internal_type', 'tax_rate', 'tax_value', 'tax_rule', 'canceled')
+        fields = ('id', 'fee_type', 'value', 'description', 'internal_type', 'tax_rate', 'tax_value', 'tax_rule', 'canceled')
 
 
 class PaymentURLField(serializers.URLField):
@@ -1361,14 +1280,18 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
                     f.order = order._wrapped if simulate else order
                     f._calculate_tax()
                     fees.append(f)
-                    if not simulate:
+                    if simulate:
+                        f.id = 0
+                    else:
                         f.save()
             else:
                 f = OrderFee(**fee_data)
                 f.order = order._wrapped if simulate else order
                 f._calculate_tax()
                 fees.append(f)
-                if not simulate:
+                if simulate:
+                    f.id = 0
+                else:
                     f.save()
 
         order.total += sum([f.value for f in fees])
