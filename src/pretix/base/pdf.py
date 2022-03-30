@@ -49,7 +49,7 @@ from arabic_reshaper import ArabicReshaper
 from bidi.algorithm import get_display
 from django.conf import settings
 from django.contrib.staticfiles import finders
-from django.db.models import Min
+from django.db.models import Max, Min
 from django.dispatch import receiver
 from django.utils.formats import date_format
 from django.utils.functional import SimpleLazyObject
@@ -419,6 +419,12 @@ DEFAULT_VARIABLES = OrderedDict((
         "editor_sample": _("2017-05-31 19:00"),
         "evaluate": lambda op, order, ev: get_first_scan(op)
     }),
+    ("giftcard_issuance_date", {
+
+        "label": _("Gift card: Issuance date"),
+        "editor_sample": _("2017-05-31"),
+        "evaluate": lambda op, order, ev: get_giftcard_issuance(op, ev)
+    }),
     ("giftcard_expiry_date", {
         "label": _("Gift card: Expiration date"),
         "editor_sample": _("2017-05-31"),
@@ -563,6 +569,15 @@ def get_giftcard_expiry(op: OrderPosition, ev):
     if not op.item.issue_giftcard:
         return ""  # performance optimization
     m = op.issued_gift_cards.aggregate(m=Min('expires'))['m']
+    if not m:
+        return ""
+    return date_format(m.astimezone(ev.timezone), "SHORT_DATE_FORMAT")
+
+
+def get_giftcard_issuance(op: OrderPosition, ev):
+    if not op.item.issue_giftcard:
+        return ""  # performance optimization
+    m = op.issued_gift_cards.aggregate(m=Max('issuance'))['m']
     if not m:
         return ""
     return date_format(m.astimezone(ev.timezone), "SHORT_DATE_FORMAT")
