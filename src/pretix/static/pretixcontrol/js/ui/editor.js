@@ -286,7 +286,7 @@ var editor = {
         } else if (key.startsWith('meta:')) {
             return key.substr(5);
         }
-        return $('#toolbox-content option[value='+key+']').attr('data-sample') || '';
+        return $('#toolbox-content option[value='+key+'], #toolbox-content option[data-old-value='+key+']').attr('data-sample') || '';
     },
 
     _load_page: function (page_number, dump) {
@@ -396,6 +396,7 @@ var editor = {
 
         $("#toolbox-content-other").hide();
         $("#toolbox-content-other-i18n").hide();
+        $("#toolbox-content-other-help").hide();
         $(".add-buttons button").prop('disabled', false);
 
         if (dump) {
@@ -492,9 +493,15 @@ var editor = {
             if (!o.content && o.type == "barcodearea") {
                 o.content = "secret";
             }
-            $("#toolbox-content").val(o.content);
+            var $migrate_to = $("#toolbox-content option[data-old-value='" + o.content + "']");
+            if ($migrate_to.length > 0) {
+                $("#toolbox-content").val($migrate_to.val());
+            } else {
+                $("#toolbox-content").val(o.content);
+            }
             $("#toolbox-content-other").toggle($("#toolbox-content").val() === "other");
             $("#toolbox-content-other-i18n").toggle($("#toolbox-content").val() === "other_i18n");
+            $("#toolbox-content-other-help").toggle($("#toolbox-content").val() === "other" || $("#toolbox-content").val() === "other_i18n");
             if (o.content === "other") {
                 $("#toolbox-content-other").val(o.text);
             } else if (o.content === "other_i18n") {
@@ -537,6 +544,7 @@ var editor = {
 
             $("#toolbox-content-other").toggle($("#toolbox-content").val() === "other");
             $("#toolbox-content-other-i18n").toggle($("#toolbox-content").val() === "other_i18n");
+            $("#toolbox-content-other-help").toggle($("#toolbox-content").val() === "other" || $("#toolbox-content").val() === "other_i18n");
             o.content = $("#toolbox-content").val();
             if ($("#toolbox-content").val() === "other") {
                 o.text = $("#toolbox-content-other").val();
@@ -591,6 +599,7 @@ var editor = {
             o.rotate(parseFloat($("#toolbox-textrotation").val()));
             $("#toolbox-content-other").toggle($("#toolbox-content").val() === "other");
             $("#toolbox-content-other-i18n").toggle($("#toolbox-content").val() === "other_i18n");
+            $("#toolbox-content-other-help").toggle($("#toolbox-content").val() === "other" || $("#toolbox-content").val() === "other_i18n");
             o.content = $("#toolbox-content").val();
             if ($("#toolbox-content").val() === "other") {
                 o.setText($("#toolbox-content-other").val());

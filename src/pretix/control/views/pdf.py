@@ -33,7 +33,7 @@ from django.core.files.storage import default_storage
 from django.http import (
     FileResponse, HttpResponse, HttpResponseBadRequest, JsonResponse,
 )
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 from django.utils.crypto import get_random_string
 from django.utils.timezone import now
@@ -65,9 +65,16 @@ class BaseEditorView(EventPermissionRequiredMixin, TemplateView):
     title = None
 
     def get(self, request, *args, **kwargs):
+        if 'placeholders' in request.GET:
+            return self.get_placeholders_help(request)
         resp = super().get(request, *args, **kwargs)
         resp._csp_ignore = True
         return resp
+
+    def get_placeholders_help(self, request):
+        ctx = {}
+        ctx['variables'] = self.get_variables()
+        return render(request, 'pretixcontrol/pdf/placeholders.html', ctx)
 
     def process_upload(self):
         f = self.request.FILES.get('background')

@@ -504,10 +504,17 @@ def variables_from_questions(sender, *args, **kwargs):
     for q in sender.questions.all():
         if q.type == Question.TYPE_FILE:
             continue
+        d['question_{}'.format(q.identifier)] = {
+            'label': _('Question: {question}').format(question=q.question),
+            'editor_sample': _('<Answer: {question}>').format(question=q.question),
+            'evaluate': partial(get_answer, question_id=q.pk),
+            'migrate_from': 'question_{}'.format(q.pk)
+        }
         d['question_{}'.format(q.pk)] = {
             'label': _('Question: {question}').format(question=q.question),
             'editor_sample': _('<Answer: {question}>').format(question=q.question),
-            'evaluate': partial(get_answer, question_id=q.pk)
+            'evaluate': partial(get_answer, question_id=q.pk),
+            'hidden': True,
         }
     return d
 
