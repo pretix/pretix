@@ -31,6 +31,8 @@
                 </p>
                 {% if line.seat or line.voucher or line.subevent or line.used_membership%}
                     <dl class="dl-inline">
+                {% elif event.settings.show_checkin_number_user and line.checkin_count %}
+                    <dl class="dl-inline">
                 {% endif %}
                 {% if line.seat %}
                     <div class="cart-icon-details">
@@ -110,6 +112,8 @@
                     </div>
                 {% endif %}
                 {% if line.seat or line.voucher or line.subevent or line.used_membership%}
+                    </dl>
+                {% elif event.settings.show_checkin_number_user and line.checkin_count %}
                     </dl>
                 {% endif %}
 
