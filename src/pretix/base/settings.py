@@ -1195,7 +1195,20 @@ DEFAULTS = {
             help_text=_("If you ask for a phone number, explain why you do so and what you will use the phone number for.")
         )
     },
-
+    'show_checkin_number_user': {
+        'default': 'False',
+        'type': bool,
+        'serializer_class': serializers.BooleanField,
+        'form_class': forms.BooleanField,
+        'form_kwargs': dict(
+            label=_("Show number of check-ins to customer"),
+            help_text=_('With this option enabled, your customers will be able how many times they entered '
+                        'the event. This is usually not necessary, but might be useful in combination with tickets '
+                        'that are usable a specific number of times, so customers can see how many times they have '
+                        'already been used. Exits or failed scans will not be counted, and the user will not see '
+                        'the different check-in lists.'),
+        )
+    },
     'ticket_download': {
         'default': 'False',
         'type': bool,
