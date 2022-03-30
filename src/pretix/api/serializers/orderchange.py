@@ -68,6 +68,7 @@ class OrderPositionCreateForExistingOrderSerializer(OrderPositionCreateSerialize
             del self.fields['order']
 
     def validate(self, data):
+        data = super().validate(data)
         if data.get('addon_to'):
             try:
                 data['addon_to'] = data['order'].positions.get(positionid=data['addon_to'])
