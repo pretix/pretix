@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: French\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-03-21 15:59+0000\n"
+"POT-Creation-Date: 2022-03-31 12:36+0000\n"
 "PO-Revision-Date: 2021-12-04 01:00+0000\n"
 "Last-Translator: Eva-Maria Obermann <obermann@rami.io>\n"
 "Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix-js/"
@@ -393,47 +393,47 @@ msgstr ""
 "Le fichier PDF généré en arrière-plan n'a pas pu être chargé pour la raison "
 "suivante :"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:615
+#: pretix/static/pretixcontrol/js/ui/editor.js:624
 msgid "Group of objects"
 msgstr "Groupe d'objets"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:621
+#: pretix/static/pretixcontrol/js/ui/editor.js:630
 msgid "Text object"
 msgstr "Objet texte"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:623
+#: pretix/static/pretixcontrol/js/ui/editor.js:632
 msgid "Barcode area"
 msgstr "Zone de code-barres"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:625
+#: pretix/static/pretixcontrol/js/ui/editor.js:634
 #, fuzzy
 #| msgid "Barcode area"
 msgid "Image area"
 msgstr "Zone de code-barres"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:627
+#: pretix/static/pretixcontrol/js/ui/editor.js:636
 msgid "Powered by pretix"
 msgstr "Propulsé par pretix"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:629
+#: pretix/static/pretixcontrol/js/ui/editor.js:638
 msgid "Object"
 msgstr "Objet"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:633
+#: pretix/static/pretixcontrol/js/ui/editor.js:642
 msgid "Ticket design"
 msgstr "Conception des billets"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:923
+#: pretix/static/pretixcontrol/js/ui/editor.js:932
 msgid "Saving failed."
 msgstr "L'enregistrement a échoué."
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:973
-#: pretix/static/pretixcontrol/js/ui/editor.js:1012
+#: pretix/static/pretixcontrol/js/ui/editor.js:982
+#: pretix/static/pretixcontrol/js/ui/editor.js:1021
 msgid "Error while uploading your PDF file, please try again."
 msgstr ""
 "Erreur lors du téléchargement de votre fichier PDF, veuillez réessayer."
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:997
+#: pretix/static/pretixcontrol/js/ui/editor.js:1006
 msgid "Do you really want to leave the editor without saving your changes?"
 msgstr ""
 "Voulez-vous vraiment quitter l'éditeur sans sauvegarder vos modifications ?"

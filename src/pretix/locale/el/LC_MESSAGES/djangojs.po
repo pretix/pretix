@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-03-21 15:59+0000\n"
+"POT-Creation-Date: 2022-03-31 12:36+0000\n"
 "PO-Revision-Date: 2019-10-03 19:00+0000\n"
 "Last-Translator: Chris Spy <chrispiropoulou@hotmail.com>\n"
 "Language-Team: Greek <https://translate.pretix.eu/projects/pretix/pretix-js/"
@@ -399,46 +399,46 @@ msgid "The PDF background file could not be loaded for the following reason:"
 msgstr ""
 "Το αρχείο φόντου PDF δεν ήταν δυνατό να φορτωθεί για τον ακόλουθο λόγο:"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:615
+#: pretix/static/pretixcontrol/js/ui/editor.js:624
 msgid "Group of objects"
 msgstr "Ομάδα αντικειμένων"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:621
+#: pretix/static/pretixcontrol/js/ui/editor.js:630
 msgid "Text object"
 msgstr "Αντικείμενο κειμένου"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:623
+#: pretix/static/pretixcontrol/js/ui/editor.js:632
 msgid "Barcode area"
 msgstr "Περιοχή Barcode"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:625
+#: pretix/static/pretixcontrol/js/ui/editor.js:634
 #, fuzzy
 #| msgid "Barcode area"
 msgid "Image area"
 msgstr "Περιοχή Barcode"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:627
+#: pretix/static/pretixcontrol/js/ui/editor.js:636
 msgid "Powered by pretix"
 msgstr "Υποστηρίζεται από το Pretix"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:629
+#: pretix/static/pretixcontrol/js/ui/editor.js:638
 msgid "Object"
 msgstr "Αντικείμενο"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:633
+#: pretix/static/pretixcontrol/js/ui/editor.js:642
 msgid "Ticket design"
 msgstr "Σχεδιασμός εισιτηρίων"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:923
+#: pretix/static/pretixcontrol/js/ui/editor.js:932
 msgid "Saving failed."
 msgstr "Η αποθήκευση απέτυχε."
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:973
-#: pretix/static/pretixcontrol/js/ui/editor.js:1012
+#: pretix/static/pretixcontrol/js/ui/editor.js:982
+#: pretix/static/pretixcontrol/js/ui/editor.js:1021
 msgid "Error while uploading your PDF file, please try again."
 msgstr "Σφάλμα κατά τη μεταφόρτωση του αρχείου PDF, δοκιμάστε ξανά."
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:997
+#: pretix/static/pretixcontrol/js/ui/editor.js:1006
 msgid "Do you really want to leave the editor without saving your changes?"
 msgstr ""
 "Θέλετε πραγματικά να αφήσετε τον επεξεργαστή χωρίς να αποθηκεύσετε τις "
