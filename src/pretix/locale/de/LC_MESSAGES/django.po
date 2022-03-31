@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-03-31 12:36+0000\n"
-"PO-Revision-Date: 2022-03-21 17:09+0000\n"
+"PO-Revision-Date: 2022-03-31 18:46+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
 ">\n"
@@ -5525,16 +5525,12 @@ msgid "Date and time of first scan"
 msgstr "Datum und Uhrzeit des ersten Scans"
 
 #: pretix/base/pdf.py:424
-#, fuzzy
-#| msgid "Gift card code"
 msgid "Gift card: Issuance date"
-msgstr "Gutscheincode"
+msgstr "Wertgutschein: Ausstellungsdatum"
 
 #: pretix/base/pdf.py:429
-#, fuzzy
-#| msgid "Expiration date"
 msgid "Gift card: Expiration date"
-msgstr "Ablaufdatum"
+msgstr "Wertgutschein: Ablaufdatum"
 
 #: pretix/base/pdf.py:470 pretix/base/pdf.py:508 pretix/base/pdf.py:514
 #, python-brace-format
@@ -7457,10 +7453,8 @@ msgstr ""
 "wofür die Nummer benutzt wird."
 
 #: pretix/base/settings.py:1204
-#, fuzzy
-#| msgid "Show number of tickets left"
 msgid "Show number of check-ins to customer"
-msgstr "Zeige Anzahl verbleibender Tickets"
+msgstr "Zeige Anzahl der Check-ins für Kund*innen an"
 
 #: pretix/base/settings.py:1205
 msgid ""
@@ -7471,6 +7465,12 @@ msgid ""
 "failed scans will not be counted, and the user will not see the different "
 "check-in lists."
 msgstr ""
+"Wenn diese Option aktiv ist, können Kund*innen selbst sehen, wie oft sie die "
+"Veranstaltung betreten haben. Das ist normalerweise nicht nötig, aber kann "
+"nützlich sein, wenn es Tickets gibt, die eine bestimmte Anzahl an Eintritten "
+"erlauben, sodass Kund*innen die bisherige Nutzung des Tickets einsehen "
+"können. Ausgänge oder fehlgeschlagene Scans werden nicht angezeigt und die "
+"Kund*innen sehen keine Aufschlüsselung verschiedener Check-in-Listen."
 
 #: pretix/base/settings.py:1218
 msgid "Allow users to download tickets"
@@ -12451,12 +12451,12 @@ msgid "The voucher has been created and sent to a person on the waiting list."
 msgstr "Ein Gutschein wurde erstellt und an die Person per E-Mail verschickt."
 
 #: pretix/control/logdisplay.py:426
-#, fuzzy
-#| msgid "A voucher has been sent to a person on the waiting list."
 msgid ""
 "The voucher has been set to expire because the recipient removed themselves "
 "from the waiting list."
-msgstr "Ein Gutschein wurde verschickt."
+msgstr ""
+"Der Gutschein wurde als abgelaufen markiert, weil der Empfänger sich selbst "
+"von der Warteliste entfernt hat."
 
 #: pretix/control/logdisplay.py:427
 msgid "The voucher has been changed."
@@ -12512,15 +12512,15 @@ msgstr "Eine Kategorie für Zusatzprodukte wurde bearbeitet."
 
 #: pretix/control/logdisplay.py:439
 msgid "A bundled item has been added to this product."
-msgstr "Ein eingeschlossenes Produkt wurde zum Produkt hinzugefügt."
+msgstr "Ein enthaltenes Produkt wurde zum Produkt hinzugefügt."
 
 #: pretix/control/logdisplay.py:440
 msgid "A bundled item has been removed from this product."
-msgstr "Eine eingeschlossenes Produkt wurde vom Produkt entfernt."
+msgstr "Ein enthaltenes Produkt wurde vom Produkt entfernt."
 
 #: pretix/control/logdisplay.py:441
 msgid "A bundled item has been changed on this product."
-msgstr "Eine eingeschlossenes Produkt wurde bearbeitet."
+msgstr "Ein enthaltenes Produkt wurde bearbeitet."
 
 #: pretix/control/logdisplay.py:442
 msgid "The quota has been added."
@@ -18915,10 +18915,8 @@ msgid "Other…"
 msgstr "Sonstiges…"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:400
-#, fuzzy
-#| msgid "Available placeholders: {list}"
 msgid "Show available placeholders"
-msgstr "Verfügbare Platzhalter: {list}"
+msgstr "Zeige verfügbare Platzhalter"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:408
 msgid "Add a new object"
@@ -18955,10 +18953,8 @@ msgid "Dynamic image"
 msgstr "Dynamisches Bild"
 
 #: pretix/control/templates/pretixcontrol/pdf/placeholders.html:16
-#, fuzzy
-#| msgid "Available placeholders: {list}"
 msgid "Available placeholders"
-msgstr "Verfügbare Platzhalter: {list}"
+msgstr "Verfügbare Platzhalter"
 
 #: pretix/control/templates/pretixcontrol/pdf/placeholders.html:19
 msgid ""
@@ -18969,16 +18965,20 @@ msgid ""
 "however most of them can also be empty in some cases depending on "
 "configuration."
 msgstr ""
+"Sie können Platzhalter in Texten auf Tickets verwenden um den Text mit "
+"individualisierten Daten anzureichern. Welche Platzhalter verfügbar sind, "
+"hängt von den Veranstaltungs-Einstellungen, Erweiterungen, Produkten und den "
+"Kundeneingaben ab. Diese Seite listet alle Platzhalter auf, die für diese "
+"Veranstaltung technisch verfügbar sind. Die meisten davon können jedoch "
+"abhängig von der Konfiguration auch leer sein."
 
 #: pretix/control/templates/pretixcontrol/pdf/placeholders.html:31
-#, fuzzy
-#| msgid "Placed order"
 msgid "Placeholder"
-msgstr "Getätigte Bestellung"
+msgstr "Platzhalter"
 
 #: pretix/control/templates/pretixcontrol/pdf/placeholders.html:33
 msgid "Formatting example"
-msgstr ""
+msgstr "Formatierungsbeispiel"
 
 #: pretix/control/templates/pretixcontrol/search/orders.html:116
 msgid ""
@@ -25499,19 +25499,16 @@ msgid "Membership:"
 msgstr "Mitgliedschaft:"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:101
-#, fuzzy
-#| msgid "Usages"
 msgctxt "ticket_checkins"
 msgid "Usage:"
-msgstr "Nutzungen"
+msgstr "Nutzungen:"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:105
-#, fuzzy, python-format
-#| msgid "This ticket has already been redeemed."
+#, python-format
 msgid "This ticket has been used once."
 msgid_plural "This ticket has been used %(count)s times."
-msgstr[0] "Das Ticket wurde bereits eingelöst."
-msgstr[1] "Das Ticket wurde bereits eingelöst."
+msgstr[0] "Das Ticket wurde bereits einmal verwendet."
+msgstr[1] "Das Ticket wurde %(count)s-mal eingelöst."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:137
 msgid "No attendee name provided"
