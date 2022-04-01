@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-03-31 12:36+0000\n"
-"PO-Revision-Date: 2022-03-22 22:00+0000\n"
+"PO-Revision-Date: 2022-04-01 13:36+0000\n"
 "Last-Translator: Ismael Menéndez Fernández <ismael.menendez@balidea.com>\n"
 "Language-Team: Galician <https://translate.pretix.eu/projects/pretix/pretix/"
 "gl/>\n"
@@ -2211,14 +2211,14 @@ msgid "Event"
 msgstr "Evento"
 
 #: pretix/base/invoice.py:407
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgctxt "invoice"
 msgid ""
 "{from_date}\n"
 "until {to_date}"
 msgstr ""
 "{from_date}\n"
-" hasta {to_date}"
+" ata {to_date}"
 
 #: pretix/base/invoice.py:440 pretix/base/services/mail.py:446
 #, fuzzy, python-brace-format
@@ -2996,9 +2996,8 @@ msgstr "Opcional. Ningún producto será vendido antes de esta fecha."
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:505
 #: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html:169
 #: pretix/control/templates/pretixcontrol/subevents/detail.html:147
-#, fuzzy
 msgid "Available from"
-msgstr "Disponible desde"
+msgstr "Dispoñible dende"
 
 #: pretix/base/models/items.py:170 pretix/base/models/items.py:226
 #: pretix/base/models/items.py:429
@@ -8072,7 +8071,6 @@ msgstr ""
 
 #: pretix/base/settings.py:1305 pretix/base/settings.py:1313
 #: pretix/presale/templates/pretixpresale/fragment_calendar_nav.html:8
-#, fuzzy
 msgid "List"
 msgstr "Lista"
 
@@ -12350,7 +12348,6 @@ msgstr "último"
 
 #: pretix/control/forms/subevents.py:525 pretix/control/forms/subevents.py:564
 #: pretix/presale/templates/pretixpresale/fragment_calendar_nav.html:21
-#, fuzzy
 msgid "Day"
 msgstr "Día"
 
@@ -27406,9 +27403,9 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:41
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:235
 #: pretix/presale/templates/pretixpresale/event/voucher.html:289
-#, fuzzy, python-format
+#, python-format
 msgid "minimum amount to order: %(num)s"
-msgstr "cantidad mínima a pedir: %(num)s"
+msgstr "cantidade mínima a pedir: %(num)s"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:74
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:167
@@ -27933,9 +27930,8 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/organizers/index.html:84
 #: pretix/presale/templates/pretixpresale/organizers/index.html:97
 #: pretix/presale/views/widget.py:359 pretix/presale/views/widget.py:382
-#, fuzzy
 msgid "Book now"
-msgstr "Reservar ahora"
+msgstr "Reservar agora"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_list.html:33
 #: pretix/presale/templates/pretixpresale/fragment_calendar.html:85
@@ -28782,15 +28778,13 @@ msgstr ""
 "                                                    "
 
 #: pretix/presale/templates/pretixpresale/fragment_calendar_nav.html:12
-#, fuzzy
 msgid "Week"
-msgstr "Día de la semana"
+msgstr "Semana"
 
 #: pretix/presale/templates/pretixpresale/fragment_calendar_nav.html:17
 #: pretix/presale/templates/pretixpresale/organizers/calendar.html:25
-#, fuzzy
 msgid "Month"
-msgstr "mes(es)"
+msgstr "Mes"
 
 #: pretix/presale/templates/pretixpresale/fragment_calendar_nav.html:27
 #, fuzzy
@@ -29079,7 +29073,6 @@ msgid "Past events"
 msgstr "Eventos pasados"
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:27
-#, fuzzy
 msgid "Upcoming events"
 msgstr "Próximos eventos"
 
