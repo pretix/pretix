@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-03-31 12:36+0000\n"
-"PO-Revision-Date: 2022-03-30 15:25+0000\n"
+"PO-Revision-Date: 2022-04-01 13:36+0000\n"
 "Last-Translator: Anna-itk <abc@aarhus.dk>\n"
 "Language-Team: Danish <https://translate.pretix.eu/projects/pretix/pretix/da/"
 ">\n"
@@ -3884,7 +3884,7 @@ msgstr "afventer"
 #: pretix/base/models/orders.py:1497
 msgctxt "payment_state"
 msgid "confirmed"
-msgstr "bekræftet"
+msgstr "Bekræftet"
 
 #: pretix/base/models/orders.py:1498
 #, fuzzy
@@ -23168,6 +23168,9 @@ msgid ""
 "provider to complete your payment. You will then be redirected back here to "
 "get your tickets."
 msgstr ""
+"Efter du har indsendt din ordre viderestiller vi dig til betalingsudbyderen "
+"så du kan gennemføre din betaling. Du vil efterfølgende blive sendt tilbage "
+"til denne side for at få dine billetter."
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_cc.html:6
 msgid ""
@@ -24426,13 +24429,15 @@ msgstr "inkl. %(rate)s%% %(taxname)s"
 #, python-format
 msgid "The items in your cart are reserved for you for %(minutes)s minutes."
 msgstr ""
-"Bookingerne i din indkøbskurv er reserveret til dig i %(minutes)sminutter."
+"Bookingerne i din indkøbskurv er reserveret til dig i %(minutes)s minutter."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:411
 msgid ""
 "The items in your cart are no longer reserved for you. You can still "
 "complete your order as long as they’re available."
-msgstr "Varerne i din indkøbskurv er ikke længere reserverede til dig."
+msgstr ""
+"Varerne i din indkøbskurv er ikke længere reserverede til dig. Du kan stadig "
+"færdiggøre din ordre, så længe der er ledige billetter."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:415
 msgid "Overview of your ordered products."
@@ -24540,7 +24545,6 @@ msgid "Payment pending"
 msgstr "Betaling afventer"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_order_status.html:20
-#, fuzzy
 msgctxt "order state"
 msgid "Confirmed"
 msgstr "Bestilling bekræftet"
