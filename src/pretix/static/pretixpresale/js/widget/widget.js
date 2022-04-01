@@ -747,6 +747,7 @@ Vue.component('pretix-overlay', {
             this.$root.frame_shown = false;
             this.$root.parent.frame_dismissed = true;
             this.$root.parent.reload();
+            this.$root.trigger_close_callback();
         },
         iframeLoaded: function () {
             if (this.$root.frame_loading) {
@@ -1368,6 +1369,13 @@ var shared_root_methods = {
             }
         });
     },
+    trigger_close_callback: function () {
+        this.$nextTick(function () {
+            for (var i = 0; i < window.PretixWidget._closed.length; i++) {
+                window.PretixWidget._closed[i]()
+            }
+        });
+    },
     reload: function () {
         var url;
         if (this.$root.is_button) {
@@ -1791,8 +1799,12 @@ var create_button = function (element) {
 widgetlist = [];
 buttonlist = [];
 window.PretixWidget._loaded = [];
+window.PretixWidget._closed = [];
 window.PretixWidget.addLoadListener = function (f) {
     window.PretixWidget._loaded.push(f);
+}
+window.PretixWidget.addCloseListener = function (f) {
+    window.PretixWidget._closed.push(f);
 }
 window.PretixWidget.buildWidgets = function () {
     document.createElement("pretix-widget");
