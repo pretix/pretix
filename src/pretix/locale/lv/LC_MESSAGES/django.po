@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-03-31 12:36+0000\n"
-"PO-Revision-Date: 2021-12-09 15:49+0000\n"
-"Last-Translator: Ilona Zilgalve <i.zilgalve@riga-jurmala.com>\n"
+"PO-Revision-Date: 2022-04-03 14:33+0000\n"
+"Last-Translator: Liga V <lerning_by_dreaming@gmx.de>\n"
 "Language-Team: Latvian <https://translate.pretix.eu/projects/pretix/pretix/"
 "lv/>\n"
 "Language: lv\n"
@@ -18,13 +18,15 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n % 10 == 0 || n % 100 >= 11 && n % 100 <= "
 "19) ? 0 : ((n % 10 == 1 && n % 100 != 11) ? 1 : 2);\n"
-"X-Generator: Weblate 4.8\n"
+"X-Generator: Weblate 4.11.2\n"
 
 #: pretix/api/auth/devicesecurity.py:28
 msgid ""
 "Full device access (reading and changing orders and gift cards, reading of "
 "products and settings)"
 msgstr ""
+"Pilna piekļuve ierīcei (lasīt un mainīt pasūtījumus un dāvanu kartes, "
+"nolasīt produktus un iestatījumus)"
 
 #: pretix/api/auth/devicesecurity.py:44
 msgid "pretixSCAN"
@@ -33,14 +35,16 @@ msgstr "pretixSCAN"
 #: pretix/api/auth/devicesecurity.py:75
 msgid "pretixSCAN (kiosk mode, no order sync, no search)"
 msgstr ""
+"pretixSCAN (kioska režīms, pasūtījumi netiek sinhronizēti, nav meklēšanas "
+"funkcija)"
 
 #: pretix/api/auth/devicesecurity.py:104
 msgid "pretixSCAN (online only, no order sync)"
-msgstr ""
+msgstr "pretixSCAN (tikai tiešsaitē, pasūtījumi netiek sinhronizēti)"
 
 #: pretix/api/auth/devicesecurity.py:134
 msgid "pretixPOS"
-msgstr "pretixPOS"
+msgstr ""
 
 #: pretix/api/models.py:39
 msgid "Application name"
@@ -48,11 +52,11 @@ msgstr "Aplikācijas nosaukums"
 
 #: pretix/api/models.py:42
 msgid "Redirection URIs"
-msgstr ""
+msgstr "Atbildes URI, uz kuru lietotājs tiks nosūtīts pēc autorizēšanās"
 
 #: pretix/api/models.py:43
 msgid "Allowed URIs list, space separated"
-msgstr ""
+msgstr "Atļauto URI saraksts, atdalīti ar atstarpi"
 
 #: pretix/api/models.py:46 pretix/plugins/paypal/payment.py:112
 msgid "Client ID"
@@ -69,7 +73,7 @@ msgstr "Ieslēgt web hook"
 #: pretix/api/models.py:98
 #: pretix/control/templates/pretixcontrol/organizers/webhooks.html:36
 msgid "Target URL"
-msgstr ""
+msgstr "Mērķa URL saite"
 
 #: pretix/api/models.py:99 pretix/base/models/devices.py:121
 #: pretix/base/models/organizer.py:258
@@ -83,12 +87,12 @@ msgstr "Izvilkt klientu sarakstu tikai no konkrēta pasākuma"
 
 #: pretix/api/serializers/cart.py:81 pretix/api/serializers/order.py:1118
 msgid "The product \"{}\" is not assigned to a quota."
-msgstr ""
+msgstr "Produkts \"{}\" nav pievienots kvotai."
 
 #: pretix/api/serializers/cart.py:89 pretix/api/serializers/order.py:1130
 msgid ""
 "There is not enough quota available on quota \"{}\" to perform the operation."
-msgstr ""
+msgstr "Kvotai \"{}\" nav pietiekošs atlikums, lai veiktu darbību."
 
 #: pretix/api/serializers/cart.py:125 pretix/api/serializers/order.py:1090
 #: pretix/base/services/orders.py:1267
@@ -116,6 +120,8 @@ msgid ""
 "Events cannot be created as 'live'. Quotas and payment must be added to the "
 "event before sales can go live."
 msgstr ""
+"Pasākumus nevar izveidot kā \"publiskus\". Pirms uzsākt pārdošanu, "
+"jāpievieno kvotas un maksājumu metodes."
 
 #: pretix/api/serializers/event.py:220 pretix/api/serializers/event.py:513
 #, python-brace-format
@@ -154,7 +160,7 @@ msgstr ""
 
 #: pretix/api/serializers/item.py:207 pretix/control/forms/item.py:572
 msgid "Gift card products should not be admission products at the same time."
-msgstr ""
+msgstr "Dāvanu kartēm vienlaicīgi nebūtu jābūt ieejas biļetēm."
 
 #: pretix/api/serializers/item.py:244
 #, python-brace-format
@@ -180,10 +186,8 @@ msgid "This type of question cannot be asked during check-in."
 msgstr ""
 
 #: pretix/api/serializers/order.py:1103 pretix/api/serializers/order.py:1110
-#, fuzzy
-#| msgid "The ordered product \"{item}\" is no longer available."
 msgid "The product \"{}\" is not available on this date."
-msgstr "Pasūtītais produkts \"{item}\" vairs nav pieejams."
+msgstr "Produkts \"{item}\" šajā datumā nav pieejams."
 
 #: pretix/api/serializers/organizer.py:120
 #: pretix/control/forms/organizer.py:510
@@ -200,7 +204,7 @@ msgstr ""
 #: pretix/api/serializers/organizer.py:224
 #: pretix/control/views/organizer.py:768
 msgid "This user already has been invited for this team."
-msgstr ""
+msgstr "Šis lietotājs jau ir ielūgts šajā komandā."
 
 #: pretix/api/serializers/organizer.py:240
 #: pretix/control/views/organizer.py:785
@@ -256,10 +260,8 @@ msgid "Order canceled"
 msgstr "Pasūtījums ir atcelts"
 
 #: pretix/api/webhooks.py:216 pretix/base/notifications.py:257
-#, fuzzy
-#| msgid "Order expired"
 msgid "Order reactivated"
-msgstr "Pasūtījuma termiņš beidzās"
+msgstr "Pasūtījuma statuss ir atkal aktivizēts"
 
 #: pretix/api/webhooks.py:220 pretix/base/notifications.py:263
 msgid "Order expired"
@@ -276,7 +278,7 @@ msgstr "Pasūtījuma kontaktadrese ir mainījusies"
 #: pretix/api/webhooks.py:232 pretix/base/notifications.py:281
 #: pretix/control/templates/pretixcontrol/event/mail.html:102
 msgid "Order changed"
-msgstr ""
+msgstr "Pasūtījums tika izmainīts"
 
 #: pretix/api/webhooks.py:236 pretix/base/notifications.py:293
 msgid "External refund of payment"
@@ -299,16 +301,12 @@ msgid "Ticket check-in reverted"
 msgstr ""
 
 #: pretix/api/webhooks.py:256
-#, fuzzy
-#| msgid "Event date"
 msgid "Event created"
-msgstr "Pasākuma datums"
+msgstr "Pasākums ir izveidots"
 
 #: pretix/api/webhooks.py:260
-#, fuzzy
-#| msgid "Event date range"
 msgid "Event details changed"
-msgstr "Notikuma datumu diapazons"
+msgstr "Notikuma datums/laiks ir mainījies"
 
 #: pretix/api/webhooks.py:264
 #, fuzzy
@@ -1182,7 +1180,7 @@ msgstr "Kopējais pasūtījums"
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:69
 #: pretix/presale/templates/pretixpresale/organizers/index.html:46
 msgid "Status"
-msgstr "Satuss"
+msgstr "Statuss"
 
 #: pretix/base/exporters/orderlist.py:271
 #: pretix/base/exporters/orderlist.py:441
@@ -5041,7 +5039,7 @@ msgstr ""
 
 #: pretix/base/payment.py:1004 pretix/plugins/banktransfer/payment.py:145
 msgid "Payment method name"
-msgstr ""
+msgstr "Maksāšanas metodes nosaukums"
 
 #: pretix/base/payment.py:1008
 msgid "Payment process description during checkout"
@@ -26080,7 +26078,7 @@ msgstr "Turku"
 
 #: pretix/settings.py:527
 msgid "Galician"
-msgstr ""
+msgstr "Galisiešu"
 
 #: pretix/settings.py:841
 msgid "User profile only"
@@ -26088,11 +26086,11 @@ msgstr "Tikai lietotāja profils"
 
 #: pretix/settings.py:842
 msgid "Read access"
-msgstr "Izlasīt pieeju"
+msgstr "Lasīšanas režīma piekļuve"
 
 #: pretix/settings.py:843
 msgid "Write access"
-msgstr "Rakstīt pieeju"
+msgstr "Rediģēšanas režīma piekļuve"
 
 #: pretix/settings.py:853
 msgid "Kosovo"
