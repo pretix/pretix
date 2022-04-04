@@ -650,7 +650,7 @@ class OrderViewSet(viewsets.ModelViewSet):
             if send_mail:
                 free_flow = (
                     payment and order.total == Decimal('0.00') and order.status == Order.STATUS_PAID and
-                    not order.require_approval and payment.provider == "free"
+                    not order.require_approval and payment.provider in ("free", "boxoffice")
                 )
                 if order.require_approval:
                     email_template = request.event.settings.mail_text_order_placed_require_approval
