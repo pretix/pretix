@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-03-31 12:36+0000\n"
-"PO-Revision-Date: 2022-04-04 11:42+0000\n"
+"PO-Revision-Date: 2022-04-05 06:00+0000\n"
 "Last-Translator: Liga V <lerning_by_dreaming@gmx.de>\n"
 "Language-Team: Latvian <https://translate.pretix.eu/projects/pretix/pretix/"
 "lv/>\n"
@@ -1727,9 +1727,6 @@ msgid "All"
 msgstr "Visi"
 
 #: pretix/base/exporters/orderlist.py:1012 pretix/control/forms/filter.py:1205
-#, fuzzy
-#| msgctxt "stripe"
-#| msgid "Live"
 msgid "Live"
 msgstr "Publiskots"
 
@@ -7120,10 +7117,8 @@ msgid ""
 msgstr ""
 
 #: pretix/base/settings.py:1253
-#, fuzzy
-#| msgid "Generate tickets"
 msgid "Generate tickets for all products"
-msgstr "Ģenerēt biļetes"
+msgstr "Ģenerēt biļetes visiem produktiem"
 
 #: pretix/base/settings.py:1254
 msgid ""
@@ -7133,10 +7128,8 @@ msgid ""
 msgstr ""
 
 #: pretix/base/settings.py:1266
-#, fuzzy
-#| msgid "Payment process description for pending orders"
 msgid "Generate tickets for pending orders"
-msgstr "Maksājuma procesa apraksts par neapstiprinātajiem pasūtījumiem"
+msgstr "Ģenerēt biļetes neapstiprinātajiem pasūtījumiem"
 
 #: pretix/base/settings.py:1267
 msgid ""
@@ -7174,16 +7167,12 @@ msgid "List"
 msgstr "Saraksts"
 
 #: pretix/base/settings.py:1306 pretix/base/settings.py:1314
-#, fuzzy
-#| msgid "Calendar"
 msgid "Week calendar"
-msgstr "Kalendārs"
+msgstr "Nedēļas kalendārs"
 
 #: pretix/base/settings.py:1307 pretix/base/settings.py:1315
-#, fuzzy
-#| msgid "Calendar"
 msgid "Month calendar"
-msgstr "Kalendārs"
+msgstr "Mēneša kalendārs"
 
 #: pretix/base/settings.py:1311
 msgid "Default overview style"
@@ -7220,11 +7209,8 @@ msgid "Customers can change the variation of the products they purchased"
 msgstr "Klienti var mainīt iegādātā produkta variācijas"
 
 #: pretix/base/settings.py:1365
-#, fuzzy
-#| msgctxt "timeline"
-#| msgid "Customers can no longer modify their orders"
 msgid "Customers can change their selected add-on products"
-msgstr "Klienti vairs nevar mainīt savus pasūtījumus"
+msgstr "Klienti var mainīt viņu atzīmētos pievienotos produktus"
 
 #: pretix/base/settings.py:1375 pretix/base/settings.py:1384
 msgid ""
@@ -7348,10 +7334,8 @@ msgstr ""
 
 #: pretix/base/settings.py:1529
 #: pretix/control/templates/pretixcontrol/order/index.html:140
-#, fuzzy
-#| msgid "Refund requested"
 msgid "Refund method"
-msgstr "Pieprasīta atmaksa"
+msgstr "Atmaksas metode"
 
 #: pretix/base/settings.py:1555 pretix/control/forms/event.py:1359
 msgid "Contact address"
@@ -7382,10 +7366,8 @@ msgid ""
 msgstr ""
 
 #: pretix/base/settings.py:1597
-#, fuzzy
-#| msgid "Cached ticket files"
 msgid "Attach ticket files"
-msgstr "Kešatmiņā saglabāti biļešu faili"
+msgstr "Pievienot biļešu failus"
 
 #: pretix/base/settings.py:1599
 #, python-brace-format
@@ -7415,10 +7397,8 @@ msgid ""
 msgstr ""
 
 #: pretix/base/settings.py:1630
-#, fuzzy
-#| msgid "Product description"
 msgid "Event description"
-msgstr "Produkta apraksts"
+msgstr "Pasākuma apraksts"
 
 #: pretix/base/settings.py:1633
 msgid ""
@@ -7555,10 +7535,8 @@ msgid ""
 msgstr ""
 
 #: pretix/base/settings.py:1776
-#, fuzzy
-#| msgid "Can view orders"
 msgid "Attachment for new orders"
-msgstr "Var apskatīt pasūtījumus"
+msgstr "Pielikums jauniem pasūtījumiem"
 
 #: pretix/base/settings.py:1779
 #, python-brace-format
@@ -8043,10 +8021,8 @@ msgid ""
 msgstr ""
 
 #: pretix/base/settings.py:2419
-#, fuzzy
-#| msgid "Additional fee"
 msgid "Additional success message"
-msgstr "Papildu maksa"
+msgstr "Papildus ziņa pēc pasūtījuma pabeigšanas"
 
 #: pretix/base/settings.py:2420
 msgid ""
@@ -8109,10 +8085,8 @@ msgid "This will be displayed on the organizer homepage."
 msgstr ""
 
 #: pretix/base/settings.py:2592
-#, fuzzy
-#| msgid "Gift card code"
 msgid "Length of gift card codes"
-msgstr "Dāvanu kartes kods "
+msgstr "Dāvanu karšu kodu garums"
 
 #: pretix/base/settings.py:2593
 msgid ""
@@ -8121,10 +8095,8 @@ msgid ""
 msgstr ""
 
 #: pretix/base/settings.py:2603
-#, fuzzy
-#| msgid "Gift card code"
 msgid "Validity of gift card codes in years"
-msgstr "Dāvanu kartes kods "
+msgstr "Dāvanu karšu kodu garums gados"
 
 #: pretix/base/settings.py:2604
 msgid ""
@@ -8144,10 +8116,8 @@ msgid ""
 msgstr ""
 
 #: pretix/base/settings.py:2626
-#, fuzzy
-#| msgid "Additional fee"
 msgid "Dialog text"
-msgstr "Papildu maksa"
+msgstr "Dialoga teksts"
 
 #: pretix/base/settings.py:2633
 msgid ""
@@ -8162,10 +8132,8 @@ msgid "Secondary dialog text"
 msgstr ""
 
 #: pretix/base/settings.py:2647
-#, fuzzy
-#| msgid "Product variations"
 msgid "Privacy settings"
-msgstr "Produktu variācijas"
+msgstr "Privātuma iestatījumi"
 
 #: pretix/base/settings.py:2652
 msgid "Dialog title"
@@ -8176,29 +8144,20 @@ msgid "Accept all cookies"
 msgstr ""
 
 #: pretix/base/settings.py:2663
-#, fuzzy
-#| msgid "Product description"
 msgid "\"Accept\" button description"
-msgstr "Produkta apraksts"
+msgstr "\"Apstiprināt\" pogas apraksts"
 
 #: pretix/base/settings.py:2669
-#, fuzzy
-#| msgid "External refund of payment"
 msgid "Required cookies only"
-msgstr "Maksājuma ārēja atmaksa"
+msgstr "Tikai nepieciešamās sīkdatnes"
 
 #: pretix/base/settings.py:2674
-#, fuzzy
-#| msgid "Product description"
 msgid "\"Reject\" button description"
-msgstr "Produkta apraksts"
+msgstr "\"Noraidīt\" pogas apraksts"
 
 #: pretix/base/settings.py:2684
-#, fuzzy
-#| msgctxt "timeline"
-#| msgid "Customers can no longer modify their orders"
 msgid "Customers can choose their own seats"
-msgstr "Klienti vairs nevar mainīt savus pasūtījumus"
+msgstr "Klienti var paši izvēlēties sēdvietas"
 
 #: pretix/base/settings.py:2685
 msgid ""
@@ -8308,11 +8267,9 @@ msgstr "Latīņu valodas transkripcija"
 
 #: pretix/base/settings.py:2919 pretix/base/settings.py:2936
 #: pretix/base/settings.py:2955
-#, fuzzy
-#| msgid "Cancellation"
 msgctxt "person_name"
 msgid "Salutation"
-msgstr "Atcelšana"
+msgstr "Uzruna"
 
 #: pretix/base/settings.py:2928 pretix/base/settings.py:2946
 #: pretix/base/settings.py:2970
@@ -8358,71 +8315,53 @@ msgid "The last payment date cannot be before the end of presale."
 msgstr ""
 
 #: pretix/base/shredder.py:73 pretix/base/shredder.py:76
-#, fuzzy
-#| msgid ""
-#| "Your event needs to be over for at least 60 days to use this feature."
 msgid "Your event needs to be over to use this feature."
-msgstr ""
-"Lai izmantotu šo funkciju, jūsu pasākumam jābūt aktīvam vismaz 60 dienas."
+msgstr "Lai izmantotu šo funkciju, jūsu pasākumam jābūt pabeigtam."
 
 #: pretix/base/shredder.py:78
 msgid "Your ticket shop needs to be offline to use this feature."
 msgstr "Lai izmantotu šo funkciju, biļešu veikalam jābūt bezsaistē."
 
 #: pretix/base/shredder.py:168
-#, fuzzy
-#| msgid "Line number"
 msgid "Phone numbers"
-msgstr "Sastāvjoslas numurs "
+msgstr "Telefona numuri"
 
 #: pretix/base/shredder.py:170
-#, fuzzy
-#| msgid "This will remove all email addresses from the waiting list."
 msgid "This will remove all phone numbers from orders."
-msgstr "Šis no gaidīšanas saraksta noņems visas e-pasta adreses."
+msgstr "Šis noņems visus telefona numurus no pasūtījumiem."
 
 #: pretix/base/shredder.py:193
 msgid "E-mails"
 msgstr "E-pasti"
 
 #: pretix/base/shredder.py:195
-#, fuzzy
-#| msgid ""
-#| "This will remove all e-mail addresses from orders and attendees, as well "
-#| "as logged email contents."
 msgid ""
 "This will remove all e-mail addresses from orders and attendees, as well as "
 "logged email contents. This will also remove the association to customer "
 "accounts."
 msgstr ""
 "Šis noņems visas e-pasta adreses no pasūtījumiem un apmeklētājiem, kā arī "
-"reģistrēto e-pasta saturu."
+"reģistrēto e-pasta saturu. Šis noņems arī piesaisti klientu kontiem."
 
 #: pretix/base/shredder.py:241
-#, fuzzy
-#| msgid "This will remove all email addresses from the waiting list."
 msgid ""
 "This will remove all names, email addresses, and phone numbers from the "
 "waiting list."
-msgstr "Šis no gaidīšanas saraksta noņems visas e-pasta adreses."
+msgstr ""
+"Šis no gaidīšanas saraksta noņems visus vārdus, e-pasta adreses un telefona "
+"numurus."
 
 #: pretix/base/shredder.py:274
-#, fuzzy
-#| msgid "Attendee name"
 msgid "Attendee info"
-msgstr "Apmeklētāja vārds, uzvārds"
+msgstr "Apmeklētāja informācija"
 
 #: pretix/base/shredder.py:276
-#, fuzzy
-#| msgid ""
-#| "This will remove all attendee names from order positions, as well as "
-#| "logged changes to them."
 msgid ""
 "This will remove all attendee names and postal addresses from order "
 "positions, as well as logged changes to them."
 msgstr ""
-"Šis noņems visus apmeklētāju vārdus no pasūtījuma pozīcijām, kā arī "
-"reģistrētās izmaiņas tajos."
+"Šis noņems visus apmeklētāju vārdus un pasta adreses no pasūtījuma "
+"pozīcijām, kā arī reģistrētās izmaiņas tajos."
 
 #: pretix/base/shredder.py:330
 msgid "Invoice addresses"
@@ -8611,11 +8550,8 @@ msgid "Order code:"
 msgstr "Pasūtījuma kods:"
 
 #: pretix/base/templates/pretixbase/email/order_details.html:31
-#, fuzzy
-#| msgctxt "payment_state"
-#| msgid "created"
 msgid "created by"
-msgstr "izveidots"
+msgstr "izveidojis"
 
 #: pretix/base/templates/pretixbase/email/order_details.html:37
 #: pretix/base/templates/pretixbase/email/order_details.html:132
@@ -8646,10 +8582,8 @@ msgid "days before"
 msgstr "dienas pirms tam"
 
 #: pretix/base/templates/pretixbase/forms/widgets/reldatetime.html:15
-#, fuzzy
-#| msgid "days before"
 msgid "minutes before"
-msgstr "dienas pirms tam"
+msgstr "minūtes pirms"
 
 #: pretix/base/templates/pretixbase/forms/widgets/reldatetime.html:21
 msgid "at"
@@ -8677,10 +8611,8 @@ msgid "Proceed to %(host)s"
 msgstr ""
 
 #: pretix/base/templates/source.html:5 pretix/base/templates/source.html:9
-#, fuzzy
-#| msgid "Voucher code"
 msgid "Source code"
-msgstr "Kupona kods"
+msgstr "Pirmkods"
 
 #: pretix/base/templates/source.html:10
 msgid ""
@@ -8945,10 +8877,8 @@ msgid "You cannot choose the base domain of this installation."
 msgstr ""
 
 #: pretix/control/forms/event.py:389 pretix/control/forms/organizer.py:146
-#, fuzzy
-#| msgid "This slug has already been used for a different event."
 msgid "This domain is already in use for a different event or organizer."
-msgstr "Šis saīsinājums jau ir izmantots citam pasākumam."
+msgstr "Šis domēns jau ir izmantots citam pasākumam vai organizētājam."
 
 #: pretix/control/forms/event.py:460 pretix/control/forms/organizer.py:277
 msgid "Name format"
@@ -9162,10 +9092,8 @@ msgid "Available placeholders: {list}"
 msgstr ""
 
 #: pretix/control/forms/event.py:1136
-#, fuzzy
-#| msgid "Ticket category"
 msgid "Ticket code generator"
-msgstr "Biļešu kategorija"
+msgstr "Biļešu koda ģenerators"
 
 #: pretix/control/forms/event.py:1137
 msgid "For advanced users, usually does not need to be changed."
@@ -9208,20 +9136,16 @@ msgid "Sale not allowed"
 msgstr ""
 
 #: pretix/control/forms/event.py:1221
-#, fuzzy
-#| msgid "New order requires approval"
 msgid "Order requires approval"
-msgstr "Jauns pasūtījums gaida apstiprinājumu"
+msgstr "Pasūtījums gaida apstiprinājumu"
 
 #: pretix/control/forms/event.py:1225
 msgid "Deviating tax rate"
 msgstr ""
 
 #: pretix/control/forms/event.py:1230
-#, fuzzy
-#| msgid "Text on invoices"
 msgid "Text on invoice"
-msgstr "Teksts rēķinos"
+msgstr "Teksts uz rēķiniem"
 
 #: pretix/control/forms/event.py:1270
 msgid "Pre-selected voucher"
@@ -9319,10 +9243,8 @@ msgid "All orders"
 msgstr ""
 
 #: pretix/control/forms/filter.py:185
-#, fuzzy
-#| msgid "Can view orders"
 msgid "Valid orders"
-msgstr "Var apskatīt pasūtījumus"
+msgstr "Derīgi pasūtījumi"
 
 #: pretix/control/forms/filter.py:186
 msgid "Paid (or canceled with paid fee)"
@@ -9342,38 +9264,28 @@ msgid "Pending or paid"
 msgstr ""
 
 #: pretix/control/forms/filter.py:190
-#, fuzzy
-#| msgid "Cancellation"
 msgid "Cancellations"
-msgstr "Atcelšana"
+msgstr "Atceltie darījumi"
 
 #: pretix/control/forms/filter.py:191
-#, fuzzy
-#| msgid "Canceled (paid fee)"
 msgid "Canceled (fully)"
-msgstr "Atcelts (samaksāta maksa)"
+msgstr "Atcelts (pilnīgi)"
 
 #: pretix/control/forms/filter.py:192
-#, fuzzy
-#| msgid "Canceled (paid fee)"
 msgid "Canceled (fully or with paid fee)"
-msgstr "Atcelts (samaksāta maksa)"
+msgstr "Atcelts (pilnīgi vai ar samaksātu pakalpojuma maksu)"
 
 #: pretix/control/forms/filter.py:193
-#, fuzzy
-#| msgid "Cancellation fee"
 msgid "Cancellation requested"
-msgstr "Atcelšanas maksa"
+msgstr "Pieprasīta atcelšana"
 
 #: pretix/control/forms/filter.py:194
 msgid "Fully canceled but invoice not canceled"
 msgstr ""
 
 #: pretix/control/forms/filter.py:196
-#, fuzzy
-#| msgid "Payment fee"
 msgid "Payment process"
-msgstr "Maksājuma maksa"
+msgstr "Maksājuma process"
 
 #: pretix/control/forms/filter.py:198
 #: pretix/control/templates/pretixcontrol/items/question.html:25
@@ -9394,27 +9306,20 @@ msgid "Partially paid"
 msgstr ""
 
 #: pretix/control/forms/filter.py:202
-#, fuzzy
-#| msgctxt "checkoutflow"
-#| msgid "Order confirmed"
 msgid "Underpaid (but confirmed)"
-msgstr "Pasūtījums apstiprināts"
+msgstr "Nav samaksāta pilnīga summa, bet pasūtījums apstiprināts"
 
 #: pretix/control/forms/filter.py:203
 msgid "Pending (but fully paid)"
 msgstr ""
 
 #: pretix/control/forms/filter.py:205
-#, fuzzy
-#| msgid "Approval pending"
 msgid "Approval process"
-msgstr "Tiek gaidīts apstiprinājums"
+msgstr "Apstiprinājuma process"
 
 #: pretix/control/forms/filter.py:206
-#, fuzzy
-#| msgid "Approval pending"
 msgid "Approved, payment pending"
-msgstr "Tiek gaidīts apstiprinājums"
+msgstr "Apstiprināts, gaida maksājumu"
 
 #: pretix/control/forms/filter.py:207
 #: pretix/control/templates/pretixcontrol/orders/fragment_order_status.html:7
@@ -9463,22 +9368,16 @@ msgid "Order placed at or after"
 msgstr ""
 
 #: pretix/control/forms/filter.py:501
-#, fuzzy
-#| msgid "New order placed"
 msgid "Order placed before"
-msgstr "Jauns pasūtījumam ir veikts"
+msgstr "Pasūtījums veikts pirms"
 
 #: pretix/control/forms/filter.py:530
-#, fuzzy
-#| msgid "Order payments and refunds"
 msgid "Minimal sum of payments and refunds"
-msgstr "Pasūtījumu maksājumi un atgrieztie maksājumi"
+msgstr "Minimālā maksājumu un atgriešanas summa"
 
 #: pretix/control/forms/filter.py:535
-#, fuzzy
-#| msgid "Order payments and refunds"
 msgid "Maximal sum of payments and refunds"
-msgstr "Pasūtījumu maksājumi un atgrieztie maksājumi"
+msgstr "Maksimālā maksājumu un atgriešanas summa"
 
 #: pretix/control/forms/filter.py:577 pretix/control/forms/filter.py:582
 #: pretix/control/forms/filter.py:608 pretix/control/forms/filter.py:613
@@ -9497,26 +9396,20 @@ msgid "All events"
 msgstr ""
 
 #: pretix/control/forms/filter.py:854
-#, fuzzy
-#| msgid "All payment providers"
 msgid "All payments"
-msgstr "Visi maksājumu pakalpojumu sniedzēji"
+msgstr "Visi maksājumi"
 
 #: pretix/control/forms/filter.py:864
 msgid "Payment created from"
 msgstr "Maksājums izveidots no"
 
 #: pretix/control/forms/filter.py:869
-#, fuzzy
-#| msgid "Payment fee"
 msgid "Payment created until"
-msgstr "Maksājuma maksa"
+msgstr "Maksājums izveidots līdz"
 
 #: pretix/control/forms/filter.py:874
-#, fuzzy
-#| msgid "Can view orders"
 msgid "Paid from"
-msgstr "Var apskatīt pasūtījumus"
+msgstr "Samaksāts no"
 
 #: pretix/control/forms/filter.py:879
 msgid "Paid until"
@@ -9557,16 +9450,12 @@ msgid "Date until"
 msgstr ""
 
 #: pretix/control/forms/filter.py:1053
-#, fuzzy
-#| msgid "Event date"
 msgid "Start time from"
-msgstr "Pasākuma datums"
+msgstr "Sākuma laiks no"
 
 #: pretix/control/forms/filter.py:1058
-#, fuzzy
-#| msgid "Event date"
 msgid "Start time until"
-msgstr "Pasākuma datums"
+msgstr "Sākuma laiks līdz"
 
 #: pretix/control/forms/filter.py:1063 pretix/control/forms/subevents.py:526
 #: pretix/control/forms/subevents.py:565
@@ -9611,10 +9500,8 @@ msgstr "Meklēšanas pieprasījums"
 
 #: pretix/control/forms/filter.py:1283
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:37
-#, fuzzy
-#| msgid "Is active"
 msgid "active"
-msgstr "Ir aktīvs"
+msgstr "aktīvs"
 
 #: pretix/control/forms/filter.py:1284
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:33
@@ -9623,10 +9510,8 @@ msgstr ""
 
 #: pretix/control/forms/filter.py:1285
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:35
-#, fuzzy
-#| msgid "Is active"
 msgid "not yet activated"
-msgstr "Ir aktīvs"
+msgstr "vēl nav aktivizēts"
 
 #: pretix/control/forms/filter.py:1289
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:79
@@ -9636,22 +9521,16 @@ msgid "Memberships"
 msgstr ""
 
 #: pretix/control/forms/filter.py:1293
-#, fuzzy
-#| msgid "Your items"
 msgid "Has no memberships"
-msgstr "Jūsu preces"
+msgstr "Nav dalību"
 
 #: pretix/control/forms/filter.py:1294
-#, fuzzy
-#| msgid "Your items"
 msgid "Has any membership"
-msgstr "Jūsu preces"
+msgstr "Ir viena vai vairākas dalības"
 
 #: pretix/control/forms/filter.py:1295
-#, fuzzy
-#| msgid "Your items"
 msgid "Has valid membership"
-msgstr "Jūsu preces"
+msgstr "Ir derīga dalība"
 
 #: pretix/control/forms/filter.py:1400
 msgid "Shop live"
@@ -9687,11 +9566,9 @@ msgid "Checked in but left"
 msgstr ""
 
 #: pretix/control/forms/filter.py:1589
-#, fuzzy
-#| msgid "Presale"
 msgctxt "checkin state"
 msgid "Present"
-msgstr "Iepriekšpārdošana"
+msgstr "Klātesošs"
 
 #: pretix/control/forms/filter.py:1590
 #: pretix/control/templates/pretixcontrol/checkin/index.html:156
@@ -9711,11 +9588,9 @@ msgid "Date start from"
 msgstr ""
 
 #: pretix/control/forms/filter.py:1616
-#, fuzzy
-#| msgid "Date and time"
 msgctxt "subevent"
 msgid "Date start until"
-msgstr "Datums un laiks"
+msgstr "Sākuma datums līdz"
 
 #: pretix/control/forms/filter.py:1719 pretix/control/forms/filter.py:1722
 #: pretix/control/templates/pretixcontrol/users/index.html:52
@@ -9794,30 +9669,22 @@ msgid "Date of last successful payment"
 msgstr ""
 
 #: pretix/control/forms/filter.py:2076
-#, fuzzy
-#| msgid "Checkout"
 msgid "All check-ins"
-msgstr "Pirkuma veikšana"
+msgstr "Visas reģistrācijas"
 
 #: pretix/control/forms/filter.py:2077
-#, fuzzy
-#| msgid "Successful payments"
 msgid "Successful check-ins"
-msgstr "Veiksmīgi maksājumi"
+msgstr "Veiksmīgas reģistrācijas"
 
 #: pretix/control/forms/filter.py:2078
-#, fuzzy
-#| msgid "Only successful payments"
 msgid "Unsuccessful check-ins"
-msgstr "Tikai veiksmīgie maksājumi"
+msgstr "Neveiksmīgas reģistrācijas"
 
 #: pretix/control/forms/filter.py:2083
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html:64
 #: pretix/plugins/checkinlists/exporters.py:612
-#, fuzzy
-#| msgid "Card type"
 msgid "Scan type"
-msgstr "Kartes veids"
+msgstr "Skenēšanas veids"
 
 #: pretix/control/forms/filter.py:2085
 msgid "All directions"
@@ -9826,16 +9693,12 @@ msgstr ""
 #: pretix/control/forms/filter.py:2094
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html:67
 #: pretix/plugins/checkinlists/exporters.py:618
-#, fuzzy
-#| msgid "Device name"
 msgid "Device"
-msgstr "Ierīces vārds"
+msgstr "Ierīce"
 
 #: pretix/control/forms/filter.py:2095 pretix/control/forms/filter.py:2230
-#, fuzzy
-#| msgid "All invoices"
 msgid "All devices"
-msgstr "Visi rēķini"
+msgstr "Visas ierīces"
 
 #: pretix/control/forms/filter.py:2101 pretix/control/forms/filter.py:2217
 msgid "All gates"
@@ -9869,10 +9732,8 @@ msgid "Software"
 msgstr ""
 
 #: pretix/control/forms/filter.py:2228
-#, fuzzy
-#| msgid "Device name"
 msgid "Device status"
-msgstr "Ierīces vārds"
+msgstr "Ierīces statuss"
 
 #: pretix/control/forms/filter.py:2231
 msgid "Active devices"
@@ -10065,10 +9926,8 @@ msgid ""
 msgstr ""
 
 #: pretix/control/forms/global_settings.py:198
-#, fuzzy
-#| msgid "Your registration"
 msgid "Source code instructions"
-msgstr "Jūsu reģistrācija"
+msgstr "Pirmkoda instrukcijas"
 
 #: pretix/control/forms/global_settings.py:200
 msgid ""
@@ -10096,10 +9955,8 @@ msgid ""
 msgstr ""
 
 #: pretix/control/forms/item.py:298 pretix/control/forms/item.py:542
-#, fuzzy
-#| msgid "Ticket category"
 msgid "No category"
-msgstr "Biļešu kategorija"
+msgstr "Nav kategorijas"
 
 #: pretix/control/forms/item.py:305
 msgid "No taxation"
@@ -10208,10 +10065,8 @@ msgid "Bundled products"
 msgstr ""
 
 #: pretix/control/forms/item.py:865
-#, fuzzy
-#| msgid "You did not select any products."
 msgid "You added the same bundled product twice."
-msgstr "Jūs neizvēlējāties nevienu produktu."
+msgstr "Jūs pievienojāt vienu un to pašu komplektu divreiz."
 
 #: pretix/control/forms/item.py:871
 #: pretix/control/templates/pretixcontrol/item/include_bundles.html:23
@@ -10579,16 +10434,12 @@ msgid ""
 msgstr ""
 
 #: pretix/control/forms/orders.py:810
-#, fuzzy
-#| msgid "Order information changed"
 msgid "Send information via email"
-msgstr "Pasūtījuma informācija ir mainījusies"
+msgstr "Nosūtīt informāciju pa e-pastu"
 
 #: pretix/control/forms/orders.py:816
-#, fuzzy
-#| msgid "Order information changed"
 msgid "Send information to waiting list"
-msgstr "Pasūtījuma informācija ir mainījusies"
+msgstr "Nosūtīt informāciju uz gaidīšanas sarakstu"
 
 #: pretix/control/forms/orders.py:847 pretix/control/forms/orders.py:873
 #, python-brace-format
@@ -10723,10 +10574,8 @@ msgid "Selection contains various values"
 msgstr ""
 
 #: pretix/control/forms/subevents.py:327
-#, fuzzy
-#| msgid "Available until"
 msgid "Available_until"
-msgstr "Pieejams līdz"
+msgstr "Pieejams_līdz"
 
 #: pretix/control/forms/subevents.py:446
 msgid "Exclude these dates instead of adding them."
@@ -11118,16 +10967,12 @@ msgid "This object has been created by cloning."
 msgstr ""
 
 #: pretix/control/logdisplay.py:315
-#, fuzzy
-#| msgid "Your gift card has been applied."
 msgid "The organizer has been changed."
-msgstr "Jūsu dāvanu karte ir piemērota."
+msgstr "Organizētājs ir mainījies."
 
 #: pretix/control/logdisplay.py:316
-#, fuzzy
-#| msgid "The order has been canceled."
 msgid "The organizer settings have been changed."
-msgstr "Pasūtījums ir atcelts."
+msgstr "Organizētāja iestatījumi ir mainījušies."
 
 #: pretix/control/logdisplay.py:317
 msgid "Gift card acceptance for another organizer has been added."
@@ -11138,82 +10983,56 @@ msgid "Gift card acceptance for another organizer has been removed."
 msgstr ""
 
 #: pretix/control/logdisplay.py:319
-#, fuzzy
-#| msgid "Your gift card has been applied."
 msgid "The webhook has been created."
-msgstr "Jūsu dāvanu karte ir piemērota."
+msgstr "Tīmekļa aizķere (webhook) ir izveidota."
 
 #: pretix/control/logdisplay.py:320
-#, fuzzy
-#| msgid "Your gift card has been applied."
 msgid "The webhook has been changed."
-msgstr "Jūsu dāvanu karte ir piemērota."
+msgstr "Tīmekļa aizķere (webhook) ir mainījusies."
 
 #: pretix/control/logdisplay.py:321 pretix/control/views/organizer.py:1666
-#, fuzzy
-#| msgid "Your gift card has been applied."
 msgid "The membership type has been created."
-msgstr "Jūsu dāvanu karte ir piemērota."
+msgstr "Izveidots jauns dalības veids."
 
 #: pretix/control/logdisplay.py:322
-#, fuzzy
-#| msgid "Your gift card has been applied."
 msgid "The membership type has been changed."
-msgstr "Jūsu dāvanu karte ir piemērota."
+msgstr "Dalības veids ir mainīts."
 
 #: pretix/control/logdisplay.py:323
-#, fuzzy
-#| msgid "The task has been completed."
 msgid "The membership type has been deleted."
-msgstr "Uzdevums ir izpildīts."
+msgstr "Dalības veids ir dzēsts."
 
 #: pretix/control/logdisplay.py:324
-#, fuzzy
-#| msgid "Your gift card has been applied."
 msgid "The account has been created."
-msgstr "Jūsu dāvanu karte ir piemērota."
+msgstr "Klienta konts tika izveidots."
 
 #: pretix/control/logdisplay.py:325
-#, fuzzy
-#| msgid "Your gift card has been applied."
 msgid "The account has been changed."
-msgstr "Jūsu dāvanu karte ir piemērota."
+msgstr "Kontam ir izmaiņas."
 
 #: pretix/control/logdisplay.py:326
-#, fuzzy
-#| msgid "The presale period for this event has ended."
 msgid "A membership for this account has been added."
-msgstr "Šī pasākuma iepriekšpārdošanas periods ir beidzies."
+msgstr "Šim kontam tika pievienota dalība."
 
 #: pretix/control/logdisplay.py:327
-#, fuzzy
-#| msgid "Your gift card has been applied."
 msgid "A membership of this account has been changed."
-msgstr "Jūsu dāvanu karte ir piemērota."
+msgstr "Viena dalība šajā kontā tika mainīta."
 
 #: pretix/control/logdisplay.py:328
-#, fuzzy
-#| msgid "The presale period for this event has ended."
 msgid "A membership of this account has been deleted."
-msgstr "Šī pasākuma iepriekšpārdošanas periods ir beidzies."
+msgstr "Viena dalība šajā kontā tika dzēsta."
 
 #: pretix/control/logdisplay.py:329
-#, fuzzy
-#| msgid "The amount has been charged to your card."
 msgid "The account has been disabled and anonymized."
-msgstr "Šī summa ir iekasēta no jūsu kartes."
+msgstr "Konts ir deaktivizēts un anonimizēts."
 
 #: pretix/control/logdisplay.py:330
-#, fuzzy
-#| msgid "The invoice has been generated."
 msgid "A new password has been requested."
-msgstr "Rēķins ir izveidots."
+msgstr "Tika pieprasīta jauna parole."
 
 #: pretix/control/logdisplay.py:331
-#, fuzzy
-#| msgid "Your gift card has been applied."
 msgid "A new password has been set."
-msgstr "Jūsu dāvanu karte ir piemērota."
+msgstr "Ir uzstādīta jauna parole."
 
 #: pretix/control/logdisplay.py:332 pretix/control/logdisplay.py:368
 msgid "Sending of an email has failed."
@@ -11224,16 +11043,12 @@ msgid "The event's internal comment has been updated."
 msgstr ""
 
 #: pretix/control/logdisplay.py:334
-#, fuzzy
-#| msgid "The order has been canceled."
 msgid "The event has been canceled."
-msgstr "Pasūtījums ir atcelts."
+msgstr "Pasākums ir atcelts."
 
 #: pretix/control/logdisplay.py:335
-#, fuzzy
-#| msgid "The order has been canceled."
 msgid "An event has been deleted."
-msgstr "Pasūtījums ir atcelts."
+msgstr "Pasākums ir dzēsts."
 
 #: pretix/control/logdisplay.py:336
 msgid "The order details have been changed."
@@ -11260,10 +11075,8 @@ msgid "The order has been marked as paid."
 msgstr ""
 
 #: pretix/control/logdisplay.py:342
-#, fuzzy
-#| msgid "The invoice has been generated."
 msgid "The cancellation request has been deleted."
-msgstr "Rēķins ir izveidots."
+msgstr "Atcelšanas pieprasījums ir dzēsts."
 
 #: pretix/control/logdisplay.py:343
 msgid "The order has been refunded."
@@ -11275,10 +11088,8 @@ msgid "The order has been canceled."
 msgstr "Pasūtījums ir atcelts."
 
 #: pretix/control/logdisplay.py:345 pretix/control/views/orders.py:1570
-#, fuzzy
-#| msgid "The order has been canceled."
 msgid "The order has been reactivated."
-msgstr "Pasūtījums ir atcelts."
+msgstr "Pasūtījums ir atkal atjaunots."
 
 #: pretix/control/logdisplay.py:346
 #, python-brace-format
