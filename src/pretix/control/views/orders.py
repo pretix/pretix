@@ -1303,6 +1303,7 @@ class OrderTransition(OrderView):
         elif self.order.cancel_allowed() and to == 'c':
             return render(self.request, 'pretixcontrol/order/cancel.html', {
                 'form': self.mark_canceled_form,
+                'fee': self.order.user_cancel_fee,
                 'order': self.order,
             })
         else:
