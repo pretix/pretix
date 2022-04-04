@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-03-31 12:36+0000\n"
-"PO-Revision-Date: 2022-04-04 10:07+0000\n"
-"Last-Translator: Raphael Michel <michel@rami.io>\n"
+"PO-Revision-Date: 2022-04-04 11:42+0000\n"
+"Last-Translator: Liga V <lerning_by_dreaming@gmx.de>\n"
 "Language-Team: Latvian <https://translate.pretix.eu/projects/pretix/pretix/"
 "lv/>\n"
 "Language: lv\n"
@@ -544,14 +544,14 @@ msgstr "Pasākuma valūta"
 #: pretix/base/settings.py:2554 pretix/control/forms/subevents.py:609
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:268
 msgid "Event start time"
-msgstr "Pasākuma sākuma datums"
+msgstr "Pasākuma sākuma laiks"
 
 #: pretix/base/exporters/events.py:60 pretix/base/models/event.py:484
 #: pretix/base/models/event.py:1287 pretix/base/pdf.py:271
 #: pretix/control/forms/subevents.py:614
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:270
 msgid "Event end time"
-msgstr "Pasākuma beigu datums"
+msgstr "Pasākuma beigu laiks"
 
 #: pretix/base/exporters/events.py:61 pretix/base/models/event.py:486
 #: pretix/base/models/event.py:1289 pretix/control/forms/subevents.py:619
@@ -22496,7 +22496,7 @@ msgstr "Jūsu bankas valsts"
 
 #: pretix/plugins/stripe/payment.py:1212
 msgid "Germany"
-msgstr "Latvija"
+msgstr "Vācija"
 
 #: pretix/plugins/stripe/payment.py:1213
 msgid "Austria"
