@@ -205,7 +205,7 @@ setup(
         'packaging',
         'paypalrestsdk==1.13.*',
         'phonenumberslite==8.12.*',
-        'Pillow==9.*',
+        'Pillow==9.1.*',
         'protobuf==3.19.*',
         'psycopg2-binary',
         'pycountry',
