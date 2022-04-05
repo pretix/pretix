@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-03-31 12:36+0000\n"
-"PO-Revision-Date: 2022-04-04 06:00+0000\n"
+"PO-Revision-Date: 2022-04-06 03:00+0000\n"
 "Last-Translator: Liga V <lerning_by_dreaming@gmx.de>\n"
 "Language-Team: Latvian <https://translate.pretix.eu/projects/pretix/"
 "pretix-js/lv/>\n"
@@ -390,7 +390,7 @@ msgstr "Objekts"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:642
 msgid "Ticket design"
-msgstr "Biļetes dizains"
+msgstr "Biļešu dizains"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:932
 msgid "Saving failed."
