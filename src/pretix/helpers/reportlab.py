@@ -19,7 +19,7 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
-from PIL.Image import BICUBIC
+from PIL.Image import Resampling
 from reportlab.lib.utils import ImageReader
 
 
@@ -31,7 +31,7 @@ class ThumbnailingImageReader(ImageReader):
             height = width * self._image.size[1] / self._image.size[0]
         self._image.thumbnail(
             size=(int(width * dpi / 72), int(height * dpi / 72)),
-            resample=BICUBIC
+            resample=Resampling.BICUBIC
         )
         self._data = None
         return width, height
