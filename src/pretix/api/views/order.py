@@ -150,7 +150,8 @@ with scopes_disabled():
             matching_positions = OrderPosition.objects.filter(
                 Q(order=OuterRef('pk')) & Q(
                     Q(attendee_name_cached__icontains=u) | Q(attendee_email__icontains=u)
-                    | Q(secret__istartswith=u) | Q(voucher__code__icontains=u)
+                    | Q(secret__istartswith=u)
+                    # | Q(voucher__code__icontains=u)  # temporarily removed since it caused bad query performance on postgres
                 )
             ).values('id')
 
