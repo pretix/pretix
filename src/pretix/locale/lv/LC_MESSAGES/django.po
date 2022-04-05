@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-26 09:20+0000\n"
 "PO-Revision-Date: 2023-05-30 21:25+0000\n"
-"Last-Translator: Raphael Michel <michel@rami.io>\n"
+"Last-Translator: Liga V <lerning_by_dreaming@gmx.de>\n"
 "Language-Team: Latvian <https://translate.pretix.eu/projects/pretix/pretix/"
 "lv/>\n"
 "Language: lv\n"
@@ -4091,8 +4091,7 @@ msgstr "Parādīt šīs biļetes gaidīšanas sarakstu"
 
 #: pretix/base/models/items.py:459
 msgid "This will only work if waiting lists are enabled for this event."
-msgstr ""
-"Šis darbosies tikai tad, ja pasākumam ir iespējoti gaidīšanas saraksti."
+msgstr "Šis darbosies tikai tad, ja pasākumam ir iespējoti gaidīšanas saraksti."
 
 #: pretix/base/models/items.py:463 pretix/base/settings.py:1271
 #: pretix/control/forms/event.py:1546
@@ -25848,8 +25847,8 @@ msgstr "Relatīvais datums:"
 #, python-format
 msgid "Are you sure you want to delete the rule <strong>%(subject)s</strong>?"
 msgstr ""
-"Vai esat pārliecināts/-a, ka vēlaties dzēst noteikumu <strong>%(subject)s</"
-"strong>?"
+"Vai esat pārliecināts/-a, ka vēlaties dzēst noteikumu "
+"<strong>%(subject)s</strong>?"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_inspect.html:4
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_inspect.html:6
@@ -28084,8 +28083,7 @@ msgstr ""
 #, python-format
 msgid ""
 "Change position #%(positionid)s from \"%(old_item)s\" to \"%(new_item)s\""
-msgstr ""
-"Mainīt pozīciju #%(positionid)s no \"%(old_item)s\" uz \"%(new_item)s\""
+msgstr "Mainīt pozīciju #%(positionid)s no \"%(old_item)s\" uz \"%(new_item)s\""
 
 #: pretix/presale/templates/pretixpresale/event/fragment_change_confirm.html:30
 #: pretix/presale/templates/pretixpresale/event/fragment_change_confirm.html:56
@@ -28918,8 +28916,7 @@ msgstr "Es vēlos, lai nauda tiek atgriezta caur manu sākotnējo maksājuma vei
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:154
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:185
 msgid "The following payment methods will be used to refund the money to you:"
-msgstr ""
-"Sekojošas maksāšanas metodes tiks izmantotas, lai atgrieztu jums naudu:"
+msgstr "Sekojošas maksāšanas metodes tiks izmantotas, lai atgrieztu jums naudu:"
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:218
 msgid "Yes, request cancellation"
