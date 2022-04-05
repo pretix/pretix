@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-03-31 12:36+0000\n"
-"PO-Revision-Date: 2022-04-05 18:17+0000\n"
+"PO-Revision-Date: 2022-04-05 18:18+0000\n"
 "Last-Translator: Svyatoslav <slava@digitalarthouse.eu>\n"
 "Language-Team: Latvian <https://translate.pretix.eu/projects/pretix/pretix/"
 "lv/>\n"
@@ -23273,7 +23273,7 @@ msgstr "Šim produktam nav pieejami papildinājumi."
 #: pretix/presale/templates/pretixpresale/event/fragment_availability.html:6
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:71
 msgid "FULLY BOOKED"
-msgstr "NAV BRĪVU VIETU"
+msgstr "Biļetes izpārdotas"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_availability.html:8
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:73
@@ -23466,7 +23466,7 @@ msgstr "Izmantot kuponu/promokodu"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart_box.html:51
 msgid "We're applying this voucher to your cart..."
-msgstr ""
+msgstr "Kupons ir aktivizēts Jūsu grozam"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart_box.html:59
 #: pretix/presale/templates/pretixpresale/event/fragment_voucher_form.html:26
@@ -23529,12 +23529,13 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:82
 msgid "Please have your ticket ready when entering the event."
 msgstr ""
+"Jūs varat lejupielādēt iegādātās biļetes, spiežot uz zemāk esošajām pogām. "
 "Informējam, ka pirms pasākuma pie ieejas Jūsu biļete tiks pārbaudīta, "
-"aicinot to uzrādīt drukātā vai elektroniskā formātā."
+"aicinām to uzrādīt drukātā vai elektroniskā formātā."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:85
 msgid "Download your tickets using the buttons below."
-msgstr "Lejupielādēt visas biļetes, izmantojot zemāk redzamo pogu."
+msgstr "Lejupielādējiet biļetes šeit"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:94
 #, python-format
