@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-03-31 12:36+0000\n"
-"PO-Revision-Date: 2022-04-05 18:18+0000\n"
-"Last-Translator: Svyatoslav <slava@digitalarthouse.eu>\n"
+"PO-Revision-Date: 2022-04-06 03:00+0000\n"
+"Last-Translator: Liga V <lerning_by_dreaming@gmx.de>\n"
 "Language-Team: Latvian <https://translate.pretix.eu/projects/pretix/pretix/"
 "lv/>\n"
 "Language: lv\n"
@@ -83,7 +83,7 @@ msgstr "Visi pasākumi (ieskaitot jaunākos izveidotos)"
 #: pretix/api/models.py:100 pretix/base/models/devices.py:122
 #: pretix/base/models/organizer.py:259
 msgid "Limit to events"
-msgstr "Izvilkt klientu sarakstu tikai no konkrēta pasākuma"
+msgstr "Ierobežot uz pasākumiem"
 
 #: pretix/api/serializers/cart.py:81 pretix/api/serializers/order.py:1118
 msgid "The product \"{}\" is not assigned to a quota."
@@ -136,7 +136,7 @@ msgstr ""
 #: pretix/api/serializers/event.py:266
 #, python-brace-format
 msgid "Unknown plugin: '{name}'."
-msgstr ""
+msgstr "Nezināms spraudnis: '{name}'."
 
 #: pretix/api/serializers/item.py:119 pretix/control/forms/item.py:926
 msgid "The bundled item must not be the same item as the bundling one."
@@ -183,7 +183,7 @@ msgstr ""
 
 #: pretix/api/serializers/item.py:397 pretix/control/forms/item.py:127
 msgid "This type of question cannot be asked during check-in."
-msgstr ""
+msgstr "Šāda veida jautājumu nevar uzdot reģistrācijas laikā."
 
 #: pretix/api/serializers/order.py:1103 pretix/api/serializers/order.py:1110
 msgid "The product \"{}\" is not available on this date."
@@ -209,7 +209,7 @@ msgstr "Šis lietotājs jau ir ielūgts šajā komandā."
 #: pretix/api/serializers/organizer.py:240
 #: pretix/control/views/organizer.py:785
 msgid "This user already has permissions for this team."
-msgstr ""
+msgstr "Šim lietotājam jau ir piekļuve šajai komandai."
 
 #: pretix/api/views/oauth.py:106 pretix/control/logdisplay.py:416
 #, python-brace-format
@@ -1881,7 +1881,7 @@ msgid ""
 "You already registered with that email address, please use the login form."
 msgstr ""
 "Jūs jau esat reģistrējies ar šo e-pasta adresi, lūdzu, izmantojiet "
-"ielogošanās formu."
+"pieslēgšanās formu."
 
 #: pretix/base/forms/auth.py:146 pretix/base/forms/auth.py:204
 #: pretix/base/forms/user.py:56 pretix/control/forms/users.py:45
@@ -7104,10 +7104,8 @@ msgid ""
 msgstr ""
 
 #: pretix/base/settings.py:1240
-#, fuzzy
-#| msgid "Products in this category are add-on products"
 msgid "Generate tickets for add-on products"
-msgstr "Šīs kategorijas produkti ir papildus pievienojami produkti"
+msgstr "Izveidot biļetes papildus pievienojamiem produktiem"
 
 #: pretix/base/settings.py:1241
 msgid ""
@@ -8009,10 +8007,8 @@ msgid ""
 msgstr ""
 
 #: pretix/base/settings.py:2406
-#, fuzzy
-#| msgid "Attendee email"
 msgid "Attendee data explanation"
-msgstr "Apmeklētāja e-pasts"
+msgstr "Apmeklētāja datu vākšanas nosacījumi"
 
 #: pretix/base/settings.py:2409
 msgid ""
@@ -8795,24 +8791,26 @@ msgstr "Visi datumi"
 
 #: pretix/control/forms/event.py:80
 msgid "Use languages"
-msgstr ""
+msgstr "Izmantojamās valodas"
 
 #: pretix/control/forms/event.py:82
 msgid "Choose all languages that your event should be available in."
-msgstr ""
+msgstr "Izvēlēties visas valodas, kurās jābut pieejam jūsu pasākumam."
 
 #: pretix/control/forms/event.py:85
 msgid "This is an event series"
-msgstr ""
+msgstr "Šī ir pasākumu sērija"
 
 #: pretix/control/forms/event.py:121
 msgid ""
 "You already used this slug for a different event. Please choose a new one."
 msgstr ""
+"Šo saīsinājumu jūs jau esat izmantojis/-usi citam pasākumam. Lūdzu "
+"izvēlieties citu."
 
 #: pretix/control/forms/event.py:125 pretix/control/forms/event.py:457
 msgid "Event timezone"
-msgstr ""
+msgstr "Pasākuma laika zona"
 
 #: pretix/control/forms/event.py:132
 msgid "Sales tax rate"
@@ -8857,7 +8855,7 @@ msgstr ""
 #: pretix/control/forms/event.py:294 pretix/control/forms/event.py:297
 #: pretix/control/forms/item.py:310
 msgid "Do not copy"
-msgstr ""
+msgstr "Nekopēt"
 
 #: pretix/control/forms/event.py:313 pretix/control/forms/subevents.py:386
 #, python-brace-format
@@ -8908,7 +8906,7 @@ msgstr ""
 
 #: pretix/control/forms/event.py:586 pretix/control/forms/organizer.py:356
 msgid "Free text input"
-msgstr ""
+msgstr "Brīva teksta ievade"
 
 #: pretix/control/forms/event.py:617
 msgid "Do not ask"
@@ -8967,10 +8965,8 @@ msgid "The online shop must be selected to receive these emails."
 msgstr ""
 
 #: pretix/control/forms/event.py:882
-#, fuzzy
-#| msgid "Sales channels to automatically check in"
 msgid "Sales channels for checkout emails"
-msgstr "Tirdzniecības kanāli, lai automātiski iereģistrētos"
+msgstr "Pārdošanas kanāli pasūtījumu apstiprinājumiem pa e-pastu"
 
 #: pretix/control/forms/event.py:883
 msgid ""
@@ -9964,7 +9960,7 @@ msgstr ""
 
 #: pretix/control/forms/item.py:307
 msgid "Copy product information"
-msgstr ""
+msgstr "Kopēt produkta informāciju"
 
 #: pretix/control/forms/item.py:318
 msgid "Do not add to a quota now"
@@ -9972,11 +9968,11 @@ msgstr ""
 
 #: pretix/control/forms/item.py:319
 msgid "Add product to an existing quota"
-msgstr ""
+msgstr "Pievienot kvotu esošai kvotai"
 
 #: pretix/control/forms/item.py:320
 msgid "Create a new quota for this product"
-msgstr ""
+msgstr "Izveidot jaunu kvotu šim produktam"
 
 #: pretix/control/forms/item.py:326
 msgid "Quota options"
@@ -9992,19 +9988,19 @@ msgstr ""
 
 #: pretix/control/forms/item.py:349
 msgid "Size"
-msgstr ""
+msgstr "Lielums"
 
 #: pretix/control/forms/item.py:350
 msgid "Number of tickets"
-msgstr ""
+msgstr "Biļešu daudzums"
 
 #: pretix/control/forms/item.py:456
 msgid "Quota name is required."
-msgstr ""
+msgstr "Kvotas nosaukums ir nepieciešams."
 
 #: pretix/control/forms/item.py:461
 msgid "Please select a quota."
-msgstr ""
+msgstr "Lūdzu izvēlieties kvotu."
 
 #: pretix/control/forms/item.py:482 pretix/plugins/badges/forms.py:75
 #: pretix/plugins/ticketoutputpdf/forms.py:53
@@ -10021,7 +10017,7 @@ msgstr ""
 
 #: pretix/control/forms/item.py:494
 msgid "Never"
-msgstr ""
+msgstr "Nekad"
 
 #: pretix/control/forms/item.py:504
 msgid ""
@@ -11917,7 +11913,7 @@ msgstr ""
 #: pretix/control/navigation.py:286
 msgctxt "navigation"
 msgid "Check-in"
-msgstr ""
+msgstr "Reģistrācija"
 
 #: pretix/control/navigation.py:295
 #: pretix/control/templates/pretixcontrol/checkin/lists.html:3
@@ -11953,7 +11949,7 @@ msgstr ""
 #: pretix/control/navigation.py:377
 #: pretix/control/templates/pretixcontrol/user/settings.html:16
 msgid "Notifications"
-msgstr ""
+msgstr "Paziņojumi"
 
 #: pretix/control/navigation.py:382
 msgid "2FA"
@@ -12018,7 +12014,7 @@ msgstr "Lietotāja profils"
 
 #: pretix/control/navigation.py:557 pretix/control/navigation.py:564
 msgid "Devices"
-msgstr ""
+msgstr "Ierīces"
 
 #: pretix/control/permissions.py:71 pretix/control/permissions.py:108
 #: pretix/control/permissions.py:139 pretix/control/permissions.py:156
@@ -12061,14 +12057,14 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/auth/login.html:43
 #: pretix/control/templates/pretixcontrol/auth/register.html:22
 msgid "Register"
-msgstr ""
+msgstr "Reģistrēties"
 
 #: pretix/control/templates/pretixcontrol/auth/login.html:27
 #: pretix/presale/templates/pretixpresale/fragment_login_status.html:19
 #: pretix/presale/templates/pretixpresale/organizers/customer_login.html:6
 #: pretix/presale/templates/pretixpresale/organizers/customer_login.html:20
 msgid "Log in"
-msgstr ""
+msgstr "Pieslēgties"
 
 #: pretix/control/templates/pretixcontrol/auth/login.html:38
 msgid "Lost password?"
@@ -12260,11 +12256,11 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/fragment_login_status.html:13
 #: pretix/presale/templates/pretixpresale/fragment_login_status.html:14
 msgid "Log out"
-msgstr ""
+msgstr "Izrakstīties"
 
 #: pretix/control/templates/pretixcontrol/base.html:244
 msgid "Organizer account"
-msgstr ""
+msgstr "Organizētāja konts"
 
 #: pretix/control/templates/pretixcontrol/base.html:267
 msgid "Search for events"
@@ -20502,14 +20498,12 @@ msgid ""
 msgstr ""
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/sepa_export.html:34
-#, fuzzy
-#| msgid "Download ticket"
 msgid "Download"
-msgstr "Lejupielādējiet biļeti"
+msgstr "Lejupielādēt"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:12
 msgid "Payer and reference"
-msgstr ""
+msgstr "Maksātājs un maksājuma mērķis"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:25
 msgid "Accept anyway"
@@ -22366,7 +22360,7 @@ msgstr ""
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/index.html:17
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/index.html:24
 msgid "Create a new layout"
-msgstr ""
+msgstr "Izveidot jaunu izklājumu"
 
 #: pretix/plugins/ticketoutputpdf/ticketoutput.py:63
 msgid "PDF output"
@@ -22417,10 +22411,8 @@ msgid "Web Check-in"
 msgstr ""
 
 #: pretix/plugins/webcheckin/templates/pretixplugins/webcheckin/index.html:10
-#, fuzzy
-#| msgid "Checkout"
 msgid "Check-in"
-msgstr "Pirkuma veikšana"
+msgstr "Reģistrācija"
 
 #: pretix/presale/checkoutflow.py:103
 msgctxt "checkoutflow"
@@ -22920,7 +22912,7 @@ msgstr "Izveidot pasūtījumu"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:202
 msgid "Submit registration"
-msgstr "Nosūtīt"
+msgstr "Iesniegt reģistrāciju"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_customer.html:20
 msgid "Log in with a customer account"
@@ -23164,10 +23156,9 @@ msgstr "Slēpt variantus"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:97
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:91
-#, fuzzy, python-format
-#| msgid "Show all events of %(name)s"
+#, python-format
 msgid "Show %(count)s variants of %(item)s"
-msgstr "Rādīt visus notikumus no %(name)s"
+msgstr "Rādīt %(count)s variantus no %(item)s"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:98
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:92
@@ -23244,27 +23235,24 @@ msgstr "Pievienot %(item)s – %(var)s grozam"
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:187
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:198
 #: pretix/presale/templates/pretixpresale/event/voucher.html:242
-#, fuzzy, python-format
-#| msgid "Amount of %(item)s – %(var)s to order"
+#, python-format
 msgid "Quantity of %(item)s, %(var)s to order"
-msgstr "Apjoms %(item)s – %(var)s ko pasūtīt"
+msgstr "Apjoms %(item)s, %(var)s ko pasūtīt"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:296
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:316
 #: pretix/presale/templates/pretixpresale/event/voucher.html:364
 #: pretix/presale/templates/pretixpresale/event/voucher.html:384
-#, fuzzy, python-format
-#| msgid "Add to cart"
+#, python-format
 msgid "Add %(item)s to cart"
-msgstr "Pievienot grozam"
+msgstr "Pievienot %(item)s grozam"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:305
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:327
 #: pretix/presale/templates/pretixpresale/event/voucher.html:375
-#, fuzzy, python-format
-#| msgid "Amount of %(item)s to order"
+#, python-format
 msgid "Quantity of %(item)s to order"
-msgstr "Apjoms of %(item)s ko pasūtīt"
+msgstr "Apjoms %(item)s ko pasūtīt"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:319
 msgid "There are no add-ons available for this product."
@@ -23322,32 +23310,28 @@ msgstr "Atrašanās vieta"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:82
 msgid "Show full location"
-msgstr ""
+msgstr "Rādīt pilnu atrašanās vietu"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:93
-#, fuzzy
-#| msgid "Fee type"
 msgid "Membership:"
-msgstr "Maksas veids"
+msgstr "Dalība:"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:101
 msgctxt "ticket_checkins"
 msgid "Usage:"
-msgstr ""
+msgstr "Lietošana:"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:105
 #, python-format
 msgid "This ticket has been used once."
 msgid_plural "This ticket has been used %(count)s times."
 msgstr[0] "Šī biļete jau ir izmantota."
-msgstr[1] "Šī biļete jau vienreiz ir izmantota."
+msgstr[1] "Šī biļete jau %(count)s reiz ir izmantota."
 msgstr[2] "Šī biļete jau ir izmantota %(count)s reizes."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:137
-#, fuzzy
-#| msgid "Attendee name"
 msgid "No attendee name provided"
-msgstr "Apmeklētāja vārds, uzvārds"
+msgstr "Apmeklētāja vārds nav norādīts"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:190
 msgid "The image you previously uploaded"
@@ -23466,7 +23450,7 @@ msgstr "Izmantot kuponu/promokodu"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart_box.html:51
 msgid "We're applying this voucher to your cart..."
-msgstr "Kupons ir aktivizēts Jūsu grozam"
+msgstr "Kupons ir aktivizēts Jūsu grozam..."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart_box.html:59
 #: pretix/presale/templates/pretixpresale/event/fragment_voucher_form.html:26
@@ -23485,10 +23469,8 @@ msgid "Completed:"
 msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/fragment_checkoutflow.html:14
-#, fuzzy
-#| msgid "Currency"
 msgid "Current:"
-msgstr "Valūta"
+msgstr "Aktuāli:"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_checkoutflow.html:26
 msgctxt "checkoutflow"
@@ -23535,7 +23517,7 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:85
 msgid "Download your tickets using the buttons below."
-msgstr "Lejupielādējiet biļetes šeit"
+msgstr "Lejupielādējiet biļetes šeit."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:94
 #, python-format
@@ -23558,10 +23540,8 @@ msgstr "Аpstiprināts"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:9
 #: pretix/presale/templates/pretixpresale/event/voucher.html:101
-#, fuzzy
-#| msgid "Uncategorized"
 msgid "Uncategorized items"
-msgstr "Nav kategorizēts"
+msgstr "Produkti bez kategorijas"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:26
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:217
@@ -23595,7 +23575,7 @@ msgstr "Mainīt cenu %(item)s"
 #: pretix/presale/templates/pretixpresale/event/fragment_quota_left.html:4
 #, python-format
 msgid "%(num)s currently available"
-msgstr ""
+msgstr "%(num)s šobrīd ir pieejams"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_calendar.html:4
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_calendar_week.html:4
@@ -23625,7 +23605,7 @@ msgstr "Aiziet"
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_calendar.html:36
 #, python-format
 msgid "Show next month, %(month)s"
-msgstr ""
+msgstr "Rādīt nākamo mēnesi %(month)s"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_calendar_week.html:8
 #, python-format
@@ -23973,16 +23953,13 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order.html:278
 #: pretix/presale/templates/pretixpresale/event/order_modify.html:85
 msgid "Request invoice"
-msgstr "Pieprasīt rēķinu"
+msgstr "Prasīt rēķinu"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:292
 msgid "Change your information"
 msgstr "Mainīt Jūsu informāciju"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:300
-#, fuzzy
-#| msgctxt "checkoutflow"
-#| msgid "Your information"
 msgid "Your information"
 msgstr "Jūsu informācija"
 
@@ -24006,17 +23983,13 @@ msgid "Change order"
 msgstr "Mainīt pasūtījumu"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:379
-#, fuzzy
-#| msgid "You can cancel this order using the following button."
 msgid ""
 "You can request to cancel this order, but you will not receive a refund."
-msgstr "Jūs varat atcelt šo pasūtījumu, izmantojot šo pogu."
+msgstr "Jūs varat pierasīt atcelt šo pasūtījumu, bet jūs nesaņemsiet atmaksu."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:383
-#, fuzzy
-#| msgid "You can cancel this order using the following button."
 msgid "You can cancel this order, but you will not receive a refund."
-msgstr "Jūs varat atcelt šo pasūtījumu, izmantojot šo pogu."
+msgstr "Jūs varat atcelt šo pasūtījumu, bet jūs nesaņemsiet atmaksu."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:387
 #: pretix/presale/templates/pretixpresale/event/order.html:410
@@ -24026,33 +23999,24 @@ msgid "This will invalidate all tickets in this order."
 msgstr "Šis visas biļetes šajā pasūtījumā padarīs nederīgas."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:392
-#, fuzzy, python-format
-#| msgid ""
-#| "You can cancel this order. In this case, a cancellation fee of <strong>"
-#| "%(fee)s</strong> will be kept and you will receive a refund of the "
-#| "remainder to your original payment method."
+#, python-format
 msgid ""
 "You can request to cancel this order. If your request is approved, a "
 "cancellation fee of <strong>%(fee)s</strong> will be kept and you will "
 "receive a refund of the remainder."
 msgstr ""
-"Jūs varat atcelt šo pasūtījumu. Šajā gadījumā tiks paturēta atcelšanas maksa "
-"<strong>%(fee)s</strong>, un jūs saņemsiet atmaksu par atlikušo summu, "
-"izmantojot sākotnēji izmantoto maksājuma veidu."
+"Jūs varat prasīt atcelt šo pasūtījumu. Ja tas tiks apstiprināts, tiks "
+"ieturēta atcelšanas maksa <strong>%(fee)s</strong>, un jūs saņemsiet atmaksu "
+"par atlikušo summu."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:398
-#, fuzzy, python-format
-#| msgid ""
-#| "You can cancel this order. In this case, a cancellation fee of <strong>"
-#| "%(fee)s</strong> will be kept and you will receive a refund of the "
-#| "remainder to your original payment method."
+#, python-format
 msgid ""
 "You can cancel this order. In this case, a cancellation fee of <strong>"
 "%(fee)s</strong> will be kept and you will receive a refund of the remainder."
 msgstr ""
 "Jūs varat atcelt šo pasūtījumu. Šajā gadījumā tiks paturēta atcelšanas maksa "
-"<strong>%(fee)s</strong>, un jūs saņemsiet atmaksu par atlikušo summu, "
-"izmantojot sākotnēji izmantoto maksājuma veidu."
+"<strong>%(fee)s</strong>, un jūs saņemsiet atmaksu par atlikušo summu."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:404
 #: pretix/presale/templates/pretixpresale/event/order.html:425
@@ -24062,49 +24026,42 @@ msgid ""
 "The refund will be issued in form of a gift card that you can use for "
 "further purchases."
 msgstr ""
+"Nauda tiks atmaksāta dāvanu kartes formā, ko jūs varēsiet izmantot "
+"nākamajiem pirkumiem."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:406
 #: pretix/presale/templates/pretixpresale/event/order.html:427
 msgid ""
 "The refund can be issued to your original payment method or as a gift card."
 msgstr ""
+"Nauda var tikt atgriezta caur jūsu sākotnējo maksāšanas metodi vai kā dāvanu "
+"karte."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:408
 #: pretix/presale/templates/pretixpresale/event/order.html:429
-#, fuzzy
-#| msgid ""
-#| "You can cancel this order and receive a full refund to your original "
-#| "payment method."
 msgid "The refund will be issued to your original payment method."
-msgstr ""
-"Jūs varat atcelt šo pasūtījumu un saņemt pilnu naudas atmaksu caur jūsu "
-"sākotnējo maksājuma veidu."
+msgstr "Naudas tiks atmaksāta caur jūsu sākotnējo maksājuma veidu."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:415
 msgid ""
 "You can request to cancel this order. If your request is approved, you get a "
 "full refund."
 msgstr ""
+"Jūs varat prasīt atcelt šo pasūtījumu. Ja jūsu prasība tiks apstiprināta, "
+"jūs saņemsiet pilnu atmaksu."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:420
-#, fuzzy
-#| msgid ""
-#| "You can cancel this order and receive a full refund to your original "
-#| "payment method."
 msgid "You can cancel this order and receive a full refund."
-msgstr ""
-"Jūs varat atcelt šo pasūtījumu un saņemt pilnu naudas atmaksu caur jūsu "
-"sākotnējo maksājuma veidu."
+msgstr "Jūs varat atcelt šo pasūtījumu un saņemt pilnu naudas atmaksu."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:443
 msgid "You can cancel this order using the following button."
 msgstr "Jūs varat atcelt šo pasūtījumu, izmantojot šo pogu."
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:11
-#, fuzzy, python-format
-#| msgid "Order canceled: %(code)s"
+#, python-format
 msgid "Request cancellation: %(code)s"
-msgstr "Pasūtījums atcelts: %(code)s"
+msgstr "Prasīt atcelt pasūtījumu: %(code)s"
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:15
 #, python-format
@@ -24117,12 +24074,17 @@ msgid ""
 "organizer will then decide on your request. If they approve, your order will "
 "be canceled and all tickets will be invalidated."
 msgstr ""
+"Jūs varat prasīt atcelt jūsu pasūtījumu šajā lapā. Organizētājs izlems par "
+"jūsu iesniegumu. Ja viņi apstiprinās, jūsu pasūtījums tiks atcelts un visas "
+"biļetes kļūs nederīgas."
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:33
 msgid ""
 "If you cancel this order, all tickets will be invalidated and you can no "
 "longer use them. You cannot revert this action."
 msgstr ""
+"Ja jūs vēlaties atcelt šo pasūtījumu, visas biļetes kļūs nederīgas un jūs "
+"vairs nevarēsiet viņas lietot. Šī darbība ir neatgriezeniska."
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:43
 #, python-format
@@ -24130,20 +24092,20 @@ msgid ""
 "If you want, you can request a refund for the full amount minus a "
 "cancellation fee of %(fee)s."
 msgstr ""
+"Ja jūs vēlaties, jūs varat prasīt naudas atmaksu par pilnu summu mīnus "
+"atcelšanas maksa %(fee)s vērtībā."
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:48
 msgid "If you want, you can request a full refund."
-msgstr ""
+msgstr "Ja jūs vēlaties, jūs varat pieprasīt pilnu naudas atmaksu."
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:77
 msgid "Enter custom amount"
-msgstr ""
+msgstr "Ievadiet savu daudzumu"
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:82
-#, fuzzy
-#| msgid "Pending amount"
 msgid "Refund amount:"
-msgstr "Neapmaksātā summa"
+msgstr "Naudas summa, kas tiks atgriezta:"
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:89
 #: pretix/presale/templates/pretixpresale/event/order_change_confirm.html:166
@@ -24151,17 +24113,18 @@ msgid ""
 "The organizer will get in touch with you to clarify the details of your "
 "refund."
 msgstr ""
+"Organizētājs ar jums sazināsies, lai noskaidrotu informāciju par naudas "
+"atgriešanu."
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:97
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:118
-#, fuzzy, python-format
-#| msgid "Your gift card has been applied."
+#, python-format
 msgid "Your gift card will be valid until %(expiry_date)s."
-msgstr "Jūsu dāvanu karte ir piemērota."
+msgstr "Jūsu dāvanu karte būs derīga līdz %(expiry_date)s."
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:106
 msgid "I want the refund as a gift card for later purchases"
-msgstr ""
+msgstr "Es vēlos naudas atmaksu kā dāvanu karti priekš vēlākiem pirkumiem"
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:112
 msgid "I want the refund to be sent to my original payment method"
@@ -24170,60 +24133,45 @@ msgstr "Es vēlos, lai nauda tiek atgriezta caur manu sākotnējo maksājuma vei
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:127
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:157
 #: pretix/presale/templates/pretixpresale/event/order_change_confirm.html:171
-#, fuzzy
-#| msgid ""
-#| "The refund amount of %(amount)s will automatically be sent back to your "
-#| "original payment method. Depending on the payment method, please allow "
-#| "for up to two weeks before this appears on your statement."
 msgid ""
 "The refund amount will automatically be sent back to your original payment "
 "method. Depending on the payment method, please allow for up to two weeks "
 "before this appears on your statement."
 msgstr ""
-"%(amount)s atmaksātā summa tiks automātiski nosūtīta atpakaļ caur jūsu "
-"sākotnējo maksājuma veidu. Atkarībā no maksājuma veida, lūdzu, uzgaidiet "
-"līdz divām nedēļām, pirms atmaksa parādās jūsu pārskatā."
+"Atmaksātā summa tiks automātiski nosūtīta atpakaļ caur jūsu sākotnējo "
+"maksājuma veidu. Atkarībā no maksājuma veida, lūdzu, uzgaidiet līdz divām "
+"nedēļām, pirms atmaksa parādās jūsu pārskatā."
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:134
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:165
 msgid "The following payment methods will be used to refund the money to you:"
-msgstr ""
+msgstr "Sekojošas maksāšanas metodes tiks izmantotas, lai atgrieztu jums naudu:"
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:145
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:176
 #: pretix/presale/templates/pretixpresale/event/order_change_confirm.html:177
-#, fuzzy
-#| msgid ""
-#| "With to the payment method you used, the refund amount of %(amount)s "
-#| "<strong>can not be sent back to you automatically</strong>. Instead, the "
-#| "event organizer will need to initiate the transfer manually. Please be "
-#| "patient as this might take a bit longer."
 msgid ""
 "With the payment method you used, the refund amount <strong>can not be sent "
 "back to you automatically</strong>. Instead, the event organizer will need "
 "to initiate the transfer manually. Please be patient as this might take a "
 "bit longer."
 msgstr ""
-"Caur jūsu sākotnēji izmantoto maksājuma veidu, atmaksas summu %(amount)s "
-"<strong> nevar jums automātiski nosūtīt </strong>. Tā vietā pasākuma "
-"organizatoram pārsūtīšana būs jāveic manuāli. Lūdzu, esiet pacietīgs/a, jo "
-"tas var aizņemt nedaudz vairāk laika."
+"Caur jūsu sākotnēji izmantoto maksājuma veidu, atmaksas summu <strong> nevar "
+"nosūtīt jums automātiski </strong>. Tā vietā pasākuma organizatoram "
+"pārsūtīšana būs jāveic manuāli. Lūdzu, esiet pacietīgs/a, jo tas var aizņemt "
+"nedaudz vairāk laika."
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:198
 msgid "Yes, request cancellation"
-msgstr ""
+msgstr "Jā, prasīt atcelšanu"
 
 #: pretix/presale/templates/pretixpresale/event/order_change_confirm.html:19
-#, fuzzy
-#| msgid "Please confirm the following payment details."
 msgid "Please confirm the following changes to your order."
-msgstr "Lūdzu, apstipriniet šo maksājuma informāciju."
+msgstr "Lūdzu apstipriniet pasūtījuma izmaiņas."
 
 #: pretix/presale/templates/pretixpresale/event/order_change_confirm.html:24
-#, fuzzy
-#| msgid "Cancel order"
 msgid "Change summary"
-msgstr "Atcelt pasūtījumu"
+msgstr "Izmaiņu kopsavilkums"
 
 #: pretix/presale/templates/pretixpresale/event/order_change_confirm.html:33
 #, python-format
@@ -24231,12 +24179,14 @@ msgid ""
 "Change position #%(positionid)s from \"%(old_item)s – %(old_variation)s \" "
 "to \"%(new_item)s – %(new_variation)s\""
 msgstr ""
+"Mainīt pozīciju #%(positionid)s no \"%(old_item)s – %(old_variation)s \" uz "
+"\"%(new_item)s – %(new_variation)s\""
 
 #: pretix/presale/templates/pretixpresale/event/order_change_confirm.html:38
 #, python-format
 msgid ""
 "Change position #%(positionid)s from \"%(old_item)s\" to \"%(new_item)s\""
-msgstr ""
+msgstr "Mainīt pozīciju #%(positionid)s no \"%(old_item)s\" uz \"%(new_item)s\""
 
 #: pretix/presale/templates/pretixpresale/event/order_change_confirm.html:45
 #: pretix/presale/templates/pretixpresale/event/order_change_confirm.html:72
@@ -24247,27 +24197,29 @@ msgid ""
 "                                                Add-on product to position #"
 "%(positionid)s"
 msgstr ""
+"\n"
+"                                                Pievienot produktu pozīcijai "
+"#%(positionid)s"
 
 #: pretix/presale/templates/pretixpresale/event/order_change_confirm.html:56
 #, python-format
 msgid "Change date of position #%(positionid)s from \"%(old)s\" to \"%(new)s\""
-msgstr ""
+msgstr "Mainīt datumu pozīcijai #%(positionid)s no \"%(old)s\" uz \"%(new)s\""
 
 #: pretix/presale/templates/pretixpresale/event/order_change_confirm.html:66
 #, python-format
 msgid "Change price of position #%(positionid)s from %(old)s to %(new)s"
-msgstr ""
+msgstr "Mainīt cenu pozīcijai #%(positionid)s no %(old)s uz %(new)s"
 
 #: pretix/presale/templates/pretixpresale/event/order_change_confirm.html:85
-#, fuzzy, python-format
-#| msgid "Amount of %(item)s – %(var)s to order"
+#, python-format
 msgid "Add position (%(item)s – %(variation)s)"
-msgstr "Apjoms %(item)s – %(var)s ko pasūtīt"
+msgstr "Pievienot jaunu pozīciju %(item)s – %(variation)s"
 
 #: pretix/presale/templates/pretixpresale/event/order_change_confirm.html:89
 #, python-format
 msgid "Add position (%(item)s)"
-msgstr ""
+msgstr "Pievienot pozīciju (%(item)s)"
 
 #: pretix/presale/templates/pretixpresale/event/order_change_confirm.html:96
 #, python-format
@@ -24275,32 +24227,30 @@ msgid ""
 "Add-on product\n"
 "                                                to position #%(positionid)s"
 msgstr ""
+"Papildus produkts\n"
+"                                                  pozīcijai #%(positionid)s"
 
 #: pretix/presale/templates/pretixpresale/event/order_change_confirm.html:109
 #, python-format
 msgid "Remove position #%(positionid)s (%(item)s – %(variation)s)"
-msgstr ""
+msgstr "Noņemt pozīciju #%(positionid)s (%(item)s – %(variation)s)"
 
 #: pretix/presale/templates/pretixpresale/event/order_change_confirm.html:113
 #, python-format
 msgid "Remove position #%(positionid)s (%(item)s)"
-msgstr ""
+msgstr "Noņemt pozīciju #%(positionid)s (%(item)s)"
 
 #: pretix/presale/templates/pretixpresale/event/order_change_confirm.html:133
-#, fuzzy
-#| msgid "Net price"
 msgid "Total price change"
-msgstr "Neto cena "
+msgstr "Kopējās summas maiņa"
 
 #: pretix/presale/templates/pretixpresale/event/order_change_confirm.html:142
-#, fuzzy
-#| msgid "View order details"
 msgid "New order total"
-msgstr "Skatīt pasūtījuma informāciju"
+msgstr "Jaunā pasūtījuma kopsumma"
 
 #: pretix/presale/templates/pretixpresale/event/order_change_confirm.html:148
 msgid "You already paid"
-msgstr ""
+msgstr "Jūs jau samaksājāt"
 
 #: pretix/presale/templates/pretixpresale/event/order_change_confirm.html:156
 msgid "You will need to pay"
@@ -24310,10 +24260,12 @@ msgstr "Jums vēl jāsamaksā"
 msgid ""
 "Your entire order will be considered unpaid until you paid this difference."
 msgstr ""
+"Viss jūsu pasūtījums tiks uzskatīts par nesamaksātu līdz jūs piemaksāsiet šo "
+"atšķirību."
 
 #: pretix/presale/templates/pretixpresale/event/order_change_confirm.html:162
 msgid "You will be refunded"
-msgstr ""
+msgstr "Jums atgriezīs"
 
 #: pretix/presale/templates/pretixpresale/event/order_modify.html:5
 msgid "Modify order"
@@ -24400,10 +24352,8 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/resend_link.html:4
 #: pretix/presale/templates/pretixpresale/event/resend_link.html:11
-#, fuzzy
-#| msgid "Resend order link"
 msgid "Resend order links"
-msgstr "Nosūtīt saiti uz pirkumu atkārtoti"
+msgstr "Nosūtīt saites uz pirkumiem atkārtoti"
 
 #: pretix/presale/templates/pretixpresale/event/resend_link.html:15
 msgid ""
@@ -24426,11 +24376,8 @@ msgid "Voucher redemption"
 msgstr "Kupona izmantošana"
 
 #: pretix/presale/templates/pretixpresale/event/voucher.html:21
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "This voucher is not valid for this event date."
 msgid "This voucher is valid only for the following specific date and time."
-msgstr "Šis kupons nav derīgs šajā pasākuma datumā."
+msgstr "Šis kupons ir derīgs tikai sekojošā datumā un laikā."
 
 #: pretix/presale/templates/pretixpresale/event/voucher.html:76
 msgid ""
@@ -24468,16 +24415,17 @@ msgid ""
 "email addresses. There is no guarantee that you will receive a certain "
 "number of tickets."
 msgstr ""
+"Informējam jūs, ka saņemsiet tikai vienu biļeti. Ja jums nepieciešamas "
+"vairākas biļetes, jūs varat sevi pievienot gaidīšanas sarakstam ar dažādām e-"
+"pasta adresēm. Nav garantijas, ka jūs saņemsiet noteiktu skaitu biļešu."
 
 #: pretix/presale/templates/pretixpresale/event/waitinglist.html:33
 msgid "Add me to the list"
 msgstr "Pievienot mani sarakstam"
 
 #: pretix/presale/templates/pretixpresale/event/waitinglist_remove.html:5
-#, fuzzy
-#| msgid "Add me to the waiting list"
 msgid "Remove me from the waiting list"
-msgstr "Pievienot mani gaidīšanas sarakstam"
+msgstr "Noņemt mani no gaidīšanas saraksta"
 
 #: pretix/presale/templates/pretixpresale/event/waitinglist_remove.html:9
 msgid ""
@@ -24485,23 +24433,25 @@ msgid ""
 "need the ticket any more, please be so kind and remove your ticket from the "
 "list so we can pass it on to the next person waiting as quickly as possible!"
 msgstr ""
+"Jūs esat izvēlēts/-a no gaidīšanas saraksta, lai varat iegādāties biļeti. Ja "
+"biļete jums vairs nav nepieciešama, lūdzu esiet tik laipni un nodzēsiet savu "
+"biļeti no saraksta, lai pēc iespējas ātrāk varam to piedāvāt nākamajai "
+"gaidošai personai!"
 
 #: pretix/presale/templates/pretixpresale/event/waitinglist_remove.html:16
 msgctxt "waitinglist"
 msgid "Yes, remove my ticket"
-msgstr ""
+msgstr "Jā, noņemiet manu biļeti"
 
 #: pretix/presale/templates/pretixpresale/fragment_calendar.html:5
-#, fuzzy
-#| msgid "Add to Calendar"
 msgid "Calendar"
-msgstr "Pievienot kalendāram"
+msgstr "Kalendārs"
 
 #: pretix/presale/templates/pretixpresale/fragment_calendar.html:63
 #: pretix/presale/templates/pretixpresale/fragment_week_calendar.html:48
 msgctxt "timerange"
 msgid "until"
-msgstr ""
+msgstr "līdz"
 
 #: pretix/presale/templates/pretixpresale/fragment_calendar.html:95
 #, python-format
@@ -24510,6 +24460,9 @@ msgid ""
 "                                                        from %(start_date)s\n"
 "                                                    "
 msgstr ""
+"\n"
+"                                                        no %(start_date)s\n"
+"                                                    "
 
 #: pretix/presale/templates/pretixpresale/fragment_calendar_nav.html:12
 msgid "Week"
@@ -24518,23 +24471,21 @@ msgstr "Nedēļa"
 #: pretix/presale/templates/pretixpresale/fragment_calendar_nav.html:17
 #: pretix/presale/templates/pretixpresale/organizers/calendar.html:25
 msgid "Month"
-msgstr ""
+msgstr "Mēnesis"
 
 #: pretix/presale/templates/pretixpresale/fragment_calendar_nav.html:27
 msgid "iCal"
 msgstr "iCal"
 
 #: pretix/presale/templates/pretixpresale/fragment_day_calendar.html:24
-#, fuzzy
-#| msgid "Upcoming events"
 msgctxt "day calendar"
 msgid "Single events"
-msgstr "Gaidāmie pasākumi"
+msgstr "Pasākumi, kas neatkārtojas"
 
 #: pretix/presale/templates/pretixpresale/fragment_day_calendar.html:77
 msgctxt "timerange"
 msgid "to"
-msgstr ""
+msgstr "līdz"
 
 #: pretix/presale/templates/pretixpresale/fragment_day_calendar.html:110
 #, python-format
@@ -24543,58 +24494,52 @@ msgid ""
 "                                    from %(start_date)s\n"
 "                                "
 msgstr ""
+"\n"
+"                                    no %(start_date)s\n"
+"                                "
 
 #: pretix/presale/templates/pretixpresale/fragment_login_status.html:5
-#, fuzzy
-#| msgid "Stripe account"
 msgid "customer account"
-msgstr "Stripe konts"
+msgstr "klienta konts"
 
 #: pretix/presale/templates/pretixpresale/fragment_login_status.html:8
-#, fuzzy
-#| msgid "View other date"
 msgid "View customer account"
-msgstr "Skatīt citu datumu"
+msgstr "Skatīt klienta kontu"
 
 #: pretix/presale/templates/pretixpresale/fragment_login_status.html:9
-#, fuzzy
-#| msgid "View all unresolved problems"
 msgid "View user profile"
-msgstr "Skatīt visas neatrisinātās problēmas"
+msgstr "Skatīt lietotāja profilu"
 
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:43
 msgid "Adjust settings in detail"
 msgstr ""
 
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:48
-#, fuzzy
-#| msgid "External refund of payment"
 msgid "Required cookies"
-msgstr "Maksājuma ārēja atmaksa"
+msgstr "Nepieciešamās sīkdatnes"
 
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:50
 msgid ""
 "Functional cookies (e.g. shopping cart, login, payment, language preference) "
 "and technical cookies (e.g. security purposes)"
 msgstr ""
+"Funkcionālās sīkdatnes (piem., iepirkumu grozs, ienākšana kontā, maksājums, "
+"izvēlētā valoda) un tehniskās sīkdatnes (piem., drošības nolūkiem)"
 
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:63
 msgctxt "cookie_usage"
 msgid "Functionality"
-msgstr ""
+msgstr "Funkcionalitāte"
 
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:65
 msgctxt "cookie_usage"
 msgid "Analytics"
-msgstr ""
+msgstr "Analīze"
 
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:67
-#, fuzzy
-#| msgctxt "stripe"
-#| msgid "Testing"
 msgctxt "cookie_usage"
 msgid "Marketing"
-msgstr "Testa režīmā"
+msgstr "Mārketings"
 
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:69
 msgctxt "cookie_usage"
@@ -24602,10 +24547,8 @@ msgid "Social features"
 msgstr ""
 
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:88
-#, fuzzy
-#| msgid "no selection"
 msgid "Save selection"
-msgstr "nav atlasīts"
+msgstr "Saglabāt izvēli"
 
 #: pretix/presale/templates/pretixpresale/fragment_week_calendar.html:79
 #, python-format
@@ -24614,10 +24557,13 @@ msgid ""
 "                                        from %(start_date)s\n"
 "                                    "
 msgstr ""
+"\n"
+"                                        no %(start_date)s\n"
+"                                    "
 
 #: pretix/presale/templates/pretixpresale/index.html:7
 msgid "Hello!"
-msgstr ""
+msgstr "Sveicināti!"
 
 #: pretix/presale/templates/pretixpresale/index.html:9
 #, python-format
@@ -24663,10 +24609,8 @@ msgstr "Ņemiet vērā, ka notikumi šajā skatā notiek dažādās laika zonās
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_address_delete.html:4
 #: pretix/presale/templates/pretixpresale/organizers/customer_address_delete.html:7
-#, fuzzy
-#| msgid "Street address"
 msgid "Delete address"
-msgstr "Adrese"
+msgstr "Dzēst adresi"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_address_delete.html:12
 msgid "Do you really want to delete the following address from your account?"
@@ -24674,133 +24618,102 @@ msgstr "Vai tiešām vēlaties izdzēst sekojošu adresi no jūsu konta?"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_info.html:6
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:15
-#, fuzzy
-#| msgid "Account information changed"
 msgid "Account information"
-msgstr "Konta informācija ir izmainīta"
+msgstr "Konta informācija"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_info.html:11
-#, fuzzy
-#| msgctxt "checkoutflow"
-#| msgid "Your information"
 msgid "Update your account information"
-msgstr "Jūsu informācija"
+msgstr "Atjaunot jūsu konta informāciju"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_login.html:11
 #, python-format
 msgid "Sign in to your account at %(org)s"
-msgstr ""
+msgstr "Ielogoties jūsu %(org)s klienta kontā"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_login.html:26
 #: pretix/presale/templates/pretixpresale/organizers/customer_registration.html:20
-#, fuzzy
-#| msgid "Stripe account"
 msgid "Create account"
-msgstr "Stripe konts"
+msgstr "Izveidot kontu"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:7
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:10
-#, fuzzy
-#| msgid "Your items"
 msgid "Your membership"
-msgstr "Jūsu preces"
+msgstr "Jūsu dalība"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_password.html:6
 #: pretix/presale/templates/pretixpresale/organizers/customer_resetpw.html:6
 #: pretix/presale/templates/pretixpresale/organizers/customer_resetpw.html:11
 #: pretix/presale/templates/pretixpresale/organizers/customer_setpassword.html:6
-#, fuzzy
-#| msgid "Password"
 msgid "Password reset"
-msgstr "Parole"
+msgstr "Atjaunot paroli"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_password.html:11
 #: pretix/presale/templates/pretixpresale/organizers/customer_setpassword.html:11
 msgid "Set a new password for your account"
-msgstr ""
+msgstr "Uzlikt jaunu paroli jūsu kontam"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:7
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:10
-#, fuzzy
-#| msgid "Stripe account"
 msgid "Your account"
-msgstr "Stripe konts"
+msgstr "Jūsu konts"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:35
-#, fuzzy
-#| msgctxt "checkoutflow"
-#| msgid "Your information"
 msgid "Change account information"
-msgstr "Jūsu informācija"
+msgstr "Mainīt konta informāciju"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:39
-#, fuzzy
-#| msgid "Cancel order"
 msgid "Change password"
-msgstr "Atcelt pasūtījumu"
+msgstr "Mainīt paroli"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:53
-#, fuzzy
-#| msgid "Address"
 msgid "Addresses"
-msgstr "Adrese"
+msgstr "Adreses"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:56
-#, fuzzy
-#| msgid "Attendee email"
 msgid "Attendee profiles"
-msgstr "Apmeklētāja e-pasts"
+msgstr "Apmeklētāju profili"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:170
 msgid "No memberships are stored in your account."
-msgstr ""
+msgstr "Jūsu kontā nav saglabāta neviena dalība."
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:202
 msgid "No addresses are stored in your account."
-msgstr ""
+msgstr "Jūsu kontā nav saglabāta neviena adrese."
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:213
-#, fuzzy
-#| msgid "<file>"
 msgid "Profile"
-msgstr "<file>"
+msgstr "Profils"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:235
 msgid "No attendee profiles are stored in your account."
-msgstr ""
+msgstr "Jūsu kontā nav saglabāts neviens apmeklētāja profils."
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile_delete.html:4
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile_delete.html:7
-#, fuzzy
-#| msgid "Refund requested"
 msgid "Delete profile"
-msgstr "Pieprasīta atmaksa"
+msgstr "Dzēsts profilu"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile_delete.html:12
 msgid "Do you really want to delete the following profile from your account?"
 msgstr "Vai tiešām vēlaties izdzēst sekojošu profilu no sava konta?"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_registration.html:6
-#, fuzzy
-#| msgid "Your registration"
 msgid "Registration"
-msgstr "Jūsu reģistrācija"
+msgstr "Reģistrācija"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_registration.html:11
-#, fuzzy, python-format
-#| msgid "Date and time"
+#, python-format
 msgid "Create a new account at %(org)s"
-msgstr "Datums un laiks"
+msgstr "Izveidot jaunu %(org)s kontu"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_registration.html:24
 msgid "Log in to an existing account"
-msgstr ""
+msgstr "Ielogoties esošā kontā"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_resetpw.html:20
-#, fuzzy
-#| msgid "Repeat password"
 msgid "Request a new password"
-msgstr "Atkārtojiet paroli "
+msgstr "Pieprasīt jaunu paroli"
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:8
 msgid "Event list"
@@ -24871,7 +24784,7 @@ msgstr "Lūdzu, ievadiet tikai pozitīvus skaitļus."
 
 #: pretix/presale/views/cart.py:408
 msgid "We applied the voucher to as many products in your cart as we could."
-msgstr ""
+msgstr "Mēs piemērojām kuponu visiem produktiem, cik bija iespējams."
 
 #: pretix/presale/views/cart.py:430
 msgid "Your cart has been updated."
@@ -24888,7 +24801,7 @@ msgstr "Produkti ir veiksmīgi pievienoti jūsu grozam."
 #: pretix/presale/views/cart.py:495 pretix/presale/views/event.py:439
 #: pretix/presale/views/widget.py:326
 msgid "Tickets for this event cannot be purchased on this sales channel."
-msgstr ""
+msgstr "Biļetes šim pasākumam nevar nopirkt caur šo pārdošanas kanālu."
 
 #: pretix/presale/views/checkout.py:55
 msgid "Your cart is empty"
@@ -24903,27 +24816,28 @@ msgid ""
 "Your account has been created. Please follow the link in the email we sent "
 "you to activate your account and choose a password."
 msgstr ""
+"Jūsu konts tika izveidots. Lūdzu sekojiet e-pasta saitei, kuru mēs jums "
+"nosūtījām, lai aktivizētu jūsu kontu un izvēlētos paroli."
 
 #: pretix/presale/views/customer.py:237 pretix/presale/views/customer.py:240
 #: pretix/presale/views/customer.py:519 pretix/presale/views/customer.py:525
-#, fuzzy
-#| msgid "You requested an invalid ticket output type."
 msgid "You clicked an invalid link."
-msgstr "Jūs pieprasījāt nederīgu biļetes izvades veidu."
+msgstr "Jūs noklikšķinājāt nederīgu saiti."
 
 #: pretix/presale/views/customer.py:260
 msgid "Your new password has been set! You can now use it to log in."
-msgstr ""
+msgstr "Jūsu jaunā parole ir apstiprināta. Tagad jūs varat ar to ielogoties."
 
 #: pretix/presale/views/customer.py:298
 msgid ""
 "We've sent you an email with further instructions on resetting your password."
 msgstr ""
+"Mēs jums nosūtījām e-pastu ar tālākām instrukcijām par paroles atjaunošanu."
 
 #: pretix/presale/views/customer.py:480
 #, python-brace-format
 msgid "Confirm email address for your account at {organizer}"
-msgstr ""
+msgstr "Apstipriniet e-pasta adresi savā {organizer} klienta kontā"
 
 #: pretix/presale/views/customer.py:487
 msgid ""
@@ -24931,12 +24845,13 @@ msgid ""
 "your email address. The email address of your account will be changed as "
 "soon as you click that link."
 msgstr ""
+"Jūsu izmaiņas ir saglabātas. Mēs jums nosūtījām e-pastu ar saiti, kur "
+"apstiprināt jūsu e-pasta adresi. Jūsu konta e-pasta adrese tiks "
+"apstiprināta, līdz ko jūs noklikšķināsiet uz tās saites."
 
 #: pretix/presale/views/customer.py:535
-#, fuzzy
-#| msgid "Your cart has been updated."
 msgid "Your email address has been updated."
-msgstr "Jūsu grozs ir atjaunināts."
+msgstr "Jūsu e-pasta adrese ir atjaunināta."
 
 #: pretix/presale/views/event.py:709
 msgid "Unknown event code or not authorized to access this event."
@@ -24968,10 +24883,8 @@ msgid "The payment is too late to be accepted."
 msgstr "Maksājums ir par vēlu, lai to pieņemtu."
 
 #: pretix/presale/views/order.py:473
-#, fuzzy
-#| msgid "The invoice has been generated."
 msgid "An invoice has been generated."
-msgstr "Rēķins ir izveidots."
+msgstr "Ir izveidots rēķins."
 
 #: pretix/presale/views/order.py:561
 msgid "The payment method for this order cannot be changed."
@@ -24987,22 +24900,16 @@ msgstr "Jūs nevarat mainīt šo pasūtījumu"
 
 #: pretix/presale/views/order.py:928 pretix/presale/views/order.py:933
 #: pretix/presale/views/order.py:938
-#, fuzzy
-#| msgid "You requested an invalid ticket output type."
 msgid "You chose an invalid cancellation fee."
-msgstr "Jūs pieprasījāt nederīgu biļetes izvades veidu."
+msgstr "Jūs izvēlējāties nederīgu atcelšanas maksu."
 
 #: pretix/presale/views/order.py:954
-#, fuzzy
-#| msgid "Cancel order"
 msgid "Canceled by customer"
-msgstr "Atcelt pasūtījumu"
+msgstr "Atcelts no klienta puses"
 
 #: pretix/presale/views/order.py:965
-#, fuzzy
-#| msgid "The invoice has been generated."
 msgid "The cancellation has been requested."
-msgstr "Rēķins ir izveidots."
+msgstr "Ir izveidots atcelšanas pieprasījums."
 
 #: pretix/presale/views/order.py:1019
 msgid "Ticket download is not (yet) enabled for this order."
@@ -25011,12 +24918,12 @@ msgstr "Šim pasūtījumam nav (vēl) iespējota biļešu lejupielāde."
 #: pretix/presale/views/order.py:1028
 msgid "Please click the link we sent you via email to download your tickets."
 msgstr ""
+"Lūdzu noklikšķiniet uz saites, ko mēs jums nosūtījām pa e-pastu, lai "
+"lejuplādētu biļetes."
 
 #: pretix/presale/views/order.py:1187
-#, fuzzy
-#| msgid "You cannot cancel this order."
 msgid "You cannot change this order."
-msgstr "Jūs nevarat atcelt šo pasūtījumu."
+msgstr "Jūs nevarat mainīt šo pasūtījumu."
 
 #: pretix/presale/views/order.py:1476
 #, python-brace-format
@@ -25024,30 +24931,32 @@ msgid ""
 "The order has been changed. You can now proceed by paying the open amount of "
 "{amount}."
 msgstr ""
+"Jūsu pasūtījums ir izmainīts. Jūs varat turpināt ar atvērtās summas {amount} "
+"samaksāšanu."
 
 #: pretix/presale/views/order.py:1488
-#, fuzzy
-#| msgid "You did not select any products."
 msgid "You did not make any changes."
-msgstr "Jūs neizvēlējāties nevienu produktu."
+msgstr "Jūs neveicāt nekādas izmaiņas."
 
 #: pretix/presale/views/order.py:1510
 msgid "You may not change your order in a way that reduces the total price."
-msgstr ""
+msgstr "Jūs nevarat mainīt jūsu pasūtījumu tā, ka samazinās kopējā summa."
 
 #: pretix/presale/views/order.py:1512
 msgid "You may only change your order in a way that increases the total price."
-msgstr ""
+msgstr "Jūs varat mainīt savu pasūtījumu tikai tā, ka kopējā summa palielinās."
 
 #: pretix/presale/views/order.py:1514
 msgid "You may not change your order in a way that changes the total price."
-msgstr ""
+msgstr "Jūs nevarat mainīt savu pasūtījumu tā, ka kopējā summa mainās."
 
 #: pretix/presale/views/order.py:1522
 msgid ""
 "You may not change your order in a way that increases the total price since "
 "payments are no longer being accepted for this event."
 msgstr ""
+"Jūs nevarat mainīt savu pasūtījumu tā, ka kopējā summa palielinās, jo "
+"maksājumi šim pasākumam vairs netiek pieņemti."
 
 #: pretix/presale/views/user.py:61
 msgid "We had difficulties processing your input."
@@ -25061,6 +24970,10 @@ msgid ""
 "{number} hours. If the email did not arrive, please check your spam folder "
 "and also double check that you used the correct email address."
 msgstr ""
+"Ja e-pasta adrese, ko jūs ievadījāt, ir derīga un uz šo adresei ir iegādāta "
+"biļete, mēs jums jau nosūtījām e-pastu ar saiti uz jūsu biļeti pēdējo "
+"{number} laikā. Ja e-pasts nav pienācis, lūdzu apskatiet spam mapi, kā arī "
+"pārbaudiet, vai jūs izmantojāt pareizo e-pasta adresi."
 
 #: pretix/presale/views/user.py:83
 msgid "Your orders for {}"
