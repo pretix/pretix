@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-03-31 12:36+0000\n"
-"PO-Revision-Date: 2022-04-05 06:00+0000\n"
+"PO-Revision-Date: 2022-04-05 07:24+0000\n"
 "Last-Translator: Liga V <lerning_by_dreaming@gmx.de>\n"
 "Language-Team: Latvian <https://translate.pretix.eu/projects/pretix/pretix/"
 "lv/>\n"
@@ -11566,10 +11566,8 @@ msgid "The event has been created."
 msgstr ""
 
 #: pretix/control/logdisplay.py:468
-#, fuzzy
-#| msgid "The order has been canceled."
 msgid "The event details have been changed."
-msgstr "Pasūtījums ir atcelts."
+msgstr "Pasākuma informācija ir mainījusies."
 
 #: pretix/control/logdisplay.py:469
 msgid "An answer option has been added to the question."
@@ -11628,22 +11626,16 @@ msgid "The team has been deleted."
 msgstr ""
 
 #: pretix/control/logdisplay.py:483 pretix/control/views/organizer.py:1454
-#, fuzzy
-#| msgid "Your gift card has been applied."
 msgid "The gate has been created."
-msgstr "Jūsu dāvanu karte ir piemērota."
+msgstr "Stacija ir izveidota."
 
 #: pretix/control/logdisplay.py:484
-#, fuzzy
-#| msgid "Your gift card has been applied."
 msgid "The gate has been changed."
-msgstr "Jūsu dāvanu karte ir piemērota."
+msgstr "Stacija ir izmainīta."
 
 #: pretix/control/logdisplay.py:485
-#, fuzzy
-#| msgid "The task has been completed."
 msgid "The gate has been deleted."
-msgstr "Uzdevums ir izpildīts."
+msgstr "Stacija ir dzēsta."
 
 #: pretix/control/logdisplay.py:486
 msgctxt "subevent"
@@ -11651,11 +11643,9 @@ msgid "The event date has been deleted."
 msgstr ""
 
 #: pretix/control/logdisplay.py:487
-#, fuzzy
-#| msgid "The order has been canceled."
 msgctxt "subevent"
 msgid "The event date has been canceled."
-msgstr "Pasūtījums ir atcelts."
+msgstr "Pasākuma datums ir atcelts."
 
 #: pretix/control/logdisplay.py:488
 msgctxt "subevent"
@@ -11707,16 +11697,12 @@ msgid "The device has notified the server of an hardware or software update."
 msgstr ""
 
 #: pretix/control/logdisplay.py:499
-#, fuzzy
-#| msgid "Your gift card has been applied."
 msgid "The gift card has been created."
-msgstr "Jūsu dāvanu karte ir piemērota."
+msgstr "Dāvanu karte ir izveidota."
 
 #: pretix/control/logdisplay.py:500 pretix/control/views/organizer.py:1306
-#, fuzzy
-#| msgid "Your gift card has been applied."
 msgid "The gift card has been changed."
-msgstr "Jūsu dāvanu karte ir piemērota."
+msgstr "Dāvanu kartē ir izmaiņas."
 
 #: pretix/control/logdisplay.py:501
 msgid "A manual transaction has been performed."
@@ -11947,10 +11933,8 @@ msgstr ""
 #: pretix/control/navigation.py:303
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html:4
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html:6
-#, fuzzy
-#| msgid "Cancel order"
 msgid "Check-in history"
-msgstr "Atcelt pasūtījumu"
+msgstr "Reģistrācijas vēsture"
 
 #: pretix/control/navigation.py:346
 #: pretix/control/templates/pretixcontrol/orders/search.html:19
@@ -12024,11 +12008,8 @@ msgstr ""
 #: pretix/control/navigation.py:528
 #: pretix/control/templates/pretixcontrol/organizers/customers.html:6
 #: pretix/control/templates/pretixcontrol/organizers/customers.html:9
-#, fuzzy
-#| msgctxt "refund_source"
-#| msgid "Customer"
 msgid "Customers"
-msgstr "Klients"
+msgstr "Klienti"
 
 #: pretix/control/navigation.py:547
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:61
