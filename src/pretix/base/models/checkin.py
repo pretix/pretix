@@ -188,6 +188,7 @@ class CheckinList(LoggedModel):
         # * in pretix.helpers.jsonlogic_boolalg
         # * in checkinrules.js
         # * in libpretixsync
+        # * in pretixscan-ios (in the future)
         top_level_operators = {
             '<', '<=', '>', '>=', '==', '!=', 'inList', 'isBefore', 'isAfter', 'or', 'and'
         }
@@ -195,7 +196,8 @@ class CheckinList(LoggedModel):
             'buildTime', 'objectList', 'lookup', 'var',
         }
         allowed_vars = {
-            'product', 'variation', 'now', 'entries_number', 'entries_today', 'entries_days'
+            'product', 'variation', 'now', 'now_isoweekday', 'entries_number', 'entries_today', 'entries_days',
+            'minutes_since_last_entry',
         }
         if not rules or not isinstance(rules, dict):
             return rules

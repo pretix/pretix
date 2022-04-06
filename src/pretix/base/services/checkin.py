@@ -41,7 +41,7 @@ import pytz
 from django.core.files import File
 from django.db import IntegrityError, transaction
 from django.db.models import (
-    BooleanField, Count, ExpressionWrapper, F, IntegerField, OuterRef, Q,
+    BooleanField, Count, ExpressionWrapper, F, IntegerField, Max, OuterRef, Q,
     Subquery, Value,
 )
 from django.db.models.functions import Coalesce, TruncDate
@@ -60,7 +60,7 @@ from pretix.helpers.jsonlogic import Logic
 from pretix.helpers.jsonlogic_boolalg import convert_to_dnf
 from pretix.helpers.jsonlogic_query import (
     Equal, GreaterEqualThan, GreaterThan, InList, LowerEqualThan, LowerThan,
-    tolerance,
+    MinutesSince, tolerance,
 )
 
 
@@ -210,16 +210,20 @@ def _logic_explain(rules, ev, rule_data):
         elif var == 'product' or var == 'variation':
             var_weights[vname] = (1000, 0)
             var_texts[vname] = _('Ticket type not allowed')
-        elif var in ('entries_number', 'entries_today', 'entries_days'):
+        elif var in ('entries_number', 'entries_today', 'entries_days', 'minutes_since_last_entry', 'now_isoweekday'):
             w = {
+                'minutes_since_last_entry': 90,
                 'entries_days': 100,
                 'entries_number': 120,
                 'entries_today': 140,
+                'now_isoweekday': 210,
             }
             l = {
+                'minutes_since_last_entry': _('time since last entry'),
                 'entries_days': _('number of days with an entry'),
                 'entries_number': _('number of entries'),
                 'entries_today': _('number of entries today'),
+                'now_isoweekday': _('week day'),
             }
             compare_to = rhs[0]
             var_weights[vname] = (w[var], abs(compare_to - rule_data[var]))
@@ -290,6 +294,11 @@ class LazyRuleVars:
         return self._dt
 
     @property
+    def now_isoweekday(self):
+        tz = self._clist.event.timezone
+        return self._dt.astimezone(tz).isoweekday()
+
+    @property
     def product(self):
         return self._position.item_id
 
@@ -314,6 +323,18 @@ class LazyRuleVars:
             return self._position.checkins.filter(list=self._clist, type=Checkin.TYPE_ENTRY).annotate(
                 day=TruncDate('datetime', tzinfo=tz)
             ).values('day').distinct().count()
+
+    @cached_property
+    def minutes_since_last_entry(self):
+        tz = self._clist.event.timezone
+        with override(tz):
+            last_entry = self._position.checkins.filter(list=self._clist, type=Checkin.TYPE_ENTRY).order_by('datetime').first()
+            if last_entry is None:
+                # Returning "None" would be "correct", but the handling of "None" in JSON logic is inconsistent
+                # between platforms (None<1 is true on some, but not all), we rather choose something that is at least
+                # consistent.
+                return -1
+            return (now() - last_entry.datetime).total_seconds() // 60
 
 
 class SQLLogic:
@@ -399,6 +420,8 @@ class SQLLogic:
         elif operator == 'var':
             if values[0] == 'now':
                 return Value(now().astimezone(pytz.UTC))
+            elif values[0] == 'now_isoweekday':
+                return Value(now().astimezone(self.list.event.timezone).isoweekday())
             elif values[0] == 'product':
                 return F('item_id')
             elif values[0] == 'variation':
@@ -448,6 +471,22 @@ class SQLLogic:
                         ).values('c')
                     ),
                     Value(0),
+                    output_field=IntegerField()
+                )
+            elif values[0] == 'minutes_since_last_entry':
+                sq_last_entry = Subquery(
+                    Checkin.objects.filter(
+                        position_id=OuterRef('pk'),
+                        type=Checkin.TYPE_ENTRY,
+                        list_id=self.list.pk,
+                    ).values('position_id').order_by().annotate(
+                        m=Max('datetime')
+                    ).values('m')
+                )
+
+                return Coalesce(
+                    MinutesSince(sq_last_entry),
+                    Value(-1),
                     output_field=IntegerField()
                 )
         else:

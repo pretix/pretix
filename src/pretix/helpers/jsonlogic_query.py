@@ -22,7 +22,10 @@
 import logging
 from datetime import timedelta
 
-from django.db.models import Func, Value
+from django.db import connection
+from django.db.models import Func, IntegerField, Value
+from django.db.models.functions import Cast
+from django.utils.timezone import now
 
 logger = logging.getLogger(__name__)
 
@@ -78,3 +81,14 @@ def tolerance(b, tol=None, sign=1):
     if tol:
         return b + timedelta(minutes=sign * float(tol))
     return b
+
+
+def MinutesSince(dt):
+    if '.postgresql' in connection.settings_dict['ENGINE']:
+        # TODO
+        pass
+    else:
+        # date diffs on MySQL and SQLite are implemented in microseconds by django, so we just cast and convert
+        # see https://github.com/django/django/blob/d436554861b9b818994276d7bf110bf03aa565f5/django/db/backends/sqlite3/_functions.py#L291
+        # and https://github.com/django/django/blob/7119f40c9881666b6f9b5cf7df09ee1d21cc8344/django/db/backends/mysql/operations.py#L345
+        return Cast(Value(now()) - dt, IntegerField()) / 1_000_000 / 60
