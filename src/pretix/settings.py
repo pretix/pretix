@@ -525,12 +525,13 @@ ALL_LANGUAGES = [
     ('es', _('Spanish')),
     ('tr', _('Turkish')),
     ('gl', _('Galician')),
+    ('cs', _('Czech')),
 ]
 LANGUAGES_OFFICIAL = {
     'en', 'de', 'de-informal'
 }
 LANGUAGES_INCUBATING = {
-    'pl', 'fi', 'pt-br', 'gl'
+    'pl', 'fi', 'pt-br', 'gl', 'cs'
 } - set(config.get('languages', 'allow_incubating', fallback='').split(','))
 LANGUAGES_RTL = {
     'ar', 'hw'
