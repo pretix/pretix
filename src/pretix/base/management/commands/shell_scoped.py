@@ -19,11 +19,13 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
+import logging
 import sys
 
 from django.apps import apps
 from django.core.management import call_command
 from django.core.management.base import BaseCommand
+from django.db import connection
 from django_scopes import scope, scopes_disabled
 
 
@@ -32,6 +34,13 @@ class Command(BaseCommand):
         parser = super().create_parser(*args, **kwargs)
         parser.parse_args = lambda x: parser.parse_known_args(x)[0]
         return parser
+
+    def add_arguments(self, parser):
+        parser.add_argument(
+            '--print-sql',
+            action='store_true',
+            help='Print all SQL queries.',
+        )
 
     def handle(self, *args, **options):
         try:
@@ -46,6 +55,11 @@ class Command(BaseCommand):
         if "--override" in flags:
             with scopes_disabled():
                 return call_command(cmd, *args, **options)
+
+        if options['print_sql']:
+            connection.force_debug_cursor = True
+            logger = logging.getLogger("django.db.backends")
+            logger.setLevel(logging.DEBUG)
 
         lookups = {}
         for flag in flags:
