@@ -46,7 +46,7 @@ class GreaterEqualThan(Func):
 
 
 class LowerEqualThan(Func):
-    arg_joiner = ' < '
+    arg_joiner = ' <= '
     arity = 2
     function = ''
 
