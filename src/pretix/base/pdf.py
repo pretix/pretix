@@ -713,11 +713,17 @@ class Renderer:
                 text = o['text']
 
             def replace(x):
-                if x.group(1) not in self.variables:
+                print(x.group(1))
+                if x.group(1).startswith('itemmeta:'):
+                    return op.item.meta_data.get(x.group(1)[9:]) or ''
+                elif x.group(1).startswith('meta:'):
+                    return ev.meta_data.get(x.group(1)[5:]) or ''
+                elif x.group(1) not in self.variables:
                     return x.group(0)
                 if x.group(1) == 'secret':
                     # Do not use shortened version
                     return op.secret
+
                 try:
                     return self.variables[x.group(1)]['evaluate'](op, order, ev)
                 except:
@@ -726,7 +732,7 @@ class Renderer:
 
             # We do not use str.format like in emails so we (a) can evaluate lazily and (b) can re-implement this
             # 1:1 on other platforms that render PDFs through our API (libpretixprint)
-            return re.sub(r'\{([a-zA-Z0-9_]+)\}', replace, text)
+            return re.sub(r'\{([a-zA-Z0-9:_]+)\}', replace, text)
 
         elif o['content'].startswith('itemmeta:'):
             return op.item.meta_data.get(o['content'][9:]) or ''
