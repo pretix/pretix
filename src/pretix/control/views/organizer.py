@@ -1624,6 +1624,8 @@ class LogView(OrganizerPermissionRequiredMixin, PaginationMixin, ListView):
             'user', 'content_type', 'api_token', 'oauth_application', 'device'
         ).order_by('-datetime')
         qs = qs.exclude(action_type__in=OVERVIEW_BANLIST)
+        if self.request.GET.get('action_type'):
+            qs = qs.filter(action_type=self.request.GET['action_type'])
         if self.request.GET.get('user'):
             qs = qs.filter(user_id=self.request.GET.get('user'))
         return qs
