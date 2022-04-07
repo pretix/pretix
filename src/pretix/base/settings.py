@@ -86,9 +86,9 @@ def primary_font_kwargs():
     from pretix.presale.style import get_fonts
 
     choices = [('Open Sans', 'Open Sans')]
-    choices += [
-        (a, {"title": a, "data": v}) for a, v in get_fonts().items()
-    ]
+    choices += sorted([
+        (a, {"title": a, "data": v}) for a, v in get_fonts().items() if not v.get('pdf_only', False)
+    ], key=lambda a: a[0])
     return {
         'choices': choices,
     }

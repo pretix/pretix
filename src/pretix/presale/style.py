@@ -215,7 +215,8 @@ Return a dictionaries of the following structure. Paths should be relative to st
         },
         "bolditalic": {
             ...
-        }
+        },
+        "pdf_only": False,   # if True, font is not usable on the web
     }
 }
 """
