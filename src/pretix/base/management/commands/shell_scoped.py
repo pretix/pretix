@@ -50,16 +50,16 @@ class Command(BaseCommand):
             cmd = 'shell'
             del options['skip_checks']
 
+        if options['print_sql']:
+            connection.force_debug_cursor = True
+            logger = logging.getLogger("django.db.backends")
+            logger.setLevel(logging.DEBUG)
+
         parser = self.create_parser(sys.argv[0], sys.argv[1])
         flags = parser.parse_known_args(sys.argv[2:])[1]
         if "--override" in flags:
             with scopes_disabled():
                 return call_command(cmd, *args, **options)
-
-        if options['print_sql']:
-            connection.force_debug_cursor = True
-            logger = logging.getLogger("django.db.backends")
-            logger.setLevel(logging.DEBUG)
 
         lookups = {}
         for flag in flags:
