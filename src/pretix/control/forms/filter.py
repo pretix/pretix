@@ -2120,7 +2120,7 @@ class CheckinFilterForm(FilterForm):
         self.event = kwargs.pop('event')
         super().__init__(*args, **kwargs)
 
-        self.fields['device'].queryset = self.event.organizer.devices.all()
+        self.fields['device'].queryset = self.event.organizer.devices.all().order_by('device_id')
         self.fields['gate'].queryset = self.event.organizer.gates.all()
 
         self.fields['checkin_list'].queryset = self.event.checkin_lists.all()
