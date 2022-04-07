@@ -532,6 +532,20 @@ def pretixcontrol_logentry_display(sender: Event, logentry: LogEntry, **kwargs):
             bleach.clean(logentry.parsed_data.get('msg'), tags=[], strip=True)
         )
 
+    if logentry.action_type in ('pretix.control.views.checkin.reverted', 'pretix.event.checkin.reverted'):
+        if 'list' in data:
+            try:
+                checkin_list = sender.checkin_lists.get(pk=data.get('list')).name
+            except CheckinList.DoesNotExist:
+                checkin_list = _("(unknown)")
+        else:
+            checkin_list = _("(unknown)")
+
+        return _('The check-in of position #{posid} on list "{list}" has been reverted.').format(
+            posid=data.get('positionid'),
+            list=checkin_list,
+        )
+
     if sender and logentry.action_type.startswith('pretix.event.checkin'):
         return _display_checkin(sender, logentry)
 
@@ -558,20 +572,6 @@ def pretixcontrol_logentry_display(sender: Event, logentry: LogEntry, **kwargs):
             posid=data.get('positionid'),
             datetime=dt_formatted,
             list=checkin_list
-        )
-
-    if logentry.action_type in ('pretix.control.views.checkin.reverted', 'pretix.event.checkin.reverted'):
-        if 'list' in data:
-            try:
-                checkin_list = sender.checkin_lists.get(pk=data.get('list')).name
-            except CheckinList.DoesNotExist:
-                checkin_list = _("(unknown)")
-        else:
-            checkin_list = _("(unknown)")
-
-        return _('The check-in of position #{posid} on list "{list}" has been reverted.').format(
-            posid=data.get('positionid'),
-            list=checkin_list,
         )
 
     if logentry.action_type == 'pretix.team.member.added':
