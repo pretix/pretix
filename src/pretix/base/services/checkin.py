@@ -41,8 +41,8 @@ import pytz
 from django.core.files import File
 from django.db import IntegrityError, transaction
 from django.db.models import (
-    BooleanField, Count, ExpressionWrapper, F, IntegerField, Max, OuterRef, Q,
-    Subquery, Value,
+    BooleanField, Count, ExpressionWrapper, F, IntegerField, Max, Min,
+    OuterRef, Q, Subquery, Value,
 )
 from django.db.models.functions import Coalesce, TruncDate
 from django.dispatch import receiver
@@ -210,8 +210,9 @@ def _logic_explain(rules, ev, rule_data):
         elif var == 'product' or var == 'variation':
             var_weights[vname] = (1000, 0)
             var_texts[vname] = _('Ticket type not allowed')
-        elif var in ('entries_number', 'entries_today', 'entries_days', 'minutes_since_last_entry', 'now_isoweekday'):
+        elif var in ('entries_number', 'entries_today', 'entries_days', 'minutes_since_last_entry', 'minutes_since_first_entry', 'now_isoweekday'):
             w = {
+                'minutes_since_first_entry': 80,
                 'minutes_since_last_entry': 90,
                 'entries_days': 100,
                 'entries_number': 120,
@@ -220,6 +221,7 @@ def _logic_explain(rules, ev, rule_data):
             }
             l = {
                 'minutes_since_last_entry': _('time since last entry'),
+                'minutes_since_first_entry': _('time since first entry'),
                 'entries_days': _('number of days with an entry'),
                 'entries_number': _('number of entries'),
                 'entries_today': _('number of entries today'),
@@ -326,6 +328,18 @@ class LazyRuleVars:
 
     @cached_property
     def minutes_since_last_entry(self):
+        tz = self._clist.event.timezone
+        with override(tz):
+            last_entry = self._position.checkins.filter(list=self._clist, type=Checkin.TYPE_ENTRY).order_by('datetime').last()
+            if last_entry is None:
+                # Returning "None" would be "correct", but the handling of "None" in JSON logic is inconsistent
+                # between platforms (None<1 is true on some, but not all), we rather choose something that is at least
+                # consistent.
+                return -1
+            return (now() - last_entry.datetime).total_seconds() // 60
+
+    @cached_property
+    def minutes_since_first_entry(self):
         tz = self._clist.event.timezone
         with override(tz):
             last_entry = self._position.checkins.filter(list=self._clist, type=Checkin.TYPE_ENTRY).order_by('datetime').first()
@@ -481,6 +495,22 @@ class SQLLogic:
                         list_id=self.list.pk,
                     ).values('position_id').order_by().annotate(
                         m=Max('datetime')
+                    ).values('m')
+                )
+
+                return Coalesce(
+                    MinutesSince(sq_last_entry),
+                    Value(-1),
+                    output_field=IntegerField()
+                )
+            elif values[0] == 'minutes_since_first_entry':
+                sq_last_entry = Subquery(
+                    Checkin.objects.filter(
+                        position_id=OuterRef('pk'),
+                        type=Checkin.TYPE_ENTRY,
+                        list_id=self.list.pk,
+                    ).values('position_id').order_by().annotate(
+                        m=Min('datetime')
                     ).values('m')
                 )
 

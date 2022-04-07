@@ -496,7 +496,7 @@ def test_rules_scan_number(position, clist):
 
 
 @pytest.mark.django_db
-def test_rules_scan_minutes(position, clist):
+def test_rules_scan_minutes_since_last(position, clist):
     # Ticket is valid unlimited times, but you always need to wait 3 hours
     clist.allow_multiple_entries = True
     clist.rules = {"or": [{"<=": [{"var": "minutes_since_last_entry"}, -1]}, {">": [{"var": "minutes_since_last_entry"}, 60 * 3]}]}
@@ -516,6 +516,40 @@ def test_rules_scan_minutes(position, clist):
     with freeze_time("2020-01-01 13:01:00"):
         assert OrderPosition.objects.filter(SQLLogic(clist).apply(clist.rules), pk=position.pk).exists()
         perform_checkin(position, clist, {})
+
+    with freeze_time("2020-01-01 15:55:00"):
+        assert not OrderPosition.objects.filter(SQLLogic(clist).apply(clist.rules), pk=position.pk).exists()
+        with pytest.raises(CheckInError) as excinfo:
+            perform_checkin(position, clist, {})
+        assert excinfo.value.code == 'rules'
+        assert 'Minimum time since last entry' in str(excinfo.value)
+
+    with freeze_time("2020-01-01 16:02:00"):
+        assert OrderPosition.objects.filter(SQLLogic(clist).apply(clist.rules), pk=position.pk).exists()
+        perform_checkin(position, clist, {})
+
+
+@pytest.mark.django_db
+def test_rules_scan_minutes_since_fist(position, clist):
+    # Ticket is valid unlimited times, but you always need to wait 3 hours
+    clist.allow_multiple_entries = True
+    clist.rules = {"or": [{"<=": [{"var": "minutes_since_first_entry"}, -1]}, {"<": [{"var": "minutes_since_first_entry"}, 60 * 3]}]}
+    clist.save()
+
+    with freeze_time("2020-01-01 10:00:00"):
+        assert OrderPosition.objects.filter(SQLLogic(clist).apply(clist.rules), pk=position.pk).exists()
+        perform_checkin(position, clist, {})
+
+    with freeze_time("2020-01-01 12:55:00"):
+        assert OrderPosition.objects.filter(SQLLogic(clist).apply(clist.rules), pk=position.pk).exists()
+        perform_checkin(position, clist, {})
+
+    with freeze_time("2020-01-01 13:01:00"):
+        assert not OrderPosition.objects.filter(SQLLogic(clist).apply(clist.rules), pk=position.pk).exists()
+        with pytest.raises(CheckInError) as excinfo:
+            perform_checkin(position, clist, {})
+        assert excinfo.value.code == 'rules'
+        assert 'Maximum time since first entry' in str(excinfo.value)
 
 
 @pytest.mark.django_db

@@ -87,6 +87,10 @@ $(document).ready(function () {
       'label': gettext('Minutes since last entry (-1 on first entry)'),
       'type': 'int',
     },
+    'minutes_since_first_entry': {
+      'label': gettext('Minutes since first entry (-1 on first entry)'),
+      'type': 'int',
+    },
   };
 
   Vue.component('checkin-rule', CheckinRule.default);
