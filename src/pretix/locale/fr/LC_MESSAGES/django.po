@@ -4,8 +4,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-03-31 12:36+0000\n"
-"PO-Revision-Date: 2021-12-21 19:00+0000\n"
-"Last-Translator: cpoisnel <chepoisnel@gmail.com>\n"
+"PO-Revision-Date: 2022-04-07 10:40+0000\n"
+"Last-Translator: Eva-Maria Obermann <obermann@rami.io>\n"
 "Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix/fr/"
 ">\n"
 "Language: fr\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.8\n"
+"X-Generator: Weblate 4.11.2\n"
 
 #: pretix/api/auth/devicesecurity.py:28
 msgid ""
@@ -3166,6 +3166,12 @@ msgid ""
 "out. There might be a short period in which both products are visible while "
 "all tickets in the referenced quota are reserved, but not yet sold."
 msgstr ""
+"Si vous sélectionnez un quota ici, ce produit ne sera affiché que lorsque ce "
+"quota n'est pas disponible. Associée à l'option de masquage des produits "
+"épuisés, cette option vous permet d'échanger des produits contre des "
+"produits plus chers une fois qu'ils sont épuisés. Il peut y avoir une courte "
+"période pendant laquelle les deux produits sont visibles alors que tous les "
+"billets du quota référencé sont réservés, mais pas encore vendus."
 
 #: pretix/base/models/items.py:448
 msgid "This product can only be bought using a voucher."
@@ -6204,14 +6210,10 @@ msgstr ""
 "complément d'un autre projet."
 
 #: pretix/base/services/cart.py:136
-#, fuzzy
-#| msgid ""
-#| "One of the products you selected can only be bought as an add-on to "
-#| "another project."
 msgid "One of the products you selected can only be bought part of a bundle."
 msgstr ""
 "L'un des produits que vous avez sélectionné ne peut être acheté qu'en "
-"complément d'un autre projet."
+"complément d'une offre groupée."
 
 #: pretix/base/services/cart.py:138
 #, fuzzy
@@ -7806,12 +7808,6 @@ msgid "Automatic waiting list assignments"
 msgstr "Affectation automatique des listes d'attente"
 
 #: pretix/base/settings.py:1120
-#, fuzzy
-#| msgid ""
-#| "If ticket capacity becomes free, automatically create a voucher and send "
-#| "it to the first person on the waiting list for that product. If this is "
-#| "not active, mails will not be send automatically but you can send them "
-#| "manually via the control panel."
 msgid ""
 "If ticket capacity becomes free, automatically create a voucher and send it "
 "to the first person on the waiting list for that product. If this is not "
@@ -7823,7 +7819,8 @@ msgstr ""
 "d'achat et envoyez-le à la première personne de la liste d'attente pour ce "
 "produit. Si ce n'est pas activé, les mails ne seront pas envoyés "
 "automatiquement mais vous pouvez les envoyer manuellement via le panneau de "
-"contrôle."
+"contrôle. Si vous désactivez la liste d'attente mais gardez cette option "
+"activée, les billets seront quand même envoyés."
 
 #: pretix/base/settings.py:1136
 msgid "Waiting list response time"
@@ -10422,10 +10419,8 @@ msgstr ""
 
 #: pretix/control/forms/event.py:938 pretix/control/forms/event.py:955
 #: pretix/control/forms/event.py:972 pretix/control/forms/event.py:1031
-#, fuzzy
-#| msgid "Text (sent by admin)"
 msgid "Text sent to attendees"
-msgstr "Texte (envoyé par admin)"
+msgstr "Texte envoyé aux participants"
 
 #: pretix/control/forms/event.py:978 pretix/control/forms/event.py:1000
 #: pretix/control/forms/event.py:1005 pretix/control/forms/event.py:1010
@@ -13038,26 +13033,20 @@ msgid "An unidentified type email has been sent."
 msgstr "Un mail de type non identifié a été envoyé."
 
 #: pretix/control/logdisplay.py:369
-#, fuzzy
-#| msgid ""
-#| "An email has been sent to notify the user that the order has been "
-#| "received."
 msgid ""
 "The email has been sent without attachments since they would have been too "
 "large to be likely to arrive."
 msgstr ""
-"Un email a été envoyé pour informer l'utilisateur que la commande a été "
-"reçue."
+"L'e-mail a été envoyé sans pièces jointes, car celles-ci auraient été trop "
+"volumineuses pour avoir des chances d'arriver."
 
 #: pretix/control/logdisplay.py:371
 msgid "A custom email has been sent."
 msgstr "Un mail personnalisé a été envoyé."
 
 #: pretix/control/logdisplay.py:372
-#, fuzzy
-#| msgid "A custom email has been sent."
 msgid "A custom email has been sent to an attendee."
-msgstr "Un mail personnalisé a été envoyé."
+msgstr "Un mail personnalisé a été envoyé à un participant."
 
 #: pretix/control/logdisplay.py:373
 msgid ""
@@ -13082,14 +13071,10 @@ msgstr ""
 "annulée."
 
 #: pretix/control/logdisplay.py:378
-#, fuzzy
-#| msgid ""
-#| "An email has been sent to notify the user that the order has been "
-#| "canceled."
 msgid ""
 "An email has been sent to notify the user that the event has been canceled."
 msgstr ""
-"Un mail a été envoyé pour informer l'utilisateur que sa commande a été "
+"Un mail a été envoyé pour informer l'utilisateur que lévénement a été "
 "annulée."
 
 #: pretix/control/logdisplay.py:380
@@ -13143,16 +13128,12 @@ msgstr ""
 "reçue et nécessite un paiement."
 
 #: pretix/control/logdisplay.py:387
-#, fuzzy
-#| msgid ""
-#| "An email has been sent to notify the user that the order has been "
-#| "received and requires payment."
 msgid ""
 "An email has been sent to notify the user that the order has been received "
 "and requires approval."
 msgstr ""
 "Un email a été envoyé pour informer l'utilisateur que la commande a été "
-"reçue et nécessite un paiement."
+"reçue et nécessite autorisation."
 
 #: pretix/control/logdisplay.py:390
 msgid ""
@@ -16959,6 +16940,10 @@ msgid ""
 "your event. By default, pretix will only ask for attendee information and "
 "offer ticket downloads for these products."
 msgstr ""
+"Chaque achat de ce produit représente une personne qui est autorisée à "
+"entrer dans votre événement. Par défaut, pretix ne demande que les "
+"informations sur les participants et ne propose que le téléchargement des "
+"billets pour ces produits."
 
 #: pretix/control/templates/pretixcontrol/item/create.html:33
 #: pretix/control/templates/pretixcontrol/item/index.html:35
@@ -18353,16 +18338,12 @@ msgstr "Texte de confirmation"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:683
 #: pretix/control/templates/pretixcontrol/search/payments.html:125
-#, fuzzy
-#| msgid ""
-#| "This email has been sent with an older version of pretix. We are "
-#| "therefore not able to display it here accurately."
 msgid ""
 "This payment was created with an older version of pretix, therefore accurate "
 "data might not be available."
 msgstr ""
-"Cet email a été envoyé avec une ancienne version de pretix. Nous ne sommes "
-"donc pas en mesure de l'afficher correctement ici."
+"Ce paiement a été créé avec une ancienne version de pretix, il se peut donc "
+"que des données précises ne soient pas disponibles."
 
 #: pretix/control/templates/pretixcontrol/order/index.html:684
 #: pretix/control/templates/pretixcontrol/search/payments.html:126
@@ -19708,6 +19689,10 @@ msgid ""
 "in one event, and require valid memberships to allow purchases in another "
 "event."
 msgstr ""
+"Vous pouvez définir des types d'adhésion. Ceux-ci vous permettent de relier "
+"entre eux les produits de différents événements. Vous pouvez vendre une "
+"adhésion en tant que partie d'un produit dans un événement, et exiger des "
+"adhésions valides pour autoriser les achats dans un autre événement."
 
 #: pretix/control/templates/pretixcontrol/organizers/membershiptypes.html:15
 msgid ""
@@ -21721,12 +21706,12 @@ msgid ""
 msgstr ""
 
 #: pretix/control/views/auth.py:297
-#, fuzzy
-#| msgid "We sent you an e-mail containing further instructions."
 msgid ""
 "If the address is registered to valid account, then we have sent you an e-"
 "mail containing further instructions."
-msgstr "Nous vous avons envoyé un e-mail contenant d'autres instructions."
+msgstr ""
+"Si l'adresse est enregistrée sur un compte valide, nous vous avons envoyé un "
+"e-mail contenant des instructions supplémentaires."
 
 #: pretix/control/views/auth.py:317
 msgid ""
@@ -23147,8 +23132,6 @@ msgid "The uploaded PDF file is too large."
 msgstr "Le fichier PDF envoyé est trop volumineux."
 
 #: pretix/control/views/pdf.py:85
-#, fuzzy
-#| msgid "The uploaded PDF file is to small."
 msgid "The uploaded PDF file is too small."
 msgstr "Le fichier PDF envoyé est trop petit."
 
@@ -23512,10 +23495,8 @@ msgid "8 portrait A7 pages on one A4 page"
 msgstr ""
 
 #: pretix/plugins/badges/exporters.py:230
-#, fuzzy
-#| msgid "The selected product is not active or has no price set."
 msgid "None of the selected products is configured to print badges."
-msgstr "Le produit sélectionné n'est pas actif ou n' a pas de prix fixe."
+msgstr "Le produit sélectionné n'est configuré pour imprimer des badges."
 
 #: pretix/plugins/badges/exporters.py:236
 #, fuzzy
@@ -25264,7 +25245,7 @@ msgstr "Adresse mail du participant"
 
 #: pretix/plugins/sendmail/signals.py:119
 msgid "Email was sent"
-msgstr "L'Email a été envoyé"
+msgstr "L'email a été envoyé"
 
 #: pretix/plugins/sendmail/signals.py:120
 msgid "The order received a mass email."
@@ -25389,10 +25370,8 @@ msgstr "L'email a été mis en file d'attente pour être envoyé."
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_inspect.html:13
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:24
-#, fuzzy
-#| msgid "Email was sent"
 msgid "Email subject"
-msgstr "L'Email a été envoyé"
+msgstr "Objet de l'e-mail"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_inspect.html:17
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_inspect.html:25
@@ -27357,7 +27336,7 @@ msgstr "Il n' y a pas d'add-ons disponibles pour ce produit."
 #: pretix/presale/templates/pretixpresale/event/fragment_availability.html:6
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:71
 msgid "FULLY BOOKED"
-msgstr ""
+msgstr "COMPLÈTEMENT RÉSERVÉ"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_availability.html:8
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:73
@@ -27448,7 +27427,7 @@ msgstr "Afficher les noms des participants sur les factures"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:190
 msgid "The image you previously uploaded"
-msgstr ""
+msgstr "L'image que vous avez précédemment téléchargée"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:239
 msgid "Okay, we're removing that…"
@@ -27461,22 +27440,18 @@ msgid "Remove %(item)s from your cart"
 msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:249
-#, fuzzy, python-format
-#| msgid "Maximum number of items per order"
+#, python-format
 msgid "Remove one %(item)s from your cart"
-msgstr "Nombre maximum d'articles par commande"
+msgstr "Retirer un %(item)s de votre panier"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:251
-#, fuzzy, python-format
-#| msgid ""
-#| "We removed %(product)s from your cart as you can not buy less than "
-#| "%(min)s items of it."
+#, python-format
 msgid ""
 "Remove one %(item)s from your cart. You currently have %(count)s in your "
 "cart."
 msgstr ""
-"Nous avons retiré %(product)s de votre panier car vous ne pouvez pas acheter "
-"moins de %(min)s articles."
+"Retirez un %(item)s de votre panier. Vous avez actuellement %(count)s dans "
+"votre panier."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:259
 msgid "We're trying to reserve another one for you!"
@@ -27504,14 +27479,15 @@ msgid ""
 "Add one more %(item)s to your cart. You currently have %(count)s in your "
 "cart."
 msgstr ""
+"Ajoutez un %(item)s de plus à votre panier. Vous avez actuellement %(count)s "
+"dans votre panier."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:377
-#, fuzzy, python-format
-#| msgid "Any product"
+#, python-format
 msgid "One product"
 msgid_plural "%(num)s products"
-msgstr[0] "Tout produit"
-msgstr[1] "Tout produit"
+msgstr[0] "Un produit"
+msgstr[1] "%(num)s produits"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:391
 #, fuzzy, python-format
@@ -27539,10 +27515,8 @@ msgid "Overview of your ordered products."
 msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart_box.html:30
-#, fuzzy
-#| msgid "Connect with pretixdesk"
 msgid "Continue with order process"
-msgstr "Connectez-vous avec pretixdesk"
+msgstr "Poursuivre le processus de commande"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart_box.html:35
 #: pretix/presale/templates/pretixpresale/event/index.html:280
@@ -27562,7 +27536,7 @@ msgstr "Échangez un bon d'achat"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart_box.html:51
 msgid "We're applying this voucher to your cart..."
-msgstr ""
+msgstr "Nous appliquons ce bon de réduction à votre panier..."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart_box.html:59
 #: pretix/presale/templates/pretixpresale/event/fragment_voucher_form.html:26
@@ -27598,10 +27572,9 @@ msgid "Please check your email account, we've sent you your tickets."
 msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:16
-#, fuzzy
-#| msgid "Please enter your name."
 msgid "Please check your email account, we've sent you an email."
-msgstr "Veuillez entrer votre nom."
+msgstr ""
+"Veuillez vérifier votre compte e-mail, nous vous avons envoyé un e-mail."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:21
 msgid ""
@@ -27627,14 +27600,8 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:57
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:76
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:82
-#, fuzzy
-#| msgid ""
-#| "You can download your tickets using the buttons below. Please have your "
-#| "ticket ready when entering the event."
 msgid "Please have your ticket ready when entering the event."
-msgstr ""
-"Vous pouvez télécharger vos billets à l'aide des boutons ci-dessous. "
-"Préparez votre billet lors de votre entrée à l'événement."
+msgstr "Pensez à venir à l'événement avec votre billet."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:85
 #, fuzzy
@@ -27939,7 +27906,7 @@ msgid ""
 msgstr ""
 "Si vous souhaitez voir ou modifier le statut et les détails de votre "
 "commande, cliquez sur le lien dans l'un des emails que nous vous avons "
-"envoyé. Si vous ne trouvez pas le lien, cliquez sur le bouton ci-contre \n"
+"envoyés. Si vous ne trouvez pas le lien, cliquez sur le bouton ci-contre \n"
 "pour demander que le lien de votre commande vous soit à nouveau envoyé."
 
 #: pretix/presale/templates/pretixpresale/event/index.html:317
