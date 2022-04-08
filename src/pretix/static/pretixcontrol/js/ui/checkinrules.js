@@ -91,6 +91,8 @@ $(document).ready(function () {
     data: function () {
       return {
         rules: {},
+        all_products: false,
+        limit_products: [],
         TYPEOPS: TYPEOPS,
         VARS: VARS,
         texts: {
@@ -110,6 +112,16 @@ $(document).ready(function () {
     },
     created: function () {
       this.rules = JSON.parse($("#id_rules").val());
+
+      var root = this.$root
+      function _update() {
+        root.all_products = $("#id_all_products").prop("checked")
+        root.limit_products = $("input[name=limit_products]:checked").map(function () { return parseInt($(this).val()) }).toArray()
+      }
+      $("#id_all_products, input[name=limit_products]").on("change", function () {
+        _update();
+      })
+      _update()
     },
     watch: {
       rules: {

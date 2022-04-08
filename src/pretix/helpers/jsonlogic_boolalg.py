@@ -35,7 +35,7 @@ def convert_to_dnf(rules):
 
     def _distribute_or_over_and(r):
         operator = list(r.keys())[0]
-        values = rules[operator]
+        values = r[operator]
         if operator == "and":
             arg_to_distribute = [arg for arg in values if isinstance(arg, dict) and "or" in arg]
             if not arg_to_distribute:
@@ -57,7 +57,7 @@ def convert_to_dnf(rules):
         if not isinstance(r, dict):
             return r
         operator = list(r.keys())[0]
-        values = rules[operator]
+        values = r[operator]
         if operator not in ("or", "and"):
             return r
         new_values = []
