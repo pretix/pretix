@@ -29,8 +29,11 @@ function convert_to_dnf(rules) {
       return {
         "or": or_operands
       }
+    } else if (!operator) {
+      return r
     } else if (operator === "!" || operator === "!!" || operator === "?:" || operator === "if") {
-      throw new UserException("Operator " +  operator + " currently unsupported by convert_to_dnf")
+      console.warn("Operator " +  operator + " currently unsupported by convert_to_dnf")
+      return r
     } else {
       return r
     }

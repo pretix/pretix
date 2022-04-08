@@ -93,6 +93,17 @@
                         </div>
 
                     </div>
+                    <div class="alert alert-info" v-if="missingItems.length">
+                        <p>
+                            {% trans "Your rule always filters by product or variation, but the following products or variations are not contained in any of your rule parts so people with these tickets will not get in:" %}
+                        </p>
+                        <ul>
+                            <li v-for="h in missingItems">{{ "{" }}{h}{{ "}" }}</li>
+                        </ul>
+                        <p>
+                            {% trans "Please double-check if this was intentional." %}
+                        </p>
+                    </div>
                 </div>
                 <div class="disabled-withoutjs sr-only">
                     {{ form.rules }}
@@ -105,6 +116,7 @@
             </button>
         </div>
     </form>
+    {{ items|json_script:"items" }}
 
     {% compress js %}
         <script type="text/javascript" src="{% static "vuejs/vue.js" %}"></script>
