@@ -55,7 +55,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pip-
       - name: Install system dependencies
-        run: sudo apt update && sudo apt install gettext mariadb-client-10.3
+        run: sudo apt remove mysql-client && sudo apt update && sudo apt install gettext mariadb-client
       - name: Install Python dependencies
         run: pip3 install -e ".[dev]" mysqlclient psycopg2-binary
         working-directory: ./src
