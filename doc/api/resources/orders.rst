@@ -1093,6 +1093,7 @@ Order state operations
 
       {
           "send_email": true,
+          "comment": "Event was canceled.",
           "cancellation_fee": null
       }
 

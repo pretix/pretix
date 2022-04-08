@@ -953,7 +953,7 @@ class OrderCancelDo(EventViewMixin, OrderDetailMixin, AsyncAction, View):
         else:
             comment = gettext('Canceled by customer')
             return self.do(self.order.pk, cancellation_fee=fee, try_auto_refund=auto_refund, refund_as_giftcard=giftcard,
-                           comment=comment)
+                           refund_comment=comment)
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)

@@ -167,6 +167,12 @@ class CancelForm(ForceQuotaConfirmationForm):
         initial=True,
         required=False
     )
+    comment = forms.CharField(
+        label=_('Comment (will be sent to the user)'),
+        help_text=_('Will be included in the notification email when the respective placeholder is present in the '
+                    'configured email text.'),
+        required=False,
+    )
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

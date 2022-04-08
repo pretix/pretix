@@ -1914,6 +1914,8 @@ Your {event} team"""))
 
 your order {code} for {event} has been canceled.
 
+{comment}
+
 You can view the details of your order at
 {url}
 
