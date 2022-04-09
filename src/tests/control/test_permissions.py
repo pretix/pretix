@@ -181,6 +181,7 @@ organizer_urls = [
     'organizer/abc/team/add',
     'organizer/abc/devices',
     'organizer/abc/device/add',
+    'organizer/abc/device/bulk_edit',
     'organizer/abc/device/1/edit',
     'organizer/abc/device/1/connect',
     'organizer/abc/device/1/revoke',

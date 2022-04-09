@@ -42,14 +42,14 @@ from django.conf import settings
 from django.contrib import messages
 from django.core.exceptions import PermissionDenied, ValidationError
 from django.core.files import File
-from django.db import transaction
+from django.db import connections, transaction
 from django.db.models import (
     Count, Exists, IntegerField, Max, Min, OuterRef, Prefetch, ProtectedError,
     Q, Subquery, Sum,
 )
 from django.db.models.functions import Coalesce, Greatest
 from django.forms import DecimalField
-from django.http import HttpResponseBadRequest, JsonResponse
+from django.http import HttpResponse, HttpResponseBadRequest, JsonResponse
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse
 from django.utils.functional import cached_property
@@ -89,11 +89,11 @@ from pretix.control.forms.filter import (
 )
 from pretix.control.forms.orders import ExporterForm
 from pretix.control.forms.organizer import (
-    CustomerCreateForm, CustomerUpdateForm, DeviceForm, EventMetaPropertyForm,
-    GateForm, GiftCardCreateForm, GiftCardUpdateForm, MailSettingsForm,
-    MembershipTypeForm, MembershipUpdateForm, OrganizerDeleteForm,
-    OrganizerForm, OrganizerSettingsForm, OrganizerUpdateForm, TeamForm,
-    WebHookForm,
+    CustomerCreateForm, CustomerUpdateForm, DeviceBulkEditForm, DeviceForm,
+    EventMetaPropertyForm, GateForm, GiftCardCreateForm, GiftCardUpdateForm,
+    MailSettingsForm, MembershipTypeForm, MembershipUpdateForm,
+    OrganizerDeleteForm, OrganizerForm, OrganizerSettingsForm,
+    OrganizerUpdateForm, TeamForm, WebHookForm,
 )
 from pretix.control.logdisplay import OVERVIEW_BANLIST
 from pretix.control.permissions import (
@@ -102,6 +102,7 @@ from pretix.control.permissions import (
 from pretix.control.signals import nav_organizer
 from pretix.control.views import PaginationMixin
 from pretix.control.views.mailsetup import MailSettingsSetupView
+from pretix.helpers import GroupConcat
 from pretix.helpers.dicts import merge_dicts
 from pretix.helpers.urls import build_absolute_uri as build_global_uri
 from pretix.multidomain.urlreverse import build_absolute_uri
@@ -819,11 +820,17 @@ class TeamMemberView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin,
         })
 
 
-class DeviceListView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, ListView):
-    model = Device
-    template_name = 'pretixcontrol/organizers/devices.html'
-    permission = 'can_change_organizer_settings'
-    context_object_name = 'devices'
+class DeviceQueryMixin:
+
+    @cached_property
+    def request_data(self):
+        if self.request.method == "POST":
+            return self.request.POST
+        return self.request.GET
+
+    @cached_property
+    def filter_form(self):
+        return DeviceFilterForm(data=self.request.GET, request=self.request)
 
     def get_queryset(self):
         qs = self.request.organizer.devices.prefetch_related(
@@ -831,16 +838,26 @@ class DeviceListView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin,
         ).order_by('revoked', '-device_id')
         if self.filter_form.is_valid():
             qs = self.filter_form.filter_qs(qs)
+
+        if 'device' in self.request_data and '__ALL' not in self.request_data:
+            qs = qs.filter(
+                id__in=self.request_data.getlist('device')
+            )
+
         return qs
+
+
+class DeviceListView(DeviceQueryMixin, OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, ListView):
+    model = Device
+    template_name = 'pretixcontrol/organizers/devices.html'
+    permission = 'can_change_organizer_settings'
+    context_object_name = 'devices'
+    paginate_by = 100
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         ctx['filter_form'] = self.filter_form
         return ctx
-
-    @cached_property
-    def filter_form(self):
-        return DeviceFilterForm(data=self.request.GET, request=self.request)
 
 
 class DeviceCreateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, CreateView):
@@ -933,6 +950,125 @@ class DeviceUpdateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixi
     def form_invalid(self, form):
         messages.error(self.request, _('Your changes could not be saved.'))
         return super().form_invalid(form)
+
+
+class DeviceBulkUpdateView(DeviceQueryMixin, OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, FormView):
+    template_name = 'pretixcontrol/organizers/device_bulk_edit.html'
+    permission = 'can_change_organizer_settings'
+    context_object_name = 'device'
+    form_class = DeviceBulkEditForm
+
+    def get_queryset(self):
+        return super().get_queryset().prefetch_related(None).order_by()
+
+    def get(self, request, *args, **kwargs):
+        return HttpResponse(status=405)
+
+    @cached_property
+    def is_submitted(self):
+        # Usually, django considers a form "bound" / "submitted" on every POST request. However, this view is always
+        # called with POST method, even if just to pass the selection of objects to work on, so we want to modify
+        # that behaviour
+        return '_bulk' in self.request.POST
+
+    def get_form_kwargs(self):
+        initial = {}
+        mixed_values = set()
+        qs = self.get_queryset().annotate(
+            limit_events_list=Subquery(
+                Device.limit_events.through.objects.filter(
+                    device_id=OuterRef('pk')
+                ).order_by('device_id', 'event_id').values('device_id').annotate(
+                    g=GroupConcat('event_id', separator=',')
+                ).values('g')
+            )
+        )
+
+        fields = {
+            'all_events': 'all_events',
+            'limit_events': 'limit_events_list',
+            'security_profile': 'security_profile',
+            'gate': 'gate',
+        }
+        for k, f in fields.items():
+            existing_values = list(qs.order_by(f).values(f).annotate(c=Count('*')))
+            if len(existing_values) == 1:
+                if k == 'limit_events':
+                    if existing_values[0][f]:
+                        initial[k] = self.request.organizer.events.filter(id__in=existing_values[0][f].split(","))
+                    else:
+                        initial[k] = []
+                else:
+                    initial[k] = existing_values[0][f]
+            elif len(existing_values) > 1:
+                mixed_values.add(k)
+                initial[k] = None
+
+        kwargs = super().get_form_kwargs()
+        kwargs['organizer'] = self.request.organizer
+        kwargs['prefix'] = 'bulkedit'
+        kwargs['initial'] = initial
+        kwargs['queryset'] = self.get_queryset()
+        kwargs['mixed_values'] = mixed_values
+        if not self.is_submitted:
+            kwargs['data'] = None
+            kwargs['files'] = None
+        return kwargs
+
+    def get_object(self, queryset=None):
+        return get_object_or_404(Device, organizer=self.request.organizer, pk=self.kwargs.get('device'))
+
+    def get_success_url(self):
+        return reverse('control:organizer.devices', kwargs={
+            'organizer': self.request.organizer.slug,
+        })
+
+    @transaction.atomic()
+    def form_valid(self, form):
+        log_entries = []
+
+        # Main form
+        form.save()
+        data = {
+            k: (v if k != 'limit_events' else [e.id for e in v])
+            for k, v in form.cleaned_data.items()
+            if k in form.changed_data
+        }
+        data['_raw_bulk_data'] = self.request.POST.dict()
+        for obj in self.get_queryset():
+            log_entries.append(
+                obj.log_action('pretix.device.changed', data=data, user=self.request.user, save=False)
+            )
+
+        if connections['default'].features.can_return_rows_from_bulk_insert:
+            LogEntry.objects.bulk_create(log_entries, batch_size=200)
+            LogEntry.bulk_postprocess(log_entries)
+        else:
+            for le in log_entries:
+                le.save()
+            LogEntry.bulk_postprocess(log_entries)
+
+        messages.success(self.request, _('Your changes have been saved.'))
+        return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['devices'] = self.get_queryset()
+        ctx['bulk_selected'] = self.request.POST.getlist("_bulk")
+        return ctx
+
+    def post(self, request, *args, **kwargs):
+        form = self.get_form()
+        is_valid = (
+            self.is_submitted and
+            form.is_valid()
+        )
+        if is_valid:
+            return self.form_valid(form)
+        else:
+            if self.is_submitted:
+                messages.error(self.request, _('We could not save your changes. See below for details.'))
+            return self.form_invalid(form)
 
 
 class DeviceConnectView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, DetailView):

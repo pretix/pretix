@@ -188,7 +188,7 @@
                     <button type="submit" class="btn btn-danger btn-save" name="action" value="delete">
                         <i class="fa fa-trash"></i>{% trans "Delete selected" %}
                     </button>
-                    <button type="submit" class="btn btn-primary btn-save" name="action" value="disable"
+                    <button type="submit" class="btn btn-primary btn-save" name="action" value="edit"
                             formaction="{% url "control:event.subevents.bulkedit"  organizer=request.event.organizer.slug event=request.event.slug %}">
                         <i class="fa fa-edit"></i>{% trans "Edit selected" %}
                     </button>

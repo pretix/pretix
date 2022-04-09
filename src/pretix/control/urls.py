@@ -164,6 +164,8 @@ urlpatterns = [
     re_path(r'^organizer/(?P<organizer>[^/]+)/devices$', organizer.DeviceListView.as_view(), name='organizer.devices'),
     re_path(r'^organizer/(?P<organizer>[^/]+)/device/add$', organizer.DeviceCreateView.as_view(),
             name='organizer.device.add'),
+    re_path(r'^organizer/(?P<organizer>[^/]+)/device/bulk_edit$', organizer.DeviceBulkUpdateView.as_view(),
+            name='organizer.device.bulk_edit'),
     re_path(r'^organizer/(?P<organizer>[^/]+)/device/(?P<device>[^/]+)/edit$', organizer.DeviceUpdateView.as_view(),
             name='organizer.device.edit'),
     re_path(r'^organizer/(?P<organizer>[^/]+)/device/(?P<device>[^/]+)/connect$', organizer.DeviceConnectView.as_view(),

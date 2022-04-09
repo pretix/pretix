@@ -21,7 +21,7 @@
             </p>
 
             <a href="{% url "control:organizer.device.add" organizer=request.organizer.slug %}"
-                    class="btn btn-primary btn-lg"><i class="fa fa-plus"></i> {% trans "Connect a device" %}</a>
+               class="btn btn-primary btn-lg"><i class="fa fa-plus"></i> {% trans "Connect a device" %}</a>
         </div>
     {% else %}
         <div class="panel panel-default">
@@ -53,101 +53,139 @@
         </div>
         <p>
             <a href="{% url "control:organizer.device.add" organizer=request.organizer.slug %}"
-                    class="btn btn-default"><i class="fa fa-plus"></i> {% trans "Connect a device" %}</a>
+               class="btn btn-default"><i class="fa fa-plus"></i> {% trans "Connect a device" %}</a>
         </p>
-        <div class="table-responsive">
-            <table class="table table-condensed table-hover">
-                <thead>
-                <tr>
-                    <th>{% trans "Device ID" %}
-                        <a href="?{% url_replace request 'ordering' '-device_id' %}"><i class="fa fa-caret-down"></i></a>
-                        <a href="?{% url_replace request 'ordering' 'device_id' %}"><i class="fa fa-caret-up"></i></a></th>
-                    </th>
-                    <th>{% trans "Name" %}
-                        <a href="?{% url_replace request 'ordering' '-name' %}"><i class="fa fa-caret-down"></i></a>
-                        <a href="?{% url_replace request 'ordering' 'name' %}"><i class="fa fa-caret-up"></i></a></th>
-                    </th>
-                    <th>{% trans "Hardware model" %}</th>
-                    <th>{% trans "Software" %}</th>
-                    <th>{% trans "Setup date" %}
-                        <a href="?{% url_replace request 'ordering' '-initialized' %}"><i class="fa fa-caret-down"></i></a>
-                        <a href="?{% url_replace request 'ordering' 'initialized' %}"><i class="fa fa-caret-up"></i></a></th>
-                    </th>
-                    <th>{% trans "Events" %}</th>
-                    <th></th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for d in devices %}
-                    <tr {% if d.revoked %}class="text-muted"{% endif %}>
-                        <td>
-                            {{ d.device_id }}
-                        </td>
-                        <td>
-                            {% if d.revoked %}<del>{% endif %}
-                            {{ d.name }}
-                            {% if d.revoked %}</del>{% endif %}
-                            {% if d.gate %}
-                                <br>
-                                <small class="text-muted">{{ d.gate.name }}</small>
-                            {% endif %}
-                            <br>
-                            <small class="text-muted">{{ d.unique_serial }}</small>
-                        </td>
-                        <td>
-                            {{ d.hardware_brand|default_if_none:"" }} {{ d.hardware_model|default_if_none:"" }}
-                        </td>
-                        <td>
-                            {{ d.software_brand|default_if_none:"" }} {{ d.software_version|default_if_none:"" }}
-                        </td>
-                        <td>
-                            {% if d.initialized %}
-                                {{ d.initialized|date:"SHORT_DATETIME_FORMAT" }}
-                            {% else %}
-                                <em>{% trans "Not yet initialized" %}</em>
-                            {% endif %}
-                            {% if d.revoked %}
-                                <span class="label label-danger">{% trans "Revoked" %}</span>
-                            {% endif %}
-                        </td>
-                        <td>
-                            {% if d.all_events %}
-                                {% trans "All" %}
-                            {% else %}
-                                <ul>
-                                    {% for e in d.limit_events.all %}
-                                        <li>
-                                            <a href="{% url "control:event.index" organizer=request.organizer.slug event=e.slug %}">
-                                                {{ e }}
-                                            </a>
-                                        </li>
-                                    {% endfor %}
-                                </ul>
-                            {% endif %}
-                        </td>
-                        <td class="text-right flip">
-                            {% if not d.initialized %}
-                                <a href="{% url "control:organizer.device.connect" organizer=request.organizer.slug device=d.id %}"
-                                        class="btn btn-primary btn-sm"><i class="fa fa-link"></i>
-                                    {% trans "Connect" %}</a>
-                            {% elif d.api_token %}
-                                <a href="{% url "control:organizer.device.revoke" organizer=request.organizer.slug device=d.id %}"
-                                        class="btn btn-default btn-sm">
-                                    {% trans "Revoke access" %}</a>
-                            {% endif %}
-                            <a href="{% url "control:organizer.device.logs" organizer=request.organizer.slug device=d.id %}"
-                               class="btn btn-default btn-sm">
-                                <span class="fa fa-list-alt"></span>
-                                {% trans "Logs" %}
-                            </a>
-                            <a href="{% url "control:organizer.device.edit" organizer=request.organizer.slug device=d.id %}"
-                                    class="btn btn-default btn-sm"><i class="fa fa-edit"></i></a>
-                        </td>
+        <form action="{% url "control:organizer.device.bulk_edit" organizer=request.organizer.slug %}" method="post">
+            {% csrf_token %}
+            <div class="hidden">
+                {{ filter_form.as_p }}
+            </div>
+            <div class="table-responsive">
+                <table class="table table-condensed table-hover table-quotas">
+                    <thead>
+                    <tr>
+                        <th>
+                            <label aria-label="{% trans "select all rows for batch-operation" %}"
+                                   class="batch-select-label"><input type="checkbox" data-toggle-table/></label>
+                        </th>
+                        <th>{% trans "Device ID" %}
+                            <a href="?{% url_replace request 'ordering' '-device_id' %}"><i
+                                    class="fa fa-caret-down"></i></a>
+                            <a href="?{% url_replace request 'ordering' 'device_id' %}"><i
+                                    class="fa fa-caret-up"></i></a>
+                        </th>
+                        <th>{% trans "Name" %}
+                            <a href="?{% url_replace request 'ordering' '-name' %}"><i class="fa fa-caret-down"></i></a>
+                            <a href="?{% url_replace request 'ordering' 'name' %}"><i class="fa fa-caret-up"></i></a>
+                        </th>
+                        <th>{% trans "Hardware model" %}</th>
+                        <th>{% trans "Software" %}</th>
+                        <th>{% trans "Setup date" %}
+                            <a href="?{% url_replace request 'ordering' '-initialized' %}"><i
+                                    class="fa fa-caret-down"></i></a>
+                            <a href="?{% url_replace request 'ordering' 'initialized' %}"><i class="fa fa-caret-up"></i></a>
+                        </th>
+                        <th>{% trans "Events" %}</th>
+                        <th></th>
                     </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-        </div>
+                    {% if page_obj.paginator.num_pages > 1 %}
+                        <tr class="table-select-all warning hidden">
+                            <td>
+                                <input type="checkbox" name="__ALL" id="__all"
+                                       data-results-total="{{ page_obj.paginator.count }}">
+                            </td>
+                            <td colspan="7">
+                                <label for="__all">
+                                    {% trans "Select all results on other pages as well" %}
+                                </label>
+                            </td>
+                        </tr>
+                    {% endif %}
+                    </thead>
+                    <tbody>
+                    {% for d in devices %}
+                        <tr {% if d.revoked %}class="text-muted"{% endif %}>
+                            <td>
+                                <label aria-label="{% trans "select row for batch-operation" %}"
+                                       class="batch-select-label"><input type="checkbox" name="device"
+                                                                         class="batch-select-checkbox"
+                                                                         value="{{ d.pk }}"/></label>
+                            </td>
+                            <td>
+                                {{ d.device_id }}
+                            </td>
+                            <td>
+                                {% if d.revoked %}
+                                    <del>{% endif %}
+                                {{ d.name }}
+                                {% if d.revoked %}</del>{% endif %}
+                                {% if d.gate %}
+                                    <br>
+                                    <small class="text-muted">{{ d.gate.name }}</small>
+                                {% endif %}
+                                <br>
+                                <small class="text-muted">{{ d.unique_serial }}</small>
+                            </td>
+                            <td>
+                                {{ d.hardware_brand|default_if_none:"" }} {{ d.hardware_model|default_if_none:"" }}
+                            </td>
+                            <td>
+                                {{ d.software_brand|default_if_none:"" }} {{ d.software_version|default_if_none:"" }}
+                            </td>
+                            <td>
+                                {% if d.initialized %}
+                                    {{ d.initialized|date:"SHORT_DATETIME_FORMAT" }}
+                                {% else %}
+                                    <em>{% trans "Not yet initialized" %}</em>
+                                {% endif %}
+                                {% if d.revoked %}
+                                    <span class="label label-danger">{% trans "Revoked" %}</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if d.all_events %}
+                                    {% trans "All" %}
+                                {% else %}
+                                    <ul>
+                                        {% for e in d.limit_events.all %}
+                                            <li>
+                                                <a href="{% url "control:event.index" organizer=request.organizer.slug event=e.slug %}">
+                                                    {{ e }}
+                                                </a>
+                                            </li>
+                                        {% endfor %}
+                                    </ul>
+                                {% endif %}
+                            </td>
+                            <td class="text-right flip">
+                                {% if not d.initialized %}
+                                    <a href="{% url "control:organizer.device.connect" organizer=request.organizer.slug device=d.id %}"
+                                       class="btn btn-primary btn-sm"><i class="fa fa-link"></i>
+                                        {% trans "Connect" %}</a>
+                                    {% elif d.api_token %}
+                                    <a href="{% url "control:organizer.device.revoke" organizer=request.organizer.slug device=d.id %}"
+                                       class="btn btn-default btn-sm">
+                                        {% trans "Revoke access" %}</a>
+                                {% endif %}
+                                <a href="{% url "control:organizer.device.logs" organizer=request.organizer.slug device=d.id %}"
+                                   class="btn btn-default btn-sm">
+                                    <span class="fa fa-list-alt"></span>
+                                    {% trans "Logs" %}
+                                </a>
+                                <a href="{% url "control:organizer.device.edit" organizer=request.organizer.slug device=d.id %}"
+                                   class="btn btn-default btn-sm"><i class="fa fa-edit"></i></a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="batch-select-actions">
+                <button type="submit" class="btn btn-default btn-save" name="action" value="edit">
+                    <i class="fa fa-edit"></i>{% trans "Edit selected" %}
+                </button>
+            </div>
+        </form>
         {% include "pretixcontrol/pagination.html" %}
     {% endif %}
 {% endblock %}
