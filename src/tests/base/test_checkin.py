@@ -744,14 +744,14 @@ def test_rules_isafter_subevent(position, clist, event):
 def test_rules_time_isoweekday(event, position, clist):
     # Ticket is valid starting at a custom time
     event.settings.timezone = 'Europe/Berlin'
-    clist.rules = {">=": [{"var": "now_isoweekday"}, 6]}
+    clist.rules = {"==": [{"var": "now_isoweekday"}, 6]}
     clist.save()
     with freeze_time("2022-04-06 21:55:00+01:00"):
         assert not OrderPosition.objects.filter(SQLLogic(clist).apply(clist.rules), pk=position.pk).exists()
         with pytest.raises(CheckInError) as excinfo:
             perform_checkin(position, clist, {})
         assert excinfo.value.code == 'rules'
-        assert 'Minimum week day exceeded' in str(excinfo.value)
+        assert 'week day is not Saturday' in str(excinfo.value)
 
     with freeze_time("2022-04-09 22:05:00+01:00"):
         assert OrderPosition.objects.filter(SQLLogic(clist).apply(clist.rules), pk=position.pk).exists()

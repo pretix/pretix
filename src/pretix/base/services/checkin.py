@@ -253,6 +253,17 @@ def _logic_explain(rules, ev, rule_data):
 
             var_weights[vname] = (w[var] + operator_weights.get(operator, 0) + penalty, abs(compare_to - rule_data[var]))
 
+            if var == 'now_isoweekday':
+                compare_to = {
+                    1: _('Monday'),
+                    2: _('Tuesday'),
+                    3: _('Wednesday'),
+                    4: _('Thursday'),
+                    5: _('Friday'),
+                    6: _('Saturday'),
+                    7: _('Sunday'),
+                }.get(compare_to, compare_to)
+
             if operator == '==':
                 var_texts[vname] = _('{variable} is not {value}').format(variable=l[var], value=compare_to)
             elif operator in ('<', '<='):
