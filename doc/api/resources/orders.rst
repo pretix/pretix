@@ -1082,6 +1082,9 @@ Order state operations
    will instead stay paid, but all positions will be removed (or marked as canceled) and replaced by the cancellation
    fee as the only component of the order.
 
+   You can control whether the customer is notified through ``send_email`` (defaults to ``true``).
+   You can pass a ``comment`` that can be visible to the user if it is used in the email template.
+
    **Example request**:
 
    .. sourcecode:: http
