@@ -341,7 +341,6 @@ def pretixcontrol_logentry_display(sender: Event, logentry: LogEntry, **kwargs):
         'pretix.event.order.paid': _('The order has been marked as paid.'),
         'pretix.event.order.cancellationrequest.deleted': _('The cancellation request has been deleted.'),
         'pretix.event.order.refunded': _('The order has been refunded.'),
-        'pretix.event.order.canceled': _('The order has been canceled.'),
         'pretix.event.order.reactivated': _('The order has been reactivated.'),
         'pretix.event.order.deleted': _('The test mode order {code} has been deleted.'),
         'pretix.event.order.placed': _('The order has been created.'),
@@ -531,6 +530,13 @@ def pretixcontrol_logentry_display(sender: Event, logentry: LogEntry, **kwargs):
         return _('The user confirmed the following message: "{}"').format(
             bleach.clean(logentry.parsed_data.get('msg'), tags=[], strip=True)
         )
+
+    if logentry.action_type == 'pretix.event.order.canceled':
+        comment = logentry.parsed_data.get('comment')
+        if comment:
+            return _('The order has been canceled (comment: "{}").').format(comment)
+        else:
+            return _('The order has been canceled.')
 
     if logentry.action_type in ('pretix.control.views.checkin.reverted', 'pretix.event.checkin.reverted'):
         if 'list' in data:

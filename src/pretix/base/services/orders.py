@@ -384,7 +384,7 @@ def deny_order(order, comment='', user=None, send_mail: bool=True, auth=None):
 
 
 def _cancel_order(order, user=None, send_mail: bool=True, api_token=None, device=None, oauth_application=None,
-                  cancellation_fee=None, keep_fees=None, cancel_invoice=True):
+                  cancellation_fee=None, keep_fees=None, cancel_invoice=True, comment=None):
     """
     Mark this order as canceled
     :param order: The order to change
@@ -481,7 +481,7 @@ def _cancel_order(order, user=None, send_mail: bool=True, api_token=None, device
                     Voucher.objects.filter(pk=position.voucher.pk).update(redeemed=Greatest(0, F('redeemed') - 1))
 
         order.log_action('pretix.event.order.canceled', user=user, auth=api_token or oauth_application or device,
-                         data={'cancellation_fee': cancellation_fee})
+                         data={'cancellation_fee': cancellation_fee, 'comment': comment})
         order.cancellation_requests.all().delete()
 
         order.create_transactions()
@@ -489,7 +489,7 @@ def _cancel_order(order, user=None, send_mail: bool=True, api_token=None, device
         if send_mail:
             email_template = order.event.settings.mail_text_order_canceled
             with language(order.locale, order.event.settings.region):
-                email_context = get_email_context(event=order.event, order=order)
+                email_context = get_email_context(event=order.event, order=order, comment=comment or "")
                 email_subject = _('Order canceled: %(code)s') % {'code': order.code}
                 try:
                     order.send_mail(
@@ -2506,15 +2506,15 @@ def _try_auto_refund(order, auto_refund=True, manual_refund=False, allow_partial
 @app.task(base=ProfiledTask, bind=True, max_retries=5, default_retry_delay=1, throws=(OrderError,))
 @scopes_disabled()
 def cancel_order(self, order: int, user: int=None, send_mail: bool=True, api_token=None, oauth_application=None,
-                 device=None, cancellation_fee=None, try_auto_refund=False, refund_as_giftcard=False, comment=None,
-                 cancel_invoice=True):
+                 device=None, cancellation_fee=None, try_auto_refund=False, refund_as_giftcard=False,
+                 email_comment=None, refund_comment=None, cancel_invoice=True):
     try:
         try:
             ret = _cancel_order(order, user, send_mail, api_token, device, oauth_application,
-                                cancellation_fee, cancel_invoice=cancel_invoice)
+                                cancellation_fee, cancel_invoice=cancel_invoice, comment=email_comment)
             if try_auto_refund:
                 _try_auto_refund(order, refund_as_giftcard=refund_as_giftcard,
-                                 comment=comment)
+                                 comment=refund_comment)
             return ret
         except LockTimeoutException:
             self.retry()

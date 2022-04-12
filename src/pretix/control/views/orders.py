@@ -1266,6 +1266,7 @@ class OrderTransition(OrderView):
         elif self.order.cancel_allowed() and to == 'c' and self.mark_canceled_form.is_valid():
             try:
                 cancel_order(self.order.pk, user=self.request.user,
+                             email_comment=self.mark_canceled_form.cleaned_data['comment'],
                              send_mail=self.mark_canceled_form.cleaned_data['send_email'],
                              cancel_invoice=self.mark_canceled_form.cleaned_data.get('cancel_invoice', True),
                              cancellation_fee=self.mark_canceled_form.cleaned_data.get('cancellation_fee'))

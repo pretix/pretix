@@ -1075,7 +1075,7 @@ class MailSettingsForm(SettingsForm):
         'mail_text_order_free': ['event', 'order'],
         'mail_text_order_free_attendee': ['event', 'order', 'position'],
         'mail_text_order_changed': ['event', 'order'],
-        'mail_text_order_canceled': ['event', 'order'],
+        'mail_text_order_canceled': ['event', 'order', 'comment'],
         'mail_text_order_expire_warning': ['event', 'order'],
         'mail_text_order_custom_mail': ['event', 'order'],
         'mail_text_download_reminder': ['event', 'order'],

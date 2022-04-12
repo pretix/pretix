@@ -345,6 +345,7 @@ class OrderViewSet(viewsets.ModelViewSet):
     @action(detail=True, methods=['POST'])
     def mark_canceled(self, request, **kwargs):
         send_mail = request.data.get('send_email', True)
+        comment = request.data.get('comment', None)
         cancellation_fee = request.data.get('cancellation_fee', None)
         if cancellation_fee:
             try:
@@ -367,6 +368,7 @@ class OrderViewSet(viewsets.ModelViewSet):
                 device=request.auth if isinstance(request.auth, Device) else None,
                 oauth_application=request.auth.application if isinstance(request.auth, OAuthAccessToken) else None,
                 send_mail=send_mail,
+                email_comment=comment,
                 cancellation_fee=cancellation_fee
             )
         except OrderError as e:
