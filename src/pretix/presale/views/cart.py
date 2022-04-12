@@ -50,7 +50,7 @@ from django.utils.decorators import method_decorator
 from django.utils.functional import cached_property
 from django.utils.http import is_safe_url, url_has_allowed_host_and_scheme
 from django.utils.timezone import now
-from django.utils.translation import gettext as _
+from django.utils.translation import gettext as _, pgettext
 from django.views.decorators.clickjacking import xframe_options_exempt
 from django.views.generic import TemplateView, View
 from django_scopes import scopes_disabled
@@ -632,10 +632,9 @@ class RedeemView(NoSearchIndexViewMixin, EventViewMixin, CartMixin, TemplateView
             if request.GET.get('subevent'):
                 try:
                     subevent_pk = int(request.GET.get('subevent'))
-                except ValueError:
-                    raise Http404(_('No SubEvent matches the given query.'))
-
-                self.subevent = get_object_or_404(SubEvent, event=request.event, pk=subevent_pk, active=True)
+                    self.subevent = SubEvent.objects.get(event=request.event, pk=subevent_pk, active=True)
+                except (ValueError, SubEvent.DoesNotExist):
+                    raise Http404(pgettext('subevent', 'We were unable to find the specified date.'))  
 
             if hasattr(self, 'voucher') and self.voucher.subevent:
                 self.subevent = self.voucher.subevent
