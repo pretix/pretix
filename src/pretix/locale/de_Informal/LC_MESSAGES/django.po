@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-12 08:32+0000\n"
-"PO-Revision-Date: 2022-03-31 18:46+0000\n"
+"PO-Revision-Date: 2022-04-12 08:43+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
@@ -11068,7 +11068,7 @@ msgid "No membership granted"
 msgstr "Keine Mitgliedschaft angelegt"
 
 #: pretix/control/forms/item.py:569
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Gift card products should use a tax rule with a rate of 0% since sales tax "
 "will be applied when the gift card is redeemed."
@@ -11267,6 +11267,8 @@ msgid ""
 "Will be included in the notification email when the respective placeholder "
 "is present in the configured email text."
 msgstr ""
+"Wird in der Benachrichtigungs-E-Mail eingefügt, sofern der konfigurierte E"
+"-Mail-Text den passenden Platzhalter enthält."
 
 #: pretix/control/forms/orders.py:209 pretix/control/forms/orders.py:203
 msgid "Payment amount"
@@ -12956,9 +12958,8 @@ msgid "The user confirmed the following message: \"{}\""
 msgstr "Der Nutzer hat diesen Text bestätigt: \"{}\""
 
 #: pretix/control/logdisplay.py:537
-#, fuzzy
 msgid "The order has been canceled (comment: \"{}\")."
-msgstr "Die Bestellung wurde abgelehnt (Kommentar: \"{comment}\")."
+msgstr "Die Bestellung wurde storniert (Kommentar: \"{comment}\")."
 
 #: pretix/control/logdisplay.py:539 pretix/control/views/orders.py:1291
 #: pretix/presale/views/order.py:967 pretix/control/logdisplay.py:344
@@ -14082,10 +14083,14 @@ msgid ""
 "or variations are not contained in any of your rule parts so people with "
 "these tickets will not get in:"
 msgstr ""
+"Die angegebene Regel filtert in allen Fällen nach Produkt oder "
+"Produktvariante, aber die folgenden Produkte oder Varianten sind in keinem "
+"Teil der Regel enthalten, sodass Personen mit diesen Tickets keinen Einlass "
+"erhalten:"
 
 #: pretix/control/templates/pretixcontrol/checkin/list_edit.html:104
 msgid "Please double-check if this was intentional."
-msgstr ""
+msgstr "Bitte prüfe, ob dies absichtlich so eingestellt ist."
 
 #: pretix/control/templates/pretixcontrol/checkin/lists.html:7
 msgid ""
@@ -16952,6 +16957,9 @@ msgid ""
 "%(fee)s for this order, but for a cancellation performed by you, you need to "
 "set the cancellation fee here:"
 msgstr ""
+"Die konfigurierte Stornogebühr für eine kundenseitige Stornierung würde für "
+"diese Bestellung %(fee)s betragen, aber bei einer durch dich ausgelösten "
+"Stornierung musst du die Stornogebühr hier selbst festlegen:"
 
 #: pretix/control/templates/pretixcontrol/order/cancel.html:51
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:200
@@ -18313,9 +18321,8 @@ msgid "Organizer: %(name)s"
 msgstr "Veranstalter: %(name)s"
 
 #: pretix/control/templates/pretixcontrol/organizers/device_bulk_edit.html:6
-#, fuzzy
 msgid "Change multiple devices"
-msgstr "Mehrere Termine bearbeiten"
+msgstr "Mehrere Geräte bearbeiten"
 
 #: pretix/control/templates/pretixcontrol/organizers/device_bulk_edit.html:8
 #: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html:13
@@ -27505,13 +27512,12 @@ msgstr ""
 "ist."
 
 #: pretix/presale/views/waiting.py:128
-#, fuzzy
 msgid ""
 "We've added you to the waiting list. You will receive an email as soon as "
 "this product gets available again."
 msgstr ""
 "Wir haben dich zur Warteliste hinzugefügt. Du erhältst eine E-Mail, sobald "
-"wieder Tickets verfügbar sind."
+"das Produkt wieder verfügbar ist."
 
 #: pretix/presale/views/waiting.py:155
 msgid "We could not find you on our waiting list."
@@ -27632,7 +27638,7 @@ msgstr "Galicisch"
 
 #: pretix/settings.py:528
 msgid "Czech"
-msgstr ""
+msgstr "Tschechisch"
 
 #: pretix/settings.py:842 pretix/settings.py:841
 msgid "User profile only"
