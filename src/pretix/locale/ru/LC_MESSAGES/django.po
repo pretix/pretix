@@ -3983,8 +3983,8 @@ msgstr ""
 #: pretix/base/models/orders.py:1023 pretix/base/services/orders.py:937
 #: pretix/control/views/event.py:758
 #, python-format
-msgid "Your order: %(code)s"
-msgstr "Ваш заказ: %(code)s"
+msgid "Your order: {code}"
+msgstr "Ваш заказ: {code}"
 
 #: pretix/base/models/orders.py:1187
 msgid "<file>"
@@ -4142,8 +4142,8 @@ msgstr "Позиция заказа"
 
 #: pretix/base/models/orders.py:2399 pretix/base/services/orders.py:955
 #, python-format
-msgid "Your event registration: %(code)s"
-msgstr "Регистрация вашего мероприятия: %(code)s"
+msgid "Your event registration: {code}"
+msgstr "Регистрация вашего мероприятия: {code}"
 
 #: pretix/base/models/orders.py:2573
 msgid "Cart ID (e.g. session key)"

@@ -3859,8 +3859,8 @@ msgstr "Voucheren \"{voucher}\" er blevet brugt i mellemtiden."
 #: pretix/base/models/orders.py:1023 pretix/base/services/orders.py:937
 #: pretix/control/views/event.py:758
 #, python-format
-msgid "Your order: %(code)s"
-msgstr "Din bestilling: %(code)s"
+msgid "Your order: {code}"
+msgstr "Din bestilling: {code}"
 
 #: pretix/base/models/orders.py:1187
 msgid "<file>"
@@ -4023,8 +4023,8 @@ msgstr ""
 
 #: pretix/base/models/orders.py:2399 pretix/base/services/orders.py:955
 #, fuzzy, python-format
-msgid "Your event registration: %(code)s"
-msgstr "Din bestilling: %(code)s"
+msgid "Your event registration: {code}"
+msgstr "Din bestilling: {code}"
 
 #: pretix/base/models/orders.py:2573
 msgid "Cart ID (e.g. session key)"

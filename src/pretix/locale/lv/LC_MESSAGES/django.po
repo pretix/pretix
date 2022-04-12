@@ -3806,8 +3806,8 @@ msgstr "Šis kupons \"{voucher}\" jau ir izmantots."
 #: pretix/base/models/orders.py:1023 pretix/base/services/orders.py:937
 #: pretix/control/views/event.py:758
 #, python-format
-msgid "Your order: %(code)s"
-msgstr "Jūsu pasūtījums: %(code)s"
+msgid "Your order: {code}"
+msgstr "Jūsu pasūtījums: {code}"
 
 #: pretix/base/models/orders.py:1187
 msgid "<file>"
@@ -3963,8 +3963,8 @@ msgstr "Pasūtījuma pozīcija"
 
 #: pretix/base/models/orders.py:2399 pretix/base/services/orders.py:955
 #, python-format
-msgid "Your event registration: %(code)s"
-msgstr "Jūsu pasākuma reģistrācija: %(code)s"
+msgid "Your event registration: {code}"
+msgstr "Jūsu pasākuma reģistrācija: {code}"
 
 #: pretix/base/models/orders.py:2573
 msgid "Cart ID (e.g. session key)"
