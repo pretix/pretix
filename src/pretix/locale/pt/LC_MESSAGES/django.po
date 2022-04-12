@@ -11373,7 +11373,7 @@ msgid "The user confirmed the following message: \"{}\""
 msgstr ""
 
 #: pretix/control/logdisplay.py:537
-msgid "The order has been canceled (comment: \"{}\")."
+msgid "The order has been canceled (comment: \"{comment}\")."
 msgstr ""
 
 #: pretix/control/logdisplay.py:539 pretix/control/views/orders.py:1291

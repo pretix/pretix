@@ -534,7 +534,7 @@ def pretixcontrol_logentry_display(sender: Event, logentry: LogEntry, **kwargs):
     if logentry.action_type == 'pretix.event.order.canceled':
         comment = logentry.parsed_data.get('comment')
         if comment:
-            return _('The order has been canceled (comment: "{}").').format(comment)
+            return _('The order has been canceled (comment: "{comment}").').format(comment=comment)
         else:
             return _('The order has been canceled.')
 

@@ -11496,7 +11496,7 @@ msgstr ""
 #: pretix/control/logdisplay.py:537
 #, fuzzy
 #| msgid "The selected seat \"{seat}\" is not available."
-msgid "The order has been canceled (comment: \"{}\")."
+msgid "The order has been canceled (comment: \"{comment}\")."
 msgstr "A kiválasztott \"{seat}\" ülés nem elérhető."
 
 #: pretix/control/logdisplay.py:539 pretix/control/views/orders.py:1291

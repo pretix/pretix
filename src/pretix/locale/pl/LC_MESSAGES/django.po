@@ -12107,7 +12107,7 @@ msgstr ""
 #: pretix/control/logdisplay.py:537
 #, fuzzy
 #| msgid "A voucher has already been sent to this person."
-msgid "The order has been canceled (comment: \"{}\")."
+msgid "The order has been canceled (comment: \"{comment}\")."
 msgstr "Voucher został już wysłany do tej osoby."
 
 #: pretix/control/logdisplay.py:539 pretix/control/views/orders.py:1291

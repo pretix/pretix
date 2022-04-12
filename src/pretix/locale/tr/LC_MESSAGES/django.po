@@ -13634,7 +13634,7 @@ msgstr "Kullanıcı şu mesajı doğruladı: \"{}\""
 #: pretix/control/logdisplay.py:537
 #, fuzzy
 #| msgid "The order has been denied."
-msgid "The order has been canceled (comment: \"{}\")."
+msgid "The order has been canceled (comment: \"{comment}\")."
 msgstr "Sipariş reddedildi."
 
 #: pretix/control/logdisplay.py:539 pretix/control/views/orders.py:1291
