@@ -135,10 +135,12 @@ msgid "Unknown plugin: '{name}'."
 msgstr "Unbekannte Erweiterung: '{name}'."
 
 #: pretix/api/serializers/item.py:119 pretix/control/forms/item.py:929
+#: pretix/control/forms/item.py:926
 msgid "The bundled item must not be the same item as the bundling one."
 msgstr "Ein Produkt darf sich nicht selbst enthalten."
 
 #: pretix/api/serializers/item.py:122 pretix/control/forms/item.py:931
+#: pretix/control/forms/item.py:928
 msgid "The bundled item must not have bundles on its own."
 msgstr ""
 "Ein Produkt darf keine Produkte enthalten, die weitere Produkte enthalten."
@@ -151,7 +153,7 @@ msgstr ""
 "Varianten, Zusatzprodukte und Bundles können nicht per PATCH/PUT geändert "
 "werden, bitte nutzen Sie die separate Ressource."
 
-#: pretix/api/serializers/item.py:202
+#: pretix/api/serializers/item.py:202 pretix/control/forms/item.py:566
 msgid ""
 "Gift card products should not be associated with non-zero tax rates since "
 "sales tax will be applied when the gift card is redeemed."
@@ -160,6 +162,7 @@ msgstr ""
 "berechnet wird, wenn der Gutschein eingelöst wird."
 
 #: pretix/api/serializers/item.py:207 pretix/control/forms/item.py:575
+#: pretix/control/forms/item.py:572
 msgid "Gift card products should not be admission products at the same time."
 msgstr "Wertgutscheine können nicht gleichzeitig zum Einlass berechtigen."
 
@@ -195,7 +198,7 @@ msgid "The product \"{}\" is not available on this date."
 msgstr "Das Produkt \"{}\" ist an diesem Termin nicht verfügbar."
 
 #: pretix/api/serializers/organizer.py:120
-#: pretix/control/forms/organizer.py:574
+#: pretix/control/forms/organizer.py:574 pretix/control/forms/organizer.py:510
 msgid ""
 "A gift card with the same secret already exists in your or an affiliated "
 "organizer account."
@@ -204,21 +207,22 @@ msgstr ""
 "einem verbundenen Veranstalterkonto."
 
 #: pretix/api/serializers/organizer.py:202
-#: pretix/control/views/organizer.py:670
+#: pretix/control/views/organizer.py:670 pretix/control/views/organizer.py:669
 msgid "pretix account invitation"
 msgstr "pretix Team-Einladung"
 
 #: pretix/api/serializers/organizer.py:224
-#: pretix/control/views/organizer.py:769
+#: pretix/control/views/organizer.py:769 pretix/control/views/organizer.py:768
 msgid "This user already has been invited for this team."
 msgstr "Dieser Benutzer hat bereits eine Einladung für dieses Team."
 
 #: pretix/api/serializers/organizer.py:240
-#: pretix/control/views/organizer.py:786
+#: pretix/control/views/organizer.py:786 pretix/control/views/organizer.py:785
 msgid "This user already has permissions for this team."
 msgstr "Dieser Benutzer hat bereits Zugriff auf dieses Team."
 
 #: pretix/api/views/oauth.py:106 pretix/control/logdisplay.py:415
+#: pretix/control/logdisplay.py:416
 #, python-brace-format
 msgid ""
 "The application \"{application_name}\" has been authorized to access your "
@@ -229,16 +233,19 @@ msgstr ""
 
 #: pretix/api/views/order.py:502 pretix/control/views/orders.py:1323
 #: pretix/presale/views/order.py:731 pretix/presale/views/order.py:804
+#: pretix/api/views/order.py:499 pretix/control/views/orders.py:1321
 msgid "You cannot generate an invoice for this order."
 msgstr "Sie können für diese Bestellung keine Rechnung erzeugen."
 
 #: pretix/api/views/order.py:507 pretix/control/views/orders.py:1325
 #: pretix/presale/views/order.py:733 pretix/presale/views/order.py:806
+#: pretix/api/views/order.py:504 pretix/control/views/orders.py:1323
 msgid "An invoice for this order already exists."
 msgstr "Zu dieser Bestellung gibt es bereits eine Rechnung."
 
 #: pretix/api/views/order.py:533 pretix/control/views/orders.py:1449
-#: pretix/control/views/users.py:141
+#: pretix/control/views/users.py:141 pretix/api/views/order.py:530
+#: pretix/control/views/orders.py:1447
 msgid "There was an error sending the mail. Please try again later."
 msgstr ""
 "Es gab ein Fehler beim Senden der E-Mail. Bitte probieren Sie es später "
@@ -246,6 +253,7 @@ msgstr ""
 
 #: pretix/api/views/order.py:611 pretix/base/services/cart.py:143
 #: pretix/base/services/orders.py:132 pretix/presale/views/order.py:788
+#: pretix/api/views/order.py:608
 msgid "One of the selected products is not available in the selected country."
 msgstr ""
 "Eines der ausgewählten Produkte ist im ausgewählten Land nicht verfügbar."
@@ -265,7 +273,7 @@ msgstr "Bestellung als bezahlt markiert"
 #: pretix/api/webhooks.py:212 pretix/base/models/checkin.py:261
 #: pretix/base/notifications.py:251
 #: pretix/control/templates/pretixcontrol/event/mail.html:111
-#: pretix/control/views/orders.py:1288
+#: pretix/control/views/orders.py:1288 pretix/control/views/orders.py:1287
 msgid "Order canceled"
 msgstr "Bestellung storniert"
 
@@ -425,6 +433,7 @@ msgstr ""
 "Bitte überweisen Sie den vollen Betrag auf das Bankkonto 9999-9999-9999-"
 
 #: pretix/base/email.py:629 pretix/control/forms/organizer.py:495
+#: pretix/control/forms/organizer.py:431
 msgid "Mr Doe"
 msgstr "Herr Mustermann"
 
@@ -555,6 +564,7 @@ msgstr "Veranstaltungswährung"
 #: pretix/base/models/event.py:1285 pretix/base/settings.py:2546
 #: pretix/base/settings.py:2556 pretix/control/forms/subevents.py:609
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:268
+#: pretix/base/settings.py:2544 pretix/base/settings.py:2554
 msgid "Event start time"
 msgstr "Veranstaltungsbeginn"
 
@@ -617,6 +627,12 @@ msgstr "Interner Kommentar"
 #: pretix/plugins/checkinlists/exporters.py:572
 #: pretix/plugins/checkinlists/exporters.py:667
 #: pretix/plugins/checkinlists/exporters.py:668
+#: pretix/control/forms/item.py:483
+#: pretix/plugins/checkinlists/exporters.py:530
+#: pretix/plugins/checkinlists/exporters.py:533
+#: pretix/plugins/checkinlists/exporters.py:570
+#: pretix/plugins/checkinlists/exporters.py:665
+#: pretix/plugins/checkinlists/exporters.py:666
 msgid "Yes"
 msgstr "Ja"
 
@@ -635,6 +651,12 @@ msgstr "Ja"
 #: pretix/plugins/checkinlists/exporters.py:572
 #: pretix/plugins/checkinlists/exporters.py:667
 #: pretix/plugins/checkinlists/exporters.py:668
+#: pretix/control/forms/item.py:484
+#: pretix/plugins/checkinlists/exporters.py:530
+#: pretix/plugins/checkinlists/exporters.py:533
+#: pretix/plugins/checkinlists/exporters.py:570
+#: pretix/plugins/checkinlists/exporters.py:665
+#: pretix/plugins/checkinlists/exporters.py:666
 msgid "No"
 msgstr "Nein"
 
@@ -705,6 +727,7 @@ msgstr "Rechnungsnummer"
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:11
 #: pretix/plugins/checkinlists/exporters.py:611
 #: pretix/presale/templates/pretixpresale/organizers/index.html:43
+#: pretix/plugins/checkinlists/exporters.py:609
 msgid "Date"
 msgstr "Datum"
 
@@ -732,6 +755,7 @@ msgstr "Datum"
 #: pretix/plugins/ticketoutputpdf/exporters.py:91
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:43
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:64
+#: pretix/plugins/checkinlists/exporters.py:613
 msgid "Order code"
 msgstr "Bestellnummer"
 
@@ -807,6 +831,10 @@ msgstr "Rechnungsabsender:"
 #: pretix/presale/templates/pretixpresale/event/order.html:318
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:25
 #: pretix/presale/templates/pretixpresale/organizers/index.html:40
+#: pretix/base/settings.py:2546 pretix/base/settings.py:2556
+#: pretix/base/settings.py:2885 pretix/control/forms/organizer.py:566
+#: pretix/control/templates/pretixcontrol/organizers/devices.html:66
+#: pretix/plugins/checkinlists/exporters.py:617
 msgid "Name"
 msgstr "Name"
 
@@ -1018,6 +1046,7 @@ msgid "Description"
 msgstr "Beschreibung"
 
 #: pretix/base/exporters/invoices.py:321 pretix/control/forms/orders.py:310
+#: pretix/control/forms/orders.py:304
 msgid "Gross price"
 msgstr "Brutto-Preis"
 
@@ -1137,7 +1166,7 @@ msgstr ""
 #: pretix/base/exporters/orderlist.py:791
 #: pretix/base/exporters/orderlist.py:969
 #: pretix/base/exporters/waitinglist.py:111 pretix/control/forms/event.py:1311
-#: pretix/control/forms/organizer.py:97
+#: pretix/control/forms/organizer.py:97 pretix/control/forms/organizer.py:96
 msgid "Event slug"
 msgstr "Kurzname der Veranstaltung"
 
@@ -1344,6 +1373,7 @@ msgstr "Art der Gebühr"
 #: pretix/control/templates/pretixcontrol/subevents/detail.html:137
 #: pretix/plugins/checkinlists/exporters.py:334
 #: pretix/plugins/checkinlists/exporters.py:444
+#: pretix/control/templates/pretixcontrol/item/index.html:88
 msgid "Price"
 msgstr "Preis"
 
@@ -1364,6 +1394,7 @@ msgstr "Rechnungsadresse: Name"
 
 #: pretix/base/exporters/orderlist.py:542
 #: pretix/plugins/checkinlists/exporters.py:616
+#: pretix/plugins/checkinlists/exporters.py:614
 msgid "Position ID"
 msgstr "Position"
 
@@ -1393,6 +1424,8 @@ msgstr "Position"
 #: pretix/presale/templates/pretixpresale/event/checkout_membership.html:52
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:135
 #: pretix/presale/templates/pretixpresale/event/order_change.html:32
+#: pretix/control/forms/orders.py:309 pretix/control/forms/orders.py:361
+#: pretix/control/forms/orders.py:726
 msgctxt "subevent"
 msgid "Date"
 msgstr "Datum"
@@ -1419,6 +1452,8 @@ msgstr "Datum"
 #: pretix/presale/forms/order.py:36 pretix/presale/forms/waitinglist.py:77
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:10
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:45
+#: pretix/control/forms/orders.py:284
+#: pretix/plugins/checkinlists/exporters.py:616
 msgid "Product"
 msgstr "Produkt"
 
@@ -1444,6 +1479,7 @@ msgstr "Variante"
 #: pretix/presale/templates/pretixpresale/event/order_change.html:54
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:26
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:124
+#: pretix/control/forms/organizer.py:619
 msgid "Attendee name"
 msgstr "Name Teilnehmer*in"
 
@@ -1739,6 +1775,7 @@ msgstr "Wert zum Stichtag anzeigen"
 #: pretix/control/templates/pretixcontrol/organizers/teams.html:61
 #: pretix/control/templates/pretixcontrol/organizers/webhooks.html:51
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:62
+#: pretix/control/templates/pretixcontrol/organizers/devices.html:115
 msgid "All"
 msgstr "Alle"
 
@@ -1781,6 +1818,7 @@ msgid "Expiry date"
 msgstr "Ablaufdatum"
 
 #: pretix/base/exporters/orderlist.py:1064 pretix/control/forms/orders.py:784
+#: pretix/control/forms/orders.py:778
 msgid "Special terms and conditions"
 msgstr "Besondere Gutscheinbedingungen"
 
@@ -2051,7 +2089,7 @@ msgid "Repeat new password"
 msgstr "Neues Passwort wiederholen"
 
 #: pretix/base/forms/user.py:75 pretix/control/forms/organizer.py:338
-#: pretix/control/forms/users.py:58
+#: pretix/control/forms/users.py:58 pretix/control/forms/organizer.py:274
 msgid "Default timezone"
 msgstr "Standardzeitzone"
 
@@ -2309,6 +2347,7 @@ msgstr "Standard-Liste"
 #: pretix/base/models/orders.py:2630 pretix/base/settings.py:2898
 #: pretix/base/settings.py:2909
 #: pretix/control/templates/pretixcontrol/users/index.html:47
+#: pretix/base/settings.py:2896 pretix/base/settings.py:2907
 msgid "Full name"
 msgstr "Voller Name"
 
@@ -2353,6 +2392,7 @@ msgstr "Wenn diese Einstellung aus ist, erhalten Sie keine Benachrichtigungen."
 #: pretix/control/templates/pretixcontrol/users/form.html:4
 #: pretix/control/templates/pretixcontrol/users/form.html:6
 #: pretix/control/views/organizer.py:138 tests/base/test_mail.py:149
+#: pretix/control/views/organizer.py:137
 msgid "User"
 msgstr "Benutzer"
 
@@ -2377,6 +2417,7 @@ msgstr "Alle Produkte (auch neu erstellte)"
 
 #: pretix/base/models/checkin.py:52 pretix/plugins/badges/exporters.py:248
 #: pretix/plugins/checkinlists/exporters.py:694
+#: pretix/plugins/checkinlists/exporters.py:692
 msgid "Limit to products"
 msgstr "Auf Produkte beschränken"
 
@@ -2533,11 +2574,13 @@ msgstr "Diese ID ist bereits in Verwendung, bitte wählen Sie eine andere."
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html:67
 #: pretix/control/templates/pretixcontrol/organizers/gates.html:16
 #: pretix/plugins/checkinlists/exporters.py:623
+#: pretix/plugins/checkinlists/exporters.py:621
 msgid "Gate"
 msgstr "Station"
 
 #: pretix/base/models/devices.py:130
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:83
+#: pretix/control/templates/pretixcontrol/organizers/devices.html:72
 msgid "Setup date"
 msgstr "Installationsdatum"
 
@@ -2648,6 +2691,8 @@ msgstr "Veranstaltung"
 #: pretix/control/templates/pretixcontrol/organizers/teams.html:39
 #: pretix/control/templates/pretixcontrol/organizers/webhooks.html:37
 #: pretix/control/views/organizer.py:1489
+#: pretix/control/templates/pretixcontrol/organizers/devices.html:76
+#: pretix/control/views/organizer.py:1353
 msgid "Events"
 msgstr "Veranstaltungen"
 
@@ -2716,6 +2761,7 @@ msgstr ""
 "dieser Veranstaltungsreihe angezeigt."
 
 #: pretix/base/models/event.py:1324 pretix/base/settings.py:2347
+#: pretix/base/settings.py:2345
 msgid "Frontpage text"
 msgstr "Text auf der Startseite"
 
@@ -3143,7 +3189,8 @@ msgstr ""
 
 #: pretix/base/models/items.py:509 pretix/base/models/items.py:840
 #: pretix/control/forms/event.py:893 pretix/control/forms/item.py:515
-#: pretix/control/forms/item.py:693
+#: pretix/control/forms/item.py:693 pretix/control/forms/item.py:512
+#: pretix/control/forms/item.py:690
 msgid "Sales channels"
 msgstr "Verkaufskanäle"
 
@@ -3281,6 +3328,7 @@ msgid "This variation will not be sold after the given date."
 msgstr "Diese Variante wird nach diesem Termin nicht mehr verkauft."
 
 #: pretix/base/models/items.py:842 pretix/control/forms/item.py:698
+#: pretix/control/forms/item.py:695
 msgid ""
 "The sales channel selection for the product as a whole takes precedence, so "
 "if a sales channel is selected here but not on product level, the variation "
@@ -3436,6 +3484,7 @@ msgstr "Datei-Upload"
 #: pretix/plugins/checkinlists/exporters.py:612
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_create.html:27
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_update.html:41
+#: pretix/plugins/checkinlists/exporters.py:610
 msgid "Time"
 msgstr "Zeit"
 
@@ -3607,6 +3656,7 @@ msgid "Item"
 msgstr "Produkt"
 
 #: pretix/base/models/items.py:1590 pretix/control/forms/item.py:641
+#: pretix/control/forms/item.py:638
 msgid "Variations"
 msgstr "Varianten"
 
@@ -3812,6 +3862,7 @@ msgid "canceled"
 msgstr "storniert"
 
 #: pretix/base/models/orders.py:187 pretix/control/forms/orders.py:595
+#: pretix/control/forms/orders.py:589
 msgid "Customer"
 msgstr "Kunde"
 
@@ -3901,11 +3952,11 @@ msgstr "Der Gutschein \"{voucher}\" hat nicht mehr ausreichend Budget übrig."
 msgid "The voucher \"{voucher}\" has been used in the meantime."
 msgstr "Der Gutschein \"{voucher}\" wurde zwischenzeitlich verwendet."
 
-#: pretix/base/models/orders.py:1023 pretix/control/views/event.py:758
-#, fuzzy, python-format
-#| msgid "Your order: {code}"
+#: pretix/base/models/orders.py:1023 pretix/base/services/orders.py:937
+#: pretix/control/views/event.py:758
+#, python-format
 msgid "Your order: %(code)s"
-msgstr "Ihre Bestellung: {code}"
+msgstr "Ihre Bestellung: %(code)s"
 
 #: pretix/base/models/orders.py:1187
 msgid "<file>"
@@ -4060,11 +4111,10 @@ msgstr "Wert"
 msgid "Order position"
 msgstr "Bestelltes Produkt"
 
-#: pretix/base/models/orders.py:2399
-#, fuzzy, python-format
-#| msgid "Your event registration: {code}"
+#: pretix/base/models/orders.py:2399 pretix/base/services/orders.py:955
+#, python-format
 msgid "Your event registration: %(code)s"
-msgstr "Ihre Registrierung: {code}"
+msgstr "Ihre Registrierung: %(code)s"
 
 #: pretix/base/models/orders.py:2573
 msgid "Cart ID (e.g. session key)"
@@ -5501,7 +5551,7 @@ msgid "Ground floor, Row 3, Seat 4"
 msgstr "Parkett, Reihe 3, Sitz 4"
 
 #: pretix/base/pdf.py:399 pretix/base/pdf.py:405
-#: pretix/control/forms/orders.py:299
+#: pretix/control/forms/orders.py:299 pretix/control/forms/orders.py:293
 msgid "General admission"
 msgstr "Freie Platzwahl"
 
@@ -5559,7 +5609,7 @@ msgstr "Rechnungsadresse: Name: {part}"
 
 #: pretix/base/pdf.py:867
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html:66
-#: pretix/plugins/ticketoutputpdf/ticketoutput.py:112
+#: pretix/plugins/ticketoutputpdf/ticketoutput.py:112 pretix/base/pdf.py:861
 msgid "Ticket"
 msgstr "Ticket"
 
@@ -6308,6 +6358,7 @@ msgstr ""
 "Wertgutschein {card} bereits eingelöst wurde."
 
 #: pretix/base/services/orders.py:462 pretix/control/forms/orders.py:195
+#: pretix/control/forms/orders.py:189
 msgid ""
 "The cancellation fee cannot be higher than the payment credit of this order."
 msgstr ""
@@ -6331,13 +6382,14 @@ msgstr ""
 "verwendet. Bitte prüfen Sie die unten angezeigten Preise genau und versuchen "
 "Sie es erneut."
 
-#: pretix/base/services/orders.py:937
-#, python-brace-format
+#: pretix/base/services/orders.py:937 pretix/base/models/orders.py:1023
+#: pretix/control/views/event.py:758
+#, python-format, python-brace-format
 msgid "Your order: {code}"
 msgstr "Ihre Bestellung: {code}"
 
-#: pretix/base/services/orders.py:955
-#, python-brace-format
+#: pretix/base/services/orders.py:955 pretix/base/models/orders.py:2399
+#, python-format, python-brace-format
 msgid "Your event registration: {code}"
 msgstr "Ihre Registrierung: {code}"
 
@@ -6588,6 +6640,7 @@ msgid "Plugin: %s"
 msgstr "Plugin: %s"
 
 #: pretix/base/services/vouchers.py:56 pretix/control/logdisplay.py:423
+#: pretix/control/logdisplay.py:424
 #, python-brace-format
 msgid "The voucher has been sent to {recipient}."
 msgstr "Der Gutschein wurde an {recipient} verschickt."
@@ -7695,6 +7748,7 @@ msgstr ""
 "veranlassen."
 
 #: pretix/base/settings.py:1439 pretix/control/forms/orders.py:791
+#: pretix/control/forms/orders.py:785
 msgid "Keep a fixed cancellation fee"
 msgstr "Feste Stornogebühr einbehalten"
 
@@ -7703,6 +7757,7 @@ msgid "Keep payment, shipping and service fees"
 msgstr "Zahlungs-, Versand- und Servicegebühren einbehalten"
 
 #: pretix/base/settings.py:1460 pretix/control/forms/orders.py:802
+#: pretix/control/forms/orders.py:796
 msgid "Keep a percentual cancellation fee"
 msgstr "Prozentuale Stornogebühr einbehalten"
 
@@ -8334,7 +8389,7 @@ msgstr ""
 "Viele Grüße,\n"
 "Das {event} Team"
 
-#: pretix/base/settings.py:1927
+#: pretix/base/settings.py:1927 pretix/base/settings.py:1925
 #, python-brace-format
 msgid ""
 "Hello,\n"
@@ -8365,7 +8420,7 @@ msgstr ""
 "Viele Grüße,\n"
 "Das {event} Team"
 
-#: pretix/base/settings.py:1943
+#: pretix/base/settings.py:1943 pretix/base/settings.py:1941
 #, python-brace-format
 msgid ""
 "Hello,\n"
@@ -8390,7 +8445,7 @@ msgstr ""
 "Viele Grüße,\n"
 "Das {event} Team"
 
-#: pretix/base/settings.py:1956
+#: pretix/base/settings.py:1956 pretix/base/settings.py:1954
 #, python-brace-format
 msgid ""
 "Hello,\n"
@@ -8418,7 +8473,7 @@ msgstr ""
 "Viele Grüße,\n"
 "Das {event} Team"
 
-#: pretix/base/settings.py:1971
+#: pretix/base/settings.py:1971 pretix/base/settings.py:1969
 #, python-brace-format
 msgid ""
 "Hello,\n"
@@ -8437,7 +8492,7 @@ msgstr ""
 "Viele Grüße,\n"
 "Das {event} Team"
 
-#: pretix/base/settings.py:1989
+#: pretix/base/settings.py:1989 pretix/base/settings.py:1987
 #, python-brace-format
 msgid ""
 "Hello {attendee_name},\n"
@@ -8461,7 +8516,7 @@ msgstr ""
 "Viele Grüße,\n"
 "Das {event} Team"
 
-#: pretix/base/settings.py:2001
+#: pretix/base/settings.py:2001 pretix/base/settings.py:1999
 #, python-brace-format
 msgid ""
 "Hello,\n"
@@ -8484,7 +8539,7 @@ msgstr ""
 "Viele Grüße,\n"
 "Das {event} Team"
 
-#: pretix/base/settings.py:2013
+#: pretix/base/settings.py:2013 pretix/base/settings.py:2011
 #, python-brace-format
 msgid ""
 "Hello {name},\n"
@@ -8521,7 +8576,7 @@ msgstr ""
 "\n"
 "Das {organizer}-Team"
 
-#: pretix/base/settings.py:2031
+#: pretix/base/settings.py:2031 pretix/base/settings.py:2029
 #, python-brace-format
 msgid ""
 "Hello {name},\n"
@@ -8558,7 +8613,7 @@ msgstr ""
 "\n"
 "Das {organizer}-Team"
 
-#: pretix/base/settings.py:2049
+#: pretix/base/settings.py:2049 pretix/base/settings.py:2047
 #, python-brace-format
 msgid ""
 "Hello {name},\n"
@@ -8599,52 +8654,58 @@ msgstr ""
 #: pretix/base/settings.py:2122 pretix/base/settings.py:2130
 #: pretix/base/settings.py:2144 pretix/base/settings.py:2152
 #: pretix/base/settings.py:2166 pretix/base/settings.py:2173
+#: pretix/base/settings.py:2099 pretix/base/settings.py:2106
+#: pretix/base/settings.py:2120 pretix/base/settings.py:2128
+#: pretix/base/settings.py:2142 pretix/base/settings.py:2150
+#: pretix/base/settings.py:2164 pretix/base/settings.py:2171
 msgid "Please enter the hexadecimal code of a color, e.g. #990000."
 msgstr "Bitte geben Sie einen hexadezimalen Farbwert ein, z.B. #990000."
 
-#: pretix/base/settings.py:2105
+#: pretix/base/settings.py:2105 pretix/base/settings.py:2103
 msgid "Primary color"
 msgstr "Hauptfarbe"
 
-#: pretix/base/settings.py:2126
+#: pretix/base/settings.py:2126 pretix/base/settings.py:2124
 msgid "Accent color for success"
 msgstr "Akzentfarbe für Erfolg"
 
-#: pretix/base/settings.py:2127
+#: pretix/base/settings.py:2127 pretix/base/settings.py:2125
 msgid "We strongly suggest to use a shade of green."
 msgstr "Wir empfehlen dringend, einen Grünton zu verwenden."
 
-#: pretix/base/settings.py:2148
+#: pretix/base/settings.py:2148 pretix/base/settings.py:2146
 msgid "Accent color for errors"
 msgstr "Akzentfarbe für Fehler"
 
-#: pretix/base/settings.py:2149
+#: pretix/base/settings.py:2149 pretix/base/settings.py:2147
 msgid "We strongly suggest to use a shade of red."
 msgstr "Wir empfehlen dringend, einen Rotton zu verwenden."
 
-#: pretix/base/settings.py:2170
+#: pretix/base/settings.py:2170 pretix/base/settings.py:2168
 msgid "Page background color"
 msgstr "Hintergrundfarbe der Seite"
 
-#: pretix/base/settings.py:2185
+#: pretix/base/settings.py:2185 pretix/base/settings.py:2183
 msgid "Use round edges"
 msgstr "Runde Ecken verwenden"
 
 #: pretix/base/settings.py:2195
 #: pretix/control/templates/pretixcontrol/pdf/index.html:329
+#: pretix/base/settings.py:2193
 msgid "Font"
 msgstr "Schriftart"
 
-#: pretix/base/settings.py:2196
+#: pretix/base/settings.py:2196 pretix/base/settings.py:2194
 msgid "Only respected by modern browsers."
 msgstr "Nur von modernen Browsern respektiert."
 
 #: pretix/base/settings.py:2223 pretix/base/settings.py:2266
-#: pretix/control/forms/organizer.py:388
+#: pretix/control/forms/organizer.py:388 pretix/base/settings.py:2221
+#: pretix/base/settings.py:2264 pretix/control/forms/organizer.py:324
 msgid "Header image"
 msgstr "Header-Bild"
 
-#: pretix/base/settings.py:2226
+#: pretix/base/settings.py:2226 pretix/base/settings.py:2224
 msgid ""
 "If you provide a logo image, we will by default not show your event name and "
 "date in the page header. By default, we show your logo with a size of up to "
@@ -8660,19 +8721,21 @@ msgstr ""
 "dargestellt wird."
 
 #: pretix/base/settings.py:2246 pretix/base/settings.py:2288
+#: pretix/base/settings.py:2244 pretix/base/settings.py:2286
 msgid "Use header image in its full size"
 msgstr "Volle Höhe des Header-Bildes verwenden"
 
 #: pretix/base/settings.py:2247 pretix/base/settings.py:2289
+#: pretix/base/settings.py:2245 pretix/base/settings.py:2287
 msgid "We recommend to upload a picture at least 1170 pixels wide."
 msgstr "Das Header-Bild sollte mindestens 1170 Pixel breit sein."
 
-#: pretix/base/settings.py:2256
+#: pretix/base/settings.py:2256 pretix/base/settings.py:2254
 msgid "Show event title even if a header image is present"
 msgstr ""
 "Veranstaltungs-Titel auch anzeigen, obwohl ein Header-Bild hochgeladen wurde"
 
-#: pretix/base/settings.py:2257
+#: pretix/base/settings.py:2257 pretix/base/settings.py:2255
 msgid ""
 "The title will only be shown on the event front page. If no header image is "
 "uploaded for the event, but the header image from the organizer profile is "
@@ -8684,6 +8747,7 @@ msgstr ""
 "Veranstaltungstitel wird immer angezeigt."
 
 #: pretix/base/settings.py:2269 pretix/control/forms/organizer.py:392
+#: pretix/base/settings.py:2267 pretix/control/forms/organizer.py:328
 msgid ""
 "If you provide a logo image, we will by default not show your organization "
 "name in the page header. By default, we show your logo with a size of up to "
@@ -8698,17 +8762,17 @@ msgstr ""
 "im Bild zu verwenden, da es auf kleineren Bildschirmen auch kleiner "
 "dargestellt wird."
 
-#: pretix/base/settings.py:2298
+#: pretix/base/settings.py:2298 pretix/base/settings.py:2296
 msgid "Use header image also for events without an individually uploaded logo"
 msgstr ""
 "Benutze das Header-Bild auch für Veranstaltungen, für die kein eigenes "
 "Header-Bild hochgeladen wurde"
 
-#: pretix/base/settings.py:2306
+#: pretix/base/settings.py:2306 pretix/base/settings.py:2304
 msgid "Social media image"
 msgstr "Social-Media-Bild"
 
-#: pretix/base/settings.py:2309
+#: pretix/base/settings.py:2309 pretix/base/settings.py:2307
 msgid ""
 "This picture will be used as a preview if you post links to your ticket shop "
 "on social media. Facebook advises to use a picture size of 1200 x 630 "
@@ -8723,19 +8787,21 @@ msgstr ""
 "anzusiedeln. Wenn dieses Bild nicht angegeben ist, wird das "
 "Veranstaltungslogo von weiter oben verwendet."
 
-#: pretix/base/settings.py:2327
+#: pretix/base/settings.py:2327 pretix/base/settings.py:2325
 msgid "Logo image"
 msgstr "Logo"
 
-#: pretix/base/settings.py:2331
+#: pretix/base/settings.py:2331 pretix/base/settings.py:2329
 msgid "We will show your logo with a maximal height and width of 2.5 cm."
 msgstr "Wir zeigen das Logo mit einer maximalen Seitenlänge von 2.5cm an."
 
 #: pretix/base/settings.py:2357 pretix/base/settings.py:2463
+#: pretix/base/settings.py:2355 pretix/base/settings.py:2461
 msgid "Info text"
 msgstr "Info-Text"
 
 #: pretix/base/settings.py:2360 pretix/base/settings.py:2465
+#: pretix/base/settings.py:2358 pretix/base/settings.py:2463
 msgid ""
 "Not displayed anywhere by default, but if you want to, you can use this e.g. "
 "in ticket templates."
@@ -8743,11 +8809,11 @@ msgstr ""
 "Wird standardmäßig nicht angezeigt, kann aber z.B. in Ticket-Vorlagen "
 "verwendet werden."
 
-#: pretix/base/settings.py:2369
+#: pretix/base/settings.py:2369 pretix/base/settings.py:2367
 msgid "Banner text (top)"
 msgstr "Bannertext (oben)"
 
-#: pretix/base/settings.py:2372
+#: pretix/base/settings.py:2372 pretix/base/settings.py:2370
 msgid ""
 "This text will be shown above every page of your shop. Please only use this "
 "for very important messages."
@@ -8755,11 +8821,11 @@ msgstr ""
 "Dieser Text wird über jeder Seite des Shops angezeigt. Bitte benutzen Sie "
 "dies nur für sehr wichtige Mitteilungen."
 
-#: pretix/base/settings.py:2382
+#: pretix/base/settings.py:2382 pretix/base/settings.py:2380
 msgid "Banner text (bottom)"
 msgstr "Bannertext (unten)"
 
-#: pretix/base/settings.py:2385
+#: pretix/base/settings.py:2385 pretix/base/settings.py:2383
 msgid ""
 "This text will be shown below every page of your shop. Please only use this "
 "for very important messages."
@@ -8767,11 +8833,11 @@ msgstr ""
 "Dieser Text wird unter jeder Seite des Shops angezeigt. Bitte benutzen Sie "
 "dies nur für sehr wichtige Mitteilungen."
 
-#: pretix/base/settings.py:2395
+#: pretix/base/settings.py:2395 pretix/base/settings.py:2393
 msgid "Voucher explanation"
 msgstr "Gutschein-Erklärung"
 
-#: pretix/base/settings.py:2398
+#: pretix/base/settings.py:2398 pretix/base/settings.py:2396
 msgid ""
 "This text will be shown next to the input for a voucher code. You can use it "
 "e.g. to explain how to obtain a voucher code."
@@ -8779,11 +8845,11 @@ msgstr ""
 "Dieser Text wird neben der Gutscheincode-Eingabe angezeigt. Sie können ihn z."
 "B. nutzen um zu erklären, wie man an einen Gutscheincode gelangt."
 
-#: pretix/base/settings.py:2408
+#: pretix/base/settings.py:2408 pretix/base/settings.py:2406
 msgid "Attendee data explanation"
 msgstr "Erklärung zu Teilnehmerdatenerfassung"
 
-#: pretix/base/settings.py:2411
+#: pretix/base/settings.py:2411 pretix/base/settings.py:2409
 msgid ""
 "This text will be shown above the questions asked for every admission "
 "product. You can use it e.g. to explain why you need information from them."
@@ -8792,11 +8858,11 @@ msgstr ""
 "angezeigt. Sie können hierüber z.B. erklären, warum Sie die angeforderten "
 "Informationen benötigen."
 
-#: pretix/base/settings.py:2421
+#: pretix/base/settings.py:2421 pretix/base/settings.py:2419
 msgid "Additional success message"
 msgstr "Zusätzliche Meldung nach Bestellabschluss"
 
-#: pretix/base/settings.py:2422
+#: pretix/base/settings.py:2422 pretix/base/settings.py:2420
 msgid ""
 "This message will be shown after an order has been created successfully. It "
 "will be shown in additional to the default text."
@@ -8804,11 +8870,11 @@ msgstr ""
 "Diese Nachricht wird nach Abschluss des Bestellvorgangs zusätzlich zum "
 "Standard-Text angezeigt."
 
-#: pretix/base/settings.py:2434
+#: pretix/base/settings.py:2434 pretix/base/settings.py:2432
 msgid "Help text of the phone number field"
 msgstr "Beschreibung des Telefonnummern-Felds"
 
-#: pretix/base/settings.py:2441
+#: pretix/base/settings.py:2441 pretix/base/settings.py:2439
 msgid ""
 "Make sure to enter a valid email address. We will send you an order "
 "confirmation including a link that you need to access your order later."
@@ -8817,15 +8883,15 @@ msgstr ""
 "eine Bestellbestätigung schicken. Diese enthält einen Link, den Sie "
 "brauchen, falls Sie später auf Ihre Bestellung zugreifen möchten."
 
-#: pretix/base/settings.py:2448
+#: pretix/base/settings.py:2448 pretix/base/settings.py:2446
 msgid "Help text of the email field"
 msgstr "Beschreibung des E-Mail-Felds"
 
-#: pretix/base/settings.py:2474
+#: pretix/base/settings.py:2474 pretix/base/settings.py:2472
 msgid "Allow creating a new team during event creation"
 msgstr "Erlaube das Erstellen neuer Teams während der Event-Erstellung"
 
-#: pretix/base/settings.py:2475
+#: pretix/base/settings.py:2475 pretix/base/settings.py:2473
 msgid ""
 "Users that do not have access to all events under this organizer, must "
 "select one of their teams to have access to the created event. This setting "
@@ -8838,36 +8904,38 @@ msgstr ""
 "selbst wenn der Nutzer normalerweise keine Teams verwalten darf."
 
 #: pretix/base/settings.py:2547 pretix/base/settings.py:2557
+#: pretix/base/settings.py:2545 pretix/base/settings.py:2555
 msgid "Event start time (descending)"
 msgstr "Veranstaltungsbeginn (absteigend)"
 
 #: pretix/base/settings.py:2549 pretix/base/settings.py:2559
+#: pretix/base/settings.py:2547 pretix/base/settings.py:2557
 msgid "Name (descending)"
 msgstr "Name (absteigend)"
 
-#: pretix/base/settings.py:2554
+#: pretix/base/settings.py:2554 pretix/base/settings.py:2552
 msgctxt "subevent"
 msgid "Date ordering"
 msgstr "Sortierung der Termine"
 
-#: pretix/base/settings.py:2570
+#: pretix/base/settings.py:2570 pretix/base/settings.py:2568
 msgid "Link back to organizer overview on all event pages"
 msgstr ""
 "Auf die Veranstalterübersicht von allen Veranstaltungsseiten zurück verlinken"
 
-#: pretix/base/settings.py:2579
+#: pretix/base/settings.py:2579 pretix/base/settings.py:2577
 msgid "Homepage text"
 msgstr "Text auf der Startseite"
 
-#: pretix/base/settings.py:2581
+#: pretix/base/settings.py:2581 pretix/base/settings.py:2579
 msgid "This will be displayed on the organizer homepage."
 msgstr "Dieser Text wird auf der Veranstalter-Seite angezeigt."
 
-#: pretix/base/settings.py:2594
+#: pretix/base/settings.py:2594 pretix/base/settings.py:2592
 msgid "Length of gift card codes"
 msgstr "Code-Länge für Wertgutscheine"
 
-#: pretix/base/settings.py:2595
+#: pretix/base/settings.py:2595 pretix/base/settings.py:2593
 msgid ""
 "The system generates by default {}-character long gift card codes. However, "
 "if a different length is required, it can be set here."
@@ -8875,11 +8943,11 @@ msgstr ""
 "Das System erstellt standardmäßig {} Zeichen lange Codes für Wertgutscheine. "
 "Wenn eine andere Länge notwendig ist, kann diese hier gesetzt werden."
 
-#: pretix/base/settings.py:2605
+#: pretix/base/settings.py:2605 pretix/base/settings.py:2603
 msgid "Validity of gift card codes in years"
 msgstr "Gültigkeit von Wertgutscheinen in Jahren"
 
-#: pretix/base/settings.py:2606
+#: pretix/base/settings.py:2606 pretix/base/settings.py:2604
 msgid ""
 "If you set a number here, gift cards will by default expire at the end of "
 "the year after this many years. If you keep it empty, gift cards do not have "
@@ -8889,11 +8957,11 @@ msgstr ""
 "viele Jahre nach dem Ende des Jahres der Ausstellung ab. Wenn Sie nichts "
 "eintragen, laufen Gutscheine standardmäßig nicht explizit ab."
 
-#: pretix/base/settings.py:2615
+#: pretix/base/settings.py:2615 pretix/base/settings.py:2613
 msgid "Enable cookie consent management features"
 msgstr "Cookie-Consent-Management aktivieren"
 
-#: pretix/base/settings.py:2621
+#: pretix/base/settings.py:2621 pretix/base/settings.py:2619
 msgid ""
 "By clicking \"Accept all cookies\", you agree to the storing of cookies and "
 "use of similar technologies on your device."
@@ -8901,11 +8969,11 @@ msgstr ""
 "Wenn Sie \"Alle akzeptieren\" klicken, erklären Sie sich mit der Speicherung "
 "von Cookies und der Nutzung vergleichbarer Technologien einverstanden."
 
-#: pretix/base/settings.py:2628
+#: pretix/base/settings.py:2628 pretix/base/settings.py:2626
 msgid "Dialog text"
 msgstr "Dialog-Text"
 
-#: pretix/base/settings.py:2635
+#: pretix/base/settings.py:2635 pretix/base/settings.py:2633
 msgid ""
 "We use cookies and similar technologies to gather data that allows us to "
 "improve this website and our offerings. If you do not agree, we will only "
@@ -8918,39 +8986,39 @@ msgstr ""
 "zwingend erforderlich sind um die Funktionen zu realisieren, die diese Seite "
 "anbietet."
 
-#: pretix/base/settings.py:2643
+#: pretix/base/settings.py:2643 pretix/base/settings.py:2641
 msgid "Secondary dialog text"
 msgstr "Sekundärer Dialog-Text"
 
-#: pretix/base/settings.py:2649
+#: pretix/base/settings.py:2649 pretix/base/settings.py:2647
 msgid "Privacy settings"
 msgstr "Datenschutz-Einstellungen"
 
-#: pretix/base/settings.py:2654
+#: pretix/base/settings.py:2654 pretix/base/settings.py:2652
 msgid "Dialog title"
 msgstr "Dialog-Titel"
 
-#: pretix/base/settings.py:2660
+#: pretix/base/settings.py:2660 pretix/base/settings.py:2658
 msgid "Accept all cookies"
 msgstr "Alle akzeptieren"
 
-#: pretix/base/settings.py:2665
+#: pretix/base/settings.py:2665 pretix/base/settings.py:2663
 msgid "\"Accept\" button description"
 msgstr "Beschriftung \"Akzeptieren\"-Button"
 
-#: pretix/base/settings.py:2671
+#: pretix/base/settings.py:2671 pretix/base/settings.py:2669
 msgid "Required cookies only"
 msgstr "Nur erforderliche Cookies"
 
-#: pretix/base/settings.py:2676
+#: pretix/base/settings.py:2676 pretix/base/settings.py:2674
 msgid "\"Reject\" button description"
 msgstr "Beschriftung \"Ablehnen\"-Button"
 
-#: pretix/base/settings.py:2686
+#: pretix/base/settings.py:2686 pretix/base/settings.py:2684
 msgid "Customers can choose their own seats"
 msgstr "Kunden können ihre Sitzplätze selbst auswählen"
 
-#: pretix/base/settings.py:2687
+#: pretix/base/settings.py:2687 pretix/base/settings.py:2685
 msgid ""
 "If disabled, you will need to manually assign seats in the backend. Note "
 "that this can mean people will not know their seat after their purchase and "
@@ -8960,29 +9028,29 @@ msgstr ""
 "zuweisen. Das bedeutet, dass Ticketkäufer ihren Platz zum Kaufzeitpunkt "
 "nicht kennen und der Platz ggf. nicht auf dem Ticket abgedruckt ist."
 
-#: pretix/base/settings.py:2711
+#: pretix/base/settings.py:2711 pretix/base/settings.py:2709
 msgid "Show button to copy user input from other products"
 msgstr "Zeige bei mehreren Tickets einen Button um Eingaben zu kopieren"
 
-#: pretix/base/settings.py:2720
+#: pretix/base/settings.py:2720 pretix/base/settings.py:2718
 msgid "Most common English titles"
 msgstr "Übliche englische Titel"
 
-#: pretix/base/settings.py:2730
+#: pretix/base/settings.py:2730 pretix/base/settings.py:2728
 msgid "Most common German titles"
 msgstr "Übliche deutsche Titel"
 
-#: pretix/base/settings.py:2738
+#: pretix/base/settings.py:2738 pretix/base/settings.py:2736
 msgctxt "person_name_salutation"
 msgid "Ms"
 msgstr "Frau"
 
-#: pretix/base/settings.py:2739
+#: pretix/base/settings.py:2739 pretix/base/settings.py:2737
 msgctxt "person_name_salutation"
 msgid "Mr"
 msgstr "Herr"
 
-#: pretix/base/settings.py:2740
+#: pretix/base/settings.py:2740 pretix/base/settings.py:2738
 msgctxt "person_name_salutation"
 msgid "Mx"
 msgstr "divers"
@@ -8991,7 +9059,11 @@ msgstr "divers"
 #: pretix/base/settings.py:2794 pretix/base/settings.py:2844
 #: pretix/base/settings.py:2857 pretix/base/settings.py:2871
 #: pretix/base/settings.py:2922 pretix/base/settings.py:2940
-#: pretix/base/settings.py:2959
+#: pretix/base/settings.py:2959 pretix/base/settings.py:2763
+#: pretix/base/settings.py:2776 pretix/base/settings.py:2792
+#: pretix/base/settings.py:2842 pretix/base/settings.py:2855
+#: pretix/base/settings.py:2869 pretix/base/settings.py:2920
+#: pretix/base/settings.py:2938 pretix/base/settings.py:2957
 msgid "Given name"
 msgstr "Vorname"
 
@@ -9000,7 +9072,12 @@ msgstr "Vorname"
 #: pretix/base/settings.py:2828 pretix/base/settings.py:2843
 #: pretix/base/settings.py:2858 pretix/base/settings.py:2872
 #: pretix/base/settings.py:2923 pretix/base/settings.py:2941
-#: pretix/base/settings.py:2960
+#: pretix/base/settings.py:2960 pretix/base/settings.py:2764
+#: pretix/base/settings.py:2777 pretix/base/settings.py:2793
+#: pretix/base/settings.py:2809 pretix/base/settings.py:2826
+#: pretix/base/settings.py:2841 pretix/base/settings.py:2856
+#: pretix/base/settings.py:2870 pretix/base/settings.py:2921
+#: pretix/base/settings.py:2939 pretix/base/settings.py:2958
 msgid "Family name"
 msgstr "Nachname"
 
@@ -9009,7 +9086,12 @@ msgstr "Nachname"
 #: pretix/base/settings.py:2835 pretix/base/settings.py:2850
 #: pretix/base/settings.py:2880 pretix/base/settings.py:2903
 #: pretix/base/settings.py:2931 pretix/base/settings.py:2950
-#: pretix/base/settings.py:2974
+#: pretix/base/settings.py:2974 pretix/base/settings.py:2768
+#: pretix/base/settings.py:2784 pretix/base/settings.py:2800
+#: pretix/base/settings.py:2815 pretix/base/settings.py:2833
+#: pretix/base/settings.py:2848 pretix/base/settings.py:2878
+#: pretix/base/settings.py:2901 pretix/base/settings.py:2929
+#: pretix/base/settings.py:2948 pretix/base/settings.py:2972
 msgctxt "person_name_sample"
 msgid "John"
 msgstr "Max"
@@ -9019,101 +9101,116 @@ msgstr "Max"
 #: pretix/base/settings.py:2837 pretix/base/settings.py:2851
 #: pretix/base/settings.py:2881 pretix/base/settings.py:2932
 #: pretix/base/settings.py:2951 pretix/base/settings.py:2975
+#: pretix/base/settings.py:2769 pretix/base/settings.py:2785
+#: pretix/base/settings.py:2801 pretix/base/settings.py:2817
+#: pretix/base/settings.py:2835 pretix/base/settings.py:2849
+#: pretix/base/settings.py:2879 pretix/base/settings.py:2930
+#: pretix/base/settings.py:2949 pretix/base/settings.py:2973
 msgctxt "person_name_sample"
 msgid "Doe"
 msgstr "Mustermann"
 
 #: pretix/base/settings.py:2777 pretix/base/settings.py:2793
 #: pretix/base/settings.py:2825 pretix/base/settings.py:2939
-#: pretix/base/settings.py:2958
+#: pretix/base/settings.py:2958 pretix/base/settings.py:2775
+#: pretix/base/settings.py:2791 pretix/base/settings.py:2823
+#: pretix/base/settings.py:2937 pretix/base/settings.py:2956
 msgctxt "person_name"
 msgid "Title"
 msgstr "Titel"
 
 #: pretix/base/settings.py:2785 pretix/base/settings.py:2801
 #: pretix/base/settings.py:2834 pretix/base/settings.py:2949
-#: pretix/base/settings.py:2973
+#: pretix/base/settings.py:2973 pretix/base/settings.py:2783
+#: pretix/base/settings.py:2799 pretix/base/settings.py:2832
+#: pretix/base/settings.py:2947 pretix/base/settings.py:2971
 msgctxt "person_name_sample"
 msgid "Dr"
 msgstr "Dr."
 
 #: pretix/base/settings.py:2809 pretix/base/settings.py:2826
+#: pretix/base/settings.py:2807 pretix/base/settings.py:2824
 msgid "First name"
 msgstr "Vorname"
 
 #: pretix/base/settings.py:2810 pretix/base/settings.py:2827
+#: pretix/base/settings.py:2808 pretix/base/settings.py:2825
 msgid "Middle name"
 msgstr "Mittlerer Name"
 
 #: pretix/base/settings.py:2891 pretix/base/settings.py:2902
-#: pretix/control/forms/organizer.py:489
+#: pretix/control/forms/organizer.py:489 pretix/base/settings.py:2889
+#: pretix/base/settings.py:2900 pretix/control/forms/organizer.py:425
 msgctxt "person_name_sample"
 msgid "John Doe"
 msgstr "Max Mustermann"
 
-#: pretix/base/settings.py:2897
+#: pretix/base/settings.py:2897 pretix/base/settings.py:2895
 msgid "Calling name"
 msgstr "Rufname"
 
-#: pretix/base/settings.py:2910
+#: pretix/base/settings.py:2910 pretix/base/settings.py:2908
 msgid "Latin transcription"
 msgstr "Transkription"
 
 #: pretix/base/settings.py:2921 pretix/base/settings.py:2938
-#: pretix/base/settings.py:2957
+#: pretix/base/settings.py:2957 pretix/base/settings.py:2919
+#: pretix/base/settings.py:2936 pretix/base/settings.py:2955
 msgctxt "person_name"
 msgid "Salutation"
 msgstr "Anrede"
 
 #: pretix/base/settings.py:2930 pretix/base/settings.py:2948
-#: pretix/base/settings.py:2972
+#: pretix/base/settings.py:2972 pretix/base/settings.py:2928
+#: pretix/base/settings.py:2946 pretix/base/settings.py:2970
 msgctxt "person_name_sample"
 msgid "Mr"
 msgstr "Herr"
 
-#: pretix/base/settings.py:2961
+#: pretix/base/settings.py:2961 pretix/base/settings.py:2959
 msgctxt "person_name"
 msgid "Degree (after name)"
 msgstr "nachgestellter Titel"
 
-#: pretix/base/settings.py:2976
+#: pretix/base/settings.py:2976 pretix/base/settings.py:2974
 msgctxt "person_name_sample"
 msgid "MA"
 msgstr "MA"
 
 #: pretix/base/settings.py:3077 pretix/control/forms/event.py:210
+#: pretix/base/settings.py:3075
 msgid ""
 "Your default locale must also be enabled for your event (see box above)."
 msgstr ""
 "Die Standardsprache muss eine der aktivierten Sprachen sein (siehe weiter "
 "oben)."
 
-#: pretix/base/settings.py:3081
+#: pretix/base/settings.py:3081 pretix/base/settings.py:3079
 msgid ""
 "You cannot require specifying attendee names if you do not ask for them."
 msgstr ""
 "Sie können die Angabe von Teilnehmernamen nur erfordern, wenn Sie auch nach "
 "Namen fragen."
 
-#: pretix/base/settings.py:3085
+#: pretix/base/settings.py:3085 pretix/base/settings.py:3083
 msgid "You have to ask for attendee emails if you want to make them required."
 msgstr ""
 "Sie müssen E-Mail-Adressen pro Ticket erfassen, wenn sie erforderlich sein "
 "sollen."
 
-#: pretix/base/settings.py:3089
+#: pretix/base/settings.py:3089 pretix/base/settings.py:3087
 msgid ""
 "You have to ask for invoice addresses if you want to make them required."
 msgstr ""
 "Sie müssen Rechnungsadressen erfassen, wenn sie erforderlich sein sollen."
 
-#: pretix/base/settings.py:3093
+#: pretix/base/settings.py:3093 pretix/base/settings.py:3091
 msgid "You have to require invoice addresses to require for company names."
 msgstr ""
 "Sie müssen Rechnungsadressen erfordern, damit Firmennamen erforderlich sein "
 "können."
 
-#: pretix/base/settings.py:3100
+#: pretix/base/settings.py:3100 pretix/base/settings.py:3098
 msgid "The last payment date cannot be before the end of presale."
 msgstr ""
 "Das letzte Zahlungsdatum kann nicht vor dem Ende des Vorverkaufs liegen."
@@ -9604,7 +9701,8 @@ msgstr "Dateityp nicht erlaubt!"
 #: pretix/control/templates/pretixcontrol/event/fragment_subevent_choice_simple.html:5
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:52
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:114
-#: pretix/plugins/sendmail/forms.py:113
+#: pretix/plugins/sendmail/forms.py:113 pretix/control/forms/orders.py:728
+#: pretix/control/forms/orders.py:905
 msgctxt "subevent"
 msgid "All dates"
 msgstr "Alle Termine"
@@ -9695,28 +9793,34 @@ msgid "Default ({value})"
 msgstr "Standard ({value})"
 
 #: pretix/control/forms/event.py:365 pretix/control/forms/organizer.py:132
+#: pretix/control/forms/organizer.py:131
 msgid "Custom domain"
 msgstr "Eigene Domain"
 
 #: pretix/control/forms/event.py:367 pretix/control/forms/organizer.py:134
+#: pretix/control/forms/organizer.py:133
 msgid "You need to configure the custom domain in the webserver beforehand."
 msgstr "Sie müssen die eigene Domain vorher im Webserver konfigurieren."
 
 #: pretix/control/forms/event.py:385 pretix/control/forms/organizer.py:142
+#: pretix/control/forms/organizer.py:141
 msgid "You cannot choose the base domain of this installation."
 msgstr "Sie können die Basisdomain dieser Installation nicht verwenden."
 
 #: pretix/control/forms/event.py:389 pretix/control/forms/organizer.py:147
+#: pretix/control/forms/organizer.py:146
 msgid "This domain is already in use for a different event or organizer."
 msgstr ""
 "Diese Domain ist bereits für eine andere Veranstaltung oder ein anderes "
 "Veranstalterkonto in Verwendung, bitte wählen Sie eine andere."
 
 #: pretix/control/forms/event.py:460 pretix/control/forms/organizer.py:341
+#: pretix/control/forms/organizer.py:277
 msgid "Name format"
 msgstr "Namensformat"
 
 #: pretix/control/forms/event.py:461 pretix/control/forms/organizer.py:342
+#: pretix/control/forms/organizer.py:278
 msgid ""
 "This defines how pretix will ask for human names. Changing this after you "
 "already received orders might lead to unexpected behavior when sorting or "
@@ -9727,10 +9831,12 @@ msgstr ""
 "nach Namen oder Ändern von Namen zu unerwartetem Verhalten führen."
 
 #: pretix/control/forms/event.py:466 pretix/control/forms/organizer.py:347
+#: pretix/control/forms/organizer.py:283
 msgid "Allowed titles"
 msgstr "Zur Auswahl stehende Titel"
 
 #: pretix/control/forms/event.py:467 pretix/control/forms/organizer.py:348
+#: pretix/control/forms/organizer.py:284
 msgid ""
 "If the naming scheme you defined above allows users to input a title, you "
 "can use this to restrict the set of selectable titles."
@@ -9739,11 +9845,13 @@ msgstr ""
 "Auswahl der Titel mit dieser Option eingeschränkt werden."
 
 #: pretix/control/forms/event.py:580 pretix/control/forms/organizer.py:414
+#: pretix/control/forms/organizer.py:350
 #, python-brace-format
 msgid "Ask for {fields}, display like {example}"
 msgstr "Frage nach {fields}, Anzeige wie {example}"
 
 #: pretix/control/forms/event.py:586 pretix/control/forms/organizer.py:420
+#: pretix/control/forms/organizer.py:356
 msgid "Free text input"
 msgstr "Freie Texteingabe"
 
@@ -9832,14 +9940,17 @@ msgstr ""
 "Online-Shop muss ausgewählt werden."
 
 #: pretix/control/forms/event.py:902 pretix/control/forms/organizer.py:435
+#: pretix/control/forms/organizer.py:371
 msgid "Bcc address"
 msgstr "BCC-Adresse"
 
 #: pretix/control/forms/event.py:903 pretix/control/forms/organizer.py:436
+#: pretix/control/forms/organizer.py:372
 msgid "All emails will be sent to this address as a Bcc copy"
 msgstr "Alle E-Mails werden in Bcc-Kopie an diese Adresse geschickt"
 
 #: pretix/control/forms/event.py:909 pretix/control/forms/organizer.py:442
+#: pretix/control/forms/organizer.py:378
 msgid "Signature"
 msgstr "Signatur"
 
@@ -9849,6 +9960,7 @@ msgid "This will be attached to every email. Available placeholders: {event}"
 msgstr "Diese wird an jede E-Mail angehängt. Verfügbare Platzhalter: {event}"
 
 #: pretix/control/forms/event.py:917 pretix/control/forms/organizer.py:450
+#: pretix/control/forms/organizer.py:386
 msgid "e.g. your contact details"
 msgstr "z.B. Ihre Kontaktdaten"
 
@@ -9889,6 +10001,8 @@ msgstr "Text an die Teilnehmer"
 #: pretix/control/templates/pretixcontrol/event/mail.html:88
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:100
 #: pretix/control/templates/pretixcontrol/pdf/index.html:413
+#: pretix/control/forms/organizer.py:392 pretix/control/forms/organizer.py:397
+#: pretix/control/forms/organizer.py:402
 msgid "Text"
 msgstr "Text"
 
@@ -9944,6 +10058,8 @@ msgstr "Abgelehnte Bestellung"
 #: pretix/control/forms/event.py:1094 pretix/control/forms/orders.py:639
 #: pretix/control/forms/orders.py:833 pretix/control/forms/organizer.py:503
 #: pretix/control/forms/vouchers.py:295 pretix/plugins/sendmail/forms.py:61
+#: pretix/control/forms/orders.py:633 pretix/control/forms/orders.py:827
+#: pretix/control/forms/organizer.py:439
 #, python-brace-format
 msgid "Available placeholders: {list}"
 msgstr "Verfügbare Platzhalter: {list}"
@@ -10038,7 +10154,7 @@ msgid "The given voucher code does not exist."
 msgstr "Der ausgewählte Gutschein existiert nicht."
 
 #: pretix/control/forms/event.py:1307 pretix/control/forms/organizer.py:93
-#: pretix/control/views/shredder.py:163
+#: pretix/control/views/shredder.py:163 pretix/control/forms/organizer.py:92
 msgid "The slug you entered was not correct."
 msgstr "Der Kurzname der Veranstaltung war nicht korrekt."
 
@@ -10222,17 +10338,19 @@ msgstr "Alle Produkte"
 
 #: pretix/control/forms/filter.py:419 pretix/control/forms/filter.py:1862
 #: pretix/control/forms/filter.py:2144 pretix/control/forms/vouchers.py:134
-#: pretix/control/views/typeahead.py:596
+#: pretix/control/views/typeahead.py:596 pretix/control/views/typeahead.py:584
 #, python-brace-format
 msgid "{product} – Any variation"
 msgstr "{product} - Beliebige Variante"
 
 #: pretix/control/forms/filter.py:483 pretix/control/forms/orders.py:745
+#: pretix/control/forms/orders.py:739
 msgctxt "subevent"
 msgid "All dates starting at or after"
 msgstr "Alle Termine beginnend am oder nach"
 
 #: pretix/control/forms/filter.py:489 pretix/control/forms/orders.py:752
+#: pretix/control/forms/orders.py:746
 msgctxt "subevent"
 msgid "All dates starting before"
 msgstr "Alle Termine beginnend vor"
@@ -10513,7 +10631,8 @@ msgstr "Gutschein suchen"
 
 #: pretix/control/forms/filter.py:1868 pretix/control/forms/vouchers.py:125
 #: pretix/control/views/typeahead.py:604 pretix/control/views/typeahead.py:608
-#: pretix/control/views/vouchers.py:121
+#: pretix/control/views/vouchers.py:121 pretix/control/views/typeahead.py:592
+#: pretix/control/views/typeahead.py:596
 #, python-brace-format
 msgid "Any product in quota \"{quota}\""
 msgstr "Beliebiges Produkt des Kontingents \"{quota}\""
@@ -10557,6 +10676,7 @@ msgstr "Fehlgeschlagene Check-Ins"
 #: pretix/control/forms/filter.py:2083
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html:64
 #: pretix/plugins/checkinlists/exporters.py:614
+#: pretix/plugins/checkinlists/exporters.py:612
 msgid "Scan type"
 msgstr "Scan-Typ"
 
@@ -10567,6 +10687,7 @@ msgstr "Alle Richtungen"
 #: pretix/control/forms/filter.py:2094
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html:67
 #: pretix/plugins/checkinlists/exporters.py:620
+#: pretix/plugins/checkinlists/exporters.py:618
 msgid "Device"
 msgstr "Gerät"
 
@@ -10597,11 +10718,14 @@ msgstr "Ende"
 #: pretix/plugins/checkinlists/exporters.py:422
 #: pretix/plugins/checkinlists/exporters.py:613
 #: pretix/plugins/checkinlists/exporters.py:686
+#: pretix/plugins/checkinlists/exporters.py:611
+#: pretix/plugins/checkinlists/exporters.py:684
 msgid "Check-in list"
 msgstr "Check-in-Liste"
 
 #: pretix/control/forms/filter.py:2221
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:82
+#: pretix/control/templates/pretixcontrol/organizers/devices.html:71
 msgid "Software"
 msgstr "Software"
 
@@ -10872,6 +10996,7 @@ msgstr ""
 "gibt. Sie können die einzelnen Varianten im nächsten Schritt eingeben."
 
 #: pretix/control/forms/item.py:298 pretix/control/forms/item.py:545
+#: pretix/control/forms/item.py:542
 msgid "No category"
 msgstr "Keine Kategorie"
 
@@ -10915,32 +11040,32 @@ msgstr "Größe"
 msgid "Number of tickets"
 msgstr "Anzahl Tickets"
 
-#: pretix/control/forms/item.py:459
+#: pretix/control/forms/item.py:459 pretix/control/forms/item.py:456
 msgid "Quota name is required."
 msgstr "Kontingentname ist erforderlich."
 
-#: pretix/control/forms/item.py:464
+#: pretix/control/forms/item.py:464 pretix/control/forms/item.py:461
 msgid "Please select a quota."
 msgstr "Bitte wählen Sie ein Kontingent aus."
 
 #: pretix/control/forms/item.py:485 pretix/plugins/badges/forms.py:75
-#: pretix/plugins/ticketoutputpdf/forms.py:53
+#: pretix/plugins/ticketoutputpdf/forms.py:53 pretix/control/forms/item.py:482
 msgid "(Event default)"
 msgstr "(Veranstaltungs-Standard)"
 
-#: pretix/control/forms/item.py:495
+#: pretix/control/forms/item.py:495 pretix/control/forms/item.py:492
 msgid "Choose automatically depending on event settings"
 msgstr "Automatisch auf Basis der Veranstaltungseinstellungen"
 
-#: pretix/control/forms/item.py:496
+#: pretix/control/forms/item.py:496 pretix/control/forms/item.py:493
 msgid "Yes, if ticket generation is enabled in general"
 msgstr "Ja, wenn Ticketing insgesamt aktiviert ist"
 
-#: pretix/control/forms/item.py:497
+#: pretix/control/forms/item.py:497 pretix/control/forms/item.py:494
 msgid "Never"
 msgstr "Niemals"
 
-#: pretix/control/forms/item.py:507
+#: pretix/control/forms/item.py:507 pretix/control/forms/item.py:504
 msgid ""
 "e.g. This reduced price is available for full-time students, jobless and "
 "people over 65. This ticket includes access to all parts of the event, "
@@ -10950,19 +11075,16 @@ msgstr ""
 "Arbeitslose und Menschen über 65. Das Ticket enthält Zugang zu allen Teilen "
 "der Veranstaltung außer des VIP-Bereiches."
 
-#: pretix/control/forms/item.py:531
+#: pretix/control/forms/item.py:531 pretix/control/forms/item.py:528
 msgid "Shown independently of other products"
 msgstr "Unabhängig von anderen Produkten angezeigt"
 
-#: pretix/control/forms/item.py:554
+#: pretix/control/forms/item.py:554 pretix/control/forms/item.py:551
 msgid "No membership granted"
 msgstr "Keine Mitgliedschaft angelegt"
 
 #: pretix/control/forms/item.py:569
 #, fuzzy, python-format
-#| msgid ""
-#| "Gift card products should not be associated with non-zero tax rates since "
-#| "sales tax will be applied when the gift card is redeemed."
 msgid ""
 "Gift card products should use a tax rule with a rate of 0% since sales tax "
 "will be applied when the gift card is redeemed."
@@ -10970,7 +11092,7 @@ msgstr ""
 "Wertgutscheine müssen einem 0%-Steuersatz zugeordnet sein, da Umsatzsteuer "
 "berechnet wird, wenn der Gutschein eingelöst wird."
 
-#: pretix/control/forms/item.py:650
+#: pretix/control/forms/item.py:650 pretix/control/forms/item.py:647
 #, python-format
 msgid ""
 "The variation \"%s\" cannot be deleted because it has already been ordered "
@@ -10981,15 +11103,15 @@ msgstr ""
 "wurde oder sich in einem Warenkorb befindet. Bitte setzen Sie die Variante "
 "stattdessen auf \"inaktiv\"."
 
-#: pretix/control/forms/item.py:744
+#: pretix/control/forms/item.py:744 pretix/control/forms/item.py:741
 msgid "Add-ons"
 msgstr "Zusatzprodukte"
 
-#: pretix/control/forms/item.py:772
+#: pretix/control/forms/item.py:772 pretix/control/forms/item.py:769
 msgid "You added the same add-on category twice"
 msgstr "Sie haben dieselbe Kategorie zweimal hinzugefügt."
 
-#: pretix/control/forms/item.py:817
+#: pretix/control/forms/item.py:817 pretix/control/forms/item.py:814
 msgid ""
 "Be aware that setting a minimal number makes it impossible to buy this "
 "product if all available add-ons are sold out."
@@ -10998,22 +11120,24 @@ msgstr ""
 "macht, das Basisprodukt zu kaufen, wenn alle (oder zu viele) Zusatzprodukte "
 "ausverkauft sind."
 
-#: pretix/control/forms/item.py:824
+#: pretix/control/forms/item.py:824 pretix/control/forms/item.py:821
 msgid "Bundled products"
 msgstr "Enthaltene Produkte"
 
-#: pretix/control/forms/item.py:868
+#: pretix/control/forms/item.py:868 pretix/control/forms/item.py:865
 msgid "You added the same bundled product twice."
 msgstr "Du hast das selbe enthaltene Produkt zweimal hinzugefügt."
 
 #: pretix/control/forms/item.py:874
 #: pretix/control/templates/pretixcontrol/item/include_bundles.html:23
 #: pretix/control/templates/pretixcontrol/item/include_bundles.html:50
+#: pretix/control/forms/item.py:871
 msgid "Bundled product"
 msgstr "Enthaltenes Produkt"
 
 #: pretix/control/forms/item.py:898 pretix/control/forms/orders.py:334
-#: pretix/control/forms/orders.py:505
+#: pretix/control/forms/orders.py:505 pretix/control/forms/item.py:895
+#: pretix/control/forms/orders.py:328 pretix/control/forms/orders.py:499
 msgid "inactive"
 msgstr "deaktiviert"
 
@@ -11122,6 +11246,7 @@ msgstr ""
 "mögliche Zahlungsdatum ignoriert."
 
 #: pretix/control/forms/orders.py:152 pretix/control/forms/orders.py:202
+#: pretix/control/forms/orders.py:196
 msgid "Notify customer by email"
 msgstr "Kunden per E-Mail benachrichtigen"
 
@@ -11159,7 +11284,7 @@ msgid ""
 "is present in the configured email text."
 msgstr ""
 
-#: pretix/control/forms/orders.py:209
+#: pretix/control/forms/orders.py:209 pretix/control/forms/orders.py:203
 msgid "Payment amount"
 msgstr "Zahlbetrag"
 
@@ -11168,19 +11293,19 @@ msgstr "Zahlbetrag"
 #: pretix/plugins/reports/exporters.py:396
 #: pretix/plugins/reports/exporters.py:458
 #: pretix/plugins/reports/exporters.py:576
-#: pretix/plugins/reports/exporters.py:799
+#: pretix/plugins/reports/exporters.py:799 pretix/control/forms/orders.py:207
 msgid "Payment date"
 msgstr "Zahlungsdatum"
 
-#: pretix/control/forms/orders.py:252
+#: pretix/control/forms/orders.py:252 pretix/control/forms/orders.py:246
 msgid "Re-calculate taxes"
 msgstr "Steuern neu berechnen"
 
-#: pretix/control/forms/orders.py:255
+#: pretix/control/forms/orders.py:255 pretix/control/forms/orders.py:249
 msgid "Do not re-calculate taxes"
 msgstr "Steuern nicht neu berechnen"
 
-#: pretix/control/forms/orders.py:256
+#: pretix/control/forms/orders.py:256 pretix/control/forms/orders.py:250
 msgid ""
 "Re-calculate taxes based on address and product settings, keep gross amount "
 "the same."
@@ -11188,7 +11313,7 @@ msgstr ""
 "Steuern basierend auf Produkten und Adresse neu berechnen, Bruttobetrag "
 "beibehalten."
 
-#: pretix/control/forms/orders.py:257
+#: pretix/control/forms/orders.py:257 pretix/control/forms/orders.py:251
 msgid ""
 "Re-calculate taxes based on address and product settings, keep net amount "
 "the same."
@@ -11196,11 +11321,11 @@ msgstr ""
 "Steuern basierend auf Produkten und Adresse neu berechnen, Nettobetrag "
 "beibehalten."
 
-#: pretix/control/forms/orders.py:262
+#: pretix/control/forms/orders.py:262 pretix/control/forms/orders.py:256
 msgid "Issue a new invoice if required"
 msgstr "Neue Rechnung erzeugen (falls erforderlich)"
 
-#: pretix/control/forms/orders.py:266
+#: pretix/control/forms/orders.py:266 pretix/control/forms/orders.py:260
 msgid ""
 "If an invoice exists for this order and this operation would change its "
 "contents, the old invoice will be canceled and a new invoice will be issued."
@@ -11209,22 +11334,22 @@ msgstr ""
 "Operationen geändert würde, wird die alte Rechnung storniert und eine neue "
 "ausgestellt."
 
-#: pretix/control/forms/orders.py:271
+#: pretix/control/forms/orders.py:271 pretix/control/forms/orders.py:265
 msgid "Notify user"
 msgstr "Benutzer benachrichtigen"
 
-#: pretix/control/forms/orders.py:275
+#: pretix/control/forms/orders.py:275 pretix/control/forms/orders.py:269
 msgid ""
 "Send an email to the customer notifying that their order has been changed."
 msgstr ""
 "Eine E-Mail wird verschickt um den Benutzer über die Änderung der Bestellung "
 "in Kenntnis zu setzen."
 
-#: pretix/control/forms/orders.py:279
+#: pretix/control/forms/orders.py:279 pretix/control/forms/orders.py:273
 msgid "Allow to overbook quotas when performing this operation"
 msgstr "Überbuchen von Kontingenten bei dieser Aktion erlauben"
 
-#: pretix/control/forms/orders.py:295
+#: pretix/control/forms/orders.py:295 pretix/control/forms/orders.py:289
 msgid "Add-on to"
 msgstr "Zusatz-Produkt zu"
 
@@ -11234,6 +11359,7 @@ msgstr "Zusatz-Produkt zu"
 #: pretix/control/views/vouchers.py:109
 #: pretix/presale/templates/pretixpresale/event/checkout_membership.html:24
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:106
+#: pretix/control/forms/orders.py:294
 msgid "Seat"
 msgstr "Sitzplatz"
 
@@ -11243,11 +11369,11 @@ msgstr "Sitzplatz"
 #: pretix/control/templates/pretixcontrol/organizers/customer_membership.html:9
 #: pretix/control/templates/pretixcontrol/organizers/customer_membership_delete.html:5
 #: pretix/control/templates/pretixcontrol/organizers/customer_membership_delete.html:9
-#: pretix/presale/forms/checkout.py:235
+#: pretix/presale/forms/checkout.py:235 pretix/control/forms/orders.py:297
 msgid "Membership"
 msgstr "Mitgliedschaft"
 
-#: pretix/control/forms/orders.py:311
+#: pretix/control/forms/orders.py:311 pretix/control/forms/orders.py:305
 msgid "Including taxes, if any. Keep empty for the product's default price"
 msgstr ""
 "inklusive Steuern (wenn vorhanden). Leer lassen für den Standardpreis des "
@@ -11256,39 +11382,43 @@ msgstr ""
 #: pretix/control/forms/orders.py:426 pretix/control/forms/orders.py:430
 #: pretix/control/forms/orders.py:444 pretix/control/forms/orders.py:481
 #: pretix/control/forms/orders.py:500 pretix/control/forms/orders.py:518
-#: pretix/control/forms/orders.py:546
+#: pretix/control/forms/orders.py:546 pretix/control/forms/orders.py:420
+#: pretix/control/forms/orders.py:424 pretix/control/forms/orders.py:438
+#: pretix/control/forms/orders.py:475 pretix/control/forms/orders.py:494
+#: pretix/control/forms/orders.py:512 pretix/control/forms/orders.py:540
 msgid "(Unchanged)"
 msgstr "(Unverändert)"
 
 #: pretix/control/forms/orders.py:436 pretix/control/forms/orders.py:541
+#: pretix/control/forms/orders.py:430 pretix/control/forms/orders.py:535
 msgid "New price (gross)"
 msgstr "Neuer Preis (brutto)"
 
-#: pretix/control/forms/orders.py:448
+#: pretix/control/forms/orders.py:448 pretix/control/forms/orders.py:442
 msgid "Generate a new secret"
 msgstr "Neuen Ticket-Code generieren"
 
-#: pretix/control/forms/orders.py:452
+#: pretix/control/forms/orders.py:452 pretix/control/forms/orders.py:446
 msgid "Cancel this position"
 msgstr "Diese Position stornieren"
 
-#: pretix/control/forms/orders.py:456
+#: pretix/control/forms/orders.py:456 pretix/control/forms/orders.py:450
 msgid "Split into new order"
 msgstr "In neue Bestellung abspalten"
 
-#: pretix/control/forms/orders.py:519
+#: pretix/control/forms/orders.py:519 pretix/control/forms/orders.py:513
 msgid "(No membership)"
 msgstr "(Keine Mitgliedschaft)"
 
-#: pretix/control/forms/orders.py:550
+#: pretix/control/forms/orders.py:550 pretix/control/forms/orders.py:544
 msgid "Remove this fee"
 msgstr "Gebühr entfernen"
 
-#: pretix/control/forms/orders.py:565
+#: pretix/control/forms/orders.py:565 pretix/control/forms/orders.py:559
 msgid "Invalidate secrets"
 msgstr "Geheime Codes anpassen"
 
-#: pretix/control/forms/orders.py:566
+#: pretix/control/forms/orders.py:566 pretix/control/forms/orders.py:560
 msgid ""
 "Regenerates the order and ticket secrets. You will need to re-send the link "
 "to the order page to the user and the user will need to download his tickets "
@@ -11301,15 +11431,18 @@ msgstr ""
 #: pretix/control/forms/orders.py:619 pretix/control/forms/orders.py:850
 #: pretix/control/forms/orders.py:877 pretix/control/forms/vouchers.py:262
 #: pretix/plugins/sendmail/forms.py:81 pretix/plugins/sendmail/forms.py:165
-#: pretix/plugins/sendmail/models.py:187
+#: pretix/plugins/sendmail/models.py:187 pretix/control/forms/orders.py:613
+#: pretix/control/forms/orders.py:844 pretix/control/forms/orders.py:871
 msgid "Subject"
 msgstr "Betreff"
 
 #: pretix/control/forms/orders.py:623 pretix/plugins/sendmail/forms.py:136
+#: pretix/control/forms/orders.py:617
 msgid "Attach tickets"
 msgstr "Tickets anhängen"
 
 #: pretix/control/forms/orders.py:624 pretix/plugins/sendmail/forms.py:137
+#: pretix/control/forms/orders.py:618
 msgid ""
 "Will be ignored if tickets exceed a given size limit to ensure email "
 "deliverability."
@@ -11317,13 +11450,14 @@ msgstr ""
 "Wird ignoriert, wenn die Tickets ein bestimmtes Größenlimit überschreiten um "
 "die Zustellung sicherzustellen."
 
-#: pretix/control/forms/orders.py:628
+#: pretix/control/forms/orders.py:628 pretix/control/forms/orders.py:622
 msgid "Attach invoices"
 msgstr "Rechnungen anhängen"
 
 #: pretix/control/forms/orders.py:654
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_inspect.html:15
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:25
+#: pretix/control/forms/orders.py:648
 msgid "Recipient"
 msgstr "Empfänger"
 
@@ -11331,17 +11465,19 @@ msgstr "Empfänger"
 #: pretix/control/forms/orders.py:858 pretix/control/forms/orders.py:885
 #: pretix/control/forms/vouchers.py:268 pretix/plugins/sendmail/forms.py:82
 #: pretix/plugins/sendmail/forms.py:170 pretix/plugins/sendmail/models.py:188
+#: pretix/control/forms/orders.py:654 pretix/control/forms/orders.py:670
+#: pretix/control/forms/orders.py:852 pretix/control/forms/orders.py:879
 msgid "Message"
 msgstr "Nachricht"
 
-#: pretix/control/forms/orders.py:689
+#: pretix/control/forms/orders.py:689 pretix/control/forms/orders.py:683
 msgid ""
 "Cancel the order. All tickets will no longer work. This can not be reverted."
 msgstr ""
 "Storniere die komplette Bestellung. Alle Tickets funktionieren nicht mehr. "
 "Dies kann nicht rückgängig gemacht werden."
 
-#: pretix/control/forms/orders.py:690
+#: pretix/control/forms/orders.py:690 pretix/control/forms/orders.py:684
 msgid ""
 "Mark the order as pending and allow the user to pay the open amount with "
 "another payment method."
@@ -11349,37 +11485,37 @@ msgstr ""
 "Markiere die Bestellung als unbezahlt und erlaube dem Nutzer, den offenen "
 "Betrag mit einer anderen Zahlungsmethode zu begleichen."
 
-#: pretix/control/forms/orders.py:692
+#: pretix/control/forms/orders.py:692 pretix/control/forms/orders.py:686
 msgid "Do nothing and keep the order as it is."
 msgstr "Tue nichts und belasse den Zustand der Bestellung wie gehabt."
 
-#: pretix/control/forms/orders.py:719
+#: pretix/control/forms/orders.py:719 pretix/control/forms/orders.py:713
 msgid "The refund amount needs to be positive and less than {}."
 msgstr "Der Rückbuchungsbetrag muss positiv und geringer als {} sein."
 
-#: pretix/control/forms/orders.py:725
+#: pretix/control/forms/orders.py:725 pretix/control/forms/orders.py:719
 msgid "You need to specify an amount for a partial refund."
 msgstr "Sie müssen für eine Teilrückerstattung auch einen Betrag angeben."
 
-#: pretix/control/forms/orders.py:737
+#: pretix/control/forms/orders.py:737 pretix/control/forms/orders.py:731
 msgid "Cancel all dates"
 msgstr "Alle Termine stornieren"
 
-#: pretix/control/forms/orders.py:756
+#: pretix/control/forms/orders.py:756 pretix/control/forms/orders.py:750
 msgid "Automatically refund money if possible"
 msgstr "Geld automatisch zurückerstatten wenn möglich"
 
-#: pretix/control/forms/orders.py:759
+#: pretix/control/forms/orders.py:759 pretix/control/forms/orders.py:753
 msgid "Only available for payment method that support automatic refunds."
 msgstr ""
 "Nur verfügbar für Zahlungsmethoden die automatische Erstattungen "
 "unterstützen."
 
-#: pretix/control/forms/orders.py:762
+#: pretix/control/forms/orders.py:762 pretix/control/forms/orders.py:756
 msgid "Create refund in the manual refund to-do list"
 msgstr "Erstattung in der To-Do-Liste für manuelle Erstattungen erzeugen"
 
-#: pretix/control/forms/orders.py:765
+#: pretix/control/forms/orders.py:765 pretix/control/forms/orders.py:759
 msgid ""
 "Manual refunds will be created which will be listed in the manual refund to-"
 "do list. When combined with the automatic refund functionally, only payments "
@@ -11395,7 +11531,7 @@ msgstr ""
 "auftauchen. Wählen Sie diese Option nicht, wenn Sie diese Bestellungen mit "
 "anderen Bestellungen verrechnen oder als Gutschein erstatten möchten."
 
-#: pretix/control/forms/orders.py:771
+#: pretix/control/forms/orders.py:771 pretix/control/forms/orders.py:765
 msgid ""
 "Refund order value to a gift card instead instead of the original payment "
 "method"
@@ -11403,23 +11539,23 @@ msgstr ""
 "Geldbeträge als Wertgutschein ausgeben statt einer Rückbuchung auf die "
 "ursprüngliche Zahlungsmethode"
 
-#: pretix/control/forms/orders.py:777
+#: pretix/control/forms/orders.py:777 pretix/control/forms/orders.py:771
 msgid "Gift card validity"
 msgstr "Gültigkeit von Wertgutscheinen"
 
-#: pretix/control/forms/orders.py:796
+#: pretix/control/forms/orders.py:796 pretix/control/forms/orders.py:790
 msgid "Keep a fixed cancellation fee per ticket"
 msgstr "Feste Stornogebühr pro Ticket einbehalten"
 
-#: pretix/control/forms/orders.py:797
+#: pretix/control/forms/orders.py:797 pretix/control/forms/orders.py:791
 msgid "Free tickets and add-on products are not counted"
 msgstr "Kostenlose Tickets und Zusatzprodukte werden nicht mitgezählt"
 
-#: pretix/control/forms/orders.py:807
+#: pretix/control/forms/orders.py:807 pretix/control/forms/orders.py:801
 msgid "Keep fees"
 msgstr "Gebühren einbehalten"
 
-#: pretix/control/forms/orders.py:810
+#: pretix/control/forms/orders.py:810 pretix/control/forms/orders.py:804
 msgid ""
 "The selected types of fees will not be refunded but instead added to the "
 "cancellation fee. Fees are never refunded in when an order in an event "
@@ -11431,20 +11567,21 @@ msgstr ""
 "in einer Veranstaltungsreihe nur teilweise erstattet wird da sie Tickets für "
 "mehrere Termine enthält."
 
-#: pretix/control/forms/orders.py:816
+#: pretix/control/forms/orders.py:816 pretix/control/forms/orders.py:810
 msgid "Send information via email"
 msgstr "Informationen per E-Mail verschicken"
 
-#: pretix/control/forms/orders.py:822
+#: pretix/control/forms/orders.py:822 pretix/control/forms/orders.py:816
 msgid "Send information to waiting list"
 msgstr "Informationen an die Warteliste verschicken"
 
 #: pretix/control/forms/orders.py:853 pretix/control/forms/orders.py:879
+#: pretix/control/forms/orders.py:847 pretix/control/forms/orders.py:873
 #, python-brace-format
 msgid "Canceled: {event}"
 msgstr "Storniert: {event}"
 
-#: pretix/control/forms/orders.py:864
+#: pretix/control/forms/orders.py:864 pretix/control/forms/orders.py:858
 #, python-brace-format
 msgid ""
 "Hello,\n"
@@ -11475,7 +11612,7 @@ msgstr ""
 "Freundliche Grüße,\n"
 "Das {event} Team"
 
-#: pretix/control/forms/orders.py:891
+#: pretix/control/forms/orders.py:891 pretix/control/forms/orders.py:885
 #, python-brace-format
 msgid ""
 "Hello,\n"
@@ -11499,36 +11636,38 @@ msgstr ""
 "Das {event} Team"
 
 #: pretix/control/forms/orders.py:923 pretix/plugins/sendmail/forms.py:144
+#: pretix/control/forms/orders.py:917
 msgctxt "subevent"
 msgid "Please either select a specific date or a date range, not both."
 msgstr ""
 "Sie müssen entweder einen einzelnen Termin oder einen Datumsbereich "
 "auswählen, nicht beides."
 
-#: pretix/control/forms/orders.py:925
+#: pretix/control/forms/orders.py:925 pretix/control/forms/orders.py:919
 msgctxt "subevent"
 msgid "Please either select all dates or a date range, not both."
 msgstr ""
 "Bitte wähle entweder alle Termine oder einen Datumsbereich, nicht beides."
 
 #: pretix/control/forms/orders.py:927 pretix/plugins/sendmail/forms.py:146
+#: pretix/control/forms/orders.py:921
 msgctxt "subevent"
 msgid "If you set a date range, please set both a start and an end."
 msgstr ""
 "Wenn Sie einen Datumsbereich verwenden, legen Sie bitte Start und Ende fest."
 
-#: pretix/control/forms/orders.py:929
+#: pretix/control/forms/orders.py:929 pretix/control/forms/orders.py:923
 msgid "Please confirm that you want to cancel ALL dates in this event series."
 msgstr ""
 "Bitte bestätigen Sie, dass Sie ALLE Termine dieser Veranstaltungsreihe "
 "stornieren möchten."
 
-#: pretix/control/forms/organizer.py:74
+#: pretix/control/forms/organizer.py:74 pretix/control/forms/organizer.py:73
 msgid "This slug is already in use. Please choose a different one."
 msgstr ""
 "Diese Kurzform ist bereits in Verwendung. Bitte wählen Sie eine andere."
 
-#: pretix/control/forms/organizer.py:224
+#: pretix/control/forms/organizer.py:224 pretix/control/forms/organizer.py:223
 msgid ""
 "The changes could not be saved because there would be no remaining team with "
 "the permission to change teams and permissions."
@@ -11537,15 +11676,16 @@ msgstr ""
 "mit der Berechtigung gäbe, Teams zu verwalten."
 
 #: pretix/control/forms/organizer.py:254 pretix/control/forms/organizer.py:287
+#: pretix/control/forms/organizer.py:253
 msgid ""
 "Your device will not have access to anything, please select some events."
 msgstr "Dieses Gerät muss auf mindestens eine Veranstaltung Zugriff erhalten."
 
-#: pretix/control/forms/organizer.py:398
+#: pretix/control/forms/organizer.py:398 pretix/control/forms/organizer.py:334
 msgid "Favicon"
 msgstr "Favicon"
 
-#: pretix/control/forms/organizer.py:402
+#: pretix/control/forms/organizer.py:402 pretix/control/forms/organizer.py:338
 msgid ""
 "If you provide a favicon, we will show it instead of the default pretix "
 "icon. We recommend a size of at least 200x200px to accommodate most devices."
@@ -11554,20 +11694,21 @@ msgstr ""
 "verwendet. Wir empfehlen eine Auflösung von 200x200px um alle Endgeräte "
 "abzudecken."
 
-#: pretix/control/forms/organizer.py:445
+#: pretix/control/forms/organizer.py:445 pretix/control/forms/organizer.py:381
 msgid "This will be attached to every email."
 msgstr "Diese wird an jede E-Mail angehängt."
 
-#: pretix/control/forms/organizer.py:524
+#: pretix/control/forms/organizer.py:524 pretix/control/forms/organizer.py:460
 msgctxt "webhooks"
 msgid "Event types"
 msgstr "Benachrichtigungsarten"
 
-#: pretix/control/forms/organizer.py:555
+#: pretix/control/forms/organizer.py:555 pretix/control/forms/organizer.py:491
 msgid "Gift card value"
 msgstr "Wert des Wertgutscheins"
 
 #: pretix/control/forms/organizer.py:605 pretix/presale/forms/customer.py:452
+#: pretix/control/forms/organizer.py:541
 msgid "An account with this email address is already registered."
 msgstr "Ein Kundenkonto mit dieser E-Mail-Adresse ist bereits registriert."
 
@@ -11575,6 +11716,7 @@ msgstr "Ein Kundenkonto mit dieser E-Mail-Adresse ist bereits registriert."
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:52
 #: pretix/presale/forms/customer.py:157 pretix/presale/forms/customer.py:485
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:28
+#: pretix/control/forms/organizer.py:557
 msgid "Phone"
 msgstr "Telefon"
 
@@ -11932,6 +12074,8 @@ msgstr "Die Bestellung wurde durch Abspaltung aus {order} erzeugt"
 #: pretix/control/logdisplay.py:200 pretix/control/logdisplay.py:202
 #: pretix/control/logdisplay.py:546 pretix/control/logdisplay.py:548
 #: pretix/control/logdisplay.py:567 pretix/control/logdisplay.py:569
+#: pretix/control/logdisplay.py:547 pretix/control/logdisplay.py:549
+#: pretix/control/logdisplay.py:568 pretix/control/logdisplay.py:570
 msgid "(unknown)"
 msgstr "(unbekannt)"
 
@@ -12060,6 +12204,7 @@ msgid "The webhook has been changed."
 msgstr "Der Webhook wurde geändert."
 
 #: pretix/control/logdisplay.py:321 pretix/control/views/organizer.py:1804
+#: pretix/control/views/organizer.py:1666
 msgid "The membership type has been created."
 msgstr "Der neue Mitgliedschafts-Typ wurde erstellt."
 
@@ -12104,6 +12249,7 @@ msgid "A new password has been set."
 msgstr "Ein neues Passwort wurde gesetzt."
 
 #: pretix/control/logdisplay.py:332 pretix/control/logdisplay.py:367
+#: pretix/control/logdisplay.py:368
 msgid "Sending of an email has failed."
 msgstr "Das Versenden einer E-Mail ist fehlgeschlagen."
 
@@ -12136,6 +12282,7 @@ msgid "The order's expiry date has been changed."
 msgstr "Die Zahlungsfrist wurde geändert."
 
 #: pretix/control/logdisplay.py:340 pretix/control/views/orders.py:1294
+#: pretix/control/views/orders.py:1293
 msgid "The order has been marked as expired."
 msgstr "Die Bestellung wurde als abgelaufen markiert."
 
@@ -12152,40 +12299,42 @@ msgid "The order has been refunded."
 msgstr "Die Bestellung wurde zurückerstattet."
 
 #: pretix/control/logdisplay.py:344 pretix/control/views/orders.py:1572
+#: pretix/control/logdisplay.py:345 pretix/control/views/orders.py:1570
 msgid "The order has been reactivated."
 msgstr "Die Bestellung wurde reaktiviert."
 
-#: pretix/control/logdisplay.py:345
+#: pretix/control/logdisplay.py:345 pretix/control/logdisplay.py:346
 #, python-brace-format
 msgid "The test mode order {code} has been deleted."
 msgstr "Die Test-Bestellung {code} wurde gelöscht."
 
-#: pretix/control/logdisplay.py:346
+#: pretix/control/logdisplay.py:346 pretix/control/logdisplay.py:347
 msgid "The order has been created."
 msgstr "Die Bestellung wurde erstellt."
 
-#: pretix/control/logdisplay.py:347
+#: pretix/control/logdisplay.py:347 pretix/control/logdisplay.py:348
 msgid "The order requires approval before it can continue to be processed."
 msgstr ""
 "Diese Bestellung erfordert eine Freigabe, bevor sie weiter verarbeitet wird."
 
 #: pretix/control/logdisplay.py:348 pretix/control/views/orders.py:565
+#: pretix/control/logdisplay.py:349
 msgid "The order has been approved."
 msgstr "Die Bestellung wurde freigegeben."
 
-#: pretix/control/logdisplay.py:349
+#: pretix/control/logdisplay.py:349 pretix/control/logdisplay.py:350
 #, python-brace-format
 msgid "The order has been denied (comment: \"{comment}\")."
 msgstr "Die Bestellung wurde abgelehnt (Kommentar: \"{comment}\")."
 
-#: pretix/control/logdisplay.py:350
+#: pretix/control/logdisplay.py:350 pretix/control/logdisplay.py:351
 #, python-brace-format
 msgid ""
 "The email address has been changed from \"{old_email}\" to \"{new_email}\"."
 msgstr ""
 "Die E-Mail-Adresse wurde von \"{old_email}\" auf \"{new_email}\" geändert."
 
-#: pretix/control/logdisplay.py:352
+#: pretix/control/logdisplay.py:352 pretix/control/logdisplay.py:353
 msgid ""
 "The email address has been confirmed to be working (the user clicked on a "
 "link in the email for the first time)."
@@ -12193,58 +12342,61 @@ msgstr ""
 "Die E-Mail-Adresse wurde als funktionierend bestätigt (der Nutzer hat "
 "erstmalig auf einen Link aus einer E-Mail geklickt)."
 
-#: pretix/control/logdisplay.py:354
+#: pretix/control/logdisplay.py:354 pretix/control/logdisplay.py:355
 #, python-brace-format
 msgid ""
 "The phone number has been changed from \"{old_phone}\" to \"{new_phone}\"."
 msgstr ""
 "Die Telefonnummer wurde von \"{old_phone}\" auf \"{new_phone}\" geändert."
 
-#: pretix/control/logdisplay.py:356
+#: pretix/control/logdisplay.py:356 pretix/control/logdisplay.py:357
 msgid "The customer account has been changed."
 msgstr "Das Kundenkonto wurde geändert."
 
-#: pretix/control/logdisplay.py:357
+#: pretix/control/logdisplay.py:357 pretix/control/logdisplay.py:358
 msgid "The order locale has been changed."
 msgstr "Die Sprache der Bestellung wurde geändert."
 
 #: pretix/control/logdisplay.py:358 pretix/control/views/orders.py:1331
 #: pretix/presale/views/order.py:739 pretix/presale/views/order.py:812
+#: pretix/control/logdisplay.py:359 pretix/control/views/orders.py:1329
 msgid "The invoice has been generated."
 msgstr "Die Rechnung wurde erstellt."
 
 #: pretix/control/logdisplay.py:359 pretix/control/views/orders.py:1402
+#: pretix/control/logdisplay.py:360 pretix/control/views/orders.py:1400
 msgid "The invoice has been regenerated."
 msgstr "Die Rechnung wurde neu generiert."
 
 #: pretix/control/logdisplay.py:360 pretix/control/views/orders.py:1431
-#: pretix/presale/views/order.py:825
+#: pretix/presale/views/order.py:825 pretix/control/logdisplay.py:361
+#: pretix/control/views/orders.py:1429
 msgid "The invoice has been reissued."
 msgstr "Die Rechnung wurde neu ausgestellt."
 
-#: pretix/control/logdisplay.py:361
+#: pretix/control/logdisplay.py:361 pretix/control/logdisplay.py:362
 msgid "The order's internal comment has been updated."
 msgstr "Der interne Kommentar wurde geändert."
 
-#: pretix/control/logdisplay.py:362
+#: pretix/control/logdisplay.py:362 pretix/control/logdisplay.py:363
 msgid "The order's follow-up date has been updated."
 msgstr "Das Datum zur Wiedervorlage wurde geändert."
 
-#: pretix/control/logdisplay.py:363
+#: pretix/control/logdisplay.py:363 pretix/control/logdisplay.py:364
 msgid "The order's flag to require attention at check-in has been toggled."
 msgstr "Der interne Kommentar wurde geändert."
 
-#: pretix/control/logdisplay.py:365
+#: pretix/control/logdisplay.py:365 pretix/control/logdisplay.py:366
 #, python-brace-format
 msgid "A new payment {local_id} has been started instead of the previous one."
 msgstr ""
 "Ein neuer Zahlungsvorgang {local_id} wurde anstatt des vorherigen gestartet."
 
-#: pretix/control/logdisplay.py:366
+#: pretix/control/logdisplay.py:366 pretix/control/logdisplay.py:367
 msgid "An unidentified type email has been sent."
 msgstr "Eine E-Mail unbekannten Typs wurde verschickt."
 
-#: pretix/control/logdisplay.py:368
+#: pretix/control/logdisplay.py:368 pretix/control/logdisplay.py:369
 msgid ""
 "The email has been sent without attachments since they would have been too "
 "large to be likely to arrive."
@@ -12252,178 +12404,180 @@ msgstr ""
 "Eine E-Mail wurde ohne Anhänge verschickt, da diese größer sind als "
 "üblicherweise akzeptiert sind."
 
-#: pretix/control/logdisplay.py:370
+#: pretix/control/logdisplay.py:370 pretix/control/logdisplay.py:371
 msgid "A custom email has been sent."
 msgstr "Eine individuelle E-Mail wurde verschickt."
 
-#: pretix/control/logdisplay.py:371
+#: pretix/control/logdisplay.py:371 pretix/control/logdisplay.py:372
 msgid "A custom email has been sent to an attendee."
 msgstr "Eine individuelle E-Mail wurde an eine Teilnehmer*in verschickt."
 
-#: pretix/control/logdisplay.py:372
+#: pretix/control/logdisplay.py:372 pretix/control/logdisplay.py:373
 msgid ""
 "An email has been sent with a reminder that the ticket is available for "
 "download."
 msgstr "Eine E-Mail wurde mit einer Download-Erinnerung wurde verschickt."
 
-#: pretix/control/logdisplay.py:374
+#: pretix/control/logdisplay.py:374 pretix/control/logdisplay.py:375
 msgid ""
 "An email has been sent with a warning that the order is about to expire."
 msgstr ""
 "Eine E-Mail wurde mit einer Warnung für das Ablaufdatum der Bestellung "
 "verschickt."
 
-#: pretix/control/logdisplay.py:376
+#: pretix/control/logdisplay.py:376 pretix/control/logdisplay.py:377
 msgid ""
 "An email has been sent to notify the user that the order has been canceled."
 msgstr ""
 "Eine E-Mail wurde verschickt, die den Benutzer auf die Stornierung der "
 "Bestellung hinweist."
 
-#: pretix/control/logdisplay.py:377
+#: pretix/control/logdisplay.py:377 pretix/control/logdisplay.py:378
 msgid ""
 "An email has been sent to notify the user that the event has been canceled."
 msgstr ""
 "Eine E-Mail wurde verschickt, die den Benutzer auf die Stornierung der "
 "Veranstaltung hinweist."
 
-#: pretix/control/logdisplay.py:379
+#: pretix/control/logdisplay.py:379 pretix/control/logdisplay.py:380
 msgid ""
 "An email has been sent to notify the user that the order has been changed."
 msgstr ""
 "Eine E-Mail wurde verschickt, die den Benutzer auf die Änderung der "
 "Bestellung hinweist."
 
-#: pretix/control/logdisplay.py:380
+#: pretix/control/logdisplay.py:380 pretix/control/logdisplay.py:381
 msgid ""
 "An email has been sent to notify the user that the order has been received."
 msgstr ""
 "Eine E-Mail wurde verschickt, die den Benutzer auf den Eingang der "
 "Bestellung hinweist."
 
-#: pretix/control/logdisplay.py:381
+#: pretix/control/logdisplay.py:381 pretix/control/logdisplay.py:382
 msgid ""
 "An email has been sent to notify the user that payment has been received."
 msgstr ""
 "Eine E-Mail wurde verschickt, die den Benutzer auf den Eingang der Bezahlung "
 "hinweist."
 
-#: pretix/control/logdisplay.py:382
+#: pretix/control/logdisplay.py:382 pretix/control/logdisplay.py:383
 msgid ""
 "An email has been sent to notify the user that the order has been denied."
 msgstr ""
 "Eine E-Mail wurde verschickt, die den Benutzer auf die Ablehnung der "
 "Bestellung hinweist."
 
-#: pretix/control/logdisplay.py:383
+#: pretix/control/logdisplay.py:383 pretix/control/logdisplay.py:384
 msgid ""
 "An email has been sent to notify the user that the order has been approved."
 msgstr ""
 "Eine E-Mail wurde verschickt, die den Benutzer auf die Freigabe der "
 "Bestellung hinweist."
 
-#: pretix/control/logdisplay.py:385
+#: pretix/control/logdisplay.py:385 pretix/control/logdisplay.py:386
 msgid ""
 "An email has been sent to notify the user that the order has been received "
 "and requires payment."
 msgstr ""
 "Eine E-Mail zur Bestätigung der Bestellung wurde an den Benutzer verschickt."
 
-#: pretix/control/logdisplay.py:386
+#: pretix/control/logdisplay.py:386 pretix/control/logdisplay.py:387
 msgid ""
 "An email has been sent to notify the user that the order has been received "
 "and requires approval."
 msgstr ""
 "Eine E-Mail zur Bestätigung der Bestellung wurde an den Benutzer verschickt."
 
-#: pretix/control/logdisplay.py:389
+#: pretix/control/logdisplay.py:389 pretix/control/logdisplay.py:390
 msgid ""
 "An email with a link to the order detail page has been resent to the user."
 msgstr ""
 "Eine E-Mail mit dem Link zur Bestellseite wurde an den Benutzer verschickt."
 
-#: pretix/control/logdisplay.py:390
+#: pretix/control/logdisplay.py:390 pretix/control/logdisplay.py:391
 #, python-brace-format
 msgid "Payment {local_id} has been confirmed."
 msgstr "Die Zahlung {local_id} wurde bestätigt."
 
-#: pretix/control/logdisplay.py:391
+#: pretix/control/logdisplay.py:391 pretix/control/logdisplay.py:392
 #, python-brace-format
 msgid "Payment {local_id} has been canceled."
 msgstr "Die Zahlung {local_id} wurde abgebrochen."
 
-#: pretix/control/logdisplay.py:392
+#: pretix/control/logdisplay.py:392 pretix/control/logdisplay.py:393
 #, python-brace-format
 msgid "Canceling payment {local_id} has failed."
 msgstr "Abbrechen der Zahlung {local_id} ist fehlgeschlagen."
 
-#: pretix/control/logdisplay.py:393
+#: pretix/control/logdisplay.py:393 pretix/control/logdisplay.py:394
 #, python-brace-format
 msgid "Payment {local_id} has been started."
 msgstr "Die Zahlung {local_id} wurde gestartet."
 
-#: pretix/control/logdisplay.py:394
+#: pretix/control/logdisplay.py:394 pretix/control/logdisplay.py:395
 #, python-brace-format
 msgid "Payment {local_id} has failed."
 msgstr "Die Zahlung {local_id} ist fehlgeschlagen."
 
-#: pretix/control/logdisplay.py:395
+#: pretix/control/logdisplay.py:395 pretix/control/logdisplay.py:396
 #, python-brace-format
 msgid "The order could not be marked as paid: {message}"
 msgstr "Die Bestellung konnte nicht als bezahlt markiert werden: {message}"
 
-#: pretix/control/logdisplay.py:396
+#: pretix/control/logdisplay.py:396 pretix/control/logdisplay.py:397
 msgid "The order has been overpaid."
 msgstr "Die Bestellung wurde überzahlt."
 
-#: pretix/control/logdisplay.py:397
+#: pretix/control/logdisplay.py:397 pretix/control/logdisplay.py:398
 #, python-brace-format
 msgid "Refund {local_id} has been created."
 msgstr "Die Erstattung {local_id} wurde erstellt."
 
-#: pretix/control/logdisplay.py:398
+#: pretix/control/logdisplay.py:398 pretix/control/logdisplay.py:399
 #, python-brace-format
 msgid "Refund {local_id} has been created by an external entity."
 msgstr "Die Erstattung {local_id} wurde von einem externem System übermittelt."
 
-#: pretix/control/logdisplay.py:399
+#: pretix/control/logdisplay.py:399 pretix/control/logdisplay.py:400
 msgid "The customer requested you to issue a refund."
 msgstr "Der Kunde hat eine Erstattung angefordert."
 
-#: pretix/control/logdisplay.py:400
+#: pretix/control/logdisplay.py:400 pretix/control/logdisplay.py:401
 #, python-brace-format
 msgid "Refund {local_id} has been completed."
 msgstr "Die Erstattung {local_id} wurde abgeschlossen."
 
-#: pretix/control/logdisplay.py:401
+#: pretix/control/logdisplay.py:401 pretix/control/logdisplay.py:402
 #, python-brace-format
 msgid "Refund {local_id} has been canceled."
 msgstr "Die Erstattung {local_id} wurde abgebrochen."
 
-#: pretix/control/logdisplay.py:402
+#: pretix/control/logdisplay.py:402 pretix/control/logdisplay.py:403
 #, python-brace-format
 msgid "Refund {local_id} has failed."
 msgstr "Die Erstattung {local_id} ist fehlgeschlagen."
 
-#: pretix/control/logdisplay.py:403
+#: pretix/control/logdisplay.py:403 pretix/control/logdisplay.py:404
 msgid "The user has been created."
 msgstr "Der Benutzer wurde erstellt."
 
 #: pretix/control/logdisplay.py:404 pretix/control/views/user.py:478
 #: pretix/control/views/user.py:538 pretix/control/views/user.py:575
+#: pretix/control/logdisplay.py:405
 msgid "Two-factor authentication has been enabled."
 msgstr "Zwei-Faktor-Authentifizierung wurde aktiviert."
 
 #: pretix/control/logdisplay.py:405 pretix/control/views/user.py:364
-#: pretix/control/views/user.py:591
+#: pretix/control/views/user.py:591 pretix/control/logdisplay.py:406
 msgid "Two-factor authentication has been disabled."
 msgstr "Zwei-Faktor-Authentifizierung wurde deaktiviert."
 
 #: pretix/control/logdisplay.py:406 pretix/control/views/user.py:608
+#: pretix/control/logdisplay.py:407
 msgid "Your two-factor emergency codes have been regenerated."
 msgstr "Ihre Zwei-Faktor-Notfall-Tokens wurden neu generiert."
 
-#: pretix/control/logdisplay.py:407
+#: pretix/control/logdisplay.py:407 pretix/control/logdisplay.py:408
 #, python-brace-format
 msgid ""
 "A new two-factor authentication device \"{name}\" has been added to your "
@@ -12432,38 +12586,38 @@ msgstr ""
 "Ein neues Gerät \"{name}\" zur Zwei-Faktor-Authentifizierung wurde "
 "hinzugefügt."
 
-#: pretix/control/logdisplay.py:409
+#: pretix/control/logdisplay.py:409 pretix/control/logdisplay.py:410
 #, python-brace-format
 msgid ""
 "The two-factor authentication device \"{name}\" has been removed from your "
 "account."
 msgstr "Das Gerät \"{name}\" zur Zwei-Faktor-Authentifizierung wurde entfernt."
 
-#: pretix/control/logdisplay.py:411
+#: pretix/control/logdisplay.py:411 pretix/control/logdisplay.py:412
 msgid "Notifications have been enabled."
 msgstr "Benachrichtigungen wurden aktiviert."
 
-#: pretix/control/logdisplay.py:412
+#: pretix/control/logdisplay.py:412 pretix/control/logdisplay.py:413
 msgid "Notifications have been disabled."
 msgstr "Benachrichtigungen wurden deaktiviert."
 
-#: pretix/control/logdisplay.py:413
+#: pretix/control/logdisplay.py:413 pretix/control/logdisplay.py:414
 msgid "Your notification settings have been changed."
 msgstr "Die Benachrichtigungs-Einstellungen wurden geändert."
 
-#: pretix/control/logdisplay.py:414
+#: pretix/control/logdisplay.py:414 pretix/control/logdisplay.py:415
 msgid "This user has been anonymized."
 msgstr "Dieser Nutzer wurde anonymisiert."
 
-#: pretix/control/logdisplay.py:417
+#: pretix/control/logdisplay.py:417 pretix/control/logdisplay.py:418
 msgid "Password reset mail sent."
 msgstr "E-Mail zur Passwort-Wiederherstellung verschickt."
 
-#: pretix/control/logdisplay.py:418
+#: pretix/control/logdisplay.py:418 pretix/control/logdisplay.py:419
 msgid "The password has been reset."
 msgstr "Das Passwort wurde zurückgesetzt."
 
-#: pretix/control/logdisplay.py:419
+#: pretix/control/logdisplay.py:419 pretix/control/logdisplay.py:420
 msgid ""
 "A repeated password reset has been denied, as the last request was less than "
 "24 hours ago."
@@ -12471,20 +12625,20 @@ msgstr ""
 "Eine Zurücksetzung des Passworts wurde abgelehnt, da es bereits eine Anfrage "
 "innerhalb der letzten 24 Stunden gab."
 
-#: pretix/control/logdisplay.py:421
+#: pretix/control/logdisplay.py:421 pretix/control/logdisplay.py:422
 #, python-brace-format
 msgid "The organizer \"{name}\" has been deleted."
 msgstr "Der Veranstalter \"{name}\" wurde gelöscht."
 
-#: pretix/control/logdisplay.py:422
+#: pretix/control/logdisplay.py:422 pretix/control/logdisplay.py:423
 msgid "The voucher has been created."
 msgstr "Der Gutschein wurde erstellt."
 
-#: pretix/control/logdisplay.py:424
+#: pretix/control/logdisplay.py:424 pretix/control/logdisplay.py:425
 msgid "The voucher has been created and sent to a person on the waiting list."
 msgstr "Ein Gutschein wurde erstellt und an die Person per E-Mail verschickt."
 
-#: pretix/control/logdisplay.py:425
+#: pretix/control/logdisplay.py:425 pretix/control/logdisplay.py:426
 msgid ""
 "The voucher has been set to expire because the recipient removed themselves "
 "from the waiting list."
@@ -12492,349 +12646,352 @@ msgstr ""
 "Der Gutschein wurde als abgelaufen markiert, weil der Empfänger sich selbst "
 "von der Warteliste entfernt hat."
 
-#: pretix/control/logdisplay.py:426
+#: pretix/control/logdisplay.py:426 pretix/control/logdisplay.py:427
 msgid "The voucher has been changed."
 msgstr "Der Gutschein wurde verändert."
 
-#: pretix/control/logdisplay.py:427
+#: pretix/control/logdisplay.py:427 pretix/control/logdisplay.py:428
 msgid "The voucher has been deleted."
 msgstr "Der Gutschein wurde gelöscht."
 
-#: pretix/control/logdisplay.py:428
+#: pretix/control/logdisplay.py:428 pretix/control/logdisplay.py:429
 #, python-brace-format
 msgid "The voucher has been redeemed in order {order_code}."
 msgstr "Der Gutschein wurde in Bestellung {order_code} eingelöst."
 
-#: pretix/control/logdisplay.py:429
+#: pretix/control/logdisplay.py:429 pretix/control/logdisplay.py:430
 msgid "The product has been created."
 msgstr "Das Produkt wurde erstellt."
 
-#: pretix/control/logdisplay.py:430
+#: pretix/control/logdisplay.py:430 pretix/control/logdisplay.py:431
 msgid "The product has been changed."
 msgstr "Das Produkt wurde verändert."
 
-#: pretix/control/logdisplay.py:431
+#: pretix/control/logdisplay.py:431 pretix/control/logdisplay.py:432
 msgid "The product has been deleted."
 msgstr "Das Produkt wurde gelöscht."
 
-#: pretix/control/logdisplay.py:432
+#: pretix/control/logdisplay.py:432 pretix/control/logdisplay.py:433
 #, python-brace-format
 msgid "The variation \"{value}\" has been created."
 msgstr "Die Variante \"{value}\" wurde erstellt."
 
-#: pretix/control/logdisplay.py:433
+#: pretix/control/logdisplay.py:433 pretix/control/logdisplay.py:434
 #, python-brace-format
 msgid "The variation \"{value}\" has been deleted."
 msgstr "Die Variante \"{value}\" wurde gelöscht."
 
-#: pretix/control/logdisplay.py:434
+#: pretix/control/logdisplay.py:434 pretix/control/logdisplay.py:435
 #, python-brace-format
 msgid "The variation \"{value}\" has been changed."
 msgstr "Die Variante \"{value}\" wurde verändert."
 
-#: pretix/control/logdisplay.py:435
+#: pretix/control/logdisplay.py:435 pretix/control/logdisplay.py:436
 msgid "An add-on has been added to this product."
 msgstr "Eine Kategorie für Zusatzprodukte wurde zum Produkt hinzugefügt."
 
-#: pretix/control/logdisplay.py:436
+#: pretix/control/logdisplay.py:436 pretix/control/logdisplay.py:437
 msgid "An add-on has been removed from this product."
 msgstr "Eine Kategorie für Zusatzprodukte wurde vom Produkt entfernt."
 
-#: pretix/control/logdisplay.py:437
+#: pretix/control/logdisplay.py:437 pretix/control/logdisplay.py:438
 msgid "An add-on has been changed on this product."
 msgstr "Eine Kategorie für Zusatzprodukte wurde bearbeitet."
 
-#: pretix/control/logdisplay.py:438
+#: pretix/control/logdisplay.py:438 pretix/control/logdisplay.py:439
 msgid "A bundled item has been added to this product."
 msgstr "Ein enthaltenes Produkt wurde zum Produkt hinzugefügt."
 
-#: pretix/control/logdisplay.py:439
+#: pretix/control/logdisplay.py:439 pretix/control/logdisplay.py:440
 msgid "A bundled item has been removed from this product."
 msgstr "Ein enthaltenes Produkt wurde vom Produkt entfernt."
 
-#: pretix/control/logdisplay.py:440
+#: pretix/control/logdisplay.py:440 pretix/control/logdisplay.py:441
 msgid "A bundled item has been changed on this product."
 msgstr "Ein enthaltenes Produkt wurde bearbeitet."
 
-#: pretix/control/logdisplay.py:441
+#: pretix/control/logdisplay.py:441 pretix/control/logdisplay.py:442
 msgid "The quota has been added."
 msgstr "Das Kontingent wurde erstellt."
 
-#: pretix/control/logdisplay.py:442
+#: pretix/control/logdisplay.py:442 pretix/control/logdisplay.py:443
 msgid "The quota has been deleted."
 msgstr "Das Kontingent wurde gelöscht."
 
-#: pretix/control/logdisplay.py:443
+#: pretix/control/logdisplay.py:443 pretix/control/logdisplay.py:444
 msgid "The quota has been changed."
 msgstr "Das Kontingent wurde verändert."
 
-#: pretix/control/logdisplay.py:444
+#: pretix/control/logdisplay.py:444 pretix/control/logdisplay.py:445
 msgid "The quota has closed."
 msgstr "Das Kontingent wurde geschlossen."
 
 #: pretix/control/logdisplay.py:445 pretix/control/views/item.py:1015
+#: pretix/control/logdisplay.py:446
 msgid "The quota has been re-opened."
 msgstr "Das Kontingent wurde erneut geöffnet."
 
-#: pretix/control/logdisplay.py:446
+#: pretix/control/logdisplay.py:446 pretix/control/logdisplay.py:447
 msgid "The category has been added."
 msgstr "Die Kategorie wurde erstellt."
 
-#: pretix/control/logdisplay.py:447
+#: pretix/control/logdisplay.py:447 pretix/control/logdisplay.py:448
 msgid "The category has been deleted."
 msgstr "Die Kategorie wurde gelöscht."
 
-#: pretix/control/logdisplay.py:448
+#: pretix/control/logdisplay.py:448 pretix/control/logdisplay.py:449
 msgid "The category has been changed."
 msgstr "Die Kategorie wurde verändert."
 
-#: pretix/control/logdisplay.py:449
+#: pretix/control/logdisplay.py:449 pretix/control/logdisplay.py:450
 msgid "The question has been added."
 msgstr "Die Frage wurde erstellt."
 
-#: pretix/control/logdisplay.py:450
+#: pretix/control/logdisplay.py:450 pretix/control/logdisplay.py:451
 msgid "The question has been deleted."
 msgstr "Die Frage wurde gelöscht."
 
-#: pretix/control/logdisplay.py:451
+#: pretix/control/logdisplay.py:451 pretix/control/logdisplay.py:452
 msgid "The question has been changed."
 msgstr "Die Frage wurde verändert."
 
-#: pretix/control/logdisplay.py:452
+#: pretix/control/logdisplay.py:452 pretix/control/logdisplay.py:453
 msgid "The tax rule has been added."
 msgstr "Die Steuer-Regel wurde erstellt."
 
-#: pretix/control/logdisplay.py:453
+#: pretix/control/logdisplay.py:453 pretix/control/logdisplay.py:454
 msgid "The tax rule has been deleted."
 msgstr "Die Steuer-Regel wurde gelöscht."
 
-#: pretix/control/logdisplay.py:454
+#: pretix/control/logdisplay.py:454 pretix/control/logdisplay.py:455
 msgid "The tax rule has been changed."
 msgstr "Die Steuer-Regel wurde geändert."
 
-#: pretix/control/logdisplay.py:455
+#: pretix/control/logdisplay.py:455 pretix/control/logdisplay.py:456
 msgid "The check-in list has been added."
 msgstr "Die Check-in-Liste wurde erstellt."
 
-#: pretix/control/logdisplay.py:456
+#: pretix/control/logdisplay.py:456 pretix/control/logdisplay.py:457
 msgid "The check-in list has been deleted."
 msgstr "Der Check-in-Liste wurde gelöscht."
 
-#: pretix/control/logdisplay.py:457
+#: pretix/control/logdisplay.py:457 pretix/control/logdisplay.py:458
 msgid "The check-in list has been changed."
 msgstr "Der Check-in-Liste wurde verändert."
 
-#: pretix/control/logdisplay.py:458
+#: pretix/control/logdisplay.py:458 pretix/control/logdisplay.py:459
 msgid "The event settings have been changed."
 msgstr "Die Veranstaltungs-Einstellungen wurden geändert."
 
-#: pretix/control/logdisplay.py:459
+#: pretix/control/logdisplay.py:459 pretix/control/logdisplay.py:460
 msgid "The ticket download settings have been changed."
 msgstr "Die Ticket-Download-Einstellungen wurden geändert."
 
-#: pretix/control/logdisplay.py:460
+#: pretix/control/logdisplay.py:460 pretix/control/logdisplay.py:461
 msgid "A plugin has been enabled."
 msgstr "Eine Erweiterung wurde aktiviert."
 
-#: pretix/control/logdisplay.py:461
+#: pretix/control/logdisplay.py:461 pretix/control/logdisplay.py:462
 msgid "A plugin has been disabled."
 msgstr "Eine Erweiterung wurde deaktiviert."
 
-#: pretix/control/logdisplay.py:462
+#: pretix/control/logdisplay.py:462 pretix/control/logdisplay.py:463
 msgid "The shop has been taken live."
 msgstr "Der Shop wurde online genommen."
 
-#: pretix/control/logdisplay.py:463
+#: pretix/control/logdisplay.py:463 pretix/control/logdisplay.py:464
 msgid "The shop has been taken offline."
 msgstr "Der Shop wurde abgeschaltet."
 
-#: pretix/control/logdisplay.py:464
+#: pretix/control/logdisplay.py:464 pretix/control/logdisplay.py:465
 msgid "The shop has been taken into test mode."
 msgstr "Der Shop wurde in den Testmodus geschaltet."
 
-#: pretix/control/logdisplay.py:465
+#: pretix/control/logdisplay.py:465 pretix/control/logdisplay.py:466
 msgid "The test mode has been disabled."
 msgstr "Der Testmodus wurde deaktiviert."
 
-#: pretix/control/logdisplay.py:466
+#: pretix/control/logdisplay.py:466 pretix/control/logdisplay.py:467
 msgid "The event has been created."
 msgstr "Die Veranstaltung wurde erstellt."
 
-#: pretix/control/logdisplay.py:467
+#: pretix/control/logdisplay.py:467 pretix/control/logdisplay.py:468
 msgid "The event details have been changed."
 msgstr "Die Veranstaltungsdetails wurden geändert."
 
-#: pretix/control/logdisplay.py:468
+#: pretix/control/logdisplay.py:468 pretix/control/logdisplay.py:469
 msgid "An answer option has been added to the question."
 msgstr "Eine Antwortoption wurde zur Frage hinzugefügt."
 
-#: pretix/control/logdisplay.py:469
+#: pretix/control/logdisplay.py:469 pretix/control/logdisplay.py:470
 msgid "An answer option has been removed from the question."
 msgstr "Eine Antwortoption wurde von der Frage entfernt."
 
-#: pretix/control/logdisplay.py:470
+#: pretix/control/logdisplay.py:470 pretix/control/logdisplay.py:471
 msgid "An answer option has been changed."
 msgstr "Eine Antwortoption wurde verändert."
 
-#: pretix/control/logdisplay.py:471
+#: pretix/control/logdisplay.py:471 pretix/control/logdisplay.py:472
 msgid "A user has been added to the event team."
 msgstr "Ein Benutzer wurde zum Team hinzugefügt."
 
-#: pretix/control/logdisplay.py:472
+#: pretix/control/logdisplay.py:472 pretix/control/logdisplay.py:473
 msgid "A user has been invited to the event team."
 msgstr "Ein Benutzer wurde ins Team eingeladen."
 
-#: pretix/control/logdisplay.py:473
+#: pretix/control/logdisplay.py:473 pretix/control/logdisplay.py:474
 msgid "A user's permissions have been changed."
 msgstr "Die Berechtigungen eines Benutzers wurden geändert."
 
-#: pretix/control/logdisplay.py:474
+#: pretix/control/logdisplay.py:474 pretix/control/logdisplay.py:475
 msgid "A user has been removed from the event team."
 msgstr "Ein Benutzer wurde aus dem Team entfernt."
 
-#: pretix/control/logdisplay.py:475
+#: pretix/control/logdisplay.py:475 pretix/control/logdisplay.py:476
 msgid "A voucher has been sent to a person on the waiting list."
 msgstr "Ein Gutschein wurde verschickt."
 
-#: pretix/control/logdisplay.py:476
+#: pretix/control/logdisplay.py:476 pretix/control/logdisplay.py:477
 msgid "An entry has been removed from the waiting list."
 msgstr "Ein Eintrag wurde von der Warteliste entfernt."
 
-#: pretix/control/logdisplay.py:477
+#: pretix/control/logdisplay.py:477 pretix/control/logdisplay.py:478
 msgid "An entry has been changed on the waiting list."
 msgstr "Ein Eintrag auf der Warteliste wurde geändert."
 
-#: pretix/control/logdisplay.py:478
+#: pretix/control/logdisplay.py:478 pretix/control/logdisplay.py:479
 msgid "An entry has been added to the waiting list."
 msgstr "Ein Eintrag wurde zur Warteliste hinzugefügt."
 
-#: pretix/control/logdisplay.py:479
+#: pretix/control/logdisplay.py:479 pretix/control/logdisplay.py:480
 msgid "The team has been created."
 msgstr "Das Team wurde erstellt."
 
-#: pretix/control/logdisplay.py:480
+#: pretix/control/logdisplay.py:480 pretix/control/logdisplay.py:481
 msgid "The team settings have been changed."
 msgstr "Die Team-Einstellungen wurden geändert."
 
-#: pretix/control/logdisplay.py:481
+#: pretix/control/logdisplay.py:481 pretix/control/logdisplay.py:482
 msgid "The team has been deleted."
 msgstr "Das Team wurde gelöscht."
 
 #: pretix/control/logdisplay.py:482 pretix/control/views/organizer.py:1590
+#: pretix/control/logdisplay.py:483 pretix/control/views/organizer.py:1454
 msgid "The gate has been created."
 msgstr "Die Station wurde erstellt."
 
-#: pretix/control/logdisplay.py:483
+#: pretix/control/logdisplay.py:483 pretix/control/logdisplay.py:484
 msgid "The gate has been changed."
 msgstr "Die Station wurde verändert."
 
-#: pretix/control/logdisplay.py:484
+#: pretix/control/logdisplay.py:484 pretix/control/logdisplay.py:485
 msgid "The gate has been deleted."
 msgstr "Die Station wurde gelöscht."
 
-#: pretix/control/logdisplay.py:485
+#: pretix/control/logdisplay.py:485 pretix/control/logdisplay.py:486
 msgctxt "subevent"
 msgid "The event date has been deleted."
 msgstr "Der Termin wurde gelöscht."
 
-#: pretix/control/logdisplay.py:486
+#: pretix/control/logdisplay.py:486 pretix/control/logdisplay.py:487
 msgctxt "subevent"
 msgid "The event date has been canceled."
 msgstr "Der Termin wurde abgesagt."
 
-#: pretix/control/logdisplay.py:487
+#: pretix/control/logdisplay.py:487 pretix/control/logdisplay.py:488
 msgctxt "subevent"
 msgid "The event date has been changed."
 msgstr "Der Termin wurde geändert."
 
-#: pretix/control/logdisplay.py:488
+#: pretix/control/logdisplay.py:488 pretix/control/logdisplay.py:489
 msgctxt "subevent"
 msgid "The event date has been created."
 msgstr "Der Termin wurde erstellt."
 
-#: pretix/control/logdisplay.py:489
+#: pretix/control/logdisplay.py:489 pretix/control/logdisplay.py:490
 msgctxt "subevent"
 msgid "A quota has been added to the event date."
 msgstr "Ein Kontingent wurde zum Termin hinzugefügt."
 
-#: pretix/control/logdisplay.py:490
+#: pretix/control/logdisplay.py:490 pretix/control/logdisplay.py:491
 msgctxt "subevent"
 msgid "A quota has been changed on the event date."
 msgstr "Ein Kontingent des Termins wurde bearbeitet."
 
-#: pretix/control/logdisplay.py:491
+#: pretix/control/logdisplay.py:491 pretix/control/logdisplay.py:492
 msgctxt "subevent"
 msgid "A quota has been removed from the event date."
 msgstr "Ein Kontingent wurde vom Termin entfernt."
 
-#: pretix/control/logdisplay.py:492
+#: pretix/control/logdisplay.py:492 pretix/control/logdisplay.py:493
 msgid "The device has been created."
 msgstr "Das Gerät wurde erstellt."
 
-#: pretix/control/logdisplay.py:493
+#: pretix/control/logdisplay.py:493 pretix/control/logdisplay.py:494
 msgid "The device has been changed."
 msgstr "Das Gerät wurde verändert."
 
-#: pretix/control/logdisplay.py:494
+#: pretix/control/logdisplay.py:494 pretix/control/logdisplay.py:495
 msgid "Access of the device has been revoked."
 msgstr "Dem Gerät wurde der Zugriff entzogen."
 
-#: pretix/control/logdisplay.py:495
+#: pretix/control/logdisplay.py:495 pretix/control/logdisplay.py:496
 msgid "The device has been initialized."
 msgstr "Das Gerät wurde installiert."
 
-#: pretix/control/logdisplay.py:496
+#: pretix/control/logdisplay.py:496 pretix/control/logdisplay.py:497
 msgid "The access token of the device has been regenerated."
 msgstr "Der Zugriffstoken des Geräts wurde neu generiert."
 
-#: pretix/control/logdisplay.py:497
+#: pretix/control/logdisplay.py:497 pretix/control/logdisplay.py:498
 msgid "The device has notified the server of an hardware or software update."
 msgstr ""
 "Dieses Gerät hat den Server über ein Hardware- oder Softwareupdate "
 "informiert."
 
-#: pretix/control/logdisplay.py:498
+#: pretix/control/logdisplay.py:498 pretix/control/logdisplay.py:499
 msgid "The gift card has been created."
 msgstr "Der Wertgutschein wurde erstellt."
 
 #: pretix/control/logdisplay.py:499 pretix/control/views/organizer.py:1442
+#: pretix/control/logdisplay.py:500 pretix/control/views/organizer.py:1306
 msgid "The gift card has been changed."
 msgstr "Der Wertgutschein wurde geändert."
 
-#: pretix/control/logdisplay.py:500
+#: pretix/control/logdisplay.py:500 pretix/control/logdisplay.py:501
 msgid "A manual transaction has been performed."
 msgstr "Eine manuelle Transaktion wurde durchgeführt."
 
-#: pretix/control/logdisplay.py:524
+#: pretix/control/logdisplay.py:524 pretix/control/logdisplay.py:525
 msgid "The settings of a payment provider have been changed."
 msgstr "Die Einstellungen einer Zahlungsmethode wurden geändert."
 
-#: pretix/control/logdisplay.py:527
+#: pretix/control/logdisplay.py:527 pretix/control/logdisplay.py:528
 msgid "The settings of a ticket output provider have been changed."
 msgstr "Die Einstellungen einer Ticket-Download-Methode wurden geändert."
 
-#: pretix/control/logdisplay.py:530
+#: pretix/control/logdisplay.py:530 pretix/control/logdisplay.py:531
 msgid "The user confirmed the following message: \"{}\""
 msgstr "Der Nutzer hat diesen Text bestätigt: \"{}\""
 
 #: pretix/control/logdisplay.py:537
 #, fuzzy
-#| msgid "The order has been denied (comment: \"{comment}\")."
 msgid "The order has been canceled (comment: \"{}\")."
 msgstr "Die Bestellung wurde abgelehnt (Kommentar: \"{comment}\")."
 
 #: pretix/control/logdisplay.py:539 pretix/control/views/orders.py:1291
-#: pretix/presale/views/order.py:967
+#: pretix/presale/views/order.py:967 pretix/control/logdisplay.py:344
+#: pretix/control/views/orders.py:1290
 msgid "The order has been canceled."
 msgstr "Die Bestellung wurde storniert."
 
-#: pretix/control/logdisplay.py:550
+#: pretix/control/logdisplay.py:550 pretix/control/logdisplay.py:572
 #, python-brace-format
 msgid "The check-in of position #{posid} on list \"{list}\" has been reverted."
 msgstr ""
 "Der Check-in von Position #{posid} auf Liste \"{list}\" wurde gelöscht."
 
-#: pretix/control/logdisplay.py:572
+#: pretix/control/logdisplay.py:572 pretix/control/logdisplay.py:552
 #, python-brace-format
 msgid ""
 "Position #{posid} has been checked in manually at {datetime} on list "
@@ -12843,7 +13000,7 @@ msgstr ""
 "Ticket #{posid} wurde am {datetime} manuell auf der Liste \"{list}\" "
 "eingecheckt."
 
-#: pretix/control/logdisplay.py:577
+#: pretix/control/logdisplay.py:577 pretix/control/logdisplay.py:557
 #, python-brace-format
 msgid ""
 "Position #{posid} has been checked in again at {datetime} on list \"{list}\"."
@@ -12851,72 +13008,74 @@ msgstr ""
 "Ticket #{posid} wurde am {datetime} erneut manuell auf der Liste \"{list}\" "
 "eingecheckt."
 
-#: pretix/control/logdisplay.py:584
+#: pretix/control/logdisplay.py:584 pretix/control/logdisplay.py:578
 #, python-brace-format
 msgid "{user} has been added to the team."
 msgstr "{user} wurde zum Team hinzugefügt."
 
-#: pretix/control/logdisplay.py:587
+#: pretix/control/logdisplay.py:587 pretix/control/logdisplay.py:581
 #, python-brace-format
 msgid "{user} has been removed from the team."
 msgstr "{user} wurde aus dem Team entfernt."
 
-#: pretix/control/logdisplay.py:590
+#: pretix/control/logdisplay.py:590 pretix/control/logdisplay.py:584
 #, python-brace-format
 msgid "{user} has joined the team using the invite sent to {email}."
 msgstr "{user} ist mit der Einladung an {email} dem Team beigetreten."
 
-#: pretix/control/logdisplay.py:595
+#: pretix/control/logdisplay.py:595 pretix/control/logdisplay.py:589
 #, python-brace-format
 msgid "{user} has been invited to the team."
 msgstr "{user} wurde ins Team eingeladen."
 
-#: pretix/control/logdisplay.py:598
+#: pretix/control/logdisplay.py:598 pretix/control/logdisplay.py:592
 #, python-brace-format
 msgid "Invite for {user} has been resent."
 msgstr "Die Einladung für {user} wurde erneut verschickt."
 
-#: pretix/control/logdisplay.py:601
+#: pretix/control/logdisplay.py:601 pretix/control/logdisplay.py:595
 #, python-brace-format
 msgid "The invite for {user} has been revoked."
 msgstr "Die Einladung für {user} wurde zurückgenommen."
 
-#: pretix/control/logdisplay.py:604
+#: pretix/control/logdisplay.py:604 pretix/control/logdisplay.py:598
 #, python-brace-format
 msgid "The token \"{name}\" has been created."
 msgstr "Der Token \"{name}\" wurde erstellt."
 
-#: pretix/control/logdisplay.py:607
+#: pretix/control/logdisplay.py:607 pretix/control/logdisplay.py:601
 #, python-brace-format
 msgid "The token \"{name}\" has been revoked."
 msgstr "Der Token \"{name}\" wurde invalidiert."
 
-#: pretix/control/logdisplay.py:610
+#: pretix/control/logdisplay.py:610 pretix/control/logdisplay.py:604
 msgid "Your account settings have been changed."
 msgstr "Die Account-Einstellungen wurden geändert."
 
 #: pretix/control/logdisplay.py:612 pretix/control/views/user.py:233
+#: pretix/control/logdisplay.py:606
 #, python-brace-format
 msgid "Your email address has been changed to {email}."
 msgstr "Die E-Mail-Adresse wurde zu {email} geändert."
 
 #: pretix/control/logdisplay.py:614 pretix/control/views/user.py:230
+#: pretix/control/logdisplay.py:608
 msgid "Your password has been changed."
 msgstr "Das Passwort wurde geändert."
 
-#: pretix/control/logdisplay.py:616
+#: pretix/control/logdisplay.py:616 pretix/control/logdisplay.py:610
 msgid "Your account has been enabled."
 msgstr "Das Benutzerkonto wurde aktiviert."
 
-#: pretix/control/logdisplay.py:618
+#: pretix/control/logdisplay.py:618 pretix/control/logdisplay.py:612
 msgid "Your account has been disabled."
 msgstr "Das Benutzerkonto wurde deaktiviert."
 
-#: pretix/control/logdisplay.py:622
+#: pretix/control/logdisplay.py:622 pretix/control/logdisplay.py:616
 msgid "You impersonated {}."
 msgstr "Sie haben als der Benutzer {} gearbeitet."
 
-#: pretix/control/logdisplay.py:625
+#: pretix/control/logdisplay.py:625 pretix/control/logdisplay.py:619
 msgid "You stopped impersonating {}."
 msgstr "Sie haben aufgehört, als der Benutzer {} zu arbeiten."
 
@@ -12971,6 +13130,8 @@ msgstr "Zahlung"
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/send_form.html:78
 #: pretix/presale/templates/pretixpresale/organizers/index.html:112
 #: pretix/presale/templates/pretixpresale/organizers/index.html:114
+#: pretix/control/views/event.py:1386 pretix/control/views/event.py:1388
+#: pretix/control/views/event.py:1419 pretix/control/views/event.py:1424
 msgid "Tickets"
 msgstr "Tickets"
 
@@ -13359,6 +13520,8 @@ msgstr "Neues Passwort setzen"
 #: pretix/presale/templates/pretixpresale/organizers/customer_info.html:20
 #: pretix/presale/templates/pretixpresale/organizers/customer_password.html:20
 #: pretix/presale/templates/pretixpresale/organizers/customer_setpassword.html:20
+#: pretix/control/templates/pretixcontrol/checkin/list_edit.html:104
+#: pretix/control/templates/pretixcontrol/item/index.html:159
 msgid "Save"
 msgstr "Speichern"
 
@@ -13520,6 +13683,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:4
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:71
+#: pretix/control/templates/pretixcontrol/organizers/devices.html:62
 msgid "Device ID"
 msgstr "Geräte-ID"
 
@@ -13671,6 +13835,7 @@ msgstr "Scan-Zeitpunkt"
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html:65
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:14
 #: pretix/plugins/checkinlists/exporters.py:624
+#: pretix/plugins/checkinlists/exporters.py:622
 msgid "Result"
 msgstr "Ergebnis"
 
@@ -15056,6 +15221,17 @@ msgstr ""
 #: pretix/plugins/stripe/views.py:643
 #: pretix/plugins/ticketoutputpdf/views.py:167
 #: pretix/presale/views/customer.py:439 pretix/presale/views/customer.py:491
+#: pretix/control/views/checkin.py:326 pretix/control/views/event.py:1201
+#: pretix/control/views/organizer.py:237 pretix/control/views/organizer.py:265
+#: pretix/control/views/organizer.py:450 pretix/control/views/organizer.py:594
+#: pretix/control/views/organizer.py:930 pretix/control/views/organizer.py:1076
+#: pretix/control/views/organizer.py:1493
+#: pretix/control/views/organizer.py:1584
+#: pretix/control/views/organizer.py:1705
+#: pretix/control/views/organizer.py:1891
+#: pretix/control/views/organizer.py:1919
+#: pretix/control/views/organizer.py:1958
+#: pretix/control/views/organizer.py:2034
 msgid "Your changes have been saved."
 msgstr "Ihre Änderungen wurden gespeichert."
 
@@ -15215,6 +15391,7 @@ msgstr "Eckdaten"
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:392
 #: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html:75
 #: pretix/control/templates/pretixcontrol/subevents/detail.html:34
+#: pretix/control/templates/pretixcontrol/item/index.html:69
 msgid "Meta data"
 msgstr "Metadaten"
 
@@ -15991,11 +16168,13 @@ msgstr "Produkttyp"
 
 #: pretix/control/templates/pretixcontrol/item/create.html:25
 #: pretix/control/templates/pretixcontrol/item/index.html:32
+#: pretix/control/templates/pretixcontrol/item/index.html:27
 msgid "Admission product"
 msgstr "Zutrittsprodukt"
 
 #: pretix/control/templates/pretixcontrol/item/create.html:27
 #: pretix/control/templates/pretixcontrol/item/index.html:34
+#: pretix/control/templates/pretixcontrol/item/index.html:29
 msgid ""
 "Every purchase of this product represents one person who is allowed to enter "
 "your event. By default, pretix will only ask for attendee information and "
@@ -16007,6 +16186,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/item/create.html:33
 #: pretix/control/templates/pretixcontrol/item/index.html:40
+#: pretix/control/templates/pretixcontrol/item/index.html:35
 msgid ""
 "This option should be set for most things that you would call a \"ticket\". "
 "For product add-ons or bundles, this should be set on the main ticket, "
@@ -16021,11 +16201,13 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/item/create.html:44
 #: pretix/control/templates/pretixcontrol/item/index.html:51
+#: pretix/control/templates/pretixcontrol/item/index.html:46
 msgid "Non-admission product"
 msgstr "Kein Zutrittsprodukt"
 
 #: pretix/control/templates/pretixcontrol/item/create.html:46
 #: pretix/control/templates/pretixcontrol/item/index.html:53
+#: pretix/control/templates/pretixcontrol/item/index.html:48
 msgid ""
 "A product that does not represent a person. By default, pretix will not ask "
 "for attendee information or offer ticket downloads."
@@ -16035,6 +16217,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/item/create.html:52
 #: pretix/control/templates/pretixcontrol/item/index.html:59
+#: pretix/control/templates/pretixcontrol/item/index.html:54
 msgid "Examples: Merchandise, donations, gift cards, add-ons to a main ticket."
 msgstr ""
 "Beispiele: Merchandise, Spenden, Geschenkgutscheine, Zusatzprodukte zum "
@@ -16197,32 +16380,39 @@ msgid "Add a new variation"
 msgstr "Neue Variante hinzufügen"
 
 #: pretix/control/templates/pretixcontrol/item/index.html:100
+#: pretix/control/templates/pretixcontrol/item/index.html:95
 msgid "Availability"
 msgstr "Verfügbarkeit"
 
 #: pretix/control/templates/pretixcontrol/item/index.html:127
+#: pretix/control/templates/pretixcontrol/item/index.html:122
 msgid "Tickets & check-in"
 msgstr "Tickets & Check-In"
 
 #: pretix/control/templates/pretixcontrol/item/index.html:132
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:592
 #: pretix/control/templates/pretixcontrol/subevents/detail.html:234
+#: pretix/control/templates/pretixcontrol/item/index.html:127
 msgid "Additional settings"
 msgstr "Zusätzliche Einstellungen"
 
 #: pretix/control/templates/pretixcontrol/item/index.html:140
+#: pretix/control/templates/pretixcontrol/item/index.html:135
 msgid "days"
 msgstr "Tage"
 
 #: pretix/control/templates/pretixcontrol/item/index.html:141
+#: pretix/control/templates/pretixcontrol/item/index.html:136
 msgid "months"
 msgstr "Monate"
 
 #: pretix/control/templates/pretixcontrol/item/index.html:143
+#: pretix/control/templates/pretixcontrol/item/index.html:138
 msgid "Membership duration after purchase"
 msgstr "Mitgliedschaftsdauer nach Kauf"
 
 #: pretix/control/templates/pretixcontrol/item/index.html:172
+#: pretix/control/templates/pretixcontrol/item/index.html:167
 msgid "Product history"
 msgstr "Produkt-Verlauf"
 
@@ -16689,6 +16879,7 @@ msgstr "App bearbeiten"
 #: pretix/control/templates/pretixcontrol/oauth/auth_revoke.html:6
 #: pretix/control/templates/pretixcontrol/oauth/authorized.html:49
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:168
+#: pretix/control/templates/pretixcontrol/organizers/devices.html:136
 msgid "Revoke access"
 msgstr "Zugriff entfernen"
 
@@ -16741,6 +16932,7 @@ msgstr "Möchten Sie diese Bestellung wirklich freigeben?"
 #: pretix/control/templates/pretixcontrol/order/pay_cancel.html:20
 #: pretix/control/templates/pretixcontrol/order/refund_cancel.html:27
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:192
+#: pretix/control/templates/pretixcontrol/order/cancel.html:36
 msgid "No, take me back"
 msgstr "Nein, lieber nicht"
 
@@ -16755,17 +16947,21 @@ msgstr "Ja, Bestellung freigeben"
 #: pretix/presale/templates/pretixpresale/event/order.html:438
 #: pretix/presale/templates/pretixpresale/event/order.html:452
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:7
+#: pretix/control/templates/pretixcontrol/order/cancel.html:5
+#: pretix/control/templates/pretixcontrol/order/cancel.html:9
 msgid "Cancel order"
 msgstr "Stornieren"
 
 #: pretix/control/templates/pretixcontrol/order/cancel.html:12
 #: pretix/control/templates/pretixcontrol/order/deny.html:10
+#: pretix/control/templates/pretixcontrol/order/cancel.html:11
 msgid "Do you really want to cancel this order? You cannot revert this action."
 msgstr ""
 "Möchten Sie diese Bestellung wirklich stornieren? Sie können diese Aktion "
 "nicht rückgängig machen."
 
 #: pretix/control/templates/pretixcontrol/order/cancel.html:16
+#: pretix/control/templates/pretixcontrol/order/cancel.html:15
 msgid ""
 "This will <strong>not</strong> automatically transfer the money back, but "
 "you will be offered options to refund the payment afterwards."
@@ -16784,6 +16980,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/order/cancel.html:51
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:200
+#: pretix/control/templates/pretixcontrol/order/cancel.html:41
 msgid "Yes, cancel order"
 msgstr "Ja, Bestellung stornieren"
 
@@ -18146,8 +18343,6 @@ msgstr "Veranstalter: %(name)s"
 
 #: pretix/control/templates/pretixcontrol/organizers/device_bulk_edit.html:6
 #, fuzzy
-#| msgctxt "subevent"
-#| msgid "Change multiple dates"
 msgid "Change multiple devices"
 msgstr "Mehrere Termine bearbeiten"
 
@@ -18295,6 +18490,7 @@ msgid "select all rows for batch-operation"
 msgstr "Alle Zeilen für Sammel-Operation auswählen"
 
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:81
+#: pretix/control/templates/pretixcontrol/organizers/devices.html:70
 msgid "Hardware model"
 msgstr "Hardware-Modell"
 
@@ -18311,19 +18507,23 @@ msgid "select row for batch-operation"
 msgstr "Zeile für Sammel-Operation auswählen"
 
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:139
+#: pretix/control/templates/pretixcontrol/organizers/devices.html:107
 msgid "Not yet initialized"
 msgstr "Noch nicht installiert"
 
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:142
+#: pretix/control/templates/pretixcontrol/organizers/devices.html:110
 msgid "Revoked"
 msgstr "Widerrufen"
 
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:164
+#: pretix/control/templates/pretixcontrol/organizers/devices.html:132
 msgid "Connect"
 msgstr "Verbinden"
 
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:173
 #: pretix/control/templates/pretixcontrol/organizers/webhooks.html:70
+#: pretix/control/templates/pretixcontrol/organizers/devices.html:141
 msgid "Logs"
 msgstr "Protokolle"
 
@@ -20435,16 +20635,20 @@ msgstr "Die neue Check-in-Liste wurde erstellt."
 #: pretix/plugins/sendmail/views.py:339 pretix/plugins/sendmail/views.py:416
 #: pretix/plugins/stripe/views.py:646
 #: pretix/plugins/ticketoutputpdf/views.py:127
+#: pretix/control/views/checkin.py:343 pretix/control/views/event.py:1159
+#: pretix/control/views/event.py:1220 pretix/control/views/event.py:1327
+#: pretix/control/views/organizer.py:240 pretix/control/views/organizer.py:268
 msgid "We could not save your changes. See below for details."
 msgstr ""
 "Die Änderungen konnten nicht gespeichert werden. Die fehlerhaften Felder "
 "sind farblich markiert."
 
 #: pretix/control/views/checkin.py:339 pretix/control/views/checkin.py:376
+#: pretix/control/views/checkin.py:322 pretix/control/views/checkin.py:359
 msgid "The requested list does not exist."
 msgstr "Die ausgewählte Liste existiert nicht."
 
-#: pretix/control/views/checkin.py:385
+#: pretix/control/views/checkin.py:385 pretix/control/views/checkin.py:368
 msgid "The selected list has been deleted."
 msgstr "Das ausgewählte List wurde gelöscht."
 
@@ -20558,6 +20762,7 @@ msgstr[0] "{num} Bestellung"
 msgstr[1] "{num} Bestellungen"
 
 #: pretix/control/views/event.py:218 pretix/control/views/organizer.py:447
+#: pretix/control/views/organizer.py:446
 msgid ""
 "Your changes have been saved. Please note that it can take a short period of "
 "time until your changes become active."
@@ -20594,13 +20799,14 @@ msgstr ""
 
 #: pretix/control/views/event.py:701 pretix/control/views/organizer.py:313
 #: pretix/plugins/sendmail/views.py:205 pretix/plugins/sendmail/views.py:352
-#: pretix/plugins/sendmail/views.py:428
+#: pretix/plugins/sendmail/views.py:428 pretix/control/views/organizer.py:312
 msgid "This value will be replaced based on dynamic parameters."
 msgstr ""
 "Dieser Textbaustein wird aufgrund verschiedener Parameter dynamisch "
 "angepasst."
 
 #: pretix/control/views/event.py:709 pretix/control/views/organizer.py:321
+#: pretix/control/views/organizer.py:320
 msgid "invalid item"
 msgstr "Ungültiges Produkt"
 
@@ -20657,38 +20863,42 @@ msgstr ""
 "B. von Plugins erstellte Daten) es nicht erlauben."
 
 #: pretix/control/views/event.py:1087 pretix/control/views/orders.py:546
+#: pretix/control/views/event.py:1084
 msgid "The comment has been updated."
 msgstr "Der Kommentar wurde aktualisiert."
 
 #: pretix/control/views/event.py:1089 pretix/control/views/orders.py:548
+#: pretix/control/views/event.py:1086
 msgid "Could not update the comment."
 msgstr "Kommentar konnte nicht gespeichert werden."
 
 #: pretix/control/views/event.py:1127 pretix/control/views/main.py:312
+#: pretix/control/views/event.py:1124
 msgid "VAT"
 msgstr "MwSt."
 
-#: pretix/control/views/event.py:1156
+#: pretix/control/views/event.py:1156 pretix/control/views/event.py:1153
 msgid "The new tax rule has been created."
 msgstr "Die neue Steuer-Regel wurde erstellt."
 
 #: pretix/control/views/event.py:1179 pretix/control/views/event.py:1239
+#: pretix/control/views/event.py:1176 pretix/control/views/event.py:1236
 msgid "The requested tax rule does not exist."
 msgstr "Diese Steuer-Regel existiert nicht."
 
-#: pretix/control/views/event.py:1248
+#: pretix/control/views/event.py:1248 pretix/control/views/event.py:1245
 msgid "The selected tax rule has been deleted."
 msgstr "Die ausgewählte Steuer-Regel wurde gelöscht."
 
-#: pretix/control/views/event.py:1250
+#: pretix/control/views/event.py:1250 pretix/control/views/event.py:1247
 msgid "The selected tax rule can not be deleted."
 msgstr "Die ausgewählte Steuer-Regel kann nicht gelöscht werden."
 
-#: pretix/control/views/event.py:1300
+#: pretix/control/views/event.py:1300 pretix/control/views/event.py:1297
 msgid "Your event is not empty, you need to set it up manually."
 msgstr "Ihre Veranstaltung ist nicht leer, Sie müssen sie manuell einrichten."
 
-#: pretix/control/views/event.py:1434
+#: pretix/control/views/event.py:1434 pretix/control/views/event.py:1431
 msgid ""
 "Your changes have been saved. You can now go on with looking at the details "
 "or take your event live to start selling!"
@@ -20697,11 +20907,11 @@ msgstr ""
 "Einstellungen fortfahren oder Ihr Event veröffentlichen um den Verkauf zu "
 "starten!"
 
-#: pretix/control/views/event.py:1453
+#: pretix/control/views/event.py:1453 pretix/control/views/event.py:1450
 msgid "Regular ticket"
 msgstr "Normales Ticket"
 
-#: pretix/control/views/event.py:1458
+#: pretix/control/views/event.py:1458 pretix/control/views/event.py:1455
 msgid "Reduced ticket"
 msgstr "Ermäßigtes Ticket"
 
@@ -21294,7 +21504,7 @@ msgstr ""
 msgid "The payment has been created successfully."
 msgstr "Die Zahlung wurde erfolgreich verbucht."
 
-#: pretix/control/views/orders.py:1278
+#: pretix/control/views/orders.py:1278 pretix/control/views/orders.py:1277
 msgid ""
 "The order has been canceled. You can now select how you want to transfer the "
 "money back to the user."
@@ -21303,20 +21513,21 @@ msgstr ""
 "Sie das Geld zurückerstatten möchten."
 
 #: pretix/control/views/orders.py:1345 pretix/control/views/orders.py:1349
+#: pretix/control/views/orders.py:1343 pretix/control/views/orders.py:1347
 msgid "No VAT ID specified."
 msgstr "Es wurde keine USt-ID-Nr. angegeben."
 
-#: pretix/control/views/orders.py:1353
+#: pretix/control/views/orders.py:1353 pretix/control/views/orders.py:1351
 msgid "No country specified."
 msgstr "Es wurde kein Land angegeben."
 
-#: pretix/control/views/orders.py:1357
+#: pretix/control/views/orders.py:1357 pretix/control/views/orders.py:1355
 msgid "VAT ID could not be checked since this country is not supported."
 msgstr ""
 "Die USt-ID-Nr. konnte nicht geprüft werden, da dieses Land nicht unterstützt "
 "wird."
 
-#: pretix/control/views/orders.py:1368
+#: pretix/control/views/orders.py:1368 pretix/control/views/orders.py:1366
 msgid ""
 "The VAT ID could not be checked, as the VAT checking service of the country "
 "is currently not available."
@@ -21324,48 +21535,54 @@ msgstr ""
 "Die USt-ID-Nr. konnte nicht geprüft werden, da der Prüfdienst des Landes im "
 "Moment nicht verfügbar ist."
 
-#: pretix/control/views/orders.py:1371
+#: pretix/control/views/orders.py:1371 pretix/control/views/orders.py:1369
 msgid "This VAT ID is valid."
 msgstr "Die USt-ID-Nr. ist gültig."
 
 #: pretix/control/views/orders.py:1385 pretix/control/views/orders.py:1416
+#: pretix/control/views/orders.py:1383 pretix/control/views/orders.py:1414
 msgid "Unknown invoice."
 msgstr "Unbekannte Rechnung"
 
-#: pretix/control/views/orders.py:1388
+#: pretix/control/views/orders.py:1388 pretix/control/views/orders.py:1386
 msgid "Invoices may not be changed after they are created."
 msgstr ""
 "Rechnungen dürfen nicht mehr verändert werden, nachdem sie erstellt wurden."
 
 #: pretix/control/views/orders.py:1390 pretix/control/views/orders.py:1419
+#: pretix/control/views/orders.py:1388 pretix/control/views/orders.py:1417
 msgid "The invoice has already been canceled."
 msgstr "Die Rechnung wurde bereits storniert."
 
-#: pretix/control/views/orders.py:1392
+#: pretix/control/views/orders.py:1392 pretix/control/views/orders.py:1390
 msgid "The invoice file has already been exported."
 msgstr "Die Rechnungsdatei wurde bereits exportiert."
 
-#: pretix/control/views/orders.py:1394
+#: pretix/control/views/orders.py:1394 pretix/control/views/orders.py:1392
 msgid "The invoice file is too old to be regenerated."
 msgstr "Die Rechnungsdatei ist zu alt, um neu generiert zu werden."
 
 #: pretix/control/views/orders.py:1396 pretix/control/views/orders.py:1421
+#: pretix/control/views/orders.py:1394 pretix/control/views/orders.py:1419
 msgid "The invoice has been cleaned of personal data."
 msgstr "Die Rechnung wurde von persönlichen Daten bereinigt."
 
-#: pretix/control/views/orders.py:1452
+#: pretix/control/views/orders.py:1452 pretix/control/views/orders.py:1450
 msgid "The email has been queued to be sent."
 msgstr "Die E-Mail wurde zum Versenden gespeichert."
 
 #: pretix/control/views/orders.py:1476 pretix/presale/views/order.py:1151
+#: pretix/control/views/orders.py:1474
 msgid "This invoice has not been found"
 msgstr "Diese Rechnung wurde nicht gefunden"
 
 #: pretix/control/views/orders.py:1483 pretix/presale/views/order.py:1158
+#: pretix/control/views/orders.py:1481
 msgid "The invoice file is no longer stored on the server."
 msgstr "Die Rechungsdatei liegt auf dem Server nicht mehr vor."
 
 #: pretix/control/views/orders.py:1488 pretix/presale/views/order.py:1163
+#: pretix/control/views/orders.py:1486
 msgid ""
 "The invoice file has not yet been generated, we will generate it for you "
 "now. Please try again in a few seconds."
@@ -21373,11 +21590,12 @@ msgstr ""
 "Diese Rechnung wurde bisher noch nicht fertig erstellt, wir werden die PDF-"
 "Datei jetzt erstellen. Bitte probieren Sie es in wenigen Sekunden erneut."
 
-#: pretix/control/views/orders.py:1515
+#: pretix/control/views/orders.py:1515 pretix/control/views/orders.py:1513
 msgid "The payment term has been changed."
 msgstr "Die Zahlungsfrist wurde geändert."
 
 #: pretix/control/views/orders.py:1520 pretix/control/views/orders.py:1577
+#: pretix/control/views/orders.py:1518 pretix/control/views/orders.py:1575
 msgid ""
 "We were not able to process the request completely as the server was too "
 "busy."
@@ -21385,39 +21603,43 @@ msgstr ""
 "Wir konnten Ihre Bestellung nicht durchführen, da der Server zu beschäftigt "
 "war."
 
-#: pretix/control/views/orders.py:1528
+#: pretix/control/views/orders.py:1528 pretix/control/views/orders.py:1526
 msgid "This action is only allowed for pending orders."
 msgstr "Diese Aktion ist nur für unbezahlte Bestellungen möglich."
 
-#: pretix/control/views/orders.py:1583
+#: pretix/control/views/orders.py:1583 pretix/control/views/orders.py:1581
 msgid "This action is only allowed for canceled orders."
 msgstr "Diese Aktion ist nur für stornierte Bestellungen möglich."
 
 #: pretix/control/views/orders.py:1788 pretix/presale/views/order.py:1449
+#: pretix/control/views/orders.py:1786
 msgid "An error occurred. Please see the details below."
 msgstr ""
 "Ein Fehler ist aufgetreten, bitte schauen Sie weiter unten für Details."
 
-#: pretix/control/views/orders.py:1796
+#: pretix/control/views/orders.py:1796 pretix/control/views/orders.py:1794
 msgid "The order has been changed and the user has been notified."
 msgstr "Die Bestellung wurde geändert und der Kunde benachrichtigt."
 
 #: pretix/control/views/orders.py:1798 pretix/control/views/orders.py:1932
 #: pretix/control/views/orders.py:1969 pretix/presale/views/order.py:1484
+#: pretix/control/views/orders.py:1796 pretix/control/views/orders.py:1930
+#: pretix/control/views/orders.py:1967
 msgid "The order has been changed."
 msgstr "Die Bestellung wurde geändert."
 
 #: pretix/control/views/orders.py:1825 pretix/presale/checkoutflow.py:849
-#: pretix/presale/views/order.py:781
+#: pretix/presale/views/order.py:781 pretix/control/views/orders.py:1823
 msgid ""
 "We had difficulties processing your input. Please review the errors below."
 msgstr "Wir hatten Schwierigkeiten, Ihre Eingabe zu verarbeiten."
 
-#: pretix/control/views/orders.py:1934
+#: pretix/control/views/orders.py:1934 pretix/control/views/orders.py:1932
 msgid "Nothing about the order had to be changed."
 msgstr "Es wurde keine Änderung vorgenommen."
 
 #: pretix/control/views/orders.py:2015 pretix/plugins/sendmail/views.py:125
+#: pretix/control/views/orders.py:2013
 msgid "We could not send the email. See below for details."
 msgstr ""
 "Wir könnten die E-Mail nicht senden, siehe weiter unten für weitere "
@@ -21425,20 +21647,24 @@ msgstr ""
 
 #: pretix/control/views/orders.py:2031 pretix/control/views/orders.py:2096
 #: pretix/plugins/sendmail/views.py:215 pretix/plugins/sendmail/views.py:362
-#: pretix/plugins/sendmail/views.py:438
+#: pretix/plugins/sendmail/views.py:438 pretix/control/views/orders.py:2029
+#: pretix/control/views/orders.py:2094
 #, python-brace-format
 msgid "Subject: {subject}"
 msgstr "Betreff: {subject}"
 
 #: pretix/control/views/orders.py:2045 pretix/control/views/orders.py:2111
+#: pretix/control/views/orders.py:2043 pretix/control/views/orders.py:2109
 msgid "Your message has been queued and will be sent to {}."
 msgstr "Die Nachricht wurde gespeichert und wird an {} versendet."
 
 #: pretix/control/views/orders.py:2049 pretix/control/views/orders.py:2114
+#: pretix/control/views/orders.py:2047 pretix/control/views/orders.py:2112
 msgid "Failed to send mail to the following user: {}"
 msgstr "Die Mail an den folgenden Benutzer konnte nicht versendet werden: {}"
 
 #: pretix/control/views/orders.py:2150 pretix/presale/views/order.py:980
+#: pretix/control/views/orders.py:2148
 msgid ""
 "This link is no longer valid. Please go back, refresh the page, and try "
 "again."
@@ -21446,23 +21672,25 @@ msgstr ""
 "Dieser Link ist nicht mehr gültig. Bitte gehen Sie einen Schritt zurück, "
 "laden Sie die Seite neu und versuchen es erneut."
 
-#: pretix/control/views/orders.py:2226
+#: pretix/control/views/orders.py:2226 pretix/control/views/orders.py:2224
 msgid "There is no order with the given order code."
 msgstr "Es existiert keine Bestellung mit der eingegebenen Bestellnummer."
 
 #: pretix/control/views/orders.py:2301 pretix/control/views/organizer.py:1531
+#: pretix/control/views/orders.py:2299 pretix/control/views/organizer.py:1395
 msgid "The selected exporter was not found."
 msgstr "Das ausgewählte Exportformat wurde nicht gefunden."
 
 #: pretix/control/views/orders.py:2308 pretix/control/views/organizer.py:1537
+#: pretix/control/views/orders.py:2306 pretix/control/views/organizer.py:1401
 msgid "There was a problem processing your input. See below for error details."
 msgstr "Die Eingabe konnte nicht verarbeitet werden."
 
-#: pretix/control/views/orders.py:2393
+#: pretix/control/views/orders.py:2393 pretix/control/views/orders.py:2391
 msgid "All orders have been canceled."
 msgstr "Alle Bestellungen wurden storniert."
 
-#: pretix/control/views/orders.py:2395
+#: pretix/control/views/orders.py:2395 pretix/control/views/orders.py:2393
 #, python-brace-format
 msgid ""
 "The orders have been canceled. An error occurred with {count} orders, please "
@@ -21471,23 +21699,23 @@ msgstr ""
 "Die Bestellungen wurden storniert. Bei {count} ist ein Fehler aufgetreten, "
 "bitte prüfe alle nicht stornierten Bestellungen."
 
-#: pretix/control/views/orders.py:2416
+#: pretix/control/views/orders.py:2416 pretix/control/views/orders.py:2414
 msgid "Your input was not valid."
 msgstr "Die Eingabe war nicht korrekt."
 
-#: pretix/control/views/organizer.py:142
+#: pretix/control/views/organizer.py:142 pretix/control/views/organizer.py:141
 msgid "Token name"
 msgstr "Token-Name"
 
-#: pretix/control/views/organizer.py:359
+#: pretix/control/views/organizer.py:359 pretix/control/views/organizer.py:358
 msgid "This organizer can not be deleted."
 msgstr "Dieser Veranstalter kann nicht gelöscht werden."
 
-#: pretix/control/views/organizer.py:381
+#: pretix/control/views/organizer.py:381 pretix/control/views/organizer.py:380
 msgid "The organizer has been deleted."
 msgstr "Der Veranstalter wurde gelöscht."
 
-#: pretix/control/views/organizer.py:384
+#: pretix/control/views/organizer.py:384 pretix/control/views/organizer.py:383
 msgid ""
 "The organizer could not be deleted as some constraints (e.g. data created by "
 "plug-ins) do not allow it."
@@ -21495,15 +21723,15 @@ msgstr ""
 "Dieser Veranstalter konnte nicht gelöscht werden, da einige Bedingungen (z."
 "B. von Plugins erstellte Daten) es nicht erlauben."
 
-#: pretix/control/views/organizer.py:488
+#: pretix/control/views/organizer.py:488 pretix/control/views/organizer.py:487
 msgid "The new organizer has been created."
 msgstr "Ein neuer Veranstalter wurde erstellt."
 
-#: pretix/control/views/organizer.py:491
+#: pretix/control/views/organizer.py:491 pretix/control/views/organizer.py:490
 msgid "Administrators"
 msgstr "Administratoren"
 
-#: pretix/control/views/organizer.py:553
+#: pretix/control/views/organizer.py:553 pretix/control/views/organizer.py:552
 msgid "The team has been created. You can now add members to the team."
 msgstr ""
 "Das neue Team wurde erstellt. Sie können nun Mitglieder zum Team hinzufügen."
@@ -21517,19 +21745,29 @@ msgstr ""
 #: pretix/control/views/organizer.py:1695
 #: pretix/control/views/organizer.py:1724
 #: pretix/control/views/organizer.py:1813
-#: pretix/control/views/organizer.py:1847
+#: pretix/control/views/organizer.py:1847 pretix/control/views/organizer.py:563
+#: pretix/control/views/organizer.py:598 pretix/control/views/organizer.py:812
+#: pretix/control/views/organizer.py:873 pretix/control/views/organizer.py:934
+#: pretix/control/views/organizer.py:1038
+#: pretix/control/views/organizer.py:1080
+#: pretix/control/views/organizer.py:1463
+#: pretix/control/views/organizer.py:1497
+#: pretix/control/views/organizer.py:1559
+#: pretix/control/views/organizer.py:1588
+#: pretix/control/views/organizer.py:1675
+#: pretix/control/views/organizer.py:1709
 msgid "Your changes could not be saved."
 msgstr "Die Änderungen konnten nicht gespeichert werden."
 
-#: pretix/control/views/organizer.py:634
+#: pretix/control/views/organizer.py:634 pretix/control/views/organizer.py:633
 msgid "The selected team has been deleted."
 msgstr "Das ausgewählte Team wurde gelöscht."
 
-#: pretix/control/views/organizer.py:637
+#: pretix/control/views/organizer.py:637 pretix/control/views/organizer.py:636
 msgid "The selected team cannot be deleted."
 msgstr "Das ausgewählte Team kann nicht gelöscht werden."
 
-#: pretix/control/views/organizer.py:700
+#: pretix/control/views/organizer.py:700 pretix/control/views/organizer.py:699
 msgid ""
 "You cannot remove the last member from this team as no one would be left "
 "with the permission to change teams."
@@ -21537,44 +21775,45 @@ msgstr ""
 "Sie können das letzte Teammitglied nicht entfernen, da es sonst niemanden "
 "mehr gäbe, der für diesen Veranstalter-Account Teams verändern kann."
 
-#: pretix/control/views/organizer.py:711
+#: pretix/control/views/organizer.py:711 pretix/control/views/organizer.py:710
 msgid "The member has been removed from the team."
 msgstr "Der Benutzer wurde aus dem Team entfernt."
 
 #: pretix/control/views/organizer.py:718 pretix/control/views/organizer.py:734
+#: pretix/control/views/organizer.py:717 pretix/control/views/organizer.py:733
 msgid "Invalid invite selected."
 msgstr "Ungültige Einladung gewählt."
 
-#: pretix/control/views/organizer.py:727
+#: pretix/control/views/organizer.py:727 pretix/control/views/organizer.py:726
 msgid "The invite has been revoked."
 msgstr "Die Einladung wurde zurückgenommen."
 
-#: pretix/control/views/organizer.py:743
+#: pretix/control/views/organizer.py:743 pretix/control/views/organizer.py:742
 msgid "The invite has been resent."
 msgstr "Die Einladung wurde erneut verschickt."
 
-#: pretix/control/views/organizer.py:750
+#: pretix/control/views/organizer.py:750 pretix/control/views/organizer.py:749
 msgid "Invalid token selected."
 msgstr "Ungültiger Token gewählt."
 
-#: pretix/control/views/organizer.py:760
+#: pretix/control/views/organizer.py:760 pretix/control/views/organizer.py:759
 msgid "The token has been revoked."
 msgstr "Der Token wurde invalidiert."
 
-#: pretix/control/views/organizer.py:772
+#: pretix/control/views/organizer.py:772 pretix/control/views/organizer.py:771
 msgid "Users need to have a pretix account before they can be invited."
 msgstr ""
 "Nutzer müssen ein pretix-Konto haben, bevor sie eingeladen werden können."
 
-#: pretix/control/views/organizer.py:782
+#: pretix/control/views/organizer.py:782 pretix/control/views/organizer.py:781
 msgid "The new member has been invited to the team."
 msgstr "Das neue Mitglied wurde per E-Mail zum Team eingeladen."
 
-#: pretix/control/views/organizer.py:797
+#: pretix/control/views/organizer.py:797 pretix/control/views/organizer.py:796
 msgid "The new member has been added to the team."
 msgstr "Das neue Mitglied wurde zum Team hinzugefügt."
 
-#: pretix/control/views/organizer.py:808
+#: pretix/control/views/organizer.py:808 pretix/control/views/organizer.py:807
 msgid ""
 "A new API token has been created with the following secret: {}\n"
 "Please copy this secret to a safe place. You will not be able to view it "
@@ -21584,74 +21823,90 @@ msgstr ""
 "Bitte kopieren Sie diesen Schlüssel an einen sicheren Ort. Sie werden ihn "
 "hier nicht erneut abrufen können."
 
-#: pretix/control/views/organizer.py:1090
+#: pretix/control/views/organizer.py:1090 pretix/control/views/organizer.py:954
 msgid "This device has been set up successfully."
 msgstr "Das Gerät wurde erfolgreich installiert."
 
-#: pretix/control/views/organizer.py:1118
+#: pretix/control/views/organizer.py:1118 pretix/control/views/organizer.py:982
 msgid "This device currently does not have access."
 msgstr "Dieses Gerät hat derzeit keinen Zugriff."
 
-#: pretix/control/views/organizer.py:1129
+#: pretix/control/views/organizer.py:1129 pretix/control/views/organizer.py:993
 msgid "Access for this device has been revoked."
 msgstr "Der Zugriff für dieses Gerät wurde entfernt."
 
 #: pretix/control/views/organizer.py:1276
+#: pretix/control/views/organizer.py:1140
 msgid "The selected gift card issuer has been added."
 msgstr "Der ausgewählte Gutscheinaussteller wurde hinzugefügt."
 
 #: pretix/control/views/organizer.py:1290
+#: pretix/control/views/organizer.py:1154
 msgid "The selected gift card issuer has been removed."
 msgstr "Der ausgewählte Gutscheinaussteller wurde gelöscht."
 
 #: pretix/control/views/organizer.py:1323
 #: pretix/control/views/organizer.py:1360
+#: pretix/control/views/organizer.py:1187
+#: pretix/control/views/organizer.py:1224
 msgid "Gift cards are not allowed to have negative values."
 msgstr "Wertgutscheine dürfen keine negativen Werte haben."
 
 #: pretix/control/views/organizer.py:1350
+#: pretix/control/views/organizer.py:1214
 msgid "The transaction could not be reversed."
 msgstr "Die Transaktion konnte nicht zurückgebucht werden."
 
 #: pretix/control/views/organizer.py:1352
+#: pretix/control/views/organizer.py:1216
 msgid "The transaction has been reversed."
 msgstr "Die Transaktion wurde zurückgebucht."
 
 #: pretix/control/views/organizer.py:1357
+#: pretix/control/views/organizer.py:1221
 msgid "Your input was invalid, please try again."
 msgstr "Die Eingabe war nicht korrekt, bitte erneut versuchen."
 
 #: pretix/control/views/organizer.py:1374
+#: pretix/control/views/organizer.py:1238
 msgid "The manual transaction has been saved."
 msgstr "Die manuelle Transaktion wurde gespeichert."
 
 #: pretix/control/views/organizer.py:1406
+#: pretix/control/views/organizer.py:1270
 msgid "The gift card has been created and can now be used."
 msgstr "Der Wertgutschein wurde erstellt und kann nun verwendet werden."
 
 #: pretix/control/views/organizer.py:1657
+#: pretix/control/views/organizer.py:1521
 msgid "The selected gate has been deleted."
 msgstr "Die ausgewählte Station wurde gelöscht."
 
 #: pretix/control/views/organizer.py:1686
+#: pretix/control/views/organizer.py:1550
 msgid "The property has been created."
 msgstr "Eine Eigenschaft wurde erstellt."
 
 #: pretix/control/views/organizer.py:1748
+#: pretix/control/views/organizer.py:1612
 msgid "The selected property has been deleted."
 msgstr "Die ausgewählte Eigenschaft wurde gelöscht."
 
 #: pretix/control/views/organizer.py:1877
 #: pretix/control/views/organizer.py:2134
+#: pretix/control/views/organizer.py:1739
+#: pretix/control/views/organizer.py:1996
 msgid "The selected object has been deleted."
 msgstr "Das ausgewählte Objekt wurde gelöscht."
 
 #: pretix/control/views/organizer.py:1936 pretix/presale/views/customer.py:289
+#: pretix/control/views/organizer.py:1798
 #, python-brace-format
 msgid "Set a new password for your account at {organizer}"
 msgstr "Setzen Sie ein neues Passwort für Ihr Kundenkonto bei {organizer}"
 
 #: pretix/control/views/organizer.py:1945
+#: pretix/control/views/organizer.py:1807
 msgid ""
 "We've sent the customer an email with further instructions on resetting your "
 "password."
@@ -21660,6 +21915,7 @@ msgstr ""
 "Passwort zurückzusetzen."
 
 #: pretix/control/views/organizer.py:2198
+#: pretix/control/views/organizer.py:2060
 msgid "The customer account has been anonymized."
 msgstr "Das Kundenkonto wurde anonymisiert."
 
@@ -22923,45 +23179,55 @@ msgstr "Ausgetreten"
 
 #: pretix/plugins/checkinlists/exporters.py:444
 #: pretix/plugins/checkinlists/exporters.py:622
+#: pretix/plugins/checkinlists/exporters.py:620
 msgid "Automatically checked in"
 msgstr "Automatisch eingecheckt"
 
 #: pretix/plugins/checkinlists/exporters.py:453
 #: pretix/plugins/checkinlists/exporters.py:617
 #: pretix/plugins/paypal/payment.py:122
+#: pretix/plugins/checkinlists/exporters.py:615
 msgid "Secret"
 msgstr "Secret"
 
 #: pretix/plugins/checkinlists/exporters.py:603
+#: pretix/plugins/checkinlists/exporters.py:601
 msgid "Check-in log (all scans)"
 msgstr "Check-in-Protokoll (alle Scans)"
 
 #: pretix/plugins/checkinlists/exporters.py:621
+#: pretix/plugins/checkinlists/exporters.py:619
 msgid "Offline override"
 msgstr "Ggf. inkorrekte Offline-Entscheidung"
 
 #: pretix/plugins/checkinlists/exporters.py:625
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:65
+#: pretix/plugins/checkinlists/exporters.py:623
 msgid "Error message"
 msgstr "Fehlermeldung"
 
 #: pretix/plugins/checkinlists/exporters.py:626
+#: pretix/plugins/checkinlists/exporters.py:624
 msgid "Upload date"
 msgstr "Upload-Datum"
 
 #: pretix/plugins/checkinlists/exporters.py:627
+#: pretix/plugins/checkinlists/exporters.py:625
 msgid "Upload time"
 msgstr "Upload-Zeitpunkt"
 
 #: pretix/plugins/checkinlists/exporters.py:670
+#: pretix/plugins/checkinlists/exporters.py:668
 msgid "OK"
 msgstr "OK"
 
 #: pretix/plugins/checkinlists/exporters.py:702
+#: pretix/plugins/checkinlists/exporters.py:700
 msgid "Successful scans only"
 msgstr "Nur erfolgreiche Scans"
 
 #: pretix/plugins/checkinlists/exporters.py:717
+#: pretix/plugins/checkinlists/exporters.py:715
 msgid "All check-in lists"
 msgstr "Alle Check-in-Listen"
 
@@ -27297,9 +27563,6 @@ msgstr ""
 
 #: pretix/presale/views/waiting.py:128
 #, fuzzy
-#| msgid ""
-#| "We've added you to the waiting list. You will receive an email as soon as "
-#| "tickets get available again."
 msgid ""
 "We've added you to the waiting list. You will receive an email as soon as "
 "this product gets available again."
@@ -27428,43 +27691,52 @@ msgstr "Galicisch"
 msgid "Czech"
 msgstr ""
 
-#: pretix/settings.py:842
+#: pretix/settings.py:842 pretix/settings.py:841
 msgid "User profile only"
 msgstr "Nur Benutzerprofil"
 
-#: pretix/settings.py:843
+#: pretix/settings.py:843 pretix/settings.py:842
 msgid "Read access"
 msgstr "Lesezugriff"
 
-#: pretix/settings.py:844
+#: pretix/settings.py:844 pretix/settings.py:843
 msgid "Write access"
 msgstr "Schreibzugriff"
 
-#: pretix/settings.py:854
+#: pretix/settings.py:854 pretix/settings.py:853
 msgid "Kosovo"
 msgstr "Kosovo"
 
+#: pretix/base/settings.py:1913
 #, python-brace-format
-#~ msgid ""
-#~ "Hello,\n"
-#~ "\n"
-#~ "your order {code} for {event} has been canceled.\n"
-#~ "\n"
-#~ "You can view the details of your order at\n"
-#~ "{url}\n"
-#~ "\n"
-#~ "Best regards,\n"
-#~ "Your {event} team"
-#~ msgstr ""
-#~ "Hallo,\n"
-#~ "\n"
-#~ "Ihre Bestellung {code} für {event} wurde storniert.\n"
-#~ "\n"
-#~ "Sie können Ihre Bestellung unter folgender Adresse einsehen:\n"
-#~ "{url}\n"
-#~ "\n"
-#~ "Viele Grüße,\n"
-#~ "Das {event} Team"
+msgid ""
+"Hello,\n"
+"\n"
+"your order {code} for {event} has been canceled.\n"
+"\n"
+"You can view the details of your order at\n"
+"{url}\n"
+"\n"
+"Best regards,\n"
+"Your {event} team"
+msgstr ""
+"Hallo,\n"
+"\n"
+"Ihre Bestellung {code} für {event} wurde storniert.\n"
+"\n"
+"Sie können Ihre Bestellung unter folgender Adresse einsehen:\n"
+"{url}\n"
+"\n"
+"Viele Grüße,\n"
+"Das {event} Team"
+
+#: pretix/presale/views/waiting.py:128
+msgid ""
+"We've added you to the waiting list. You will receive an email as soon as "
+"tickets get available again."
+msgstr ""
+"Wir haben Sie zur Warteliste hinzugefügt. Sie erhalten eine E-Mail, sobald "
+"wieder Tickets verfügbar sind."
 
 #, python-format
 #~ msgid "Amount of %(item)s – %(var)s to order"
