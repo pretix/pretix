@@ -53,7 +53,7 @@ from django.db.transaction import get_connection
 from django.dispatch import receiver
 from django.utils.functional import cached_property
 from django.utils.timezone import make_aware, now
-from django.utils.translation import gettext as _
+from django.utils.translation import gettext as _, gettext_lazy
 from django_scopes import scopes_disabled
 
 from pretix.api.models import OAuthApplication
@@ -934,7 +934,7 @@ def _create_order(event: Event, email: str, positions: List[CartPosition], now_d
 def _order_placed_email(event: Event, order: Order, pprov: BasePaymentProvider, email_template, log_entry: str,
                         invoice, payment: OrderPayment, is_free=False):
     email_context = get_email_context(event=event, order=order, payment=payment if pprov else None)
-    email_subject = _('Your order: %(code)s') % {'code': order.code}
+    email_subject = gettext_lazy('Your order: %(code)s') % {'code': order.code}
     try:
         order.send_mail(
             email_subject, email_template, email_context,
@@ -952,7 +952,7 @@ def _order_placed_email(event: Event, order: Order, pprov: BasePaymentProvider, 
 
 def _order_placed_email_attendee(event: Event, order: Order, position: OrderPosition, email_template, log_entry: str, is_free=False):
     email_context = get_email_context(event=event, order=order, position=position)
-    email_subject = _('Your event registration: %(code)s') % {'code': order.code}
+    email_subject = gettext_lazy('Your event registration: %(code)s') % {'code': order.code}
 
     try:
         position.send_mail(
