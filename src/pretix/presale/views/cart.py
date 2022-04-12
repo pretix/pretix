@@ -632,7 +632,7 @@ class RedeemView(NoSearchIndexViewMixin, EventViewMixin, CartMixin, TemplateView
             if request.GET.get('subevent'):
                 try:
                     subevent_pk = int(request.GET.get('subevent'))
-                    self.subevent = SubEvent.objects.get(event=request.event, pk=subevent_pk, active=True)
+                    self.subevent = request.event.subevents.get(pk=subevent_pk, active=True)
                 except (ValueError, SubEvent.DoesNotExist):
                     raise Http404(pgettext('subevent', 'We were unable to find the specified date.'))  
 
