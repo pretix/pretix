@@ -219,6 +219,14 @@ def _logic_explain(rules, ev, rule_data):
                 'entries_today': 140,
                 'now_isoweekday': 210,
             }
+            operator_weights = {
+                '==': 2,
+                '<': 1,
+                '<=': 1,
+                '>': 1,
+                '>=': 1,
+                '!=': 3,
+            }
             l = {
                 'minutes_since_last_entry': _('time since last entry'),
                 'minutes_since_first_entry': _('time since first entry'),
@@ -228,7 +236,23 @@ def _logic_explain(rules, ev, rule_data):
                 'now_isoweekday': _('week day'),
             }
             compare_to = rhs[0]
-            var_weights[vname] = (w[var], abs(compare_to - rule_data[var]))
+            penalty = 0
+
+            if var in ('minutes_since_last_entry', 'minutes_since_first_entry'):
+                is_comparison_to_minus_one = (
+                    (operator == '<' and compare_to <= 0) or
+                    (operator == '<=' and compare_to < 0) or
+                    (operator == '>=' and compare_to < 0) or
+                    (operator == '>' and compare_to <= 0) or
+                    (operator == '==' and compare_to == -1) or
+                    (operator == '!=' and compare_to == -1)
+                )
+                if is_comparison_to_minus_one:
+                    # These are "technical" comparisons without real meaning, we don't want to show them.
+                    penalty = 1000
+
+            var_weights[vname] = (w[var] + operator_weights.get(operator, 0) + penalty, abs(compare_to - rule_data[var]))
+
             if operator == '==':
                 var_texts[vname] = _('{variable} is not {value}').format(variable=l[var], value=compare_to)
             elif operator in ('<', '<='):
@@ -237,6 +261,7 @@ def _logic_explain(rules, ev, rule_data):
                 var_texts[vname] = _('Minimum {variable} exceeded').format(variable=l[var])
             elif operator == '!=':
                 var_texts[vname] = _('{variable} is {value}').format(variable=l[var], value=compare_to)
+
         else:
             raise ValueError(f'Unknown variable {var}')
 
