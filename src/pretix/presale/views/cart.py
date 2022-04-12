@@ -630,8 +630,12 @@ class RedeemView(NoSearchIndexViewMixin, EventViewMixin, CartMixin, TemplateView
         self.subevent = None
         if request.event.has_subevents:
             if request.GET.get('subevent'):
-                self.subevent = get_object_or_404(SubEvent, event=request.event, pk=request.GET.get('subevent'),
-                                                  active=True)
+                try:
+                    subevent_pk = int(request.GET.get('subevent'))
+                except ValueError:
+                    raise Http404(_('No SubEvent matches the given query.'))
+
+                self.subevent = get_object_or_404(SubEvent, event=request.event, pk=subevent_pk, active=True)
 
             if hasattr(self, 'voucher') and self.voucher.subevent:
                 self.subevent = self.voucher.subevent
