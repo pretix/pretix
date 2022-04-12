@@ -566,7 +566,7 @@ class ItemUpdateForm(I18nModelForm):
             if d['tax_rule'] and d['tax_rule'].rate > 0:
                 self.add_error(
                     'tax_rule',
-                    _("Gift card products should use a tax rule with a rate of 0% since sales tax will be applied when the gift card is redeemed.")
+                    _("Gift card products should use a tax rule with a rate of 0 percent since sales tax will be applied when the gift card is redeemed.")
                 )
             if d['admission']:
                 self.add_error(

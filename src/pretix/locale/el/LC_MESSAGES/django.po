@@ -11507,7 +11507,7 @@ msgstr ""
 #: pretix/control/forms/item.py:569
 #, python-format
 msgid ""
-"Gift card products should use a tax rule with a rate of 0% since sales tax "
+"Gift card products should use a tax rule with a rate of 0 percent since sales tax "
 "will be applied when the gift card is redeemed."
 msgstr ""
 
