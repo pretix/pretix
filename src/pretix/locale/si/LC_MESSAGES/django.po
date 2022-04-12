@@ -3661,7 +3661,7 @@ msgstr ""
 #: pretix/base/models/orders.py:1023 pretix/base/services/orders.py:937
 #: pretix/control/views/event.py:758
 #, python-format
-msgid "Your order: %(code)s"
+msgid "Your order: {code}"
 msgstr ""
 
 #: pretix/base/models/orders.py:1187

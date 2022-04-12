@@ -3925,8 +3925,8 @@ msgstr "El val \"{voucher}\" ha estat usat simultàniament."
 #: pretix/base/models/orders.py:1023 pretix/base/services/orders.py:937
 #: pretix/control/views/event.py:758
 #, python-format
-msgid "Your order: %(code)s"
-msgstr "La vostra comanda: %(code)s"
+msgid "Your order: {code}"
+msgstr "La vostra comanda: {code}"
 
 #: pretix/base/models/orders.py:1187
 msgid "<file>"
@@ -3978,8 +3978,8 @@ msgstr "Registre confirmat: %(code)s"
 
 #: pretix/base/models/orders.py:1748
 #, python-format
-msgid "Payment received for your order: %(code)s"
-msgstr "S'ha rebut el pagament per a la vostra comanda: %(code)s"
+msgid "Payment received for your order: {code}"
+msgstr "S'ha rebut el pagament per a la vostra comanda: {code}"
 
 #: pretix/base/models/orders.py:1858
 msgctxt "refund_state"
@@ -4084,8 +4084,8 @@ msgstr "Posició de la comanda"
 
 #: pretix/base/models/orders.py:2399 pretix/base/services/orders.py:955
 #, python-format
-msgid "Your event registration: %(code)s"
-msgstr "El vostre registre: %(code)s"
+msgid "Your event registration: {code}"
+msgstr "El vostre registre: {code}"
 
 #: pretix/base/models/orders.py:2573
 msgid "Cart ID (e.g. session key)"

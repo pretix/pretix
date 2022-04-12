@@ -3901,8 +3901,8 @@ msgstr "Der Gutschein \"{voucher}\" wurde zwischenzeitlich verwendet."
 #: pretix/base/models/orders.py:1023 pretix/base/services/orders.py:937
 #: pretix/control/views/event.py:758
 #, python-format
-msgid "Your order: %(code)s"
-msgstr "Deine Bestellung: %(code)s"
+msgid "Your order: {code}"
+msgstr "Deine Bestellung: {code}"
 
 #: pretix/base/models/orders.py:1187
 msgid "<file>"
@@ -4059,8 +4059,8 @@ msgstr "Bestelltes Produkt"
 
 #: pretix/base/models/orders.py:2399 pretix/base/services/orders.py:955
 #, python-format
-msgid "Your event registration: %(code)s"
-msgstr "Deine Registrierung: %(code)s"
+msgid "Your event registration: {code}"
+msgstr "Deine Registrierung: {code}"
 
 #: pretix/base/models/orders.py:2573
 msgid "Cart ID (e.g. session key)"

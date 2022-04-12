@@ -3898,8 +3898,8 @@ msgstr "优惠券已创建。"
 #: pretix/base/models/orders.py:1023 pretix/base/services/orders.py:937
 #: pretix/control/views/event.py:758
 #, python-format
-msgid "Your order: %(code)s"
-msgstr "您的订单：%(code)s"
+msgid "Your order: {code}"
+msgstr "您的订单：{code}"
 
 #: pretix/base/models/orders.py:1187
 msgid "<file>"
@@ -4057,8 +4057,8 @@ msgstr "订单位置"
 
 #: pretix/base/models/orders.py:2399 pretix/base/services/orders.py:955
 #, python-format
-msgid "Your event registration: %(code)s"
-msgstr "您的活动注册：%(code)s"
+msgid "Your event registration: {code}"
+msgstr "您的活动注册：{code}"
 
 #: pretix/base/models/orders.py:2573
 msgid "Cart ID (e.g. session key)"

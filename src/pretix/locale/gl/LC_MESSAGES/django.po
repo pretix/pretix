@@ -4112,8 +4112,8 @@ msgstr ""
 #: pretix/base/models/orders.py:1023 pretix/base/services/orders.py:937
 #: pretix/control/views/event.py:758
 #, python-format
-msgid "Your order: %(code)s"
-msgstr "O seu pedido: %(code)s"
+msgid "Your order: {code}"
+msgstr "O seu pedido: {code}"
 
 #: pretix/base/models/orders.py:1187
 #, fuzzy
@@ -4295,8 +4295,8 @@ msgstr "Posición de la orden"
 
 #: pretix/base/models/orders.py:2399 pretix/base/services/orders.py:955
 #, fuzzy, python-format
-msgid "Your event registration: %(code)s"
-msgstr "Su pedido: %(code)s"
+msgid "Your event registration: {code}"
+msgstr "Su pedido: {code}"
 
 #: pretix/base/models/orders.py:2573
 #, fuzzy

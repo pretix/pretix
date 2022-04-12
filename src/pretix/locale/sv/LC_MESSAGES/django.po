@@ -3922,8 +3922,8 @@ msgstr "Kampanjkoden \"{voucher}\" har använts under tiden."
 #: pretix/base/models/orders.py:1023 pretix/base/services/orders.py:937
 #: pretix/control/views/event.py:758
 #, python-format
-msgid "Your order: %(code)s"
-msgstr "Din beställning: %(code)s"
+msgid "Your order: {code}"
+msgstr "Din beställning: {code}"
 
 #: pretix/base/models/orders.py:1187
 msgid "<file>"
@@ -4079,8 +4079,8 @@ msgstr "Beställd produkt"
 
 #: pretix/base/models/orders.py:2399 pretix/base/services/orders.py:955
 #, python-format
-msgid "Your event registration: %(code)s"
-msgstr "Din registrering: %(code)s"
+msgid "Your event registration: {code}"
+msgstr "Din registrering: {code}"
 
 #: pretix/base/models/orders.py:2573
 msgid "Cart ID (e.g. session key)"

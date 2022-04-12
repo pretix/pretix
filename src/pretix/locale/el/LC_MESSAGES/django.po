@@ -4103,8 +4103,8 @@ msgstr "Το κουπόνι έχει δημιουργηθεί."
 #: pretix/base/models/orders.py:1023 pretix/base/services/orders.py:937
 #: pretix/control/views/event.py:758
 #, python-format
-msgid "Your order: %(code)s"
-msgstr "Η παραγγελία σας:  %(code)s"
+msgid "Your order: {code}"
+msgstr "Η παραγγελία σας:  {code}"
 
 #: pretix/base/models/orders.py:1187
 msgid "<file>"
@@ -4262,8 +4262,8 @@ msgstr "Θέση παραγγελείας"
 
 #: pretix/base/models/orders.py:2399 pretix/base/services/orders.py:955
 #, python-format
-msgid "Your event registration: %(code)s"
-msgstr "Η εγγραφή σας στην εκδήλωση: %(code)s"
+msgid "Your event registration: {code}"
+msgstr "Η εγγραφή σας στην εκδήλωση: {code}"
 
 #: pretix/base/models/orders.py:2573
 msgid "Cart ID (e.g. session key)"

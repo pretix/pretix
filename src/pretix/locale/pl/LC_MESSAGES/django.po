@@ -4163,7 +4163,7 @@ msgstr "Pozycja zamówienia"
 #: pretix/base/models/orders.py:2399 pretix/base/services/orders.py:955
 #, fuzzy, python-format
 #| msgid "Presale not started"
-msgid "Your event registration: %(code)s"
+msgid "Your event registration: {code}"
 msgstr "Przedsprzedaż nierozpoczęta"
 
 #: pretix/base/models/orders.py:2573

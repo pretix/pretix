@@ -3673,8 +3673,8 @@ msgstr ""
 #: pretix/base/models/orders.py:1023 pretix/base/services/orders.py:937
 #: pretix/control/views/event.py:758
 #, python-format
-msgid "Your order: %(code)s"
-msgstr "Tilauksesi: %(code)s"
+msgid "Your order: {code}"
+msgstr "Tilauksesi: {code}"
 
 #: pretix/base/models/orders.py:1187
 msgid "<file>"
@@ -3830,7 +3830,7 @@ msgstr ""
 
 #: pretix/base/models/orders.py:2399 pretix/base/services/orders.py:955
 #, python-format
-msgid "Your event registration: %(code)s"
+msgid "Your event registration: {code}"
 msgstr ""
 
 #: pretix/base/models/orders.py:2573
