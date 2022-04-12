@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-03-31 12:36+0000\n"
+"POT-Creation-Date: 2022-04-12 08:33+0000\n"
 "PO-Revision-Date: 2020-10-27 06:00+0000\n"
 "Last-Translator: David Vaz <davidmgvaz@gmail.com>\n"
 "Language-Team: Portuguese (Portugal) <https://translate.pretix.eu/projects/"
@@ -331,45 +331,45 @@ msgstr "Número de entradas prévias desde a meia noite"
 msgid "Number of days with a previous entry"
 msgstr "Número de dias com entrada prévia"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:97
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:100
 msgid "All of the conditions below (AND)"
 msgstr "Todas as condições abaixo (E)"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:98
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:101
 msgid "At least one of the conditions below (OR)"
 msgstr "Pelo menos uma das condições abaixo (Ou)"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:99
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:102
 msgid "Event start"
 msgstr "Início do evento"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:100
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:103
 msgid "Event end"
 msgstr "Fim do evento"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:101
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:104
 msgid "Event admission"
 msgstr "Admissão ao evento"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:102
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:105
 #, fuzzy
 #| msgid "Current date and time"
 msgid "custom date and time"
 msgstr "Data e hora atual"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:103
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:106
 msgid "custom time"
 msgstr "Hora personalisada"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:104
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:107
 msgid "Tolerance (minutes)"
 msgstr "Tolerância (minutos)"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:105
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:108
 msgid "Add condition"
 msgstr "Adicionar condição"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:106
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:109
 msgid "minutes"
 msgstr ""
 
