@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-12 08:32+0000\n"
-"PO-Revision-Date: 2022-04-12 08:43+0000\n"
+"PO-Revision-Date: 2022-04-13 00:00+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
 ">\n"
@@ -5965,7 +5965,7 @@ msgstr "Maximale {variable} überschritten"
 #: pretix/base/services/checkin.py:231
 #, python-brace-format
 msgid "Minimum {variable} exceeded"
-msgstr "Minimale {variable} überschritten"
+msgstr "Minimale {variable} unterschritten"
 
 #: pretix/base/services/checkin.py:233
 #, python-brace-format
