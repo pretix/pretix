@@ -3978,8 +3978,8 @@ msgstr "Registre confirmat: %(code)s"
 
 #: pretix/base/models/orders.py:1748
 #, python-format
-msgid "Payment received for your order: {code}"
-msgstr "S'ha rebut el pagament per a la vostra comanda: {code}"
+msgid "Payment received for your order: %(code)s"
+msgstr "S'ha rebut el pagament per a la vostra comanda: %(code)s"
 
 #: pretix/base/models/orders.py:1858
 msgctxt "refund_state"

@@ -4036,8 +4036,8 @@ msgstr "Регистрация мероприятия подтверждена: 
 
 #: pretix/base/models/orders.py:1748
 #, python-format
-msgid "Payment received for your order: {code}"
-msgstr "Получена оплата за ваш заказ: {code}"
+msgid "Payment received for your order: %(code)s"
+msgstr "Получена оплата за ваш заказ: %(code)s"
 
 #: pretix/base/models/orders.py:1858
 msgctxt "refund_state"
