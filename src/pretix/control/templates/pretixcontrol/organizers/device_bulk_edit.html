@@ -1,0 +1,46 @@
+{% extends "pretixcontrol/organizers/base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% block inner %}
+    <h1>
+        {% trans "Change multiple devices" %}
+        <small>
+            {% blocktrans trimmed with number=devices.count %}
+                {{ number }} selected
+            {% endblocktrans %}
+        </small>
+    </h1>
+    <form class="form-horizontal" action="" method="post">
+        {% csrf_token %}
+        {% bootstrap_form_errors form %}
+        <div class="hidden">
+            {% for d in devices %}
+                <input type="hidden" name="device" value="{{ d.pk }}">
+            {% endfor %}
+        </div>
+        <fieldset>
+            <legend>{% trans "General" %}</legend>
+            <div class="bulk-edit-field-group">
+                <label class="field-toggle">
+                    <input type="checkbox" name="_bulk" value="{{ form.prefix }}__events" {% if form.prefix|add:"__events" in bulk_selected %}checked{% endif %}>
+                    {% trans "change" context "form_bulk" %}
+                </label>
+                <div class="field-content">
+                    {% bootstrap_field form.all_events layout="control" %}
+                    {% bootstrap_field form.limit_events layout="control" %}
+                </div>
+            </div>
+        </fieldset>
+        <p>&nbsp;</p>
+        <fieldset>
+            <legend>{% trans "Advanced settings" %}</legend>
+            {% bootstrap_field form.security_profile layout="bulkedit" %}
+            {% bootstrap_field form.gate layout="bulkedit" %}
+        </fieldset>
+        <div class="form-group submit-group">
+            <button type="submit" class="btn btn-primary btn-save">
+                {% trans "Save" %}
+            </button>
+        </div>
+    </form>
+{% endblock %}

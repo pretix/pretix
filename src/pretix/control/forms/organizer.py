@@ -39,6 +39,7 @@ from django import forms
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db.models import Q
+from django.forms.utils import ErrorDict
 from django.utils.crypto import get_random_string
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _, pgettext_lazy
@@ -266,6 +267,69 @@ class DeviceForm(forms.ModelForm):
         field_classes = {
             'limit_events': SafeEventMultipleChoiceField
         }
+
+
+class DeviceBulkEditForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        organizer = kwargs.pop('organizer')
+        self.mixed_values = kwargs.pop('mixed_values')
+        self.queryset = kwargs.pop('queryset')
+        super().__init__(*args, **kwargs)
+        self.fields['limit_events'].queryset = organizer.events.all().order_by(
+            '-has_subevents', '-date_from'
+        )
+        self.fields['gate'].queryset = organizer.gates.all()
+
+    def clean(self):
+        d = super().clean()
+        if self.prefix + '__events' in self.data.getlist('_bulk') and not d['all_events'] and not d['limit_events']:
+            raise ValidationError(_('Your device will not have access to anything, please select some events.'))
+
+        return d
+
+    class Meta:
+        model = Device
+        fields = ['all_events', 'limit_events', 'security_profile', 'gate']
+        widgets = {
+            'limit_events': forms.CheckboxSelectMultiple(attrs={
+                'data-inverse-dependency': '#id_all_events',
+                'class': 'scrolling-multiple-choice scrolling-multiple-choice-large',
+            }),
+        }
+        field_classes = {
+            'limit_events': SafeEventMultipleChoiceField
+        }
+
+    def save(self, commit=True):
+        objs = list(self.queryset)
+        fields = set()
+
+        check_map = {
+            'all_events': '__events',
+            'limit_events': '__events',
+        }
+        for k in self.fields:
+            cb_val = self.prefix + check_map.get(k, k)
+            if cb_val not in self.data.getlist('_bulk'):
+                continue
+
+            fields.add(k)
+            for obj in objs:
+                if k == 'limit_events':
+                    getattr(obj, k).set(self.cleaned_data[k])
+                else:
+                    setattr(obj, k, self.cleaned_data[k])
+
+        if fields:
+            Device.objects.bulk_update(objs, [f for f in fields if f != 'limit_events'], 200)
+
+    def full_clean(self):
+        if len(self.data) == 0:
+            # form wasn't submitted
+            self._errors = ErrorDict()
+            return
+        super().full_clean()
 
 
 class OrganizerSettingsForm(SettingsForm):
