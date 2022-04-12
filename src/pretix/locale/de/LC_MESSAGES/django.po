@@ -26601,7 +26601,7 @@ msgid ""
 "waiting list. If we notify you, you'll have %(hours)s hours time to buy a "
 "ticket until we assign it to the next person on the list."
 msgstr ""
-"Wenn wieder Tickets verfügbar sind, werden wir die ersten Leute auf der "
+"Wenn wieder Tickets verfügbar sind, werden wir die ersten Personen auf der "
 "Warteliste benachrichtigen. Wenn wir Sie benachrichtigen, haben Sie "
 "%(hours)s Stunden Zeit, ein Ticket zu erwerben, bevor wir es an die nächste "
 "Person auf der Liste weitergeben."
@@ -27364,6 +27364,29 @@ msgstr "Schreibzugriff"
 msgid "Kosovo"
 msgstr "Kosovo"
 
+#: pretix/base/settings.py:1913
+#, python-brace-format
+msgid ""
+"Hello,\n"
+"\n"
+"your order {code} for {event} has been canceled.\n"
+"\n"
+"You can view the details of your order at\n"
+"{url}\n"
+"\n"
+"Best regards,\n"
+"Your {event} team"
+msgstr ""
+"Hallo,\n"
+"\n"
+"Ihre Bestellung {code} für {event} wurde storniert.\n"
+"\n"
+"Sie können Ihre Bestellung unter folgender Adresse einsehen:\n"
+"{url}\n"
+"\n"
+"Viele Grüße,\n"
+"Das {event} Team"
+
 #, python-format
 #~ msgid "Amount of %(item)s – %(var)s to order"
 #~ msgstr "Anzahl an %(item)s – %(var)s"
@@ -27724,9 +27747,6 @@ msgstr "Kosovo"
 #~ msgstr "Voller Zugriff"
 
 #, fuzzy
-#~| msgid ""
-#~| "You cannot change the price of a position that has been used to issue a "
-#~| "gift card."
 #~ msgid ""
 #~ "You cannot cancel a position that has been used to issue a gift card."
 #~ msgstr ""
@@ -28199,9 +28219,6 @@ msgstr "Kosovo"
 #~ "eine entsprechende App für Desktop-Computer."
 
 #, fuzzy
-#~| msgid ""
-#~| "Sorry, there was an error in the payment process. Please check the link "
-#~| "in your emails to continue."
 #~ msgid ""
 #~ "Sorry, there was an error in the payment process.in your emails to "
 #~ "continue."
@@ -28667,9 +28684,6 @@ msgstr "Kosovo"
 #~ msgstr "Erstes Kontingent erstellen"
 
 #, fuzzy
-#~| msgid ""
-#~| "The number of days after placing an order the user has to pay to "
-#~| "preserve his reservation."
 #~ msgid ""
 #~ "The number of days after placing an order the user has to pay to preserve "
 #~ "their reservation."
@@ -28828,7 +28842,6 @@ msgstr "Kosovo"
 #~ msgstr "Veranstaltungsüberblick"
 
 #, fuzzy
-#~| msgid "Use feature"
 #~ msgid "Use the \\"
 #~ msgstr "Funktion benutzen"
 
@@ -29144,12 +29157,10 @@ msgstr "Kosovo"
 #~ "wiederkommen möchten."
 
 #, fuzzy
-#~| msgid "Vouchers"
 #~ msgid "All Vouchers"
 #~ msgstr "Gutscheine"
 
 #, fuzzy
-#~| msgid "Redeemed"
 #~ msgid "Redeemd"
 #~ msgstr "Eingelöst"
 
