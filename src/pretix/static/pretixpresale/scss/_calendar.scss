@@ -82,8 +82,14 @@
       }
     }
 
-    .event-name {
+
+    &.available > *:first-child,
+    &.continued > *:first-child,
+    &.soon > *:first-child {
       font-weight: bold;
+    }
+
+    .event-name {
       display: block;
     }
     .event-time, .event-status {

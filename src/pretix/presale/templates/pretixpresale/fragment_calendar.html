@@ -55,15 +55,9 @@
                                             {% if event.time %}
                                                 <span class="event-time" data-time="{{ event.event.date_from.isoformat }}" data-timezone="{{ event.timezone }}" data-time-short>
                                                     <span class="fa fa-clock-o" aria-hidden="true"></span>
-                                                    {% if not show_names|default_if_none:True %}
-                                                        <strong>
-                                                    {% endif %}
                                                     <time datetime="{{ event.time|date_fast:"H:i" }}">{{ event.time|date_fast:"TIME_FORMAT" }}</time>
                                                     {% if event.event.settings.show_date_to and event.time_end %}
                                                         <span aria-hidden="true">–</span><span class="sr-only">{% trans "until" context "timerange" %}</span> <time datetime="{{ event.time_end|date_fast:"H:i" }}">{{ event.time_end|date_fast:"TIME_FORMAT" }}</time>
-                                                    {% endif %}
-                                                    {% if not show_names|default_if_none:True %}
-                                                        </strong>
                                                     {% endif %}
                                                     {% if multiple_timezones %}
                                                         {{ event.timezone }}
