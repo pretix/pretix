@@ -88,6 +88,11 @@
     &.soon > *:first-child {
       font-weight: bold;
     }
+    &.over > *:first-child,
+    &.reserved > *:first-child,
+    &.soldout > *:first-child {
+      text-decoration: line-through
+    }
 
     .event-name {
       display: block;
