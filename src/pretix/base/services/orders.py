@@ -754,7 +754,7 @@ def _check_positions(event: Event, now_dt: datetime, positions: List[CartPositio
         event,
         sales_channel,
         [
-            (cp.item_id, cp.subevent_id, cp.line_price_gross, bool(cp.addon_to), cp.is_bundled)
+            (cp.item_id, cp.subevent_id, cp.line_price_gross, bool(cp.addon_to), cp.is_bundled, cp.listed_price - cp.price_after_voucher)
             for cp in sorted_positions
         ]
     )

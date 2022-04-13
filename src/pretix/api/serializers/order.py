@@ -1195,7 +1195,6 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
                         bundled_sum=Decimal('0.00'),
                     )
                     pos.price = line_price.gross
-                    # todo: voucher budget use
                     pos._auto_generated_price = True
                 else:
                     if pos.voucher:
@@ -1203,7 +1202,10 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
                             price_after_voucher = max(pos.price, pos.voucher.calculate_price(listed_price))
                         else:
                             price_after_voucher = max(pos.price - pos.tax_value, pos.voucher.calculate_price(listed_price))
+                    else:
+                        price_after_voucher = listed_price
                     pos._auto_generated_price = False
+                pos._voucher_discount = listed_price - price_after_voucher
                 if pos.voucher:
                     pos.voucher_budget_use = max(listed_price - price_after_voucher, Decimal('0.00'))
 
@@ -1212,7 +1214,7 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
                 self.context['event'],
                 order.sales_channel,
                 [
-                    (cp.item_id, cp.subevent_id, cp.price, bool(cp.addon_to), cp.is_bundled)
+                    (cp.item_id, cp.subevent_id, cp.price, bool(cp.addon_to), cp.is_bundled, pos._voucher_discount)
                     for cp in order_positions
                 ]
             )

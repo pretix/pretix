@@ -37,6 +37,8 @@ condition_limit_products                 list of integers           If ``conditi
 condition_apply_to_addons                boolean                    If ``true``, the discount applies to add-on products as well,
                                                                     otherwise it only applies to top-level items. The discount never
                                                                     applies to bundled products.
+condition_ignore_voucher_discounted      boolean                    If ``true``, the discount does not apply to products which have
+                                                                    been discounted by a voucher.
 condition_min_count                      integer                    The minimum number of matching products for the discount
                                                                     to be activated.
 condition_min_value                      money (string)             The minimum value of matching products for the discount
@@ -89,6 +91,7 @@ Endpoints
             "condition_all_products": true,
             "condition_limit_products": [],
             "condition_apply_to_addons": true,
+            "condition_ignore_voucher_discounted": false,
             "condition_min_count": 3,
             "condition_min_value": "0.00",
             "benefit_discount_matching_percent": "100.00",
@@ -140,6 +143,7 @@ Endpoints
         "condition_all_products": true,
         "condition_limit_products": [],
         "condition_apply_to_addons": true,
+        "condition_ignore_voucher_discounted": false,
         "condition_min_count": 3,
         "condition_min_value": "0.00",
         "benefit_discount_matching_percent": "100.00",
@@ -177,6 +181,7 @@ Endpoints
         "condition_all_products": true,
         "condition_limit_products": [],
         "condition_apply_to_addons": true,
+        "condition_ignore_voucher_discounted": false,
         "condition_min_count": 3,
         "condition_min_value": "0.00",
         "benefit_discount_matching_percent": "100.00",
@@ -203,6 +208,7 @@ Endpoints
         "condition_all_products": true,
         "condition_limit_products": [],
         "condition_apply_to_addons": true,
+        "condition_ignore_voucher_discounted": false,
         "condition_min_count": 3,
         "condition_min_value": "0.00",
         "benefit_discount_matching_percent": "100.00",
@@ -258,6 +264,7 @@ Endpoints
         "condition_all_products": true,
         "condition_limit_products": [],
         "condition_apply_to_addons": true,
+        "condition_ignore_voucher_discounted": false,
         "condition_min_count": 3,
         "condition_min_value": "0.00",
         "benefit_discount_matching_percent": "100.00",

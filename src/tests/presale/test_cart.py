@@ -2170,6 +2170,58 @@ class CartTest(CartTestMixin, TestCase):
         self.assertEqual(len(objs), 2)
         self.assertEqual({objs[0].price, objs[1].price}, {Decimal('23.00'), Decimal('18.40')})
 
+    def test_discount_and_voucher_mixed(self):
+        with scopes_disabled():
+            Discount.objects.create(event=self.event, condition_min_count=2, benefit_discount_matching_percent=50,
+                                    benefit_only_apply_to_cheapest_n_matches=1)
+            v = Voucher.objects.create(
+                event=self.event, price_mode='set', value=Decimal('4.00'), max_usages=100
+            )
+        self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
+            'item_%d' % self.ticket.id: '1',
+            '_voucher_code': v.code,
+        }, follow=True)
+        with scopes_disabled():
+            objs = list(CartPosition.objects.filter(cart_id=self.session_key, event=self.event))
+        self.assertEqual(len(objs), 1)
+        self.assertEqual(objs[0].item, self.ticket)
+        self.assertIsNone(objs[0].variation)
+        self.assertEqual(objs[0].price, 4)
+        self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
+            'item_%d' % self.ticket.id: '1',
+            '_voucher_code': v.code,
+        }, follow=True)
+        with scopes_disabled():
+            objs = list(CartPosition.objects.filter(cart_id=self.session_key, event=self.event))
+        self.assertEqual(len(objs), 2)
+        self.assertEqual({objs[0].price, objs[1].price}, {Decimal('4.00'), Decimal('2.00')})
+
+    def test_discount_and_voucher_mix_forbidden(self):
+        with scopes_disabled():
+            Discount.objects.create(event=self.event, condition_min_count=2, benefit_discount_matching_percent=50,
+                                    benefit_only_apply_to_cheapest_n_matches=1, condition_ignore_voucher_discounted=True)
+            v = Voucher.objects.create(
+                event=self.event, price_mode='set', value=Decimal('4.00'), max_usages=100
+            )
+        self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
+            'item_%d' % self.ticket.id: '1',
+            '_voucher_code': v.code,
+        }, follow=True)
+        with scopes_disabled():
+            objs = list(CartPosition.objects.filter(cart_id=self.session_key, event=self.event))
+        self.assertEqual(len(objs), 1)
+        self.assertEqual(objs[0].item, self.ticket)
+        self.assertIsNone(objs[0].variation)
+        self.assertEqual(objs[0].price, 4)
+        self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
+            'item_%d' % self.ticket.id: '1',
+            '_voucher_code': v.code,
+        }, follow=True)
+        with scopes_disabled():
+            objs = list(CartPosition.objects.filter(cart_id=self.session_key, event=self.event))
+        self.assertEqual(len(objs), 2)
+        self.assertEqual({objs[0].price, objs[1].price}, {Decimal('4.00'), Decimal('4.00')})
+
 
 class CartAddonTest(CartTestMixin, TestCase):
     @scopes_disabled()

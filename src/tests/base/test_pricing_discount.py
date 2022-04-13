@@ -137,7 +137,7 @@ testcases_single_rule = [
     (
         mixed_min_count_matching_percent,
         (
-            (1, 1, Decimal('120.00'), False, False),
+            (1, 1, Decimal('120.00'), False, False, Decimal('0.00')),
         ) * 2,
         (
             Decimal('120.00'),
@@ -147,7 +147,7 @@ testcases_single_rule = [
     (
         mixed_min_count_matching_percent,
         (
-            (1, 1, Decimal('120.00'), False, False),
+            (1, 1, Decimal('120.00'), False, False, Decimal('0.00')),
         ) * 3,
         (
             Decimal('96.00'),
@@ -158,12 +158,12 @@ testcases_single_rule = [
     (
         mixed_min_count_matching_percent,
         (
-            (1, 1, Decimal('120.00'), False, False),
-            (1, 2, Decimal('120.00'), False, False),
-            (1, 3, Decimal('120.00'), False, False),
-            (1, 1, Decimal('120.00'), False, False),
-            (1, 2, Decimal('120.00'), False, False),
-            (1, 3, Decimal('120.00'), False, False),
+            (1, 1, Decimal('120.00'), False, False, Decimal('0.00')),
+            (1, 2, Decimal('120.00'), False, False, Decimal('0.00')),
+            (1, 3, Decimal('120.00'), False, False, Decimal('0.00')),
+            (1, 1, Decimal('120.00'), False, False, Decimal('0.00')),
+            (1, 2, Decimal('120.00'), False, False, Decimal('0.00')),
+            (1, 3, Decimal('120.00'), False, False, Decimal('0.00')),
         ),
         (
             Decimal('96.00'),
@@ -179,7 +179,7 @@ testcases_single_rule = [
     (
         mixed_min_count_one_free,
         (
-            (1, 1, Decimal('120.00'), False, False),
+            (1, 1, Decimal('120.00'), False, False, Decimal('0.00')),
         ) * 2,
         (
             Decimal('120.00'),
@@ -189,7 +189,7 @@ testcases_single_rule = [
     (
         mixed_min_count_one_free,
         (
-            (1, 1, Decimal('120.00'), False, False),
+            (1, 1, Decimal('120.00'), False, False, Decimal('0.00')),
         ) * 3,
         (
             Decimal('0.00'),
@@ -200,7 +200,7 @@ testcases_single_rule = [
     (
         mixed_min_count_one_free,
         (
-            (1, 1, Decimal('120.00'), False, False),
+            (1, 1, Decimal('120.00'), False, False, Decimal('0.00')),
         ) * 5,
         (
             Decimal('0.00'),
@@ -213,7 +213,7 @@ testcases_single_rule = [
     (
         mixed_min_count_one_free,
         (
-            (1, 1, Decimal('120.00'), False, False),
+            (1, 1, Decimal('120.00'), False, False, Decimal('0.00')),
         ) * 6,
         (
             Decimal('0.00'),
@@ -227,12 +227,12 @@ testcases_single_rule = [
     (
         mixed_min_count_one_free,
         (
-            (1, 1, Decimal('1.00'), False, False),
-            (1, 1, Decimal('2.00'), False, False),
-            (1, 1, Decimal('3.00'), False, False),
-            (1, 1, Decimal('4.00'), False, False),
-            (1, 1, Decimal('5.00'), False, False),
-            (1, 1, Decimal('6.00'), False, False),
+            (1, 1, Decimal('1.00'), False, False, Decimal('0.00')),
+            (1, 1, Decimal('2.00'), False, False, Decimal('0.00')),
+            (1, 1, Decimal('3.00'), False, False, Decimal('0.00')),
+            (1, 1, Decimal('4.00'), False, False, Decimal('0.00')),
+            (1, 1, Decimal('5.00'), False, False, Decimal('0.00')),
+            (1, 1, Decimal('6.00'), False, False, Decimal('0.00')),
         ),
         (
             Decimal('0.00'),
@@ -248,7 +248,7 @@ testcases_single_rule = [
     (
         mixed_min_value_matching_percent,
         (
-            (1, 1, Decimal('120.00'), False, False),
+            (1, 1, Decimal('120.00'), False, False, Decimal('0.00')),
         ) * 4,
         (
             Decimal('120.00'),
@@ -260,7 +260,7 @@ testcases_single_rule = [
     (
         mixed_min_value_matching_percent,
         (
-            (1, 1, Decimal('120.00'), False, False),
+            (1, 1, Decimal('120.00'), False, False, Decimal('0.00')),
         ) * 5,
         (
             Decimal('96.00'),
@@ -273,7 +273,7 @@ testcases_single_rule = [
     (
         mixed_min_value_matching_percent,
         (
-            (1, 1, Decimal('120.00'), False, False),
+            (1, 1, Decimal('120.00'), False, False, Decimal('0.00')),
         ) * 10,
         (
             Decimal('96.00'),
@@ -293,10 +293,10 @@ testcases_single_rule = [
     (
         same_min_count_matching_percent,
         (
-            (1, 1, Decimal('120.00'), False, False),
-            (1, 1, Decimal('120.00'), False, False),
-            (1, 2, Decimal('120.00'), False, False),
-            (1, 2, Decimal('120.00'), False, False),
+            (1, 1, Decimal('120.00'), False, False, Decimal('0.00')),
+            (1, 1, Decimal('120.00'), False, False, Decimal('0.00')),
+            (1, 2, Decimal('120.00'), False, False, Decimal('0.00')),
+            (1, 2, Decimal('120.00'), False, False, Decimal('0.00')),
         ),
         (
             Decimal('120.00'),
@@ -308,11 +308,11 @@ testcases_single_rule = [
     (
         same_min_count_matching_percent,
         (
-            (1, 1, Decimal('120.00'), False, False),
-            (1, 1, Decimal('120.00'), False, False),
-            (1, 1, Decimal('120.00'), False, False),
-            (1, 2, Decimal('120.00'), False, False),
-            (1, 2, Decimal('120.00'), False, False),
+            (1, 1, Decimal('120.00'), False, False, Decimal('0.00')),
+            (1, 1, Decimal('120.00'), False, False, Decimal('0.00')),
+            (1, 1, Decimal('120.00'), False, False, Decimal('0.00')),
+            (1, 2, Decimal('120.00'), False, False, Decimal('0.00')),
+            (1, 2, Decimal('120.00'), False, False, Decimal('0.00')),
         ),
         (
             Decimal('96.00'),
@@ -325,14 +325,14 @@ testcases_single_rule = [
     (
         same_min_count_matching_percent,
         (
-            (1, 1, Decimal('120.00'), False, False),
-            (1, 1, Decimal('120.00'), False, False),
-            (1, 1, Decimal('120.00'), False, False),
-            (1, 2, Decimal('120.00'), False, False),
-            (1, 2, Decimal('120.00'), False, False),
-            (1, 2, Decimal('120.00'), False, False),
-            (1, 2, Decimal('120.00'), False, False),
-            (1, 3, Decimal('120.00'), False, False),
+            (1, 1, Decimal('120.00'), False, False, Decimal('0.00')),
+            (1, 1, Decimal('120.00'), False, False, Decimal('0.00')),
+            (1, 1, Decimal('120.00'), False, False, Decimal('0.00')),
+            (1, 2, Decimal('120.00'), False, False, Decimal('0.00')),
+            (1, 2, Decimal('120.00'), False, False, Decimal('0.00')),
+            (1, 2, Decimal('120.00'), False, False, Decimal('0.00')),
+            (1, 2, Decimal('120.00'), False, False, Decimal('0.00')),
+            (1, 3, Decimal('120.00'), False, False, Decimal('0.00')),
         ),
         (
             Decimal('96.00'),
@@ -350,15 +350,15 @@ testcases_single_rule = [
     (
         same_min_count_one_free,
         (
-            (1, 1, Decimal('120.00'), False, False),
-            (1, 1, Decimal('120.00'), False, False),
-            (1, 1, Decimal('120.00'), False, False),
-            (1, 2, Decimal('120.00'), False, False),
-            (1, 2, Decimal('120.00'), False, False),
-            (1, 2, Decimal('120.00'), False, False),
-            (1, 2, Decimal('120.00'), False, False),
-            (1, 3, Decimal('120.00'), False, False),
-            (1, 3, Decimal('120.00'), False, False),
+            (1, 1, Decimal('120.00'), False, False, Decimal('0.00')),
+            (1, 1, Decimal('120.00'), False, False, Decimal('0.00')),
+            (1, 1, Decimal('120.00'), False, False, Decimal('0.00')),
+            (1, 2, Decimal('120.00'), False, False, Decimal('0.00')),
+            (1, 2, Decimal('120.00'), False, False, Decimal('0.00')),
+            (1, 2, Decimal('120.00'), False, False, Decimal('0.00')),
+            (1, 2, Decimal('120.00'), False, False, Decimal('0.00')),
+            (1, 3, Decimal('120.00'), False, False, Decimal('0.00')),
+            (1, 3, Decimal('120.00'), False, False, Decimal('0.00')),
         ),
         (
             Decimal('0.00'),
@@ -375,15 +375,15 @@ testcases_single_rule = [
     (
         same_min_count_one_free,
         (
-            (1, 1, Decimal('1.00'), False, False),
-            (1, 1, Decimal('2.00'), False, False),
-            (1, 1, Decimal('3.00'), False, False),
-            (1, 2, Decimal('4.00'), False, False),
-            (1, 2, Decimal('5.00'), False, False),
-            (1, 2, Decimal('6.00'), False, False),
-            (1, 2, Decimal('7.00'), False, False),
-            (1, 3, Decimal('8.00'), False, False),
-            (1, 3, Decimal('9.00'), False, False),
+            (1, 1, Decimal('1.00'), False, False, Decimal('0.00')),
+            (1, 1, Decimal('2.00'), False, False, Decimal('0.00')),
+            (1, 1, Decimal('3.00'), False, False, Decimal('0.00')),
+            (1, 2, Decimal('4.00'), False, False, Decimal('0.00')),
+            (1, 2, Decimal('5.00'), False, False, Decimal('0.00')),
+            (1, 2, Decimal('6.00'), False, False, Decimal('0.00')),
+            (1, 2, Decimal('7.00'), False, False, Decimal('0.00')),
+            (1, 3, Decimal('8.00'), False, False, Decimal('0.00')),
+            (1, 3, Decimal('9.00'), False, False, Decimal('0.00')),
         ),
         (
             Decimal('0.00'),
@@ -402,15 +402,15 @@ testcases_single_rule = [
     (
         same_min_value_matching_percent,
         (
-            (1, 1, Decimal('120.00'), False, False),
-            (1, 1, Decimal('120.00'), False, False),
-            (1, 1, Decimal('120.00'), False, False),
-            (1, 1, Decimal('120.00'), False, False),
-            (1, 2, Decimal('120.00'), False, False),
-            (1, 2, Decimal('120.00'), False, False),
-            (1, 2, Decimal('120.00'), False, False),
-            (1, 2, Decimal('120.00'), False, False),
-            (1, 2, Decimal('120.00'), False, False),
+            (1, 1, Decimal('120.00'), False, False, Decimal('0.00')),
+            (1, 1, Decimal('120.00'), False, False, Decimal('0.00')),
+            (1, 1, Decimal('120.00'), False, False, Decimal('0.00')),
+            (1, 1, Decimal('120.00'), False, False, Decimal('0.00')),
+            (1, 2, Decimal('120.00'), False, False, Decimal('0.00')),
+            (1, 2, Decimal('120.00'), False, False, Decimal('0.00')),
+            (1, 2, Decimal('120.00'), False, False, Decimal('0.00')),
+            (1, 2, Decimal('120.00'), False, False, Decimal('0.00')),
+            (1, 2, Decimal('120.00'), False, False, Decimal('0.00')),
         ),
         (
             Decimal('120.00'),
@@ -429,9 +429,9 @@ testcases_single_rule = [
     (
         distinct_min_count_matching_percent,
         (
-            (1, 1, Decimal('120.00'), False, False),
-            (1, 1, Decimal('120.00'), False, False),
-            (1, 1, Decimal('120.00'), False, False),
+            (1, 1, Decimal('120.00'), False, False, Decimal('0.00')),
+            (1, 1, Decimal('120.00'), False, False, Decimal('0.00')),
+            (1, 1, Decimal('120.00'), False, False, Decimal('0.00')),
         ),
         (
             Decimal('120.00'),
@@ -442,9 +442,9 @@ testcases_single_rule = [
     (
         distinct_min_count_matching_percent,
         (
-            (1, 1, Decimal('120.00'), False, False),
-            (1, 2, Decimal('120.00'), False, False),
-            (1, 3, Decimal('120.00'), False, False),
+            (1, 1, Decimal('120.00'), False, False, Decimal('0.00')),
+            (1, 2, Decimal('120.00'), False, False, Decimal('0.00')),
+            (1, 3, Decimal('120.00'), False, False, Decimal('0.00')),
         ),
         (
             Decimal('96.00'),
@@ -455,14 +455,14 @@ testcases_single_rule = [
     (
         distinct_min_count_matching_percent,
         (
-            (1, 1, Decimal('120.00'), False, False),
-            (1, 2, Decimal('120.00'), False, False),
-            (1, 3, Decimal('120.00'), False, False),
-            (1, 1, Decimal('120.00'), False, False),
-            (1, 2, Decimal('120.00'), False, False),
-            (1, 3, Decimal('120.00'), False, False),
-            (1, 1, Decimal('120.00'), False, False),
-            (1, 2, Decimal('120.00'), False, False),
+            (1, 1, Decimal('120.00'), False, False, Decimal('0.00')),
+            (1, 2, Decimal('120.00'), False, False, Decimal('0.00')),
+            (1, 3, Decimal('120.00'), False, False, Decimal('0.00')),
+            (1, 1, Decimal('120.00'), False, False, Decimal('0.00')),
+            (1, 2, Decimal('120.00'), False, False, Decimal('0.00')),
+            (1, 3, Decimal('120.00'), False, False, Decimal('0.00')),
+            (1, 1, Decimal('120.00'), False, False, Decimal('0.00')),
+            (1, 2, Decimal('120.00'), False, False, Decimal('0.00')),
         ),
         (
             Decimal('96.00'),
@@ -478,13 +478,13 @@ testcases_single_rule = [
     (
         distinct_min_count_matching_percent,
         (
-            (1, 1, Decimal('120.00'), False, False),
-            (1, 2, Decimal('120.00'), False, False),
-            (1, 3, Decimal('120.00'), False, False),
-            (1, 1, Decimal('120.00'), False, False),
-            (1, 2, Decimal('120.00'), False, False),
-            (1, 3, Decimal('120.00'), False, False),
-            (1, 4, Decimal('120.00'), False, False),
+            (1, 1, Decimal('120.00'), False, False, Decimal('0.00')),
+            (1, 2, Decimal('120.00'), False, False, Decimal('0.00')),
+            (1, 3, Decimal('120.00'), False, False, Decimal('0.00')),
+            (1, 1, Decimal('120.00'), False, False, Decimal('0.00')),
+            (1, 2, Decimal('120.00'), False, False, Decimal('0.00')),
+            (1, 3, Decimal('120.00'), False, False, Decimal('0.00')),
+            (1, 4, Decimal('120.00'), False, False, Decimal('0.00')),
         ),
         (
             Decimal('96.00'),
@@ -499,13 +499,13 @@ testcases_single_rule = [
     (
         distinct_min_count_matching_percent,
         (
-            (1, 1, Decimal('120.00'), False, False),
-            (1, 2, Decimal('120.00'), False, False),
-            (1, 3, Decimal('120.00'), False, False),
-            (1, 1, Decimal('120.00'), False, False),
-            (1, 2, Decimal('120.00'), False, False),
-            (1, 4, Decimal('120.00'), False, False),
-            (1, 1, Decimal('120.00'), False, False),
+            (1, 1, Decimal('120.00'), False, False, Decimal('0.00')),
+            (1, 2, Decimal('120.00'), False, False, Decimal('0.00')),
+            (1, 3, Decimal('120.00'), False, False, Decimal('0.00')),
+            (1, 1, Decimal('120.00'), False, False, Decimal('0.00')),
+            (1, 2, Decimal('120.00'), False, False, Decimal('0.00')),
+            (1, 4, Decimal('120.00'), False, False, Decimal('0.00')),
+            (1, 1, Decimal('120.00'), False, False, Decimal('0.00')),
         ),
         (
             Decimal('96.00'),
@@ -522,9 +522,9 @@ testcases_single_rule = [
     (
         distinct_min_count_one_free,
         (
-            (1, 1, Decimal('120.00'), False, False),
-            (1, 1, Decimal('120.00'), False, False),
-            (1, 1, Decimal('120.00'), False, False),
+            (1, 1, Decimal('120.00'), False, False, Decimal('0.00')),
+            (1, 1, Decimal('120.00'), False, False, Decimal('0.00')),
+            (1, 1, Decimal('120.00'), False, False, Decimal('0.00')),
         ),
         (
             Decimal('120.00'),
@@ -535,9 +535,9 @@ testcases_single_rule = [
     (
         distinct_min_count_one_free,
         (
-            (1, 1, Decimal('120.00'), False, False),
-            (1, 2, Decimal('120.00'), False, False),
-            (1, 3, Decimal('120.00'), False, False),
+            (1, 1, Decimal('120.00'), False, False, Decimal('0.00')),
+            (1, 2, Decimal('120.00'), False, False, Decimal('0.00')),
+            (1, 3, Decimal('120.00'), False, False, Decimal('0.00')),
         ),
         (
             Decimal('0.00'),
@@ -548,12 +548,12 @@ testcases_single_rule = [
     (
         distinct_min_count_one_free,
         (
-            (1, 1, Decimal('120.00'), False, False),
-            (1, 2, Decimal('120.00'), False, False),
-            (1, 3, Decimal('120.00'), False, False),
-            (1, 1, Decimal('120.00'), False, False),
-            (1, 2, Decimal('120.00'), False, False),
-            (1, 4, Decimal('120.00'), False, False),
+            (1, 1, Decimal('120.00'), False, False, Decimal('0.00')),
+            (1, 2, Decimal('120.00'), False, False, Decimal('0.00')),
+            (1, 3, Decimal('120.00'), False, False, Decimal('0.00')),
+            (1, 1, Decimal('120.00'), False, False, Decimal('0.00')),
+            (1, 2, Decimal('120.00'), False, False, Decimal('0.00')),
+            (1, 4, Decimal('120.00'), False, False, Decimal('0.00')),
         ),
         (
             Decimal('120.00'),
@@ -567,12 +567,12 @@ testcases_single_rule = [
     (
         distinct_min_count_one_free,
         (
-            (1, 1, Decimal('3.00'), False, False),
-            (1, 2, Decimal('2.00'), False, False),
-            (1, 3, Decimal('1.00'), False, False),
-            (1, 1, Decimal('1.00'), False, False),
-            (1, 2, Decimal('2.00'), False, False),
-            (1, 4, Decimal('3.00'), False, False),
+            (1, 1, Decimal('3.00'), False, False, Decimal('0.00')),
+            (1, 2, Decimal('2.00'), False, False, Decimal('0.00')),
+            (1, 3, Decimal('1.00'), False, False, Decimal('0.00')),
+            (1, 1, Decimal('1.00'), False, False, Decimal('0.00')),
+            (1, 2, Decimal('2.00'), False, False, Decimal('0.00')),
+            (1, 4, Decimal('3.00'), False, False, Decimal('0.00')),
         ),
         (
             Decimal('3.00'),
@@ -586,12 +586,12 @@ testcases_single_rule = [
     (
         distinct_min_count_two_free,
         (
-            (1, 1, Decimal('3.00'), False, False),
-            (1, 2, Decimal('2.00'), False, False),
-            (1, 3, Decimal('1.00'), False, False),
-            (1, 1, Decimal('1.00'), False, False),
-            (1, 2, Decimal('2.00'), False, False),
-            (1, 4, Decimal('3.00'), False, False),
+            (1, 1, Decimal('3.00'), False, False, Decimal('0.00')),
+            (1, 2, Decimal('2.00'), False, False, Decimal('0.00')),
+            (1, 3, Decimal('1.00'), False, False, Decimal('0.00')),
+            (1, 1, Decimal('1.00'), False, False, Decimal('0.00')),
+            (1, 2, Decimal('2.00'), False, False, Decimal('0.00')),
+            (1, 4, Decimal('3.00'), False, False, Decimal('0.00')),
         ),
         (
             Decimal('3.00'),
@@ -605,12 +605,12 @@ testcases_single_rule = [
     (
         distinct_min_count_one_free,
         (
-            (1, 1, Decimal('120.00'), False, False),
-            (1, 2, Decimal('120.00'), False, False),
-            (1, 3, Decimal('120.00'), False, False),
-            (1, 4, Decimal('120.00'), False, False),
-            (1, 5, Decimal('120.00'), False, False),
-            (1, 6, Decimal('120.00'), False, False),
+            (1, 1, Decimal('120.00'), False, False, Decimal('0.00')),
+            (1, 2, Decimal('120.00'), False, False, Decimal('0.00')),
+            (1, 3, Decimal('120.00'), False, False, Decimal('0.00')),
+            (1, 4, Decimal('120.00'), False, False, Decimal('0.00')),
+            (1, 5, Decimal('120.00'), False, False, Decimal('0.00')),
+            (1, 6, Decimal('120.00'), False, False, Decimal('0.00')),
         ),
         (
             Decimal('120.00'),
@@ -624,12 +624,12 @@ testcases_single_rule = [
     (
         distinct_min_count_one_free,
         (
-            (1, 1, Decimal('1.00'), False, False),
-            (1, 2, Decimal('2.00'), False, False),
-            (1, 3, Decimal('3.00'), False, False),
-            (1, 4, Decimal('4.00'), False, False),
-            (1, 5, Decimal('5.00'), False, False),
-            (1, 6, Decimal('6.00'), False, False),
+            (1, 1, Decimal('1.00'), False, False, Decimal('0.00')),
+            (1, 2, Decimal('2.00'), False, False, Decimal('0.00')),
+            (1, 3, Decimal('3.00'), False, False, Decimal('0.00')),
+            (1, 4, Decimal('4.00'), False, False, Decimal('0.00')),
+            (1, 5, Decimal('5.00'), False, False, Decimal('0.00')),
+            (1, 6, Decimal('6.00'), False, False, Decimal('0.00')),
         ),
         (
             Decimal('0.00'),
@@ -643,12 +643,12 @@ testcases_single_rule = [
     (
         distinct_min_count_one_free,
         (
-            (1, 1, Decimal('4.00'), False, False),
-            (1, 2, Decimal('4.00'), False, False),
-            (1, 3, Decimal('4.00'), False, False),
-            (1, 1, Decimal('6.00'), False, False),
-            (1, 2, Decimal('6.00'), False, False),
-            (1, 3, Decimal('6.00'), False, False),
+            (1, 1, Decimal('4.00'), False, False, Decimal('0.00')),
+            (1, 2, Decimal('4.00'), False, False, Decimal('0.00')),
+            (1, 3, Decimal('4.00'), False, False, Decimal('0.00')),
+            (1, 1, Decimal('6.00'), False, False, Decimal('0.00')),
+            (1, 2, Decimal('6.00'), False, False, Decimal('0.00')),
+            (1, 3, Decimal('6.00'), False, False, Decimal('0.00')),
         ),
         (
             # This one is unexpected, since the customer could get a lower price
@@ -669,7 +669,7 @@ testcases_single_rule = [
             Discount(condition_min_count=1, benefit_discount_matching_percent=20),
         ),
         (
-            (1, 1, Decimal('100.00'), False, False),
+            (1, 1, Decimal('100.00'), False, False, Decimal('0.00')),
         ),
         (
             Decimal('80.00'),
@@ -684,8 +684,8 @@ testcases_single_rule = [
             ),
         ),
         (
-            (1, 1, Decimal('100.00'), False, False),
-            (1, 1, Decimal('100.00'), False, False),
+            (1, 1, Decimal('100.00'), False, False, Decimal('0.00')),
+            (1, 1, Decimal('100.00'), False, False, Decimal('0.00')),
         ),
         (
             Decimal('0.00'),
@@ -703,9 +703,9 @@ testcases_single_rule = [
             ),
         ),
         (
-            (1, 1, Decimal('100.00'), False, False),
-            (1, 1, Decimal('100.00'), False, False),
-            (1, 1, Decimal('100.00'), False, False),
+            (1, 1, Decimal('100.00'), False, False, Decimal('0.00')),
+            (1, 1, Decimal('100.00'), False, False, Decimal('0.00')),
+            (1, 1, Decimal('100.00'), False, False, Decimal('0.00')),
         ),
         (
             Decimal('100.00'),
@@ -723,9 +723,9 @@ testcases_single_rule = [
             ),
         ),
         (
-            (1, 1, Decimal('100.00'), False, False),
-            (1, 1, Decimal('100.00'), True, False),
-            (1, 1, Decimal('100.00'), True, False),
+            (1, 1, Decimal('100.00'), False, False, Decimal('0.00')),
+            (1, 1, Decimal('100.00'), True, False, Decimal('0.00')),
+            (1, 1, Decimal('100.00'), True, False, Decimal('0.00')),
         ),
         (
             Decimal('80.00'),
@@ -742,11 +742,11 @@ testcases_single_rule = [
             ),
         ),
         (
-            (1, 1, Decimal('100.00'), False, False),
-            (1, 1, Decimal('100.00'), False, False),
-            (1, 1, Decimal('100.00'), False, False),
-            (1, 1, Decimal('100.00'), True, False),
-            (1, 1, Decimal('100.00'), True, False),
+            (1, 1, Decimal('100.00'), False, False, Decimal('0.00')),
+            (1, 1, Decimal('100.00'), False, False, Decimal('0.00')),
+            (1, 1, Decimal('100.00'), False, False, Decimal('0.00')),
+            (1, 1, Decimal('100.00'), True, False, Decimal('0.00')),
+            (1, 1, Decimal('100.00'), True, False, Decimal('0.00')),
         ),
         (
             Decimal('80.00'),
@@ -765,9 +765,9 @@ testcases_single_rule = [
             ),
         ),
         (
-            (1, 1, Decimal('100.00'), False, False),
-            (1, 1, Decimal('100.00'), True, False),
-            (1, 1, Decimal('100.00'), True, False),
+            (1, 1, Decimal('100.00'), False, False, Decimal('0.00')),
+            (1, 1, Decimal('100.00'), True, False, Decimal('0.00')),
+            (1, 1, Decimal('100.00'), True, False, Decimal('0.00')),
         ),
         (
             Decimal('100.00'),
@@ -786,9 +786,9 @@ testcases_single_rule = [
             ),
         ),
         (
-            (1, 1, Decimal('100.00'), False, False),
-            (1, 1, Decimal('100.00'), True, True),
-            (1, 1, Decimal('100.00'), True, True),
+            (1, 1, Decimal('100.00'), False, False, Decimal('0.00')),
+            (1, 1, Decimal('100.00'), True, True, Decimal('0.00')),
+            (1, 1, Decimal('100.00'), True, True, Decimal('0.00')),
         ),
         (
             Decimal('100.00'),
@@ -813,9 +813,9 @@ testcases_multiple_rules = [
             ),
         ),
         (
-            (1, 1, Decimal('100.00'), False, False),
-            (1, 1, Decimal('100.00'), False, False),
-            (1, 1, Decimal('100.00'), False, False),
+            (1, 1, Decimal('100.00'), False, False, Decimal('0.00')),
+            (1, 1, Decimal('100.00'), False, False, Decimal('0.00')),
+            (1, 1, Decimal('100.00'), False, False, Decimal('0.00')),
         ),
         (
             Decimal('80.00'),
@@ -838,9 +838,9 @@ testcases_multiple_rules = [
             ),
         ),
         (
-            (1, 1, Decimal('100.00'), False, False),
-            (1, 1, Decimal('100.00'), False, False),
-            (1, 1, Decimal('100.00'), False, False),
+            (1, 1, Decimal('100.00'), False, False, Decimal('0.00')),
+            (1, 1, Decimal('100.00'), False, False, Decimal('0.00')),
+            (1, 1, Decimal('100.00'), False, False, Decimal('0.00')),
         ),
         (
             Decimal('80.00'),
@@ -862,9 +862,9 @@ testcases_multiple_rules = [
             ),
         ),
         (
-            (1, 1, Decimal('100.00'), False, False),
-            (1, 1, Decimal('100.00'), False, False),
-            (1, 1, Decimal('100.00'), False, False),
+            (1, 1, Decimal('100.00'), False, False, Decimal('0.00')),
+            (1, 1, Decimal('100.00'), False, False, Decimal('0.00')),
+            (1, 1, Decimal('100.00'), False, False, Decimal('0.00')),
         ),
         (
             Decimal('100.00'),
@@ -885,11 +885,11 @@ testcases_multiple_rules = [
             ),
         ),
         (
-            (1, 1, Decimal('100.00'), False, False),
-            (1, 1, Decimal('100.00'), False, False),
-            (1, 1, Decimal('100.00'), False, False),
-            (1, 1, Decimal('100.00'), False, False),
-            (1, 1, Decimal('100.00'), False, False),
+            (1, 1, Decimal('100.00'), False, False, Decimal('0.00')),
+            (1, 1, Decimal('100.00'), False, False, Decimal('0.00')),
+            (1, 1, Decimal('100.00'), False, False, Decimal('0.00')),
+            (1, 1, Decimal('100.00'), False, False, Decimal('0.00')),
+            (1, 1, Decimal('100.00'), False, False, Decimal('0.00')),
         ),
         (
             Decimal('100.00'),
@@ -912,9 +912,9 @@ testcases_multiple_rules = [
             ),
         ),
         (
-            (1, 1, Decimal('100.00'), False, False),
-            (1, 1, Decimal('100.00'), False, False),
-            (1, 1, Decimal('100.00'), False, False),
+            (1, 1, Decimal('100.00'), False, False, Decimal('0.00')),
+            (1, 1, Decimal('100.00'), False, False, Decimal('0.00')),
+            (1, 1, Decimal('100.00'), False, False, Decimal('0.00')),
         ),
         (
             Decimal('80.00'),
@@ -949,10 +949,10 @@ def test_limit_products(event, item, item2):
     d2.save()
 
     positions = (
-        (item.pk, None, Decimal('100.00'), False, False),
-        (item.pk, None, Decimal('100.00'), False, False),
-        (item2.pk, None, Decimal('100.00'), False, False),
-        (item2.pk, None, Decimal('100.00'), False, False),
+        (item.pk, None, Decimal('100.00'), False, False, Decimal('0.00')),
+        (item.pk, None, Decimal('100.00'), False, False, Decimal('0.00')),
+        (item2.pk, None, Decimal('100.00'), False, False, Decimal('0.00')),
+        (item2.pk, None, Decimal('100.00'), False, False, Decimal('0.00')),
     )
     expected = (
         Decimal('80.00'),
@@ -974,8 +974,8 @@ def test_sales_channels(event, item):
     d2.save()
 
     positions = (
-        (item.pk, None, Decimal('100.00'), False, False),
-        (item.pk, None, Decimal('100.00'), False, False),
+        (item.pk, None, Decimal('100.00'), False, False, Decimal('0.00')),
+        (item.pk, None, Decimal('100.00'), False, False, Decimal('0.00')),
     )
 
     assert sorted([p for p, d in apply_discounts(event, 'resellers', positions)]) == [Decimal('80.00'), Decimal('80.00')]
@@ -991,8 +991,8 @@ def test_available_from(event, item):
     d2.save()
 
     positions = (
-        (item.pk, None, Decimal('100.00'), False, False),
-        (item.pk, None, Decimal('100.00'), False, False),
+        (item.pk, None, Decimal('100.00'), False, False, Decimal('0.00')),
+        (item.pk, None, Decimal('100.00'), False, False, Decimal('0.00')),
     )
 
     assert sorted([p for p, d in apply_discounts(event, 'web', positions)]) == [Decimal('50.00'), Decimal('50.00')]
@@ -1007,8 +1007,8 @@ def test_available_until(event, item):
     d2.save()
 
     positions = (
-        (item.pk, None, Decimal('100.00'), False, False),
-        (item.pk, None, Decimal('100.00'), False, False),
+        (item.pk, None, Decimal('100.00'), False, False, Decimal('0.00')),
+        (item.pk, None, Decimal('100.00'), False, False, Decimal('0.00')),
     )
 
     assert sorted([p for p, d in apply_discounts(event, 'web', positions)]) == [Decimal('50.00'), Decimal('50.00')]

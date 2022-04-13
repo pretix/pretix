@@ -31,7 +31,8 @@ class DiscountSerializer(I18nAwareModelSerializer):
         fields = ('id', 'active', 'internal_name', 'position', 'sales_channels', 'available_from',
                   'available_until', 'subevent_mode', 'condition_all_products', 'condition_limit_products',
                   'condition_apply_to_addons', 'condition_min_count', 'condition_min_value',
-                  'benefit_discount_matching_percent', 'benefit_only_apply_to_cheapest_n_matches')
+                  'benefit_discount_matching_percent', 'benefit_only_apply_to_cheapest_n_matches',
+                  'condition_ignore_voucher_discounted')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

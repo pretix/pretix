@@ -101,6 +101,13 @@ class Discount(LoggedModel):
         verbose_name=_("Apply to add-on products"),
         help_text=_("Discounts never apply to bundled products"),
     )
+    condition_ignore_voucher_discounted = models.BooleanField(
+        default=False,
+        verbose_name=_("Ignore products discounted by a voucher"),
+        help_text=_("If this option is checked, products that already received a discount through a voucher will not "
+                    "be considered for this discount. However, products that use a voucher only to e.g. unlock a "
+                    "hidden product or gain access to sold-out quota will still receive the discount."),
+    )
     condition_min_count = models.PositiveIntegerField(
         verbose_name=_('Minimum number of matching products'),
         default=0,
@@ -238,12 +245,12 @@ class Discount(LoggedModel):
         for idx in consume_idx:
             result.setdefault(idx, positions[idx][2])
 
-    def apply(self, positions: Dict[int, Tuple[int, Optional[int], Decimal, bool]]) -> Dict[int, Decimal]:
+    def apply(self, positions: Dict[int, Tuple[int, Optional[int], Decimal, bool, Decimal]]) -> Dict[int, Decimal]:
         """
         Tries to apply this discount to a cart
 
         :param positions: Dictionary mapping IDs to tuples of the form
-                          ``(item_id, subevent_id, line_price_gross, is_addon_to)``.
+                          ``(item_id, subevent_id, line_price_gross, is_addon_to, voucher_discount)``.
                           Bundled positions may not be included.
 
         :return: A dictionary mapping keys from the input dictionary to new prices. All positions
@@ -262,10 +269,11 @@ class Discount(LoggedModel):
         # First, filter out everything not even covered by our product scope
         initial_candidates = [
             idx
-            for idx, (item_id, subevent_id, line_price_gross, is_addon_to) in positions.items()
+            for idx, (item_id, subevent_id, line_price_gross, is_addon_to, voucher_discount) in positions.items()
             if (
                 (self.condition_all_products or item_id in limit_products) and
-                (self.condition_apply_to_addons or not is_addon_to)
+                (self.condition_apply_to_addons or not is_addon_to) and
+                (not self.condition_ignore_voucher_discounted or voucher_discount is None or voucher_discount == Decimal('0.00'))
             )
         ]
 

@@ -47,6 +47,7 @@ class DiscountForm(I18nModelForm):
             'condition_min_count',
             'condition_min_value',
             'condition_apply_to_addons',
+            'condition_ignore_voucher_discounted',
             'benefit_discount_matching_percent',
             'benefit_only_apply_to_cheapest_n_matches',
         ]
