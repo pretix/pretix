@@ -121,7 +121,12 @@ class Discount(LoggedModel):
     )
     benefit_only_apply_to_cheapest_n_matches = models.PositiveIntegerField(
         verbose_name=_('Apply discount only to this number of matching products'),
-        help_text=_('Keep the field empty to apply the discount to all matching products.'),
+        help_text=_(
+            'This option allows you to create discounts of the type "buy X get Y reduced/for free". For example, if '
+            'you set "Minimum number of matching products" to four and this value to two, the customer\'s cart will be '
+            'split into grups of four tickets and  the cheapest two tickets within every group will be discounted. If '
+            'you want to grant the discount on all matching products, keep this field empty.'
+        ),
         null=True,
         blank=True,
         validators=[MinValueValidator(1)],
