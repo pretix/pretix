@@ -406,6 +406,15 @@
                                         {{ line.used_membership }}
                                     </a>
                                 {% endif %}
+                                {% if line.discount %}
+                                    <br />
+                                    <span class="text-success discounted" data-toggle="tooltip" title="{% trans "The price of this product was reduced because of an automatic discount or this product was part of the discount calculation for a different product in this order." %}">
+                                        <span class="fa fa-percent fa-fw" aria-hidden="true"></span>
+                                        <a href="{% url "control:event.items.discounts.edit" organizer=request.event.organizer.slug event=request.event.slug discount=line.discount.id %}">
+                                            {{ line.discount.internal_name }}
+                                        </a>
+                                    </span>
+                                {% endif %}
                                 {% if not line.canceled %}
                                     <div class="position-buttons">
                                         {% if line.generate_ticket %}
