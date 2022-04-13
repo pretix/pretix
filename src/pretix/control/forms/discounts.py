@@ -86,6 +86,8 @@ class DiscountForm(I18nModelForm):
         self.fields['condition_limit_products'].queryset = self.event.items.all()
         self.fields['condition_min_count'].required = False
         self.fields['condition_min_count'].widget.is_required = False
+        self.fields['condition_min_value'].required = False
+        self.fields['condition_min_value'].widget.is_required = False
 
         if not self.event.has_subevents:
             del self.fields['subevent_mode']
@@ -101,4 +103,6 @@ class DiscountForm(I18nModelForm):
 
         if d.get('condition_min_count') is None:
             d['condition_min_count'] = 0
+        if d.get('condition_min_value') is None:
+            d['condition_min_value'] = Decimal('0.00')
         return d
