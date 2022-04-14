@@ -57,7 +57,10 @@ notes                                 string                     A note taken by
 tags                                  list of strings            Additional tags selected by the exhibitor
 first_upload                          datetime                   Date and time of the first upload of this lead
 data                                  list of objects            Attendee data set that may be shown to the exhibitor based o
-                                                                 the event's configuration. Each entry contains the fields ``id``, ``label``, and ``value``.
+                                                                 the event's configuration. Each entry contains the fields ``id``,
+                                                                 ``label``, ``value``, and ``details``. ``details`` is usually empty
+                                                                 except in a few cases where it contains an additional list of objects
+                                                                 with ``value`` and ``label`` keys (e.g. splitting of names).
 device_name                           string                     User-defined name for the device used for scanning (or ``null``).
 ===================================== ========================== =======================================================
 
@@ -205,7 +208,11 @@ Endpoints
               {
                 "id": "attendee_name",
                 "label": "Attendee name",
-                "value": "Peter",
+                "value": "Peter Miller",
+                "details": [
+                  {"label": "Given name", "value": "Peter"},
+                  {"label": "Family name", "value": "Miller"},
+                ]
               }
             ]
           }
@@ -542,12 +549,17 @@ The request for this looks like this:
           {
             "id": "attendee_name",
             "label": "Name",
-            "value": "Jon Doe"
+            "value": "Jon Doe",
+            "details": [
+              {"label": "Given name", "value": "John"},
+              {"label": "Family name", "value": "Doe"},
+            ]
           },
           {
             "id": "attendee_email",
             "label": "Email",
-            "value": "test@example.com"
+            "value": "test@example.com",
+            "details": []
           }
          ]
         },
@@ -560,3 +572,59 @@ The request for this looks like this:
    :statuscode 201: No error, leads was scanned for the first time
    :statuscode 400: Invalid data submitted
    :statuscode 401: Invalid authentication code
+
+You can also fetch existing leads (if you are authorized to do so):
+
+.. http:get:: /exhibitors/api/v1/leads/
+
+   **Example request:**
+
+   .. sourcecode:: http
+
+    GET /exhibitors/api/v1/leads/ HTTP/1.1
+    Authorization: Exhibitor ABCDE123
+    Accept: application/json, text/javascript
+
+   **Example response:**
+
+   .. sourcecode:: http
+
+    HTTP/1.1 200 OK
+    Vary: Accept
+    Content-Type: application/json
+
+    {
+      "count": 1,
+      "next": null,
+      "previous": null,
+      "results": [
+        {
+          "attendee": {
+            "fields": [
+              {
+                "id": "attendee_name",
+                "label": "Name",
+                "value": "Jon Doe",
+                "details": [
+                  {"label": "Given name", "value": "John"},
+                  {"label": "Family name", "value": "Doe"},
+                ]
+              },
+              {
+                "id": "attendee_email",
+                "label": "Email",
+                "value": "test@example.com",
+                "details": []
+              }
+           ]
+          },
+          "rating": 4,
+          "tags": ["foo"],
+          "notes": "Great customer, wants our newsletter"
+        }
+      ]
+    }
+
+   :statuscode 200: No error
+   :statuscode 401: Invalid authentication code
+   :statuscode 403: Not permitted to access bulk data
