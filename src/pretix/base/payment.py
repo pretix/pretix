@@ -955,6 +955,8 @@ class BoxOfficeProvider(BasePaymentProvider):
         return {
             "pos_id": payment.info_data.get('pos_id', None),
             "receipt_id": payment.info_data.get('receipt_id', None),
+            "payment_type": payment.info_data.get('payment_type', None),
+            "payment_data": payment.info_data.get('payment_data', {}),
         }
 
     def payment_control_render(self, request, payment) -> str:
