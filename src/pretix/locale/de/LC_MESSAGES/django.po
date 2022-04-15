@@ -5099,7 +5099,7 @@ msgstr "Kostenlos"
 
 #: pretix/base/payment.py:936
 msgid "Box office"
-msgstr "Abendkasse"
+msgstr "Kassensystem"
 
 #: pretix/base/payment.py:979 pretix/base/payment.py:997
 #: pretix/plugins/manualpayment/apps.py:30
