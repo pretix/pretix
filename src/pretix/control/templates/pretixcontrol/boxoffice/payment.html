@@ -57,7 +57,11 @@
         {% endif %}
     {% elif payment_info.payment_type == "izettle" %}
         <dt>{% trans "Payment provider" %}</dt>
-        <dd>iZettle</dd>
+        <dd>Zettle</dd>
+        {% if payment_info.payment_data.reference %}
+            <dt>{% trans "Paymeant reference" %}</dt>
+            <dd>{{ payment_info.payment_data.reference }}</dd>
+        {% endif %}
         <dt>{% trans "Payment Application" %}</dt>
         <dd>{{ payment_info.payment_data.applicationName }}</dd>
         <dt>{% trans "Card Entry Mode" %}</dt>
