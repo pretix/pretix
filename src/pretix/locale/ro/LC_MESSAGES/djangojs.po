@@ -8,194 +8,196 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-12 08:33+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2022-04-17 05:00+0000\n"
+"Last-Translator: Edd28 <chitu_edy@yahoo.com>\n"
+"Language-Team: Romanian <https://translate.pretix.eu/projects/pretix/"
+"pretix-js/ro/>\n"
 "Language: ro\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < "
 "20)) ? 1 : 2;\n"
+"X-Generator: Weblate 4.11.2\n"
 
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:56
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:62
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:68
 msgid "Marked as paid"
-msgstr ""
+msgstr "Marcat ca plătit"
 
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:76
 msgid "Comment:"
-msgstr ""
+msgstr "Comentariu:"
 
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:15
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:39
 msgid "Placed orders"
-msgstr ""
+msgstr "Comenzi plasate"
 
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:15
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:39
 msgid "Paid orders"
-msgstr ""
+msgstr "Comenzi încasate"
 
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:27
 msgid "Total revenue"
-msgstr ""
+msgstr "Total încasări"
 
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:12
 msgid "Contacting Stripe …"
-msgstr ""
+msgstr "Se conectează Stripe…"
 
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:60
 msgid "Total"
-msgstr ""
+msgstr "Total"
 
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:152
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:183
 msgid "Confirming your payment …"
-msgstr ""
+msgstr "Se confirmă plata…"
 
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:159
 msgid "Contacting your bank …"
-msgstr ""
+msgstr "Se contactează banca …"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:30
 msgid "Select a check-in list"
-msgstr ""
+msgstr "Selectează o listă de check-in"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:31
 msgid "No active check-in lists found."
-msgstr ""
+msgstr "Nicio listă de check-in găsită."
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:32
 msgid "Switch check-in list"
-msgstr ""
+msgstr "Schimbă lista de check-in"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:33
 msgid "Search results"
-msgstr ""
+msgstr "Rezultatele căutării"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:34
 msgid "No tickets found"
-msgstr ""
+msgstr "Niciun bilet găsit"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:35
 msgid "Result"
-msgstr ""
+msgstr "Rezultat"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:36
 msgid "This ticket requires special attention"
-msgstr ""
+msgstr "Acest bilet necesită atenție specială"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:37
 msgid "Switch direction"
-msgstr ""
+msgstr "Schimbă direcția"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:38
 msgid "Entry"
-msgstr ""
+msgstr "Acces"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:39
 msgid "Exit"
-msgstr ""
+msgstr "Ieșire"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:40
 msgid "Scan a ticket or search and press return…"
-msgstr ""
+msgstr "Scanează sau caută un bilet și apasă Enter…"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:41
 msgid "Load more"
-msgstr ""
+msgstr "Mai mult"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:42
 msgid "Valid"
-msgstr ""
+msgstr "Valid"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:43
 msgid "Unpaid"
-msgstr ""
+msgstr "Neplătit"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:44
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:45
 msgid "Canceled"
-msgstr ""
+msgstr "Anulat"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:46
 msgid "Redeemed"
-msgstr ""
+msgstr "Revendicat"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:47
 msgid "Cancel"
-msgstr ""
+msgstr "Anulează"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:48
 msgid "Continue"
-msgstr ""
+msgstr "Continuă"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:49
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:58
 msgid "Ticket not paid"
-msgstr ""
+msgstr "Bilet neplătit"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:50
 msgid "This ticket is not yet paid. Do you want to continue anyways?"
-msgstr ""
+msgstr "Acest bilet nu este încă plătit. Vrei totuși să continui?"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:51
 msgid "Additional information required"
-msgstr ""
+msgstr "Sunt necesare mai multe informații"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:52
 msgid "Valid ticket"
-msgstr ""
+msgstr "Bilet valid"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:53
 msgid "Exit recorded"
-msgstr ""
+msgstr "Ieșire înregistrată"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:54
 msgid "Ticket already used"
-msgstr ""
+msgstr "Bilet deja folosit"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:55
 msgid "Information required"
-msgstr ""
+msgstr "Informație necesară"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:56
 msgid "Unknown ticket"
-msgstr ""
+msgstr "Bilet necunoscut"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:57
 msgid "Ticket type not allowed here"
-msgstr ""
+msgstr "Tipul de bilet nu este permis aici"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:59
 msgid "Entry not allowed"
-msgstr ""
+msgstr "Intrarea nu este permisă"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:60
 msgid "Ticket code revoked/changed"
-msgstr ""
+msgstr "Codul biletului a fost anulat/modificat"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:61
 msgid "Order canceled"
-msgstr ""
+msgstr "Comandă anulată"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:62
 msgid "Checked-in Tickets"
-msgstr ""
+msgstr "Bilete Scanate"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:63
 msgid "Valid Tickets"
-msgstr ""
+msgstr "Bilete Valide"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:64
 msgid "Currently inside"
-msgstr ""
+msgstr "Aflat în interior"
 
 #: pretix/static/lightbox/js/lightbox.js:96
 msgid "close"
-msgstr ""
+msgstr "închide"
 
 #: pretix/static/pretixbase/js/asynctask.js:43
 #: pretix/static/pretixbase/js/asynctask.js:119
@@ -203,11 +205,14 @@ msgid ""
 "Your request is currently being processed. Depending on the size of your "
 "event, this might take up to a few minutes."
 msgstr ""
+"Solicitarea ta este în curs de procesare. În funcție de amploarea "
+"evenimentului, aceasta poate dura câteva minute."
 
 #: pretix/static/pretixbase/js/asynctask.js:48
 #: pretix/static/pretixbase/js/asynctask.js:124
 msgid "Your request has been queued on the server and will soon be processed."
 msgstr ""
+"Solicitarea ta a fost transmisă către server și va fi procesată în curând."
 
 #: pretix/static/pretixbase/js/asynctask.js:54
 #: pretix/static/pretixbase/js/asynctask.js:130
@@ -216,34 +221,41 @@ msgid ""
 "If this takes longer than two minutes, please contact us or go back in your "
 "browser and try again."
 msgstr ""
+"Solicitarea ta a fost primită de server, însă se așteaptă să fie procesată. "
+"Dacă acest lucru durează mai mult de două minute, te rugăm să ne contactezi "
+"sau să revii în browser și să reîncerci."
 
 #: pretix/static/pretixbase/js/asynctask.js:89
 #: pretix/static/pretixbase/js/asynctask.js:175
 #: pretix/static/pretixbase/js/asynctask.js:180
 #: pretix/static/pretixcontrol/js/ui/mail.js:24
 msgid "An error of type {code} occurred."
-msgstr ""
+msgstr "A avut loc o eroare de tipul {code}."
 
 #: pretix/static/pretixbase/js/asynctask.js:92
 msgid ""
 "We currently cannot reach the server, but we keep trying. Last error code: "
 "{code}"
 msgstr ""
+"Momentan nu putem comunica cu serverul, dar reîncercăm. Ultimul cod de "
+"eroare: {code}"
 
 #: pretix/static/pretixbase/js/asynctask.js:144
 #: pretix/static/pretixcontrol/js/ui/mail.js:21
 msgid "The request took too long. Please try again."
-msgstr ""
+msgstr "Solicitarea a durat cam mult. Te rugăm să reîncerci."
 
 #: pretix/static/pretixbase/js/asynctask.js:183
 #: pretix/static/pretixcontrol/js/ui/mail.js:26
 msgid ""
 "We currently cannot reach the server. Please try again. Error code: {code}"
 msgstr ""
+"Momentan nu putem comunica cu serverul. Te rugăm să reîncerci. Cod eroare: "
+"{code}"
 
 #: pretix/static/pretixbase/js/asynctask.js:205
 msgid "We are processing your request …"
-msgstr ""
+msgstr "Se procesează solicitarea …"
 
 #: pretix/static/pretixbase/js/asynctask.js:213
 msgid ""
@@ -251,351 +263,363 @@ msgid ""
 "than one minute, please check your internet connection and then reload this "
 "page and try again."
 msgstr ""
+"Trimitem solicitarea ta către server. Dacă acest proces durează mai mult de "
+"un minut, te rugăm să verifici conexiunea la internet, să reîncarci această "
+"pagină și să reîncerci."
 
 #: pretix/static/pretixbase/js/asynctask.js:270
 #: pretix/static/pretixcontrol/js/ui/main.js:71
 msgid "Close message"
-msgstr ""
+msgstr "Închide mesajul"
 
 #: pretix/static/pretixcontrol/js/clipboard.js:23
 msgid "Copied!"
-msgstr ""
+msgstr "Copiat!"
 
 #: pretix/static/pretixcontrol/js/clipboard.js:29
 msgid "Press Ctrl-C to copy!"
-msgstr ""
+msgstr "Apasă Ctrl+C pentru a copia!"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:10
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:16
 msgid "is one of"
-msgstr ""
+msgstr "e unul dintre"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:22
 msgid "is before"
-msgstr ""
+msgstr "e înainte de"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:26
 msgid "is after"
-msgstr ""
+msgstr "e după"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:59
 msgid "Product"
-msgstr ""
+msgstr "Produs"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:63
 msgid "Product variation"
-msgstr ""
+msgstr "Variații produs"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:67
 msgid "Current date and time"
-msgstr ""
+msgstr "Data și ora curentă"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:71
 msgid "Number of previous entries"
-msgstr ""
+msgstr "Numărul intrărilor anterioare"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:75
 msgid "Number of previous entries since midnight"
-msgstr ""
+msgstr "Numărul intrărilor ulterioare până la sfârșitul zilei"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:79
 msgid "Number of days with a previous entry"
-msgstr ""
+msgstr "Numărul de zile cu o intrare anterioară"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:100
 msgid "All of the conditions below (AND)"
-msgstr ""
+msgstr "Toate condițiile de mai jos (ȘI)"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:101
 msgid "At least one of the conditions below (OR)"
-msgstr ""
+msgstr "Cel puțin una dintre condițiile de mai jos (SAU)"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:102
 msgid "Event start"
-msgstr ""
+msgstr "Evenimentul începe"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:103
 msgid "Event end"
-msgstr ""
+msgstr "Evenimentul se termină"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:104
 msgid "Event admission"
-msgstr ""
+msgstr "Participarea la eveniment"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:105
 msgid "custom date and time"
-msgstr ""
+msgstr "dată și timp personalizate"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:106
 msgid "custom time"
-msgstr ""
+msgstr "timp personalizat"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:107
 msgid "Tolerance (minutes)"
-msgstr ""
+msgstr "Toleranță (minute)"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:108
 msgid "Add condition"
-msgstr ""
+msgstr "Adaugă condiție"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:109
 msgid "minutes"
-msgstr ""
+msgstr "minute"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:71
 msgid "Check-in QR"
-msgstr ""
+msgstr "QR Check-in"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:376
 msgid "The PDF background file could not be loaded for the following reason:"
 msgstr ""
+"Fișierul de fundal al PDF-ului nu a putut fi încărcat din această cauză:"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:624
 msgid "Group of objects"
-msgstr ""
+msgstr "Grup de obiecte"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:630
 msgid "Text object"
-msgstr ""
+msgstr "Obiect Text"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:632
 msgid "Barcode area"
-msgstr ""
+msgstr "Zonă de Cod de bare"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:634
 msgid "Image area"
-msgstr ""
+msgstr "Zonă de Imagine"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:636
 msgid "Powered by pretix"
-msgstr ""
+msgstr "Dezvoltat de pretix"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:638
 msgid "Object"
-msgstr ""
+msgstr "Obiect"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:642
 msgid "Ticket design"
-msgstr ""
+msgstr "Design bilet"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:932
 msgid "Saving failed."
-msgstr ""
+msgstr "Salvarea a eșuat."
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:982
 #: pretix/static/pretixcontrol/js/ui/editor.js:1021
 msgid "Error while uploading your PDF file, please try again."
-msgstr ""
+msgstr "Eroare la încărcarea fișierului PDF, te rugăm să reîncerci."
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:1006
 msgid "Do you really want to leave the editor without saving your changes?"
 msgstr ""
+"Ești sigur că dorești să părăsești editorul fără a salva schimbările "
+"efectuate?"
 
 #: pretix/static/pretixcontrol/js/ui/mail.js:19
 msgid "An error has occurred."
-msgstr ""
+msgstr "S-a produs o eroare."
 
 #: pretix/static/pretixcontrol/js/ui/mail.js:54
 msgid "Generating messages …"
-msgstr ""
+msgstr "Se generează mesajele …"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:107
 msgid "Unknown error."
-msgstr ""
+msgstr "Eroare necunoscută."
 
 #: pretix/static/pretixcontrol/js/ui/main.js:308
 msgid "Your color has great contrast and is very easy to read!"
-msgstr ""
+msgstr "Culoarea utilizată are un contrast ridicat și ajută mult la citit!"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:312
 msgid "Your color has decent contrast and is probably good-enough to read!"
 msgstr ""
+"Culoarea utilizată are un contrast acceptabil și probabil e îndeajuns de "
+"bună pentru citit!"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:316
 msgid ""
 "Your color has bad contrast for text on white background, please choose a "
 "darker shade."
 msgstr ""
+"Culoarea utilizată are un contrast slab pentru lizibilitatea textului pe "
+"fundal alb, te rugăm să alegi o nuanță mai închisă."
 
 #: pretix/static/pretixcontrol/js/ui/main.js:454
 msgid "All"
-msgstr ""
+msgstr "Toate"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:455
 msgid "None"
-msgstr ""
+msgstr "Niciunul"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:456
 msgid "Search query"
-msgstr ""
+msgstr "Caută sintaxa"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:459
 msgid "Selected only"
-msgstr ""
+msgstr "Doar selecția"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:886
 msgid "Use a different name internally"
-msgstr ""
+msgstr "Folosește un nume intern diferit"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:922
 msgid "Click to close"
-msgstr ""
+msgstr "Click pentru a închide"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:963
 msgid "You have unsaved changes!"
-msgstr ""
+msgstr "Ai modificări nesalvate!"
 
 #: pretix/static/pretixcontrol/js/ui/orderchange.js:25
 msgid "Calculating default price…"
-msgstr ""
+msgstr "Se calculează prețul implicit…"
 
 #: pretix/static/pretixcontrol/js/ui/question.js:42
 msgid "Others"
-msgstr ""
+msgstr "Altele"
 
 #: pretix/static/pretixcontrol/js/ui/question.js:82
 msgid "Count"
-msgstr ""
+msgstr "Numără"
 
 #: pretix/static/pretixcontrol/js/ui/question.js:136
 #: pretix/static/pretixpresale/js/ui/questions.js:269
 msgid "Yes"
-msgstr ""
+msgstr "Da"
 
 #: pretix/static/pretixcontrol/js/ui/question.js:137
 #: pretix/static/pretixpresale/js/ui/questions.js:269
 msgid "No"
-msgstr ""
+msgstr "Nu"
 
 #: pretix/static/pretixcontrol/js/ui/subevent.js:111
 msgid "(one more date)"
 msgid_plural "({num} more dates)"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "(o dată în plus)"
+msgstr[1] "({num} date în plus)"
+msgstr[2] "({num} date în plus)"
 
 #: pretix/static/pretixpresale/js/ui/cart.js:43
 msgid ""
 "The items in your cart are no longer reserved for you. You can still "
 "complete your order as long as they’re available."
 msgstr ""
+"Articolele din coșul tău nu mai sunt rezervate. Încă mai poți finaliza "
+"comanda atât timp cât acestea sunt disponibile."
 
 #: pretix/static/pretixpresale/js/ui/cart.js:45
 msgid "Cart expired"
-msgstr ""
+msgstr "Coșul a expirat"
 
 #: pretix/static/pretixpresale/js/ui/cart.js:50
 msgid "The items in your cart are reserved for you for one minute."
 msgid_plural "The items in your cart are reserved for you for {num} minutes."
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Articolele din coș mai sunt rezervate pentru încă un minut."
+msgstr[1] "Articolele din coș mai sunt rezervate pentru încă {num} minute."
+msgstr[2] "Articolele din coș mai sunt rezervate pentru încă {num} minute."
 
 #: pretix/static/pretixpresale/js/ui/main.js:144
 msgid "The organizer keeps %(currency)s %(amount)s"
-msgstr ""
+msgstr "Organizatorul păstrează %(currency)s %(amount)s"
 
 #: pretix/static/pretixpresale/js/ui/main.js:152
 msgid "You get %(currency)s %(amount)s back"
-msgstr ""
+msgstr "Primești înapoi %(currency)s %(amount)s"
 
 #: pretix/static/pretixpresale/js/ui/main.js:168
 msgid "Please enter the amount the organizer can keep."
-msgstr ""
+msgstr "Introdu valoarea pe care o poate păstra organizatorul."
 
 #: pretix/static/pretixpresale/js/ui/main.js:364
 msgid "Please enter a quantity for one of the ticket types."
-msgstr ""
+msgstr "Introdu cantitatea pentru unul dintre tipurile de bilete."
 
 #: pretix/static/pretixpresale/js/ui/main.js:400
 msgid "required"
-msgstr ""
+msgstr "necesar"
 
 #: pretix/static/pretixpresale/js/ui/main.js:503
 #: pretix/static/pretixpresale/js/ui/main.js:522
 msgid "Time zone:"
-msgstr ""
+msgstr "Fus orar:"
 
 #: pretix/static/pretixpresale/js/ui/main.js:513
 msgid "Your local time:"
-msgstr ""
+msgstr "Ora locală:"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:17
 msgctxt "widget"
 msgid "Sold out"
-msgstr ""
+msgstr "Epuizat"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:18
 msgctxt "widget"
 msgid "Buy"
-msgstr ""
+msgstr "Cumpără"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:19
 msgctxt "widget"
 msgid "Register"
-msgstr ""
+msgstr "Înregistrează-te"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:20
 msgctxt "widget"
 msgid "Reserved"
-msgstr ""
+msgstr "Rezervat"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:21
 msgctxt "widget"
 msgid "FREE"
-msgstr ""
+msgstr "GRATUIT"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:22
 msgctxt "widget"
 msgid "from %(currency)s %(price)s"
-msgstr ""
+msgstr "de la %(currency)s %(price)s"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:23
 msgctxt "widget"
 msgid "incl. %(rate)s% %(taxname)s"
-msgstr ""
+msgstr "inclusiv %(rate)s% %(taxname)s"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:24
 msgctxt "widget"
 msgid "plus %(rate)s% %(taxname)s"
-msgstr ""
+msgstr "plus %(rate)s% %(taxname)s"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:25
 msgctxt "widget"
 msgid "incl. taxes"
-msgstr ""
+msgstr "inclusiv taxele"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:26
 msgctxt "widget"
 msgid "plus taxes"
-msgstr ""
+msgstr "plus taxele"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:27
 #, javascript-format
 msgctxt "widget"
 msgid "currently available: %s"
-msgstr ""
+msgstr "disponibile momentan: %s"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:28
 msgctxt "widget"
 msgid "Only available with a voucher"
-msgstr ""
+msgstr "Disponibil doar cu un voucher"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:29
 #, javascript-format
 msgctxt "widget"
 msgid "minimum amount to order: %s"
-msgstr ""
+msgstr "valoare minimă de comandat: %s"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:30
 msgctxt "widget"
 msgid "Close ticket shop"
-msgstr ""
+msgstr "Închide magazinul de bilete"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:31
 msgctxt "widget"
 msgid "The ticket shop could not be loaded."
-msgstr ""
+msgstr "Magazinul de bilete nu a putut fi încărcat."
 
 #: pretix/static/pretixpresale/js/widget/widget.js:32
 msgctxt "widget"
@@ -603,16 +627,18 @@ msgid ""
 "There are currently a lot of users in this ticket shop. Please open the shop "
 "in a new tab to continue."
 msgstr ""
+"Momentan sunt o mulțime de utilizatori în acest shop. Deschide magazinul "
+"într-un nou tab pentru a continua."
 
 #: pretix/static/pretixpresale/js/widget/widget.js:34
 msgctxt "widget"
 msgid "Open ticket shop"
-msgstr ""
+msgstr "Deschide magazinul de bilete"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:35
 msgctxt "widget"
 msgid "The cart could not be created. Please try again later"
-msgstr ""
+msgstr "Coșul nu a putut fi creat. Te rugăm să reîncerci mai târziu"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:36
 msgctxt "widget"
@@ -620,11 +646,13 @@ msgid ""
 "We could not create your cart, since there are currently too many users in "
 "this ticket shop. Please click \"Continue\" to retry in a new tab."
 msgstr ""
+"Nu am putut crea coșul tău fiindcă sunt prea mulți utilizatori în acest "
+"magazin. Click pe „Continuă” pentru a reîncerca într-un tab nou."
 
 #: pretix/static/pretixpresale/js/widget/widget.js:38
 msgctxt "widget"
 msgid "Waiting list"
-msgstr ""
+msgstr "Listă de așteptare"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:39
 msgctxt "widget"
@@ -632,159 +660,161 @@ msgid ""
 "You currently have an active cart for this event. If you select more "
 "products, they will be added to your existing cart."
 msgstr ""
+"Momentan ai un coș activ la acest eveniment. Dacă selectezi mai multe "
+"produse, ele se vor adăuga coșului existent."
 
 #: pretix/static/pretixpresale/js/widget/widget.js:41
 msgctxt "widget"
 msgid "Resume checkout"
-msgstr ""
+msgstr "Continuă plata"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:42
 msgctxt "widget"
 msgid "Redeem a voucher"
-msgstr ""
+msgstr "Revendică un voucher"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:43
 msgctxt "widget"
 msgid "Redeem"
-msgstr ""
+msgstr "Revendică"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:44
 msgctxt "widget"
 msgid "Voucher code"
-msgstr ""
+msgstr "Cod voucher"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:45
 msgctxt "widget"
 msgid "Close"
-msgstr ""
+msgstr "Închide"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:46
 msgctxt "widget"
 msgid "Continue"
-msgstr ""
+msgstr "Continuă"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:47
 msgctxt "widget"
 msgid "See variations"
-msgstr ""
+msgstr "Vezi variații"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:48
 msgctxt "widget"
 msgid "Choose a different event"
-msgstr ""
+msgstr "Alege un eveniment diferit"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:49
 msgctxt "widget"
 msgid "Choose a different date"
-msgstr ""
+msgstr "Alege o dată diferită"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:50
 msgctxt "widget"
 msgid "Back"
-msgstr ""
+msgstr "Înapoi"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:51
 msgctxt "widget"
 msgid "Next month"
-msgstr ""
+msgstr "Luna viitoare"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:52
 msgctxt "widget"
 msgid "Previous month"
-msgstr ""
+msgstr "Luna trecută"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:53
 msgctxt "widget"
 msgid "Next week"
-msgstr ""
+msgstr "Săptămâna viitoare"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:54
 msgctxt "widget"
 msgid "Previous week"
-msgstr ""
+msgstr "Săptămâna trecută"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:55
 msgctxt "widget"
 msgid "Open seat selection"
-msgstr ""
+msgstr "Deschide selecția locurilor"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:56
 msgctxt "widget"
 msgid "Load more"
-msgstr ""
+msgstr "Mai mult"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:58
 msgid "Mo"
-msgstr ""
+msgstr "Lu"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:59
 msgid "Tu"
-msgstr ""
+msgstr "Ma"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:60
 msgid "We"
-msgstr ""
+msgstr "Mi"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:61
 msgid "Th"
-msgstr ""
+msgstr "Jo"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:62
 msgid "Fr"
-msgstr ""
+msgstr "Vi"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:63
 msgid "Sa"
-msgstr ""
+msgstr "Sâ"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:64
 msgid "Su"
-msgstr ""
+msgstr "Du"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:67
 msgid "January"
-msgstr ""
+msgstr "Ianuarie"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:68
 msgid "February"
-msgstr ""
+msgstr "Februarie"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:69
 msgid "March"
-msgstr ""
+msgstr "Martie"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:70
 msgid "April"
-msgstr ""
+msgstr "Aprilie"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:71
 msgid "May"
-msgstr ""
+msgstr "Mai"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:72
 msgid "June"
-msgstr ""
+msgstr "Iunie"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:73
 msgid "July"
-msgstr ""
+msgstr "Iulie"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:74
 msgid "August"
-msgstr ""
+msgstr "August"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:75
 msgid "September"
-msgstr ""
+msgstr "Septembrie"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:76
 msgid "October"
-msgstr ""
+msgstr "Octombrie"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:77
 msgid "November"
-msgstr ""
+msgstr "Noiembrie"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:78
 msgid "December"
-msgstr ""
+msgstr "Decembrie"
