@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-12 08:32+0000\n"
 "PO-Revision-Date: 2022-04-17 05:00+0000\n"
-"Last-Translator: Edd28 <chitu_edy@yahoo.com>\n"
+"Last-Translator: Basarabeanu Bogdan-Robert <middleftw@gmail.com>\n"
 "Language-Team: Romanian <https://translate.pretix.eu/projects/pretix/pretix/"
 "ro/>\n"
 "Language: ro\n"
@@ -13882,7 +13882,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/organizers/detail.html:104
 #: pretix/control/views/dashboards.py:529
 msgid "Shop disabled"
-msgstr ""
+msgstr "Magazin dezactivat"
 
 #: pretix/control/templates/pretixcontrol/events/index.html:146
 #: pretix/control/templates/pretixcontrol/organizers/detail.html:110
