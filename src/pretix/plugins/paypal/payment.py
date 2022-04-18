@@ -691,6 +691,8 @@ class PaypalMethod(BasePaymentProvider):
 
             for purchaseunit in pp_captured_order.purchase_units:
                 for capture in purchaseunit.payments.captures:
+                    ReferencedPayPalObject.objects.get_or_create(order=payment.order, payment=payment, reference=capture.id)
+
                     if capture.status == 'PENDING':
                         messages.warning(request, _('PayPal has not yet approved the payment. We will inform you as '
                                                     'soon as the payment completed.'))
