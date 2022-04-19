@@ -485,14 +485,17 @@ def mail_send_task(self, *args, to: List[str], subject: str, body: str, html: st
         try:
             backend.send_messages([email])
         except (smtplib.SMTPResponseException, smtplib.SMTPSenderRefused) as e:
-            if e.smtp_code in (101, 111, 421, 422, 431, 432, 442, 447, 452):
-                if e.smtp_code == 432 and settings.HAS_REDIS:
+            if e.smtp_code in (101, 111, 421, 422, 431, 432, 442, 447, 452, 454):
+                if e.smtp_code in (432, 454) and settings.HAS_REDIS:
                     # This is likely Microsoft Exchange Online which has a pretty bad rate limit of max. 3 concurrent
                     # SMTP connections which is *easily* exceeded with many celery threads. Just retrying with exponential
                     # backoff won't be good enough if we have a lot of emails, instead we'll need to make sure our retry
                     # intervals scatter such that the email won't all be retried at the same time again and cause the
                     # same problem.
                     # See also https://docs.microsoft.com/en-us/exchange/troubleshoot/send-emails/smtp-submission-improvements
+                    #
+                    # Also observed on AWS SES with 454:
+                    # https://aws.amazon.com/blogs/messaging-and-targeting/how-to-handle-a-throttling-maximum-sending-rate-exceeded-error/
                     from django_redis import get_redis_connection
 
                     redis_key = "pretix_mail_retry_" + hashlib.sha1(f"{getattr(backend, 'username', '_')}@{getattr(backend, 'host', '_')}".encode()).hexdigest()
