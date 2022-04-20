@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-12 08:32+0000\n"
-"PO-Revision-Date: 2022-04-20 02:00+0000\n"
+"PO-Revision-Date: 2022-04-21 05:00+0000\n"
 "Last-Translator: Edd28 <chitu_edy@yahoo.com>\n"
 "Language-Team: Romanian <https://translate.pretix.eu/projects/pretix/pretix/"
 "ro/>\n"
@@ -818,7 +818,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order.html:322
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:180
 msgid "Address"
-msgstr ""
+msgstr "Adresă"
 
 #: pretix/base/exporters/invoices.py:208 pretix/base/exporters/invoices.py:216
 #: pretix/base/exporters/invoices.py:334 pretix/base/exporters/invoices.py:342
@@ -834,7 +834,7 @@ msgstr ""
 #: pretix/plugins/checkinlists/exporters.py:479
 #: pretix/plugins/reports/exporters.py:754
 msgid "ZIP code"
-msgstr ""
+msgstr "Cod poștal"
 
 #: pretix/base/exporters/invoices.py:209 pretix/base/exporters/invoices.py:217
 #: pretix/base/exporters/invoices.py:335 pretix/base/exporters/invoices.py:343
@@ -850,7 +850,7 @@ msgstr ""
 #: pretix/plugins/checkinlists/exporters.py:480
 #: pretix/plugins/reports/exporters.py:755
 msgid "City"
-msgstr ""
+msgstr "Oraș"
 
 #: pretix/base/exporters/invoices.py:210 pretix/base/exporters/invoices.py:218
 #: pretix/base/exporters/invoices.py:336 pretix/base/exporters/invoices.py:344
@@ -2447,7 +2447,7 @@ msgstr ""
 #: pretix/base/models/customers.py:222 pretix/base/models/orders.py:1317
 #: pretix/base/models/orders.py:2629 pretix/base/settings.py:839
 msgid "Company name"
-msgstr ""
+msgstr "Nume companie"
 
 #: pretix/base/models/customers.py:226 pretix/base/models/orders.py:1321
 #: pretix/base/models/orders.py:2636 pretix/base/settings.py:79
@@ -6551,7 +6551,7 @@ msgstr ""
 
 #: pretix/base/settings.py:890
 msgid "EU VAT ID"
-msgstr ""
+msgstr "Cod TVA UE"
 
 #: pretix/base/settings.py:903
 msgid "e.g. With this document, we sent you the invoice for your ticket order."
@@ -18988,7 +18988,7 @@ msgstr ""
 
 #: pretix/control/views/organizer.py:491
 msgid "Administrators"
-msgstr ""
+msgstr "Administratori"
 
 #: pretix/control/views/organizer.py:553
 msgid "The team has been created. You can now add members to the team."
@@ -24286,11 +24286,11 @@ msgstr ""
 
 #: pretix/settings.py:508
 msgid "English"
-msgstr ""
+msgstr "Engleză"
 
 #: pretix/settings.py:509
 msgid "German"
-msgstr ""
+msgstr "Germană"
 
 #: pretix/settings.py:510
 msgid "German (informal)"
