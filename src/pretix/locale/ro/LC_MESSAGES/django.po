@@ -497,6 +497,8 @@ msgid ""
 "Only include invoices issued on or after this date. Note that the invoice "
 "date does not always correspond to the order or payment date."
 msgstr ""
+"Include doar facturile emise la această data sau după. De menționat că data "
+"facturii nu corespunde întotdeauna cu cea a comenzii sau a plății."
 
 #: pretix/base/exporters/dekodi.py:231 pretix/base/exporters/invoices.py:78
 #: pretix/base/exporters/orderlist.py:115
@@ -514,17 +516,19 @@ msgstr ""
 #: pretix/plugins/checkinlists/exporters.py:461
 #: pretix/plugins/ticketoutputpdf/exporters.py:81
 msgid "End date"
-msgstr ""
+msgstr "Dată încheiere"
 
 #: pretix/base/exporters/dekodi.py:234 pretix/base/exporters/invoices.py:81
 msgid ""
 "Only include invoices issued on or before this date. Note that the invoice "
 "date does not always correspond to the order or payment date."
 msgstr ""
+"Include doar facturile emise la această data sau înainte. De menționat că "
+"data facturii nu corespunde întotdeauna cu cea a comenzii sau a plății."
 
 #: pretix/base/exporters/events.py:47
 msgid "Event data"
-msgstr ""
+msgstr "Dată eveniment"
 
 #: pretix/base/exporters/events.py:55 pretix/base/exporters/waitinglist.py:112
 #: pretix/base/models/event.py:459 pretix/base/pdf.py:214
@@ -533,51 +537,51 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/events/index.html:62
 #: pretix/control/templates/pretixcontrol/organizers/detail.html:58
 msgid "Event name"
-msgstr ""
+msgstr "Denumire eveniment"
 
 #: pretix/base/exporters/events.py:56 pretix/base/models/event.py:475
 #: pretix/base/models/organizer.py:88
 #: pretix/control/templates/pretixcontrol/organizers/index.html:47
 msgid "Short form"
-msgstr ""
+msgstr "Nume scurt"
 
 #: pretix/base/exporters/events.py:57 pretix/base/models/event.py:477
 msgid "Shop is live"
-msgstr ""
+msgstr "Magazinul e live"
 
 #: pretix/base/exporters/events.py:58 pretix/base/models/event.py:479
 msgid "Event currency"
-msgstr ""
+msgstr "Monedă eveniment"
 
 #: pretix/base/exporters/events.py:59 pretix/base/models/event.py:482
 #: pretix/base/models/event.py:1285 pretix/base/settings.py:2548
 #: pretix/base/settings.py:2558 pretix/control/forms/subevents.py:609
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:268
 msgid "Event start time"
-msgstr ""
+msgstr "Oră începere eveniment"
 
 #: pretix/base/exporters/events.py:60 pretix/base/models/event.py:484
 #: pretix/base/models/event.py:1287 pretix/base/pdf.py:271
 #: pretix/control/forms/subevents.py:614
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:270
 msgid "Event end time"
-msgstr ""
+msgstr "Oră încheiere eveniment"
 
 #: pretix/base/exporters/events.py:61 pretix/base/models/event.py:486
 #: pretix/base/models/event.py:1289 pretix/control/forms/subevents.py:619
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:274
 msgid "Admission time"
-msgstr ""
+msgstr "Oră primire participanți"
 
 #: pretix/base/exporters/events.py:62 pretix/base/models/event.py:498
 #: pretix/base/models/event.py:1298 pretix/control/forms/subevents.py:92
 msgid "Start of presale"
-msgstr ""
+msgstr "Dată începere presale"
 
 #: pretix/base/exporters/events.py:63 pretix/base/models/event.py:492
 #: pretix/base/models/event.py:1292 pretix/control/forms/subevents.py:98
 msgid "End of presale"
-msgstr ""
+msgstr "Dată încheiere presale"
 
 #: pretix/base/exporters/events.py:64 pretix/base/exporters/invoices.py:351
 #: pretix/base/models/event.py:504 pretix/base/models/event.py:1304
@@ -587,18 +591,18 @@ msgstr "Locație"
 #: pretix/base/exporters/events.py:65 pretix/base/models/event.py:507
 #: pretix/base/models/event.py:1307
 msgid "Latitude"
-msgstr ""
+msgstr "Latitudine"
 
 #: pretix/base/exporters/events.py:66 pretix/base/models/event.py:515
 #: pretix/base/models/event.py:1315
 msgid "Longitude"
-msgstr ""
+msgstr "Longitudine"
 
 #: pretix/base/exporters/events.py:67 pretix/base/models/event.py:527
 #: pretix/control/templates/pretixcontrol/event/index.html:113
 #: pretix/control/templates/pretixcontrol/order/index.html:920
 msgid "Internal comment"
-msgstr ""
+msgstr "Comentariu intern"
 
 #: pretix/base/exporters/events.py:79 pretix/base/exporters/invoices.py:305
 #: pretix/base/exporters/orderlist.py:398
@@ -647,13 +651,13 @@ msgstr "Nu"
 #: pretix/control/templates/pretixcontrol/orders/refunds.html:50
 #: pretix/control/templates/pretixcontrol/search/payments.html:93
 msgid "Payment provider"
-msgstr ""
+msgstr "Procesator plăți"
 
 #: pretix/base/exporters/invoices.py:88 pretix/base/exporters/invoices.py:90
 #: pretix/control/forms/filter.py:177 pretix/control/forms/filter.py:859
 #: pretix/control/forms/filter.py:1984
 msgid "All payment providers"
-msgstr ""
+msgstr "Toți procesatorii de plăți"
 
 #: pretix/base/exporters/invoices.py:95
 msgid ""
@@ -661,14 +665,18 @@ msgid ""
 "this payment provider. Note that this might include some invoices of orders "
 "which in the end have been fully or partially paid with a different provider."
 msgstr ""
+"Include doar facturile comenzilor care au măcar o încercare de plată prin "
+"acest procesator de plăți. De menționat că pot fi incluse unele facturi ale "
+"unor comenzi care în final au fost total sau parțial plătite printr-un alt "
+"procesator de plăți."
 
 #: pretix/base/exporters/invoices.py:131
 msgid "All invoices"
-msgstr ""
+msgstr "Toate facturile"
 
 #: pretix/base/exporters/invoices.py:182
 msgid "Invoice data"
-msgstr ""
+msgstr "Dată factură"
 
 #: pretix/base/exporters/invoices.py:191 pretix/base/shredder.py:390
 #: pretix/control/templates/pretixcontrol/order/index.html:242
@@ -681,11 +689,11 @@ msgstr "Facturi"
 
 #: pretix/base/exporters/invoices.py:192
 msgid "Invoice lines"
-msgstr ""
+msgstr "Linii factură"
 
 #: pretix/base/exporters/invoices.py:199 pretix/base/exporters/invoices.py:318
 msgid "Invoice number"
-msgstr ""
+msgstr "Număr factură"
 
 #: pretix/base/exporters/invoices.py:200 pretix/base/exporters/invoices.py:327
 #: pretix/base/exporters/orderlist.py:927
@@ -727,7 +735,7 @@ msgstr "Dată"
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:43
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:64
 msgid "Order code"
-msgstr ""
+msgstr "ID comandă"
 
 #: pretix/base/exporters/invoices.py:202 pretix/base/exporters/invoices.py:329
 #: pretix/base/models/waitinglist.py:73 pretix/base/orderimport.py:150
@@ -735,15 +743,15 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/users/index.html:42
 #: pretix/control/views/waitinglist.py:292
 msgid "E-mail address"
-msgstr ""
+msgstr "Adresă e-mail"
 
 #: pretix/base/exporters/invoices.py:203 pretix/base/exporters/invoices.py:330
 msgid "Invoice type"
-msgstr ""
+msgstr "Tip factură"
 
 #: pretix/base/exporters/invoices.py:204 pretix/base/exporters/invoices.py:331
 msgid "Cancellation of"
-msgstr ""
+msgstr "Anulare de"
 
 #: pretix/base/exporters/invoices.py:205
 #: pretix/base/exporters/waitinglist.py:116 pretix/base/models/auth.py:258
@@ -760,7 +768,7 @@ msgstr "Limba"
 #: pretix/base/exporters/invoices.py:335 pretix/base/exporters/invoices.py:336
 #: pretix/base/exporters/invoices.py:337 pretix/base/exporters/invoices.py:338
 msgid "Invoice sender:"
-msgstr ""
+msgstr "Emitent factură:"
 
 #: pretix/base/exporters/invoices.py:206 pretix/base/exporters/invoices.py:214
 #: pretix/base/exporters/invoices.py:332 pretix/base/exporters/invoices.py:340
@@ -802,7 +810,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:25
 #: pretix/presale/templates/pretixpresale/organizers/index.html:40
 msgid "Name"
-msgstr ""
+msgstr "Nume"
 
 #: pretix/base/exporters/invoices.py:207 pretix/base/exporters/invoices.py:333
 #: pretix/base/exporters/orderlist.py:279
@@ -878,7 +886,7 @@ msgstr "Țară"
 
 #: pretix/base/exporters/invoices.py:211 pretix/base/exporters/invoices.py:337
 msgid "Tax ID"
-msgstr ""
+msgstr "ID Taxă"
 
 #: pretix/base/exporters/invoices.py:212 pretix/base/exporters/invoices.py:220
 #: pretix/base/exporters/invoices.py:338 pretix/base/exporters/invoices.py:346
@@ -892,7 +900,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:95
 #: pretix/presale/templates/pretixpresale/event/order.html:333
 msgid "VAT ID"
-msgstr ""
+msgstr "Cod TVA"
 
 #: pretix/base/exporters/invoices.py:213 pretix/base/exporters/invoices.py:214
 #: pretix/base/exporters/invoices.py:215 pretix/base/exporters/invoices.py:216
@@ -905,7 +913,7 @@ msgstr ""
 #: pretix/base/exporters/invoices.py:345 pretix/base/exporters/invoices.py:346
 #: pretix/base/exporters/invoices.py:347 pretix/base/exporters/invoices.py:348
 msgid "Invoice recipient:"
-msgstr ""
+msgstr "Destinatar factură:"
 
 #: pretix/base/exporters/invoices.py:213 pretix/base/exporters/invoices.py:339
 #: pretix/base/exporters/orderlist.py:272
@@ -922,11 +930,11 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:79
 #: pretix/presale/templates/pretixpresale/event/order.html:314
 msgid "Company"
-msgstr ""
+msgstr "Companie"
 
 #: pretix/base/exporters/invoices.py:215 pretix/base/exporters/invoices.py:341
 msgid "Street address"
-msgstr ""
+msgstr "Strada"
 
 #: pretix/base/exporters/invoices.py:219 pretix/base/exporters/invoices.py:345
 #: pretix/base/exporters/orderlist.py:279
@@ -956,31 +964,31 @@ msgstr "Beneficiar"
 #: pretix/control/templates/pretixcontrol/order/index.html:909
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:106
 msgid "Internal reference"
-msgstr ""
+msgstr "Referință internă"
 
 #: pretix/base/exporters/invoices.py:223 pretix/control/forms/event.py:1218
 msgid "Reverse charge"
-msgstr ""
+msgstr "Taxare inversă"
 
 #: pretix/base/exporters/invoices.py:224
 msgid "Shown foreign currency"
-msgstr ""
+msgstr "Arată în altă monedă"
 
 #: pretix/base/exporters/invoices.py:225
 msgid "Foreign currency rate"
-msgstr ""
+msgstr "Schimb valutar"
 
 #: pretix/base/exporters/invoices.py:226
 msgid "Total value (with taxes)"
-msgstr ""
+msgstr "Valoare totală (cu taxe incluse)"
 
 #: pretix/base/exporters/invoices.py:227
 msgid "Total value (without taxes)"
-msgstr ""
+msgstr "Valoare totală (fără taxe)"
 
 #: pretix/base/exporters/invoices.py:228
 msgid "Payment matching IDs"
-msgstr ""
+msgstr "ID-uri plăți"
 
 #: pretix/base/exporters/invoices.py:229 pretix/base/exporters/invoices.py:349
 #: pretix/base/exporters/orderlist.py:297
@@ -989,7 +997,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/event/payment.html:10
 #: pretix/control/views/event.py:325
 msgid "Payment providers"
-msgstr ""
+msgstr "Procesatori de plăți"
 
 #: pretix/base/exporters/invoices.py:285 pretix/base/exporters/invoices.py:388
 msgid "Cancellation"
@@ -1003,7 +1011,7 @@ msgstr "Factură"
 
 #: pretix/base/exporters/invoices.py:319
 msgid "Line number"
-msgstr ""
+msgstr "Număr linie"
 
 #: pretix/base/exporters/invoices.py:320 pretix/base/exporters/orderlist.py:446
 #: pretix/base/models/items.py:371 pretix/base/models/items.py:787
@@ -1013,17 +1021,17 @@ msgstr "Descripție"
 
 #: pretix/base/exporters/invoices.py:321 pretix/control/forms/orders.py:310
 msgid "Gross price"
-msgstr ""
+msgstr "Preț brut"
 
 #: pretix/base/exporters/invoices.py:322
 msgid "Net price"
-msgstr ""
+msgstr "Preț net"
 
 #: pretix/base/exporters/invoices.py:323 pretix/base/exporters/orderlist.py:450
 #: pretix/base/exporters/orderlist.py:559 pretix/base/models/orders.py:2059
 #: pretix/base/models/orders.py:2174 pretix/base/models/orders.py:2515
 msgid "Tax value"
-msgstr ""
+msgstr "Valoare taxă"
 
 #: pretix/base/exporters/invoices.py:324 pretix/base/exporters/orderlist.py:448
 #: pretix/base/exporters/orderlist.py:557 pretix/base/models/orders.py:2050
@@ -1033,32 +1041,32 @@ msgstr ""
 #: pretix/plugins/reports/exporters.py:706
 #: pretix/plugins/reports/exporters.py:751
 msgid "Tax rate"
-msgstr ""
+msgstr "Cotă impozitare"
 
 #: pretix/base/exporters/invoices.py:325
 msgid "Tax name"
-msgstr ""
+msgstr "Nume taxă"
 
 #: pretix/base/exporters/invoices.py:326
 msgid "Event start date"
-msgstr ""
+msgstr "Dată începere eveniment"
 
 #: pretix/base/exporters/invoices.py:350 pretix/base/pdf.py:263
 msgid "Event end date"
-msgstr ""
+msgstr "Dată încheiere eveniment"
 
 #: pretix/base/exporters/mail.py:52
 msgid "Email addresses (text file)"
-msgstr ""
+msgstr "Adrese email (fișier text)"
 
 #: pretix/base/exporters/mail.py:74 pretix/plugins/reports/exporters.py:384
 #: pretix/plugins/reports/exporters.py:564
 msgid "Filter by status"
-msgstr ""
+msgstr "Filtrare după status"
 
 #: pretix/base/exporters/orderlist.py:71
 msgid "Order data"
-msgstr ""
+msgstr "Dată comandă"
 
 #: pretix/base/exporters/orderlist.py:80 pretix/base/models/orders.py:262
 #: pretix/control/navigation.py:245 pretix/control/navigation.py:352
@@ -1068,40 +1076,40 @@ msgstr ""
 #: pretix/plugins/reports/exporters.py:552
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:47
 msgid "Orders"
-msgstr ""
+msgstr "Comenzi"
 
 #: pretix/base/exporters/orderlist.py:81 pretix/base/models/orders.py:2196
 #: pretix/base/notifications.py:205
 msgid "Order positions"
-msgstr ""
+msgstr "Poziții comandă"
 
 #: pretix/base/exporters/orderlist.py:82
 msgid "Order fees"
-msgstr ""
+msgstr "Tarife comandă"
 
 #: pretix/base/exporters/orderlist.py:90
 msgid "Only paid orders"
-msgstr ""
+msgstr "Doar comenzile plătite"
 
 #: pretix/base/exporters/orderlist.py:96
 msgid "Include payment amounts"
-msgstr ""
+msgstr "Include valorile de plată"
 
 #: pretix/base/exporters/orderlist.py:102
 msgid "Show multiple choice answers grouped in one column"
-msgstr ""
+msgstr "Arată răspunsurile cu variantă multiplă grupate într-o singură coloană"
 
 #: pretix/base/exporters/orderlist.py:111
 msgid "Only include orders created on or after this date."
-msgstr ""
+msgstr "Include doar comenzile create la această dată sau după."
 
 #: pretix/base/exporters/orderlist.py:118
 msgid "Only include orders created on or before this date."
-msgstr ""
+msgstr "Include doar comenzile create la această dată sau înainte."
 
 #: pretix/base/exporters/orderlist.py:122
 msgid "Start event date"
-msgstr ""
+msgstr "Dată începere eveniment"
 
 #: pretix/base/exporters/orderlist.py:125
 msgid ""
@@ -24405,4 +24413,8 @@ msgstr ""
 
 #: pretix/settings.py:854
 msgid "Kosovo"
+msgstr "Kosovo"
+
+#: pretix/control/templates/pretixcontrol/boxoffice/payment.html:62
+msgid "Paymeant reference"
 msgstr ""
