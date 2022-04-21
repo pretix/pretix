@@ -555,9 +555,11 @@ DEFAULTS = {
         'serializer_class': serializers.IntegerField,
         'serializer_kwargs': dict(
             min_value=0,
+            max_value=60 * 24 * 7,
         ),
         'form_kwargs': dict(
             min_value=0,
+            max_value=60 * 24 * 7,
             label=_("Reservation period"),
             required=True,
             help_text=_("The number of minutes the items in a user's cart are reserved for this user."),
