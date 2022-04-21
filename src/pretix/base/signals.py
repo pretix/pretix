@@ -399,7 +399,10 @@ order_modified = EventPluginSignal()
 Arguments: ``order``
 
 This signal is sent out every time an order's information is modified. The order object is given
-as the first argument.
+as the first argument. In contrast to ``order_changed``, this signal is sent out if information
+of an order or any of it's position is changed that concerns user input, such as attendee names,
+invoice addresses or question answers. If the order changes in a material way, such as changed
+products, prices, or tax rates, ``order_changed`` is used instead.
 
 As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
 """
@@ -409,7 +412,10 @@ order_changed = EventPluginSignal()
 Arguments: ``order``
 
 This signal is sent out every time an order's content is changed. The order object is given
-as the first argument.
+as the first argument. In contrast to ``modified``, this signal is sent out if the order or
+any of its positions changes in a material way, such as changed products, prices, or tax rates,
+``order_changed`` is used instead. If "only" user input is changed, such as attendee names,
+invoice addresses or question answers, ``order_modified`` is used instead.
 
 As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
 """
