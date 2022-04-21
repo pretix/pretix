@@ -41,8 +41,8 @@ import pytz
 from django.core.files import File
 from django.db import IntegrityError, transaction
 from django.db.models import (
-    BooleanField, Count, ExpressionWrapper, F, IntegerField, OuterRef, Q,
-    Subquery, Value,
+    BooleanField, Count, ExpressionWrapper, F, IntegerField, Max, Min,
+    OuterRef, Q, Subquery, Value,
 )
 from django.db.models.functions import Coalesce, TruncDate
 from django.dispatch import receiver
@@ -60,7 +60,7 @@ from pretix.helpers.jsonlogic import Logic
 from pretix.helpers.jsonlogic_boolalg import convert_to_dnf
 from pretix.helpers.jsonlogic_query import (
     Equal, GreaterEqualThan, GreaterThan, InList, LowerEqualThan, LowerThan,
-    tolerance,
+    MinutesSince, tolerance,
 )
 
 
@@ -210,19 +210,60 @@ def _logic_explain(rules, ev, rule_data):
         elif var == 'product' or var == 'variation':
             var_weights[vname] = (1000, 0)
             var_texts[vname] = _('Ticket type not allowed')
-        elif var in ('entries_number', 'entries_today', 'entries_days'):
+        elif var in ('entries_number', 'entries_today', 'entries_days', 'minutes_since_last_entry', 'minutes_since_first_entry', 'now_isoweekday'):
             w = {
+                'minutes_since_first_entry': 80,
+                'minutes_since_last_entry': 90,
                 'entries_days': 100,
                 'entries_number': 120,
                 'entries_today': 140,
+                'now_isoweekday': 210,
+            }
+            operator_weights = {
+                '==': 2,
+                '<': 1,
+                '<=': 1,
+                '>': 1,
+                '>=': 1,
+                '!=': 3,
             }
             l = {
+                'minutes_since_last_entry': _('time since last entry'),
+                'minutes_since_first_entry': _('time since first entry'),
                 'entries_days': _('number of days with an entry'),
                 'entries_number': _('number of entries'),
                 'entries_today': _('number of entries today'),
+                'now_isoweekday': _('week day'),
             }
             compare_to = rhs[0]
-            var_weights[vname] = (w[var], abs(compare_to - rule_data[var]))
+            penalty = 0
+
+            if var in ('minutes_since_last_entry', 'minutes_since_first_entry'):
+                is_comparison_to_minus_one = (
+                    (operator == '<' and compare_to <= 0) or
+                    (operator == '<=' and compare_to < 0) or
+                    (operator == '>=' and compare_to < 0) or
+                    (operator == '>' and compare_to <= 0) or
+                    (operator == '==' and compare_to == -1) or
+                    (operator == '!=' and compare_to == -1)
+                )
+                if is_comparison_to_minus_one:
+                    # These are "technical" comparisons without real meaning, we don't want to show them.
+                    penalty = 1000
+
+            var_weights[vname] = (w[var] + operator_weights.get(operator, 0) + penalty, abs(compare_to - rule_data[var]))
+
+            if var == 'now_isoweekday':
+                compare_to = {
+                    1: _('Monday'),
+                    2: _('Tuesday'),
+                    3: _('Wednesday'),
+                    4: _('Thursday'),
+                    5: _('Friday'),
+                    6: _('Saturday'),
+                    7: _('Sunday'),
+                }.get(compare_to, compare_to)
+
             if operator == '==':
                 var_texts[vname] = _('{variable} is not {value}').format(variable=l[var], value=compare_to)
             elif operator in ('<', '<='):
@@ -231,6 +272,7 @@ def _logic_explain(rules, ev, rule_data):
                 var_texts[vname] = _('Minimum {variable} exceeded').format(variable=l[var])
             elif operator == '!=':
                 var_texts[vname] = _('{variable} is {value}').format(variable=l[var], value=compare_to)
+
         else:
             raise ValueError(f'Unknown variable {var}')
 
@@ -290,6 +332,11 @@ class LazyRuleVars:
         return self._dt
 
     @property
+    def now_isoweekday(self):
+        tz = self._clist.event.timezone
+        return self._dt.astimezone(tz).isoweekday()
+
+    @property
     def product(self):
         return self._position.item_id
 
@@ -314,6 +361,30 @@ class LazyRuleVars:
             return self._position.checkins.filter(list=self._clist, type=Checkin.TYPE_ENTRY).annotate(
                 day=TruncDate('datetime', tzinfo=tz)
             ).values('day').distinct().count()
+
+    @cached_property
+    def minutes_since_last_entry(self):
+        tz = self._clist.event.timezone
+        with override(tz):
+            last_entry = self._position.checkins.filter(list=self._clist, type=Checkin.TYPE_ENTRY).order_by('datetime').last()
+            if last_entry is None:
+                # Returning "None" would be "correct", but the handling of "None" in JSON logic is inconsistent
+                # between platforms (None<1 is true on some, but not all), we rather choose something that is at least
+                # consistent.
+                return -1
+            return (now() - last_entry.datetime).total_seconds() // 60
+
+    @cached_property
+    def minutes_since_first_entry(self):
+        tz = self._clist.event.timezone
+        with override(tz):
+            last_entry = self._position.checkins.filter(list=self._clist, type=Checkin.TYPE_ENTRY).order_by('datetime').first()
+            if last_entry is None:
+                # Returning "None" would be "correct", but the handling of "None" in JSON logic is inconsistent
+                # between platforms (None<1 is true on some, but not all), we rather choose something that is at least
+                # consistent.
+                return -1
+            return (now() - last_entry.datetime).total_seconds() // 60
 
 
 class SQLLogic:
@@ -399,6 +470,8 @@ class SQLLogic:
         elif operator == 'var':
             if values[0] == 'now':
                 return Value(now().astimezone(pytz.UTC))
+            elif values[0] == 'now_isoweekday':
+                return Value(now().astimezone(self.list.event.timezone).isoweekday())
             elif values[0] == 'product':
                 return F('item_id')
             elif values[0] == 'variation':
@@ -448,6 +521,38 @@ class SQLLogic:
                         ).values('c')
                     ),
                     Value(0),
+                    output_field=IntegerField()
+                )
+            elif values[0] == 'minutes_since_last_entry':
+                sq_last_entry = Subquery(
+                    Checkin.objects.filter(
+                        position_id=OuterRef('pk'),
+                        type=Checkin.TYPE_ENTRY,
+                        list_id=self.list.pk,
+                    ).values('position_id').order_by().annotate(
+                        m=Max('datetime')
+                    ).values('m')
+                )
+
+                return Coalesce(
+                    MinutesSince(sq_last_entry),
+                    Value(-1),
+                    output_field=IntegerField()
+                )
+            elif values[0] == 'minutes_since_first_entry':
+                sq_last_entry = Subquery(
+                    Checkin.objects.filter(
+                        position_id=OuterRef('pk'),
+                        type=Checkin.TYPE_ENTRY,
+                        list_id=self.list.pk,
+                    ).values('position_id').order_by().annotate(
+                        m=Min('datetime')
+                    ).values('m')
+                )
+
+                return Coalesce(
+                    MinutesSince(sq_last_entry),
+                    Value(-1),
                     output_field=IntegerField()
                 )
         else:

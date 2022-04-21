@@ -67,6 +67,10 @@ $(document).ready(function () {
       'label': gettext('Current date and time'),
       'type': 'datetime',
     },
+    'now_isoweekday': {
+      'label': gettext('Current day of the week (1 = Monday, 7 = Sunday)'),
+      'type': 'int',
+    },
     'entries_number': {
       'label': gettext('Number of previous entries'),
       'type': 'int',
@@ -77,6 +81,14 @@ $(document).ready(function () {
     },
     'entries_days': {
       'label': gettext('Number of days with a previous entry'),
+      'type': 'int',
+    },
+    'minutes_since_last_entry': {
+      'label': gettext('Minutes since last entry (-1 on first entry)'),
+      'type': 'int',
+    },
+    'minutes_since_first_entry': {
+      'label': gettext('Minutes since first entry (-1 on first entry)'),
       'type': 'int',
     },
   };
