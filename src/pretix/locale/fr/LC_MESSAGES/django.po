@@ -4,8 +4,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-12 08:32+0000\n"
-"PO-Revision-Date: 2022-04-07 10:40+0000\n"
-"Last-Translator: Eva-Maria Obermann <obermann@rami.io>\n"
+"PO-Revision-Date: 2022-04-21 12:10+0000\n"
+"Last-Translator: hmontheline <Helias.mackay@goetheanum.ch>\n"
 "Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix/fr/"
 ">\n"
 "Language: fr\n"
@@ -1354,10 +1354,9 @@ msgid "E-mail address verified"
 msgstr "Adresse e-mail"
 
 #: pretix/base/exporters/orderlist.py:301
-#, fuzzy, python-brace-format
-#| msgid "Payment method"
+#, python-brace-format
 msgid "Paid by {method}"
-msgstr "Mode de paiement"
+msgstr "Payé avec {method}"
 
 #: pretix/base/exporters/orderlist.py:445
 msgid "Fee type"
@@ -27808,7 +27807,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/organizers/index.html:97
 #: pretix/presale/views/widget.py:359 pretix/presale/views/widget.py:382
 msgid "Book now"
-msgstr ""
+msgstr "Réserver maintenant"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_list.html:33
 #: pretix/presale/templates/pretixpresale/fragment_calendar.html:85
@@ -28685,17 +28684,13 @@ msgstr ""
 "                                                    "
 
 #: pretix/presale/templates/pretixpresale/fragment_calendar_nav.html:12
-#, fuzzy
-#| msgid "Weekday"
 msgid "Week"
-msgstr "jour de semaine"
+msgstr "Semaine"
 
 #: pretix/presale/templates/pretixpresale/fragment_calendar_nav.html:17
 #: pretix/presale/templates/pretixpresale/organizers/calendar.html:25
-#, fuzzy
-#| msgid "month(s)"
 msgid "Month"
-msgstr "mois(s)"
+msgstr "Mois"
 
 #: pretix/presale/templates/pretixpresale/fragment_calendar_nav.html:27
 msgid "iCal"
