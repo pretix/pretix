@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-12 08:33+0000\n"
+"POT-Creation-Date: 2022-04-21 15:18+0000\n"
 "PO-Revision-Date: 2021-12-06 23:00+0000\n"
 "Last-Translator: Ondřej Sokol <osokol@treesoft.cz>\n"
 "Language-Team: Czech <https://translate.pretix.eu/projects/pretix/pretix-js/"
@@ -304,54 +304,66 @@ msgid "Current date and time"
 msgstr "Současný čas"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:71
+msgid "Current day of the week (1 = Monday, 7 = Sunday)"
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:75
 msgid "Number of previous entries"
 msgstr "Počet předchozích záznamů"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:75
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:79
 msgid "Number of previous entries since midnight"
 msgstr "Počet záznamů od půlnoci"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:79
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:83
 msgid "Number of days with a previous entry"
 msgstr "Počet dní bez úprav"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:100
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:87
+msgid "Minutes since last entry (-1 on first entry)"
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:91
+msgid "Minutes since first entry (-1 on first entry)"
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:112
 msgid "All of the conditions below (AND)"
 msgstr "Všechny následující podmínky (AND)"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:101
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:113
 msgid "At least one of the conditions below (OR)"
 msgstr "Alespoň jedna z následujících podmínek (OR)"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:102
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:114
 msgid "Event start"
 msgstr "Začátek akce"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:103
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:115
 msgid "Event end"
 msgstr "Konec akce"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:104
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:116
 msgid "Event admission"
 msgstr "Vstup na akci"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:105
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:117
 msgid "custom date and time"
 msgstr "Pevný termín"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:106
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:118
 msgid "custom time"
 msgstr "Pevná doba"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:107
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:119
 msgid "Tolerance (minutes)"
 msgstr "Tolerance (v minutách)"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:108
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:120
 msgid "Add condition"
 msgstr "Přidat podmínku"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:109
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:121
 msgid "minutes"
 msgstr "minuty"
 
