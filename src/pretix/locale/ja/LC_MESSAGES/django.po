@@ -362,12 +362,12 @@ msgstr "オンラインショップ"
 #: pretix/base/context.py:45
 #, python-brace-format
 msgid "powered by {name} based on <a {a_attr}>pretix</a>"
-msgstr ""
+msgstr "{name} に基づき <a {a_attr}>pretix</a>"
 
 #: pretix/base/context.py:52
 #, python-format
 msgid "<a %(a_attr)s>ticketing powered by pretix</a>"
-msgstr ""
+msgstr "<a %(a_attr)s>はpretixによるチケット販売</a>"
 
 #: pretix/base/context.py:61
 msgid "source code"
@@ -428,19 +428,19 @@ msgstr "Excel (.xlsx)"
 
 #: pretix/base/exporter.py:152 pretix/base/exporter.py:271
 msgid "CSV (with commas)"
-msgstr ""
+msgstr "CSV（コンマ付き）"
 
 #: pretix/base/exporter.py:153 pretix/base/exporter.py:272
 msgid "CSV (Excel-style)"
-msgstr ""
+msgstr "CSV（エクセルスタイル）"
 
 #: pretix/base/exporter.py:154 pretix/base/exporter.py:273
 msgid "CSV (with semicolons)"
-msgstr ""
+msgstr "CSV（セミコロン付き）"
 
 #: pretix/base/exporter.py:267
 msgid "Combined Excel (.xlsx)"
-msgstr ""
+msgstr "結合されたエクセル（.xlsx）"
 
 #: pretix/base/exporters/answers.py:52
 msgid "Answers to file upload questions"
@@ -515,10 +515,8 @@ msgstr ""
 "日と一致するわけではありません。"
 
 #: pretix/base/exporters/events.py:47
-#, fuzzy
-#| msgid "Event end date"
 msgid "Event data"
-msgstr "イベント終了日"
+msgstr "イベント情報"
 
 #: pretix/base/exporters/events.py:55 pretix/base/exporters/waitinglist.py:112
 #: pretix/base/models/event.py:459 pretix/base/pdf.py:214
@@ -526,52 +524,54 @@ msgstr "イベント終了日"
 #: pretix/control/forms/filter.py:1425 pretix/control/forms/filter.py:1427
 #: pretix/control/templates/pretixcontrol/events/index.html:62
 #: pretix/control/templates/pretixcontrol/organizers/detail.html:58
+#, fuzzy
 msgid "Event name"
-msgstr ""
+msgstr "イベント名"
 
 #: pretix/base/exporters/events.py:56 pretix/base/models/event.py:475
 #: pretix/base/models/organizer.py:88
 #: pretix/control/templates/pretixcontrol/organizers/index.html:47
 msgid "Short form"
-msgstr ""
+msgstr "ショートフォーム"
 
 #: pretix/base/exporters/events.py:57 pretix/base/models/event.py:477
 msgid "Shop is live"
-msgstr ""
+msgstr "ショップがオープン"
 
 #: pretix/base/exporters/events.py:58 pretix/base/models/event.py:479
+#, fuzzy
 msgid "Event currency"
-msgstr ""
+msgstr "イベント通貨"
 
 #: pretix/base/exporters/events.py:59 pretix/base/models/event.py:482
 #: pretix/base/models/event.py:1285 pretix/base/settings.py:2548
 #: pretix/base/settings.py:2558 pretix/control/forms/subevents.py:609
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:268
 msgid "Event start time"
-msgstr ""
+msgstr "イベント開始時間"
 
 #: pretix/base/exporters/events.py:60 pretix/base/models/event.py:484
 #: pretix/base/models/event.py:1287 pretix/base/pdf.py:271
 #: pretix/control/forms/subevents.py:614
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:270
 msgid "Event end time"
-msgstr ""
+msgstr "イベント終了時間"
 
 #: pretix/base/exporters/events.py:61 pretix/base/models/event.py:486
 #: pretix/base/models/event.py:1289 pretix/control/forms/subevents.py:619
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:274
 msgid "Admission time"
-msgstr ""
+msgstr "入場時間"
 
 #: pretix/base/exporters/events.py:62 pretix/base/models/event.py:498
 #: pretix/base/models/event.py:1298 pretix/control/forms/subevents.py:92
 msgid "Start of presale"
-msgstr ""
+msgstr "先行販売開始"
 
 #: pretix/base/exporters/events.py:63 pretix/base/models/event.py:492
 #: pretix/base/models/event.py:1292 pretix/control/forms/subevents.py:98
 msgid "End of presale"
-msgstr ""
+msgstr "先行販売終了"
 
 #: pretix/base/exporters/events.py:64 pretix/base/exporters/invoices.py:351
 #: pretix/base/models/event.py:504 pretix/base/models/event.py:1304
@@ -581,18 +581,18 @@ msgstr "イベント開催地"
 #: pretix/base/exporters/events.py:65 pretix/base/models/event.py:507
 #: pretix/base/models/event.py:1307
 msgid "Latitude"
-msgstr ""
+msgstr "ラティチュード"
 
 #: pretix/base/exporters/events.py:66 pretix/base/models/event.py:515
 #: pretix/base/models/event.py:1315
 msgid "Longitude"
-msgstr ""
+msgstr "経度"
 
 #: pretix/base/exporters/events.py:67 pretix/base/models/event.py:527
 #: pretix/control/templates/pretixcontrol/event/index.html:113
 #: pretix/control/templates/pretixcontrol/order/index.html:920
 msgid "Internal comment"
-msgstr ""
+msgstr "内部コメント"
 
 #: pretix/base/exporters/events.py:79 pretix/base/exporters/invoices.py:305
 #: pretix/base/exporters/orderlist.py:398
@@ -938,9 +938,10 @@ msgstr "住所"
 #: pretix/plugins/reports/exporters.py:756
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:91
 #: pretix/presale/templates/pretixpresale/event/order.html:329
+#, fuzzy
 msgctxt "address"
 msgid "State"
-msgstr ""
+msgstr "開始"
 
 #: pretix/base/exporters/invoices.py:221 pretix/base/exporters/invoices.py:347
 #: pretix/base/models/orders.py:2648 pretix/base/models/orders.py:2676
@@ -1102,20 +1103,26 @@ msgid "Start event date"
 msgstr "一番初めの日付"
 
 #: pretix/base/exporters/orderlist.py:125
+#, fuzzy
 msgid ""
 "Only include orders including at least one ticket for a date on or after "
 "this date. Will also include other dates in case of mixed orders!"
 msgstr ""
+"この日以降の日付のチケットを1枚以上含む注文のみ対象となります。混雑している場"
+"合は、他の日付も含まれます。"
 
 #: pretix/base/exporters/orderlist.py:130
 msgid "End event date"
-msgstr ""
+msgstr "イベント終了日"
 
 #: pretix/base/exporters/orderlist.py:133
+#, fuzzy
 msgid ""
 "Only include orders including at least one ticket for a date on or before "
 "this date. Will also include other dates in case of mixed orders!"
 msgstr ""
+"この日付以前の日付のチケットを1枚以上含むご注文のみ対象となります。ご注文が混"
+"在している場合は、他の日付のものも含まれます。"
 
 #: pretix/base/exporters/orderlist.py:271
 #: pretix/base/exporters/orderlist.py:438
@@ -1124,8 +1131,9 @@ msgstr ""
 #: pretix/base/exporters/orderlist.py:969
 #: pretix/base/exporters/waitinglist.py:111 pretix/control/forms/event.py:1311
 #: pretix/control/forms/organizer.py:97
+#, fuzzy
 msgid "Event slug"
-msgstr ""
+msgstr "イベントスラッグ"
 
 #: pretix/base/exporters/orderlist.py:271 pretix/base/notifications.py:201
 #: pretix/control/templates/pretixcontrol/search/orders.html:60
@@ -3675,7 +3683,6 @@ msgstr ""
 
 #: pretix/base/models/orders.py:1023 pretix/control/views/event.py:758
 #, fuzzy, python-format
-#| msgid "Order code"
 msgid "Your order: %(code)s"
 msgstr "注文番号"
 
@@ -9078,7 +9085,6 @@ msgstr ""
 
 #: pretix/control/forms/filter.py:874
 #, fuzzy
-#| msgid "Paid orders"
 msgid "Paid from"
 msgstr "支払い済みの注文"
 
@@ -9676,9 +9682,6 @@ msgstr ""
 
 #: pretix/control/forms/item.py:569
 #, fuzzy
-#| msgid ""
-#| "Gift card products should not be associated with non-zero tax rates since "
-#| "sales tax will be applied when the gift card is redeemed."
 msgid ""
 "Gift card products should use a tax rule with a rate of 0 percent since "
 "sales tax will be applied when the gift card is redeemed."
@@ -12084,7 +12087,6 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:62
 #, fuzzy
-#| msgid "Internal reference"
 msgid "Payment reference"
 msgstr "内部参考資料"
 
@@ -16852,7 +16854,6 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:429
 #, fuzzy
-#| msgid "Order code"
 msgid "Other QR code"
 msgstr "注文番号"
 
@@ -24389,3 +24390,8 @@ msgstr ""
 #: pretix/settings.py:854
 msgid "Kosovo"
 msgstr ""
+
+#: pretix/control/templates/pretixcontrol/boxoffice/payment.html:62
+#, fuzzy
+msgid "Paymeant reference"
+msgstr "内部参考資料"
