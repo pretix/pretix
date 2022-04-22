@@ -8,10 +8,10 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-21 15:18+0000\n"
-"PO-Revision-Date: 2022-04-17 05:00+0000\n"
+"PO-Revision-Date: 2022-04-22 19:56+0000\n"
 "Last-Translator: Edd28 <chitu_edy@yahoo.com>\n"
-"Language-Team: Romanian <https://translate.pretix.eu/projects/pretix/pretix-"
-"js/ro/>\n"
+"Language-Team: Romanian <https://translate.pretix.eu/projects/pretix/"
+"pretix-js/ro/>\n"
 "Language: ro\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -38,7 +38,7 @@ msgstr "Comenzi plasate"
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:15
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:39
 msgid "Paid orders"
-msgstr "Comenzi încasate"
+msgstr "Comenzi plătite"
 
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:27
 msgid "Total revenue"
@@ -95,7 +95,7 @@ msgstr "Schimbă direcția"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:38
 msgid "Entry"
-msgstr "Acces"
+msgstr "Intrare"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:39
 msgid "Exit"
@@ -157,11 +157,11 @@ msgstr "Ieșire înregistrată"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:54
 msgid "Ticket already used"
-msgstr "Bilet deja folosit"
+msgstr "Bilet deja utilizat"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:55
 msgid "Information required"
-msgstr "Informație necesară"
+msgstr "Informații necesare"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:56
 msgid "Unknown ticket"
