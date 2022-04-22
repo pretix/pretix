@@ -340,7 +340,7 @@ class PaypalSettingsHolder(BasePaymentProvider):
                     "return_url": build_global_uri('plugins:paypal:oauth.return')
                 },
                 "tracking_id": request.session['payment_paypal_isu_tracking_id'],
-                "preferred_language_code": request.user.locale
+                "preferred_language_code": request.user.locale.split('-')[0]
             })
             response = pprov.client.execute(req)
         except IOError as e:

@@ -17,7 +17,7 @@ class PayPalHttpClient(VendorPayPalHttpClient):
                 token_type=cache.get("pretix_paypal_access_token_type"),
             )
             # This is not part of the constructor - so we need to set it after the fact.
-            self._access_token.created_at = cache.get("pretix_paypal_access_token_created_at"),
+            self._access_token.created_at = cache.get("pretix_paypal_access_token_created_at")
 
         # Only then we'll call the original __call__() method, as it will verify the validity of the tokens
         # and request new ones if required.
