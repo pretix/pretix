@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-26 09:20+0000\n"
-"PO-Revision-Date: 2022-04-28 02:00+0000\n"
+"PO-Revision-Date: 2023-05-30 21:24+0000\n"
 "Last-Translator: Edd28 <chitu_edy@yahoo.com>\n"
 "Language-Team: Romanian <https://translate.pretix.eu/projects/pretix/pretix/"
 "ro/>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < "
 "20)) ? 1 : 2;\n"
-"X-Generator: Weblate 4.12\n"
+"X-Generator: Weblate 4.17\n"
 
 #: pretix/_base_settings.py:78
 msgid "English"
@@ -5098,8 +5098,7 @@ msgstr "Utilizări maxime"
 
 #: pretix/base/models/memberships.py:57
 msgid "Number of times this membership can be used in a purchase."
-msgstr ""
-"Numărul de ori în care poate fi folosit acest abonament la o achiziție."
+msgstr "Numărul de ori în care poate fi folosit acest abonament la o achiziție."
 
 #: pretix/base/models/memberships.py:123
 #: pretix/control/templates/pretixcontrol/items/question.html:27
@@ -5621,8 +5620,8 @@ msgid ""
 "Reverse Charge: According to Article 194, 196 of Council Directive 2006/112/"
 "EEC, VAT liability rests with the service recipient."
 msgstr ""
-"Taxare inversă: În conformitate cu articolele 194 și 196 din Directiva "
-"2006/112/CEE a Consiliului, obligația de plată a TVA revine beneficiarului "
+"Taxare inversă: În conformitate cu articolele 194 și 196 din Directiva 2006/"
+"112/CEE a Consiliului, obligația de plată a TVA revine beneficiarului "
 "serviciului."
 
 #: pretix/base/models/tax.py:350
@@ -6294,10 +6293,10 @@ msgid ""
 "Don't forget to set the correct fees above!"
 msgstr ""
 "Vă recomandăm să activați această opțiune dacă doriți ca utilizatorii dvs. "
-"să achite comisioanele de plată ale procesatorului dvs. de plăți. <a "
-"href=\"{docs_url}\" target=\"_blank\" rel=\"noopener\">Faceți click aici "
-"pentru informații detaliate despre acest lucru.</a> Nu uitați să setați "
-"taxele corecte mai sus!"
+"să achite comisioanele de plată ale procesatorului dvs. de plăți. <a href=\""
+"{docs_url}\" target=\"_blank\" rel=\"noopener\">Faceți click aici pentru "
+"informații detaliate despre acest lucru.</a> Nu uitați să setați taxele "
+"corecte mai sus!"
 
 #: pretix/base/payment.py:378
 msgid "Text on invoices"
@@ -7744,8 +7743,8 @@ msgid ""
 "You are trying to use a membership of type \"{type}\" more than {number} "
 "times, which is the maximum amount."
 msgstr ""
-"Încercați să utilizați un abonament de tip \"{type}\" de mai mult de "
-"{number} ori, care este numărul maxim."
+"Încercați să utilizați un abonament de tip \"{type}\" de mai mult de {number}"
+" ori, care este numărul maxim."
 
 #: pretix/base/services/memberships.py:194
 #, python-brace-format
@@ -9953,14 +9952,14 @@ msgid ""
 "vital email going to spam, you can only upload PDF files of up to {size} MB."
 msgstr ""
 "Acest fișier va fi atașat la primul e-mail pe care îl trimitem pentru "
-"fiecare comandă nouă. Prin urmare, acesta va fi combinat cu textele "
-"\"Comandă plasată\", \"Comandă gratuită\" sau \"Comandă primită\" de mai "
-"sus. Acesta va fi trimis atât contactelor de comandă, cât și "
-"participanților. Îl puteți utiliza, de exemplu, pentru a trimite termenii și "
-"condițiile de utilizare. Nu îl utilizați pentru a trimite informații "
-"nepublice, deoarece acest fișier ar putea fi trimis înainte ca plata să fie "
-"confirmată sau comanda să fie aprobată. Pentru a evita ca acest e-mail vital "
-"să ajungă la spam, puteți încărca numai fișiere PDF de până la {size} MB."
+"fiecare comandă nouă. Prin urmare, acesta va fi combinat cu textele \"Comandă"
+" plasată\", \"Comandă gratuită\" sau \"Comandă primită\" de mai sus. Acesta "
+"va fi trimis atât contactelor de comandă, cât și participanților. Îl puteți "
+"utiliza, de exemplu, pentru a trimite termenii și condițiile de utilizare. "
+"Nu îl utilizați pentru a trimite informații nepublice, deoarece acest fișier "
+"ar putea fi trimis înainte ca plata să fie confirmată sau comanda să fie "
+"aprobată. Pentru a evita ca acest e-mail vital să ajungă la spam, puteți "
+"încărca numai fișiere PDF de până la {size} MB."
 
 #: pretix/base/settings.py:2148
 #, python-brace-format
@@ -10921,9 +10920,9 @@ msgid ""
 "The system generates by default {}-character long gift card codes. However, "
 "if a different length is required, it can be set here."
 msgstr ""
-"Sistemul generează în mod implicit coduri de carduri cadou cu o lungime de "
-"{} caractere. Cu toate acestea, dacă este necesară o lungime diferită, "
-"aceasta poate fi setată aici."
+"Sistemul generează în mod implicit coduri de carduri cadou cu o lungime de {}"
+" caractere. Cu toate acestea, dacă este necesară o lungime diferită, aceasta "
+"poate fi setată aici."
 
 #: pretix/base/settings.py:3096
 msgid "Validity of gift card codes in years"
@@ -11453,8 +11452,7 @@ msgstr ""
 
 #: pretix/base/templates/pretixbase/email/notification.html:57
 msgid "Click here to view and change your notification settings"
-msgstr ""
-"Faceți click aici pentru a vizualiza și modifica setările de notificare"
+msgstr "Faceți click aici pentru a vizualiza și modifica setările de notificare"
 
 #: pretix/base/templates/pretixbase/email/notification.html:60
 msgid "Click here disable all notifications immediately."
@@ -13109,8 +13107,7 @@ msgstr "Text suplimentar în subsol"
 
 #: pretix/control/forms/global_settings.py:60
 msgid "Will be included as additional text in the footer, site-wide."
-msgstr ""
-"Va fi inclus ca text suplimentar în subsol, la nivelul întregului site."
+msgstr "Va fi inclus ca text suplimentar în subsol, la nivelul întregului site."
 
 #: pretix/control/forms/global_settings.py:65
 msgid "Additional footer link"
@@ -13223,9 +13220,9 @@ msgid ""
 "company) or I offer the functionality of pretix to others (e.g. a Software-"
 "as-a-Service company)."
 msgstr ""
-"Folosesc pretix pentru a vinde bilete ale altor organizatori de evenimente "
-"(de exemplu, o companie de ticketing) sau ofer funcționalitatea pretix "
-"altora (de exemplu, o companie de software ca serviciu)."
+"Folosesc pretix pentru a vinde bilete ale altor organizatori de evenimente ("
+"de exemplu, o companie de ticketing) sau ofer funcționalitatea pretix altora "
+"(de exemplu, o companie de software ca serviciu)."
 
 #: pretix/control/forms/global_settings.py:150
 msgid "I'm not sure which option applies."
@@ -14524,8 +14521,7 @@ msgstr ""
 #: pretix/control/logdisplay.py:102
 #, python-brace-format
 msgid "Price of position #{posid} changed from {old_price} to {new_price}."
-msgstr ""
-"Prețul poziției #{posid} s-a schimbat de la {old_price} la {new_price}."
+msgstr "Prețul poziției #{posid} s-a schimbat de la {old_price} la {new_price}."
 
 #: pretix/control/logdisplay.py:110
 #, python-brace-format
@@ -14626,8 +14622,8 @@ msgid ""
 "Unknown scan of code \"{barcode}…\" at {datetime} for list \"{list}\", type "
 "\"{type}\"."
 msgstr ""
-"Scanare necunoscută a codului \"{barcode}...\" la {datetime} pentru lista "
-"\"{list}\", tip \"{type}\"."
+"Scanare necunoscută a codului \"{barcode}...\" la {datetime} pentru lista \""
+"{list}\", tip \"{type}\"."
 
 #: pretix/control/logdisplay.py:236
 #, python-brace-format
@@ -14652,8 +14648,8 @@ msgid ""
 "Scan of revoked code \"{barcode}\" for list \"{list}\", type \"{type}\", was "
 "uploaded."
 msgstr ""
-"Scanarea codului revocat \"{barcode}\" pentru lista \"{list}\", tip "
-"\"{type}\", a fost încărcată."
+"Scanarea codului revocat \"{barcode}\" pentru lista \"{list}\", tip \"{type}"
+"\", a fost încărcată."
 
 #: pretix/control/logdisplay.py:268
 #, python-brace-format
@@ -14670,16 +14666,16 @@ msgid ""
 "Denied scan of position #{posid} for list \"{list}\", type \"{type}\", error "
 "code \"{errorcode}\"."
 msgstr ""
-"Scanare refuzată a poziției #{posid} pentru lista \"{list}\", tip "
-"\"{type}\", cod de eroare \"{errorcode}\"."
+"Scanare refuzată a poziției #{posid} pentru lista \"{list}\", tip \"{type}\""
+", cod de eroare \"{errorcode}\"."
 
 #: pretix/control/logdisplay.py:289
 #, python-brace-format
 msgid ""
 "Position #{posid} has been checked out at {datetime} for list \"{list}\"."
 msgstr ""
-"Poziția #{posid} a fost scanată la check-out în {datetime} pentru lista "
-"\"{list}\"."
+"Poziția #{posid} a fost scanată la check-out în {datetime} pentru lista \""
+"{list}\"."
 
 #: pretix/control/logdisplay.py:295
 #, python-brace-format
@@ -14691,8 +14687,8 @@ msgstr "Poziția #{posid} a fost scanată la check-out pentru lista \"{list}\"."
 msgid ""
 "Position #{posid} has been checked in at {datetime} for list \"{list}\"."
 msgstr ""
-"Poziția #{posid} a fost scanată la check-in în {datetime} pentru lista "
-"\"{list}\"."
+"Poziția #{posid} a fost scanată la check-in în {datetime} pentru lista \""
+"{list}\"."
 
 #: pretix/control/logdisplay.py:307
 #, python-brace-format
@@ -16765,8 +16761,8 @@ msgstr "Șterge lista de check-in"
 msgid ""
 "Are you sure you want to delete the check-in list <strong>%(name)s</strong>?"
 msgstr ""
-"Sunteți sigur că doriți să ștergeți lista de check-in <strong>%(name)s</"
-"strong>?"
+"Sunteți sigur că doriți să ștergeți lista de check-in "
+"<strong>%(name)s</strong>?"
 
 #: pretix/control/templates/pretixcontrol/checkin/list_delete.html:11
 #, python-format
@@ -16774,8 +16770,8 @@ msgid ""
 "This will delete the information of <strong>%(num)s</strong> check-ins as "
 "well."
 msgstr ""
-"Acest lucru va șterge și informațiile despre check-in ale <strong>%(num)s</"
-"strong>."
+"Acest lucru va șterge și informațiile despre check-in ale "
+"<strong>%(num)s</strong>."
 
 #: pretix/control/templates/pretixcontrol/checkin/list_delete.html:18
 #: pretix/control/templates/pretixcontrol/event/tax_delete.html:17
@@ -16963,8 +16959,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/checkin/list_edit.html:102
 msgid "Please double-check if this was intentional."
-msgstr ""
-"Vă rugăm să verificați de două ori dacă acest lucru a fost intenționat."
+msgstr "Vă rugăm să verificați de două ori dacă acest lucru a fost intenționat."
 
 #: pretix/control/templates/pretixcontrol/checkin/lists.html:7
 msgid ""
@@ -18244,8 +18239,8 @@ msgstr ""
 "pretix acceptă o <a href=\"https://pretix.eu/about/en/features/payment\" "
 "target=\"_blank\">gamă largă de procesatori de plăți</a>, permițându-vă să "
 "alegeți metodele de plată care se potrivesc cel mai bine nevoilor dvs. Iată "
-"doar două dintre ele ca exemple, puteți adăuga mai multe în partea "
-"\"Setări\" a evenimentului dvs."
+"doar două dintre ele ca exemple, puteți adăuga mai multe în partea \"Setări\""
+" a evenimentului dvs."
 
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:173
 msgid ""
@@ -18476,8 +18471,8 @@ msgstr "Ștergeți regula de taxare"
 msgid ""
 "Are you sure you want to delete the tax rule <strong>%(taxrule)s</strong>?"
 msgstr ""
-"Sunteți sigur că doriți să ștergeți regula de taxare <strong>%(taxrule)s</"
-"strong>?"
+"Sunteți sigur că doriți să ștergeți regula de taxare "
+"<strong>%(taxrule)s</strong>?"
 
 #: pretix/control/templates/pretixcontrol/event/tax_delete.html:12
 msgid ""
@@ -18501,9 +18496,9 @@ msgid ""
 "not responsible for the correct handling of taxes in your ticket shop. If in "
 "doubt, please contact a lawyer or tax consultant."
 msgstr ""
-"Aceste setări sunt destinate utilizatorilor avansați. Consultați <a "
-"href=\"%(docs)s\">documentația</a> pentru mai multe informații. Rețineți că "
-"nu suntem responsabili pentru gestionarea corectă a taxelor în magazinul "
+"Aceste setări sunt destinate utilizatorilor avansați. Consultați <a href=\""
+"%(docs)s\">documentația</a> pentru mai multe informații. Rețineți că nu "
+"suntem responsabili pentru gestionarea corectă a taxelor în magazinul "
 "dumneavoastră de bilete. Dacă aveți îndoieli, vă rugăm să contactați un "
 "avocat sau un consultant fiscal."
 
@@ -19197,9 +19192,9 @@ msgid ""
 "\"reduced\", merchandise with variations for different sizes, workshop add-"
 "on with variations for simultaneous workshops."
 msgstr ""
-"Exemple: Categoria de bilete cu variații pentru \"preț întreg\" și "
-"\"redus\", produse cu variații pentru diferite mărimi, workshop add-on cu "
-"variații de workshop-uri simultane."
+"Exemple: Categoria de bilete cu variații pentru \"preț întreg\" și \"redus\""
+", produse cu variații pentru diferite mărimi, workshop add-on cu variații de "
+"workshop-uri simultane."
 
 #: pretix/control/templates/pretixcontrol/item/create.html:145
 msgid "Quota settings"
@@ -19230,8 +19225,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/item/delete.html:19
 #, python-format
 msgid "Are you sure you want to delete the product <strong>%(item)s</strong>?"
-msgstr ""
-"Sunteți sigur că doriți să ștergeți produsul <strong>%(item)s</strong>?"
+msgstr "Sunteți sigur că doriți să ștergeți produsul <strong>%(item)s</strong>?"
 
 #: pretix/control/templates/pretixcontrol/item/delete.html:22
 #: pretix/control/templates/pretixcontrol/items/quota_delete.html:24
@@ -21141,8 +21135,8 @@ msgid ""
 "everyone on the waiting list will get multiple emails."
 msgstr ""
 "Nu trebuie să executați această funcție de mai multe ori pentru același "
-"eveniment, pentru că toți cei de pe lista de așteptare vor primi mai multe e-"
-"mailuri."
+"eveniment, pentru că toți cei de pe lista de așteptare vor primi mai multe "
+"e-mailuri."
 
 #: pretix/control/templates/pretixcontrol/orders/cancel.html:83
 msgid "Cancel all orders"
@@ -23212,8 +23206,7 @@ msgstr "Ștergeți data"
 #: pretix/control/templates/pretixcontrol/subevents/delete.html:9
 #, python-format
 msgid "Are you sure you want to delete the date <strong>%(subevent)s</strong>?"
-msgstr ""
-"Sunteți sigur că doriți să ștergeți data <strong>%(subevent)s</strong>?"
+msgstr "Sunteți sigur că doriți să ștergeți data <strong>%(subevent)s</strong>?"
 
 #: pretix/control/templates/pretixcontrol/subevents/delete_bulk.html:4
 #: pretix/control/templates/pretixcontrol/subevents/delete_bulk.html:6
@@ -23305,8 +23298,7 @@ msgstr "Adăugați un dispozitiv de autentificare cu doi factori"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_confirm_totp.html:8
 msgid "To set up this device, please follow the following steps:"
-msgstr ""
-"Pentru a configura acest dispozitiv, vă rugăm să urmați următorii pași:"
+msgstr "Pentru a configura acest dispozitiv, vă rugăm să urmați următorii pași:"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_confirm_totp.html:12
 msgid "Download the Google Authenticator application to your phone:"
@@ -23394,8 +23386,8 @@ msgstr "Ștergeți un dispozitiv de autentificare cu doi factori"
 msgid ""
 "Are you sure you want to delete the authentication device \"%(device)s\"?"
 msgstr ""
-"Sunteți sigur că doriți să ștergeți dispozitivul de autentificare "
-"\"%(device)s\"?"
+"Sunteți sigur că doriți să ștergeți dispozitivul de autentificare \"%(device)"
+"s\"?"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_delete.html:12
 msgid "You will no longer be able to use this device to log in to pretix."
@@ -26114,8 +26106,8 @@ msgstr "Imprimarea insignelor"
 msgid ""
 "Are you sure you want to delete the badge layout <strong>%(layout)s</strong>?"
 msgstr ""
-"Sunteți sigur că doriți să ștergeți macheta insignei <strong>%(layout)s</"
-"strong>?"
+"Sunteți sigur că doriți să ștergeți macheta insignei "
+"<strong>%(layout)s</strong>?"
 
 #: pretix/plugins/badges/templates/pretixplugins/badges/edit.html:6
 #: pretix/plugins/badges/templates/pretixplugins/badges/edit.html:13
@@ -28597,8 +28589,8 @@ msgid ""
 "The provided key \"%(value)s\" does not look valid. It should start with "
 "\"%(prefix)s\"."
 msgstr ""
-"Cheia furnizată \"%(value)s\" nu pare validă. Ea ar trebui să înceapă cu "
-"\"%(prefix)s\"."
+"Cheia furnizată \"%(value)s\" nu pare validă. Ea ar trebui să înceapă cu \""
+"%(prefix)s\"."
 
 #: pretix/plugins/stripe/forms.py:51 pretix/plugins/stripe/signals.py:152
 msgid "Stripe Connect: App fee (percent)"
@@ -31302,8 +31294,7 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/order.html:434
 msgid "You can cancel this order and receive a full refund."
-msgstr ""
-"Puteți să anulați această comandă și să primiți o rambursare integrală."
+msgstr "Puteți să anulați această comandă și să primiți o rambursare integrală."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:458
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:54
@@ -31384,8 +31375,7 @@ msgstr "Doresc ca rambursarea să fie trimisă la metoda mea de plată inițial�
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:154
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:185
 msgid "The following payment methods will be used to refund the money to you:"
-msgstr ""
-"Următoarele metode de plată vor fi folosite pentru a vă rambursa banii:"
+msgstr "Următoarele metode de plată vor fi folosite pentru a vă rambursa banii:"
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:218
 msgid "Yes, request cancellation"
@@ -31443,8 +31433,7 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/order_pay_change.html:46
 msgid "There are no alternative payment providers available for this order."
-msgstr ""
-"Nu există alți procesatori de plăți disponibili pentru această comandă."
+msgstr "Nu există alți procesatori de plăți disponibili pentru această comandă."
 
 #: pretix/presale/templates/pretixpresale/event/order_pay_confirm.html:16
 msgid "Please confirm the following payment details."
@@ -31690,8 +31679,8 @@ msgid ""
 "                                                    "
 msgstr ""
 "\n"
-"                                                        de la "
-"%(start_date)s\n"
+"                                                        de la %(start_date)"
+"s\n"
 "                                                    "
 
 #: pretix/presale/templates/pretixpresale/fragment_calendar_nav.html:12
@@ -31838,8 +31827,8 @@ msgid ""
 "If you're looking to configure this installation, please <a %(a_attr)s>head "
 "over here</a>."
 msgstr ""
-"<a>Dacă doriți să configurați această instalare, vă rugăm să <a "
-"%(a_attr)s>începeți aici</a>."
+"<a>Dacă doriți să configurați această instalare, vă rugăm să <a %(a_attr)"
+"s>începeți aici</a>."
 
 #: pretix/presale/templates/pretixpresale/index.html:24
 msgid "Enjoy!"
@@ -32225,8 +32214,7 @@ msgstr ""
 
 #: pretix/presale/views/order.py:1568
 msgid "You may not change your order in a way that changes the total price."
-msgstr ""
-"Nu vă puteți modifica comanda într-un mod care să schimbe prețul total."
+msgstr "Nu vă puteți modifica comanda într-un mod care să schimbe prețul total."
 
 #: pretix/presale/views/order.py:1576
 msgid ""
