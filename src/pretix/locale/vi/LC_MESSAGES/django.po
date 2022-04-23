@@ -8,24 +8,26 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-21 15:18+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2022-04-24 02:00+0000\n"
+"Last-Translator: fsnaix <truonggiangsn@gmail.com>\n"
+"Language-Team: Vietnamese <https://translate.pretix.eu/projects/pretix/"
+"pretix/vi/>\n"
 "Language: vi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 4.11.2\n"
 
 #: pretix/api/auth/devicesecurity.py:28
 msgid ""
 "Full device access (reading and changing orders and gift cards, reading of "
 "products and settings)"
-msgstr ""
+msgstr "Quyền truy cập toàn bộ hệ thống"
 
 #: pretix/api/auth/devicesecurity.py:44
 msgid "pretixSCAN"
-msgstr ""
+msgstr "pretixQuét"
 
 #: pretix/api/auth/devicesecurity.py:75
 msgid "pretixSCAN (kiosk mode, no order sync, no search)"
@@ -37,46 +39,46 @@ msgstr ""
 
 #: pretix/api/auth/devicesecurity.py:134
 msgid "pretixPOS"
-msgstr ""
+msgstr "pretixPOS"
 
 #: pretix/api/models.py:39
 msgid "Application name"
-msgstr ""
+msgstr "Tên ứng dụng"
 
 #: pretix/api/models.py:42
 msgid "Redirection URIs"
-msgstr ""
+msgstr "Đường link chuyển tiếp"
 
 #: pretix/api/models.py:43
 msgid "Allowed URIs list, space separated"
-msgstr ""
+msgstr "Đường link cho phép, cách nhau với dấu cách"
 
 #: pretix/api/models.py:46 pretix/plugins/paypal/payment.py:112
 msgid "Client ID"
-msgstr ""
+msgstr "ID người dùng"
 
 #: pretix/api/models.py:50
 msgid "Client secret"
-msgstr ""
+msgstr "Bí mật của người dùng"
 
 #: pretix/api/models.py:97
 msgid "Enable webhook"
-msgstr ""
+msgstr "Cho Phép webhook"
 
 #: pretix/api/models.py:98
 #: pretix/control/templates/pretixcontrol/organizers/webhooks.html:36
 msgid "Target URL"
-msgstr ""
+msgstr "Đường link trỏ tới"
 
 #: pretix/api/models.py:99 pretix/base/models/devices.py:121
 #: pretix/base/models/organizer.py:258
 msgid "All events (including newly created ones)"
-msgstr ""
+msgstr "Tất cả các sự kiện (bao gồm cả sự kiện mới tạo)"
 
 #: pretix/api/models.py:100 pretix/base/models/devices.py:122
 #: pretix/base/models/organizer.py:259
 msgid "Limit to events"
-msgstr ""
+msgstr "Giới hạn cho sự kiện"
 
 #: pretix/api/serializers/cart.py:81 pretix/api/serializers/order.py:1118
 msgid "The product \"{}\" is not assigned to a quota."
