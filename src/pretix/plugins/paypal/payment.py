@@ -323,8 +323,6 @@ class PaypalSettingsHolder(BasePaymentProvider):
                                     "features": [
                                         "PAYMENT",
                                         "REFUND",
-                                        "ADVANCED_TRANSACTIONS_SEARCH",
-                                        "TRACKING_SHIPMENT_READWRITE",
                                         "ACCESS_MERCHANT_INFORMATION"
                                     ],
                                 }
