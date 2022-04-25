@@ -633,8 +633,8 @@ class PaypalMethod(BasePaymentProvider):
                 req = OrdersGetRequest(request.session.get('payment_paypal_oid'))
                 response = self.client.execute(req)
             except IOError as e:
+                logger.exception('PayPal OrdersGetRequest: {}'.format(str(e)))
                 raise PaymentException(_('We had trouble communicating with PayPal'))
-                logger.error('OrdersGetRequest: {}'.format(str(e)))
             else:
                 pp_captured_order = response.result
 
