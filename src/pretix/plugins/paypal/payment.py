@@ -895,7 +895,7 @@ class PaypalMethod(BasePaymentProvider):
                 response = self.client.execute(req)
             except IOError as e:
                 messages.warning(request, _('We had trouble communicating with PayPal'))
-                logger.error('OrdersGetRequest: {}'.format(str(e)))
+                logger.exception('PayPal OrdersGetRequest: {}'.format(str(e)))
                 return False
             else:
                 if response.result.status == 'APPROVED':
