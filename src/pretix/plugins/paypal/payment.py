@@ -573,7 +573,7 @@ class PaypalMethod(BasePaymentProvider):
             response = self.client.execute(paymentreq)
         except IOError as e:
             messages.error(request, _('We had trouble communicating with PayPal'))
-            logger.error('OrdersCreateRequest: {}'.format(str(e)))
+            logger.exception('PayPal OrdersCreateRequest: {}'.format(str(e)))
         else:
             if response.result.status not in ('CREATED', 'PAYER_ACTION_REQUIRED'):
                 messages.error(request, _('We had trouble communicating with PayPal'))
