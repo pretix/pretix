@@ -685,7 +685,7 @@ class PaypalMethod(BasePaymentProvider):
                     response = self.client.execute(capturereq)
                 except IOError as e:
                     messages.error(request, _('We had trouble communicating with PayPal'))
-                    logger.error('OrdersCaptureRequest: {}'.format(str(e)))
+                    logger.exception('PayPal OrdersCaptureRequest: {}'.format(str(e)))
                     return
                 else:
                     pp_captured_order = response.result
