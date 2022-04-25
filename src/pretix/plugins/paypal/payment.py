@@ -271,7 +271,7 @@ class PaypalSettingsHolder(BasePaymentProvider):
                 settings_content = (
                     "<button formaction='{}' class='btn btn-danger'>{}</button>"
                 ).format(
-                    reverse('plugins:paypal:oauth.disconnect', kwargs={
+                    reverse('plugins:paypal:isu.disconnect', kwargs={
                         'organizer': self.event.organizer.slug,
                         'event': self.event.slug,
                     }),
@@ -338,7 +338,7 @@ class PaypalSettingsHolder(BasePaymentProvider):
                 ],
                 "partner_config_override": {
                     "partner_logo_url": urllib.parse.urljoin(settings.SITE_URL, static('pretixbase/img/pretix-logo.svg')),
-                    "return_url": build_global_uri('plugins:paypal:oauth.return')
+                    "return_url": build_global_uri('plugins:paypal:isu.return')
                 },
                 "tracking_id": request.session['payment_paypal_isu_tracking_id'],
                 "preferred_language_code": request.user.locale.split('-')[0]
