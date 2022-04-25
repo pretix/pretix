@@ -235,7 +235,7 @@ class PaypalSettingsHolder(BasePaymentProvider):
                 ('debug_buyer_country',
                  forms.ChoiceField(
                      choices=allcountries,
-                     label=mark_safe('<kbd>DEBUG</kbd> {}'.format(_('Buyer country'))),
+                     label=mark_safe('<span class="label label-primary">DEBUG</span> {}'.format(_('Buyer country'))),
                      initial=guess_country(self.event),
                  )),
             )
