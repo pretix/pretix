@@ -128,10 +128,6 @@ class XHRView(TemplateView):
         else:
             order = None
 
-        # urlkwargs = {}
-        # if 'cart_namespace' in kwargs:
-        #     urlkwargs['cart_namespace'] = kwargs['cart_namespace']
-
         prov = PaypalMethod(request.event)
 
         if order:
