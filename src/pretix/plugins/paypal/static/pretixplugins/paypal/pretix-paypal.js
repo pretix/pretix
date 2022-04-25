@@ -257,7 +257,7 @@ var pretixpaypal = {
             });
 
             if (button.isEligible()) {
-                eligibles.push(pretixpaypal.apm_map[fundingSource] || fundingSource);
+                eligibles.push(gettext(pretixpaypal.apm_map[fundingSource] || fundingSource));
             }
         });
 
