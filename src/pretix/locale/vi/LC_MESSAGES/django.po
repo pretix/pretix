@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-21 15:18+0000\n"
-"PO-Revision-Date: 2022-04-24 02:00+0000\n"
+"PO-Revision-Date: 2022-04-25 16:10+0000\n"
 "Last-Translator: fsnaix <truonggiangsn@gmail.com>\n"
 "Language-Team: Vietnamese <https://translate.pretix.eu/projects/pretix/"
 "pretix/vi/>\n"
@@ -31,11 +31,11 @@ msgstr "pretixQuét"
 
 #: pretix/api/auth/devicesecurity.py:75
 msgid "pretixSCAN (kiosk mode, no order sync, no search)"
-msgstr ""
+msgstr "pretixSCAN (chế độ kiosk, không sync đơn hàng, không hỗ trợ tìm kiếm)"
 
 #: pretix/api/auth/devicesecurity.py:104
 msgid "pretixSCAN (online only, no order sync)"
-msgstr ""
+msgstr "pretixSCAN (chế độ online, không sync đơn hàng)"
 
 #: pretix/api/auth/devicesecurity.py:134
 msgid "pretixPOS"
@@ -82,7 +82,7 @@ msgstr "Giới hạn cho sự kiện"
 
 #: pretix/api/serializers/cart.py:81 pretix/api/serializers/order.py:1118
 msgid "The product \"{}\" is not assigned to a quota."
-msgstr ""
+msgstr "Mặt hàng \"{}\" chưa được chỉ định số hàng tồn."
 
 #: pretix/api/serializers/cart.py:89 pretix/api/serializers/order.py:1130
 msgid ""
