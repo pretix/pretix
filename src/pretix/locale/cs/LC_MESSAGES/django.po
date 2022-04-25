@@ -12289,7 +12289,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:62
 #, fuzzy
 #| msgid "Payment states"
-msgid "Paymeant reference"
+msgid "Payment reference"
 msgstr "Stavy platby"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:65

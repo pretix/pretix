@@ -13162,7 +13162,7 @@ msgstr "Data de criação"
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:62
 #, fuzzy
 #| msgid "Payment fee"
-msgid "Paymeant reference"
+msgid "Payment reference"
 msgstr "Taxa de pagamento"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:65

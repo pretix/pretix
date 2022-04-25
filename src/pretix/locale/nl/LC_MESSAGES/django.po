@@ -13650,7 +13650,7 @@ msgstr "Server-transactiecode"
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:62
 #, fuzzy
 #| msgid "Payer and reference"
-msgid "Paymeant reference"
+msgid "Payment reference"
 msgstr "Betaler en kenmerk"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:65

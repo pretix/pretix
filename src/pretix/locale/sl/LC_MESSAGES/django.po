@@ -12963,7 +12963,7 @@ msgstr "Variacije"
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:62
 #, fuzzy
 #| msgid "Payment fee"
-msgid "Paymeant reference"
+msgid "Payment reference"
 msgstr "Stroški plačila"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:65

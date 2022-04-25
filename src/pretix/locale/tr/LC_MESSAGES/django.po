@@ -14478,7 +14478,7 @@ msgstr "Oluşturulma tarihi"
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:62
 #, fuzzy
 #| msgid "Payer and reference"
-msgid "Paymeant reference"
+msgid "Payment reference"
 msgstr "Ödeyici ve referans"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:65

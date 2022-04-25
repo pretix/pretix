@@ -12246,7 +12246,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:62
 #, fuzzy
 #| msgid "Presale not started"
-msgid "Paymeant reference"
+msgid "Payment reference"
 msgstr "Elővétel nem kezdődött el"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:65

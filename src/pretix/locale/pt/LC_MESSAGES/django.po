@@ -12119,7 +12119,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:62
 #, fuzzy
 #| msgid "Payment provider"
-msgid "Paymeant reference"
+msgid "Payment reference"
 msgstr "Provedor de pagamento"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:65

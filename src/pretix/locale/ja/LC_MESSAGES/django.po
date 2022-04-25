@@ -12085,7 +12085,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:62
 #, fuzzy
 #| msgid "Internal reference"
-msgid "Paymeant reference"
+msgid "Payment reference"
 msgstr "内部参考資料"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:65

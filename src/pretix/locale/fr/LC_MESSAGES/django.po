@@ -14571,7 +14571,7 @@ msgstr "Créer une date"
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:62
 #, fuzzy
 #| msgid "Payer and reference"
-msgid "Paymeant reference"
+msgid "Payment reference"
 msgstr "Payeur et référence"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:65

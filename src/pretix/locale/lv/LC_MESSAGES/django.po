@@ -12499,7 +12499,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:62
 #, fuzzy
 #| msgid "Payer and reference"
-msgid "Paymeant reference"
+msgid "Payment reference"
 msgstr "Maksātājs un maksājuma mērķis"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:65

@@ -12052,7 +12052,7 @@ msgid "Server Transaction Code"
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:62
-msgid "Paymeant reference"
+msgid "Payment reference"
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:65

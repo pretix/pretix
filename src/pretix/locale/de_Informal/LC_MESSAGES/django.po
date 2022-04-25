@@ -13599,7 +13599,7 @@ msgstr "Server-Transaktionscode"
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:62
 #, fuzzy
 #| msgid "Payer and reference"
-msgid "Paymeant reference"
+msgid "Payment reference"
 msgstr "Zahlender und Verwendungszweck"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:65

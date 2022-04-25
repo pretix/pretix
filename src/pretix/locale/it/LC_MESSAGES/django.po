@@ -12756,7 +12756,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:62
 #, fuzzy
 #| msgid "Payment refunded."
-msgid "Paymeant reference"
+msgid "Payment reference"
 msgstr "Pagamento rimborsato."
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:65

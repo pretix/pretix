@@ -14260,7 +14260,7 @@ msgstr "Código de transacción"
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:62
 #, fuzzy
 #| msgid "Payer and reference"
-msgid "Paymeant reference"
+msgid "Payment reference"
 msgstr "Pagador y referencia"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:65
