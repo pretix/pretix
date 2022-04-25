@@ -197,9 +197,8 @@ class PaypalSettingsHolder(BasePaymentProvider):
              forms.BooleanField(
                  label=_('Enable Buy Now Pay Later'),
                  help_text=_(
-                     'Offer your customers the possibility to buy now (up to 1.000€) and pay in 30 days while getting '
-                     'your money right away. Please contact your PayPal account manager to discuss your eligibility '
-                     'before activating this feature.'
+                     'Offer your customers the possibility to buy now (up to 1.000€) and pay in 3/6/12/24 installments '
+                     'or within 30 days. You, as the merchant, are getting your money right away.'
                  ),
                  required=False,
                  widget=forms.CheckboxInput(
