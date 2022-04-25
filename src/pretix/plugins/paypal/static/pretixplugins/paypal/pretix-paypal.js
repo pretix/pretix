@@ -189,11 +189,8 @@ var pretixpaypal = {
                 // Since this view is also only used for APMs, we only need the XHR-calls for the Smart Payment Buttons.
                 if (pretixpaypal.paypage) {
                     return $("#payment_paypal_" + pretixpaypal.method.method + "_oid");
-                } else if (window.location.pathname.endsWith("/pay/change")) {
-                    let url = window.location.pathname.split('order')
-                    var xhrurl = url[0] + 'paypal' + url[1].split('pay/change')[0] + 'xhr/'
                 } else {
-                    var xhrurl = window.location.pathname.split('checkout/')[0] + 'paypal/xhr/'
+                    var xhrurl = $("#payment_paypal_" + pretixpaypal.method.method + "_xhr").val();
                 }
 
                 return fetch(xhrurl, {

@@ -35,7 +35,7 @@ event_patterns = [
         re_path(r'^redirect/$', redirect_view, name='redirect'),
         re_path(r'^xhr/$', XHRView.as_view(), name='xhr'),
         re_path(r'^pay/(?P<order>[^/]+)/(?P<hash>[^/]+)/(?P<payment>[^/]+)/$', PayView.as_view(), name='pay'),
-        re_path(r'^(?P<order>[^/]+)/(?P<secret>[A-Za-z0-9]+)/xhr/$', XHRView.as_view(), name='xhr'),
+        re_path(r'^(?P<order>[^/][^w]+)/(?P<secret>[A-Za-z0-9]+)/xhr/$', XHRView.as_view(), name='xhr'),
 
         re_path(r'w/(?P<cart_namespace>[a-zA-Z0-9]{16})/abort/', abort, name='abort'),
         re_path(r'w/(?P<cart_namespace>[a-zA-Z0-9]{16})/return/', success, name='return'),

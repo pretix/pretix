@@ -111,7 +111,6 @@ def redirect_view(request, *args, **kwargs):
     return r
 
 
-# ToDo: cart-namespacing for widget?
 @method_decorator(csrf_exempt, name='dispatch')
 @method_decorator(xframe_options_exempt, 'dispatch')
 class XHRView(TemplateView):

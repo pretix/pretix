@@ -434,8 +434,22 @@ class PaypalMethod(BasePaymentProvider):
         return request.session.get('payment_paypal_oid', '') != ''
 
     def payment_form_render(self, request) -> str:
+        def build_kwargs():
+            keys = ['organizer', 'event', 'order', 'secret', 'cart_namespace']
+            kwargs = {}
+            for key in keys:
+                if key in request.resolver_match.kwargs:
+                    kwargs[key] = request.resolver_match.kwargs[key]
+            return kwargs
+
         template = get_template('pretixplugins/paypal/checkout_payment_form.html')
-        ctx = {'request': request, 'event': self.event, 'settings': self.settings, 'method': self.method}
+        ctx = {
+            'request': request,
+            'event': self.event,
+            'settings': self.settings,
+            'method': self.method,
+            'xhr': eventreverse(self.event, 'plugins:paypal:xhr', kwargs=build_kwargs())
+        }
         return template.render(ctx)
 
     def checkout_prepare(self, request, cart):
