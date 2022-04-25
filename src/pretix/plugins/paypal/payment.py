@@ -346,7 +346,7 @@ class PaypalSettingsHolder(BasePaymentProvider):
             response = pprov.client.execute(req)
         except IOError as e:
             messages.error(request, _('An error occurred during connecting with PayPal, please try again.'))
-            logger.error('PartnerReferralCreateRequest: {}'.format(str(e)))
+            logger.exception('PayPal PartnerReferralCreateRequest: {}'.format(str(e)))
         else:
             return self.get_link(response.result.links, 'action_url').href
 
