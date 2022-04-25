@@ -724,7 +724,6 @@ class PaypalMethod(BasePaymentProvider):
 
             except SendMailException:
                 messages.warning(request, _('There was an error sending the confirmation mail.'))
-            return None
         finally:
             del request.session['payment_paypal_oid']
 
