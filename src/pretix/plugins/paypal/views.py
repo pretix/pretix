@@ -206,7 +206,7 @@ def isu_return(request, *args, **kwargs):
         response = prov.client.execute(req)
     except IOError as e:
         messages.error(request, _('An error occurred during connecting with PayPal, please try again.'))
-        logger.error('PartnersMerchantIntegrationsGetRequest: {}'.format(str(e)))
+        logger.exception('PayPal PartnersMerchantIntegrationsGetRequest: {}'.format(str(e)))
     else:
         params = ['merchant_id', 'tracking_id', 'payments_receivable', 'primary_email_confirmed']
         if not any(k in response.result for k in params):
