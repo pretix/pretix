@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-21 15:18+0000\n"
-"PO-Revision-Date: 2022-04-22 19:56+0000\n"
+"PO-Revision-Date: 2022-04-25 16:10+0000\n"
 "Last-Translator: Edd28 <chitu_edy@yahoo.com>\n"
 "Language-Team: Romanian <https://translate.pretix.eu/projects/pretix/"
 "pretix-js/ro/>\n"
@@ -307,7 +307,7 @@ msgstr "Data și ora curentă"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:71
 msgid "Current day of the week (1 = Monday, 7 = Sunday)"
-msgstr ""
+msgstr "Ziua curentă a săptămânii (1 = Luni, 7 = Duminică)"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:75
 msgid "Number of previous entries"
@@ -323,11 +323,11 @@ msgstr "Numărul de zile cu o intrare anterioară"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:87
 msgid "Minutes since last entry (-1 on first entry)"
-msgstr ""
+msgstr "Minute de la ultima intrare (-1 la prima intrare)"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:91
 msgid "Minutes since first entry (-1 on first entry)"
-msgstr ""
+msgstr "Minute de la prima intrare (-1 la prima intrare)"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:112
 msgid "All of the conditions below (AND)"
@@ -489,7 +489,7 @@ msgstr "Altele"
 
 #: pretix/static/pretixcontrol/js/ui/question.js:82
 msgid "Count"
-msgstr "Numără"
+msgstr "Număr"
 
 #: pretix/static/pretixcontrol/js/ui/question.js:136
 #: pretix/static/pretixpresale/js/ui/questions.js:269
