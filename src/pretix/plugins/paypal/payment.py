@@ -677,7 +677,7 @@ class PaypalMethod(BasePaymentProvider):
                     self.client.execute(patchreq)
                 except IOError as e:
                     messages.error(request, _('We had trouble communicating with PayPal'))
-                    logger.error('OrdersPatchRequest: {}'.format(str(e)))
+                    logger.exception('PayPal OrdersPatchRequest: {}'.format(str(e)))
                     return
 
                 try:
