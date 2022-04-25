@@ -976,7 +976,7 @@ class PaypalWallet(PaypalMethod):
 class PaypalAPM(PaypalMethod):
     identifier = 'paypal_apm'
     verbose_name = _('PayPal APM')
-    public_name = _('Loading alternative payment methods...')
+    public_name = _('PayPal Alternative Payment Methods')
     method = 'apm'
 
     def payment_is_valid_session(self, request):
