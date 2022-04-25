@@ -55,7 +55,7 @@ from paypalcheckoutsdk.orders import (
     OrdersCaptureRequest, OrdersCreateRequest, OrdersGetRequest,
     OrdersPatchRequest,
 )
-from paypalcheckoutsdk.payments import CapturesRefundRequest
+from paypalcheckoutsdk.payments import CapturesRefundRequest, RefundsGetRequest
 
 from pretix import settings
 from pretix.base.decimal import round_decimal
@@ -880,17 +880,20 @@ class PaypalMethod(BasePaymentProvider):
             })
             logger.error('execute_refund: {}'.format(str(e)))
             raise PaymentException(_('Refunding the amount via PayPal failed: {}').format(str(e)))
+
+        refund.info = json.dumps(response.result.dict())
+        refund.save(update_fields=['info'])
+
+        req = RefundsGetRequest(response.result.id)
+        response = self.client.execute(req)
+        refund.info = json.dumps(response.result.dict())
+        refund.save(update_fields=['info'])
+
         if response.result.status == 'COMPLETED':
-            req = OrdersGetRequest(payment_info_data['id'])
-            response = self.client.execute(req)
-            refund.info = json.dumps(response.result.dict())
             refund.done()
         elif response.result.status == 'PENDING':
-            req = OrdersGetRequest(payment_info_data['id'])
-            response = self.client.execute(req)
-            refund.info = json.dumps(response.result.dict())
             refund.state = OrderRefund.REFUND_STATE_TRANSIT
-            refund.save()
+            refund.save(update_fields=['state'])
         else:
             refund.order.log_action('pretix.event.order.refund.failed', {
                 'local_id': refund.local_id,
