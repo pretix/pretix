@@ -43,6 +43,7 @@ from django.contrib import messages
 from django.core import signing
 from django.http import HttpRequest
 from django.template.loader import get_template
+from django.templatetags.static import static
 from django.urls import reverse
 from django.utils.crypto import get_random_string
 from django.utils.safestring import mark_safe
@@ -336,7 +337,7 @@ class PaypalSettingsHolder(BasePaymentProvider):
                     "EXPRESS_CHECKOUT"
                 ],
                 "partner_config_override": {
-                    "partner_logo_url": "https://pretix.eu/static/pretixbase/img/pretix-logo.svg",
+                    "partner_logo_url": urllib.parse.urljoin(settings.SITE_URL, static('pretixbase/img/pretix-logo.svg')),
                     "return_url": build_global_uri('plugins:paypal:oauth.return')
                 },
                 "tracking_id": request.session['payment_paypal_isu_tracking_id'],
