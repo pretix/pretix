@@ -76,7 +76,7 @@ var pretixpaypal = {
 
         // We are setting the cogwheel already here, as the renderAPM() method might take some time to get loaded.
         let apmtextselector = $("label[for=input_payment_paypal_apm]");
-        apmtextselector.html('<span class="fa fa-cog fa-spin"></span>');
+        apmtextselector.prepend('<span class="fa fa-cog fa-spin"></span> ');
 
         let sdk_url = 'https://www.paypal.com/sdk/js' +
             '?client-id=' + pretixpaypal.client_id +
@@ -262,13 +262,13 @@ var pretixpaypal = {
         });
 
         inputselector.attr('title', eligibles.join(', '));
-        textselector.hide(500, function () {
+        textselector.fadeOut(300, function () {
             textselector.text(eligibles.join(', '));
-            textselector.show(1000);
+            textselector.fadeIn(300);
         });
-        textselector2.hide(500, function () {
+        textselector2.fadeOut(300, function () {
             textselector2[0].textContent = eligibles.join(', ');
-            textselector2.show(1000);
+            textselector2.fadeIn(300);
         });
     }
 };
