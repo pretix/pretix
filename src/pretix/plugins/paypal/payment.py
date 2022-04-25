@@ -197,7 +197,7 @@ class PaypalSettingsHolder(BasePaymentProvider):
              forms.BooleanField(
                  label=_('Enable Buy Now Pay Later'),
                  help_text=_(
-                     'Offer your customers the possibility to buy now (up to 1.000€) and pay in 3/6/12/24 installments '
+                     'Offer your customers the possibility to buy now (up to a certain limit) and pay in multiple installments '
                      'or within 30 days. You, as the merchant, are getting your money right away.'
                  ),
                  required=False,
