@@ -159,7 +159,7 @@ class PayView(PaypalOrderView, TemplateView):
     template_name = ''
 
     def get(self, request, *args, **kwargs):
-        if self.payment.state not in [OrderPayment.PAYMENT_STATE_CREATED, OrderPayment.PAYMENT_STATE_PENDING]:
+        if self.payment.state != OrderPayment.PAYMENT_STATE_CREATED:
             return self._redirect_to_order()
         else:
             r = render(request, 'pretixplugins/paypal/pay.html', self.get_context_data())
