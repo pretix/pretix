@@ -58,6 +58,7 @@ from paypalcheckoutsdk.payments import CapturesRefundRequest
 
 from pretix import settings
 from pretix.base.decimal import round_decimal
+from pretix.base.forms.questions import guess_country
 from pretix.base.models import Event, Order, OrderPayment, OrderRefund, Quota
 from pretix.base.payment import BasePaymentProvider, PaymentException
 from pretix.base.services.mail import SendMailException
@@ -235,6 +236,7 @@ class PaypalSettingsHolder(BasePaymentProvider):
                  forms.ChoiceField(
                      choices=allcountries,
                      label=mark_safe('<kbd>DEBUG</kbd> {}'.format(_('Buyer country'))),
+                     initial=guess_country(self.event),
                  )),
             )
 
