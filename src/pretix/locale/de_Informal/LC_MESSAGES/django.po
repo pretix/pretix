@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-26 16:22+0000\n"
-"PO-Revision-Date: 2022-04-13 00:00+0000\n"
+"PO-Revision-Date: 2022-04-26 16:34+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
@@ -5881,16 +5881,12 @@ msgid "Ticket type not allowed"
 msgstr "Ticketart nicht erlaubt"
 
 #: pretix/base/services/checkin.py:231
-#, fuzzy
-#| msgid "Waiting list entry"
 msgid "time since last entry"
-msgstr "Wartelisten-Eintrag"
+msgstr "Zeit seit letztem Eintritt"
 
 #: pretix/base/services/checkin.py:232
-#, fuzzy
-#| msgid "Waiting list entry"
 msgid "time since first entry"
-msgstr "Wartelisten-Eintrag"
+msgstr "Zeit seit erstem Eintritt"
 
 #: pretix/base/services/checkin.py:233
 msgid "number of days with an entry"
@@ -5905,10 +5901,8 @@ msgid "number of entries today"
 msgstr "Anzahl Eintritte heute"
 
 #: pretix/base/services/checkin.py:236
-#, fuzzy
-#| msgid "Weekend day"
 msgid "week day"
-msgstr "Wochenendtag"
+msgstr "Wochentag"
 
 #: pretix/base/services/checkin.py:258 pretix/control/forms/filter.py:1065
 msgid "Monday"
@@ -13597,10 +13591,8 @@ msgid "Server Transaction Code"
 msgstr "Server-Transaktionscode"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:62
-#, fuzzy
-#| msgid "Payer and reference"
 msgid "Payment reference"
-msgstr "Zahlender und Verwendungszweck"
+msgstr "Zahlungsreferenz"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:65
 msgid "Payment Application"
@@ -27051,13 +27043,9 @@ msgstr ""
 "erworben werden."
 
 #: pretix/presale/views/cart.py:637
-#, fuzzy
-#| msgid "We were unable to find the user you requested a new password for."
 msgctxt "subevent"
 msgid "We were unable to find the specified date."
-msgstr ""
-"Wir konnten den Benutzer, für den ein neues Passwort angefordert wurde, "
-"nicht finden."
+msgstr "Wir konnten den angegebenen Termin nicht finden."
 
 #: pretix/presale/views/checkout.py:55
 msgid "Your cart is empty"
@@ -27389,7 +27377,7 @@ msgstr "Portugiesisch (Brasilien)"
 
 #: pretix/settings.py:526
 msgid "Romanian"
-msgstr ""
+msgstr "Rumänisch"
 
 #: pretix/settings.py:527
 msgid "Russian"
