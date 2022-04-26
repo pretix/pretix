@@ -23,10 +23,12 @@ msgid ""
 "Full device access (reading and changing orders and gift cards, reading of "
 "products and settings)"
 msgstr ""
+"Повний доступ до пристрою (читання та зміна замовлень і подарункових карток, "
+"читання продуктів і налаштувань)"
 
 #: pretix/api/auth/devicesecurity.py:44
 msgid "pretixSCAN"
-msgstr ""
+msgstr "pretixSCAN"
 
 #: pretix/api/auth/devicesecurity.py:75
 msgid "pretixSCAN (kiosk mode, no order sync, no search)"
@@ -24306,55 +24308,55 @@ msgstr ""
 msgid "Chinese (simplified)"
 msgstr ""
 
-#: pretix/settings.py:513
+#: pretix/settings.py:513 pretix/settings.py:528
 msgid "Czech"
 msgstr ""
 
-#: pretix/settings.py:514
+#: pretix/settings.py:514 pretix/settings.py:513
 msgid "Danish"
 msgstr ""
 
-#: pretix/settings.py:515
+#: pretix/settings.py:515 pretix/settings.py:514
 msgid "Dutch"
 msgstr ""
 
-#: pretix/settings.py:516
+#: pretix/settings.py:516 pretix/settings.py:515
 msgid "Dutch (informal)"
 msgstr ""
 
-#: pretix/settings.py:517
+#: pretix/settings.py:517 pretix/settings.py:516
 msgid "French"
 msgstr ""
 
-#: pretix/settings.py:518
+#: pretix/settings.py:518 pretix/settings.py:517
 msgid "Finnish"
 msgstr ""
 
-#: pretix/settings.py:519
+#: pretix/settings.py:519 pretix/settings.py:527
 msgid "Galician"
 msgstr ""
 
-#: pretix/settings.py:520
+#: pretix/settings.py:520 pretix/settings.py:518
 msgid "Greek"
 msgstr ""
 
-#: pretix/settings.py:521
+#: pretix/settings.py:521 pretix/settings.py:519
 msgid "Italian"
 msgstr ""
 
-#: pretix/settings.py:522
+#: pretix/settings.py:522 pretix/settings.py:520
 msgid "Latvian"
 msgstr ""
 
-#: pretix/settings.py:523
+#: pretix/settings.py:523 pretix/settings.py:521
 msgid "Polish"
 msgstr ""
 
-#: pretix/settings.py:524
+#: pretix/settings.py:524 pretix/settings.py:522
 msgid "Portuguese (Portugal)"
 msgstr ""
 
-#: pretix/settings.py:525
+#: pretix/settings.py:525 pretix/settings.py:523
 msgid "Portuguese (Brazil)"
 msgstr ""
 
@@ -24362,30 +24364,30 @@ msgstr ""
 msgid "Romanian"
 msgstr ""
 
-#: pretix/settings.py:527
+#: pretix/settings.py:527 pretix/settings.py:524
 msgid "Russian"
 msgstr ""
 
-#: pretix/settings.py:528
+#: pretix/settings.py:528 pretix/settings.py:525
 msgid "Spanish"
 msgstr ""
 
-#: pretix/settings.py:529
+#: pretix/settings.py:529 pretix/settings.py:526
 msgid "Turkish"
 msgstr ""
 
-#: pretix/settings.py:843
+#: pretix/settings.py:843 pretix/settings.py:842
 msgid "User profile only"
 msgstr ""
 
-#: pretix/settings.py:844
+#: pretix/settings.py:844 pretix/settings.py:843
 msgid "Read access"
 msgstr ""
 
-#: pretix/settings.py:845
+#: pretix/settings.py:845 pretix/settings.py:844
 msgid "Write access"
 msgstr ""
 
-#: pretix/settings.py:855
+#: pretix/settings.py:855 pretix/settings.py:854
 msgid "Kosovo"
 msgstr ""
