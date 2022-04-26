@@ -25,50 +25,50 @@ msgstr ""
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:62
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:68
 msgid "Marked as paid"
-msgstr ""
+msgstr "Позначено як оплачене"
 
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:76
 msgid "Comment:"
-msgstr ""
+msgstr "Коментар:"
 
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:15
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:39
 msgid "Placed orders"
-msgstr ""
+msgstr "Створені замовлення"
 
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:15
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:39
 msgid "Paid orders"
-msgstr ""
+msgstr "Сплачені замовлення"
 
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:27
 msgid "Total revenue"
-msgstr ""
+msgstr "Загальний прибуток"
 
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:12
 msgid "Contacting Stripe …"
-msgstr ""
+msgstr "Налаштовується зв'язок з Stripe…"
 
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:60
 msgid "Total"
-msgstr ""
+msgstr "Всього"
 
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:152
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:183
 msgid "Confirming your payment …"
-msgstr ""
+msgstr "Підтверджується ваш платіж"
 
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:159
 msgid "Contacting your bank …"
-msgstr ""
+msgstr "Встановлюється зв’язок з Вашим банком …"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:30
 msgid "Select a check-in list"
-msgstr ""
+msgstr "Виберіть список реєстрації"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:31
 msgid "No active check-in lists found."
-msgstr ""
+msgstr "Активних списків реєстрації не знайдено."
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:32
 msgid "Switch check-in list"
@@ -108,81 +108,81 @@ msgstr ""
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:41
 msgid "Load more"
-msgstr ""
+msgstr "Завантажити більше"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:42
 msgid "Valid"
-msgstr ""
+msgstr "Дійсний"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:43
 msgid "Unpaid"
-msgstr ""
+msgstr "Неоплаченo"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:44
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:45
 msgid "Canceled"
-msgstr ""
+msgstr "Скасовано"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:46
 msgid "Redeemed"
-msgstr ""
+msgstr "Викуплено"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:47
 msgid "Cancel"
-msgstr ""
+msgstr "Скасувати"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:48
 msgid "Continue"
-msgstr ""
+msgstr "Продовжити"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:49
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:58
 msgid "Ticket not paid"
-msgstr ""
+msgstr "Квиток не оплачено"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:50
 msgid "This ticket is not yet paid. Do you want to continue anyways?"
-msgstr ""
+msgstr "Цей квиток ще не оплачений. Ви все одно хочете продовжити?"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:51
 msgid "Additional information required"
-msgstr ""
+msgstr "Необхідна додаткова інформація"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:52
 msgid "Valid ticket"
-msgstr ""
+msgstr "Дійсний квиток"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:53
 msgid "Exit recorded"
-msgstr ""
+msgstr "Вихід записано"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:54
 msgid "Ticket already used"
-msgstr ""
+msgstr "Квиток уже використаний"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:55
 msgid "Information required"
-msgstr ""
+msgstr "Необхідна інформація"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:56
 msgid "Unknown ticket"
-msgstr ""
+msgstr "Квиток не знайдено"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:57
 msgid "Ticket type not allowed here"
-msgstr ""
+msgstr "Тип квитка тут заборонений"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:59
 msgid "Entry not allowed"
-msgstr ""
+msgstr "Вхід заборонено"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:60
 msgid "Ticket code revoked/changed"
-msgstr ""
+msgstr "Код квитка скасовано/змінено"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:61
 msgid "Order canceled"
-msgstr ""
+msgstr "Замовлення скасовано"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:62
 msgid "Checked-in Tickets"
@@ -198,7 +198,7 @@ msgstr ""
 
 #: pretix/static/lightbox/js/lightbox.js:96
 msgid "close"
-msgstr ""
+msgstr "Закрити"
 
 #: pretix/static/pretixbase/js/asynctask.js:43
 #: pretix/static/pretixbase/js/asynctask.js:119
@@ -206,11 +206,13 @@ msgid ""
 "Your request is currently being processed. Depending on the size of your "
 "event, this might take up to a few minutes."
 msgstr ""
+"Ваш запит наразі обробляється. Залежно від масштабу вашої події це може "
+"зайняти до кількох хвилин."
 
 #: pretix/static/pretixbase/js/asynctask.js:48
 #: pretix/static/pretixbase/js/asynctask.js:124
 msgid "Your request has been queued on the server and will soon be processed."
-msgstr ""
+msgstr "Ваш запит поставлено в чергу на сервері і незабаром буде оброблено."
 
 #: pretix/static/pretixbase/js/asynctask.js:54
 #: pretix/static/pretixbase/js/asynctask.js:130
@@ -219,34 +221,41 @@ msgid ""
 "If this takes longer than two minutes, please contact us or go back in your "
 "browser and try again."
 msgstr ""
+"Ваш запит надійшов на сервер, але все ще перебуває в очікуванні обробки. "
+"Якщо це займе більше двох хвилин, будь ласка, зв'яжіться з нами або "
+"поверніться назад у браузері та повторіть запит."
 
 #: pretix/static/pretixbase/js/asynctask.js:89
 #: pretix/static/pretixbase/js/asynctask.js:175
 #: pretix/static/pretixbase/js/asynctask.js:180
 #: pretix/static/pretixcontrol/js/ui/mail.js:24
 msgid "An error of type {code} occurred."
-msgstr ""
+msgstr "Виникла помилка типу {code}."
 
 #: pretix/static/pretixbase/js/asynctask.js:92
 msgid ""
 "We currently cannot reach the server, but we keep trying. Last error code: "
 "{code}"
 msgstr ""
+"Не вдається зв'язатися із сервером, повторюємо спроби. Код останньої "
+"помилки: {code}"
 
 #: pretix/static/pretixbase/js/asynctask.js:144
 #: pretix/static/pretixcontrol/js/ui/mail.js:21
 msgid "The request took too long. Please try again."
-msgstr ""
+msgstr "Запит тривав занадто довго. Будь ласка спробуйте ще раз."
 
 #: pretix/static/pretixbase/js/asynctask.js:183
 #: pretix/static/pretixcontrol/js/ui/mail.js:26
 msgid ""
 "We currently cannot reach the server. Please try again. Error code: {code}"
 msgstr ""
+"Наразі ми не можемо підключитися до сервера. Будь ласка спробуйте ще раз. "
+"Код помилки: {code}"
 
 #: pretix/static/pretixbase/js/asynctask.js:205
 msgid "We are processing your request …"
-msgstr ""
+msgstr "Ми обробляємо ваш запит…"
 
 #: pretix/static/pretixbase/js/asynctask.js:213
 msgid ""
@@ -254,28 +263,31 @@ msgid ""
 "than one minute, please check your internet connection and then reload this "
 "page and try again."
 msgstr ""
+"Зараз ми надсилаємо Ваш запит на сервер. Якщо це займе більше однієї "
+"хвилини, перевірте підключення до Інтернету, а потім перезавантажте цю "
+"сторінку та повторіть спробу."
 
 #: pretix/static/pretixbase/js/asynctask.js:270
 #: pretix/static/pretixcontrol/js/ui/main.js:71
 msgid "Close message"
-msgstr ""
+msgstr "Закрити повідомлення"
 
 #: pretix/static/pretixcontrol/js/clipboard.js:23
 msgid "Copied!"
-msgstr ""
+msgstr "Скопійовано!"
 
 #: pretix/static/pretixcontrol/js/clipboard.js:29
 msgid "Press Ctrl-C to copy!"
-msgstr ""
+msgstr "Натисніть Ctrl+C щоб скопіювати!"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:10
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:16
 msgid "is one of"
-msgstr ""
+msgstr "є одним із"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:22
 msgid "is before"
-msgstr ""
+msgstr "є раніше"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:26
 msgid "is after"
@@ -291,11 +303,11 @@ msgstr ""
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:67
 msgid "Current date and time"
-msgstr ""
+msgstr "Поточна дата та час"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:71
 msgid "Current day of the week (1 = Monday, 7 = Sunday)"
-msgstr ""
+msgstr "Поточний день тижня (1 = понеділок, 7 = неділя)"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:75
 msgid "Number of previous entries"
@@ -311,7 +323,7 @@ msgstr ""
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:87
 msgid "Minutes since last entry (-1 on first entry)"
-msgstr ""
+msgstr "Хвилин після останнього запису (-1 при першому записі)"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:91
 msgid "Minutes since first entry (-1 on first entry)"
