@@ -62,6 +62,9 @@
                     <th>{% trans "Name" %}
                         <a href="?{% url_replace request 'ordering' '-name' %}"><i class="fa fa-caret-down"></i></a>
                         <a href="?{% url_replace request 'ordering' 'name' %}"><i class="fa fa-caret-up"></i></a></th>
+                    <th>{% trans "External ID" %}
+                        <a href="?{% url_replace request 'ordering' '-external_identifier' %}"><i class="fa fa-caret-down"></i></a>
+                        <a href="?{% url_replace request 'ordering' 'external_identifier' %}"><i class="fa fa-caret-up"></i></a></th>
                     <th></th>
                 </tr>
                 </thead>
@@ -81,6 +84,7 @@
                             {% if not c.is_verified %}</strike>{% endif %}
                         </td>
                         <td>{{ c.name }}</td>
+                        <td>{{ c.external_identifier }}</td>
                         <td class="text-right">
                             <a href="{% url "control:organizer.customer" organizer=request.organizer.slug customer=c.identifier %}"
                                     class="btn btn-default btn-sm" data-toggle="tooltip" title="{% trans "Details" %}">

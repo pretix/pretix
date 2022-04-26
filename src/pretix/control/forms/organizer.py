@@ -607,7 +607,7 @@ class CustomerUpdateForm(forms.ModelForm):
 
     class Meta:
         model = Customer
-        fields = ['is_active', 'name_parts', 'email', 'is_verified', 'phone', 'locale']
+        fields = ['is_active', 'name_parts', 'email', 'is_verified', 'phone', 'locale', 'external_identifier', 'notes']
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -651,7 +651,7 @@ class CustomerCreateForm(CustomerUpdateForm):
 
     class Meta:
         model = Customer
-        fields = ['identifier', 'is_active', 'name_parts', 'email', 'is_verified', 'locale']
+        fields = ['identifier', 'is_active', 'name_parts', 'email', 'is_verified', 'locale', 'external_identifier', 'notes']
 
 
 class MembershipUpdateForm(forms.ModelForm):
