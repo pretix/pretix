@@ -52,7 +52,10 @@ class MultiStringField(TextField):
         if isinstance(value, (list, tuple)):
             return DELIMITER + DELIMITER.join(value) + DELIMITER
         elif value is None:
-            return ""
+            if self.null:
+                return None
+            else:
+                return ""
         raise TypeError("Invalid data type passed.")
 
     def get_prep_lookup(self, lookup_type, value):  # NOQA
@@ -78,6 +81,8 @@ class MultiStringField(TextField):
             return MultiStringContains
         elif lookup_name == 'icontains':
             return MultiStringIContains
+        elif lookup_name == 'isnull':
+            return builtin_lookups.IsNull
         raise NotImplementedError(
             "Lookup '{}' doesn't work with MultiStringField".format(lookup_name),
         )
