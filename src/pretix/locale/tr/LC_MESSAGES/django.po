@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-21 15:18+0000\n"
+"POT-Creation-Date: 2022-04-26 16:22+0000\n"
 "PO-Revision-Date: 2019-10-31 14:39+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: Turkish <https://translate.pretix.eu/projects/pretix/pretix/"
@@ -28996,92 +28996,96 @@ msgid "Chinese (simplified)"
 msgstr ""
 
 #: pretix/settings.py:513
+msgid "Czech"
+msgstr ""
+
+#: pretix/settings.py:514
 msgid "Danish"
 msgstr "Danimarkalı"
 
-#: pretix/settings.py:514
+#: pretix/settings.py:515
 msgid "Dutch"
 msgstr "Flemenkçe"
 
-#: pretix/settings.py:515
+#: pretix/settings.py:516
 #, fuzzy
 #| msgid "German (informal)"
 msgid "Dutch (informal)"
 msgstr "Almanca (gayri resmi)"
 
-#: pretix/settings.py:516
+#: pretix/settings.py:517
 msgid "French"
 msgstr ""
 
-#: pretix/settings.py:517
+#: pretix/settings.py:518
 #, fuzzy
 #| msgid "Danish"
 msgid "Finnish"
 msgstr "Danimarkalı"
 
-#: pretix/settings.py:518
-msgid "Greek"
-msgstr ""
-
 #: pretix/settings.py:519
-msgid "Italian"
+msgid "Galician"
 msgstr ""
 
 #: pretix/settings.py:520
-msgid "Latvian"
+msgid "Greek"
 msgstr ""
 
 #: pretix/settings.py:521
+msgid "Italian"
+msgstr ""
+
+#: pretix/settings.py:522
+msgid "Latvian"
+msgstr ""
+
+#: pretix/settings.py:523
 #, fuzzy
 #| msgid "English"
 msgid "Polish"
 msgstr "İngilizce"
 
-#: pretix/settings.py:522
+#: pretix/settings.py:524
 #, fuzzy
 #| msgid "Portuguese (Brazil)"
 msgid "Portuguese (Portugal)"
 msgstr "Portekizce (Brezilya)"
 
-#: pretix/settings.py:523
+#: pretix/settings.py:525
 msgid "Portuguese (Brazil)"
 msgstr "Portekizce (Brezilya)"
 
-#: pretix/settings.py:524
+#: pretix/settings.py:526
+msgid "Romanian"
+msgstr ""
+
+#: pretix/settings.py:527
 msgid "Russian"
 msgstr ""
 
-#: pretix/settings.py:525
+#: pretix/settings.py:528
 #, fuzzy
 #| msgid "Danish"
 msgid "Spanish"
 msgstr "Danimarkalı"
 
-#: pretix/settings.py:526
+#: pretix/settings.py:529
 msgid "Turkish"
 msgstr "Türkçe"
 
-#: pretix/settings.py:527
-msgid "Galician"
-msgstr ""
-
-#: pretix/settings.py:528
-msgid "Czech"
-msgstr ""
-
-#: pretix/settings.py:842
+#: pretix/settings.py:843
 msgid "User profile only"
 msgstr ""
 
-#: pretix/settings.py:843
+#: pretix/settings.py:844
 msgid "Read access"
 msgstr "Okuma erişimi"
 
-#: pretix/settings.py:844
+#: pretix/settings.py:845
 msgid "Write access"
 msgstr "Yazma erişimi"
 
-#: pretix/settings.py:854
+#: pretix/settings.py:855
 msgid "Kosovo"
 msgstr ""
 

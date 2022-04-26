@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-21 15:18+0000\n"
+"POT-Creation-Date: 2022-04-26 16:22+0000\n"
 "PO-Revision-Date: 2022-02-01 22:00+0000\n"
 "Last-Translator: Jozsef Ebenspanger <j.ebenspanger@mso-mg.de>\n"
 "Language-Team: Hungarian <https://translate.pretix.eu/projects/pretix/pretix/"
@@ -24665,86 +24665,90 @@ msgid "Chinese (simplified)"
 msgstr "kínai (egyszerűsített)"
 
 #: pretix/settings.py:513
+msgid "Czech"
+msgstr ""
+
+#: pretix/settings.py:514
 msgid "Danish"
 msgstr "dán"
 
-#: pretix/settings.py:514
+#: pretix/settings.py:515
 msgid "Dutch"
 msgstr "holland"
 
-#: pretix/settings.py:515
+#: pretix/settings.py:516
 msgid "Dutch (informal)"
 msgstr "holland (informális)"
 
-#: pretix/settings.py:516
+#: pretix/settings.py:517
 msgid "French"
 msgstr "francia"
 
-#: pretix/settings.py:517
+#: pretix/settings.py:518
 #, fuzzy
 #| msgid "Danish"
 msgid "Finnish"
 msgstr "dán"
 
-#: pretix/settings.py:518
+#: pretix/settings.py:519
+msgid "Galician"
+msgstr ""
+
+#: pretix/settings.py:520
 msgid "Greek"
 msgstr "görög"
 
-#: pretix/settings.py:519
+#: pretix/settings.py:521
 msgid "Italian"
 msgstr "olasz"
 
-#: pretix/settings.py:520
+#: pretix/settings.py:522
 msgid "Latvian"
 msgstr "lett"
 
-#: pretix/settings.py:521
+#: pretix/settings.py:523
 msgid "Polish"
 msgstr "lengyel"
 
-#: pretix/settings.py:522
+#: pretix/settings.py:524
 #, fuzzy
 #| msgid "Portuguese (Brazil)"
 msgid "Portuguese (Portugal)"
 msgstr "portugál (brazil)"
 
-#: pretix/settings.py:523
+#: pretix/settings.py:525
 msgid "Portuguese (Brazil)"
 msgstr "portugál (brazil)"
 
-#: pretix/settings.py:524
+#: pretix/settings.py:526
+msgid "Romanian"
+msgstr ""
+
+#: pretix/settings.py:527
 msgid "Russian"
 msgstr "orosz"
 
-#: pretix/settings.py:525
+#: pretix/settings.py:528
 msgid "Spanish"
 msgstr "spanyol"
 
-#: pretix/settings.py:526
+#: pretix/settings.py:529
 msgid "Turkish"
 msgstr "török"
 
-#: pretix/settings.py:527
-msgid "Galician"
-msgstr ""
-
-#: pretix/settings.py:528
-msgid "Czech"
-msgstr ""
-
-#: pretix/settings.py:842
+#: pretix/settings.py:843
 msgid "User profile only"
 msgstr ""
 
-#: pretix/settings.py:843
+#: pretix/settings.py:844
 msgid "Read access"
 msgstr "Olvasási jog"
 
-#: pretix/settings.py:844
+#: pretix/settings.py:845
 msgid "Write access"
 msgstr "Írási jog"
 
-#: pretix/settings.py:854
+#: pretix/settings.py:855
 msgid "Kosovo"
 msgstr ""
 

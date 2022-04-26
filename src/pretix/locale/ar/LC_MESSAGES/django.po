@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-21 15:18+0000\n"
+"POT-Creation-Date: 2022-04-26 16:22+0000\n"
 "PO-Revision-Date: 2021-09-15 11:22+0000\n"
 "Last-Translator: Mohamed Tawfiq <mtawfiq@wafyapp.com>\n"
 "Language-Team: Arabic <https://translate.pretix.eu/projects/pretix/pretix/ar/"
@@ -27111,82 +27111,86 @@ msgid "Chinese (simplified)"
 msgstr "الصينية (المبسطة)"
 
 #: pretix/settings.py:513
-msgid "Danish"
-msgstr "دانماركي"
-
-#: pretix/settings.py:514
-msgid "Dutch"
-msgstr "هولندي"
-
-#: pretix/settings.py:515
-msgid "Dutch (informal)"
-msgstr "الهولندية (غير رسمي)"
-
-#: pretix/settings.py:516
-msgid "French"
-msgstr "الفرنسية"
-
-#: pretix/settings.py:517
-msgid "Finnish"
-msgstr "الفنلندية"
-
-#: pretix/settings.py:518
-msgid "Greek"
-msgstr "اليونانية"
-
-#: pretix/settings.py:519
-msgid "Italian"
-msgstr "الإيطالية"
-
-#: pretix/settings.py:520
-msgid "Latvian"
-msgstr "لاتفيفية"
-
-#: pretix/settings.py:521
-msgid "Polish"
-msgstr "البولندية"
-
-#: pretix/settings.py:522
-msgid "Portuguese (Portugal)"
-msgstr "البرتغالية (البرتغال)"
-
-#: pretix/settings.py:523
-msgid "Portuguese (Brazil)"
-msgstr "البرتغالية (البرازيل)"
-
-#: pretix/settings.py:524
-msgid "Russian"
-msgstr "الروسية"
-
-#: pretix/settings.py:525
-msgid "Spanish"
-msgstr "الأسبانية"
-
-#: pretix/settings.py:526
-msgid "Turkish"
-msgstr "التركية"
-
-#: pretix/settings.py:527
-msgid "Galician"
-msgstr ""
-
-#: pretix/settings.py:528
 msgid "Czech"
 msgstr ""
 
-#: pretix/settings.py:842
+#: pretix/settings.py:514
+msgid "Danish"
+msgstr "دانماركي"
+
+#: pretix/settings.py:515
+msgid "Dutch"
+msgstr "هولندي"
+
+#: pretix/settings.py:516
+msgid "Dutch (informal)"
+msgstr "الهولندية (غير رسمي)"
+
+#: pretix/settings.py:517
+msgid "French"
+msgstr "الفرنسية"
+
+#: pretix/settings.py:518
+msgid "Finnish"
+msgstr "الفنلندية"
+
+#: pretix/settings.py:519
+msgid "Galician"
+msgstr ""
+
+#: pretix/settings.py:520
+msgid "Greek"
+msgstr "اليونانية"
+
+#: pretix/settings.py:521
+msgid "Italian"
+msgstr "الإيطالية"
+
+#: pretix/settings.py:522
+msgid "Latvian"
+msgstr "لاتفيفية"
+
+#: pretix/settings.py:523
+msgid "Polish"
+msgstr "البولندية"
+
+#: pretix/settings.py:524
+msgid "Portuguese (Portugal)"
+msgstr "البرتغالية (البرتغال)"
+
+#: pretix/settings.py:525
+msgid "Portuguese (Brazil)"
+msgstr "البرتغالية (البرازيل)"
+
+#: pretix/settings.py:526
+msgid "Romanian"
+msgstr ""
+
+#: pretix/settings.py:527
+msgid "Russian"
+msgstr "الروسية"
+
+#: pretix/settings.py:528
+msgid "Spanish"
+msgstr "الأسبانية"
+
+#: pretix/settings.py:529
+msgid "Turkish"
+msgstr "التركية"
+
+#: pretix/settings.py:843
 msgid "User profile only"
 msgstr "ملف تعريف المستخدم فقط"
 
-#: pretix/settings.py:843
+#: pretix/settings.py:844
 msgid "Read access"
 msgstr "الوصول إلى القراءة"
 
-#: pretix/settings.py:844
+#: pretix/settings.py:845
 msgid "Write access"
 msgstr "الوصول إلى الكتابة"
 
-#: pretix/settings.py:854
+#: pretix/settings.py:855
 msgid "Kosovo"
 msgstr "كوسوفو"
 

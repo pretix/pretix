@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-21 15:18+0000\n"
+"POT-Creation-Date: 2022-04-26 16:22+0000\n"
 "PO-Revision-Date: 2021-05-30 13:17+0000\n"
 "Last-Translator: albert <albert.serra.monner@gmail.com>\n"
 "Language-Team: Catalan <https://translate.pretix.eu/projects/pretix/pretix/"
@@ -26911,82 +26911,86 @@ msgid "Chinese (simplified)"
 msgstr "Xinès (simplificat)"
 
 #: pretix/settings.py:513
-msgid "Danish"
-msgstr "Danès"
-
-#: pretix/settings.py:514
-msgid "Dutch"
-msgstr "Holandès"
-
-#: pretix/settings.py:515
-msgid "Dutch (informal)"
-msgstr "Holandès (informal)"
-
-#: pretix/settings.py:516
-msgid "French"
-msgstr "Francès"
-
-#: pretix/settings.py:517
-msgid "Finnish"
-msgstr "Finlandès"
-
-#: pretix/settings.py:518
-msgid "Greek"
-msgstr "Grec"
-
-#: pretix/settings.py:519
-msgid "Italian"
-msgstr "Italià"
-
-#: pretix/settings.py:520
-msgid "Latvian"
-msgstr "Letó"
-
-#: pretix/settings.py:521
-msgid "Polish"
-msgstr "Polonès"
-
-#: pretix/settings.py:522
-msgid "Portuguese (Portugal)"
-msgstr "Portuguès (Portugal)"
-
-#: pretix/settings.py:523
-msgid "Portuguese (Brazil)"
-msgstr "Portuguès (Brasil)"
-
-#: pretix/settings.py:524
-msgid "Russian"
-msgstr "Rus"
-
-#: pretix/settings.py:525
-msgid "Spanish"
-msgstr "Espanyol"
-
-#: pretix/settings.py:526
-msgid "Turkish"
-msgstr "Turc"
-
-#: pretix/settings.py:527
-msgid "Galician"
-msgstr ""
-
-#: pretix/settings.py:528
 msgid "Czech"
 msgstr ""
 
-#: pretix/settings.py:842
+#: pretix/settings.py:514
+msgid "Danish"
+msgstr "Danès"
+
+#: pretix/settings.py:515
+msgid "Dutch"
+msgstr "Holandès"
+
+#: pretix/settings.py:516
+msgid "Dutch (informal)"
+msgstr "Holandès (informal)"
+
+#: pretix/settings.py:517
+msgid "French"
+msgstr "Francès"
+
+#: pretix/settings.py:518
+msgid "Finnish"
+msgstr "Finlandès"
+
+#: pretix/settings.py:519
+msgid "Galician"
+msgstr ""
+
+#: pretix/settings.py:520
+msgid "Greek"
+msgstr "Grec"
+
+#: pretix/settings.py:521
+msgid "Italian"
+msgstr "Italià"
+
+#: pretix/settings.py:522
+msgid "Latvian"
+msgstr "Letó"
+
+#: pretix/settings.py:523
+msgid "Polish"
+msgstr "Polonès"
+
+#: pretix/settings.py:524
+msgid "Portuguese (Portugal)"
+msgstr "Portuguès (Portugal)"
+
+#: pretix/settings.py:525
+msgid "Portuguese (Brazil)"
+msgstr "Portuguès (Brasil)"
+
+#: pretix/settings.py:526
+msgid "Romanian"
+msgstr ""
+
+#: pretix/settings.py:527
+msgid "Russian"
+msgstr "Rus"
+
+#: pretix/settings.py:528
+msgid "Spanish"
+msgstr "Espanyol"
+
+#: pretix/settings.py:529
+msgid "Turkish"
+msgstr "Turc"
+
+#: pretix/settings.py:843
 msgid "User profile only"
 msgstr ""
 
-#: pretix/settings.py:843
+#: pretix/settings.py:844
 msgid "Read access"
 msgstr "Accés de lectura"
 
-#: pretix/settings.py:844
+#: pretix/settings.py:845
 msgid "Write access"
 msgstr "Accés d'escriptura"
 
-#: pretix/settings.py:854
+#: pretix/settings.py:855
 msgid "Kosovo"
 msgstr "Kosovo"
 
