@@ -3,23 +3,24 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-26 16:23+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"PO-Revision-Date: 2022-04-26 16:34+0000\n"
+"Last-Translator: Iryna N <in380@nyu.edu>\n"
+"Language-Team: Ukrainian <https://translate.pretix.eu/projects/pretix/"
+"pretix-js/uk/>\n"
+"Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=(n % 1 == 0 && n % 10 == 1 && n % 100 != "
-"11 ? 0 : n % 1 == 0 && n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % "
-"100 > 14) ? 1 : n % 1 == 0 && (n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || "
-"(n % 100 >=11 && n % 100 <=14 )) ? 2: 3);\n"
+"Plural-Forms: nplurals=4; plural=(n % 1 == 0 && n % 10 == 1 && n % 100 != 11 "
+"? 0 : n % 1 == 0 && n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > "
+"14) ? 1 : n % 1 == 0 && (n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || (n % "
+"100 >=11 && n % 100 <=14 )) ? 2: 3);\n"
+"X-Generator: Weblate 4.11.2\n"
 
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:56
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:62
@@ -395,70 +396,74 @@ msgstr ""
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:636
 msgid "Powered by pretix"
-msgstr ""
+msgstr "На базі pretix"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:638
 msgid "Object"
-msgstr ""
+msgstr "Об'єкт"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:642
 msgid "Ticket design"
-msgstr ""
+msgstr "Дизайн квитка"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:932
 msgid "Saving failed."
-msgstr ""
+msgstr "Не вдалося зберегти."
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:982
 #: pretix/static/pretixcontrol/js/ui/editor.js:1021
 msgid "Error while uploading your PDF file, please try again."
-msgstr ""
+msgstr "Під час завантаження PDF-файлу сталася помилка. Повторіть спробу."
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:1006
 msgid "Do you really want to leave the editor without saving your changes?"
-msgstr ""
+msgstr "Ви дійсно хочете вийти з редактора, не зберігаючи зміни?"
 
 #: pretix/static/pretixcontrol/js/ui/mail.js:19
 msgid "An error has occurred."
-msgstr ""
+msgstr "Сталася помилка."
 
 #: pretix/static/pretixcontrol/js/ui/mail.js:54
 msgid "Generating messages …"
-msgstr ""
+msgstr "Створюються повідомлення…"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:107
 msgid "Unknown error."
-msgstr ""
+msgstr "Невідома помилка."
 
 #: pretix/static/pretixcontrol/js/ui/main.js:308
 msgid "Your color has great contrast and is very easy to read!"
-msgstr ""
+msgstr "Ваш колір має великий контраст і його дуже легко читати!"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:312
 msgid "Your color has decent contrast and is probably good-enough to read!"
 msgstr ""
+"Ваш колір має достатню контрастність і, ймовірно, цілком підходить для "
+"читання!"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:316
 msgid ""
 "Your color has bad contrast for text on white background, please choose a "
 "darker shade."
 msgstr ""
+"Ваш колір має низьку контрастність для тексту на білому тлі, будь ласка, "
+"виберіть темніший відтінок."
 
 #: pretix/static/pretixcontrol/js/ui/main.js:454
 msgid "All"
-msgstr ""
+msgstr "Все"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:455
 msgid "None"
-msgstr ""
+msgstr "Жодного"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:456
 msgid "Search query"
-msgstr ""
+msgstr "Пошуковий запит"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:459
 msgid "Selected only"
-msgstr ""
+msgstr "Тільки вибрані"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:886
 msgid "Use a different name internally"
@@ -466,33 +471,33 @@ msgstr ""
 
 #: pretix/static/pretixcontrol/js/ui/main.js:922
 msgid "Click to close"
-msgstr ""
+msgstr "Натисніть, щоб закрити"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:963
 msgid "You have unsaved changes!"
-msgstr ""
+msgstr "У вас є незбережені зміни!"
 
 #: pretix/static/pretixcontrol/js/ui/orderchange.js:25
 msgid "Calculating default price…"
-msgstr ""
+msgstr "Розрахунок ціни за замовчуванням…"
 
 #: pretix/static/pretixcontrol/js/ui/question.js:42
 msgid "Others"
-msgstr ""
+msgstr "Інше"
 
 #: pretix/static/pretixcontrol/js/ui/question.js:82
 msgid "Count"
-msgstr ""
+msgstr "Підрахувати"
 
 #: pretix/static/pretixcontrol/js/ui/question.js:136
 #: pretix/static/pretixpresale/js/ui/questions.js:269
 msgid "Yes"
-msgstr ""
+msgstr "Так"
 
 #: pretix/static/pretixcontrol/js/ui/question.js:137
 #: pretix/static/pretixpresale/js/ui/questions.js:269
 msgid "No"
-msgstr ""
+msgstr "Ні"
 
 #: pretix/static/pretixcontrol/js/ui/subevent.js:111
 msgid "(one more date)"
@@ -505,10 +510,12 @@ msgid ""
 "The items in your cart are no longer reserved for you. You can still "
 "complete your order as long as they’re available."
 msgstr ""
+"Товари у вашому кошику більше не зарезервовані для вас. Ви все ще можете "
+"завершити своє замовлення, поки вони доступні."
 
 #: pretix/static/pretixpresale/js/ui/cart.js:45
 msgid "Cart expired"
-msgstr ""
+msgstr "Термін дії кошика закінчився"
 
 #: pretix/static/pretixpresale/js/ui/cart.js:50
 msgid "The items in your cart are reserved for you for one minute."
