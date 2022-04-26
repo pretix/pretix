@@ -210,7 +210,7 @@ setup(
         'psycopg2-binary',
         'pycountry',
         'pycparser==2.21',
-        'PyPDF2==1.26.*',
+        'PyPDF2==1.27.9',
         'python-bidi==0.4.*',  # Support for Arabic in reportlab
         'python-dateutil==2.8.*',
         'python-u2flib-server==4.*',
