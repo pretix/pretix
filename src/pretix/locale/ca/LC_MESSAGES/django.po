@@ -2710,8 +2710,8 @@ msgstr ""
 msgid ""
 "This option allows you to create discounts of the type \"buy X get Y reduced/"
 "for free\". For example, if you set \"Minimum number of matching products\" "
-"to four and this value to two, the customer's cart will be split into grups "
-"of four tickets and  the cheapest two tickets within every group will be "
+"to four and this value to two, the customer's cart will be split into groups "
+"of four tickets and the cheapest two tickets within every group will be "
 "discounted. If you want to grant the discount on all matching products, keep "
 "this field empty."
 msgstr ""
@@ -3189,7 +3189,7 @@ msgstr ""
 "Si aquest producte és part d'una comanda, la comanda passarà a l'estat "
 "\"aprovació\" i necessitarà que ho confirmeu abans que es pugui pagar i ser "
 "completat. Podeu utilitzar això per exemple per a tiquets de descompte que "
-"només estan disponibles a grups específics."
+"només estan disponibles a groups específics."
 
 #: pretix/base/models/items.py:461
 msgid ""
@@ -3404,7 +3404,7 @@ msgstr ""
 "Si aquest producte és part d'una comanda, la comanda passarà a l'estat "
 "\"aprovació\" i necessitarà que ho confirmeu abans que es pugui pagar i ser "
 "completat. Podeu utilitzar això per exemple per a tiquets de descompte que "
-"només estan disponibles a grups específics."
+"només estan disponibles a groups específics."
 
 #: pretix/base/models/items.py:820 pretix/control/navigation.py:546
 #: pretix/control/templates/pretixcontrol/organizers/membershiptypes.html:4

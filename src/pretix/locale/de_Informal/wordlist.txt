@@ -192,6 +192,7 @@ Przelewy
 pt
 px
 QR
+rabattiert
 Rabattierung
 Reader
 Rechnungs
