@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-27 12:44+0000\n"
-"PO-Revision-Date: 2022-04-26 16:34+0000\n"
+"PO-Revision-Date: 2022-04-27 13:49+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
@@ -2549,21 +2549,18 @@ msgstr "Installationsdatum"
 #: pretix/base/models/discount.py:44
 msgctxt "subevent"
 msgid "Dates can be mixed without limitation"
-msgstr ""
+msgstr "Termine können ohne Beschränkung gemischt gewählt werden"
 
 #: pretix/base/models/discount.py:45
-#, fuzzy
-#| msgid "Multiple matching products were found."
 msgctxt "subevent"
 msgid "All matching products must be for the same date"
-msgstr "Mehrere passende Produkte gefunden."
+msgstr "Alle passenden Produkte müssen für den selben Termin gelten"
 
 #: pretix/base/models/discount.py:46
-#, fuzzy
-#| msgid "Add tickets for a different date"
 msgctxt "subevent"
 msgid "Each matching product must be for a different date"
-msgstr "Tickets für anderen Termin hinzufügen"
+msgstr ""
+"Alle passenden Produkte müssen für einen unterschiedlichen Termin gelten"
 
 #: pretix/base/models/discount.py:55 pretix/base/models/event.py:1274
 #: pretix/base/models/items.py:368 pretix/base/models/items.py:784
@@ -2612,37 +2609,28 @@ msgid "Available until"
 msgstr "Verfügbar bis"
 
 #: pretix/base/models/discount.py:84
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "Event series date changed"
 msgid "Event series handling"
-msgstr "Veranstaltungsreihe: Termin geändert"
+msgstr "Behandlung von Veranstaltungsreihen"
 
 #: pretix/base/models/discount.py:92
-#, fuzzy
-#| msgid "All products (including newly created ones)"
 msgid "Apply to all products (including newly created ones)"
-msgstr "Alle Produkte (auch neu erstellte)"
+msgstr "Anwendbar für alle Produkte (inkl. neu erstellter Produkte)"
 
 #: pretix/base/models/discount.py:96
-#, fuzzy
-#| msgid "Apply to products"
 msgid "Apply to specific products"
-msgstr "Auf Produkte anwenden"
+msgstr "Auf bestimmte Produkte anwenden"
 
 #: pretix/base/models/discount.py:101
-#, fuzzy
-#| msgid "Apply to products"
 msgid "Apply to add-on products"
-msgstr "Auf Produkte anwenden"
+msgstr "Auf Zusatzprodukte anwenden"
 
 #: pretix/base/models/discount.py:102
 msgid "Discounts never apply to bundled products"
-msgstr ""
+msgstr "Automatische Rabatte gelten niemals für enthaltene Produkte"
 
 #: pretix/base/models/discount.py:106
 msgid "Ignore products discounted by a voucher"
-msgstr ""
+msgstr "Ignoriere Produkte, die von einem Gutschein rabattiert werden"
 
 #: pretix/base/models/discount.py:107
 msgid ""
@@ -2651,24 +2639,27 @@ msgid ""
 "use a voucher only to e.g. unlock a hidden product or gain access to sold-"
 "out quota will still receive the discount."
 msgstr ""
+"Wenn diese Option aktiv ist, werden Produkte, die bereits aufgrund eines "
+"Gutscheins einen Rabatt erhalten haben, nicht für Rabatte berücksichtigt. "
+"Wenn der Gutschein hingegen nur z.B. Freischaltung eines versteckten "
+"Produkts oder eines ausverkauften Kontingents verwendet wurde, wird der "
+"automatische Rabatt trotzdem gewährt."
 
 #: pretix/base/models/discount.py:112
-#, fuzzy
-#| msgid "Maximum number of items per order"
 msgid "Minimum number of matching products"
-msgstr "Maximale Anzahl von Produkten pro Bestellung"
+msgstr "Minimale Anzahl passender Produkte"
 
 #: pretix/base/models/discount.py:116
 msgid "Minimum gross value of matching products"
-msgstr ""
+msgstr "Minimaler Brutto-Gesamtbetrag passender Produkte"
 
 #: pretix/base/models/discount.py:123
 msgid "Percentual discount on matching products"
-msgstr ""
+msgstr "Prozentualer Rabatt auf passende Produkte"
 
 #: pretix/base/models/discount.py:130
 msgid "Apply discount only to this number of matching products"
-msgstr ""
+msgstr "Gewähre Rabatt nur für diese Anzahl passender Produkte"
 
 #: pretix/base/models/discount.py:132
 msgid ""
@@ -2679,30 +2670,44 @@ msgid ""
 "discounted. If you want to grant the discount on all matching products, keep "
 "this field empty."
 msgstr ""
+"Diese Option erlaubt die Erstellung von Rabatten des Typs \"kaufe X, erhalte "
+"Y rabattiert/kostenlos\". Wenn beispielsweise \"Minimale Anzahl passender "
+"Produkte\" auf 4 gesetzt ist und dieser Wert auf 2, wird der Warenkorb des "
+"Kunden in Vierergruppen aufgeteilt und die günstigsten zwei Tickets jeder "
+"Gruppe werden rabattiert. Wenn der Rabatt auf alle passenden Produkte "
+"gewährt werden soll, muss das Feld frei bleiben."
 
 #: pretix/base/models/discount.py:169
 msgid ""
 "You can either set a minimum number of matching products or a minimum value, "
 "not both."
 msgstr ""
+"Du kannst entweder eine minimale Anzahl an Produkten oder einen minimalen "
+"Betrag setzen, aber nicht beides."
 
 #: pretix/base/models/discount.py:174
 msgid ""
 "You need to either set a minimum number of matching products or a minimum "
 "value."
 msgstr ""
+"Du musst entweder eine minimale Anzahl an Produkten oder einen minimalen "
+"Betrag setzen."
 
 #: pretix/base/models/discount.py:179
 msgid ""
 "You cannot apply the discount only to some of the matched products if you "
 "are matching on a minimum value."
 msgstr ""
+"Du kannst den Rabatt nicht nur auf manche der passenden Produkte anwenden, "
+"wenn du einen minimalen Betrag forderst."
 
 #: pretix/base/models/discount.py:185
 msgid ""
 "You cannot apply the discount only to bookings of different dates if you are "
 "matching on a minimum value."
 msgstr ""
+"Du kannst den Rabatt nicht auf unterschiedliche Termine einschränken, wenn "
+"du einen minimalen Betrag setzt."
 
 #: pretix/base/models/event.py:84
 msgid "The end of the presale period has to be later than its start."
@@ -3840,10 +3845,9 @@ msgid "Quota {val}"
 msgstr "Kontingent {val}"
 
 #: pretix/base/models/log.py:206
-#, fuzzy, python-brace-format
-#| msgid "Product {val}"
+#, python-brace-format
 msgid "Discount {val}"
-msgstr "Produkt {val}"
+msgstr "Rabatt {val}"
 
 #: pretix/base/models/log.py:216
 #, python-brace-format
@@ -9664,20 +9668,16 @@ msgid "Product \"{name}\" becomes unavailable"
 msgstr "Produkt „{name}“ ist nicht mehr verfügbar"
 
 #: pretix/base/timeline.py:225
-#, fuzzy, python-brace-format
-#| msgctxt "timeline"
-#| msgid "Product \"{name}\" becomes available"
+#, python-brace-format
 msgctxt "timeline"
 msgid "Discount \"{name}\" becomes active"
-msgstr "Produkt „{name}“ ist verfügbar"
+msgstr "Rabatt „{name}“ ist verfügbar"
 
 #: pretix/base/timeline.py:236
-#, fuzzy, python-brace-format
-#| msgctxt "timeline"
-#| msgid "Product \"{name}\" becomes unavailable"
+#, python-brace-format
 msgctxt "timeline"
 msgid "Discount \"{name}\" becomes inactive"
-msgstr "Produkt „{name}“ ist nicht mehr verfügbar"
+msgstr "Rabatt „{name}“ ist nicht mehr verfügbar"
 
 #: pretix/base/timeline.py:276
 #, python-brace-format
@@ -12730,22 +12730,16 @@ msgid "The question has been changed."
 msgstr "Die Frage wurde verändert."
 
 #: pretix/control/logdisplay.py:452
-#, fuzzy
-#| msgid "The quota has been added."
 msgid "The discount has been added."
-msgstr "Das Kontingent wurde erstellt."
+msgstr "Der Rabatt wurde erstellt."
 
 #: pretix/control/logdisplay.py:453
-#, fuzzy
-#| msgid "The product has been deleted."
 msgid "The discount has been deleted."
-msgstr "Das Produkt wurde gelöscht."
+msgstr "Der Rabatt wurde gelöscht."
 
 #: pretix/control/logdisplay.py:454
-#, fuzzy
-#| msgid "The account has been changed."
 msgid "The discount has been changed."
-msgstr "Das Konto wurde verändert."
+msgstr "Der Rabatt wurde verändert."
 
 #: pretix/control/logdisplay.py:455
 msgid "The tax rule has been added."
@@ -13149,10 +13143,8 @@ msgid "Categories"
 msgstr "Kategorien"
 
 #: pretix/control/navigation.py:190
-#, fuzzy
-#| msgid "Account"
 msgid "Discounts"
-msgstr "Konto"
+msgstr "Rabatte"
 
 #: pretix/control/navigation.py:211
 msgid "Overview"
@@ -16422,23 +16414,17 @@ msgstr "Möchtest du die Kategorie <strong>%(name)s</strong> wirklich löschen?"
 
 #: pretix/control/templates/pretixcontrol/items/discount.html:4
 #: pretix/control/templates/pretixcontrol/items/discount.html:6
-#, fuzzy
-#| msgid "Customer account"
 msgid "Automatic discount"
-msgstr "Kundenkonto"
+msgstr "Automatischer Rabatt"
 
 #: pretix/control/templates/pretixcontrol/items/discount.html:21
-#, fuzzy
-#| msgid "Confirmations"
 msgctxt "discount"
 msgid "Condition"
-msgstr "Bestätigungen"
+msgstr "Bedingung"
 
 #: pretix/control/templates/pretixcontrol/items/discount.html:31
-#, fuzzy
-#| msgid "Minimum Price"
 msgid "Minimum cart content"
-msgstr "Minimaler Preis"
+msgstr "Minimaler Warenkorbinhalt"
 
 #: pretix/control/templates/pretixcontrol/items/discount.html:40
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_cc.html:50
@@ -16446,64 +16432,48 @@ msgid "OR"
 msgstr "ODER"
 
 #: pretix/control/templates/pretixcontrol/items/discount.html:50
-#, fuzzy
-#| msgid "Beneficiary"
 msgctxt "discount"
 msgid "Benefit"
-msgstr "Leistungsempfänger"
+msgstr "Vergünstigung"
 
 #: pretix/control/templates/pretixcontrol/items/discount.html:60
-#, fuzzy
-#| msgid "Account history"
 msgid "Discount history"
-msgstr "Konto-Änderungen"
+msgstr "Rabatt-Verlauf"
 
 #: pretix/control/templates/pretixcontrol/items/discount_delete.html:4
 #: pretix/control/templates/pretixcontrol/items/discount_delete.html:6
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "Delete date"
 msgid "Delete discount"
-msgstr "Termin löschen"
+msgstr "Rabatt löschen"
 
 #: pretix/control/templates/pretixcontrol/items/discount_delete.html:10
-#, fuzzy, python-format
-#| msgid ""
-#| "You cannot delete the product <strong>%(item)s</strong> because it "
-#| "already has been ordered."
+#, python-format
 msgid ""
 "You cannot delete the discount <strong>%(discount)s</strong> because it "
 "already has\n"
 "                been used as part of an order."
 msgstr ""
-"Das Produkt <strong>%(item)s</strong> kann nicht gelöscht werden, da es "
-"bereits bestellt wurde."
+"Der Rabatt <strong>%(discount)s</strong> kann nicht gelöscht werden, da er "
+"bereits für bestehende Bestellungen verwendet wurde."
 
 #: pretix/control/templates/pretixcontrol/items/discount_delete.html:21
-#, fuzzy, python-format
-#| msgid ""
-#| "Are you sure you want to delete the category <strong>%(name)s</strong>?"
+#, python-format
 msgid "Are you sure you want to delete the discount <strong>%(name)s</strong>?"
-msgstr "Möchtest du die Kategorie <strong>%(name)s</strong> wirklich löschen?"
+msgstr "Möchtest du den Rabatt <strong>%(name)s</strong> wirklich löschen?"
 
 #: pretix/control/templates/pretixcontrol/items/discount_delete.html:25
-#, fuzzy, python-format
-#| msgid ""
-#| "You cannot delete the product <strong>%(item)s</strong> because it "
-#| "already has been ordered, but you can deactivate it."
+#, python-format
 msgid ""
 "You cannot delete the discount <strong>%(name)s</strong> because it already "
 "has been used as part of an order, but you can deactivate it."
 msgstr ""
-"Das Produkt <strong>%(item)s</strong> kann nicht gelöscht werden, da es "
-"bereits bestellt wurde, aber du kannst es deaktivieren."
+"Der Rabatt <strong>%(name)s</strong> kann nicht gelöscht werden, da er "
+"bereits für bestehende Bestellungen verwendet wurde, aber du kannst ihn "
+"deaktivieren."
 
 #: pretix/control/templates/pretixcontrol/items/discounts.html:3
 #: pretix/control/templates/pretixcontrol/items/discounts.html:5
-#, fuzzy
-#| msgid "Customer accounts"
 msgid "Automatic discounts"
-msgstr "Kundenkonten"
+msgstr "Automatische Rabatte"
 
 #: pretix/control/templates/pretixcontrol/items/discounts.html:7
 #, python-format
@@ -16513,6 +16483,10 @@ msgid ""
 "can create group discounts like \"get 20%% off if you buy 3 or more tickets"
 "\" or \"buy 2 tickets, get 1 free\"."
 msgstr ""
+"Mit automatischen Rabatten kannst du automatisch Rabatte auf Käufe von "
+"Kunden basierend auf bestimmten Bedingungen gewähren. Beispielsweise kannst "
+"du Gruppenrabatte wie \"erhalte 20%% Rabatt ab 3 oder mehr Tickets\" oder "
+"\"kaufe 2 Tickets und erhalte ein weiteres kostenlos\" erstellen."
 
 #: pretix/control/templates/pretixcontrol/items/discounts.html:14
 msgid ""
@@ -16522,6 +16496,12 @@ msgid ""
 "purchases (\"buy a package of 10 you can turn into individual tickest later"
 "\"), you can use customer accounts and memberships instead."
 msgstr ""
+"Automatische Rabatte sind, solange sie aktiv sind, für alle Kunden "
+"verfügbar. Wenn du Rabatte nur bestimmten Kunden anbieten möchtest, nutze "
+"stattdessen Gutscheine. Wenn du Rabatte über mehrere Bestellungen hinweg "
+"anbieten möchtest (\"kaufe ein Zehner-Paket, das du später in individuelle "
+"Tickets umtauschst\") kannst du stattdessen Kundenkonten und "
+"Mitgliedschaften nutzen."
 
 #: pretix/control/templates/pretixcontrol/items/discounts.html:22
 msgid ""
@@ -16529,6 +16509,9 @@ msgid ""
 "are not applied if an existing order is changed through any of the available "
 "options."
 msgstr ""
+"Rabatte werden nur beim ursprünglichen Kaufvorgang automatisch "
+"berücksichtigt. Sie werden nicht berücksichtigt, wenn existierende "
+"Bestellungen später verändert werden."
 
 #: pretix/control/templates/pretixcontrol/items/discounts.html:28
 msgid ""
@@ -16536,19 +16519,18 @@ msgid ""
 "overlapping discounts, the first one in the order of the list below will "
 "apply."
 msgstr ""
+"Jedes Produkt im Warenkorb kann nur von einem Rabatt berücksichtigt werden. "
+"Wenn sich deine automatischen Rabatte in der Abdeckung überlappen, wird der "
+"erste in der Reihenfolge der untenstehenden Liste gewählt."
 
 #: pretix/control/templates/pretixcontrol/items/discounts.html:36
-#, fuzzy
-#| msgid "You haven't created any layouts yet."
 msgid "You haven't created any discounts yet."
-msgstr "Du hast noch keine Layouts erstellt."
+msgstr "Du hast noch keine Rabatte erstellt."
 
 #: pretix/control/templates/pretixcontrol/items/discounts.html:42
 #: pretix/control/templates/pretixcontrol/items/discounts.html:47
-#, fuzzy
-#| msgid "Create a new account"
 msgid "Create a new discount"
-msgstr "Neuen Benutzer erstellen"
+msgstr "Neuen Rabatt erstellen"
 
 #: pretix/control/templates/pretixcontrol/items/discounts.html:94
 #: pretix/control/templates/pretixcontrol/items/index.html:72
@@ -17515,10 +17497,9 @@ msgid "Voucher code used:"
 msgstr "Verwendeter Gutscheincode:"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:390
-#, fuzzy, python-format
-#| msgid "Maximum discount budget"
+#, python-format
 msgid "Used %(amount)s discount from budget"
-msgstr "Maximales Rabattbudget"
+msgstr "Verwendete %(amount)s Rabatt vom Budget"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:411
 msgid ""
@@ -17526,6 +17507,9 @@ msgid ""
 "this product was part of the discount calculation for a different product in "
 "this order."
 msgstr ""
+"Der Preis dieses Produktes wurde durch einen automatischen Rabatt reduziert "
+"oder dieses Produkt war Teil der Rabattberechnung für ein anderes Produkt "
+"dieser Bestellung."
 
 #: pretix/control/templates/pretixcontrol/order/index.html:441
 msgid "Ticket page"
@@ -20854,48 +20838,33 @@ msgstr[1] "{num} Bestellungen"
 
 #: pretix/control/views/discounts.py:68 pretix/control/views/discounts.py:110
 #: pretix/control/views/discounts.py:212
-#, fuzzy
-#| msgid "The requested list does not exist."
 msgid "The requested discount does not exist."
-msgstr "Die ausgewählte Liste existiert nicht."
+msgstr "Der ausgewählte Rabatt existiert nicht."
 
 #: pretix/control/views/discounts.py:78
-#, fuzzy
-#| msgid "The selected list has been deleted."
 msgid "The selected discount has been deleted."
-msgstr "Das ausgewählte List wurde gelöscht."
+msgstr "Der ausgewählte Rabatt wurde gelöscht."
 
 #: pretix/control/views/discounts.py:86
-#, fuzzy
-#| msgid "The selected product has been deactivated."
 msgid "The selected discount has been deactivated."
-msgstr "Das ausgewählte Produkt wurde deaktiviert."
+msgstr "Der ausgewählte Rabatt wurde deaktiviert."
 
 #: pretix/control/views/discounts.py:177
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "The new date has been created."
 msgid "The new discount has been created."
-msgstr "Eine neuer Termin wurde erstellt."
+msgstr "Der ausgewählte Rabatt wurde erstellt."
 
 #: pretix/control/views/discounts.py:225
-#, fuzzy
-#| msgid "The order of items has been updated."
 msgid "The order of discounts has been updated."
-msgstr "Die Reihenfolge der Produkte wurde gespeichert."
+msgstr "Die Reihenfolge der Rabatte wurde gespeichert."
 
 #: pretix/control/views/discounts.py:258 pretix/control/views/item.py:172
 #: pretix/control/views/item.py:375 pretix/control/views/item.py:504
-#, fuzzy
-#| msgid "Some of the provided item ids are invalid."
 msgid "Some of the provided object ids are invalid."
-msgstr "Einige der angegebenen Produkt-IDs sind ungültig."
+msgstr "Einige der angegebenen Objekt-IDs sind ungültig."
 
 #: pretix/control/views/discounts.py:261
-#, fuzzy
-#| msgid "Not all items have been selected."
 msgid "Not all discounts have been selected."
-msgstr "Es wurden nicht alle Fragen ausgewählt."
+msgstr "Es wurden nicht alle Rabatte ausgewählt."
 
 #: pretix/control/views/event.py:218 pretix/control/views/organizer.py:447
 msgid ""
@@ -21164,10 +21133,8 @@ msgstr ""
 
 #: pretix/control/views/item.py:181 pretix/control/views/item.py:378
 #: pretix/control/views/item.py:507
-#, fuzzy
-#| msgid "Not all items have been selected."
 msgid "Not all objects have been selected."
-msgstr "Es wurden nicht alle Fragen ausgewählt."
+msgstr "Es wurden nicht alle Objekte ausgewählt."
 
 #: pretix/control/views/item.py:205 pretix/control/views/item.py:240
 #: pretix/control/views/item.py:329
@@ -25901,11 +25868,13 @@ msgstr "Das zuvor hochgeladene Bild"
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:296
 msgid "The price of this product was reduced because of an automatic discount."
 msgstr ""
+"Der Preis dieses Produktes wurde wegen eines automatischen Rabattes "
+"reduziert."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:238
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:299
 msgid "Discounted"
-msgstr ""
+msgstr "Rabattiert"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:246
 msgid "Okay, we're removing that…"
