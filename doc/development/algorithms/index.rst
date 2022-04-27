@@ -9,5 +9,6 @@ ticket scanning apps and we want to ensure the implementations are as similar as
 .. toctree::
    :maxdepth: 2
 
+   pricing
    checkin
    layouts

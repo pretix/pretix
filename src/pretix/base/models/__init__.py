@@ -25,6 +25,7 @@ from .base import CachedFile, LoggedModel, cachedfile_name
 from .checkin import Checkin, CheckinList
 from .customers import Customer
 from .devices import Device, Gate
+from .discount import Discount
 from .event import (
     Event, Event_SettingsStore, EventLock, EventMetaProperty, EventMetaValue,
     SubEvent, SubEventMetaValue, generate_invite_token,

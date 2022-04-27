@@ -1070,10 +1070,10 @@ class OrderChangeManagerTests(TestCase):
         assert self.order.transactions.count() == 4
 
     @classscope(attr='o')
-    def test_change_item_change_price_before_voucher(self):
+    def test_change_item_change_voucher_budget_use(self):
         self.op1.voucher = self.event.vouchers.create(item=self.shirt, redeemed=1, price_mode='set', value='5.00')
         self.op1.price = Decimal('5.00')
-        self.op1.price_before_voucher = Decimal('23.00')
+        self.op1.voucher_budget_use = Decimal('18.00')
         self.op1.save()
         p = self.op1.price
         self.ocm.change_item(self.op1, self.shirt, None)
@@ -1082,13 +1082,13 @@ class OrderChangeManagerTests(TestCase):
         self.order.refresh_from_db()
         assert self.op1.item == self.shirt
         assert self.op1.price == p
-        assert self.op1.price_before_voucher == Decimal('12.00')
+        assert self.op1.voucher_budget_use == Decimal('7.00')
 
     @classscope(attr='o')
-    def test_change_item_change_price_before_voucher_minimum_value(self):
+    def test_change_item_change_voucher_budget_use_minimum_value(self):
         self.op1.voucher = self.event.vouchers.create(item=self.shirt, redeemed=1, price_mode='set', value='20.00')
         self.op1.price = Decimal('20.00')
-        self.op1.price_before_voucher = Decimal('23.00')
+        self.op1.voucher_budget_use = Decimal('3.00')
         self.op1.save()
         p = self.op1.price
         self.ocm.change_item(self.op1, self.shirt, None)
@@ -1097,7 +1097,7 @@ class OrderChangeManagerTests(TestCase):
         self.order.refresh_from_db()
         assert self.op1.item == self.shirt
         assert self.op1.price == p
-        assert self.op1.price_before_voucher == Decimal('20.00')
+        assert self.op1.voucher_budget_use == Decimal('0.00')
 
     @classscope(attr='o')
     def test_change_item_success(self):
@@ -3133,7 +3133,7 @@ class OrderReactivateTest(TestCase):
     @classscope(attr='o')
     def test_reactivate_voucher_budget(self):
         self.op1.voucher = self.event.vouchers.create(code="FOO", item=self.ticket, budget=Decimal('0.00'))
-        self.op1.price_before_voucher = self.op1.price * 2
+        self.op1.voucher_budget_use = self.op1.price
         self.op1.save()
         with pytest.raises(OrderError):
             reactivate_order(self.order)

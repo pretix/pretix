@@ -906,10 +906,10 @@ class Order(LockModel, LoggedModel):
                 if force:
                     continue
 
-                if op.voucher and op.voucher.budget is not None and op.price_before_voucher is not None:
+                if op.voucher and op.voucher.budget is not None and op.voucher_budget_use:
                     if op.voucher not in v_budget:
                         v_budget[op.voucher] = op.voucher.budget - op.voucher.budget_used()
-                    disc = op.price_before_voucher - op.price
+                    disc = op.voucher_budget_use
                     if disc > v_budget[op.voucher]:
                         raise Quota.QuotaExceededException(error_messages['voucher_budget'].format(
                             voucher=op.voucher.code
@@ -1275,9 +1275,6 @@ class AbstractPosition(models.Model):
         verbose_name=_("Variation"),
         on_delete=models.PROTECT
     )
-    price_before_voucher = models.DecimalField(
-        decimal_places=2, max_digits=10, null=True,
-    )
     price = models.DecimalField(
         decimal_places=2, max_digits=10,
         verbose_name=_("Price")
@@ -1313,6 +1310,10 @@ class AbstractPosition(models.Model):
         'Seat', null=True, blank=True, on_delete=models.PROTECT
     )
     is_bundled = models.BooleanField(default=False)
+
+    discount = models.ForeignKey(
+        'Discount', null=True, blank=True, on_delete=models.RESTRICT
+    )
 
     company = models.CharField(max_length=255, blank=True, verbose_name=_('Company name'), null=True)
     street = models.TextField(verbose_name=_('Address'), blank=True, null=True)
@@ -2160,6 +2161,9 @@ class OrderPosition(AbstractPosition):
         related_name='all_positions',
         on_delete=models.PROTECT
     )
+    voucher_budget_use = models.DecimalField(
+        max_digits=10, decimal_places=2, null=True, blank=True,
+    )
     tax_rate = models.DecimalField(
         max_digits=7, decimal_places=2,
         verbose_name=_('Tax rate')
@@ -2232,6 +2236,8 @@ class OrderPosition(AbstractPosition):
                 else:
                     setattr(op, f.name, getattr(cartpos, f.name))
             op._calculate_tax()
+            if cartpos.voucher:
+                op.voucher_budget_use = cartpos.listed_price - cartpos.price_after_voucher
             op.positionid = i + 1
             op.save()
             ops.append(op)
@@ -2580,12 +2586,25 @@ class CartPosition(AbstractPosition):
         verbose_name=_("Expiration date"),
         db_index=True
     )
-    includes_tax = models.BooleanField(
-        default=True
+
+    tax_rate = models.DecimalField(
+        max_digits=7, decimal_places=2, default=Decimal('0.00'),
+        verbose_name=_('Tax rate')
     )
-    override_tax_rate = models.DecimalField(
-        max_digits=10, decimal_places=2,
-        null=True, blank=True
+    listed_price = models.DecimalField(
+        decimal_places=2, max_digits=10, null=True,
+    )
+    price_after_voucher = models.DecimalField(
+        decimal_places=2, max_digits=10, null=True,
+    )
+    custom_price_input = models.DecimalField(
+        decimal_places=2, max_digits=10, null=True,
+    )
+    custom_price_input_is_net = models.BooleanField(
+        default=False,
+    )
+    line_price_gross = models.DecimalField(
+        decimal_places=2, max_digits=10, null=True,
     )
 
     objects = ScopedManager(organizer='event__organizer')
@@ -2600,20 +2619,65 @@ class CartPosition(AbstractPosition):
         )
 
     @property
-    def tax_rate(self):
-        if self.includes_tax:
-            if self.override_tax_rate is not None:
-                return self.override_tax_rate
-            return self.item.tax(self.price, base_price_is='gross').rate
-        else:
-            return Decimal('0.00')
-
-    @property
     def tax_value(self):
-        if self.includes_tax:
-            return self.item.tax(self.price, override_tax_rate=self.override_tax_rate, base_price_is='gross').tax
+        net = round_decimal(self.price - (self.price * (1 - 100 / (100 + self.tax_rate))),
+                            self.event.currency)
+        return self.price - net
+
+    def update_listed_price_and_voucher(self, voucher_only=False, max_discount=None):
+        from pretix.base.services.pricing import (
+            get_listed_price, is_included_for_free,
+        )
+
+        if voucher_only:
+            listed_price = self.listed_price
         else:
-            return Decimal('0.00')
+            if self.addon_to_id and is_included_for_free(self.item, self.addon_to):
+                listed_price = Decimal('0.00')
+            else:
+                listed_price = get_listed_price(self.item, self.variation, self.subevent)
+
+        if self.voucher:
+            price_after_voucher = self.voucher.calculate_price(listed_price, max_discount)
+        else:
+            price_after_voucher = listed_price
+
+        if self.is_bundled:
+            bundle = self.addon_to.item.bundles.filter(bundled_item=self.item, bundled_variation=self.variation).first()
+            if bundle:
+                listed_price = bundle.designated_price
+                price_after_voucher = bundle.designated_price
+
+        if listed_price != self.listed_price or price_after_voucher != self.price_after_voucher:
+            self.listed_price = listed_price
+            self.price_after_voucher = price_after_voucher
+            self.save(update_fields=['listed_price', 'price_after_voucher'])
+
+    def migrate_free_price_if_necessary(self):
+        # Migrate from pre-discounts position
+        if self.item.free_price and self.custom_price_input is None:
+            custom_price = self.price
+            if custom_price > 100000000:
+                raise ValueError('price_too_high')
+            self.custom_price_input = custom_price
+            self.custom_price_input_is_net = not False
+            self.save(update_fields=['custom_price_input', 'custom_price_input_is_net'])
+
+    def update_line_price(self, invoice_address, bundled_positions):
+        from pretix.base.services.pricing import get_line_price
+
+        line_price = get_line_price(
+            price_after_voucher=self.price_after_voucher,
+            custom_price_input=self.custom_price_input,
+            custom_price_input_is_net=self.custom_price_input_is_net,
+            tax_rule=self.item.tax_rule,
+            invoice_address=invoice_address,
+            bundled_sum=sum([b.price_after_voucher for b in bundled_positions]),
+        )
+        if line_price.gross != self.line_price_gross or line_price.rate != self.tax_rate:
+            self.line_price_gross = line_price.gross
+            self.tax_rate = line_price.rate
+            self.save(update_fields=['line_price_gross', 'tax_rate'])
 
 
 class InvoiceAddress(models.Model):

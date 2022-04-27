@@ -231,6 +231,13 @@
                     {% else %}
                         {{ line.price|money:event.currency }}
                     {% endif %}
+                    {% if line.discount and line.line_price_gross != line.price %}
+                        <span class="text-success discounted" data-toggle="tooltip" title="{% trans "The price of this product was reduced because of an automatic discount." %}">
+                            <br>
+                            <span class="fa fa-percent fa-fw" aria-hidden="true"></span>
+                            {% trans "Discounted" %}
+                        </span>
+                    {% endif %}
                 </div>
             {% else %}
                 <div role="cell" class="count">
@@ -284,6 +291,13 @@
                         {{ line.net_price|money:event.currency }}
                     {% else %}
                         {{ line.price|money:event.currency }}
+                    {% endif %}
+                    {% if line.discount and line.line_price_gross != line.price %}
+                        <span class="text-success discounted" data-toggle="tooltip" title="{% trans "The price of this product was reduced because of an automatic discount." %}">
+                            <br>
+                            <span class="fa fa-percent fa-fw" aria-hidden="true"></span>
+                            {% trans "Discounted" %}
+                        </span>
                     {% endif %}
                 </div>
             {% endif %}

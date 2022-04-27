@@ -189,7 +189,7 @@ Cart position endpoints
    * ``attendee_email`` (optional)
    * ``subevent`` (optional)
    * ``expires`` (optional)
-   * ``includes_tax`` (optional)
+   * ``includes_tax`` (optional, **deprecated**, do not use, will be removed)
    * ``sales_channel`` (optional)
    * ``answers``
 

@@ -387,7 +387,7 @@
                                 {% if line.voucher %}
                                     <br/><span class="fa fa-tags fa-fw"></span> {% trans "Voucher code used:" %}
                                     <a
-                                            {% if line.price_before_voucher|default_if_none:"NONE" != "NONE" %}data-toggle="tooltip" title="{% blocktrans trimmed with price=line.price_before_voucher|money:request.event.currency %}Original price: {{ price }}{% endblocktrans %}"{% endif %}
+                                            {% if line.voucher.budget and line.voucher_budget_use|default_if_none:"NONE" != "NONE" %}data-toggle="tooltip" title="{% blocktrans trimmed with amount=line.voucher_budget_use|money:request.event.currency %}Used {{ amount }} discount from budget{% endblocktrans %}"{% endif %}
                                             href="{% url "control:event.voucher" event=request.event.slug organizer=request.event.organizer.slug voucher=line.voucher.pk %}">
                                         {{ line.voucher.code }}
                                     </a>
@@ -405,6 +405,15 @@
                                     <a href="{% url "control:organizer.customer.membership.edit" organizer=request.organizer.slug customer=order.customer.identifier id=line.used_membership.pk %}">
                                         {{ line.used_membership }}
                                     </a>
+                                {% endif %}
+                                {% if line.discount %}
+                                    <br />
+                                    <span class="text-success discounted" data-toggle="tooltip" title="{% trans "The price of this product was reduced because of an automatic discount or this product was part of the discount calculation for a different product in this order." %}">
+                                        <span class="fa fa-percent fa-fw" aria-hidden="true"></span>
+                                        <a href="{% url "control:event.items.discounts.edit" organizer=request.event.organizer.slug event=request.event.slug discount=line.discount.id %}">
+                                            {{ line.discount.internal_name }}
+                                        </a>
+                                    </span>
                                 {% endif %}
                                 {% if not line.canceled %}
                                     <div class="position-buttons">

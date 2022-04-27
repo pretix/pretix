@@ -54,11 +54,14 @@ from pretix.base.models import (
 )
 from pretix.base.models.event import SubEvent
 from pretix.base.models.orders import OrderFee
-from pretix.base.models.tax import TAXED_ZERO, TaxedPrice, TaxRule
+from pretix.base.models.tax import TaxRule
 from pretix.base.reldate import RelativeDateWrapper
 from pretix.base.services.checkin import _save_answers
 from pretix.base.services.locking import LockTimeoutException, NoLockManager
-from pretix.base.services.pricing import get_price
+from pretix.base.services.pricing import (
+    apply_discounts, get_line_price, get_listed_price, get_price,
+    is_included_for_free,
+)
 from pretix.base.services.quotas import QuotaAvailability
 from pretix.base.services.tasks import ProfiledEventTask
 from pretix.base.settings import PERSON_NAME_SCHEMES, LazyI18nStringList
@@ -145,13 +148,15 @@ error_messages = {
 
 
 class CartManager:
-    AddOperation = namedtuple('AddOperation', ('count', 'item', 'variation', 'price', 'voucher', 'quotas',
-                                               'addon_to', 'subevent', 'includes_tax', 'bundled', 'seat',
-                                               'price_before_voucher'))
+    AddOperation = namedtuple('AddOperation', ('count', 'item', 'variation', 'voucher', 'quotas',
+                                               'addon_to', 'subevent', 'bundled', 'seat', 'listed_price',
+                                               'price_after_voucher', 'custom_price_input',
+                                               'custom_price_input_is_net'))
     RemoveOperation = namedtuple('RemoveOperation', ('position',))
-    VoucherOperation = namedtuple('VoucherOperation', ('position', 'voucher', 'price'))
-    ExtendOperation = namedtuple('ExtendOperation', ('position', 'count', 'item', 'variation', 'price', 'voucher',
-                                                     'quotas', 'subevent', 'seat', 'price_before_voucher'))
+    VoucherOperation = namedtuple('VoucherOperation', ('position', 'voucher', 'price_after_voucher'))
+    ExtendOperation = namedtuple('ExtendOperation', ('position', 'count', 'item', 'variation', 'voucher',
+                                                     'quotas', 'subevent', 'seat', 'listed_price',
+                                                     'price_after_voucher'))
     order = {
         RemoveOperation: 10,
         VoucherOperation: 15,
@@ -178,8 +183,8 @@ class CartManager:
 
     @property
     def positions(self):
-        return CartPosition.objects.filter(
-            Q(cart_id=self.cart_id) & Q(event=self.event)
+        return self.event.cartposition_set.filter(
+            Q(cart_id=self.cart_id)
         ).select_related('item', 'subevent')
 
     def _is_seated(self, item, subevent):
@@ -390,7 +395,6 @@ class CartManager:
             'addons'
         ).order_by('-is_bundled')
         err = None
-        changed_prices = {}
         for cp in expired:
             removed_positions = {op.position.pk for op in self._operations if isinstance(op, self.RemoveOperation)}
             if cp.pk in removed_positions or (cp.addon_to_id and cp.addon_to_id in removed_positions):
@@ -401,40 +405,16 @@ class CartManager:
             if cp.is_bundled:
                 bundle = cp.addon_to.item.bundles.filter(bundled_item=cp.item, bundled_variation=cp.variation).first()
                 if bundle:
-                    price = bundle.designated_price or 0
+                    listed_price = bundle.designated_price or 0
                 else:
-                    price = cp.price
-
-                changed_prices[cp.pk] = price
-
-                if not cp.includes_tax:
-                    price = self._get_price(cp.item, cp.variation, cp.voucher, price, cp.subevent,
-                                            force_custom_price=True, cp_is_net=False)
-                    price = TaxedPrice(net=price.net, gross=price.net, rate=0, tax=0, name='')
-                else:
-                    price = self._get_price(cp.item, cp.variation, cp.voucher, price, cp.subevent,
-                                            force_custom_price=True)
-                pbv = TAXED_ZERO
+                    listed_price = cp.price
+                price_after_voucher = listed_price
             else:
-                bundled_sum = Decimal('0.00')
-                if not cp.addon_to_id:
-                    for bundledp in cp.addons.all():
-                        if bundledp.is_bundled:
-                            bundledprice = changed_prices.get(bundledp.pk, bundledp.price)
-                            bundled_sum += bundledprice
-
-                if not cp.includes_tax:
-                    price = self._get_price(cp.item, cp.variation, cp.voucher, cp.price, cp.subevent,
-                                            cp_is_net=True, bundled_sum=bundled_sum)
-                    price = TaxedPrice(net=price.net, gross=price.net, rate=Decimal('0'), tax=Decimal('0'), name='')
-                    pbv = self._get_price(cp.item, cp.variation, None, cp.price, cp.subevent,
-                                          cp_is_net=True, bundled_sum=bundled_sum)
-                    pbv = TaxedPrice(net=pbv.net, gross=pbv.net, rate=Decimal('0'), tax=Decimal('0'), name='')
+                listed_price = get_listed_price(cp.item, cp.variation, cp.subevent)
+                if cp.voucher:
+                    price_after_voucher = cp.voucher.calculate_price(listed_price)
                 else:
-                    price = self._get_price(cp.item, cp.variation, cp.voucher, cp.price, cp.subevent,
-                                            bundled_sum=bundled_sum)
-                    pbv = self._get_price(cp.item, cp.variation, None, cp.price, cp.subevent,
-                                          bundled_sum=bundled_sum)
+                    price_after_voucher = listed_price
 
             quotas = list(cp.quotas)
             if not quotas:
@@ -450,7 +430,8 @@ class CartManager:
 
             op = self.ExtendOperation(
                 position=cp, item=cp.item, variation=cp.variation, voucher=cp.voucher, count=1,
-                price=price, quotas=quotas, subevent=cp.subevent, seat=cp.seat, price_before_voucher=pbv
+                quotas=quotas, subevent=cp.subevent, seat=cp.seat, listed_price=listed_price,
+                price_after_voucher=price_after_voucher,
             )
             self._check_item_constraints(op)
 
@@ -489,26 +470,22 @@ class CartManager:
             if p.is_bundled:
                 continue
 
-            bundled_sum = Decimal('0.00')
-            if not p.addon_to_id:
-                for bundledp in p.addons.all():
-                    if bundledp.is_bundled:
-                        bundledprice = bundledp.price
-                        bundled_sum += bundledprice
-
-            price = self._get_price(p.item, p.variation, voucher, None, p.subevent, bundled_sum=bundled_sum)
-            """
-            if price.gross > p.price:
-                continue
-            """
+            if p.listed_price is None:
+                if p.addon_to_id and is_included_for_free(p.item, p.addon_to):
+                    listed_price = Decimal('0.00')
+                else:
+                    listed_price = get_listed_price(p.item, p.variation, p.subevent)
+            else:
+                listed_price = p.listed_price
+            price_after_voucher = voucher.calculate_price(listed_price)
 
             voucher_use_diff[voucher] += 1
-            ops.append((p.price - price.gross, self.VoucherOperation(p, voucher, price)))
+            ops.append((listed_price - price_after_voucher, self.VoucherOperation(p, voucher, price_after_voucher)))
 
         # If there are not enough voucher usages left for the full cart, let's apply them in the order that benefits
         # the user the most.
         ops.sort(key=lambda k: k[0], reverse=True)
-        self._operations += [k[1] for k in ops]\
+        self._operations += [k[1] for k in ops]
 
         if not voucher_use_diff:
             raise CartError(error_messages['voucher_no_match'])
@@ -575,7 +552,6 @@ class CartManager:
 
             # Fetch bundled items
             bundled = []
-            bundled_sum = Decimal('0.00')
             db_bundles = list(item.bundles.all())
             self._update_items_cache([b.bundled_item_id for b in db_bundles], [b.bundled_variation_id for b in db_bundles])
             for bundle in db_bundles:
@@ -595,28 +571,49 @@ class CartManager:
                 else:
                     bundle_quotas = []
 
-                if bundle.designated_price:
-                    bprice = self._get_price(bitem, bvar, None, bundle.designated_price, subevent, force_custom_price=True,
-                                             cp_is_net=False)
-                else:
-                    bprice = TAXED_ZERO
-                bundled_sum += bundle.designated_price * bundle.count
-
                 bop = self.AddOperation(
-                    count=bundle.count, item=bitem, variation=bvar, price=bprice,
-                    voucher=None, quotas=bundle_quotas, addon_to='FAKE', subevent=subevent,
-                    includes_tax=bool(bprice.rate), bundled=[], seat=None, price_before_voucher=bprice,
+                    count=bundle.count,
+                    item=bitem,
+                    variation=bvar,
+                    voucher=None,
+                    quotas=bundle_quotas,
+                    addon_to='FAKE',
+                    subevent=subevent,
+                    bundled=[],
+                    seat=None,
+                    listed_price=bundle.designated_price,
+                    price_after_voucher=bundle.designated_price,
+                    custom_price_input=None,
+                    custom_price_input_is_net=False,
                 )
                 self._check_item_constraints(bop, operations)
                 bundled.append(bop)
 
-            price = self._get_price(item, variation, voucher, i.get('price'), subevent, bundled_sum=bundled_sum)
-            pbv = self._get_price(item, variation, None, i.get('price'), subevent, bundled_sum=bundled_sum)
+            listed_price = get_listed_price(item, variation, subevent)
+            if voucher:
+                price_after_voucher = voucher.calculate_price(listed_price)
+            else:
+                price_after_voucher = listed_price
+            custom_price = None
+            if item.free_price and i.get('price'):
+                custom_price = Decimal(str(i.get('price')).replace(",", "."))
+                if custom_price > 100000000:
+                    raise ValueError('price_too_high')
 
             op = self.AddOperation(
-                count=i['count'], item=item, variation=variation, price=price, voucher=voucher, quotas=quotas,
-                addon_to=False, subevent=subevent, includes_tax=bool(price.rate), bundled=bundled, seat=seat,
-                price_before_voucher=pbv
+                count=i['count'],
+                item=item,
+                variation=variation,
+                voucher=voucher,
+                quotas=quotas,
+                addon_to=False,
+                subevent=subevent,
+                bundled=bundled,
+                seat=seat,
+                listed_price=listed_price,
+                price_after_voucher=price_after_voucher,
+                custom_price_input=custom_price,
+                custom_price_input_is_net=self.event.settings.display_net_prices,
             )
             self._check_item_constraints(op, operations)
             operations.append(op)
@@ -707,16 +704,27 @@ class CartManager:
             input_addons[cp.id][a['item'], a['variation']] = a.get('count', 1)
             selected_addons[cp.id, item.category_id][a['item'], a['variation']] = a.get('count', 1)
 
-            if price_included[cp.pk].get(item.category_id):
-                price = TAXED_ZERO
+            if is_included_for_free(item, cp):
+                listed_price = Decimal('0.00')
             else:
-                price = self._get_price(item, variation, None, a.get('price'), cp.subevent)
+                listed_price = get_listed_price(item, variation, cp.subevent)
+            custom_price = None
+            if item.free_price and a.get('price'):
+                custom_price = Decimal(str(a.get('price')).replace(",", "."))
+                if custom_price > 100000000:
+                    raise ValueError('price_too_high')
 
             # Fix positions with wrong price (TODO: happens out-of-cartmanager-transaction and therefore a little hacky)
             for ca in current_addons[cp][a['item'], a['variation']]:
-                if ca.price != price.gross:
-                    ca.price = price.gross
-                    ca.save(update_fields=['price'])
+                if ca.listed_price != listed_price:
+                    ca.listed_price = ca.listed_price
+                    ca.price_after_voucher = ca.price_after_voucher
+                    ca.save(update_fields=['listed_price', 'price_after_voucher'])
+                if ca.custom_price_input != custom_price:
+                    ca.custom_price_input = custom_price
+                    ca.custom_price_input_is_net = self.event.settings.display_net_prices
+                    ca.price_after_voucher = ca.price_after_voucher
+                    ca.save(update_fields=['custom_price_input', 'custom_price_input'])
 
             if a.get('count', 1) > len(current_addons[cp][a['item'], a['variation']]):
                 # This add-on is new, add it to the cart
@@ -725,9 +733,18 @@ class CartManager:
 
                 op = self.AddOperation(
                     count=a.get('count', 1) - len(current_addons[cp][a['item'], a['variation']]),
-                    item=item, variation=variation, price=price, voucher=None, quotas=quotas,
-                    addon_to=cp, subevent=cp.subevent, includes_tax=bool(price.rate), bundled=[], seat=None,
-                    price_before_voucher=None
+                    item=item,
+                    variation=variation,
+                    voucher=None,
+                    quotas=quotas,
+                    addon_to=cp,
+                    subevent=cp.subevent,
+                    bundled=[],
+                    seat=None,
+                    listed_price=listed_price,
+                    price_after_voucher=listed_price,
+                    custom_price_input=custom_price,
+                    custom_price_input_is_net=self.event.settings.display_net_prices,
                 )
                 self._check_item_constraints(op, operations)
                 operations.append(op)
@@ -972,13 +989,31 @@ class CartManager:
                         err = err or error_messages['seat_unavailable']
 
                     for k in range(available_count):
+                        line_price = get_line_price(
+                            price_after_voucher=op.price_after_voucher,
+                            custom_price_input=op.custom_price_input,
+                            custom_price_input_is_net=op.custom_price_input_is_net,
+                            tax_rule=op.item.tax_rule,
+                            invoice_address=self.invoice_address,
+                            bundled_sum=sum([pp.count * pp.price_after_voucher for pp in op.bundled]),
+                        )
                         cp = CartPosition(
-                            event=self.event, item=op.item, variation=op.variation,
-                            price=op.price.gross, expires=self._expiry, cart_id=self.cart_id,
-                            voucher=op.voucher, addon_to=op.addon_to if op.addon_to else None,
-                            subevent=op.subevent, includes_tax=op.includes_tax, seat=op.seat,
-                            override_tax_rate=op.price.rate,
-                            price_before_voucher=op.price_before_voucher.gross if op.price_before_voucher is not None else None
+                            event=self.event,
+                            item=op.item,
+                            variation=op.variation,
+                            expires=self._expiry,
+                            cart_id=self.cart_id,
+                            voucher=op.voucher,
+                            addon_to=op.addon_to if op.addon_to else None,
+                            subevent=op.subevent,
+                            seat=op.seat,
+                            listed_price=op.listed_price,
+                            price_after_voucher=op.price_after_voucher,
+                            custom_price_input=op.custom_price_input,
+                            custom_price_input_is_net=op.custom_price_input_is_net,
+                            line_price_gross=line_price.gross,
+                            tax_rate=line_price.tax,
+                            price=line_price.gross,
                         )
                         if self.event.settings.attendee_names_asked:
                             scheme = PERSON_NAME_SCHEMES.get(self.event.settings.name_scheme)
@@ -1007,12 +1042,26 @@ class CartManager:
                         if op.bundled:
                             cp.save()  # Needs to be in the database already so we have a PK that we can reference
                             for b in op.bundled:
+                                bline_price = (
+                                    b.item.tax_rule or TaxRule(rate=Decimal('0.00'))
+                                ).tax(b.listed_price, base_price_is='gross', invoice_address=self.invoice_address)  # todo compare with previous behaviour
                                 for j in range(b.count):
                                     new_cart_positions.append(CartPosition(
-                                        event=self.event, item=b.item, variation=b.variation,
-                                        price=b.price.gross, expires=self._expiry, cart_id=self.cart_id,
-                                        voucher=None, addon_to=cp, override_tax_rate=b.price.rate,
-                                        subevent=b.subevent, includes_tax=b.includes_tax, is_bundled=True
+                                        event=self.event,
+                                        item=b.item,
+                                        variation=b.variation,
+                                        expires=self._expiry, cart_id=self.cart_id,
+                                        voucher=None,
+                                        addon_to=cp,
+                                        subevent=b.subevent,
+                                        listed_price=b.listed_price,
+                                        price_after_voucher=b.price_after_voucher,
+                                        custom_price_input=b.custom_price_input,
+                                        custom_price_input_is_net=b.custom_price_input_is_net,
+                                        line_price_gross=bline_price.gross,
+                                        tax_rate=bline_price.tax,
+                                        price=bline_price.gross,
+                                        is_bundled=True
                                     ))
 
                         new_cart_positions.append(cp)
@@ -1024,11 +1073,11 @@ class CartManager:
                         op.position.delete()
                     elif available_count == 1:
                         op.position.expires = self._expiry
-                        op.position.price = op.price.gross
-                        if op.price_before_voucher is not None:
-                            op.position.price_before_voucher = op.price_before_voucher.gross
+                        op.position.listed_price = op.listed_price
+                        op.position.price_after_voucher = op.price_after_voucher
+                        # op.position.price will be updated by recompute_final_prices_and_taxes()
                         try:
-                            op.position.save(force_update=True)
+                            op.position.save(force_update=True, update_fields=['expires', 'listed_price', 'price_after_voucher'])
                         except DatabaseError:
                             # Best effort... The position might have been deleted in the meantime!
                             pass
@@ -1046,10 +1095,10 @@ class CartManager:
                         # be expected
                         continue
 
-                op.position.price_before_voucher = op.position.price
-                op.position.price = op.price.gross
+                op.position.price_after_voucher = op.price_after_voucher
                 op.position.voucher = op.voucher
-                op.position.save()
+                # op.posiiton.price will be set in recompute_final_prices_and_taxes
+                op.position.save(update_fields=['price_after_voucher', 'voucher'])
                 vouchers_ok[op.voucher] -= 1
 
         for p in new_cart_positions:
@@ -1074,6 +1123,35 @@ class CartManager:
 
         return False
 
+    def recompute_final_prices_and_taxes(self):
+        positions = sorted(list(self.positions), key=lambda op: -(op.addon_to_id or 0))
+        diff = Decimal('0.00')
+        for cp in positions:
+            if cp.listed_price is None:
+                # migration from old system? also used in unit tests
+                cp.update_listed_price_and_voucher()
+                cp.migrate_free_price_if_necessary()
+
+            cp.update_line_price(self.invoice_address, [b for b in positions if b.addon_to_id == cp.pk and b.is_bundled])
+
+        discount_results = apply_discounts(
+            self.event,
+            self._sales_channel,
+            [
+                (cp.item_id, cp.subevent_id, cp.line_price_gross, bool(cp.addon_to), cp.is_bundled, cp.listed_price - cp.price_after_voucher)
+                for cp in positions
+            ]
+        )
+
+        for cp, (new_price, discount) in zip(positions, discount_results):
+            if cp.price != new_price or cp.discount_id != (discount.pk if discount else None):
+                diff += new_price - cp.price
+                cp.price = new_price
+                cp.discount = discount
+                cp.save(update_fields=['price', 'discount'])
+
+        return diff
+
     def commit(self):
         self._check_presale_dates()
         self._check_max_cart_size()
@@ -1091,31 +1169,9 @@ class CartManager:
                 self.now_dt = now_dt
                 self._extend_expiry_of_valid_existing_positions()
                 err = self._perform_operations() or err
+                self.recompute_final_prices_and_taxes()
             if err:
                 raise CartError(err)
-
-
-def update_tax_rates(event: Event, cart_id: str, invoice_address: InvoiceAddress):
-    positions = CartPosition.objects.filter(
-        cart_id=cart_id, event=event
-    ).select_related('item', 'item__tax_rule')
-    totaldiff = Decimal('0.00')
-    for pos in positions:
-        if not pos.item.tax_rule:
-            continue
-        rate = pos.item.tax_rule.tax_rate_for(invoice_address)
-
-        if pos.tax_rate != rate:
-            if not pos.item.tax_rule.keep_gross_if_rate_changes:
-                current_net = pos.price - pos.tax_value
-                new_gross = pos.item.tax(current_net, base_price_is='net', invoice_address=invoice_address).gross
-                totaldiff += new_gross - pos.price
-                pos.price = new_gross
-            pos.includes_tax = rate != Decimal('0.00')
-            pos.override_tax_rate = rate
-            pos.save(update_fields=['price', 'includes_tax', 'override_tax_rate'])
-
-    return totaldiff
 
 
 def get_fees(event, request, total, invoice_address, provider, positions):

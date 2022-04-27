@@ -1,0 +1,41 @@
+{% extends "pretixcontrol/items/base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% block title %}{% trans "Delete discount" %}{% endblock %}
+{% block inside %}
+    <h1>{% trans "Delete discount" %}</h1>
+    <form action="" method="post" class="form-horizontal">
+        {% csrf_token %}
+        {% if not possible and not item.active %}
+            <p>{% blocktrans %}You cannot delete the discount <strong>{{ discount }}</strong> because it already has
+                been used as part of an order.{% endblocktrans %}</p>
+            <div class="form-group submit-group">
+                <a href="{% url "control:event.discounts" organizer=request.event.organizer.slug event=request.event.slug %}"
+                   class="btn btn-default btn-cancel">
+                    {% trans "Cancel" %}
+                </a>
+                <div class="clearfix"></div>
+            </div>
+        {% else %}
+            {% if possible %}
+                <p>{% blocktrans trimmed with name=discount.internal_name %}
+                    Are you sure you want to delete the discount <strong>{{ name }}</strong>?
+                {% endblocktrans %}</p>
+            {% else %}
+                <p>{% blocktrans trimmed with name=discount.internal_name %}
+                    You cannot delete the discount <strong>{{ name }}</strong> because it already has been used as part
+                    of an order, but you can deactivate it.
+                {% endblocktrans %}</p>
+            {% endif %}
+            <div class="form-group submit-group">
+                <a href="{% url "control:event.items.discounts" organizer=request.event.organizer.slug event=request.event.slug %}"
+                   class="btn btn-default btn-cancel">
+                    {% trans "Cancel" %}
+                </a>
+                <button type="submit" class="btn btn-danger btn-save">
+                    {% if possible %}{% trans "Delete" %}{% else %}{% trans "Deactivate" %}{% endif %}
+                </button>
+            </div>
+        {% endif %}
+    </form>
+{% endblock %}
