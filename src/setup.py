@@ -92,7 +92,7 @@ def npm_install():
         node_prefix = os.path.join(here, 'pretix', 'static.dist', 'node_prefix')
         os.makedirs(node_prefix, exist_ok=True)
         copy_tree(os.path.join(here, 'pretix', 'static', 'npm_dir'), node_prefix)
-        subprocess.check_call(['npm', 'install', '--prefix=' + node_prefix])
+        subprocess.check_call(['npm', 'install'], shell=True, cwd=node_prefix)
         npm_installed = True
 
 
