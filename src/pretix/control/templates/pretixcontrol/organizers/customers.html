@@ -84,7 +84,7 @@
                             {% if not c.is_verified %}</strike>{% endif %}
                         </td>
                         <td>{{ c.name }}</td>
-                        <td>{{ c.external_identifier }}</td>
+                        <td>{% if c.external_identifier %}{{ c.external_identifier }}{% endif %}</td>
                         <td class="text-right">
                             <a href="{% url "control:organizer.customer" organizer=request.organizer.slug customer=c.identifier %}"
                                     class="btn btn-default btn-sm" data-toggle="tooltip" title="{% trans "Details" %}">
