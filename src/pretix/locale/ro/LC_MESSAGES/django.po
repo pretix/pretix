@@ -1579,7 +1579,7 @@ msgstr "Rapoarte de rambursare"
 #: pretix/base/models/orders.py:2039 pretix/base/models/orders.py:2159
 #: pretix/base/models/orders.py:2463
 msgid "Order"
-msgstr "Ordine"
+msgstr "Comanda"
 
 #: pretix/base/exporters/orderlist.py:791
 #: pretix/base/exporters/orderlist.py:969
@@ -10276,7 +10276,7 @@ msgstr "Vânzarea nu este permisă"
 
 #: pretix/control/forms/event.py:1221
 msgid "Order requires approval"
-msgstr "Ordinul necesită aprobare"
+msgstr "Comanda necesită aprobare"
 
 #: pretix/control/forms/event.py:1225
 msgid "Deviating tax rate"
@@ -11608,7 +11608,7 @@ msgstr ""
 
 #: pretix/control/forms/orders.py:692
 msgid "Do nothing and keep the order as it is."
-msgstr "Nu faceți nimic și păstrați ordinea așa cum este."
+msgstr "Nu faceți nimic și păstrați comanda așa cum este."
 
 #: pretix/control/forms/orders.py:719
 msgid "The refund amount needs to be positive and less than {}."
@@ -12176,7 +12176,7 @@ msgid ""
 "Position #{posid} ({old_item}, {old_price}) split into new order: {order}"
 msgstr ""
 "Poziția #{posid} ({old_item}, {old_price}) este împărțită într-o nouă "
-"ordine: {order}"
+"comandă: {order}"
 
 #: pretix/control/logdisplay.py:181
 #, python-brace-format
@@ -12486,7 +12486,7 @@ msgstr "Factura a fost emisă din nou."
 
 #: pretix/control/logdisplay.py:361
 msgid "The order's internal comment has been updated."
-msgstr "Comentariul intern al ordinului a fost actualizat."
+msgstr "Comentariul intern al comenzii a fost actualizat."
 
 #: pretix/control/logdisplay.py:362
 msgid "The order's follow-up date has been updated."
@@ -15773,7 +15773,7 @@ msgstr ""
 "Aceste setări sunt destinate utilizatorilor profesioniști cu situații de "
 "taxare foarte specifice. Dacă creați orice regulă aici, setările de taxare "
 "inversă de mai sus vor fi ignorate. Regulile vor fi verificate în ordine și, "
-"odată ce prima regulă se potrivește cu ordinea, aceasta va fi utilizată și "
+"odată ce prima regulă se potrivește cu comanda, aceasta va fi utilizată și "
 "toate regulile ulterioare vor fi ignorate. Dacă nicio regulă nu se "
 "potrivește, se va percepe taxa."
 
@@ -21105,9 +21105,8 @@ msgid "The new discount has been created."
 msgstr "Noua dată a fost creată."
 
 #: pretix/control/views/discounts.py:225
-#, fuzzy
 msgid "The order of discounts has been updated."
-msgstr "Ordinea elementelor a fost actualizată."
+msgstr "Ordinea reducerilor a fost actualizată."
 
 #: pretix/control/views/discounts.py:258 pretix/control/views/item.py:172
 #: pretix/control/views/item.py:375 pretix/control/views/item.py:504
@@ -23595,7 +23594,7 @@ msgid ""
 "reference containing the order number."
 msgstr ""
 "Orice valoare introdusă aici va fi adăugată în fața referinței obișnuite de "
-"rezervare care conține numărul de ordine."
+"rezervare care conține numărul de comandă."
 
 #: pretix/plugins/paypal/payment.py:147
 msgid "Reference postfix"
@@ -23607,7 +23606,7 @@ msgid ""
 "containing the order number."
 msgstr ""
 "Orice valoare introdusă aici va fi adăugată după referința obișnuită de "
-"rezervare care conține numărul de ordine."
+"rezervare care conține numărul de comandă."
 
 #: pretix/plugins/paypal/payment.py:178
 msgid ""
@@ -28078,6 +28077,15 @@ msgstr "Unele dintre ID-urile de articol furnizate nu sunt valide."
 #: pretix/control/views/item.py:181
 msgid "Not all items have been selected."
 msgstr "Nu au fost selectate toate articolele."
+
+#: pretix/control/templates/pretixcontrol/items/discounts.html:14
+msgid ""
+"Automatic discounts are available to all customers as long as they are "
+"active. If you want to offer special prices only to specific customers, you "
+"can use vouchers instead. If you want to offer discounts across multiple "
+"purchases (\"buy a package of 10 you can turn into individual tickest later"
+"\"), you can use customer accounts and memberships instead."
+msgstr ""
 
 #~ msgid "Paymeant reference"
 #~ msgstr "Referință de plată"
