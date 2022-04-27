@@ -268,7 +268,7 @@ class OrderListExporter(MultiSheetListExporter):
         tax_rates = self._get_all_tax_rates(qs)
 
         headers = [
-            _('Event slug'), _('Order code'), _('Order total'), _('Status'), _('Email'), _('Phone number'), 
+            _('Event slug'), _('Order code'), _('Order total'), _('Status'), _('Email'), _('Phone number'),
             _('External customer ID'), _('Order date'), _('Order time'), _('Company'), _('Name'),
         ]
         name_scheme = PERSON_NAME_SCHEMES[self.event.settings.name_scheme] if not self.is_multievent else None
