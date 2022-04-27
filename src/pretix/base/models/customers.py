@@ -59,8 +59,8 @@ class Customer(LoggedModel):
                               default=settings.LANGUAGE_CODE,
                               verbose_name=_('Language'))
     last_modified = models.DateTimeField(auto_now=True)
-    external_identifier = models.CharField(default="", max_length=255, verbose_name=_('External identifier'), blank=True)
-    notes = models.TextField(default="", verbose_name=_('Notes'), blank=True)
+    external_identifier = models.CharField(max_length=255, verbose_name=_('External identifier'), null=True, blank=True)
+    notes = models.TextField(verbose_name=_('Notes'), null=True, blank=True)
 
     objects = ScopedManager(organizer='organizer')
 
