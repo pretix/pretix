@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-27 12:44+0000\n"
-"PO-Revision-Date: 2022-04-27 07:00+0000\n"
+"PO-Revision-Date: 2022-04-28 02:00+0000\n"
 "Last-Translator: Edd28 <chitu_edy@yahoo.com>\n"
 "Language-Team: Romanian <https://translate.pretix.eu/projects/pretix/pretix/"
 "ro/>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < "
 "20)) ? 1 : 2;\n"
-"X-Generator: Weblate 4.11.2\n"
+"X-Generator: Weblate 4.12\n"
 
 #: pretix/api/auth/devicesecurity.py:28
 msgid ""
@@ -1075,7 +1075,7 @@ msgstr "Valoare taxă"
 #: pretix/plugins/reports/exporters.py:751 pretix/base/models/orders.py:2050
 #: pretix/base/models/orders.py:2165 pretix/base/models/orders.py:2506
 msgid "Tax rate"
-msgstr "Rata de impozitare"
+msgstr "Taxa"
 
 #: pretix/base/exporters/invoices.py:325
 msgid "Tax name"
@@ -2289,7 +2289,7 @@ msgstr "Cant"
 #: pretix/base/invoice.py:544 pretix/base/invoice.py:638
 msgctxt "invoice"
 msgid "Tax rate"
-msgstr "Rata de impozitare"
+msgstr "Taxare"
 
 #: pretix/base/invoice.py:545
 msgctxt "invoice"
@@ -2334,7 +2334,7 @@ msgstr "Valoarea brută"
 #: pretix/base/invoice.py:641
 msgctxt "invoice"
 msgid "Tax"
-msgstr "Taxă"
+msgstr "Valoarea taxei"
 
 #: pretix/base/invoice.py:671
 msgctxt "invoice"
@@ -3995,7 +3995,7 @@ msgstr "în așteptare"
 
 #: pretix/base/models/orders.py:162
 msgid "paid"
-msgstr "plătit"
+msgstr "plătită"
 
 #: pretix/base/models/orders.py:163
 msgid "expired"
@@ -4453,8 +4453,8 @@ msgid ""
 "Keep gross amount constant if the tax rate changes based on the invoice "
 "address"
 msgstr ""
-"Păstrați valoarea brută constantă dacă rata de impozitare se modifică în "
-"funcție de adresa facturii"
+"Păstrați valoarea brută constantă dacă taxele se modifică în funcție de "
+"adresa facturii"
 
 #: pretix/base/models/tax.py:163
 msgid "Use EU reverse charge taxation rules"
@@ -7447,7 +7447,7 @@ msgstr "Strada Albert Einstein 52"
 
 #: pretix/base/settings.py:882
 msgid "Domestic tax ID"
-msgstr "Cod fiscal național"
+msgstr "CUI / CIF"
 
 #: pretix/base/settings.py:883
 msgid "e.g. tax number in Germany, ABN in Australia, …"
@@ -10566,7 +10566,7 @@ msgstr "Plata creată până la"
 
 #: pretix/control/forms/filter.py:874
 msgid "Paid from"
-msgstr "Plătit din"
+msgstr "Plătită din"
 
 #: pretix/control/forms/filter.py:879
 msgid "Paid until"
@@ -16828,7 +16828,7 @@ msgstr "Editare întrebare"
 #: pretix/plugins/reports/exporters.py:299
 #: pretix/presale/templates/pretixpresale/event/fragment_order_status.html:22
 msgid "Paid"
-msgstr "Plătit"
+msgstr "Plătită"
 
 #: pretix/control/templates/pretixcontrol/items/question.html:44
 msgid "No matching answers found."
@@ -17833,7 +17833,7 @@ msgstr "Anulați plata"
 #: pretix/control/templates/pretixcontrol/order/index.html:710
 #: pretix/control/templates/pretixcontrol/order/index.html:701
 msgid "Confirm as paid"
-msgstr "Confirmați ca fiind plătit"
+msgstr "Confirmați ca fiind plătită"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:753
 #: pretix/control/templates/pretixcontrol/order/index.html:744
@@ -18432,7 +18432,7 @@ msgstr "PLĂTITĂ ÎN MINUS"
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:222
 #: pretix/control/templates/pretixcontrol/search/orders.html:107
 msgid "FULLY PAID"
-msgstr "PLĂTIT INTEGRAL"
+msgstr "PLĂTITĂ INTEGRAL"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:186
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:234
@@ -23491,7 +23491,7 @@ msgstr "Lista de check-in (PDF)"
 #: pretix/plugins/checkinlists/exporters.py:331
 msgctxt "tablehead"
 msgid "paid"
-msgstr "plătit"
+msgstr "plătită"
 
 #: pretix/plugins/checkinlists/exporters.py:444
 msgid "Checked out"
