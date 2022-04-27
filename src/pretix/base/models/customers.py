@@ -92,8 +92,8 @@ class Customer(LoggedModel):
         self.name_cached = ''
         self.email = None
         self.phone = None
-        self.external_identifier = ""
-        self.notes = ""
+        self.external_identifier = None
+        self.notes = None
         self.save()
         self.all_logentries().update(data={}, shredded=True)
         self.orders.all().update(customer=None)
