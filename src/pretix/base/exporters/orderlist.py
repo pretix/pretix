@@ -259,7 +259,7 @@ class OrderListExporter(MultiSheetListExporter):
             payment_providers=Subquery(p_providers, output_field=CharField()),
             invoice_numbers=Subquery(i_numbers, output_field=CharField()),
             pcnt=Subquery(s, output_field=IntegerField())
-        ).select_related('invoice_address')
+        ).select_related('invoice_address', 'customer')
 
         qs = self._date_filter(qs, form_data, rel='')
 
@@ -268,8 +268,8 @@ class OrderListExporter(MultiSheetListExporter):
         tax_rates = self._get_all_tax_rates(qs)
 
         headers = [
-            _('Event slug'), _('Order code'), _('Order total'), _('Status'), _('Email'), _('Phone number'), _('Order date'),
-            _('Order time'), _('Company'), _('Name'),
+            _('Event slug'), _('Order code'), _('Order total'), _('Status'), _('Email'), _('Phone number'), 
+            _('External customer ID'), _('Order date'), _('Order time'), _('Company'), _('Name'),
         ]
         name_scheme = PERSON_NAME_SCHEMES[self.event.settings.name_scheme] if not self.is_multievent else None
         if name_scheme and len(name_scheme['fields']) > 1:
@@ -347,6 +347,7 @@ class OrderListExporter(MultiSheetListExporter):
                 order.get_status_display(),
                 order.email,
                 str(order.phone) if order.phone else '',
+                str(order.customer.external_identifier) if order.customer and order.customer.external_identifier else '',
                 order.datetime.astimezone(tz).strftime('%Y-%m-%d'),
                 order.datetime.astimezone(tz).strftime('%H:%M:%S'),
             ]
@@ -428,7 +429,7 @@ class OrderListExporter(MultiSheetListExporter):
             order__event__in=self.events,
         ).annotate(
             payment_providers=Subquery(p_providers, output_field=CharField()),
-        ).select_related('order', 'order__invoice_address', 'tax_rule')
+        ).select_related('order', 'order__invoice_address', 'order__customer', 'tax_rule')
         if form_data['paid_only']:
             qs = qs.filter(order__status=Order.STATUS_PAID)
 
@@ -440,6 +441,7 @@ class OrderListExporter(MultiSheetListExporter):
             _('Status'),
             _('Email'),
             _('Phone number'),
+            _('External customer ID'),
             _('Order date'),
             _('Order time'),
             _('Fee type'),
@@ -472,6 +474,7 @@ class OrderListExporter(MultiSheetListExporter):
                 order.get_status_display(),
                 order.email,
                 str(order.phone) if order.phone else '',
+                str(order.customer.external_identifier) if order.customer and order.customer.external_identifier else '',
                 order.datetime.astimezone(tz).strftime('%Y-%m-%d'),
                 order.datetime.astimezone(tz).strftime('%H:%M:%S'),
                 op.get_fee_type_display(),
@@ -524,7 +527,7 @@ class OrderListExporter(MultiSheetListExporter):
         qs = base_qs.annotate(
             payment_providers=Subquery(p_providers, output_field=CharField()),
         ).select_related(
-            'order', 'order__invoice_address', 'item', 'variation',
+            'order', 'order__invoice_address', 'order__customer', 'item', 'variation',
             'voucher', 'tax_rule'
         ).prefetch_related(
             'answers', 'answers__question', 'answers__options'
@@ -543,6 +546,7 @@ class OrderListExporter(MultiSheetListExporter):
             _('Status'),
             _('Email'),
             _('Phone number'),
+            _('External customer ID'),
             _('Order date'),
             _('Order time'),
         ]
@@ -631,6 +635,7 @@ class OrderListExporter(MultiSheetListExporter):
                     order.get_status_display(),
                     order.email,
                     str(order.phone) if order.phone else '',
+                    str(order.customer.external_identifier) if order.customer and order.customer.external_identifier else '',
                     order.datetime.astimezone(tz).strftime('%Y-%m-%d'),
                     order.datetime.astimezone(tz).strftime('%H:%M:%S'),
                 ]
