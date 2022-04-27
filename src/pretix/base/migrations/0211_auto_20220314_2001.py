@@ -11,7 +11,7 @@ def migrate_voucher_budget_use(apps, schema_editor):
     OrderPosition.all.filter(
         price_before_voucher__isnull=False
     ).exclude(price=F('price_before_voucher')).update(
-        voucher_budget_use=Greatest(F('price') - F('price_before_voucher'), Decimal('0.00'))
+        voucher_budget_use=Greatest(F('price_before_voucher') - F('price'), Decimal('0.00'))
     )
 
 
