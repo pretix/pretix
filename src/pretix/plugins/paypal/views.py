@@ -52,8 +52,8 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from django.views.generic import TemplateView
 from django_scopes import scopes_disabled
-from paypalcheckoutsdk.orders import OrdersGetRequest
-from paypalcheckoutsdk.payments import RefundsGetRequest
+from paypalcheckoutsdk import orders
+from paypalcheckoutsdk import payments
 
 from pretix.base.models import Event, Order, OrderPayment, OrderRefund, Quota
 from pretix.base.payment import PaymentException
@@ -341,10 +341,10 @@ def webhook(request, *args, **kwargs):
     prov = Paypal(event)
     prov.init_api()
 
-    payloadid = rso.payment.info_data['id']
-
     try:
-        sale = prov.client.execute(OrdersGetRequest(payloadid)).result
+        if rso:
+            payloadid = rso.payment.info_data['id']
+        sale = prov.client.execute(orders.OrdersGetRequest(payloadid)).result
     except IOError:
         logger.exception('PayPal error on webhook. Event data: %s' % str(event_json))
         return HttpResponse('Sale not found', status=500)
@@ -359,7 +359,7 @@ def webhook(request, *args, **kwargs):
             # Legacy PayPal info-data
             if "purchase_units" not in p.info_data:
                 try:
-                    req = OrdersGetRequest(p.info_data['cart'])
+                    req = orders.OrdersGetRequest(p.info_data['cart'])
                     response = prov.client.execute(req)
                     p.info = json.dumps(response.result.dict())
                     p.save(update_fields=['info'])
@@ -381,7 +381,7 @@ def webhook(request, *args, **kwargs):
     if payment.state == OrderPayment.PAYMENT_STATE_CONFIRMED and sale['status'] in ('PARTIALLY_REFUNDED', 'REFUNDED', 'COMPLETED'):
         if event_json['resource_type'] == 'refund':
             try:
-                req = RefundsGetRequest(event_json['resource']['id'])
+                req = payments.RefundsGetRequest(event_json['resource']['id'])
                 refund = prov.client.execute(req).result
             except IOError:
                 logger.exception('PayPal error on webhook. Event data: %s' % str(event_json))
