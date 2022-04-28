@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-28 16:44+0000\n"
-"PO-Revision-Date: 2022-04-28 17:52+0000\n"
+"PO-Revision-Date: 2022-04-28 18:04+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
@@ -23464,19 +23464,15 @@ msgid "We had trouble communicating with PayPal"
 msgstr "Die Kommunikation mit PayPal ist fehlgeschlagen"
 
 #: pretix/plugins/paypal/payment.py:470 pretix/plugins/paypal/payment.py:891
-#, fuzzy
-#| msgid "This gift card was used in the meantime. Please try again."
 msgid ""
 "Something went wrong when requesting the payment status. Please try again."
 msgstr ""
-"Dieser Wertgutschein wurde zwischenzeitlich verwendet. Bitte erneut "
-"versuchen."
+"Etwas ist beim Abruf des Zahlungsstatus schiefgelaufen. Bitte probiere es "
+"noch ein Mal."
 
 #: pretix/plugins/paypal/payment.py:479 pretix/plugins/paypal/payment.py:900
-#, fuzzy
-#| msgid "You may need to enable JavaScript for Stripe payments."
 msgid "You may need to enable JavaScript for PayPal payments."
-msgstr "Du musst JavaScript aktivieren, um mit Stripe zu bezahlen."
+msgstr "Du musst JavaScript aktivieren, um mit PayPal zu bezahlen."
 
 #: pretix/plugins/paypal/payment.py:613 pretix/plugins/paypal/payment.py:630
 #: pretix/plugins/paypal/payment.py:696
@@ -23517,16 +23513,12 @@ msgid "PayPal sale ID"
 msgstr "PayPal-Verkaufs-ID"
 
 #: pretix/plugins/paypal/payment.py:968
-#, fuzzy
-#| msgid "PayPal"
 msgid "PayPal APM"
-msgstr "PayPal"
+msgstr "PayPal APM"
 
 #: pretix/plugins/paypal/payment.py:969
-#, fuzzy
-#| msgid "Link to enable payment method"
 msgid "PayPal Alternative Payment Methods"
-msgstr "Link zur Aktivierung"
+msgstr "PayPal Alternative Zahlungsmethoden"
 
 #: pretix/plugins/paypal/signals.py:59
 msgid "Payment completed."
@@ -23549,63 +23541,58 @@ msgid "Payment pending."
 msgstr "Zahlung ausstehend."
 
 #: pretix/plugins/paypal/signals.py:64
-#, fuzzy
-#| msgid "Order approved"
 msgid "Order approved."
-msgstr "Bestellung freigegeben"
+msgstr "Bestellung freigegeben."
 
 #: pretix/plugins/paypal/signals.py:73
 msgid "PayPal reported an event: {}"
 msgstr "PayPal meldete ein Ereignis: {}"
 
 #: pretix/plugins/paypal/signals.py:80
-#, fuzzy
-#| msgid "PayPal Connect: Client ID"
 msgid "PayPal ISU/Connect: Client ID"
-msgstr "PayPal Connect: Client-ID"
+msgstr "PayPal ISU/Connect: Client-ID"
 
 #: pretix/plugins/paypal/signals.py:84
-#, fuzzy
-#| msgid "PayPal Connect: Secret key"
 msgid "PayPal ISU/Connect: Secret key"
-msgstr "PayPal Connect: Geheimer Schlüssel"
+msgstr "PayPal ISU/Connect: Geheimer Schlüssel"
 
 #: pretix/plugins/paypal/signals.py:88
-#, fuzzy
-#| msgid "PayPal Connect: Client ID"
 msgid "PayPal ISU/Connect: Partner Merchant ID"
-msgstr "PayPal Connect: Client-ID"
+msgstr "PayPal ISU/Connect: Partner Händler ID"
 
 #: pretix/plugins/paypal/signals.py:89
 msgid ""
 "This is not the BN-code, but rather the ID of the merchant account which "
 "holds branding information for ISU."
 msgstr ""
+"Dies ist nicht der BN-Code sondern die ID das Händler-Kontos welches die "
+"Branding-Informationen für ISU bereitstellt."
 
 #: pretix/plugins/paypal/signals.py:93
-#, fuzzy
-#| msgid "PayPal Connect Endpoint"
 msgid "PayPal ISU/Connect Endpoint"
-msgstr "PayPal Connect: Endpunkt"
+msgstr "PayPal ISU/Connect: Endpunkt"
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/checkout_payment_confirm.html:5
 msgid ""
 "The total amount listed above will be withdrawn from your PayPal account "
 "after the confirmation of your purchase."
 msgstr ""
-"Der obige Gesamtbetrag wird nach der Bestätigung Ihrer Bestellung von deinem "
-"PayPal-Account abgezogen."
+"Der obige Gesamtbetrag wird nach der Bestätigung deiner Bestellung von "
+"deinem PayPal-Account abgezogen."
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/checkout_payment_confirm.html:10
 msgid ""
 "After placing your order, you will be able to select your desired payment "
 "method, including PayPal."
 msgstr ""
+"Nachdem du deine Bestellung aufgegeben hast, kannst du deine gewünschte "
+"Zahlungsmethode wählen - inklusive PayPal."
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/checkout_payment_form.html:5
 msgid ""
 "Please click the \"Pay with PayPal\" button below to start your payment."
 msgstr ""
+"Bitte klicke auf den \"Mit PayPal bezahlen\" um mit der Zahlung zu beginnen."
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/checkout_payment_form.html:9
 msgid ""
@@ -23618,10 +23605,8 @@ msgstr ""
 "zurückgeleitet, um deine Bestellung zu bestätigen."
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/control.html:5
-#, fuzzy
-#| msgid "Order"
 msgid "Order ID"
-msgstr "Bestellung"
+msgstr "Bestellnummer"
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/control.html:11
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/control_legacy.html:11
@@ -23654,14 +23639,12 @@ msgid "Pay order: %(code)s"
 msgstr "Bestellung bezahlen: %(code)s"
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/pay.html:26
-#, fuzzy
-#| msgid "Please try again."
 msgid "Please turn on JavaScript."
-msgstr "Bitte erneut versuchen."
+msgstr "Bitte aktiviere JavaScript."
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/pay.html:29
 msgid "Please use the button/form below to complete your payment."
-msgstr ""
+msgstr "Bitte nutze den Knopf/das Formular um deine Zahlung durchzuführen."
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/pending.html:4
 msgid ""
@@ -23701,6 +23684,8 @@ msgid ""
 "The e-mail address on your PayPal account has not yet been confirmed. You "
 "will need to do this before you can start accepting payments."
 msgstr ""
+"Die E-Mail-Adresse deines PayPal-Kontos wurde noch nicht bestätigt. Du musst "
+"die Bestätigung durchführen bevor du Zahlungen annehmen kannst."
 
 #: pretix/plugins/paypal/views.py:226
 msgid ""
