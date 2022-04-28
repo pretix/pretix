@@ -33,6 +33,7 @@
 # License for the specific language governing permissions and limitations under the License.
 
 from django.apps import AppConfig
+from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 
 from pretix import __version__ as version
@@ -54,3 +55,12 @@ class PaypalApp(AppConfig):
 
     def ready(self):
         from . import signals  # NOQA
+
+    @cached_property
+    def compatibility_errors(self):
+        errs = []
+        try:
+            import paypalrestsdk  # NOQA
+        except ImportError:
+            errs.append("Python package 'paypalrestsdk' is not installed.")
+        return errs
