@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-28 16:44+0000\n"
-"PO-Revision-Date: 2022-04-28 10:40+0000\n"
+"PO-Revision-Date: 2022-04-28 17:52+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
@@ -23279,10 +23279,8 @@ msgid "PayPal account"
 msgstr "PayPal-Konto"
 
 #: pretix/plugins/paypal/payment.py:114
-#, fuzzy
-#| msgid "PayPal payment ID"
 msgid "PayPal Merchant ID"
-msgstr "PayPal-Zahlungs-ID"
+msgstr "PayPal Händler-ID"
 
 #: pretix/plugins/paypal/payment.py:128 pretix/plugins/stripe/payment.py:191
 #, python-brace-format
@@ -23303,12 +23301,13 @@ msgid ""
 "have the option to revert back to paying with their PayPal account. For this "
 "reason, this payment method is always active."
 msgstr ""
+"Auch wenn ein Kunde eine Alternative Zahlungsmethode auswählt, kann er "
+"jederzeit wieder auf PayPal als Zahlungsmethode zurückwechseln. Aus diesem "
+"Grund ist diese Zahlungsmethode immer aktiv."
 
 #: pretix/plugins/paypal/payment.py:164
-#, fuzzy
-#| msgid "Enable payment method"
 msgid "Alternative Payment Methods"
-msgstr "Aktiviere Zahlungsmethode"
+msgstr "Alternative Zahlungsmethoden"
 
 #: pretix/plugins/paypal/payment.py:166
 msgid ""
@@ -23319,10 +23318,16 @@ msgid ""
 "on the shoppers location. For German merchants, this is the direct successor "
 "of PayPal Plus."
 msgstr ""
+"Zusätzlich zu klassischen PayPal-Zahlungen kannst du deinen Kunden jetzt "
+"auch anbieten mit Kreditkarten und anderen, lokalen Zahlungsmethoden wie "
+"bspw. SOFORT, giropay, iDEAL und vielen anderen zu zahlen - auch wenn diese "
+"keine PayPal-Konto besitzen. Zulässige Zahlungsmethoden werden automatisch "
+"auf Basis des Aufenthaltsortes des Kunden ausgewählt. Für deutsche Händler "
+"ist dies der direkte Nachfolger von PayPal Plus."
 
 #: pretix/plugins/paypal/payment.py:181
 msgid "Disable SEPA Direct Debit"
-msgstr ""
+msgstr "SEPA-Bankeinzug deaktivieren"
 
 #: pretix/plugins/paypal/payment.py:183
 msgid ""
@@ -23332,10 +23337,15 @@ msgid ""
 "nature of your event - you might want to disabled the option of SEPA Direct "
 "Debit payments in order to reduce the risk of costly chargebacks."
 msgstr ""
+"Während die meisten Zahlungsmethoden keinen grundlosen Widerruf vorsehen, "
+"können SEPA-Lastschriften per Mausklick zurückgerufen werden. Aus diesem "
+"Grund - und abhängig von der Art Ihrer Veranstaltung - kann es notwendig "
+"sein SEPA-Lastschriften nicht anzubieten und damit das Risiko von "
+"kostspieligen Rücklastschriften zu vermeiden."
 
 #: pretix/plugins/paypal/payment.py:197
 msgid "Enable Buy Now Pay Later"
-msgstr ""
+msgstr "Jetzt Kaufen, Später Zahlen aktivieren"
 
 #: pretix/plugins/paypal/payment.py:199
 msgid ""
@@ -23343,6 +23353,9 @@ msgid ""
 "pay in multiple installments or within 30 days. You, as the merchant, are "
 "getting your money right away."
 msgstr ""
+"Biete deinen Kunden die Möglichkeit an, Zahlungen (bis zu einem gewissen "
+"Limit) in mehreren Raten oder binnen 30 Tagen zu bezahlen. Du, als der "
+"Händler, erhältst dein Geld jedoch sofort."
 
 #: pretix/plugins/paypal/payment.py:215
 msgid "Reference prefix"
@@ -23369,16 +23382,12 @@ msgstr ""
 "eingetragen, der die Bestellnummer enthält."
 
 #: pretix/plugins/paypal/payment.py:231
-#, fuzzy
-#| msgid "Automatic discount"
 msgid "-- Automatic --"
-msgstr "Automatischer Rabatt"
+msgstr "-- Automatisch --"
 
 #: pretix/plugins/paypal/payment.py:237
-#, fuzzy
-#| msgid "Any country"
 msgid "Buyer country"
-msgstr "Beliebiges Land"
+msgstr "Land des Käufers"
 
 #: pretix/plugins/paypal/payment.py:261
 msgid ""
