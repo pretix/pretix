@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-28 16:44+0000\n"
-"PO-Revision-Date: 2021-10-25 15:40+0000\n"
+"PO-Revision-Date: 2022-04-28 18:04+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix-js/de_Informal/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.8\n"
+"X-Generator: Weblate 4.12\n"
 
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:56
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:62
@@ -31,105 +31,103 @@ msgstr "Kommentar:"
 
 #: pretix/plugins/paypal/static/pretixplugins/paypal/pretix-paypal.js:34
 msgid "PayPal"
-msgstr ""
+msgstr "PayPal"
 
 #: pretix/plugins/paypal/static/pretixplugins/paypal/pretix-paypal.js:35
 msgid "Venmo"
-msgstr ""
+msgstr "Venmo"
 
 #: pretix/plugins/paypal/static/pretixplugins/paypal/pretix-paypal.js:36
 msgid "Apple Pay"
-msgstr ""
+msgstr "Apple Pay"
 
 #: pretix/plugins/paypal/static/pretixplugins/paypal/pretix-paypal.js:37
 msgid "Itaú"
-msgstr ""
+msgstr "Itaú"
 
 #: pretix/plugins/paypal/static/pretixplugins/paypal/pretix-paypal.js:38
 msgid "PayPal Credit"
-msgstr ""
+msgstr "PayPal Kredit"
 
 #: pretix/plugins/paypal/static/pretixplugins/paypal/pretix-paypal.js:39
 msgid "Credit Card"
-msgstr ""
+msgstr "Kreditkarte"
 
 #: pretix/plugins/paypal/static/pretixplugins/paypal/pretix-paypal.js:40
 msgid "PayPal Pay Later"
-msgstr ""
+msgstr "PayPal Später Zahlen"
 
 #: pretix/plugins/paypal/static/pretixplugins/paypal/pretix-paypal.js:41
 msgid "iDEAL"
-msgstr ""
+msgstr "iDEAL"
 
 #: pretix/plugins/paypal/static/pretixplugins/paypal/pretix-paypal.js:42
 msgid "SEPA Direct Debit"
-msgstr ""
+msgstr "SEPA-Lastschrift"
 
 #: pretix/plugins/paypal/static/pretixplugins/paypal/pretix-paypal.js:43
 msgid "Bancontact"
-msgstr ""
+msgstr "Bancontact"
 
 #: pretix/plugins/paypal/static/pretixplugins/paypal/pretix-paypal.js:44
 msgid "giropay"
-msgstr ""
+msgstr "giropay"
 
 #: pretix/plugins/paypal/static/pretixplugins/paypal/pretix-paypal.js:45
 msgid "SOFORT"
-msgstr ""
+msgstr "SOFORT"
 
 #: pretix/plugins/paypal/static/pretixplugins/paypal/pretix-paypal.js:46
-#, fuzzy
-#| msgid "Yes"
 msgid "eps"
-msgstr "Ja"
+msgstr "eps"
 
 #: pretix/plugins/paypal/static/pretixplugins/paypal/pretix-paypal.js:47
 msgid "MyBank"
-msgstr ""
+msgstr "MyBank"
 
 #: pretix/plugins/paypal/static/pretixplugins/paypal/pretix-paypal.js:48
 msgid "Przelewy24"
-msgstr ""
+msgstr "Przelewy24"
 
 #: pretix/plugins/paypal/static/pretixplugins/paypal/pretix-paypal.js:49
 msgid "Verkkopankki"
-msgstr ""
+msgstr "Verkkopankki"
 
 #: pretix/plugins/paypal/static/pretixplugins/paypal/pretix-paypal.js:50
 msgid "PayU"
-msgstr ""
+msgstr "PayU"
 
 #: pretix/plugins/paypal/static/pretixplugins/paypal/pretix-paypal.js:51
 msgid "BLIK"
-msgstr ""
+msgstr "BLIK"
 
 #: pretix/plugins/paypal/static/pretixplugins/paypal/pretix-paypal.js:52
 msgid "Trustly"
-msgstr ""
+msgstr "Trustly"
 
 #: pretix/plugins/paypal/static/pretixplugins/paypal/pretix-paypal.js:53
 msgid "Zimpler"
-msgstr ""
+msgstr "Zimpler"
 
 #: pretix/plugins/paypal/static/pretixplugins/paypal/pretix-paypal.js:54
 msgid "Maxima"
-msgstr ""
+msgstr "Maxima"
 
 #: pretix/plugins/paypal/static/pretixplugins/paypal/pretix-paypal.js:55
 msgid "OXXO"
-msgstr ""
+msgstr "OXXO"
 
 #: pretix/plugins/paypal/static/pretixplugins/paypal/pretix-paypal.js:56
 msgid "Boleto"
-msgstr ""
+msgstr "Boleto"
 
 #: pretix/plugins/paypal/static/pretixplugins/paypal/pretix-paypal.js:57
 msgid "WeChat Pay"
-msgstr ""
+msgstr "WeChat Pay"
 
 #: pretix/plugins/paypal/static/pretixplugins/paypal/pretix-paypal.js:58
 msgid "Mercado Pago"
-msgstr ""
+msgstr "Mercado Pago"
 
 #: pretix/plugins/paypal/static/pretixplugins/paypal/pretix-paypal.js:152
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:48
@@ -144,7 +142,7 @@ msgstr "Zahlung wird bestätigt …"
 
 #: pretix/plugins/paypal/static/pretixplugins/paypal/pretix-paypal.js:230
 msgid "Payment method unavailable"
-msgstr ""
+msgstr "Zahlungsmethode nicht verfügbar"
 
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:15
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:39
@@ -415,7 +413,7 @@ msgstr "Aktueller Zeitpunkt"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:71
 msgid "Current day of the week (1 = Monday, 7 = Sunday)"
-msgstr ""
+msgstr "Aktueller Wochentag (1 = Montag, 7 = Sonntag)"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:75
 msgid "Number of previous entries"
@@ -431,11 +429,11 @@ msgstr "Anzahl an Tagen mit vorherigem Eintritt"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:87
 msgid "Minutes since last entry (-1 on first entry)"
-msgstr ""
+msgstr "Minuten seit vorherigem Zutritt (-1 beim erstem Zutritt)"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:91
 msgid "Minutes since first entry (-1 on first entry)"
-msgstr ""
+msgstr "Minuten seit erstem Zutritt (-1 bei erstem Zutritt)"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:112
 msgid "All of the conditions below (AND)"
