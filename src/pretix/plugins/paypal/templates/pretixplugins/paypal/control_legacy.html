@@ -1,0 +1,18 @@
+{% load i18n %}
+
+{% if payment_info %}
+    <dl class="dl-horizontal">
+        <dt>{% trans "Payment ID" %}</dt>
+        <dd>{{ payment_info.id }}</dd>
+        <dt>{% trans "Sale ID" %}</dt>
+        <dd>{{ sale_id|default_if_none:"?" }}</dd>
+        <dt>{% trans "Payer" %}</dt>
+        <dd>{{ payment_info.payer.payer_info.email }}</dd>
+        <dt>{% trans "Last update" %}</dt>
+        <dd>{{ payment_info.update_time }}</dd>
+        <dt>{% trans "Total value" %}</dt>
+        <dd>{{ payment_info.transactions.0.amount.total }}</dd>
+        <dt>{% trans "Currency" %}</dt>
+        <dd>{{ payment_info.transactions.0.amount.currency }}</dd>
+    </dl>
+{% endif %}
