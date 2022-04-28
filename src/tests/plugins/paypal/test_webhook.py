@@ -173,17 +173,17 @@ def get_test_order():
                                                                               'value': '42.41'}},
                                                            'custom_id': 'Order PAYPALV2-JWJGC',
                                                            'links': [{
-                                                                         'href': 'https://api.sandbox.paypal.com/v2/payments/captures/22A4162004478570J',
-                                                                         'rel': 'self',
-                                                                         'method': 'GET'},
-                                                                     {
-                                                                         'href': 'https://api.sandbox.paypal.com/v2/payments/captures/22A4162004478570J/refund',
-                                                                         'rel': 'refund',
-                                                                         'method': 'POST'},
-                                                                     {
-                                                                         'href': 'https://api.sandbox.paypal.com/v2/checkout/orders/806440346Y391300T',
-                                                                         'rel': 'up',
-                                                                         'method': 'GET'}],
+                                                               'href': 'https://api.sandbox.paypal.com/v2/payments/captures/22A4162004478570J',
+                                                               'rel': 'self',
+                                                               'method': 'GET'},
+                                                               {
+                                                                   'href': 'https://api.sandbox.paypal.com/v2/payments/captures/22A4162004478570J/refund',
+                                                                   'rel': 'refund',
+                                                                   'method': 'POST'},
+                                                               {
+                                                                   'href': 'https://api.sandbox.paypal.com/v2/checkout/orders/806440346Y391300T',
+                                                                   'rel': 'up',
+                                                                   'method': 'GET'}],
                                                            'create_time': '2022-04-28T12:00:22Z',
                                                            'update_time': '2022-04-28T12:00:22Z'}]}}],
             'payer': {'name': {'given_name': 'test', 'surname': 'buyer'},
@@ -267,7 +267,8 @@ def test_webhook_all_good(env, client, monkeypatch):
     monkeypatch.setattr("pretix.plugins.paypal.payment.PaypalMethod.init_api", init_api)
 
     with scopes_disabled():
-        ReferencedPayPalObject.objects.create(order=order, payment=order.payments.first(), reference="806440346Y391300T")
+        ReferencedPayPalObject.objects.create(order=order, payment=order.payments.first(),
+                                              reference="806440346Y391300T")
 
     client.post('/dummy/dummy/paypal/webhook/', json.dumps(
         {
@@ -373,29 +374,6 @@ def test_webhook_all_good(env, client, monkeypatch):
                 "status": "COMPLETED"
             },
             "status": "SUCCESS",
-            "transmissions": [
-                {
-                    "webhook_url": "https://pretix.eu/_paypal/webhook/",
-                    "http_status": 200,
-                    "reason_phrase": "HTTP/1.1 200 Connection established",
-                    "response_headers": {
-                        "X-Frame-Options": "DENY",
-                        "Server": "WSGIServer/0.2 CPython/3.8.10",
-                        "Content-Security-Policy": "default-src 'self' https://pretix.eu; script-src 'self' https://pretix.eu https://checkout.stripe.com https://js.stripe.com; object-src 'none'; frame-src 'self' https://pretix.eu https://checkout.stripe.com https://js.stripe.com; style-src 'self' https://pretix.eu 'self'; connect-src 'self' https://pretix.eu 'self' https://checkout.stripe.com; img-src 'self' https://pretix.eu 'self' data: https://*.stripe.com https://cdn.pretix.space; font-src 'self' https://pretix.eu; media-src 'self' https://pretix.eu data:; form-action 'self' https://pretix.eu https:",
-                        "Connection": "keep-alive",
-                        "Vary": "Accept-Language, Cookie, Host",
-                        "P3P": "CP=\"ALL DSP COR CUR ADM TAI OUR IND COM NAV INT\"",
-                        "X-XSS-Protection": "1",
-                        "Content-Length": "0",
-                        "Date": "Thu, 28 Apr 2022 12:00:55 GMT",
-                        "Content-Language": "en",
-                        "Content-Type": "text/html; charset=utf-8"
-                    },
-                    "transmission_id": "d2c167a0-c6ea-11ec-bc3b-712138f266f7",
-                    "status": "SUCCESS",
-                    "timestamp": "2022-04-28T12:00:40Z"
-                }
-            ],
             "links": [
                 {
                     "href": "https://api.sandbox.paypal.com/v1/notifications/webhooks-events/WH-4T867178D0574904F-7TT11736YU643990P",
@@ -432,7 +410,8 @@ def test_webhook_global(env, client, monkeypatch):
     monkeypatch.setattr("paypalcheckoutsdk.orders.OrdersGetRequest", lambda *args: pp_order)
     monkeypatch.setattr("pretix.plugins.paypal.payment.PaypalMethod.init_api", init_api)
     with scopes_disabled():
-        ReferencedPayPalObject.objects.create(order=order, payment=order.payments.first(), reference="806440346Y391300T")
+        ReferencedPayPalObject.objects.create(order=order, payment=order.payments.first(),
+                                              reference="806440346Y391300T")
 
     client.post('/_paypal/webhook/', json.dumps(
         {
@@ -538,29 +517,6 @@ def test_webhook_global(env, client, monkeypatch):
                 "status": "COMPLETED"
             },
             "status": "SUCCESS",
-            "transmissions": [
-                {
-                    "webhook_url": "https://pretix.eu/_paypal/webhook/",
-                    "http_status": 200,
-                    "reason_phrase": "HTTP/1.1 200 Connection established",
-                    "response_headers": {
-                        "X-Frame-Options": "DENY",
-                        "Server": "WSGIServer/0.2 CPython/3.8.10",
-                        "Content-Security-Policy": "default-src 'self' https://pretix.eu; script-src 'self' https://pretix.eu https://checkout.stripe.com https://js.stripe.com; object-src 'none'; frame-src 'self' https://pretix.eu https://checkout.stripe.com https://js.stripe.com; style-src 'self' https://pretix.eu 'self'; connect-src 'self' https://pretix.eu 'self' https://checkout.stripe.com; img-src 'self' https://pretix.eu 'self' data: https://*.stripe.com https://cdn.pretix.space; font-src 'self' https://pretix.eu; media-src 'self' https://pretix.eu data:; form-action 'self' https://pretix.eu https:",
-                        "Connection": "keep-alive",
-                        "Vary": "Accept-Language, Cookie, Host",
-                        "P3P": "CP=\"ALL DSP COR CUR ADM TAI OUR IND COM NAV INT\"",
-                        "X-XSS-Protection": "1",
-                        "Content-Length": "0",
-                        "Date": "Thu, 28 Apr 2022 12:00:55 GMT",
-                        "Content-Language": "en",
-                        "Content-Type": "text/html; charset=utf-8"
-                    },
-                    "transmission_id": "d2c167a0-c6ea-11ec-bc3b-712138f266f7",
-                    "status": "SUCCESS",
-                    "timestamp": "2022-04-28T12:00:40Z"
-                }
-            ],
             "links": [
                 {
                     "href": "https://api.sandbox.paypal.com/v1/notifications/webhooks-events/WH-4T867178D0574904F-7TT11736YU643990P",
@@ -596,7 +552,8 @@ def test_webhook_mark_paid(env, client, monkeypatch):
     monkeypatch.setattr("paypalcheckoutsdk.orders.OrdersGetRequest", lambda *args: pp_order)
     monkeypatch.setattr("pretix.plugins.paypal.payment.PaypalMethod.init_api", init_api)
     with scopes_disabled():
-        ReferencedPayPalObject.objects.create(order=order, payment=order.payments.first(), reference="806440346Y391300T")
+        ReferencedPayPalObject.objects.create(order=order, payment=order.payments.first(),
+                                              reference="806440346Y391300T")
 
     client.post('/dummy/dummy/paypal/webhook/', json.dumps(
         {
@@ -662,29 +619,6 @@ def test_webhook_mark_paid(env, client, monkeypatch):
                 "status": "COMPLETED"
             },
             "status": "SUCCESS",
-            "transmissions": [
-                {
-                    "webhook_url": "https://pretix.eu/_paypal/webhook/",
-                    "http_status": 200,
-                    "reason_phrase": "HTTP/1.1 200 Connection established",
-                    "response_headers": {
-                        "X-Frame-Options": "DENY",
-                        "Server": "WSGIServer/0.2 CPython/3.8.10",
-                        "Content-Security-Policy": "default-src 'self' https://pretix.eu; script-src 'self' https://pretix.eu https://checkout.stripe.com https://js.stripe.com; object-src 'none'; frame-src 'self' https://pretix.eu https://checkout.stripe.com https://js.stripe.com; style-src 'self' https://pretix.eu 'self'; connect-src 'self' https://pretix.eu 'self' https://checkout.stripe.com; img-src 'self' https://pretix.eu 'self' data: https://*.stripe.com https://cdn.pretix.space; font-src 'self' https://pretix.eu; media-src 'self' https://pretix.eu data:; form-action 'self' https://pretix.eu https:",
-                        "Connection": "keep-alive",
-                        "Vary": "Accept-Language, Cookie, Host",
-                        "P3P": "CP=\"ALL DSP COR CUR ADM TAI OUR IND COM NAV INT\"",
-                        "X-XSS-Protection": "1",
-                        "Content-Length": "36",
-                        "Date": "Thu, 28 Apr 2022 12:00:46 GMT",
-                        "Content-Language": "en",
-                        "Content-Type": "text/html; charset=utf-8"
-                    },
-                    "transmission_id": "cebecb20-c6ea-11ec-aaee-ab418495522d",
-                    "status": "SUCCESS",
-                    "timestamp": "2022-04-28T12:00:33Z"
-                }
-            ],
             "links": [
                 {
                     "href": "https://api.sandbox.paypal.com/v1/notifications/webhooks-events/WH-88L014580L300952M-4BX97184625330932",
@@ -718,7 +652,8 @@ def test_webhook_refund1(env, client, monkeypatch):
     monkeypatch.setattr("paypalcheckoutsdk.payments.RefundsGetRequest", lambda *args: pp_refund)
     monkeypatch.setattr("pretix.plugins.paypal.payment.PaypalMethod.init_api", init_api)
     with scopes_disabled():
-        ReferencedPayPalObject.objects.create(order=order, payment=order.payments.first(), reference="22A4162004478570J")
+        ReferencedPayPalObject.objects.create(order=order, payment=order.payments.first(),
+                                              reference="22A4162004478570J")
 
     client.post('/dummy/dummy/paypal/webhook/', json.dumps(
         {
@@ -769,29 +704,6 @@ def test_webhook_refund1(env, client, monkeypatch):
                 "status": "COMPLETED"
             },
             "status": "SUCCESS",
-            "transmissions": [
-                {
-                    "webhook_url": "https://pretix.eu/_paypal/webhook/",
-                    "http_status": 200,
-                    "reason_phrase": "HTTP/1.1 200 Connection established",
-                    "response_headers": {
-                        "X-Frame-Options": "DENY",
-                        "Server": "WSGIServer/0.2 CPython/3.8.10",
-                        "Content-Security-Policy": "default-src 'self' https://pretix.eu; script-src 'self' https://pretix.eu https://checkout.stripe.com https://js.stripe.com; object-src 'none'; frame-src 'self' https://pretix.eu https://checkout.stripe.com https://js.stripe.com; style-src 'self' https://pretix.eu 'self'; connect-src 'self' https://pretix.eu 'self' https://checkout.stripe.com; img-src 'self' https://pretix.eu 'self' data: https://*.stripe.com https://cdn.pretix.space; font-src 'self' https://pretix.eu; media-src 'self' https://pretix.eu data:; form-action 'self' https://pretix.eu https:",
-                        "Connection": "keep-alive",
-                        "Vary": "Accept-Language, Cookie, Host",
-                        "P3P": "CP=\"ALL DSP COR CUR ADM TAI OUR IND COM NAV INT\"",
-                        "X-XSS-Protection": "1",
-                        "Content-Length": "0",
-                        "Date": "Thu, 28 Apr 2022 14:51:17 GMT",
-                        "Content-Language": "en",
-                        "Content-Type": "text/html; charset=utf-8"
-                    },
-                    "transmission_id": "a0d5a220-c702-11ec-aaee-ab418495522d",
-                    "status": "SUCCESS",
-                    "timestamp": "2022-04-28T14:51:04Z"
-                }
-            ],
             "links": [
                 {
                     "href": "https://api.sandbox.paypal.com/v1/notifications/webhooks-events/WH-5LJ60612747357339-66248625WA926672S",
@@ -834,7 +746,8 @@ def test_webhook_refund2(env, client, monkeypatch):
     monkeypatch.setattr("paypalcheckoutsdk.payments.RefundsGetRequest", lambda *args: pp_refund)
     monkeypatch.setattr("pretix.plugins.paypal.payment.PaypalMethod.init_api", init_api)
     with scopes_disabled():
-        ReferencedPayPalObject.objects.create(order=order, payment=order.payments.first(), reference="22A4162004478570J")
+        ReferencedPayPalObject.objects.create(order=order, payment=order.payments.first(),
+                                              reference="22A4162004478570J")
 
     client.post('/dummy/dummy/paypal/webhook/', json.dumps(
         {
@@ -885,29 +798,6 @@ def test_webhook_refund2(env, client, monkeypatch):
                 "status": "COMPLETED"
             },
             "status": "SUCCESS",
-            "transmissions": [
-                {
-                    "webhook_url": "https://pretix.eu/_paypal/webhook/",
-                    "http_status": 200,
-                    "reason_phrase": "HTTP/1.1 200 Connection established",
-                    "response_headers": {
-                        "X-Frame-Options": "DENY",
-                        "Server": "WSGIServer/0.2 CPython/3.8.10",
-                        "Content-Security-Policy": "default-src 'self' https://pretix.eu; script-src 'self' https://pretix.eu https://checkout.stripe.com https://js.stripe.com; object-src 'none'; frame-src 'self' https://pretix.eu https://checkout.stripe.com https://js.stripe.com; style-src 'self' https://pretix.eu 'self'; connect-src 'self' https://pretix.eu 'self' https://checkout.stripe.com; img-src 'self' https://pretix.eu 'self' data: https://*.stripe.com https://cdn.pretix.space; font-src 'self' https://pretix.eu; media-src 'self' https://pretix.eu data:; form-action 'self' https://pretix.eu https:",
-                        "Connection": "keep-alive",
-                        "Vary": "Accept-Language, Cookie, Host",
-                        "P3P": "CP=\"ALL DSP COR CUR ADM TAI OUR IND COM NAV INT\"",
-                        "X-XSS-Protection": "1",
-                        "Content-Length": "0",
-                        "Date": "Thu, 28 Apr 2022 14:56:27 GMT",
-                        "Content-Language": "en",
-                        "Content-Type": "text/html; charset=utf-8"
-                    },
-                    "transmission_id": "582a28b0-c703-11ec-bd59-21cc47a5aa1d",
-                    "status": "SUCCESS",
-                    "timestamp": "2022-04-28T14:56:11Z"
-                }
-            ],
             "links": [
                 {
                     "href": "https://api.sandbox.paypal.com/v1/notifications/webhooks-events/WH-7FL378472F5218625-6WC87835CR8751809",
