@@ -6,7 +6,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-28 16:44+0000\n"
 "PO-Revision-Date: 2022-04-28 17:57+0000\n"
-"Last-Translator: Raphael Michel <michel@rami.io>\n"
+"Last-Translator: Martin Gross <martin@pc-coholic.de>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
 ">\n"
 "Language: de\n"
@@ -23682,14 +23682,12 @@ msgid "Pay order: %(code)s"
 msgstr "Bestellung bezahlen: %(code)s"
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/pay.html:26
-#, fuzzy
-#| msgid "Please try again."
 msgid "Please turn on JavaScript."
-msgstr "Bitte erneut versuchen."
+msgstr "Bitte aktiviere JavaScript."
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/pay.html:29
 msgid "Please use the button/form below to complete your payment."
-msgstr ""
+msgstr "Bitte nutzen Sie den Knopf/das Formular um Ihre Zahlung durchzuführen."
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/pending.html:4
 msgid ""
@@ -23729,6 +23727,8 @@ msgid ""
 "The e-mail address on your PayPal account has not yet been confirmed. You "
 "will need to do this before you can start accepting payments."
 msgstr ""
+"The E-Mail-Adresse Ihres PayPal-Kontos wurde noch nicht bestätigt. Sie "
+"müssen die Bestätigung durchführen bevor Sie Zahlungen annehmen können."
 
 #: pretix/plugins/paypal/views.py:226
 msgid ""
