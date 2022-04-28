@@ -40,7 +40,6 @@ from decimal import Decimal
 
 from django import forms
 from django.contrib import messages
-from django.core import signing
 from django.http import HttpRequest
 from django.template.loader import get_template
 from django.templatetags.static import static
@@ -598,36 +597,6 @@ class PaypalMethod(BasePaymentProvider):
 
             request.session['payment_paypal_oid'] = response.result.id
             return response.result
-
-    def _create_payment(self, request, paymentreq):
-        try:
-            response = self.client.execute(paymentreq)
-        except IOError as e:
-            messages.error(request, _('We had trouble communicating with PayPal'))
-            logger.error('_create_payment: {}'.format(str(e)))
-        else:
-            if response.result.status not in ('CREATED', 'SAVED', 'APPROVED', 'COMPLETED', 'PAYER_ACTION_REQUIRED'):
-                messages.error(request, _('We had trouble communicating with PayPal'))
-                logger.error('Invalid payment state: ' + str(paymentreq))
-                return
-            request.session['payment_paypal_id'] = response.result.id
-
-            link = '{href}&fundingSource={method}'.format(
-                href=self.get_link(
-                    response.result.links,
-                    'payer-action' if response.result.status == 'PAYER_ACTION_REQUIRED' else 'approve'
-                ).href,
-                method=self.method
-            )
-
-            if request.session.get('iframe_session', False):
-                signer = signing.Signer(salt='safe-redirect')
-                return (
-                    build_absolute_uri(request.event, 'plugins:paypal:redirect') + '?url=' +
-                    urllib.parse.quote(signer.sign(link))
-                )
-            else:
-                return str(link)
 
     def checkout_confirm_render(self, request) -> str:
         """
