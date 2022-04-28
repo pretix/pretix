@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-27 12:44+0000\n"
+"POT-Creation-Date: 2022-04-28 16:44+0000\n"
 "PO-Revision-Date: 2022-04-27 09:15+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: Dutch (informal) <https://translate.pretix.eu/projects/pretix/"
@@ -18,6 +18,37 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Weblate 4.11.2\n"
+
+#: htmlcov/pretix_control_views_dashboards_py.html:963
+#: pretix/control/templates/pretixcontrol/events/index.html:140
+#: pretix/control/templates/pretixcontrol/organizers/detail.html:104
+#: pretix/control/views/dashboards.py:529
+msgid "Shop disabled"
+msgstr "Winkel uitgeschakeld"
+
+#: htmlcov/pretix_control_views_dashboards_py.html:965
+#: pretix/control/forms/filter.py:1034 pretix/control/forms/filter.py:1404
+#: pretix/control/templates/pretixcontrol/events/index.html:142
+#: pretix/control/templates/pretixcontrol/organizers/detail.html:106
+#: pretix/control/templates/pretixcontrol/subevents/index.html:152
+msgid "Presale over"
+msgstr "Verkoop afgelopen"
+
+#: htmlcov/pretix_control_views_dashboards_py.html:967
+#: pretix/control/forms/filter.py:1033 pretix/control/forms/filter.py:1403
+#: pretix/control/templates/pretixcontrol/events/index.html:144
+#: pretix/control/templates/pretixcontrol/organizers/detail.html:108
+#: pretix/control/templates/pretixcontrol/subevents/index.html:154
+msgid "Presale not started"
+msgstr "Verkoop nog niet begonnen"
+
+#: htmlcov/pretix_control_views_dashboards_py.html:969
+#: pretix/control/templates/pretixcontrol/events/index.html:146
+#: pretix/control/templates/pretixcontrol/organizers/detail.html:110
+#: pretix/control/templates/pretixcontrol/subevents/index.html:156
+#: pretix/control/views/dashboards.py:535
+msgid "On sale"
+msgstr "In de verkoop"
 
 #: pretix/api/auth/devicesecurity.py:28
 msgid ""
@@ -55,7 +86,7 @@ msgstr "Doorverwijzings-URI's"
 msgid "Allowed URIs list, space separated"
 msgstr "Lijst van toegestane URI's, gescheiden met spaties"
 
-#: pretix/api/models.py:46 pretix/plugins/paypal/payment.py:112
+#: pretix/api/models.py:46 pretix/plugins/paypal/payment.py:125
 msgid "Client ID"
 msgstr "Client ID"
 
@@ -99,7 +130,7 @@ msgstr ""
 msgid "The selected seat \"{seat}\" is not available."
 msgstr "De gekozen stoel \"{seat}\" is niet beschikbaar."
 
-#: pretix/api/serializers/checkin.py:65 pretix/base/models/event.py:1473
+#: pretix/api/serializers/checkin.py:65 pretix/base/models/event.py:1483
 #: pretix/base/models/items.py:1459 pretix/base/models/items.py:1700
 msgid "One or more items do not belong to this event."
 msgstr "Één of meer items horen niet bij dit evenement."
@@ -558,47 +589,47 @@ msgid "Event currency"
 msgstr "Munteenheid van evenement"
 
 #: pretix/base/exporters/events.py:59 pretix/base/models/event.py:482
-#: pretix/base/models/event.py:1285 pretix/base/settings.py:2548
+#: pretix/base/models/event.py:1295 pretix/base/settings.py:2548
 #: pretix/base/settings.py:2558 pretix/control/forms/subevents.py:609
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:268
 msgid "Event start time"
 msgstr "Starttijd van het evenement"
 
 #: pretix/base/exporters/events.py:60 pretix/base/models/event.py:484
-#: pretix/base/models/event.py:1287 pretix/base/pdf.py:271
+#: pretix/base/models/event.py:1297 pretix/base/pdf.py:271
 #: pretix/control/forms/subevents.py:614
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:270
 msgid "Event end time"
 msgstr "Eindtijd van het evenement"
 
 #: pretix/base/exporters/events.py:61 pretix/base/models/event.py:486
-#: pretix/base/models/event.py:1289 pretix/control/forms/subevents.py:619
+#: pretix/base/models/event.py:1299 pretix/control/forms/subevents.py:619
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:274
 msgid "Admission time"
 msgstr "Toegangstijd"
 
 #: pretix/base/exporters/events.py:62 pretix/base/models/event.py:498
-#: pretix/base/models/event.py:1298 pretix/control/forms/subevents.py:92
+#: pretix/base/models/event.py:1308 pretix/control/forms/subevents.py:92
 msgid "Start of presale"
 msgstr "Begin van de verkoop"
 
 #: pretix/base/exporters/events.py:63 pretix/base/models/event.py:492
-#: pretix/base/models/event.py:1292 pretix/control/forms/subevents.py:98
+#: pretix/base/models/event.py:1302 pretix/control/forms/subevents.py:98
 msgid "End of presale"
 msgstr "Einde van de voorverkoop"
 
 #: pretix/base/exporters/events.py:64 pretix/base/exporters/invoices.py:351
-#: pretix/base/models/event.py:504 pretix/base/models/event.py:1304
+#: pretix/base/models/event.py:504 pretix/base/models/event.py:1314
 msgid "Location"
 msgstr "Locatie"
 
 #: pretix/base/exporters/events.py:65 pretix/base/models/event.py:507
-#: pretix/base/models/event.py:1307
+#: pretix/base/models/event.py:1317
 msgid "Latitude"
 msgstr "Breedtegraad"
 
 #: pretix/base/exporters/events.py:66 pretix/base/models/event.py:515
-#: pretix/base/models/event.py:1315
+#: pretix/base/models/event.py:1325
 msgid "Longitude"
 msgstr "Lengtegraad"
 
@@ -779,7 +810,7 @@ msgstr "Verzender van factuur:"
 #: pretix/base/exporters/orderlist.py:272
 #: pretix/base/exporters/waitinglist.py:106 pretix/base/forms/questions.py:1030
 #: pretix/base/models/devices.py:66 pretix/base/models/devices.py:126
-#: pretix/base/models/event.py:1283 pretix/base/models/event.py:1517
+#: pretix/base/models/event.py:1293 pretix/base/models/event.py:1527
 #: pretix/base/models/items.py:1573 pretix/base/models/items.py:1741
 #: pretix/base/models/memberships.py:41 pretix/base/models/organizer.py:72
 #: pretix/base/models/seating.py:61 pretix/base/models/waitinglist.py:66
@@ -1186,6 +1217,7 @@ msgstr "Totaalbedrag van bestelling"
 #: pretix/control/templates/pretixcontrol/subevents/index.html:99
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:155
 #: pretix/control/views/waitinglist.py:292
+#: pretix/plugins/paypal/templates/pretixplugins/paypal/control.html:7
 #: pretix/plugins/reports/exporters.py:458
 #: pretix/plugins/reports/exporters.py:799
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_inspect.html:29
@@ -1543,7 +1575,7 @@ msgstr "Bestelling"
 #: pretix/base/exporters/orderlist.py:791
 #: pretix/base/exporters/orderlist.py:969
 #: pretix/control/templates/pretixcontrol/search/payments.html:75
-#: pretix/plugins/paypal/templates/pretixplugins/paypal/control.html:5
+#: pretix/plugins/paypal/templates/pretixplugins/paypal/control_legacy.html:5
 msgid "Payment ID"
 msgstr "Betalings-ID"
 
@@ -1689,6 +1721,7 @@ msgstr "Testmodus"
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:34
 #: pretix/plugins/banktransfer/refund_export.py:46
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/control.html:15
+#: pretix/plugins/paypal/templates/pretixplugins/paypal/control_legacy.html:15
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:57
 msgid "Currency"
 msgstr "Munteenheid"
@@ -2575,7 +2608,7 @@ msgctxt "subevent"
 msgid "Each matching product must be for a different date"
 msgstr "Voeg tickets toe voor een andere datum"
 
-#: pretix/base/models/discount.py:55 pretix/base/models/event.py:1274
+#: pretix/base/models/discount.py:55 pretix/base/models/event.py:1284
 #: pretix/base/models/items.py:368 pretix/base/models/items.py:784
 #: pretix/control/forms/filter.py:1030 pretix/control/forms/filter.py:1713
 #: pretix/control/templates/pretixcontrol/event/plugins.html:55
@@ -2741,7 +2774,7 @@ msgstr ""
 msgid "The slug may only contain letters, numbers, dots and dashes."
 msgstr "De slug mag alleen letters, cijfers, punten en streepjes bevatten."
 
-#: pretix/base/models/event.py:488 pretix/base/models/event.py:1278
+#: pretix/base/models/event.py:488 pretix/base/models/event.py:1288
 msgid "Show in lists"
 msgstr "Toon in lijsten"
 
@@ -2753,7 +2786,7 @@ msgstr ""
 "Als dit is ingeschakeld zal dit evenement zichtbaar zijn op de lijst van "
 "evenementen van jouw organisatoraccount."
 
-#: pretix/base/models/event.py:493 pretix/base/models/event.py:1293
+#: pretix/base/models/event.py:493 pretix/base/models/event.py:1303
 #: pretix/control/forms/subevents.py:99
 msgid ""
 "Optional. No products will be sold after this date. If you do not set this "
@@ -2762,7 +2795,7 @@ msgstr ""
 "Optioneel. Na deze datum worden geen producten meer verkocht. Als je deze "
 "waarde niet instelt eindigt de verkoop na de einddatum van je evenement."
 
-#: pretix/base/models/event.py:499 pretix/base/models/event.py:1299
+#: pretix/base/models/event.py:499 pretix/base/models/event.py:1309
 #: pretix/control/forms/subevents.py:93
 msgid "Optional. No products will be sold before this date."
 msgstr "Optioneel. Er worden geen producten verkocht vóór deze datum."
@@ -2780,7 +2813,7 @@ msgstr "Plugins"
 msgid "Event series"
 msgstr "Evenementenreeks"
 
-#: pretix/base/models/event.py:535 pretix/base/models/event.py:1327
+#: pretix/base/models/event.py:535 pretix/base/models/event.py:1337
 #, fuzzy
 #| msgid "Settings"
 msgid "Seating plan"
@@ -2820,7 +2853,7 @@ msgstr "Evenement"
 msgid "Events"
 msgstr "Evenementen"
 
-#: pretix/base/models/event.py:1104
+#: pretix/base/models/event.py:1114
 msgid ""
 "You have configured at least one paid product but have not enabled any "
 "payment methods."
@@ -2828,41 +2861,41 @@ msgstr ""
 "Je hebt ten minste één betaald product ingesteld maar geen betaalmethoden "
 "ingeschakeld."
 
-#: pretix/base/models/event.py:1107
+#: pretix/base/models/event.py:1117
 msgid "You need to configure at least one quota to sell anything."
 msgstr "Je moet ten minste één quotum instellen om iets te verkopen."
 
-#: pretix/base/models/event.py:1112
+#: pretix/base/models/event.py:1122
 #, python-brace-format
 msgid "You need to fill the meta parameter \"{property}\"."
 msgstr "Je moet de meta-eigenschap \"{property}\" invullen."
 
-#: pretix/base/models/event.py:1224
+#: pretix/base/models/event.py:1234
 msgid ""
 "Once created an event cannot change between an series and a single event."
 msgstr ""
 "Een evenement kan, wanneer aangemaakt, niet worden veranderd van een enkel "
 "evenement in een reeks of andersom."
 
-#: pretix/base/models/event.py:1230
+#: pretix/base/models/event.py:1240
 msgid "The event slug cannot be changed."
 msgstr "De slug van het evenement kan niet worden veranderd."
 
-#: pretix/base/models/event.py:1233
+#: pretix/base/models/event.py:1243
 msgid "This slug has already been used for a different event."
 msgstr "Deze slug wordt al voor een ander evenement gebruikt."
 
-#: pretix/base/models/event.py:1239
+#: pretix/base/models/event.py:1249
 msgid "The event cannot end before it starts."
 msgstr "Het evenement kan niet eindigen voor het begint."
 
-#: pretix/base/models/event.py:1245
+#: pretix/base/models/event.py:1255
 msgid "The event's presale cannot end before it starts."
 msgstr ""
 "De verkoopperiode van het evenement kan niet eindigen voordat de voorverkoop "
 "begint."
 
-#: pretix/base/models/event.py:1275
+#: pretix/base/models/event.py:1285
 msgid ""
 "Only with this checkbox enabled, this date is visible in the frontend to "
 "users."
@@ -2870,7 +2903,7 @@ msgstr ""
 "Alleen wanneer dit selectievak is ingeschakeld is deze datum zichtbaar voor "
 "gebruikers."
 
-#: pretix/base/models/event.py:1279
+#: pretix/base/models/event.py:1289
 msgid ""
 "If selected, this event will show up publicly on the list of dates for your "
 "event."
@@ -2878,46 +2911,46 @@ msgstr ""
 "Als dit is ingeschakeld zal dit evenement zichtbaar zijn in de lijst met "
 "datums van deze evenementenreeks."
 
-#: pretix/base/models/event.py:1324 pretix/base/settings.py:2349
+#: pretix/base/models/event.py:1334 pretix/base/settings.py:2349
 msgid "Frontpage text"
 msgstr "Voorpaginatekst"
 
-#: pretix/base/models/event.py:1339
+#: pretix/base/models/event.py:1349
 msgid "Date in event series"
 msgstr "Datum in evenementenreeks"
 
-#: pretix/base/models/event.py:1340
+#: pretix/base/models/event.py:1350
 msgid "Dates in event series"
 msgstr "Datums in evenementenreeks"
 
-#: pretix/base/models/event.py:1479
+#: pretix/base/models/event.py:1489
 msgid "One or more variations do not belong to this event."
 msgstr "Één of meer varianten horen niet bij dit evenement."
 
-#: pretix/base/models/event.py:1509 pretix/base/models/items.py:1733
+#: pretix/base/models/event.py:1519 pretix/base/models/items.py:1733
 msgid "Can not contain spaces or special characters except underscores"
 msgstr ""
 "Mag geen spaties of speciale tekens bevatten, maar wel onderstrepingstekens"
 
-#: pretix/base/models/event.py:1514 pretix/base/models/items.py:1738
+#: pretix/base/models/event.py:1524 pretix/base/models/items.py:1738
 msgid "The property name may only contain letters, numbers and underscores."
 msgstr ""
 "De naam van de eigenschap mag alleen letters, cijfers en "
 "onderstrepingstekens bevatten."
 
-#: pretix/base/models/event.py:1519
+#: pretix/base/models/event.py:1529
 msgid "Default value"
 msgstr "Standaardwaarde"
 
-#: pretix/base/models/event.py:1521
+#: pretix/base/models/event.py:1531
 msgid "Can only be changed by organizer-level administrators"
 msgstr "Kan alleen worden gewijzigd door beheerders van deze organisator"
 
-#: pretix/base/models/event.py:1523
+#: pretix/base/models/event.py:1533
 msgid "Required for events"
 msgstr "Verplicht voor evenementen"
 
-#: pretix/base/models/event.py:1524
+#: pretix/base/models/event.py:1534
 msgid ""
 "If checked, an event can only be taken live if the property is set. In event "
 "series, its always optional to set a value for individual dates"
@@ -2926,11 +2959,11 @@ msgstr ""
 "als deze eigenschap een waarde heeft. In evenementenreeksen is het altijd "
 "optioneel om een waarde voor individuele datums in te stellen"
 
-#: pretix/base/models/event.py:1529
+#: pretix/base/models/event.py:1539
 msgid "Valid values"
 msgstr "Toegestane waarden"
 
-#: pretix/base/models/event.py:1530
+#: pretix/base/models/event.py:1540
 msgid ""
 "If you keep this empty, any value is allowed. Otherwise, enter one possible "
 "value per line."
@@ -2938,13 +2971,13 @@ msgstr ""
 "Voer hier een toegestane waarde per regel in. Als je dit veld leeg laat "
 "wordt iedere waarde toegestaan."
 
-#: pretix/base/models/event.py:1536
+#: pretix/base/models/event.py:1546
 msgid "A property can either be required or have a default value, not both."
 msgstr ""
 "Een eigenschap kan niet verplicht zijn en tegelijkertijd een standaardwaarde "
 "hebben."
 
-#: pretix/base/models/event.py:1538
+#: pretix/base/models/event.py:1548
 msgid "You cannot set a default value that is not a valid value."
 msgstr ""
 "Je kan geen standaardwaarde instellen die niet in de lijst met toegestane "
@@ -10471,20 +10504,6 @@ msgstr "Winkel live en voorverkoop actief"
 msgid "Inactive"
 msgstr "Uitgeschakeld"
 
-#: pretix/control/forms/filter.py:1033 pretix/control/forms/filter.py:1403
-#: pretix/control/templates/pretixcontrol/events/index.html:144
-#: pretix/control/templates/pretixcontrol/organizers/detail.html:108
-#: pretix/control/templates/pretixcontrol/subevents/index.html:154
-msgid "Presale not started"
-msgstr "Verkoop nog niet begonnen"
-
-#: pretix/control/forms/filter.py:1034 pretix/control/forms/filter.py:1404
-#: pretix/control/templates/pretixcontrol/events/index.html:142
-#: pretix/control/templates/pretixcontrol/organizers/detail.html:106
-#: pretix/control/templates/pretixcontrol/subevents/index.html:152
-msgid "Presale over"
-msgstr "Verkoop afgelopen"
-
 #: pretix/control/forms/filter.py:1039 pretix/control/forms/filter.py:1042
 #: pretix/control/forms/filter.py:2041
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:73
@@ -14063,6 +14082,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/waitinglist/delete.html:12
 #: pretix/control/templates/pretixcontrol/waitinglist/delete_bulk.html:33
 #: pretix/plugins/badges/templates/pretixplugins/badges/delete.html:13
+#: pretix/plugins/paypal/templates/pretixplugins/paypal/pay.html:40
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_delete.html:12
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/sca.html:29
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/delete.html:12
@@ -15943,19 +15963,6 @@ msgstr "Reeks"
 #: pretix/control/templates/pretixcontrol/subevents/index.html:142
 msgid "More quotas"
 msgstr "Meer quota"
-
-#: pretix/control/templates/pretixcontrol/events/index.html:140
-#: pretix/control/templates/pretixcontrol/organizers/detail.html:104
-#: pretix/control/views/dashboards.py:529
-msgid "Shop disabled"
-msgstr "Winkel uitgeschakeld"
-
-#: pretix/control/templates/pretixcontrol/events/index.html:146
-#: pretix/control/templates/pretixcontrol/organizers/detail.html:110
-#: pretix/control/templates/pretixcontrol/subevents/index.html:156
-#: pretix/control/views/dashboards.py:535
-msgid "On sale"
-msgstr "In de verkoop"
 
 #: pretix/control/templates/pretixcontrol/events/index.html:151
 #: pretix/control/templates/pretixcontrol/organizers/detail.html:115
@@ -22398,7 +22405,7 @@ msgstr "Badges"
 
 #: pretix/plugins/badges/apps.py:34 pretix/plugins/banktransfer/apps.py:35
 #: pretix/plugins/checkinlists/apps.py:48
-#: pretix/plugins/manualpayment/apps.py:34 pretix/plugins/paypal/apps.py:48
+#: pretix/plugins/manualpayment/apps.py:34 pretix/plugins/paypal/apps.py:47
 #: pretix/plugins/pretixdroid/apps.py:34 pretix/plugins/reports/apps.py:48
 #: pretix/plugins/returnurl/apps.py:34 pretix/plugins/sendmail/apps.py:34
 #: pretix/plugins/statistics/apps.py:34 pretix/plugins/stripe/apps.py:35
@@ -22784,6 +22791,7 @@ msgstr "Je invoer was ongeldig, zie hieronder voor details."
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/control.html:5
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_assign.html:41
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/control.html:9
+#: pretix/plugins/paypal/templates/pretixplugins/paypal/control_legacy.html:9
 msgid "Payer"
 msgstr "Betaler"
 
@@ -23367,7 +23375,7 @@ msgstr "Automatisch ingecheckt"
 
 #: pretix/plugins/checkinlists/exporters.py:453
 #: pretix/plugins/checkinlists/exporters.py:617
-#: pretix/plugins/paypal/payment.py:122
+#: pretix/plugins/paypal/payment.py:135
 msgid "Secret"
 msgstr "Geheim"
 
@@ -23421,48 +23429,93 @@ msgstr ""
 "Deze plug-in voegt een aanpasbare betalingsmethode voor handmatige "
 "verwerking toe."
 
-#: pretix/plugins/paypal/apps.py:44 pretix/plugins/paypal/apps.py:47
-#: pretix/plugins/paypal/payment.py:74
+#: pretix/plugins/paypal/apps.py:43 pretix/plugins/paypal/apps.py:46
+#: pretix/plugins/paypal/payment.py:89 pretix/plugins/paypal/payment.py:153
+#: pretix/plugins/paypal/payment.py:961 pretix/plugins/paypal/payment.py:962
 msgid "PayPal"
 msgstr "PayPal"
 
-#: pretix/plugins/paypal/apps.py:53
+#: pretix/plugins/paypal/apps.py:52
 msgid ""
 "Accept payments with your PayPal account. PayPal is one of the most popular "
 "payment methods world-wide."
 msgstr ""
 
-#: pretix/plugins/paypal/payment.py:90
-msgid ""
-"The PayPal sandbox is being used, you can test without actually sending "
-"money but you will need a PayPal sandbox user to log in."
-msgstr ""
-"De PayPal-sandbox wordt gebruikt. Je kan betalingen testen zonder "
-"daadwerkelijk geld over te maken, maar je zal een PayPal-sandboxgebruiker "
-"nodig hebben om in te loggen."
-
-#: pretix/plugins/paypal/payment.py:102
+#: pretix/plugins/paypal/payment.py:106
 msgid "PayPal account"
 msgstr "PayPal-account"
 
-#: pretix/plugins/paypal/payment.py:115 pretix/plugins/stripe/payment.py:191
+#: pretix/plugins/paypal/payment.py:114
+#, fuzzy
+#| msgid "PayPal payment ID"
+msgid "PayPal Merchant ID"
+msgstr "PayPal-betalingskenmerk"
+
+#: pretix/plugins/paypal/payment.py:128 pretix/plugins/stripe/payment.py:191
 #, python-brace-format
 msgid "<a target=\"_blank\" rel=\"noopener\" href=\"{docs_url}\">{text}</a>"
 msgstr "<a target=\"_blank\" rel=\"noopener\" href=\"{docs_url}\">{text}</a>"
 
-#: pretix/plugins/paypal/payment.py:116 pretix/plugins/stripe/payment.py:192
+#: pretix/plugins/paypal/payment.py:129 pretix/plugins/stripe/payment.py:192
 msgid "Click here for a tutorial on how to obtain the required keys"
 msgstr "Klik hier voor instructies over hoe de benodigde sleutels te krijgen"
 
-#: pretix/plugins/paypal/payment.py:128 pretix/plugins/stripe/payment.py:171
+#: pretix/plugins/paypal/payment.py:141 pretix/plugins/stripe/payment.py:171
 msgid "Endpoint"
 msgstr "Endpoint"
 
-#: pretix/plugins/paypal/payment.py:140
+#: pretix/plugins/paypal/payment.py:156
+msgid ""
+"Even if a customer choses an Alternative Payment Method, they will always "
+"have the option to revert back to paying with their PayPal account. For this "
+"reason, this payment method is always active."
+msgstr ""
+
+#: pretix/plugins/paypal/payment.py:164
+#, fuzzy
+#| msgid "Enable payment method"
+msgid "Alternative Payment Methods"
+msgstr "Betaalmethode inschakelen"
+
+#: pretix/plugins/paypal/payment.py:166
+msgid ""
+"In addition to payments through a PayPal account, you can also offer your "
+"customers the option to pay with credit cards and other, local payment "
+"methods such as SOFORT, giropay, iDEAL, and many more - even when they do "
+"not have a PayPal account. Eligible payment methods will be determined based "
+"on the shoppers location. For German merchants, this is the direct successor "
+"of PayPal Plus."
+msgstr ""
+
+#: pretix/plugins/paypal/payment.py:181
+msgid "Disable SEPA Direct Debit"
+msgstr ""
+
+#: pretix/plugins/paypal/payment.py:183
+msgid ""
+"While most payment methods cannot be recalled by a customer without "
+"outlining their exact grief with the merchants, SEPA Direct Debit can be "
+"recalled with the press of a button. For that reason - and depending on the "
+"nature of your event - you might want to disabled the option of SEPA Direct "
+"Debit payments in order to reduce the risk of costly chargebacks."
+msgstr ""
+
+#: pretix/plugins/paypal/payment.py:197
+msgid "Enable Buy Now Pay Later"
+msgstr ""
+
+#: pretix/plugins/paypal/payment.py:199
+msgid ""
+"Offer your customers the possibility to buy now (up to a certain limit) and "
+"pay in multiple installments or within 30 days. You, as the merchant, are "
+"getting your money right away."
+msgstr ""
+
+#: pretix/plugins/paypal/payment.py:215
 msgid "Reference prefix"
 msgstr "Kenmerk-voorvoegsel"
 
-#: pretix/plugins/paypal/payment.py:141
+#: pretix/plugins/paypal/payment.py:216
 msgid ""
 "Any value entered here will be added in front of the regular booking "
 "reference containing the order number."
@@ -23470,13 +23523,13 @@ msgstr ""
 "Als je hier een waarde invoert zal deze waarde voor het normale kenmerk met "
 "het bestelnummer worden ingevoegd."
 
-#: pretix/plugins/paypal/payment.py:147
+#: pretix/plugins/paypal/payment.py:222
 #, fuzzy
 #| msgid "Reference prefix"
 msgid "Reference postfix"
 msgstr "Kenmerk-voorvoegsel"
 
-#: pretix/plugins/paypal/payment.py:148
+#: pretix/plugins/paypal/payment.py:223
 #, fuzzy
 #| msgid ""
 #| "Any value entered here will be added in front of the regular booking "
@@ -23488,7 +23541,19 @@ msgstr ""
 "Als je hier een waarde invoert zal deze waarde voor het normale kenmerk met "
 "het bestelnummer worden ingevoegd."
 
-#: pretix/plugins/paypal/payment.py:178
+#: pretix/plugins/paypal/payment.py:231
+#, fuzzy
+#| msgid "Customer actions"
+msgid "-- Automatic --"
+msgstr "Klantacties"
+
+#: pretix/plugins/paypal/payment.py:237
+#, fuzzy
+#| msgid "Any country"
+msgid "Buyer country"
+msgstr "Ieder land"
+
+#: pretix/plugins/paypal/payment.py:261
 msgid ""
 "To accept payments via PayPal, you will need an account at PayPal. By "
 "clicking on the following button, you can either create a new PayPal account "
@@ -23498,16 +23563,16 @@ msgstr ""
 "op de volgende knop te klikken kan je een nieuw PayPal-account aanmaken, of "
 "pretix met een bestaand account verbinden."
 
-#: pretix/plugins/paypal/payment.py:182
+#: pretix/plugins/paypal/payment.py:266
 #, python-brace-format
 msgid "Connect with {icon} PayPal"
 msgstr "Verbinden met {icon} PayPal"
 
-#: pretix/plugins/paypal/payment.py:192
+#: pretix/plugins/paypal/payment.py:276
 msgid "Disconnect from PayPal"
 msgstr "Verbinding met PayPal verbreken"
 
-#: pretix/plugins/paypal/payment.py:196
+#: pretix/plugins/paypal/payment.py:280
 msgid ""
 "Please configure a PayPal Webhook to the following endpoint in order to "
 "automatically cancel orders when payments are refunded externally."
@@ -23515,18 +23580,18 @@ msgstr ""
 "Stel een PayPal-webhook naar het volgende endpoint in om bestellingen "
 "automatisch te annuleren wanneer betalingen extern worden terugbetaald."
 
-#: pretix/plugins/paypal/payment.py:207
+#: pretix/plugins/paypal/payment.py:291
 msgid "PayPal does not process payments in your event's currency."
 msgstr "PayPal accepteert geen betalingen in de munteenheid van je evenement."
 
-#: pretix/plugins/paypal/payment.py:208
+#: pretix/plugins/paypal/payment.py:292
 msgid ""
 "Please check this PayPal page for a complete list of supported currencies."
 msgstr ""
 "Zie de volgende PayPal-pagina voor een complete lijst van ondersteunde "
 "munteenheden."
 
-#: pretix/plugins/paypal/payment.py:213
+#: pretix/plugins/paypal/payment.py:297
 msgid ""
 "Your event's currency is supported by PayPal as a payment and balance "
 "currency for in-country accounts only. This means, that the receiving as "
@@ -23540,15 +23605,45 @@ msgstr ""
 "aangemaakt en dezelfde munteenheid moeten gebruiken. Buitenlandse PayPal-"
 "accounts zullen geen betalingen kunnen versturen."
 
-#: pretix/plugins/paypal/payment.py:261 pretix/plugins/paypal/payment.py:327
-#: pretix/plugins/paypal/payment.py:365 pretix/plugins/paypal/payment.py:380
-#: pretix/plugins/paypal/payment.py:448 pretix/plugins/paypal/payment.py:603
-#: pretix/plugins/paypal/payment.py:680
+#: pretix/plugins/paypal/payment.py:349 pretix/plugins/paypal/views.py:189
+#: pretix/plugins/paypal/views.py:205 pretix/plugins/paypal/views.py:213
+#: pretix/plugins/paypal/views.py:216
+msgid "An error occurred during connecting with PayPal, please try again."
+msgstr ""
+"Er trad een fout op tijdens het verbinden met PayPal, probeer het opnieuw."
+
+#: pretix/plugins/paypal/payment.py:388
+msgid ""
+"The PayPal sandbox is being used, you can test without actually sending "
+"money but you will need a PayPal sandbox user to log in."
+msgstr ""
+"De PayPal-sandbox wordt gebruikt. Je kan betalingen testen zonder "
+"daadwerkelijk geld over te maken, maar je zal een PayPal-sandboxgebruiker "
+"nodig hebben om in te loggen."
+
+#: pretix/plugins/paypal/payment.py:464 pretix/plugins/paypal/payment.py:474
+#: pretix/plugins/paypal/payment.py:590 pretix/plugins/paypal/payment.py:594
+#: pretix/plugins/paypal/payment.py:622 pretix/plugins/paypal/payment.py:664
+#: pretix/plugins/paypal/payment.py:672 pretix/plugins/paypal/payment.py:885
+#: pretix/plugins/paypal/payment.py:895
 msgid "We had trouble communicating with PayPal"
 msgstr "We hadden moeite met met PayPal communiceren"
 
-#: pretix/plugins/paypal/payment.py:394 pretix/plugins/paypal/payment.py:403
-#: pretix/plugins/paypal/payment.py:474
+#: pretix/plugins/paypal/payment.py:470 pretix/plugins/paypal/payment.py:891
+#, fuzzy
+#| msgid "This gift card was used in the meantime. Please try again."
+msgid ""
+"Something went wrong when requesting the payment status. Please try again."
+msgstr "Deze cadeaubon is in de tussentijd gebruikt. Probeer het opnieuw."
+
+#: pretix/plugins/paypal/payment.py:479 pretix/plugins/paypal/payment.py:900
+#, fuzzy
+#| msgid "You may need to enable JavaScript for Stripe payments."
+msgid "You may need to enable JavaScript for PayPal payments."
+msgstr "Je moet mogelijk JavaScript inschakelen voor Stripe-betalingen."
+
+#: pretix/plugins/paypal/payment.py:613 pretix/plugins/paypal/payment.py:630
+#: pretix/plugins/paypal/payment.py:696
 msgid ""
 "We were unable to process your payment. See below for details on how to "
 "proceed."
@@ -23556,7 +23651,7 @@ msgstr ""
 "We konden je betaling niet verwerken. Zie hieronder voor details over hoe "
 "verder te gaan."
 
-#: pretix/plugins/paypal/payment.py:455 pretix/plugins/paypal/payment.py:464
+#: pretix/plugins/paypal/payment.py:683
 msgid ""
 "PayPal has not yet approved the payment. We will inform you as soon as the "
 "payment completed."
@@ -23564,64 +23659,100 @@ msgstr ""
 "PayPal heeft de betaling nog niet goedgekeurd. We zullen het aan je melden "
 "zodra de betaling is voltooid."
 
-#: pretix/plugins/paypal/payment.py:489 pretix/plugins/stripe/payment.py:494
+#: pretix/plugins/paypal/payment.py:711 pretix/plugins/stripe/payment.py:494
 #: pretix/plugins/stripe/payment.py:871
 msgid "There was an error sending the confirmation mail."
 msgstr "Er is een fout opgetreden bij het versturen van de bevestigingsmail."
 
-#: pretix/plugins/paypal/payment.py:579 pretix/plugins/paypal/payment.py:586
+#: pretix/plugins/paypal/payment.py:851 pretix/plugins/paypal/payment.py:872
 msgid "Refunding the amount via PayPal failed: {}"
 msgstr "Het bedrag via PayPal terugbetalen is mislukt: {}"
 
-#: pretix/plugins/paypal/payment.py:721 pretix/plugins/paypal/payment.py:729
+#: pretix/plugins/paypal/payment.py:941 pretix/plugins/paypal/payment.py:949
 msgid "The payment for this invoice has already been received."
 msgstr "De betaling voor deze factuur is al ontvangen."
 
-#: pretix/plugins/paypal/payment.py:722 pretix/plugins/paypal/payment.py:730
+#: pretix/plugins/paypal/payment.py:942 pretix/plugins/paypal/payment.py:950
 msgid "PayPal payment ID"
 msgstr "PayPal-betalingskenmerk"
 
-#: pretix/plugins/paypal/payment.py:724
+#: pretix/plugins/paypal/payment.py:944
 msgid "PayPal sale ID"
 msgstr "PayPal-verkoopkenmerk"
 
-#: pretix/plugins/paypal/signals.py:50
+#: pretix/plugins/paypal/payment.py:968
+#, fuzzy
+#| msgid "PayPal"
+msgid "PayPal APM"
+msgstr "PayPal"
+
+#: pretix/plugins/paypal/payment.py:969
+#, fuzzy
+#| msgid "Link to enable payment method"
+msgid "PayPal Alternative Payment Methods"
+msgstr "Link om betalingsmethode in te schakelen"
+
+#: pretix/plugins/paypal/signals.py:59
 msgid "Payment completed."
 msgstr "Betaling voltooid."
 
-#: pretix/plugins/paypal/signals.py:51
+#: pretix/plugins/paypal/signals.py:60
 msgid "Payment denied."
 msgstr "Betaling geweigerd."
 
-#: pretix/plugins/paypal/signals.py:52
+#: pretix/plugins/paypal/signals.py:61
 msgid "Payment refunded."
 msgstr "Betaling teruggestort."
 
-#: pretix/plugins/paypal/signals.py:53
+#: pretix/plugins/paypal/signals.py:62
 msgid "Payment reversed."
 msgstr "Betaling omgekeerd."
 
-#: pretix/plugins/paypal/signals.py:54
+#: pretix/plugins/paypal/signals.py:63
 msgid "Payment pending."
 msgstr "Betaling staat open."
 
-#: pretix/plugins/paypal/signals.py:63
+#: pretix/plugins/paypal/signals.py:64
+#, fuzzy
+#| msgid "Order approved"
+msgid "Order approved."
+msgstr "Bestelling goedgekeurd"
+
+#: pretix/plugins/paypal/signals.py:73
 msgid "PayPal reported an event: {}"
 msgstr "PayPal meldt: {}"
 
-#: pretix/plugins/paypal/signals.py:70
-msgid "PayPal Connect: Client ID"
+#: pretix/plugins/paypal/signals.py:80
+#, fuzzy
+#| msgid "PayPal Connect: Client ID"
+msgid "PayPal ISU/Connect: Client ID"
 msgstr "PayPal Connect: Client-ID"
 
-#: pretix/plugins/paypal/signals.py:74
-msgid "PayPal Connect: Secret key"
+#: pretix/plugins/paypal/signals.py:84
+#, fuzzy
+#| msgid "PayPal Connect: Secret key"
+msgid "PayPal ISU/Connect: Secret key"
 msgstr "PayPal Connect: Geheime sleutel"
 
-#: pretix/plugins/paypal/signals.py:78
-msgid "PayPal Connect Endpoint"
+#: pretix/plugins/paypal/signals.py:88
+#, fuzzy
+#| msgid "PayPal Connect: Client ID"
+msgid "PayPal ISU/Connect: Partner Merchant ID"
+msgstr "PayPal Connect: Client-ID"
+
+#: pretix/plugins/paypal/signals.py:89
+msgid ""
+"This is not the BN-code, but rather the ID of the merchant account which "
+"holds branding information for ISU."
+msgstr ""
+
+#: pretix/plugins/paypal/signals.py:93
+#, fuzzy
+#| msgid "PayPal Connect Endpoint"
+msgid "PayPal ISU/Connect Endpoint"
 msgstr "PayPal Connect-endpoint"
 
-#: pretix/plugins/paypal/templates/pretixplugins/paypal/checkout_payment_confirm.html:3
+#: pretix/plugins/paypal/templates/pretixplugins/paypal/checkout_payment_confirm.html:5
 msgid ""
 "The total amount listed above will be withdrawn from your PayPal account "
 "after the confirmation of your purchase."
@@ -23629,7 +23760,18 @@ msgstr ""
 "Het totaalbedrag dat hierboven staat aangegeven zal van je PayPal-account "
 "worden afgeschreven na de bevestiging van je aankoop."
 
-#: pretix/plugins/paypal/templates/pretixplugins/paypal/checkout_payment_form.html:3
+#: pretix/plugins/paypal/templates/pretixplugins/paypal/checkout_payment_confirm.html:10
+msgid ""
+"After placing your order, you will be able to select your desired payment "
+"method, including PayPal."
+msgstr ""
+
+#: pretix/plugins/paypal/templates/pretixplugins/paypal/checkout_payment_form.html:5
+msgid ""
+"Please click the \"Pay with PayPal\" button below to start your payment."
+msgstr ""
+
+#: pretix/plugins/paypal/templates/pretixplugins/paypal/checkout_payment_form.html:9
 msgid ""
 "After you clicked continue, we will redirect you to PayPal to fill in your "
 "payment details. You will then be redirected back here to review and confirm "
@@ -23639,18 +23781,51 @@ msgstr ""
 "te vullen. Hierna zal je naar deze website worden teruggestuurd om de "
 "bestelling te controleren en te bevestigen."
 
-#: pretix/plugins/paypal/templates/pretixplugins/paypal/control.html:7
-msgid "Sale ID"
-msgstr "Verkoopkenmerk"
+#: pretix/plugins/paypal/templates/pretixplugins/paypal/control.html:5
+#, fuzzy
+#| msgid "Order"
+msgid "Order ID"
+msgstr "Bestelling"
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/control.html:11
+#: pretix/plugins/paypal/templates/pretixplugins/paypal/control_legacy.html:11
 msgid "Last update"
 msgstr "Laatste update"
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/control.html:13
+#: pretix/plugins/paypal/templates/pretixplugins/paypal/control_legacy.html:13
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:53
 msgid "Total value"
 msgstr "Totaalwaarde"
+
+#: pretix/plugins/paypal/templates/pretixplugins/paypal/control_legacy.html:7
+msgid "Sale ID"
+msgstr "Verkoopkenmerk"
+
+#: pretix/plugins/paypal/templates/pretixplugins/paypal/pay.html:5
+#: pretix/plugins/stripe/templates/pretixplugins/stripe/sca.html:5
+#: pretix/plugins/stripe/templates/pretixplugins/stripe/sca_return.html:6
+#: pretix/presale/templates/pretixpresale/event/order_pay.html:4
+#: pretix/presale/templates/pretixpresale/event/order_pay_confirm.html:5
+msgid "Pay order"
+msgstr "Betaal bestelling"
+
+#: pretix/plugins/paypal/templates/pretixplugins/paypal/pay.html:16
+#: pretix/presale/templates/pretixpresale/event/order_pay.html:7
+#: pretix/presale/templates/pretixpresale/event/order_pay_confirm.html:8
+#, python-format
+msgid "Pay order: %(code)s"
+msgstr "Betaal bestelling: %(code)s"
+
+#: pretix/plugins/paypal/templates/pretixplugins/paypal/pay.html:26
+#, fuzzy
+#| msgid "Please try again."
+msgid "Please turn on JavaScript."
+msgstr "Probeer het opnieuw."
+
+#: pretix/plugins/paypal/templates/pretixplugins/paypal/pay.html:29
+msgid "Please use the button/form below to complete your payment."
+msgstr ""
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/pending.html:4
 msgid ""
@@ -23683,12 +23858,13 @@ msgstr "Is het venster om je betaling uit te voeren niet geopend?"
 msgid "Click here in order to open the window."
 msgstr "Klik hier om het venster te openen."
 
-#: pretix/plugins/paypal/views.py:82 pretix/plugins/paypal/views.py:95
-msgid "An error occurred during connecting with PayPal, please try again."
+#: pretix/plugins/paypal/views.py:221
+msgid ""
+"The e-mail address on your PayPal account has not yet been confirmed. You "
+"will need to do this before you can start accepting payments."
 msgstr ""
-"Er trad een fout op tijdens het verbinden met PayPal, probeer het opnieuw."
 
-#: pretix/plugins/paypal/views.py:98
+#: pretix/plugins/paypal/views.py:226
 msgid ""
 "Your PayPal account is now connected to pretix. You can change the settings "
 "in detail below."
@@ -23696,15 +23872,15 @@ msgstr ""
 "Je PayPal-account is nu verbonden met pretix. Je kan hieronder de "
 "instellingen wijzigen."
 
-#: pretix/plugins/paypal/views.py:139
+#: pretix/plugins/paypal/views.py:272
 msgid "Invalid response from PayPal received."
 msgstr "Ongeldige reactie van PayPal ontvangen."
 
-#: pretix/plugins/paypal/views.py:155
+#: pretix/plugins/paypal/views.py:288
 msgid "It looks like you canceled the PayPal payment"
 msgstr "Het lijkt erop dat je de PayPal-betaling hebt geannuleerd"
 
-#: pretix/plugins/paypal/views.py:287
+#: pretix/plugins/paypal/views.py:438
 msgid "Your PayPal account has been disconnected."
 msgstr "De verbinding met je PayPal-account is verbroken."
 
@@ -24987,13 +25163,6 @@ msgstr ""
 msgid ""
 "The payment transaction could not be completed for the following reason:"
 msgstr "De betalingstransactie kon om de volgende reden niet voltooid worden:"
-
-#: pretix/plugins/stripe/templates/pretixplugins/stripe/sca.html:5
-#: pretix/plugins/stripe/templates/pretixplugins/stripe/sca_return.html:6
-#: pretix/presale/templates/pretixpresale/event/order_pay.html:4
-#: pretix/presale/templates/pretixpresale/event/order_pay_confirm.html:5
-msgid "Pay order"
-msgstr "Betaal bestelling"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/sca.html:16
 #, python-format
@@ -27222,12 +27391,6 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order_modify.html:87
 msgid "Save changes"
 msgstr "Wijzigingen opslaan"
-
-#: pretix/presale/templates/pretixpresale/event/order_pay.html:7
-#: pretix/presale/templates/pretixpresale/event/order_pay_confirm.html:8
-#, python-format
-msgid "Pay order: %(code)s"
-msgstr "Betaal bestelling: %(code)s"
 
 #: pretix/presale/templates/pretixpresale/event/order_pay_change.html:5
 msgid "Change payment method"
