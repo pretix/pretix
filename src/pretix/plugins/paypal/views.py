@@ -321,16 +321,16 @@ def webhook(request, *args, **kwargs):
     else:
         payloadid = event_json['resource']['id']
 
-    try:
-        refs = [payloadid]
-        if event_json['resource'].get('supplementary_data', {}).get('related_ids', {}).get('order_id'):
-            refs.append(event_json['resource'].get('supplementary_data').get('related_ids').get('order_id'))
+    refs = [payloadid]
+    if event_json['resource'].get('supplementary_data', {}).get('related_ids', {}).get('order_id'):
+        refs.append(event_json['resource'].get('supplementary_data').get('related_ids').get('order_id'))
 
-        rso = ReferencedPayPalObject.objects.select_related('order', 'order__event').get(
-            reference__in=refs
-        )
+    rso = ReferencedPayPalObject.objects.select_related('order', 'order__event').filter(
+        reference__in=refs
+    ).first()
+    if rso:
         event = rso.order.event
-    except ReferencedPayPalObject.DoesNotExist:
+    else:
         rso = None
         if hasattr(request, 'event'):
             event = request.event
