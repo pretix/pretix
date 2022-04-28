@@ -134,9 +134,12 @@ class CartPositionCreateSerializer(I18nAwareModelSerializer):
             raise ValidationError('The specified product requires to choose a seat.')
 
         validated_data.pop('sales_channel')
-        validated_data['custom_price_input'] = validated_data['price']  # todo: does this make sense?
+        # todo: does this make sense?
+        validated_data['custom_price_input'] = validated_data['price']
         # todo: listed price, etc?
-        validated_data['custom_price_input_is_net'] = validated_data.pop('includes_tax')
+        # currently does not matter because there is no way to transform an API cart position into an order that keeps
+        # prices, cart positions are just quota/voucher placeholders
+        validated_data['custom_price_input_is_net'] = not validated_data.pop('includes_tax', True)
         cp = CartPosition.objects.create(event=self.context['event'], **validated_data)
 
         for answ_data in answers_data:
