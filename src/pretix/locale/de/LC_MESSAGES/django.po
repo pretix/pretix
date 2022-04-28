@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-27 12:44+0000\n"
-"PO-Revision-Date: 2022-04-27 13:49+0000\n"
+"PO-Revision-Date: 2022-04-28 10:40+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
 ">\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.11.2\n"
+"X-Generator: Weblate 4.12\n"
 "X-Poedit-Bookmarks: -1,-1,904,-1,-1,-1,-1,-1,-1,-1\n"
 
 #: pretix/api/auth/devicesecurity.py:28
@@ -2560,7 +2560,7 @@ msgstr "Alle passenden Produkte müssen für den selben Termin gelten"
 msgctxt "subevent"
 msgid "Each matching product must be for a different date"
 msgstr ""
-"Alle passenden Produkte müssen für einen unterschiedlichen Termin gelten"
+"Alle passenden Produkte müssen für jeweils unterschiedliche Termine gelten"
 
 #: pretix/base/models/discount.py:55 pretix/base/models/event.py:1274
 #: pretix/base/models/items.py:368 pretix/base/models/items.py:784
