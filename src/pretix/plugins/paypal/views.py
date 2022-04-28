@@ -52,8 +52,8 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from django.views.generic import TemplateView
 from django_scopes import scopes_disabled
-from paypalcheckoutsdk import orders
-from paypalcheckoutsdk import payments
+from paypalcheckoutsdk import orders as pp_orders
+from paypalcheckoutsdk import payments as pp_payments
 
 from pretix.base.models import Event, Order, OrderPayment, OrderRefund, Quota
 from pretix.base.payment import PaymentException
@@ -313,7 +313,7 @@ def webhook(request, *args, **kwargs):
     if 'resource_type' not in event_json:
         return HttpResponse("Invalid body, no resource_type given", status=400)
 
-    if event_json['resource_type'] not in ["checkout-order", "refund"]:
+    if event_json['resource_type'] not in ["checkout-order", "refund", "capture"]:
         return HttpResponse("Not interested in this resource type", status=200)
 
     # Retrieve the Charge ID of the refunded payment
@@ -344,7 +344,7 @@ def webhook(request, *args, **kwargs):
     try:
         if rso:
             payloadid = rso.payment.info_data['id']
-        sale = prov.client.execute(orders.OrdersGetRequest(payloadid)).result
+        sale = prov.client.execute(pp_orders.OrdersGetRequest(payloadid)).result
     except IOError:
         logger.exception('PayPal error on webhook. Event data: %s' % str(event_json))
         return HttpResponse('Sale not found', status=500)
@@ -359,7 +359,7 @@ def webhook(request, *args, **kwargs):
             # Legacy PayPal info-data
             if "purchase_units" not in p.info_data:
                 try:
-                    req = orders.OrdersGetRequest(p.info_data['cart'])
+                    req = pp_orders.OrdersGetRequest(p.info_data['cart'])
                     response = prov.client.execute(req)
                     p.info = json.dumps(response.result.dict())
                     p.save(update_fields=['info'])
@@ -381,7 +381,7 @@ def webhook(request, *args, **kwargs):
     if payment.state == OrderPayment.PAYMENT_STATE_CONFIRMED and sale['status'] in ('PARTIALLY_REFUNDED', 'REFUNDED', 'COMPLETED'):
         if event_json['resource_type'] == 'refund':
             try:
-                req = payments.RefundsGetRequest(event_json['resource']['id'])
+                req = pp_payments.RefundsGetRequest(event_json['resource']['id'])
                 refund = prov.client.execute(req).result
             except IOError:
                 logger.exception('PayPal error on webhook. Event data: %s' % str(event_json))
