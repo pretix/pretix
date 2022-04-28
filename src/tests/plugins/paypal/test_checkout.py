@@ -67,15 +67,55 @@ def env(client):
     return client, ticket
 
 
+class Object():
+    pass
+
+
+def get_test_order():
+    return {'id': '04F89033701558004',
+            'intent': 'CAPTURE',
+            'status': 'APPROVED',
+            'purchase_units': [{'reference_id': 'default',
+                                'amount': {'currency_code': 'EUR', 'value': '43.59'},
+                                'payee': {'merchant_id': 'G6R2B9YXADKWW'},
+                                'description': 'Event tickets for PayPal v2',
+                                'custom_id': 'PAYPALV2',
+                                'soft_descriptor': 'MARTINFACIL'}],
+            'payer': {'name': {'given_name': 'test', 'surname': 'buyer'},
+                      'email_address': 'dummy@dummy.dummy',
+                      'payer_id': 'Q739JNKWH67HE',
+                      'address': {'country_code': 'DE'}},
+            'create_time': '2022-04-28T13:10:58Z',
+            'links': [{'href': 'https://api.sandbox.paypal.com/v2/checkout/orders/04F89033701558004',
+                       'rel': 'self',
+                       'method': 'GET'},
+                      {'href': 'https://api.sandbox.paypal.com/v2/checkout/orders/04F89033701558004',
+                       'rel': 'update',
+                       'method': 'PATCH'},
+                      {'href': 'https://api.sandbox.paypal.com/v2/checkout/orders/04F89033701558004/capture',
+                       'rel': 'capture',
+                       'method': 'POST'}]}
+
+
 @pytest.mark.django_db
 def test_payment(env, monkeypatch):
-    def create_payment(self, request, payment):
-        assert payment['intent'] == 'sale'
-        assert payment['transactions'][0]['amount']['currency'] == 'EUR'
-        assert payment['transactions'][0]['amount']['total'] == '26.00'
-        create_payment.called = True
-        return 'https://approve.url'
-    monkeypatch.setattr("pretix.plugins.paypal.payment.Paypal._create_payment", create_payment)
+    def init_api(self):
+        class Client():
+            environment = Object()
+            environment.client_id = '12345'
+            environment.merchant_id = 'G6R2B9YXADKWW'
+
+            def execute(self, request):
+                response = Object()
+                response.result = Object()
+                response.result.status = 'APPROVED'
+                return response
+
+        self.client = Client()
+
+    order = get_test_order()
+    monkeypatch.setattr("paypalcheckoutsdk.orders.OrdersGetRequest", lambda *args: order)
+    monkeypatch.setattr("pretix.plugins.paypal.payment.PaypalMethod.init_api", init_api)
 
     client, ticket = env
     session_key = get_cart_session_key(client, ticket.event)
@@ -87,7 +127,15 @@ def test_payment(env, monkeypatch):
     client.post('/%s/%s/checkout/questions/' % (ticket.event.organizer.slug, ticket.event.slug), {
         'email': 'admin@localhost'
     }, follow=True)
+
+    session = client.session
+    session['payment_paypal_oid'] = '04F89033701558004'
+    session.save()
+
     response = client.post('/%s/%s/checkout/payment/' % (ticket.event.organizer.slug, ticket.event.slug), {
-        'payment': 'paypal'
+        'payment': 'paypal',
+        'payment_paypal_wallet_oid': '04F89033701558004',
+        'payment_paypal_wallet_payer': 'Q739JNKWH67HE',
     })
-    assert response['Location'] == 'https://approve.url'
+    print(response.content.decode())
+    assert response['Location'] == '/ccc/30c3/checkout/confirm/'
