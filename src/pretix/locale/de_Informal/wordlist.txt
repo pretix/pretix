@@ -45,9 +45,10 @@ bez
 BezahlCode
 Bezahlmethode
 Blackberry
-Browsereinstellungen
 BLIK
 BN
+Branding
+Browsereinstellungen
 BSD
 bspw
 Boleto
@@ -231,6 +232,7 @@ Scans
 Scanergebnis
 Scanning
 schiefgeht
+schiefgelaufen
 sechsstelligen
 Secret
 Security
@@ -335,5 +337,6 @@ Zimpler
 zubuchbaren
 zurückbuchen
 zurückgeleitet
+zurückwechseln
 zzgl
 ZVT
