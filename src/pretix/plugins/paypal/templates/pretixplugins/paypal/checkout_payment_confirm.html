@@ -1,6 +1,14 @@
 {% load i18n %}
 
-<p>{% blocktrans trimmed %}
-    The total amount listed above will be withdrawn from your PayPal account after the
-    confirmation of your purchase.
-{% endblocktrans %}</p>
+<p>
+    {% if method == "wallet" %}
+        {% blocktrans trimmed %}
+            The total amount listed above will be withdrawn from your PayPal account after the
+            confirmation of your purchase.
+        {% endblocktrans %}
+    {% else %}
+        {% blocktrans trimmed %}
+            After placing your order, you will be able to select your desired payment method, including PayPal.
+        {% endblocktrans %}
+    {% endif %}
+</p>

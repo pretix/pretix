@@ -61,7 +61,7 @@ def env(client):
 @pytest.mark.django_db
 def test_settings(env):
     client, event = env
-    response = client.get('/control/event/%s/%s/settings/payment/paypal' % (event.organizer.slug, event.slug),
+    response = client.get('/control/event/%s/%s/settings/payment/paypal_settings' % (event.organizer.slug, event.slug),
                           follow=True)
     assert response.status_code == 200
     assert 'paypal__enabled' in response.rendered_content

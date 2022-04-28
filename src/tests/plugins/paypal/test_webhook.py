@@ -48,190 +48,348 @@ def env():
         code='FOOBAR', event=event, email='dummy@dummy.test',
         status=Order.STATUS_PAID,
         datetime=now(), expires=now() + timedelta(days=10),
-        total=Decimal('13.37'),
+        total=Decimal('43.59'),
     )
     o1.payments.create(
         amount=o1.total,
         provider='paypal',
         state=OrderPayment.PAYMENT_STATE_CONFIRMED,
         info=json.dumps({
-            "id": "PAY-5YK922393D847794YKER7MUI",
-            "create_time": "2013-02-19T22:01:53Z",
-            "update_time": "2013-02-19T22:01:55Z",
-            "state": "approved",
-            "intent": "sale",
-            "payer": {
-                "payment_method": "credit_card",
-                "funding_instruments": [
-                    {
-                        "credit_card": {
-                            "type": "mastercard",
-                            "number": "xxxxxxxxxxxx5559",
-                            "expire_month": 2,
-                            "expire_year": 2018,
-                            "first_name": "Betsy",
-                            "last_name": "Buyer"
-                        }
-                    }
-                ]
-            },
-            "transactions": [
+            "id": "806440346Y391300T",
+            "status": "COMPLETED",
+            "purchase_units": [
                 {
-                    "amount": {
-                        "total": "7.47",
-                        "currency": "USD",
-                        "details": {
-                            "subtotal": "7.47"
+                    "reference_id": "default",
+                    "shipping": {
+                        "name": {
+                            "full_name": "test buyer"
                         }
                     },
-                    "description": "This is the payment transaction description.",
-                    "note_to_payer": "Contact us for any questions on your order.",
-                    "related_resources": [
-                        {
-                            "sale": {
-                                "id": "36C38912MN9658832",
-                                "create_time": "2013-02-19T22:01:53Z",
-                                "update_time": "2013-02-19T22:01:55Z",
-                                "state": "completed",
+                    "payments": {
+                        "captures": [
+                            {
+                                "id": "22A4162004478570J",
+                                "status": "COMPLETED",
                                 "amount": {
-                                    "total": "7.47",
-                                    "currency": "USD"
+                                    "currency_code": "EUR",
+                                    "value": "43.59"
                                 },
-                                "protection_eligibility": "ELIGIBLE",
-                                "protection_eligibility_type": "ITEM_NOT_RECEIVED_ELIGIBLE",
-                                "transaction_fee": {
-                                    "value": "1.75",
-                                    "currency": "USD"
+                                "final_capture": True,
+                                "disbursement_mode": "INSTANT",
+                                "seller_protection": {
+                                    "status": "ELIGIBLE",
+                                    "dispute_categories": [
+                                        "ITEM_NOT_RECEIVED",
+                                        "UNAUTHORIZED_TRANSACTION"
+                                    ]
                                 },
-                                "parent_payment": "PAY-5YK922393D847794YKER7MUI",
+                                "seller_receivable_breakdown": {
+                                    "gross_amount": {
+                                        "currency_code": "EUR",
+                                        "value": "43.59"
+                                    },
+                                    "paypal_fee": {
+                                        "currency_code": "EUR",
+                                        "value": "1.18"
+                                    },
+                                    "net_amount": {
+                                        "currency_code": "EUR",
+                                        "value": "42.41"
+                                    }
+                                },
+                                "custom_id": "Order PAYPALV2-JWJGC",
                                 "links": [
                                     {
-                                        "href": "https://api.paypal.com/v1/payments/sale/36C38912MN9658832",
+                                        "href": "https://api.sandbox.paypal.com/v2/payments/captures/22A4162004478570J",
                                         "rel": "self",
                                         "method": "GET"
                                     },
                                     {
-                                        "href": "https://api.paypal.com/v1/payments/sale/36C38912MN9658832/refund",
+                                        "href": "https://api.sandbox.paypal.com/v2/payments/captures/22A4162004478570J/refund",
                                         "rel": "refund",
                                         "method": "POST"
                                     },
                                     {
-                                        "href":
-                                            "https://api.paypal.com/v1/payments/payment/PAY-5YK922393D847794YKER7MUI",
-                                        "rel": "parent_payment",
+                                        "href": "https://api.sandbox.paypal.com/v2/checkout/orders/806440346Y391300T",
+                                        "rel": "up",
                                         "method": "GET"
                                     }
-                                ]
+                                ],
+                                "create_time": "2022-04-28T12:00:22Z",
+                                "update_time": "2022-04-28T12:00:22Z"
                             }
-                        }
-                    ]
+                        ]
+                    }
                 }
             ],
+            "payer": {
+                "name": {
+                    "given_name": "test",
+                    "surname": "buyer"
+                },
+                "email_address": "dummy@dummy.dummy",
+                "payer_id": "Q739JNKWH67HE",
+                "address": {
+                    "country_code": "DE"
+                }
+            },
             "links": [
                 {
-                    "href": "https://api.paypal.com/v1/payments/payment/PAY-5YK922393D847794YKER7MUI",
+                    "href": "https://api.sandbox.paypal.com/v2/checkout/orders/806440346Y391300T",
                     "rel": "self",
                     "method": "GET"
                 }
             ]
-
         })
     )
     return event, o1
 
 
-def get_test_charge(order: Order):
+def get_test_order():
+    return {'id': '806440346Y391300T',
+            'intent': 'CAPTURE',
+            'status': 'COMPLETED',
+            'purchase_units': [{'reference_id': 'default',
+                                'amount': {'currency_code': 'EUR', 'value': '43.59'},
+                                'payee': {'email_address': 'dummy-facilitator@dummy.dummy',
+                                          'merchant_id': 'G6R2B9YXADKWW'},
+                                'description': 'Order JWJGC for PayPal v2',
+                                'custom_id': 'Order PAYPALV2-JWJGC',
+                                'soft_descriptor': 'MARTINFACIL',
+                                'payments': {'captures': [{'id': '22A4162004478570J',
+                                                           'status': 'COMPLETED',
+                                                           'amount': {'currency_code': 'EUR', 'value': '43.59'},
+                                                           'final_capture': True,
+                                                           'disbursement_mode': 'INSTANT',
+                                                           'seller_protection': {'status': 'ELIGIBLE',
+                                                                                 'dispute_categories': [
+                                                                                     'ITEM_NOT_RECEIVED',
+                                                                                     'UNAUTHORIZED_TRANSACTION']},
+                                                           'seller_receivable_breakdown': {
+                                                               'gross_amount': {'currency_code': 'EUR',
+                                                                                'value': '43.59'},
+                                                               'paypal_fee': {'currency_code': 'EUR', 'value': '1.18'},
+                                                               'net_amount': {'currency_code': 'EUR',
+                                                                              'value': '42.41'}},
+                                                           'custom_id': 'Order PAYPALV2-JWJGC',
+                                                           'links': [{
+                                                               'href': 'https://api.sandbox.paypal.com/v2/payments/captures/22A4162004478570J',
+                                                               'rel': 'self',
+                                                               'method': 'GET'},
+                                                               {
+                                                                   'href': 'https://api.sandbox.paypal.com/v2/payments/captures/22A4162004478570J/refund',
+                                                                   'rel': 'refund',
+                                                                   'method': 'POST'},
+                                                               {
+                                                                   'href': 'https://api.sandbox.paypal.com/v2/checkout/orders/806440346Y391300T',
+                                                                   'rel': 'up',
+                                                                   'method': 'GET'}],
+                                                           'create_time': '2022-04-28T12:00:22Z',
+                                                           'update_time': '2022-04-28T12:00:22Z'}]}}],
+            'payer': {'name': {'given_name': 'test', 'surname': 'buyer'},
+                      'email_address': 'dummy@dummy.dummy',
+                      'payer_id': 'Q739JNKWH67HE',
+                      'address': {'country_code': 'DE'}},
+            'create_time': '2022-04-28T11:59:59Z',
+            'update_time': '2022-04-28T12:00:22Z',
+            'links': [{'href': 'https://api.sandbox.paypal.com/v2/checkout/orders/806440346Y391300T',
+                       'rel': 'self',
+                       'method': 'GET'}]}
+
+
+def get_test_refund():
     return {
-        "id": "36C38912MN9658832",
-        "create_time": "2013-02-19T22:01:53Z",
-        "update_time": "2013-02-19T22:01:55Z",
-        "state": "completed",
+        "id": "1YK122615V244890X",
         "amount": {
-            "total": "7.47",
-            "currency": "USD"
+            "currency_code": "EUR",
+            "value": "43.59"
         },
-        "protection_eligibility": "ELIGIBLE",
-        "protection_eligibility_type": "ITEM_NOT_RECEIVED_ELIGIBLE,UNAUTHORIZED_PAYMENT_ELIGIBLE",
-        "transaction_fee": {
-            "value": "1.75",
-            "currency": "USD"
+        "seller_payable_breakdown": {
+            "gross_amount": {
+                "currency_code": "EUR",
+                "value": "43.59"
+            },
+            "paypal_fee": {
+                "currency_code": "EUR",
+                "value": "1.18"
+            },
+            "net_amount": {
+                "currency_code": "EUR",
+                "value": "42.41"
+            },
+            "total_refunded_amount": {
+                "currency_code": "EUR",
+                "value": "43.59"
+            }
         },
-        "parent_payment": "PAY-5YK922393D847794YKER7MUI",
+        "custom_id": "Order PAYPALV2-JWJGC",
+        "status": "COMPLETED",
+        "create_time": "2022-04-28T07:50:56-07:00",
+        "update_time": "2022-04-28T07:50:56-07:00",
         "links": [
             {
-                "href": "https://api.paypal.com/v1/payments/sale/36C38912MN9658832",
+                "href": "https://api.sandbox.paypal.com/v2/payments/refunds/1YK122615V244890X",
                 "rel": "self",
                 "method": "GET"
             },
             {
-                "href": "https://api.paypal.com/v1/payments/sale/36C38912MN9658832/refund",
-                "rel": "refund",
-                "method": "POST"
-            },
-            {
-                "href": "https://api.paypal.com/v1/payments/payment/PAY-5YK922393D847794YKER7MUI",
-                "rel": "parent_payment",
+                "href": "https://api.sandbox.paypal.com/v2/payments/captures/22A4162004478570J",
+                "rel": "up",
                 "method": "GET"
             }
         ]
     }
 
 
-def get_test_refund(order: Order):
-    return {
-        'refund_from_received_amount': {'value': '13.30', 'currency': 'EUR'},
-        'amount': {'total': '13.37', 'currency': 'EUR'},
-        'sale_id': '1G495778AR8401726',
-        'update_time': '2018-07-24T07:50:07Z',
-        'total_refunded_amount': {'value': '13.37', 'currency': 'EUR'},
-        'refund_reason_code': 'REFUND',
-        'invoice_number': 'Test',
-        'parent_payment': 'PAY-0UB50445HE155450FLNLNMUY',
-        'state': 'completed',
-        'create_time': '2018-07-24T07:50:07Z',
-        'refund_from_transaction_fee': {'value': '0.07', 'currency': 'EUR'},
-        'id': '93M41501U3542574L',
-        'refund_to_payer': {'value': '13.37', 'currency': 'EUR'},
-        'links': [
-            {'method': 'GET', 'rel': 'self',
-             'href': 'https://api.sandbox.paypal.com/v1/payments/refund/93M41501U3542574L'},
-            {'method': 'GET',
-             'rel': 'parent_payment',
-             'href': 'https://api.sandbox.paypal.com/v1/payments/payment/PAY-0UB50445HE155450FLNLNMUY'},
-            {'method': 'GET', 'rel': 'sale',
-             'href': 'https://api.sandbox.paypal.com/v1/payments/sale/1G495778AR8401726'}
-        ]
-    }
+class Object():
+    pass
+
+
+def init_api(self):
+    class Client():
+        environment = Object()
+        environment.client_id = '12345'
+        environment.merchant_id = 'G6R2B9YXADKWW'
+
+        def execute(self, request):
+            response = Object()
+            response.result = request
+            return response
+
+    self.client = Client()
 
 
 @pytest.mark.django_db
 def test_webhook_all_good(env, client, monkeypatch):
-    charge = get_test_charge(env[1])
-    monkeypatch.setattr("paypalrestsdk.Sale.find", lambda *args: charge)
-    monkeypatch.setattr("pretix.plugins.paypal.payment.Paypal.init_api", lambda *args: None)
+    order = env[1]
+    pp_order = get_test_order()
+    monkeypatch.setattr("paypalcheckoutsdk.orders.OrdersGetRequest", lambda *args: pp_order)
+    monkeypatch.setattr("pretix.plugins.paypal.payment.PaypalMethod.init_api", init_api)
+
+    with scopes_disabled():
+        ReferencedPayPalObject.objects.create(order=order, payment=order.payments.first(),
+                                              reference="806440346Y391300T")
 
     client.post('/dummy/dummy/paypal/webhook/', json.dumps(
         {
-            "id": "WH-2WR32451HC0233532-67976317FL4543714",
-            "create_time": "2014-10-23T17:23:52Z",
-            "resource_type": "sale",
-            "event_type": "PAYMENT.SALE.COMPLETED",
-            "summary": "A successful sale payment was made for $ 0.48 USD",
+            "id": "WH-4T867178D0574904F-7TT11736YU643990P",
+            "create_time": "2022-04-28T12:00:37.077Z",
+            "resource_type": "checkout-order",
+            "event_type": "CHECKOUT.ORDER.COMPLETED",
+            "summary": "Checkout Order Completed",
             "resource": {
-                "amount": {
-                    "total": "-0.01",
-                    "currency": "USD"
+                "update_time": "2022-04-28T12:00:22Z",
+                "create_time": "2022-04-28T11:59:59Z",
+                "purchase_units": [
+                    {
+                        "reference_id": "default",
+                        "amount": {
+                            "currency_code": "EUR",
+                            "value": "43.59"
+                        },
+                        "payee": {
+                            "email_address": "dummy-facilitator@dummy.dummy",
+                            "merchant_id": "G6R2B9YXADKWW"
+                        },
+                        "description": "Order JWJGC for PayPal v2",
+                        "custom_id": "Order PAYPALV2-JWJGC",
+                        "soft_descriptor": "MARTINFACIL",
+                        "payments": {
+                            "captures": [
+                                {
+                                    "id": "22A4162004478570J",
+                                    "status": "COMPLETED",
+                                    "amount": {
+                                        "currency_code": "EUR",
+                                        "value": "43.59"
+                                    },
+                                    "final_capture": True,
+                                    "disbursement_mode": "INSTANT",
+                                    "seller_protection": {
+                                        "status": "ELIGIBLE",
+                                        "dispute_categories": [
+                                            "ITEM_NOT_RECEIVED",
+                                            "UNAUTHORIZED_TRANSACTION"
+                                        ]
+                                    },
+                                    "seller_receivable_breakdown": {
+                                        "gross_amount": {
+                                            "currency_code": "EUR",
+                                            "value": "43.59"
+                                        },
+                                        "paypal_fee": {
+                                            "currency_code": "EUR",
+                                            "value": "1.18"
+                                        },
+                                        "net_amount": {
+                                            "currency_code": "EUR",
+                                            "value": "42.41"
+                                        }
+                                    },
+                                    "custom_id": "Order PAYPALV2-JWJGC",
+                                    "links": [
+                                        {
+                                            "href": "https://api.sandbox.paypal.com/v2/payments/captures/22A4162004478570J",
+                                            "rel": "self",
+                                            "method": "GET"
+                                        },
+                                        {
+                                            "href": "https://api.sandbox.paypal.com/v2/payments/captures/22A4162004478570J/refund",
+                                            "rel": "refund",
+                                            "method": "POST"
+                                        },
+                                        {
+                                            "href": "https://api.sandbox.paypal.com/v2/checkout/orders/806440346Y391300T",
+                                            "rel": "up",
+                                            "method": "GET"
+                                        }
+                                    ],
+                                    "create_time": "2022-04-28T12:00:22Z",
+                                    "update_time": "2022-04-28T12:00:22Z"
+                                }
+                            ]
+                        }
+                    }
+                ],
+                "links": [
+                    {
+                        "href": "https://api.sandbox.paypal.com/v2/checkout/orders/806440346Y391300T",
+                        "rel": "self",
+                        "method": "GET"
+                    }
+                ],
+                "id": "806440346Y391300T",
+                "intent": "CAPTURE",
+                "payer": {
+                    "name": {
+                        "given_name": "test",
+                        "surname": "buyer"
+                    },
+                    "email_address": "dummy@dummy.dummy",
+                    "payer_id": "Q739JNKWH67HE",
+                    "address": {
+                        "country_code": "DE"
+                    }
                 },
-                "id": "36C38912MN9658832",
-                "parent_payment": "PAY-5YK922393D847794YKER7MUI",
-                "update_time": "2014-10-31T15:41:51Z",
-                "state": "completed",
-                "create_time": "2014-10-31T15:41:51Z",
-                "links": [],
-                "sale_id": "9T0916710M1105906"
+                "status": "COMPLETED"
             },
-            "links": [],
-            "event_version": "1.0"
+            "status": "SUCCESS",
+            "links": [
+                {
+                    "href": "https://api.sandbox.paypal.com/v1/notifications/webhooks-events/WH-4T867178D0574904F-7TT11736YU643990P",
+                    "rel": "self",
+                    "method": "GET",
+                    "encType": "application/json"
+                },
+                {
+                    "href": "https://api.sandbox.paypal.com/v1/notifications/webhooks-events/WH-4T867178D0574904F-7TT11736YU643990P/resend",
+                    "rel": "resend",
+                    "method": "POST",
+                    "encType": "application/json"
+                }
+            ],
+            "event_version": "1.0",
+            "resource_version": "2.0"
         }
     ), content_type='application_json')
 
@@ -248,33 +406,133 @@ def test_webhook_global(env, client, monkeypatch):
     with scopes_disabled():
         order.payments.update(state=OrderPayment.PAYMENT_STATE_PENDING)
 
-    charge = get_test_charge(env[1])
-    monkeypatch.setattr("paypalrestsdk.Sale.find", lambda *args: charge)
-    monkeypatch.setattr("pretix.plugins.paypal.payment.Paypal.init_api", lambda *args: None)
-    ReferencedPayPalObject.objects.create(order=order, reference="PAY-5YK922393D847794YKER7MUI")
+    pp_order = get_test_order()
+    monkeypatch.setattr("paypalcheckoutsdk.orders.OrdersGetRequest", lambda *args: pp_order)
+    monkeypatch.setattr("pretix.plugins.paypal.payment.PaypalMethod.init_api", init_api)
+    with scopes_disabled():
+        ReferencedPayPalObject.objects.create(order=order, payment=order.payments.first(),
+                                              reference="806440346Y391300T")
 
     client.post('/_paypal/webhook/', json.dumps(
         {
-            "id": "WH-2WR32451HC0233532-67976317FL4543714",
-            "create_time": "2014-10-23T17:23:52Z",
-            "resource_type": "sale",
-            "event_type": "PAYMENT.SALE.COMPLETED",
-            "summary": "A successful sale payment was made for $ 0.48 USD",
+            "id": "WH-4T867178D0574904F-7TT11736YU643990P",
+            "create_time": "2022-04-28T12:00:37.077Z",
+            "resource_type": "checkout-order",
+            "event_type": "CHECKOUT.ORDER.COMPLETED",
+            "summary": "Checkout Order Completed",
             "resource": {
-                "amount": {
-                    "total": "-0.01",
-                    "currency": "USD"
+                "update_time": "2022-04-28T12:00:22Z",
+                "create_time": "2022-04-28T11:59:59Z",
+                "purchase_units": [
+                    {
+                        "reference_id": "default",
+                        "amount": {
+                            "currency_code": "EUR",
+                            "value": "43.59"
+                        },
+                        "payee": {
+                            "email_address": "dummy-facilitator@dummy.dummy",
+                            "merchant_id": "G6R2B9YXADKWW"
+                        },
+                        "description": "Order JWJGC for PayPal v2",
+                        "custom_id": "Order PAYPALV2-JWJGC",
+                        "soft_descriptor": "MARTINFACIL",
+                        "payments": {
+                            "captures": [
+                                {
+                                    "id": "22A4162004478570J",
+                                    "status": "COMPLETED",
+                                    "amount": {
+                                        "currency_code": "EUR",
+                                        "value": "43.59"
+                                    },
+                                    "final_capture": True,
+                                    "disbursement_mode": "INSTANT",
+                                    "seller_protection": {
+                                        "status": "ELIGIBLE",
+                                        "dispute_categories": [
+                                            "ITEM_NOT_RECEIVED",
+                                            "UNAUTHORIZED_TRANSACTION"
+                                        ]
+                                    },
+                                    "seller_receivable_breakdown": {
+                                        "gross_amount": {
+                                            "currency_code": "EUR",
+                                            "value": "43.59"
+                                        },
+                                        "paypal_fee": {
+                                            "currency_code": "EUR",
+                                            "value": "1.18"
+                                        },
+                                        "net_amount": {
+                                            "currency_code": "EUR",
+                                            "value": "42.41"
+                                        }
+                                    },
+                                    "custom_id": "Order PAYPALV2-JWJGC",
+                                    "links": [
+                                        {
+                                            "href": "https://api.sandbox.paypal.com/v2/payments/captures/22A4162004478570J",
+                                            "rel": "self",
+                                            "method": "GET"
+                                        },
+                                        {
+                                            "href": "https://api.sandbox.paypal.com/v2/payments/captures/22A4162004478570J/refund",
+                                            "rel": "refund",
+                                            "method": "POST"
+                                        },
+                                        {
+                                            "href": "https://api.sandbox.paypal.com/v2/checkout/orders/806440346Y391300T",
+                                            "rel": "up",
+                                            "method": "GET"
+                                        }
+                                    ],
+                                    "create_time": "2022-04-28T12:00:22Z",
+                                    "update_time": "2022-04-28T12:00:22Z"
+                                }
+                            ]
+                        }
+                    }
+                ],
+                "links": [
+                    {
+                        "href": "https://api.sandbox.paypal.com/v2/checkout/orders/806440346Y391300T",
+                        "rel": "self",
+                        "method": "GET"
+                    }
+                ],
+                "id": "806440346Y391300T",
+                "intent": "CAPTURE",
+                "payer": {
+                    "name": {
+                        "given_name": "test",
+                        "surname": "buyer"
+                    },
+                    "email_address": "dummy@dummy.dummy",
+                    "payer_id": "Q739JNKWH67HE",
+                    "address": {
+                        "country_code": "DE"
+                    }
                 },
-                "id": "36C38912MN9658832",
-                "parent_payment": "PAY-5YK922393D847794YKER7MUI",
-                "update_time": "2014-10-31T15:41:51Z",
-                "state": "completed",
-                "create_time": "2014-10-31T15:41:51Z",
-                "links": [],
-                "sale_id": "9T0916710M1105906"
+                "status": "COMPLETED"
             },
-            "links": [],
-            "event_version": "1.0"
+            "status": "SUCCESS",
+            "links": [
+                {
+                    "href": "https://api.sandbox.paypal.com/v1/notifications/webhooks-events/WH-4T867178D0574904F-7TT11736YU643990P",
+                    "rel": "self",
+                    "method": "GET",
+                    "encType": "application/json"
+                },
+                {
+                    "href": "https://api.sandbox.paypal.com/v1/notifications/webhooks-events/WH-4T867178D0574904F-7TT11736YU643990P/resend",
+                    "rel": "resend",
+                    "method": "POST",
+                    "encType": "application/json"
+                }
+            ],
+            "event_version": "1.0",
+            "resource_version": "2.0"
         }
     ), content_type='application_json')
 
@@ -290,32 +548,93 @@ def test_webhook_mark_paid(env, client, monkeypatch):
     with scopes_disabled():
         order.payments.update(state=OrderPayment.PAYMENT_STATE_PENDING)
 
-    charge = get_test_charge(env[1])
-    monkeypatch.setattr("paypalrestsdk.Sale.find", lambda *args: charge)
-    monkeypatch.setattr("pretix.plugins.paypal.payment.Paypal.init_api", lambda *args: None)
+    pp_order = get_test_order()
+    monkeypatch.setattr("paypalcheckoutsdk.orders.OrdersGetRequest", lambda *args: pp_order)
+    monkeypatch.setattr("pretix.plugins.paypal.payment.PaypalMethod.init_api", init_api)
+    with scopes_disabled():
+        ReferencedPayPalObject.objects.create(order=order, payment=order.payments.first(),
+                                              reference="806440346Y391300T")
 
     client.post('/dummy/dummy/paypal/webhook/', json.dumps(
         {
-            "id": "WH-2WR32451HC0233532-67976317FL4543714",
-            "create_time": "2014-10-23T17:23:52Z",
-            "resource_type": "sale",
-            "event_type": "PAYMENT.SALE.COMPLETED",
-            "summary": "A successful sale payment was made for $ 0.48 USD",
+            "id": "WH-88L014580L300952M-4BX97184625330932",
+            "create_time": "2022-04-28T12:00:26.840Z",
+            "resource_type": "capture",
+            "event_type": "PAYMENT.CAPTURE.COMPLETED",
+            "summary": "Payment completed for EUR 43.59 EUR",
             "resource": {
+                "disbursement_mode": "INSTANT",
                 "amount": {
-                    "total": "-0.01",
-                    "currency": "USD"
+                    "value": "43.59",
+                    "currency_code": "EUR"
                 },
-                "id": "36C38912MN9658832",
-                "parent_payment": "PAY-5YK922393D847794YKER7MUI",
-                "update_time": "2014-10-31T15:41:51Z",
-                "state": "completed",
-                "create_time": "2014-10-31T15:41:51Z",
-                "links": [],
-                "sale_id": "9T0916710M1105906"
+                "seller_protection": {
+                    "dispute_categories": [
+                        "ITEM_NOT_RECEIVED",
+                        "UNAUTHORIZED_TRANSACTION"
+                    ],
+                    "status": "ELIGIBLE"
+                },
+                "supplementary_data": {
+                    "related_ids": {
+                        "order_id": "806440346Y391300T"
+                    }
+                },
+                "update_time": "2022-04-28T12:00:22Z",
+                "create_time": "2022-04-28T12:00:22Z",
+                "final_capture": True,
+                "seller_receivable_breakdown": {
+                    "paypal_fee": {
+                        "value": "1.18",
+                        "currency_code": "EUR"
+                    },
+                    "gross_amount": {
+                        "value": "43.59",
+                        "currency_code": "EUR"
+                    },
+                    "net_amount": {
+                        "value": "42.41",
+                        "currency_code": "EUR"
+                    }
+                },
+                "custom_id": "Order PAYPALV2-JWJGC",
+                "links": [
+                    {
+                        "method": "GET",
+                        "rel": "self",
+                        "href": "https://api.sandbox.paypal.com/v2/payments/captures/22A4162004478570J"
+                    },
+                    {
+                        "method": "POST",
+                        "rel": "refund",
+                        "href": "https://api.sandbox.paypal.com/v2/payments/captures/22A4162004478570J/refund"
+                    },
+                    {
+                        "method": "GET",
+                        "rel": "up",
+                        "href": "https://api.sandbox.paypal.com/v2/checkout/orders/806440346Y391300T"
+                    }
+                ],
+                "id": "22A4162004478570J",
+                "status": "COMPLETED"
             },
-            "links": [],
-            "event_version": "1.0"
+            "status": "SUCCESS",
+            "links": [
+                {
+                    "href": "https://api.sandbox.paypal.com/v1/notifications/webhooks-events/WH-88L014580L300952M-4BX97184625330932",
+                    "rel": "self",
+                    "method": "GET",
+                    "encType": "application/json"
+                },
+                {
+                    "href": "https://api.sandbox.paypal.com/v1/notifications/webhooks-events/WH-88L014580L300952M-4BX97184625330932/resend",
+                    "rel": "resend",
+                    "method": "POST",
+                    "encType": "application/json"
+                }
+            ],
+            "event_version": "1.0",
+            "resource_version": "2.0"
         }
     ), content_type='application_json')
 
@@ -325,43 +644,82 @@ def test_webhook_mark_paid(env, client, monkeypatch):
 
 @pytest.mark.django_db
 def test_webhook_refund1(env, client, monkeypatch):
-    charge = get_test_charge(env[1])
-    charge['state'] = 'refunded'
-    refund = get_test_refund(env[1])
+    order = env[1]
+    pp_order = get_test_order()
+    pp_refund = get_test_refund()
 
-    monkeypatch.setattr("paypalrestsdk.Sale.find", lambda *args: charge)
-    monkeypatch.setattr("paypalrestsdk.Refund.find", lambda *args: refund)
-    monkeypatch.setattr("pretix.plugins.paypal.payment.Paypal.init_api", lambda *args: None)
+    monkeypatch.setattr("paypalcheckoutsdk.orders.OrdersGetRequest", lambda *args: pp_order)
+    monkeypatch.setattr("paypalcheckoutsdk.payments.RefundsGetRequest", lambda *args: pp_refund)
+    monkeypatch.setattr("pretix.plugins.paypal.payment.PaypalMethod.init_api", init_api)
+    with scopes_disabled():
+        ReferencedPayPalObject.objects.create(order=order, payment=order.payments.first(),
+                                              reference="22A4162004478570J")
 
     client.post('/dummy/dummy/paypal/webhook/', json.dumps(
         {
-            # Sample obtained in a sandbox webhook
-            "id": "WH-9K829080KA1622327-31011919VC6498738",
-            "create_time": "2017-01-15T20:15:36Z",
+            "id": "WH-5LJ60612747357339-66248625WA926672S",
+            "create_time": "2022-04-28T14:51:00.318Z",
             "resource_type": "refund",
-            "event_type": "PAYMENT.SALE.REFUNDED",
-            "summary": "A EUR 255.41 EUR sale payment was refunded",
+            "event_type": "PAYMENT.CAPTURE.REFUNDED",
+            "summary": "A EUR 43.59 EUR capture payment was refunded",
             "resource": {
+                "seller_payable_breakdown": {
+                    "total_refunded_amount": {
+                        "value": "43.59",
+                        "currency_code": "EUR"
+                    },
+                    "paypal_fee": {
+                        "value": "1.18",
+                        "currency_code": "EUR"
+                    },
+                    "gross_amount": {
+                        "value": "42.41",
+                        "currency_code": "EUR"
+                    },
+                    "net_amount": {
+                        "value": "43.59",
+                        "currency_code": "EUR"
+                    }
+                },
                 "amount": {
-                    "total": "255.41",
-                    "currency": "EUR"
+                    "value": "43.59",
+                    "currency_code": "EUR"
                 },
-                "id": "75S46770PP192124D",
-                "parent_payment": "PAY-5YK922393D847794YKER7MUI",
-                "update_time": "2017-01-15T20:15:06Z",
-                "create_time": "2017-01-15T20:14:29Z",
-                "state": "completed",
-                "links": [],
-                "refund_to_payer": {
-                    "value": "255.41",
-                    "currency": "EUR"
-                },
-                "invoice_number": "",
-                "refund_reason_code": "REFUND",
-                "sale_id": "9T0916710M1105906"
+                "update_time": "2022-04-28T07:50:56-07:00",
+                "create_time": "2022-04-28T07:50:56-07:00",
+                "custom_id": "Order PAYPALV2-JWJGC",
+                "links": [
+                    {
+                        "method": "GET",
+                        "rel": "self",
+                        "href": "https://api.sandbox.paypal.com/v2/payments/refunds/1YK122615V244890X"
+                    },
+                    {
+                        "method": "GET",
+                        "rel": "up",
+                        "href": "https://api.sandbox.paypal.com/v2/payments/captures/22A4162004478570J"
+                    }
+                ],
+                "id": "1YK122615V244890X",
+                "status": "COMPLETED"
             },
-            "links": [],
-            "event_version": "1.0"
+            "status": "SUCCESS",
+            "links": [
+                {
+                    "href": "https://api.sandbox.paypal.com/v1/notifications/webhooks-events/WH-5LJ60612747357339-66248625WA926672S",
+                    "rel": "self",
+                    "method": "GET",
+                    "encType": "application/json"
+                },
+                {
+                    "href": "https://api.sandbox.paypal.com/v1/notifications/webhooks-events/WH-5LJ60612747357339-66248625WA926672S/resend",
+                    "rel": "resend",
+                    "method": "POST",
+                    "encType": "application/json"
+                }
+            ],
+            "event_version": "1.0",
+            "resource_version": "2.0"
         }
     ), content_type='application_json')
 
@@ -380,37 +738,82 @@ def test_webhook_refund1(env, client, monkeypatch):
 
 @pytest.mark.django_db
 def test_webhook_refund2(env, client, monkeypatch):
-    charge = get_test_charge(env[1])
-    charge['state'] = 'refunded'
-    refund = get_test_refund(env[1])
+    order = env[1]
+    pp_order = get_test_order()
+    pp_refund = get_test_refund()
 
-    monkeypatch.setattr("paypalrestsdk.Sale.find", lambda *args: charge)
-    monkeypatch.setattr("paypalrestsdk.Refund.find", lambda *args: refund)
-    monkeypatch.setattr("pretix.plugins.paypal.payment.Paypal.init_api", lambda *args: None)
+    monkeypatch.setattr("paypalcheckoutsdk.orders.OrdersGetRequest", lambda *args: pp_order)
+    monkeypatch.setattr("paypalcheckoutsdk.payments.RefundsGetRequest", lambda *args: pp_refund)
+    monkeypatch.setattr("pretix.plugins.paypal.payment.PaypalMethod.init_api", init_api)
+    with scopes_disabled():
+        ReferencedPayPalObject.objects.create(order=order, payment=order.payments.first(),
+                                              reference="22A4162004478570J")
 
     client.post('/dummy/dummy/paypal/webhook/', json.dumps(
         {
-            # Sample obtained in the webhook simulator
-            "id": "WH-2N242548W9943490U-1JU23391CS4765624",
-            "create_time": "2014-10-31T15:42:24Z",
+            "id": "WH-7FL378472F5218625-6WC87835CR8751809",
+            "create_time": "2022-04-28T14:56:08.160Z",
             "resource_type": "refund",
-            "event_type": "PAYMENT.SALE.REFUNDED",
-            "summary": "A 0.01 USD sale payment was refunded",
+            "event_type": "PAYMENT.CAPTURE.REFUNDED",
+            "summary": "A EUR 43.59 EUR capture payment was refunded",
             "resource": {
-                "amount": {
-                    "total": "-0.01",
-                    "currency": "USD"
+                "seller_payable_breakdown": {
+                    "total_refunded_amount": {
+                        "value": "43.59",
+                        "currency_code": "EUR"
+                    },
+                    "paypal_fee": {
+                        "value": "01.18",
+                        "currency_code": "EUR"
+                    },
+                    "gross_amount": {
+                        "value": "43.59",
+                        "currency_code": "EUR"
+                    },
+                    "net_amount": {
+                        "value": "42.41",
+                        "currency_code": "EUR"
+                    }
                 },
-                "id": "36C38912MN9658832",
-                "parent_payment": "PAY-5YK922393D847794YKER7MUI",
-                "update_time": "2014-10-31T15:41:51Z",
-                "state": "completed",
-                "create_time": "2014-10-31T15:41:51Z",
-                "links": [],
-                "sale_id": "9T0916710M1105906"
+                "amount": {
+                    "value": "43.59",
+                    "currency_code": "EUR"
+                },
+                "update_time": "2022-04-28T07:56:04-07:00",
+                "create_time": "2022-04-28T07:56:04-07:00",
+                "custom_id": "Order PAYPALV2-JWJGC",
+                "links": [
+                    {
+                        "method": "GET",
+                        "rel": "self",
+                        "href": "https://api.sandbox.paypal.com/v2/payments/refunds/3K87087190824201K"
+                    },
+                    {
+                        "method": "GET",
+                        "rel": "up",
+                        "href": "https://api.sandbox.paypal.com/v2/payments/captures/22A4162004478570J"
+                    }
+                ],
+                "id": "3K87087190824201K",
+                "status": "COMPLETED"
             },
-            "links": [],
-            "event_version": "1.0"
+            "status": "SUCCESS",
+            "links": [
+                {
+                    "href": "https://api.sandbox.paypal.com/v1/notifications/webhooks-events/WH-7FL378472F5218625-6WC87835CR8751809",
+                    "rel": "self",
+                    "method": "GET",
+                    "encType": "application/json"
+                },
+                {
+                    "href": "https://api.sandbox.paypal.com/v1/notifications/webhooks-events/WH-7FL378472F5218625-6WC87835CR8751809/resend",
+                    "rel": "resend",
+                    "method": "POST",
+                    "encType": "application/json"
+                }
+            ],
+            "event_version": "1.0",
+            "resource_version": "2.0"
         }
     ), content_type='application_json')
 
