@@ -103,7 +103,6 @@ def register_global_settings(sender, **kwargs):
 @receiver(html_head, dispatch_uid="payment_paypal_html_head")
 def html_head_presale(sender, request=None, **kwargs):
     provider = PaypalMethod(sender)
-    provider.init_api()
     url = resolve(request.path_info)
 
     if provider.settings.get('_enabled', as_type=bool) and (
@@ -111,6 +110,7 @@ def html_head_presale(sender, request=None, **kwargs):
             (url.url_name == "event.checkout" and url.kwargs['step'] == "payment") or
             (url.namespace == "plugins:paypal" and url.url_name == "pay")
     ):
+        provider.init_api()
         template = get_template('pretixplugins/paypal/presale_head.html')
 
         ctx = {
