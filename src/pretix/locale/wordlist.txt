@@ -2,6 +2,7 @@
 ABN
 AGPL
 Alipay
+APM
 analytics
 anonymize
 anonymized
@@ -14,9 +15,13 @@ barcode
 Bcc
 BCC
 BezahlCode
+BLIK
 blocklist
+BN
+Boleto
 Bundles
 chardet
+chargebacks
 checkboxes
 CONFIRM
 cronjob
@@ -33,6 +38,7 @@ DSS
 DNS
 EPC
 EPS
+eps
 favicon
 filetype
 frontend
@@ -53,8 +59,10 @@ IBANs
 iCal
 ics
 iDEAL
+Itaú
 integrations
 iOS
+ISU
 JSON
 Kosovo
 Lead
@@ -64,10 +72,14 @@ MapQuest
 MOTO
 Multibanco
 Mx
+MyBank
 multiline
 OpenCage
 OpenStreetMap
 overpayment
+OXXO
+Pago
+PayU
 PCI
 PDFs
 percentual
@@ -110,6 +122,7 @@ TODO
 TOTP
 transactional
 trustable
+Trustly
 txt
 UID
 uncanceled
@@ -117,6 +130,8 @@ uncategorized
 undeletable
 unredeemed
 URIs
+Venmo
+Verkkopankki
 waitinglist
 WebAuthn
 webhook
@@ -129,4 +144,5 @@ whitespace
 xlsx
 xml
 Yubikey
+Zimpler
 ZVT

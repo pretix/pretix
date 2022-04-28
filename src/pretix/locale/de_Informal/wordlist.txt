@@ -11,6 +11,7 @@ Alipay
 and
 App
 Apps
+APM
 as
 auschecken
 Ausgangsscan
@@ -45,8 +46,11 @@ BezahlCode
 Bezahlmethode
 Blackberry
 Browsereinstellungen
+BLIK
+BN
 BSD
 bspw
+Boleto
 Bundles
 bzw
 chardet
@@ -84,6 +88,7 @@ email
 Enterprise
 EPC
 EPS
+eps
 Erstattungsbetrag
 Erstattungsliste
 Erstattungsmethode
@@ -132,7 +137,9 @@ Installations
 integrationen
 INV
 invalidiert
+ISU
 iOS
+Itaú
 iTunes
 JavaScript
 JSON
@@ -160,6 +167,7 @@ Mo
 MOTO
 Multibanco
 MwSt
+MyBank
 name
 Nr
 number
@@ -169,10 +177,13 @@ OpenCage
 OpenStreetMap
 Opera
 Output
+OXXO
 parsen
+Pago
 Pay
 PayPal
 PayPals
+PayU
 PCI
 Platzhalterzeichen
 Play
@@ -262,6 +273,7 @@ TOTP
 Trace
 Tracking
 transaktionale
+Trustly
 Turnover
 txt
 überbuchen
@@ -288,6 +300,7 @@ URIs
 Ursprüngl
 USt
 Überweisungs
+Venmo
 Veranstaltereinstellungen
 Veranstalterkonten
 Veranstalterkonto
@@ -300,6 +313,7 @@ Veranstaltungs
 veranstaltungsweiten
 Verfügbarkeitsberechnung
 Verfügbarkeitsstatus
+Verkkopankki
 Veröffentlichbarer
 VIP
 WebAuthn
@@ -317,6 +331,7 @@ Zahlungsplugins
 Zehnerkarten
 zeitbasiert
 Zeitslotbuchung
+Zimpler
 zubuchbaren
 zurückbuchen
 zurückgeleitet
