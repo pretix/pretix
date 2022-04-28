@@ -21,9 +21,10 @@
 #
 import hashlib
 
-from paypalcheckoutsdk.core import PayPalHttpClient as VendorPayPalHttpClient, AccessToken
-
 from django.core.cache import cache
+from paypalcheckoutsdk.core import (
+    AccessToken, PayPalHttpClient as VendorPayPalHttpClient,
+)
 
 
 class PayPalHttpClient(VendorPayPalHttpClient):

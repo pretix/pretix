@@ -55,7 +55,7 @@ from django_scopes import scopes_disabled
 from paypalcheckoutsdk.orders import OrdersGetRequest
 from paypalcheckoutsdk.payments import RefundsGetRequest
 
-from pretix.base.models import Event, Order, OrderPayment, Quota, OrderRefund
+from pretix.base.models import Event, Order, OrderPayment, OrderRefund, Quota
 from pretix.base.payment import PaymentException
 from pretix.base.settings import GlobalSettingsObject
 from pretix.control.permissions import event_permission_required
