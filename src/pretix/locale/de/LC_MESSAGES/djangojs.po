@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-28 16:44+0000\n"
-"PO-Revision-Date: 2022-04-28 18:03+0000\n"
-"Last-Translator: Martin Gross <martin@pc-coholic.de>\n"
+"PO-Revision-Date: 2022-04-28 18:04+0000\n"
+"Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix-js/"
 "de/>\n"
 "Language: de\n"
@@ -430,11 +430,11 @@ msgstr "Anzahl an Tagen mit vorherigem Eintritt"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:87
 msgid "Minutes since last entry (-1 on first entry)"
-msgstr "Minuten seit letzten Eintritt (-1 bei Ersteintritt)"
+msgstr "Minuten seit vorherigem Eintritt (-1 bei erstem Zutritt)"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:91
 msgid "Minutes since first entry (-1 on first entry)"
-msgstr "Minuten seit erstem Eintritt (-1 bei Ersteintritt)"
+msgstr "Minuten seit erstem Eintritt (-1 bei erstem Zutritt)"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:112
 msgid "All of the conditions below (AND)"
