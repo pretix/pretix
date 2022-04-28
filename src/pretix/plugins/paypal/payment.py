@@ -153,7 +153,7 @@ class PaypalSettingsHolder(BasePaymentProvider):
                  label=_('PayPal'),
                  required=False,
                  help_text=_(
-                     'Even if a customer choses an Alternative Payment Method, they will always have the option to '
+                     'Even if a customer chooses an Alternative Payment Method, they will always have the option to '
                      'revert back to paying with their PayPal account. For this reason, this payment method is always '
                      'active.'
                  ),

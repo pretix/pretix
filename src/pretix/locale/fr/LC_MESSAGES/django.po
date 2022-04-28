@@ -3222,7 +3222,7 @@ msgid ""
 "keep things organized."
 msgstr ""
 "Si vous avez beaucoup de produits, vous pouvez les trier par catégories pour "
-"garder les choses organisées."
+"garder les chooses organisées."
 
 #: pretix/base/models/items.py:359
 msgid "Item name"
@@ -25025,7 +25025,7 @@ msgstr "Endpoint"
 
 #: pretix/plugins/paypal/payment.py:156
 msgid ""
-"Even if a customer choses an Alternative Payment Method, they will always "
+"Even if a customer chooses an Alternative Payment Method, they will always "
 "have the option to revert back to paying with their PayPal account. For this "
 "reason, this payment method is always active."
 msgstr ""
