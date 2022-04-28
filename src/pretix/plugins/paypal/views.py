@@ -52,8 +52,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from django.views.generic import TemplateView
 from django_scopes import scopes_disabled
-from paypalcheckoutsdk import orders as pp_orders
-from paypalcheckoutsdk import payments as pp_payments
+from paypalcheckoutsdk import orders as pp_orders, payments as pp_payments
 
 from pretix.base.models import Event, Order, OrderPayment, OrderRefund, Quota
 from pretix.base.payment import PaymentException
