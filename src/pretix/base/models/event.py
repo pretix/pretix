@@ -700,7 +700,7 @@ class Event(EventMixin, LoggedModel):
 
         from ..signals import event_copy_data
         from . import (
-            Item, ItemAddOn, ItemBundle, ItemCategory, ItemMetaValue, Question,
+            Discount, Item, ItemAddOn, ItemBundle, ItemCategory, ItemMetaValue, Question,
             Quota,
         )
 
@@ -809,6 +809,16 @@ class Event(EventMixin, LoggedModel):
             for v in vars:
                 q.variations.add(variation_map[v.pk])
             self.items.filter(hidden_if_available_id=oldid).update(hidden_if_available=q)
+
+        for d in Discount.objects.filter(event=other).prefetch_related('condition_limit_products'):
+            items = list(d.condition_limit_products.all())
+            d.pk = None
+            d.event = self
+            d.save()
+            d.log_action('pretix.object.cloned')
+            for i in items:
+                if i.pk in item_map:
+                    d.condition_limit_products.add(item_map[i.pk])
 
         question_map = {}
         for q in Question.objects.filter(event=other).prefetch_related('items', 'options'):
