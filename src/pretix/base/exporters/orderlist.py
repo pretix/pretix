@@ -424,13 +424,13 @@ class OrderListExporter(MultiSheetListExporter):
         ).values(
             'm'
         ).order_by()
-        qs = OrderFee.objects.filter(
+        qs = OrderFee.all.filter(
             order__event__in=self.events,
         ).annotate(
             payment_providers=Subquery(p_providers, output_field=CharField()),
         ).select_related('order', 'order__invoice_address', 'tax_rule')
         if form_data['paid_only']:
-            qs = qs.filter(order__status=Order.STATUS_PAID)
+            qs = qs.filter(order__status=Order.STATUS_PAID, canceled=False)
 
         qs = self._date_filter(qs, form_data, rel='order__')
 
@@ -469,7 +469,7 @@ class OrderListExporter(MultiSheetListExporter):
             row = [
                 self.event_object_cache[order.event_id].slug,
                 order.code,
-                order.get_status_display(),
+                _("canceled") if op.canceled else order.get_status_display(),
                 order.email,
                 str(order.phone) if order.phone else '',
                 order.datetime.astimezone(tz).strftime('%Y-%m-%d'),
@@ -518,7 +518,7 @@ class OrderListExporter(MultiSheetListExporter):
         ).values(
             'm'
         ).order_by()
-        base_qs = OrderPosition.objects.filter(
+        base_qs = OrderPosition.all.filter(
             order__event__in=self.events,
         )
         qs = base_qs.annotate(
@@ -530,7 +530,7 @@ class OrderListExporter(MultiSheetListExporter):
             'answers', 'answers__question', 'answers__options'
         )
         if form_data['paid_only']:
-            qs = qs.filter(order__status=Order.STATUS_PAID)
+            qs = qs.filter(order__status=Order.STATUS_PAID, canceled=False)
 
         qs = self._date_filter(qs, form_data, rel='order__')
 
@@ -628,7 +628,7 @@ class OrderListExporter(MultiSheetListExporter):
                     self.event_object_cache[order.event_id].slug,
                     order.code,
                     op.positionid,
-                    order.get_status_display(),
+                    _("canceled") if op.canceled else order.get_status_display(),
                     order.email,
                     str(order.phone) if order.phone else '',
                     order.datetime.astimezone(tz).strftime('%Y-%m-%d'),
