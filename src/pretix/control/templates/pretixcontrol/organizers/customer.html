@@ -65,7 +65,7 @@
                                 –{% endif %}</dd>
                         {% if customer.notes %}
                             <dt>{% trans "Notes" %}</dt>
-                            <dd>{{ customer.notes }}</dd>
+                            <dd>{{ customer.notes|linebreaks }}</dd>
                         {% endif %}
                         </dl>
                     </form>

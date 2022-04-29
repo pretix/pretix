@@ -1310,6 +1310,8 @@ class CustomerFilterForm(FilterForm):
                 Q(email__icontains=query)
                 | Q(name_cached__icontains=query)
                 | Q(identifier__istartswith=query)
+                | Q(external_identifier__icontains=query)
+                | Q(notes__icontains=query)
             )
 
         if fdata.get('status') == 'active':
