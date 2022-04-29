@@ -80,12 +80,16 @@
                             {% elif c.forced and c.successful %}
                                 <span class="fa fa-fw fa-warning" data-toggle="tooltip"
                                       title="{% blocktrans trimmed with date=c.datetime|date:'SHORT_DATETIME_FORMAT' %}Additional entry scan: {{ date }}{% endblocktrans %}"></span>
-                            {% elif c.forced and not c.successful %}
-                                <br>
-                                <small class="text-muted">{% trans "Failed in offline mode" %}</small>
+                            {% elif c.force_sent %}
+                                <span class="fa fa-fw fa-cloud-upload" data-toggle="tooltip"
+                                      title="{% blocktrans trimmed with date=c.created|date:'SHORT_DATETIME_FORMAT' %}Offline scan. Upload time: {{ date }}{% endblocktrans %}"></span>
                             {% elif c.auto_checked_in %}
                                 <span class="fa fa-fw fa-magic" data-toggle="tooltip"
                                       title="{% blocktrans trimmed with date=c.datetime|date:'SHORT_DATETIME_FORMAT' %}Automatically checked in: {{ date }}{% endblocktrans %}"></span>
+                            {% endif %}
+                            {% if c.forced and not c.successful %}
+                                <br>
+                                <small class="text-muted">{% trans "Failed in offline mode" %}</small>
                             {% endif %}
                         </td>
                         <td>

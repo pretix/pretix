@@ -157,6 +157,7 @@ class CheckinListViewSet(viewsets.ModelViewSet):
             list=self.get_object(),
             successful=False,
             forced=True,
+            force_sent=True,
             device=self.request.auth if isinstance(self.request.auth, Device) else None,
             gate=self.request.auth.gate if isinstance(self.request.auth, Device) else None,
             **kwargs,
