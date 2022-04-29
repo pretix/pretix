@@ -723,7 +723,7 @@ class Event(EventMixin, LoggedModel):
             tax_map[t.pk] = t
             t.pk = None
             t.event = self
-            t.save()
+            t.save(force_insert=True)
             t.log_action('pretix.object.cloned')
 
         category_map = {}
@@ -731,7 +731,7 @@ class Event(EventMixin, LoggedModel):
             category_map[c.pk] = c
             c.pk = None
             c.event = self
-            c.save()
+            c.save(force_insert=True)
             c.log_action('pretix.object.cloned')
 
         item_meta_properties_map = {}
@@ -739,7 +739,7 @@ class Event(EventMixin, LoggedModel):
             item_meta_properties_map[imp.pk] = imp
             imp.pk = None
             imp.event = self
-            imp.save()
+            imp.save(force_insert=True)
             imp.log_action('pretix.object.cloned')
 
         item_map = {}
@@ -760,7 +760,7 @@ class Event(EventMixin, LoggedModel):
             if i.grant_membership_type and other.organizer_id != self.organizer_id:
                 i.grant_membership_type = None
 
-            i.save()
+            i.save(force_insert=True)
             i.log_action('pretix.object.cloned')
 
             if require_membership_types and other.organizer_id == self.organizer_id:
@@ -770,19 +770,19 @@ class Event(EventMixin, LoggedModel):
                 variation_map[v.pk] = v
                 v.pk = None
                 v.item = i
-                v.save()
+                v.save(force_insert=True)
 
         for imv in ItemMetaValue.objects.filter(item__event=other).prefetch_related('item', 'property'):
             imv.pk = None
             imv.property = item_meta_properties_map[imv.property.pk]
             imv.item = item_map[imv.item.pk]
-            imv.save()
+            imv.save(force_insert=True)
 
         for ia in ItemAddOn.objects.filter(base_item__event=other).prefetch_related('base_item', 'addon_category'):
             ia.pk = None
             ia.base_item = item_map[ia.base_item.pk]
             ia.addon_category = category_map[ia.addon_category.pk]
-            ia.save()
+            ia.save(force_insert=True)
 
         for ia in ItemBundle.objects.filter(base_item__event=other).prefetch_related('base_item', 'bundled_item', 'bundled_variation'):
             ia.pk = None
@@ -790,7 +790,7 @@ class Event(EventMixin, LoggedModel):
             ia.bundled_item = item_map[ia.bundled_item.pk]
             if ia.bundled_variation:
                 ia.bundled_variation = variation_map[ia.bundled_variation.pk]
-            ia.save()
+            ia.save(force_insert=True)
 
         quota_map = {}
         for q in Quota.objects.filter(event=other, subevent__isnull=True).prefetch_related('items', 'variations'):
@@ -801,7 +801,7 @@ class Event(EventMixin, LoggedModel):
             q.pk = None
             q.event = self
             q.closed = False
-            q.save()
+            q.save(force_insert=True)
             q.log_action('pretix.object.cloned')
             for i in items:
                 if i.pk in item_map:
@@ -814,7 +814,7 @@ class Event(EventMixin, LoggedModel):
             items = list(d.condition_limit_products.all())
             d.pk = None
             d.event = self
-            d.save()
+            d.save(force_insert=True)
             d.log_action('pretix.object.cloned')
             for i in items:
                 if i.pk in item_map:
@@ -827,7 +827,7 @@ class Event(EventMixin, LoggedModel):
             question_map[q.pk] = q
             q.pk = None
             q.event = self
-            q.save()
+            q.save(force_insert=True)
             q.log_action('pretix.object.cloned')
 
             for i in items:
@@ -835,7 +835,7 @@ class Event(EventMixin, LoggedModel):
             for o in opts:
                 o.pk = None
                 o.question = q
-                o.save()
+                o.save(force_insert=True)
 
         for q in self.questions.filter(dependency_question__isnull=False):
             q.dependency_question = question_map[q.dependency_question_id]
@@ -845,10 +845,10 @@ class Event(EventMixin, LoggedModel):
             if isinstance(rules, dict):
                 for k, v in rules.items():
                     if k == 'lookup':
-                        if v[0] == 'product':
-                            v[1] = str(item_map.get(int(v[1]), 0).pk) if int(v[1]) in item_map else "0"
-                        elif v[0] == 'variation':
-                            v[1] = str(variation_map.get(int(v[1]), 0).pk) if int(v[1]) in variation_map else "0"
+                        if rules[k][0] == 'product':
+                            rules[k][1] = str(item_map.get(int(v[1]), 0).pk) if int(v[1]) in item_map else "0"
+                        elif rules[k][0] == 'variation':
+                            rules[k][1] = str(variation_map.get(int(v[1]), 0).pk) if int(v[1]) in variation_map else "0"
                     else:
                         _walk_rules(v)
             elif isinstance(rules, list):
@@ -864,7 +864,7 @@ class Event(EventMixin, LoggedModel):
             rules = cl.rules
             _walk_rules(rules)
             cl.rules = rules
-            cl.save()
+            cl.save(force_insert=True)
             cl.log_action('pretix.object.cloned')
             for i in items:
                 cl.limit_products.add(item_map[i.pk])
@@ -873,21 +873,25 @@ class Event(EventMixin, LoggedModel):
             if other.seating_plan.organizer_id == self.organizer_id:
                 self.seating_plan = other.seating_plan
             else:
-                self.organizer.seating_plans.create(name=other.seating_plan.name, layout=other.seating_plan.layout)
+                sp = other.seating_plan
+                sp.pk = None
+                sp.organizer = self.organizer
+                sp.save(force_insert=True)
+                self.seating_plan = sp
             self.save()
 
         for m in other.seat_category_mappings.filter(subevent__isnull=True):
             m.pk = None
             m.event = self
             m.product = item_map[m.product_id]
-            m.save()
+            m.save(force_insert=True)
 
         for s in other.seats.filter(subevent__isnull=True):
             s.pk = None
             s.event = self
             if s.product_id:
                 s.product = item_map[s.product_id]
-            s.save()
+            s.save(force_insert=True)
 
         has_custom_style = other.settings.presale_css_file or other.settings.presale_widget_css_file
         skip_settings = (
