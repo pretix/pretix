@@ -760,7 +760,7 @@ class Event(EventMixin, LoggedModel):
             if i.grant_membership_type and other.organizer_id != self.organizer_id:
                 i.grant_membership_type = None
 
-            i.save(force_insert=True)
+            i.save()  # no force_insert since i.picture.save could have already inserted
             i.log_action('pretix.object.cloned')
 
             if require_membership_types and other.organizer_id == self.organizer_id:
