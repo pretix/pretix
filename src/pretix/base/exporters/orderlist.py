@@ -518,7 +518,7 @@ class OrderListExporter(MultiSheetListExporter):
         ).values(
             'm'
         ).order_by()
-        base_qs = OrderPosition.objects.filter(
+        base_qs = OrderPosition.all.filter(
             order__event__in=self.events,
         )
         qs = base_qs.annotate(
