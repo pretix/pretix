@@ -14,6 +14,7 @@ The customer resource contains the following public fields:
 Field                                 Type                       Description
 ===================================== ========================== =======================================================
 identifier                            string                     Internal ID of the customer
+external_identifier                   string                     External ID of the customer (or ``null``)
 email                                 string                     Customer email address
 name                                  string                     Name of this customer (or ``null``)
 name_parts                            object of strings          Decomposition of name (i.e. given name, family name)
@@ -24,6 +25,7 @@ last_login                            datetime                   Date and time o
 date_joined                           datetime                   Date and time of registration
 locale                                string                     Preferred language of the customer
 last_modified                         datetime                   Date and time of modification of the record
+notes                                 string                     Internal notes and comments (or ``null``)
 ===================================== ========================== =======================================================
 
 .. versionadded:: 4.0
@@ -58,6 +60,7 @@ Endpoints
         "results": [
           {
             "identifier": "8WSAJCJ",
+            "external_identifier": null,
             "email": "customer@example.org",
             "name": "John Doe",
             "name_parts": {
@@ -69,7 +72,8 @@ Endpoints
             "last_login": null,
             "date_joined": "2021-04-06T13:44:22.809216Z",
             "locale": "de",
-            "last_modified": "2021-04-06T13:44:22.809377Z"
+            "last_modified": "2021-04-06T13:44:22.809377Z",
+            "notes": null
           }
         ]
       }
@@ -103,6 +107,7 @@ Endpoints
 
       {
         "identifier": "8WSAJCJ",
+        "external_identifier": null,
         "email": "customer@example.org",
         "name": "John Doe",
         "name_parts": {
@@ -114,7 +119,8 @@ Endpoints
         "last_login": null,
         "date_joined": "2021-04-06T13:44:22.809216Z",
         "locale": "de",
-        "last_modified": "2021-04-06T13:44:22.809377Z"
+        "last_modified": "2021-04-06T13:44:22.809377Z",
+        "notes": null
       }
 
    :param organizer: The ``slug`` field of the organizer to fetch
@@ -150,6 +156,7 @@ Endpoints
 
       {
         "identifier": "8WSAJCJ",
+        "external_identifier": null,
         "email": "test@example.org",
         ...
       }
@@ -193,6 +200,7 @@ Endpoints
 
       {
         "identifier": "8WSAJCJ",
+        "external_identifier": null,
         "email": "test@example.org",
         …
       }
@@ -226,6 +234,7 @@ Endpoints
 
       {
         "identifier": "8WSAJCJ",
+        "external_identifier": null,
         "email": null,
         …
       }

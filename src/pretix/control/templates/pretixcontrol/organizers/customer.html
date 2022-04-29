@@ -27,6 +27,10 @@
                         <dl class="dl-horizontal">
                             <dt>{% trans "Customer ID" %}</dt>
                             <dd>#{{ customer.identifier }}</dd>
+                        {% if customer.external_identifier %}
+                            <dt>{% trans "External identifier" %}</dt>
+                            <dd>{{ customer.external_identifier }}</dd>
+                        {% endif %}
                             <dt>{% trans "Status" %}</dt>
                             <dd>
                                 {% if not customer.is_active %}
@@ -59,6 +63,10 @@
                             <dt>{% trans "Last login" %}</dt>
                             <dd>{% if customer.last_login %}{{ customer.last_login|date:"SHORT_DATETIME_FORMAT" }}{% else %}
                                 –{% endif %}</dd>
+                        {% if customer.notes %}
+                            <dt>{% trans "Notes" %}</dt>
+                            <dd>{{ customer.notes }}</dd>
+                        {% endif %}
                         </dl>
                     </form>
                     <div class="text-right">

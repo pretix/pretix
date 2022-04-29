@@ -36,6 +36,7 @@ def customer(organizer, event):
 
 TEST_CUSTOMER_RES = {
     "identifier": "8WSAJCJ",
+    "external_identifier": None,
     "email": "foo@example.org",
     "name": "Foo",
     "name_parts": {
@@ -46,7 +47,8 @@ TEST_CUSTOMER_RES = {
     "last_login": None,
     "date_joined": "2021-04-06T13:44:22.809216Z",
     "locale": "en",
-    "last_modified": "2021-04-06T13:44:22.809377Z"
+    "last_modified": "2021-04-06T13:44:22.809377Z",
+    "notes": None,
 }
 
 

@@ -1265,7 +1265,8 @@ class CustomerFilterForm(FilterForm):
     orders = {
         'email': 'email',
         'identifier': 'identifier',
-        'name_cached': 'name_cached',
+        'name': 'name_cached',
+        'external_identifier': 'external_identifier',
     }
     query = forms.CharField(
         label=_('Search query'),

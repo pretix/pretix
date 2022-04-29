@@ -59,6 +59,8 @@ class Customer(LoggedModel):
                               default=settings.LANGUAGE_CODE,
                               verbose_name=_('Language'))
     last_modified = models.DateTimeField(auto_now=True)
+    external_identifier = models.CharField(max_length=255, verbose_name=_('External identifier'), null=True, blank=True)
+    notes = models.TextField(verbose_name=_('Notes'), null=True, blank=True)
 
     objects = ScopedManager(organizer='organizer')
 
@@ -90,6 +92,8 @@ class Customer(LoggedModel):
         self.name_cached = ''
         self.email = None
         self.phone = None
+        self.external_identifier = None
+        self.notes = None
         self.save()
         self.all_logentries().update(data={}, shredded=True)
         self.orders.all().update(customer=None)
