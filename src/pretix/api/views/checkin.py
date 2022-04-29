@@ -424,6 +424,7 @@ class CheckinListPositionViewSet(viewsets.ReadOnlyModelViewSet):
             forced=force,
         )
         raw_barcode_for_checkin = None
+        from_revoked_secret = False
 
         try:
             queryset = self.get_queryset(ignore_status=True, ignore_products=True)
@@ -499,6 +500,7 @@ class CheckinListPositionViewSet(viewsets.ReadOnlyModelViewSet):
             elif revoked_matches and force:
                 op = revoked_matches[0].position
                 raw_barcode_for_checkin = self.kwargs['pk']
+                from_revoked_secret = True
             else:
                 op = revoked_matches[0].position
                 op.order.log_action('pretix.event.checkin.revoked', data={
@@ -550,7 +552,7 @@ class CheckinListPositionViewSet(viewsets.ReadOnlyModelViewSet):
                     auth=self.request.auth,
                     type=type,
                     raw_barcode=raw_barcode_for_checkin,
-                    from_revoked_secret=True,
+                    from_revoked_secret=from_revoked_secret,
                 )
             except RequiredQuestionsError as e:
                 return Response({
