@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-28 16:44+0000\n"
-"PO-Revision-Date: 2022-04-27 07:00+0000\n"
+"PO-Revision-Date: 2022-05-02 07:00+0000\n"
 "Last-Translator: Iryna N <in380@nyu.edu>\n"
 "Language-Team: Ukrainian <https://translate.pretix.eu/projects/pretix/pretix/"
 "uk/>\n"
@@ -18,14 +18,14 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.11.2\n"
+"X-Generator: Weblate 4.12\n"
 
 #: htmlcov/pretix_control_views_dashboards_py.html:963
 #: pretix/control/templates/pretixcontrol/events/index.html:140
 #: pretix/control/templates/pretixcontrol/organizers/detail.html:104
 #: pretix/control/views/dashboards.py:529
 msgid "Shop disabled"
-msgstr ""
+msgstr "Магазин вимкнено"
 
 #: htmlcov/pretix_control_views_dashboards_py.html:965
 #: pretix/control/forms/filter.py:1034 pretix/control/forms/filter.py:1404
@@ -33,7 +33,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/organizers/detail.html:106
 #: pretix/control/templates/pretixcontrol/subevents/index.html:152
 msgid "Presale over"
-msgstr ""
+msgstr "Попередній продаж закінчено"
 
 #: htmlcov/pretix_control_views_dashboards_py.html:967
 #: pretix/control/forms/filter.py:1033 pretix/control/forms/filter.py:1403
@@ -41,7 +41,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/organizers/detail.html:108
 #: pretix/control/templates/pretixcontrol/subevents/index.html:154
 msgid "Presale not started"
-msgstr ""
+msgstr "Передпродаж не розпочато"
 
 #: htmlcov/pretix_control_views_dashboards_py.html:969
 #: pretix/control/templates/pretixcontrol/events/index.html:146
@@ -49,7 +49,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/subevents/index.html:156
 #: pretix/control/views/dashboards.py:535
 msgid "On sale"
-msgstr ""
+msgstr "Продається"
 
 #: pretix/api/auth/devicesecurity.py:28
 msgid ""
@@ -93,7 +93,7 @@ msgstr "ID Клієнта"
 
 #: pretix/api/models.py:50
 msgid "Client secret"
-msgstr ""
+msgstr "Секрет клієнта"
 
 #: pretix/api/models.py:97
 msgid "Enable webhook"
@@ -467,7 +467,7 @@ msgstr "CSV (з крапкою з комою)"
 
 #: pretix/base/exporter.py:267
 msgid "Combined Excel (.xlsx)"
-msgstr ""
+msgstr "Об'єднаний Excel (.xlsx)"
 
 #: pretix/base/exporters/answers.py:52
 msgid "Answers to file upload questions"
@@ -544,7 +544,7 @@ msgstr ""
 
 #: pretix/base/exporters/events.py:47
 msgid "Event data"
-msgstr ""
+msgstr "Дані про події"
 
 #: pretix/base/exporters/events.py:55 pretix/base/exporters/waitinglist.py:112
 #: pretix/base/models/event.py:459 pretix/base/pdf.py:214
@@ -587,7 +587,7 @@ msgstr "Час закінчення події"
 #: pretix/base/models/event.py:1299 pretix/control/forms/subevents.py:619
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:274
 msgid "Admission time"
-msgstr ""
+msgstr "Час відкриття"
 
 #: pretix/base/exporters/events.py:62 pretix/base/models/event.py:498
 #: pretix/base/models/event.py:1308 pretix/control/forms/subevents.py:92
@@ -984,7 +984,7 @@ msgstr "Внутрішнє посилання"
 
 #: pretix/base/exporters/invoices.py:223 pretix/control/forms/event.py:1218
 msgid "Reverse charge"
-msgstr ""
+msgstr "Скасувати оплату"
 
 #: pretix/base/exporters/invoices.py:224
 msgid "Shown foreign currency"
@@ -1299,7 +1299,7 @@ msgstr "Номери рахунків"
 #: pretix/control/forms/filter.py:538
 #: pretix/control/templates/pretixcontrol/order/index.html:181
 msgid "Sales channel"
-msgstr ""
+msgstr "Канал продажу"
 
 #: pretix/base/exporters/orderlist.py:292 pretix/base/models/items.py:495
 #: pretix/base/models/orders.py:229
@@ -1317,7 +1317,7 @@ msgstr ""
 #: pretix/plugins/banktransfer/refund_export.py:46
 #: pretix/plugins/checkinlists/exporters.py:471
 msgid "Comment"
-msgstr ""
+msgstr "Коментар"
 
 #: pretix/base/exporters/orderlist.py:294
 #: pretix/base/exporters/orderlist.py:583 pretix/base/models/orders.py:224
@@ -1330,7 +1330,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:177
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:68
 msgid "Positions"
-msgstr ""
+msgstr "Позиції"
 
 #: pretix/base/exporters/orderlist.py:296
 #: pretix/base/exporters/orderlist.py:613 pretix/base/models/orders.py:255
@@ -1341,7 +1341,7 @@ msgstr "Адреса електронної пошти підтверджена"
 #: pretix/base/exporters/orderlist.py:301
 #, python-brace-format
 msgid "Paid by {method}"
-msgstr ""
+msgstr "Оплачено з{method}"
 
 #: pretix/base/exporters/orderlist.py:445
 msgid "Fee type"
@@ -1492,12 +1492,12 @@ msgstr ""
 #: pretix/base/exporters/orderlist.py:577 pretix/base/orderimport.py:671
 #: pretix/plugins/checkinlists/exporters.py:472
 msgid "Seat ID"
-msgstr ""
+msgstr "Ідентифікаційний номер місця"
 
 #: pretix/base/exporters/orderlist.py:578
 #: pretix/plugins/checkinlists/exporters.py:473
 msgid "Seat name"
-msgstr ""
+msgstr "Назва місця"
 
 #: pretix/base/exporters/orderlist.py:579
 #: pretix/plugins/checkinlists/exporters.py:474
@@ -1507,16 +1507,16 @@ msgstr ""
 #: pretix/base/exporters/orderlist.py:580
 #: pretix/plugins/checkinlists/exporters.py:475
 msgid "Seat row"
-msgstr ""
+msgstr "Ряд"
 
 #: pretix/base/exporters/orderlist.py:581
 #: pretix/plugins/checkinlists/exporters.py:476
 msgid "Seat number"
-msgstr ""
+msgstr "Номер місця"
 
 #: pretix/base/exporters/orderlist.py:582
 msgid "Order comment"
-msgstr ""
+msgstr "Коментар до замовленння"
 
 #: pretix/base/exporters/orderlist.py:750
 msgid "Order payments and refunds"
@@ -1621,7 +1621,7 @@ msgstr "Bаучери Блокування"
 
 #: pretix/base/exporters/orderlist.py:834 pretix/control/views/item.py:928
 msgid "Current user's carts"
-msgstr ""
+msgstr "Кошики цього користувача"
 
 #: pretix/base/exporters/orderlist.py:834
 #: pretix/base/exporters/waitinglist.py:41 pretix/base/shredder.py:239
@@ -1659,7 +1659,7 @@ msgstr "Поточна наявність"
 #: pretix/control/templates/pretixcontrol/items/quota.html:58
 #: pretix/control/views/item.py:935
 msgid "Infinite"
-msgstr ""
+msgstr "Безкінечний"
 
 #: pretix/base/exporters/orderlist.py:881
 msgid "Gift card transactions"
@@ -1739,7 +1739,7 @@ msgstr ""
 
 #: pretix/base/exporters/orderlist.py:1004
 msgid "Show value at"
-msgstr ""
+msgstr "Показати значення як"
 
 #: pretix/base/exporters/orderlist.py:1010
 #: pretix/base/exporters/orderlist.py:1020 pretix/control/forms/filter.py:472
@@ -1770,11 +1770,11 @@ msgstr "Очистити кошик"
 
 #: pretix/base/exporters/orderlist.py:1022 pretix/control/forms/filter.py:1214
 msgid "Valid and with value"
-msgstr ""
+msgstr "Дійсний і зі значенням"
 
 #: pretix/base/exporters/orderlist.py:1023 pretix/control/forms/filter.py:1215
 msgid "Expired and with value"
-msgstr ""
+msgstr "Прострочений і з цінністю"
 
 #: pretix/base/exporters/orderlist.py:1024 pretix/control/forms/filter.py:197
 #: pretix/control/forms/filter.py:1216 pretix/control/forms/filter.py:1798
@@ -1799,7 +1799,7 @@ msgstr "Термін придатності"
 
 #: pretix/base/exporters/orderlist.py:1064 pretix/control/forms/orders.py:784
 msgid "Special terms and conditions"
-msgstr ""
+msgstr "Особливі умови"
 
 #: pretix/base/exporters/orderlist.py:1066
 #: pretix/control/templates/pretixcontrol/order/change.html:94
@@ -1807,24 +1807,24 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:32
 #: pretix/control/templates/pretixcontrol/organizers/giftcards.html:65
 msgid "Current value"
-msgstr ""
+msgstr "Поточна вартість"
 
 #: pretix/base/exporters/orderlist.py:1067
 msgid "Created in order"
-msgstr ""
+msgstr "Створено по порядку"
 
 #: pretix/base/exporters/orderlist.py:1068
 msgid "Last invoice number of order"
-msgstr ""
+msgstr "Номер останнього рахунку-фактури замовлення"
 
 #: pretix/base/exporters/orderlist.py:1069
 msgid "Last invoice date of order"
-msgstr ""
+msgstr "Дата останнього рахунку-фактури замовлення"
 
 #: pretix/base/exporters/waitinglist.py:47
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:87
 msgid "All entries"
-msgstr ""
+msgstr "Всі записи"
 
 #: pretix/base/exporters/waitinglist.py:52
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:90
@@ -1836,7 +1836,7 @@ msgstr "В очікуванні ваучера"
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:212
 #: pretix/control/views/waitinglist.py:311
 msgid "Voucher assigned"
-msgstr ""
+msgstr "Ваучер призначений"
 
 #: pretix/base/exporters/waitinglist.py:62
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:95
@@ -1847,20 +1847,20 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:208
 #: pretix/control/views/waitinglist.py:307
 msgid "Voucher redeemed"
-msgstr ""
+msgstr "Ваучер використано"
 
 #: pretix/base/exporters/waitinglist.py:78
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:101
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:210
 #: pretix/control/views/waitinglist.py:309
 msgid "Voucher expired"
-msgstr ""
+msgstr "Термін дії ваучера закінчився"
 
 #: pretix/base/exporters/waitinglist.py:109 pretix/base/pdf.py:111
 #: pretix/control/forms/event.py:1417
 #: pretix/control/templates/pretixcontrol/items/index.html:35
 msgid "Product name"
-msgstr ""
+msgstr "Назва продукту"
 
 #: pretix/base/exporters/waitinglist.py:113 pretix/base/orderimport.py:186
 #: pretix/control/templates/pretixcontrol/checkin/index.html:86
@@ -1954,22 +1954,28 @@ msgid ""
 "You uploaded an image in landscape orientation. Please upload an image in "
 "portrait orientation."
 msgstr ""
+"Ви завантажили зображення горизонтального формату. Будь ласка, завантажте "
+"зображення вертикального формату."
 
 #: pretix/base/forms/questions.py:444
 msgid "Please upload an image where the width is 3/4 of the height."
-msgstr ""
+msgstr "Будь ласка, завантажте зображення, ширина якого становить 3/4 висоти."
 
 #: pretix/base/forms/questions.py:447
 msgid ""
 "The file you uploaded has a very large number of pixels, please upload an "
 "image no larger than 10000 x 10000 pixels."
 msgstr ""
+"Файл, який ви завантажили, має дуже велику кількість пікселів, будь ласка, "
+"завантажте зображення розміром не більше 10000 x 10000 пікселів."
 
 #: pretix/base/forms/questions.py:450
 msgid ""
 "Upload a valid image. The file you uploaded was either not an image or a "
 "corrupted image."
 msgstr ""
+"Завантажте дійсне зображення. Файл, який ви завантажили, не був зображенням "
+"або був пошкодженим."
 
 #: pretix/base/forms/questions.py:607 pretix/base/forms/questions.py:926
 msgid "Street and Number"
@@ -1996,6 +2002,8 @@ msgid ""
 "Optional, but depending on the country you reside in we might need to charge "
 "you additional taxes if you do not enter it."
 msgstr ""
+"Необов’язково, але залежно від країни, в якій ви проживаєте, нам може "
+"знадобитися стягнути з вас додаткові податки, якщо ви не введете його."
 
 #: pretix/base/forms/questions.py:967 pretix/base/forms/questions.py:973
 msgid "If you are registered in Switzerland, you can enter your UID instead."
@@ -2020,6 +2028,8 @@ msgid ""
 "There already is an account associated with this e-mail address. Please "
 "choose a different one."
 msgstr ""
+"З цією адресою електронної пошти вже пов’язано обліковий запис. Будь ласка, "
+"виберіть іншу."
 
 #: pretix/base/forms/user.py:53
 msgid ""
@@ -2086,15 +2096,17 @@ msgid ""
 "Invalid placeholder syntax: You used a different number of \"{\" than of "
 "\"}\"."
 msgstr ""
+"Недійсний синтаксис заповнювача: ви використали іншу кількість \"{\" than of "
+"\"}\"."
 
 #: pretix/base/forms/validators.py:73
 #, python-format
 msgid "Invalid placeholder(s): %(value)s"
-msgstr ""
+msgstr "Недійсні заповнювачі: %(value)s"
 
 #: pretix/base/forms/widgets.py:218 pretix/base/forms/widgets.py:223
 msgid "Business or institutional customer"
-msgstr ""
+msgstr "Комерційний або установчий клієнт"
 
 #: pretix/base/forms/widgets.py:222
 msgid "Individual customer"
@@ -2104,12 +2116,12 @@ msgstr "Індивідуальний замовник"
 #, python-format
 msgctxt "invoice"
 msgid "Page %d of %d"
-msgstr ""
+msgstr "Сторінка %d з %d"
 
 #: pretix/base/invoice.py:246
 msgctxt "invoice"
 msgid "Classic renderer (pretix 1.0)"
-msgstr ""
+msgstr "Класичнa версія відображення рахунків (pretix 1.0)"
 
 #: pretix/base/invoice.py:290
 msgctxt "invoice"
@@ -2168,6 +2180,8 @@ msgid ""
 "{from_date}\n"
 "until {to_date}"
 msgstr ""
+"{from_date}\n"
+"до {to_date}"
 
 #: pretix/base/invoice.py:440 pretix/base/services/mail.py:446
 #, python-brace-format
@@ -2194,7 +2208,7 @@ msgstr "Одержувач"
 #: pretix/base/invoice.py:519
 msgctxt "invoice"
 msgid "Tax Invoice"
-msgstr ""
+msgstr "Податкова накладна"
 
 #: pretix/base/invoice.py:520
 msgctxt "invoice"
@@ -2231,47 +2245,47 @@ msgstr "Нетто"
 #: pretix/base/invoice.py:546
 msgctxt "invoice"
 msgid "Gross"
-msgstr ""
+msgstr "Брутто"
 
 #: pretix/base/invoice.py:552
 msgctxt "invoice"
 msgid "Amount"
-msgstr ""
+msgstr "Сума"
 
 #: pretix/base/invoice.py:583 pretix/base/invoice.py:588
 msgctxt "invoice"
 msgid "Invoice total"
-msgstr ""
+msgstr "Загальна сума рахунку"
 
 #: pretix/base/invoice.py:596
 msgctxt "invoice"
 msgid "Received payments"
-msgstr ""
+msgstr "Отримані платежі"
 
 #: pretix/base/invoice.py:599
 msgctxt "invoice"
 msgid "Outstanding payments"
-msgstr ""
+msgstr "Неоплачені платежі"
 
 #: pretix/base/invoice.py:639
 msgctxt "invoice"
 msgid "Net value"
-msgstr ""
+msgstr "Вартість Нетто"
 
 #: pretix/base/invoice.py:640
 msgctxt "invoice"
 msgid "Gross value"
-msgstr ""
+msgstr "Вартість Брутто"
 
 #: pretix/base/invoice.py:641
 msgctxt "invoice"
 msgid "Tax"
-msgstr ""
+msgstr "Податок"
 
 #: pretix/base/invoice.py:671
 msgctxt "invoice"
 msgid "Included taxes"
-msgstr ""
+msgstr "Враховані податки"
 
 #: pretix/base/invoice.py:699
 #, python-brace-format
@@ -2280,6 +2294,8 @@ msgid ""
 "Using the conversion rate of 1:{rate} as published by the European Central "
 "Bank on {date}, this corresponds to:"
 msgstr ""
+"Використовується курс обміну 1:{rate}, опублікований Європейським "
+"центральним банком{date}, що становить:"
 
 #: pretix/base/invoice.py:713
 #, python-brace-format
