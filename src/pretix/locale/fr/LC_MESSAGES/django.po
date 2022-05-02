@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-28 16:44+0000\n"
-"PO-Revision-Date: 2022-04-21 12:10+0000\n"
+"PO-Revision-Date: 2022-05-03 07:00+0000\n"
 "Last-Translator: hmontheline <Helias.mackay@goetheanum.ch>\n"
 "Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix/fr/"
 ">\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.11.2\n"
+"X-Generator: Weblate 4.12\n"
 
 #: htmlcov/pretix_control_views_dashboards_py.html:963
 #: pretix/control/templates/pretixcontrol/events/index.html:140
@@ -28393,10 +28393,8 @@ msgid "View other date"
 msgstr "Afficher une autre date"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:83
-#, fuzzy
-#| msgid "Choose date to buy a ticket"
 msgid "Choose date to book a ticket"
-msgstr "Choisissez la date d'achat du billet"
+msgstr "Choisissez une date pour acheter un billet"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:88
 msgctxt "subevent"
