@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-28 16:44+0000\n"
-"PO-Revision-Date: 2022-05-03 07:00+0000\n"
+"PO-Revision-Date: 2022-05-03 13:16+0000\n"
 "Last-Translator: hmontheline <Helias.mackay@goetheanum.ch>\n"
 "Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix/fr/"
 ">\n"
@@ -28393,6 +28393,7 @@ msgid "View other date"
 msgstr "Afficher une autre date"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:83
+#, fuzzy
 msgid "Choose date to book a ticket"
 msgstr "Choisissez une date pour acheter un billet"
 
