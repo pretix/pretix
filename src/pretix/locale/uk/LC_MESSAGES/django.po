@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-28 16:44+0000\n"
-"PO-Revision-Date: 2022-05-03 07:00+0000\n"
+"PO-Revision-Date: 2022-05-03 13:16+0000\n"
 "Last-Translator: Iryna N <in380@nyu.edu>\n"
 "Language-Team: Ukrainian <https://translate.pretix.eu/projects/pretix/pretix/"
 "uk/>\n"
@@ -2740,7 +2740,7 @@ msgstr ""
 
 #: pretix/base/models/event.py:488 pretix/base/models/event.py:1288
 msgid "Show in lists"
-msgstr ""
+msgstr "Показати у списках"
 
 #: pretix/base/models/event.py:489
 msgid ""
