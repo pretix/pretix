@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-28 16:44+0000\n"
 "PO-Revision-Date: 2022-05-04 05:00+0000\n"
-"Last-Translator: Iryna N <in380@nyu.edu>\n"
+"Last-Translator: Viktoriia <tvitalya.00@gmail.com>\n"
 "Language-Team: Ukrainian <https://translate.pretix.eu/projects/pretix/pretix/"
 "uk/>\n"
 "Language: uk\n"
@@ -225,7 +225,7 @@ msgstr "Питання такого типу не можна задавати п
 
 #: pretix/api/serializers/order.py:1094 pretix/api/serializers/order.py:1101
 msgid "The product \"{}\" is not available on this date."
-msgstr ""
+msgstr "Продукт \"{}\" на цю дату не доступний."
 
 #: pretix/api/serializers/organizer.py:120
 #: pretix/control/forms/organizer.py:574
@@ -233,28 +233,30 @@ msgid ""
 "A gift card with the same secret already exists in your or an affiliated "
 "organizer account."
 msgstr ""
+"Подарунковий сертифікат з таким секретом вже існує в вашому або в "
+"афілійованому кабінеті організатора."
 
 #: pretix/api/serializers/organizer.py:202
 #: pretix/control/views/organizer.py:670
 msgid "pretix account invitation"
-msgstr ""
+msgstr "Запрошення до профіля pretix"
 
 #: pretix/api/serializers/organizer.py:224
 #: pretix/control/views/organizer.py:769
 msgid "This user already has been invited for this team."
-msgstr ""
+msgstr "Цього користувача вже було запрошено в цю команду."
 
 #: pretix/api/serializers/organizer.py:240
 #: pretix/control/views/organizer.py:786
 msgid "This user already has permissions for this team."
-msgstr ""
+msgstr "В цього користувача вже є дозвіл в цій команді."
 
 #: pretix/api/views/oauth.py:106 pretix/control/logdisplay.py:415
 #, python-brace-format
 msgid ""
 "The application \"{application_name}\" has been authorized to access your "
 "account."
-msgstr ""
+msgstr "Додаток \"{application_name}\" дозволило увійти в свій профіль."
 
 #: pretix/api/views/order.py:502 pretix/control/views/orders.py:1324
 #: pretix/presale/views/order.py:731 pretix/presale/views/order.py:804
@@ -269,12 +271,12 @@ msgstr "Рахунок-фактура для цього замовлення в�
 #: pretix/api/views/order.py:533 pretix/control/views/orders.py:1450
 #: pretix/control/views/users.py:141
 msgid "There was an error sending the mail. Please try again later."
-msgstr ""
+msgstr "Помилка відправки пошти. Будь ласка, спробуйте ще раз пізніше."
 
 #: pretix/api/views/order.py:611 pretix/base/services/cart.py:146
 #: pretix/base/services/orders.py:134 pretix/presale/views/order.py:788
 msgid "One of the selected products is not available in the selected country."
-msgstr ""
+msgstr "Один з обраних продуктів не є доступним в обраній країні."
 
 #: pretix/api/webhooks.py:200 pretix/base/notifications.py:233
 msgid "New order placed"
@@ -361,12 +363,12 @@ msgstr "Дата серії події змінена"
 #: pretix/api/webhooks.py:276
 msgctxt "subevent"
 msgid "Event series date deleted"
-msgstr ""
+msgstr "Дата серії заходів видалена"
 
 #: pretix/base/auth.py:143
 #, python-brace-format
 msgid "{system} User"
-msgstr ""
+msgstr "{system} Користувач"
 
 #: pretix/base/auth.py:152 pretix/base/forms/auth.py:246
 #: pretix/base/models/auth.py:244 pretix/base/models/customers.py:48
@@ -403,7 +405,7 @@ msgstr ""
 #: pretix/base/context.py:52
 #, python-format
 msgid "<a %(a_attr)s>ticketing powered by pretix</a>"
-msgstr ""
+msgstr "<a %(a_attr)s> покупка квитків через pretix</a>"
 
 #: pretix/base/context.py:61
 msgid "source code"
@@ -421,13 +423,13 @@ msgstr "За замовчуванням"
 
 #: pretix/base/email.py:206
 msgid "Simple with logo"
-msgstr ""
+msgstr "Простий варіант з логотипом"
 
 #: pretix/base/email.py:513 pretix/base/email.py:595 pretix/base/email.py:611
 #: pretix/base/email.py:616 pretix/base/pdf.py:163 pretix/base/pdf.py:311
 #: pretix/base/services/invoices.py:439 pretix/control/views/event.py:753
 msgid "John Doe"
-msgstr ""
+msgstr "John Doe (\"Джон До\")"
 
 #: pretix/base/email.py:517
 msgid "Sample Corporation"
@@ -1013,7 +1015,7 @@ msgstr "Загальна вартість (без податків)"
 
 #: pretix/base/exporters/invoices.py:228
 msgid "Payment matching IDs"
-msgstr ""
+msgstr "Ідентифікація платежу"
 
 #: pretix/base/exporters/invoices.py:229 pretix/base/exporters/invoices.py:349
 #: pretix/base/exporters/orderlist.py:297
@@ -1122,7 +1124,7 @@ msgstr "Включіть суми платежів"
 
 #: pretix/base/exporters/orderlist.py:102
 msgid "Show multiple choice answers grouped in one column"
-msgstr ""
+msgstr "Показувати багатоваріантні відповіді, згруповані в одну колонку"
 
 #: pretix/base/exporters/orderlist.py:111
 msgid "Only include orders created on or after this date."
@@ -1659,7 +1661,7 @@ msgstr "Список очікування"
 
 #: pretix/base/exporters/orderlist.py:834
 msgid "Exited orders"
-msgstr ""
+msgstr "Опрацьовані замовлення"
 
 #: pretix/base/exporters/orderlist.py:834
 msgid "Current availability"
@@ -2021,6 +2023,8 @@ msgstr ""
 #: pretix/base/forms/questions.py:967 pretix/base/forms/questions.py:973
 msgid "If you are registered in Switzerland, you can enter your UID instead."
 msgstr ""
+"Якщо ви зареєстровані в Швейцарії, ви альтенативно можете ввести ваш "
+"ідентифікаційний номер підприємця"
 
 #: pretix/base/forms/questions.py:971
 msgid ""
@@ -2591,7 +2595,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/event/plugins.html:55
 #: pretix/control/templates/pretixcontrol/users/index.html:51
 msgid "Active"
-msgstr ""
+msgstr "Статус: активний"
 
 #: pretix/base/models/discount.py:59 pretix/base/models/items.py:89
 #: pretix/base/models/items.py:362 pretix/base/models/tax.py:140
@@ -2740,7 +2744,7 @@ msgstr ""
 
 #: pretix/base/models/event.py:471 pretix/base/models/organizer.py:84
 msgid "The slug may only contain letters, numbers, dots and dashes."
-msgstr ""
+msgstr "Ім'я може містити лише літери, цифри, крапки та тире."
 
 #: pretix/base/models/event.py:488 pretix/base/models/event.py:1288
 msgid "Show in lists"
@@ -2751,6 +2755,8 @@ msgid ""
 "If selected, this event will show up publicly on the list of events for your "
 "organizer account."
 msgstr ""
+"Якщо обрано, цей захід відображатиметься для всіх у списку подій в вашому "
+"профілі організатора."
 
 #: pretix/base/models/event.py:493 pretix/base/models/event.py:1303
 #: pretix/control/forms/subevents.py:99
@@ -2758,11 +2764,13 @@ msgid ""
 "Optional. No products will be sold after this date. If you do not set this "
 "value, the presale will end after the end date of your event."
 msgstr ""
+"Додаткова опція. Продаж закінчується після цієї дати. Якщо ви не обираєте цю "
+"опцію, передпродаж закінчиться після кінцевої дати вашої події."
 
 #: pretix/base/models/event.py:499 pretix/base/models/event.py:1309
 #: pretix/control/forms/subevents.py:93
 msgid "Optional. No products will be sold before this date."
-msgstr ""
+msgstr "Додаткова опція. Продаж не здійснюватиметься до цієї дати."
 
 #: pretix/base/models/event.py:524 pretix/control/navigation.py:65
 msgid "Plugins"
@@ -2775,19 +2783,20 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/organizers/index.html:81
 #: pretix/presale/views/widget.py:603
 msgid "Event series"
-msgstr ""
+msgstr "Серія заходів"
 
 #: pretix/base/models/event.py:535 pretix/base/models/event.py:1337
 msgid "Seating plan"
-msgstr ""
+msgstr "План розсадки"
 
 #: pretix/base/models/event.py:542 pretix/base/payment.py:356
 msgid "Restrict to specific sales channels"
-msgstr ""
+msgstr "Продаж можливий лише через обрані канали продажу"
 
 #: pretix/base/models/event.py:543
 msgid "Only sell tickets for this event on the following sales channels."
 msgstr ""
+"Здійснювати продаж квитків на цей захід лише через наступні канали продажу."
 
 #: pretix/base/models/event.py:550 pretix/base/models/items.py:347
 #: pretix/base/models/items.py:1562 pretix/base/models/orders.py:181
@@ -2801,7 +2810,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:44
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:65
 msgid "Event"
-msgstr ""
+msgstr "Захід"
 
 #: pretix/base/models/event.py:551 pretix/control/navigation.py:342
 #: pretix/control/navigation.py:463
@@ -2812,27 +2821,30 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/organizers/webhooks.html:37
 #: pretix/control/views/organizer.py:1489
 msgid "Events"
-msgstr ""
+msgstr "Заходи"
 
 #: pretix/base/models/event.py:1114
 msgid ""
 "You have configured at least one paid product but have not enabled any "
 "payment methods."
 msgstr ""
+"Ви обрали принаймні один оплачений продукт, але не вказали метод оплати."
 
 #: pretix/base/models/event.py:1117
 msgid "You need to configure at least one quota to sell anything."
-msgstr ""
+msgstr "Будь ласка, визначте як мінімум одну ціну, аби розпочати продаж."
 
 #: pretix/base/models/event.py:1122
 #, python-brace-format
 msgid "You need to fill the meta parameter \"{property}\"."
-msgstr ""
+msgstr "Будь ласка, додайте мета параметри \"{property}\"."
 
 #: pretix/base/models/event.py:1234
 msgid ""
 "Once created an event cannot change between an series and a single event."
 msgstr ""
+"Після створення одноразового заходу змінити параметри на серію заходів буде "
+"неможливо."
 
 #: pretix/base/models/event.py:1240
 msgid "The event slug cannot be changed."
@@ -2844,11 +2856,13 @@ msgstr ""
 
 #: pretix/base/models/event.py:1249
 msgid "The event cannot end before it starts."
-msgstr ""
+msgstr "Захід не може закінчуватися до дати його початку."
 
 #: pretix/base/models/event.py:1255
 msgid "The event's presale cannot end before it starts."
 msgstr ""
+"Передпродаж квитків на захід не може закінчуватися до того, як він "
+"розпочнеться."
 
 #: pretix/base/models/event.py:1285
 msgid ""
