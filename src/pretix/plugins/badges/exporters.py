@@ -196,6 +196,7 @@ def render_pdf(event, positions, opt):
         )
         for i, (op, r) in enumerate(positions):
             bg_page = copy.copy(r.bg_pdf.getPage(0))
+            bg_page.trimBox = bg_page.mediaBox
             offsetx = opt['margins'][3] + (i % opt['cols']) * opt['offsets'][0]
             offsety = opt['margins'][2] + (opt['rows'] - 1 - i // opt['cols']) * opt['offsets'][1]
             empty_pdf_page.mergeTranslatedPage(
