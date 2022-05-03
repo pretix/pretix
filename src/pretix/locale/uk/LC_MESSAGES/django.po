@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-28 16:44+0000\n"
-"PO-Revision-Date: 2022-05-03 13:16+0000\n"
+"PO-Revision-Date: 2022-05-04 05:00+0000\n"
 "Last-Translator: Iryna N <in380@nyu.edu>\n"
 "Language-Team: Ukrainian <https://translate.pretix.eu/projects/pretix/pretix/"
 "uk/>\n"
@@ -165,7 +165,7 @@ msgstr "Властивість метаданих '{name}' не допускає
 #: pretix/api/serializers/event.py:266
 #, python-brace-format
 msgid "Unknown plugin: '{name}'."
-msgstr ""
+msgstr "Невідомий плагін: '{name}'."
 
 #: pretix/api/serializers/item.py:119 pretix/control/forms/item.py:929
 msgid "The bundled item must not be the same item as the bundling one."
@@ -180,6 +180,8 @@ msgid ""
 "Updating add-ons, bundles, or variations via PATCH/PUT is not supported. "
 "Please use the dedicated nested endpoint."
 msgstr ""
+"Оновлення доповнень, пакетів або варіантів за допомогою PATCH/PUT не "
+"підтримується. Будь ласка, використовуйте виділену вкладену кінцеву точку."
 
 #: pretix/api/serializers/item.py:202
 msgid ""
@@ -193,6 +195,8 @@ msgstr ""
 #: pretix/api/serializers/item.py:207 pretix/control/forms/item.py:575
 msgid "Gift card products should not be admission products at the same time."
 msgstr ""
+"Продукти з подарунковими картками не повинні бути водночас матеріалами для "
+"входу."
 
 #: pretix/api/serializers/item.py:244
 #, python-brace-format
