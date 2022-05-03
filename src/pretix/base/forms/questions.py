@@ -429,7 +429,7 @@ class PortraitImageWidget(UploadedFileWidget):
 
     def value_from_datadict(self, data, files, name):
         d = super().value_from_datadict(data, files, name)
-        if d is not None:
+        if d is not None and d is not False:
             d._cropdata = json.loads(data.get(name + '_cropdata', '{}') or '{}')
         return d
 
