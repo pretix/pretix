@@ -658,7 +658,7 @@ var editor = {
             lockRotation: false,
             fontFamily: 'Open Sans',
             lineHeight: 1,
-            content: 'item',
+            content: 'event_name',
             editable: false,
             fontSize: editor._pt2px(13)
         });
