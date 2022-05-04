@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-28 16:44+0000\n"
-"PO-Revision-Date: 2022-05-04 05:00+0000\n"
-"Last-Translator: Viktoriia <tvitalya.00@gmail.com>\n"
+"PO-Revision-Date: 2022-05-05 06:00+0000\n"
+"Last-Translator: Iryna N <in380@nyu.edu>\n"
 "Language-Team: Ukrainian <https://translate.pretix.eu/projects/pretix/pretix/"
 "uk/>\n"
 "Language: uk\n"
@@ -1743,7 +1743,7 @@ msgstr "Використання подарункового сертифікат
 #: pretix/base/exporters/orderlist.py:969
 #: pretix/control/templates/pretixcontrol/giftcards/payment.html:10
 msgid "Issuer"
-msgstr ""
+msgstr "Видавач"
 
 #: pretix/base/exporters/orderlist.py:997 pretix/control/navigation.py:523
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:84
@@ -2426,7 +2426,7 @@ msgstr ""
 #: pretix/base/models/checkin.py:60 pretix/control/navigation.py:579
 #: pretix/control/templates/pretixcontrol/organizers/gates.html:5
 msgid "Gates"
-msgstr ""
+msgstr "Станції"
 
 #: pretix/base/models/checkin.py:61
 msgid ""
@@ -2606,14 +2606,14 @@ msgstr "Внутрішнє ім'я"
 #: pretix/base/models/discount.py:64 pretix/base/models/items.py:793
 #: pretix/base/models/items.py:1053 pretix/base/models/items.py:1271
 msgid "Position"
-msgstr ""
+msgstr "Позиція"
 
 #: pretix/base/models/discount.py:67 pretix/base/models/items.py:509
 #: pretix/base/models/items.py:840 pretix/control/forms/discounts.py:79
 #: pretix/control/forms/event.py:893 pretix/control/forms/item.py:515
 #: pretix/control/forms/item.py:693
 msgid "Sales channels"
-msgstr ""
+msgstr "Канали продажу"
 
 #: pretix/base/models/discount.py:73 pretix/base/models/items.py:168
 #: pretix/base/models/items.py:224 pretix/base/models/items.py:427
@@ -2641,25 +2641,24 @@ msgid "Event series handling"
 msgstr "Дата серії події змінена"
 
 #: pretix/base/models/discount.py:92
-#, fuzzy
 msgid "Apply to all products (including newly created ones)"
 msgstr "Усі події (включаючи новостворені)"
 
 #: pretix/base/models/discount.py:96
 msgid "Apply to specific products"
-msgstr ""
+msgstr "Застосовувати до конкретних продуктів"
 
 #: pretix/base/models/discount.py:101
 msgid "Apply to add-on products"
-msgstr ""
+msgstr "Застосувати до додаткових продуктів"
 
 #: pretix/base/models/discount.py:102
 msgid "Discounts never apply to bundled products"
-msgstr ""
+msgstr "Знижки ніколи не поширюються на товари в комплектах"
 
 #: pretix/base/models/discount.py:106
 msgid "Ignore products discounted by a voucher"
-msgstr ""
+msgstr "Ігнорувати продукти зі знижкою за ваучером"
 
 #: pretix/base/models/discount.py:107
 msgid ""
@@ -2774,7 +2773,7 @@ msgstr "Додаткова опція. Продаж не здійснювати�
 
 #: pretix/base/models/event.py:524 pretix/control/navigation.py:65
 msgid "Plugins"
-msgstr ""
+msgstr "Плагіни"
 
 #: pretix/base/models/event.py:531 pretix/base/pdf.py:219
 #: pretix/control/forms/event.py:250 pretix/control/forms/filter.py:1407
@@ -2787,7 +2786,7 @@ msgstr "Серія заходів"
 
 #: pretix/base/models/event.py:535 pretix/base/models/event.py:1337
 msgid "Seating plan"
-msgstr "План розсадки"
+msgstr "План сидінь"
 
 #: pretix/base/models/event.py:542 pretix/base/payment.py:356
 msgid "Restrict to specific sales channels"
@@ -2810,7 +2809,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:44
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:65
 msgid "Event"
-msgstr "Захід"
+msgstr "Подія"
 
 #: pretix/base/models/event.py:551 pretix/control/navigation.py:342
 #: pretix/control/navigation.py:463
@@ -2821,7 +2820,7 @@ msgstr "Захід"
 #: pretix/control/templates/pretixcontrol/organizers/webhooks.html:37
 #: pretix/control/views/organizer.py:1489
 msgid "Events"
-msgstr "Заходи"
+msgstr "Події"
 
 #: pretix/base/models/event.py:1114
 msgid ""
@@ -2856,111 +2855,125 @@ msgstr ""
 
 #: pretix/base/models/event.py:1249
 msgid "The event cannot end before it starts."
-msgstr "Захід не може закінчуватися до дати його початку."
+msgstr "Подія не може закінчуватися до дати її початку."
 
 #: pretix/base/models/event.py:1255
 msgid "The event's presale cannot end before it starts."
 msgstr ""
-"Передпродаж квитків на захід не може закінчуватися до того, як він "
+"Передпродаж квитків на подію не може закінчуватися до того, як він "
 "розпочнеться."
 
 #: pretix/base/models/event.py:1285
 msgid ""
 "Only with this checkbox enabled, this date is visible in the frontend to "
 "users."
-msgstr ""
+msgstr "Лише якщо обрана ця позначка, користувачі бачать ці дані в інтерфейсі."
 
 #: pretix/base/models/event.py:1289
 msgid ""
 "If selected, this event will show up publicly on the list of dates for your "
 "event."
 msgstr ""
+"Якщо вибрано, ця подія відображатиметься для всіх у списку дат для вашої "
+"події."
 
 #: pretix/base/models/event.py:1334 pretix/base/settings.py:2349
 msgid "Frontpage text"
-msgstr ""
+msgstr "Текст на головній сторінці"
 
 #: pretix/base/models/event.py:1349
 msgid "Date in event series"
-msgstr ""
+msgstr "Дата в серії подій"
 
 #: pretix/base/models/event.py:1350
 msgid "Dates in event series"
-msgstr ""
+msgstr "Дати в серії подій"
 
 #: pretix/base/models/event.py:1489
 msgid "One or more variations do not belong to this event."
-msgstr ""
+msgstr "Один або кілька варіантів не належать до цієї події."
 
 #: pretix/base/models/event.py:1519 pretix/base/models/items.py:1733
 msgid "Can not contain spaces or special characters except underscores"
 msgstr ""
+"Не може містити пробіли або спеціальні символи, крім символів підкреслення"
 
 #: pretix/base/models/event.py:1524 pretix/base/models/items.py:1738
 msgid "The property name may only contain letters, numbers and underscores."
 msgstr ""
+"Назва властивості може містити лише літери, цифри та символи підкреслення."
 
 #: pretix/base/models/event.py:1529
 msgid "Default value"
-msgstr ""
+msgstr "Значення за замовчуванням"
 
 #: pretix/base/models/event.py:1531
 msgid "Can only be changed by organizer-level administrators"
-msgstr ""
+msgstr "Змінювати можуть лише адміністратори рівня організаторів"
 
 #: pretix/base/models/event.py:1533
 msgid "Required for events"
-msgstr ""
+msgstr "Обов’язково для подій"
 
 #: pretix/base/models/event.py:1534
 msgid ""
 "If checked, an event can only be taken live if the property is set. In event "
 "series, its always optional to set a value for individual dates"
 msgstr ""
+"Якщо обрано цю позначку, подію можна транслювати, лише якщо властивість "
+"встановлено. У серії подій завжди необов’язково встановлювати значення для "
+"окремих дат"
 
 #: pretix/base/models/event.py:1539
 msgid "Valid values"
-msgstr ""
+msgstr "Дійсні значення"
 
 #: pretix/base/models/event.py:1540
 msgid ""
 "If you keep this empty, any value is allowed. Otherwise, enter one possible "
 "value per line."
 msgstr ""
+"Якщо залишити це поле порожнім, дозволено будь-якi значення. В іншому "
+"випадку введіть одне можливе значення на рядок."
 
 #: pretix/base/models/event.py:1546
 msgid "A property can either be required or have a default value, not both."
 msgstr ""
+"Властивість може бути обов’язковою або мати значення за замовчуванням, але "
+"не обидва."
 
 #: pretix/base/models/event.py:1548
 msgid "You cannot set a default value that is not a valid value."
 msgstr ""
+"Ви не можете встановити значення за замовчуванням, яке не є дійсним "
+"значенням."
 
 #: pretix/base/models/fields.py:33
 msgid "No value can contain the delimiter character."
-msgstr ""
+msgstr "Жодне значення не може містити символ-роздільник."
 
 #: pretix/base/models/giftcards.py:79
 msgid "The gift card code may only contain letters, numbers, dots and dashes."
 msgstr ""
+"Код подарункової картки може містити лише літери, цифри, крапки та тире."
 
 #: pretix/base/models/giftcards.py:91
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:39
 msgctxt "giftcard"
 msgid "Special terms and conditions"
-msgstr ""
+msgstr "Особливі умови використання"
 
 #: pretix/base/models/invoices.py:179
 #, python-format
 msgctxt "invoice"
 msgid "Tax ID: %s"
-msgstr ""
+msgstr "Податковий ідентифікаційний номер: %s"
 
 #: pretix/base/models/invoices.py:185 pretix/base/services/invoices.py:141
 #, python-format
 msgctxt "invoice"
 msgid "VAT-ID: %s"
-msgstr ""
+msgstr "Ідентифікаційний номер платника ПДВ: %s"
 
 #: pretix/base/models/items.py:86
 msgid "Category name"
@@ -3242,6 +3255,10 @@ msgid ""
 "tickets to indicate to the person at check-in that the student ID card still "
 "needs to be checked."
 msgstr ""
+"Якщо ви встановите цю опцію, програма реєстрації показуватиме видиме "
+"попередження, що цей квиток потребує особливої уваги. Ви можете "
+"використовувати це, наприклад, для студентських квитків, щоб повідомити "
+"особі під час реєстрації, що студентський квиток все ще потрібно перевірити."
 
 #: pretix/base/models/items.py:502 pretix/base/models/items.py:801
 msgid "Original price"
@@ -3253,54 +3270,62 @@ msgid ""
 "current price is a discounted one. This is just a cosmetic setting and will "
 "not actually impact pricing."
 msgstr ""
+"Якщо встановлено, це буде відображатися поруч із поточною ціною, щоб "
+"показати, що поточна ціна є знижкою. Це лише косметичний параметр, який "
+"насправді не вплине на ціни."
 
 #: pretix/base/models/items.py:514
 msgid "This product is a gift card"
-msgstr ""
+msgstr "Цей продукт є подарунковою карткою"
 
 #: pretix/base/models/items.py:515
 msgid ""
 "When a customer buys this product, they will get a gift card with a value "
 "corresponding to the product price."
 msgstr ""
+"Коли клієнт купує цей товар, він отримує подарункову картку з вартістю, що "
+"відповідає ціні товару."
 
 #: pretix/base/models/items.py:520 pretix/base/models/items.py:815
 #: pretix/control/templates/pretixcontrol/item/include_variations.html:36
 #: pretix/control/templates/pretixcontrol/item/include_variations.html:117
 msgid "Require a valid membership"
-msgstr ""
+msgstr "Вимагати дійснe членствo"
 
 #: pretix/base/models/items.py:525
 msgid "Allowed membership types"
-msgstr ""
+msgstr "Дозволені типи членства"
 
 #: pretix/base/models/items.py:529 pretix/base/models/items.py:824
 msgid "Hide without a valid membership"
-msgstr ""
+msgstr "Сховати без дійсного членства"
 
 #: pretix/base/models/items.py:530 pretix/base/models/items.py:825
 msgid ""
 "Do not show this unless the customer is logged in and has a valid "
 "membership. Be aware that this means it will never be visible in the widget."
 msgstr ""
+"Не показувати це, якщо клієнт не ввійшов у систему та не має дійсного "
+"членств. Майте на увазі, що це означає, що цього ніколи не буде видно у "
+"віджеті."
 
 #: pretix/base/models/items.py:539
 msgid "This product creates a membership of type"
-msgstr ""
+msgstr "Цей продукт створює членство типу"
 
 #: pretix/base/models/items.py:542
 msgid ""
 "The duration of the membership is the same as the duration of the event or "
 "event series date"
-msgstr ""
+msgstr "Тривалість членства така сама, як тривалість події або дати серії подій"
 
 #: pretix/base/models/items.py:546
 msgid "Membership duration in days"
-msgstr ""
+msgstr "Тривалість членства в днях"
 
 #: pretix/base/models/items.py:550
 msgid "Membership duration in months"
-msgstr ""
+msgstr "Тривалість членства в місяцях"
 
 #: pretix/base/models/items.py:558 pretix/base/models/items.py:1265
 #: pretix/control/forms/filter.py:374 pretix/control/forms/filter.py:1596
@@ -3315,33 +3340,35 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/items/quotas.html:49
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:27
 msgid "Products"
-msgstr ""
+msgstr "Продукти"
 
 #: pretix/base/models/items.py:717
 msgid ""
 "The maximum number per order can not be lower than the minimum number per "
 "order."
 msgstr ""
+"Максимальна кількість на кожне замовлення не може бути нижчою за мінімальну "
+"кількість для замовлення."
 
 #: pretix/base/models/items.py:723
 msgid "The item's category must belong to the same event as the item."
-msgstr ""
+msgstr "Категорія товару має належати до тієї ж події, що й елемент."
 
 #: pretix/base/models/items.py:728
 msgid "The item's tax rule must belong to the same event as the item."
-msgstr ""
+msgstr "Податкове правило для товару має належати до тієї ж події, що й об’єкт."
 
 #: pretix/base/models/items.py:734
 msgid "The item's availability cannot end before it starts."
-msgstr ""
+msgstr "Доступність товару не може закінчитися до її початку."
 
 #: pretix/base/models/items.py:788
 msgid "This is shown below the variation name in lists."
-msgstr ""
+msgstr "Це показано під назвою варіанта в списках."
 
 #: pretix/base/models/items.py:808
 msgid "Require approval"
-msgstr ""
+msgstr "Вимагати затвердження"
 
 #: pretix/base/models/items.py:810
 msgid ""
@@ -3350,20 +3377,24 @@ msgid ""
 "paid and completed. You can use this e.g. for discounted tickets that are "
 "only available to specific groups."
 msgstr ""
+"Якщо цей варіант є частиною замовлення, замовлення буде переведено в стан "
+"«затвердження», і його потрібно буде підтвердити, перш ніж його можна буде "
+"оплатити та завершити. Ви можете використовувати це, наприклад, на квитки зі "
+"знижкою, які доступні лише для певних груп."
 
 #: pretix/base/models/items.py:820 pretix/control/navigation.py:546
 #: pretix/control/templates/pretixcontrol/organizers/membershiptypes.html:4
 #: pretix/control/templates/pretixcontrol/organizers/membershiptypes.html:6
 msgid "Membership types"
-msgstr ""
+msgstr "Види членства"
 
 #: pretix/base/models/items.py:832
 msgid "This variation will not be sold before the given date."
-msgstr ""
+msgstr "Цей варіант не буде проданий раніше зазначеної дати."
 
 #: pretix/base/models/items.py:837
 msgid "This variation will not be sold after the given date."
-msgstr ""
+msgstr "Цей варіант не буде проданий після вказаної дати."
 
 #: pretix/base/models/items.py:842 pretix/control/forms/item.py:698
 msgid ""
@@ -3371,85 +3402,91 @@ msgid ""
 "if a sales channel is selected here but not on product level, the variation "
 "will not be available."
 msgstr ""
+"Вибір каналу збуту для продукту в цілому має пріоритет, тому якщо тут "
+"вибрано канал збуту, але не на рівні продукту, варіант буде недоступним."
 
 #: pretix/base/models/items.py:847
 msgid "Show only if a matching voucher is redeemed."
-msgstr ""
+msgstr "Показувати, лише якщо використано відповідний ваучер."
 
 #: pretix/base/models/items.py:849
 msgid ""
 "This variation will be hidden from the event page until the user enters a "
 "voucher that unlocks this variation."
 msgstr ""
+"Цей варіант буде приховано на сторінці події, доки користувач не введе "
+"ваучер, який розблокує цей варіант."
 
 #: pretix/base/models/items.py:856 pretix/base/models/vouchers.py:252
 #: pretix/base/models/waitinglist.py:96 pretix/base/orderimport.py:284
 msgid "Product variation"
-msgstr ""
+msgstr "Варіація продукту"
 
 #: pretix/base/models/items.py:857
 #: pretix/control/templates/pretixcontrol/item/create.html:64
 msgid "Product variations"
-msgstr ""
+msgstr "Варіації продукту"
 
 #: pretix/base/models/items.py:1035
 msgid "Minimum number"
-msgstr ""
+msgstr "Мінімальна кількість"
 
 #: pretix/base/models/items.py:1039
 msgid "Maximum number"
-msgstr ""
+msgstr "Максимальна кількість"
 
 #: pretix/base/models/items.py:1043
 msgid "Add-Ons are included in the price"
-msgstr ""
+msgstr "Доповнення входять у вартість"
 
 #: pretix/base/models/items.py:1044
 msgid ""
 "If selected, adding add-ons to this ticket is free, even if the add-ons "
 "would normally cost money individually."
 msgstr ""
+"Якщо вибрано, додавання доповнень до цього квитка буде безкоштовним, навіть "
+"якщо доповнення зазвичай коштують грошей окремо."
 
 #: pretix/base/models/items.py:1049
 msgid "Allow the same product to be selected multiple times"
-msgstr ""
+msgstr "Дозволити вибирати один і той самий продукт кілька разів"
 
 #: pretix/base/models/items.py:1068
 msgid "The add-on's category must belong to the same event as the item."
-msgstr ""
+msgstr "Категорія доповнення має належати до тієї ж події, що й предмет."
 
 #: pretix/base/models/items.py:1073
 msgid "The item already has an add-on of this category."
-msgstr ""
+msgstr "Предмет вже має доповнення цієї категорії."
 
 #: pretix/base/models/items.py:1078
 msgid "The minimum count needs to be equal to or greater than zero."
-msgstr ""
+msgstr "Мінімальна кількість має дорівнювати або бути вище нуля."
 
 #: pretix/base/models/items.py:1083
 msgid "The maximum count needs to be equal to or greater than zero."
-msgstr ""
+msgstr "Максимальна кількість має дорівнювати або бути вище нуля."
 
 #: pretix/base/models/items.py:1088
 msgid "The maximum count needs to be greater than the minimum count."
-msgstr ""
+msgstr "Максимальна кількість має бути вище ніж мінімальна кількість."
 
 #: pretix/base/models/items.py:1115
 msgid "Bundled item"
-msgstr ""
+msgstr "У комплекті"
 
 #: pretix/base/models/items.py:1121
 msgid "Bundled variation"
-msgstr ""
+msgstr "Варіація у комплекті"
 
 #: pretix/base/models/items.py:1127
 #: pretix/control/templates/pretixcontrol/order/transactions.html:22
 msgid "Quantity"
-msgstr ""
+msgstr "Кількість"
 
 #: pretix/base/models/items.py:1132
 msgid "Designated price part"
-msgstr ""
+msgstr "Призначена цінова частина"
 
 #: pretix/base/models/items.py:1133
 msgid ""
@@ -3458,65 +3495,69 @@ msgid ""
 "taxation, but can be kept blank otherwise. This value will NOT be added to "
 "the base item's price."
 msgstr ""
+"Якщо встановлено, буде показано, що цей комплектний товар відповідає за дане "
+"значення загальної ціни брутто. Це може бути важливим у випадках змішаного "
+"оподаткування, але в іншому випадку його можна залишити порожнім. Це "
+"значення НЕ буде додано до ціни базового товару."
 
 #: pretix/base/models/items.py:1156
 msgid "The bundled item must belong to the same event as the item."
-msgstr ""
+msgstr "Предмет у комплекті має належати до тієї ж події, що й предмет."
 
 #: pretix/base/models/items.py:1158
 msgid "A variation needs to be set for this item."
-msgstr ""
+msgstr "Для цього предмету потрібно встановити варіант."
 
 #: pretix/base/models/items.py:1160
 msgid "The chosen variation does not belong to this item."
-msgstr ""
+msgstr "Вибрана варіація не належить до цього предмету."
 
 #: pretix/base/models/items.py:1165
 msgid "The count needs to be equal to or greater than zero."
-msgstr ""
+msgstr "Кількість має дорівнювати або бути вище нуля."
 
 #: pretix/base/models/items.py:1218
 msgid "Number"
-msgstr ""
+msgstr "Номер"
 
 #: pretix/base/models/items.py:1219
 msgid "Text (one line)"
-msgstr ""
+msgstr "Текст (один рядок)"
 
 #: pretix/base/models/items.py:1220
 msgid "Multiline text"
-msgstr ""
+msgstr "Багаторядковий текст"
 
 #: pretix/base/models/items.py:1221
 msgid "Yes/No"
-msgstr ""
+msgstr "Так/Ні"
 
 #: pretix/base/models/items.py:1222
 msgid "Choose one from a list"
-msgstr ""
+msgstr "Виберіть один зі списку"
 
 #: pretix/base/models/items.py:1223
 msgid "Choose multiple from a list"
-msgstr ""
+msgstr "Виберіть декілька із списку"
 
 #: pretix/base/models/items.py:1224
 msgid "File upload"
-msgstr ""
+msgstr "Завантаження файлу"
 
 #: pretix/base/models/items.py:1226 pretix/base/reldate.py:183
 #: pretix/plugins/checkinlists/exporters.py:612
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_create.html:27
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_update.html:41
 msgid "Time"
-msgstr ""
+msgstr "Час"
 
 #: pretix/base/models/items.py:1227
 msgid "Date and time"
-msgstr ""
+msgstr "Дата і час"
 
 #: pretix/base/models/items.py:1228
 msgid "Country code (ISO 3166-1 alpha-2)"
-msgstr ""
+msgstr "Код країни (ISO 3166-1 alpha-2)"
 
 #: pretix/base/models/items.py:1240 pretix/base/models/items.py:1319
 #: pretix/base/orderimport.py:732 pretix/control/forms/item.py:84
@@ -3524,161 +3565,164 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/items/question_edit.html:17
 #: pretix/control/templates/pretixcontrol/items/questions.html:21
 msgid "Question"
-msgstr ""
+msgstr "Запитання"
 
 #: pretix/base/models/items.py:1249
 msgid "Help text"
-msgstr ""
+msgstr "Текст довідки"
 
 #: pretix/base/models/items.py:1250
 msgid "If the question needs to be explained or clarified, do it here!"
-msgstr ""
+msgstr "Якщо питання потрібно пояснити чи уточнити, зробіть це тут!"
 
 #: pretix/base/models/items.py:1256
 msgid "Question type"
-msgstr ""
+msgstr "Тип запитання"
 
 #: pretix/base/models/items.py:1260
 #: pretix/control/templates/pretixcontrol/items/questions.html:55
 msgid "Required question"
-msgstr ""
+msgstr "Обов'язкове запитання"
 
 #: pretix/base/models/items.py:1267
 msgid "This question will be asked to buyers of the selected products"
-msgstr ""
+msgstr "Це питання буде поставлене покупцям обраної продукції"
 
 #: pretix/base/models/items.py:1274
 msgid "Ask during check-in instead of in the ticket buying process"
-msgstr ""
+msgstr "Запитати під час реєстрації, а не в процесі покупки квитка"
 
 #: pretix/base/models/items.py:1275
 msgid "Not supported by all check-in apps for all question types."
 msgstr ""
+"Не підтримується всіма програмами для реєстрації для всіх типів запитань."
 
 #: pretix/base/models/items.py:1279
 #: pretix/control/templates/pretixcontrol/items/questions.html:66
 msgid "Hidden question"
-msgstr ""
+msgstr "Приховане запитання"
 
 #: pretix/base/models/items.py:1280
 msgid "This question will only show up in the backend."
-msgstr ""
+msgstr "Це питання відображатиметься лише у серверній частині."
 
 #: pretix/base/models/items.py:1284
 msgid "Print answer on invoices"
-msgstr ""
+msgstr "Роздрукувати відповідь на рахунках"
 
 #: pretix/base/models/items.py:1292 pretix/base/models/items.py:1298
 #: pretix/base/models/items.py:1304
 msgid "Minimum value"
-msgstr ""
+msgstr "Мінімальне значення"
 
 #: pretix/base/models/items.py:1293 pretix/base/models/items.py:1296
 #: pretix/base/models/items.py:1299 pretix/base/models/items.py:1302
 #: pretix/base/models/items.py:1305 pretix/base/models/items.py:1308
 msgid "Currently not supported in our apps and during check-in"
-msgstr ""
+msgstr "Наразі не підтримується в наших програмах і під час реєстрації"
 
 #: pretix/base/models/items.py:1295 pretix/base/models/items.py:1301
 #: pretix/base/models/items.py:1307
 msgid "Maximum value"
-msgstr ""
+msgstr "Максимальне значення"
 
 #: pretix/base/models/items.py:1311
 msgid "Validate file to be a portrait"
-msgstr ""
+msgstr "Підтвердьте, що файл є портретом"
 
 #: pretix/base/models/items.py:1312
 msgid ""
 "If checked, files must be images with an aspect ratio of 3:4. This is "
 "commonly used for photos printed on badges."
 msgstr ""
+"Якщо позначено, файли мають бути зображеннями зі співвідношенням сторін 3:4. "
+"Це зазвичай використовується для фотографій, надрукованих на значках."
 
 #: pretix/base/models/items.py:1364
 msgid "An answer to this question is required to proceed."
-msgstr ""
+msgstr "Щоб продовжити, потрібна відповідь на це запитання."
 
 #: pretix/base/models/items.py:1378 pretix/base/models/items.py:1396
 #: pretix/base/orderimport.py:742 pretix/base/orderimport.py:750
 msgid "Invalid option selected."
-msgstr ""
+msgstr "Вибрано недійсну опцію."
 
 #: pretix/base/models/items.py:1406
 msgid "The number is to low."
-msgstr ""
+msgstr "Занизька кількість."
 
 #: pretix/base/models/items.py:1408
 msgid "The number is to high."
-msgstr ""
+msgstr "Зависока кількість."
 
 #: pretix/base/models/items.py:1411
 msgid "Invalid number input."
-msgstr ""
+msgstr "Недійсне введення числа."
 
 #: pretix/base/models/items.py:1418 pretix/base/models/items.py:1442
 msgid "Please choose a later date."
-msgstr ""
+msgstr "Будь ласка, виберіть пізнішу дату."
 
 #: pretix/base/models/items.py:1420 pretix/base/models/items.py:1444
 msgid "Please choose an earlier date."
-msgstr ""
+msgstr "Будь ласка, виберіть ранішу дату."
 
 #: pretix/base/models/items.py:1423
 msgid "Invalid date input."
-msgstr ""
+msgstr "Недійсне введення дати."
 
 #: pretix/base/models/items.py:1430
 msgid "Invalid time input."
-msgstr ""
+msgstr "Неправильний введений час."
 
 #: pretix/base/models/items.py:1439
 msgid "Invalid datetime input."
-msgstr ""
+msgstr "Недійсне введення дати й часу."
 
 #: pretix/base/models/items.py:1451
 msgid "Unknown country code."
-msgstr ""
+msgstr "Невідомий код країни."
 
 #: pretix/base/models/items.py:1465
 #: pretix/control/templates/pretixcontrol/items/question.html:68
 msgid "Answer"
-msgstr ""
+msgstr "Відповідь"
 
 #: pretix/base/models/items.py:1487
 msgid "The identifier \"{}\" is already used for a different option."
-msgstr ""
+msgstr "Ідентифікатор \"{}\" вже використовується для іншого параметра."
 
 #: pretix/base/models/items.py:1490
 msgid "Question option"
-msgstr ""
+msgstr "Варіант запитань"
 
 #: pretix/base/models/items.py:1491
 msgid "Question options"
-msgstr ""
+msgstr "Варіанти запитань"
 
 #: pretix/base/models/items.py:1576 pretix/control/forms/event.py:1364
 #: pretix/control/templates/pretixcontrol/items/quotas.html:56
 msgid "Total capacity"
-msgstr ""
+msgstr "Загальна місткість"
 
 #: pretix/base/models/items.py:1578 pretix/control/forms/item.py:351
 msgid "Leave empty for an unlimited number of tickets."
-msgstr ""
+msgstr "Залиште порожнім для необмеженої кількості квитків."
 
 #: pretix/base/models/items.py:1582 pretix/base/models/orders.py:1269
 #: pretix/base/models/orders.py:2491
 #: pretix/control/templates/pretixcontrol/checkin/index.html:83
 msgid "Item"
-msgstr ""
+msgstr "Предмет"
 
 #: pretix/base/models/items.py:1590 pretix/control/forms/item.py:641
 msgid "Variations"
-msgstr ""
+msgstr "Варіації"
 
 #: pretix/base/models/items.py:1594
 #: pretix/control/templates/pretixcontrol/items/quotas.html:70
 msgid "Ignore this quota when determining event availability"
-msgstr ""
+msgstr "Ігнорувати цю квоту під час визначення доступності події"
 
 #: pretix/base/models/items.py:1595
 msgid ""
@@ -3687,10 +3731,14 @@ msgid ""
 "that is added to each event but should not stop the event from being shown "
 "as sold out."
 msgstr ""
+"Якщо ви ввімкнете це, ця квота буде ігноруватися під час визначення "
+"доступності подій у вашому календарі подій. Це корисно, наприклад, для "
+"товарів, які додаються до кожної події, але не повинні перешкоджати показу "
+"події як розпроданої."
 
 #: pretix/base/models/items.py:1602
 msgid "Close this quota permanently once it is sold out"
-msgstr ""
+msgstr "Закрити цю квоту назавжди, як тільки вона буде розпродана"
 
 #: pretix/base/models/items.py:1603
 msgid ""
@@ -3698,10 +3746,14 @@ msgid ""
 "sold, even if tickets become available again through cancellations or "
 "expiring orders. Of course, you can always re-open it manually."
 msgstr ""
+"Якщо ви ввімкнете цю функцію, коли квота буде розпродана один раз, квитки "
+"більше не продаватимуться, навіть якщо квитки знову стануть доступними через "
+"скасування чи замовлення, термін дії яких закінчується. Звичайно, ви завжди "
+"можете знову відкрити продаж вручну."
 
 #: pretix/base/models/items.py:1611
 msgid "Allow to sell more tickets once people have checked out"
-msgstr ""
+msgstr "Дозволити продавати більше квитків, коли люди вийдуть"
 
 #: pretix/base/models/items.py:1612
 msgid ""
@@ -3717,7 +3769,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/items/quota_edit.html:8
 #: pretix/control/templates/pretixcontrol/items/quota_edit.html:15
 msgid "Quota"
-msgstr ""
+msgstr "Квота"
 
 #: pretix/base/models/items.py:1624 pretix/control/navigation.py:166
 #: pretix/control/templates/pretixcontrol/items/quotas.html:4
@@ -3726,47 +3778,50 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html:180
 #: pretix/control/templates/pretixcontrol/subevents/detail.html:58
 msgid "Quotas"
-msgstr ""
+msgstr "Квоти"
 
 #: pretix/base/models/items.py:1692
 msgid "All variations must belong to an item contained in the items list."
 msgstr ""
+"Усі варіанти повинні належати елементу, що міститься в списку елементів."
 
 #: pretix/base/models/items.py:1703
 msgid ""
 "One or more items has variations but none of these are in the variations "
 "list."
 msgstr ""
+"Один або кілька продуктів мають варіанти, але жодного з них немає у списку "
+"варіантів."
 
 #: pretix/base/models/items.py:1709 pretix/base/models/waitinglist.py:237
 msgid "Subevent cannot be null for event series."
-msgstr ""
+msgstr "Підподія не може бути нульовою для серії подій."
 
 #: pretix/base/models/log.py:156
 #, python-brace-format
 msgid "Order {val}"
-msgstr ""
+msgstr "Замовлення {val}"
 
 #: pretix/base/models/log.py:166
 #, python-brace-format
 msgid "Voucher {val}…"
-msgstr ""
+msgstr "Промокод {val}…"
 
 #: pretix/base/models/log.py:176
 #, python-brace-format
 msgid "Product {val}"
-msgstr ""
+msgstr "Продукт {val}"
 
 #: pretix/base/models/log.py:186
 #, python-brace-format
 msgctxt "subevent"
 msgid "Date {val}"
-msgstr ""
+msgstr "Дата {val}"
 
 #: pretix/base/models/log.py:196
 #, python-brace-format
 msgid "Quota {val}"
-msgstr ""
+msgstr "Квота {val}"
 
 #: pretix/base/models/log.py:206
 #, python-brace-format
@@ -3776,31 +3831,33 @@ msgstr ""
 #: pretix/base/models/log.py:216
 #, python-brace-format
 msgid "Category {val}"
-msgstr ""
+msgstr "Категорія {val}"
 
 #: pretix/base/models/log.py:226
 #, python-brace-format
 msgid "Question {val}"
-msgstr ""
+msgstr "Запитання {val}"
 
 #: pretix/base/models/log.py:236
 #, python-brace-format
 msgid "Tax rule {val}"
-msgstr ""
+msgstr "Податкове правило {val}"
 
 #: pretix/base/models/memberships.py:44
 msgid "Membership is transferable"
-msgstr ""
+msgstr "Членство можна передати"
 
 #: pretix/base/models/memberships.py:45
 msgid ""
 "If this is selected, the membership can be used to purchase tickets for "
 "multiple persons. If not, the attendee name always needs to stay the same."
 msgstr ""
+"Якщо ця опція вибрана, членство можна використовувати для придбання квитків "
+"для кількох осіб. Якщо ні, ім’я учасника завжди має залишатися незмінним."
 
 #: pretix/base/models/memberships.py:50
 msgid "Parallel usage is allowed"
-msgstr ""
+msgstr "Допускається паралельне використання"
 
 #: pretix/base/models/memberships.py:51
 msgid ""
@@ -3808,16 +3865,19 @@ msgid ""
 "events happening at the same time. Note that this will only check for an "
 "identical start time of the events, not for any overlap between events."
 msgstr ""
+"Якщо вибрано цей параметр, членство можна використовувати для придбання "
+"квитків на події, що відбуваються одночасно. Зауважте, що це перевірить лише "
+"ідентичний час початку подій, а не часові збіги між подіями."
 
 #: pretix/base/models/memberships.py:56 pretix/base/models/vouchers.py:194
 #: pretix/control/views/vouchers.py:109
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:28
 msgid "Maximum usages"
-msgstr ""
+msgstr "Максимальне використання"
 
 #: pretix/base/models/memberships.py:57
 msgid "Number of times this membership can be used in a purchase."
-msgstr ""
+msgstr "Кількість разів, коли це членство можна використати для покупки."
 
 #: pretix/base/models/memberships.py:123
 #: pretix/control/templates/pretixcontrol/items/question.html:26
@@ -3828,60 +3888,62 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/fragment_order_status.html:27
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:78
 msgid "Canceled"
-msgstr ""
+msgstr "Скасовано"
 
 #: pretix/base/models/memberships.py:133
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:85
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:20
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:121
 msgid "Membership type"
-msgstr ""
+msgstr "Тип членства"
 
 #: pretix/base/models/orders.py:161
 msgid "pending"
-msgstr ""
+msgstr "в очікуванні"
 
 #: pretix/base/models/orders.py:162
 msgid "paid"
-msgstr ""
+msgstr "оплачено"
 
 #: pretix/base/models/orders.py:163
 msgid "expired"
-msgstr ""
+msgstr "термін придатності закінчився"
 
 #: pretix/base/models/orders.py:164
 msgid "canceled"
-msgstr ""
+msgstr "cкасовано"
 
 #: pretix/base/models/orders.py:187 pretix/control/forms/orders.py:595
 msgid "Customer"
-msgstr ""
+msgstr "Клієнт"
 
 #: pretix/base/models/orders.py:202 pretix/control/forms/filter.py:514
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:55
 msgid "Locale"
-msgstr ""
+msgstr "Мова клієнта"
 
 #: pretix/base/models/orders.py:212 pretix/base/models/orders.py:2586
 #: pretix/control/forms/orders.py:78
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:138
 msgid "Expiration date"
-msgstr ""
+msgstr "Термін придатності"
 
 #: pretix/base/models/orders.py:216 pretix/control/forms/filter.py:525
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:57
 msgid "Total amount"
-msgstr ""
+msgstr "Загальна сума"
 
 #: pretix/base/models/orders.py:220 pretix/base/models/vouchers.py:282
 msgid ""
 "The text entered in this field will not be visible to the user and is "
 "available for your convenience."
 msgstr ""
+"Текст, введений у це поле, не буде видимим для користувача і доступний для "
+"вашої зручності."
 
 #: pretix/base/models/orders.py:225
 msgid "We'll show you this order to be due for a follow-up on this day."
-msgstr ""
+msgstr "Ми покажемо вам це замовлення, яке має бути виконано в цей день."
 
 #: pretix/base/models/orders.py:231
 msgid ""
@@ -3890,154 +3952,164 @@ msgid ""
 "custom message, so you need to brief your check-in staff how to handle these "
 "cases."
 msgstr ""
+"Якщо ви встановите це, програма реєстрації показуватиме видиме попередження "
+"про те, що квитки такого порядку потребують особливої уваги. Тут не "
+"відображатимуться будь-які деталі чи користувацькі повідомлення, тому вам "
+"потрібно проінформувати свій персонал, який здійснює реєстрацію, як "
+"поводитися з такими випадками."
 
 #: pretix/base/models/orders.py:243 pretix/base/models/orders.py:1306
 msgid "Meta information"
-msgstr ""
+msgstr "Метаінформація"
 
 #: pretix/base/models/orders.py:857
 msgid ""
 "The payment can not be accepted as the last date of payments configured in "
 "the payment settings is over."
 msgstr ""
+"Платіж не може бути прийнятий, оскільки закінчилася остання дата платежів, "
+"налаштована в налаштуваннях платежу."
 
 #: pretix/base/models/orders.py:859
 msgid ""
 "The payment can not be accepted as the order is expired and you configured "
 "that no late payments should be accepted in the payment settings."
 msgstr ""
+"Платіж не може бути прийнятий, оскільки термін дії замовлення закінчився, а "
+"ви налаштували, що в налаштуваннях платежів не прийматимуться прострочені "
+"платежі."
 
 #: pretix/base/models/orders.py:861
 msgid "This order is not yet approved by the event organizer."
-msgstr ""
+msgstr "Це замовлення ще не затверджене організаторами події."
 
 #: pretix/base/models/orders.py:885
 #, python-brace-format
 msgid "The ordered product \"{item}\" is no longer available."
-msgstr ""
+msgstr "Замовлений товар \"{item}\" більше не доступний."
 
 #: pretix/base/models/orders.py:886
 #, python-brace-format
 msgid "The seat \"{seat}\" is no longer available."
-msgstr ""
+msgstr "Місце \"{seat}\" більше недоступне."
 
 #: pretix/base/models/orders.py:887
 #, python-brace-format
 msgid "The voucher \"{voucher}\" no longer has sufficient budget."
-msgstr ""
+msgstr "Ваучер \"{voucher}\" більше не має достатнього бюджету."
 
 #: pretix/base/models/orders.py:888
 #, python-brace-format
 msgid "The voucher \"{voucher}\" has been used in the meantime."
-msgstr ""
+msgstr "Тим часом ваучер \"{voucher}\" було використано."
 
 #: pretix/base/models/orders.py:1023 pretix/control/views/event.py:758
 #, python-format
 msgid "Your order: %(code)s"
-msgstr ""
+msgstr "Ваше замовлення: %(code)s"
 
 #: pretix/base/models/orders.py:1187
 msgid "<file>"
-msgstr ""
+msgstr "<file>"
 
 #: pretix/base/models/orders.py:1286 pretix/base/models/orders.py:1294
 msgid "Empty, if this product is not an admission ticket"
-msgstr ""
+msgstr "Порожньо, якщо цей продукт не є вхідним квитком"
 
 #: pretix/base/models/orders.py:1496
 msgctxt "payment_state"
 msgid "created"
-msgstr ""
+msgstr "створено"
 
 #: pretix/base/models/orders.py:1497
 msgctxt "payment_state"
 msgid "pending"
-msgstr ""
+msgstr "в очікуванні"
 
 #: pretix/base/models/orders.py:1498
 msgctxt "payment_state"
 msgid "confirmed"
-msgstr ""
+msgstr "підтверджено"
 
 #: pretix/base/models/orders.py:1499
 msgctxt "payment_state"
 msgid "canceled"
-msgstr ""
+msgstr "скасовано"
 
 #: pretix/base/models/orders.py:1500
 msgctxt "payment_state"
 msgid "failed"
-msgstr ""
+msgstr "не вдалось"
 
 #: pretix/base/models/orders.py:1501
 msgctxt "payment_state"
 msgid "refunded"
-msgstr ""
+msgstr "відшкодовано"
 
 #: pretix/base/models/orders.py:1529 pretix/base/models/orders.py:1918
 #: pretix/base/shredder.py:434
 msgid "Payment information"
-msgstr ""
+msgstr "Інформація про оплату"
 
 #: pretix/base/models/orders.py:1731
 #, python-format
 msgid "Event registration confirmed: %(code)s"
-msgstr ""
+msgstr "Реєстрацію на подію підтверджено: %(code)s"
 
 #: pretix/base/models/orders.py:1749
 #, python-format
 msgid "Payment received for your order: %(code)s"
-msgstr ""
+msgstr "Отримано платіж за ваше замовлення: %(code)s"
 
 #: pretix/base/models/orders.py:1859
 msgctxt "refund_state"
 msgid "started externally"
-msgstr ""
+msgstr "розпочато зовнішньо"
 
 #: pretix/base/models/orders.py:1860
 msgctxt "refund_state"
 msgid "created"
-msgstr ""
+msgstr "створено"
 
 #: pretix/base/models/orders.py:1861
 msgctxt "refund_state"
 msgid "in transit"
-msgstr ""
+msgstr "в дорозі"
 
 #: pretix/base/models/orders.py:1862
 msgctxt "refund_state"
 msgid "done"
-msgstr ""
+msgstr "виконано"
 
 #: pretix/base/models/orders.py:1863
 msgctxt "refund_state"
 msgid "failed"
-msgstr ""
+msgstr "не вдалось"
 
 #: pretix/base/models/orders.py:1865
 msgctxt "refund_state"
 msgid "canceled"
-msgstr ""
+msgstr "скасовано"
 
 #: pretix/base/models/orders.py:1873
 msgctxt "refund_source"
 msgid "Organizer"
-msgstr ""
+msgstr "Організатор"
 
 #: pretix/base/models/orders.py:1874
 msgctxt "refund_source"
 msgid "Customer"
-msgstr ""
+msgstr "Клієнт"
 
 #: pretix/base/models/orders.py:1875
 msgctxt "refund_source"
 msgid "External"
-msgstr ""
+msgstr "Зовнішній"
 
 #: pretix/base/models/orders.py:1913
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:197
 msgid "Refund reason"
-msgstr ""
+msgstr "Причина повернення коштів"
 
 #: pretix/base/models/orders.py:1914
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:198
@@ -4045,73 +4117,76 @@ msgstr ""
 msgid ""
 "May be shown to the end user or used e.g. as part of a payment reference."
 msgstr ""
+"Може бути показаний кінцевому користувачеві або використаний, наприклад, як "
+"частина довідки про оплату."
 
 #: pretix/base/models/orders.py:2025
 msgid "Payment fee"
-msgstr ""
+msgstr "Комісія за оплату"
 
 #: pretix/base/models/orders.py:2026
 msgid "Shipping fee"
-msgstr ""
+msgstr "Вартість доставки"
 
 #: pretix/base/models/orders.py:2027
 msgid "Service fee"
-msgstr ""
+msgstr "Плата за послуги"
 
 #: pretix/base/models/orders.py:2028
 #: pretix/control/templates/pretixcontrol/order/index.html:148
 msgid "Cancellation fee"
-msgstr ""
+msgstr "Плата за скасування"
 
 #: pretix/base/models/orders.py:2029
 msgid "Insurance fee"
-msgstr ""
+msgstr "Страховий збір"
 
 #: pretix/base/models/orders.py:2030
 msgid "Other fees"
-msgstr ""
+msgstr "Інші платежі"
 
 #: pretix/base/models/orders.py:2031 pretix/base/payment.py:1122
 #: pretix/control/templates/pretixcontrol/items/index.html:86
 #: pretix/control/templates/pretixcontrol/order/index.html:143
 msgid "Gift card"
-msgstr ""
+msgstr "Подарунковий сертифікат"
 
 #: pretix/base/models/orders.py:2036
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:66
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:104
 #: pretix/control/views/vouchers.py:109
 msgid "Value"
-msgstr ""
+msgstr "Вартість"
 
 #: pretix/base/models/orders.py:2199
 msgid "Order position"
-msgstr ""
+msgstr "Позиція замовлення"
 
 #: pretix/base/models/orders.py:2405
 #, python-format
 msgid "Your event registration: %(code)s"
-msgstr ""
+msgstr "Ваша реєстрація на подію: %(code)s"
 
 #: pretix/base/models/orders.py:2579
 msgid "Cart ID (e.g. session key)"
-msgstr ""
+msgstr "Ідентифікатор кошика (наприклад, ідентифікаційний номер сесії)"
 
 #: pretix/base/models/orders.py:2613
 msgid "Cart position"
-msgstr ""
+msgstr "Позиція кошика"
 
 #: pretix/base/models/orders.py:2614
 msgid "Cart positions"
-msgstr ""
+msgstr "Позиції кошика"
 
 #: pretix/base/models/orders.py:2692
 msgid "Business customer"
-msgstr ""
+msgstr "Бізнес клієнт"
 
 #: pretix/base/models/orders.py:2708
 msgid "This reference will be printed on your invoice for your convenience."
 msgstr ""
+"Це посилання буде надруковано на вашому рахунку-фактурі для вашої зручності."
 
 #: pretix/base/models/organizer.py:76
 msgid ""
@@ -4119,6 +4194,9 @@ msgid ""
 "Every slug can only be used once. This is being used in URLs to refer to "
 "your organizer accounts and your events."
 msgstr ""
+"Має бути коротким, містити лише малі літери, цифри, крапки та тире. Кожен "
+"слаг можна використовувати лише один раз. Це використовується в URL-адресах "
+"для посилань на ваші облікові записи організатора та ваші події."
 
 #: pretix/base/models/organizer.py:93 pretix/control/forms/event.py:99
 #: pretix/control/forms/event.py:105 pretix/control/forms/filter.py:727
@@ -4131,70 +4209,73 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:9
 #: pretix/control/templates/pretixcontrol/organizers/mail.html:9
 msgid "Organizer"
-msgstr ""
+msgstr "Організатор"
 
 #: pretix/base/models/organizer.py:94 pretix/control/navigation.py:348
 #: pretix/control/templates/pretixcontrol/oauth/authorized.html:19
 #: pretix/control/templates/pretixcontrol/organizers/index.html:6
 #: pretix/control/templates/pretixcontrol/organizers/index.html:8
 msgid "Organizers"
-msgstr ""
+msgstr "Організатори"
 
 #: pretix/base/models/organizer.py:256
 #: pretix/control/templates/pretixcontrol/organizers/teams.html:35
 msgid "Team name"
-msgstr ""
+msgstr "Назва команди"
 
 #: pretix/base/models/organizer.py:257
 #: pretix/control/templates/pretixcontrol/organizers/team_members.html:13
 msgid "Team members"
-msgstr ""
+msgstr "Учасники команди"
 
 #: pretix/base/models/organizer.py:263
 msgid "Can create events"
-msgstr ""
+msgstr "Може створювати події"
 
 #: pretix/base/models/organizer.py:267
 msgid "Can change teams and permissions"
-msgstr ""
+msgstr "Можна змінювати команди та дозволи"
 
 #: pretix/base/models/organizer.py:271
 msgid "Can change organizer settings"
-msgstr ""
+msgstr "Можe змінити налаштування організатора"
 
 #: pretix/base/models/organizer.py:272
 msgid ""
 "Someone with this setting can get access to most data of all of your events, "
 "i.e. via privacy reports, so be careful who you add to this team!"
 msgstr ""
+"Особа із цим налаштуванням може отримати доступ до більшості даних усіх "
+"ваших подій,наприклад, до звітів про конфіденційність, тому будьте обережні, "
+"кого ви додаєте до цієї команди!"
 
 #: pretix/base/models/organizer.py:277
 msgid "Can manage customer accounts"
-msgstr ""
+msgstr "Може керувати обліковими записами клієнтів"
 
 #: pretix/base/models/organizer.py:281
 msgid "Can manage gift cards"
-msgstr ""
+msgstr "Може керувати подарунковими сертифікатами"
 
 #: pretix/base/models/organizer.py:285
 msgid "Can change event settings"
-msgstr ""
+msgstr "Можна змінювати налаштування події"
 
 #: pretix/base/models/organizer.py:289
 msgid "Can change product settings"
-msgstr ""
+msgstr "Можна змінювати налаштування продукту"
 
 #: pretix/base/models/organizer.py:293
 msgid "Can view orders"
-msgstr ""
+msgstr "Може переглядати замовлення"
 
 #: pretix/base/models/organizer.py:297
 msgid "Can change orders"
-msgstr ""
+msgstr "Можe змінювати замовлення"
 
 #: pretix/base/models/organizer.py:301
 msgid "Can perform check-ins"
-msgstr ""
+msgstr "Може проводити реєстрацію"
 
 #: pretix/base/models/organizer.py:302
 msgid ""
@@ -4202,64 +4283,67 @@ msgid ""
 "information about attendees. Users with \"can change orders\" can also "
 "perform check-ins."
 msgstr ""
+"Це включає пошук учасників, який можна використовувати для отримання "
+"особистої інформації про учасників. Користувачі з \"можe змінювати "
+"замовлення\" також можуть виконувати реєстрацію."
 
 #: pretix/base/models/organizer.py:307
 msgid "Can view vouchers"
-msgstr ""
+msgstr "Можe переглядати ваучери"
 
 #: pretix/base/models/organizer.py:311
 msgid "Can change vouchers"
-msgstr ""
+msgstr "Може змінювати ваучери"
 
 #: pretix/base/models/organizer.py:315
 #, python-format
 msgid "%(name)s on %(object)s"
-msgstr ""
+msgstr "%(name)s на %(object)s"
 
 #: pretix/base/models/organizer.py:347
 #: pretix/control/templates/pretixcontrol/events/create_basics.html:61
 msgid "Team"
-msgstr ""
+msgstr "Команда"
 
 #: pretix/base/models/organizer.py:348 pretix/control/navigation.py:513
 #: pretix/control/templates/pretixcontrol/organizers/teams.html:6
 msgid "Teams"
-msgstr ""
+msgstr "Команди"
 
 #: pretix/base/models/organizer.py:368
 #, python-brace-format
 msgid "Invite to team '{team}' for '{email}'"
-msgstr ""
+msgstr "Запросити в команду '{team}' для '{email}'"
 
 #: pretix/base/models/seating.py:45
 msgid "Your layout file is not a valid JSON file."
-msgstr ""
+msgstr "Ваш файл макета не є дійсним файлом JSON."
 
 #: pretix/base/models/seating.py:54
 msgid "Your layout file is not a valid seating plan. Error message: {}"
-msgstr ""
+msgstr "Ваш файл макета не є дійсним планом місць. Повідомлення про помилку: {}"
 
 #: pretix/base/models/seating.py:175
 #, python-brace-format
 msgid "Row {number}"
-msgstr ""
+msgstr "Ряд {number}"
 
 #: pretix/base/models/seating.py:180
 #, python-brace-format
 msgid "Seat {number}"
-msgstr ""
+msgstr "Місце {number}"
 
 #: pretix/base/models/tax.py:145
 msgid "Official name"
-msgstr ""
+msgstr "Офіційна назва"
 
 #: pretix/base/models/tax.py:146
 msgid "Should be short, e.g. \"VAT\""
-msgstr ""
+msgstr "Має бути коротким, наприклад, \"ПДВ\""
 
 #: pretix/base/models/tax.py:155
 msgid "The configured product prices include the tax amount"
-msgstr ""
+msgstr "Налаштовані ціни на продукти включають суму податку"
 
 #: pretix/base/models/tax.py:159
 msgid ""
@@ -4269,7 +4353,7 @@ msgstr ""
 
 #: pretix/base/models/tax.py:163
 msgid "Use EU reverse charge taxation rules"
-msgstr ""
+msgstr "Використовувати правила ЄС щодо зворотного оподаткування"
 
 #: pretix/base/models/tax.py:165
 msgid ""
@@ -4280,35 +4364,46 @@ msgid ""
 "option after consulting a tax counsel. No warranty given for correct tax "
 "calculation. USE AT YOUR OWN RISK."
 msgstr ""
+"Не рекомендовано. Більшість подій НЕ підлягають зворотному нарахуванню, "
+"оскільки місцем оподаткування є місце проведення події. Ця опція вимикає "
+"нарахування ПДВ для всіх клієнтів за межами ЄС та для бізнес-клієнтів у "
+"різних країнах ЄС, які ввели дійсний ідентифікаційний номер платника ПДВ ЄС. "
+"Увімкніть цю опцію лише після консультації з податковим консультантом. Не "
+"надається гарантія на правильний розрахунок податку. ВИКОРИСТОВУЙТЕ НА СВІЙ "
+"РИЗИК."
 
 #: pretix/base/models/tax.py:172 pretix/plugins/stripe/payment.py:209
 msgid "Merchant country"
-msgstr ""
+msgstr "Країна торговця"
 
 #: pretix/base/models/tax.py:174
 msgid ""
 "Your country of residence. This is the country the EU reverse charge rule "
 "will not apply in, if configured above."
 msgstr ""
+"Ваша країна проживання. У цій країні не застосовуватиметься правило ЄС щодо "
+"зворотного стягнення плати, якщо так налаштовано вище."
 
 #: pretix/base/models/tax.py:210
 msgid "You need to set your home country to use the reverse charge feature."
 msgstr ""
+"Вам потрібно налаштувати свою країну, щоб використовувати функцію зворотного "
+"нарахування."
 
 #: pretix/base/models/tax.py:214
 #, python-brace-format
 msgid "incl. {rate}% {name}"
-msgstr ""
+msgstr "вкл. {rate}% {name}"
 
 #: pretix/base/models/tax.py:216
 #, python-brace-format
 msgid "plus {rate}% {name}"
-msgstr ""
+msgstr "плюс {rate}% {name}"
 
 #: pretix/base/models/tax.py:218
 #: pretix/control/templates/pretixcontrol/event/tax_index.html:46
 msgid "reverse charge enabled"
-msgstr ""
+msgstr "активовано зворотне оподаткування"
 
 #: pretix/base/models/tax.py:335
 msgctxt "invoice"
@@ -4316,6 +4411,8 @@ msgid ""
 "Reverse Charge: According to Article 194, 196 of Council Directive 2006/112/"
 "EEC, VAT liability rests with the service recipient."
 msgstr ""
+"Зворотне нарахування: Відповідно до статей 194, 196 Директиви Ради 2006/112/"
+"ЄЕС, зобов'язання з ПДВ покладаються на одержувача послуги."
 
 #: pretix/base/models/tax.py:341
 msgctxt "invoice"
@@ -4324,31 +4421,31 @@ msgstr ""
 
 #: pretix/base/models/vouchers.py:169
 msgid "No effect"
-msgstr ""
+msgstr "Не впливає"
 
 #: pretix/base/models/vouchers.py:170
 msgid "Set product price to"
-msgstr ""
+msgstr "Встановити ціну продукту до"
 
 #: pretix/base/models/vouchers.py:171
 msgid "Subtract from product price"
-msgstr ""
+msgstr "Відняти від ціни продукту"
 
 #: pretix/base/models/vouchers.py:172
 msgid "Reduce product price by (%)"
-msgstr ""
+msgstr "Знизити ціну продукту на (%)"
 
 #: pretix/base/models/vouchers.py:195
 msgid "Number of times this voucher can be redeemed."
-msgstr ""
+msgstr "Кількість разів, скільки цей ваучер можна використати."
 
 #: pretix/base/models/vouchers.py:199 pretix/control/views/vouchers.py:109
 msgid "Redeemed"
-msgstr ""
+msgstr "Викуплено"
 
 #: pretix/base/models/vouchers.py:203
 msgid "Maximum discount budget"
-msgstr ""
+msgstr "Максимальний бюджет знижки"
 
 #: pretix/base/models/vouchers.py:204
 msgid ""
@@ -4356,6 +4453,9 @@ msgid ""
 "voucher across all usages. If this is sum reached, the voucher can no longer "
 "be used."
 msgstr ""
+"Це максимальна грошова сума, яка буде знижена за допомогою цього ваучера для "
+"всіх видів використання. Якщо ця сума буде досягнута, ваучер більше не може "
+"бути використаний."
 
 #: pretix/base/models/vouchers.py:211
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:87
@@ -4363,11 +4463,11 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:24
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:123
 msgid "Valid until"
-msgstr ""
+msgstr "Дійсний до"
 
 #: pretix/base/models/vouchers.py:215 pretix/control/forms/filter.py:1807
 msgid "Reserve ticket from quota"
-msgstr ""
+msgstr "Забронювати квиток з квоти"
 
 #: pretix/base/models/vouchers.py:217
 msgid ""
@@ -4375,48 +4475,54 @@ msgid ""
 "quotas, such that it is guaranteed that anyone with this voucher code does "
 "receive a ticket."
 msgstr ""
+"Якщо активовано, цей ваучер буде вираховано з квот відповідного продукту, "
+"так що будь-хто, хто має цей код ваучера, отримає квиток."
 
 #: pretix/base/models/vouchers.py:223
 msgid "Allow to bypass quota"
-msgstr ""
+msgstr "Дозволити обійти квоту"
 
 #: pretix/base/models/vouchers.py:225
 msgid ""
 "If activated, a holder of this voucher code can buy tickets, even if there "
 "are none left."
 msgstr ""
+"Якщо ця опція активована, власник цього коду ваучера може купити квитки, "
+"навіть якщо їх не залишилося."
 
 #: pretix/base/models/vouchers.py:229
 msgid "Price mode"
-msgstr ""
+msgstr "Ціновий режим"
 
 #: pretix/base/models/vouchers.py:235
 msgid "Voucher value"
-msgstr ""
+msgstr "Вартість ваучера"
 
 #: pretix/base/models/vouchers.py:244 pretix/control/forms/vouchers.py:65
 msgid "This product is added to the user's cart if the voucher is redeemed."
-msgstr ""
+msgstr "Цей продукт додається в кошик користувача, якщо ваучер викуплено."
 
 #: pretix/base/models/vouchers.py:254
 msgid "This variation of the product select above is being used."
-msgstr ""
+msgstr "Використовується цей варіант вибраного вище продукту."
 
 #: pretix/base/models/vouchers.py:263
 msgid ""
 "If enabled, the voucher is valid for any product affected by this quota."
 msgstr ""
+"Якщо ця опція активована, ваучер дійсний для будь-якого продукту, на який "
+"впливає ця квота."
 
 #: pretix/base/models/vouchers.py:270
 msgid "Specific seat"
-msgstr ""
+msgstr "Конкретне місце"
 
 #: pretix/base/models/vouchers.py:274
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:118
 #: pretix/control/templates/pretixcontrol/vouchers/tags.html:42
 #: pretix/control/views/vouchers.py:109
 msgid "Tag"
-msgstr ""
+msgstr "Тег"
 
 #: pretix/base/models/vouchers.py:277
 msgid ""
@@ -4424,54 +4530,61 @@ msgid ""
 "same value for multiple vouchers, you can get statistics on how many of them "
 "have been redeemed etc."
 msgstr ""
+"Ви можете використовувати це поле, щоб згрупувати кілька ваучерів разом. "
+"Якщо ви введете однакове значення для кількох ваучерів, ви можете отримати "
+"статистику про те, скільки з них було погашено тощо."
 
 #: pretix/base/models/vouchers.py:286
 msgid "Shows hidden products that match this voucher"
-msgstr ""
+msgstr "Показує приховані продукти, які відповідають цьому ваучеру"
 
 #: pretix/base/models/vouchers.py:294 pretix/control/navigation.py:265
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:6
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:8
 msgid "Vouchers"
-msgstr ""
+msgstr "Ваучери"
 
 #: pretix/base/models/vouchers.py:320
 msgid "You cannot select a quota that belongs to a different event."
-msgstr ""
+msgstr "Ви не можете вибрати квоту, яка належить до іншої події."
 
 #: pretix/base/models/vouchers.py:322
 msgid "You cannot select a quota and a specific product at the same time."
-msgstr ""
+msgstr "Ви не можете вибрати квоту та конкретний продукт одночасно."
 
 #: pretix/base/models/vouchers.py:325
 msgid "You cannot select an item that belongs to a different event."
-msgstr ""
+msgstr "Ви не можете вибрати продукт, який належить до іншої події."
 
 #: pretix/base/models/vouchers.py:327 pretix/base/models/vouchers.py:340
 msgid ""
 "You cannot select a variation without having selected a product that "
 "provides variations."
-msgstr ""
+msgstr "Ви не можете вибрати варіант, не вибравши продукт, який надає варіанти."
 
 #: pretix/base/models/vouchers.py:330
 msgid "This variation does not belong to this product."
-msgstr ""
+msgstr "Цей варіант не належить до цього продукту."
 
 #: pretix/base/models/vouchers.py:332 pretix/base/models/vouchers.py:423
 msgid ""
 "You can only block quota if you specify a specific product variation. "
 "Otherwise it might be unclear which quotas to block."
 msgstr ""
+"Ви можете заблокувати квоту, лише якщо ви вкажете певний варіант продукту. "
+"Інакше може бути незрозуміло, які квоти блокувати."
 
 #: pretix/base/models/vouchers.py:335
 msgid "It is currently not possible to create vouchers for add-on products."
-msgstr ""
+msgstr "Наразі неможливо створити ваучери на додаткові продукти."
 
 #: pretix/base/models/vouchers.py:337 pretix/base/models/vouchers.py:430
 msgid ""
 "You need to select a specific product or quota if this voucher should "
 "reserve tickets."
 msgstr ""
+"Вам потрібно вибрати певний продукт або квоту, якщо цей ваучер повинен "
+"резервувати квитки."
 
 #: pretix/base/models/vouchers.py:347
 #, python-format
@@ -4479,34 +4592,40 @@ msgid ""
 "This voucher has already been redeemed %(redeemed)s times. You cannot reduce "
 "the maximum number of usages below this number."
 msgstr ""
+"Цей ваучер уже активовано %(redeemed)s разів. Ви не можете зменшити "
+"максимальну кількість використань нижче цього числа."
 
 #: pretix/base/models/vouchers.py:357 pretix/base/models/vouchers.py:415
 msgid ""
 "If you want this voucher to block quota, you need to select a specific date."
 msgstr ""
+"Якщо ви хочете, щоб цей ваучер блокував квоту, вам потрібно вибрати "
+"конкретну дату."
 
 #: pretix/base/models/vouchers.py:359
 msgid "You can not select a subevent if your event is not an event series."
-msgstr ""
+msgstr "Ви не можете вибрати підподію, якщо ваша подія не є серією подій."
 
 #: pretix/base/models/vouchers.py:434
 msgid ""
 "You cannot create a voucher that blocks quota as the selected product or "
 "quota is currently sold out or completely reserved."
 msgstr ""
+"Ви не можете створити ваучер, який блокує квоту, оскільки вибраний продукт "
+"або квота наразі розпродані або повністю зарезервовані."
 
 #: pretix/base/models/vouchers.py:440
 msgid "A voucher with this code already exists."
-msgstr ""
+msgstr "Ваучер з цим кодом уже існує."
 
 #: pretix/base/models/vouchers.py:447
 msgid "You need to choose a date if you select a seat."
-msgstr ""
+msgstr "Вам потрібно вибрати дату, якщо ви обираєте місце."
 
 #: pretix/base/models/vouchers.py:456
 #, python-brace-format
 msgid "The specified seat ID \"{id}\" does not exist for this event."
-msgstr ""
+msgstr "Вказаний ідентифікатор місця \"{id}\" не існує для цієї події."
 
 #: pretix/base/models/vouchers.py:460
 #, python-brace-format
@@ -4514,88 +4633,91 @@ msgid ""
 "The seat \"{id}\" is currently unavailable (blocked, already sold or a "
 "different voucher)."
 msgstr ""
+"Місце \"{id}\" наразі недоступне (заблоковане, уже продано або інший ваучер)."
 
 #: pretix/base/models/vouchers.py:465
 msgid "You need to choose a specific product if you select a seat."
-msgstr ""
+msgstr "Якщо ви вибираєте місце, потрібно вибрати конкретний продукт."
 
 #: pretix/base/models/vouchers.py:468
 msgid "Seat-specific vouchers can only be used once."
-msgstr ""
+msgstr "Ваучерами на місце можна скористатися лише один раз."
 
 #: pretix/base/models/vouchers.py:471
 #, python-brace-format
 msgid "You need to choose the product \"{prod}\" for this seat."
-msgstr ""
+msgstr "Вам потрібно вибрати продукт \"{prod}\" для цього місця."
 
 #: pretix/base/models/vouchers.py:474
 #, python-brace-format
 msgid "The seat \"{id}\" is already sold or currently blocked."
-msgstr ""
+msgstr "Місце \"{id}\" вже продано або наразі заблоковано."
 
 #: pretix/base/models/waitinglist.py:61
 msgid "On waiting list since"
-msgstr ""
+msgstr "У списку очікування від"
 
 #: pretix/base/models/waitinglist.py:81
 msgid "Assigned voucher"
-msgstr ""
+msgstr "Призначений ваучер"
 
 #: pretix/base/models/waitinglist.py:90
 msgid "The product the user waits for."
-msgstr ""
+msgstr "Продукт, на який чекає користувач."
 
 #: pretix/base/models/waitinglist.py:98
 msgid "The variation of the product selected above."
-msgstr ""
+msgstr "Варіація вибраного вище продукту."
 
 #: pretix/base/models/waitinglist.py:110
 msgid "Waiting list entry"
-msgstr ""
+msgstr "Запис в список очікування"
 
 #: pretix/base/models/waitinglist.py:111
 msgid "Waiting list entries"
-msgstr ""
+msgstr "Записи в списку очікування"
 
 #: pretix/base/models/waitinglist.py:153
 msgid "This product is currently not available."
-msgstr ""
+msgstr "Цей продукт наразі недоступний."
 
 #: pretix/base/models/waitinglist.py:180
 msgid "No seat with this product is currently available."
-msgstr ""
+msgstr "Наразі немає місць із цим продуктом."
 
 #: pretix/base/models/waitinglist.py:183
 msgid "A voucher has already been sent to this person."
-msgstr ""
+msgstr "Ваучер вже надіслано цій особі."
 
 #: pretix/base/models/waitinglist.py:185
 msgid "This entry is anonymized and can no longer be used."
-msgstr ""
+msgstr "Цей запис анонімний і більше не може використовуватися."
 
 #: pretix/base/models/waitinglist.py:195
 #, python-brace-format
 msgid "Automatically created from waiting list entry for {email}"
-msgstr ""
+msgstr "Автоматично створено зі списку очікування для {email}"
 
 #: pretix/base/models/waitinglist.py:219
 #, python-brace-format
 msgid "You have been selected from the waitinglist for {event}"
-msgstr ""
+msgstr "Вас вибрано зі списку очікування на {event}"
 
 #: pretix/base/models/waitinglist.py:229
 msgid "The selected item does not belong to this event."
-msgstr ""
+msgstr "Вибраний предмет не належить до цієї події."
 
 #: pretix/base/models/waitinglist.py:231
 msgid "Please select a specific variation of this product."
-msgstr ""
+msgstr "Будь ласка, виберіть конкретну варіацію цього продукту."
 
 #: pretix/base/models/waitinglist.py:249
 msgid ""
 "You are already on this waiting list! We will notify you as soon as we have "
 "a ticket available for you."
 msgstr ""
+"Ви вже в цьому списку очікування! Ми повідомимо вас, як тільки у нас буде "
+"квиток."
 
 #: pretix/base/notifications.py:192 pretix/control/navigation.py:137
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:20
@@ -4604,153 +4726,153 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/index.html:90
 msgctxt "subevent"
 msgid "Dates"
-msgstr ""
+msgstr "Дати"
 
 #: pretix/base/notifications.py:194 pretix/base/pdf.py:224
 #: pretix/plugins/badges/exporters.py:295
 #: pretix/plugins/ticketoutputpdf/exporters.py:92
 msgid "Event date"
-msgstr ""
+msgstr "Дата події"
 
 #: pretix/base/notifications.py:200
 #: pretix/control/templates/pretixcontrol/order/index.html:616
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:366
 msgid "Net total"
-msgstr ""
+msgstr "Сума Нетто"
 
 #: pretix/base/notifications.py:202
 msgid "Pending amount"
-msgstr ""
+msgstr "Сума в очікуванні"
 
 #: pretix/base/notifications.py:204 pretix/control/forms/filter.py:182
 #: pretix/control/forms/orderimport.py:37
 msgid "Order status"
-msgstr ""
+msgstr "Статус замовлення"
 
 #: pretix/base/notifications.py:222
 msgid "Purchased products"
-msgstr ""
+msgstr "Придбані продукти"
 
 #: pretix/base/notifications.py:223
 #: pretix/base/templates/pretixbase/email/order_details.html:147
 msgid "View order details"
-msgstr ""
+msgstr "Переглянути деталі замовлення"
 
 #: pretix/base/notifications.py:234
 #, python-brace-format
 msgid "A new order has been placed: {order.code}"
-msgstr ""
+msgstr "Нове замовлення було розміщено: {order.code}"
 
 #: pretix/base/notifications.py:240
 #, python-brace-format
 msgid "A new order has been placed that requires approval: {order.code}"
-msgstr ""
+msgstr "Було розміщено нове замовлення, яке потребує затвердження: {order.code}"
 
 #: pretix/base/notifications.py:246
 #, python-brace-format
 msgid "Order {order.code} has been marked as paid."
-msgstr ""
+msgstr "Замовлення {order.code} позначено як оплачене."
 
 #: pretix/base/notifications.py:252
 #, python-brace-format
 msgid "Order {order.code} has been canceled."
-msgstr ""
+msgstr "Замовлення {order.code} скасовано."
 
 #: pretix/base/notifications.py:258
 #, python-brace-format
 msgid "Order {order.code} has been reactivated."
-msgstr ""
+msgstr "Замовлення {order.code} повторно активовано."
 
 #: pretix/base/notifications.py:264
 #, python-brace-format
 msgid "Order {order.code} has been marked as expired."
-msgstr ""
+msgstr "Замовлення {order.code} позначено як прострочене."
 
 #: pretix/base/notifications.py:270
 #, python-brace-format
 msgid "The ticket information of order {order.code} has been changed."
-msgstr ""
+msgstr "Інформацію про квиток замовлення {order.code} було змінено."
 
 #: pretix/base/notifications.py:276
 #, python-brace-format
 msgid "The contact address of order {order.code} has been changed."
-msgstr ""
+msgstr "Контактну адресу замовлення {order.code} було змінено."
 
 #: pretix/base/notifications.py:282
 #, python-brace-format
 msgid "Order {order.code} has been changed."
-msgstr ""
+msgstr "Замовлення {order.code} було змінено."
 
 #: pretix/base/notifications.py:287
 msgid "Order has been overpaid"
-msgstr ""
+msgstr "Замовлення переплачено"
 
 #: pretix/base/notifications.py:288
 #, python-brace-format
 msgid "Order {order.code} has been overpaid."
-msgstr ""
+msgstr "Замовлення {order.code} було переплачено."
 
 #: pretix/base/notifications.py:294
 #, python-brace-format
 msgid "An external refund for {order.code} has occurred."
-msgstr ""
+msgstr "Відбулося зовнішнє відшкодування для {order.code}."
 
 #: pretix/base/notifications.py:299
 msgid "Refund requested"
-msgstr ""
+msgstr "Запит на повернення коштів"
 
 #: pretix/base/notifications.py:300
 #, python-brace-format
 msgid "You have been requested to issue a refund for {order.code}."
-msgstr ""
+msgstr "Вам надіслано запит на повернення коштів за {order.code}."
 
 #: pretix/base/orderimport.py:90
 msgid "Keep empty"
-msgstr ""
+msgstr "Залишати порожнім"
 
 #: pretix/base/orderimport.py:117
 #, python-brace-format
 msgid "Invalid setting for column \"{header}\"."
-msgstr ""
+msgstr "Недійсне налаштування для колонки \"{header}\"."
 
 #: pretix/base/orderimport.py:176
 msgid "Enter a valid phone number."
-msgstr ""
+msgstr "Введіть дійсний номер телефону."
 
 #: pretix/base/orderimport.py:204 pretix/presale/views/waiting.py:111
 msgctxt "subevent"
 msgid "You need to select a date."
-msgstr ""
+msgstr "Вам потрібно вибрати дату."
 
 #: pretix/base/orderimport.py:223 pretix/base/orderimport.py:235
 msgctxt "subevent"
 msgid "No matching date was found."
-msgstr ""
+msgstr "Не знайдено відповідної дати."
 
 #: pretix/base/orderimport.py:225 pretix/base/orderimport.py:237
 msgctxt "subevent"
 msgid "Multiple matching dates were found."
-msgstr ""
+msgstr "Знайдено кілька відповідних дат."
 
 #: pretix/base/orderimport.py:273
 msgid "No matching product was found."
-msgstr ""
+msgstr "Відповідного продукту не знайдено."
 
 #: pretix/base/orderimport.py:275
 msgid "Multiple matching products were found."
-msgstr ""
+msgstr "Знайдено кілька відповідних продуктів."
 
 #: pretix/base/orderimport.py:304
 msgid "No matching variation was found."
-msgstr ""
+msgstr "Не знайдено відповідних варіантів."
 
 #: pretix/base/orderimport.py:306
 msgid "Multiple matching variations were found."
-msgstr ""
+msgstr "Було знайдено кілька відповідних варіантів."
 
 #: pretix/base/orderimport.py:309
 msgid "You need to select a variation for this product."
-msgstr ""
+msgstr "Вам потрібно вибрати варіант цього продукту."
 
 #: pretix/base/orderimport.py:321 pretix/base/orderimport.py:336
 #: pretix/base/orderimport.py:351 pretix/base/orderimport.py:362
@@ -4761,11 +4883,11 @@ msgstr ""
 #: pretix/control/forms/filter.py:576 pretix/control/forms/filter.py:581
 #: pretix/control/forms/filter.py:586
 msgid "Invoice address"
-msgstr ""
+msgstr "Адреса рахунку-фактури"
 
 #: pretix/base/orderimport.py:396 pretix/base/orderimport.py:542
 msgid "Please enter a valid country code."
-msgstr ""
+msgstr "Будь ласка, введіть дійсний код країни."
 
 #: pretix/base/orderimport.py:413 pretix/base/orderimport.py:559
 msgid "States are not supported for this country."
@@ -4777,7 +4899,7 @@ msgstr ""
 
 #: pretix/base/orderimport.py:470 pretix/control/forms/filter.py:595
 msgid "Attendee e-mail address"
-msgstr ""
+msgstr "Адреса електронної пошти учасника"
 
 #: pretix/base/orderimport.py:486 pretix/base/orderimport.py:497
 #: pretix/base/orderimport.py:508 pretix/base/orderimport.py:519
@@ -4789,7 +4911,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:164
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:167
 msgid "Attendee address"
-msgstr ""
+msgstr "Адреса учасника"
 
 #: pretix/base/orderimport.py:554
 msgid "State"
@@ -4797,74 +4919,76 @@ msgstr ""
 
 #: pretix/base/orderimport.py:577
 msgid "Calculate from product"
-msgstr ""
+msgstr "Розрахувати з продукту"
 
 #: pretix/base/orderimport.py:585 pretix/control/views/orders.py:886
 #: pretix/control/views/orders.py:915 pretix/control/views/orders.py:959
 #: pretix/control/views/orders.py:991 pretix/control/views/orders.py:1014
 msgid "You entered an invalid number."
-msgstr ""
+msgstr "Ви ввели недійсний номер."
 
 #: pretix/base/orderimport.py:603
 #: pretix/control/templates/pretixcontrol/checkin/index.html:97
 #: pretix/control/templates/pretixcontrol/order/index.html:435
 msgid "Ticket code"
-msgstr ""
+msgstr "Kод квитка"
 
 #: pretix/base/orderimport.py:604
 msgid "Generate automatically"
-msgstr ""
+msgstr "Генерувати автоматично"
 
 #: pretix/base/orderimport.py:613
 msgid "You cannot assign a position secret that already exists."
-msgstr ""
+msgstr "Ви не можете призначити секрет позиції, який уже існує."
 
 #: pretix/base/orderimport.py:642
 msgid "Please enter a valid language code."
-msgstr ""
+msgstr "Будь ласка, введіть дійсний код мови."
 
 #: pretix/base/orderimport.py:662
 msgid "Please enter a valid sales channel."
-msgstr ""
+msgstr "Введіть дійсний канал продажу."
 
 #: pretix/base/orderimport.py:686
 msgid "Multiple matching seats were found."
-msgstr ""
+msgstr "Знайдено кілька відповідних місць."
 
 #: pretix/base/orderimport.py:688
 msgid "No matching seat was found."
-msgstr ""
+msgstr "Не знайдено відповідного місця."
 
 #: pretix/base/orderimport.py:691 pretix/base/services/cart.py:143
 msgid ""
 "The seat you selected has already been taken. Please select a different seat."
-msgstr ""
+msgstr "Вибране вами місце вже зайнято. Будь ласка, виберіть інше місце."
 
 #: pretix/base/orderimport.py:694 pretix/base/services/cart.py:140
 msgid "You need to select a specific seat."
-msgstr ""
+msgstr "Вам потрібно вибрати конкретне місце."
 
 #: pretix/base/orderimport.py:744 pretix/base/orderimport.py:752
 msgid "Ambiguous option selected."
-msgstr ""
+msgstr "Вибрано неоднозначний варіант."
 
 #: pretix/base/payment.py:201
 #: pretix/presale/templates/pretixpresale/event/order.html:114
 msgid "Pay now"
-msgstr ""
+msgstr "Заплатити зараз"
 
 #: pretix/base/payment.py:275
 msgid "Enable payment method"
-msgstr ""
+msgstr "Увімкнути спосіб оплати"
 
 #: pretix/base/payment.py:281
 msgid ""
 "Users will not be able to choose this payment provider after the given date."
 msgstr ""
+"Користувачі не зможуть вибрати цього постачальника платежів після вказаної "
+"дати."
 
 #: pretix/base/payment.py:286
 msgid "Text on invoices"
-msgstr ""
+msgstr "Текст на рахунках-фактурах"
 
 #: pretix/base/payment.py:287
 msgid ""
@@ -4873,10 +4997,14 @@ msgid ""
 "order is paid. If the invoice is generated later, it will show a text "
 "stating that it has already been paid."
 msgstr ""
+"Буде надруковано під цифрами платежу та над текстом закриття рахунків-"
+"фактур. Це буде використано лише в тому випадку, якщо рахунок-фактура "
+"створено до оплати замовлення. Якщо рахунок-фактуру створено пізніше, у "
+"ньому з’явиться текст про те, що його вже сплачено."
 
 #: pretix/base/payment.py:296
 msgid "Minimum order total"
-msgstr ""
+msgstr "Мінімальна сума замовлення"
 
 #: pretix/base/payment.py:297
 msgid ""
@@ -4884,10 +5012,14 @@ msgid ""
 "exceeds the given value. The order total for this purpose may be computed "
 "without taking the fees imposed by this payment method into account."
 msgstr ""
+"Цей платіж буде доступний лише в тому випадку, якщо загальна сума замовлення "
+"дорівнює або перевищує задане значення. Загальна сума замовлення для цієї "
+"мети може бути обчислена без урахування комісій, стягнених цим способом "
+"оплати."
 
 #: pretix/base/payment.py:307
 msgid "Maximum order total"
-msgstr ""
+msgstr "Максимальна сума замовлення"
 
 #: pretix/base/payment.py:308
 msgid ""
@@ -4895,22 +5027,25 @@ msgid ""
 "the given value. The order total for this purpose may be computed without "
 "taking the fees imposed by this payment method into account."
 msgstr ""
+"Цей платіж буде доступний лише в тому випадку, якщо загальна сума замовлення "
+"дорівнює або нижче заданої вартості. Загальна сума замовлення для цієї мети "
+"може бути обчислена без урахування комісій, стягнених цим способом оплати."
 
 #: pretix/base/payment.py:318 pretix/base/payment.py:327
 msgid "Additional fee"
-msgstr ""
+msgstr "Додаткова комісія"
 
 #: pretix/base/payment.py:319
 msgid "Absolute value"
-msgstr ""
+msgstr "Абсолютне значення"
 
 #: pretix/base/payment.py:328
 msgid "Percentage of the order total."
-msgstr ""
+msgstr "Відсоток від загальної суми замовлення."
 
 #: pretix/base/payment.py:334
 msgid "Calculate the fee from the total value including the fee."
-msgstr ""
+msgstr "Розрахувати oплату із загальної вартості, включаючи oплату."
 
 #: pretix/base/payment.py:335
 #, python-brace-format
@@ -4920,10 +5055,15 @@ msgid ""
 "\"noopener\">Click here for detailed information on what this does.</a> "
 "Don't forget to set the correct fees above!"
 msgstr ""
+"Ми рекомендуємо ввімкнути цю функцію, якщо ви хочете, щоб ваші користувачі "
+"сплачували комісію вашого постачальника платежів.<a href=\"{docs_url}\" "
+"target=\"_blank\" rel=\"noopener\">Натисніть тут, щоб отримати докладну "
+"інформацію про те, що це робить.</a> Не забудьте вказати правильні комісії "
+"вище!"
 
 #: pretix/base/payment.py:343
 msgid "Restrict to countries"
-msgstr ""
+msgstr "Обмежити до країн"
 
 #: pretix/base/payment.py:345
 msgid ""
@@ -4931,82 +5071,96 @@ msgid ""
 "selected countries. If you don't select any country, all countries are "
 "allowed. This is only enabled if the invoice address is required."
 msgstr ""
+"Дозволити вибирати цього постачальника платежів лише для адрес рахунків-"
+"фактур у вибраних країнах. Якщо ви не виберете жодну країну, усі країни "
+"будуть дозволені. Це ввімкнено, лише якщо потрібна адреса рахунку-фактури."
 
 #: pretix/base/payment.py:364
 msgid ""
 "Only allow the usage of this payment provider in the selected sales channels."
 msgstr ""
+"Дозволити використання цього постачальника платежів лише у вибраних каналах "
+"продажу."
 
 #: pretix/base/payment.py:368
 msgid "Hide payment method"
-msgstr ""
+msgstr "Приховати спосіб оплати"
 
 #: pretix/base/payment.py:371
 msgid ""
 "The payment method will not be shown by default but only to people who enter "
 "the shop through a special link."
 msgstr ""
+"Спосіб оплати не відображатиметься за замовчуванням, а лише людям, які "
+"входять у магазин за спеціальним посиланням."
 
 #: pretix/base/payment.py:377
 msgid "Link to enable payment method"
-msgstr ""
+msgstr "Посилання для ввімкнення способу оплати"
 
 #: pretix/base/payment.py:386
 msgid "Share this link with customers who should use this payment method."
 msgstr ""
+"Поділіться цим посиланням з клієнтами, яким слід скористатися цим способом "
+"оплати."
 
 #: pretix/base/payment.py:419
 msgctxt "invoice"
 msgid "The payment for this invoice has already been received."
-msgstr ""
+msgstr "Платіж за цей рахунок-фактуру вже отримано."
 
 #: pretix/base/payment.py:830
 msgid "Automatic refunds are not supported by this payment provider."
-msgstr ""
+msgstr "Автоматичне відшкодування не підтримується цим постачальником платежів."
 
 #: pretix/base/payment.py:901
 msgid ""
 "No payment is required as this order only includes products which are free "
 "of charge."
 msgstr ""
+"Оплата не потрібна, оскільки це замовлення включає лише безкоштовні продукти."
 
 #: pretix/base/payment.py:908
 msgid "Free of charge"
-msgstr ""
+msgstr "Безкоштовно"
 
 #: pretix/base/payment.py:936
 msgid "Box office"
-msgstr ""
+msgstr "Каса"
 
 #: pretix/base/payment.py:981 pretix/base/payment.py:999
 #: pretix/plugins/manualpayment/apps.py:30
 #: pretix/plugins/manualpayment/apps.py:33
 msgid "Manual payment"
-msgstr ""
+msgstr "Оплата вручну"
 
 #: pretix/base/payment.py:985 pretix/plugins/banktransfer/payment.py:186
 msgid ""
 "In test mode, you can just manually mark this order as paid in the backend "
 "after it has been created."
 msgstr ""
+"У тестовому режимі ви можете просто вручну позначити це замовлення як "
+"оплачене в серверній частині після його створення."
 
 #: pretix/base/payment.py:1006 pretix/plugins/banktransfer/payment.py:145
 msgid "Payment method name"
-msgstr ""
+msgstr "Назва способу оплати"
 
 #: pretix/base/payment.py:1010
 msgid "Payment process description during checkout"
-msgstr ""
+msgstr "Опис процесу оплати під час оформлення замовлення"
 
 #: pretix/base/payment.py:1011
 msgid ""
 "This text will be shown during checkout when the user selects this payment "
 "method. It should give a short explanation on this payment method."
 msgstr ""
+"Цей текст відображатиметься під час оплати, коли користувач вибере цей "
+"спосіб оплати. Він має дати коротке пояснення щодо цього способу оплати."
 
 #: pretix/base/payment.py:1016
 msgid "Payment process description in order confirmation emails"
-msgstr ""
+msgstr "Опис процесу оплати в електронних листах з підтвердженням замовлення"
 
 #: pretix/base/payment.py:1017
 #, python-brace-format
@@ -5019,7 +5173,7 @@ msgstr ""
 
 #: pretix/base/payment.py:1024
 msgid "Payment process description for pending orders"
-msgstr ""
+msgstr "Опис процесу оплати для замовлень, що очікують на розгляд"
 
 #: pretix/base/payment.py:1025
 #, python-brace-format
@@ -5031,59 +5185,66 @@ msgstr ""
 
 #: pretix/base/payment.py:1074
 msgid "Offsetting"
-msgstr ""
+msgstr "Компенсація"
 
 #: pretix/base/payment.py:1088 pretix/control/views/orders.py:968
 msgid "You entered an order that could not be found."
-msgstr ""
+msgstr "Ви ввели замовлення, яке не вдалося знайти."
 
 #: pretix/base/payment.py:1117
 #, python-format
 msgid "Balanced against orders: %s"
-msgstr ""
+msgstr "Збалансовано щодо замовлень: %s"
 
 #: pretix/base/payment.py:1138
 msgid "In test mode, only test cards will work."
-msgstr ""
+msgstr "У тестовому режимі працюватимуть лише тестові картки."
 
 #: pretix/base/payment.py:1203 pretix/base/payment.py:1266
 #: pretix/base/payment.py:1310 pretix/base/services/orders.py:835
 msgid "You cannot pay with gift cards when buying a gift card."
 msgstr ""
+"При покупці подарункового сертифікату не можна розплачуватися подарунковим "
+"сертифікатом."
 
 #: pretix/base/payment.py:1212 pretix/base/payment.py:1274
 #: pretix/base/payment.py:1318 pretix/base/services/orders.py:826
 msgid "This gift card does not support this currency."
-msgstr ""
+msgstr "Цей подарунковий сертифікат не підтримує цю валюту."
 
 #: pretix/base/payment.py:1215 pretix/base/payment.py:1277
 #: pretix/base/services/orders.py:828
 msgid "This gift card can only be used in test mode."
 msgstr ""
+"Цей подарунковий сертифікат можна використовувати лише в тестовому режимі."
 
 #: pretix/base/payment.py:1218 pretix/base/payment.py:1280
 #: pretix/base/services/orders.py:830
 msgid "Only test gift cards can be used in test mode."
 msgstr ""
+"У тестовому режимі можна використовувати лише тестові подарункові "
+"сертифікати."
 
 #: pretix/base/payment.py:1221 pretix/base/payment.py:1283
 #: pretix/base/payment.py:1324
 msgid "This gift card is no longer valid."
-msgstr ""
+msgstr "Цей подарунковий сертифікат більше не дійсний."
 
 #: pretix/base/payment.py:1224 pretix/base/payment.py:1286
 msgid "All credit on this gift card has been used."
-msgstr ""
+msgstr "Усі кошти з цього подарункового сертифікату вже використані."
 
 #: pretix/base/payment.py:1229
 msgid "This gift card is already used for your payment."
-msgstr ""
+msgstr "Цей подарунковий сертифікат вже використовується для оплати."
 
 #: pretix/base/payment.py:1244
 msgid ""
 "Your gift card has been applied, but {} still need to be paid. Please select "
 "a payment method."
 msgstr ""
+"Ваш подарунковий сертифікат застосовано, але {} все ще потрібно сплатити. "
+"Будь ласка, виберіть спосіб оплати."
 
 #: pretix/base/payment.py:1248
 msgid "Your gift card has been applied."
