@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-28 16:44+0000\n"
 "PO-Revision-Date: 2022-05-06 04:00+0000\n"
-"Last-Translator: Iryna Loik <iraloyik@gmail.com>\n"
+"Last-Translator: Yuliya Palmova <yuliyasushchenko@hotmail.com>\n"
 "Language-Team: Ukrainian <https://translate.pretix.eu/projects/pretix/pretix/"
 "uk/>\n"
 "Language: uk\n"
@@ -7545,11 +7545,11 @@ msgstr "Просити номер телефону"
 
 #: pretix/base/settings.py:1174
 msgid "Ask for a phone number when signing up to the waiting list."
-msgstr "Просити номер телефону під час реєстрації у список очікування."
+msgstr "Потребує номер телефону під час реєстрації у список очікування."
 
 #: pretix/base/settings.py:1183
 msgid "Require phone number"
-msgstr "Просити номер телефону"
+msgstr "Потребує номер телефону"
 
 #: pretix/base/settings.py:1184
 msgid "Require a phone number when signing up to the waiting list.."
