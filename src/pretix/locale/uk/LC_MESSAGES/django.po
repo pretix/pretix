@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-28 16:44+0000\n"
 "PO-Revision-Date: 2022-05-05 18:07+0000\n"
-"Last-Translator: Iryna Loik <iraloyik@gmail.com>\n"
+"Last-Translator: Iryna N <in380@nyu.edu>\n"
 "Language-Team: Ukrainian <https://translate.pretix.eu/projects/pretix/pretix/"
 "uk/>\n"
 "Language: uk\n"
@@ -3253,7 +3253,6 @@ msgid "Maximum amount per order"
 msgstr "Максимальна сума замовлення"
 
 #: pretix/base/models/items.py:490
-#, fuzzy
 msgid ""
 "This product can only be bought at most this many times within one order. If "
 "you keep the field empty or set it to 0, there is no special limit for this "
@@ -7420,10 +7419,15 @@ msgid ""
 "less priority than the language and is therefore mostly relevant for "
 "languages used in different regions globally (like English)."
 msgstr ""
+"Буде використовуватися для визначення форматування дати та часу, а також "
+"країни за замовчуванням для адрес та номерів телефонів клієнтів. Для "
+"форматування це має менший пріоритет, ніж мова, і тому в основному актуально "
+"для мов, які використовуються в різних регіонах світу (наприклад, "
+"англійська)."
 
 #: pretix/base/settings.py:1041
 msgid "Show event times and dates on the ticket shop"
-msgstr ""
+msgstr "Показувати час і дату подій у квитковій крамниці"
 
 #: pretix/base/settings.py:1042
 msgid ""
