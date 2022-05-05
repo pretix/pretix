@@ -55,7 +55,7 @@ from django.utils.formats import date_format
 from django.utils.functional import SimpleLazyObject
 from django.utils.html import conditional_escape
 from django.utils.timezone import now
-from django.utils.translation import gettext_lazy as _
+from django.utils.translation import gettext_lazy as _, pgettext
 from i18nfield.strings import LazyI18nString
 from PyPDF2 import PdfFileReader
 from pytz import timezone
@@ -522,7 +522,10 @@ def variables_from_questions(sender, *args, **kwargs):
 def _get_attendee_name_part(key, op, order, ev):
     if isinstance(key, tuple):
         return ' '.join(p for p in [_get_attendee_name_part(c[0], op, order, ev) for c in key] if p)
-    return op.attendee_name_parts.get(key, '')
+    value = op.attendee_name_parts.get(key, '')
+    if key == "salutation":
+        return pgettext("person_name_salutation", value)
+    return value
 
 
 def _get_ia_name_part(key, op, order, ev):
