@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-28 16:44+0000\n"
-"PO-Revision-Date: 2022-05-03 13:16+0000\n"
+"PO-Revision-Date: 2022-05-05 15:40+0000\n"
 "Last-Translator: hmontheline <Helias.mackay@goetheanum.ch>\n"
 "Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix/fr/"
 ">\n"
@@ -9656,12 +9656,12 @@ msgstr ""
 #: pretix/base/settings.py:2740
 msgctxt "person_name_salutation"
 msgid "Ms"
-msgstr ""
+msgstr "Mme"
 
 #: pretix/base/settings.py:2741
 msgctxt "person_name_salutation"
 msgid "Mr"
-msgstr ""
+msgstr "M."
 
 #: pretix/base/settings.py:2742
 msgctxt "person_name_salutation"
