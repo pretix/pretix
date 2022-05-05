@@ -7545,15 +7545,15 @@ msgstr "Просити номер телефону"
 
 #: pretix/base/settings.py:1174
 msgid "Ask for a phone number when signing up to the waiting list."
-msgstr ""
+msgstr "Просити номер телефону під час реєстрації у список очікування."
 
 #: pretix/base/settings.py:1183
 msgid "Require phone number"
-msgstr ""
+msgstr "Просити номер телефону"
 
 #: pretix/base/settings.py:1184
 msgid "Require a phone number when signing up to the waiting list.."
-msgstr ""
+msgstr "Просити номер телефону під час реєстрації у список очікування.."
 
 #: pretix/base/settings.py:1194
 msgid "Phone number explanation"
