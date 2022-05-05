@@ -99,9 +99,15 @@ def event_copy_data_receiver(sender, other, question_map, item_map, **kwargs):
         for o in layout:
             if o['type'] == 'textarea':
                 if o['content'].startswith('question_'):
-                    newq = question_map.get(int(o['content'][9:]))
-                    if newq:
-                        o['content'] = 'question_{}'.format(newq.pk)
+                    try:
+                        newq = question_map.get(int(o['content'][9:]))
+                    except ValueError:
+                        # int cannot convert new placeholders question_{identifier}
+                        # can be safely ignored as only old format questions_{pk} should be converted
+                        pass
+                    else:
+                        if newq:
+                            o['content'] = 'question_{}'.format(newq.pk)
 
         bl.layout = json.dumps(layout)
         bl.save()
