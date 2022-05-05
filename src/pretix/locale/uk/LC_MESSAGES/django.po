@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-28 16:44+0000\n"
-"PO-Revision-Date: 2022-05-05 14:29+0000\n"
+"PO-Revision-Date: 2022-05-05 15:40+0000\n"
 "Last-Translator: Iryna Loik <iraloyik@gmail.com>\n"
 "Language-Team: Ukrainian <https://translate.pretix.eu/projects/pretix/pretix/"
 "uk/>\n"
@@ -6167,6 +6167,11 @@ msgid ""
 "We are sending this email because you configured us to do so in your event "
 "settings."
 msgstr ""
+"Вітаємо, \n"
+"\n"
+"новий рахунок за (подію) було створено, див. у додатку. \n"
+"\n"
+"Ви отримали цей імейл тому, що вказали це у своїх налаштуваннях події."
 
 #: pretix/base/services/mail.py:246
 #, python-brace-format
@@ -6682,6 +6687,21 @@ msgid ""
 "\n"
 "your pretix developers"
 msgstr ""
+"Вітаємо! \n"
+"\n"
+"Доступні оновлення для pretix або для одного із плагінів, які ви встановили "
+"під час налаштування pretix. Перейдіть будь ласка за посилання для отримання "
+"додаткової інформації. \n"
+"\n"
+"{url} \n"
+"\n"
+"Ви завжди знайдете найновішу інформацію щодо наших оновлень  на pretix.eu "
+"blog:\n"
+"\n"
+"https://pretix.eu/about/en/blog/\n"
+"\n"
+"З повагою\n"
+"команда розробників pretix"
 
 #: pretix/base/services/update_check.py:145
 #: pretix/base/services/update_check.py:147
@@ -6813,48 +6833,51 @@ msgstr ""
 
 #: pretix/base/settings.py:264
 msgid "Ask for postal addresses per ticket"
-msgstr ""
+msgstr "Вказати поштову адресу квитка"
 
 #: pretix/base/settings.py:273
 msgid "Require postal addresses per ticket"
-msgstr ""
+msgstr "Вказати поштову адресу за кожним квитком"
 
 #: pretix/base/settings.py:283
 msgid "Ask for the order email address twice"
-msgstr ""
+msgstr "Двічі запитайти електронну адресу замовлення"
 
 #: pretix/base/settings.py:284
 msgid ""
 "Require customers to fill in the primary email address twice to avoid errors."
 msgstr ""
+"Просити замовників двічі вказувати електронну адресу для уникнення помилок."
 
 #: pretix/base/settings.py:293
 msgid "Ask for a phone number per order"
-msgstr ""
+msgstr "Запитувати номер телефону  для замовлення"
 
 #: pretix/base/settings.py:302
 msgid "Require a phone number per order"
-msgstr ""
+msgstr "Запитувати номер телефону для замовлення"
 
 #: pretix/base/settings.py:312
 msgid "Ask for invoice address"
-msgstr ""
+msgstr "Запитувати адресу для виставлення рахунку"
 
 #: pretix/base/settings.py:321
 msgid "Do not ask for invoice address if an order is free"
 msgstr ""
+"Не просити вказати адресу для виставлення рахунку, якщо замовлення "
+"безкоштовне"
 
 #: pretix/base/settings.py:330
 msgid "Require customer name"
-msgstr ""
+msgstr "Просити ім'я замовника"
 
 #: pretix/base/settings.py:339
 msgid "Show attendee names on invoices"
-msgstr ""
+msgstr "Вказувати імена учасників на рахунку"
 
 #: pretix/base/settings.py:348
 msgid "Show event location on invoices"
-msgstr ""
+msgstr "Вказувати місце події на рахунку"
 
 #: pretix/base/settings.py:349
 msgid ""
@@ -6862,32 +6885,36 @@ msgid ""
 "same for all lines. It will be shown on every line if there are different "
 "locations."
 msgstr ""
+"Місце події буде показано під списком продуктів, якщо воно однакове для всіх "
+"ліній. Він буде відображатися в кожному рядку, якщо це різні місця."
 
 #: pretix/base/settings.py:359
 msgid ""
 "On invoices from one EU country into another EU country with a different "
 "currency, print the tax amounts in both currencies if possible"
 msgstr ""
+"На рахунках виставлених одній країні ЄС іншій з різними національними "
+"валютами, друкувати вартість ПДВ в обох валютах якщо це можливо."
 
 #: pretix/base/settings.py:369
 msgid "Require invoice address"
-msgstr ""
+msgstr "Просити адресу для виставлення рахунку"
 
 #: pretix/base/settings.py:379
 msgid "Require a business addresses"
-msgstr ""
+msgstr "Просити робочу адресу"
 
 #: pretix/base/settings.py:380
 msgid "This will require users to enter a company name."
-msgstr ""
+msgstr "Користувачі повинні вказати назву своєї компанії."
 
 #: pretix/base/settings.py:390
 msgid "Ask for beneficiary"
-msgstr ""
+msgstr "Вказати бенефіціара"
 
 #: pretix/base/settings.py:400
 msgid "Custom recipient field"
-msgstr ""
+msgstr "Спеціальне поле одержувача"
 
 #: pretix/base/settings.py:402
 msgid ""
@@ -6897,10 +6924,15 @@ msgid ""
 "details as well as for displaying the value on the invoice. It will be shown "
 "on the invoice below the headline. The field will not be required."
 msgstr ""
+"Якщо ви хочете додати спеціальне текстове поле, напр. шоб отримати "
+"реєстраційний номер для конкретної країни, у формі адреси рахунка-фактури "
+"заповніть його тут. Ця мітка буде використовуватися як для запиту "
+"користувача ввести свої дані, так і для відображення у рахунку-фактурі під "
+"заголовком. Поле не буде обов’язковим."
 
 #: pretix/base/settings.py:415
 msgid "Ask for VAT ID"
-msgstr ""
+msgstr "Попросити код ПДВ"
 
 #: pretix/base/settings.py:417
 #, python-brace-format
@@ -6909,44 +6941,54 @@ msgid ""
 "only requested from business customers in the following countries: "
 "{countries}"
 msgstr ""
+"Працює у випадках, коли є запит у рахунку.  Номер платника ПДВ не потрібен, "
+"тільки за запитом клієнтів із наступних країн : {countries}"
 
 #: pretix/base/settings.py:430
 msgid "Invoice address explanation"
-msgstr ""
+msgstr "Пояснення адреси рахунку"
 
 #: pretix/base/settings.py:433
 msgid "This text will be shown above the invoice address form during checkout."
 msgstr ""
+"Цей текст буде відображатись над адресою рахунку під час оформлення "
+"замовлення."
 
 #: pretix/base/settings.py:442
 msgid "Show paid amount on partially paid invoices"
-msgstr ""
+msgstr "Показати сплачену суму на частково оплачених рахунках"
 
 #: pretix/base/settings.py:443
 msgid ""
 "If an invoice has already been paid partially, this option will add the paid "
 "and pending amount to the invoice."
 msgstr ""
+"Якщо рахунок був сплачений частково, ця опція додасть сплачену суму та суму "
+"до сплати до рахунку."
 
 #: pretix/base/settings.py:453
 msgid "Show free products on invoices"
-msgstr ""
+msgstr "Показати безкоштовні продукти на рахунку"
 
 #: pretix/base/settings.py:454
 msgid ""
 "Note that invoices will never be generated for orders that contain only free "
 "products."
 msgstr ""
+"Звертаємо увагу, що рахунок не генерувається для замовлень, які містять "
+"тільки безкоштовні продукти."
 
 #: pretix/base/settings.py:464
 msgid "Show expiration date of order"
-msgstr ""
+msgstr "Показати термін дії замовлення"
 
 #: pretix/base/settings.py:465
 msgid ""
 "The expiration date will not be shown if the invoice is generated after the "
 "order is paid."
 msgstr ""
+"Термін дії не буде відображатись на рахунку якщо його створено після сплати "
+"рахунку."
 
 #: pretix/base/settings.py:475
 msgid "Minimum length of invoice number after prefix"
@@ -6960,11 +7002,12 @@ msgstr ""
 
 #: pretix/base/settings.py:486
 msgid "Generate invoices with consecutive numbers"
-msgstr ""
+msgstr "Згенерувати рахунки з послідовними номерами"
 
 #: pretix/base/settings.py:487
 msgid "If deactivated, the order code will be used in the invoice number."
 msgstr ""
+"Якщо вимкнено, номер замовлення буде використовуватись в номері рахунку."
 
 #: pretix/base/settings.py:496
 msgid "Invoice number prefix"
@@ -6994,21 +7037,25 @@ msgstr ""
 
 #: pretix/base/settings.py:536
 msgid "Length of ticket codes"
-msgstr ""
+msgstr "Довжина коду квитка"
 
 #: pretix/base/settings.py:563
 msgid "Reservation period"
-msgstr ""
+msgstr "Період бронювання"
 
 #: pretix/base/settings.py:565
 msgid ""
 "The number of minutes the items in a user's cart are reserved for this user."
 msgstr ""
+"Кількість хвилин, протягом яких товари в кошику користувача зарезервовані "
+"для цього користувача."
 
 #: pretix/base/settings.py:574
 msgid ""
 "Directly redirect to check-out after a product has been added to the cart."
 msgstr ""
+"Після того як продукт було додано до кошика відразу перенаправити на "
+"оформлення замовлення."
 
 #: pretix/base/settings.py:583
 msgid "End of presale text"
@@ -7030,28 +7077,33 @@ msgid ""
 "This text will be shown above the payment options. You can explain the "
 "choices to the user here, if you want."
 msgstr ""
+"Цей текст буде відображатись перед методами сплати. Ви можете пояснити опції "
+"своїм користувачам, якщо бажаєте."
 
 #: pretix/base/settings.py:612 pretix/base/settings.py:621
 msgid "in days"
-msgstr ""
+msgstr "у днях"
 
 #: pretix/base/settings.py:613 pretix/base/settings.py:622
 msgid "in minutes"
-msgstr ""
+msgstr "у хвилинах"
 
 #: pretix/base/settings.py:617
 msgid "Set payment term"
-msgstr ""
+msgstr "Вказати термін оплати"
 
 #: pretix/base/settings.py:624
 msgid ""
 "If using days, the order will expire at the end of the last day. Using "
 "minutes is more exact, but should only be used for real-time payment methods."
 msgstr ""
+"При використанні днів, термін дії замовлення завершиться в останній день. "
+"Використання хвилин є точнішим, але може використовуватись для способів "
+"оплати у реальному часі."
 
 #: pretix/base/settings.py:634
 msgid "Payment term in days"
-msgstr ""
+msgstr "Термін оплати у днях"
 
 #: pretix/base/settings.py:641
 msgid ""
@@ -7060,6 +7112,12 @@ msgid ""
 "recommend 14 days. If you only use real-time payment methods, we recommend "
 "still setting two or three days to allow people to retry failed payments."
 msgstr ""
+"Кількість днів після створення замовлення, протягом яких замовник повинен "
+"сплатити замовлення. Якщо ви використовуєте повільні методи оплати, як "
+"наприклад, банківський переказ, ми рекомендуємо 14 днів. Якщо ви "
+"використовуєте оплати у реальному часі, пропоноємо дозволити 2-3 днів для "
+"того, щоб замовники змогли повторити платіж, у випадку якщо не вдалось "
+"сплатити з першого разу."
 
 #: pretix/base/settings.py:659
 msgid "Only end payment terms on weekdays"
@@ -7075,7 +7133,7 @@ msgstr ""
 
 #: pretix/base/settings.py:676
 msgid "Payment term in minutes"
-msgstr ""
+msgstr "Термін оплати у хвилинах"
 
 #: pretix/base/settings.py:677
 msgid ""
@@ -7084,10 +7142,15 @@ msgid ""
 "methods. Please note that for technical reasons, the actual time frame might "
 "be a few minutes longer before the order is marked as expired."
 msgstr ""
+"Кількість хвилин після створення замовлення, протягом яких замовник має "
+"сплатити своє замовлення. Використовується тільки при методах оплати у "
+"реальному часі. Звертаємо вашу увагу, що з технічних причин, фактичний час "
+"бути на кілька хвилин довшим, перед тим як замовлення буде позначено як "
+"прострочене."
 
 #: pretix/base/settings.py:700
 msgid "Last date of payments"
-msgstr ""
+msgstr "Остання дата оплати"
 
 #: pretix/base/settings.py:701
 msgid ""
@@ -7095,10 +7158,13 @@ msgid ""
 "configured above. If you use the event series feature and an order contains "
 "tickets for multiple dates, the earliest date will be used."
 msgstr ""
+"Останній день прийому будь-якої оплати. Це має пріоритет перед умовами, "
+"налаштованими вище. Якщо ви використовуєте функцію серії подій і замовлення "
+"містить квитки на кілька дат, буде використана найраніша дата."
 
 #: pretix/base/settings.py:712
 msgid "Automatically expire unpaid orders"
-msgstr ""
+msgstr "Автоматично припинити термін дії несплачених замовлень"
 
 #: pretix/base/settings.py:713
 msgid ""
@@ -7120,7 +7186,7 @@ msgstr ""
 
 #: pretix/base/settings.py:744
 msgid "Accept late payments"
-msgstr ""
+msgstr "Приймати прострочені платежі"
 
 #: pretix/base/settings.py:745
 msgid ""
@@ -7131,39 +7197,40 @@ msgstr ""
 
 #: pretix/base/settings.py:756
 msgid "Show start date"
-msgstr ""
+msgstr "Показати дату початку"
 
 #: pretix/base/settings.py:757
 msgid "Show the presale start date before presale has started."
 msgstr ""
+"Показати дату початку передпродажу перед тим як розпочнеться передпродаж."
 
 #: pretix/base/settings.py:772 pretix/base/settings.py:783
 msgid "Do not generate invoices"
-msgstr ""
+msgstr "Не генерувати рахунки"
 
 #: pretix/base/settings.py:773 pretix/base/settings.py:784
 msgid "Only manually in admin panel"
-msgstr ""
+msgstr "Тільки вручну в панелі адміністратора"
 
 #: pretix/base/settings.py:774 pretix/base/settings.py:785
 msgid "Automatically on user request"
-msgstr ""
+msgstr "Автоматично за запитом користувача"
 
 #: pretix/base/settings.py:775 pretix/base/settings.py:786
 msgid "Automatically for all created orders"
-msgstr ""
+msgstr "Автоматично для усіх створених замовлень"
 
 #: pretix/base/settings.py:776 pretix/base/settings.py:787
 msgid "Automatically on payment or when required by payment method"
-msgstr ""
+msgstr "Автоматично для оплат або коли вимагається тип оплати"
 
 #: pretix/base/settings.py:780
 msgid "Generate invoices"
-msgstr ""
+msgstr "Згенерувати рахунки"
 
 #: pretix/base/settings.py:789
 msgid "Invoices will never be automatically generated for free orders."
-msgstr ""
+msgstr "Рахунки не будуть автоматично генеруватись для безкоштовних замовлень."
 
 #: pretix/base/settings.py:798
 msgid "Automatically cancel and reissue invoice on address changes"
@@ -7178,7 +7245,7 @@ msgstr ""
 
 #: pretix/base/settings.py:810
 msgid "Allow to update existing invoices"
-msgstr ""
+msgstr "Дозволити оновити існуючі рахунки"
 
 #: pretix/base/settings.py:811
 msgid ""
@@ -7186,10 +7253,13 @@ msgid ""
 "most countries, we recommend to leave this option turned off and always "
 "issue a new invoice if a change needs to be made."
 msgstr ""
+"За замовчуванням, рахунки не можна редагувати після того, як вони були "
+"створені. Для більшості країн, ми рекомендуємо залишити цю опцію вимкненою "
+"та завжди створювати новий рахунок якщо необхідно внести зміни."
 
 #: pretix/base/settings.py:826
 msgid "Address line"
-msgstr ""
+msgstr "Адреса"
 
 #: pretix/base/settings.py:830
 msgid "Albert Einstein Road 52"
@@ -7197,41 +7267,42 @@ msgstr ""
 
 #: pretix/base/settings.py:882
 msgid "Domestic tax ID"
-msgstr ""
+msgstr "Внутрішній податковий номер"
 
 #: pretix/base/settings.py:883
 msgid "e.g. tax number in Germany, ABN in Australia, …"
-msgstr ""
+msgstr "напр., податковий рахунок у Німечинні, ABN в Австралії"
 
 #: pretix/base/settings.py:892
 msgid "EU VAT ID"
-msgstr ""
+msgstr "податковий номер ЄС"
 
 #: pretix/base/settings.py:905
 msgid "e.g. With this document, we sent you the invoice for your ticket order."
-msgstr ""
+msgstr "напр., цим документом ми надсилаємо вам рахунок за ваше замовлення."
 
 #: pretix/base/settings.py:908
 msgid "Introductory text"
-msgstr ""
+msgstr "вступний текст"
 
 #: pretix/base/settings.py:909
 msgid "Will be printed on every invoice above the invoice rows."
 msgstr ""
+"Буде надруковано на кожному рахунку-фактурі над рядками рахунків-фактур."
 
 #: pretix/base/settings.py:922
 msgid ""
 "e.g. Thank you for your purchase! You can find more information on the event "
 "at ..."
-msgstr ""
+msgstr "напр., Дякуємо за покупку! Більше інформації про захід"
 
 #: pretix/base/settings.py:925
 msgid "Additional text"
-msgstr ""
+msgstr "Додатковий текст"
 
 #: pretix/base/settings.py:926
 msgid "Will be printed on every invoice below the invoice total."
-msgstr ""
+msgstr "Буде надруковано на кожному рахунку після загальної вартості."
 
 #: pretix/base/settings.py:939
 msgid ""
@@ -7248,10 +7319,12 @@ msgid ""
 "Will be printed centered and in a smaller font at the end of every invoice "
 "page."
 msgstr ""
+"Буде друкуватись відцентровано дрібним шрифтом у кінці кожної сторінки "
+"рахунку."
 
 #: pretix/base/settings.py:956
 msgid "Attach invoices to emails"
-msgstr ""
+msgstr "Прикріпляти рахунки до імейлів"
 
 #: pretix/base/settings.py:957
 msgid ""
@@ -25302,4 +25375,4 @@ msgstr ""
 
 #: pretix/settings.py:855
 msgid "Kosovo"
-msgstr ""
+msgstr "Косово"
