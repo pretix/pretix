@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-28 16:44+0000\n"
-"PO-Revision-Date: 2022-05-05 18:21+0000\n"
-"Last-Translator: Yuliya Palmova <yuliyasushchenko@hotmail.com>\n"
+"PO-Revision-Date: 2022-05-06 04:00+0000\n"
+"Last-Translator: Iryna Loik <iraloyik@gmail.com>\n"
 "Language-Team: Ukrainian <https://translate.pretix.eu/projects/pretix/pretix/"
 "uk/>\n"
 "Language: uk\n"
@@ -7557,13 +7557,15 @@ msgstr "Просити номер телефону під час реєстра�
 
 #: pretix/base/settings.py:1194
 msgid "Phone number explanation"
-msgstr ""
+msgstr "Пояснення номеру телефону"
 
 #: pretix/base/settings.py:1197
 msgid ""
 "If you ask for a phone number, explain why you do so and what you will use "
 "the phone number for."
 msgstr ""
+"Якщо ви просите номер телефону, вкажіть причину та для чого ви будете його "
+"використовувати."
 
 #: pretix/base/settings.py:1206
 msgid "Show number of check-ins to customer"
@@ -7581,15 +7583,15 @@ msgstr ""
 
 #: pretix/base/settings.py:1220
 msgid "Allow users to download tickets"
-msgstr ""
+msgstr "Дозволити користувачас завантажувати квитки"
 
 #: pretix/base/settings.py:1221
 msgid "If this is off, nobody can download a ticket."
-msgstr ""
+msgstr "Якщо вимкнено, ніхто не зможе завантажити квиток."
 
 #: pretix/base/settings.py:1230
 msgid "Download date"
-msgstr ""
+msgstr "Завантажити дату"
 
 #: pretix/base/settings.py:1231
 msgid ""
@@ -7597,10 +7599,14 @@ msgid ""
 "feature and an order contains tickets for multiple event dates, download of "
 "all tickets will be available if at least one of the event dates allows it."
 msgstr ""
+"Завантаження квитка буде запропоновано після цієї дати. Якщо ви "
+"використовуєте функцію серії подій, і замовлення містить квитки на кілька "
+"подій з різними датами, завантаження всіх квитків буде доступним, якщо "
+"принаймні одна з дат події дозволяє це."
 
 #: pretix/base/settings.py:1242
 msgid "Generate tickets for add-on products"
-msgstr ""
+msgstr "Згенеруйте квитки на додаткові продукти"
 
 #: pretix/base/settings.py:1243
 msgid ""
@@ -7608,10 +7614,13 @@ msgid ""
 "for add-on products. With this option, a separate ticket is issued for every "
 "add-on product as well."
 msgstr ""
+"За замовчуванням квитки видаються лише на продукти, вибрані окремо, а не на "
+"додаткові продукти. За допомогою цієї опції для кожного додаткового продукту "
+"також видається окремий квиток."
 
 #: pretix/base/settings.py:1255
 msgid "Generate tickets for all products"
-msgstr ""
+msgstr "Згенерувати квитки на усі продукти"
 
 #: pretix/base/settings.py:1256
 msgid ""
@@ -7619,20 +7628,25 @@ msgid ""
 "\"admission ticket\"in the product settings. You can also turn off ticket "
 "issuing in every product separately."
 msgstr ""
+"Якщо вимкнено, квитки видаються лише для продуктів, які позначені як «"
+"вхідний квиток» у налаштуваннях продукту. Ви також можете вимкнути видачу "
+"квитків у кожному продукті окремо."
 
 #: pretix/base/settings.py:1268
 msgid "Generate tickets for pending orders"
-msgstr ""
+msgstr "Згенерувати квитки для відкладених замовлень"
 
 #: pretix/base/settings.py:1269
 msgid ""
 "If turned off, ticket downloads are only possible after an order has been "
 "marked as paid."
 msgstr ""
+"Якщо вимкнено, завантаження квитка можливе тільки після того, як замовлення "
+"буде позначено як оплачене."
 
 #: pretix/base/settings.py:1280
 msgid "Do not issue ticket before email address is validated"
-msgstr ""
+msgstr "Не створювати квиток поки електронна адреса не пройшла перевірку"
 
 #: pretix/base/settings.py:1281
 msgid ""
@@ -7642,10 +7656,15 @@ msgid ""
 "from the page as soon as they clicked a link in the email. Does not affect "
 "orders performed through other sales channels."
 msgstr ""
+"Якщо ввімкнено, квитки не будуть пропонуватися для завантаження "
+"безпосередньо після покупки. Вони будуть прикріплені до електронного листа з "
+"підтвердженням платежу (якщо розмір файлу не надто великий), і клієнт зможе "
+"завантажити їх зі сторінки, щойно натисне посилання в електронному листі. Не "
+"впливає на замовлення, виконані через інші канали продажу."
 
 #: pretix/base/settings.py:1293
 msgid "Show availability in event overviews"
-msgstr ""
+msgstr "Показати кількість в описі події"
 
 #: pretix/base/settings.py:1294
 msgid ""
@@ -7653,41 +7672,46 @@ msgid ""
 "make for longer page loading times if you have lots of events and the shown "
 "status might be out of date for up to two minutes."
 msgstr ""
+"Якщо відмічено, перелік подій показуватиме події, які розпродані. Це може "
+"затримувати час завантеження сторінки якщо у вас багато подій та статус буде "
+"показуватись з відставання до 2 хвилин."
 
 #: pretix/base/settings.py:1307 pretix/base/settings.py:1315
 #: pretix/presale/templates/pretixpresale/fragment_calendar_nav.html:8
 msgid "List"
-msgstr ""
+msgstr "Список"
 
 #: pretix/base/settings.py:1308 pretix/base/settings.py:1316
 msgid "Week calendar"
-msgstr ""
+msgstr "Календар на тиждень"
 
 #: pretix/base/settings.py:1309 pretix/base/settings.py:1317
 msgid "Month calendar"
-msgstr ""
+msgstr "Календар на місяць"
 
 #: pretix/base/settings.py:1313
 msgid "Default overview style"
-msgstr ""
+msgstr "Стиль перегляду за замовчуванням"
 
 #: pretix/base/settings.py:1319
 msgid ""
 "If your event series has more than 50 dates in the future, only the month or "
 "week calendar can be used."
 msgstr ""
+"Якщо серія ваших подій має більше як 50 дат у майбутньому, тільки календар "
+"на тиждень чи на місяць може використовуватись."
 
 #: pretix/base/settings.py:1328
 msgid "Hide all unavailable dates from calendar or list views"
-msgstr ""
+msgstr "Сховати усі недоступні дати з календаря або списку"
 
 #: pretix/base/settings.py:1337
 msgid "Allow customers to modify their information after they checked in."
-msgstr ""
+msgstr "Дозволити клієнтам змінювати свою інформацію після реєстрації."
 
 #: pretix/base/settings.py:1346
 msgid "Last date of modifications"
-msgstr ""
+msgstr "Остання дата внесення змін"
 
 #: pretix/base/settings.py:1347
 msgid ""
@@ -7696,92 +7720,105 @@ msgid ""
 "order contains tickets for multiple event dates, the earliest date will be "
 "used."
 msgstr ""
+"Останній день, коли користувачі можуть змінювати деталі своїх замовлень, "
+"наприклад імена учасників або відповіді на запитання. Якщо ви використовуєте "
+"функцію серії подій, а замовлення містить квитки на кілька подій з різними "
+"датам, буде використана найраніша дата."
 
 #: pretix/base/settings.py:1358
 msgid "Customers can change the variation of the products they purchased"
-msgstr ""
+msgstr "Клієнти можуть змінювати кількість продуктів, які вони придбали"
 
 #: pretix/base/settings.py:1367
 msgid "Customers can change their selected add-on products"
 msgstr ""
+"Клієнти можуть змінювати кількість додаткових продуктів, які вони придбали"
 
 #: pretix/base/settings.py:1377 pretix/base/settings.py:1386
 msgid ""
 "Only allow changes if the resulting price is higher or equal than the "
 "previous price."
 msgstr ""
+"Дозволити зміни якщо кінцева вартість вища або дорівнює попередній вартості."
 
 #: pretix/base/settings.py:1378 pretix/base/settings.py:1387
 msgid ""
 "Only allow changes if the resulting price is higher than the previous price."
-msgstr ""
+msgstr "Дозволити зміни якщо кінцева вартість вища за попередню."
 
 #: pretix/base/settings.py:1379 pretix/base/settings.py:1388
 msgid ""
 "Only allow changes if the resulting price is equal to the previous price."
-msgstr ""
+msgstr "Дозволити зміни якщо кінцева вартість дорівнює попередній вартості."
 
 #: pretix/base/settings.py:1380 pretix/base/settings.py:1389
 msgid "Allow changes regardless of price, even if this results in a refund."
 msgstr ""
+"Дозволити зміни не залежно від вартості, навіть якщо треба повернути кошти."
 
 #: pretix/base/settings.py:1384
 msgid "Requirement for changed prices"
-msgstr ""
+msgstr "Вимога для змінених цін"
 
 #: pretix/base/settings.py:1400
 msgid "Do not allow changes after"
-msgstr ""
+msgstr "Не дозволяти зміни після"
 
 #: pretix/base/settings.py:1409
 msgid "Customers can cancel their unpaid orders"
-msgstr ""
+msgstr "Клієнт може скасувати своє несплачене замовлення"
 
 #: pretix/base/settings.py:1418 pretix/base/settings.py:1548
 msgid "Do not allow cancellations after"
-msgstr ""
+msgstr "Не дозволяти скасування після"
 
 #: pretix/base/settings.py:1427
 msgid "Customers can cancel their paid orders"
-msgstr ""
+msgstr "Клієнти можуть скасувати своє сплачене замовлення"
 
 #: pretix/base/settings.py:1428
 msgid ""
 "Paid money will be automatically paid back if the payment method allows it. "
 "Otherwise, a manual refund will be created for you to process manually."
 msgstr ""
+"Оплачені кошти будуть автоматично повернені якщо спосіб оплати це дозволяє. "
+"В іншому випадку для вас буде створено опцію для повернення вручну."
 
 #: pretix/base/settings.py:1441 pretix/control/forms/orders.py:791
 msgid "Keep a fixed cancellation fee"
-msgstr ""
+msgstr "Зберегти фіксовану плату за скасування"
 
 #: pretix/base/settings.py:1450
 msgid "Keep payment, shipping and service fees"
-msgstr ""
+msgstr "Зберегти збір за оплату, доставку та обслуговування"
 
 #: pretix/base/settings.py:1462 pretix/control/forms/orders.py:802
 msgid "Keep a percentual cancellation fee"
-msgstr ""
+msgstr "Зберегти відсоткову плату за скасування"
 
 #: pretix/base/settings.py:1471
 msgid "Allow customers to voluntarily choose a lower refund"
-msgstr ""
+msgstr "Дозвольте клієнтам добровільно вибрати нижчий тариф відшкодування"
 
 #: pretix/base/settings.py:1472
 msgid ""
 "With this option enabled, your customers can choose to get a smaller refund "
 "to support you."
 msgstr ""
+"Коли ця опція увімкнена, ваші клієнти можуть обрати менший тариф "
+"відшкодування таким чином підтримавши вас."
 
 #: pretix/base/settings.py:1477
 msgid ""
 "However, if you want us to help keep the lights on here, please consider "
 "using the slider below to request a smaller refund. Thank you!"
 msgstr ""
+"Однак, якщо ви хочете допомогти нам продовжувати нашу роботу, скористайтеся "
+"повзунком нижче, щоб отримати менше відшкодування. Дякуємо!"
 
 #: pretix/base/settings.py:1484
 msgid "Voluntary lower refund explanation"
-msgstr ""
+msgstr "Пояснення добровільного меншого відшкодування"
 
 #: pretix/base/settings.py:1487
 msgid ""
@@ -7790,77 +7827,97 @@ msgid ""
 "like to receive. You can use it e.g. to explain choosing a lower refund will "
 "help your organization."
 msgstr ""
+"Цей текст буде відображатись між поясненням того, як відбувається повернення "
+"коштів, і повзунком, за допомогою якого ваші клієнти можуть вибрати суму, "
+"яку вони хотіли б отримати. Ви можете використовувати його, наприклад "
+"пояснити як вибір нижчого відшкодування допоможе вашій організації."
 
 #: pretix/base/settings.py:1502
 msgid "Step size for reduction amount"
-msgstr ""
+msgstr "Розмір кроку для зменшення суми"
 
 #: pretix/base/settings.py:1503
+#, fuzzy
 msgid ""
 "By default, customers can choose an arbitrary amount for you to keep. If you "
 "set this to e.g. 10, they will only be able to choose values in increments "
 "of 10."
 msgstr ""
+"За замовчуванням клієнти можуть вибрати довільну суму для повернення. Якщо "
+"ви встановите це, наприклад, 10, вони зможуть вибирати значення лише з "
+"кроком 10."
 
 #: pretix/base/settings.py:1513
 msgid ""
 "Customers can only request a cancellation that needs to be approved by the "
 "event organizer before the order is canceled and a refund is issued."
 msgstr ""
+"Клієнти можуть лише подати запит на скасування, яке має бути схвалено "
+"організатором події, перш ніж замовлення буде скасовано та здійснено "
+"повернення коштів."
 
 #: pretix/base/settings.py:1523 pretix/base/settings.py:1533
 msgid "All refunds are issued to the original payment method"
-msgstr ""
+msgstr "Всі повернення здійснюються у такий же спосіб як була здійснена оплата"
 
 #: pretix/base/settings.py:1524 pretix/base/settings.py:1534
 msgid ""
 "Customers can choose between a gift card and a refund to their payment method"
 msgstr ""
+"Клієнти можуть обирати між подарунковою карткою або повернення у спосіб, "
+"який було здійснено оплату"
 
 #: pretix/base/settings.py:1525 pretix/base/settings.py:1535
 msgid "All refunds are issued as gift cards"
-msgstr ""
+msgstr "Всі повернення коштів здійснюються через подарункові картки"
 
 #: pretix/base/settings.py:1526 pretix/base/settings.py:1536
 msgid "Do not handle refunds automatically at all"
-msgstr ""
+msgstr "Не здійснювати повернення коштів автоматично"
 
 #: pretix/base/settings.py:1531
 #: pretix/control/templates/pretixcontrol/order/index.html:140
 msgid "Refund method"
-msgstr ""
+msgstr "Спосіб повернення коштів"
 
 #: pretix/base/settings.py:1557 pretix/control/forms/event.py:1359
 msgid "Contact address"
-msgstr ""
+msgstr "Контактна адреса"
 
 #: pretix/base/settings.py:1558 pretix/control/forms/event.py:1361
 msgid "We'll show this publicly to allow attendees to contact you."
 msgstr ""
+"Це буде відображатись для всіх для того, щоб учасники могли з вами "
+"сконтактувати."
 
 #: pretix/base/settings.py:1566 pretix/control/forms/event.py:1353
+#, fuzzy
 msgid "Imprint URL"
-msgstr ""
+msgstr "Вставити URL"
 
 #: pretix/base/settings.py:1567 pretix/control/forms/event.py:1354
 msgid ""
 "This should point e.g. to a part of your website that has your contact "
 "details and legal information."
 msgstr ""
+"Це повинно вказувати наприклад, на частину вашого вебсайту, де міститься "
+"контактна та юридична інформація."
 
 #: pretix/base/settings.py:1577
 msgid "Privacy Policy URL"
-msgstr ""
+msgstr "Політика приватності URL"
 
 #: pretix/base/settings.py:1578
 msgid ""
 "This should point e.g. to a part of your website that explains how you use "
 "data gathered in your ticket shop."
 msgstr ""
+"Це повинно перенаправляти на розділ вашого сайте, де ви пояснюєте яким чином "
+"використовується інформація отримана у вашому магазині."
 
 #: pretix/base/settings.py:1599
 msgid "Attach ticket files"
-msgstr ""
+msgstr "Прикріпити квиток"
 
 #: pretix/base/settings.py:1601
 #, python-brace-format
@@ -7868,20 +7925,24 @@ msgid ""
 "Tickets will never be attached if they're larger than {size} to avoid email "
 "delivery problems."
 msgstr ""
+"Квитки не будуть прикріплятись якщо вони більше {size}  для уникнення "
+"проблем із їх доставкою на електронну пошту."
 
 #: pretix/base/settings.py:1612
 msgid "Attach calendar files"
-msgstr ""
+msgstr "Прикріпити файли з календарем"
 
 #: pretix/base/settings.py:1613
 msgid ""
 "If enabled, we will attach an .ics calendar file to order confirmation "
 "emails."
 msgstr ""
+"Якщо увімкнено, ми прикріпимо файл .ics для календаря до імейлу з "
+"підтвердженням замовлення."
 
 #: pretix/base/settings.py:1622
 msgid "Attach calendar files only after order has been paid"
-msgstr ""
+msgstr "Прикріпити календар тільки після оплати"
 
 #: pretix/base/settings.py:1623
 msgid ""
@@ -7891,7 +7952,7 @@ msgstr ""
 
 #: pretix/base/settings.py:1632
 msgid "Event description"
-msgstr ""
+msgstr "Опис події"
 
 #: pretix/base/settings.py:1635
 msgid ""
@@ -7918,16 +7979,16 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/event/mail.html:39
 #: pretix/control/templates/pretixcontrol/organizers/mail.html:40
 msgid "Sender address"
-msgstr ""
+msgstr "Адреса відправника"
 
 #: pretix/base/settings.py:1664 pretix/control/forms/mailsetup.py:36
 #: pretix/control/forms/mailsetup.py:109
 msgid "Sender address for outgoing emails"
-msgstr ""
+msgstr "Адреса відправника для вихідних імейлів"
 
 #: pretix/base/settings.py:1673
 msgid "Sender name"
-msgstr ""
+msgstr "Ім'я отримувача"
 
 #: pretix/base/settings.py:1674
 msgid ""
@@ -7949,6 +8010,16 @@ msgid ""
 "Best regards,\n"
 "Your {event} team"
 msgstr ""
+"Привіт, \n"
+"\n"
+"Ви отримали цей імейл тому, що попросили нас надіслати вам посилання на   "
+"{event}, який ви щойно забронювали.\n"
+"\n"
+"Ви можете змінити своє замовлення та перевірити статус свого замовлення на "
+"{url}\n"
+"\n"
+"З повагою, \n"
+"команда {event}"
 
 #: pretix/base/settings.py:1705
 #, python-brace-format
@@ -7977,6 +8048,15 @@ msgid ""
 "Best regards,\n"
 "Your {event} team"
 msgstr ""
+"Привіт {attendee_name},\n"
+"\n"
+"Ви успішно зареєструвались на {event}.\n"
+"\n"
+"Перевірити деталі та статус вашого квитка можна тут: \n"
+"{url}\n"
+"\n"
+"З повагою, \n"
+"команда {event}"
 
 #: pretix/base/settings.py:1729
 #, python-brace-format
