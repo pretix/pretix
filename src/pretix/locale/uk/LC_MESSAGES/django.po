@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-28 16:44+0000\n"
 "PO-Revision-Date: 2022-05-05 18:07+0000\n"
-"Last-Translator: Viktoriia <tvitalya.00@gmail.com>\n"
+"Last-Translator: Iryna Loik <iraloyik@gmail.com>\n"
 "Language-Team: Ukrainian <https://translate.pretix.eu/projects/pretix/pretix/"
 "uk/>\n"
 "Language: uk\n"
@@ -7377,7 +7377,7 @@ msgstr ""
 
 #: pretix/base/settings.py:969
 msgid "Email address to receive a copy of each invoice"
-msgstr ""
+msgstr "Електронна адреса (імейл) для отримання копії кожного рахунку"
 
 #: pretix/base/settings.py:970
 msgid ""
@@ -7385,10 +7385,14 @@ msgid ""
 "creation. You can use this for an automated import of invoices to your "
 "accounting system. The invoice will be the only attachment of the email."
 msgstr ""
+"Кожен створений рахунок буде надісланий на електронну адресу після його "
+"створення. Ви можете це використовувати для автоматичного імпорту рахунків у "
+"бухгалтерську систему. Рахунок буде прикріплятись тільки до електронного "
+"листа."
 
 #: pretix/base/settings.py:981
 msgid "Show items outside presale period"
-msgstr ""
+msgstr "Показати продукти, які не включені у передпродаж"
 
 #: pretix/base/settings.py:982
 msgid ""
