@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-28 16:44+0000\n"
-"PO-Revision-Date: 2022-05-05 18:07+0000\n"
-"Last-Translator: Iryna N <in380@nyu.edu>\n"
+"PO-Revision-Date: 2022-05-05 18:19+0000\n"
+"Last-Translator: Iryna Loik <iraloyik@gmail.com>\n"
 "Language-Team: Ukrainian <https://translate.pretix.eu/projects/pretix/pretix/"
 "uk/>\n"
 "Language: uk\n"
@@ -7434,32 +7434,38 @@ msgid ""
 "If disabled, no date or time will be shown on the ticket shop's front page. "
 "This settings does however not affect the display in other locations."
 msgstr ""
+"Якщо вимкнено, дата чи час не відображатимуться на першій сторінці магазину. "
+"Однак ці налаштування не впливають на відображення в інших місцях."
 
 #: pretix/base/settings.py:1052
 msgid "Show event end date"
-msgstr ""
+msgstr "Показати дату закінчення події"
 
 #: pretix/base/settings.py:1053
 msgid "If disabled, only event's start date will be displayed to the public."
 msgstr ""
+"Якщо вимкнено, тільки дата початку події буде відображатись у відкритому "
+"доступі."
 
 #: pretix/base/settings.py:1062
 msgid "Show dates with time"
-msgstr ""
+msgstr "Показати дати та час"
 
 #: pretix/base/settings.py:1063
 msgid ""
 "If disabled, the event's start and end date will be displayed without the "
 "time of day."
 msgstr ""
+"Якщо вимкнено, дата початку та завершення події будуть відображатись без "
+"часу."
 
 #: pretix/base/settings.py:1072
 msgid "Hide all products that are sold out"
-msgstr ""
+msgstr "Приховати усі розпродані продукти"
 
 #: pretix/base/settings.py:1082 pretix/control/forms/event.py:1331
 msgid "Publicly show how many tickets of a certain type are still available."
-msgstr ""
+msgstr "Показувати користувачам наявність квитків певної категорії."
 
 #: pretix/base/settings.py:1091
 msgid "Ask search engines not to index the ticket shop"
@@ -7471,7 +7477,7 @@ msgstr ""
 
 #: pretix/base/settings.py:1109
 msgid "Enable waiting list"
-msgstr ""
+msgstr "Активувати список очікування"
 
 #: pretix/base/settings.py:1110 pretix/control/forms/event.py:1336
 msgid ""
@@ -7480,10 +7486,14 @@ msgid ""
 "person on the waiting list and this person will receive an email "
 "notification with a voucher that can be used to buy a ticket."
 msgstr ""
+"Коли квитки розпродано, бажаючі можуть додати себе у список очікування. Як "
+"тільки квиток знову зявиться у доступі, він буде заброньований для першої "
+"людини у списку очікування і ця людина отримає електронний лист-сповіщення "
+"із ваучером, який мона використати для покупки квитка."
 
 #: pretix/base/settings.py:1121
 msgid "Automatic waiting list assignments"
-msgstr ""
+msgstr "Автоматичне призначення списку очікування"
 
 #: pretix/base/settings.py:1122
 msgid ""
@@ -7493,10 +7503,15 @@ msgid ""
 "via the control panel. If you disable the waiting list but keep this option "
 "enabled, tickets will still be sent out."
 msgstr ""
+"Якщо з'являєтсья квиток, автоматично створіть ваучер і надішліть його першій "
+"особі в списку очікування на цей продукт. Якщо ця опція не активна, листи не "
+"надсилатимуться автоматично, але ви можете надіслати їх вручну через панель "
+"керування. Якщо вимкнути список очікування, але залишити цю опцію "
+"ввімкненою, квитки все одно надсилатимуться."
 
 #: pretix/base/settings.py:1138
 msgid "Waiting list response time"
-msgstr ""
+msgstr "Час відповіді для списку очікування"
 
 #: pretix/base/settings.py:1141
 msgid ""
@@ -7504,10 +7519,13 @@ msgid ""
 "redeemed within this number of hours until it expires and can be re-assigned "
 "to the next person on the list."
 msgstr ""
+"Якщо ваучер на квиток надіслано особі зі списку очікування, його потрібно "
+"викупити протягом певної кількості годин до закінчення терміну його дії та "
+"повторно призначити наступній особі в списку."
 
 #: pretix/base/settings.py:1152
 msgid "Ask for a name"
-msgstr ""
+msgstr "Запитати ім'я"
 
 #: pretix/base/settings.py:1153
 msgid "Ask for a name when signing up to the waiting list."
