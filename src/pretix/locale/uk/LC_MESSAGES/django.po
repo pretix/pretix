@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-28 16:44+0000\n"
 "PO-Revision-Date: 2022-05-05 18:19+0000\n"
-"Last-Translator: Iryna Loik <iraloyik@gmail.com>\n"
+"Last-Translator: Yuliya Palmova <yuliyasushchenko@hotmail.com>\n"
 "Language-Team: Ukrainian <https://translate.pretix.eu/projects/pretix/pretix/"
 "uk/>\n"
 "Language: uk\n"
@@ -2864,7 +2864,7 @@ msgstr ""
 
 #: pretix/base/models/event.py:1240
 msgid "The event slug cannot be changed."
-msgstr ""
+msgstr "Критика форма події не може бути змінена"
 
 #: pretix/base/models/event.py:1243
 msgid "This slug has already been used for a different event."
@@ -7473,7 +7473,7 @@ msgstr ""
 
 #: pretix/base/settings.py:1100
 msgid "Show variations of a product expanded by default"
-msgstr ""
+msgstr "Показувати різновиди товару розгорнуті за замовчуванням"
 
 #: pretix/base/settings.py:1109
 msgid "Enable waiting list"
