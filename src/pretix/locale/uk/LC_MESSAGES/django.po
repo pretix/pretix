@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-28 16:44+0000\n"
 "PO-Revision-Date: 2022-05-05 14:29+0000\n"
-"Last-Translator: Iryna N <in380@nyu.edu>\n"
+"Last-Translator: Iryna Loik <iraloyik@gmail.com>\n"
 "Language-Team: Ukrainian <https://translate.pretix.eu/projects/pretix/pretix/"
 "uk/>\n"
 "Language: uk\n"
@@ -2577,17 +2577,17 @@ msgstr "Дата ініціалізації"
 #: pretix/base/models/discount.py:44
 msgctxt "subevent"
 msgid "Dates can be mixed without limitation"
-msgstr ""
+msgstr "Дати можуть перемішуватись без обмежень"
 
 #: pretix/base/models/discount.py:45
 msgctxt "subevent"
 msgid "All matching products must be for the same date"
-msgstr ""
+msgstr "Усі відповідні продукти мають бути на одну дату"
 
 #: pretix/base/models/discount.py:46
 msgctxt "subevent"
 msgid "Each matching product must be for a different date"
-msgstr ""
+msgstr "Усі відповідні продукти мають бути на іншу дату"
 
 #: pretix/base/models/discount.py:55 pretix/base/models/event.py:1284
 #: pretix/base/models/items.py:368 pretix/base/models/items.py:784
@@ -2667,22 +2667,26 @@ msgid ""
 "use a voucher only to e.g. unlock a hidden product or gain access to sold-"
 "out quota will still receive the discount."
 msgstr ""
+"Якщо ця опція уже зараєстрована, знижка на продукти, отримані через ваучер "
+"знижки, не застосовується. Проте, продукти, які використовують ваучер у "
+"випадках, наприклад, розблокувати захований продукт або отримати доступ до "
+"розпроданої квоти зможуть отримати знижку."
 
 #: pretix/base/models/discount.py:112
 msgid "Minimum number of matching products"
-msgstr ""
+msgstr "Мінімальна кількість відповідних продуктів"
 
 #: pretix/base/models/discount.py:116
 msgid "Minimum gross value of matching products"
-msgstr ""
+msgstr "Мінімальна валова вартість відповідних продуктів"
 
 #: pretix/base/models/discount.py:123
 msgid "Percentual discount on matching products"
-msgstr ""
+msgstr "Відсоткова знижка на відповідні продукти"
 
 #: pretix/base/models/discount.py:130
 msgid "Apply discount only to this number of matching products"
-msgstr ""
+msgstr "Використати знижку тільки для цієї кількості обраних продуктів"
 
 #: pretix/base/models/discount.py:132
 msgid ""
@@ -2693,30 +2697,44 @@ msgid ""
 "discounted. If you want to grant the discount on all matching products, keep "
 "this field empty."
 msgstr ""
+"Ця опція дозволяє створити знижку типу \"купуєте Х, отримуєте Y зі знижкою/"
+"безкоштовно\". Наприклад, якщо ви встановите «Мінімальна кількість "
+"відповідних товарів» на чотири, а це значення дорівнює двом, кошик клієнта "
+"буде поділено на групи по чотири квитки, а на два найдешевші квитки у кожній "
+"групі буде застосована знижка. Якщо ви хочете надати знижку на всі "
+"відповідні товари, залиште це поле порожнім."
 
 #: pretix/base/models/discount.py:169
 msgid ""
 "You can either set a minimum number of matching products or a minimum value, "
 "not both."
 msgstr ""
+"Ви можете встановити або мінімальну кількість відповідних продуктів, або "
+"мінімальне значення, але не обидва."
 
 #: pretix/base/models/discount.py:174
 msgid ""
 "You need to either set a minimum number of matching products or a minimum "
 "value."
 msgstr ""
+"Ви можете встановити або мінімальну кількість відповідних продуктів, або "
+"мінімальне значення."
 
 #: pretix/base/models/discount.py:179
 msgid ""
 "You cannot apply the discount only to some of the matched products if you "
 "are matching on a minimum value."
 msgstr ""
+"Ви не зможете застосовати знижку для певних товарів, якщо ви застосовуєте "
+"мінімальне значення."
 
 #: pretix/base/models/discount.py:185
 msgid ""
 "You cannot apply the discount only to bookings of different dates if you are "
 "matching on a minimum value."
 msgstr ""
+"Ви не можете застосовувати знижку для бронювань на різні дати, якщо ви "
+"застосовуєте мінімальне значення."
 
 #: pretix/base/models/event.py:84
 msgid "The end of the presale period has to be later than its start."
@@ -3833,7 +3851,7 @@ msgstr "Квота {val}"
 #: pretix/base/models/log.py:206
 #, python-brace-format
 msgid "Discount {val}"
-msgstr ""
+msgstr "Знижка {val}"
 
 #: pretix/base/models/log.py:216
 #, python-brace-format
@@ -4900,11 +4918,11 @@ msgstr "Будь ласка, введіть дійсний код країни."
 
 #: pretix/base/orderimport.py:413 pretix/base/orderimport.py:559
 msgid "States are not supported for this country."
-msgstr ""
+msgstr "Штати не підтримуються для цієї країни."
 
 #: pretix/base/orderimport.py:421 pretix/base/orderimport.py:567
 msgid "Please enter a valid state."
-msgstr ""
+msgstr "Вкажіть правильний штат."
 
 #: pretix/base/orderimport.py:470 pretix/control/forms/filter.py:595
 msgid "Attendee e-mail address"
