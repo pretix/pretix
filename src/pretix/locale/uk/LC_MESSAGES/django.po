@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-28 16:44+0000\n"
 "PO-Revision-Date: 2022-05-06 13:55+0000\n"
-"Last-Translator: Iryna Loik <iraloyik@gmail.com>\n"
+"Last-Translator: Olha Dolinska <olya.dolinska.od@gmail.com>\n"
 "Language-Team: Ukrainian <https://translate.pretix.eu/projects/pretix/pretix/"
 "uk/>\n"
 "Language: uk\n"
@@ -9398,7 +9398,7 @@ msgstr "Подія:"
 #: pretix/base/templates/pretixbase/email/order_details.html:26
 #: pretix/base/templates/pretixbase/email/order_details.html:77
 msgid "Order code:"
-msgstr "Номер замовлення:"
+msgstr "Код замовлення:"
 
 #: pretix/base/templates/pretixbase/email/order_details.html:31
 msgid "created by"
