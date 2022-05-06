@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-28 16:44+0000\n"
-"PO-Revision-Date: 2022-05-06 09:56+0000\n"
+"PO-Revision-Date: 2022-05-06 10:23+0000\n"
 "Last-Translator: Iryna Loik <iraloyik@gmail.com>\n"
 "Language-Team: Ukrainian <https://translate.pretix.eu/projects/pretix/pretix/"
 "uk/>\n"
@@ -8494,6 +8494,15 @@ msgid ""
 "    Best regards,\n"
 "    Your {event} team"
 msgstr ""
+"Привіт {attendee_name},\n"
+"\n"
+"ви зареєтрувались на {event}. \n"
+"\n"
+"Якщо ви ще не завантажили свій квиток, то це можна зробити тут:\n"
+"    {url}\n"
+"\n"
+"З повагою,\n"
+"команда {event}"
 
 #: pretix/base/settings.py:2003
 #, python-brace-format
@@ -8508,6 +8517,15 @@ msgid ""
 "Best regards,\n"
 "Your {event} team"
 msgstr ""
+"Привіт, \n"
+"\n"
+"Ви придбали квиток на {event}.\n"
+"\n"
+"Якщо ви ще не завантажили свій квиток, то це можна зробити ось тут:\n"
+"{url}\n"
+"\n"
+"З повагою, \n"
+"команда {event}"
 
 #: pretix/base/settings.py:2015
 #, python-brace-format
@@ -8528,6 +8546,21 @@ msgid ""
 "\n"
 "Your {organizer} team"
 msgstr ""
+"Привіт {name},\n"
+"\n"
+"Дякуємо, що зареєстрували свій еккаунт на {organizer}!\n"
+"\n"
+"Для того, щоб активувати ваш еккаунт необхідно вставновити пароль, "
+"перейшовши за посиланням тут: \n"
+"{url}\n"
+"\n"
+"Цей лінк дійсний протягом одного дня. \n"
+"\n"
+"Якщо ви не реєструвались, просимо ігнорувати цей лист. \n"
+"\n"
+"З повагою, \n"
+"\n"
+"команда {organizer}"
 
 #: pretix/base/settings.py:2033
 #, python-brace-format
@@ -8548,6 +8581,23 @@ msgid ""
 "\n"
 "Your {organizer} team"
 msgstr ""
+"Привіт {name},\n"
+"\n"
+"Ви надіслали запит для зміни електронної адреси у вашому еккаунті на "
+"{organizer}!\n"
+"\n"
+"Для зміни, просимо перейти за цим посиланням \n"
+"\n"
+"{url}\n"
+"\n"
+"Лінк буде дійсним протягом одного дня. \n"
+"\n"
+"Якщо ви не робили запит щодо зміни електронної адреси, просимо ігнорувати "
+"цей лист. \n"
+"\n"
+"З повагою,\n"
+"\n"
+"команда {organizer}"
 
 #: pretix/base/settings.py:2051
 #, python-brace-format
@@ -8568,46 +8618,63 @@ msgid ""
 "\n"
 "Your {organizer} team"
 msgstr ""
+"Привіт {name},\n"
+"\n"
+"Ви надіслали заявку для зміни пароля у вашому еккаунті на {organizer}!\n"
+"\n"
+"Для того, щоб створити новий пароль, перейдіть будь ласка за цим посиланням: "
+"\n"
+"\n"
+"{url}\n"
+"\n"
+"Лінк буде дійсним протягом одного дня. \n"
+"\n"
+"Якщо ви не надсилали запит на створення нового пароля, просимо ігнорувати "
+"цей імейл. \n"
+"\n"
+"З повагою, \n"
+"\n"
+"команда {organizer}"
 
 #: pretix/base/settings.py:2103 pretix/base/settings.py:2110
 #: pretix/base/settings.py:2124 pretix/base/settings.py:2132
 #: pretix/base/settings.py:2146 pretix/base/settings.py:2154
 #: pretix/base/settings.py:2168 pretix/base/settings.py:2175
 msgid "Please enter the hexadecimal code of a color, e.g. #990000."
-msgstr ""
+msgstr "Будь ласка, введіть шістнадцятковий код кольору, наприклад #990000."
 
 #: pretix/base/settings.py:2107
 msgid "Primary color"
-msgstr ""
+msgstr "Основний колір"
 
 #: pretix/base/settings.py:2128
 msgid "Accent color for success"
-msgstr ""
+msgstr "Акцентний колір для успіху"
 
 #: pretix/base/settings.py:2129
 msgid "We strongly suggest to use a shade of green."
-msgstr ""
+msgstr "Ми наполегливо рекомендуємо обирати відтінки зеленого."
 
 #: pretix/base/settings.py:2150
 msgid "Accent color for errors"
-msgstr ""
+msgstr "Акцентні кольори помилок"
 
 #: pretix/base/settings.py:2151
 msgid "We strongly suggest to use a shade of red."
-msgstr ""
+msgstr "Ми наполегливо рекомендуємо використовувати відтінки червоного."
 
 #: pretix/base/settings.py:2172
 msgid "Page background color"
-msgstr ""
+msgstr "Колір фону сторінки"
 
 #: pretix/base/settings.py:2187
 msgid "Use round edges"
-msgstr ""
+msgstr "Використовувати круглі кути"
 
 #: pretix/base/settings.py:2197
 #: pretix/control/templates/pretixcontrol/pdf/index.html:329
 msgid "Font"
-msgstr ""
+msgstr "Шрифт"
 
 #: pretix/base/settings.py:2198
 msgid "Only respected by modern browsers."
