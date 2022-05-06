@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-28 16:44+0000\n"
 "PO-Revision-Date: 2022-05-06 13:58+0000\n"
-"Last-Translator: Olha Dolinska <olya.dolinska.od@gmail.com>\n"
+"Last-Translator: Iryna Loik <iraloyik@gmail.com>\n"
 "Language-Team: Ukrainian <https://translate.pretix.eu/projects/pretix/pretix/"
 "uk/>\n"
 "Language: uk\n"
@@ -9514,12 +9514,12 @@ msgstr "Клієнти не можуть змінювати свої замов�
 #: pretix/base/timeline.py:113
 msgctxt "timeline"
 msgid "No more payments can be completed"
-msgstr ""
+msgstr "Платежі не можуть здійснюватись"
 
 #: pretix/base/timeline.py:125
 msgctxt "timeline"
 msgid "Tickets can be downloaded"
-msgstr ""
+msgstr "Квитки можна завантажити"
 
 #: pretix/base/timeline.py:137
 msgctxt "timeline"
