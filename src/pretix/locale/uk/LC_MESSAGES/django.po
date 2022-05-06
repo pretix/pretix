@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-28 16:44+0000\n"
 "PO-Revision-Date: 2022-05-06 14:06+0000\n"
-"Last-Translator: Olha Dolinska <olya.dolinska.od@gmail.com>\n"
+"Last-Translator: Iryna Loik <iraloyik@gmail.com>\n"
 "Language-Team: Ukrainian <https://translate.pretix.eu/projects/pretix/pretix/"
 "uk/>\n"
 "Language: uk\n"
@@ -9621,20 +9621,20 @@ msgstr ""
 
 #: pretix/base/views/tasks.py:162
 msgid "An unexpected error has occurred, please try again later."
-msgstr ""
+msgstr "Виникла неочікувана помилка, просимо пізніше спробувати ще раз."
 
 #: pretix/base/views/tasks.py:165
 msgid "The task has been completed."
-msgstr ""
+msgstr "Завдання завершено."
 
 #: pretix/control/forms/__init__.py:200
 #, python-brace-format
 msgid "Please do not upload files larger than {size}!"
-msgstr ""
+msgstr "Будь ласка не завантажуйте файли, які перевищують {size}!"
 
 #: pretix/control/forms/__init__.py:220
 msgid "Filetype not allowed!"
-msgstr ""
+msgstr "Несумісний тип файлу!"
 
 #: pretix/control/forms/checkin.py:90 pretix/control/forms/filter.py:381
 #: pretix/control/forms/filter.py:408 pretix/control/forms/filter.py:1605
@@ -9649,19 +9649,19 @@ msgstr ""
 #: pretix/plugins/sendmail/forms.py:113
 msgctxt "subevent"
 msgid "All dates"
-msgstr ""
+msgstr "Усі дати"
 
 #: pretix/control/forms/event.py:80
 msgid "Use languages"
-msgstr ""
+msgstr "Використати мови"
 
 #: pretix/control/forms/event.py:82
 msgid "Choose all languages that your event should be available in."
-msgstr ""
+msgstr "Використати усі мови, які будуть використовуватись під час події."
 
 #: pretix/control/forms/event.py:85
 msgid "This is an event series"
-msgstr ""
+msgstr "Це серія подій"
 
 #: pretix/control/forms/event.py:121
 msgid ""
@@ -9670,11 +9670,11 @@ msgstr ""
 
 #: pretix/control/forms/event.py:125 pretix/control/forms/event.py:457
 msgid "Event timezone"
-msgstr ""
+msgstr "Часовий пояс події"
 
 #: pretix/control/forms/event.py:132
 msgid "Sales tax rate"
-msgstr ""
+msgstr "Ставка податку з продажу"
 
 #: pretix/control/forms/event.py:133
 msgid ""
@@ -9685,7 +9685,7 @@ msgstr ""
 
 #: pretix/control/forms/event.py:140
 msgid "Grant access to team"
-msgstr ""
+msgstr "Надати доступ команді"
 
 #: pretix/control/forms/event.py:141
 msgid ""
