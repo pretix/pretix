@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-28 16:44+0000\n"
-"PO-Revision-Date: 2022-05-06 13:48+0000\n"
+"PO-Revision-Date: 2022-05-06 13:49+0000\n"
 "Last-Translator: Olha Dolinska <olya.dolinska.od@gmail.com>\n"
 "Language-Team: Ukrainian <https://translate.pretix.eu/projects/pretix/pretix/"
 "uk/>\n"
@@ -9324,7 +9324,7 @@ msgstr "Якщо ця проблема не зникне, будь ласка, �
 
 #: pretix/base/templates/500.html:13
 msgid "If you contact us, please send us the following code:"
-msgstr "Якщо ви з нами контактуєте, будь ласка надішліть нам наступний код:"
+msgstr "Якщо ви з нами контактуєте, будь ласка, надішліть нам наступний код:"
 
 #: pretix/base/templates/csrffail.html:4 pretix/base/templates/csrffail.html:8
 msgid "Verification failed"
@@ -9335,6 +9335,8 @@ msgid ""
 "We could not verify that this request really was sent from you. For security "
 "reasons, we therefore cannot process it."
 msgstr ""
+"Ми не змогли перевірити, що цей запит був справді надісланий вам. З "
+"міркувань безпеки ми не можемо обробити його."
 
 #: pretix/base/templates/csrffail.html:20
 msgid ""
