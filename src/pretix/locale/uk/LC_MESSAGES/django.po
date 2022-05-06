@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-28 16:44+0000\n"
-"PO-Revision-Date: 2022-05-06 14:00+0000\n"
+"PO-Revision-Date: 2022-05-06 14:02+0000\n"
 "Last-Translator: Olha Dolinska <olya.dolinska.od@gmail.com>\n"
 "Language-Team: Ukrainian <https://translate.pretix.eu/projects/pretix/pretix/"
 "uk/>\n"
@@ -9549,7 +9549,7 @@ msgstr "Продукт \"{name}\" стає доступним"
 #, python-brace-format
 msgctxt "timeline"
 msgid "Product \"{name}\" becomes unavailable"
-msgstr "Продукт \"{name}\" недоступний"
+msgstr "Продукт \"{name}\" стає недоступним"
 
 #: pretix/base/timeline.py:225
 #, python-brace-format
@@ -9567,13 +9567,13 @@ msgstr "Знижка \"{name}\" стає неактивною"
 #, python-brace-format
 msgctxt "timeline"
 msgid "Product variation \"{product} – {variation}\" becomes available"
-msgstr ""
+msgstr "Варіація продукту \"{product} – {variation}\" стає доступною"
 
 #: pretix/base/timeline.py:290
 #, python-brace-format
 msgctxt "timeline"
 msgid "Product variation \"{product} – {variation}\" becomes unavailable"
-msgstr ""
+msgstr "Варіація продукту \"{product} – {variation}\" стає недоступною"
 
 #: pretix/base/timeline.py:321
 #, python-brace-format
