@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-28 16:44+0000\n"
-"PO-Revision-Date: 2022-05-06 13:56+0000\n"
+"PO-Revision-Date: 2022-05-06 13:57+0000\n"
 "Last-Translator: Olha Dolinska <olya.dolinska.od@gmail.com>\n"
 "Language-Team: Ukrainian <https://translate.pretix.eu/projects/pretix/pretix/"
 "uk/>\n"
@@ -9450,7 +9450,7 @@ msgstr "Перенаправити"
 msgid ""
 "The link you clicked on wants to redirect you to a destination on the "
 "website %(host)s."
-msgstr "Посилання, за яким ви перейшли перенаправить вас на сайт %(host)s."
+msgstr "Посилання, за яким ви перейшли, перенаправить вас на сайт %(host)s."
 
 #: pretix/base/templates/pretixbase/redirect.html:14
 msgid "Please only proceed if you trust this website to be safe."
@@ -9462,8 +9462,9 @@ msgid "Proceed to %(host)s"
 msgstr "Перейти на %(host)s"
 
 #: pretix/base/templates/source.html:5 pretix/base/templates/source.html:9
+#, fuzzy
 msgid "Source code"
-msgstr ""
+msgstr "Початковий код"
 
 #: pretix/base/templates/source.html:10
 msgid ""
@@ -9472,8 +9473,9 @@ msgid ""
 msgstr ""
 
 #: pretix/base/ticketoutput.py:179
+#, fuzzy
 msgid "Enable ticket format"
-msgstr ""
+msgstr "Увімкнути формат квитків"
 
 #: pretix/base/ticketoutput.py:197
 msgid "Download ticket"
