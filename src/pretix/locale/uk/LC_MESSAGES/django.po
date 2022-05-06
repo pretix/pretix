@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-28 16:44+0000\n"
 "PO-Revision-Date: 2022-05-06 13:54+0000\n"
-"Last-Translator: Olha Dolinska <olya.dolinska.od@gmail.com>\n"
+"Last-Translator: Iryna Loik <iraloyik@gmail.com>\n"
 "Language-Team: Ukrainian <https://translate.pretix.eu/projects/pretix/pretix/"
 "uk/>\n"
 "Language: uk\n"
@@ -9393,25 +9393,25 @@ msgstr "Ви отримуєте цей лист, бо хтось зареєст�
 #: pretix/base/templates/pretixbase/email/order_details.html:12
 #: pretix/base/templates/pretixbase/email/order_details.html:62
 msgid "Event:"
-msgstr ""
+msgstr "Подія:"
 
 #: pretix/base/templates/pretixbase/email/order_details.html:26
 #: pretix/base/templates/pretixbase/email/order_details.html:77
 msgid "Order code:"
-msgstr ""
+msgstr "Номер замовлення:"
 
 #: pretix/base/templates/pretixbase/email/order_details.html:31
 msgid "created by"
-msgstr ""
+msgstr "створено"
 
 #: pretix/base/templates/pretixbase/email/order_details.html:37
 #: pretix/base/templates/pretixbase/email/order_details.html:132
 msgid "Contact:"
-msgstr ""
+msgstr "Контакт:"
 
 #: pretix/base/templates/pretixbase/email/order_details.html:52
 msgid "View registration details"
-msgstr ""
+msgstr "Переглянути деталі реєстрації"
 
 #: pretix/base/templates/pretixbase/email/order_details.html:57
 msgid ""
