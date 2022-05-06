@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-28 16:44+0000\n"
-"PO-Revision-Date: 2022-05-06 13:42+0000\n"
+"PO-Revision-Date: 2022-05-06 13:46+0000\n"
 "Last-Translator: Olha Dolinska <olya.dolinska.od@gmail.com>\n"
 "Language-Team: Ukrainian <https://translate.pretix.eu/projects/pretix/pretix/"
 "uk/>\n"
@@ -9239,6 +9239,7 @@ msgstr "Відповіді на питання"
 msgid ""
 "This will remove all answers to questions, as well as logged changes to them."
 msgstr ""
+"Це видалить всі відповіді на питання, а також зареєстровані з ними зміни."
 
 #: pretix/base/shredder.py:393
 msgid ""
@@ -9249,11 +9250,12 @@ msgstr ""
 
 #: pretix/base/shredder.py:420
 msgid "Cached ticket files"
-msgstr ""
+msgstr "Файли кеш з квитками"
 
 #: pretix/base/shredder.py:422
 msgid "This will remove all cached ticket files. No download will be offered."
 msgstr ""
+"Це видалить всі файли кеш з квитками. Завантаження не будуть запропоновані."
 
 #: pretix/base/shredder.py:437
 msgid ""
