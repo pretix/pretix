@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-28 16:44+0000\n"
-"PO-Revision-Date: 2022-05-06 13:49+0000\n"
+"PO-Revision-Date: 2022-05-06 13:51+0000\n"
 "Last-Translator: Olha Dolinska <olya.dolinska.od@gmail.com>\n"
 "Language-Team: Ukrainian <https://translate.pretix.eu/projects/pretix/pretix/"
 "uk/>\n"
@@ -9343,10 +9343,12 @@ msgid ""
 "Please go back to the last page, refresh this page and then try again. If "
 "the problem persists, please get in touch with us."
 msgstr ""
+"Будь ласка, поверніться на попередню сторінку, обновіть цю сторінку і "
+"спробуйте ще раз. Якщо проблема не зникне, будь ласка, зв'яжіться з нами."
 
 #: pretix/base/templates/pretixbase/cachedfiles/pending.html:21
 msgid "We are preparing your file for download …"
-msgstr ""
+msgstr "Ми готуємо Ваш файл для завантаження…"
 
 #: pretix/base/templates/pretixbase/cachedfiles/pending.html:23
 msgid ""
