@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-28 16:44+0000\n"
 "PO-Revision-Date: 2022-05-06 13:57+0000\n"
-"Last-Translator: Olha Dolinska <olya.dolinska.od@gmail.com>\n"
+"Last-Translator: Iryna Loik <iraloyik@gmail.com>\n"
 "Language-Team: Ukrainian <https://translate.pretix.eu/projects/pretix/pretix/"
 "uk/>\n"
 "Language: uk\n"
@@ -9479,27 +9479,27 @@ msgstr "Увімкнути формат квитків"
 
 #: pretix/base/ticketoutput.py:197
 msgid "Download ticket"
-msgstr ""
+msgstr "Завантажити квиток"
 
 #: pretix/base/timeline.py:59
 msgctxt "timeline"
 msgid "Your event starts"
-msgstr ""
+msgstr "Ваша подія почнеться"
 
 #: pretix/base/timeline.py:67
 msgctxt "timeline"
 msgid "Your event ends"
-msgstr ""
+msgstr "Ваша подія завершиться"
 
 #: pretix/base/timeline.py:75
 msgctxt "timeline"
 msgid "Admissions for your event start"
-msgstr ""
+msgstr "Реєстрація на подію починається"
 
 #: pretix/base/timeline.py:83
 msgctxt "timeline"
 msgid "Start of ticket sales"
-msgstr ""
+msgstr "Розпочати продаж квитків"
 
 #: pretix/base/timeline.py:91
 msgctxt "timeline"
