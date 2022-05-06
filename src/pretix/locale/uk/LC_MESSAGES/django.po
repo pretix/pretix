@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-28 16:44+0000\n"
 "PO-Revision-Date: 2022-05-06 13:46+0000\n"
-"Last-Translator: Olha Dolinska <olya.dolinska.od@gmail.com>\n"
+"Last-Translator: Iryna Loik <iraloyik@gmail.com>\n"
 "Language-Team: Ukrainian <https://translate.pretix.eu/projects/pretix/pretix/"
 "uk/>\n"
 "Language: uk\n"
@@ -9223,7 +9223,7 @@ msgstr ""
 
 #: pretix/base/shredder.py:330
 msgid "Invoice addresses"
-msgstr ""
+msgstr "Адреса рахунку"
 
 #: pretix/base/shredder.py:333
 msgid ""
@@ -9263,6 +9263,9 @@ msgid ""
 "method, all data will be removed or personal data only. No download will be "
 "offered."
 msgstr ""
+"Це видалить усю інформацію, яка повязана із оплатою. Залежно від способу "
+"оплати буде видалена або уся інформація або тільки особиста інформація. "
+"Завантаження буде не активне."
 
 #: pretix/base/templates/400.html:4 pretix/base/templates/400.html:8
 msgid "Bad Request"
@@ -9270,27 +9273,27 @@ msgstr ""
 
 #: pretix/base/templates/400.html:9
 msgid "We were unable to parse your request."
-msgstr ""
+msgstr "Нам не вдалося проаналізувати ваш запит."
 
 #: pretix/base/templates/400.html:12 pretix/base/templates/403.html:12
 #: pretix/base/templates/404.html:12 pretix/base/templates/500.html:22
 #: pretix/base/templates/csrffail.html:26
 msgid "Take a step back"
-msgstr ""
+msgstr "Поверніться на крок назад"
 
 #: pretix/base/templates/400.html:13 pretix/base/templates/403.html:13
 #: pretix/base/templates/500.html:23
 #: pretix/presale/templates/pretixpresale/event/cookies.html:40
 msgid "Try again"
-msgstr ""
+msgstr "Спробуйте будь ласка ще раз"
 
 #: pretix/base/templates/403.html:4 pretix/base/templates/403.html:8
 msgid "Permission denied"
-msgstr ""
+msgstr "Відмовлено у доступі"
 
 #: pretix/base/templates/403.html:9
 msgid "You do not have access to this page."
-msgstr ""
+msgstr "У вас відсутній доступ до цієї сторінки."
 
 #: pretix/base/templates/403.html:20 pretix/base/templates/404.html:19
 #: pretix/control/templates/pretixcontrol/base.html:192
