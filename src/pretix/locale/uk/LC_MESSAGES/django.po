@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-28 16:44+0000\n"
-"PO-Revision-Date: 2022-05-06 14:06+0000\n"
-"Last-Translator: Iryna Loik <iraloyik@gmail.com>\n"
+"PO-Revision-Date: 2022-05-07 06:00+0000\n"
+"Last-Translator: Iryna N <in380@nyu.edu>\n"
 "Language-Team: Ukrainian <https://translate.pretix.eu/projects/pretix/pretix/"
 "uk/>\n"
 "Language: uk\n"
@@ -7838,14 +7838,13 @@ msgid "Step size for reduction amount"
 msgstr "Розмір кроку для зменшення суми"
 
 #: pretix/base/settings.py:1503
-#, fuzzy
 msgid ""
 "By default, customers can choose an arbitrary amount for you to keep. If you "
 "set this to e.g. 10, they will only be able to choose values in increments "
 "of 10."
 msgstr ""
 "За замовчуванням клієнти можуть вибрати довільну суму для повернення. Якщо "
-"ви встановите це, наприклад, 10, вони зможуть вибирати значення лише з "
+"ви встановите тут, наприклад, 10, вони зможуть вибирати значення лише з "
 "кроком 10."
 
 #: pretix/base/settings.py:1513
@@ -7892,7 +7891,6 @@ msgstr ""
 "сконтактувати."
 
 #: pretix/base/settings.py:1566 pretix/control/forms/event.py:1353
-#, fuzzy
 msgid "Imprint URL"
 msgstr "Вставити URL"
 
@@ -7967,6 +7965,12 @@ msgid ""
 "data as calendar entries are often shared with an unspecified number of "
 "people."
 msgstr ""
+"Ви можете використовувати це поле, щоб поділитися інформацією з учасниками, "
+"як-от інформацією про подорожі або посиланням на цифрову подію. Якщо ви "
+"залишите його порожнім, ми розмістимо там посилання на магазин події, час "
+"входу та ім’я вашого організатора. Ми не дозволяємо використовувати "
+"заповнювачі з конфіденційними даними про людей, оскільки записи календаря "
+"часто надаються невизначеній кількості людей."
 
 #: pretix/base/settings.py:1648
 msgid "Subject prefix"
@@ -8001,6 +8005,8 @@ msgid ""
 "Sender name used in conjunction with the sender address for outgoing emails. "
 "Defaults to your event name."
 msgstr ""
+"Ім’я відправника використовується разом з адресою відправника для вихідних "
+"листів. За замовчуванням — назва події."
 
 #: pretix/base/settings.py:1692
 #, python-brace-format
@@ -9189,7 +9195,6 @@ msgid "This will remove all phone numbers from orders."
 msgstr "Це видалить всі номери телефонів з замовлень."
 
 #: pretix/base/shredder.py:193
-#, fuzzy
 msgid "E-mails"
 msgstr "Електронні листи (адреси)"
 
@@ -9220,6 +9225,8 @@ msgid ""
 "This will remove all attendee names and postal addresses from order "
 "positions, as well as logged changes to them."
 msgstr ""
+"Це видалить усі імена та поштові адреси учасників із позицій замовлення, а "
+"також зареєстровані зміни до них."
 
 #: pretix/base/shredder.py:330
 msgid "Invoice addresses"
@@ -9230,6 +9237,8 @@ msgid ""
 "This will remove all invoice addresses from orders, as well as logged "
 "changes to them."
 msgstr ""
+"Це видалить усі адреси рахунків-фактур із замовлень, а також зареєстровані "
+"зміни до них."
 
 #: pretix/base/shredder.py:357
 msgid "Question answers"
@@ -9247,6 +9256,9 @@ msgid ""
 "might contain personal data from the database. Invoice numbers and totals "
 "will be conserved."
 msgstr ""
+"Це видалить усі PDF-файли рахунків-фактур, а також будь-який їх текстовий "
+"вміст, який може містити особисті дані з бази даних. Номери рахунків-фактур "
+"та підсумки будуть збережені."
 
 #: pretix/base/shredder.py:420
 msgid "Cached ticket files"
@@ -9462,7 +9474,6 @@ msgid "Proceed to %(host)s"
 msgstr "Перейти на %(host)s"
 
 #: pretix/base/templates/source.html:5 pretix/base/templates/source.html:9
-#, fuzzy
 msgid "Source code"
 msgstr "Початковий код"
 
@@ -9471,9 +9482,11 @@ msgid ""
 "This site is powered by free software. If you want to read the license terms "
 "or obtain the source code, follow these links or instructions:"
 msgstr ""
+"Цей сайт працює на основі безкоштовного програмного забезпечення. Якщо ви "
+"хочете ознайомитися з умовами ліцензії або отримати вихідний код, перейдіть "
+"за цими посиланнями або інструкціями:"
 
 #: pretix/base/ticketoutput.py:179
-#, fuzzy
 msgid "Enable ticket format"
 msgstr "Увімкнути формат квитків"
 
@@ -9593,6 +9606,10 @@ msgid ""
 "required for security reasons, to ensure that your browser is not being "
 "hijacked by third parties."
 msgstr ""
+"Ви бачите це повідомлення, оскільки цей сайт HTTPS вимагає, щоб ваш веб-"
+"браузер надіслав \"заголовок Referer\", але жодного не було надіслано. Цей "
+"заголовок потрібен з міркувань безпеки, щоб гарантувати, що ваш веб-"
+"переглядач не буде захоплений третіми сторонами."
 
 #: pretix/base/views/errors.py:53
 msgid ""
@@ -9600,6 +9617,9 @@ msgid ""
 "enable them, at least for this site, or for HTTPS connections, or for 'same-"
 "origin' requests."
 msgstr ""
+"Якщо ви налаштували свій веб-переглядач на вимкнення заголовків «Referer», "
+"увімкніть їх повторно, принаймні для цього сайту, або для з’єднань HTTPS, "
+"або для запитів «одного походження»."
 
 #: pretix/base/views/errors.py:58
 msgid ""
@@ -9682,6 +9702,10 @@ msgid ""
 "applicable tax rate here in percent. If you have a more complicated tax "
 "situation, you can add more tax rates and detailed configuration later."
 msgstr ""
+"Чи потрібно платити податок з продажу квитків? У цьому випадку введіть "
+"застосовну ставку податку у відсотках. Якщо у вас складніша податкова "
+"ситуація, ви можете додати більше податкових ставок і детальну конфігурацію "
+"пізніше."
 
 #: pretix/control/forms/event.py:140
 msgid "Grant access to team"
@@ -9706,11 +9730,11 @@ msgstr ""
 
 #: pretix/control/forms/event.py:214
 msgid "Your default locale must be specified."
-msgstr ""
+msgstr "Вам потрібно визначити свій регіон за замовчуванням."
 
 #: pretix/control/forms/event.py:288
 msgid "Copy configuration from"
-msgstr ""
+msgstr "Копіювати конфігурацію з"
 
 #: pretix/control/forms/event.py:294 pretix/control/forms/event.py:297
 #: pretix/control/forms/item.py:310
@@ -9724,23 +9748,23 @@ msgstr ""
 
 #: pretix/control/forms/event.py:365 pretix/control/forms/organizer.py:132
 msgid "Custom domain"
-msgstr ""
+msgstr "Спеціальний домен"
 
 #: pretix/control/forms/event.py:367 pretix/control/forms/organizer.py:134
 msgid "You need to configure the custom domain in the webserver beforehand."
-msgstr ""
+msgstr "Необхідно попередньо налаштувати спеціальний домен на веб-сервері."
 
 #: pretix/control/forms/event.py:385 pretix/control/forms/organizer.py:142
 msgid "You cannot choose the base domain of this installation."
-msgstr ""
+msgstr "Ви не можете вибрати базовий домен для цієї установки."
 
 #: pretix/control/forms/event.py:389 pretix/control/forms/organizer.py:147
 msgid "This domain is already in use for a different event or organizer."
-msgstr ""
+msgstr "Цей домен уже використовується для іншої події чи організатора."
 
 #: pretix/control/forms/event.py:460 pretix/control/forms/organizer.py:341
 msgid "Name format"
-msgstr ""
+msgstr "Формат імені"
 
 #: pretix/control/forms/event.py:461 pretix/control/forms/organizer.py:342
 msgid ""
@@ -9748,6 +9772,9 @@ msgid ""
 "already received orders might lead to unexpected behavior when sorting or "
 "changing names."
 msgstr ""
+"Це визначає, як pretix запитуватиме людські імена. Зміна цього параметра "
+"після того, як ви вже отримали замовлення, може призвести до несподіваної "
+"поведінки під час сортування або зміни імен."
 
 #: pretix/control/forms/event.py:466 pretix/control/forms/organizer.py:347
 msgid "Allowed titles"
@@ -9758,11 +9785,14 @@ msgid ""
 "If the naming scheme you defined above allows users to input a title, you "
 "can use this to restrict the set of selectable titles."
 msgstr ""
+"Якщо схема назв, яку ви визначили вище, дозволяє користувачам вводити "
+"заголовок, ви можете використовувати це, щоб обмежити набір заголовків, які "
+"можна вибрати."
 
 #: pretix/control/forms/event.py:580 pretix/control/forms/organizer.py:414
 #, python-brace-format
 msgid "Ask for {fields}, display like {example}"
-msgstr ""
+msgstr "Запитувати {fields}, відображати як {example}"
 
 #: pretix/control/forms/event.py:586 pretix/control/forms/organizer.py:420
 msgid "Free text input"
@@ -9789,7 +9819,7 @@ msgstr ""
 
 #: pretix/control/forms/event.py:703
 msgid "Tax rule for payment fees"
-msgstr ""
+msgstr "Податкове правило для сплати зборів"
 
 #: pretix/control/forms/event.py:705
 msgid ""
@@ -9797,6 +9827,10 @@ msgid ""
 "payment methods. This will set the tax rate and reverse charge rules, other "
 "settings of the tax rule are ignored."
 msgstr ""
+"Податкове правило, яке застосовується до додаткових комісій, які ви "
+"налаштували для методів разового платежу. Це встановить ставку податку та "
+"правила зворотного нарахування, інші налаштування податкового правила "
+"ігноруються."
 
 #: pretix/control/forms/event.py:815
 msgid "Generate invoices for Sales channels"
@@ -9833,6 +9867,8 @@ msgid ""
 "The order placed and paid emails will only be send to orders from these "
 "sales channels. The online shop must be enabled."
 msgstr ""
+"Розміщене замовлення та оплачені електронні листи надсилатимуться лише для "
+"замовлень із цих каналів продажу. Інтернет-магазин має бути увімкнено."
 
 #: pretix/control/forms/event.py:894
 msgid ""
@@ -9842,7 +9878,7 @@ msgstr ""
 
 #: pretix/control/forms/event.py:902 pretix/control/forms/organizer.py:435
 msgid "Bcc address"
-msgstr ""
+msgstr "Прихована адреса"
 
 #: pretix/control/forms/event.py:903 pretix/control/forms/organizer.py:436
 msgid "All emails will be sent to this address as a Bcc copy"
@@ -9856,6 +9892,7 @@ msgstr ""
 #, python-brace-format
 msgid "This will be attached to every email. Available placeholders: {event}"
 msgstr ""
+"Це буде вкладено до кожного електронного листа. Доступні заповнювачі: {event}"
 
 #: pretix/control/forms/event.py:917 pretix/control/forms/organizer.py:450
 msgid "e.g. your contact details"
@@ -9863,12 +9900,12 @@ msgstr ""
 
 #: pretix/control/forms/event.py:922
 msgid "HTML mail renderer"
-msgstr ""
+msgstr "HTML візуалізація пошти"
 
 #: pretix/control/forms/event.py:927 pretix/control/forms/event.py:944
 #: pretix/control/forms/event.py:961 pretix/control/forms/event.py:1020
 msgid "Text sent to order contact address"
-msgstr ""
+msgstr "Текст надіслано на контактну адресу замовлення"
 
 #: pretix/control/forms/event.py:932 pretix/control/forms/event.py:949
 #: pretix/control/forms/event.py:966 pretix/control/forms/event.py:1025
@@ -9882,6 +9919,9 @@ msgid ""
 "person who orders the tickets, the following email will be sent out to the "
 "attendees."
 msgstr ""
+"Якщо в замовленні є учасники з адресами електронної пошти, відмінними від "
+"того, хто замовляє квитки, учасникам буде надіслано таке електронне "
+"повідомлення."
 
 #: pretix/control/forms/event.py:938 pretix/control/forms/event.py:955
 #: pretix/control/forms/event.py:972 pretix/control/forms/event.py:1031
@@ -9904,7 +9944,7 @@ msgstr ""
 
 #: pretix/control/forms/event.py:988
 msgid "Text (requested by user)"
-msgstr ""
+msgstr "Текст (за запитом користувача)"
 
 #: pretix/control/forms/event.py:1039
 msgid ""
@@ -9945,7 +9985,7 @@ msgstr ""
 #: pretix/control/forms/vouchers.py:295 pretix/plugins/sendmail/forms.py:61
 #, python-brace-format
 msgid "Available placeholders: {list}"
-msgstr ""
+msgstr "Доступні заповнювачі: {list}"
 
 #: pretix/control/forms/event.py:1136
 msgid "Ticket code generator"
@@ -10014,6 +10054,10 @@ msgid ""
 "can for example be used to provide widgets that give discounts or unlock "
 "secret products."
 msgstr ""
+"Якщо налаштовано, віджет показуватиме продукти так, ніби цей ваучер був "
+"введений, і коли продукт купується через віджет, цей ваучер буде "
+"використаний. Це можна використовувати, наприклад, для надання віджетів, які "
+"надають знижки або відкривають секретні продукти."
 
 #: pretix/control/forms/event.py:1277
 msgid "Compatibility mode"
@@ -10024,6 +10068,8 @@ msgid ""
 "Our regular widget doesn't work in all website builders. If you run into "
 "trouble, try using this compatibility mode."
 msgstr ""
+"Наш звичайний віджет працює не у всіх конструкторах веб-сайтів. Якщо у вас "
+"виникнуть проблеми, спробуйте скористатися цим режимом сумісності."
 
 #: pretix/control/forms/event.py:1300
 msgid "The given voucher code does not exist."
@@ -10155,7 +10201,7 @@ msgstr ""
 
 #: pretix/control/forms/filter.py:200
 msgid "Overpaid"
-msgstr ""
+msgstr "Переплачено"
 
 #: pretix/control/forms/filter.py:201
 msgid "Partially paid"
@@ -10187,11 +10233,11 @@ msgstr ""
 
 #: pretix/control/forms/filter.py:210
 msgid "Follow-up configured"
-msgstr ""
+msgstr "Подальший контроль налаштовано"
 
 #: pretix/control/forms/filter.py:211
 msgid "Follow-up due"
-msgstr ""
+msgstr "Подальший контроль"
 
 #: pretix/control/forms/filter.py:415 pretix/control/forms/filter.py:1599
 #: pretix/control/forms/filter.py:1858 pretix/control/forms/filter.py:2140
@@ -10207,7 +10253,7 @@ msgstr ""
 #: pretix/control/views/typeahead.py:596
 #, python-brace-format
 msgid "{product} – Any variation"
-msgstr ""
+msgstr "{product} – будь-який варіант"
 
 #: pretix/control/forms/filter.py:483 pretix/control/forms/orders.py:745
 msgctxt "subevent"
@@ -10229,17 +10275,17 @@ msgstr ""
 
 #: pretix/control/forms/filter.py:530
 msgid "Minimal sum of payments and refunds"
-msgstr ""
+msgstr "Мінімальна сума виплат і відшкодувань"
 
 #: pretix/control/forms/filter.py:535
 msgid "Maximal sum of payments and refunds"
-msgstr ""
+msgstr "Максимальна сума виплат і відшкодувань"
 
 #: pretix/control/forms/filter.py:577 pretix/control/forms/filter.py:582
 #: pretix/control/forms/filter.py:608 pretix/control/forms/filter.py:613
 #: pretix/control/forms/filter.py:628
 msgid "Exact matches only"
-msgstr ""
+msgstr "Лише точні відповідності"
 
 #: pretix/control/forms/filter.py:730 pretix/control/forms/filter.py:735
 #: pretix/control/forms/filter.py:842 pretix/control/forms/filter.py:847
@@ -10261,7 +10307,7 @@ msgstr ""
 
 #: pretix/control/forms/filter.py:869
 msgid "Payment created until"
-msgstr ""
+msgstr "Платіж створено до"
 
 #: pretix/control/forms/filter.py:874
 msgid "Paid from"
@@ -10273,7 +10319,7 @@ msgstr ""
 
 #: pretix/control/forms/filter.py:1031 pretix/control/forms/filter.py:1401
 msgid "Shop live and presale running"
-msgstr ""
+msgstr "Купуйте в прямому ефірі та передпродажі"
 
 #: pretix/control/forms/filter.py:1032 pretix/control/forms/filter.py:1714
 msgid "Inactive"
@@ -10320,7 +10366,7 @@ msgstr ""
 #: pretix/control/forms/filter.py:1284
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:33
 msgid "disabled"
-msgstr ""
+msgstr "деактивовано"
 
 #: pretix/control/forms/filter.py:1285
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:35
@@ -10332,35 +10378,35 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:50
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:118
 msgid "Memberships"
-msgstr ""
+msgstr "Членство"
 
 #: pretix/control/forms/filter.py:1293
 msgid "Has no memberships"
-msgstr ""
+msgstr "Не має членства"
 
 #: pretix/control/forms/filter.py:1294
 msgid "Has any membership"
-msgstr ""
+msgstr "Має будь-яке членство"
 
 #: pretix/control/forms/filter.py:1295
 msgid "Has valid membership"
-msgstr ""
+msgstr "Має дійсне членство"
 
 #: pretix/control/forms/filter.py:1400
 msgid "Shop live"
-msgstr ""
+msgstr "Магазин активний"
 
 #: pretix/control/forms/filter.py:1402
 msgid "Shop not live"
-msgstr ""
+msgstr "Магазин не активний"
 
 #: pretix/control/forms/filter.py:1405
 msgid "Single event running or in the future"
-msgstr ""
+msgstr "Окрема подія, що триває або відбудеться в майбутньому"
 
 #: pretix/control/forms/filter.py:1406
 msgid "Single event in the past"
-msgstr ""
+msgstr "Окрема подія в минулому"
 
 #: pretix/control/forms/filter.py:1577 pretix/control/forms/filter.py:1579
 msgid "Search attendee…"
@@ -10421,27 +10467,27 @@ msgstr ""
 
 #: pretix/control/forms/filter.py:1795
 msgid "Unredeemed"
-msgstr ""
+msgstr "Невикуплені"
 
 #: pretix/control/forms/filter.py:1796
 msgid "Redeemed at least once"
-msgstr ""
+msgstr "Викуплено принаймні один раз"
 
 #: pretix/control/forms/filter.py:1797
 msgid "Fully redeemed"
-msgstr ""
+msgstr "Повністю викуплено"
 
 #: pretix/control/forms/filter.py:1799
 msgid "Redeemed and checked in with ticket"
-msgstr ""
+msgstr "Викуплено та зареєстровано з квитком"
 
 #: pretix/control/forms/filter.py:1804
 msgid "Quota handling"
-msgstr ""
+msgstr "Обробка квот"
 
 #: pretix/control/forms/filter.py:1808
 msgid "Allow to ignore quota"
-msgstr ""
+msgstr "Дозволити ігнорувати квоту"
 
 #: pretix/control/forms/filter.py:1813 pretix/control/forms/filter.py:1815
 msgid "Filter by tag"
@@ -10456,7 +10502,7 @@ msgstr ""
 #: pretix/control/views/vouchers.py:121
 #, python-brace-format
 msgid "Any product in quota \"{quota}\""
-msgstr ""
+msgstr "Будь-який продукт у квоті \"{quota}\""
 
 #: pretix/control/forms/filter.py:1989
 msgid "Refund status"
@@ -10498,7 +10544,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html:64
 #: pretix/plugins/checkinlists/exporters.py:614
 msgid "Scan type"
-msgstr ""
+msgstr "Тип сканування"
 
 #: pretix/control/forms/filter.py:2085
 msgid "All directions"
@@ -10538,16 +10584,16 @@ msgstr ""
 #: pretix/plugins/checkinlists/exporters.py:613
 #: pretix/plugins/checkinlists/exporters.py:686
 msgid "Check-in list"
-msgstr ""
+msgstr "Список реєстрації"
 
 #: pretix/control/forms/filter.py:2221
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:82
 msgid "Software"
-msgstr ""
+msgstr "програмне забезпечення"
 
 #: pretix/control/forms/filter.py:2228
 msgid "Device status"
-msgstr ""
+msgstr "Стан пристрою"
 
 #: pretix/control/forms/filter.py:2231
 msgid "Active devices"
@@ -10555,7 +10601,7 @@ msgstr ""
 
 #: pretix/control/forms/filter.py:2232
 msgid "Revoked devices"
-msgstr ""
+msgstr "Відкликані пристрої"
 
 #: pretix/control/forms/global_settings.py:59
 msgid "Additional footer text"
@@ -10583,11 +10629,11 @@ msgstr ""
 
 #: pretix/control/forms/global_settings.py:80
 msgid "OpenCage API key for geocoding"
-msgstr ""
+msgstr "Ключ API OpenCage для геокодування"
 
 #: pretix/control/forms/global_settings.py:84
 msgid "MapQuest API key for geocoding"
-msgstr ""
+msgstr "Ключ API MapQuest для геокодування"
 
 #: pretix/control/forms/global_settings.py:88
 msgid "Leaflet tiles URL pattern"
@@ -10597,7 +10643,7 @@ msgstr ""
 #: pretix/control/forms/global_settings.py:94
 #, python-brace-format
 msgid "e.g. {sample}"
-msgstr ""
+msgstr "Наприклад,{sample}"
 
 #: pretix/control/forms/global_settings.py:93
 msgid "Leaflet tiles attribution"
@@ -10630,7 +10676,7 @@ msgstr ""
 
 #: pretix/control/forms/global_settings.py:133
 msgid "Changes to pretix"
-msgstr ""
+msgstr "Зміни до pretix"
 
 #: pretix/control/forms/global_settings.py:136
 msgid ""
@@ -10861,7 +10907,7 @@ msgstr ""
 
 #: pretix/control/forms/item.py:744
 msgid "Add-ons"
-msgstr ""
+msgstr "Доповнення"
 
 #: pretix/control/forms/item.py:772
 msgid "You added the same add-on category twice"
@@ -10872,20 +10918,22 @@ msgid ""
 "Be aware that setting a minimal number makes it impossible to buy this "
 "product if all available add-ons are sold out."
 msgstr ""
+"Майте на увазі, що встановлення мінімальної кількості робить неможливим "
+"придбання цього продукту, якщо всі доступні доповнення розпродані."
 
 #: pretix/control/forms/item.py:824
 msgid "Bundled products"
-msgstr ""
+msgstr "Продукти в комплекті"
 
 #: pretix/control/forms/item.py:868
 msgid "You added the same bundled product twice."
-msgstr ""
+msgstr "Ви двічі додали один і той самий продукт у комплекті."
 
 #: pretix/control/forms/item.py:874
 #: pretix/control/templates/pretixcontrol/item/include_bundles.html:23
 #: pretix/control/templates/pretixcontrol/item/include_bundles.html:50
 msgid "Bundled product"
-msgstr ""
+msgstr "Продукт в комплекті"
 
 #: pretix/control/forms/item.py:898 pretix/control/forms/orders.py:334
 #: pretix/control/forms/orders.py:505
@@ -10894,11 +10942,11 @@ msgstr ""
 
 #: pretix/control/forms/mailsetup.py:40
 msgid "Hostname"
-msgstr ""
+msgstr "Ім'я хоста"
 
 #: pretix/control/forms/mailsetup.py:45
 msgid "Port"
-msgstr ""
+msgstr "Порт"
 
 #: pretix/control/forms/mailsetup.py:50
 msgid "Username"
@@ -10931,14 +10979,16 @@ msgid ""
 "You are not allowed to use this mail server, please choose one with a public "
 "IP address instead."
 msgstr ""
+"Вам не дозволено використовувати цей поштовий сервер, оберіть замість нього "
+"сервер із загальнодоступною IP-адресою."
 
 #: pretix/control/forms/mailsetup.py:92
 msgid "We were unable to resolve this hostname."
-msgstr ""
+msgstr "Нам не вдалося визначити це ім’я хоста."
 
 #: pretix/control/forms/orderimport.py:30
 msgid "Import mode"
-msgstr ""
+msgstr "Режим імпорту"
 
 #: pretix/control/forms/orderimport.py:32
 msgid "Create a separate order for each line"
@@ -10946,7 +10996,7 @@ msgstr ""
 
 #: pretix/control/forms/orderimport.py:33
 msgid "Create one order with one position per line"
-msgstr ""
+msgstr "Створіть одне замовлення з однією позицією на рядок"
 
 #: pretix/control/forms/orderimport.py:39
 msgid "Create orders as fully paid"
@@ -10954,11 +11004,11 @@ msgstr ""
 
 #: pretix/control/forms/orderimport.py:40
 msgid "Create orders as pending and still require payment"
-msgstr ""
+msgstr "Створити замовлення як незавершені та все одно вимагати оплатy"
 
 #: pretix/control/forms/orderimport.py:44
 msgid "Create orders as test mode orders"
-msgstr ""
+msgstr "Створити замовлення як замовлення в тестовому режимі"
 
 #: pretix/control/forms/orderimport.py:57
 #, python-brace-format
@@ -10967,13 +11017,15 @@ msgstr ""
 
 #: pretix/control/forms/orders.py:72
 msgid "Overbook quota"
-msgstr ""
+msgstr "Перевищити квоту"
 
 #: pretix/control/forms/orders.py:73
 msgid ""
 "If you check this box, this operation will be performed even if it leads to "
 "an overbooked quota and you having sold more tickets than you planned!"
 msgstr ""
+"Якщо ви оберете цю опцію, ця операція буде виконана, навіть якщо це призведе "
+"до перезаброньованої квоти і ви продасте більше квитків, ніж планували!"
 
 #: pretix/control/forms/orders.py:117
 msgid "Overbook quota and ignore late payment"
@@ -10993,7 +11045,7 @@ msgstr ""
 
 #: pretix/control/forms/orders.py:159
 msgid "Keep a cancellation fee of"
-msgstr ""
+msgstr "Стягувати комісію за скасування"
 
 #: pretix/control/forms/orders.py:160
 msgid ""
@@ -11003,10 +11055,15 @@ msgid ""
 "want to keep them. Please always enter a gross value, tax will be calculated "
 "automatically."
 msgstr ""
+"Якщо ви будете стягувати плату, усі позиції в цьому замовленні будуть "
+"скасовані, а замовлення буде зменшено до сплаченої комісії за скасування. "
+"Комісійні за оплату та доставку також будуть скасовані, тому включіть їх у "
+"свій збір за скасування, якщо ви хочете їх зберегти. Будь ласка, завжди "
+"вводьте вартість брутто, податок буде розраховано автоматично."
 
 #: pretix/control/forms/orders.py:166
 msgid "Generate cancellation for invoice"
-msgstr ""
+msgstr "Створити скасування для рахунка-фактури"
 
 #: pretix/control/forms/orders.py:171
 #: pretix/control/templates/pretixcontrol/order/deny.html:23
@@ -11021,7 +11078,7 @@ msgstr ""
 
 #: pretix/control/forms/orders.py:209
 msgid "Payment amount"
-msgstr ""
+msgstr "Сума оплати"
 
 #: pretix/control/forms/orders.py:213
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/control.html:18
@@ -11030,54 +11087,63 @@ msgstr ""
 #: pretix/plugins/reports/exporters.py:576
 #: pretix/plugins/reports/exporters.py:799
 msgid "Payment date"
-msgstr ""
+msgstr "Дата оплати"
 
 #: pretix/control/forms/orders.py:252
 msgid "Re-calculate taxes"
-msgstr ""
+msgstr "Перерахувати податки"
 
 #: pretix/control/forms/orders.py:255
 msgid "Do not re-calculate taxes"
-msgstr ""
+msgstr "Не перераховувати податки"
 
 #: pretix/control/forms/orders.py:256
 msgid ""
 "Re-calculate taxes based on address and product settings, keep gross amount "
 "the same."
 msgstr ""
+"Перерахувати податки на основі адреси та налаштувань продукту, залишивши "
+"валову суму незмінною."
 
 #: pretix/control/forms/orders.py:257
 msgid ""
 "Re-calculate taxes based on address and product settings, keep net amount "
 "the same."
 msgstr ""
+"Перерахувати податки на основі адреси та налаштувань продукту, залишивши "
+"чисту суму незмінною."
 
 #: pretix/control/forms/orders.py:262
 msgid "Issue a new invoice if required"
-msgstr ""
+msgstr "Створити новий рахунок-фактуру, якщо потрібно"
 
 #: pretix/control/forms/orders.py:266
 msgid ""
 "If an invoice exists for this order and this operation would change its "
 "contents, the old invoice will be canceled and a new invoice will be issued."
 msgstr ""
+"Якщо для цього замовлення існує рахунок-фактура і ця операція змінить його "
+"зміст, старий рахунок-фактуру буде скасовано, а новий рахунок-фактура буде "
+"виставлено."
 
 #: pretix/control/forms/orders.py:271
 msgid "Notify user"
-msgstr ""
+msgstr "Повідомити користувача"
 
 #: pretix/control/forms/orders.py:275
 msgid ""
 "Send an email to the customer notifying that their order has been changed."
 msgstr ""
+"Надіслати клієнту електронний лист із повідомленням про те, що його "
+"замовлення було змінено."
 
 #: pretix/control/forms/orders.py:279
 msgid "Allow to overbook quotas when performing this operation"
-msgstr ""
+msgstr "Дозволити перебронювати квоти під час виконання цієї операції"
 
 #: pretix/control/forms/orders.py:295
 msgid "Add-on to"
-msgstr ""
+msgstr "Доповнення до"
 
 #: pretix/control/forms/orders.py:300
 #: pretix/control/templates/pretixcontrol/checkin/index.html:90
@@ -11086,7 +11152,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/checkout_membership.html:24
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:106
 msgid "Seat"
-msgstr ""
+msgstr "Місце"
 
 #: pretix/control/forms/orders.py:303
 #: pretix/control/templates/pretixcontrol/order/change.html:162
@@ -11096,46 +11162,48 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/organizers/customer_membership_delete.html:9
 #: pretix/presale/forms/checkout.py:235
 msgid "Membership"
-msgstr ""
+msgstr "Членство"
 
 #: pretix/control/forms/orders.py:311
 msgid "Including taxes, if any. Keep empty for the product's default price"
 msgstr ""
+"Включаючи податки, якщо такі є. Залиште порожнім для ціни продукту за "
+"замовчуванням"
 
 #: pretix/control/forms/orders.py:426 pretix/control/forms/orders.py:430
 #: pretix/control/forms/orders.py:444 pretix/control/forms/orders.py:481
 #: pretix/control/forms/orders.py:500 pretix/control/forms/orders.py:518
 #: pretix/control/forms/orders.py:546
 msgid "(Unchanged)"
-msgstr ""
+msgstr "(без змін)"
 
 #: pretix/control/forms/orders.py:436 pretix/control/forms/orders.py:541
 msgid "New price (gross)"
-msgstr ""
+msgstr "Нова ціна (брутто)"
 
 #: pretix/control/forms/orders.py:448
 msgid "Generate a new secret"
-msgstr ""
+msgstr "Створити новий секрет"
 
 #: pretix/control/forms/orders.py:452
 msgid "Cancel this position"
-msgstr ""
+msgstr "Скасувати цю позицію"
 
 #: pretix/control/forms/orders.py:456
 msgid "Split into new order"
-msgstr ""
+msgstr "Розділити на нові замовлення"
 
 #: pretix/control/forms/orders.py:519
 msgid "(No membership)"
-msgstr ""
+msgstr "(Немає членства)"
 
 #: pretix/control/forms/orders.py:550
 msgid "Remove this fee"
-msgstr ""
+msgstr "Зняти цю плату"
 
 #: pretix/control/forms/orders.py:565
 msgid "Invalidate secrets"
-msgstr ""
+msgstr "Визнати секрети недійсними"
 
 #: pretix/control/forms/orders.py:566
 msgid ""
