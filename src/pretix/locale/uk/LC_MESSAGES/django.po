@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-28 16:44+0000\n"
-"PO-Revision-Date: 2022-05-06 13:51+0000\n"
-"Last-Translator: Iryna Loik <iraloyik@gmail.com>\n"
+"PO-Revision-Date: 2022-05-06 13:52+0000\n"
+"Last-Translator: Olha Dolinska <olya.dolinska.od@gmail.com>\n"
 "Language-Team: Ukrainian <https://translate.pretix.eu/projects/pretix/pretix/"
 "uk/>\n"
 "Language: uk\n"
@@ -9355,6 +9355,8 @@ msgid ""
 "If this takes longer than a few minutes, please refresh this page or contact "
 "us."
 msgstr ""
+"Якщо це займе більше, ніж кілька хвилин, будь ласка, обновіть сторінку або "
+"зв'яжіться з нами."
 
 #: pretix/base/templates/pretixbase/email/email_footer.html:3
 #, python-format
@@ -9364,11 +9366,11 @@ msgstr ""
 #: pretix/base/templates/pretixbase/email/notification.html:55
 #: pretix/base/templates/pretixbase/email/notification.txt:14
 msgid "You receive these emails based on your notification settings."
-msgstr ""
+msgstr "Ви отримуєте ці листи через Ваші налаштування сповіщень."
 
 #: pretix/base/templates/pretixbase/email/notification.html:57
 msgid "Click here to view and change your notification settings"
-msgstr ""
+msgstr "Натисніть тут, щоб переглянути та змінити Ваші налаштування сповіщень"
 
 #: pretix/base/templates/pretixbase/email/notification.html:60
 msgid "Click here disable all notifications immediately."
