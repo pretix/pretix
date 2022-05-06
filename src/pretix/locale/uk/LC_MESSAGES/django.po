@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-28 16:44+0000\n"
 "PO-Revision-Date: 2022-05-06 14:02+0000\n"
-"Last-Translator: Olha Dolinska <olya.dolinska.od@gmail.com>\n"
+"Last-Translator: Iryna Loik <iraloyik@gmail.com>\n"
 "Language-Team: Ukrainian <https://translate.pretix.eu/projects/pretix/pretix/"
 "uk/>\n"
 "Language: uk\n"
@@ -9579,12 +9579,12 @@ msgstr "Варіація продукту \"{product} – {variation}\" стає
 #, python-brace-format
 msgctxt "timeline"
 msgid "Payment provider \"{name}\" can no longer be selected"
-msgstr ""
+msgstr "Не можливо обрати \"{name}\" для оплати"
 
 #: pretix/base/validators.py:49
 #, python-format
 msgid "This field has an invalid value: %(value)s."
-msgstr ""
+msgstr "Це поле містить недійсне значення: %(value)s."
 
 #: pretix/base/views/errors.py:48
 msgid ""
