@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-28 16:44+0000\n"
-"PO-Revision-Date: 2022-05-06 10:23+0000\n"
+"PO-Revision-Date: 2022-05-06 13:35+0000\n"
 "Last-Translator: Iryna Loik <iraloyik@gmail.com>\n"
 "Language-Team: Ukrainian <https://translate.pretix.eu/projects/pretix/pretix/"
 "uk/>\n"
@@ -8678,12 +8678,12 @@ msgstr "Шрифт"
 
 #: pretix/base/settings.py:2198
 msgid "Only respected by modern browsers."
-msgstr ""
+msgstr "Які визнаються новішими браузерами."
 
 #: pretix/base/settings.py:2225 pretix/base/settings.py:2268
 #: pretix/control/forms/organizer.py:388
 msgid "Header image"
-msgstr ""
+msgstr "Зображення заголовка"
 
 #: pretix/base/settings.py:2228
 msgid ""
@@ -8693,18 +8693,25 @@ msgid ""
 "recommend not using small details on the picture as it will be resized on "
 "smaller screens."
 msgstr ""
+"Якщо ви надасте зображення логотипу, ми за замовчуванням не показуватимемо "
+"назву та дату вашої події в заголовку сторінки. За замовчуванням ми "
+"показуємо ваш логотип розміром до 1140x120 пікселів. Ви можете збільшити "
+"розмір за допомогою налаштувань нижче. Ми рекомендуємо не використовувати "
+"дрібні деталі на зображенні, оскільки на менших екранах його розмір буде "
+"змінено."
 
 #: pretix/base/settings.py:2248 pretix/base/settings.py:2290
 msgid "Use header image in its full size"
-msgstr ""
+msgstr "Використати зображення заголовка у повному розмірі"
 
 #: pretix/base/settings.py:2249 pretix/base/settings.py:2291
 msgid "We recommend to upload a picture at least 1170 pixels wide."
 msgstr ""
+"Ми рекомендуємо завантажити картинку щонайменше 1170 пікселів завширшки."
 
 #: pretix/base/settings.py:2258
 msgid "Show event title even if a header image is present"
-msgstr ""
+msgstr "Показати назву заходу якщо є зображення заголовка"
 
 #: pretix/base/settings.py:2259
 msgid ""
@@ -8712,6 +8719,10 @@ msgid ""
 "uploaded for the event, but the header image from the organizer profile is "
 "used, this option will be ignored and the event title will always be shown."
 msgstr ""
+"Назва події буде відображатись на головній сторінці. Якщо ви не завантажили "
+"зображення для події, але використали зображення заголовка зі сторінки "
+"профілю організатора, ця опція буде проігнорована та назва заходу буде "
+"завжди відображатись."
 
 #: pretix/base/settings.py:2271 pretix/control/forms/organizer.py:392
 msgid ""
@@ -8721,14 +8732,21 @@ msgid ""
 "recommend not using small details on the picture as it will be resized on "
 "smaller screens."
 msgstr ""
+"Якщо ви надасте зображення логотипу, ми за замовчуванням не показуватимемо "
+"назву вашої організації в заголовку сторінки. За замовчуванням ми показуємо "
+"ваш логотип розміром до 1140x120 пікселів. Ви можете збільшити розмір за "
+"допомогою налаштувань нижче. Ми рекомендуємо не використовувати дрібні "
+"деталі на зображенні, оскільки на менших екранах його розмір буде змінено."
 
 #: pretix/base/settings.py:2300
 msgid "Use header image also for events without an individually uploaded logo"
 msgstr ""
+"Використовуйте зображення заголовка також для подій без окремо завантаженого "
+"логотипу"
 
 #: pretix/base/settings.py:2308
 msgid "Social media image"
-msgstr ""
+msgstr "Зображення соціальної мережі"
 
 #: pretix/base/settings.py:2311
 msgid ""
@@ -8738,92 +8756,115 @@ msgid ""
 "preview, so we recommend to make sure it still looks good only the center "
 "square is shown. If you do not fill this, we will use the logo given above."
 msgstr ""
+"Це зображення буде використано для попереднього перегляду, якщо ви "
+"опублікуєте посилання на ваш магазин квитків у соціальних мережах. Facebook "
+"радить використовувати зображення розміром 1200 x 630 пікселів, однак деякі "
+"платформи, як-от WhatsApp і Reddit, показують лише квадратний попередній "
+"перегляд, тому ми рекомендуємо переконатися, що воно все ще добре виглядає, "
+"лише відображається центральний квадрат. Якщо ви не заповните це, ми будемо "
+"використовувати логотип, наведений вище."
 
 #: pretix/base/settings.py:2329
 msgid "Logo image"
-msgstr ""
+msgstr "Логотип зображення"
 
 #: pretix/base/settings.py:2333
 msgid "We will show your logo with a maximal height and width of 2.5 cm."
-msgstr ""
+msgstr "Ми покажемо ваше лого з максимальною висотою та шириною 2.5 см."
 
 #: pretix/base/settings.py:2359 pretix/base/settings.py:2465
 msgid "Info text"
-msgstr ""
+msgstr "Інфо текст"
 
 #: pretix/base/settings.py:2362 pretix/base/settings.py:2467
 msgid ""
 "Not displayed anywhere by default, but if you want to, you can use this e.g. "
 "in ticket templates."
 msgstr ""
+"За замовчуванням не відображаються, але за бажанням ви можете використати, "
+"наприклад, на шаблоні квитка."
 
 #: pretix/base/settings.py:2371
 msgid "Banner text (top)"
-msgstr ""
+msgstr "Текст баннера (верх)"
 
 #: pretix/base/settings.py:2374
 msgid ""
 "This text will be shown above every page of your shop. Please only use this "
 "for very important messages."
 msgstr ""
+"Цей текст буде відображаьись зверху кожної сторінки вашого магазину. "
+"Використовуйте його тільки для дуже важливих повідомлень."
 
 #: pretix/base/settings.py:2384
 msgid "Banner text (bottom)"
-msgstr ""
+msgstr "Текст баннера (низ)"
 
 #: pretix/base/settings.py:2387
 msgid ""
 "This text will be shown below every page of your shop. Please only use this "
 "for very important messages."
 msgstr ""
+"Цей текст буде відображатись внизу кожної сторінки вашого магазину. Просимо "
+"використовувати тільки для дуже важливих повідомлень."
 
 #: pretix/base/settings.py:2397
 msgid "Voucher explanation"
-msgstr ""
+msgstr "Пояснення ваучера"
 
 #: pretix/base/settings.py:2400
 msgid ""
 "This text will be shown next to the input for a voucher code. You can use it "
 "e.g. to explain how to obtain a voucher code."
 msgstr ""
+"Цей текст буде відображатись поруч з полем для введення коду ваучера. Ви "
+"можете використовувати його, наприклад для пояснень як отримати ваучер."
 
 #: pretix/base/settings.py:2410
 msgid "Attendee data explanation"
-msgstr ""
+msgstr "Пояснення даних учасників"
 
 #: pretix/base/settings.py:2413
 msgid ""
 "This text will be shown above the questions asked for every admission "
 "product. You can use it e.g. to explain why you need information from them."
 msgstr ""
+"Цей текст буде відображатись над запитаннями, які ставлять для вступу до "
+"кожного продукту. Ви можете використовувати його, наприклад щоб пояснити, "
+"чому вам потрібна саме така інформація від них."
 
 #: pretix/base/settings.py:2423
 msgid "Additional success message"
-msgstr ""
+msgstr "Додаткове успішне повідомлення"
 
 #: pretix/base/settings.py:2424
 msgid ""
 "This message will be shown after an order has been created successfully. It "
 "will be shown in additional to the default text."
 msgstr ""
+"Це повідомлення буде з'являтись, коли замовлення було успішно створено. Воно "
+"буде відображатись додатково до тексту, який встановлений за замовчуванням."
 
 #: pretix/base/settings.py:2436
 msgid "Help text of the phone number field"
-msgstr ""
+msgstr "Текст допомоги до поля із номером телефону"
 
 #: pretix/base/settings.py:2443
 msgid ""
 "Make sure to enter a valid email address. We will send you an order "
 "confirmation including a link that you need to access your order later."
 msgstr ""
+"Переконайтесь, що ви ввели дійсну електронну адресу. Ми надішлемо вам "
+"підтвердження вашого замовлення разом із посилання для доступу до вашого "
+"замовлення."
 
 #: pretix/base/settings.py:2450
 msgid "Help text of the email field"
-msgstr ""
+msgstr "Допоміжний текст у полі для введення електронної адреси"
 
 #: pretix/base/settings.py:2476
 msgid "Allow creating a new team during event creation"
-msgstr ""
+msgstr "Дозволити створювати нову команду під час створення події"
 
 #: pretix/base/settings.py:2477
 msgid ""
@@ -8832,45 +8873,52 @@ msgid ""
 "allows users to create an event-specified team on-the-fly, even when they do "
 "not have \"Can change teams and permissions\" permission."
 msgstr ""
+"У користувачів нема доступу до всіх подій, створених цим організатором. "
+"Необхідно обрати одну із команд для доступу до створеної події. Налаштування "
+"дозволяють користувачам відразу створювати команду під конкретний захід, "
+"навіть якщо у них нема доступу до функції \"Змінювати команди та доступи\"."
 
 #: pretix/base/settings.py:2549 pretix/base/settings.py:2559
 msgid "Event start time (descending)"
-msgstr ""
+msgstr "Початок події (спадаючий)"
 
 #: pretix/base/settings.py:2551 pretix/base/settings.py:2561
 msgid "Name (descending)"
-msgstr ""
+msgstr "Назва (спадаючий)"
 
 #: pretix/base/settings.py:2556
 msgctxt "subevent"
 msgid "Date ordering"
-msgstr ""
+msgstr "Дата замовлення"
 
 #: pretix/base/settings.py:2572
 msgid "Link back to organizer overview on all event pages"
-msgstr ""
+msgstr "Зв'язати із описом організатора на сторінці усіх подій"
 
 #: pretix/base/settings.py:2581
 msgid "Homepage text"
-msgstr ""
+msgstr "Текст домашньої сторінки"
 
 #: pretix/base/settings.py:2583
 msgid "This will be displayed on the organizer homepage."
-msgstr ""
+msgstr "Це буде відображатись на сторінці організатора."
 
 #: pretix/base/settings.py:2596
 msgid "Length of gift card codes"
-msgstr ""
+msgstr "Довжина коду подарункового сертифіката"
 
 #: pretix/base/settings.py:2597
 msgid ""
 "The system generates by default {}-character long gift card codes. However, "
 "if a different length is required, it can be set here."
 msgstr ""
+"За замовчуванням система генерує {}-значний код для подарункового "
+"сертифікату. Якщо необхідно встановити іншу довжину коду, це можна зробити "
+"тут."
 
 #: pretix/base/settings.py:2607
 msgid "Validity of gift card codes in years"
-msgstr ""
+msgstr "Тривалість подарункового сертифіката у роках"
 
 #: pretix/base/settings.py:2608
 msgid ""
@@ -8878,20 +8926,26 @@ msgid ""
 "the year after this many years. If you keep it empty, gift cards do not have "
 "an explicit expiry date."
 msgstr ""
+"Якщо ви вкажете тут номер, за замовчуванням, термін дії сертифікату "
+"завершиться у кінці відповідного календарного року після цієї кількості "
+"років. Якщо ви залишите це поле порожнім, подарункові сертифікати будуть без "
+"точної дати завершення."
 
 #: pretix/base/settings.py:2617
 msgid "Enable cookie consent management features"
-msgstr ""
+msgstr "Увімкнути функції керування згодою на використання файлів cookie"
 
 #: pretix/base/settings.py:2623
 msgid ""
 "By clicking \"Accept all cookies\", you agree to the storing of cookies and "
 "use of similar technologies on your device."
 msgstr ""
+"Натискаючи «Прийняти всі файли cookie», ви погоджуєтеся на збереження файлів "
+"cookie та використання подібних технологій на вашому пристрої."
 
 #: pretix/base/settings.py:2630
 msgid "Dialog text"
-msgstr ""
+msgstr "Діалоговий текст"
 
 #: pretix/base/settings.py:2637
 msgid ""
@@ -8900,38 +8954,42 @@ msgid ""
 "use cookies if they are essential to providing the services this website "
 "offers."
 msgstr ""
+"Ви використовуємо cookies та схожі технології для збору інформації, яка "
+"допомагає нам покращити роботу цього сайту та наших пропозицій. Якщо ви не "
+"погоджуєтесь, ми будемо використовувати файли cookie, лише якщо вони "
+"необхідні для надання послуг, які пропонує цей веб-сайт."
 
 #: pretix/base/settings.py:2645
 msgid "Secondary dialog text"
-msgstr ""
+msgstr "Додатковий текст діалогу"
 
 #: pretix/base/settings.py:2651
 msgid "Privacy settings"
-msgstr ""
+msgstr "Налаштування приватності"
 
 #: pretix/base/settings.py:2656
 msgid "Dialog title"
-msgstr ""
+msgstr "Назва діалогу"
 
 #: pretix/base/settings.py:2662
 msgid "Accept all cookies"
-msgstr ""
+msgstr "Прийняти усі cookies"
 
 #: pretix/base/settings.py:2667
 msgid "\"Accept\" button description"
-msgstr ""
+msgstr "Опис кнопки \"Прийняти\""
 
 #: pretix/base/settings.py:2673
 msgid "Required cookies only"
-msgstr ""
+msgstr "Тільки необхідні cookies"
 
 #: pretix/base/settings.py:2678
 msgid "\"Reject\" button description"
-msgstr ""
+msgstr "Опис кнопки \"Відхилити\""
 
 #: pretix/base/settings.py:2688
 msgid "Customers can choose their own seats"
-msgstr ""
+msgstr "Клієнти можуть самостійно обирати собі місця"
 
 #: pretix/base/settings.py:2689
 msgid ""
@@ -8939,28 +8997,31 @@ msgid ""
 "that this can mean people will not know their seat after their purchase and "
 "it might not be written on their ticket."
 msgstr ""
+"Якщо вимкнено, вам потрібно буде вручну призначити місця в серверній "
+"частині. Зауважте, що це може означати, що люди не знають свої місця після "
+"покупки, і це може бути не в на вказано на їхньому квитку."
 
 #: pretix/base/settings.py:2713
 msgid "Show button to copy user input from other products"
-msgstr ""
+msgstr "Показати кнопку копіювання інформації користувача з інших продуктів"
 
 #: pretix/base/settings.py:2722
 msgid "Most common English titles"
-msgstr ""
+msgstr "Найпоширеніші звертання англійською мовою"
 
 #: pretix/base/settings.py:2732
 msgid "Most common German titles"
-msgstr ""
+msgstr "Найпоширеніші звертання німецькою мовою"
 
 #: pretix/base/settings.py:2740
 msgctxt "person_name_salutation"
 msgid "Ms"
-msgstr ""
+msgstr "Пані"
 
 #: pretix/base/settings.py:2741
 msgctxt "person_name_salutation"
 msgid "Mr"
-msgstr ""
+msgstr "Пан"
 
 #: pretix/base/settings.py:2742
 msgctxt "person_name_salutation"
@@ -8973,7 +9034,7 @@ msgstr ""
 #: pretix/base/settings.py:2924 pretix/base/settings.py:2942
 #: pretix/base/settings.py:2961
 msgid "Given name"
-msgstr ""
+msgstr "Ім'я"
 
 #: pretix/base/settings.py:2768 pretix/base/settings.py:2781
 #: pretix/base/settings.py:2797 pretix/base/settings.py:2813
@@ -8982,7 +9043,7 @@ msgstr ""
 #: pretix/base/settings.py:2925 pretix/base/settings.py:2943
 #: pretix/base/settings.py:2962
 msgid "Family name"
-msgstr ""
+msgstr "Прізвище"
 
 #: pretix/base/settings.py:2772 pretix/base/settings.py:2788
 #: pretix/base/settings.py:2804 pretix/base/settings.py:2819
@@ -8992,7 +9053,7 @@ msgstr ""
 #: pretix/base/settings.py:2976
 msgctxt "person_name_sample"
 msgid "John"
-msgstr ""
+msgstr "Джон"
 
 #: pretix/base/settings.py:2773 pretix/base/settings.py:2789
 #: pretix/base/settings.py:2805 pretix/base/settings.py:2821
@@ -9001,35 +9062,35 @@ msgstr ""
 #: pretix/base/settings.py:2953 pretix/base/settings.py:2977
 msgctxt "person_name_sample"
 msgid "Doe"
-msgstr ""
+msgstr "До"
 
 #: pretix/base/settings.py:2779 pretix/base/settings.py:2795
 #: pretix/base/settings.py:2827 pretix/base/settings.py:2941
 #: pretix/base/settings.py:2960
 msgctxt "person_name"
 msgid "Title"
-msgstr ""
+msgstr "Звертання"
 
 #: pretix/base/settings.py:2787 pretix/base/settings.py:2803
 #: pretix/base/settings.py:2836 pretix/base/settings.py:2951
 #: pretix/base/settings.py:2975
 msgctxt "person_name_sample"
 msgid "Dr"
-msgstr ""
+msgstr "Доктор"
 
 #: pretix/base/settings.py:2811 pretix/base/settings.py:2828
 msgid "First name"
-msgstr ""
+msgstr "Ім'я"
 
 #: pretix/base/settings.py:2812 pretix/base/settings.py:2829
 msgid "Middle name"
-msgstr ""
+msgstr "Середнє ім'я"
 
 #: pretix/base/settings.py:2893 pretix/base/settings.py:2904
 #: pretix/control/forms/organizer.py:489
 msgctxt "person_name_sample"
 msgid "John Doe"
-msgstr ""
+msgstr "Джон До"
 
 #: pretix/base/settings.py:2899
 msgid "Calling name"
@@ -9037,34 +9098,36 @@ msgstr ""
 
 #: pretix/base/settings.py:2912
 msgid "Latin transcription"
-msgstr ""
+msgstr "Транслітерація латиницею"
 
 #: pretix/base/settings.py:2923 pretix/base/settings.py:2940
 #: pretix/base/settings.py:2959
 msgctxt "person_name"
 msgid "Salutation"
-msgstr ""
+msgstr "Привітання"
 
 #: pretix/base/settings.py:2932 pretix/base/settings.py:2950
 #: pretix/base/settings.py:2974
 msgctxt "person_name_sample"
 msgid "Mr"
-msgstr ""
+msgstr "Пан"
 
 #: pretix/base/settings.py:2963
 msgctxt "person_name"
 msgid "Degree (after name)"
-msgstr ""
+msgstr "Ступінь (після імені)"
 
 #: pretix/base/settings.py:2978
 msgctxt "person_name_sample"
 msgid "MA"
-msgstr ""
+msgstr "Магістр"
 
 #: pretix/base/settings.py:3079 pretix/control/forms/event.py:210
 msgid ""
 "Your default locale must also be enabled for your event (see box above)."
 msgstr ""
+"Ваша мова за замовчуванням також має бути ввімкнена для вашої події (див. "
+"поле вище)."
 
 #: pretix/base/settings.py:3083
 msgid ""
