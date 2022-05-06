@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-28 16:44+0000\n"
 "PO-Revision-Date: 2022-05-06 13:58+0000\n"
-"Last-Translator: Iryna Loik <iraloyik@gmail.com>\n"
+"Last-Translator: Olha Dolinska <olya.dolinska.od@gmail.com>\n"
 "Language-Team: Ukrainian <https://translate.pretix.eu/projects/pretix/pretix/"
 "uk/>\n"
 "Language: uk\n"
@@ -9499,7 +9499,7 @@ msgstr "Реєстрація на подію починається"
 #: pretix/base/timeline.py:83
 msgctxt "timeline"
 msgid "Start of ticket sales"
-msgstr "Розпочати продаж квитків"
+msgstr "Початок продажу квитків"
 
 #: pretix/base/timeline.py:91
 msgctxt "timeline"
