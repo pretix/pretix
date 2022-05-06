@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-28 16:44+0000\n"
-"PO-Revision-Date: 2022-05-06 13:54+0000\n"
+"PO-Revision-Date: 2022-05-06 13:55+0000\n"
 "Last-Translator: Iryna Loik <iraloyik@gmail.com>\n"
 "Language-Team: Ukrainian <https://translate.pretix.eu/projects/pretix/pretix/"
 "uk/>\n"
@@ -9417,33 +9417,33 @@ msgstr "Переглянути деталі реєстрації"
 msgid ""
 "You are receiving this email because you placed an order for the following "
 "event:"
-msgstr ""
+msgstr "Ви отримали цей імейл тому, що замовили участь у цій події:"
 
 #: pretix/base/templates/pretixbase/email/order_details.html:86
 msgid "Details:"
-msgstr ""
+msgstr "Деталі:"
 
 #: pretix/base/templates/pretixbase/forms/widgets/portrait_image.html:10
 msgid "Upload photo"
-msgstr ""
+msgstr "Завантажити фото"
 
 #: pretix/base/templates/pretixbase/forms/widgets/reldate.html:15
 #: pretix/base/templates/pretixbase/forms/widgets/reldatetime.html:19
 msgid "days before"
-msgstr ""
+msgstr "днів до"
 
 #: pretix/base/templates/pretixbase/forms/widgets/reldatetime.html:15
 msgid "minutes before"
-msgstr ""
+msgstr "хвилин до"
 
 #: pretix/base/templates/pretixbase/forms/widgets/reldatetime.html:21
 msgid "at"
-msgstr ""
+msgstr "о"
 
 #: pretix/base/templates/pretixbase/redirect.html:5
 #: pretix/base/templates/pretixbase/redirect.html:9
 msgid "Redirect"
-msgstr ""
+msgstr "Перенаправити"
 
 #: pretix/base/templates/pretixbase/redirect.html:11
 #, python-format
