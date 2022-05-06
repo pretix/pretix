@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-28 16:44+0000\n"
 "PO-Revision-Date: 2022-05-07 06:00+0000\n"
-"Last-Translator: Iryna Loik <iraloyik@gmail.com>\n"
+"Last-Translator: Olha Dolinska <olya.dolinska.od@gmail.com>\n"
 "Language-Team: Ukrainian <https://translate.pretix.eu/projects/pretix/pretix/"
 "uk/>\n"
 "Language: uk\n"
@@ -9641,7 +9641,7 @@ msgstr ""
 
 #: pretix/base/views/tasks.py:162
 msgid "An unexpected error has occurred, please try again later."
-msgstr "Виникла неочікувана помилка, просимо пізніше спробувати ще раз."
+msgstr "Виникла неочікувана помилка, просимо спробувати ще раз пізніше."
 
 #: pretix/base/views/tasks.py:165
 msgid "The task has been completed."
