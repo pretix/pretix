@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-28 16:44+0000\n"
 "PO-Revision-Date: 2022-05-06 13:39+0000\n"
-"Last-Translator: Olha Dolinska <olya.dolinska.od@gmail.com>\n"
+"Last-Translator: Iryna Loik <iraloyik@gmail.com>\n"
 "Language-Team: Ukrainian <https://translate.pretix.eu/projects/pretix/pretix/"
 "uk/>\n"
 "Language: uk\n"
@@ -9160,10 +9160,12 @@ msgstr ""
 msgid ""
 "You have to ask for invoice addresses if you want to make them required."
 msgstr ""
+"Ви повинні просити вказати адресу для виставлення рахунку, якщо ви хочете "
+"зробити це обов'язковим."
 
 #: pretix/base/settings.py:3095
 msgid "You have to require invoice addresses to require for company names."
-msgstr ""
+msgstr "Ви повинні вимагати адреси для виставлення рахунків для компаній."
 
 #: pretix/base/settings.py:3102
 msgid "The last payment date cannot be before the end of presale."
