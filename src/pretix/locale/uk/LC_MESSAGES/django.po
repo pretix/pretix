@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-28 16:44+0000\n"
-"PO-Revision-Date: 2022-05-06 13:36+0000\n"
+"PO-Revision-Date: 2022-05-06 13:39+0000\n"
 "Last-Translator: Olha Dolinska <olya.dolinska.od@gmail.com>\n"
 "Language-Team: Ukrainian <https://translate.pretix.eu/projects/pretix/pretix/"
 "uk/>\n"
@@ -9167,19 +9167,20 @@ msgstr ""
 
 #: pretix/base/settings.py:3102
 msgid "The last payment date cannot be before the end of presale."
-msgstr ""
+msgstr "Кінцева дата оплати не може бути до кінця передпродажів."
 
 #: pretix/base/shredder.py:73 pretix/base/shredder.py:76
 msgid "Your event needs to be over to use this feature."
-msgstr ""
+msgstr "Щоб скористатись цією опцією, ваша подія має бути завершена."
 
 #: pretix/base/shredder.py:78
 msgid "Your ticket shop needs to be offline to use this feature."
 msgstr ""
+"Щоб скористатись цією опцією, ваш пункт продажу квитків має бути офлайн."
 
 #: pretix/base/shredder.py:168
 msgid "Phone numbers"
-msgstr ""
+msgstr "Номери телефонів"
 
 #: pretix/base/shredder.py:170
 msgid "This will remove all phone numbers from orders."
