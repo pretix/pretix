@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-28 16:44+0000\n"
-"PO-Revision-Date: 2022-05-06 13:55+0000\n"
-"Last-Translator: Olha Dolinska <olya.dolinska.od@gmail.com>\n"
+"PO-Revision-Date: 2022-05-06 13:56+0000\n"
+"Last-Translator: Iryna Loik <iraloyik@gmail.com>\n"
 "Language-Team: Ukrainian <https://translate.pretix.eu/projects/pretix/pretix/"
 "uk/>\n"
 "Language: uk\n"
@@ -9450,16 +9450,16 @@ msgstr "Перенаправити"
 msgid ""
 "The link you clicked on wants to redirect you to a destination on the "
 "website %(host)s."
-msgstr ""
+msgstr "Посилання, за яким ви перейшли перенаправить вас на сайт %(host)s."
 
 #: pretix/base/templates/pretixbase/redirect.html:14
 msgid "Please only proceed if you trust this website to be safe."
-msgstr ""
+msgstr "Перейдіть у випадку, якщо ви довіряєте цьому сайту."
 
 #: pretix/base/templates/pretixbase/redirect.html:20
 #, python-format
 msgid "Proceed to %(host)s"
-msgstr ""
+msgstr "Перейти на %(host)s"
 
 #: pretix/base/templates/source.html:5 pretix/base/templates/source.html:9
 msgid "Source code"
