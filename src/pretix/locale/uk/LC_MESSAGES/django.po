@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-28 16:44+0000\n"
 "PO-Revision-Date: 2022-05-06 13:42+0000\n"
-"Last-Translator: Iryna Loik <iraloyik@gmail.com>\n"
+"Last-Translator: Olha Dolinska <olya.dolinska.od@gmail.com>\n"
 "Language-Team: Ukrainian <https://translate.pretix.eu/projects/pretix/pretix/"
 "uk/>\n"
 "Language: uk\n"
@@ -9186,11 +9186,12 @@ msgstr "Номери телефонів"
 
 #: pretix/base/shredder.py:170
 msgid "This will remove all phone numbers from orders."
-msgstr ""
+msgstr "Це видалить всі номери телефонів з замовлень."
 
 #: pretix/base/shredder.py:193
+#, fuzzy
 msgid "E-mails"
-msgstr ""
+msgstr "Електронні листи (адреси)"
 
 #: pretix/base/shredder.py:195
 msgid ""
@@ -9207,10 +9208,12 @@ msgid ""
 "This will remove all names, email addresses, and phone numbers from the "
 "waiting list."
 msgstr ""
+"Це видалить всі імена, електронні адреси та номери телефонів зі списку "
+"очікування."
 
 #: pretix/base/shredder.py:274
 msgid "Attendee info"
-msgstr ""
+msgstr "Інформація відвідувача"
 
 #: pretix/base/shredder.py:276
 msgid ""
@@ -9230,7 +9233,7 @@ msgstr ""
 
 #: pretix/base/shredder.py:357
 msgid "Question answers"
-msgstr ""
+msgstr "Відповіді на питання"
 
 #: pretix/base/shredder.py:359
 msgid ""
