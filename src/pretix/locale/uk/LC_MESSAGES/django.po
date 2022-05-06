@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-28 16:44+0000\n"
-"PO-Revision-Date: 2022-05-06 13:57+0000\n"
+"PO-Revision-Date: 2022-05-06 13:58+0000\n"
 "Last-Translator: Iryna Loik <iraloyik@gmail.com>\n"
 "Language-Team: Ukrainian <https://translate.pretix.eu/projects/pretix/pretix/"
 "uk/>\n"
@@ -9504,12 +9504,12 @@ msgstr "Розпочати продаж квитків"
 #: pretix/base/timeline.py:91
 msgctxt "timeline"
 msgid "End of ticket sales"
-msgstr ""
+msgstr "Завершити продаж квитків"
 
 #: pretix/base/timeline.py:100
 msgctxt "timeline"
 msgid "Customers can no longer modify their orders"
-msgstr ""
+msgstr "Клієнти не можуть змінювати свої замовлення"
 
 #: pretix/base/timeline.py:113
 msgctxt "timeline"
