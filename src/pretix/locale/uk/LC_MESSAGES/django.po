@@ -9542,14 +9542,14 @@ msgstr ""
 #, python-brace-format
 msgctxt "timeline"
 msgid "Product \"{name}\" becomes available"
-msgstr ""
+msgstr "Продукт \"{name}\" стає доступним"
 
 #: pretix/base/timeline.py:187 pretix/base/timeline.py:211
 #: pretix/base/timeline.py:260
 #, python-brace-format
 msgctxt "timeline"
 msgid "Product \"{name}\" becomes unavailable"
-msgstr ""
+msgstr "Продукт \"{name}\" недоступний"
 
 #: pretix/base/timeline.py:225
 #, python-brace-format
