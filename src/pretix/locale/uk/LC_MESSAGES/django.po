@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-28 16:44+0000\n"
 "PO-Revision-Date: 2022-05-06 13:47+0000\n"
-"Last-Translator: Iryna Loik <iraloyik@gmail.com>\n"
+"Last-Translator: Olha Dolinska <olya.dolinska.od@gmail.com>\n"
 "Language-Team: Ukrainian <https://translate.pretix.eu/projects/pretix/pretix/"
 "uk/>\n"
 "Language: uk\n"
@@ -9264,12 +9264,12 @@ msgid ""
 "offered."
 msgstr ""
 "Це видалить усю інформацію, яка повязана із оплатою. Залежно від способу "
-"оплати буде видалена або уся інформація або тільки особиста інформація. "
+"оплати, буде видалена уся інформація або тільки особиста інформація. "
 "Завантаження буде не активне."
 
 #: pretix/base/templates/400.html:4 pretix/base/templates/400.html:8
 msgid "Bad Request"
-msgstr ""
+msgstr "Неправильний запит"
 
 #: pretix/base/templates/400.html:9
 msgid "We were unable to parse your request."
@@ -9285,7 +9285,7 @@ msgstr "Поверніться на крок назад"
 #: pretix/base/templates/500.html:23
 #: pretix/presale/templates/pretixpresale/event/cookies.html:40
 msgid "Try again"
-msgstr "Спробуйте будь ласка ще раз"
+msgstr "Спробуйте, будь ласка, ще раз"
 
 #: pretix/base/templates/403.html:4 pretix/base/templates/403.html:8
 msgid "Permission denied"
