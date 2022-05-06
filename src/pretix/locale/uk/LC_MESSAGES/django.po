@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-28 16:44+0000\n"
 "PO-Revision-Date: 2022-05-06 13:35+0000\n"
-"Last-Translator: Олександра Сергіївна Миргородська <myrgor3188@ukr.net>\n"
+"Last-Translator: Olha Dolinska <olya.dolinska.od@gmail.com>\n"
 "Language-Team: Ukrainian <https://translate.pretix.eu/projects/pretix/pretix/"
 "uk/>\n"
 "Language: uk\n"
@@ -7950,6 +7950,9 @@ msgid ""
 "Use this if you e.g. put a private access link into the calendar file to "
 "make sure people only receive it after their payment was confirmed."
 msgstr ""
+"Скористайтесь цим, якщо ви, наприклад, додаєте приватне посилання в файл "
+"календаря, щоб переконатись, що люди отримають його після підтвердження "
+"платежу."
 
 #: pretix/base/settings.py:1632
 msgid "Event description"
@@ -7967,13 +7970,15 @@ msgstr ""
 
 #: pretix/base/settings.py:1648
 msgid "Subject prefix"
-msgstr ""
+msgstr "Підзаголовок"
 
 #: pretix/base/settings.py:1649
 msgid ""
 "This will be prepended to the subject of all outgoing emails, formatted as "
 "[prefix]. Choose, for example, a short form of your event name."
 msgstr ""
+"Це буде додано перед темою всіх вихідних електронних листів, оформлено як "
+"[підзаголовок]. Виберіть, наприклад, скорочену форму вашого імені."
 
 #: pretix/base/settings.py:1663 pretix/control/forms/mailsetup.py:35
 #: pretix/control/forms/mailsetup.py:108
@@ -8035,6 +8040,15 @@ msgid ""
 "Best regards,\n"
 "Your {event} team"
 msgstr ""
+"Вітаю,\n"
+"\n"
+"хтось зробив запит на список ваших замовлень для {події}.\n"
+"Список наступний:\n"
+"\n"
+"{замовлення}\n"
+"\n"
+"З найкращими побажаннями\n"
+"Ваша {назва} команда"
 
 #: pretix/base/settings.py:1717
 #, python-brace-format
@@ -9094,7 +9108,7 @@ msgstr "Джон До"
 
 #: pretix/base/settings.py:2899
 msgid "Calling name"
-msgstr ""
+msgstr "Ім'я, за яким можна до когось звернутись. Прізвисько"
 
 #: pretix/base/settings.py:2912
 msgid "Latin transcription"
@@ -9133,6 +9147,7 @@ msgstr ""
 msgid ""
 "You cannot require specifying attendee names if you do not ask for them."
 msgstr ""
+"Ви не можете вимагати уточнення імен відвідувачів, якщо ви їх не запитували."
 
 #: pretix/base/settings.py:3087
 msgid "You have to ask for attendee emails if you want to make them required."
