@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-28 16:44+0000\n"
-"PO-Revision-Date: 2022-05-06 13:46+0000\n"
+"PO-Revision-Date: 2022-05-06 13:47+0000\n"
 "Last-Translator: Iryna Loik <iraloyik@gmail.com>\n"
 "Language-Team: Ukrainian <https://translate.pretix.eu/projects/pretix/pretix/"
 "uk/>\n"
@@ -9300,19 +9300,19 @@ msgstr "У вас відсутній доступ до цієї сторінки
 #: pretix/control/templates/pretixcontrol/user/staff_session_start.html:4
 #: pretix/control/templates/pretixcontrol/user/staff_session_start.html:6
 msgid "Admin mode"
-msgstr ""
+msgstr "Режим адміністратора"
 
 #: pretix/base/templates/404.html:4 pretix/base/templates/404.html:8
 msgid "Not found"
-msgstr ""
+msgstr "Не знайдено"
 
 #: pretix/base/templates/404.html:9
 msgid "I'm afraid we could not find the the resource you requested."
-msgstr ""
+msgstr "На жаль, ми нам не вдалось знайти ресурс, який ви шукаєте."
 
 #: pretix/base/templates/500.html:4 pretix/base/templates/500.html:8
 msgid "Internal Server Error"
-msgstr ""
+msgstr "Внутрішня помилка сервера"
 
 #: pretix/base/templates/500.html:9
 msgid "We had trouble processing your request."
