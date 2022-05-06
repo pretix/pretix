@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-28 16:44+0000\n"
 "PO-Revision-Date: 2022-05-06 13:35+0000\n"
-"Last-Translator: Iryna Loik <iraloyik@gmail.com>\n"
+"Last-Translator: Олександра Сергіївна Миргородська <myrgor3188@ukr.net>\n"
 "Language-Team: Ukrainian <https://translate.pretix.eu/projects/pretix/pretix/"
 "uk/>\n"
 "Language: uk\n"
@@ -169,11 +169,11 @@ msgstr "Невідомий плагін: '{name}'."
 
 #: pretix/api/serializers/item.py:119 pretix/control/forms/item.py:929
 msgid "The bundled item must not be the same item as the bundling one."
-msgstr ""
+msgstr "Зв'язана одиниця не повинна збігатися з тою, що зв'язує"
 
 #: pretix/api/serializers/item.py:122 pretix/control/forms/item.py:931
 msgid "The bundled item must not have bundles on its own."
-msgstr ""
+msgstr "Зв'язана одиниця не повинна мати власне прив'язування."
 
 #: pretix/api/serializers/item.py:193
 msgid ""
@@ -400,7 +400,7 @@ msgstr "Інтернет-магазин"
 #: pretix/base/context.py:45
 #, python-brace-format
 msgid "powered by {name} based on <a {a_attr}>pretix</a>"
-msgstr ""
+msgstr "Приводиться до дії з 1{ім'я} на базі <a 2{a_attr}>pretix</a>"
 
 #: pretix/base/context.py:52
 #, python-format
@@ -2868,7 +2868,7 @@ msgstr "Критика форма події не може бути змінен
 
 #: pretix/base/models/event.py:1243
 msgid "This slug has already been used for a different event."
-msgstr ""
+msgstr "Цього равлика вже було використано для іншої події."
 
 #: pretix/base/models/event.py:1249
 msgid "The event cannot end before it starts."
@@ -5426,7 +5426,7 @@ msgstr "Країна учасника"
 
 #: pretix/base/pdf.py:209
 msgid "Pseudonymization ID (lead scanning)"
-msgstr ""
+msgstr "Надання псевдоніму  ID (веде сканування)"
 
 #: pretix/base/pdf.py:215 pretix/base/pdf.py:220
 msgid "Sample event name"
@@ -7470,7 +7470,7 @@ msgstr "Показувати користувачам наявність кви�
 
 #: pretix/base/settings.py:1091
 msgid "Ask search engines not to index the ticket shop"
-msgstr ""
+msgstr "Прохання до пошукової системи не вказувати банк запитів"
 
 #: pretix/base/settings.py:1100
 msgid "Show variations of a product expanded by default"
@@ -7570,7 +7570,7 @@ msgstr ""
 
 #: pretix/base/settings.py:1206
 msgid "Show number of check-ins to customer"
-msgstr ""
+msgstr "Показати кількість перевірок клієнтові"
 
 #: pretix/base/settings.py:1207
 msgid ""
