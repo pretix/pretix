@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-26 09:20+0000\n"
 "PO-Revision-Date: 2023-05-30 21:27+0000\n"
-"Last-Translator: anonymous <noreply@weblate.org>\n"
+"Last-Translator: Iryna N <in380@nyu.edu>\n"
 "Language-Team: Ukrainian <https://translate.pretix.eu/projects/pretix/pretix/"
 "uk/>\n"
 "Language: uk\n"
@@ -4275,8 +4275,7 @@ msgstr "Цей продукт створює членство типу"
 msgid ""
 "The duration of the membership is the same as the duration of the event or "
 "event series date"
-msgstr ""
-"Тривалість членства така сама, як тривалість події або дати серії подій"
+msgstr "Тривалість членства така сама, як тривалість події або дати серії подій"
 
 #: pretix/base/models/items.py:596
 msgid "Membership duration in days"
@@ -4444,8 +4443,7 @@ msgstr "Категорія товару має належати до тієї ж
 
 #: pretix/base/models/items.py:873
 msgid "The item's tax rule must belong to the same event as the item."
-msgstr ""
-"Податкове правило для товару має належати до тієї ж події, що й об’єкт."
+msgstr "Податкове правило для товару має належати до тієї ж події, що й об’єкт."
 
 #: pretix/base/models/items.py:879
 msgid "The item's availability cannot end before it starts."
@@ -5455,8 +5453,7 @@ msgstr "Ваш файл макета не є дійсним файлом JSON."
 
 #: pretix/base/models/seating.py:54
 msgid "Your layout file is not a valid seating plan. Error message: {}"
-msgstr ""
-"Ваш файл макета не є дійсним планом місць. Повідомлення про помилку: {}"
+msgstr "Ваш файл макета не є дійсним планом місць. Повідомлення про помилку: {}"
 
 #: pretix/base/models/seating.py:175
 #, python-brace-format
@@ -5722,8 +5719,7 @@ msgstr "Ви не можете вибрати квоту, яка належит�
 msgid ""
 "You cannot select a variation without having selected a product that "
 "provides variations."
-msgstr ""
-"Ви не можете вибрати варіант, не вибравши продукт, який надає варіанти."
+msgstr "Ви не можете вибрати варіант, не вибравши продукт, який надає варіанти."
 
 #: pretix/base/models/vouchers.py:352
 msgid "This variation does not belong to this product."
@@ -5928,8 +5924,7 @@ msgstr "Нове замовлення було розміщено: {order.code}"
 #: pretix/base/notifications.py:240
 #, python-brace-format
 msgid "A new order has been placed that requires approval: {order.code}"
-msgstr ""
-"Було розміщено нове замовлення, яке потребує затвердження: {order.code}"
+msgstr "Було розміщено нове замовлення, яке потребує затвердження: {order.code}"
 
 #: pretix/base/notifications.py:246
 #, python-brace-format
@@ -6279,8 +6274,7 @@ msgstr "Платіж за цей рахунок-фактуру вже отрим
 
 #: pretix/base/payment.py:903
 msgid "Automatic refunds are not supported by this payment provider."
-msgstr ""
-"Автоматичне відшкодування не підтримується цим постачальником платежів."
+msgstr "Автоматичне відшкодування не підтримується цим постачальником платежів."
 
 #: pretix/base/payment.py:994
 msgid ""
@@ -7613,8 +7607,8 @@ msgid ""
 "You selected a membership of type \"{type}\", which is not allowed for the "
 "product \"{product}\"."
 msgstr ""
-"Ви вибрали членство типу \"{type}\", яке не дозволено для продукту "
-"\"{product}\"."
+"Ви вибрали членство типу \"{type}\", яке не дозволено для продукту \""
+"{product}\"."
 
 #: pretix/base/services/memberships.py:183
 #, python-brace-format
@@ -12997,9 +12991,9 @@ msgid ""
 "company) or I offer the functionality of pretix to others (e.g. a Software-"
 "as-a-Service company)."
 msgstr ""
-"Я використовую pretix для продажу квитків інших організаторів подій "
-"(наприклад, компанії з продажу квитків) або пропоную функції pretix іншим "
-"(наприклад, компанії, що займається програмним забезпеченням як послугою)."
+"Я використовую pretix для продажу квитків інших організаторів подій ("
+"наприклад, компанії з продажу квитків) або пропоную функції pretix іншим ("
+"наприклад, компанії, що займається програмним забезпеченням як послугою)."
 
 #: pretix/control/forms/global_settings.py:150
 msgid "I'm not sure which option applies."
@@ -14114,8 +14108,8 @@ msgid ""
 msgstr ""
 "Добрий день,\n"
 "\n"
-"цим електронним листом ми надсилаємо вам один або кілька ваучерів на "
-"{event}:\n"
+"цим електронним листом ми надсилаємо вам один або кілька ваучерів на {event}:"
+"\n"
 "\n"
 "{voucher_list}\n"
 "\n"
@@ -14251,8 +14245,8 @@ msgid ""
 "Position #{posid}: Event date \"{old_event}\" ({old_price}) changed to "
 "\"{new_event}\" ({new_price})."
 msgstr ""
-"Позиція #{posid}: дату події \"{old_event}\" ({old_price}) змінено на "
-"\"{new_event}\" ({new_price})."
+"Позиція #{posid}: дату події \"{old_event}\" ({old_price}) змінено на \""
+"{new_event}\" ({new_price})."
 
 #: pretix/control/logdisplay.py:102
 #, python-brace-format
@@ -14358,16 +14352,16 @@ msgid ""
 "Unknown scan of code \"{barcode}…\" at {datetime} for list \"{list}\", type "
 "\"{type}\"."
 msgstr ""
-"Невідоме сканування коду \"{barcode}...\" о {datetime} для списку "
-"\"{list}\", введіть \"{type}\"."
+"Невідоме сканування коду \"{barcode}...\" о {datetime} для списку \"{list}\""
+", введіть \"{type}\"."
 
 #: pretix/control/logdisplay.py:236
 #, python-brace-format
 msgid ""
 "Unknown scan of code \"{barcode}…\" for list \"{list}\", type \"{type}\"."
 msgstr ""
-"Невідоме сканування коду \"{barcode}…\" для списку \"{list}\", введіть "
-"\"{type}\"."
+"Невідоме сканування коду \"{barcode}…\" для списку \"{list}\", введіть \""
+"{type}\"."
 
 #: pretix/control/logdisplay.py:247
 #, python-brace-format
@@ -14375,8 +14369,8 @@ msgid ""
 "Scan scan of revoked code \"{barcode}…\" at {datetime} for list \"{list}\", "
 "type \"{type}\", was uploaded."
 msgstr ""
-"Було завантажено сканування відсканованого коду \"{barcode}...\" о "
-"{datetime} для списку \"{list}\", типу \"{type}\"."
+"Було завантажено сканування відсканованого коду \"{barcode}...\" о {datetime}"
+" для списку \"{list}\", типу \"{type}\"."
 
 #: pretix/control/logdisplay.py:257
 #, python-brace-format
@@ -14402,8 +14396,8 @@ msgid ""
 "Denied scan of position #{posid} for list \"{list}\", type \"{type}\", error "
 "code \"{errorcode}\"."
 msgstr ""
-"Відмовлено в скануванні позиції #{posid} для списку \"{list}\", типу "
-"\"{type}\", коду помилки \"{errorcode}\"."
+"Відмовлено в скануванні позиції #{posid} для списку \"{list}\", типу \"{type}"
+"\", коду помилки \"{errorcode}\"."
 
 #: pretix/control/logdisplay.py:289
 #, python-brace-format
@@ -14420,8 +14414,7 @@ msgstr "Позицію #{posid} вилучено зі списку \"{list}\"."
 #, python-brace-format
 msgid ""
 "Position #{posid} has been checked in at {datetime} for list \"{list}\"."
-msgstr ""
-"Позицію #{posid} було зареєстровано в {datetime} для списку \"{list}\"."
+msgstr "Позицію #{posid} було зареєстровано в {datetime} для списку \"{list}\"."
 
 #: pretix/control/logdisplay.py:307
 #, python-brace-format
@@ -14753,8 +14746,7 @@ msgstr "Дату подальшого виконання замовлення о
 
 #: pretix/control/logdisplay.py:402
 msgid "The order's flag to require attention at check-in has been toggled."
-msgstr ""
-"Прапорець замовлення, який вимагає уваги під час реєстрації, увімкнено."
+msgstr "Прапорець замовлення, який вимагає уваги під час реєстрації, увімкнено."
 
 #: pretix/control/logdisplay.py:404
 #, fuzzy
@@ -19330,8 +19322,8 @@ msgid ""
 "Are you sure you want to disable the application <strong>%(application)s</"
 "strong> permanently?"
 msgstr ""
-"Ви впевнені, що хочете назавжди вимкнути програму <strong>%(application)s</"
-"strong>?"
+"Ви впевнені, що хочете назавжди вимкнути програму "
+"<strong>%(application)s</strong>?"
 
 #: pretix/control/templates/pretixcontrol/oauth/app_list.html:4
 #: pretix/control/templates/pretixcontrol/oauth/app_list.html:6
@@ -19467,9 +19459,9 @@ msgid ""
 "%(fee)s for this order, but for a cancellation performed by you, you need to "
 "set the cancellation fee here:"
 msgstr ""
-"Налаштована комісія за скасування через самообслуговування становитиме "
-"%(fee)s для цього замовлення, але для скасування, здійсненого вами, вам "
-"потрібно встановити комісію за скасування тут:"
+"Налаштована комісія за скасування через самообслуговування становитиме %(fee)"
+"s для цього замовлення, але для скасування, здійсненого вами, вам потрібно "
+"встановити комісію за скасування тут:"
 
 #: pretix/control/templates/pretixcontrol/order/cancel.html:51
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:220
@@ -27434,8 +27426,8 @@ msgid ""
 "The provided key \"%(value)s\" does not look valid. It should start with "
 "\"%(prefix)s\"."
 msgstr ""
-"Наданий ключ \"%(value)s\" виглядає недійсним. Він має починатися з "
-"\"%(prefix)s\"."
+"Наданий ключ \"%(value)s\" виглядає недійсним. Він має починатися з \""
+"%(prefix)s\"."
 
 #: pretix/plugins/stripe/forms.py:51 pretix/plugins/stripe/signals.py:152
 msgid "Stripe Connect: App fee (percent)"
@@ -28831,8 +28823,8 @@ msgstr ""
 msgid ""
 "You need to fill all fields that are marked with <span>*</span> to continue."
 msgstr ""
-"Щоб продовжити, необхідно заповнити всі поля, позначені символом <span>*</"
-"span>."
+"Щоб продовжити, необхідно заповнити всі поля, позначені символом "
+"<span>*</span>."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:54
 msgid "Auto-fill with address"
@@ -29416,8 +29408,8 @@ msgid ""
 "before this appears on your statement."
 msgstr ""
 "Сума відшкодування буде автоматично повернута на ваш початковий спосіб "
-"оплати. Залежно від способу оплати зачекайте до двох тижнів, перш ніж це "
-"з’явиться у вашій виписці."
+"оплати. Залежно від способу оплати зачекайте до двох тижнів, перш ніж це з’"
+"явиться у вашій виписці."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_change_confirm.html:165
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:165
