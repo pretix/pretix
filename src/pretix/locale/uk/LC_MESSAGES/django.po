@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-28 16:44+0000\n"
 "PO-Revision-Date: 2022-05-06 13:48+0000\n"
-"Last-Translator: Iryna Loik <iraloyik@gmail.com>\n"
+"Last-Translator: Olha Dolinska <olya.dolinska.od@gmail.com>\n"
 "Language-Team: Ukrainian <https://translate.pretix.eu/projects/pretix/pretix/"
 "uk/>\n"
 "Language: uk\n"
@@ -9320,7 +9320,7 @@ msgstr "У нас виникли проблеми із опрацюванням 
 
 #: pretix/base/templates/500.html:10
 msgid "If this problem persists, please contact us."
-msgstr "Якщо ця проблема не зникне, будь ласка зв'яжіться з нами."
+msgstr "Якщо ця проблема не зникне, будь ласка, зв'яжіться з нами."
 
 #: pretix/base/templates/500.html:13
 msgid "If you contact us, please send us the following code:"
