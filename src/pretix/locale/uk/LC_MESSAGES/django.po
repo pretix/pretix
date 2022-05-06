@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-28 16:44+0000\n"
-"PO-Revision-Date: 2022-05-06 13:53+0000\n"
-"Last-Translator: Iryna Loik <iraloyik@gmail.com>\n"
+"PO-Revision-Date: 2022-05-06 13:54+0000\n"
+"Last-Translator: Olha Dolinska <olya.dolinska.od@gmail.com>\n"
 "Language-Team: Ukrainian <https://translate.pretix.eu/projects/pretix/pretix/"
 "uk/>\n"
 "Language: uk\n"
@@ -9374,7 +9374,7 @@ msgstr "Натисніть тут, щоб переглянути та зміни
 
 #: pretix/base/templates/pretixbase/email/notification.html:60
 msgid "Click here disable all notifications immediately."
-msgstr "Натисність тут щоб негайно скасувати усі сповіщення."
+msgstr "Натисність тут, щоб негайно вимкнути усі сповіщення."
 
 #: pretix/base/templates/pretixbase/email/notification.txt:15
 msgid "Click here to view and change your notification settings:"
@@ -9382,13 +9382,13 @@ msgstr "Натисніть тут, щоб переглянути та зміни
 
 #: pretix/base/templates/pretixbase/email/notification.txt:17
 msgid "Click here disable all notifications immediately:"
-msgstr ""
+msgstr "Натисніть тут, щоб негайно вимкнути усі сповіщення:"
 
 #: pretix/base/templates/pretixbase/email/order_details.html:7
 msgid ""
 "You are receiving this email because someone signed you up for the following "
 "event:"
-msgstr ""
+msgstr "Ви отримуєте цей лист, бо хтось зареєстрував вас на наступну подію:"
 
 #: pretix/base/templates/pretixbase/email/order_details.html:12
 #: pretix/base/templates/pretixbase/email/order_details.html:62
