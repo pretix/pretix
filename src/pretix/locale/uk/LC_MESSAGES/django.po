@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-28 16:44+0000\n"
-"PO-Revision-Date: 2022-05-06 13:39+0000\n"
+"PO-Revision-Date: 2022-05-06 13:42+0000\n"
 "Last-Translator: Iryna Loik <iraloyik@gmail.com>\n"
 "Language-Team: Ukrainian <https://translate.pretix.eu/projects/pretix/pretix/"
 "uk/>\n"
@@ -9169,7 +9169,7 @@ msgstr "Ви повинні вимагати адреси для виставл�
 
 #: pretix/base/settings.py:3102
 msgid "The last payment date cannot be before the end of presale."
-msgstr "Кінцева дата оплати не може бути до кінця передпродажів."
+msgstr "Кінцева дата оплати не може бути перед кінцем передпродажу."
 
 #: pretix/base/shredder.py:73 pretix/base/shredder.py:76
 msgid "Your event needs to be over to use this feature."
@@ -9198,6 +9198,9 @@ msgid ""
 "logged email contents. This will also remove the association to customer "
 "accounts."
 msgstr ""
+"Це видалить усі адреси електронної пошти із замовлень та учасників, а також "
+"вміст електронної пошти, які зареєстровані. Це також призведе до видалення "
+"зв’язків з обліковими записами клієнтів."
 
 #: pretix/base/shredder.py:241
 msgid ""
