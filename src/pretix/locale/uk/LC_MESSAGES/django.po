@@ -9324,11 +9324,11 @@ msgstr "Якщо ця проблема не зникне, будь ласка з
 
 #: pretix/base/templates/500.html:13
 msgid "If you contact us, please send us the following code:"
-msgstr ""
+msgstr "Якщо ви з нами контактуєте, будь ласка надішліть нам наступний код:"
 
 #: pretix/base/templates/csrffail.html:4 pretix/base/templates/csrffail.html:8
 msgid "Verification failed"
-msgstr ""
+msgstr "Не вдалося перевірити"
 
 #: pretix/base/templates/csrffail.html:9
 msgid ""
