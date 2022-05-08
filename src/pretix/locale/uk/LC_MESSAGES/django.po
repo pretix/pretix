@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-28 16:44+0000\n"
 "PO-Revision-Date: 2022-05-08 19:00+0000\n"
-"Last-Translator: Iryna N <in380@nyu.edu>\n"
+"Last-Translator: Ola Ola <olge.to@gmail.com>\n"
 "Language-Team: Ukrainian <https://translate.pretix.eu/projects/pretix/pretix/"
 "uk/>\n"
 "Language: uk\n"
@@ -9687,6 +9687,7 @@ msgstr "Це серія подій"
 msgid ""
 "You already used this slug for a different event. Please choose a new one."
 msgstr ""
+"Ви вже використали цю помітку для іншого заходу. Будь ласка оберіть знову."
 
 #: pretix/control/forms/event.py:125 pretix/control/forms/event.py:457
 msgid "Event timezone"
@@ -10052,7 +10053,7 @@ msgstr "Замовлення потрібно підтвердити"
 
 #: pretix/control/forms/event.py:1225
 msgid "Deviating tax rate"
-msgstr ""
+msgstr "Податкова ставка, що відрізняється"
 
 #: pretix/control/forms/event.py:1230
 msgid "Text on invoice"
@@ -10093,7 +10094,7 @@ msgstr "Наведений код ваучера не існує."
 #: pretix/control/forms/event.py:1307 pretix/control/forms/organizer.py:93
 #: pretix/control/views/shredder.py:163
 msgid "The slug you entered was not correct."
-msgstr ""
+msgstr "Ви ввели невірну помітку."
 
 #: pretix/control/forms/event.py:1342
 msgid "Ticket downloads"
@@ -10771,6 +10772,8 @@ msgid ""
 "restriction on the scope of usage and therefore without making use of any "
 "additional permission."
 msgstr ""
+"Я хочу використовувати pretix на умовах ліцензії AGPLv3 без обмежень обсягу "
+"користування та відповідно без використання будь-яких дозволів."
 
 #: pretix/control/forms/global_settings.py:163
 msgid ""
@@ -10810,7 +10813,7 @@ msgstr ""
 
 #: pretix/control/forms/global_settings.py:187
 msgid "Footer: \"powered by\" name (optional)"
-msgstr ""
+msgstr "Нижній колонтитул: Назва \"Під управлінням\" (опціонально)"
 
 #: pretix/control/forms/global_settings.py:188
 msgid ""
@@ -10818,10 +10821,13 @@ msgid ""
 "name of your company or organization (if you made any changes to pretix), "
 "set the name here."
 msgstr ""
+"Якщо Ви бажаєте, щоб повідомлення \"Під управлінням\" внизу сторінки вміщало "
+"назву Вашої компанії чи організації (якщо Ви бажаєте внести будь-які зміни "
+"до pretix), то вкажіть назву тут."
 
 #: pretix/control/forms/global_settings.py:193
 msgid "Link for powered by name"
-msgstr ""
+msgstr "Посилання до назви під управлінням"
 
 #: pretix/control/forms/global_settings.py:194
 msgid ""
@@ -10952,6 +10958,9 @@ msgid ""
 "Gift card products should use a tax rule with a rate of 0 percent since "
 "sales tax will be applied when the gift card is redeemed."
 msgstr ""
+"Продукти з подарунковими сертифікатами мають використовувати податкове "
+"правило зі ставкою податку 0%, бо податок з продажу буде примінятися, коли "
+"подарунковий сертифікат буде погашено."
 
 #: pretix/control/forms/item.py:650
 #, python-format
@@ -11013,11 +11022,11 @@ msgstr "Ім'я користувача"
 
 #: pretix/control/forms/mailsetup.py:59
 msgid "Use STARTTLS"
-msgstr ""
+msgstr "Використовуйте STARTTLS"
 
 #: pretix/control/forms/mailsetup.py:60
 msgid "Commonly enabled on port 587."
-msgstr ""
+msgstr "Зазвичай ввімкнений на порту 587."
 
 #: pretix/control/forms/mailsetup.py:64
 msgid "Use SSL"
@@ -11025,13 +11034,14 @@ msgstr "Використати SSL"
 
 #: pretix/control/forms/mailsetup.py:65
 msgid "Commonly enabled on port 465."
-msgstr ""
+msgstr "Зазвичай ввімкнений на порту 465."
 
 #: pretix/control/forms/mailsetup.py:72
 msgid ""
 "You can activate either SSL or STARTTLS security, but not both at the same "
 "time."
 msgstr ""
+"Ви можете активувати або SSL, або STARTTLS безпеку, але не обидві одночасно."
 
 #: pretix/control/forms/mailsetup.py:84 pretix/control/forms/mailsetup.py:89
 msgid ""
@@ -11137,6 +11147,8 @@ msgid ""
 "Will be included in the notification email when the respective placeholder "
 "is present in the configured email text."
 msgstr ""
+"Буде включено до листа-повідомлення, якщо відповідний заповнювач наявний у "
+"підготовленому тексті листа."
 
 #: pretix/control/forms/orders.py:209
 msgid "Payment amount"
@@ -11351,10 +11363,12 @@ msgstr "Автоматично повертати гроші, якщо це мо
 #: pretix/control/forms/orders.py:759
 msgid "Only available for payment method that support automatic refunds."
 msgstr ""
+"Доступно лише для методів оплати, які передбачають атоматичние повернення "
+"коштів."
 
 #: pretix/control/forms/orders.py:762
 msgid "Create refund in the manual refund to-do list"
-msgstr ""
+msgstr "Створити повернення коштів у списку до виконання вручну"
 
 #: pretix/control/forms/orders.py:765
 msgid ""
@@ -11476,7 +11490,7 @@ msgstr ""
 
 #: pretix/control/forms/organizer.py:74
 msgid "This slug is already in use. Please choose a different one."
-msgstr ""
+msgstr "Ця помітка вже використовується, будь ласка оберіть іншу."
 
 #: pretix/control/forms/organizer.py:224
 msgid ""
@@ -11494,13 +11508,16 @@ msgstr ""
 
 #: pretix/control/forms/organizer.py:398
 msgid "Favicon"
-msgstr ""
+msgstr "Фавікон"
 
 #: pretix/control/forms/organizer.py:402
 msgid ""
 "If you provide a favicon, we will show it instead of the default pretix "
 "icon. We recommend a size of at least 200x200px to accommodate most devices."
 msgstr ""
+"Якщо Ви надаєте фавікон, ми будумо показувати його замість стандартної "
+"pretix іконки. Ми радимо використовувати розмір 200x200px щонайменше, його "
+"підтримує більщість обладнання."
 
 #: pretix/control/forms/organizer.py:445
 msgid "This will be attached to every email."
@@ -11751,7 +11768,7 @@ msgstr "Ваучер з одним із цих кодів уже існує."
 #: pretix/control/forms/vouchers.py:391
 #, python-brace-format
 msgid "The voucher code {code} appears in your list twice."
-msgstr ""
+msgstr "Код сертифікату {code} показується у Вашому списку двічі."
 
 #: pretix/control/forms/vouchers.py:395
 msgid ""
@@ -11994,7 +12011,7 @@ msgstr "Вебхук створено."
 
 #: pretix/control/logdisplay.py:320
 msgid "The webhook has been changed."
-msgstr ""
+msgstr "Вебхук було змінено."
 
 #: pretix/control/logdisplay.py:321 pretix/control/views/organizer.py:1804
 msgid "The membership type has been created."
@@ -12112,7 +12129,7 @@ msgstr "Замовлення затверджено."
 #: pretix/control/logdisplay.py:349
 #, python-brace-format
 msgid "The order has been denied (comment: \"{comment}\")."
-msgstr ""
+msgstr "Замовлення було відхилено (comment: \"{comment}\")."
 
 #: pretix/control/logdisplay.py:350
 #, python-brace-format
@@ -12429,6 +12446,8 @@ msgid ""
 "The voucher has been set to expire because the recipient removed themselves "
 "from the waiting list."
 msgstr ""
+"Термін дії сертифікату закінчується, бо отримувач видалив себе із списку "
+"очікування."
 
 #: pretix/control/logdisplay.py:426
 msgid "The voucher has been changed."
@@ -12773,7 +12792,7 @@ msgstr "Користувач підтвердив таке повідомлен�
 #: pretix/control/logdisplay.py:540
 #, python-brace-format
 msgid "The order has been canceled (comment: \"{comment}\")."
-msgstr ""
+msgstr "Замовлення скасовано (comment: \"{comment}\")."
 
 #: pretix/control/logdisplay.py:542 pretix/control/views/orders.py:1292
 #: pretix/presale/views/order.py:967
@@ -12843,24 +12862,24 @@ msgstr ""
 
 #: pretix/control/logdisplay.py:613
 msgid "Your account settings have been changed."
-msgstr ""
+msgstr "Налаштування Вашого аккауту було змінено."
 
 #: pretix/control/logdisplay.py:615 pretix/control/views/user.py:233
 #, python-brace-format
 msgid "Your email address has been changed to {email}."
-msgstr ""
+msgstr "Ваша електронна адреса була змінена на {email}."
 
 #: pretix/control/logdisplay.py:617 pretix/control/views/user.py:230
 msgid "Your password has been changed."
-msgstr ""
+msgstr "Ваш пароль було змінено."
 
 #: pretix/control/logdisplay.py:619
 msgid "Your account has been enabled."
-msgstr ""
+msgstr "Ваш аккаунт активовано."
 
 #: pretix/control/logdisplay.py:621
 msgid "Your account has been disabled."
-msgstr ""
+msgstr "Ваш аккаунт не працює."
 
 #: pretix/control/logdisplay.py:625
 msgid "You impersonated {}."
@@ -12874,19 +12893,20 @@ msgstr ""
 msgid ""
 "The selected event was not found or you have no permission to administrate "
 "it."
-msgstr ""
+msgstr "Обраний захід не знайдено, або Ви не маєте права управляти ним."
 
 #: pretix/control/middleware.py:177 pretix/control/middleware.py:187
 msgid ""
 "The selected organizer was not found or you have no permission to "
 "administrate it."
 msgstr ""
+"Обраний організатор не був знайдений або ви не маєте права управляти ним."
 
 #: pretix/control/navigation.py:37 pretix/control/navigation.py:336
 #: pretix/control/templates/pretixcontrol/dashboard.html:3
 #: pretix/control/templates/pretixcontrol/dashboard.html:5
 msgid "Dashboard"
-msgstr ""
+msgstr "Панель керування"
 
 #: pretix/control/navigation.py:49 pretix/control/navigation.py:380
 #: pretix/control/navigation.py:480
@@ -12900,7 +12920,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:29
 #: pretix/control/templates/pretixcontrol/organizers/mail.html:19
 msgid "General"
-msgstr ""
+msgstr "Загальний"
 
 #: pretix/control/navigation.py:57
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:151
@@ -12924,11 +12944,11 @@ msgstr "Квитки"
 #: pretix/control/templates/pretixcontrol/event/tax_index.html:3
 #: pretix/control/templates/pretixcontrol/event/tax_index.html:5
 msgid "Tax rules"
-msgstr ""
+msgstr "Правила оподаткування"
 
 #: pretix/control/navigation.py:97
 msgid "Invoicing"
-msgstr ""
+msgstr "Виставлення рахунку"
 
 #: pretix/control/navigation.py:105
 msgctxt "action"
@@ -12938,25 +12958,25 @@ msgstr "Скасування"
 #: pretix/control/navigation.py:113
 #: pretix/control/templates/pretixcontrol/event/widget.html:8
 msgid "Widget"
-msgstr ""
+msgstr "Віджет"
 
 #: pretix/control/navigation.py:126 pretix/control/navigation.py:433
 #: pretix/control/navigation.py:473
 #: pretix/control/templates/pretixcontrol/event/payment.html:41
 msgid "Settings"
-msgstr ""
+msgstr "Налаштування"
 
 #: pretix/control/navigation.py:174
 msgid "Categories"
-msgstr ""
+msgstr "Категорії"
 
 #: pretix/control/navigation.py:190
 msgid "Discounts"
-msgstr ""
+msgstr "Знижка"
 
 #: pretix/control/navigation.py:211
 msgid "Overview"
-msgstr ""
+msgstr "Огляд"
 
 #: pretix/control/navigation.py:219
 #: pretix/control/templates/pretixcontrol/order/index.html:763
@@ -12964,28 +12984,28 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/orders/refunds.html:9
 #: pretix/presale/templates/pretixpresale/event/order.html:137
 msgid "Refunds"
-msgstr ""
+msgstr "Повернення коштів"
 
 #: pretix/control/navigation.py:227 pretix/control/navigation.py:589
 msgid "Export"
-msgstr ""
+msgstr "Експорт"
 
 #: pretix/control/navigation.py:245
 msgid "Import"
-msgstr ""
+msgstr "Імпорт"
 
 #: pretix/control/navigation.py:274
 msgid "All vouchers"
-msgstr ""
+msgstr "Усі сертифікати"
 
 #: pretix/control/navigation.py:282
 msgid "Tags"
-msgstr ""
+msgstr "Тег"
 
 #: pretix/control/navigation.py:294
 msgctxt "navigation"
 msgid "Check-in"
-msgstr ""
+msgstr "Реєстрація"
 
 #: pretix/control/navigation.py:303
 #: pretix/control/templates/pretixcontrol/checkin/lists.html:3
@@ -12996,36 +13016,36 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/subevents/detail.html:158
 #: pretix/plugins/checkinlists/apps.py:44
 msgid "Check-in lists"
-msgstr ""
+msgstr "Список реєстрації"
 
 #: pretix/control/navigation.py:311
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html:4
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html:6
 msgid "Check-in history"
-msgstr ""
+msgstr "Історія реєстрації"
 
 #: pretix/control/navigation.py:354
 #: pretix/control/templates/pretixcontrol/orders/search.html:19
 msgid "Search"
-msgstr ""
+msgstr "Пошук"
 
 #: pretix/control/navigation.py:366
 #: pretix/control/templates/pretixcontrol/order/index.html:669
 msgid "Payments"
-msgstr ""
+msgstr "Платежі"
 
 #: pretix/control/navigation.py:374
 msgid "User settings"
-msgstr ""
+msgstr "Налаштування користувача"
 
 #: pretix/control/navigation.py:385
 #: pretix/control/templates/pretixcontrol/user/settings.html:16
 msgid "Notifications"
-msgstr ""
+msgstr "Повідомлення"
 
 #: pretix/control/navigation.py:390
 msgid "2FA"
-msgstr ""
+msgstr "2FA"
 
 #: pretix/control/navigation.py:395
 msgid "Authorized apps"
@@ -13037,31 +13057,31 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/user/history.html:10
 #: pretix/control/templates/pretixcontrol/user/settings.html:70
 msgid "Account history"
-msgstr ""
+msgstr "Історія аккаунту"
 
 #: pretix/control/navigation.py:415
 msgid "All users"
-msgstr ""
+msgstr "Усі користувачі"
 
 #: pretix/control/navigation.py:420
 #: pretix/control/templates/pretixcontrol/user/staff_session_list.html:5
 #: pretix/control/templates/pretixcontrol/user/staff_session_list.html:7
 msgid "Admin sessions"
-msgstr ""
+msgstr "Сеанс адміністратора"
 
 #: pretix/control/navigation.py:427
 #: pretix/control/templates/pretixcontrol/global_settings_base.html:5
 #: pretix/control/templates/pretixcontrol/global_settings_base.html:7
 msgid "Global settings"
-msgstr ""
+msgstr "Глобальні налаштування"
 
 #: pretix/control/navigation.py:438
 msgid "Update check"
-msgstr ""
+msgstr "Перевірка оновлення"
 
 #: pretix/control/navigation.py:443
 msgid "License check"
-msgstr ""
+msgstr "Перевірка ліцензії"
 
 #: pretix/control/navigation.py:487
 #: pretix/control/templates/pretixcontrol/organizers/properties.html:5
@@ -13071,13 +13091,13 @@ msgstr ""
 #: pretix/control/navigation.py:501
 #: pretix/control/templates/pretixcontrol/organizers/webhooks.html:6
 msgid "Webhooks"
-msgstr ""
+msgstr "Вебхук"
 
 #: pretix/control/navigation.py:536
 #: pretix/control/templates/pretixcontrol/organizers/customers.html:6
 #: pretix/control/templates/pretixcontrol/organizers/customers.html:9
 msgid "Customers"
-msgstr ""
+msgstr "Клієнти"
 
 #: pretix/control/navigation.py:555
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:61
@@ -13086,7 +13106,7 @@ msgstr ""
 
 #: pretix/control/navigation.py:565 pretix/control/navigation.py:572
 msgid "Devices"
-msgstr ""
+msgstr "Обладнання"
 
 #: pretix/control/permissions.py:71 pretix/control/permissions.py:108
 #: pretix/control/permissions.py:139 pretix/control/permissions.py:156
@@ -26275,7 +26295,7 @@ msgstr ""
 
 #: pretix/settings.py:845
 msgid "Write access"
-msgstr ""
+msgstr "Доступ до запису"
 
 #: pretix/settings.py:855
 msgid "Kosovo"
