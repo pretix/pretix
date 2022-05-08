@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-28 16:44+0000\n"
-"PO-Revision-Date: 2022-05-08 07:00+0000\n"
+"PO-Revision-Date: 2022-05-08 19:00+0000\n"
 "Last-Translator: Iryna N <in380@nyu.edu>\n"
 "Language-Team: Ukrainian <https://translate.pretix.eu/projects/pretix/pretix/"
 "uk/>\n"
@@ -17565,19 +17565,19 @@ msgstr[2] ""
 #: pretix/control/templates/pretixcontrol/orders/overview.html:5
 #: pretix/control/templates/pretixcontrol/orders/overview.html:16
 msgid "Order overview"
-msgstr ""
+msgstr "Огляд замовлення"
 
 #: pretix/control/templates/pretixcontrol/orders/overview.html:10
 msgid "Sales"
-msgstr ""
+msgstr "Продажі"
 
 #: pretix/control/templates/pretixcontrol/orders/overview.html:11
 msgid "Revenue (gross)"
-msgstr ""
+msgstr "Дохід (валовий)"
 
 #: pretix/control/templates/pretixcontrol/orders/overview.html:12
 msgid "Revenue (net)"
-msgstr ""
+msgstr "Дохід (чистий)"
 
 #: pretix/control/templates/pretixcontrol/orders/overview.html:58
 msgctxt "subevent"
@@ -17585,11 +17585,13 @@ msgid ""
 "If you select a single date, fees will not be listed here as it might not be "
 "clear which date they belong to."
 msgstr ""
+"Якщо ви виберете одну дату, збори не будуть перераховані тут, оскільки може "
+"бути неясно, до якої дати вони належать."
 
 #: pretix/control/templates/pretixcontrol/orders/overview.html:72
 #: pretix/plugins/reports/exporters.py:295
 msgid "Purchased"
-msgstr ""
+msgstr "Придбано"
 
 #: pretix/control/templates/pretixcontrol/orders/overview.html:181
 msgid ""
@@ -17597,21 +17599,24 @@ msgid ""
 "canceled completely, while the numbers also include single canceled "
 "positions within valid orders."
 msgstr ""
+"Якщо ви натиснете на посилання в в цій колонці, ви знайдете лише замовлення, "
+"які повністю скасовані, тоді як цифри також враховують окремі скасовані "
+"позиції в межах дійсних замовлень."
 
 #: pretix/control/templates/pretixcontrol/orders/refunds.html:34
 msgid "No refunds are currently open."
-msgstr ""
+msgstr "Наразі повернення коштів не відкрито."
 
 #: pretix/control/templates/pretixcontrol/orders/refunds.html:74
 msgid "Actions"
-msgstr ""
+msgstr "Дії"
 
 #: pretix/control/templates/pretixcontrol/orders/search.html:7
 #: pretix/control/templates/pretixcontrol/orders/search.html:9
 #: pretix/control/templates/pretixcontrol/search/orders.html:7
 #: pretix/control/templates/pretixcontrol/search/orders.html:9
 msgid "Order search"
-msgstr ""
+msgstr "Пошук замовлень"
 
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:6
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:12
@@ -17619,7 +17624,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/organizers/customer_edit.html:18
 #, python-format
 msgid "Customer #%(id)s"
-msgstr ""
+msgstr "Клієнт #%(id)s"
 
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:21
 #: pretix/control/templates/pretixcontrol/organizers/customer_membership.html:15
@@ -17631,30 +17636,30 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:107
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:162
 msgid "Details"
-msgstr ""
+msgstr "Деталі"
 
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:28
 #: pretix/control/templates/pretixcontrol/organizers/customers.html:54
 #: pretix/presale/templates/pretixpresale/event/checkout_customer.html:40
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:20
 msgid "Customer ID"
-msgstr ""
+msgstr "ID клієнта"
 
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:45
 msgid "Send password reset link"
-msgstr ""
+msgstr "Надіслати посилання для відновлення пароля"
 
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:71
 #: pretix/control/templates/pretixcontrol/organizers/customer_anonymize.html:39
 #: pretix/control/templates/pretixcontrol/users/form.html:18
 msgid "Anonymize"
-msgstr ""
+msgstr "Анонімізувати"
 
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:86
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:22
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:122
 msgid "Valid from"
-msgstr ""
+msgstr "Діє з"
 
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:90
 #: pretix/control/templates/pretixcontrol/organizers/customer_membership.html:35
@@ -17662,74 +17667,80 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:40
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:125
 msgid "Usages"
-msgstr ""
+msgstr "Використання"
 
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:157
 msgid "Add membership"
-msgstr ""
+msgstr "Додати членство"
 
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:204
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:94
 msgid "Matched to the account based on the email address."
-msgstr ""
+msgstr "Збігається з обліковим записом на основі адреси електронної пошти."
 
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:250
 msgid "Customer history"
-msgstr ""
+msgstr "Історія клієнтів"
 
 #: pretix/control/templates/pretixcontrol/organizers/customer_anonymize.html:5
 #: pretix/control/templates/pretixcontrol/organizers/customer_anonymize.html:11
 #, python-format
 msgid "Anonymize customer #%(id)s"
-msgstr ""
+msgstr "Анонімізувати клієнта #%(id)s"
 
 #: pretix/control/templates/pretixcontrol/organizers/customer_anonymize.html:16
 msgid "Are you sure you want to anonymize this customer account?"
-msgstr ""
+msgstr "Ви впевнені, що хочете анонімізувати цей обліковий запис клієнта?"
 
 #: pretix/control/templates/pretixcontrol/organizers/customer_anonymize.html:20
 msgid "All orders will be disconnected from this customer account."
-msgstr ""
+msgstr "Усі замовлення будуть відключені від цього облікового запису клієнта."
 
 #: pretix/control/templates/pretixcontrol/organizers/customer_anonymize.html:22
 msgid ""
 "The orders themselves will not be anonymized and can still contain personal "
 "information!"
 msgstr ""
+"Самі замовлення не будуть анонімними і все ще можуть містити особисту "
+"інформацію!"
 
 #: pretix/control/templates/pretixcontrol/organizers/customer_anonymize.html:26
 msgid ""
 "The customer will no longer be able to log in and will lose access to any "
 "membership benefits."
 msgstr ""
+"Клієнт більше не зможе ввійти в систему та втратить доступ до будь-яких "
+"переваг членства."
 
 #: pretix/control/templates/pretixcontrol/organizers/customer_anonymize.html:29
 msgid "This action is irreversible."
-msgstr ""
+msgstr "Ця дія є незворотною."
 
 #: pretix/control/templates/pretixcontrol/organizers/customer_edit.html:6
 #: pretix/control/templates/pretixcontrol/organizers/customer_edit.html:16
 msgid "New customer"
-msgstr ""
+msgstr "Новий клієнт"
 
 #: pretix/control/templates/pretixcontrol/organizers/customer_membership_delete.html:15
 msgid "Are you sure you want to delete this membership?"
-msgstr ""
+msgstr "Ви впевнені, що хочете видалити це членство?"
 
 #: pretix/control/templates/pretixcontrol/organizers/customer_membership_delete.html:17
 msgid ""
 "This membership cannot be deleted since it has been used in an order. Change "
 "its end date to the past instead."
 msgstr ""
+"Це членство не можна видалити, оскільки воно було використано в замовленні. "
+"Натомість змініть його дату завершення на минулу."
 
 #: pretix/control/templates/pretixcontrol/organizers/customers.html:14
 msgid "No customer accounts have been created yet."
-msgstr ""
+msgstr "Ще не створено жодних облікових записів клієнтів."
 
 #: pretix/control/templates/pretixcontrol/organizers/customers.html:19
 #: pretix/control/templates/pretixcontrol/organizers/customers.html:48
 msgid "Create a new customer"
-msgstr ""
+msgstr "Створити нового клієнта"
 
 #: pretix/control/templates/pretixcontrol/organizers/delete.html:5
 msgid "Delete organizer"
