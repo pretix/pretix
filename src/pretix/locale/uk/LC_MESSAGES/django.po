@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-28 16:44+0000\n"
 "PO-Revision-Date: 2022-05-09 15:43+0000\n"
-"Last-Translator: Iryna Loik <iraloyik@gmail.com>\n"
+"Last-Translator: Iryna N <in380@nyu.edu>\n"
 "Language-Team: Ukrainian <https://translate.pretix.eu/projects/pretix/pretix/"
 "uk/>\n"
 "Language: uk\n"
@@ -22025,86 +22025,96 @@ msgstr ""
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:100
 msgid "Order already paid"
-msgstr ""
+msgstr "Замовлення вже оплачено"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:117
 msgid "Discard"
-msgstr ""
+msgstr "Відкинути"
 
 #: pretix/plugins/banktransfer/views.py:135
 msgid ""
 "Negative amount but refund can't be logged, please create manual refund "
 "first."
 msgstr ""
+"Сума від’ємна, але відшкодування неможливо зареєструвати. Спершу створіть "
+"відшкодування вручну."
 
 #: pretix/plugins/banktransfer/views.py:161
 msgid "Problem sending email."
-msgstr ""
+msgstr "Проблема з надсиланням електронної пошти."
 
 #: pretix/plugins/banktransfer/views.py:182
 msgid "Unknown order code"
-msgstr ""
+msgstr "Невідомий код замовлення"
 
 #: pretix/plugins/banktransfer/views.py:331
 msgid "Search text"
-msgstr ""
+msgstr "Пошук y текстi"
 
 #: pretix/plugins/banktransfer/views.py:332
 msgid "min"
-msgstr ""
+msgstr "мінімум"
 
 #: pretix/plugins/banktransfer/views.py:333
 msgid "max"
-msgstr ""
+msgstr "максимум"
 
 #: pretix/plugins/banktransfer/views.py:342
 msgid "Filter form is not valid."
-msgstr ""
+msgstr "Форма фільтра недійсна."
 
 #: pretix/plugins/banktransfer/views.py:385
 msgid "All unresolved transactions have been discarded."
-msgstr ""
+msgstr "Усі невирішені транзакції були відхилені."
 
 #: pretix/plugins/banktransfer/views.py:405
 msgid "You must choose a file to import."
-msgstr ""
+msgstr "Ви повинні вибрати файл для імпорту."
 
 #: pretix/plugins/banktransfer/views.py:409
 msgid ""
 "We were unable to detect the file type of this import. Please contact "
 "support for help."
 msgstr ""
+"Нам не вдалося визначити тип файлу цього імпорту. Зверніться до служби "
+"підтримки, щоб отримати допомогу."
 
 #: pretix/plugins/banktransfer/views.py:422
 #: pretix/plugins/banktransfer/views.py:466
 msgid "We were unable to process your input."
-msgstr ""
+msgstr "Нам не вдалося обробити ваш введений текст."
 
 #: pretix/plugins/banktransfer/views.py:431
 msgid ""
 "I'm sorry, but we were unable to import this CSV file. Please contact "
 "support for help."
 msgstr ""
+"Вибачте, але нам не вдалося імпортувати цей файл CSV. Зверніться до служби "
+"підтримки, щоб отримати допомогу."
 
 #: pretix/plugins/banktransfer/views.py:436
 msgid ""
 "I'm sorry, but we detected this file as empty. Please contact support for "
 "help."
 msgstr ""
+"На жаль, ми виявили цей файл порожнім. Зверніться до служби підтримки, щоб "
+"отримати допомогу."
 
 #: pretix/plugins/banktransfer/views.py:456
 msgid "Invalid input data."
-msgstr ""
+msgstr "Недійсні введені дані."
 
 #: pretix/plugins/banktransfer/views.py:460
 msgid "You need to select the column containing the payment reference."
-msgstr ""
+msgstr "Вам потрібно вибрати колонку, що містить посилання на платіж."
 
 #: pretix/plugins/banktransfer/views.py:581
 msgid ""
 "Please perform per-event bank imports as this organizer has events with "
 "multiple currencies."
 msgstr ""
+"Будь ласка, виконайте імпорт банків для окремих подій, оскільки цей "
+"організатор має події з кількома валютами."
 
 #: pretix/plugins/banktransfer/views.py:673
 #, python-brace-format
