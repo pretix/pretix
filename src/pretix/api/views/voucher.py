@@ -25,7 +25,7 @@ from django.db import transaction
 from django.db.models import F, Q
 from django.utils.timezone import now
 from django_filters.rest_framework import (
-    BooleanFilter, DjangoFilterBackend, FilterSet,
+    BooleanFilter, CharFilter, DjangoFilterBackend, FilterSet,
 )
 from django_scopes import scopes_disabled
 from rest_framework import status, viewsets
@@ -40,6 +40,7 @@ from pretix.base.models import Voucher
 with scopes_disabled():
     class VoucherFilter(FilterSet):
         active = BooleanFilter(method='filter_active')
+        code = CharFilter(lookup_expr='iexact')
 
         class Meta:
             model = Voucher
