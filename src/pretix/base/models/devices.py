@@ -179,6 +179,7 @@ class Device(LoggedModel):
         return {
             'can_view_orders',
             'can_change_orders',
+            'can_view_vouchers',
             'can_manage_gift_cards'
         }
 
