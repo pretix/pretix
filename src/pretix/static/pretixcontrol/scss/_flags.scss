@@ -36,6 +36,26 @@ div[lang] {
   }
 }
 
+/*
+  This list started of based on a list of country codes and is evolving into a list of language codes. Sorry 'bout that ;)
+
+  For example, the country code for China is CN, but the language code for Chinese is ZH. Similar issues with CZ/CS,
+  UA/ZK, GR/EL, ...
+
+  The filenames of the flags still represent country codes, but the selectors are slowly moving to language codes as we
+  add languages and work out conflicts.
+
+  We do know that languages and countries are not the same thing, see also
+  https://github.com/pretix/pretix/issues/300
+
+  That's why we neve use these flags in the "public" areas, i.e. the ticket shop, but only in the backend to provide
+  a quicker visual clue for which input field is which. We have not found a flag-less way that is as efficient,
+  unfortunately.
+
+  In some cases, the flag-to-country-mapping is okayish, the Austrian and Swiss people will hopefully forgive us for
+  using a German flag for German. In some cases it's impossible to do, in which case we used non-Country flags (e.g.
+  the flag of the Arab league for Arabic) or the flag of the autonomous region of Galicia for the Galician language.
+ */
 pre[lang=ad], input[lang=ad], textarea[lang=ad], div[lang=ad] { background-image: url(static('pretixbase/img/flags/ad.png')); }
 pre[lang=ae], input[lang=ae], textarea[lang=ae], div[lang=ae] { background-image: url(static('pretixbase/img/flags/ae.png')); }
 pre[lang=af], input[lang=af], textarea[lang=af], div[lang=af] { background-image: url(static('pretixbase/img/flags/af.png')); }
@@ -86,7 +106,7 @@ pre[lang=cn], input[lang=cn], textarea[lang=cn], div[lang=cn] { background-image
 pre[lang=zh-hans], input[lang=zh-hans], textarea[lang=zh-hans], div[lang=zh-hans] { background-image: url(static('pretixbase/img/flags/cn.png')); }
 pre[lang=co], input[lang=co], textarea[lang=co], div[lang=co] { background-image: url(static('pretixbase/img/flags/co.png')); }
 pre[lang=cr], input[lang=cr], textarea[lang=cr], div[lang=cr] { background-image: url(static('pretixbase/img/flags/cr.png')); }
-pre[lang=cs], input[lang=cs], textarea[lang=cs], div[lang=cs] { background-image: url(static('pretixbase/img/flags/cs.png')); }
+pre[lang=cs], input[lang=cs], textarea[lang=cs], div[lang=cs] { background-image: url(static('pretixbase/img/flags/cz.png')); }
 pre[lang=cu], input[lang=cu], textarea[lang=cu], div[lang=cu] { background-image: url(static('pretixbase/img/flags/cu.png')); }
 pre[lang=cv], input[lang=cv], textarea[lang=cv], div[lang=cv] { background-image: url(static('pretixbase/img/flags/cv.png')); }
 pre[lang=cx], input[lang=cx], textarea[lang=cx], div[lang=cx] { background-image: url(static('pretixbase/img/flags/cx.png')); }
@@ -120,7 +140,7 @@ pre[lang=ge], input[lang=ge], textarea[lang=ge], div[lang=ge] { background-image
 pre[lang=gf], input[lang=gf], textarea[lang=gf], div[lang=gf] { background-image: url(static('pretixbase/img/flags/gf.png')); }
 pre[lang=gh], input[lang=gh], textarea[lang=gh], div[lang=gh] { background-image: url(static('pretixbase/img/flags/gh.png')); }
 pre[lang=gi], input[lang=gi], textarea[lang=gi], div[lang=gi] { background-image: url(static('pretixbase/img/flags/gi.png')); }
-pre[lang=gl], input[lang=gl], textarea[lang=gl], div[lang=gl] { background-image: url(static('pretixbase/img/flags/gl.png')); }
+pre[lang=gl], input[lang=gl], textarea[lang=gl], div[lang=gl] { background-image: url(static('pretixbase/img/flags/galicia.png')); }
 pre[lang=gm], input[lang=gm], textarea[lang=gm], div[lang=gm] { background-image: url(static('pretixbase/img/flags/gm.png')); }
 pre[lang=gn], input[lang=gn], textarea[lang=gn], div[lang=gn] { background-image: url(static('pretixbase/img/flags/gn.png')); }
 pre[lang=gp], input[lang=gp], textarea[lang=gp], div[lang=gp] { background-image: url(static('pretixbase/img/flags/gp.png')); }
@@ -265,6 +285,7 @@ pre[lang=tv], input[lang=tv], textarea[lang=tv], div[lang=tv] { background-image
 pre[lang=tw], input[lang=tw], textarea[lang=tw], div[lang=tw] { background-image: url(static('pretixbase/img/flags/tw.png')); }
 pre[lang=tz], input[lang=tz], textarea[lang=tz], div[lang=tz] { background-image: url(static('pretixbase/img/flags/tz.png')); }
 pre[lang=ua], input[lang=ua], textarea[lang=ua], div[lang=ua] { background-image: url(static('pretixbase/img/flags/ua.png')); }
+pre[lang=uk], input[lang=uk], textarea[lang=uk], div[lang=uk] { background-image: url(static('pretixbase/img/flags/ua.png')); }
 pre[lang=ug], input[lang=ug], textarea[lang=ug], div[lang=ug] { background-image: url(static('pretixbase/img/flags/ug.png')); }
 pre[lang=um], input[lang=um], textarea[lang=um], div[lang=um] { background-image: url(static('pretixbase/img/flags/um.png')); }
 pre[lang=us], input[lang=us], textarea[lang=us], div[lang=us] { background-image: url(static('pretixbase/img/flags/us.png')); }
