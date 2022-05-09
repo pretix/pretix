@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-28 16:44+0000\n"
-"PO-Revision-Date: 2022-05-05 15:40+0000\n"
+"PO-Revision-Date: 2022-05-09 15:43+0000\n"
 "Last-Translator: hmontheline <Helias.mackay@goetheanum.ch>\n"
 "Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix/fr/"
 ">\n"
@@ -28063,6 +28063,8 @@ msgid ""
 "Once the items are in your cart, you will have %(time)s minutes to complete "
 "your purchase."
 msgstr ""
+"Une fois les articles dans votre panier, vous aurez %(time)s minutes pour "
+"compléter votre achat."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:282
 #, fuzzy, python-format
