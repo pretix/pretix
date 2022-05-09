@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-28 16:44+0000\n"
-"PO-Revision-Date: 2022-05-09 15:46+0000\n"
-"Last-Translator: Raphael Michel <michel@rami.io>\n"
+"PO-Revision-Date: 2022-05-10 02:00+0000\n"
+"Last-Translator: Iryna N <in380@nyu.edu>\n"
 "Language-Team: Ukrainian <https://translate.pretix.eu/projects/pretix/pretix/"
 "uk/>\n"
 "Language: uk\n"
@@ -2403,7 +2403,7 @@ msgstr "Відновлення паролю"
 
 #: pretix/base/models/checkin.py:51
 msgid "All products (including newly created ones)"
-msgstr "Усі продукти (включно з новоствореними)"
+msgstr "Усі продукти (включаючи новостворені)"
 
 #: pretix/base/models/checkin.py:52 pretix/plugins/badges/exporters.py:248
 #: pretix/plugins/checkinlists/exporters.py:694
@@ -18661,7 +18661,7 @@ msgstr "Зміст зображення"
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_update.html:29
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/send_form.html:52
 msgid "Content"
-msgstr ""
+msgstr "Контент"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:381
 #: pretix/control/templates/pretixcontrol/pdf/placeholders.html:50
@@ -22170,65 +22170,65 @@ msgstr ""
 
 #: pretix/plugins/checkinlists/exporters.py:120
 msgid "Include questions"
-msgstr ""
+msgstr "Враховувати запитання"
 
 #: pretix/plugins/checkinlists/exporters.py:265
 msgid "Check-in list (PDF)"
-msgstr ""
+msgstr "Список реєстрації (PDF)"
 
 #. Translators: maximum 5 characters
 #: pretix/plugins/checkinlists/exporters.py:331
 msgctxt "tablehead"
 msgid "paid"
-msgstr ""
+msgstr "оплачено"
 
 #: pretix/plugins/checkinlists/exporters.py:444
 msgid "Checked out"
-msgstr ""
+msgstr "Виписано"
 
 #: pretix/plugins/checkinlists/exporters.py:444
 #: pretix/plugins/checkinlists/exporters.py:622
 msgid "Automatically checked in"
-msgstr ""
+msgstr "Автоматично зареєстровано"
 
 #: pretix/plugins/checkinlists/exporters.py:453
 #: pretix/plugins/checkinlists/exporters.py:617
 #: pretix/plugins/paypal/payment.py:135
 msgid "Secret"
-msgstr ""
+msgstr "Секрет"
 
 #: pretix/plugins/checkinlists/exporters.py:603
 msgid "Check-in log (all scans)"
-msgstr ""
+msgstr "Журнал реєстрації (усі сканування)"
 
 #: pretix/plugins/checkinlists/exporters.py:621
 msgid "Offline override"
-msgstr ""
+msgstr "Перевизначення в автономному режимі"
 
 #: pretix/plugins/checkinlists/exporters.py:625
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:65
 msgid "Error message"
-msgstr ""
+msgstr "Повідомлення про помилку"
 
 #: pretix/plugins/checkinlists/exporters.py:626
 msgid "Upload date"
-msgstr ""
+msgstr "дата завантаження"
 
 #: pretix/plugins/checkinlists/exporters.py:627
 msgid "Upload time"
-msgstr ""
+msgstr "Час завантаження"
 
 #: pretix/plugins/checkinlists/exporters.py:670
 msgid "OK"
-msgstr ""
+msgstr "OK"
 
 #: pretix/plugins/checkinlists/exporters.py:702
 msgid "Successful scans only"
-msgstr ""
+msgstr "Тільки успішні сканування"
 
 #: pretix/plugins/checkinlists/exporters.py:717
 msgid "All check-in lists"
-msgstr ""
+msgstr "Усі списки реєстрації"
 
 #: pretix/plugins/manualpayment/apps.py:37
 msgid "A fully customizable payment method for manual processing."
@@ -22238,7 +22238,7 @@ msgstr ""
 #: pretix/plugins/paypal/payment.py:89 pretix/plugins/paypal/payment.py:153
 #: pretix/plugins/paypal/payment.py:961 pretix/plugins/paypal/payment.py:962
 msgid "PayPal"
-msgstr ""
+msgstr "PayPal"
 
 #: pretix/plugins/paypal/apps.py:52
 msgid ""
@@ -22248,7 +22248,7 @@ msgstr ""
 
 #: pretix/plugins/paypal/payment.py:106
 msgid "PayPal account"
-msgstr ""
+msgstr "Рахунок PayPal"
 
 #: pretix/plugins/paypal/payment.py:114
 #, fuzzy
@@ -22259,15 +22259,15 @@ msgstr "ID платежу"
 #: pretix/plugins/paypal/payment.py:128 pretix/plugins/stripe/payment.py:191
 #, python-brace-format
 msgid "<a target=\"_blank\" rel=\"noopener\" href=\"{docs_url}\">{text}</a>"
-msgstr ""
+msgstr "<a target=\"_blank\" rel=\"noopener\" href=\"{docs_url}\">{text}</a>"
 
 #: pretix/plugins/paypal/payment.py:129 pretix/plugins/stripe/payment.py:192
 msgid "Click here for a tutorial on how to obtain the required keys"
-msgstr ""
+msgstr "Натисніть тут, щоб отримати інструкцію, як отримати необхідні ключі"
 
 #: pretix/plugins/paypal/payment.py:141 pretix/plugins/stripe/payment.py:171
 msgid "Endpoint"
-msgstr ""
+msgstr "Kінцевий пункт"
 
 #: pretix/plugins/paypal/payment.py:156
 msgid ""
@@ -22352,30 +22352,37 @@ msgid ""
 "clicking on the following button, you can either create a new PayPal account "
 "connect pretix to an existing one."
 msgstr ""
+"Щоб приймати платежі через PayPal, вам потрібен обліковий запис у PayPal. "
+"Натиснувши наведену нижче кнопку, ви можете створити новий обліковий запис "
+"PayPal або підключити попередній до існуючого."
 
 #: pretix/plugins/paypal/payment.py:266
 #, python-brace-format
 msgid "Connect with {icon} PayPal"
-msgstr ""
+msgstr "Підключіться до {icon} PayPal"
 
 #: pretix/plugins/paypal/payment.py:276
 msgid "Disconnect from PayPal"
-msgstr ""
+msgstr "Від’єднатися від PayPal"
 
 #: pretix/plugins/paypal/payment.py:280
 msgid ""
 "Please configure a PayPal Webhook to the following endpoint in order to "
 "automatically cancel orders when payments are refunded externally."
 msgstr ""
+"Будь ласка, налаштуйте PayPal Webhook на таку кінцеву точку, щоб автоматично "
+"скасовувати замовлення, коли платежі повертаються ззовні."
 
 #: pretix/plugins/paypal/payment.py:291
 msgid "PayPal does not process payments in your event's currency."
-msgstr ""
+msgstr "PayPal не обробляє платежі у валюті вашої події."
 
 #: pretix/plugins/paypal/payment.py:292
 msgid ""
 "Please check this PayPal page for a complete list of supported currencies."
 msgstr ""
+"Будь ласка, перевірте цю сторінку PayPal, щоб отримати повний список валют, "
+"які підтримуються."
 
 #: pretix/plugins/paypal/payment.py:297
 msgid ""
@@ -22385,12 +22392,16 @@ msgid ""
 "country and use the same currency. Out of country accounts will not be able "
 "to send any payments."
 msgstr ""
+"Валюта вашої події підтримується PayPal як валюта платежу та балансу лише "
+"для рахунків у країні. Це означає, що обліковий запис PayPal для отримання "
+"та відправлення має бути створено в одній країні та використовувати ту саму "
+"валюту. За кордоном не можна буде надсилати платежі."
 
 #: pretix/plugins/paypal/payment.py:349 pretix/plugins/paypal/views.py:189
 #: pretix/plugins/paypal/views.py:205 pretix/plugins/paypal/views.py:213
 #: pretix/plugins/paypal/views.py:216
 msgid "An error occurred during connecting with PayPal, please try again."
-msgstr ""
+msgstr "Під час підключення до PayPal сталася помилка, спробуйте ще раз."
 
 #: pretix/plugins/paypal/payment.py:388
 msgid ""
@@ -22404,7 +22415,7 @@ msgstr ""
 #: pretix/plugins/paypal/payment.py:672 pretix/plugins/paypal/payment.py:885
 #: pretix/plugins/paypal/payment.py:895
 msgid "We had trouble communicating with PayPal"
-msgstr ""
+msgstr "У нас виникли проблеми зі зв’язком із PayPal"
 
 #: pretix/plugins/paypal/payment.py:470 pretix/plugins/paypal/payment.py:891
 msgid ""
@@ -22420,34 +22431,36 @@ msgstr ""
 msgid ""
 "We were unable to process your payment. See below for details on how to "
 "proceed."
-msgstr ""
+msgstr "Нам не вдалося обробити ваш платіж. Нижче описано, як діяти далі."
 
 #: pretix/plugins/paypal/payment.py:683
 msgid ""
 "PayPal has not yet approved the payment. We will inform you as soon as the "
 "payment completed."
 msgstr ""
+"PayPal ще не схвалив платіж. Ми повідомимо вас, як тільки оплата буде "
+"завершена."
 
 #: pretix/plugins/paypal/payment.py:711 pretix/plugins/stripe/payment.py:494
 #: pretix/plugins/stripe/payment.py:871
 msgid "There was an error sending the confirmation mail."
-msgstr ""
+msgstr "Сталася помилка під час надсилання листа з підтвердженням."
 
 #: pretix/plugins/paypal/payment.py:851 pretix/plugins/paypal/payment.py:872
 msgid "Refunding the amount via PayPal failed: {}"
-msgstr ""
+msgstr "Не вдалося повернути суму через PayPal: {}"
 
 #: pretix/plugins/paypal/payment.py:941 pretix/plugins/paypal/payment.py:949
 msgid "The payment for this invoice has already been received."
-msgstr ""
+msgstr "Платіж за цей рахунок-фактуру вже отримано."
 
 #: pretix/plugins/paypal/payment.py:942 pretix/plugins/paypal/payment.py:950
 msgid "PayPal payment ID"
-msgstr ""
+msgstr "Ідентифікатор платежу PayPal"
 
 #: pretix/plugins/paypal/payment.py:944
 msgid "PayPal sale ID"
-msgstr ""
+msgstr "Ідентифікатор продажу PayPal"
 
 #: pretix/plugins/paypal/payment.py:968
 msgid "PayPal APM"
@@ -22459,23 +22472,23 @@ msgstr ""
 
 #: pretix/plugins/paypal/signals.py:59
 msgid "Payment completed."
-msgstr ""
+msgstr "Оплата завершена."
 
 #: pretix/plugins/paypal/signals.py:60
 msgid "Payment denied."
-msgstr ""
+msgstr "У оплаті відмовлено."
 
 #: pretix/plugins/paypal/signals.py:61
 msgid "Payment refunded."
-msgstr ""
+msgstr "Оплата повернена."
 
 #: pretix/plugins/paypal/signals.py:62
 msgid "Payment reversed."
-msgstr ""
+msgstr "Оплата скасована."
 
 #: pretix/plugins/paypal/signals.py:63
 msgid "Payment pending."
-msgstr ""
+msgstr "В очікуванні оплати."
 
 #: pretix/plugins/paypal/signals.py:64
 msgid "Order approved."
@@ -22483,7 +22496,7 @@ msgstr "Замовлення підтверджено."
 
 #: pretix/plugins/paypal/signals.py:73
 msgid "PayPal reported an event: {}"
-msgstr ""
+msgstr "PayPal повідомив про подію: {}"
 
 #: pretix/plugins/paypal/signals.py:80
 msgid "PayPal ISU/Connect: Client ID"
@@ -22512,6 +22525,8 @@ msgid ""
 "The total amount listed above will be withdrawn from your PayPal account "
 "after the confirmation of your purchase."
 msgstr ""
+"Загальна сума, зазначена вище, буде знята з вашого облікового запису PayPal "
+"після підтвердження вашої покупки."
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/checkout_payment_confirm.html:10
 msgid ""
@@ -22530,6 +22545,9 @@ msgid ""
 "payment details. You will then be redirected back here to review and confirm "
 "your order."
 msgstr ""
+"Після того, як ви натиснули кнопку «Продовжити», ми перенаправимо вас на "
+"PayPal, щоб заповнити свої платіжні дані. Потім ви будете перенаправлені "
+"назад сюди, щоб переглянути та підтвердити своє замовлення."
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/control.html:5
 #, fuzzy
@@ -22540,17 +22558,17 @@ msgstr "Замовлення"
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/control.html:11
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/control_legacy.html:11
 msgid "Last update"
-msgstr ""
+msgstr "Останнє оновлення"
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/control.html:13
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/control_legacy.html:13
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:53
 msgid "Total value"
-msgstr ""
+msgstr "Загальна вартість"
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/control_legacy.html:7
 msgid "Sale ID"
-msgstr ""
+msgstr "ID Продажу"
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/pay.html:5
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/sca.html:5
@@ -22580,27 +22598,31 @@ msgid ""
 "Our attempt to execute your Payment via PayPal has failed. Please try again "
 "or contact us."
 msgstr ""
+"Наша спроба здійснити ваш платіж через PayPal зазнала невдачі. Будь ласка, "
+"спробуйте ще раз або зв’яжіться з нами."
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/pending.html:8
 msgid ""
 "We're waiting for an answer from PayPal regarding your payment. Please "
 "contact us, if this takes more than a few hours."
 msgstr ""
+"Ми чекаємо відповіді від PayPal щодо вашого платежу. Будь ласка, зв’яжіться "
+"з нами, якщо це займе більше кількох годин."
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/redirect.html:17
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/redirect.html:17
 msgid "The payment process has started in a new window."
-msgstr ""
+msgstr "Процес оплати розпочався в новому вікні."
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/redirect.html:20
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/redirect.html:20
 msgid "The window to enter your payment data was not opened or was closed?"
-msgstr ""
+msgstr "Вікно для введення платіжних даних не було відкрито або було закрито?"
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/redirect.html:24
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/redirect.html:24
 msgid "Click here in order to open the window."
-msgstr ""
+msgstr "Натисніть тут, щоб відкрити вікно."
 
 #: pretix/plugins/paypal/views.py:221
 msgid ""
@@ -22615,32 +22637,36 @@ msgid ""
 "Your PayPal account is now connected to pretix. You can change the settings "
 "in detail below."
 msgstr ""
+"Ваш обліковий запис PayPal тепер підключено до pretix. Нижче ви можете "
+"змінити деталі налаштування."
 
 #: pretix/plugins/paypal/views.py:272
 msgid "Invalid response from PayPal received."
-msgstr ""
+msgstr "Від PayPal отримано недійсну відповідь."
 
 #: pretix/plugins/paypal/views.py:288
 msgid "It looks like you canceled the PayPal payment"
-msgstr ""
+msgstr "Схоже, ви скасували платіж PayPal"
 
 #: pretix/plugins/paypal/views.py:438
 msgid "Your PayPal account has been disconnected."
-msgstr ""
+msgstr "Ваш обліковий запис PayPal відключено."
 
 #: pretix/plugins/pretixdroid/apps.py:30 pretix/plugins/pretixdroid/apps.py:33
 msgid "Old check-in device API"
-msgstr ""
+msgstr "API старого пристрою реєстрації"
 
 #: pretix/plugins/pretixdroid/apps.py:39
 msgid ""
 "This plugin allows you to use the pretixdroid and pretixdesk apps for your "
 "event."
 msgstr ""
+"Цей плагін дозволяє вам використовувати програми pretixdroid і pretixdesk "
+"для вашої події."
 
 #: pretix/plugins/reports/apps.py:44 pretix/plugins/reports/apps.py:47
 msgid "Report exporter"
-msgstr ""
+msgstr "Експортер звіту"
 
 #: pretix/plugins/reports/apps.py:51
 msgid "Generate printable reports about your sales."
@@ -22649,21 +22675,21 @@ msgstr ""
 #: pretix/plugins/reports/exporters.py:154
 #, python-format
 msgid "Page %d"
-msgstr ""
+msgstr "Сторінка %d"
 
 #: pretix/plugins/reports/exporters.py:156
 #, python-format
 msgid "Created: %s"
-msgstr ""
+msgstr "Створено: %s"
 
 #: pretix/plugins/reports/exporters.py:198
 msgid "Order overview (PDF)"
-msgstr ""
+msgstr "Огляд замовлення (PDF)"
 
 #: pretix/plugins/reports/exporters.py:266
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:58
 msgid "Orders by product"
-msgstr ""
+msgstr "Замовлення за продуктами"
 
 #: pretix/plugins/reports/exporters.py:266
 msgid "(excl. taxes)"
@@ -22671,12 +22697,12 @@ msgstr ""
 
 #: pretix/plugins/reports/exporters.py:266
 msgid "(incl. taxes)"
-msgstr ""
+msgstr "(враховуючи податки)"
 
 #: pretix/plugins/reports/exporters.py:271
 #, python-brace-format
 msgid "{axis} between {start} and {end}"
-msgstr ""
+msgstr "{axis} між {start} i{end}"
 
 #: pretix/plugins/reports/exporters.py:303
 #: pretix/plugins/reports/exporters.py:304
@@ -22685,11 +22711,11 @@ msgstr ""
 #: pretix/plugins/reports/exporters.py:307
 #: pretix/plugins/reports/exporters.py:308
 msgid "#"
-msgstr ""
+msgstr "#"
 
 #: pretix/plugins/reports/exporters.py:376
 msgid "List of orders with taxes (PDF)"
-msgstr ""
+msgstr "Список замовлень з податками (PDF)"
 
 #: pretix/plugins/reports/exporters.py:453
 #, python-brace-format
@@ -22701,52 +22727,56 @@ msgstr ""
 #: pretix/plugins/reports/exporters.py:759
 #: pretix/plugins/reports/exporters.py:800
 msgid "Gross"
-msgstr ""
+msgstr "Брутто"
 
 #: pretix/plugins/reports/exporters.py:462
 #: pretix/plugins/reports/exporters.py:708
 #: pretix/plugins/reports/exporters.py:760
 #: pretix/plugins/reports/exporters.py:800
 msgid "Tax"
-msgstr ""
+msgstr "Податок"
 
 #: pretix/plugins/reports/exporters.py:547
 msgid "List of orders with taxes"
-msgstr ""
+msgstr "Список замовлень з податками"
 
 #: pretix/plugins/reports/exporters.py:553
 msgid "Taxes by country"
-msgstr ""
+msgstr "Податки за країнами"
 
 #: pretix/plugins/reports/exporters.py:554
 msgid "Business customers"
-msgstr ""
+msgstr "Бізнес-клієнти"
 
 #: pretix/plugins/reports/exporters.py:704
 #: pretix/plugins/reports/exporters.py:749
 msgid "Country code"
-msgstr ""
+msgstr "Kод країни"
 
 #: pretix/plugins/returnurl/apps.py:30 pretix/plugins/returnurl/apps.py:33
 #: pretix/plugins/returnurl/templates/returnurl/settings.html:5
 msgid "Redirection from order page"
-msgstr ""
+msgstr "Перенаправлення зі сторінки замовлення"
 
 #: pretix/plugins/returnurl/apps.py:37
 msgid ""
 "This plugin allows to link to payments and redirect back afterwards. This is "
 "useful in combination with our API."
 msgstr ""
+"Цей плагін дозволяє підключатися до платежів і потім перенаправляти назад. "
+"Це корисно в поєднанні з нашим API."
 
 #: pretix/plugins/returnurl/signals.py:86
 msgid "Redirection"
-msgstr ""
+msgstr "Перенаправлення"
 
 #: pretix/plugins/returnurl/templates/returnurl/settings.html:7
 msgid ""
 "This feature is useful if you use only the payment component of pretix but "
 "build your own checkout interface for other steps."
 msgstr ""
+"Ця функція корисна, якщо ви використовуєте лише платіжний компонент pretix, "
+"але створюєте власний інтерфейс оплати для інших кроків."
 
 #: pretix/plugins/returnurl/views.py:35
 msgid "Base redirection URL"
@@ -22762,11 +22792,11 @@ msgstr ""
 
 #: pretix/plugins/sendmail/forms.py:75 pretix/plugins/sendmail/models.py:208
 msgid "Send email to"
-msgstr ""
+msgstr "Надіслати електронний лист на адресу"
 
 #: pretix/plugins/sendmail/forms.py:84
 msgid "Attachment"
-msgstr ""
+msgstr "Прикріплення"
 
 #: pretix/plugins/sendmail/forms.py:91
 msgid ""
@@ -22777,7 +22807,7 @@ msgstr ""
 
 #: pretix/plugins/sendmail/forms.py:99
 msgid "Only send to people who bought"
-msgstr ""
+msgstr "Надсилайте лише тим, хто купив"
 
 #: pretix/plugins/sendmail/forms.py:104
 msgid "Filter check-in status"
@@ -22789,12 +22819,12 @@ msgstr ""
 
 #: pretix/plugins/sendmail/forms.py:111
 msgid "Only send to customers of"
-msgstr ""
+msgstr "Надсилати лише клієнтам"
 
 #: pretix/plugins/sendmail/forms.py:117
 msgctxt "subevent"
 msgid "Only send to customers of dates starting at or after"
-msgstr ""
+msgstr "Надсилати лише клієнтам y дати, які починаються з або після"
 
 #: pretix/plugins/sendmail/forms.py:122
 msgctxt "subevent"
@@ -22820,26 +22850,29 @@ msgid ""
 "Every attendee (falling back to the order contact when no attendee email "
 "address is given)"
 msgstr ""
+"Кожен учасник (звертаючись до контактної особи відповідальної за замовлення, "
+"якщо не вказано електронну адресу учасника)"
 
 #: pretix/plugins/sendmail/forms.py:160 pretix/plugins/sendmail/models.py:181
 msgid "Both (all order contact addresses and all attendee email addresses)"
 msgstr ""
+"Обидва (усі контактні адреси замовлення та електронні адреси всіх учасників)"
 
 #: pretix/plugins/sendmail/forms.py:177 pretix/plugins/sendmail/views.py:296
 msgid "payment pending (except unapproved)"
-msgstr ""
+msgstr "В очікуванні оплати (крім незатвердженого)"
 
 #: pretix/plugins/sendmail/forms.py:178 pretix/plugins/sendmail/views.py:297
 msgid "approval pending"
-msgstr ""
+msgstr "В очікуванні затвердження"
 
 #: pretix/plugins/sendmail/forms.py:181 pretix/plugins/sendmail/views.py:295
 msgid "pending with payment overdue"
-msgstr ""
+msgstr "B очікуванні з простроченням платежу"
 
 #: pretix/plugins/sendmail/forms.py:184
 msgid "Send to customers with order status"
-msgstr ""
+msgstr "Відправити клієнтам зі статусом замовлення"
 
 #: pretix/plugins/sendmail/forms.py:208 pretix/plugins/sendmail/forms.py:212
 msgid "Send to customers checked in on list"
@@ -22871,57 +22904,58 @@ msgstr ""
 
 #: pretix/plugins/sendmail/forms.py:309
 msgid "Please specify the send date"
-msgstr ""
+msgstr "Будь ласка, вкажіть дату відправки"
 
 #: pretix/plugins/sendmail/forms.py:314
 msgid "Please specify the offset days and time"
-msgstr ""
+msgstr "Будь ласка, вкажіть дні та час зміщення"
 
 #: pretix/plugins/sendmail/forms.py:325
 msgid "Please specify a product"
-msgstr ""
+msgstr "Будь ласка, вкажіть продукт"
 
 #: pretix/plugins/sendmail/models.py:48
 msgid "scheduled"
-msgstr ""
+msgstr "заплановано"
 
 #: pretix/plugins/sendmail/models.py:49
 msgid "failed"
-msgstr ""
+msgstr "не вдалося"
 
 #: pretix/plugins/sendmail/models.py:50
 msgid "completed"
-msgstr ""
+msgstr "завершено"
 
 #: pretix/plugins/sendmail/models.py:51
 msgid "missed"
-msgstr ""
+msgstr "пропущенo"
 
 #: pretix/plugins/sendmail/models.py:191
 msgid "Limit products"
-msgstr ""
+msgstr "Обмежити продукти"
 
 #: pretix/plugins/sendmail/models.py:196
 msgid "By default, only paid orders will receive the email"
 msgstr ""
+"За замовчуванням електронний лист отримуватимуть лише оплачені замовлення"
 
 #: pretix/plugins/sendmail/models.py:200
 msgid "Send date"
-msgstr ""
+msgstr "Дата відправлення"
 
 #: pretix/plugins/sendmail/models.py:202
 #: pretix/presale/templates/pretixpresale/fragment_day_calendar.html:8
 msgid "Time of day"
-msgstr ""
+msgstr "Час дня"
 
 #: pretix/plugins/sendmail/models.py:213
 msgid "Only enabled rules are actually sent"
-msgstr ""
+msgstr "Насправді надсилаються лише активовані правила"
 
 #: pretix/plugins/sendmail/models.py:249
 #, python-brace-format
 msgid "on {date} at {time}"
-msgstr ""
+msgstr "в {date} o {time}"
 
 #: pretix/plugins/sendmail/models.py:255
 #, python-format
@@ -22957,11 +22991,11 @@ msgstr[2] ""
 
 #: pretix/plugins/sendmail/signals.py:96
 msgid "Automated emails"
-msgstr ""
+msgstr "Автоматизовані електронні листи"
 
 #: pretix/plugins/sendmail/signals.py:119
 msgid "Email was sent"
-msgstr ""
+msgstr "Електронний лист надіслано"
 
 #: pretix/plugins/sendmail/signals.py:120
 msgid "The order received a mass email."
@@ -22970,6 +23004,8 @@ msgstr ""
 #: pretix/plugins/sendmail/signals.py:121
 msgid "A ticket holder of this order received a mass email."
 msgstr ""
+"Власник квитка цього замовлення отримав масове повідомлення електронною "
+"поштою."
 
 #: pretix/plugins/sendmail/signals.py:122
 msgid "An email rule was created"
@@ -22999,27 +23035,27 @@ msgstr ""
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/history.html:25
 msgid "Sent to orders:"
-msgstr ""
+msgstr "Відправлено на замовлення:"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/history.html:34
 msgid "All customers not checked in"
-msgstr ""
+msgstr "Усі клієнти не зареєструвалися"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/history.html:46
 msgid "Attendee contact addresses"
-msgstr ""
+msgstr "Контактні адреси учасників"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/history.html:48
 msgid "All contact addresses"
-msgstr ""
+msgstr "Усі контактні адреси"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/history.html:50
 msgid "Order contact addresses"
-msgstr ""
+msgstr "Контактні адреси замовлення"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/history.html:61
 msgid "Send a new email based on this"
-msgstr ""
+msgstr "Надіслати новий лист на основі цього"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_create.html:4
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_create.html:6
@@ -23033,6 +23069,9 @@ msgid ""
 "your configured date. Typically, this will not be more than 10 minutes. Your "
 "email will never be sent earlier than the time you configured."
 msgstr ""
+"З технічних причин електронний лист може бути надіслано трохи пізніше за "
+"встановлену вами дату. Як правило, це не більше 10 хвилин. Ваша електронна "
+"пошта ніколи не буде надіслана раніше, ніж ви налаштували."
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_delete.html:4
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_delete.html:6
@@ -23056,17 +23095,17 @@ msgstr ""
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_inspect.html:13
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:24
 msgid "Email subject"
-msgstr ""
+msgstr "Тема електронного листа"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_inspect.html:17
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_inspect.html:25
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:26
 msgid "Scheduled time"
-msgstr ""
+msgstr "Запланований час"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_inspect.html:30
 msgid "Last schedule computation"
-msgstr ""
+msgstr "Останній розрахунок графіка"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:4
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:6
@@ -23087,15 +23126,15 @@ msgstr ""
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:28
 msgctxt "subevent"
 msgid "Sent / Total dates"
-msgstr ""
+msgstr "Відправлено / Загальні дати"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:47
 msgid "Next execution:"
-msgstr ""
+msgstr "Наступне виконання:"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:51
 msgid "unknown"
-msgstr ""
+msgstr "невідомо"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:55
 msgid "Last execution:"
@@ -23139,17 +23178,17 @@ msgstr ""
 #, python-format
 msgid "%(number)s matching order"
 msgid_plural "%(number)s matching orders"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "%(number)s відповідне замовлення"
+msgstr[1] "%(number)s відповідних замовлення"
+msgstr[2] "%(number)s відповідних замовлень"
 
 #: pretix/plugins/sendmail/views.py:121
 msgid "You supplied an invalid log entry ID"
-msgstr ""
+msgstr "Ви вказали недійсний ідентифікатор запису в журналі"
 
 #: pretix/plugins/sendmail/views.py:193
 msgid "There are no orders matching this selection."
-msgstr ""
+msgstr "Немає замовлень, що відповідають цьому вибору."
 
 #: pretix/plugins/sendmail/views.py:246
 #, python-format
@@ -23157,6 +23196,8 @@ msgid ""
 "Your message has been queued and will be sent to the contact addresses of %d "
 "orders in the next few minutes."
 msgstr ""
+"Ваше повідомлення поставлено в чергу і буде надіслано на контактні адреси %d "
+"замовлень протягом наступних кількох хвилин."
 
 #: pretix/plugins/sendmail/views.py:368
 msgid "Your rule has been created."
@@ -23171,7 +23212,7 @@ msgstr ""
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:8
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:10
 msgid "Statistics"
-msgstr ""
+msgstr "Статистика"
 
 #: pretix/plugins/statistics/apps.py:37
 msgid "Get a birds-eye view of your event sales with graphical statistics."
@@ -23179,13 +23220,15 @@ msgstr ""
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:19
 msgid "Orders by day"
-msgstr ""
+msgstr "Замовлення по днях"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:25
 msgid ""
 "Orders paid in multiple payments are shown with the date of their last "
 "payment."
 msgstr ""
+"Замовлення, oплачені кількома платежами, відображаються з датою останнього "
+"платежу."
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:34
 msgid "Revenue over time"
@@ -23197,28 +23240,32 @@ msgid ""
 "If you select a single date, payment method fees will not be listed here as "
 "it might not be clear which date they belong to."
 msgstr ""
+"Якщо ви виберете одну дату, комісія за спосіб оплати тут не буде перелічена, "
+"оскільки може бути не зрозуміло, до якої дати вони належать."
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:48
 msgid ""
 "Only fully paid orders are counted. Orders paid in multiple payments are "
 "shown with the date of their last payment."
 msgstr ""
+"Враховуються лише повністю оплачені замовлення. Замовлення, сплачені "
+"кількома платежами, відображаються з датою останнього платежу."
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:67
 msgid "Seating Overview"
-msgstr ""
+msgstr "Огляд місць"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:74
 msgid "Sold Seats"
-msgstr ""
+msgstr "Продані місця"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:80
 msgid "Blocked Seats"
-msgstr ""
+msgstr "Заблоковані місця"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:86
 msgid "Free Seats"
-msgstr ""
+msgstr "Вільні місця"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:94
 msgid "Seating Sales Potentials"
@@ -23226,37 +23273,37 @@ msgstr ""
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:102
 msgid "Unsold Seats"
-msgstr ""
+msgstr "Непродані місця"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:103
 msgid "Potential Profits"
-msgstr ""
+msgstr "Потенційні прибутки"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:107
 msgid "Minimum Price"
-msgstr ""
+msgstr "Mінімальна ціна"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:108
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:110
 msgid "Blocked"
-msgstr ""
+msgstr "Заблоковано"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:109
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:111
 msgid "Available"
-msgstr ""
+msgstr "Доступнo"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:116
 msgid "On Sale"
-msgstr ""
+msgstr "У продажу"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:136
 msgid "Not on Sale"
-msgstr ""
+msgstr "Не в продажу"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:146
 msgid "Seats not attributed to any specific product"
-msgstr ""
+msgstr "Місця не віднесені до жодного конкретного продукту"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:172
 msgid ""
@@ -23282,6 +23329,8 @@ msgid ""
 "The provided key \"%(value)s\" does not look valid. It should start with "
 "\"%(prefix)s\"."
 msgstr ""
+"Наданий ключ \"%(value)s\" виглядає недійсним. Він має починатися з \""
+"%(prefix)s\"."
 
 #: pretix/plugins/stripe/forms.py:51 pretix/plugins/stripe/signals.py:152
 msgid "Stripe Connect: App fee (percent)"
@@ -23301,14 +23350,17 @@ msgid ""
 "clicking on the following button, you can either create a new Stripe account "
 "connect pretix to an existing one."
 msgstr ""
+"Щоб приймати платежі через Stripe, вам знадобиться обліковий запис у Stripe. "
+"Натиснувши наведену нижче кнопку, ви можете створити новий обліковий запис "
+"Stripe, або підключити pretix до існуючого."
 
 #: pretix/plugins/stripe/payment.py:114
 msgid "Connect with Stripe"
-msgstr ""
+msgstr "З'єднатися зі Stripe"
 
 #: pretix/plugins/stripe/payment.py:124
 msgid "Disconnect from Stripe"
-msgstr ""
+msgstr "Від’єднатися від Stripe"
 
 #: pretix/plugins/stripe/payment.py:128
 msgid ""
