@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-28 16:44+0000\n"
 "PO-Revision-Date: 2022-05-09 15:43+0000\n"
-"Last-Translator: Richard Schreiber <wiffbi@gmail.com>\n"
+"Last-Translator: Iryna Loik <iraloyik@gmail.com>\n"
 "Language-Team: Ukrainian <https://translate.pretix.eu/projects/pretix/pretix/"
 "uk/>\n"
 "Language: uk\n"
@@ -16554,18 +16554,27 @@ msgid ""
 "implications, e.g. the payment method fee might change or additional "
 "questions can be added to the order that need to be answered by the user."
 msgstr ""
+"Ви можете використовувати цей інструмент для того щоб змінити замовлений "
+"продукт або частково відмінити замовлення. Звертаємо вашу увагу, що зміна "
+"замовлення може мати кілька наслідків, наприклад зміна вартості комісії за "
+"оплату або з'являться додаткові запитання, на які повинен користувач дати "
+"відповідь."
 
 #: pretix/control/templates/pretixcontrol/order/change.html:31
 msgid ""
 "The user will receive a notification about the change but in the case of new "
 "required questions, the user will not be forced to answer them."
 msgstr ""
+"Користувач отримає сповіщення про зміну, але у випадку, якщо з'являться "
+"додаткові запитання, користувач не буде зобовязаний відповідати на них."
 
 #: pretix/control/templates/pretixcontrol/order/change.html:37
 msgid ""
 "If an invoice is attached to the order, a cancellation will be created "
 "together with a new invoice."
 msgstr ""
+"Якщо рахунок було прикріплено до замовлення, то разом зі скасуванням "
+"згенерувається новий рахунок."
 
 #: pretix/control/templates/pretixcontrol/order/change.html:42
 msgid ""
@@ -16581,11 +16590,17 @@ msgid ""
 "not be able to exist otherwise. In most cases it is easier to cancel the "
 "order completely and create a new one."
 msgstr ""
+"Будь ласка, обережно користуйтесь цим інструментом. Зміни, які ви внесете не "
+"можна буде потім скасувати. Також, якщо ви вручну зміните замовлення, не всі "
+"обмеження (наприклад, на необхідні доповнення) будуть перевірені. Тому ви "
+"можете створити таке замовлення, яке не можливо буде реалізувати. У "
+"більшості випадків значно простіше скасувати замовлення і натомість створити "
+"нове."
 
 #: pretix/control/templates/pretixcontrol/order/change.html:68
 #, python-format
 msgid "Add-On to position #%(posid)s"
-msgstr ""
+msgstr "Додатково до позиції #%(posid)s"
 
 #: pretix/control/templates/pretixcontrol/order/change.html:85
 msgid ""
@@ -16593,6 +16608,9 @@ msgid ""
 "change the price or item, the discount will still be calculated from the "
 "original price at the time of purchase."
 msgstr ""
+"Ця позиція була створена ваучером з обмеженим бюджетом. Якщо ви змінити ціну "
+"або товар, знижка буде враховуватись від оригінальної ціни, за яку було "
+"здійснено покупку."
 
 #: pretix/control/templates/pretixcontrol/order/change.html:97
 #: pretix/control/templates/pretixcontrol/order/change.html:327
@@ -16824,14 +16842,16 @@ msgid ""
 "We don't know if this invoice was emailed to the customer since it was "
 "created before our system tracked this information"
 msgstr ""
+"Нам невідомо чи цей рахунок було надіслано клієнту, оскільки він був "
+"створено до того, як наша система почала відстежувати таку інформацію"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:255
 msgid "Invoice was emailed to customer"
-msgstr ""
+msgstr "Рахунок було надіслано замовнику"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:260
 msgid "Invoice was not yet emailed to customer"
-msgstr ""
+msgstr "Рахунок ще не був надісланий замовнику"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:270
 msgid "Rebuild the invoice with updated data but the same invoice number."
@@ -16862,12 +16882,12 @@ msgstr "Скасувати та повторно випустити"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:300
 msgid "Email invoices"
-msgstr ""
+msgstr "Надіслати рахунки"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:309
 #: pretix/control/templates/pretixcontrol/order/index.html:321
 msgid "Generate invoice"
-msgstr ""
+msgstr "Створити рахунок"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:334
 msgid "Change answers"
@@ -16959,7 +16979,7 @@ msgstr "<strong>плюс</strong> %(rate)s%% %(taxname)s"
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:351
 #, python-format
 msgid "incl. %(rate)s%% %(taxname)s"
-msgstr ""
+msgstr "враховуючи %(rate)s%% %(taxname)s"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:625
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:377
@@ -17127,6 +17147,10 @@ msgid ""
 "products in the order are still available. If the order is pending payment, "
 "the expiry date will be reset."
 msgstr ""
+"Повторно активуючи замовлення, ви скасовуєте його скасування та перетворюєте "
+"його назад у незавершене чи оплачене замовлення. Це можливо лише за умови, "
+"що всі продукти в замовленні ще є в наявності. Якщо замовлення очікує на "
+"оплату, дата закінчення терміну дії буде скинута."
 
 #: pretix/control/templates/pretixcontrol/order/reactivate.html:34
 msgid "Reactivate"
@@ -17175,6 +17199,11 @@ msgid ""
 "refunds will be created as pending refunds, you can then later mark them as "
 "done once you actually transferred the money back to the customer."
 msgstr ""
+"Будь-які оплати, які ви обрали для автоматичного повернення коштів відразу "
+"надішлють запити на відшкодування відповідним постачальникам послуг оплати. "
+"Повернення вручну будуть створені як відшкодування, які очікують на "
+"відшкодування, потім ви зможете позначити їх як виконані, коли фактично "
+"перекажете гроші клієнту."
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:32
 msgid "Refund to original payment method"
@@ -17936,20 +17965,20 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:139
 msgid "Not yet initialized"
-msgstr ""
+msgstr "Ще не ініціалізовано"
 
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:142
 msgid "Revoked"
-msgstr ""
+msgstr "Скасовано"
 
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:164
 msgid "Connect"
-msgstr ""
+msgstr "З'єднати"
 
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:173
 #: pretix/control/templates/pretixcontrol/organizers/webhooks.html:70
 msgid "Logs"
-msgstr ""
+msgstr "Журнали"
 
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:185
 #: pretix/control/templates/pretixcontrol/subevents/index.html:193
@@ -17958,11 +17987,11 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:12
 msgid "Organizer settings"
-msgstr ""
+msgstr "Налаштування організатора"
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:44
 msgid "Organizer page"
-msgstr ""
+msgstr "Сторінка організатора"
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:70
 msgid ""
@@ -17970,10 +17999,13 @@ msgid ""
 "default settings for all events in this account that do not have their own "
 "design settings."
 msgstr ""
+"Ці налаштування будуть застосовані для сторінки організатора, а також як "
+"стандартні налаштування на усі події цього еккаунта, які не мають своїх "
+"налаштувань."
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:89
 msgid "Privacy"
-msgstr ""
+msgstr "Приватність"
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:93
 msgid ""
@@ -17981,6 +18013,9 @@ msgid ""
 "before you are allowed to use cookies or similar technology for analytics, "
 "tracking, payment, or similar purposes."
 msgstr ""
+"Деякі юрисдикції, враховуючи ЄС, вимагають підтвердження від користувача для "
+"використання cookies або схожих технологій для аналітики, відстежування, "
+"оплати або схожих цілей."
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:100
 msgid ""
@@ -17989,6 +18024,10 @@ msgid ""
 "security. Therefore, cookies set by pretix itself do not require consent in "
 "all jurisdictions that we are aware of."
 msgstr ""
+"pretix встановлює файли cookies тільки для того, щоб надати послуги, про які "
+"просить користувач або ж для підтримки певного рівня безпеки. Тому файли "
+"cookie, встановлені самим pretix, не вимагають згоди у всіх юрисдикціях, про "
+"які нам відомо."
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:108
 msgid ""
@@ -17996,6 +18035,10 @@ msgid ""
 "affect if you use <strong>plugins</strong> that require additional cookies "
 "<strong>and</strong> participate in our cookie consent mechanism."
 msgstr ""
+"Тому, налаштування на цій сторінці будуть <strong>тільки</strong> будуть "
+"застосовуватись якщо ви використаєте <strong>плагіни</strong> які "
+"вимагаються додаткові файли cookies <strong>та</strong> використовуються "
+"нашим механізмом отримання згоди на використання файлів cookie."
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:115
 msgid ""
@@ -18005,82 +18048,95 @@ msgid ""
 "usage, the legal details in your specific jurisdiction, or the agreements "
 "you have with third parties such as payment or tracking providers."
 msgstr ""
+"Відповідно, це ваша відповідальність щодо дотримання норм діючого "
+"закондавства. Ми намагаємось допомогти із наданням усіх налаштувань, але ми "
+"не можемо брати на себе відповідальність, оскільки нам невідомо про вашу "
+"особисту конфігурацію використання pretix, діюче законодавство у вашій "
+"юрисдикції, або ж про домовленості, які є у вас з третіми сторонами такими "
+"як постачальники платежів чи відстеження."
 
 #: pretix/control/templates/pretixcontrol/organizers/gate_delete.html:5
 msgid "Delete gate:"
-msgstr ""
+msgstr "Видалити ворота:"
 
 #: pretix/control/templates/pretixcontrol/organizers/gate_delete.html:8
 msgid "Are you sure you want to delete the gate?"
-msgstr ""
+msgstr "Ви впевнені, що хочете видалити ці ворота?"
 
 #: pretix/control/templates/pretixcontrol/organizers/gate_edit.html:6
 msgid "Gate:"
-msgstr ""
+msgstr "Ворота:"
 
 #: pretix/control/templates/pretixcontrol/organizers/gate_edit.html:8
 #: pretix/control/templates/pretixcontrol/organizers/gates.html:11
 msgid "Create a new gate"
-msgstr ""
+msgstr "Створити нові ворота"
 
 #: pretix/control/templates/pretixcontrol/organizers/gates.html:7
 msgid "The list below shows gates that you can use to group check-in devices."
 msgstr ""
+"У списку нижче показано ворота, які можна використовувати для групування "
+"пристроїв реєстрації."
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:7
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_edit.html:6
 #, python-format
 msgid "Gift card: %(card)s"
-msgstr ""
+msgstr "Подарункова карта: %(card)s"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:36
 msgid "Expire date"
-msgstr ""
+msgstr "Дата завершення терміну дії"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:43
 msgid "Issued through sale"
-msgstr ""
+msgstr "Видана через продаж"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:55
 msgid "Transactions"
-msgstr ""
+msgstr "Транзакції"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:81
 msgid ""
 "Create a payment on the respective order that cancels out with this "
 "transaction. The order will then likely be overpaid."
 msgstr ""
+"Створіть платіж за відповідним замовленням, яке скасовується з цією "
+"трансакцією. Тоді, швидше за все, замовлення буде переплачено."
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:83
 msgid "Revert"
-msgstr ""
+msgstr "Повернути"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:87
 msgid "Manual transaction"
-msgstr ""
+msgstr "Операція вручну"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:120
 msgid "Gift card history"
-msgstr ""
+msgstr "Історія подарункової карти"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcards.html:8
 msgid "Issued gift cards"
-msgstr ""
+msgstr "Видані подарункові сертифікати"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcards.html:13
 msgid ""
 "You haven't issued any gift cards yet. You can either set up a product in an "
 "event shop to sell gift cards, or you can manually issue gift cards."
 msgstr ""
+"Ви не створили жодного подарункового сертифікату. Ви можете створити продукт "
+"у магазині події для продажу подарункового сертифікату або ж вручну видавати "
+"подарункові сертифікати."
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcards.html:20
 #: pretix/control/templates/pretixcontrol/organizers/giftcards.html:50
 msgid "Manually issue a gift card"
-msgstr ""
+msgstr "Вручну видати подарунковий сертифікат"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcards.html:106
 msgid "Accepted gift cards of other organizers"
-msgstr ""
+msgstr "Приймаються подарункові картки інших організаторів"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcards.html:108
 msgid ""
@@ -18088,54 +18144,60 @@ msgid ""
 "ticket shops in this account will also accept gift codes issued through a "
 "different organizer account, and vice versa."
 msgstr ""
+"Якщо у вас є доступ до інших профілів організаторів, ви можете налаштувати "
+"свій магазин у цьому еккаунті так, що він теж прийматиме подарункові коди, "
+"які створені на інших профілях або ж навпаки."
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcards.html:124
 msgid "You are currently not accepting gift cards from other organizers."
-msgstr ""
+msgstr "Зараз ви не приймаєте подарункові сертифікати інших організаторів."
 
 #: pretix/control/templates/pretixcontrol/organizers/index.html:9
 msgid ""
 "The list below shows all organizer accounts you have administrative access "
 "to."
 msgstr ""
+"У списку нижче ви знайдете перелік усіх еккаунтів адміністраторів, до яких у "
+"вас є доступ."
 
 #: pretix/control/templates/pretixcontrol/organizers/logs.html:4
 #: pretix/control/templates/pretixcontrol/organizers/logs.html:6
 msgid "Organizer logs"
-msgstr ""
+msgstr "Журнал організатора"
 
 #: pretix/control/templates/pretixcontrol/organizers/mail.html:60
 msgid "Customer account registration"
-msgstr ""
+msgstr "Реєстрація облікового запису клієнта"
 
 #: pretix/control/templates/pretixcontrol/organizers/mail.html:63
 msgid "Customer account email change"
-msgstr ""
+msgstr "Зміна імейлу клієнта"
 
 #: pretix/control/templates/pretixcontrol/organizers/mail.html:66
 msgid "Customer account password reset"
-msgstr ""
+msgstr "Зміна паролю клієнта"
 
 #: pretix/control/templates/pretixcontrol/organizers/membershiptype_delete.html:5
 msgid "Delete membership type:"
-msgstr ""
+msgstr "Видалити тип членства:"
 
 #: pretix/control/templates/pretixcontrol/organizers/membershiptype_delete.html:9
 msgid "Are you sure you want to delete this membership type?"
-msgstr ""
+msgstr "Чи ви впевнені, що хочете видалити цей тип членства?"
 
 #: pretix/control/templates/pretixcontrol/organizers/membershiptype_delete.html:11
 msgid "This membership type cannot be deleted since it has already been used."
 msgstr ""
+"Цей тип членства не можливо видалити, оскільки його уже було використано."
 
 #: pretix/control/templates/pretixcontrol/organizers/membershiptype_edit.html:6
 msgid "Membership type:"
-msgstr ""
+msgstr "Тип членства:"
 
 #: pretix/control/templates/pretixcontrol/organizers/membershiptype_edit.html:8
 #: pretix/control/templates/pretixcontrol/organizers/membershiptypes.html:21
 msgid "Create a new membership type"
-msgstr ""
+msgstr "Створити новий вид членства"
 
 #: pretix/control/templates/pretixcontrol/organizers/membershiptypes.html:8
 msgid ""
@@ -18144,11 +18206,17 @@ msgid ""
 "in one event, and require valid memberships to allow purchases in another "
 "event."
 msgstr ""
+"Ви можете визначити типи членства. Вони дозволяють об’єднувати продукти з "
+"різних подій разом. Ви можете продавати членство як частину продукту в одній "
+"події і вимагати наявність дійсного членства для здійснення покупки в іншій "
+"події."
 
 #: pretix/control/templates/pretixcontrol/organizers/membershiptypes.html:15
 msgid ""
 "This can be used to enable products like year passes, tickets of ten, etc."
 msgstr ""
+"Це можна використовувати, щоб увімкнути такі продукти, як річні абонементи, "
+"квитки десятками тощо."
 
 #: pretix/control/templates/pretixcontrol/organizers/properties.html:7
 msgid ""
@@ -18156,89 +18224,94 @@ msgid ""
 "can later set for your events and re-use in places like ticket layouts. This "
 "is an useful timesaver if you create lots and lots of events."
 msgstr ""
+"Тут ви можете задати параметри метаданих (змінних), які ви потім можете "
+"поворно застосовувати наприклад, на дизайні квитків. Це зекономить ваш час, "
+"якщо ви створюєте дуже багато подій."
 
 #: pretix/control/templates/pretixcontrol/organizers/properties.html:15
 #: pretix/control/templates/pretixcontrol/organizers/property_edit.html:8
 msgid "Create a new property"
-msgstr ""
+msgstr "Створити нову властивість"
 
 #: pretix/control/templates/pretixcontrol/organizers/properties.html:20
 msgid "Property"
-msgstr ""
+msgstr "Властивість"
 
 #: pretix/control/templates/pretixcontrol/organizers/property_delete.html:5
 msgid "Delete property:"
-msgstr ""
+msgstr "Видалити властивість:"
 
 #: pretix/control/templates/pretixcontrol/organizers/property_delete.html:8
 msgid "Are you sure you want to delete the property?"
-msgstr ""
+msgstr "Чи ви впевнені, що хочете видалити цю властивість?"
 
 #: pretix/control/templates/pretixcontrol/organizers/property_edit.html:6
 msgid "Property:"
-msgstr ""
+msgstr "Властивість:"
 
 #: pretix/control/templates/pretixcontrol/organizers/team_delete.html:5
 msgid "Delete team:"
-msgstr ""
+msgstr "Видалити команду:"
 
 #: pretix/control/templates/pretixcontrol/organizers/team_delete.html:7
 msgid ""
 "You cannot delete the team because there would be no one left who could "
 "change team permissions afterwards."
 msgstr ""
+"Ви не можете видалити команду, тому що в результаті нікого не залишиться хто "
+"б зміг би птім надавати права."
 
 #: pretix/control/templates/pretixcontrol/organizers/team_delete.html:17
 msgid "Are you sure you want to delete the team?"
-msgstr ""
+msgstr "Ви впевнені, що хочете видалити команду?"
 
 #: pretix/control/templates/pretixcontrol/organizers/team_edit.html:6
 #: pretix/control/templates/pretixcontrol/organizers/team_members.html:6
 msgid "Team:"
-msgstr ""
+msgstr "Команда:"
 
 #: pretix/control/templates/pretixcontrol/organizers/team_edit.html:8
 #: pretix/control/templates/pretixcontrol/organizers/teams.html:30
 msgid "Create a new team"
-msgstr ""
+msgstr "Створити нову команду"
 
 #: pretix/control/templates/pretixcontrol/organizers/team_edit.html:10
 msgid "You will be able to add team members in the next step."
-msgstr ""
+msgstr "Ви зможете додати членів команди у наступному кроці."
 
 #: pretix/control/templates/pretixcontrol/organizers/team_edit.html:23
 msgid "Organizer permissions"
-msgstr ""
+msgstr "Дозволи для організатора"
 
 #: pretix/control/templates/pretixcontrol/organizers/team_edit.html:31
 msgid "Event permissions"
-msgstr ""
+msgstr "Дозволи для події"
 
 #: pretix/control/templates/pretixcontrol/organizers/team_members.html:21
 msgid "Member"
-msgstr ""
+msgstr "Учасник"
 
 #: pretix/control/templates/pretixcontrol/organizers/team_members.html:32
 msgid "Two-factor authentication enabled"
-msgstr ""
+msgstr "Увімкнено двофакторну аутентифікацію"
 
 #: pretix/control/templates/pretixcontrol/organizers/team_members.html:36
 msgid "Two-factor authentication disabled"
-msgstr ""
+msgstr "Вимкнено двофакторну аутентифікацію"
 
 #: pretix/control/templates/pretixcontrol/organizers/team_members.html:43
 #: pretix/control/templates/pretixcontrol/organizers/team_members.html:63
 #: pretix/control/templates/pretixcontrol/organizers/team_members.html:109
 msgid "Remove"
-msgstr ""
+msgstr "Видалити"
 
 #: pretix/control/templates/pretixcontrol/organizers/team_members.html:53
 msgid "invited, pending response"
-msgstr ""
+msgstr "Запрошено, очікування відповіді"
 
 #: pretix/control/templates/pretixcontrol/organizers/team_members.html:55
 msgid "resend invite"
-msgstr ""
+msgstr "переслати запрошення"
 
 #: pretix/control/templates/pretixcontrol/organizers/team_members.html:73
 msgid ""
@@ -18246,11 +18319,15 @@ msgid ""
 "have a pretix account, they will immediately be added to the event. "
 "Otherwise, they will be sent an email with an invitation."
 msgstr ""
+"Для того, щоб додати нового користувача, введіть будь ласка сюди його/її "
+"електронну адресу. Якщо у цієї людини уже є обліковий запис pretix, то її "
+"атоматично буде додано до події. У іншому випадку вона отримає запрошення на "
+"електронну пошту."
 
 #: pretix/control/templates/pretixcontrol/organizers/team_members.html:81
 #: pretix/control/templates/pretixcontrol/organizers/team_members.html:122
 msgid "Add"
-msgstr ""
+msgstr "Додати"
 
 #: pretix/control/templates/pretixcontrol/organizers/team_members.html:88
 msgid "API tokens"
@@ -18258,20 +18335,22 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/organizers/team_members.html:132
 msgid "Team history"
-msgstr ""
+msgstr "Історія команди"
 
 #: pretix/control/templates/pretixcontrol/organizers/teams.html:8
 msgid "The list below shows all teams that exist within this organizer."
 msgstr ""
+"У списку нижче наведено перелік усіх команд, які існують під цим "
+"організатором."
 
 #: pretix/control/templates/pretixcontrol/organizers/teams.html:38
 msgid "Members"
-msgstr ""
+msgstr "Учасники"
 
 #: pretix/control/templates/pretixcontrol/organizers/teams.html:54
 #, python-format
 msgid "+ %(count)s invited"
-msgstr ""
+msgstr "+ %(count)s запрошено"
 
 #: pretix/control/templates/pretixcontrol/organizers/webhook_edit.html:6
 msgid "Modify webhook"
@@ -18296,7 +18375,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/organizers/webhook_logs.html:44
 msgid "Failed"
-msgstr ""
+msgstr "Невдало"
 
 #: pretix/control/templates/pretixcontrol/organizers/webhook_logs.html:54
 msgid "Request URL"
@@ -18342,63 +18421,66 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/pagination_huge.html:28
 #, python-format
 msgid "%(count)s elements"
-msgstr ""
+msgstr "%(count)s елементів"
 
 #: pretix/control/templates/pretixcontrol/pagination.html:40
 #: pretix/control/templates/pretixcontrol/pagination_huge.html:38
 msgid "Show per page:"
-msgstr ""
+msgstr "Показати на сторінці:"
 
 #: pretix/control/templates/pretixcontrol/pagination_huge.html:14
 #, python-format
 msgid "Page %(page)s"
-msgstr ""
+msgstr "Сторінка %(page)s"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:5
 #: pretix/control/templates/pretixcontrol/pdf/index.html:15
 #: pretix/control/templates/pretixcontrol/pdf/placeholders.html:5
 #: pretix/control/templates/pretixcontrol/pdf/placeholders.html:15
 msgid "PDF Editor"
-msgstr ""
+msgstr "Редактор PDF"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:31
 #: pretix/plugins/banktransfer/refund_export.py:46
 msgid "Code"
-msgstr ""
+msgstr "Код"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:35
 msgid "Paste"
-msgstr ""
+msgstr "Вставити"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:39
 msgid "Undo"
-msgstr ""
+msgstr "Скасувати"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:43
 msgid "Redo"
-msgstr ""
+msgstr "Переробити"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:48
 msgid "Editor"
-msgstr ""
+msgstr "Редактор"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:66
 msgid ""
 "This feature is only intended for advanced users. We recommend to only use "
 "it to copy and share ticket designs, not to modify the design source code."
 msgstr ""
+"Цей застосунок передбачений тільки для досвідчених користувачів. Ми "
+"рекомендуємо його використовувати для копіювання та обміну дизайну квитків, "
+"але не для зміни вихідного коду дизайну."
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:80
 msgid "Apply"
-msgstr ""
+msgstr "Застосувати"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:88
 msgid "Uploading new PDF background…"
-msgstr ""
+msgstr "Завантаження нового фону PDF…"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:96
 msgid "Welcome to the PDF ticket editor!"
-msgstr ""
+msgstr "Вітаємо у PDF редакторі квитків!"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:98
 msgid ""
@@ -18406,6 +18488,9 @@ msgid ""
 "You can upload a background PDF and then use this tool to place texts and a "
 "QR code on the ticket."
 msgstr ""
+"Цей редактор допоможе вам створити дизайн квитків у форматі PDF для вашої "
+"події. Ви можете завантажин фон у форматі PDF та використовувати цей "
+"інструмент для розміщення тексту та QR коду на квитку."
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:109
 msgid ""
@@ -18414,6 +18499,10 @@ msgid ""
 "tickets. You can use the \"Preview\" button on the right for a more precise "
 "preview."
 msgstr ""
+"Звертаємо вашу увагу, що редактор може надати приблизний попередній вигляд. "
+"Деякі деталі, наприклад, відтворення тексту може відображатись по-іншому у "
+"кінцевій версії квитка. Ви можете використовувати кнопку \"Попередній "
+"перегляд\" праворуч для точнішого відображення."
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:123
 msgid ""
@@ -18422,52 +18511,57 @@ msgid ""
 "might have problems displaying your background PDF or loading the correct "
 "fonts."
 msgstr ""
+"Редактор тестувався з найновішими версіями Google Chrome, Mozilla Firefox та "
+"Opera. Інші браузери, особливо Internet Explorer або Microsoft Edge можуть "
+"некоректно відображати фон у форматі PDF або завантажувати правильні шрифти."
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:131
 msgid ""
 "The editor requires JavaScript to work. Please enable JavaScript in your "
 "browser to continue."
 msgstr ""
+"Для коректної роботи редактора потрібен JavaScript. Будь ласка увімкніть "
+"JavaScript у своєму браузері для того, щоб продовжити роботу."
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:141
 #: pretix/control/templates/pretixcontrol/pdf/index.html:173
 msgid "Loading…"
-msgstr ""
+msgstr "Завантаження…"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:144
 msgid "Start editing"
-msgstr ""
+msgstr "Почати редагування"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:159
 msgid "Cut"
-msgstr ""
+msgstr "Вирізати"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:163
 msgid "Copy"
-msgstr ""
+msgstr "Копіювати"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:179
 #: pretix/control/templates/pretixcontrol/pdf/index.html:243
 #: pretix/control/templates/pretixcontrol/pdf/index.html:340
 msgid "Width (mm)"
-msgstr ""
+msgstr "Ширина (мм)"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:183
 #: pretix/control/templates/pretixcontrol/pdf/index.html:248
 msgid "Height (mm)"
-msgstr ""
+msgstr "Висота (мм)"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:189
 msgid "Background PDF"
-msgstr ""
+msgstr "Фон PDF"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:192
 msgid "Create empty background"
-msgstr ""
+msgstr "Створити порожній фон"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:197
 msgid "Upload custom background"
-msgstr ""
+msgstr "Завантажити власний фон"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:203
 msgid ""
@@ -18475,6 +18569,9 @@ msgid ""
 "If you want to use a custom background, it already needs to have the correct "
 "size."
 msgstr ""
+"Після того як ви змінили розмір сторінки, вам необхідно створити порожній "
+"фон. Якщо ви хочете використати власний фон, він повинен співпадати з новими "
+"розмірами сторінки."
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:213
 msgid "Download current background"
@@ -18482,61 +18579,63 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:220
 msgid "Preferred language"
-msgstr ""
+msgstr "Бажана мова"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:231
 msgid "x (mm)"
-msgstr ""
+msgstr "x (мм)"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:236
 msgid "y (mm)"
-msgstr ""
+msgstr "y (мм)"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:255
 msgid "Size (mm)"
-msgstr ""
+msgstr "Розмір (мм)"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:266
 msgid "Render without whitespace"
-msgstr ""
+msgstr "Відображати без пробілів"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:268
 msgid ""
 "Required for consistent size across platforms. Supported on Android starting "
 "with pretixPRINT 2.3.3 and on Desktop with pretixSCAN 1.9.3."
 msgstr ""
+"Необхідний для однакового розміру на різних платформах. Підтримується на "
+"Android, починаючи з pretixPRINT 2.3.3, і на комп’ютері з pretixSCAN 1.9.3."
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:274
 msgid "Font size (pt)"
-msgstr ""
+msgstr "Розмір шрифта (кегль)"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:293
 msgid "Flow multiple lines downward from specified position"
-msgstr ""
+msgstr "Потік кількох рядків вниз від заданої позиції"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:302
 msgid "Text color"
-msgstr ""
+msgstr "Колір тексту"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:345
 msgid "Rotation (°)"
-msgstr ""
+msgstr "Повернути (°)"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:352
 msgid "Style"
-msgstr ""
+msgstr "Стиль"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:354
 msgid "Dark"
-msgstr ""
+msgstr "Темний"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:355
 msgid "Light"
-msgstr ""
+msgstr "Світлий"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:361
 msgid "Image content"
-msgstr ""
+msgstr "Зміст зображення"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:372
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_create.html:15
@@ -18548,12 +18647,12 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/pdf/index.html:381
 #: pretix/control/templates/pretixcontrol/pdf/placeholders.html:50
 msgid "Event attribute:"
-msgstr ""
+msgstr "Атрибут події:"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:386
 #: pretix/control/templates/pretixcontrol/pdf/placeholders.html:59
 msgid "Item attribute:"
-msgstr ""
+msgstr "Атрибут предмета:"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:389
 msgid "Other… (multilingual)"
@@ -18561,7 +18660,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:390
 msgid "Other…"
-msgstr ""
+msgstr "Інше…"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:400
 msgid "Show available placeholders"
@@ -18569,11 +18668,11 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:408
 msgid "Add a new object"
-msgstr ""
+msgstr "Додати новий об'єкт"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:417
 msgid "QR code for Check-In"
-msgstr ""
+msgstr "QR код для реєстрації"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:423
 msgid "QR code for Lead Scanning"
@@ -18585,7 +18684,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:435
 msgid "pretix Logo"
-msgstr ""
+msgstr "лого pretix"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:438
 msgid ""
@@ -18596,7 +18695,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:440
 msgid "Dynamic image"
-msgstr ""
+msgstr "Динамічне зображення"
 
 #: pretix/control/templates/pretixcontrol/pdf/placeholders.html:16
 msgid "Available placeholders"
@@ -18625,36 +18724,40 @@ msgid ""
 "We couldn't find any orders that you have access to and that match your "
 "search query."
 msgstr ""
+"Нам не вдалось знайти жодного замовлення, до якого б у вас був доступ та "
+"відповідав вашому пошуковому запиту."
 
 #: pretix/control/templates/pretixcontrol/search/payments.html:7
 #: pretix/control/templates/pretixcontrol/search/payments.html:9
 msgid "Payment search"
-msgstr ""
+msgstr "Пошук оплати"
 
 #: pretix/control/templates/pretixcontrol/search/payments.html:155
 msgid ""
 "We couldn't find any payments that you have access to and that match your "
 "search query."
 msgstr ""
+"Нам не вдалось знайти жодної оплати, до якої у вас є доступ та який "
+"відповідає вашому пошуковому запиту."
 
 #: pretix/control/templates/pretixcontrol/select2_widget.html:9
 msgid "Please enable JavaScript in your browser."
-msgstr ""
+msgstr "Будь ласка, увімкніть JavaScript у своєму браузері."
 
 #: pretix/control/templates/pretixcontrol/shredder/download.html:5
 #: pretix/control/templates/pretixcontrol/shredder/download.html:8
 #: pretix/control/templates/pretixcontrol/shredder/index.html:5
 #: pretix/control/templates/pretixcontrol/shredder/index.html:8
 msgid "Data shredder"
-msgstr ""
+msgstr "Подрібнювач даних"
 
 #: pretix/control/templates/pretixcontrol/shredder/download.html:15
 msgid "Step 1: Download data"
-msgstr ""
+msgstr "Крок 1: Завантажити дані"
 
 #: pretix/control/templates/pretixcontrol/shredder/download.html:17
 msgid "(Optional) Step 1: Download data"
-msgstr ""
+msgstr "(Необов’язково) Крок 1. Завантажити дані"
 
 #: pretix/control/templates/pretixcontrol/shredder/download.html:20
 msgid ""
@@ -18662,14 +18765,17 @@ msgid ""
 "might be required to keep some of this data on file. You can therefore "
 "download the following file and store it in a safe place:"
 msgstr ""
+"Ви збираєтеся назавжди видалити дані із сервера, навіть якщо вам може "
+"знадобитися зберегти деякі з цих даних у файлі. Тому ви можете завантажити "
+"наступний файл і зберегти його у безпечному місці:"
 
 #: pretix/control/templates/pretixcontrol/shredder/download.html:29
 msgid "Download data"
-msgstr ""
+msgstr "Завантажити дані"
 
 #: pretix/control/templates/pretixcontrol/shredder/download.html:34
 msgid "Step 2: Confirm deletion"
-msgstr ""
+msgstr "Крок 2: Підтвердити видалення"
 
 #: pretix/control/templates/pretixcontrol/shredder/download.html:36
 #, python-format
@@ -18679,14 +18785,17 @@ msgid ""
 "confirm you really want this, please type out the event's short name "
 "(\"%(slug)s\") here:"
 msgstr ""
+"Будь ласка упевніться, що ви повністю упевнені, що хочете видалити обрані "
+"категорії даних з події <strong>%(event)s</strong>. Для підтвердження свого "
+"наміру, будь ласка вкажіть тут коротку назву події (\"%(slug)s\"):"
 
 #: pretix/control/templates/pretixcontrol/shredder/download.html:41
 msgid "Event short name"
-msgstr ""
+msgstr "Коротка назва події"
 
 #: pretix/control/templates/pretixcontrol/shredder/download.html:46
 msgid "Step 3: Confirm download"
-msgstr ""
+msgstr "Крок 3: Підтвердити завантаження"
 
 #: pretix/control/templates/pretixcontrol/shredder/download.html:48
 msgid ""
@@ -18697,7 +18806,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/shredder/download.html:53
 msgid "Confirmation code"
-msgstr ""
+msgstr "Код підтвердження"
 
 #: pretix/control/templates/pretixcontrol/shredder/index.html:11
 msgid ""
