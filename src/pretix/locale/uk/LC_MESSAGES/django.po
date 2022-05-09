@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-28 16:44+0000\n"
-"PO-Revision-Date: 2022-05-09 04:00+0000\n"
-"Last-Translator: Iryna Loik <iraloyik@gmail.com>\n"
+"PO-Revision-Date: 2022-05-09 15:43+0000\n"
+"Last-Translator: Richard Schreiber <wiffbi@gmail.com>\n"
 "Language-Team: Ukrainian <https://translate.pretix.eu/projects/pretix/pretix/"
 "uk/>\n"
 "Language: uk\n"
@@ -169,7 +169,7 @@ msgstr "Невідомий плагін: '{name}'."
 
 #: pretix/api/serializers/item.py:119 pretix/control/forms/item.py:929
 msgid "The bundled item must not be the same item as the bundling one."
-msgstr "Зв'язана одиниця не повинна збігатися з тою, що зв'язує"
+msgstr "Зв'язана одиниця не повинна збігатися з тою, що зв'язує."
 
 #: pretix/api/serializers/item.py:122 pretix/control/forms/item.py:931
 msgid "The bundled item must not have bundles on its own."
@@ -400,7 +400,7 @@ msgstr "Інтернет-магазин"
 #: pretix/base/context.py:45
 #, python-brace-format
 msgid "powered by {name} based on <a {a_attr}>pretix</a>"
-msgstr "Приводиться до дії з 1{ім'я} на базі <a 2{a_attr}>pretix</a>"
+msgstr "Приводиться до дії з {name} на базі <a {a_attr}>pretix</a>"
 
 #: pretix/base/context.py:52
 #, python-format
@@ -8048,13 +8048,13 @@ msgid ""
 msgstr ""
 "Вітаю,\n"
 "\n"
-"хтось зробив запит на список ваших замовлень для {події}.\n"
+"хтось зробив запит на список ваших замовлень для {event}.\n"
 "Список наступний:\n"
 "\n"
-"{замовлення}\n"
+"{orders}\n"
 "\n"
 "З найкращими побажаннями\n"
-"Ваша {назва} команда"
+"Ваша {event} команда"
 
 #: pretix/base/settings.py:1717
 #, python-brace-format
@@ -8572,6 +8572,7 @@ msgstr ""
 "\n"
 "Для того, щоб активувати ваш еккаунт необхідно вставновити пароль, "
 "перейшовши за посиланням тут: \n"
+"\n"
 "{url}\n"
 "\n"
 "Цей лінк дійсний протягом одного дня. \n"
@@ -9724,7 +9725,7 @@ msgstr ""
 
 #: pretix/control/forms/event.py:146
 msgid "Create a new team for this event with me as the only member"
-msgstr "Створити нову команду для події, де я єдиний(-а) учасник(-ця)."
+msgstr "Створити нову команду для події, де я єдиний(-а) учасник(-ця)"
 
 #: pretix/control/forms/event.py:189 pretix/control/forms/event.py:360
 msgid ""
@@ -10917,7 +10918,7 @@ msgstr "Потрібна назва квоти."
 
 #: pretix/control/forms/item.py:464
 msgid "Please select a quota."
-msgstr "Оберіть будь ласка квоту"
+msgstr "Оберіть будь ласка квоту."
 
 #: pretix/control/forms/item.py:485 pretix/plugins/badges/forms.py:75
 #: pretix/plugins/ticketoutputpdf/forms.py:53
@@ -14047,8 +14048,8 @@ msgid ""
 msgstr ""
 "Добрий день,\n"
 "\n"
-"Bас запросили до команди на pretix, платформі для проведення продажy квитків "
-"на події.\n"
+"Bас запросили до команди на pretix, платформі для проведення продажy \n"
+"квитків на події.\n"
 "\n"
 "Організатор: %(organizer)s\n"
 "Команда: %(team)s\n"
@@ -15483,14 +15484,12 @@ msgid ""
 "    "
 msgstr ""
 "\n"
-"        … …Ваш подарунковий сертифікат буде використанo для оплати цього "
+"        Ваш подарунковий сертифікат буде використанo для оплати цього "
 "замовлення. Якщо сума кредиту на подарунковому сертифікаті нижча за загальну "
 "суму замовлення, ви зможете оплатити\n"
-"\n"
-"……різницю іншим способом оплати. Якщо сума кредиту перевищує загальну суму "
-"замовлення, ви зможете повторно використовувати подарунковий сертифікат в "
-"майбутньому.\n"
-"…\n"
+"        різницю іншим способом оплати. Якщо сума кредиту перевищує загальну "
+"суму замовлення, ви зможете повторно використовувати подарунковий сертифікат "
+"в майбутньому.\n"
 "    "
 
 #: pretix/control/templates/pretixcontrol/global_license.html:8
@@ -17264,7 +17263,7 @@ msgid ""
 msgstr ""
 "Ми отримали сповіщення, що <strong>%(amount)s</strong> було повернено через "
 "<strong>%(method)s</strong>. Якщо це відшкодування буде оброблено, "
-"замовлення буде недоплачено на <strong>%(оглядає)s</strong>. Загальна сума "
+"замовлення буде недоплачено на <strong>%(pending)s</strong>. Загальна сума "
 "замовлення становить <strong>%(total)s</strong>."
 
 #: pretix/control/templates/pretixcontrol/order/refund_process.html:30
