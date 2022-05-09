@@ -747,7 +747,7 @@ Vue.component('pretix-overlay', {
             this.$root.frame_shown = false;
             this.$root.parent.frame_dismissed = true;
             this.$root.parent.reload();
-            this.$root.trigger_close_callback();
+            this.$root.parent.trigger_close_callback();
         },
         iframeLoaded: function () {
             if (this.$root.frame_loading) {
