@@ -172,8 +172,6 @@ Cart position endpoints
 
        * does not check or calculate prices but believes any prices you send
 
-       * does not support the redemption of vouchers
-
        * does not prevent you from buying items that can only be bought with a voucher
 
        * does not support file upload questions
@@ -191,6 +189,7 @@ Cart position endpoints
    * ``expires`` (optional)
    * ``includes_tax`` (optional, **deprecated**, do not use, will be removed)
    * ``sales_channel`` (optional)
+   * ``voucher`` (optional, expect a voucher code)
    * ``answers``
 
       * ``question``

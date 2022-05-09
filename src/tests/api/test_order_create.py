@@ -2027,6 +2027,31 @@ def test_order_create_with_seat_consumed_from_cart(token_client, organizer, even
 
 
 @pytest.mark.django_db
+def test_order_create_with_voucher_consumed_from_cart(token_client, organizer, event, item, quota, question):
+    with scopes_disabled():
+        voucher = event.vouchers.create(code="FOOBAR", item=item, max_usages=3, redeemed=2)
+    CartPosition.objects.create(
+        event=event, cart_id='aaa', item=item, voucher=voucher,
+        price=21.5, expires=now() + datetime.timedelta(minutes=10),
+    )
+    res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
+    res['positions'][0]['item'] = item.pk
+    res['positions'][0]['voucher'] = voucher.code
+    res['positions'][0]['answers'][0]['question'] = question.pk
+    res['consume_carts'] = ['aaa']
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 201
+    with scopes_disabled():
+        o = Order.objects.get(code=resp.data['code'])
+        p = o.positions.first()
+    assert p.voucher == voucher
+
+
+@pytest.mark.django_db
 def test_order_create_send_no_emails(token_client, organizer, event, item, quota, question):
     res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
     res['positions'][0]['item'] = item.pk

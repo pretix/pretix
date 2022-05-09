@@ -23,6 +23,7 @@ import os
 from datetime import timedelta
 
 from django.core.files import File
+from django.db.models import Q
 from django.utils.crypto import get_random_string
 from django.utils.timezone import now
 from django.utils.translation import gettext_lazy
@@ -33,7 +34,7 @@ from pretix.api.serializers.i18n import I18nAwareModelSerializer
 from pretix.api.serializers.order import (
     AnswerCreateSerializer, AnswerSerializer, InlineSeatSerializer,
 )
-from pretix.base.models import Quota, Seat
+from pretix.base.models import Quota, Seat, Voucher
 from pretix.base.models.orders import CartPosition
 
 
@@ -61,11 +62,12 @@ class CartPositionCreateSerializer(I18nAwareModelSerializer):
     seat = serializers.CharField(required=False, allow_null=True)
     sales_channel = serializers.CharField(required=False, default='sales_channel')
     includes_tax = serializers.BooleanField(required=False, allow_null=True)
+    voucher = serializers.CharField(required=False, allow_null=True)
 
     class Meta:
         model = CartPosition
         fields = ('cart_id', 'item', 'variation', 'price', 'attendee_name', 'attendee_name_parts', 'attendee_email',
-                  'subevent', 'expires', 'includes_tax', 'answers', 'seat', 'sales_channel')
+                  'subevent', 'expires', 'includes_tax', 'answers', 'seat', 'sales_channel', 'voucher')
 
     def create(self, validated_data):
         answers_data = validated_data.pop('answers')
@@ -125,13 +127,45 @@ class CartPositionCreateSerializer(I18nAwareModelSerializer):
                 raise ValidationError('The specified seat ID is not unique.')
             else:
                 validated_data['seat'] = seat
-                if not seat.is_available(
-                    sales_channel=validated_data.get('sales_channel', 'web'),
-                    distance_ignore_cart_id=validated_data['cart_id'],
-                ):
-                    raise ValidationError(gettext_lazy('The selected seat "{seat}" is not available.').format(seat=seat.name))
         elif seated:
             raise ValidationError('The specified product requires to choose a seat.')
+
+        if validated_data.get('voucher'):
+            try:
+                voucher = self.context['event'].vouchers.get(code__iexact=validated_data.get('voucher'))
+            except Voucher.DoesNotExist:
+                raise ValidationError('The specified voucher does not exist.')
+
+            if voucher and not voucher.applies_to(validated_data.get('item'), validated_data.get('variation')):
+                raise ValidationError('The specified voucher is not valid for the given item and variation.')
+
+            if voucher and voucher.seat and voucher.seat != validated_data.get('seat'):
+                raise ValidationError('The specified voucher is not valid for this seat.')
+
+            if voucher and voucher.subevent_id and voucher.subevent_id != validated_data.get('subevent'):
+                raise ValidationError('The specified voucher is not valid for this subevent.')
+
+            if voucher.valid_until is not None and voucher.valid_until < now():
+                raise ValidationError('The specified voucher is expired.')
+
+            redeemed_in_carts = CartPosition.objects.filter(
+                Q(voucher=voucher) & Q(event=self.context['event']) & Q(expires__gte=now())
+            )
+            cart_count = redeemed_in_carts.count()
+            v_avail = voucher.max_usages - voucher.redeemed - cart_count
+            if v_avail < 1:
+                raise ValidationError('The specified voucher has already been used the maximum number of times.')
+
+            validated_data['voucher'] = voucher
+
+        if validated_data.get('seat'):
+            if not validated_data['seat'].is_available(
+                sales_channel=validated_data.get('sales_channel', 'web'),
+                distance_ignore_cart_id=validated_data['cart_id'],
+                ignore_voucher_id=validated_data['voucher'].pk if validated_data.get('voucher') else None,
+            ):
+                raise ValidationError(
+                    gettext_lazy('The selected seat "{seat}" is not available.').format(seat=validated_data['seat'].name))
 
         validated_data.pop('sales_channel')
         # todo: does this make sense?
