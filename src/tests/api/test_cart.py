@@ -888,3 +888,180 @@ def test_cartpos_create_bulk_partial_seat_failure(token_client, organizer, event
         assert CartPosition.objects.count() == 1
         cp1 = CartPosition.objects.get(pk=resp.data['results'][0]['data']['id'])
     assert cp1.price == Decimal('23.00')
+
+
+@pytest.mark.django_db
+def test_cartpos_create_with_voucher_by_code(token_client, organizer, event, item, quota, seat):
+    with scopes_disabled():
+        voucher = event.vouchers.create(code="FOOBAR", seat=seat)
+    res = copy.deepcopy(CARTPOS_CREATE_PAYLOAD)
+    res['item'] = item.pk
+    res['voucher'] = voucher.code
+    res['seat'] = seat.seat_guid
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/cartpositions/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 201
+    with scopes_disabled():
+        cp1 = CartPosition.objects.get(pk=resp.data['id'])
+    assert cp1.voucher == voucher
+    assert cp1.seat == seat
+
+
+@pytest.mark.django_db
+def test_cartpos_create_with_voucher_unknown(token_client, organizer, event, item, quota):
+    res = copy.deepcopy(CARTPOS_CREATE_PAYLOAD)
+    res['item'] = item.pk
+    res['voucher'] = 'TEST'
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/cartpositions/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 400
+    assert resp.data == ['The specified voucher does not exist.']
+
+
+@pytest.mark.django_db
+def test_cartpos_create_with_voucher_invalid_item(token_client, organizer, event, item, quota):
+    with scopes_disabled():
+        item2 = event.items.create(name="item2")
+        voucher = event.vouchers.create(code="FOOBAR", item=item2)
+    res = copy.deepcopy(CARTPOS_CREATE_PAYLOAD)
+    res['item'] = item.pk
+    res['voucher'] = voucher.code
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/cartpositions/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 400
+    assert resp.data == ['The specified voucher is not valid for the given item and variation.']
+
+
+@pytest.mark.django_db
+def test_cartpos_create_with_voucher_invalid_seat(token_client, organizer, event, item, quota, seat):
+    with scopes_disabled():
+        seat2 = event.seats.create(seat_number="A2", product=item, seat_guid="A2")
+        voucher = event.vouchers.create(code="FOOBAR", item=item, seat=seat2)
+    res = copy.deepcopy(CARTPOS_CREATE_PAYLOAD)
+    res['item'] = item.pk
+    res['voucher'] = voucher.code
+    res['seat'] = seat.seat_guid
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/cartpositions/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 400
+    assert resp.data == ['The specified voucher is not valid for this seat.']
+
+
+@pytest.mark.django_db
+def test_cartpos_create_with_voucher_invalid_subevent(token_client, organizer, event, item, quota, subevent):
+    with scopes_disabled():
+        voucher = event.vouchers.create(code="FOOBAR", item=item, subevent=subevent)
+        quota.subevent = subevent
+        quota.save()
+    res = copy.deepcopy(CARTPOS_CREATE_PAYLOAD)
+    res['item'] = item.pk
+    res['voucher'] = voucher.code
+    res['subevent'] = subevent.pk
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/cartpositions/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 400
+    assert resp.data == ['The specified voucher is not valid for this subevent.']
+
+
+@pytest.mark.django_db
+def test_cartpos_create_with_voucher_expired(token_client, organizer, event, item, quota):
+    with scopes_disabled():
+        voucher = event.vouchers.create(code="FOOBAR", item=item, valid_until=now() - datetime.timedelta(days=1))
+    res = copy.deepcopy(CARTPOS_CREATE_PAYLOAD)
+    res['item'] = item.pk
+    res['voucher'] = voucher.code
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/cartpositions/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 400
+    assert resp.data == ['The specified voucher is expired.']
+
+
+@pytest.mark.django_db
+def test_cartpos_create_with_voucher_redeemed(token_client, organizer, event, item, quota):
+    with scopes_disabled():
+        voucher = event.vouchers.create(code="FOOBAR", item=item, redeemed=1)
+    res = copy.deepcopy(CARTPOS_CREATE_PAYLOAD)
+    res['item'] = item.pk
+    res['voucher'] = voucher.code
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/cartpositions/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 400
+    assert resp.data == ['The specified voucher has already been used the maximum number of times.']
+
+
+@pytest.mark.django_db
+def test_cartpos_create_bulk_with_voucher(token_client, organizer, event, item, quota):
+    with scopes_disabled():
+        voucher = event.vouchers.create(code="FOOBAR", item=item, max_usages=3, redeemed=1)
+    res = copy.deepcopy(CARTPOS_CREATE_PAYLOAD)
+    res['item'] = item.pk
+    res['expires'] = (now() + datetime.timedelta(days=1)).isoformat()
+    res['voucher'] = voucher.code
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/cartpositions/bulk_create/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=[
+            res,
+            res
+        ]
+    )
+    assert resp.status_code == 200
+    assert len(resp.data['results']) == 2
+    assert resp.data['results'][0]['success']
+    assert resp.data['results'][1]['success']
+
+    with scopes_disabled():
+        assert CartPosition.objects.count() == 2
+        cp1 = CartPosition.objects.get(pk=resp.data['results'][0]['data']['id'])
+        cp2 = CartPosition.objects.get(pk=resp.data['results'][1]['data']['id'])
+    assert cp1.voucher == voucher
+    assert cp2.voucher == voucher
+
+
+@pytest.mark.django_db
+def test_cartpos_create_bulk_with_voucher_redeemed(token_client, organizer, event, item, quota):
+    with scopes_disabled():
+        voucher = event.vouchers.create(code="FOOBAR", item=item, max_usages=3, redeemed=2)
+    res = copy.deepcopy(CARTPOS_CREATE_PAYLOAD)
+    res['item'] = item.pk
+    res['expires'] = (now() + datetime.timedelta(days=1)).isoformat()
+    res['voucher'] = voucher.code
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/cartpositions/bulk_create/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=[
+            res,
+            res
+        ]
+    )
+    assert resp.status_code == 200
+    assert len(resp.data['results']) == 2
+    assert resp.data['results'][0]['success']
+    assert not resp.data['results'][1]['success']
+    assert resp.data['results'][1]['errors'] == {'non_field_errors': ['The specified voucher has already been used the maximum number of times.']}
+
+    with scopes_disabled():
+        assert CartPosition.objects.count() == 1
+        cp1 = CartPosition.objects.get(pk=resp.data['results'][0]['data']['id'])
+    assert cp1.voucher == voucher
