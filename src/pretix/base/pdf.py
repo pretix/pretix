@@ -570,6 +570,18 @@ def get_variables(event):
             "evaluate": partial(_get_ia_name_part, key)
         }
 
+    concatenation_for_salutation = scheme.get("concatenation_for_salutation", scheme["concatenation"])
+    v['attendee_name_for_salutation'] = {
+        'label': _("Attendee name for salutation"),
+        'editor_sample': _("Mr Doe"),
+        'evaluate': lambda op, order, ev: concatenation_for_salutation(op.attendee_name_parts)
+    }
+    v['invoice_name_for_salutation'] = {
+        'label': _("Invoice name for salutation"),
+        'editor_sample': _("Mr Doe"),
+        'evaluate': lambda op, order, ev: concatenation_for_salutation(order.invoice_address.name_parts if getattr(order, 'invoice_address', None) else {})
+    }
+
     for recv, res in layout_text_variables.send(sender=event):
         v.update(res)
 
