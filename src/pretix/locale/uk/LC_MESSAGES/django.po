@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-28 16:44+0000\n"
-"PO-Revision-Date: 2022-05-10 02:00+0000\n"
-"Last-Translator: Iryna N <in380@nyu.edu>\n"
+"PO-Revision-Date: 2022-05-10 09:22+0000\n"
+"Last-Translator: Iryna Loik <iraloyik@gmail.com>\n"
 "Language-Team: Ukrainian <https://translate.pretix.eu/projects/pretix/pretix/"
 "uk/>\n"
 "Language: uk\n"
@@ -18822,6 +18822,9 @@ msgid ""
 "a six-character code. Please enter this code here to confirm that you "
 "successfully downloaded the file."
 msgstr ""
+"Серед завантажених файлів Ви знайдете файл з назвою \"CONFIRM_CODE.txt\", "
+"який міститиме шестизначний код. Будь ласка введеіть тут цей код для "
+"підтвердження того, що ви завантажили цей файл."
 
 #: pretix/control/templates/pretixcontrol/shredder/download.html:53
 msgid "Confirmation code"
@@ -23983,48 +23986,52 @@ msgstr ""
 
 #: pretix/plugins/webcheckin/signals.py:36
 msgid "Web Check-in"
-msgstr ""
+msgstr "Веб-реєстрація"
 
 #: pretix/plugins/webcheckin/templates/pretixplugins/webcheckin/index.html:10
 msgid "Check-in"
-msgstr ""
+msgstr "Реєстрація"
 
 #: pretix/presale/checkoutflow.py:103
 msgctxt "checkoutflow"
 msgid "Step"
-msgstr ""
+msgstr "Крок"
 
 #: pretix/presale/checkoutflow.py:235
 msgctxt "checkoutflow"
 msgid "Customer account"
-msgstr ""
+msgstr "Обліковий запис клієнта"
 
 #: pretix/presale/checkoutflow.py:364
 msgctxt "checkoutflow"
 msgid "Membership"
-msgstr ""
+msgstr "Членство"
 
 #: pretix/presale/checkoutflow.py:407 pretix/presale/checkoutflow.py:427
 msgid ""
 "Your cart includes a product that requires an active membership to be "
 "selected."
 msgstr ""
+"У вашій корзині є продукт, для покупки якого потрібен дійсний членський "
+"квиток."
 
 #: pretix/presale/checkoutflow.py:446
 msgctxt "checkoutflow"
 msgid "Add-on products"
-msgstr ""
+msgstr "Додаткові продукти"
 
 #: pretix/presale/checkoutflow.py:675
 msgctxt "checkoutflow"
 msgid "Your information"
-msgstr ""
+msgstr "Ваша інформація"
 
 #: pretix/presale/checkoutflow.py:885
 msgid ""
 "Unfortunately, based on the invoice address you entered, we're not able to "
 "sell you the selected products for tax-related legal reasons."
 msgstr ""
+"Нам дуже прикро, але адреса, яку ви ввели для рахунку, не дозволяє нам "
+"продати вам обрані вами продукти, через податково-правові причини."
 
 #: pretix/presale/checkoutflow.py:891
 msgid ""
@@ -24032,66 +24039,72 @@ msgid ""
 "rate to your purchase and the price of the products in your cart has changed "
 "accordingly."
 msgstr ""
+"Адреса на рахунку, яку ви ввели вимагає змінити податковий відсоток вашої "
+"покупи, тому вартість продуктів у вашій корзині змінилась відповідно."
 
 #: pretix/presale/checkoutflow.py:904 pretix/presale/checkoutflow.py:910
 msgid "Please enter a valid email address."
-msgstr ""
+msgstr "Будь ласка введіть існуючу електронну адресу."
 
 #: pretix/presale/checkoutflow.py:917
 msgid "Please enter your invoicing address."
-msgstr ""
+msgstr "Будь ласка введіть адресу для виставлення рахунку."
 
 #: pretix/presale/checkoutflow.py:921
 msgid "Please enter your name."
-msgstr ""
+msgstr "Будь ласка введіть своє ім'я."
 
 #: pretix/presale/checkoutflow.py:956 pretix/presale/checkoutflow.py:961
 #: pretix/presale/checkoutflow.py:966 pretix/presale/checkoutflow.py:971
 #: pretix/presale/checkoutflow.py:976
 msgid "Please fill in answers to all required questions."
-msgstr ""
+msgstr "Будь ласка дайте відповіді на усі обов'язкові запитання."
 
 #: pretix/presale/checkoutflow.py:1090
 msgctxt "checkoutflow"
 msgid "Payment"
-msgstr ""
+msgstr "Оплата"
 
 #: pretix/presale/checkoutflow.py:1135 pretix/presale/views/order.py:680
 msgid "Please select a payment method."
-msgstr ""
+msgstr "Оберіть будь ласка метод оплати."
 
 #: pretix/presale/checkoutflow.py:1159 pretix/presale/checkoutflow.py:1165
 #: pretix/presale/views/order.py:454 pretix/presale/views/order.py:522
 msgid "The payment information you entered was incomplete."
-msgstr ""
+msgstr "Ви ввели неповну платіжну інформацію."
 
 #: pretix/presale/checkoutflow.py:1196
 msgctxt "checkoutflow"
 msgid "Review order"
-msgstr ""
+msgstr "Переглянути замовлення"
 
 #: pretix/presale/checkoutflow.py:1281
 msgid "You need to check all checkboxes on the bottom of the page."
-msgstr ""
+msgstr "Вам необхідно відмітити усі поля внизу сторінки."
 
 #: pretix/presale/checkoutflow.py:1324
 msgid ""
 "There was an error sending the confirmation mail. Please try again later."
 msgstr ""
+"Виникла помилка під час надсилання підтвердження на пошту. Спробуйте будь "
+"ласка пізніше ще раз."
 
 #: pretix/presale/forms/checkout.py:70
 msgid "E-mail address (repeated)"
-msgstr ""
+msgstr "Адреса електронної пошти (повторно)"
 
 #: pretix/presale/forms/checkout.py:71
 msgid ""
 "Please enter the same email address again to make sure you typed it "
 "correctly."
 msgstr ""
+"Введіть ту саму адресу електронної пошти ще раз, щоб переконатися, що ви "
+"ввели її правильно."
 
 #: pretix/presale/forms/checkout.py:110
 msgid "Please enter the same email address twice."
-msgstr ""
+msgstr "Будь ласка, двічі введіть ту саму адресу електронної пошти."
 
 #: pretix/presale/forms/checkout.py:124
 msgid "Save to address"
