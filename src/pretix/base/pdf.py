@@ -551,7 +551,7 @@ def get_variables(event):
     v['attendee_name_for_salutation'] = {
         'label': _("Attendee name for salutation"),
         'editor_sample': _("Mr Doe"),
-        'evaluate': lambda op, order, ev: concatenation_for_salutation(op.attendee_name_parts)
+        'evaluate': lambda op, order, ev: concatenation_for_salutation(op.attendee_name_parts or {})
     }
 
     for key, label, weight in scheme['fields']:
