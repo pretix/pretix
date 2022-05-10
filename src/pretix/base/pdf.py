@@ -530,7 +530,10 @@ def _get_attendee_name_part(key, op, order, ev):
 
 
 def _get_ia_name_part(key, op, order, ev):
-    return order.invoice_address.name_parts.get(key, '') if getattr(order, 'invoice_address', None) else ''
+    value = order.invoice_address.name_parts.get(key, '') if getattr(order, 'invoice_address', None) else ''
+    if key == 'salutation' and value:
+        return pgettext('person_name_salutation', value)
+    return value
 
 
 def get_images(event):
