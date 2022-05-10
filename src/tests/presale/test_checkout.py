@@ -39,9 +39,9 @@ from django_scopes import scopes_disabled
 
 from pretix.base.decimal import round_decimal
 from pretix.base.models import (
-    CartPosition, Event, Invoice, InvoiceAddress, Item, ItemCategory, Order,
-    OrderPayment, OrderPosition, Organizer, Question, QuestionAnswer, Quota,
-    SeatingPlan, Voucher,
+    CartPosition, Discount, Event, Invoice, InvoiceAddress, Item, ItemCategory,
+    Order, OrderPayment, OrderPosition, Organizer, Question, QuestionAnswer,
+    Quota, SeatingPlan, Voucher,
 )
 from pretix.base.models.items import (
     ItemAddOn, ItemBundle, ItemVariation, SubEventItem, SubEventItemVariation,
@@ -539,7 +539,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
 
         cr1.refresh_from_db()
         assert cr1.price == Decimal('23.20')
-        assert cr1.override_tax_rate == Decimal('20.00')
+        assert cr1.tax_rate == Decimal('20.00')
         assert cr1.tax_value == Decimal('3.87')
         return cr1
 
@@ -572,7 +572,8 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
         with scopes_disabled():
             cr1 = CartPosition.objects.create(
                 event=self.event, cart_id=self.session_key, item=self.ticket,
-                price=23, expires=now() + timedelta(minutes=10),
+                price=23, listed_price=23, price_after_voucher=23, custom_price_input=23, custom_price_input_is_net=False,
+                expires=now() + timedelta(minutes=10),
                 voucher=self.event.vouchers.create()
             )
 
@@ -621,21 +622,80 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
             cr = CartPosition.objects.get(cart_id=self.session_key)
             assert cr.price == Decimal('21.26')
 
-    def test_free_price_net_price_reverse_charge_keep_gross(self):
+    def test_free_price_net_price_reverse_charge_keep_gross_but_enforce_min(self):
         # This is an end-to-end test of a very confusing case in which the event is set to
+        # "show net prices" but the tax rate is set to "keep gross if rate changes" in
+        # combination of free prices.
+        # This means the user will be greeted with a display price of "23 EUR + VAT". If they
+        # then adjust the price to pay more, e.g. "24 EUR", it will be interpreted as a net
+        # value (since the event is set to shown net values). The cart position is therefore
+        # created with a gross price of 28.56 EUR. Then, the user enters their invoice address, which
+        # triggers reverse charge. The tax is now removed, and the price would be reverted to "24.00 + 0%",
+        # however that is now lower than the minimum price of "27.37 incl VAT", so the price is raised to 27.37.
+        self.event.settings.display_net_prices = True
+        self.ticket.free_price = True
+        self.ticket.save()
+        self.tr19.eu_reverse_charge = True
+        self.tr19.keep_gross_if_rate_changes = True
+        self.tr19.price_includes_tax = False
+        self.tr19.home_country = Country('DE')
+        self.tr19.save()
+        self.event.settings.invoice_address_vatid = True
+
+        response = self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
+            'item_%d' % self.ticket.id: '1',
+            'price_%d' % self.ticket.id: '24.00',
+        }, follow=True)
+        self.assertRedirects(response, '/%s/%s/?require_cookie=true' % (self.orga.slug, self.event.slug),
+                             target_status_code=200)
+
+        with scopes_disabled():
+            cr1 = CartPosition.objects.get()
+            assert cr1.listed_price == Decimal('23.00')
+            assert cr1.custom_price_input == Decimal('24.00')
+            assert cr1.custom_price_input_is_net
+            assert cr1.price == Decimal('28.56')
+            assert cr1.tax_rate == Decimal('19.00')
+
+        with mock.patch('vat_moss.id.validate') as mock_validate:
+            mock_validate.return_value = ('AT', 'AT123456', 'Foo')
+            self.client.post('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), {
+                'is_business': 'business',
+                'company': 'Foo',
+                'name': 'Bar',
+                'street': 'Baz',
+                'zipcode': '12345',
+                'city': 'Here',
+                'country': 'AT',
+                'vat_id': 'AT123456',
+                'email': 'admin@localhost'
+            }, follow=True)
+
+        cr1.refresh_from_db()
+        assert cr1.price == Decimal('27.37')
+        assert cr1.tax_rate == Decimal('0.00')
+
+        self._set_session('payment', 'banktransfer')
+
+        response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
+        doc = BeautifulSoup(response.content.decode(), "lxml")
+        self.assertEqual(len(doc.select(".thank-you")), 1)
+        with scopes_disabled():
+            op = OrderPosition.objects.get()
+            self.assertEqual(op.price, Decimal('27.37'))
+            self.assertEqual(op.tax_value, Decimal('0.00'))
+            self.assertEqual(op.tax_rate, Decimal('0.00'))
+
+    def test_free_price_net_price_reverse_charge_keep_gross(self):
+        # This is the slightly happier case of the previous test in which the event is set to
         # "show net prices" but the tax rate is set to "keep gross if rate changes" in
         # combination of free prices.
         # This means the user will be greeted with a display price of "23 EUR + VAT". If they
         # then adjust the price to pay more, e.g. "40 EUR", it will be interpreted as a net
         # value (since the event is set to shown net values). The cart position is therefore
         # created with a gross price of 47.60 EUR. Then, the user enters their invoice address, which
-        # triggers reverse charge. The tax is now removed, but since the tax rule is set to
-        # keep the gross price the same, the user will still need to pay 47.60 EUR (incl 0% VAT),
-        # instead of the 40 EUR the maybe wanted in the first place.
-        # While confusing, this behaviour is technically correct and the correct answer to anyone
-        # complaining about this is "do not turn display_net_prices and keep_gross_if_rate_changes
-        # on at the same time" (display_net_prices only makes sense if you're targeting a B2B
-        # audience in which case keep_gross_if_rate_changes is useless or even harmful).
+        # triggers reverse charge. The tax is now removed, and the price is reverted to "40.00 + 0%"
+        # since that was the user's original intent.
         self.event.settings.display_net_prices = True
         self.ticket.free_price = True
         self.ticket.save()
@@ -655,6 +715,9 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
 
         with scopes_disabled():
             cr1 = CartPosition.objects.get()
+            assert cr1.listed_price == Decimal('23.00')
+            assert cr1.custom_price_input == Decimal('40.00')
+            assert cr1.custom_price_input_is_net
             assert cr1.price == Decimal('47.60')
             assert cr1.tax_rate == Decimal('19.00')
 
@@ -673,7 +736,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
             }, follow=True)
 
         cr1.refresh_from_db()
-        assert cr1.price == Decimal('47.60')
+        assert cr1.price == Decimal('40.00')
         assert cr1.tax_rate == Decimal('0.00')
 
         self._set_session('payment', 'banktransfer')
@@ -683,7 +746,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
         self.assertEqual(len(doc.select(".thank-you")), 1)
         with scopes_disabled():
             op = OrderPosition.objects.get()
-            self.assertEqual(op.price, Decimal('47.60'))
+            self.assertEqual(op.price, Decimal('40.00'))
             self.assertEqual(op.tax_value, Decimal('0.00'))
             self.assertEqual(op.tax_rate, Decimal('0.00'))
 
@@ -1662,7 +1725,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
         with scopes_disabled():
             cr1 = CartPosition.objects.create(
                 event=self.event, cart_id=self.session_key, item=self.ticket,
-                price=42, expires=now() + timedelta(minutes=10)
+                price=42, listed_price=42, price_after_voucher=42, expires=now() + timedelta(minutes=10)
             )
 
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
@@ -1682,7 +1745,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
         with scopes_disabled():
             cr1 = CartPosition.objects.create(
                 event=self.event, cart_id=self.session_key, item=self.ticket,
-                price=0, expires=now() + timedelta(minutes=10)
+                price=0, listed_price=0, price_after_voucher=0, expires=now() + timedelta(minutes=10)
             )
 
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
@@ -1701,7 +1764,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                                      price_included=True)
             cp1 = CartPosition.objects.create(
                 event=self.event, cart_id=self.session_key, item=self.ticket,
-                price=0, expires=now() - timedelta(minutes=10)
+                price=0, listed_price=0, price_after_voucher=0, expires=now() - timedelta(minutes=10)
             )
         self.ticket.default_price = 0
         self.ticket.save()
@@ -1712,7 +1775,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
         with scopes_disabled():
             CartPosition.objects.create(
                 event=self.event, cart_id=self.session_key, item=self.workshop1,
-                price=0, expires=now() - timedelta(minutes=10),
+                price=0, listed_price=0, price_after_voucher=0, expires=now() - timedelta(minutes=10),
                 addon_to=cp1
             )
         self.client.get('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), follow=True)
@@ -1734,7 +1797,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
         with scopes_disabled():
             cr1 = CartPosition.objects.create(
                 event=self.event, cart_id=self.session_key, item=self.ticket,
-                price=42, expires=now() + timedelta(minutes=10)
+                price=42, listed_price=42, price_after_voucher=42, expires=now() + timedelta(minutes=10)
             )
         self._set_session('payment', 'banktransfer')
 
@@ -1751,7 +1814,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
         with scopes_disabled():
             cr1 = CartPosition.objects.create(
                 event=self.event, cart_id=self.session_key, item=self.ticket,
-                price=0, expires=now() + timedelta(minutes=10)
+                price=0, listed_price=0, price_after_voucher=0, expires=now() + timedelta(minutes=10)
             )
         self._set_session('payment', 'free')
 
@@ -1771,7 +1834,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
         with scopes_disabled():
             cr1 = CartPosition.objects.create(
                 event=self.event, cart_id=self.session_key, item=self.ticket,
-                price=0, expires=now() + timedelta(minutes=10)
+                price=0, listed_price=0, price_after_voucher=0, expires=now() + timedelta(minutes=10)
             )
         self._set_session('payment', 'free')
 
@@ -2043,7 +2106,8 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
         with scopes_disabled():
             cr1 = CartPosition.objects.create(
                 event=self.event, cart_id=self.session_key, item=self.ticket,
-                price=23, expires=now() - timedelta(minutes=10)
+                listed_price=23, price_after_voucher=23, custom_price_input=23, price=23,
+                expires=now() - timedelta(minutes=10)
             )
         self._set_session('payment', 'banktransfer')
 
@@ -2276,12 +2340,14 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
 
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
-        self.assertEqual(len(doc.select(".alert-danger")), 1)
+        self.assertGreaterEqual(len(doc.select(".alert-danger")), 1)
         with scopes_disabled():
-            self.assertEqual(CartPosition.objects.filter(cart_id=self.session_key).count(), 1)
+            self.assertEqual(CartPosition.objects.filter(cart_id=self.session_key).count(), 0)
+            cr1 = CartPosition.objects.create(
+                event=self.event, cart_id=self.session_key, item=self.ticket,
+                price=12, expires=now() - timedelta(minutes=10), voucher=v
+            )
 
-        cr1.voucher = v
-        cr1.save()
         self.client.get('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
@@ -2341,6 +2407,48 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
             self.assertEqual(len(doc.select(".thank-you")), 1)
             self.assertEqual(Order.objects.count(), 1)
             self.assertEqual(OrderPosition.objects.count(), 1)
+
+    def test_discount_success(self):
+        with scopes_disabled():
+            Discount.objects.create(event=self.event, condition_min_count=2, benefit_discount_matching_percent=20)
+            CartPosition.objects.create(
+                event=self.event, cart_id=self.session_key, item=self.ticket,
+                listed_price=23, price_after_voucher=23, price=18.4, expires=now() - timedelta(minutes=10),
+            )
+            CartPosition.objects.create(
+                event=self.event, cart_id=self.session_key, item=self.ticket,
+                listed_price=23, price_after_voucher=23, price=18.4, expires=now() - timedelta(minutes=10),
+            )
+        self._set_session('payment', 'banktransfer')
+
+        response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
+        doc = BeautifulSoup(response.content.decode(), "lxml")
+        with scopes_disabled():
+            self.assertFalse(CartPosition.objects.filter(cart_id=self.session_key).exists())
+            self.assertEqual(len(doc.select(".thank-you")), 1)
+            self.assertEqual(Order.objects.count(), 1)
+            self.assertEqual(OrderPosition.objects.count(), 2)
+            self.assertEqual(OrderPosition.objects.filter(price=18.4).count(), 2)
+
+    def test_discount_changed(self):
+        with scopes_disabled():
+            Discount.objects.create(event=self.event, condition_min_count=2, benefit_discount_matching_percent=20)
+            cr1 = CartPosition.objects.create(
+                event=self.event, cart_id=self.session_key, item=self.ticket,
+                listed_price=23, price_after_voucher=23, price=23, expires=now() - timedelta(minutes=10),
+            )
+            CartPosition.objects.create(
+                event=self.event, cart_id=self.session_key, item=self.ticket,
+                listed_price=23, price_after_voucher=23, price=23, expires=now() - timedelta(minutes=10),
+            )
+        self._set_session('payment', 'banktransfer')
+
+        response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
+        doc = BeautifulSoup(response.content.decode(), "lxml")
+        self.assertEqual(len(doc.select(".alert-danger")), 1)
+        with scopes_disabled():
+            cr1 = CartPosition.objects.get(id=cr1.id)
+            self.assertEqual(cr1.price, Decimal('18.40'))
 
     def test_max_per_item_failed(self):
         self.quota_tickets.size = 3
@@ -2964,7 +3072,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
         with scopes_disabled():
             CartPosition.objects.create(
                 event=self.event, cart_id=self.session_key, item=self.ticket,
-                price=0, expires=now() + timedelta(minutes=10)
+                price=0, listed_price=0, price_after_voucher=0, expires=now() + timedelta(minutes=10)
             )
 
         self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
@@ -2977,7 +3085,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
         with scopes_disabled():
             cr1 = CartPosition.objects.create(
                 event=self.event, cart_id=self.session_key, item=self.workshop2, variation=self.workshop2a,
-                price=0, expires=now() + timedelta(minutes=10)
+                price=0, listed_price=0, price_after_voucher=0, expires=now() + timedelta(minutes=10)
             )
 
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
@@ -2997,7 +3105,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
         with scopes_disabled():
             cr1 = CartPosition.objects.create(
                 event=self.event, cart_id=self.session_key, item=self.workshop2, variation=self.workshop2a,
-                price=0, expires=now() + timedelta(minutes=10)
+                price=0, listed_price=0, price_after_voucher=0, expires=now() + timedelta(minutes=10)
             )
 
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
@@ -3109,7 +3217,7 @@ class QuestionsTestCase(BaseCheckoutTestCase, TestCase):
             )
             cr2 = CartPosition.objects.create(
                 event=self.event, cart_id=self.session_key, item=self.ticket,
-                price=20, expires=now() + timedelta(minutes=10)
+                price=23, expires=now() + timedelta(minutes=10)
             )
         response = self.client.get('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
@@ -3352,11 +3460,11 @@ class CheckoutBundleTest(BaseCheckoutTestCase, TestCase):
         )
         self.cp1 = CartPosition.objects.create(
             event=self.event, cart_id=self.session_key, item=self.ticket,
-            price=21.5, expires=now() + timedelta(minutes=10)
+            price=21.5, listed_price=23, price_after_voucher=23, expires=now() + timedelta(minutes=10)
         )
         self.bundled1 = CartPosition.objects.create(
             event=self.event, cart_id=self.session_key, item=self.trans, addon_to=self.cp1,
-            price=1.5, expires=now() + timedelta(minutes=10), is_bundled=True
+            price=1.5, listed_price=1.5, price_after_voucher=1.5, expires=now() + timedelta(minutes=10), is_bundled=True
         )
 
     @classscope(attr='orga')
@@ -3417,6 +3525,10 @@ class CheckoutBundleTest(BaseCheckoutTestCase, TestCase):
         self.ticket.free_price = True
         self.ticket.default_price = 1
         self.ticket.save()
+        self.cp1.custom_price_input = 20
+        self.cp1.listed_price = 1
+        self.cp1.price_after_voucher = 1
+        self.cp1.line_price = 20 - 1.5
         self.cp1.price = 20 - 1.5
         self.cp1.save()
 
@@ -3434,6 +3546,10 @@ class CheckoutBundleTest(BaseCheckoutTestCase, TestCase):
         self.ticket.free_price = True
         self.ticket.default_price = 1
         self.ticket.save()
+        self.cp1.custom_price_input = 1
+        self.cp1.listed_price = 1
+        self.cp1.price_after_voucher = 1
+        self.cp1.line_price = 0
         self.cp1.price = 0
         self.cp1.save()
 
@@ -3514,12 +3630,12 @@ class CheckoutBundleTest(BaseCheckoutTestCase, TestCase):
         self.cp1.save()
         self.bundled1.expires = now() - timedelta(minutes=10)
         self.bundled1.save()
-        with self.assertRaises(OrderError):
-            _perform_order(self.event, 'manual', [self.cp1.pk, self.bundled1.pk], 'admin@example.org', 'en', None, {}, 'web')
-        self.cp1.refresh_from_db()
-        self.bundled1.refresh_from_db()
-        assert self.cp1.price == 21
-        assert self.bundled1.price == 2
+        oid = _perform_order(self.event, 'manual', [self.cp1.pk, self.bundled1.pk], 'admin@example.org', 'en', None, {}, 'web')
+        o = Order.objects.get(pk=oid)
+        cp = o.positions.get(addon_to__isnull=True)
+        b = cp.addons.first()
+        assert cp.price == 21
+        assert b.price == 2
 
     @classscope(attr='orga')
     def test_expired_designated_price_changed_beyond_base_price(self):
@@ -3558,10 +3674,8 @@ class CheckoutBundleTest(BaseCheckoutTestCase, TestCase):
             price=2.5, expires=now() - timedelta(minutes=10), is_bundled=False
         )
         self.cp1.expires = now() - timedelta(minutes=10)
-        self.cp1.includes_tax = False
         self.cp1.save()
         self.bundled1.expires = now() - timedelta(minutes=10)
-        self.bundled1.includes_tax = False
         self.bundled1.save()
 
         oid = _perform_order(self.event, 'manual', [self.cp1.pk, self.bundled1.pk, a.pk], 'admin@example.org', 'en', None, {}, 'web')
@@ -3632,7 +3746,6 @@ class CheckoutBundleTest(BaseCheckoutTestCase, TestCase):
         self.cp1.save()
         self.bundled1.expires = now() - timedelta(minutes=10)
         self.bundled1.price = Decimal('1.40')
-        self.bundled1.includes_tax = False
         self.bundled1.save()
 
         oid = _perform_order(self.event, 'manual', [self.cp1.pk, self.bundled1.pk], 'admin@example.org', 'en', ia.pk, {}, 'web')
@@ -3663,11 +3776,9 @@ class CheckoutBundleTest(BaseCheckoutTestCase, TestCase):
         self.trans.save()
         self.cp1.expires = now() - timedelta(minutes=10)
         self.cp1.price = Decimal('18.07')
-        self.cp1.includes_tax = False
         self.cp1.save()
         self.bundled1.expires = now() - timedelta(minutes=10)
         self.bundled1.price = Decimal('1.40')
-        self.bundled1.includes_tax = False
         self.bundled1.save()
 
         oid = _perform_order(self.event, 'manual', [self.cp1.pk, self.bundled1.pk], 'admin@example.org', 'en', ia.pk, {}, 'web')
@@ -3717,7 +3828,7 @@ class CheckoutSeatingTest(BaseCheckoutTestCase, TestCase):
         self.seat_a3 = self.event.seats.create(seat_number="A3", product=self.ticket, seat_guid="A3")
         self.cp1 = CartPosition.objects.create(
             event=self.event, cart_id=self.session_key, item=self.ticket,
-            price=21.5, expires=now() + timedelta(minutes=10), seat=self.seat_a1
+            price=21.5, listed_price=21.5, price_after_voucher=21.5, expires=now() + timedelta(minutes=10), seat=self.seat_a1
         )
 
     @scopes_disabled()
@@ -3800,11 +3911,11 @@ class CheckoutVoucherBudgetTest(BaseCheckoutTestCase, TestCase):
                                         valid_until=now() + timedelta(days=2), max_usages=999, redeemed=0)
         self.cp1 = CartPosition.objects.create(
             event=self.event, cart_id=self.session_key, item=self.ticket,
-            price_before_voucher=23, price=21.5, expires=now() + timedelta(minutes=10), voucher=self.v
+            price_after_voucher=21.5, listed_price=23, price=21.5, expires=now() + timedelta(minutes=10), voucher=self.v
         )
         self.cp2 = CartPosition.objects.create(
             event=self.event, cart_id=self.session_key, item=self.ticket,
-            price_before_voucher=23, price=21.5, expires=now() + timedelta(minutes=10), voucher=self.v
+            price_after_voucher=21.5, listed_price=23, price=21.5, expires=now() + timedelta(minutes=10), voucher=self.v
         )
 
     @scopes_disabled()
@@ -3814,7 +3925,7 @@ class CheckoutVoucherBudgetTest(BaseCheckoutTestCase, TestCase):
         o = Order.objects.get(pk=oid)
         op = o.positions.first()
         assert op.item == self.ticket
-        assert op.price_before_voucher == Decimal('23.00')
+        assert op.voucher_budget_use == Decimal('1.50')
 
     @scopes_disabled()
     def test_budget_exceeded_for_second_order(self):

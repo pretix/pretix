@@ -513,13 +513,15 @@ class CSVCheckinList(CheckInListMixin, ListExporter):
             ]
             if len(name_scheme['fields']) > 1:
                 for k, label, w in name_scheme['fields']:
-                    row.append(
-                        (
-                            op.attendee_name_parts or
-                            (op.addon_to.attendee_name_parts if op.addon_to else {}) or
-                            ia.name_parts
-                        ).get(k, '')
-                    )
+                    v = (
+                        op.attendee_name_parts or
+                        (op.addon_to.attendee_name_parts if op.addon_to else {}) or
+                        ia.name_parts
+                    ).get(k, '')
+                    if k == "salutation":
+                        v = pgettext("person_name_salutation", v)
+
+                    row.append(v)
             row += [
                 str(op.item) + (" – " + str(op.variation.value) if op.variation else ""),
                 op.price,

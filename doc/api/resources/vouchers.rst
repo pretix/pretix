@@ -1,3 +1,5 @@
+.. _`rest-vouchers`:
+
 Vouchers
 ========
 

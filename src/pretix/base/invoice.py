@@ -510,7 +510,7 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
         return story
 
     def _get_story(self, doc):
-        has_taxes = any(il.tax_value for il in self.invoice.lines.all())
+        has_taxes = any(il.tax_value for il in self.invoice.lines.all()) or self.invoice.reverse_charge
 
         story = [
             NextPageTemplate('FirstPage'),

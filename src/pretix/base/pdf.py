@@ -37,6 +37,7 @@ import hashlib
 import itertools
 import logging
 import os
+import re
 import subprocess
 import tempfile
 import uuid
@@ -48,12 +49,14 @@ from arabic_reshaper import ArabicReshaper
 from bidi.algorithm import get_display
 from django.conf import settings
 from django.contrib.staticfiles import finders
+from django.db.models import Max, Min
 from django.dispatch import receiver
 from django.utils.formats import date_format
 from django.utils.functional import SimpleLazyObject
 from django.utils.html import conditional_escape
 from django.utils.timezone import now
-from django.utils.translation import gettext_lazy as _
+from django.utils.translation import gettext_lazy as _, pgettext
+from i18nfield.strings import LazyI18nString
 from PyPDF2 import PdfFileReader
 from pytz import timezone
 from reportlab.graphics import renderPDF
@@ -201,6 +204,11 @@ DEFAULT_VARIABLES = OrderedDict((
         "label": _("Attendee email"),
         "editor_sample": 'foo@bar.com',
         "evaluate": lambda op, order, ev: op.attendee_email or (op.addon_to.attendee_email if op.addon_to else '')
+    }),
+    ("pseudonymization_id", {
+        "label": _("Pseudonymization ID (lead scanning)"),
+        "editor_sample": "GG89JUJDTA",
+        "evaluate": lambda orderposition, order, event: orderposition.pseudonymization_id,
     }),
     ("event_name", {
         "label": _("Event name"),
@@ -387,29 +395,40 @@ DEFAULT_VARIABLES = OrderedDict((
     ("seat", {
         "label": _("Seat: Full name"),
         "editor_sample": _("Ground floor, Row 3, Seat 4"),
-        "evaluate": lambda op, order, ev: str(op.seat if op.seat else
+        "evaluate": lambda op, order, ev: str(get_seat(op) if get_seat(op) else
                                               _('General admission') if ev.seating_plan_id is not None else "")
     }),
     ("seat_zone", {
         "label": _("Seat: zone"),
         "editor_sample": _("Ground floor"),
-        "evaluate": lambda op, order, ev: str(op.seat.zone_name if op.seat else
+        "evaluate": lambda op, order, ev: str(get_seat(op).zone_name if get_seat(op) else
                                               _('General admission') if ev.seating_plan_id is not None else "")
     }),
     ("seat_row", {
         "label": _("Seat: row"),
         "editor_sample": "3",
-        "evaluate": lambda op, order, ev: str(op.seat.row_name if op.seat else "")
+        "evaluate": lambda op, order, ev: str(get_seat(op).row_name if get_seat(op) else "")
     }),
     ("seat_number", {
         "label": _("Seat: seat number"),
         "editor_sample": 4,
-        "evaluate": lambda op, order, ev: str(op.seat.seat_number if op.seat else "")
+        "evaluate": lambda op, order, ev: str(get_seat(op).seat_number if get_seat(op) else "")
     }),
     ("first_scan", {
         "label": _("Date and time of first scan"),
         "editor_sample": _("2017-05-31 19:00"),
         "evaluate": lambda op, order, ev: get_first_scan(op)
+    }),
+    ("giftcard_issuance_date", {
+
+        "label": _("Gift card: Issuance date"),
+        "editor_sample": _("2017-05-31"),
+        "evaluate": lambda op, order, ev: get_giftcard_issuance(op, ev)
+    }),
+    ("giftcard_expiry_date", {
+        "label": _("Gift card: Expiration date"),
+        "editor_sample": _("2017-05-31"),
+        "evaluate": lambda op, order, ev: get_giftcard_expiry(op, ev)
     }),
 ))
 DEFAULT_IMAGES = OrderedDict([])
@@ -485,22 +504,36 @@ def variables_from_questions(sender, *args, **kwargs):
     for q in sender.questions.all():
         if q.type == Question.TYPE_FILE:
             continue
+        d['question_{}'.format(q.identifier)] = {
+            'label': _('Question: {question}').format(question=q.question),
+            'editor_sample': _('<Answer: {question}>').format(question=q.question),
+            'evaluate': partial(get_answer, question_id=q.pk),
+            'migrate_from': 'question_{}'.format(q.pk)
+        }
         d['question_{}'.format(q.pk)] = {
             'label': _('Question: {question}').format(question=q.question),
             'editor_sample': _('<Answer: {question}>').format(question=q.question),
-            'evaluate': partial(get_answer, question_id=q.pk)
+            'evaluate': partial(get_answer, question_id=q.pk),
+            'hidden': True,
         }
     return d
 
 
 def _get_attendee_name_part(key, op, order, ev):
     if isinstance(key, tuple):
-        return ' '.join(p for p in [_get_attendee_name_part(c[0], op, order, ev) for c in key] if p)
-    return op.attendee_name_parts.get(key, '')
+        parts = [_get_attendee_name_part(c[0], op, order, ev) for c in key if not (c[0] == 'salutation' and op.attendee_name_parts.get(c[0], '') == "Mx")]
+        return ' '.join(p for p in parts if p)
+    value = op.attendee_name_parts.get(key, '')
+    if key == 'salutation':
+        return pgettext('person_name_salutation', value)
+    return value
 
 
 def _get_ia_name_part(key, op, order, ev):
-    return order.invoice_address.name_parts.get(key, '') if getattr(order, 'invoice_address', None) else ''
+    value = order.invoice_address.name_parts.get(key, '') if getattr(order, 'invoice_address', None) else ''
+    if key == 'salutation' and value:
+        return pgettext('person_name_salutation', value)
+    return value
 
 
 def get_images(event):
@@ -516,6 +549,14 @@ def get_variables(event):
     v = copy.copy(DEFAULT_VARIABLES)
 
     scheme = PERSON_NAME_SCHEMES[event.settings.name_scheme]
+
+    concatenation_for_salutation = scheme.get("concatenation_for_salutation", scheme["concatenation"])
+    v['attendee_name_for_salutation'] = {
+        'label': _("Attendee name for salutation"),
+        'editor_sample': _("Mr Doe"),
+        'evaluate': lambda op, order, ev: concatenation_for_salutation(op.attendee_name_parts or {})
+    }
+
     for key, label, weight in scheme['fields']:
         v['attendee_name_%s' % key] = {
             'label': _("Attendee name: {part}").format(part=label),
@@ -533,6 +574,12 @@ def get_variables(event):
     v['invoice_name']['editor_sample'] = scheme['concatenation'](scheme['sample'])
     v['attendee_name']['editor_sample'] = scheme['concatenation'](scheme['sample'])
 
+    v['invoice_name_for_salutation'] = {
+        'label': _("Invoice address name for salutation"),
+        'editor_sample': _("Mr Doe"),
+        'evaluate': lambda op, order, ev: concatenation_for_salutation(order.invoice_address.name_parts if getattr(order, 'invoice_address', None) else {})
+    }
+
     for key, label, weight in scheme['fields']:
         v['invoice_name_%s' % key] = {
             'label': _("Invoice address name: {part}").format(part=label),
@@ -546,6 +593,24 @@ def get_variables(event):
     return v
 
 
+def get_giftcard_expiry(op: OrderPosition, ev):
+    if not op.item.issue_giftcard:
+        return ""  # performance optimization
+    m = op.issued_gift_cards.aggregate(m=Min('expires'))['m']
+    if not m:
+        return ""
+    return date_format(m.astimezone(ev.timezone), "SHORT_DATE_FORMAT")
+
+
+def get_giftcard_issuance(op: OrderPosition, ev):
+    if not op.item.issue_giftcard:
+        return ""  # performance optimization
+    m = op.issued_gift_cards.aggregate(m=Max('issuance'))['m']
+    if not m:
+        return ""
+    return date_format(m.astimezone(ev.timezone), "SHORT_DATE_FORMAT")
+
+
 def get_first_scan(op: OrderPosition):
     scans = list(op.checkins.all())
 
@@ -555,6 +620,14 @@ def get_first_scan(op: OrderPosition):
             "SHORT_DATETIME_FORMAT"
         )
     return ""
+
+
+def get_seat(op: OrderPosition):
+    if op.seat_id:
+        return op.seat
+    if op.addon_to_id:
+        return op.addon_to.seat
+    return None
 
 
 reshaper = SimpleLazyObject(lambda: ArabicReshaper(configuration={
@@ -616,12 +689,14 @@ class Renderer:
                          preserveAspectRatio=True, anchor='n',
                          mask='auto')
 
-    def _draw_barcodearea(self, canvas: Canvas, op: OrderPosition, o: dict):
+    def _draw_barcodearea(self, canvas: Canvas, op: OrderPosition, order: Order, o: dict):
         content = o.get('content', 'secret')
         if content == 'secret':
+            # do not use get_text_content because it uses a shortened version of secret
+            # and does not deal with our default value here properly
             content = op.secret
-        elif content == 'pseudonymization_id':
-            content = op.pseudonymization_id
+        else:
+            content = self._get_text_content(op, order, o)
 
         level = 'H'
         if len(content) > 32:
@@ -648,20 +723,51 @@ class Renderer:
                 return self._get_text_content(op, order, o, True)
 
         ev = self._get_ev(op, order)
+
         if not o['content']:
             return '(error)'
-        if o['content'] == 'other':
-            return o['text']
+
+        if o['content'] == 'other' or o['content'] == 'other_i18n':
+            if o['content'] == 'other_i18n':
+                text = str(LazyI18nString(o['text_i18n']))
+            else:
+                text = o['text']
+
+            def replace(x):
+                print(x.group(1))
+                if x.group(1).startswith('itemmeta:'):
+                    return op.item.meta_data.get(x.group(1)[9:]) or ''
+                elif x.group(1).startswith('meta:'):
+                    return ev.meta_data.get(x.group(1)[5:]) or ''
+                elif x.group(1) not in self.variables:
+                    return x.group(0)
+                if x.group(1) == 'secret':
+                    # Do not use shortened version
+                    return op.secret
+
+                try:
+                    return self.variables[x.group(1)]['evaluate'](op, order, ev)
+                except:
+                    logger.exception('Failed to process variable.')
+                    return '(error)'
+
+            # We do not use str.format like in emails so we (a) can evaluate lazily and (b) can re-implement this
+            # 1:1 on other platforms that render PDFs through our API (libpretixprint)
+            return re.sub(r'\{([a-zA-Z0-9:_]+)\}', replace, text)
+
         elif o['content'].startswith('itemmeta:'):
             return op.item.meta_data.get(o['content'][9:]) or ''
+
         elif o['content'].startswith('meta:'):
             return ev.meta_data.get(o['content'][5:]) or ''
+
         elif o['content'] in self.variables:
             try:
                 return self.variables[o['content']]['evaluate'](op, order, ev)
             except:
                 logger.exception('Failed to process variable.')
                 return '(error)'
+
         return ''
 
     def _draw_imagearea(self, canvas: Canvas, op: OrderPosition, order: Order, o: dict):
@@ -754,20 +860,30 @@ class Renderer:
             p.drawOn(canvas, 0, -h - ad[1])
         canvas.restoreState()
 
-    def draw_page(self, canvas: Canvas, order: Order, op: OrderPosition, show_page=True):
-        for o in self.layout:
-            if o['type'] == "barcodearea":
-                self._draw_barcodearea(canvas, op, o)
-            elif o['type'] == "imagearea":
-                self._draw_imagearea(canvas, op, order, o)
-            elif o['type'] == "textarea":
-                self._draw_textarea(canvas, op, order, o)
-            elif o['type'] == "poweredby":
-                self._draw_poweredby(canvas, op, o)
-            if self.bg_pdf:
-                canvas.setPageSize((self.bg_pdf.getPage(0).mediaBox[2], self.bg_pdf.getPage(0).mediaBox[3]))
-        if show_page:
-            canvas.showPage()
+    def draw_page(self, canvas: Canvas, order: Order, op: OrderPosition, show_page=True, only_page=None):
+        page_count = self.bg_pdf.getNumPages()
+
+        if not only_page and not show_page:
+            raise ValueError("only_page=None and show_page=False cannot be combined")
+
+        for page in range(page_count):
+            if only_page and only_page != page + 1:
+                continue
+            for o in self.layout:
+                if o.get('page', 1) != page + 1:
+                    continue
+                if o['type'] == "barcodearea":
+                    self._draw_barcodearea(canvas, op, order, o)
+                elif o['type'] == "imagearea":
+                    self._draw_imagearea(canvas, op, order, o)
+                elif o['type'] == "textarea":
+                    self._draw_textarea(canvas, op, order, o)
+                elif o['type'] == "poweredby":
+                    self._draw_poweredby(canvas, op, o)
+                if self.bg_pdf:
+                    canvas.setPageSize((self.bg_pdf.getPage(page).mediaBox[2], self.bg_pdf.getPage(page).mediaBox[3]))
+            if show_page:
+                canvas.showPage()
 
     def render_background(self, buffer, title=_('Ticket')):
         if settings.PDFTK:
@@ -780,7 +896,7 @@ class Renderer:
                 subprocess.run([
                     settings.PDFTK,
                     os.path.join(d, 'front.pdf'),
-                    'background',
+                    'multibackground',
                     os.path.join(d, 'back.pdf'),
                     'output',
                     os.path.join(d, 'out.pdf'),
@@ -794,8 +910,8 @@ class Renderer:
             new_pdf = PdfFileReader(buffer)
             output = PdfFileWriter()
 
-            for page in new_pdf.pages:
-                bg_page = copy.copy(self.bg_pdf.getPage(0))
+            for i, page in enumerate(new_pdf.pages):
+                bg_page = copy.copy(self.bg_pdf.getPage(i))
                 bg_page.mergePage(page)
                 output.addPage(bg_page)
 

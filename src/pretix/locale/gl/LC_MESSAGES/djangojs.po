@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-02-14 14:39+0000\n"
-"PO-Revision-Date: 2021-11-25 21:00+0000\n"
+"POT-Creation-Date: 2022-04-28 16:44+0000\n"
+"PO-Revision-Date: 2022-02-22 22:00+0000\n"
 "Last-Translator: Ismael Menéndez Fernández <ismael.menendez@balidea.com>\n"
 "Language-Team: Galician <https://translate.pretix.eu/projects/pretix/pretix-"
 "js/gl/>\n"
@@ -29,6 +29,123 @@ msgstr "Marcado como pagado"
 msgid "Comment:"
 msgstr "Comentario:"
 
+#: pretix/plugins/paypal/static/pretixplugins/paypal/pretix-paypal.js:34
+msgid "PayPal"
+msgstr ""
+
+#: pretix/plugins/paypal/static/pretixplugins/paypal/pretix-paypal.js:35
+msgid "Venmo"
+msgstr ""
+
+#: pretix/plugins/paypal/static/pretixplugins/paypal/pretix-paypal.js:36
+msgid "Apple Pay"
+msgstr ""
+
+#: pretix/plugins/paypal/static/pretixplugins/paypal/pretix-paypal.js:37
+msgid "Itaú"
+msgstr ""
+
+#: pretix/plugins/paypal/static/pretixplugins/paypal/pretix-paypal.js:38
+msgid "PayPal Credit"
+msgstr ""
+
+#: pretix/plugins/paypal/static/pretixplugins/paypal/pretix-paypal.js:39
+msgid "Credit Card"
+msgstr ""
+
+#: pretix/plugins/paypal/static/pretixplugins/paypal/pretix-paypal.js:40
+msgid "PayPal Pay Later"
+msgstr ""
+
+#: pretix/plugins/paypal/static/pretixplugins/paypal/pretix-paypal.js:41
+msgid "iDEAL"
+msgstr ""
+
+#: pretix/plugins/paypal/static/pretixplugins/paypal/pretix-paypal.js:42
+msgid "SEPA Direct Debit"
+msgstr ""
+
+#: pretix/plugins/paypal/static/pretixplugins/paypal/pretix-paypal.js:43
+msgid "Bancontact"
+msgstr ""
+
+#: pretix/plugins/paypal/static/pretixplugins/paypal/pretix-paypal.js:44
+msgid "giropay"
+msgstr ""
+
+#: pretix/plugins/paypal/static/pretixplugins/paypal/pretix-paypal.js:45
+msgid "SOFORT"
+msgstr ""
+
+#: pretix/plugins/paypal/static/pretixplugins/paypal/pretix-paypal.js:46
+#, fuzzy
+#| msgid "Yes"
+msgid "eps"
+msgstr "Si"
+
+#: pretix/plugins/paypal/static/pretixplugins/paypal/pretix-paypal.js:47
+msgid "MyBank"
+msgstr ""
+
+#: pretix/plugins/paypal/static/pretixplugins/paypal/pretix-paypal.js:48
+msgid "Przelewy24"
+msgstr ""
+
+#: pretix/plugins/paypal/static/pretixplugins/paypal/pretix-paypal.js:49
+msgid "Verkkopankki"
+msgstr ""
+
+#: pretix/plugins/paypal/static/pretixplugins/paypal/pretix-paypal.js:50
+msgid "PayU"
+msgstr ""
+
+#: pretix/plugins/paypal/static/pretixplugins/paypal/pretix-paypal.js:51
+msgid "BLIK"
+msgstr ""
+
+#: pretix/plugins/paypal/static/pretixplugins/paypal/pretix-paypal.js:52
+msgid "Trustly"
+msgstr ""
+
+#: pretix/plugins/paypal/static/pretixplugins/paypal/pretix-paypal.js:53
+msgid "Zimpler"
+msgstr ""
+
+#: pretix/plugins/paypal/static/pretixplugins/paypal/pretix-paypal.js:54
+msgid "Maxima"
+msgstr ""
+
+#: pretix/plugins/paypal/static/pretixplugins/paypal/pretix-paypal.js:55
+msgid "OXXO"
+msgstr ""
+
+#: pretix/plugins/paypal/static/pretixplugins/paypal/pretix-paypal.js:56
+msgid "Boleto"
+msgstr ""
+
+#: pretix/plugins/paypal/static/pretixplugins/paypal/pretix-paypal.js:57
+msgid "WeChat Pay"
+msgstr ""
+
+#: pretix/plugins/paypal/static/pretixplugins/paypal/pretix-paypal.js:58
+msgid "Mercado Pago"
+msgstr ""
+
+#: pretix/plugins/paypal/static/pretixplugins/paypal/pretix-paypal.js:152
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:48
+msgid "Continue"
+msgstr "Continuar"
+
+#: pretix/plugins/paypal/static/pretixplugins/paypal/pretix-paypal.js:205
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:152
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:183
+msgid "Confirming your payment …"
+msgstr "Confirmando o pagamento…"
+
+#: pretix/plugins/paypal/static/pretixplugins/paypal/pretix-paypal.js:230
+msgid "Payment method unavailable"
+msgstr ""
+
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:15
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:39
 msgid "Placed orders"
@@ -37,7 +154,7 @@ msgstr "Pedidos enviados"
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:15
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:39
 msgid "Paid orders"
-msgstr "Ordes pagadas"
+msgstr "Pedidos pagados"
 
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:27
 msgid "Total revenue"
@@ -50,11 +167,6 @@ msgstr "Contactando con Stripe…"
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:60
 msgid "Total"
 msgstr "Total"
-
-#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:152
-#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:183
-msgid "Confirming your payment …"
-msgstr "Confirmando o pagamento…"
 
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:159
 msgid "Contacting your bank …"
@@ -128,10 +240,6 @@ msgstr "Trocado"
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:47
 msgid "Cancel"
 msgstr "Cancelar"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:48
-msgid "Continue"
-msgstr "Continuar"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:49
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:58
@@ -304,108 +412,116 @@ msgid "Current date and time"
 msgstr "Data e hora actual"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:71
+msgid "Current day of the week (1 = Monday, 7 = Sunday)"
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:75
 msgid "Number of previous entries"
 msgstr "Número de entradas previas"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:75
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:79
 msgid "Number of previous entries since midnight"
 msgstr "Número de entradas previas desde a medianoite"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:79
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:83
 msgid "Number of days with a previous entry"
 msgstr "Número de días cunha entrada previa"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:97
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:87
+msgid "Minutes since last entry (-1 on first entry)"
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:91
+msgid "Minutes since first entry (-1 on first entry)"
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:112
 msgid "All of the conditions below (AND)"
 msgstr "Todas as condicións seguintes (E)"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:98
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:113
 msgid "At least one of the conditions below (OR)"
 msgstr "Polo menos unha das seguintes condicións (OU)"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:99
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:114
 msgid "Event start"
 msgstr "Comezo do evento"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:100
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:115
 msgid "Event end"
 msgstr "Fin do evento"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:101
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:116
 msgid "Event admission"
 msgstr "Admisión ao evento"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:102
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:117
 msgid "custom date and time"
 msgstr "Seleccionar data e hora"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:103
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:118
 msgid "custom time"
 msgstr "Seleccionar hora"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:104
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:119
 msgid "Tolerance (minutes)"
 msgstr "Tolerancia (en minutos)"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:105
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:120
 msgid "Add condition"
 msgstr "Engadir condición"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:106
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:121
 msgid "minutes"
 msgstr "minutos"
-
-#: pretix/static/pretixcontrol/js/ui/editor.js:69
-msgid "Lead Scan QR"
-msgstr "Escanear QR de clientela potencial"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:71
 msgid "Check-in QR"
 msgstr "QR de validación"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:313
+#: pretix/static/pretixcontrol/js/ui/editor.js:376
 msgid "The PDF background file could not be loaded for the following reason:"
 msgstr "O arquivo PDF de fondo non se puido cargar polo motivo seguinte:"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:521
+#: pretix/static/pretixcontrol/js/ui/editor.js:624
 msgid "Group of objects"
 msgstr "Grupo de obxectos"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:527
+#: pretix/static/pretixcontrol/js/ui/editor.js:630
 msgid "Text object"
 msgstr "Obxecto de texto"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:529
+#: pretix/static/pretixcontrol/js/ui/editor.js:632
 msgid "Barcode area"
 msgstr "Área para código de barras"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:531
+#: pretix/static/pretixcontrol/js/ui/editor.js:634
 msgid "Image area"
 msgstr "Área de imaxe"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:533
+#: pretix/static/pretixcontrol/js/ui/editor.js:636
 msgid "Powered by pretix"
 msgstr "Desenvolto por Pretix"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:535
+#: pretix/static/pretixcontrol/js/ui/editor.js:638
 msgid "Object"
 msgstr "Obxecto"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:539
+#: pretix/static/pretixcontrol/js/ui/editor.js:642
 msgid "Ticket design"
 msgstr "Deseño do tícket"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:813
+#: pretix/static/pretixcontrol/js/ui/editor.js:932
 msgid "Saving failed."
 msgstr "O gardado fallou."
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:862
-#: pretix/static/pretixcontrol/js/ui/editor.js:901
+#: pretix/static/pretixcontrol/js/ui/editor.js:982
+#: pretix/static/pretixcontrol/js/ui/editor.js:1021
 msgid "Error while uploading your PDF file, please try again."
 msgstr ""
 "Houbo un erro mentres se cargaba o arquivo PDF. Por favor, inténteo de novo."
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:886
+#: pretix/static/pretixcontrol/js/ui/editor.js:1006
 msgid "Do you really want to leave the editor without saving your changes?"
 msgstr "Realmente desexa saír do editor sen gardar os cambios?"
 
@@ -455,15 +571,15 @@ msgstr "Consultar unha procura"
 msgid "Selected only"
 msgstr "Soamente seleccionados"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:885
+#: pretix/static/pretixcontrol/js/ui/main.js:886
 msgid "Use a different name internally"
 msgstr "Usar un nome diferente internamente"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:921
+#: pretix/static/pretixcontrol/js/ui/main.js:922
 msgid "Click to close"
 msgstr "Click para cerrar"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:962
+#: pretix/static/pretixcontrol/js/ui/main.js:963
 msgid "You have unsaved changes!"
 msgstr "Tes cambios sen gardar!"
 
@@ -526,20 +642,20 @@ msgstr "Obtés %(currency)s %(price)s de volta"
 msgid "Please enter the amount the organizer can keep."
 msgstr "Por favor, ingrese a cantidade que pode conservar o organizador."
 
-#: pretix/static/pretixpresale/js/ui/main.js:361
+#: pretix/static/pretixpresale/js/ui/main.js:364
 msgid "Please enter a quantity for one of the ticket types."
 msgstr "Por favor, introduza un valor para cada tipo de entrada."
 
-#: pretix/static/pretixpresale/js/ui/main.js:397
+#: pretix/static/pretixpresale/js/ui/main.js:400
 msgid "required"
 msgstr "campo requirido"
 
-#: pretix/static/pretixpresale/js/ui/main.js:500
-#: pretix/static/pretixpresale/js/ui/main.js:519
+#: pretix/static/pretixpresale/js/ui/main.js:503
+#: pretix/static/pretixpresale/js/ui/main.js:522
 msgid "Time zone:"
 msgstr "Zona horaria:"
 
-#: pretix/static/pretixpresale/js/ui/main.js:510
+#: pretix/static/pretixpresale/js/ui/main.js:513
 msgid "Your local time:"
 msgstr "A súa hora local:"
 
@@ -818,3 +934,6 @@ msgstr "Novembro"
 #: pretix/static/pretixpresale/js/widget/widget.js:78
 msgid "December"
 msgstr "Decembro"
+
+#~ msgid "Lead Scan QR"
+#~ msgstr "Escanear QR de clientela potencial"

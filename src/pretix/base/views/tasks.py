@@ -205,6 +205,7 @@ class AsyncFormView(AsyncMixin, FormView):
     Also, all form keyword arguments except ``instance`` need to be serializable.
     """
     known_errortypes = ['ValidationError']
+    expected_exceptions = (ValidationError,)
     task_base = ProfiledEventTask
 
     def __init_subclass__(cls):
@@ -243,7 +244,7 @@ class AsyncFormView(AsyncMixin, FormView):
             base=cls.task_base,
             bind=True,
             name=cls.__module__ + '.' + cls.__name__ + '.async_execute',
-            throws=(ValidationError,)
+            throws=cls.expected_exceptions
         )(async_execute)
 
     def async_form_valid(self, task, form):

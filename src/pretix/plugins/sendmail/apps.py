@@ -34,8 +34,8 @@ class SendMailApp(AppConfig):
         author = _("the pretix team")
         category = 'FEATURE'
         version = version
-        description = _("This plugin allows you to send out emails " +
-                        "to all your customers.")
+        featured = True
+        description = _("Send out emails to all your customers or specific groups of customers.")
 
     def ready(self):
         from . import signals  # NOQA

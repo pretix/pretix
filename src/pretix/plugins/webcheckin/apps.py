@@ -33,8 +33,9 @@ class WebCheckinApp(AppConfig):
         name = _("Web-based check-in")
         author = _("the pretix team")
         version = version
+        experimental = True
         category = "FEATURE"
-        description = _("This plugin allows you to perform check-in actions in your browser.")
+        description = _("Turn your browser into a check-in device to perform access control.")
 
     def ready(self):
         from . import signals  # NOQA

@@ -41,16 +41,16 @@ from io import BytesIO
 import dateutil.parser
 import pycountry
 import pytz
-from babel import Locale
 from django import forms
 from django.conf import settings
 from django.contrib import messages
 from django.core.exceptions import ValidationError
 from django.core.files.uploadedfile import SimpleUploadedFile
-from django.core.validators import MaxValueValidator, MinValueValidator, RegexValidator
+from django.core.validators import (
+    MaxValueValidator, MinValueValidator, RegexValidator,
+)
 from django.db.models import QuerySet
 from django.forms import Select, widgets
-from django.utils import translation
 from django.utils.formats import date_format
 from django.utils.html import escape
 from django.utils.safestring import mark_safe
@@ -85,7 +85,9 @@ from pretix.base.templatetags.rich_text import rich_text
 from pretix.control.forms import (
     ExtFileField, ExtValidationMixin, SizeValidationMixin, SplitDateTimeField,
 )
-from pretix.helpers.countries import CachedCountries
+from pretix.helpers.countries import (
+    CachedCountries, get_phone_prefixes_sorted_and_localized,
+)
 from pretix.helpers.escapejson import escapejson_attr
 from pretix.helpers.i18n import get_format_without_seconds
 from pretix.presale.signals import question_form_fields
@@ -262,17 +264,14 @@ class WrappedPhonePrefixSelect(Select):
 
     def __init__(self, initial=None):
         choices = [("", "---------")]
-        language = get_babel_locale()  # changed from default implementation that used the django locale
-        locale = Locale(translation.to_locale(language))
-        for prefix, values in _COUNTRY_CODE_TO_REGION_CODE.items():
-            prefix = "+%d" % prefix
-            if initial and initial in values:
-                self.initial = prefix
-            for country_code in values:
-                country_name = locale.territories.get(country_code)
-                if country_name:
-                    choices.append((prefix, "{} {}".format(country_name, prefix)))
-        super().__init__(choices=sorted(choices, key=lambda item: item[1]), attrs={'aria-label': pgettext_lazy('phonenumber', 'International area code')})
+
+        if initial:
+            for prefix, values in _COUNTRY_CODE_TO_REGION_CODE.items():
+                if initial in values:
+                    self.initial = "+%d" % prefix
+                    break
+        choices += get_phone_prefixes_sorted_and_localized()
+        super().__init__(choices=choices, attrs={'aria-label': pgettext_lazy('phonenumber', 'International area code')})
 
     def render(self, name, value, *args, **kwargs):
         return super().render(name, value or self.initial, *args, **kwargs)
@@ -316,7 +315,12 @@ class WrappedPhoneNumberPrefixWidget(PhoneNumberPrefixWidget):
         silently deleting data.
         """
         if value:
-            if type(value) == PhoneNumber:
+            if isinstance(value, str):
+                try:
+                    value = PhoneNumber.from_string(value)
+                except:
+                    pass
+            if isinstance(value, PhoneNumber):
                 if value.country_code and value.national_number:
                     return [
                         "+%d" % value.country_code,
@@ -425,7 +429,7 @@ class PortraitImageWidget(UploadedFileWidget):
 
     def value_from_datadict(self, data, files, name):
         d = super().value_from_datadict(data, files, name)
-        if d is not None:
+        if d is not None and d is not False:
             d._cropdata = json.loads(data.get(name + '_cropdata', '{}') or '{}')
         return d
 
@@ -703,7 +707,7 @@ class BaseQuestionsForm(forms.Form):
                     label=label, required=required,
                     min_value=q.valid_number_min or Decimal('0.00'),
                     max_value=q.valid_number_max,
-                    help_text=q.help_text,
+                    help_text=help_text,
                     initial=initial.answer if initial else None,
                 )
             elif q.type == Question.TYPE_STRING:

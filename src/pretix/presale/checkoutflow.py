@@ -55,7 +55,7 @@ from pretix.base.models import Customer, Order
 from pretix.base.models.orders import InvoiceAddress, OrderPayment
 from pretix.base.models.tax import TaxedPrice, TaxRule
 from pretix.base.services.cart import (
-    CartError, error_messages, get_fees, set_cart_addons, update_tax_rates,
+    CartError, CartManager, error_messages, get_fees, set_cart_addons,
 )
 from pretix.base.services.memberships import validate_memberships_in_order
 from pretix.base.services.orders import perform_order
@@ -735,9 +735,9 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
 
         return f
 
-    def get_question_override_sets(self, cart_position):
+    def get_question_override_sets(self, cart_position, index):
         o = []
-        if self.cart_customer:
+        if self.cart_customer and index == 0:
             o.append({
                 'attendee_name_parts': {
                     'initial': self.cart_customer.name_parts
@@ -873,11 +873,13 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
                 self.cart_session['saved_invoice_address'] = saved.pk
 
             try:
-                diff = update_tax_rates(
-                    event=request.event,
+                cm = CartManager(
+                    event=self.request.event,
                     cart_id=get_or_create_cart_id(request),
-                    invoice_address=addr
+                    invoice_address=addr,
+                    sales_channel=request.sales_channel.identifier,
                 )
+                diff = cm.recompute_final_prices_and_taxes()
             except TaxRule.SaleNotAllowed:
                 messages.error(request,
                                _("Unfortunately, based on the invoice address you entered, we're not able to sell you "

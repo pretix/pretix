@@ -113,10 +113,13 @@ class SettingsForm(i18nfield.forms.I18nFormMixin, HierarkeyForm):
             if isinstance(f, (RelativeDateTimeField, RelativeDateField)):
                 f.set_event(self.obj)
 
-    def save(self):
+    def _unmask_secret_fields(self):
         for k, v in self.cleaned_data.items():
             if isinstance(self.fields.get(k), SecretKeySettingsField) and self.cleaned_data.get(k) == SECRET_REDACTED:
                 self.cleaned_data[k] = self.initial[k]
+
+    def save(self):
+        self._unmask_secret_fields()
         return super().save()
 
     def clean(self):

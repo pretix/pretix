@@ -282,7 +282,7 @@ class LayoutEditorView(BaseEditorView):
         return self.layout.background.url if self.layout.background else self.get_default_background()
 
     def save_background(self, f: CachedFile):
-        if self.layout.background:
+        if self.layout.background and TicketLayout.objects.filter(background=self.layout.background).count() == 1:
             self.layout.background.delete()
         self.layout.background.save('background.pdf', f.file)
         invalidate_cache.apply_async(kwargs={'event': self.request.event.pk, 'provider': 'pdf'})

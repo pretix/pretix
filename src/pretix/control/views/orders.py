@@ -360,7 +360,8 @@ class OrderDetail(OrderView):
         cartpos = queryset.order_by(
             'item', 'variation'
         ).select_related(
-            'item', 'variation', 'addon_to', 'tax_rule', 'used_membership', 'used_membership__membership_type'
+            'item', 'variation', 'addon_to', 'tax_rule', 'used_membership', 'used_membership__membership_type',
+            'discount',
         ).prefetch_related(
             'item__questions', 'issued_gift_cards',
             Prefetch('answers', queryset=QuestionAnswer.objects.prefetch_related('options').select_related('question')),
@@ -1123,6 +1124,7 @@ class OrderRefundView(OrderView):
         return render(self.request, 'pretixcontrol/order/refund_choose.html', {
             'payments': payments,
             'new_refunds': new_refunds,
+            'full_refund': full_refund,
             'remainder': to_refund,
             'order': self.order,
             'comment': comment,
@@ -1265,6 +1267,7 @@ class OrderTransition(OrderView):
         elif self.order.cancel_allowed() and to == 'c' and self.mark_canceled_form.is_valid():
             try:
                 cancel_order(self.order.pk, user=self.request.user,
+                             email_comment=self.mark_canceled_form.cleaned_data['comment'],
                              send_mail=self.mark_canceled_form.cleaned_data['send_email'],
                              cancel_invoice=self.mark_canceled_form.cleaned_data.get('cancel_invoice', True),
                              cancellation_fee=self.mark_canceled_form.cleaned_data.get('cancellation_fee'))
@@ -1302,6 +1305,7 @@ class OrderTransition(OrderView):
         elif self.order.cancel_allowed() and to == 'c':
             return render(self.request, 'pretixcontrol/order/cancel.html', {
                 'form': self.mark_canceled_form,
+                'fee': self.order.user_cancel_fee,
                 'order': self.order,
             })
         else:
@@ -1760,7 +1764,7 @@ class OrderChange(OrderView):
                 if p.form.cleaned_data['tax_rule'] and p.form.cleaned_data['tax_rule'] != p.tax_rule:
                     ocm.change_tax_rule(p, p.form.cleaned_data['tax_rule'])
 
-                if p.form.cleaned_data['operation_split']:
+                if p.form.cleaned_data.get('operation_split'):
                     ocm.split(p)
 
                 if p.form.cleaned_data['operation_secret']:
@@ -2215,12 +2219,10 @@ class OrderGo(EventPermissionRequiredMixin, View):
             return redirect('control:event.order', event=request.event.slug, organizer=request.event.organizer.slug,
                             code=order.code)
         except Order.DoesNotExist:
-            try:
-                i = self.request.event.invoices.get(Q(invoice_no=code) | Q(full_invoice_no=code))
+            i = self.request.event.invoices.filter(Q(invoice_no=code) | Q(full_invoice_no=code)).first()
+            if i:
                 return redirect('control:event.order', event=request.event.slug, organizer=request.event.organizer.slug,
                                 code=i.order.code)
-            except Invoice.DoesNotExist:
-                pass
 
             messages.error(request, _('There is no order with the given order code.'))
             return redirect('control:event.orders', event=request.event.slug, organizer=request.event.organizer.slug)
@@ -2231,8 +2233,9 @@ class ExportMixin:
     def exporters(self):
         exporters = []
         responses = register_data_exporters.send(self.request.event)
-        for ex in sorted([response(self.request.event, self.request.organizer) for r, response in responses], key=lambda ex: str(ex.verbose_name)):
-            if self.request.GET.get("identifier") and ex.identifier != self.request.GET.get("identifier"):
+        id = self.request.GET.get("identifier") or self.request.POST.get("exporter")
+        for ex in sorted([response(self.request.event, self.request.organizer) for r, response in responses if response], key=lambda ex: str(ex.verbose_name)):
+            if id and ex.identifier != id:
                 continue
 
             # Use form parse cycle to generate useful defaults

@@ -57,5 +57,6 @@ $(function () {
         update_variation_summary($el);
         $(this).on("change dp.change", "input", function () {update_variation_summary($el)});
         setup_collapsible_details($("#item_variations"));
+        form_handlers($(event.target));
     });
 });

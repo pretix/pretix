@@ -102,7 +102,7 @@ class ItemList(ListView):
         ).annotate(
             var_count=Count('variations')
         ).prefetch_related("category").order_by(
-            F('category__position').desc(nulls_first=True),
+            F('category__position').asc(nulls_first=True),
             'category', 'position'
         )
 
@@ -169,7 +169,7 @@ def reorder_items(request, organizer, event):
     input_items = list(request.event.items.filter(id__in=[i for i in ids if i.isdigit()]))
 
     if len(input_items) != len(ids):
-        raise Http404(_("Some of the provided item ids are invalid."))
+        raise Http404(_("Some of the provided object ids are invalid."))
 
     item_categories = {i.category_id for i in input_items}
     if len(item_categories) > 1:
@@ -178,7 +178,7 @@ def reorder_items(request, organizer, event):
     # get first and only category
     item_category = next(iter(item_categories))
     if len(input_items) != request.event.items.filter(category=item_category).count():
-        raise Http404(_("Not all items have been selected."))
+        raise Http404(_("Not all objects have been selected."))
 
     for i in input_items:
         pos = ids.index(str(i.pk))
@@ -372,10 +372,10 @@ def reorder_categories(request, organizer, event):
     input_categories = list(request.event.categories.filter(id__in=[i for i in ids if i.isdigit()]))
 
     if len(input_categories) != len(ids):
-        raise Http404(_("Some of the provided category ids are invalid."))
+        raise Http404(_("Some of the provided object ids are invalid."))
 
     if len(input_categories) != request.event.categories.count():
-        raise Http404(_("Not all categories have been selected."))
+        raise Http404(_("Not all objects have been selected."))
 
     for c in input_categories:
         pos = ids.index(str(c.pk))
@@ -501,10 +501,10 @@ def reorder_questions(request, organizer, event):
     input_questions = list(request.event.questions.filter(id__in=custom_question_ids))
 
     if len(input_questions) != len(custom_question_ids):
-        raise Http404(_("Some of the provided question ids are invalid."))
+        raise Http404(_("Some of the provided object ids are invalid."))
 
     if len(input_questions) != request.event.questions.count():
-        raise Http404(_("Not all questions have been selected."))
+        raise Http404(_("Not all objects have been selected."))
 
     for q in input_questions:
         pos = ids.index(str(q.pk))

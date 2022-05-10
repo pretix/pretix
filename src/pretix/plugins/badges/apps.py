@@ -34,7 +34,9 @@ class BadgesApp(AppConfig):
         author = _("the pretix team")
         version = version
         category = "FEATURE"
-        description = _("This plugin allows you to generate badges or name tags for your attendees.")
+        featured = True
+        description = _("Automatically generate badges or name tags for your attendees. You can download the badges in the "
+                        "backend or automatically print them with our check-in apps.")
 
     def ready(self):
         from . import signals  # NOQA

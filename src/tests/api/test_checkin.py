@@ -806,6 +806,26 @@ def test_forced_multiple(token_client, organizer, clist, event, order):
 
 
 @pytest.mark.django_db
+def test_forced_flag_set_if_required(token_client, organizer, clist, event, order):
+    with scopes_disabled():
+        p = order.positions.first()
+    resp = token_client.post('/api/v1/organizers/{}/events/{}/checkinlists/{}/positions/{}/redeem/'.format(
+        organizer.slug, event.slug, clist.pk, p.pk
+    ), {'force': True}, format='json')
+    with scopes_disabled():
+        assert not p.checkins.order_by('pk').last().forced
+    assert resp.status_code == 201
+    assert resp.data['status'] == 'ok'
+    resp = token_client.post('/api/v1/organizers/{}/events/{}/checkinlists/{}/positions/{}/redeem/'.format(
+        organizer.slug, event.slug, clist.pk, p.pk
+    ), {'force': True}, format='json')
+    with scopes_disabled():
+        assert p.checkins.order_by('pk').last().forced
+    assert resp.status_code == 201
+    assert resp.data['status'] == 'ok'
+
+
+@pytest.mark.django_db
 def test_require_product(token_client, organizer, clist, event, order):
     with scopes_disabled():
         clist.limit_products.clear()

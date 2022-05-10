@@ -13,6 +13,7 @@ recursive-include pretix/plugins/banktransfer/static *
 recursive-include pretix/plugins/manualpayment/templates *
 recursive-include pretix/plugins/manualpayment/static *
 recursive-include pretix/plugins/paypal/templates *
+recursive-include pretix/plugins/paypal/static *
 recursive-include pretix/plugins/pretixdroid/templates *
 recursive-include pretix/plugins/pretixdroid/static *
 recursive-include pretix/plugins/sendmail/templates *

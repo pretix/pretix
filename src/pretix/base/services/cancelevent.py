@@ -214,8 +214,8 @@ def cancel_event(self, event: Event, subevent: int, auto_refund: bool,
             refund_amount = o.payment_refund_sum
 
             try:
-                if auto_refund:
-                    _try_auto_refund(o.pk, manual_refund=manual_refund, allow_partial=True,
+                if auto_refund or manual_refund:
+                    _try_auto_refund(o.pk, auto_refund=auto_refund, manual_refund=manual_refund, allow_partial=True,
                                      source=OrderRefund.REFUND_SOURCE_ADMIN, refund_as_giftcard=refund_as_giftcard,
                                      giftcard_expires=giftcard_expires, giftcard_conditions=giftcard_conditions,
                                      comment=gettext('Event canceled'))
@@ -272,8 +272,8 @@ def cancel_event(self, event: Event, subevent: int, auto_refund: bool,
             ocm.commit()
             refund_amount = o.payment_refund_sum - o.total
 
-            if auto_refund:
-                _try_auto_refund(o.pk, manual_refund=manual_refund, allow_partial=True,
+            if auto_refund or manual_refund:
+                _try_auto_refund(o.pk, auto_refund=auto_refund, manual_refund=manual_refund, allow_partial=True,
                                  source=OrderRefund.REFUND_SOURCE_ADMIN, refund_as_giftcard=refund_as_giftcard,
                                  giftcard_expires=giftcard_expires, giftcard_conditions=giftcard_conditions,
                                  comment=gettext('Event canceled'))

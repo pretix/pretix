@@ -42,6 +42,7 @@ class InitializationRequestSerializer(serializers.Serializer):
     hardware_model = serializers.CharField(max_length=190)
     software_brand = serializers.CharField(max_length=190)
     software_version = serializers.CharField(max_length=190)
+    info = serializers.JSONField(required=False, allow_null=True)
 
 
 class UpdateRequestSerializer(serializers.Serializer):
@@ -49,6 +50,7 @@ class UpdateRequestSerializer(serializers.Serializer):
     hardware_model = serializers.CharField(max_length=190)
     software_brand = serializers.CharField(max_length=190)
     software_version = serializers.CharField(max_length=190)
+    info = serializers.JSONField(required=False, allow_null=True)
 
 
 class GateSerializer(serializers.ModelSerializer):
@@ -94,6 +96,7 @@ class InitializeView(APIView):
         device.hardware_model = serializer.validated_data.get('hardware_model')
         device.software_brand = serializer.validated_data.get('software_brand')
         device.software_version = serializer.validated_data.get('software_version')
+        device.info = serializer.validated_data.get('info')
         device.api_token = generate_api_token()
         device.save()
 
@@ -114,6 +117,7 @@ class UpdateView(APIView):
         device.hardware_model = serializer.validated_data.get('hardware_model')
         device.software_brand = serializer.validated_data.get('software_brand')
         device.software_version = serializer.validated_data.get('software_version')
+        device.info = serializer.validated_data.get('info')
         device.save()
         device.log_action('pretix.device.updated', data=serializer.validated_data, auth=device)
 

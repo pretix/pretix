@@ -76,6 +76,10 @@ class LocaleMiddleware(MiddlewareMixin):
                             if lang.startswith(firstpart + '-'):
                                 language = lang
                                 break
+                if language not in settings_holder.settings.locales:
+                    # This seems redundant, but can happen in the rare edge case that settings.locale is (wrongfully)
+                    # not part of settings.locales
+                    language = settings_holder.settings.locales[0]
                 if '-' not in language and settings_holder.settings.region:
                     language += '-' + settings_holder.settings.region
         else:

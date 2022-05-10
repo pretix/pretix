@@ -243,6 +243,8 @@ class MailSettingsSetupView(TemplateView):
                 messages.success(request, _('Your changes have been saved.'))
                 return redirect(self.get_success_url())
             else:
+                self.smtp_form._unmask_secret_fields()
+
                 backend = get_connection(
                     backend=settings.EMAIL_CUSTOM_SMTP_BACKEND,
                     host=self.smtp_form.cleaned_data['smtp_host'],

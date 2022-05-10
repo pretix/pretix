@@ -207,7 +207,6 @@ class PaymentSearchTest(SoupTest):
             attendee_email="att@att.com"
         )
         OrderPayment.objects.create(
-            local_id=1,
             state=OrderPayment.PAYMENT_STATE_CONFIRMED,
             amount=Decimal("14"),
             order=o1,
@@ -215,7 +214,6 @@ class PaymentSearchTest(SoupTest):
             info="{test payment order 1}"
         )
         OrderPayment.objects.create(
-            local_id=1,
             state=OrderPayment.PAYMENT_STATE_REFUNDED,
             amount=Decimal("14"),
             order=o1,
@@ -223,7 +221,6 @@ class PaymentSearchTest(SoupTest):
             info="{refunded payment}"
         )
         OrderPayment.objects.create(
-            local_id=1,
             state=OrderPayment.PAYMENT_STATE_CANCELED,
             amount=Decimal("14"),
             order=o1,
@@ -231,7 +228,6 @@ class PaymentSearchTest(SoupTest):
             info="{canceled payment}"
         )
         OrderPayment.objects.create(
-            local_id=1,
             state=OrderPayment.PAYMENT_STATE_FAILED,
             amount=Decimal("14"),
             order=o1,
@@ -239,7 +235,6 @@ class PaymentSearchTest(SoupTest):
             info="{failed payment}"
         )
         OrderPayment.objects.create(
-            local_id=1,
             state=OrderPayment.PAYMENT_STATE_PENDING,
             amount=Decimal("14"),
             order=o1,
@@ -264,7 +259,6 @@ class PaymentSearchTest(SoupTest):
             attendee_name_parts={'full_name': "Mark", "_scheme": "full"}
         )
         OrderPayment.objects.create(
-            local_id=1,
             state=OrderPayment.PAYMENT_STATE_CREATED,
             amount=Decimal("15"),
             order=o2,
@@ -379,12 +373,10 @@ class PaymentSearchTest(SoupTest):
 
         b = str(self.orga1.pk)
         resp = self.client.get('/control/search/payments/?organizer=' + b).content.decode()
-        print(resp)
         assert "FO1" in resp
 
         b = str(self.orga2.pk)
         resp = self.client.get('/control/search/payments/?organizer=' + b).content.decode()
-        print(resp)
         assert "FO1" not in resp
 
     def test_filter_state(self):
@@ -394,18 +386,18 @@ class PaymentSearchTest(SoupTest):
 
         confirmed = OrderPayment.PAYMENT_STATE_CONFIRMED
         resp = self.client.get('/control/search/payments/?state=' + confirmed).content.decode()
-        assert "P-1" in resp
-        assert "P-2" not in resp
-        assert "P-3" not in resp
-        assert "P-4" not in resp
-        assert "P-5" not in resp
-        assert "P-6" not in resp
+        assert "FO1A-P-1" in resp
+        assert "FO1A-P-2" not in resp
+        assert "FO1A-P-3" not in resp
+        assert "FO1A-P-4" not in resp
+        assert "FO1A-P-5" not in resp
+        assert "FO1A-P-6" not in resp
 
     def test_filter_provider(self):
-        resp = self.client.get('/control/search/payments/?state=giftcard').content.decode()
-        assert "P-1" in resp
-        assert "P-2" not in resp
-        assert "P-3" not in resp
-        assert "P-4" not in resp
-        assert "P-5" not in resp
-        assert "P-6" not in resp
+        resp = self.client.get('/control/search/payments/?provider=giftcard').content.decode()
+        assert "FO1A-P-1" in resp
+        assert "FO1A-P-2" not in resp
+        assert "FO1A-P-3" not in resp
+        assert "FO1A-P-4" not in resp
+        assert "FO1A-P-5" not in resp
+        assert "FO1A-P-6" not in resp

@@ -213,4 +213,10 @@ def item(event):
     return event.items.create(name='foo', default_price=3)
 
 
+@pytest.fixture
+@scopes_disabled()
+def membership_type(organizer):
+    return organizer.membership_types.create(name='foo')
+
+
 utils.setup_databases = scopes_disabled()(utils.setup_databases)

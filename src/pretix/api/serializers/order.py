@@ -56,7 +56,9 @@ from pretix.base.models.orders import (
 from pretix.base.pdf import get_images, get_variables
 from pretix.base.services.cart import error_messages
 from pretix.base.services.locking import NoLockManager
-from pretix.base.services.pricing import get_price
+from pretix.base.services.pricing import (
+    apply_discounts, get_line_price, get_listed_price, is_included_for_free,
+)
 from pretix.base.settings import COUNTRIES_WITH_STATE_IN_ADDRESS
 from pretix.base.signals import register_ticket_outputs
 from pretix.multidomain.urlreverse import build_absolute_uri
@@ -424,88 +426,7 @@ class OrderPositionSerializer(I18nAwareModelSerializer):
             self.fields.pop('pdf_data', None)
 
     def validate(self, data):
-        if data.get('attendee_name') and data.get('attendee_name_parts'):
-            raise ValidationError(
-                {'attendee_name': ['Do not specify attendee_name if you specified attendee_name_parts.']}
-            )
-        if data.get('attendee_name_parts') and '_scheme' not in data.get('attendee_name_parts'):
-            data['attendee_name_parts']['_scheme'] = self.context['request'].event.settings.name_scheme
-
-        if data.get('country'):
-            if not pycountry.countries.get(alpha_2=data.get('country').code):
-                raise ValidationError(
-                    {'country': ['Invalid country code.']}
-                )
-
-        if data.get('state'):
-            cc = str(data.get('country') or self.instance.country or '')
-            if cc not in COUNTRIES_WITH_STATE_IN_ADDRESS:
-                raise ValidationError(
-                    {'state': ['States are not supported in country "{}".'.format(cc)]}
-                )
-            if not pycountry.subdivisions.get(code=cc + '-' + data.get('state')):
-                raise ValidationError(
-                    {'state': ['"{}" is not a known subdivision of the country "{}".'.format(data.get('state'), cc)]}
-                )
-        return data
-
-    def update(self, instance, validated_data):
-        # Even though all fields that shouldn't be edited are marked as read_only in the serializer
-        # (hopefully), we'll be extra careful here and be explicit about the model fields we update.
-        update_fields = [
-            'attendee_name_parts', 'company', 'street', 'zipcode', 'city', 'country',
-            'state', 'attendee_email',
-        ]
-        answers_data = validated_data.pop('answers', None)
-
-        name = validated_data.pop('attendee_name', '')
-        if name and not validated_data.get('attendee_name_parts'):
-            validated_data['attendee_name_parts'] = {
-                '_legacy': name
-            }
-
-        for attr, value in validated_data.items():
-            if attr in update_fields:
-                setattr(instance, attr, value)
-
-        instance.save(update_fields=update_fields)
-
-        if answers_data is not None:
-            qs_seen = set()
-            answercache = {
-                a.question_id: a for a in instance.answers.all()
-            }
-            for answ_data in answers_data:
-                options = answ_data.pop('options', [])
-                if answ_data['question'].pk in qs_seen:
-                    raise ValidationError(f'Question {answ_data["question"]} was sent twice.')
-                if answ_data['question'].pk in answercache:
-                    a = answercache[answ_data['question'].pk]
-                    if isinstance(answ_data['answer'], File):
-                        a.file.save(answ_data['answer'].name, answ_data['answer'], save=False)
-                        a.answer = 'file://' + a.file.name
-                    elif a.answer.startswith('file://') and answ_data['answer'] == "file:keep":
-                        pass  # keep current file
-                    else:
-                        for attr, value in answ_data.items():
-                            setattr(a, attr, value)
-                    a.save()
-                else:
-                    if isinstance(answ_data['answer'], File):
-                        an = answ_data.pop('answer')
-                        a = instance.answers.create(**answ_data, answer='')
-                        a.file.save(os.path.basename(an.name), an, save=False)
-                        a.answer = 'file://' + a.file.name
-                        a.save()
-                    else:
-                        a = instance.answers.create(**answ_data)
-                a.options.set(options)
-                qs_seen.add(a.question_id)
-            for qid, a in answercache.items():
-                if qid not in qs_seen:
-                    a.delete()
-
-        return instance
+        raise TypeError("this serializer is readonly")
 
 
 class RequireAttentionField(serializers.Field):
@@ -593,7 +514,7 @@ class OrderPaymentDateField(serializers.DateField):
 class OrderFeeSerializer(I18nAwareModelSerializer):
     class Meta:
         model = OrderFee
-        fields = ('fee_type', 'value', 'description', 'internal_type', 'tax_rate', 'tax_value', 'tax_rule', 'canceled')
+        fields = ('id', 'fee_type', 'value', 'description', 'internal_type', 'tax_rate', 'tax_value', 'tax_rule', 'canceled')
 
 
 class PaymentURLField(serializers.URLField):
@@ -934,7 +855,7 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
     consume_carts = serializers.ListField(child=serializers.CharField(), required=False)
     force = serializers.BooleanField(default=False, required=False)
     payment_date = serializers.DateTimeField(required=False, allow_null=True)
-    send_email = serializers.BooleanField(default=False, required=False)
+    send_email = serializers.BooleanField(default=False, required=False, allow_null=True)
     require_approval = serializers.BooleanField(default=False, required=False)
     simulate = serializers.BooleanField(default=False, required=False)
     customer = serializers.SlugRelatedField(slug_field='identifier', queryset=Customer.objects.none(), required=False)
@@ -1042,6 +963,8 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
         force = validated_data.pop('force', False)
         simulate = validated_data.pop('simulate', False)
         self._send_mail = validated_data.pop('send_email', False)
+        if self._send_mail is None:
+            self._send_mail = validated_data.get('sales_channel') in self.context['event'].settings.mail_sales_channel_placed_paid
 
         if 'invoice_address' in validated_data:
             iadata = validated_data.pop('invoice_address')
@@ -1119,29 +1042,18 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
 
                     if v.budget is not None:
                         price = pos_data.get('price')
+                        listed_price = get_listed_price(pos_data.get('item'), pos_data.get('variation'), pos_data.get('subevent'))
+
+                        if pos_data.get('voucher'):
+                            price_after_voucher = pos_data.get('voucher').calculate_price(listed_price)
+                        else:
+                            price_after_voucher = listed_price
                         if price is None:
-                            price = get_price(
-                                item=pos_data.get('item'),
-                                variation=pos_data.get('variation'),
-                                voucher=v,
-                                custom_price=None,
-                                subevent=pos_data.get('subevent'),
-                                addon_to=pos_data.get('addon_to'),
-                                invoice_address=ia,
-                            ).gross
-                        pbv = get_price(
-                            item=pos_data['item'],
-                            variation=pos_data.get('variation'),
-                            voucher=None,
-                            custom_price=None,
-                            subevent=pos_data.get('subevent'),
-                            addon_to=pos_data.get('addon_to'),
-                            invoice_address=ia,
-                        )
+                            price = price_after_voucher
 
                         if v not in v_budget:
                             v_budget[v] = v.budget - v.budget_used()
-                        disc = pbv.gross - price
+                        disc = max(listed_price - price, 0)
                         if disc > v_budget[v]:
                             new_disc = v_budget[v]
                             v_budget[v] -= new_disc
@@ -1237,52 +1149,85 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
                     order.invoice_address = ia
                     ia.last_modified = now()
 
+            # Generate position objects
             pos_map = {}
             for pos_data in positions_data:
-                answers_data = pos_data.pop('answers', [])
                 addon_to = pos_data.pop('addon_to', None)
                 attendee_name = pos_data.pop('attendee_name', '')
                 if attendee_name and not pos_data.get('attendee_name_parts'):
                     pos_data['attendee_name_parts'] = {
                         '_legacy': attendee_name
                     }
-                pos = OrderPosition(**pos_data)
+                pos = OrderPosition(**{k: v for k, v in pos_data.items() if k != 'answers'})
                 if simulate:
                     pos.order = order._wrapped
                 else:
                     pos.order = order
                 if addon_to:
                     if simulate:
-                        pos.addon_to = pos_map[addon_to]._wrapped
+                        pos.addon_to = pos_map[addon_to]
                     else:
                         pos.addon_to = pos_map[addon_to]
 
-                if pos.price is None:
-                    price = get_price(
-                        item=pos.item,
-                        variation=pos.variation,
-                        voucher=pos.voucher,
-                        custom_price=None,
-                        subevent=pos.subevent,
-                        addon_to=pos.addon_to,
-                        invoice_address=ia,
-                    )
-                    pos.price = price.gross
-                    pos.tax_rate = price.rate
-                    pos.tax_value = price.tax
-                    pos.tax_rule = pos.item.tax_rule
-                else:
-                    pos._calculate_tax()
+                pos_map[pos.positionid] = pos
+                pos_data['__instance'] = pos
 
-                pos.price_before_voucher = get_price(
-                    item=pos.item,
-                    variation=pos.variation,
-                    voucher=None,
-                    custom_price=None,
-                    subevent=pos.subevent,
-                    addon_to=pos.addon_to,
-                    invoice_address=ia,
-                ).gross
+            # Calculate prices if not set
+            for pos_data in positions_data:
+                pos = pos_data['__instance']
+                if pos.addon_to_id and is_included_for_free(pos.item, pos.addon_to):
+                    listed_price = Decimal('0.00')
+                else:
+                    listed_price = get_listed_price(pos.item, pos.variation, pos.subevent)
+
+                if pos.price is None:
+                    if pos.voucher:
+                        price_after_voucher = pos.voucher.calculate_price(listed_price)
+                    else:
+                        price_after_voucher = listed_price
+
+                    line_price = get_line_price(
+                        price_after_voucher=price_after_voucher,
+                        custom_price_input=None,
+                        custom_price_input_is_net=False,
+                        tax_rule=pos.item.tax_rule,
+                        invoice_address=ia,
+                        bundled_sum=Decimal('0.00'),
+                    )
+                    pos.price = line_price.gross
+                    pos._auto_generated_price = True
+                else:
+                    if pos.voucher:
+                        if not pos.item.tax_rule or pos.item.tax_rule.price_includes_tax:
+                            price_after_voucher = max(pos.price, pos.voucher.calculate_price(listed_price))
+                        else:
+                            price_after_voucher = max(pos.price - pos.tax_value, pos.voucher.calculate_price(listed_price))
+                    else:
+                        price_after_voucher = listed_price
+                    pos._auto_generated_price = False
+                pos._voucher_discount = listed_price - price_after_voucher
+                if pos.voucher:
+                    pos.voucher_budget_use = max(listed_price - price_after_voucher, Decimal('0.00'))
+
+            order_positions = [pos_data['__instance'] for pos_data in positions_data]
+            discount_results = apply_discounts(
+                self.context['event'],
+                order.sales_channel,
+                [
+                    (cp.item_id, cp.subevent_id, cp.price, bool(cp.addon_to), cp.is_bundled, pos._voucher_discount)
+                    for cp in order_positions
+                ]
+            )
+            for cp, (new_price, discount) in zip(order_positions, discount_results):
+                if new_price != pos.price and pos._auto_generated_price:
+                    pos.price = new_price
+                pos.discount = discount
+
+            # Save instances
+            for pos_data in positions_data:
+                answers_data = pos_data.pop('answers', [])
+                pos = pos_data['__instance']
+                pos._calculate_tax()
 
                 if simulate:
                     pos = WrappedModel(pos)
@@ -1295,6 +1240,7 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
                         answers.append(answ)
                     pos.answers = answers
                     pos.pseudonymization_id = "PREVIEW"
+                    pos_map[pos.positionid] = pos
                 else:
                     if pos.voucher:
                         Voucher.objects.filter(pk=pos.voucher.pk).update(redeemed=F('redeemed') + 1)
@@ -1317,7 +1263,6 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
                         else:
                             answ = pos.answers.create(**answ_data)
                             answ.options.add(*options)
-                pos_map[pos.positionid] = pos
 
             if not simulate:
                 for cp in delete_cps:
@@ -1359,14 +1304,18 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
                     f.order = order._wrapped if simulate else order
                     f._calculate_tax()
                     fees.append(f)
-                    if not simulate:
+                    if simulate:
+                        f.id = 0
+                    else:
                         f.save()
             else:
                 f = OrderFee(**fee_data)
                 f.order = order._wrapped if simulate else order
                 f._calculate_tax()
                 fees.append(f)
-                if not simulate:
+                if simulate:
+                    f.id = 0
+                else:
                     f.save()
 
         order.total += sum([f.value for f in fees])

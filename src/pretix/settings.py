@@ -184,6 +184,7 @@ if config.get('pretix', 'trust_x_forwarded_proto', fallback=False):
 PRETIX_PLUGINS_DEFAULT = config.get('pretix', 'plugins_default',
                                     fallback='pretix.plugins.sendmail,pretix.plugins.statistics,pretix.plugins.checkinlists,pretix.plugins.autocheckin')
 PRETIX_PLUGINS_EXCLUDE = config.get('pretix', 'plugins_exclude', fallback='').split(',')
+PRETIX_PLUGINS_SHOW_META = config.getboolean('pretix', 'plugins_show_meta', fallback=True)
 
 FETCH_ECB_RATES = config.getboolean('pretix', 'ecb_rates', fallback=True)
 
@@ -509,27 +510,30 @@ ALL_LANGUAGES = [
     ('de-informal', _('German (informal)')),
     ('ar', _('Arabic')),
     ('zh-hans', _('Chinese (simplified)')),
+    ('cs', _('Czech')),
     ('da', _('Danish')),
     ('nl', _('Dutch')),
     ('nl-informal', _('Dutch (informal)')),
     ('fr', _('French')),
     ('fi', _('Finnish')),
+    ('gl', _('Galician')),
     ('el', _('Greek')),
     ('it', _('Italian')),
     ('lv', _('Latvian')),
     ('pl', _('Polish')),
     ('pt-pt', _('Portuguese (Portugal)')),
     ('pt-br', _('Portuguese (Brazil)')),
+    ('ro', _('Romanian')),
     ('ru', _('Russian')),
     ('es', _('Spanish')),
     ('tr', _('Turkish')),
-    ('gl', _('Galician')),
+    ('uk', _('Ukrainian')),
 ]
 LANGUAGES_OFFICIAL = {
     'en', 'de', 'de-informal'
 }
 LANGUAGES_INCUBATING = {
-    'pl', 'fi', 'pt-br', 'gl'
+    'pl', 'fi', 'pt-br', 'gl', 'cs'
 } - set(config.get('languages', 'allow_incubating', fallback='').split(','))
 LANGUAGES_RTL = {
     'ar', 'hw'

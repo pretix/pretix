@@ -162,10 +162,12 @@ class UserAnonymizeView(AdministratorPermissionRequiredMixin, RecentAuthenticati
         self.object = get_object_or_404(User, pk=self.kwargs.get("id"))
         self.object.log_action('pretix.user.anonymized',
                                user=request.user)
-        self.object.email = "{}@disabled.pretix.eu".format(self.object.pk)
+        self.object.email = "{}.{}@disabled.pretix.eu".format(self.object.pk, self.object.auth_backend)
         self.object.fullname = ""
         self.object.is_active = False
         self.object.notifications_send = False
+        self.object.auth_backend = 'anonymized'
+        self.object.auth_backend_identifier = None
         self.object.save()
         for le in self.object.all_logentries.filter(action_type="pretix.user.settings.changed"):
             d = le.parsed_data

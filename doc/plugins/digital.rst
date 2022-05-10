@@ -52,6 +52,7 @@ Variable                            Description
 ``order_email``                     E-mail address of the ticket purchaser
 ``product_id``                      Internal ID of the purchased product
 ``product_variation``               Internal ID of the purchased product variation (or empty)
+``secret``                          The secret ticket code, would be used as the QR code for physical tickets
 ``attendee_name``                   Full name of the ticket holder (or empty)
 ``attendee_name_*``                 Name parts of the ticket holder, depending on configuration, e.g. ``attendee_name_given_name`` or ``attendee_name_family_name``
 ``attendee_email``                  E-mail address of the ticket holder (or empty)

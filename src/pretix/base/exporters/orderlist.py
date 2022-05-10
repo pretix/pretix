@@ -259,7 +259,7 @@ class OrderListExporter(MultiSheetListExporter):
             payment_providers=Subquery(p_providers, output_field=CharField()),
             invoice_numbers=Subquery(i_numbers, output_field=CharField()),
             pcnt=Subquery(s, output_field=IntegerField())
-        ).select_related('invoice_address')
+        ).select_related('invoice_address', 'customer')
 
         qs = self._date_filter(qs, form_data, rel='')
 
@@ -268,8 +268,8 @@ class OrderListExporter(MultiSheetListExporter):
         tax_rates = self._get_all_tax_rates(qs)
 
         headers = [
-            _('Event slug'), _('Order code'), _('Order total'), _('Status'), _('Email'), _('Phone number'), _('Order date'),
-            _('Order time'), _('Company'), _('Name'),
+            _('Event slug'), _('Order code'), _('Order total'), _('Status'), _('Email'), _('Phone number'),
+            _('Order date'), _('Order time'), _('Company'), _('Name'),
         ]
         name_scheme = PERSON_NAME_SCHEMES[self.event.settings.name_scheme] if not self.is_multievent else None
         if name_scheme and len(name_scheme['fields']) > 1:
@@ -294,6 +294,7 @@ class OrderListExporter(MultiSheetListExporter):
         headers.append(_('Follow-up date'))
         headers.append(_('Positions'))
         headers.append(_('E-mail address verified'))
+        headers.append(_('External customer ID'))
         headers.append(_('Payment providers'))
         if form_data.get('include_payment_amounts'):
             payment_methods = self._get_all_payment_methods(qs)
@@ -400,6 +401,7 @@ class OrderListExporter(MultiSheetListExporter):
             row.append(order.custom_followup_at.strftime("%Y-%m-%d") if order.custom_followup_at else "")
             row.append(order.pcnt)
             row.append(_('Yes') if order.email_known_to_work else _('No'))
+            row.append(str(order.customer.external_identifier) if order.customer and order.customer.external_identifier else '')
             row.append(', '.join([
                 str(self.providers.get(p, p)) for p in sorted(set((order.payment_providers or '').split(',')))
                 if p and p != 'free'
@@ -424,13 +426,13 @@ class OrderListExporter(MultiSheetListExporter):
         ).values(
             'm'
         ).order_by()
-        qs = OrderFee.objects.filter(
+        qs = OrderFee.all.filter(
             order__event__in=self.events,
         ).annotate(
             payment_providers=Subquery(p_providers, output_field=CharField()),
-        ).select_related('order', 'order__invoice_address', 'tax_rule')
+        ).select_related('order', 'order__invoice_address', 'order__customer', 'tax_rule')
         if form_data['paid_only']:
-            qs = qs.filter(order__status=Order.STATUS_PAID)
+            qs = qs.filter(order__status=Order.STATUS_PAID, canceled=False)
 
         qs = self._date_filter(qs, form_data, rel='order__')
 
@@ -459,6 +461,7 @@ class OrderListExporter(MultiSheetListExporter):
             _('Address'), _('ZIP code'), _('City'), _('Country'), pgettext('address', 'State'), _('VAT ID'),
         ]
 
+        headers.append(_('External customer ID'))
         headers.append(_('Payment providers'))
         yield headers
 
@@ -469,7 +472,7 @@ class OrderListExporter(MultiSheetListExporter):
             row = [
                 self.event_object_cache[order.event_id].slug,
                 order.code,
-                order.get_status_display(),
+                _("canceled") if op.canceled else order.get_status_display(),
                 order.email,
                 str(order.phone) if order.phone else '',
                 order.datetime.astimezone(tz).strftime('%Y-%m-%d'),
@@ -502,6 +505,7 @@ class OrderListExporter(MultiSheetListExporter):
                 ]
             except InvoiceAddress.DoesNotExist:
                 row += [''] * (8 + (len(name_scheme['fields']) if name_scheme and len(name_scheme['fields']) > 1 else 0))
+            row.append(str(order.customer.external_identifier) if order.customer and order.customer.external_identifier else '')
             row.append(', '.join([
                 str(self.providers.get(p, p)) for p in sorted(set((op.payment_providers or '').split(',')))
                 if p and p != 'free'
@@ -518,19 +522,19 @@ class OrderListExporter(MultiSheetListExporter):
         ).values(
             'm'
         ).order_by()
-        base_qs = OrderPosition.objects.filter(
+        base_qs = OrderPosition.all.filter(
             order__event__in=self.events,
         )
         qs = base_qs.annotate(
             payment_providers=Subquery(p_providers, output_field=CharField()),
         ).select_related(
-            'order', 'order__invoice_address', 'item', 'variation',
+            'order', 'order__invoice_address', 'order__customer', 'item', 'variation',
             'voucher', 'tax_rule'
         ).prefetch_related(
             'answers', 'answers__question', 'answers__options'
         )
         if form_data['paid_only']:
-            qs = qs.filter(order__status=Order.STATUS_PAID)
+            qs = qs.filter(order__status=Order.STATUS_PAID, canceled=False)
 
         qs = self._date_filter(qs, form_data, rel='order__')
 
@@ -611,6 +615,7 @@ class OrderListExporter(MultiSheetListExporter):
         headers += [
             _('Sales channel'), _('Order locale'),
             _('E-mail address verified'),
+            _('External customer ID'),
             _('Payment providers'),
         ]
 
@@ -628,7 +633,7 @@ class OrderListExporter(MultiSheetListExporter):
                     self.event_object_cache[order.event_id].slug,
                     order.code,
                     op.positionid,
-                    order.get_status_display(),
+                    _("canceled") if op.canceled else order.get_status_display(),
                     order.email,
                     str(order.phone) if order.phone else '',
                     order.datetime.astimezone(tz).strftime('%Y-%m-%d'),
@@ -730,7 +735,8 @@ class OrderListExporter(MultiSheetListExporter):
                 row += [
                     order.sales_channel,
                     order.locale,
-                    _('Yes') if order.email_known_to_work else _('No')
+                    _('Yes') if order.email_known_to_work else _('No'),
+                    str(order.customer.external_identifier) if order.customer and order.customer.external_identifier else '',
                 ]
                 row.append(', '.join([
                     str(self.providers.get(p, p)) for p in sorted(set((op.payment_providers or '').split(',')))

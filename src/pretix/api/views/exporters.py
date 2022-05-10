@@ -132,7 +132,7 @@ class EventExportersViewSet(ExportersMixin, viewsets.ViewSet):
     def exporters(self):
         exporters = []
         responses = register_data_exporters.send(self.request.event)
-        for ex in sorted([response(self.request.event, self.request.organizer) for r, response in responses], key=lambda ex: str(ex.verbose_name)):
+        for ex in sorted([response(self.request.event, self.request.organizer) for r, response in responses if response], key=lambda ex: str(ex.verbose_name)):
             ex._serializer = JobRunSerializer(exporter=ex)
             exporters.append(ex)
         return exporters
@@ -147,7 +147,11 @@ class OrganizerExportersViewSet(ExportersMixin, viewsets.ViewSet):
     @cached_property
     def exporters(self):
         exporters = []
-        events = (self.request.auth or self.request.user).get_events_with_permission('can_view_orders', request=self.request).filter(
+        if isinstance(self.request.auth, (Device, TeamAPIToken)):
+            perm_holder = self.request.auth
+        else:
+            perm_holder = self.request.user
+        events = perm_holder.get_events_with_permission('can_view_orders', request=self.request).filter(
             organizer=self.request.organizer
         )
         responses = register_multievent_data_exporters.send(self.request.organizer)
@@ -157,8 +161,12 @@ class OrganizerExportersViewSet(ExportersMixin, viewsets.ViewSet):
         return exporters
 
     def get_serializer_kwargs(self):
+        if isinstance(self.request.auth, (Device, TeamAPIToken)):
+            perm_holder = self.request.auth
+        else:
+            perm_holder = self.request.user
         return {
-            'events': self.request.auth.get_events_with_permission('can_view_orders', request=self.request).filter(
+            'events': perm_holder.get_events_with_permission('can_view_orders', request=self.request).filter(
                 organizer=self.request.organizer
             )
         }

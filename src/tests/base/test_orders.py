@@ -1070,10 +1070,10 @@ class OrderChangeManagerTests(TestCase):
         assert self.order.transactions.count() == 4
 
     @classscope(attr='o')
-    def test_change_item_change_price_before_voucher(self):
+    def test_change_item_change_voucher_budget_use(self):
         self.op1.voucher = self.event.vouchers.create(item=self.shirt, redeemed=1, price_mode='set', value='5.00')
         self.op1.price = Decimal('5.00')
-        self.op1.price_before_voucher = Decimal('23.00')
+        self.op1.voucher_budget_use = Decimal('18.00')
         self.op1.save()
         p = self.op1.price
         self.ocm.change_item(self.op1, self.shirt, None)
@@ -1082,13 +1082,13 @@ class OrderChangeManagerTests(TestCase):
         self.order.refresh_from_db()
         assert self.op1.item == self.shirt
         assert self.op1.price == p
-        assert self.op1.price_before_voucher == Decimal('12.00')
+        assert self.op1.voucher_budget_use == Decimal('7.00')
 
     @classscope(attr='o')
-    def test_change_item_change_price_before_voucher_minimum_value(self):
+    def test_change_item_change_voucher_budget_use_minimum_value(self):
         self.op1.voucher = self.event.vouchers.create(item=self.shirt, redeemed=1, price_mode='set', value='20.00')
         self.op1.price = Decimal('20.00')
-        self.op1.price_before_voucher = Decimal('23.00')
+        self.op1.voucher_budget_use = Decimal('3.00')
         self.op1.save()
         p = self.op1.price
         self.ocm.change_item(self.op1, self.shirt, None)
@@ -1097,7 +1097,7 @@ class OrderChangeManagerTests(TestCase):
         self.order.refresh_from_db()
         assert self.op1.item == self.shirt
         assert self.op1.price == p
-        assert self.op1.price_before_voucher == Decimal('20.00')
+        assert self.op1.voucher_budget_use == Decimal('0.00')
 
     @classscope(attr='o')
     def test_change_item_success(self):
@@ -1778,6 +1778,37 @@ class OrderChangeManagerTests(TestCase):
         assert o2.code != self.order.code
         assert o2.secret != self.order.secret
         assert o2.datetime > self.order.datetime
+        assert self.op2.secret != old_secret
+        assert not self.order.invoices.exists()
+        assert not o2.invoices.exists()
+
+    @classscope(attr='o')
+    def test_split_include_addons(self):
+        self.shirt.category = self.event.categories.create(name='Add-ons', is_addon=True)
+        self.ticket.addons.create(addon_category=self.shirt.category)
+        self.ocm.add_position(self.shirt, None, Decimal('13.00'), self.op2)
+        self.ocm.commit()
+        self.order.refresh_from_db()
+        self.ocm = OrderChangeManager(self.order, None)
+        a = self.order.positions.get(addon_to=self.op2)
+
+        old_secret = self.op2.secret
+        self.ocm.split(self.op2)
+        self.ocm.commit()
+        self.order.refresh_from_db()
+        self.op2.refresh_from_db()
+        a.refresh_from_db()
+        assert self.order.total == Decimal('23.00')
+        assert self.order.positions.count() == 1
+        assert self.op2.order != self.order
+        o2 = self.op2.order
+        assert o2.total == Decimal('36.00')
+        assert o2.positions.count() == 2
+        assert o2.code != self.order.code
+        assert o2.secret != self.order.secret
+        assert o2.datetime > self.order.datetime
+        assert a.addon_to == self.op2
+        assert a.order == o2
         assert self.op2.secret != old_secret
         assert not self.order.invoices.exists()
         assert not o2.invoices.exists()
@@ -3102,7 +3133,7 @@ class OrderReactivateTest(TestCase):
     @classscope(attr='o')
     def test_reactivate_voucher_budget(self):
         self.op1.voucher = self.event.vouchers.create(code="FOO", item=self.ticket, budget=Decimal('0.00'))
-        self.op1.price_before_voucher = self.op1.price * 2
+        self.op1.voucher_budget_use = self.op1.price
         self.op1.save()
         with pytest.raises(OrderError):
             reactivate_order(self.order)

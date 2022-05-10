@@ -385,6 +385,12 @@ class VoucherBulkForm(VoucherForm):
         if vouchers.exists():
             raise ValidationError(_('A voucher with one of these codes already exists.'))
 
+        codes_seen = set()
+        for c in data['codes']:
+            if c in codes_seen:
+                raise ValidationError(_('The voucher code {code} appears in your list twice.').format(code=c))
+            codes_seen.add(c)
+
         if data.get('send') and not all([data.get('send_subject'), data.get('send_message'), data.get('send_recipients')]):
             raise ValidationError(_('If vouchers should be sent by email, subject, message and recipients need to be specified.'))
 

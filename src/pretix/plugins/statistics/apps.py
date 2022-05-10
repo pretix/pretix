@@ -34,7 +34,7 @@ class StatisticsApp(AppConfig):
         author = _("the pretix team")
         version = version
         category = 'FEATURE'
-        description = _("This plugin shows you various statistics.")
+        description = _("Get a birds-eye view of your event sales with graphical statistics.")
 
     def ready(self):
         from . import signals  # NOQA

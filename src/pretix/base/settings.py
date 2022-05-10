@@ -86,11 +86,29 @@ def primary_font_kwargs():
     from pretix.presale.style import get_fonts
 
     choices = [('Open Sans', 'Open Sans')]
-    choices += [
-        (a, {"title": a, "data": v}) for a, v in get_fonts().items()
-    ]
+    choices += sorted([
+        (a, {"title": a, "data": v}) for a, v in get_fonts().items() if not v.get('pdf_only', False)
+    ], key=lambda a: a[0])
     return {
         'choices': choices,
+    }
+
+
+def restricted_plugin_kwargs():
+    from pretix.base.plugins import get_all_plugins
+
+    plugins_available = [
+        (p.module, p.name) for p in get_all_plugins(None)
+        if (
+            not p.name.startswith('.') and
+            getattr(p, 'restricted', False) and
+            not hasattr(p, 'is_available')  # this means you should not really use restricted and is_available
+        )
+    ]
+    return {
+        'widget': forms.CheckboxSelectMultiple,
+        'label': _("Allow usage of restricted plugins"),
+        'choices': plugins_available,
     }
 
 
@@ -109,6 +127,13 @@ class LazyI18nStringList(UserList):
 
 
 DEFAULTS = {
+    'allowed_restricted_plugins': {
+        'default': [],
+        'type': list,
+        'form_class': forms.MultipleChoiceField,
+        'serializer_class': serializers.MultipleChoiceField,
+        'form_kwargs': lambda: restricted_plugin_kwargs(),
+    },
     'customer_accounts': {
         'default': 'False',
         'type': bool,
@@ -530,9 +555,11 @@ DEFAULTS = {
         'serializer_class': serializers.IntegerField,
         'serializer_kwargs': dict(
             min_value=0,
+            max_value=60 * 24 * 7,
         ),
         'form_kwargs': dict(
             min_value=0,
+            max_value=60 * 24 * 7,
             label=_("Reservation period"),
             required=True,
             help_text=_("The number of minutes the items in a user's cart are reserved for this user."),
@@ -1170,7 +1197,20 @@ DEFAULTS = {
             help_text=_("If you ask for a phone number, explain why you do so and what you will use the phone number for.")
         )
     },
-
+    'show_checkin_number_user': {
+        'default': 'False',
+        'type': bool,
+        'serializer_class': serializers.BooleanField,
+        'form_class': forms.BooleanField,
+        'form_kwargs': dict(
+            label=_("Show number of check-ins to customer"),
+            help_text=_('With this option enabled, your customers will be able how many times they entered '
+                        'the event. This is usually not necessary, but might be useful in combination with tickets '
+                        'that are usable a specific number of times, so customers can see how many times they have '
+                        'already been used. Exits or failed scans will not be counted, and the user will not see '
+                        'the different check-in lists.'),
+        )
+    },
     'ticket_download': {
         'default': 'False',
         'type': bool,
@@ -1875,6 +1915,8 @@ Your {event} team"""))
         'default': LazyI18nString.from_gettext(gettext_noop("""Hello,
 
 your order {code} for {event} has been canceled.
+
+{comment}
 
 You can view the details of your order at
 {url}

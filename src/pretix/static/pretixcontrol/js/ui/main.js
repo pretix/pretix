@@ -150,8 +150,8 @@ var form_handlers = function (el) {
                 date: 'fa fa-calendar',
                 up: 'fa fa-chevron-up',
                 down: 'fa fa-chevron-down',
-                previous: 'fa fa-chevron-left',
-                next: 'fa fa-chevron-right',
+                previous: $("html").hasClass("rtl") ? 'fa fa-chevron-right' : 'fa fa-chevron-left',
+                next: $("html").hasClass("rtl") ? 'fa fa-chevron-left' : 'fa fa-chevron-right',
                 today: 'fa fa-screenshot',
                 clear: 'fa fa-trash',
                 close: 'fa fa-remove'
@@ -173,8 +173,8 @@ var form_handlers = function (el) {
                 date: 'fa fa-calendar',
                 up: 'fa fa-chevron-up',
                 down: 'fa fa-chevron-down',
-                previous: 'fa fa-chevron-left',
-                next: 'fa fa-chevron-right',
+                previous: $("html").hasClass("rtl") ? 'fa fa-chevron-right' : 'fa fa-chevron-left',
+                next: $("html").hasClass("rtl") ? 'fa fa-chevron-left' : 'fa fa-chevron-right',
                 today: 'fa fa-screenshot',
                 clear: 'fa fa-trash',
                 close: 'fa fa-remove'
@@ -217,8 +217,8 @@ var form_handlers = function (el) {
                 date: 'fa fa-calendar',
                 up: 'fa fa-chevron-up',
                 down: 'fa fa-chevron-down',
-                previous: 'fa fa-chevron-left',
-                next: 'fa fa-chevron-right',
+                previous: $("html").hasClass("rtl") ? 'fa fa-chevron-right' : 'fa fa-chevron-left',
+                next: $("html").hasClass("rtl") ? 'fa fa-chevron-left' : 'fa fa-chevron-right',
                 today: 'fa fa-screenshot',
                 clear: 'fa fa-trash',
                 close: 'fa fa-remove'
@@ -355,7 +355,7 @@ var form_handlers = function (el) {
         var dependent = $(this),
             dependency = $($(this).attr("data-display-dependency")),
             update = function (ev) {
-                var enabled = dependency.toArray().some(function(d) {return (d.type === 'checkbox' || d.type === 'radio') ? d.checked : !!d.value;});
+                var enabled = dependency.toArray().some(function(d) {return (d.type === 'checkbox' || d.type === 'radio') ? d.checked : (!!d.value && !d.value.match(/^0\.?0*$/g))});
                 if (dependent.is("[data-inverse]")) {
                     enabled = !enabled;
                 }
@@ -765,6 +765,7 @@ $(function () {
 
     $(".propagated-settings-box button[data-action=unlink]").click(function (ev) {
         var $box = $(this).closest(".propagated-settings-box");
+        $box.find("input[name=decouple]").val($(this).val());
         $box.find("[data-propagated-locked]").prop("readonly", false);
         $box.removeClass("locked").addClass("unlocked");
         ev.preventDefault();

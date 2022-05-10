@@ -128,11 +128,15 @@ def test_update_valid_fields(device_client, device: Device):
         'hardware_brand': 'Samsung',
         'hardware_model': 'Galaxy S',
         'software_brand': 'pretixdroid',
-        'software_version': '5.0.0'
-    })
+        'software_version': '5.0.0',
+        'info': {
+            'foo': 'bar'
+        },
+    }, format='json')
     assert resp.status_code == 200
     device.refresh_from_db()
     assert device.software_version == '5.0.0'
+    assert device.info == {'foo': 'bar'}
 
 
 @pytest.mark.django_db

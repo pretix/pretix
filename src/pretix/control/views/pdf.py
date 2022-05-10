@@ -23,6 +23,7 @@ import json
 import logging
 import mimetypes
 from datetime import timedelta
+from decimal import Decimal
 from io import BytesIO
 
 from django.conf import settings
@@ -32,13 +33,14 @@ from django.core.files.storage import default_storage
 from django.http import (
     FileResponse, HttpResponse, HttpResponseBadRequest, JsonResponse,
 )
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 from django.utils.crypto import get_random_string
 from django.utils.timezone import now
 from django.utils.translation import gettext as _
 from django.views.generic import TemplateView
-from PyPDF2 import PdfFileWriter
+from PyPDF2 import PdfFileReader, PdfFileWriter
+from PyPDF2.utils import PdfReadError
 from reportlab.lib.units import mm
 
 from pretix.base.i18n import language
@@ -63,9 +65,16 @@ class BaseEditorView(EventPermissionRequiredMixin, TemplateView):
     title = None
 
     def get(self, request, *args, **kwargs):
+        if 'placeholders' in request.GET:
+            return self.get_placeholders_help(request)
         resp = super().get(request, *args, **kwargs)
         resp._csp_ignore = True
         return resp
+
+    def get_placeholders_help(self, request):
+        ctx = {}
+        ctx['variables'] = self.get_variables()
+        return render(request, 'pretixcontrol/pdf/placeholders.html', ctx)
 
     def process_upload(self):
         f = self.request.FILES.get('background')
@@ -82,15 +91,15 @@ class BaseEditorView(EventPermissionRequiredMixin, TemplateView):
         return None, f
 
     def _get_preview_position(self):
-        item = self.request.event.items.create(name=_("Sample product"), default_price=42.23,
+        item = self.request.event.items.create(name=_("Sample product"), default_price=Decimal('42.23'),
                                                description=_("Sample product description"))
-        item2 = self.request.event.items.create(name=_("Sample workshop"), default_price=23.40)
+        item2 = self.request.event.items.create(name=_("Sample workshop"), default_price=Decimal('23.40'))
 
         from pretix.base.models import Order
         order = self.request.event.orders.create(status=Order.STATUS_PENDING, datetime=now(),
                                                  email='sample@pretix.eu',
                                                  locale=self.request.event.settings.locale,
-                                                 expires=now(), code="PREVIEW1234", total=119)
+                                                 expires=now(), code="PREVIEW1234", total=Decimal('119.00'))
 
         scheme = PERSON_NAME_SCHEMES[self.request.event.settings.name_scheme]
         sample = {k: str(v) for k, v in scheme['sample'].items()}
@@ -191,6 +200,17 @@ class BaseEditorView(EventPermissionRequiredMixin, TemplateView):
             c.file = fileobj
             c.save()
             c.refresh_from_db()
+
+            try:
+                bg_bytes = c.file.read()
+                PdfFileReader(BytesIO(bg_bytes), strict=False)
+            except PdfReadError as e:
+                return JsonResponse({
+                    "status": "error",
+                    "error": _('Unfortunately, we were unable to process this PDF file ({reason}).').format(
+                        reason=str(e)
+                    )
+                })
             return JsonResponse({
                 "status": "ok",
                 "id": c.id,

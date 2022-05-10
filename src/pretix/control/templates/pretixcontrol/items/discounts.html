@@ -1,0 +1,147 @@
+{% extends "pretixcontrol/items/base.html" %}
+{% load i18n %}
+{% block title %}{% trans "Automatic discounts" %}{% endblock %}
+{% block inside %}
+    <h1>{% trans "Automatic discounts" %}</h1>
+    <p>
+        {% blocktrans trimmed %}
+            With automatic discounts, you can automatically apply a discount to purchases from your customers based
+            on certain conditions. For example, you can create group discounts like "get 20% off if you buy 3 or more
+            tickets" or "buy 2 tickets, get 1 free".
+        {% endblocktrans %}
+    </p>
+    <p>
+        {% blocktrans trimmed %}
+            Automatic discounts are available to all customers as long as they are active. If you want to offer special
+            prices only to specific customers, you can use vouchers instead. If you want to offer discounts across
+            multiple purchases ("buy a package of 10 you can turn into individual tickets later"), you can use
+            customer accounts and memberships instead.
+        {% endblocktrans %}
+    </p>
+    <p>
+        {% blocktrans trimmed %}
+            Discounts are only automatically applied during an initial purchase. They are not applied if an existing
+            order is changed through any of the available options.
+        {% endblocktrans %}
+    </p>
+    <p>
+        {% blocktrans trimmed %}
+            Every product in the cart can only be affected by one discount. If you have overlapping discounts, the
+            first one in the order of the list below will apply.
+        {% endblocktrans %}
+    </p>
+    {% if discounts|length == 0 %}
+        <div class="empty-collection">
+            <p>
+                {% blocktrans trimmed %}
+                    You haven't created any discounts yet.
+                {% endblocktrans %}
+            </p>
+
+            <a href="{% url "control:event.items.discounts.add" organizer=request.event.organizer.slug event=request.event.slug %}"
+               class="btn btn-primary btn-lg"><i class="fa fa-plus"></i> {% trans "Create a new discount" %}</a>
+        </div>
+    {% else %}
+        <p>
+            <a href="{% url "control:event.items.discounts.add" organizer=request.event.organizer.slug event=request.event.slug %}"
+               class="btn btn-default"><i class="fa fa-plus"></i> {% trans "Create a new discount" %}
+            </a>
+        </p>
+        <form method="post">
+            {% csrf_token %}
+            <div class="table-responsive">
+                <table class="table table-hover table-quotas">
+                    <thead>
+                    <tr>
+                        <th>{% trans "Internal name" %}</th>
+                        <th></th>
+                        <th></th>
+                        <th>{% trans "Products" %}</th>
+                        <th class="action-col-2"></th>
+                        <th class="action-col-2"></th>
+                    </tr>
+                    </thead>
+                    <tbody data-dnd-url="{% url "control:event.items.discounts.reorder" organizer=request.event.organizer.slug event=request.event.slug %}">
+                    {% for d in discounts %}
+                        <tr data-dnd-id="{{ d.id }}">
+                            <td>
+                                {% if d.active %}
+                                   <strong>
+                                {% else %}
+                                    <del>
+                                {% endif %}
+                                    <a  href="{% url "control:event.items.discounts.edit" organizer=request.event.organizer.slug event=request.event.slug discount=d.id %}">
+                                    {{ d.internal_name }}</a>
+                                {% if d.active %}
+                                    </strong>
+                                {% else %}
+                                    </del>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% for k, c in sales_channels.items %}
+                                    {% if k in d.sales_channels %}
+                                        <span class="fa fa-fw fa-{{ c.icon }} text-muted"
+                                              data-toggle="tooltip" title="{% trans c.verbose_name %}"></span>
+                                    {% else %}
+                                    {% endif %}
+                                {% endfor %}
+                            </td>
+                            <td>
+                                {% if d.available_from or d.available_until %}
+                                    {% if not d.is_available_by_time %}
+                                        <span class="label label-danger" data-toggle="tooltip"
+                                              title="{% trans "Currently unavailable since a limited timeframe for this product has been set" %}">
+                                            <span class="fa fa-clock-o fa-fw" data-toggle="tooltip">
+                                            </span>
+                                        </span>
+                                    {% else %}
+                                        <span class="fa fa-clock-o fa-fw text-muted" data-toggle="tooltip"
+                                              title="{% trans "Only available in a limited timeframe" %}">
+                                        </span>
+                                    {% endif %}
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if d.condition_all_products %}
+                                    <em>{% trans "All" %}</em>
+                                {% else %}
+                                    <ul>
+                                        {% for item in d.condition_limit_products.all %}
+                                            <li>
+                                                <a href="{% url "control:event.item" organizer=request.event.organizer.slug event=request.event.slug item=item.id %}">{{ item }}</a>
+                                            </li>
+                                        {% endfor %}
+                                    </ul>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <button formaction="{% url "control:event.items.discounts.up" organizer=request.event.organizer.slug event=request.event.slug discount=d.id %}"
+                                        class="btn btn-default btn-sm sortable-up"
+                                        {% if forloop.counter0 == 0 and not page_obj.has_previous %}
+                                        disabled{% endif %}><i class="fa fa-arrow-up"></i></button>
+                                <button formaction="{% url "control:event.items.discounts.down" organizer=request.event.organizer.slug event=request.event.slug discount=d.id %}"
+                                        class="btn btn-default btn-sm sortable-down"
+                                        {% if forloop.revcounter0 == 0 and not page_obj.has_next %} disabled{% endif %}>
+                                    <i class="fa fa-arrow-down"></i></button>
+                                <span class="dnd-container"></span>
+                            </td>
+                            <td class="text-right flip">
+                                <a href="{% url "control:event.items.discounts.edit" organizer=request.event.organizer.slug event=request.event.slug discount=d.id %}"
+                                   class="btn btn-default btn-sm"><i class="fa fa-edit"></i></a>
+                                <a href="{% url "control:event.items.discounts.add" organizer=request.event.organizer.slug event=request.event.slug %}?copy_from={{ d.id }}"
+                                   class="btn btn-sm btn-default" title="{% trans "Clone" %}" data-toggle="tooltip">
+                                    <span class="fa fa-copy"></span>
+                                </a>
+                                <a href="{% url "control:event.items.discounts.delete" organizer=request.event.organizer.slug event=request.event.slug discount=d.id %}"
+                                   class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </form>
+        {% include "pretixcontrol/pagination.html" %}
+    {% endif %}
+{% endblock %}

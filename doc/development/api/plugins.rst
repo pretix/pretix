@@ -45,13 +45,17 @@ Attribute          Type                 Description
 name               string               The human-readable name of your plugin
 author             string               Your name
 version            string               A human-readable version code of your plugin
-description        string               A more verbose description of what your plugin does.
+description        string               A more verbose description of what your plugin does. May contain HTML.
 category           string               Category of a plugin. Either one of ``"FEATURE"``, ``"PAYMENT"``,
                                         ``"INTEGRATION"``, ``"CUSTOMIZATION"``, ``"FORMAT"``, or ``"API"``,
                                         or any other string.
+picture            string (optional)    Path to a picture resolvable through the static file system.
+featured           boolean (optional)   ``False`` by default, can promote a plugin if it's something many users will want, use carefully.
 visible            boolean (optional)   ``True`` by default, can hide a plugin so it cannot be normally activated.
 restricted         boolean (optional)   ``False`` by default, restricts a plugin such that it can only be enabled
                                         for an event by system administrators / superusers.
+experimental       boolean (optional)   ``False`` by default, marks a plugin as an experimental feature in the plugins list.
+picture            string (optional)    Path to a picture resolvable through the static file system.
 compatibility      string               Specifier for compatible pretix versions.
 ================== ==================== ===========================================================
 
@@ -74,8 +78,10 @@ A working example would be:
             name = _("PayPal")
             author = _("the pretix team")
             version = '1.0.0'
-            category = 'PAYMENT
+            category = 'PAYMENT'
+            picture = 'pretix_paypal/paypal_logo.svg'
             visible = True
+            featured = False
             restricted = False
             description = _("This plugin allows you to receive payments via PayPal")
             compatibility = "pretix>=2.7.0"
@@ -92,6 +98,7 @@ those will be displayed but not block the plugin execution.
 
 The ``AppConfig`` class may implement a method ``is_available(event)`` that checks if a plugin
 is available for a specific event. If not, it will not be shown in the plugin list of that event.
+You should not define ``is_available`` and ``restricted`` on the same plugin.
 
 Plugin registration
 -------------------

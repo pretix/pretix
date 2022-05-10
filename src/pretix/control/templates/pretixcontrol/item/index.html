@@ -20,6 +20,11 @@
                         <div class="form-group">
                             <label class="col-md-3 control-label">{% trans "Product type" %}</label>
                             <div class="col-md-9">
+                                {% for e in form.errors.admission %}
+                                    <div class="alert alert-danger has-error">
+                                        {{ e }}
+                                    </div>
+                                {% endfor %}
                                 <div class="big-radio radio">
                                     <label>
                                         <input type="radio" value="on" name="{{ form.admission.html_name }}" {% if form.admission.value %}checked{% endif %}>

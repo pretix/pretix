@@ -186,6 +186,14 @@ def get_event_navigation(request: HttpRequest):
                     }),
                     'active': 'event.items.questions' in url.url_name,
                 },
+                {
+                    'label': _('Discounts'),
+                    'url': reverse('control:event.items.discounts', kwargs={
+                        'event': request.event.slug,
+                        'organizer': request.event.organizer.slug,
+                    }),
+                    'active': 'event.items.discounts' in url.url_name,
+                },
             ]
         })
 

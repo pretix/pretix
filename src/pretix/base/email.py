@@ -177,7 +177,7 @@ class TemplateBasedMailRenderer(BaseHTMLMailRenderer):
                     op.variation,
                     op.subevent,
                     op.attendee_name,
-                    (op.pk if op.addon_to_id else None),
+                    op.addon_to_id,
                     (op.pk if op.has_addons else None)
                 )
             )]
@@ -310,7 +310,11 @@ def get_email_context(**kwargs):
             val = [val]
         for v in val:
             if all(rp in kwargs for rp in v.required_context):
-                ctx[v.identifier] = v.render(kwargs)
+                try:
+                    ctx[v.identifier] = v.render(kwargs)
+                except:
+                    ctx[v.identifier] = '(error)'
+                    logger.exception(f'Failed to process email placeholder {v.identifier}.')
     return ctx
 
 

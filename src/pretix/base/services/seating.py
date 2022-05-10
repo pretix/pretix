@@ -45,7 +45,7 @@ def validate_plan_change(event, subevent, plan):
                 seat=OuterRef('pk'),
                 canceled=False,
             ).exclude(
-                order__status=(Order.STATUS_CANCELED, Order.STATUS_EXPIRED)
+                order__status__in=(Order.STATUS_CANCELED, Order.STATUS_EXPIRED)
             ))
         ).annotate(has_v=Count('vouchers')).filter(
             subevent=subevent,
@@ -69,7 +69,7 @@ def generate_seats(event, subevent, plan, mapping, blocked_guids=None):
             seat=OuterRef('pk'),
             canceled=False,
         ).exclude(
-            order__status=Order.STATUS_CANCELED
+            order__status__in=(Order.STATUS_CANCELED, Order.STATUS_EXPIRED)
         )),
         has_v=Count('vouchers')
     ).filter(subevent=subevent).order_by():
@@ -134,7 +134,7 @@ def generate_seats(event, subevent, plan, mapping, blocked_guids=None):
     Seat.objects.bulk_create(create_seats)
     CartPosition.objects.filter(seat__in=[s.pk for s in current_seats.values()]).delete()
     OrderPosition.all.filter(
-        Q(canceled=True) | Q(order__status=Order.STATUS_CANCELED),
+        Q(canceled=True) | Q(order__status__in=(Order.STATUS_CANCELED, Order.STATUS_EXPIRED)),
         seat__in=[s.pk for s in current_seats.values()],
     ).update(seat=None)
     Seat.objects.filter(pk__in=[s.pk for s in current_seats.values()]).delete()

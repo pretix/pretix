@@ -156,6 +156,9 @@ class Device(LoggedModel):
         null=True,
         blank=False
     )
+    info = models.JSONField(
+        null=True, blank=True,
+    )
 
     objects = ScopedManager(organizer='organizer')
 
@@ -176,6 +179,7 @@ class Device(LoggedModel):
         return {
             'can_view_orders',
             'can_change_orders',
+            'can_view_vouchers',
             'can_manage_gift_cards'
         }
 

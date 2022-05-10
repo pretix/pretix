@@ -26,7 +26,7 @@ from io import BytesIO
 from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
 from PIL import Image, ImageOps
-from PIL.Image import LANCZOS
+from PIL.Image import Resampling
 
 from pretix.helpers.models import Thumbnail
 
@@ -141,7 +141,7 @@ def resize_image(image, size):
     image = ImageOps.exif_transpose(image)
 
     new_size, crop = get_sizes(size, image.size)
-    image = image.resize(new_size, resample=LANCZOS)
+    image = image.resize(new_size, resample=Resampling.LANCZOS)
     if crop:
         image = image.crop(crop)
 

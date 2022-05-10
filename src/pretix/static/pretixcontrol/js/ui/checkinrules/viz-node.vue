@@ -7,7 +7,7 @@
         </rect>
         <foreignObject :width="boxWidth - 10" :height="boxHeight - 10" :x="x + 5" :y="y + 5">
             <div xmlns="http://www.w3.org/1999/xhtml" class="text">
-                <span v-if="vardata.type === 'int'">
+                <span v-if="vardata && vardata.type === 'int'">
                     <span v-if="variable.startsWith('entries_')" class="fa fa-sign-in"></span>
                     {{ vardata.label }}
                     <br>
@@ -15,7 +15,7 @@
                         {{ op.label }} {{ rightoperand }}
                     </strong>
                 </span>
-                <span v-else-if="variable === 'now'">
+                <span v-else-if="vardata && variable === 'now'">
                     <span class="fa fa-clock-o"></span> {{ vardata.label }}<br>
                     <strong>
                         {{ op.label }}<br>
@@ -36,7 +36,7 @@
                         </span>
                     </strong>
                 </span>
-                <span v-else-if="operator === 'inList'">
+                <span v-else-if="vardata && operator === 'inList'">
                     <span class="fa fa-ticket"></span> {{ vardata.label }}<br>
                     <strong>
                         {{ rightoperand.objectList.map((o) => o.lookup[2]).join(", ") }}
@@ -53,6 +53,7 @@
 </template>
 <script>
   export default {
+
     props: {
       node: Object,
       nodeid: String,

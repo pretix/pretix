@@ -434,6 +434,9 @@ class ItemCreateForm(I18nModelForm):
         if self.cleaned_data.get('copy_from'):
             for question in self.cleaned_data['copy_from'].questions.all():
                 question.items.add(instance)
+                question.log_action('pretix.event.question.changed', user=self.user, data={
+                    'item_added': self.instance.pk
+                })
             for a in self.cleaned_data['copy_from'].addons.all():
                 instance.addons.create(addon_category=a.addon_category, min_count=a.min_count, max_count=a.max_count,
                                        price_included=a.price_included, position=a.position,
@@ -563,7 +566,7 @@ class ItemUpdateForm(I18nModelForm):
             if d['tax_rule'] and d['tax_rule'].rate > 0:
                 self.add_error(
                     'tax_rule',
-                    _("Gift card products should not be associated with non-zero tax rates since sales tax will be applied when the gift card is redeemed.")
+                    _("Gift card products should use a tax rule with a rate of 0 percent since sales tax will be applied when the gift card is redeemed.")
                 )
             if d['admission']:
                 self.add_error(
@@ -627,7 +630,9 @@ class ItemUpdateForm(I18nModelForm):
                 'class': 'scrolling-multiple-choice'
             }),
             'generate_tickets': TicketNullBooleanSelect(),
-            'show_quota_left': ShowQuotaNullBooleanSelect()
+            'show_quota_left': ShowQuotaNullBooleanSelect(),
+            'max_per_order': forms.widgets.NumberInput(attrs={'min': 0}),
+            'min_per_order': forms.widgets.NumberInput(attrs={'min': 0}),
         }
 
 

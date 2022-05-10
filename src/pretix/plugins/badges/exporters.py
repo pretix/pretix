@@ -181,7 +181,7 @@ def render_pdf(event, positions, opt):
             offsety = opt['margins'][2] + (opt['rows'] - 1 - i // opt['cols']) * opt['offsets'][1]
             p.translate(offsetx, offsety)
             with language(op.order.locale, op.order.event.settings.region):
-                r.draw_page(p, op.order, op, show_page=False)
+                r.draw_page(p, op.order, op, show_page=False, only_page=1)
             p.translate(-offsetx, -offsety)
 
         if opt['pagesize']:
@@ -196,6 +196,7 @@ def render_pdf(event, positions, opt):
         )
         for i, (op, r) in enumerate(positions):
             bg_page = copy.copy(r.bg_pdf.getPage(0))
+            bg_page.trimBox = bg_page.mediaBox
             offsetx = opt['margins'][3] + (i % opt['cols']) * opt['offsets'][0]
             offsety = opt['margins'][2] + (opt['rows'] - 1 - i // opt['cols']) * opt['offsets'][1]
             empty_pdf_page.mergeTranslatedPage(

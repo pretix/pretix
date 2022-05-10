@@ -11,6 +11,7 @@ Alipay
 and
 App
 Apps
+APM
 as
 auschecken
 Ausgangsscan
@@ -44,9 +45,13 @@ bez
 BezahlCode
 Bezahlmethode
 Blackberry
+BLIK
+BN
+Branding
 Browsereinstellungen
 BSD
 bspw
+Boleto
 Bundles
 bzw
 chardet
@@ -78,11 +83,13 @@ Edge
 Eingangsscan
 Einlassbuchung
 Einlassdatum
+Einlasskontrolle
 Einlassuhrzeit
 email
 Enterprise
 EPC
 EPS
+eps
 Erstattungsbetrag
 Erstattungsliste
 Erstattungsmethode
@@ -131,7 +138,9 @@ Installations
 integrationen
 INV
 invalidiert
+ISU
 iOS
+Itaú
 iTunes
 JavaScript
 JSON
@@ -148,6 +157,7 @@ loszulegen
 Ltd
 max
 MapQuest
+Mercado
 Merchandise
 Meta
 Metadaten
@@ -159,6 +169,7 @@ Mo
 MOTO
 Multibanco
 MwSt
+MyBank
 name
 Nr
 number
@@ -168,10 +179,13 @@ OpenCage
 OpenStreetMap
 Opera
 Output
+OXXO
 parsen
+Pago
 Pay
 PayPal
 PayPals
+PayU
 PCI
 Platzhalterzeichen
 Play
@@ -191,6 +205,7 @@ Przelewy
 pt
 px
 QR
+rabattiert
 Rabattierung
 Reader
 Rechnungs
@@ -218,6 +233,7 @@ Scans
 Scanergebnis
 Scanning
 schiefgeht
+schiefgelaufen
 sechsstelligen
 Secret
 Security
@@ -252,6 +268,7 @@ Teammitglied
 Teamname
 Telephone
 Ticketing
+To
 Tokengenerator
 Toolbar
 TODO
@@ -259,6 +276,7 @@ TOTP
 Trace
 Tracking
 transaktionale
+Trustly
 Turnover
 txt
 überbuchen
@@ -285,6 +303,7 @@ URIs
 Ursprüngl
 USt
 Überweisungs
+Venmo
 Veranstaltereinstellungen
 Veranstalterkonten
 Veranstalterkonto
@@ -297,6 +316,7 @@ Veranstaltungs
 veranstaltungsweiten
 Verfügbarkeitsberechnung
 Verfügbarkeitsstatus
+Verkkopankki
 Veröffentlichbarer
 VIP
 WebAuthn
@@ -314,8 +334,10 @@ Zahlungsplugins
 Zehnerkarten
 zeitbasiert
 Zeitslotbuchung
+Zimpler
 zubuchbaren
 zurückbuchen
 zurückgeleitet
+zurückwechseln
 zzgl
 ZVT

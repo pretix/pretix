@@ -48,7 +48,7 @@ class ReportsApp(AppConfig):
         author = _("the pretix team")
         version = version
         category = 'FORMAT'
-        description = _("This plugin allows you to generate printable reports about your sales.")
+        description = _("Generate printable reports about your sales.")
 
     def ready(self):
         from . import signals  # NOQA

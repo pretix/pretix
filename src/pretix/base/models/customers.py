@@ -59,6 +59,8 @@ class Customer(LoggedModel):
                               default=settings.LANGUAGE_CODE,
                               verbose_name=_('Language'))
     last_modified = models.DateTimeField(auto_now=True)
+    external_identifier = models.CharField(max_length=255, verbose_name=_('External identifier'), null=True, blank=True)
+    notes = models.TextField(verbose_name=_('Notes'), null=True, blank=True)
 
     objects = ScopedManager(organizer='organizer')
 
@@ -90,6 +92,8 @@ class Customer(LoggedModel):
         self.name_cached = ''
         self.email = None
         self.phone = None
+        self.external_identifier = None
+        self.notes = None
         self.save()
         self.all_logentries().update(data={}, shredded=True)
         self.orders.all().update(customer=None)
@@ -172,6 +176,7 @@ class Customer(LoggedModel):
         return salted_hmac(key_salt, payload).hexdigest()
 
     def get_email_context(self):
+        from pretix.base.email import get_name_parts_localized
         ctx = {
             'name': self.name,
             'organizer': self.organizer.name,
@@ -180,7 +185,13 @@ class Customer(LoggedModel):
         for f, l, w in name_scheme['fields']:
             if f == 'full_name':
                 continue
-            ctx['name_%s' % f] = self.name_parts.get(f, '')
+            ctx['name_%s' % f] = get_name_parts_localized(self.name_parts, f)
+
+        if "concatenation_for_salutation" in name_scheme:
+            ctx['name_for_salutation'] = name_scheme["concatenation_for_salutation"](self.name_parts)
+        else:
+            ctx['name_for_salutation'] = name_scheme["concatenation"](self.name_parts)
+
         return ctx
 
     @property

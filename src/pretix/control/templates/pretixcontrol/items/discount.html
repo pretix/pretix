@@ -1,0 +1,74 @@
+{% extends "pretixcontrol/items/base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% block title %}{% trans "Automatic discount" %}{% endblock %}
+{% block inside %}
+    <h1>{% trans "Automatic discount" %}</h1>
+    <form action="" method="post" class="form-horizontal">
+        {% csrf_token %}
+        {% bootstrap_form_errors form %}
+        <div class="row">
+            <div class="col-xs-12{% if discount %} col-lg-10{% endif %}">
+                <fieldset>
+                    <legend>{% trans "General information" %}</legend>
+                    {% bootstrap_field form.active layout="control" %}
+                    {% bootstrap_field form.internal_name layout="control" %}
+                    {% bootstrap_field form.available_from layout="control" %}
+                    {% bootstrap_field form.available_until layout="control" %}
+                    {% bootstrap_field form.sales_channels layout="control" %}
+                </fieldset>
+                <fieldset>
+                    <legend>{% trans "Condition" context "discount" %}</legend>
+                    {% bootstrap_field form.condition_all_products layout="control" %}
+                    {% bootstrap_field form.condition_limit_products layout="control" %}
+                    {% bootstrap_field form.condition_apply_to_addons layout="control" %}
+                    {% bootstrap_field form.condition_ignore_voucher_discounted layout="control" %}
+                    {% if form.subevent_mode %}
+                        {% bootstrap_field form.subevent_mode layout="control" %}
+                    {% endif %}
+                    <div class="form-group form-alternatives">
+                        <label class="col-md-3 control-label">
+                            {% trans "Minimum cart content" %}<br>
+                            <span class="optional">{% trans "Optional" %}</span>
+                        </label>
+                        <div class="col-md-4">
+                            {% bootstrap_field form.condition_min_count form_group_class="" %}
+                        </div>
+                        <div class="col-md-1 text-center condition-or" data-display-dependency="#id_subevent_mode_2" data-inverse>
+                            <div class="hr">
+                                <div class="sep">
+                                    <div class="sepText">{% trans "OR" %}</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4" data-display-dependency="#id_subevent_mode_2" data-inverse>
+                            {% bootstrap_field form.condition_min_value form_group_class="" %}
+                        </div>
+                    </div>
+                </fieldset>
+                <fieldset>
+                    <legend>{% trans "Benefit" context "discount" %}</legend>
+                    {% bootstrap_field form.benefit_discount_matching_percent layout="control" addon_after="%" %}
+                    {% bootstrap_field form.benefit_only_apply_to_cheapest_n_matches layout="control" %}
+                </fieldset>
+            </div>
+            {% if discount %}
+                <div class="col-xs-12 col-lg-2">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">
+                                {% trans "Discount history" %}
+                            </h3>
+                        </div>
+                        {% include "pretixcontrol/includes/logs.html" with obj=discount %}
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+        <div class="form-group submit-group">
+            <button type="submit" class="btn btn-primary btn-save">
+                {% trans "Save" %}
+            </button>
+        </div>
+    </form>
+{% endblock %}

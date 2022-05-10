@@ -313,6 +313,23 @@ class CheckinListUpdate(EventPermissionRequiredMixin, UpdateView):
         r['Content-Security-Policy'] = 'script-src \'unsafe-eval\''
         return r
 
+    def get_context_data(self, **kwargs):
+        return {
+            'items': [
+                {
+                    'id': i.pk,
+                    'name': str(i),
+                    'variations': [
+                        {
+                            'id': v.pk,
+                            'name': str(v.value)
+                        } for v in i.variations.all()
+                    ]
+                } for i in self.request.event.items.filter(active=True).prefetch_related('variations')
+            ],
+            **super().get_context_data(),
+        }
+
     def get_object(self, queryset=None) -> CheckinList:
         try:
             return self.request.event.checkin_lists.get(

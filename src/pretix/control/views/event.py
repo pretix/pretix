@@ -92,6 +92,7 @@ from ...base.i18n import language
 from ...base.models.items import (
     Item, ItemCategory, ItemMetaProperty, Question, Quota,
 )
+from ...base.services.mail import TolerantDict
 from ...base.settings import SETTINGS_AFFECTING_CSS, LazyI18nStringList
 from ..logdisplay import OVERVIEW_BANLIST
 from . import CreateView, PaginationMixin, UpdateView
@@ -327,15 +328,27 @@ class EventPlugins(EventSettingsViewMixin, EventPermissionRequiredMixin, Templat
             'FORMAT': _('Output and export formats'),
             'API': _('API features'),
         }
+
+        plugins_grouped = groupby(
+            sorted(
+                plugins,
+                key=lambda p: (
+                    str(getattr(p, 'category', _('Other'))),
+                    (0 if getattr(p, 'featured', False) else 1),
+                    str(p.name).lower().replace('pretix ', '')
+                ),
+            ),
+            lambda p: str(getattr(p, 'category', _('Other')))
+        )
+        plugins_grouped = [(c, list(plist)) for c, plist in plugins_grouped]
+
         context['plugins'] = sorted([
-            (c, labels.get(c, c), list(plist))
+            (c, labels.get(c, c), plist, any(getattr(p, 'picture', None) for p in plist))
             for c, plist
-            in groupby(
-                sorted(plugins, key=lambda p: str(getattr(p, 'category', _('Other')))),
-                lambda p: str(getattr(p, 'category', _('Other')))
-            )
+            in plugins_grouped
         ], key=lambda c: (order.index(c[0]), c[1]) if c[0] in order else (999, str(c[1])))
         context['plugins_active'] = self.object.get_plugins()
+        context['show_meta'] = settings.PRETIX_PLUGINS_SHOW_META
         return context
 
     def get(self, request, *args, **kwargs):
@@ -354,19 +367,17 @@ class EventPlugins(EventSettingsViewMixin, EventPermissionRequiredMixin, Templat
         }
 
         with transaction.atomic():
-            allow_restricted = request.user.has_active_staff_session(request.session.session_key)
-
             for key, value in request.POST.items():
                 if key.startswith("plugin:"):
                     module = key.split(":")[1]
                     if value == "enable" and module in plugins_available:
                         if getattr(plugins_available[module], 'restricted', False):
-                            if not allow_restricted:
+                            if module not in request.event.settings.allowed_restricted_plugins:
                                 continue
 
                         self.request.event.log_action('pretix.event.plugins.enabled', user=self.request.user,
                                                       data={'plugin': module})
-                        self.object.enable_plugin(module, allow_restricted=allow_restricted)
+                        self.object.enable_plugin(module, allow_restricted=request.event.settings.allowed_restricted_plugins)
                     else:
                         self.request.event.log_action('pretix.event.plugins.disabled', user=self.request.user,
                                                       data={'plugin': module})
@@ -731,7 +742,7 @@ class MailSettingsRendererPreview(MailSettingsPreview):
 
     def get(self, request, *args, **kwargs):
         v = str(request.event.settings.mail_text_order_placed)
-        v = v.format_map(self.placeholders('mail_text_order_placed'))
+        v = v.format_map(TolerantDict(self.placeholders('mail_text_order_placed')))
         renderers = request.event.get_html_mail_renderers()
         if request.GET.get('renderer') in renderers:
             with rolledback_transaction():
@@ -1043,6 +1054,9 @@ class EventLog(EventPermissionRequiredMixin, PaginationMixin, ListView):
             qs = qs.filter(device_id=self.request.GET.get('user')[2:])
         elif self.request.GET.get('user'):
             qs = qs.filter(user_id=self.request.GET.get('user'))
+
+        if self.request.GET.get('action_type'):
+            qs = qs.filter(action_type=self.request.GET['action_type'])
 
         if self.request.GET.get('content_type'):
             qs = qs.filter(content_type=get_object_or_404(ContentType, pk=self.request.GET.get('content_type')))
@@ -1415,7 +1429,7 @@ class QuickSetupView(FormView):
             })
             quota.items.add(*items)
 
-        self.request.event.set_active_plugins(plugins_active, allow_restricted=True)
+        self.request.event.set_active_plugins(plugins_active, allow_restricted=plugins_active)
         self.request.event.save()
         messages.success(self.request, _('Your changes have been saved. You can now go on with looking at the details '
                                          'or take your event live to start selling!'))

@@ -681,7 +681,9 @@ var shared_iframe_fragment = (
     + '</div>'
     + '<div class="pretix-widget-frame-inner" ref="frame-container" v-show="$root.frame_shown">'
     + '<iframe frameborder="0" width="650px" height="650px" @load="iframeLoaded" '
-    + '        :name="$root.parent.widget_id" src="about:blank" v-once>'
+    + '        :name="$root.parent.widget_id" src="about:blank" v-once'
+    + '        allow="autoplay *; camera *; fullscreen *; payment *"'
+    + '        referrerpolicy="origin">'
     + 'Please enable frames in your browser!'
     + '</iframe>'
     + '<div class="pretix-widget-frame-close"><a href="#" @click.prevent="close">'
@@ -745,6 +747,7 @@ Vue.component('pretix-overlay', {
             this.$root.frame_shown = false;
             this.$root.parent.frame_dismissed = true;
             this.$root.parent.reload();
+            this.$root.parent.trigger_close_callback();
         },
         iframeLoaded: function () {
             if (this.$root.frame_loading) {
@@ -1366,6 +1369,13 @@ var shared_root_methods = {
             }
         });
     },
+    trigger_close_callback: function () {
+        this.$nextTick(function () {
+            for (var i = 0; i < window.PretixWidget._closed.length; i++) {
+                window.PretixWidget._closed[i]()
+            }
+        });
+    },
     reload: function () {
         var url;
         if (this.$root.is_button) {
@@ -1789,8 +1799,12 @@ var create_button = function (element) {
 widgetlist = [];
 buttonlist = [];
 window.PretixWidget._loaded = [];
+window.PretixWidget._closed = [];
 window.PretixWidget.addLoadListener = function (f) {
     window.PretixWidget._loaded.push(f);
+}
+window.PretixWidget.addCloseListener = function (f) {
+    window.PretixWidget._closed.push(f);
 }
 window.PretixWidget.buildWidgets = function () {
     document.createElement("pretix-widget");

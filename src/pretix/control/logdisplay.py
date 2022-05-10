@@ -341,13 +341,12 @@ def pretixcontrol_logentry_display(sender: Event, logentry: LogEntry, **kwargs):
         'pretix.event.order.paid': _('The order has been marked as paid.'),
         'pretix.event.order.cancellationrequest.deleted': _('The cancellation request has been deleted.'),
         'pretix.event.order.refunded': _('The order has been refunded.'),
-        'pretix.event.order.canceled': _('The order has been canceled.'),
         'pretix.event.order.reactivated': _('The order has been reactivated.'),
         'pretix.event.order.deleted': _('The test mode order {code} has been deleted.'),
         'pretix.event.order.placed': _('The order has been created.'),
         'pretix.event.order.placed.require_approval': _('The order requires approval before it can continue to be processed.'),
         'pretix.event.order.approved': _('The order has been approved.'),
-        'pretix.event.order.denied': _('The order has been denied.'),
+        'pretix.event.order.denied': _('The order has been denied (comment: "{comment}").'),
         'pretix.event.order.contact.changed': _('The email address has been changed from "{old_email}" '
                                                 'to "{new_email}".'),
         'pretix.event.order.contact.confirmed': _('The email address has been confirmed to be working (the user clicked on a link '
@@ -423,6 +422,7 @@ def pretixcontrol_logentry_display(sender: Event, logentry: LogEntry, **kwargs):
         'pretix.voucher.added': _('The voucher has been created.'),
         'pretix.voucher.sent': _('The voucher has been sent to {recipient}.'),
         'pretix.voucher.added.waitinglist': _('The voucher has been created and sent to a person on the waiting list.'),
+        'pretix.voucher.expired.waitinglist': _('The voucher has been set to expire because the recipient removed themselves from the waiting list.'),
         'pretix.voucher.changed': _('The voucher has been changed.'),
         'pretix.voucher.deleted': _('The voucher has been deleted.'),
         'pretix.voucher.redeemed': _('The voucher has been redeemed in order {order_code}.'),
@@ -449,6 +449,9 @@ def pretixcontrol_logentry_display(sender: Event, logentry: LogEntry, **kwargs):
         'pretix.event.question.added': _('The question has been added.'),
         'pretix.event.question.deleted': _('The question has been deleted.'),
         'pretix.event.question.changed': _('The question has been changed.'),
+        'pretix.event.discount.added': _('The discount has been added.'),
+        'pretix.event.discount.deleted': _('The discount has been deleted.'),
+        'pretix.event.discount.changed': _('The discount has been changed.'),
         'pretix.event.taxrule.added': _('The tax rule has been added.'),
         'pretix.event.taxrule.deleted': _('The tax rule has been deleted.'),
         'pretix.event.taxrule.changed': _('The tax rule has been changed.'),
@@ -531,6 +534,27 @@ def pretixcontrol_logentry_display(sender: Event, logentry: LogEntry, **kwargs):
             bleach.clean(logentry.parsed_data.get('msg'), tags=[], strip=True)
         )
 
+    if logentry.action_type == 'pretix.event.order.canceled':
+        comment = logentry.parsed_data.get('comment')
+        if comment:
+            return _('The order has been canceled (comment: "{comment}").').format(comment=comment)
+        else:
+            return _('The order has been canceled.')
+
+    if logentry.action_type in ('pretix.control.views.checkin.reverted', 'pretix.event.checkin.reverted'):
+        if 'list' in data:
+            try:
+                checkin_list = sender.checkin_lists.get(pk=data.get('list')).name
+            except CheckinList.DoesNotExist:
+                checkin_list = _("(unknown)")
+        else:
+            checkin_list = _("(unknown)")
+
+        return _('The check-in of position #{posid} on list "{list}" has been reverted.').format(
+            posid=data.get('positionid'),
+            list=checkin_list,
+        )
+
     if sender and logentry.action_type.startswith('pretix.event.checkin'):
         return _display_checkin(sender, logentry)
 
@@ -557,20 +581,6 @@ def pretixcontrol_logentry_display(sender: Event, logentry: LogEntry, **kwargs):
             posid=data.get('positionid'),
             datetime=dt_formatted,
             list=checkin_list
-        )
-
-    if logentry.action_type in ('pretix.control.views.checkin.reverted', 'pretix.event.checkin.reverted'):
-        if 'list' in data:
-            try:
-                checkin_list = sender.checkin_lists.get(pk=data.get('list')).name
-            except CheckinList.DoesNotExist:
-                checkin_list = _("(unknown)")
-        else:
-            checkin_list = _("(unknown)")
-
-        return _('The check-in of position #{posid} on list "{list}" has been reverted.').format(
-            posid=data.get('positionid'),
-            list=checkin_list,
         )
 
     if logentry.action_type == 'pretix.team.member.added':

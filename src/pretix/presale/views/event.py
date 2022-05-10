@@ -700,6 +700,22 @@ class SeatingPlanView(EventViewMixin, TemplateView):
                                                 kwargs={'cart_namespace': kwargs.get('cart_namespace') or ''})
         if context['cart_redirect'].startswith('https:'):
             context['cart_redirect'] = '/' + context['cart_redirect'].split('/', 3)[3]
+
+        v = self.request.GET.get('voucher')
+        if v:
+            v = v.strip()
+            try:
+                voucher = self.request.event.vouchers.get(code__iexact=v)
+                if voucher.redeemed >= voucher.max_usages or voucher.valid_until is not None \
+                        and voucher.valid_until < now() or voucher.item is not None \
+                        and voucher.item.is_available() is False:
+                    voucher = None
+            except Voucher.DoesNotExist:
+                voucher = None
+        else:
+            voucher = None
+        context['voucher'] = voucher
+
         return context
 
 

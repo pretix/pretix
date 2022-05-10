@@ -36,6 +36,9 @@
                         {% bootstrap_field sform.contact_mail layout="control" %}
                         {% bootstrap_field sform.organizer_info_text layout="control" %}
                         {% bootstrap_field sform.event_team_provisioning layout="control" %}
+                        {% if sform.allowed_restricted_plugins %}
+                            {% bootstrap_field sform.allowed_restricted_plugins layout="control" %}
+                        {% endif %}
                     </fieldset>
                     <fieldset>
                         <legend>{% trans "Organizer page" %}</legend>

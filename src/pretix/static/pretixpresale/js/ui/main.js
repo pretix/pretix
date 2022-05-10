@@ -34,8 +34,8 @@ var form_handlers = function (el) {
                 date: 'fa fa-calendar',
                 up: 'fa fa-chevron-up',
                 down: 'fa fa-chevron-down',
-                previous: 'fa fa-chevron-left',
-                next: 'fa fa-chevron-right',
+                previous: $("html").hasClass("rtl") ? 'fa fa-chevron-right' : 'fa fa-chevron-left',
+                next: $("html").hasClass("rtl") ? 'fa fa-chevron-left' : 'fa fa-chevron-right',
                 today: 'fa fa-screenshot',
                 clear: 'fa fa-trash',
                 close: 'fa fa-remove'
@@ -57,8 +57,8 @@ var form_handlers = function (el) {
                 date: 'fa fa-calendar',
                 up: 'fa fa-chevron-up',
                 down: 'fa fa-chevron-down',
-                previous: 'fa fa-chevron-left',
-                next: 'fa fa-chevron-right',
+                previous: $("html").hasClass("rtl") ? 'fa fa-chevron-right' : 'fa fa-chevron-left',
+                next: $("html").hasClass("rtl") ? 'fa fa-chevron-left' : 'fa fa-chevron-right',
                 today: 'fa fa-screenshot',
                 clear: 'fa fa-trash',
                 close: 'fa fa-remove'
@@ -99,8 +99,8 @@ var form_handlers = function (el) {
                 date: 'fa fa-calendar',
                 up: 'fa fa-chevron-up',
                 down: 'fa fa-chevron-down',
-                previous: 'fa fa-chevron-left',
-                next: 'fa fa-chevron-right',
+                previous: $("html").hasClass("rtl") ? 'fa fa-chevron-right' : 'fa fa-chevron-left',
+                next: $("html").hasClass("rtl") ? 'fa fa-chevron-left' : 'fa fa-chevron-right',
                 today: 'fa fa-screenshot',
                 clear: 'fa fa-trash',
                 close: 'fa fa-remove'
@@ -219,7 +219,10 @@ $(function () {
             // multi-input fields have a role=group with aria-labelledby 
             var label = this.hasAttribute("aria-labelledby") ? $("#" + this.getAttribute("aria-labelledby")) : $("[for="+target.attr("id")+"]");
 
-            content.append("<li><a href='#" + target.attr("id") + "'>" + label.get(0).childNodes[0].nodeValue + "</a>: "+desc.text()+"</li>");
+            var $li = $("<li>");
+            $li.text(": " + desc.text())
+            $li.prepend($("<a>").attr("href", "#" + target.attr("id")).text(label.get(0).childNodes[0].nodeValue))
+            content.append($li);
         });
         $(this).append(content);
     });

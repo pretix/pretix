@@ -167,6 +167,12 @@ class CancelForm(ForceQuotaConfirmationForm):
         initial=True,
         required=False
     )
+    comment = forms.CharField(
+        label=_('Comment (will be sent to the user)'),
+        help_text=_('Will be included in the notification email when the respective placeholder is present in the '
+                    'configured email text.'),
+        required=False,
+    )
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -482,6 +488,9 @@ class OrderPositionChangeForm(forms.Form):
         self.fields['tax_rule'].queryset = instance.event.tax_rules.all()
         self.fields['tax_rule'].label_from_instance = self.taxrule_label_from_instance
 
+        if instance.addon_to_id:
+            del self.fields['operation_split']
+
         if not instance.seat and not (
                 instance.item.seat_category_mappings.filter(subevent=instance.subevent).exists()
         ):
@@ -612,7 +621,7 @@ class OrderMailForm(forms.Form):
     )
     attach_tickets = forms.BooleanField(
         label=_("Attach tickets"),
-        help_text=_("Will be ignored if all tickets in this order exceed a given size limit to ensure email deliverability."),
+        help_text=_("Will be ignored if tickets exceed a given size limit to ensure email deliverability."),
         required=False
     )
     attach_invoices = forms.ModelMultipleChoiceField(
@@ -746,16 +755,17 @@ class EventCancelForm(forms.Form):
     auto_refund = forms.BooleanField(
         label=_('Automatically refund money if possible'),
         initial=True,
-        required=False
+        required=False,
+        help_text=_('Only available for payment method that support automatic refunds.')
     )
     manual_refund = forms.BooleanField(
-        label=_('Create manual refund if the payment method does not support automatic refunds'),
-        widget=forms.CheckboxInput(attrs={'data-display-dependency': '#id_auto_refund'}),
+        label=_('Create refund in the manual refund to-do list'),
         initial=True,
         required=False,
-        help_text=_('If checked, all payments with a payment method not supporting automatic refunds will be on your '
-                    'manual refund to-do list. Do not check if you want to refund some of the orders by offsetting '
-                    'with different orders or issuing gift cards.')
+        help_text=_('Manual refunds will be created which will be listed in the manual refund to-do list. '
+                    'When combined with the automatic refund functionally, only payments with a payment method not '
+                    'supporting automatic refunds will be on your manual refund to-do list. Do not check if you want '
+                    'to refund some of the orders by offsetting with different orders or issuing gift cards.')
     )
     refund_as_giftcard = forms.BooleanField(
         label=_('Refund order value to a gift card instead instead of the original payment method'),
@@ -840,7 +850,7 @@ class EventCancelForm(forms.Form):
             label=_("Subject"),
             required=True,
             widget_kwargs={'attrs': {'data-display-dependency': '#id_send'}},
-            initial=_('Canceled: {event}'),
+            initial=LazyI18nString.from_gettext(gettext_noop('Canceled: {event}')),
             widget=I18nTextInput,
             locales=self.event.settings.get('locales'),
         )
@@ -866,7 +876,7 @@ class EventCancelForm(forms.Form):
         self.fields['send_waitinglist_subject'] = I18nFormField(
             label=_("Subject"),
             required=True,
-            initial=_('Canceled: {event}'),
+            initial=LazyI18nString.from_gettext(gettext_noop('Canceled: {event}')),
             widget=I18nTextInput,
             widget_kwargs={'attrs': {'data-display-dependency': '#id_send_waitinglist'}},
             locales=self.event.settings.get('locales'),

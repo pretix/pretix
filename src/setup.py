@@ -92,7 +92,7 @@ def npm_install():
         node_prefix = os.path.join(here, 'pretix', 'static.dist', 'node_prefix')
         os.makedirs(node_prefix, exist_ok=True)
         copy_tree(os.path.join(here, 'pretix', 'static', 'npm_dir'), node_prefix)
-        subprocess.check_call(['npm', 'install', '--prefix=' + node_prefix])
+        subprocess.check_call('npm install', shell=True, cwd=node_prefix)
         npm_installed = True
 
 
@@ -160,7 +160,7 @@ setup(
     install_requires=[
         'arabic-reshaper==2.1.3',  # Support for Arabic in reportlab
         'babel',
-        'BeautifulSoup4==4.8.*',
+        'BeautifulSoup4==4.10.*',
         'bleach==4.1.*',
         'celery==4.4.*',
         'chardet==4.0.*',
@@ -171,11 +171,11 @@ setup(
         'Django==3.2.*',
         'django-bootstrap3==15.0.*',
         'django-compressor==3.1.*',
-        'django-countries>=7.2',
+        'django-countries==7.2.*',
         'django-filter==21.1',
         'django-formset-js-improved==0.5.0.2',
         'django-formtools==2.3',
-        'django-hierarkey==1.0.*,>=1.0.4',
+        'django-hierarkey==1.1.*',
         'django-hijack==3.1.*',
         'django-i18nfield==1.9.*,>=1.9.4',
         'django-libsass==0.9',
@@ -187,8 +187,8 @@ setup(
         'django-phonenumber-field==6.0.*',
         'django-redis==5.0.*',
         'django-scopes==1.2.*',
-        'django-statici18n==2.1.*',
-        'djangorestframework==3.12.*',
+        'django-statici18n==2.2.*',
+        'djangorestframework==3.13.*',
         'dnspython<2.0',  # do not upgrade, causes issues with eventlet / gunicorn 19 and we cannot upgrade gunicorn right now
         'drf_ujson2==1.6.*',
         'isoweek',
@@ -204,12 +204,12 @@ setup(
         'packaging',
         'paypalrestsdk==1.13.*',
         'phonenumberslite==8.12.*',
-        'Pillow==9.*',
+        'Pillow==9.1.*',
         'protobuf==3.19.*',
         'psycopg2-binary',
         'pycountry',
         'pycparser==2.21',
-        'PyPDF2==1.26.*',
+        'PyPDF2==1.27.9',
         'python-bidi==0.4.*',  # Support for Arabic in reportlab
         'python-dateutil==2.8.*',
         'python-u2flib-server==4.*',
@@ -217,12 +217,12 @@ setup(
         'pyuca',
         'redis==3.5.*',
         'reportlab==3.6.*',
-        'requests==2.26.*',
+        'requests==2.27.*',
         'sentry-sdk==1.5.*',
         'sepaxml==2.4.*,>=2.4.1',
         'slimit',
         'static3==0.7.*',
-        'stripe==2.42.*',
+        'stripe==2.66.*',
         'text-unidecode==1.*',
         'tlds>=2020041600',
         'tqdm==4.*',

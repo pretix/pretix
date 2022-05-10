@@ -1,6 +1,7 @@
 {% extends "pretixcontrol/event/base.html" %}
 {% load i18n %}
 {% load bootstrap3 %}
+{% load money %}
 {% block title %}
     {% trans "Cancel order" %}
 {% endblock %}
@@ -22,12 +23,21 @@
         {% csrf_token %}
         <input type="hidden" name="status" value="c"/>
         {% bootstrap_form_errors form %}
+        {% if form.cancellation_fee %}
+            {% if fee %}
+                {% with fee|money:request.event.currency as f %}
+                    <p>{% blocktrans trimmed with fee="<strong>"|add:f|add:"</strong>"|safe %}
+                        The configured cancellation fee for a self-service cancellation would be {{ fee }} for this
+                        order, but for a cancellation performed by you, you need to set the cancellation fee here:
+                    {% endblocktrans %}</p>
+                {% endwith %}
+            {% endif %}
+            {% bootstrap_field form.cancellation_fee layout='' %}
+        {% endif %}
         {% bootstrap_field form.send_email layout='' %}
+        {% bootstrap_field form.comment layout='' %}
         {% if form.cancel_invoice %}
             {% bootstrap_field form.cancel_invoice layout='' %}
-        {% endif %}
-        {% if form.cancellation_fee %}
-            {% bootstrap_field form.cancellation_fee layout='' %}
         {% endif %}
         <div class="row checkout-button-row">
             <div class="col-md-4">

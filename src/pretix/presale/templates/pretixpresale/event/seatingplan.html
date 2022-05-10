@@ -26,9 +26,9 @@
     {% csrf_token %}
     <input type="hidden" name="subevent" value="{{ subevent.id|default_if_none:"" }}"/>
     {% if event.has_subevents %}
-        {% eventsignal event "pretix.presale.signals.render_seating_plan" request=request subevent=subevent %}
+        {% eventsignal event "pretix.presale.signals.render_seating_plan" request=request subevent=subevent voucher=voucher %}
     {% else %}
-        {% eventsignal event "pretix.presale.signals.render_seating_plan" request=request %}
+        {% eventsignal event "pretix.presale.signals.render_seating_plan" request=request voucher=voucher %}
     {% endif %}
 </form>
 {% include "pretixpresale/fragment_modals.html" %}

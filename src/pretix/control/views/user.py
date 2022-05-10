@@ -399,7 +399,8 @@ class User2FADeviceConfirmWebAuthnView(RecentAuthenticationRequiredMixin, Templa
             ukey,
             self.request.user.email,
             str(self.request.user),
-            settings.SITE_URL
+            settings.SITE_URL,
+            attestation="none"
         )
         ctx['jsondata'] = json.dumps(make_credential_options.registration_dict)
 

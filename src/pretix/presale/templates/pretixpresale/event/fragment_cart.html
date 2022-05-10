@@ -31,6 +31,8 @@
                 </p>
                 {% if line.seat or line.voucher or line.subevent or line.used_membership%}
                     <dl class="dl-inline">
+                {% elif event.settings.show_checkin_number_user and line.checkin_count %}
+                    <dl class="dl-inline">
                 {% endif %}
                 {% if line.seat %}
                     <div class="cart-icon-details">
@@ -94,7 +96,24 @@
                         </dd>
                     </div>
                 {% endif %}
+                {% if event.settings.show_checkin_number_user and line.checkin_count %}
+                    <div class="cart-icon-details">
+                        <dt class="sr-only">{% trans "Usage:" context "ticket_checkins" %}</dt>
+                        <dd class="text-success">
+                            <span class="fa fa-check-circle fa-fw text-success" aria-hidden="true"></span>
+                            <strong>
+                            {% blocktrans trimmed count count=line.checkin_count %}
+                                This ticket has been used once.
+                            {% plural %}
+                                This ticket has been used {{ count }} times.
+                            {% endblocktrans %}
+                            </strong>
+                        </dd>
+                    </div>
+                {% endif %}
                 {% if line.seat or line.voucher or line.subevent or line.used_membership%}
+                    </dl>
+                {% elif event.settings.show_checkin_number_user and line.checkin_count %}
                     </dl>
                 {% endif %}
 
@@ -205,12 +224,19 @@
                 {% endif %}
                 </div>
             {% elif line.addon_to %}
-                <div role="cell" class="count">&nbsp;</div>
+                <div role="cell" class="count">{% if line.count == 1 %}&nbsp;{% else %}{{ line.count }}{% endif %}</div>
                 <div role="cell" class="singleprice price">
                     {% if event.settings.display_net_prices %}
                         {{ line.net_price|money:event.currency }}
                     {% else %}
                         {{ line.price|money:event.currency }}
+                    {% endif %}
+                    {% if line.discount and line.line_price_gross != line.price %}
+                        <span class="text-success discounted" data-toggle="tooltip" title="{% trans "The price of this product was reduced because of an automatic discount." %}">
+                            <br>
+                            <span class="fa fa-percent fa-fw" aria-hidden="true"></span>
+                            {% trans "Discounted" %}
+                        </span>
                     {% endif %}
                 </div>
             {% else %}
@@ -265,6 +291,13 @@
                         {{ line.net_price|money:event.currency }}
                     {% else %}
                         {{ line.price|money:event.currency }}
+                    {% endif %}
+                    {% if line.discount and line.line_price_gross != line.price %}
+                        <span class="text-success discounted" data-toggle="tooltip" title="{% trans "The price of this product was reduced because of an automatic discount." %}">
+                            <br>
+                            <span class="fa fa-percent fa-fw" aria-hidden="true"></span>
+                            {% trans "Discounted" %}
+                        </span>
                     {% endif %}
                 </div>
             {% endif %}

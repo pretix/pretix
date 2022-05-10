@@ -138,8 +138,8 @@ class LogEntry(models.Model):
     @cached_property
     def display_object(self):
         from . import (
-            Event, Item, ItemCategory, Order, Question, Quota, SubEvent,
-            TaxRule, Voucher,
+            Discount, Event, Item, ItemCategory, Order, Question, Quota,
+            SubEvent, TaxRule, Voucher,
         )
 
         try:
@@ -201,6 +201,16 @@ class LogEntry(models.Model):
                     'quota': co.id
                 }),
                 'val': escape(co.name),
+            }
+        elif isinstance(co, Discount):
+            a_text = _('Discount {val}')
+            a_map = {
+                'href': reverse('control:event.items.discounts.edit', kwargs={
+                    'event': self.event.slug,
+                    'organizer': self.event.organizer.slug,
+                    'discount': co.id
+                }),
+                'val': escape(co.internal_name),
             }
         elif isinstance(co, ItemCategory):
             a_text = _('Category {val}')

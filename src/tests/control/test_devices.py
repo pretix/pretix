@@ -43,7 +43,7 @@ def event(organizer):
 
 @pytest.fixture
 def device(organizer):
-    return organizer.devices.create(name='Cashdesk')
+    return organizer.devices.create(name='Cashdesk', all_events=True)
 
 
 @pytest.fixture
@@ -108,3 +108,19 @@ def test_revoke_device(event, admin_user, admin_team, device, client):
     client.post('/control/organizer/dummy/device/{}/revoke'.format(device.pk), {}, follow=True)
     device.refresh_from_db()
     assert device.revoked
+
+
+@pytest.mark.django_db
+def test_bulk_update_device(event, admin_user, admin_team, device, client):
+    client.login(email='dummy@dummy.dummy', password='dummy')
+    client.post('/control/organizer/dummy/device/bulk_edit', {
+        'device': str(device.pk),
+        'bulkedit-limit_events': str(event.pk),
+        '_bulk': ['bulkedit__events', 'bulkeditsecurity_profile'],
+        'bulkedit-security_profile': 'full',
+    }, follow=True)
+    device.refresh_from_db()
+    assert device.security_profile == 'full'
+    assert not device.all_events
+    with scopes_disabled():
+        assert list(device.limit_events.all()) == [event]

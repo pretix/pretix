@@ -6,7 +6,7 @@
     font-size: 16px;
   }
   p {
-    margin-bottom: 0;
+    margin-bottom: 3px;
   }
   .events {
     list-style: none;
@@ -23,7 +23,7 @@
     border-left-color: inherit;
 
     padding: 3px 5px;
-    margin-top: 3px;
+    margin-bottom: 3px;
     font-size: 12px;
     overflow-wrap: anywhere;
     text-decoration: none;
@@ -37,13 +37,13 @@
     }
 
     &.continued, &.over {
-      background: lighten(#767676, 48%);
-      border-color: lighten(#767676, 30%);
-      border-left-color: lighten(#767676, 30%);
+      background: lighten(#767676, 54%);
+      border-color: lighten(#767676, 44%);
+      border-left-color: lighten(#767676, 44%);
       color: #767676;
       &:hover {
-        background: lighten(#767676, 50%);
-        border-color: lighten(#767676, 25%);
+        background: lighten(#767676, 54%);
+        border-color: lighten(#767676, 40%);
       }
     }
 
@@ -82,8 +82,14 @@
       }
     }
 
-    .event-name {
+
+    &.available > *:first-child,
+    &.continued > *:first-child,
+    &.soon > *:first-child {
       font-weight: bold;
+    }
+
+    .event-name {
       display: block;
     }
     .event-time, .event-status {
@@ -96,7 +102,7 @@
     margin-bottom: 15px;
   }
   h3 {
-    margin-bottom: 5px;
+    margin-bottom: 8px;
     font-weight: bold;
     cursor: pointer;
   }
@@ -105,9 +111,6 @@
   }
   details[open] h3 .fa::before {
     content: $fa-var-caret-down;
-  }
-  .events {
-    overflow: hidden;  /* required for smooth toggle animation */
   }
   .no-events {
     display: none;

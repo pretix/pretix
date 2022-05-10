@@ -50,6 +50,7 @@ from localflavor.generic.validators import IBANValidator
 
 from pretix.base.models import Order, OrderPayment, OrderRefund
 from pretix.base.payment import BasePaymentProvider
+from pretix.plugins.banktransfer.templatetags.ibanformat import ibanformat
 
 
 class BankTransfer(BasePaymentProvider):
@@ -243,7 +244,7 @@ class BankTransfer(BasePaymentProvider):
         if self.settings.get('bank_details_type') == 'sepa':
             bankdetails += [
                 _("Account holder"), ": ", self.settings.get('bank_details_sepa_name'), "\n",
-                _("IBAN"), ": ", self.settings.get('bank_details_sepa_iban'), "\n",
+                _("IBAN"), ": ", ibanformat(self.settings.get('bank_details_sepa_iban')), "\n",
                 _("BIC"), ": ", self.settings.get('bank_details_sepa_bic'), "\n",
                 _("Bank"), ": ", self.settings.get('bank_details_sepa_bank'),
             ]

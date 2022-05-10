@@ -34,4 +34,4 @@ class ManualPaymentApp(AppConfig):
         author = _("the pretix team")
         version = version
         category = 'PAYMENT'
-        description = _("This plugin adds a customizable payment method for manual processing.")
+        description = _("A fully customizable payment method for manual processing.")

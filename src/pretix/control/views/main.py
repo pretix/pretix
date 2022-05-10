@@ -265,8 +265,6 @@ class EventWizard(SafeSessionWizardView):
             event.has_subevents = foundation_data['has_subevents']
             event.testmode = True
             form_dict['basics'].save()
-            event.set_active_plugins(settings.PRETIX_PLUGINS_DEFAULT.split(","), allow_restricted=True)
-            event.save(update_fields=['plugins'])
             event.log_action(
                 'pretix.event.added',
                 user=self.request.user,
@@ -299,6 +297,9 @@ class EventWizard(SafeSessionWizardView):
             elif self.clone_from:
                 event.copy_data_from(self.clone_from)
             else:
+                event.set_active_plugins(settings.PRETIX_PLUGINS_DEFAULT.split(","),
+                                         allow_restricted=settings.PRETIX_PLUGINS_DEFAULT.split(","))
+                event.save(update_fields=['plugins'])
                 event.checkin_lists.create(
                     name=_('Default'),
                     all_products=True

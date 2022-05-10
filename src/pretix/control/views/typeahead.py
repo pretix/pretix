@@ -37,7 +37,7 @@ from datetime import datetime, time
 import pytz
 from dateutil.parser import parse
 from django.core.exceptions import PermissionDenied
-from django.db.models import Max, Min, Q
+from django.db.models import F, Max, Min, Q
 from django.db.models.functions import Coalesce, Greatest
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
@@ -402,7 +402,12 @@ def items_select2(request, **kwargs):
 
     qs = request.event.items.filter(
         name__icontains=i18ncomp(query)
-    ).order_by('position')
+    ).order_by(
+        F('category__position').asc(nulls_first=True),
+        'category',
+        'position',
+        'pk'
+    )
 
     total = qs.count()
     pagesize = 20
@@ -434,7 +439,14 @@ def variations_select2(request, **kwargs):
     for word in query.split():
         q &= Q(value__icontains=i18ncomp(word)) | Q(item__name__icontains=i18ncomp(ord))
 
-    qs = ItemVariation.objects.filter(q).order_by('item__position', 'item__name', 'position', 'value').select_related('item')
+    qs = ItemVariation.objects.filter(q).order_by(
+        F('item__category__position').asc(nulls_first=True),
+        'item__category_id',
+        'item__position',
+        'item__pk'
+        'position',
+        'value'
+    ).select_related('item')
 
     total = qs.count()
     pagesize = 20

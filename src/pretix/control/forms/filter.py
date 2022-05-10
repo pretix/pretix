@@ -255,7 +255,6 @@ class OrderFilterForm(FilterForm):
                 | Q(pk__in=matching_invoices)
                 | Q(pk__in=matching_positions)
                 | Q(pk__in=matching_invoice_addresses)
-                | Q(pk__in=matching_invoices)
             )
             for recv, q in order_search_filter_q.send(sender=getattr(self, 'event', None), query=u):
                 mainq = mainq | q
@@ -1266,7 +1265,8 @@ class CustomerFilterForm(FilterForm):
     orders = {
         'email': 'email',
         'identifier': 'identifier',
-        'name_cached': 'name_cached',
+        'name': 'name_cached',
+        'external_identifier': 'external_identifier',
     }
     query = forms.CharField(
         label=_('Search query'),
@@ -1310,6 +1310,8 @@ class CustomerFilterForm(FilterForm):
                 Q(email__icontains=query)
                 | Q(name_cached__icontains=query)
                 | Q(identifier__istartswith=query)
+                | Q(external_identifier__icontains=query)
+                | Q(notes__icontains=query)
             )
 
         if fdata.get('status') == 'active':
@@ -1860,11 +1862,11 @@ class VoucherFilterForm(FilterForm):
         for i in self.event.items.prefetch_related('variations').all():
             variations = list(i.variations.all())
             if variations:
-                choices.append((str(i.pk), _('{product} – Any variation').format(product=i.name)))
+                choices.append((str(i.pk), _('{product} – Any variation').format(product=str(i))))
                 for v in variations:
-                    choices.append(('%d-%d' % (i.pk, v.pk), '%s – %s' % (i.name, v.value)))
+                    choices.append(('%d-%d' % (i.pk, v.pk), '%s – %s' % (str(i), v.value)))
             else:
-                choices.append((str(i.pk), i.name))
+                choices.append((str(i.pk), str(i)))
         for q in self.event.quotas.all():
             choices.append(('q-%d' % q.pk, _('Any product in quota "{quota}"').format(quota=q)))
         self.fields['itemvar'].choices = choices
@@ -1881,7 +1883,7 @@ class VoucherFilterForm(FilterForm):
             if s == '<>':
                 qs = qs.filter(Q(tag__isnull=True) | Q(tag=''))
             elif s[0] == '"' and s[-1] == '"':
-                qs = qs.filter(tag__iexact=s[1:-1])
+                qs = qs.filter(tag__exact=s[1:-1])
             else:
                 qs = qs.filter(tag__icontains=s)
 
@@ -2121,7 +2123,7 @@ class CheckinFilterForm(FilterForm):
         self.event = kwargs.pop('event')
         super().__init__(*args, **kwargs)
 
-        self.fields['device'].queryset = self.event.organizer.devices.all()
+        self.fields['device'].queryset = self.event.organizer.devices.all().order_by('device_id')
         self.fields['gate'].queryset = self.event.organizer.gates.all()
 
         self.fields['checkin_list'].queryset = self.event.checkin_lists.all()
@@ -2142,11 +2144,11 @@ class CheckinFilterForm(FilterForm):
         for i in self.event.items.prefetch_related('variations').all():
             variations = list(i.variations.all())
             if variations:
-                choices.append((str(i.pk), _('{product} – Any variation').format(product=i.name)))
+                choices.append((str(i.pk), _('{product} – Any variation').format(product=str(i))))
                 for v in variations:
-                    choices.append(('%d-%d' % (i.pk, v.pk), '%s – %s' % (i.name, v.value)))
+                    choices.append(('%d-%d' % (i.pk, v.pk), '%s – %s' % (str(i), v.value)))
             else:
-                choices.append((str(i.pk), i.name))
+                choices.append((str(i.pk), str(i)))
         self.fields['itemvar'].choices = choices
 
     def filter_qs(self, qs):

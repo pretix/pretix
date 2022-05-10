@@ -43,6 +43,8 @@ Possible permissions are:
 * Can view vouchers
 * Can change vouchers
 
+.. _`rest-compat`:
+
 Compatibility
 -------------
 
@@ -58,6 +60,7 @@ that your clients can deal with them properly:
 * Support of new HTTP methods for a given API endpoint
 * Support of new query parameters for a given API endpoint
 * New fields contained in API responses
+* Response body structure or message texts on failed requests (``4xx``, ``5xx`` response codes)
 
 We treat the following types of changes as *backwards-incompatible*:
 

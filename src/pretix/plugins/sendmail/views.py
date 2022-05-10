@@ -108,6 +108,8 @@ class SenderView(EventPermissionRequiredMixin, FormView):
                     kwargs['initial']['created_from'] = dateutil.parser.parse(logentry.parsed_data['created_from'])
                 if logentry.parsed_data.get('created_to'):
                     kwargs['initial']['created_to'] = dateutil.parser.parse(logentry.parsed_data['created_to'])
+                if logentry.parsed_data.get('attach_tickets'):
+                    kwargs['initial']['attach_tickets'] = logentry.parsed_data['attach_tickets']
                 if logentry.parsed_data.get('subevent'):
                     try:
                         kwargs['initial']['subevent'] = self.request.event.subevents.get(
@@ -229,6 +231,7 @@ class SenderView(EventPermissionRequiredMixin, FormView):
             'not_checked_in': form.cleaned_data.get('not_checked_in'),
             'checkin_lists': [i.pk for i in form.cleaned_data.get('checkin_lists')],
             'filter_checkins': form.cleaned_data.get('filter_checkins'),
+            'attach_tickets': form.cleaned_data.get('attach_tickets'),
         }
         attachment = form.cleaned_data.get('attachment')
         if attachment is not None and attachment is not False:
