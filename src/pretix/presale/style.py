@@ -26,7 +26,7 @@ from urllib.parse import urljoin, urlsplit
 
 import django_libsass
 import sass
-from compressor.filters.cssmin import CSSCompressorFilter
+from compressor.filters.cssmin import CSSMinFilter
 from django.conf import settings
 from django.core.cache import cache
 from django.core.files.base import ContentFile, File
@@ -115,7 +115,7 @@ def compile_scss(object, file="main.scss", fonts=True):
             include_paths=[sassdir], output_style='nested',
             custom_functions=cf
         )
-        cssf = CSSCompressorFilter(css)
+        cssf = CSSMinFilter(css)
         css = cssf.output()
         cache.set('sass_compile_{}_{}'.format(cp, srcchecksum), css, 600)
 

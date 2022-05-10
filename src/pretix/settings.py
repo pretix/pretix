@@ -593,7 +593,7 @@ CSRF_FAILURE_VIEW = 'pretix.base.views.errors.csrf_failure'
 
 template_loaders = (
     'django.template.loaders.filesystem.Loader',
-    'django.template.loaders.app_directories.Loader',
+    'pretix.helpers.template_loaders.AppLoader',
 )
 if not DEBUG:
     template_loaders = (
@@ -648,6 +648,10 @@ COMPRESS_PRECOMPILERS = (
     ('text/vue', 'pretix.helpers.compressor.VueCompiler'),
 )
 
+COMPRESS_OFFLINE_CONTEXT = {
+    'basetpl': 'empty.html',
+}
+
 COMPRESS_ENABLED = COMPRESS_OFFLINE = not debug_fallback
 
 COMPRESS_FILTERS = {
@@ -655,7 +659,10 @@ COMPRESS_FILTERS = {
         # CssAbsoluteFilter is incredibly slow, especially when dealing with our _flags.scss
         # However, we don't need it if we consequently use the static() function in Sass
         # 'compressor.filters.css_default.CssAbsoluteFilter',
-        'compressor.filters.cssmin.CSSCompressorFilter',
+        'compressor.filters.cssmin.rCSSMinFilter',
+    ),
+    'js': (
+        'compressor.filters.jsmin.JSMinFilter',
     )
 }
 
