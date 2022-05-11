@@ -835,32 +835,32 @@ var editor = {
                 editor._delete();
                 break;
             case 65:  /* A */
-                if (e.ctrlKey) {
+                if (e.ctrlKey || e.metaKey) {
                     editor._selectAll();
                 }
                 break;
             case 89:  /* Y */
-                if (e.ctrlKey) {
+                if (e.ctrlKey || e.metaKey) {
                     editor._redo();
                 }
                 break;
             case 90:  /* Z */
-                if (e.ctrlKey) {
+                if (e.ctrlKey || e.metaKey) {
                     editor._undo();
                 }
                 break;
             case 88:  /* X */
-                if (e.ctrlKey) {
+                if (e.ctrlKey || e.metaKey) {
                     editor._cut();
                 }
                 break;
             case 86:  /* V */
-                if (e.ctrlKey) {
+                if (e.ctrlKey || e.metaKey) {
                     editor._paste();
                 }
                 break;
             case 67:  /* C */
-                if (e.ctrlKey) {
+                if (e.ctrlKey || e.metaKey) {
                     editor._copy();
                 }
                 break;
