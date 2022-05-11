@@ -4,7 +4,6 @@
 from django.core.exceptions import ImproperlyConfigured
 from django.db import migrations, models
 from django_mysql.checks import mysql_connections
-from django_mysql.utils import connection_is_mariadb
 
 
 def set_attendee_name_parts(apps, schema_editor):
@@ -31,7 +30,7 @@ def check_mysqlversion(apps, schema_editor):
     conns = list(mysql_connections())
     found = 'Unknown version'
     for alias, conn in conns:
-        if connection_is_mariadb(conn) and hasattr(conn, 'mysql_version'):
+        if hasattr(conn, 'mysql_is_mariadb') and conn.mysql_is_mariadb and hasattr(conn, 'mysql_version'):
             if conn.mysql_version >= (10, 2, 7):
                 any_conn_works = True
             else:
