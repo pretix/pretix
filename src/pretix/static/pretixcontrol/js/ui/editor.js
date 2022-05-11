@@ -286,7 +286,7 @@ var editor = {
         } else if (key.startsWith('meta:')) {
             return key.substr(5);
         }
-        return $('#toolbox-content option[value='+key+'], #toolbox-content option[data-old-value='+key+']').attr('data-sample') || '';
+        return $('#toolbox-content option[value='+key+'], #toolbox-content option[data-old-value='+key+']').attr('data-sample') || '???';
     },
 
     _load_page: function (page_number, dump) {
