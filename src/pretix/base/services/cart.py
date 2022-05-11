@@ -447,7 +447,10 @@ class CartManager:
         try:
             voucher = self.event.vouchers.get(code__iexact=voucher_code.strip())
         except Voucher.DoesNotExist:
-            raise CartError(error_messages['voucher_invalid'])
+            if self.event.organizer.accepted_gift_cards.filter(secret__iexact=voucher_code).exists():
+                raise CartError(error_messages['gift_card'])
+            else:
+                raise CartError(error_messages['voucher_invalid'])
         voucher_use_diff = Counter()
         ops = []
 
