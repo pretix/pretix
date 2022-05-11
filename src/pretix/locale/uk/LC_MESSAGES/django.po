@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-28 16:44+0000\n"
-"PO-Revision-Date: 2022-05-10 09:22+0000\n"
-"Last-Translator: Iryna Loik <iraloyik@gmail.com>\n"
+"PO-Revision-Date: 2022-05-12 06:59+0000\n"
+"Last-Translator: Iryna N <in380@nyu.edu>\n"
 "Language-Team: Ukrainian <https://translate.pretix.eu/projects/pretix/pretix/"
 "uk/>\n"
 "Language: uk\n"
@@ -1473,7 +1473,7 @@ msgstr "Варіанти"
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:26
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:124
 msgid "Attendee name"
-msgstr "Ім'я відвідувача"
+msgstr "Ім'я учасника"
 
 #: pretix/base/exporters/orderlist.py:567 pretix/base/forms/questions.py:585
 #: pretix/base/models/customers.py:219 pretix/base/models/orders.py:1292
@@ -9171,7 +9171,7 @@ msgstr ""
 msgid ""
 "You cannot require specifying attendee names if you do not ask for them."
 msgstr ""
-"Ви не можете вимагати уточнення імен відвідувачів, якщо ви їх про це не "
+"Ви не можете вимагати уточнення імен учасників, якщо ви їх про це не "
 "запитували."
 
 #: pretix/base/settings.py:3087
@@ -9391,7 +9391,7 @@ msgstr ""
 #: pretix/base/templates/pretixbase/email/email_footer.html:3
 #, python-format
 msgid "powered by <a %(a_attr)s>pretix</a>"
-msgstr ""
+msgstr "На основі<a %(a_attr)s>pretix</a>"
 
 #: pretix/base/templates/pretixbase/email/notification.html:55
 #: pretix/base/templates/pretixbase/email/notification.txt:14
@@ -13146,7 +13146,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/auth/forgot.html:14
 msgid "Send recovery information"
-msgstr ""
+msgstr "Надіслати інформацію про відновлення"
 
 #: pretix/control/templates/pretixcontrol/auth/invite.html:7
 msgid "Accept an invitation"
@@ -13401,6 +13401,10 @@ msgid ""
 "plan on no longer supporting Internet Explorer in our administrative backend "
 "in the next months."
 msgstr ""
+"Internet Explorer – це старий браузер, який не підтримує багато новітніх веб-"
+"технологій. Хоча деякі функції вже можуть не працювати належним чином, ми "
+"плануємо більше не підтримувати Internet Explorer у нашому адміністративному "
+"сервері протягом наступних місяців."
 
 #: pretix/control/templates/pretixcontrol/base.html:332
 msgid ""
@@ -13848,6 +13852,9 @@ msgid ""
 "specific check-in situations. Please reach out to support if you have "
 "questions about setting this up."
 msgstr ""
+"Ці налаштування на цій сторінці призначені для професійних користувачів із "
+"дуже специфічними ситуаціями реєстрації. Якщо у вас виникли запитання щодо "
+"налаштування, зверніться до служби підтримки."
 
 #: pretix/control/templates/pretixcontrol/checkin/list_edit.html:47
 msgid ""
@@ -13861,6 +13868,10 @@ msgid ""
 "and Desktop apps. Custom check-in rules do not work offline with our iOS "
 "scanning app."
 msgstr ""
+"Якщо ви скористаєтеся цими розширеними параметрами, ми рекомендуємо "
+"використовувати наші програми для Android і настільних комп’ютерів. "
+"Спеціальні правила реєстрації не працюють в автономному режимі з нашим "
+"додатком для сканування iOS."
 
 #: pretix/control/templates/pretixcontrol/checkin/list_edit.html:67
 msgid "Custom check-in rule"
@@ -13919,6 +13930,13 @@ msgid ""
 "festival with festival passes that allow access to every or multiple "
 "performances as well as tickets only valid for single performances."
 msgstr ""
+"Ви можете створити кілька списків реєстрації, щоб розділити декілька частин "
+"вашої події, наприклад, якщо у вас є окремі записи для кількох типів "
+"квитків. Різні списки реєстрації є абсолютно незалежними: якщо квиток "
+"відображається в двох списках, він дійсний один раз у кожному списку. Це "
+"може бути корисно, якщо ви проводите фестиваль із фестивальними "
+"абонементами, які дають доступ до кожного або кількох вистав, а також "
+"квитками, дійсними лише для окремих вистав."
 
 #: pretix/control/templates/pretixcontrol/checkin/lists.html:23
 msgid ""
@@ -14021,6 +14039,21 @@ msgid ""
 "\n"
 "Your %(instance)s team\n"
 msgstr ""
+"Добрий день,\n"
+"\n"
+"Xтось попросив використовувати %(address)s як адресу відправника на "
+"%(instance)s..\n"
+"Це дозволить їм надсилати електронні листи, які, як показано, надходять з "
+"цієї електронної адреси.\n"
+"Якщо це були ви, будь ласка, введіть наступний код підтвердження:\n"
+"\n"
+"%(code)s\n"
+"\n"
+"Якщо ви цього не просили, ви можете сміливо ігнорувати цей лист.\n"
+"\n"
+"З найкращими побажаннями,\n"
+"\n"
+"Ваша команда %(instance)s\n"
 
 #: pretix/control/templates/pretixcontrol/email/forgot.txt:1
 #, python-format
@@ -14125,7 +14158,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/email_setup_simple.html:8
 #: pretix/control/templates/pretixcontrol/email_setup_smtp.html:8
 msgid "E-mail sending"
-msgstr ""
+msgstr "Надсилання електронної пошти"
 
 #: pretix/control/templates/pretixcontrol/email_setup.html:21
 msgid "Use system default"
@@ -14136,6 +14169,8 @@ msgid ""
 "E-mails will be sent through the system's default server. They will show the "
 "following sender information:"
 msgstr ""
+"Електронні листи надсилатимуться через сервер системи за замовчуванням. Вони "
+"відображатимуть таку інформацію про відправника:"
 
 #: pretix/control/templates/pretixcontrol/email_setup.html:35
 msgctxt "mail_header"
@@ -14151,6 +14186,8 @@ msgstr "Відповідати-кому"
 #: pretix/control/templates/pretixcontrol/email_setup_simple.html:18
 msgid "Use system email server with a custom sender address"
 msgstr ""
+"Використовувати системний сервер електронної пошти зі спеціальною адресою "
+"відправника"
 
 #: pretix/control/templates/pretixcontrol/email_setup.html:64
 msgid ""
@@ -14159,6 +14196,10 @@ msgid ""
 "directly from you, but it also might require some extra steps to ensure good "
 "deliverability."
 msgstr ""
+"Електронні листи надсилатимуться через сервер за замовчуванням системи, але "
+"з вашою власною адресою відправника. Це зробить ваші електронні листи більш "
+"персоналізованими та надходитиме безпосередньо від вас, але це також може "
+"вимагати деяких додаткових кроків для забезпечення гарної доставки."
 
 #: pretix/control/templates/pretixcontrol/email_setup.html:84
 #: pretix/control/templates/pretixcontrol/email_setup_smtp.html:18
@@ -14349,6 +14390,9 @@ msgid ""
 "event and only retain the financial information such as the number and type "
 "of tickets sold."
 msgstr ""
+"Ви можете видалити особисті дані, такі як імена та адреси електронної пошти, "
+"зі своєї події та зберегти лише фінансову інформацію, як-от кількість і тип "
+"проданих квитків."
 
 #: pretix/control/templates/pretixcontrol/event/dangerzone.html:76
 #: pretix/control/templates/pretixcontrol/event/dangerzone.html:89
@@ -14479,7 +14523,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/event/index.html:35
 msgid "Show pending refunds"
-msgstr ""
+msgstr "Показати відшкодування, що очікують на розгляд"
 
 #: pretix/control/templates/pretixcontrol/event/index.html:40
 msgid ""
@@ -14489,17 +14533,19 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/event/index.html:44
 msgid "Show orders requesting cancellation"
-msgstr ""
+msgstr "Показати замовлення із запитом на скасування"
 
 #: pretix/control/templates/pretixcontrol/event/index.html:49
 msgid ""
 "This event contains <strong>pending approvals</strong> that you should take "
 "care of."
 msgstr ""
+"Ця подія містить <strong>очікуючі підтвердження</strong>, про які вам слід "
+"подбати."
 
 #: pretix/control/templates/pretixcontrol/event/index.html:53
 msgid "Show orders pending approval"
-msgstr ""
+msgstr "Показати замовлення, які очікують на затвердження"
 
 #: pretix/control/templates/pretixcontrol/event/index.html:58
 msgid ""
@@ -14638,6 +14684,9 @@ msgid ""
 "recommend enabling test mode if your customers already know your shop, as it "
 "will confuse them."
 msgstr ""
+"Схоже, у вас уже є кілька справжніх замовлень у вашому магазині. Ми не "
+"рекомендуємо вмикати тестовий режим, якщо ваші клієнти вже знають ваш "
+"магазин, оскільки це може їх заплутати."
 
 #: pretix/control/templates/pretixcontrol/event/live.html:119
 msgid "Enable test mode"
@@ -14697,7 +14746,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/event/mail.html:21
 #: pretix/control/templates/pretixcontrol/organizers/mail.html:22
 msgid "Sending method"
-msgstr ""
+msgstr "Спосіб відправлення"
 
 #: pretix/control/templates/pretixcontrol/event/mail.html:25
 #: pretix/control/templates/pretixcontrol/organizers/mail.html:26
@@ -14711,7 +14760,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/event/mail.html:60
 msgid "Calendar invites"
-msgstr ""
+msgstr "Запрошення в календарі"
 
 #: pretix/control/templates/pretixcontrol/event/mail.html:66
 msgid "E-mail design"
@@ -14872,7 +14921,7 @@ msgstr "Ваші зміни збережено."
 
 #: pretix/control/templates/pretixcontrol/event/plugins.html:36
 msgid "Top recommendation"
-msgstr ""
+msgstr "Найкраща рекомендація"
 
 #: pretix/control/templates/pretixcontrol/event/plugins.html:40
 msgid "Experimental feature"
@@ -14918,6 +14967,9 @@ msgid ""
 "can use the navigation on the left to modify the settings of your event in "
 "much more detail."
 msgstr ""
+"Ви можете прокрутити вниз і швидко створити свої перші квитки, або ви можете "
+"скористатися навігацією ліворуч, щоб змінити налаштування вашої події "
+"набагато більш детально."
 
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:36
 msgid "Create ticket types"
@@ -15015,7 +15067,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:64
 msgid "Customer and attendee data"
-msgstr ""
+msgstr "Дані про клієнтів і відвідувачів"
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:65
 msgid "Customer data (once per order)"
@@ -15168,6 +15220,11 @@ msgid ""
 "for the correct handling of taxes in your ticket shop. If in doubt, please "
 "contact a lawyer or tax consultant."
 msgstr ""
+"Ці налаштування призначені для досвідчених користувачів. Додаткову "
+"інформацію див. у <a href=\"%(docs)s\">документації</a>. Зауважте, що ми не "
+"несемо відповідальності за правильну обробку податків у вашій квитковій "
+"крамниці. Якщо ви сумніваєтеся, зверніться до юриста або податкового "
+"консультанта."
 
 #: pretix/control/templates/pretixcontrol/event/tax_edit.html:44
 msgid "Custom taxation rules"
@@ -15515,6 +15572,8 @@ msgstr ""
 msgid ""
 "This page is intended to help you use pretix in compliance with its license."
 msgstr ""
+"Ця сторінка призначена для того, щоб допомогти вам використовувати pretix "
+"відповідно до його ліцензії."
 
 #: pretix/control/templates/pretixcontrol/global_license.html:11
 msgid ""
@@ -15683,6 +15742,9 @@ msgid ""
 "your event. By default, pretix will only ask for attendee information and "
 "offer ticket downloads for these products."
 msgstr ""
+"Кожна покупка цього продукту представляє одну особу, якій дозволено брати "
+"участь у вашій події. За замовчуванням pretix запитуватиме лише інформацію "
+"про учасників і пропонує завантаження квитків для цих продуктів."
 
 #: pretix/control/templates/pretixcontrol/item/create.html:33
 #: pretix/control/templates/pretixcontrol/item/index.html:40
@@ -16005,6 +16067,9 @@ msgid ""
 "overlapping discounts, the first one in the order of the list below will "
 "apply."
 msgstr ""
+"На кожен товар у кошику може вплинути лише одна знижка. Якщо у вас "
+"накладаються знижки, буде застосовуватися перша знижка в порядку зі списку "
+"нижче."
 
 #: pretix/control/templates/pretixcontrol/items/discounts.html:36
 msgid "You haven't created any discounts yet."
@@ -16060,6 +16125,10 @@ msgid ""
 "name to inspect and change product details. You can also use the buttons on "
 "the right to change the order of products within a give category."
 msgstr ""
+"Нижче ви знайдете список усіх доступних продуктів. Ви можете натиснути назву "
+"продукту, щоб перевірити та змінити деталі продукту. Ви також можете "
+"використовувати кнопки праворуч, щоб змінити порядок продуктів у межах даної "
+"категорії."
 
 #: pretix/control/templates/pretixcontrol/items/index.html:16
 msgid "You haven't created any products yet."
@@ -18373,7 +18442,7 @@ msgstr "+ %(count)s запрошено"
 
 #: pretix/control/templates/pretixcontrol/organizers/webhook_edit.html:6
 msgid "Modify webhook"
-msgstr ""
+msgstr "Змінити вебхук"
 
 #: pretix/control/templates/pretixcontrol/organizers/webhook_edit.html:8
 msgid "Create a new webhook"
@@ -18711,6 +18780,10 @@ msgid ""
 "generated by plugins. If you want to embed a logo or other images, use a "
 "custom background instead."
 msgstr ""
+"Ви можете використовувати це для додавання завантажених користувачами "
+"зображень із запитань або зображень, створених за допомогою плагінів. Якщо "
+"ви хочете вставити логотип або інші зображення, замість цього використовуйте "
+"власний фон."
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:440
 msgid "Dynamic image"
@@ -18935,7 +19008,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:345
 msgid "End of time slots"
-msgstr ""
+msgstr "Кінець часових інтервалів"
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:351
 msgid "Length of slots"
@@ -19065,7 +19138,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/subevents/index.html:91
 msgid "Begin"
-msgstr ""
+msgstr "Початок"
 
 #: pretix/control/templates/pretixcontrol/subevents/index.html:169
 msgctxt "subevent"
@@ -19292,6 +19365,10 @@ msgid ""
 "log in. We recommend to store them in a safe place, e.g. printed out or in a "
 "password manager. Every token can be used at most once."
 msgstr ""
+"Якщо ви втратите доступ до своїх пристроїв, ви можете використовувати один "
+"із наведених нижче ключів для входу. Ми рекомендуємо зберігати їх у "
+"безпечному місці, наприклад, роздруковані або в менеджері паролів. Кожен "
+"маркер можна використати не більше одного разу."
 
 #: pretix/control/templates/pretixcontrol/user/2fa_main.html:106
 msgid "Unused tokens:"
@@ -19478,7 +19555,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/users/form.html:11
 msgid "Send password reset email"
-msgstr ""
+msgstr "Надіслати електронного листа для відновлення пароля"
 
 #: pretix/control/templates/pretixcontrol/users/form.html:16
 msgid "Impersonate user"
@@ -19604,7 +19681,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html:11
 msgid "This voucher already has been used. It is not recommended to modify it."
-msgstr ""
+msgstr "Цей ваучер вже використано. Не рекомендується його змінювати."
 
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html:15
 #, python-format
@@ -19617,6 +19694,8 @@ msgid ""
 "This voucher is currently used in %(number)s cart sessions and there might "
 "not be free to use until the cart sessions expire."
 msgstr ""
+"Цей ваучер наразі використовується в %(number)s сеансах кошика, і його, "
+"можливо, не можна буде використовувати, доки не закінчиться сеанс кошика."
 
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html:28
 msgid "Remove cart positions"
@@ -19734,7 +19813,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:21
 msgid "Send vouchers"
-msgstr ""
+msgstr "Надіслати ваучери"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:27
 msgid ""
@@ -19762,7 +19841,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:62
 msgid "Send as many vouchers as possible"
-msgstr ""
+msgstr "Надіслати якомога більше ваучерів"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:71
 msgid "Sales estimate"
@@ -19804,7 +19883,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:231
 msgid "Send a voucher"
-msgstr ""
+msgstr "Надіслати ваучер"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:238
 msgid "Move to the top of the list"
@@ -19812,7 +19891,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:242
 msgid "Move to the end of the list"
-msgstr ""
+msgstr "Перейти до кінця списку"
 
 #: pretix/control/templatetags/hierarkey_form.py:68
 msgid "Currently set on organizer level"
@@ -19885,6 +19964,9 @@ msgid ""
 "mail containing further instructions. Please note that we will send at most "
 "one email every 24 hours."
 msgstr ""
+"Якщо адреса зареєстрована для дійсного облікового запису, ми надіслали вам "
+"електронний лист із подальшими інструкціями. Зверніть увагу, що ми "
+"надсилатимемо щонайбільше один електронний лист кожні 24 години."
 
 #: pretix/control/views/auth.py:297
 msgid ""
@@ -19951,7 +20033,7 @@ msgstr ""
 #: pretix/plugins/stripe/views.py:646
 #: pretix/plugins/ticketoutputpdf/views.py:127
 msgid "We could not save your changes. See below for details."
-msgstr ""
+msgstr "Нам не вдалося зберегти ваші зміни. Подробиці - нижче."
 
 #: pretix/control/views/checkin.py:339 pretix/control/views/checkin.py:376
 msgid "The requested list does not exist."
@@ -19963,11 +20045,11 @@ msgstr ""
 
 #: pretix/control/views/dashboards.py:114
 msgid "Attendees (ordered)"
-msgstr ""
+msgstr "Відвідувачі (по порядку)"
 
 #: pretix/control/views/dashboards.py:124
 msgid "Attendees (paid)"
-msgstr ""
+msgstr "Учасники (оплачені)"
 
 #: pretix/control/views/dashboards.py:135
 #, python-brace-format
@@ -20143,7 +20225,7 @@ msgstr ""
 
 #: pretix/control/views/event.py:766
 msgid "Unknown e-mail renderer."
-msgstr ""
+msgstr "Невідомий засіб обробки електронної пошти."
 
 #: pretix/control/views/event.py:782 pretix/control/views/orders.py:462
 #: pretix/presale/views/order.py:1008 pretix/presale/views/order.py:1015
@@ -20223,6 +20305,8 @@ msgid ""
 "Your changes have been saved. You can now go on with looking at the details "
 "or take your event live to start selling!"
 msgstr ""
+"Ваші зміни збережено. Тепер ви можете продовжувати переглядати деталі або "
+"транслювати свою подію в прямому ефірі, щоб почати продавати!"
 
 #: pretix/control/views/event.py:1453
 msgid "Regular ticket"
@@ -20381,7 +20465,7 @@ msgstr ""
 
 #: pretix/control/views/item.py:944
 msgid "Waiting list (pending)"
-msgstr ""
+msgstr "Список очікування (очікується)"
 
 #: pretix/control/views/item.py:951
 msgid "Currently for sale"
@@ -20462,7 +20546,7 @@ msgstr ""
 
 #: pretix/control/views/mailsetup.py:207
 msgid "Sender address verification"
-msgstr ""
+msgstr "Перевірка адреси відправника"
 
 #: pretix/control/views/mailsetup.py:262
 #, python-format
@@ -20477,6 +20561,12 @@ msgid ""
 "all of your emails since they impose a maximum number of emails per time "
 "period."
 msgstr ""
+"Ми рекомендуємо не використовувати Google Mail для транзакційних електронних "
+"листів. Якщо ви спробуєте надіслати багато електронних листів за короткий "
+"проміжок часу, напр. під час надсилання інформації всім покупцям ваших "
+"квитків існує велика ймовірність, що Google не доставлятиме всі ваші "
+"електронні листи, оскільки вони встановлюють максимальну кількість "
+"електронних листів за певний період часу."
 
 #: pretix/control/views/main.py:217
 msgid "You do not have permission to clone this event."
@@ -20627,6 +20717,8 @@ msgid ""
 "The payment has been marked as complete, but we were unable to send a "
 "confirmation mail."
 msgstr ""
+"Платіж позначено як завершений, але нам не вдалося надіслати лист із "
+"підтвердженням."
 
 #: pretix/control/views/orders.py:825
 msgid "The payment has been marked as complete."
@@ -20634,13 +20726,13 @@ msgstr ""
 
 #: pretix/control/views/orders.py:827
 msgid "This payment can not be confirmed at the moment."
-msgstr ""
+msgstr "На даний момент цей платіж не може бути підтверджений."
 
 #: pretix/control/views/orders.py:1020
 msgid ""
 "You can not refund more than the amount of a payment that is not yet "
 "refunded."
-msgstr ""
+msgstr "Ви не можете повернути більше суми платежу, яка ще не повернута."
 
 #: pretix/control/views/orders.py:1025
 msgid ""
@@ -20668,6 +20760,8 @@ msgstr ""
 msgid ""
 "A new gift card was created. You can now send the user their gift card code."
 msgstr ""
+"Створено новий подарунковий сертифікат. Тепер ви можете надіслати "
+"користувачеві код його подарункового сертифікату."
 
 #: pretix/control/views/orders.py:1096
 msgid "Your gift card code"
@@ -20689,12 +20783,15 @@ msgstr ""
 #: pretix/control/views/orders.py:1109
 msgid "The refunds you selected do not match the selected total refund amount."
 msgstr ""
+"Вибрані вами відшкодування не відповідають вибраній загальній сумі "
+"відшкодування."
 
 #: pretix/control/views/orders.py:1263
 msgid ""
 "The order has been marked as paid, but we were unable to send a confirmation "
 "mail."
 msgstr ""
+"Замовлення позначено як оплачене, але нам не вдалося надіслати підтвердження."
 
 #: pretix/control/views/orders.py:1266
 msgid "The payment has been created successfully."
@@ -20782,7 +20879,7 @@ msgstr ""
 
 #: pretix/control/views/orders.py:1529
 msgid "This action is only allowed for pending orders."
-msgstr ""
+msgstr "Ця дія дозволена лише для замовлень, що очікують на розгляд."
 
 #: pretix/control/views/orders.py:1584
 msgid "This action is only allowed for canceled orders."
@@ -20813,7 +20910,7 @@ msgstr ""
 
 #: pretix/control/views/orders.py:2016 pretix/plugins/sendmail/views.py:125
 msgid "We could not send the email. See below for details."
-msgstr ""
+msgstr "Ми не змогли надіслати електронного листа. Подробиці дивіться нижче."
 
 #: pretix/control/views/orders.py:2032 pretix/control/views/orders.py:2097
 #: pretix/plugins/sendmail/views.py:215 pretix/plugins/sendmail/views.py:362
@@ -20828,13 +20925,15 @@ msgstr ""
 
 #: pretix/control/views/orders.py:2050 pretix/control/views/orders.py:2115
 msgid "Failed to send mail to the following user: {}"
-msgstr ""
+msgstr "Не вдалося надіслати пошту такому користувачеві: {}"
 
 #: pretix/control/views/orders.py:2151 pretix/presale/views/order.py:980
 msgid ""
 "This link is no longer valid. Please go back, refresh the page, and try "
 "again."
 msgstr ""
+"Це посилання більше не дійсне. Будь ласка, поверніться, оновіть сторінку та "
+"повторіть спробу."
 
 #: pretix/control/views/orders.py:2227
 msgid "There is no order with the given order code."
@@ -21274,7 +21373,7 @@ msgstr ""
 
 #: pretix/control/views/waitinglist.py:202
 msgid "The waiting list entry has been moved to the end of the list."
-msgstr ""
+msgstr "Запис у списку очікування переміщено в кінець списку."
 
 #: pretix/control/views/waitinglist.py:292
 msgid "On list since"
@@ -21327,6 +21426,9 @@ msgid ""
 "download the badges in the backend or automatically print them with our "
 "check-in apps."
 msgstr ""
+"Автоматично створюйте значки або теги з іменами для ваших учасників. Ви "
+"можете завантажити значки на сервері або автоматично роздрукувати їх за "
+"допомогою наших програм для реєстрації."
 
 #: pretix/plugins/badges/exporters.py:77
 msgid "One badge per page"
@@ -21350,16 +21452,16 @@ msgstr ""
 
 #: pretix/plugins/badges/exporters.py:230
 msgid "None of the selected products is configured to print badges."
-msgstr ""
+msgstr "Жоден із вибраних продуктів не налаштовано на друк значків."
 
 #: pretix/plugins/badges/exporters.py:236
 msgid "Attendee badges"
-msgstr ""
+msgstr "Бейджики учасників"
 
 #: pretix/plugins/badges/exporters.py:256 pretix/plugins/sendmail/models.py:195
 #: pretix/plugins/ticketoutputpdf/exporters.py:69
 msgid "Include pending orders"
-msgstr ""
+msgstr "Враховувати відкладені замовлення"
 
 #: pretix/plugins/badges/exporters.py:261
 msgid "Include add-on or bundled positions"
@@ -21367,7 +21469,7 @@ msgstr ""
 
 #: pretix/plugins/badges/exporters.py:266
 msgid "Rendering option"
-msgstr ""
+msgstr "Варіант візуалізації"
 
 #: pretix/plugins/badges/exporters.py:271
 msgid ""
@@ -21452,7 +21554,7 @@ msgstr ""
 #: pretix/plugins/badges/templates/pretixplugins/badges/edit.html:27
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/edit.html:27
 msgid "You can modify the design after you saved this page."
-msgstr ""
+msgstr "Ви можете змінити дизайн після збереження цієї сторінки."
 
 #: pretix/plugins/badges/templates/pretixplugins/badges/index.html:10
 msgid "You haven't created any badge layouts yet."
@@ -21882,6 +21984,8 @@ msgid ""
 "After you sent the bank transfer, you can close this window. We will send "
 "you an email as soon as we received your payment."
 msgstr ""
+"Після того як ви надіслали банківський переказ, ви можете закрити це вікно. "
+"Ми надішлемо вам електронний лист, як тільки отримаємо ваш платіж."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:47
 msgid "Open BezahlCode in your banking app to start the payment process."
@@ -22792,6 +22896,7 @@ msgstr ""
 #: pretix/plugins/sendmail/apps.py:38
 msgid "Send out emails to all your customers or specific groups of customers."
 msgstr ""
+"Розіслати електронні листи всім своїм клієнтам або певним групам клієнтів."
 
 #: pretix/plugins/sendmail/forms.py:75 pretix/plugins/sendmail/models.py:208
 msgid "Send email to"
@@ -22810,7 +22915,7 @@ msgstr ""
 
 #: pretix/plugins/sendmail/forms.py:99
 msgid "Only send to people who bought"
-msgstr "Надсилайте лише тим, хто купив"
+msgstr "Надсилати лише тим, хто купив"
 
 #: pretix/plugins/sendmail/forms.py:104
 msgid "Filter check-in status"
@@ -22818,7 +22923,7 @@ msgstr ""
 
 #: pretix/plugins/sendmail/forms.py:108
 msgid "Send to customers not checked in"
-msgstr ""
+msgstr "Надсилати клієнтам, які не зареєструвалися"
 
 #: pretix/plugins/sendmail/forms.py:111
 msgid "Only send to customers of"
@@ -22895,7 +23000,7 @@ msgstr ""
 
 #: pretix/plugins/sendmail/forms.py:294
 msgid "Relative, before event end"
-msgstr ""
+msgstr "Відноснo, до закінчення події"
 
 #: pretix/plugins/sendmail/forms.py:295
 msgid "Relative, after event start"
@@ -22903,7 +23008,7 @@ msgstr ""
 
 #: pretix/plugins/sendmail/forms.py:296
 msgid "Relative, after event end"
-msgstr ""
+msgstr "Відноснo, після закінчення події"
 
 #: pretix/plugins/sendmail/forms.py:309
 msgid "Please specify the send date"
@@ -22964,17 +23069,17 @@ msgstr "в {date} o {time}"
 #, python-format
 msgid "%(count)d day after event end at %(time)s"
 msgid_plural "%(count)d days after event end at %(time)s"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "%(count)d день після завершення події о %(time)s"
+msgstr[1] "%(count)d дні після завершення події о %(time)s"
+msgstr[2] "%(count)d днів після завершення події о %(time)s"
 
 #: pretix/plugins/sendmail/models.py:264
 #, python-format
 msgid "%(count)d day before event end at %(time)s"
 msgid_plural "%(count)d days before event end at %(time)s"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "%(count)d день перед завершенням події о %(time)s"
+msgstr[1] "%(count)d дні перед завершенням події о %(time)s"
+msgstr[2] "%(count)d днів перед завершенням події о %(time)s"
 
 #: pretix/plugins/sendmail/models.py:274
 #, python-format
@@ -23404,12 +23509,12 @@ msgstr ""
 #: pretix/plugins/stripe/payment.py:174
 msgctxt "stripe"
 msgid "Live"
-msgstr ""
+msgstr "Дійсний"
 
 #: pretix/plugins/stripe/payment.py:175
 msgctxt "stripe"
 msgid "Testing"
-msgstr ""
+msgstr "В режимі тестування"
 
 #: pretix/plugins/stripe/payment.py:177
 msgid ""
@@ -23423,7 +23528,7 @@ msgstr ""
 
 #: pretix/plugins/stripe/payment.py:201
 msgid "Secret key"
-msgstr ""
+msgstr "Секретний ключ"
 
 #: pretix/plugins/stripe/payment.py:210
 msgid ""
@@ -23433,7 +23538,7 @@ msgstr ""
 
 #: pretix/plugins/stripe/payment.py:218
 msgid "Credit card payments"
-msgstr ""
+msgstr "Оплата кредитними картками"
 
 #: pretix/plugins/stripe/payment.py:223 pretix/plugins/stripe/payment.py:956
 msgid "giropay"
@@ -23518,6 +23623,8 @@ msgid ""
 "Your payment is pending completion. We will inform you as soon as the "
 "payment completed."
 msgstr ""
+"Ваш платіж очікує на завершення. Ми повідомимо вам, як тільки оплата буде "
+"завершена."
 
 #: pretix/plugins/stripe/payment.py:506 pretix/plugins/stripe/payment.py:888
 #, python-format
@@ -23526,25 +23633,27 @@ msgstr ""
 
 #: pretix/plugins/stripe/payment.py:562
 msgid "No payment information found."
-msgstr ""
+msgstr "Інформацію про платіж не знайдено."
 
 #: pretix/plugins/stripe/payment.py:597
 msgid ""
 "We had trouble communicating with Stripe. Please try again and contact "
 "support if the problem persists."
 msgstr ""
+"У нас виникли проблеми зі зв’язком із Stripe. Спробуйте ще раз і зв’яжіться "
+"зі службою підтримки, якщо проблема не зникне."
 
 #: pretix/plugins/stripe/payment.py:601
 msgid "Stripe returned an error"
-msgstr ""
+msgstr "Stripe надіслав помилку"
 
 #: pretix/plugins/stripe/payment.py:703
 msgid "Credit card via Stripe"
-msgstr ""
+msgstr "Кредитна картка через Stripe"
 
 #: pretix/plugins/stripe/payment.py:704
 msgid "Credit card"
-msgstr ""
+msgstr "Кредитна картка"
 
 #: pretix/plugins/stripe/payment.py:731
 msgid "You may need to enable JavaScript for Stripe payments."
@@ -23552,7 +23661,7 @@ msgstr ""
 
 #: pretix/plugins/stripe/payment.py:882
 msgid "Your payment failed. Please try again."
-msgstr ""
+msgstr "Не вдалося здійснити платіж. Будь ласка, спробуйте ще раз."
 
 #: pretix/plugins/stripe/payment.py:955
 msgid "giropay via Stripe"
@@ -23561,7 +23670,7 @@ msgstr ""
 #: pretix/plugins/stripe/payment.py:987 pretix/plugins/stripe/payment.py:1154
 #: pretix/plugins/stripe/payment.py:1306
 msgid "unknown name"
-msgstr ""
+msgstr "невідоме ім'я"
 
 #: pretix/plugins/stripe/payment.py:1019 pretix/plugins/stripe/payment.py:1071
 #: pretix/plugins/stripe/payment.py:1186 pretix/plugins/stripe/payment.py:1338
@@ -23576,44 +23685,44 @@ msgstr ""
 
 #: pretix/plugins/stripe/payment.py:1079
 msgid "Alipay via Stripe"
-msgstr ""
+msgstr "Alipay через Stripe"
 
 #: pretix/plugins/stripe/payment.py:1122
 msgid "Bancontact via Stripe"
-msgstr ""
+msgstr "Bancontact через Stripe"
 
 #: pretix/plugins/stripe/payment.py:1194
 msgid "SOFORT via Stripe"
-msgstr ""
+msgstr "SOFORT через Stripe"
 
 #: pretix/plugins/stripe/payment.py:1211
 msgid "Country of your bank"
-msgstr ""
+msgstr "Країна Вашого банку"
 
 #: pretix/plugins/stripe/payment.py:1212
 msgid "Germany"
-msgstr ""
+msgstr "Німеччина"
 
 #: pretix/plugins/stripe/payment.py:1213
 msgid "Austria"
-msgstr ""
+msgstr "Австрія"
 
 #: pretix/plugins/stripe/payment.py:1214
 msgid "Belgium"
-msgstr ""
+msgstr "Белгія"
 
 #: pretix/plugins/stripe/payment.py:1215
 msgid "Netherlands"
-msgstr ""
+msgstr "Нідерланди"
 
 #: pretix/plugins/stripe/payment.py:1216
 msgid "Spain"
-msgstr ""
+msgstr "Іспанія"
 
 #: pretix/plugins/stripe/payment.py:1263
 #, python-brace-format
 msgid "Bank account {iban} at {bank}"
-msgstr ""
+msgstr "Банківський pахунок {iban} в {bank}"
 
 #: pretix/plugins/stripe/payment.py:1274
 msgid "EPS via Stripe"
@@ -23633,47 +23742,47 @@ msgstr ""
 
 #: pretix/plugins/stripe/signals.py:85
 msgid "Charge succeeded."
-msgstr ""
+msgstr "Оплата здійснена успішно."
 
 #: pretix/plugins/stripe/signals.py:86
 msgid "Charge refunded."
-msgstr ""
+msgstr "Плату повернуто."
 
 #: pretix/plugins/stripe/signals.py:87
 msgid "Charge updated."
-msgstr ""
+msgstr "Плату оновлено."
 
 #: pretix/plugins/stripe/signals.py:88
 msgid "Charge pending"
-msgstr ""
+msgstr "Очікується стягнення плати"
 
 #: pretix/plugins/stripe/signals.py:89
 msgid "Payment authorized."
-msgstr ""
+msgstr "Оплата авторизована."
 
 #: pretix/plugins/stripe/signals.py:90
 msgid "Payment authorization canceled."
-msgstr ""
+msgstr "Авторизація платежу скасована."
 
 #: pretix/plugins/stripe/signals.py:91
 msgid "Payment authorization failed."
-msgstr ""
+msgstr "Помилка авторизації платежу."
 
 #: pretix/plugins/stripe/signals.py:97
 msgid "Charge failed. Reason: {}"
-msgstr ""
+msgstr "Не вдалося зняти оплату. Причина: {}"
 
 #: pretix/plugins/stripe/signals.py:99
 msgid "Dispute created. Reason: {}"
-msgstr ""
+msgstr "Виникла суперечка. Причина: {}"
 
 #: pretix/plugins/stripe/signals.py:101
 msgid "Dispute updated. Reason: {}"
-msgstr ""
+msgstr "Суперечка оновлена.Причина: {}"
 
 #: pretix/plugins/stripe/signals.py:103
 msgid "Dispute closed. Status: {}"
-msgstr ""
+msgstr "Суперечка закрита. Статус: {}"
 
 #: pretix/plugins/stripe/signals.py:106
 msgid "Stripe reported an event: {}"
@@ -24077,7 +24186,7 @@ msgstr "Ви ввели неповну платіжну інформацію."
 #: pretix/presale/checkoutflow.py:1196
 msgctxt "checkoutflow"
 msgid "Review order"
-msgstr "Переглянути замовлення"
+msgstr "Перевірити замовлення"
 
 #: pretix/presale/checkoutflow.py:1281
 msgid "You need to check all checkboxes on the bottom of the page."
@@ -24199,7 +24308,7 @@ msgstr ""
 
 #: pretix/presale/forms/order.py:125
 msgid "No other variation of this product is currently available for you."
-msgstr ""
+msgstr "Наразі для вас немає інших варіантів цього продукту."
 
 #: pretix/presale/forms/order.py:130
 msgid "No other variations of this product exist."
@@ -24310,7 +24419,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/base.html:170
 #: pretix/presale/templates/pretixpresale/organizers/base.html:88
 msgid "Contact event organizer"
-msgstr ""
+msgstr "Зв'язатися з організатором події"
 
 #: pretix/presale/templates/pretixpresale/event/base.html:173
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:75
@@ -24327,7 +24436,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/base.html:179
 #: pretix/presale/templates/pretixpresale/organizers/base.html:97
 msgid "Imprint"
-msgstr ""
+msgstr "Імпресум"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_addons.html:10
 msgid ""
@@ -24337,7 +24446,7 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/checkout_addons.html:13
 msgid "We're now trying to book these add-ons for you!"
-msgstr ""
+msgstr "Зараз ми намагаємося забронювати ці доповнення для вас!"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_addons.html:20
 msgid "Add-ons:"
@@ -24352,7 +24461,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/organizers/customer_address_delete.html:21
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile_delete.html:21
 msgid "Go back"
-msgstr ""
+msgstr "Назад"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:7
 #, python-format
@@ -24363,7 +24472,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:48
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:49
 msgid "Checkout"
-msgstr ""
+msgstr "Оформити замовлення"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:15
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:21
@@ -24371,7 +24480,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:7
 #: pretix/presale/templates/pretixpresale/event/fragment_cart_box.html:11
 msgid "Your cart"
-msgstr ""
+msgstr "Ваш кошик"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:28
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:26
@@ -24382,49 +24491,49 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:44
 #: pretix/presale/templates/pretixpresale/event/index.html:74
 msgid "Add tickets for a different date"
-msgstr ""
+msgstr "Додати квитки на іншу дату"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:6
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:8
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:9
 msgid "Review order"
-msgstr ""
+msgstr "Перевірка замовлення"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:11
 msgid "Please review the details below and confirm your order."
-msgstr ""
+msgstr "Будь ласка, перегляньте деталі нижче та підтвердьте ваше замовлення."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:13
 msgid "Please hang tight, we're finalizing your order!"
-msgstr ""
+msgstr "Будь ласка, зачекайте, ми завершуємо ваше замовлення!"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:32
 msgid "Add or remove tickets"
-msgstr ""
+msgstr "Додати або видалити квитки"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:45
 msgid "Modify payment"
-msgstr ""
+msgstr "Змінити оплату"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:47
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:69
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:119
 msgid "Modify"
-msgstr ""
+msgstr "Змінити"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:67
 msgid "Modify invoice information"
-msgstr ""
+msgstr "Змінити інформацію рахунка-фактури"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:117
 msgid "Modify contact information"
-msgstr ""
+msgstr "Змінити контактну інформацію"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:123
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:23
 #: pretix/presale/templates/pretixpresale/event/order_modify.html:33
 msgid "Contact information"
-msgstr ""
+msgstr "Контактна інформація"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:164
 msgid "Confirmations"
@@ -24435,6 +24544,8 @@ msgid ""
 "Your order requires approval by the event organizer before it can be "
 "confirmed and forms a valid contract."
 msgstr ""
+"Ваше замовлення потребує підтвердження від організатора події, перш ніж воно "
+"може бути підтверджене та сформовано дійсний контракт."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:184
 msgid ""
@@ -24442,6 +24553,9 @@ msgid ""
 "rejected your order. If your order was approved, we will send you a link "
 "that you can use to pay."
 msgstr ""
+"Ми надішлемо вам електронного листа, як тільки організатор заходу схвалить "
+"або відхилить ваше замовлення. Якщо ваше замовлення було схвалено, ми "
+"надішлемо вам посилання, за яким ви зможете оплатити."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:200
 msgid "Place binding order"
@@ -24449,7 +24563,7 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:202
 msgid "Submit registration"
-msgstr ""
+msgstr "Підтвердити"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_customer.html:20
 msgid "Log in with a customer account"
@@ -24483,6 +24597,10 @@ msgid ""
 "password, so you can use the account for future orders at %(org)s. You can "
 "still go ahead with this purchase before you received the email."
 msgstr ""
+"Ми надішлемо вам електронного листа з посиланням для активації вашого "
+"облікового запису та встановлення пароля, щоб ви могли використовувати "
+"обліковий запис для майбутніх замовлень на %(org)s. Ви все ще можете "
+"здійснити цю покупку до того, як отримаєте електронний лист."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_customer.html:107
 msgid "Continue as a guest"
@@ -24494,6 +24612,10 @@ msgid ""
 "will be able to access the details and status of your order any time through "
 "the secret link we will send you via email once the order is complete."
 msgstr ""
+"Вам не обов'язково створювати обліковий запис. Якщо ви продовжите як гість, "
+"ви зможете будь-коли отримати доступ до деталей та статусу свого замовлення "
+"за секретним посиланням, яке ми надішлемо вам електронною поштою після "
+"завершення замовлення."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_membership.html:6
 msgid ""
@@ -24548,11 +24670,14 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:8
 msgid "Before we continue, we need you to answer some questions."
 msgstr ""
+"Перш ніж ми продовжимо, вам потрібно буде відповісти на декілька запитань."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:10
 msgid ""
 "You need to fill all fields that are marked with <span>*</span> to continue."
 msgstr ""
+"Щоб продовжити, необхідно заповнити всі поля, позначені символом "
+"<span>*</span>."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:54
 msgid "Auto-fill with address"
@@ -24644,7 +24769,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:62
 msgctxt "price"
 msgid "free"
-msgstr ""
+msgstr "безкоштовно"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:76
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:51
@@ -24702,7 +24827,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/voucher.html:322
 #, python-format
 msgid "Modify price for %(item)s"
-msgstr ""
+msgstr "Змінити ціну на %(item)s"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:155
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:267
@@ -24739,7 +24864,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/voucher.html:250
 #, python-format
 msgid "Add %(item)s, %(var)s to cart"
-msgstr ""
+msgstr "Додати %(item)s, %(var)s до кошика"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:187
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:198
@@ -24754,7 +24879,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/voucher.html:384
 #, python-format
 msgid "Add %(item)s to cart"
-msgstr ""
+msgstr "Додати %(item)s до кошика"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:305
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:327
@@ -24836,7 +24961,7 @@ msgstr[2] ""
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:137
 msgid "No attendee name provided"
-msgstr ""
+msgstr "Ім’я учасника не вказано"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:190
 msgid "The image you previously uploaded"
@@ -24891,7 +25016,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:282
 #, python-format
 msgid "Add one more %(item)s to your cart"
-msgstr ""
+msgstr "Додати ще один(y) %(item)s до кошика"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:284
 #, python-format
@@ -24899,14 +25024,15 @@ msgid ""
 "Add one more %(item)s to your cart. You currently have %(count)s in your "
 "cart."
 msgstr ""
+"Додати ще один(у) %(item)s до кошика. Зараз у вашому кошику є %(count)s."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:391
 #, python-format
 msgid "One product"
 msgid_plural "%(num)s products"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Один продукт"
+msgstr[1] "%(num)s продукти"
+msgstr[2] "%(num)s продуктів"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:405
 #, python-format
@@ -24917,12 +25043,15 @@ msgstr ""
 #, python-format
 msgid "The items in your cart are reserved for you for %(minutes)s minutes."
 msgstr ""
+"Товари у вашому кошику зарезервовані для вас протягом %(minutes)s хвилин."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:425
 msgid ""
 "The items in your cart are no longer reserved for you. You can still "
 "complete your order as long as they’re available."
 msgstr ""
+"Товари у вашому кошику більше не зарезервовані для вас. Ви все ще можете "
+"завершити своє замовлення, поки вони доступні."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:429
 msgid "Overview of your ordered products."
@@ -24936,11 +25065,11 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/index.html:280
 #: pretix/presale/templates/pretixpresale/event/voucher.html:407
 msgid "Proceed with checkout"
-msgstr ""
+msgstr "Перейти до оформлення замовлення"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart_box.html:43
 msgid "Empty cart"
-msgstr ""
+msgstr "Очистити кошик"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart_box.html:48
 #: pretix/presale/templates/pretixpresale/event/index.html:297
@@ -24960,7 +25089,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/fragment_checkoutflow.html:2
 msgctxt "checkoutflow"
 msgid "Checkout steps"
-msgstr ""
+msgstr "Етапи оформлення замовлення"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_checkoutflow.html:12
 msgid "Completed:"
@@ -24973,7 +25102,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/fragment_checkoutflow.html:26
 msgctxt "checkoutflow"
 msgid "Order confirmed"
-msgstr ""
+msgstr "Замовлення підтверджено"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:14
 msgid "Please check your email account, we've sent you your tickets."
@@ -25020,16 +25149,16 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/fragment_order_status.html:7
 msgctxt "order state"
 msgid "Confirmation pending"
-msgstr ""
+msgstr "Очікується підтвердження"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_order_status.html:11
 msgid "Payment pending"
-msgstr ""
+msgstr "Очікується оплата"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_order_status.html:20
 msgctxt "order state"
 msgid "Confirmed"
-msgstr ""
+msgstr "Підтверджено"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:9
 #: pretix/presale/templates/pretixpresale/event/voucher.html:101
@@ -25051,7 +25180,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/voucher.html:328
 msgctxt "price"
 msgid "FREE"
-msgstr ""
+msgstr "БЕЗКОШТОВНО"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:175
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:304
@@ -25067,12 +25196,12 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/fragment_quota_left.html:4
 #, python-format
 msgid "%(num)s currently available"
-msgstr ""
+msgstr "Наразі доступно %(num)s"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_calendar.html:4
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_calendar_week.html:4
 msgid "calendar navigation"
-msgstr ""
+msgstr "Навігація по календарю"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_calendar.html:8
 #, python-format
@@ -25124,7 +25253,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/organizers/index.html:97
 #: pretix/presale/views/widget.py:359 pretix/presale/views/widget.py:382
 msgid "Book now"
-msgstr ""
+msgstr "Забронювати зараз"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_list.html:33
 #: pretix/presale/templates/pretixpresale/fragment_calendar.html:79
@@ -25159,14 +25288,17 @@ msgid ""
 "                Calendar for %(datetime)s\n"
 "            "
 msgstr ""
+"\n"
+"                Календар для %(datetime)s\n"
+"            "
 
 #: pretix/presale/templates/pretixpresale/event/index.html:44
 msgid "Your cart, general information, add products to your cart"
-msgstr ""
+msgstr "Ваш кошик, загальна інформація, додати продукти до кошика"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:44
 msgid "General information, add products to your cart"
-msgstr ""
+msgstr "Загальна інформація, додати продукти до кошика"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:64
 msgid "Please select a date to redeem your voucher."
@@ -25174,11 +25306,11 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/index.html:78
 msgid "View other date"
-msgstr ""
+msgstr "Переглянути іншу дату"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:83
 msgid "Choose date to book a ticket"
-msgstr ""
+msgstr "Оберіть дату для бронювання квитка"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:88
 msgctxt "subevent"
@@ -25194,7 +25326,7 @@ msgstr ""
 #: pretix/presale/views/widget.py:665
 #, python-format
 msgid "The presale for this event will start on %(date)s at %(time)s."
-msgstr ""
+msgstr "Передпродаж для цієї події розпочнеться %(date)s o %(time)s."
 
 #: pretix/presale/templates/pretixpresale/event/index.html:153
 #: pretix/presale/views/waiting.py:102 pretix/presale/views/widget.py:670
@@ -25215,13 +25347,13 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/voucher.html:33
 #, python-format
 msgid "Begin: %(time)s"
-msgstr ""
+msgstr "Початок:%(time)s"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:187
 #: pretix/presale/templates/pretixpresale/event/voucher.html:40
 #, python-format
 msgid "End: %(time)s"
-msgstr ""
+msgstr "Кінець:%(time)s"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:199
 #: pretix/presale/templates/pretixpresale/event/voucher.html:50
@@ -25238,7 +25370,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/index.html:220
 #: pretix/presale/templates/pretixpresale/event/voucher.html:68
 msgid "Add to Calendar"
-msgstr ""
+msgstr "Додати до календаря"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:233
 #: pretix/presale/templates/pretixpresale/event/seatingplan.html:23
@@ -25252,6 +25384,9 @@ msgid ""
 "you want, you can add yourself to the waiting list. We will then notify if "
 "seats are available again."
 msgstr ""
+"Деякі з категорій у наведеному вище плані місць наразі розпродані. Якщо "
+"хочете, можете додати себе до списку очікування. Після цього ми повідомимо, "
+"якщо місця знову будуть вільні."
 
 #: pretix/presale/templates/pretixpresale/event/index.html:262
 msgid "Join waiting list"
@@ -25261,16 +25396,16 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/voucher.html:405
 msgctxt "free_tickets"
 msgid "Register"
-msgstr ""
+msgstr "Зареєструватись"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:283
 #: pretix/presale/templates/pretixpresale/event/voucher.html:410
 msgid "Add to cart"
-msgstr ""
+msgstr "Додати до кошика"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:304
 msgid "If you already ordered a ticket"
-msgstr ""
+msgstr "Якщо Ви вже замовили квиток"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:308
 msgid ""
@@ -25279,15 +25414,19 @@ msgid ""
 "cannot find the link, click on the following button to request the link to "
 "your order to be sent to you again."
 msgstr ""
+"Якщо ви хочете переглянути або змінити статус і деталі свого замовлення, "
+"натисніть посилання в одному з листів, які ми надіслали вам під час "
+"оформлення замовлення. Якщо ви не можете знайти посилання, натисніть "
+"наведену нижче кнопку, щоб знову надіслати вам посилання на ваше замовлення."
 
 #: pretix/presale/templates/pretixpresale/event/index.html:317
 msgid "Resend order link"
-msgstr ""
+msgstr "Надіслати посилання на замовлення ще раз"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:12
 #: pretix/presale/templates/pretixpresale/event/order.html:29
 msgid "Thank you!"
-msgstr ""
+msgstr "Дякую!"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:14
 #: pretix/presale/templates/pretixpresale/event/order.html:32
@@ -25297,7 +25436,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order.html:16
 #: pretix/presale/templates/pretixpresale/event/order.html:48
 msgid "Your order has been processed successfully! See below for details."
-msgstr ""
+msgstr "Ваше замовлення успішно оброблено! Подробиці - нижче."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:18
 #: pretix/presale/templates/pretixpresale/event/order.html:50
@@ -25309,6 +25448,8 @@ msgid ""
 "Please note that we still await approval by the event organizer before your "
 "order is confirmed."
 msgstr ""
+"Будь ласка, зверніть увагу, що ми все ще очікуємо підтвердження від "
+"організатора події, перш ніж ваше замовлення буде підтверджено."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:39
 msgid ""
@@ -25326,6 +25467,10 @@ msgid ""
 "your order later. We also sent you an email containing the link to the "
 "address you specified."
 msgstr ""
+"Будь ласка, зробіть закладку або збережіть посилання саме на цю сторінку, "
+"якщо ви хочете отримати доступ до свого замовлення пізніше. Ми також "
+"надіслали вам електронний лист із посиланням на вказану вами електронну "
+"адресу."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:58
 msgid ""
@@ -25336,12 +25481,12 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order.html:72
 #: pretix/presale/templates/pretixpresale/event/position.html:18
 msgid "View in backend"
-msgstr ""
+msgstr "Переглянути у серверній частині"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:89
 #, python-format
 msgid "A payment of %(total)s is still pending for this order."
-msgstr ""
+msgstr "Платіж у розмірі %(total)s ще очікується для цього замовлення."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:94
 #, python-format
@@ -25357,11 +25502,15 @@ msgid ""
 "We've received your request to cancel this order. Please stay patient while "
 "the event organizer decides on the cancellation."
 msgstr ""
+"Ми отримали ваш запит на скасування цього замовлення. Будь ласка, наберіться "
+"терпіння, поки організатор заходу ухвалить рішення про скасування."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:144
 #, python-format
 msgid "A refund of %(amount)s will be sent out to you soon, please be patient."
 msgstr ""
+"Незабаром вам буде надіслано відшкодування в розмірі %(amount)s, будь ласка, "
+"наберіться терпіння."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:151
 msgid "Print"
@@ -25373,6 +25522,9 @@ msgid ""
 "We've issued your refund of %(amount)s as a gift card. On your next purchase "
 "with us, you can use the following gift card code during payment:"
 msgstr ""
+"Ми повернули вам %(amount)s як подарунковий сертифікат. Під час наступної "
+"покупки у нас ви можете використовувати такий код подарункового сертифікату "
+"під час оплати:"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:163
 #, python-format
@@ -25390,6 +25542,8 @@ msgid ""
 "A refund of %(amount)s has been sent to you. Depending on the payment "
 "method, please allow for up to 14 days until it shows up on your statement."
 msgstr ""
+"Вам надіслано відшкодування в розмірі %(amount)s. Залежно від способу оплати "
+"зачекайте до 14 днів, поки воно не з’явиться у вашій виписці."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:198
 msgid "Change ordered items"
@@ -25398,7 +25552,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order.html:200
 #: pretix/presale/templates/pretixpresale/event/order.html:294
 msgid "Change details"
-msgstr ""
+msgstr "Змінити деталі"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:266
 msgid ""
@@ -25421,12 +25575,12 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/order.html:340
 msgid "Internal Reference"
-msgstr ""
+msgstr "Внутрішнє посилання"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:353
 msgctxt "action"
 msgid "Change or cancel your order"
-msgstr ""
+msgstr "Змінити або скасувати замовлення"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:360
 msgid ""
@@ -25452,7 +25606,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order.html:431
 #: pretix/presale/templates/pretixpresale/event/order.html:446
 msgid "This will invalidate all tickets in this order."
-msgstr ""
+msgstr "Це призведе до скасування всіх квитків у цьому замовленні."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:392
 #, python-format
@@ -25461,6 +25615,9 @@ msgid ""
 "cancellation fee of <strong>%(fee)s</strong> will be kept and you will "
 "receive a refund of the remainder."
 msgstr ""
+"Ви можете подати запит на скасування цього замовлення. Якщо ваш запит буде "
+"схвалено, комісія за скасування в розмірі <strong>%(fee)s</strong> буде "
+"збережена, а ви отримаєте відшкодування залишку."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:398
 #, python-format
@@ -25494,6 +25651,8 @@ msgid ""
 "You can request to cancel this order. If your request is approved, you get a "
 "full refund."
 msgstr ""
+"Ви можете подати запит на скасування цього замовлення. Якщо ваш запит буде "
+"схвалено, ви отримаєте повне відшкодування."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:420
 msgid "You can cancel this order and receive a full refund."
@@ -25501,7 +25660,7 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/order.html:443
 msgid "You can cancel this order using the following button."
-msgstr ""
+msgstr "Ви можете скасувати це замовлення, натиснувши цю кнопку."
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:11
 #, python-format
@@ -25519,12 +25678,17 @@ msgid ""
 "organizer will then decide on your request. If they approve, your order will "
 "be canceled and all tickets will be invalidated."
 msgstr ""
+"Ви можете подати запит на скасування замовлення на цій сторінці. Після цього "
+"організатори заходу приймуть рішення щодо вашого запиту. Якщо вони схвалять, "
+"ваше замовлення буде скасовано, а всі квитки будуть визнані недійсними."
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:33
 msgid ""
 "If you cancel this order, all tickets will be invalidated and you can no "
 "longer use them. You cannot revert this action."
 msgstr ""
+"Якщо ви скасуєте це замовлення, усі квитки будуть визнані недійсними, і ви "
+"більше не зможете ними користуватися. Відмінити цю дію не можна."
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:43
 #, python-format
@@ -25532,6 +25696,8 @@ msgid ""
 "If you want, you can request a refund for the full amount minus a "
 "cancellation fee of %(fee)s."
 msgstr ""
+"Якщо хочете, ви можете подати запит на повернення повної суми з вирахуванням "
+"комісії за скасування в розмірі %(fee)s."
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:48
 msgid "If you want, you can request a full refund."
@@ -25543,7 +25709,7 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:82
 msgid "Refund amount:"
-msgstr ""
+msgstr "Сума відшкодування:"
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:89
 #: pretix/presale/templates/pretixpresale/event/order_change_confirm.html:166
@@ -25574,6 +25740,9 @@ msgid ""
 "method. Depending on the payment method, please allow for up to two weeks "
 "before this appears on your statement."
 msgstr ""
+"Сума відшкодування буде автоматично повернута на ваш початковий спосіб "
+"оплати. Залежно від способу оплати зачекайте до двох тижнів, перш ніж це з’"
+"явиться у вашій виписці."
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:134
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:165
@@ -25589,6 +25758,10 @@ msgid ""
 "to initiate the transfer manually. Please be patient as this might take a "
 "bit longer."
 msgstr ""
+"Через спосіб оплати, який ви використали, суму відшкодування <strong>не "
+"можна повернути вам автоматично</strong>. Натомість організатору події "
+"потрібно буде ініціювати повернення коштів вручну. Будь ласка, наберіться "
+"терпіння, оскільки це може зайняти трохи більше часу."
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:198
 msgid "Yes, request cancellation"
@@ -25689,18 +25862,21 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/order_modify.html:5
 msgid "Modify order"
-msgstr ""
+msgstr "Змінити замовлення"
 
 #: pretix/presale/templates/pretixpresale/event/order_modify.html:8
 #, python-format
 msgid "Modify order: %(code)s"
-msgstr ""
+msgstr "Змінити замовлення: %(code)s"
 
 #: pretix/presale/templates/pretixpresale/event/order_modify.html:18
 msgid ""
 "Modifying your invoice address will not automatically generate a new "
 "invoice. Please contact us if you need a new invoice."
 msgstr ""
+"Зміна адреси рахунка-фактури не призведе до автоматичного створення нового "
+"рахунка-фактури. Будь ласка, зв’яжіться з нами, якщо вам потрібен новий "
+"рахунок."
 
 #: pretix/presale/templates/pretixpresale/event/order_modify.html:87
 msgid "Save changes"
@@ -25760,7 +25936,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/resend_link.html:4
 #: pretix/presale/templates/pretixpresale/event/resend_link.html:11
 msgid "Resend order links"
-msgstr ""
+msgstr "Надіслати посилання на замовлення ще раз"
 
 #: pretix/presale/templates/pretixpresale/event/resend_link.html:15
 msgid ""
@@ -25768,10 +25944,14 @@ msgid ""
 "you used for your order. We will send you an email with links to all orders "
 "you placed using this email address."
 msgstr ""
+"Якщо ви втратили посилання на своє замовлення, введіть адресу електронної "
+"пошти, яку ви використовували для замовлення. Ми надішлемо вам електронний "
+"лист із посиланнями на всі замовлення, які ви зробили за допомогою цієї "
+"електронної адреси."
 
 #: pretix/presale/templates/pretixpresale/event/resend_link.html:30
 msgid "Send links"
-msgstr ""
+msgstr "Надіслати посилання"
 
 #: pretix/presale/templates/pretixpresale/event/voucher.html:9
 #: pretix/presale/templates/pretixpresale/event/voucher.html:16
@@ -25788,6 +25968,8 @@ msgid ""
 "You entered a voucher code that allows you to buy one of the following "
 "products at the specified price:"
 msgstr ""
+"Ви ввели код ваучера, який дозволяє придбати один із наступних товарів за "
+"вказаною ціною:"
 
 #: pretix/presale/templates/pretixpresale/event/voucher.html:136
 #, python-format
@@ -25836,7 +26018,7 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/fragment_calendar.html:5
 msgid "Calendar"
-msgstr ""
+msgstr "Календар"
 
 #: pretix/presale/templates/pretixpresale/fragment_calendar.html:60
 #: pretix/presale/templates/pretixpresale/fragment_week_calendar.html:45
@@ -25868,7 +26050,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/fragment_day_calendar.html:24
 msgctxt "day calendar"
 msgid "Single events"
-msgstr ""
+msgstr "Окремі події"
 
 #: pretix/presale/templates/pretixpresale/fragment_day_calendar.html:77
 msgctxt "timerange"
@@ -26045,7 +26227,7 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:56
 msgid "Attendee profiles"
-msgstr ""
+msgstr "Профілі учасників"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:170
 msgid "No memberships are stored in your account."
@@ -26061,7 +26243,7 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:235
 msgid "No attendee profiles are stored in your account."
-msgstr ""
+msgstr "У вашому обліковому записі не зберігаються профілі учасників."
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile_delete.html:4
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile_delete.html:7
@@ -26137,7 +26319,7 @@ msgstr ""
 
 #: pretix/presale/utils.py:317
 msgid "The selected ticket shop is currently not available."
-msgstr ""
+msgstr "Обрана квиткова крамниця наразі не доступна."
 
 #: pretix/presale/utils.py:323
 msgid "This feature is not enabled."
@@ -26166,11 +26348,11 @@ msgstr ""
 
 #: pretix/presale/views/cart.py:433 pretix/presale/views/cart.py:458
 msgid "Your cart is now empty."
-msgstr ""
+msgstr "Зараз ваш кошик порожній."
 
 #: pretix/presale/views/cart.py:473
 msgid "The products have been successfully added to your cart."
-msgstr ""
+msgstr "Продукти успішно додані до вашого кошика."
 
 #: pretix/presale/views/cart.py:495 pretix/presale/views/event.py:439
 #: pretix/presale/views/widget.py:326
@@ -26184,7 +26366,7 @@ msgstr ""
 
 #: pretix/presale/views/checkout.py:55
 msgid "Your cart is empty"
-msgstr ""
+msgstr "Ваш кошик порожній"
 
 #: pretix/presale/views/checkout.py:59
 msgid "The presale for this event is over or has not yet started."
@@ -26243,7 +26425,7 @@ msgstr ""
 #: pretix/presale/views/event.py:744 pretix/presale/views/event.py:752
 #: pretix/presale/views/event.py:755
 msgid "Please go back and try again."
-msgstr ""
+msgstr "Будь ласка, поверніться назад та спробуйте ще раз."
 
 #: pretix/presale/views/order.py:385 pretix/presale/views/order.py:450
 #: pretix/presale/views/order.py:518
@@ -26265,11 +26447,11 @@ msgstr ""
 
 #: pretix/presale/views/order.py:572
 msgid "A payment is currently pending for this order."
-msgstr ""
+msgstr "Наразі очікується оплатa цього замовлення."
 
 #: pretix/presale/views/order.py:841
 msgid "You cannot modify this order"
-msgstr ""
+msgstr "Ви не можете змінити це замовлення"
 
 #: pretix/presale/views/order.py:928 pretix/presale/views/order.py:933
 #: pretix/presale/views/order.py:938
@@ -26345,6 +26527,8 @@ msgstr ""
 #: pretix/presale/views/user.py:91
 msgid "We have trouble sending emails right now, please check back later."
 msgstr ""
+"Зараз у нас виникли проблеми з надсиланням електронних листів, перевірте "
+"пізніше."
 
 #: pretix/presale/views/user.py:94
 msgid ""
@@ -26361,6 +26545,8 @@ msgid ""
 "You cannot add yourself to the waiting list as this product is currently "
 "available."
 msgstr ""
+"Ви не можете додати себе до списку очікування, оскільки цей продукт зараз "
+"доступний."
 
 #: pretix/presale/views/waiting.py:128
 msgid ""
@@ -26382,7 +26568,7 @@ msgstr ""
 msgid ""
 "Thank you very much! We will assign your spot on the waiting list to someone "
 "else."
-msgstr ""
+msgstr "Дуже дякую! Ми передамо ваше місце у списку очікування комусь іншому."
 
 #: pretix/presale/views/widget.py:321
 msgid "This ticket shop is currently disabled."
