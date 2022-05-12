@@ -1246,8 +1246,8 @@ class Question(LoggedModel):
                     'not input one, we will generate one automatically.'),
         validators=[
             RegexValidator(
-                regex=r"^[a-zA-Z0-9]([a-zA-Z0-9.\-_]*[a-zA-Z0-9])?$",
-                message=_("The identifier may only contain letters, numbers, dots and dashes. It must start and end with a letter or number."),
+                regex=r"^[a-zA-Z0-9.\-_]+$",
+                message=_("The identifier may only contain letters, numbers, dots, dashes and underscores."),
             ),
         ],
     )
@@ -1467,7 +1467,17 @@ class Question(LoggedModel):
 
 class QuestionOption(models.Model):
     question = models.ForeignKey('Question', related_name='options', on_delete=models.CASCADE)
-    identifier = models.CharField(max_length=190)
+    identifier = models.CharField(
+        max_length=190,
+        help_text=_('You can enter any value here to make it easier to match the data with other sources. If you do '
+                    'not input one, we will generate one automatically.'),
+        validators=[
+            RegexValidator(
+                regex=r"^[a-zA-Z0-9.\-_]+$",
+                message=_("The identifier may only contain letters, numbers, dots, dashes and underscores."),
+            ),
+        ],
+    )
     answer = I18nCharField(verbose_name=_('Answer'))
     position = models.IntegerField(default=0)
 

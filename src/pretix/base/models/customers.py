@@ -24,6 +24,7 @@ from django.conf import settings
 from django.contrib.auth.hashers import (
     check_password, is_password_usable, make_password,
 )
+from django.core.validators import RegexValidator
 from django.db import models
 from django.db.models import F, Q
 from django.utils.crypto import get_random_string, salted_hmac
@@ -44,7 +45,19 @@ class Customer(LoggedModel):
     """
     id = models.BigAutoField(primary_key=True)
     organizer = models.ForeignKey(Organizer, related_name='customers', on_delete=models.CASCADE)
-    identifier = models.CharField(max_length=190, db_index=True, unique=True)
+    identifier = models.CharField(
+        max_length=190,
+        db_index=True,
+        unique=True,
+        help_text=_('You can enter any value here to make it easier to match the data with other sources. If you do '
+                    'not input one, we will generate one automatically.'),
+        validators=[
+            RegexValidator(
+                regex=r"^[a-zA-Z0-9.\-_]+$",
+                message=_("The identifier may only contain letters, numbers, dots, dashes and underscores."),
+            ),
+        ],
+    )
     email = models.EmailField(db_index=True, null=True, blank=False, verbose_name=_('E-mail'), max_length=190)
     phone = PhoneNumberField(null=True, blank=True, verbose_name=_('Phone number'))
     password = models.CharField(verbose_name=_('Password'), max_length=128)
