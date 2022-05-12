@@ -1243,7 +1243,13 @@ class Question(LoggedModel):
         max_length=190,
         verbose_name=_("Internal identifier"),
         help_text=_('You can enter any value here to make it easier to match the data with other sources. If you do '
-                    'not input one, we will generate one automatically.')
+                    'not input one, we will generate one automatically.'),
+        validators=[
+            RegexValidator(
+                regex=r"^[a-zA-Z0-9.\-_]+$",
+                message=_("The identifier may only contain letters, numbers, dots, dashes, and underscores."),
+            ),
+        ],
     )
     help_text = I18nTextField(
         verbose_name=_("Help text"),
@@ -1461,7 +1467,17 @@ class Question(LoggedModel):
 
 class QuestionOption(models.Model):
     question = models.ForeignKey('Question', related_name='options', on_delete=models.CASCADE)
-    identifier = models.CharField(max_length=190)
+    identifier = models.CharField(
+        max_length=190,
+        help_text=_('You can enter any value here to make it easier to match the data with other sources. If you do '
+                    'not input one, we will generate one automatically.'),
+        validators=[
+            RegexValidator(
+                regex=r"^[a-zA-Z0-9.\-_]+$",
+                message=_("The identifier may only contain letters, numbers, dots, dashes, and underscores."),
+            ),
+        ],
+    )
     answer = I18nCharField(verbose_name=_('Answer'))
     position = models.IntegerField(default=0)
 
