@@ -1246,7 +1246,7 @@ class Question(LoggedModel):
                     'not input one, we will generate one automatically.'),
         validators=[
             RegexValidator(
-                regex="^[a-zA-Z0-9]([a-zA-Z0-9.\-_]*[a-zA-Z0-9])?$",
+                regex=r"^[a-zA-Z0-9]([a-zA-Z0-9.\-_]*[a-zA-Z0-9])?$",
                 message=_("The identifier may only contain letters, numbers, dots and dashes. It must start and end with a letter or number."),
             ),
         ],
