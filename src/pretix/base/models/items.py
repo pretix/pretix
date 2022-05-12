@@ -1243,7 +1243,13 @@ class Question(LoggedModel):
         max_length=190,
         verbose_name=_("Internal identifier"),
         help_text=_('You can enter any value here to make it easier to match the data with other sources. If you do '
-                    'not input one, we will generate one automatically.')
+                    'not input one, we will generate one automatically.'),
+        validators=[
+            RegexValidator(
+                regex="^[a-zA-Z0-9]([a-zA-Z0-9.\-_]*[a-zA-Z0-9])?$",
+                message=_("The identifier may only contain letters, numbers, dots and dashes. It must start and end with a letter or number."),
+            ),
+        ],
     )
     help_text = I18nTextField(
         verbose_name=_("Help text"),
