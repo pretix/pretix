@@ -54,7 +54,7 @@ class Customer(LoggedModel):
         validators=[
             RegexValidator(
                 regex=r"^[a-zA-Z0-9]([a-zA-Z0-9.\-_]*[a-zA-Z0-9])?$",
-                message=_("The identifier may only contain letters, numbers, dots, dashes and underscores. It must start and end with a letter or number."),
+                message=_("The identifier may only contain letters, numbers, dots, dashes, and underscores. It must start and end with a letter or number."),
             ),
         ],
     )

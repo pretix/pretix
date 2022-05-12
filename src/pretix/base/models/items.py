@@ -1247,7 +1247,7 @@ class Question(LoggedModel):
         validators=[
             RegexValidator(
                 regex=r"^[a-zA-Z0-9.\-_]+$",
-                message=_("The identifier may only contain letters, numbers, dots, dashes and underscores."),
+                message=_("The identifier may only contain letters, numbers, dots, dashes, and underscores."),
             ),
         ],
     )
@@ -1474,7 +1474,7 @@ class QuestionOption(models.Model):
         validators=[
             RegexValidator(
                 regex=r"^[a-zA-Z0-9.\-_]+$",
-                message=_("The identifier may only contain letters, numbers, dots, dashes and underscores."),
+                message=_("The identifier may only contain letters, numbers, dots, dashes, and underscores."),
             ),
         ],
     )
