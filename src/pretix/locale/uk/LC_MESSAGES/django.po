@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-28 16:44+0000\n"
-"PO-Revision-Date: 2022-05-12 06:59+0000\n"
+"PO-Revision-Date: 2022-05-12 23:00+0000\n"
 "Last-Translator: Iryna N <in380@nyu.edu>\n"
 "Language-Team: Ukrainian <https://translate.pretix.eu/projects/pretix/pretix/"
 "uk/>\n"
@@ -16581,6 +16581,9 @@ msgid ""
 "%(fee)s for this order, but for a cancellation performed by you, you need to "
 "set the cancellation fee here:"
 msgstr ""
+"Налаштована комісія за скасування через самообслуговування становитиме %(fee)"
+"s для цього замовлення, але для скасування, здійсненого вами, вам потрібно "
+"встановити комісію за скасування тут:"
 
 #: pretix/control/templates/pretixcontrol/order/cancel.html:51
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:200
@@ -17477,6 +17480,11 @@ msgid ""
 "orders can be created. Make sure that you check afterwards for any overpaid "
 "orders or pending refunds that you need to take care of manually."
 msgstr ""
+"Ви можете використовувати цю сторінку, щоб відразу скасувати та повернути "
+"всі замовлення, якщо вам потрібно скасувати подію. Це також вимкне всі "
+"продукти, тому не можна створювати нові замовлення. Обов’язково перевірте, "
+"чи немає надміру сплачених замовлень або відшкодувань, які очікують на "
+"відшкодування, про які вам потрібно подбати вручну."
 
 #: pretix/control/templates/pretixcontrol/orders/cancel.html:15
 msgid ""
@@ -20663,7 +20671,7 @@ msgstr ""
 
 #: pretix/control/views/orders.py:617
 msgid "The order has been denied and is therefore now canceled."
-msgstr ""
+msgstr "Замовлення було відхилено, тому тепер скасовано."
 
 #: pretix/control/views/orders.py:654
 msgid "This payment has been canceled."
@@ -20711,6 +20719,11 @@ msgid ""
 "\n"
 "Your {event} team"
 msgstr ""
+"Добрий день,\n"
+"\n"
+"На жаль, ми не змогли задовольнити ваш запит і скасувати ваше замовлення.\n"
+"\n"
+"Ваша команда {event}"
 
 #: pretix/control/views/orders.py:822
 msgid ""
@@ -20802,6 +20815,8 @@ msgid ""
 "The order has been canceled. You can now select how you want to transfer the "
 "money back to the user."
 msgstr ""
+"Замовлення скасовано. Тепер ви можете вибрати, як ви хочете переказати гроші "
+"назад користувачеві."
 
 #: pretix/control/views/orders.py:1346 pretix/control/views/orders.py:1350
 msgid "No VAT ID specified."
@@ -20883,7 +20898,7 @@ msgstr "Ця дія дозволена лише для замовлень, що 
 
 #: pretix/control/views/orders.py:1584
 msgid "This action is only allowed for canceled orders."
-msgstr ""
+msgstr "Ця дія дозволена лише для скасованих замовлень."
 
 #: pretix/control/views/orders.py:1789 pretix/presale/views/order.py:1449
 msgid "An error occurred. Please see the details below."
@@ -20949,7 +20964,7 @@ msgstr ""
 
 #: pretix/control/views/orders.py:2394
 msgid "All orders have been canceled."
-msgstr ""
+msgstr "Усі замовлення скасовано."
 
 #: pretix/control/views/orders.py:2396
 #, python-brace-format
@@ -20957,6 +20972,8 @@ msgid ""
 "The orders have been canceled. An error occurred with {count} orders, please "
 "check all uncanceled orders."
 msgstr ""
+"Замовлення скасовано. Сталася помилка з {count} замовленнями. Перевірте всі "
+"нескасовані замовлення."
 
 #: pretix/control/views/orders.py:2417
 msgid "Your input was not valid."
@@ -21794,7 +21811,7 @@ msgstr ""
 
 #: pretix/plugins/banktransfer/tasks.py:146
 msgid "The order has already been canceled."
-msgstr ""
+msgstr "Замовлення вже скасовано."
 
 #: pretix/plugins/banktransfer/tasks.py:156
 msgid "Automatic split to multiple orders not possible."
@@ -25596,10 +25613,12 @@ msgstr ""
 msgid ""
 "You can request to cancel this order, but you will not receive a refund."
 msgstr ""
+"Ви можете подати запит на скасування цього замовлення, але ви не отримаєте "
+"відшкодування."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:383
 msgid "You can cancel this order, but you will not receive a refund."
-msgstr ""
+msgstr "Ви можете скасувати це замовлення, але ви не отримаєте відшкодування."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:387
 #: pretix/presale/templates/pretixpresale/event/order.html:410
@@ -25625,6 +25644,9 @@ msgid ""
 "You can cancel this order. In this case, a cancellation fee of <strong>"
 "%(fee)s</strong> will be kept and you will receive a refund of the remainder."
 msgstr ""
+"Ви можете скасувати це замовлення. У цьому випадку комісія за скасування в "
+"розмірі <strong>%(fee)s</strong> буде збережена, і ви отримаєте "
+"відшкодування залишку."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:404
 #: pretix/presale/templates/pretixpresale/event/order.html:425
@@ -25656,7 +25678,7 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/order.html:420
 msgid "You can cancel this order and receive a full refund."
-msgstr ""
+msgstr "Ви можете скасувати це замовлення та отримати повне відшкодування."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:443
 msgid "You can cancel this order using the following button."
@@ -25670,7 +25692,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:15
 #, python-format
 msgid "Cancel order: %(code)s"
-msgstr ""
+msgstr "Скасувати замовлення: %(code)s"
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:26
 msgid ""
@@ -25932,6 +25954,8 @@ msgid ""
 "This order is managed for you by %(email)s. Please contact them for any "
 "questions regarding payment, cancellation or changes to this order."
 msgstr ""
+"Цим замовленням керує %(email)s. Будь ласка, зв’яжіться з ними з будь-яких "
+"питань щодо оплати, скасування або зміни цього замовлення."
 
 #: pretix/presale/templates/pretixpresale/event/resend_link.html:4
 #: pretix/presale/templates/pretixpresale/event/resend_link.html:11
