@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-28 16:44+0000\n"
 "PO-Revision-Date: 2022-05-12 23:00+0000\n"
-"Last-Translator: Iryna N <in380@nyu.edu>\n"
+"Last-Translator: Iryna Loik <iraloyik@gmail.com>\n"
 "Language-Team: Ukrainian <https://translate.pretix.eu/projects/pretix/pretix/"
 "uk/>\n"
 "Language: uk\n"
@@ -24234,39 +24234,42 @@ msgstr "Будь ласка, двічі введіть ту саму адрес�
 
 #: pretix/presale/forms/checkout.py:124
 msgid "Save to address"
-msgstr ""
+msgstr "Зберегти до адреси"
 
 #: pretix/presale/forms/checkout.py:125
 msgid "Create new address"
-msgstr ""
+msgstr "Створити нову адресу"
 
 #: pretix/presale/forms/checkout.py:128
 msgid "Save address in my customer account for future purchases"
-msgstr ""
+msgstr "Зберегти адресу у моєму обліковому записі клієнта для наступних покупок"
 
 #: pretix/presale/forms/checkout.py:156
 msgid "Save answers to my customer profiles for future purchases"
 msgstr ""
+"Зберегти відповіді до мого облікового запису клієнта для наступних покупок"
 
 #: pretix/presale/forms/checkout.py:163
 msgid "Save to profile"
-msgstr ""
+msgstr "Зберегти у профілі"
 
 #: pretix/presale/forms/checkout.py:164
 msgid "Create new profile"
-msgstr ""
+msgstr "Створити новий профіль"
 
 #: pretix/presale/forms/customer.py:67
 msgid "You need to fill out all fields."
-msgstr ""
+msgstr "Вам необхідно заповнити усі поля."
 
 #: pretix/presale/forms/customer.py:69
 msgid "We have not found an account with this email address and password."
 msgstr ""
+"На жаль, нам не вдалось знайти обліковий запис із такою електронною адресою "
+"та паролем."
 
 #: pretix/presale/forms/customer.py:71
 msgid "This account is disabled."
-msgstr ""
+msgstr "Цей обліковий запис деактивовано."
 
 #: pretix/presale/forms/customer.py:72
 msgid ""
@@ -24274,44 +24277,52 @@ msgid ""
 "link in the email we sent you. Click \"Reset password\" to receive a new "
 "email in case you cannot find it again."
 msgstr ""
+"Ви ще не активували свій обліковий запис та не створили пароль. Перейдіть "
+"будь ласка за лінком у електронному листі, який ми вам щойно надіслали. "
+"Натисніть \"скинути пароль\", лля того, щоб повторно отримати лист, якщо з "
+"якихось причин вам не вдалось знайти попередній лист."
 
 #: pretix/presale/forms/customer.py:135
 msgid ""
 "We've received a lot of registration requests from you, please wait 10 "
 "minutes before you try again."
 msgstr ""
+"Ми отримали від вас кілька запитів на реєстрацію. Будь ласка, зачекайте 10 "
+"хв перед тим як спробувати знову."
 
 #: pretix/presale/forms/customer.py:137
 msgid ""
 "An account with this email address is already registered. Please try to log "
 "in or reset your password instead."
 msgstr ""
+"Обліковий запис із такою електронною адресою уже існує. Просимо зайти у свій "
+"профіль або натисніть \"скинути пароль\"."
 
 #: pretix/presale/forms/customer.py:190
 #, python-brace-format
 msgid "What is the result of {num1} + {num2}?"
-msgstr ""
+msgstr "Скільки буде {num1} + {num2}?"
 
 #: pretix/presale/forms/customer.py:236
 msgid "Please enter the correct result."
-msgstr ""
+msgstr "Будь ласка вкажіть правильну відповідь."
 
 #: pretix/presale/forms/customer.py:277
 #, python-brace-format
 msgid "Activate your account at {organizer}"
-msgstr ""
+msgstr "Активуйте свій обліковий запис на {organizer}"
 
 #: pretix/presale/forms/customer.py:335
 msgid "For security reasons, please wait 10 minutes before you try again."
-msgstr ""
+msgstr "Задля безпеки просимо зачекати 10 хв, перед тим як ви спробуєте знову."
 
 #: pretix/presale/forms/customer.py:336
 msgid "A user with this email address is not known in our system."
-msgstr ""
+msgstr "У нашій системі немає користувача з такою електронною адресою."
 
 #: pretix/presale/forms/customer.py:457
 msgid "Only required if you change your email address"
-msgstr ""
+msgstr "Обов'язково, якщо ви змінюєте електронну адресу"
 
 #: pretix/presale/forms/order.py:105 pretix/presale/forms/order.py:113
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:153
@@ -24321,7 +24332,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/voucher.html:207
 #: pretix/presale/templates/pretixpresale/event/voucher.html:339
 msgid "plus taxes"
-msgstr ""
+msgstr "враховуючи податок"
 
 #: pretix/presale/forms/order.py:125
 msgid "No other variation of this product is currently available for you."
@@ -24329,57 +24340,57 @@ msgstr "Наразі для вас немає інших варіантів ць
 
 #: pretix/presale/forms/order.py:130
 msgid "No other variations of this product exist."
-msgstr ""
+msgstr "Інших варіацій цього продукту не існує."
 
 #: pretix/presale/forms/renderers.py:50
 msgctxt "form"
 msgid "is valid"
-msgstr ""
+msgstr "дійсний"
 
 #: pretix/presale/forms/renderers.py:52
 msgctxt "form"
 msgid "has errors"
-msgstr ""
+msgstr "з помилками"
 
 #: pretix/presale/forms/renderers.py:64
 #: pretix/presale/templates/pretixpresale/event/fragment_voucher_form.html:14
 msgctxt "form"
 msgid "required"
-msgstr ""
+msgstr "обов'язково"
 
 #: pretix/presale/ical.py:80 pretix/presale/ical.py:138
 #, python-brace-format
 msgid "Tickets: {url}"
-msgstr ""
+msgstr "Квитки:{url}"
 
 #: pretix/presale/ical.py:83 pretix/presale/ical.py:140
 #, python-brace-format
 msgid "Admission: {datetime}"
-msgstr ""
+msgstr "Прийом заявок: {datetime}"
 
 #: pretix/presale/ical.py:87 pretix/presale/ical.py:144
 #, python-brace-format
 msgid "Organizer: {organizer}"
-msgstr ""
+msgstr "Організатор: {organizer}"
 
 #: pretix/presale/templates/pretixpresale/base.html:58
 msgid "Footer Navigation"
-msgstr ""
+msgstr "Навігація в нижньому колонтитулі"
 
 #: pretix/presale/templates/pretixpresale/event/base.html:29
 msgid "This shop is currently only visible to you and your team."
-msgstr ""
+msgstr "Наразі цей магазин бачите лише ви та ваша команда."
 
 #: pretix/presale/templates/pretixpresale/event/base.html:31
 msgid "Take it live now"
-msgstr ""
+msgstr "Відкрити доступ зараз"
 
 #: pretix/presale/templates/pretixpresale/event/base.html:41
 #: pretix/presale/templates/pretixpresale/event/base.html:94
 #: pretix/presale/templates/pretixpresale/organizers/base.html:23
 #: pretix/presale/templates/pretixpresale/organizers/base.html:60
 msgid "select language"
-msgstr ""
+msgstr "Оберіть мову"
 
 #: pretix/presale/templates/pretixpresale/event/base.html:45
 #: pretix/presale/templates/pretixpresale/event/base.html:98
@@ -24387,18 +24398,18 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/organizers/base.html:64
 #, python-format
 msgid "Website in %(language)s"
-msgstr ""
+msgstr "Веб-сайт %(language)s"
 
 #: pretix/presale/templates/pretixpresale/event/base.html:59
 #, python-format
 msgid "Show all events of %(name)s"
-msgstr ""
+msgstr "Показати усі події %(name)s"
 
 #: pretix/presale/templates/pretixpresale/event/base.html:73
 #: pretix/presale/templates/pretixpresale/event/base.html:78
 #: pretix/presale/templates/pretixpresale/event/base.html:83
 msgid "Homepage"
-msgstr ""
+msgstr "Домашня сторінка"
 
 #: pretix/presale/templates/pretixpresale/event/base.html:114
 #: pretix/presale/templates/pretixpresale/event/base.html:120
@@ -24407,7 +24418,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/base.html:161
 msgctxt "alert-messages"
 msgid "Warning"
-msgstr ""
+msgstr "Попередження"
 
 #: pretix/presale/templates/pretixpresale/event/base.html:115
 #: pretix/presale/templates/pretixpresale/event/base.html:156
@@ -24415,6 +24426,9 @@ msgid ""
 "This ticket shop is currently in test mode. Please do not perform any real "
 "purchases as your order might be deleted without notice."
 msgstr ""
+"Цей магазин із продажу квитків зараз у тестовому режимі. Будь ласка не "
+"здійснюйте жодних покупок, оскільки ваше замовлення може видалитись без "
+"попередження."
 
 #: pretix/presale/templates/pretixpresale/event/base.html:121
 #: pretix/presale/templates/pretixpresale/event/base.html:162
@@ -24422,16 +24436,18 @@ msgid ""
 "Orders made through this sales channel cannot be deleted - even if the "
 "ticket shop is in test mode!"
 msgstr ""
+"Замовлення, здійснені через цей канал продажу не можливо видалити, навіть "
+"якщо магазин працює у тестовому режимі!"
 
 #: pretix/presale/templates/pretixpresale/event/base.html:130
 msgctxt "alert-messages"
 msgid "Error"
-msgstr ""
+msgstr "Помилка"
 
 #: pretix/presale/templates/pretixpresale/event/base.html:132
 msgctxt "alert-messages"
 msgid "Information"
-msgstr ""
+msgstr "Інформація"
 
 #: pretix/presale/templates/pretixpresale/event/base.html:170
 #: pretix/presale/templates/pretixpresale/organizers/base.html:88
@@ -24443,12 +24459,12 @@ msgstr "Зв'язатися з організатором події"
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:103
 #: pretix/presale/templates/pretixpresale/organizers/base.html:91
 msgid "Privacy policy"
-msgstr ""
+msgstr "Політика приватності"
 
 #: pretix/presale/templates/pretixpresale/event/base.html:176
 #: pretix/presale/templates/pretixpresale/organizers/base.html:94
 msgid "Cookie settings"
-msgstr ""
+msgstr "Налаштування файлів Cookie"
 
 #: pretix/presale/templates/pretixpresale/event/base.html:179
 #: pretix/presale/templates/pretixpresale/organizers/base.html:97
@@ -24460,6 +24476,8 @@ msgid ""
 "For some of the products in your cart, you can choose additional options "
 "before you continue."
 msgstr ""
+"Для деяких продуктів у вашому кошику будь ласка оберіть додаткові опції "
+"перед тим як продовжити далі."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_addons.html:13
 msgid "We're now trying to book these add-ons for you!"
@@ -24467,7 +24485,7 @@ msgstr "Зараз ми намагаємося забронювати ці до�
 
 #: pretix/presale/templates/pretixpresale/event/checkout_addons.html:20
 msgid "Add-ons:"
-msgstr ""
+msgstr "Додатки:"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_addons.html:49
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:194
@@ -24483,7 +24501,7 @@ msgstr "Назад"
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:7
 #, python-format
 msgid "Step %(current)s of %(total)s: %(label)s"
-msgstr ""
+msgstr "Крок %(current)s з %(total)s: %(label)s"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:12
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:48
@@ -24503,7 +24521,7 @@ msgstr "Ваш кошик"
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:26
 #: pretix/presale/templates/pretixpresale/event/fragment_cart_box.html:18
 msgid "Cart expired"
-msgstr ""
+msgstr "Термін дії кошика закінчився"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:44
 #: pretix/presale/templates/pretixpresale/event/index.html:74
@@ -24554,7 +24572,7 @@ msgstr "Контактна інформація"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:164
 msgid "Confirmations"
-msgstr ""
+msgstr "Підтвердження"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:182
 msgid ""
@@ -24576,7 +24594,7 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:200
 msgid "Place binding order"
-msgstr ""
+msgstr "Розмістити обов’язковий порядок"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:202
 msgid "Submit registration"
@@ -24584,11 +24602,11 @@ msgstr "Підтвердити"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_customer.html:20
 msgid "Log in with a customer account"
-msgstr ""
+msgstr "Увійти у клієнтський обліковий запис"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_customer.html:29
 msgid "You are currently logged in with the following credentials."
-msgstr ""
+msgstr "Наразі ви ввійшли, використовуючі такі облікові дані."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_customer.html:47
 #, python-format
@@ -24597,15 +24615,19 @@ msgid ""
 "connect your order to your account. This will allow you to see all your "
 "orders in one place and access them at any time."
 msgstr ""
+"Якщо ви раніше створили клієнтський обліковий запис на %(org)s, то ви зараз "
+"можете ввійти у систему а прив'язати замовлення до вашого облікового запису. "
+"Це дозволить вам бачити усі свої замовлення в одному місці та мати до них "
+"доступ у будь-який час."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_customer.html:59
 #: pretix/presale/templates/pretixpresale/organizers/customer_login.html:31
 msgid "Reset password"
-msgstr ""
+msgstr "Скинути пароль"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_customer.html:77
 msgid "Create a new customer account"
-msgstr ""
+msgstr "Створити новий клієнтський обліковий запис"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_customer.html:86
 #, python-format
@@ -24621,7 +24643,7 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/checkout_customer.html:107
 msgid "Continue as a guest"
-msgstr ""
+msgstr "Продовжити як гість"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_customer.html:115
 msgid ""
@@ -24639,50 +24661,58 @@ msgid ""
 "Some of the products in your cart can only be purchased if there is an "
 "active membership on your account."
 msgstr ""
+"Для покупки деяких із продуктів у вашій корзині необхідно мати дійсне "
+"членство у вашому обліковому записі."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_membership.html:38
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:120
 msgid "Selected add-ons"
-msgstr ""
+msgstr "Обрані додатки"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_membership.html:69
 msgid ""
 "Your account does not include an active membership that allows you to buy "
 "this product."
 msgstr ""
+"У вашому обліковому записі нема жодних дійсних членських підписок, які дають "
+"можливість придбати цей продукт."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_membership.html:70
 msgid "You will not be able to continue."
-msgstr ""
+msgstr "Ви не зможете продовжити."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html:7
 msgid "Please select how you want to pay."
-msgstr ""
+msgstr "Будь ласка оберіть спосіб оплати."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html:44
 msgid "This sales channel does not provide support for test mode."
-msgstr ""
+msgstr "Цей канал продажу не підтримується у тестовому режимі."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html:46
 msgid "If you continue, you might pay an actual order with non-existing money!"
 msgstr ""
+"Якщо ви продовжите, ви можете оплатити фактичне замовлення неіснуючими "
+"грошима!"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html:54
 msgid "This payment provider does not provide support for test mode."
-msgstr ""
+msgstr "Цей тип оплати не підтримується у тестовому режимі."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html:56
 msgid "If you continue, actual money might be transferred."
-msgstr ""
+msgstr "Якщо ви продовжите, з вашого рахунку можуть зняти кошти."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html:68
 msgid "There are no payment providers enabled."
-msgstr ""
+msgstr "Ви не активували жодного типу оплати."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html:70
 msgid ""
 "Please go to the payment settings and activate one or more payment providers."
 msgstr ""
+"Будь ласка перейдіть у налаштування оплат для активації одного або кількох "
+"типів оплат."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:8
 msgid "Before we continue, we need you to answer some questions."
@@ -24698,28 +24728,28 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:54
 msgid "Auto-fill with address"
-msgstr ""
+msgstr "Автозаповнення адреси"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:61
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:174
 msgid "Fill form"
-msgstr ""
+msgstr "Заповнити форму"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:89
 msgid "Copy answers from above"
-msgstr ""
+msgstr "Скопіювати відповіді зверху"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:156
 msgid "Copy answers"
-msgstr ""
+msgstr "Скопіювати відповіді"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:165
 msgid "Auto-fill with profile"
-msgstr ""
+msgstr "Автозаповнення з профілю"
 
 #: pretix/presale/templates/pretixpresale/event/cookies.html:8
 msgid "Please continue in a new tab"
-msgstr ""
+msgstr "Будь ласка продовжіть у новій вкладці"
 
 #: pretix/presale/templates/pretixpresale/event/cookies.html:10
 msgid ""
@@ -24728,18 +24758,22 @@ msgid ""
 "embedded into the website. Please try to open the ticket shop in a new tab "
 "or change your browser settings."
 msgstr ""
+"Ваш браузер налаштований на блокування файлів cookie з елементів веб-сайту "
+"третіх сторін. На жаль, це означає, що ми не можемо показати вам цей "
+"магазин, вбудований у веб-сайт. Спробуйте відкрити магазин у новій вкладці "
+"або ж змінити налаштування свого браузера."
 
 #: pretix/presale/templates/pretixpresale/event/cookies.html:17
 msgid "We apologize for the inconvenience!"
-msgstr ""
+msgstr "Просимо вибачення за незручності!"
 
 #: pretix/presale/templates/pretixpresale/event/cookies.html:24
 msgid "Continue in new tab"
-msgstr ""
+msgstr "Продовжіть у новій вкладці"
 
 #: pretix/presale/templates/pretixpresale/event/cookies.html:31
 msgid "Cookies not supported"
-msgstr ""
+msgstr "Файли Cookies не підтримуються"
 
 #: pretix/presale/templates/pretixpresale/event/cookies.html:33
 msgid ""
