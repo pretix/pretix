@@ -4,8 +4,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-28 16:44+0000\n"
-"PO-Revision-Date: 2022-05-13 13:36+0000\n"
-"Last-Translator: Jonathan Berger <drskullster@gmail.com>\n"
+"PO-Revision-Date: 2022-05-13 14:36+0000\n"
+"Last-Translator: hmontheline <Helias.mackay@goetheanum.ch>\n"
 "Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix/fr/"
 ">\n"
 "Language: fr\n"
@@ -1568,26 +1568,20 @@ msgstr "Numéro de client"
 
 #: pretix/base/exporters/orderlist.py:581
 #: pretix/plugins/checkinlists/exporters.py:476
-#, fuzzy
-#| msgid "Team name"
 msgid "Seat number"
-msgstr "Nom de l'équipe"
+msgstr "Numéro de siège"
 
 #: pretix/base/exporters/orderlist.py:582
-#, fuzzy
-#| msgid "Order code"
 msgid "Order comment"
-msgstr "Code de commande"
+msgstr "Commentaire de commande"
 
 #: pretix/base/exporters/orderlist.py:750
 msgid "Order payments and refunds"
 msgstr "Commandes et remboursements"
 
 #: pretix/base/exporters/orderlist.py:758
-#, fuzzy
-#| msgid "Payment date"
 msgid "Payment states"
-msgstr "Date de paiement"
+msgstr "États de paiement"
 
 #: pretix/base/exporters/orderlist.py:766
 #, fuzzy
