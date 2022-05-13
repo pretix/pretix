@@ -4,8 +4,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-28 16:44+0000\n"
-"PO-Revision-Date: 2022-05-09 15:43+0000\n"
-"Last-Translator: hmontheline <Helias.mackay@goetheanum.ch>\n"
+"PO-Revision-Date: 2022-05-13 13:36+0000\n"
+"Last-Translator: Jonathan Berger <drskullster@gmail.com>\n"
 "Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix/fr/"
 ">\n"
 "Language: fr\n"
@@ -1291,10 +1291,8 @@ msgstr "Date de commande"
 #: pretix/base/exporters/orderlist.py:444
 #: pretix/base/exporters/orderlist.py:547
 #: pretix/plugins/checkinlists/exporters.py:469
-#, fuzzy
-#| msgid "Order date"
 msgid "Order time"
-msgstr "Date de commande"
+msgstr "Heure de commande"
 
 #: pretix/base/exporters/orderlist.py:280
 #, fuzzy
