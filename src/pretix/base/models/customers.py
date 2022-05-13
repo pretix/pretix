@@ -48,7 +48,6 @@ class Customer(LoggedModel):
     identifier = models.CharField(
         max_length=190,
         db_index=True,
-        unique=True,
         help_text=_('You can enter any value here to make it easier to match the data with other sources. If you do '
                     'not input one, we will generate one automatically.'),
         validators=[
@@ -78,7 +77,7 @@ class Customer(LoggedModel):
     objects = ScopedManager(organizer='organizer')
 
     class Meta:
-        unique_together = [['organizer', 'email']]
+        unique_together = [['organizer', 'email'], ['organizer', 'identifier']]
         ordering = ('email',)
 
     def get_email_field_name(self):
