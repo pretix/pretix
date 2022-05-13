@@ -5,7 +5,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-28 16:44+0000\n"
 "PO-Revision-Date: 2022-05-13 14:36+0000\n"
-"Last-Translator: hmontheline <Helias.mackay@goetheanum.ch>\n"
+"Last-Translator: Jonathan Berger <drskullster@gmail.com>\n"
 "Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix/fr/"
 ">\n"
 "Language: fr\n"
@@ -1540,31 +1540,23 @@ msgstr "Tickets"
 
 #: pretix/base/exporters/orderlist.py:577 pretix/base/orderimport.py:671
 #: pretix/plugins/checkinlists/exporters.py:472
-#, fuzzy
-#| msgid "Client ID"
 msgid "Seat ID"
-msgstr "Numéro de client"
+msgstr "Numéro de siège"
 
 #: pretix/base/exporters/orderlist.py:578
 #: pretix/plugins/checkinlists/exporters.py:473
-#, fuzzy
-#| msgid "Team name"
 msgid "Seat name"
-msgstr "Nom de l'équipe"
+msgstr "Nom du siège"
 
 #: pretix/base/exporters/orderlist.py:579
 #: pretix/plugins/checkinlists/exporters.py:474
-#, fuzzy
-#| msgid "Team name"
 msgid "Seat zone"
-msgstr "Nom de l'équipe"
+msgstr "Zone du siège"
 
 #: pretix/base/exporters/orderlist.py:580
 #: pretix/plugins/checkinlists/exporters.py:475
-#, fuzzy
-#| msgid "Client ID"
 msgid "Seat row"
-msgstr "Numéro de client"
+msgstr "Rangée du siège"
 
 #: pretix/base/exporters/orderlist.py:581
 #: pretix/plugins/checkinlists/exporters.py:476
@@ -1584,10 +1576,8 @@ msgid "Payment states"
 msgstr "États de paiement"
 
 #: pretix/base/exporters/orderlist.py:766
-#, fuzzy
-#| msgid "Check-in status"
 msgid "Refund states"
-msgstr "Statut d'enregistrement"
+msgstr "Etats des remboursements"
 
 #: pretix/base/exporters/orderlist.py:791
 #: pretix/base/exporters/orderlist.py:930
@@ -1794,10 +1784,8 @@ msgstr "Remises par cartes-cadeaux"
 
 #: pretix/base/exporters/orderlist.py:969
 #: pretix/control/templates/pretixcontrol/giftcards/payment.html:10
-#, fuzzy
-#| msgid "Voucher details"
 msgid "Issuer"
-msgstr "Détails du bon"
+msgstr "Emetteur"
 
 #: pretix/base/exporters/orderlist.py:997 pretix/control/navigation.py:523
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:84
@@ -2031,10 +2019,8 @@ msgid "Please do not use special characters in names."
 msgstr "Veuillez entrer votre nom."
 
 #: pretix/base/forms/questions.py:257
-#, fuzzy
-#| msgid "Please enter your name."
 msgid "Please enter a shorter name."
-msgstr "Veuillez entrer votre nom."
+msgstr "Veuillez entrer un nom plus court."
 
 #: pretix/base/forms/questions.py:274
 #, fuzzy
