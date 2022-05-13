@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-26 09:20+0000\n"
-"PO-Revision-Date: 2022-05-23 01:00+0000\n"
-"Last-Translator: Ola Ola <olge.to@gmail.com>\n"
+"PO-Revision-Date: 2023-05-30 21:27+0000\n"
+"Last-Translator: Iryna Loik <iraloyik@gmail.com>\n"
 "Language-Team: Ukrainian <https://translate.pretix.eu/projects/pretix/pretix/"
 "uk/>\n"
 "Language: uk\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.12\n"
+"X-Generator: Weblate 4.17\n"
 
 #: pretix/_base_settings.py:78
 msgid "English"
@@ -9132,8 +9132,8 @@ msgid ""
 "\"admission ticket\"in the product settings. You can also turn off ticket "
 "issuing in every product separately."
 msgstr ""
-"Якщо вимкнено, квитки видаються лише для продуктів, які позначені як "
-"«вхідний квиток» у налаштуваннях продукту. Ви також можете вимкнути видачу "
+"Якщо вимкнено, квитки видаються лише для продуктів, які позначені як «"
+"вхідний квиток» у налаштуваннях продукту. Ви також можете вимкнути видачу "
 "квитків у кожному продукті окремо."
 
 #: pretix/base/settings.py:1474
@@ -10450,8 +10450,8 @@ msgstr ""
 "\n"
 "Ви надіслали заявку для зміни пароля у вашому еккаунті на {organizer}!\n"
 "\n"
-"Для того, щоб створити новий пароль, перейдіть будь ласка за цим "
-"посиланням: \n"
+"Для того, щоб створити новий пароль, перейдіть будь ласка за цим посиланням: "
+"\n"
 "\n"
 "{url}\n"
 "\n"
@@ -11272,8 +11272,7 @@ msgstr "Натисність тут, щоб негайно вимкнути ус
 
 #: pretix/base/templates/pretixbase/email/notification.txt:15
 msgid "Click here to view and change your notification settings:"
-msgstr ""
-"Натисніть тут, щоб переглянути та змінити свої налаштування сповіщеннь:"
+msgstr "Натисніть тут, щоб переглянути та змінити свої налаштування сповіщеннь:"
 
 #: pretix/base/templates/pretixbase/email/notification.txt:17
 msgid "Click here disable all notifications immediately:"
@@ -28311,8 +28310,7 @@ msgstr "Створити нову адресу"
 
 #: pretix/presale/forms/checkout.py:129
 msgid "Save address in my customer account for future purchases"
-msgstr ""
-"Зберегти адресу у моєму обліковому записі клієнта для наступних покупок"
+msgstr "Зберегти адресу у моєму обліковому записі клієнта для наступних покупок"
 
 #: pretix/presale/forms/checkout.py:158
 msgid "Save answers to my customer profiles for future purchases"
@@ -30020,8 +30018,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order.html:422
 #: pretix/presale/templates/pretixpresale/event/order.html:443
 msgid "The refund will be issued to your original payment method."
-msgstr ""
-"Відшкодування буде здійснено у такий же спосіб як здійснювалась оплата."
+msgstr "Відшкодування буде здійснено у такий же спосіб як здійснювалась оплата."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:388
 #: pretix/presale/templates/pretixpresale/event/order.html:401
@@ -30963,8 +30960,7 @@ msgstr "Ви не внесли жодних змін."
 
 #: pretix/presale/views/order.py:1564
 msgid "You may not change your order in a way that reduces the total price."
-msgstr ""
-"Ви не можете вносити зміни, які зменшують загальну вартість замовлення."
+msgstr "Ви не можете вносити зміни, які зменшують загальну вартість замовлення."
 
 #: pretix/presale/views/order.py:1566
 msgid "You may only change your order in a way that increases the total price."
