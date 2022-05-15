@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-28 16:44+0000\n"
-"PO-Revision-Date: 2022-05-13 14:40+0000\n"
-"Last-Translator: Raphael Michel <michel@rami.io>\n"
+"PO-Revision-Date: 2022-05-16 04:00+0000\n"
+"Last-Translator: Ola Ola <olge.to@gmail.com>\n"
 "Language-Team: Ukrainian <https://translate.pretix.eu/projects/pretix/pretix/"
 "uk/>\n"
 "Language: uk\n"
@@ -12879,12 +12879,12 @@ msgstr "Запрошення для користувача {user} скасова
 #: pretix/control/logdisplay.py:607
 #, python-brace-format
 msgid "The token \"{name}\" has been created."
-msgstr ""
+msgstr "Токен \"{name}\" було створено."
 
 #: pretix/control/logdisplay.py:610
 #, python-brace-format
 msgid "The token \"{name}\" has been revoked."
-msgstr ""
+msgstr "Токен\"{name}\" було відізвано."
 
 #: pretix/control/logdisplay.py:613
 msgid "Your account settings have been changed."
@@ -12909,7 +12909,7 @@ msgstr "Ваш аккаунт не працює."
 
 #: pretix/control/logdisplay.py:625
 msgid "You impersonated {}."
-msgstr ""
+msgstr "Ви виказували себе за {}."
 
 #: pretix/control/logdisplay.py:628
 msgid "You stopped impersonating {}."
