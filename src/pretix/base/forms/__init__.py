@@ -196,10 +196,16 @@ class SecretKeySettingsWidget(forms.TextInput):
         attrs.update({
             'autocomplete': 'new-password'  # see https://bugs.chromium.org/p/chromium/issues/detail?id=370363#c7
         })
+        self.__reflect_value = False
         super().__init__(attrs)
 
+    def value_from_datadict(self, data, files, name):
+        value = super().value_from_datadict(data, files, name)
+        self.__reflect_value = value and value != SECRET_REDACTED
+        return value
+
     def get_context(self, name, value, attrs):
-        if value:
+        if value and not self.__reflect_value:
             value = SECRET_REDACTED
         return super().get_context(name, value, attrs)
 
