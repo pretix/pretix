@@ -6,7 +6,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('pretixbase', '0214_customer_notes_ext_id'),
+        ('pretixbase', '0215_customer_organizer_identifier_unique'),
     ]
 
     operations = [
