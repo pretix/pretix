@@ -326,7 +326,13 @@ class Checkin(models.Model):
     type = models.CharField(max_length=100, choices=CHECKIN_TYPES, default=TYPE_ENTRY)
 
     nonce = models.CharField(max_length=190, null=True, blank=True)
+
+    # Whether or not the scan was made offline
+    force_sent = models.BooleanField(default=False, null=True, blank=True)
+
+    # Whether the scan was made offline AND would have not been possible online
     forced = models.BooleanField(default=False)
+
     device = models.ForeignKey(
         'pretixbase.Device', related_name='checkins', on_delete=models.PROTECT, null=True, blank=True
     )

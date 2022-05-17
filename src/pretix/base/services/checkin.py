@@ -796,6 +796,7 @@ def perform_checkin(op: OrderPosition, clist: CheckinList, given_answers: dict, 
                 gate=device.gate if device else None,
                 nonce=nonce,
                 forced=force and (not entry_allowed or from_revoked_secret),
+                force_sent=force,
                 raw_barcode=raw_barcode,
             )
             op.order.log_action('pretix.event.checkin', data={
