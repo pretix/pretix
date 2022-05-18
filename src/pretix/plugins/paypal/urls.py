@@ -24,7 +24,7 @@ from django.conf.urls import include, re_path
 from pretix.multidomain import event_url
 
 from .views import (
-    abort, oauth_disconnect, oauth_return, redirect_view, success, webhook,
+    abort, oauth_disconnect, redirect_view, success, webhook,
 )
 
 event_patterns = [
@@ -43,6 +43,4 @@ event_patterns = [
 urlpatterns = [
     re_path(r'^control/event/(?P<organizer>[^/]+)/(?P<event>[^/]+)/paypal/disconnect/',
             oauth_disconnect, name='oauth.disconnect'),
-    re_path(r'^_paypal/webhook/$', webhook, name='webhook'),
-    re_path(r'^_paypal/oauth_return/$', oauth_return, name='oauth.return'),
 ]

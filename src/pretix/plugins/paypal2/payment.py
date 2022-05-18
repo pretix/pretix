@@ -269,7 +269,7 @@ class PaypalSettingsHolder(BasePaymentProvider):
                 settings_content = (
                     "<button formaction='{}' class='btn btn-danger'>{}</button>"
                 ).format(
-                    reverse('plugins:paypal:isu.disconnect', kwargs={
+                    reverse('plugins:paypal2:isu.disconnect', kwargs={
                         'organizer': self.event.organizer.slug,
                         'event': self.event.slug,
                     }),
@@ -279,7 +279,7 @@ class PaypalSettingsHolder(BasePaymentProvider):
             settings_content = "<div class='alert alert-info'>%s<br /><code>%s</code></div>" % (
                 _('Please configure a PayPal Webhook to the following endpoint in order to automatically cancel orders '
                   'when payments are refunded externally.'),
-                build_global_uri('plugins:paypal:webhook')
+                build_global_uri('plugins:paypal2:webhook')
             )
 
         if self.event.currency not in SUPPORTED_CURRENCIES:
@@ -446,7 +446,7 @@ class PaypalMethod(BasePaymentProvider):
             'event': self.event,
             'settings': self.settings,
             'method': self.method,
-            'xhr': eventreverse(self.event, 'plugins:paypal:xhr', kwargs=build_kwargs())
+            'xhr': eventreverse(self.event, 'plugins:paypal2:xhr', kwargs=build_kwargs())
         }
         return template.render(ctx)
 
@@ -581,8 +581,8 @@ class PaypalMethod(BasePaymentProvider):
                     'locale': request.LANGUAGE_CODE,
                     'shipping_preference': 'NO_SHIPPING',  # 'SET_PROVIDED_ADDRESS',  # Do not set on non-ship order?
                     'user_action': 'CONTINUE',
-                    'return_url': build_absolute_uri(request.event, 'plugins:paypal:return', kwargs=kwargs),
-                    'cancel_url': build_absolute_uri(request.event, 'plugins:paypal:abort', kwargs=kwargs),
+                    'return_url': build_absolute_uri(request.event, 'plugins:paypal2:return', kwargs=kwargs),
+                    'cancel_url': build_absolute_uri(request.event, 'plugins:paypal2:abort', kwargs=kwargs),
                 },
             })
             response = self.client.execute(paymentreq)
@@ -996,7 +996,7 @@ class PaypalAPM(PaypalMethod):
         payment.info = json.dumps(paypal_order.dict())
         payment.save(update_fields=['info'])
 
-        return eventreverse(self.event, 'plugins:paypal:pay', kwargs={
+        return eventreverse(self.event, 'plugins:paypal2:pay', kwargs={
             'order': payment.order.code,
             'payment': payment.pk,
             'hash': hashlib.sha1(payment.order.secret.lower().encode()).hexdigest(),
