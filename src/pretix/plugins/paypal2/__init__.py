@@ -19,30 +19,15 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
-from django.conf.urls import include, re_path
 
-from pretix.multidomain import event_url
-
-from .views import (
-    abort, oauth_disconnect, oauth_return, redirect_view, success, webhook,
-)
-
-event_patterns = [
-    re_path(r'^paypal/', include([
-        re_path(r'^abort/$', abort, name='abort'),
-        re_path(r'^return/$', success, name='return'),
-        re_path(r'^redirect/$', redirect_view, name='redirect'),
-
-        re_path(r'w/(?P<cart_namespace>[a-zA-Z0-9]{16})/abort/', abort, name='abort'),
-        re_path(r'w/(?P<cart_namespace>[a-zA-Z0-9]{16})/return/', success, name='return'),
-
-        event_url(r'^webhook/$', webhook, name='webhook', require_live=False),
-    ])),
-]
-
-urlpatterns = [
-    re_path(r'^control/event/(?P<organizer>[^/]+)/(?P<event>[^/]+)/paypal/disconnect/',
-            oauth_disconnect, name='oauth.disconnect'),
-    re_path(r'^_paypal/webhook/$', webhook, name='webhook'),
-    re_path(r'^_paypal/oauth_return/$', oauth_return, name='oauth.return'),
-]
+# This file is based on an earlier version of pretix which was released under the Apache License 2.0. The full text of
+# the Apache License 2.0 can be obtained at <http://www.apache.org/licenses/LICENSE-2.0>.
+#
+# This file may have since been changed and any changes are released under the terms of AGPLv3 as described above. A
+# full history of changes and contributors is available at <https://github.com/pretix/pretix>.
+#
+# This file contains Apache-licensed contributions copyrighted by: Tobias Kunze
+#
+# Unless required by applicable law or agreed to in writing, software distributed under the Apache License 2.0 is
+# distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+# License for the specific language governing permissions and limitations under the License.
