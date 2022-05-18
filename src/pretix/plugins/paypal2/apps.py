@@ -40,10 +40,10 @@ from pretix import __version__ as version
 
 class Paypal2App(AppConfig):
     name = 'pretix.plugins.paypal2'
-    verbose_name = _("PayPal")
+    verbose_name = _("PayPal V2")
 
     class PretixPluginMeta:
-        name = _("PayPal")
+        name = _("PayPal V2")
         author = _("the pretix team")
         version = version
         category = 'PAYMENT'
@@ -54,3 +54,6 @@ class Paypal2App(AppConfig):
 
     def ready(self):
         from . import signals  # NOQA
+
+    def is_available(self, event):
+        return 'pretix.plugins.paypal' not in event.plugins.split(',')

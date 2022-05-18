@@ -56,6 +56,9 @@ class PaypalApp(AppConfig):
     def ready(self):
         from . import signals  # NOQA
 
+    def is_available(self, event):
+        return 'pretix.plugins.paypal' in event.plugins.split(',')
+
     @cached_property
     def compatibility_errors(self):
         errs = []

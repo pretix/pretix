@@ -37,7 +37,7 @@ from pretix.base.settings import settings_hierarkey
 from pretix.base.signals import (
     logentry_display, register_global_settings, register_payment_providers,
 )
-from pretix.plugins.paypal.payment import PaypalMethod
+from pretix.plugins.paypal2.payment import PaypalMethod
 from pretix.presale.signals import html_head, process_response
 
 
