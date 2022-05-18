@@ -286,8 +286,14 @@ def oauth_disconnect(request, **kwargs):
     request.event.settings.payment_paypal__enabled = False
     messages.success(request, _('Your PayPal account has been disconnected.'))
 
+    # Migrate User to PayPal v2
+    event = request.event
+    event.disable_plugin("pretix.plugins.paypal")
+    event.enable_plugin("pretix.plugins.paypal2")
+    event.save()
+
     return redirect(reverse('control:event.settings.payment.provider', kwargs={
         'organizer': request.event.organizer.slug,
         'event': request.event.slug,
-        'provider': 'paypal'
+        'provider': 'paypal_settings'
     }))

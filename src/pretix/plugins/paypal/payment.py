@@ -171,16 +171,10 @@ class Paypal(BasePaymentProvider):
         if self.settings.connect_client_id and not self.settings.secret:
             # Use PayPal connect
             if not self.settings.connect_user_id:
-                settings_content = (
-                    "<p>{}</p>"
-                    "<a href='{}' class='btn btn-primary btn-lg'>{}</a>"
-                ).format(
-                    _('To accept payments via PayPal, you will need an account at PayPal. By clicking on the '
-                      'following button, you can either create a new PayPal account connect pretix to an existing '
-                      'one.'),
-                    self.get_connect_url(request),
-                    _('Connect with {icon} PayPal').format(icon='<i class="fa fa-paypal"></i>')
-                )
+                # Migrate User to PayPal v2
+                self.event.disable_plugin("pretix.plugins.paypal")
+                self.event.enable_plugin("pretix.plugins.paypal2")
+                self.event.save()
             else:
                 settings_content = (
                     "<button formaction='{}' class='btn btn-danger'>{}</button>"
@@ -192,29 +186,10 @@ class Paypal(BasePaymentProvider):
                     _('Disconnect from PayPal')
                 )
         else:
-            settings_content = "<div class='alert alert-info'>%s<br /><code>%s</code></div>" % (
-                _('Please configure a PayPal Webhook to the following endpoint in order to automatically cancel orders '
-                  'when payments are refunded externally.'),
-                build_global_uri('plugins:paypal:webhook')
-            )
-
-        if self.event.currency not in SUPPORTED_CURRENCIES:
-            settings_content += (
-                '<br><br><div class="alert alert-warning">%s '
-                '<a href="https://developer.paypal.com/docs/api/reference/currency-codes/">%s</a>'
-                '</div>'
-            ) % (
-                _("PayPal does not process payments in your event's currency."),
-                _("Please check this PayPal page for a complete list of supported currencies.")
-            )
-
-        if self.event.currency in LOCAL_ONLY_CURRENCIES:
-            settings_content += '<br><br><div class="alert alert-warning">%s''</div>' % (
-                _("Your event's currency is supported by PayPal as a payment and balance currency for in-country "
-                  "accounts only. This means, that the receiving as well as the sending PayPal account must have been "
-                  "created in the same country and use the same currency. Out of country accounts will not be able to "
-                  "send any payments.")
-            )
+            # Migrate User to PayPal v2
+            self.event.disable_plugin("pretix.plugins.paypal")
+            self.event.enable_plugin("pretix.plugins.paypal2")
+            self.event.save()
 
         return settings_content
 
