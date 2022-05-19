@@ -1654,7 +1654,7 @@ Order position ticket download
    The referenced URL can provide a download or a regular, human-viewable website - so it is advised to open this URL
    in a webbrowser and leave it up to the user to handle the result.
 
-   Tickets can be only downloaded if the order is paid (depending on event settings) and if ticket downloads are active. Also, depending on event
+   Tickets can only be downloaded if ticket downloads are active and – depending on event settings – the order is either paid or pending. Also, depending on event
    configuration downloads might be only unavailable for add-on products or non-admission products.
    Note that in some cases the ticket file might not yet have been created. In that case, you will receive a status
    code :http:statuscode:`409` and you are expected to retry the request after a short period of waiting.
