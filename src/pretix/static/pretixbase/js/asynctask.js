@@ -153,7 +153,7 @@ function async_task_error(jqXHR, textStatus, errorThrown) {
 
             if (respdom.filter('#page-wrapper') && $('#page-wrapper').length) {
                 $("#page-wrapper").html(respdom.find("#page-wrapper").html());
-                setup_basics($("body"));
+                setup_basics($("#page-wrapper"));
                 form_handlers($("#page-wrapper"));
                 setup_collapsible_details($("#page-wrapper"));
                 $(document).trigger("pretix:bind-forms");
