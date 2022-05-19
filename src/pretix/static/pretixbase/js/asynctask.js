@@ -70,6 +70,7 @@ function async_task_check_error(jqXHR, textStatus, errorThrown) {
             jqXHR.responseText.indexOf("<body"),
             jqXHR.responseText.indexOf("</body")
         ));
+        setup_basics($("body"));
         form_handlers($("body"));
         setup_collapsible_details($("body"));
         window.setTimeout(function () { $(window).scrollTop(0) }, 200)
@@ -152,6 +153,7 @@ function async_task_error(jqXHR, textStatus, errorThrown) {
 
             if (respdom.filter('#page-wrapper') && $('#page-wrapper').length) {
                 $("#page-wrapper").html(respdom.find("#page-wrapper").html());
+                setup_basics($("body"));
                 form_handlers($("#page-wrapper"));
                 setup_collapsible_details($("#page-wrapper"));
                 $(document).trigger("pretix:bind-forms");
@@ -161,6 +163,7 @@ function async_task_error(jqXHR, textStatus, errorThrown) {
                     jqXHR.responseText.indexOf("<body"),
                     jqXHR.responseText.indexOf("</body")
                 ));
+                setup_basics($("body"));
                 form_handlers($("body"));
                 setup_collapsible_details($("body"));
                 $(document).trigger("pretix:bind-forms");
