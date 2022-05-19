@@ -174,6 +174,63 @@ var form_handlers = function (el) {
     }
 };
 
+function setup_basics(el) {
+    el.find("input[data-toggle=radiocollapse]").change(function () {
+        $($(this).attr("data-parent")).find(".collapse.in").collapse('hide');
+        $($(this).attr("data-target")).collapse('show');
+    });
+    el.find(".js-only").removeClass("js-only");
+    el.find(".js-hidden").hide();
+
+    el.find("div.collapsed").removeClass("collapsed").addClass("collapse");
+    el.find(".has-error, .alert-danger").each(function () {
+        $(this).closest("div.panel-collapse").collapse("show");
+    });
+    el.find(".has-error").first().each(function(){
+        if ($(this).is(':input')) this.focus();
+        else $(":input", this).get(0).focus();
+    });
+    el.find(".alert-danger").first().each(function() {
+        var content = $("<ul></ul>").click(function(e) {
+            var input = $(e.target.hash).get(0);
+            if (input) input.focus();
+            input.scrollIntoView({block: "center"});
+            e.preventDefault();
+        });
+        $(".has-error").each(function() {
+            var target = target = $(":input", this);
+            var desc = $("#" + target.attr("aria-describedby").split(' ', 1)[0]);
+            // multi-input fields have a role=group with aria-labelledby
+            var label = this.hasAttribute("aria-labelledby") ? $("#" + this.getAttribute("aria-labelledby")) : $("[for="+target.attr("id")+"]");
+
+            var $li = $("<li>");
+            $li.text(": " + desc.text())
+            $li.prepend($("<a>").attr("href", "#" + target.attr("id")).text(label.get(0).childNodes[0].nodeValue))
+            content.append($li);
+        });
+        $(this).append(content);
+    });
+
+    el.find("[data-click-to-load]").on("click", function(e) {
+        var target = document.getElementById(this.getAttribute("data-click-to-load"));
+        target.src = this.href;
+        target.focus();
+        e.preventDefault();
+    });
+
+    el.find('[data-toggle="tooltip"]').tooltip();
+
+    // AddOns
+    el.find('.addon-variation-description').hide();
+    el.find('.toggle-variation-description').click(function () {
+        $(this).parent().find('.addon-variation-description').slideToggle();
+    });
+    el.find('input[type=radio][description]').change(function () {
+        if ($(this).prop("checked")) {
+            $(this).parent().parent().find('.addon-variation-description').stop().slideDown();
+        }
+    });
+}
 
 $(function () {
     "use strict";
@@ -191,48 +248,7 @@ $(function () {
         if (!$input.prop("checked")) $input.prop('checked', true).trigger("change");
     });
 
-    $("input[data-toggle=radiocollapse]").change(function () {
-        $($(this).attr("data-parent")).find(".collapse.in").collapse('hide');
-        $($(this).attr("data-target")).collapse('show');
-    });
-    $(".js-only").removeClass("js-only");
-    $(".js-hidden").hide();
-
-    $("div.collapsed").removeClass("collapsed").addClass("collapse");
-    $(".has-error, .alert-danger").each(function () {
-        $(this).closest("div.panel-collapse").collapse("show");
-    });
-    $(".has-error").first().each(function(){
-        if ($(this).is(':input')) this.focus();
-        else $(":input", this).get(0).focus();
-    });
-    $(".alert-danger").first().each(function() {
-        var content = $("<ul></ul>").click(function(e) {
-            var input = $(e.target.hash).get(0);
-            if (input) input.focus();
-            input.scrollIntoView({block: "center"});
-            e.preventDefault();
-        });
-        $(".has-error").each(function() {
-            var target = target = $(":input", this);
-            var desc = $("#" + target.attr("aria-describedby").split(' ', 1)[0]);
-            // multi-input fields have a role=group with aria-labelledby 
-            var label = this.hasAttribute("aria-labelledby") ? $("#" + this.getAttribute("aria-labelledby")) : $("[for="+target.attr("id")+"]");
-
-            var $li = $("<li>");
-            $li.text(": " + desc.text())
-            $li.prepend($("<a>").attr("href", "#" + target.attr("id")).text(label.get(0).childNodes[0].nodeValue))
-            content.append($li);
-        });
-        $(this).append(content);
-    });
-
-    $("[data-click-to-load]").on("click", function(e) {
-        var target = document.getElementById(this.getAttribute("data-click-to-load"));
-        target.src = this.href;
-        target.focus();
-        e.preventDefault();
-    });
+    setup_basics($("body"));
     $(".overlay-remove").on("click", function() {
         $(this).closest(".contains-overlay").find(".overlay").fadeOut();
     });
@@ -244,20 +260,7 @@ $(function () {
         $("#voucher-toggle").slideUp();
     });
 
-    $('[data-toggle="tooltip"]').tooltip();
-
     $("#ajaxerr").on("click", ".ajaxerr-close", ajaxErrDialog.hide);
-
-    // AddOns
-    $('.addon-variation-description').hide();
-    $('.toggle-variation-description').click(function () {
-        $(this).parent().find('.addon-variation-description').slideToggle();
-    });
-    $('input[type=radio][description]').change(function () {
-        if ($(this).prop("checked")) {
-            $(this).parent().parent().find('.addon-variation-description').stop().slideDown();
-        }
-    });
 
     // Copy answers
     $(".js-copy-answers").click(function (e) {
