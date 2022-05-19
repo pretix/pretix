@@ -1,7 +1,6 @@
 /*global $ */
 
 setup_collapsible_details = function (el) {
-    console.log(el);
     var isOpera = Object.prototype.toString.call(window.opera) == '[object Opera]';
     el.find("details summary").click(function (e) {
         if (this.tagName !== "A" && $(e.target).closest("a").length > 0) {
