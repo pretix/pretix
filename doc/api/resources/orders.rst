@@ -609,13 +609,17 @@ Fetching individual orders
 Order ticket download
 ---------------------
 
+.. versionchanged:: 4.10
+
+   The API now supports ticket downloads for pending orders if allowed by the event settings.
+
 .. http:get:: /api/v1/organizers/(organizer)/events/(event)/orders/(code)/download/(output)/
 
    Download tickets for an order, identified by its order code. Depending on the chosen output, the response might
    be a ZIP file, PDF file or something else. The order details response contains a list of output options for this
    particular order.
 
-   Tickets can be only downloaded if the order is paid and if ticket downloads are active. Note that in some cases the
+   Tickets can only be downloaded if ticket downloads are active and – depending on event settings – the order is either paid or pending. Note that in some cases the
    ticket file might not yet have been created. In that case, you will receive a status code :http:statuscode:`409` and
    you are expected to retry the request after a short period of waiting.
 
@@ -1635,6 +1639,10 @@ Fetching individual positions
 Order position ticket download
 ------------------------------
 
+.. versionchanged:: 4.10
+
+   The API now supports ticket downloads for pending orders if allowed by the event settings.
+
 .. http:get:: /api/v1/organizers/(organizer)/events/(event)/orderpositions/(id)/download/(output)/
 
    Download tickets for one order position, identified by its internal ID.
@@ -1646,7 +1654,7 @@ Order position ticket download
    The referenced URL can provide a download or a regular, human-viewable website - so it is advised to open this URL
    in a webbrowser and leave it up to the user to handle the result.
 
-   Tickets can be only downloaded if the order is paid and if ticket downloads are active. Also, depending on event
+   Tickets can only be downloaded if ticket downloads are active and – depending on event settings – the order is either paid or pending. Also, depending on event
    configuration downloads might be only unavailable for add-on products or non-admission products.
    Note that in some cases the ticket file might not yet have been created. In that case, you will receive a status
    code :http:statuscode:`409` and you are expected to retry the request after a short period of waiting.

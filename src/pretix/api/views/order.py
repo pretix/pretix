@@ -261,8 +261,11 @@ class OrderViewSet(viewsets.ModelViewSet):
         provider = self._get_output_provider(output)
         order = self.get_object()
 
-        if order.status != Order.STATUS_PAID:
-            raise PermissionDenied("Downloads are not available for unpaid orders.")
+        if order.status in (Order.STATUS_CANCELED, Order.STATUS_EXPIRED):
+            raise PermissionDenied("Downloads are not available for canceled or expired orders.")
+
+        if order.status == Order.STATUS_PENDING and not request.event.settings.ticket_download_pending:
+            raise PermissionDenied("Downloads are not available for pending orders.")
 
         ct = CachedCombinedTicket.objects.filter(
             order=order, provider=provider.identifier, file__isnull=False
@@ -1119,8 +1122,11 @@ class OrderPositionViewSet(viewsets.ModelViewSet):
         provider = self._get_output_provider(output)
         pos = self.get_object()
 
-        if pos.order.status != Order.STATUS_PAID:
-            raise PermissionDenied("Downloads are not available for unpaid orders.")
+        if pos.order.status in (Order.STATUS_CANCELED, Order.STATUS_EXPIRED):
+            raise PermissionDenied("Downloads are not available for canceled or expired orders.")
+
+        if pos.order.status == Order.STATUS_PENDING and not request.event.settings.ticket_download_pending:
+            raise PermissionDenied("Downloads are not available for pending orders.")
         if not pos.generate_ticket:
             raise PermissionDenied("Downloads are not enabled for this product.")
 
