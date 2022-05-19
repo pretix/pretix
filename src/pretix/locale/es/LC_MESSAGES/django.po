@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-28 16:44+0000\n"
-"PO-Revision-Date: 2022-05-05 15:40+0000\n"
-"Last-Translator: hmontheline <Helias.mackay@goetheanum.ch>\n"
+"PO-Revision-Date: 2022-05-19 22:00+0000\n"
+"Last-Translator: Ismael Menéndez Fernández <ismael.menendez@balidea.com>\n"
 "Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/pretix/"
 "es/>\n"
 "Language: es\n"
@@ -5524,10 +5524,8 @@ msgstr ""
 "producto."
 
 #: pretix/base/payment.py:1259 pretix/base/payment.py:1301
-#, fuzzy
-#| msgid "This feature is not enabled."
 msgid "This gift card is not known."
-msgstr "Esta función no está habilitada."
+msgstr "El código de descuento no es válido."
 
 #: pretix/base/payment.py:1261 pretix/base/payment.py:1303
 msgid ""
@@ -16665,6 +16663,14 @@ msgid ""
 "the difference.\n"
 "    "
 msgstr ""
+"\n"
+"        Si tiene una tarjeta de regalo, ingrese el código de la tarjeta de "
+"regalo aquí. Si la tarjeta regalo no tiene\n"
+"crédito suficiente para pagar el pedido completo, se le volverá a mostrar "
+"esta página y podrá\n"
+"canjear otra tarjeta de regalo o seleccionar un método de pago diferente "
+"para la diferencia.\n"
+"    "
 
 #: pretix/control/templates/pretixcontrol/giftcards/checkout_confirm.html:4
 msgid ""
@@ -18589,10 +18595,8 @@ msgstr "Importe no reembolsado"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:40
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:87
-#, fuzzy
-#| msgid "Refund only"
 msgid "Refund amount"
-msgstr "Reembolso solamente"
+msgstr "Reembolso"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:68
 #, fuzzy
@@ -27937,6 +27941,9 @@ msgid ""
 "We've issued your refund of %(amount)s as a gift card. On your next purchase "
 "with us, you can use the following gift card code during payment:"
 msgstr ""
+"Emitimos su reembolso de %(amount)s como tarjeta de regalo. En su próxima "
+"compra con nosotros, puede utilizar el siguiente código de tarjeta de regalo "
+"durante el pago:"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:163
 #, python-format
@@ -28074,6 +28081,8 @@ msgid ""
 "The refund will be issued in form of a gift card that you can use for "
 "further purchases."
 msgstr ""
+"El reembolso se emitirá en forma de una tarjeta de regalo que podrá utilizar "
+"para futuras compras."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:406
 #: pretix/presale/templates/pretixpresale/event/order.html:427
@@ -28135,6 +28144,8 @@ msgid ""
 "If you cancel this order, all tickets will be invalidated and you can no "
 "longer use them. You cannot revert this action."
 msgstr ""
+"Si cancela este pedido, todos los tickets serán invalidados y ya no podrá "
+"usarlos. No puede anular esta acción."
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:43
 #, python-format
@@ -28156,10 +28167,8 @@ msgid "Enter custom amount"
 msgstr "Comentario interno"
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:82
-#, fuzzy
-#| msgid "Refund only"
 msgid "Refund amount:"
-msgstr "Reembolso solamente"
+msgstr "Reembolso"
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:89
 #: pretix/presale/templates/pretixpresale/event/order_change_confirm.html:166
@@ -28213,12 +28222,6 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:145
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:176
 #: pretix/presale/templates/pretixpresale/event/order_change_confirm.html:177
-#, fuzzy
-#| msgid ""
-#| "With to the payment method you used, the refund amount of %(amount)s "
-#| "<strong>can not be sent back to you automatically</strong>. Instead, the "
-#| "event organizer will need to initiate the transfer manually. Please be "
-#| "patient as this might take a bit longer."
 msgid ""
 "With the payment method you used, the refund amount <strong>can not be sent "
 "back to you automatically</strong>. Instead, the event organizer will need "
