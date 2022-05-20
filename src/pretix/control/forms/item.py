@@ -32,6 +32,7 @@
 # Unless required by applicable law or agreed to in writing, software distributed under the Apache License 2.0 is
 # distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations under the License.
+import copy
 import os
 from decimal import Decimal
 from urllib.parse import urlencode
@@ -423,9 +424,10 @@ class ItemCreateForm(I18nModelForm):
         if self.cleaned_data.get('has_variations'):
             if self.cleaned_data.get('copy_from') and self.cleaned_data.get('copy_from').has_variations:
                 for variation in self.cleaned_data['copy_from'].variations.all():
-                    ItemVariation.objects.create(item=instance, value=variation.value, active=variation.active,
-                                                 position=variation.position, default_price=variation.default_price,
-                                                 description=variation.description, original_price=variation.original_price)
+                    v = copy.copy(variation)
+                    v.pk = None
+                    v.item = instance
+                    v.save()
             else:
                 ItemVariation.objects.create(
                     item=instance, value=__('Standard')
