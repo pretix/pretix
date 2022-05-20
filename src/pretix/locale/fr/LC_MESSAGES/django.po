@@ -4,8 +4,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-28 16:44+0000\n"
-"PO-Revision-Date: 2022-05-13 14:36+0000\n"
-"Last-Translator: Jonathan Berger <drskullster@gmail.com>\n"
+"PO-Revision-Date: 2022-05-20 14:10+0000\n"
+"Last-Translator: hmontheline <Helias.mackay@goetheanum.ch>\n"
 "Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix/fr/"
 ">\n"
 "Language: fr\n"
@@ -27444,10 +27444,8 @@ msgstr "Panier expiré"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:44
 #: pretix/presale/templates/pretixpresale/event/index.html:74
-#, fuzzy
-#| msgid "This file is from a different event."
 msgid "Add tickets for a different date"
-msgstr "Ce fichier provient d'un événement différent."
+msgstr "Ajouter des billets pour une autre date"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:6
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:8
@@ -28147,6 +28145,7 @@ msgstr "Commande validée"
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:14
 msgid "Please check your email account, we've sent you your tickets."
 msgstr ""
+"Veuillez vérifier votre compte e-mail, nous vous avons envoyé vos tickets."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:16
 msgid "Please check your email account, we've sent you an email."
@@ -28173,6 +28172,8 @@ msgid ""
 "If the email has no attachment, click the link in our email and you will be "
 "able to download them from here."
 msgstr ""
+"Si l'e-mail n'a pas de pièce jointe, clique sur le lien de commande dans l'e-"
+"mail et télécharge-le ensuite à partir d'ici."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:57
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:76
