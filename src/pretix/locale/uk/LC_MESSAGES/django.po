@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-28 16:44+0000\n"
-"PO-Revision-Date: 2022-05-19 22:00+0000\n"
-"Last-Translator: Olha Dolinska <olya.dolinska.od@gmail.com>\n"
+"PO-Revision-Date: 2022-05-23 01:00+0000\n"
+"Last-Translator: Ola Ola <olge.to@gmail.com>\n"
 "Language-Team: Ukrainian <https://translate.pretix.eu/projects/pretix/pretix/"
 "uk/>\n"
 "Language: uk\n"
@@ -11470,6 +11470,20 @@ msgid ""
 "\n"
 "Your {event} team"
 msgstr ""
+"Вітаємо,\n"
+"\n"
+"цим електронним листом ми повідомляємо Вам, що {event} було нажаль скасовано."
+"\n"
+"\n"
+"Ми відшкодуємо Вам {refund_amount} за Вашим методом оплати.\n"
+"\n"
+"Ви можете переглянути стан Вашого поточного замовлення тут:\n"
+"\n"
+"{url}\n"
+"\n"
+"З повагою,\n"
+"\n"
+"Ваша {event} команда"
 
 #: pretix/control/forms/orders.py:891
 #, python-brace-format
@@ -12913,7 +12927,7 @@ msgstr "Ви виказували себе за {}."
 
 #: pretix/control/logdisplay.py:628
 msgid "You stopped impersonating {}."
-msgstr ""
+msgstr "Ви припинили видавати себе за {}."
 
 #: pretix/control/middleware.py:150 pretix/control/middleware.py:164
 msgid ""
@@ -13128,7 +13142,7 @@ msgstr "Клієнти"
 #: pretix/control/navigation.py:555
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:61
 msgid "Customer accounts"
-msgstr ""
+msgstr "Рахунки клієнтів"
 
 #: pretix/control/navigation.py:565 pretix/control/navigation.py:572
 msgid "Devices"
@@ -13137,18 +13151,18 @@ msgstr "Обладнання"
 #: pretix/control/permissions.py:71 pretix/control/permissions.py:108
 #: pretix/control/permissions.py:139 pretix/control/permissions.py:156
 msgid "You do not have permission to view this content."
-msgstr ""
+msgstr "Ви не маєте дозволу переглядати цей контент."
 
 #: pretix/control/templates/pretixcontrol/auth/base.html:44
 #: pretix/control/templates/pretixcontrol/base.html:356
 #, python-format
 msgid "You are currently working on behalf of %(user)s."
-msgstr ""
+msgstr "Зараз Ви працюєте за дорученням %(user)s."
 
 #: pretix/control/templates/pretixcontrol/auth/base.html:49
 #: pretix/control/templates/pretixcontrol/base.html:361
 msgid "Stop impersonating"
-msgstr ""
+msgstr "Припинити видавати себе за іншого"
 
 #: pretix/control/templates/pretixcontrol/auth/forgot.html:14
 msgid "Send recovery information"
@@ -13207,7 +13221,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/auth/login_2fa.html:14
 msgid "Token"
-msgstr ""
+msgstr "Токен"
 
 #: pretix/control/templates/pretixcontrol/auth/login_2fa.html:18
 #: pretix/control/templates/pretixcontrol/user/reauth.html:22
@@ -13262,7 +13276,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/auth/oauth_authorization.html:24
 #, python-format
 msgid "You are currently logged in as <strong>%(user)s</strong>."
-msgstr ""
+msgstr "Ви увійшли у систему як <strong>%(user)s</strong>."
 
 #: pretix/control/templates/pretixcontrol/auth/oauth_authorization.html:28
 msgid "The application requires the following permissions:"
@@ -13399,6 +13413,8 @@ msgid ""
 "We've detected that you are using <strong>Microsoft Internet Explorer</"
 "strong>."
 msgstr ""
+"Ми виявили, що Ви використовуєте <strong>Microsoft Internet "
+"Explorer</strong>."
 
 #: pretix/control/templates/pretixcontrol/base.html:327
 msgid ""
@@ -13417,11 +13433,15 @@ msgid ""
 "We kindly ask you to move to one of our supported browsers, such as "
 "Microsoft Edge, Mozilla Firefox, Google Chrome, or Safari."
 msgstr ""
+"Будь ласка перейдіть на один із запропонованих браузерів, як наприклад "
+"Microsoft Edge, Mozilla Firefox, Google Chrome, або Safari."
 
 #: pretix/control/templates/pretixcontrol/base.html:341
 msgid ""
 "Please leave a short comment on what you did in the following admin sessions:"
 msgstr ""
+"Будь ласка залиште коментар про те, що Ви робили у даній адміністративній "
+"сесії:"
 
 #: pretix/control/templates/pretixcontrol/base.html:372
 msgid "Read more"
@@ -13437,7 +13457,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/base.html:396
 msgid "Show all test mode orders"
-msgstr ""
+msgstr "Показати всі тестові замовлення"
 
 #: pretix/control/templates/pretixcontrol/base.html:404
 msgid ""
@@ -13465,15 +13485,17 @@ msgid ""
 "For security reasons, please change your password before you continue. "
 "Afterwards you will be redirected to your original destination."
 msgstr ""
+"З міркувань безпеки, будь ласка змініть Ваш пароль перед тим, як продовжити. "
+"Після цього Ви будуте перенаправлені до початкового пункту призначення."
 
 #: pretix/control/templates/pretixcontrol/base.html:445
 #, python-format
 msgid "Times displayed in %(tz)s"
-msgstr ""
+msgstr "Час відображається в %(tz)s"
 
 #: pretix/control/templates/pretixcontrol/base.html:451
 msgid "running in development mode"
-msgstr ""
+msgstr "працює в режимі розробки"
 
 #: pretix/control/templates/pretixcontrol/base.html:467
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:16
@@ -13957,7 +13979,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/checkin/lists.html:40
 msgid "Your search did not match any check-in lists."
-msgstr ""
+msgstr "За Вашим запитом нічого не знайдено."
 
 #: pretix/control/templates/pretixcontrol/checkin/lists.html:42
 msgid "You haven't created any check-in lists yet."
@@ -14358,7 +14380,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/event/live.html:131
 #: pretix/control/templates/pretixcontrol/event/settings.html:352
 msgid "Cancel or delete event"
-msgstr ""
+msgstr "Відмінити або видалити захід"
 
 #: pretix/control/templates/pretixcontrol/event/dangerzone.html:9
 #: pretix/control/templates/pretixcontrol/event/dangerzone.html:25
