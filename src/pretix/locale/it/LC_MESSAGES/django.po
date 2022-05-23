@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-28 16:44+0000\n"
-"PO-Revision-Date: 2022-05-08 19:00+0000\n"
-"Last-Translator: Emanuele Signoretta <signorettae@gmail.com>\n"
+"PO-Revision-Date: 2022-05-23 14:28+0000\n"
+"Last-Translator: Mauro Amico <mauro.amico@gmail.com>\n"
 "Language-Team: Italian <https://translate.pretix.eu/projects/pretix/pretix/"
 "it/>\n"
 "Language: it\n"
@@ -559,10 +559,8 @@ msgstr ""
 "pagamento."
 
 #: pretix/base/exporters/events.py:47
-#, fuzzy
-#| msgid "Start date"
 msgid "Event data"
-msgstr "Data di Inizio"
+msgstr "Data dell'evento"
 
 #: pretix/base/exporters/events.py:55 pretix/base/exporters/waitinglist.py:112
 #: pretix/base/models/event.py:459 pretix/base/pdf.py:214
@@ -585,21 +583,21 @@ msgstr ""
 
 #: pretix/base/exporters/events.py:58 pretix/base/models/event.py:479
 msgid "Event currency"
-msgstr ""
+msgstr "Valuta dell'evento"
 
 #: pretix/base/exporters/events.py:59 pretix/base/models/event.py:482
 #: pretix/base/models/event.py:1295 pretix/base/settings.py:2548
 #: pretix/base/settings.py:2558 pretix/control/forms/subevents.py:609
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:268
 msgid "Event start time"
-msgstr ""
+msgstr "Orario inizio evento"
 
 #: pretix/base/exporters/events.py:60 pretix/base/models/event.py:484
 #: pretix/base/models/event.py:1297 pretix/base/pdf.py:271
 #: pretix/control/forms/subevents.py:614
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:270
 msgid "Event end time"
-msgstr ""
+msgstr "Orario fine evento"
 
 #: pretix/base/exporters/events.py:61 pretix/base/models/event.py:486
 #: pretix/base/models/event.py:1299 pretix/control/forms/subevents.py:619
@@ -636,7 +634,7 @@ msgstr "Longitudine"
 #: pretix/control/templates/pretixcontrol/event/index.html:113
 #: pretix/control/templates/pretixcontrol/order/index.html:929
 msgid "Internal comment"
-msgstr ""
+msgstr "Nota interna"
 
 #: pretix/base/exporters/events.py:79 pretix/base/exporters/invoices.py:305
 #: pretix/base/exporters/orderlist.py:398
@@ -4485,10 +4483,9 @@ msgid "You need to choose a date if you select a seat."
 msgstr ""
 
 #: pretix/base/models/vouchers.py:456
-#, fuzzy, python-brace-format
-#| msgid "The subevent does not belong to this event."
+#, python-brace-format
 msgid "The specified seat ID \"{id}\" does not exist for this event."
-msgstr "Il sotto-evento non appartiene a questo evento."
+msgstr "L'identificativo {id} del posto non appartiene a questo evento."
 
 #: pretix/base/models/vouchers.py:460
 #, python-brace-format
@@ -5774,10 +5771,8 @@ msgid "Only allowed after {datetime}"
 msgstr ""
 
 #: pretix/base/services/checkin.py:212
-#, fuzzy
-#| msgid "Presale not started"
 msgid "Ticket type not allowed"
-msgstr "Prevendita non ancora attiva"
+msgstr "Tipologia di biglietto non consentita"
 
 #: pretix/base/services/checkin.py:231
 msgid "time since last entry"
@@ -5800,38 +5795,36 @@ msgid "number of entries today"
 msgstr ""
 
 #: pretix/base/services/checkin.py:236
-#, fuzzy
-#| msgid "Weekend day"
 msgid "week day"
-msgstr "Giorno del fine settimana"
+msgstr "Giorno della settimana"
 
 #: pretix/base/services/checkin.py:258 pretix/control/forms/filter.py:1065
 msgid "Monday"
-msgstr ""
+msgstr "lunedì"
 
 #: pretix/base/services/checkin.py:259 pretix/control/forms/filter.py:1066
 msgid "Tuesday"
-msgstr ""
+msgstr "martedì"
 
 #: pretix/base/services/checkin.py:260 pretix/control/forms/filter.py:1067
 msgid "Wednesday"
-msgstr ""
+msgstr "mercoledì"
 
 #: pretix/base/services/checkin.py:261 pretix/control/forms/filter.py:1068
 msgid "Thursday"
-msgstr ""
+msgstr "giovedì"
 
 #: pretix/base/services/checkin.py:262 pretix/control/forms/filter.py:1069
 msgid "Friday"
-msgstr ""
+msgstr "venerdì"
 
 #: pretix/base/services/checkin.py:263 pretix/control/forms/filter.py:1070
 msgid "Saturday"
-msgstr ""
+msgstr "sabato"
 
 #: pretix/base/services/checkin.py:264 pretix/control/forms/filter.py:1071
 msgid "Sunday"
-msgstr ""
+msgstr "domenica"
 
 #: pretix/base/services/checkin.py:268
 #, python-brace-format
@@ -5839,20 +5832,19 @@ msgid "{variable} is not {value}"
 msgstr ""
 
 #: pretix/base/services/checkin.py:270
-#, fuzzy, python-brace-format
-#| msgid "Tax value"
+#, python-brace-format
 msgid "Maximum {variable} exceeded"
-msgstr "Tasse"
+msgstr "Massimo {variable} superato"
 
 #: pretix/base/services/checkin.py:272
 #, python-brace-format
 msgid "Minimum {variable} exceeded"
-msgstr ""
+msgstr "Minimo {variable} superato"
 
 #: pretix/base/services/checkin.py:274
 #, python-brace-format
 msgid "{variable} is {value}"
-msgstr ""
+msgstr "{variable} è {value}"
 
 #: pretix/base/services/checkin.py:714
 msgid "This order position has been canceled."
@@ -5877,7 +5869,7 @@ msgstr ""
 
 #: pretix/base/services/checkin.py:768
 msgid "You need to answer questions to complete this check-in."
-msgstr ""
+msgstr "Devi rispondere alle domande per completare la registrazione."
 
 #: pretix/base/services/checkin.py:814
 msgid "This ticket has already been redeemed."
@@ -5885,7 +5877,7 @@ msgstr ""
 
 #: pretix/base/services/export.py:66 pretix/base/services/export.py:125
 msgid "Your export did not contain any data."
-msgstr ""
+msgstr "L'esportazione non contiene dati."
 
 #: pretix/base/services/invoices.py:106
 #, python-brace-format
@@ -5942,10 +5934,9 @@ msgid "Sample product A"
 msgstr ""
 
 #: pretix/base/services/invoices.py:507
-#, fuzzy, python-brace-format
-#| msgid "Invoice number"
+#, python-brace-format
 msgid "New invoice: {number}"
-msgstr "Numero fattura"
+msgstr "Nuova fattura: {number}"
 
 #: pretix/base/services/invoices.py:509
 #, python-brace-format
@@ -8963,11 +8954,10 @@ msgid "Discount \"{name}\" becomes active"
 msgstr ""
 
 #: pretix/base/timeline.py:236
-#, fuzzy, python-brace-format
-#| msgid "This account is inactive."
+#, python-brace-format
 msgctxt "timeline"
 msgid "Discount \"{name}\" becomes inactive"
-msgstr "Questo account non è attivo."
+msgstr "Lo sconto \"{name}\" diventa inattivo."
 
 #: pretix/base/timeline.py:276
 #, python-brace-format
@@ -9119,11 +9109,9 @@ msgid "Do not copy"
 msgstr ""
 
 #: pretix/control/forms/event.py:313 pretix/control/forms/subevents.py:386
-#, fuzzy, python-brace-format
-#| msgctxt "invoice"
-#| msgid "Net value"
+#, python-brace-format
 msgid "Default ({value})"
-msgstr "Valore netto"
+msgstr "Default ({value})"
 
 #: pretix/control/forms/event.py:365 pretix/control/forms/organizer.py:132
 msgid "Custom domain"
@@ -10535,7 +10523,7 @@ msgstr ""
 #: pretix/plugins/reports/exporters.py:576
 #: pretix/plugins/reports/exporters.py:799
 msgid "Payment date"
-msgstr ""
+msgstr "Data pagamento"
 
 #: pretix/control/forms/orders.py:252
 msgid "Re-calculate taxes"
@@ -11509,10 +11497,9 @@ msgid "The order has been approved."
 msgstr ""
 
 #: pretix/control/logdisplay.py:349
-#, fuzzy, python-brace-format
-#| msgid "Order changed"
+#, python-brace-format
 msgid "The order has been denied (comment: \"{comment}\")."
-msgstr "Ordine modificato"
+msgstr "L'ordine è stato negato (commento: \"{comment}\")."
 
 #: pretix/control/logdisplay.py:350
 #, python-brace-format
@@ -12165,10 +12152,9 @@ msgid "The user confirmed the following message: \"{}\""
 msgstr ""
 
 #: pretix/control/logdisplay.py:540
-#, fuzzy, python-brace-format
-#| msgid "Order changed"
+#, python-brace-format
 msgid "The order has been canceled (comment: \"{comment}\")."
-msgstr "Ordine modificato"
+msgstr "L'ordine è stato annullato (commento: \"{comment}\")."
 
 #: pretix/control/logdisplay.py:542 pretix/control/views/orders.py:1292
 #: pretix/presale/views/order.py:967
@@ -22436,10 +22422,9 @@ msgid "Only enabled rules are actually sent"
 msgstr ""
 
 #: pretix/plugins/sendmail/models.py:249
-#, fuzzy, python-brace-format
-#| msgid "incl. {rate}% {name}"
+#, python-brace-format
 msgid "on {date} at {time}"
-msgstr "Incluso {rate}% {name}"
+msgstr "il {date} alle {time}"
 
 #: pretix/plugins/sendmail/models.py:255
 #, python-format
@@ -24409,12 +24394,11 @@ msgid "Usage:"
 msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:105
-#, fuzzy, python-format
-#| msgid "Order changed"
+#, python-format
 msgid "This ticket has been used once."
 msgid_plural "This ticket has been used %(count)s times."
-msgstr[0] "Ordine modificato"
-msgstr[1] "Ordine modificato"
+msgstr[0] "Il biglietto è stato usato una volta"
+msgstr[1] "Il biglietto è stato usato %(count)s volte."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:137
 #, fuzzy
