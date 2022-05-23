@@ -142,7 +142,7 @@ class CartPositionCreateSerializer(I18nAwareModelSerializer):
             if voucher and voucher.seat and voucher.seat != validated_data.get('seat'):
                 raise ValidationError('The specified voucher is not valid for this seat.')
 
-            if voucher and voucher.subevent_id and voucher.subevent_id != validated_data.get('subevent'):
+            if voucher and voucher.subevent_id and (not validated_data.get('subevent') or voucher.subevent_id != validated_data['subevent'].pk):
                 raise ValidationError('The specified voucher is not valid for this subevent.')
 
             if voucher.valid_until is not None and voucher.valid_until < now():
