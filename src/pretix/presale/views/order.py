@@ -1255,7 +1255,7 @@ class OrderChange(EventViewMixin, OrderDetailMixin, TemplateView):
                             allow_addons=True,
                             quota_cache=quota_cache,
                             memberships=(
-                                self.request.customer.usable_memberships(
+                                self.order.customer.usable_memberships(
                                     for_event=p.subevent or self.request.event,
                                     testmode=self.order.testmode
                                 )
