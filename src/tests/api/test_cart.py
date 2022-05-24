@@ -963,12 +963,13 @@ def test_cartpos_create_with_voucher_invalid_seat(token_client, organizer, event
 def test_cartpos_create_with_voucher_invalid_subevent(token_client, organizer, event, item, quota, subevent):
     with scopes_disabled():
         voucher = event.vouchers.create(code="FOOBAR", item=item, subevent=subevent)
-        quota.subevent = subevent
+        se2 = event.subevents.create(name="Foobar", date_from=subevent.date_from)
+        quota.subevent = se2
         quota.save()
     res = copy.deepcopy(CARTPOS_CREATE_PAYLOAD)
     res['item'] = item.pk
     res['voucher'] = voucher.code
-    res['subevent'] = subevent.pk
+    res['subevent'] = se2.pk
     resp = token_client.post(
         '/api/v1/organizers/{}/events/{}/cartpositions/'.format(
             organizer.slug, event.slug
