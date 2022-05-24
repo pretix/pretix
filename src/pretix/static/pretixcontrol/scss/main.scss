@@ -569,16 +569,17 @@ td > .dl-horizontal {
         width: 70%;
         margin: auto;
 
-        .fa {
+        & > .fa {
             float: left;
             margin-right: 30px;
+            margin-left: 0;
         }
 
         h2 {
             padding-top: 25px;
         }
 
-        p {
+        & > * {
             margin-left: 158px;
         }
     }
