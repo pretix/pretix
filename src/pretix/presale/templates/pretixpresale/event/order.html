@@ -38,7 +38,7 @@
                         <strong>
                             {% trans "Please note that we still await approval by the event organizer before you can pay and complete this order." %}
                         </strong>
-                    {% else %}
+                    {% elif not event.settings.payment_pending_hidden %}
                         <strong>
                             {% trans "Please note that we still await your payment to complete the process." %}
                         </strong>
