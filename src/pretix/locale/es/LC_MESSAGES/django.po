@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-28 16:44+0000\n"
-"PO-Revision-Date: 2022-05-19 22:00+0000\n"
+"PO-Revision-Date: 2022-05-24 21:00+0000\n"
 "Last-Translator: Ismael Menéndez Fernández <ismael.menendez@balidea.com>\n"
 "Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/pretix/"
 "es/>\n"
@@ -27554,12 +27554,9 @@ msgid "Payment pending"
 msgstr "Pago pendiente"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_order_status.html:20
-#, fuzzy
-#| msgctxt "payment_state"
-#| msgid "confirmed"
 msgctxt "order state"
 msgid "Confirmed"
-msgstr "confirmado"
+msgstr "Confirmado"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:9
 #: pretix/presale/templates/pretixpresale/event/voucher.html:101
@@ -27987,15 +27984,10 @@ msgid "Request invoice"
 msgstr "Solicitar factura"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:292
-#, fuzzy
-#| msgid "Change order information"
 msgid "Change your information"
-msgstr "Cambiar la información de la orden"
+msgstr "Cambiar la información del pedido"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:300
-#, fuzzy
-#| msgctxt "checkoutflow"
-#| msgid "Your information"
 msgid "Your information"
 msgstr "Su información"
 
@@ -28004,11 +27996,9 @@ msgid "Internal Reference"
 msgstr "Referencia interna"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:353
-#, fuzzy
-#| msgid "Change for all events"
 msgctxt "action"
 msgid "Change or cancel your order"
-msgstr "Modificación para todos los eventos"
+msgstr "Cambiar o cancelar tu pedido"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:360
 msgid ""
@@ -28039,10 +28029,8 @@ msgstr "Puedes cancelar esta orden usando el siguiente botón."
 #: pretix/presale/templates/pretixpresale/event/order.html:410
 #: pretix/presale/templates/pretixpresale/event/order.html:431
 #: pretix/presale/templates/pretixpresale/event/order.html:446
-#, fuzzy
-#| msgid "This will invalidate all of your tickets."
 msgid "This will invalidate all tickets in this order."
-msgstr "Esto invalidará todos tus tickets."
+msgstr "Esto invalidará todos los tickets de este pedido."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:392
 #, fuzzy, python-format
