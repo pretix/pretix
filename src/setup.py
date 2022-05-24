@@ -202,6 +202,7 @@ setup(
         'oauthlib==3.1.*',
         'openpyxl==3.0.*',
         'packaging',
+        'paypalrestsdk==1.13.*',
         'paypal-checkout-serversdk==1.0.*',
         'PyJWT==2.0.*',
         'phonenumberslite==8.12.*',
