@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-28 16:44+0000\n"
-"PO-Revision-Date: 2022-05-19 22:00+0000\n"
+"PO-Revision-Date: 2022-05-24 21:00+0000\n"
 "Last-Translator: Ismael Menéndez Fernández <ismael.menendez@balidea.com>\n"
 "Language-Team: Galician <https://translate.pretix.eu/projects/pretix/pretix/"
 "gl/>\n"
@@ -18716,7 +18716,6 @@ msgstr "Cambiar productos"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:344
 #: pretix/presale/templates/pretixpresale/event/order.html:205
-#, fuzzy
 msgid "Ordered items"
 msgstr "Artículos pedidos"
 
@@ -28811,14 +28810,12 @@ msgid "Request invoice"
 msgstr "Solicitar factura"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:292
-#, fuzzy
 msgid "Change your information"
-msgstr "Cambiar la información de la orden"
+msgstr "Cambiar a información do pedido"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:300
-#, fuzzy
 msgid "Your information"
-msgstr "Su información"
+msgstr "A súa información"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:340
 msgid "Internal Reference"
@@ -28827,7 +28824,7 @@ msgstr "Referencia interna"
 #: pretix/presale/templates/pretixpresale/event/order.html:353
 msgctxt "action"
 msgid "Change or cancel your order"
-msgstr "Modificación ou cancelacións"
+msgstr "Modificar ou cancelar o seu pedido"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:360
 msgid ""
@@ -28856,7 +28853,7 @@ msgstr "Puedes cancelar esta orden usando el siguiente botón."
 #: pretix/presale/templates/pretixpresale/event/order.html:431
 #: pretix/presale/templates/pretixpresale/event/order.html:446
 msgid "This will invalidate all tickets in this order."
-msgstr "Esto invalidará todos os seus tickets."
+msgstr "Esto invalidará todos os tickets de este pedido."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:392
 #, fuzzy, python-format
