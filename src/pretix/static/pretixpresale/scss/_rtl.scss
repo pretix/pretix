@@ -30,12 +30,12 @@ html.rtl {
     padding-right: 20px;
     padding-left: 0;
   }
-  .thank-you .fa {
+  .thank-you > .fa {
     float: right;
     margin-left: 30px;
     margin-right: 0;
   }
-  .thank-you p {
+  .thank-you > * {
     margin-right: 158px;
     margin-left: 0;
   }

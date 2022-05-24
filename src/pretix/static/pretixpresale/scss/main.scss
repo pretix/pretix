@@ -290,16 +290,17 @@ body.loading .container {
         margin-right: auto;
         margin-bottom: 3em;
 
-        .fa {
+        & > .fa {
             float: left;
             margin-right: 30px;
+            margin-left: 0;
         }
 
         h2 {
             padding-top: 35px;
         }
 
-        p {
+        & > * {
             margin-left: 158px;
         }
     }
