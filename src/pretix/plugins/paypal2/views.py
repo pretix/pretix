@@ -106,7 +106,7 @@ def redirect_view(request, *args, **kwargs):
     except signing.BadSignature:
         return HttpResponseBadRequest('Invalid parameter')
 
-    r = render(request, 'pretixplugins/paypal/redirect.html', {
+    r = render(request, 'pretixplugins/paypal2/redirect.html', {
         'url': url,
     })
     r._csp_ignore = True
@@ -164,7 +164,7 @@ class PayView(PaypalOrderView, TemplateView):
         if self.payment.state != OrderPayment.PAYMENT_STATE_CREATED:
             return self._redirect_to_order()
         else:
-            r = render(request, 'pretixplugins/paypal/pay.html', self.get_context_data())
+            r = render(request, 'pretixplugins/paypal2/pay.html', self.get_context_data())
             return r
 
     def post(self, request, *args, **kwargs):
@@ -444,7 +444,7 @@ def isu_disconnect(request, **kwargs):
     del request.event.settings.payment_paypal_isu_merchant_id
     del request.event.settings.payment_paypal_isu_scopes
     request.event.settings.payment_paypal__enabled = False
-    messages.success(request, _('Your PayPal account has been disconnected.'))
+    messages.success(request, _('Your PayPal account has been disconnected.BB'))
 
     return redirect(reverse('control:event.settings.payment.provider', kwargs={
         'organizer': request.event.organizer.slug,

@@ -293,7 +293,7 @@ def oauth_disconnect(request, **kwargs):
     del request.event.settings.payment_paypal_connect_refresh_token
     del request.event.settings.payment_paypal_connect_user_id
     request.event.settings.payment_paypal__enabled = False
-    messages.success(request, _('Your PayPal account has been disconnected.'))
+    messages.success(request, _('Your PayPal account has been disconnected.AA'))
 
     # Migrate User to PayPal v2
     event = request.event

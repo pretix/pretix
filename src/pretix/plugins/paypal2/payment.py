@@ -440,7 +440,7 @@ class PaypalMethod(BasePaymentProvider):
                     kwargs[key] = request.resolver_match.kwargs[key]
             return kwargs
 
-        template = get_template('pretixplugins/paypal/checkout_payment_form.html')
+        template = get_template('pretixplugins/paypal2/checkout_payment_form.html')
         ctx = {
             'request': request,
             'event': self.event,
@@ -603,7 +603,7 @@ class PaypalMethod(BasePaymentProvider):
         Returns the HTML that should be displayed when the user selected this provider
         on the 'confirm order' page.
         """
-        template = get_template('pretixplugins/paypal/checkout_payment_confirm.html')
+        template = get_template('pretixplugins/paypal2/checkout_payment_confirm.html')
         ctx = {'request': request, 'event': self.event, 'settings': self.settings}
         return template.render(ctx)
 
@@ -725,7 +725,7 @@ class PaypalMethod(BasePaymentProvider):
                 retry = False
         except KeyError:
             pass
-        template = get_template('pretixplugins/paypal/pending.html')
+        template = get_template('pretixplugins/paypal2/pending.html')
         ctx = {'request': request, 'event': self.event, 'settings': self.settings,
                'retry': retry, 'order': payment.order}
         return template.render(ctx)
@@ -779,7 +779,7 @@ class PaypalMethod(BasePaymentProvider):
     def payment_control_render(self, request: HttpRequest, payment: OrderPayment):
         # Legacy PayPal info-data
         if 'purchase_units' not in payment.info_data:
-            template = get_template('pretixplugins/paypal/control_legacy.html')
+            template = get_template('pretixplugins/paypal2/control_legacy.html')
             sale_id = None
             for trans in payment.info_data.get('transactions', []):
                 for res in trans.get('related_resources', []):
@@ -788,7 +788,7 @@ class PaypalMethod(BasePaymentProvider):
             ctx = {'request': request, 'event': self.event, 'settings': self.settings,
                    'payment_info': payment.info_data, 'order': payment.order, 'sale_id': sale_id}
         else:
-            template = get_template('pretixplugins/paypal/control.html')
+            template = get_template('pretixplugins/paypal2/control.html')
             ctx = {'request': request, 'event': self.event, 'settings': self.settings,
                    'payment_info': payment.info_data, 'order': payment.order}
 

@@ -108,14 +108,14 @@ def html_head_presale(sender, request=None, **kwargs):
     if provider.settings.get('_enabled', as_type=bool) and (
             url.url_name == "event.order.pay.change" or
             (url.url_name == "event.checkout" and url.kwargs['step'] == "payment") or
-            (url.namespace == "plugins:paypal" and url.url_name == "pay")
+            (url.namespace == "plugins:paypal2" and url.url_name == "pay")
     ):
         provider.init_api()
-        template = get_template('pretixplugins/paypal/presale_head.html')
+        template = get_template('pretixplugins/paypal2/presale_head.html')
 
         ctx = {
             'client_id': provider.client.environment.client_id,
-            'merchant_id': provider.client.environment.merchant_id,
+            'merchant_id': provider.client.environment.merchant_id or '',
             'csp_nonce': _nonce(request),
             'debug': settings.DEBUG,
             'settings': provider.settings,
@@ -138,7 +138,7 @@ def signal_process_response(sender, request: HttpRequest, response: HttpResponse
     if provider.settings.get('_enabled', as_type=bool) and (
             url.url_name == "event.order.pay.change" or
             (url.url_name == "event.checkout" and url.kwargs['step'] == "payment") or
-            (url.namespace == "plugins:paypal" and url.url_name == "pay")
+            (url.namespace == "plugins:paypal2" and url.url_name == "pay")
     ):
         if 'Content-Security-Policy' in response:
             h = _parse_csp(response['Content-Security-Policy'])

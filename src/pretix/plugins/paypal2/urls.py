@@ -45,7 +45,7 @@ event_patterns = [
 ]
 
 urlpatterns = [
-    re_path(r'^control/event/(?P<organizer>[^/]+)/(?P<event>[^/]+)/paypal/disconnect/', isu_disconnect,
+    re_path(r'^control/event/(?P<organizer>[^/]+)/(?P<event>[^/]+)/paypal2/disconnect/', isu_disconnect,
             name='isu.disconnect'),
     re_path(r'^control/event/(?P<organizer>[^/]+)/(?P<event>[^/]+)/paypal/return/$', isu_return, name='isu.return'),
     re_path(r'^_paypal/webhook/$', webhook, name='webhook'),
