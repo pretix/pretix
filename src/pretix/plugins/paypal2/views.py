@@ -62,8 +62,8 @@ from pretix.multidomain.urlreverse import eventreverse
 from pretix.plugins.paypal2.client.customer.partners_merchantintegrations_get_request import (
     PartnersMerchantIntegrationsGetRequest,
 )
-from pretix.plugins.paypal.models import ReferencedPayPalObject
 from pretix.plugins.paypal2.payment import PaypalMethod, PaypalMethod as Paypal
+from pretix.plugins.paypal.models import ReferencedPayPalObject
 from pretix.presale.views import get_cart, get_cart_total
 
 logger = logging.getLogger('pretix.plugins.paypal')

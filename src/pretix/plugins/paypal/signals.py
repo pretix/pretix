@@ -22,7 +22,7 @@
 
 from django.dispatch import receiver
 
-from pretix.base.signals import register_payment_providers, logentry_display
+from pretix.base.signals import logentry_display, register_payment_providers
 
 
 @receiver(register_payment_providers, dispatch_uid="payment_paypal")
