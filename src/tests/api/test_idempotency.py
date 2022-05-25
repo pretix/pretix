@@ -104,6 +104,19 @@ def test_ignore_path_method_body(token_client, organizer):
 
 
 @pytest.mark.django_db
+def test_query_key(token_client, organizer):
+    resp = token_client.post('/api/v1/organizers/{}/events/'.format(organizer.slug),
+                             PAYLOAD, format='json', HTTP_X_IDEMPOTENCY_KEY='foo')
+    assert resp.status_code == 201
+    data = resp.content
+    resp = token_client.get('/api/v1/idempotency_query?key=foo')
+    assert resp.content == data
+    assert resp.status_code == 201
+    resp = token_client.get('/api/v1/idempotency_query?key=bar')
+    assert resp.status_code == 404
+
+
+@pytest.mark.django_db
 def test_scoped_by_token(token_client, device, organizer):
     resp = token_client.post('/api/v1/organizers/{}/events/'.format(organizer.slug),
                              PAYLOAD, format='json', HTTP_X_IDEMPOTENCY_KEY='foo')
