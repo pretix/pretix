@@ -4,8 +4,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-28 16:44+0000\n"
-"PO-Revision-Date: 2022-04-01 13:36+0000\n"
-"Last-Translator: Anna-itk <abc@aarhus.dk>\n"
+"PO-Revision-Date: 2022-05-25 11:00+0000\n"
+"Last-Translator: Mie Frydensbjerg <mif@aarhus.dk>\n"
 "Language-Team: Danish <https://translate.pretix.eu/projects/pretix/pretix/da/"
 ">\n"
 "Language: da\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.11.2\n"
+"X-Generator: Weblate 4.12\n"
 
 #: htmlcov/pretix_control_views_dashboards_py.html:963
 #: pretix/control/templates/pretixcontrol/events/index.html:140
@@ -7900,7 +7900,7 @@ msgstr ""
 "Arrangøren af {event}"
 
 #: pretix/base/settings.py:1729
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -7921,7 +7921,7 @@ msgstr ""
 "Du kan ændre informationer og se status på din bestilling på {url}\n"
 "\n"
 "Venlig hilsen\n"
-"Arrangører af {event}"
+"Arrangøren af {event}"
 
 #: pretix/base/settings.py:1746
 #, fuzzy, python-brace-format
@@ -8103,7 +8103,7 @@ msgstr ""
 "værdien er 0 vil e-mailen aldrig blive sendt."
 
 #: pretix/base/settings.py:1872
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -8120,7 +8120,7 @@ msgstr ""
 "Hej\n"
 "\n"
 "Vi har ikke modtaget betaling af din bestilling til {event}.\n"
-"Husk at vi kun kan garantere bestillingen hvis du betaler inden "
+"Husk at vi kun kan garantere bestillingen, hvis du betaler inden "
 "{expire_date}.\n"
 "\n"
 "Du kan se betalingsoplysninger og status for din bestilling på {url}\n"
