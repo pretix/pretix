@@ -175,6 +175,15 @@ def webhook(request, *args, **kwargs):
     event_body = request.body.decode('utf-8').strip()
     event_json = json.loads(event_body)
 
+    # V1/V2 Sorting -- Start
+    if 'event_type' not in event_json:
+        return HttpResponse("Invalid body, no event_type given", status=400)
+
+    if event_json['event_type'].startswith(('CHECKOUT.ORDER.', 'PAYMENT.CAPTURE.')):
+        from pretix.plugins.paypal2.views import webhook
+        return webhook(request, *args, **kwargs)
+    # V1/V2 Sorting -- End
+
     # We do not check the signature, we just use it as a trigger to look the charge up.
     if 'resource_type' not in event_json:
         return HttpResponse("Invalid body, no resource_type given", status=400)

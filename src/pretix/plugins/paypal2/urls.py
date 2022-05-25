@@ -21,8 +21,6 @@
 #
 from django.conf.urls import include, re_path
 
-from pretix.multidomain import event_url
-
 from .views import (
     PayView, XHRView, abort, isu_disconnect, isu_return, redirect_view,
     success, webhook,
@@ -41,7 +39,8 @@ event_patterns = [
         re_path(r'w/(?P<cart_namespace>[a-zA-Z0-9]{16})/return/', success, name='return'),
         re_path(r'w/(?P<cart_namespace>[a-zA-Z0-9]{16})/xhr/', XHRView.as_view(), name='xhr'),
 
-        event_url(r'^webhook/$', webhook, name='webhook', require_live=False),
+        # Provided - for now - by PayPal v1. To be changed with deprecation of v1 and renaming of paypal2 to paypal.
+        # event_url(r'^webhook/$', webhook, name='webhook', require_live=False),
     ])),
 ]
 
