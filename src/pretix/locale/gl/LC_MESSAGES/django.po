@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-28 16:44+0000\n"
-"PO-Revision-Date: 2022-05-24 21:00+0000\n"
+"PO-Revision-Date: 2022-05-26 21:00+0000\n"
 "Last-Translator: Ismael Menéndez Fernández <ismael.menendez@balidea.com>\n"
 "Language-Team: Galician <https://translate.pretix.eu/projects/pretix/pretix/"
 "gl/>\n"
@@ -27499,7 +27499,7 @@ msgid "Website in %(language)s"
 msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/base.html:59
-#, fuzzy, python-format
+#, python-format
 msgid "Show all events of %(name)s"
 msgstr "Mostrar todos los eventos de %(name)s"
 
@@ -29211,26 +29211,23 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/resend_link.html:4
 #: pretix/presale/templates/pretixpresale/event/resend_link.html:11
-#, fuzzy
 msgid "Resend order links"
 msgstr "Reenviar liganzóns do pedido"
 
 #: pretix/presale/templates/pretixpresale/event/resend_link.html:15
-#, fuzzy
 msgid ""
 "If you lost the link to your order or orders, please enter the email address "
 "you used for your order. We will send you an email with links to all orders "
 "you placed using this email address."
 msgstr ""
-"Si ha perdido el enlace a su pedido o pedidos, por favor, introduzca la "
-"dirección de correo electrónico que utilizó para su pedido. Le enviaremos un "
-"correo electrónico con enlaces a todos los pedidos que haya realizado "
-"utilizando esta dirección de correo electrónico."
+"Se perdeu a ligazón ao seu pedido ou pedidos, por favor, introduza a "
+"dirección de correo electrónico que utilizou para o seu pedido. "
+"Enviarémoslle un correo electrónico con ligazóns a todos os pedidos que "
+"realizase utilizando esta dirección de correo electrónico."
 
 #: pretix/presale/templates/pretixpresale/event/resend_link.html:30
-#, fuzzy
 msgid "Send links"
-msgstr "Enviar links"
+msgstr "Enviar ligazóns"
 
 #: pretix/presale/templates/pretixpresale/event/voucher.html:9
 #: pretix/presale/templates/pretixpresale/event/voucher.html:16
@@ -29912,13 +29909,12 @@ msgstr ""
 "regrese más tarde."
 
 #: pretix/presale/views/user.py:94
-#, fuzzy
 msgid ""
 "If there were any orders by this user, they will receive an email with their "
 "order codes."
 msgstr ""
-"Si hubiera algún pedido por parte de este usuario, recibirá un correo "
-"electrónico con sus códigos de pedido."
+"Se houbese algún pedido por parte deste usuario, recibirá un correo "
+"electrónico cos seus códigos de pedido."
 
 #: pretix/presale/views/waiting.py:94
 #, fuzzy
