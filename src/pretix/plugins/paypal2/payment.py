@@ -64,7 +64,7 @@ from pretix.plugins.paypal2.client.customer.partner_referral_create_request impo
 )
 from pretix.plugins.paypal.models import ReferencedPayPalObject
 
-logger = logging.getLogger('pretix.plugins.paypal')
+logger = logging.getLogger('pretix.plugins.paypal2')
 
 SUPPORTED_CURRENCIES = ['AUD', 'BRL', 'CAD', 'CZK', 'DKK', 'EUR', 'HKD', 'HUF', 'INR', 'ILS', 'JPY', 'MYR', 'MXN',
                         'TWD', 'NZD', 'NOK', 'PHP', 'PLN', 'GBP', 'RUB', 'SGD', 'SEK', 'CHF', 'THB', 'USD']
