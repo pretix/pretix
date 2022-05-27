@@ -66,7 +66,7 @@ from pretix.plugins.paypal2.payment import PaypalMethod, PaypalMethod as Paypal
 from pretix.plugins.paypal.models import ReferencedPayPalObject
 from pretix.presale.views import get_cart, get_cart_total
 
-logger = logging.getLogger('pretix.plugins.paypal')
+logger = logging.getLogger('pretix.plugins.paypal2')
 
 
 class PaypalOrderView:
