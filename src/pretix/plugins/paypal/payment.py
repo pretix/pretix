@@ -57,7 +57,6 @@ from pretix.base.models import Event, Order, OrderPayment, OrderRefund, Quota
 from pretix.base.payment import BasePaymentProvider, PaymentException
 from pretix.base.services.mail import SendMailException
 from pretix.base.settings import SettingsSandbox
-from pretix.helpers.urls import build_absolute_uri as build_global_uri
 from pretix.multidomain.urlreverse import build_absolute_uri
 from pretix.plugins.paypal.models import ReferencedPayPalObject
 
@@ -203,8 +202,8 @@ class Paypal(BasePaymentProvider):
                 client_id=self.settings.connect_client_id,
                 client_secret=self.settings.connect_secret_key,
                 openid_client_id=self.settings.connect_client_id,
-                openid_client_secret=self.settings.connect_secret_key,
-                openid_redirect_uri=urllib.parse.quote(build_global_uri('plugins:paypal:oauth.return')))
+                openid_client_secret=self.settings.connect_secret_key
+            )
         else:
             paypalrestsdk.set_config(
                 mode="sandbox" if "sandbox" in self.settings.get('endpoint') else 'live',
