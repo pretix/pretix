@@ -85,17 +85,9 @@ class PaypalSettingsHolder(BasePaymentProvider):
 
     @property
     def settings_form_fields(self):
-        # PayPal connect (legacy) || ISU
+        # ISU
         if self.settings.connect_client_id and self.settings.connect_secret_key and not self.settings.secret:
-            if self.settings.connect_user_id:
-                fields = [
-                    ('connect_user_id',
-                     forms.CharField(
-                         label=_('PayPal account'),
-                         disabled=True
-                     )),
-                ]
-            elif self.settings.isu_merchant_id:
+            if self.settings.isu_merchant_id:
                 fields = [
                     ('isu_merchant_id',
                      forms.CharField(
@@ -240,7 +232,7 @@ class PaypalSettingsHolder(BasePaymentProvider):
         settings_content = ""
         if self.settings.connect_client_id and self.settings.connect_secret_key and not self.settings.secret:
             # Use ISU
-            if not any([self.settings.isu_merchant_id, self.settings.connect_user_id]):
+            if not self.settings.isu_merchant_id:
                 isu_referral_url = self.get_isu_referral_url(request)
                 settings_content = (
                     "<p>{}</p>"
@@ -381,20 +373,20 @@ class PaypalMethod(BasePaymentProvider):
         return super().is_allowed(request, total) and self.event.currency in SUPPORTED_CURRENCIES
 
     def init_api(self):
-        # PayPal Connect (legacy) || ISU
+        # ISU
         if self.settings.connect_client_id and not self.settings.secret:
             if 'sandbox' in self.settings.connect_endpoint:
                 env = SandboxEnvironment(
                     client_id=self.settings.connect_client_id,
                     client_secret=self.settings.connect_secret_key,
-                    merchant_id=self.settings.get('isu_merchant_id', self.settings.get('connect_user_id', None)),
+                    merchant_id=self.settings.get('isu_merchant_id', None),
                     partner_id=self.BN
                 )
             else:
                 env = LiveEnvironment(
                     client_id=self.settings.connect_client_id,
                     client_secret=self.settings.connect_secret_key,
-                    merchant_id=self.settings.get('isu_merchant_id', self.settings.get('connect_user_id', None)),
+                    merchant_id=self.settings.get('isu_merchant_id', None),
                     partner_id=self.BN
                 )
         # Manual API integration
@@ -505,13 +497,8 @@ class PaypalMethod(BasePaymentProvider):
         if request.resolver_match and 'cart_namespace' in request.resolver_match.kwargs:
             kwargs['cart_namespace'] = request.resolver_match.kwargs['cart_namespace']
 
-        # PayPal Connect (legacy)
-        if request.event.settings.payment_paypal_connect_user_id:
-            payee = {
-                "email": request.event.settings.payment_paypal_connect_user_id,
-            }
         # ISU
-        elif request.event.settings.payment_paypal_isu_merchant_id:
+        if request.event.settings.payment_paypal_isu_merchant_id:
             payee = {
                 "merchant_id": request.event.settings.payment_paypal_isu_merchant_id,
             }
