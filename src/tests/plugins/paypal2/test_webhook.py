@@ -264,7 +264,7 @@ def test_webhook_all_good(env, client, monkeypatch):
     order = env[1]
     pp_order = get_test_order()
     monkeypatch.setattr("paypalcheckoutsdk.orders.OrdersGetRequest", lambda *args: pp_order)
-    monkeypatch.setattr("pretix.plugins.paypal.payment.PaypalMethod.init_api", init_api)
+    monkeypatch.setattr("pretix.plugins.paypal2.payment.PaypalMethod.init_api", init_api)
 
     with scopes_disabled():
         ReferencedPayPalObject.objects.create(order=order, payment=order.payments.first(),
@@ -408,7 +408,7 @@ def test_webhook_global(env, client, monkeypatch):
 
     pp_order = get_test_order()
     monkeypatch.setattr("paypalcheckoutsdk.orders.OrdersGetRequest", lambda *args: pp_order)
-    monkeypatch.setattr("pretix.plugins.paypal.payment.PaypalMethod.init_api", init_api)
+    monkeypatch.setattr("pretix.plugins.paypal2.payment.PaypalMethod.init_api", init_api)
     with scopes_disabled():
         ReferencedPayPalObject.objects.create(order=order, payment=order.payments.first(),
                                               reference="806440346Y391300T")
@@ -550,7 +550,7 @@ def test_webhook_mark_paid(env, client, monkeypatch):
 
     pp_order = get_test_order()
     monkeypatch.setattr("paypalcheckoutsdk.orders.OrdersGetRequest", lambda *args: pp_order)
-    monkeypatch.setattr("pretix.plugins.paypal.payment.PaypalMethod.init_api", init_api)
+    monkeypatch.setattr("pretix.plugins.paypal2.payment.PaypalMethod.init_api", init_api)
     with scopes_disabled():
         ReferencedPayPalObject.objects.create(order=order, payment=order.payments.first(),
                                               reference="806440346Y391300T")
@@ -650,7 +650,7 @@ def test_webhook_refund1(env, client, monkeypatch):
 
     monkeypatch.setattr("paypalcheckoutsdk.orders.OrdersGetRequest", lambda *args: pp_order)
     monkeypatch.setattr("paypalcheckoutsdk.payments.RefundsGetRequest", lambda *args: pp_refund)
-    monkeypatch.setattr("pretix.plugins.paypal.payment.PaypalMethod.init_api", init_api)
+    monkeypatch.setattr("pretix.plugins.paypal2.payment.PaypalMethod.init_api", init_api)
     with scopes_disabled():
         ReferencedPayPalObject.objects.create(order=order, payment=order.payments.first(),
                                               reference="22A4162004478570J")
@@ -744,7 +744,7 @@ def test_webhook_refund2(env, client, monkeypatch):
 
     monkeypatch.setattr("paypalcheckoutsdk.orders.OrdersGetRequest", lambda *args: pp_order)
     monkeypatch.setattr("paypalcheckoutsdk.payments.RefundsGetRequest", lambda *args: pp_refund)
-    monkeypatch.setattr("pretix.plugins.paypal.payment.PaypalMethod.init_api", init_api)
+    monkeypatch.setattr("pretix.plugins.paypal2.payment.PaypalMethod.init_api", init_api)
     with scopes_disabled():
         ReferencedPayPalObject.objects.create(order=order, payment=order.payments.first(),
                                               reference="22A4162004478570J")

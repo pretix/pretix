@@ -115,7 +115,7 @@ def test_payment(env, monkeypatch):
 
     order = get_test_order()
     monkeypatch.setattr("paypalcheckoutsdk.orders.OrdersGetRequest", lambda *args: order)
-    monkeypatch.setattr("pretix.plugins.paypal.payment.PaypalMethod.init_api", init_api)
+    monkeypatch.setattr("pretix.plugins.paypal2.payment.PaypalMethod.init_api", init_api)
 
     client, ticket = env
     session_key = get_cart_session_key(client, ticket.event)
