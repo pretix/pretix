@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-05-27 13:57+0000\n"
-"PO-Revision-Date: 2022-05-27 14:16+0000\n"
+"PO-Revision-Date: 2022-05-27 14:20+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
@@ -13883,7 +13883,7 @@ msgstr "Zusätzlicher Scan: %(date)s"
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html:85
 #, python-format
 msgid "Offline scan. Upload time: %(date)s"
-msgstr "Offline-Scan. Uploadzeitpunkt: %(date)s"
+msgstr "Offline-Scan. Upload-Zeitpunkt: %(date)s"
 
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html:88
 #: pretix/control/templates/pretixcontrol/order/index.html:373
