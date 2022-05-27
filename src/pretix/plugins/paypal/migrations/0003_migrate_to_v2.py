@@ -14,7 +14,7 @@ def migrate_to_v2(app, schema_editor):
             Q(key__in=['payment_paypal_connect_client_id', 'payment_paypal_connect_secret_key'])
             & (Q(value__isnull=True) | ~Q(value=""))
     ).exists():
-        for ev in Event.objects.filter(plugins__contains='pretix.plugins.paypal', slug='lieferantix'): # ToDo
+        for ev in Event.objects.filter(plugins__contains='pretix.plugins.paypal'):
             switch_paypal_version(ev)
 
     # There are system-wide OAuth keys set - so we need to check each event individually
@@ -22,7 +22,7 @@ def migrate_to_v2(app, schema_editor):
         # Only look at events that have the PayPal plugin enabled
         for ev in Event.objects.filter(plugins__contains='pretix.plugins.paypal'):
             # If the payment method is enabled, we don't do anything
-            if EventSettingsStore.objects.filter(object_id=ev.pk, key='payment_paypal__enabled', value=True).exists():
+            if EventSettingsStore.objects.filter(object_id=ev.pk, key='payment_paypal__enabled', value="True").exists():
                 pass
             # In all other cases, the payment method is either disabled or hasn't been set up - in this case we'll
             # migrate the event to v2
@@ -31,16 +31,14 @@ def migrate_to_v2(app, schema_editor):
 
 
 def switch_paypal_version(event):
-    from pretix.presale.style import regenerate_css
-
     plugins_active = event.plugins.split(',')
-    plugins_active.remove('pretix.plugins.paypal')
-    plugins_active.append('pretix.plugins.paypal2')
 
-    event.plugins = ','.join(plugins_active)
-    event.save(update_fields=['plugins'])
+    if 'pretix.plugins.paypal' in plugins_active:
+        plugins_active.remove('pretix.plugins.paypal')
+        plugins_active.append('pretix.plugins.paypal2')
 
-    regenerate_css.apply_async(args=(event.pk,))
+        event.plugins = ','.join(plugins_active)
+        event.save(update_fields=['plugins'])
 
 
 class Migration(migrations.Migration):
