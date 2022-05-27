@@ -5,8 +5,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-05-27 13:57+0000\n"
-"PO-Revision-Date: 2022-05-16 19:00+0000\n"
-"Last-Translator: Dennis Lichtenthäler <lichtenthaeler@rami.io>\n"
+"PO-Revision-Date: 2022-05-27 14:16+0000\n"
+"Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
 ">\n"
 "Language: de\n"
@@ -1329,10 +1329,8 @@ msgstr "E-Mail-Adresse verifiziert"
 #: pretix/base/exporters/orderlist.py:297
 #: pretix/base/exporters/orderlist.py:464
 #: pretix/base/exporters/orderlist.py:618
-#, fuzzy
-#| msgid "Customer ID"
 msgid "External customer ID"
-msgstr "Kundennummer"
+msgstr "Externe Kundennummer"
 
 #: pretix/base/exporters/orderlist.py:302
 #, python-brace-format
@@ -2514,6 +2512,9 @@ msgid ""
 "The identifier may only contain letters, numbers, dots, dashes, and "
 "underscores. It must start and end with a letter or number."
 msgstr ""
+"Dieses Feld darf nur Buchstaben, Zahlen, Punkte, Bindestriche und "
+"Unterstriche enthalten. Es muss mit einer Zahl oder einem Buchstaben "
+"beginnen und enden."
 
 #: pretix/base/models/customers.py:65
 msgid "Account active"
@@ -2543,7 +2544,7 @@ msgstr "Externe Referenz"
 #: pretix/base/models/customers.py:75
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:67
 msgid "Notes"
-msgstr ""
+msgstr "Notizen"
 
 #: pretix/base/models/customers.py:238 pretix/base/models/orders.py:1318
 #: pretix/base/models/orders.py:2693 pretix/base/settings.py:841
@@ -3614,14 +3615,12 @@ msgid "Question"
 msgstr "Frage"
 
 #: pretix/base/models/items.py:1250 pretix/base/models/items.py:1477
-#, fuzzy
-#| msgid "The property name may only contain letters, numbers and underscores."
 msgid ""
 "The identifier may only contain letters, numbers, dots, dashes, and "
 "underscores."
 msgstr ""
-"Der Name der Eigenschaft darf nur Buchstaben, Zahlen und Bindestriche "
-"enthalten."
+"Dieses Feld darf nur Buchstaben, Zahlen, Punkte, Bindestriche und "
+"Unterstriche enthalten."
 
 #: pretix/base/models/items.py:1255
 msgid "Help text"
@@ -5711,10 +5710,8 @@ msgid "<Answer: {question}>"
 msgstr "<Antwort: {question}>"
 
 #: pretix/base/pdf.py:555
-#, fuzzy
-#| msgid "Attendee name x position (mm)"
 msgid "Attendee name for salutation"
-msgstr "Teilnehmername-x-Position (mm)"
+msgstr "Teilnehmername für Anrede"
 
 #: pretix/base/pdf.py:562 pretix/base/pdf.py:569
 #: pretix/plugins/badges/exporters.py:298
@@ -5726,10 +5723,8 @@ msgid "Attendee name: {part}"
 msgstr "Teilnehmer*innenname: {part}"
 
 #: pretix/base/pdf.py:578
-#, fuzzy
-#| msgid "Invoice address explanation"
 msgid "Invoice address name for salutation"
-msgstr "Erläuterung zur Rechnungsadresse"
+msgstr "Name der Rechnungsadresse für Anrede"
 
 #: pretix/base/pdf.py:585
 #, python-brace-format
@@ -13908,10 +13903,9 @@ msgid "Additional entry scan: %(date)s"
 msgstr "Zusätzlicher Scan: %(date)s"
 
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html:85
-#, fuzzy, python-format
-#| msgid "Denied scan: %(date)s"
+#, python-format
 msgid "Offline scan. Upload time: %(date)s"
-msgstr "Abgelehnter Scan: %(date)s"
+msgstr "Offline-Scan. Uploadzeitpunkt: %(date)s"
 
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html:88
 #: pretix/control/templates/pretixcontrol/order/index.html:373
@@ -23316,10 +23310,8 @@ msgid "Check-in log (all scans)"
 msgstr "Check-in-Protokoll (alle Scans)"
 
 #: pretix/plugins/checkinlists/exporters.py:621
-#, fuzzy
-#| msgid "Go offline"
 msgid "Offline"
-msgstr "Shop ausschalten"
+msgstr "Offline"
 
 #: pretix/plugins/checkinlists/exporters.py:622
 msgid "Offline override"
@@ -23537,22 +23529,16 @@ msgid "PayPal reported an event: {}"
 msgstr "PayPal meldete ein Ereignis: {}"
 
 #: pretix/plugins/paypal/signals.py:70
-#, fuzzy
-#| msgid "PayPal ISU/Connect: Client ID"
 msgid "PayPal Connect: Client ID"
-msgstr "PayPal ISU/Connect: Client-ID"
+msgstr "PayPal Connect: Client-ID"
 
 #: pretix/plugins/paypal/signals.py:74
-#, fuzzy
-#| msgid "PayPal ISU/Connect: Secret key"
 msgid "PayPal Connect: Secret key"
-msgstr "PayPal ISU/Connect: Geheimer Schlüssel"
+msgstr "PayPal Connect: Geheimer Schlüssel"
 
 #: pretix/plugins/paypal/signals.py:78
-#, fuzzy
-#| msgid "PayPal ISU/Connect Endpoint"
 msgid "PayPal Connect Endpoint"
-msgstr "PayPal ISU/Connect: Endpunkt"
+msgstr "PayPal Connect: Endpunkt"
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/checkout_payment_confirm.html:3
 msgid ""
@@ -27834,7 +27820,7 @@ msgstr "Türkisch"
 
 #: pretix/settings.py:530
 msgid "Ukrainian"
-msgstr ""
+msgstr "Ukrainisch"
 
 #: pretix/settings.py:851
 msgid "User profile only"
