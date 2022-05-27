@@ -239,7 +239,7 @@ class PaypalSettingsHolder(BasePaymentProvider):
                     "<a href='{}' class='btn btn-primary btn-lg {}'>{}</a>"
                 ).format(
                     _('To accept payments via PayPal, you will need an account at PayPal. By clicking on the '
-                      'following button, you can either create a new PayPal account connect pretix to an existing '
+                      'following button, you can either create a new PayPal account or connect pretix to an existing '
                       'one.'),
                     isu_referral_url,
                     'disabled' if not isu_referral_url else '',
