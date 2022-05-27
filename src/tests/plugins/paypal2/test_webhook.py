@@ -270,7 +270,7 @@ def test_webhook_all_good(env, client, monkeypatch):
         ReferencedPayPalObject.objects.create(order=order, payment=order.payments.first(),
                                               reference="806440346Y391300T")
 
-    client.post('/dummy/dummy/paypal/webhook/', json.dumps(
+    client.post('/_paypal/webhook/', json.dumps(
         {
             "id": "WH-4T867178D0574904F-7TT11736YU643990P",
             "create_time": "2022-04-28T12:00:37.077Z",
@@ -555,7 +555,7 @@ def test_webhook_mark_paid(env, client, monkeypatch):
         ReferencedPayPalObject.objects.create(order=order, payment=order.payments.first(),
                                               reference="806440346Y391300T")
 
-    client.post('/dummy/dummy/paypal/webhook/', json.dumps(
+    client.post('/_paypal/webhook/', json.dumps(
         {
             "id": "WH-88L014580L300952M-4BX97184625330932",
             "create_time": "2022-04-28T12:00:26.840Z",
@@ -655,7 +655,7 @@ def test_webhook_refund1(env, client, monkeypatch):
         ReferencedPayPalObject.objects.create(order=order, payment=order.payments.first(),
                                               reference="22A4162004478570J")
 
-    client.post('/dummy/dummy/paypal/webhook/', json.dumps(
+    client.post('/_paypal/webhook/', json.dumps(
         {
             "id": "WH-5LJ60612747357339-66248625WA926672S",
             "create_time": "2022-04-28T14:51:00.318Z",
@@ -749,7 +749,7 @@ def test_webhook_refund2(env, client, monkeypatch):
         ReferencedPayPalObject.objects.create(order=order, payment=order.payments.first(),
                                               reference="22A4162004478570J")
 
-    client.post('/dummy/dummy/paypal/webhook/', json.dumps(
+    client.post('/_paypal/webhook/', json.dumps(
         {
             "id": "WH-7FL378472F5218625-6WC87835CR8751809",
             "create_time": "2022-04-28T14:56:08.160Z",
