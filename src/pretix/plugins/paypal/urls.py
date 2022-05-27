@@ -21,9 +21,7 @@
 #
 from django.conf.urls import include, re_path
 
-from pretix.multidomain import event_url
-
-from .views import abort, oauth_disconnect, redirect_view, success, webhook
+from .views import abort, oauth_disconnect, redirect_view, success
 
 event_patterns = [
     re_path(r'^paypal/', include([
@@ -33,8 +31,6 @@ event_patterns = [
 
         re_path(r'w/(?P<cart_namespace>[a-zA-Z0-9]{16})/abort/', abort, name='abort'),
         re_path(r'w/(?P<cart_namespace>[a-zA-Z0-9]{16})/return/', success, name='return'),
-
-        event_url(r'^webhook/$', webhook, name='webhook', require_live=False),
     ])),
 ]
 

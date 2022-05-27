@@ -241,7 +241,7 @@ def test_webhook_all_good(env, client, monkeypatch):
 
 
 @pytest.mark.django_db
-def test_webhook_global(env, client, monkeypatch):
+def test_webhook_mark_paid(env, client, monkeypatch):
     order = env[1]
     order.status = Order.STATUS_PENDING
     order.save()
@@ -283,48 +283,8 @@ def test_webhook_global(env, client, monkeypatch):
 
 
 @pytest.mark.django_db
-def test_webhook_mark_paid(env, client, monkeypatch):
-    order = env[1]
-    order.status = Order.STATUS_PENDING
-    order.save()
-    with scopes_disabled():
-        order.payments.update(state=OrderPayment.PAYMENT_STATE_PENDING)
-
-    charge = get_test_charge(env[1])
-    monkeypatch.setattr("paypalrestsdk.Sale.find", lambda *args: charge)
-    monkeypatch.setattr("pretix.plugins.paypal.payment.Paypal.init_api", lambda *args: None)
-
-    client.post('/dummy/dummy/paypal/webhook/', json.dumps(
-        {
-            "id": "WH-2WR32451HC0233532-67976317FL4543714",
-            "create_time": "2014-10-23T17:23:52Z",
-            "resource_type": "sale",
-            "event_type": "PAYMENT.SALE.COMPLETED",
-            "summary": "A successful sale payment was made for $ 0.48 USD",
-            "resource": {
-                "amount": {
-                    "total": "-0.01",
-                    "currency": "USD"
-                },
-                "id": "36C38912MN9658832",
-                "parent_payment": "PAY-5YK922393D847794YKER7MUI",
-                "update_time": "2014-10-31T15:41:51Z",
-                "state": "completed",
-                "create_time": "2014-10-31T15:41:51Z",
-                "links": [],
-                "sale_id": "9T0916710M1105906"
-            },
-            "links": [],
-            "event_version": "1.0"
-        }
-    ), content_type='application_json')
-
-    order.refresh_from_db()
-    assert order.status == Order.STATUS_PAID
-
-
-@pytest.mark.django_db
 def test_webhook_refund1(env, client, monkeypatch):
+    order = env[1]
     charge = get_test_charge(env[1])
     charge['state'] = 'refunded'
     refund = get_test_refund(env[1])
@@ -332,8 +292,9 @@ def test_webhook_refund1(env, client, monkeypatch):
     monkeypatch.setattr("paypalrestsdk.Sale.find", lambda *args: charge)
     monkeypatch.setattr("paypalrestsdk.Refund.find", lambda *args: refund)
     monkeypatch.setattr("pretix.plugins.paypal.payment.Paypal.init_api", lambda *args: None)
+    ReferencedPayPalObject.objects.create(order=order, reference="PAY-5YK922393D847794YKER7MUI")
 
-    client.post('/dummy/dummy/paypal/webhook/', json.dumps(
+    client.post('/_paypal/webhook/', json.dumps(
         {
             # Sample obtained in a sandbox webhook
             "id": "WH-9K829080KA1622327-31011919VC6498738",
@@ -380,6 +341,7 @@ def test_webhook_refund1(env, client, monkeypatch):
 
 @pytest.mark.django_db
 def test_webhook_refund2(env, client, monkeypatch):
+    order = env[1]
     charge = get_test_charge(env[1])
     charge['state'] = 'refunded'
     refund = get_test_refund(env[1])
@@ -387,8 +349,9 @@ def test_webhook_refund2(env, client, monkeypatch):
     monkeypatch.setattr("paypalrestsdk.Sale.find", lambda *args: charge)
     monkeypatch.setattr("paypalrestsdk.Refund.find", lambda *args: refund)
     monkeypatch.setattr("pretix.plugins.paypal.payment.Paypal.init_api", lambda *args: None)
+    ReferencedPayPalObject.objects.create(order=order, reference="PAY-5YK922393D847794YKER7MUI")
 
-    client.post('/dummy/dummy/paypal/webhook/', json.dumps(
+    client.post('/_paypal/webhook/', json.dumps(
         {
             # Sample obtained in the webhook simulator
             "id": "WH-2N242548W9943490U-1JU23391CS4765624",
