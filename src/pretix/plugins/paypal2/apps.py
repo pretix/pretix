@@ -37,8 +37,10 @@ class Paypal2App(AppConfig):
         category = 'PAYMENT'
         featured = True
         picture = 'pretixplugins/paypal2/paypal_logo.svg'
-        description = _("Accept payments with your PayPal account. PayPal is one of the most popular payment methods "
-                        "world-wide.")
+        description = _("Accept payments with your PayPal account. In addition to regular PayPal payments, you can now "
+                        "also offer payments in a variety of local payment methods such as giropay, SOFORT, iDEAL and "
+                        "many more to your customers - they don't even need a PayPal account. PayPal is one of the "
+                        "most popular payment methods world-wide.")
 
     def ready(self):
         from . import signals  # NOQA
