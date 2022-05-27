@@ -734,7 +734,6 @@ class Renderer:
                 text = o['text']
 
             def replace(x):
-                print(x.group(1))
                 if x.group(1).startswith('itemmeta:'):
                     return op.item.meta_data.get(x.group(1)[9:]) or ''
                 elif x.group(1).startswith('meta:'):
