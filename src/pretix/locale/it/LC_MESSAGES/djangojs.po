@@ -7,11 +7,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-28 16:44+0000\n"
+"POT-Creation-Date: 2022-05-27 13:57+0000\n"
 "PO-Revision-Date: 2022-05-08 19:00+0000\n"
 "Last-Translator: Emanuele Signoretta <signorettae@gmail.com>\n"
-"Language-Team: Italian <https://translate.pretix.eu/projects/pretix/"
-"pretix-js/it/>\n"
+"Language-Team: Italian <https://translate.pretix.eu/projects/pretix/pretix-"
+"js/it/>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -28,123 +28,6 @@ msgstr "Segna come pagato"
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:76
 msgid "Comment:"
 msgstr "Commento:"
-
-#: pretix/plugins/paypal/static/pretixplugins/paypal/pretix-paypal.js:34
-msgid "PayPal"
-msgstr "PayPal"
-
-#: pretix/plugins/paypal/static/pretixplugins/paypal/pretix-paypal.js:35
-msgid "Venmo"
-msgstr "Venmo"
-
-#: pretix/plugins/paypal/static/pretixplugins/paypal/pretix-paypal.js:36
-msgid "Apple Pay"
-msgstr "Apple Pay"
-
-#: pretix/plugins/paypal/static/pretixplugins/paypal/pretix-paypal.js:37
-msgid "Itaú"
-msgstr ""
-
-#: pretix/plugins/paypal/static/pretixplugins/paypal/pretix-paypal.js:38
-msgid "PayPal Credit"
-msgstr ""
-
-#: pretix/plugins/paypal/static/pretixplugins/paypal/pretix-paypal.js:39
-msgid "Credit Card"
-msgstr ""
-
-#: pretix/plugins/paypal/static/pretixplugins/paypal/pretix-paypal.js:40
-msgid "PayPal Pay Later"
-msgstr ""
-
-#: pretix/plugins/paypal/static/pretixplugins/paypal/pretix-paypal.js:41
-msgid "iDEAL"
-msgstr ""
-
-#: pretix/plugins/paypal/static/pretixplugins/paypal/pretix-paypal.js:42
-msgid "SEPA Direct Debit"
-msgstr ""
-
-#: pretix/plugins/paypal/static/pretixplugins/paypal/pretix-paypal.js:43
-msgid "Bancontact"
-msgstr ""
-
-#: pretix/plugins/paypal/static/pretixplugins/paypal/pretix-paypal.js:44
-msgid "giropay"
-msgstr ""
-
-#: pretix/plugins/paypal/static/pretixplugins/paypal/pretix-paypal.js:45
-msgid "SOFORT"
-msgstr ""
-
-#: pretix/plugins/paypal/static/pretixplugins/paypal/pretix-paypal.js:46
-#, fuzzy
-#| msgid "Yes"
-msgid "eps"
-msgstr "Si"
-
-#: pretix/plugins/paypal/static/pretixplugins/paypal/pretix-paypal.js:47
-msgid "MyBank"
-msgstr ""
-
-#: pretix/plugins/paypal/static/pretixplugins/paypal/pretix-paypal.js:48
-msgid "Przelewy24"
-msgstr ""
-
-#: pretix/plugins/paypal/static/pretixplugins/paypal/pretix-paypal.js:49
-msgid "Verkkopankki"
-msgstr ""
-
-#: pretix/plugins/paypal/static/pretixplugins/paypal/pretix-paypal.js:50
-msgid "PayU"
-msgstr ""
-
-#: pretix/plugins/paypal/static/pretixplugins/paypal/pretix-paypal.js:51
-msgid "BLIK"
-msgstr ""
-
-#: pretix/plugins/paypal/static/pretixplugins/paypal/pretix-paypal.js:52
-msgid "Trustly"
-msgstr ""
-
-#: pretix/plugins/paypal/static/pretixplugins/paypal/pretix-paypal.js:53
-msgid "Zimpler"
-msgstr ""
-
-#: pretix/plugins/paypal/static/pretixplugins/paypal/pretix-paypal.js:54
-msgid "Maxima"
-msgstr ""
-
-#: pretix/plugins/paypal/static/pretixplugins/paypal/pretix-paypal.js:55
-msgid "OXXO"
-msgstr ""
-
-#: pretix/plugins/paypal/static/pretixplugins/paypal/pretix-paypal.js:56
-msgid "Boleto"
-msgstr ""
-
-#: pretix/plugins/paypal/static/pretixplugins/paypal/pretix-paypal.js:57
-msgid "WeChat Pay"
-msgstr ""
-
-#: pretix/plugins/paypal/static/pretixplugins/paypal/pretix-paypal.js:58
-msgid "Mercado Pago"
-msgstr ""
-
-#: pretix/plugins/paypal/static/pretixplugins/paypal/pretix-paypal.js:152
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:48
-msgid "Continue"
-msgstr "Continua"
-
-#: pretix/plugins/paypal/static/pretixplugins/paypal/pretix-paypal.js:205
-#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:152
-#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:183
-msgid "Confirming your payment …"
-msgstr "Stiamo processando il tuo pagamento …"
-
-#: pretix/plugins/paypal/static/pretixplugins/paypal/pretix-paypal.js:230
-msgid "Payment method unavailable"
-msgstr ""
 
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:15
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:39
@@ -167,6 +50,11 @@ msgstr "Sto contattando Stripe …"
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:60
 msgid "Total"
 msgstr "Totale"
+
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:152
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:183
+msgid "Confirming your payment …"
+msgstr "Stiamo processando il tuo pagamento …"
 
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:159
 msgid "Contacting your bank …"
@@ -241,6 +129,10 @@ msgstr "Riscattato"
 msgid "Cancel"
 msgstr "Annulla"
 
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:48
+msgid "Continue"
+msgstr "Continua"
+
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:49
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:58
 msgid "Ticket not paid"
@@ -307,7 +199,7 @@ msgid "close"
 msgstr "Chiudi"
 
 #: pretix/static/pretixbase/js/asynctask.js:43
-#: pretix/static/pretixbase/js/asynctask.js:119
+#: pretix/static/pretixbase/js/asynctask.js:120
 msgid ""
 "Your request is currently being processed. Depending on the size of your "
 "event, this might take up to a few minutes."
@@ -316,12 +208,12 @@ msgstr ""
 "tuo evento, questo passaggio può durare fino ad alcuni minuti."
 
 #: pretix/static/pretixbase/js/asynctask.js:48
-#: pretix/static/pretixbase/js/asynctask.js:124
+#: pretix/static/pretixbase/js/asynctask.js:125
 msgid "Your request has been queued on the server and will soon be processed."
 msgstr "La tua richiesta è stata inviata al server e verrà presto elaborata."
 
 #: pretix/static/pretixbase/js/asynctask.js:54
-#: pretix/static/pretixbase/js/asynctask.js:130
+#: pretix/static/pretixbase/js/asynctask.js:131
 msgid ""
 "Your request arrived on the server but we still wait for it to be processed. "
 "If this takes longer than two minutes, please contact us or go back in your "
@@ -331,14 +223,14 @@ msgstr ""
 "elaborazione. Se l'attesa dura più a lungo di due minuti di ti invitiamo a "
 "contattarci o di tornare al browser e riprovare."
 
-#: pretix/static/pretixbase/js/asynctask.js:89
-#: pretix/static/pretixbase/js/asynctask.js:175
-#: pretix/static/pretixbase/js/asynctask.js:180
+#: pretix/static/pretixbase/js/asynctask.js:90
+#: pretix/static/pretixbase/js/asynctask.js:178
+#: pretix/static/pretixbase/js/asynctask.js:183
 #: pretix/static/pretixcontrol/js/ui/mail.js:24
 msgid "An error of type {code} occurred."
 msgstr "Si è verificato un errore {code}."
 
-#: pretix/static/pretixbase/js/asynctask.js:92
+#: pretix/static/pretixbase/js/asynctask.js:93
 msgid ""
 "We currently cannot reach the server, but we keep trying. Last error code: "
 "{code}"
@@ -346,12 +238,12 @@ msgstr ""
 "Al momento il server non è raggiungibile, ma continueremo a provare. Codice "
 "dell'ultimo errore: {code}"
 
-#: pretix/static/pretixbase/js/asynctask.js:144
+#: pretix/static/pretixbase/js/asynctask.js:145
 #: pretix/static/pretixcontrol/js/ui/mail.js:21
 msgid "The request took too long. Please try again."
 msgstr "La richiesta ha impiegato troppo tempo. Si prega di riprovare."
 
-#: pretix/static/pretixbase/js/asynctask.js:183
+#: pretix/static/pretixbase/js/asynctask.js:186
 #: pretix/static/pretixcontrol/js/ui/mail.js:26
 msgid ""
 "We currently cannot reach the server. Please try again. Error code: {code}"
@@ -359,11 +251,11 @@ msgstr ""
 "Al momento il server non è raggiungibile. Si prega di riprovare. Codice "
 "dell'errore: {code}"
 
-#: pretix/static/pretixbase/js/asynctask.js:205
+#: pretix/static/pretixbase/js/asynctask.js:208
 msgid "We are processing your request …"
 msgstr "Stiamo elaborando la tua richiesta …"
 
-#: pretix/static/pretixbase/js/asynctask.js:213
+#: pretix/static/pretixbase/js/asynctask.js:216
 msgid ""
 "We are currently sending your request to the server. If this takes longer "
 "than one minute, please check your internet connection and then reload this "
@@ -373,7 +265,7 @@ msgstr ""
 "più di un minuto si prega di verificare la connessione internet e ricaricare "
 "la pagina per riprovare l'invio."
 
-#: pretix/static/pretixbase/js/asynctask.js:270
+#: pretix/static/pretixbase/js/asynctask.js:273
 #: pretix/static/pretixcontrol/js/ui/main.js:71
 msgid "Close message"
 msgstr "Messaggio di chiusura"
@@ -479,48 +371,48 @@ msgstr "minuti"
 msgid "Check-in QR"
 msgstr "Check-in con QR"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:376
+#: pretix/static/pretixcontrol/js/ui/editor.js:382
 msgid "The PDF background file could not be loaded for the following reason:"
 msgstr "Il file PDF di sfondo non può essere caricato per le seguenti ragioni:"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:624
+#: pretix/static/pretixcontrol/js/ui/editor.js:630
 msgid "Group of objects"
 msgstr "Gruppo di oggetti"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:630
+#: pretix/static/pretixcontrol/js/ui/editor.js:636
 msgid "Text object"
 msgstr "Oggetto testo"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:632
+#: pretix/static/pretixcontrol/js/ui/editor.js:638
 msgid "Barcode area"
 msgstr "Area codice a barra"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:634
+#: pretix/static/pretixcontrol/js/ui/editor.js:640
 msgid "Image area"
 msgstr "Area immagini"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:636
+#: pretix/static/pretixcontrol/js/ui/editor.js:642
 msgid "Powered by pretix"
 msgstr "Powered by Pretix"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:638
+#: pretix/static/pretixcontrol/js/ui/editor.js:644
 msgid "Object"
 msgstr "Oggetto"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:642
+#: pretix/static/pretixcontrol/js/ui/editor.js:648
 msgid "Ticket design"
 msgstr "Design biglietto"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:932
+#: pretix/static/pretixcontrol/js/ui/editor.js:938
 msgid "Saving failed."
 msgstr "Salvataggio fallito."
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:982
-#: pretix/static/pretixcontrol/js/ui/editor.js:1021
+#: pretix/static/pretixcontrol/js/ui/editor.js:988
+#: pretix/static/pretixcontrol/js/ui/editor.js:1027
 msgid "Error while uploading your PDF file, please try again."
 msgstr "Errore durante il caricamento del tuo file PDF, prova di nuovo."
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:1006
+#: pretix/static/pretixcontrol/js/ui/editor.js:1012
 msgid "Do you really want to leave the editor without saving your changes?"
 msgstr "Vuoi davvero abbandonare l'editor senza salvare le modifiche?"
 
@@ -638,20 +530,20 @@ msgstr "Ricevi indietro %(currency)s %(amount)s"
 msgid "Please enter the amount the organizer can keep."
 msgstr "Inserisci l'importo che l'organizzatore può trattenere."
 
-#: pretix/static/pretixpresale/js/ui/main.js:364
+#: pretix/static/pretixpresale/js/ui/main.js:377
 msgid "Please enter a quantity for one of the ticket types."
 msgstr "Inserisci la quantità per una tipologia di biglietto."
 
-#: pretix/static/pretixpresale/js/ui/main.js:400
+#: pretix/static/pretixpresale/js/ui/main.js:413
 msgid "required"
 msgstr "richiesto"
 
-#: pretix/static/pretixpresale/js/ui/main.js:503
-#: pretix/static/pretixpresale/js/ui/main.js:522
+#: pretix/static/pretixpresale/js/ui/main.js:516
+#: pretix/static/pretixpresale/js/ui/main.js:535
 msgid "Time zone:"
 msgstr "Fuso orario:"
 
-#: pretix/static/pretixpresale/js/ui/main.js:513
+#: pretix/static/pretixpresale/js/ui/main.js:526
 msgid "Your local time:"
 msgstr "Ora locale:"
 
@@ -930,6 +822,20 @@ msgstr "Novembre"
 #: pretix/static/pretixpresale/js/widget/widget.js:78
 msgid "December"
 msgstr "Dicembre"
+
+#~ msgid "PayPal"
+#~ msgstr "PayPal"
+
+#~ msgid "Venmo"
+#~ msgstr "Venmo"
+
+#~ msgid "Apple Pay"
+#~ msgstr "Apple Pay"
+
+#, fuzzy
+#~| msgid "Yes"
+#~ msgid "eps"
+#~ msgstr "Si"
 
 #~ msgid "Lead Scan QR"
 #~ msgstr "Scansiona QR del lead"
