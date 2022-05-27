@@ -321,6 +321,7 @@ with scopes_disabled():
         is_future = django_filters.rest_framework.BooleanFilter(method='is_future_qs')
         ends_after = django_filters.rest_framework.IsoDateTimeFilter(method='ends_after_qs')
         modified_since = django_filters.IsoDateTimeFilter(field_name='last_modified', lookup_expr='gte')
+        sales_channel = django_filters.rest_framework.CharFilter(method='sales_channel_qs')
 
         class Meta:
             model = SubEvent
@@ -352,6 +353,9 @@ with scopes_disabled():
                 return queryset.filter(expr)
             else:
                 return queryset.exclude(expr)
+
+        def sales_channel_qs(self, queryset, name, value):
+            return queryset.filter(event__sales_channels__contains=value)
 
 
 class SubEventViewSet(ConditionalListView, viewsets.ModelViewSet):

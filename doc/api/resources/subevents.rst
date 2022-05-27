@@ -474,6 +474,7 @@ Endpoints
    :query is_future: If set to ``true`` (``false``), only events that happen currently or in the future are (not) returned.
    :query is_past: If set to ``true`` (``false``), only events that are over are (not) returned.
    :query ends_after: If set to a date and time, only events that happen during of after the given time are returned.
+   :query sales_channel: If set to a sales channel identifier, the response will only contain subevents from events available on this sales channel.
    :param organizer: The ``slug`` field of a valid organizer
    :param event: The ``slug`` field of the event to fetch
    :statuscode 200: no error
