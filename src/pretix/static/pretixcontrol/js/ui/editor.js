@@ -192,6 +192,7 @@ var editor = {
                     size: editor._px2mm(o.height * o.scaleY).toFixed(2),
                     content: o.content,
                     text: o.text,
+                    text_i18n: o.text_i18n || {},
                     nowhitespace: o.nowhitespace || false,
                 });
             } else  if (o.type === "poweredby") {
@@ -219,6 +220,11 @@ var editor = {
             o.content = d.content;
             o.scaleToHeight(editor._mm2px(d.size));
             o.nowhitespace = d.nowhitespace || false;
+            if (d.content === "other") {
+                o.text = d.text
+            } else if (d.content === "other_i18n") {
+                o.text_i18n = d.text_i18n
+            }
         } else if (d.type === "imagearea") {
             o = editor._add_imagearea(d.content);
             o.content = d.content;
