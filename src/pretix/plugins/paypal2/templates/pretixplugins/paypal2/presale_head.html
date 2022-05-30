@@ -1,0 +1,20 @@
+{% load static %}
+{% load compress %}
+{% load i18n %}
+
+{% compress js %}
+    <script type="text/javascript" src="{% static "pretixplugins/paypal2/pretix-paypal.js" %}"></script>
+{% endcompress %}
+
+<script type="text/plain" id="csp_nonce">{{ csp_nonce }}</script>
+<script type="text/plain" id="paypal_client_id">{{ client_id }}</script>
+<script type="text/plain" id="paypal_merchant_id">{{ merchant_id }}</script>
+{% if disable_funding %}
+    <script type="text/plain" id="paypal_disable_funding">{{ disable_funding }}</script>
+{% endif %}
+{% if enable_funding %}
+    <script type="text/plain" id="paypal_enable_funding">{{ enable_funding }}</script>
+{% endif %}
+{% if debug %}
+    <script type="text/plain" id="paypal_buyer_country">{{ settings.debug_buyer_country }}</script>
+{% endif %}

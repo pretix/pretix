@@ -19,20 +19,20 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
+class PartnerReferralCreateRequest:
+    """
+    Creates a Partner Referral.
+    """
+    def __init__(self):
+        self.verb = "POST"
+        self.path = "/v2/customer/partner-referrals?"
+        self.headers = {}
+        self.headers["Content-Type"] = "application/json"
+        self.body = None
 
-from django.dispatch import receiver
+    def prefer(self, prefer):
+        self.headers["Prefer"] = str(prefer)
 
-from pretix.base.signals import logentry_display, register_payment_providers
-
-
-@receiver(register_payment_providers, dispatch_uid="payment_paypal")
-def register_payment_provider(sender, **kwargs):
-    from .payment import Paypal
-    return Paypal
-
-
-@receiver(signal=logentry_display, dispatch_uid="paypal_logentry_display")
-def pretixcontrol_logentry_display(sender, logentry, **kwargs):
-    from pretix.plugins.paypal2.signals import pretixcontrol_logentry_display
-
-    return pretixcontrol_logentry_display(sender, logentry, **kwargs)
+    def request_body(self, order):
+        self.body = order
+        return self

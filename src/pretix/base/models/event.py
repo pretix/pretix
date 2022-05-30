@@ -1226,7 +1226,7 @@ class Event(EventMixin, LoggedModel):
             self.set_active_plugins(plugins_active)
 
             plugins_available = self.get_available_plugins()
-            if hasattr(plugins_available[module].app, 'uninstalled'):
+            if module in plugins_available and hasattr(plugins_available[module].app, 'uninstalled'):
                 getattr(plugins_available[module].app, 'uninstalled')(self)
 
         regenerate_css.apply_async(args=(self.pk,))

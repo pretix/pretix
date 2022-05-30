@@ -19,20 +19,25 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
-
-from django.dispatch import receiver
-
-from pretix.base.signals import logentry_display, register_payment_providers
-
-
-@receiver(register_payment_providers, dispatch_uid="payment_paypal")
-def register_payment_provider(sender, **kwargs):
-    from .payment import Paypal
-    return Paypal
+try:
+    from urllib import quote  # Python 2.X
+except ImportError:
+    from urllib.parse import quote  # Python 3+
 
 
-@receiver(signal=logentry_display, dispatch_uid="paypal_logentry_display")
-def pretixcontrol_logentry_display(sender, logentry, **kwargs):
-    from pretix.plugins.paypal2.signals import pretixcontrol_logentry_display
+class PartnersMerchantIntegrationsGetRequest:
+    """
+    Retrieves the Merchant Account Status of a Partner Merchant Integration.
+    """
+    def __init__(self, partner_merchant_id, seller_merchant_id):
+        self.verb = "GET"
+        self.path = "/v1/customer/partners/{partner_merchant_id}/merchant-integrations/{seller_merchant_id}".format(
+            partner_merchant_id=quote(str(partner_merchant_id)),
+            seller_merchant_id=quote(str(seller_merchant_id))
+        )
+        self.headers = {}
+        self.headers["Content-Type"] = "application/json"
+        self.body = None
 
-    return pretixcontrol_logentry_display(sender, logentry, **kwargs)
+    def prefer(self, prefer):
+        self.headers["Prefer"] = str(prefer)

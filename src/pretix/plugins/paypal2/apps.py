@@ -20,50 +20,30 @@
 # <https://www.gnu.org/licenses/>.
 #
 
-# This file is based on an earlier version of pretix which was released under the Apache License 2.0. The full text of
-# the Apache License 2.0 can be obtained at <http://www.apache.org/licenses/LICENSE-2.0>.
-#
-# This file may have since been changed and any changes are released under the terms of AGPLv3 as described above. A
-# full history of changes and contributors is available at <https://github.com/pretix/pretix>.
-#
-# This file contains Apache-licensed contributions copyrighted by: Tobias Kunze
-#
-# Unless required by applicable law or agreed to in writing, software distributed under the Apache License 2.0 is
-# distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
-# License for the specific language governing permissions and limitations under the License.
-
 from django.apps import AppConfig
-from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 
 from pretix import __version__ as version
 
 
-class PaypalApp(AppConfig):
-    name = 'pretix.plugins.paypal'
-    verbose_name = _("PayPal")
+class Paypal2App(AppConfig):
+    name = 'pretix.plugins.paypal2'
+    verbose_name = "PayPal"
 
     class PretixPluginMeta:
-        name = _("PayPal")
+        name = "PayPal"
         author = _("the pretix team")
         version = version
         category = 'PAYMENT'
         featured = True
-        picture = 'pretixplugins/paypal/paypal_logo.svg'
-        description = _("Accept payments with your PayPal account. PayPal is one of the most popular payment methods "
-                        "world-wide.")
+        picture = 'pretixplugins/paypal2/paypal_logo.svg'
+        description = _("Accept payments with your PayPal account. In addition to regular PayPal payments, you can now "
+                        "also offer payments in a variety of local payment methods such as giropay, SOFORT, iDEAL and "
+                        "many more to your customers - they don't even need a PayPal account. PayPal is one of the "
+                        "most popular payment methods world-wide.")
 
     def ready(self):
         from . import signals  # NOQA
 
     def is_available(self, event):
-        return 'pretix.plugins.paypal' in event.plugins.split(',')
-
-    @cached_property
-    def compatibility_errors(self):
-        errs = []
-        try:
-            import paypalrestsdk  # NOQA
-        except ImportError:
-            errs.append("Python package 'paypalrestsdk' is not installed.")
-        return errs
+        return 'pretix.plugins.paypal' not in event.plugins.split(',')

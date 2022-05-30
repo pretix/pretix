@@ -32,38 +32,36 @@
 # distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations under the License.
 
-from django.apps import AppConfig
-from django.utils.functional import cached_property
-from django.utils.translation import gettext_lazy as _
+import datetime
 
-from pretix import __version__ as version
+import pytest
+
+from pretix.base.models import Event, Organizer, Team, User
 
 
-class PaypalApp(AppConfig):
-    name = 'pretix.plugins.paypal'
-    verbose_name = _("PayPal")
+@pytest.fixture
+def env(client):
+    orga = Organizer.objects.create(name='CCC', slug='ccc')
+    event = Event.objects.create(
+        organizer=orga, name='30C3', slug='30c3',
+        date_from=datetime.datetime(2013, 12, 26, tzinfo=datetime.timezone.utc),
+        plugins='pretix.plugins.paypal2',
+        live=True
+    )
+    event.settings.set('attendee_names_asked', False)
+    event.settings.set('payment_paypal__enabled', True)
+    user = User.objects.create_user('dummy@dummy.dummy', 'dummy')
+    t = Team.objects.create(organizer=event.organizer, can_change_event_settings=True)
+    t.members.add(user)
+    t.limit_events.add(event)
+    client.force_login(user)
+    return client, event
 
-    class PretixPluginMeta:
-        name = _("PayPal")
-        author = _("the pretix team")
-        version = version
-        category = 'PAYMENT'
-        featured = True
-        picture = 'pretixplugins/paypal/paypal_logo.svg'
-        description = _("Accept payments with your PayPal account. PayPal is one of the most popular payment methods "
-                        "world-wide.")
 
-    def ready(self):
-        from . import signals  # NOQA
-
-    def is_available(self, event):
-        return 'pretix.plugins.paypal' in event.plugins.split(',')
-
-    @cached_property
-    def compatibility_errors(self):
-        errs = []
-        try:
-            import paypalrestsdk  # NOQA
-        except ImportError:
-            errs.append("Python package 'paypalrestsdk' is not installed.")
-        return errs
+@pytest.mark.django_db
+def test_settings(env):
+    client, event = env
+    response = client.get('/control/event/%s/%s/settings/payment/paypal_settings' % (event.organizer.slug, event.slug),
+                          follow=True)
+    assert response.status_code == 200
+    assert 'paypal__enabled' in response.rendered_content

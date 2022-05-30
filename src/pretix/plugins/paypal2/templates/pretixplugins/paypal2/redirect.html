@@ -1,0 +1,32 @@
+{% load compress %}
+{% load i18n %}
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ settings.PRETIX_INSTANCE_NAME }}</title>
+    {% compress css %}
+        <link rel="stylesheet" type="text/x-scss" href="{% static "pretixbase/scss/cachedfiles.scss" %}"/>
+    {% endcompress %}
+    {% compress js %}
+        <script type="text/javascript" src="{% static "jquery/js/jquery-2.1.1.min.js" %}"></script>
+    {% endcompress %}
+</head>
+<body>
+    <div class="container">
+        <h1>{% trans "The payment process has started in a new window." %}</h1>
+
+        <p>
+            {% trans "The window to enter your payment data was not opened or was closed?" %}
+        </p>
+        <p>
+            <a href="{{ url }}" target="_blank">
+                {% trans "Click here in order to open the window." %}
+            </a>
+        </p>
+        <script>
+            window.open('{{ url|escapejs }}');
+        </script>
+    </div>
+</body>
+</html>

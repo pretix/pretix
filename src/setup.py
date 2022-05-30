@@ -203,6 +203,8 @@ setup(
         'openpyxl==3.0.*',
         'packaging',
         'paypalrestsdk==1.13.*',
+        'paypal-checkout-serversdk==1.0.*',
+        'PyJWT==2.0.*',
         'phonenumberslite==8.12.*',
         'Pillow==9.1.*',
         'protobuf==3.19.*',

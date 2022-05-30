@@ -57,12 +57,8 @@ def test_require_live(event, client):
     event.save()
     r = client.get('/mrmcd/2015/paypal/abort/', follow=False)
     assert r.status_code == 302
-    r = client.get('/mrmcd/2015/paypal/webhook/', follow=False)
-    assert r.status_code == 405
 
     event.live = False
     event.save()
     r = client.get('/mrmcd/2015/paypal/abort/', follow=False)
     assert r.status_code == 403
-    r = client.get('/mrmcd/2015/paypal/webhook/', follow=False)
-    assert r.status_code == 405

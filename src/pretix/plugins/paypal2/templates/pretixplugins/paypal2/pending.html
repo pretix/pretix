@@ -1,0 +1,12 @@
+{% load i18n %}
+
+{% if retry %}
+    <p>{% blocktrans trimmed %}
+        Our attempt to execute your Payment via PayPal has failed. Please try again or contact us.
+    {% endblocktrans %}</p>
+{% else %}
+    <p>{% blocktrans trimmed %}
+        We're waiting for an answer from PayPal regarding your payment. Please contact us, if this
+        takes more than a few hours.
+    {% endblocktrans %}</p>
+{% endif %}

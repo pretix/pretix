@@ -299,16 +299,16 @@ class EventsTest(SoupTest):
 
     def test_plugins(self):
         doc = self.get_doc('/control/event/%s/%s/settings/plugins' % (self.orga1.slug, self.event1.slug))
-        self.assertIn("PayPal", doc.select(".form-plugins")[0].text)
-        self.assertIn("Enable", doc.select("[name=\"plugin:pretix.plugins.paypal\"]")[0].text)
+        self.assertIn("Stripe", doc.select(".form-plugins")[0].text)
+        self.assertIn("Enable", doc.select("[name=\"plugin:pretix.plugins.stripe\"]")[0].text)
 
         doc = self.post_doc('/control/event/%s/%s/settings/plugins' % (self.orga1.slug, self.event1.slug),
-                            {'plugin:pretix.plugins.paypal': 'enable'})
-        self.assertIn("Disable", doc.select("[name=\"plugin:pretix.plugins.paypal\"]")[0].text)
+                            {'plugin:pretix.plugins.stripe': 'enable'})
+        self.assertIn("Disable", doc.select("[name=\"plugin:pretix.plugins.stripe\"]")[0].text)
 
         doc = self.post_doc('/control/event/%s/%s/settings/plugins' % (self.orga1.slug, self.event1.slug),
-                            {'plugin:pretix.plugins.paypal': 'disable'})
-        self.assertIn("Enable", doc.select("[name=\"plugin:pretix.plugins.paypal\"]")[0].text)
+                            {'plugin:pretix.plugins.stripe': 'disable'})
+        self.assertIn("Enable", doc.select("[name=\"plugin:pretix.plugins.stripe\"]")[0].text)
 
     def test_testmode_enable(self):
         self.event1.testmode = False
