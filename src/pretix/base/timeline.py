@@ -84,13 +84,17 @@ def timeline_for_event(event, subevent=None):
             edit_url=ev_edit_url
         ))
 
-    if ev.presale_end:
-        tl.append(TimelineEvent(
-            event=event, subevent=subevent,
-            datetime=ev.presale_end,
-            description=pgettext_lazy('timeline', 'End of ticket sales'),
-            edit_url=ev_edit_url
-        ))
+    tl.append(TimelineEvent(
+        event=event, subevent=subevent,
+        datetime=(
+            ev.presale_end or ev.date_to or ev.date_from.astimezone(ev.timezone).replace(hour=23, minute=59, second=59)
+        ),
+        description='{}{}'.format(
+            pgettext_lazy('timeline', 'End of ticket sales'),
+            f" ({pgettext_lazy('timeline', 'automatically because the event is over and no end of presale has been configured')})" if not ev.presale_end else ""
+        ),
+        edit_url=ev_edit_url
+    ))
 
     rd = event.settings.get('last_order_modification_date', as_type=RelativeDateWrapper)
     if rd:
