@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-05-27 13:57+0000\n"
-"PO-Revision-Date: 2022-05-26 21:00+0000\n"
+"PO-Revision-Date: 2022-05-30 20:00+0000\n"
 "Last-Translator: Ismael Menéndez Fernández <ismael.menendez@balidea.com>\n"
 "Language-Team: Galician <https://translate.pretix.eu/projects/pretix/pretix/"
 "gl/>\n"
@@ -27045,9 +27045,8 @@ msgid "PDF output"
 msgstr "Salida en PDF"
 
 #: pretix/plugins/ticketoutputpdf/ticketoutput.py:65
-#, fuzzy
 msgid "Download tickets (PDF)"
-msgstr "Descargar ticket"
+msgstr "Descargar tickets (PDF)"
 
 #: pretix/plugins/ticketoutputpdf/ticketoutput.py:66
 #, fuzzy
@@ -27534,9 +27533,8 @@ msgstr "O carro da compra caducou"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:44
 #: pretix/presale/templates/pretixpresale/event/index.html:74
-#, fuzzy
 msgid "Add tickets for a different date"
-msgstr "Este archivo es de un evento diferente."
+msgstr "Engadir entrada para unha data diferente"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:6
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:8
