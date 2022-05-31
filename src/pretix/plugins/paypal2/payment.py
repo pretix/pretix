@@ -553,7 +553,7 @@ class PaypalMethod(BasePaymentProvider):
                     # 'shipping': {},  # Include Shipping information?
                 }],
                 'application_context': {
-                    'locale': request.LANGUAGE_CODE,
+                    'locale': request.LANGUAGE_CODE.split('-')[0],
                     'shipping_preference': 'NO_SHIPPING',  # 'SET_PROVIDED_ADDRESS',  # Do not set on non-ship order?
                     'user_action': 'CONTINUE',
                     'return_url': build_absolute_uri(request.event, 'plugins:paypal2:return', kwargs=kwargs),
