@@ -47,6 +47,7 @@ from django.urls import reverse
 from django.utils.decorators import method_decorator
 from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
+from django.views import View
 from django.views.decorators.clickjacking import xframe_options_exempt
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
@@ -115,8 +116,7 @@ def redirect_view(request, *args, **kwargs):
 
 @method_decorator(csrf_exempt, name='dispatch')
 @method_decorator(xframe_options_exempt, 'dispatch')
-class XHRView(TemplateView):
-    template_name = ''
+class XHRView(View):
 
     def post(self, request, *args, **kwargs):
         if 'order' in self.kwargs:
