@@ -198,7 +198,12 @@ var pretixpaypal = {
                 }).then(function (res) {
                     return res.json();
                 }).then(function (data) {
-                    return data.id;
+                    if ('id' in data) {
+                        return data.id;
+                    } else {
+                        // Refreshing the page to surface the request-error message
+                        location.reload();
+                    }
                 });
             },
             onApprove: function (data, actions) {
