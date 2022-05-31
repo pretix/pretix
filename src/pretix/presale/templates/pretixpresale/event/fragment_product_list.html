@@ -144,7 +144,7 @@
                                         </div>
                                         <p>
                                     {% elif not var.display_price.gross %}
-                                        {% trans "FREE" context "price" %}
+                                        <span class="text-uppercase">{% trans "free" context "price" %}</span>
                                     {% elif event.settings.display_net_prices %}
                                         {{ var.display_price.net|money:event.currency }}
                                     {% else %}

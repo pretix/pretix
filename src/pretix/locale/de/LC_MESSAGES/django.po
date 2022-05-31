@@ -25768,7 +25768,7 @@ msgstr "minimale Bestellmenge: %(num)s"
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:62
 msgctxt "price"
 msgid "free"
-msgstr "kostenlos"
+msgstr "gratis"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:76
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:51
