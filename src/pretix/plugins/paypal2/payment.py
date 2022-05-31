@@ -653,20 +653,20 @@ class PaypalMethod(BasePaymentProvider):
                 else:
                     pp_captured_order = response.result
 
-            for purchaseunit in pp_captured_order.purchase_units:
-                for capture in purchaseunit.payments.captures:
-                    try:
-                        ReferencedPayPalObject.objects.get_or_create(order=payment.order, payment=payment, reference=capture.id)
-                    except ReferencedPayPalObject.MultipleObjectsReturned:
-                        pass
+                for purchaseunit in pp_captured_order.purchase_units:
+                    for capture in purchaseunit.payments.captures:
+                        try:
+                            ReferencedPayPalObject.objects.get_or_create(order=payment.order, payment=payment, reference=capture.id)
+                        except ReferencedPayPalObject.MultipleObjectsReturned:
+                            pass
 
-                    if capture.status == 'PENDING':
-                        messages.warning(request, _('PayPal has not yet approved the payment. We will inform you as '
-                                                    'soon as the payment completed.'))
-                        payment.info = json.dumps(pp_captured_order.dict())
-                        payment.state = OrderPayment.PAYMENT_STATE_PENDING
-                        payment.save()
-                        return
+                        if capture.status == 'PENDING':
+                            messages.warning(request, _('PayPal has not yet approved the payment. We will inform you as '
+                                                        'soon as the payment completed.'))
+                            payment.info = json.dumps(pp_captured_order.dict())
+                            payment.state = OrderPayment.PAYMENT_STATE_PENDING
+                            payment.save()
+                            return
 
             payment.refresh_from_db()
 
