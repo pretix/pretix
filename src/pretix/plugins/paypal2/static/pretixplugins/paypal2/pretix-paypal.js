@@ -119,6 +119,8 @@ var pretixpaypal = {
                 if (head && ppscript.parentNode) {
                     head.removeChild(ppscript);
                 }
+
+                pretixpaypal.ready();
             }
         };
     },
@@ -277,10 +279,4 @@ var pretixpaypal = {
 
 $(function () {
     pretixpaypal.load();
-
-    (async() => {
-        while(!pretixpaypal.paypal)
-            await new Promise(resolve => setTimeout(resolve, 1000));
-        pretixpaypal.ready();
-    })();
 });
