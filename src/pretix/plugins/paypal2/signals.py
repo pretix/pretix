@@ -149,6 +149,7 @@ def signal_process_response(sender, request: HttpRequest, response: HttpResponse
             'script-src': ['https://www.paypal.com', "'nonce-{}'".format(_nonce(request))],
             'frame-src': ['https://www.paypal.com', 'https://www.sandbox.paypal.com', "'nonce-{}'".format(_nonce(request))],
             'connect-src': ['https://www.paypal.com', 'https://www.sandbox.paypal.com'],  # Or not - seems to only affect PayPal logging...
+            'img-src': ['https://t.paypal.com'],
             'style-src': ["'nonce-{}'".format(_nonce(request))]
         }
 
