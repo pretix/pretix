@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-05-27 13:57+0000\n"
-"PO-Revision-Date: 2022-05-30 20:00+0000\n"
+"PO-Revision-Date: 2022-06-01 08:08+0000\n"
 "Last-Translator: Ismael Menéndez Fernández <ismael.menendez@balidea.com>\n"
 "Language-Team: Galician <https://translate.pretix.eu/projects/pretix/pretix/"
 "gl/>\n"
@@ -4434,9 +4434,8 @@ msgstr "Otras tarifas"
 #: pretix/base/models/orders.py:2031 pretix/base/payment.py:1122
 #: pretix/control/templates/pretixcontrol/items/index.html:86
 #: pretix/control/templates/pretixcontrol/order/index.html:143
-#, fuzzy
 msgid "Gift card"
-msgstr "Tarjeta de regalo"
+msgstr "Tarxeta de regalo"
 
 #: pretix/base/models/orders.py:2036
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:66
@@ -26395,9 +26394,8 @@ msgstr ""
 "su país de residencia."
 
 #: pretix/plugins/stripe/payment.py:218
-#, fuzzy
 msgid "Credit card payments"
-msgstr "Pagos con tarjeta de crédito"
+msgstr "Pagos con cartón de crédito"
 
 #: pretix/plugins/stripe/payment.py:223 pretix/plugins/stripe/payment.py:956
 #, fuzzy
@@ -26735,9 +26733,8 @@ msgid "Stripe Connect"
 msgstr "Pago con Stripe"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_confirm.html:4
-#, fuzzy
 msgid "The total amount will be withdrawn from your credit card."
-msgstr "El monto total será retirado de su tarjeta de crédito."
+msgstr "O monto total será retirado da súa tarxeta de crédito."
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_confirm.html:8
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_cc.html:26
@@ -26766,9 +26763,8 @@ msgid ""
 msgstr ""
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_cc.html:16
-#, fuzzy
 msgid "For a credit card payment, please turn on JavaScript."
-msgstr "Para pagar con tarjeta de crédito, active JavaScript."
+msgstr "Para pagar con tarxeta de crédito, active  JavaScript."
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_cc.html:22
 #, fuzzy
