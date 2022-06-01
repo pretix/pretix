@@ -150,7 +150,7 @@ class XHRView(View):
         else:
             cart_total = get_cart_total(request)
             cart_fees = Decimal('0.00')
-            for fee in get_fees(request.event, request, cart_total, None, prov, get_cart(request)):
+            for fee in get_fees(request.event, request, cart_total, None, None, get_cart(request)):
                 cart_fees += fee.value
 
             cart = {
