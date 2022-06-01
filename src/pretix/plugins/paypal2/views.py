@@ -133,7 +133,9 @@ class XHRView(View):
 
         if order:
             lp = order.payments.last()
-            if lp and lp.state not in (OrderPayment.PAYMENT_STATE_CONFIRMED, OrderPayment.PAYMENT_STATE_REFUNDED):
+            if lp and lp.fee and lp.state not in (
+                    OrderPayment.PAYMENT_STATE_CONFIRMED, OrderPayment.PAYMENT_STATE_REFUNDED
+            ):
                 fee = lp.fee.value - prov.calculate_fee(order.pending_sum - lp.fee.value)
             else:
                 fee = prov.calculate_fee(order.pending_sum)
