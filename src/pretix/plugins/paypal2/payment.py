@@ -525,7 +525,7 @@ class PaypalMethod(BasePaymentProvider):
             )
             request.session['payment_paypal_payment'] = payment.pk
         elif cart and not payment:
-            value = self.format_price(cart['total'] + cart['fee'])
+            value = self.format_price(cart['cart_total'] + cart['cart_fees'] + cart['payment_fee'])
             currency = request.event.currency
             description = __('Event tickets for {event}').format(event=request.event.name)
             custom_id = '{prefix}{slug}{postfix}'.format(
