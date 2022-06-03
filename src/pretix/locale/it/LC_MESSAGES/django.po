@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-05-27 13:57+0000\n"
 "PO-Revision-Date: 2022-06-04 01:00+0000\n"
-"Last-Translator: Marco Giacopuzzi <marco.giaco2000@gmail.com>\n"
+"Last-Translator: Tommi <surfing@tommi.space>\n"
 "Language-Team: Italian <https://translate.pretix.eu/projects/pretix/pretix/"
 "it/>\n"
 "Language: it\n"
@@ -545,11 +545,11 @@ msgstr "Nome dell'evento"
 #: pretix/base/models/organizer.py:88
 #: pretix/control/templates/pretixcontrol/organizers/index.html:47
 msgid "Short form"
-msgstr ""
+msgstr "Formato corto"
 
 #: pretix/base/exporters/events.py:57 pretix/base/models/event.py:477
 msgid "Shop is live"
-msgstr ""
+msgstr "Il negozio è live"
 
 #: pretix/base/exporters/events.py:58 pretix/base/models/event.py:479
 msgid "Event currency"
@@ -573,7 +573,7 @@ msgstr "Orario fine evento"
 #: pretix/base/models/event.py:1303 pretix/control/forms/subevents.py:619
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:274
 msgid "Admission time"
-msgstr ""
+msgstr "Tempo di ammissione"
 
 #: pretix/base/exporters/events.py:62 pretix/base/models/event.py:498
 #: pretix/base/models/event.py:1312 pretix/control/forms/subevents.py:92
@@ -1330,10 +1330,8 @@ msgstr "Indirizzo email verificato"
 #: pretix/base/exporters/orderlist.py:297
 #: pretix/base/exporters/orderlist.py:464
 #: pretix/base/exporters/orderlist.py:618
-#, fuzzy
-#| msgid "Customer ID"
 msgid "External customer ID"
-msgstr "ID cliente"
+msgstr "ID cliente esterno"
 
 #: pretix/base/exporters/orderlist.py:302
 #, python-brace-format
@@ -1377,7 +1375,7 @@ msgstr "Indirizzo di fatturazione"
 #: pretix/base/exporters/orderlist.py:475
 #: pretix/base/exporters/orderlist.py:636 pretix/base/models/orders.py:164
 msgid "canceled"
-msgstr ""
+msgstr "cancellato"
 
 #: pretix/base/exporters/orderlist.py:546
 #: pretix/plugins/checkinlists/exporters.py:616
@@ -1488,10 +1486,8 @@ msgstr "ID Pseudonimo"
 
 #: pretix/base/exporters/orderlist.py:580 pretix/control/forms/filter.py:621
 #: pretix/control/templates/pretixcontrol/order/change.html:194
-#, fuzzy
-#| msgid "Client secret"
 msgid "Ticket secret"
-msgstr "Secret del client"
+msgstr "Biglietto segreto"
 
 #: pretix/base/exporters/orderlist.py:581 pretix/base/orderimport.py:671
 #: pretix/plugins/checkinlists/exporters.py:472
@@ -1651,8 +1647,6 @@ msgid "Waiting list"
 msgstr "Lista d'attesa"
 
 #: pretix/base/exporters/orderlist.py:840
-#, fuzzy
-#| msgid "Paid orders"
 msgid "Exited orders"
 msgstr "Ordini pagati"
 
@@ -1945,11 +1939,9 @@ msgid "Please enter a shorter name."
 msgstr "Per favore inserisci un nome più breve."
 
 #: pretix/base/forms/questions.py:274
-#, fuzzy
-#| msgid "Internal reference"
 msgctxt "phonenumber"
 msgid "International area code"
-msgstr "Riferimento interno"
+msgstr "Codice di riferimento interno"
 
 #: pretix/base/forms/questions.py:298
 msgctxt "phonenumber"
@@ -2009,16 +2001,21 @@ msgid ""
 "Optional, but depending on the country you reside in we might need to charge "
 "you additional taxes if you do not enter it."
 msgstr ""
+"Opzionale, ma a seconda dello stato in cui risiedi potremmo addebitarti "
+"tasse addizionali se non lo inserisci."
 
 #: pretix/base/forms/questions.py:967 pretix/base/forms/questions.py:973
 msgid "If you are registered in Switzerland, you can enter your UID instead."
-msgstr ""
+msgstr "Se sei cittadinə svizzerə, puoi inserire il tuo UID."
 
 #: pretix/base/forms/questions.py:971
 msgid ""
 "Optional, but it might be required for you to claim tax benefits on your "
 "invoice depending on your and the seller’s country of residence."
 msgstr ""
+"Opzionale, ma potrebbe esserti richiesto di reclamare agevolazioni fiscali "
+"sulla tua ricevuta a seconda del tuo stato di residenza e di quello del tuo "
+"venditore."
 
 #: pretix/base/forms/questions.py:1060
 msgid "You need to provide a company name."
