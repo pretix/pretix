@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-05-27 13:57+0000\n"
-"PO-Revision-Date: 2022-05-23 14:28+0000\n"
-"Last-Translator: Mauro Amico <mauro.amico@gmail.com>\n"
+"PO-Revision-Date: 2022-06-04 01:00+0000\n"
+"Last-Translator: Marco Giacopuzzi <marco.giaco2000@gmail.com>\n"
 "Language-Team: Italian <https://translate.pretix.eu/projects/pretix/pretix/"
 "it/>\n"
 "Language: it\n"
@@ -1311,11 +1311,8 @@ msgstr "Commento"
 #: pretix/base/exporters/orderlist.py:294
 #: pretix/base/exporters/orderlist.py:587 pretix/base/models/orders.py:224
 #: pretix/control/forms/filter.py:209
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "All dates"
 msgid "Follow-up date"
-msgstr "Tutte le date"
+msgstr "Data di follow-up"
 
 #: pretix/base/exporters/orderlist.py:295
 #: pretix/control/templates/pretixcontrol/orders/index.html:125
@@ -1747,7 +1744,7 @@ msgstr "Carte regalo"
 
 #: pretix/base/exporters/orderlist.py:1010
 msgid "Show value at"
-msgstr ""
+msgstr "Mostra il valore a"
 
 #: pretix/base/exporters/orderlist.py:1016
 #: pretix/base/exporters/orderlist.py:1026 pretix/control/forms/filter.py:472
@@ -1797,7 +1794,7 @@ msgstr "Scaduto"
 
 #: pretix/base/exporters/orderlist.py:1067 pretix/base/models/giftcards.py:84
 msgid "Test mode card"
-msgstr ""
+msgstr "Scheda di prova"
 
 #: pretix/base/exporters/orderlist.py:1069 pretix/base/models/giftcards.py:88
 #: pretix/control/templates/pretixcontrol/order/index.html:192
@@ -1818,10 +1815,8 @@ msgid "Current value"
 msgstr "Valore attuale"
 
 #: pretix/base/exporters/orderlist.py:1073
-#, fuzzy
-#| msgid "Creation date"
 msgid "Created in order"
-msgstr "Data di creazione"
+msgstr "Creato nell'ordine"
 
 #: pretix/base/exporters/orderlist.py:1074
 msgid "Last invoice number of order"
