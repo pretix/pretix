@@ -16,6 +16,12 @@
                     </li>
                 {% endfor %}
             </ul>
+            <div class="alert-info alert">
+                {% blocktrans trimmed %}
+                    It is possible that some of the above dates can't be deleted if a plugin has data attached to them.
+                    In that case, they will be disabled instead.
+                {% endblocktrans %}
+            </div>
         {% endif %}
         {% if forbidden %}
             <p>{% blocktrans trimmed %}The following dates can't be deleted as they already have orders, but
@@ -30,7 +36,8 @@
             </ul>
         {% endif %}
         <div class="form-group submit-group">
-            <a href="{% url "control:event.subevents" organizer=request.event.organizer.slug event=request.event.slug %}" class="btn btn-default btn-cancel">
+            <a href="{% url "control:event.subevents" organizer=request.event.organizer.slug event=request.event.slug %}"
+               class="btn btn-default btn-cancel">
                 {% trans "Cancel" %}
             </a>
             <button type="submit" class="btn btn-danger btn-save" value="delete_confirm" name="action">

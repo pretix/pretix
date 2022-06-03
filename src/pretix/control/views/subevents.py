@@ -41,7 +41,7 @@ from django.contrib import messages
 from django.core.exceptions import ValidationError
 from django.core.files import File
 from django.db import connections, transaction
-from django.db.models import Count, F, Prefetch
+from django.db.models import Count, F, Prefetch, ProtectedError
 from django.db.models.functions import Coalesce, TruncDate, TruncTime
 from django.forms import inlineformset_factory
 from django.http import Http404, HttpResponse, HttpResponseRedirect
@@ -639,12 +639,14 @@ class SubEventBulkAction(SubEventQueryMixin, EventPermissionRequiredMixin, View)
             })
         elif request.POST.get('action') == 'delete_confirm':
             for obj in self.get_queryset():
-                if obj.allow_delete():
+                try:
+                    if not obj.allow_delete():
+                        raise ProtectedError('only deactivate', [obj])
                     CartPosition.objects.filter(addon_to__subevent=obj).delete()
                     obj.cartposition_set.all().delete()
                     obj.log_action('pretix.subevent.deleted', user=self.request.user)
                     obj.delete()
-                else:
+                except ProtectedError:
                     obj.log_action(
                         'pretix.subevent.changed', user=self.request.user, data={
                             'active': False
