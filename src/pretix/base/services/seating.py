@@ -132,6 +132,7 @@ def generate_seats(event, subevent, plan, mapping, blocked_guids=None):
                                   'already used in a voucher.', s.name))
 
     Seat.objects.bulk_create(create_seats)
+    CartPosition.objects.filter(addon_to__seat__in=[s.pk for s in current_seats.values()]).delete()
     CartPosition.objects.filter(seat__in=[s.pk for s in current_seats.values()]).delete()
     OrderPosition.all.filter(
         Q(canceled=True) | Q(order__status__in=(Order.STATUS_CANCELED, Order.STATUS_EXPIRED)),
