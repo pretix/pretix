@@ -36,6 +36,7 @@ from django.utils import timezone, translation
 from django.utils.timezone import get_current_timezone
 from django.utils.translation import get_language, gettext as _
 from django.views.generic import FormView
+from redis import ResponseError
 
 from pretix.base.models import User
 from pretix.base.services.tasks import ProfiledEventTask
@@ -68,6 +69,11 @@ class AsyncMixin:
                 res.get(timeout=timeout, propagate=False)
             except celery.exceptions.TimeoutError:
                 pass
+            except ResponseError:
+                # There is a long-standing concurrency issue in either celery or redis-py that hasn't been fixed
+                # yet. Instead of crashing, we can ignore it and the client will retry their request and hopefully
+                # it is fixed next time.
+                logger.warning('Ignored ResponseError in AsyncResult.get()')
             except ConnectionError:
                 # Redis probably just restarted, let's just report not ready and retry next time
                 data = self._ajax_response_data()
