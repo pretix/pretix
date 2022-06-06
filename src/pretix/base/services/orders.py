@@ -213,9 +213,9 @@ def reactivate_order(order: Order, force: bool=False, user: User=None, auth=None
     if order.status != Order.STATUS_CANCELED:
         raise OrderError(_('The order was not canceled.'))
 
-    with order.event.lock() as now_dt:
-        is_available = order._is_still_available(now_dt, count_waitinglist=False, check_voucher_usage=True,
-                                                 check_memberships=True, force=force)
+    with transaction.atomic():
+        is_available = order._is_still_available(now(), count_waitinglist=False, check_voucher_usage=True,
+                                                 check_memberships=True, lock=True, force=force)
         if is_available is True:
             if order.payment_refund_sum >= order.total:
                 order.status = Order.STATUS_PAID
@@ -224,29 +224,28 @@ def reactivate_order(order: Order, force: bool=False, user: User=None, auth=None
             order.cancellation_date = None
             order.set_expires(now(),
                               order.event.subevents.filter(id__in=[p.subevent_id for p in order.positions.all()]))
-            with transaction.atomic():
-                order.save(update_fields=['expires', 'status', 'cancellation_date'])
-                order.log_action(
-                    'pretix.event.order.reactivated',
-                    user=user,
-                    auth=auth,
-                    data={
-                        'expires': order.expires,
-                    }
-                )
-                for position in order.positions.all():
-                    if position.voucher:
-                        Voucher.objects.filter(pk=position.voucher.pk).update(redeemed=Greatest(0, F('redeemed') + 1))
+            order.save(update_fields=['expires', 'status', 'cancellation_date'])
+            order.log_action(
+                'pretix.event.order.reactivated',
+                user=user,
+                auth=auth,
+                data={
+                    'expires': order.expires,
+                }
+            )
+            for position in order.positions.all():
+                if position.voucher:
+                    Voucher.objects.filter(pk=position.voucher.pk).update(redeemed=Greatest(0, F('redeemed') + 1))
 
-                    for gc in position.issued_gift_cards.all():
-                        gc = GiftCard.objects.select_for_update(of=OF_SELF).get(pk=gc.pk)
-                        gc.transactions.create(value=position.price, order=order, acceptor=order.event.organizer)
-                        break
+                for gc in position.issued_gift_cards.all():
+                    gc = GiftCard.objects.select_for_update(of=OF_SELF).get(pk=gc.pk)
+                    gc.transactions.create(value=position.price, order=order, acceptor=order.event.organizer)
+                    break
 
-                    for m in position.granted_memberships.all():
-                        m.canceled = False
-                        m.save()
-                order.create_transactions()
+                for m in position.granted_memberships.all():
+                    m.canceled = False
+                    m.save()
+            order.create_transactions()
         else:
             raise OrderError(is_available)
 
@@ -268,7 +267,6 @@ def extend_order(order: Order, new_date: datetime, force: bool=False, valid_if_p
     if new_date < now():
         raise OrderError(_('The new expiry date needs to be in the future.'))
 
-    @transaction.atomic
     def change(was_expired=True):
         old_date = order.expires
         order.expires = new_date
@@ -306,11 +304,11 @@ def extend_order(order: Order, new_date: datetime, force: bool=False, valid_if_p
                 generate_invoice(order)
             order.create_transactions()
 
-    if order.status == Order.STATUS_PENDING:
-        change(was_expired=False)
-    else:
-        with order.event.lock() as now_dt:
-            is_available = order._is_still_available(now_dt, count_waitinglist=False, force=force)
+    with transaction.atomic():
+        if order.status == Order.STATUS_PENDING:
+            change(was_expired=False)
+        else:
+            is_available = order._is_still_available(now(), count_waitinglist=False, lock=True, force=force)
             if is_available is True:
                 change(was_expired=True)
             else:
@@ -666,6 +664,9 @@ def _check_positions(event: Event, now_dt: datetime, positions: List[CartPositio
 
     sorted_positions = sorted(positions, key=lambda s: -int(s.is_bundled))
 
+    for cp in sorted_positions:
+        cp._cached_quotas = list(cp.quotas)
+
     # Create locks
     if any(cp.expires < now() + timedelta(minutes=2) for cp in sorted_positions):
         # No need to perform any locking if the cart positions still guarantee everything long enough.
@@ -678,7 +679,7 @@ def _check_positions(event: Event, now_dt: datetime, positions: List[CartPositio
             lock_objects([event])
         else:
             lock_objects(
-                [q for q in reduce(operator.or_, (set(cp.quotas) for cp in sorted_positions), set()) if q.size is not None] +
+                [q for q in reduce(operator.or_, (set(cp._cached_quotas) for cp in sorted_positions), set()) if q.size is not None] +
                 [op.voucher for op in sorted_positions if op.voucher] +
                 [op.seat for op in sorted_positions if op.seat]
             )
@@ -692,7 +693,7 @@ def _check_positions(event: Event, now_dt: datetime, positions: List[CartPositio
             err = err or error_messages['unavailable']
             delete(cp)
             continue
-        quotas = list(cp.quotas)
+        quotas = cp._cached_quotas
 
         products_seen[cp.item] += 1
         if cp.item.max_per_order and products_seen[cp.item] > cp.item.max_per_order:

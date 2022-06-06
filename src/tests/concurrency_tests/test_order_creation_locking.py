@@ -7,9 +7,9 @@ from asgiref.sync import sync_to_async
 from django.conf import settings
 from django.utils.timezone import now
 from django_scopes import scopes_disabled
+from tests.concurrency_tests.utils import post
 
 from pretix.base.models import CartPosition, OrderPosition
-from tests.concurrency_tests.utils import post
 
 SessionStore = import_module(settings.SESSION_ENGINE).SessionStore
 

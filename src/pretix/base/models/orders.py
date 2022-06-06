@@ -37,10 +37,12 @@ import copy
 import hashlib
 import json
 import logging
+import operator
 import string
 from collections import Counter
 from datetime import datetime, time, timedelta
 from decimal import Decimal
+from functools import reduce
 from typing import Any, Dict, List, Union
 
 import dateutil
@@ -912,8 +914,9 @@ class Order(LockModel, LoggedModel):
 
         return self._is_still_available(count_waitinglist=count_waitinglist, force=force)
 
-    def _is_still_available(self, now_dt: datetime=None, count_waitinglist=True, force=False,
+    def _is_still_available(self, now_dt: datetime=None, count_waitinglist=True, lock=False, force=False,
                             check_voucher_usage=False, check_memberships=False) -> Union[bool, str]:
+        from pretix.base.services.locking import lock_objects
         from pretix.base.services.memberships import (
             validate_memberships_in_order,
         )
@@ -935,6 +938,16 @@ class Order(LockModel, LoggedModel):
                     validate_memberships_in_order(self.customer, positions, self.event, lock=False, testmode=self.testmode)
                 except ValidationError as e:
                     raise Quota.QuotaExceededException(e.message)
+
+            for cp in positions:
+                cp._cached_quotas = list(cp.quotas) if not force else []
+
+            if lock:
+                lock_objects(
+                    [q for q in reduce(operator.or_, (set(cp._cached_quotas) for cp in positions), set()) if q.size is not None] +
+                    [op.voucher for op in positions if op.voucher and not force] +
+                    [op.seat for op in positions if op.seat]
+                )
 
             for i, op in enumerate(positions):
                 if op.seat:
@@ -960,7 +973,7 @@ class Order(LockModel, LoggedModel):
                             voucher=op.voucher.code
                         ))
 
-                quotas = list(op.quotas)
+                quotas = op._cached_quotas
                 if len(quotas) == 0:
                     raise Quota.QuotaExceededException(error_messages['unavailable'].format(
                         item=str(op.item) + (' - ' + str(op.variation) if op.variation else '')
