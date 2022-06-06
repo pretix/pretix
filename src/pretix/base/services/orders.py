@@ -2700,6 +2700,18 @@ class OrderChangeManager:
         except ValidationError as e:
             raise OrderError(e.message)
 
+    def _create_locks(self):
+        full_lock_required = any(diff > 0 for diff in self._seatdiff.values()) and self.event.settings.seating_minimal_distance > 0
+        if full_lock_required:
+            # We lock the entire event in this case since we don't want to deal with fine-granular locking
+            # in the case of seating distance enforcement
+            lock_objects([self.event])
+        else:
+            lock_objects(
+                [q for q, d in self._quotadiff.items() if q.size is not None and d > 0] +
+                [s for s, d in self._seatdiff.items() if d > 0]
+            )
+
     def commit(self, check_quotas=True):
         if self._committed:
             # an order change can only be committed once
@@ -2719,17 +2731,17 @@ class OrderChangeManager:
         self._payment_fee_diff()
 
         with transaction.atomic():
-            with self.order.event.lock():
-                if self.order.status in (Order.STATUS_PENDING, Order.STATUS_PAID):
-                    if check_quotas:
-                        self._check_quotas()
-                    self._check_seats()
-                self._check_complete_cancel()
-                self._check_and_lock_memberships()
-                try:
-                    self._perform_operations()
-                except TaxRule.SaleNotAllowed:
-                    raise OrderError(self.error_messages['tax_rule_country_blocked'])
+            if self.order.status in (Order.STATUS_PENDING, Order.STATUS_PAID):
+                if check_quotas:
+                    self._check_quotas()
+                self._check_seats()
+            self._create_locks()
+            self._check_complete_cancel()
+            self._check_and_lock_memberships()
+            try:
+                self._perform_operations()
+            except TaxRule.SaleNotAllowed:
+                raise OrderError(self.error_messages['tax_rule_country_blocked'])
             self._recalculate_total_and_payment_fee()
             self._check_paid_price_change()
             self._check_paid_to_free()
