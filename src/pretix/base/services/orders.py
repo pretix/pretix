@@ -439,9 +439,8 @@ def deny_order(order, comment='', user=None, send_mail: bool=True, auth=None):
         if not order.require_approval or not order.status == Order.STATUS_PENDING:
             raise OrderError(_('This order is not pending approval.'))
 
-        with order.event.lock():
-            order.status = Order.STATUS_CANCELED
-            order.save(update_fields=['status'])
+        order.status = Order.STATUS_CANCELED
+        order.save(update_fields=['status'])
 
         order.log_action('pretix.event.order.denied', user=user, auth=auth, data={
             'comment': comment
@@ -521,51 +520,49 @@ def _cancel_order(order, user=None, send_mail: bool=True, api_token=None, device
                 m.save()
 
         if cancellation_fee:
-            with order.event.lock():
-                for position in order.positions.all():
-                    if position.voucher:
-                        Voucher.objects.filter(pk=position.voucher.pk).update(redeemed=Greatest(0, F('redeemed') - 1))
-                    position.canceled = True
-                    assign_ticket_secret(
-                        event=order.event, position=position, force_invalidate_if_revokation_list_used=True, force_invalidate=False, save=False
-                    )
-                    position.save(update_fields=['canceled', 'secret'])
-                new_fee = cancellation_fee
-                for fee in order.fees.all():
-                    if keep_fees and fee in keep_fees:
-                        new_fee -= fee.value
-                    else:
-                        fee.canceled = True
-                        fee.save(update_fields=['canceled'])
-
-                if new_fee:
-                    f = OrderFee(
-                        fee_type=OrderFee.FEE_TYPE_CANCELLATION,
-                        value=new_fee,
-                        tax_rule=order.event.settings.tax_rate_default,
-                        order=order,
-                    )
-                    f._calculate_tax()
-                    f.save()
-
-                if cancellation_fee > order.total:
-                    raise OrderError(_('The cancellation fee cannot be higher than the total amount of this order.'))
-                elif order.payment_refund_sum < cancellation_fee:
-                    order.status = Order.STATUS_PENDING
-                    order.set_expires()
+            for position in order.positions.all():
+                if position.voucher:
+                    Voucher.objects.filter(pk=position.voucher.pk).update(redeemed=Greatest(0, F('redeemed') - 1))
+                position.canceled = True
+                assign_ticket_secret(
+                    event=order.event, position=position, force_invalidate_if_revokation_list_used=True, force_invalidate=False, save=False
+                )
+                position.save(update_fields=['canceled', 'secret'])
+            new_fee = cancellation_fee
+            for fee in order.fees.all():
+                if keep_fees and fee in keep_fees:
+                    new_fee -= fee.value
                 else:
-                    order.status = Order.STATUS_PAID
-                order.total = cancellation_fee
-                order.cancellation_date = now()
-                order.save(update_fields=['status', 'cancellation_date', 'total'])
+                    fee.canceled = True
+                    fee.save(update_fields=['canceled'])
+
+            if new_fee:
+                f = OrderFee(
+                    fee_type=OrderFee.FEE_TYPE_CANCELLATION,
+                    value=new_fee,
+                    tax_rule=order.event.settings.tax_rate_default,
+                    order=order,
+                )
+                f._calculate_tax()
+                f.save()
+
+            if cancellation_fee > order.total:
+                raise OrderError(_('The cancellation fee cannot be higher than the total amount of this order.'))
+            elif order.payment_refund_sum < cancellation_fee:
+                order.status = Order.STATUS_PENDING
+                order.set_expires()
+            else:
+                order.status = Order.STATUS_PAID
+            order.total = cancellation_fee
+            order.cancellation_date = now()
+            order.save(update_fields=['status', 'cancellation_date', 'total'])
 
             if cancel_invoice and i:
                 invoices.append(generate_invoice(order))
         else:
-            with order.event.lock():
-                order.status = Order.STATUS_CANCELED
-                order.cancellation_date = now()
-                order.save(update_fields=['status', 'cancellation_date'])
+            order.status = Order.STATUS_CANCELED
+            order.cancellation_date = now()
+            order.save(update_fields=['status', 'cancellation_date'])
 
             for position in order.positions.all():
                 assign_ticket_secret(
