@@ -338,9 +338,8 @@ def mark_order_expired(order, user=None, auth=None):
             order = Order.objects.get(pk=order)
         if isinstance(user, int):
             user = User.objects.get(pk=user)
-        with order.event.lock():
-            order.status = Order.STATUS_EXPIRED
-            order.save(update_fields=['status'])
+        order.status = Order.STATUS_EXPIRED
+        order.save(update_fields=['status'])
 
         order.log_action('pretix.event.order.expired', user=user, auth=auth)
         i = order.invoices.filter(is_cancellation=False).last()
