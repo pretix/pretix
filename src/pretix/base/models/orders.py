@@ -1735,9 +1735,10 @@ class OrderPayment(models.Model):
             generate_invoice, invoice_qualified,
         )
 
-        if (self.order.status == Order.STATUS_PENDING and self.order.expires > now() + timedelta(seconds=LOCK_TIMEOUT * 2)) or not lock:
+        if (self.order.status == Order.STATUS_PENDING and self.order.expires > now() + timedelta(seconds=60 * 2)) or not lock:
             # Performance optimization. In this case, there's really no reason to lock everything and an atomic
             # database transaction is more than enough.
+            from pretix.base.services.locking import NoLockManager
             lockfn = NoLockManager
         else:
             lockfn = self.order.event.lock

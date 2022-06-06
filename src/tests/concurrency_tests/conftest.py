@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta
 
+import aiohttp
 import pytest
 from django.utils.timezone import now
 from django_redis import get_redis_connection
@@ -45,6 +46,7 @@ def event(organizer):
     )
     e.item_meta_properties.create(name="day", default="Monday")
     e.settings.timezone = 'Europe/Berlin'
+    e.settings.payment_banktransfer__enabled = True
     return e
 
 
@@ -78,6 +80,28 @@ def voucher(event, item):
 
 @pytest.fixture
 @scopes_disabled()
+def membership_type(event):
+    return event.organizer.membership_types.create(name="foo", allow_parallel_usage=False)
+
+
+@pytest.fixture
+@scopes_disabled()
+def customer(event, membership_type):
+    return event.organizer.customers.create(email="admin@localhost", is_active=True, is_verified=True)
+
+
+@pytest.fixture
+@scopes_disabled()
+def membership(event, membership_type, customer):
+    return customer.memberships.create(
+        membership_type=membership_type,
+        date_start=datetime(2017, 1, 1, 0, 0, tzinfo=UTC),
+        date_end=datetime(2099, 1, 1, 0, 0, tzinfo=UTC),
+    )
+
+
+@pytest.fixture
+@scopes_disabled()
 def seat(event, organizer, item):
     SeatingPlan.objects.create(
         name="Plan", organizer=organizer, layout="{}"
@@ -86,3 +110,9 @@ def seat(event, organizer, item):
         layout_category='Stalls', product=item
     )
     return event.seats.create(seat_number="A1", product=item, seat_guid="A1")
+
+
+@pytest.fixture
+async def session(live_server, event):
+    async with aiohttp.ClientSession() as session:
+        yield session

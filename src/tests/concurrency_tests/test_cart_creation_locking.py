@@ -1,22 +1,11 @@
 import asyncio
 
-import aiohttp
 import pytest
 from asgiref.sync import sync_to_async
 from django_scopes import scopes_disabled
+from tests.concurrency_tests.utils import post
 
 from pretix.base.models import CartPosition
-
-
-@pytest.fixture
-async def session(live_server, event):
-    async with aiohttp.ClientSession() as session:
-        yield session
-
-
-async def post(session, url, data):
-    async with session.post(url, data=data) as response:
-        return await response.text()
 
 
 @pytest.mark.asyncio

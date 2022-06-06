@@ -36,10 +36,10 @@ import logging
 from itertools import groupby
 
 from django.conf import settings
-from django.db import connection, DatabaseError
+from django.db import DatabaseError, connection
 from django.utils.timezone import now
 
-from pretix.base.models import Event, Seat, Quota, Voucher, Membership
+from pretix.base.models import Event, Membership, Quota, Seat, Voucher
 from pretix.testutils.middleware import storage as debug_storage
 
 logger = logging.getLogger('pretix.base.locking')
@@ -54,12 +54,16 @@ KEY_SPACES = {
 
 
 def pg_lock_key(obj):
+    """
+    This maps the primary key space of multiple tables to a single bigint key space within postgres. It is not
+    an injective function, which is fine, as long as collisions are rare.
+    """
     keyspace = KEY_SPACES.get(type(obj))
     objectid = obj.pk
     if not keyspace:
         raise ValueError(f"No key space defined for locking objects of type {type(obj)}")
     assert isinstance(objectid, int)
-    key = (objectid << 10) | keyspace
+    key = (objectid << 33) | (keyspace % (1 << 33))
     return key
 
 
@@ -75,7 +79,7 @@ def lock_objects(objects):
             "You cannot create locks outside of an transaction"
         )
     if 'postgresql' in settings.DATABASES['default']['ENGINE']:
-        keys = sorted([pg_lock_key(obj) for obj in objects])
+        keys = sorted(list(set(pg_lock_key(obj) for obj in objects)))
         calls = ", ".join([f"pg_advisory_xact_lock({k})" for k in keys])
         try:
             with connection.cursor() as cursor:

@@ -63,7 +63,7 @@ from pretix.base.models.orders import OrderFee
 from pretix.base.models.tax import TaxRule
 from pretix.base.reldate import RelativeDateWrapper
 from pretix.base.services.checkin import _save_answers
-from pretix.base.services.locking import lock_objects, LockTimeoutException
+from pretix.base.services.locking import LockTimeoutException, lock_objects
 from pretix.base.services.pricing import (
     apply_discounts, get_line_price, get_listed_price, get_price,
     is_included_for_free,
