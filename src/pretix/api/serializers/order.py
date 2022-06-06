@@ -977,8 +977,18 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
         else:
             ia = None
 
+        lock_required = False
+        for pos_data in positions_data:
+            pos_data['_quotas'] = list(
+                pos_data.get('variation').quotas.filter(subevent=pos_data.get('subevent'))
+                if pos_data.get('variation')
+                else pos_data.get('item').quotas.filter(subevent=pos_data.get('subevent'))
+            )
+            if pos_data.get('voucher') or pos_data.get('seat') or any(q.size is not None for q in pos_data['_quotas']):
+                lock_required = True
+
         lockfn = self.context['event'].lock
-        if simulate:
+        if simulate or not lock_required:
             lockfn = NoLockManager
         with lockfn() as now_dt:
             free_seats = set()
@@ -1102,9 +1112,7 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
                                 str(pos_data.get('item'))
                             )]
 
-                    new_quotas = (pos_data.get('variation').quotas.filter(subevent=pos_data.get('subevent'))
-                                  if pos_data.get('variation')
-                                  else pos_data.get('item').quotas.filter(subevent=pos_data.get('subevent')))
+                    new_quotas = pos_data['_quotas']
                     if len(new_quotas) == 0:
                         errs[i]['item'] = [gettext_lazy('The product "{}" is not assigned to a quota.').format(
                             str(pos_data.get('item'))
@@ -1158,7 +1166,7 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
                     pos_data['attendee_name_parts'] = {
                         '_legacy': attendee_name
                     }
-                pos = OrderPosition(**{k: v for k, v in pos_data.items() if k != 'answers'})
+                pos = OrderPosition(**{k: v for k, v in pos_data.items() if k != 'answers' and k != '_quotas'})
                 if simulate:
                     pos.order = order._wrapped
                 else:
