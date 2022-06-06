@@ -153,7 +153,7 @@
                             {% endif %}
                         </td>
                         <td>
-                            <span class="fa fa-{{ o.sales_channel_obj.icon }} text-muted"
+                            <span class="fa fa-fw fa-{{ o.sales_channel_obj.icon }} text-muted"
                                   data-toggle="tooltip" title="{% trans o.sales_channel_obj.verbose_name %}"></span>
                             {{ o.datetime|date:"SHORT_DATETIME_FORMAT" }}
                         </td>
