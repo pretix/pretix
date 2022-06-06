@@ -6,7 +6,7 @@ from django_redis import get_redis_connection
 from django_scopes import scopes_disabled
 from pytz import UTC
 
-from pretix.base.models import Event, Item, Organizer, Quota
+from pretix.base.models import Event, Item, Organizer, Quota, SeatingPlan
 
 
 @pytest.fixture(autouse=True)
@@ -68,3 +68,21 @@ def quota(event, item):
     )
     q.items.add(item)
     return q
+
+
+@pytest.fixture
+@scopes_disabled()
+def voucher(event, item):
+    return event.vouchers.create(code="Foo", max_usages=1)
+
+
+@pytest.fixture
+@scopes_disabled()
+def seat(event, organizer, item):
+    SeatingPlan.objects.create(
+        name="Plan", organizer=organizer, layout="{}"
+    )
+    event.seat_category_mappings.create(
+        layout_category='Stalls', product=item
+    )
+    return event.seats.create(seat_number="A1", product=item, seat_guid="A1")
