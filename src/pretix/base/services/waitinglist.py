@@ -22,6 +22,7 @@
 import sys
 from datetime import timedelta
 
+from django.db import transaction
 from django.db.models import Exists, F, OuterRef, Q, Sum
 from django.dispatch import receiver
 from django.utils.timezone import now
@@ -31,6 +32,7 @@ from pretix.base.models import (
     Event, SeatCategoryMapping, User, WaitingListEntry,
 )
 from pretix.base.models.waitinglist import WaitingListException
+from pretix.base.services.locking import lock_objects
 from pretix.base.services.tasks import EventTask
 from pretix.base.signals import periodic_task
 from pretix.celery_app import app
@@ -71,11 +73,23 @@ def assign_automatically(event: Event, user_id: int=None, subevent_id: int=None)
 
     sent = 0
 
-    with event.lock():
+    with transaction.atomic(durable=True):
+        quotas_by_item = {}
+        quotas = set()
+        for wle in qs:
+            if (wle.item_id, wle.variation_id, wle.subevent_id) not in quotas_by_item:
+                quotas_by_item[wle.item_id, wle.variation_id, wle.subevent_id] = list(
+                    wle.variation.quotas.filter(subevent=wle.subevent)
+                    if wle.variation
+                    else wle.item.quotas.filter(subevent=wle.subevent)
+                )
+            wle._quotas = quotas_by_item[wle.item_id, wle.variation_id, wle.subevent_id]
+            quotas |= set(wle._quotas)
+
+        lock_objects(quotas)
         for wle in qs:
             if (wle.item, wle.variation, wle.subevent) in gone:
                 continue
-
             ev = (wle.subevent or event)
             if not ev.presale_is_running or (wle.subevent and not wle.subevent.active):
                 continue
@@ -90,9 +104,6 @@ def assign_automatically(event: Event, user_id: int=None, subevent_id: int=None)
                     gone.add((wle.item, wle.variation, wle.subevent))
                     continue
 
-            quotas = (wle.variation.quotas.filter(subevent=wle.subevent)
-                      if wle.variation
-                      else wle.item.quotas.filter(subevent=wle.subevent))
             availability = (
                 wle.variation.check_quotas(count_waitinglist=False, _cache=quota_cache, subevent=wle.subevent)
                 if wle.variation
@@ -106,7 +117,7 @@ def assign_automatically(event: Event, user_id: int=None, subevent_id: int=None)
                     continue
 
                 # Reduce affected quotas in cache
-                for q in quotas:
+                for q in wle._quotas:
                     quota_cache[q.pk] = (
                         quota_cache[q.pk][0] if quota_cache[q.pk][0] > 1 else 0,
                         quota_cache[q.pk][1] - 1 if quota_cache[q.pk][1] is not None else sys.maxsize
