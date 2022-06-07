@@ -548,8 +548,8 @@ class PaypalMethod(BasePaymentProvider):
                         'value': value,
                     },
                     'payee': payee,
-                    'description': description,
-                    'custom_id': custom_id,
+                    'description': description[:127],
+                    'custom_id': custom_id[:127],
                     # 'shipping': {},  # Include Shipping information?
                 }],
                 'application_context': {
@@ -610,31 +610,33 @@ class PaypalMethod(BasePaymentProvider):
 
             if pp_captured_order.status == 'APPROVED':
                 try:
+                    custom_id = '{prefix}{orderstring}{postfix}'.format(
+                        prefix='{} '.format(self.settings.prefix) if self.settings.prefix else '',
+                        orderstring=__('Order {slug}-{code}').format(
+                            slug=self.event.slug.upper(),
+                            code=payment.order.code
+                        ),
+                        postfix=' {}'.format(self.settings.postfix) if self.settings.postfix else ''
+                    )
+                    description = '{prefix}{orderstring}{postfix}'.format(
+                        prefix='{} '.format(self.settings.prefix) if self.settings.prefix else '',
+                        orderstring=__('Order {order} for {event}').format(
+                            event=request.event.name,
+                            order=payment.order.code
+                        ),
+                        postfix=' {}'.format(self.settings.postfix) if self.settings.postfix else ''
+                    )
                     patchreq = OrdersPatchRequest(pp_captured_order.id)
                     patchreq.request_body([
                         {
                             "op": "replace",
                             "path": "/purchase_units/@reference_id=='default'/custom_id",
-                            "value": '{prefix}{orderstring}{postfix}'.format(
-                                prefix='{} '.format(self.settings.prefix) if self.settings.prefix else '',
-                                orderstring=__('Order {slug}-{code}').format(
-                                    slug=self.event.slug.upper(),
-                                    code=payment.order.code
-                                ),
-                                postfix=' {}'.format(self.settings.postfix) if self.settings.postfix else ''
-                            ),
+                            "value": custom_id[:127],
                         },
                         {
                             "op": "replace",
                             "path": "/purchase_units/@reference_id=='default'/description",
-                            "value": '{prefix}{orderstring}{postfix}'.format(
-                                prefix='{} '.format(self.settings.prefix) if self.settings.prefix else '',
-                                orderstring=__('Order {order} for {event}').format(
-                                    event=request.event.name,
-                                    order=payment.order.code
-                                ),
-                                postfix=' {}'.format(self.settings.postfix) if self.settings.postfix else ''
-                            ),
+                            "value": description[:127],
                         }
                     ])
                     self.client.execute(patchreq)

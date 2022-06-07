@@ -70,6 +70,7 @@ var pretixpaypal = {
             pretixpaypal.paypage = Boolean($('#paypal-button-container').data('paypage'));
             pretixpaypal.order_id = $.trim($("#paypal_oid").html());
             pretixpaypal.currency = $("body").attr("data-currency");
+            pretixpaypal.locale = $("body").attr("data-locale") + "_" + $("body").attr("data-datetimelocale").toUpperCase();
         }
 
         pretixpaypal.continue_button.prop("disabled", true);
@@ -82,6 +83,7 @@ var pretixpaypal = {
             '?client-id=' + pretixpaypal.client_id +
             '&components=buttons,funding-eligibility' +
             '&currency=' + pretixpaypal.currency;
+            //'&locale=' + pretixpaypal.locale;
 
         if (pretixpaypal.merchant_id) {
             sdk_url += '&merchant-id=' + pretixpaypal.merchant_id;
