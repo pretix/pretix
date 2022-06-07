@@ -70,7 +70,7 @@ var pretixpaypal = {
             pretixpaypal.paypage = Boolean($('#paypal-button-container').data('paypage'));
             pretixpaypal.order_id = $.trim($("#paypal_oid").html());
             pretixpaypal.currency = $("body").attr("data-currency");
-            pretixpaypal.locale = $("body").attr("data-locale") + "_" + $("body").attr("data-datetimelocale").toUpperCase();
+            pretixpaypal.locale = this.guessLocale();
         }
 
         pretixpaypal.continue_button.prop("disabled", true);
@@ -83,7 +83,10 @@ var pretixpaypal = {
             '?client-id=' + pretixpaypal.client_id +
             '&components=buttons,funding-eligibility' +
             '&currency=' + pretixpaypal.currency;
-            //'&locale=' + pretixpaypal.locale;
+
+        if (pretixpaypal.locale) {
+            sdk_url += '&locale=' + pretixpaypal.locale;
+        }
 
         if (pretixpaypal.merchant_id) {
             sdk_url += '&merchant-id=' + pretixpaypal.merchant_id;
@@ -274,6 +277,41 @@ var pretixpaypal = {
             textselector2[0].textContent = eligibles.join(', ');
             textselector2.fadeIn(300);
         });
+    },
+
+    guessLocale: function() {
+        // This is a horrible hackjob and does not at all take into consideration the actual locale.
+        // Instead, we only look at the language that the shop is currently being displayed in and make
+        // that into a locale.
+        let allowed_locales = [
+            'en_US',
+            'ar_DZ',
+            'fr_FR',
+            'es_ES',
+            'zh_CN',
+            'de_DE',
+            'nl_NL',
+            'pt_PT',
+            'cs_CZ',
+            'da_DK',
+            'fi_FI',
+            'el_GR',
+            'hu_HU',
+            'id_ID',
+            'he_IL',
+            'it_IT',
+            'ja_JP',
+            'ru_RU',
+            'no_NO',
+            'pl_PL',
+            'sk_SK',
+            'sv_SE',
+            'th_TH',
+            'tr_TR',
+        ]
+        let lang = $("body").attr("data-locale").split('-')[0];
+        console.log(allowed_locales.find(element => element.startsWith(lang)));
+        return allowed_locales.find(element => element.startsWith(lang));
     }
 };
 
