@@ -5,8 +5,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-06-07 16:18+0000\n"
-"PO-Revision-Date: 2022-05-27 14:20+0000\n"
-"Last-Translator: Raphael Michel <michel@rami.io>\n"
+"PO-Revision-Date: 2022-06-07 16:34+0000\n"
+"Last-Translator: Martin Gross <martin@pc-coholic.de>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
 ">\n"
 "Language: de\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.12\n"
+"X-Generator: Weblate 4.12.2\n"
 "X-Poedit-Bookmarks: -1,-1,904,-1,-1,-1,-1,-1,-1,-1\n"
 
 #: pretix/api/auth/devicesecurity.py:28
@@ -23582,6 +23582,11 @@ msgid ""
 "they don't even need a PayPal account. PayPal is one of the most popular "
 "payment methods world-wide."
 msgstr ""
+"Akzeptieren Sie Zahlungen mit Ihrem PayPal Konto. Zusätzlich zu regulären "
+"PayPal-Zahlungen können Sie nun auch Zahlungen in einer Vielzahl von lokalen "
+"Zahlungsmethoden wie giropay, SOFORT, iDEAL und vielen anderen von Ihren "
+"Kunden annehmen - diese benötigen hierzu nicht ein Mal ein PayPal Konto. "
+"PayPal ist eine der populärsten Zahlungsmethoden weltweit."
 
 #: pretix/plugins/paypal2/payment.py:94
 msgid "PayPal Merchant ID"
@@ -23765,16 +23770,12 @@ msgid "PayPal reported an event: {}"
 msgstr "PayPal meldete ein Ereignis: {}"
 
 #: pretix/plugins/paypal2/signals.py:80
-#, fuzzy
-#| msgid "PayPal Connect: Client ID"
 msgid "PayPal ISU/Connect: Client ID"
-msgstr "PayPal Connect: Client-ID"
+msgstr "PayPal ISU/Connect: Client-ID"
 
 #: pretix/plugins/paypal2/signals.py:84
-#, fuzzy
-#| msgid "PayPal Connect: Secret key"
 msgid "PayPal ISU/Connect: Secret key"
-msgstr "PayPal Connect: Geheimer Schlüssel"
+msgstr "PayPal ISU/Connect: Geheimer Schlüssel"
 
 #: pretix/plugins/paypal2/signals.py:88
 msgid "PayPal ISU/Connect: Partner Merchant ID"
@@ -23789,10 +23790,8 @@ msgstr ""
 "Branding-Informationen für ISU bereitstellt."
 
 #: pretix/plugins/paypal2/signals.py:93
-#, fuzzy
-#| msgid "PayPal Connect Endpoint"
 msgid "PayPal ISU/Connect Endpoint"
-msgstr "PayPal Connect: Endpunkt"
+msgstr "PayPal ISU/Connect: Endpunkt"
 
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/checkout_payment_confirm.html:10
 msgid ""
@@ -23810,18 +23809,13 @@ msgstr ""
 "beginnen."
 
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/checkout_payment_form.html:9
-#, fuzzy
-#| msgid ""
-#| "After you clicked continue, we will redirect you to PayPal to fill in "
-#| "your payment details. You will then be redirected back here to review and "
-#| "confirm your order."
 msgid ""
 "After you clicked continue, we will be able to select how you want to pay "
 "and to fill in your payment details. You will then be redirected back here "
 "to review and confirm your order."
 msgstr ""
-"Nach dem Klick auf „Fortfahren“ werden wir Sie zu PayPal weiterleiten, um "
-"Ihre Zahlungsdaten einzugeben. Sie werden danach wieder hierher "
+"Nach dem Klick auf „Fortfahren“ können Sie auswählen wie Sie bezahlen wollen "
+"und Ihre Zahlungsdaten eingeben. Sie werden danach wieder hierher "
 "zurückgeleitet, um Ihre Bestellung zu bestätigen."
 
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/pay.html:5
