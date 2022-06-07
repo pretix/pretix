@@ -462,7 +462,7 @@ def isu_disconnect(request, **kwargs):
     del request.event.settings.payment_paypal_isu_merchant_id
     del request.event.settings.payment_paypal_isu_scopes
     request.event.settings.payment_paypal__enabled = False
-    messages.success(request, _('Your PayPal account has been disconnected.BB'))
+    messages.success(request, _('Your PayPal account has been disconnected.'))
 
     return redirect(reverse('control:event.settings.payment.provider', kwargs={
         'organizer': request.event.organizer.slug,
