@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-27 13:57+0000\n"
+"POT-Creation-Date: 2022-06-07 16:18+0000\n"
 "PO-Revision-Date: 2022-03-15 00:00+0000\n"
 "Last-Translator: Yuriko Matsunami <y.matsunami@enobyte.com>\n"
 "Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/pretix-"
@@ -28,6 +28,123 @@ msgstr "支払い済み"
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:76
 msgid "Comment:"
 msgstr "注釈:"
+
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:34
+msgid "PayPal"
+msgstr ""
+
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:35
+msgid "Venmo"
+msgstr ""
+
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:36
+msgid "Apple Pay"
+msgstr ""
+
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:37
+msgid "Itaú"
+msgstr ""
+
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:38
+msgid "PayPal Credit"
+msgstr ""
+
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:39
+msgid "Credit Card"
+msgstr ""
+
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:40
+msgid "PayPal Pay Later"
+msgstr ""
+
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:41
+msgid "iDEAL"
+msgstr ""
+
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:42
+msgid "SEPA Direct Debit"
+msgstr ""
+
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:43
+msgid "Bancontact"
+msgstr ""
+
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:44
+msgid "giropay"
+msgstr ""
+
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:45
+msgid "SOFORT"
+msgstr ""
+
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:46
+#, fuzzy
+#| msgid "Yes"
+msgid "eps"
+msgstr "はい"
+
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:47
+msgid "MyBank"
+msgstr ""
+
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:48
+msgid "Przelewy24"
+msgstr ""
+
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:49
+msgid "Verkkopankki"
+msgstr ""
+
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:50
+msgid "PayU"
+msgstr ""
+
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:51
+msgid "BLIK"
+msgstr ""
+
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:52
+msgid "Trustly"
+msgstr ""
+
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:53
+msgid "Zimpler"
+msgstr ""
+
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:54
+msgid "Maxima"
+msgstr ""
+
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:55
+msgid "OXXO"
+msgstr ""
+
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:56
+msgid "Boleto"
+msgstr ""
+
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:57
+msgid "WeChat Pay"
+msgstr ""
+
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:58
+msgid "Mercado Pago"
+msgstr ""
+
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:157
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:48
+msgid "Continue"
+msgstr "次へ"
+
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:215
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:152
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:183
+msgid "Confirming your payment …"
+msgstr "お支払い内容の確認"
+
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:240
+msgid "Payment method unavailable"
+msgstr ""
 
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:15
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:39
@@ -50,11 +167,6 @@ msgstr "お問い合わせはこちら"
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:60
 msgid "Total"
 msgstr "合計"
-
-#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:152
-#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:183
-msgid "Confirming your payment …"
-msgstr "お支払い内容の確認"
 
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:159
 msgid "Contacting your bank …"
@@ -128,10 +240,6 @@ msgstr "使用済"
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:47
 msgid "Cancel"
 msgstr "キャンセル"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:48
-msgid "Continue"
-msgstr "次へ"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:49
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:58
@@ -818,11 +926,6 @@ msgstr "１１月"
 #: pretix/static/pretixpresale/js/widget/widget.js:78
 msgid "December"
 msgstr "１２月"
-
-#, fuzzy
-#~| msgid "Yes"
-#~ msgid "eps"
-#~ msgstr "はい"
 
 #~ msgid "Lead Scan QR"
 #~ msgstr "QRコード読み込み"

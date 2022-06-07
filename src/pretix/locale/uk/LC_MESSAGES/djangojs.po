@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-27 13:57+0000\n"
+"POT-Creation-Date: 2022-06-07 16:18+0000\n"
 "PO-Revision-Date: 2022-05-10 02:00+0000\n"
 "Last-Translator: Iryna N <in380@nyu.edu>\n"
 "Language-Team: Ukrainian <https://translate.pretix.eu/projects/pretix/pretix-"
@@ -32,6 +32,123 @@ msgstr "Позначено як оплачене"
 msgid "Comment:"
 msgstr "Коментар:"
 
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:34
+msgid "PayPal"
+msgstr "PayPal"
+
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:35
+msgid "Venmo"
+msgstr "Venmo"
+
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:36
+msgid "Apple Pay"
+msgstr "Apple Pay"
+
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:37
+msgid "Itaú"
+msgstr "Itaú"
+
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:38
+msgid "PayPal Credit"
+msgstr "PayPal Кредит"
+
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:39
+msgid "Credit Card"
+msgstr "Кредитна картка"
+
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:40
+msgid "PayPal Pay Later"
+msgstr "PayPal Оплатити пізніше"
+
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:41
+msgid "iDEAL"
+msgstr "iDEAL"
+
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:42
+msgid "SEPA Direct Debit"
+msgstr "SEPA Прямий дебет"
+
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:43
+msgid "Bancontact"
+msgstr "Банкконтакт"
+
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:44
+msgid "giropay"
+msgstr "giropay"
+
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:45
+msgid "SOFORT"
+msgstr "SOFORT"
+
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:46
+#, fuzzy
+#| msgid "Yes"
+msgid "eps"
+msgstr "Так"
+
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:47
+msgid "MyBank"
+msgstr "MyBank"
+
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:48
+msgid "Przelewy24"
+msgstr ""
+
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:49
+msgid "Verkkopankki"
+msgstr ""
+
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:50
+msgid "PayU"
+msgstr ""
+
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:51
+msgid "BLIK"
+msgstr ""
+
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:52
+msgid "Trustly"
+msgstr ""
+
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:53
+msgid "Zimpler"
+msgstr ""
+
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:54
+msgid "Maxima"
+msgstr ""
+
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:55
+msgid "OXXO"
+msgstr ""
+
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:56
+msgid "Boleto"
+msgstr ""
+
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:57
+msgid "WeChat Pay"
+msgstr ""
+
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:58
+msgid "Mercado Pago"
+msgstr ""
+
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:157
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:48
+msgid "Continue"
+msgstr "Продовжити"
+
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:215
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:152
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:183
+msgid "Confirming your payment …"
+msgstr "Підтверджується ваш платіж…"
+
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:240
+msgid "Payment method unavailable"
+msgstr ""
+
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:15
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:39
 msgid "Placed orders"
@@ -53,11 +170,6 @@ msgstr "Налаштовується зв'язок з Stripe…"
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:60
 msgid "Total"
 msgstr "Всього"
-
-#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:152
-#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:183
-msgid "Confirming your payment …"
-msgstr "Підтверджується ваш платіж…"
 
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:159
 msgid "Contacting your bank …"
@@ -131,10 +243,6 @@ msgstr "Викуплено"
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:47
 msgid "Cancel"
 msgstr "Скасувати"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:48
-msgid "Continue"
-msgstr "Продовжити"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:49
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:58
@@ -825,47 +933,3 @@ msgstr "листопад"
 #: pretix/static/pretixpresale/js/widget/widget.js:78
 msgid "December"
 msgstr "грудень"
-
-#~ msgid "PayPal"
-#~ msgstr "PayPal"
-
-#~ msgid "Venmo"
-#~ msgstr "Venmo"
-
-#~ msgid "Apple Pay"
-#~ msgstr "Apple Pay"
-
-#~ msgid "Itaú"
-#~ msgstr "Itaú"
-
-#~ msgid "PayPal Credit"
-#~ msgstr "PayPal Кредит"
-
-#~ msgid "Credit Card"
-#~ msgstr "Кредитна картка"
-
-#~ msgid "PayPal Pay Later"
-#~ msgstr "PayPal Оплатити пізніше"
-
-#~ msgid "iDEAL"
-#~ msgstr "iDEAL"
-
-#~ msgid "SEPA Direct Debit"
-#~ msgstr "SEPA Прямий дебет"
-
-#~ msgid "Bancontact"
-#~ msgstr "Банкконтакт"
-
-#~ msgid "giropay"
-#~ msgstr "giropay"
-
-#~ msgid "SOFORT"
-#~ msgstr "SOFORT"
-
-#, fuzzy
-#~| msgid "Yes"
-#~ msgid "eps"
-#~ msgstr "Так"
-
-#~ msgid "MyBank"
-#~ msgstr "MyBank"

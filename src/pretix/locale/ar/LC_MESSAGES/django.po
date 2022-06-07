@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-27 13:57+0000\n"
+"POT-Creation-Date: 2022-06-07 16:18+0000\n"
 "PO-Revision-Date: 2022-06-06 18:00+0000\n"
 "Last-Translator: Abdullah <abdullah.gumaijan@gmail.com>\n"
 "Language-Team: Arabic <https://translate.pretix.eu/projects/pretix/pretix/ar/"
@@ -61,6 +61,7 @@ msgid "Allowed URIs list, space separated"
 msgstr "قائمة العناوين المسموح بها، مفصولة بمسافة"
 
 #: pretix/api/models.py:46 pretix/plugins/paypal/payment.py:112
+#: pretix/plugins/paypal2/payment.py:105
 msgid "Client ID"
 msgstr "هوية العميل"
 
@@ -87,16 +88,16 @@ msgstr "كل الفعاليات (بما في ذلك تلك التي تم إنش�
 msgid "Limit to events"
 msgstr "حد على الفعاليات"
 
-#: pretix/api/serializers/cart.py:90 pretix/api/serializers/order.py:1109
+#: pretix/api/serializers/cart.py:90 pretix/api/serializers/order.py:1117
 msgid "The product \"{}\" is not assigned to a quota."
 msgstr "لم يتم تعيين حصة للمنتج \"{}\"."
 
-#: pretix/api/serializers/cart.py:98 pretix/api/serializers/order.py:1121
+#: pretix/api/serializers/cart.py:98 pretix/api/serializers/order.py:1129
 msgid ""
 "There is not enough quota available on quota \"{}\" to perform the operation."
 msgstr "لا توجد حصة كافية متاحة في الحصة \"{}\" لإجراء العملية."
 
-#: pretix/api/serializers/cart.py:168 pretix/api/serializers/order.py:1081
+#: pretix/api/serializers/cart.py:168 pretix/api/serializers/order.py:1091
 #: pretix/base/services/orders.py:1263
 #, python-brace-format
 msgid "The selected seat \"{seat}\" is not available."
@@ -193,7 +194,7 @@ msgstr "الأسئلة تدور في حلقة لا متناهية."
 msgid "This type of question cannot be asked during check-in."
 msgstr "لا يمكن طرح هذا النوع من الأسئلة أثناء تسجيل الدخول."
 
-#: pretix/api/serializers/order.py:1094 pretix/api/serializers/order.py:1101
+#: pretix/api/serializers/order.py:1104 pretix/api/serializers/order.py:1111
 msgid "The product \"{}\" is not available on this date."
 msgstr "المنتج \"{}\" غير متوفر في هذا التاريخ."
 
@@ -1179,6 +1180,7 @@ msgstr "إجمالي الطلب"
 #: pretix/control/templates/pretixcontrol/subevents/index.html:99
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:155
 #: pretix/control/views/waitinglist.py:292
+#: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control.html:7
 #: pretix/plugins/reports/exporters.py:458
 #: pretix/plugins/reports/exporters.py:799
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_inspect.html:29
@@ -1556,6 +1558,7 @@ msgstr "الطلب"
 #: pretix/base/exporters/orderlist.py:975
 #: pretix/control/templates/pretixcontrol/search/payments.html:75
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/control.html:5
+#: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control_legacy.html:5
 msgid "Payment ID"
 msgstr "معرف الدفع"
 
@@ -1701,6 +1704,8 @@ msgstr "وضع الاختبار"
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:34
 #: pretix/plugins/banktransfer/refund_export.py:46
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/control.html:15
+#: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control.html:15
+#: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control_legacy.html:15
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:57
 msgid "Currency"
 msgstr "العملة"
@@ -3186,10 +3191,10 @@ msgstr "شراء هذا المنتج يتطلب موافقة"
 
 #: pretix/base/models/items.py:456
 msgid ""
-"If this product is part of an order, the order will be put into an \"approval"
-"\" state and will need to be confirmed by you before it can be paid and "
-"completed. You can use this e.g. for discounted tickets that are only "
-"available to specific groups."
+"If this product is part of an order, the order will be put into an "
+"\"approval\" state and will need to be confirmed by you before it can be "
+"paid and completed. You can use this e.g. for discounted tickets that are "
+"only available to specific groups."
 msgstr ""
 "إذا كان هذا المنتج جزءا من طلب، فسيتم وضع الطلب في حالة \"الموافقة\" وسيتعين "
 "عليك تأكيده قبل دفعه وإكماله. يمكنك استخدام هذا على سبيل المثال للتذاكر "
@@ -5082,8 +5087,8 @@ msgstr "احسب الرسوم من القيمة الإجمالية بما في �
 #, python-brace-format
 msgid ""
 "We recommend to enable this if you want your users to pay the payment fees "
-"of your payment provider. <a href=\"{docs_url}\" target=\"_blank\" rel="
-"\"noopener\">Click here for detailed information on what this does.</a> "
+"of your payment provider. <a href=\"{docs_url}\" target=\"_blank\" "
+"rel=\"noopener\">Click here for detailed information on what this does.</a> "
 "Don't forget to set the correct fees above!"
 msgstr ""
 "نوصي بتمكين هذا الخيار إذا كنت تريد أن يدفع المستخدمون رسوم الدفع لمزود "
@@ -5672,7 +5677,7 @@ msgstr "شرح عنوان الفاتورة"
 msgid "Invoice address name: {part}"
 msgstr "اسم عنوان الفاتورة: {part}"
 
-#: pretix/base/pdf.py:888
+#: pretix/base/pdf.py:887
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html:66
 #: pretix/plugins/ticketoutputpdf/ticketoutput.py:112
 msgid "Ticket"
@@ -8119,12 +8124,12 @@ msgstr "تنقسم إلى النظام الجديد"
 #, python-brace-format
 msgid ""
 "This file will be attached to the first email that we send for every new "
-"order. Therefore it will be combined with the \"Placed order\", \"Free order"
-"\", or \"Received order\" texts from above. It will be sent to both order "
-"contacts and attendees. You can use this e.g. to send your terms of service. "
-"Do not use it to send non-public information as this file might be sent "
-"before payment is confirmed or the order is approved. To avoid this vital "
-"email going to spam, you can only upload PDF files of up to {size} MB."
+"order. Therefore it will be combined with the \"Placed order\", \"Free "
+"order\", or \"Received order\" texts from above. It will be sent to both "
+"order contacts and attendees. You can use this e.g. to send your terms of "
+"service. Do not use it to send non-public information as this file might be "
+"sent before payment is confirmed or the order is approved. To avoid this "
+"vital email going to spam, you can only upload PDF files of up to {size} MB."
 msgstr ""
 
 #: pretix/base/settings.py:1803
@@ -9463,56 +9468,56 @@ msgctxt "timeline"
 msgid "Start of ticket sales"
 msgstr "بداية بيع التذاكر"
 
-#: pretix/base/timeline.py:91
+#: pretix/base/timeline.py:93
 msgctxt "timeline"
 msgid "End of ticket sales"
 msgstr "نهاية بيع التذاكر"
 
-#: pretix/base/timeline.py:100
+#: pretix/base/timeline.py:104
 msgctxt "timeline"
 msgid "Customers can no longer modify their orders"
 msgstr "لم يعد بإمكان العملاء تعديل طلباتهم"
 
-#: pretix/base/timeline.py:113
+#: pretix/base/timeline.py:117
 msgctxt "timeline"
 msgid "No more payments can be completed"
 msgstr "لا يمكن إتمام المزيد من المدفوعات"
 
-#: pretix/base/timeline.py:125
+#: pretix/base/timeline.py:129
 msgctxt "timeline"
 msgid "Tickets can be downloaded"
 msgstr "يمكن تنزيل التذاكر"
 
-#: pretix/base/timeline.py:137
+#: pretix/base/timeline.py:141
 msgctxt "timeline"
 msgid "Customers can no longer cancel free or unpaid orders"
 msgstr "لم يعد بإمكان العملاء إلغاء الطلبات المجانية أو غير المدفوعة"
 
-#: pretix/base/timeline.py:149
+#: pretix/base/timeline.py:153
 msgctxt "timeline"
 msgid "Customers can no longer cancel paid orders"
 msgstr "لم يعد بإمكان العملاء إلغاء الطلبات المدفوعة"
 
-#: pretix/base/timeline.py:163
+#: pretix/base/timeline.py:167
 msgctxt "timeline"
 msgid "Download reminders are being sent out"
 msgstr "يتم إرسال رسائل للتذكير بالتنزيل"
 
-#: pretix/base/timeline.py:176 pretix/base/timeline.py:199
-#: pretix/base/timeline.py:249
+#: pretix/base/timeline.py:180 pretix/base/timeline.py:203
+#: pretix/base/timeline.py:253
 #, python-brace-format
 msgctxt "timeline"
 msgid "Product \"{name}\" becomes available"
 msgstr "المنتج \"{name}\" أصبح متوفرا"
 
-#: pretix/base/timeline.py:187 pretix/base/timeline.py:211
-#: pretix/base/timeline.py:260
+#: pretix/base/timeline.py:191 pretix/base/timeline.py:215
+#: pretix/base/timeline.py:264
 #, python-brace-format
 msgctxt "timeline"
 msgid "Product \"{name}\" becomes unavailable"
 msgstr "المنتج \"{name}\" لم يعد متوفرا"
 
-#: pretix/base/timeline.py:225
+#: pretix/base/timeline.py:229
 #, fuzzy, python-brace-format
 #| msgctxt "timeline"
 #| msgid "Product \"{name}\" becomes available"
@@ -9520,7 +9525,7 @@ msgctxt "timeline"
 msgid "Discount \"{name}\" becomes active"
 msgstr "المنتج \"{name}\" أصبح متوفرا"
 
-#: pretix/base/timeline.py:236
+#: pretix/base/timeline.py:240
 #, fuzzy, python-brace-format
 #| msgctxt "timeline"
 #| msgid "Product \"{name}\" becomes unavailable"
@@ -9528,7 +9533,7 @@ msgctxt "timeline"
 msgid "Discount \"{name}\" becomes inactive"
 msgstr "المنتج \"{name}\" لم يعد متوفرا"
 
-#: pretix/base/timeline.py:276
+#: pretix/base/timeline.py:280
 #, fuzzy, python-brace-format
 #| msgctxt "timeline"
 #| msgid "Product \"{name}\" becomes available"
@@ -9536,7 +9541,7 @@ msgctxt "timeline"
 msgid "Product variation \"{product} – {variation}\" becomes available"
 msgstr "المنتج \"{name}\" أصبح متوفرا"
 
-#: pretix/base/timeline.py:290
+#: pretix/base/timeline.py:294
 #, fuzzy, python-brace-format
 #| msgctxt "timeline"
 #| msgid "Product \"{name}\" becomes unavailable"
@@ -9544,7 +9549,7 @@ msgctxt "timeline"
 msgid "Product variation \"{product} – {variation}\" becomes unavailable"
 msgstr "المنتج \"{name}\" لم يعد متوفرا"
 
-#: pretix/base/timeline.py:321
+#: pretix/base/timeline.py:325
 #, python-brace-format
 msgctxt "timeline"
 msgid "Payment provider \"{name}\" can no longer be selected"
@@ -9593,11 +9598,11 @@ msgstr ""
 "إذا قمت بإعداد متصفحك لتعطيل ملفات تعريف الارتباط ، فالرجاء إعادة تمكينها ، "
 "على الأقل لهذا الموقع ، أو لطلبات \"نفس الأصل\"."
 
-#: pretix/base/views/tasks.py:162
+#: pretix/base/views/tasks.py:168
 msgid "An unexpected error has occurred, please try again later."
 msgstr "حدث خطأ غير متوقع ، يرجى المحاولة مرة أخرى في وقت لاحق."
 
-#: pretix/base/views/tasks.py:165
+#: pretix/base/views/tasks.py:171
 msgid "The task has been completed."
 msgstr "تم إنهاء المهمة."
 
@@ -11864,8 +11869,8 @@ msgid ""
 "Unknown scan of code \"{barcode}…\" at {datetime} for list \"{list}\", type "
 "\"{type}\"."
 msgstr ""
-"تم مسح رمز غير محدد\"{barcode}...\" في \"{datetime}\"لقائمة\"{list}\"نوع"
-"\"{type}\"."
+"تم مسح رمز غير محدد\"{barcode}...\" في "
+"\"{datetime}\"لقائمة\"{list}\"نوع\"{type}\"."
 
 #: pretix/control/logdisplay.py:217
 #, python-brace-format
@@ -11879,8 +11884,8 @@ msgid ""
 "Scan scan of revoked code \"{barcode}…\" at {datetime} for list \"{list}\", "
 "type \"{type}\", was uploaded."
 msgstr ""
-"تم تحديث مسح الرمز الملغي\"{barcode}...\"في {datetime}للقائمة\"{list}\"، نوع"
-"\"{type}\"."
+"تم تحديث مسح الرمز الملغي\"{barcode}...\"في {datetime}للقائمة\"{list}\"، "
+"نوع\"{type}\"."
 
 #: pretix/control/logdisplay.py:238
 #, python-brace-format
@@ -11895,8 +11900,8 @@ msgid ""
 "Denied scan of position #{posid} at {datetime} for list \"{list}\", type "
 "\"{type}\", error code \"{errorcode}\"."
 msgstr ""
-"تم رفض مسح الحالة#{posid}في{datetime}لقائمة\"{list}\"نوع\"{type}\"خطأ الرمز"
-"\"{errorcode}\"."
+"تم رفض مسح الحالة#{posid}في{datetime}لقائمة\"{list}\"نوع\"{type}\"خطأ "
+"الرمز\"{errorcode}\"."
 
 #: pretix/control/logdisplay.py:260
 #, python-brace-format
@@ -13748,7 +13753,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/organizers/team_delete.html:21
 #: pretix/control/templates/pretixcontrol/pdf/index.html:77
 #: pretix/control/templates/pretixcontrol/subevents/delete.html:12
-#: pretix/control/templates/pretixcontrol/subevents/delete_bulk.html:34
+#: pretix/control/templates/pretixcontrol/subevents/delete_bulk.html:41
 #: pretix/control/templates/pretixcontrol/user/2fa_delete.html:18
 #: pretix/control/templates/pretixcontrol/user/2fa_disable.html:17
 #: pretix/control/templates/pretixcontrol/user/2fa_enable.html:18
@@ -13759,6 +13764,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/waitinglist/delete.html:12
 #: pretix/control/templates/pretixcontrol/waitinglist/delete_bulk.html:33
 #: pretix/plugins/badges/templates/pretixplugins/badges/delete.html:13
+#: pretix/plugins/paypal2/templates/pretixplugins/paypal2/pay.html:40
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_delete.html:12
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/sca.html:29
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/delete.html:12
@@ -13788,7 +13794,7 @@ msgstr "قم بالإلغاء"
 #: pretix/control/templates/pretixcontrol/organizers/team_delete.html:24
 #: pretix/control/templates/pretixcontrol/pdf/index.html:167
 #: pretix/control/templates/pretixcontrol/subevents/delete.html:15
-#: pretix/control/templates/pretixcontrol/subevents/delete_bulk.html:37
+#: pretix/control/templates/pretixcontrol/subevents/delete_bulk.html:44
 #: pretix/control/templates/pretixcontrol/user/2fa_delete.html:21
 #: pretix/control/templates/pretixcontrol/vouchers/delete.html:15
 #: pretix/control/templates/pretixcontrol/vouchers/delete_bulk.html:36
@@ -14908,7 +14914,7 @@ msgstr ""
 #: pretix/control/views/organizer.py:2057
 #: pretix/control/views/organizer.py:2096
 #: pretix/control/views/organizer.py:2172 pretix/control/views/subevents.py:481
-#: pretix/control/views/subevents.py:1578 pretix/control/views/user.py:216
+#: pretix/control/views/subevents.py:1580 pretix/control/views/user.py:216
 #: pretix/control/views/users.py:110 pretix/control/views/vouchers.py:287
 #: pretix/plugins/badges/views.py:131 pretix/plugins/sendmail/views.py:410
 #: pretix/plugins/stripe/views.py:643
@@ -15243,10 +15249,10 @@ msgstr "حكم الضرائب: %(name)s"
 #: pretix/control/templates/pretixcontrol/event/tax_edit.html:34
 #, python-format
 msgid ""
-"These settings are intended for advanced users. See the <a href=\"%(docs)s"
-"\">documentation</a> for more information. Note that we are not responsible "
-"for the correct handling of taxes in your ticket shop. If in doubt, please "
-"contact a lawyer or tax consultant."
+"These settings are intended for advanced users. See the <a "
+"href=\"%(docs)s\">documentation</a> for more information. Note that we are "
+"not responsible for the correct handling of taxes in your ticket shop. If in "
+"doubt, please contact a lawyer or tax consultant."
 msgstr ""
 "وتهدف هذه الإعدادات للمستخدمين المتقدمين. انظر <a href=\"%(docs)s\">الوثائق</"
 "a> للحصول على مزيد من المعلومات. ملاحظة أننا لسنا مسؤولين عن التعامل الصحيح "
@@ -15866,9 +15872,9 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/item/create.html:85
 msgid ""
-"Examples: Ticket category with variations for \"full price\" and \"reduced"
-"\", merchandise with variations for different sizes, workshop add-on with "
-"variations for simultaneous workshops."
+"Examples: Ticket category with variations for \"full price\" and "
+"\"reduced\", merchandise with variations for different sizes, workshop add-"
+"on with variations for simultaneous workshops."
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/item/create.html:98
@@ -16168,8 +16174,8 @@ msgstr "حسابات العملاء"
 msgid ""
 "With automatic discounts, you can automatically apply a discount to "
 "purchases from your customers based on certain conditions. For example, you "
-"can create group discounts like \"get 20%% off if you buy 3 or more tickets"
-"\" or \"buy 2 tickets, get 1 free\"."
+"can create group discounts like \"get 20%% off if you buy 3 or more "
+"tickets\" or \"buy 2 tickets, get 1 free\"."
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/items/discounts.html:14
@@ -16177,8 +16183,8 @@ msgid ""
 "Automatic discounts are available to all customers as long as they are "
 "active. If you want to offer special prices only to specific customers, you "
 "can use vouchers instead. If you want to offer discounts across multiple "
-"purchases (\"buy a package of 10 you can turn into individual tickets later"
-"\"), you can use customer accounts and memberships instead."
+"purchases (\"buy a package of 10 you can turn into individual tickets "
+"later\"), you can use customer accounts and memberships instead."
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/items/discounts.html:22
@@ -16646,8 +16652,8 @@ msgid ""
 "Are you sure you want to revoke access to your account for the application "
 "<strong>%(application)s</strong>?"
 msgstr ""
-"هل أنت متأكد أنك تريد إلغاء حق الدخول إلى حسابك للتطبيق على <strong>"
-"%(application)s</strong>؟"
+"هل أنت متأكد أنك تريد إلغاء حق الدخول إلى حسابك للتطبيق على "
+"<strong>%(application)s</strong>؟"
 
 #: pretix/control/templates/pretixcontrol/oauth/auth_revoke.html:15
 #: pretix/control/templates/pretixcontrol/organizers/device_revoke.html:24
@@ -17548,13 +17554,13 @@ msgstr "اعتبره منته"
 msgid ""
 "We received notice that <strong>%(amount)s</strong> have been refunded via "
 "<strong>%(method)s</strong>. If this refund is processed, the order will be "
-"underpaid by <strong>%(pending)s</strong>. The order total is <strong>"
-"%(total)s</strong>."
+"underpaid by <strong>%(pending)s</strong>. The order total is "
+"<strong>%(total)s</strong>."
 msgstr ""
-"نحن رسفيد لاحظ أن <strong>%(amount)s</strong> كان ردها عبر <strong>"
-"%(method)s</strong>. إذا تم معالجة هذا المبلغ، وسوف يكون النظام يتقاضون "
-"أجورا التي كتبها <strong>%(pending)s</strong>. مجموع النظام هو على <strong>"
-"%(total)s</strong>."
+"نحن رسفيد لاحظ أن <strong>%(amount)s</strong> كان ردها عبر "
+"<strong>%(method)s</strong>. إذا تم معالجة هذا المبلغ، وسوف يكون النظام "
+"يتقاضون أجورا التي كتبها <strong>%(pending)s</strong>. مجموع النظام هو على "
+"<strong>%(total)s</strong>."
 
 #: pretix/control/templates/pretixcontrol/order/refund_process.html:30
 msgid "Since the order is already canceled, this will not affect its state."
@@ -19435,7 +19441,13 @@ msgstr "مواعيد الحذف"
 msgid "Are you sure you want to delete the following dates?"
 msgstr "هل أنت متأكد أنك تريد حذف التواريخ التالية؟"
 
-#: pretix/control/templates/pretixcontrol/subevents/delete_bulk.html:21
+#: pretix/control/templates/pretixcontrol/subevents/delete_bulk.html:20
+msgid ""
+"It is possible that some of the above dates can't be deleted if a plugin has "
+"data attached to them. In that case, they will be disabled instead."
+msgstr ""
+
+#: pretix/control/templates/pretixcontrol/subevents/delete_bulk.html:27
 msgid ""
 "The following dates can't be deleted as they already have orders, but will "
 "be disabled instead."
@@ -20027,8 +20039,8 @@ msgstr "مواعيد الحذف"
 #| msgid ""
 #| "Are you sure you want to delete the voucher <strong>%(voucher)s</strong>?"
 msgid ""
-"Are you sure you want to delete any cart positions with voucher <strong>"
-"%(voucher)s</strong>?"
+"Are you sure you want to delete any cart positions with voucher "
+"<strong>%(voucher)s</strong>?"
 msgstr "هل أنت متأكد أنك تريد حذف قسيمة على <strong>%(voucher)s</strong>؟"
 
 #: pretix/control/templates/pretixcontrol/vouchers/delete_carts.html:10
@@ -20147,8 +20159,8 @@ msgstr "حذف المدخلات"
 #: pretix/control/templates/pretixcontrol/waitinglist/delete.html:9
 #, python-format
 msgid ""
-"Are you sure you want to delete the following waiting list entry <strong>"
-"%(entry)s</strong>?"
+"Are you sure you want to delete the following waiting list entry "
+"<strong>%(entry)s</strong>?"
 msgstr ""
 "هل أنت متأكد أنك تريد حذف ما يلي انتظار دخول قائمة على <strong>%(entry)s</"
 "strong>؟"
@@ -20233,8 +20245,8 @@ msgstr "تقديرات المبيعات"
 #, python-format
 msgid ""
 "If you can make enough room at your event to fit all the persons on the "
-"waiting list in, you could sell tickets worth an additional <strong>"
-"%(amount)s</strong>."
+"waiting list in, you could sell tickets worth an additional "
+"<strong>%(amount)s</strong>."
 msgstr ""
 "إذا يمكنك جعل مساحة كافية في الحدث الخاص بك لتناسب جميع الأشخاص على قائمة "
 "الانتظار في، هل يمكن بيع تذاكر بقيمة إضافية <strong>%(amount)s</strong>."
@@ -20448,8 +20460,8 @@ msgstr "تم إنشاء الاختيار في قائمة جديدة."
 #: pretix/control/views/item.py:1238 pretix/control/views/item.py:1389
 #: pretix/control/views/organizer.py:241 pretix/control/views/organizer.py:269
 #: pretix/control/views/organizer.py:1070 pretix/control/views/subevents.py:460
-#: pretix/control/views/subevents.py:586 pretix/control/views/subevents.py:1028
-#: pretix/control/views/subevents.py:1480 pretix/control/views/user.py:329
+#: pretix/control/views/subevents.py:586 pretix/control/views/subevents.py:1030
+#: pretix/control/views/subevents.py:1482 pretix/control/views/user.py:329
 #: pretix/control/views/vouchers.py:266 pretix/control/views/vouchers.py:319
 #: pretix/control/views/vouchers.py:507 pretix/plugins/badges/views.py:91
 #: pretix/plugins/sendmail/views.py:339 pretix/plugins/sendmail/views.py:416
@@ -21743,16 +21755,16 @@ msgctxt "subevent"
 msgid "The selected dates have been enabled."
 msgstr "تم تعطيل التواريخ المحددة."
 
-#: pretix/control/views/subevents.py:655
+#: pretix/control/views/subevents.py:657
 msgctxt "subevent"
 msgid "The selected dates have been deleted or disabled."
 msgstr "تم حذف المواعيد المحددة أو تعطيل."
 
-#: pretix/control/views/subevents.py:877
+#: pretix/control/views/subevents.py:879
 msgid "Please do not create more than 100.000 dates at once."
 msgstr ""
 
-#: pretix/control/views/subevents.py:1019
+#: pretix/control/views/subevents.py:1021
 msgctxt "subevent"
 msgid "{} new dates have been created."
 msgstr "وقد تم إنشاء {} مواعيد جديدة."
@@ -21977,10 +21989,10 @@ msgstr "شارات"
 #: pretix/plugins/badges/apps.py:34 pretix/plugins/banktransfer/apps.py:35
 #: pretix/plugins/checkinlists/apps.py:48
 #: pretix/plugins/manualpayment/apps.py:34 pretix/plugins/paypal/apps.py:48
-#: pretix/plugins/pretixdroid/apps.py:34 pretix/plugins/reports/apps.py:48
-#: pretix/plugins/returnurl/apps.py:34 pretix/plugins/sendmail/apps.py:34
-#: pretix/plugins/statistics/apps.py:34 pretix/plugins/stripe/apps.py:35
-#: pretix/plugins/ticketoutputpdf/apps.py:48
+#: pretix/plugins/paypal2/apps.py:35 pretix/plugins/pretixdroid/apps.py:34
+#: pretix/plugins/reports/apps.py:48 pretix/plugins/returnurl/apps.py:34
+#: pretix/plugins/sendmail/apps.py:34 pretix/plugins/statistics/apps.py:34
+#: pretix/plugins/stripe/apps.py:35 pretix/plugins/ticketoutputpdf/apps.py:48
 #: pretix/plugins/webcheckin/apps.py:34
 msgid "the pretix team"
 msgstr "فريق pretix"
@@ -22352,6 +22364,8 @@ msgstr "الإدخالات الخاصة بك غير صالحة ، الرجاء �
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/control.html:5
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_assign.html:41
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/control.html:9
+#: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control.html:9
+#: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control_legacy.html:9
 msgid "Payer"
 msgstr "المسدد"
 
@@ -22919,7 +22933,7 @@ msgstr "تم التسجيل تلقائيا"
 
 #: pretix/plugins/checkinlists/exporters.py:453
 #: pretix/plugins/checkinlists/exporters.py:617
-#: pretix/plugins/paypal/payment.py:122
+#: pretix/plugins/paypal/payment.py:122 pretix/plugins/paypal2/payment.py:115
 msgid "Secret"
 msgstr "سري"
 
@@ -22978,7 +22992,9 @@ msgid "A fully customizable payment method for manual processing."
 msgstr "يضيف هذا البرنامج المساعد طريقة دفع قابلة للتخصيص والمعالجة اليدوية."
 
 #: pretix/plugins/paypal/apps.py:44 pretix/plugins/paypal/apps.py:47
-#: pretix/plugins/paypal/payment.py:74
+#: pretix/plugins/paypal/payment.py:74 pretix/plugins/paypal2/payment.py:77
+#: pretix/plugins/paypal2/payment.py:133 pretix/plugins/paypal2/payment.py:944
+#: pretix/plugins/paypal2/payment.py:945
 msgid "PayPal"
 msgstr "PayPal"
 
@@ -22988,7 +23004,7 @@ msgid ""
 "payment methods world-wide."
 msgstr ""
 
-#: pretix/plugins/paypal/payment.py:90
+#: pretix/plugins/paypal/payment.py:90 pretix/plugins/paypal2/payment.py:368
 msgid ""
 "The PayPal sandbox is being used, you can test without actually sending "
 "money but you will need a PayPal sandbox user to log in."
@@ -23000,25 +23016,28 @@ msgstr ""
 msgid "PayPal account"
 msgstr "حساب PayPal"
 
-#: pretix/plugins/paypal/payment.py:115 pretix/plugins/stripe/payment.py:191
+#: pretix/plugins/paypal/payment.py:115 pretix/plugins/paypal2/payment.py:108
+#: pretix/plugins/stripe/payment.py:191
 #, python-brace-format
 msgid "<a target=\"_blank\" rel=\"noopener\" href=\"{docs_url}\">{text}</a>"
 msgstr "<a target=\"_blank\" rel=\"noopener\" href=\"{docs_url}\">{text}</a>"
 
-#: pretix/plugins/paypal/payment.py:116 pretix/plugins/stripe/payment.py:192
+#: pretix/plugins/paypal/payment.py:116 pretix/plugins/paypal2/payment.py:109
+#: pretix/plugins/stripe/payment.py:192
 msgid "Click here for a tutorial on how to obtain the required keys"
 msgstr ""
 "انقر هنا للحصول على برنامج تعليمي حول كيفية الحصول على المفاتيح المطلوبة"
 
-#: pretix/plugins/paypal/payment.py:128 pretix/plugins/stripe/payment.py:171
+#: pretix/plugins/paypal/payment.py:128 pretix/plugins/paypal2/payment.py:121
+#: pretix/plugins/stripe/payment.py:171
 msgid "Endpoint"
 msgstr "نقطة النهاية"
 
-#: pretix/plugins/paypal/payment.py:140
+#: pretix/plugins/paypal/payment.py:140 pretix/plugins/paypal2/payment.py:195
 msgid "Reference prefix"
 msgstr "رمز يسبق المرجع"
 
-#: pretix/plugins/paypal/payment.py:141
+#: pretix/plugins/paypal/payment.py:141 pretix/plugins/paypal2/payment.py:196
 msgid ""
 "Any value entered here will be added in front of the regular booking "
 "reference containing the order number."
@@ -23026,13 +23045,13 @@ msgstr ""
 "ستتم إضافة أي قيمة يتم إدخالها هنا أمام مرجع الحجز العادي الذي يحتوي على رقم "
 "الطلب."
 
-#: pretix/plugins/paypal/payment.py:147
+#: pretix/plugins/paypal/payment.py:147 pretix/plugins/paypal2/payment.py:202
 #, fuzzy
 #| msgid "Reference prefix"
 msgid "Reference postfix"
 msgstr "رمز يسبق المرجع"
 
-#: pretix/plugins/paypal/payment.py:148
+#: pretix/plugins/paypal/payment.py:148 pretix/plugins/paypal2/payment.py:203
 #, fuzzy
 #| msgid ""
 #| "Any value entered here will be added in front of the regular booking "
@@ -23044,137 +23063,63 @@ msgstr ""
 "ستتم إضافة أي قيمة يتم إدخالها هنا أمام مرجع الحجز العادي الذي يحتوي على رقم "
 "الطلب."
 
-#: pretix/plugins/paypal/payment.py:178
-msgid ""
-"To accept payments via PayPal, you will need an account at PayPal. By "
-"clicking on the following button, you can either create a new PayPal account "
-"connect pretix to an existing one."
-msgstr ""
-"لقبول المدفوعات عبر PayPal ، ستحتاج إلى حساب في PayPal. من خلال النقر على "
-"الزر التالي ، يمكنك إما إنشاء حساب PayPal جديد يربط pretix بحساب موجود."
-
-#: pretix/plugins/paypal/payment.py:182
-#, python-brace-format
-msgid "Connect with {icon} PayPal"
-msgstr "اتصل مع {icon} PayPal"
-
-#: pretix/plugins/paypal/payment.py:192
+#: pretix/plugins/paypal/payment.py:186 pretix/plugins/paypal2/payment.py:256
 msgid "Disconnect from PayPal"
 msgstr "اقطع الاتصال ب PayPal"
 
-#: pretix/plugins/paypal/payment.py:196
-msgid ""
-"Please configure a PayPal Webhook to the following endpoint in order to "
-"automatically cancel orders when payments are refunded externally."
-msgstr ""
-"يرجى إعداد PayPal Webhook إلى نقطة النهاية التالية لإلغاء الطلبات تلقائيا "
-"عند رد المدفوعات خارجيا."
-
-#: pretix/plugins/paypal/payment.py:207
-msgid "PayPal does not process payments in your event's currency."
-msgstr "لا يعالج PayPal المدفوعات بعملة الفعالية الخاصة بك."
-
-#: pretix/plugins/paypal/payment.py:208
-msgid ""
-"Please check this PayPal page for a complete list of supported currencies."
-msgstr "يرجى مراجعة صفحة PayPal هذه للحصول على قائمة كاملة بالعملات المدعومة."
-
-#: pretix/plugins/paypal/payment.py:213
-msgid ""
-"Your event's currency is supported by PayPal as a payment and balance "
-"currency for in-country accounts only. This means, that the receiving as "
-"well as the sending PayPal account must have been created in the same "
-"country and use the same currency. Out of country accounts will not be able "
-"to send any payments."
-msgstr ""
-"يدعم PayPal عملة الفعالية الخاصة بك كعملة دفع ورصيد للحسابات داخل البلد فقط. "
-"هذا يعني أنه يجب إنشاء حساب PayPal المستلم وكذلك حساب المرسل في نفس البلد "
-"واستخدام نفس العملة. لن تتمكن الحسابات خارج الدولة من إرسال أي مدفوعات."
-
-#: pretix/plugins/paypal/payment.py:261 pretix/plugins/paypal/payment.py:327
-#: pretix/plugins/paypal/payment.py:365 pretix/plugins/paypal/payment.py:380
-#: pretix/plugins/paypal/payment.py:448 pretix/plugins/paypal/payment.py:603
-#: pretix/plugins/paypal/payment.py:680
+#: pretix/plugins/paypal/payment.py:237 pretix/plugins/paypal/payment.py:303
+#: pretix/plugins/paypal/payment.py:341 pretix/plugins/paypal/payment.py:356
+#: pretix/plugins/paypal/payment.py:424 pretix/plugins/paypal/payment.py:579
+#: pretix/plugins/paypal/payment.py:656 pretix/plugins/paypal2/payment.py:444
+#: pretix/plugins/paypal2/payment.py:454 pretix/plugins/paypal2/payment.py:565
+#: pretix/plugins/paypal2/payment.py:569 pretix/plugins/paypal2/payment.py:597
+#: pretix/plugins/paypal2/payment.py:644 pretix/plugins/paypal2/payment.py:652
+#: pretix/plugins/paypal2/payment.py:868 pretix/plugins/paypal2/payment.py:878
 msgid "We had trouble communicating with PayPal"
 msgstr "كانت لدينا مشكلة في التواصل مع PayPal"
 
-#: pretix/plugins/paypal/payment.py:394 pretix/plugins/paypal/payment.py:403
-#: pretix/plugins/paypal/payment.py:474
+#: pretix/plugins/paypal/payment.py:370 pretix/plugins/paypal/payment.py:379
+#: pretix/plugins/paypal/payment.py:450 pretix/plugins/paypal2/payment.py:588
+#: pretix/plugins/paypal2/payment.py:608 pretix/plugins/paypal2/payment.py:679
 msgid ""
 "We were unable to process your payment. See below for details on how to "
 "proceed."
 msgstr ""
 "لم نتمكن من معالجة الدفع. انظر أدناه للحصول على تفاصيل حول كيفية المتابعة."
 
-#: pretix/plugins/paypal/payment.py:455 pretix/plugins/paypal/payment.py:464
+#: pretix/plugins/paypal/payment.py:431 pretix/plugins/paypal/payment.py:440
+#: pretix/plugins/paypal2/payment.py:666
 msgid ""
 "PayPal has not yet approved the payment. We will inform you as soon as the "
 "payment completed."
 msgstr "لم يوافق PayPal على الدفع بعد. سنبلغك بمجرد إتمام عملية الدفع."
 
-#: pretix/plugins/paypal/payment.py:489 pretix/plugins/stripe/payment.py:494
-#: pretix/plugins/stripe/payment.py:871
+#: pretix/plugins/paypal/payment.py:465 pretix/plugins/paypal2/payment.py:694
+#: pretix/plugins/stripe/payment.py:494 pretix/plugins/stripe/payment.py:871
 msgid "There was an error sending the confirmation mail."
 msgstr "حدث خطأ في إرسال بريد التأكيد."
 
-#: pretix/plugins/paypal/payment.py:579 pretix/plugins/paypal/payment.py:586
+#: pretix/plugins/paypal/payment.py:555 pretix/plugins/paypal/payment.py:562
+#: pretix/plugins/paypal2/payment.py:834 pretix/plugins/paypal2/payment.py:855
 msgid "Refunding the amount via PayPal failed: {}"
 msgstr "فشل رد المبلغ عبر PayPal: {}"
 
-#: pretix/plugins/paypal/payment.py:721 pretix/plugins/paypal/payment.py:729
+#: pretix/plugins/paypal/payment.py:697 pretix/plugins/paypal/payment.py:705
+#: pretix/plugins/paypal2/payment.py:924 pretix/plugins/paypal2/payment.py:932
 msgid "The payment for this invoice has already been received."
 msgstr "تم إستلام قيمة هذه الفاتورة مسبقا."
 
-#: pretix/plugins/paypal/payment.py:722 pretix/plugins/paypal/payment.py:730
+#: pretix/plugins/paypal/payment.py:698 pretix/plugins/paypal/payment.py:706
+#: pretix/plugins/paypal2/payment.py:925 pretix/plugins/paypal2/payment.py:933
 msgid "PayPal payment ID"
 msgstr "رقم مرجع سداد PayPal"
 
-#: pretix/plugins/paypal/payment.py:724
+#: pretix/plugins/paypal/payment.py:700 pretix/plugins/paypal2/payment.py:927
 msgid "PayPal sale ID"
 msgstr "رقم مرجع البيع في PayPal"
 
-#: pretix/plugins/paypal/signals.py:50
-msgid "Payment completed."
-msgstr "تم السداد."
-
-#: pretix/plugins/paypal/signals.py:51
-msgid "Payment denied."
-msgstr "تم رفض عملية السداد."
-
-#: pretix/plugins/paypal/signals.py:52
-msgid "Payment refunded."
-msgstr "تم استرداد قيمة السداد."
-
-#: pretix/plugins/paypal/signals.py:53
-msgid "Payment reversed."
-msgstr "تم عكس عملية السداد."
-
-#: pretix/plugins/paypal/signals.py:54
-msgid "Payment pending."
-msgstr "انتظار الدفع."
-
-#: pretix/plugins/paypal/signals.py:63
-msgid "PayPal reported an event: {}"
-msgstr "أبلغ PayPal عن حادثة: {}"
-
-#: pretix/plugins/paypal/signals.py:70
-#, fuzzy
-msgid "PayPal Connect: Client ID"
-msgstr "اتصال PayPal: رقم العميل"
-
-#: pretix/plugins/paypal/signals.py:74
-#, fuzzy
-#| msgid "PayPal Connect: Secret key"
-msgid "PayPal Connect: Secret key"
-msgstr "اتصال PayPal: المفتاح السري"
-
-#: pretix/plugins/paypal/signals.py:78
-#, fuzzy
-#| msgid "PayPal Connect Endpoint"
-msgid "PayPal Connect Endpoint"
-msgstr "نقطة نهاية اتصال PayPal"
-
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/checkout_payment_confirm.html:3
+#: pretix/plugins/paypal2/templates/pretixplugins/paypal2/checkout_payment_confirm.html:5
 msgid ""
 "The total amount listed above will be withdrawn from your PayPal account "
 "after the confirmation of your purchase."
@@ -23192,19 +23137,26 @@ msgstr ""
 "ستتم إعادة توجيهك مرة أخرى هنا لمراجعة طلبك وتأكيده."
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/control.html:7
+#: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control.html:5
+#: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control_legacy.html:7
 msgid "Sale ID"
 msgstr "رقم مرجع البيع"
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/control.html:11
+#: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control.html:11
+#: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control_legacy.html:11
 msgid "Last update"
 msgstr "آخر تحديث"
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/control.html:13
+#: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control.html:13
+#: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control_legacy.html:13
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:53
 msgid "Total value"
 msgstr "القيمة الإجمالية"
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/pending.html:4
+#: pretix/plugins/paypal2/templates/pretixplugins/paypal2/pending.html:4
 msgid ""
 "Our attempt to execute your Payment via PayPal has failed. Please try again "
 "or contact us."
@@ -23213,6 +23165,7 @@ msgstr ""
 "أخرى أو الاتصال بنا."
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/pending.html:8
+#: pretix/plugins/paypal2/templates/pretixplugins/paypal2/pending.html:8
 msgid ""
 "We're waiting for an answer from PayPal regarding your payment. Please "
 "contact us, if this takes more than a few hours."
@@ -23221,25 +23174,304 @@ msgstr ""
 "أكثر من بضع ساعات."
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/redirect.html:17
+#: pretix/plugins/paypal2/templates/pretixplugins/paypal2/redirect.html:17
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/redirect.html:17
 msgid "The payment process has started in a new window."
 msgstr "بدأت عملية الدفع في نافذة جديدة."
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/redirect.html:20
+#: pretix/plugins/paypal2/templates/pretixplugins/paypal2/redirect.html:20
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/redirect.html:20
 msgid "The window to enter your payment data was not opened or was closed?"
 msgstr "لم يتم فتح نافذة إدخال بيانات الدفع الخاصة بك أو أنه تم إغلاقها؟"
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/redirect.html:24
+#: pretix/plugins/paypal2/templates/pretixplugins/paypal2/redirect.html:24
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/redirect.html:24
 msgid "Click here in order to open the window."
 msgstr "انقر هنا لفتح النافذة."
 
-#: pretix/plugins/paypal/views.py:82 pretix/plugins/paypal/views.py:95
+#: pretix/plugins/paypal/views.py:106 pretix/plugins/paypal2/views.py:290
+msgid "Invalid response from PayPal received."
+msgstr "تم استلام رد غير صالح من PayPal."
+
+#: pretix/plugins/paypal/views.py:122 pretix/plugins/paypal2/views.py:306
+msgid "It looks like you canceled the PayPal payment"
+msgstr "يبدو أنك قد ألغيت عملية السداد عبر PayPal"
+
+#: pretix/plugins/paypal/views.py:254
+msgid "Your PayPal account has been disconnected."
+msgstr "تم قطع اتصال حساب PayPal الخاص بك."
+
+#: pretix/plugins/paypal2/apps.py:40
+msgid ""
+"Accept payments with your PayPal account. In addition to regular PayPal "
+"payments, you can now also offer payments in a variety of local payment "
+"methods such as giropay, SOFORT, iDEAL and many more to your customers - "
+"they don't even need a PayPal account. PayPal is one of the most popular "
+"payment methods world-wide."
+msgstr ""
+
+#: pretix/plugins/paypal2/payment.py:94
+#, fuzzy
+#| msgid "PayPal payment ID"
+msgid "PayPal Merchant ID"
+msgstr "رقم مرجع سداد PayPal"
+
+#: pretix/plugins/paypal2/payment.py:136
+msgid ""
+"Even if a customer chooses an Alternative Payment Method, they will always "
+"have the option to revert back to paying with their PayPal account. For this "
+"reason, this payment method is always active."
+msgstr ""
+
+#: pretix/plugins/paypal2/payment.py:144
+#, fuzzy
+#| msgid "Enable payment method"
+msgid "Alternative Payment Methods"
+msgstr "تفعيل طريقة الدفع"
+
+#: pretix/plugins/paypal2/payment.py:146
+msgid ""
+"In addition to payments through a PayPal account, you can also offer your "
+"customers the option to pay with credit cards and other, local payment "
+"methods such as SOFORT, giropay, iDEAL, and many more - even when they do "
+"not have a PayPal account. Eligible payment methods will be determined based "
+"on the shoppers location. For German merchants, this is the direct successor "
+"of PayPal Plus."
+msgstr ""
+
+#: pretix/plugins/paypal2/payment.py:161
+msgid "Disable SEPA Direct Debit"
+msgstr ""
+
+#: pretix/plugins/paypal2/payment.py:163
+msgid ""
+"While most payment methods cannot be recalled by a customer without "
+"outlining their exact grief with the merchants, SEPA Direct Debit can be "
+"recalled with the press of a button. For that reason - and depending on the "
+"nature of your event - you might want to disabled the option of SEPA Direct "
+"Debit payments in order to reduce the risk of costly chargebacks."
+msgstr ""
+
+#: pretix/plugins/paypal2/payment.py:177
+msgid "Enable Buy Now Pay Later"
+msgstr ""
+
+#: pretix/plugins/paypal2/payment.py:179
+msgid ""
+"Offer your customers the possibility to buy now (up to a certain limit) and "
+"pay in multiple installments or within 30 days. You, as the merchant, are "
+"getting your money right away."
+msgstr ""
+
+#: pretix/plugins/paypal2/payment.py:211
+#, fuzzy
+#| msgid "Customer actions"
+msgid "-- Automatic --"
+msgstr "إجراءات العملاء"
+
+#: pretix/plugins/paypal2/payment.py:217
+#, fuzzy
+#| msgid "Any country"
+msgid "Buyer country"
+msgstr "أي بلد"
+
+#: pretix/plugins/paypal2/payment.py:241
+#, fuzzy
+#| msgid ""
+#| "To accept payments via PayPal, you will need an account at PayPal. By "
+#| "clicking on the following button, you can either create a new PayPal "
+#| "account connect pretix to an existing one."
+msgid ""
+"To accept payments via PayPal, you will need an account at PayPal. By "
+"clicking on the following button, you can either create a new PayPal account "
+"or connect pretix to an existing one."
+msgstr ""
+"لقبول المدفوعات عبر PayPal ، ستحتاج إلى حساب في PayPal. من خلال النقر على "
+"الزر التالي ، يمكنك إما إنشاء حساب PayPal جديد يربط pretix بحساب موجود."
+
+#: pretix/plugins/paypal2/payment.py:246
+#, python-brace-format
+msgid "Connect with {icon} PayPal"
+msgstr "اتصل مع {icon} PayPal"
+
+#: pretix/plugins/paypal2/payment.py:260
+msgid ""
+"Please configure a PayPal Webhook to the following endpoint in order to "
+"automatically cancel orders when payments are refunded externally."
+msgstr ""
+"يرجى إعداد PayPal Webhook إلى نقطة النهاية التالية لإلغاء الطلبات تلقائيا "
+"عند رد المدفوعات خارجيا."
+
+#: pretix/plugins/paypal2/payment.py:271
+msgid "PayPal does not process payments in your event's currency."
+msgstr "لا يعالج PayPal المدفوعات بعملة الفعالية الخاصة بك."
+
+#: pretix/plugins/paypal2/payment.py:272
+msgid ""
+"Please check this PayPal page for a complete list of supported currencies."
+msgstr "يرجى مراجعة صفحة PayPal هذه للحصول على قائمة كاملة بالعملات المدعومة."
+
+#: pretix/plugins/paypal2/payment.py:277
+msgid ""
+"Your event's currency is supported by PayPal as a payment and balance "
+"currency for in-country accounts only. This means, that the receiving as "
+"well as the sending PayPal account must have been created in the same "
+"country and use the same currency. Out of country accounts will not be able "
+"to send any payments."
+msgstr ""
+"يدعم PayPal عملة الفعالية الخاصة بك كعملة دفع ورصيد للحسابات داخل البلد فقط. "
+"هذا يعني أنه يجب إنشاء حساب PayPal المستلم وكذلك حساب المرسل في نفس البلد "
+"واستخدام نفس العملة. لن تتمكن الحسابات خارج الدولة من إرسال أي مدفوعات."
+
+#: pretix/plugins/paypal2/payment.py:329 pretix/plugins/paypal2/views.py:199
+#: pretix/plugins/paypal2/views.py:223 pretix/plugins/paypal2/views.py:231
+#: pretix/plugins/paypal2/views.py:234
 msgid "An error occurred during connecting with PayPal, please try again."
 msgstr "حدث خطأ أثناء الاتصال ب PayPal ، يرجى المحاولة مرة أخرى."
 
-#: pretix/plugins/paypal/views.py:98
+#: pretix/plugins/paypal2/payment.py:450 pretix/plugins/paypal2/payment.py:874
+#, fuzzy
+#| msgid "This gift card was used in the meantime. Please try again."
+msgid ""
+"Something went wrong when requesting the payment status. Please try again."
+msgstr "تم استخدام بطاقة الهدايا هذه في هذه الأثناء. حاول مرة اخرى."
+
+#: pretix/plugins/paypal2/payment.py:459 pretix/plugins/paypal2/payment.py:883
+#, fuzzy
+#| msgid "You may need to enable JavaScript for Stripe payments."
+msgid "You may need to enable JavaScript for PayPal payments."
+msgstr "قد تحتاج إلى تمكين JavaScript لمدفوعات Stripe."
+
+#: pretix/plugins/paypal2/payment.py:951
+#, fuzzy
+#| msgid "PayPal"
+msgid "PayPal APM"
+msgstr "PayPal"
+
+#: pretix/plugins/paypal2/payment.py:952
+#, fuzzy
+#| msgid "Link to enable payment method"
+msgid "PayPal Alternative Payment Methods"
+msgstr "رابط لتمكين طريقة الدفع"
+
+#: pretix/plugins/paypal2/signals.py:59
+msgid "Payment completed."
+msgstr "تم السداد."
+
+#: pretix/plugins/paypal2/signals.py:60
+msgid "Payment denied."
+msgstr "تم رفض عملية السداد."
+
+#: pretix/plugins/paypal2/signals.py:61
+msgid "Payment refunded."
+msgstr "تم استرداد قيمة السداد."
+
+#: pretix/plugins/paypal2/signals.py:62
+msgid "Payment reversed."
+msgstr "تم عكس عملية السداد."
+
+#: pretix/plugins/paypal2/signals.py:63
+msgid "Payment pending."
+msgstr "انتظار الدفع."
+
+#: pretix/plugins/paypal2/signals.py:64
+#, fuzzy
+#| msgid "Order approved"
+msgid "Order approved."
+msgstr "تمت الموافقة على الطلب"
+
+#: pretix/plugins/paypal2/signals.py:73
+msgid "PayPal reported an event: {}"
+msgstr "أبلغ PayPal عن حادثة: {}"
+
+#: pretix/plugins/paypal2/signals.py:80
+#, fuzzy
+msgid "PayPal ISU/Connect: Client ID"
+msgstr "اتصال PayPal: رقم العميل"
+
+#: pretix/plugins/paypal2/signals.py:84
+#, fuzzy
+#| msgid "PayPal Connect: Secret key"
+msgid "PayPal ISU/Connect: Secret key"
+msgstr "اتصال PayPal: المفتاح السري"
+
+#: pretix/plugins/paypal2/signals.py:88
+#, fuzzy
+msgid "PayPal ISU/Connect: Partner Merchant ID"
+msgstr "اتصال PayPal: رقم العميل"
+
+#: pretix/plugins/paypal2/signals.py:89
+msgid ""
+"This is not the BN-code, but rather the ID of the merchant account which "
+"holds branding information for ISU."
+msgstr ""
+
+#: pretix/plugins/paypal2/signals.py:93
+#, fuzzy
+#| msgid "PayPal Connect Endpoint"
+msgid "PayPal ISU/Connect Endpoint"
+msgstr "نقطة نهاية اتصال PayPal"
+
+#: pretix/plugins/paypal2/templates/pretixplugins/paypal2/checkout_payment_confirm.html:10
+msgid ""
+"After placing your order, you will be able to select your desired payment "
+"method, including PayPal."
+msgstr ""
+
+#: pretix/plugins/paypal2/templates/pretixplugins/paypal2/checkout_payment_form.html:5
+msgid ""
+"Please click the \"Pay with PayPal\" button below to start your payment."
+msgstr ""
+
+#: pretix/plugins/paypal2/templates/pretixplugins/paypal2/checkout_payment_form.html:9
+#, fuzzy
+#| msgid ""
+#| "After you clicked continue, we will redirect you to PayPal to fill in "
+#| "your payment details. You will then be redirected back here to review and "
+#| "confirm your order."
+msgid ""
+"After you clicked continue, we will be able to select how you want to pay "
+"and to fill in your payment details. You will then be redirected back here "
+"to review and confirm your order."
+msgstr ""
+"بعد النقر فوق متابعة ، سنعيد توجيهك إلى PayPal لملء تفاصيل الدفع الخاصة بك. "
+"ستتم إعادة توجيهك مرة أخرى هنا لمراجعة طلبك وتأكيده."
+
+#: pretix/plugins/paypal2/templates/pretixplugins/paypal2/pay.html:5
+#: pretix/plugins/stripe/templates/pretixplugins/stripe/sca.html:5
+#: pretix/plugins/stripe/templates/pretixplugins/stripe/sca_return.html:6
+#: pretix/presale/templates/pretixpresale/event/order_pay.html:4
+#: pretix/presale/templates/pretixpresale/event/order_pay_confirm.html:5
+msgid "Pay order"
+msgstr "قم بسداد الطلب"
+
+#: pretix/plugins/paypal2/templates/pretixplugins/paypal2/pay.html:16
+#: pretix/presale/templates/pretixpresale/event/order_pay.html:7
+#: pretix/presale/templates/pretixpresale/event/order_pay_confirm.html:8
+#, python-format
+msgid "Pay order: %(code)s"
+msgstr "ادفع الطلب: %(code)s"
+
+#: pretix/plugins/paypal2/templates/pretixplugins/paypal2/pay.html:26
+#, fuzzy
+#| msgid "Please try again."
+msgid "Please turn on JavaScript."
+msgstr "حاول مرة اخرى."
+
+#: pretix/plugins/paypal2/templates/pretixplugins/paypal2/pay.html:29
+#: pretix/presale/templates/pretixpresale/event/checkout_payment.html:7
+msgid "Please select how you want to pay."
+msgstr "يرجى اختيار طريقة الدفع."
+
+#: pretix/plugins/paypal2/views.py:239
+msgid ""
+"The e-mail address on your PayPal account has not yet been confirmed. You "
+"will need to do this before you can start accepting payments."
+msgstr ""
+
+#: pretix/plugins/paypal2/views.py:244
 msgid ""
 "Your PayPal account is now connected to pretix. You can change the settings "
 "in detail below."
@@ -23247,16 +23479,10 @@ msgstr ""
 "حساب PayPal الخاص بك مرتبط الآن ب pretix. يمكنك تغيير الإعدادات بالتفصيل "
 "أدناه."
 
-#: pretix/plugins/paypal/views.py:139
-msgid "Invalid response from PayPal received."
-msgstr "تم استلام رد غير صالح من PayPal."
-
-#: pretix/plugins/paypal/views.py:155
-msgid "It looks like you canceled the PayPal payment"
-msgstr "يبدو أنك قد ألغيت عملية السداد عبر PayPal"
-
-#: pretix/plugins/paypal/views.py:287
-msgid "Your PayPal account has been disconnected."
+#: pretix/plugins/paypal2/views.py:465
+#, fuzzy
+#| msgid "Your PayPal account has been disconnected."
+msgid "Your PayPal account has been disconnected.BB"
 msgstr "تم قطع اتصال حساب PayPal الخاص بك."
 
 #: pretix/plugins/pretixdroid/apps.py:30 pretix/plugins/pretixdroid/apps.py:33
@@ -24069,14 +24295,15 @@ msgstr "اقطع الاتصال ب Stripe"
 
 #: pretix/plugins/stripe/payment.py:128
 msgid ""
-"Please configure a <a href=\"https://dashboard.stripe.com/account/webhooks"
-"\">Stripe Webhook</a> to the following endpoint in order to automatically "
-"cancel orders when charges are refunded externally and to process "
-"asynchronous payment methods like SOFORT."
+"Please configure a <a href=\"https://dashboard.stripe.com/account/"
+"webhooks\">Stripe Webhook</a> to the following endpoint in order to "
+"automatically cancel orders when charges are refunded externally and to "
+"process asynchronous payment methods like SOFORT."
 msgstr ""
-"الرجاء إعداد <a href=\"https://dashboard.stripe.com/account/webhooks"
-"\">Stripe Webhook</a> إلى نقطة النهاية التالية لإلغاء الطلبات تلقائيا عندما "
-"يتم استرداد الرسوم خارجيا ومعالجة وسائل الدفع غير المتزامن مثل SOFORT."
+"الرجاء إعداد <a href=\"https://dashboard.stripe.com/account/"
+"webhooks\">Stripe Webhook</a> إلى نقطة النهاية التالية لإلغاء الطلبات "
+"تلقائيا عندما يتم استرداد الرسوم خارجيا ومعالجة وسائل الدفع غير المتزامن مثل "
+"SOFORT."
 
 #: pretix/plugins/stripe/payment.py:140
 msgid "Enable MOTO payments for resellers"
@@ -24551,13 +24778,6 @@ msgstr ""
 msgid ""
 "The payment transaction could not be completed for the following reason:"
 msgstr "تعذر إتمام عملية الدفع للسبب التالي:"
-
-#: pretix/plugins/stripe/templates/pretixplugins/stripe/sca.html:5
-#: pretix/plugins/stripe/templates/pretixplugins/stripe/sca_return.html:6
-#: pretix/presale/templates/pretixpresale/event/order_pay.html:4
-#: pretix/presale/templates/pretixpresale/event/order_pay_confirm.html:5
-msgid "Pay order"
-msgstr "قم بسداد الطلب"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/sca.html:16
 #, python-format
@@ -25343,10 +25563,6 @@ msgstr "لا يتضمن حسابك عضوية نشطة تسمح لك بشراء 
 msgid "You will not be able to continue."
 msgstr "لن تتمكن من الاستمرار."
 
-#: pretix/presale/templates/pretixpresale/event/checkout_payment.html:7
-msgid "Please select how you want to pay."
-msgstr "يرجى اختيار طريقة الدفع."
-
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html:44
 msgid "This sales channel does not provide support for test mode."
 msgstr "لا توفر قناة المبيعات هذه دعما لوضع الاختبار."
@@ -25487,6 +25703,7 @@ msgstr "المبلغ الأدنى للطلب: %(num)s"
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:167
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:279
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:62
+#: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:147
 msgctxt "price"
 msgid "free"
 msgstr ""
@@ -25955,15 +26172,6 @@ msgstr "غير مصنف"
 msgid "Show full-size image of %(item)s"
 msgstr "أظهر صورة بالحجم الكبير ل %(item)s"
 
-#: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:147
-#: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:276
-#: pretix/presale/templates/pretixpresale/event/voucher.html:140
-#: pretix/presale/templates/pretixpresale/event/voucher.html:196
-#: pretix/presale/templates/pretixpresale/event/voucher.html:328
-msgctxt "price"
-msgid "FREE"
-msgstr "مجاني"
-
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:175
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:304
 msgid "Enter a voucher code below to buy this ticket."
@@ -25975,6 +26183,14 @@ msgstr "أدخل رمز كود الخصم أدناه لشراء هذه التذ�
 #| msgid "Modify price for %(item)s"
 msgid "Set price in %(currency)s for %(item)s"
 msgstr "تعديل السعر ل%(item)s"
+
+#: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:276
+#: pretix/presale/templates/pretixpresale/event/voucher.html:140
+#: pretix/presale/templates/pretixpresale/event/voucher.html:196
+#: pretix/presale/templates/pretixpresale/event/voucher.html:328
+msgctxt "price"
+msgid "FREE"
+msgstr "مجاني"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_quota_left.html:4
 #, python-format
@@ -26412,8 +26628,9 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order.html:398
 #, python-format
 msgid ""
-"You can cancel this order. In this case, a cancellation fee of <strong>"
-"%(fee)s</strong> will be kept and you will receive a refund of the remainder."
+"You can cancel this order. In this case, a cancellation fee of "
+"<strong>%(fee)s</strong> will be kept and you will receive a refund of the "
+"remainder."
 msgstr ""
 "يمكنك إلغاء هذا الطلب. في هذه الحالة ، سيتم الاحتفاظ برسوم إلغاء قدرها "
 "<strong>%(fee)s</strong> وستسترد المبلغ المتبقي."
@@ -26590,8 +26807,8 @@ msgstr ""
 #, python-format
 msgid ""
 "\n"
-"                                                Add-on product to position #"
-"%(positionid)s"
+"                                                Add-on product to position "
+"#%(positionid)s"
 msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/order_change_confirm.html:56
@@ -26689,12 +26906,6 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order_modify.html:87
 msgid "Save changes"
 msgstr "احفظ التغييرات"
-
-#: pretix/presale/templates/pretixpresale/event/order_pay.html:7
-#: pretix/presale/templates/pretixpresale/event/order_pay_confirm.html:8
-#, python-format
-msgid "Pay order: %(code)s"
-msgstr "ادفع الطلب: %(code)s"
 
 #: pretix/presale/templates/pretixpresale/event/order_pay_change.html:5
 msgid "Change payment method"
@@ -27491,173 +27702,118 @@ msgstr "هذه ليست سلسلة فعالية."
 msgid "from %(start_date)s"
 msgstr "من %(start_date)s"
 
-#: pretix/settings.py:508
+#: pretix/settings.py:509
 msgid "English"
 msgstr "الإنجليزية"
 
-#: pretix/settings.py:509
+#: pretix/settings.py:510
 msgid "German"
 msgstr "الألمانية"
 
-#: pretix/settings.py:510
+#: pretix/settings.py:511
 msgid "German (informal)"
 msgstr "الألمانية (غير رسمي)"
 
-#: pretix/settings.py:511
+#: pretix/settings.py:512
 msgid "Arabic"
 msgstr "العربية"
 
-#: pretix/settings.py:512
+#: pretix/settings.py:513
 msgid "Chinese (simplified)"
 msgstr "الصينية (المبسطة)"
 
-#: pretix/settings.py:513
+#: pretix/settings.py:514
 msgid "Czech"
 msgstr ""
 
-#: pretix/settings.py:514
+#: pretix/settings.py:515
 msgid "Danish"
 msgstr "دانماركي"
 
-#: pretix/settings.py:515
+#: pretix/settings.py:516
 msgid "Dutch"
 msgstr "هولندي"
 
-#: pretix/settings.py:516
+#: pretix/settings.py:517
 msgid "Dutch (informal)"
 msgstr "الهولندية (غير رسمي)"
 
-#: pretix/settings.py:517
+#: pretix/settings.py:518
 msgid "French"
 msgstr "الفرنسية"
 
-#: pretix/settings.py:518
+#: pretix/settings.py:519
 msgid "Finnish"
 msgstr "الفنلندية"
 
-#: pretix/settings.py:519
+#: pretix/settings.py:520
 msgid "Galician"
 msgstr ""
 
-#: pretix/settings.py:520
+#: pretix/settings.py:521
 msgid "Greek"
 msgstr "اليونانية"
 
-#: pretix/settings.py:521
+#: pretix/settings.py:522
 msgid "Italian"
 msgstr "الإيطالية"
 
-#: pretix/settings.py:522
+#: pretix/settings.py:523
 msgid "Latvian"
 msgstr "لاتفيفية"
 
-#: pretix/settings.py:523
+#: pretix/settings.py:524
 msgid "Polish"
 msgstr "البولندية"
 
-#: pretix/settings.py:524
+#: pretix/settings.py:525
 msgid "Portuguese (Portugal)"
 msgstr "البرتغالية (البرتغال)"
 
-#: pretix/settings.py:525
+#: pretix/settings.py:526
 msgid "Portuguese (Brazil)"
 msgstr "البرتغالية (البرازيل)"
 
-#: pretix/settings.py:526
+#: pretix/settings.py:527
 msgid "Romanian"
 msgstr ""
 
-#: pretix/settings.py:527
+#: pretix/settings.py:528
 msgid "Russian"
 msgstr "الروسية"
 
-#: pretix/settings.py:528
+#: pretix/settings.py:529
 msgid "Spanish"
 msgstr "الأسبانية"
 
-#: pretix/settings.py:529
+#: pretix/settings.py:530
 msgid "Turkish"
 msgstr "التركية"
 
-#: pretix/settings.py:530
+#: pretix/settings.py:531
 msgid "Ukrainian"
 msgstr ""
 
-#: pretix/settings.py:851
+#: pretix/settings.py:852
 msgid "User profile only"
 msgstr "ملف تعريف المستخدم فقط"
 
-#: pretix/settings.py:852
+#: pretix/settings.py:853
 msgid "Read access"
 msgstr "الوصول إلى القراءة"
 
-#: pretix/settings.py:853
+#: pretix/settings.py:854
 msgid "Write access"
 msgstr "الوصول إلى الكتابة"
 
-#: pretix/settings.py:863
+#: pretix/settings.py:864
 msgid "Kosovo"
 msgstr "كوسوفو"
-
-#, fuzzy
-#~| msgid "PayPal payment ID"
-#~ msgid "PayPal Merchant ID"
-#~ msgstr "رقم مرجع سداد PayPal"
-
-#, fuzzy
-#~| msgid "Enable payment method"
-#~ msgid "Alternative Payment Methods"
-#~ msgstr "تفعيل طريقة الدفع"
-
-#, fuzzy
-#~| msgid "Customer actions"
-#~ msgid "-- Automatic --"
-#~ msgstr "إجراءات العملاء"
-
-#, fuzzy
-#~| msgid "Any country"
-#~ msgid "Buyer country"
-#~ msgstr "أي بلد"
-
-#, fuzzy
-#~| msgid "This gift card was used in the meantime. Please try again."
-#~ msgid ""
-#~ "Something went wrong when requesting the payment status. Please try again."
-#~ msgstr "تم استخدام بطاقة الهدايا هذه في هذه الأثناء. حاول مرة اخرى."
-
-#, fuzzy
-#~| msgid "You may need to enable JavaScript for Stripe payments."
-#~ msgid "You may need to enable JavaScript for PayPal payments."
-#~ msgstr "قد تحتاج إلى تمكين JavaScript لمدفوعات Stripe."
-
-#, fuzzy
-#~| msgid "PayPal"
-#~ msgid "PayPal APM"
-#~ msgstr "PayPal"
-
-#, fuzzy
-#~| msgid "Link to enable payment method"
-#~ msgid "PayPal Alternative Payment Methods"
-#~ msgstr "رابط لتمكين طريقة الدفع"
-
-#, fuzzy
-#~| msgid "Order approved"
-#~ msgid "Order approved."
-#~ msgstr "تمت الموافقة على الطلب"
-
-#, fuzzy
-#~ msgid "PayPal ISU/Connect: Partner Merchant ID"
-#~ msgstr "اتصال PayPal: رقم العميل"
 
 #, fuzzy
 #~| msgid "Order"
 #~ msgid "Order ID"
 #~ msgstr "الطلب"
-
-#, fuzzy
-#~| msgid "Please try again."
-#~ msgid "Please turn on JavaScript."
-#~ msgstr "حاول مرة اخرى."
 
 #, python-format
 #~ msgid "Original price: %(price)s"

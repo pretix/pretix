@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-27 13:57+0000\n"
+"POT-Creation-Date: 2022-06-07 16:18+0000\n"
 "PO-Revision-Date: 2021-10-29 02:00+0000\n"
 "Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
 "Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix-js/"
@@ -27,6 +27,123 @@ msgstr "Gemarkeerd als betaald"
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:76
 msgid "Comment:"
 msgstr "Opmerking:"
+
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:34
+msgid "PayPal"
+msgstr ""
+
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:35
+msgid "Venmo"
+msgstr ""
+
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:36
+msgid "Apple Pay"
+msgstr ""
+
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:37
+msgid "Itaú"
+msgstr ""
+
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:38
+msgid "PayPal Credit"
+msgstr ""
+
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:39
+msgid "Credit Card"
+msgstr ""
+
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:40
+msgid "PayPal Pay Later"
+msgstr ""
+
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:41
+msgid "iDEAL"
+msgstr ""
+
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:42
+msgid "SEPA Direct Debit"
+msgstr ""
+
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:43
+msgid "Bancontact"
+msgstr ""
+
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:44
+msgid "giropay"
+msgstr ""
+
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:45
+msgid "SOFORT"
+msgstr ""
+
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:46
+#, fuzzy
+#| msgid "Yes"
+msgid "eps"
+msgstr "Ja"
+
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:47
+msgid "MyBank"
+msgstr ""
+
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:48
+msgid "Przelewy24"
+msgstr ""
+
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:49
+msgid "Verkkopankki"
+msgstr ""
+
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:50
+msgid "PayU"
+msgstr ""
+
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:51
+msgid "BLIK"
+msgstr ""
+
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:52
+msgid "Trustly"
+msgstr ""
+
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:53
+msgid "Zimpler"
+msgstr ""
+
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:54
+msgid "Maxima"
+msgstr ""
+
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:55
+msgid "OXXO"
+msgstr ""
+
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:56
+msgid "Boleto"
+msgstr ""
+
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:57
+msgid "WeChat Pay"
+msgstr ""
+
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:58
+msgid "Mercado Pago"
+msgstr ""
+
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:157
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:48
+msgid "Continue"
+msgstr "Doorgaan"
+
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:215
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:152
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:183
+msgid "Confirming your payment …"
+msgstr "Betaling bevestigen …"
+
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:240
+msgid "Payment method unavailable"
+msgstr ""
 
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:15
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:39
@@ -49,11 +166,6 @@ msgstr "Verbinding maken met Stripe …"
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:60
 msgid "Total"
 msgstr "Totaal"
-
-#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:152
-#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:183
-msgid "Confirming your payment …"
-msgstr "Betaling bevestigen …"
 
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:159
 msgid "Contacting your bank …"
@@ -127,10 +239,6 @@ msgstr "Gebruikt"
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:47
 msgid "Cancel"
 msgstr "Annuleren"
-
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:48
-msgid "Continue"
-msgstr "Doorgaan"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:49
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:58
@@ -825,11 +933,6 @@ msgstr "November"
 msgid "December"
 msgstr "December"
 
-#, fuzzy
-#~| msgid "Yes"
-#~ msgid "eps"
-#~ msgstr "Ja"
-
 #~ msgid "Lead Scan QR"
 #~ msgstr "QR-code voor lead-scanning"
 
@@ -882,8 +985,8 @@ msgstr "December"
 #~ "<a href=\"https://pretix.eu\" target=\"_blank\" rel=\"noopener\">event "
 #~ "ticketing powered by pretix</a>"
 #~ msgstr ""
-#~ "<a href=\"https://pretix.eu\" target=\"_blank\" rel=\"noopener"
-#~ "\">ticketsysteem mogelijk gemaakt door pretix</a>"
+#~ "<a href=\"https://pretix.eu\" target=\"_blank\" "
+#~ "rel=\"noopener\">ticketsysteem mogelijk gemaakt door pretix</a>"
 
 #~ msgid ""
 #~ "Your request has been queued on the server and will now be processed. If "

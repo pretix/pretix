@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-27 13:57+0000\n"
+"POT-Creation-Date: 2022-06-07 16:18+0000\n"
 "PO-Revision-Date: 2022-04-28 02:00+0000\n"
 "Last-Translator: Edd28 <chitu_edy@yahoo.com>\n"
 "Language-Team: Romanian <https://translate.pretix.eu/projects/pretix/pretix/"
@@ -57,6 +57,7 @@ msgid "Allowed URIs list, space separated"
 msgstr "Lista URI-urilor permise, separate prin spații"
 
 #: pretix/api/models.py:46 pretix/plugins/paypal/payment.py:112
+#: pretix/plugins/paypal2/payment.py:105
 msgid "Client ID"
 msgstr "ID Client"
 
@@ -83,18 +84,18 @@ msgstr "Toate evenimentele (inclusiv cele nou create)"
 msgid "Limit to events"
 msgstr "Limitarea la evenimente"
 
-#: pretix/api/serializers/cart.py:90 pretix/api/serializers/order.py:1109
+#: pretix/api/serializers/cart.py:90 pretix/api/serializers/order.py:1117
 msgid "The product \"{}\" is not assigned to a quota."
 msgstr "Produsul \"{}\" nu este atribuit unei cote."
 
-#: pretix/api/serializers/cart.py:98 pretix/api/serializers/order.py:1121
+#: pretix/api/serializers/cart.py:98 pretix/api/serializers/order.py:1129
 msgid ""
 "There is not enough quota available on quota \"{}\" to perform the operation."
 msgstr ""
 "Nu există suficientă cotă disponibilă pe cota \"{}\" pentru a efectua "
 "operațiunea."
 
-#: pretix/api/serializers/cart.py:168 pretix/api/serializers/order.py:1081
+#: pretix/api/serializers/cart.py:168 pretix/api/serializers/order.py:1091
 #: pretix/base/services/orders.py:1263
 #, python-brace-format
 msgid "The selected seat \"{seat}\" is not available."
@@ -197,7 +198,7 @@ msgstr "A fost detectată o dependență circulară între întrebări."
 msgid "This type of question cannot be asked during check-in."
 msgstr "Acest tip de întrebare nu poate fi adresat în timpul înregistrării."
 
-#: pretix/api/serializers/order.py:1094 pretix/api/serializers/order.py:1101
+#: pretix/api/serializers/order.py:1104 pretix/api/serializers/order.py:1111
 msgid "The product \"{}\" is not available on this date."
 msgstr "Produsul \"{}\" nu este disponibil la această dată."
 
@@ -1183,6 +1184,7 @@ msgstr "Total comenzi"
 #: pretix/control/templates/pretixcontrol/subevents/index.html:99
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:155
 #: pretix/control/views/waitinglist.py:292
+#: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control.html:7
 #: pretix/plugins/reports/exporters.py:458
 #: pretix/plugins/reports/exporters.py:799
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_inspect.html:29
@@ -1554,6 +1556,7 @@ msgstr "Comanda"
 #: pretix/base/exporters/orderlist.py:975
 #: pretix/control/templates/pretixcontrol/search/payments.html:75
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/control.html:5
+#: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control_legacy.html:5
 msgid "Payment ID"
 msgstr "ID plată"
 
@@ -1697,6 +1700,8 @@ msgstr "Mod testare"
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:34
 #: pretix/plugins/banktransfer/refund_export.py:46
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/control.html:15
+#: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control.html:15
+#: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control_legacy.html:15
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:57
 msgid "Currency"
 msgstr "Moneda"
@@ -3195,10 +3200,10 @@ msgstr "Cumpărarea acestui produs necesită aprobare"
 
 #: pretix/base/models/items.py:456
 msgid ""
-"If this product is part of an order, the order will be put into an \"approval"
-"\" state and will need to be confirmed by you before it can be paid and "
-"completed. You can use this e.g. for discounted tickets that are only "
-"available to specific groups."
+"If this product is part of an order, the order will be put into an "
+"\"approval\" state and will need to be confirmed by you before it can be "
+"paid and completed. You can use this e.g. for discounted tickets that are "
+"only available to specific groups."
 msgstr ""
 "În cazul în care acest produs face parte dintr-o comandă, comanda va fi "
 "plasată în starea de \"aprobare\" și va trebui să fie confirmată de dvs. "
@@ -5136,15 +5141,15 @@ msgstr "Calculați taxa din valoarea totală, inclusiv taxa."
 #, python-brace-format
 msgid ""
 "We recommend to enable this if you want your users to pay the payment fees "
-"of your payment provider. <a href=\"{docs_url}\" target=\"_blank\" rel="
-"\"noopener\">Click here for detailed information on what this does.</a> "
+"of your payment provider. <a href=\"{docs_url}\" target=\"_blank\" "
+"rel=\"noopener\">Click here for detailed information on what this does.</a> "
 "Don't forget to set the correct fees above!"
 msgstr ""
 "Vă recomandăm să activați această opțiune dacă doriți ca utilizatorii dvs. "
-"să achite comisioanele de plată ale procesatorului dvs. de plăți. <a href="
-"\"{docs_url}\" target=\"_blank\" rel=\"noopener\">Faceți click aici pentru "
-"informații detaliate despre acest lucru.</a> Nu uitați să setați taxele "
-"corecte mai sus!"
+"să achite comisioanele de plată ale procesatorului dvs. de plăți. <a "
+"href=\"{docs_url}\" target=\"_blank\" rel=\"noopener\">Faceți click aici "
+"pentru informații detaliate despre acest lucru.</a> Nu uitați să setați "
+"taxele corecte mai sus!"
 
 #: pretix/base/payment.py:343
 msgid "Restrict to countries"
@@ -5730,7 +5735,7 @@ msgstr "Explicație adresă de facturare"
 msgid "Invoice address name: {part}"
 msgstr "Adresa de facturare: {part}"
 
-#: pretix/base/pdf.py:888
+#: pretix/base/pdf.py:887
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html:66
 #: pretix/plugins/ticketoutputpdf/ticketoutput.py:112
 msgid "Ticket"
@@ -8297,12 +8302,12 @@ msgstr "Atașament pentru comenzile noi"
 #, python-brace-format
 msgid ""
 "This file will be attached to the first email that we send for every new "
-"order. Therefore it will be combined with the \"Placed order\", \"Free order"
-"\", or \"Received order\" texts from above. It will be sent to both order "
-"contacts and attendees. You can use this e.g. to send your terms of service. "
-"Do not use it to send non-public information as this file might be sent "
-"before payment is confirmed or the order is approved. To avoid this vital "
-"email going to spam, you can only upload PDF files of up to {size} MB."
+"order. Therefore it will be combined with the \"Placed order\", \"Free "
+"order\", or \"Received order\" texts from above. It will be sent to both "
+"order contacts and attendees. You can use this e.g. to send your terms of "
+"service. Do not use it to send non-public information as this file might be "
+"sent before payment is confirmed or the order is approved. To avoid this "
+"vital email going to spam, you can only upload PDF files of up to {size} MB."
 msgstr ""
 "Acest fișier va fi atașat la primul e-mail pe care îl trimitem pentru "
 "fiecare comandă nouă. Prin urmare, acesta va fi combinat cu textele "
@@ -9678,80 +9683,80 @@ msgctxt "timeline"
 msgid "Start of ticket sales"
 msgstr "Deschidere vânzare de bilete"
 
-#: pretix/base/timeline.py:91
+#: pretix/base/timeline.py:93
 msgctxt "timeline"
 msgid "End of ticket sales"
 msgstr "Încheiere vânzare de bilete"
 
-#: pretix/base/timeline.py:100
+#: pretix/base/timeline.py:104
 msgctxt "timeline"
 msgid "Customers can no longer modify their orders"
 msgstr "Clienții nu-și mai pot modifica comenzile"
 
-#: pretix/base/timeline.py:113
+#: pretix/base/timeline.py:117
 msgctxt "timeline"
 msgid "No more payments can be completed"
 msgstr "Nu mai pot fi efectuate plăți"
 
-#: pretix/base/timeline.py:125
+#: pretix/base/timeline.py:129
 msgctxt "timeline"
 msgid "Tickets can be downloaded"
 msgstr "Biletele pot fi descărcate"
 
-#: pretix/base/timeline.py:137
+#: pretix/base/timeline.py:141
 msgctxt "timeline"
 msgid "Customers can no longer cancel free or unpaid orders"
 msgstr "Clienții nu mai pot anula comenzile gratuite sau neplătite"
 
-#: pretix/base/timeline.py:149
+#: pretix/base/timeline.py:153
 msgctxt "timeline"
 msgid "Customers can no longer cancel paid orders"
 msgstr "Clienții nu mai pot anula comenzile plătite"
 
-#: pretix/base/timeline.py:163
+#: pretix/base/timeline.py:167
 msgctxt "timeline"
 msgid "Download reminders are being sent out"
 msgstr "Sunt trimise memento-uri de descărcare"
 
-#: pretix/base/timeline.py:176 pretix/base/timeline.py:199
-#: pretix/base/timeline.py:249
+#: pretix/base/timeline.py:180 pretix/base/timeline.py:203
+#: pretix/base/timeline.py:253
 #, python-brace-format
 msgctxt "timeline"
 msgid "Product \"{name}\" becomes available"
 msgstr "Produsul \"{name}\" devine disponibil"
 
-#: pretix/base/timeline.py:187 pretix/base/timeline.py:211
-#: pretix/base/timeline.py:260
+#: pretix/base/timeline.py:191 pretix/base/timeline.py:215
+#: pretix/base/timeline.py:264
 #, python-brace-format
 msgctxt "timeline"
 msgid "Product \"{name}\" becomes unavailable"
 msgstr "Produsul \"{name}\" devine indisponibil"
 
-#: pretix/base/timeline.py:225
+#: pretix/base/timeline.py:229
 #, fuzzy, python-brace-format
 msgctxt "timeline"
 msgid "Discount \"{name}\" becomes active"
 msgstr "Produsul \"{name}\" devine disponibil"
 
-#: pretix/base/timeline.py:236
+#: pretix/base/timeline.py:240
 #, fuzzy, python-brace-format
 msgctxt "timeline"
 msgid "Discount \"{name}\" becomes inactive"
 msgstr "Produsul \"{name}\" devine indisponibil"
 
-#: pretix/base/timeline.py:276
+#: pretix/base/timeline.py:280
 #, python-brace-format
 msgctxt "timeline"
 msgid "Product variation \"{product} – {variation}\" becomes available"
 msgstr "Variația de produs \"{product} - {variation}\" devine disponibilă"
 
-#: pretix/base/timeline.py:290
+#: pretix/base/timeline.py:294
 #, python-brace-format
 msgctxt "timeline"
 msgid "Product variation \"{product} – {variation}\" becomes unavailable"
 msgstr "Variația de produs \"{product} - {variation}\" devine indisponibilă"
 
-#: pretix/base/timeline.py:321
+#: pretix/base/timeline.py:325
 #, python-brace-format
 msgctxt "timeline"
 msgid "Payment provider \"{name}\" can no longer be selected"
@@ -9804,12 +9809,12 @@ msgstr ""
 "să le activați din nou, cel puțin pentru acest site sau pentru solicitările "
 "\"de aceeași origine\"."
 
-#: pretix/base/views/tasks.py:162
+#: pretix/base/views/tasks.py:168
 msgid "An unexpected error has occurred, please try again later."
 msgstr ""
 "A apărut o eroare neașteptată, vă rugăm să încercați din nou mai târziu."
 
-#: pretix/base/views/tasks.py:165
+#: pretix/base/views/tasks.py:171
 msgid "The task has been completed."
 msgstr "Sarcina a fost îndeplinită."
 
@@ -14061,7 +14066,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/organizers/team_delete.html:21
 #: pretix/control/templates/pretixcontrol/pdf/index.html:77
 #: pretix/control/templates/pretixcontrol/subevents/delete.html:12
-#: pretix/control/templates/pretixcontrol/subevents/delete_bulk.html:34
+#: pretix/control/templates/pretixcontrol/subevents/delete_bulk.html:41
 #: pretix/control/templates/pretixcontrol/user/2fa_delete.html:18
 #: pretix/control/templates/pretixcontrol/user/2fa_disable.html:17
 #: pretix/control/templates/pretixcontrol/user/2fa_enable.html:18
@@ -14072,6 +14077,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/waitinglist/delete.html:12
 #: pretix/control/templates/pretixcontrol/waitinglist/delete_bulk.html:33
 #: pretix/plugins/badges/templates/pretixplugins/badges/delete.html:13
+#: pretix/plugins/paypal2/templates/pretixplugins/paypal2/pay.html:40
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_delete.html:12
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/sca.html:29
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/delete.html:12
@@ -14101,7 +14107,7 @@ msgstr "Anulează"
 #: pretix/control/templates/pretixcontrol/organizers/team_delete.html:24
 #: pretix/control/templates/pretixcontrol/pdf/index.html:167
 #: pretix/control/templates/pretixcontrol/subevents/delete.html:15
-#: pretix/control/templates/pretixcontrol/subevents/delete_bulk.html:37
+#: pretix/control/templates/pretixcontrol/subevents/delete_bulk.html:44
 #: pretix/control/templates/pretixcontrol/user/2fa_delete.html:21
 #: pretix/control/templates/pretixcontrol/vouchers/delete.html:15
 #: pretix/control/templates/pretixcontrol/vouchers/delete_bulk.html:36
@@ -15312,7 +15318,7 @@ msgstr ""
 #: pretix/control/views/organizer.py:2057
 #: pretix/control/views/organizer.py:2096
 #: pretix/control/views/organizer.py:2172 pretix/control/views/subevents.py:481
-#: pretix/control/views/subevents.py:1578 pretix/control/views/user.py:216
+#: pretix/control/views/subevents.py:1580 pretix/control/views/user.py:216
 #: pretix/control/views/users.py:110 pretix/control/views/vouchers.py:287
 #: pretix/plugins/badges/views.py:131 pretix/plugins/sendmail/views.py:410
 #: pretix/plugins/stripe/views.py:643
@@ -15439,8 +15445,8 @@ msgstr ""
 "pretix acceptă o <a href=\"https://pretix.eu/about/en/features/payment\" "
 "target=\"_blank\">gamă largă de procesatori de plăți</a>, permițându-vă să "
 "alegeți metodele de plată care se potrivesc cel mai bine nevoilor dvs. Iată "
-"doar două dintre ele ca exemple, puteți adăuga mai multe în partea \"Setări"
-"\" a evenimentului dvs."
+"doar două dintre ele ca exemple, puteți adăuga mai multe în partea "
+"\"Setări\" a evenimentului dvs."
 
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:173
 msgid ""
@@ -15664,14 +15670,14 @@ msgstr "Regula de taxare: %(name)s"
 #: pretix/control/templates/pretixcontrol/event/tax_edit.html:34
 #, python-format
 msgid ""
-"These settings are intended for advanced users. See the <a href=\"%(docs)s"
-"\">documentation</a> for more information. Note that we are not responsible "
-"for the correct handling of taxes in your ticket shop. If in doubt, please "
-"contact a lawyer or tax consultant."
+"These settings are intended for advanced users. See the <a "
+"href=\"%(docs)s\">documentation</a> for more information. Note that we are "
+"not responsible for the correct handling of taxes in your ticket shop. If in "
+"doubt, please contact a lawyer or tax consultant."
 msgstr ""
-"Aceste setări sunt destinate utilizatorilor avansați. Consultați <a href="
-"\"%(docs)s\">documentația</a> pentru mai multe informații. Rețineți că nu "
-"suntem responsabili pentru gestionarea corectă a taxelor în magazinul "
+"Aceste setări sunt destinate utilizatorilor avansați. Consultați <a "
+"href=\"%(docs)s\">documentația</a> pentru mai multe informații. Rețineți că "
+"nu suntem responsabili pentru gestionarea corectă a taxelor în magazinul "
 "dumneavoastră de bilete. Dacă aveți îndoieli, vă rugăm să contactați un "
 "avocat sau un consultant fiscal."
 
@@ -16332,13 +16338,13 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/item/create.html:85
 msgid ""
-"Examples: Ticket category with variations for \"full price\" and \"reduced"
-"\", merchandise with variations for different sizes, workshop add-on with "
-"variations for simultaneous workshops."
+"Examples: Ticket category with variations for \"full price\" and "
+"\"reduced\", merchandise with variations for different sizes, workshop add-"
+"on with variations for simultaneous workshops."
 msgstr ""
-"Exemple: Categoria de bilete cu variații pentru \"preț întreg\" și \"redus"
-"\", produse cu variații pentru diferite mărimi, workshop add-on cu variații "
-"de workshop-uri simultane."
+"Exemple: Categoria de bilete cu variații pentru \"preț întreg\" și "
+"\"redus\", produse cu variații pentru diferite mărimi, workshop add-on cu "
+"variații de workshop-uri simultane."
 
 #: pretix/control/templates/pretixcontrol/item/create.html:98
 msgid "Quota settings"
@@ -16608,8 +16614,8 @@ msgstr "Conturi de client"
 msgid ""
 "With automatic discounts, you can automatically apply a discount to "
 "purchases from your customers based on certain conditions. For example, you "
-"can create group discounts like \"get 20%% off if you buy 3 or more tickets"
-"\" or \"buy 2 tickets, get 1 free\"."
+"can create group discounts like \"get 20%% off if you buy 3 or more "
+"tickets\" or \"buy 2 tickets, get 1 free\"."
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/items/discounts.html:14
@@ -16617,8 +16623,8 @@ msgid ""
 "Automatic discounts are available to all customers as long as they are "
 "active. If you want to offer special prices only to specific customers, you "
 "can use vouchers instead. If you want to offer discounts across multiple "
-"purchases (\"buy a package of 10 you can turn into individual tickets later"
-"\"), you can use customer accounts and memberships instead."
+"purchases (\"buy a package of 10 you can turn into individual tickets "
+"later\"), you can use customer accounts and memberships instead."
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/items/discounts.html:22
@@ -17977,8 +17983,8 @@ msgstr "Marcați ca fiind gata"
 msgid ""
 "We received notice that <strong>%(amount)s</strong> have been refunded via "
 "<strong>%(method)s</strong>. If this refund is processed, the order will be "
-"underpaid by <strong>%(pending)s</strong>. The order total is <strong>"
-"%(total)s</strong>."
+"underpaid by <strong>%(pending)s</strong>. The order total is "
+"<strong>%(total)s</strong>."
 msgstr ""
 "Am fost anunțați că <strong>%(amount)s</strong> au fost rambursate prin "
 "<strong>%(method)s</strong>. În cazul în care această rambursare este "
@@ -19803,7 +19809,13 @@ msgstr "Ștergeți datele"
 msgid "Are you sure you want to delete the following dates?"
 msgstr "Sunteți sigur că doriți să ștergeți următoarele date?"
 
-#: pretix/control/templates/pretixcontrol/subevents/delete_bulk.html:21
+#: pretix/control/templates/pretixcontrol/subevents/delete_bulk.html:20
+msgid ""
+"It is possible that some of the above dates can't be deleted if a plugin has "
+"data attached to them. In that case, they will be disabled instead."
+msgstr ""
+
+#: pretix/control/templates/pretixcontrol/subevents/delete_bulk.html:27
 msgid ""
 "The following dates can't be deleted as they already have orders, but will "
 "be disabled instead."
@@ -20408,8 +20420,8 @@ msgstr "Ștergeți coșuri"
 #: pretix/control/templates/pretixcontrol/vouchers/delete_carts.html:9
 #, python-format
 msgid ""
-"Are you sure you want to delete any cart positions with voucher <strong>"
-"%(voucher)s</strong>?"
+"Are you sure you want to delete any cart positions with voucher "
+"<strong>%(voucher)s</strong>?"
 msgstr ""
 "Sunteți sigur că doriți să ștergeți toate pozițiile din coș cu voucher "
 "<strong>%(voucher)s</strong>?"
@@ -20538,8 +20550,8 @@ msgstr "Ștergeți intrarea"
 #: pretix/control/templates/pretixcontrol/waitinglist/delete.html:9
 #, python-format
 msgid ""
-"Are you sure you want to delete the following waiting list entry <strong>"
-"%(entry)s</strong>?"
+"Are you sure you want to delete the following waiting list entry "
+"<strong>%(entry)s</strong>?"
 msgstr ""
 "Sunteți sigur că doriți să ștergeți următoarea intrare din lista de "
 "așteptare <strong>%(entry)s</strong>?"
@@ -20622,8 +20634,8 @@ msgstr "Estimarea vânzărilor"
 #, python-format
 msgid ""
 "If you can make enough room at your event to fit all the persons on the "
-"waiting list in, you could sell tickets worth an additional <strong>"
-"%(amount)s</strong>."
+"waiting list in, you could sell tickets worth an additional "
+"<strong>%(amount)s</strong>."
 msgstr ""
 "Dacă puteți face suficient loc la evenimentul dvs. pentru a încadra toate "
 "persoanele de pe lista de așteptare, ați putea vinde bilete în valoare "
@@ -20826,8 +20838,8 @@ msgstr "Noua listă de check-in a fost creată."
 #: pretix/control/views/item.py:1238 pretix/control/views/item.py:1389
 #: pretix/control/views/organizer.py:241 pretix/control/views/organizer.py:269
 #: pretix/control/views/organizer.py:1070 pretix/control/views/subevents.py:460
-#: pretix/control/views/subevents.py:586 pretix/control/views/subevents.py:1028
-#: pretix/control/views/subevents.py:1480 pretix/control/views/user.py:329
+#: pretix/control/views/subevents.py:586 pretix/control/views/subevents.py:1030
+#: pretix/control/views/subevents.py:1482 pretix/control/views/user.py:329
 #: pretix/control/views/vouchers.py:266 pretix/control/views/vouchers.py:319
 #: pretix/control/views/vouchers.py:507 pretix/plugins/badges/views.py:91
 #: pretix/plugins/sendmail/views.py:339 pretix/plugins/sendmail/views.py:416
@@ -22126,16 +22138,16 @@ msgctxt "subevent"
 msgid "The selected dates have been enabled."
 msgstr "Datele selectate au fost activate."
 
-#: pretix/control/views/subevents.py:655
+#: pretix/control/views/subevents.py:657
 msgctxt "subevent"
 msgid "The selected dates have been deleted or disabled."
 msgstr "Datele selectate au fost șterse sau dezactivate."
 
-#: pretix/control/views/subevents.py:877
+#: pretix/control/views/subevents.py:879
 msgid "Please do not create more than 100.000 dates at once."
 msgstr "Vă rugăm să nu creați mai mult de 100.000 de date deodată."
 
-#: pretix/control/views/subevents.py:1019
+#: pretix/control/views/subevents.py:1021
 msgctxt "subevent"
 msgid "{} new dates have been created."
 msgstr "{} au fost create date noi."
@@ -22366,10 +22378,10 @@ msgstr "Insigne"
 #: pretix/plugins/badges/apps.py:34 pretix/plugins/banktransfer/apps.py:35
 #: pretix/plugins/checkinlists/apps.py:48
 #: pretix/plugins/manualpayment/apps.py:34 pretix/plugins/paypal/apps.py:48
-#: pretix/plugins/pretixdroid/apps.py:34 pretix/plugins/reports/apps.py:48
-#: pretix/plugins/returnurl/apps.py:34 pretix/plugins/sendmail/apps.py:34
-#: pretix/plugins/statistics/apps.py:34 pretix/plugins/stripe/apps.py:35
-#: pretix/plugins/ticketoutputpdf/apps.py:48
+#: pretix/plugins/paypal2/apps.py:35 pretix/plugins/pretixdroid/apps.py:34
+#: pretix/plugins/reports/apps.py:48 pretix/plugins/returnurl/apps.py:34
+#: pretix/plugins/sendmail/apps.py:34 pretix/plugins/statistics/apps.py:34
+#: pretix/plugins/stripe/apps.py:35 pretix/plugins/ticketoutputpdf/apps.py:48
 #: pretix/plugins/webcheckin/apps.py:34
 msgid "the pretix team"
 msgstr "echipa pretix"
@@ -22762,6 +22774,8 @@ msgstr ""
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/control.html:5
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_assign.html:41
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/control.html:9
+#: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control.html:9
+#: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control_legacy.html:9
 msgid "Payer"
 msgstr "Plătitor"
 
@@ -23354,7 +23368,7 @@ msgstr "Înregistrări automate check-in"
 
 #: pretix/plugins/checkinlists/exporters.py:453
 #: pretix/plugins/checkinlists/exporters.py:617
-#: pretix/plugins/paypal/payment.py:122
+#: pretix/plugins/paypal/payment.py:122 pretix/plugins/paypal2/payment.py:115
 msgid "Secret"
 msgstr "Cheie secretă"
 
@@ -23402,7 +23416,9 @@ msgid "A fully customizable payment method for manual processing."
 msgstr "O metodă de plată complet personalizabilă pentru procesarea manuală."
 
 #: pretix/plugins/paypal/apps.py:44 pretix/plugins/paypal/apps.py:47
-#: pretix/plugins/paypal/payment.py:74
+#: pretix/plugins/paypal/payment.py:74 pretix/plugins/paypal2/payment.py:77
+#: pretix/plugins/paypal2/payment.py:133 pretix/plugins/paypal2/payment.py:944
+#: pretix/plugins/paypal2/payment.py:945
 msgid "PayPal"
 msgstr "PayPal"
 
@@ -23414,7 +23430,7 @@ msgstr ""
 "Acceptați plăți cu contul PayPal. PayPal este una dintre cele mai populare "
 "metode de plată la nivel mondial."
 
-#: pretix/plugins/paypal/payment.py:90
+#: pretix/plugins/paypal/payment.py:90 pretix/plugins/paypal2/payment.py:368
 msgid ""
 "The PayPal sandbox is being used, you can test without actually sending "
 "money but you will need a PayPal sandbox user to log in."
@@ -23426,25 +23442,28 @@ msgstr ""
 msgid "PayPal account"
 msgstr "Cont PayPal"
 
-#: pretix/plugins/paypal/payment.py:115 pretix/plugins/stripe/payment.py:191
+#: pretix/plugins/paypal/payment.py:115 pretix/plugins/paypal2/payment.py:108
+#: pretix/plugins/stripe/payment.py:191
 #, python-brace-format
 msgid "<a target=\"_blank\" rel=\"noopener\" href=\"{docs_url}\">{text}</a>"
 msgstr "<a target=\"_blank\" rel=\"noopener\" href=\"{docs_url}\">{text}</a>"
 
-#: pretix/plugins/paypal/payment.py:116 pretix/plugins/stripe/payment.py:192
+#: pretix/plugins/paypal/payment.py:116 pretix/plugins/paypal2/payment.py:109
+#: pretix/plugins/stripe/payment.py:192
 msgid "Click here for a tutorial on how to obtain the required keys"
 msgstr ""
 "Faceți click aici pentru un tutorial despre cum să obțineți cheile necesare"
 
-#: pretix/plugins/paypal/payment.py:128 pretix/plugins/stripe/payment.py:171
+#: pretix/plugins/paypal/payment.py:128 pretix/plugins/paypal2/payment.py:121
+#: pretix/plugins/stripe/payment.py:171
 msgid "Endpoint"
 msgstr "Endpoint"
 
-#: pretix/plugins/paypal/payment.py:140
+#: pretix/plugins/paypal/payment.py:140 pretix/plugins/paypal2/payment.py:195
 msgid "Reference prefix"
 msgstr "Prefix de referință"
 
-#: pretix/plugins/paypal/payment.py:141
+#: pretix/plugins/paypal/payment.py:141 pretix/plugins/paypal2/payment.py:196
 msgid ""
 "Any value entered here will be added in front of the regular booking "
 "reference containing the order number."
@@ -23452,11 +23471,11 @@ msgstr ""
 "Orice valoare introdusă aici va fi adăugată în fața referinței obișnuite de "
 "rezervare care conține numărul de comandă."
 
-#: pretix/plugins/paypal/payment.py:147
+#: pretix/plugins/paypal/payment.py:147 pretix/plugins/paypal2/payment.py:202
 msgid "Reference postfix"
 msgstr "Postfix de referință"
 
-#: pretix/plugins/paypal/payment.py:148
+#: pretix/plugins/paypal/payment.py:148 pretix/plugins/paypal2/payment.py:203
 msgid ""
 "Any value entered here will be added behind the regular booking reference "
 "containing the order number."
@@ -23464,67 +23483,24 @@ msgstr ""
 "Orice valoare introdusă aici va fi adăugată după referința obișnuită de "
 "rezervare care conține numărul de comandă."
 
-#: pretix/plugins/paypal/payment.py:178
-msgid ""
-"To accept payments via PayPal, you will need an account at PayPal. By "
-"clicking on the following button, you can either create a new PayPal account "
-"connect pretix to an existing one."
-msgstr ""
-"Pentru a accepta plăți prin PayPal, aveți nevoie de un cont la PayPal. "
-"Făcând click pe următorul buton, puteți fie să creați un nou cont PayPal, "
-"fie să vă conectați la unul existent."
-
-#: pretix/plugins/paypal/payment.py:182
-#, python-brace-format
-msgid "Connect with {icon} PayPal"
-msgstr "Conectați-vă cu {icon} PayPal"
-
-#: pretix/plugins/paypal/payment.py:192
+#: pretix/plugins/paypal/payment.py:186 pretix/plugins/paypal2/payment.py:256
 msgid "Disconnect from PayPal"
 msgstr "Deconectați-vă de la PayPal"
 
-#: pretix/plugins/paypal/payment.py:196
-msgid ""
-"Please configure a PayPal Webhook to the following endpoint in order to "
-"automatically cancel orders when payments are refunded externally."
-msgstr ""
-"Vă rugăm să configurați un Webhook PayPal la următorul endpoint pentru a "
-"anula automat comenzile atunci când plățile sunt rambursate din exterior."
-
-#: pretix/plugins/paypal/payment.py:207
-msgid "PayPal does not process payments in your event's currency."
-msgstr "PayPal nu procesează plățile în moneda evenimentului dumneavoastră."
-
-#: pretix/plugins/paypal/payment.py:208
-msgid ""
-"Please check this PayPal page for a complete list of supported currencies."
-msgstr ""
-"Vă rugăm să verificați această pagină PayPal pentru o listă completă a "
-"monedelor acceptate."
-
-#: pretix/plugins/paypal/payment.py:213
-msgid ""
-"Your event's currency is supported by PayPal as a payment and balance "
-"currency for in-country accounts only. This means, that the receiving as "
-"well as the sending PayPal account must have been created in the same "
-"country and use the same currency. Out of country accounts will not be able "
-"to send any payments."
-msgstr ""
-"Moneda evenimentului dvs. este acceptată de PayPal ca monedă de plată și de "
-"sold doar pentru conturile din țară. Acest lucru înseamnă că atât contul "
-"PayPal de primire, cât și cel de trimitere trebuie să fi fost create în "
-"aceeași țară și să utilizeze aceeași monedă. Conturile din afara țării nu "
-"vor putea trimite nicio plată."
-
-#: pretix/plugins/paypal/payment.py:261 pretix/plugins/paypal/payment.py:327
-#: pretix/plugins/paypal/payment.py:365 pretix/plugins/paypal/payment.py:380
-#: pretix/plugins/paypal/payment.py:448 pretix/plugins/paypal/payment.py:603
-#: pretix/plugins/paypal/payment.py:680
+#: pretix/plugins/paypal/payment.py:237 pretix/plugins/paypal/payment.py:303
+#: pretix/plugins/paypal/payment.py:341 pretix/plugins/paypal/payment.py:356
+#: pretix/plugins/paypal/payment.py:424 pretix/plugins/paypal/payment.py:579
+#: pretix/plugins/paypal/payment.py:656 pretix/plugins/paypal2/payment.py:444
+#: pretix/plugins/paypal2/payment.py:454 pretix/plugins/paypal2/payment.py:565
+#: pretix/plugins/paypal2/payment.py:569 pretix/plugins/paypal2/payment.py:597
+#: pretix/plugins/paypal2/payment.py:644 pretix/plugins/paypal2/payment.py:652
+#: pretix/plugins/paypal2/payment.py:868 pretix/plugins/paypal2/payment.py:878
 msgid "We had trouble communicating with PayPal"
 msgstr "Am avut probleme de comunicare cu PayPal"
 
-#: pretix/plugins/paypal/payment.py:394 pretix/plugins/paypal/payment.py:403
-#: pretix/plugins/paypal/payment.py:474
+#: pretix/plugins/paypal/payment.py:370 pretix/plugins/paypal/payment.py:379
+#: pretix/plugins/paypal/payment.py:450 pretix/plugins/paypal2/payment.py:588
+#: pretix/plugins/paypal2/payment.py:608 pretix/plugins/paypal2/payment.py:679
 msgid ""
 "We were unable to process your payment. See below for details on how to "
 "proceed."
@@ -23532,7 +23508,8 @@ msgstr ""
 "Nu am reușit să procesăm plata dvs. Vedeți mai jos pentru detalii despre cum "
 "să procedați."
 
-#: pretix/plugins/paypal/payment.py:455 pretix/plugins/paypal/payment.py:464
+#: pretix/plugins/paypal/payment.py:431 pretix/plugins/paypal/payment.py:440
+#: pretix/plugins/paypal2/payment.py:666
 msgid ""
 "PayPal has not yet approved the payment. We will inform you as soon as the "
 "payment completed."
@@ -23540,64 +23517,32 @@ msgstr ""
 "PayPal nu a aprobat încă plata. Vă vom informa de îndată ce plata va fi "
 "finalizată."
 
-#: pretix/plugins/paypal/payment.py:489 pretix/plugins/stripe/payment.py:494
-#: pretix/plugins/stripe/payment.py:871
+#: pretix/plugins/paypal/payment.py:465 pretix/plugins/paypal2/payment.py:694
+#: pretix/plugins/stripe/payment.py:494 pretix/plugins/stripe/payment.py:871
 msgid "There was an error sending the confirmation mail."
 msgstr "S-a produs o eroare la trimiterea mailului de confirmare."
 
-#: pretix/plugins/paypal/payment.py:579 pretix/plugins/paypal/payment.py:586
+#: pretix/plugins/paypal/payment.py:555 pretix/plugins/paypal/payment.py:562
+#: pretix/plugins/paypal2/payment.py:834 pretix/plugins/paypal2/payment.py:855
 msgid "Refunding the amount via PayPal failed: {}"
 msgstr "Rambursarea sumei prin PayPal a eșuat: {}"
 
-#: pretix/plugins/paypal/payment.py:721 pretix/plugins/paypal/payment.py:729
+#: pretix/plugins/paypal/payment.py:697 pretix/plugins/paypal/payment.py:705
+#: pretix/plugins/paypal2/payment.py:924 pretix/plugins/paypal2/payment.py:932
 msgid "The payment for this invoice has already been received."
 msgstr "Plata pentru această factură a fost deja primită."
 
-#: pretix/plugins/paypal/payment.py:722 pretix/plugins/paypal/payment.py:730
+#: pretix/plugins/paypal/payment.py:698 pretix/plugins/paypal/payment.py:706
+#: pretix/plugins/paypal2/payment.py:925 pretix/plugins/paypal2/payment.py:933
 msgid "PayPal payment ID"
 msgstr "ID-ul de plată PayPal"
 
-#: pretix/plugins/paypal/payment.py:724
+#: pretix/plugins/paypal/payment.py:700 pretix/plugins/paypal2/payment.py:927
 msgid "PayPal sale ID"
 msgstr "ID-ul de vânzare PayPal"
 
-#: pretix/plugins/paypal/signals.py:50
-msgid "Payment completed."
-msgstr "Plată finalizată."
-
-#: pretix/plugins/paypal/signals.py:51
-msgid "Payment denied."
-msgstr "Plată refuzată."
-
-#: pretix/plugins/paypal/signals.py:52
-msgid "Payment refunded."
-msgstr "Plata rambursată."
-
-#: pretix/plugins/paypal/signals.py:53
-msgid "Payment reversed."
-msgstr "Plata a fost inversată."
-
-#: pretix/plugins/paypal/signals.py:54
-msgid "Payment pending."
-msgstr "Plată în curs."
-
-#: pretix/plugins/paypal/signals.py:63
-msgid "PayPal reported an event: {}"
-msgstr "PayPal a raportat un eveniment: {}"
-
-#: pretix/plugins/paypal/signals.py:70
-msgid "PayPal Connect: Client ID"
-msgstr "PayPal Connect: ID client"
-
-#: pretix/plugins/paypal/signals.py:74
-msgid "PayPal Connect: Secret key"
-msgstr "PayPal Connect: Cheie secretă"
-
-#: pretix/plugins/paypal/signals.py:78
-msgid "PayPal Connect Endpoint"
-msgstr "Punct final PayPal Connect"
-
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/checkout_payment_confirm.html:3
+#: pretix/plugins/paypal2/templates/pretixplugins/paypal2/checkout_payment_confirm.html:5
 msgid ""
 "The total amount listed above will be withdrawn from your PayPal account "
 "after the confirmation of your purchase."
@@ -23616,19 +23561,26 @@ msgstr ""
 "pentru a vă revizui și confirma comanda."
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/control.html:7
+#: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control.html:5
+#: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control_legacy.html:7
 msgid "Sale ID"
 msgstr "ID de vânzare"
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/control.html:11
+#: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control.html:11
+#: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control_legacy.html:11
 msgid "Last update"
 msgstr "Ultima actualizare"
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/control.html:13
+#: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control.html:13
+#: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control_legacy.html:13
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:53
 msgid "Total value"
 msgstr "Valoarea totală"
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/pending.html:4
+#: pretix/plugins/paypal2/templates/pretixplugins/paypal2/pending.html:4
 msgid ""
 "Our attempt to execute your Payment via PayPal has failed. Please try again "
 "or contact us."
@@ -23637,6 +23589,7 @@ msgstr ""
 "încercați din nou sau să ne contactați."
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/pending.html:8
+#: pretix/plugins/paypal2/templates/pretixplugins/paypal2/pending.html:8
 msgid ""
 "We're waiting for an answer from PayPal regarding your payment. Please "
 "contact us, if this takes more than a few hours."
@@ -23645,11 +23598,13 @@ msgstr ""
 "să ne contactați, dacă acest lucru durează mai mult de câteva ore."
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/redirect.html:17
+#: pretix/plugins/paypal2/templates/pretixplugins/paypal2/redirect.html:17
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/redirect.html:17
 msgid "The payment process has started in a new window."
 msgstr "Procesul de plată a început într-o fereastră nouă."
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/redirect.html:20
+#: pretix/plugins/paypal2/templates/pretixplugins/paypal2/redirect.html:20
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/redirect.html:20
 msgid "The window to enter your payment data was not opened or was closed?"
 msgstr ""
@@ -23657,17 +23612,290 @@ msgstr ""
 "închisă?"
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/redirect.html:24
+#: pretix/plugins/paypal2/templates/pretixplugins/paypal2/redirect.html:24
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/redirect.html:24
 msgid "Click here in order to open the window."
 msgstr "Faceți clic aici pentru a deschide fereastra."
 
-#: pretix/plugins/paypal/views.py:82 pretix/plugins/paypal/views.py:95
+#: pretix/plugins/paypal/views.py:106 pretix/plugins/paypal2/views.py:290
+msgid "Invalid response from PayPal received."
+msgstr "S-a primit un răspuns invalid de la PayPal."
+
+#: pretix/plugins/paypal/views.py:122 pretix/plugins/paypal2/views.py:306
+msgid "It looks like you canceled the PayPal payment"
+msgstr "Se pare că ai anulat plata prin PayPal"
+
+#: pretix/plugins/paypal/views.py:254
+msgid "Your PayPal account has been disconnected."
+msgstr "Contul dvs. PayPal a fost deconectat."
+
+#: pretix/plugins/paypal2/apps.py:40
+msgid ""
+"Accept payments with your PayPal account. In addition to regular PayPal "
+"payments, you can now also offer payments in a variety of local payment "
+"methods such as giropay, SOFORT, iDEAL and many more to your customers - "
+"they don't even need a PayPal account. PayPal is one of the most popular "
+"payment methods world-wide."
+msgstr ""
+
+#: pretix/plugins/paypal2/payment.py:94
+#, fuzzy
+msgid "PayPal Merchant ID"
+msgstr "ID-ul de plată PayPal"
+
+#: pretix/plugins/paypal2/payment.py:136
+msgid ""
+"Even if a customer chooses an Alternative Payment Method, they will always "
+"have the option to revert back to paying with their PayPal account. For this "
+"reason, this payment method is always active."
+msgstr ""
+
+#: pretix/plugins/paypal2/payment.py:144
+#, fuzzy
+msgid "Alternative Payment Methods"
+msgstr "Activați metoda de plată"
+
+#: pretix/plugins/paypal2/payment.py:146
+msgid ""
+"In addition to payments through a PayPal account, you can also offer your "
+"customers the option to pay with credit cards and other, local payment "
+"methods such as SOFORT, giropay, iDEAL, and many more - even when they do "
+"not have a PayPal account. Eligible payment methods will be determined based "
+"on the shoppers location. For German merchants, this is the direct successor "
+"of PayPal Plus."
+msgstr ""
+
+#: pretix/plugins/paypal2/payment.py:161
+msgid "Disable SEPA Direct Debit"
+msgstr ""
+
+#: pretix/plugins/paypal2/payment.py:163
+msgid ""
+"While most payment methods cannot be recalled by a customer without "
+"outlining their exact grief with the merchants, SEPA Direct Debit can be "
+"recalled with the press of a button. For that reason - and depending on the "
+"nature of your event - you might want to disabled the option of SEPA Direct "
+"Debit payments in order to reduce the risk of costly chargebacks."
+msgstr ""
+
+#: pretix/plugins/paypal2/payment.py:177
+msgid "Enable Buy Now Pay Later"
+msgstr ""
+
+#: pretix/plugins/paypal2/payment.py:179
+msgid ""
+"Offer your customers the possibility to buy now (up to a certain limit) and "
+"pay in multiple installments or within 30 days. You, as the merchant, are "
+"getting your money right away."
+msgstr ""
+
+#: pretix/plugins/paypal2/payment.py:211
+#, fuzzy
+msgid "-- Automatic --"
+msgstr "Cont client"
+
+#: pretix/plugins/paypal2/payment.py:217
+#, fuzzy
+msgid "Buyer country"
+msgstr "Orice țară"
+
+#: pretix/plugins/paypal2/payment.py:241
+#, fuzzy
+#| msgid ""
+#| "To accept payments via PayPal, you will need an account at PayPal. By "
+#| "clicking on the following button, you can either create a new PayPal "
+#| "account connect pretix to an existing one."
+msgid ""
+"To accept payments via PayPal, you will need an account at PayPal. By "
+"clicking on the following button, you can either create a new PayPal account "
+"or connect pretix to an existing one."
+msgstr ""
+"Pentru a accepta plăți prin PayPal, aveți nevoie de un cont la PayPal. "
+"Făcând click pe următorul buton, puteți fie să creați un nou cont PayPal, "
+"fie să vă conectați la unul existent."
+
+#: pretix/plugins/paypal2/payment.py:246
+#, python-brace-format
+msgid "Connect with {icon} PayPal"
+msgstr "Conectați-vă cu {icon} PayPal"
+
+#: pretix/plugins/paypal2/payment.py:260
+msgid ""
+"Please configure a PayPal Webhook to the following endpoint in order to "
+"automatically cancel orders when payments are refunded externally."
+msgstr ""
+"Vă rugăm să configurați un Webhook PayPal la următorul endpoint pentru a "
+"anula automat comenzile atunci când plățile sunt rambursate din exterior."
+
+#: pretix/plugins/paypal2/payment.py:271
+msgid "PayPal does not process payments in your event's currency."
+msgstr "PayPal nu procesează plățile în moneda evenimentului dumneavoastră."
+
+#: pretix/plugins/paypal2/payment.py:272
+msgid ""
+"Please check this PayPal page for a complete list of supported currencies."
+msgstr ""
+"Vă rugăm să verificați această pagină PayPal pentru o listă completă a "
+"monedelor acceptate."
+
+#: pretix/plugins/paypal2/payment.py:277
+msgid ""
+"Your event's currency is supported by PayPal as a payment and balance "
+"currency for in-country accounts only. This means, that the receiving as "
+"well as the sending PayPal account must have been created in the same "
+"country and use the same currency. Out of country accounts will not be able "
+"to send any payments."
+msgstr ""
+"Moneda evenimentului dvs. este acceptată de PayPal ca monedă de plată și de "
+"sold doar pentru conturile din țară. Acest lucru înseamnă că atât contul "
+"PayPal de primire, cât și cel de trimitere trebuie să fi fost create în "
+"aceeași țară și să utilizeze aceeași monedă. Conturile din afara țării nu "
+"vor putea trimite nicio plată."
+
+#: pretix/plugins/paypal2/payment.py:329 pretix/plugins/paypal2/views.py:199
+#: pretix/plugins/paypal2/views.py:223 pretix/plugins/paypal2/views.py:231
+#: pretix/plugins/paypal2/views.py:234
 msgid "An error occurred during connecting with PayPal, please try again."
 msgstr ""
 "A apărut o eroare în timpul conectării cu PayPal, vă rugăm să încercați din "
 "nou."
 
-#: pretix/plugins/paypal/views.py:98
+#: pretix/plugins/paypal2/payment.py:450 pretix/plugins/paypal2/payment.py:874
+#, fuzzy
+msgid ""
+"Something went wrong when requesting the payment status. Please try again."
+msgstr ""
+"Acest card cadou a fost folosit între timp. Vă rugăm să încercați din nou."
+
+#: pretix/plugins/paypal2/payment.py:459 pretix/plugins/paypal2/payment.py:883
+#, fuzzy
+msgid "You may need to enable JavaScript for PayPal payments."
+msgstr ""
+"Este posibil să fie necesar să activați JavaScript pentru plățile Stripe."
+
+#: pretix/plugins/paypal2/payment.py:951
+#, fuzzy
+msgid "PayPal APM"
+msgstr "PayPal"
+
+#: pretix/plugins/paypal2/payment.py:952
+#, fuzzy
+msgid "PayPal Alternative Payment Methods"
+msgstr "Legătură pentru a activa metoda de plată"
+
+#: pretix/plugins/paypal2/signals.py:59
+msgid "Payment completed."
+msgstr "Plată finalizată."
+
+#: pretix/plugins/paypal2/signals.py:60
+msgid "Payment denied."
+msgstr "Plată refuzată."
+
+#: pretix/plugins/paypal2/signals.py:61
+msgid "Payment refunded."
+msgstr "Plata rambursată."
+
+#: pretix/plugins/paypal2/signals.py:62
+msgid "Payment reversed."
+msgstr "Plata a fost inversată."
+
+#: pretix/plugins/paypal2/signals.py:63
+msgid "Payment pending."
+msgstr "Plată în curs."
+
+#: pretix/plugins/paypal2/signals.py:64
+#, fuzzy
+msgid "Order approved."
+msgstr "Comandă aprobată"
+
+#: pretix/plugins/paypal2/signals.py:73
+msgid "PayPal reported an event: {}"
+msgstr "PayPal a raportat un eveniment: {}"
+
+#: pretix/plugins/paypal2/signals.py:80
+#, fuzzy
+msgid "PayPal ISU/Connect: Client ID"
+msgstr "PayPal Connect: ID client"
+
+#: pretix/plugins/paypal2/signals.py:84
+#, fuzzy
+msgid "PayPal ISU/Connect: Secret key"
+msgstr "PayPal Connect: Cheie secretă"
+
+#: pretix/plugins/paypal2/signals.py:88
+#, fuzzy
+msgid "PayPal ISU/Connect: Partner Merchant ID"
+msgstr "PayPal Connect: ID client"
+
+#: pretix/plugins/paypal2/signals.py:89
+msgid ""
+"This is not the BN-code, but rather the ID of the merchant account which "
+"holds branding information for ISU."
+msgstr ""
+
+#: pretix/plugins/paypal2/signals.py:93
+#, fuzzy
+msgid "PayPal ISU/Connect Endpoint"
+msgstr "Punct final PayPal Connect"
+
+#: pretix/plugins/paypal2/templates/pretixplugins/paypal2/checkout_payment_confirm.html:10
+msgid ""
+"After placing your order, you will be able to select your desired payment "
+"method, including PayPal."
+msgstr ""
+
+#: pretix/plugins/paypal2/templates/pretixplugins/paypal2/checkout_payment_form.html:5
+msgid ""
+"Please click the \"Pay with PayPal\" button below to start your payment."
+msgstr ""
+
+#: pretix/plugins/paypal2/templates/pretixplugins/paypal2/checkout_payment_form.html:9
+#, fuzzy
+#| msgid ""
+#| "After you clicked continue, we will redirect you to PayPal to fill in "
+#| "your payment details. You will then be redirected back here to review and "
+#| "confirm your order."
+msgid ""
+"After you clicked continue, we will be able to select how you want to pay "
+"and to fill in your payment details. You will then be redirected back here "
+"to review and confirm your order."
+msgstr ""
+"După ce ați făcut click pe \"Continuare\", vă vom redirecționa către PayPal "
+"pentru a completa detaliile de plată. Apoi veți fi redirecționat înapoi aici "
+"pentru a vă revizui și confirma comanda."
+
+#: pretix/plugins/paypal2/templates/pretixplugins/paypal2/pay.html:5
+#: pretix/plugins/stripe/templates/pretixplugins/stripe/sca.html:5
+#: pretix/plugins/stripe/templates/pretixplugins/stripe/sca_return.html:6
+#: pretix/presale/templates/pretixpresale/event/order_pay.html:4
+#: pretix/presale/templates/pretixpresale/event/order_pay_confirm.html:5
+msgid "Pay order"
+msgstr "Plătiți comanda"
+
+#: pretix/plugins/paypal2/templates/pretixplugins/paypal2/pay.html:16
+#: pretix/presale/templates/pretixpresale/event/order_pay.html:7
+#: pretix/presale/templates/pretixpresale/event/order_pay_confirm.html:8
+#, python-format
+msgid "Pay order: %(code)s"
+msgstr "Plătește comanda: %(code)s"
+
+#: pretix/plugins/paypal2/templates/pretixplugins/paypal2/pay.html:26
+#, fuzzy
+msgid "Please turn on JavaScript."
+msgstr "Vă rugăm să încercați din nou."
+
+#: pretix/plugins/paypal2/templates/pretixplugins/paypal2/pay.html:29
+#: pretix/presale/templates/pretixpresale/event/checkout_payment.html:7
+msgid "Please select how you want to pay."
+msgstr "Vă rugăm să selectați cum doriți să plătiți."
+
+#: pretix/plugins/paypal2/views.py:239
+msgid ""
+"The e-mail address on your PayPal account has not yet been confirmed. You "
+"will need to do this before you can start accepting payments."
+msgstr ""
+
+#: pretix/plugins/paypal2/views.py:244
 msgid ""
 "Your PayPal account is now connected to pretix. You can change the settings "
 "in detail below."
@@ -23675,16 +23903,10 @@ msgstr ""
 "Contul dvs. PayPal este acum conectat la pretix. Puteți modifica setările în "
 "detaliu mai jos."
 
-#: pretix/plugins/paypal/views.py:139
-msgid "Invalid response from PayPal received."
-msgstr "S-a primit un răspuns invalid de la PayPal."
-
-#: pretix/plugins/paypal/views.py:155
-msgid "It looks like you canceled the PayPal payment"
-msgstr "Se pare că ai anulat plata prin PayPal"
-
-#: pretix/plugins/paypal/views.py:287
-msgid "Your PayPal account has been disconnected."
+#: pretix/plugins/paypal2/views.py:465
+#, fuzzy
+#| msgid "Your PayPal account has been disconnected."
+msgid "Your PayPal account has been disconnected.BB"
 msgstr "Contul dvs. PayPal a fost deconectat."
 
 #: pretix/plugins/pretixdroid/apps.py:30 pretix/plugins/pretixdroid/apps.py:33
@@ -24425,10 +24647,10 @@ msgstr "Deconectați-vă de la Stripe"
 
 #: pretix/plugins/stripe/payment.py:128
 msgid ""
-"Please configure a <a href=\"https://dashboard.stripe.com/account/webhooks"
-"\">Stripe Webhook</a> to the following endpoint in order to automatically "
-"cancel orders when charges are refunded externally and to process "
-"asynchronous payment methods like SOFORT."
+"Please configure a <a href=\"https://dashboard.stripe.com/account/"
+"webhooks\">Stripe Webhook</a> to the following endpoint in order to "
+"automatically cancel orders when charges are refunded externally and to "
+"process asynchronous payment methods like SOFORT."
 msgstr ""
 "Vă rugăm să configurați un <a href=\"https://dashboard.stripe.com/account/"
 "webhooks\">Stripe Webhook</a> la următorul endpoint pentru a anula automat "
@@ -24898,13 +25120,6 @@ msgstr ""
 msgid ""
 "The payment transaction could not be completed for the following reason:"
 msgstr "Operațiunea de plată nu a putut fi finalizată din următorul motiv:"
-
-#: pretix/plugins/stripe/templates/pretixplugins/stripe/sca.html:5
-#: pretix/plugins/stripe/templates/pretixplugins/stripe/sca_return.html:6
-#: pretix/presale/templates/pretixpresale/event/order_pay.html:4
-#: pretix/presale/templates/pretixpresale/event/order_pay_confirm.html:5
-msgid "Pay order"
-msgstr "Plătiți comanda"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/sca.html:16
 #, python-format
@@ -25693,10 +25908,6 @@ msgstr ""
 msgid "You will not be able to continue."
 msgstr "Nu veți putea continua."
 
-#: pretix/presale/templates/pretixpresale/event/checkout_payment.html:7
-msgid "Please select how you want to pay."
-msgstr "Vă rugăm să selectați cum doriți să plătiți."
-
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html:44
 msgid "This sales channel does not provide support for test mode."
 msgstr "Acest canal de vânzări nu oferă suport pentru modul de testare."
@@ -25835,6 +26046,7 @@ msgstr "suma minimă pentru a comanda: %(num)s"
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:167
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:279
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:62
+#: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:147
 msgctxt "price"
 msgid "free"
 msgstr "gratuit"
@@ -26252,15 +26464,6 @@ msgstr "Articole fără categorie"
 msgid "Show full-size image of %(item)s"
 msgstr "Arată imaginea în mărime naturală a %(item)s"
 
-#: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:147
-#: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:276
-#: pretix/presale/templates/pretixpresale/event/voucher.html:140
-#: pretix/presale/templates/pretixpresale/event/voucher.html:196
-#: pretix/presale/templates/pretixpresale/event/voucher.html:328
-msgctxt "price"
-msgid "FREE"
-msgstr "GRATUIT"
-
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:175
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:304
 msgid "Enter a voucher code below to buy this ticket."
@@ -26271,6 +26474,14 @@ msgstr "Introduceți un cod voucher mai jos pentru a cumpăra acest bilet."
 #, python-format
 msgid "Set price in %(currency)s for %(item)s"
 msgstr "Setați prețul în %(currency)s pentru %(item)s"
+
+#: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:276
+#: pretix/presale/templates/pretixpresale/event/voucher.html:140
+#: pretix/presale/templates/pretixpresale/event/voucher.html:196
+#: pretix/presale/templates/pretixpresale/event/voucher.html:328
+msgctxt "price"
+msgid "FREE"
+msgstr "GRATUIT"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_quota_left.html:4
 #, python-format
@@ -26712,8 +26923,9 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order.html:398
 #, python-format
 msgid ""
-"You can cancel this order. In this case, a cancellation fee of <strong>"
-"%(fee)s</strong> will be kept and you will receive a refund of the remainder."
+"You can cancel this order. In this case, a cancellation fee of "
+"<strong>%(fee)s</strong> will be kept and you will receive a refund of the "
+"remainder."
 msgstr ""
 "Puteți anula această comandă. În acest caz, se percepe o taxă de anulare de "
 "<strong>%(fee)s</strong> și veți primi o rambursare a sumei rămase."
@@ -26899,8 +27111,8 @@ msgstr ""
 #, python-format
 msgid ""
 "\n"
-"                                                Add-on product to position #"
-"%(positionid)s"
+"                                                Add-on product to position "
+"#%(positionid)s"
 msgstr ""
 "\n"
 "                                                Produs suplimentar add-on la "
@@ -26993,12 +27205,6 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order_modify.html:87
 msgid "Save changes"
 msgstr "Salvează modificările"
-
-#: pretix/presale/templates/pretixpresale/event/order_pay.html:7
-#: pretix/presale/templates/pretixpresale/event/order_pay_confirm.html:8
-#, python-format
-msgid "Pay order: %(code)s"
-msgstr "Plătește comanda: %(code)s"
 
 #: pretix/presale/templates/pretixpresale/event/order_pay_change.html:5
 msgid "Change payment method"
@@ -27782,176 +27988,126 @@ msgstr "Aceasta nu este o serie de evenimente."
 msgid "from %(start_date)s"
 msgstr "de la %(start_date)s"
 
-#: pretix/settings.py:508
+#: pretix/settings.py:509
 msgid "English"
 msgstr "Engleză"
 
-#: pretix/settings.py:509
+#: pretix/settings.py:510
 msgid "German"
 msgstr "Germană"
 
-#: pretix/settings.py:510
+#: pretix/settings.py:511
 msgid "German (informal)"
 msgstr "Germană (informal)"
 
-#: pretix/settings.py:511
+#: pretix/settings.py:512
 msgid "Arabic"
 msgstr "Arab"
 
-#: pretix/settings.py:512
+#: pretix/settings.py:513
 msgid "Chinese (simplified)"
 msgstr "Chineză (simplificată)"
 
-#: pretix/settings.py:513
+#: pretix/settings.py:514
 msgid "Czech"
 msgstr "Cehă"
 
-#: pretix/settings.py:514
+#: pretix/settings.py:515
 msgid "Danish"
 msgstr "Daneză"
 
-#: pretix/settings.py:515
+#: pretix/settings.py:516
 msgid "Dutch"
 msgstr "Olandeză"
 
-#: pretix/settings.py:516
+#: pretix/settings.py:517
 msgid "Dutch (informal)"
 msgstr "Olandeză (informal)"
 
-#: pretix/settings.py:517
+#: pretix/settings.py:518
 msgid "French"
 msgstr "Teritoriile Franceze de Sud"
 
-#: pretix/settings.py:518
+#: pretix/settings.py:519
 msgid "Finnish"
 msgstr "Finlandeză"
 
-#: pretix/settings.py:519
+#: pretix/settings.py:520
 msgid "Galician"
 msgstr "Galiciană"
 
-#: pretix/settings.py:520
+#: pretix/settings.py:521
 msgid "Greek"
 msgstr "Greek"
 
-#: pretix/settings.py:521
+#: pretix/settings.py:522
 msgid "Italian"
 msgstr "Italiană"
 
-#: pretix/settings.py:522
+#: pretix/settings.py:523
 msgid "Latvian"
 msgstr "Letonă"
 
-#: pretix/settings.py:523
+#: pretix/settings.py:524
 msgid "Polish"
 msgstr "Poloneză"
 
-#: pretix/settings.py:524
+#: pretix/settings.py:525
 msgid "Portuguese (Portugal)"
 msgstr "Portugheză (Portugalia)"
 
-#: pretix/settings.py:525
+#: pretix/settings.py:526
 msgid "Portuguese (Brazil)"
 msgstr "Portugheză (Brazilia)"
 
-#: pretix/settings.py:526
+#: pretix/settings.py:527
 msgid "Romanian"
 msgstr "Română"
 
-#: pretix/settings.py:527
+#: pretix/settings.py:528
 msgid "Russian"
 msgstr "Rusă"
 
-#: pretix/settings.py:528
+#: pretix/settings.py:529
 msgid "Spanish"
 msgstr "Spaniolă"
 
-#: pretix/settings.py:529
+#: pretix/settings.py:530
 msgid "Turkish"
 msgstr "Turcă"
 
-#: pretix/settings.py:530
+#: pretix/settings.py:531
 msgid "Ukrainian"
 msgstr ""
 
-#: pretix/settings.py:851
+#: pretix/settings.py:852
 msgid "User profile only"
 msgstr "Doar profilul utilizatorului"
 
-#: pretix/settings.py:852
+#: pretix/settings.py:853
 msgid "Read access"
 msgstr "Acces la citire"
 
-#: pretix/settings.py:853
+#: pretix/settings.py:854
 msgid "Write access"
 msgstr "Acces la scriere"
 
-#: pretix/settings.py:863
+#: pretix/settings.py:864
 msgid "Kosovo"
 msgstr "Kosovo"
 
-#, fuzzy
-#~ msgid "PayPal Merchant ID"
-#~ msgstr "ID-ul de plată PayPal"
-
-#, fuzzy
-#~ msgid "Alternative Payment Methods"
-#~ msgstr "Activați metoda de plată"
-
-#, fuzzy
-#~ msgid "-- Automatic --"
-#~ msgstr "Cont client"
-
-#, fuzzy
-#~ msgid "Buyer country"
-#~ msgstr "Orice țară"
-
-#, fuzzy
-#~ msgid ""
-#~ "Something went wrong when requesting the payment status. Please try again."
-#~ msgstr ""
-#~ "Acest card cadou a fost folosit între timp. Vă rugăm să încercați din nou."
-
-#, fuzzy
-#~ msgid "You may need to enable JavaScript for PayPal payments."
-#~ msgstr ""
-#~ "Este posibil să fie necesar să activați JavaScript pentru plățile Stripe."
-
-#, fuzzy
-#~ msgid "PayPal APM"
-#~ msgstr "PayPal"
-
-#, fuzzy
-#~ msgid "PayPal Alternative Payment Methods"
-#~ msgstr "Legătură pentru a activa metoda de plată"
-
-#, fuzzy
-#~ msgid "Order approved."
-#~ msgstr "Comandă aprobată"
-
-#, fuzzy
-#~ msgid "PayPal ISU/Connect: Client ID"
+#~ msgid "PayPal Connect: Client ID"
 #~ msgstr "PayPal Connect: ID client"
 
-#, fuzzy
-#~ msgid "PayPal ISU/Connect: Secret key"
+#~ msgid "PayPal Connect: Secret key"
 #~ msgstr "PayPal Connect: Cheie secretă"
 
-#, fuzzy
-#~ msgid "PayPal ISU/Connect: Partner Merchant ID"
-#~ msgstr "PayPal Connect: ID client"
-
-#, fuzzy
-#~ msgid "PayPal ISU/Connect Endpoint"
+#~ msgid "PayPal Connect Endpoint"
 #~ msgstr "Punct final PayPal Connect"
 
 #, fuzzy
 #~ msgid "Order ID"
 #~ msgstr "Comanda"
-
-#, fuzzy
-#~ msgid "Please turn on JavaScript."
-#~ msgstr "Vă rugăm să încercați din nou."
 
 #, python-format
 #~ msgid "Original price: %(price)s"
