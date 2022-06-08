@@ -205,7 +205,10 @@ def isu_return(request, *args, **kwargs):
     # Cached access tokens are not updated by PayPal to include new Merchants that granted access rights since
     # the access token was generated. Therefor we increment the cycle count and by that invalidate the cached
     # token and pull a new one.
-    cache.incr('pretix_paypal_token_hash_cycle')
+    try:
+        cache.incr('pretix_paypal_token_hash_cycle')
+    except ValueError:
+        cache.set('pretix_paypal_token_hash_cycle', 0)
 
     gs = GlobalSettingsObject()
     prov = Paypal(event)
