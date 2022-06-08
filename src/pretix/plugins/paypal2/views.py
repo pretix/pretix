@@ -38,6 +38,7 @@ from decimal import Decimal
 
 from django.contrib import messages
 from django.core import signing
+from django.core.cache import cache
 from django.db.models import Sum
 from django.http import (
     Http404, HttpResponse, HttpResponseBadRequest, JsonResponse,
@@ -201,6 +202,11 @@ def isu_return(request, *args, **kwargs):
 
     event = get_object_or_404(Event, pk=request.session['payment_paypal_isu_event'])
 
+    # Cached access tokens are not updated by PayPal to include new Merchants that granted access rights since
+    # the access token was generated. Therefor we increment the cycle count and by that invalidate the cached
+    # token and pull a new one.
+    cache.incr('pretix_paypal_token_hash_cycle')
+
     gs = GlobalSettingsObject()
     prov = Paypal(event)
     prov.init_api()
@@ -212,16 +218,8 @@ def isu_return(request, *args, **kwargs):
         )
         response = prov.client.execute(req)
     except IOError as e:
-        retry = request.GET.get('retry', 0)
-        retry = int(retry)
-        if retry < 3:
-            params = request.GET.copy()
-            params['retry'] = retry + 1
-            logger.exception('PayPal PartnersMerchantIntegrationsGetRequest: {}; Retrying.'.format(str(e)))
-            return redirect('{}?{}'.format(request.path, params.urlencode()))
-        else:
-            messages.error(request, _('An error occurred during connecting with PayPal, please try again.'))
-            logger.exception('PayPal PartnersMerchantIntegrationsGetRequest: {}'.format(str(e)))
+        messages.error(request, _('An error occurred during connecting with PayPal, please try again.'))
+        logger.exception('PayPal PartnersMerchantIntegrationsGetRequest: {}'.format(str(e)))
     else:
         params = ['merchant_id', 'tracking_id', 'payments_receivable', 'primary_email_confirmed']
         if not any(k in response.result for k in params):

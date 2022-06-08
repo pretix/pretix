@@ -29,12 +29,16 @@ from paypalcheckoutsdk.core import (
 
 class PayPalHttpClient(VendorPayPalHttpClient):
     def __call__(self, request):
-        # First we get all the items that make up the current credentials and create a hash to detect changes
+        # Cached access tokens are not updated by PayPal to include new Merchants that granted access rights since
+        # the access token was generated. Therefor we increment the cycle count and by that invalidate the cached
+        # token and pull a new one.
+        incr = cache.get('pretix_paypal_token_hash_cycle', default=0)
 
+        # Then we get all the items that make up the current credentials and create a hash to detect changes
         checksum = hashlib.sha256(''.join([
             self.environment.base_url, self.environment.client_id, self.environment.client_secret
         ]).encode()).hexdigest()
-        cache_key_hash = f'pretix_paypal_token_hash_{checksum}'
+        cache_key_hash = f'pretix_paypal_token_hash_{checksum}_{incr}'
         token_hash = cache.get(cache_key_hash)
 
         if token_hash:
