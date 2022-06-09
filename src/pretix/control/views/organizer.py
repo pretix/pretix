@@ -830,7 +830,7 @@ class DeviceQueryMixin:
 
     @cached_property
     def filter_form(self):
-        return DeviceFilterForm(data=self.request.GET, request=self.request)
+        return DeviceFilterForm(data=self.request_data, request=self.request)
 
     def get_queryset(self):
         qs = self.request.organizer.devices.prefetch_related(
