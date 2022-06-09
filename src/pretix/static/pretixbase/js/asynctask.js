@@ -222,7 +222,6 @@ $(function () {
         formData.append('ajax', '1');
         if (e.originalEvent.submitter) {
             // Not supported on IE, may lead to wrong results, but we don't support IE in the backend anymore
-            console.warn('Unknown submitter, IE unsupported');
             var submitter = e.originalEvent.submitter;
             if (submitter.name) {
                 formData.append(submitter.name, submitter.value);
