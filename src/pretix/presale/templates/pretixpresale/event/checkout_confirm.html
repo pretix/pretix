@@ -182,9 +182,13 @@
                     {% trans "Your order requires approval by the event organizer before it can be confirmed and forms a valid contract." %}
                 </strong>
                 {% blocktrans trimmed %}
-                    We will sent you an email as soon as the event organizer approved or rejected your order. If your
-                    order was approved, we will send you a link that you can use to pay.
+                    We will sent you an email as soon as the event organizer approved or rejected your order.
                 {% endblocktrans %}
+                {% if cart.total > 0 %}
+                    {% blocktrans trimmed %}
+                         If your order was approved, we will send you a link that you can use to pay.
+                    {% endblocktrans %}
+                {% endif %}
             </div>
         {% endif %}
         <div class="row checkout-button-row clearfix">
