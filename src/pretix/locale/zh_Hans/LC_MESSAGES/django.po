@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-07 16:18+0000\n"
+"POT-Creation-Date: 2022-06-09 15:07+0000\n"
 "PO-Revision-Date: 2021-12-03 08:37+0000\n"
 "Last-Translator: ExtremeX-BB <qq754163444@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://translate.pretix.eu/projects/"
@@ -642,6 +642,8 @@ msgstr "否"
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:31
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:50
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:59
+#: pretix/control/templates/pretixcontrol/boxoffice/payment.html:76
+#: pretix/control/templates/pretixcontrol/boxoffice/payment.html:83
 #: pretix/control/templates/pretixcontrol/orders/refunds.html:50
 #: pretix/control/templates/pretixcontrol/search/payments.html:93
 msgid "Payment provider"
@@ -13816,6 +13818,7 @@ msgid "Server Transaction Code"
 msgstr "交易码"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:62
+#: pretix/control/templates/pretixcontrol/boxoffice/payment.html:78
 #, fuzzy
 #| msgid "Payer and reference"
 msgid "Payment reference"
@@ -13832,6 +13835,58 @@ msgstr "支付信息"
 #| msgid "Transaction Code"
 msgid "Authorization Code"
 msgstr "交易码"
+
+#: pretix/control/templates/pretixcontrol/boxoffice/payment.html:80
+#, fuzzy
+#| msgid "Transaction Code"
+msgid "Transaction ID"
+msgstr "交易码"
+
+#: pretix/control/templates/pretixcontrol/boxoffice/payment.html:85
+#, fuzzy
+#| msgid "Payer and reference"
+msgid "PSP reference"
+msgstr "付款人和参考"
+
+#: pretix/control/templates/pretixcontrol/boxoffice/payment.html:87
+msgid "Terminal ID"
+msgstr ""
+
+#: pretix/control/templates/pretixcontrol/boxoffice/payment.html:89
+#, fuzzy
+#| msgid "Payment method"
+msgid "paymentMethod"
+msgstr "支付方式"
+
+#: pretix/control/templates/pretixcontrol/boxoffice/payment.html:91
+#, fuzzy
+#| msgid "Card number"
+msgid "Card Holder"
+msgstr "卡号"
+
+#: pretix/control/templates/pretixcontrol/boxoffice/payment.html:93
+#, fuzzy
+#| msgid "Card number"
+msgid "Card Number"
+msgstr "卡号"
+
+#: pretix/control/templates/pretixcontrol/boxoffice/payment.html:95
+#, fuzzy
+#| msgid "Cart position"
+msgid "Card Expiration"
+msgstr "购物车位置"
+
+#: pretix/control/templates/pretixcontrol/boxoffice/payment.html:97
+#, fuzzy
+#| msgid "Card Entry Mode"
+msgid "Card Entry Method"
+msgstr "卡片输入方式"
+
+#: pretix/control/templates/pretixcontrol/boxoffice/payment.html:99
+#, fuzzy
+#| msgid "Result"
+msgid "Result Code"
+msgstr "结果"
 
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html:9
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html:41
@@ -23492,15 +23547,15 @@ msgstr "输入付款数据的窗口未打开或已关闭？"
 msgid "Click here in order to open the window."
 msgstr "单击此处打开窗口。"
 
-#: pretix/plugins/paypal/views.py:106 pretix/plugins/paypal2/views.py:290
+#: pretix/plugins/paypal/views.py:106 pretix/plugins/paypal2/views.py:291
 msgid "Invalid response from PayPal received."
 msgstr "收到PayPal的响应无效。"
 
-#: pretix/plugins/paypal/views.py:122 pretix/plugins/paypal2/views.py:306
+#: pretix/plugins/paypal/views.py:122 pretix/plugins/paypal2/views.py:307
 msgid "It looks like you canceled the PayPal payment"
 msgstr "您好像取消了PayPal付款"
 
-#: pretix/plugins/paypal/views.py:254
+#: pretix/plugins/paypal/views.py:254 pretix/plugins/paypal2/views.py:466
 msgid "Your PayPal account has been disconnected."
 msgstr "您的PayPal帐户已断开。"
 
@@ -23621,9 +23676,9 @@ msgid ""
 "to send any payments."
 msgstr ""
 
-#: pretix/plugins/paypal2/payment.py:329 pretix/plugins/paypal2/views.py:199
-#: pretix/plugins/paypal2/views.py:223 pretix/plugins/paypal2/views.py:231
-#: pretix/plugins/paypal2/views.py:234
+#: pretix/plugins/paypal2/payment.py:329 pretix/plugins/paypal2/views.py:200
+#: pretix/plugins/paypal2/views.py:224 pretix/plugins/paypal2/views.py:232
+#: pretix/plugins/paypal2/views.py:235
 msgid "An error occurred during connecting with PayPal, please try again."
 msgstr "连接PayPal时出错，请重试。"
 
@@ -23763,23 +23818,17 @@ msgstr "请重试。"
 msgid "Please select how you want to pay."
 msgstr "请选择付款方式。"
 
-#: pretix/plugins/paypal2/views.py:239
+#: pretix/plugins/paypal2/views.py:240
 msgid ""
 "The e-mail address on your PayPal account has not yet been confirmed. You "
 "will need to do this before you can start accepting payments."
 msgstr ""
 
-#: pretix/plugins/paypal2/views.py:244
+#: pretix/plugins/paypal2/views.py:245
 msgid ""
 "Your PayPal account is now connected to pretix. You can change the settings "
 "in detail below."
 msgstr "您的PayPal帐户现已连接到pretix。 您可以在下面详细更改设置。"
-
-#: pretix/plugins/paypal2/views.py:465
-#, fuzzy
-#| msgid "Your PayPal account has been disconnected."
-msgid "Your PayPal account has been disconnected.BB"
-msgstr "您的PayPal帐户已断开。"
 
 #: pretix/plugins/pretixdroid/apps.py:30 pretix/plugins/pretixdroid/apps.py:33
 #, fuzzy
@@ -25690,7 +25739,7 @@ msgid "Add-ons:"
 msgstr "附加组件"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_addons.html:49
-#: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:194
+#: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:198
 #: pretix/presale/templates/pretixpresale/event/checkout_customer.html:130
 #: pretix/presale/templates/pretixpresale/event/checkout_membership.html:86
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html:78
@@ -25793,19 +25842,35 @@ msgid ""
 msgstr "您的订单需要得到活动组织者的批准才能确认并形成有效合同。"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:184
+#, fuzzy
+#| msgid ""
+#| "We will sent you an email as soon as the event organizer approved or "
+#| "rejected your order. If your order was approved, we will send you a link "
+#| "that you can use to pay."
 msgid ""
 "We will sent you an email as soon as the event organizer approved or "
-"rejected your order. If your order was approved, we will send you a link "
-"that you can use to pay."
+"rejected your order."
 msgstr ""
 "我们会在活动组织者批准或拒绝您的订单后立即向您发送电子邮件。 如果您的订单获得"
 "批准，我们会向您发送一个可用于支付的链接。"
 
-#: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:200
+#: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:188
+#, fuzzy
+#| msgid ""
+#| "We will sent you an email as soon as the event organizer approved or "
+#| "rejected your order. If your order was approved, we will send you a link "
+#| "that you can use to pay."
+msgid ""
+"If your order was approved, we will send you a link that you can use to pay."
+msgstr ""
+"我们会在活动组织者批准或拒绝您的订单后立即向您发送电子邮件。 如果您的订单获得"
+"批准，我们会向您发送一个可用于支付的链接。"
+
+#: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:204
 msgid "Place binding order"
 msgstr "绑定订货"
 
-#: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:202
+#: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:206
 msgid "Submit registration"
 msgstr "提交注册"
 
@@ -28184,6 +28249,11 @@ msgstr "录入权限"
 #: pretix/settings.py:864
 msgid "Kosovo"
 msgstr ""
+
+#, fuzzy
+#~| msgid "Your PayPal account has been disconnected."
+#~ msgid "Your PayPal account has been disconnected.BB"
+#~ msgstr "您的PayPal帐户已断开。"
 
 #, fuzzy
 #~| msgid "Order"

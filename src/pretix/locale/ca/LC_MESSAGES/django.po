@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-07 16:18+0000\n"
+"POT-Creation-Date: 2022-06-09 15:07+0000\n"
 "PO-Revision-Date: 2021-05-30 13:17+0000\n"
 "Last-Translator: albert <albert.serra.monner@gmail.com>\n"
 "Language-Team: Catalan <https://translate.pretix.eu/projects/pretix/pretix/"
@@ -658,6 +658,8 @@ msgstr "No"
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:31
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:50
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:59
+#: pretix/control/templates/pretixcontrol/boxoffice/payment.html:76
+#: pretix/control/templates/pretixcontrol/boxoffice/payment.html:83
 #: pretix/control/templates/pretixcontrol/orders/refunds.html:50
 #: pretix/control/templates/pretixcontrol/search/payments.html:93
 msgid "Payment provider"
@@ -13892,6 +13894,7 @@ msgid "Server Transaction Code"
 msgstr "Variacions"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:62
+#: pretix/control/templates/pretixcontrol/boxoffice/payment.html:78
 #, fuzzy
 #| msgid "Payer and reference"
 msgid "Payment reference"
@@ -13908,6 +13911,58 @@ msgstr "Informació de pagament"
 #| msgid "Cart positions"
 msgid "Authorization Code"
 msgstr "Posicions del carretó"
+
+#: pretix/control/templates/pretixcontrol/boxoffice/payment.html:80
+#, fuzzy
+#| msgid "Variations"
+msgid "Transaction ID"
+msgstr "Variacions"
+
+#: pretix/control/templates/pretixcontrol/boxoffice/payment.html:85
+#, fuzzy
+#| msgid "Payer and reference"
+msgid "PSP reference"
+msgstr "Pagador i referència"
+
+#: pretix/control/templates/pretixcontrol/boxoffice/payment.html:87
+msgid "Terminal ID"
+msgstr ""
+
+#: pretix/control/templates/pretixcontrol/boxoffice/payment.html:89
+#, fuzzy
+#| msgid "Payment method"
+msgid "paymentMethod"
+msgstr "Mètode de pagament"
+
+#: pretix/control/templates/pretixcontrol/boxoffice/payment.html:91
+#, fuzzy
+#| msgid "Card number"
+msgid "Card Holder"
+msgstr "Número de la targeta"
+
+#: pretix/control/templates/pretixcontrol/boxoffice/payment.html:93
+#, fuzzy
+#| msgid "Card number"
+msgid "Card Number"
+msgstr "Número de la targeta"
+
+#: pretix/control/templates/pretixcontrol/boxoffice/payment.html:95
+#, fuzzy
+#| msgid "Cart position"
+msgid "Card Expiration"
+msgstr "Posició del carretó"
+
+#: pretix/control/templates/pretixcontrol/boxoffice/payment.html:97
+#, fuzzy
+#| msgid "Card type"
+msgid "Card Entry Method"
+msgstr "Tipus de targeta"
+
+#: pretix/control/templates/pretixcontrol/boxoffice/payment.html:99
+#, fuzzy
+#| msgid "Result"
+msgid "Result Code"
+msgstr "Resultat"
 
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html:9
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html:41
@@ -23073,15 +23128,15 @@ msgstr ""
 msgid "Click here in order to open the window."
 msgstr ""
 
-#: pretix/plugins/paypal/views.py:106 pretix/plugins/paypal2/views.py:290
+#: pretix/plugins/paypal/views.py:106 pretix/plugins/paypal2/views.py:291
 msgid "Invalid response from PayPal received."
 msgstr ""
 
-#: pretix/plugins/paypal/views.py:122 pretix/plugins/paypal2/views.py:306
+#: pretix/plugins/paypal/views.py:122 pretix/plugins/paypal2/views.py:307
 msgid "It looks like you canceled the PayPal payment"
 msgstr ""
 
-#: pretix/plugins/paypal/views.py:254
+#: pretix/plugins/paypal/views.py:254 pretix/plugins/paypal2/views.py:466
 msgid "Your PayPal account has been disconnected."
 msgstr ""
 
@@ -23195,9 +23250,9 @@ msgid ""
 "to send any payments."
 msgstr ""
 
-#: pretix/plugins/paypal2/payment.py:329 pretix/plugins/paypal2/views.py:199
-#: pretix/plugins/paypal2/views.py:223 pretix/plugins/paypal2/views.py:231
-#: pretix/plugins/paypal2/views.py:234
+#: pretix/plugins/paypal2/payment.py:329 pretix/plugins/paypal2/views.py:200
+#: pretix/plugins/paypal2/views.py:224 pretix/plugins/paypal2/views.py:232
+#: pretix/plugins/paypal2/views.py:235
 msgid "An error occurred during connecting with PayPal, please try again."
 msgstr ""
 
@@ -23336,23 +23391,17 @@ msgstr "Si us plau, introduïu la mateixa contrasenya dues vegades"
 msgid "Please select how you want to pay."
 msgstr "Si us plau, trieu com voleu fer el pagament."
 
-#: pretix/plugins/paypal2/views.py:239
+#: pretix/plugins/paypal2/views.py:240
 msgid ""
 "The e-mail address on your PayPal account has not yet been confirmed. You "
 "will need to do this before you can start accepting payments."
 msgstr ""
 
-#: pretix/plugins/paypal2/views.py:244
+#: pretix/plugins/paypal2/views.py:245
 msgid ""
 "Your PayPal account is now connected to pretix. You can change the settings "
 "in detail below."
 msgstr ""
-
-#: pretix/plugins/paypal2/views.py:465
-#, fuzzy
-#| msgid "Your Stripe account has been disconnected."
-msgid "Your PayPal account has been disconnected.BB"
-msgstr "El vostre compte de Stripe ha estat desconnectat."
 
 #: pretix/plugins/pretixdroid/apps.py:30 pretix/plugins/pretixdroid/apps.py:33
 msgid "Old check-in device API"
@@ -25169,7 +25218,7 @@ msgid "Add-ons:"
 msgstr "Productes complementaris"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_addons.html:49
-#: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:194
+#: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:198
 #: pretix/presale/templates/pretixpresale/event/checkout_customer.html:130
 #: pretix/presale/templates/pretixpresale/event/checkout_membership.html:86
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html:78
@@ -25271,15 +25320,19 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:184
 msgid ""
 "We will sent you an email as soon as the event organizer approved or "
-"rejected your order. If your order was approved, we will send you a link "
-"that you can use to pay."
+"rejected your order."
 msgstr ""
 
-#: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:200
+#: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:188
+msgid ""
+"If your order was approved, we will send you a link that you can use to pay."
+msgstr ""
+
+#: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:204
 msgid "Place binding order"
 msgstr "Efectuar la compra"
 
-#: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:202
+#: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:206
 msgid "Submit registration"
 msgstr "Enviar registre"
 
@@ -27596,6 +27649,11 @@ msgstr "Accés d'escriptura"
 #: pretix/settings.py:864
 msgid "Kosovo"
 msgstr "Kosovo"
+
+#, fuzzy
+#~| msgid "Your Stripe account has been disconnected."
+#~ msgid "Your PayPal account has been disconnected.BB"
+#~ msgstr "El vostre compte de Stripe ha estat desconnectat."
 
 #, fuzzy
 #~| msgid "Order"

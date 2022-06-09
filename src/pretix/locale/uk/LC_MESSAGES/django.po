@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-07 16:18+0000\n"
+"POT-Creation-Date: 2022-06-09 15:07+0000\n"
 "PO-Revision-Date: 2022-05-23 01:00+0000\n"
 "Last-Translator: Ola Ola <olge.to@gmail.com>\n"
 "Language-Team: Ukrainian <https://translate.pretix.eu/projects/pretix/pretix/"
@@ -648,6 +648,8 @@ msgstr "Ні"
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:31
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:50
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:59
+#: pretix/control/templates/pretixcontrol/boxoffice/payment.html:76
+#: pretix/control/templates/pretixcontrol/boxoffice/payment.html:83
 #: pretix/control/templates/pretixcontrol/orders/refunds.html:50
 #: pretix/control/templates/pretixcontrol/search/payments.html:93
 msgid "Payment provider"
@@ -13638,6 +13640,7 @@ msgid "Server Transaction Code"
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:62
+#: pretix/control/templates/pretixcontrol/boxoffice/payment.html:78
 msgid "Payment reference"
 msgstr ""
 
@@ -13648,6 +13651,59 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:73
 msgid "Authorization Code"
 msgstr "Код авторизації"
+
+#: pretix/control/templates/pretixcontrol/boxoffice/payment.html:80
+#, fuzzy
+#| msgid "Transactions"
+msgid "Transaction ID"
+msgstr "Транзакції"
+
+#: pretix/control/templates/pretixcontrol/boxoffice/payment.html:85
+#, fuzzy
+#| msgid "Internal reference"
+msgid "PSP reference"
+msgstr "Внутрішнє посилання"
+
+#: pretix/control/templates/pretixcontrol/boxoffice/payment.html:87
+msgid "Terminal ID"
+msgstr ""
+
+#: pretix/control/templates/pretixcontrol/boxoffice/payment.html:89
+#, fuzzy
+#| msgid "Payment method"
+msgid "paymentMethod"
+msgstr "Спосіб оплати"
+
+#: pretix/control/templates/pretixcontrol/boxoffice/payment.html:91
+#, fuzzy
+#| msgid "Card number"
+msgid "Card Holder"
+msgstr "Номер картки"
+
+#: pretix/control/templates/pretixcontrol/boxoffice/payment.html:93
+#, fuzzy
+#| msgid "Card number"
+msgid "Card Number"
+msgstr "Номер картки"
+
+#: pretix/control/templates/pretixcontrol/boxoffice/payment.html:95
+#, fuzzy
+#| msgctxt "terminal_zvt"
+#| msgid "Card expiration"
+msgid "Card Expiration"
+msgstr "Термін дії картки"
+
+#: pretix/control/templates/pretixcontrol/boxoffice/payment.html:97
+#, fuzzy
+#| msgid "Card Entry Mode"
+msgid "Card Entry Method"
+msgstr "Режим введення картки"
+
+#: pretix/control/templates/pretixcontrol/boxoffice/payment.html:99
+#, fuzzy
+#| msgid "Result"
+msgid "Result Code"
+msgstr "Результат"
 
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html:9
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html:41
@@ -22669,15 +22725,15 @@ msgstr "Вікно для введення платіжних даних не б
 msgid "Click here in order to open the window."
 msgstr "Натисніть тут, щоб відкрити вікно."
 
-#: pretix/plugins/paypal/views.py:106 pretix/plugins/paypal2/views.py:290
+#: pretix/plugins/paypal/views.py:106 pretix/plugins/paypal2/views.py:291
 msgid "Invalid response from PayPal received."
 msgstr "Від PayPal отримано недійсну відповідь."
 
-#: pretix/plugins/paypal/views.py:122 pretix/plugins/paypal2/views.py:306
+#: pretix/plugins/paypal/views.py:122 pretix/plugins/paypal2/views.py:307
 msgid "It looks like you canceled the PayPal payment"
 msgstr "Схоже, ви скасували платіж PayPal"
 
-#: pretix/plugins/paypal/views.py:254
+#: pretix/plugins/paypal/views.py:254 pretix/plugins/paypal2/views.py:466
 msgid "Your PayPal account has been disconnected."
 msgstr "Ваш обліковий запис PayPal відключено."
 
@@ -22808,9 +22864,9 @@ msgstr ""
 "та відправлення має бути створено в одній країні та використовувати ту саму "
 "валюту. За кордоном не можна буде надсилати платежі."
 
-#: pretix/plugins/paypal2/payment.py:329 pretix/plugins/paypal2/views.py:199
-#: pretix/plugins/paypal2/views.py:223 pretix/plugins/paypal2/views.py:231
-#: pretix/plugins/paypal2/views.py:234
+#: pretix/plugins/paypal2/payment.py:329 pretix/plugins/paypal2/views.py:200
+#: pretix/plugins/paypal2/views.py:224 pretix/plugins/paypal2/views.py:232
+#: pretix/plugins/paypal2/views.py:235
 msgid "An error occurred during connecting with PayPal, please try again."
 msgstr "Під час підключення до PayPal сталася помилка, спробуйте ще раз."
 
@@ -22950,7 +23006,7 @@ msgstr "Вкажіть правильний штат."
 msgid "Please select how you want to pay."
 msgstr "Будь ласка оберіть спосіб оплати."
 
-#: pretix/plugins/paypal2/views.py:239
+#: pretix/plugins/paypal2/views.py:240
 msgid ""
 "The e-mail address on your PayPal account has not yet been confirmed. You "
 "will need to do this before you can start accepting payments."
@@ -22958,19 +23014,13 @@ msgstr ""
 "Ви не підтвердили свій рахунок PayPal. Вам необхідно його активувати до того "
 "як ви почнете отримувати платежі."
 
-#: pretix/plugins/paypal2/views.py:244
+#: pretix/plugins/paypal2/views.py:245
 msgid ""
 "Your PayPal account is now connected to pretix. You can change the settings "
 "in detail below."
 msgstr ""
 "Ваш обліковий запис PayPal тепер підключено до pretix. Нижче ви можете "
 "змінити деталі налаштування."
-
-#: pretix/plugins/paypal2/views.py:465
-#, fuzzy
-#| msgid "Your PayPal account has been disconnected."
-msgid "Your PayPal account has been disconnected.BB"
-msgstr "Ваш обліковий запис PayPal відключено."
 
 #: pretix/plugins/pretixdroid/apps.py:30 pretix/plugins/pretixdroid/apps.py:33
 msgid "Old check-in device API"
@@ -24693,7 +24743,7 @@ msgid "Add-ons:"
 msgstr "Додатки:"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_addons.html:49
-#: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:194
+#: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:198
 #: pretix/presale/templates/pretixpresale/event/checkout_customer.html:130
 #: pretix/presale/templates/pretixpresale/event/checkout_membership.html:86
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html:78
@@ -24788,20 +24838,37 @@ msgstr ""
 "може бути підтверджене та сформовано дійсний контракт."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:184
+#, fuzzy
+#| msgid ""
+#| "We will sent you an email as soon as the event organizer approved or "
+#| "rejected your order. If your order was approved, we will send you a link "
+#| "that you can use to pay."
 msgid ""
 "We will sent you an email as soon as the event organizer approved or "
-"rejected your order. If your order was approved, we will send you a link "
-"that you can use to pay."
+"rejected your order."
 msgstr ""
 "Ми надішлемо вам електронного листа, як тільки організатор заходу схвалить "
 "або відхилить ваше замовлення. Якщо ваше замовлення було схвалено, ми "
 "надішлемо вам посилання, за яким ви зможете оплатити."
 
-#: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:200
+#: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:188
+#, fuzzy
+#| msgid ""
+#| "We will sent you an email as soon as the event organizer approved or "
+#| "rejected your order. If your order was approved, we will send you a link "
+#| "that you can use to pay."
+msgid ""
+"If your order was approved, we will send you a link that you can use to pay."
+msgstr ""
+"Ми надішлемо вам електронного листа, як тільки організатор заходу схвалить "
+"або відхилить ваше замовлення. Якщо ваше замовлення було схвалено, ми "
+"надішлемо вам посилання, за яким ви зможете оплатити."
+
+#: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:204
 msgid "Place binding order"
 msgstr "Розмістити обов’язковий порядок"
 
-#: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:202
+#: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:206
 msgid "Submit registration"
 msgstr "Підтвердити"
 
@@ -27055,6 +27122,11 @@ msgstr "Доступ до запису"
 #: pretix/settings.py:864
 msgid "Kosovo"
 msgstr "Косово"
+
+#, fuzzy
+#~| msgid "Your PayPal account has been disconnected."
+#~ msgid "Your PayPal account has been disconnected.BB"
+#~ msgstr "Ваш обліковий запис PayPal відключено."
 
 #, fuzzy
 #~| msgid "Order"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-07 16:18+0000\n"
+"POT-Creation-Date: 2022-06-09 15:07+0000\n"
 "PO-Revision-Date: 2022-06-06 18:00+0000\n"
 "Last-Translator: Abdullah <abdullah.gumaijan@gmail.com>\n"
 "Language-Team: Arabic <https://translate.pretix.eu/projects/pretix/pretix/ar/"
@@ -649,6 +649,8 @@ msgstr "لا"
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:31
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:50
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:59
+#: pretix/control/templates/pretixcontrol/boxoffice/payment.html:76
+#: pretix/control/templates/pretixcontrol/boxoffice/payment.html:83
 #: pretix/control/templates/pretixcontrol/orders/refunds.html:50
 #: pretix/control/templates/pretixcontrol/search/payments.html:93
 msgid "Payment provider"
@@ -13512,6 +13514,7 @@ msgid "Server Transaction Code"
 msgstr "رمز معاملة الخادم"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:62
+#: pretix/control/templates/pretixcontrol/boxoffice/payment.html:78
 #, fuzzy
 #| msgid "Payer and reference"
 msgid "Payment reference"
@@ -13524,6 +13527,59 @@ msgstr "طلبات الدفع"
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:73
 msgid "Authorization Code"
 msgstr "شفرة الترخيص"
+
+#: pretix/control/templates/pretixcontrol/boxoffice/payment.html:80
+#, fuzzy
+#| msgid "Transactions"
+msgid "Transaction ID"
+msgstr "المعاملات"
+
+#: pretix/control/templates/pretixcontrol/boxoffice/payment.html:85
+#, fuzzy
+#| msgid "Payer and reference"
+msgid "PSP reference"
+msgstr "المسدد والمرجع"
+
+#: pretix/control/templates/pretixcontrol/boxoffice/payment.html:87
+msgid "Terminal ID"
+msgstr ""
+
+#: pretix/control/templates/pretixcontrol/boxoffice/payment.html:89
+#, fuzzy
+#| msgid "Payment method"
+msgid "paymentMethod"
+msgstr "طريقة السداد"
+
+#: pretix/control/templates/pretixcontrol/boxoffice/payment.html:91
+#, fuzzy
+#| msgid "Card number"
+msgid "Card Holder"
+msgstr "رقم البطاقة"
+
+#: pretix/control/templates/pretixcontrol/boxoffice/payment.html:93
+#, fuzzy
+#| msgid "Card number"
+msgid "Card Number"
+msgstr "رقم البطاقة"
+
+#: pretix/control/templates/pretixcontrol/boxoffice/payment.html:95
+#, fuzzy
+#| msgctxt "terminal_zvt"
+#| msgid "Card expiration"
+msgid "Card Expiration"
+msgstr "تاريخ انتهاء البطاقة"
+
+#: pretix/control/templates/pretixcontrol/boxoffice/payment.html:97
+#, fuzzy
+#| msgid "Card Entry Mode"
+msgid "Card Entry Method"
+msgstr "وضع بطاقة الدخول"
+
+#: pretix/control/templates/pretixcontrol/boxoffice/payment.html:99
+#, fuzzy
+#| msgid "Result"
+msgid "Result Code"
+msgstr "النتيجة"
 
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html:9
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html:41
@@ -23191,15 +23247,15 @@ msgstr "لم يتم فتح نافذة إدخال بيانات الدفع الخ�
 msgid "Click here in order to open the window."
 msgstr "انقر هنا لفتح النافذة."
 
-#: pretix/plugins/paypal/views.py:106 pretix/plugins/paypal2/views.py:290
+#: pretix/plugins/paypal/views.py:106 pretix/plugins/paypal2/views.py:291
 msgid "Invalid response from PayPal received."
 msgstr "تم استلام رد غير صالح من PayPal."
 
-#: pretix/plugins/paypal/views.py:122 pretix/plugins/paypal2/views.py:306
+#: pretix/plugins/paypal/views.py:122 pretix/plugins/paypal2/views.py:307
 msgid "It looks like you canceled the PayPal payment"
 msgstr "يبدو أنك قد ألغيت عملية السداد عبر PayPal"
 
-#: pretix/plugins/paypal/views.py:254
+#: pretix/plugins/paypal/views.py:254 pretix/plugins/paypal2/views.py:466
 msgid "Your PayPal account has been disconnected."
 msgstr "تم قطع اتصال حساب PayPal الخاص بك."
 
@@ -23325,9 +23381,9 @@ msgstr ""
 "هذا يعني أنه يجب إنشاء حساب PayPal المستلم وكذلك حساب المرسل في نفس البلد "
 "واستخدام نفس العملة. لن تتمكن الحسابات خارج الدولة من إرسال أي مدفوعات."
 
-#: pretix/plugins/paypal2/payment.py:329 pretix/plugins/paypal2/views.py:199
-#: pretix/plugins/paypal2/views.py:223 pretix/plugins/paypal2/views.py:231
-#: pretix/plugins/paypal2/views.py:234
+#: pretix/plugins/paypal2/payment.py:329 pretix/plugins/paypal2/views.py:200
+#: pretix/plugins/paypal2/views.py:224 pretix/plugins/paypal2/views.py:232
+#: pretix/plugins/paypal2/views.py:235
 msgid "An error occurred during connecting with PayPal, please try again."
 msgstr "حدث خطأ أثناء الاتصال ب PayPal ، يرجى المحاولة مرة أخرى."
 
@@ -23465,25 +23521,19 @@ msgstr "حاول مرة اخرى."
 msgid "Please select how you want to pay."
 msgstr "يرجى اختيار طريقة الدفع."
 
-#: pretix/plugins/paypal2/views.py:239
+#: pretix/plugins/paypal2/views.py:240
 msgid ""
 "The e-mail address on your PayPal account has not yet been confirmed. You "
 "will need to do this before you can start accepting payments."
 msgstr ""
 
-#: pretix/plugins/paypal2/views.py:244
+#: pretix/plugins/paypal2/views.py:245
 msgid ""
 "Your PayPal account is now connected to pretix. You can change the settings "
 "in detail below."
 msgstr ""
 "حساب PayPal الخاص بك مرتبط الآن ب pretix. يمكنك تغيير الإعدادات بالتفصيل "
 "أدناه."
-
-#: pretix/plugins/paypal2/views.py:465
-#, fuzzy
-#| msgid "Your PayPal account has been disconnected."
-msgid "Your PayPal account has been disconnected.BB"
-msgstr "تم قطع اتصال حساب PayPal الخاص بك."
 
 #: pretix/plugins/pretixdroid/apps.py:30 pretix/plugins/pretixdroid/apps.py:33
 msgid "Old check-in device API"
@@ -25378,7 +25428,7 @@ msgid "Add-ons:"
 msgstr "إضافات"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_addons.html:49
-#: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:194
+#: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:198
 #: pretix/presale/templates/pretixpresale/event/checkout_customer.html:130
 #: pretix/presale/templates/pretixpresale/event/checkout_membership.html:86
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html:78
@@ -25471,19 +25521,35 @@ msgid ""
 msgstr "يتطلب طلبك موافقة منظم الفعالية قبل تأكيده."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:184
+#, fuzzy
+#| msgid ""
+#| "We will sent you an email as soon as the event organizer approved or "
+#| "rejected your order. If your order was approved, we will send you a link "
+#| "that you can use to pay."
 msgid ""
 "We will sent you an email as soon as the event organizer approved or "
-"rejected your order. If your order was approved, we will send you a link "
-"that you can use to pay."
+"rejected your order."
 msgstr ""
 "سنرسل إليك بريدا إلكترونيا بمجرد أن يوافق منظم الفعالية على طلبك أو يرفضه. "
 "إذا تمت الموافقة على طلبك ، فسنرسل لك رابطا يمكنك استخدامه للدفع."
 
-#: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:200
+#: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:188
+#, fuzzy
+#| msgid ""
+#| "We will sent you an email as soon as the event organizer approved or "
+#| "rejected your order. If your order was approved, we will send you a link "
+#| "that you can use to pay."
+msgid ""
+"If your order was approved, we will send you a link that you can use to pay."
+msgstr ""
+"سنرسل إليك بريدا إلكترونيا بمجرد أن يوافق منظم الفعالية على طلبك أو يرفضه. "
+"إذا تمت الموافقة على طلبك ، فسنرسل لك رابطا يمكنك استخدامه للدفع."
+
+#: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:204
 msgid "Place binding order"
 msgstr "تأكيد الطلب"
 
-#: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:202
+#: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:206
 msgid "Submit registration"
 msgstr "قم بإرسال تسجيل"
 
@@ -27809,6 +27875,11 @@ msgstr "الوصول إلى الكتابة"
 #: pretix/settings.py:864
 msgid "Kosovo"
 msgstr "كوسوفو"
+
+#, fuzzy
+#~| msgid "Your PayPal account has been disconnected."
+#~ msgid "Your PayPal account has been disconnected.BB"
+#~ msgstr "تم قطع اتصال حساب PayPal الخاص بك."
 
 #, fuzzy
 #~| msgid "Order"
