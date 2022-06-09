@@ -486,6 +486,11 @@ td > .dl-horizontal {
     padding: 15px;
 }
 
+.old-browser-warning {
+    padding: 50px;
+    font-size: 30px;
+}
+
 @media(min-width:768px) {
     .impersonate-warning, .old-browser-warning {
         position: inherit;
