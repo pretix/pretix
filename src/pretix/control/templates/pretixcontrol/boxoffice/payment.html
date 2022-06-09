@@ -88,13 +88,13 @@
         <dd>{{ payment_info.payment_data.terminalId }}</dd>
         <dt>{% trans "Payment method" %}</dt>
         <dd>{{ payment_info.payment_data.paymentMethod }} ({{ payment_info.payment_data.cardType }} / {{ payment_info.payment_data.cardScheme }} / {{ payment_info.payment_data.paymentMethodVariant }})</dd>
-        <dt>{% trans "Card Holder" %}</dt>
+        <dt>{% trans "Card holder" %}</dt>
         <dd>{{ payment_info.payment_data.cardHolderName }}</dd>
-        <dt>{% trans "Card Number" %}</dt>
+        <dt>{% trans "Card number" %}</dt>
         <dd>{{ payment_info.payment_data.cardBin }} **** {{ payment_info.payment_data.cardSummary }}</dd>
-        <dt>{% trans "Card Expiration" %}</dt>
+        <dt>{% trans "Card expiration" %}</dt>
         <dd>{{ payment_info.payment_data.expiryMonth }} / {{ payment_info.payment_data.expiryYear }}</dd>
-        <dt>{% trans "Card Entry Method" %}</dt>
+        <dt>{% trans "Card Entry Mode" %}</dt>
         <dd>{{ payment_info.payment_data.posEntryMode }}</dd>
         <dt>{% trans "Result Code" %}</dt>
         <dd>{{ payment_info.payment_data.posResultCode }}</dd>
