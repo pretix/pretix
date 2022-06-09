@@ -72,6 +72,13 @@
         </dd>
         <dt>{% trans "Authorization Code" %}</dt>
         <dd>{{ payment_info.payment_data.authorizationCode }}</dd>
+    {% elif payment_info.payment_type == "izettle_qrc" %}
+        <dt>{% trans "Payment provider" %}</dt>
+        <dd>PayPal QRC via Zettle</dd>
+        <dt>{% trans "Payment reference" %}</dt>
+        <dd>{{ payment_info.payment_data.reference }}</dd>
+        <dt>{% trans "Transaction ID" %}</dt>
+        <dd>{{ payment_info.payment_data.transactionId }}</dd>
     {% elif payment_info.payment_type == "adyen_legacy" %}
         <dt>{% trans "Payment provider" %}</dt>
         <dd>Adyen POS</dd>
