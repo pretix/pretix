@@ -218,7 +218,7 @@ $(function () {
             'this page and try again.'
         ));
 
-        var formData = new FormData($(this).get(0))
+        var formData = new FormData(this);
         formData.append('ajax', '1');
         if (e.originalEvent.submitter) {
             // Not supported on IE, may lead to wrong results, but we don't support IE in the backend anymore
