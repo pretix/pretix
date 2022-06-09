@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-09 15:41+0000\n"
+"POT-Creation-Date: 2022-06-09 15:47+0000\n"
 "PO-Revision-Date: 2021-12-03 08:37+0000\n"
 "Last-Translator: ExtremeX-BB <qq754163444@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://translate.pretix.eu/projects/"
@@ -13794,11 +13794,13 @@ msgstr "类型"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:43
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:67
+#: pretix/control/templates/pretixcontrol/boxoffice/payment.html:97
 msgid "Card Entry Mode"
 msgstr "卡片输入方式"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:45
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:69
+#: pretix/control/templates/pretixcontrol/boxoffice/payment.html:93
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_confirm.html:10
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_cc.html:28
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:13
@@ -13856,26 +13858,14 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:91
 #, fuzzy
 #| msgid "Card number"
-msgid "Card Holder"
-msgstr "卡号"
-
-#: pretix/control/templates/pretixcontrol/boxoffice/payment.html:93
-#, fuzzy
-#| msgid "Card number"
-msgid "Card Number"
+msgid "Card holder"
 msgstr "卡号"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:95
 #, fuzzy
 #| msgid "Cart position"
-msgid "Card Expiration"
+msgid "Card expiration"
 msgstr "购物车位置"
-
-#: pretix/control/templates/pretixcontrol/boxoffice/payment.html:97
-#, fuzzy
-#| msgid "Card Entry Mode"
-msgid "Card Entry Method"
-msgstr "卡片输入方式"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:99
 #, fuzzy
@@ -28239,6 +28229,21 @@ msgstr "录入权限"
 #: pretix/settings.py:864
 msgid "Kosovo"
 msgstr ""
+
+#, fuzzy
+#~| msgid "Card number"
+#~ msgid "Card Number"
+#~ msgstr "卡号"
+
+#, fuzzy
+#~| msgid "Cart position"
+#~ msgid "Card Expiration"
+#~ msgstr "购物车位置"
+
+#, fuzzy
+#~| msgid "Card Entry Mode"
+#~ msgid "Card Entry Method"
+#~ msgstr "卡片输入方式"
 
 #, fuzzy
 #~| msgid "Payer and reference"

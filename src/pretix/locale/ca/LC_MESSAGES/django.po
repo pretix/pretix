@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-09 15:41+0000\n"
+"POT-Creation-Date: 2022-06-09 15:47+0000\n"
 "PO-Revision-Date: 2021-05-30 13:17+0000\n"
 "Last-Translator: albert <albert.serra.monner@gmail.com>\n"
 "Language-Team: Catalan <https://translate.pretix.eu/projects/pretix/pretix/"
@@ -13870,11 +13870,13 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:43
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:67
+#: pretix/control/templates/pretixcontrol/boxoffice/payment.html:97
 msgid "Card Entry Mode"
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:45
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:69
+#: pretix/control/templates/pretixcontrol/boxoffice/payment.html:93
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_confirm.html:10
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_cc.html:28
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:13
@@ -13932,26 +13934,14 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:91
 #, fuzzy
 #| msgid "Card number"
-msgid "Card Holder"
-msgstr "Número de la targeta"
-
-#: pretix/control/templates/pretixcontrol/boxoffice/payment.html:93
-#, fuzzy
-#| msgid "Card number"
-msgid "Card Number"
+msgid "Card holder"
 msgstr "Número de la targeta"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:95
 #, fuzzy
 #| msgid "Cart position"
-msgid "Card Expiration"
+msgid "Card expiration"
 msgstr "Posició del carretó"
-
-#: pretix/control/templates/pretixcontrol/boxoffice/payment.html:97
-#, fuzzy
-#| msgid "Card type"
-msgid "Card Entry Method"
-msgstr "Tipus de targeta"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:99
 #, fuzzy
@@ -27639,6 +27629,21 @@ msgstr "Accés d'escriptura"
 #: pretix/settings.py:864
 msgid "Kosovo"
 msgstr "Kosovo"
+
+#, fuzzy
+#~| msgid "Card number"
+#~ msgid "Card Number"
+#~ msgstr "Número de la targeta"
+
+#, fuzzy
+#~| msgid "Cart position"
+#~ msgid "Card Expiration"
+#~ msgstr "Posició del carretó"
+
+#, fuzzy
+#~| msgid "Card type"
+#~ msgid "Card Entry Method"
+#~ msgstr "Tipus de targeta"
 
 #, fuzzy
 #~| msgid "Payer and reference"

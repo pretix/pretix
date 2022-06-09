@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-09 15:41+0000\n"
+"POT-Creation-Date: 2022-06-09 15:47+0000\n"
 "PO-Revision-Date: 2021-08-12 21:00+0000\n"
 "Last-Translator: amandajurno <amandajurno@gmail.com>\n"
 "Language-Team: Portuguese <https://translate.pretix.eu/projects/pretix/"
@@ -12299,11 +12299,13 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:43
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:67
+#: pretix/control/templates/pretixcontrol/boxoffice/payment.html:97
 msgid "Card Entry Mode"
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:45
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:69
+#: pretix/control/templates/pretixcontrol/boxoffice/payment.html:93
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_confirm.html:10
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_cc.html:28
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:13
@@ -12349,22 +12351,14 @@ msgid "Terminal ID"
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:91
-msgid "Card Holder"
-msgstr ""
-
-#: pretix/control/templates/pretixcontrol/boxoffice/payment.html:93
-msgid "Card Number"
+msgid "Card holder"
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:95
 #, fuzzy
 #| msgid "Order positions"
-msgid "Card Expiration"
+msgid "Card expiration"
 msgstr "Posição do pedido"
-
-#: pretix/control/templates/pretixcontrol/boxoffice/payment.html:97
-msgid "Card Entry Method"
-msgstr ""
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:99
 msgid "Result Code"

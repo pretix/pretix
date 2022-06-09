@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-09 15:41+0000\n"
+"POT-Creation-Date: 2022-06-09 15:47+0000\n"
 "PO-Revision-Date: 2022-02-16 00:00+0000\n"
 "Last-Translator: Miguel Magalhães <magamig@gmail.com>\n"
 "Language-Team: Portuguese (Portugal) <https://translate.pretix.eu/projects/"
@@ -14013,11 +14013,13 @@ msgstr "Tipo"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:43
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:67
+#: pretix/control/templates/pretixcontrol/boxoffice/payment.html:97
 msgid "Card Entry Mode"
 msgstr "Modo de entrada de cartão"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:45
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:69
+#: pretix/control/templates/pretixcontrol/boxoffice/payment.html:93
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_confirm.html:10
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_cc.html:28
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:13
@@ -14069,27 +14071,15 @@ msgstr "Terminal ZVT"
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:91
 #, fuzzy
 #| msgid "Card number"
-msgid "Card Holder"
-msgstr "Número do cartão"
-
-#: pretix/control/templates/pretixcontrol/boxoffice/payment.html:93
-#, fuzzy
-#| msgid "Card number"
-msgid "Card Number"
+msgid "Card holder"
 msgstr "Número do cartão"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:95
 #, fuzzy
 #| msgctxt "terminal_zvt"
 #| msgid "Card expiration"
-msgid "Card Expiration"
+msgid "Card expiration"
 msgstr "Validade do cartão"
-
-#: pretix/control/templates/pretixcontrol/boxoffice/payment.html:97
-#, fuzzy
-#| msgid "Card Entry Mode"
-msgid "Card Entry Method"
-msgstr "Modo de entrada de cartão"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:99
 #, fuzzy
@@ -28681,6 +28671,22 @@ msgstr "Permissão de escrita"
 #: pretix/settings.py:864
 msgid "Kosovo"
 msgstr "Kosovo"
+
+#, fuzzy
+#~| msgid "Card number"
+#~ msgid "Card Number"
+#~ msgstr "Número do cartão"
+
+#, fuzzy
+#~| msgctxt "terminal_zvt"
+#~| msgid "Card expiration"
+#~ msgid "Card Expiration"
+#~ msgstr "Validade do cartão"
+
+#, fuzzy
+#~| msgid "Card Entry Mode"
+#~ msgid "Card Entry Method"
+#~ msgstr "Modo de entrada de cartão"
 
 #, fuzzy
 #~| msgid "Payer and reference"

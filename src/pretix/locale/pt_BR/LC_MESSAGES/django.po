@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-09 15:41+0000\n"
+"POT-Creation-Date: 2022-06-09 15:47+0000\n"
 "PO-Revision-Date: 2021-09-27 06:00+0000\n"
 "Last-Translator: Diego Rodrigo <diegorodrigo90@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.pretix.eu/projects/"
@@ -13356,11 +13356,13 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:43
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:67
+#: pretix/control/templates/pretixcontrol/boxoffice/payment.html:97
 msgid "Card Entry Mode"
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:45
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:69
+#: pretix/control/templates/pretixcontrol/boxoffice/payment.html:93
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_confirm.html:10
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_cc.html:28
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:13
@@ -13416,26 +13418,16 @@ msgid "Terminal ID"
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:91
-msgid "Card Holder"
-msgstr ""
-
-#: pretix/control/templates/pretixcontrol/boxoffice/payment.html:93
 #, fuzzy
 #| msgid "Number"
-msgid "Card Number"
+msgid "Card holder"
 msgstr "Número"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:95
 #, fuzzy
 #| msgid "Cart position"
-msgid "Card Expiration"
+msgid "Card expiration"
 msgstr "Posição do carrinho"
-
-#: pretix/control/templates/pretixcontrol/boxoffice/payment.html:97
-#, fuzzy
-#| msgid "Payment type"
-msgid "Card Entry Method"
-msgstr "Tipo de pagamento"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:99
 msgid "Result Code"
@@ -27177,6 +27169,16 @@ msgstr "Acesso de escrita"
 #: pretix/settings.py:864
 msgid "Kosovo"
 msgstr ""
+
+#, fuzzy
+#~| msgid "Cart position"
+#~ msgid "Card Expiration"
+#~ msgstr "Posição do carrinho"
+
+#, fuzzy
+#~| msgid "Payment type"
+#~ msgid "Card Entry Method"
+#~ msgstr "Tipo de pagamento"
 
 #, fuzzy
 #~| msgid "Payment fee"

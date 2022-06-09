@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-09 15:41+0000\n"
+"POT-Creation-Date: 2022-06-09 15:47+0000\n"
 "PO-Revision-Date: 2022-06-07 16:34+0000\n"
 "Last-Translator: Martin Gross <martin@pc-coholic.de>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
@@ -13806,11 +13806,13 @@ msgstr "Typ"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:43
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:67
+#: pretix/control/templates/pretixcontrol/boxoffice/payment.html:97
 msgid "Card Entry Mode"
 msgstr "Art der Karteneingabe"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:45
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:69
+#: pretix/control/templates/pretixcontrol/boxoffice/payment.html:93
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_confirm.html:10
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_cc.html:28
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:13
@@ -13860,27 +13862,15 @@ msgstr "ZVT-Terminal"
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:91
 #, fuzzy
 #| msgid "Cardholder name"
-msgid "Card Holder"
+msgid "Card holder"
 msgstr "Karteninhaber"
-
-#: pretix/control/templates/pretixcontrol/boxoffice/payment.html:93
-#, fuzzy
-#| msgid "Card number"
-msgid "Card Number"
-msgstr "Kreditkartennummer"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:95
 #, fuzzy
 #| msgctxt "terminal_zvt"
 #| msgid "Card expiration"
-msgid "Card Expiration"
+msgid "Card expiration"
 msgstr "Ablaufdatum"
-
-#: pretix/control/templates/pretixcontrol/boxoffice/payment.html:97
-#, fuzzy
-#| msgid "Card Entry Mode"
-msgid "Card Entry Method"
-msgstr "Art der Karteneingabe"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:99
 #, fuzzy
@@ -28114,6 +28104,22 @@ msgstr "Schreibzugriff"
 #: pretix/settings.py:864
 msgid "Kosovo"
 msgstr "Kosovo"
+
+#, fuzzy
+#~| msgid "Card number"
+#~ msgid "Card Number"
+#~ msgstr "Kreditkartennummer"
+
+#, fuzzy
+#~| msgctxt "terminal_zvt"
+#~| msgid "Card expiration"
+#~ msgid "Card Expiration"
+#~ msgstr "Ablaufdatum"
+
+#, fuzzy
+#~| msgid "Card Entry Mode"
+#~ msgid "Card Entry Method"
+#~ msgstr "Art der Karteneingabe"
 
 #, fuzzy
 #~| msgid "Payment reference"
