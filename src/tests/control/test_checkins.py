@@ -297,7 +297,7 @@ def test_manual_checkins(client, checkin_list_env):
     client.login(email='dummy@dummy.dummy', password='dummy')
     with scopes_disabled():
         assert not checkin_list_env[5][3].checkins.exists()
-    client.post('/control/event/dummy/dummy/checkinlists/{}/'.format(checkin_list_env[6].pk), {
+    client.post('/control/event/dummy/dummy/checkinlists/{}/bulk_action'.format(checkin_list_env[6].pk), {
         'checkin': [checkin_list_env[5][3].pk]
     })
     with scopes_disabled():
@@ -312,10 +312,10 @@ def test_manual_checkins_revert(client, checkin_list_env):
     client.login(email='dummy@dummy.dummy', password='dummy')
     with scopes_disabled():
         assert not checkin_list_env[5][3].checkins.exists()
-    client.post('/control/event/dummy/dummy/checkinlists/{}/'.format(checkin_list_env[6].pk), {
+    client.post('/control/event/dummy/dummy/checkinlists/{}/bulk_action'.format(checkin_list_env[6].pk), {
         'checkin': [checkin_list_env[5][3].pk]
     })
-    client.post('/control/event/dummy/dummy/checkinlists/{}/'.format(checkin_list_env[6].pk), {
+    client.post('/control/event/dummy/dummy/checkinlists/{}/bulk_action'.format(checkin_list_env[6].pk), {
         'checkin': [checkin_list_env[5][3].pk],
         'revert': 'true'
     })
