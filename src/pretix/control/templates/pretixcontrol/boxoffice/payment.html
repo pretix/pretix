@@ -82,11 +82,11 @@
     {% elif payment_info.payment_type == "adyen_legacy" %}
         <dt>{% trans "Payment provider" %}</dt>
         <dd>Adyen POS</dd>
-        <dt>{% trans "PSP reference" %}</dt>
+        <dt>{% trans "Reference" %}</dt>
         <dd>{{ payment_info.payment_data.pspReference }}</dd>
         <dt>{% trans "Terminal ID" %}</dt>
         <dd>{{ payment_info.payment_data.terminalId }}</dd>
-        <dt>{% trans "paymentMethod" %}</dt>
+        <dt>{% trans "Payment method" %}</dt>
         <dd>{{ payment_info.payment_data.paymentMethod }} ({{ payment_info.payment_data.cardType }} / {{ payment_info.payment_data.cardScheme }} / {{ payment_info.payment_data.paymentMethodVariant }})</dd>
         <dt>{% trans "Card Holder" %}</dt>
         <dd>{{ payment_info.payment_data.cardHolderName }}</dd>

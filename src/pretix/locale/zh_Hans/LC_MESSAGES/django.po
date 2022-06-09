@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-09 15:07+0000\n"
+"POT-Creation-Date: 2022-06-09 15:41+0000\n"
 "PO-Revision-Date: 2021-12-03 08:37+0000\n"
 "Last-Translator: ExtremeX-BB <qq754163444@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://translate.pretix.eu/projects/"
@@ -1601,6 +1601,7 @@ msgid "Amount"
 msgstr "数量"
 
 #: pretix/base/exporters/orderlist.py:798
+#: pretix/control/templates/pretixcontrol/boxoffice/payment.html:89
 #: pretix/control/templates/pretixcontrol/order/index.html:680
 #: pretix/control/templates/pretixcontrol/order/index.html:775
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:85
@@ -13843,20 +13844,14 @@ msgid "Transaction ID"
 msgstr "交易码"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:85
-#, fuzzy
-#| msgid "Payer and reference"
-msgid "PSP reference"
-msgstr "付款人和参考"
+#: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/control.html:26
+#: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_assign.html:33
+msgid "Reference"
+msgstr "参考"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:87
 msgid "Terminal ID"
 msgstr ""
-
-#: pretix/control/templates/pretixcontrol/boxoffice/payment.html:89
-#, fuzzy
-#| msgid "Payment method"
-msgid "paymentMethod"
-msgstr "支付方式"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:91
 #, fuzzy
@@ -22773,11 +22768,6 @@ msgstr "数量"
 msgid "Transfer amount"
 msgstr "转移"
 
-#: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/control.html:26
-#: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_assign.html:33
-msgid "Reference"
-msgstr "参考"
-
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/control.html:32
 msgid "Reference code"
 msgstr "参考代码"
@@ -28249,6 +28239,16 @@ msgstr "录入权限"
 #: pretix/settings.py:864
 msgid "Kosovo"
 msgstr ""
+
+#, fuzzy
+#~| msgid "Payer and reference"
+#~ msgid "PSP reference"
+#~ msgstr "付款人和参考"
+
+#, fuzzy
+#~| msgid "Payment method"
+#~ msgid "paymentMethod"
+#~ msgstr "支付方式"
 
 #, fuzzy
 #~| msgid "Your PayPal account has been disconnected."

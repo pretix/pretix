@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-09 15:07+0000\n"
+"POT-Creation-Date: 2022-06-09 15:41+0000\n"
 "PO-Revision-Date: 2022-05-25 11:00+0000\n"
 "Last-Translator: Mie Frydensbjerg <mif@aarhus.dk>\n"
 "Language-Team: Danish <https://translate.pretix.eu/projects/pretix/pretix/da/"
@@ -1616,6 +1616,7 @@ msgid "Amount"
 msgstr "Beløb"
 
 #: pretix/base/exporters/orderlist.py:798
+#: pretix/control/templates/pretixcontrol/boxoffice/payment.html:89
 #: pretix/control/templates/pretixcontrol/order/index.html:680
 #: pretix/control/templates/pretixcontrol/order/index.html:775
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:85
@@ -13350,20 +13351,14 @@ msgid "Transaction ID"
 msgstr "Opret dato"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:85
-#, fuzzy
-#| msgid "Payer and reference"
-msgid "PSP reference"
-msgstr "Betaler og reference"
+#: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/control.html:26
+#: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_assign.html:33
+msgid "Reference"
+msgstr "Reference"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:87
 msgid "Terminal ID"
 msgstr ""
-
-#: pretix/control/templates/pretixcontrol/boxoffice/payment.html:89
-#, fuzzy
-#| msgid "Payment method"
-msgid "paymentMethod"
-msgstr "Betalingsmetode"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:91
 #, fuzzy
@@ -21801,11 +21796,6 @@ msgstr "Beløb"
 msgid "Transfer amount"
 msgstr "Navn"
 
-#: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/control.html:26
-#: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_assign.html:33
-msgid "Reference"
-msgstr "Reference"
-
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/control.html:32
 msgid "Reference code"
 msgstr "Referencekode"
@@ -26893,6 +26883,16 @@ msgstr ""
 #: pretix/settings.py:864
 msgid "Kosovo"
 msgstr ""
+
+#, fuzzy
+#~| msgid "Payer and reference"
+#~ msgid "PSP reference"
+#~ msgstr "Betaler og reference"
+
+#, fuzzy
+#~| msgid "Payment method"
+#~ msgid "paymentMethod"
+#~ msgstr "Betalingsmetode"
 
 #, fuzzy
 #~ msgid "Your PayPal account has been disconnected.BB"

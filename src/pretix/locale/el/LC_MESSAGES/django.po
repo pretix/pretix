@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-09 15:07+0000\n"
+"POT-Creation-Date: 2022-06-09 15:41+0000\n"
 "PO-Revision-Date: 2019-10-31 14:39+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: Greek <https://translate.pretix.eu/projects/pretix/pretix/el/"
@@ -1673,6 +1673,7 @@ msgid "Amount"
 msgstr "Ποσό"
 
 #: pretix/base/exporters/orderlist.py:798
+#: pretix/control/templates/pretixcontrol/boxoffice/payment.html:89
 #: pretix/control/templates/pretixcontrol/order/index.html:680
 #: pretix/control/templates/pretixcontrol/order/index.html:775
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:85
@@ -14631,20 +14632,14 @@ msgid "Transaction ID"
 msgstr "Κωδικός συναλλαγής"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:85
-#, fuzzy
-#| msgid "Payer and reference"
-msgid "PSP reference"
-msgstr "Πληρωτής και αναφορά"
+#: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/control.html:26
+#: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_assign.html:33
+msgid "Reference"
+msgstr "Αναφορά"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:87
 msgid "Terminal ID"
 msgstr ""
-
-#: pretix/control/templates/pretixcontrol/boxoffice/payment.html:89
-#, fuzzy
-#| msgid "Payment method"
-msgid "paymentMethod"
-msgstr "Μέθοδος πληρωμής"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:91
 #, fuzzy
@@ -24059,11 +24054,6 @@ msgstr "Ποσό"
 msgid "Transfer amount"
 msgstr "Μεταφορά"
 
-#: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/control.html:26
-#: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_assign.html:33
-msgid "Reference"
-msgstr "Αναφορά"
-
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/control.html:32
 msgid "Reference code"
 msgstr "Κώδικας αναφοράς"
@@ -29812,6 +29802,16 @@ msgstr "Πρόσβαση για εγγραφή"
 #: pretix/settings.py:864
 msgid "Kosovo"
 msgstr ""
+
+#, fuzzy
+#~| msgid "Payer and reference"
+#~ msgid "PSP reference"
+#~ msgstr "Πληρωτής και αναφορά"
+
+#, fuzzy
+#~| msgid "Payment method"
+#~ msgid "paymentMethod"
+#~ msgstr "Μέθοδος πληρωμής"
 
 #, fuzzy
 #~| msgid "Your PayPal account has been disconnected."

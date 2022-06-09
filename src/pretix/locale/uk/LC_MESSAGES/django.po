@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-09 15:07+0000\n"
+"POT-Creation-Date: 2022-06-09 15:41+0000\n"
 "PO-Revision-Date: 2022-05-23 01:00+0000\n"
 "Last-Translator: Ola Ola <olge.to@gmail.com>\n"
 "Language-Team: Ukrainian <https://translate.pretix.eu/projects/pretix/pretix/"
@@ -1586,6 +1586,7 @@ msgid "Amount"
 msgstr "Сума"
 
 #: pretix/base/exporters/orderlist.py:798
+#: pretix/control/templates/pretixcontrol/boxoffice/payment.html:89
 #: pretix/control/templates/pretixcontrol/order/index.html:680
 #: pretix/control/templates/pretixcontrol/order/index.html:775
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:85
@@ -13659,20 +13660,14 @@ msgid "Transaction ID"
 msgstr "Транзакції"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:85
-#, fuzzy
-#| msgid "Internal reference"
-msgid "PSP reference"
-msgstr "Внутрішнє посилання"
+#: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/control.html:26
+#: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_assign.html:33
+msgid "Reference"
+msgstr ""
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:87
 msgid "Terminal ID"
 msgstr ""
-
-#: pretix/control/templates/pretixcontrol/boxoffice/payment.html:89
-#, fuzzy
-#| msgid "Payment method"
-msgid "paymentMethod"
-msgstr "Спосіб оплати"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:91
 #, fuzzy
@@ -22012,11 +22007,6 @@ msgstr ""
 msgid "Transfer amount"
 msgstr ""
 
-#: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/control.html:26
-#: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_assign.html:33
-msgid "Reference"
-msgstr ""
-
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/control.html:32
 msgid "Reference code"
 msgstr ""
@@ -27122,6 +27112,16 @@ msgstr "Доступ до запису"
 #: pretix/settings.py:864
 msgid "Kosovo"
 msgstr "Косово"
+
+#, fuzzy
+#~| msgid "Internal reference"
+#~ msgid "PSP reference"
+#~ msgstr "Внутрішнє посилання"
+
+#, fuzzy
+#~| msgid "Payment method"
+#~ msgid "paymentMethod"
+#~ msgstr "Спосіб оплати"
 
 #, fuzzy
 #~| msgid "Your PayPal account has been disconnected."

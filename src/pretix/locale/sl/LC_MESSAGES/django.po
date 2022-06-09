@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-09 15:07+0000\n"
+"POT-Creation-Date: 2022-06-09 15:41+0000\n"
 "PO-Revision-Date: 2022-05-23 11:21+0000\n"
 "Last-Translator: Emanat Institute <info@emanat.si>\n"
 "Language-Team: Slovenian <https://translate.pretix.eu/projects/pretix/pretix/"
@@ -1594,6 +1594,7 @@ msgid "Amount"
 msgstr "Znesek"
 
 #: pretix/base/exporters/orderlist.py:798
+#: pretix/control/templates/pretixcontrol/boxoffice/payment.html:89
 #: pretix/control/templates/pretixcontrol/order/index.html:680
 #: pretix/control/templates/pretixcontrol/order/index.html:775
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:85
@@ -13203,20 +13204,14 @@ msgid "Transaction ID"
 msgstr "Variacije"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:85
-#, fuzzy
-#| msgid "Payment fee"
-msgid "PSP reference"
-msgstr "Stroški plačila"
+#: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/control.html:26
+#: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_assign.html:33
+msgid "Reference"
+msgstr ""
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:87
 msgid "Terminal ID"
 msgstr ""
-
-#: pretix/control/templates/pretixcontrol/boxoffice/payment.html:89
-#, fuzzy
-#| msgid "Payment method"
-msgid "paymentMethod"
-msgstr "Način plačila"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:91
 msgid "Card Holder"
@@ -21495,11 +21490,6 @@ msgstr "Znesek"
 msgid "Transfer amount"
 msgstr "Skupni znesek"
 
-#: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/control.html:26
-#: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_assign.html:33
-msgid "Reference"
-msgstr ""
-
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/control.html:32
 msgid "Reference code"
 msgstr ""
@@ -26580,6 +26570,16 @@ msgstr ""
 #: pretix/settings.py:864
 msgid "Kosovo"
 msgstr "Kosovo"
+
+#, fuzzy
+#~| msgid "Payment fee"
+#~ msgid "PSP reference"
+#~ msgstr "Stroški plačila"
+
+#, fuzzy
+#~| msgid "Payment method"
+#~ msgid "paymentMethod"
+#~ msgstr "Način plačila"
 
 #, fuzzy
 #~| msgid "Your account has been disabled."
