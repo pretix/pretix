@@ -71,13 +71,20 @@
             </p>
         </div>
     {% else %}
-        <form method="post" action="">
+        <form method="post" action="{% url "control:event.orders.checkinlists.bulk_action" event=request.event.slug organizer=request.event.organizer.slug list=checkinlist.pk %}" data-asynctask>
+            <div class="hidden">
+                {{ filter_form.as_p }}
+                <input name="returnquery" type="hidden" value="{{ request.META.QUERY_STRING }}">
+            </div>
            {% csrf_token %}
             <div class="table-responsive">
                 <table class="table table-condensed table-hover">
                     <thead>
                     <tr>
-                        <th></th>
+                        <th>
+                            <label aria-label="{% trans "select all rows for batch-operation" %}"
+                                   class="batch-select-label"><input type="checkbox" data-toggle-table/></label>
+                        </th>
                         <th>{% trans "Order code" %} <a href="?{% url_replace request 'ordering' '-code'%}"><i class="fa fa-caret-down"></i></a>
                       <a href="?{% url_replace request 'ordering' 'code'%}"><i class="fa fa-caret-up"></i></a></th>
                         <th>{% trans "Item" %} <a href="?{% url_replace request 'ordering' '-item'%}"><i class="fa fa-caret-down"></i></a>
@@ -100,6 +107,19 @@
                         <th>{% trans "Timestamp" %} <a href="?{% url_replace request 'ordering' '-timestamp'%}"><i class="fa fa-caret-down"></i></a>
                       <a href="?{% url_replace request 'ordering' 'timestamp'%}"><i class="fa fa-caret-up"></i></a></th>
                     </tr>
+                    {% if page_obj.paginator.num_pages > 1 %}
+                        <tr class="table-select-all warning hidden">
+                            <td>
+                                <input type="checkbox" name="__ALL" id="__all"
+                                       data-results-total="{{ page_obj.paginator.count }}">
+                            </td>
+                            <td colspan="8">
+                                <label for="__all">
+                                    {% trans "Select all results on other pages as well" %}
+                                </label>
+                            </td>
+                        </tr>
+                    {% endif %}
                     </thead>
                     <tbody>
                     {% for e in entries %}
@@ -180,13 +200,16 @@
             </div>
             {% if "can_change_orders" in request.eventpermset %}
                 <button type="submit" class="btn btn-primary btn-save">
+                    <span class="fa fa-sign-in" aria-hidden="true"></span>
                     {% trans "Check-In selected attendees" %}
                 </button>
                 <button type="submit" class="btn btn-default btn-save" name="checkout" value="true">
+                    <span class="fa fa-sign-out" aria-hidden="true"></span>
                     {% trans "Check-Out selected attendees" %}
                 </button>
-                <button type="submit" class="btn btn-default btn-save" name="revert" value="true">
-                    {% trans "Revert selected check-ins" %}
+                <button type="submit" class="btn btn-danger btn-save" name="revert" value="true">
+                    <span class="fa fa-trash" aria-hidden="true"></span>
+                    {% trans "Delete all check-ins of selected attendees" %}
                 </button>
             {% endif %}
         </form>

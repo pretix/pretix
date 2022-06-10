@@ -218,14 +218,17 @@ $(function () {
             'this page and try again.'
         ));
 
-
-        console.log($(this).get(0))
-        var formData = new FormData($(this).get(0))
+        var formData = new FormData(this);
         formData.append('ajax', '1');
+        // Not supported on IE, may lead to wrong results, but we don't support IE in the backend anymore
+        var submitter = e.originalEvent.submitter;
+        if (submitter && submitter.name) {
+            formData.append(submitter.name, submitter.value);
+        }
         $.ajax(
             {
                 'type': 'POST',
-                'url': $(this).attr('action'),
+                'url': this.action,
                 'data': formData,
                 processData: false,
                 contentType: false,

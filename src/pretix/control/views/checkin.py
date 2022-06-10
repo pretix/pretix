@@ -37,7 +37,7 @@ from django.contrib import messages
 from django.db import transaction
 from django.db.models import Exists, Max, OuterRef, Prefetch, Subquery
 from django.http import Http404, HttpResponseRedirect
-from django.shortcuts import get_object_or_404, redirect
+from django.shortcuts import get_object_or_404
 from django.urls import reverse
 from django.utils.functional import cached_property
 from django.utils.timezone import is_aware, make_aware, now
@@ -49,6 +49,7 @@ from pretix.base.channels import get_all_sales_channels
 from pretix.base.models import Checkin, Order, OrderPosition
 from pretix.base.models.checkin import CheckinList
 from pretix.base.signals import checkin_created
+from pretix.base.views.tasks import AsyncPostView
 from pretix.control.forms.checkin import CheckinListForm
 from pretix.control.forms.filter import (
     CheckinFilterForm, CheckinListAttendeeFilterForm,
@@ -58,11 +59,13 @@ from pretix.control.views import CreateView, PaginationMixin, UpdateView
 from pretix.helpers.models import modelcopy
 
 
-class CheckInListShow(EventPermissionRequiredMixin, PaginationMixin, ListView):
-    model = Checkin
-    context_object_name = 'entries'
-    template_name = 'pretixcontrol/checkin/index.html'
-    permission = 'can_view_orders'
+class CheckInListQueryMixin:
+
+    @cached_property
+    def request_data(self):
+        if self.request.method == "POST":
+            return self.request.POST
+        return self.request.GET
 
     def get_queryset(self, filter=True):
         cqs = Checkin.objects.filter(
@@ -105,15 +108,27 @@ class CheckInListShow(EventPermissionRequiredMixin, PaginationMixin, ListView):
         if filter and self.filter_form.is_valid():
             qs = self.filter_form.filter_qs(qs)
 
+        if 'checkin' in self.request_data and '__ALL' not in self.request_data:
+            qs = qs.filter(
+                id__in=self.request_data.getlist('checkin')
+            )
+
         return qs
 
     @cached_property
     def filter_form(self):
         return CheckinListAttendeeFilterForm(
-            data=self.request.GET,
+            data=self.request_data,
             event=self.request.event,
             list=self.list
         )
+
+
+class CheckInListShow(EventPermissionRequiredMixin, PaginationMixin, CheckInListQueryMixin, ListView):
+    model = Checkin
+    context_object_name = 'entries'
+    template_name = 'pretixcontrol/checkin/index.html'
+    permission = 'can_view_orders'
 
     def dispatch(self, request, *args, **kwargs):
         self.list = get_object_or_404(self.request.event.checkin_lists.all(), pk=kwargs.get("list"))
@@ -153,18 +168,23 @@ class CheckInListShow(EventPermissionRequiredMixin, PaginationMixin, ListView):
                     e.last_exit_aware = e.last_exit
         return ctx
 
-    def post(self, request, *args, **kwargs):
-        if "can_change_orders" not in request.eventpermset:
-            messages.error(request, _('You do not have permission to perform this action.'))
-            return redirect(reverse('control:event.orders.checkins', kwargs={
-                'event': self.request.event.slug,
-                'organizer': self.request.event.organizer.slug
-            }) + '?' + request.GET.urlencode())
 
-        positions = self.get_queryset(filter=False).filter(
-            pk__in=request.POST.getlist('checkin')
-        )
+class CheckInListBulkActionView(CheckInListQueryMixin, EventPermissionRequiredMixin, AsyncPostView):
+    template_name = 'pretixcontrol/organizers/device_bulk_edit.html'
+    permission = 'can_change_orders'
+    context_object_name = 'device'
 
+    def dispatch(self, request, *args, **kwargs):
+        self.list = get_object_or_404(self.request.event.checkin_lists.all(), pk=kwargs.get("list"))
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_queryset(self):
+        return super().get_queryset().prefetch_related(None).order_by()
+
+    @transaction.atomic()
+    def async_post(self, request, *args, **kwargs):
+        self.list = get_object_or_404(request.event.checkin_lists.all(), pk=kwargs.get("list"))
+        positions = self.get_queryset()
         if request.POST.get('revert') == 'true':
             for op in positions:
                 if op.order.status == Order.STATUS_PAID or (self.list.include_pending and op.order.status == Order.STATUS_PENDING):
@@ -177,7 +197,7 @@ class CheckInListShow(EventPermissionRequiredMixin, PaginationMixin, ListView):
                     }, user=request.user)
                     op.order.touch()
 
-            messages.success(request, _('The selected check-ins have been reverted.'))
+            return 'reverted', request.POST.get('returnquery')
         else:
             for op in positions:
                 if op.order.status == Order.STATUS_PAID or (self.list.include_pending and op.order.status == Order.STATUS_PENDING):
@@ -206,14 +226,22 @@ class CheckInListShow(EventPermissionRequiredMixin, PaginationMixin, ListView):
                         'web': True
                     }, user=request.user)
                     checkin_created.send(op.order.event, checkin=ci)
+            return 'checked-out' if t == Checkin.TYPE_EXIT else 'checked-in', request.POST.get('returnquery')
 
-            messages.success(request, _('The selected tickets have been marked as checked in.'))
+    def get_success_message(self, value):
+        if value[0] == 'reverted':
+            return _('The selected check-ins have been reverted.')
+        elif value[0] == 'checked-out':
+            return _('The selected tickets have been marked as checked out.')
+        else:
+            return _('The selected tickets have been marked as checked in.')
 
-        return redirect(reverse('control:event.orders.checkinlists.show', kwargs={
+    def get_success_url(self, value):
+        return reverse('control:event.orders.checkinlists.show', kwargs={
             'event': self.request.event.slug,
             'organizer': self.request.event.organizer.slug,
             'list': self.list.pk
-        }) + '?' + request.GET.urlencode())
+        }) + ('?' + value[1] if value[1] else '')
 
 
 class CheckinListList(EventPermissionRequiredMixin, PaginationMixin, ListView):
