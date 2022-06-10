@@ -486,11 +486,16 @@ td > .dl-horizontal {
     padding: 15px;
 }
 
+.old-browser-warning {
+    padding: 32px;/* 30px + 2px optical compensation */
+    font-size: 30px;
+}
+
 @media(min-width:768px) {
     .impersonate-warning, .old-browser-warning {
         position: inherit;
         margin: 0 0 0 250px;
-        padding: 15px 30px;
+        padding: 15px 47px;/* 45px + 2px optical compensation */
     }
 }
 
