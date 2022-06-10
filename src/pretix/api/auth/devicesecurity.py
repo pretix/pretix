@@ -45,6 +45,7 @@ class PretixScanSecurityProfile(AllowListSecurityProfile):
     allowlist = (
         ('GET', 'api-v1:version'),
         ('GET', 'api-v1:device.eventselection'),
+        ('GET', 'api-v1:idempotency.query'),
         ('POST', 'api-v1:device.update'),
         ('POST', 'api-v1:device.revoke'),
         ('POST', 'api-v1:device.roll'),
@@ -76,6 +77,7 @@ class PretixScanNoSyncNoSearchSecurityProfile(AllowListSecurityProfile):
     allowlist = (
         ('GET', 'api-v1:version'),
         ('GET', 'api-v1:device.eventselection'),
+        ('GET', 'api-v1:idempotency.query'),
         ('POST', 'api-v1:device.update'),
         ('POST', 'api-v1:device.revoke'),
         ('POST', 'api-v1:device.roll'),
@@ -105,6 +107,7 @@ class PretixScanNoSyncSecurityProfile(AllowListSecurityProfile):
     allowlist = (
         ('GET', 'api-v1:version'),
         ('GET', 'api-v1:device.eventselection'),
+        ('GET', 'api-v1:idempotency.query'),
         ('POST', 'api-v1:device.update'),
         ('POST', 'api-v1:device.revoke'),
         ('POST', 'api-v1:device.roll'),
@@ -135,6 +138,7 @@ class PretixPosSecurityProfile(AllowListSecurityProfile):
     allowlist = (
         ('GET', 'api-v1:version'),
         ('GET', 'api-v1:device.eventselection'),
+        ('GET', 'api-v1:idempotency.query'),
         ('POST', 'api-v1:device.update'),
         ('POST', 'api-v1:device.revoke'),
         ('POST', 'api-v1:device.roll'),
