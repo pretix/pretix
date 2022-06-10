@@ -226,11 +226,13 @@ class CheckInListBulkActionView(CheckInListQueryMixin, EventPermissionRequiredMi
                         'web': True
                     }, user=request.user)
                     checkin_created.send(op.order.event, checkin=ci)
-            return 'ok', request.POST.get('returnquery')
+            return 'checked-out' if t == Checkin.TYPE_EXIT else 'checked-in', request.POST.get('returnquery')
 
     def get_success_message(self, value):
         if value[0] == 'reverted':
             return _('The selected check-ins have been reverted.')
+        elif value[0] == 'checked-out':
+            return _('The selected tickets have been marked as checked out.')
         else:
             return _('The selected tickets have been marked as checked in.')
 
