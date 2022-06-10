@@ -227,6 +227,108 @@ Endpoints
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer or event or exhibitor does not exist **or** you have no permission to view it.
 
+.. http:get:: /api/v1/organizers/(organizer)/events/(event)/exhibitors/(id)/vouchers/
+
+   Returns a list of all vouchers connected to an exhibitor. The response contains the same data as described in
+   :ref:`rest-vouchers`.
+
+   **Example request**:
+
+   .. sourcecode:: http
+
+      GET /api/v1/organizers/bigevents/events/sampleconf/exhibitors/1/vouchers/ HTTP/1.1
+      Host: pretix.eu
+      Accept: application/json, text/javascript
+
+   **Example response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 200 OK
+      Vary: Accept
+      Content-Type: application/json
+
+      {
+        "count": 1,
+        "next": null,
+        "previous": null,
+        "results": [
+          {
+            "id": 1,
+            "code": "43K6LKM37FBVR2YG",
+            "max_usages": 1,
+            "redeemed": 0,
+            "valid_until": null,
+            "block_quota": false,
+            "allow_ignore_quota": false,
+            "price_mode": "set",
+            "value": "12.00",
+            "item": 1,
+            "variation": null,
+            "quota": null,
+            "tag": "testvoucher",
+            "comment": "",
+            "seat": null,
+            "subevent": null
+          }
+        ]
+      }
+
+   :query page: The page number in case of a multi-page result set, default is 1
+   :param organizer: The ``slug`` field of a valid organizer
+   :param event: The ``slug`` field of the event to fetch
+   :param id: The ``id`` field of the exhibitor to fetch
+   :statuscode 200: no error
+   :statuscode 401: Authentication failure
+   :statuscode 403: The requested organizer or event or exhibitor does not exist **or** you have no permission to view it.
+
+.. http:post:: /api/v1/organizers/(organizer)/events/(event)/exhibitors/(id)/vouchers/attach/
+
+   Attaches an **existing** voucher to an exhibitor. You need to send either the ``id`` **or** the ``code`` field of
+   the voucher.
+
+   **Example request**:
+
+   .. sourcecode:: http
+
+      POST /api/v1/organizers/bigevents/events/sampleconf/exhibitors/1/vouchers/attach/ HTTP/1.1
+      Host: pretix.eu
+      Accept: application/json, text/javascript
+
+     {
+       "id": 15
+     }
+
+   **Example request**:
+
+   .. sourcecode:: http
+
+      POST /api/v1/organizers/bigevents/events/sampleconf/exhibitors/1/vouchers/attach/ HTTP/1.1
+      Host: pretix.eu
+      Accept: application/json, text/javascript
+
+     {
+       "code": "43K6LKM37FBVR2YG"
+     }
+
+   **Example response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 200 OK
+      Vary: Accept
+      Content-Type: application/json
+
+      {}
+
+   :param organizer: The ``slug`` field of a valid organizer
+   :param event: The ``slug`` field of the event to use
+   :param id: The ``id`` field of the exhibitor to use
+   :statuscode 200: no error
+   :statuscode 400: Invalid data sent, e.g. voucher does not exist
+   :statuscode 401: Authentication failure
+   :statuscode 403: The requested organizer or event or exhibitor does not exist **or** you have no permission to view it.
+
 .. http:post:: /api/v1/organizers/(organizer)/events/(event)/exhibitors/
 
    Create a new exhibitor.
