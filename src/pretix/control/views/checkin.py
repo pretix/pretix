@@ -430,9 +430,9 @@ class CheckinListView(EventPermissionRequiredMixin, PaginationMixin, ListView):
         qs = Checkin.all.filter(
             list__event=self.request.event,
         ).select_related(
-            'position', 'position', 'position__item', 'position__variation', 'position__subevent'
+            'position', 'position__order', 'position__item', 'position__variation', 'position__subevent'
         ).prefetch_related(
-            'list', 'gate'
+            'list', 'gate', 'device'
         )
         if self.filter_form.is_valid():
             qs = self.filter_form.filter_qs(qs)
