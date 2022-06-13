@@ -199,10 +199,9 @@ class CheckInListBulkActionView(CheckInListQueryMixin, EventPermissionRequiredMi
 
             return 'reverted', request.POST.get('returnquery')
         else:
+            t = Checkin.TYPE_EXIT if request.POST.get('checkout') == 'true' else Checkin.TYPE_ENTRY
             for op in positions:
                 if op.order.status == Order.STATUS_PAID or (self.list.include_pending and op.order.status == Order.STATUS_PENDING):
-                    t = Checkin.TYPE_EXIT if request.POST.get('checkout') == 'true' else Checkin.TYPE_ENTRY
-
                     lci = op.checkins.filter(list=self.list).first()
                     if self.list.allow_multiple_entries or t != Checkin.TYPE_ENTRY or (lci and lci.type != Checkin.TYPE_ENTRY):
                         ci = Checkin.objects.create(position=op, list=self.list, datetime=now(), type=t)
