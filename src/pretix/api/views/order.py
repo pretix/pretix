@@ -27,7 +27,9 @@ from decimal import Decimal
 import django_filters
 import pytz
 from django.db import transaction
-from django.db.models import Exists, F, OuterRef, Prefetch, Q, Subquery
+from django.db.models import (
+    Exists, F, OuterRef, Prefetch, Q, Subquery, prefetch_related_objects,
+)
 from django.db.models.functions import Coalesce, Concat
 from django.http import FileResponse, HttpResponse
 from django.shortcuts import get_object_or_404
@@ -202,36 +204,34 @@ class OrderViewSet(viewsets.ModelViewSet):
         if 'invoice_address' not in self.request.GET.getlist('exclude'):
             qs = qs.select_related('invoice_address')
 
-        if self.request.query_params.get('include_canceled_positions', 'false') == 'true':
+        qs = qs.prefetch_related(self._positions_prefetch(self.request))
+        return qs
+
+    def _positions_prefetch(self, request):
+        if request.query_params.get('include_canceled_positions', 'false') == 'true':
             opq = OrderPosition.all
         else:
             opq = OrderPosition.objects
-        if self.request.query_params.get('pdf_data', 'false') == 'true':
-            qs = qs.prefetch_related(
-                Prefetch(
-                    'positions',
-                    opq.all().prefetch_related(
-                        Prefetch('checkins', queryset=Checkin.objects.all()),
-                        'item', 'variation', 'answers', 'answers__options', 'answers__question',
-                        'item__category', 'addon_to', 'seat',
-                        Prefetch('addons', opq.select_related('item', 'variation', 'seat'))
-                    )
+        if request.query_params.get('pdf_data', 'false') == 'true':
+            return Prefetch(
+                'positions',
+                opq.all().prefetch_related(
+                    Prefetch('checkins', queryset=Checkin.objects.all()),
+                    'item', 'variation', 'answers', 'answers__options', 'answers__question',
+                    'item__category', 'addon_to', 'seat',
+                    Prefetch('addons', opq.select_related('item', 'variation', 'seat'))
                 )
             )
         else:
-            qs = qs.prefetch_related(
-                Prefetch(
-                    'positions',
-                    opq.all().prefetch_related(
-                        Prefetch('checkins', queryset=Checkin.objects.all()),
-                        'item', 'variation',
-                        Prefetch('answers', queryset=QuestionAnswer.objects.prefetch_related('options', 'question').order_by('question__position')),
-                        'seat',
-                    )
+            return Prefetch(
+                'positions',
+                opq.all().prefetch_related(
+                    Prefetch('checkins', queryset=Checkin.objects.all()),
+                    'item', 'variation',
+                    Prefetch('answers', queryset=QuestionAnswer.objects.prefetch_related('options', 'question').order_by('question__position')),
+                    'seat',
                 )
             )
-
-        return qs
 
     def _get_output_provider(self, identifier):
         responses = register_ticket_outputs.send(self.request.event)
@@ -619,6 +619,7 @@ class OrderViewSet(viewsets.ModelViewSet):
                 serializer = SimulatedOrderSerializer(order, context=serializer.context)
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
             else:
+                prefetch_related_objects([order], self._positions_prefetch(request))
                 serializer = OrderSerializer(order, context=serializer.context)
 
             order.log_action(
