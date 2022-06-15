@@ -650,11 +650,22 @@ $(function () {
     // Lightbox
     lightbox.init();
 
-    // free-range price input auto-check checkbox
+    // free-range price input auto-check checkbox/set count-input to 1 if 0
     $("[data-checked-onchange]").each(function() {
-        var checkbox = this;
+        var countInput = this;
         $("#" + this.getAttribute("data-checked-onchange")).on("change", function() {
-            checkbox.checked = true;
+            if (countInput.type === "checkbox") {
+                if (countInput.checked) return;
+                countInput.checked = true;
+            }
+            else if (countInput.type === "number" && !countInput.valueAsNumber) {
+                countInput.value = "1";
+            }
+            else {
+                return;
+            }
+            // in case of a change, trigger event
+            $(countInput).trigger("change");
         });
     });
 });

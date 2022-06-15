@@ -192,6 +192,9 @@
                                         {% else %}
                                             <input type="number" class="form-control input-item-count" placeholder="0" min="0"
                                                    {% if not ev.presale_is_running %}disabled{% endif %}
+                                                    {% if item.free_price %}
+                                                       data-checked-onchange="price-variation-{{ item.pk }}-{{ var.pk }}"
+                                                    {% endif %}
                                                    max="{{ var.order_max }}"
                                                    id="variation_{{ item.id }}_{{ var.id }}"
                                                    name="variation_{{ item.id }}_{{ var.id }}"
@@ -321,6 +324,9 @@
                                 <input type="number" class="form-control input-item-count" placeholder="0" min="0"
                                        {% if not ev.presale_is_running %}disabled{% endif %}
                                        {% if itemnum == 1 %}value="1"{% endif %}
+                                        {% if item.free_price %}
+                                           data-checked-onchange="price-item-{{ item.pk }}"
+                                        {% endif %}
                                        max="{{ item.order_max }}"
                                        name="item_{{ item.id }}"
                                        id="item_{{ item.id }}"

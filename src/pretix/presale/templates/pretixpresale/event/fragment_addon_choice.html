@@ -131,6 +131,7 @@
                                         <div class="input-group input-group-price">
                                             <span class="input-group-addon">{{ event.currency }}</span>
                                             <input type="number" class="form-control input-item-price"
+                                                    id="price-variation-{{form.pos.pk}}-{{ item.pk }}-{{ var.pk }}"
                                                     placeholder="0"
                                                     min="{% if event.settings.display_net_prices %}{{ var.display_price.net|money_numberfield:event.currency }}{% else %}{{ var.display_price.gross|money_numberfield:event.currency }}{% endif %}"
                                                     name="cp_{{ form.pos.pk }}_variation_{{ item.id }}_{{ var.id }}_price"
@@ -173,6 +174,9 @@
                                             <label class="item-checkbox-label">
                                                 <input type="checkbox" value="1"
                                                         {% if var.initial %}checked="checked"{% endif %}
+                                                        {% if item.free_price %}
+                                                           data-checked-onchange="price-variation-{{form.pos.pk}}-{{ item.pk }}-{{ var.pk }}"
+                                                        {% endif %}
                                                         id="cp_{{ form.pos.pk }}_variation_{{ item.id }}_{{ var.id }}"
                                                         name="cp_{{ form.pos.pk }}_variation_{{ item.id }}_{{ var.id }}"
                                                         data-exclusive-prefix="cp_{{ form.pos.pk }}_variation_{{ item.id }}_"
@@ -181,6 +185,9 @@
                                         {% else %}
                                             <input type="number" class="form-control input-item-count" placeholder="0" min="0"
                                                     {% if var.initial %}value="{{ var.initial }}"{% endif %}
+                                                    {% if item.free_price %}
+                                                       data-checked-onchange="price-variation-{{form.pos.pk}}-{{ item.pk }}-{{ var.pk }}"
+                                                    {% endif %}
                                                     max="{{ c.max_count }}"
                                                     id="cp_{{ form.pos.pk }}_variation_{{ item.id }}_{{ var.id }}"
                                                     name="cp_{{ form.pos.pk }}_variation_{{ item.id }}_{{ var.id }}"
@@ -245,6 +252,7 @@
                                 <div class="input-group input-group-price">
                                     <span class="input-group-addon">{{ event.currency }}</span>
                                     <input type="number" class="form-control input-item-price" placeholder="0"
+                                            id="price-item-{{ form.pos.pk }}-{{ item.pk }}"
                                             min="{% if event.settings.display_net_prices %}{{ item.display_price.net|money_numberfield:event.currency }}{% else %}{{ item.display_price.gross|money_numberfield:event.currency }}{% endif %}"
                                             name="cp_{{ form.pos.pk }}_item_{{ item.id }}_price"
                                             title="{% blocktrans trimmed with item=item.name %}Modify price for {{ item }}{% endblocktrans %}"
@@ -285,6 +293,9 @@
                             {% if c.max_count == 1 or not c.multi_allowed %}
                                 <label class="item-checkbox-label">
                                     <input type="checkbox" value="1"
+                                            {% if item.free_price %}
+                                               data-checked-onchange="price-item-{{ form.pos.pk }}-{{ item.pk }}"
+                                            {% endif %}
                                             {% if c.max_count == 1 and c.min_count == 1 and c.items|length == 1 %}
                                                 checked="checked"
                                                 required="required"
@@ -298,6 +309,9 @@
                                 </label>
                             {% else %}
                                 <input type="number" class="form-control input-item-count" placeholder="0" min="0"
+                                        {% if item.free_price %}
+                                           data-checked-onchange="price-item-{{ form.pos.pk }}-{{ item.pk }}"
+                                        {% endif %}
                                         max="{{ c.max_count }}"
                                         {% if item.initial %}value="{{ item.initial }}"{% endif %}
                                         name="cp_{{ form.pos.pk }}_item_{{ item.id }}"
