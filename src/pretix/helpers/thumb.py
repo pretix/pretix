@@ -184,7 +184,7 @@ def create_thumbnail(sourcename, size):
         quality = None
         image_out.info = image.info
         save_kwargs = {
-            'append_images': frames[1:] if len(frames) > 1 else [],
+            'append_images': frames[1:],
             'loop': image.info.get('loop', 0),
             'save_all': True,
         }
