@@ -179,8 +179,8 @@ def create_thumbnail(sourcename, size):
         # Yields better file sizes for photos
         target_ext = 'jpeg'
         quality = 95
-    elif source.name.lower().endswith('.gif'):
-        target_ext = 'gif'
+    elif source.name.lower().endswith('.gif') or source.name.lower().endswith('.png'):
+        target_ext = source.name.lower()[-3:]
         quality = None
         image_out.info = image.info
         save_kwargs = {
