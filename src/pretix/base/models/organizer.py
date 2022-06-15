@@ -474,7 +474,7 @@ class OrganizerFooterLink(models.Model):
     organizer = models.ForeignKey('Organizer', on_delete=models.CASCADE, related_name='footer_links')
     label = I18nCharField(
         max_length=200,
-        verbose_name=_("Link description"),
+        verbose_name=_("Link text"),
     )
     url = models.URLField(
         verbose_name=_("Link destination"),
