@@ -654,9 +654,18 @@ $(function () {
     $("[data-checked-onchange]").each(function() {
         var countInput = this;
         $("#" + this.getAttribute("data-checked-onchange")).on("change", function() {
-            if (countInput.type === "checkbox") countInput.checked = true;
-            else if (countInput.value === 0) countInput.value = 1;
-            $(countInput).trigger("change")
+            if (countInput.type === "checkbox") {
+                if (countInput.checked) return;
+                countInput.checked = true;
+            }
+            else if (countInput.type === "number" && !countInput.valueAsNumber) {
+                countInput.value = "1";
+            }
+            else {
+                return;
+            }
+            // in case of a change, trigger event
+            $(countInput).trigger("change");
         });
     });
 });
