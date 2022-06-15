@@ -19,6 +19,7 @@ If you want to **create** a plugin, please go to the
    certificates
    digital
    exhibitors
+   shipping
    imported_secrets
    webinar
    presale-saml
