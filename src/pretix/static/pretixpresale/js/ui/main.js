@@ -650,11 +650,12 @@ $(function () {
     // Lightbox
     lightbox.init();
 
-    // free-range price input auto-check checkbox
+    // free-range price input auto-check checkbox/set count-input to 1 if 0
     $("[data-checked-onchange]").each(function() {
         var countInput = this;
         $("#" + this.getAttribute("data-checked-onchange")).on("change", function() {
             if (countInput.type === "checkbox") countInput.checked = true;
+            else if (countInput.value === 0) countInput.value = 1;
             $(countInput).trigger("change")
         });
     });
