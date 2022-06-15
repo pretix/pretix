@@ -41,7 +41,9 @@ from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.core.validators import validate_email
 from django.db.models import Prefetch, Q, prefetch_related_objects
-from django.forms import CheckboxSelectMultiple, formset_factory
+from django.forms import (
+    CheckboxSelectMultiple, formset_factory, inlineformset_factory,
+)
 from django.urls import reverse
 from django.utils.functional import cached_property
 from django.utils.html import escape
@@ -58,7 +60,7 @@ from pretix.base.channels import get_all_sales_channels
 from pretix.base.email import get_available_placeholders
 from pretix.base.forms import I18nModelForm, PlaceholderValidator, SettingsForm
 from pretix.base.models import Event, Organizer, TaxRule, Team
-from pretix.base.models.event import EventMetaValue, SubEvent
+from pretix.base.models.event import EventFooterLink, EventMetaValue, SubEvent
 from pretix.base.reldate import RelativeDateField, RelativeDateTimeField
 from pretix.base.settings import (
     PERSON_NAME_SCHEMES, PERSON_NAME_TITLE_GROUPS, validate_event_settings,
@@ -1483,4 +1485,26 @@ ConfirmTextFormset = formset_factory(
     ConfirmTextForm,
     formset=BaseConfirmTextFormSet,
     can_order=True, can_delete=True, extra=0
+)
+
+
+class EventFooterLinkForm(I18nModelForm):
+    class Meta:
+        model = EventFooterLink
+        fields = ('label', 'url')
+
+
+class BaseEventFooterLinkFormSet(I18nFormSetMixin, forms.BaseInlineFormSet):
+    def __init__(self, *args, **kwargs):
+        event = kwargs.pop('event', None)
+        if event:
+            kwargs['locales'] = event.settings.get('locales')
+        super().__init__(*args, **kwargs)
+
+
+EventFooterLinkFormset = inlineformset_factory(
+    Event, EventFooterLink,
+    EventFooterLinkForm,
+    formset=BaseEventFooterLinkFormSet,
+    can_order=False, can_delete=True, extra=0
 )

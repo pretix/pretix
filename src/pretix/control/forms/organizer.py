@@ -39,12 +39,13 @@ from django import forms
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db.models import Q
+from django.forms import inlineformset_factory
 from django.forms.utils import ErrorDict
 from django.utils.crypto import get_random_string
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _, pgettext_lazy
 from django_scopes.forms import SafeModelMultipleChoiceField
-from i18nfield.forms import I18nFormField, I18nTextarea
+from i18nfield.forms import I18nFormField, I18nFormSetMixin, I18nTextarea
 from phonenumber_field.formfields import PhoneNumberField
 from pytz import common_timezones
 
@@ -60,6 +61,7 @@ from pretix.base.models import (
     Customer, Device, EventMetaProperty, Gate, GiftCard, Membership,
     MembershipType, Organizer, Team,
 )
+from pretix.base.models.organizer import OrganizerFooterLink
 from pretix.base.settings import PERSON_NAME_SCHEMES, PERSON_NAME_TITLE_GROUPS
 from pretix.control.forms import ExtFileField, SplitDateTimeField
 from pretix.control.forms.event import (
@@ -682,3 +684,25 @@ class MembershipUpdateForm(forms.ModelForm):
             titles=self.instance.customer.organizer.settings.name_scheme_titles,
             label=_('Attendee name'),
         )
+
+
+class OrganizerFooterLinkForm(I18nModelForm):
+    class Meta:
+        model = OrganizerFooterLink
+        fields = ('label', 'url')
+
+
+class BaseOrganizerFooterLinkFormSet(I18nFormSetMixin, forms.BaseInlineFormSet):
+    def __init__(self, *args, **kwargs):
+        organizer = kwargs.pop('organizer', None)
+        if organizer:
+            kwargs['locales'] = organizer.settings.get('locales')
+        super().__init__(*args, **kwargs)
+
+
+OrganizerFooterLinkFormset = inlineformset_factory(
+    Organizer, OrganizerFooterLink,
+    OrganizerFooterLinkForm,
+    formset=BaseOrganizerFooterLinkFormSet,
+    can_order=False, can_delete=True, extra=0
+)
