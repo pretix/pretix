@@ -25,7 +25,7 @@ from io import BytesIO
 
 from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
-from PIL import Image, ImageOps
+from PIL import Image, ImageOps, ImageSequence
 from PIL.Image import Resampling
 
 from pretix.helpers.models import Thumbnail
@@ -171,12 +171,23 @@ def create_thumbnail(sourcename, size):
     except:
         raise ThumbnailError('Could not load image')
 
-    image = resize_image(image, size)
+    frames = [resize_image(frame, size) for frame in ImageSequence.Iterator(image)]
+    image_out = frames[0]
+    save_kwargs = {}
 
     if source.name.lower().endswith('.jpg') or source.name.lower().endswith('.jpeg'):
         # Yields better file sizes for photos
         target_ext = 'jpeg'
         quality = 95
+    elif source.name.lower().endswith('.gif'):
+        target_ext = 'gif'
+        quality = None
+        image_out.info = image.info
+        save_kwargs = {
+            'append_images': frames[1:] if len(frames) > 1 else [],
+            'loop': image.info.get('loop', 0),
+            'save_all': True,
+        }
     else:
         target_ext = 'png'
         quality = None
@@ -184,11 +195,11 @@ def create_thumbnail(sourcename, size):
     checksum = hashlib.md5(image.tobytes()).hexdigest()
     name = checksum + '.' + size.replace('^', 'c') + '.' + target_ext
     buffer = BytesIO()
-    if image.mode == "P" and source.name.lower().endswith('.png'):
-        image = image.convert('RGBA')
-    if image.mode not in ("1", "L", "RGB", "RGBA"):
-        image = image.convert('RGB')
-    image.save(fp=buffer, format=target_ext.upper(), quality=quality)
+    if image_out.mode == "P" and source.name.lower().endswith('.png'):
+        image_out = image_out.convert('RGBA')
+    if image_out.mode not in ("1", "L", "RGB", "RGBA"):
+        image_out = image_out.convert('RGB')
+    image_out.save(fp=buffer, format=target_ext.upper(), quality=quality, **save_kwargs)
     imgfile = ContentFile(buffer.getvalue())
 
     t = Thumbnail.objects.create(source=sourcename, size=size)
