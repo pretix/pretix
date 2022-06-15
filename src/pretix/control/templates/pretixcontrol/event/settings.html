@@ -235,19 +235,6 @@
                 {% bootstrap_field sform.display_net_prices layout="control" %}
                 {% bootstrap_field sform.show_variations_expanded layout="control" %}
                 {% bootstrap_field sform.hide_sold_out layout="control" %}
-                {% url "control:organizer.edit" organizer=request.organizer.slug as org_url %}
-                {% propagated request.event org_url "meta_noindex" %}
-                    {% bootstrap_field sform.meta_noindex layout="control" %}
-                {% endpropagated %}
-                {% if sform.frontpage_subevent_ordering %}
-                    {% bootstrap_field sform.frontpage_subevent_ordering layout="control" %}
-                {% endif %}
-                {% if sform.event_list_type %}
-                    {% bootstrap_field sform.event_list_type layout="control" %}
-                {% endif %}
-                {% if sform.event_list_available_only %}
-                    {% bootstrap_field sform.event_list_available_only layout="control" %}
-                {% endif %}
 
                 <div class="form-group">
                     <label class="col-md-3 control-label">
@@ -315,6 +302,21 @@
                         </div>
                     </div>
                 </div>
+                
+                {% if sform.frontpage_subevent_ordering %}
+                    {% bootstrap_field sform.frontpage_subevent_ordering layout="control" %}
+                {% endif %}
+                {% if sform.event_list_type %}
+                    {% bootstrap_field sform.event_list_type layout="control" %}
+                {% endif %}
+                {% if sform.event_list_available_only %}
+                    {% bootstrap_field sform.event_list_available_only layout="control" %}
+                {% endif %}
+                
+                {% url "control:organizer.edit" organizer=request.organizer.slug as org_url %}
+                {% propagated request.event org_url "meta_noindex" %}
+                    {% bootstrap_field sform.meta_noindex layout="control" %}
+                {% endpropagated %}
             </fieldset>
             <fieldset>
                 <legend>{% trans "Cart" %}</legend>
