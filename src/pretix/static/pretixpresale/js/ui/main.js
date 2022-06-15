@@ -652,9 +652,10 @@ $(function () {
 
     // free-range price input auto-check checkbox
     $("[data-checked-onchange]").each(function() {
-        var checkbox = this;
+        var countInput = this;
         $("#" + this.getAttribute("data-checked-onchange")).on("change", function() {
-            checkbox.checked = true;
+            if (countInput.type === "checkbox") countInput.checked = true;
+            $(countInput).trigger("change")
         });
     });
 });
