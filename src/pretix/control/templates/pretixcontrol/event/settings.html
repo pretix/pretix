@@ -69,7 +69,8 @@
                     </label>
                     <div class="col-md-9">
                         <div class="checkbox">
-                            <label><input type="checkbox" checked="checked" disabled="disabled"> {% trans "Ask and require input" %}</label>
+                            <label><input type="checkbox" checked="checked"
+                                          disabled="disabled"> {% trans "Ask and require input" %}</label>
                         </div>
                     </div>
                 </div>
@@ -81,7 +82,8 @@
                     </label>
                     <div class="col-md-9 static-form-row">
                         <p>
-                            <a href="{% url "control:event.settings.invoice" event=request.event.slug organizer=request.organizer.slug %}#tab-0-1-open" target="_blank">
+                            <a href="{% url "control:event.settings.invoice" event=request.event.slug organizer=request.organizer.slug %}#tab-0-1-open"
+                               target="_blank">
                                 {% trans "See invoice settings" %}
                             </a>
                         </p>
@@ -101,7 +103,8 @@
                     </label>
                     <div class="col-md-9 static-form-row">
                         <p>
-                            <a href="{% url "control:event.items.questions" event=request.event.slug organizer=request.organizer.slug %}" target="_blank">
+                            <a href="{% url "control:event.items.questions" event=request.event.slug organizer=request.organizer.slug %}"
+                               target="_blank">
                                 {% trans "Manage questions" %}
                             </a>
                         </p>
@@ -232,10 +235,74 @@
                 {% bootstrap_field sform.display_net_prices layout="control" %}
                 {% bootstrap_field sform.show_variations_expanded layout="control" %}
                 {% bootstrap_field sform.hide_sold_out layout="control" %}
-                {% url "control:organizer.edit" organizer=request.organizer.slug as org_url %}
-                {% propagated request.event org_url "meta_noindex" %}
-                    {% bootstrap_field sform.meta_noindex layout="control" %}
-                {% endpropagated %}
+
+                <div class="form-group">
+                    <label class="col-md-3 control-label">
+                        {% trans "Footer links" %}<br>
+                        <span class="optional">{% trans "Optional" %}</span>
+                    </label>
+                    <div class="col-md-9">
+                        <p class="help-block">
+                            {% blocktrans trimmed %}
+                                These links will be shown in the footer of your ticket shop. You could
+                                for example link your terms of service here. Your contact address, imprint, and privacy
+                                policy will be linked automatically (if you configured them), so you do not need to add
+                                them here.
+                            {% endblocktrans %}
+                        </p>
+                        <div class="formset" data-formset data-formset-prefix="{{ footer_links_formset.prefix }}">
+                            {{ footer_links_formset.management_form }}
+                            {% bootstrap_formset_errors footer_links_formset %}
+                            <div data-formset-body>
+                                {% for form in footer_links_formset %}
+                                    <div class="row formset-row" data-formset-form>
+                                        <div class="sr-only">
+                                            {{ form.id }}
+                                            {% bootstrap_field form.DELETE form_group_class="" layout="inline" %}
+                                        </div>
+                                        <div class="col-md-5">
+                                            {% bootstrap_form_errors form %}
+                                            {% bootstrap_field form.label layout='inline' form_group_class="" %}
+                                        </div>
+                                        <div class="col-md-5">
+                                            {% bootstrap_field form.url layout='inline' form_group_class="" %}
+                                        </div>
+                                        <div class="col-md-2 text-right flip">
+                                            <button type="button" class="btn btn-danger" data-formset-delete-button>
+                                                <i class="fa fa-trash"></i></button>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            <script type="form-template" data-formset-empty-form>
+                                {% escapescript %}
+                                    <div class="row formset-row" data-formset-form>
+                                        <div class="sr-only">
+                                            {{ footer_links_formset.empty_form.id }}
+                                            {% bootstrap_field footer_links_formset.empty_form.DELETE form_group_class="" layout="inline" %}
+                                        </div>
+                                        <div class="col-md-5">
+                                            {% bootstrap_field footer_links_formset.empty_form.label layout='inline' form_group_class="" %}
+                                        </div>
+                                        <div class="col-md-5">
+                                            {% bootstrap_field footer_links_formset.empty_form.url layout='inline' form_group_class="" %}
+                                        </div>
+                                        <div class="col-md-2 text-right flip">
+
+                                            <button type="button" class="btn btn-danger" data-formset-delete-button>
+                                                <i class="fa fa-trash"></i></button>
+                                        </div>
+                                    </div>
+                                {% endescapescript %}
+                            </script>
+                            <p>
+                                <button type="button" class="btn btn-default" data-formset-add>
+                                    <i class="fa fa-plus"></i> {% trans "Add link" %}</button>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
                 {% if sform.frontpage_subevent_ordering %}
                     {% bootstrap_field sform.frontpage_subevent_ordering layout="control" %}
                 {% endif %}
@@ -245,6 +312,11 @@
                 {% if sform.event_list_available_only %}
                     {% bootstrap_field sform.event_list_available_only layout="control" %}
                 {% endif %}
+                
+                {% url "control:organizer.edit" organizer=request.organizer.slug as org_url %}
+                {% propagated request.event org_url "meta_noindex" %}
+                    {% bootstrap_field sform.meta_noindex layout="control" %}
+                {% endpropagated %}
             </fieldset>
             <fieldset>
                 <legend>{% trans "Cart" %}</legend>
@@ -262,13 +334,15 @@
                 </div>
                 <div class="alert alert-info">
                     {% blocktrans trimmed %}
-                        The waiting list determines availability mainly based on quotas. If you use a seating plan and your
+                        The waiting list determines availability mainly based on quotas. If you use a seating plan and
+                        your
                         number of available seats is less than the available quota, you might run into situations where
                         people are sent an email from the waiting list but still are unable to book a seat.
                     {% endblocktrans %}
                     <strong>
                         {% blocktrans trimmed %}
-                            Specifically, this means the waiting list is not safe to use together with the minimum distance
+                            Specifically, this means the waiting list is not safe to use together with the minimum
+                            distance
                             feature of our seating plan module.
                         {% endblocktrans %}
                     </strong>

@@ -718,6 +718,11 @@ class Event(EventMixin, LoggedModel):
         self.save()
         self.log_action('pretix.object.cloned', data={'source': other.slug, 'source_id': other.pk})
 
+        for fl in EventFooterLink.objects.filter(event=other):
+            fl.pk = None
+            fl.event = self
+            fl.save(force_insert=True)
+
         tax_map = {}
         for t in other.tax_rules.all():
             tax_map[t.pk] = t
@@ -1612,3 +1617,25 @@ class SubEventMetaValue(LoggedModel):
         super().save(*args, **kwargs)
         if self.subevent:
             self.subevent.event.cache.clear()
+
+
+class EventFooterLink(models.Model):
+    """
+    A footer link assigned to an event.
+    """
+    event = models.ForeignKey('Event', on_delete=models.CASCADE, related_name='footer_links')
+    label = I18nCharField(
+        max_length=200,
+        verbose_name=_("Link text"),
+    )
+    url = models.URLField(
+        verbose_name=_("Link URL"),
+    )
+
+    def delete(self, *args, **kwargs):
+        super().delete(*args, **kwargs)
+        self.event.cache.clear()
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        self.event.cache.clear()
