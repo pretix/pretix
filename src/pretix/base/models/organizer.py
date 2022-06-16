@@ -477,7 +477,7 @@ class OrganizerFooterLink(models.Model):
         verbose_name=_("Link text"),
     )
     url = models.URLField(
-        verbose_name=_("Link destination"),
+        verbose_name=_("Link URL"),
     )
 
     def delete(self, *args, **kwargs):
