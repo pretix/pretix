@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-06-09 15:47+0000\n"
-"PO-Revision-Date: 2022-06-19 17:54+0000\n"
+"PO-Revision-Date: 2022-06-19 18:02+0000\n"
 "Last-Translator: Mathias Moen <mathiamo@gmail.com>\n"
 "Language-Team: Norwegian Bokmål <https://translate.pretix.eu/projects/pretix/"
 "pretix/nb_NO/>\n"
@@ -280,12 +280,12 @@ msgstr "Bestillingsinformasjon endret"
 
 #: pretix/api/webhooks.py:228 pretix/base/notifications.py:275
 msgid "Order contact address changed"
-msgstr "Bestillingskontaktadresse endret"
+msgstr "Kontaktadresse for bestilling endret"
 
 #: pretix/api/webhooks.py:232 pretix/base/notifications.py:281
 #: pretix/control/templates/pretixcontrol/event/mail.html:102
 msgid "Order changed"
-msgstr "Bestillingen endret"
+msgstr "Bestilling endret"
 
 #: pretix/api/webhooks.py:236 pretix/base/notifications.py:293
 msgid "External refund of payment"
@@ -316,15 +316,13 @@ msgid "Event details changed"
 msgstr "Eventdetaljer endret"
 
 #: pretix/api/webhooks.py:264
-#, fuzzy
-#| msgid "Event start date"
 msgid "Event deleted"
-msgstr "Event startdato"
+msgstr "Arrangement slettet"
 
 #: pretix/api/webhooks.py:268
 msgctxt "subevent"
 msgid "Event series date added"
-msgstr ""
+msgstr "Arrangementsserie-dato lagt til"
 
 #: pretix/api/webhooks.py:272
 msgctxt "subevent"
