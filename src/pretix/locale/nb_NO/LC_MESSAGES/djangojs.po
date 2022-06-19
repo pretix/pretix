@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-06-09 15:47+0000\n"
-"PO-Revision-Date: 2022-06-19 17:42+0000\n"
+"PO-Revision-Date: 2022-06-20 02:00+0000\n"
 "Last-Translator: Mathias Moen <mathiamo@gmail.com>\n"
 "Language-Team: Norwegian Bokmål <https://translate.pretix.eu/projects/pretix/"
 "pretix-js/nb_NO/>\n"
@@ -176,7 +176,7 @@ msgstr "Velg en innsjekkingsliste"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:31
 msgid "No active check-in lists found."
-msgstr "Ingen aktive innsjekkingslister"
+msgstr "Ingen aktive innsjekkingslister funnet."
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:32
 msgid "Switch check-in list"
@@ -334,7 +334,7 @@ msgstr ""
 #: pretix/static/pretixbase/js/asynctask.js:183
 #: pretix/static/pretixcontrol/js/ui/mail.js:24
 msgid "An error of type {code} occurred."
-msgstr "En feil oppsto: {code}"
+msgstr "En feil av type {code} oppsto."
 
 #: pretix/static/pretixbase/js/asynctask.js:93
 msgid ""
@@ -743,7 +743,7 @@ msgstr "Kjøp billetter"
 #: pretix/static/pretixpresale/js/widget/widget.js:35
 msgctxt "widget"
 msgid "The cart could not be created. Please try again later"
-msgstr "Handlekurven kunne ikke opprettes. Vennligst prøv igjen senere."
+msgstr "Handlekurven kunne ikke opprettes. Vennligst prøv igjen senere"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:36
 msgctxt "widget"
@@ -844,8 +844,6 @@ msgid "Open seat selection"
 msgstr "Åpne setevalg"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:56
-#, fuzzy
-#| msgid "Load more"
 msgctxt "widget"
 msgid "Load more"
 msgstr "Last mer"
