@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-06-09 15:47+0000\n"
 "PO-Revision-Date: 2022-06-19 17:54+0000\n"
-"Last-Translator: fyksen <fredrik@fyksen.me>\n"
+"Last-Translator: Mathias Moen <mathiamo@gmail.com>\n"
 "Language-Team: Norwegian Bokmål <https://translate.pretix.eu/projects/pretix/"
 "pretix/nb_NO/>\n"
 "Language: nb_NO\n"
@@ -185,9 +185,8 @@ msgstr ""
 "Spørmsmålet kan ikke avhenge av et spørsmål som er spurt når man sjekker inn."
 
 #: pretix/api/serializers/item.py:392 pretix/control/forms/item.py:119
-#, fuzzy
 msgid "Circular dependency between questions detected."
-msgstr "Circular dependency between questions detected."
+msgstr "Sirkulær avhengighet mellom spørsmål oppdaget."
 
 #: pretix/api/serializers/item.py:397 pretix/control/forms/item.py:128
 msgid "This type of question cannot be asked during check-in."
@@ -8024,10 +8023,8 @@ msgid "Secondary dialog text"
 msgstr ""
 
 #: pretix/base/settings.py:2651
-#, fuzzy
-#| msgid "Product"
 msgid "Privacy settings"
-msgstr "Produkt"
+msgstr "Personverninnstillinger"
 
 #: pretix/base/settings.py:2656
 msgid "Dialog title"
@@ -24824,7 +24821,7 @@ msgstr ""
 #: pretix/presale/views/customer.py:480
 #, python-brace-format
 msgid "Confirm email address for your account at {organizer}"
-msgstr ""
+msgstr "Bekreft e-post adresse for din konto hos {organizer}"
 
 #: pretix/presale/views/customer.py:487
 msgid ""
@@ -25116,11 +25113,12 @@ msgstr ""
 
 #: pretix/settings.py:854
 msgid "Write access"
-msgstr ""
+msgstr "Skriverettighet"
 
 #: pretix/settings.py:864
+#, fuzzy
 msgid "Kosovo"
-msgstr ""
+msgstr "Kosovo"
 
 #, fuzzy
 #~| msgid "Your changes have been saved."
