@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-06-09 15:47+0000\n"
 "PO-Revision-Date: 2022-06-20 02:00+0000\n"
-"Last-Translator: Mathias Moen <mathiamo@gmail.com>\n"
+"Last-Translator: fyksen <fredrik@fyksen.me>\n"
 "Language-Team: Norwegian Bokmål <https://translate.pretix.eu/projects/pretix/"
 "pretix-js/nb_NO/>\n"
 "Language: nb_NO\n"
@@ -738,7 +738,7 @@ msgstr ""
 #: pretix/static/pretixpresale/js/widget/widget.js:34
 msgctxt "widget"
 msgid "Open ticket shop"
-msgstr "Kjøp billetter"
+msgstr "Åpne billettbutikk"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:35
 msgctxt "widget"
