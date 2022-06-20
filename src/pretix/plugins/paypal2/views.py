@@ -197,7 +197,10 @@ def isu_return(request, *args, **kwargs):
     getparams = ['merchantId', 'merchantIdInPayPal', 'permissionsGranted', 'accountStatus', 'consentStatus', 'productIntentID', 'isEmailConfirmed']
     sessionparams = ['payment_paypal_isu_event', 'payment_paypal_isu_tracking_id']
     if not any(k in request.GET for k in getparams) or not any(k in request.session for k in sessionparams):
-        messages.error(request, _('An error occurred during connecting with PayPal, please try again.'))
+        messages.error(request, _('An error occurred returning from PayPal: request parameters missing. Please try again.'))
+        missing_getparams = set(getparams) - set(request.GET)
+        missing_sessionparams = set(sessionparams) - set(request.session)
+        logger.exception('PayPal2 - Missing params in GET {} and/or Session {}'.format(missing_getparams, missing_sessionparams))
         return redirect(reverse('control:index'))
 
     event = get_object_or_404(Event, pk=request.session['payment_paypal_isu_event'])
@@ -222,17 +225,21 @@ def isu_return(request, *args, **kwargs):
         response = prov.client.execute(req)
     except IOError as e:
         messages.error(request, _('An error occurred during connecting with PayPal, please try again.'))
-        logger.exception('PayPal PartnersMerchantIntegrationsGetRequest: {}'.format(str(e)))
+        logger.exception('PayPal2 - PartnersMerchantIntegrationsGetRequest: {}'.format(str(e)))
     else:
         params = ['merchant_id', 'tracking_id', 'payments_receivable', 'primary_email_confirmed']
         if not any(k in response.result for k in params):
             if 'message' in response.result:
                 messages.error(request, response.result.message)
+                logger.exception('PayPal2 - Error-message in response: {}'.format(response.result.message))
             else:
-                messages.error(request, _('An error occurred during connecting with PayPal, please try again.'))
+                messages.error(request, _('An error occurred returning from PayPal: result parameters missing. Please try again.'))
+                missing_params = set(params) - set(response.result)
+                logger.exception('PayPal2 - Missing params {} in response.result'.format(missing_params))
         else:
             if response.result.tracking_id != request.session['payment_paypal_isu_tracking_id']:
-                messages.error(request, _('An error occurred during connecting with PayPal, please try again.'))
+                messages.error(request, _('An error occurred returning from PayPal: session parameter not matching. Please try again.'))
+                logger.exception('PayPal2 - tracking_id not matching session.payment_paypal_isu_tracking_id')
             else:
                 if request.GET.get("isEmailConfirmed") == "false":  # Yes - literal!
                     messages.warning(
