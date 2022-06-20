@@ -2317,6 +2317,7 @@ class OrderChangeManager:
                 self._check_and_lock_memberships()
                 try:
                     self._perform_operations()
+                    self.order.refresh_from_db()
                 except TaxRule.SaleNotAllowed:
                     raise OrderError(self.error_messages['tax_rule_country_blocked'])
             self._recalculate_total_and_payment_fee()
