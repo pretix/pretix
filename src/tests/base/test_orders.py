@@ -1388,6 +1388,7 @@ class OrderChangeManagerTests(TestCase):
         assert self.order.total == Decimal('0.00')
         assert self.order.status == Order.STATUS_PAID
         self.order.status = Order.STATUS_PENDING
+        self.order.save()
         self.ocm.cancel(self.op2)
         self.ocm.commit()
         self.order.refresh_from_db()
@@ -1746,6 +1747,7 @@ class OrderChangeManagerTests(TestCase):
 
         ia.vat_id_validated = False
         ia.save()
+        self.order.refresh_from_db()
 
         self.ocm = OrderChangeManager(self.order, None)
         self.ocm.recalculate_taxes()
