@@ -831,9 +831,10 @@ class Renderer:
             textColor=Color(o['color'][0] / 255, o['color'][1] / 255, o['color'][2] / 255),
             alignment=align_map[o['align']]
         )
+        # add an almost-invisible space &hairsp; after hyphens as word-wrap in ReportLab only works on space chars
         text = conditional_escape(
             self._get_text_content(op, order, o) or "",
-        ).replace("\n", "<br/>\n")
+        ).replace("\n", "<br/>\n").replace("-", "-&hairsp;")
 
         # reportlab does not support RTL, ligature-heavy scripts like Arabic. Therefore, we use ArabicReshaper
         # to resolve all ligatures and python-bidi to switch RTL texts.
