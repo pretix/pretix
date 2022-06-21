@@ -248,23 +248,24 @@
                                     </del>
                                     <ins><span class="sr-only">{% trans "New price:" %}</span>
                                 {% endif %}
-                            {% if item.free_price %}
-                                <div class="input-group input-group-price">
-                                    <span class="input-group-addon">{{ event.currency }}</span>
-                                    <input type="number" class="form-control input-item-price" placeholder="0"
-                                            id="price-item-{{ form.pos.pk }}-{{ item.pk }}"
-                                            min="{% if event.settings.display_net_prices %}{{ item.display_price.net|money_numberfield:event.currency }}{% else %}{{ item.display_price.gross|money_numberfield:event.currency }}{% endif %}"
-                                            name="cp_{{ form.pos.pk }}_item_{{ item.id }}_price"
-                                            title="{% blocktrans trimmed with item=item.name %}Modify price for {{ item }}{% endblocktrans %}"
-                                            value="{% if event.settings.display_net_prices %}{{ item.initial_price.net|money_numberfield:event.currency }}{% else %}{{ item.initial_price.gross|money_numberfield:event.currency }}{% endif %}"
-                                            step="any">
-                                </div>
-                            {% elif not item.display_price.gross %}
-                            {% elif event.settings.display_net_prices %}
-                                {{ item.display_price.net|money:event.currency }}
-                            {% else %}
-                                {{ item.display_price.gross|money:event.currency }}
-                            {% endif %}
+                                {% if item.free_price %}
+                                    <div class="input-group input-group-price">
+                                        <span class="input-group-addon">{{ event.currency }}</span>
+                                        <input type="number" class="form-control input-item-price" placeholder="0"
+                                                id="price-item-{{ form.pos.pk }}-{{ item.pk }}"
+                                                min="{% if event.settings.display_net_prices %}{{ item.display_price.net|money_numberfield:event.currency }}{% else %}{{ item.display_price.gross|money_numberfield:event.currency }}{% endif %}"
+                                                name="cp_{{ form.pos.pk }}_item_{{ item.id }}_price"
+                                                title="{% blocktrans trimmed with item=item.name %}Modify price for {{ item }}{% endblocktrans %}"
+                                                value="{% if event.settings.display_net_prices %}{{ item.initial_price.net|money_numberfield:event.currency }}{% else %}{{ item.initial_price.gross|money_numberfield:event.currency }}{% endif %}"
+                                                step="any">
+                                    </div>
+                                {% elif not item.display_price.gross %}
+                                    {% trans "FREE" context "price" %}
+                                {% elif event.settings.display_net_prices %}
+                                    {{ item.display_price.net|money:event.currency }}
+                                {% else %}
+                                    {{ item.display_price.gross|money:event.currency }}
+                                {% endif %}
                                 {% if item.original_price %}
                                     </ins>
                                 {% endif %}
