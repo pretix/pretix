@@ -2304,6 +2304,11 @@ class OrderChangeManager:
             # Do nothing
             return
 
+        # Clear prefetched objects cache of order. We're going to modify the positions and fees and we have no guarantee
+        # that every operation tuple points to a position/fee instance that has been fetched from the same object cache,
+        # so it's dangerous to keep the cache around.
+        self.order._prefetched_objects_cache = {}
+
         # finally, incorporate difference in payment fees
         self._payment_fee_diff()
 

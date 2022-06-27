@@ -1673,6 +1673,8 @@ def test_order_change_patch(token_client, organizer, event, order, quota):
         assert p.item == item2
         f.refresh_from_db()
         assert f.value == Decimal('10.00')
+        order.refresh_from_db()
+        assert order.total == Decimal('109.44')
 
 
 @pytest.mark.django_db
