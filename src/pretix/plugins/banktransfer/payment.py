@@ -80,6 +80,7 @@ class BankTransfer(BasePaymentProvider):
             )),
             ('bank_details_sepa_name', forms.CharField(
                 label=_('Name of account holder'),
+                help_text=_('Please note: special characters other than letters, numbers and punctuation can cause problems with some banks.'),
                 widget=forms.TextInput(
                     attrs={
                         'data-display-dependency': '#id_payment_banktransfer_bank_details_type_0',
