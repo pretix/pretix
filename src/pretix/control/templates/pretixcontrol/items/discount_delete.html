@@ -10,7 +10,7 @@
             <p>{% blocktrans %}You cannot delete the discount <strong>{{ discount }}</strong> because it already has
                 been used as part of an order.{% endblocktrans %}</p>
             <div class="form-group submit-group">
-                <a href="{% url "control:event.discounts" organizer=request.event.organizer.slug event=request.event.slug %}"
+                <a href="{% url "control:event.items.discounts" organizer=request.event.organizer.slug event=request.event.slug %}"
                    class="btn btn-default btn-cancel">
                     {% trans "Cancel" %}
                 </a>
