@@ -647,6 +647,7 @@ class TeamDeleteView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin,
             return redirect(success_url)
 
         try:
+            self.object.log_action('pretix.team.deleted', user=self.request.user)
             self.object.delete()
         except ProtectedError:
             messages.error(
@@ -658,7 +659,6 @@ class TeamDeleteView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin,
             )
             return redirect(success_url)
 
-        self.object.log_action('pretix.team.deleted', user=self.request.user)
         messages.success(request, _('The selected team has been deleted.'))
         return redirect(success_url)
 
