@@ -642,14 +642,25 @@ class TeamDeleteView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin,
     def delete(self, request, *args, **kwargs):
         success_url = self.get_success_url()
         self.object = self.get_object()
-        if self.is_allowed():
-            self.object.log_action('pretix.team.deleted', user=self.request.user)
-            self.object.delete()
-            messages.success(request, _('The selected team has been deleted.'))
-            return redirect(success_url)
-        else:
+        if not self.is_allowed():
             messages.error(request, _('The selected team cannot be deleted.'))
             return redirect(success_url)
+
+        try:
+            self.object.log_action('pretix.team.deleted', user=self.request.user)
+            self.object.delete()
+        except ProtectedError:
+            messages.error(
+                self.request,
+                _(
+                    'The team could not be deleted as some constraints (e.g. data created by '
+                    'plug-ins) do not allow it.'
+                )
+            )
+            return redirect(success_url)
+
+        messages.success(request, _('The selected team has been deleted.'))
+        return redirect(success_url)
 
 
 class TeamMemberView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, DetailView):
