@@ -468,7 +468,10 @@ class Paypal(BasePaymentProvider):
     def payment_pending_render(self, request, payment) -> str:
         retry = True
         try:
-            if payment.info and payment.info_data['state'] == 'pending':
+            if (
+                    payment.info
+                    and payment.info_data['transactions'][0]['related_resources'][0]['sale']['state'] == 'pending'
+            ):
                 retry = False
         except KeyError:
             pass
