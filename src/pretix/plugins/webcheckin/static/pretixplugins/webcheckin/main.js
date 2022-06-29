@@ -59,6 +59,7 @@ window.vapp = new Vue({
             'result.rules': gettext('Entry not allowed'),
             'result.revoked': gettext('Ticket code revoked/changed'),
             'result.canceled': gettext('Order canceled'),
+            'result.ambiguous': gettext('Ticket code is ambiguous on list'),
             'status.checkin': gettext('Checked-in Tickets'),
             'status.position': gettext('Valid Tickets'),
             'status.inside': gettext('Currently inside'),

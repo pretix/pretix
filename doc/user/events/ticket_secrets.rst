@@ -90,6 +90,7 @@ Name and seat visible on scanner                yes                             
 Order-specific check-in attention flag          yes                                 yes                                 yes (except directly after sale)    n/a                               no
 Ticket search by order code or name             yes                                 yes                                 yes (except directly after sale)    no                                no
 Check-in statistics on scanner                  yes                                 yes                                 mostly accurate                     no                                no
+Support for add-on check-in with main ticket    yes                                 yes                                 yes (except directly after sale)    no                                no
 =============================================== =================================== =================================== =================================== ================================= =====================================
 
 .. _EdDSA: https://en.wikipedia.org/wiki/EdDSA#Ed25519

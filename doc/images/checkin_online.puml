@@ -19,8 +19,25 @@ else
 endif
 
 
-===CHECK=== -down-> "Is the order in status PAID or PENDING\nand is the position not canceled?"
+===CHECK=== -down-> "Is addon_match set to true?"
 --> if "" then
+    -down->[no] "Is the order in status PAID or PENDING\nand is the position not canceled?"
+else
+    -right->[yes] "Build a list that includes the position\nas well as all its add-ons"
+    -down-> "Filter list for products that are part of the check-in list"
+    --> if "" then
+        -down->[one found] Proceed with the matching position
+        --> "Is the order in status PAID or PENDING\nand is the position not canceled?"
+    else
+        --> if "" then
+            -right->[none found] "Return error PRODUCT  "
+        else
+            -down->[multiple found] Return error AMBIGUOUS
+        endif
+    endif
+endif
+
+"Is the order in status PAID or PENDING\nand is the position not canceled?" --> if "" then
     -right->[no] "Return error CANCELED"
 else
     -down->[yes] "Is the product part of the check-in list?"
