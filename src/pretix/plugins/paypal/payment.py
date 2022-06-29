@@ -473,7 +473,7 @@ class Paypal(BasePaymentProvider):
                     and payment.info_data['transactions'][0]['related_resources'][0]['sale']['state'] == 'pending'
             ):
                 retry = False
-        except KeyError:
+        except (KeyError, IndexError):
             pass
         template = get_template('pretixplugins/paypal/pending.html')
         ctx = {'request': request, 'event': self.event, 'settings': self.settings,
