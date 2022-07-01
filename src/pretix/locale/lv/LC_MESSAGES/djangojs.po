@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-09 15:47+0000\n"
+"POT-Creation-Date: 2022-07-01 07:50+0000\n"
 "PO-Revision-Date: 2022-04-06 03:00+0000\n"
 "Last-Translator: Liga V <lerning_by_dreaming@gmx.de>\n"
 "Language-Team: Latvian <https://translate.pretix.eu/projects/pretix/pretix-"
@@ -374,7 +374,7 @@ msgstr ""
 "aizņem ilgāk kā vienu minūti, lūdzu, pārbaudiet savu interneta savienojumu, "
 "pārlādējiet šo lapu un mēģiniet vēlreiz."
 
-#: pretix/static/pretixbase/js/asynctask.js:273
+#: pretix/static/pretixbase/js/asynctask.js:276
 #: pretix/static/pretixcontrol/js/ui/main.js:71
 msgid "Close message"
 msgstr "Aizvērt ziņu"

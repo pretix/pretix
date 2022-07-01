@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-09 15:47+0000\n"
+"POT-Creation-Date: 2022-07-01 07:50+0000\n"
 "PO-Revision-Date: 2019-08-27 08:00+0000\n"
 "Last-Translator: Bostjan Marusic <bostjan@brokenbones.si>\n"
 "Language-Team: Slovenian <https://translate.pretix.eu/projects/pretix/pretix-"
@@ -400,7 +400,7 @@ msgstr ""
 "preverite vašo internetno povezavo in nato ponovno naložite spletno stran in "
 "poskusite znova."
 
-#: pretix/static/pretixbase/js/asynctask.js:273
+#: pretix/static/pretixbase/js/asynctask.js:276
 #: pretix/static/pretixcontrol/js/ui/main.js:71
 msgid "Close message"
 msgstr "Zapri obvestilo"

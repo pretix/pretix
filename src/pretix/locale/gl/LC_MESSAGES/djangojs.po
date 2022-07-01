@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-09 15:47+0000\n"
+"POT-Creation-Date: 2022-07-01 07:50+0000\n"
 "PO-Revision-Date: 2022-02-22 22:00+0000\n"
 "Last-Translator: Ismael Menéndez Fernández <ismael.menendez@balidea.com>\n"
 "Language-Team: Galician <https://translate.pretix.eu/projects/pretix/pretix-"
@@ -373,7 +373,7 @@ msgstr ""
 "dun minuto, por favor, revise a súa conexión a Internet, recargue a páxina e "
 "inténteo de novo."
 
-#: pretix/static/pretixbase/js/asynctask.js:273
+#: pretix/static/pretixbase/js/asynctask.js:276
 #: pretix/static/pretixcontrol/js/ui/main.js:71
 msgid "Close message"
 msgstr "Cerrar mensaxe"

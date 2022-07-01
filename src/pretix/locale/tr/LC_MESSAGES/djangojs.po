@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-09 15:47+0000\n"
+"POT-Creation-Date: 2022-07-01 07:50+0000\n"
 "PO-Revision-Date: 2018-09-03 06:36+0000\n"
 "Last-Translator: Yunus Fırat Pişkin <firat.piskin@idvlabs.com>\n"
 "Language-Team: Turkish <https://translate.pretix.eu/projects/pretix/pretix-"
@@ -405,7 +405,7 @@ msgstr ""
 "sürerse, lütfen İnternet bağlantınızı kontrol edin ve ardından bu sayfayı "
 "tekrar yükleyin ve tekrar deneyin."
 
-#: pretix/static/pretixbase/js/asynctask.js:273
+#: pretix/static/pretixbase/js/asynctask.js:276
 #: pretix/static/pretixcontrol/js/ui/main.js:71
 msgid "Close message"
 msgstr "Mesajı kapat"

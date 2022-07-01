@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-09 15:47+0000\n"
+"POT-Creation-Date: 2022-07-01 07:50+0000\n"
 "PO-Revision-Date: 2019-10-03 19:00+0000\n"
 "Last-Translator: Chris Spy <chrispiropoulou@hotmail.com>\n"
 "Language-Team: Greek <https://translate.pretix.eu/projects/pretix/pretix-js/"
@@ -405,7 +405,7 @@ msgstr ""
 "περισσότερο από ένα λεπτό, ελέγξτε τη σύνδεσή σας στο διαδίκτυο και στη "
 "συνέχεια επαναλάβετε τη φόρτωση αυτής της σελίδας και δοκιμάστε ξανά."
 
-#: pretix/static/pretixbase/js/asynctask.js:273
+#: pretix/static/pretixbase/js/asynctask.js:276
 #: pretix/static/pretixcontrol/js/ui/main.js:71
 msgid "Close message"
 msgstr "Κλείσιμο μηνύματος"
