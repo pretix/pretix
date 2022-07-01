@@ -5,8 +5,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-07-01 07:49+0000\n"
-"PO-Revision-Date: 2022-06-07 16:34+0000\n"
-"Last-Translator: Martin Gross <martin@pc-coholic.de>\n"
+"PO-Revision-Date: 2022-07-01 08:03+0000\n"
+"Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
 ">\n"
 "Language: de\n"
@@ -3016,16 +3016,12 @@ msgid "You cannot set a default value that is not a valid value."
 msgstr "Der Standardwert muss gleichzeitig ein erlaubter Wert sein."
 
 #: pretix/base/models/event.py:1632 pretix/base/models/organizer.py:477
-#, fuzzy
-#| msgid "Info text"
 msgid "Link text"
-msgstr "Info-Text"
+msgstr "Linktext"
 
 #: pretix/base/models/event.py:1635 pretix/base/models/organizer.py:480
-#, fuzzy
-#| msgid "Imprint URL"
 msgid "Link URL"
-msgstr "Impressum (URL)"
+msgstr "Link-URL"
 
 #: pretix/base/models/fields.py:33
 msgid "No value can contain the delimiter character."
@@ -12277,10 +12273,8 @@ msgid "The organizer settings have been changed."
 msgstr "Die Veranstalter-Einstellungen wurden geändert."
 
 #: pretix/control/logdisplay.py:317 pretix/control/logdisplay.py:472
-#, fuzzy
-#| msgid "The order details have been changed."
 msgid "The footer links have been changed."
-msgstr "Die Bestelldetails wurden geändert."
+msgstr "Die Links im Footer wurden geändert."
 
 #: pretix/control/logdisplay.py:318
 msgid "Gift card acceptance for another organizer has been added."
@@ -13891,19 +13885,16 @@ msgid "Terminal ID"
 msgstr "Terminal-ID"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:91
-#, fuzzy
 msgid "Card holder"
 msgstr "Karteninhaber"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:95
-#, fuzzy
 msgid "Card expiration"
 msgstr "Ablaufdatum"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:99
-#, fuzzy
 msgid "Result Code"
-msgstr "Ergebnis"
+msgstr "Ergebniscode"
 
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html:9
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html:41
@@ -14074,10 +14065,8 @@ msgid "Check-Out selected attendees"
 msgstr "Ausgewählte Personen auschecken"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html:212
-#, fuzzy
-#| msgid "Check-In selected attendees"
 msgid "Delete all check-ins of selected attendees"
-msgstr "Ausgewählte Teilnehmer einchecken"
+msgstr "Alle Check-ins der ausgewählten Personen löschen"
 
 #: pretix/control/templates/pretixcontrol/checkin/list_delete.html:4
 #: pretix/control/templates/pretixcontrol/checkin/list_delete.html:6
@@ -15625,10 +15614,8 @@ msgstr "Anzeige"
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:241
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:55
-#, fuzzy
-#| msgid "Voucher link"
 msgid "Footer links"
-msgstr "Gutschein-Link"
+msgstr "Fußzeilen-Links"
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:246
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:60
@@ -15638,13 +15625,15 @@ msgid ""
 "privacy policy will be linked automatically (if you configured them), so you "
 "do not need to add them here."
 msgstr ""
+"Diese Links werden in der Fußzeile des Ticketshops angezeigt. Sie können "
+"hier beispielsweise auf Ihre AGB verlinken. Ihre Kontaktadresse, Impressum "
+"und Datenschutzerklärung werden bereits automatisch verlinkt (wenn sie "
+"eingetragen sind), sodass Sie sie hier nicht erneut hinzufügen müssen."
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:300
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:119
-#, fuzzy
-#| msgid "Address line"
 msgid "Add link"
-msgstr "Adresszeile"
+msgstr "Link hinzufügen"
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:322
 msgid "Cart"
@@ -18801,6 +18790,8 @@ msgstr "Veranstalterseite"
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:68
 msgid "The links you configure here will also be shown on all of your events."
 msgstr ""
+"Die Links, die Sie hier hinzufügen, werden ebenfalls bei allen Ihrer "
+"Veranstaltungen angezeigt."
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:141
 msgid ""
@@ -19869,6 +19860,9 @@ msgid ""
 "It is possible that some of the above dates can't be deleted if a plugin has "
 "data attached to them. In that case, they will be disabled instead."
 msgstr ""
+"Möglicherweise können manche der oben gelisteten Termine dennoch nicht "
+"gelöscht werden, wenn eine Erweiterung Daten mit den Terminen verknüpft hat. "
+"In diesem Fall werden die Termine stattdessen deaktiviert."
 
 #: pretix/control/templates/pretixcontrol/subevents/delete_bulk.html:27
 msgid ""
@@ -20870,10 +20864,8 @@ msgid "The selected check-ins have been reverted."
 msgstr "Der ausgewählte Check-In wurde gelöscht."
 
 #: pretix/control/views/checkin.py:234
-#, fuzzy
-#| msgid "The selected tickets have been marked as checked in."
 msgid "The selected tickets have been marked as checked out."
-msgstr "Die ausgewählten Tickets wurden als eingecheckt markiert."
+msgstr "Die ausgewählten Tickets wurden als ausgecheckt markiert."
 
 #: pretix/control/views/checkin.py:236
 msgid "The selected tickets have been marked as checked in."
@@ -22004,16 +21996,12 @@ msgid "The selected team cannot be deleted."
 msgstr "Das ausgewählte Team kann nicht gelöscht werden."
 
 #: pretix/control/views/organizer.py:656
-#, fuzzy
-#| msgid ""
-#| "The event could not be deleted as some constraints (e.g. data created by "
-#| "plug-ins) do not allow it."
 msgid ""
 "The team could not be deleted as some constraints (e.g. data created by plug-"
 "ins) do not allow it."
 msgstr ""
-"Diese Veranstaltung konnte nicht gelöscht werden, da einige Bedingungen (z."
-"B. von Plugins erstellte Daten) es nicht erlauben."
+"Das Team konnte nicht gelöscht werden, da einige Bedingungen (z.B. von "
+"Plugins erstellte Daten) es nicht erlauben."
 
 #: pretix/control/views/organizer.py:662
 msgid "The selected team has been deleted."
@@ -22681,6 +22669,8 @@ msgid ""
 "Please note: special characters other than letters, numbers, and some "
 "punctuation can cause problems with some banks."
 msgstr ""
+"Bitte beachten Sie: Andere Zeichen als Buchstaben, Zahlen und rudimentäre "
+"Zeichensetzung können bei einigen Banken Probleme verursachen."
 
 #: pretix/plugins/banktransfer/payment.py:93
 #: pretix/plugins/banktransfer/payment.py:248
@@ -23768,7 +23758,6 @@ msgid "Buyer country"
 msgstr "Land des Käufers"
 
 #: pretix/plugins/paypal2/payment.py:241
-#, fuzzy
 msgid ""
 "To accept payments via PayPal, you will need an account at PayPal. By "
 "clicking on the following button, you can either create a new PayPal account "
@@ -23942,34 +23931,28 @@ msgid "Please select how you want to pay."
 msgstr "Bitte wählen Sie die gewünschte Zahlungsmethode aus."
 
 #: pretix/plugins/paypal2/views.py:200
-#, fuzzy
-#| msgid "An error occurred during connecting with PayPal, please try again."
 msgid ""
 "An error occurred returning from PayPal: request parameters missing. Please "
 "try again."
 msgstr ""
-"Während der Verbindung mit PayPal ist ein Fehler aufgetreten, bitte "
-"versuchen Sie es erneut."
+"Während der Verbindung mit PayPal ist ein Fehler aufgetreten (fehlende "
+"Anfrage-Parameter), bitte versuchen Sie es erneut."
 
 #: pretix/plugins/paypal2/views.py:236
-#, fuzzy
-#| msgid "An error occurred during connecting with PayPal, please try again."
 msgid ""
 "An error occurred returning from PayPal: result parameters missing. Please "
 "try again."
 msgstr ""
-"Während der Verbindung mit PayPal ist ein Fehler aufgetreten, bitte "
-"versuchen Sie es erneut."
+"Während der Verbindung mit PayPal ist ein Fehler aufgetreten (fehlende "
+"Ergebnis-Parameter), bitte versuchen Sie es erneut."
 
 #: pretix/plugins/paypal2/views.py:241
-#, fuzzy
-#| msgid "An error occurred during connecting with PayPal, please try again."
 msgid ""
 "An error occurred returning from PayPal: session parameter not matching. "
 "Please try again."
 msgstr ""
-"Während der Verbindung mit PayPal ist ein Fehler aufgetreten, bitte "
-"versuchen Sie es erneut."
+"Während der Verbindung mit PayPal ist ein Fehler aufgetreten (unpassende "
+"Session-Parameter), bitte versuchen Sie es erneut."
 
 #: pretix/plugins/paypal2/views.py:247
 msgid ""
@@ -25876,23 +25859,19 @@ msgstr ""
 "bestätigt werden kann und einen gültigen Vertrag darstellt."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:184
-#, fuzzy
 msgid ""
 "We will sent you an email as soon as the event organizer approved or "
 "rejected your order."
 msgstr ""
 "Wir informieren Sie per E-Mail, sobald der Veranstalter Ihre Bestellung "
-"freigegeben oder abgelehnt hat. Wenn die Bestellung freigegeben wird, senden "
-"wir Ihnen einen Link, über den Sie die Bestellung bezahlen können."
+"freigegeben oder abgelehnt hat."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:188
-#, fuzzy
 msgid ""
 "If your order was approved, we will send you a link that you can use to pay."
 msgstr ""
-"Wir informieren Sie per E-Mail, sobald der Veranstalter Ihre Bestellung "
-"freigegeben oder abgelehnt hat. Wenn die Bestellung freigegeben wird, senden "
-"wir Ihnen einen Link, über den Sie die Bestellung bezahlen können."
+"Wenn die Bestellung freigegeben wird, senden wir Ihnen einen Link, über den "
+"Sie die Bestellung bezahlen können."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:204
 msgid "Place binding order"
