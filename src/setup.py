@@ -204,7 +204,7 @@ setup(
         'packaging',
         'paypalrestsdk==1.13.*',
         'paypal-checkout-serversdk==1.0.*',
-        'PyJWT==2.0.*',
+        'PyJWT==2.4.*',
         'phonenumberslite==8.12.*',
         'Pillow==9.1.*',
         'protobuf==3.19.*',
@@ -237,7 +237,7 @@ setup(
         'dev': [
             'coverage',
             'coveralls',
-            'django-debug-toolbar==3.2.*',
+            'django-debug-toolbar>=3.2,<3.6',
             'flake8==4.0.*',
             'freezegun',
             'isort==5.10.*',
