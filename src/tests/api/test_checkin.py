@@ -1176,7 +1176,6 @@ def test_redeem_unknown_legacy_device_bug(device, device_client, organizer, clis
     ), {
         'force': True
     }, format='json')
-    print(resp.data)
     assert resp.status_code == 400
     assert resp.data["status"] == "error"
     assert resp.data["reason"] == "already_redeemed"
@@ -1196,3 +1195,43 @@ def test_redeem_unknown_legacy_device_bug(device, device_client, organizer, clis
     assert resp.data["reason"] == "invalid"
     with scopes_disabled():
         assert not Checkin.objects.last()
+
+
+@pytest.mark.django_db
+def test_redeem_by_id_not_allowed_if_pretixscan(device, device_client, organizer, clist, event, order):
+    with scopes_disabled():
+        p = order.positions.first()
+    device.software_brand = "pretixSCAN"
+    device.software_version = "1.14.2"
+    device.save()
+    resp = device_client.post('/api/v1/organizers/{}/events/{}/checkinlists/{}/positions/{}/redeem/'.format(
+        organizer.slug, event.slug, clist.pk, p.pk
+    ), {
+        'force': True
+    }, format='json')
+    print(resp.data)
+    assert resp.status_code == 404
+    resp = device_client.post('/api/v1/organizers/{}/events/{}/checkinlists/{}/positions/{}/redeem/'.format(
+        organizer.slug, event.slug, clist.pk, p.secret
+    ), {
+        'force': True
+    }, format='json')
+    assert resp.status_code == 201
+
+
+@pytest.mark.django_db
+def test_redeem_by_id_not_allowed_if_untrusted(device, device_client, organizer, clist, event, order):
+    with scopes_disabled():
+        p = order.positions.first()
+    resp = device_client.post('/api/v1/organizers/{}/events/{}/checkinlists/{}/positions/{}/redeem/?untrusted_input=true'.format(
+        organizer.slug, event.slug, clist.pk, p.pk
+    ), {
+        'force': True
+    }, format='json')
+    assert resp.status_code == 404
+    resp = device_client.post('/api/v1/organizers/{}/events/{}/checkinlists/{}/positions/{}/redeem/?untrusted_input=true'.format(
+        organizer.slug, event.slug, clist.pk, p.secret
+    ), {
+        'force': True
+    }, format='json')
+    assert resp.status_code == 201
