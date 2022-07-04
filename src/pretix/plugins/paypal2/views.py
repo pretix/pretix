@@ -199,7 +199,7 @@ def isu_return(request, *args, **kwargs):
     if not any(k in request.GET for k in getparams) or not any(k in request.session for k in sessionparams):
         messages.error(request, _('An error occurred returning from PayPal: request parameters missing. Please try again.'))
         missing_getparams = set(getparams) - set(request.GET)
-        missing_sessionparams = set(sessionparams) - set(request.session)
+        missing_sessionparams = {p for p in sessionparams if p not in request.session}
         logger.exception('PayPal2 - Missing params in GET {} and/or Session {}'.format(missing_getparams, missing_sessionparams))
         return redirect(reverse('control:index'))
 
