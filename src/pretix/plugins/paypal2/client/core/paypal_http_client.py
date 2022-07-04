@@ -32,7 +32,7 @@ class PayPalHttpClient(VendorPayPalHttpClient):
         # Cached access tokens are not updated by PayPal to include new Merchants that granted access rights since
         # the access token was generated. Therefor we increment the cycle count and by that invalidate the cached
         # token and pull a new one.
-        incr = cache.get('pretix_paypal_token_hash_cycle', default=0)
+        incr = cache.get('pretix_paypal_token_hash_cycle', default=1)
 
         # Then we get all the items that make up the current credentials and create a hash to detect changes
         checksum = hashlib.sha256(''.join([
