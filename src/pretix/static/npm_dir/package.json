@@ -9,7 +9,7 @@
     "@rollup/plugin-babel": "^5.3.1",
     "@rollup/plugin-node-resolve": "^13.3.0",
     "vue": "^2.7.0",
-    "rollup": "^2.75.5",
+    "rollup": "^2.75.7",
     "rollup-plugin-vue": "^5.0.1",
     "vue-template-compiler": "^2.7.0"
   }
