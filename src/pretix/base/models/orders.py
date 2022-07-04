@@ -843,7 +843,7 @@ class Order(LockModel, LoggedModel):
                 if terms:
                     term_last = min(terms)
                 else:
-                    term_last = None
+                    return None
             else:
                 term_last = term_last.datetime(self.event).date()
             term_last = make_aware(datetime.combine(
