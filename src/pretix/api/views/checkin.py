@@ -409,6 +409,11 @@ class CheckinListPositionViewSet(viewsets.ReadOnlyModelViewSet):
         ignore_unpaid = bool(self.request.data.get('ignore_unpaid', False))
         nonce = self.request.data.get('nonce')
 
+        untrusted_input = (
+            self.request.GET.get('untrusted_input', '') not in ('0', 'false', 'False', '')
+            or (isinstance(self.request.auth, Device) and 'pretixscan' in (self.request.auth.software_brand or '').lower())
+        )
+
         if 'datetime' in self.request.data:
             dt = DateTimeField().to_internal_value(self.request.data.get('datetime'))
         else:
@@ -429,7 +434,7 @@ class CheckinListPositionViewSet(viewsets.ReadOnlyModelViewSet):
 
         try:
             queryset = self.get_queryset(ignore_status=True, ignore_products=True)
-            if self.kwargs['pk'].isnumeric():
+            if self.kwargs['pk'].isnumeric() and not untrusted_input:
                 op = queryset.get(Q(pk=self.kwargs['pk']) | Q(secret=self.kwargs['pk']))
             else:
                 # In application/x-www-form-urlencoded, you can encodes space ' ' with '+' instead of '%20'.

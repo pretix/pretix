@@ -611,8 +611,12 @@ Order position endpoints
    Tries to redeem an order position, identified by its internal ID, i.e. checks the attendee in. This endpoint
    accepts a number of optional requests in the body.
 
-   **Tip:** Instead of an ID, you can also use the ``secret`` field as the lookup parameter.
+   **Tip:** Instead of an ID, you can also use the ``secret`` field as the lookup parameter. In this case, you should
+   always set ``untrusted_input=true`` as a query parameter to avoid security issues.
 
+   :query boolean untrusted_input: If set to true, the lookup parameter is **always** interpreted as a ``secret``, never
+                                   as an ``id``. This should be always set if you are passing through untrusted, scanned
+                                   data to avoid guessing of ticket IDs.
    :<json boolean questions_supported: When this parameter is set to ``true``, handling of questions is supported. If
                                        you do not implement question handling in your user interface, you **must**
                                        set this to ``false``. In that case, questions will just be ignored. Defaults
