@@ -1588,7 +1588,7 @@ class OrderPayment(models.Model):
         if status_change:
             self.order.create_transactions()
 
-    def fail(self, info=None, user=None, auth=None):
+    def fail(self, info=None, user=None, auth=None, log_data=None):
         """
         Marks the order as failed and sets info to ``info``, but only if the order is in ``created`` or ``pending``
         state. This is equivalent to setting ``state`` to ``OrderPayment.PAYMENT_STATE_FAILED`` and logging a failure,
@@ -1616,6 +1616,7 @@ class OrderPayment(models.Model):
             'local_id': self.local_id,
             'provider': self.provider,
             'info': info,
+            'data': log_data,
         }, user=user, auth=auth)
 
     def confirm(self, count_waitinglist=True, send_mail=True, force=False, user=None, auth=None, mail_text='',
