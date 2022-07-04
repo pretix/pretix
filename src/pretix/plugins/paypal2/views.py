@@ -211,7 +211,7 @@ def isu_return(request, *args, **kwargs):
     try:
         cache.incr('pretix_paypal_token_hash_cycle')
     except ValueError:
-        cache.set('pretix_paypal_token_hash_cycle', 1)
+        cache.set('pretix_paypal_token_hash_cycle', 1, None)
 
     gs = GlobalSettingsObject()
     prov = Paypal(event)
