@@ -78,7 +78,7 @@ Synchronization setting                         any                             
 ----------------------------------------------- ----------------------------------- ----------------------------------------------------------------------- -----------------------------------------------------------------------
 Ticket secrets                                  any                                 Random                              Signed                              Random                            Signed
 =============================================== =================================== =================================== =================================== ================================= =====================================
-Scenario supported on platforms                 Android, Desktop, iOS               Android, Desktop, iOS               Android, Desktop                    Android, Desktop                  Android, Desktop
+Scenario supported on platforms                 Android, Desktop, iOS               Android, Desktop, iOS               Android, Desktop                    Android, Desktop, iOS             Android, Desktop, iOS
 Synchronization speed for large data sets                                           slow                                slow                                fast                              fast
 Tickets can be scanned                          yes                                 yes                                 yes                                 no                                yes
 Ticket is valid after sale                      immediately                         next sync (~5 minutes)              immediately                         never                             immediately
