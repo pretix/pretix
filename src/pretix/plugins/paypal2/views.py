@@ -376,7 +376,7 @@ def webhook(request, *args, **kwargs):
     prov.init_api()
 
     try:
-        if rso:
+        if rso and 'id' in rso.payment.info_data:
             payloadid = rso.payment.info_data['id']
         sale = prov.client.execute(pp_orders.OrdersGetRequest(payloadid)).result
     except IOError:
