@@ -128,7 +128,7 @@
             </p>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-primary pull-right" @click="check(checkResult.position.secret, true, false, false)">
+            <button type="button" class="btn btn-primary pull-right" @click="check(checkResult.position.secret, true, false, false, true)">
               {{ $root.strings['modal.continue'] }}
             </button>
             <button type="button" class="btn btn-default" @click="showUnpaidModal = false">
@@ -188,7 +188,7 @@
             </div>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-primary pull-right" @click="check(checkResult.position.secret, true, true)">
+            <button type="button" class="btn btn-primary pull-right" @click="check(checkResult.position.secret, true, true, true)">
               {{ $root.strings['modal.continue'] }}
             </button>
             <button type="button" class="btn btn-default" @click="showQuestionsModal = false">
@@ -296,7 +296,7 @@ export default {
   },
   methods: {
     selectResult(res) {
-      this.check(res.id, false, false, false)
+      this.check(res.id, false, false, false, false)
     },
     answerSetM(qid, opid, checked) {
       let arr = this.answers[qid] ? this.answers[qid].split(',') : [];
@@ -320,7 +320,7 @@ export default {
       this.showQuestionsModal = false
       this.answers = {}
     },
-    check(id, ignoreUnpaid, keepAnswers, fallbackToSearch) {
+    check(id, ignoreUnpaid, keepAnswers, fallbackToSearch, untrusted) {
       if (!keepAnswers) {
         this.answers = {}
       } else if (this.showQuestionsModal) {
@@ -339,7 +339,11 @@ export default {
         this.$refs.input.blur()
       })
 
-      fetch(this.$root.api.lists + this.checkinlist.id + '/positions/' + encodeURIComponent(id) + '/redeem/?expand=item&expand=subevent&expand=variation', {
+      let url = this.$root.api.lists + this.checkinlist.id + '/positions/' + encodeURIComponent(id) + '/redeem/?expand=item&expand=subevent&expand=variation'
+      if (untrusted)  {
+        url += '&untrusted_input=true'
+      }
+      fetch(url, {
         method: 'POST',
         headers: {
           'X-CSRFToken': document.querySelector("input[name=csrfmiddlewaretoken]").value,
@@ -439,7 +443,7 @@ export default {
     startSearch(fallbackToScan) {
       if (this.query.length >= 32 && fallbackToScan) {
         // likely a secret, not a search result
-        this.check(this.query, false, false, true)
+        this.check(this.query, false, false, true, true)
         return
       }
 
