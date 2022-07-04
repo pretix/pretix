@@ -475,8 +475,11 @@ def base_placeholders(sender, **kwargs):
         ),
         SimpleFunctionalMailTextPlaceholder(
             'event_admission_time', ['event_or_subevent'],
-            lambda event_or_subevent: date_format(event_or_subevent.date_admission, 'TIME_FORMAT') if event_or_subevent.date_admission else '',
-            lambda event: date_format(event.date_admission, 'TIME_FORMAT') if event.date_admission else '',
+            lambda event_or_subevent:
+                date_format(event_or_subevent.date_admission.astimezone(event_or_subevent.timezone), 'TIME_FORMAT')
+                if event_or_subevent.date_admission
+                else '',
+            lambda event: date_format(event.date_admission.astimezone(event.timezone), 'TIME_FORMAT') if event.date_admission else '',
         ),
         SimpleFunctionalMailTextPlaceholder(
             'subevent', ['waiting_list_entry', 'event'],
