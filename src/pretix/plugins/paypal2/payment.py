@@ -354,6 +354,9 @@ class PaypalMethod(BasePaymentProvider):
 
     @property
     def is_enabled(self) -> bool:
+        if self.settings.connect_client_id and self.settings.connect_secret_key and not self.settings.secret:
+            if not self.settings.isu_merchant_id:
+                return False
         return self.settings.get('_enabled', as_type=bool) and self.settings.get('method_{}'.format(self.method),
                                                                                  as_type=bool)
 
@@ -588,6 +591,9 @@ class PaypalMethod(BasePaymentProvider):
                 raise PaymentException(_('We were unable to process your payment. See below for details on how to '
                                          'proceed.'))
 
+            if self.settings.connect_client_id and self.settings.connect_secret_key and not self.settings.secret:
+                if not self.settings.isu_merchant_id:
+                    raise PaymentException('Payment method misconfigured')
             self.init_api()
             try:
                 req = OrdersGetRequest(request.session.get('payment_paypal_oid'))
