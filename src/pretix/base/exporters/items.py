@@ -154,6 +154,10 @@ class ItemDataExporter(ListExporter):
                         _("Yes") if i.require_membership or v.require_membership else "",
                         _("Yes") if i.require_membership_hidden or v.require_membership_hidden else "",
                     ]
+                    row += [
+                        m.get(p.name, '') for p in props
+                    ]
+                    yield row
 
             else:
                 row = [
@@ -193,10 +197,10 @@ class ItemDataExporter(ListExporter):
                     _("Yes") if i.require_membership_hidden else "",
                 ]
 
-            row += [
-                m.get(p.name, '') for p in props
-            ]
-            yield row
+                row += [
+                    m.get(p.name, '') for p in props
+                ]
+                yield row
 
     def get_filename(self):
         return '{}_products'.format(self.events.first().organizer.slug)
