@@ -290,6 +290,50 @@ class WidgetCartTest(CartTestMixin, TestCase):
         data = json.loads(response.content.decode())
         assert len(data['items_by_category']) == 0
 
+    def test_product_list_view_variation_filter(self):
+        response = self.client.get('/%s/%s/widget/product_list?variations=%s' % (self.orga.slug, self.event.slug,
+                                                                                 self.shirt_red.pk))
+        assert response['Access-Control-Allow-Origin'] == '*'
+        data = json.loads(response.content.decode())
+        assert data['items_by_category'] == [
+            {
+                "items": [
+                    {
+                        "require_voucher": False,
+                        "order_min": None,
+                        "max_price": "14.00",
+                        "price": None,
+                        "picture": None,
+                        "has_variations": 4,
+                        "allow_waitinglist": True,
+                        "description": None,
+                        "min_price": "12.00",
+                        "avail": None,
+                        "variations": [
+                            {
+                                "value": "Red",
+                                "id": self.shirt_red.pk,
+                                'original_price': None,
+                                "price": {"gross": "14.00", "net": "11.76", "tax": "2.24", "name": "",
+                                          "rate": "19.00", "includes_mixed_tax_rate": False},
+                                "description": None,
+                                "avail": [100, None],
+                                "order_max": 2
+                            }
+                        ],
+                        "id": self.shirt.pk,
+                        "free_price": False,
+                        "original_price": None,
+                        "name": "T-Shirt",
+                        "order_max": None
+                    }
+                ],
+                "description": None,
+                "id": self.category.pk,
+                "name": "Everything"
+            }
+        ]
+
     def test_product_list_view_with_voucher(self):
         with scopes_disabled():
             self.event.vouchers.create(item=self.ticket, code="ABCDE")

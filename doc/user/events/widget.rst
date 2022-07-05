@@ -135,6 +135,10 @@ Alternatively, you can select one or more categories to be shown::
 
    <pretix-widget event="https://pretix.eu/demo/democon/" categories="12,25"></pretix-widget>
 
+Or variation IDs::
+
+   <pretix-widget event="https://pretix.eu/demo/democon/" variations="15,2,68"></pretix-widget>
+
 Multi-event selection
 ---------------------
 
