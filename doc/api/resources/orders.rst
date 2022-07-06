@@ -60,6 +60,7 @@ invoice_address                       object                     Invoice address
 ├ state                               string                     Customer state (ISO 3166-2 code). Only supported in
                                                                  AU, BR, CA, CN, MY, MX, and US.
 ├ internal_reference                  string                     Customer's internal reference to be printed on the invoice
+├ custom_field                        string                     Custom invoice address field
 ├ vat_id                              string                     Customer VAT ID
 └ vat_id_validated                    string                     ``true``, if the VAT ID has been validated against the
                                                                  EU VAT service and validation was successful. This only
