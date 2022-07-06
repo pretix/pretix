@@ -7,16 +7,16 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-07-01 07:49+0000\n"
-"PO-Revision-Date: 2021-11-15 00:00+0000\n"
-"Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
-"Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/"
-">\n"
+"PO-Revision-Date: 2022-07-06 21:00+0000\n"
+"Last-Translator: Hans Fraiponts <fraiponts@gmail.com>\n"
+"Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
+"\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.8\n"
+"X-Generator: Weblate 4.12.2\n"
 
 #: htmlcov/pretix_control_views_dashboards_py.html:963
 #: pretix/control/templates/pretixcontrol/events/index.html:140
@@ -1367,10 +1367,8 @@ msgstr "E-mailadres gecontroleerd"
 #: pretix/base/exporters/orderlist.py:297
 #: pretix/base/exporters/orderlist.py:464
 #: pretix/base/exporters/orderlist.py:618
-#, fuzzy
-#| msgid "Customer ID"
 msgid "External customer ID"
-msgstr "Klantnummer"
+msgstr "Externe Klantnummer"
 
 #: pretix/base/exporters/orderlist.py:302
 #, python-brace-format
@@ -1977,10 +1975,8 @@ msgid "Repeat password"
 msgstr "Herhaal wachtwoord"
 
 #: pretix/base/forms/questions.py:198
-#, fuzzy
-#| msgid "Please enter a shorter name."
 msgid "Please do not use special characters in names."
-msgstr "Vul alstublieft een kortere naam in."
+msgstr "Gelieve geen bijzondere tekens te gebruiken in namen."
 
 #: pretix/base/forms/questions.py:257
 msgid "Please enter a shorter name."
@@ -2095,7 +2091,7 @@ msgstr "Het huidige wachtwoord dat u heeft ingevoerd is niet correct."
 
 #: pretix/base/forms/user.py:58
 msgid "Please choose a password different to your current one."
-msgstr ""
+msgstr "Kies een wachtwoord dat niet hetzelfde is als het huidige alstublieft."
 
 #: pretix/base/forms/user.py:63 pretix/presale/forms/customer.py:386
 #: pretix/presale/forms/customer.py:455
@@ -2386,10 +2382,8 @@ msgid "Date joined"
 msgstr "Datum toegevoegd"
 
 #: pretix/base/models/auth.py:254
-#, fuzzy
-#| msgid "Request a new password"
 msgid "Force user to select a new password"
-msgstr "Nieuw wachtwoord aanvragen"
+msgstr "Verplicht de gebruiker een nieuw wachtwoord aan te vragen"
 
 #: pretix/base/models/auth.py:261
 msgid "Timezone"
@@ -2559,6 +2553,8 @@ msgid ""
 "The identifier may only contain letters, numbers, dots, dashes, and "
 "underscores. It must start and end with a letter or number."
 msgstr ""
+"De unieke code mag enkel letters, cijfers, punten, streepjes en liggende "
+"streepjes bevatten. Het moet beginnen met een letter of nummer."
 
 #: pretix/base/models/customers.py:65
 msgid "Account active"
@@ -2582,15 +2578,13 @@ msgstr "Registratiedatum"
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:31
 #: pretix/control/templates/pretixcontrol/organizers/customers.html:65
 #: pretix/control/templates/pretixcontrol/users/form.html:43
-#, fuzzy
-#| msgid "Internal identifier"
 msgid "External identifier"
-msgstr "Intern kenmerk"
+msgstr "Externe unieke code"
 
 #: pretix/base/models/customers.py:75
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:67
 msgid "Notes"
-msgstr ""
+msgstr "Notas"
 
 #: pretix/base/models/customers.py:238 pretix/base/models/orders.py:1318
 #: pretix/base/models/orders.py:2693 pretix/base/settings.py:841
@@ -2631,21 +2625,17 @@ msgstr "Initialisatiedatum"
 #: pretix/base/models/discount.py:44
 msgctxt "subevent"
 msgid "Dates can be mixed without limitation"
-msgstr ""
+msgstr "Datums kunnen gecombineerd worden zonder beperking"
 
 #: pretix/base/models/discount.py:45
-#, fuzzy
-#| msgid "Multiple matching products were found."
 msgctxt "subevent"
 msgid "All matching products must be for the same date"
-msgstr "Er zijn meerdere overeenkomende producten gevonden."
+msgstr "Alle overeenkomende producten moeten op dezelfde datum plaats vinden"
 
 #: pretix/base/models/discount.py:46
-#, fuzzy
-#| msgid "Add tickets for a different date"
 msgctxt "subevent"
 msgid "Each matching product must be for a different date"
-msgstr "Voeg tickets voor een andere datum toe"
+msgstr "Elk toegevoegde ticket moet op een andere datum zijn"
 
 #: pretix/base/models/discount.py:55 pretix/base/models/event.py:1296
 #: pretix/base/models/items.py:368 pretix/base/models/items.py:784
@@ -2701,16 +2691,12 @@ msgid "Event series handling"
 msgstr "Evenementenreeks: datum aangepast"
 
 #: pretix/base/models/discount.py:92
-#, fuzzy
-#| msgid "All products (including newly created ones)"
 msgid "Apply to all products (including newly created ones)"
-msgstr "Alle producten (inclusief nieuw gemaakte)"
+msgstr "Pas toe op alle producten (inclusief nieuw gemaakte)"
 
 #: pretix/base/models/discount.py:96
-#, fuzzy
-#| msgid "Apply to products"
 msgid "Apply to specific products"
-msgstr "Toepassen op producten"
+msgstr "Pas toe op specifieke producten"
 
 #: pretix/base/models/discount.py:101
 #, fuzzy
@@ -2720,11 +2706,11 @@ msgstr "Toepassen op producten"
 
 #: pretix/base/models/discount.py:102
 msgid "Discounts never apply to bundled products"
-msgstr ""
+msgstr "Kortingen zijn nooit van toepassing op gebundelde producten"
 
 #: pretix/base/models/discount.py:106
 msgid "Ignore products discounted by a voucher"
-msgstr ""
+msgstr "Negeer producten die korting krijgen door een voucher"
 
 #: pretix/base/models/discount.py:107
 msgid ""
@@ -2733,6 +2719,10 @@ msgid ""
 "use a voucher only to e.g. unlock a hidden product or gain access to sold-"
 "out quota will still receive the discount."
 msgstr ""
+"Als deze optie is aangevinkt, worden producten die korting kregen door een "
+"voucher niet in rekening genomen voor deze korting. Echter producten die een "
+"voucher alleen gebruiken om bvb een verborgen product te tonen of om toegang "
+"te krijgen tot uitverkochte producten zullen nog steeds een korting krijgen."
 
 #: pretix/base/models/discount.py:112
 #, fuzzy
@@ -2750,7 +2740,7 @@ msgstr ""
 
 #: pretix/base/models/discount.py:130
 msgid "Apply discount only to this number of matching products"
-msgstr ""
+msgstr "Pas de korting enkel toe op dit aantal relevante producten"
 
 #: pretix/base/models/discount.py:132
 msgid ""
