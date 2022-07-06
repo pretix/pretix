@@ -114,7 +114,7 @@ def order(event, item, taxrule, question):
         o.fees.create(fee_type=OrderFee.FEE_TYPE_PAYMENT, value=Decimal('0.25'), tax_rate=Decimal('19.00'),
                       tax_value=Decimal('0.05'), tax_rule=taxrule, canceled=True)
         InvoiceAddress.objects.create(order=o, company="Sample company", country=Country('NZ'),
-                                      vat_id="DE123", vat_id_validated=True)
+                                      vat_id="DE123", vat_id_validated=True, custom_field="Custom info")
         op = OrderPosition.objects.create(
             order=o,
             item=item,
@@ -264,6 +264,7 @@ TEST_ORDER_RES = {
         "country": "NZ",
         "state": "",
         "internal_reference": "",
+        "custom_field": "Custom info",
         "vat_id": "DE123",
         "vat_id_validated": True
     },
