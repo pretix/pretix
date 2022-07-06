@@ -96,6 +96,7 @@ ALLOWED_ATTRIBUTES = {
     'div': ['class'],
     'p': ['class'],
     'span': ['class', 'title'],
+    'ol': ['start'],
     # Update doc/user/markdown.rst if you change this!
 }
 
