@@ -22,9 +22,10 @@
 from datetime import datetime, timedelta
 
 from django import forms
+from django.core.exceptions import ValidationError
 from django.urls import reverse
 from django.utils.timezone import get_current_timezone, make_aware, now
-from django.utils.translation import pgettext_lazy
+from django.utils.translation import gettext_lazy as _, pgettext_lazy
 from django_scopes.forms import (
     SafeModelChoiceField, SafeModelMultipleChoiceField,
 )
@@ -109,6 +110,7 @@ class CheckinListForm(forms.ModelForm):
             'rules',
             'gates',
             'exit_all_at',
+            'addon_match',
         ]
         widgets = {
             'limit_products': forms.CheckboxSelectMultiple(attrs={
@@ -130,6 +132,12 @@ class CheckinListForm(forms.ModelForm):
     def clean(self):
         d = super().clean()
         d['rules'] = CheckinList.validate_rules(d.get('rules'))
+
+        if d.get('addon_match') and d.get('all_products'):
+            raise ValidationError(_('If you allow checking in add-on tickets by scanning the main ticket, you must '
+                                    'select a specific set of products for this check-in list, only including the '
+                                    'possible add-on products.'))
+
         return d
 
 

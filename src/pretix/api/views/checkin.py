@@ -25,6 +25,7 @@ from django.core.exceptions import ValidationError
 from django.db import transaction
 from django.db.models import (
     Count, Exists, F, Max, OrderBy, OuterRef, Prefetch, Q, Subquery,
+    prefetch_related_objects,
 )
 from django.db.models.functions import Coalesce
 from django.http import Http404
@@ -280,7 +281,7 @@ class CheckinListPositionViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = CheckinListOrderPositionSerializer
     queryset = OrderPosition.all.none()
     filter_backends = (ExtendedBackend, RichOrderingFilter)
-    ordering = ('attendee_name_cached', 'positionid')
+    ordering = (F('attendee_name_cached').asc(nulls_last=True), 'positionid')
     ordering_fields = (
         'order__code', 'order__datetime', 'positionid', 'attendee_name',
         'last_checked_in', 'order__email',
@@ -408,11 +409,13 @@ class CheckinListPositionViewSet(viewsets.ReadOnlyModelViewSet):
             raise ValidationError("Invalid check-in type.")
         ignore_unpaid = bool(self.request.data.get('ignore_unpaid', False))
         nonce = self.request.data.get('nonce')
-
         untrusted_input = (
             self.request.GET.get('untrusted_input', '') not in ('0', 'false', 'False', '')
             or (isinstance(self.request.auth, Device) and 'pretixscan' in (self.request.auth.software_brand or '').lower())
         )
+
+        if not self.checkinlist.all_products:
+            prefetch_related_objects([self.checkinlist], 'limit_products')
 
         if 'datetime' in self.request.data:
             dt = DateTimeField().to_internal_value(self.request.data.get('datetime'))
@@ -432,19 +435,32 @@ class CheckinListPositionViewSet(viewsets.ReadOnlyModelViewSet):
         raw_barcode_for_checkin = None
         from_revoked_secret = False
 
-        try:
-            queryset = self.get_queryset(ignore_status=True, ignore_products=True)
-            if self.kwargs['pk'].isnumeric() and not untrusted_input:
-                op = queryset.get(Q(pk=self.kwargs['pk']) | Q(secret=self.kwargs['pk']))
-            else:
-                # In application/x-www-form-urlencoded, you can encodes space ' ' with '+' instead of '%20'.
-                # `id`, however, is part of a path where this technically is not allowed. Old versions of our
-                # scan apps still do it, so we try work around it!
-                try:
-                    op = queryset.get(secret=self.kwargs['pk'])
-                except OrderPosition.DoesNotExist:
-                    op = queryset.get(secret=self.kwargs['pk'].replace('+', ' '))
-        except OrderPosition.DoesNotExist:
+        # 1. Gather a list of positions that could be the one we looking fore, either from their ID, secret or
+        #    parent secret
+        queryset = self.get_queryset(ignore_status=True, ignore_products=True).order_by(
+            F('addon_to').asc(nulls_first=True)
+        )
+
+        q = Q(secret=self.kwargs['pk'])
+        if self.checkinlist.addon_match:
+            q |= Q(addon_to__secret=self.kwargs['pk'])
+        if self.kwargs['pk'].isnumeric() and not untrusted_input:
+            q |= Q(pk=self.kwargs['pk'])
+
+        op_candidates = list(queryset.filter(q))
+        if not op_candidates and '+' in self.kwargs['pk']:
+            # In application/x-www-form-urlencoded, you can encodes space ' ' with '+' instead of '%20'.
+            # `id`, however, is part of a path where this technically is not allowed. Old versions of our
+            # scan apps still do it, so we try work around it!
+            q = Q(secret=self.kwargs['pk'].replace('+', ' '))
+            if self.checkinlist.addon_match:
+                q |= Q(addon_to__secret=self.kwargs['pk'].replace('+', ' '))
+            op_candidates = list(queryset.filter(q))
+
+        # 2. Handle the "nothing found" case: Either it's really a bogus secret that we don't know (-> error), or it
+        #    might be a revoked one that we actually know (-> error, but with better error message and logging and
+        #    with respecting the force option).
+        if not op_candidates:
             revoked_matches = list(self.request.event.revoked_secrets.filter(secret=self.kwargs['pk']))
             if len(revoked_matches) == 0:
                 self.request.event.log_action('pretix.event.checkin.unknown', data={
@@ -504,7 +520,9 @@ class CheckinListPositionViewSet(viewsets.ReadOnlyModelViewSet):
                     'require_attention': False,
                 }, status=404)
             elif revoked_matches and force:
-                op = revoked_matches[0].position
+                op_candidates = [revoked_matches[0].position]
+                if self.checkinlist.addon_match:
+                    op_candidates += list(revoked_matches[0].position.addons.all())
                 raw_barcode_for_checkin = self.kwargs['pk']
                 from_revoked_secret = True
             else:
@@ -529,6 +547,56 @@ class CheckinListPositionViewSet(viewsets.ReadOnlyModelViewSet):
                     'position': CheckinListOrderPositionSerializer(op, context=self.get_serializer_context()).data
                 }, status=400)
 
+        # 3. Handle the "multiple options found" case: Except for the unlikely case of a secret being also a valid primary
+        #    key on the same list, we're probably dealing with the ``addon_match`` case here and need to figure out
+        #    which add-on has the right product.
+        if len(op_candidates) > 1:
+            if self.checkinlist.addon_match and not self.checkinlist.all_products:
+                op_candidates_matching_product = [
+                    op for op in op_candidates if op.item_id in {i.pk for i in self.checkinlist.limit_products.all()}
+                ]
+            else:
+                op_candidates_matching_product = op_candidates
+            if len(op_candidates_matching_product) == 0:
+                # None of the found add-ons has the correct product, too bad! We could just error out here, but
+                # instead we just continue with *any* product and have it rejected by the check in perform_checkin.
+                # This has the advantage of a better error message.
+                op_candidates = [op_candidates[0]]
+            elif len(op_candidates_matching_product) > 1:
+                # It's still ambiguous, we'll error out.
+                # We choose the first match (regardless of product) for the logging since it's most likely to be the
+                # base product according to our order_by above.
+                op = op_candidates[0]
+                op.order.log_action('pretix.event.checkin.denied', data={
+                    'position': op.id,
+                    'positionid': op.positionid,
+                    'errorcode': Checkin.REASON_AMBIGUOUS,
+                    'reason_explanation': None,
+                    'force': force,
+                    'datetime': dt,
+                    'type': type,
+                    'list': self.checkinlist.pk
+                }, user=self.request.user, auth=self.request.auth)
+                Checkin.objects.create(
+                    position=op,
+                    successful=False,
+                    error_reason=Checkin.REASON_AMBIGUOUS,
+                    error_explanation=None,
+                    **common_checkin_args,
+                )
+                return Response({
+                    'status': 'error',
+                    'reason': Checkin.REASON_AMBIGUOUS,
+                    'reason_explanation': None,
+                    'require_attention': op.item.checkin_attention or op.order.checkin_attention,
+                    'position': CheckinListOrderPositionSerializer(op, context=self.get_serializer_context()).data
+                }, status=400)
+            else:
+                op_candidates = op_candidates_matching_product
+
+        op = op_candidates[0]
+
+        # 5. Pre-validate all incoming answers, handle file upload
         given_answers = {}
         if 'answers' in self.request.data:
             aws = self.request.data.get('answers')
@@ -542,6 +610,7 @@ class CheckinListPositionViewSet(viewsets.ReadOnlyModelViewSet):
                     except ValidationError:
                         pass
 
+        # 6. Pass to our actual check-in logic
         with language(self.request.event.settings.locale):
             try:
                 perform_checkin(

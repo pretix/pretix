@@ -56,6 +56,12 @@ class CheckinList(LoggedModel):
                                           default=False,
                                           help_text=_('With this option, people will be able to check in even if the '
                                                       'order has not been paid.'))
+    addon_match = models.BooleanField(
+        verbose_name=_('Allow checking in add-on tickets by scanning the main ticket'),
+        default=False,
+        help_text=_('A scan will only be possible if the check-in list is configured such that there is always exactly '
+                    'one matching add-on ticket. Ambiguous scans will be rejected..')
+    )
     gates = models.ManyToManyField(
         'Gate', verbose_name=_("Gates"), blank=True,
         help_text=_("Does not have any effect for the validation of tickets, only for the automatic configuration of "
@@ -258,6 +264,7 @@ class Checkin(models.Model):
     REASON_REVOKED = 'revoked'
     REASON_INCOMPLETE = 'incomplete'
     REASON_ALREADY_REDEEMED = 'already_redeemed'
+    REASON_AMBIGUOUS = 'ambiguous'
     REASON_ERROR = 'error'
     REASONS = (
         (REASON_CANCELED, _('Order canceled')),
@@ -268,6 +275,7 @@ class Checkin(models.Model):
         (REASON_INCOMPLETE, _('Information required')),
         (REASON_ALREADY_REDEEMED, _('Ticket already used')),
         (REASON_PRODUCT, _('Ticket type not allowed here')),
+        (REASON_AMBIGUOUS, _('Ticket code is ambiguous on list')),
         (REASON_ERROR, _('Server error')),
     )
 

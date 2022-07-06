@@ -34,6 +34,7 @@ allow_multiple_entries                boolean                    If ``true``, su
 allow_entry_after_exit                boolean                    If ``true``, subsequent scans of a ticket on this list are valid if the last scan of the ticket was an exit scan.
 rules                                 object                     Custom check-in logic. The contents of this field are currently not considered a stable API and modifications through the API are highly discouraged.
 exit_all_at                           datetime                   Automatically check out (i.e. perform an exit scan) at this point in time. After this happened, this property will automatically be set exactly one day into the future. Note that this field is considered "internal configuration" and if you pull the list with ``If-Modified-Since``, the daily change in this field will not trigger a response.
+addon_match                           boolean                    If ``true``, tickets on this list can be redeemed by scanning their parent ticket if this still leads to an unambiguous match.
 ===================================== ========================== =======================================================
 
 .. versionchanged:: 3.9
@@ -52,6 +53,10 @@ exit_all_at                           datetime                   Automatically c
 .. versionchanged:: 3.17
 
     The ``ends_after`` and ``expand`` query parameters have been added.
+
+.. versionchanged:: 4.12
+
+    The ``addon_match`` attribute has been added.
 
 Endpoints
 ---------
@@ -94,6 +99,7 @@ Endpoints
             "allow_entry_after_exit": true,
             "exit_all_at": null,
             "rules": {},
+            "addon_match": false,
             "auto_checkin_sales_channels": [
               "pretixpos"
             ]
@@ -146,6 +152,7 @@ Endpoints
         "allow_entry_after_exit": true,
         "exit_all_at": null,
         "rules": {},
+        "addon_match": false,
         "auto_checkin_sales_channels": [
           "pretixpos"
         ]
@@ -245,6 +252,7 @@ Endpoints
         "subevent": null,
         "allow_multiple_entries": false,
         "allow_entry_after_exit": true,
+        "addon_match": false,
         "auto_checkin_sales_channels": [
           "pretixpos"
         ]
@@ -269,6 +277,7 @@ Endpoints
         "subevent": null,
         "allow_multiple_entries": false,
         "allow_entry_after_exit": true,
+        "addon_match": false,
         "auto_checkin_sales_channels": [
           "pretixpos"
         ]
@@ -323,6 +332,7 @@ Endpoints
         "subevent": null,
         "allow_multiple_entries": false,
         "allow_entry_after_exit": true,
+        "addon_match": false,
         "auto_checkin_sales_channels": [
           "pretixpos"
         ]
@@ -743,6 +753,7 @@ Order position endpoints
    * ``already_redeemed`` - Ticket already has been redeemed
    * ``product`` - Tickets with this product may not be scanned at this device
    * ``rules`` - Check-in prevented by a user-defined rule
+   * ``ambiguous`` - Multiple tickets match scan, rejected
 
    In case of reason ``rules``, there might be an additional response field ``reason_explanation`` with a human-readable
    description of the violated rules. However, that field can also be missing or be ``null``.

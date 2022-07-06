@@ -70,7 +70,7 @@ def order(event, item, other_item, taxrule):
             total=46, locale='en'
         )
         InvoiceAddress.objects.create(order=o, company="Sample company", country=Country('NZ'))
-        OrderPosition.objects.create(
+        op1 = OrderPosition.objects.create(
             order=o,
             positionid=1,
             item=item,
@@ -89,6 +89,16 @@ def order(event, item, other_item, taxrule):
             attendee_name_parts={'full_name': "Michael"},
             secret="sf4HZG73fU6kwddgjg2QOusFbYZwVKpK",
             pseudonymization_id="BACDEFGHKL",
+        )
+        OrderPosition.objects.create(
+            order=o,
+            positionid=3,
+            item=other_item,
+            addon_to=op1,
+            variation=None,
+            price=Decimal("0"),
+            secret="3u4ez6vrrbgb3wvezxhq446p548dt2wn",
+            pseudonymization_id="FOOBAR12345",
         )
         return o
 
@@ -157,6 +167,38 @@ TEST_ORDERPOSITION2_RES = {
     "pseudonymization_id": "BACDEFGHKL",
 }
 
+TEST_ORDERPOSITION3_RES = {
+    "id": 3,
+    "require_attention": False,
+    "order__status": "p",
+    "order": "FOO",
+    "positionid": 3,
+    "item": 1,
+    "variation": None,
+    "price": "0.00",
+    "attendee_name": "Peter",
+    "attendee_name_parts": {'full_name': "Peter"},
+    "attendee_email": None,
+    "voucher": None,
+    "tax_rate": "0.00",
+    "tax_value": "0.00",
+    "tax_rule": None,
+    "secret": "3u4ez6vrrbgb3wvezxhq446p548dt2wn",
+    "addon_to": None,
+    "checkins": [],
+    "downloads": [],
+    "answers": [],
+    "seat": None,
+    "company": None,
+    "street": None,
+    "zipcode": None,
+    "city": None,
+    "country": None,
+    "state": None,
+    "subevent": None,
+    "pseudonymization_id": "FOOBAR12345",
+}
+
 TEST_LIST_RES = {
     "name": "Default",
     "all_products": False,
@@ -168,6 +210,7 @@ TEST_LIST_RES = {
     "allow_entry_after_exit": True,
     "subevent": None,
     "exit_all_at": None,
+    "addon_match": False,
     "rules": {}
 }
 
@@ -396,27 +439,31 @@ def test_list_update(token_client, organizer, event, clist):
 def test_list_all_items_positions(token_client, organizer, event, clist, clist_all, item, other_item, order):
     with scopes_disabled():
         p1 = dict(TEST_ORDERPOSITION1_RES)
-        p1["id"] = order.positions.first().pk
+        p1["id"] = order.positions.get(positionid=1).pk
         p1["item"] = item.pk
         p2 = dict(TEST_ORDERPOSITION2_RES)
-        p2["id"] = order.positions.last().pk
+        p2["id"] = order.positions.get(positionid=2).pk
         p2["item"] = other_item.pk
+        p3 = dict(TEST_ORDERPOSITION3_RES)
+        p3["id"] = order.positions.get(positionid=3).pk
+        p3["item"] = other_item.pk
+        p3["addon_to"] = p1["id"]
 
     # All items
     resp = token_client.get('/api/v1/organizers/{}/events/{}/checkinlists/{}/positions/?ordering=positionid'.format(
         organizer.slug, event.slug, clist_all.pk
     ))
     assert resp.status_code == 200
-    assert [p1, p2] == resp.data['results']
+    assert [p1, p2, p3] == resp.data['results']
 
     # Check-ins on other list ignored
     with scopes_disabled():
-        order.positions.first().checkins.create(list=clist)
+        c = order.positions.get(positionid=1).checkins.create(list=clist)
     resp = token_client.get('/api/v1/organizers/{}/events/{}/checkinlists/{}/positions/?ordering=positionid'.format(
         organizer.slug, event.slug, clist_all.pk
     ))
     assert resp.status_code == 200
-    assert [p1, p2] == resp.data['results']
+    assert [p1, p2, p3] == resp.data['results']
     resp = token_client.get('/api/v1/organizers/{}/events/{}/checkinlists/{}/positions/?has_checkin=1'.format(
         organizer.slug, event.slug, clist_all.pk
     ))
@@ -425,7 +472,7 @@ def test_list_all_items_positions(token_client, organizer, event, clist, clist_a
 
     # Only checked in
     with scopes_disabled():
-        c = order.positions.first().checkins.create(list=clist_all)
+        c = order.positions.get(positionid=1).checkins.create(list=clist_all)
     p1['checkins'] = [
         {
             'id': c.pk,
@@ -448,7 +495,7 @@ def test_list_all_items_positions(token_client, organizer, event, clist, clist_a
         organizer.slug, event.slug, clist_all.pk
     ))
     assert resp.status_code == 200
-    assert [p2] == resp.data['results']
+    assert [p2, p3] == resp.data['results']
 
     # Order by checkin
     resp = token_client.get(
@@ -456,18 +503,18 @@ def test_list_all_items_positions(token_client, organizer, event, clist, clist_a
             organizer.slug, event.slug, clist_all.pk
         ))
     assert resp.status_code == 200
-    assert [p1, p2] == resp.data['results']
+    assert resp.data['results'][0] == p1
     resp = token_client.get(
         '/api/v1/organizers/{}/events/{}/checkinlists/{}/positions/?ordering=last_checked_in'.format(
             organizer.slug, event.slug, clist_all.pk
         ))
     assert resp.status_code == 200
-    assert [p2, p1] == resp.data['results']
+    assert resp.data['results'][-1] == p1
 
     # Order by checkin date
     time.sleep(1)
     with scopes_disabled():
-        c = order.positions.last().checkins.create(list=clist_all)
+        c = order.positions.get(positionid=2).checkins.create(list=clist_all)
     p2['checkins'] = [
         {
             'id': c.pk,
@@ -480,23 +527,23 @@ def test_list_all_items_positions(token_client, organizer, event, clist, clist_a
         }
     ]
     resp = token_client.get(
-        '/api/v1/organizers/{}/events/{}/checkinlists/{}/positions/?ordering=-last_checked_in'.format(
+        '/api/v1/organizers/{}/events/{}/checkinlists/{}/positions/?ordering=-last_checked_in,positionid'.format(
             organizer.slug, event.slug, clist_all.pk
         ))
     assert resp.status_code == 200
-    assert [p2, p1] == resp.data['results']
+    assert [p2, p1, p3] == resp.data['results']
 
     # Order by attendee_name
-    resp = token_client.get('/api/v1/organizers/{}/events/{}/checkinlists/{}/positions/?ordering=-attendee_name'.format(
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/checkinlists/{}/positions/?ordering=-attendee_name,positionid'.format(
         organizer.slug, event.slug, clist_all.pk
     ))
     assert resp.status_code == 200
-    assert [p1, p2] == resp.data['results']
-    resp = token_client.get('/api/v1/organizers/{}/events/{}/checkinlists/{}/positions/?ordering=attendee_name'.format(
+    assert [p1, p3, p2] == resp.data['results']
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/checkinlists/{}/positions/?ordering=attendee_name,positionid'.format(
         organizer.slug, event.slug, clist_all.pk
     ))
     assert resp.status_code == 200
-    assert [p2, p1] == resp.data['results']
+    assert [p2, p1, p3] == resp.data['results']
 
     # Paid only
     order.status = Order.STATUS_PENDING
@@ -513,32 +560,41 @@ def test_list_all_items_positions(token_client, organizer, event, clist, clist_a
     assert resp.status_code == 200
     p1['order__status'] = 'n'
     p2['order__status'] = 'n'
-    assert [p2, p1] == resp.data['results']
+    p3['order__status'] = 'n'
+    assert [p2, p1, p3] == resp.data['results']
 
 
 @pytest.mark.django_db
 def test_list_all_items_positions_by_subevent(token_client, organizer, event, clist, clist_all, item, other_item, order, subevent):
     with scopes_disabled():
         se2 = event.subevents.create(name="Foobar", date_from=datetime.datetime(2017, 12, 27, 10, 0, 0, tzinfo=UTC))
-        pfirst = order.positions.first()
+        pfirst = order.positions.get(positionid=1)
         pfirst.subevent = se2
         pfirst.save()
         p1 = dict(TEST_ORDERPOSITION1_RES)
         p1["id"] = pfirst.pk
         p1["subevent"] = se2.pk
         p1["item"] = item.pk
-        plast = order.positions.last()
-        plast.subevent = subevent
-        plast.save()
+        psecond = order.positions.get(positionid=2)
+        psecond.subevent = subevent
+        psecond.save()
         p2 = dict(TEST_ORDERPOSITION2_RES)
-        p2["id"] = plast.pk
+        p2["id"] = psecond.pk
         p2["item"] = other_item.pk
         p2["subevent"] = subevent.pk
+        pthird = order.positions.get(positionid=3)
+        pthird.subevent = se2
+        pthird.save()
+        p3 = dict(TEST_ORDERPOSITION3_RES)
+        p3["id"] = pthird.pk
+        p3["addon_to"] = pfirst.pk
+        p3["item"] = other_item.pk
+        p3["subevent"] = se2.pk
     resp = token_client.get('/api/v1/organizers/{}/events/{}/checkinlists/{}/positions/?ordering=positionid'.format(
         organizer.slug, event.slug, clist_all.pk
     ))
     assert resp.status_code == 200
-    assert [p1, p2] == resp.data['results']
+    assert [p1, p2, p3] == resp.data['results']
 
     clist_all.subevent = subevent
     clist_all.save()
@@ -593,7 +649,7 @@ def test_status(token_client, organizer, event, clist_all, item, other_item, ord
     ))
     assert resp.status_code == 200
     assert resp.data['checkin_count'] == 1
-    assert resp.data['position_count'] == 2
+    assert resp.data['position_count'] == 3
     assert resp.data['inside_count'] == 1
     assert resp.data['items'] == [
         {
@@ -622,7 +678,7 @@ def test_status(token_client, organizer, event, clist_all, item, other_item, ord
             'id': other_item.pk,
             'checkin_count': 0,
             'admission': False,
-            'position_count': 1,
+            'position_count': 2,
             'variations': []
         }
     ]
@@ -1185,12 +1241,14 @@ def test_redeem_unknown_revoked_force(token_client, organizer, clist, event, ord
     assert resp.status_code == 201
     assert resp.data["status"] == "ok"
     with scopes_disabled():
-        assert Checkin.objects.last().forced
-        assert Checkin.objects.last().force_sent
+        ci = Checkin.objects.last()
+        assert ci.forced
+        assert ci.force_sent
+        assert ci.position == p
 
 
 @pytest.mark.django_db
-def test_redeem_unknown_legacy_device_bug(device, device_client, organizer, clist, event, order):
+def test_redeem_unknown_legacy_device_bug(device, device_client, organizer, clist, event):
     device.software_brand = "pretixSCAN"
     device.software_version = "1.11.1"
     device.save()
@@ -1232,7 +1290,6 @@ def test_redeem_by_id_not_allowed_if_pretixscan(device, device_client, organizer
     ), {
         'force': True
     }, format='json')
-    print(resp.data)
     assert resp.status_code == 404
     resp = device_client.post('/api/v1/organizers/{}/events/{}/checkinlists/{}/positions/{}/redeem/'.format(
         organizer.slug, event.slug, clist.pk, p.secret
@@ -1258,3 +1315,82 @@ def test_redeem_by_id_not_allowed_if_untrusted(device, device_client, organizer,
         'force': True
     }, format='json')
     assert resp.status_code == 201
+
+
+@pytest.mark.django_db
+def test_redeem_addon_if_match_disabled(token_client, organizer, clist, other_item, event, order):
+    with scopes_disabled():
+        clist.all_products = False
+        clist.save()
+        clist.limit_products.set([other_item])
+    resp = token_client.post('/api/v1/organizers/{}/events/{}/checkinlists/{}/positions/{}/redeem/'.format(
+        organizer.slug, event.slug, clist.pk, 'z3fsn8jyufm5kpk768q69gkbyr5f4h6w'
+    ), {
+    }, format='json')
+    assert resp.status_code == 400
+    assert resp.data["status"] == "error"
+    assert resp.data["reason"] == "product"
+    with scopes_disabled():
+        assert not Checkin.objects.last()
+
+
+@pytest.mark.django_db
+def test_redeem_addon_if_match_enabled(token_client, organizer, clist, other_item, event, order):
+    with scopes_disabled():
+        clist.all_products = False
+        clist.addon_match = True
+        clist.save()
+        clist.limit_products.set([other_item])
+        p = order.positions.first().addons.all().first()
+    resp = token_client.post('/api/v1/organizers/{}/events/{}/checkinlists/{}/positions/{}/redeem/'.format(
+        organizer.slug, event.slug, clist.pk, 'z3fsn8jyufm5kpk768q69gkbyr5f4h6w'
+    ), {
+    }, format='json')
+    assert resp.status_code == 201
+    assert resp.data['status'] == 'ok'
+    assert resp.data['position']['attendee_name'] == 'Peter'  # test propagation of names
+    assert resp.data['position']['item'] == other_item.pk
+    with scopes_disabled():
+        ci = Checkin.objects.last()
+        assert ci.position == p
+
+
+@pytest.mark.django_db
+def test_redeem_addon_if_match_ambiguous(token_client, organizer, clist, item, other_item, event, order):
+    with scopes_disabled():
+        clist.all_products = False
+        clist.addon_match = True
+        clist.save()
+        clist.limit_products.set([item, other_item])
+    resp = token_client.post('/api/v1/organizers/{}/events/{}/checkinlists/{}/positions/{}/redeem/'.format(
+        organizer.slug, event.slug, clist.pk, 'z3fsn8jyufm5kpk768q69gkbyr5f4h6w'
+    ), {
+    }, format='json')
+    assert resp.status_code == 400
+    assert resp.data["status"] == "error"
+    assert resp.data["reason"] == "ambiguous"
+    with scopes_disabled():
+        assert not Checkin.objects.last()
+
+
+@pytest.mark.django_db
+def test_redeem_addon_if_match_and_revoked_force(token_client, organizer, clist, other_item, event, order):
+    with scopes_disabled():
+        event.revoked_secrets.create(position=order.positions.get(positionid=1), secret='revoked_secret')
+        clist.all_products = False
+        clist.addon_match = True
+        clist.save()
+        clist.limit_products.set([other_item])
+        p = order.positions.first().addons.all().first()
+    resp = token_client.post('/api/v1/organizers/{}/events/{}/checkinlists/{}/positions/{}/redeem/'.format(
+        organizer.slug, event.slug, clist.pk, 'revoked_secret'
+    ), {
+        'force': True
+    }, format='json')
+    assert resp.status_code == 201
+    assert resp.data["status"] == "ok"
+    with scopes_disabled():
+        ci = Checkin.objects.last()
+        assert ci.forced
+        assert ci.force_sent
+        assert ci.position == p
