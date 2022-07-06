@@ -1398,6 +1398,9 @@ var shared_root_methods = {
         if (this.$root.category_filter) {
             url += '&categories=' + encodeURIComponent(this.$root.category_filter);
         }
+        if (this.$root.variation_filter) {
+            url += '&variations=' + encodeURIComponent(this.$root.variation_filter);
+        }
         var cart_id = getCookie(this.cookieName);
         if (this.$root.voucher_code) {
             url += '&voucher=' + encodeURIComponent(this.$root.voucher_code);
@@ -1464,7 +1467,7 @@ var shared_root_methods = {
                 root.error = data.error;
                 root.display_add_to_cart = data.display_add_to_cart;
                 root.waiting_list_enabled = data.waiting_list_enabled;
-                root.show_variations_expanded = data.show_variations_expanded;
+                root.show_variations_expanded = data.show_variations_expanded || !!root.variation_filter;
                 root.cart_id = cart_id;
                 root.cart_exists = data.cart_exists;
                 root.vouchers_exist = data.vouchers_exist;
@@ -1665,6 +1668,7 @@ var create_widget = function (element) {
     var widget_data = JSON.parse(JSON.stringify(window.PretixWidget.widget_data));
     var filter = element.attributes.filter ? element.attributes.filter.value : null;
     var items = element.attributes.items ? element.attributes.items.value : null;
+    var variations = element.attributes.variations ? element.attributes.variations.value : null;
     var categories = element.attributes.categories ? element.attributes.categories.value : null;
     for (var i = 0; i < element.attributes.length; i++) {
         var attrib = element.attributes[i];
@@ -1696,10 +1700,11 @@ var create_widget = function (element) {
                 filter: filter,
                 item_filter: items,
                 category_filter: categories,
+                variation_filter: variations,
                 voucher_code: voucher,
                 display_net_prices: false,
                 voucher_explanation_text: null,
-                show_variations_expanded: false,
+                show_variations_expanded: !!variations,
                 skip_ssl: skip_ssl,
                 disable_iframe: disable_iframe,
                 style: style,

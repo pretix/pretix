@@ -224,12 +224,12 @@ class WidgetAPIProductList(EventListMixin, View):
     def _get_items(self):
         qs = self.request.event.items
         if 'items' in self.request.GET:
-            qs = qs.filter(pk__in=[pk for pk in self.request.GET.get('items').split(",") if pk.isdigit()])
+            qs = qs.filter(pk__in=[pk.strip() for pk in self.request.GET.get('items').split(",") if pk.strip().isdigit()])
         if 'categories' in self.request.GET:
-            qs = qs.filter(category__pk__in=[pk for pk in self.request.GET.get('categories').split(",") if pk.isdigit()])
+            qs = qs.filter(category__pk__in=[pk.strip() for pk in self.request.GET.get('categories').split(",") if pk.strip().isdigit()])
         variation_filter = None
         if 'variations' in self.request.GET:
-            variation_filter = [int(pk) for pk in self.request.GET.get('variations').split(",") if pk.isdigit()]
+            variation_filter = [int(pk.strip()) for pk in self.request.GET.get('variations').split(",") if pk.strip().isdigit()]
             qs = qs.filter(
                 pk__in=ItemVariation.objects.filter(
                     item__event=self.request.event,
