@@ -26,11 +26,11 @@ from django.utils.translation import gettext_lazy as _
 from openpyxl.styles import Alignment
 from openpyxl.utils import get_column_letter
 
+from ...helpers.safe_openpyxl import SafeCell
 from ..channels import get_all_sales_channels
 from ..exporter import ListExporter
 from ..models import ItemMetaValue
 from ..signals import register_data_exporters
-from ...helpers.safe_openpyxl import SafeCell
 
 
 def _max(a1, a2):

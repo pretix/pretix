@@ -54,7 +54,9 @@ from lxml import html
 
 from pretix.base.context import get_powered_by
 from pretix.base.i18n import language
-from pretix.base.models import CartPosition, Event, Quota, SubEvent, Voucher, ItemVariation
+from pretix.base.models import (
+    CartPosition, Event, ItemVariation, Quota, SubEvent, Voucher,
+)
 from pretix.base.services.cart import error_messages
 from pretix.base.settings import GlobalSettingsObject
 from pretix.base.templatetags.rich_text import rich_text
