@@ -220,7 +220,7 @@ setup(
         'redis==3.5.*',
         'reportlab==3.6.*',
         'requests==2.27.*',
-        'sentry-sdk==1.5.*',
+        'sentry-sdk>=1.5,<1.7',
         'sepaxml==2.4.*,>=2.4.1',
         'slimit',
         'static3==0.7.*',
@@ -237,7 +237,7 @@ setup(
         'dev': [
             'coverage',
             'coveralls',
-            'django-debug-toolbar==3.2.*',
+            'django-debug-toolbar==3.5.*',
             'flake8==4.0.*',
             'freezegun',
             'isort==5.10.*',
