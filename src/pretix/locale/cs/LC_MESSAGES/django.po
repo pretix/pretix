@@ -8,16 +8,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-07-01 07:49+0000\n"
-"PO-Revision-Date: 2022-02-23 22:00+0000\n"
-"Last-Translator: Tonda Pavlík <reklamy@playton.cz>\n"
-"Language-Team: Czech <https://translate.pretix.eu/projects/pretix/pretix/cs/"
-">\n"
+"PO-Revision-Date: 2022-07-11 06:00+0000\n"
+"Last-Translator: Michael <michael.happl@gmx.at>\n"
+"Language-Team: Czech <https://translate.pretix.eu/projects/pretix/pretix/cs/>"
+"\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 4.8\n"
+"X-Generator: Weblate 4.12.2\n"
 
 #: htmlcov/pretix_control_views_dashboards_py.html:963
 #: pretix/control/templates/pretixcontrol/events/index.html:140
@@ -1359,10 +1359,8 @@ msgstr "E-mailová adresa ověřena"
 #: pretix/base/exporters/orderlist.py:297
 #: pretix/base/exporters/orderlist.py:464
 #: pretix/base/exporters/orderlist.py:618
-#, fuzzy
-#| msgid "Business customer"
 msgid "External customer ID"
-msgstr "Obchodní zákazník"
+msgstr "ID externího zákazníka"
 
 #: pretix/base/exporters/orderlist.py:302
 #, python-brace-format
@@ -1406,7 +1404,7 @@ msgstr "Adresa faktury"
 #: pretix/base/exporters/orderlist.py:475
 #: pretix/base/exporters/orderlist.py:636 pretix/base/models/orders.py:164
 msgid "canceled"
-msgstr ""
+msgstr "zrušeno"
 
 #: pretix/base/exporters/orderlist.py:546
 #: pretix/plugins/checkinlists/exporters.py:616
@@ -1518,7 +1516,7 @@ msgstr "ID pseudonymizace"
 #: pretix/base/exporters/orderlist.py:580 pretix/control/forms/filter.py:621
 #: pretix/control/templates/pretixcontrol/order/change.html:194
 msgid "Ticket secret"
-msgstr ""
+msgstr "Kód vstupenky"
 
 #: pretix/base/exporters/orderlist.py:581 pretix/base/orderimport.py:671
 #: pretix/plugins/checkinlists/exporters.py:472
@@ -1924,7 +1922,7 @@ msgstr "Kód poukázky"
 msgid ""
 "Due to technical reasons you cannot set inputs, that need to be masked (e.g. "
 "passwords), to %(value)s."
-msgstr ""
+msgstr "Z technických důvodů nelze toto pole nastavit na hodnotu %(value)s."
 
 #: pretix/base/forms/auth.py:57 pretix/base/forms/auth.py:168
 msgid "Keep me logged in"
@@ -2538,6 +2536,8 @@ msgid ""
 "The identifier may only contain letters, numbers, dots, dashes, and "
 "underscores. It must start and end with a letter or number."
 msgstr ""
+"Toto pole může obsahovat pouze písmena, číslice, tečky, pomlčky a "
+"podtržítka. Musí začínat a končit číslem nebo písmenem."
 
 #: pretix/base/models/customers.py:65
 msgid "Account active"
@@ -2561,15 +2561,13 @@ msgstr "Datum registrace"
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:31
 #: pretix/control/templates/pretixcontrol/organizers/customers.html:65
 #: pretix/control/templates/pretixcontrol/users/form.html:43
-#, fuzzy
-#| msgid "Internal identifier"
 msgid "External identifier"
-msgstr "Neplatný identifikátor"
+msgstr "Externí identifikátor"
 
 #: pretix/base/models/customers.py:75
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:67
 msgid "Notes"
-msgstr ""
+msgstr "Poznámky"
 
 #: pretix/base/models/customers.py:238 pretix/base/models/orders.py:1318
 #: pretix/base/models/orders.py:2693 pretix/base/settings.py:841
@@ -2610,19 +2608,17 @@ msgstr "Datum inicualizace"
 #: pretix/base/models/discount.py:44
 msgctxt "subevent"
 msgid "Dates can be mixed without limitation"
-msgstr ""
+msgstr "Datumy lze míchat bez omezení"
 
 #: pretix/base/models/discount.py:45
-#, fuzzy
-#| msgid "This product will not be sold before the given date."
 msgctxt "subevent"
 msgid "All matching products must be for the same date"
-msgstr "Tento produkt nebude před uvedeným datem prodáván."
+msgstr "Všechny shodné produkty se musí vztahovat ke stejnému datu."
 
 #: pretix/base/models/discount.py:46
 msgctxt "subevent"
 msgid "Each matching product must be for a different date"
-msgstr ""
+msgstr "Všechny odpovídající produkty se musí vztahovat vždy k jiným datům"
 
 #: pretix/base/models/discount.py:55 pretix/base/models/event.py:1296
 #: pretix/base/models/items.py:368 pretix/base/models/items.py:784
@@ -2641,14 +2637,14 @@ msgstr "Interní jméno"
 #: pretix/base/models/discount.py:64 pretix/base/models/items.py:793
 #: pretix/base/models/items.py:1053 pretix/base/models/items.py:1277
 msgid "Position"
-msgstr ""
+msgstr "Posize"
 
 #: pretix/base/models/discount.py:67 pretix/base/models/items.py:509
 #: pretix/base/models/items.py:840 pretix/control/forms/discounts.py:79
 #: pretix/control/forms/event.py:895 pretix/control/forms/item.py:517
 #: pretix/control/forms/item.py:695
 msgid "Sales channels"
-msgstr ""
+msgstr "Prodejní cesty"
 
 #: pretix/base/models/discount.py:73 pretix/base/models/items.py:168
 #: pretix/base/models/items.py:224 pretix/base/models/items.py:427
@@ -2671,35 +2667,28 @@ msgid "Available until"
 msgstr "K dispozici do"
 
 #: pretix/base/models/discount.py:84
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "Event series date changed"
 msgid "Event series handling"
-msgstr "Datum u sérii akcí byla upravena"
+msgstr "Zpracování sérii akcí"
 
 #: pretix/base/models/discount.py:92
-#, fuzzy
-#| msgid "All products (including newly created ones)"
 msgid "Apply to all products (including newly created ones)"
-msgstr "Všechny produkty (včetně nově vytvořených)"
+msgstr "Platí pro všechny produkty (včetně nově vytvořených)"
 
 #: pretix/base/models/discount.py:96
 msgid "Apply to specific products"
-msgstr ""
+msgstr "Použít na konkrétní produkty"
 
 #: pretix/base/models/discount.py:101
-#, fuzzy
-#| msgid "{category} (Add-On products)"
 msgid "Apply to add-on products"
-msgstr "{category} (doplňkové produkty)"
+msgstr "Použít na doplňkové produkty"
 
 #: pretix/base/models/discount.py:102
 msgid "Discounts never apply to bundled products"
-msgstr ""
+msgstr "Slevy se nikdy nevztahují na balíčky produktů"
 
 #: pretix/base/models/discount.py:106
 msgid "Ignore products discounted by a voucher"
-msgstr ""
+msgstr "Ignorovat produkty zlevněné voucherem"
 
 #: pretix/base/models/discount.py:107
 msgid ""
@@ -2708,22 +2697,26 @@ msgid ""
 "use a voucher only to e.g. unlock a hidden product or gain access to sold-"
 "out quota will still receive the discount."
 msgstr ""
+"Pokud je tato možnost aktivní, nebudou se slevy vztahovat na produkty, na "
+"které již byla poskytnuta sleva na základě voucheru. Pokud byl naopak poukaz "
+"použit pouze například k odblokování skrytého produktu nebo vyprodané kvóty, "
+"bude automatická sleva poskytnuta i nadále."
 
 #: pretix/base/models/discount.py:112
 msgid "Minimum number of matching products"
-msgstr ""
+msgstr "Minimální počet odpovídajících produktů"
 
 #: pretix/base/models/discount.py:116
 msgid "Minimum gross value of matching products"
-msgstr ""
+msgstr "Minimální celková brutto částka odpovídajících produktů"
 
 #: pretix/base/models/discount.py:123
 msgid "Percentual discount on matching products"
-msgstr ""
+msgstr "Procentuální sleva na odpovídající produkty"
 
 #: pretix/base/models/discount.py:130
 msgid "Apply discount only to this number of matching products"
-msgstr ""
+msgstr "Poskytnutí slevy pouze na tento počet odpovídajících produktů"
 
 #: pretix/base/models/discount.py:132
 msgid ""
@@ -2734,30 +2727,42 @@ msgid ""
 "discounted. If you want to grant the discount on all matching products, keep "
 "this field empty."
 msgstr ""
+"Tato možnost umožňuje vytvářet slevy typu \"kupte X, získejte Y se slevou/"
+"zdarma\". Pokud je například \"Minimální počet odpovídajících produktů\" "
+"nastaven na 4 a tato hodnota je nastavena na 2, bude košík zákazníka "
+"rozdělen do skupin po čtyřech a nejlevnější dvě vstupenky v každé skupině "
+"budou zlevněny. Pokud se má sleva uplatnit na všechny odpovídající produkty, "
+"pole musí zůstat prázdné."
 
 #: pretix/base/models/discount.py:169
 msgid ""
 "You can either set a minimum number of matching products or a minimum value, "
 "not both."
 msgstr ""
+"Můžete nastavit buď minimální počet odpovídajících produktů, nebo minimální "
+"hodnotu, nikoli obojí."
 
 #: pretix/base/models/discount.py:174
 msgid ""
 "You need to either set a minimum number of matching products or a minimum "
 "value."
 msgstr ""
+"Je třeba nastavit buď minimální počet odpovídajících produktů, nebo "
+"minimální hodnotu."
 
 #: pretix/base/models/discount.py:179
 msgid ""
 "You cannot apply the discount only to some of the matched products if you "
 "are matching on a minimum value."
 msgstr ""
+"Slevu můžete uplatnit nejen na některé odpovídající produkty, pokud "
+"požadujete minimální částku."
 
 #: pretix/base/models/discount.py:185
 msgid ""
 "You cannot apply the discount only to bookings of different dates if you are "
 "matching on a minimum value."
-msgstr ""
+msgstr "Pokud nastavíte minimální částku, nelze slevu omezit na různá data."
 
 #: pretix/base/models/event.py:84
 msgid "The end of the presale period has to be later than its start."
@@ -2985,11 +2990,11 @@ msgstr "Nelze nastavit výchozí hodnotu, která není platnou hodnotou."
 
 #: pretix/base/models/event.py:1632 pretix/base/models/organizer.py:477
 msgid "Link text"
-msgstr ""
+msgstr "Text odkazu"
 
 #: pretix/base/models/event.py:1635 pretix/base/models/organizer.py:480
 msgid "Link URL"
-msgstr ""
+msgstr "URL odkazu"
 
 #: pretix/base/models/fields.py:33
 msgid "No value can contain the delimiter character."
@@ -3152,16 +3157,16 @@ msgstr "Zobrazit čekací listinu pro tento lístek"
 
 #: pretix/base/models/items.py:410
 msgid "This will only work if waiting lists are enabled for this event."
-msgstr ""
+msgstr "Předpokládá, že čekací listy pro tuto událost jsou aktivovány."
 
 #: pretix/base/models/items.py:414 pretix/base/settings.py:1081
 #: pretix/control/forms/event.py:1332
 msgid "Show number of tickets left"
-msgstr ""
+msgstr "Zobrazit počet zbývajících vstupenek"
 
 #: pretix/base/models/items.py:415
 msgid "Publicly show how many tickets are still available."
-msgstr ""
+msgstr "Zveřejněte, kolik vstupenek je ještě k dispozici."
 
 #: pretix/base/models/items.py:422
 msgid "Product picture"
@@ -3169,7 +3174,7 @@ msgstr "Obrázek produktu"
 
 #: pretix/base/models/items.py:440
 msgid "Only show after sellout of"
-msgstr ""
+msgstr "Nezobrazovat, pokud je k dispozici jiný kontingent"
 
 #: pretix/base/models/items.py:441
 msgid ""
@@ -3179,6 +3184,11 @@ msgid ""
 "out. There might be a short period in which both products are visible while "
 "all tickets in the referenced quota are reserved, but not yet sold."
 msgstr ""
+"Pokud zde vyberete kontingent, tento produkt se zobrazí pouze v případě, že "
+"tento jiný kontingent není k dispozici. V kombinaci s možností zobrazit "
+"vyprodané produkty to umožňuje nahradit produkt dražším, jakmile se vyprodá. "
+"Pokud jsou všechny produkty v nastavené kvótě rezervovány, ale ještě nebyly "
+"prodány, může nastat krátké období, kdy jsou oba produkty viditelné."
 
 #: pretix/base/models/items.py:448
 msgid "This product can only be bought using a voucher."
@@ -3194,7 +3204,7 @@ msgstr ""
 
 #: pretix/base/models/items.py:454
 msgid "Buying this product requires approval"
-msgstr ""
+msgstr "Nákup tohoto produktu vyžaduje potvrzení"
 
 #: pretix/base/models/items.py:456
 msgid ""
@@ -3203,6 +3213,9 @@ msgid ""
 "paid and completed. You can use this e.g. for discounted tickets that are "
 "only available to specific groups."
 msgstr ""
+"Pokud je tento produkt součástí objednávky, není objednávka uvolněna přímo, "
+"ale musí být potvrzena vámi před jejím zaplacením a dokončením. To můžete "
+"použít například pro vstupenky, které jsou dostupné pouze pro určité členy."
 
 #: pretix/base/models/items.py:461
 msgid ""
@@ -3217,10 +3230,12 @@ msgid ""
 "This product will be hidden from the event page until the user enters a "
 "voucher that unlocks this product."
 msgstr ""
+"Tento produkt se na stránce akce nezobrazí, pokud zákazník nezadá kód "
+"voucheru spojený s tímto produktem."
 
 #: pretix/base/models/items.py:467
 msgid "Only sell this product as part of a bundle"
-msgstr ""
+msgstr "Tento produkt prodávat pouze jako součást balíčku"
 
 #: pretix/base/models/items.py:469
 msgid ""
@@ -3228,10 +3243,14 @@ msgid ""
 "products. Do <strong>not</strong> check this option if you want to use this "
 "product as an add-on product, but only for fixed bundles!"
 msgstr ""
+"Pokud je tato možnost nastavena, produkt se prodává pouze jako součást "
+"balíčků. Tato možnost <strong>nesmí</strong> být nastavena, pokud má být "
+"tento produkt použit jako doplňkový produkt, ale pouze pro pevné balíčky "
+"produktů!"
 
 #: pretix/base/models/items.py:474
 msgid "Allow product to be canceled or changed"
-msgstr ""
+msgstr "Umožnit zrušení nebo změnu objednávky"
 
 #: pretix/base/models/items.py:476
 msgid ""
@@ -3239,6 +3258,9 @@ msgid ""
 "event apply. If this is unchecked, orders containing this product can not be "
 "canceled by users but only by you."
 msgstr ""
+"Pokud je tato možnost aktivní, platí obvyklé podmínky pro zrušení a změnu "
+"rezervace akce. Pokud je tato možnost vypnuta, zákazníci nemohou objednávky "
+"s tímto produktem nikdy zrušit sami, bez ohledu na nastavení pro celou akci."
 
 #: pretix/base/models/items.py:480
 msgid "Minimum amount per order"
@@ -3250,10 +3272,13 @@ msgid ""
 "many times. If you keep the field empty or set it to 0, there is no special "
 "limit for this product."
 msgstr ""
+"Tento produkt lze objednat pouze tehdy, pokud je v nákupním košíku alespoň "
+"tolikrát, kolikrát je zde uvedeno. Pokud je pole prázdné nebo nastavené na "
+"hodnotu 0, neexistuje žádný limit."
 
 #: pretix/base/models/items.py:487
 msgid "Maximum amount per order"
-msgstr ""
+msgstr "Maximální množství na jednu objednávku"
 
 #: pretix/base/models/items.py:490
 msgid ""
@@ -3262,6 +3287,10 @@ msgid ""
 "product. The limit for the maximum number of items in the whole order "
 "applies regardless."
 msgstr ""
+"Tento produkt lze v rámci jedné objednávky zakoupit maximálně tolikrát. "
+"Pokud necháte pole prázdné nebo jej nastavíte na 0, není pro tento produkt "
+"žádný zvláštní limit. Limit pro maximální počet položek v celé objednávce "
+"platí bez ohledu na to."
 
 #: pretix/base/models/items.py:497
 msgid ""
@@ -3270,10 +3299,13 @@ msgid ""
 "tickets to indicate to the person at check-in that the student ID card still "
 "needs to be checked."
 msgstr ""
+"Pokud je tato možnost nastavená, aplikace pro check-in nahlásí, že tento "
+"tiket vyžaduje speciální zacházení. To je užitečné například pro studenty, "
+"jejichž studentský průkaz je třeba ještě zkontrolovat."
 
 #: pretix/base/models/items.py:502 pretix/base/models/items.py:801
 msgid "Original price"
-msgstr ""
+msgstr "Původní cena"
 
 #: pretix/base/models/items.py:505 pretix/base/models/items.py:804
 msgid ""
@@ -3281,56 +3313,61 @@ msgid ""
 "current price is a discounted one. This is just a cosmetic setting and will "
 "not actually impact pricing."
 msgstr ""
+"Pokud je nastaveno, zobrazí se vedle aktuální ceny, aby bylo vidět, že "
+"aktuální cena je zlevněná. Jedná se pouze o kosmetické nastavení, které ve "
+"skutečnosti neovlivní cenu."
 
 #: pretix/base/models/items.py:514
 msgid "This product is a gift card"
-msgstr ""
+msgstr "Tento produkt je dárková karta"
 
 #: pretix/base/models/items.py:515
 msgid ""
 "When a customer buys this product, they will get a gift card with a value "
 "corresponding to the product price."
 msgstr ""
+"Když si zákazník tento produkt koupí, dostane dárkovou kartu v hodnotě "
+"odpovídající ceně produktu."
 
 #: pretix/base/models/items.py:520 pretix/base/models/items.py:815
 #: pretix/control/templates/pretixcontrol/item/include_variations.html:36
 #: pretix/control/templates/pretixcontrol/item/include_variations.html:117
 msgid "Require a valid membership"
-msgstr ""
+msgstr "Vyžadují platné členství"
 
 #: pretix/base/models/items.py:525
 msgid "Allowed membership types"
-msgstr ""
+msgstr "Povolené typy členství"
 
 #: pretix/base/models/items.py:529 pretix/base/models/items.py:824
-#, fuzzy
-#| msgid "Create a new event"
 msgid "Hide without a valid membership"
-msgstr "Vytvořit novou událost"
+msgstr "Skrýt bez platného členství"
 
 #: pretix/base/models/items.py:530 pretix/base/models/items.py:825
 msgid ""
 "Do not show this unless the customer is logged in and has a valid "
 "membership. Be aware that this means it will never be visible in the widget."
 msgstr ""
+"Pokud zákazník není přihlášen a má platné členství, nezobrazuje se. Pozor, "
+"to například znamená, že tento produkt nelze nikdy zobrazit ve widgetu."
 
 #: pretix/base/models/items.py:539
 msgid "This product creates a membership of type"
-msgstr ""
+msgstr "Tento produkt vytváří členství typu"
 
 #: pretix/base/models/items.py:542
 msgid ""
 "The duration of the membership is the same as the duration of the event or "
 "event series date"
-msgstr ""
+msgstr "Doba členství je stejná jako doba akce nebo série akcí"
 
 #: pretix/base/models/items.py:546
 msgid "Membership duration in days"
-msgstr ""
+msgstr "Délka členství ve dnech"
 
 #: pretix/base/models/items.py:550
 msgid "Membership duration in months"
-msgstr ""
+msgstr "Délka členství ve měsících"
 
 #: pretix/base/models/items.py:558 pretix/base/models/items.py:1271
 #: pretix/control/forms/filter.py:374 pretix/control/forms/filter.py:1599
@@ -3345,35 +3382,35 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/items/quotas.html:49
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:27
 msgid "Products"
-msgstr ""
+msgstr "Produkty"
 
 #: pretix/base/models/items.py:717
 msgid ""
 "The maximum number per order can not be lower than the minimum number per "
 "order."
 msgstr ""
+"Minimální počet na objednávku musí být menší než maximální počet na "
+"objednávku."
 
 #: pretix/base/models/items.py:723
 msgid "The item's category must belong to the same event as the item."
-msgstr ""
+msgstr "Kategorie produktu musí patřit ke stejné akci jako produkt."
 
 #: pretix/base/models/items.py:728
 msgid "The item's tax rule must belong to the same event as the item."
-msgstr ""
+msgstr "Daňová sazba produktu musí patřit ke stejné akci jako produkt."
 
 #: pretix/base/models/items.py:734
 msgid "The item's availability cannot end before it starts."
-msgstr ""
+msgstr "Konec dostupnosti musí být po začátku dostupnosti."
 
 #: pretix/base/models/items.py:788
 msgid "This is shown below the variation name in lists."
-msgstr ""
+msgstr "Tento údaj se zobrazuje v seznamech produktů pod názvem varianty."
 
 #: pretix/base/models/items.py:808
-#, fuzzy
-#| msgid "New order requires approval"
 msgid "Require approval"
-msgstr "Nová objednávka vyžaduje potvrzení"
+msgstr "Vyžadují potvrzení"
 
 #: pretix/base/models/items.py:810
 msgid ""
@@ -3382,20 +3419,24 @@ msgid ""
 "paid and completed. You can use this e.g. for discounted tickets that are "
 "only available to specific groups."
 msgstr ""
+"Pokud je tato varianta součástí objednávky, objednávka není uvolněna přímo, "
+"ale musí být potvrzena z vaší strany, aby mohla být zaplacena a dokončena. "
+"To můžete použít například pro vstupenky, které jsou dostupné pouze pro "
+"určité členy."
 
 #: pretix/base/models/items.py:820 pretix/control/navigation.py:546
 #: pretix/control/templates/pretixcontrol/organizers/membershiptypes.html:4
 #: pretix/control/templates/pretixcontrol/organizers/membershiptypes.html:6
 msgid "Membership types"
-msgstr ""
+msgstr "Typy členství"
 
 #: pretix/base/models/items.py:832
 msgid "This variation will not be sold before the given date."
-msgstr ""
+msgstr "Tato varianta se nebude prodávat před tímto datem."
 
 #: pretix/base/models/items.py:837
 msgid "This variation will not be sold after the given date."
-msgstr ""
+msgstr "Tato varianta se po tomto datu již nebude prodávat."
 
 #: pretix/base/models/items.py:842 pretix/control/forms/item.py:700
 msgid ""
