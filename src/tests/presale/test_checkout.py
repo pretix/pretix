@@ -31,6 +31,7 @@ from bs4 import BeautifulSoup
 from django.conf import settings
 from django.core import mail as djmail
 from django.core.files.uploadedfile import SimpleUploadedFile
+from django.core.signing import dumps
 from django.test import TestCase
 from django.utils.crypto import get_random_string
 from django.utils.timezone import now
@@ -43,6 +44,7 @@ from pretix.base.models import (
     Order, OrderPayment, OrderPosition, Organizer, Question, QuestionAnswer,
     Quota, SeatingPlan, Voucher,
 )
+from pretix.base.models.customers import CustomerSSOProvider
 from pretix.base.models.items import (
     ItemAddOn, ItemBundle, ItemVariation, SubEventItem, SubEventItemVariation,
 )
@@ -4237,6 +4239,44 @@ class CustomerCheckoutTestCase(BaseCheckoutTestCase, TestCase):
             'customer_mode': 'guest'
         }, follow=False)
         assert response.status_code == 200
+
+    def test_native_auth_disabled(self):
+        self.orga.settings.customer_accounts_native = False
+        response = self.client.get('/%s/%s/checkout/customer/' % (self.orga.slug, self.event.slug))
+        assert b'register-email' not in response.content
+        assert b'login-email' not in response.content
+
+        response = self.client.post('/%s/%s/checkout/customer/' % (self.orga.slug, self.event.slug), {
+            'customer_mode': 'register',
+            'register-email': 'foo@example.com',
+            'register-name_parts_0': 'John Doe',
+        }, follow=False)
+        assert response.status_code == 200
+
+        response = self.client.post('/%s/%s/checkout/customer/' % (self.orga.slug, self.event.slug), {
+            'customer_mode': 'login',
+            'login-email': 'john@example.org',
+            'login-password': 'foo',
+        }, follow=False)
+        assert response.status_code == 200
+
+    def test_sso_login(self):
+        with scopes_disabled():
+            self.customer.provider = CustomerSSOProvider.objects.create(
+                organizer=self.orga,
+                method="oidc",
+                name="OIDC OP",
+                configuration={}
+            )
+            self.customer.save()
+        response = self.client.post('/%s/%s/checkout/customer/' % (self.orga.slug, self.event.slug), {
+            'customer_mode': 'login',
+            'login-sso-data': dumps({'customer': self.customer.pk}, salt=f'customer_sso_popup_{self.orga.pk}'),
+            'login-password': 'foo',
+        }, follow=False)
+        assert response.status_code == 302
+        self.assertRedirects(response, '/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug),
+                             target_status_code=200)
 
     def test_select_membership(self):
         mtype = self.orga.membership_types.create(name='Week pass', transferable=False)

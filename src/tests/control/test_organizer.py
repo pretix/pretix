@@ -23,6 +23,7 @@ import datetime
 from smtplib import SMTPResponseException
 
 import pytest
+import responses
 from django.db import transaction
 from django.test.utils import override_settings
 from django_scopes import scopes_disabled
@@ -292,3 +293,41 @@ class OrganizerTest(SoupTest):
         self.orga1.settings.flush()
         assert "smtp_use_custom" not in self.orga1.settings._cache()
         assert "mail_from" not in self.orga1.settings._cache()
+
+    @responses.activate
+    def test_create_sso_provider(self):
+        conf = {
+            "authorization_endpoint": "https://example.com/authorize",
+            "token_endpoint": "https://example.com/token",
+            "userinfo_endpoint": "https://example.com/userinfo",
+            "response_types_supported": ["code"],
+            "response_modes_supported": ["query"],
+            "grant_types_supported": ["authorization_code"],
+            "scopes_supported": ["openid", "email", "profile"],
+            "claims_supported": ["email", "sub"]
+        }
+        responses.add(
+            responses.GET,
+            "https://example.com/provider/.well-known/openid-configuration",
+            json=conf
+        )
+        doc = self.post_doc(
+            '/control/organizer/%s/ssoprovider/add' % self.orga1.slug,
+            {
+                'name_0': 'OIDC',
+                'button_label_0': 'Log in with OIDC',
+                'method': 'oidc',
+                'config_oidc_base_url': 'https://example.com/provider',
+                'config_oidc_client_id': 'aaaa',
+                'config_oidc_client_secret': 'bbbb',
+                'config_oidc_scope': 'openid email',
+                'config_oidc_email_field': 'email',
+                'config_oidc_uid_field': 'sub',
+            },
+            follow=True
+        )
+        assert not doc.select('.has-error, .alert-danger')
+        with scopes_disabled():
+            p = self.orga1.sso_providers.get()
+            assert p.configuration['scope'] == 'openid email'
+            assert p.configuration['provider_config'] == conf

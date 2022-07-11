@@ -71,6 +71,7 @@ from pretix.base.models import (
     Membership, MembershipType, Order, OrderPayment, OrderPosition, Organizer,
     Team, TeamInvite, User,
 )
+from pretix.base.models.customers import CustomerSSOProvider
 from pretix.base.models.event import Event, EventMetaProperty, EventMetaValue
 from pretix.base.models.giftcards import (
     GiftCardTransaction, gen_giftcard_secret,
@@ -94,7 +95,8 @@ from pretix.control.forms.organizer import (
     EventMetaPropertyForm, GateForm, GiftCardCreateForm, GiftCardUpdateForm,
     MailSettingsForm, MembershipTypeForm, MembershipUpdateForm,
     OrganizerDeleteForm, OrganizerFooterLinkFormset, OrganizerForm,
-    OrganizerSettingsForm, OrganizerUpdateForm, TeamForm, WebHookForm,
+    OrganizerSettingsForm, OrganizerUpdateForm, SSOProviderForm, TeamForm,
+    WebHookForm,
 )
 from pretix.control.logdisplay import OVERVIEW_BANLIST
 from pretix.control.permissions import (
@@ -1924,6 +1926,119 @@ class MembershipTypeDeleteView(OrganizerDetailViewMixin, OrganizerPermissionRequ
         return redirect(success_url)
 
 
+class SSOProviderListView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, ListView):
+    model = CustomerSSOProvider
+    template_name = 'pretixcontrol/organizers/ssoproviders.html'
+    permission = 'can_change_organizer_settings'
+    context_object_name = 'providers'
+
+    def get_queryset(self):
+        return self.request.organizer.sso_providers.all()
+
+
+class SSOProviderCreateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, CreateView):
+    model = CustomerSSOProvider
+    template_name = 'pretixcontrol/organizers/ssoprovider_edit.html'
+    permission = 'can_change_organizer_settings'
+    form_class = SSOProviderForm
+
+    def get_object(self, queryset=None):
+        return get_object_or_404(CustomerSSOProvider, organizer=self.request.organizer, pk=self.kwargs.get('provider'))
+
+    def get_success_url(self):
+        return reverse('control:organizer.ssoproviders', kwargs={
+            'organizer': self.request.organizer.slug,
+        })
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['event'] = self.request.organizer
+        return kwargs
+
+    def form_valid(self, form):
+        messages.success(self.request, _('The provider has been created.'))
+        form.instance.organizer = self.request.organizer
+        ret = super().form_valid(form)
+        form.instance.log_action('pretix.ssoprovider.created', user=self.request.user, data={
+            k: getattr(self.object, k, self.object.configuration.get(k)) for k in form.changed_data
+        })
+        return ret
+
+    def form_invalid(self, form):
+        messages.error(self.request, _('Your changes could not be saved.'))
+        return super().form_invalid(form)
+
+
+class SSOProviderUpdateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, UpdateView):
+    model = CustomerSSOProvider
+    template_name = 'pretixcontrol/organizers/ssoprovider_edit.html'
+    permission = 'can_change_organizer_settings'
+    context_object_name = 'provider'
+    form_class = SSOProviderForm
+
+    def get_object(self, queryset=None):
+        return get_object_or_404(CustomerSSOProvider, organizer=self.request.organizer, pk=self.kwargs.get('provider'))
+
+    def get_success_url(self):
+        return reverse('control:organizer.ssoproviders', kwargs={
+            'organizer': self.request.organizer.slug,
+        })
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['redirect_uri'] = build_absolute_uri(self.request.organizer, 'presale:organizer.customer.login.return', kwargs={
+            'provider': self.object.pk
+        })
+        return ctx
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['event'] = self.request.organizer
+        return kwargs
+
+    def form_valid(self, form):
+        if form.has_changed():
+            self.object.log_action('pretix.ssoprovider.changed', user=self.request.user, data={
+                k: getattr(self.object, k, self.object.configuration.get(k)) for k in form.changed_data
+            })
+        messages.success(self.request, _('Your changes have been saved.'))
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        messages.error(self.request, _('Your changes could not be saved.'))
+        return super().form_invalid(form)
+
+
+class SSOProviderDeleteView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, DeleteView):
+    model = CustomerSSOProvider
+    template_name = 'pretixcontrol/organizers/ssoprovider_delete.html'
+    permission = 'can_change_organizer_settings'
+    context_object_name = 'provider'
+
+    def get_object(self, queryset=None):
+        return get_object_or_404(CustomerSSOProvider, organizer=self.request.organizer, pk=self.kwargs.get('provider'))
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['is_allowed'] = self.object.allow_delete()
+        return ctx
+
+    def get_success_url(self):
+        return reverse('control:organizer.ssoproviders', kwargs={
+            'organizer': self.request.organizer.slug,
+        })
+
+    @transaction.atomic
+    def delete(self, request, *args, **kwargs):
+        success_url = self.get_success_url()
+        self.object = self.get_object()
+        if self.object.allow_delete():
+            self.object.log_action('pretix.ssoprovider.deleted', user=self.request.user)
+            self.object.delete()
+            messages.success(request, _('The selected object has been deleted.'))
+        return redirect(success_url)
+
+
 class CustomerListView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, PaginationMixin, ListView):
     model = Customer
     template_name = 'pretixcontrol/organizers/customers.html'
@@ -1969,7 +2084,7 @@ class CustomerDetailView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMi
         )
 
     def post(self, request, *args, **kwargs):
-        if request.POST.get('action') == 'pwreset':
+        if request.POST.get('action') == 'pwreset' and self.customer.provider_id is None:
             self.customer.log_action('pretix.customer.password.resetrequested', {}, user=self.request.user)
             ctx = self.customer.get_email_context()
             token = TokenGenerator().make_token(self.customer)

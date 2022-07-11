@@ -14,24 +14,38 @@
             </h2>
             <form action="" method="post">
                 {% csrf_token %}
-                {% bootstrap_form form %}
-                <div class="form-group buttons">
-                    <button type="submit" class="btn btn-primary btn-lg btn-block">
-                        {% trans "Log in" %}
-                    </button>
-                </div>
-                <div class="row">
-                    <div class="col-md-6">
-                        <a class="btn btn-link btn-block" href="{% eventurl request.organizer "presale:organizer.customer.register" %}">
-                            {% trans "Create account" %}
-                        </a>
+                {% if request.organizer.settings.customer_accounts_native %}
+                    {% bootstrap_form form %}
+                    <div class="form-group buttons">
+                        <button type="submit" class="btn btn-primary btn-lg btn-block">
+                            {% trans "Log in" %}
+                        </button>
                     </div>
-                    <div class="col-md-6">
-                        <a class="btn btn-link btn-block" href="{% eventurl request.organizer "presale:organizer.customer.resetpw" %}">
-                            {% trans "Reset password" %}
+                {% endif %}
+                {% for provider in request.organizer.sso_providers.all %}
+                    {% if provider.is_active %}
+                        <a href="{% eventurl request.organizer "presale:organizer.customer.login" provider=provider.pk %}?{{ request.META.QUERY_STRING }}"
+                           class="btn btn-primary btn-lg btn-block">
+                            {{ provider.button_label }}
                         </a>
+                    {% endif %}
+                {% endfor %}
+                {% if request.organizer.settings.customer_accounts_native %}
+                    <div class="row">
+                        <div class="col-md-6">
+                            <a class="btn btn-link btn-block"
+                               href="{% eventurl request.organizer "presale:organizer.customer.register" %}">
+                                {% trans "Create account" %}
+                            </a>
+                        </div>
+                        <div class="col-md-6">
+                            <a class="btn btn-link btn-block"
+                               href="{% eventurl request.organizer "presale:organizer.customer.resetpw" %}">
+                                {% trans "Reset password" %}
+                            </a>
+                        </div>
                     </div>
-                </div>
+                {% endif %}
             </form>
         </div>
     </div>

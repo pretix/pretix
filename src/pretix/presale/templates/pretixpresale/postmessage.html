@@ -1,0 +1,31 @@
+{% load compress %}
+{% load i18n %}
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ settings.PRETIX_INSTANCE_NAME }}</title>
+    {% compress css %}
+        <link rel="stylesheet" type="text/x-scss" href="{% static "pretixpresale/scss/waiting.scss" %}"/>
+    {% endcompress %}
+    {% compress js %}
+        <script type="text/javascript" src="{% static "jquery/js/jquery-2.1.1.min.js" %}"></script>
+        <script type="text/javascript" src="{% static "pretixpresale/js/postmessage.js" %}"></script>
+    {% endcompress %}
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+    <div class="container">
+        <i class="fa fa-cog big-rotating-icon" aria-hidden="true"></i>
+
+        <h1>{% trans "We are processing your request …" %}</h1>
+
+        {{ message|json_script:"postmessage" }}
+        <script type="text/plain" id="origin">{{ origin }}</script>
+
+        <p>
+            {% trans "If this takes longer than a few minutes, please contact us." %}
+        </p>
+    </div>
+</body>
+</html>

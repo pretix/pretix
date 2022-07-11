@@ -38,6 +38,7 @@ from urllib.parse import urljoin
 
 from django.conf import settings
 from django.core.exceptions import PermissionDenied
+from django.db.models import Q
 from django.http import Http404
 from django.middleware.csrf import rotate_token
 from django.shortcuts import redirect
@@ -87,6 +88,7 @@ def get_customer(request):
         with scope(organizer=request.organizer):
             try:
                 customer = request.organizer.customers.get(
+                    Q(provider__isnull=True) | Q(provider__is_active=True),
                     is_active=True, is_verified=True,
                     pk=session[session_key]
                 )

@@ -146,6 +146,17 @@ DEFAULTS = {
                         "advanced features like memberships.")
         )
     },
+    'customer_accounts_native': {
+        'default': 'True',
+        'type': bool,
+        'form_class': forms.BooleanField,
+        'serializer_class': serializers.BooleanField,
+        'form_kwargs': dict(
+            label=_("Allow customers to log in with email address and password"),
+            help_text=_("If disabled, you will need to connect one or more single-sign-on providers."),
+            widget=forms.CheckboxInput(attrs={'data-display-dependency': '#id_settings-customer_accounts'}),
+        )
+    },
     'customer_accounts_link_by_email': {
         'default': 'False',
         'type': bool,

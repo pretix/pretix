@@ -112,6 +112,7 @@ Sofort
 SOFORT
 Somecity
 SSL
+SSO
 STARTTLS
 Su
 subevent

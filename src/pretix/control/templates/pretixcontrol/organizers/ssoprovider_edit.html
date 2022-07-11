@@ -1,0 +1,33 @@
+{% extends "pretixcontrol/organizers/base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% block inner %}
+    {% if provider %}
+        <h1>{% trans "SSO provider:" %} {{ provider.name }}</h1>
+    {% else %}
+        <h1>{% trans "Create a new SSO provider" %}</h1>
+    {% endif %}
+    <form class="form-horizontal" action="" method="post">
+        {% csrf_token %}
+        {% bootstrap_form form layout="control" %}
+        {% if redirect_uri %}
+            <div class="form-group">
+                <label class="col-md-3 control-label" for="redirect_uri">
+                    {% trans "Redirection URL" context "sso" %}
+
+                </label>
+                <div class="col-md-9">
+                    <input type="text" value="{{ redirect_uri }}"
+                           class="form-control"
+                           disabled id="redirect_uri">
+                </div>
+            </div>
+        {% endif %}
+        <div class="form-group submit-group">
+            <button type="submit" class="btn btn-primary btn-save">
+                {% trans "Save" %}
+            </button>
+        </div>
+
+    </form>
+{% endblock %}
