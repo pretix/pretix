@@ -199,6 +199,7 @@ function setup_basics(el) {
         });
         $(".has-error").each(function() {
             var target = target = $(":input", this);
+            if (!target || !target.attr("aria-describedby")) return;
             var desc = $("#" + target.attr("aria-describedby").split(' ', 1)[0]);
             // multi-input fields have a role=group with aria-labelledby
             var label = this.hasAttribute("aria-labelledby") ? $("#" + this.getAttribute("aria-labelledby")) : $("[for="+target.attr("id")+"]");
