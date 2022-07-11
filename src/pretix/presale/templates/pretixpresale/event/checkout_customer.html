@@ -50,16 +50,31 @@
                                     and access them at any time.
                                 {% endblocktrans %}
                             </p>
-                            {% bootstrap_form login_form layout="checkout" %}
+                            {% if request.organizer.settings.customer_accounts_native %}
+                                {% bootstrap_form login_form layout="checkout" %}
+                                <div class="row">
+                                    <div class="col-md-offset-3 col-md-9">
+                                        <a
+                                                href="{% abseventurl request.organizer "presale:organizer.customer.resetpw" %}"
+                                                target="_blank">
+                                            {% trans "Reset password" %}
+                                        </a>
+                                    </div>
+                                </div>
+                            {% endif %}
                             <div class="row">
-                                <div class="col-md-offset-3 col-md-9">
-                                    <a
-                                            href="{% abseventurl request.organizer "presale:organizer.customer.resetpw" %}"
-                                            target="_blank">
-                                        {% trans "Reset password" %}
-                                    </a>
+                                <div class="col-md-6 col-md-offset-3">
+                                    {% for provider in request.organizer.sso_providers.all %}
+                                        {% if provider.is_active %}
+                                            <a href="{% eventurl request.organizer "presale:organizer.customer.login" provider=provider.pk %}?next={% if request.event_domain %}{{ request.scheme }}://{{ request.get_host }}{% endif %}{{ request.get_full_path|urlencode }}"
+                                               class="btn btn-primary btn-lg btn-block" data-open-in-popup-window>
+                                                {{ provider.button_label }}
+                                            </a>
+                                        {% endif %}
+                                    {% endfor %}
                                 </div>
                             </div>
+                            <input type="hidden" name="login-sso-data" id="login_sso_data">
                         {% endif %}
                     </div>
                 </div>

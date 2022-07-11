@@ -19,14 +19,18 @@
             <dl class="dl-horizontal">
                 <dt>{% trans "Customer ID" %}</dt>
                 <dd>#{{ customer.identifier }}</dd>
+                {% if customer.provider %}
+                    <dt>{% trans "Login method" %}</dt>
+                    <dd>{{ customer.provider.name }}</dd>
+                {% endif %}
                 <dt>{% trans "E-mail" %}</dt>
                 <dd>{{ customer.email }}
                 </dd>
                 <dt>{% trans "Name" %}</dt>
                 <dd>{{ customer.name }}</dd>
                 {% if customer.phone %}
-                <dt>{% trans "Phone" %}</dt>
-                <dd>{{ customer.phone }}</dd>
+                    <dt>{% trans "Phone" %}</dt>
+                    <dd>{{ customer.phone }}</dd>
                 {% endif %}
             </dl>
             <div class="text-right">
@@ -34,10 +38,12 @@
                         class="btn btn-default">
                     {% trans "Change account information" %}
                 </a>
-                <a href="{% eventurl request.organizer "presale:organizer.customer.password" %}"
-                        class="btn btn-default">
-                    {% trans "Change password" %}
-                </a>
+                {% if not customer.provider %}
+                    <a href="{% eventurl request.organizer "presale:organizer.customer.password" %}"
+                            class="btn btn-default">
+                        {% trans "Change password" %}
+                    </a>
+                {% endif %}
             </div>
         </div>
     </div>

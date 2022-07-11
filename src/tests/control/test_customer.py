@@ -31,6 +31,7 @@ from tests.base import extract_form_fields
 from pretix.base.models import (
     Item, Order, OrderPosition, Organizer, Team, User,
 )
+from pretix.base.models.customers import CustomerSSOProvider
 
 
 @pytest.fixture
@@ -90,6 +91,16 @@ def admin_user(organizer):
     return u
 
 
+@pytest.fixture
+def provider(organizer):
+    return CustomerSSOProvider.objects.create(
+        organizer=organizer,
+        method="oidc",
+        name="OIDC OP",
+        configuration={}
+    )
+
+
 @pytest.mark.django_db
 def test_list_of_customers(organizer, admin_user, client, customer):
     client.login(email='dummy@dummy.dummy', password='dummy')
@@ -123,6 +134,25 @@ def test_customer_update(organizer, admin_user, customer, client):
     customer.refresh_from_db()
     assert customer.name == 'John Doe'
     assert customer.is_verified
+
+
+@pytest.mark.django_db
+def test_customer_update_email_not_allowed_for_sso_customers(organizer, admin_user, customer, client, provider):
+    customer.provider = provider
+    customer.save()
+    client.login(email='dummy@dummy.dummy', password='dummy')
+    resp = client.get('/control/organizer/dummy/customer/{}/edit'.format(customer.identifier))
+    doc = BeautifulSoup(resp.content, "lxml")
+    d = extract_form_fields(doc)
+    d['name_parts_0'] = 'John Doe'
+    d['email'] = 'customer@example.net'
+    d['external_identifier'] = 'aaaaaaa'
+    resp = client.post('/control/organizer/dummy/customer/{}/edit'.format(customer.identifier), d)
+    assert resp.status_code == 302
+    customer.refresh_from_db()
+    assert customer.name == 'John Doe'
+    assert customer.email == "john@example.org"
+    assert not customer.external_identifier
 
 
 @pytest.mark.django_db

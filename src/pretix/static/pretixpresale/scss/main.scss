@@ -166,7 +166,7 @@ body.loading .container {
     font-size: 120px;
     color: $brand-primary;
 }
-#loadingmodal, #ajaxerr, #cookie-consent-modal {
+#loadingmodal, #ajaxerr, #cookie-consent-modal, #popupmodal {
     position: fixed;
     top: 0;
     left: 0;
@@ -181,6 +181,11 @@ body.loading .container {
     .big-icon {
         margin-top: 50px;
         font-size: 200px;
+        color: $brand-primary;
+    }
+    &#popupmodal .big-icon {
+        margin-top: 10px;
+        font-size: 100px;
         color: $brand-primary;
     }
 
@@ -231,7 +236,7 @@ body.loading .container {
     }
 }
 @media (max-width: 700px) {
-    #loadingmodal, #ajaxerr, #cookie-consent-modal {
+    #loadingmodal, #ajaxerr, #cookie-consent-modal, #popupmodal {
         .modal-card {
             margin: 25px auto 0;
             max-height: calc(100vh - 50px - 20px);
@@ -253,7 +258,7 @@ body.loading .container {
     background: rgba(236, 236, 236, .9);
 }
 
-.loading #loadingmodal, .ajaxerr #ajaxerr {
+.loading #loadingmodal, .ajaxerr #ajaxerr, .has-popup #popupmodal {
     opacity: 1;
     visibility: visible;
     transition: opacity .5s ease-in-out;

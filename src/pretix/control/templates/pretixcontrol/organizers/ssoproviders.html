@@ -1,0 +1,44 @@
+{% extends "pretixcontrol/organizers/base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% block title %}{% trans "SSO providers" %}{% endblock %}
+{% block inner %}
+    <h1>{% trans "SSO providers" %}</h1>
+    <p>
+        {% blocktrans trimmed %}
+            You can connect existing Single-Sign-On (SSO) providers to allow your customers to log in using your own
+            account system.
+        {% endblocktrans %}
+    </p>
+    <a href="{% url "control:organizer.ssoprovider.add" organizer=request.organizer.slug %}" class="btn btn-default">
+        <span class="fa fa-plus"></span>
+        {% trans "Create a new SSO provider" %}
+    </a>
+    <table class="table table-condensed table-hover">
+        <thead>
+        <tr>
+            <th>{% trans "Name" %}</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for p in providers %}
+            <tr>
+                <td><strong>
+                    <a href="{% url "control:organizer.ssoprovider.edit" organizer=request.organizer.slug provider=p.id %}">
+                        {% if not p.is_active %}<del>{% endif %}
+                        {{ p.name }}
+                        {% if not p.is_active %}</del>{% endif %}
+                    </a>
+                </strong></td>
+                <td class="text-right flip">
+                    <a href="{% url "control:organizer.ssoprovider.edit" organizer=request.organizer.slug provider=p.id %}"
+                            class="btn btn-default btn-sm"><i class="fa fa-edit"></i></a>
+                    <a href="{% url "control:organizer.ssoprovider.delete" organizer=request.organizer.slug provider=p.id %}"
+                            class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

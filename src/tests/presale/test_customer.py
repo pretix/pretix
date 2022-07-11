@@ -22,16 +22,20 @@
 import datetime
 from datetime import timedelta
 from decimal import Decimal
-from urllib.parse import parse_qs, urlparse
+from urllib.parse import parse_qs, quote, urlparse
 
 import pytest
+import responses
 from django.core import mail as djmail, signing
 from django.core.signing import dumps
 from django.test import Client
 from django.utils.timezone import now
 from django_scopes import scopes_disabled
 
-from pretix.base.models import Event, Item, Order, OrderPosition, Organizer
+from pretix.base.models import (
+    Customer, Event, Item, Order, OrderPosition, Organizer,
+)
+from pretix.base.models.customers import CustomerSSOProvider
 from pretix.multidomain.models import KnownDomain
 from pretix.presale.forms.customer import TokenGenerator
 
@@ -67,6 +71,27 @@ def test_disabled(env, client):
     assert r.status_code == 404
     r = client.get('/bigevents/account/')
     assert r.status_code == 404
+
+
+@pytest.mark.django_db
+def test_native_disabled(env, client):
+    env[0].settings.customer_accounts_native = False
+    r = client.get('/bigevents/account/register')
+    assert r.status_code == 404
+    r = client.get('/bigevents/account/login')
+    assert r.status_code == 200
+    r = client.get('/bigevents/account/pwreset')
+    assert r.status_code == 404
+    r = client.get('/bigevents/account/pwrecover')
+    assert r.status_code == 404
+    r = client.get('/bigevents/account/activate')
+    assert r.status_code == 404
+    r = client.get('/bigevents/account/change')
+    assert r.status_code == 302
+    r = client.get('/bigevents/account/confirmchange')
+    assert r.status_code == 302
+    r = client.get('/bigevents/account/')
+    assert r.status_code == 302
 
 
 @pytest.mark.django_db
@@ -209,6 +234,162 @@ def test_org_login_not_active(env, client):
     assert b'alert-danger' in r.content
 
 
+@pytest.fixture
+def provider(env):
+    return CustomerSSOProvider.objects.create(
+        organizer=env[0],
+        method="oidc",
+        name="OIDC OP",
+        configuration={
+            "base_url": "https://example.com/provider",
+            "client_id": "abc123",
+            "client_secret": "abcdefghi",
+            "uid_field": "sub",
+            "email_field": "email",
+            "scope": "openid email profile",
+            "provider_config": {
+                "authorization_endpoint": "https://example.com/authorize",
+                "token_endpoint": "https://example.com/token",
+                "userinfo_endpoint": "https://example.com/userinfo",
+                "response_types_supported": ["code"],
+                "response_modes_supported": ["query"],
+                "grant_types_supported": ["authorization_code"],
+                "scopes_supported": ["openid", "email", "profile"],
+                "claims_supported": ["email", "sub"]
+            }
+        }
+    )
+
+
+@responses.activate
+def _sso_login(client, provider, email='test@example.org', popup_origin=None, expect_fail=False):
+    responses.reset()
+    responses.add(
+        responses.POST,
+        "https://example.com/token",
+        json={
+            'access_token': 'test_access_token',
+        },
+    )
+    responses.add(
+        responses.GET,
+        "https://example.com/userinfo",
+        json={
+            'sub': 'abcdf',
+            'email': email
+        },
+    )
+
+    url = f'/bigevents/account/login/{provider.pk}/?next=/redirect'
+    if popup_origin:
+        url += '&popup_origin=' + popup_origin
+    r = client.get(url, follow=False)
+    assert r.status_code == 302
+    assert "/authorize" in r['Location']
+    u = urlparse(r['Location'])
+    state = parse_qs(u.query)['state'][0]
+    r = client.get(f'/bigevents/account/login/{provider.pk}/return?code=test_code&state={quote(state)}')
+    if not expect_fail:
+        if popup_origin:
+            assert r.status_code == 200
+            assert popup_origin in r.content.decode()
+        else:
+            assert r.status_code == 302
+            assert "/redirect" in r['Location']
+    else:
+        if popup_origin:
+            assert r.status_code == 200
+            assert popup_origin in r.content.decode()
+        else:
+            assert r.status_code == 302
+            assert "/account/login" in r['Location']
+
+        r = client.get('/bigevents/account/')
+        assert r.status_code == 302
+
+
+@pytest.mark.django_db
+def test_org_sso_login_new_customer(env, client, provider):
+    _sso_login(client, provider)
+
+    with scopes_disabled():
+        c = Customer.objects.get(provider=provider)
+        assert c.external_identifier == "abcdf"
+
+    r = client.get('/bigevents/account/')
+    assert r.status_code == 200
+
+
+@pytest.mark.django_db
+def test_org_sso_logout_if_provider_disabled(env, client, provider):
+    _sso_login(client, provider)
+
+    with scopes_disabled():
+        c = Customer.objects.get(provider=provider)
+        assert c.external_identifier == "abcdf"
+
+    r = client.get('/bigevents/account/')
+    assert r.status_code == 200
+
+    provider.is_active = False
+    provider.save()
+
+    r = client.get('/bigevents/account/')
+    assert r.status_code == 302
+
+
+@pytest.mark.django_db
+def test_org_sso_login_new_customer_popup(env, client, provider):
+    KnownDomain.objects.create(organizer=env[0], event=env[1], domainname="popuporigin")
+    _sso_login(client, provider, popup_origin="https://popuporigin")
+
+
+@pytest.mark.django_db
+def test_org_sso_login_new_customer_popup_invalid_origin(env, client, provider):
+    KnownDomain.objects.create(organizer=env[0], event=env[1], domainname="popuporigin")
+    with pytest.raises(AssertionError):
+        _sso_login(client, provider, popup_origin="https://forbidden")
+
+
+@pytest.mark.django_db
+def test_org_sso_login_returning_customer_new_email(env, client, provider):
+    _sso_login(client, provider)
+    with scopes_disabled():
+        c = Customer.objects.get(provider=provider)
+
+    r = client.get('/bigevents/account/logout')
+    assert r.status_code == 302
+
+    _sso_login(client, provider, 'new@example.net')
+    c.refresh_from_db()
+    assert c.email == "new@example.net"
+
+
+@pytest.mark.django_db(transaction=True)
+def test_org_sso_login_returning_customer_new_email_conflict(env, client, provider):
+    with scopes_disabled():
+        customer = env[0].customers.create(email='new@example.net', is_verified=True, is_active=False)
+        customer.set_password('foo')
+        customer.save()
+
+    _sso_login(client, provider)
+
+    r = client.get('/bigevents/account/logout')
+    assert r.status_code == 302
+
+    _sso_login(client, provider, 'new@example.net', expect_fail=True)
+
+
+@pytest.mark.django_db(transaction=True)
+def test_org_sso_login_new_customer_email_conflict(env, client, provider):
+    with scopes_disabled():
+        customer = env[0].customers.create(email='new@example.net', is_verified=True, is_active=False)
+        customer.set_password('foo')
+        customer.save()
+
+    _sso_login(client, provider, 'new@example.net', expect_fail=True)
+
+
 @pytest.mark.django_db
 @pytest.mark.parametrize("url", [
     "account/change",
@@ -309,6 +490,20 @@ def test_org_order_list(env, client):
 
 
 @pytest.mark.django_db
+def test_no_login_for_sso_accounts_even_if_password_is_set(env, client, provider):
+    with scopes_disabled():
+        customer = env[0].customers.create(email='john@example.org', is_verified=True, provider=provider)
+        customer.set_password('foo')
+        customer.save()
+
+    r = client.post('/bigevents/account/login', {
+        'email': 'john@example.org',
+        'password': 'foo',
+    })
+    assert r.status_code == 200
+
+
+@pytest.mark.django_db
 def test_change_name(env, client):
     with scopes_disabled():
         customer = env[0].customers.create(email='john@example.org', is_verified=True)
@@ -328,6 +523,24 @@ def test_change_name(env, client):
     assert r.status_code == 302
     customer.refresh_from_db()
     assert customer.name == 'John Doe'
+
+
+@pytest.mark.django_db
+def test_no_change_email_or_pass_for_sso_customers(env, client, provider):
+    _sso_login(client, provider, 'john@example.org')
+    r = client.post('/bigevents/account/change', {
+        'name_parts_0': 'Johnny',
+        'email': 'john@example.com',
+    })
+    assert r.status_code == 302
+    with scopes_disabled():
+        customer = Customer.objects.get(provider=provider)
+    customer.refresh_from_db()
+    assert customer.email == 'john@example.org'
+    assert customer.name == 'Johnny'
+    assert len(djmail.outbox) == 0
+    r = client.get('/bigevents/account/password')
+    assert r.status_code == 404
 
 
 @pytest.mark.django_db
@@ -567,3 +780,59 @@ def test_cross_domain_login_validate_redirect_url(env, client, client2):
     assert u.path == '/account/'
     q = parse_qs(u.query)
     assert 'cross_domain_customer_auth' not in q
+
+
+@pytest.mark.django_db
+@responses.activate
+def test_cross_domain_login_with_sso(env, client, client2, provider):
+    with scopes_disabled():
+        KnownDomain.objects.create(domainname='org.test', organizer=env[0])
+        KnownDomain.objects.create(domainname='event.test', organizer=env[0], event=env[1])
+
+    # Log in on org domain
+    responses.reset()
+    responses.add(
+        responses.POST,
+        "https://example.com/token",
+        json={
+            'access_token': 'test_access_token',
+        },
+    )
+    responses.add(
+        responses.GET,
+        "https://example.com/userinfo",
+        json={
+            'sub': 'abcdf',
+            'email': 'john@example.org'
+        },
+    )
+
+    url = f'/account/login/{provider.pk}/?next=https://event.test/redeem&request_cross_domain_customer_auth=true'
+    r = client.get(url, follow=False, HTTP_HOST='org.test')
+    assert r.status_code == 302
+    assert "/authorize" in r['Location']
+    u = urlparse(r['Location'])
+    state = parse_qs(u.query)['state'][0]
+
+    r = client.get(f'/account/login/{provider.pk}/return?code=test_code&state={quote(state)}', HTTP_HOST='org.test')
+    assert r.status_code == 302
+    u = urlparse(r.headers['Location'])
+    assert u.netloc == 'event.test'
+    assert u.path == '/redeem'
+    q = parse_qs(u.query)
+    assert 'cross_domain_customer_auth' in q
+
+    # Take session over to event domain
+    r = client2.get(f'/?{u.query}', HTTP_HOST='event.test')
+    assert r.status_code == 200
+    assert b'john@example.org' in r.content
+
+    # Logged in on org domain
+    r = client.get('/', HTTP_HOST='event.test')
+    assert r.status_code == 200
+    assert b'john@example.org' in r.content
+
+    # Logged in on event domain
+    r = client2.get('/', HTTP_HOST='org.test')
+    assert r.status_code == 200
+    assert b'john@example.org' in r.content

@@ -30,6 +30,7 @@ from django.db.models import F, Q
 from django.utils.crypto import get_random_string, salted_hmac
 from django.utils.translation import gettext_lazy as _, pgettext_lazy
 from django_scopes import ScopedManager, scopes_disabled
+from i18nfield.fields import I18nCharField
 from phonenumber_field.modelfields import PhoneNumberField
 
 from pretix.base.banlist import banned
@@ -39,12 +40,42 @@ from pretix.base.settings import PERSON_NAME_SCHEMES
 from pretix.helpers.countries import FastCountryField
 
 
+class CustomerSSOProvider(LoggedModel):
+    METHOD_OIDC = 'oidc'
+    METHODS = (
+        (METHOD_OIDC, 'OpenID Connect'),
+    )
+
+    id = models.BigAutoField(primary_key=True)
+    organizer = models.ForeignKey(Organizer, related_name='sso_providers', on_delete=models.CASCADE)
+    name = I18nCharField(
+        max_length=200,
+        verbose_name=_("Provider name"),
+    )
+    is_active = models.BooleanField(default=True, verbose_name=_('Active'))
+    button_label = I18nCharField(
+        max_length=200,
+        verbose_name=_("Login button label"),
+    )
+    method = models.CharField(
+        max_length=190,
+        verbose_name=_("Single-sign-on method"),
+        null=False, blank=False,
+        choices=METHODS,
+    )
+    configuration = models.JSONField()
+
+    def allow_delete(self):
+        return not self.customers.exists()
+
+
 class Customer(LoggedModel):
     """
     Represents a registered customer of an organizer.
     """
     id = models.BigAutoField(primary_key=True)
     organizer = models.ForeignKey(Organizer, related_name='customers', on_delete=models.CASCADE)
+    provider = models.ForeignKey(CustomerSSOProvider, related_name='customers', on_delete=models.PROTECT, null=True, blank=True)
     identifier = models.CharField(
         max_length=190,
         db_index=True,

@@ -141,6 +141,29 @@ def test_customer_patch(token_client, organizer, customer):
 
 
 @pytest.mark.django_db
+def test_customer_patch_with_provider(token_client, organizer, customer):
+    with scopes_disabled():
+        customer.provider = organizer.sso_providers.create(
+            method="oidc",
+            name="OIDC OP",
+            configuration={}
+        )
+        customer.external_identifier = "123"
+        customer.save()
+
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/customers/{}/'.format(organizer.slug, customer.identifier),
+        format='json',
+        data={
+            'external_identifier': '234',
+        }
+    )
+    assert resp.status_code == 200
+    customer.refresh_from_db()
+    assert customer.external_identifier == "123"
+
+
+@pytest.mark.django_db
 def test_customer_anonymize(token_client, organizer, customer):
     resp = token_client.post(
         '/api/v1/organizers/{}/customers/{}/anonymize/'.format(organizer.slug, customer.identifier),

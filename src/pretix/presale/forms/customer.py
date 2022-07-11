@@ -32,6 +32,7 @@ from django.contrib.auth.password_validation import (
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.core import signing
 from django.utils.functional import cached_property
+from django.utils.html import escape
 from django.utils.translation import gettext_lazy as _
 from phonenumber_field.formfields import PhoneNumberField
 
@@ -83,7 +84,7 @@ class AuthenticationForm(forms.Form):
 
         if email is not None and password:
             try:
-                u = self.request.organizer.customers.get(email=email.lower())
+                u = self.request.organizer.customers.get(email=email.lower(), provider__isnull=True)
             except Customer.DoesNotExist:
                 # Run the default password hasher once to reduce the timing
                 # difference between an existing and a nonexistent user (django #20760).
@@ -333,7 +334,7 @@ class ResetPasswordForm(forms.Form):
         if 'email' not in self.cleaned_data:
             return
         try:
-            self.customer = self.request.organizer.customers.get(email=self.cleaned_data['email'].lower())
+            self.customer = self.request.organizer.customers.get(email=self.cleaned_data['email'].lower(), provider__isnull=True)
             return self.customer.email
         except Customer.DoesNotExist:
             # Yup, this is an information leak. But it prevents dozens of support requests – and even if we didn't
@@ -473,6 +474,14 @@ class ChangeInfoForm(forms.ModelForm):
             widget=WrappedPhoneNumberPrefixWidget()
         )
 
+        if self.instance.provider_id is not None:
+            self.fields['email'].disabled = True
+            self.fields['email'].help_text = _(
+                'To change your email address, change it in your {provider} account and then log out and log in '
+                'again.'
+            ).format(provider=escape(self.instance.provider.name))
+            del self.fields['password_current']
+
     def clean_password_current(self):
         old_pw = self.cleaned_data.get('password_current')
 
@@ -501,13 +510,13 @@ class ChangeInfoForm(forms.ModelForm):
         email = self.cleaned_data.get('email')
         password_current = self.cleaned_data.get('password_current')
 
-        if email != self.instance.email and not password_current:
+        if email != self.instance.email and not password_current and self.instance.provider_id is None:
             raise forms.ValidationError(
                 self.error_messages['pw_current_wrong'],
                 code='pw_current_wrong',
             )
 
-        if email is not None:
+        if email is not None and self.instance.provider_id is not None:
             try:
                 self.request.organizer.customers.exclude(pk=self.instance.pk).get(email=email.lower())
             except Customer.DoesNotExist:

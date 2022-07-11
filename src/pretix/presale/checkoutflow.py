@@ -39,6 +39,7 @@ from decimal import Decimal
 from django.conf import settings
 from django.contrib import messages
 from django.core.exceptions import ValidationError
+from django.core.signing import BadSignature, loads
 from django.core.validators import EmailValidator
 from django.db.models import F, Q
 from django.http import HttpResponseNotAllowed, JsonResponse
@@ -261,7 +262,7 @@ class CustomerStep(CartMixin, TemplateFlowStep):
             p.item.require_membership or
             (p.variation and p.variation.require_membership)
             for p in self.positions
-        )
+        ) and self.request.event.settings.customer_accounts_native
 
     @cached_property
     def guest_allowed(self):
@@ -290,6 +291,22 @@ class CustomerStep(CartMixin, TemplateFlowStep):
             field.widget.is_required = False
         return f
 
+    def _handle_sso_login(self):
+        value = self.request.POST['login-sso-data']
+        try:
+            data = loads(value, salt=f'customer_sso_popup_{self.request.organizer.pk}', max_age=120)
+        except BadSignature:
+            return False
+        try:
+            customer = self.request.organizer.customers.get(pk=data['customer'], provider__isnull=False)
+        except Customer.DoesNotExist:
+            return False
+        self.cart_session['customer_mode'] = 'login'
+        self.cart_session['customer'] = customer.pk
+        self.cart_session['customer_cart_tied_to_login'] = True
+        customer_login(self.request, customer)
+        return True
+
     def post(self, request):
         self.request = request
 
@@ -301,7 +318,12 @@ class CustomerStep(CartMixin, TemplateFlowStep):
                 self.cart_session['customer'] = request.customer.pk
                 self.cart_session['customer_cart_tied_to_login'] = True
                 return redirect(self.get_next_url(request))
-            elif self.login_form.is_valid():
+            elif "login-sso-data" in self.request.POST:
+                if not self._handle_sso_login():
+                    messages.error(request, _('We failed to process your authentication request, please try again.'))
+                    return self.render()
+                return redirect(self.get_next_url(request))
+            elif self.event.settings.customer_accounts_native and self.login_form.is_valid():
                 customer_login(self.request, self.login_form.get_customer())
                 self.cart_session['customer_mode'] = 'login'
                 self.cart_session['customer'] = self.login_form.get_customer().pk
@@ -309,7 +331,7 @@ class CustomerStep(CartMixin, TemplateFlowStep):
                 return redirect(self.get_next_url(request))
             else:
                 return self.render()
-        elif request.POST.get("customer_mode") == 'register':
+        elif request.POST.get("customer_mode") == 'register' and self.signup_allowed:
             if self.register_form.is_valid():
                 customer = self.register_form.create()
                 self.cart_session['customer_mode'] = 'login'

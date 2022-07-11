@@ -14,7 +14,10 @@ The customer resource contains the following public fields:
 Field                                 Type                       Description
 ===================================== ========================== =======================================================
 identifier                            string                     Internal ID of the customer
-external_identifier                   string                     External ID of the customer (or ``null``)
+external_identifier                   string                     External ID of the customer (or ``null``). This field can
+                                                                 be changed for customers created manually or through
+                                                                 the API, but is read-only for customers created through a
+                                                                 SSO integration.
 email                                 string                     Customer email address
 name                                  string                     Name of this customer (or ``null``)
 name_parts                            object of strings          Decomposition of name (i.e. given name, family name)

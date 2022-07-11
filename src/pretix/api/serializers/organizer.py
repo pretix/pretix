@@ -74,6 +74,11 @@ class CustomerSerializer(I18nAwareModelSerializer):
         fields = ('identifier', 'external_identifier', 'email', 'name', 'name_parts', 'is_active', 'is_verified', 'last_login', 'date_joined',
                   'locale', 'last_modified', 'notes')
 
+    def update(self, instance, validated_data):
+        if instance and instance.provider_id:
+            validated_data['external_identifier'] = instance.external_identifier
+        return super().update(instance, validated_data)
+
 
 class CustomerCreateSerializer(CustomerSerializer):
     send_email = serializers.BooleanField(default=False, required=False, allow_null=True)
@@ -284,6 +289,7 @@ class TeamMemberSerializer(serializers.ModelSerializer):
 class OrganizerSettingsSerializer(SettingsSerializer):
     default_fields = [
         'customer_accounts',
+        'customer_accounts_native',
         'customer_accounts_link_by_email',
         'invoice_regenerate_allowed',
         'contact_mail',
