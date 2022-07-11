@@ -34,7 +34,9 @@
 
 import binascii
 import json
+import operator
 from datetime import timedelta
+from functools import reduce
 from urllib.parse import urlparse
 
 import webauthn
@@ -491,11 +493,14 @@ class User(AbstractBaseUser, PermissionsMixin, LoggingMixin):
         if request and self.has_active_staff_session(request.session.session_key):
             return Event.objects.all()
 
-        kwargs = {permission: True}
+        if isinstance(permission, (tuple, list)):
+            q = reduce(operator.or_, [Q(**{p: True}) for p in permission])
+        else:
+            q = Q(**{permission: True})
 
         return Event.objects.filter(
-            Q(organizer_id__in=self.teams.filter(all_events=True, **kwargs).values_list('organizer', flat=True))
-            | Q(id__in=self.teams.filter(**kwargs).values_list('limit_events__id', flat=True))
+            Q(organizer_id__in=self.teams.filter(q, all_events=True).values_list('organizer', flat=True))
+            | Q(id__in=self.teams.filter(q).values_list('limit_events__id', flat=True))
         )
 
     @scopes_disabled()

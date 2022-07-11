@@ -1408,3 +1408,38 @@ def test_redeem_addon_if_match_and_revoked_force(token_client, organizer, clist,
         assert ci.forced
         assert ci.force_sent
         assert ci.position == p
+
+
+@pytest.mark.django_db
+def test_search(token_client, organizer, event, clist, clist_all, item, other_item, order, django_assert_max_num_queries):
+    with scopes_disabled():
+        p1 = dict(TEST_ORDERPOSITION1_RES)
+        p1["id"] = order.positions.get(positionid=1).pk
+        p1["item"] = item.pk
+
+    with django_assert_max_num_queries(17):
+        resp = token_client.get('/api/v1/organizers/{}/events/{}/checkinlists/{}/positions/?search=z3fsn8jyu'.format(
+            organizer.slug, event.slug, clist_all.pk
+        ))
+    assert resp.status_code == 200
+    assert [p1] == resp.data['results']
+    with django_assert_max_num_queries(17):
+        resp = token_client.get('/api/v1/organizers/{}/checkinrpc/search/?list={}&search=z3fsn8jyu'.format(organizer.slug, clist_all.pk))
+    assert resp.status_code == 200
+    assert [p1] == resp.data['results']
+
+
+@pytest.mark.django_db
+def test_rpc_interface_redeem(token_client, organizer, clist, event, order, django_assert_max_num_queries):
+    with scopes_disabled():
+        p = order.positions.first()
+    with django_assert_max_num_queries(30):
+        resp = token_client.post('/api/v1/organizers/{}/checkinrpc/redeem/'.format(
+            organizer.slug
+        ), {
+            'secret': p.secret,
+            'lists': [clist.pk],
+            'answers': {}
+        }, format='json')
+    assert resp.status_code == 201
+    assert resp.data['status'] == 'ok'

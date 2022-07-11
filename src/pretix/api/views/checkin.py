@@ -41,10 +41,13 @@ from packaging.version import parse
 from rest_framework import views, viewsets
 from rest_framework.decorators import action
 from rest_framework.fields import DateTimeField
+from rest_framework.generics import ListAPIView
 from rest_framework.permissions import SAFE_METHODS
 from rest_framework.response import Response
 
-from pretix.api.serializers.checkin import CheckinListSerializer
+from pretix.api.serializers.checkin import (
+    CheckinListSerializer, CheckinRPCRedeemInputSerializer,
+)
 from pretix.api.serializers.item import QuestionSerializer
 from pretix.api.serializers.order import (
     CheckinListOrderPositionSerializer, FailedCheckinSerializer,
@@ -54,7 +57,7 @@ from pretix.api.views.order import OrderPositionFilter
 from pretix.base.i18n import language
 from pretix.base.models import (
     CachedFile, Checkin, CheckinList, Device, Event, Order, OrderPosition,
-    Question, RevokedTicketSecret,
+    Question, RevokedTicketSecret, TeamAPIToken,
 )
 from pretix.base.services.checkin import (
     CheckInError, RequiredQuestionsError, SQLLogic, perform_checkin,
@@ -761,4 +764,96 @@ class CheckinListPositionViewSet(viewsets.ReadOnlyModelViewSet):
 
 
 class CheckinRPCRedeemView(views.APIView):
-    pass
+    def post(self, request, *args, **kwargs):
+        if isinstance(self.request.auth, (TeamAPIToken, Device)):
+            events = self.request.auth.get_events_with_permission(('can_change_orders', 'can_checkin_orders'))
+        elif self.request.user.is_authenticated:
+            events = self.request.user.get_events_with_permission(('can_change_orders', 'can_checkin_orders'), self.request).filter(
+                organizer=self.request.organizer
+            )
+        else:
+            raise ValueError("unknown authentication method")
+
+        s = CheckinRPCRedeemInputSerializer(data=request.data, context={'events': events})
+        s.is_valid(raise_exception=True)
+        return _redeem_process(
+            checkinlists=s.validated_data['lists'],
+            raw_barcode=s.validated_data['secret'],
+            answers_data=s.validated_data.get('answers'),
+            datetime=s.validated_data.get('datetime'),
+            force=s.validated_data['force'],
+            checkin_type=s.validated_data['type'],
+            ignore_unpaid=s.validated_data['ignore_unpaid'],
+            nonce=s.validated_data.get('nonce'),
+            untrusted_input=True,
+            user=self.request.user,
+            auth=self.request.auth,
+            expand=self.request.query_params.getlist('expand'),
+            pdf_data=self.request.query_params.get('pdf_data', 'false') == 'true',
+            questions_supported=s.validated_data['questions_supported'],
+            canceled_supported=s.validated_data['canceled_supported'],
+            request=self.request,  # this is not clean, but we need it in the serializers for URL generation
+            legacy_url_support=True,
+        )
+
+
+class CheckinRPCSearchView(ListAPIView):
+    serializer_class = CheckinListOrderPositionSerializer
+    queryset = OrderPosition.all.none()
+    filter_backends = (ExtendedBackend, RichOrderingFilter)
+    ordering = (F('attendee_name_cached').asc(nulls_last=True), 'positionid')
+    ordering_fields = (
+        'order__code', 'order__datetime', 'positionid', 'attendee_name',
+        'last_checked_in', 'order__email',
+    )
+    ordering_custom = {
+        'attendee_name': {
+            '_order': F('display_name').asc(nulls_first=True),
+            'display_name': Coalesce('attendee_name_cached', 'addon_to__attendee_name_cached')
+        },
+        '-attendee_name': {
+            '_order': F('display_name').desc(nulls_last=True),
+            'display_name': Coalesce('attendee_name_cached', 'addon_to__attendee_name_cached')
+        },
+        'last_checked_in': {
+            '_order': OrderBy(F('last_checked_in'), nulls_first=True),
+        },
+        '-last_checked_in': {
+            '_order': OrderBy(F('last_checked_in'), nulls_last=True, descending=True),
+        },
+    }
+    filterset_class = OrderPositionFilter
+
+    def get_serializer_context(self):
+        ctx = super().get_serializer_context()
+        ctx['expand'] = self.request.query_params.getlist('expand')
+        ctx['pdf_data'] = self.request.query_params.get('pdf_data', 'false') == 'true'
+        # todo: any negative effects to omitting "event" here?
+        return ctx
+
+    def get_queryset(self, ignore_status=False, ignore_products=False):
+        if isinstance(self.request.auth, (TeamAPIToken, Device)):
+            events = self.request.auth.get_events_with_permission(('can_view_orders', 'can_checkin_orders'))
+        elif self.request.user.is_authenticated:
+            events = self.request.user.get_events_with_permission(('can_view_orders', 'can_checkin_orders'), self.request).filter(
+                organizer=self.request.organizer
+            )
+        else:
+            raise ValueError("unknown authentication method")
+
+        lists = list(
+            CheckinList.objects.filter(event__in=events).filter(id__in=self.request.query_params.getlist('list'))
+        )
+
+        qs = _checkin_list_position_queryset(
+            lists,
+            ignore_status=self.request.query_params.get('ignore_status', 'false') == 'true' or ignore_status,
+            ignore_products=ignore_products,
+            pdf_data=self.request.query_params.get('pdf_data', 'false') == 'true',
+            expand=self.request.query_params.getlist('expand'),
+        )
+
+        if len(self.request.query_params.get('search', '')) < 3:
+            qs = qs.none()
+
+        return qs
