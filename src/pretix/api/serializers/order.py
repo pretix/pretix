@@ -422,7 +422,7 @@ class OrderPositionSerializer(I18nAwareModelSerializer):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         request = self.context.get('request')
-        if request and (not request.query_params.get('pdf_data', 'false') == 'true' or 'can_view_orders' not in request.eventpermset):
+        if not self.context.get('pdf_data') or (request and 'can_view_orders' not in request.eventpermset):
             self.fields.pop('pdf_data', None)
 
     def validate(self, data):
@@ -481,13 +481,13 @@ class CheckinListOrderPositionSerializer(OrderPositionSerializer):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        if 'subevent' in self.context['request'].query_params.getlist('expand'):
+        if 'subevent' in self.context['expand']:
             self.fields['subevent'] = SubEventSerializer(read_only=True)
 
-        if 'item' in self.context['request'].query_params.getlist('expand'):
+        if 'item' in self.context['expand']:
             self.fields['item'] = ItemSerializer(read_only=True, context=self.context)
 
-        if 'variation' in self.context['request'].query_params.getlist('expand'):
+        if 'variation' in self.context['expand']:
             self.fields['variation'] = InlineItemVariationSerializer(read_only=True)
 
 
@@ -590,10 +590,10 @@ class OrderSerializer(I18nAwareModelSerializer):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        if not self.context['request'].query_params.get('pdf_data', 'false') == 'true':
+        if not self.context['pdf_data']:
             self.fields['positions'].child.fields.pop('pdf_data', None)
 
-        for exclude_field in self.context['request'].query_params.getlist('exclude'):
+        for exclude_field in self.context['exclude']:
             p = exclude_field.split('.')
             if p[0] in self.fields:
                 if len(p) == 1:

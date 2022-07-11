@@ -229,13 +229,14 @@ def clist_all(event, item):
 
 
 @pytest.mark.django_db
-def test_list_list(token_client, organizer, event, clist, item, subevent):
+def test_list_list(token_client, organizer, event, clist, item, subevent, django_assert_num_queries):
     res = dict(TEST_LIST_RES)
     res["id"] = clist.pk
     res["limit_products"] = [item.pk]
     res["auto_checkin_sales_channels"] = []
 
-    resp = token_client.get('/api/v1/organizers/{}/events/{}/checkinlists/'.format(organizer.slug, event.slug))
+    with django_assert_num_queries(11):
+        resp = token_client.get('/api/v1/organizers/{}/events/{}/checkinlists/'.format(organizer.slug, event.slug))
     assert resp.status_code == 200
     assert [res] == resp.data['results']
 
@@ -436,7 +437,7 @@ def test_list_update(token_client, organizer, event, clist):
 
 
 @pytest.mark.django_db
-def test_list_all_items_positions(token_client, organizer, event, clist, clist_all, item, other_item, order):
+def test_list_all_items_positions(token_client, organizer, event, clist, clist_all, item, other_item, order, django_assert_num_queries):
     with scopes_disabled():
         p1 = dict(TEST_ORDERPOSITION1_RES)
         p1["id"] = order.positions.get(positionid=1).pk
@@ -450,9 +451,10 @@ def test_list_all_items_positions(token_client, organizer, event, clist, clist_a
         p3["addon_to"] = p1["id"]
 
     # All items
-    resp = token_client.get('/api/v1/organizers/{}/events/{}/checkinlists/{}/positions/?ordering=positionid'.format(
-        organizer.slug, event.slug, clist_all.pk
-    ))
+    with django_assert_num_queries(23):
+        resp = token_client.get('/api/v1/organizers/{}/events/{}/checkinlists/{}/positions/?ordering=positionid'.format(
+            organizer.slug, event.slug, clist_all.pk
+        ))
     assert resp.status_code == 200
     assert [p1, p2, p3] == resp.data['results']
 
@@ -682,6 +684,18 @@ def test_status(token_client, organizer, event, clist_all, item, other_item, ord
             'variations': []
         }
     ]
+
+
+@pytest.mark.django_db
+def test_query_load(token_client, organizer, clist, event, order, django_assert_max_num_queries):
+    with scopes_disabled():
+        p = order.positions.first().pk
+    with django_assert_max_num_queries(30):
+        resp = token_client.post('/api/v1/organizers/{}/events/{}/checkinlists/{}/positions/{}/redeem/'.format(
+            organizer.slug, event.slug, clist.pk, p
+        ), {}, format='json')
+    assert resp.status_code == 201
+    assert resp.data['status'] == 'ok'
 
 
 @pytest.mark.django_db

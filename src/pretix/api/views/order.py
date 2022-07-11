@@ -187,6 +187,8 @@ class OrderViewSet(viewsets.ModelViewSet):
     def get_serializer_context(self):
         ctx = super().get_serializer_context()
         ctx['event'] = self.request.event
+        ctx['pdf_data'] = self.request.query_params.get('pdf_data', 'false') == 'true'
+        ctx['exclude'] = self.request.query_params.getlist('exclude')
         return ctx
 
     def get_queryset(self):
@@ -932,6 +934,7 @@ class OrderPositionViewSet(viewsets.ModelViewSet):
     def get_serializer_context(self):
         ctx = super().get_serializer_context()
         ctx['event'] = self.request.event
+        ctx['pdf_data'] = self.request.query_params.get('pdf_data', 'false') == 'true'
         return ctx
 
     def get_queryset(self):

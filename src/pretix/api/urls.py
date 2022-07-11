@@ -112,6 +112,8 @@ for app in apps.get_app_configs():
 urlpatterns = [
     re_path(r'^', include(router.urls)),
     re_path(r'^organizers/(?P<organizer>[^/]+)/', include(orga_router.urls)),
+    re_path(r'^organizers/(?P<organizer>[^/]+)/checkinrpc/redeem/$', checkin.CheckinRPCRedeemView.as_view(),
+            name="organizer.settings"),
     re_path(r'^organizers/(?P<organizer>[^/]+)/settings/$', organizer.OrganizerSettingsView.as_view(),
             name="organizer.settings"),
     re_path(r'^organizers/(?P<organizer>[^/]+)/giftcards/(?P<giftcard>[^/]+)/', include(giftcard_router.urls)),
