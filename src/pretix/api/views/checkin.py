@@ -299,9 +299,9 @@ def _handle_file_upload(data, user, auth):
 def _checkin_list_position_queryset(checkinlists, ignore_status=False, ignore_products=False, pdf_data=False, expand=None):
     list_by_event = {cl.event_id: cl for cl in checkinlists}
     if not checkinlists:
-        raise ValueError('No check-in list passed.')
+        raise ValidationError('No check-in list passed.')
     if len(list_by_event) != len(checkinlists):
-        raise ValueError('Selecting two check-in lists from the same event is unsupported.')
+        raise ValidationError('Selecting two check-in lists from the same event is unsupported.')
 
     cqs = Checkin.objects.filter(
         position_id=OuterRef('pk'),
