@@ -255,7 +255,7 @@ class Device(LoggedModel):
         :param request: Ignored, for compatibility with User model
         :return: Iterable of Events
         """
-        if (isinstance(permission, (list, tuple)) and any(p in self.permission_set for p in permission)) or permission in self.permission_set():
+        if (isinstance(permission, (list, tuple)) and any(p in self.permission_set() for p in permission)) or permission in self.permission_set():
             return self.get_events_with_any_permission()
         else:
             return self.organizer.events.none()

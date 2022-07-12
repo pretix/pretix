@@ -47,6 +47,7 @@ from rest_framework.response import Response
 
 from pretix.api.serializers.checkin import (
     CheckinListSerializer, CheckinRPCRedeemInputSerializer,
+    MiniCheckinListSerializer,
 )
 from pretix.api.serializers.item import QuestionSerializer
 from pretix.api.serializers.order import (
@@ -491,6 +492,7 @@ def _redeem_process(*, checkinlists, raw_barcode, answers_data, datetime, force,
                 'reason': Checkin.REASON_INVALID,
                 'reason_explanation': None,
                 'require_attention': False,
+                'list': MiniCheckinListSerializer(checkinlists[0]).data,
             }, status=404)
         elif revoked_matches and force:
             op_candidates = [revoked_matches[0].position]
@@ -518,7 +520,8 @@ def _redeem_process(*, checkinlists, raw_barcode, answers_data, datetime, force,
                 'reason': Checkin.REASON_REVOKED,
                 'reason_explanation': None,
                 'require_attention': False,
-                'position': CheckinListOrderPositionSerializer(op, context={**context, 'event': op.order.event}).data
+                'position': CheckinListOrderPositionSerializer(op, context={**context, 'event': op.order.event}).data,
+                'list': MiniCheckinListSerializer(list_by_event[revoked_matches[0].event_id]).data,
             }, status=400)
 
     # 3. Handle the "multiple options found" case: Except for the unlikely case of a secret being also a valid primary
@@ -566,7 +569,8 @@ def _redeem_process(*, checkinlists, raw_barcode, answers_data, datetime, force,
                 'reason': Checkin.REASON_AMBIGUOUS,
                 'reason_explanation': None,
                 'require_attention': op.item.checkin_attention or op.order.checkin_attention,
-                'position': CheckinListOrderPositionSerializer(op, context={**context, 'event': op.order.event}).data
+                'position': CheckinListOrderPositionSerializer(op, context={**context, 'event': op.order.event}).data,
+                'list': MiniCheckinListSerializer(list_by_event[op.order.event_id]).data,
             }, status=400)
         else:
             op_candidates = op_candidates_matching_product
@@ -613,7 +617,8 @@ def _redeem_process(*, checkinlists, raw_barcode, answers_data, datetime, force,
                 'position': CheckinListOrderPositionSerializer(op, context={**context, 'event': op.order.event}).data,
                 'questions': [
                     QuestionSerializer(q).data for q in e.questions
-                ]
+                ],
+                'list': MiniCheckinListSerializer(list_by_event[op.order.event_id]).data,
             }, status=400)
         except CheckInError as e:
             op.order.log_action('pretix.event.checkin.denied', data={
@@ -638,13 +643,15 @@ def _redeem_process(*, checkinlists, raw_barcode, answers_data, datetime, force,
                 'reason': e.code,
                 'reason_explanation': e.reason,
                 'require_attention': op.item.checkin_attention or op.order.checkin_attention,
-                'position': CheckinListOrderPositionSerializer(op, context={**context, 'event': op.order.event}).data
+                'position': CheckinListOrderPositionSerializer(op, context={**context, 'event': op.order.event}).data,
+                'list': MiniCheckinListSerializer(list_by_event[op.order.event_id]).data,
             }, status=400)
         else:
             return Response({
                 'status': 'ok',
                 'require_attention': op.item.checkin_attention or op.order.checkin_attention,
-                'position': CheckinListOrderPositionSerializer(op, context={**context, 'event': op.order.event}).data
+                'position': CheckinListOrderPositionSerializer(op, context={**context, 'event': op.order.event}).data,
+                'list': MiniCheckinListSerializer(list_by_event[op.order.event_id]).data,
             }, status=201)
 
 
@@ -842,7 +849,7 @@ class CheckinRPCSearchView(ListAPIView):
             raise ValueError("unknown authentication method")
 
         lists = list(
-            CheckinList.objects.filter(event__in=events).filter(id__in=self.request.query_params.getlist('list'))
+            CheckinList.objects.filter(event__in=events).select_related('event').filter(id__in=self.request.query_params.getlist('list'))
         )
 
         qs = _checkin_list_position_queryset(

@@ -341,10 +341,10 @@ class PdfDataSerializer(serializers.Field):
             # we serialize a list.
 
             if 'vars' not in self.context:
-                self.context['vars'] = get_variables(self.context['request'].event)
+                self.context['vars'] = get_variables(self.context['event'])
 
             if 'vars_images' not in self.context:
-                self.context['vars_images'] = get_images(self.context['request'].event)
+                self.context['vars_images'] = get_images(self.context['event'])
 
             for k, f in self.context['vars'].items():
                 try:
@@ -422,7 +422,7 @@ class OrderPositionSerializer(I18nAwareModelSerializer):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         request = self.context.get('request')
-        if not self.context.get('pdf_data') or (request and 'can_view_orders' not in request.eventpermset):
+        if not self.context.get('pdf_data') or (request and hasattr(request, 'event') and 'can_view_orders' not in request.eventpermset):  # todo
             self.fields.pop('pdf_data', None)
 
     def validate(self, data):
