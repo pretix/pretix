@@ -52,7 +52,7 @@ from pretix.api.serializers.item import (
 from pretix.api.views import ConditionalListView
 from pretix.base.models import (
     CartPosition, Item, ItemAddOn, ItemBundle, ItemCategory, ItemVariation,
-    Question, QuestionOption, Quota,
+    Question, QuestionOption, Quota, SubEvent,
 )
 from pretix.base.services.quotas import QuotaAvailability
 from pretix.helpers.dicts import merge_dicts
@@ -459,6 +459,8 @@ class QuestionOptionViewSet(viewsets.ModelViewSet):
 
 with scopes_disabled():
     class QuotaFilter(FilterSet):
+        subevent = django_filters.ModelMultipleChoiceFilter(queryset=SubEvent.objects.all())
+
         class Meta:
             model = Quota
             fields = ['subevent']

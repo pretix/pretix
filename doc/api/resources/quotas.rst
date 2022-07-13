@@ -89,7 +89,8 @@ Endpoints
    :query integer page: The page number in case of a multi-page result set, default is 1
    :query string ordering: Manually set the ordering of results. Valid fields to be used are ``id`` and ``position``.
                            Default: ``position``
-   :query integer subevent: Only return quotas of the sub-event with the given ID
+   :query integer subevent: Only return quotas of the sub-event with the given ID. Can be passed multiple times to filter
+                            for multiple sub-events.
    :query string with_availability: Set to ``true`` to get availability information. Can lead to increased answer times.
    :param organizer: The ``slug`` field of the organizer to fetch
    :param event: The ``slug`` field of the event to fetch
