@@ -787,7 +787,7 @@ class CheckinRPCRedeemView(views.APIView):
             checkinlists=s.validated_data['lists'],
             raw_barcode=s.validated_data['secret'],
             answers_data=s.validated_data.get('answers'),
-            datetime=s.validated_data.get('datetime'),
+            datetime=s.validated_data.get('datetime') or now(),
             force=s.validated_data['force'],
             checkin_type=s.validated_data['type'],
             ignore_unpaid=s.validated_data['ignore_unpaid'],
