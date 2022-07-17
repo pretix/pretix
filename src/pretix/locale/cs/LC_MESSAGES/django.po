@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-07-01 07:49+0000\n"
 "PO-Revision-Date: 2022-07-18 05:00+0000\n"
-"Last-Translator: Hana Happl <hana.happl@gmx.at>\n"
+"Last-Translator: Tony Pavlik <kontakt@playton.cz>\n"
 "Language-Team: Czech <https://translate.pretix.eu/projects/pretix/pretix/cs/>"
 "\n"
 "Language: cs\n"
@@ -1059,7 +1059,7 @@ msgstr "Čistá cena"
 #: pretix/base/exporters/orderlist.py:563 pretix/base/models/orders.py:2060
 #: pretix/base/models/orders.py:2178 pretix/base/models/orders.py:2521
 msgid "Tax value"
-msgstr "Daňová hodnota"
+msgstr "Hodnota daně"
 
 #: pretix/base/exporters/invoices.py:324 pretix/base/exporters/orderlist.py:450
 #: pretix/base/exporters/orderlist.py:561 pretix/base/models/orders.py:2051
