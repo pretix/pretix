@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-07-01 07:49+0000\n"
-"PO-Revision-Date: 2022-07-11 06:00+0000\n"
+"PO-Revision-Date: 2022-07-18 05:00+0000\n"
 "Last-Translator: Michael <michael.happl@gmx.at>\n"
 "Language-Team: Czech <https://translate.pretix.eu/projects/pretix/pretix/cs/>"
 "\n"
@@ -551,10 +551,8 @@ msgstr ""
 "Upozorňujeme, že datum faktury ne vždy odpovídá datu objednávky nebo platby."
 
 #: pretix/base/exporters/events.py:47
-#, fuzzy
-#| msgid "Event start"
 msgid "Event data"
-msgstr "Začátek akce"
+msgstr "Údaje o akci"
 
 #: pretix/base/exporters/events.py:55 pretix/base/exporters/waitinglist.py:112
 #: pretix/base/models/event.py:459 pretix/base/pdf.py:214
@@ -1507,7 +1505,7 @@ msgstr "Email účastníka"
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html:8
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:156
 msgid "Voucher"
-msgstr "Voucher"
+msgstr "Poukázka"
 
 #: pretix/base/exporters/orderlist.py:579
 msgid "Pseudonymization ID"
@@ -1953,7 +1951,7 @@ msgstr ""
 #: pretix/base/forms/user.py:56 pretix/control/forms/users.py:45
 #: pretix/presale/forms/customer.py:290 pretix/presale/forms/customer.py:378
 msgid "Please enter the same password twice"
-msgstr "Pro minimalizování překlepů, zadejte stejné heslo dvakrát."
+msgstr "Zadejte stejné heslo dvakrát"
 
 #: pretix/base/forms/auth.py:149
 msgid "Email address"
@@ -2339,7 +2337,7 @@ msgstr ""
 
 #: pretix/base/invoice.py:726
 msgid "Modern Invoice Renderer (pretix 2.7)"
-msgstr "Modern Invoice Renderer (pretix 2.7)"
+msgstr "Moderní (pretix 2.7)"
 
 #: pretix/base/migrations/0077_auto_20171124_1629.py:33
 #: pretix/base/migrations/0077_auto_20171124_1629_squashed_0088_auto_20180328_1217.py:35
@@ -2613,7 +2611,7 @@ msgstr "Datumy lze míchat bez omezení"
 #: pretix/base/models/discount.py:45
 msgctxt "subevent"
 msgid "All matching products must be for the same date"
-msgstr "Všechny shodné produkty se musí vztahovat ke stejnému datu."
+msgstr "Všechny shodné produkty se musí vztahovat ke stejnému datu"
 
 #: pretix/base/models/discount.py:46
 msgctxt "subevent"
@@ -3444,22 +3442,21 @@ msgid ""
 "if a sales channel is selected here but not on product level, the variation "
 "will not be available."
 msgstr ""
+"Výběr prodejního kanálu pro produkt jako celek má přednost, takže pokud je "
+"zde vybrán prodejní kanál, ale ne na úrovni produktu, varianta nebude k "
+"dispozici."
 
 #: pretix/base/models/items.py:847
-#, fuzzy
-#| msgid ""
-#| "This product will only be shown if a voucher matching the product is "
-#| "redeemed."
 msgid "Show only if a matching voucher is redeemed."
-msgstr ""
-"Tento produkt se zobrazí pouze v případě, že bude uplatněn voucher "
-"odpovídající produktu."
+msgstr "Zobrazí se pouze po uplatnění odpovídajícího poukazu."
 
 #: pretix/base/models/items.py:849
 msgid ""
 "This variation will be hidden from the event page until the user enters a "
 "voucher that unlocks this variation."
 msgstr ""
+"Tato varianta bude na stránce události skrytá, dokud uživatel nezadá poukaz, "
+"který tuto variantu odemkne."
 
 #: pretix/base/models/items.py:856 pretix/base/models/vouchers.py:252
 #: pretix/base/models/waitinglist.py:96 pretix/base/orderimport.py:284
@@ -3469,66 +3466,68 @@ msgstr "Varianta produktu"
 #: pretix/base/models/items.py:857
 #: pretix/control/templates/pretixcontrol/item/create.html:64
 msgid "Product variations"
-msgstr ""
+msgstr "Varianty"
 
 #: pretix/base/models/items.py:1035
 msgid "Minimum number"
-msgstr ""
+msgstr "Minimální počet"
 
 #: pretix/base/models/items.py:1039
 msgid "Maximum number"
-msgstr ""
+msgstr "Maximální počet"
 
 #: pretix/base/models/items.py:1043
 msgid "Add-Ons are included in the price"
-msgstr ""
+msgstr "Další produkty jsou zahrnuty v ceně"
 
 #: pretix/base/models/items.py:1044
 msgid ""
 "If selected, adding add-ons to this ticket is free, even if the add-ons "
 "would normally cost money individually."
 msgstr ""
+"Pokud je tato možnost aktivována, lze další produkty přidat bez příplatku, i "
+"když by ve skutečnosti stály peníze."
 
 #: pretix/base/models/items.py:1049
 msgid "Allow the same product to be selected multiple times"
-msgstr ""
+msgstr "Povolit vícenásobný výběr stejného produktu"
 
 #: pretix/base/models/items.py:1068
 msgid "The add-on's category must belong to the same event as the item."
-msgstr ""
+msgstr "Kategorie pro další produkty musí patřit ke stejné akci jako produkt."
 
 #: pretix/base/models/items.py:1073
 msgid "The item already has an add-on of this category."
-msgstr ""
+msgstr "Tento produkt již má další produkty s touto kategorií."
 
 #: pretix/base/models/items.py:1078
 msgid "The minimum count needs to be equal to or greater than zero."
-msgstr ""
+msgstr "Minimální počet musí být alespoň nula."
 
 #: pretix/base/models/items.py:1083
 msgid "The maximum count needs to be equal to or greater than zero."
-msgstr ""
+msgstr "Maximální počet musí být alespoň nula."
 
 #: pretix/base/models/items.py:1088
 msgid "The maximum count needs to be greater than the minimum count."
-msgstr ""
+msgstr "Minimální počet musí být menší než maximální počet."
 
 #: pretix/base/models/items.py:1115
 msgid "Bundled item"
-msgstr ""
+msgstr "Součást produktu"
 
 #: pretix/base/models/items.py:1121
 msgid "Bundled variation"
-msgstr ""
+msgstr "Zahrnutá varianta"
 
 #: pretix/base/models/items.py:1127
 #: pretix/control/templates/pretixcontrol/order/transactions.html:22
 msgid "Quantity"
-msgstr ""
+msgstr "Počet"
 
 #: pretix/base/models/items.py:1132
 msgid "Designated price part"
-msgstr ""
+msgstr "Uvedený podíl na ceně"
 
 #: pretix/base/models/items.py:1133
 msgid ""
@@ -3537,65 +3536,69 @@ msgid ""
 "taxation, but can be kept blank otherwise. This value will NOT be added to "
 "the base item's price."
 msgstr ""
+"Pokud je tato hodnota nastavena, znamená to, že zahrnutý produkt je "
+"odpovědný za odpovídající podíl na celkové hrubé ceně. To může být důležité "
+"v případech smíšeného zdanění, jinak můžete toto pole ponechat prázdné. Tato "
+"cena se nepřipočítává k základní ceně."
 
 #: pretix/base/models/items.py:1156
 msgid "The bundled item must belong to the same event as the item."
-msgstr ""
+msgstr "Zahrnuté produkty musí patřit ke stejné akci."
 
 #: pretix/base/models/items.py:1158
 msgid "A variation needs to be set for this item."
-msgstr ""
+msgstr "Pro tento produkt musí být vybrána varianta."
 
 #: pretix/base/models/items.py:1160
 msgid "The chosen variation does not belong to this item."
-msgstr ""
+msgstr "Tato varianta nepatří k tomuto produktu."
 
 #: pretix/base/models/items.py:1165
 msgid "The count needs to be equal to or greater than zero."
-msgstr ""
+msgstr "Počet musí být alespoň nula."
 
 #: pretix/base/models/items.py:1218
 msgid "Number"
-msgstr ""
+msgstr "Číslo"
 
 #: pretix/base/models/items.py:1219
 msgid "Text (one line)"
-msgstr ""
+msgstr "Text (jednořádkový)"
 
 #: pretix/base/models/items.py:1220
 msgid "Multiline text"
-msgstr ""
+msgstr "Text (víceřádkový)"
 
 #: pretix/base/models/items.py:1221
 msgid "Yes/No"
-msgstr ""
+msgstr "Ano/Ne"
 
 #: pretix/base/models/items.py:1222
 msgid "Choose one from a list"
-msgstr ""
+msgstr "Výběr ze seznamu"
 
 #: pretix/base/models/items.py:1223
 msgid "Choose multiple from a list"
-msgstr ""
+msgstr "Vícenásobný výběr ze seznamu"
 
 #: pretix/base/models/items.py:1224
 msgid "File upload"
-msgstr ""
+msgstr "Upload souborů"
 
 #: pretix/base/models/items.py:1226 pretix/base/reldate.py:183
 #: pretix/plugins/checkinlists/exporters.py:612
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_create.html:27
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_update.html:41
 msgid "Time"
-msgstr ""
+msgstr "Čas"
 
 #: pretix/base/models/items.py:1227
 msgid "Date and time"
-msgstr ""
+msgstr "Datum a hodina"
 
 #: pretix/base/models/items.py:1228
 msgid "Country code (ISO 3166-1 alpha-2)"
-msgstr ""
+msgstr "Země (ISO3166-1-alpha-2-kód zemí)"
 
 #: pretix/base/models/items.py:1240 pretix/base/models/items.py:1325
 #: pretix/base/orderimport.py:732 pretix/control/forms/item.py:85
@@ -3603,169 +3606,170 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/items/question_edit.html:17
 #: pretix/control/templates/pretixcontrol/items/questions.html:21
 msgid "Question"
-msgstr ""
+msgstr "Otázka"
 
 #: pretix/base/models/items.py:1250 pretix/base/models/items.py:1477
-#, fuzzy
-#| msgid "The property name may only contain letters, numbers and underscores."
 msgid ""
 "The identifier may only contain letters, numbers, dots, dashes, and "
 "underscores."
-msgstr "Název vlastnosti může obsahovat pouze písmena, čísla a podtržítka."
+msgstr ""
+"Toto pole může obsahovat pouze písmena, číslice, tečky, pomlčky a podtržítka."
 
 #: pretix/base/models/items.py:1255
 msgid "Help text"
-msgstr ""
+msgstr "Nápověda"
 
 #: pretix/base/models/items.py:1256
 msgid "If the question needs to be explained or clarified, do it here!"
-msgstr ""
+msgstr "Pokud je třeba otázku vysvětlit nebo objasnit, udělejte to zde!"
 
 #: pretix/base/models/items.py:1262
 msgid "Question type"
-msgstr ""
+msgstr "Typ odpovědi"
 
 #: pretix/base/models/items.py:1266
 #: pretix/control/templates/pretixcontrol/items/questions.html:55
 msgid "Required question"
-msgstr ""
+msgstr "Odpověď je nutná"
 
 #: pretix/base/models/items.py:1273
 msgid "This question will be asked to buyers of the selected products"
-msgstr ""
+msgstr "Tato otázka je položena všem kupujícím vybraných produktů"
 
 #: pretix/base/models/items.py:1280
 msgid "Ask during check-in instead of in the ticket buying process"
-msgstr ""
+msgstr "Otázka při registraci místo v procesu prodeje"
 
 #: pretix/base/models/items.py:1281
 msgid "Not supported by all check-in apps for all question types."
-msgstr ""
+msgstr "Všechny naše aplikace pro odbavení nepodporují všechny typy otázek."
 
 #: pretix/base/models/items.py:1285
 #: pretix/control/templates/pretixcontrol/items/questions.html:66
 msgid "Hidden question"
-msgstr ""
+msgstr "Skrytá otázka"
 
 #: pretix/base/models/items.py:1286
 msgid "This question will only show up in the backend."
-msgstr ""
+msgstr "Tato otázka se zobrazí pouze v zadní části."
 
 #: pretix/base/models/items.py:1290
 msgid "Print answer on invoices"
-msgstr ""
+msgstr "Tisk odpovědi na faktury"
 
 #: pretix/base/models/items.py:1298 pretix/base/models/items.py:1304
 #: pretix/base/models/items.py:1310
 msgid "Minimum value"
-msgstr ""
+msgstr "Minimální hodnota"
 
 #: pretix/base/models/items.py:1299 pretix/base/models/items.py:1302
 #: pretix/base/models/items.py:1305 pretix/base/models/items.py:1308
 #: pretix/base/models/items.py:1311 pretix/base/models/items.py:1314
 msgid "Currently not supported in our apps and during check-in"
-msgstr ""
+msgstr "V současné době není podporováno našimi aplikacemi a během odbavení"
 
 #: pretix/base/models/items.py:1301 pretix/base/models/items.py:1307
 #: pretix/base/models/items.py:1313
 msgid "Maximum value"
-msgstr ""
+msgstr "Maximální hodnota"
 
 #: pretix/base/models/items.py:1317
 msgid "Validate file to be a portrait"
-msgstr ""
+msgstr "Zkontrolujte, zda je fotografie na výšku"
 
 #: pretix/base/models/items.py:1318
 msgid ""
 "If checked, files must be images with an aspect ratio of 3:4. This is "
 "commonly used for photos printed on badges."
 msgstr ""
+"Pokud je tato možnost aktivní, jsou přijímány pouze snímky ve formátu 3:4. "
+"Obvykle se používá pro účastnické průkazy."
 
 #: pretix/base/models/items.py:1370
 msgid "An answer to this question is required to proceed."
-msgstr ""
+msgstr "Tuto otázku je nutné zodpovědět."
 
 #: pretix/base/models/items.py:1384 pretix/base/models/items.py:1402
 #: pretix/base/orderimport.py:742 pretix/base/orderimport.py:750
 msgid "Invalid option selected."
-msgstr ""
+msgstr "Vybrána neplatná možnost."
 
 #: pretix/base/models/items.py:1412
 msgid "The number is to low."
-msgstr ""
+msgstr "Počet je příliš nízký."
 
 #: pretix/base/models/items.py:1414
 msgid "The number is to high."
-msgstr ""
+msgstr "Počet je příliš vysoký."
 
 #: pretix/base/models/items.py:1417
 msgid "Invalid number input."
-msgstr ""
+msgstr "Neplatný číselný údaj."
 
 #: pretix/base/models/items.py:1424 pretix/base/models/items.py:1448
 msgid "Please choose a later date."
-msgstr ""
+msgstr "Zvolte prosím pozdější datum."
 
 #: pretix/base/models/items.py:1426 pretix/base/models/items.py:1450
 msgid "Please choose an earlier date."
-msgstr ""
+msgstr "Zvolte prosím dřívější datum."
 
 #: pretix/base/models/items.py:1429
 msgid "Invalid date input."
-msgstr ""
+msgstr "Neplatné zadání data."
 
 #: pretix/base/models/items.py:1436
 msgid "Invalid time input."
-msgstr ""
+msgstr "Neplatný časový údaj."
 
 #: pretix/base/models/items.py:1445
 msgid "Invalid datetime input."
-msgstr ""
+msgstr "Neplatné zadání časového razítka."
 
 #: pretix/base/models/items.py:1457
 msgid "Unknown country code."
-msgstr ""
+msgstr "Neznámý kód země."
 
 #: pretix/base/models/items.py:1481
 #: pretix/control/templates/pretixcontrol/items/question.html:68
 msgid "Answer"
-msgstr ""
+msgstr "Odpověď"
 
 #: pretix/base/models/items.py:1503
 msgid "The identifier \"{}\" is already used for a different option."
-msgstr ""
+msgstr "Odkaz {} je již použit pro jinou možnost, vyberte prosím jinou."
 
 #: pretix/base/models/items.py:1506
 msgid "Question option"
-msgstr ""
+msgstr "Možnost odpovědi"
 
 #: pretix/base/models/items.py:1507
 msgid "Question options"
-msgstr ""
+msgstr "Možnosti odpovědí"
 
 #: pretix/base/models/items.py:1592 pretix/control/forms/event.py:1366
 #: pretix/control/templates/pretixcontrol/items/quotas.html:56
 msgid "Total capacity"
-msgstr ""
+msgstr "Celkový počet"
 
 #: pretix/base/models/items.py:1594 pretix/control/forms/item.py:352
 msgid "Leave empty for an unlimited number of tickets."
-msgstr ""
+msgstr "Pro neomezený počet vstupenek nechte prázdné."
 
 #: pretix/base/models/items.py:1598 pretix/base/models/orders.py:1269
 #: pretix/base/models/orders.py:2491
 #: pretix/control/templates/pretixcontrol/checkin/index.html:90
 msgid "Item"
-msgstr ""
+msgstr "Produkt"
 
 #: pretix/base/models/items.py:1606 pretix/control/forms/item.py:643
 msgid "Variations"
-msgstr ""
+msgstr "Varianty"
 
 #: pretix/base/models/items.py:1610
 #: pretix/control/templates/pretixcontrol/items/quotas.html:70
 msgid "Ignore this quota when determining event availability"
-msgstr ""
+msgstr "Ignorujte tento kontingent pro celkovou obsazenost akce"
 
 #: pretix/base/models/items.py:1611
 msgid ""
@@ -3774,10 +3778,14 @@ msgid ""
 "that is added to each event but should not stop the event from being shown "
 "as sold out."
 msgstr ""
+"Pokud je tato možnost aktivní, bude tato kvóta při určování celkové "
+"dostupnosti v kalendáři událostí ignorována. To je užitečné například pro "
+"další položky, které se prodávají v rámci každé akce, ale neměly by mít vliv "
+"na zobrazení v kalendáři."
 
 #: pretix/base/models/items.py:1618
 msgid "Close this quota permanently once it is sold out"
-msgstr ""
+msgstr "Uzavřít tuto kvótu po vyprodání"
 
 #: pretix/base/models/items.py:1619
 msgid ""
@@ -3785,10 +3793,14 @@ msgid ""
 "sold, even if tickets become available again through cancellations or "
 "expiring orders. Of course, you can always re-open it manually."
 msgstr ""
+"Při této možnosti je kvóta po vyprodání uzavřena. To znamená, že další "
+"vstupenky nebudou prodávány, ani když budou znovu k dispozici z důvodu "
+"zrušení nebo vypršení platnosti objednávek. Kvótu můžete samozřejmě kdykoli "
+"znovu otevřít."
 
 #: pretix/base/models/items.py:1627
 msgid "Allow to sell more tickets once people have checked out"
-msgstr ""
+msgstr "Prodej dalších vstupenek po odchodu zákazníků z akce"
 
 #: pretix/base/models/items.py:1628
 msgid ""
@@ -3799,12 +3811,18 @@ msgid ""
 "are ignored if they are set to \"Allow re-entering after an exit scan\" to "
 "prevent accidental overbooking."
 msgstr ""
+"Při této možnosti se místo v kvótě uvolní, jakmile jsou vstupenky "
+"naskenovány u východu z akce. K tomu dojde pouze v případě, že vstupenka "
+"byla naskenována u vstupu i u výstupu a výstup byl naskenován později. "
+"Nezáleží na tom, který seznam odbavení byl naskenován, ale aby se zabránilo "
+"přeplnění, seznamy odbavení s nastavenou možností \"Povolit opakovaný vstup "
+"při naskenovaném výstupu\" budou ignorovány."
 
 #: pretix/base/models/items.py:1639 pretix/base/models/vouchers.py:261
 #: pretix/control/templates/pretixcontrol/items/quota_edit.html:8
 #: pretix/control/templates/pretixcontrol/items/quota_edit.html:15
 msgid "Quota"
-msgstr ""
+msgstr "Kontingent"
 
 #: pretix/base/models/items.py:1640 pretix/control/navigation.py:166
 #: pretix/control/templates/pretixcontrol/items/quotas.html:4
@@ -3813,81 +3831,85 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html:180
 #: pretix/control/templates/pretixcontrol/subevents/detail.html:58
 msgid "Quotas"
-msgstr ""
+msgstr "Kontingenty"
 
 #: pretix/base/models/items.py:1708
 msgid "All variations must belong to an item contained in the items list."
 msgstr ""
+"Všechny varianty musí patřit k produktu, který je také uveden v seznamu "
+"produktů."
 
 #: pretix/base/models/items.py:1719
 msgid ""
 "One or more items has variations but none of these are in the variations "
 "list."
-msgstr ""
+msgstr "Jeden nebo více produktů má varianty, ale žádný z nich není vybrán."
 
 #: pretix/base/models/items.py:1725 pretix/base/models/waitinglist.py:237
 msgid "Subevent cannot be null for event series."
-msgstr ""
+msgstr "Datum nemůže být prázdné, protože se jedná o sérii akcí."
 
 #: pretix/base/models/log.py:156
 #, python-brace-format
 msgid "Order {val}"
-msgstr ""
+msgstr "Objednávka {val}"
 
 #: pretix/base/models/log.py:166
 #, python-brace-format
 msgid "Voucher {val}…"
-msgstr ""
+msgstr "Poukázka {val}…"
 
 #: pretix/base/models/log.py:176
 #, python-brace-format
 msgid "Product {val}"
-msgstr ""
+msgstr "Produkt {val}"
 
 #: pretix/base/models/log.py:186
 #, python-brace-format
 msgctxt "subevent"
 msgid "Date {val}"
-msgstr ""
+msgstr "Termín {val}"
 
 #: pretix/base/models/log.py:196
 #, python-brace-format
 msgid "Quota {val}"
-msgstr ""
+msgstr "Kontingent {val}"
 
 #: pretix/base/models/log.py:206
 #, python-brace-format
 msgid "Discount {val}"
-msgstr ""
+msgstr "Sleva {val}"
 
 #: pretix/base/models/log.py:216
 #, python-brace-format
 msgid "Category {val}"
-msgstr ""
+msgstr "Kategorie {val}"
 
 #: pretix/base/models/log.py:226
 #, python-brace-format
 msgid "Question {val}"
-msgstr ""
+msgstr "Otázka {val}"
 
 #: pretix/base/models/log.py:236
 #, python-brace-format
 msgid "Tax rule {val}"
-msgstr ""
+msgstr "Daňové pravidlo {val}"
 
 #: pretix/base/models/memberships.py:44
 msgid "Membership is transferable"
-msgstr ""
+msgstr "Členství je přenosné"
 
 #: pretix/base/models/memberships.py:45
 msgid ""
 "If this is selected, the membership can be used to purchase tickets for "
 "multiple persons. If not, the attendee name always needs to stay the same."
 msgstr ""
+"Pokud je tato možnost vybrána, je možné rezervovat vstupenky pro více osob v "
+"rámci členství. V opačném případě musí být jméno účastníka vždy shodné."
 
 #: pretix/base/models/memberships.py:50
 msgid "Parallel usage is allowed"
-msgstr ""
+msgstr "Možnost souběžného použití"
 
 #: pretix/base/models/memberships.py:51
 msgid ""
@@ -3895,16 +3917,19 @@ msgid ""
 "events happening at the same time. Note that this will only check for an "
 "identical start time of the events, not for any overlap between events."
 msgstr ""
+"Pokud je tato možnost vybrána, lze si v rámci členství rezervovat více "
+"vstupenek na akce, které se konají ve stejnou dobu. Kontroluje se pouze "
+"shodný čas začátku události, nikoli překrývající se události."
 
 #: pretix/base/models/memberships.py:56 pretix/base/models/vouchers.py:194
 #: pretix/control/views/vouchers.py:109
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:28
 msgid "Maximum usages"
-msgstr ""
+msgstr "Maximální využití"
 
 #: pretix/base/models/memberships.py:57
 msgid "Number of times this membership can be used in a purchase."
-msgstr ""
+msgstr "Maximální počet využití."
 
 #: pretix/base/models/memberships.py:123
 #: pretix/control/templates/pretixcontrol/items/question.html:26
@@ -3922,49 +3947,51 @@ msgstr "Zrušeno"
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:20
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:121
 msgid "Membership type"
-msgstr ""
+msgstr "Druh členství"
 
 #: pretix/base/models/orders.py:161
 msgid "pending"
-msgstr ""
+msgstr "chybějící"
 
 #: pretix/base/models/orders.py:162
 msgid "paid"
-msgstr ""
+msgstr "zaplaceno"
 
 #: pretix/base/models/orders.py:163
 msgid "expired"
-msgstr ""
+msgstr "vypršelá platnost"
 
 #: pretix/base/models/orders.py:187 pretix/control/forms/orders.py:595
 msgid "Customer"
-msgstr ""
+msgstr "Zákazník"
 
 #: pretix/base/models/orders.py:202 pretix/control/forms/filter.py:514
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:59
 msgid "Locale"
-msgstr ""
+msgstr "Jazyk"
 
 #: pretix/base/models/orders.py:212 pretix/base/models/orders.py:2586
 #: pretix/control/forms/orders.py:78
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:138
 msgid "Expiration date"
-msgstr ""
+msgstr "Datum platnosti"
 
 #: pretix/base/models/orders.py:216 pretix/control/forms/filter.py:525
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:57
 msgid "Total amount"
-msgstr ""
+msgstr "Celková částka"
 
 #: pretix/base/models/orders.py:220 pretix/base/models/vouchers.py:282
 msgid ""
 "The text entered in this field will not be visible to the user and is "
 "available for your convenience."
-msgstr ""
+msgstr "Zde zadaný text se zákazníkovi nezobrazuje a slouží k přehledu."
 
 #: pretix/base/models/orders.py:225
 msgid "We'll show you this order to be due for a follow-up on this day."
 msgstr ""
+"Tuto objednávku zobrazíme jako platnou objednávku na další akci ve vybraný "
+"den."
 
 #: pretix/base/models/orders.py:231
 msgid ""
@@ -3973,155 +4000,161 @@ msgid ""
 "custom message, so you need to brief your check-in staff how to handle these "
 "cases."
 msgstr ""
+"Pokud je tato možnost nastavena, aplikace pro odbavení nahlásí, že tento tip "
+"vyžaduje zvláštní zpracování. To je užitečné například pro studenty, jejichž "
+"studentský průkaz je třeba ještě zkontrolovat."
 
 #: pretix/base/models/orders.py:243 pretix/base/models/orders.py:1306
 msgid "Meta information"
-msgstr ""
+msgstr "Metainformace"
 
 #: pretix/base/models/orders.py:857
 msgid ""
 "The payment can not be accepted as the last date of payments configured in "
 "the payment settings is over."
 msgstr ""
+"Tuto platbu nelze přijmout, protože bylo překročeno datum poslední platby "
+"nakonfigurované v nastavení platby."
 
 #: pretix/base/models/orders.py:859
 msgid ""
 "The payment can not be accepted as the order is expired and you configured "
 "that no late payments should be accepted in the payment settings."
 msgstr ""
+"Tuto platbu nelze přijmout, protože platnost příkazu vypršela a v nastavení "
+"plateb je nakonfigurováno, že pozdní platby nemají být přijímány."
 
 #: pretix/base/models/orders.py:861
 msgid "This order is not yet approved by the event organizer."
-msgstr ""
+msgstr "Tato objednávka ještě není schválena organizátorem akce."
 
 #: pretix/base/models/orders.py:885
 #, python-brace-format
 msgid "The ordered product \"{item}\" is no longer available."
-msgstr ""
+msgstr "Objednaný produkt \"{item}\" již není k dispozici."
 
 #: pretix/base/models/orders.py:886
 #, python-brace-format
 msgid "The seat \"{seat}\" is no longer available."
-msgstr ""
+msgstr "Sedadlo \"{seat}\" již není k dispozici.."
 
 #: pretix/base/models/orders.py:887
 #, python-brace-format
 msgid "The voucher \"{voucher}\" no longer has sufficient budget."
-msgstr ""
+msgstr "Poukaz \"{voucher}\" již nemá dostatečný rozpočet."
 
 #: pretix/base/models/orders.py:888
 #, python-brace-format
 msgid "The voucher \"{voucher}\" has been used in the meantime."
-msgstr ""
+msgstr "Poukaz \"{voucher}\" byl mezitím použit."
 
 #: pretix/base/models/orders.py:1023 pretix/control/views/event.py:773
-#, fuzzy, python-format
-#| msgid "Order code"
+#, python-format
 msgid "Your order: %(code)s"
-msgstr "Kód objednávky"
+msgstr "Vaše objednávka: %(code)s"
 
 #: pretix/base/models/orders.py:1187
 msgid "<file>"
-msgstr ""
+msgstr "<soubor>"
 
 #: pretix/base/models/orders.py:1286 pretix/base/models/orders.py:1294
 msgid "Empty, if this product is not an admission ticket"
-msgstr ""
+msgstr "Prázdné, pokud tento produkt není vstupenkou"
 
 #: pretix/base/models/orders.py:1496
 msgctxt "payment_state"
 msgid "created"
-msgstr ""
+msgstr "vytvořeno"
 
 #: pretix/base/models/orders.py:1497
 msgctxt "payment_state"
 msgid "pending"
-msgstr ""
+msgstr "čeká na"
 
 #: pretix/base/models/orders.py:1498
 msgctxt "payment_state"
 msgid "confirmed"
-msgstr ""
+msgstr "potvrzeno"
 
 #: pretix/base/models/orders.py:1499
 msgctxt "payment_state"
 msgid "canceled"
-msgstr ""
+msgstr "přerušeno"
 
 #: pretix/base/models/orders.py:1500
 msgctxt "payment_state"
 msgid "failed"
-msgstr ""
+msgstr "neúspěšné"
 
 #: pretix/base/models/orders.py:1501
 msgctxt "payment_state"
 msgid "refunded"
-msgstr ""
+msgstr "vráceno"
 
 #: pretix/base/models/orders.py:1529 pretix/base/models/orders.py:1918
 #: pretix/base/shredder.py:434
 msgid "Payment information"
-msgstr ""
+msgstr "Informace o platbě"
 
 #: pretix/base/models/orders.py:1731
 #, python-format
 msgid "Event registration confirmed: %(code)s"
-msgstr ""
+msgstr "Registrace události potvrzena: %(code)s"
 
 #: pretix/base/models/orders.py:1749
 #, python-format
 msgid "Payment received for your order: %(code)s"
-msgstr ""
+msgstr "Přijatá platba za vaši objednávku: %(code)s"
 
 #: pretix/base/models/orders.py:1859
 msgctxt "refund_state"
 msgid "started externally"
-msgstr ""
+msgstr "zahájeno externě"
 
 #: pretix/base/models/orders.py:1860
 msgctxt "refund_state"
 msgid "created"
-msgstr ""
+msgstr "vytvořeno"
 
 #: pretix/base/models/orders.py:1861
 msgctxt "refund_state"
 msgid "in transit"
-msgstr ""
+msgstr "na cestě"
 
 #: pretix/base/models/orders.py:1862
 msgctxt "refund_state"
 msgid "done"
-msgstr ""
+msgstr "vyřízeno"
 
 #: pretix/base/models/orders.py:1863
 msgctxt "refund_state"
 msgid "failed"
-msgstr ""
+msgstr "neúspěšné"
 
 #: pretix/base/models/orders.py:1865
 msgctxt "refund_state"
 msgid "canceled"
-msgstr ""
+msgstr "přerušeno"
 
 #: pretix/base/models/orders.py:1873
 msgctxt "refund_source"
 msgid "Organizer"
-msgstr ""
+msgstr "Organizátor"
 
 #: pretix/base/models/orders.py:1874
 msgctxt "refund_source"
 msgid "Customer"
-msgstr ""
+msgstr "Zákazník"
 
 #: pretix/base/models/orders.py:1875
 msgctxt "refund_source"
 msgid "External"
-msgstr ""
+msgstr "Externí"
 
 #: pretix/base/models/orders.py:1913
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:197
 msgid "Refund reason"
-msgstr ""
+msgstr "Důvod vrácení peněz"
 
 #: pretix/base/models/orders.py:1914
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:198
@@ -4129,65 +4162,67 @@ msgstr ""
 msgid ""
 "May be shown to the end user or used e.g. as part of a payment reference."
 msgstr ""
+"Může být zobrazen koncovému uživateli nebo použit např. jako součást "
+"platebního odkazu."
 
 #: pretix/base/models/orders.py:2025
 msgid "Payment fee"
-msgstr ""
+msgstr "Poplatek za platbu"
 
 #: pretix/base/models/orders.py:2026
 msgid "Shipping fee"
-msgstr ""
+msgstr "Poštovné"
 
 #: pretix/base/models/orders.py:2027
 msgid "Service fee"
-msgstr ""
+msgstr "Poplatek za služby"
 
 #: pretix/base/models/orders.py:2028
 #: pretix/control/templates/pretixcontrol/order/index.html:148
 msgid "Cancellation fee"
-msgstr ""
+msgstr "Storno poplatek"
 
 #: pretix/base/models/orders.py:2029
 msgid "Insurance fee"
-msgstr ""
+msgstr "Pojistné"
 
 #: pretix/base/models/orders.py:2030
 msgid "Other fees"
-msgstr ""
+msgstr "Další poplatky"
 
 #: pretix/base/models/orders.py:2031 pretix/base/payment.py:1122
 #: pretix/control/templates/pretixcontrol/items/index.html:86
 #: pretix/control/templates/pretixcontrol/order/index.html:143
 msgid "Gift card"
-msgstr ""
+msgstr "Dárkový poukaz"
 
 #: pretix/base/models/orders.py:2036
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:66
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:104
 #: pretix/control/views/vouchers.py:109
 msgid "Value"
-msgstr ""
+msgstr "Hodnota"
 
 #: pretix/base/models/orders.py:2199
 msgid "Order position"
-msgstr ""
+msgstr "Objednaný produkt"
 
 #: pretix/base/models/orders.py:2405
 #, python-format
 msgid "Your event registration: %(code)s"
-msgstr ""
+msgstr "Registrace vaší akce: %(code)s"
 
 #: pretix/base/models/orders.py:2579
 msgid "Cart ID (e.g. session key)"
-msgstr ""
+msgstr "ID košíku (např. klíč relace)"
 
 #: pretix/base/models/orders.py:2613
 msgid "Cart position"
-msgstr ""
+msgstr "Produkt v nákupním košíku"
 
 #: pretix/base/models/orders.py:2614
 msgid "Cart positions"
-msgstr ""
+msgstr "Produkty v nákupním košíku"
 
 #: pretix/base/models/orders.py:2692
 msgid "Business customer"
@@ -4195,7 +4230,7 @@ msgstr "Obchodní zákazník"
 
 #: pretix/base/models/orders.py:2708
 msgid "This reference will be printed on your invoice for your convenience."
-msgstr ""
+msgstr "Tento odkaz bude pro vaše potřeby vytištěn na faktuře."
 
 #: pretix/base/models/organizer.py:77
 msgid ""
@@ -4203,6 +4238,9 @@ msgid ""
 "Every slug can only be used once. This is being used in URLs to refer to "
 "your organizer accounts and your events."
 msgstr ""
+"Měly by být krátké a mohou obsahovat pouze malá písmena, číslice, pomlčky a "
+"tečky. Každá zkratka může být použita pouze jednou a bude použita v adresách "
+"URL na váš účet organizátora a organizátory."
 
 #: pretix/base/models/organizer.py:94 pretix/control/forms/event.py:101
 #: pretix/control/forms/event.py:107 pretix/control/forms/filter.py:727
@@ -4215,70 +4253,73 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:9
 #: pretix/control/templates/pretixcontrol/organizers/mail.html:9
 msgid "Organizer"
-msgstr ""
+msgstr "Pořadatel"
 
 #: pretix/base/models/organizer.py:95 pretix/control/navigation.py:348
 #: pretix/control/templates/pretixcontrol/oauth/authorized.html:19
 #: pretix/control/templates/pretixcontrol/organizers/index.html:6
 #: pretix/control/templates/pretixcontrol/organizers/index.html:8
 msgid "Organizers"
-msgstr ""
+msgstr "Organizátor"
 
 #: pretix/base/models/organizer.py:257
 #: pretix/control/templates/pretixcontrol/organizers/teams.html:35
 msgid "Team name"
-msgstr ""
+msgstr "Název týmu"
 
 #: pretix/base/models/organizer.py:258
 #: pretix/control/templates/pretixcontrol/organizers/team_members.html:13
 msgid "Team members"
-msgstr ""
+msgstr "Členové týmu"
 
 #: pretix/base/models/organizer.py:264
 msgid "Can create events"
-msgstr ""
+msgstr "Může vytvářet akce"
 
 #: pretix/base/models/organizer.py:268
 msgid "Can change teams and permissions"
-msgstr ""
+msgstr "Může měnit týmy a práva"
 
 #: pretix/base/models/organizer.py:272
 msgid "Can change organizer settings"
-msgstr ""
+msgstr "Možnost změny nastavení organizéru"
 
 #: pretix/base/models/organizer.py:273
 msgid ""
 "Someone with this setting can get access to most data of all of your events, "
 "i.e. via privacy reports, so be careful who you add to this team!"
 msgstr ""
+"S tímto povolením může někdo vidět většinu údajů o vašich událostech, např. "
+"prostřednictvím zpráv o ochraně osobních údajů, proto je prosím předávejte "
+"pouze důvěryhodným osobám!"
 
 #: pretix/base/models/organizer.py:278
 msgid "Can manage customer accounts"
-msgstr ""
+msgstr "Umí spravovat účty zákazníků"
 
 #: pretix/base/models/organizer.py:282
 msgid "Can manage gift cards"
-msgstr ""
+msgstr "Umí spravovat dárkové karty"
 
 #: pretix/base/models/organizer.py:286
 msgid "Can change event settings"
-msgstr ""
+msgstr "Může změnit nastavení akce"
 
 #: pretix/base/models/organizer.py:290
 msgid "Can change product settings"
-msgstr ""
+msgstr "Může měnit nastavení produktu"
 
 #: pretix/base/models/organizer.py:294
 msgid "Can view orders"
-msgstr ""
+msgstr "Může zobrazit objednávky"
 
 #: pretix/base/models/organizer.py:298
 msgid "Can change orders"
-msgstr ""
+msgstr "Může měnit objednávky"
 
 #: pretix/base/models/organizer.py:302
 msgid "Can perform check-ins"
-msgstr ""
+msgstr "Může odbavit vstupenky"
 
 #: pretix/base/models/organizer.py:303
 msgid ""
@@ -4286,74 +4327,80 @@ msgid ""
 "information about attendees. Users with \"can change orders\" can also "
 "perform check-ins."
 msgstr ""
+"To znamená i vyhledávání v údajích účastníků, které umožňuje přístup k "
+"osobním informacím. Uživatelé, kteří mohou upravovat objednávky, mohou také "
+"kontrolovat tipy."
 
 #: pretix/base/models/organizer.py:308
 msgid "Can view vouchers"
-msgstr ""
+msgstr "Může zobrazit poukazy"
 
 #: pretix/base/models/organizer.py:312
 msgid "Can change vouchers"
-msgstr ""
+msgstr "Může měnit poukazy"
 
 #: pretix/base/models/organizer.py:316
 #, python-format
 msgid "%(name)s on %(object)s"
-msgstr ""
+msgstr "%(name)s pro %(object)s"
 
 #: pretix/base/models/organizer.py:348
 #: pretix/control/templates/pretixcontrol/events/create_basics.html:61
 msgid "Team"
-msgstr ""
+msgstr "Team"
 
 #: pretix/base/models/organizer.py:349 pretix/control/navigation.py:513
 #: pretix/control/templates/pretixcontrol/organizers/teams.html:6
 msgid "Teams"
-msgstr ""
+msgstr "Týmy"
 
 #: pretix/base/models/organizer.py:369
 #, python-brace-format
 msgid "Invite to team '{team}' for '{email}'"
-msgstr ""
+msgstr "Pozvání do týmu \"{team}\" pro \"{email}\""
 
 #: pretix/base/models/seating.py:45
 msgid "Your layout file is not a valid JSON file."
-msgstr ""
+msgstr "Plán rozesazení není platný soubor JSON."
 
 #: pretix/base/models/seating.py:54
 msgid "Your layout file is not a valid seating plan. Error message: {}"
-msgstr ""
+msgstr "Soubor není platným plánem zasedání. Chyba: {}"
 
 #: pretix/base/models/seating.py:175
 #, python-brace-format
 msgid "Row {number}"
-msgstr ""
+msgstr "Řada {number}"
 
 #: pretix/base/models/seating.py:180
 #, python-brace-format
 msgid "Seat {number}"
-msgstr ""
+msgstr "Sedadlo {number}"
 
 #: pretix/base/models/tax.py:145
 msgid "Official name"
-msgstr ""
+msgstr "Oficiální název"
 
 #: pretix/base/models/tax.py:146
 msgid "Should be short, e.g. \"VAT\""
-msgstr ""
+msgstr "Mělo by být krátké, např. \"DPH\""
 
 #: pretix/base/models/tax.py:155
 msgid "The configured product prices include the tax amount"
-msgstr ""
+msgstr "Nastavená cena produktu obsahuje daň"
 
 #: pretix/base/models/tax.py:159
 msgid ""
 "Keep gross amount constant if the tax rate changes based on the invoice "
 "address"
 msgstr ""
+"Pokud se kvůli adrese faktury změní sazba daně, ponechte místo čisté částky "
+"konstantní hrubou částku"
 
 #: pretix/base/models/tax.py:163
 msgid "Use EU reverse charge taxation rules"
 msgstr ""
+"Použití pravidel EU o daňové povinnosti příjemce služby (reverse charge)"
 
 #: pretix/base/models/tax.py:165
 msgid ""
@@ -4364,67 +4411,75 @@ msgid ""
 "option after consulting a tax counsel. No warranty given for correct tax "
 "calculation. USE AT YOUR OWN RISK."
 msgstr ""
+"Nedoporučuje se. Reverse charge se na většinu akcí nevztahuje, protože "
+"zdanění probíhá v místě dodání, tj. v místě konání akce. Tato možnost "
+"zajišťuje, že zákazníkům mimo EU a firemním zákazníkům v jiných zemích EU "
+"nebude účtována žádná daň, pokud je zadáno platné DIČ. Tato možnost by měla "
+"být aktivována pouze po konzultaci s daňovým poradcem. Nepřebíráme žádnou "
+"odpovědnost za správný výpočet daní. Používání na vlastní nebezpečí."
 
 #: pretix/base/models/tax.py:172 pretix/plugins/stripe/payment.py:209
 msgid "Merchant country"
-msgstr ""
+msgstr "Země prodejce"
 
 #: pretix/base/models/tax.py:174
 msgid ""
 "Your country of residence. This is the country the EU reverse charge rule "
 "will not apply in, if configured above."
 msgstr ""
+"Země, jejíž DPH podléháte. V této zemi se při aktivaci této funkce neprovádí "
+"zpětné nabíjení."
 
 #: pretix/base/models/tax.py:210
 msgid "You need to set your home country to use the reverse charge feature."
-msgstr ""
+msgstr "Chcete-li použít službu Reverse Charge, musíte zadat zemi pobytu."
 
 #: pretix/base/models/tax.py:214
 #, python-brace-format
 msgid "incl. {rate}% {name}"
-msgstr ""
+msgstr "vč. {rate}% {name}"
 
 #: pretix/base/models/tax.py:216
 #, python-brace-format
 msgid "plus {rate}% {name}"
-msgstr ""
+msgstr "plus {rate}% {name}"
 
 #: pretix/base/models/tax.py:218
 #: pretix/control/templates/pretixcontrol/event/tax_index.html:46
 msgid "reverse charge enabled"
-msgstr ""
+msgstr "aktivní Reverse charge"
 
 #: pretix/base/models/tax.py:335
 msgctxt "invoice"
 msgid ""
 "Reverse Charge: According to Article 194, 196 of Council Directive 2006/112/"
 "EEC, VAT liability rests with the service recipient."
-msgstr ""
+msgstr "Daň odvádí příjemce služby."
 
 #: pretix/base/models/tax.py:341
 msgctxt "invoice"
 msgid "VAT liability rests with the service recipient."
-msgstr ""
+msgstr "Daň odvádí příjemce služby."
 
 #: pretix/base/models/vouchers.py:169
 msgid "No effect"
-msgstr ""
+msgstr "Žádná změna"
 
 #: pretix/base/models/vouchers.py:170
 msgid "Set product price to"
-msgstr ""
+msgstr "Změnit cenu produktu na"
 
 #: pretix/base/models/vouchers.py:171
 msgid "Subtract from product price"
-msgstr ""
+msgstr "Odečtení částky z ceny produktu"
 
 #: pretix/base/models/vouchers.py:172
 msgid "Reduce product price by (%)"
-msgstr ""
+msgstr "Snížení ceny produktu o (%)"
 
 #: pretix/base/models/vouchers.py:195
 msgid "Number of times this voucher can be redeemed."
-msgstr ""
+msgstr "Jak často lze tento poukaz použít."
 
 #: pretix/base/models/vouchers.py:199 pretix/control/views/vouchers.py:109
 msgid "Redeemed"
@@ -4432,7 +4487,7 @@ msgstr "Uplatněno"
 
 #: pretix/base/models/vouchers.py:203
 msgid "Maximum discount budget"
-msgstr ""
+msgstr "Maximální rozpočet na slevy"
 
 #: pretix/base/models/vouchers.py:204
 msgid ""
@@ -4440,6 +4495,8 @@ msgid ""
 "voucher across all usages. If this is sum reached, the voucher can no longer "
 "be used."
 msgstr ""
+"Jedná se o maximální částku, která bude poskytnuta jako sleva při všech "
+"použitích tohoto poukazu. Po vyčerpání této částky nelze poukaz dále použít."
 
 #: pretix/base/models/vouchers.py:211
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:95
@@ -4447,7 +4504,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:24
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:123
 msgid "Valid until"
-msgstr ""
+msgstr "Platí do"
 
 #: pretix/base/models/vouchers.py:215 pretix/control/forms/filter.py:1810
 msgid "Reserve ticket from quota"
@@ -4798,10 +4855,8 @@ msgid "Invalid setting for column \"{header}\"."
 msgstr ""
 
 #: pretix/base/orderimport.py:176
-#, fuzzy
-#| msgid "Line number"
 msgid "Enter a valid phone number."
-msgstr "Číslo řádku"
+msgstr "Zadejte prosím platné telefonní číslo."
 
 #: pretix/base/orderimport.py:204 pretix/presale/views/waiting.py:111
 msgctxt "subevent"
@@ -5291,10 +5346,8 @@ msgid "Attendee street"
 msgstr ""
 
 #: pretix/base/pdf.py:182
-#, fuzzy
-#| msgid "ZIP code"
 msgid "Attendee ZIP code"
-msgstr "PSČ"
+msgstr "PSČ účastníka"
 
 #: pretix/base/pdf.py:187
 msgid "Attendee city"
@@ -5309,10 +5362,8 @@ msgid "Attendee country"
 msgstr ""
 
 #: pretix/base/pdf.py:209
-#, fuzzy
-#| msgid "Pseudonymization ID"
 msgid "Pseudonymization ID (lead scanning)"
-msgstr "ID pseudonymizace"
+msgstr "ID pseudonymizace (lead scanning)"
 
 #: pretix/base/pdf.py:215 pretix/base/pdf.py:220
 msgid "Sample event name"
@@ -5420,16 +5471,12 @@ msgid "Sample city"
 msgstr ""
 
 #: pretix/base/pdf.py:335
-#, fuzzy
-#| msgid "Invoice data"
 msgid "Invoice address state"
-msgstr "Obsah faktury"
+msgstr "Stát fakturační adresy"
 
 #: pretix/base/pdf.py:336
-#, fuzzy
-#| msgid "Presale not started"
 msgid "Sample State"
-msgstr "Předprodej zatím nezačal"
+msgstr "Ukázkový stát"
 
 #: pretix/base/pdf.py:340
 msgid "Invoice address country"
@@ -5468,10 +5515,8 @@ msgid "Event organizer info text"
 msgstr ""
 
 #: pretix/base/pdf.py:367 pretix/base/pdf.py:368
-#, fuzzy
-#| msgid "Presale not started"
 msgid "Event info text"
-msgstr "Předprodej zatím nezačal"
+msgstr "Informace o akci"
 
 #: pretix/base/pdf.py:372
 msgid "Printing date"
@@ -5519,16 +5564,12 @@ msgid "Date and time of first scan"
 msgstr ""
 
 #: pretix/base/pdf.py:424
-#, fuzzy
-#| msgid "Gift card code"
 msgid "Gift card: Issuance date"
-msgstr "kód dárkové poukázky"
+msgstr "Poukaz: Datum vystavení"
 
 #: pretix/base/pdf.py:429
-#, fuzzy
-#| msgid "Gift card transactions"
 msgid "Gift card: Expiration date"
-msgstr "Transakce u dárkové karty"
+msgstr "Poukaz: Datum platnosti"
 
 #: pretix/base/pdf.py:470 pretix/base/pdf.py:508 pretix/base/pdf.py:514
 #, python-brace-format
@@ -5541,10 +5582,8 @@ msgid "<Answer: {question}>"
 msgstr ""
 
 #: pretix/base/pdf.py:555
-#, fuzzy
-#| msgid "Attendee name"
 msgid "Attendee name for salutation"
-msgstr "Jméno účastníka"
+msgstr "Jméno účastníka pro pozdrav"
 
 #: pretix/base/pdf.py:562 pretix/base/pdf.py:569
 #: pretix/plugins/badges/exporters.py:298
@@ -5556,10 +5595,8 @@ msgid "Attendee name: {part}"
 msgstr ""
 
 #: pretix/base/pdf.py:578
-#, fuzzy
-#| msgid "Invoice address name"
 msgid "Invoice address name for salutation"
-msgstr "Adresa faktury"
+msgstr "Jméno fakturační adresy pro pozdrav"
 
 #: pretix/base/pdf.py:585
 #, python-brace-format
@@ -5621,10 +5658,8 @@ msgstr ""
 
 #: pretix/base/services/cancelevent.py:221
 #: pretix/base/services/cancelevent.py:279
-#, fuzzy
-#| msgid "Event created"
 msgid "Event canceled"
-msgstr "Akce byla vytvořena"
+msgstr "Akce byla zrušena"
 
 #: pretix/base/services/cart.py:89 pretix/base/services/orders.py:114
 msgid ""
@@ -5852,10 +5887,8 @@ msgid "Only allowed after {datetime}"
 msgstr ""
 
 #: pretix/base/services/checkin.py:212
-#, fuzzy
-#| msgid "Presale not started"
 msgid "Ticket type not allowed"
-msgstr "Předprodej zatím nezačal"
+msgstr "Typ vstupenky není povolen"
 
 #: pretix/base/services/checkin.py:231
 msgid "time since last entry"
@@ -6496,10 +6529,8 @@ msgid ""
 msgstr ""
 
 #: pretix/base/settings.py:154
-#, fuzzy
-#| msgid "E-mail address"
 msgid "Match orders based on email address"
-msgstr "E-mailová adresa"
+msgstr "Přiřazení objednávek k zákaznickým účtům na základě e-mailové adresy"
 
 #: pretix/base/settings.py:155
 msgid ""
@@ -6653,10 +6684,8 @@ msgid "Ask for beneficiary"
 msgstr ""
 
 #: pretix/base/settings.py:400
-#, fuzzy
-#| msgid "Custom address field"
 msgid "Custom recipient field"
-msgstr "Adresa"
+msgstr "Dodatečné pole přijímače"
 
 #: pretix/base/settings.py:402
 msgid ""
@@ -6762,10 +6791,8 @@ msgid ""
 msgstr ""
 
 #: pretix/base/settings.py:536
-#, fuzzy
-#| msgid "Event ticket {event}-{code}"
 msgid "Length of ticket codes"
-msgstr "Vstupenka {event}-{code}"
+msgstr "Délka kódů vstupenek"
 
 #: pretix/base/settings.py:563
 msgid "Reservation period"
@@ -8798,11 +8825,10 @@ msgid "Discount \"{name}\" becomes active"
 msgstr ""
 
 #: pretix/base/timeline.py:240
-#, fuzzy, python-brace-format
-#| msgid "This account is inactive."
+#, python-brace-format
 msgctxt "timeline"
 msgid "Discount \"{name}\" becomes inactive"
-msgstr "Účet není aktivní."
+msgstr "Sleva \"{name}\" se zneaktivní"
 
 #: pretix/base/timeline.py:280
 #, python-brace-format
@@ -19434,11 +19460,9 @@ msgid "We've been unable to parse the uploaded file as a CSV file."
 msgstr ""
 
 #: pretix/control/views/orders.py:326
-#, fuzzy
-#| msgid "All invoices"
 msgid "Your invoice"
 msgid_plural "Your invoices"
-msgstr[0] "Všechny faktury"
+msgstr[0] "Vaše faktura"
 msgstr[1] "Všechny faktury"
 msgstr[2] "Všechny faktury"
 
@@ -21503,10 +21527,8 @@ msgid "Payment pending."
 msgstr ""
 
 #: pretix/plugins/paypal2/signals.py:64
-#, fuzzy
-#| msgid "Order approved"
 msgid "Order approved."
-msgstr "Objednávka byla potvrzena"
+msgstr "Objednávka byla potvrzena."
 
 #: pretix/plugins/paypal2/signals.py:73
 msgid "PayPal reported an event: {}"
@@ -23650,11 +23672,8 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:249
 #: pretix/presale/templates/pretixpresale/event/voucher.html:166
 #: pretix/presale/templates/pretixpresale/event/voucher.html:300
-#, fuzzy
-#| msgctxt "invoice"
-#| msgid "Original invoice"
 msgid "Original price:"
-msgstr "Originální faktura"
+msgstr "Originální cena:"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:128
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:249
@@ -23662,10 +23681,8 @@ msgstr "Originální faktura"
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:259
 #: pretix/presale/templates/pretixpresale/event/voucher.html:176
 #: pretix/presale/templates/pretixpresale/event/voucher.html:310
-#, fuzzy
-#| msgid "Net price"
 msgid "New price:"
-msgstr "Čistá cena"
+msgstr "Nová cena:"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:138
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:258
@@ -23779,17 +23796,13 @@ msgid "Price total"
 msgstr "Celkem"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:39
-#, fuzzy
-#| msgid "Seat ID"
 msgid "Seat:"
-msgstr "ID sedadla"
+msgstr "Sedadlo:"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:57
-#, fuzzy
-#| msgid "Date"
 msgctxt "subevent"
 msgid "Date:"
-msgstr "Datum"
+msgstr "Datum:"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:80
 msgid "Location:"
@@ -23800,10 +23813,8 @@ msgid "Show full location"
 msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:93
-#, fuzzy
-#| msgid "Create a new event"
 msgid "Membership:"
-msgstr "Vytvořit novou událost"
+msgstr "Členství:"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:101
 msgctxt "ticket_checkins"
@@ -25531,7 +25542,7 @@ msgstr ""
 
 #: pretix/settings.py:854
 msgid "Write access"
-msgstr ""
+msgstr "Přístup k zápisu"
 
 #: pretix/settings.py:864
 msgid "Kosovo"
