@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-07-01 07:49+0000\n"
-"PO-Revision-Date: 2022-07-18 05:00+0000\n"
-"Last-Translator: Tony Pavlik <kontakt@playton.cz>\n"
+"PO-Revision-Date: 2022-07-18 15:00+0000\n"
+"Last-Translator: Hana Happl <hana.happl@gmx.at>\n"
 "Language-Team: Czech <https://translate.pretix.eu/projects/pretix/pretix/cs/>"
 "\n"
 "Language: cs\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 4.12.2\n"
+"X-Generator: Weblate 4.13.1\n"
 
 #: htmlcov/pretix_control_views_dashboards_py.html:963
 #: pretix/control/templates/pretixcontrol/events/index.html:140
@@ -6459,7 +6459,7 @@ msgstr ""
 
 #: pretix/base/services/orders.py:1262
 msgid "You need to choose a subevent for the new position."
-msgstr ""
+msgstr "Musíte si zvolit termín."
 
 #: pretix/base/services/orders.py:1264
 #, python-brace-format
@@ -6467,14 +6467,16 @@ msgid ""
 "You selected seat \"{seat}\" for a date that does not match the selected "
 "ticket date. Please choose a seat again."
 msgstr ""
+"Vybrali jste si místo \"{seat}\" pro datum, které neodpovídá vybranému datu "
+"vstupenky. Zvolte prosím místo znovu."
 
 #: pretix/base/services/orders.py:1265
 msgid "The selected product requires you to select a seat."
-msgstr ""
+msgstr "U vybraného produktu je třeba vybrat místo."
 
 #: pretix/base/services/orders.py:1266
 msgid "The selected product does not allow to select a seat."
-msgstr ""
+msgstr "Vybraný produkt neumožňuje výběr místa."
 
 #: pretix/base/services/orders.py:1267
 msgid "The selected country is blocked by your tax rule."
@@ -6492,12 +6494,16 @@ msgid ""
 "A position can not be canceled since the gift card {card} purchased in this "
 "order has already been redeemed."
 msgstr ""
+"Pozici nelze zrušit, protože dárkový poukaz {card}} zakoupený v této "
+"objednávce již byl uplatněn."
 
 #: pretix/base/services/orders.py:2497
 msgid ""
 "There was an error while trying to send the money back to you. Please "
 "contact the event organizer for further information."
 msgstr ""
+"Při pokusu o platbu zpět došlo k chybě. Pro další informace se prosím "
+"obraťte na organizátora akce."
 
 #: pretix/base/services/seating.py:61 pretix/base/services/seating.py:128
 #, python-format
@@ -6517,15 +6523,15 @@ msgstr ""
 msgid ""
 "The download file could no longer be found on the server, please try to "
 "start again."
-msgstr ""
+msgstr "Soubor ke stažení již nebyl na serveru nalezen, zkuste to znovu."
 
 #: pretix/base/services/shredder.py:111 pretix/control/views/shredder.py:91
 msgid "This file is from a different event."
-msgstr ""
+msgstr "Tento soubor je z jiné akce."
 
 #: pretix/base/services/shredder.py:120
 msgid "The confirm code you entered was incorrect."
-msgstr ""
+msgstr "Zadaný potvrzovací kód byl chybný."
 
 #: pretix/base/services/shredder.py:122
 msgid "Something happened in your event after the export, please try again."
@@ -6567,11 +6573,11 @@ msgstr ""
 
 #: pretix/base/services/tickets.py:102 pretix/control/views/pdf.py:96
 msgid "Sample workshop"
-msgstr ""
+msgstr "Vzorový workshop"
 
 #: pretix/base/services/update_check.py:113
 msgid "pretix update available"
-msgstr ""
+msgstr "aktualizace pretixu je k dispozici"
 
 #: pretix/base/services/update_check.py:116
 #, python-brace-format
@@ -6598,20 +6604,20 @@ msgstr ""
 #: pretix/base/services/update_check.py:147
 #, python-format
 msgid "Plugin: %s"
-msgstr ""
+msgstr "Plugin: %s"
 
 #: pretix/base/services/vouchers.py:56 pretix/control/logdisplay.py:424
 #, python-brace-format
 msgid "The voucher has been sent to {recipient}."
-msgstr ""
+msgstr "Poukaz byl zaslán {recipient}."
 
 #: pretix/base/settings.py:110
 msgid "Allow usage of restricted plugins"
-msgstr ""
+msgstr "Povolené používání omezených rozšíření"
 
 #: pretix/base/settings.py:143
 msgid "Allow customers to create accounts"
-msgstr ""
+msgstr "Povolit zákazníkům vytvářet účty"
 
 #: pretix/base/settings.py:144
 msgid ""
