@@ -68,6 +68,8 @@ class PretixScanSecurityProfile(AllowListSecurityProfile):
         ('GET', 'api-v1:orderposition-pdf_image'),
         ('GET', 'api-v1:event.settings'),
         ('POST', 'api-v1:upload'),
+        ('POST', 'api-v1:checkinrpc.redeem'),
+        ('GET', 'api-v1:checkinrpc.search'),
     )
 
 
@@ -98,6 +100,8 @@ class PretixScanNoSyncNoSearchSecurityProfile(AllowListSecurityProfile):
         ('GET', 'api-v1:orderposition-pdf_image'),
         ('GET', 'api-v1:event.settings'),
         ('POST', 'api-v1:upload'),
+        ('POST', 'api-v1:checkinrpc.redeem'),
+        ('GET', 'api-v1:checkinrpc.search'),
     )
 
 
@@ -129,6 +133,8 @@ class PretixScanNoSyncSecurityProfile(AllowListSecurityProfile):
         ('GET', 'api-v1:orderposition-pdf_image'),
         ('GET', 'api-v1:event.settings'),
         ('POST', 'api-v1:upload'),
+        ('POST', 'api-v1:checkinrpc.redeem'),
+        ('GET', 'api-v1:checkinrpc.search'),
     )
 
 
@@ -194,6 +200,8 @@ class PretixPosSecurityProfile(AllowListSecurityProfile):
         ('GET', 'plugins:pretix_seating:event.plan'),
         ('GET', 'plugins:pretix_seating:selection.simple'),
         ('POST', 'api-v1:upload'),
+        ('POST', 'api-v1:checkinrpc.redeem'),
+        ('GET', 'api-v1:checkinrpc.search'),
     )
 
 
