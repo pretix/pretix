@@ -798,7 +798,7 @@ class CheckinRPCRedeemView(views.APIView):
             expand=self.request.query_params.getlist('expand'),
             pdf_data=self.request.query_params.get('pdf_data', 'false') == 'true',
             questions_supported=s.validated_data['questions_supported'],
-            canceled_supported=s.validated_data['canceled_supported'],
+            canceled_supported=True,
             request=self.request,  # this is not clean, but we need it in the serializers for URL generation
             legacy_url_support=True,
         )
@@ -835,7 +835,6 @@ class CheckinRPCSearchView(ListAPIView):
         ctx = super().get_serializer_context()
         ctx['expand'] = self.request.query_params.getlist('expand')
         ctx['pdf_data'] = self.request.query_params.get('pdf_data', 'false') == 'true'
-        # todo: any negative effects to omitting "event" here?
         return ctx
 
     def get_queryset(self, ignore_status=False, ignore_products=False):
