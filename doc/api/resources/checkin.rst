@@ -57,6 +57,7 @@ Checking a ticket in
                            ``require_attention`` will inform you whether either the order or the item have the
                            ``checkin_attention`` flag set. (3) If ``attendee_name`` is empty, it may automatically fall
                            back to values from a parent product or from invoice addresses.
+   :>json boolean require_attention: Whether or not the ``require_attention`` flag is set on the item or order.
    :>json object list: Excerpt of information about the matching :ref:`check-in list <rest-checkinlists>` (if any was found),
                        including the attributes ``id``, ``name``, ``event``, ``subevent``, and ``include_pending``.
    :>json object questions: List of questions to be answered for check-in, only set on status ``"incomplete"``.
@@ -95,6 +96,7 @@ Checking a ticket in
         "position": {
           …
         },
+        "require_attention": false,
         "list": {
           "id": 1,
           "name": "Default check-in list",
@@ -116,6 +118,7 @@ Checking a ticket in
         "position": {
           …
         },
+        "require_attention": false,
         "list": {
           "id": 1,
           "name": "Default check-in list",
@@ -157,7 +160,22 @@ Checking a ticket in
         ]
       }
 
-   **Example error response**:
+   **Example error response (invalid ticket)**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 404 Not Found
+      Content-Type: text/json
+
+      {
+        "detail": "Not found.",
+        "status": "error",
+        "reason": "invalid",
+        "reason_explanation": null,
+        "require_attention": false
+      }
+
+   **Example error response (known, but invalid ticket)**:
 
    .. sourcecode:: http
 
@@ -167,6 +185,8 @@ Checking a ticket in
       {
         "status": "error",
         "reason": "unpaid",
+        "reason_explanation": null,
+        "require_attention": false,
         "list": {
           "id": 1,
           "name": "Default check-in list",
@@ -181,12 +201,15 @@ Checking a ticket in
 
    Possible error reasons:
 
-   * ``unpaid`` - Ticket is not paid for
+   * ``invalid`` - Ticket is not known.
+   * ``unpaid`` - Ticket is not paid for.
    * ``canceled`` – Ticket is canceled or expired.
-   * ``already_redeemed`` - Ticket already has been redeemed
-   * ``product`` - Tickets with this product may not be scanned at this device
-   * ``rules`` - Check-in prevented by a user-defined rule
-   * ``ambiguous`` - Multiple tickets match scan, rejected
+   * ``already_redeemed`` - Ticket already has been redeemed.
+   * ``product`` - Tickets with this product may not be scanned at this device.
+   * ``rules`` - Check-in prevented by a user-defined rule.
+   * ``ambiguous`` - Multiple tickets match scan, rejected.
+   * ``revoked`` - Ticket code has been revoked.
+   * ``error`` - Internal error.
 
    In case of reason ``rules``, there might be an additional response field ``reason_explanation`` with a human-readable
    description of the violated rules. However, that field can also be missing or be ``null``.
@@ -196,7 +219,7 @@ Checking a ticket in
    :statuscode 400: Invalid or incomplete request, see above
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer/event does not exist **or** you have no permission to view this resource.
-   :statuscode 404: The requested order position or check-in list does not exist.
+   :statuscode 404: The requested order position does not exist.
 
 Performing a ticket search
 --------------------------
@@ -319,5 +342,5 @@ Performing a ticket search
    :param organizer: The ``slug`` field of the organizer to fetch
    :statuscode 200: no error
    :statuscode 401: Authentication failure
-   :statuscode 403: The requested organizer/event does not exist **or** you have no permission to view this resource.
+   :statuscode 403: The requested organizer or check-in list does not exist **or** you have no permission to view this resource.
    :statuscode 404: The requested check-in list does not exist.

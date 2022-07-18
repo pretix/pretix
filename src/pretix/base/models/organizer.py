@@ -461,7 +461,9 @@ class TeamAPIToken(models.Model):
         :param request: Ignored, for compatibility with User model
         :return: Iterable of Events
         """
-        if (isinstance(permission, (list, tuple)) and any(getattr(self.team, p, False) for p in permission)) or getattr(self.team, permission, False):
+        if (
+                isinstance(permission, (list, tuple)) and any(getattr(self.team, p, False) for p in permission)
+        ) or (isinstance(permission, str) and getattr(self.team, permission, False)):
             return self.get_events_with_any_permission()
         else:
             return self.team.organizer.events.none()

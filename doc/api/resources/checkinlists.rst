@@ -756,13 +756,15 @@ Order position endpoints
 
    Possible error reasons:
 
-   * ``unpaid`` - Ticket is not paid for
-   * ``canceled`` – Ticket is canceled or expired. This reason is only sent when your request sets
+   * ``invalid`` - Ticket code not known.
+   * ``unpaid`` - Ticket is not paid for.
+   * ``canceled`` – Ticket is canceled or expired. This reason is only sent when your request sets.
      ``canceled_supported`` to ``true``, otherwise these orders return ``unpaid``.
-   * ``already_redeemed`` - Ticket already has been redeemed
-   * ``product`` - Tickets with this product may not be scanned at this device
-   * ``rules`` - Check-in prevented by a user-defined rule
-   * ``ambiguous`` - Multiple tickets match scan, rejected
+   * ``already_redeemed`` - Ticket already has been redeemed.
+   * ``product`` - Tickets with this product may not be scanned at this device.
+   * ``rules`` - Check-in prevented by a user-defined rule.
+   * ``ambiguous`` - Multiple tickets match scan, rejected.
+   * ``revoked`` - Ticket code has been revoked.
 
    In case of reason ``rules``, there might be an additional response field ``reason_explanation`` with a human-readable
    description of the violated rules. However, that field can also be missing or be ``null``.

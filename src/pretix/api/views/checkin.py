@@ -24,7 +24,7 @@ from functools import reduce
 
 import django_filters
 from django.conf import settings
-from django.core.exceptions import ValidationError
+from django.core.exceptions import ValidationError as BaseValidationError
 from django.db import transaction
 from django.db.models import (
     Count, Exists, F, Max, OrderBy, OuterRef, Prefetch, Q, Subquery,
@@ -40,6 +40,7 @@ from django_scopes import scopes_disabled
 from packaging.version import parse
 from rest_framework import views, viewsets
 from rest_framework.decorators import action
+from rest_framework.exceptions import PermissionDenied, ValidationError
 from rest_framework.fields import DateTimeField
 from rest_framework.generics import ListAPIView
 from rest_framework.permissions import SAFE_METHODS
@@ -280,7 +281,7 @@ def _handle_file_upload(data, user, auth):
             file__isnull=False,
             pk=data[len("file:"):],
         )
-    except (ValidationError, IndexError):  # invalid uuid
+    except (ValidationError, BaseValidationError, IndexError):  # invalid uuid
         raise ValidationError('The submitted file ID "{fid}" was not found.'.format(fid=data))
     except CachedFile.DoesNotExist:
         raise ValidationError('The submitted file ID "{fid}" was not found.'.format(fid=data))
@@ -382,6 +383,9 @@ def _checkin_list_position_queryset(checkinlists, ignore_status=False, ignore_pr
 def _redeem_process(*, checkinlists, raw_barcode, answers_data, datetime, force, checkin_type, ignore_unpaid, nonce,
                     untrusted_input, user, auth, expand, pdf_data, request, questions_supported, canceled_supported,
                     legacy_url_support=False):
+    if not checkinlists:
+        raise ValidationError('No check-in list passed.')
+
     list_by_event = {cl.event_id: cl for cl in checkinlists}
     prefetch_related_objects([cl for cl in checkinlists if not cl.all_products], 'limit_products')
 
@@ -391,8 +395,16 @@ def _redeem_process(*, checkinlists, raw_barcode, answers_data, datetime, force,
     context = {
         'request': request,
         'expand': expand,
-        'pdf_data': pdf_data,
     }
+
+    def _make_context(context, event):
+        return {
+            **context,
+            'event': op.order.event,
+            'pdf_data': pdf_data and (
+                user if user and user.is_authenticated else auth
+            ).has_event_permission(request.organizer, event, 'can_view_orders', request),
+        }
 
     common_checkin_args = dict(
         raw_barcode=raw_barcode,
@@ -520,7 +532,7 @@ def _redeem_process(*, checkinlists, raw_barcode, answers_data, datetime, force,
                 'reason': Checkin.REASON_REVOKED,
                 'reason_explanation': None,
                 'require_attention': False,
-                'position': CheckinListOrderPositionSerializer(op, context={**context, 'event': op.order.event}).data,
+                'position': CheckinListOrderPositionSerializer(op, context=_make_context(context, revoked_matches[0].event)).data,
                 'list': MiniCheckinListSerializer(list_by_event[revoked_matches[0].event_id]).data,
             }, status=400)
 
@@ -569,7 +581,7 @@ def _redeem_process(*, checkinlists, raw_barcode, answers_data, datetime, force,
                 'reason': Checkin.REASON_AMBIGUOUS,
                 'reason_explanation': None,
                 'require_attention': op.item.checkin_attention or op.order.checkin_attention,
-                'position': CheckinListOrderPositionSerializer(op, context={**context, 'event': op.order.event}).data,
+                'position': CheckinListOrderPositionSerializer(op, context=_make_context(context, op.order.event)).data,
                 'list': MiniCheckinListSerializer(list_by_event[op.order.event_id]).data,
             }, status=400)
         else:
@@ -588,7 +600,7 @@ def _redeem_process(*, checkinlists, raw_barcode, answers_data, datetime, force,
                         given_answers[q] = _handle_file_upload(answers_data[str(q.pk)], user, auth)
                     else:
                         given_answers[q] = q.clean_answer(answers_data[str(q.pk)])
-                except ValidationError:
+                except (ValidationError, BaseValidationError):
                     pass
 
     # 6. Pass to our actual check-in logic
@@ -614,7 +626,7 @@ def _redeem_process(*, checkinlists, raw_barcode, answers_data, datetime, force,
             return Response({
                 'status': 'incomplete',
                 'require_attention': op.item.checkin_attention or op.order.checkin_attention,
-                'position': CheckinListOrderPositionSerializer(op, context={**context, 'event': op.order.event}).data,
+                'position': CheckinListOrderPositionSerializer(op, context=_make_context(context, op.order.event)).data,
                 'questions': [
                     QuestionSerializer(q).data for q in e.questions
                 ],
@@ -643,14 +655,14 @@ def _redeem_process(*, checkinlists, raw_barcode, answers_data, datetime, force,
                 'reason': e.code,
                 'reason_explanation': e.reason,
                 'require_attention': op.item.checkin_attention or op.order.checkin_attention,
-                'position': CheckinListOrderPositionSerializer(op, context={**context, 'event': op.order.event}).data,
+                'position': CheckinListOrderPositionSerializer(op, context=_make_context(context, op.order.event)).data,
                 'list': MiniCheckinListSerializer(list_by_event[op.order.event_id]).data,
             }, status=400)
         else:
             return Response({
                 'status': 'ok',
                 'require_attention': op.item.checkin_attention or op.order.checkin_attention,
-                'position': CheckinListOrderPositionSerializer(op, context={**context, 'event': op.order.event}).data,
+                'position': CheckinListOrderPositionSerializer(op, context=_make_context(context, op.order.event)).data,
                 'list': MiniCheckinListSerializer(list_by_event[op.order.event_id]).data,
             }, status=201)
 
@@ -834,10 +846,11 @@ class CheckinRPCSearchView(ListAPIView):
     def get_serializer_context(self):
         ctx = super().get_serializer_context()
         ctx['expand'] = self.request.query_params.getlist('expand')
-        ctx['pdf_data'] = self.request.query_params.get('pdf_data', 'false') == 'true'
+        ctx['pdf_data'] = False
         return ctx
 
-    def get_queryset(self, ignore_status=False, ignore_products=False):
+    @cached_property
+    def lists(self):
         if isinstance(self.request.auth, (TeamAPIToken, Device)):
             events = self.request.auth.get_events_with_permission(('can_view_orders', 'can_checkin_orders'))
         elif self.request.user.is_authenticated:
@@ -846,20 +859,39 @@ class CheckinRPCSearchView(ListAPIView):
             )
         else:
             raise ValueError("unknown authentication method")
-
+        requested_lists = [int(l) for l in self.request.query_params.getlist('list') if l.isdigit()]
         lists = list(
-            CheckinList.objects.filter(event__in=events).select_related('event').filter(id__in=self.request.query_params.getlist('list'))
+            CheckinList.objects.filter(event__in=events).select_related('event').filter(id__in=requested_lists)
         )
+        if len(lists) != len(requested_lists):
+            missing_lists = set(requested_lists) - {l.pk for l in lists}
+            raise PermissionDenied("You requested lists that do not exist or that you do not have access to: " + ", ".join(str(l) for l in missing_lists))
+        return lists
 
+    @cached_property
+    def has_full_access_permission(self):
+        if isinstance(self.request.auth, (TeamAPIToken, Device)):
+            events = self.request.auth.get_events_with_permission('can_view_orders')
+        elif self.request.user.is_authenticated:
+            events = self.request.user.get_events_with_permission('can_view_orders', self.request).filter(
+                organizer=self.request.organizer
+            )
+        else:
+            raise ValueError("unknown authentication method")
+
+        full_access_lists = CheckinList.objects.filter(event__in=events).filter(id__in=[c.pk for c in self.lists]).count()
+        return len(self.lists) == full_access_lists
+
+    def get_queryset(self, ignore_status=False, ignore_products=False):
         qs = _checkin_list_position_queryset(
-            lists,
+            self.lists,
             ignore_status=self.request.query_params.get('ignore_status', 'false') == 'true' or ignore_status,
             ignore_products=ignore_products,
             pdf_data=self.request.query_params.get('pdf_data', 'false') == 'true',
             expand=self.request.query_params.getlist('expand'),
         )
 
-        if len(self.request.query_params.get('search', '')) < 3:
+        if len(self.request.query_params.get('search', '')) < 3 and not self.has_full_access_permission:
             qs = qs.none()
 
         return qs
