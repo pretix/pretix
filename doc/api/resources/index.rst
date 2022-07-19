@@ -25,6 +25,7 @@ at :ref:`plugin-docs`.
    invoices
    vouchers
    discounts
+   checkin
    checkinlists
    waitinglist
    customers

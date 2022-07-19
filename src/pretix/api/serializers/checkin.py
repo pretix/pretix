@@ -26,7 +26,7 @@ from rest_framework.exceptions import ValidationError
 from pretix.api.serializers.event import SubEventSerializer
 from pretix.api.serializers.i18n import I18nAwareModelSerializer
 from pretix.base.channels import get_all_sales_channels
-from pretix.base.models import CheckinList
+from pretix.base.models import Checkin, CheckinList
 
 
 class CheckinListSerializer(I18nAwareModelSerializer):
@@ -78,3 +78,31 @@ class CheckinListSerializer(I18nAwareModelSerializer):
         CheckinList.validate_rules(data.get('rules'))
 
         return data
+
+
+class CheckinRPCRedeemInputSerializer(serializers.Serializer):
+    lists = serializers.PrimaryKeyRelatedField(required=True, many=True, queryset=CheckinList.objects.none())
+    secret = serializers.CharField(required=True, allow_null=False)
+    force = serializers.BooleanField(default=False, required=False)
+    type = serializers.ChoiceField(choices=Checkin.CHECKIN_TYPES, default=Checkin.TYPE_ENTRY)
+    ignore_unpaid = serializers.BooleanField(default=False, required=False)
+    questions_supported = serializers.BooleanField(default=True, required=False)
+    nonce = serializers.CharField(required=False, allow_null=True)
+    datetime = serializers.DateTimeField(required=False, allow_null=True)
+    answers = serializers.JSONField(required=False, allow_null=True)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['lists'].child_relation.queryset = CheckinList.objects.filter(event__in=self.context['events']).select_related('event')
+
+
+class MiniCheckinListSerializer(I18nAwareModelSerializer):
+    event = serializers.SlugRelatedField(slug_field='slug', read_only=True)
+    subevent = serializers.PrimaryKeyRelatedField(read_only=True)
+
+    class Meta:
+        model = CheckinList
+        fields = ('id', 'name', 'event', 'subevent', 'include_pending')
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)

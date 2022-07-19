@@ -184,8 +184,9 @@ class ItemSerializer(I18nAwareModelSerializer):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['require_membership_types'].queryset = self.context['event'].organizer.membership_types.all()
-        self.fields['grant_membership_type'].queryset = self.context['event'].organizer.membership_types.all()
+        if not self.read_only:
+            self.fields['require_membership_types'].queryset = self.context['event'].organizer.membership_types.all()
+            self.fields['grant_membership_type'].queryset = self.context['event'].organizer.membership_types.all()
 
     def validate(self, data):
         data = super().validate(data)

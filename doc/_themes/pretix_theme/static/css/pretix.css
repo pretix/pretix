@@ -3155,14 +3155,14 @@ a .fa, a .wy-menu-vertical li span.toctree-expand, .wy-menu-vertical li a span.t
     vertical-align: -15%
 }
 
-.wy-alert, .rst-content .note, .rst-content .attention, .rst-content .caution, .rst-content .danger, .rst-content .error, .rst-content .hint, .rst-content .important, .rst-content .tip, .rst-content .warning, .rst-content .seealso, .rst-content .admonition-todo {
+.wy-alert, .rst-content .note, .rst-content .attention, .rst-content .caution, .rst-content .danger, .rst-content .error, .rst-content .hint, .rst-content .important, .rst-content .tip, .rst-content .warning, .rst-content .seealso, .rst-content .admonition-todo, .rst-content div.deprecated {
     padding: 12px;
     line-height: 24px;
     margin-bottom: 24px;
     background: #e7f2fa
 }
 
-.wy-alert-title, .rst-content .admonition-title {
+.wy-alert-title, .rst-content .admonition-title, .rst-content .deprecated .versionmodified {
     color: #fff;
     font-weight: bold;
     display: block;

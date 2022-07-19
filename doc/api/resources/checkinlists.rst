@@ -1,5 +1,7 @@
 .. spelling:: checkin
 
+.. _rest-checkinlists:
+
 Check-in lists
 ==============
 
@@ -425,6 +427,9 @@ Order position endpoints
    * If ``attendee_name`` is empty, it will automatically fall back to values from a parent product or from invoice
      addresses.
 
+   You can use this endpoint to implement a ticket search. We also provide a dedicated search input as part of our
+   :ref:`check-in API <rest-checkin>` that supports search across multiple events.
+
    **Example request**:
 
    .. sourcecode:: http
@@ -614,8 +619,6 @@ Order position endpoints
    :statuscode 403: The requested organizer/event does not exist **or** you have no permission to view this resource.
    :statuscode 404: The requested order position or check-in list does not exist.
 
-.. _`rest-checkin-redeem`:
-
 .. http:post:: /api/v1/organizers/(organizer)/events/(event)/checkinlists/(list)/positions/(id)/redeem/
 
    Tries to redeem an order position, identified by its internal ID, i.e. checks the attendee in. This endpoint
@@ -623,6 +626,12 @@ Order position endpoints
 
    **Tip:** Instead of an ID, you can also use the ``secret`` field as the lookup parameter. In this case, you should
    always set ``untrusted_input=true`` as a query parameter to avoid security issues.
+
+   .. note::
+
+      We no longer recommend using this API if you're building a ticket scanning application, as it has a few design
+      flaws that can lead to `security issues`_ or compatibility issues due to barcode content characters that are not
+      URL-safe. We recommend to use our new :ref:`check-in API <rest-checkin>` instead.
 
    :query boolean untrusted_input: If set to true, the lookup parameter is **always** interpreted as a ``secret``, never
                                    as an ``id``. This should be always set if you are passing through untrusted, scanned
@@ -747,13 +756,15 @@ Order position endpoints
 
    Possible error reasons:
 
-   * ``unpaid`` - Ticket is not paid for
-   * ``canceled`` – Ticket is canceled or expired. This reason is only sent when your request sets
+   * ``invalid`` - Ticket code not known.
+   * ``unpaid`` - Ticket is not paid for.
+   * ``canceled`` – Ticket is canceled or expired. This reason is only sent when your request sets.
      ``canceled_supported`` to ``true``, otherwise these orders return ``unpaid``.
-   * ``already_redeemed`` - Ticket already has been redeemed
-   * ``product`` - Tickets with this product may not be scanned at this device
-   * ``rules`` - Check-in prevented by a user-defined rule
-   * ``ambiguous`` - Multiple tickets match scan, rejected
+   * ``already_redeemed`` - Ticket already has been redeemed.
+   * ``product`` - Tickets with this product may not be scanned at this device.
+   * ``rules`` - Check-in prevented by a user-defined rule.
+   * ``ambiguous`` - Multiple tickets match scan, rejected.
+   * ``revoked`` - Ticket code has been revoked.
 
    In case of reason ``rules``, there might be an additional response field ``reason_explanation`` with a human-readable
    description of the violated rules. However, that field can also be missing or be ``null``.
@@ -767,3 +778,6 @@ Order position endpoints
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer/event does not exist **or** you have no permission to view this resource.
    :statuscode 404: The requested order position or check-in list does not exist.
+
+
+.. _security issues: https://pretix.eu/about/de/blog/20220705-release-4111/
