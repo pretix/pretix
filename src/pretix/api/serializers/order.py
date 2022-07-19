@@ -422,7 +422,14 @@ class OrderPositionSerializer(I18nAwareModelSerializer):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         request = self.context.get('request')
-        if not self.context.get('pdf_data') or (request and hasattr(request, 'event') and 'can_view_orders' not in request.eventpermset):  # todo
+        pdf_data_allowed = (
+            # We check this based on permission if we are on /events/…/orders/ or /events/…/orderpositions/ or
+            # /events/…/checkinlists/…/positions/
+            # We're unable to check this on this level if we're on /checkinrpc/, in which case we rely on the view
+            # layer to not set pdf_data=true in the first place.
+            request and hasattr(request, 'event') and 'can_view_orders' not in request.eventpermset
+        )
+        if not self.context.get('pdf_data') or pdf_data_allowed:
             self.fields.pop('pdf_data', None)
 
     def validate(self, data):

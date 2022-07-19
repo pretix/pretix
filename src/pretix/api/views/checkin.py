@@ -812,7 +812,7 @@ class CheckinRPCRedeemView(views.APIView):
             questions_supported=s.validated_data['questions_supported'],
             canceled_supported=True,
             request=self.request,  # this is not clean, but we need it in the serializers for URL generation
-            legacy_url_support=True,
+            legacy_url_support=False,
         )
 
 
