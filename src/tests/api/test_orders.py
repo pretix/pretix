@@ -1654,3 +1654,56 @@ def test_revoked_secret_list(token_client, organizer, event):
     ))
     assert resp.status_code == 200
     assert [res] == resp.data['results']
+
+
+@pytest.mark.django_db
+def test_pdf_data(token_client, organizer, event, order):
+    # order detail
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/orders/{}/?pdf_data=true'.format(
+        organizer.slug, event.slug, order.code
+    ))
+    assert resp.status_code == 200
+    assert resp.data['positions'][0].get('pdf_data')
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/orders/{}/'.format(
+        organizer.slug, event.slug, order.code
+    ))
+    assert resp.status_code == 200
+    assert not resp.data['positions'][0].get('pdf_data')
+
+    # order list
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/orders/?pdf_data=true'.format(
+        organizer.slug, event.slug
+    ))
+    assert resp.status_code == 200
+    assert resp.data['results'][0]['positions'][0].get('pdf_data')
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/orders/'.format(
+        organizer.slug, event.slug
+    ))
+    assert resp.status_code == 200
+    assert not resp.data['results'][0]['positions'][0].get('pdf_data')
+
+    # position list
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/orderpositions/?pdf_data=true'.format(
+        organizer.slug, event.slug
+    ))
+    assert resp.status_code == 200
+    assert resp.data['results'][0].get('pdf_data')
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/orderpositions/'.format(
+        organizer.slug, event.slug
+    ))
+    assert resp.status_code == 200
+    assert not resp.data['results'][0].get('pdf_data')
+
+    posid = resp.data['results'][0]['id']
+
+    # position detail
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/orderpositions/{}/?pdf_data=true'.format(
+        organizer.slug, event.slug, posid
+    ))
+    assert resp.status_code == 200
+    assert resp.data.get('pdf_data')
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/orderpositions/{}/'.format(
+        organizer.slug, event.slug, posid
+    ))
+    assert resp.status_code == 200
+    assert not resp.data.get('pdf_data')

@@ -211,6 +211,7 @@ def test_order_create(token_client, organizer, event, item, quota, question):
         ), format='json', data=res
     )
     assert resp.status_code == 201
+    assert not resp.data['positions'][0].get('pdf_data')
     with scopes_disabled():
         o = Order.objects.get(code=resp.data['code'])
     assert o.customer == customer
@@ -2549,3 +2550,20 @@ def test_order_create_voucher_block_quota(token_client, organizer, event, item, 
         ), format='json', data=res
     )
     assert resp.status_code == 201
+
+
+@pytest.mark.django_db
+def test_order_create_pdf_data(token_client, organizer, event, item, quota, question):
+    res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
+    res['positions'][0]['item'] = item.pk
+    res['positions'][0]['answers'][0]['question'] = question.pk
+    with scopes_disabled():
+        customer = organizer.customers.create()
+    res['customer'] = customer.identifier
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/?pdf_data=true'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 201
+    assert 'secret' in resp.data['positions'][0]['pdf_data']

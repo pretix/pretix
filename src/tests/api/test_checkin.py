@@ -1303,6 +1303,7 @@ def test_search(token_client, organizer, event, clist, clist_all, item, other_it
         ))
     assert resp.status_code == 200
     assert [p1] == resp.data['results']
+    assert not resp.data['results'][0].get('pdf_data')
 
 
 @pytest.mark.django_db
