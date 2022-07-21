@@ -4,8 +4,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-07-01 07:49+0000\n"
-"PO-Revision-Date: 2022-06-26 18:00+0000\n"
-"Last-Translator: Hari Har Wolfer <harihar@sri-ma.de>\n"
+"PO-Revision-Date: 2022-07-22 07:00+0000\n"
+"Last-Translator: Julius Rickert <pretix@juliusrickert.de>\n"
 "Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix/fr/"
 ">\n"
 "Language: fr\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.12.2\n"
+"X-Generator: Weblate 4.13.1\n"
 
 #: htmlcov/pretix_control_views_dashboards_py.html:963
 #: pretix/control/templates/pretixcontrol/events/index.html:140
@@ -53,10 +53,8 @@ msgid ""
 msgstr ""
 
 #: pretix/api/auth/devicesecurity.py:44
-#, fuzzy
-#| msgid "1. Download pretixdesk"
 msgid "pretixSCAN"
-msgstr "1. Télécharger pretixdesk"
+msgstr "pretixSCANNER"
 
 #: pretix/api/auth/devicesecurity.py:76
 msgid "pretixSCAN (kiosk mode, no order sync, no search)"
@@ -2200,7 +2198,7 @@ msgid ""
 "Invalid placeholder syntax: You used a different number of \"{\" than of "
 "\"}\"."
 msgstr ""
-"Syntaxe de substitution invalide:  vous devriez utiliser des numéros "
+"Syntaxe de substitution invalide : vous devriez utiliser des numéros "
 "différents de \"{\" ou de \"}\"."
 
 #: pretix/base/forms/validators.py:73
