@@ -63,7 +63,6 @@ def compare_ignoring_order(data1, data2):
         try:
             assert set(data1) == set(data2)
         except:
-            print(data1, data2)
             assert len(data1) == len(data2) and all(data1.count(i) == data2.count(i) for i in data1)
     elif isinstance(data1, dict) and isinstance(data2, dict):
         assert set(data1.keys()) == set(data2.keys())

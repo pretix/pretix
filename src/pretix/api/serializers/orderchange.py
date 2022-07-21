@@ -396,7 +396,6 @@ class OrderChangeOperationSerializer(serializers.Serializer):
     def validate(self, data):
         seen_positions = set()
         for d in data.get('patch_positions', []):
-            print(d, seen_positions)
             if d['position'] in seen_positions:
                 raise ValidationError({'patch_positions': ['You have specified the same object twice.']})
             seen_positions.add(d['position'])

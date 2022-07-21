@@ -113,7 +113,6 @@ def test_team_update(token_client, organizer, event, second_team):
         },
         format='json'
     )
-    print(resp.data)
     assert resp.status_code == 400
 
 

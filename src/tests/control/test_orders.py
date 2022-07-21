@@ -648,7 +648,6 @@ def test_order_reactivate(client, env):
     client.login(email='dummy@dummy.dummy', password='dummy')
     response = client.post('/control/event/dummy/dummy/orders/FOO/reactivate', {
     }, follow=True)
-    print(response.content.decode())
     assert 'alert-success' in response.content.decode()
     with scopes_disabled():
         o = Order.objects.get(id=env[2].id)
@@ -1079,7 +1078,6 @@ def test_order_mark_paid_forced(client, env):
         'amount': str(o.pending_sum),
         'force': 'on'
     }, follow=True)
-    print(response.content.decode())
     assert 'alert-success' in response.content.decode()
     with scopes_disabled():
         o = Order.objects.get(id=env[2].id)
@@ -1366,7 +1364,7 @@ class OrderChangeTests(SoupTest):
                 date_end=self.event.date_from + timedelta(days=1),
                 attendee_name_parts={'_scheme': 'full', 'full_name': 'John Doe'},
             )
-        r = self.client.post('/control/event/{}/{}/orders/{}/change'.format(
+        self.client.post('/control/event/{}/{}/orders/{}/change'.format(
             self.event.organizer.slug, self.event.slug, self.order.code
         ), {
             'add-TOTAL_FORMS': '0',
@@ -1377,7 +1375,6 @@ class OrderChangeTests(SoupTest):
             'op-{}-used_membership'.format(self.op2.pk): str(m_correct1.pk),
             'op-{}-used_membership'.format(self.op3.pk): str(m_correct1.pk),
         }, follow=True)
-        print(r.content)
         self.op1.refresh_from_db()
         self.order.refresh_from_db()
         assert self.op1.used_membership == m_correct1

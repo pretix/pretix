@@ -137,5 +137,4 @@ def test_payment(env, monkeypatch):
         'payment_paypal_wallet_oid': '04F89033701558004',
         'payment_paypal_wallet_payer': 'Q739JNKWH67HE',
     })
-    print(response.content.decode())
     assert response['Location'] == '/ccc/30c3/checkout/confirm/'

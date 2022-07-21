@@ -328,7 +328,6 @@ class ItemDisplayTest(EventTestMixin, SoupTest):
             self.event.subevents.create(name='Foo SE2', date_from=now() + datetime.timedelta(days=12),
                                         active=True)
         resp = self.client.get('/%s/%s/' % (self.orga.slug, self.event.slug))
-        print(resp.rendered_content)
         self.assertIn("Foo SE2", resp.rendered_content)
         self.assertNotIn("Foo SE1", resp.rendered_content)
         resp = self.client.get('/%s/%s/?date=%d-W%d' % (self.orga.slug, self.event.slug, se1.date_from.isocalendar()[0], se1.date_from.isocalendar()[1]))

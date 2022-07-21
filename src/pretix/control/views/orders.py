@@ -540,10 +540,8 @@ class OrderComment(OrderView):
                 self.order.log_action('pretix.event.order.checkin_attention', user=self.request.user, data={
                     'new_value': form.cleaned_data.get('checkin_attention')
                 })
-            print(self.order.custom_followup_at)
             self.order.save(update_fields=['checkin_attention', 'comment', 'custom_followup_at'])
             self.order.refresh_from_db()
-            print(self.order.custom_followup_at)
             messages.success(self.request, _('The comment has been updated.'))
         else:
             messages.error(self.request, _('Could not update the comment.'))

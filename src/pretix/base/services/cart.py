@@ -1241,7 +1241,6 @@ def add_items_to_cart(self, event: int, items: List[dict], cart_id: str=None, lo
     :raises CartError: On any error that occurred
     """
     with language(locale):
-        print(locale)
         ia = False
         if invoice_address:
             try:
