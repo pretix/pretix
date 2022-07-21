@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-07-01 07:49+0000\n"
-"PO-Revision-Date: 2022-07-18 15:00+0000\n"
+"PO-Revision-Date: 2022-07-22 07:00+0000\n"
 "Last-Translator: Hana Happl <hana.happl@gmx.at>\n"
 "Language-Team: Czech <https://translate.pretix.eu/projects/pretix/pretix/cs/>"
 "\n"
@@ -6624,6 +6624,8 @@ msgid ""
 "This will allow customers to sign up for an account on your ticket shop. "
 "This is a prerequisite for some advanced features like memberships."
 msgstr ""
+"To umožní zákazníkům zaregistrovat si účet ve vašem obchodě s lístky. To je "
+"předpokladem pro některé rozšířené funkce, jako je členství."
 
 #: pretix/base/settings.py:154
 msgid "Match orders based on email address"
@@ -6634,46 +6636,51 @@ msgid ""
 "This will allow registered customers to access orders made with the same "
 "email address, even if the customer was not logged in during the purchase."
 msgstr ""
+"To umožní registrovaným zákazníkům přístup k objednávkám provedeným pod "
+"stejnou e-mailovou adresou, i když zákazník nebyl během nákupu přihlášen."
 
 #: pretix/base/settings.py:170
 msgid "Maximum number of items per order"
-msgstr ""
+msgstr "Maximální počet položek na jednu objednávku"
 
 #: pretix/base/settings.py:171
 msgid "Add-on products will not be counted."
-msgstr ""
+msgstr "Doplňkové produkty se nezapočítávají."
 
 #: pretix/base/settings.py:180
 msgid ""
 "Show net prices instead of gross prices in the product list (not "
 "recommended!)"
 msgstr ""
+"Zobrazení čistých cen místo hrubých cen v seznamu produktů (nedoporučuje se!)"
 
 #: pretix/base/settings.py:181
 msgid ""
 "Independent of your choice, the cart will show gross prices as this is the "
 "price that needs to be paid."
 msgstr ""
+"Nezávisle na vaší volbě se v košíku zobrazí hrubé ceny, protože to je cena, "
+"kterou je třeba zaplatit."
 
 #: pretix/base/settings.py:196
 msgid "Ask for attendee names"
-msgstr ""
+msgstr "Zeptejte se na jména účastníků"
 
 #: pretix/base/settings.py:197
 msgid "Ask for a name for all tickets which include admission to the event."
-msgstr ""
+msgstr "U všech vstupenek, které zahrnují vstup na akci, si vyžádejte jméno."
 
 #: pretix/base/settings.py:206
 msgid "Require attendee names"
-msgstr ""
+msgstr "Požadovat jména účastníků"
 
 #: pretix/base/settings.py:207
 msgid "Require customers to fill in the names of all attendees."
-msgstr ""
+msgstr "Požadujte, aby zákazníci vyplnili jména všech účastníků."
 
 #: pretix/base/settings.py:217
 msgid "Ask for email addresses per ticket"
-msgstr ""
+msgstr "Požádejte o e-mailové adresy na lístek"
 
 #: pretix/base/settings.py:218
 msgid ""
@@ -6686,10 +6693,18 @@ msgid ""
 "primary email address, not to the per-attendee addresses. You can however "
 "enable this in the E-mail settings."
 msgstr ""
+"Obvykle společnost pretix požaduje pro každou objednávku jednu e-mailovou "
+"adresu a potvrzení objednávky bude zasláno pouze na tuto e-mailovou adresu. "
+"Pokud tuto možnost povolíte, bude systém navíc požadovat jednotlivé e-"
+"mailové adresy pro každou vstupenku. To může být užitečné, pokud chcete "
+"získat individuální adresy pro každého účastníka i v případě skupinových "
+"objednávek. Pretix však ve výchozím nastavení odešle potvrzení objednávky "
+"pouze na jednu primární e-mailovou adresu, nikoli na adresy jednotlivých "
+"účastníků. Tuto možnost však můžete povolit v nastavení e-mailu."
 
 #: pretix/base/settings.py:232
 msgid "Require email addresses per ticket"
-msgstr ""
+msgstr "Vyžadovat e-mailové adresy na lístek"
 
 #: pretix/base/settings.py:233
 msgid ""
@@ -6697,59 +6712,65 @@ msgid ""
 "tickets. See the above option for more details. One email address for the "
 "order confirmation will always be required regardless of this setting."
 msgstr ""
+"Vyžadovat od zákazníků, aby u všech vstupenek vyplňovali individuální e-"
+"mailové adresy. Další podrobnosti naleznete ve výše uvedené možnosti. Bez "
+"ohledu na toto nastavení bude vždy vyžadována jedna e-mailová adresa pro "
+"potvrzení objednávky."
 
 #: pretix/base/settings.py:245
 msgid "Ask for company per ticket"
-msgstr ""
+msgstr "Zadejte název společnosti na lístek"
 
 #: pretix/base/settings.py:254
 msgid "Require company per ticket"
-msgstr ""
+msgstr "Požadavek na název firmy na lístku"
 
 #: pretix/base/settings.py:264
 msgid "Ask for postal addresses per ticket"
-msgstr ""
+msgstr "Zaznamenejte poštovní adresu na lístek"
 
 #: pretix/base/settings.py:273
 msgid "Require postal addresses per ticket"
-msgstr ""
+msgstr "Vyžadujte poštovní adresu na lístek"
 
 #: pretix/base/settings.py:283
 msgid "Ask for the order email address twice"
-msgstr ""
+msgstr "Dvakrát se dotázat na e-mailové adresy"
 
 #: pretix/base/settings.py:284
 msgid ""
 "Require customers to fill in the primary email address twice to avoid errors."
 msgstr ""
+"Požadujte, aby zákazníci vyplnili primární e-mailovou adresu dvakrát, abyste "
+"předešli chybám."
 
 #: pretix/base/settings.py:293
 msgid "Ask for a phone number per order"
-msgstr ""
+msgstr "Dotaz na telefonní číslo na objednávku"
 
 #: pretix/base/settings.py:302
 msgid "Require a phone number per order"
-msgstr ""
+msgstr "Vyžadovat telefonní číslo na objednávku"
 
 #: pretix/base/settings.py:312
 msgid "Ask for invoice address"
-msgstr ""
+msgstr "Dotaz na fakturační adresu"
 
 #: pretix/base/settings.py:321
 msgid "Do not ask for invoice address if an order is free"
-msgstr ""
+msgstr "U bezplatných objednávek nepožadujte fakturační adresu"
 
 #: pretix/base/settings.py:330
 msgid "Require customer name"
-msgstr ""
+msgstr "Vyžadujte jméno zadavatele"
 
 #: pretix/base/settings.py:339
 msgid "Show attendee names on invoices"
-msgstr ""
+msgstr "Zobrazení jména účastníka na fakturách"
 
 #: pretix/base/settings.py:348
 msgid "Show event location on invoices"
-msgstr ""
+msgstr "Zobrazení místa konání na fakturách"
 
 #: pretix/base/settings.py:349
 msgid ""
@@ -6757,28 +6778,32 @@ msgid ""
 "same for all lines. It will be shown on every line if there are different "
 "locations."
 msgstr ""
+"Místo konání akce se zobrazí pod seznamem produktů, pokud je pro všechny "
+"řádky stejné. Pokud se místa konání liší, zobrazí se na každém řádku."
 
 #: pretix/base/settings.py:359
 msgid ""
 "On invoices from one EU country into another EU country with a different "
 "currency, print the tax amounts in both currencies if possible"
 msgstr ""
+"Na fakturách z jedné země EU do jiné země EU s jinou měnou by měla být "
+"částka daně vytištěna pokud možno v obou měnách"
 
 #: pretix/base/settings.py:369
 msgid "Require invoice address"
-msgstr ""
+msgstr "Vyžaduje se fakturační adresa"
 
 #: pretix/base/settings.py:379
 msgid "Require a business addresses"
-msgstr ""
+msgstr "Požadavek na obchodní adresy"
 
 #: pretix/base/settings.py:380
 msgid "This will require users to enter a company name."
-msgstr ""
+msgstr "Uživatelé budou muset zadat název firmy."
 
 #: pretix/base/settings.py:390
 msgid "Ask for beneficiary"
-msgstr ""
+msgstr "Požádejte o příjemce"
 
 #: pretix/base/settings.py:400
 msgid "Custom recipient field"
@@ -6807,11 +6832,12 @@ msgstr ""
 
 #: pretix/base/settings.py:430
 msgid "Invoice address explanation"
-msgstr ""
+msgstr "Vysvětlivky k fakturační adrese"
 
 #: pretix/base/settings.py:433
 msgid "This text will be shown above the invoice address form during checkout."
 msgstr ""
+"Tento text se zobrazí nad formulářem pro fakturační adresu během objednávky."
 
 #: pretix/base/settings.py:442
 msgid "Show paid amount on partially paid invoices"
@@ -6825,7 +6851,7 @@ msgstr ""
 
 #: pretix/base/settings.py:453
 msgid "Show free products on invoices"
-msgstr ""
+msgstr "Zobrazení bezplatných produktů na fakturách"
 
 #: pretix/base/settings.py:454
 msgid ""
@@ -6893,21 +6919,23 @@ msgstr "Délka kódů vstupenek"
 
 #: pretix/base/settings.py:563
 msgid "Reservation period"
-msgstr ""
+msgstr "Doba rezervace"
 
 #: pretix/base/settings.py:565
 msgid ""
 "The number of minutes the items in a user's cart are reserved for this user."
 msgstr ""
+"Počet minut, po které jsou položky v košíku uživatele rezervovány pro tohoto "
+"uživatele."
 
 #: pretix/base/settings.py:574
 msgid ""
 "Directly redirect to check-out after a product has been added to the cart."
-msgstr ""
+msgstr "Přímé přesměrování na check-out po přidání produktu do košíku."
 
 #: pretix/base/settings.py:583
 msgid "End of presale text"
-msgstr ""
+msgstr "Text pro ukončení předprodeje"
 
 #: pretix/base/settings.py:586
 msgid ""
@@ -6918,27 +6946,27 @@ msgstr ""
 
 #: pretix/base/settings.py:600
 msgid "Guidance text"
-msgstr ""
+msgstr "Nápověda"
 
 #: pretix/base/settings.py:601
 msgid ""
 "This text will be shown above the payment options. You can explain the "
 "choices to the user here, if you want."
 msgstr ""
+"Tento text se zobrazí nad možnostmi platby. Pokud chcete, můžete zde "
+"uživateli vysvětlit možnosti volby."
 
 #: pretix/base/settings.py:612 pretix/base/settings.py:621
 msgid "in days"
-msgstr ""
+msgstr "ve dnech"
 
 #: pretix/base/settings.py:613 pretix/base/settings.py:622
 msgid "in minutes"
-msgstr ""
+msgstr "v minutách"
 
 #: pretix/base/settings.py:617
-#, fuzzy
-#| msgid "Presale not started"
 msgid "Set payment term"
-msgstr "Předprodej zatím nezačal"
+msgstr "Nastavení termínu splatnosti"
 
 #: pretix/base/settings.py:624
 msgid ""
@@ -6971,10 +6999,8 @@ msgid ""
 msgstr ""
 
 #: pretix/base/settings.py:676
-#, fuzzy
-#| msgid "Presale not started"
 msgid "Payment term in minutes"
-msgstr "Předprodej zatím nezačal"
+msgstr "Platební lhůta v minutách"
 
 #: pretix/base/settings.py:677
 msgid ""
@@ -7030,7 +7056,7 @@ msgstr ""
 
 #: pretix/base/settings.py:756
 msgid "Show start date"
-msgstr ""
+msgstr "Zobrazit začátek předprodejního období"
 
 #: pretix/base/settings.py:757
 msgid "Show the presale start date before presale has started."
@@ -7038,7 +7064,7 @@ msgstr ""
 
 #: pretix/base/settings.py:772 pretix/base/settings.py:783
 msgid "Do not generate invoices"
-msgstr ""
+msgstr "Nevytvářet faktury"
 
 #: pretix/base/settings.py:773 pretix/base/settings.py:784
 msgid "Only manually in admin panel"
@@ -7058,7 +7084,7 @@ msgstr ""
 
 #: pretix/base/settings.py:780
 msgid "Generate invoices"
-msgstr ""
+msgstr "Vystavit faktury"
 
 #: pretix/base/settings.py:789
 msgid "Invoices will never be automatically generated for free orders."
@@ -7088,11 +7114,11 @@ msgstr ""
 
 #: pretix/base/settings.py:826
 msgid "Address line"
-msgstr ""
+msgstr "Řádek adresy"
 
 #: pretix/base/settings.py:830
 msgid "Albert Einstein Road 52"
-msgstr ""
+msgstr "ulice Alberta-Einstein 52"
 
 #: pretix/base/settings.py:882
 msgid "Domestic tax ID"
@@ -7108,25 +7134,27 @@ msgstr ""
 
 #: pretix/base/settings.py:905
 msgid "e.g. With this document, we sent you the invoice for your ticket order."
-msgstr ""
+msgstr "Např. s tímto dokladem obdržíte fakturu za objednávku lístku."
 
 #: pretix/base/settings.py:908
 msgid "Introductory text"
-msgstr ""
+msgstr "Úvodní text"
 
 #: pretix/base/settings.py:909
 msgid "Will be printed on every invoice above the invoice rows."
-msgstr ""
+msgstr "Tiskne se nad položkami faktury na každé faktuře."
 
 #: pretix/base/settings.py:922
 msgid ""
 "e.g. Thank you for your purchase! You can find more information on the event "
 "at ..."
 msgstr ""
+"Např. Děkujeme vám za zakoupení vstupenky! Další informace o akci najdete na "
+"..."
 
 #: pretix/base/settings.py:925
 msgid "Additional text"
-msgstr ""
+msgstr "Doplňkový text"
 
 #: pretix/base/settings.py:926
 msgid "Will be printed on every invoice below the invoice total."
@@ -7140,7 +7168,7 @@ msgstr ""
 
 #: pretix/base/settings.py:942
 msgid "Footer"
-msgstr ""
+msgstr "Zápatí"
 
 #: pretix/base/settings.py:943
 msgid ""
@@ -7182,15 +7210,15 @@ msgstr ""
 
 #: pretix/base/settings.py:1002
 msgid "Available languages"
-msgstr ""
+msgstr "Jazyky, které jsou k dispozici"
 
 #: pretix/base/settings.py:1018 pretix/control/forms/event.py:131
 msgid "Default language"
-msgstr ""
+msgstr "Standardní jazyk"
 
 #: pretix/base/settings.py:1028
 msgid "Region"
-msgstr ""
+msgstr "Region"
 
 #: pretix/base/settings.py:1029
 msgid ""
@@ -7202,7 +7230,7 @@ msgstr ""
 
 #: pretix/base/settings.py:1041
 msgid "Show event times and dates on the ticket shop"
-msgstr ""
+msgstr "Zobrazení času a data akce v obchodě s lístky"
 
 #: pretix/base/settings.py:1042
 msgid ""
@@ -7246,7 +7274,7 @@ msgstr ""
 
 #: pretix/base/settings.py:1109
 msgid "Enable waiting list"
-msgstr ""
+msgstr "Aktivovat čekací listinu"
 
 #: pretix/base/settings.py:1110 pretix/control/forms/event.py:1338
 msgid ""
@@ -7289,40 +7317,32 @@ msgid "Ask for a name when signing up to the waiting list."
 msgstr ""
 
 #: pretix/base/settings.py:1162
-#, fuzzy
-#| msgid "Device name"
 msgid "Require name"
-msgstr "Název zařízení"
+msgstr "Vyžadovat jméno"
 
 #: pretix/base/settings.py:1163
 msgid "Require a name when signing up to the waiting list.."
-msgstr ""
+msgstr "Pro zařazení do čekací listiny je nutné zadat jméno."
 
 #: pretix/base/settings.py:1173
-#, fuzzy
-#| msgid "Line number"
 msgid "Ask for a phone number"
-msgstr "Číslo řádku"
+msgstr "Požádat o telefonní číslo"
 
 #: pretix/base/settings.py:1174
 msgid "Ask for a phone number when signing up to the waiting list."
 msgstr ""
 
 #: pretix/base/settings.py:1183
-#, fuzzy
-#| msgid "Line number"
 msgid "Require phone number"
-msgstr "Číslo řádku"
+msgstr "Požadavek na telefonní číslo"
 
 #: pretix/base/settings.py:1184
 msgid "Require a phone number when signing up to the waiting list.."
-msgstr ""
+msgstr "Pro zařazení do pořadníku je nutné zadat telefonní číslo."
 
 #: pretix/base/settings.py:1194
-#, fuzzy
-#| msgid "Line number"
 msgid "Phone number explanation"
-msgstr "Číslo řádku"
+msgstr "Vysvětlivky k telefonnímu číslu"
 
 #: pretix/base/settings.py:1197
 msgid ""
@@ -7354,7 +7374,7 @@ msgstr ""
 
 #: pretix/base/settings.py:1230
 msgid "Download date"
-msgstr ""
+msgstr "Datum stažení"
 
 #: pretix/base/settings.py:1231
 msgid ""
@@ -8636,23 +8656,23 @@ msgstr ""
 
 #: pretix/base/templates/400.html:4 pretix/base/templates/400.html:8
 msgid "Bad Request"
-msgstr ""
+msgstr "Špatný požadavek"
 
 #: pretix/base/templates/400.html:9
 msgid "We were unable to parse your request."
-msgstr ""
+msgstr "Váš požadavek se nám nepodařilo zpracovat."
 
 #: pretix/base/templates/400.html:12 pretix/base/templates/403.html:12
 #: pretix/base/templates/404.html:12 pretix/base/templates/500.html:22
 #: pretix/base/templates/csrffail.html:26
 msgid "Take a step back"
-msgstr ""
+msgstr "Krok zpět"
 
 #: pretix/base/templates/400.html:13 pretix/base/templates/403.html:13
 #: pretix/base/templates/500.html:23
 #: pretix/presale/templates/pretixpresale/event/cookies.html:40
 msgid "Try again"
-msgstr ""
+msgstr "Zkuste to znovu"
 
 #: pretix/base/templates/403.html:4 pretix/base/templates/403.html:8
 msgid "Permission denied"
@@ -8667,27 +8687,27 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/user/staff_session_start.html:4
 #: pretix/control/templates/pretixcontrol/user/staff_session_start.html:6
 msgid "Admin mode"
-msgstr ""
+msgstr "Režim správce"
 
 #: pretix/base/templates/404.html:4 pretix/base/templates/404.html:8
 msgid "Not found"
-msgstr ""
+msgstr "Nenalezeno"
 
 #: pretix/base/templates/404.html:9
 msgid "I'm afraid we could not find the the resource you requested."
-msgstr ""
+msgstr "Je nám líto, ale požadovanou stránku se nám nepodařilo najít."
 
 #: pretix/base/templates/500.html:4 pretix/base/templates/500.html:8
 msgid "Internal Server Error"
-msgstr ""
+msgstr "Interní chyba serveru"
 
 #: pretix/base/templates/500.html:9
 msgid "We had trouble processing your request."
-msgstr ""
+msgstr "Měli jsme potíže se zpracováním vašeho požadavku."
 
 #: pretix/base/templates/500.html:10
 msgid "If this problem persists, please contact us."
-msgstr ""
+msgstr "Pokud problém přetrvává, obraťte se na nás."
 
 #: pretix/base/templates/500.html:13
 msgid "If you contact us, please send us the following code:"
@@ -8695,7 +8715,7 @@ msgstr ""
 
 #: pretix/base/templates/csrffail.html:4 pretix/base/templates/csrffail.html:8
 msgid "Verification failed"
-msgstr ""
+msgstr "Ověření se nezdařilo"
 
 #: pretix/base/templates/csrffail.html:9
 msgid ""
@@ -8708,6 +8728,8 @@ msgid ""
 "Please go back to the last page, refresh this page and then try again. If "
 "the problem persists, please get in touch with us."
 msgstr ""
+"Vraťte se prosím na poslední stránku, obnovte tuto stránku a zkuste to "
+"znovu. Pokud problém přetrvává, kontaktujte nás."
 
 #: pretix/base/templates/pretixbase/cachedfiles/pending.html:21
 msgid "We are preparing your file for download …"
