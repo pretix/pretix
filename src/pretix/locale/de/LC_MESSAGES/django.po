@@ -5,8 +5,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-07-01 07:49+0000\n"
-"PO-Revision-Date: 2022-07-19 00:00+0000\n"
-"Last-Translator: Raphael Michel <michel@rami.io>\n"
+"PO-Revision-Date: 2022-07-22 07:00+0000\n"
+"Last-Translator: Julius Rickert <pretix@juliusrickert.de>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
 ">\n"
 "Language: de\n"
@@ -30,7 +30,7 @@ msgstr "Shop deaktiviert"
 #: pretix/control/templates/pretixcontrol/organizers/detail.html:106
 #: pretix/control/templates/pretixcontrol/subevents/index.html:152
 msgid "Presale over"
-msgstr "Verkauf beendet"
+msgstr "Vorverkauf beendet"
 
 #: htmlcov/pretix_control_views_dashboards_py.html:967
 #: pretix/control/forms/filter.py:1033 pretix/control/forms/filter.py:1406
@@ -38,7 +38,7 @@ msgstr "Verkauf beendet"
 #: pretix/control/templates/pretixcontrol/organizers/detail.html:108
 #: pretix/control/templates/pretixcontrol/subevents/index.html:154
 msgid "Presale not started"
-msgstr "noch nicht gestartet"
+msgstr "Vorverkauf noch nicht gestartet"
 
 #: htmlcov/pretix_control_views_dashboards_py.html:969
 #: pretix/control/templates/pretixcontrol/events/index.html:146
@@ -62,11 +62,12 @@ msgstr "pretixSCAN"
 
 #: pretix/api/auth/devicesecurity.py:76
 msgid "pretixSCAN (kiosk mode, no order sync, no search)"
-msgstr "pretixSCAN (Kiosk-Modus, keine Bestell-Synchronisierung, keine Suche)"
+msgstr ""
+"pretixSCAN (Kiosk-Modus, keine Bestellungs-Synchronisierung, keine Suche)"
 
 #: pretix/api/auth/devicesecurity.py:106
 msgid "pretixSCAN (online only, no order sync)"
-msgstr "pretixSCAN (nur online, keine Bestellsynchronisierung)"
+msgstr "pretixSCAN (nur online, keine Bestellungs-Synchronisierung)"
 
 #: pretix/api/auth/devicesecurity.py:137
 msgid "pretixPOS"
@@ -78,11 +79,11 @@ msgstr "Name der Applikation"
 
 #: pretix/api/models.py:42
 msgid "Redirection URIs"
-msgstr "URLs zur Weiterleitung"
+msgstr "Weiterleitungs-URIs"
 
 #: pretix/api/models.py:43
 msgid "Allowed URIs list, space separated"
-msgstr "Liste erlaubter URLs, mit Leerzeichen getrennt"
+msgstr "Liste erlaubter URIs, mit Leerzeichen getrennt"
 
 #: pretix/api/models.py:46 pretix/plugins/paypal/payment.py:112
 #: pretix/plugins/paypal2/payment.py:105
