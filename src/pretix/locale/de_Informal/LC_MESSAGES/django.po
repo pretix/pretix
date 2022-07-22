@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-07-01 07:49+0000\n"
-"PO-Revision-Date: 2022-07-19 00:00+0000\n"
+"PO-Revision-Date: 2022-07-22 11:11+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
@@ -64,11 +64,12 @@ msgstr "pretixSCAN"
 
 #: pretix/api/auth/devicesecurity.py:76
 msgid "pretixSCAN (kiosk mode, no order sync, no search)"
-msgstr "pretixSCAN (Kiosk-Modus, keine Bestell-Synchronisierung, keine Suche)"
+msgstr ""
+"pretixSCAN (Kiosk-Modus, keine Bestellungs-Synchronisierung, keine Suche)"
 
 #: pretix/api/auth/devicesecurity.py:106
 msgid "pretixSCAN (online only, no order sync)"
-msgstr "pretixSCAN (nur online, keine Bestellsynchronisierung)"
+msgstr "pretixSCAN (nur online, keine Bestellungs-Synchronisierung)"
 
 #: pretix/api/auth/devicesecurity.py:137
 msgid "pretixPOS"
@@ -80,11 +81,11 @@ msgstr "Name der Applikation"
 
 #: pretix/api/models.py:42
 msgid "Redirection URIs"
-msgstr "URLs zur Weiterleitung"
+msgstr "Weiterleitungs-URIs"
 
 #: pretix/api/models.py:43
 msgid "Allowed URIs list, space separated"
-msgstr "Liste erlaubter URLs, mit Leerzeichen getrennt"
+msgstr "Liste erlaubter URIs, mit Leerzeichen getrennt"
 
 #: pretix/api/models.py:46 pretix/plugins/paypal/payment.py:112
 #: pretix/plugins/paypal2/payment.py:105
