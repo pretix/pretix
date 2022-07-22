@@ -230,13 +230,15 @@ class OrderViewSet(viewsets.ModelViewSet):
                     Prefetch('item', queryset=self.request.event.items.prefetch_related(
                         Prefetch('meta_values', ItemMetaValue.objects.select_related('property'), to_attr='meta_values_cached')
                     )),
-                    'variation', 'answers', 'answers__options', 'answers__question',
+                    'variation',
+                    'answers', 'answers__options', 'answers__question',
                     'item__category',
+                    'addon_to__answers', 'addon_to__answers__options', 'addon_to__answers__question',
                     Prefetch('subevent', queryset=self.request.event.subevents.prefetch_related(
                         Prefetch('meta_values', to_attr='meta_values_cached', queryset=SubEventMetaValue.objects.select_related('property'))
                     )),
                     Prefetch('addons', opq.select_related('item', 'variation', 'seat'))
-                ).select_related('seat', 'addon_to')
+                ).select_related('seat', 'addon_to', 'addon_to__seat')
             )
         else:
             return Prefetch(
@@ -972,8 +974,10 @@ class OrderPositionViewSet(viewsets.ModelViewSet):
                     Prefetch('meta_values', ItemMetaValue.objects.select_related('property'),
                              to_attr='meta_values_cached')
                 )),
-                'variation', 'answers', 'answers__options', 'answers__question',
+                'variation',
+                'answers', 'answers__options', 'answers__question',
                 'item__category',
+                'addon_to__answers', 'addon_to__answers__options', 'addon_to__answers__question',
                 Prefetch('addons', qs.select_related('item', 'variation')),
                 Prefetch('subevent', queryset=self.request.event.subevents.prefetch_related(
                     Prefetch('meta_values', to_attr='meta_values_cached',
@@ -989,17 +993,17 @@ class OrderPositionViewSet(viewsets.ModelViewSet):
                                          to_attr='meta_values_cached')
                             )),
                             'variation', 'answers', 'answers__options', 'answers__question',
-                            'item__category', 'addon_to', 'seat',
+                            'item__category',
                             Prefetch('subevent', queryset=self.request.event.subevents.prefetch_related(
                                 Prefetch('meta_values', to_attr='meta_values_cached',
                                          queryset=SubEventMetaValue.objects.select_related('property'))
                             )),
                             Prefetch('addons', qs.select_related('item', 'variation', 'seat'))
-                        )
+                        ).select_related('addon_to', 'seat', 'addon_to__seat')
                     )
                 ))
             ).select_related(
-                'addon_to', 'seat'
+                'addon_to', 'seat', 'addon_to__seat'
             )
         else:
             qs = qs.prefetch_related(
