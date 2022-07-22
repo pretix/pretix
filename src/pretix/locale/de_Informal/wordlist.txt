@@ -41,6 +41,7 @@ Bestätigungs
 Bestellbestätigungs
 Bestellungsänderungen
 Bestellungsstatus
+Bestellungs
 bez
 BezahlCode
 Bezahlmethode
@@ -323,6 +324,7 @@ VIP
 WebAuthn
 Webhook
 Webhooks
+Weiterleitungs
 WeChat
 WhatsApp
 Widget
