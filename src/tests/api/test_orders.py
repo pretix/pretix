@@ -1657,7 +1657,7 @@ def test_revoked_secret_list(token_client, organizer, event):
 
 
 @pytest.mark.django_db
-def test_pdf_data(token_client, organizer, event, order):
+def test_pdf_data(token_client, organizer, event, order, django_assert_max_num_queries):
     # order detail
     resp = token_client.get('/api/v1/organizers/{}/events/{}/orders/{}/?pdf_data=true'.format(
         organizer.slug, event.slug, order.code
@@ -1671,9 +1671,10 @@ def test_pdf_data(token_client, organizer, event, order):
     assert not resp.data['positions'][0].get('pdf_data')
 
     # order list
-    resp = token_client.get('/api/v1/organizers/{}/events/{}/orders/?pdf_data=true'.format(
-        organizer.slug, event.slug
-    ))
+    with django_assert_max_num_queries(29):
+        resp = token_client.get('/api/v1/organizers/{}/events/{}/orders/?pdf_data=true'.format(
+            organizer.slug, event.slug
+        ))
     assert resp.status_code == 200
     assert resp.data['results'][0]['positions'][0].get('pdf_data')
     resp = token_client.get('/api/v1/organizers/{}/events/{}/orders/'.format(
@@ -1683,9 +1684,10 @@ def test_pdf_data(token_client, organizer, event, order):
     assert not resp.data['results'][0]['positions'][0].get('pdf_data')
 
     # position list
-    resp = token_client.get('/api/v1/organizers/{}/events/{}/orderpositions/?pdf_data=true'.format(
-        organizer.slug, event.slug
-    ))
+    with django_assert_max_num_queries(32):
+        resp = token_client.get('/api/v1/organizers/{}/events/{}/orderpositions/?pdf_data=true'.format(
+            organizer.slug, event.slug
+        ))
     assert resp.status_code == 200
     assert resp.data['results'][0].get('pdf_data')
     resp = token_client.get('/api/v1/organizers/{}/events/{}/orderpositions/'.format(

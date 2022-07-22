@@ -898,7 +898,7 @@ def test_checkin_only_permission(token_client, event, team, organizer, clist_all
     assert resp.status_code == 200
     assert resp.data['count'] > 0
 
-    # With all permissions, I can not request PDF data during checkin
+    # With limited permissions, I can not request PDF data during checkin
     resp = _redeem(token_client, organizer, [clist_all], p.secret, {}, '?pdf_data=true')
     assert resp.status_code == 201
     assert not resp.data['position'].get('pdf_data')

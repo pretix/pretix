@@ -63,9 +63,10 @@ from pretix.api.serializers.orderchange import (
 )
 from pretix.base.i18n import language
 from pretix.base.models import (
-    CachedCombinedTicket, CachedTicket, Checkin, Device, Event, Invoice,
-    InvoiceAddress, Order, OrderFee, OrderPayment, OrderPosition, OrderRefund,
-    Quota, SubEvent, TaxRule, TeamAPIToken, generate_secret,
+    CachedCombinedTicket, CachedTicket, Checkin, Device, EventMetaValue,
+    Invoice, InvoiceAddress, ItemMetaValue, Order, OrderFee, OrderPayment,
+    OrderPosition, OrderRefund, Quota, SubEvent, SubEventMetaValue, TaxRule,
+    TeamAPIToken, generate_secret,
 )
 from pretix.base.models.orders import QuestionAnswer, RevokedTicketSecret
 from pretix.base.payment import PaymentException
@@ -215,14 +216,27 @@ class OrderViewSet(viewsets.ModelViewSet):
         else:
             opq = OrderPosition.objects
         if request.query_params.get('pdf_data', 'false') == 'true':
+            prefetch_related_objects([request.organizer], 'meta_properties')
+            prefetch_related_objects(
+                [request.event],
+                Prefetch('meta_values', queryset=EventMetaValue.objects.select_related('property'), to_attr='meta_values_cached'),
+                'questions',
+                'item_meta_properties',
+            )
             return Prefetch(
                 'positions',
                 opq.all().prefetch_related(
                     Prefetch('checkins', queryset=Checkin.objects.all()),
-                    'item', 'variation', 'answers', 'answers__options', 'answers__question',
-                    'item__category', 'addon_to', 'seat',
+                    Prefetch('item', queryset=self.request.event.items.prefetch_related(
+                        Prefetch('meta_values', ItemMetaValue.objects.select_related('property'), to_attr='meta_values_cached')
+                    )),
+                    'variation', 'answers', 'answers__options', 'answers__question',
+                    'item__category',
+                    Prefetch('subevent', queryset=self.request.event.subevents.prefetch_related(
+                        Prefetch('meta_values', to_attr='meta_values_cached', queryset=SubEventMetaValue.objects.select_related('property'))
+                    )),
                     Prefetch('addons', opq.select_related('item', 'variation', 'seat'))
-                )
+                ).select_related('seat', 'addon_to')
             )
         else:
             return Prefetch(
@@ -945,25 +959,47 @@ class OrderPositionViewSet(viewsets.ModelViewSet):
 
         qs = qs.filter(order__event=self.request.event)
         if self.request.query_params.get('pdf_data', 'false') == 'true':
+            prefetch_related_objects([self.request.organizer], 'meta_properties')
+            prefetch_related_objects(
+                [self.request.event],
+                Prefetch('meta_values', queryset=EventMetaValue.objects.select_related('property'), to_attr='meta_values_cached'),
+                'questions',
+                'item_meta_properties',
+            )
             qs = qs.prefetch_related(
                 Prefetch('checkins', queryset=Checkin.objects.all()),
-                'answers', 'answers__options', 'answers__question',
+                Prefetch('item', queryset=self.request.event.items.prefetch_related(
+                    Prefetch('meta_values', ItemMetaValue.objects.select_related('property'),
+                             to_attr='meta_values_cached')
+                )),
+                'variation', 'answers', 'answers__options', 'answers__question',
+                'item__category',
                 Prefetch('addons', qs.select_related('item', 'variation')),
-                Prefetch('order', Order.objects.select_related('invoice_address').prefetch_related(
-                    Prefetch(
-                        'event',
-                        Event.objects.select_related('organizer')
-                    ),
+                Prefetch('subevent', queryset=self.request.event.subevents.prefetch_related(
+                    Prefetch('meta_values', to_attr='meta_values_cached',
+                             queryset=SubEventMetaValue.objects.select_related('property'))
+                )),
+                Prefetch('order', self.request.event.orders.select_related('invoice_address').prefetch_related(
                     Prefetch(
                         'positions',
                         qs.prefetch_related(
-                            'item', 'variation', 'answers', 'answers__options', 'answers__question',
                             Prefetch('checkins', queryset=Checkin.objects.all()),
+                            Prefetch('item', queryset=self.request.event.items.prefetch_related(
+                                Prefetch('meta_values', ItemMetaValue.objects.select_related('property'),
+                                         to_attr='meta_values_cached')
+                            )),
+                            'variation', 'answers', 'answers__options', 'answers__question',
+                            'item__category', 'addon_to', 'seat',
+                            Prefetch('subevent', queryset=self.request.event.subevents.prefetch_related(
+                                Prefetch('meta_values', to_attr='meta_values_cached',
+                                         queryset=SubEventMetaValue.objects.select_related('property'))
+                            )),
+                            Prefetch('addons', qs.select_related('item', 'variation', 'seat'))
                         )
                     )
                 ))
             ).select_related(
-                'item', 'variation', 'item__category', 'addon_to', 'seat'
+                'addon_to', 'seat'
             )
         else:
             qs = qs.prefetch_related(

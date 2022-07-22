@@ -1448,7 +1448,10 @@ class SubEvent(EventMixin, LoggedModel):
     @property
     def meta_data(self):
         data = self.event.meta_data
-        data.update({v.property.name: v.value for v in self.meta_values.select_related('property').all()})
+        if hasattr(self, 'meta_values_cached'):
+            data.update({v.property.name: v.value for v in self.meta_values_cached})
+        else:
+            data.update({v.property.name: v.value for v in self.meta_values.select_related('property').all()})
         return data
 
     @property
