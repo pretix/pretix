@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-07-01 07:49+0000\n"
-"PO-Revision-Date: 2022-07-22 07:00+0000\n"
+"PO-Revision-Date: 2022-07-22 14:42+0000\n"
 "Last-Translator: Hana Happl <hana.happl@gmx.at>\n"
 "Language-Team: Czech <https://translate.pretix.eu/projects/pretix/pretix/cs/>"
 "\n"
@@ -4916,7 +4916,7 @@ msgstr "Bylo nalezeno více shodných variant."
 
 #: pretix/base/orderimport.py:309
 msgid "You need to select a variation for this product."
-msgstr "Pro tento produkt je třeba vybrat variantu"
+msgstr "Pro tento produkt je třeba vybrat variantu."
 
 #: pretix/base/orderimport.py:321 pretix/base/orderimport.py:336
 #: pretix/base/orderimport.py:351 pretix/base/orderimport.py:362
@@ -8757,15 +8757,15 @@ msgstr ""
 
 #: pretix/base/templates/pretixbase/email/notification.html:60
 msgid "Click here disable all notifications immediately."
-msgstr ""
+msgstr "Kliknutím zde okamžitě vypnete všechna oznámení."
 
 #: pretix/base/templates/pretixbase/email/notification.txt:15
 msgid "Click here to view and change your notification settings:"
-msgstr ""
+msgstr "Chcete-li tato nastavení změnit, klikněte zde:"
 
 #: pretix/base/templates/pretixbase/email/notification.txt:17
 msgid "Click here disable all notifications immediately:"
-msgstr ""
+msgstr "Kliknutím zde okamžitě vypnete všechna oznámení:"
 
 #: pretix/base/templates/pretixbase/email/order_details.html:7
 msgid ""
@@ -8776,27 +8776,25 @@ msgstr ""
 #: pretix/base/templates/pretixbase/email/order_details.html:12
 #: pretix/base/templates/pretixbase/email/order_details.html:62
 msgid "Event:"
-msgstr ""
+msgstr "Akce:"
 
 #: pretix/base/templates/pretixbase/email/order_details.html:26
 #: pretix/base/templates/pretixbase/email/order_details.html:77
 msgid "Order code:"
-msgstr ""
+msgstr "Číslo objednávky:"
 
 #: pretix/base/templates/pretixbase/email/order_details.html:31
-#, fuzzy
-#| msgid "Created: %s"
 msgid "created by"
-msgstr "Vytvořeno: %s"
+msgstr "vytvořené"
 
 #: pretix/base/templates/pretixbase/email/order_details.html:37
 #: pretix/base/templates/pretixbase/email/order_details.html:132
 msgid "Contact:"
-msgstr ""
+msgstr "Kontakt:"
 
 #: pretix/base/templates/pretixbase/email/order_details.html:52
 msgid "View registration details"
-msgstr ""
+msgstr "Zobrazení přihlašovacích údajů"
 
 #: pretix/base/templates/pretixbase/email/order_details.html:57
 msgid ""
@@ -8806,31 +8804,29 @@ msgstr ""
 
 #: pretix/base/templates/pretixbase/email/order_details.html:86
 msgid "Details:"
-msgstr ""
+msgstr "Podrobné údaje:"
 
 #: pretix/base/templates/pretixbase/forms/widgets/portrait_image.html:10
 msgid "Upload photo"
-msgstr ""
+msgstr "Nahrát fotografii"
 
 #: pretix/base/templates/pretixbase/forms/widgets/reldate.html:15
 #: pretix/base/templates/pretixbase/forms/widgets/reldatetime.html:19
 msgid "days before"
-msgstr ""
+msgstr "dny před"
 
 #: pretix/base/templates/pretixbase/forms/widgets/reldatetime.html:15
 msgid "minutes before"
-msgstr ""
+msgstr "Minuty před"
 
 #: pretix/base/templates/pretixbase/forms/widgets/reldatetime.html:21
 msgid "at"
-msgstr ""
+msgstr "datum"
 
 #: pretix/base/templates/pretixbase/redirect.html:5
 #: pretix/base/templates/pretixbase/redirect.html:9
-#, fuzzy
-#| msgid "Redirection URIs"
 msgid "Redirect"
-msgstr "URI použité pro přesměrování"
+msgstr "Přesměrování"
 
 #: pretix/base/templates/pretixbase/redirect.html:11
 #, python-format
@@ -8842,17 +8838,17 @@ msgstr ""
 #: pretix/base/templates/pretixbase/redirect.html:14
 msgid "Please only proceed if you trust this website to be safe."
 msgstr ""
+"Pokračujte, prosím, pouze v případě, že považujete tyto webové stránky za "
+"důvěryhodné."
 
 #: pretix/base/templates/pretixbase/redirect.html:20
 #, python-format
 msgid "Proceed to %(host)s"
-msgstr ""
+msgstr "Pokračovat na %(host)s"
 
 #: pretix/base/templates/source.html:5 pretix/base/templates/source.html:9
-#, fuzzy
-#| msgid "Country code"
 msgid "Source code"
-msgstr "Kód země"
+msgstr "Zdrojový kód"
 
 #: pretix/base/templates/source.html:10
 msgid ""
@@ -8865,61 +8861,61 @@ msgstr ""
 
 #: pretix/base/ticketoutput.py:179
 msgid "Enable ticket format"
-msgstr ""
+msgstr "Povolení formátu stahování"
 
 #: pretix/base/ticketoutput.py:197
 msgid "Download ticket"
-msgstr ""
+msgstr "Stáhnout vstupenku"
 
 #: pretix/base/timeline.py:59
 msgctxt "timeline"
 msgid "Your event starts"
-msgstr ""
+msgstr "Vaše akce začíná"
 
 #: pretix/base/timeline.py:67
 msgctxt "timeline"
 msgid "Your event ends"
-msgstr ""
+msgstr "Vaše akce končí"
 
 #: pretix/base/timeline.py:75
 msgctxt "timeline"
 msgid "Admissions for your event start"
-msgstr ""
+msgstr "Vstup na akci začíná"
 
 #: pretix/base/timeline.py:83
 msgctxt "timeline"
 msgid "Start of ticket sales"
-msgstr ""
+msgstr "Zahájení předprodeje"
 
 #: pretix/base/timeline.py:93
 msgctxt "timeline"
 msgid "End of ticket sales"
-msgstr ""
+msgstr "Konec předprodeje"
 
 #: pretix/base/timeline.py:104
 msgctxt "timeline"
 msgid "Customers can no longer modify their orders"
-msgstr ""
+msgstr "Zákazníci již nemohou zpracovávat své objednávky"
 
 #: pretix/base/timeline.py:117
 msgctxt "timeline"
 msgid "No more payments can be completed"
-msgstr ""
+msgstr "Nepřijímáme žádné další platby"
 
 #: pretix/base/timeline.py:129
 msgctxt "timeline"
 msgid "Tickets can be downloaded"
-msgstr ""
+msgstr "Vstupenky si můžete stáhnout"
 
 #: pretix/base/timeline.py:141
 msgctxt "timeline"
 msgid "Customers can no longer cancel free or unpaid orders"
-msgstr "Zákazníci již nemohou zrušit bezplatné nebo nezaplacené objednávky."
+msgstr "Zákazníci již nemohou zrušit bezplatné nebo nezaplacené objednávky"
 
 #: pretix/base/timeline.py:153
 msgctxt "timeline"
 msgid "Customers can no longer cancel paid orders"
-msgstr ""
+msgstr "Zákazníci již nemohou zrušit zaplacené objednávky"
 
 #: pretix/base/timeline.py:167
 msgctxt "timeline"
@@ -9005,20 +9001,20 @@ msgstr ""
 
 #: pretix/base/views/tasks.py:169
 msgid "An unexpected error has occurred, please try again later."
-msgstr ""
+msgstr "Došlo k interní chybě, zkuste to prosím později."
 
 #: pretix/base/views/tasks.py:172
 msgid "The task has been completed."
-msgstr ""
+msgstr "Úkol byl splněn."
 
 #: pretix/control/forms/__init__.py:200
 #, python-brace-format
 msgid "Please do not upload files larger than {size}!"
-msgstr ""
+msgstr "Nevkládejte prosím soubory větší než {size}!"
 
 #: pretix/control/forms/__init__.py:220
 msgid "Filetype not allowed!"
-msgstr ""
+msgstr "Typ souboru není povolen!"
 
 #: pretix/control/forms/checkin.py:90 pretix/control/forms/filter.py:381
 #: pretix/control/forms/filter.py:408 pretix/control/forms/filter.py:1608
@@ -9033,19 +9029,19 @@ msgstr ""
 #: pretix/plugins/sendmail/forms.py:113
 msgctxt "subevent"
 msgid "All dates"
-msgstr ""
+msgstr "Všechny termíny"
 
 #: pretix/control/forms/event.py:82
 msgid "Use languages"
-msgstr ""
+msgstr "Dostupné jazyky"
 
 #: pretix/control/forms/event.py:84
 msgid "Choose all languages that your event should be available in."
-msgstr ""
+msgstr "Vyberte všechny jazyky, ve kterých má být obchod s akcemi k dispozici."
 
 #: pretix/control/forms/event.py:87
 msgid "This is an event series"
-msgstr ""
+msgstr "Jedná se o sérii akcí"
 
 #: pretix/control/forms/event.py:123
 msgid ""
@@ -9094,21 +9090,21 @@ msgstr ""
 
 #: pretix/control/forms/event.py:290
 msgid "Copy configuration from"
-msgstr ""
+msgstr "Kopírování konfigurace z"
 
 #: pretix/control/forms/event.py:296 pretix/control/forms/event.py:299
 #: pretix/control/forms/item.py:311
 msgid "Do not copy"
-msgstr ""
+msgstr "Nepřevzít"
 
 #: pretix/control/forms/event.py:315 pretix/control/forms/subevents.py:386
 #, python-brace-format
 msgid "Default ({value})"
-msgstr ""
+msgstr "Výchozí hodnota ({value})"
 
 #: pretix/control/forms/event.py:367 pretix/control/forms/organizer.py:134
 msgid "Custom domain"
-msgstr ""
+msgstr "Vlastní doména"
 
 #: pretix/control/forms/event.py:369 pretix/control/forms/organizer.py:136
 msgid "You need to configure the custom domain in the webserver beforehand."
@@ -23560,7 +23556,7 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:206
 msgid "Submit registration"
-msgstr ""
+msgstr "Odeslat registraci"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_customer.html:20
 msgid "Log in with a customer account"
