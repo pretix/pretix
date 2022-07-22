@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-07-01 07:49+0000\n"
-"PO-Revision-Date: 2022-07-22 14:42+0000\n"
+"PO-Revision-Date: 2022-07-23 06:00+0000\n"
 "Last-Translator: Hana Happl <hana.happl@gmx.at>\n"
 "Language-Team: Czech <https://translate.pretix.eu/projects/pretix/pretix/cs/>"
 "\n"
@@ -7779,6 +7779,17 @@ msgid ""
 "Best regards,\n"
 "Your {event} team"
 msgstr ""
+"Dobrý den,\n"
+"\n"
+"vaše objednávka na {event} byla úspěšná. Vzhledem k tomu, že jste si "
+"objednali pouze produkty zdarma,\n"
+"není vyžadována žádná platba.\n"
+"\n"
+"Údaje o objednávce můžete změnit a stav objednávky si prohlédnout na adrese\n"
+"{url}\n"
+"\n"
+"S pozdravem,\n"
+"Váš tým {event}"
 
 #: pretix/base/settings.py:1746
 #, python-brace-format
@@ -8453,7 +8464,7 @@ msgstr ""
 #: pretix/base/settings.py:2924 pretix/base/settings.py:2942
 #: pretix/base/settings.py:2961
 msgid "Given name"
-msgstr ""
+msgstr "Jméno"
 
 #: pretix/base/settings.py:2768 pretix/base/settings.py:2781
 #: pretix/base/settings.py:2797 pretix/base/settings.py:2813
@@ -8462,7 +8473,7 @@ msgstr ""
 #: pretix/base/settings.py:2925 pretix/base/settings.py:2943
 #: pretix/base/settings.py:2962
 msgid "Family name"
-msgstr ""
+msgstr "Příjmení"
 
 #: pretix/base/settings.py:2772 pretix/base/settings.py:2788
 #: pretix/base/settings.py:2804 pretix/base/settings.py:2819
@@ -8801,6 +8812,8 @@ msgid ""
 "You are receiving this email because you placed an order for the following "
 "event:"
 msgstr ""
+"Tento e-mail jste obdrželi, protože jste zadali objednávku na následující "
+"akci:"
 
 #: pretix/base/templates/pretixbase/email/order_details.html:86
 msgid "Details:"
@@ -16065,7 +16078,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/order/index.html:344
 #: pretix/presale/templates/pretixpresale/event/order.html:205
 msgid "Ordered items"
-msgstr ""
+msgstr "Objednané položky"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:363
 #, python-format
@@ -23114,7 +23127,7 @@ msgstr ""
 #: pretix/presale/checkoutflow.py:675
 msgctxt "checkoutflow"
 msgid "Your information"
-msgstr ""
+msgstr "Informace pro vás"
 
 #: pretix/presale/checkoutflow.py:885
 msgid ""
@@ -24312,7 +24325,7 @@ msgstr ""
 #: pretix/presale/views/widget.py:665
 #, python-format
 msgid "The presale for this event will start on %(date)s at %(time)s."
-msgstr ""
+msgstr "Předprodej na tuto akci bude zahájen %(date)s v %(time)s."
 
 #: pretix/presale/templates/pretixpresale/event/index.html:153
 #: pretix/presale/views/waiting.py:102 pretix/presale/views/widget.py:670
@@ -24362,7 +24375,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/seatingplan.html:23
 #: pretix/presale/templates/pretixpresale/event/voucher.html:84
 msgid "We're now trying to reserve this for you!"
-msgstr ""
+msgstr "Vybrané produkty se pro vás nyní snažíme rezervovat!"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:253
 msgid ""
@@ -24399,6 +24412,10 @@ msgid ""
 "cannot find the link, click on the following button to request the link to "
 "your order to be sent to you again."
 msgstr ""
+"Pokud chcete zobrazit nebo změnit stav a podrobnosti své objednávky, "
+"klikněte na odkaz v jednom z e-mailů, které jsme vám zaslali během procesu "
+"objednávky. Pokud odkaz nemůžete najít, klikněte na následující tlačítko a "
+"požádejte o opětovné zaslání odkazu na vaši objednávku."
 
 #: pretix/presale/templates/pretixpresale/event/index.html:317
 msgid "Resend order link"
@@ -24513,7 +24530,7 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/order.html:198
 msgid "Change ordered items"
-msgstr ""
+msgstr "Změnit objednané položky"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:200
 #: pretix/presale/templates/pretixpresale/event/order.html:294
@@ -24626,7 +24643,7 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/order.html:443
 msgid "You can cancel this order using the following button."
-msgstr ""
+msgstr "Tuto objednávku můžete zrušit pomocí následujícího tlačítka."
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:11
 #, python-format
