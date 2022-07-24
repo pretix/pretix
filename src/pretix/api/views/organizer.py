@@ -53,6 +53,11 @@ from pretix.base.settings import SETTINGS_AFFECTING_CSS
 from pretix.helpers.dicts import merge_dicts
 from pretix.presale.style import regenerate_organizer_css
 
+from pretix.presale.forms.customer import TokenGenerator
+from pretix.multidomain.urlreverse import build_absolute_uri
+from pretix.base.services.mail import mail
+from django.utils.translation import gettext_lazy as _
+
 
 class OrganizerViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = OrganizerSerializer
@@ -515,14 +520,29 @@ class CustomerViewSet(viewsets.ModelViewSet):
 
     @transaction.atomic()
     def perform_create(self, serializer):
-        inst = serializer.save(organizer=self.request.organizer)
+        customer = serializer.save(organizer=self.request.organizer)
+        customer.set_unusable_password()
+        customer.save()
+        ctx = customer.get_email_context()
+        token = TokenGenerator().make_token(customer)
+        ctx['url'] = build_absolute_uri(self.request.organizer,
+                                        'presale:organizer.customer.activate') + '?id=' + customer.identifier + '&token=' + token
+        mail(
+            customer.email,
+            _('Activate your account at {organizer}').format(organizer=self.request.organizer.name),
+            self.request.organizer.settings.mail_text_customer_registration,
+            ctx,
+            locale=customer.locale,
+            customer=customer,
+            organizer=self.request.organizer,
+        )
         serializer.instance.log_action(
             'pretix.customer.created',
             user=self.request.user,
             auth=self.request.auth,
             data=self.request.data,
         )
-        return inst
+        return customer
 
     @transaction.atomic()
     def perform_update(self, serializer):
