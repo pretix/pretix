@@ -188,7 +188,7 @@ class CartMixin:
                     ii = 0
                 return (
                     i, addon_penalty, ii,
-                ) + subevent_key + category_key + item_key + variation_key + (pos.price, (pos.voucher_id or 0), (pos.seat_id or 0))
+                ) + grp
             return (
                 # These are grouped by attributes so we don't put any position ids
                 0, 0, 0,
