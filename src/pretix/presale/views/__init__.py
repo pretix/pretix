@@ -173,13 +173,13 @@ class CartMixin:
                     # standalone positions are grouped by main product position id, addons below them also sorted by position id
                     i, addon_penalty, pos.positionid if isinstance(pos, OrderPosition) else pos.pk,
                     # all other places are only used for positions that can be grouped. We just put zeros.
-                ) + (0, ) * 10
+                ) + (0, ) * 12
 
             # positions are sorted and grouped by various attributes
             category_key = (pos.item.category.position, pos.item.category.id) if pos.item.category is not None else (0, 0)
             item_key = pos.item.position, pos.item_id
             variation_key = (pos.variation.position, pos.variation.id) if pos.variation is not None else (0, 0)
-            subevent_key = (pos.subevent.date_from, str(pos.subevent.name), pos.subevent_id) if pos.subevent_id else (0, "")
+            subevent_key = (pos.subevent.date_from, str(pos.subevent.name), pos.subevent_id) if pos.subevent_id else (0, "", 0)
             grp = subevent_key + category_key + item_key + variation_key + (pos.price, (pos.voucher_id or 0), (pos.seat_id or 0))
             if pos.addon_to_id:
                 if for_sorting:
