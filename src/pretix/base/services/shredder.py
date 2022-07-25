@@ -51,7 +51,7 @@ from pretix.celery_app import app
 
 
 @app.task(base=ProfiledEventTask)
-def export(event: Event, shredders: List[str], session_key=None) -> None:
+def export(event: Event, shredders: List[str], session_key=None, cfid=None) -> None:
     known_shredders = event.get_data_shredders()
 
     with NamedTemporaryFile() as rawfile:
@@ -85,13 +85,16 @@ def export(event: Event, shredders: List[str], session_key=None) -> None:
 
         rawfile.seek(0)
 
-        cf = CachedFile()
-        cf.date = now()
+        if cfid:
+            cf = CachedFile.objects.get(pk=cfid)
+        else:
+            cf = CachedFile()
+            cf.date = now()
+            cf.session_key = session_key
+            cf.web_download = True
+            cf.expires = now() + timedelta(hours=1)
         cf.filename = event.slug + '.zip'
         cf.type = 'application/zip'
-        cf.session_key = session_key
-        cf.web_download = True
-        cf.expires = now() + timedelta(hours=1)
         cf.save()
         cf.file.save(cachedfile_name(cf, cf.filename), rawfile)
 
@@ -115,7 +118,7 @@ def shred(event: Event, fileid: str, confirm_code: str) -> None:
         if not shredder:
             continue
         shredders.append(shredder)
-    if any(shredder.require_download_confirmation for shredder in shredders):
+    if confirm_code is not True and any(shredder.require_download_confirmation for shredder in shredders):
         if indexdata['confirm_code'] != confirm_code:
             raise ShredError(_("The confirm code you entered was incorrect."))
     if event.logentry_set.filter(datetime__gte=parse(indexdata['time'])):

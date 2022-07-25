@@ -42,7 +42,8 @@ from pretix.api.views import cart
 
 from .views import (
     checkin, device, discount, event, exporters, idempotency, item, oauth,
-    order, organizer, upload, user, version, voucher, waitinglist, webhooks,
+    order, organizer, shredders, upload, user, version, voucher, waitinglist,
+    webhooks,
 )
 
 router = routers.DefaultRouter()
@@ -84,6 +85,7 @@ event_router.register(r'waitinglistentries', waitinglist.WaitingListViewSet)
 event_router.register(r'checkinlists', checkin.CheckinListViewSet)
 event_router.register(r'cartpositions', cart.CartPositionViewSet)
 event_router.register(r'exporters', exporters.EventExportersViewSet, basename='exporters')
+event_router.register(r'shredders', shredders.EventShreddersViewSet, basename='shredders')
 
 checkinlist_router = routers.DefaultRouter()
 checkinlist_router.register(r'positions', checkin.CheckinListPositionViewSet, basename='checkinlistpos')
