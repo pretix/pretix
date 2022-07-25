@@ -22,6 +22,7 @@
 from decimal import Decimal
 
 import django_filters
+from django.contrib.auth.hashers import make_password
 from django.db import transaction
 from django.shortcuts import get_object_or_404
 from django.utils.functional import cached_property
@@ -38,8 +39,8 @@ from rest_framework.viewsets import GenericViewSet
 
 from pretix.api.models import OAuthAccessToken
 from pretix.api.serializers.organizer import (
-    CustomerSerializer, DeviceSerializer, GiftCardSerializer,
-    GiftCardTransactionSerializer, MembershipSerializer,
+    CustomerCreateSerializer, CustomerSerializer, DeviceSerializer,
+    GiftCardSerializer, GiftCardTransactionSerializer, MembershipSerializer,
     MembershipTypeSerializer, OrganizerSerializer, OrganizerSettingsSerializer,
     SeatingPlanSerializer, TeamAPITokenSerializer, TeamInviteSerializer,
     TeamMemberSerializer, TeamSerializer,
@@ -52,11 +53,6 @@ from pretix.base.models import (
 from pretix.base.settings import SETTINGS_AFFECTING_CSS
 from pretix.helpers.dicts import merge_dicts
 from pretix.presale.style import regenerate_organizer_css
-
-from pretix.presale.forms.customer import TokenGenerator
-from pretix.multidomain.urlreverse import build_absolute_uri
-from pretix.base.services.mail import mail
-from django.utils.translation import gettext_lazy as _
 
 
 class OrganizerViewSet(viewsets.ReadOnlyModelViewSet):
@@ -519,30 +515,24 @@ class CustomerViewSet(viewsets.ModelViewSet):
         raise MethodNotAllowed("Customers cannot be deleted.")
 
     @transaction.atomic()
-    def perform_create(self, serializer):
-        customer = serializer.save(organizer=self.request.organizer)
-        customer.set_unusable_password()
-        customer.save()
-        ctx = customer.get_email_context()
-        token = TokenGenerator().make_token(customer)
-        ctx['url'] = build_absolute_uri(self.request.organizer,
-                                        'presale:organizer.customer.activate') + '?id=' + customer.identifier + '&token=' + token
-        mail(
-            customer.email,
-            _('Activate your account at {organizer}').format(organizer=self.request.organizer.name),
-            self.request.organizer.settings.mail_text_customer_registration,
-            ctx,
-            locale=customer.locale,
-            customer=customer,
-            organizer=self.request.organizer,
-        )
+    def perform_create(self, serializer, send_email=False):
+        customer = serializer.save(organizer=self.request.organizer, password=make_password(None))
         serializer.instance.log_action(
             'pretix.customer.created',
             user=self.request.user,
             auth=self.request.auth,
             data=self.request.data,
         )
+        if send_email:
+            customer.send_activation_mail()
         return customer
+
+    def create(self, request, *args, **kwargs):
+        serializer = CustomerCreateSerializer(data=request.data, context=self.get_serializer_context())
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer, send_email=serializer.validated_data.pop('send_email', False))
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
     @transaction.atomic()
     def perform_update(self, serializer):
