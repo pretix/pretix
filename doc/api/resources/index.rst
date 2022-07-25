@@ -38,6 +38,7 @@ at :ref:`plugin-docs`.
    webhooks
    seatingplans
    exporters
+   shredders
    sendmail_rules
    billing_invoices
    billing_var
