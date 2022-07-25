@@ -532,6 +532,7 @@ event                                 object                     Object describi
 ├ imprint_url                         string                     URL to legal notice page. If not ``null``, a button in the app should link to this page.
 ├ privacy_url                         string                     URL to privacy notice page. If not ``null``, a button in the app should link to this page.
 ├ help_url                            string                     URL to help page. If not ``null``, a button in the app should link to this page.
+├ terms_url                           string                     URL to terms of service. If not ``null``, a button in the app should link to this page.
 ├ logo_url                            string                     URL to event logo. If not ``null``, this logo may be shown in the app.
 ├ slug                                string                     Event short form
 └ organizer                           string                     Organizer short form
@@ -567,6 +568,7 @@ scan_types                            list of objects            Only used for a
         "imprint_url": null,
         "privacy_url": null,
         "help_url": null,
+        "terms_url": null,
         "logo_url": null,
         "organizer": "sampleconf"
       },
