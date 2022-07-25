@@ -222,6 +222,7 @@ def test_invoice_address_shredder(event, order):
             'company': 'Acme Company',
             'country': 'UK',
             'internal_reference': '',
+            'custom_field': None,
             'is_business': False,
             'last_modified': ia.last_modified.isoformat().replace('+00:00', 'Z'),
             'name': '',

@@ -172,6 +172,7 @@ ORDER_CREATE_PAYLOAD = {
         "city": "Sample City",
         "country": "NZ",
         "internal_reference": "",
+        "custom_field": None,
         "vat_id": ""
     },
     "positions": [
@@ -321,7 +322,8 @@ def test_order_create_simulate(token_client, organizer, event, item, quota, ques
             'state': '',
             'vat_id': '',
             'vat_id_validated': False,
-            'internal_reference': ''
+            'internal_reference': '',
+            'custom_field': None
         },
         'positions': [
             {
