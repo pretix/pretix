@@ -41,7 +41,9 @@ from pretix.base.forms.questions import (
 )
 from pretix.base.i18n import get_language_without_region
 from pretix.base.models import Customer
+from pretix.base.services.mail import mail
 from pretix.helpers.http import get_client_ip
+from pretix.multidomain.urlreverse import build_absolute_uri
 
 
 class TokenGenerator(PasswordResetTokenGenerator):
@@ -266,7 +268,19 @@ class RegistrationForm(forms.Form):
         customer.set_unusable_password()
         customer.save()
         customer.log_action('pretix.customer.created', {})
-        customer.send_activation_mail()
+        ctx = customer.get_email_context()
+        token = TokenGenerator().make_token(customer)
+        ctx['url'] = build_absolute_uri(self.request.organizer,
+                                        'presale:organizer.customer.activate') + '?id=' + customer.identifier + '&token=' + token
+        mail(
+            customer.email,
+            _('Activate your account at {organizer}').format(organizer=self.request.organizer.name),
+            self.request.organizer.settings.mail_text_customer_registration,
+            ctx,
+            locale=customer.locale,
+            customer=customer,
+            organizer=self.request.organizer,
+        )
         return customer
 
 

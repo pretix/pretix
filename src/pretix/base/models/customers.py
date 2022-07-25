@@ -216,27 +216,6 @@ class Customer(LoggedModel):
             testmode=testmode,
         )
 
-    def send_activation_mail(self):
-        from pretix.base.services.mail import mail
-        from pretix.multidomain.urlreverse import build_absolute_uri
-        from pretix.presale.forms.customer import TokenGenerator
-
-        ctx = self.get_email_context()
-        token = TokenGenerator().make_token(self)
-        ctx['url'] = build_absolute_uri(
-            self.organizer,
-            'presale:organizer.customer.activate'
-        ) + '?id=' + self.identifier + '&token=' + token
-        mail(
-            self.email,
-            _('Activate your account at {organizer}').format(organizer=self.organizer.name),
-            self.organizer.settings.mail_text_customer_registration,
-            ctx,
-            locale=self.locale,
-            customer=self,
-            organizer=self.organizer,
-        )
-
 
 class AttendeeProfile(models.Model):
     customer = models.ForeignKey(

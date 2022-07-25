@@ -22,7 +22,6 @@
 from decimal import Decimal
 
 import django_filters
-from django.contrib.auth.hashers import make_password
 from django.db import transaction
 from django.shortcuts import get_object_or_404
 from django.utils.functional import cached_property
@@ -39,8 +38,8 @@ from rest_framework.viewsets import GenericViewSet
 
 from pretix.api.models import OAuthAccessToken
 from pretix.api.serializers.organizer import (
-    CustomerCreateSerializer, CustomerSerializer, DeviceSerializer,
-    GiftCardSerializer, GiftCardTransactionSerializer, MembershipSerializer,
+    CustomerSerializer, DeviceSerializer, GiftCardSerializer,
+    GiftCardTransactionSerializer, MembershipSerializer,
     MembershipTypeSerializer, OrganizerSerializer, OrganizerSettingsSerializer,
     SeatingPlanSerializer, TeamAPITokenSerializer, TeamInviteSerializer,
     TeamMemberSerializer, TeamSerializer,
@@ -515,24 +514,15 @@ class CustomerViewSet(viewsets.ModelViewSet):
         raise MethodNotAllowed("Customers cannot be deleted.")
 
     @transaction.atomic()
-    def perform_create(self, serializer, send_email=False):
-        customer = serializer.save(organizer=self.request.organizer, password=make_password(None))
+    def perform_create(self, serializer):
+        inst = serializer.save(organizer=self.request.organizer)
         serializer.instance.log_action(
             'pretix.customer.created',
             user=self.request.user,
             auth=self.request.auth,
             data=self.request.data,
         )
-        if send_email:
-            customer.send_activation_mail()
-        return customer
-
-    def create(self, request, *args, **kwargs):
-        serializer = CustomerCreateSerializer(data=request.data, context=self.get_serializer_context())
-        serializer.is_valid(raise_exception=True)
-        self.perform_create(serializer, send_email=serializer.validated_data.pop('send_email', False))
-        headers = self.get_success_headers(serializer.data)
-        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+        return inst
 
     @transaction.atomic()
     def perform_update(self, serializer):

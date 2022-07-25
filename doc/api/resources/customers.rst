@@ -131,9 +131,7 @@ Endpoints
 
 .. http:post:: /api/v1/organizers/(organizer)/customers/
 
-   Creates a new customer. In addition to the fields defined on the resource, you can pass the field ``send_email``
-   to control whether the system should send an account activation email with a password reset link (defaults to
-   ``false``).
+   Creates a new customer
 
    **Example request**:
 
@@ -145,8 +143,7 @@ Endpoints
       Content-Type: application/json
 
       {
-        "email": "test@example.org",
-        "send_email": true
+        "email": "test@example.org"
       }
 
    **Example response**:
