@@ -3,7 +3,7 @@
 Data shredders
 ==============
 
-pretix and it's plugins include a number of data shredders that allow you to clear personal information from the systme.
+pretix and it's plugins include a number of data shredders that allow you to clear personal information from the system.
 This page shows you how to use these shredders through the API.
 
 .. versionchanged:: 4.12
