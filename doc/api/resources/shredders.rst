@@ -86,7 +86,7 @@ endpoints:
 
    .. sourcecode:: http
 
-      HTTP/1.1 200 OK
+      HTTP/1.1 202 Accepted
       Vary: Accept
       Content-Type: application/json
 
@@ -120,8 +120,11 @@ Shredding the data
 ------------------
 
 When starting an export, you receive a ``shred`` URL for actually shredding the data.
-Since shredding often requires deleting large data sets, it might take longer than the duration of an HTTP request. Therefore,
-shredding again is a two-step process. First you need to start an export task with one of the following to API
+You can only start the actual shredding process after the export file was generated, however you are not forced to download
+the file (we'd recommend it in most cases, though).
+The download will no longer be possible after the shredding.
+Since shredding often requires deleting large data sets, it might take longer than the duration of an HTTP request.
+Therefore, shredding again is a two-step process. First you need to start a shredder task with one of the following to API
 endpoints:
 
 .. http:post:: /api/v1/organizers/(organizer)/events/(event)/shredders/shred/(id1)/(id2)/
@@ -141,7 +144,7 @@ endpoints:
 
    .. sourcecode:: http
 
-      HTTP/1.1 200 OK
+      HTTP/1.1 202 Accepted
       Vary: Accept
       Content-Type: application/json
 

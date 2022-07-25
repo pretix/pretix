@@ -128,6 +128,9 @@ def test_run_success(token_client, order, organizer, team, event):
     resp4 = token_client.get("/" + resp3.data["status"].split("/", 3)[3])
     assert resp4.status_code == 410  # because we have no celery
 
+    resp2 = token_client.get("/" + resp.data["download"].split("/", 3)[3])
+    assert resp2.status_code == 404  # shredded now
+
     order.refresh_from_db()
     assert not order.email
 
