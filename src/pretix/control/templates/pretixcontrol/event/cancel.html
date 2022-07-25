@@ -16,6 +16,9 @@
                 <legend>{% trans "Paid orders" %}</legend>
                 {% bootstrap_field form.cancel_allow_user_paid layout="control" %}
                 {% bootstrap_field form.cancel_allow_user_paid_require_approval layout="control" %}
+                <div data-display-dependency="#id_cancel_allow_user_paid_require_approval">
+                    {% bootstrap_field form.cancel_allow_user_paid_require_approval_fee_unknown layout="control" %}
+                </div>
                 {% bootstrap_field form.cancel_allow_user_paid_keep layout="control" %}
                 {% bootstrap_field form.cancel_allow_user_paid_keep_percentage layout="control" %}
                 {% bootstrap_field form.cancel_allow_user_paid_keep_fees layout="control" %}
