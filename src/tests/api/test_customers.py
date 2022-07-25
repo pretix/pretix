@@ -20,6 +20,7 @@
 # <https://www.gnu.org/licenses/>.
 #
 import pytest
+from django.core import mail as djmail
 from django_scopes import scopes_disabled
 
 
@@ -98,6 +99,29 @@ def test_customer_create(token_client, organizer):
         assert customer.is_active
         assert customer.name == 'John Doe'
         assert customer.is_verified
+    assert len(djmail.outbox) == 0
+
+
+@pytest.mark.django_db
+def test_customer_create_send_email(token_client, organizer):
+    resp = token_client.post(
+        '/api/v1/organizers/{}/customers/'.format(organizer.slug),
+        format='json',
+        data={
+            'identifier': 'IGNORED',
+            'email': 'bar@example.com',
+            'name_parts': {
+                "_scheme": "given_family",
+                'given_name': 'John',
+                'family_name': 'Doe',
+            },
+            'is_active': True,
+            'is_verified': True,
+            'send_email': True,
+        }
+    )
+    assert resp.status_code == 201
+    assert len(djmail.outbox) == 1
 
 
 @pytest.mark.django_db
