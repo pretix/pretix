@@ -161,7 +161,7 @@ setup(
         'arabic-reshaper==2.1.3',  # Support for Arabic in reportlab
         'babel',
         'BeautifulSoup4==4.10.*',
-        'bleach==4.1.*',
+        'bleach>=4.1,<5.1',
         'celery==4.4.*',
         'chardet==4.0.*',
         'cryptography>=3.4.2',
@@ -220,7 +220,7 @@ setup(
         'redis==3.5.*',
         'reportlab==3.6.*',
         'requests==2.27.*',
-        'sentry-sdk==1.5.*',
+        'sentry-sdk==1.8.*',
         'sepaxml==2.4.*,>=2.4.1',
         'slimit',
         'static3==0.7.*',
