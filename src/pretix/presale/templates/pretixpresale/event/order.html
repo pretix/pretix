@@ -373,7 +373,26 @@
                 {% if user_cancel_allowed %}
                     <li class="list-group-item">
                         {% if order.status == "p" and order.total != 0 %}
-                            {% if order.user_cancel_fee >= order.total %}
+                            {% if request.event.settings.cancel_allow_user_paid_require_approval and request.event.settings.cancel_allow_user_paid_require_approval_fee_unknown %}
+                                <p>
+                                    {% blocktrans trimmed %}
+                                        You can request to cancel this order.
+                                    {% endblocktrans %}
+                                    {% blocktrans trimmed %}
+                                        If your request is approved, the organizer will determine if you will receive a
+                                        full refund or if a cancellation fee is deducted according to their cancellation
+                                        policy.
+                                    {% endblocktrans %}
+                                    {% if request.event.settings.cancel_allow_user_paid_refund_as_giftcard == "force" %}
+                                        {% trans "The refund will be issued in form of a gift card that you can use for further purchases." %}
+                                    {% elif request.event.settings.cancel_allow_user_paid_refund_as_giftcard == "option" %}
+                                        {% trans "The refund can be issued to your original payment method or as a gift card." %}
+                                    {% elif request.event.settings.cancel_allow_user_paid_refund_as_giftcard == "off" %}
+                                        {% trans "The refund will be issued to your original payment method." %}
+                                    {% endif %}
+                                    {% trans "This will invalidate all tickets in this order." %}
+                                </p>
+                            {% elif order.user_cancel_fee >= order.total %}
                                 <p>
                                     {% if request.event.settings.cancel_allow_user_paid_require_approval %}
                                         {% blocktrans trimmed %}

@@ -762,6 +762,7 @@ class EventSettingsSerializer(SettingsSerializer):
         'cancel_allow_user_paid_adjust_fees_step',
         'cancel_allow_user_paid_refund_as_giftcard',
         'cancel_allow_user_paid_require_approval',
+        'cancel_allow_user_paid_require_approval_fee_unknown',
         'change_allow_user_variation',
         'change_allow_user_addons',
         'change_allow_user_until',
