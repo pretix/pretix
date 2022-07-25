@@ -28,6 +28,7 @@ from typing import Tuple
 import bleach
 import vat_moss.exchange_rates
 from django.contrib.staticfiles import finders
+from django.db.models import Sum
 from django.dispatch import receiver
 from django.utils.formats import date_format, localize
 from django.utils.translation import (
@@ -47,7 +48,7 @@ from reportlab.platypus import (
 )
 
 from pretix.base.decimal import round_decimal
-from pretix.base.models import Event, Invoice, Order
+from pretix.base.models import Event, Invoice, Order, OrderPayment
 from pretix.base.signals import register_invoice_renderers
 from pretix.base.templatetags.money import money_filter
 from pretix.helpers.reportlab import ThumbnailingImageReader
@@ -589,15 +590,33 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
             ])
             colwidths = [a * doc.width for a in (.65, .05, .30)]
 
-        if self.invoice.event.settings.invoice_show_payments and not self.invoice.is_cancellation and \
-                self.invoice.order.status == Order.STATUS_PENDING:
-            pending_sum = self.invoice.order.pending_sum
-            if pending_sum != total:
-                tdata.append([pgettext('invoice', 'Received payments')] + (['', '', ''] if has_taxes else ['']) + [
-                    money_filter(pending_sum - total, self.invoice.event.currency)
+        if self.invoice.event.settings.invoice_show_payments and not self.invoice.is_cancellation:
+            if self.invoice.order.status == Order.STATUS_PENDING:
+                pending_sum = self.invoice.order.pending_sum
+                if pending_sum != total:
+                    tdata.append([pgettext('invoice', 'Received payments')] + (['', '', ''] if has_taxes else ['']) + [
+                        money_filter(pending_sum - total, self.invoice.event.currency)
+                    ])
+                    tdata.append([pgettext('invoice', 'Outstanding payments')] + (['', '', ''] if has_taxes else ['']) + [
+                        money_filter(pending_sum, self.invoice.event.currency)
+                    ])
+                    tstyledata += [
+                        ('FONTNAME', (0, len(tdata) - 3), (-1, len(tdata) - 3), self.font_bold),
+                    ]
+            elif self.invoice.order.payments.filter(
+                state__in=(OrderPayment.PAYMENT_STATE_CONFIRMED, OrderPayment.PAYMENT_STATE_REFUNDED), provider='giftcard'
+            ).exists():
+                giftcard_sum = self.invoice.order.payments.filter(
+                    state__in=(OrderPayment.PAYMENT_STATE_CONFIRMED, OrderPayment.PAYMENT_STATE_REFUNDED),
+                    provider='giftcard'
+                ).aggregate(
+                    s=Sum('amount')
+                )['s'] or Decimal('0.00')
+                tdata.append([pgettext('invoice', 'Paid by gift card')] + (['', '', ''] if has_taxes else ['']) + [
+                    money_filter(giftcard_sum, self.invoice.event.currency)
                 ])
-                tdata.append([pgettext('invoice', 'Outstanding payments')] + (['', '', ''] if has_taxes else ['']) + [
-                    money_filter(pending_sum, self.invoice.event.currency)
+                tdata.append([pgettext('invoice', 'Remaining amount')] + (['', '', ''] if has_taxes else ['']) + [
+                    money_filter(total - giftcard_sum, self.invoice.event.currency)
                 ])
                 tstyledata += [
                     ('FONTNAME', (0, len(tdata) - 3), (-1, len(tdata) - 3), self.font_bold),
