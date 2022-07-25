@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-01 07:50+0000\n"
+"POT-Creation-Date: 2022-07-25 16:59+0000\n"
 "PO-Revision-Date: 2022-05-08 19:00+0000\n"
 "Last-Translator: Emanuele Signoretta <signorettae@gmail.com>\n"
 "Language-Team: Italian <https://translate.pretix.eu/projects/pretix/pretix-"
@@ -293,14 +293,18 @@ msgid "Order canceled"
 msgstr "Ordine cancellato"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:62
+msgid "Ticket code is ambiguous on list"
+msgstr ""
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:63
 msgid "Checked-in Tickets"
 msgstr "Biglietti controllati"
 
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:63
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:64
 msgid "Valid Tickets"
 msgstr "Biglietti validi"
 
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:64
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:65
 msgid "Currently inside"
 msgstr "Attualmente all'interno"
 
@@ -640,20 +644,20 @@ msgstr "Ricevi indietro %(currency)s %(amount)s"
 msgid "Please enter the amount the organizer can keep."
 msgstr "Inserisci l'importo che l'organizzatore può trattenere."
 
-#: pretix/static/pretixpresale/js/ui/main.js:377
+#: pretix/static/pretixpresale/js/ui/main.js:378
 msgid "Please enter a quantity for one of the ticket types."
 msgstr "Inserisci la quantità per una tipologia di biglietto."
 
-#: pretix/static/pretixpresale/js/ui/main.js:413
+#: pretix/static/pretixpresale/js/ui/main.js:414
 msgid "required"
 msgstr "richiesto"
 
-#: pretix/static/pretixpresale/js/ui/main.js:516
-#: pretix/static/pretixpresale/js/ui/main.js:535
+#: pretix/static/pretixpresale/js/ui/main.js:517
+#: pretix/static/pretixpresale/js/ui/main.js:536
 msgid "Time zone:"
 msgstr "Fuso orario:"
 
-#: pretix/static/pretixpresale/js/ui/main.js:526
+#: pretix/static/pretixpresale/js/ui/main.js:527
 msgid "Your local time:"
 msgstr "Ora locale:"
 

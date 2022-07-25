@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-01 07:50+0000\n"
+"POT-Creation-Date: 2022-07-25 16:59+0000\n"
 "PO-Revision-Date: 2021-12-06 23:00+0000\n"
 "Last-Translator: Ondřej Sokol <osokol@treesoft.cz>\n"
 "Language-Team: Czech <https://translate.pretix.eu/projects/pretix/pretix-js/"
@@ -291,14 +291,18 @@ msgid "Order canceled"
 msgstr "Objednávka zrušena"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:62
+msgid "Ticket code is ambiguous on list"
+msgstr ""
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:63
 msgid "Checked-in Tickets"
 msgstr "Vyřízené vstupenky"
 
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:63
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:64
 msgid "Valid Tickets"
 msgstr "Platné vstupenky"
 
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:64
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:65
 msgid "Currently inside"
 msgstr "Aktuálně uvnitř"
 
@@ -644,20 +648,20 @@ msgstr "Dostanete %(currency)s %(amount)s zpět"
 msgid "Please enter the amount the organizer can keep."
 msgstr "Zadejte částku, kterou si organizátor může ponechat."
 
-#: pretix/static/pretixpresale/js/ui/main.js:377
+#: pretix/static/pretixpresale/js/ui/main.js:378
 msgid "Please enter a quantity for one of the ticket types."
 msgstr "Zadejte prosím množství pro jeden z typů vstupenek."
 
-#: pretix/static/pretixpresale/js/ui/main.js:413
+#: pretix/static/pretixpresale/js/ui/main.js:414
 msgid "required"
 msgstr "povinný"
 
-#: pretix/static/pretixpresale/js/ui/main.js:516
-#: pretix/static/pretixpresale/js/ui/main.js:535
+#: pretix/static/pretixpresale/js/ui/main.js:517
+#: pretix/static/pretixpresale/js/ui/main.js:536
 msgid "Time zone:"
 msgstr "Časové pásmo:"
 
-#: pretix/static/pretixpresale/js/ui/main.js:526
+#: pretix/static/pretixpresale/js/ui/main.js:527
 msgid "Your local time:"
 msgstr "Místní čas:"
 

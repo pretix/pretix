@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-01 07:50+0000\n"
+"POT-Creation-Date: 2022-07-25 16:59+0000\n"
 "PO-Revision-Date: 2022-04-28 18:04+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
@@ -289,14 +289,18 @@ msgid "Order canceled"
 msgstr "Bestellung storniert"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:62
+msgid "Ticket code is ambiguous on list"
+msgstr ""
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:63
 msgid "Checked-in Tickets"
 msgstr "Eingecheckte Tickets"
 
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:63
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:64
 msgid "Valid Tickets"
 msgstr "Gültige Tickets"
 
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:64
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:65
 msgid "Currently inside"
 msgstr "Derzeit anwesend"
 
@@ -645,20 +649,20 @@ msgstr "Du erhältst %(currency)s %(amount)s zurück"
 msgid "Please enter the amount the organizer can keep."
 msgstr "Bitte gib den Betrag ein, den der Veranstalter einbehalten darf."
 
-#: pretix/static/pretixpresale/js/ui/main.js:377
+#: pretix/static/pretixpresale/js/ui/main.js:378
 msgid "Please enter a quantity for one of the ticket types."
 msgstr "Bitte trage eine Menge für eines der Produkte ein."
 
-#: pretix/static/pretixpresale/js/ui/main.js:413
+#: pretix/static/pretixpresale/js/ui/main.js:414
 msgid "required"
 msgstr "verpflichtend"
 
-#: pretix/static/pretixpresale/js/ui/main.js:516
-#: pretix/static/pretixpresale/js/ui/main.js:535
+#: pretix/static/pretixpresale/js/ui/main.js:517
+#: pretix/static/pretixpresale/js/ui/main.js:536
 msgid "Time zone:"
 msgstr "Zeitzone:"
 
-#: pretix/static/pretixpresale/js/ui/main.js:526
+#: pretix/static/pretixpresale/js/ui/main.js:527
 msgid "Your local time:"
 msgstr "Deine lokale Zeit:"
 

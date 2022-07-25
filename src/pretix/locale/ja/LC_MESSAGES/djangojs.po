@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-01 07:50+0000\n"
+"POT-Creation-Date: 2022-07-25 16:59+0000\n"
 "PO-Revision-Date: 2022-03-15 00:00+0000\n"
 "Last-Translator: Yuriko Matsunami <y.matsunami@enobyte.com>\n"
 "Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/pretix-"
@@ -291,14 +291,18 @@ msgid "Order canceled"
 msgstr "注文がキャンセルされました"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:62
+msgid "Ticket code is ambiguous on list"
+msgstr ""
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:63
 msgid "Checked-in Tickets"
 msgstr "チェックイン済みのチケット"
 
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:63
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:64
 msgid "Valid Tickets"
 msgstr "有効なチケット"
 
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:64
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:65
 msgid "Currently inside"
 msgstr "現在オンラインです"
 
@@ -635,20 +639,20 @@ msgstr "%(currency)s %(amount)s が払い戻されます"
 msgid "Please enter the amount the organizer can keep."
 msgstr "イベント開催者が受け取る料金を入力してください。"
 
-#: pretix/static/pretixpresale/js/ui/main.js:377
+#: pretix/static/pretixpresale/js/ui/main.js:378
 msgid "Please enter a quantity for one of the ticket types."
 msgstr "商品の総数を入力してください。"
 
-#: pretix/static/pretixpresale/js/ui/main.js:413
+#: pretix/static/pretixpresale/js/ui/main.js:414
 msgid "required"
 msgstr "必須"
 
-#: pretix/static/pretixpresale/js/ui/main.js:516
-#: pretix/static/pretixpresale/js/ui/main.js:535
+#: pretix/static/pretixpresale/js/ui/main.js:517
+#: pretix/static/pretixpresale/js/ui/main.js:536
 msgid "Time zone:"
 msgstr "タイムゾーン："
 
-#: pretix/static/pretixpresale/js/ui/main.js:526
+#: pretix/static/pretixpresale/js/ui/main.js:527
 msgid "Your local time:"
 msgstr "現地時間："
 

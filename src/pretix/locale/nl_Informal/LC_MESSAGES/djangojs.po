@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-01 07:50+0000\n"
+"POT-Creation-Date: 2022-07-25 16:59+0000\n"
 "PO-Revision-Date: 2021-08-05 04:00+0000\n"
 "Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
 "Language-Team: Dutch (informal) <https://translate.pretix.eu/projects/pretix/"
@@ -291,14 +291,18 @@ msgid "Order canceled"
 msgstr "Bestelling geannuleerd"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:62
+msgid "Ticket code is ambiguous on list"
+msgstr ""
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:63
 msgid "Checked-in Tickets"
 msgstr "Ingecheckte kaartjes"
 
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:63
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:64
 msgid "Valid Tickets"
 msgstr "Geldige kaartjes"
 
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:64
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:65
 msgid "Currently inside"
 msgstr "Op dit moment binnen"
 
@@ -648,20 +652,20 @@ msgstr "Jij krijgt %(currency)s %(amount)s terug"
 msgid "Please enter the amount the organizer can keep."
 msgstr "Voer het bedrag in dat de organisator mag houden."
 
-#: pretix/static/pretixpresale/js/ui/main.js:377
+#: pretix/static/pretixpresale/js/ui/main.js:378
 msgid "Please enter a quantity for one of the ticket types."
 msgstr "Voer een hoeveelheid voor een van de producten in."
 
-#: pretix/static/pretixpresale/js/ui/main.js:413
+#: pretix/static/pretixpresale/js/ui/main.js:414
 msgid "required"
 msgstr "verplicht"
 
-#: pretix/static/pretixpresale/js/ui/main.js:516
-#: pretix/static/pretixpresale/js/ui/main.js:535
+#: pretix/static/pretixpresale/js/ui/main.js:517
+#: pretix/static/pretixpresale/js/ui/main.js:536
 msgid "Time zone:"
 msgstr "Tijdzone:"
 
-#: pretix/static/pretixpresale/js/ui/main.js:526
+#: pretix/static/pretixpresale/js/ui/main.js:527
 msgid "Your local time:"
 msgstr "Je lokale tijd:"
 
