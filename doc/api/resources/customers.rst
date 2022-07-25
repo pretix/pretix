@@ -173,8 +173,8 @@ Endpoints
    the resource, other fields will be reset to default. With ``PATCH``, you only need to provide the fields that you
    want to change.
 
-   You can change all fields of the resource except the ``identifier``, ``last_login``, ``date_joined``, ``name``,
-   and ``last_modified`` fields.
+   You can change all fields of the resource except the ``identifier``, ``last_login``, ``date_joined``,
+   ``name`` (which is auto-generated from ``name_parts``), and ``last_modified`` fields.
 
    **Example request**:
 
