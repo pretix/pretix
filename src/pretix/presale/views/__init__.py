@@ -179,7 +179,8 @@ class CartMixin:
             category_key = (pos.item.category.position, pos.item.category.id) if pos.item.category is not None else (0, 0)
             item_key = pos.item.position, pos.item_id
             variation_key = (pos.variation.position, pos.variation.id) if pos.variation is not None else (0, 0)
-            grp = category_key + item_key + variation_key + (pos.price, (pos.voucher_id or 0), (pos.subevent_id or 0), (pos.seat_id or 0))
+            subevent_key = (pos.subevent.date_from, str(pos.subevent.name)) if pos.subevent_id else (0, "")
+            grp = subevent_key + category_key + item_key + variation_key + (pos.price, (pos.voucher_id or 0), (pos.seat_id or 0))
             if pos.addon_to_id:
                 if for_sorting:
                     ii = pos.positionid if isinstance(pos, OrderPosition) else pos.pk
@@ -187,7 +188,7 @@ class CartMixin:
                     ii = 0
                 return (
                     i, addon_penalty, ii,
-                ) + category_key + item_key + variation_key + (pos.price, (pos.voucher_id or 0), (pos.subevent_id or 0), (pos.seat_id or 0))
+                ) + subevent_key + category_key + item_key + variation_key + (pos.price, (pos.voucher_id or 0), (pos.seat_id or 0))
             return (
                 # These are grouped by attributes so we don't put any position ids
                 0, 0, 0,
