@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-07-25 16:59+0000\n"
-"PO-Revision-Date: 2022-07-22 11:11+0000\n"
+"PO-Revision-Date: 2022-07-26 09:01+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
 ">\n"
@@ -1076,22 +1076,16 @@ msgid "Event end date"
 msgstr "Veranstaltungsenddatum"
 
 #: pretix/base/exporters/items.py:50
-#, fuzzy
-#| msgid "Product name"
 msgid "Product data"
-msgstr "Produktbezeichnung"
+msgstr "Produktdaten"
 
 #: pretix/base/exporters/items.py:56
-#, fuzzy
-#| msgid "Product"
 msgid "Product ID"
-msgstr "Produkt"
+msgstr "Produkt-ID"
 
 #: pretix/base/exporters/items.py:57
-#, fuzzy
-#| msgid "Variation"
 msgid "Variation ID"
-msgstr "Variante"
+msgstr "Varianten-ID"
 
 #: pretix/base/exporters/items.py:58 pretix/base/models/items.py:108
 #: pretix/base/pdf.py:141
@@ -2444,18 +2438,14 @@ msgid "Outstanding payments"
 msgstr "Offener Betrag"
 
 #: pretix/base/invoice.py:615
-#, fuzzy
-#| msgid "Issued gift cards"
 msgctxt "invoice"
 msgid "Paid by gift card"
-msgstr "Ausgestellte Wertgutscheine"
+msgstr "Mit Wertgutschein beglichen"
 
 #: pretix/base/invoice.py:618
-#, fuzzy
-#| msgid "Pending amount"
 msgctxt "invoice"
 msgid "Remaining amount"
-msgstr "Offener Betrag"
+msgstr "Restbetrag"
 
 #: pretix/base/invoice.py:658
 msgctxt "invoice"
@@ -2596,7 +2586,7 @@ msgstr ""
 
 #: pretix/base/models/checkin.py:60
 msgid "Allow checking in add-on tickets by scanning the main ticket"
-msgstr ""
+msgstr "Check-in von Zusatzprodukten durch Scan des Haupttickets erlauben"
 
 #: pretix/base/models/checkin.py:62
 msgid ""
@@ -2604,6 +2594,9 @@ msgid ""
 "there is always exactly one matching add-on ticket. Ambiguous scans will be "
 "rejected.."
 msgstr ""
+"Ein Scan ist nur möglich, wenn die Check-in-Liste so konfiguriert ist, dass "
+"es immer genau ein passendes Zusatzprodukt gibt. Uneindeutige Scans werden "
+"abgelehnt."
 
 #: pretix/base/models/checkin.py:66 pretix/control/navigation.py:579
 #: pretix/control/templates/pretixcontrol/organizers/gates.html:5
@@ -2691,10 +2684,8 @@ msgid "Ticket type not allowed here"
 msgstr "Ticketart hier nicht erlaubt"
 
 #: pretix/base/models/checkin.py:278
-#, fuzzy
-#| msgid "Ticket code y position (mm)"
 msgid "Ticket code is ambiguous on list"
-msgstr "Ticket-Code-y-Position (mm)"
+msgstr "Ticket-Code ist nicht eindeutig auf der Liste"
 
 #: pretix/base/models/checkin.py:279
 msgid "Server error"
@@ -5872,18 +5863,13 @@ msgid "Random (default, works with all pretix apps)"
 msgstr "Zufällig (Standard, funktioniert mit allen pretix-Apps)"
 
 #: pretix/base/secrets.py:146
-#, fuzzy
-#| msgid ""
-#| "pretix signature scheme 1 (for very large events, does not work with "
-#| "pretixSCAN on iOS and changes semantics of offline scanning – please "
-#| "refer to documentation or support for details)"
 msgid ""
 "pretix signature scheme 1 (for very large events, changes semantics of "
 "offline scanning – please refer to documentation or support for details)"
 msgstr ""
-"pretix Signaturverfahren 1 (für sehr große Veranstaltungen, funktioniert "
-"nicht mit pretixSCAN auf iOS und ändert die Funktionsweise des Offline-"
-"Modus, bitte informieren Sie sich in der Dokumentation oder beim Support)"
+"pretix Signaturverfahren 1 (für sehr große Veranstaltungen, ändert die "
+"Funktionsweise des Offline-Modus, bitte informiere dich in der Dokumentation "
+"oder beim Support)"
 
 #: pretix/base/services/cancelevent.py:221
 #: pretix/base/services/cancelevent.py:279
@@ -8081,6 +8067,8 @@ msgstr ""
 msgid ""
 "Do not show the cancellation fee to users when they request cancellation."
 msgstr ""
+"Zeige keine Stornogebühr für Benutzer an, wenn die Stornierung angefragt "
+"wird."
 
 #: pretix/base/settings.py:1532 pretix/base/settings.py:1542
 msgid "All refunds are issued to the original payment method"
@@ -9944,6 +9932,9 @@ msgid ""
 "must select a specific set of products for this check-in list, only "
 "including the possible add-on products."
 msgstr ""
+"Wenn Sie erlauben, Zusatzprodukte mit dem Ticket-Code des Hauptproduktes zu "
+"scannen, müssen Sie eine Auswahl bestimmter Produkte treffen, die nur die "
+"Zusatzprodukte enthält."
 
 #: pretix/control/forms/event.py:82
 msgid "Use languages"
@@ -12555,16 +12546,12 @@ msgid "An unidentified type email has been sent."
 msgstr "Eine E-Mail unbekannten Typs wurde verschickt."
 
 #: pretix/control/logdisplay.py:369
-#, fuzzy
-#| msgid ""
-#| "The email has been sent without attachments since they would have been "
-#| "too large to be likely to arrive."
 msgid ""
 "The email has been sent without attached tickets since they would have been "
 "too large to be likely to arrive."
 msgstr ""
-"Eine E-Mail wurde ohne Anhänge verschickt, da diese größer sind als "
-"üblicherweise akzeptiert sind."
+"Eine E-Mail wurde ohne angehängte Tickets verschickt, da diese größer sind "
+"als üblicherweise akzeptiert sind."
 
 #: pretix/control/logdisplay.py:371
 msgid "A custom email has been sent."
@@ -14286,18 +14273,12 @@ msgstr ""
 "verwenden, damit diese Optionen funktionieren."
 
 #: pretix/control/templates/pretixcontrol/checkin/list_edit.html:51
-#, fuzzy
-#| msgid ""
-#| "If you make use of these advanced options, we recommend using our Android "
-#| "and Desktop apps. Custom check-in rules do not work offline with our iOS "
-#| "scanning app."
 msgid ""
 "If you make use of these advanced options, we recommend using our Android "
 "and Desktop apps."
 msgstr ""
 "Wenn Sie diese erweiterten Optionen verwenden, empfehlen wir unsere Android- "
-"und Desktop-Apps. Eigene Regeln funktionieren derzeit in unserer iOS-App "
-"nicht offline."
+"und Desktop-Apps."
 
 #: pretix/control/templates/pretixcontrol/checkin/list_edit.html:65
 msgid "Custom check-in rule"
@@ -27049,10 +27030,8 @@ msgstr "Bestellung umbuchen"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:378
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:27
-#, fuzzy
-#| msgid "You cannot cancel this order."
 msgid "You can request to cancel this order."
-msgstr "Sie können diese Bestellung nicht stornieren."
+msgstr "Sie können eine Stornierung dieser Bestellung anfragen."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:381
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:30
@@ -27061,6 +27040,9 @@ msgid ""
 "receive a full refund or if a cancellation fee is deducted according to "
 "their cancellation policy."
 msgstr ""
+"Wenn die Anfrage genehmigt wird, wird der Veranstalter aufgrund seiner "
+"Stornobedingungen festlegen, ob Sie eine volle Erstattung erhalten oder ob "
+"eine Stornogebühr abgezogen wird."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:387
 #: pretix/presale/templates/pretixpresale/event/order.html:423
