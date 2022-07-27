@@ -27,7 +27,11 @@
 {% block custom_header %}
     {{ block.super }}
     <meta property="og:title" content="{{ ev.name }}" />
-    <meta property="og:description" content="{{ ev.get_date_range_display }}" />
+    {% if request.event.has_subevents and not subevent %}
+        <meta property="og:description" content="{% trans "Event series" %}" />
+    {% else %}
+        <meta property="og:description" content="{{ ev.get_date_range_display }}" />
+    {% endif %}
     {% if subevent %}
         <meta property="og:url" content="{% abseventurl request.event "presale:event.index" subevent=subevent.pk %}" />
     {% else %}
