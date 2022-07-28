@@ -48,7 +48,7 @@ from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _, pgettext
 from django.views import View
 from django.views.generic import ListView
-from django.views.generic.edit import DeleteView
+from django.views.generic.edit import DeleteView, UpdateView
 
 from pretix.base.models import Item, Quota, WaitingListEntry
 from pretix.base.models.waitinglist import WaitingListException
@@ -159,6 +159,21 @@ class WaitingListActionView(EventPermissionRequiredMixin, WaitingListQuerySetMix
                 if not obj.voucher_id:
                     obj.log_action('pretix.event.orders.waitinglist.deleted', user=self.request.user)
                     obj.delete()
+            messages.success(request, _('The selected entries have been deleted.'))
+            return self._redirect_back()
+
+        elif request.POST.get('action') == 'update':
+            return render(request, 'pretixcontrol/waitinglist/update_bulk.html', {
+                'allowed': self.get_queryset().filter(voucher__isnull=True),
+                'subevent': self.get_queryset().filter(voucher__isnull=True)[0].subevent,
+                'forbidden': self.get_queryset().filter(voucher__isnull=False),
+            })
+
+        elif request.POST.get('action') == 'update_confirm':
+            for obj in self.get_queryset():
+                if not obj.voucher_id:
+                    obj.log_action('pretix.event.orders.waitinglist.transfered', user=self.request.user)
+                    print("object:", obj)
             messages.success(request, _('The selected entries have been deleted.'))
             return self._redirect_back()
 
@@ -366,3 +381,39 @@ class EntryDelete(EventPermissionRequiredMixin, DeleteView):
             'event': self.request.event.slug,
             'organizer': self.request.event.organizer.slug
         })
+
+class EntryUpdate(EventPermissionRequiredMixin, UpdateView):
+    model = WaitingListEntry
+    template_name = 'pretixcontrol/waitinglist/update.html'
+    permission = 'can_change_orders'
+    fields = ['subevent']
+    context_object_name = 'entry'
+
+
+
+
+    def get_object(self, queryset=None) -> WaitingListEntry:
+        try:
+            return self.request.event.waitinglistentries.get(
+                id=self.kwargs['entry'],
+                voucher__isnull=True,
+            )
+        except WaitingListEntry.DoesNotExist:
+            raise Http404(_("The requested entry does not exist."))
+
+
+    def get_success_url(self) -> str:
+        return reverse('control:event.orders.waitinglist', kwargs={
+            'event': self.request.event.slug,
+            'organizer': self.request.event.organizer.slug
+        })
+
+    @transaction.atomic
+    def update(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        success_url = self.get_success_url()
+        self.object.log_action('pretix.event.orders.waitinglist.transfered', user=self.request.user)
+        messages.success(self.request, _('The selected entry has been transfered.'))
+        if "next" in self.request.GET and is_safe_url(self.request.GET.get("next"), allowed_hosts=None):
+            return redirect(self.request.GET.get("next"))
+        return HttpResponseRedirect(success_url)
