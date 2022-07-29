@@ -32,7 +32,7 @@
 # distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations under the License.
 
-from urllib.parse import urljoin, urlsplit
+from urllib.parse import urljoin, urlparse, urlsplit
 
 from django.conf import settings
 from django.db.models import Q
@@ -162,7 +162,13 @@ def eventreverse(obj, name, kwargs=None):
         siteurlsplit = urlsplit(settings.SITE_URL)
         if siteurlsplit.port and siteurlsplit.port not in (80, 443):
             domain = '%s:%d' % (domain, siteurlsplit.port)
-        return urljoin('%s://%s' % (siteurlsplit.scheme, domain), path)
+        url = urljoin('%s://%s' % (siteurlsplit.scheme, domain), path)
+        try:
+            u = urlparse(url)
+            netloc = u.netloc.encode('ascii').decode('idna')
+            return u._replace(netloc=netloc).geturl()
+        except Exception:
+            return url
 
     kwargs['organizer'] = organizer.slug
     url = reverse(name, kwargs=kwargs, urlconf=maindomain_urlconf)
