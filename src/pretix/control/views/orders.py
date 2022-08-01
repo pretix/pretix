@@ -1186,13 +1186,17 @@ class OrderTransition(OrderView):
             if ps == Decimal('0.00') and self.order.pending_sum <= Decimal('0.00'):
                 p = self.order.payments.filter(state=OrderPayment.PAYMENT_STATE_CONFIRMED).last()
                 if p:
-                    p._mark_order_paid(
-                        user=self.request.user,
-                        send_mail=self.mark_paid_form.cleaned_data['send_email'],
-                        force=self.mark_paid_form.cleaned_data.get('force', False),
-                        payment_refund_sum=self.order.payment_refund_sum,
-                    )
-                    messages.success(self.request, _('The order has been marked as paid.'))
+                    try:
+                        p._mark_order_paid(
+                            user=self.request.user,
+                            send_mail=self.mark_paid_form.cleaned_data['send_email'],
+                            force=self.mark_paid_form.cleaned_data.get('force', False),
+                            payment_refund_sum=self.order.payment_refund_sum,
+                        )
+                    except Quota.QuotaExceededException as e:
+                        messages.error(self.request, str(e))
+                    else:
+                        messages.success(self.request, _('The order has been marked as paid.'))
                     return redirect(self.get_order_url())
 
             try:
