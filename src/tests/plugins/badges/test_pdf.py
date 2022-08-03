@@ -39,7 +39,7 @@ from io import BytesIO
 import pytest
 from django.utils.timezone import now
 from django_scopes import scope
-from PyPDF2 import PdfFileReader
+from PyPDF2 import PdfReader
 
 from pretix.base.models import (
     Event, Item, ItemVariation, Order, OrderPosition, Organizer,
@@ -100,8 +100,8 @@ def test_generate_pdf(env):
         'include_pending': True
     })
     assert ftype == 'application/pdf'
-    pdf = PdfFileReader(BytesIO(buf))
-    assert pdf.numPages == 2
+    pdf = PdfReader(BytesIO(buf))
+    assert len(pdf.pages) == 2
 
 
 @pytest.mark.django_db
@@ -115,5 +115,5 @@ def test_generate_pdf_multi(env):
         'include_pending': True
     })
     assert ftype == 'application/pdf'
-    pdf = PdfFileReader(BytesIO(buf))
-    assert pdf.numPages == 1
+    pdf = PdfReader(BytesIO(buf))
+    assert len(pdf.pages) == 1

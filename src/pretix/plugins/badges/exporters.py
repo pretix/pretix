@@ -48,6 +48,7 @@ from django.db.models import Exists, OuterRef, Q
 from django.db.models.functions import Coalesce
 from django.utils.timezone import make_aware
 from django.utils.translation import gettext as _, gettext_lazy
+from PyPDF2 import Transformation
 from reportlab.lib import pagesizes
 from reportlab.lib.units import mm
 from reportlab.pdfgen import canvas
@@ -157,7 +158,7 @@ OPTIONS = OrderedDict([
 
 
 def render_pdf(event, positions, opt):
-    from PyPDF2 import PdfFileReader, PdfFileWriter
+    from PyPDF2 import PdfReader, PdfWriter
     Renderer._register_fonts()
 
     renderermap = {
@@ -168,7 +169,7 @@ def render_pdf(event, positions, opt):
         default_renderer = _renderer(event, event.badge_layouts.get(default=True))
     except BadgeLayout.DoesNotExist:
         default_renderer = None
-    output_pdf_writer = PdfFileWriter()
+    output_pdf_writer = PdfWriter()
 
     any = False
     npp = opt['cols'] * opt['rows']
@@ -189,22 +190,19 @@ def render_pdf(event, positions, opt):
         p.showPage()
         p.save()
         buffer.seek(0)
-        canvas_pdf_reader = PdfFileReader(buffer)
-        empty_pdf_page = output_pdf_writer.addBlankPage(
-            width=opt['pagesize'][0] if opt['pagesize'] else positions[0][1].bg_pdf.getPage(0).mediaBox[2],
-            height=opt['pagesize'][1] if opt['pagesize'] else positions[0][1].bg_pdf.getPage(0).mediaBox[3],
+        canvas_pdf_reader = PdfReader(buffer)
+        empty_pdf_page = output_pdf_writer.add_blank_page(
+            width=opt['pagesize'][0] if opt['pagesize'] else positions[0][1].bg_pdf.pages[0].mediabox[2],
+            height=opt['pagesize'][1] if opt['pagesize'] else positions[0][1].bg_pdf.pages[0].mediabox[3],
         )
         for i, (op, r) in enumerate(positions):
-            bg_page = copy.copy(r.bg_pdf.getPage(0))
-            bg_page.trimBox = bg_page.mediaBox
+            bg_page = copy.copy(r.bg_pdf.pages[0])
+            bg_page.trimbox = bg_page.mediabox
             offsetx = opt['margins'][3] + (i % opt['cols']) * opt['offsets'][0]
             offsety = opt['margins'][2] + (opt['rows'] - 1 - i // opt['cols']) * opt['offsets'][1]
-            empty_pdf_page.mergeTranslatedPage(
-                bg_page,
-                tx=offsetx,
-                ty=offsety
-            )
-        empty_pdf_page.mergePage(canvas_pdf_reader.getPage(0))
+            bg_page.add_transformation(Transformation().translate(offsetx, offsety))
+            empty_pdf_page.merge_page(bg_page)
+        empty_pdf_page.merge_page(canvas_pdf_reader.pages[0])
 
     pagebuffer = []
     outbuffer = BytesIO()
@@ -221,7 +219,7 @@ def render_pdf(event, positions, opt):
     if pagebuffer:
         render_page(pagebuffer)
 
-    output_pdf_writer.addMetadata({
+    output_pdf_writer.add_metadata({
         '/Title': 'Badges',
         '/Creator': 'pretix',
     })

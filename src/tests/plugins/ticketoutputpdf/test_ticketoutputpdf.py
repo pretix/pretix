@@ -26,7 +26,7 @@ from io import BytesIO
 import pytest
 from django.utils.timezone import now
 from django_scopes import scope
-from PyPDF2 import PdfFileReader
+from PyPDF2 import PdfReader
 
 from pretix.base.models import (
     Event, Item, ItemVariation, Order, OrderPosition, Organizer,
@@ -70,5 +70,5 @@ def test_generate_pdf(env0):
         o = PdfTicketOutput(event)
         fname, ftype, buf = o.generate(order.positions.first())
         assert ftype == 'application/pdf'
-        pdf = PdfFileReader(BytesIO(buf))
-        assert pdf.numPages == 1
+        pdf = PdfReader(BytesIO(buf))
+        assert len(pdf.pages) == 1
