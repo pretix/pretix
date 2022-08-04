@@ -620,6 +620,14 @@ var editor = {
             }
         }
 
+        // empty text-inputs if not in use
+        if ($("#toolbox-content").val() !== "other") {
+            $("#toolbox-content-other").val("");
+        }
+        if ($("#toolbox-content").val() !== "other_i18n") {
+            $("#toolbox-content-other-i18n textarea").val("");
+        }
+
         o.setCoords();
         editor.fabric.renderAll();
     },
