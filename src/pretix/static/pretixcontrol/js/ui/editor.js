@@ -608,8 +608,16 @@ var editor = {
             $("#toolbox-content-other-help").toggle($("#toolbox-content").val() === "other" || $("#toolbox-content").val() === "other_i18n");
             o.content = $("#toolbox-content").val();
             if ($("#toolbox-content").val() === "other") {
+                if (this.id === "toolbox-content") {
+                    // switched content-type, update value with value from i18n textarea
+                    $("#toolbox-content-other").val($("#toolbox-content-other-i18n textarea").val());
+                }
                 o.setText($("#toolbox-content-other").val());
             } else if ($("#toolbox-content").val() === "other_i18n") {
+                if (this.id === "toolbox-content") {
+                    // switched content-type, update value with value from "other" textarea
+                    $("#toolbox-content-other-i18n textarea").val($("#toolbox-content-other").val());
+                }
                 o.text_i18n = {}
                 $("#toolbox-content-other-i18n textarea").each(function () {
                     o.text_i18n[$(this).attr("lang")] = $(this).val();
