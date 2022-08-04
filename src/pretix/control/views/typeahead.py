@@ -228,9 +228,9 @@ def nav_context_list(request):
     if query:
         qs_orga = qs_orga.filter(Q(name__icontains=query) | Q(slug__icontains=query))
 
-    if query:
+    if query and len(query) >= 3:
         qs_orders = Order.objects.filter(
-            code__icontains=query
+            code__istartswith=query
         ).select_related('event', 'event__organizer').only('event', 'code', 'pk').order_by()
         if not request.user.has_active_staff_session(request.session.session_key):
             qs_orders = qs_orders.filter(
@@ -241,7 +241,7 @@ def nav_context_list(request):
             )
 
         qs_vouchers = Voucher.objects.filter(
-            code__icontains=query
+            code__istartswith=query
         ).select_related('event', 'event__organizer').only('event', 'code', 'pk').order_by()
         if not request.user.has_active_staff_session(request.session.session_key):
             qs_vouchers = qs_vouchers.filter(
