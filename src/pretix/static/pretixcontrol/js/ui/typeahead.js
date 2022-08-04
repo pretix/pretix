@@ -12,13 +12,8 @@ $(function () {
         var $query = $(this).find('[data-typeahead-query]').length ? $(this).find('[data-typeahead-query]') : $($(this).attr("data-typeahead-field"));
         $container.find("li:not(.query-holder)").remove();
         var lastQuery = "";
-
-        $query.on("change", function () {
-            if ($container.attr("data-typeahead-field") && $query.val() === "") {
-                $container.removeClass('focused');
-                $container.find("li:not(.query-holder)").remove();
-                return;
-            }
+        var runQueryTimeout = null;
+        function runQuery() {
             lastQuery = $query.val();
             var thisQuery = $query.val();
             $.getJSON(
@@ -119,6 +114,17 @@ $(function () {
                     $container.toggleClass('focused', $query.is(":focus") && $container.children().length > 0);
                 }
             );
+        }
+        $query.on("change", function () {
+            if ($container.attr("data-typeahead-field") && $query.val() === "") {
+                $container.removeClass('focused');
+                $container.find("li:not(.query-holder)").remove();
+                return;
+            }
+            if (runQueryTimeout != null) {
+                window.clearTimeout(runQueryTimeout)
+            }
+            runQueryTimeout = window.setTimeout(runQuery, 250)
         });
         $query.on("keydown", function (event) {
             var $selected = $container.find(".active");
