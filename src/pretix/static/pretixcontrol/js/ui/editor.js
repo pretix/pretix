@@ -300,7 +300,6 @@ var editor = {
 
         // Fetch the required page
         editor.pdf.getPage(page_number).then(function (page) {
-            console.log('Page loaded');
             var canvas = document.getElementById('pdf-canvas');
 
             var scale = editor.$cva.width() / page.getViewport(1.0).width;
@@ -326,7 +325,6 @@ var editor = {
                 editor.pdf_page_number = page_number
                 editor._init_page_nav();
 
-                console.log('Page rendered');
                 if (dump || !editor._fabric_loaded) {
                     editor._init_fabric(dump);
                 } else {
@@ -349,7 +347,6 @@ var editor = {
                 }
                 $("#page_nav").append($li)
                 $a.on("click", function (event) {
-                    console.log("switch to page", $(this).attr("data-page"));
                     editor.fabric.deactivateAll();
                     editor._load_page(parseInt($(this).attr("data-page")));
                     event.preventDefault();
@@ -369,7 +366,6 @@ var editor = {
         // Asynchronous download of PDF
         var loadingTask = PDFJS.getDocument(url);
         loadingTask.promise.then(function (pdf) {
-            console.log('PDF loaded');
 
             editor.pdf = pdf;
             editor.pdf_page_count = pdf.numPages;
@@ -422,7 +418,6 @@ var editor = {
         }
 
         editor._fabric_loaded = true;
-        console.log("Fabric loaded");
         if (editor._window_loaded) {
             editor._ready();
         }
@@ -430,7 +425,6 @@ var editor = {
 
     _window_load_event: function () {
         editor._window_loaded = true;
-        console.log("Window loaded");
         if (editor._fabric_loaded) {
             editor._ready();
         }
