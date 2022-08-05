@@ -520,7 +520,7 @@ var editor = {
         }
     },
 
-    _update_values_from_toolbox: function () {
+    _update_values_from_toolbox: function (e) {
         var o = editor.fabric.getActiveObject();
         if (!o) {
             o = editor.fabric.getActiveGroup();
@@ -553,14 +553,14 @@ var editor = {
             $("#toolbox-content-other-help").toggle($("#toolbox-content").val() === "other" || $("#toolbox-content").val() === "other_i18n");
             o.content = $("#toolbox-content").val();
             if ($("#toolbox-content").val() === "other") {
-                if (this.id === "toolbox-content") {
-                    // switched content-type, update value with value from i18n textarea
+                if (e.target.id === "toolbox-content") {
+                    // user used dropdown to switch content-type, update value with value from i18n textarea
                     $("#toolbox-content-other").val($("#toolbox-content-other-i18n textarea").val());
                 }
                 o.text = $("#toolbox-content-other").val();
             } else if ($("#toolbox-content").val() === "other_i18n") {
-                if (this.id === "toolbox-content") {
-                    // switched content-type, update value with value from "other" textarea
+                if (e.target.id === "toolbox-content") {
+                    // user used dropdown to switch content-type, update value with value from "other" textarea
                     $("#toolbox-content-other-i18n textarea").val($("#toolbox-content-other").val());
                 }
                 o.text_i18n = {}
@@ -616,14 +616,14 @@ var editor = {
             $("#toolbox-content-other-help").toggle($("#toolbox-content").val() === "other" || $("#toolbox-content").val() === "other_i18n");
             o.content = $("#toolbox-content").val();
             if ($("#toolbox-content").val() === "other") {
-                if (this.id === "toolbox-content") {
-                    // switched content-type, update value with value from i18n textarea
+                if (e.target.id === "toolbox-content") {
+                    // user used dropdown to switch content-type, update value with value from i18n textarea
                     $("#toolbox-content-other").val($("#toolbox-content-other-i18n textarea").val());
                 }
                 o.setText($("#toolbox-content-other").val());
             } else if ($("#toolbox-content").val() === "other_i18n") {
-                if (this.id === "toolbox-content") {
-                    // switched content-type, update value with value from "other" textarea
+                if (e.target.id === "toolbox-content") {
+                    // user used dropdown to switch content-type, update value with value from "other" textarea
                     $("#toolbox-content-other-i18n textarea").val($("#toolbox-content-other").val());
                 }
                 o.text_i18n = {}
@@ -1079,14 +1079,14 @@ var editor = {
         $("#toolbox label.btn").bind('click change', editor._update_values_from_toolbox);
         $("#toolbox select").bind('change', editor._update_values_from_toolbox);
         $("#toolbox select").bind('change', editor._create_savepoint);
-        $("#toolbox button.toggling").bind('click change', function () {
+        $("#toolbox button.toggling").bind('click change', function (e) {
             if ($(this).is(".option")) {
                 $(this).addClass("active");
                 $(this).parent().siblings().find("button").removeClass("active");
             } else {
                 $(this).toggleClass("active");
             }
-            editor._update_values_from_toolbox();
+            editor._update_values_from_toolbox(e);
             editor._create_savepoint();
         });
         $("#toolbox .colorpickerfield").bind('changeColor', editor._update_values_from_toolbox);
