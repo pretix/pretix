@@ -44,7 +44,7 @@ from django.http import HttpRequest
 from django.template.loader import get_template
 from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
-from PyPDF2 import PdfFileMerger
+from PyPDF2 import PdfMerger
 
 from pretix.base.i18n import language
 from pretix.base.models import Order, OrderPosition
@@ -112,7 +112,7 @@ class PdfTicketOutput(BaseTicketOutput):
         return renderer.render_background(buffer, _('Ticket'))
 
     def generate_order(self, order: Order):
-        merger = PdfFileMerger()
+        merger = PdfMerger()
         with language(order.locale, self.event.settings.region):
             for op in order.positions_with_tickets:
                 layout = override_layout.send_chained(

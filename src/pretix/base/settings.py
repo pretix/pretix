@@ -57,6 +57,7 @@ from django_countries.fields import Country
 from hierarkey.models import GlobalSettingsBase, Hierarkey
 from i18nfield.forms import I18nFormField, I18nTextarea, I18nTextInput
 from i18nfield.strings import LazyI18nString
+from phonenumbers import PhoneNumber, parse
 from rest_framework import serializers
 
 from pretix.api.serializers.fields import (
@@ -3030,6 +3031,7 @@ settings_hierarkey.add_type(LazyI18nStringList,
 settings_hierarkey.add_type(RelativeDateWrapper,
                             serialize=lambda rdw: rdw.to_string(),
                             unserialize=lambda s: RelativeDateWrapper.from_string(s))
+settings_hierarkey.add_type(PhoneNumber, lambda pn: pn.as_international, lambda s: parse(s))
 
 
 @settings_hierarkey.set_global(cache_namespace='global')
