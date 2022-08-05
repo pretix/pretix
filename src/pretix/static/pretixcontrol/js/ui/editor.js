@@ -300,7 +300,6 @@ var editor = {
 
         // Fetch the required page
         editor.pdf.getPage(page_number).then(function (page) {
-            console.log('Page loaded');
             var canvas = document.getElementById('pdf-canvas');
 
             var scale = editor.$cva.width() / page.getViewport(1.0).width;
@@ -326,7 +325,6 @@ var editor = {
                 editor.pdf_page_number = page_number
                 editor._init_page_nav();
 
-                console.log('Page rendered');
                 if (dump || !editor._fabric_loaded) {
                     editor._init_fabric(dump);
                 } else {
@@ -349,7 +347,6 @@ var editor = {
                 }
                 $("#page_nav").append($li)
                 $a.on("click", function (event) {
-                    console.log("switch to page", $(this).attr("data-page"));
                     editor.fabric.deactivateAll();
                     editor._load_page(parseInt($(this).attr("data-page")));
                     event.preventDefault();
@@ -369,7 +366,6 @@ var editor = {
         // Asynchronous download of PDF
         var loadingTask = PDFJS.getDocument(url);
         loadingTask.promise.then(function (pdf) {
-            console.log('PDF loaded');
 
             editor.pdf = pdf;
             editor.pdf_page_count = pdf.numPages;
@@ -422,7 +418,6 @@ var editor = {
         }
 
         editor._fabric_loaded = true;
-        console.log("Fabric loaded");
         if (editor._window_loaded) {
             editor._ready();
         }
@@ -430,7 +425,6 @@ var editor = {
 
     _window_load_event: function () {
         editor._window_loaded = true;
-        console.log("Window loaded");
         if (editor._fabric_loaded) {
             editor._ready();
         }
@@ -520,7 +514,7 @@ var editor = {
         }
     },
 
-    _update_values_from_toolbox: function () {
+    _update_values_from_toolbox: function (e) {
         var o = editor.fabric.getActiveObject();
         if (!o) {
             o = editor.fabric.getActiveGroup();
@@ -553,8 +547,16 @@ var editor = {
             $("#toolbox-content-other-help").toggle($("#toolbox-content").val() === "other" || $("#toolbox-content").val() === "other_i18n");
             o.content = $("#toolbox-content").val();
             if ($("#toolbox-content").val() === "other") {
+                if (e.target.id === "toolbox-content") {
+                    // user used dropdown to switch content-type, update value with value from i18n textarea
+                    $("#toolbox-content-other").val($("#toolbox-content-other-i18n textarea").val());
+                }
                 o.text = $("#toolbox-content-other").val();
             } else if ($("#toolbox-content").val() === "other_i18n") {
+                if (e.target.id === "toolbox-content") {
+                    // user used dropdown to switch content-type, update value with value from "other" textarea
+                    $("#toolbox-content-other-i18n textarea").val($("#toolbox-content-other").val());
+                }
                 o.text_i18n = {}
                 $("#toolbox-content-other-i18n textarea").each(function () {
                     o.text_i18n[$(this).attr("lang")] = $(this).val();
@@ -608,8 +610,16 @@ var editor = {
             $("#toolbox-content-other-help").toggle($("#toolbox-content").val() === "other" || $("#toolbox-content").val() === "other_i18n");
             o.content = $("#toolbox-content").val();
             if ($("#toolbox-content").val() === "other") {
+                if (e.target.id === "toolbox-content") {
+                    // user used dropdown to switch content-type, update value with value from i18n textarea
+                    $("#toolbox-content-other").val($("#toolbox-content-other-i18n textarea").val());
+                }
                 o.setText($("#toolbox-content-other").val());
             } else if ($("#toolbox-content").val() === "other_i18n") {
+                if (e.target.id === "toolbox-content") {
+                    // user used dropdown to switch content-type, update value with value from "other" textarea
+                    $("#toolbox-content-other-i18n textarea").val($("#toolbox-content-other").val());
+                }
                 o.text_i18n = {}
                 $("#toolbox-content-other-i18n textarea").each(function () {
                     o.text_i18n[$(this).attr("lang")] = $(this).val();
@@ -618,6 +628,14 @@ var editor = {
             } else {
                 o.setText(editor._get_text_sample($("#toolbox-content").val()));
             }
+        }
+
+        // empty text-inputs if not in use
+        if ($("#toolbox-content").val() !== "other") {
+            $("#toolbox-content-other").val("");
+        }
+        if ($("#toolbox-content").val() !== "other_i18n") {
+            $("#toolbox-content-other-i18n textarea").val("");
         }
 
         o.setCoords();
@@ -1055,14 +1073,14 @@ var editor = {
         $("#toolbox label.btn").bind('click change', editor._update_values_from_toolbox);
         $("#toolbox select").bind('change', editor._update_values_from_toolbox);
         $("#toolbox select").bind('change', editor._create_savepoint);
-        $("#toolbox button.toggling").bind('click change', function () {
+        $("#toolbox button.toggling").bind('click change', function (e) {
             if ($(this).is(".option")) {
                 $(this).addClass("active");
                 $(this).parent().siblings().find("button").removeClass("active");
             } else {
                 $(this).toggleClass("active");
             }
-            editor._update_values_from_toolbox();
+            editor._update_values_from_toolbox(e);
             editor._create_savepoint();
         });
         $("#toolbox .colorpickerfield").bind('changeColor', editor._update_values_from_toolbox);
