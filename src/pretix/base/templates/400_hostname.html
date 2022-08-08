@@ -1,0 +1,52 @@
+{% extends "error.html" %}
+{% load i18n %}
+{% load static %}
+{% block title %}{% trans "Unknown host" %}{% endblock %}
+{% block content %}
+<i class="fa fa-question-circle-o fa-fw big-icon"></i>
+<div class="error-details">
+    <h1>{% trans "Unknown host" %}</h1>
+    <p>
+        {% blocktrans trimmed with host=header_host %}
+        Your browser told us that you want to access "{{ header_host }}". Unfortunately, we don't have
+        any content for this domain.
+        {% endblocktrans %}
+    </p>
+    {% if is_fresh_install %}
+    <p>
+        {% blocktrans trimmed %}
+        It looks like this is a fresh installation of pretix. This error message is probably caused due to
+        the fact that either your configuration includes the wrong site URL or your reverse proxy is sending
+        the wrong header.
+        {% endblocktrans %}
+    </p>
+    <dl>
+        <dt>{% trans "Expected host according to configuration" %}</dt>
+        <dd><code>{{ site_host }}</code></dd>
+        <dt>{% trans "Received headers" %}</dt>
+        <dd>
+            <code>Host: {{ request.headers.Host }}</code>
+            {% if xfh %}
+            <br>
+            <code>X-Forwarded-For: {{ xfh }}</code>
+            {% if not settings.USE_X_FORWARDED_HOST %}({% trans "ignored" %}){% endif %}
+            {% endif %}
+        </dd>
+        <dt>{% trans "Derived host from headers" %}</dt>
+        <dd><code>{{ header_host }}</code></dd>
+    </dl>
+    {% else %}
+    <p>
+        {% blocktrans trimmed %}
+        If you just configured this as a domain for your ticket shop, you now need to set this up as a "custom domain"
+        in your organizer account.
+        {% endblocktrans %}
+    </p>
+    {% endif %}
+    <p class="links">
+        <a id='goback' href='#'>{% trans "Take a step back" %}</a>
+        &middot; <a id='reload' href='#'>{% trans "Try again" %}</a>
+    </p>
+    <img src="{% static "pretixbase/img/pretix-logo.svg" %}" class="logo"/>
+</div>
+{% endblock %}

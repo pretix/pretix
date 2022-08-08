@@ -43,6 +43,7 @@ from django.core.cache import cache
 from django.core.exceptions import DisallowedHost
 from django.http.request import split_domain_port
 from django.middleware.csrf import CsrfViewMiddleware as BaseCsrfMiddleware
+from django.shortcuts import render
 from django.urls import set_urlconf
 from django.utils.cache import patch_vary_headers
 from django.utils.deprecation import MiddlewareMixin
@@ -112,7 +113,15 @@ class MultiDomainMiddleware(MiddlewareMixin):
             elif settings.DEBUG or domain in LOCAL_HOST_NAMES:
                 request.urlconf = "pretix.multidomain.maindomain_urlconf"
             else:
-                raise DisallowedHost("Unknown host: %r" % host)
+                with scopes_disabled():
+                    is_fresh_install = not Event.objects.exists()
+                return render(request, '400_hostname.html', {
+                    'header_host': domain,
+                    'site_host': default_domain,
+                    'settings': settings,
+                    'xfh': request.headers.get('X-Forwarded-Host'),
+                    'is_fresh_install': is_fresh_install,
+                })
         else:
             raise DisallowedHost("Invalid HTTP_HOST header: %r." % host)
 
