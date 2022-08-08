@@ -48,6 +48,7 @@ from django.db.models import Exists, Max, Min, OuterRef, Prefetch, Q
 from django.db.models.functions import Coalesce, Greatest
 from django.http import Http404, HttpResponse
 from django.shortcuts import redirect
+from django.templatetags.static import static
 from django.utils.decorators import method_decorator
 from django.utils.formats import date_format, get_format
 from django.utils.timezone import get_current_timezone, now
@@ -66,6 +67,7 @@ from pretix.helpers.daterange import daterange
 from pretix.helpers.formats.en.formats import (
     SHORT_MONTH_DAY_FORMAT, WEEK_FORMAT,
 )
+from pretix.helpers.thumb import get_thumbnail
 from pretix.multidomain.urlreverse import eventreverse
 from pretix.presale.ical import get_public_ical
 from pretix.presale.views import OrganizerViewMixin
@@ -1170,3 +1172,11 @@ class OrganizerIcalDownload(OrganizerViewMixin, View):
         if request.organizer.settings.meta_noindex:
             resp['X-Robots-Tag'] = 'noindex'
         return resp
+
+
+class OrganizerFavicon(View):
+    def get(self, *args, **kwargs):
+        if self.request.organizer.settings.favicon:
+            return redirect(get_thumbnail(self.request.organizer.settings.favicon, '32x32^').thumb.url)
+        else:
+            return redirect(static("pretixbase/img/favicon.ico"))
