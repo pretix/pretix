@@ -121,7 +121,7 @@ class MultiDomainMiddleware(MiddlewareMixin):
                     'settings': settings,
                     'xfh': request.headers.get('X-Forwarded-Host'),
                     'is_fresh_install': is_fresh_install,
-                })
+                }, status=400)
         else:
             raise DisallowedHost("Invalid HTTP_HOST header: %r." % host)
 
