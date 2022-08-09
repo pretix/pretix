@@ -43,6 +43,7 @@ from pretix.base.i18n import (
     LazyCurrencyNumber, LazyDate, LazyExpiresDate, LazyNumber,
 )
 from pretix.base.models import Event
+from pretix.base.reldate import RelativeDateWrapper
 from pretix.base.settings import PERSON_NAME_SCHEMES
 from pretix.base.signals import (
     register_html_mail_renderers, register_mail_placeholders,
@@ -468,6 +469,19 @@ def base_placeholders(sender, **kwargs):
                     'position': '123'
                 }
             ),
+        ),
+        SimpleFunctionalMailTextPlaceholder(
+            'last_order_modification_date_and_time', ['order', 'event'],
+            lambda order, event:
+            date_format(order.modify_deadline.astimezone(event.timezone), 'SHORT_DATETIME_FORMAT')
+            if order.modify_deadline
+            else '',
+            lambda event: date_format(
+                event.settings.get(
+                    'last_order_modification_date', as_type=RelativeDateWrapper
+                ).datetime(event).astimezone(event.timezone),
+                'SHORT_DATETIME_FORMAT'
+            ) if event.settings.get('last_order_modification_date') else '',
         ),
         SimpleFunctionalMailTextPlaceholder(
             'event_location', ['event_or_subevent'], lambda event_or_subevent: str(event_or_subevent.location or ''),
