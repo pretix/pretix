@@ -113,6 +113,12 @@ class LoginView(RedirectBackMixin, FormView):
             raise Http404('Feature not enabled')
         return super().post(request, *args, **kwargs)
 
+    def get_context_data(self, **kwargs):
+        return super().get_context_data(
+            **kwargs,
+            providers=self.request.organizer.sso_providers.all()
+        )
+
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
         kwargs['request'] = self.request

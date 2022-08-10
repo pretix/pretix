@@ -19,15 +19,32 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
+import base64
+import hashlib
 import logging
+import time
+from datetime import datetime
 from urllib.parse import urlencode, urljoin
 
+import jwt
 import requests
+from cryptography.hazmat.primitives.asymmetric.rsa import generate_private_key
+from cryptography.hazmat.primitives.serialization import (
+    Encoding, NoEncryption, PrivateFormat, PublicFormat,
+)
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 from requests import RequestException
 
+from pretix.multidomain.urlreverse import build_absolute_uri
+
 logger = logging.getLogger(__name__)
+
+
+"""
+This module contains utilities for implementing OpenID Connect for customer authentication both as a receiving party (RP)
+as well as an OpenID Provider (OP).
+"""
 
 
 def _urljoin(base, path):
@@ -205,3 +222,74 @@ def oidc_validate_authorization(provider, code, redirect_uri):
         )
 
     return profile
+
+
+def _hash_scheme(value):
+    # As described in https://openid.net/specs/openid-connect-core-1_0.html#HybridIDToken
+    digest = hashlib.sha256(value.encode()).digest()
+    digest_truncated = digest[:(len(digest) // 2)]
+    return base64.urlsafe_b64encode(digest_truncated).decode().rstrip("=")
+
+
+def customer_claims(customer, scope):
+    scope = scope.split(' ')
+    claims = {
+        'sub': customer.identifier,
+        'locale': customer.locale,
+    }
+    if 'profile' in scope:
+        if customer.name:
+            claims['name'] = customer.name
+        if 'given_name' in customer.name_parts:
+            claims['given_name'] = customer.name_parts['given_name']
+        if 'family_name' in customer.name_parts:
+            claims['family_name'] = customer.name_parts['family_name']
+        if 'middle_name' in customer.name_parts:
+            claims['middle_name'] = customer.name_parts['middle_name']
+        if 'calling_name' in customer.name_parts:
+            claims['nickname'] = customer.name_parts['calling_name']
+    if 'email' in scope and customer.email:
+        claims['email'] = customer.email
+        claims['email_verified'] = customer.is_verified
+    if 'phone' in scope and customer.phone:
+        claims['phone_number'] = customer.phone.as_international
+    return claims
+
+
+def _get_or_create_server_keypair(organizer):
+    if not organizer.settings.sso_server_signing_key_rsa256_private:
+        privkey = generate_private_key(key_size=4096, public_exponent=65537)
+        pubkey = privkey.public_key()
+        organizer.settings.sso_server_signing_key_rsa256_private = privkey.private_bytes(
+            Encoding.PEM, PrivateFormat.PKCS8, NoEncryption()
+        ).decode()
+        organizer.settings.sso_server_signing_key_rsa256_public = pubkey.public_bytes(
+            Encoding.PEM, PublicFormat.SubjectPublicKeyInfo
+        ).decode()
+    return organizer.settings.sso_server_signing_key_rsa256_private, organizer.settings.sso_server_signing_key_rsa256_public
+
+
+def generate_id_token(customer, client, auth_time, nonce, scope, expires: datetime, scope_claims=False, with_code=None, with_access_token=None):
+    payload = {
+        'iss': build_absolute_uri(client.organizer, 'presale:organizer.index').rstrip('/'),
+        'aud': client.client_id,
+        'exp': int(expires.timestamp()),
+        'iat': int(time.time()),
+        'auth_time': auth_time,
+        **customer_claims(customer, client.evaluated_scope(scope) if scope_claims else ''),
+    }
+    if nonce:
+        payload['nonce'] = nonce
+    if with_code:
+        payload['c_hash'] = _hash_scheme(with_code)
+    if with_access_token:
+        payload['at_hash'] = _hash_scheme(with_access_token)
+    privkey, pubkey = _get_or_create_server_keypair(client.organizer)
+    return jwt.encode(
+        payload,
+        privkey,
+        headers={
+            "kid": hashlib.sha256(pubkey.encode()).hexdigest()[:16]
+        },
+        algorithm="RS256",
+    )
