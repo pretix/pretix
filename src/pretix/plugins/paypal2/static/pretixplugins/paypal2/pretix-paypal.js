@@ -141,11 +141,11 @@ var pretixpaypal = {
             pretixpaypal.restore();
         });
 
-        if ($("input[name=payment][value^='paypal']").is(':checked') || $(".payment-redo-form").length) {
+        if ($("input[name=payment][value^='paypal']").is(':checked')) {
             pretixpaypal.renderButton($("input[name=payment][value^='paypal']:checked").val());
-        }
-
-        if ($('#paypal-button-container').data('paypage')) {
+        } else if ($(".payment-redo-form").length) {
+            pretixpaypal.renderButton($("input[name=payment][value^='paypal']").val());
+        } else if ($('#paypal-button-container').data('paypage')) {
             pretixpaypal.renderButton('paypal_apm');
         }
     },

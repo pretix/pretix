@@ -107,6 +107,7 @@ def html_head_presale(sender, request=None, **kwargs):
 
     if provider.settings.get('_enabled', as_type=bool) and (
             url.url_name == "event.order.pay.change" or
+            url.url_name == "event.order.pay" or
             (url.url_name == "event.checkout" and url.kwargs['step'] == "payment") or
             (url.namespace == "plugins:paypal2" and url.url_name == "pay")
     ):
@@ -137,6 +138,7 @@ def signal_process_response(sender, request: HttpRequest, response: HttpResponse
 
     if provider.settings.get('_enabled', as_type=bool) and (
             url.url_name == "event.order.pay.change" or
+            url.url_name == "event.order.pay" or
             (url.url_name == "event.checkout" and url.kwargs['step'] == "payment") or
             (url.namespace == "plugins:paypal2" and url.url_name == "pay")
     ):
