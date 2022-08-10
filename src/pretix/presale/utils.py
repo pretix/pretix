@@ -32,6 +32,7 @@
 # distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations under the License.
 import re
+import time
 import warnings
 from importlib import import_module
 from urllib.parse import urljoin
@@ -153,9 +154,15 @@ def add_customer_to_request(request):
     request.customer = SimpleLazyObject(lambda: get_customer(request))
 
 
+def get_customer_auth_time(request):
+    auth_time_session_key = f'customer_auth_time:{request.organizer.pk}'
+    return request.session.get(auth_time_session_key) or 0
+
+
 def customer_login(request, customer):
     session_key = f'customer_auth_id:{request.organizer.pk}'
     hash_session_key = f'customer_auth_hash:{request.organizer.pk}'
+    auth_time_session_key = f'customer_auth_time:{request.organizer.pk}'
     dependency_key = f'customer_auth_session_dependency:{request.organizer.pk}'
     session_auth_hash = customer.get_session_auth_hash()
 
@@ -172,6 +179,7 @@ def customer_login(request, customer):
     request.session.pop(dependency_key, None)
     request.session[session_key] = customer.pk
     request.session[hash_session_key] = session_auth_hash
+    request.session[auth_time_session_key] = int(time.time())
     request.customer = customer
 
     customer.last_login = now()
@@ -183,6 +191,7 @@ def customer_login(request, customer):
 def customer_logout(request):
     session_key = f'customer_auth_id:{request.organizer.pk}'
     hash_session_key = f'customer_auth_hash:{request.organizer.pk}'
+    auth_time_session_key = f'customer_auth_time:{request.organizer.pk}'
     dependency_key = f'customer_auth_session_dependency:{request.organizer.pk}'
 
     # Remove dependency on parent session
@@ -193,6 +202,7 @@ def customer_logout(request):
     # Remove user session
     customer_id = request.session.pop(session_key, None)
     request.session.pop(hash_session_key, None)
+    request.session.pop(auth_time_session_key, None)
 
     # Remove carts tied to this user
     carts = request.session.get('carts', {})

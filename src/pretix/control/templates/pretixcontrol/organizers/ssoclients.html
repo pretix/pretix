@@ -1,0 +1,44 @@
+{% extends "pretixcontrol/organizers/base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% block title %}{% trans "SSO clients" %}{% endblock %}
+{% block inner %}
+    <h1>{% trans "SSO clients" %}</h1>
+    <p>
+        {% blocktrans trimmed %}
+            You can allow your customers to log into other systems using their customer account credentials by setting up
+            your other systems as a Single-Sign-On (SSO) client based on OpenID Connect.
+        {% endblocktrans %}
+    </p>
+    <a href="{% url "control:organizer.ssoclient.add" organizer=request.organizer.slug %}" class="btn btn-default">
+        <span class="fa fa-plus"></span>
+        {% trans "Create a new SSO client" %}
+    </a>
+    <table class="table table-condensed table-hover">
+        <thead>
+        <tr>
+            <th>{% trans "Name" %}</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for c in clients %}
+            <tr>
+                <td><strong>
+                    <a href="{% url "control:organizer.ssoclient.edit" organizer=request.organizer.slug client=c.id %}">
+                        {% if not c.is_active %}<del>{% endif %}
+                        {{ c.name }}
+                        {% if not c.is_active %}</del>{% endif %}
+                    </a>
+                </strong></td>
+                <td class="text-right flip">
+                    <a href="{% url "control:organizer.ssoclient.edit" organizer=request.organizer.slug client=c.id %}"
+                            class="btn btn-default btn-sm"><i class="fa fa-edit"></i></a>
+                    <a href="{% url "control:organizer.ssoclient.delete" organizer=request.organizer.slug client=c.id %}"
+                            class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

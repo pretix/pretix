@@ -24,7 +24,7 @@ from django.conf import settings
 from django.contrib.auth.hashers import (
     check_password, is_password_usable, make_password,
 )
-from django.core.validators import RegexValidator
+from django.core.validators import RegexValidator, URLValidator
 from django.db import models
 from django.db.models import F, Q
 from django.utils.crypto import get_random_string, salted_hmac
@@ -35,6 +35,7 @@ from phonenumber_field.modelfields import PhoneNumberField
 
 from pretix.base.banlist import banned
 from pretix.base.models.base import LoggedModel
+from pretix.base.models.fields import MultiStringField
 from pretix.base.models.organizer import Organizer
 from pretix.base.settings import PERSON_NAME_SCHEMES
 from pretix.helpers.countries import FastCountryField
@@ -348,3 +349,134 @@ class AttendeeProfile(models.Model):
             parts.append(f'{a["field_label"]}: {val}')
 
         return '\n'.join([str(p).strip() for p in parts if p and str(p).strip()])
+
+
+def generate_client_id():
+    return get_random_string(40)
+
+
+def generate_client_secret():
+    return get_random_string(40)
+
+
+class CustomerSSOClient(LoggedModel):
+    CLIENT_CONFIDENTIAL = "confidential"
+    CLIENT_PUBLIC = "public"
+    CLIENT_TYPES = (
+        (CLIENT_CONFIDENTIAL, pgettext_lazy("openidconnect", "Confidential")),
+        (CLIENT_PUBLIC, pgettext_lazy("openidconnect", "Public")),
+    )
+
+    GRANT_AUTHORIZATION_CODE = "authorization-code"
+    GRANT_IMPLICIT = "implicit"
+    GRANT_TYPES = (
+        (GRANT_AUTHORIZATION_CODE, pgettext_lazy("openidconnect", "Authorization code")),
+        (GRANT_IMPLICIT, pgettext_lazy("openidconnect", "Implicit")),
+    )
+
+    SCOPE_CHOICES = (
+        ('openid', _('OpenID Connect access (required)')),
+        ('profile', _('Profile data (name, addresses)')),
+        ('email', _('E-mail address')),
+        ('phone', _('Phone number')),
+    )
+
+    id = models.BigAutoField(primary_key=True)
+    organizer = models.ForeignKey(Organizer, related_name='sso_clients', on_delete=models.CASCADE)
+
+    name = models.CharField(verbose_name=_("Application name"), max_length=255, blank=False)
+    is_active = models.BooleanField(default=True, verbose_name=_('Active'))
+
+    client_id = models.CharField(
+        verbose_name=_("Client ID"),
+        max_length=100, unique=True, default=generate_client_id, db_index=True
+    )
+    client_secret = models.CharField(
+        max_length=255, blank=False,
+    )
+
+    client_type = models.CharField(
+        max_length=32, choices=CLIENT_TYPES, verbose_name=_("Client type"), default=CLIENT_CONFIDENTIAL,
+    )
+    authorization_grant_type = models.CharField(
+        max_length=32, choices=GRANT_TYPES, verbose_name=_("Grant type"), default=GRANT_AUTHORIZATION_CODE,
+    )
+    redirect_uris = models.TextField(
+        blank=False,
+        verbose_name=_("Redirection URIs"),
+        help_text=_("Allowed URIs list, space separated")
+    )
+    allowed_scopes = MultiStringField(
+        default=['openid', 'profile', 'email', 'phone'],
+        delimiter=" ",
+        blank=True,
+        verbose_name=_('Allowed access scopes'),
+        help_text=_('Separate multiple values with spaces'),
+    )
+
+    def is_usable(self):
+        return self.is_active
+
+    def allow_redirect_uri(self, redirect_uri):
+        return self.redirect_uris and any(r.strip() == redirect_uri for r in self.redirect_uris.split(' '))
+
+    def allow_delete(self):
+        return True
+
+    def evaluated_scope(self, scope):
+        scope = set(scope.split(' '))
+        allowed_scopes = set(self.allowed_scopes)
+        return ' '.join(scope & allowed_scopes)
+
+    def clean(self):
+        redirect_uris = self.redirect_uris.strip().split()
+
+        if redirect_uris:
+            validator = URLValidator()
+            for uri in redirect_uris:
+                validator(uri)
+
+    def set_client_secret(self):
+        secret = get_random_string(64)
+        self.client_secret = make_password(secret)
+        return secret
+
+    def check_client_secret(self, raw_secret):
+        """
+        Return a boolean of whether the ra_secret was correct. Handles
+        hashing formats behind the scenes.
+        """
+        def setter(raw_secret):
+            self.client_secret = make_password(raw_secret)
+            self.save(update_fields=["client_secret"])
+        return check_password(raw_secret, self.client_secret, setter)
+
+
+class CustomerSSOGrant(models.Model):
+    id = models.BigAutoField(primary_key=True)
+    client = models.ForeignKey(
+        CustomerSSOClient, on_delete=models.CASCADE, related_name="grants"
+    )
+    customer = models.ForeignKey(
+        Customer, on_delete=models.CASCADE, related_name="sso_grants"
+    )
+    code = models.CharField(max_length=255, unique=True)
+    nonce = models.CharField(max_length=255, null=True, blank=True)
+    auth_time = models.IntegerField()
+    expires = models.DateTimeField()
+    redirect_uri = models.TextField()
+    scope = models.TextField(blank=True)
+
+
+class CustomerSSOAccessToken(models.Model):
+    id = models.BigAutoField(primary_key=True)
+    client = models.ForeignKey(
+        CustomerSSOClient, on_delete=models.CASCADE, related_name="access_tokens"
+    )
+    customer = models.ForeignKey(
+        Customer, on_delete=models.CASCADE, related_name="sso_access_tokens"
+    )
+    from_code = models.CharField(max_length=255, null=True, blank=True)
+    token = models.CharField(max_length=255, unique=True)
+    expires = models.DateTimeField()
+    scope = models.TextField(blank=True)
