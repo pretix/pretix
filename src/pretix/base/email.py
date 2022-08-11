@@ -471,7 +471,7 @@ def base_placeholders(sender, **kwargs):
             ),
         ),
         SimpleFunctionalMailTextPlaceholder(
-            'last_order_modification_date_and_time', ['order', 'event'],
+            'order_modification_deadline_date_and_time', ['order', 'event'],
             lambda order, event:
             date_format(order.modify_deadline.astimezone(event.timezone), 'SHORT_DATETIME_FORMAT')
             if order.modify_deadline
