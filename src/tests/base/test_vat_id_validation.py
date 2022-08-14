@@ -17,6 +17,12 @@ def test_eu_invalid_format():
 
 
 @responses.activate
+def test_eu_no_prefix():
+    with pytest.raises(VATIDFinalError):
+        validate_vat_id('12345', 'AT')
+
+
+@responses.activate
 def test_eu_country_mismatch():
     with pytest.raises(VATIDFinalError):
         validate_vat_id('AT12345', 'DE')

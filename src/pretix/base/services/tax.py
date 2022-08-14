@@ -94,6 +94,10 @@ def _validate_vat_id_NO(vat_id, country_code):
 def _validate_vat_id_EU(vat_id, country_code):
     # Inspired by vat_moss library
     vat_id = vat_moss.id.normalize(vat_id)
+
+    if not vat_id or len(vat_id) < 3:
+        raise VATIDFinalError(error_messages['invalid'])
+
     number = vat_id[2:]
 
     if vat_id[:2] != cc_to_vat_prefix(country_code):
