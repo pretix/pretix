@@ -665,33 +665,8 @@ var form_handlers = function (el) {
     questions_init_photos(el);
 };
 
-$(function () {
-    "use strict";
-
-    $("body").removeClass("nojs");
-    lightbox.init();
-
-    $(document).on("click", ".variations .variations-select-all", function (e) {
-        $(this).parent().parent().find("input[type=checkbox]").prop("checked", true).change();
-        e.stopPropagation();
-        return false;
-    });
-    $(document).on("click", ".variations .variations-select-none", function (e) {
-        $(this).parent().parent().find("input[type=checkbox]").prop("checked", false).change();
-        e.stopPropagation();
-        return false;
-    });
-    if ($(".items-on-quota").length) {
-        $(".items-on-quota .panel").each(function () {
-            var $panel = $(this);
-            $panel.toggleClass("panel-success", $panel.find("input:checked").length > 0);
-            $(this).find("input").change(function () {
-                $panel.toggleClass("panel-success", $panel.find("input:checked").length > 0);
-            });
-        });
-    }
-
-    $("#sumtoggle").find("button").click(function () {
+function setup_basics(el) {
+    el.find("#sumtoggle").find("button").click(function () {
         $(".table-product-overview .sum-gross").toggle($(this).attr("data-target") === ".sum-gross");
         $(".table-product-overview .sum-net").toggle($(this).attr("data-target") === ".sum-net");
         $(".table-product-overview .count").toggle($(this).attr("data-target") === ".count");
@@ -700,18 +675,18 @@ $(function () {
         $(this).addClass("active");
     });
 
-    $('.collapsible').collapse();
-    $("input[data-toggle=radiocollapse]").change(function () {
+    el.find('.collapsible').collapse();
+    el.find("input[data-toggle=radiocollapse]").change(function () {
         $($(this).attr("data-parent")).find(".collapse.in").collapse('hide');
         $($(this).attr("data-target")).collapse('show');
     });
-    $("div.collapsed").removeClass("collapsed").addClass("collapse");
-    $(".has-error").each(function () {
+    el.find("div.collapsed").removeClass("collapsed").addClass("collapse");
+    el.find(".has-error").each(function () {
         $(this).closest("div.panel-collapse").collapse("show");
     });
 
-    $('[data-toggle="tooltip"]').tooltip();
-    $('[data-toggle="tooltip_html"]').tooltip({
+    el.find('[data-toggle="tooltip"]').tooltip();
+    el.find('[data-toggle="tooltip_html"]').tooltip({
         'html': true,
         'whiteList': {
             // Global attributes allowed on any supplied element below.
@@ -733,7 +708,7 @@ $(function () {
     if (url.match('#')) {
         $('.nav-tabs a[href="#' + url.split('#')[1] + '"]').tab('show');
     }
-    $('a[data-toggle="tab"]').on('click', function (e) {
+    el.find('a[data-toggle="tab"]').on('click', function (e) {
         if (!$(this).closest(".tab-content").length) {
             // only append hash if not inside a .panel
             window.location.hash = this.hash;
@@ -741,7 +716,7 @@ $(function () {
     });
 
     // Event wizard
-    $("#event-slug-random-generate").click(function () {
+    el.find("#event-slug-random-generate").click(function () {
         var url = $(this).attr("data-rng-url");
         $("#id_basics-slug").val("Generating...");
         $.getJSON(url, function (data) {
@@ -749,10 +724,7 @@ $(function () {
         });
     });
 
-    form_handlers($("body"));
-    $(document).trigger("pretix:bind-forms");
-
-    $(".qrcode-canvas").each(function () {
+    el.find(".qrcode-canvas").each(function () {
         $(this).qrcode(
             {
                 text: $.trim($($(this).attr("data-qrdata")).html())
@@ -760,10 +732,10 @@ $(function () {
         );
     });
 
-    $(".propagated-settings-box").find("input, textarea, select").not("[readonly]")
+    el.find(".propagated-settings-box").find("input, textarea, select").not("[readonly]")
         .attr("data-propagated-locked", "true").prop("readonly", true);
 
-    $(".propagated-settings-box button[data-action=unlink]").click(function (ev) {
+    el.find(".propagated-settings-box button[data-action=unlink]").click(function (ev) {
         var $box = $(this).closest(".propagated-settings-box");
         $box.find("input[name=decouple]").val($(this).val());
         $box.find("[data-propagated-locked]").prop("readonly", false);
@@ -773,7 +745,7 @@ $(function () {
     });
 
     // Tables with bulk selection, e.g. subevent list
-    $("input[data-toggle-table]").each(function (ev) {
+    el.find("input[data-toggle-table]").each(function (ev) {
         var $toggle = $(this);
         var $actionButtons = $(".batch-select-actions button", this.form);
         var countLabels = $("<span></span>").appendTo($actionButtons);
@@ -852,7 +824,7 @@ $(function () {
             if (!nrOfChecked) countLabels.empty();
             else countLabels.text(" ("+nrOfChecked+")");
 
-            if (!allChecked) $selectAll.find("input").prop("checked", false); 
+            if (!allChecked) $selectAll.find("input").prop("checked", false);
 
             $actionButtons.attr("disabled", !nrOfChecked);
             $toggle.prop("checked", allChecked).prop("indeterminate", nrOfChecked > 0 && !allChecked);
@@ -875,7 +847,7 @@ $(function () {
     });
 
     // Items and categories
-    $(".internal-name-wrapper").each(function () {
+    el.find(".internal-name-wrapper").each(function () {
         if ($(this).find("input").val() === "") {
             var $fg = $(this).find(".form-group");
             $fg.hide();
@@ -896,7 +868,7 @@ $(function () {
         }
     });
 
-    $("button[data-toggle=qrcode]").click(function (e) {
+    el.find("button[data-toggle=qrcode]").click(function (e) {
         e.preventDefault();
         var $current = $(".qr-code-overlay[data-qrcode='" + $(this).attr("data-qrcode") + "']");
         if ($current.length) {
@@ -926,6 +898,37 @@ $(function () {
         });
         return false;
     });
+}
+
+$(function () {
+    "use strict";
+
+    $("body").removeClass("nojs");
+    lightbox.init();
+
+    $(document).on("click", ".variations .variations-select-all", function (e) {
+        $(this).parent().parent().find("input[type=checkbox]").prop("checked", true).change();
+        e.stopPropagation();
+        return false;
+    });
+    $(document).on("click", ".variations .variations-select-none", function (e) {
+        $(this).parent().parent().find("input[type=checkbox]").prop("checked", false).change();
+        e.stopPropagation();
+        return false;
+    });
+    if ($(".items-on-quota").length) {
+        $(".items-on-quota .panel").each(function () {
+            var $panel = $(this);
+            $panel.toggleClass("panel-success", $panel.find("input:checked").length > 0);
+            $(this).find("input").change(function () {
+                $panel.toggleClass("panel-success", $panel.find("input:checked").length > 0);
+            });
+        });
+    }
+
+    setup_basics($("body"));
+    form_handlers($("body"));
+    $(document).trigger("pretix:bind-forms");
 
     $("#ajaxerr").on("click", ".ajaxerr-close", ajaxErrDialog.hide);
     moment.locale($("body").attr("data-datetimelocale"));
