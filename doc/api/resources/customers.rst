@@ -26,9 +26,15 @@ date_joined                           datetime                   Date and time o
 locale                                string                     Preferred language of the customer
 last_modified                         datetime                   Date and time of modification of the record
 notes                                 string                     Internal notes and comments (or ``null``)
+password                              string                     Can only be set during creation of a new customer, will
+                                                                 not be included in any responses.
 ===================================== ========================== =======================================================
 
 .. versionadded:: 4.0
+
+.. versionchanged:: 4.3
+
+   Passwords can now be set through the API during customer creation.
 
 Endpoints
 ---------
@@ -146,6 +152,7 @@ Endpoints
 
       {
         "email": "test@example.org",
+        "password": "verysecret",
         "send_email": true
       }
 

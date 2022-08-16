@@ -77,10 +77,11 @@ class CustomerSerializer(I18nAwareModelSerializer):
 
 class CustomerCreateSerializer(CustomerSerializer):
     send_email = serializers.BooleanField(default=False, required=False, allow_null=True)
+    password = serializers.CharField(write_only=True, required=False, allow_null=True)
 
     class Meta:
         model = Customer
-        fields = CustomerSerializer.Meta.fields + ('send_email',)
+        fields = CustomerSerializer.Meta.fields + ('send_email', 'password')
 
 
 class MembershipTypeSerializer(I18nAwareModelSerializer):
