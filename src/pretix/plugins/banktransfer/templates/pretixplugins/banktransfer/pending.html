@@ -1,6 +1,7 @@
 {% load i18n %}
 {% load l10n %}
 {% load commadecimal %}
+{% load static %}
 {% load dotdecimal %}
 {% load ibanformat %}
 {% load money %}
@@ -41,18 +42,40 @@
         </p>
     </div>
     {% if settings.bank_details_type == "sepa" %}
-        <div class="col-md-3 col-sm-6 hidden-xs text-center js-only">
-            <h4>BezahlCode</h4>
-            <p>
-            <a aria-label="{% trans "Open BezahlCode in your banking app to start the payment process." %}" href="bank://singlepaymentsepa?name={{ settings.bank_details_sepa_name|urlencode }}&iban={{ settings.bank_details_sepa_iban }}&bic={{ settings.bank_details_sepa_bic }}&amount={{ amount|commadecimal }}&reason={{ code }}&currency={{ event.currency }}">
-                <script type="text/plain" data-size="150" data-replace-with-qr data-desc="{% trans 'BezahlCode for your order. Scan this image with your banking app’s QR-Reader to start the payment process.' %}">bank://singlepaymentsepa?name={{ settings.bank_details_sepa_name|urlencode }}&iban={{ settings.bank_details_sepa_iban }}&bic={{ settings.bank_details_sepa_bic }}&amount={{ amount|commadecimal }}&reason={{ code }}&currency={{ event.currency }}</script>
-            </a>
-            </p>
-        </div>
-        <div class="col-md-3 col-sm-6 hidden-xs text-center js-only">
-            <h4>GiroCode / EPC-QR</h4>
-            <p>
-            <script type="text/plain" data-size="150" data-replace-with-qr data-desc="{% trans 'GiroCode / EPC-QR for your order. Scan this image with your banking app’s QR-Reader to start the payment process.' %}">BCD
+        <div class="col-md-6 col-sm-6 hidden-xs text-center js-only">
+            <ul class="nav nav-tabs" id="banktransfer_qrcodes_tabs" role="tablist">
+                {% if swiss_qrbill %}
+                    <li class="active"><a href="#banktransfer_qrcodes_qrbill" role="tab" id="dropdown1-tab" data-toggle="tab">QR-bill</a></li>
+                {% endif %}
+                <li {% if not swiss_qrbill %}class="active"{% endif %}><a href="#banktransfer_qrcodes_girocode" role="tab" id="dropdown1-tab" data-toggle="tab">EPC-QR</a></li>
+                <li class=""><a href="#banktransfer_qrcodes_bezahlcode" role="tab" id="dropdown2-tab" data-toggle="tab">BezahlCode</a></li>
+            </ul>
+            <div class="tab-content" id="banktransfer_qrcodes_tabs_content">
+                {% if swiss_qrbill %}
+                    <div id="banktransfer_qrcodes_qrbill" class="tab-pane fade active in" role="tabpanel">
+                        <p class="small">
+                            {% trans "Scan the qr-code with your banking app" %}
+                        </p>
+                        <p class="banktransfer-swiss-cross-overlay">
+                            <svg class="banktransfer-swiss-cross" xmlns="http://www.w3.org/2000/svg"
+                                 viewBox="0 0 19.8 19.8">
+                                <polygon
+                                        points="18.3,0.7 1.6,0.7 0.7,0.7 0.7,1.6 0.7,18.3 0.7,19.1 1.6,19.1 18.3,19.1 19.1,19.1 19.1,18.3 19.1,1.6 19.1,0.7 "/>
+                                <rect x="8.3" y="4" fill="#fff" width="3.3" height="11"/>
+                                <rect x="4.4" y="7.9" fill="#fff" width="11" height="3.3"/>
+                                <polygon fill="none" stroke="#fff" stroke-miterlimit="10" stroke-width="1.4357" points="0.7,1.6 0.7,18.3 0.7,19.1 1.6,19.1 18.3,19.1 19.1,19.1 19.1,18.3 19.1,1.6 19.1,0.7 18.3,0.7 1.6,0.7 0.7,0.7 "/>
+                            </svg>
+
+                            <script type="text/plain" data-size="150" data-replace-with-qr data-desc="{% trans 'Scan this image with your banking app’s QR-Reader to start the payment process.' %}">{{swiss_qrbill}}</script>
+                        </p>
+                    </div>
+                {% endif %}
+                <div id="banktransfer_qrcodes_girocode" class="tab-pane fade {% if not swiss_qrbill %}active in{% endif %}" role="tabpanel">
+                    <p class="small">
+                        {% trans "Scan the qr-code with your banking app" %}
+                    </p>
+                    <p>
+                    <script type="text/plain" data-size="150" data-replace-with-qr data-desc="{% trans 'Scan this image with your banking app’s QR-Reader to start the payment process.' %}">BCD
 002
 2
 SCT
@@ -65,15 +88,22 @@ SCT
 {{ code }}
 
             </script>
-            </p>
-        </div>
-        <div class="visible-xs-block text-center">
-            <p>
-                <a href="bank://singlepaymentsepa?name={{ settings.bank_details_sepa_name|urlencode }}&iban={{ settings.bank_details_sepa_iban }}&bic={{ settings.bank_details_sepa_bic }}&amount={{ amount|commadecimal }}&reason={{ code }}&currency={{ event.currency }}" class="btn btn-default">
-                    {% trans "Open banking app" %}
-                </a><br>
-                <small>{% trans "Requires that the app supports BezahlCode" %}</small>
-            </p>
+                    </p>
+                </div>
+                <div id="banktransfer_qrcodes_bezahlcode" class="tab-pane fade" role="tabpanel">
+                    <p class="small">
+                        {% trans "Scan the qr-code with your banking app" %}
+                    </p>
+                    <p>
+                        <a aria-label="{% trans "Open BezahlCode in your banking app to start the payment process." %}" href="bank://singlepaymentsepa?name={{ settings.bank_details_sepa_name|urlencode }}&iban={{ settings.bank_details_sepa_iban }}&bic={{ settings.bank_details_sepa_bic }}&amount={{ amount|commadecimal }}&reason={{ code }}&currency={{ event.currency }}">
+                        <script type="text/plain" data-size="150" data-replace-with-qr data-desc="{% trans 'Scan this image with your banking app’s QR-Reader to start the payment process.' %}">bank://singlepaymentsepa?name={{ settings.bank_details_sepa_name|urlencode }}&iban={{ settings.bank_details_sepa_iban }}&bic={{ settings.bank_details_sepa_bic }}&amount={{ amount|commadecimal }}&reason={{ code }}&currency={{ event.currency }}</script>
+                        </a>
+                    </p>
+                </div>
+            </div>
         </div>
     {% endif %}
 </div>
+{% if swiss_qrbill %}
+<link rel="stylesheet" href="{% static "pretixplugins/banktransfer/swisscross.css" %}">
+{% endif %}
