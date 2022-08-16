@@ -42,8 +42,6 @@ from django.core import mail
 from django.utils.timezone import now
 from django_countries.fields import Country
 from django_scopes import scopes_disabled
-
-from pretix.base.services.tax import VATIDFinalError, VATIDTemporaryError
 from tests.base import SoupTest
 from tests.plugins.stripe.test_provider import MockedCharge
 
@@ -56,6 +54,7 @@ from pretix.base.payment import PaymentException
 from pretix.base.services.invoices import (
     generate_cancellation, generate_invoice,
 )
+from pretix.base.services.tax import VATIDFinalError, VATIDTemporaryError
 
 
 @pytest.fixture

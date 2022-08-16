@@ -2,7 +2,9 @@ import pytest
 import responses
 from requests import Timeout
 
-from pretix.base.services.tax import VATIDTemporaryError, validate_vat_id, VATIDFinalError
+from pretix.base.services.tax import (
+    VATIDFinalError, VATIDTemporaryError, validate_vat_id,
+)
 
 
 def test_unknown_country():

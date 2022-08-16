@@ -47,7 +47,7 @@ from pretix.base.models.items import (
     ItemAddOn, ItemBundle, ItemVariation, SubEventItem, SubEventItemVariation,
 )
 from pretix.base.services.orders import OrderError, _perform_order
-from pretix.base.services.tax import VATIDTemporaryError, VATIDFinalError
+from pretix.base.services.tax import VATIDFinalError, VATIDTemporaryError
 from pretix.testutils.scope import classscope
 from pretix.testutils.sessions import get_cart_session_key
 
