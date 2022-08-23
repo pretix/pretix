@@ -103,7 +103,7 @@ def _validate_vat_id_EU(vat_id, country_code):
     if vat_id[:2] != cc_to_vat_prefix(country_code):
         raise VATIDFinalError(error_messages['country_mismatch'])
 
-    if not re.match(vat_moss.id.ID_PATTERNS[country_code]['regex'], number):
+    if not re.match(vat_moss.id.ID_PATTERNS[cc_to_vat_prefix(country_code)]['regex'], number):
         raise VATIDFinalError(error_messages['invalid'])
 
     payload = """
