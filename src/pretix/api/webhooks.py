@@ -220,6 +220,10 @@ def register_default_webhook_events(sender, **kwargs):
             _('Order expired'),
         ),
         ParametrizedOrderWebhookEvent(
+            'pretix.event.order.expirychanged',
+            _('Order expiry date changed'),
+        ),
+        ParametrizedOrderWebhookEvent(
             'pretix.event.order.modified',
             _('Order information changed'),
         ),
@@ -232,8 +236,28 @@ def register_default_webhook_events(sender, **kwargs):
             _('Order changed'),
         ),
         ParametrizedOrderWebhookEvent(
+            'pretix.event.order.refund.created',
+            _('Refund of payment created'),
+        ),
+        ParametrizedOrderWebhookEvent(
             'pretix.event.order.refund.created.externally',
             _('External refund of payment'),
+        ),
+        ParametrizedOrderWebhookEvent(
+            'pretix.event.order.refund.requested',
+            _('Refund of payment requested by customer'),
+        ),
+        ParametrizedOrderWebhookEvent(
+            'pretix.event.order.refund.done',
+            _('Refund of payment completed'),
+        ),
+        ParametrizedOrderWebhookEvent(
+            'pretix.event.order.refund.canceled',
+            _('Refund of payment canceled'),
+        ),
+        ParametrizedOrderWebhookEvent(
+            'pretix.event.order.refund.failed',
+            _('Refund of payment failed'),
         ),
         ParametrizedOrderWebhookEvent(
             'pretix.event.order.approved',
