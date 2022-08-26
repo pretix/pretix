@@ -921,15 +921,14 @@ class Event(EventMixin, LoggedModel):
                 fi = default_storage.open(s.value[len('file://'):], 'rb')
                 nonce = get_random_string(length=8)
                 if s.key == 'mail_attachment_new_order':
-                    fname_clean = clean_filename(os.path.basename(s.value[len('file://'):]))
-                    fname = 'pub/%s/%s/%s.%s.%s' % (
-                        self.organizer.slug, self.slug, fname_clean, nonce, s.value.split('.')[-1]
-                    )
+                    fname_base = clean_filename(os.path.basename(s.value[len('file://'):]))
                 else:
-                    # TODO: make sure pub is always correct
-                    fname = 'pub/%s/%s/%s.%s.%s' % (
-                        self.organizer.slug, self.slug, s.key, nonce, s.value.split('.')[-1]
-                    )
+                    fname_base = s.key
+
+                # TODO: make sure pub is always correct
+                fname = 'pub/%s/%s/%s.%s.%s' % (
+                    self.organizer.slug, self.slug, fname_base, nonce, s.value.split('.')[-1]
+                )
                 newname = default_storage.save(fname, fi)
                 s.value = 'file://' + newname
                 s.save()
