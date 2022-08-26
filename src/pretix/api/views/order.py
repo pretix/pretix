@@ -1322,6 +1322,7 @@ class OrderPositionViewSet(viewsets.ModelViewSet):
             serializer.is_valid(raise_exception=True)
             serializer.save()
             new_data = serializer.data
+            instance.order.create_transactions()
 
             if old_data != new_data:
                 log_data = self.request.data
