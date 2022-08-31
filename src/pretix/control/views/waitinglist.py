@@ -56,6 +56,7 @@ from pretix.base.services.waitinglist import assign_automatically
 from pretix.base.views.tasks import AsyncAction
 from pretix.control.permissions import EventPermissionRequiredMixin
 from pretix.control.views import PaginationMixin
+from pretix.control.forms.waitinglist import WaitingListForm
 
 
 class AutoAssign(EventPermissionRequiredMixin, AsyncAction, View):
@@ -163,9 +164,9 @@ class WaitingListActionView(EventPermissionRequiredMixin, WaitingListQuerySetMix
             return self._redirect_back()
 
         elif request.POST.get('action') == 'update':
-            return render(request, 'pretixcontrol/waitinglist/update_bulk.html', {
+            print(self.get_queryset().values())
+            return render(request, 'pretixcontrol/waitinglist/update_many.html', {
                 'allowed': self.get_queryset().filter(voucher__isnull=True),
-                'subevent': self.get_queryset().filter(voucher__isnull=True)[0].subevent,
                 'forbidden': self.get_queryset().filter(voucher__isnull=False),
             })
 
@@ -173,8 +174,8 @@ class WaitingListActionView(EventPermissionRequiredMixin, WaitingListQuerySetMix
             for obj in self.get_queryset():
                 if not obj.voucher_id:
                     obj.log_action('pretix.event.orders.waitinglist.transfered', user=self.request.user)
-                    print("object:", obj)
-            messages.success(request, _('The selected entries have been deleted.'))
+                    obj.subevent = obj.subevent
+            messages.success(request, _('The selected entries have been transfered.'))
             return self._redirect_back()
 
         if 'assign' in request.POST:
@@ -401,6 +402,43 @@ class EntryUpdate(EventPermissionRequiredMixin, UpdateView):
         except WaitingListEntry.DoesNotExist:
             raise Http404(_("The requested entry does not exist."))
 
+
+    def get_success_url(self) -> str:
+        return reverse('control:event.orders.waitinglist', kwargs={
+            'event': self.request.event.slug,
+            'organizer': self.request.event.organizer.slug
+        })
+
+    @transaction.atomic
+    def update(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        success_url = self.get_success_url()
+        self.object.log_action('pretix.event.orders.waitinglist.transfered', user=self.request.user)
+        messages.success(self.request, _('The selected entry has been transfered.'))
+        if "next" in self.request.GET and is_safe_url(self.request.GET.get("next"), allowed_hosts=None):
+            return redirect(self.request.GET.get("next"))
+        return HttpResponseRedirect(success_url)
+
+class EntriesUpdate(EventPermissionRequiredMixin, UpdateView):
+    form_class = WaitingListForm
+    #model = WaitingListEntry
+    template_name = 'pretixcontrol/waitinglist/update_many.html'
+    permission = 'can_change_orders'
+    fields = ['subevent']
+    #context_object_name = 'entry'
+
+    def form_valid(self, form):
+        self.object.substage_set.update(myfield='new-value')
+        return super(EntriesUpdate, self).form_valid(form)
+
+    def get_object(self, queryset=None) -> WaitingListEntry:
+        try:
+            return self.request.event.waitinglistentries.get(
+                id=self.kwargs['entry'],
+                voucher__isnull=True,
+            )
+        except WaitingListEntry.DoesNotExist:
+            raise Http404(_("The requested entry does not exist."))
 
     def get_success_url(self) -> str:
         return reverse('control:event.orders.waitinglist', kwargs={
