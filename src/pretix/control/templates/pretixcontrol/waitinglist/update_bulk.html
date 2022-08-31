@@ -11,8 +11,16 @@
             <ul>
                 {% for s in allowed %}
                     <li>
-                        {{ subevent }}
                         {{ s }}
+
+
+                        <input type="hidden" name="entry" value="{{ s.pk }}">
+                    </li>
+                {% endfor %}
+             {% for s in subevent %}
+                    <li>
+                        {{ s }}
+                        hello
 
                         <input type="hidden" name="entry" value="{{ s.pk }}">
                     </li>
