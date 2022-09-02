@@ -299,6 +299,22 @@ def register_default_webhook_events(sender, **kwargs):
             'pretix.subevent.deleted',
             pgettext_lazy('subevent', 'Event series date deleted'),
         ),
+        ParametrizedEventWebhookEvent(
+            'pretix.event.live.activated',
+            _('Shop taken live'),
+        ),
+        ParametrizedEventWebhookEvent(
+            'pretix.event.live.deactivated',
+            _('Shop taken offline'),
+        ),
+        ParametrizedEventWebhookEvent(
+            'pretix.event.testmode.activated',
+            _('Testmode of shop has been activated'),
+        ),
+        ParametrizedEventWebhookEvent(
+            'pretix.event.testmode.deactivated',
+            _('Testmode of shop has been deactivated'),
+        ),
     )
 
 
