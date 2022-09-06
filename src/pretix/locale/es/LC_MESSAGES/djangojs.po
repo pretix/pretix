@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-25 16:59+0000\n"
+"POT-Creation-Date: 2022-09-06 12:12+0000\n"
 "PO-Revision-Date: 2021-11-25 21:00+0000\n"
 "Last-Translator: Ismael Menéndez Fernández <ismael.menendez@balidea.com>\n"
 "Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/pretix-"
@@ -483,51 +483,51 @@ msgstr "minutos"
 msgid "Check-in QR"
 msgstr "QR de Chequeo"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:382
+#: pretix/static/pretixcontrol/js/ui/editor.js:378
 msgid "The PDF background file could not be loaded for the following reason:"
 msgstr ""
 "El archivo PDF de fondo no ha podido ser cargado debido al siguiente motivo:"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:630
+#: pretix/static/pretixcontrol/js/ui/editor.js:648
 msgid "Group of objects"
 msgstr "Grupo de objetos"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:636
+#: pretix/static/pretixcontrol/js/ui/editor.js:654
 msgid "Text object"
 msgstr "Objeto de texto"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:638
+#: pretix/static/pretixcontrol/js/ui/editor.js:656
 msgid "Barcode area"
 msgstr "Área para código de barras"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:640
+#: pretix/static/pretixcontrol/js/ui/editor.js:658
 msgid "Image area"
 msgstr "Área de imagen"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:642
+#: pretix/static/pretixcontrol/js/ui/editor.js:660
 msgid "Powered by pretix"
 msgstr "Proveído por pretix"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:644
+#: pretix/static/pretixcontrol/js/ui/editor.js:662
 msgid "Object"
 msgstr "Objeto"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:648
+#: pretix/static/pretixcontrol/js/ui/editor.js:666
 msgid "Ticket design"
 msgstr "Diseño del ticket"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:938
+#: pretix/static/pretixcontrol/js/ui/editor.js:956
 msgid "Saving failed."
 msgstr "El guardado falló."
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:988
-#: pretix/static/pretixcontrol/js/ui/editor.js:1027
+#: pretix/static/pretixcontrol/js/ui/editor.js:1006
+#: pretix/static/pretixcontrol/js/ui/editor.js:1045
 msgid "Error while uploading your PDF file, please try again."
 msgstr ""
 "Ha habido un error mientras se cargaba el archivo PDF, por favor, intente de "
 "nuevo."
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:1012
+#: pretix/static/pretixcontrol/js/ui/editor.js:1030
 msgid "Do you really want to leave the editor without saving your changes?"
 msgstr "¿Realmente desea salir del editor sin haber guardado sus cambios?"
 
@@ -577,15 +577,15 @@ msgstr "Consultar búsqueda"
 msgid "Selected only"
 msgstr "Solamente seleccionados"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:886
+#: pretix/static/pretixcontrol/js/ui/main.js:858
 msgid "Use a different name internally"
 msgstr "Usar un nombre diferente internamente"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:922
+#: pretix/static/pretixcontrol/js/ui/main.js:894
 msgid "Click to close"
 msgstr "Click para cerrar"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:963
+#: pretix/static/pretixcontrol/js/ui/main.js:966
 msgid "You have unsaved changes!"
 msgstr "¡Tienes cambios sin guardar!"
 
@@ -649,20 +649,20 @@ msgstr "Obtienes %(currency)s %(price)s de vuelta"
 msgid "Please enter the amount the organizer can keep."
 msgstr "Por favor, ingrese el monto que el organizador puede quedarse."
 
-#: pretix/static/pretixpresale/js/ui/main.js:378
+#: pretix/static/pretixpresale/js/ui/main.js:380
 msgid "Please enter a quantity for one of the ticket types."
 msgstr "Por favor, introduzca un valor para cada tipo de entrada."
 
-#: pretix/static/pretixpresale/js/ui/main.js:414
+#: pretix/static/pretixpresale/js/ui/main.js:416
 msgid "required"
 msgstr "campo requerido"
 
-#: pretix/static/pretixpresale/js/ui/main.js:517
-#: pretix/static/pretixpresale/js/ui/main.js:536
+#: pretix/static/pretixpresale/js/ui/main.js:519
+#: pretix/static/pretixpresale/js/ui/main.js:538
 msgid "Time zone:"
 msgstr "Zona horaria:"
 
-#: pretix/static/pretixpresale/js/ui/main.js:527
+#: pretix/static/pretixpresale/js/ui/main.js:529
 msgid "Your local time:"
 msgstr "Su hora local:"
 
