@@ -72,7 +72,19 @@ class CustomerSerializer(I18nAwareModelSerializer):
     class Meta:
         model = Customer
         fields = ('identifier', 'external_identifier', 'email', 'name', 'name_parts', 'is_active', 'is_verified', 'last_login', 'date_joined',
-                  'locale', 'last_modified', 'notes')
+                  'locale', 'last_modified', 'notes', 'password')
+        extra_kwargs = {
+            "password": {"write_only": True},
+        }
+
+    def update(self, instance, validated_data):
+        for attr, value in validated_data.items():
+            if attr == 'password':
+                instance.set_password(value)
+            else:
+                setattr(instance, attr, value)
+        instance.save()
+        return instance
 
 
 class CustomerCreateSerializer(CustomerSerializer):

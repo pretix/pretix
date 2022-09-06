@@ -133,11 +133,13 @@ def test_customer_patch(token_client, organizer, customer):
         format='json',
         data={
             'email': 'blubb@example.org',
+            'password': 'qux',
         }
     )
     assert resp.status_code == 200
     customer.refresh_from_db()
     assert customer.email == 'blubb@example.org'
+    assert customer.check_password('qux')
 
 
 @pytest.mark.django_db
