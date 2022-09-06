@@ -39,7 +39,7 @@ from urllib.parse import urlencode, urlparse
 from django import forms
 from django.conf import settings
 from django.core.exceptions import ValidationError
-from django.core.validators import validate_email
+from django.core.validators import MaxValueValidator, validate_email
 from django.db.models import Prefetch, Q, prefetch_related_objects
 from django.forms import (
     CheckboxSelectMultiple, formset_factory, inlineformset_factory,
@@ -848,6 +848,7 @@ class InvoiceSettingsForm(SettingsForm):
         self.fields['invoice_generate_sales_channels'].choices = (
             (c.identifier, c.verbose_name) for c in get_all_sales_channels().values()
         )
+        self.fields['invoice_numbers_counter_length'].validators.append(MaxValueValidator(15))
 
     def clean(self):
         data = super().clean()

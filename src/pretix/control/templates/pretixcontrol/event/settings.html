@@ -207,14 +207,16 @@
                 {% bootstrap_field sform.logo_show_title layout="control" %}
                 {% bootstrap_field sform.og_image layout="control" %}
                 {% url "control:organizer.edit" organizer=request.organizer.slug as org_url %}
-                {% propagated request.event org_url "primary_color" "primary_font" "theme_color_success" "theme_color_danger" "theme_color_background" "theme_round_borders" %}
-                    {% bootstrap_field sform.primary_color layout="control" %}
-                    {% bootstrap_field sform.theme_color_success layout="control" %}
-                    {% bootstrap_field sform.theme_color_danger layout="control" %}
-                    {% bootstrap_field sform.theme_color_background layout="control" %}
-                    {% bootstrap_field sform.theme_round_borders layout="control" %}
-                    {% bootstrap_field sform.primary_font layout="control" %}
-                {% endpropagated %}
+                {% with org_url|add:"#tab-0-4-open" as org_url_tab %}
+                    {% propagated request.event org_url_tab "primary_color" "primary_font" "theme_color_success" "theme_color_danger" "theme_color_background" "theme_round_borders" %}
+                        {% bootstrap_field sform.primary_color layout="control" %}
+                        {% bootstrap_field sform.theme_color_success layout="control" %}
+                        {% bootstrap_field sform.theme_color_danger layout="control" %}
+                        {% bootstrap_field sform.theme_color_background layout="control" %}
+                        {% bootstrap_field sform.theme_round_borders layout="control" %}
+                        {% bootstrap_field sform.primary_font layout="control" %}
+                    {% endpropagated %}
+                {% endwith %}
             </fieldset>
             <fieldset>
                 <legend>{% trans "Timeline" %}</legend>

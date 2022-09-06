@@ -610,7 +610,10 @@ class OrderListExporter(MultiSheetListExporter):
             for k, label, w in name_scheme['fields']:
                 headers.append(_('Invoice address name') + ': ' + str(label))
         headers += [
-            _('Address'), _('ZIP code'), _('City'), _('Country'), pgettext('address', 'State'), _('VAT ID'),
+            _('Invoice address street'), _('Invoice address ZIP code'), _('Invoice address city'),
+            _('Invoice address country'),
+            pgettext('address', 'Invoice address state'),
+            _('VAT ID'),
         ]
         headers += [
             _('Sales channel'), _('Order locale'),

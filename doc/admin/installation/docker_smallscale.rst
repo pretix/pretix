@@ -240,6 +240,9 @@ The following snippet is an example on how to configure a nginx proxy for pretix
         listen 80 default_server;
         listen [::]:80 ipv6only=on default_server;
         server_name pretix.mydomain.com;
+        location / {
+            return 301 https://$host$request_uri;
+        }
     }
     server {
         listen 443 default_server;

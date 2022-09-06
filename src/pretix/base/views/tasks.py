@@ -216,7 +216,8 @@ class AsyncFormView(AsyncMixin, FormView):
     task_base = ProfiledEventTask
 
     def __init_subclass__(cls):
-        def async_execute(self, *, request_path, query_string, form_kwargs, locale, tz, organizer=None, event=None, user=None, session_key=None):
+        def async_execute(self, *, request_path, query_string, form_kwargs, locale, tz, url_kwargs=None, url_args=None,
+                          organizer=None, event=None, user=None, session_key=None):
             view_instance = cls()
             form_kwargs['data'] = QueryDict(form_kwargs['data'])
             req = RequestFactory().post(
@@ -225,6 +226,8 @@ class AsyncFormView(AsyncMixin, FormView):
                 content_type='application/x-www-form-urlencoded'
             )
             view_instance.request = req
+            view_instance.kwargs = url_kwargs
+            view_instance.args = url_args
             if event:
                 view_instance.request.event = event
                 view_instance.request.organizer = event.organizer
@@ -284,6 +287,8 @@ class AsyncFormView(AsyncMixin, FormView):
             'request_path': self.request.path,
             'query_string': self.request.GET.urlencode(),
             'form_kwargs': form_kwargs,
+            'url_args': self.args,
+            'url_kwargs': self.kwargs,
             'locale': get_language(),
             'tz': get_current_timezone().zone,
         }
@@ -336,6 +341,8 @@ class AsyncPostView(AsyncMixin, View):
                 content_type='application/x-www-form-urlencoded'
             )
             view_instance.request = req
+            view_instance.kwargs = url_kwargs
+            view_instance.args = url_args
             if event:
                 view_instance.request.event = event
                 view_instance.request.organizer = event.organizer

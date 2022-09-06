@@ -582,7 +582,7 @@ class PaypalMethod(BasePaymentProvider):
         on the 'confirm order' page.
         """
         template = get_template('pretixplugins/paypal2/checkout_payment_confirm.html')
-        ctx = {'request': request, 'event': self.event, 'settings': self.settings}
+        ctx = {'request': request, 'event': self.event, 'settings': self.settings, 'method': self.method}
         return template.render(ctx)
 
     def execute_payment(self, request: HttpRequest, payment: OrderPayment):

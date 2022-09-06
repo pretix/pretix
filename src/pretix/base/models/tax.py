@@ -114,7 +114,7 @@ EU_CURRENCIES = {
     'RO': 'RON',
     'SE': 'SEK'
 }
-VAT_ID_COUNTRIES = EU_COUNTRIES | {'CH'}
+VAT_ID_COUNTRIES = EU_COUNTRIES | {'CH', 'NO'}
 
 
 def is_eu_country(cc):

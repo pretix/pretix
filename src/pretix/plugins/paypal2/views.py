@@ -283,7 +283,7 @@ def success(request, *args, **kwargs):
     else:
         payment = None
 
-    if request.session.get('payment_paypal_id', None):
+    if request.session.get('payment_paypal_oid', None):
         if payment:
             prov = Paypal(request.event)
             try:
@@ -296,7 +296,7 @@ def success(request, *args, **kwargs):
                 return resp
     else:
         messages.error(request, _('Invalid response from PayPal received.'))
-        logger.error('Session did not contain payment_paypal_id')
+        logger.error('Session did not contain payment_paypal_oid')
         urlkwargs['step'] = 'payment'
         return redirect(eventreverse(request.event, 'presale:event.checkout', kwargs=urlkwargs))
 

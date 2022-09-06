@@ -191,6 +191,7 @@ function setup_basics(el) {
         else $(":input", this).get(0).focus();
     });
     el.find(".alert-danger").first().each(function() {
+        var container = this;
         var content = $("<ul></ul>").click(function(e) {
             var input = $(e.target.hash).get(0);
             if (input) input.focus();
@@ -199,13 +200,14 @@ function setup_basics(el) {
         });
         $(".has-error").each(function() {
             var target = target = $(":input", this);
-            if (!target || !target.attr("aria-describedby")) return;
-            var desc = $("#" + target.attr("aria-describedby").split(' ', 1)[0]);
+            var desc = target && target.attr("aria-describedby") ? document.getElementById(target.attr("aria-describedby").split(' ', 1)[0]) : null;
+            if (!target || !desc || desc == container) return;
+
             // multi-input fields have a role=group with aria-labelledby
             var label = this.hasAttribute("aria-labelledby") ? $("#" + this.getAttribute("aria-labelledby")) : $("[for="+target.attr("id")+"]");
 
             var $li = $("<li>");
-            $li.text(": " + desc.text())
+            $li.text(": " + desc.textContent)
             $li.prepend($("<a>").attr("href", "#" + target.attr("id")).text(label.get(0).childNodes[0].nodeValue))
             content.append($li);
         });

@@ -58,9 +58,9 @@
                                 {% endblocktrans %}
                                 </span>
                                 <span aria-hidden="true">{{ item.min_price|money:event.currency }} – {{ item.max_price|money:event.currency }}</span>
-                            {% elif not item.min_price and not item.max_price %}
+                            {% elif not item.min_price and not item.max_price and not item.mandatory_priced_addons %}
                                 <span class="text-uppercase">{% trans "free" context "price" %}</span>
-                            {% else %}
+                            {% elif not item.mandatory_priced_addons  %}
                                 {{ item.min_price|money:event.currency }}
                             {% endif %}
                         </div>
@@ -144,7 +144,9 @@
                                         </div>
                                         <p>
                                     {% elif not var.display_price.gross %}
-                                        <span class="text-uppercase">{% trans "free" context "price" %}</span>
+                                        {% if not item.mandatory_priced_addons %}
+                                            <span class="text-uppercase">{% trans "free" context "price" %}</span>
+                                        {% endif %}
                                     {% elif event.settings.display_net_prices %}
                                         {{ var.display_price.net|money:event.currency }}
                                     {% else %}
@@ -276,7 +278,9 @@
                             </div>
                             <p>
                         {% elif not item.display_price.gross %}
-                            <span class="text-uppercase">{% trans "free" context "price" %}</span>
+                            {% if not item.mandatory_priced_addons %}
+                                <span class="text-uppercase">{% trans "free" context "price" %}</span>
+                            {% endif %}
                         {% elif event.settings.display_net_prices %}
                             {{ item.display_price.net|money:event.currency }}
                         {% else %}

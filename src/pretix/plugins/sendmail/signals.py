@@ -42,6 +42,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.urls import resolve, reverse
 from django.utils import timezone
+from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
 from django_scopes import scope, scopes_disabled
 
@@ -134,6 +135,7 @@ def sendmail_run_rules(sender, **kwargs):
     with scopes_disabled():
         mails = ScheduledMail.objects.all()
 
+        unchanged = []
         for m in mails.filter(Q(last_computed__isnull=True)
                               | Q(subevent__last_modified__gt=F('last_computed'))
                               | Q(event__last_modified__gt=F('last_computed'))):
@@ -141,6 +143,17 @@ def sendmail_run_rules(sender, **kwargs):
             m.recompute()
             if m.computed_datetime != previous:
                 m.save(update_fields=['last_computed', 'computed_datetime'])
+            else:
+                unchanged.append(m.pk)
+
+        if unchanged:
+            # Theoretically, we don't need to write back the unchanged ones to the database… but that will cause us to
+            # recompute them on every run until eternity. So we want to set their last_computed date to something more
+            # recent... but not for all of them at once, in case it's millions, so we don't stress the database without
+            # cause
+            batch_size = max(connection.ops.bulk_batch_size(['id'], unchanged) - 2, 100)
+            for i in range(max(1, 5000 // batch_size)):
+                ScheduledMail.objects.filter(pk__in=unchanged[i * batch_size:batch_size]).update(last_computed=now())
 
         mails.filter(
             state=ScheduledMail.STATE_SCHEDULED,

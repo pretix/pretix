@@ -36,6 +36,7 @@ from pretix.base.models import (
 from pretix.base.models.orders import Transaction
 from pretix.base.orderimport import get_all_columns
 from pretix.base.services.invoices import generate_invoice, invoice_qualified
+from pretix.base.services.locking import NoLockManager
 from pretix.base.services.tasks import ProfiledEventTask
 from pretix.base.signals import order_paid, order_placed
 from pretix.celery_app import app
@@ -85,9 +86,9 @@ def setif(record, obj, attr, setting):
 
 @app.task(base=ProfiledEventTask, throws=(DataImportError,))
 def import_orders(event: Event, fileid: str, settings: dict, locale: str, user) -> None:
-    # TODO: quotacheck?
     cf = CachedFile.objects.get(id=fileid)
     user = User.objects.get(pk=user)
+    seats_used = False
     with language(locale, event.settings.region):
         cols = get_all_columns(event)
         parsed = parse_csv(cf.file)
@@ -133,6 +134,8 @@ def import_orders(event: Event, fileid: str, settings: dict, locale: str, user) 
                 position = OrderPosition(positionid=len(order._positions) + 1)
                 position.attendee_name_parts = {'_scheme': event.settings.name_scheme}
                 position.meta_info = {}
+                if position.seat is not None:
+                    seats_used = True
                 order._positions.append(position)
                 position.assign_pseudonymization_id()
 
@@ -144,9 +147,12 @@ def import_orders(event: Event, fileid: str, settings: dict, locale: str, user) 
                     _('Invalid data in row {row}: {message}').format(row=i, message=str(e))
                 )
 
-        # quota check?
-        with event.lock():
-            with transaction.atomic():
+        # We don't support vouchers, quotas, or memberships here, so we only need to lock if seats
+        # are in use
+        lockfn = event.lock if seats_used else NoLockManager
+
+        try:
+            with lockfn(), transaction.atomic():
                 save_transactions = []
                 for o in orders:
                     o.total = sum([c.price for c in o._positions])  # currently no support for fees
@@ -204,4 +210,7 @@ def import_orders(event: Event, fileid: str, settings: dict, locale: str, user) 
                     ) and not o.invoices.last()
                     if gen_invoice:
                         generate_invoice(o, trigger_pdf=True)
+        except DataImportError:
+            raise ValidationError(_('We were not able to process your request completely as the server was too busy. '
+                                    'Please try again.'))
     cf.delete()

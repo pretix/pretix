@@ -55,7 +55,7 @@ class PropagatedNode(Node):
                 </div>
                 <div class="panel-body help-text">
                     {text_expl}<br>
-                    <a href="{url}" target="_blank">
+                    <a href="{url}" target="_blank" class="btn btn-default">
                         {text_orga}
                     </a>
                 </div>

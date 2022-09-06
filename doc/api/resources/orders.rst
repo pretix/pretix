@@ -428,7 +428,7 @@ List of all orders
                            ``last_modified``, and ``status``. Default: ``datetime``
    :query string code: Only return orders that match the given order code
    :query string status: Only return orders in the given order status (see above)
-   :query string search: Only return orders matching a given search query
+   :query string search: Only return orders matching a given search query (matching for names, email addresses, and company names)
    :query integer item: Only return orders with a position that contains this item ID. *Warning:* Result will also include orders if they contain mixed items, and it will even return orders where the item is only contained in a canceled position.
    :query integer variation: Only return orders with a position that contains this variation ID. *Warning:* Result will also include orders if they contain mixed items and variations, and it will even return orders where the variation is only contained in a canceled position.
    :query boolean testmode: Only return orders with ``testmode`` set to ``true`` or ``false``
@@ -853,7 +853,7 @@ Creating orders
 
    You can supply the following fields of the resource:
 
-   * ``code`` (optional)
+   * ``code`` (optional) – Only ``A-Z`` and ``0-9``, but without ``O`` and ``1``.
    * ``status`` (optional) – Defaults to pending for non-free orders and paid for free orders. You can only set this to
      ``"n"`` for pending or ``"p"`` for paid. We will create a payment object for this order either in state ``created``
      or in state ``confirmed``, depending on this value. If you create a paid order, the ``order_paid`` signal will

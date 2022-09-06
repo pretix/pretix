@@ -65,7 +65,7 @@ from pretix.base.models import (
 )
 from pretix.base.models.event import SubEvent
 from pretix.base.models.items import (
-    ItemBundle, SubEventItem, SubEventItemVariation,
+    ItemAddOn, ItemBundle, SubEventItem, SubEventItemVariation,
 )
 from pretix.base.services.quotas import QuotaAvailability
 from pretix.helpers.compat import date_fromisocalendar
@@ -181,6 +181,13 @@ def get_grouped_items(event, subevent=None, voucher=None, channel='web', require
                 Q(disabled=True) | Q(available_from__gt=now()) | Q(available_until__lt=now()),
                 item_id=OuterRef('pk'),
                 subevent=subevent,
+            )
+        ),
+        mandatory_priced_addons=Exists(
+            ItemAddOn.objects.filter(
+                base_item_id=OuterRef('pk'),
+                min_count__gte=1,
+                price_included=False
             )
         ),
         requires_seat=requires_seat,

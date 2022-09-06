@@ -93,6 +93,10 @@ event_patterns = [
             name='event.payment.unlock'),
     re_path(r'resend/$', pretix.presale.views.user.ResendLinkView.as_view(), name='event.resend_link'),
 
+    re_path(r'^favicon.ico/?$',
+            pretix.presale.views.organizer.OrganizerFavicon.as_view(),
+            name='event.favicon'),
+
     re_path(r'^order/(?P<order>[^/]+)/(?P<secret>[A-Za-z0-9]+)/open/(?P<hash>[a-z0-9]+)/$', pretix.presale.views.order.OrderOpen.as_view(),
             name='event.order.open'),
     re_path(r'^order/(?P<order>[^/]+)/(?P<secret>[A-Za-z0-9]+)/$', pretix.presale.views.order.OrderDetails.as_view(),
@@ -164,6 +168,9 @@ event_patterns = [
 
 organizer_patterns = [
     re_path(r'^$', pretix.presale.views.organizer.OrganizerIndex.as_view(), name='organizer.index'),
+    re_path(r'^favicon.ico/?$',
+            pretix.presale.views.organizer.OrganizerFavicon.as_view(),
+            name='organizer.favicon'),
     re_path(r'^events/ical/$',
             pretix.presale.views.organizer.OrganizerIcalDownload.as_view(),
             name='organizer.ical'),

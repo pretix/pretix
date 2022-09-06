@@ -54,7 +54,10 @@ from pretix.base.models.items import SubEventItem, SubEventItemVariation
 from pretix.base.services.seating import (
     SeatProtected, generate_seats, validate_plan_change,
 )
-from pretix.base.settings import LazyI18nStringList, validate_event_settings
+from pretix.base.settings import (
+    PERSON_NAME_SALUTATIONS, PERSON_NAME_SCHEMES, PERSON_NAME_TITLE_GROUPS,
+    LazyI18nStringList, validate_event_settings,
+)
 from pretix.base.signals import api_event_settings_fields
 
 logger = logging.getLogger(__name__)
@@ -777,6 +780,7 @@ class EventSettingsSerializer(SettingsSerializer):
         'logo_image_large',
         'logo_show_title',
         'og_image',
+        'name_scheme',
     ]
 
     def __init__(self, *args, **kwargs):
@@ -842,4 +846,25 @@ class DeviceEventSettingsSerializer(EventSettingsSerializer):
         'invoice_address_from_country',
         'invoice_address_from_tax_id',
         'invoice_address_from_vat_id',
+        'name_scheme',
     ]
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['_name_scheme_fields'] = serializers.JSONField(
+            read_only=True,
+            default=[{"key": k, "label": str(v), "weight": w} for k, v, w, *__ in PERSON_NAME_SCHEMES.get(self.event.settings.name_scheme)['fields']]
+        )
+        self.fields['_name_scheme_salutations'] = serializers.JSONField(
+            read_only=True,
+            default=[{"key": k, "label": str(v)} for k, v in PERSON_NAME_SALUTATIONS]
+        )
+        self.fields['_name_scheme_titles'] = serializers.JSONField(
+            read_only=True,
+            default=(
+                [{"key": k, "label": k}
+                 for k in PERSON_NAME_TITLE_GROUPS.get(self.event.settings.name_scheme_titles)[1]]
+                if self.event.settings.name_scheme_titles
+                else []
+            )
+        )

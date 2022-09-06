@@ -1344,22 +1344,36 @@ class ItemUpdateGeneral(ItemDetailMixin, EventPermissionRequiredMixin, MetaDataE
     def form_valid(self, form):
         self.save_meta()
         messages.success(self.request, _('Your changes have been saved.'))
-        if form.has_changed() or any(f.has_changed() for f in self.plugin_forms):
-            data = {
-                k: form.cleaned_data.get(k)
-                for k in form.changed_data
-            }
-            for f in self.plugin_forms:
-                data.update({
-                    k: (f.cleaned_data.get(k).name
-                        if isinstance(f.cleaned_data.get(k), File)
-                        else f.cleaned_data.get(k))
-                    for k in f.changed_data
-                })
+
+        change_data = {
+            k: form.cleaned_data.get(k)
+            for k in form.changed_data
+        }
+        for f in self.plugin_forms:
+            change_data.update({
+                k: (f.cleaned_data.get(k).name
+                    if isinstance(f.cleaned_data.get(k), File)
+                    else f.cleaned_data.get(k))
+                for k in f.changed_data
+            })
+
+        meta_changed = {}
+        for f in self.meta_forms:
+            meta_changed.update({
+                k: (f.cleaned_data.get(k).name
+                    if isinstance(f.cleaned_data.get(k), File)
+                    else f.cleaned_data.get(k))
+                for k in f.changed_data
+            })
+        if meta_changed:
+            change_data['meta_data'] = meta_changed
+
+        if change_data:
             self.object.log_action(
-                'pretix.event.item.changed', user=self.request.user, data=data
+                'pretix.event.item.changed', user=self.request.user, data=change_data
             )
             invalidate_cache.apply_async(kwargs={'event': self.request.event.pk, 'item': self.object.pk})
+
         for f in self.plugin_forms:
             f.save()
 

@@ -4,13 +4,13 @@
   "private": true,
   "scripts": {},
   "dependencies": {
-    "@babel/core": "^7.18.6",
-    "@babel/preset-env": "^7.18.6",
+    "@babel/core": "^7.18.10",
+    "@babel/preset-env": "^7.18.9",
     "@rollup/plugin-babel": "^5.3.1",
     "@rollup/plugin-node-resolve": "^13.3.0",
-    "vue": "^2.7.0",
-    "rollup": "^2.75.7",
+    "vue": "^2.7.8",
+    "rollup": "^2.77.2",
     "rollup-plugin-vue": "^5.0.1",
-    "vue-template-compiler": "^2.7.0"
+    "vue-template-compiler": "^2.7.8"
   }
 }

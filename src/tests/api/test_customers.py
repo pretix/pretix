@@ -82,6 +82,7 @@ def test_customer_create(token_client, organizer):
         data={
             'identifier': 'IGNORED',
             'email': 'bar@example.com',
+            'password': 'foobar',
             'name_parts': {
                 "_scheme": "given_family",
                 'given_name': 'John',
@@ -99,6 +100,7 @@ def test_customer_create(token_client, organizer):
         assert customer.is_active
         assert customer.name == 'John Doe'
         assert customer.is_verified
+        assert customer.check_password('foobar')
     assert len(djmail.outbox) == 0
 
 

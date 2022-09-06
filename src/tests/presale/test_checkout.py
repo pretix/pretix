@@ -47,6 +47,7 @@ from pretix.base.models.items import (
     ItemAddOn, ItemBundle, ItemVariation, SubEventItem, SubEventItemVariation,
 )
 from pretix.base.services.orders import OrderError, _perform_order
+from pretix.base.services.tax import VATIDFinalError, VATIDTemporaryError
 from pretix.testutils.scope import classscope
 from pretix.testutils.sessions import get_cart_session_key
 
@@ -139,8 +140,8 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 price=23, expires=now() + timedelta(minutes=10)
             )
 
-        with mock.patch('vat_moss.id.validate') as mock_validate:
-            mock_validate.return_value = ('AT', 'AT123456', 'Foo')
+        with mock.patch('pretix.base.services.tax._validate_vat_id_EU') as mock_validate:
+            mock_validate.return_value = 'AT123456'
             self.client.post('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), {
                 'is_business': 'business',
                 'company': 'Foo',
@@ -163,8 +164,8 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
     def test_reverse_charge_enable_then_disable(self):
         self.test_reverse_charge()
 
-        with mock.patch('vat_moss.id.validate') as mock_validate:
-            mock_validate.return_value = ('AT', 'AT123456', 'Foo')
+        with mock.patch('pretix.base.services.tax._validate_vat_id_EU') as mock_validate:
+            mock_validate.return_value = 'AT123456'
             self.client.post('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), {
                 'is_business': 'individual',
                 'name': 'Bar',
@@ -195,10 +196,9 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 price=23, expires=now() + timedelta(minutes=10)
             )
 
-        with mock.patch('vat_moss.id.validate') as mock_validate:
+        with mock.patch('pretix.base.services.tax._validate_vat_id_EU') as mock_validate:
             def raiser(*args, **kwargs):
-                import vat_moss.errors
-                raise vat_moss.errors.InvalidError()
+                raise VATIDFinalError('final')
 
             mock_validate.side_effect = raiser
             resp = self.client.post('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), {
@@ -229,7 +229,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 price=23, expires=now() + timedelta(minutes=10)
             )
 
-        with mock.patch('vat_moss.id.validate') as mock_validate:
+        with mock.patch('pretix.base.services.tax._validate_vat_id_EU') as mock_validate:
             mock_validate.return_value = ('AU', 'AU123456', 'Foo')
             self.client.post('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), {
                 'is_business': 'business',
@@ -263,8 +263,8 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 price=23, expires=now() + timedelta(minutes=10)
             )
 
-        with mock.patch('vat_moss.id.validate') as mock_validate:
-            mock_validate.return_value = ('AT', 'AT123456', 'Foo')
+        with mock.patch('pretix.base.services.tax._validate_vat_id_EU') as mock_validate:
+            mock_validate.return_value = 'AT123456'
             self.client.post('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), {
                 'is_business': 'business',
                 'company': 'Foo',
@@ -296,20 +296,18 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 price=23, expires=now() + timedelta(minutes=10)
             )
 
-        with mock.patch('vat_moss.id.validate') as mock_validate:
-            mock_validate.return_value = ('AT', 'AT123456', 'Foo')
-            resp = self.client.post('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), {
-                'is_business': 'business',
-                'company': 'Foo',
-                'name': 'Bar',
-                'street': 'Baz',
-                'zipcode': '12345',
-                'city': 'Here',
-                'country': 'FR',
-                'vat_id': 'AT123456',
-                'email': 'admin@localhost'
-            }, follow=True)
-            assert 'alert-danger' in resp.content.decode()
+        resp = self.client.post('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), {
+            'is_business': 'business',
+            'company': 'Foo',
+            'name': 'Bar',
+            'street': 'Baz',
+            'zipcode': '12345',
+            'city': 'Here',
+            'country': 'FR',
+            'vat_id': 'AT123456',
+            'email': 'admin@localhost'
+        }, follow=True)
+        assert 'alert-danger' in resp.content.decode()
 
         cr1.refresh_from_db()
         assert cr1.price == Decimal('23.00')
@@ -326,10 +324,9 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 price=23, expires=now() + timedelta(minutes=10)
             )
 
-        with mock.patch('vat_moss.id.validate') as mock_validate:
+        with mock.patch('pretix.base.services.tax._validate_vat_id_EU') as mock_validate:
             def raiser(*args, **kwargs):
-                import vat_moss.errors
-                raise vat_moss.errors.WebServiceUnavailableError('Fail')
+                raise VATIDTemporaryError('temp')
 
             mock_validate.side_effect = raiser
             self.client.post('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), {
@@ -364,8 +361,8 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 price=23, expires=now() + timedelta(minutes=10)
             )
 
-        with mock.patch('vat_moss.id.validate') as mock_validate:
-            mock_validate.return_value = ('AT', 'AT123456', 'Foo')
+        with mock.patch('pretix.base.services.tax._validate_vat_id_EU') as mock_validate:
+            mock_validate.return_value = 'AT123456'
             self.client.post('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), {
                 'is_business': 'business',
                 'company': 'Foo',
@@ -401,8 +398,8 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 price=23, expires=now() + timedelta(minutes=10)
             )
 
-        with mock.patch('vat_moss.id.validate') as mock_validate:
-            mock_validate.return_value = ('AT', 'AT123456', 'Foo')
+        with mock.patch('pretix.base.services.tax._validate_vat_id_EU') as mock_validate:
+            mock_validate.return_value = 'AT123456'
             self.client.post('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), {
                 'is_business': 'business',
                 'company': 'Foo',
@@ -418,7 +415,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
         cr1.refresh_from_db()
         assert cr1.price == Decimal('19.33')
 
-        with mock.patch('vat_moss.id.validate') as mock_validate:
+        with mock.patch('pretix.base.services.tax._validate_vat_id_EU') as mock_validate:
             mock_validate.return_value = ('DE', 'DE123456', 'Foo')
             self.client.post('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), {
                 'is_business': 'business',
@@ -465,8 +462,8 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
         cr1.refresh_from_db()
         assert cr1.price == Decimal('23.00')
 
-        with mock.patch('vat_moss.id.validate') as mock_validate:
-            mock_validate.return_value = ('AT', 'AT123456', 'Foo')
+        with mock.patch('pretix.base.services.tax._validate_vat_id_EU') as mock_validate:
+            mock_validate.return_value = 'AT123456'
             r = self.client.post('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), {
                 'is_business': 'business',
                 'company': 'Foo',
@@ -525,8 +522,8 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 price=23, expires=now() + timedelta(minutes=10)
             )
 
-        with mock.patch('vat_moss.id.validate') as mock_validate:
-            mock_validate.return_value = ('AT', 'AT123456', 'Foo')
+        with mock.patch('pretix.base.services.tax._validate_vat_id_EU') as mock_validate:
+            mock_validate.return_value = 'AT123456'
             self.client.post('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), {
                 'is_business': 'individual',
                 'name': 'Bar',
@@ -577,8 +574,8 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 voucher=self.event.vouchers.create()
             )
 
-        with mock.patch('vat_moss.id.validate') as mock_validate:
-            mock_validate.return_value = ('AT', 'AT123456', 'Foo')
+        with mock.patch('pretix.base.services.tax._validate_vat_id_EU') as mock_validate:
+            mock_validate.return_value = 'AT123456'
             self.client.post('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), {
                 'is_business': 'individual',
                 'name': 'Bar',
@@ -605,8 +602,8 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
     def test_country_taxing_switch(self):
         self._test_country_taxing()
 
-        with mock.patch('vat_moss.id.validate') as mock_validate:
-            mock_validate.return_value = ('AT', 'AT123456', 'Foo')
+        with mock.patch('pretix.base.services.tax._validate_vat_id_EU') as mock_validate:
+            mock_validate.return_value = 'AT123456'
             self.client.post('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), {
                 'is_business': 'individual',
                 'name': 'Bar',
@@ -657,8 +654,8 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
             assert cr1.price == Decimal('28.56')
             assert cr1.tax_rate == Decimal('19.00')
 
-        with mock.patch('vat_moss.id.validate') as mock_validate:
-            mock_validate.return_value = ('AT', 'AT123456', 'Foo')
+        with mock.patch('pretix.base.services.tax._validate_vat_id_EU') as mock_validate:
+            mock_validate.return_value = 'AT123456'
             self.client.post('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), {
                 'is_business': 'business',
                 'company': 'Foo',
@@ -721,8 +718,8 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
             assert cr1.price == Decimal('47.60')
             assert cr1.tax_rate == Decimal('19.00')
 
-        with mock.patch('vat_moss.id.validate') as mock_validate:
-            mock_validate.return_value = ('AT', 'AT123456', 'Foo')
+        with mock.patch('pretix.base.services.tax._validate_vat_id_EU') as mock_validate:
+            mock_validate.return_value = 'AT123456'
             self.client.post('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), {
                 'is_business': 'business',
                 'company': 'Foo',

@@ -166,6 +166,11 @@ class StripeSettingsHolder(BasePaymentProvider):
                          label=_('Stripe account'),
                          disabled=True
                      )),
+                    ('connect_user_id',
+                     forms.CharField(
+                         label=_('Stripe account'),
+                         disabled=True
+                     )),
                     ('endpoint',
                      forms.ChoiceField(
                          label=_('Endpoint'),

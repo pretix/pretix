@@ -392,7 +392,7 @@ class InvoiceAddressCountry(ImportColumn):
         return list(countries)
 
     def clean(self, value, previous_values):
-        if value and not Country(value).numeric:
+        if value and not (Country(value).numeric or value in settings.COUNTRIES_OVERRIDE):
             raise ValidationError(_("Please enter a valid country code."))
         return value
 
@@ -538,7 +538,7 @@ class AttendeeCountry(ImportColumn):
         return list(countries)
 
     def clean(self, value, previous_values):
-        if value and not Country(value).numeric:
+        if value and not (Country(value).numeric or value in settings.COUNTRIES_OVERRIDE):
             raise ValidationError(_("Please enter a valid country code."))
         return value
 

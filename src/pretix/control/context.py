@@ -71,7 +71,7 @@ def _default_context(request):
     except Resolver404:
         return {}
 
-    if not request.path.startswith(get_script_prefix() + 'control'):
+    if not request.path.startswith(get_script_prefix() + 'control') or not hasattr(request, 'user'):
         return {}
     ctx = {
         'url_name': url.url_name,

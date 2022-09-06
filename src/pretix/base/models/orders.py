@@ -747,6 +747,19 @@ class Order(LockModel, LoggedModel):
                 iteration = 0
 
     @property
+    def modify_deadline(self):
+        modify_deadline = self.event.settings.get('last_order_modification_date', as_type=RelativeDateWrapper)
+        if self.event.has_subevents and modify_deadline:
+            dates = [
+                modify_deadline.datetime(se)
+                for se in self.event.subevents.filter(id__in=self.positions.values_list('subevent', flat=True))
+            ]
+            return min(dates) if dates else None
+        elif modify_deadline:
+            return modify_deadline.datetime(self.event)
+        return None
+
+    @property
     def can_modify_answers(self) -> bool:
         """
         ``True`` if the user can change the question answers / attendee names that are
@@ -758,16 +771,7 @@ class Order(LockModel, LoggedModel):
         if self.status not in (Order.STATUS_PENDING, Order.STATUS_PAID, Order.STATUS_EXPIRED):
             return False
 
-        modify_deadline = self.event.settings.get('last_order_modification_date', as_type=RelativeDateWrapper)
-        if self.event.has_subevents and modify_deadline:
-            dates = [
-                modify_deadline.datetime(se)
-                for se in self.event.subevents.filter(id__in=self.positions.values_list('subevent', flat=True))
-            ]
-            modify_deadline = min(dates) if dates else None
-        elif modify_deadline:
-            modify_deadline = modify_deadline.datetime(self.event)
-
+        modify_deadline = self.modify_deadline
         if modify_deadline is not None and now() > modify_deadline:
             return False
 

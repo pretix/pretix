@@ -199,7 +199,7 @@ setup(
         'markdown==3.3.4',  # 3.3.5 requires importlib-metadata>=4.4, but django-bootstrap3 requires importlib-metadata<3.
         # We can upgrade markdown again once django-bootstrap3 upgrades or once we drop Python 3.6 and 3.7
         'mt-940==4.23.*',
-        'oauthlib==3.1.*',
+        'oauthlib==3.2.*',
         'openpyxl==3.0.*',
         'packaging',
         'paypalrestsdk==1.13.*',
@@ -211,7 +211,7 @@ setup(
         'psycopg2-binary',
         'pycountry',
         'pycparser==2.21',
-        'PyPDF2==1.27.9',
+        'PyPDF2==2.9.*',
         'python-bidi==0.4.*',  # Support for Arabic in reportlab
         'python-dateutil==2.8.*',
         'python-u2flib-server==4.*',
@@ -248,11 +248,11 @@ setup(
             'pytest-cache',
             'pytest-cov',
             'pytest-django==4.*',
-            'pytest-mock>=2.0,<3.7',
-            'pytest-rerunfailures>=9,<11',
+            'pytest-mock==3.8.*',
+            'pytest-rerunfailures==10.2',
             'pytest-sugar',
-            'pytest-xdist==1.31.*',
-            'pytest==6.*',
+            'pytest-xdist==2.5.*',
+            'pytest==7.*',
             'responses',
         ],
         'memcached': ['pylibmc'],

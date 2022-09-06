@@ -93,7 +93,7 @@ def inputfile_factory():
             'D': 'Test',
             'E': 'Baz',
             'F': '0.00',
-            'G': 'AU',
+            'G': 'XK',
             'H': '',
             'I': 'Foo,Bar',
             'J': '2021-06-28 11:00:00',

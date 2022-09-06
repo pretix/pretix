@@ -57,7 +57,7 @@ from django.utils.html import conditional_escape
 from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _, pgettext
 from i18nfield.strings import LazyI18nString
-from PyPDF2 import PdfFileReader
+from PyPDF2 import PdfReader
 from pytz import timezone
 from reportlab.graphics import renderPDF
 from reportlab.graphics.barcode.qr import QrCodeWidget
@@ -646,7 +646,7 @@ class Renderer:
         self.event = event
         if self.background_file:
             self.bg_bytes = self.background_file.read()
-            self.bg_pdf = PdfFileReader(BytesIO(self.bg_bytes), strict=False)
+            self.bg_pdf = PdfReader(BytesIO(self.bg_bytes), strict=False)
         else:
             self.bg_bytes = None
             self.bg_pdf = None
@@ -861,7 +861,7 @@ class Renderer:
         canvas.restoreState()
 
     def draw_page(self, canvas: Canvas, order: Order, op: OrderPosition, show_page=True, only_page=None):
-        page_count = self.bg_pdf.getNumPages()
+        page_count = len(self.bg_pdf.pages)
 
         if not only_page and not show_page:
             raise ValueError("only_page=None and show_page=False cannot be combined")
@@ -881,7 +881,7 @@ class Renderer:
                 elif o['type'] == "poweredby":
                     self._draw_poweredby(canvas, op, o)
                 if self.bg_pdf:
-                    canvas.setPageSize((self.bg_pdf.getPage(page).mediaBox[2], self.bg_pdf.getPage(page).mediaBox[3]))
+                    canvas.setPageSize((self.bg_pdf.pages[0].mediabox[2], self.bg_pdf.pages[0].mediabox[3]))
             if show_page:
                 canvas.showPage()
 
@@ -905,17 +905,17 @@ class Renderer:
                 with open(os.path.join(d, 'out.pdf'), 'rb') as f:
                     return BytesIO(f.read())
         else:
-            from PyPDF2 import PdfFileReader, PdfFileWriter
+            from PyPDF2 import PdfReader, PdfWriter
             buffer.seek(0)
-            new_pdf = PdfFileReader(buffer)
-            output = PdfFileWriter()
+            new_pdf = PdfReader(buffer)
+            output = PdfWriter()
 
             for i, page in enumerate(new_pdf.pages):
-                bg_page = copy.copy(self.bg_pdf.getPage(i))
-                bg_page.mergePage(page)
-                output.addPage(bg_page)
+                bg_page = copy.copy(self.bg_pdf.pages[i])
+                bg_page.merge_page(page)
+                output.add_page(bg_page)
 
-            output.addMetadata({
+            output.add_metadata({
                 '/Title': str(title),
                 '/Creator': 'pretix',
             })

@@ -515,8 +515,8 @@ class CustomerViewSet(viewsets.ModelViewSet):
         raise MethodNotAllowed("Customers cannot be deleted.")
 
     @transaction.atomic()
-    def perform_create(self, serializer, send_email=False):
-        customer = serializer.save(organizer=self.request.organizer, password=make_password(None))
+    def perform_create(self, serializer, send_email=False, password=None):
+        customer = serializer.save(organizer=self.request.organizer, password=make_password(password))
         serializer.instance.log_action(
             'pretix.customer.created',
             user=self.request.user,
@@ -530,7 +530,7 @@ class CustomerViewSet(viewsets.ModelViewSet):
     def create(self, request, *args, **kwargs):
         serializer = CustomerCreateSerializer(data=request.data, context=self.get_serializer_context())
         serializer.is_valid(raise_exception=True)
-        self.perform_create(serializer, send_email=serializer.validated_data.pop('send_email', False))
+        self.perform_create(serializer, send_email=serializer.validated_data.pop('send_email', False), password=serializer.validated_data.pop('password', None))
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
