@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-25 16:59+0000\n"
+"POT-Creation-Date: 2022-09-06 12:12+0000\n"
 "PO-Revision-Date: 2021-12-03 08:37+0000\n"
 "Last-Translator: ExtremeX-BB <qq754163444@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://translate.pretix.eu/projects/"
@@ -486,50 +486,50 @@ msgstr ""
 msgid "Check-in QR"
 msgstr "签到QR码"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:382
+#: pretix/static/pretixcontrol/js/ui/editor.js:378
 msgid "The PDF background file could not be loaded for the following reason:"
 msgstr "由于以下原因无法加载PDF背景文件:"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:630
+#: pretix/static/pretixcontrol/js/ui/editor.js:648
 msgid "Group of objects"
 msgstr "对象组"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:636
+#: pretix/static/pretixcontrol/js/ui/editor.js:654
 msgid "Text object"
 msgstr "文本对象"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:638
+#: pretix/static/pretixcontrol/js/ui/editor.js:656
 msgid "Barcode area"
 msgstr "条码区"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:640
+#: pretix/static/pretixcontrol/js/ui/editor.js:658
 #, fuzzy
 #| msgid "Barcode area"
 msgid "Image area"
 msgstr "条码区"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:642
+#: pretix/static/pretixcontrol/js/ui/editor.js:660
 msgid "Powered by pretix"
 msgstr "由pretix驱动"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:644
+#: pretix/static/pretixcontrol/js/ui/editor.js:662
 msgid "Object"
 msgstr "对象"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:648
+#: pretix/static/pretixcontrol/js/ui/editor.js:666
 msgid "Ticket design"
 msgstr "门票设计"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:938
+#: pretix/static/pretixcontrol/js/ui/editor.js:956
 msgid "Saving failed."
 msgstr "保存失败."
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:988
-#: pretix/static/pretixcontrol/js/ui/editor.js:1027
+#: pretix/static/pretixcontrol/js/ui/editor.js:1006
+#: pretix/static/pretixcontrol/js/ui/editor.js:1045
 msgid "Error while uploading your PDF file, please try again."
 msgstr "上传PDF文件时出错，请重试。"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:1012
+#: pretix/static/pretixcontrol/js/ui/editor.js:1030
 msgid "Do you really want to leave the editor without saving your changes?"
 msgstr "你真的想离开编辑器而不保存你的更改吗?"
 
@@ -575,15 +575,15 @@ msgstr ""
 msgid "Selected only"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/main.js:886
+#: pretix/static/pretixcontrol/js/ui/main.js:858
 msgid "Use a different name internally"
 msgstr "在内部使用一个不同的名称"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:922
+#: pretix/static/pretixcontrol/js/ui/main.js:894
 msgid "Click to close"
 msgstr "点此关闭"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:963
+#: pretix/static/pretixcontrol/js/ui/main.js:966
 msgid "You have unsaved changes!"
 msgstr ""
 
@@ -655,22 +655,22 @@ msgstr "由 %(currency)s %(price)s"
 msgid "Please enter the amount the organizer can keep."
 msgstr ""
 
-#: pretix/static/pretixpresale/js/ui/main.js:378
+#: pretix/static/pretixpresale/js/ui/main.js:380
 msgid "Please enter a quantity for one of the ticket types."
 msgstr ""
 
-#: pretix/static/pretixpresale/js/ui/main.js:414
+#: pretix/static/pretixpresale/js/ui/main.js:416
 #, fuzzy
 #| msgid "Cart expired"
 msgid "required"
 msgstr "购物车已过期"
 
-#: pretix/static/pretixpresale/js/ui/main.js:517
-#: pretix/static/pretixpresale/js/ui/main.js:536
+#: pretix/static/pretixpresale/js/ui/main.js:519
+#: pretix/static/pretixpresale/js/ui/main.js:538
 msgid "Time zone:"
 msgstr ""
 
-#: pretix/static/pretixpresale/js/ui/main.js:527
+#: pretix/static/pretixpresale/js/ui/main.js:529
 msgid "Your local time:"
 msgstr ""
 

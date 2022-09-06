@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-25 16:59+0000\n"
+"POT-Creation-Date: 2022-09-06 12:12+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -468,48 +468,48 @@ msgstr ""
 msgid "Check-in QR"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:382
+#: pretix/static/pretixcontrol/js/ui/editor.js:378
 msgid "The PDF background file could not be loaded for the following reason:"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:630
+#: pretix/static/pretixcontrol/js/ui/editor.js:648
 msgid "Group of objects"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:636
+#: pretix/static/pretixcontrol/js/ui/editor.js:654
 msgid "Text object"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:638
+#: pretix/static/pretixcontrol/js/ui/editor.js:656
 msgid "Barcode area"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:640
+#: pretix/static/pretixcontrol/js/ui/editor.js:658
 msgid "Image area"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:642
+#: pretix/static/pretixcontrol/js/ui/editor.js:660
 msgid "Powered by pretix"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:644
+#: pretix/static/pretixcontrol/js/ui/editor.js:662
 msgid "Object"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:648
+#: pretix/static/pretixcontrol/js/ui/editor.js:666
 msgid "Ticket design"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:938
+#: pretix/static/pretixcontrol/js/ui/editor.js:956
 msgid "Saving failed."
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:988
-#: pretix/static/pretixcontrol/js/ui/editor.js:1027
+#: pretix/static/pretixcontrol/js/ui/editor.js:1006
+#: pretix/static/pretixcontrol/js/ui/editor.js:1045
 msgid "Error while uploading your PDF file, please try again."
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:1012
+#: pretix/static/pretixcontrol/js/ui/editor.js:1030
 msgid "Do you really want to leave the editor without saving your changes?"
 msgstr ""
 
@@ -555,15 +555,15 @@ msgstr ""
 msgid "Selected only"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/main.js:886
+#: pretix/static/pretixcontrol/js/ui/main.js:858
 msgid "Use a different name internally"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/main.js:922
+#: pretix/static/pretixcontrol/js/ui/main.js:894
 msgid "Click to close"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/main.js:963
+#: pretix/static/pretixcontrol/js/ui/main.js:966
 msgid "You have unsaved changes!"
 msgstr ""
 
@@ -625,20 +625,20 @@ msgstr ""
 msgid "Please enter the amount the organizer can keep."
 msgstr ""
 
-#: pretix/static/pretixpresale/js/ui/main.js:378
+#: pretix/static/pretixpresale/js/ui/main.js:380
 msgid "Please enter a quantity for one of the ticket types."
 msgstr ""
 
-#: pretix/static/pretixpresale/js/ui/main.js:414
+#: pretix/static/pretixpresale/js/ui/main.js:416
 msgid "required"
 msgstr ""
 
-#: pretix/static/pretixpresale/js/ui/main.js:517
-#: pretix/static/pretixpresale/js/ui/main.js:536
+#: pretix/static/pretixpresale/js/ui/main.js:519
+#: pretix/static/pretixpresale/js/ui/main.js:538
 msgid "Time zone:"
 msgstr ""
 
-#: pretix/static/pretixpresale/js/ui/main.js:527
+#: pretix/static/pretixpresale/js/ui/main.js:529
 msgid "Your local time:"
 msgstr ""
 
