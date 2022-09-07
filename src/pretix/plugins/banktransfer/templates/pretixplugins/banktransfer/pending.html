@@ -45,10 +45,10 @@
         <div class="col-md-6 col-sm-6 hidden-xs text-center js-only blank-after">
             <ul class="nav nav-tabs" id="banktransfer_qrcodes_tabs" role="tablist">
                 {% if swiss_qrbill %}
-                    <li class="active"><a href="#banktransfer_qrcodes_qrbill" role="tab" id="banktransfer_qrcodes_qrbill_tab" data-toggle="tab" aria-controls="banktransfer_qrcodes_qrbill">QR-bill</a></li>
+                    <li class="active"><a href="#banktransfer_qrcodes_qrbill" role="tab" id="banktransfer_qrcodes_qrbill_tab" data-toggle="tab" aria-controls="banktransfer_qrcodes_qrbill" aria-expanded="true">QR-bill</a></li>
                 {% endif %}
-                <li {% if not swiss_qrbill %}class="active"{% endif %}><a href="#banktransfer_qrcodes_girocode" role="tab" id="banktransfer_qrcodes_girocode_tab" data-toggle="tab" aria-controls="banktransfer_qrcodes_girocode">EPC-QR</a></li>
-                <li class=""><a href="#banktransfer_qrcodes_bezahlcode" role="tab" id="banktransfer_qrcodes_bezahlcode_tab" data-toggle="tab" aria-controls="banktransfer_qrcodes_bezahlcode">BezahlCode</a></li>
+                <li {% if not swiss_qrbill %}class="active"{% endif %}><a href="#banktransfer_qrcodes_girocode" role="tab" id="banktransfer_qrcodes_girocode_tab" data-toggle="tab" aria-controls="banktransfer_qrcodes_girocode" aria-expanded="{% if swiss_qrbill %}false{% else %}true{% endif %}">EPC-QR</a></li>
+                <li class=""><a href="#banktransfer_qrcodes_bezahlcode" role="tab" id="banktransfer_qrcodes_bezahlcode_tab" data-toggle="tab" aria-controls="banktransfer_qrcodes_bezahlcode" aria-expanded="false">BezahlCode</a></li>
             </ul>
             <div class="tab-content" id="banktransfer_qrcodes_tabs_content">
                 {% if swiss_qrbill %}
