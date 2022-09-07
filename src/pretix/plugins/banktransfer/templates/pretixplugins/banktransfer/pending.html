@@ -45,14 +45,14 @@
         <div class="col-md-6 col-sm-6 hidden-xs text-center js-only">
             <ul class="nav nav-tabs" id="banktransfer_qrcodes_tabs" role="tablist">
                 {% if swiss_qrbill %}
-                    <li class="active"><a href="#banktransfer_qrcodes_qrbill" role="tab" id="dropdown1-tab" data-toggle="tab">QR-bill</a></li>
+                    <li class="active"><a href="#banktransfer_qrcodes_qrbill" role="tab" id="banktransfer_qrcodes_qrbill_tab" data-toggle="tab" aria-controls="banktransfer_qrcodes_qrbill">QR-bill</a></li>
                 {% endif %}
-                <li {% if not swiss_qrbill %}class="active"{% endif %}><a href="#banktransfer_qrcodes_girocode" role="tab" id="dropdown1-tab" data-toggle="tab">EPC-QR</a></li>
-                <li class=""><a href="#banktransfer_qrcodes_bezahlcode" role="tab" id="dropdown2-tab" data-toggle="tab">BezahlCode</a></li>
+                <li {% if not swiss_qrbill %}class="active"{% endif %}><a href="#banktransfer_qrcodes_girocode" role="tab" id="banktransfer_qrcodes_girocode_tab" data-toggle="tab" aria-controls="banktransfer_qrcodes_girocode">EPC-QR</a></li>
+                <li class=""><a href="#banktransfer_qrcodes_bezahlcode" role="tab" id="banktransfer_qrcodes_bezahlcode_tab" data-toggle="tab" aria-controls="banktransfer_qrcodes_bezahlcode">BezahlCode</a></li>
             </ul>
             <div class="tab-content" id="banktransfer_qrcodes_tabs_content">
                 {% if swiss_qrbill %}
-                    <div id="banktransfer_qrcodes_qrbill" class="tab-pane fade active in" role="tabpanel">
+                    <div id="banktransfer_qrcodes_qrbill" class="tab-pane fade active in" role="tabpanel" aria-labelledby="banktransfer_qrcodes_qrbill_tab">
                         <p class="small">
                             {% trans "Scan the qr-code with your banking app" %}
                         </p>
@@ -70,7 +70,7 @@
                         </p>
                     </div>
                 {% endif %}
-                <div id="banktransfer_qrcodes_girocode" class="tab-pane fade {% if not swiss_qrbill %}active in{% endif %}" role="tabpanel">
+                <div id="banktransfer_qrcodes_girocode" class="tab-pane fade {% if not swiss_qrbill %}active in{% endif %}" role="tabpanel" aria-labelledby="banktransfer_qrcodes_girocode_tab">
                     <p class="small">
                         {% trans "Scan the qr-code with your banking app" %}
                     </p>
@@ -90,7 +90,7 @@ SCT
             </script>
                     </p>
                 </div>
-                <div id="banktransfer_qrcodes_bezahlcode" class="tab-pane fade" role="tabpanel">
+                <div id="banktransfer_qrcodes_bezahlcode" class="tab-pane fade" role="tabpanel" aria-labelledby="banktransfer_qrcodes_bezahlcode_tab">
                     <p class="small">
                         {% trans "Scan the qr-code with your banking app" %}
                     </p>
