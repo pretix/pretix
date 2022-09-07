@@ -57,15 +57,7 @@
                             {% trans "Scan the qr-code with your banking app" %}
                         </p>
                         <p class="banktransfer-swiss-cross-overlay">
-                            <svg class="banktransfer-swiss-cross" xmlns="http://www.w3.org/2000/svg"
-                                 viewBox="0 0 19.8 19.8">
-                                <polygon
-                                        points="18.3,0.7 1.6,0.7 0.7,0.7 0.7,1.6 0.7,18.3 0.7,19.1 1.6,19.1 18.3,19.1 19.1,19.1 19.1,18.3 19.1,1.6 19.1,0.7 "/>
-                                <rect x="8.3" y="4" fill="#fff" width="3.3" height="11"/>
-                                <rect x="4.4" y="7.9" fill="#fff" width="11" height="3.3"/>
-                                <polygon fill="none" stroke="#fff" stroke-miterlimit="10" stroke-width="1.4357" points="0.7,1.6 0.7,18.3 0.7,19.1 1.6,19.1 18.3,19.1 19.1,19.1 19.1,18.3 19.1,1.6 19.1,0.7 18.3,0.7 1.6,0.7 0.7,0.7 "/>
-                            </svg>
-
+                            <svg class="banktransfer-swiss-cross" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 19.8 19.8"><path stroke="#fff" stroke-width="1.436" d="M.7.7h18.4v18.4H.7z"/><path fill="#fff" d="M8.3 4h3.3v11H8.3z"/><path fill="#fff" d="M4.4 7.9h11v3.3h-11z"/></svg>
                             <script type="text/plain" data-size="150" data-replace-with-qr data-desc="{% trans 'Scan this image with your banking app’s QR-Reader to start the payment process.' %}">{{swiss_qrbill}}</script>
                         </p>
                     </div>
