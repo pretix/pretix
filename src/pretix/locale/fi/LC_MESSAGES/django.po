@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-09-08 10:09+0000\n"
-"PO-Revision-Date: 2021-11-10 05:00+0000\n"
-"Last-Translator: Jaakko Rinta-Filppula <jaakko@r-f.fi>\n"
+"PO-Revision-Date: 2022-09-08 20:00+0000\n"
+"Last-Translator: Mika Lammi <mika.lammi@gmail.com>\n"
 "Language-Team: Finnish <https://translate.pretix.eu/projects/pretix/pretix/"
 "fi/>\n"
 "Language: fi\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.8\n"
+"X-Generator: Weblate 4.14\n"
 
 #: pretix/api/auth/devicesecurity.py:28
 msgid ""
@@ -31,11 +31,11 @@ msgstr "pretixSCAN"
 
 #: pretix/api/auth/devicesecurity.py:78
 msgid "pretixSCAN (kiosk mode, no order sync, no search)"
-msgstr ""
+msgstr "pretixSCAN (päätetila, ei synkronointia, ei hakua)"
 
 #: pretix/api/auth/devicesecurity.py:110
 msgid "pretixSCAN (online only, no order sync)"
-msgstr ""
+msgstr "pretixSCAN (vain online, ei tilausten synkronointia)"
 
 #: pretix/api/auth/devicesecurity.py:143
 msgid "pretixPOS"
@@ -60,7 +60,7 @@ msgstr "Asiakas-ID"
 
 #: pretix/api/models.py:50
 msgid "Client secret"
-msgstr ""
+msgstr "Asiakkaan \"secret\""
 
 #: pretix/api/models.py:97
 msgid "Enable webhook"
@@ -153,6 +153,8 @@ msgid ""
 "Gift card products should not be associated with non-zero tax rates since "
 "sales tax will be applied when the gift card is redeemed."
 msgstr ""
+"Lahjakorttituotteisiin ei saa liittää nollaveroasetusta koska myyntivero "
+"lasketaan kun lahjakorttia käytetään."
 
 #: pretix/api/serializers/item.py:208 pretix/control/forms/item.py:577
 msgid "Gift card products should not be admission products at the same time."
@@ -195,7 +197,7 @@ msgstr ""
 #: pretix/api/serializers/organizer.py:211
 #: pretix/control/views/organizer.py:695
 msgid "pretix account invitation"
-msgstr ""
+msgstr "Kutsu pretix-tilin käyttäjäksi"
 
 #: pretix/api/serializers/organizer.py:233
 #: pretix/control/views/organizer.py:794
@@ -265,9 +267,8 @@ msgid "Order expired"
 msgstr "Tilaus vanhentunut"
 
 #: pretix/api/webhooks.py:224
-#, fuzzy
 msgid "Order expiry date changed"
-msgstr "Tilauksen tiedot muuttuneet"
+msgstr "Tilauksen vanhenemispäivä on muuttunut"
 
 #: pretix/api/webhooks.py:228 pretix/base/notifications.py:269
 msgid "Order information changed"
@@ -275,7 +276,7 @@ msgstr "Tilauksen tiedot muuttuneet"
 
 #: pretix/api/webhooks.py:232 pretix/base/notifications.py:275
 msgid "Order contact address changed"
-msgstr ""
+msgstr "Tilauksen yhteystieto on muuttunut"
 
 #: pretix/api/webhooks.py:236 pretix/base/notifications.py:281
 #: pretix/control/templates/pretixcontrol/event/mail.html:102
@@ -283,9 +284,8 @@ msgid "Order changed"
 msgstr "Tilaus muuttunut"
 
 #: pretix/api/webhooks.py:240
-#, fuzzy
 msgid "Refund of payment created"
-msgstr "Hyvitä alkuperäiseen maksutapaan"
+msgstr "Maksun hyvitys on luotu"
 
 #: pretix/api/webhooks.py:244 pretix/base/notifications.py:293
 msgid "External refund of payment"
@@ -293,22 +293,19 @@ msgstr "Ulkoinen maksun palautus"
 
 #: pretix/api/webhooks.py:248
 msgid "Refund of payment requested by customer"
-msgstr ""
+msgstr "Asiakas pyytää maksun hyvitystä"
 
 #: pretix/api/webhooks.py:252
-#, fuzzy
 msgid "Refund of payment completed"
-msgstr "Hyvitä alkuperäiseen maksutapaan"
+msgstr "Maksun hyvitys on suoritettu"
 
 #: pretix/api/webhooks.py:256
-#, fuzzy
 msgid "Refund of payment canceled"
-msgstr "Hyvistys on peruttu."
+msgstr "Maksun hyvitys on peruutettu"
 
 #: pretix/api/webhooks.py:260
-#, fuzzy
 msgid "Refund of payment failed"
-msgstr "Hyvitä alkuperäiseen maksutapaan"
+msgstr "Maksun hyvitys on epäonnistunut"
 
 #: pretix/api/webhooks.py:264
 msgid "Order approved"
@@ -354,24 +351,20 @@ msgid "Event series date deleted"
 msgstr "Tapahtumapäivä poistettu"
 
 #: pretix/api/webhooks.py:304
-#, fuzzy
 msgid "Shop taken live"
-msgstr "Kauppa on auki"
+msgstr "Kauppa on live-tilassa"
 
 #: pretix/api/webhooks.py:308
-#, fuzzy
 msgid "Shop taken offline"
-msgstr "Piilota tapahtuma"
+msgstr "Kauppa on offline-tilassa"
 
 #: pretix/api/webhooks.py:312
-#, fuzzy
 msgid "Test-Mode of shop has been activated"
-msgstr "Valittu tuote on poistettu käytöstä."
+msgstr "Kaupan testikäyttö on käynnistetty"
 
 #: pretix/api/webhooks.py:316
-#, fuzzy
 msgid "Test-Mode of shop has been deactivated"
-msgstr "Valittu tuote on poistettu käytöstä."
+msgstr "Kaupan testikäyttö on otettu pois päältä"
 
 #: pretix/base/auth.py:143
 #, python-brace-format
@@ -458,7 +451,7 @@ msgstr "Summa on veloitettu kortiltasi."
 
 #: pretix/base/email.py:624
 msgid "Please transfer money to this bank account: 9999-9999-9999-9999"
-msgstr ""
+msgstr "Ole hyvä ja siirrä raha tälle tilille: 9999-9999-9999-9999"
 
 #: pretix/base/email.py:646 pretix/base/pdf.py:556 pretix/base/pdf.py:579
 #: pretix/control/forms/organizer.py:497
@@ -562,9 +555,8 @@ msgstr ""
 "Huomaa, että laskun päiväys ei aina vastaa tilaus- tai maksupäivämäärää."
 
 #: pretix/base/exporters/events.py:47
-#, fuzzy
 msgid "Event data"
-msgstr "Tapahtuman päivämäärä"
+msgstr "Tapahtumatieto"
 
 #: pretix/base/exporters/events.py:55 pretix/base/exporters/waitinglist.py:112
 #: pretix/base/models/event.py:459 pretix/base/pdf.py:214
@@ -579,7 +571,7 @@ msgstr "Tapahtuman nimi"
 #: pretix/base/models/organizer.py:89
 #: pretix/control/templates/pretixcontrol/organizers/index.html:47
 msgid "Short form"
-msgstr ""
+msgstr "Lyhyt muoto"
 
 #: pretix/base/exporters/events.py:57 pretix/base/models/event.py:477
 msgid "Shop is live"
