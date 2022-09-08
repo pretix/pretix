@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-06 12:16+0000\n"
+"POT-Creation-Date: 2022-09-08 10:09+0000\n"
 "PO-Revision-Date: 2022-09-08 09:57+0000\n"
 "Last-Translator: Martin Gross <gross@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
@@ -372,11 +372,15 @@ msgid "Shop taken offline"
 msgstr "Shop offline genommen"
 
 #: pretix/api/webhooks.py:312
-msgid "Testmode of shop has been activated"
+#, fuzzy
+#| msgid "Testmode of shop has been activated"
+msgid "Test-Mode of shop has been activated"
 msgstr "Testmodus des Ticketshops wurde aktiviert"
 
 #: pretix/api/webhooks.py:316
-msgid "Testmode of shop has been deactivated"
+#, fuzzy
+#| msgid "Testmode of shop has been deactivated"
+msgid "Test-Mode of shop has been deactivated"
 msgstr "Testmodus des Ticketshops wurde deaktiviert"
 
 #: pretix/base/auth.py:143

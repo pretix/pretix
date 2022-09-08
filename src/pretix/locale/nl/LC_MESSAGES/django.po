@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-06 12:16+0000\n"
+"POT-Creation-Date: 2022-09-08 10:09+0000\n"
 "PO-Revision-Date: 2022-07-06 21:00+0000\n"
 "Last-Translator: Hans Fraiponts <fraiponts@gmail.com>\n"
 "Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/"
@@ -391,13 +391,13 @@ msgstr "De winkel is offline gehaald."
 #: pretix/api/webhooks.py:312
 #, fuzzy
 #| msgid "The order has been reactivated."
-msgid "Testmode of shop has been activated"
+msgid "Test-Mode of shop has been activated"
 msgstr "De bestelling is opnieuw geactiveerd."
 
 #: pretix/api/webhooks.py:316
 #, fuzzy
 #| msgid "The order has been reactivated."
-msgid "Testmode of shop has been deactivated"
+msgid "Test-Mode of shop has been deactivated"
 msgstr "De bestelling is opnieuw geactiveerd."
 
 #: pretix/base/auth.py:143

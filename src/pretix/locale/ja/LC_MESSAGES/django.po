@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-06 12:16+0000\n"
+"POT-Creation-Date: 2022-09-08 10:09+0000\n"
 "PO-Revision-Date: 2022-05-31 10:01+0000\n"
 "Last-Translator: Aya Yabuki <a.yabuki@enobyte.com>\n"
 "Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/pretix/"
@@ -377,12 +377,14 @@ msgstr "ショップがオープン"
 #: pretix/api/webhooks.py:312
 #, fuzzy
 #| msgid "The amount has been charged to your card."
-msgid "Testmode of shop has been activated"
+msgid "Test-Mode of shop has been activated"
 msgstr "その金額がカードに請求されました。"
 
 #: pretix/api/webhooks.py:316
-msgid "Testmode of shop has been deactivated"
-msgstr ""
+#, fuzzy
+#| msgid "The amount has been charged to your card."
+msgid "Test-Mode of shop has been deactivated"
+msgstr "その金額がカードに請求されました。"
 
 #: pretix/base/auth.py:143
 #, python-brace-format

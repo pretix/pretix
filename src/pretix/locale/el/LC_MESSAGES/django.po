@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-06 12:16+0000\n"
+"POT-Creation-Date: 2022-09-08 10:09+0000\n"
 "PO-Revision-Date: 2019-10-31 14:39+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: Greek <https://translate.pretix.eu/projects/pretix/pretix/el/"
@@ -421,13 +421,13 @@ msgstr "Το κατάστημα έχει ληφθεί εκτός σύνδεση�
 #: pretix/api/webhooks.py:312
 #, fuzzy
 #| msgid "The order has been created."
-msgid "Testmode of shop has been activated"
+msgid "Test-Mode of shop has been activated"
 msgstr "Η παραγγελία έχει δημιουργηθεί."
 
 #: pretix/api/webhooks.py:316
 #, fuzzy
 #| msgid "The order has been created."
-msgid "Testmode of shop has been deactivated"
+msgid "Test-Mode of shop has been deactivated"
 msgstr "Η παραγγελία έχει δημιουργηθεί."
 
 #: pretix/base/auth.py:143

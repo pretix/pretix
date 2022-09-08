@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-06 12:16+0000\n"
+"POT-Creation-Date: 2022-09-08 10:09+0000\n"
 "PO-Revision-Date: 2021-08-12 21:00+0000\n"
 "Last-Translator: amandajurno <amandajurno@gmail.com>\n"
 "Language-Team: Portuguese <https://translate.pretix.eu/projects/pretix/"
@@ -376,13 +376,13 @@ msgstr ""
 #: pretix/api/webhooks.py:312
 #, fuzzy
 #| msgid "The selected team cannot be deleted."
-msgid "Testmode of shop has been activated"
+msgid "Test-Mode of shop has been activated"
 msgstr "A equipe selecionada não pode ser deletada."
 
 #: pretix/api/webhooks.py:316
 #, fuzzy
 #| msgid "The selected team cannot be deleted."
-msgid "Testmode of shop has been deactivated"
+msgid "Test-Mode of shop has been deactivated"
 msgstr "A equipe selecionada não pode ser deletada."
 
 #: pretix/base/auth.py:143

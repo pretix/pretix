@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-06 12:16+0000\n"
+"POT-Creation-Date: 2022-09-08 10:09+0000\n"
 "PO-Revision-Date: 2022-06-21 20:00+0000\n"
 "Last-Translator: Anna-itk <abc@aarhus.dk>\n"
 "Language-Team: Danish <https://translate.pretix.eu/projects/pretix/pretix/da/"
@@ -382,12 +382,12 @@ msgstr "Butik ikke i luften"
 
 #: pretix/api/webhooks.py:312
 #, fuzzy
-msgid "Testmode of shop has been activated"
+msgid "Test-Mode of shop has been activated"
 msgstr "Bestilling oprettet."
 
 #: pretix/api/webhooks.py:316
 #, fuzzy
-msgid "Testmode of shop has been deactivated"
+msgid "Test-Mode of shop has been deactivated"
 msgstr "Bestilling oprettet."
 
 #: pretix/base/auth.py:143

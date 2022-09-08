@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-06 12:16+0000\n"
+"POT-Creation-Date: 2022-09-08 10:09+0000\n"
 "PO-Revision-Date: 2021-12-09 15:49+0000\n"
 "Last-Translator: Ilona Zilgalve <i.zilgalve@riga-jurmala.com>\n"
 "Language-Team: Russian <https://translate.pretix.eu/projects/pretix/pretix/"
@@ -389,13 +389,13 @@ msgstr "Магазин действующий"
 #: pretix/api/webhooks.py:312
 #, fuzzy
 #| msgid "The order has been canceled."
-msgid "Testmode of shop has been activated"
+msgid "Test-Mode of shop has been activated"
 msgstr "Заказ отменён."
 
 #: pretix/api/webhooks.py:316
 #, fuzzy
 #| msgid "The order has been canceled."
-msgid "Testmode of shop has been deactivated"
+msgid "Test-Mode of shop has been deactivated"
 msgstr "Заказ отменён."
 
 #: pretix/base/auth.py:143

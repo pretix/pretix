@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-06 12:16+0000\n"
+"POT-Creation-Date: 2022-09-08 10:09+0000\n"
 "PO-Revision-Date: 2022-06-30 19:00+0000\n"
 "Last-Translator: Janine Steitz <steitz@booker-gmbh.de>\n"
 "Language-Team: Italian <https://translate.pretix.eu/projects/pretix/pretix/"
@@ -389,13 +389,13 @@ msgstr "Il negozio è live"
 #: pretix/api/webhooks.py:312
 #, fuzzy
 #| msgid "Order changed"
-msgid "Testmode of shop has been activated"
+msgid "Test-Mode of shop has been activated"
 msgstr "Ordine modificato"
 
 #: pretix/api/webhooks.py:316
 #, fuzzy
 #| msgid "Order changed"
-msgid "Testmode of shop has been deactivated"
+msgid "Test-Mode of shop has been deactivated"
 msgstr "Ordine modificato"
 
 #: pretix/base/auth.py:143

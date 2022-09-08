@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-06 12:16+0000\n"
+"POT-Creation-Date: 2022-09-08 10:09+0000\n"
 "PO-Revision-Date: 2021-05-30 13:17+0000\n"
 "Last-Translator: albert <albert.serra.monner@gmail.com>\n"
 "Language-Team: Catalan <https://translate.pretix.eu/projects/pretix/pretix/"
@@ -392,13 +392,13 @@ msgstr "Tenda no activa"
 #: pretix/api/webhooks.py:312
 #, fuzzy
 #| msgid "The task has been completed."
-msgid "Testmode of shop has been activated"
+msgid "Test-Mode of shop has been activated"
 msgstr "S'ha completat la tasca."
 
 #: pretix/api/webhooks.py:316
 #, fuzzy
 #| msgid "The task has been completed."
-msgid "Testmode of shop has been deactivated"
+msgid "Test-Mode of shop has been deactivated"
 msgstr "S'ha completat la tasca."
 
 #: pretix/base/auth.py:143

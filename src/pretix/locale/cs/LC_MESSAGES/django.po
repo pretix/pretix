@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-06 12:16+0000\n"
+"POT-Creation-Date: 2022-09-08 10:09+0000\n"
 "PO-Revision-Date: 2022-07-23 06:00+0000\n"
 "Last-Translator: Hana Happl <hana.happl@gmx.at>\n"
 "Language-Team: Czech <https://translate.pretix.eu/projects/pretix/pretix/cs/"
@@ -381,13 +381,13 @@ msgstr "Obchod je spuštěný"
 #: pretix/api/webhooks.py:312
 #, fuzzy
 #| msgid "Order {order.code} has been reactivated."
-msgid "Testmode of shop has been activated"
+msgid "Test-Mode of shop has been activated"
 msgstr "Objednávka {order.code} byla opět aktivována."
 
 #: pretix/api/webhooks.py:316
 #, fuzzy
 #| msgid "Order {order.code} has been reactivated."
-msgid "Testmode of shop has been deactivated"
+msgid "Test-Mode of shop has been deactivated"
 msgstr "Objednávka {order.code} byla opět aktivována."
 
 #: pretix/base/auth.py:143

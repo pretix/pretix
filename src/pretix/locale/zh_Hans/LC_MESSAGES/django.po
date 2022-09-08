@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-06 12:16+0000\n"
+"POT-Creation-Date: 2022-09-08 10:09+0000\n"
 "PO-Revision-Date: 2022-06-29 05:00+0000\n"
 "Last-Translator: Yang JianCheng <948862346@qq.com>\n"
 "Language-Team: Chinese (Simplified) <https://translate.pretix.eu/projects/"
@@ -376,13 +376,13 @@ msgstr "这家商店已经下线了。"
 #: pretix/api/webhooks.py:312
 #, fuzzy
 #| msgid "The order has been created."
-msgid "Testmode of shop has been activated"
+msgid "Test-Mode of shop has been activated"
 msgstr "订单已创建。"
 
 #: pretix/api/webhooks.py:316
 #, fuzzy
 #| msgid "The order has been created."
-msgid "Testmode of shop has been deactivated"
+msgid "Test-Mode of shop has been deactivated"
 msgstr "订单已创建。"
 
 #: pretix/base/auth.py:143

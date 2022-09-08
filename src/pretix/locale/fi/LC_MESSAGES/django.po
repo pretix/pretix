@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-06 12:16+0000\n"
+"POT-Creation-Date: 2022-09-08 10:09+0000\n"
 "PO-Revision-Date: 2021-11-10 05:00+0000\n"
 "Last-Translator: Jaakko Rinta-Filppula <jaakko@r-f.fi>\n"
 "Language-Team: Finnish <https://translate.pretix.eu/projects/pretix/pretix/"
@@ -365,12 +365,12 @@ msgstr "Piilota tapahtuma"
 
 #: pretix/api/webhooks.py:312
 #, fuzzy
-msgid "Testmode of shop has been activated"
+msgid "Test-Mode of shop has been activated"
 msgstr "Valittu tuote on poistettu käytöstä."
 
 #: pretix/api/webhooks.py:316
 #, fuzzy
-msgid "Testmode of shop has been deactivated"
+msgid "Test-Mode of shop has been deactivated"
 msgstr "Valittu tuote on poistettu käytöstä."
 
 #: pretix/base/auth.py:143
@@ -3244,10 +3244,10 @@ msgstr ""
 
 #: pretix/base/models/items.py:456
 msgid ""
-"If this product is part of an order, the order will be put into an \"approval"
-"\" state and will need to be confirmed by you before it can be paid and "
-"completed. You can use this e.g. for discounted tickets that are only "
-"available to specific groups."
+"If this product is part of an order, the order will be put into an "
+"\"approval\" state and will need to be confirmed by you before it can be "
+"paid and completed. You can use this e.g. for discounted tickets that are "
+"only available to specific groups."
 msgstr ""
 
 #: pretix/base/models/items.py:463
@@ -4952,8 +4952,8 @@ msgstr ""
 #, python-brace-format
 msgid ""
 "We recommend to enable this if you want your users to pay the payment fees "
-"of your payment provider. <a href=\"{docs_url}\" target=\"_blank\" rel="
-"\"noopener\">Click here for detailed information on what this does.</a> "
+"of your payment provider. <a href=\"{docs_url}\" target=\"_blank\" "
+"rel=\"noopener\">Click here for detailed information on what this does.</a> "
 "Don't forget to set the correct fees above!"
 msgstr ""
 
@@ -7589,12 +7589,12 @@ msgstr "Voi tarkastella tilauksia"
 #, python-brace-format
 msgid ""
 "This file will be attached to the first email that we send for every new "
-"order. Therefore it will be combined with the \"Placed order\", \"Free order"
-"\", or \"Received order\" texts from above. It will be sent to both order "
-"contacts and attendees. You can use this e.g. to send your terms of service. "
-"Do not use it to send non-public information as this file might be sent "
-"before payment is confirmed or the order is approved. To avoid this vital "
-"email going to spam, you can only upload PDF files of up to {size} MB."
+"order. Therefore it will be combined with the \"Placed order\", \"Free "
+"order\", or \"Received order\" texts from above. It will be sent to both "
+"order contacts and attendees. You can use this e.g. to send your terms of "
+"service. Do not use it to send non-public information as this file might be "
+"sent before payment is confirmed or the order is approved. To avoid this "
+"vital email going to spam, you can only upload PDF files of up to {size} MB."
 msgstr ""
 
 #: pretix/base/settings.py:1813
@@ -14165,10 +14165,10 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/event/tax_edit.html:34
 #, python-format
 msgid ""
-"These settings are intended for advanced users. See the <a href=\"%(docs)s"
-"\">documentation</a> for more information. Note that we are not responsible "
-"for the correct handling of taxes in your ticket shop. If in doubt, please "
-"contact a lawyer or tax consultant."
+"These settings are intended for advanced users. See the <a "
+"href=\"%(docs)s\">documentation</a> for more information. Note that we are "
+"not responsible for the correct handling of taxes in your ticket shop. If in "
+"doubt, please contact a lawyer or tax consultant."
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/event/tax_edit.html:44
@@ -14717,9 +14717,9 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/item/create.html:85
 msgid ""
-"Examples: Ticket category with variations for \"full price\" and \"reduced"
-"\", merchandise with variations for different sizes, workshop add-on with "
-"variations for simultaneous workshops."
+"Examples: Ticket category with variations for \"full price\" and "
+"\"reduced\", merchandise with variations for different sizes, workshop add-"
+"on with variations for simultaneous workshops."
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/item/create.html:98
@@ -14962,8 +14962,8 @@ msgstr "Asiakastilit"
 msgid ""
 "With automatic discounts, you can automatically apply a discount to "
 "purchases from your customers based on certain conditions. For example, you "
-"can create group discounts like \"get 20%% off if you buy 3 or more tickets"
-"\" or \"buy 2 tickets, get 1 free\"."
+"can create group discounts like \"get 20%% off if you buy 3 or more "
+"tickets\" or \"buy 2 tickets, get 1 free\"."
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/items/discounts.html:14
@@ -14971,8 +14971,8 @@ msgid ""
 "Automatic discounts are available to all customers as long as they are "
 "active. If you want to offer special prices only to specific customers, you "
 "can use vouchers instead. If you want to offer discounts across multiple "
-"purchases (\"buy a package of 10 you can turn into individual tickets later"
-"\"), you can use customer accounts and memberships instead."
+"purchases (\"buy a package of 10 you can turn into individual tickets "
+"later\"), you can use customer accounts and memberships instead."
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/items/discounts.html:22
@@ -16209,8 +16209,8 @@ msgstr "Merkitse valmiiksi"
 msgid ""
 "We received notice that <strong>%(amount)s</strong> have been refunded via "
 "<strong>%(method)s</strong>. If this refund is processed, the order will be "
-"underpaid by <strong>%(pending)s</strong>. The order total is <strong>"
-"%(total)s</strong>."
+"underpaid by <strong>%(pending)s</strong>. The order total is "
+"<strong>%(total)s</strong>."
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/order/refund_process.html:30
@@ -18400,8 +18400,8 @@ msgstr "Poista ostoskorit"
 #: pretix/control/templates/pretixcontrol/vouchers/delete_carts.html:9
 #, python-format
 msgid ""
-"Are you sure you want to delete any cart positions with voucher <strong>"
-"%(voucher)s</strong>?"
+"Are you sure you want to delete any cart positions with voucher "
+"<strong>%(voucher)s</strong>?"
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/vouchers/delete_carts.html:10
@@ -18516,8 +18516,8 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/waitinglist/delete.html:9
 #, python-format
 msgid ""
-"Are you sure you want to delete the following waiting list entry <strong>"
-"%(entry)s</strong>?"
+"Are you sure you want to delete the following waiting list entry "
+"<strong>%(entry)s</strong>?"
 msgstr ""
 "Oletko varma, että haluat poistaa merkinnän <strong>%(entry)s</strong> "
 "jonotuslistalta?"
@@ -18583,8 +18583,8 @@ msgstr "Myyntiarvio"
 #, python-format
 msgid ""
 "If you can make enough room at your event to fit all the persons on the "
-"waiting list in, you could sell tickets worth an additional <strong>"
-"%(amount)s</strong>."
+"waiting list in, you could sell tickets worth an additional "
+"<strong>%(amount)s</strong>."
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:98
@@ -22185,10 +22185,10 @@ msgstr ""
 
 #: pretix/plugins/stripe/payment.py:128
 msgid ""
-"Please configure a <a href=\"https://dashboard.stripe.com/account/webhooks"
-"\">Stripe Webhook</a> to the following endpoint in order to automatically "
-"cancel orders when charges are refunded externally and to process "
-"asynchronous payment methods like SOFORT."
+"Please configure a <a href=\"https://dashboard.stripe.com/account/"
+"webhooks\">Stripe Webhook</a> to the following endpoint in order to "
+"automatically cancel orders when charges are refunded externally and to "
+"process asynchronous payment methods like SOFORT."
 msgstr ""
 
 #: pretix/plugins/stripe/payment.py:140
@@ -24334,8 +24334,9 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order.html:417
 #, python-format
 msgid ""
-"You can cancel this order. In this case, a cancellation fee of <strong>"
-"%(fee)s</strong> will be kept and you will receive a refund of the remainder."
+"You can cancel this order. In this case, a cancellation fee of "
+"<strong>%(fee)s</strong> will be kept and you will receive a refund of the "
+"remainder."
 msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/order.html:434
@@ -24472,8 +24473,8 @@ msgstr ""
 #, python-format
 msgid ""
 "\n"
-"                                                Add-on product to position #"
-"%(positionid)s"
+"                                                Add-on product to position "
+"#%(positionid)s"
 msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/order_change_confirm.html:56

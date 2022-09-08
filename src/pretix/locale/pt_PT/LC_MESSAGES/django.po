@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-06 12:16+0000\n"
+"POT-Creation-Date: 2022-09-08 10:09+0000\n"
 "PO-Revision-Date: 2022-02-16 00:00+0000\n"
 "Last-Translator: Miguel Magalhães <magamig@gmail.com>\n"
 "Language-Team: Portuguese (Portugal) <https://translate.pretix.eu/projects/"
@@ -405,13 +405,13 @@ msgstr "A loja foi tirado do ar."
 #: pretix/api/webhooks.py:312
 #, fuzzy
 #| msgid "The order has been reactivated."
-msgid "Testmode of shop has been activated"
+msgid "Test-Mode of shop has been activated"
 msgstr "A encomenda foi reativada."
 
 #: pretix/api/webhooks.py:316
 #, fuzzy
 #| msgid "The order has been reactivated."
-msgid "Testmode of shop has been deactivated"
+msgid "Test-Mode of shop has been deactivated"
 msgstr "A encomenda foi reativada."
 
 #: pretix/base/auth.py:143
