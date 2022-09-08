@@ -5,8 +5,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-09-06 12:16+0000\n"
-"PO-Revision-Date: 2022-07-26 09:01+0000\n"
-"Last-Translator: Raphael Michel <michel@rami.io>\n"
+"PO-Revision-Date: 2022-09-08 09:57+0000\n"
+"Last-Translator: Martin Gross <gross@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
 ">\n"
 "Language: de\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.13.1\n"
+"X-Generator: Weblate 4.14\n"
 "X-Poedit-Bookmarks: -1,-1,904,-1,-1,-1,-1,-1,-1,-1\n"
 
 #: pretix/api/auth/devicesecurity.py:28
@@ -280,10 +280,8 @@ msgid "Order expired"
 msgstr "Bestellung abgelaufen"
 
 #: pretix/api/webhooks.py:224
-#, fuzzy
-#| msgid "The order's expiry date has been changed."
 msgid "Order expiry date changed"
-msgstr "Die Zahlungsfrist wurde geändert."
+msgstr "Zahlungsfrist der Bestellung wurde geändert"
 
 #: pretix/api/webhooks.py:228 pretix/base/notifications.py:269
 msgid "Order information changed"
@@ -299,38 +297,28 @@ msgid "Order changed"
 msgstr "Bestellung geändert"
 
 #: pretix/api/webhooks.py:240
-#, fuzzy
-#| msgid "Refund to original payment method"
 msgid "Refund of payment created"
-msgstr "Auf das ursprüngliche Zahlungsmittel erstatten"
+msgstr "Erstattung einer Zahlung erstellt"
 
 #: pretix/api/webhooks.py:244 pretix/base/notifications.py:293
 msgid "External refund of payment"
 msgstr "Externe Erstattung einer Zahlung"
 
 #: pretix/api/webhooks.py:248
-#, fuzzy
-#| msgid "Text (requested by user)"
 msgid "Refund of payment requested by customer"
-msgstr "Text (vom Benutzer beantragt)"
+msgstr "Erstattung von Kunde beantragt"
 
 #: pretix/api/webhooks.py:252
-#, fuzzy
-#| msgid "Payment completed."
 msgid "Refund of payment completed"
-msgstr "Zahlung erfolgreich."
+msgstr "Erstattung abgeschlossen"
 
 #: pretix/api/webhooks.py:256
-#, fuzzy
-#| msgid "Refund {local_id} has been canceled."
 msgid "Refund of payment canceled"
-msgstr "Die Erstattung {local_id} wurde abgebrochen."
+msgstr "Erstattung abgebrochen"
 
 #: pretix/api/webhooks.py:260
-#, fuzzy
-#| msgid "Refund for overpayment"
 msgid "Refund of payment failed"
-msgstr "Erstattung für Überzahlung"
+msgstr "Erstattung fehlgeschlagen"
 
 #: pretix/api/webhooks.py:264
 msgid "Order approved"
@@ -376,28 +364,20 @@ msgid "Event series date deleted"
 msgstr "Veranstaltungsreihe: Termin gelöscht"
 
 #: pretix/api/webhooks.py:304
-#, fuzzy
-#| msgid "Shop not live"
 msgid "Shop taken live"
-msgstr "Shop nicht live"
+msgstr "Shop live geschaltet"
 
 #: pretix/api/webhooks.py:308
-#, fuzzy
-#| msgid "The shop has been taken offline."
 msgid "Shop taken offline"
-msgstr "Der Shop wurde abgeschaltet."
+msgstr "Shop offline genommen"
 
 #: pretix/api/webhooks.py:312
-#, fuzzy
-#| msgid "The order has been reactivated."
 msgid "Testmode of shop has been activated"
-msgstr "Die Bestellung wurde reaktiviert."
+msgstr "Testmodus des Ticketshops wurde aktiviert"
 
 #: pretix/api/webhooks.py:316
-#, fuzzy
-#| msgid "The order has been reactivated."
 msgid "Testmode of shop has been deactivated"
-msgstr "Die Bestellung wurde reaktiviert."
+msgstr "Testmodus des Ticketshops wurde deaktiviert"
 
 #: pretix/base/auth.py:143
 #, python-brace-format
