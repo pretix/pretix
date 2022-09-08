@@ -327,7 +327,7 @@ class Discount(LoggedModel):
                 candidates = []
                 cardinality = None
                 for se, l in subevent_to_idx.items():
-                    l = [ll for ll in l if ll not in current_group]
+                    l = [ll for ll in l if ll in initial_candidates and ll not in current_group]
                     if cardinality and len(l) != cardinality:
                         continue
                     if se not in {positions[idx][1] for idx in current_group}:
