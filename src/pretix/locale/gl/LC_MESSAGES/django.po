@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-09-06 12:16+0000\n"
-"PO-Revision-Date: 2022-06-01 08:08+0000\n"
+"PO-Revision-Date: 2022-09-07 20:00+0000\n"
 "Last-Translator: Ismael Menéndez Fernández <ismael.menendez@balidea.com>\n"
 "Language-Team: Galician <https://translate.pretix.eu/projects/pretix/pretix/"
 "gl/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.12\n"
+"X-Generator: Weblate 4.14\n"
 
 #: pretix/api/auth/devicesecurity.py:28
 msgid ""
@@ -407,7 +407,6 @@ msgstr "{system} Usuario"
 #: pretix/presale/forms/customer.py:368 pretix/presale/forms/user.py:40
 #: pretix/presale/templates/pretixpresale/event/order.html:306
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:22
-#, fuzzy
 msgid "E-mail"
 msgstr "Correo electrónico"
 
@@ -640,15 +639,13 @@ msgstr "Hora de admisión"
 
 #: pretix/base/exporters/events.py:62 pretix/base/models/event.py:498
 #: pretix/base/models/event.py:1320 pretix/control/forms/subevents.py:92
-#, fuzzy
 msgid "Start of presale"
-msgstr "Inicio de preventa"
+msgstr "Inicio de prevenda"
 
 #: pretix/base/exporters/events.py:63 pretix/base/models/event.py:492
 #: pretix/base/models/event.py:1314 pretix/control/forms/subevents.py:98
-#, fuzzy
 msgid "End of presale"
-msgstr "Finalización de preventa"
+msgstr "Finalización de prevenda"
 
 #: pretix/base/exporters/events.py:64 pretix/base/exporters/invoices.py:351
 #: pretix/base/models/event.py:504 pretix/base/models/event.py:1326
@@ -5248,10 +5245,9 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/subevents/index.html:5
 #: pretix/control/templates/pretixcontrol/subevents/index.html:7
 #: pretix/presale/templates/pretixpresale/event/index.html:94
-#, fuzzy
 msgctxt "subevent"
 msgid "Dates"
-msgstr "Fechas"
+msgstr "Datas"
 
 #: pretix/base/notifications.py:194 pretix/base/pdf.py:224
 #: pretix/plugins/badges/exporters.py:302
@@ -6422,11 +6418,11 @@ msgstr ""
 
 #: pretix/base/services/cart.py:104 pretix/base/services/orders.py:116
 msgid "The presale period for this event has not yet started."
-msgstr "O período de preventa deste evento aínda non comezou."
+msgstr "O período de prevenda deste evento aínda non comezou."
 
 #: pretix/base/services/cart.py:105
 msgid "The presale period for this event has ended."
-msgstr "O período de preventa deste evento finalizou."
+msgstr "O período de prevenda deste evento finalizou."
 
 #: pretix/base/services/cart.py:106
 msgid ""
@@ -6448,7 +6444,7 @@ msgid ""
 "The presale period for one of the events in your cart has ended. The "
 "affected positions have been removed from your cart."
 msgstr ""
-"Este evento non está en período de preventa. As posicións afectadas foron "
+"Este evento non está en período de prevenda. As posicións afectadas foron "
 "eliminadas do seu carriño."
 
 #: pretix/base/services/cart.py:111
@@ -6986,7 +6982,7 @@ msgstr ""
 
 #: pretix/base/services/orders.py:117
 msgid "The presale period has ended."
-msgstr "O período de preventa rematou."
+msgstr "O período de prevenda rematou."
 
 #: pretix/base/services/orders.py:118
 msgid ""
@@ -7040,7 +7036,7 @@ msgid ""
 "The presale period for one of the events in your cart has not yet started. "
 "The affected positions have been removed from your cart."
 msgstr ""
-"Este evento non está en período de preventa. As posicións afectadas foron "
+"Este evento non está en período de prevenda. As posicións afectadas foron "
 "eliminadas do seu carriño."
 
 #: pretix/base/services/orders.py:132
@@ -12493,9 +12489,8 @@ msgid "You need to specify an amount for a partial refund."
 msgstr "Es necesario especificar un importe para un reembolso parcial."
 
 #: pretix/control/forms/orders.py:737
-#, fuzzy
 msgid "Cancel all dates"
-msgstr "Cancelar orden"
+msgstr "Cancelar todas as datas"
 
 #: pretix/control/forms/orders.py:756
 #, fuzzy
@@ -28924,7 +28919,7 @@ msgstr "Ver outra data"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:87
 msgid "Choose date to book a ticket"
-msgstr "Elixa a data para comprar un ticket"
+msgstr "Elixa a data para comprar un tícket"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:92
 msgctxt "subevent"
@@ -28934,18 +28929,18 @@ msgstr "Outras datas"
 #: pretix/presale/templates/pretixpresale/event/index.html:142
 #: pretix/presale/views/waiting.py:98 pretix/presale/views/widget.py:674
 msgid "The presale period for this event is over."
-msgstr "O período de preventa para este evento terminou."
+msgstr "O período de prevenda para este evento terminou."
 
 #: pretix/presale/templates/pretixpresale/event/index.html:150
 #: pretix/presale/views/widget.py:676
 #, python-format
 msgid "The presale for this event will start on %(date)s at %(time)s."
-msgstr "A preventa para este evento comezará en %(date)s a %(time)s."
+msgstr "A prevenda para este evento comezará en %(date)s a %(time)s."
 
 #: pretix/presale/templates/pretixpresale/event/index.html:157
 #: pretix/presale/views/waiting.py:102 pretix/presale/views/widget.py:681
 msgid "The presale for this event has not yet started."
-msgstr "A preventa deste evento aínda non comezou."
+msgstr "A prevenda deste evento aínda non comezou."
 
 #: pretix/presale/templates/pretixpresale/event/index.html:167
 #: pretix/presale/templates/pretixpresale/event/index.html:168
@@ -29017,7 +29012,7 @@ msgstr "Engadir ao pedido"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:308
 msgid "If you already ordered a ticket"
-msgstr "Se xa pediu un ticket"
+msgstr "Se xa pediu un tícket"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:312
 msgid ""
@@ -29033,7 +29028,7 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/index.html:321
 msgid "Resend order link"
-msgstr "Reenviar liganzóns do pedido"
+msgstr "Reenviar ligazóns do pedido"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:12
 #: pretix/presale/templates/pretixpresale/event/order.html:29
@@ -29614,7 +29609,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/resend_link.html:4
 #: pretix/presale/templates/pretixpresale/event/resend_link.html:11
 msgid "Resend order links"
-msgstr "Reenviar liganzóns do pedido"
+msgstr "Reenviar ligazóns do pedido"
 
 #: pretix/presale/templates/pretixpresale/event/resend_link.html:15
 msgid ""
@@ -29622,10 +29617,10 @@ msgid ""
 "you used for your order. We will send you an email with links to all orders "
 "you placed using this email address."
 msgstr ""
-"Se perdeu a ligazón ao seu pedido ou pedidos, por favor, introduza a "
-"dirección de correo electrónico que utilizou para o seu pedido. "
-"Enviarémoslle un correo electrónico con ligazóns a todos os pedidos que "
-"realizase utilizando esta dirección de correo electrónico."
+"Se perdeu a ligazón ao seu pedido ou pedidos, por favor, introduza o "
+"enderezo de correo electrónico que utilizou para o seu pedido. Enviarémoslle "
+"un correo electrónico con ligazóns a todos os pedidos que realizase "
+"utilizando este enderezo de correo electrónico."
 
 #: pretix/presale/templates/pretixpresale/event/resend_link.html:30
 msgid "Send links"
@@ -30134,7 +30129,7 @@ msgstr "O seu pedido está baleiro"
 
 #: pretix/presale/views/checkout.py:59
 msgid "The presale for this event is over or has not yet started."
-msgstr "A preventa deste evento terminou ou aínda non comezou."
+msgstr "A preventa desde evento terminou ou aínda non comezou."
 
 #: pretix/presale/views/customer.py:218
 msgid ""
