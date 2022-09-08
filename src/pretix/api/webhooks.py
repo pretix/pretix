@@ -309,11 +309,11 @@ def register_default_webhook_events(sender, **kwargs):
         ),
         ParametrizedEventWebhookEvent(
             'pretix.event.testmode.activated',
-            _('Testmode of shop has been activated'),
+            _('Test-Mode of shop has been activated'),
         ),
         ParametrizedEventWebhookEvent(
             'pretix.event.testmode.deactivated',
-            _('Testmode of shop has been deactivated'),
+            _('Test-Mode of shop has been deactivated'),
         ),
     )
 
