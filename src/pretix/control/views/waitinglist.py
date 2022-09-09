@@ -141,7 +141,7 @@ class WaitingListQuerySetMixin:
 with scopes_disabled():
     class WaitingListSettingsForm(I18nModelForm):
         def __init__(self, *args, **kwargs):
-            self.queryset = kwargs.pop('queryset')
+            #self.queryset = kwargs.pop('queryset')
             super().__init__(*args, **kwargs)
             #self.fields['subevent'] =
 
