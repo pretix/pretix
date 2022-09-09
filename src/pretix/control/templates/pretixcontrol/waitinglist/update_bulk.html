@@ -12,8 +12,6 @@
                 {% for s in allowed %}
                     <li>
                         {{ s }}
-
-
                         <input type="hidden" name="entry" value="{{ s.pk }}">
                     </li>
                 {% endfor %}
@@ -38,7 +36,10 @@
                 {% endfor %}
             </ul>
         {% endif %}
-        <div class="form-group submit-group">
+        <div class="col-md-4">
+            {% bootstrap_field form.subevent %}
+        </div>
+            <div class="form-group submit-group">
             <a href="{% url "control:event.orders.waitinglist" organizer=request.event.organizer.slug event=request.event.slug %}" class="btn btn-default btn-cancel">
                 {% trans "Cancel" %}
             </a>
@@ -48,3 +49,4 @@
         </div>
     </form>
 {% endblock %}
+SubEventBulkEditForm

@@ -34,7 +34,7 @@
 
 import csv
 import io
-
+from django_scopes import ScopedManager
 from django.contrib import messages
 from django.db import transaction
 from django.db.models import F, Max, Min, Q, Sum
@@ -47,17 +47,19 @@ from django.utils.http import is_safe_url
 from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _, pgettext
 from django.views import View
-from django.views.generic import ListView
+from django.views.generic import ListView, FormView
 from django.views.generic.edit import DeleteView, UpdateView
-
+from pretix.base.forms import I18nModelForm
+from pretix.base.forms import SettingsForm
 from pretix.base.models import Item, Quota, WaitingListEntry
 from pretix.base.models.waitinglist import WaitingListException
 from pretix.base.services.waitinglist import assign_automatically
 from pretix.base.views.tasks import AsyncAction
 from pretix.control.permissions import EventPermissionRequiredMixin
 from pretix.control.views import PaginationMixin
-from pretix.control.forms.waitinglist import WaitingListForm
-
+from django import forms
+#from pretix.control.forms.waitinglist import WaitingListForm
+from django_scopes import scopes_disabled
 
 class AutoAssign(EventPermissionRequiredMixin, AsyncAction, View):
     task = assign_automatically
@@ -136,10 +138,33 @@ class WaitingListQuerySetMixin:
 
         return qs
 
+with scopes_disabled():
+    class WaitingListSettingsForm(I18nModelForm):
+        def __init__(self, *args, **kwargs):
+            self.queryset = kwargs.pop('queryset')
+            super().__init__(*args, **kwargs)
+            #self.fields['subevent'] =
 
-class WaitingListActionView(EventPermissionRequiredMixin, WaitingListQuerySetMixin, View):
+        subevent = forms.ChoiceField(
+            label=_("Date list"),
+            help_text=_(
+                "Select the date of the subevent the entries will be transfered to."
+            ).format(),
+            required=True,
+        )
+
+        class Meta:
+            model = WaitingListEntry
+            fields = [
+                'subevent'
+            ]
+
+class WaitingListActionView(EventPermissionRequiredMixin, WaitingListQuerySetMixin, FormView): #FormView
     model = WaitingListEntry
     permission = 'can_change_orders'
+    form_class = WaitingListSettingsForm
+    def get_queryset(self):
+        return super().get_queryset().prefetch_related(None).order_by()
 
     def _redirect_back(self):
         if "next" in self.request.GET and is_safe_url(self.request.GET.get("next"), allowed_hosts=None):
@@ -165,9 +190,9 @@ class WaitingListActionView(EventPermissionRequiredMixin, WaitingListQuerySetMix
 
         elif request.POST.get('action') == 'update':
             print(self.get_queryset().values())
-            return render(request, 'pretixcontrol/waitinglist/update_many.html', {
-                'allowed': self.get_queryset().filter(voucher__isnull=True),
-                'forbidden': self.get_queryset().filter(voucher__isnull=False),
+            return render(request, 'pretixcontrol/waitinglist/update_bulk.html', {
+                'allowed': self.get_queryset(),
+                'form': self.form_class,
             })
 
         elif request.POST.get('action') == 'update_confirm':
@@ -420,7 +445,7 @@ class EntryUpdate(EventPermissionRequiredMixin, UpdateView):
         return HttpResponseRedirect(success_url)
 
 class EntriesUpdate(EventPermissionRequiredMixin, UpdateView):
-    form_class = WaitingListForm
+    #form_class = WaitingListForm
     #model = WaitingListEntry
     template_name = 'pretixcontrol/waitinglist/update_many.html'
     permission = 'can_change_orders'
