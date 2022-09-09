@@ -21,7 +21,4 @@ from pretix.base.templatetags.money import money_filter
 from pretix.control.forms import SplitDateTimeField, SplitDateTimePickerWidget
 from pretix.helpers.money import change_decimal_field
 
-class WaitingListForm(I18nModelForm):
-    class Meta:
-        model = WaitingListEntry
-        fields = ['subevent']
+
