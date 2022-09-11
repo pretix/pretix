@@ -7,16 +7,16 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-09-08 10:09+0000\n"
-"PO-Revision-Date: 2022-07-06 21:00+0000\n"
-"Last-Translator: Hans Fraiponts <fraiponts@gmail.com>\n"
-"Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/"
-">\n"
+"PO-Revision-Date: 2022-09-11 21:00+0000\n"
+"Last-Translator: Thomas Vranken <thvranken@gmail.com>\n"
+"Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
+"\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.12.2\n"
+"X-Generator: Weblate 4.14\n"
 
 #: pretix/api/auth/devicesecurity.py:28
 msgid ""
@@ -159,9 +159,8 @@ msgid ""
 "Gift card products should not be associated with non-zero tax rates since "
 "sales tax will be applied when the gift card is redeemed."
 msgstr ""
-"Cadeaukaartproducten moeten niet worden gekoppeld aan een positief "
-"belastingtarief, omdat de belasting al wordt toegepast wanneer de "
-"cadeaukaart wordt verzilverd."
+"Cadeaukaarten moeten gekoppeld zijn aan een belastingtarief van 0%, omdat de "
+"belasting geheven wordt op het moment dat de cadeaukaart verzilverd wordt."
 
 #: pretix/api/serializers/item.py:208 pretix/control/forms/item.py:577
 msgid "Gift card products should not be admission products at the same time."
@@ -1118,7 +1117,7 @@ msgstr "Belastingwaarde"
 #: pretix/plugins/reports/exporters.py:706
 #: pretix/plugins/reports/exporters.py:751
 msgid "Tax rate"
-msgstr "Belastingtarief"
+msgstr "Btw-tarief"
 
 #: pretix/base/exporters/invoices.py:325
 msgid "Tax name"
@@ -2489,7 +2488,7 @@ msgstr "Aantal"
 #: pretix/base/invoice.py:545 pretix/base/invoice.py:657
 msgctxt "invoice"
 msgid "Tax rate"
-msgstr "Belastingtarief"
+msgstr "Btw-tarief"
 
 #: pretix/base/invoice.py:546
 msgctxt "invoice"
@@ -4247,10 +4246,9 @@ msgid "The voucher \"{voucher}\" has been used in the meantime."
 msgstr "De voucher \"{voucher}\" is in de tussentijd gebruikt."
 
 #: pretix/base/models/orders.py:1027 pretix/control/views/event.py:773
-#, fuzzy, python-format
-#| msgid "Your order: {code}"
+#, python-format
 msgid "Your order: %(code)s"
-msgstr "Uw bestelling: {code}"
+msgstr "Uw bestelling: %(code)s"
 
 #: pretix/base/models/orders.py:1191
 msgid "<file>"
@@ -4407,10 +4405,9 @@ msgid "Order position"
 msgstr "Besteld product"
 
 #: pretix/base/models/orders.py:2410
-#, fuzzy, python-format
-#| msgid "Your event registration: {code}"
+#, python-format
 msgid "Your event registration: %(code)s"
-msgstr "Uw aanmelding: {code}"
+msgstr "Uw aanmelding: %(code)s"
 
 #: pretix/base/models/orders.py:2584
 msgid "Cart ID (e.g. session key)"
@@ -9856,10 +9853,9 @@ msgid "Please only proceed if you trust this website to be safe."
 msgstr ""
 
 #: pretix/base/templates/pretixbase/redirect.html:20
-#, fuzzy, python-format
-#| msgid "Proceed with checkout"
+#, python-format
 msgid "Proceed to %(host)s"
-msgstr "Afrekenen"
+msgstr "Ga verder naar %(host)s"
 
 #: pretix/base/templates/source.html:5 pretix/base/templates/source.html:9
 msgid "Source code"
@@ -11063,10 +11059,8 @@ msgid "Active devices"
 msgstr "Alle apparaten"
 
 #: pretix/control/forms/filter.py:2235
-#, fuzzy
-#| msgid "Revoke device access:"
 msgid "Revoked devices"
-msgstr "Apparaattoegang intrekken:"
+msgstr "Geblokkeerde toestellen"
 
 #: pretix/control/forms/global_settings.py:59
 msgid "Additional footer text"
@@ -11407,17 +11401,12 @@ msgid "No membership granted"
 msgstr "Geen lidmaatschap toegekend"
 
 #: pretix/control/forms/item.py:571
-#, fuzzy
-#| msgid ""
-#| "Gift card products should not be associated with non-zero tax rates since "
-#| "sales tax will be applied when the gift card is redeemed."
 msgid ""
 "Gift card products should use a tax rule with a rate of 0 percent since "
 "sales tax will be applied when the gift card is redeemed."
 msgstr ""
-"Cadeaukaartproducten moeten niet worden gekoppeld aan een positief "
-"belastingtarief, omdat de belasting al wordt toegepast wanneer de "
-"cadeaukaart wordt verzilverd."
+"Cadeaukaarten moeten gekoppeld worden aan een belastingtarief van 0%, omdat "
+"de belasting al wordt toegepast wanneer de cadeaukaart wordt verzilverd."
 
 #: pretix/control/forms/item.py:652
 #, python-format
@@ -15098,10 +15087,9 @@ msgid "Update map?"
 msgstr "Kaart bijwerken?"
 
 #: pretix/control/templates/pretixcontrol/event/fragment_plugin_description.html:5
-#, fuzzy, python-format
-#| msgid "Version %(v)s by <em>%(a)s</em>"
+#, python-format
 msgid "by <em>%(a)s</em>"
-msgstr "Versie %(v)s door <em>%(a)s</em>"
+msgstr "door <em>%(a)s</em>"
 
 #: pretix/control/templates/pretixcontrol/event/fragment_plugin_description.html:14
 #, fuzzy
@@ -16868,17 +16856,14 @@ msgid "Delete discount"
 msgstr "Datum verwijderen"
 
 #: pretix/control/templates/pretixcontrol/items/discount_delete.html:10
-#, fuzzy, python-format
-#| msgid ""
-#| "You cannot delete the product <strong>%(item)s</strong> because it "
-#| "already has been ordered."
+#, python-format
 msgid ""
 "You cannot delete the discount <strong>%(discount)s</strong> because it "
 "already has\n"
 "                been used as part of an order."
 msgstr ""
-"U kunt het product <strong>%(item)s</strong> niet verwijderen, omdat het al "
-"is besteld."
+"De korting <strong>%(discount)s</strong> kan niet verwijderd worden, "
+"aangezien deze al gebruikt werd bij een bestelling."
 
 #: pretix/control/templates/pretixcontrol/items/discount_delete.html:21
 #, fuzzy, python-format
@@ -16889,15 +16874,12 @@ msgstr ""
 "Weet u zeker dat u de categorie <strong>%(name)s</strong> wilt verwijderen?"
 
 #: pretix/control/templates/pretixcontrol/items/discount_delete.html:25
-#, fuzzy, python-format
-#| msgid ""
-#| "You cannot delete the product <strong>%(item)s</strong> because it "
-#| "already has been ordered, but you can deactivate it."
+#, python-format
 msgid ""
 "You cannot delete the discount <strong>%(name)s</strong> because it already "
 "has been used as part of an order, but you can deactivate it."
 msgstr ""
-"U kunt het product <strong>%(item)s</strong> niet verwijderen, omdat het al "
+"U kunt het product <strong>%(name)s</strong> niet verwijderen, omdat het al "
 "besteld is, maar u kunt het wel deactiveren."
 
 #: pretix/control/templates/pretixcontrol/items/discounts.html:3
@@ -24497,10 +24479,8 @@ msgid "failed"
 msgstr "mislukt"
 
 #: pretix/plugins/sendmail/models.py:50
-#, fuzzy
-#| msgid "Completed:"
 msgid "completed"
-msgstr "Voltooid:"
+msgstr "voltooid"
 
 #: pretix/plugins/sendmail/models.py:51
 msgid "missed"
@@ -24684,10 +24664,8 @@ msgid "Scheduled time"
 msgstr "Geplande tijd"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_inspect.html:30
-#, fuzzy
-#| msgid "Last execution:"
 msgid "Last schedule computation"
-msgstr "Laatste uitvoering:"
+msgstr "Laatst uitgevoerd"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:4
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:6
@@ -25687,7 +25665,7 @@ msgid ""
 "accordingly."
 msgstr ""
 "Vanwege het factureringsadres dat u invoerde moeten wij een ander "
-"belastingtarief toepassen voor uw aankoop en hebben we de prijs van de "
+"belastingtarief toepassen voor uw aankoop, en hebben we de prijs van de "
 "producten in uw winkelwagen aangepast."
 
 #: pretix/presale/checkoutflow.py:904 pretix/presale/checkoutflow.py:910
@@ -26536,19 +26514,16 @@ msgid "Membership:"
 msgstr "Lidmaatschap:"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:101
-#, fuzzy
-#| msgid "Usages"
 msgctxt "ticket_checkins"
 msgid "Usage:"
-msgstr "Aantal keren gebruikt"
+msgstr "Aantal keer gebruikt:"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:105
-#, fuzzy, python-format
-#| msgid "This ticket has already been redeemed."
+#, python-format
 msgid "This ticket has been used once."
 msgid_plural "This ticket has been used %(count)s times."
-msgstr[0] "Dit ticket is al gebruikt."
-msgstr[1] "Dit ticket is al gebruikt."
+msgstr[0] "Dit ticket werd reeds eenmaal gebruikt."
+msgstr[1] "Dit ticket werd al %(count)s keer gebruikt."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:137
 msgid "No attendee name provided"
