@@ -1210,7 +1210,8 @@ class OrderTransition(OrderView):
                                                                OrderPayment.PAYMENT_STATE_CREATED)):
                     try:
                         with transaction.atomic():
-                            p.payment_provider.cancel_payment(p)
+                            if p.payment_provider:
+                                p.payment_provider.cancel_payment(p)
                             self.order.log_action('pretix.event.order.payment.canceled', {
                                 'local_id': p.local_id,
                                 'provider': p.provider,
