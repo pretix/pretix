@@ -1056,12 +1056,14 @@ class Order(LockModel, LoggedModel):
                 if p.canceled and not _backfill_before_cancellation:
                     continue
                 target_transaction_count[Transaction.key(p)] += 1
+                p._transaction_key_reset()
 
             fees = self.fees.all() if fees is None else fees
             for f in fees:
                 if f.canceled and not _backfill_before_cancellation:
                     continue
                 target_transaction_count[Transaction.key(f)] += 1
+                f._transaction_key_reset()
 
         keys = set(target_transaction_count.keys()) | set(current_transaction_count.keys())
         create = []
@@ -2076,8 +2078,16 @@ class OrderFee(models.Model):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         if not self.get_deferred_fields():
-            self.__initial_transaction_key = Transaction.key(self)
-            self.__initial_canceled = self.canceled
+            self._transaction_key_reset()
+
+    def refresh_from_db(self, using=None, fields=None):
+        if not self.get_deferred_fields():
+            self._transaction_key_reset()
+        return super().refresh_from_db(using, fields)
+
+    def _transaction_key_reset(self):
+        self.__initial_transaction_key = Transaction.key(self)
+        self.__initial_canceled = self.canceled
 
     def __str__(self):
         if self.description:
@@ -2197,8 +2207,16 @@ class OrderPosition(AbstractPosition):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         if not self.get_deferred_fields():
-            self.__initial_transaction_key = Transaction.key(self)
-            self.__initial_canceled = self.canceled
+            self._transaction_key_reset()
+
+    def refresh_from_db(self, using=None, fields=None):
+        if not self.get_deferred_fields():
+            self._transaction_key_reset()
+        return super().refresh_from_db(using, fields)
+
+    def _transaction_key_reset(self):
+        self.__initial_transaction_key = Transaction.key(self)
+        self.__initial_canceled = self.canceled
 
     class Meta:
         verbose_name = _("Order position")
