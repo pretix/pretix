@@ -920,10 +920,7 @@ class Event(EventMixin, LoggedModel):
             if s.value.startswith('file://'):
                 fi = default_storage.open(s.value[len('file://'):], 'rb')
                 nonce = get_random_string(length=8)
-                if s.key == 'mail_attachment_new_order':
-                    fname_base = clean_filename(os.path.basename(s.value))
-                else:
-                    fname_base = s.key
+                fname_base = clean_filename(os.path.basename(s.value))
 
                 # TODO: make sure pub is always correct
                 fname = 'pub/%s/%s/%s.%s.%s' % (
