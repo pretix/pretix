@@ -51,6 +51,7 @@ from django.utils.translation import gettext as __, gettext_lazy as _
 from i18nfield.strings import LazyI18nString
 from paypalrestsdk.exceptions import BadRequest, UnauthorizedAccess
 from paypalrestsdk.openid_connect import Tokeninfo
+from requests import RequestException
 
 from pretix.base.decimal import round_decimal
 from pretix.base.models import Event, Order, OrderPayment, OrderRefund, Quota
@@ -421,6 +422,9 @@ class Paypal(BasePaymentProvider):
             try:
                 payment.execute({"payer_id": request.session.get('payment_paypal_payer')})
             except paypalrestsdk.exceptions.ConnectionError as e:
+                messages.error(request, _('We had trouble communicating with PayPal'))
+                logger.exception('Error on creating payment: ' + str(e))
+            except RequestException as e:
                 messages.error(request, _('We had trouble communicating with PayPal'))
                 logger.exception('Error on creating payment: ' + str(e))
 
