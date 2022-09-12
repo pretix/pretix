@@ -353,7 +353,8 @@ def get_or_create_cart_id(request, create=True):
         if cart_invalidated:
             # This cart was created with a login but the person is now logged out.
             # Destroy the cart for privacy protection.
-            request.session['carts'][current_id] = {}
+            if 'carts' in request.session:
+                request.session['carts'][current_id] = {}
         else:
             return current_id
 
