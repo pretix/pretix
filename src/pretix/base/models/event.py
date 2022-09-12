@@ -921,7 +921,7 @@ class Event(EventMixin, LoggedModel):
                 fi = default_storage.open(s.value[len('file://'):], 'rb')
                 nonce = get_random_string(length=8)
                 if s.key == 'mail_attachment_new_order':
-                    fname_base = clean_filename(os.path.basename(s.value[len('file://'):]))
+                    fname_base = clean_filename(os.path.basename(s.value))
                 else:
                     fname_base = s.key
 
