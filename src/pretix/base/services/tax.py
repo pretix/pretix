@@ -109,6 +109,9 @@ def _validate_vat_id_EU(vat_id, country_code):
     if not re.match(vat_moss.id.ID_PATTERNS[cc_to_vat_prefix(country_code)]['regex'], number):
         raise VATIDFinalError(error_messages['invalid'])
 
+    # We are relying on the country code of the normalized VAT-ID and not the user/InvoiceAddress-provided
+    # VAT-ID, since Django and the EU have different ideas of which country is using which country code.
+    # For example: For django and most people, Greece is GR. However, the VAT-service expects EL.
     payload = """
             <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:ec.europa.eu:taxud:vies:services:checkVat:types">
                <soapenv:Header/>
@@ -119,7 +122,7 @@ def _validate_vat_id_EU(vat_id, country_code):
                   </urn:checkVat>
                </soapenv:Body>
             </soapenv:Envelope>
-    """.strip() % (country_code, number)
+    """.strip() % (vat_id[:2], number)
 
     try:
         response = requests.post(
