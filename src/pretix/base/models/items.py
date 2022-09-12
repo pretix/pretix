@@ -600,10 +600,14 @@ class Item(LoggedModel):
                                                     invoice_address=invoice_address,
                                                     base_price_is='gross',
                                                     currency=currency)
-                    compare_price = self.tax_rule.tax(b.designated_price * b.count,
-                                                      override_tax_rate=override_tax_rate,
-                                                      invoice_address=invoice_address,
-                                                      currency=currency)
+                    if not self.tax_rule:
+                        compare_price = TaxedPrice(gross=b.designated_price * b.count, net=b.designated_price * b.count,
+                                                   tax=Decimal('0.00'), rate=Decimal('0.00'), name='')
+                    else:
+                        compare_price = self.tax_rule.tax(b.designated_price * b.count,
+                                                          override_tax_rate=override_tax_rate,
+                                                          invoice_address=invoice_address,
+                                                          currency=currency)
                     t.net += bprice.net - compare_price.net
                     t.tax += bprice.tax - compare_price.tax
                     t.name = "MIXED!"
