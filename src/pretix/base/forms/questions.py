@@ -51,6 +51,7 @@ from django.core.validators import (
 )
 from django.db.models import QuerySet
 from django.forms import Select, widgets
+from django.forms.widgets import FILE_INPUT_CONTRADICTION
 from django.utils.formats import date_format
 from django.utils.html import escape
 from django.utils.safestring import mark_safe
@@ -429,7 +430,7 @@ class PortraitImageWidget(UploadedFileWidget):
 
     def value_from_datadict(self, data, files, name):
         d = super().value_from_datadict(data, files, name)
-        if d is not None and d is not False:
+        if d is not None and d is not False and d is not FILE_INPUT_CONTRADICTION:
             d._cropdata = json.loads(data.get(name + '_cropdata', '{}') or '{}')
         return d
 
