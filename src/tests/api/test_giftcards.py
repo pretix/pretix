@@ -147,6 +147,17 @@ def test_giftcard_patch(token_client, organizer, event, giftcard):
     assert giftcard.currency == "EUR"
     assert not giftcard.testmode
 
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/giftcards/{}/'.format(organizer.slug, giftcard.pk),
+        {
+            'value': '9.00',
+        },
+        format='json'
+    )
+    assert resp.status_code == 200
+    giftcard.refresh_from_db()
+    assert giftcard.value == Decimal('9.00')
+
 
 @pytest.mark.django_db
 def test_giftcard_patch_min_value(token_client, organizer, event, giftcard):

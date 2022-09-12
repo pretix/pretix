@@ -114,20 +114,21 @@ class GiftCardSerializer(I18nAwareModelSerializer):
 
     def validate(self, data):
         data = super().validate(data)
-        s = data['secret']
-        qs = GiftCard.objects.filter(
-            secret=s
-        ).filter(
-            Q(issuer=self.context["organizer"]) | Q(
-                issuer__gift_card_collector_acceptance__collector=self.context["organizer"])
-        )
-        if self.instance:
-            qs = qs.exclude(pk=self.instance.pk)
-        if qs.exists():
-            raise ValidationError(
-                {'secret': _(
-                    'A gift card with the same secret already exists in your or an affiliated organizer account.')}
+        if 'secret' in data:
+            s = data['secret']
+            qs = GiftCard.objects.filter(
+                secret=s
+            ).filter(
+                Q(issuer=self.context["organizer"]) | Q(
+                    issuer__gift_card_collector_acceptance__collector=self.context["organizer"])
             )
+            if self.instance:
+                qs = qs.exclude(pk=self.instance.pk)
+            if qs.exists():
+                raise ValidationError(
+                    {'secret': _(
+                        'A gift card with the same secret already exists in your or an affiliated organizer account.')}
+                )
         return data
 
     class Meta:
