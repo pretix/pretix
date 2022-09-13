@@ -159,7 +159,7 @@ class EventMixin:
 
     def get_weekday_to_display(self, tz=None, short=False) -> str:
         """
-        Returns a formatted string containing the weekday of the start date of the event with respect
+        Returns a formatted string containing the weekday of the end date of the event with respect
         to the current locale.
         """
         tz = tz or self.timezone
