@@ -411,7 +411,7 @@ Hosted or pretix Enterprise are active, you can pass the following fields:
         };
     </script>
 
-  If you use ```analytics.js` (Universal Analytics)::
+  If you use ``analytics.js`` (Universal Analytics)::
 
     <script>
         (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
