@@ -127,7 +127,7 @@ class ClearableBasenameFileInput(forms.ClearableFileInput):
         def __str__(self):
             if hasattr(self.file, 'display_name'):
                 return self.file.display_name
-            return os.path.basename(self.file.name).split('.', 1)[-1]
+            return os.path.basename(self.file.name).rsplit('.', 2)[0]
 
         @property
         def url(self):
