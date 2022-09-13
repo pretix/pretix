@@ -92,9 +92,10 @@ If any other status code is returned, we will assume you did not receive the cal
 or ``304 Not Modified`` response will be treated as a failure. pretix will not follow any ``301`` or ``302`` redirect
 headers and pretix will ignore all other information in your response headers or body.
 
-If we do not receive a status code in the range of ``200`` and ``299``, pretix will retry to deliver for up to three
-days with an exponential back off. Therefore, we recommend that you implement your endpoint in a way where calling it
-multiple times for the same event due to a perceived error does not do any harm.
+If we do not receive a status code in the range of ``200`` and ``299`` or do not receive any response within a 30 second
+time frame, pretix will retry to deliver for up to three days with an exponential back off. Therefore, we recommend that
+you implement your endpoint in a way where calling it multiple times for the same event due to a perceived error does
+not do any harm.
 
 There is only one exception: If status code ``410 Gone`` is returned, we will assume the
 endpoint does not exist any more and automatically disable the webhook.

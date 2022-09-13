@@ -6,13 +6,42 @@
     <p>
         {% trans "This page shows all calls to your webhook in the past 30 days." %}
     </p>
+    {% if retry_count %}
+        <form action="" method="post">
+            {% csrf_token %}
+            <div class="alert alert-info">
+                <p>
+                    {% blocktranslate trimmed count count=retry_count %}
+                        One webhook is scheduled to be retried.
+                    {% plural %}
+                        {{ count }} webhooks are scheduled to be retried.
+                    {% endblocktranslate %}
+                </p>
+                <p>
+                    <button type="submit" name="action" value="expedite" class="btn btn-success">
+                        {% trans "Retry now" %}
+                    </button>
+                    <button type="submit" name="action" value="drop" class="btn btn-danger">
+                        {% trans "Stop retrying" %}
+                    </button>
+                </p>
+                <p class="help-block">
+                    {% blocktranslate trimmed with minutes=5 %}
+                        Webhooks scheduled to be retried in less than {{ minutes }} minutes may be not listed here and can
+                        no longer be stopped or expedited.
+                    {% endblocktranslate %}
+                </p>
+            </div>
+        </form>
+    {% endif %}
     {% for c in calls %}
         <details class="panel panel-default">
             <summary class="panel-heading">
                 <div class="row">
                     <div class="col-md-4 col-sm-12 col-xs-12">
                         {% if c.is_retry %}
-                            <span class="fa fa-repeat fa-fw" data-toggle="tooltip" title="{% trans "This webhook was retried since it previously failed." %}"></span>
+                            <span class="fa fa-repeat fa-fw" data-toggle="tooltip"
+                                  title="{% trans "This webhook was retried since it previously failed." %}"></span>
                         {% else %}
                             <span class="fa fa-clock-o fa-fw"></span>
                         {% endif %}

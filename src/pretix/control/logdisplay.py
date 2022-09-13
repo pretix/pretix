@@ -319,6 +319,8 @@ def pretixcontrol_logentry_display(sender: Event, logentry: LogEntry, **kwargs):
         'pretix.giftcards.acceptance.removed': _('Gift card acceptance for another organizer has been removed.'),
         'pretix.webhook.created': _('The webhook has been created.'),
         'pretix.webhook.changed': _('The webhook has been changed.'),
+        'pretix.webhook.retries.expedited': _('The webhook call retry jobs have been manually expedited.'),
+        'pretix.webhook.retries.dropped': _('The webhook call retry jobs have been dropped.'),
         'pretix.membershiptype.created': _('The membership type has been created.'),
         'pretix.membershiptype.changed': _('The membership type has been changed.'),
         'pretix.membershiptype.deleted': _('The membership type has been deleted.'),

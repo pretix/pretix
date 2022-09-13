@@ -62,6 +62,7 @@ from django.views.generic import (
 )
 
 from pretix.api.models import WebHook
+from pretix.api.webhooks import manually_retry_all_calls
 from pretix.base.auth import get_auth_backends
 from pretix.base.channels import get_all_sales_channels
 from pretix.base.i18n import language
@@ -1252,6 +1253,7 @@ class WebHookLogsView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         ctx['webhook'] = self.webhook
+        ctx['retry_count'] = self.webhook.retries.count()
         return ctx
 
     @cached_property
@@ -1262,6 +1264,26 @@ class WebHookLogsView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin
 
     def get_queryset(self):
         return self.webhook.calls.order_by('-datetime')
+
+    def post(self, request, *args, **kwargs):
+        if request.POST.get("action") == "expedite":
+            self.request.organizer.log_action('pretix.webhook.retries.expedited', user=self.request.user, data={
+                'webhook': self.webhook.pk,
+            })
+            manually_retry_all_calls.apply_async(args=(self.webhook.pk,))
+            messages.success(request, _('All requests will now be scheduled for an immediate attempt. Please '
+                                        'allow for a few minutes before they are processed.'))
+        elif request.POST.get("action") == "drop":
+            self.request.organizer.log_action('pretix.webhook.retries.dropped', user=self.request.user, data={
+                'webhook': self.webhook.pk,
+            })
+            self.webhook.retries.all().delete()
+            messages.success(request, _('All requests will now be scheduled for an immediate attempt. Please '
+                                        'allow for a few minutes before they are processed.'))
+        return redirect(reverse('control:organizer.webhook.logs', kwargs={
+            'organizer': self.request.organizer.slug,
+            'webhook': self.webhook.pk,
+        }))
 
 
 class GiftCardListView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, ListView):
