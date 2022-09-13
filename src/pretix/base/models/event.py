@@ -157,6 +157,18 @@ class EventMixin:
             ("SHORT_" if short else "") + ("DATETIME_FORMAT" if self.settings.show_times and show_times else "DATE_FORMAT")
         )
 
+    def get_weekday_to_display(self, tz=None, short=False) -> str:
+        """
+        Returns a formatted string containing the weekday of the start date of the event with respect
+        to the current locale.
+        """
+        tz = tz or self.timezone
+        if not self.settings.show_date_to or not self.date_to:
+            return ""
+        return _date(
+            self.date_to.astimezone(tz), ("D" if short else "l")
+        )
+
     def get_date_range_display(self, tz=None, force_show_end=False, as_html=False) -> str:
         """
         Returns a formatted string containing the start date and the end date

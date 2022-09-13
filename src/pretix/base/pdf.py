@@ -280,6 +280,11 @@ DEFAULT_VARIABLES = OrderedDict((
             "TIME_FORMAT"
         ) if ev.date_to else ""
     }),
+    ("event_end_weekday", {
+        "label": _("Event end weekday"),
+        "editor_sample": _("Friday"),
+        "evaluate": lambda op, order, ev: ev.get_weekday_to_display()
+    }),
     ("event_admission", {
         "label": _("Event admission date and time"),
         "editor_sample": _("2017-05-31 19:00"),
