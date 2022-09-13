@@ -251,6 +251,11 @@ DEFAULT_VARIABLES = OrderedDict((
         "editor_sample": _("20:00"),
         "evaluate": lambda op, order, ev: ev.get_time_from_display()
     }),
+    ("event_begin_weekday", {
+        "label": _("Event begin weekday"),
+        "editor_sample": _("Friday"),
+        "evaluate": lambda op, order, ev: ev.get_weekday_from_display()
+    }),
     ("event_end", {
         "label": _("Event end date and time"),
         "editor_sample": _("2017-05-31 22:00"),
