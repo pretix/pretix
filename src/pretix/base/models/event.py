@@ -69,6 +69,7 @@ from pretix.base.reldate import RelativeDateWrapper
 from pretix.base.validators import EventSlugBanlistValidator
 from pretix.helpers.database import GroupConcat
 from pretix.helpers.daterange import daterange
+from pretix.helpers.hierarkey import clean_filename
 from pretix.helpers.json import safe_string
 from pretix.helpers.thumb import get_thumbnail
 
@@ -917,11 +918,13 @@ class Event(EventMixin, LoggedModel):
             s.object = self
             s.pk = None
             if s.value.startswith('file://'):
-                fi = default_storage.open(s.value[7:], 'rb')
+                fi = default_storage.open(s.value[len('file://'):], 'rb')
                 nonce = get_random_string(length=8)
+                fname_base = clean_filename(os.path.basename(s.value))
+
                 # TODO: make sure pub is always correct
                 fname = 'pub/%s/%s/%s.%s.%s' % (
-                    self.organizer.slug, self.slug, s.key, nonce, s.value.split('.')[-1]
+                    self.organizer.slug, self.slug, fname_base, nonce, s.value.split('.')[-1]
                 )
                 newname = default_storage.save(fname, fi)
                 s.value = 'file://' + newname
