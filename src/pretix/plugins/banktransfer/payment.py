@@ -47,6 +47,7 @@ from i18nfield.forms import I18nTextInput
 from i18nfield.strings import LazyI18nString
 from localflavor.generic.forms import BICFormField, IBANFormField
 from localflavor.generic.validators import IBANValidator
+from text_unidecode import unidecode
 
 from pretix.base.models import Order, OrderPayment, OrderRefund
 from pretix.base.payment import BasePaymentProvider
@@ -261,6 +262,51 @@ class BankTransfer(BasePaymentProvider):
         }
         return template.render(ctx)
 
+    def swiss_qrbill(self, payment):
+        if not self.settings.get('bank_details_sepa_iban') or not self.settings.get('bank_details_sepa_iban')[:2] in ('CH', 'LI'):
+            return
+        if self.event.currency not in ('EUR', 'CHF'):
+            return
+        if not self.event.settings.invoice_address_from or not self.event.settings.invoice_address_from_country:
+            return
+
+        data_fields = [
+            'SPC',
+            '0200',
+            '1',
+            self.settings.get('bank_details_sepa_iban'),
+            'K',
+            self.settings.get('bank_details_sepa_name')[:70],
+            self.event.settings.invoice_address_from.replace('\n', ', ')[:70],
+            (self.event.settings.invoice_address_from_zipcode + ' ' + self.event.settings.invoice_address_from_city)[:70],
+            '',
+            '',
+            str(self.event.settings.invoice_address_from_country),
+            '',  # rfu
+            '',  # rfu
+            '',  # rfu
+            '',  # rfu
+            '',  # rfu
+            '',  # rfu
+            '',  # rfu
+            str(payment.amount),
+            self.event.currency,
+            '',  # debtor address
+            '',  # debtor address
+            '',  # debtor address
+            '',  # debtor address
+            '',  # debtor address
+            '',  # debtor address
+            '',  # debtor address
+            'NON',
+            '',  # structured reference
+            self._code(payment.order),
+            'EPD',
+        ]
+
+        data_fields = [unidecode(d or '') for d in data_fields]
+        return '\r\n'.join(data_fields)
+
     def payment_pending_render(self, request: HttpRequest, payment: OrderPayment):
         template = get_template('pretixplugins/banktransfer/pending.html')
         ctx = {
@@ -269,6 +315,7 @@ class BankTransfer(BasePaymentProvider):
             'order': payment.order,
             'amount': payment.amount,
             'settings': self.settings,
+            'swiss_qrbill': self.swiss_qrbill(payment),
             'pending_description': self.settings.get('pending_description', as_type=LazyI18nString),
             'details': self.settings.get('bank_details', as_type=LazyI18nString),
         }

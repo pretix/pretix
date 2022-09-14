@@ -1,0 +1,15 @@
+.banktransfer-swiss-cross-overlay {
+    position: relative;
+    width: 150px;
+    height: 150px;
+    margin: 0 auto 10px;
+}
+.banktransfer-swiss-cross {
+    position: absolute;
+    width: 15.217%;
+    height: 15.217%;
+    left: 50%;
+    top: 50%;
+    margin-left: -7.609%;
+    margin-top: -7.609%;
+}
