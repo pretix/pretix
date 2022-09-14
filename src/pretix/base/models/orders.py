@@ -2081,6 +2081,10 @@ class OrderFee(models.Model):
             self._transaction_key_reset()
 
     def refresh_from_db(self, using=None, fields=None):
+        """
+        Reload field values from the database. Similar to django's implementation
+        with adjustment for our method that forces us to create ``Transaction`` instances.
+        """
         if not self.get_deferred_fields():
             self._transaction_key_reset()
         return super().refresh_from_db(using, fields)
@@ -2210,6 +2214,10 @@ class OrderPosition(AbstractPosition):
             self._transaction_key_reset()
 
     def refresh_from_db(self, using=None, fields=None):
+        """
+        Reload field values from the database. Similar to django's implementation
+        with adjustment for our method that forces us to create ``Transaction`` instances.
+        """
         if not self.get_deferred_fields():
             self._transaction_key_reset()
         return super().refresh_from_db(using, fields)
