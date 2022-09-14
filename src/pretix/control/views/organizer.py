@@ -1278,8 +1278,7 @@ class WebHookLogsView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin
                 'webhook': self.webhook.pk,
             })
             self.webhook.retries.all().delete()
-            messages.success(request, _('All requests will now be scheduled for an immediate attempt. Please '
-                                        'allow for a few minutes before they are processed.'))
+            messages.success(request, _('All unprocessed webhooks have been stopped from retrying.'))
         return redirect(reverse('control:organizer.webhook.logs', kwargs={
             'organizer': self.request.organizer.slug,
             'webhook': self.webhook.pk,
