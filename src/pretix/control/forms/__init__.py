@@ -48,6 +48,8 @@ from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
 from django_scopes.forms import SafeModelMultipleChoiceField
 
+from pretix.helpers.hierarkey import clean_filename
+
 from ...base.forms import I18nModelForm
 
 # Import for backwards compatibility with okd import paths
@@ -127,7 +129,7 @@ class ClearableBasenameFileInput(forms.ClearableFileInput):
         def __str__(self):
             if hasattr(self.file, 'display_name'):
                 return self.file.display_name
-            return os.path.basename(self.file.name).rsplit('.', 2)[0]
+            return clean_filename(os.path.basename(self.file.name))
 
         @property
         def url(self):
