@@ -155,12 +155,13 @@ class ScheduledMail(models.Model):
                     positions = [p for p in positions if p.subevent_id == self.subevent_id]
 
                 for p in positions:
-                    email_ctx = get_email_context(event=e, order=o, position_or_address=ia, position=p)
                     try:
                         if p.attendee_email and (p.attendee_email != o.email or not o_sent):
+                            email_ctx = get_email_context(event=e, order=o, position_or_address=p, position=p)
                             p.send_mail(self.rule.subject, self.rule.template, email_ctx,
                                         log_entry_type='pretix.plugins.sendmail.rule.order.position.email.sent')
                         elif not o_sent and o.email:
+                            email_ctx = get_email_context(event=e, order=o, position_or_address=ia, position=p)
                             o.send_mail(self.rule.subject, self.rule.template, email_ctx,
                                         log_entry_type='pretix.plugins.sendmail.rule.order.email.sent')
                             o_sent = True
