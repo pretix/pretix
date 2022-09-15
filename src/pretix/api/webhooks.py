@@ -454,7 +454,8 @@ def send_webhook(self, logentry_id: int, action_type: str, webhook_id: int, retr
                 if retry_count >= len(retry_intervals):
                     return 'retry-given-up'
                 elif retry_intervals[retry_count] < retry_celery_cutoff:
-                    send_webhook.apply_async(args=(logentry_id, action_type, webhook_id, retry_count + 1), countdown=retry_intervals[retry_count])
+                    send_webhook.apply_async(args=(logentry_id, action_type, webhook_id, retry_count + 1),
+                                             countdown=retry_intervals[retry_count])
                     return 'retry-via-celery'
                 else:
                     webhook.retries.update_or_create(

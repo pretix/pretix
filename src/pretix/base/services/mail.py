@@ -502,11 +502,11 @@ def mail_send_task(self, *args, to: List[str], subject: str, body: str, html: st
                     rc.expire(redis_key, 300)
 
                     max_retries = 10
-                    retry_after = 30 + cnt * 10
+                    retry_after = min(30 + cnt * 10, 1800)
                 else:
                     # Most likely some other kind of temporary failure, retry again (but pretty soon)
                     max_retries = 5
-                    retry_after = 2 ** (self.request.retries * 3)  # max is 2 ** (4*3) = 4096 seconds = 68 minutes
+                    retry_after = [10, 30, 60, 300, 900][self.request.retries]
 
                 try:
                     self.retry(max_retries=max_retries, countdown=retry_after)
@@ -542,7 +542,7 @@ def mail_send_task(self, *args, to: List[str], subject: str, body: str, html: st
             if not any(c >= 500 for c in smtp_codes):
                 # Not a permanent failure (mailbox full, service unavailable), retry later, but with large intervals
                 try:
-                    self.retry(max_retries=5, countdown=2 ** (self.request.retries * 3) * 4)  # max is 2 ** (4*3) * 4 = 16384 seconds = approx 4.5 hours
+                    self.retry(max_retries=5, countdown=[60, 300, 600, 1200, 1800][self.request.retries])
                 except MaxRetriesExceededError:
                     # ignore and go on with logging the error
                     pass
@@ -567,7 +567,7 @@ def mail_send_task(self, *args, to: List[str], subject: str, body: str, html: st
         except Exception as e:
             if isinstance(e, (smtplib.SMTPServerDisconnected, smtplib.SMTPConnectError, ssl.SSLError, OSError)):
                 try:
-                    self.retry(max_retries=5, countdown=2 ** (self.request.retries * 3))  # max is 2 ** (4*3) = 4096 seconds = 68 minutes
+                    self.retry(max_retries=5, countdown=[10, 30, 60, 300, 900][self.request.retries])
                 except MaxRetriesExceededError:
                     if log_target:
                         log_target.log_action(
