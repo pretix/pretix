@@ -8,17 +8,17 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-09-08 10:09+0000\n"
-"PO-Revision-Date: 2021-12-09 15:49+0000\n"
-"Last-Translator: Ilona Zilgalve <i.zilgalve@riga-jurmala.com>\n"
+"PO-Revision-Date: 2022-09-15 21:00+0000\n"
+"Last-Translator: Svyatoslav <slava@digitalarthouse.eu>\n"
 "Language-Team: Russian <https://translate.pretix.eu/projects/pretix/pretix/"
 "ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
-"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.8\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Weblate 4.14\n"
 
 #: pretix/api/auth/devicesecurity.py:28
 msgid ""
@@ -25735,8 +25735,9 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/organizers/index.html:84
 #: pretix/presale/templates/pretixpresale/organizers/index.html:97
 #: pretix/presale/views/widget.py:370 pretix/presale/views/widget.py:393
+#, fuzzy
 msgid "Book now"
-msgstr "Купить сейчас"
+msgstr "Купить"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_list.html:33
 #: pretix/presale/templates/pretixpresale/fragment_calendar.html:79
