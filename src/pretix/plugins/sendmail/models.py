@@ -140,7 +140,7 @@ class ScheduledMail(models.Model):
                 ia = InvoiceAddress(order=o)
 
             if send_to_orders and o.email:
-                email_ctx = get_email_context(event=e, order=o, position_or_address=ia)
+                email_ctx = get_email_context(event=e, order=o, invoice_address=ia)
                 try:
                     o.send_mail(self.rule.subject, self.rule.template, email_ctx,
                                 log_entry_type='pretix.plugins.sendmail.rule.order.email.sent')
@@ -157,11 +157,11 @@ class ScheduledMail(models.Model):
                 for p in positions:
                     try:
                         if p.attendee_email and (p.attendee_email != o.email or not o_sent):
-                            email_ctx = get_email_context(event=e, order=o, position_or_address=p, position=p)
+                            email_ctx = get_email_context(event=e, order=o, invoice_address=ia, position=p)
                             p.send_mail(self.rule.subject, self.rule.template, email_ctx,
                                         log_entry_type='pretix.plugins.sendmail.rule.order.position.email.sent')
                         elif not o_sent and o.email:
-                            email_ctx = get_email_context(event=e, order=o, position_or_address=ia, position=p)
+                            email_ctx = get_email_context(event=e, order=o, invoice_address=ia)
                             o.send_mail(self.rule.subject, self.rule.template, email_ctx,
                                         log_entry_type='pretix.plugins.sendmail.rule.order.email.sent')
                             o_sent = True
