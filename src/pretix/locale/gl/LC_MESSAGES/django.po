@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-09-08 10:09+0000\n"
-"PO-Revision-Date: 2022-09-08 20:00+0000\n"
+"PO-Revision-Date: 2022-09-15 08:59+0000\n"
 "Last-Translator: Ismael Menéndez Fernández <ismael.menendez@balidea.com>\n"
 "Language-Team: Galician <https://translate.pretix.eu/projects/pretix/pretix/"
 "gl/>\n"
@@ -1734,7 +1734,7 @@ msgstr "Produto"
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:26
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:124
 msgid "Attendee name"
-msgstr "Nome do asistente"
+msgstr "Nome da persoa asistente"
 
 #: pretix/base/exporters/orderlist.py:571 pretix/base/forms/questions.py:585
 #: pretix/base/models/customers.py:256 pretix/base/models/orders.py:1296
@@ -5365,9 +5365,8 @@ msgid "Invalid setting for column \"{header}\"."
 msgstr ""
 
 #: pretix/base/orderimport.py:176
-#, fuzzy
 msgid "Enter a valid phone number."
-msgstr "Ha introducido un número no válido."
+msgstr "Introduce un número de teléfono válido."
 
 #: pretix/base/orderimport.py:204 pretix/presale/views/waiting.py:111
 #, fuzzy
@@ -6254,10 +6253,8 @@ msgid "<Answer: {question}>"
 msgstr "<Respuesta: {question}>"
 
 #: pretix/base/pdf.py:555
-#, fuzzy
-#| msgid "Attendee name: {part}"
 msgid "Attendee name for salutation"
-msgstr "Nome do asistente: {part}"
+msgstr "Nome da persoa asistente: {part}"
 
 #: pretix/base/pdf.py:562 pretix/base/pdf.py:569
 #: pretix/plugins/badges/exporters.py:304
@@ -6266,7 +6263,7 @@ msgstr "Nome do asistente: {part}"
 #: pretix/plugins/ticketoutputpdf/exporters.py:94
 #, python-brace-format
 msgid "Attendee name: {part}"
-msgstr "Nome do asistente: {part}"
+msgstr "Nome da persoa asistente: {part}"
 
 #: pretix/base/pdf.py:578
 #, fuzzy
@@ -8800,7 +8797,7 @@ msgstr ""
 "El equipo de {event}"
 
 #: pretix/base/settings.py:1715
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -8814,13 +8811,12 @@ msgid ""
 msgstr ""
 "Hola, \n"
 "\n"
-"alguien pidió una lista de sus órdenes para {event} . \n"
-"La lista es la siguiente: \n"
+"Alguén pediu unha listaxe dos teus pedidos de {event} . \n"
+"A lista é a seguinte: \n"
 "\n"
 "{orders} \n"
 "\n"
-"Saludos cordiales , \n"
-"su equipo {event}"
+"Saúdos cordiais"
 
 #: pretix/base/settings.py:1727
 #, python-brace-format
@@ -11210,9 +11206,8 @@ msgid "Partially paid"
 msgstr "Marcar como pagado"
 
 #: pretix/control/forms/filter.py:202
-#, fuzzy
 msgid "Underpaid (but confirmed)"
-msgstr "Orden confirmada"
+msgstr "Pedido confirmada"
 
 #: pretix/control/forms/filter.py:203
 #, fuzzy
@@ -12786,9 +12781,8 @@ msgid "Weekend day"
 msgstr "Día de fin de semana"
 
 #: pretix/control/forms/users.py:122 pretix/control/views/user.py:212
-#, fuzzy
 msgid "Your changes could not be saved. See below for details."
-msgstr "Sus cambios no se han podido guardar. Ver abajo para más detalles."
+msgstr "Os seus cambios non se puideron gardar. Ver abaixo para máis detalles."
 
 #: pretix/control/forms/vouchers.py:154
 msgid "Specific seat ID"
@@ -16534,9 +16528,8 @@ msgstr ""
 #: pretix/plugins/stripe/views.py:643
 #: pretix/plugins/ticketoutputpdf/views.py:167
 #: pretix/presale/views/customer.py:439 pretix/presale/views/customer.py:491
-#, fuzzy
 msgid "Your changes have been saved."
-msgstr "Tus cambios han sido guardados."
+msgstr "Os teus cambios foron gardados."
 
 #: pretix/control/templates/pretixcontrol/event/plugins.html:36
 msgid "Top recommendation"
@@ -17526,7 +17519,6 @@ msgid "View full log"
 msgstr "Ver log completo"
 
 #: pretix/control/templates/pretixcontrol/item/base.html:6
-#, fuzzy
 msgid "Modify product:"
 msgstr "Modificar producto:"
 
@@ -19035,7 +19027,7 @@ msgstr "Cambiar productos"
 #: pretix/control/templates/pretixcontrol/order/index.html:344
 #: pretix/presale/templates/pretixpresale/event/order.html:205
 msgid "Ordered items"
-msgstr "Artículos pedidos"
+msgstr "Artigos pedidos"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:363
 #, fuzzy, python-format
@@ -19082,9 +19074,8 @@ msgstr "Nombre del ticket"
 #: pretix/control/templates/pretixcontrol/order/index.html:549
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:199
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:205
-#, fuzzy
 msgid "not answered"
-msgstr "sin respuesta"
+msgstr "Non contestou"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:514
 #, fuzzy
@@ -22649,9 +22640,8 @@ msgstr "Se ha creado la nueva lista de registro."
 #: pretix/plugins/sendmail/views.py:339 pretix/plugins/sendmail/views.py:416
 #: pretix/plugins/stripe/views.py:646
 #: pretix/plugins/ticketoutputpdf/views.py:127
-#, fuzzy
 msgid "We could not save your changes. See below for details."
-msgstr "No pudimos guardar tus cambios. Mira abajo para detalles."
+msgstr "Non puidemos gardar os teus cambios. Mira abaixo para detalles."
 
 #: pretix/control/views/checkin.py:366 pretix/control/views/checkin.py:403
 #, fuzzy
@@ -22827,13 +22817,12 @@ msgid "Not all discounts have been selected."
 msgstr "La pregunta ha sido eliminada."
 
 #: pretix/control/views/event.py:224 pretix/control/views/organizer.py:453
-#, fuzzy
 msgid ""
 "Your changes have been saved. Please note that it can take a short period of "
 "time until your changes become active."
 msgstr ""
-"Sus cambios han sido guardados. Por favor, tenga en cuenta que puede tardar "
-"un corto período de tiempo hasta que sus cambios se activen."
+"Os seus cambios foron gardados. Por favor, teña en conta que pode tardar un "
+"curto período de tempo ata que os seus cambios actívense."
 
 #: pretix/control/views/event.py:341
 #, fuzzy
@@ -22982,13 +22971,12 @@ msgid "Your event is not empty, you need to set it up manually."
 msgstr "Su evento no está vacío, necesita configurarlo manualmente."
 
 #: pretix/control/views/event.py:1449
-#, fuzzy
 msgid ""
 "Your changes have been saved. You can now go on with looking at the details "
 "or take your event live to start selling!"
 msgstr ""
-"Sus cambios han sido guardados. Ahora puede seguir con los detalles o tomar "
-"su evento en vivo para empezar a vender!"
+"Os seus cambios foron gardados. Agora pode seguir cos detalles ou tomar o "
+"seu evento en vivo para empezar a vender!"
 
 #: pretix/control/views/event.py:1468
 #, fuzzy
@@ -23003,9 +22991,8 @@ msgstr "Entrada reducida"
 #: pretix/control/views/global_settings.py:65
 #: pretix/control/views/global_settings.py:88
 #: pretix/control/views/global_settings.py:153
-#, fuzzy
 msgid "Your changes have not been saved, see below for errors."
-msgstr "Sus modificaciones no se han grabado, véase más abajo para errores."
+msgstr "As súas modificacións non se gravaron, véxase máis abaixo para erros."
 
 #: pretix/control/views/global_settings.py:193
 msgid ""
@@ -23693,12 +23680,9 @@ msgstr "El orden ha sido cambiado."
 
 #: pretix/control/views/orders.py:1828 pretix/presale/checkoutflow.py:849
 #: pretix/presale/views/order.py:781
-#, fuzzy
 msgid ""
 "We had difficulties processing your input. Please review the errors below."
-msgstr ""
-"Tuvimos dificultades para procesar su información. Por favor revise los "
-"errores a continuación."
+msgstr "Tivemos problemas ao procesar a túa entrada. Revisa os erros."
 
 #: pretix/control/views/orders.py:1937
 #, fuzzy
@@ -23818,9 +23802,8 @@ msgstr "El equipo ha sido creado. Ahora puede agregar miembros al equipo."
 #: pretix/control/views/organizer.py:1749
 #: pretix/control/views/organizer.py:1838
 #: pretix/control/views/organizer.py:1872
-#, fuzzy
 msgid "Your changes could not be saved."
-msgstr "Tus cambios no pudieron ser guardados."
+msgstr "Os teus cambios non puideron ser gardados."
 
 #: pretix/control/views/organizer.py:646
 #, fuzzy
@@ -27699,10 +27682,8 @@ msgstr ""
 "que o escribiu correctamente"
 
 #: pretix/presale/forms/checkout.py:110
-#, fuzzy
 msgid "Please enter the same email address twice."
-msgstr ""
-"Por favor, introduzca la misma dirección de correo electrónico dos veces."
+msgstr "Introduce o mesmo enderezo de correo electrónico dúas veces."
 
 #: pretix/presale/forms/checkout.py:124
 #, fuzzy
@@ -27982,7 +27963,7 @@ msgstr "Add-ons"
 #: pretix/presale/templates/pretixpresale/organizers/customer_address_delete.html:21
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile_delete.html:21
 msgid "Go back"
-msgstr "Voltar"
+msgstr "Volver"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:7
 #, python-format
@@ -28030,17 +28011,15 @@ msgstr "Por favor espera, estamos a finalizar o teu pedido!"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:32
 msgid "Add or remove tickets"
-msgstr "Añadir un novo tipo de ticket"
+msgstr "Engadir un novo tipo de ticket"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:45
-#, fuzzy
 msgid "Modify payment"
 msgstr "Modificar pago"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:47
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:69
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:119
-#, fuzzy
 msgid "Modify"
 msgstr "Modificar"
 
@@ -28553,7 +28532,7 @@ msgstr[1] "Este ticket ya ha sido canjeado."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:137
 msgid "No attendee name provided"
-msgstr "Non se facilitou o nome do asistente"
+msgstr "Non se facilitou o nome da persoa asistente"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:190
 msgid "The image you previously uploaded"
@@ -28745,7 +28724,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:76
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:82
 msgid "Please have your ticket ready when entering the event."
-msgstr "Por favor teña o seu  ticket listo ao entrar ao evento."
+msgstr "Por favor, teña o seu tícket á vista ao entrar ao evento."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:85
 #, fuzzy
@@ -28769,10 +28748,9 @@ msgid "Payment pending"
 msgstr "Pago pendiente"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_order_status.html:20
-#, fuzzy
 msgctxt "order state"
 msgid "Confirmed"
-msgstr "confirmado"
+msgstr "Confirmado"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:9
 #: pretix/presale/templates/pretixpresale/event/voucher.html:101
@@ -29081,7 +29059,7 @@ msgid ""
 msgstr ""
 "Por favor, marque ou garde a ligazón a esta páxina exacta se desexa acceder "
 "ao seu pedido máis tarde. Tamén lle enviamos un correo electrónico coa "
-"ligazón á dirección que vostede especificou."
+"ligazón ao enderezo que vostede especificou."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:58
 msgid ""
@@ -29169,9 +29147,8 @@ msgstr "Cancelar orden"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:200
 #: pretix/presale/templates/pretixpresale/event/order.html:294
-#, fuzzy
 msgid "Change details"
-msgstr "Cambiar detalles"
+msgstr "Cambiar datos"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:266
 msgid ""
@@ -29520,14 +29497,13 @@ msgid "You will be refunded"
 msgstr "Importe no reembolsado"
 
 #: pretix/presale/templates/pretixpresale/event/order_modify.html:5
-#, fuzzy
 msgid "Modify order"
-msgstr "Modificar orden"
+msgstr "Modificar o pedido"
 
 #: pretix/presale/templates/pretixpresale/event/order_modify.html:8
-#, fuzzy, python-format
+#, python-format
 msgid "Modify order: %(code)s"
-msgstr "Modificar orden: %(code)s"
+msgstr "Modificar pedido: %(code)s"
 
 #: pretix/presale/templates/pretixpresale/event/order_modify.html:18
 #, fuzzy
@@ -29540,9 +29516,8 @@ msgstr ""
 "factura."
 
 #: pretix/presale/templates/pretixpresale/event/order_modify.html:87
-#, fuzzy
 msgid "Save changes"
-msgstr "Guardar cambios"
+msgstr "Gardar cambios"
 
 #: pretix/presale/templates/pretixpresale/event/order_pay_change.html:5
 #, fuzzy
@@ -30300,9 +30275,8 @@ msgid ""
 msgstr ""
 
 #: pretix/presale/views/user.py:83
-#, fuzzy
 msgid "Your orders for {}"
-msgstr "Tus ordenes para {}"
+msgstr "Os teus pedidos de {}"
 
 #: pretix/presale/views/user.py:91
 #, fuzzy
