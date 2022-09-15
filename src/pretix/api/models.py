@@ -133,6 +133,18 @@ class WebHookCall(models.Model):
         ordering = ("-datetime",)
 
 
+class WebHookCallRetry(models.Model):
+    id = models.BigAutoField(primary_key=True)
+    webhook = models.ForeignKey('WebHook', on_delete=models.CASCADE, related_name='retries')
+    logentry = models.ForeignKey('pretixbase.LogEntry', on_delete=models.CASCADE, related_name='webhook_retries')
+    retry_not_before = models.DateTimeField(auto_now_add=True)
+    retry_count = models.PositiveIntegerField(default=0)
+    action_type = models.CharField(max_length=255)
+
+    class Meta:
+        unique_together = (('webhook', 'logentry'),)
+
+
 class ApiCall(models.Model):
     idempotency_key = models.CharField(max_length=190, db_index=True)
     auth_hash = models.CharField(max_length=190, db_index=True)
