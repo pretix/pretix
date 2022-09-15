@@ -87,7 +87,7 @@ def send_mails(event: Event, user: int, subject: dict, message: dict, orders: li
 
                 try:
                     with language(o.locale, event.settings.region):
-                        email_context = get_email_context(event=event, order=o, position_or_address=p, position=p)
+                        email_context = get_email_context(event=event, order=o, invoice_address=ia, position=p)
                         mail(
                             p.attendee_email,
                             subject,
@@ -116,7 +116,7 @@ def send_mails(event: Event, user: int, subject: dict, message: dict, orders: li
         if send_to_order and o.email:
             try:
                 with language(o.locale, event.settings.region):
-                    email_context = get_email_context(event=event, order=o, position_or_address=ia)
+                    email_context = get_email_context(event=event, order=o, invoice_address=ia)
                     mail(
                         o.email,
                         subject,
