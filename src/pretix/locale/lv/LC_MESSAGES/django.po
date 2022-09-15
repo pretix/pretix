@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-09-08 10:09+0000\n"
-"PO-Revision-Date: 2022-04-06 03:00+0000\n"
+"PO-Revision-Date: 2022-09-15 21:00+0000\n"
 "Last-Translator: Svyatoslav <slava@digitalarthouse.eu>\n"
 "Language-Team: Latvian <https://translate.pretix.eu/projects/pretix/pretix/"
 "lv/>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n % 10 == 0 || n % 100 >= 11 && n % 100 <= "
 "19) ? 0 : ((n % 10 == 1 && n % 100 != 11) ? 1 : 2);\n"
-"X-Generator: Weblate 4.11.2\n"
+"X-Generator: Weblate 4.14\n"
 
 #: pretix/api/auth/devicesecurity.py:28
 msgid ""
@@ -24654,7 +24654,7 @@ msgstr "Rādīt nākamo nedēļu, %(week)s"
 #: pretix/presale/templates/pretixpresale/organizers/index.html:97
 #: pretix/presale/views/widget.py:370 pretix/presale/views/widget.py:393
 msgid "Book now"
-msgstr "Pērc tagad"
+msgstr "Pērc"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_list.html:33
 #: pretix/presale/templates/pretixpresale/fragment_calendar.html:79
