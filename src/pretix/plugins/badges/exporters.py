@@ -49,6 +49,7 @@ from django.db.models.functions import Coalesce
 from django.utils.timezone import make_aware
 from django.utils.translation import gettext as _, gettext_lazy
 from PyPDF2 import Transformation
+from PyPDF2.generic import RectangleObject
 from reportlab.lib import pagesizes
 from reportlab.lib.units import mm
 from reportlab.pdfgen import canvas
@@ -205,10 +206,17 @@ def render_pdf(event, positions, opt):
         )
         for i, (op, r) in enumerate(positions):
             bg_page = copy.copy(r.bg_pdf.pages[0])
-            bg_page.trimbox = bg_page.mediabox
             offsetx = opt['margins'][3] + (i % opt['cols']) * opt['offsets'][0]
             offsety = opt['margins'][2] + (opt['rows'] - 1 - i // opt['cols']) * opt['offsets'][1]
             bg_page.add_transformation(Transformation().translate(offsetx, offsety))
+            mb = bg_page.mediabox
+            bg_page.mediabox = RectangleObject((
+                mb.left.as_numeric() + offsetx,
+                mb.bottom.as_numeric() + offsety,
+                mb.right.as_numeric() + offsetx,
+                mb.top.as_numeric() + offsety
+            ))
+            bg_page.trimbox = bg_page.mediabox
             empty_pdf_page.merge_page(bg_page)
         empty_pdf_page.merge_page(canvas_pdf_reader.pages[0])
 
