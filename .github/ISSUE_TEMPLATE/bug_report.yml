@@ -1,5 +1,5 @@
 name: Bug report
-about: Please only create issues for bug reports. Feature requests or general questions should start as a "Discussion" on GitHub.
+description: Please only create issues for bug reports. Feature requests or general questions should start as a "Discussion" on GitHub.
 body:
   - type: markdown
     attributes:
