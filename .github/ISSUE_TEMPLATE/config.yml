@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Community Support
+    url: https://github.com/pretix/pretix/discussions/categories/q-a
+    about: Not sure how to do Y? Please post your support requests in the Q&A section of our GitHub Discussions instead!
+  - name: Feature ideas
+    url: https://github.com/pretix/pretix/discussions/categories/ideas
+    about: Please post your idea in the Ideas section of our GitHub Discussions instead!
