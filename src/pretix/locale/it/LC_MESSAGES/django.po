@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-09-08 10:09+0000\n"
-"PO-Revision-Date: 2022-06-30 19:00+0000\n"
-"Last-Translator: Janine Steitz <steitz@booker-gmbh.de>\n"
+"PO-Revision-Date: 2022-09-16 11:44+0000\n"
+"Last-Translator: Mauro Amico <mauro.amico@gmail.com>\n"
 "Language-Team: Italian <https://translate.pretix.eu/projects/pretix/pretix/"
 "it/>\n"
 "Language: it\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.12.2\n"
+"X-Generator: Weblate 4.14\n"
 
 #: pretix/api/auth/devicesecurity.py:28
 msgid ""
@@ -154,8 +154,8 @@ msgid ""
 "Updating add-ons, bundles, or variations via PATCH/PUT is not supported. "
 "Please use the dedicated nested endpoint."
 msgstr ""
-"L'aggiornamento delle aggiunte, dei pacchetti o delle variazioni tramite "
-"PATCH/PUT non è supportato. Utilizza l'endpoint dedicato."
+"L'aggiornamento delle aggiunte, dei pacchetti o delle varianti tramite PATCH/"
+"PUT non è supportato. Utilizza l'endpoint dedicato."
 
 #: pretix/api/serializers/item.py:203
 msgid ""
@@ -1143,10 +1143,8 @@ msgid "Product ID"
 msgstr "Prodotto"
 
 #: pretix/base/exporters/items.py:57
-#, fuzzy
-#| msgid "Variation"
 msgid "Variation ID"
-msgstr "Variazione"
+msgstr "ID variante"
 
 #: pretix/base/exporters/items.py:58 pretix/base/models/items.py:108
 #: pretix/base/pdf.py:141
@@ -1170,7 +1168,7 @@ msgstr ""
 #: pretix/base/exporters/waitinglist.py:110 pretix/base/models/items.py:780
 #: pretix/base/models/orders.py:1279 pretix/base/models/orders.py:2502
 msgid "Variation"
-msgstr "Variazione"
+msgstr "Variante"
 
 #: pretix/base/exporters/items.py:70 pretix/base/models/discount.py:55
 #: pretix/base/models/event.py:1296 pretix/base/models/items.py:368
@@ -3480,18 +3478,12 @@ msgid "Membership types"
 msgstr ""
 
 #: pretix/base/models/items.py:832
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "This voucher is not valid for this event date."
 msgid "This variation will not be sold before the given date."
-msgstr "Questo Voucher non è valido per questa data."
+msgstr "Questa variante non sarà venduta prima della data indicata."
 
 #: pretix/base/models/items.py:837
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "This voucher is not valid for this event date."
 msgid "This variation will not be sold after the given date."
-msgstr "Questo Voucher non è valido per questa data."
+msgstr "Questa variante non sarà venduta doo la data indicata."
 
 #: pretix/base/models/items.py:842 pretix/control/forms/item.py:700
 msgid ""
@@ -3513,12 +3505,12 @@ msgstr ""
 #: pretix/base/models/items.py:856 pretix/base/models/vouchers.py:252
 #: pretix/base/models/waitinglist.py:96 pretix/base/orderimport.py:284
 msgid "Product variation"
-msgstr "Varianti prodotto"
+msgstr "Variante prodotto"
 
 #: pretix/base/models/items.py:857
 #: pretix/control/templates/pretixcontrol/item/create.html:64
 msgid "Product variations"
-msgstr ""
+msgstr "Varianti prodotto"
 
 #: pretix/base/models/items.py:1035
 msgid "Minimum number"
@@ -3593,11 +3585,11 @@ msgstr "Il sotto-evento non appartiene a questo evento."
 
 #: pretix/base/models/items.py:1158
 msgid "A variation needs to be set for this item."
-msgstr "Bisogna impostare una variante per questo elemento."
+msgstr "Bisogna impostare una variante per questo prodotto."
 
 #: pretix/base/models/items.py:1160
 msgid "The chosen variation does not belong to this item."
-msgstr "La variante scelta non appartiene a questo elemento."
+msgstr "La variante scelta non appartiene a questo prodotto."
 
 #: pretix/base/models/items.py:1165
 msgid "The count needs to be equal to or greater than zero."
@@ -3815,7 +3807,7 @@ msgstr ""
 
 #: pretix/base/models/items.py:1606 pretix/control/forms/item.py:643
 msgid "Variations"
-msgstr ""
+msgstr "Varianti"
 
 #: pretix/base/models/items.py:1610
 #: pretix/control/templates/pretixcontrol/items/quotas.html:70
@@ -24624,21 +24616,19 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:95
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:89
-#, fuzzy
-#| msgid "Variation"
 msgid "Hide variants"
-msgstr "Variazione"
+msgstr "Nascondi varianti"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:97
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:91
 #, python-format
 msgid "Show %(count)s variants of %(item)s"
-msgstr ""
+msgstr "Mostra %(count)s varianti di %(item)s"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:98
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:92
 msgid "Show variants"
-msgstr ""
+msgstr "Mostra varianti"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:121
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:244
