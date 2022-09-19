@@ -268,7 +268,10 @@ class Order(LockModel, LoggedModel):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         if 'require_approval' not in self.get_deferred_fields() and 'status' not in self.get_deferred_fields():
-            self.__initial_status_paid_or_pending = self.status in (Order.STATUS_PENDING, Order.STATUS_PAID) and not self.require_approval
+            self._transaction_key_reset()
+
+    def _transaction_key_reset(self):
+        self.__initial_status_paid_or_pending = self.status in (Order.STATUS_PENDING, Order.STATUS_PAID) and not self.require_approval
 
     def gracefully_delete(self, user=None, auth=None):
         from . import GiftCard, GiftCardTransaction, Membership, Voucher
@@ -1090,6 +1093,7 @@ class Order(LockModel, LoggedModel):
         create.sort(key=lambda t: (0 if t.count < 0 else 1, t.positionid or 0))
         if save:
             Transaction.objects.bulk_create(create)
+        self._transaction_key_reset()
         _transactions_mark_order_clean(self.pk)
         return create
 
