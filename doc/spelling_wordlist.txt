@@ -66,6 +66,7 @@ iterable
 Jimdo
 jwt
 JWT
+JWTs
 libpretixprint
 libsass
 linters
@@ -88,7 +89,9 @@ nginx
 nodejs
 NotificationType
 npm
+OIDC
 ons
+OpenID
 optimizations
 overpayment
 param
@@ -133,6 +136,7 @@ serializer
 serializers
 sexualized
 SQL
+SSO
 startup
 stdout
 stylesheet
@@ -159,6 +163,8 @@ untrusted
 uptime
 username
 url
+URI
+URIs
 validator
 versa
 versioning
