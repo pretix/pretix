@@ -119,6 +119,7 @@ ggf
 GiroCode
 giropay
 GPL
+Grants
 Guide
 Gutscheineinlöser
 herunterscrollen
@@ -138,6 +139,7 @@ innennamen
 Installations
 integrationen
 INV
+invalidieren
 invalidiert
 ISU
 iOS
@@ -176,8 +178,10 @@ name
 Nr
 number
 OK
+On
 Open
 OpenCage
+OpenID
 OpenStreetMap
 Opera
 Output
@@ -236,12 +240,15 @@ Scanergebnis
 Scanning
 schiefgeht
 schiefgelaufen
+Scope
+Scopes
 sechsstelligen
 Secret
 Security
 SEPA
 Shirts
 Signaturverfahren
+Sign
 Sitzplanmoduls
 Social
 Sofort
@@ -250,6 +257,7 @@ Sorry
 Source
 SPF
 SSL
+SSO
 STARTTLS
 Steuerschuldnerschaft
 Store
