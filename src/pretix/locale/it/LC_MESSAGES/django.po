@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-26 09:20+0000\n"
 "PO-Revision-Date: 2023-05-30 21:20+0000\n"
-"Last-Translator: anonymous <noreply@weblate.org>\n"
+"Last-Translator: Michele Pagnozzi <michele.pagnozzi@gmail.com>\n"
 "Language-Team: Italian <https://translate.pretix.eu/projects/pretix/pretix/"
 "it/>\n"
 "Language: it\n"
@@ -3179,8 +3179,7 @@ msgstr "Per il login è richiesta l'autenticazione a due fattori"
 
 #: pretix/base/models/auth.py:270
 msgid "Receive notifications according to my settings below"
-msgstr ""
-"Ricevere le notifiche in base alle impostazioni personalizzate seguenti"
+msgstr "Ricevere le notifiche in base alle impostazioni personalizzate seguenti"
 
 #: pretix/base/models/auth.py:271
 msgid "If turned off, you will not get any notifications."
