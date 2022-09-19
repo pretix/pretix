@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-09-19 16:31+0000\n"
-"PO-Revision-Date: 2022-09-08 09:57+0000\n"
-"Last-Translator: Martin Gross <gross@rami.io>\n"
+"PO-Revision-Date: 2022-09-19 19:01+0000\n"
+"Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
 "Language: de_Informal\n"
@@ -373,14 +373,10 @@ msgid "Shop taken offline"
 msgstr "Shop offline genommen"
 
 #: pretix/api/webhooks.py:317
-#, fuzzy
-#| msgid "Testmode of shop has been activated"
 msgid "Test-Mode of shop has been activated"
 msgstr "Testmodus des Ticketshops wurde aktiviert"
 
 #: pretix/api/webhooks.py:321
-#, fuzzy
-#| msgid "Testmode of shop has been deactivated"
 msgid "Test-Mode of shop has been deactivated"
 msgstr "Testmodus des Ticketshops wurde deaktiviert"
 
@@ -433,26 +429,27 @@ msgstr "Quellcode"
 #: pretix/base/customersso/oidc.py:59
 #, python-brace-format
 msgid "Configuration option \"{name}\" is missing."
-msgstr ""
+msgstr "Konfigurationsoption \"{name}\" fehlt."
 
 #: pretix/base/customersso/oidc.py:67 pretix/base/customersso/oidc.py:72
 #, python-brace-format
 msgid ""
 "Unable to retrieve configuration from \"{url}\". Error message: \"{error}\"."
 msgstr ""
+"Die Konfiguration von \"{url}\" konnte nicht abgerufen werden. Fehlermeldung:"
+" \"{error}\"."
 
 #: pretix/base/customersso/oidc.py:78 pretix/base/customersso/oidc.py:83
 #: pretix/base/customersso/oidc.py:88 pretix/base/customersso/oidc.py:93
 #: pretix/base/customersso/oidc.py:98 pretix/base/customersso/oidc.py:103
 #, python-brace-format
 msgid "Incompatible SSO provider: \"{error}\"."
-msgstr ""
+msgstr "SSO-Provider ist nicht kompatibel: \"{error}\"."
 
 #: pretix/base/customersso/oidc.py:109
-#, fuzzy, python-brace-format
-#| msgid "Your event registration: {code}"
+#, python-brace-format
 msgid "You are not requesting \"{scope}\"."
-msgstr "Deine Registrierung: {code}"
+msgstr "Du fragst \"{scope}\" nicht mit an."
 
 #: pretix/base/customersso/oidc.py:115
 #, python-brace-format
@@ -460,6 +457,8 @@ msgid ""
 "You are requesting scope \"{scope}\" but provider only supports these: "
 "{scopes}."
 msgstr ""
+"Du fragst Scope \"{scope}\" an, aber der Provider unterstützt nur diese: "
+"{scopes}."
 
 #: pretix/base/customersso/oidc.py:123
 #, python-brace-format
@@ -467,6 +466,8 @@ msgid ""
 "You are requesting field \"{field}\" but provider only supports these: "
 "{fields}."
 msgstr ""
+"Du fragst Feld \"{field}\" an, aber der Provider unterstützt nur diese: "
+"{fields}."
 
 #: pretix/base/customersso/oidc.py:169 pretix/base/customersso/oidc.py:176
 #: pretix/base/customersso/oidc.py:195 pretix/base/customersso/oidc.py:212
@@ -475,19 +476,15 @@ msgstr ""
 #: pretix/presale/views/customer.py:785
 #, python-brace-format
 msgid "Login was not successful. Error message: \"{error}\"."
-msgstr ""
+msgstr "Login war nicht erfolgreich. Fehlermeldung: \"{error}\"."
 
 #: pretix/base/customersso/oidc.py:202
-#, fuzzy
-#| msgid ""
-#| "The e-mail address on your PayPal account has not yet been confirmed. You "
-#| "will need to do this before you can start accepting payments."
 msgid ""
 "The email address on this account is not yet verified. Please first confirm "
 "the email address in your customer account."
 msgstr ""
-"Die E-Mail-Adresse deines PayPal-Kontos wurde noch nicht bestätigt. Du musst "
-"die Bestätigung durchführen bevor du Zahlungen annehmen kannst."
+"Die E-Mail-Adresse deines Kontos wurde noch nicht bestätigt. Bitte bestätige "
+"zunächst die E-Mail-Adresse in deinem Kundenkonto."
 
 #: pretix/base/email.py:200 pretix/base/exporters/items.py:138
 #: pretix/base/exporters/items.py:180 pretix/control/views/main.py:304
@@ -1821,8 +1818,6 @@ msgid "Invoice address country"
 msgstr "Rechnungsadresse: Land"
 
 #: pretix/base/exporters/orderlist.py:615
-#, fuzzy
-#| msgid "Invoice address state"
 msgctxt "address"
 msgid "Invoice address state"
 msgstr "Rechnungsadresse: Bundesstaat"
@@ -2816,20 +2811,16 @@ msgid "Server error"
 msgstr "Serverfehler"
 
 #: pretix/base/models/customers.py:54
-#, fuzzy
-#| msgid "Property name"
 msgid "Provider name"
-msgstr "Bezeichnung"
+msgstr "Provider-Name"
 
 #: pretix/base/models/customers.py:59
 msgid "Login button label"
-msgstr ""
+msgstr "Login-Button-Beschriftung"
 
 #: pretix/base/models/customers.py:63
-#, fuzzy
-#| msgid "Sending method"
 msgid "Single-sign-on method"
-msgstr "Versandmethode"
+msgstr "Single-Sign-On-Methode"
 
 #: pretix/base/models/customers.py:83 pretix/base/models/devices.py:72
 #: pretix/base/models/items.py:1249 pretix/base/models/items.py:1476
@@ -2899,18 +2890,14 @@ msgstr "Land auswählen"
 #: pretix/base/models/customers.py:366
 msgctxt "openidconnect"
 msgid "Confidential"
-msgstr ""
+msgstr "Vertraulich"
 
 #: pretix/base/models/customers.py:367
-#, fuzzy
-#| msgid "Public profile"
 msgctxt "openidconnect"
 msgid "Public"
-msgstr "Öffentliche Ansicht"
+msgstr "Öffentlich"
 
 #: pretix/base/models/customers.py:373
-#, fuzzy
-#| msgid "Authorization Code"
 msgctxt "openidconnect"
 msgid "Authorization code"
 msgstr "Authorisierungscode"
@@ -2918,41 +2905,31 @@ msgstr "Authorisierungscode"
 #: pretix/base/models/customers.py:374
 msgctxt "openidconnect"
 msgid "Implicit"
-msgstr ""
+msgstr "Implizit"
 
 #: pretix/base/models/customers.py:378
 msgid "OpenID Connect access (required)"
-msgstr ""
+msgstr "OpenID Connect Zugriff (erforderlich)"
 
 #: pretix/base/models/customers.py:379
-#, fuzzy
-#| msgid "Create new address"
 msgid "Profile data (name, addresses)"
-msgstr "Neue Adresse erstellen"
+msgstr "Profildaten (Name, Adresse)"
 
 #: pretix/base/models/customers.py:399
-#, fuzzy
-#| msgid "Event type"
 msgid "Client type"
-msgstr "Veranstaltungsart"
+msgstr "Art des Clients"
 
 #: pretix/base/models/customers.py:402
-#, fuzzy
-#| msgid "Scan type"
 msgid "Grant type"
-msgstr "Scan-Typ"
+msgstr "Art des Grants"
 
 #: pretix/base/models/customers.py:413
-#, fuzzy
-#| msgid "Allowed membership types"
 msgid "Allowed access scopes"
-msgstr "Erlaubte Mitgliedschafts-Typen"
+msgstr "Erlaubte Zugriffsbereiche"
 
 #: pretix/base/models/customers.py:414
-#, fuzzy
-#| msgid "Create multiple vouchers"
 msgid "Separate multiple values with spaces"
-msgstr "Mehrere Gutscheine erstellen"
+msgstr "Mehrere Werte mit Leerzeichen trennen"
 
 #: pretix/base/models/devices.py:71 pretix/base/models/items.py:1248
 msgid "Internal identifier"
@@ -5809,10 +5786,8 @@ msgid "20:00"
 msgstr "20:00"
 
 #: pretix/base/pdf.py:255
-#, fuzzy
-#| msgid "Event begin date"
 msgid "Event begin weekday"
-msgstr "Veranstaltungsdatum"
+msgstr "Veranstaltungsdatum Wochentag"
 
 #: pretix/base/pdf.py:256 pretix/base/pdf.py:285
 #: pretix/base/services/checkin.py:262 pretix/control/forms/filter.py:1069
@@ -5832,10 +5807,8 @@ msgid "22:00"
 msgstr "22:00"
 
 #: pretix/base/pdf.py:284
-#, fuzzy
-#| msgid "Event end date"
 msgid "Event end weekday"
-msgstr "Veranstaltungsenddatum"
+msgstr "Veranstaltungsende Wochentag"
 
 #: pretix/base/pdf.py:289
 msgid "Event admission date and time"
@@ -7094,17 +7067,15 @@ msgstr ""
 "Funktionen wie Mitgliedschaften."
 
 #: pretix/base/settings.py:155
-#, fuzzy
-#| msgid "We have not found an account with this email address and password."
 msgid "Allow customers to log in with email address and password"
-msgstr ""
-"Wir können kein Kundenkonto mit dieser E-Mail-Adresse und diesem Passwort "
-"finden."
+msgstr "Erlaube den Login mit E-Mail-Adresse und Passwort"
 
 #: pretix/base/settings.py:156
 msgid ""
 "If disabled, you will need to connect one or more single-sign-on providers."
 msgstr ""
+"Wenn diese Option deaktiviert ist, müssen ein oder mehrere Single-Sign-On-"
+"Provider angebunden werden."
 
 #: pretix/base/settings.py:166
 msgid "Match orders based on email address"
@@ -9743,10 +9714,8 @@ msgstr "Erneut versuchen"
 
 #: pretix/base/templates/400_hostname.html:4
 #: pretix/base/templates/400_hostname.html:8
-#, fuzzy
-#| msgid "Unknown ticket"
 msgid "Unknown host"
-msgstr "Unbekanntes Ticket"
+msgstr "Unbekannter Hostname"
 
 #: pretix/base/templates/400_hostname.html:10
 #, python-format
@@ -9754,6 +9723,8 @@ msgid ""
 "Your browser told us that you want to access \"%(header_host)s\". "
 "Unfortunately, we don't have any content for this domain."
 msgstr ""
+"Dein Browser hat uns mitgeteilt, dass du \"%(header_host)s\" aufrufen "
+"möchtest. Leider liegen uns für diese Domain keine Inhalte vor."
 
 #: pretix/base/templates/400_hostname.html:17
 msgid ""
@@ -9761,34 +9732,34 @@ msgid ""
 "probably caused due to the fact that either your configuration includes the "
 "wrong site URL or your reverse proxy is sending the wrong header."
 msgstr ""
+"Es sieht so aus, als wäre dies eine frische Installation von pretix. Diese "
+"Fehlermeldung wird vermutlich dadurch verursacht, dass entweder die "
+"Konfigurationsdatei die falsche URL enthält oder der Reverse-Proxy den "
+"falschen Header schickt."
 
 #: pretix/base/templates/400_hostname.html:24
-#, fuzzy
-#| msgid "Existing app configurations"
 msgid "Expected host according to configuration"
-msgstr "Bestehende App-Konfigurationen"
+msgstr "Erwarteter Hostname laut Konfiguration"
 
 #: pretix/base/templates/400_hostname.html:26
-#, fuzzy
-#| msgid "Received order"
 msgid "Received headers"
-msgstr "Bestellung erhalten"
+msgstr "Erhaltener Header"
 
 #: pretix/base/templates/400_hostname.html:32
-#, fuzzy
-#| msgid "Ignore"
 msgid "ignored"
-msgstr "Ignorieren"
+msgstr "ignoriert"
 
 #: pretix/base/templates/400_hostname.html:35
 msgid "Derived host from headers"
-msgstr ""
+msgstr "Aus Headern abgeleiteter Hostname"
 
 #: pretix/base/templates/400_hostname.html:40
 msgid ""
 "If you just configured this as a domain for your ticket shop, you now need "
 "to set this up as a \"custom domain\" in your organizer account."
 msgstr ""
+"Wenn du gerade diese Domain für deinen Ticket-Shop eingerichtet hast, musst "
+"du diese nun in deinem Veranstalterkonto als \"eigene Domain\" eintragen."
 
 #: pretix/base/templates/403.html:4 pretix/base/templates/403.html:8
 msgid "Permission denied"
@@ -12115,42 +12086,34 @@ msgid "Phone"
 msgstr "Telefon"
 
 #: pretix/control/forms/organizer.py:721
-#, fuzzy
-#| msgid "Target URL"
 msgctxt "sso_oidc"
 msgid "Base URL"
-msgstr "Ziel-URL"
+msgstr "Basis-URL"
 
 #: pretix/control/forms/organizer.py:725
-#, fuzzy
-#| msgid "Client ID"
 msgctxt "sso_oidc"
 msgid "Client ID"
 msgstr "Client-ID"
 
 #: pretix/control/forms/organizer.py:729
-#, fuzzy
-#| msgid "Client secret"
 msgctxt "sso_oidc"
 msgid "Client secret"
-msgstr "Geheimer Schlüssel"
+msgstr "Client-Secret"
 
 #: pretix/control/forms/organizer.py:733
 msgctxt "sso_oidc"
 msgid "Scope"
-msgstr ""
+msgstr "Scope"
 
 #: pretix/control/forms/organizer.py:734
 msgctxt "sso_oidc"
 msgid "Multiple scopes separated with spaces."
-msgstr ""
+msgstr "Mehrere Scopes können mit Leerzeichen getrennt werden."
 
 #: pretix/control/forms/organizer.py:738
-#, fuzzy
-#| msgid "User ID"
 msgctxt "sso_oidc"
 msgid "User ID field"
-msgstr "Benutzer-ID"
+msgstr "Benutzer-ID-Feld"
 
 #: pretix/control/forms/organizer.py:739
 msgctxt "sso_oidc"
@@ -12158,13 +12121,13 @@ msgid ""
 "We will assume that the contents of the user ID fields are unique and can "
 "never change for a user."
 msgstr ""
+"Wir gehen davon aus, dass sich der Inhalt des Benutzer-ID-Felds eindeutig "
+"ist und sich für einen Benutzer nie ändert."
 
 #: pretix/control/forms/organizer.py:745
-#, fuzzy
-#| msgid "Email invoices"
 msgctxt "sso_oidc"
 msgid "Email field"
-msgstr "Rechnungen per E-Mail verschicken"
+msgstr "E-Mail-Feld"
 
 #: pretix/control/forms/organizer.py:746
 msgctxt "sso_oidc"
@@ -12173,25 +12136,24 @@ msgid ""
 "verified to really belong the the user. If this can't be guaranteed, "
 "security issues might arise."
 msgstr ""
+"Wir nehmen an, dass alle vom SSO-Provider übermittelten E-Mail-Adressen "
+"verifiziert wurden und sicher vom zugehörigen Benutzer kontrolliert werden. "
+"Wenn dies nicht der Fall ist, kann es zu Sicherheitsproblemen kommen."
 
 #: pretix/control/forms/organizer.py:753
-#, fuzzy
-#| msgid "Phone"
 msgctxt "sso_oidc"
 msgid "Phone field"
-msgstr "Telefon"
+msgstr "Telefonnummern-Feld"
 
 #: pretix/control/forms/organizer.py:771
 #, python-brace-format
 msgctxt "sso_oidc"
 msgid "{label} field"
-msgstr ""
+msgstr "{label}-Feld"
 
 #: pretix/control/forms/organizer.py:804
-#, fuzzy
-#| msgid "A new client secret has been generated and is now effective."
 msgid "Invalidate old client secret and generate a new one"
-msgstr "Ein neuer geheimer Schlüssel wurde erzeugt und ist sofort aktiv."
+msgstr "Bestehendes Client-Secret invalidieren und neues Client-Secret erzeugen"
 
 #: pretix/control/forms/renderers.py:54
 #: pretix/control/templates/pretixcontrol/items/question_edit.html:135
@@ -12679,49 +12641,35 @@ msgstr "Der Webhook wurde geändert."
 
 #: pretix/control/logdisplay.py:322
 msgid "The webhook call retry jobs have been manually expedited."
-msgstr ""
+msgstr "Die Webhook-Wiederholungsaufträge wurden manuell beschleunigt."
 
 #: pretix/control/logdisplay.py:323
-#, fuzzy
-#| msgid "The webhook has been created."
 msgid "The webhook call retry jobs have been dropped."
-msgstr "Der Webhook wurde erstellt."
+msgstr "Die Webhook-Wiederholungsaufträge wurden manuell verworfen."
 
 #: pretix/control/logdisplay.py:324
-#, fuzzy
-#| msgid "The order has been created."
 msgid "The SSO provider has been created."
-msgstr "Die Bestellung wurde erstellt."
+msgstr "Der SSO-Provider wurde erstellt."
 
 #: pretix/control/logdisplay.py:325
-#, fuzzy
-#| msgid "The order has been changed."
 msgid "The SSO provider has been changed."
-msgstr "Die Bestellung wurde geändert."
+msgstr "Der SSO-Provider wurde geändert."
 
 #: pretix/control/logdisplay.py:326
-#, fuzzy
-#| msgid "The order has been deleted."
 msgid "The SSO provider has been deleted."
-msgstr "Die Bestellung wurde gelöscht."
+msgstr "Der SSO-Provider wurde gelöscht."
 
 #: pretix/control/logdisplay.py:327
-#, fuzzy
-#| msgid "The event has been created."
 msgid "The SSO client has been created."
-msgstr "Die Veranstaltung wurde erstellt."
+msgstr "Der SSO-Client wurde erstellt."
 
 #: pretix/control/logdisplay.py:328
-#, fuzzy
-#| msgid "The account has been changed."
 msgid "The SSO client has been changed."
-msgstr "Das Konto wurde verändert."
+msgstr "Der SSO-Client wurde geändert."
 
 #: pretix/control/logdisplay.py:329
-#, fuzzy
-#| msgid "The event has been deleted."
 msgid "The SSO client has been deleted."
-msgstr "Die Veranstaltung wurde gelöscht."
+msgstr "Der SSO-Client wurde gelöscht."
 
 #: pretix/control/logdisplay.py:330 pretix/control/views/organizer.py:1852
 msgid "The membership type has been created."
@@ -13810,15 +13758,13 @@ msgstr "Kunden"
 #: pretix/control/templates/pretixcontrol/organizers/ssoclients.html:4
 #: pretix/control/templates/pretixcontrol/organizers/ssoclients.html:6
 msgid "SSO clients"
-msgstr ""
+msgstr "SSO-Clients"
 
 #: pretix/control/navigation.py:564
 #: pretix/control/templates/pretixcontrol/organizers/ssoproviders.html:4
 #: pretix/control/templates/pretixcontrol/organizers/ssoproviders.html:6
-#, fuzzy
-#| msgid "Payment providers"
 msgid "SSO providers"
-msgstr "Zahlungsmethoden"
+msgstr "SSO-Provider"
 
 #: pretix/control/navigation.py:573
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:132
@@ -18929,10 +18875,8 @@ msgid "Customer ID"
 msgstr "Kundennummer"
 
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:31
-#, fuzzy
-#| msgid "Payment provider"
 msgid "SSO provider"
-msgstr "Zahlungsmethode"
+msgstr "SSO-Provider"
 
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:53
 msgid "Send password reset link"
@@ -19512,36 +19456,25 @@ msgid "Property:"
 msgstr "Eigenschaft:"
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoclient_delete.html:5
-#, fuzzy
-#| msgid "Delete event"
 msgid "Delete SSO client:"
-msgstr "Veranstaltung löschen"
+msgstr "SSO-Client löschen:"
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoclient_delete.html:9
-#, fuzzy
-#| msgid "Are you sure you want to delete the gate?"
 msgid "Are you sure you want to delete this SSO client?"
-msgstr "Möchten Sie die Station wirklich löschen?"
+msgstr "Möchtest du diesen SSO-Client wirklich löschen?"
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoclient_delete.html:11
-#, fuzzy
-#| msgid ""
-#| "This membership type cannot be deleted since it has already been used."
 msgid "This SSO client cannot be deleted since it has already been used."
-msgstr ""
-"Der Mitgliedschafts-Typ kann nicht gelöscht werden, da er bereits genutzt "
-"wurde."
+msgstr "Der SSO-Client kann nicht gelöscht werden, da er bereits genutzt wurde."
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoclient_edit.html:6
 msgid "SSO client:"
-msgstr ""
+msgstr "SSO-Client:"
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoclient_edit.html:8
 #: pretix/control/templates/pretixcontrol/organizers/ssoclients.html:15
-#, fuzzy
-#| msgid "Create a new event"
 msgid "Create a new SSO client"
-msgstr "Neue Veranstaltung erstellen"
+msgstr "Neuen SSO-Client erstellen"
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoclients.html:8
 msgid ""
@@ -19549,53 +19482,44 @@ msgid ""
 "account credentials by setting up your other systems as a Single-Sign-On "
 "(SSO) client based on OpenID Connect."
 msgstr ""
+"Du kannst deinen Kunden erlauben, sich mit ihren bestehenden Kundenkonto-"
+"Zugangsdaten in andere Systeme einzuloggen, indem du diese anderen Systeme "
+"über Single-Sign-On (SSO) auf Basis von OpenID Connect einbindest."
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoprovider_delete.html:5
-#, fuzzy
-#| msgid "Delete property:"
 msgid "Delete SSO provider:"
-msgstr "Eigenschaft löschen:"
+msgstr "SSO-Provider löschen:"
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoprovider_delete.html:9
-#, fuzzy
-#| msgid "Are you sure you want to delete the property?"
 msgid "Are you sure you want to delete this SSO provider?"
-msgstr "Möchtest du die Eigenschaft wirklich löschen?"
+msgstr "Möchtest du diesen SSO-Provider wirklich löschen?"
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoprovider_delete.html:11
-#, fuzzy
-#| msgid ""
-#| "This membership type cannot be deleted since it has already been used."
 msgid "This SSO provider cannot be deleted since it has already been used."
 msgstr ""
-"Der Mitgliedschafts-Typ kann nicht gelöscht werden, da er bereits genutzt "
-"wurde."
+"Dieser SSO-Provider kann nicht gelöscht werden, da er bereits genutzt wurde."
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoprovider_edit.html:6
-#, fuzzy
-#| msgid "Payment provider:"
 msgid "SSO provider:"
-msgstr "Zahlungsmethode:"
+msgstr "SSO-Provider:"
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoprovider_edit.html:8
 #: pretix/control/templates/pretixcontrol/organizers/ssoproviders.html:15
-#, fuzzy
-#| msgid "Create a new property"
 msgid "Create a new SSO provider"
-msgstr "Neue Eigenschaft erstellen"
+msgstr "Neuen SSO-Provider erstellen"
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoprovider_edit.html:16
-#, fuzzy
-#| msgid "Redirection URIs"
 msgctxt "sso"
 msgid "Redirection URL"
-msgstr "Weiterleitungs-URIs"
+msgstr "Weiterleitungs-URLs"
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoproviders.html:8
 msgid ""
 "You can connect existing Single-Sign-On (SSO) providers to allow your "
 "customers to log in using your own account system."
 msgstr ""
+"Du kannst bestehende Single-Sign-On-Dienste (SSO) anbinden, damit sich deine "
+"Kunden über dein bestehendes System in ihr Kundenkonto einloggen können."
 
 #: pretix/control/templates/pretixcontrol/organizers/team_delete.html:5
 msgid "Delete team:"
@@ -19719,24 +19643,19 @@ msgstr ""
 "Diese Seite zeigt alle Aufrufe des Webhooks in den letzten 30 Tagen an."
 
 #: pretix/control/templates/pretixcontrol/organizers/webhook_logs.html:14
-#, fuzzy, python-format
-#| msgid "The webhook has been created."
+#, python-format
 msgid "One webhook is scheduled to be retried."
 msgid_plural "%(count)s webhooks are scheduled to be retried."
-msgstr[0] "Der Webhook wurde erstellt."
-msgstr[1] "Der Webhook wurde erstellt."
+msgstr[0] "Ein Webhook ist zur Wiederholung geplant."
+msgstr[1] "%(count)s Webhooks sind zur Wiederholung geplant."
 
 #: pretix/control/templates/pretixcontrol/organizers/webhook_logs.html:22
-#, fuzzy
-#| msgid "Retry"
 msgid "Retry now"
-msgstr "Nochmal versuchen"
+msgstr "Jetzt wiederholen"
 
 #: pretix/control/templates/pretixcontrol/organizers/webhook_logs.html:25
-#, fuzzy
-#| msgid "Stop impersonating"
 msgid "Stop retrying"
-msgstr "Zurück zum eigenen Benutzer"
+msgstr "Wiederholung abbrechen"
 
 #: pretix/control/templates/pretixcontrol/organizers/webhook_logs.html:29
 #, python-format
@@ -19744,6 +19663,9 @@ msgid ""
 "Webhooks scheduled to be retried in less than %(minutes)s minutes may not be "
 "listed here and can no longer be stopped or expedited."
 msgstr ""
+"Webhooks, die geplant sind in weniger als %(minutes)s Minuten wiederholt zu "
+"werden, werden ggf. nicht hier aufgelistet und können nicht mehr gestoppt "
+"oder beschleunigt werden."
 
 #: pretix/control/templates/pretixcontrol/organizers/webhook_logs.html:44
 msgid "This webhook was retried since it previously failed."
@@ -22649,10 +22571,13 @@ msgid ""
 "All requests will now be scheduled for an immediate attempt. Please allow "
 "for a few minutes before they are processed."
 msgstr ""
+"Alle wartenden Webhooks werden nun für einen zeitnahen neuen Versuch "
+"eingeplant. Bitte hab ein paar Minuten Geduld, bis die Verarbeitung "
+"abgeschlossen wurde."
 
 #: pretix/control/views/organizer.py:1283
 msgid "All unprocessed webhooks have been stopped from retrying."
-msgstr ""
+msgstr "Alle unverarbeiteten Webhooks werden nicht weiter ausgeführt."
 
 #: pretix/control/views/organizer.py:1324
 msgid "The selected gift card issuer has been added."
@@ -22707,10 +22632,8 @@ msgid "The selected object has been deleted."
 msgstr "Das ausgewählte Objekt wurde gelöscht."
 
 #: pretix/control/views/organizer.py:1959
-#, fuzzy
-#| msgid "The order has been created."
 msgid "The provider has been created."
-msgstr "Die Bestellung wurde erstellt."
+msgstr "Der Provider wurde erstellt."
 
 #: pretix/control/views/organizer.py:2076
 #, python-brace-format
@@ -22718,18 +22641,17 @@ msgid ""
 "The SSO client has been created. Please note down the following client "
 "secret, it will never be shown again: {secret}"
 msgstr ""
+"Der SSO-Client wurde erstellt. Bitte notiere das folgende Client-Secret, es "
+"wird nicht erneut angezeigt: {secret}"
 
 #: pretix/control/views/organizer.py:2125
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Your changes have been saved. Please note that it can take a short period "
-#| "of time until your changes become active."
+#, python-brace-format
 msgid ""
 "Your changes have been saved. Please note down the following client secret, "
 "it will never be shown again: {secret}"
 msgstr ""
-"Deine Änderungen wurden gespeichert. Beachte, dass es einen Moment dauern "
-"kann, bis diese wirksam werden."
+"Deine Änderungen wurden gespeichert. Bitte notiere das folgende Client-"
+"Secret, es wird nicht erneut angezeigt: {secret}"
 
 #: pretix/control/views/organizer.py:2225 pretix/presale/views/customer.py:313
 #, python-brace-format
@@ -23683,21 +23605,17 @@ msgstr ""
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:67
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:87
 msgid "Scan the qr-code with your banking app"
-msgstr ""
+msgstr "Scanne den QR-Code mit deiner Banking-App"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:61
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:70
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:91
-#, fuzzy
-#| msgid ""
-#| "BezahlCode for your order. Scan this image with your banking app’s QR-"
-#| "Reader to start the payment process."
 msgid ""
 "Scan this image with your banking app’s QR-Reader to start the payment "
 "process."
 msgstr ""
-"BezahlCode für deine Bestellung. Scanne dieses Bild mit dem QR-Code-Reader "
-"deiner Bank-App, um die Zahlung zu starten."
+"Scanne dieses Bild mit dem QR-Code-Reader deiner Bank-App, um die Zahlung zu "
+"starten."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:90
 msgid "Open BezahlCode in your banking app to start the payment process."
@@ -25992,14 +25910,10 @@ msgid "Customer account"
 msgstr "Kundenkonto"
 
 #: pretix/presale/checkoutflow.py:323
-#, fuzzy
-#| msgid ""
-#| "We were not able to process your request completely as the server was too "
-#| "busy. Please try again."
 msgid "We failed to process your authentication request, please try again."
 msgstr ""
-"Wir waren nicht in der Lage, deine Anfrage zu verarbeiten, da der Server zu "
-"beschäftigt war. Bitte versuche es erneut."
+"Wir konnten deine Authentifizierung nicht durchführen, bitte versuche es "
+"erneut."
 
 #: pretix/presale/checkoutflow.py:386
 msgctxt "checkoutflow"
@@ -26200,6 +26114,8 @@ msgid ""
 "To change your email address, change it in your {provider} account and then "
 "log out and log in again."
 msgstr ""
+"Um deine E-Mail-Adresse zu ändern, ändere sie zunächst in deinem {provider}-"
+"Konto ab und logge dich dann hier einmal aus und wieder ein."
 
 #: pretix/presale/forms/order.py:105 pretix/presale/forms/order.py:113
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:155
@@ -28117,25 +28033,25 @@ msgid "View user profile"
 msgstr "Kundenprofil ansehen"
 
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:15
-#, fuzzy
-#| msgid "The payment process has started in a new window."
 msgid "We've started the requested process in a new window."
-msgstr "Der Zahlungsvorgang wird in einem neuen Fenster fortgesetzt."
+msgstr "Wir haben den angeforderten Prozess in einem neuen Fenster gestartet."
 
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:18
 msgid "If you do not see the new window, we can help you launch it again."
 msgstr ""
+"Wenn du das neue Fenster nicht siehst, können wir dir helfen, es erneut zu "
+"öffnen."
 
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:23
-#, fuzzy
-#| msgid "Open download page"
 msgid "Open window again"
-msgstr "Downloadseite öffnen"
+msgstr "Fenster erneut öffnen"
 
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:27
 msgid ""
 "Once the process in the new window has been completed, you can continue here."
 msgstr ""
+"Sobald der Prozess im neuen Fenster abgeschlossen wurde, kannst du hier "
+"fortfahren."
 
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:69
 msgid "Adjust settings in detail"
@@ -28288,10 +28204,8 @@ msgid "Your account"
 msgstr "Dein Konto"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:23
-#, fuzzy
-#| msgid "Sending method"
 msgid "Login method"
-msgstr "Versandmethode"
+msgstr "Login-Methode"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:39
 msgid "Change account information"
@@ -28504,6 +28418,9 @@ msgid ""
 "We were unable to use your login since the email address {email} is already "
 "used for a different account in this system."
 msgstr ""
+"Wir waren nicht in der Lage, deinen Login zu verwenden, da die E-Mail-"
+"Adresse {email} bereits für ein anderes Konto in diesem System in Verwendung "
+"ist."
 
 #: pretix/presale/views/event.py:732
 msgid "Unknown event code or not authorized to access this event."
