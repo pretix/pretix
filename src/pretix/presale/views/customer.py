@@ -733,7 +733,7 @@ class SSOLoginReturnView(RedirectBackMixin, View):
             scheme = PERSON_NAME_SCHEMES.get(name_scheme)
             for fname, label, size in scheme['fields']:
                 if fname in profile:
-                    name_parts[fname] = profile[fname]
+                    name_parts[fname] = profile[fname] or ''
             if len(name_parts) == 1 and profile.get('name'):
                 name_parts = {'_legacy': profile['name']}
             customer = Customer(
