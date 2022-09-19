@@ -161,7 +161,7 @@ class OrganizerUpdateForm(OrganizerForm):
         instance = super().save(commit)
 
         if self.domain:
-            current_domain = instance.domains.first()
+            current_domain = instance.domains.filter(event__isnull=True).first()
             if self.cleaned_data['domain']:
                 if current_domain and current_domain.domainname != self.cleaned_data['domain']:
                     current_domain.delete()
