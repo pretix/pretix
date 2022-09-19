@@ -12,6 +12,7 @@ wanting to use pretix to sell tickets.
    events/settings
    events/structureguide
    events/widget
+   customers/index
    events/giftcards
    faq
    markdown
