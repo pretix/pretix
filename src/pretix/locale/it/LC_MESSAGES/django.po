@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-09-08 10:09+0000\n"
 "PO-Revision-Date: 2022-09-19 16:31+0000\n"
-"Last-Translator: Michele Pagnozzi <michele.pagnozzi@gmail.com>\n"
+"Last-Translator: Mauro Amico <mauro.amico@gmail.com>\n"
 "Language-Team: Italian <https://translate.pretix.eu/projects/pretix/pretix/"
 "it/>\n"
 "Language: it\n"
@@ -602,7 +602,7 @@ msgstr "Valuta dell'evento"
 #: pretix/base/settings.py:2568 pretix/control/forms/subevents.py:609
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:268
 msgid "Event start time"
-msgstr "Orario inizio evento"
+msgstr "Ora inizio evento"
 
 #: pretix/base/exporters/events.py:60 pretix/base/models/event.py:484
 #: pretix/base/models/event.py:1309 pretix/base/pdf.py:271
@@ -2808,7 +2808,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/organizers/gates.html:16
 #: pretix/plugins/checkinlists/exporters.py:624
 msgid "Gate"
-msgstr ""
+msgstr "Ingresso"
 
 #: pretix/base/models/devices.py:130
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:83
@@ -3206,7 +3206,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/items/categories.html:5
 #: pretix/control/templates/pretixcontrol/items/categories.html:33
 msgid "Product categories"
-msgstr ""
+msgstr "Categorie prodotto"
 
 #: pretix/base/models/items.py:115
 #, python-brace-format
