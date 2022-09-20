@@ -201,10 +201,11 @@ class WaitingListActionView(EventPermissionRequiredMixin, WaitingListQuerySetMix
             return self._redirect_back()
 
         elif request.POST.get('action') == 'update':
-            form = self.form_class(request.POST) #event = request.event)
-            print(form.is_valid())
+            form = self.form_class(request.POST, event = request.event) #event = request.event)
+            #obj = form.save(commit=False)
+            #obj.save(update_fields='subevent')
             #if form.is_valid(update_fields=["subevent"]):
-            form.save()
+            #form.save()
             for field in form:
                 print("Field Error:", field.name, field.errors)
             return render(request, 'pretixcontrol/waitinglist/update_bulk.html', {

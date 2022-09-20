@@ -38,6 +38,8 @@
         {% endif %}
         <div class="col-md-4">
             {% bootstrap_field form.subevent %}
+            {{ form.errors }}
+            {{ form.non_field_errors }}
         </div>
             <div class="form-group submit-group">
             <a href="{% url "control:event.orders.waitinglist" organizer=request.event.organizer.slug event=request.event.slug %}" class="btn btn-default btn-cancel">

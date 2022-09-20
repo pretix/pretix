@@ -23,23 +23,22 @@ from pretix.helpers.money import change_decimal_field
 from django_scopes import scopes_disabled
 
 with scopes_disabled():
-    with scopes_disabled():
-        class WaitingListEntryEditForm(I18nModelForm):
+    class WaitingListEntryEditForm(I18nModelForm):
 
-            def __init__(self, *args, **kwargs):
-                self.event = kwargs['event']
-                super().__init__(*args, **kwargs)
-                self.fields['subevent'].queryset = self.event.subevents.all()
+        def __init__(self, *args, **kwargs):
+            self.event = kwargs['event']
+            super().__init__(*args, **kwargs)
+            self.fields['subevent'].queryset = self.event.subevents.all()
 
-            class Meta:
-                model = WaitingListEntry
-                localized_fields = '__all__'
-                fields = [
-                    'subevent',
-                ]
-                field_classes = {
-                }
-                widgets = {
-                }
+        class Meta:
+            model = WaitingListEntry
+            localized_fields = '__all__'
+            fields = [
+                'subevent',
+            ]
+            field_classes = {
+            }
+            widgets = {
+            }
 
 
