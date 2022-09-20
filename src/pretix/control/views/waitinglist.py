@@ -58,7 +58,7 @@ from pretix.base.views.tasks import AsyncAction
 from pretix.control.permissions import EventPermissionRequiredMixin
 from pretix.control.views import PaginationMixin
 from django import forms
-#from pretix.control.forms.waitinglist import WaitingListForm
+from pretix.control.forms.waitinglist import WaitingListEntryEditForm
 from django_scopes import scopes_disabled
 
 class AutoAssign(EventPermissionRequiredMixin, AsyncAction, View):
@@ -145,7 +145,14 @@ with scopes_disabled():
             super().__init__(*args, **kwargs)
             #self.fields['subevent'] =
 
-        subevent = forms.ChoiceField(
+        """subevent = forms.ChoiceField(
+            label=_("Date list"),
+            help_text=_(
+                "Select the date of the subevent the entries will be transfered to."
+            ).format(),
+            required=True,
+        )"""
+        event = forms.ChoiceField(
             label=_("Date list"),
             help_text=_(
                 "Select the date of the subevent the entries will be transfered to."
@@ -156,15 +163,21 @@ with scopes_disabled():
         class Meta:
             model = WaitingListEntry
             fields = [
-                'subevent'
+                #'subevent',
+                'event',
             ]
 
-class WaitingListActionView(EventPermissionRequiredMixin, WaitingListQuerySetMixin, FormView): #FormView
+class WaitingListActionView(EventPermissionRequiredMixin, WaitingListQuerySetMixin, UpdateView): #FormView
     model = WaitingListEntry
     permission = 'can_change_orders'
-    form_class = WaitingListSettingsForm
-    def get_queryset(self):
-        return super().get_queryset().prefetch_related(None).order_by()
+    form_class = WaitingListEntryEditForm
+    #def get_queryset(self):
+    #    return super().get_queryset().prefetch_related(None).order_by()
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        print(self.request.event)
+        kwargs['event'] = self.request.event
+        return kwargs
 
     def _redirect_back(self):
         if "next" in self.request.GET and is_safe_url(self.request.GET.get("next"), allowed_hosts=None):
@@ -192,6 +205,7 @@ class WaitingListActionView(EventPermissionRequiredMixin, WaitingListQuerySetMix
             print(self.get_queryset().values())
             return render(request, 'pretixcontrol/waitinglist/update_bulk.html', {
                 'allowed': self.get_queryset(),
+                'forbidden': self.get_queryset().filter(voucher__isnull=False),
                 'form': self.form_class,
             })
 
@@ -381,6 +395,7 @@ class EntryDelete(EventPermissionRequiredMixin, DeleteView):
     template_name = 'pretixcontrol/waitinglist/delete.html'
     permission = 'can_change_orders'
     context_object_name = 'entry'
+    #form_class = WaitingListEntryEditForm
 
     def get_object(self, queryset=None) -> WaitingListEntry:
         try:
@@ -412,21 +427,27 @@ class EntryUpdate(EventPermissionRequiredMixin, UpdateView):
     model = WaitingListEntry
     template_name = 'pretixcontrol/waitinglist/update.html'
     permission = 'can_change_orders'
-    fields = ['subevent']
+    form_class = WaitingListEntryEditForm
     context_object_name = 'entry'
 
 
 
-
+    #def dispatch(self, request, *args, **kwargs):
+        #self.fields['subevent'] = WaitingListEntry.objects.filter(event=self.request.event)
+    #    return super().dispatch(request, *args, **kwargs)
+    def get_queryset(self):
+        return WaitingListEntry.objects.filter(
+            event=self.request.event,
+        )
     def get_object(self, queryset=None) -> WaitingListEntry:
         try:
             return self.request.event.waitinglistentries.get(
                 id=self.kwargs['entry'],
+                event=self.request.event,
                 voucher__isnull=True,
             )
         except WaitingListEntry.DoesNotExist:
             raise Http404(_("The requested entry does not exist."))
-
 
     def get_success_url(self) -> str:
         return reverse('control:event.orders.waitinglist', kwargs={
@@ -443,6 +464,11 @@ class EntryUpdate(EventPermissionRequiredMixin, UpdateView):
         if "next" in self.request.GET and is_safe_url(self.request.GET.get("next"), allowed_hosts=None):
             return redirect(self.request.GET.get("next"))
         return HttpResponseRedirect(success_url)
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['event'] = self.request.event
+        return kwargs
 
 class EntriesUpdate(EventPermissionRequiredMixin, UpdateView):
     #form_class = WaitingListForm

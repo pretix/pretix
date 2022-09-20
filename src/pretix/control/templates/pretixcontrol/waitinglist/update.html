@@ -7,7 +7,7 @@
 	<form action="" method="post" class="form-horizontal">
 		{% csrf_token %}
 		<p>{% blocktrans %}Please select the subevent to which the following waiting list entry should be transfered: <strong>{{ entry }}</strong>?{% endblocktrans %}</p>
-            {{ form.as_p }}
+            {% bootstrap_field form.subevent layout="control" %}
 		<div class="form-group submit-group">
             <a href="{% url "control:event.orders.waitinglist" organizer=request.event.organizer.slug event=request.event.slug %}" class="btn btn-default btn-cancel">
                 {% trans "Cancel" %}
