@@ -1329,6 +1329,7 @@ class Question(LoggedModel):
         verbose_name = _("Question")
         verbose_name_plural = _("Questions")
         ordering = ('position', 'id')
+        unique_together = (('event', 'identifier'),)
 
     def __str__(self):
         return str(self.question)
@@ -1344,7 +1345,7 @@ class Question(LoggedModel):
     @staticmethod
     def _clean_identifier(event, code, instance=None):
         qs = Question.objects.filter(event=event, identifier__iexact=code)
-        if instance:
+        if instance and instance.pk:
             qs = qs.exclude(pk=instance.pk)
         if qs.exists():
             raise ValidationError(_('This identifier is already used for a different question.'))

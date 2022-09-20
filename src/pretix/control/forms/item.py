@@ -129,6 +129,11 @@ class QuestionForm(I18nModelForm):
 
         return val
 
+    def clean_identifier(self):
+        val = self.cleaned_data.get('identifier')
+        Question._clean_identifier(self.instance.event, val, self.instance)
+        return val
+
     def clean(self):
         d = super().clean()
         if d.get('dependency_question') and not d.get('dependency_values'):
