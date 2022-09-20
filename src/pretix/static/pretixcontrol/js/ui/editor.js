@@ -959,10 +959,10 @@ var editor = {
         return false;
     },
 
-    _preview: function () {
+    _preview: function (e) {
         $("#preview-form input[name=data]").val(JSON.stringify(editor.dump()));
         $("#preview-form input[name=background]").val(editor.uploaded_file_id);
-        $("#preview-form").get(0).submit();
+        if (!e || !e.target.form) $("#preview-form").get(0).submit();
     },
 
     _replace_pdf_file: function (url) {
