@@ -220,7 +220,7 @@ setup(
         'pyuca',
         'redis==4.3.*',
         'reportlab==3.6.*',
-        'requests==2.27.*',
+        'requests==2.28.*',
         'sentry-sdk==1.8.*',
         'sepaxml==2.4.*,>=2.4.1',
         'slimit',
