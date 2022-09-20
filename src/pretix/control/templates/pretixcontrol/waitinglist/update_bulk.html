@@ -43,7 +43,7 @@
             <a href="{% url "control:event.orders.waitinglist" organizer=request.event.organizer.slug event=request.event.slug %}" class="btn btn-default btn-cancel">
                 {% trans "Cancel" %}
             </a>
-            <button type="submit" class="btn btn-danger btn-save" value="update_confirm" name="action">
+            <button type="submit" class="btn btn-primary btn-save">
                 {% trans "Update" %}
             </button>
         </div>

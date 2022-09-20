@@ -167,7 +167,7 @@ with scopes_disabled():
                 'event',
             ]
 
-class WaitingListActionView(EventPermissionRequiredMixin, WaitingListQuerySetMixin, UpdateView): #FormView
+class WaitingListActionView(EventPermissionRequiredMixin, WaitingListQuerySetMixin, FormView): #FormView
     model = WaitingListEntry
     permission = 'can_change_orders'
     form_class = WaitingListEntryEditForm
@@ -175,7 +175,6 @@ class WaitingListActionView(EventPermissionRequiredMixin, WaitingListQuerySetMix
     #    return super().get_queryset().prefetch_related(None).order_by()
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
-        print(self.request.event)
         kwargs['event'] = self.request.event
         return kwargs
 
@@ -202,11 +201,16 @@ class WaitingListActionView(EventPermissionRequiredMixin, WaitingListQuerySetMix
             return self._redirect_back()
 
         elif request.POST.get('action') == 'update':
-            print(self.get_queryset().values())
+            form = self.form_class(request.POST) #event = request.event)
+            print(form.is_valid())
+            #if form.is_valid(update_fields=["subevent"]):
+            form.save()
+            for field in form:
+                print("Field Error:", field.name, field.errors)
             return render(request, 'pretixcontrol/waitinglist/update_bulk.html', {
                 'allowed': self.get_queryset(),
                 'forbidden': self.get_queryset().filter(voucher__isnull=False),
-                'form': self.form_class,
+                'form': form,
             })
 
         elif request.POST.get('action') == 'update_confirm':
