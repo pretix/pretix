@@ -17,7 +17,7 @@ def change_unique_identifiers(apps, schema_editor):
 
 class Migration(migrations.Migration):
     dependencies = [
-        ('pretixbase', '0204_orderposition_backfill_is_bundled'),
+        ('pretixbase', '0220_auto_20220811_1002'),
     ]
 
     operations = [

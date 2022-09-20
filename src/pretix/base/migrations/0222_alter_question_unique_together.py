@@ -6,7 +6,7 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('pretixbase', '0205_auto_20211201_1155'),
+        ('pretixbase', '0221_clean_nonunique_question_identifiers'),
     ]
 
     operations = [
