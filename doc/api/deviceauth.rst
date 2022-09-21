@@ -105,6 +105,37 @@ following endpoint:
 
 You will receive a response equivalent to the response of your initialization request.
 
+Device Information
+------------------
+
+You can request information about your device and the server with one call:
+
+.. sourcecode:: http
+
+   GET /api/v1/device/info HTTP/1.1
+   Host: pretix.eu
+
+The response will look like this:
+
+.. sourcecode:: http
+
+   HTTP/1.1 200 OK
+   Content-Type: application/json
+
+   {
+     "device": {
+       "organizer": "foo",
+       "device_id": 5,
+       "unique_serial": "HHZ9LW9JWP390VFZ",
+       "api_token": "1kcsh572fonm3hawalrncam4l1gktr2rzx25a22l8g9hx108o9oi0rztpcvwnfnd",
+       "name": "Bar",
+       "gate": {
+         "id": 3,
+         "name": "South entrance"
+       }
+     }
+   }
+
 Creating a new API key
 ----------------------
 

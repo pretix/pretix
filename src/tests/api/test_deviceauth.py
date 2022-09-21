@@ -171,3 +171,15 @@ def test_revoke_valid(device_client, device: Device):
     assert resp.status_code == 200
     device.refresh_from_db()
     assert device.revoked
+
+
+@pytest.mark.django_db
+def test_device_info(device_client, device: Device):
+    resp = device_client.get('/api/v1/device/info')
+    assert resp.status_code == 200
+    assert resp.data['device']['organizer'] == 'dummy'
+    assert resp.data['device']['name'] == 'Foo'
+    assert 'device_id' in resp.data['device']
+    assert 'unique_serial' in resp.data['device']
+    assert 'api_token' in resp.data['device']
+    assert 'pretix' in resp.data['server']['version']

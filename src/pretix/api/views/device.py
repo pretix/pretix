@@ -29,7 +29,9 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from pretix import __version__
 from pretix.api.auth.device import DeviceTokenAuthentication
+from pretix.api.views.version import numeric_version
 from pretix.base.models import CheckinList, Device, SubEvent
 from pretix.base.models.devices import Gate, generate_api_token
 
@@ -149,6 +151,24 @@ class RevokeKeyView(APIView):
 
         serializer = DeviceSerializer(device)
         return Response(serializer.data)
+
+
+class InfoView(APIView):
+    authentication_classes = (DeviceTokenAuthentication,)
+
+    def get(self, request, format=None):
+        device = request.auth
+        serializer = DeviceSerializer(device)
+        return Response({
+            'device': serializer.data,
+            'server': {
+                'version': {
+                    'pretix': __version__,
+                    'pretix_numeric': numeric_version(__version__),
+                }
+            }
+
+        })
 
 
 class EventSelectionView(APIView):

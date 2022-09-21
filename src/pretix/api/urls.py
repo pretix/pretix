@@ -138,6 +138,7 @@ urlpatterns = [
     re_path(r"^device/update$", device.UpdateView.as_view(), name="device.update"),
     re_path(r"^device/roll$", device.RollKeyView.as_view(), name="device.roll"),
     re_path(r"^device/revoke$", device.RevokeKeyView.as_view(), name="device.revoke"),
+    re_path(r"^device/info$", device.InfoView.as_view(), name="device.info"),
     re_path(r"^device/eventselection$", device.EventSelectionView.as_view(), name="device.eventselection"),
     re_path(r"^idempotency_query$", idempotency.IdempotencyQueryView.as_view(), name="idempotency.query"),
     re_path(r"^upload$", upload.UploadView.as_view(), name="upload"),
