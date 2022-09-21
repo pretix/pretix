@@ -449,7 +449,7 @@ class ChangePasswordView(CustomerRequiredMixin, FormView):
     def dispatch(self, request, *args, **kwargs):
         if not request.organizer.settings.customer_accounts:
             raise Http404('Feature not enabled')
-        if self.request.customer.provider_id:
+        if self.request.customer and self.request.customer.provider_id:
             raise Http404('Feature not enabled')
         return super().dispatch(request, *args, **kwargs)
 
