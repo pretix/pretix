@@ -74,7 +74,15 @@
 
     <p>
     {% if options == 0 %}
-        You entered a voucher code that does not match any products.
+        {% if request.event.has_subevents and not voucher.subevent %}
+            {% blocktrans trimmed %}
+                For the selected date, there are currently no products available that can be bought with this voucher. Please try a different date or a different voucher.
+            {% endblocktrans %}
+        {% else %}
+            {% blocktrans trimmed %}
+                There are currently no products available that can be bought with this voucher.
+            {% endblocktrans %}
+        {% endif %}
     {% else %}
         {% blocktrans trimmed %}
             You entered a voucher code that allows you to buy one of the following products at the specified price:
