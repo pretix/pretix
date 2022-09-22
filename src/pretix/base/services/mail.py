@@ -121,7 +121,7 @@ def mail(email: Union[str, Sequence[str]], subject: str, template: Union[str, La
     :param order: The order this email is related to (optional). If set, this will be used to include a link to the
         order below the email.
 
-    :param order: The order position this email is related to (optional). If set, this will be used to include a link
+    :param position: The order position this email is related to (optional). If set, this will be used to include a link
         to the order position instead of the order below the email.
 
     :param headers: A dict of custom mail headers to add to the mail
