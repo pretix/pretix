@@ -88,7 +88,7 @@
         </p>
         {% endif %}
     </div>
-{% elif not can_download and ticket_download_date %}
+{% elif not can_download and plugins_allow_ticket_download and ticket_download_date %}
     {% if order.status == 'p' %}
         <div class="alert alert-info info-download">
             {% blocktrans trimmed with date=ticket_download_date|date:"SHORT_DATE_FORMAT" %}

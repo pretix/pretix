@@ -177,6 +177,7 @@ class TicketPageMixin:
         ctx['order'] = self.order
 
         can_download = all([r for rr, r in allow_ticket_download.send(self.request.event, order=self.order)])
+        ctx['plugins_allow_ticket_download'] = can_download
         if self.request.event.settings.ticket_download_date:
             ctx['ticket_download_date'] = self.order.ticket_download_date
         can_download = (
