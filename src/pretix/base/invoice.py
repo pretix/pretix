@@ -533,6 +533,7 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
         tstyledata = [
             ('ALIGN', (1, 0), (-1, -1), 'RIGHT'),
             ('VALIGN', (0, 0), (-1, -1), 'TOP'),
+            ('FONTNAME', (0, 0), (-1, -1), self.font_regular),
             ('FONTNAME', (0, 0), (-1, 0), self.font_bold),
             ('FONTNAME', (0, -1), (-1, -1), self.font_bold),
             ('LEFTPADDING', (0, 0), (0, -1), 0),
