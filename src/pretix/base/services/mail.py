@@ -141,7 +141,7 @@ def mail(email: Union[str, Sequence[str]], subject: str, template: Union[str, La
 
     :param user: The user this email is sent to
 
-    :param customer: The user this email is sent to
+    :param customer: The customer this email is sent to
 
     :param attach_cached_files: A list of cached file to attach to this email.
 
