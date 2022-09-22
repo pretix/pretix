@@ -73,9 +73,21 @@
     {% endif %}
 
     <p>
+    {% if options == 0 %}
+        {% if request.event.has_subevents and not voucher.subevent %}
+            {% blocktrans trimmed %}
+                For the selected date, there are currently no products available that can be bought with this voucher. Please try a different date or a different voucher.
+            {% endblocktrans %}
+        {% else %}
+            {% blocktrans trimmed %}
+                There are currently no products available that can be bought with this voucher.
+            {% endblocktrans %}
+        {% endif %}
+    {% else %}
         {% blocktrans trimmed %}
             You entered a voucher code that allows you to buy one of the following products at the specified price:
         {% endblocktrans %}
+    {% endif %}
     </p>
     {% if event.presale_is_running or event.settings.show_items_outside_presale_period %}
         <form method="post"
@@ -396,7 +408,7 @@
                 </section>
             {% endfor %}
             {% eventsignal event "pretix.presale.signals.voucher_redeem_info" voucher=voucher %}
-            {% if event.presale_is_running %}
+            {% if event.presale_is_running and options > 0 %}
                 <div class="row checkout-button-row">
                     <div class="col-md-4 col-md-offset-8 col-xs-12">
                         <button class="btn btn-block btn-primary btn-lg" id="btn-add-to-cart" type="submit">
