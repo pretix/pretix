@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-09-19 16:31+0000\n"
-"PO-Revision-Date: 2022-06-21 20:00+0000\n"
+"PO-Revision-Date: 2022-09-23 22:00+0000\n"
 "Last-Translator: Anna-itk <abc@aarhus.dk>\n"
 "Language-Team: Danish <https://translate.pretix.eu/projects/pretix/pretix/da/"
 ">\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.12.2\n"
+"X-Generator: Weblate 4.14.1\n"
 
 #: pretix/api/auth/devicesecurity.py:28
 msgid ""
@@ -10202,7 +10202,7 @@ msgstr "Pris (valgfri)"
 
 #: pretix/control/forms/event.py:1430
 msgid "Free"
-msgstr ""
+msgstr "Gratis"
 
 #: pretix/control/forms/event.py:1435
 msgid "Quantity available"
@@ -14511,9 +14511,8 @@ msgid "Cancellation settings"
 msgstr "Indstillinger for afbestilling"
 
 #: pretix/control/templates/pretixcontrol/event/cancel.html:11
-#, fuzzy
 msgid "Unpaid or free orders"
-msgstr "Annullering"
+msgstr "Ikke-betalte eller gratis ordre"
 
 #: pretix/control/templates/pretixcontrol/event/cancel.html:34
 msgid ""
@@ -15056,7 +15055,7 @@ msgstr "Betaling gennemført"
 
 #: pretix/control/templates/pretixcontrol/event/mail.html:96
 msgid "Free order"
-msgstr "Gratis bestilling"
+msgstr "Gratis ordre"
 
 #: pretix/control/templates/pretixcontrol/event/mail.html:99
 #: pretix/control/templates/pretixcontrol/order/index.html:226
@@ -25564,7 +25563,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:282
 msgctxt "price"
 msgid "free"
-msgstr ""
+msgstr "gratis"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:76
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:51
@@ -27243,7 +27242,7 @@ msgstr "Din kurv er blevet opdateret."
 
 #: pretix/presale/views/cart.py:434 pretix/presale/views/cart.py:459
 msgid "Your cart is now empty."
-msgstr ""
+msgstr "Din kurv tom."
 
 #: pretix/presale/views/cart.py:474
 msgid "The products have been successfully added to your cart."
