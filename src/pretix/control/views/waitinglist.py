@@ -34,13 +34,12 @@
 
 import csv
 import io
-from django_scopes import ScopedManager
 from django.contrib import messages
 from django.db import transaction
 from django.db.models import F, Max, Min, Q, Sum
 from django.db.models.functions import Coalesce
 from django.http import Http404, HttpResponse, HttpResponseRedirect
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect, render, get_object_or_404
 from django.urls import reverse
 from django.utils.functional import cached_property
 from django.utils.http import is_safe_url
@@ -48,9 +47,9 @@ from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _, pgettext
 from django.views import View
 from django.views.generic import ListView, FormView
-from django.views.generic.edit import DeleteView, UpdateView
+from django.views.generic.edit import DeleteView
+from . import UpdateView
 from pretix.base.forms import I18nModelForm
-from pretix.base.forms import SettingsForm
 from pretix.base.models import Item, Quota, WaitingListEntry
 from pretix.base.models.waitinglist import WaitingListException
 from pretix.base.services.waitinglist import assign_automatically
@@ -65,6 +64,7 @@ class AutoAssign(EventPermissionRequiredMixin, AsyncAction, View):
     task = assign_automatically
     known_errortypes = ['WaitingListError']
     permission = 'can_change_orders'
+
 
     def get_success_message(self, value):
         return _('{num} vouchers have been created and sent out via email.').format(num=value)
@@ -138,6 +138,7 @@ class WaitingListQuerySetMixin:
 
         return qs
 
+
 with scopes_disabled():
     class WaitingListSettingsForm(I18nModelForm):
         def __init__(self, *args, **kwargs):
@@ -173,6 +174,7 @@ class WaitingListActionView(EventPermissionRequiredMixin, WaitingListQuerySetMix
     form_class = WaitingListEntryEditForm
     #def get_queryset(self):
     #    return super().get_queryset().prefetch_related(None).order_by()
+
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
         kwargs['event'] = self.request.event
@@ -201,7 +203,7 @@ class WaitingListActionView(EventPermissionRequiredMixin, WaitingListQuerySetMix
             return self._redirect_back()
 
         elif request.POST.get('action') == 'update':
-            form = self.form_class(request.POST, event = request.event) #event = request.event)
+            form = self.form_class(event=request.event) #event = request.event)
             #obj = form.save(commit=False)
             #obj.save(update_fields='subevent')
             #if form.is_valid(update_fields=["subevent"]):
@@ -217,9 +219,9 @@ class WaitingListActionView(EventPermissionRequiredMixin, WaitingListQuerySetMix
         elif request.POST.get('action') == 'update_confirm':
             for obj in self.get_queryset():
                 if not obj.voucher_id:
-                    obj.log_action('pretix.event.orders.waitinglist.transfered', user=self.request.user)
+                    obj.log_action('pretix.event.orders.waitinglist.transferred', user=self.request.user)
                     obj.subevent = obj.subevent
-            messages.success(request, _('The selected entries have been transfered.'))
+            messages.success(request, _('The selected entries have been transferred.'))
             return self._redirect_back()
 
         if 'assign' in request.POST:
@@ -435,24 +437,12 @@ class EntryUpdate(EventPermissionRequiredMixin, UpdateView):
     form_class = WaitingListEntryEditForm
     context_object_name = 'entry'
 
-
-
     #def dispatch(self, request, *args, **kwargs):
         #self.fields['subevent'] = WaitingListEntry.objects.filter(event=self.request.event)
     #    return super().dispatch(request, *args, **kwargs)
-    def get_queryset(self):
-        return WaitingListEntry.objects.filter(
-            event=self.request.event,
-        )
     def get_object(self, queryset=None) -> WaitingListEntry:
-        try:
-            return self.request.event.waitinglistentries.get(
-                id=self.kwargs['entry'],
-                event=self.request.event,
-                voucher__isnull=True,
-            )
-        except WaitingListEntry.DoesNotExist:
-            raise Http404(_("The requested entry does not exist."))
+        return get_object_or_404(WaitingListEntry, pk=self.kwargs['entry'], event=self.request.event, voucher__isnull=True)
+
 
     def get_success_url(self) -> str:
         return reverse('control:event.orders.waitinglist', kwargs={
@@ -460,20 +450,14 @@ class EntryUpdate(EventPermissionRequiredMixin, UpdateView):
             'organizer': self.request.event.organizer.slug
         })
 
-    @transaction.atomic
-    def update(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        success_url = self.get_success_url()
-        self.object.log_action('pretix.event.orders.waitinglist.transfered', user=self.request.user)
-        messages.success(self.request, _('The selected entry has been transfered.'))
-        if "next" in self.request.GET and is_safe_url(self.request.GET.get("next"), allowed_hosts=None):
-            return redirect(self.request.GET.get("next"))
-        return HttpResponseRedirect(success_url)
 
-    def get_form_kwargs(self):
-        kwargs = super().get_form_kwargs()
-        kwargs['event'] = self.request.event
-        return kwargs
+    #self.object.log_action('pretix.event.orders.waitinglist.transferred', user=self.request.user)
+    #messages.success(self.request, _('The selected entry has been transferred.'))
+
+    #def get_form_kwargs(self):
+    #    kwargs = super().get_form_kwargs()
+    #    kwargs['event'] = self.request.event
+    #    return kwargs
 
 class EntriesUpdate(EventPermissionRequiredMixin, UpdateView):
     #form_class = WaitingListForm
@@ -506,8 +490,8 @@ class EntriesUpdate(EventPermissionRequiredMixin, UpdateView):
     def update(self, request, *args, **kwargs):
         self.object = self.get_object()
         success_url = self.get_success_url()
-        self.object.log_action('pretix.event.orders.waitinglist.transfered', user=self.request.user)
-        messages.success(self.request, _('The selected entry has been transfered.'))
+        self.object.log_action('pretix.event.orders.waitinglist.transferred', user=self.request.user)
+        messages.success(self.request, _('The selected entry has been transferred.'))
         if "next" in self.request.GET and is_safe_url(self.request.GET.get("next"), allowed_hosts=None):
             return redirect(self.request.GET.get("next"))
         return HttpResponseRedirect(success_url)
