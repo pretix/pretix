@@ -72,10 +72,10 @@
         </div>
     {% else %}
         <form method="post" action="{% url "control:event.orders.checkinlists.bulk_action" event=request.event.slug organizer=request.event.organizer.slug list=checkinlist.pk %}" data-asynctask>
-            <div class="hidden">
-                {{ filter_form.as_p }}
-                <input name="returnquery" type="hidden" value="{{ request.META.QUERY_STRING }}">
-            </div>
+            {% for field in filter_form %}
+                {{ field.as_hidden }}
+            {% endfor %}
+            <input name="returnquery" type="hidden" value="{{ request.META.QUERY_STRING }}">
            {% csrf_token %}
             <div class="table-responsive">
                 <table class="table table-condensed table-hover">
