@@ -72,9 +72,9 @@
         {% endif %}
         <form action="{% url "control:event.subevents.bulkaction"  organizer=request.event.organizer.slug event=request.event.slug %}" method="post">
             {% csrf_token %}
-            <div class="hidden">
-                {{ filter_form.as_p }}
-            </div>
+            {% for field in filter_form %}
+                {{ field.as_hidden }}
+            {% endfor %}
             <div class="table-responsive">
                 <table class="table table-hover table-quotas">
                     <thead>
