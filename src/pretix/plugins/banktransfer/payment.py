@@ -316,9 +316,11 @@ class BankTransfer(BasePaymentProvider):
             'amount': payment.amount,
             'settings': self.settings,
             'swiss_qrbill': self.swiss_qrbill(payment),
+            'eu_barcodes': self.event.currency == 'EUR',
             'pending_description': self.settings.get('pending_description', as_type=LazyI18nString),
             'details': self.settings.get('bank_details', as_type=LazyI18nString),
         }
+        ctx['any_barcodes'] = ctx['swiss_qrbill'] or ctx['eu_barcodes']
         return template.render(ctx)
 
     def payment_control_render(self, request: HttpRequest, payment: OrderPayment) -> str:

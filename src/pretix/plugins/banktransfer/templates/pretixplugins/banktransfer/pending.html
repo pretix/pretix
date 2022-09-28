@@ -41,14 +41,16 @@
             {% trans "After you sent the bank transfer, you can close this window. We will send you an email as soon as we received your payment." %}
         </p>
     </div>
-    {% if settings.bank_details_type == "sepa" %}
+    {% if settings.bank_details_type == "sepa" and any_barcodes %}
         <div class="col-md-6 col-sm-6 hidden-xs text-center js-only blank-after">
             <ul class="nav nav-tabs" id="banktransfer_qrcodes_tabs" role="tablist">
                 {% if swiss_qrbill %}
                     <li class="active"><a href="#banktransfer_qrcodes_qrbill" role="tab" id="banktransfer_qrcodes_qrbill_tab" data-toggle="tab" aria-controls="banktransfer_qrcodes_qrbill" aria-expanded="true">QR-bill</a></li>
                 {% endif %}
-                <li {% if not swiss_qrbill %}class="active"{% endif %}><a href="#banktransfer_qrcodes_girocode" role="tab" id="banktransfer_qrcodes_girocode_tab" data-toggle="tab" aria-controls="banktransfer_qrcodes_girocode" aria-expanded="{% if swiss_qrbill %}false{% else %}true{% endif %}">EPC-QR</a></li>
-                <li class=""><a href="#banktransfer_qrcodes_bezahlcode" role="tab" id="banktransfer_qrcodes_bezahlcode_tab" data-toggle="tab" aria-controls="banktransfer_qrcodes_bezahlcode" aria-expanded="false">BezahlCode</a></li>
+                {% if eu_barcodes %}
+                    <li {% if not swiss_qrbill %}class="active"{% endif %}><a href="#banktransfer_qrcodes_girocode" role="tab" id="banktransfer_qrcodes_girocode_tab" data-toggle="tab" aria-controls="banktransfer_qrcodes_girocode" aria-expanded="{% if swiss_qrbill %}false{% else %}true{% endif %}">EPC-QR</a></li>
+                    <li class=""><a href="#banktransfer_qrcodes_bezahlcode" role="tab" id="banktransfer_qrcodes_bezahlcode_tab" data-toggle="tab" aria-controls="banktransfer_qrcodes_bezahlcode" aria-expanded="false">BezahlCode</a></li>
+                {% endif %}
             </ul>
             <div class="tab-content" id="banktransfer_qrcodes_tabs_content">
                 {% if swiss_qrbill %}
@@ -62,36 +64,38 @@
                         </p>
                     </div>
                 {% endif %}
-                <div id="banktransfer_qrcodes_girocode" class="tab-pane fade {% if not swiss_qrbill %}active in{% endif %}" role="tabpanel" aria-labelledby="banktransfer_qrcodes_girocode_tab">
-                    <p class="small">
-                        {% trans "Scan the qr-code with your banking app" %}
-                    </p>
-                    <p>
-                    <script type="text/plain" data-size="150" data-replace-with-qr data-desc="{% trans 'Scan this image with your banking app’s QR-Reader to start the payment process.' %}">BCD
-002
-2
-SCT
-{{ settings.bank_details_sepa_bic }}
-{{ settings.bank_details_sepa_name|unidecode }}
-{{ settings.bank_details_sepa_iban }}
-{{ event.currency }}{{ amount|dotdecimal }}
+                {% if eu_barcodes %}
+                    <div id="banktransfer_qrcodes_girocode" class="tab-pane fade {% if not swiss_qrbill %}active in{% endif %}" role="tabpanel" aria-labelledby="banktransfer_qrcodes_girocode_tab">
+                                                                                                                                                                                                       <p class="small">
+                                                                                                                                                                                                       {% trans "Scan the qr-code with your banking app" %}
+                                                                                                                                                                                                       </p>
+                                                                                                                                                                                                       <p>
+                                                                                                                                                                                                       <script type="text/plain" data-size="150" data-replace-with-qr data-desc="{% trans 'Scan this image with your banking app’s QR-Reader to start the payment process.' %}">BCD
+                                                                                                                                                                                                       002
+                                                                                                                                                                                                       2
+                                                                                                                                                                                                       SCT
+                                                                                                                                                                                                       {{ settings.bank_details_sepa_bic }}
+                                                                                                                                                                                                       {{ settings.bank_details_sepa_name|unidecode }}
+                                                                                                                                                                                                       {{ settings.bank_details_sepa_iban }}
+                                                                                                                                                                                                       {{ event.currency }}{{ amount|dotdecimal }}
 
 
-{{ code }}
+                                                                                                                                                                                                       {{ code }}
 
-            </script>
-                    </p>
-                </div>
-                <div id="banktransfer_qrcodes_bezahlcode" class="tab-pane fade" role="tabpanel" aria-labelledby="banktransfer_qrcodes_bezahlcode_tab">
-                    <p class="small">
-                        {% trans "Scan the qr-code with your banking app" %}
-                    </p>
-                    <p>
-                        <a aria-label="{% trans "Open BezahlCode in your banking app to start the payment process." %}" href="bank://singlepaymentsepa?name={{ settings.bank_details_sepa_name|urlencode }}&iban={{ settings.bank_details_sepa_iban }}&bic={{ settings.bank_details_sepa_bic }}&amount={{ amount|commadecimal }}&reason={{ code }}&currency={{ event.currency }}">
-                        <script type="text/plain" data-size="150" data-replace-with-qr data-desc="{% trans 'Scan this image with your banking app’s QR-Reader to start the payment process.' %}">bank://singlepaymentsepa?name={{ settings.bank_details_sepa_name|urlencode }}&iban={{ settings.bank_details_sepa_iban }}&bic={{ settings.bank_details_sepa_bic }}&amount={{ amount|commadecimal }}&reason={{ code }}&currency={{ event.currency }}</script>
-                        </a>
-                    </p>
-                </div>
+                                                                                                                                                                                                       </script>
+                                                                                                                                                                                                       </p>
+                                                                                                                                                                                                       </div>
+                    <div id="banktransfer_qrcodes_bezahlcode" class="tab-pane fade" role="tabpanel" aria-labelledby="banktransfer_qrcodes_bezahlcode_tab">
+                        <p class="small">
+                            {% trans "Scan the qr-code with your banking app" %}
+                        </p>
+                        <p>
+                            <a aria-label="{% trans "Open BezahlCode in your banking app to start the payment process." %}" href="bank://singlepaymentsepa?name={{ settings.bank_details_sepa_name|urlencode }}&iban={{ settings.bank_details_sepa_iban }}&bic={{ settings.bank_details_sepa_bic }}&amount={{ amount|commadecimal }}&reason={{ code }}&currency={{ event.currency }}">
+                                <script type="text/plain" data-size="150" data-replace-with-qr data-desc="{% trans 'Scan this image with your banking app’s QR-Reader to start the payment process.' %}">bank://singlepaymentsepa?name={{ settings.bank_details_sepa_name|urlencode }}&iban={{ settings.bank_details_sepa_iban }}&bic={{ settings.bank_details_sepa_bic }}&amount={{ amount|commadecimal }}&reason={{ code }}&currency={{ event.currency }}</script>
+                            </a>
+                        </p>
+                    </div>
+                {% endif %}
             </div>
         </div>
     {% endif %}
