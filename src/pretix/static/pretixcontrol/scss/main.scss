@@ -110,6 +110,9 @@ h1 .btn-sm {
 .container-fluid > .alert:first-child {
     margin-top: 20px;
 }
+.alert h2 {
+    margin-top: 0;
+}
 
 .flipped-scroll-wrapper {
     overflow-y: auto;
