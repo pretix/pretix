@@ -114,14 +114,14 @@
                                     </div>
                                 </div>
                             {% endif %}
-                            {% if pos.addons.all %}
+                            {% if pos.addons_without_bundled %}
                                 <div class="form-group">
                                     <label class="col-md-3 control-label">
                                         {% trans "Selected add-ons" %}
                                     </label>
                                     <div class="col-md-9 form-control-text">
                                         <ul class="addon-list">
-                                            {% regroup pos.addons.all by item_and_variation as addons_by_itemvar %}
+                                            {% regroup pos.addons_without_bundled by item_and_variation as addons_by_itemvar %}
                                             {% for group in addons_by_itemvar %}
                                                 <li>{% if group.list|length > 1 %}{{ group.list|length }}&times; {% endif %}{{ group.grouper.0.name }}{% if group.grouper.1 %} – {{ group.grouper.1.value }}{% endif %}</li>
                                             {% endfor %}

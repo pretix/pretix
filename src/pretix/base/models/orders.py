@@ -2714,6 +2714,10 @@ class CartPosition(AbstractPosition):
             self.tax_rate = line_price.rate
             self.save(update_fields=['line_price_gross', 'tax_rate'])
 
+    @property
+    def addons_without_bundled(self):
+        return [op for op in self.addons.all() if not op.is_bundled]
+
 
 class InvoiceAddress(models.Model):
     last_modified = models.DateTimeField(auto_now=True)
