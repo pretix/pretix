@@ -506,7 +506,7 @@ def mail_send_task(self, *args, to: List[str], subject: str, body: str, html: st
                 else:
                     # Most likely some other kind of temporary failure, retry again (but pretty soon)
                     max_retries = 5
-                    retry_after = [10, 30, 60, 300, 900][self.request.retries]
+                    retry_after = [10, 30, 60, 300, 900, 900][self.request.retries]
 
                 try:
                     self.retry(max_retries=max_retries, countdown=retry_after)
@@ -567,7 +567,7 @@ def mail_send_task(self, *args, to: List[str], subject: str, body: str, html: st
         except Exception as e:
             if isinstance(e, (smtplib.SMTPServerDisconnected, smtplib.SMTPConnectError, ssl.SSLError, OSError)):
                 try:
-                    self.retry(max_retries=5, countdown=[10, 30, 60, 300, 900][self.request.retries])
+                    self.retry(max_retries=5, countdown=[10, 30, 60, 300, 900, 900][self.request.retries])
                 except MaxRetriesExceededError:
                     if log_target:
                         log_target.log_action(
