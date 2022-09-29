@@ -165,7 +165,8 @@ OPTIONS = OrderedDict([
 
 
 def render_pdf(event, positions, opt):
-    from PyPDF2 import PdfMerger, PdfReader, PdfWriter
+    from PyPDF2 import PdfMerger, PdfReader, PdfWriter, Transformation
+    from PyPDF2.generic import RectangleObject
     Renderer._register_fonts()
 
     renderermap = {
@@ -213,14 +214,23 @@ def render_pdf(event, positions, opt):
     nup_pdf = PdfWriter()
     nup_page = None
     for i, page in enumerate(badges_pdf.pages):
-        if (i % badges_per_page == 0):
+        di = i % badges_per_page
+        if (di == 0):
             nup_page = nup_pdf.add_blank_page(
                 width=opt['pagesize'][0],
                 height=opt['pagesize'][1],
             )
-        tx = opt['margins'][3] + (i % opt['cols']) * opt['offsets'][0]
-        ty = opt['margins'][2] + (opt['rows'] - 1 - i // opt['cols']) * opt['offsets'][1]
-        nup_page.mergeTranslatedPage(page, tx, ty)
+        tx = opt['margins'][3] + (di % opt['cols']) * opt['offsets'][0]
+        ty = opt['margins'][2] + (opt['rows'] - 1 - (di // opt['cols'])) * opt['offsets'][1]
+        page.add_transformation(Transformation().translate(tx, ty))
+        page.mediabox = RectangleObject((
+            page.mediabox.left.as_numeric() + tx,
+            page.mediabox.bottom.as_numeric() + ty,
+            page.mediabox.right.as_numeric() + tx,
+            page.mediabox.top.as_numeric() + ty
+        ))
+        page.trimbox = page.mediabox
+        nup_page.merge_page(page)
 
     outbuffer = BytesIO()
     nup_pdf.write(outbuffer)
