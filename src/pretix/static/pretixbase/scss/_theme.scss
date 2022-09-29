@@ -208,6 +208,12 @@ svg.svg-icon {
   left: 0.5em;
 }
 
+.badge-primary { background: $brand-primary; }
+.badge-success { background: $brand-success; }
+.badge-danger { background: $brand-danger; }
+.badge-warning { background: $brand-warning; }
+.badge-info { background: $brand-info; }
+
 @include table-row-variant('success', lighten($brand-success, 40%));
 @include table-row-variant('info', lighten($brand-info, 30%));
 @include table-row-variant('warning', lighten($brand-warning, 40%));
