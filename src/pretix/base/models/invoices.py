@@ -46,6 +46,7 @@ from django.utils.translation import pgettext
 from django_scopes import ScopedManager
 
 from pretix.base.settings import COUNTRIES_WITH_STATE_IN_ADDRESS
+from pretix.base.templatetags.country import country_name
 from pretix.helpers.countries import FastCountryField
 
 
@@ -181,7 +182,7 @@ class Invoice(models.Model):
             self.invoice_from_name,
             self.invoice_from,
             (self.invoice_from_zipcode or "") + " " + (self.invoice_from_city or ""),
-            self.invoice_from_country.name if self.invoice_from_country else "",
+            country_name(self.invoice_from_country, self.event.settings.country_names_common),
             pgettext("invoice", "VAT-ID: %s") % self.invoice_from_vat_id if self.invoice_from_vat_id else "",
             taxidrow,
         ]
@@ -193,7 +194,7 @@ class Invoice(models.Model):
             self.invoice_from_name,
             self.invoice_from,
             (self.invoice_from_zipcode or "") + " " + (self.invoice_from_city or ""),
-            self.invoice_from_country.name if self.invoice_from_country else "",
+            country_name(self.invoice_from_country, self.event.settings.country_names_common),
         ]
         return '\n'.join([p.strip() for p in parts if p and p.strip()])
 
@@ -219,7 +220,7 @@ class Invoice(models.Model):
             self.invoice_to_name,
             self.invoice_to_street,
             ((self.invoice_to_zipcode or "") + " " + (self.invoice_to_city or "") + " " + (state_name or "")).strip(),
-            self.invoice_to_country.name if self.invoice_to_country else "",
+            country_name(self.invoice_to_country, self.event.settings.country_names_common),
         ]
         return '\n'.join([p.strip() for p in parts if p and p.strip()])
 

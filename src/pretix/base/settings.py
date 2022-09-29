@@ -2604,6 +2604,14 @@ Your {organizer} team"""))
             help_text=_('This will be displayed on the organizer homepage.')
         )
     },
+    'country_names_common': {
+        # Hidden setting to toggle things like ("Taiwan" vs "Taiwan (Province of China)" or "Russia" vs
+        # "Russian Federation". Can be turned to False on request for diplomacy-sensitive users.
+        'default': 'True',
+        'type': bool,
+        'serializer_class': serializers.BooleanField,
+        'serializer_kwargs': {},
+    },
     'name_scheme': {
         'default': 'full',  # default for new events is 'given_family'
         'type': str,
