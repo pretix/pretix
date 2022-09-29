@@ -32,7 +32,6 @@
 # distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations under the License.
 
-import copy
 import json
 from collections import OrderedDict
 from datetime import datetime, time, timedelta
@@ -166,8 +165,7 @@ OPTIONS = OrderedDict([
 
 
 def render_pdf(event, positions, opt):
-    from PyPDF2 import PdfMerger, PdfReader, PdfWriter, Transformation
-    from PyPDF2.generic import RectangleObject
+    from PyPDF2 import PdfMerger, PdfReader, PdfWriter
     Renderer._register_fonts()
 
     renderermap = {
@@ -178,7 +176,7 @@ def render_pdf(event, positions, opt):
         default_renderer = _renderer(event, event.badge_layouts.get(default=True))
     except BadgeLayout.DoesNotExist:
         default_renderer = None
-    
+
     op_renderers = [(op, renderermap.get(op.item_id, default_renderer)) for op in positions if renderermap.get(op.item_id, default_renderer)]
     if not len(op_renderers):
         raise OrderError(_("None of the selected products is configured to print badges."))
@@ -191,7 +189,7 @@ def render_pdf(event, positions, opt):
     })
     for op, renderer in op_renderers:
         buffer = BytesIO()
-        page = canvas.Canvas(buffer, pagesize=pagesizes.A4)    
+        page = canvas.Canvas(buffer, pagesize=pagesizes.A4)
         with language(op.order.locale, op.order.event.settings.region):
             renderer.draw_page(page, op.order, op)
 
