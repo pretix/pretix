@@ -23,7 +23,8 @@ import pyuca
 from babel.core import Locale
 from django.core.cache import cache
 from django.utils import translation
-from django_countries import Countries
+from django.utils.encoding import force_str
+from django_countries import Countries, CountryTuple
 from django_countries.fields import CountryField
 from phonenumbers.data import _COUNTRY_CODE_TO_REGION_CODE
 
@@ -59,6 +60,22 @@ class CachedCountries(Countries):
         self._cached_lists[cache_key] = val
         cache.set(cache_key, val, 3600 * 24 * 30)
         yield from val
+
+    def translate_pair(self, code: str, name=None):
+        # We need to temporarily override this function until
+        # https://github.com/SmileyChris/django-countries/issues/364
+        # is fixed
+        if name is None:
+            name = self.countries[code]
+        if isinstance(name, dict):
+            if "names" in name:
+                country_name: str = name["names"][0]
+            else:
+                country_name = name["name"]
+        else:
+            country_name = name
+        country_name = force_str(country_name)
+        return CountryTuple(code, country_name)
 
 
 class FastCountryField(CountryField):
