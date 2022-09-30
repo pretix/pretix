@@ -48,6 +48,8 @@ from django.db.models import Exists, OuterRef, Q
 from django.db.models.functions import Coalesce
 from django.utils.timezone import make_aware
 from django.utils.translation import gettext as _, gettext_lazy
+from PyPDF2 import PdfMerger, PdfReader, PdfWriter, Transformation
+from PyPDF2.generic import RectangleObject
 from reportlab.lib import pagesizes
 from reportlab.lib.units import mm
 from reportlab.pdfgen import canvas
@@ -165,8 +167,6 @@ OPTIONS = OrderedDict([
 
 
 def render_pdf(event, positions, opt):
-    from PyPDF2 import PdfMerger, PdfReader, PdfWriter, Transformation
-    from PyPDF2.generic import RectangleObject
     Renderer._register_fonts()
 
     renderermap = {
@@ -205,7 +205,7 @@ def render_pdf(event, positions, opt):
     outbuffer.seek(0)
 
     badges_per_page = opt['cols'] * opt['rows']
-    if (badges_per_page == 1):
+    if badges_per_page == 1:
         # no need to place multiple badges on one page
         return outbuffer
 
@@ -215,7 +215,7 @@ def render_pdf(event, positions, opt):
     nup_page = None
     for i, page in enumerate(badges_pdf.pages):
         di = i % badges_per_page
-        if (di == 0):
+        if di == 0:
             nup_page = nup_pdf.add_blank_page(
                 width=opt['pagesize'][0],
                 height=opt['pagesize'][1],
