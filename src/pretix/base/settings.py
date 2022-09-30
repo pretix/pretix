@@ -3042,7 +3042,7 @@ settings_hierarkey.add_type(LazyI18nStringList,
 settings_hierarkey.add_type(RelativeDateWrapper,
                             serialize=lambda rdw: rdw.to_string(),
                             unserialize=lambda s: RelativeDateWrapper.from_string(s))
-settings_hierarkey.add_type(PhoneNumber, lambda pn: pn.as_international, lambda s: parse(s))
+settings_hierarkey.add_type(PhoneNumber, lambda pn: pn.as_international, lambda s: parse(s) if s else None)
 
 
 @settings_hierarkey.set_global(cache_namespace='global')
