@@ -147,6 +147,45 @@ error_messages = {
 }
 
 
+def _get_quota_availability(quota_diff, now_dt):
+    quotas_ok = defaultdict(int)
+    qa = QuotaAvailability()
+    qa.queue(*[k for k, v in quota_diff.items() if v > 0])
+    qa.compute(now_dt=now_dt)
+    for quota, count in quota_diff.items():
+        if count <= 0:
+            quotas_ok[quota] = 0
+            break
+        avail = qa.results[quota]
+        if avail[1] is not None and avail[1] < count:
+            quotas_ok[quota] = min(count, avail[1])
+        else:
+            quotas_ok[quota] = count
+    return quotas_ok
+
+
+def _get_voucher_availability(event, voucher_use_diff, now_dt, exclude_position_ids):
+    vouchers_ok = {}
+    _voucher_depend_on_cart = set()
+    for voucher, count in voucher_use_diff.items():
+        voucher.refresh_from_db()
+
+        if voucher.valid_until is not None and voucher.valid_until < now_dt:
+            raise CartError(error_messages['voucher_expired'])
+
+        redeemed_in_carts = CartPosition.objects.filter(
+            Q(voucher=voucher) & Q(event=event) &
+            Q(expires__gte=now_dt)
+        ).exclude(pk__in=exclude_position_ids)
+        cart_count = redeemed_in_carts.count()
+        v_avail = voucher.max_usages - voucher.redeemed - cart_count
+        if cart_count > 0:
+            _voucher_depend_on_cart.add(voucher)
+        vouchers_ok[voucher] = v_avail
+
+    return vouchers_ok, _voucher_depend_on_cart
+
+
 class CartManager:
     AddOperation = namedtuple('AddOperation', ('count', 'item', 'variation', 'voucher', 'quotas',
                                                'addon_to', 'subevent', 'bundled', 'seat', 'listed_price',
@@ -819,43 +858,13 @@ class CartManager:
         self._quota_diff.update(quota_diff)
         self._operations += operations
 
-    def _get_quota_availability(self):
-        quotas_ok = defaultdict(int)
-        qa = QuotaAvailability()
-        qa.queue(*[k for k, v in self._quota_diff.items() if v > 0])
-        qa.compute(now_dt=self.now_dt)
-        for quota, count in self._quota_diff.items():
-            if count <= 0:
-                quotas_ok[quota] = 0
-                break
-            avail = qa.results[quota]
-            if avail[1] is not None and avail[1] < count:
-                quotas_ok[quota] = min(count, avail[1])
-            else:
-                quotas_ok[quota] = count
-        return quotas_ok
-
     def _get_voucher_availability(self):
-        vouchers_ok = {}
-        self._voucher_depend_on_cart = set()
-        for voucher, count in self._voucher_use_diff.items():
-            voucher.refresh_from_db()
-
-            if voucher.valid_until is not None and voucher.valid_until < self.now_dt:
-                raise CartError(error_messages['voucher_expired'])
-
-            redeemed_in_carts = CartPosition.objects.filter(
-                Q(voucher=voucher) & Q(event=self.event) &
-                Q(expires__gte=self.now_dt)
-            ).exclude(pk__in=[
+        vouchers_ok, self._voucher_depend_on_cart = _get_voucher_availability(
+            self.event, self._voucher_use_diff, self.now_dt,
+            exclude_position_ids=[
                 op.position.id for op in self._operations if isinstance(op, self.ExtendOperation)
-            ])
-            cart_count = redeemed_in_carts.count()
-            v_avail = voucher.max_usages - voucher.redeemed - cart_count
-            if cart_count > 0:
-                self._voucher_depend_on_cart.add(voucher)
-            vouchers_ok[voucher] = v_avail
-
+            ]
+        )
         return vouchers_ok
 
     def _check_min_max_per_product(self):
@@ -908,7 +917,7 @@ class CartManager:
 
     def _perform_operations(self):
         vouchers_ok = self._get_voucher_availability()
-        quotas_ok = self._get_quota_availability()
+        quotas_ok = _get_quota_availability(self._quota_diff, self.now_dt)
         err = None
         new_cart_positions = []
 

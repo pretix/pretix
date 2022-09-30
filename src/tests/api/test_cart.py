@@ -82,6 +82,7 @@ TEST_CARTPOSITION_RES = {
     'attendee_email': None,
     'voucher': None,
     'addon_to': None,
+    'is_bundled': False,
     'subevent': None,
     'datetime': '2018-06-11T10:00:00Z',
     'expires': '2018-06-11T10:00:00Z',
@@ -352,7 +353,7 @@ def test_cartpos_create_item_validation(token_client, organizer, event, item, it
         ), format='json', data=res
     )
     assert resp.status_code == 400
-    assert resp.data == ['The product "Budget Ticket" is not assigned to a quota.']
+    assert resp.data == {'non_field_errors': ['The product "Budget Ticket" is not assigned to a quota.']}
 
     quota.variations.add(var1)
     resp = token_client.post(
@@ -704,7 +705,7 @@ def test_cartpos_create_with_blocked_seat(token_client, organizer, event, item, 
         ), format='json', data=res
     )
     assert resp.status_code == 400
-    assert resp.data == ['The selected seat "Seat A1" is not available.']
+    assert resp.data == {'seat': ['The selected seat "Seat A1" is not available.']}
 
 
 @pytest.mark.django_db
@@ -739,7 +740,7 @@ def test_cartpos_create_with_used_seat(token_client, organizer, event, item, quo
         ), format='json', data=res
     )
     assert resp.status_code == 400
-    assert resp.data == ['The selected seat "Seat A1" is not available.']
+    assert resp.data == {'seat': ['The selected seat "Seat A1" is not available.']}
 
 
 @pytest.mark.django_db
@@ -753,7 +754,7 @@ def test_cartpos_create_with_unknown_seat(token_client, organizer, event, item, 
         ), format='json', data=res
     )
     assert resp.status_code == 400
-    assert resp.data == ['The specified seat does not exist.']
+    assert resp.data == {'seat': ['The specified seat does not exist.']}
 
 
 @pytest.mark.django_db
@@ -766,7 +767,7 @@ def test_cartpos_create_require_seat(token_client, organizer, event, item, quota
         ), format='json', data=res
     )
     assert resp.status_code == 400
-    assert resp.data == ['The specified product requires to choose a seat.']
+    assert resp.data == {'seat': ['The specified product requires to choose a seat.']}
 
 
 @pytest.mark.django_db
@@ -783,7 +784,7 @@ def test_cartpos_create_unseated(token_client, organizer, event, item, quota, se
         ), format='json', data=res
     )
     assert resp.status_code == 400
-    assert resp.data == ['The specified product does not allow to choose a seat.']
+    assert resp.data == {'seat': ['The specified product does not allow to choose a seat.']}
 
 
 @pytest.mark.django_db
@@ -882,7 +883,7 @@ def test_cartpos_create_bulk_partial_seat_failure(token_client, organizer, event
     assert len(resp.data['results']) == 2
     assert resp.data['results'][0]['success']
     assert not resp.data['results'][1]['success']
-    assert resp.data['results'][1]['errors'] == {'non_field_errors': ['The selected seat "Seat A1" is not available.']}
+    assert resp.data['results'][1]['errors'] == {'non_field_errors': ['You can not select the same seat multiple times.']}
 
     with scopes_disabled():
         assert CartPosition.objects.count() == 1
@@ -921,7 +922,7 @@ def test_cartpos_create_with_voucher_unknown(token_client, organizer, event, ite
         ), format='json', data=res
     )
     assert resp.status_code == 400
-    assert resp.data == ['The specified voucher does not exist.']
+    assert resp.data == {'voucher': ['The specified voucher does not exist.']}
 
 
 @pytest.mark.django_db
@@ -938,7 +939,7 @@ def test_cartpos_create_with_voucher_invalid_item(token_client, organizer, event
         ), format='json', data=res
     )
     assert resp.status_code == 400
-    assert resp.data == ['The specified voucher is not valid for the given item and variation.']
+    assert resp.data == {'voucher': ['The specified voucher is not valid for the given item and variation.']}
 
 
 @pytest.mark.django_db
@@ -956,7 +957,7 @@ def test_cartpos_create_with_voucher_invalid_seat(token_client, organizer, event
         ), format='json', data=res
     )
     assert resp.status_code == 400
-    assert resp.data == ['The specified voucher is not valid for this seat.']
+    assert resp.data == {'voucher': ['The specified voucher is not valid for this seat.']}
 
 
 @pytest.mark.django_db
@@ -976,7 +977,7 @@ def test_cartpos_create_with_voucher_invalid_subevent(token_client, organizer, e
         ), format='json', data=res
     )
     assert resp.status_code == 400
-    assert resp.data == ['The specified voucher is not valid for this subevent.']
+    assert resp.data == {'voucher': ['The specified voucher is not valid for this subevent.']}
 
 
 @pytest.mark.django_db
@@ -992,7 +993,7 @@ def test_cartpos_create_with_voucher_expired(token_client, organizer, event, ite
         ), format='json', data=res
     )
     assert resp.status_code == 400
-    assert resp.data == ['The specified voucher is expired.']
+    assert resp.data == {'voucher': ['The specified voucher is expired.']}
 
 
 @pytest.mark.django_db
@@ -1008,7 +1009,7 @@ def test_cartpos_create_with_voucher_redeemed(token_client, organizer, event, it
         ), format='json', data=res
     )
     assert resp.status_code == 400
-    assert resp.data == ['The specified voucher has already been used the maximum number of times.']
+    assert resp.data == {'voucher': ['The specified voucher has already been used the maximum number of times.']}
 
 
 @pytest.mark.django_db
@@ -1060,7 +1061,7 @@ def test_cartpos_create_bulk_with_voucher_redeemed(token_client, organizer, even
     assert len(resp.data['results']) == 2
     assert resp.data['results'][0]['success']
     assert not resp.data['results'][1]['success']
-    assert resp.data['results'][1]['errors'] == {'non_field_errors': ['The specified voucher has already been used the maximum number of times.']}
+    assert resp.data['results'][1]['errors'] == {'voucher': ['The specified voucher has already been used the maximum number of times.']}
 
     with scopes_disabled():
         assert CartPosition.objects.count() == 1

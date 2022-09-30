@@ -23,8 +23,6 @@ import os
 from datetime import timedelta
 
 from django.core.files import File
-from django.db.models import Q
-from django.utils.crypto import get_random_string
 from django.utils.timezone import now
 from django.utils.translation import gettext_lazy
 from rest_framework import serializers
@@ -34,7 +32,7 @@ from pretix.api.serializers.i18n import I18nAwareModelSerializer
 from pretix.api.serializers.order import (
     AnswerCreateSerializer, AnswerSerializer, InlineSeatSerializer,
 )
-from pretix.base.models import Quota, Seat, Voucher
+from pretix.base.models import Seat, Voucher
 from pretix.base.models.orders import CartPosition
 
 
@@ -52,7 +50,7 @@ class CartPositionSerializer(I18nAwareModelSerializer):
         model = CartPosition
         fields = ('id', 'cart_id', 'item', 'variation', 'price', 'attendee_name', 'attendee_name_parts',
                   'attendee_email', 'voucher', 'addon_to', 'subevent', 'datetime', 'expires', 'includes_tax',
-                  'answers', 'seat')
+                  'answers', 'seat', 'is_bundled')
 
 
 class CartPositionCreateSerializer(I18nAwareModelSerializer):
@@ -71,43 +69,6 @@ class CartPositionCreateSerializer(I18nAwareModelSerializer):
 
     def create(self, validated_data):
         answers_data = validated_data.pop('answers')
-        if not validated_data.get('cart_id'):
-            cid = "{}@api".format(get_random_string(48))
-            while CartPosition.objects.filter(cart_id=cid).exists():
-                cid = "{}@api".format(get_random_string(48))
-            validated_data['cart_id'] = cid
-
-        if not validated_data.get('expires'):
-            validated_data['expires'] = now() + timedelta(
-                minutes=self.context['event'].settings.get('reservation_time', as_type=int)
-            )
-
-        new_quotas = (validated_data.get('variation').quotas.filter(subevent=validated_data.get('subevent'))
-                      if validated_data.get('variation')
-                      else validated_data.get('item').quotas.filter(subevent=validated_data.get('subevent')))
-        if len(new_quotas) == 0:
-            raise ValidationError(
-                gettext_lazy('The product "{}" is not assigned to a quota.').format(
-                    str(validated_data.get('item'))
-                )
-            )
-        for quota in new_quotas:
-            avail = quota.availability(_cache=self.context['quota_cache'])
-            if avail[0] != Quota.AVAILABILITY_OK or (avail[1] is not None and avail[1] < 1):
-                raise ValidationError(
-                    gettext_lazy('There is not enough quota available on quota "{}" to perform '
-                                 'the operation.').format(
-                        quota.name
-                    )
-                )
-
-        for quota in new_quotas:
-            oldsize = self.context['quota_cache'][quota.pk][1]
-            newsize = oldsize - 1 if oldsize is not None else None
-            self.context['quota_cache'][quota.pk] = (
-                Quota.AVAILABILITY_OK if newsize is None or newsize > 0 else Quota.AVAILABILITY_GONE,
-                newsize
-            )
 
         attendee_name = validated_data.pop('attendee_name', '')
         if attendee_name and not validated_data.get('attendee_name_parts'):
@@ -115,59 +76,9 @@ class CartPositionCreateSerializer(I18nAwareModelSerializer):
                 '_legacy': attendee_name
             }
 
-        seated = validated_data.get('item').seat_category_mappings.filter(subevent=validated_data.get('subevent')).exists()
-        if validated_data.get('seat'):
-            if not seated:
-                raise ValidationError('The specified product does not allow to choose a seat.')
-            try:
-                seat = self.context['event'].seats.get(seat_guid=validated_data['seat'], subevent=validated_data.get('subevent'))
-            except Seat.DoesNotExist:
-                raise ValidationError('The specified seat does not exist.')
-            except Seat.MultipleObjectsReturned:
-                raise ValidationError('The specified seat ID is not unique.')
-            else:
-                validated_data['seat'] = seat
-        elif seated:
-            raise ValidationError('The specified product requires to choose a seat.')
-
-        if validated_data.get('voucher'):
-            try:
-                voucher = self.context['event'].vouchers.get(code__iexact=validated_data.get('voucher'))
-            except Voucher.DoesNotExist:
-                raise ValidationError('The specified voucher does not exist.')
-
-            if voucher and not voucher.applies_to(validated_data.get('item'), validated_data.get('variation')):
-                raise ValidationError('The specified voucher is not valid for the given item and variation.')
-
-            if voucher and voucher.seat and voucher.seat != validated_data.get('seat'):
-                raise ValidationError('The specified voucher is not valid for this seat.')
-
-            if voucher and voucher.subevent_id and (not validated_data.get('subevent') or voucher.subevent_id != validated_data['subevent'].pk):
-                raise ValidationError('The specified voucher is not valid for this subevent.')
-
-            if voucher.valid_until is not None and voucher.valid_until < now():
-                raise ValidationError('The specified voucher is expired.')
-
-            redeemed_in_carts = CartPosition.objects.filter(
-                Q(voucher=voucher) & Q(event=self.context['event']) & Q(expires__gte=now())
-            )
-            cart_count = redeemed_in_carts.count()
-            v_avail = voucher.max_usages - voucher.redeemed - cart_count
-            if v_avail < 1:
-                raise ValidationError('The specified voucher has already been used the maximum number of times.')
-
-            validated_data['voucher'] = voucher
-
-        if validated_data.get('seat'):
-            if not validated_data['seat'].is_available(
-                sales_channel=validated_data.get('sales_channel', 'web'),
-                distance_ignore_cart_id=validated_data['cart_id'],
-                ignore_voucher_id=validated_data['voucher'].pk if validated_data.get('voucher') else None,
-            ):
-                raise ValidationError(
-                    gettext_lazy('The selected seat "{seat}" is not available.').format(seat=validated_data['seat'].name))
-
+        validated_data.pop('_quotas')
         validated_data.pop('sales_channel')
+
         # todo: does this make sense?
         validated_data['custom_price_input'] = validated_data['price']
         # todo: listed price, etc?
@@ -240,4 +151,64 @@ class CartPositionCreateSerializer(I18nAwareModelSerializer):
             raise ValidationError(
                 {'attendee_name': ['Do not specify attendee_name if you specified attendee_name_parts.']}
             )
+
+        if not data.get('expires'):
+            data['expires'] = now() + timedelta(
+                minutes=self.context['event'].settings.get('reservation_time', as_type=int)
+            )
+
+        quotas_for_item_cache = self.context.get('quotas_for_item_cache', {})
+        quotas_for_variation_cache = self.context.get('quotas_for_variation_cache', {})
+
+        if data.get('variation'):
+            if data['variation'].pk not in quotas_for_variation_cache:
+                quotas_for_variation_cache[data['variation'].pk] = data['variation'].quotas.filter(subevent=data.get('subevent'))
+            data['_quotas'] = quotas_for_variation_cache[data['variation'].pk]
+        else:
+            if data['item'].pk not in quotas_for_item_cache:
+                quotas_for_item_cache[data['item'].pk] = data['item'].quotas.filter(subevent=data.get('subevent'))
+            data['_quotas'] = quotas_for_item_cache[data['item'].pk]
+
+        if len(data['_quotas']) == 0:
+            raise ValidationError(
+                gettext_lazy('The product "{}" is not assigned to a quota.').format(
+                    str(data.get('item'))
+                )
+            )
+
+        seated = data.get('item').seat_category_mappings.filter(subevent=data.get('subevent')).exists()
+        if data.get('seat'):
+            if not seated:
+                raise ValidationError({'seat': ['The specified product does not allow to choose a seat.']})
+            try:
+                seat = self.context['event'].seats.get(seat_guid=data['seat'], subevent=data.get('subevent'))
+            except Seat.DoesNotExist:
+                raise ValidationError({'seat': ['The specified seat does not exist.']})
+            except Seat.MultipleObjectsReturned:
+                raise ValidationError({'seat': ['The specified seat ID is not unique.']})
+            else:
+                data['seat'] = seat
+        elif seated:
+            raise ValidationError({'seat': ['The specified product requires to choose a seat.']})
+
+        if data.get('voucher'):
+            try:
+                voucher = self.context['event'].vouchers.get(code__iexact=data['voucher'])
+            except Voucher.DoesNotExist:
+                raise ValidationError({'voucher': ['The specified voucher does not exist.']})
+
+            if voucher and not voucher.applies_to(data['item'], data.get('variation')):
+                raise ValidationError({'voucher': ['The specified voucher is not valid for the given item and variation.']})
+
+            if voucher and voucher.seat and voucher.seat != data.get('seat'):
+                raise ValidationError({'voucher': ['The specified voucher is not valid for this seat.']})
+
+            if voucher and voucher.subevent_id and (not data.get('subevent') or voucher.subevent_id != data['subevent'].pk):
+                raise ValidationError({'voucher': ['The specified voucher is not valid for this subevent.']})
+
+            if voucher.valid_until is not None and voucher.valid_until < now():
+                raise ValidationError({'voucher': ['The specified voucher is expired.']})
+
+            data['voucher'] = voucher
+
         return data
