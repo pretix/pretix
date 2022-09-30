@@ -215,6 +215,13 @@ class AsyncFormView(AsyncMixin, FormView):
     expected_exceptions = (ValidationError,)
     task_base = ProfiledEventTask
 
+    def async_set_progress(self, percentage):
+        if not self._task_self.request.called_directly:
+            self._task_self.update_state(
+                state='PROGRESS',
+                meta={'value': percentage}
+            )
+
     def __init_subclass__(cls):
         def async_execute(self, *, request_path, query_string, form_kwargs, locale, tz, url_kwargs=None, url_args=None,
                           organizer=None, event=None, user=None, session_key=None):
@@ -239,6 +246,9 @@ class AsyncFormView(AsyncMixin, FormView):
                 engine = import_module(settings.SESSION_ENGINE)
                 self.SessionStore = engine.SessionStore
                 view_instance.request.session = self.SessionStore(session_key)
+
+            task_self = self
+            view_instance._task_self = task_self
 
             with translation.override(locale), timezone.override(pytz.timezone(tz)):
                 form_class = view_instance.get_form_class()
@@ -331,6 +341,13 @@ class AsyncPostView(AsyncMixin, View):
     expected_exceptions = (ValidationError,)
     task_base = ProfiledEventTask
 
+    def async_set_progress(self, percentage):
+        if not self._task_self.request.called_directly:
+            self._task_self.update_state(
+                state='PROGRESS',
+                meta={'value': percentage}
+            )
+
     def __init_subclass__(cls):
         def async_execute(self, *, request_path, url_args, url_kwargs, query_string, post_data, locale, tz,
                           organizer=None, event=None, user=None, session_key=None):
@@ -354,6 +371,9 @@ class AsyncPostView(AsyncMixin, View):
                 engine = import_module(settings.SESSION_ENGINE)
                 self.SessionStore = engine.SessionStore
                 view_instance.request.session = self.SessionStore(session_key)
+
+            task_self = self
+            view_instance._task_self = task_self
 
             with translation.override(locale), timezone.override(pytz.timezone(tz)):
                 return view_instance.async_post(view_instance.request, *url_args, **url_kwargs)
