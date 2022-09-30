@@ -77,7 +77,7 @@ class LockTimeoutException(Exception):
     pass
 
 
-class LockReleaseException(Exception):
+class LockReleaseException(LockTimeoutException):
     pass
 
 
@@ -180,5 +180,5 @@ def release_event_redis(event):
         lock.release()
     except RedisError:
         logger.exception('Error releasing an event lock')
-        raise LockTimeoutException()
+        raise LockReleaseException()
     event._lock = None
