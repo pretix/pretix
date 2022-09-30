@@ -175,13 +175,15 @@ Cart position endpoints
 
        * does not validate if the event's ticket sales are already over or haven't started
 
-       * does not support add-on products at the moment
+       * does not validate constraints on add-on products at the moment
 
        * does not check or calculate prices but believes any prices you send
 
        * does not prevent you from buying items that can only be bought with a voucher
 
        * does not support file upload questions
+
+       Note that more validation might be added in the future, so please do not rely on missing validation.
 
    You can supply the following fields of the resource:
 
@@ -197,6 +199,8 @@ Cart position endpoints
    * ``includes_tax`` (optional, **deprecated**, do not use, will be removed)
    * ``sales_channel`` (optional)
    * ``voucher`` (optional, expect a voucher code)
+   * ``addons`` (optional, expect a list of nested objects of cart positions)
+   * ``bundled`` (optional, expect a list of nested objects of cart positions)
    * ``answers``
 
       * ``question``
@@ -228,6 +232,12 @@ Cart position endpoints
             "options": []
           }
         ],
+        "addons": [
+          {
+            "item": 2,
+            "variation": null,
+          }
+        ],
         "subevent": null
       }
 
@@ -239,7 +249,7 @@ Cart position endpoints
       Vary: Accept
       Content-Type: application/json
 
-      (Full cart position resource, see above.)
+      (Full cart position resource, see above, with additional nested objects "addons" and "bundled".)
 
    :param organizer: The ``slug`` field of the organizer of the event to create a position for
    :param event: The ``slug`` field of the event to create a position for
@@ -251,8 +261,8 @@ Cart position endpoints
 
 .. http:post:: /api/v1/organizers/(organizer)/events/(event)/cartpositions/bulk_create/
 
-   Creates multiple new cart position. This operation is deliberately not atomic, so each cart position can succeed
-   or fail individually, so the response code of the response is not the only thing to look at!
+   Creates multiple new cart position. **This operation is deliberately not atomic, so each cart position can succeed
+   or fail individually, so the response code of the response is not the only thing to look at!**
 
    .. warning:: This endpoint is considered **experimental**. It might change at any time without prior notice.
 

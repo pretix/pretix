@@ -140,6 +140,9 @@ class CartPositionViewSet(CreateModelMixin, DestroyModelMixin, viewsets.ReadOnly
 
             for q in validated_data['_quotas']:
                 quota_diff[q] += 1
+            for sub_data in validated_data.get('addons', []) + validated_data.get('bundled', []):
+                for q in sub_data['_quotas']:
+                    quota_diff[q] += 1
 
         seats_seen = set()
 
@@ -164,12 +167,20 @@ class CartPositionViewSet(CreateModelMixin, DestroyModelMixin, viewsets.ReadOnly
                     validated_data = pserializer.validated_data
 
                     if validated_data.get('seat'):
+                        # Assumption: Add-ons currently can't have seats
                         if validated_data['seat'] in seats_seen:
                             raise ValidationError(error_messages['seat_multiple'])
                         seats_seen.add(validated_data['seat'])
 
+                    quotas_needed = Counter()
                     for q in validated_data['_quotas']:
-                        if quotas_ok[q] < 1:
+                        quotas_needed[q] += 1
+                    for sub_data in validated_data.get('addons', []) + validated_data.get('bundled', []):
+                        for q in sub_data['_quotas']:
+                            quotas_needed[q] += 1
+
+                    for q, needed in quotas_needed.items():
+                        if quotas_ok[q] < needed:
                             raise ValidationError(
                                 _('There is not enough quota available on quota "{}" to perform the operation.').format(
                                     q.name
@@ -177,12 +188,14 @@ class CartPositionViewSet(CreateModelMixin, DestroyModelMixin, viewsets.ReadOnly
                             )
 
                     if validated_data.get('voucher'):
+                        # Assumption: Add-ons currently can't have vouchers, thus we only need to check the main voucher
                         if vouchers_ok[validated_data['voucher']] < 1:
                             raise ValidationError(
                                 {'voucher': [_('The specified voucher has already been used the maximum number of times.')]}
                             )
 
                     if validated_data.get('seat'):
+                        # Assumption: Add-ons currently can't have seats, thus we only need to check the main product
                         if not validated_data['seat'].is_available(
                             sales_channel=validated_data.get('sales_channel', 'web'),
                             distance_ignore_cart_id=validated_data['cart_id'],
@@ -192,8 +205,8 @@ class CartPositionViewSet(CreateModelMixin, DestroyModelMixin, viewsets.ReadOnly
                                 {'seat': [_('The selected seat "{seat}" is not available.').format(seat=validated_data['seat'].name)]}
                             )
 
-                    for q in validated_data['_quotas']:
-                        quotas_ok[q] -= 1
+                    for q, needed in quotas_needed.items():
+                        quotas_ok[q] -= needed
                     if validated_data.get('voucher'):
                         vouchers_ok[validated_data['voucher']] -= 1
 
@@ -202,9 +215,15 @@ class CartPositionViewSet(CreateModelMixin, DestroyModelMixin, viewsets.ReadOnly
                         raise ValidationError(error_messages['unavailable'])
 
                     cp = pserializer.create(validated_data)
+
+                    d = CartPositionSerializer(cp, context=ctx).data
+                    addons = sorted(cp.addons.all(), key=lambda a: a.pk)  # order of creation, safe since they are created in the same transaction
+                    d['addons'] = CartPositionSerializer([a for a in addons if not a.is_bundled], many=True, context=ctx).data
+                    d['bundled'] = CartPositionSerializer([a for a in addons if a.is_bundled], many=True, context=ctx).data
+
                     results[i] = {
                         'success': True,
-                        'data': CartPositionSerializer(cp, context=ctx).data,
+                        'data': d,
                         'errors': None,
                     }
                 except ValidationError as e:

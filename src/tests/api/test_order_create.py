@@ -1986,7 +1986,7 @@ def test_order_create_with_duplicate_seat(token_client, organizer, event, item, 
             "price": "23.00",
             "attendee_name_parts": {"full_name": "Peter"},
             "attendee_email": None,
-            "addon_to": 1,
+            "addon_to": None,
             "answers": [],
             "subevent": None,
             "seat": seat.seat_guid
