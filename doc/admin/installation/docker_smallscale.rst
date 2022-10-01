@@ -49,11 +49,13 @@ all lines prepended with a ``$`` symbol can also be run by an unprivileged user.
 Data files
 ----------
 
-First of all, you need to create a directory on your server that pretix can use to store data files and make that
-directory writable to the user that runs pretix inside the docker container::
+First of all, you need to create a directory on your server that pretix can use to store data files.
+Make that directory writable to the user that runs pretix inside the docker container.
+Also, make the directory accessible to all other users so any public files can be accessed::
 
     # mkdir /var/pretix-data
     # chown -R 15371:15371 /var/pretix-data
+    # chmod 0751 /var/pretix-data
 
 Database
 --------
