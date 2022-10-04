@@ -891,7 +891,11 @@ class Renderer:
                 elif o['type'] == "poweredby":
                     self._draw_poweredby(canvas, op, o)
                 if self.bg_pdf:
-                    canvas.setPageSize((self.bg_pdf.pages[0].mediabox[2], self.bg_pdf.pages[0].mediabox[3]))
+                    page_size = (self.bg_pdf.pages[0].mediabox[2], self.bg_pdf.pages[0].mediabox[3])
+                    if self.bg_pdf.pages[0].get('/Rotate') in (90, 270):
+                        # swap dimensions due to pdf being rotated
+                        page_size = page_size[::-1]
+                    canvas.setPageSize(page_size)
             if show_page:
                 canvas.showPage()
 
@@ -915,13 +919,36 @@ class Renderer:
                 with open(os.path.join(d, 'out.pdf'), 'rb') as f:
                     return BytesIO(f.read())
         else:
-            from PyPDF2 import PdfReader, PdfWriter
+            from PyPDF2 import PdfReader, PdfWriter, Transformation
+            from PyPDF2.generic import RectangleObject
             buffer.seek(0)
             new_pdf = PdfReader(buffer)
             output = PdfWriter()
 
             for i, page in enumerate(new_pdf.pages):
                 bg_page = copy.copy(self.bg_pdf.pages[i])
+                bg_rotation = bg_page.get('/Rotate')
+                if bg_rotation:
+                    t = Transformation().rotate(bg_rotation)
+                    w = float(page.mediabox.getWidth())
+                    h = float(page.mediabox.getHeight())
+                    if bg_rotation in (90, 270):
+                        # offset due to rotation base
+                        if bg_rotation == 90:
+                            t = t.translate(h, 0)
+                        else:
+                            t = t.translate(0, w)
+                        # rotate mediabox as well
+                        page.mediabox = RectangleObject((
+                            page.mediabox.left.as_numeric(),
+                            page.mediabox.bottom.as_numeric(),
+                            page.mediabox.top.as_numeric(),
+                            page.mediabox.right.as_numeric(),
+                        ))
+                        page.trimbox = page.mediabox
+                    elif bg_rotation == 180:
+                        t = t.translate(w, h)
+                    page.add_transformation(t)
                 bg_page.merge_page(page)
                 output.add_page(bg_page)
 
