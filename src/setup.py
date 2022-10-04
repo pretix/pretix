@@ -187,7 +187,7 @@ setup(
         'django-phonenumber-field==7.0.*',
         'django-redis==5.0.*',
         'django-scopes==1.2.*',
-        'django-statici18n==2.2.*',
+        'django-statici18n>=2.2,<2.4',
         'djangorestframework==3.13.*',
         'dnspython<2.0',  # do not upgrade, causes issues with eventlet / gunicorn 19 and we cannot upgrade gunicorn right now
         'drf_ujson2==1.6.*',
