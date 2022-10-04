@@ -249,7 +249,7 @@ setup(
             'pytest-cache',
             'pytest-cov',
             'pytest-django==4.*',
-            'pytest-mock==3.8.*',
+            'pytest-mock==3.9.*',
             'pytest-rerunfailures==10.2',
             'pytest-sugar',
             'pytest-xdist==2.5.*',
