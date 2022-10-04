@@ -238,7 +238,7 @@ setup(
         'dev': [
             'coverage',
             'coveralls',
-            'django-debug-toolbar==3.5.*',
+            'django-debug-toolbar==3.7.*',
             'flake8==5.0.*',
             'freezegun',
             'isort==5.10.*',
