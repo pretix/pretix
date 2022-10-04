@@ -165,7 +165,7 @@ setup(
         'celery==4.4.*',
         'chardet==5.0.*',
         'cryptography>=3.4.2',
-        'css-inline==0.7.*',
+        'css-inline==0.8.*',
         'defusedcsv>=1.1.0',
         'dj-static',
         'Django==3.2.*',
@@ -188,7 +188,7 @@ setup(
         'django-redis==5.0.*',
         'django-scopes==1.2.*',
         'django-statici18n==2.2.*',
-        'djangorestframework==3.13.*',
+        'djangorestframework>=3.13,<3.15',
         'dnspython<2.0',  # do not upgrade, causes issues with eventlet / gunicorn 19 and we cannot upgrade gunicorn right now
         'drf_ujson2==1.6.*',
         'isoweek',
