@@ -929,6 +929,7 @@ class Renderer:
                 bg_page = copy.copy(self.bg_pdf.pages[i])
                 bg_rotation = bg_page.get('/Rotate')
                 if bg_rotation:
+                    # /Rotate is clockwise, transformation.rotate is counter-clockwise
                     t = Transformation().rotate(bg_rotation)
                     w = float(page.mediabox.getWidth())
                     h = float(page.mediabox.getHeight())
