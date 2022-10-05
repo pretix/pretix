@@ -32,7 +32,6 @@
 # distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations under the License.
 
-import copy
 import json
 from collections import OrderedDict
 from datetime import datetime, time, timedelta
@@ -43,12 +42,13 @@ import dateutil.parser
 from django import forms
 from django.contrib.staticfiles import finders
 from django.core.files import File
+from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
 from django.db.models import Exists, OuterRef, Q
 from django.db.models.functions import Coalesce
 from django.utils.timezone import make_aware
 from django.utils.translation import gettext as _, gettext_lazy
-from PyPDF2 import Transformation
+from PyPDF2 import PdfMerger, PdfReader, PdfWriter, Transformation
 from PyPDF2.generic import RectangleObject
 from reportlab.lib import pagesizes
 from reportlab.lib.units import mm
@@ -167,7 +167,6 @@ OPTIONS = OrderedDict([
 
 
 def render_pdf(event, positions, opt):
-    from PyPDF2 import PdfReader, PdfWriter
     Renderer._register_fonts()
 
     renderermap = {
@@ -178,71 +177,65 @@ def render_pdf(event, positions, opt):
         default_renderer = _renderer(event, event.badge_layouts.get(default=True))
     except BadgeLayout.DoesNotExist:
         default_renderer = None
-    output_pdf_writer = PdfWriter()
 
-    any = False
-    npp = opt['cols'] * opt['rows']
+    op_renderers = [(op, renderermap.get(op.item_id, default_renderer)) for op in positions if renderermap.get(op.item_id, default_renderer)]
+    if not len(op_renderers):
+        raise OrderError(_("None of the selected products is configured to print badges."))
 
-    def render_page(positions):
-        buffer = BytesIO()
-        p = canvas.Canvas(buffer, pagesize=pagesizes.A4)
-        for i, (op, r) in enumerate(positions):
-            offsetx = opt['margins'][3] + (i % opt['cols']) * opt['offsets'][0]
-            offsety = opt['margins'][2] + (opt['rows'] - 1 - i // opt['cols']) * opt['offsets'][1]
-            p.translate(offsetx, offsety)
-            with language(op.order.locale, op.order.event.settings.region):
-                r.draw_page(p, op.order, op, show_page=False, only_page=1)
-            p.translate(-offsetx, -offsety)
-
-        if opt['pagesize']:
-            p.setPageSize(opt['pagesize'])
-        p.showPage()
-        p.save()
-        buffer.seek(0)
-        canvas_pdf_reader = PdfReader(buffer)
-        empty_pdf_page = output_pdf_writer.add_blank_page(
-            width=opt['pagesize'][0] if opt['pagesize'] else positions[0][1].bg_pdf.pages[0].mediabox[2],
-            height=opt['pagesize'][1] if opt['pagesize'] else positions[0][1].bg_pdf.pages[0].mediabox[3],
-        )
-        for i, (op, r) in enumerate(positions):
-            bg_page = copy.copy(r.bg_pdf.pages[0])
-            offsetx = opt['margins'][3] + (i % opt['cols']) * opt['offsets'][0]
-            offsety = opt['margins'][2] + (opt['rows'] - 1 - i // opt['cols']) * opt['offsets'][1]
-            bg_page.add_transformation(Transformation().translate(offsetx, offsety))
-            mb = bg_page.mediabox
-            bg_page.mediabox = RectangleObject((
-                mb.left.as_numeric() + offsetx,
-                mb.bottom.as_numeric() + offsety,
-                mb.right.as_numeric() + offsetx,
-                mb.top.as_numeric() + offsety
-            ))
-            bg_page.trimbox = bg_page.mediabox
-            empty_pdf_page.merge_page(bg_page)
-        empty_pdf_page.merge_page(canvas_pdf_reader.pages[0])
-
-    pagebuffer = []
-    outbuffer = BytesIO()
-    for op in positions:
-        r = renderermap.get(op.item_id, default_renderer)
-        if not r:
-            continue
-        any = True
-        pagebuffer.append((op, r))
-        if len(pagebuffer) == npp:
-            render_page(pagebuffer)
-            pagebuffer.clear()
-
-    if pagebuffer:
-        render_page(pagebuffer)
-
-    output_pdf_writer.add_metadata({
+    # render each badge on its own page first
+    merger = PdfMerger()
+    merger.add_metadata({
         '/Title': 'Badges',
         '/Creator': 'pretix',
     })
-    output_pdf_writer.write(outbuffer)
+    for op, renderer in op_renderers:
+        buffer = BytesIO()
+        page = canvas.Canvas(buffer, pagesize=pagesizes.A4)
+        with language(op.order.locale, op.order.event.settings.region):
+            renderer.draw_page(page, op.order, op)
+
+        if opt['pagesize']:
+            page.setPageSize(opt['pagesize'])
+        page.save()
+        buffer = renderer.render_background(buffer, _('Badge'))
+        merger.append(ContentFile(buffer.read()))
+
+    outbuffer = BytesIO()
+    merger.write(outbuffer)
     outbuffer.seek(0)
-    if not any:
-        raise OrderError(_("None of the selected products is configured to print badges."))
+
+    badges_per_page = opt['cols'] * opt['rows']
+    if badges_per_page == 1:
+        # no need to place multiple badges on one page
+        return outbuffer
+
+    # place n-up badges/pages per page
+    badges_pdf = PdfReader(outbuffer)
+    nup_pdf = PdfWriter()
+    nup_page = None
+    for i, page in enumerate(badges_pdf.pages):
+        di = i % badges_per_page
+        if di == 0:
+            nup_page = nup_pdf.add_blank_page(
+                width=opt['pagesize'][0],
+                height=opt['pagesize'][1],
+            )
+        tx = opt['margins'][3] + (di % opt['cols']) * opt['offsets'][0]
+        ty = opt['margins'][2] + (opt['rows'] - 1 - (di // opt['cols'])) * opt['offsets'][1]
+        page.add_transformation(Transformation().translate(tx, ty))
+        page.mediabox = RectangleObject((
+            page.mediabox.left.as_numeric() + tx,
+            page.mediabox.bottom.as_numeric() + ty,
+            page.mediabox.right.as_numeric() + tx,
+            page.mediabox.top.as_numeric() + ty
+        ))
+        page.trimbox = page.mediabox
+        nup_page.merge_page(page)
+
+    outbuffer = BytesIO()
+    nup_pdf.write(outbuffer)
+    outbuffer.seek(0)
+
     return outbuffer
 
 
