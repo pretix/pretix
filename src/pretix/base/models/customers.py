@@ -78,6 +78,7 @@ class Customer(LoggedModel):
     organizer = models.ForeignKey(Organizer, related_name='customers', on_delete=models.CASCADE)
     provider = models.ForeignKey(CustomerSSOProvider, related_name='customers', on_delete=models.PROTECT, null=True, blank=True)
     identifier = models.CharField(
+        verbose_name=_('Customer ID'),
         max_length=190,
         db_index=True,
         help_text=_('You can enter any value here to make it easier to match the data with other sources. If you do '

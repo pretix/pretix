@@ -102,9 +102,9 @@ def multiexport(self, organizer: Organizer, user: User, device: int, token: int,
             timezone = e.settings.timezone
             region = e.settings.region
         else:
-            locale = settings.LANGUAGE_CODE
-            timezone = settings.TIME_ZONE
-            region = None
+            locale = organizer.settings.locale or settings.LANGUAGE_CODE
+            timezone = organizer.settings.timezone or settings.TIME_ZONE
+            region = organizer.settings.region
     with language(locale, region), override(timezone):
         if form_data.get('events') is not None:
             if isinstance(form_data['events'][0], str):
@@ -123,9 +123,7 @@ def multiexport(self, organizer: Organizer, user: User, device: int, token: int,
                 if (
                     isinstance(ex, OrganizerLevelExportMixin) and
                     not staff_session and
-                    not (device or token or user).has_organizer_permission(self.request.organizer,
-                                                                           ex.organizer_required_permission,
-                                                                           self.request)
+                    not (device or token or user).has_organizer_permission(organizer, ex.organizer_required_permission)
                 ):
                     raise ExportError(
                         gettext('You do not have sufficient permission to perform this export.')
