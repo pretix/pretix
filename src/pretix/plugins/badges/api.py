@@ -24,6 +24,7 @@ from rest_framework import viewsets
 from pretix.api.serializers.i18n import I18nAwareModelSerializer
 from pretix.api.serializers.order import CompatibleJSONField
 
+from ...multidomain.utils import static_absolute
 from .models import BadgeItem, BadgeLayout
 
 
@@ -46,6 +47,12 @@ class BadgeLayoutSerializer(I18nAwareModelSerializer):
     class Meta:
         model = BadgeLayout
         fields = ('id', 'name', 'default', 'layout', 'background', 'item_assignments')
+
+    def to_representation(self, instance):
+        d = super().to_representation(instance)
+        if not d['background']:
+            d['background'] = static_absolute(instance.event, "pretixplugins/badges/badge_default_a6l.pdf")
+        return d
 
 
 class BadgeLayoutViewSet(viewsets.ReadOnlyModelViewSet):

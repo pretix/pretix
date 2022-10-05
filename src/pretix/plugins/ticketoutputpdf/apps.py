@@ -34,7 +34,7 @@
 
 from django.apps import AppConfig
 from django.utils.functional import cached_property
-from django.utils.translation import gettext_lazy as _
+from django.utils.translation import gettext, gettext_lazy as _
 
 from pretix import __version__ as version
 
@@ -63,3 +63,11 @@ class TicketOutputPdfApp(AppConfig):
         except ImportError:
             errs.append("Python package 'reportlab' is not installed.")
         return errs
+
+    def installed(self, event):
+        event.ticket_layouts.get_or_create(
+            default=True,
+            defaults={
+                'name': gettext('Default layout'),
+            }
+        )
