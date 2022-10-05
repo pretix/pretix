@@ -23,6 +23,8 @@ from django import forms
 from django.http import QueryDict
 from rest_framework import serializers
 
+from pretix.base.exporter import OrganizerLevelExportMixin
+
 
 class FormFieldWrapperField(serializers.Field):
     def __init__(self, *args, **kwargs):
@@ -87,7 +89,7 @@ class JobRunSerializer(serializers.Serializer):
         ex = kwargs.pop('exporter')
         events = kwargs.pop('events', None)
         super().__init__(*args, **kwargs)
-        if events is not None:
+        if events is not None and not isinstance(ex, OrganizerLevelExportMixin):
             self.fields["events"] = serializers.SlugRelatedField(
                 queryset=events,
                 required=True,

@@ -196,6 +196,7 @@ def test_gone_without_celery(token_client, organizer, team, event):
 @pytest.mark.django_db
 def test_org_level_export(token_client, organizer, team, event):
     resp = token_client.post('/api/v1/organizers/{}/exporters/giftcardlist/run/'.format(organizer.slug), data={
+        'date': '2022-10-05T00:00:00Z',
         '_format': 'xlsx',
     }, format='json')
     assert resp.status_code == 202
@@ -204,6 +205,7 @@ def test_org_level_export(token_client, organizer, team, event):
     team.save()
 
     resp = token_client.post('/api/v1/organizers/{}/exporters/giftcardlist/run/'.format(organizer.slug), data={
+        'date': '2022-10-05T00:00:00Z',
         '_format': 'xlsx',
     }, format='json')
     assert resp.status_code == 404
