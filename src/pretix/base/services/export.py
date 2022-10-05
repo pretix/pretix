@@ -66,16 +66,19 @@ def export(self, event: Event, fileid: str, provider: str, form_data: Dict[str, 
                 with tempfile.TemporaryFile() as f:
                     if 'output_file' in inspect.signature(ex.render).parameters:
                         d = ex.render(form_data, output_file=f)
+                        if d is None:
+                            raise ExportError(
+                                gettext('Your export did not contain any data.')
+                            )
                         file.filename, file.type, data = d
                     else:
                         d = ex.render(form_data)
+                        if d is None:
+                            raise ExportError(
+                                gettext('Your export did not contain any data.')
+                            )
                         file.filename, file.type, data = d
                         f = ContentFile(data)
-
-                    if d is None:
-                        raise ExportError(
-                            gettext('Your export did not contain any data.')
-                        )
                     file.file.save(cachedfile_name(file, file.filename), f)
     return file.pk
 
@@ -140,14 +143,18 @@ def multiexport(self, organizer: Organizer, user: User, device: int, token: int,
                 with tempfile.TemporaryFile() as f:
                     if 'output_file' in inspect.signature(ex.render).parameters:
                         d = ex.render(form_data, output_file=f)
+                        if d is None:
+                            raise ExportError(
+                                gettext('Your export did not contain any data.')
+                            )
                         file.filename, file.type, data = d
                     else:
                         d = ex.render(form_data)
                         file.filename, file.type, data = d
+                        if d is None:
+                            raise ExportError(
+                                gettext('Your export did not contain any data.')
+                            )
                         f = ContentFile(data)
-                    if d is None:
-                        raise ExportError(
-                            gettext('Your export did not contain any data.')
-                        )
                     file.file.save(cachedfile_name(file, file.filename), f)
     return file.pk
