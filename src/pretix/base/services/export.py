@@ -19,10 +19,12 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
+import inspect
 import tempfile
 from typing import Any, Dict
 
 from django.conf import settings
+from django.core.files.base import ContentFile
 from django.utils.timezone import override
 from django.utils.translation import gettext
 
@@ -62,12 +64,18 @@ def export(self, event: Event, fileid: str, provider: str, form_data: Dict[str, 
             ex = response(event, event.organizer, set_progress)
             if ex.identifier == provider:
                 with tempfile.TemporaryFile() as f:
-                    d = ex.render(form_data, output_file=f)
+                    if 'output_file' in inspect.signature(ex.render).parameters:
+                        d = ex.render(form_data, output_file=f)
+                        file.filename, file.type, data = d
+                    else:
+                        d = ex.render(form_data)
+                        file.filename, file.type, data = d
+                        f = ContentFile(data)
+
                     if d is None:
                         raise ExportError(
                             gettext('Your export did not contain any data.')
                         )
-                    file.filename, file.type, data = d
                     file.file.save(cachedfile_name(file, file.filename), f)
     return file.pk
 
@@ -130,11 +138,16 @@ def multiexport(self, organizer: Organizer, user: User, device: int, token: int,
                     )
 
                 with tempfile.TemporaryFile() as f:
-                    d = ex.render(form_data, output_file=f)
+                    if 'output_file' in inspect.signature(ex.render).parameters:
+                        d = ex.render(form_data, output_file=f)
+                        file.filename, file.type, data = d
+                    else:
+                        d = ex.render(form_data)
+                        file.filename, file.type, data = d
+                        f = ContentFile(data)
                     if d is None:
                         raise ExportError(
                             gettext('Your export did not contain any data.')
                         )
-                    file.filename, file.type, data = d
                     file.file.save(cachedfile_name(file, file.filename), f)
     return file.pk
