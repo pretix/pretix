@@ -66,6 +66,7 @@ def export(self, event: Event, fileid: str, provider: str, form_data: Dict[str, 
                 with tempfile.TemporaryFile() as f:
                     if 'output_file' in inspect.signature(ex.render).parameters:
                         d = ex.render(form_data, output_file=f)
+                        f.seek(0)
                         if d is None:
                             raise ExportError(
                                 gettext('Your export did not contain any data.')
@@ -143,6 +144,7 @@ def multiexport(self, organizer: Organizer, user: User, device: int, token: int,
                 with tempfile.TemporaryFile() as f:
                     if 'output_file' in inspect.signature(ex.render).parameters:
                         d = ex.render(form_data, output_file=f)
+                        f.seek(0)
                         if d is None:
                             raise ExportError(
                                 gettext('Your export did not contain any data.')
