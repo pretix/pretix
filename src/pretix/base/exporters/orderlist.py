@@ -884,76 +884,74 @@ class QuotaListExporter(ListExporter):
         return '{}_quotas'.format(self.event.slug)
 
 
-def generate_GiftCardTransactionListExporter(organizer):  # hackhack
-    class GiftcardTransactionListExporter(ListExporter):
-        identifier = 'giftcardtransactionlist'
-        verbose_name = gettext_lazy('Gift card transactions')
+class GiftcardTransactionListExporter(ListExporter):
+    identifier = 'giftcardtransactionlist'
+    verbose_name = gettext_lazy('Gift card transactions')
 
-        @property
-        def additional_form_fields(self):
-            d = [
-                ('date_from',
-                 forms.DateField(
-                     label=_('Start date'),
-                     widget=forms.DateInput(attrs={'class': 'datepickerfield'}),
-                     required=False,
-                 )),
-                ('date_to',
-                 forms.DateField(
-                     label=_('End date'),
-                     widget=forms.DateInput(attrs={'class': 'datepickerfield'}),
-                     required=False,
-                 )),
+    @property
+    def additional_form_fields(self):
+        d = [
+            ('date_from',
+             forms.DateField(
+                 label=_('Start date'),
+                 widget=forms.DateInput(attrs={'class': 'datepickerfield'}),
+                 required=False,
+             )),
+            ('date_to',
+             forms.DateField(
+                 label=_('End date'),
+                 widget=forms.DateInput(attrs={'class': 'datepickerfield'}),
+                 required=False,
+             )),
+        ]
+        d = OrderedDict(d)
+        return d
+
+    def iterate_list(self, form_data):
+        qs = GiftCardTransaction.objects.filter(
+            card__issuer=self.organizer,
+        ).order_by('datetime').select_related('card', 'order', 'order__event')
+
+        if form_data.get('date_from'):
+            date_value = form_data.get('date_from')
+            if isinstance(date_value, str):
+                date_value = dateutil.parser.parse(date_value).date()
+            qs = qs.filter(
+                datetime__gte=make_aware(datetime.combine(date_value, time(0, 0, 0)), self.timezone)
+            )
+
+        if form_data.get('date_to'):
+            date_value = form_data.get('date_to')
+            if isinstance(date_value, str):
+                date_value = dateutil.parser.parse(date_value).date()
+
+            qs = qs.filter(
+                datetime__lte=make_aware(datetime.combine(date_value, time(23, 59, 59, 999999)), self.timezone)
+            )
+
+        headers = [
+            _('Gift card code'),
+            _('Test mode'),
+            _('Date'),
+            _('Amount'),
+            _('Currency'),
+            _('Order'),
+        ]
+        yield headers
+
+        for obj in qs:
+            row = [
+                obj.card.secret,
+                _('TEST MODE') if obj.card.testmode else '',
+                obj.datetime.astimezone(self.timezone).strftime('%Y-%m-%d %H:%M:%S'),
+                obj.value,
+                obj.card.currency,
+                obj.order.full_code if obj.order else None,
             ]
-            d = OrderedDict(d)
-            return d
+            yield row
 
-        def iterate_list(self, form_data):
-            qs = GiftCardTransaction.objects.filter(
-                card__issuer=organizer,
-            ).order_by('datetime').select_related('card', 'order', 'order__event')
-
-            if form_data.get('date_from'):
-                date_value = form_data.get('date_from')
-                if isinstance(date_value, str):
-                    date_value = dateutil.parser.parse(date_value).date()
-                qs = qs.filter(
-                    datetime__gte=make_aware(datetime.combine(date_value, time(0, 0, 0)), self.timezone)
-                )
-
-            if form_data.get('date_to'):
-                date_value = form_data.get('date_to')
-                if isinstance(date_value, str):
-                    date_value = dateutil.parser.parse(date_value).date()
-
-                qs = qs.filter(
-                    datetime__lte=make_aware(datetime.combine(date_value, time(23, 59, 59, 999999)), self.timezone)
-                )
-
-            headers = [
-                _('Gift card code'),
-                _('Test mode'),
-                _('Date'),
-                _('Amount'),
-                _('Currency'),
-                _('Order'),
-            ]
-            yield headers
-
-            for obj in qs:
-                row = [
-                    obj.card.secret,
-                    _('TEST MODE') if obj.card.testmode else '',
-                    obj.datetime.astimezone(self.timezone).strftime('%Y-%m-%d %H:%M:%S'),
-                    obj.value,
-                    obj.card.currency,
-                    obj.order.full_code if obj.order else None,
-                ]
-                yield row
-
-        def get_filename(self):
-            return '{}_giftcardtransactions'.format(organizer.slug)
-    return GiftcardTransactionListExporter
+    def get_filename(self):
+        return '{}_giftcardtransactions'.format(self.organizer.slug)
 
 
 class GiftcardRedemptionListExporter(ListExporter):
@@ -1000,114 +998,111 @@ class GiftcardRedemptionListExporter(ListExporter):
             return '{}_giftcardredemptions'.format(self.event.slug)
 
 
-def generate_GiftCardListExporter(organizer):  # hackhack
-    class GiftcardListExporter(ListExporter):
-        identifier = 'giftcardlist'
-        verbose_name = gettext_lazy('Gift cards')
+class GiftcardListExporter(ListExporter):
+    identifier = 'giftcardlist'
+    verbose_name = gettext_lazy('Gift cards')
 
-        @property
-        def additional_form_fields(self):
-            return OrderedDict(
-                [
-                    ('date', forms.DateTimeField(
-                        label=_('Show value at'),
-                        initial=now(),
-                    )),
-                    ('testmode', forms.ChoiceField(
-                        label=_('Test mode'),
-                        choices=(
-                            ('', _('All')),
-                            ('yes', _('Test mode')),
-                            ('no', _('Live')),
-                        ),
-                        initial='no',
-                        required=False
-                    )),
-                    ('state', forms.ChoiceField(
-                        label=_('Status'),
-                        choices=(
-                            ('', _('All')),
-                            ('empty', _('Empty')),
-                            ('valid_value', _('Valid and with value')),
-                            ('expired_value', _('Expired and with value')),
-                            ('expired', _('Expired')),
-                        ),
-                        initial='valid_value',
-                        required=False
-                    ))
-                ]
-            )
-
-        def iterate_list(self, form_data):
-            s = GiftCardTransaction.objects.filter(
-                card=OuterRef('pk'),
-                datetime__lte=form_data['date']
-            ).order_by().values('card').annotate(s=Sum('value')).values('s')
-            qs = organizer.issued_gift_cards.filter(
-                issuance__lte=form_data['date']
-            ).annotate(
-                cached_value=Coalesce(Subquery(s), Decimal('0.00')),
-            ).order_by('issuance').prefetch_related(
-                'transactions', 'transactions__order', 'transactions__order__event', 'transactions__order__invoices'
-            )
-
-            if form_data.get('testmode') == 'yes':
-                qs = qs.filter(testmode=True)
-            elif form_data.get('testmode') == 'no':
-                qs = qs.filter(testmode=False)
-
-            if form_data.get('state') == 'empty':
-                qs = qs.filter(cached_value=0)
-            elif form_data.get('state') == 'valid_value':
-                qs = qs.exclude(cached_value=0).filter(Q(expires__isnull=True) | Q(expires__gte=form_data['date']))
-            elif form_data.get('state') == 'expired_value':
-                qs = qs.exclude(cached_value=0).filter(expires__lt=form_data['date'])
-            elif form_data.get('state') == 'expired':
-                qs = qs.filter(expires__lt=form_data['date'])
-
-            headers = [
-                _('Gift card code'),
-                _('Test mode card'),
-                _('Creation date'),
-                _('Expiry date'),
-                _('Special terms and conditions'),
-                _('Currency'),
-                _('Current value'),
-                _('Created in order'),
-                _('Last invoice number of order'),
-                _('Last invoice date of order'),
+    @property
+    def additional_form_fields(self):
+        return OrderedDict(
+            [
+                ('date', forms.DateTimeField(
+                    label=_('Show value at'),
+                    initial=now(),
+                )),
+                ('testmode', forms.ChoiceField(
+                    label=_('Test mode'),
+                    choices=(
+                        ('', _('All')),
+                        ('yes', _('Test mode')),
+                        ('no', _('Live')),
+                    ),
+                    initial='no',
+                    required=False
+                )),
+                ('state', forms.ChoiceField(
+                    label=_('Status'),
+                    choices=(
+                        ('', _('All')),
+                        ('empty', _('Empty')),
+                        ('valid_value', _('Valid and with value')),
+                        ('expired_value', _('Expired and with value')),
+                        ('expired', _('Expired')),
+                    ),
+                    initial='valid_value',
+                    required=False
+                ))
             ]
-            yield headers
+        )
 
-            tz = get_current_timezone()
-            for obj in qs:
-                o = None
-                i = None
-                trans = list(obj.transactions.all())
-                if trans:
-                    o = trans[0].order
-                if o:
-                    invs = list(o.invoices.all())
-                    if invs:
-                        i = invs[-1]
-                row = [
-                    obj.secret,
-                    _('Yes') if obj.testmode else _('No'),
-                    obj.issuance.astimezone(tz).date().strftime('%Y-%m-%d'),
-                    obj.expires.astimezone(tz).date().strftime('%Y-%m-%d') if obj.expires else '',
-                    obj.conditions or '',
-                    obj.currency,
-                    obj.cached_value,
-                    o.full_code if o else '',
-                    i.number if i else '',
-                    i.date.strftime('%Y-%m-%d') if i else '',
-                ]
-                yield row
+    def iterate_list(self, form_data):
+        s = GiftCardTransaction.objects.filter(
+            card=OuterRef('pk'),
+            datetime__lte=form_data['date']
+        ).order_by().values('card').annotate(s=Sum('value')).values('s')
+        qs = self.organizer.issued_gift_cards.filter(
+            issuance__lte=form_data['date']
+        ).annotate(
+            cached_value=Coalesce(Subquery(s), Decimal('0.00')),
+        ).order_by('issuance').prefetch_related(
+            'transactions', 'transactions__order', 'transactions__order__event', 'transactions__order__invoices'
+        )
 
-        def get_filename(self):
-            return '{}_giftcards'.format(organizer.slug)
+        if form_data.get('testmode') == 'yes':
+            qs = qs.filter(testmode=True)
+        elif form_data.get('testmode') == 'no':
+            qs = qs.filter(testmode=False)
 
-    return GiftcardListExporter
+        if form_data.get('state') == 'empty':
+            qs = qs.filter(cached_value=0)
+        elif form_data.get('state') == 'valid_value':
+            qs = qs.exclude(cached_value=0).filter(Q(expires__isnull=True) | Q(expires__gte=form_data['date']))
+        elif form_data.get('state') == 'expired_value':
+            qs = qs.exclude(cached_value=0).filter(expires__lt=form_data['date'])
+        elif form_data.get('state') == 'expired':
+            qs = qs.filter(expires__lt=form_data['date'])
+
+        headers = [
+            _('Gift card code'),
+            _('Test mode card'),
+            _('Creation date'),
+            _('Expiry date'),
+            _('Special terms and conditions'),
+            _('Currency'),
+            _('Current value'),
+            _('Created in order'),
+            _('Last invoice number of order'),
+            _('Last invoice date of order'),
+        ]
+        yield headers
+
+        tz = get_current_timezone()
+        for obj in qs:
+            o = None
+            i = None
+            trans = list(obj.transactions.all())
+            if trans:
+                o = trans[0].order
+            if o:
+                invs = list(o.invoices.all())
+                if invs:
+                    i = invs[-1]
+            row = [
+                obj.secret,
+                _('Yes') if obj.testmode else _('No'),
+                obj.issuance.astimezone(tz).date().strftime('%Y-%m-%d'),
+                obj.expires.astimezone(tz).date().strftime('%Y-%m-%d') if obj.expires else '',
+                obj.conditions or '',
+                obj.currency,
+                obj.cached_value,
+                o.full_code if o else '',
+                i.number if i else '',
+                i.date.strftime('%Y-%m-%d') if i else '',
+            ]
+            yield row
+
+    def get_filename(self):
+        return '{}_giftcards'.format(self.organizer.slug)
 
 
 @receiver(register_data_exporters, dispatch_uid="exporter_orderlist")
@@ -1147,9 +1142,9 @@ def register_multievent_i_giftcardredemptionlist_exporter(sender, **kwargs):
 
 @receiver(register_multievent_data_exporters, dispatch_uid="multiexporter_giftcardlist")
 def register_multievent_i_giftcardlist_exporter(sender, **kwargs):
-    return generate_GiftCardListExporter(sender)
+    return GiftcardListExporter
 
 
 @receiver(register_multievent_data_exporters, dispatch_uid="multiexporter_giftcardtransactionlist")
 def register_multievent_i_giftcardtransactionlist_exporter(sender, **kwargs):
-    return generate_GiftCardTransactionListExporter(sender)
+    return GiftcardTransactionListExporter
