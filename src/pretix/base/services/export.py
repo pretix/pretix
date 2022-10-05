@@ -19,10 +19,10 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
+import tempfile
 from typing import Any, Dict
 
 from django.conf import settings
-from django.core.files.base import ContentFile
 from django.utils.timezone import override
 from django.utils.translation import gettext
 
@@ -61,14 +61,14 @@ def export(self, event: Event, fileid: str, provider: str, form_data: Dict[str, 
                 continue
             ex = response(event, event.organizer, set_progress)
             if ex.identifier == provider:
-                d = ex.render(form_data)
-                if d is None:
-                    raise ExportError(
-                        gettext('Your export did not contain any data.')
-                    )
-                file.filename, file.type, data = d
-                file.file.save(cachedfile_name(file, file.filename), ContentFile(data))
-                file.save()
+                with tempfile.TemporaryFile() as f:
+                    d = ex.render(form_data, output_file=f)
+                    if d is None:
+                        raise ExportError(
+                            gettext('Your export did not contain any data.')
+                        )
+                    file.filename, file.type, data = d
+                    file.file.save(cachedfile_name(file, file.filename), f)
     return file.pk
 
 
@@ -129,12 +129,12 @@ def multiexport(self, organizer: Organizer, user: User, device: int, token: int,
                         gettext('You do not have sufficient permission to perform this export.')
                     )
 
-                d = ex.render(form_data)
-                if d is None:
-                    raise ExportError(
-                        gettext('Your export did not contain any data.')
-                    )
-                file.filename, file.type, data = d
-                file.file.save(cachedfile_name(file, file.filename), ContentFile(data))
-                file.save()
+                with tempfile.TemporaryFile() as f:
+                    d = ex.render(form_data, output_file=f)
+                    if d is None:
+                        raise ExportError(
+                            gettext('Your export did not contain any data.')
+                        )
+                    file.filename, file.type, data = d
+                    file.file.save(cachedfile_name(file, file.filename), f)
     return file.pk
