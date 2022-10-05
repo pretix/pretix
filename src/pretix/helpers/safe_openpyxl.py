@@ -74,7 +74,30 @@ def SafeCell(*args, value=None, **kwargs):
     return c
 
 
-class SafeAppendMixin:
+class SafeWriteOnlyWorksheet(WriteOnlyWorksheet):
+    def append(self, row):
+        if not isgenerator(row) and not isinstance(row, (list, tuple, range)):
+            self._invalid_row(row)
+
+        self._get_writer()
+
+        if self._rows is None:
+            self._rows = self._write_rows()
+            next(self._rows)
+
+        filtered_row = []
+        for content in row:
+            if isinstance(content, Cell):
+                filtered_row.append(content)
+            else:
+                filtered_row.append(
+                    SafeCell(self, row=1, column=1, value=remove_invalid_excel_chars(content))
+                )
+
+        self._rows.send(filtered_row)
+
+
+class SafeWorksheet(Worksheet):
     def append(self, iterable):
         row_idx = self._current_row + 1
 
@@ -105,21 +128,16 @@ class SafeAppendMixin:
         self._current_row = row_idx
 
 
-class SafeWriteOnlyWorksheet(SafeAppendMixin, WriteOnlyWorksheet):
-    pass
-
-
-class SafeWorksheet(SafeAppendMixin, Worksheet):
-    pass
-
-
 class SafeWorkbook(Workbook):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         if self._sheets:
             # monkeypatch existing sheets
             for s in self._sheets:
-                s.append = SafeAppendMixin.append
+                if self.write_only:
+                    s.append = SafeWriteOnlyWorksheet.append
+                else:
+                    s.append = SafeWorksheet.append
 
     def create_sheet(self, title=None, index=None):
         if self.read_only:
