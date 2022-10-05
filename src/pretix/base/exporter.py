@@ -51,7 +51,7 @@ from pretix.helpers.safe_openpyxl import (  # NOQA: backwards compatibility for 
     SafeWorkbook, remove_invalid_excel_chars as excel_safe,
 )
 
-__ = excel_safe  # just so the compatbility import above is "used" and doesn't get removed by linter
+__ = excel_safe  # just so the compatibility import above is "used" and doesn't get removed by linter
 
 
 class BaseExporter:
@@ -80,7 +80,7 @@ class BaseExporter:
     def verbose_name(self) -> str:
         """
         A human-readable name for this exporter. This should be short but
-        self-explaining. Good examples include 'JSON' or 'Microsoft Excel'.
+        self-explaining. Good examples include 'Orders as JSON' or 'Orders as Microsoft Excel'.
         """
         raise NotImplementedError()  # NOQA
 
@@ -135,6 +135,16 @@ class BaseExporter:
         tasks.
         """
         raise NotImplementedError()  # NOQA
+
+
+class OrganizerLevelExportMixin:
+    @property
+    def organizer_required_permission(self) -> str:
+        """
+        The permission level required to use this exporter. Only useful for organizer-level exports,
+        not for event-level exports.
+        """
+        return 'can_view_orders'
 
 
 class ListExporter(BaseExporter):

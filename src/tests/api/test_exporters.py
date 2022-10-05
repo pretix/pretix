@@ -191,3 +191,19 @@ def test_gone_without_celery(token_client, organizer, team, event):
     cf = CachedFile.objects.create()
     resp = token_client.get('/api/v1/organizers/{}/events/{}/exporters/orderlist/download/{}/{}/'.format(organizer.slug, event.slug, uuid.uuid4(), cf.id))
     assert resp.status_code == 410
+
+
+@pytest.mark.django_db
+def test_org_level_export(token_client, organizer, team, event):
+    resp = token_client.post('/api/v1/organizers/{}/exporters/giftcardlist/run/'.format(organizer.slug), data={
+        '_format': 'xlsx',
+    }, format='json')
+    assert resp.status_code == 202
+
+    team.can_manage_gift_cards = False
+    team.save()
+
+    resp = token_client.post('/api/v1/organizers/{}/exporters/giftcardlist/run/'.format(organizer.slug), data={
+        '_format': 'xlsx',
+    }, format='json')
+    assert resp.status_code == 404

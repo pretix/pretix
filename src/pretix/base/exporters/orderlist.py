@@ -60,7 +60,9 @@ from pretix.base.settings import PERSON_NAME_SCHEMES
 from ...control.forms.filter import get_all_payment_providers
 from ...helpers import GroupConcat
 from ...helpers.iter import chunked_iterable
-from ..exporter import ListExporter, MultiSheetListExporter
+from ..exporter import (
+    ListExporter, MultiSheetListExporter, OrganizerLevelExportMixin,
+)
 from ..signals import (
     register_data_exporters, register_multievent_data_exporters,
 )
@@ -884,9 +886,10 @@ class QuotaListExporter(ListExporter):
         return '{}_quotas'.format(self.event.slug)
 
 
-class GiftcardTransactionListExporter(ListExporter):
+class GiftcardTransactionListExporter(OrganizerLevelExportMixin, ListExporter):
     identifier = 'giftcardtransactionlist'
     verbose_name = gettext_lazy('Gift card transactions')
+    organizer_required_permission = 'can_manage_gift_cards'
 
     @property
     def additional_form_fields(self):
@@ -998,9 +1001,10 @@ class GiftcardRedemptionListExporter(ListExporter):
             return '{}_giftcardredemptions'.format(self.event.slug)
 
 
-class GiftcardListExporter(ListExporter):
+class GiftcardListExporter(OrganizerLevelExportMixin, ListExporter):
     identifier = 'giftcardlist'
     verbose_name = gettext_lazy('Gift cards')
+    organizer_required_permission = 'can_manage_gift_cards'
 
     @property
     def additional_form_fields(self):

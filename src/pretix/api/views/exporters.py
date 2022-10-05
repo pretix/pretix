@@ -35,7 +35,8 @@ from rest_framework.reverse import reverse
 from pretix.api.serializers.exporters import (
     ExporterSerializer, JobRunSerializer,
 )
-from pretix.base.models import CachedFile, Device, TeamAPIToken
+from pretix.base.exporter import OrganizerLevelExportMixin
+from pretix.base.models import CachedFile, Device, Event, TeamAPIToken
 from pretix.base.services.export import export, multiexport
 from pretix.base.signals import (
     register_data_exporters, register_multievent_data_exporters,
@@ -155,7 +156,19 @@ class OrganizerExportersViewSet(ExportersMixin, viewsets.ViewSet):
             organizer=self.request.organizer
         )
         responses = register_multievent_data_exporters.send(self.request.organizer)
-        for ex in sorted([response(events, self.request.organizer) for r, response in responses if response], key=lambda ex: str(ex.verbose_name)):
+        raw_exporters = [
+            response(Event.objects.none() if issubclass(response, OrganizerLevelExportMixin) else events, self.request.organizer)
+            for r, response in responses
+            if response
+        ]
+        raw_exporters = [
+            ex for ex in raw_exporters
+            if (
+                not isinstance(ex, OrganizerLevelExportMixin) or
+                perm_holder.has_organizer_permission(self.request.organizer, ex.organizer_required_permission, self.request)
+            )
+        ]
+        for ex in sorted(raw_exporters, key=lambda ex: str(ex.verbose_name)):
             ex._serializer = JobRunSerializer(exporter=ex, events=events)
             exporters.append(ex)
         return exporters

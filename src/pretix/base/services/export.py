@@ -26,6 +26,7 @@ from django.core.files.base import ContentFile
 from django.utils.timezone import override
 from django.utils.translation import gettext
 
+from pretix.base.exporter import OrganizerLevelExportMixin
 from pretix.base.i18n import LazyLocaleException, language
 from pretix.base.models import (
     CachedFile, Device, Event, Organizer, TeamAPIToken, User, cachedfile_name,
@@ -119,6 +120,17 @@ def multiexport(self, organizer: Organizer, user: User, device: int, token: int,
                 continue
             ex = response(events, organizer, set_progress)
             if ex.identifier == provider:
+                if (
+                    isinstance(ex, OrganizerLevelExportMixin) and
+                    not staff_session and
+                    not (device or token or user).has_organizer_permission(self.request.organizer,
+                                                                           ex.organizer_required_permission,
+                                                                           self.request)
+                ):
+                    raise ExportError(
+                        gettext('You do not have sufficient permission to perform this export.')
+                    )
+
                 d = ex.render(form_data)
                 if d is None:
                     raise ExportError(

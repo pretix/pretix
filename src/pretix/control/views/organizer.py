@@ -65,6 +65,7 @@ from pretix.api.models import WebHook
 from pretix.api.webhooks import manually_retry_all_calls
 from pretix.base.auth import get_auth_backends
 from pretix.base.channels import get_all_sales_channels
+from pretix.base.exporter import OrganizerLevelExportMixin
 from pretix.base.i18n import language
 from pretix.base.models import (
     CachedFile, Customer, Device, Gate, GiftCard, Invoice, LogEntry,
@@ -1508,7 +1509,19 @@ class ExportMixin:
         )
         responses = register_multievent_data_exporters.send(self.request.organizer)
         id = self.request.GET.get("identifier") or self.request.POST.get("exporter")
-        for ex in sorted([response(events, self.request.organizer) for r, response in responses if response], key=lambda ex: str(ex.verbose_name)):
+        raw_exporters = [
+            response(Event.objects.none() if issubclass(response, OrganizerLevelExportMixin) else events, self.request.organizer)
+            for r, response in responses
+            if response
+        ]
+        raw_exporters = [
+            ex for ex in raw_exporters
+            if (
+                not isinstance(ex, OrganizerLevelExportMixin) or
+                self.request.user.has_organizer_permission(self.request.organizer, ex.organizer_required_permission, self.request)
+            )
+        ]
+        for ex in sorted(raw_exporters, key=lambda ex: str(ex.verbose_name)):
             if id and ex.identifier != id:
                 continue
 
@@ -1526,18 +1539,19 @@ class ExportMixin:
                 initial=initial
             )
             ex.form.fields = ex.export_form_fields
-            ex.form.fields.update([
-                ('events',
-                 forms.ModelMultipleChoiceField(
-                     queryset=events,
-                     initial=events,
-                     widget=forms.CheckboxSelectMultiple(
-                         attrs={'class': 'scrolling-multiple-choice'}
-                     ),
-                     label=_('Events'),
-                     required=True
-                 )),
-            ])
+            if not isinstance(ex, OrganizerLevelExportMixin):
+                ex.form.fields.update([
+                    ('events',
+                     forms.ModelMultipleChoiceField(
+                         queryset=events,
+                         initial=events,
+                         widget=forms.CheckboxSelectMultiple(
+                             attrs={'class': 'scrolling-multiple-choice'}
+                         ),
+                         label=_('Events'),
+                         required=True
+                     )),
+                ])
             exporters.append(ex)
         return exporters
 
