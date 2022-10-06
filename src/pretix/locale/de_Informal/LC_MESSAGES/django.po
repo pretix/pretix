@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-09-29 09:24+0000\n"
-"PO-Revision-Date: 2022-09-29 10:21+0000\n"
+"PO-Revision-Date: 2022-10-06 07:53+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
@@ -27666,7 +27666,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:180
 msgid "The following payment methods will be used to refund the money to you:"
 msgstr ""
-"Die folgenden Zahlungsmethoden werden verwendet, um Ihnen das Geld "
+"Die folgenden Zahlungsmethoden werden verwendet, um dir das Geld "
 "zurückzuerstatten:"
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:160
