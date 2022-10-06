@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-09-29 09:24+0000\n"
-"PO-Revision-Date: 2022-09-29 10:21+0000\n"
+"PO-Revision-Date: 2022-10-06 07:53+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
 ">\n"
@@ -27568,7 +27568,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order.html:427
 #: pretix/presale/templates/pretixpresale/event/order.html:448
 msgid "The refund will be issued to your original payment method."
-msgstr "Der Betrag wird mit Ihrer ursprüngliche Zahlungsmethode erstattet."
+msgstr "Der Betrag wird mit Ihrer ursprünglichen Zahlungsmethode erstattet."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:393
 #: pretix/presale/templates/pretixpresale/event/order.html:406
