@@ -93,6 +93,7 @@ id                                    integer                    Internal conten
 title                                 multi-lingual string       The content title (required)
 content_type                          string                     The type of content, valid values are ``webinar``, ``video``, ``livestream``, ``link``, ``file``
 url                                   string                     The location of the digital content
+file                                  file                       A downloadable file. Either ``url`` or ``file`` must be ``null``.
 description                           multi-lingual string       A public description of the item. May contain Markdown
                                                                  syntax and is not required.
 available_from                        datetime                   The first date time at which this content will be shown
@@ -144,6 +145,7 @@ API Endpoints
             },
             "content_type": "link",
             "url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+            "file": null,
             "description": {
                 "en": "Watch our event live here on YouTube!"
             },
@@ -191,6 +193,7 @@ API Endpoints
         },
         "content_type": "link",
         "url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+        "file": null,
         "description": {
             "en": "Watch our event live here on YouTube!"
         },
@@ -229,6 +232,7 @@ API Endpoints
         },
         "content_type": "link",
         "url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+        "file": null,
         "description": {
             "en": "Watch our event live here on YouTube!"
         },
@@ -255,6 +259,7 @@ API Endpoints
         },
         "content_type": "link",
         "url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+        "file": null,
         "description": {
             "en": "Watch our event live here on YouTube!"
         },
@@ -309,6 +314,7 @@ API Endpoints
         },
         "content_type": "link",
         "url": "https://mywebsite.com",
+        "file": null,
         "description": {
             "en": "Watch our event live here on YouTube!"
         },
