@@ -51,7 +51,6 @@ simple_mappings = (
     (forms.EmailField, serializers.EmailField, ()),
     (forms.UUIDField, serializers.UUIDField, ()),
     (forms.URLField, serializers.URLField, ()),
-    (forms.NullBooleanField, serializers.NullBooleanField, ()),
     (forms.BooleanField, serializers.BooleanField, ()),
 )
 
@@ -108,6 +107,12 @@ class JobRunSerializer(serializers.Serializer):
                     )
                     break
 
+            if isinstance(v, forms.NullBooleanField):
+                self.fields[k] = serializers.BooleanField(
+                    required=v.required,
+                    allow_null=True,
+                    validators=v.validators,
+                )
             if isinstance(v, forms.ModelMultipleChoiceField):
                 self.fields[k] = PrimaryKeyRelatedField(
                     queryset=v.queryset,
