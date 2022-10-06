@@ -27720,7 +27720,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:180
 msgid "The following payment methods will be used to refund the money to you:"
 msgstr ""
-"Die folgenden Zahlungsmethoden werden verwendet, um dir das Geld "
+"Die folgenden Zahlungsmethoden werden verwendet, um Ihnen das Geld "
 "zurückzuerstatten:"
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:160
