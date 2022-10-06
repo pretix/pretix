@@ -52,7 +52,7 @@ RES_LAYOUT = {
     'default': True,
     'item_assignments': [{'item': 1}],
     'layout': [{'a': 2}],
-    'background': None
+    'background': 'http://example.com/static/pretixplugins/badges/badge_default_a6l.pdf'
 }
 
 
