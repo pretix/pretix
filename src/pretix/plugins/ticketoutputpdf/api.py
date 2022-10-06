@@ -24,6 +24,7 @@ from rest_framework import viewsets
 from pretix.api.serializers.i18n import I18nAwareModelSerializer
 from pretix.api.serializers.order import CompatibleJSONField
 
+from ...multidomain.utils import static_absolute
 from .models import TicketLayout, TicketLayoutItem
 
 
@@ -48,6 +49,12 @@ class TicketLayoutSerializer(I18nAwareModelSerializer):
     class Meta:
         model = TicketLayout
         fields = ('id', 'name', 'default', 'layout', 'background', 'item_assignments')
+
+    def to_representation(self, instance):
+        d = super().to_representation(instance)
+        if not d['background']:
+            d['background'] = static_absolute(instance.event, "pretixpresale/pdf/ticket_default_a4.pdf")
+        return d
 
 
 class TicketLayoutViewSet(viewsets.ReadOnlyModelViewSet):
