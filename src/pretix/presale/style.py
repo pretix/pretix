@@ -22,6 +22,7 @@
 import hashlib
 import logging
 import os
+from urllib.parse import urljoin, urlsplit
 
 import django_libsass
 import sass
@@ -31,6 +32,7 @@ from django.core.cache import cache
 from django.core.files.base import ContentFile, File
 from django.core.files.storage import default_storage
 from django.dispatch import Signal
+from django.templatetags.static import static as _static
 from django.utils.timezone import now
 from django_scopes import scope
 
@@ -39,7 +41,9 @@ from pretix.base.services.tasks import (
     TransactionAwareProfiledEventTask, TransactionAwareTask,
 )
 from pretix.celery_app import app
-from pretix.multidomain.utils import static_absolute
+from pretix.multidomain.urlreverse import (
+    get_event_domain, get_organizer_domain,
+)
 from pretix.presale.signals import sass_postamble, sass_preamble
 
 logger = logging.getLogger('pretix.presale.style')
@@ -50,7 +54,19 @@ def compile_scss(object, file="main.scss", fonts=True):
     sassdir = os.path.join(settings.STATIC_ROOT, 'pretixpresale/scss')
 
     def static(path):
-        sp = static_absolute(object, path)
+        sp = _static(path)
+        if not settings.MEDIA_URL.startswith("/") and sp.startswith("/"):
+            if isinstance(object, Event):
+                domain = get_event_domain(object, fallback=True)
+            else:
+                domain = get_organizer_domain(object)
+            if domain:
+                siteurlsplit = urlsplit(settings.SITE_URL)
+                if siteurlsplit.port and siteurlsplit.port not in (80, 443):
+                    domain = '%s:%d' % (domain, siteurlsplit.port)
+                sp = urljoin('%s://%s' % (siteurlsplit.scheme, domain), sp)
+            else:
+                sp = urljoin(settings.SITE_URL, sp)
         return '"{}"'.format(sp)
 
     sassrules = []
