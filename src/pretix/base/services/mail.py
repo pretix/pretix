@@ -542,7 +542,7 @@ def mail_send_task(self, *args, to: List[str], subject: str, body: str, html: st
             if not any(c >= 500 for c in smtp_codes):
                 # Not a permanent failure (mailbox full, service unavailable), retry later, but with large intervals
                 try:
-                    self.retry(max_retries=5, countdown=[60, 300, 600, 1200, 1800][self.request.retries])
+                    self.retry(max_retries=5, countdown=[60, 300, 600, 1200, 1800, 1800][self.request.retries])
                 except MaxRetriesExceededError:
                     # ignore and go on with logging the error
                     pass
