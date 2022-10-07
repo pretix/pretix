@@ -473,6 +473,13 @@ td > .dl-horizontal {
     word-wrap: break-word;
 }
 
+td > p:last-child,
+.panel-body > dl:last-child,
+.panel-body > .table:last-child,
+.panel-body > .table-responsive:last-child > .table:last-child {
+    margin-bottom: 0;
+}
+
 .fa.disabled {
     color: $text-muted;
 }
