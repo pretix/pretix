@@ -1178,7 +1178,7 @@ class OrderTransition(OrderView):
             }
         )
 
-    def post(self, *args, **kwargs):
+    def post(self, request, *args, **kwargs):
         to = self.request.POST.get('status', '')
         if self.order.status in (Order.STATUS_PENDING, Order.STATUS_EXPIRED) and to == 'p' and self.mark_paid_form.is_valid():
             ps = self.mark_paid_form.cleaned_data['amount']
@@ -1267,38 +1267,41 @@ class OrderTransition(OrderView):
                                                  'confirmation mail.'))
             else:
                 messages.success(self.request, _('The payment has been created successfully.'))
-        elif self.order.cancel_allowed() and to == 'c' and self.mark_canceled_form.is_valid():
-            try:
-                cancel_order(self.order.pk, user=self.request.user,
-                             email_comment=self.mark_canceled_form.cleaned_data['comment'],
-                             send_mail=self.mark_canceled_form.cleaned_data['send_email'],
-                             cancel_invoice=self.mark_canceled_form.cleaned_data.get('cancel_invoice', True),
-                             cancellation_fee=self.mark_canceled_form.cleaned_data.get('cancellation_fee'))
-            except OrderError as e:
-                messages.error(self.request, str(e))
-            else:
-                self.order.refresh_from_db()
-                if self.order.pending_sum < 0:
-                    messages.success(self.request, _('The order has been canceled. You can now select how you want to '
-                                                     'transfer the money back to the user.'))
-                    with language(self.order.locale):
-                        return redirect(reverse('control:event.order.refunds.start', kwargs={
-                            'event': self.request.event.slug,
-                            'organizer': self.request.event.organizer.slug,
-                            'code': self.order.code
-                        }) + '?start-action=do_nothing&start-mode=partial&start-partial_amount={}&giftcard={}&comment={}'.format(
-                            round_decimal(self.order.pending_sum * -1),
-                            'true' if self.req and self.req.refund_as_giftcard else 'false',
-                            quote(gettext('Order canceled'))
-                        ))
+        elif self.order.cancel_allowed() and to == 'c':
+            if self.mark_canceled_form.is_valid():
+                try:
+                    cancel_order(self.order.pk, user=self.request.user,
+                                 email_comment=self.mark_canceled_form.cleaned_data['comment'],
+                                 send_mail=self.mark_canceled_form.cleaned_data['send_email'],
+                                 cancel_invoice=self.mark_canceled_form.cleaned_data.get('cancel_invoice', True),
+                                 cancellation_fee=self.mark_canceled_form.cleaned_data.get('cancellation_fee'))
+                except OrderError as e:
+                    messages.error(self.request, str(e))
+                else:
+                    self.order.refresh_from_db()
+                    if self.order.pending_sum < 0:
+                        messages.success(self.request, _('The order has been canceled. You can now select how you want to '
+                                                         'transfer the money back to the user.'))
+                        with language(self.order.locale):
+                            return redirect(reverse('control:event.order.refunds.start', kwargs={
+                                'event': self.request.event.slug,
+                                'organizer': self.request.event.organizer.slug,
+                                'code': self.order.code
+                            }) + '?start-action=do_nothing&start-mode=partial&start-partial_amount={}&giftcard={}&comment={}'.format(
+                                round_decimal(self.order.pending_sum * -1),
+                                'true' if self.req and self.req.refund_as_giftcard else 'false',
+                                quote(gettext('Order canceled'))
+                            ))
 
-                messages.success(self.request, _('The order has been canceled.'))
+                    messages.success(self.request, _('The order has been canceled.'))
+            else:
+                return self.get(self.request, *args, **kwargs)
         elif self.order.status == Order.STATUS_PENDING and to == 'e':
             mark_order_expired(self.order, user=self.request.user)
             messages.success(self.request, _('The order has been marked as expired.'))
         return redirect(self.get_order_url())
 
-    def get(self, *args, **kwargs):
+    def get(self, request, *args, **kwargs):
         to = self.request.GET.get('status', '')
         if self.order.status in (Order.STATUS_PENDING, Order.STATUS_EXPIRED) and to == 'p':
             return render(self.request, 'pretixcontrol/order/pay.html', {
