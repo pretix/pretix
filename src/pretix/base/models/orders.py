@@ -2237,7 +2237,7 @@ class OrderPosition(AbstractPosition):
 
     @cached_property
     def sort_key(self):
-        return self.addon_to.positionid if self.addon_to else self.positionid, self.addon_to_id or 0
+        return self.addon_to.positionid if self.addon_to else self.positionid, self.addon_to_id or 0, self.positionid
 
     @property
     def checkins(self):
@@ -2263,7 +2263,7 @@ class OrderPosition(AbstractPosition):
         ops = []
         cp_mapping = {}
         # The sorting key ensures that all addons come directly after the position they refer to
-        for i, cartpos in enumerate(sorted(cp, key=lambda c: (c.addon_to_id or c.pk, c.addon_to_id or 0))):
+        for i, cartpos in enumerate(sorted(cp, key=lambda c: c.sort_key)):
             op = OrderPosition(order=order)
             for f in AbstractPosition._meta.fields:
                 if f.name == 'addon_to':
@@ -2659,6 +2659,20 @@ class CartPosition(AbstractPosition):
                             self.event.currency)
         return self.price - net
 
+    @cached_property
+    def sort_key(self):
+        subevent_key = (self.subevent.date_from, str(self.subevent.name), self.subevent_id) if self.subevent_id else (0, "", 0)
+        category_key = (self.item.category.position, self.item.category.id) if self.item.category_id is not None else (0, 0)
+        item_key = self.item.position, self.item_id
+        variation_key = (self.variation.position, self.variation.id) if self.variation_id is not None else (0, 0)
+        line_key = (self.price, (self.voucher_id or 0), (self.seat.sorting_rank if self.seat_id else None), self.pk)
+        sort_key = subevent_key + category_key + item_key + variation_key + line_key
+
+        if self.addon_to_id:
+            return self.addon_to.sort_key + (1 if self.is_bundled else 2,) + sort_key
+        else:
+            return sort_key + (0,) + sort_key
+
     def update_listed_price_and_voucher(self, voucher_only=False, max_discount=None):
         from pretix.base.services.pricing import (
             get_listed_price, is_included_for_free,
@@ -2716,7 +2730,8 @@ class CartPosition(AbstractPosition):
 
     @property
     def addons_without_bundled(self):
-        return [op for op in self.addons.all() if not op.is_bundled]
+        addons = [op for op in self.addons.all() if not op.is_bundled]
+        return sorted(addons, key=lambda cp: cp.sort_key)
 
 
 class InvoiceAddress(models.Model):

@@ -46,7 +46,7 @@ class QuestionsViewMixin(BaseQuestionsViewMixin):
     @cached_property
     def _positions_for_questions(self):
         cart = get_cart(self.request)
-        return sorted(list(cart), key=self._keyfunc)
+        return sorted(list(cart), key=lambda cp: cp.sort_key)
 
     def question_form_kwargs(self, cr):
         d = {
