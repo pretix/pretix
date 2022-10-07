@@ -20,6 +20,7 @@
 # <https://www.gnu.org/licenses/>.
 #
 import hashlib
+import re
 from importlib import import_module
 from urllib.parse import (
     parse_qs, quote, urlencode, urljoin, urlparse, urlsplit, urlunparse,
@@ -619,7 +620,7 @@ class SSOLoginView(RedirectBackMixin, View):
         })
 
         if self.provider.method == "oidc":
-            return redirect(oidc_authorize_url(self.provider, f'{nonce}#{next_url}', redirect_uri))
+            return redirect(oidc_authorize_url(self.provider, f'{nonce}§{next_url}', redirect_uri))
         else:
             raise Http404("Unknown SSO method.")
 
@@ -678,7 +679,7 @@ class SSOLoginReturnView(RedirectBackMixin, View):
                     popup_origin,
                 )
 
-            nonce, redirect_to = request.GET['state'].split('#')
+            nonce, redirect_to = re.split("[#§]", request.GET['state'])  # Allow # for backwards-compatibility for a while
 
             if nonce != request.session.get(f'pretix_customerauth_{self.provider.pk}_nonce'):
                 return self._fail(
