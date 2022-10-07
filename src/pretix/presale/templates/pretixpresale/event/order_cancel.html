@@ -50,7 +50,12 @@
             </p>
         {% endif %}
 
-        {% if not request.event.settings.cancel_allow_user_paid_require_approval or not request.event.settings.cancel_allow_user_paid_require_approval_fee_unknown %}
+        {% if order.total != 0 and order.user_cancel_fee %}
+            {% blocktrans trimmed with fee=order.user_cancel_fee|money:request.event.currency %}
+                You can cancel this order. As per our cancellation policy, you will still be required
+                to pay a cancellation fee of <strong>{{ fee }}</strong>.
+            {% endblocktrans %}
+        {% elif not request.event.settings.cancel_allow_user_paid_require_approval or not request.event.settings.cancel_allow_user_paid_require_approval_fee_unknown %}
         {% if request.event.settings.cancel_allow_user_paid_adjust_fees and order.status == "p" and order.total != 0 %}
             <p>
                 {% if cancel_fee %}
@@ -98,7 +103,7 @@
         {% endif %}
         {% endif %}
 
-        {% if refund_amount %}
+        {% if refund_amount > 0 %}
             {% if request.event.settings.cancel_allow_user_paid_refund_as_giftcard == "manually" %}
                 <strong>
                     {% trans "The organizer will get in touch with you to clarify the details of your refund." %}

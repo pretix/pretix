@@ -459,17 +459,24 @@
                             </p>
                         {% else %}
                             <p>
-                                {% blocktrans trimmed %}
-                                    You can cancel this order using the following button.
-                                {% endblocktrans %}
+                                {% if order.total != 0 and order.user_cancel_fee %}
+                                    {% blocktrans trimmed with fee=order.user_cancel_fee|money:request.event.currency %}
+                                        You can cancel this order. As per our cancellation policy, you will still be required
+                                        to pay a cancellation fee of <strong>{{ fee }}</strong>.
+                                    {% endblocktrans %}
+                                {% else %}
+                                    {% blocktrans trimmed %}
+                                        You can cancel this order using the following button.
+                                    {% endblocktrans %}
+                                {% endif %}
                                 {% trans "This will invalidate all tickets in this order." %}
                             </p>
                             <p>
-                            <a href="{% eventurl event 'presale:event.order.cancel' secret=order.secret order=order.code %}"
-                                    class="btn btn-danger">
-                                <span class="fa fa-remove" aria-hidden="true"></span>
-                                {% trans "Cancel order" %}
-                            </a>
+                                <a href="{% eventurl event 'presale:event.order.cancel' secret=order.secret order=order.code %}"
+                                        class="btn btn-danger">
+                                    <span class="fa fa-remove" aria-hidden="true"></span>
+                                    {% trans "Cancel order" %}
+                                </a>
                             </p>
                         {% endif %}
                     </li>

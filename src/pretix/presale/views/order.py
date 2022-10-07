@@ -917,7 +917,10 @@ class OrderCancelDo(EventViewMixin, OrderDetailMixin, AsyncAction, View):
             auto_refund = self.request.event.settings.cancel_allow_user_paid_refund_as_giftcard != "manually"
         if self.order.total == Decimal('0.00'):
             fee = Decimal('0.00')
-        elif 'cancel_fee' in request.POST and self.request.event.settings.cancel_allow_user_paid_adjust_fees:
+        elif self.order.status == Order.STATUS_PENDING:
+            auto_refund = False
+            fee = self.order.user_cancel_fee
+        elif 'cancel_fee' in request.POST and self.order.status == Order.STATUS_PAID and self.request.event.settings.cancel_allow_user_paid_adjust_fees:
             fee = fee or Decimal('0.00')
             fee_in = re.sub('[^0-9.,]', '', request.POST.get('cancel_fee'))
             try:

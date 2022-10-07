@@ -564,17 +564,30 @@ class Order(LockModel, LoggedModel):
     @cached_property
     def user_cancel_fee(self):
         fee = Decimal('0.00')
-        if self.event.settings.cancel_allow_user_paid_keep_fees:
-            fee += self.fees.filter(
-                fee_type__in=(OrderFee.FEE_TYPE_PAYMENT, OrderFee.FEE_TYPE_SHIPPING, OrderFee.FEE_TYPE_SERVICE,
-                              OrderFee.FEE_TYPE_CANCELLATION)
-            ).aggregate(
-                s=Sum('value')
-            )['s'] or 0
-        if self.event.settings.cancel_allow_user_paid_keep_percentage:
-            fee += self.event.settings.cancel_allow_user_paid_keep_percentage / Decimal('100.0') * (self.total - fee)
-        if self.event.settings.cancel_allow_user_paid_keep:
-            fee += self.event.settings.cancel_allow_user_paid_keep
+        if self.status == Order.STATUS_PAID:
+            if self.event.settings.cancel_allow_user_paid_keep_fees:
+                fee += self.fees.filter(
+                    fee_type__in=(OrderFee.FEE_TYPE_PAYMENT, OrderFee.FEE_TYPE_SHIPPING, OrderFee.FEE_TYPE_SERVICE,
+                                  OrderFee.FEE_TYPE_CANCELLATION)
+                ).aggregate(
+                    s=Sum('value')
+                )['s'] or 0
+            if self.event.settings.cancel_allow_user_paid_keep_percentage:
+                fee += self.event.settings.cancel_allow_user_paid_keep_percentage / Decimal('100.0') * (self.total - fee)
+            if self.event.settings.cancel_allow_user_paid_keep:
+                fee += self.event.settings.cancel_allow_user_paid_keep
+        else:
+            if self.event.settings.cancel_allow_user_unpaid_keep_fees:
+                fee += self.fees.filter(
+                    fee_type__in=(OrderFee.FEE_TYPE_PAYMENT, OrderFee.FEE_TYPE_SHIPPING, OrderFee.FEE_TYPE_SERVICE,
+                                  OrderFee.FEE_TYPE_CANCELLATION)
+                ).aggregate(
+                    s=Sum('value')
+                )['s'] or 0
+            if self.event.settings.cancel_allow_user_unpaid_keep_percentage:
+                fee += self.event.settings.cancel_allow_user_unpaid_keep_percentage / Decimal('100.0') * (self.total - fee)
+            if self.event.settings.cancel_allow_user_unpaid_keep:
+                fee += self.event.settings.cancel_allow_user_unpaid_keep
         return round_decimal(min(fee, self.total), self.event.currency)
 
     @property
@@ -642,10 +655,12 @@ class Order(LockModel, LoggedModel):
         if self.user_cancel_deadline and now() > self.user_cancel_deadline:
             return False
 
-        if self.status == Order.STATUS_PAID or self.payment_refund_sum > Decimal('0.00'):
+        if self.status == Order.STATUS_PAID:
             if self.total == Decimal('0.00'):
                 return self.event.settings.cancel_allow_user
             return self.event.settings.cancel_allow_user_paid
+        elif self.payment_refund_sum > Decimal('0.00'):
+            return False
         elif self.status == Order.STATUS_PENDING:
             return self.event.settings.cancel_allow_user
         return False

@@ -462,9 +462,13 @@ def _cancel_order(order, user=None, send_mail: bool=True, api_token=None, device
                     f._calculate_tax()
                     f.save()
 
-                if order.payment_refund_sum < cancellation_fee:
-                    raise OrderError(_('The cancellation fee cannot be higher than the payment credit of this order.'))
-                order.status = Order.STATUS_PAID
+                if cancellation_fee > order.total:
+                    raise OrderError(_('The cancellation fee cannot be higher than the total amount of this order.'))
+                elif order.payment_refund_sum < cancellation_fee:
+                    order.status = Order.STATUS_PENDING
+                    order.set_expires()
+                else:
+                    order.status = Order.STATUS_PAID
                 order.total = cancellation_fee
                 order.cancellation_date = now()
                 order.save(update_fields=['status', 'cancellation_date', 'total'])
