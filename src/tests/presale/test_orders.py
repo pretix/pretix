@@ -460,30 +460,19 @@ class OrdersTest(BaseOrdersTest):
             r = self.order.cancellation_requests.get()
             assert r.cancellation_fee == Decimal('3.00')
 
-    def test_orders_cancel_unpaid_no_request(self):
+    def test_orders_cancel_partially_paid_no_selfservice(self):
         self.order.status = Order.STATUS_PENDING
         self.order.save()
         with scopes_disabled():
-            self.order.payments.create(provider='testdummy_partialrefund', amount=self.order.total, state=OrderPayment.PAYMENT_STATE_CONFIRMED)
+            self.order.payments.create(provider='testdummy_partialrefund', amount=self.order.total - Decimal("1.00"),
+                                       state=OrderPayment.PAYMENT_STATE_CONFIRMED)
         self.event.settings.cancel_allow_user_paid = True
         self.event.settings.cancel_allow_user_paid_keep = Decimal('3.00')
         self.event.settings.cancel_allow_user_paid_require_approval = True
         response = self.client.get(
             '/%s/%s/order/%s/%s/cancel' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret)
         )
-        assert response.status_code == 200
-        response = self.client.post(
-            '/%s/%s/order/%s/%s/cancel/do' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret), {
-            }, follow=True)
-        self.assertRedirects(response,
-                             '/%s/%s/order/%s/%s/' % (self.orga.slug, self.event.slug, self.order.code,
-                                                      self.order.secret),
-                             target_status_code=200)
-        self.order.refresh_from_db()
-        assert self.order.status == Order.STATUS_CANCELED
-        with scopes_disabled():
-            assert not self.order.refunds.exists()
-            assert not self.order.cancellation_requests.exists()
+        assert response.status_code == 302
 
     def test_orders_cancel_free_no_request(self):
         self.order.status = Order.STATUS_PAID
@@ -600,6 +589,33 @@ class OrdersTest(BaseOrdersTest):
             r = self.order.refunds.get()
             assert r.provider == "giftcard"
             assert r.amount == Decimal('20.00')
+
+    def test_orders_cancel_unpaid_fee(self):
+        self.order.status = Order.STATUS_PENDING
+        self.order.save()
+        with scopes_disabled():
+            self.order.payments.create(provider='testdummy_partialrefund', amount=self.order.total, state=OrderPayment.PAYMENT_STATE_CREATED)
+        self.event.settings.cancel_allow_user = True
+        self.event.settings.cancel_allow_user_paid = False
+        self.event.settings.cancel_allow_user_unpaid_keep = Decimal('3.00')
+        self.event.settings.cancel_allow_user_paid_keep = Decimal('7.00')
+        response = self.client.get(
+            '/%s/%s/order/%s/%s/cancel' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret)
+        )
+        assert response.status_code == 200
+        assert 'manually' not in response.content.decode()
+        response = self.client.post(
+            '/%s/%s/order/%s/%s/cancel/do' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret), {
+            }, follow=True)
+        self.assertRedirects(response,
+                             '/%s/%s/order/%s/%s/' % (self.orga.slug, self.event.slug, self.order.code,
+                                                      self.order.secret),
+                             target_status_code=200)
+        self.order.refresh_from_db()
+        assert self.order.status == Order.STATUS_PENDING
+        assert self.order.total == Decimal('3.00')
+        with scopes_disabled():
+            assert self.order.refunds.count() == 0
 
     def test_orders_cancel_paid_fee_autorefund(self):
         self.order.status = Order.STATUS_PAID

@@ -1107,11 +1107,23 @@ def test_order_mark_canceled_pending_fee_not_allowed(token_client, organizer, ev
         '/api/v1/organizers/{}/events/{}/orders/{}/mark_canceled/'.format(
             organizer.slug, event.slug, order.code
         ), data={
-            'cancellation_fee': '7.00'
+            'cancellation_fee': '700.00'
         }
     )
     assert resp.status_code == 400
-    assert resp.data == {'detail': 'The cancellation fee cannot be higher than the payment credit of this order.'}
+    assert resp.data == {'detail': 'The cancellation fee cannot be higher than the total amount of this order.'}
+    assert len(djmail.outbox) == 0
+
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/{}/mark_canceled/'.format(
+            organizer.slug, event.slug, order.code
+        ), data={
+            'cancellation_fee': '7.00'
+        }
+    )
+    assert resp.status_code == 200
+    assert resp.data['status'] == Order.STATUS_PENDING
+    assert len(djmail.outbox) == 1
 
 
 @pytest.mark.django_db

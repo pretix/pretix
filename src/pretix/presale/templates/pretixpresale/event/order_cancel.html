@@ -50,7 +50,7 @@
             </p>
         {% endif %}
 
-        {% if order.total != 0 and order.user_cancel_fee %}
+        {% if order.status == "n" and order.total != 0 and order.user_cancel_fee %}
             {% blocktrans trimmed with fee=order.user_cancel_fee|money:request.event.currency %}
                 You can cancel this order. As per our cancellation policy, you will still be required
                 to pay a cancellation fee of <strong>{{ fee }}</strong>.
