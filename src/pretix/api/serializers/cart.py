@@ -23,8 +23,7 @@ import os
 from datetime import timedelta
 
 from django.core.files import File
-from django.db.models import Q
-from django.utils.crypto import get_random_string
+from django.db.models import prefetch_related_objects
 from django.utils.timezone import now
 from django.utils.translation import gettext_lazy
 from rest_framework import serializers
@@ -34,7 +33,7 @@ from pretix.api.serializers.i18n import I18nAwareModelSerializer
 from pretix.api.serializers.order import (
     AnswerCreateSerializer, AnswerSerializer, InlineSeatSerializer,
 )
-from pretix.base.models import Quota, Seat, Voucher
+from pretix.base.models import Seat, Voucher
 from pretix.base.models.orders import CartPosition
 
 
@@ -52,148 +51,18 @@ class CartPositionSerializer(I18nAwareModelSerializer):
         model = CartPosition
         fields = ('id', 'cart_id', 'item', 'variation', 'price', 'attendee_name', 'attendee_name_parts',
                   'attendee_email', 'voucher', 'addon_to', 'subevent', 'datetime', 'expires', 'includes_tax',
-                  'answers', 'seat')
+                  'answers', 'seat', 'is_bundled')
 
 
-class CartPositionCreateSerializer(I18nAwareModelSerializer):
+class BaseCartPositionCreateSerializer(I18nAwareModelSerializer):
     answers = AnswerCreateSerializer(many=True, required=False)
-    expires = serializers.DateTimeField(required=False)
     attendee_name = serializers.CharField(required=False, allow_null=True)
-    seat = serializers.CharField(required=False, allow_null=True)
-    sales_channel = serializers.CharField(required=False, default='sales_channel')
     includes_tax = serializers.BooleanField(required=False, allow_null=True)
-    voucher = serializers.CharField(required=False, allow_null=True)
 
     class Meta:
         model = CartPosition
-        fields = ('cart_id', 'item', 'variation', 'price', 'attendee_name', 'attendee_name_parts', 'attendee_email',
-                  'subevent', 'expires', 'includes_tax', 'answers', 'seat', 'sales_channel', 'voucher')
-
-    def create(self, validated_data):
-        answers_data = validated_data.pop('answers')
-        if not validated_data.get('cart_id'):
-            cid = "{}@api".format(get_random_string(48))
-            while CartPosition.objects.filter(cart_id=cid).exists():
-                cid = "{}@api".format(get_random_string(48))
-            validated_data['cart_id'] = cid
-
-        if not validated_data.get('expires'):
-            validated_data['expires'] = now() + timedelta(
-                minutes=self.context['event'].settings.get('reservation_time', as_type=int)
-            )
-
-        new_quotas = (validated_data.get('variation').quotas.filter(subevent=validated_data.get('subevent'))
-                      if validated_data.get('variation')
-                      else validated_data.get('item').quotas.filter(subevent=validated_data.get('subevent')))
-        if len(new_quotas) == 0:
-            raise ValidationError(
-                gettext_lazy('The product "{}" is not assigned to a quota.').format(
-                    str(validated_data.get('item'))
-                )
-            )
-        for quota in new_quotas:
-            avail = quota.availability(_cache=self.context['quota_cache'])
-            if avail[0] != Quota.AVAILABILITY_OK or (avail[1] is not None and avail[1] < 1):
-                raise ValidationError(
-                    gettext_lazy('There is not enough quota available on quota "{}" to perform '
-                                 'the operation.').format(
-                        quota.name
-                    )
-                )
-
-        for quota in new_quotas:
-            oldsize = self.context['quota_cache'][quota.pk][1]
-            newsize = oldsize - 1 if oldsize is not None else None
-            self.context['quota_cache'][quota.pk] = (
-                Quota.AVAILABILITY_OK if newsize is None or newsize > 0 else Quota.AVAILABILITY_GONE,
-                newsize
-            )
-
-        attendee_name = validated_data.pop('attendee_name', '')
-        if attendee_name and not validated_data.get('attendee_name_parts'):
-            validated_data['attendee_name_parts'] = {
-                '_legacy': attendee_name
-            }
-
-        seated = validated_data.get('item').seat_category_mappings.filter(subevent=validated_data.get('subevent')).exists()
-        if validated_data.get('seat'):
-            if not seated:
-                raise ValidationError('The specified product does not allow to choose a seat.')
-            try:
-                seat = self.context['event'].seats.get(seat_guid=validated_data['seat'], subevent=validated_data.get('subevent'))
-            except Seat.DoesNotExist:
-                raise ValidationError('The specified seat does not exist.')
-            except Seat.MultipleObjectsReturned:
-                raise ValidationError('The specified seat ID is not unique.')
-            else:
-                validated_data['seat'] = seat
-        elif seated:
-            raise ValidationError('The specified product requires to choose a seat.')
-
-        if validated_data.get('voucher'):
-            try:
-                voucher = self.context['event'].vouchers.get(code__iexact=validated_data.get('voucher'))
-            except Voucher.DoesNotExist:
-                raise ValidationError('The specified voucher does not exist.')
-
-            if voucher and not voucher.applies_to(validated_data.get('item'), validated_data.get('variation')):
-                raise ValidationError('The specified voucher is not valid for the given item and variation.')
-
-            if voucher and voucher.seat and voucher.seat != validated_data.get('seat'):
-                raise ValidationError('The specified voucher is not valid for this seat.')
-
-            if voucher and voucher.subevent_id and (not validated_data.get('subevent') or voucher.subevent_id != validated_data['subevent'].pk):
-                raise ValidationError('The specified voucher is not valid for this subevent.')
-
-            if voucher.valid_until is not None and voucher.valid_until < now():
-                raise ValidationError('The specified voucher is expired.')
-
-            redeemed_in_carts = CartPosition.objects.filter(
-                Q(voucher=voucher) & Q(event=self.context['event']) & Q(expires__gte=now())
-            )
-            cart_count = redeemed_in_carts.count()
-            v_avail = voucher.max_usages - voucher.redeemed - cart_count
-            if v_avail < 1:
-                raise ValidationError('The specified voucher has already been used the maximum number of times.')
-
-            validated_data['voucher'] = voucher
-
-        if validated_data.get('seat'):
-            if not validated_data['seat'].is_available(
-                sales_channel=validated_data.get('sales_channel', 'web'),
-                distance_ignore_cart_id=validated_data['cart_id'],
-                ignore_voucher_id=validated_data['voucher'].pk if validated_data.get('voucher') else None,
-            ):
-                raise ValidationError(
-                    gettext_lazy('The selected seat "{seat}" is not available.').format(seat=validated_data['seat'].name))
-
-        validated_data.pop('sales_channel')
-        # todo: does this make sense?
-        validated_data['custom_price_input'] = validated_data['price']
-        # todo: listed price, etc?
-        # currently does not matter because there is no way to transform an API cart position into an order that keeps
-        # prices, cart positions are just quota/voucher placeholders
-        validated_data['custom_price_input_is_net'] = not validated_data.pop('includes_tax', True)
-        cp = CartPosition.objects.create(event=self.context['event'], **validated_data)
-
-        for answ_data in answers_data:
-            options = answ_data.pop('options')
-            if isinstance(answ_data['answer'], File):
-                an = answ_data.pop('answer')
-                answ = cp.answers.create(**answ_data, answer='')
-                answ.file.save(os.path.basename(an.name), an, save=False)
-                answ.answer = 'file://' + answ.file.name
-                answ.save()
-                an.close()
-            else:
-                answ = cp.answers.create(**answ_data)
-                answ.options.add(*options)
-        return cp
-
-    def validate_cart_id(self, cid):
-        if cid and not cid.endswith('@api'):
-            raise ValidationError('Cart ID should end in @api or be empty.')
-        return cid
+        fields = ('item', 'variation', 'price', 'attendee_name', 'attendee_name_parts', 'attendee_email',
+                  'subevent', 'includes_tax', 'answers')
 
     def validate_item(self, item):
         if item.event != self.context['event']:
@@ -240,4 +109,178 @@ class CartPositionCreateSerializer(I18nAwareModelSerializer):
             raise ValidationError(
                 {'attendee_name': ['Do not specify attendee_name if you specified attendee_name_parts.']}
             )
+
+        if not data.get('expires'):
+            data['expires'] = now() + timedelta(
+                minutes=self.context['event'].settings.get('reservation_time', as_type=int)
+            )
+
+        quotas_for_item_cache = self.context.get('quotas_for_item_cache', {})
+        quotas_for_variation_cache = self.context.get('quotas_for_variation_cache', {})
+
+        seated = data.get('item').seat_category_mappings.filter(subevent=data.get('subevent')).exists()
+        if data.get('seat'):
+            if not seated:
+                raise ValidationError({'seat': ['The specified product does not allow to choose a seat.']})
+            try:
+                seat = self.context['event'].seats.get(seat_guid=data['seat'], subevent=data.get('subevent'))
+            except Seat.DoesNotExist:
+                raise ValidationError({'seat': ['The specified seat does not exist.']})
+            except Seat.MultipleObjectsReturned:
+                raise ValidationError({'seat': ['The specified seat ID is not unique.']})
+            else:
+                data['seat'] = seat
+        elif seated:
+            raise ValidationError({'seat': ['The specified product requires to choose a seat.']})
+
+        if data.get('voucher'):
+            try:
+                voucher = self.context['event'].vouchers.get(code__iexact=data['voucher'])
+            except Voucher.DoesNotExist:
+                raise ValidationError({'voucher': ['The specified voucher does not exist.']})
+
+            if voucher and not voucher.applies_to(data['item'], data.get('variation')):
+                raise ValidationError({'voucher': ['The specified voucher is not valid for the given item and variation.']})
+
+            if voucher and voucher.seat and voucher.seat != data.get('seat'):
+                raise ValidationError({'voucher': ['The specified voucher is not valid for this seat.']})
+
+            if voucher and voucher.subevent_id and (not data.get('subevent') or voucher.subevent_id != data['subevent'].pk):
+                raise ValidationError({'voucher': ['The specified voucher is not valid for this subevent.']})
+
+            if voucher.valid_until is not None and voucher.valid_until < now():
+                raise ValidationError({'voucher': ['The specified voucher is expired.']})
+
+            data['voucher'] = voucher
+
+        if not data.get('voucher') or (not data['voucher'].allow_ignore_quota and not data['voucher'].block_quota):
+            if data.get('variation'):
+                if data['variation'].pk not in quotas_for_variation_cache:
+                    quotas_for_variation_cache[data['variation'].pk] = data['variation'].quotas.filter(subevent=data.get('subevent'))
+                data['_quotas'] = quotas_for_variation_cache[data['variation'].pk]
+            else:
+                if data['item'].pk not in quotas_for_item_cache:
+                    quotas_for_item_cache[data['item'].pk] = data['item'].quotas.filter(subevent=data.get('subevent'))
+                data['_quotas'] = quotas_for_item_cache[data['item'].pk]
+
+            if len(data['_quotas']) == 0:
+                raise ValidationError(
+                    gettext_lazy('The product "{}" is not assigned to a quota.').format(
+                        str(data.get('item'))
+                    )
+                )
+        else:
+            data['_quotas'] = []
+
+        return data
+
+    def create(self, validated_data):
+        validated_data.pop('_quotas')
+        answers_data = validated_data.pop('answers')
+
+        attendee_name = validated_data.pop('attendee_name', '')
+        if attendee_name and not validated_data.get('attendee_name_parts'):
+            validated_data['attendee_name_parts'] = {
+                '_legacy': attendee_name
+            }
+
+        # todo: does this make sense?
+        validated_data['custom_price_input'] = validated_data['price']
+        # todo: listed price, etc?
+        # currently does not matter because there is no way to transform an API cart position into an order that keeps
+        # prices, cart positions are just quota/voucher placeholders
+        validated_data['custom_price_input_is_net'] = not validated_data.pop('includes_tax', True)
+        cp = CartPosition.objects.create(event=self.context['event'], **validated_data)
+
+        for answ_data in answers_data:
+            options = answ_data.pop('options')
+            if isinstance(answ_data['answer'], File):
+                an = answ_data.pop('answer')
+                answ = cp.answers.create(**answ_data, answer='')
+                answ.file.save(os.path.basename(an.name), an, save=False)
+                answ.answer = 'file://' + answ.file.name
+                answ.save()
+                an.close()
+            else:
+                answ = cp.answers.create(**answ_data)
+                answ.options.add(*options)
+        return cp
+
+
+class CartPositionCreateSerializer(BaseCartPositionCreateSerializer):
+    expires = serializers.DateTimeField(required=False)
+    addons = BaseCartPositionCreateSerializer(many=True, required=False)
+    bundled = BaseCartPositionCreateSerializer(many=True, required=False)
+    seat = serializers.CharField(required=False, allow_null=True)
+    sales_channel = serializers.CharField(required=False, default='sales_channel')
+    voucher = serializers.CharField(required=False, allow_null=True)
+
+    class Meta:
+        model = CartPosition
+        fields = BaseCartPositionCreateSerializer.Meta.fields + (
+            'cart_id', 'expires', 'addons', 'bundled', 'seat', 'sales_channel', 'voucher'
+        )
+
+    def validate_cart_id(self, cid):
+        if cid and not cid.endswith('@api'):
+            raise ValidationError('Cart ID should end in @api or be empty.')
+        return cid
+
+    def create(self, validated_data):
+        validated_data.pop('sales_channel')
+        addons_data = validated_data.pop('addons', None)
+        bundled_data = validated_data.pop('bundled', None)
+
+        cp = super().create(validated_data)
+
+        if addons_data:
+            for addon_data in addons_data:
+                addon_data['addon_to'] = cp
+                addon_data['is_bundled'] = False
+                super().create(addon_data)
+
+        if bundled_data:
+            for bundle_data in bundled_data:
+                bundle_data['addon_to'] = cp
+                bundle_data['is_bundled'] = True
+                super().create(bundle_data)
+
+        return cp
+
+    def validate(self, data):
+        data = super().validate(data)
+
+        # This is currently only a very basic validation of add-ons and bundled products, we don't validate their number
+        # or price. We can always go stricter, as the endpoint is documented as experimental.
+        # However, this serializer should always be *at least* as strict as the order creation serializer.
+
+        if data.get('item') and data.get('addons'):
+            prefetch_related_objects([data['item']], 'addons')
+            for sub_data in data['addons']:
+                if not any(a.addon_category_id == sub_data['item'].category_id for a in data['item'].addons.all()):
+                    raise ValidationError({
+                        'addons': [
+                            'The product "{prod}" can not be used as an add-on product for "{main}".'.format(
+                                prod=str(sub_data['item']),
+                                main=str(data['item']),
+                            )
+                        ]
+                    })
+
+        if data.get('item') and data.get('bundled'):
+            prefetch_related_objects([data['item']], 'bundles')
+            for sub_data in data['bundled']:
+                if not any(
+                    a.bundled_item_id == sub_data['item'].pk and
+                    a.bundled_variation_id == (sub_data['variation'].pk if sub_data.get('variation') else None)
+                    for a in data['item'].bundles.all()
+                ):
+                    raise ValidationError({
+                        'bundled': [
+                            'The product "{prod}" can not be used as an bundled product for "{main}".'.format(
+                                prod=str(sub_data['item']),
+                                main=str(data['item']),
+                            )
+                        ]
+                    })
         return data

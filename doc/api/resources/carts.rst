@@ -17,8 +17,8 @@ The cart position resource contains the following public fields:
 Field                                 Type                       Description
 ===================================== ========================== =======================================================
 id                                    integer                    Internal ID of the cart position
-cart_id                               string                     Identifier of the cart this belongs to. Needs to end
-                                                                 in "@api" for API-created positions.
+cart_id                               string                     Identifier of the cart this belongs to, needs to end
+                                                                 in "@api" for API-created positions
 datetime                              datetime                   Time of creation
 expires                               datetime                   The cart position will expire at this time and no longer block quota
 item                                  integer                    ID of the item
@@ -29,14 +29,15 @@ attendee_name_parts                   object of strings          Composition of 
 attendee_email                        string                     Specified attendee email address for this position (or ``null``)
 voucher                               integer                    Internal ID of the voucher used for this position (or ``null``)
 addon_to                              integer                    Internal ID of the position this position is an add-on for (or ``null``)
-subevent                              integer                    ID of the date inside an event series this position belongs to (or ``null``).
+is_bundled                            boolean                    If ``addon_to`` is set, this shows whether this is a bundled product or an addon product
+subevent                              integer                    ID of the date inside an event series this position belongs to (or ``null``)
 answers                               list of objects            Answers to user-defined questions
 ├ question                            integer                    Internal ID of the answered question
 ├ answer                              string                     Text representation of the answer
 ├ question_identifier                 string                     The question's ``identifier`` field
 ├ options                             list of integers           Internal IDs of selected option(s)s (only for choice types)
 └ option_identifiers                  list of strings            The ``identifier`` fields of the selected option(s)s
-seat                                  objects                    The assigned seat. Can be ``null``.
+seat                                  objects                    The assigned seat (or ``null``)
 ├ id                                  integer                    Internal ID of the seat instance
 ├ name                                string                     Human-readable seat name
 └ seat_guid                           string                     Identifier of the seat within the seating plan
@@ -45,6 +46,10 @@ seat                                  objects                    The assigned se
 .. versionchanged:: 3.0
 
    This ``seat`` attribute has been added.
+
+.. versionchanged:: 4.14
+
+   This ``is_bundled`` attribute has been added and the cart creation endpoints have been updated.
 
 
 Cart position endpoints
@@ -87,6 +92,7 @@ Cart position endpoints
             "attendee_email": null,
             "voucher": null,
             "addon_to": null,
+            "is_bundled": false,
             "subevent": null,
             "datetime": "2018-06-11T10:00:00Z",
             "expires": "2018-06-11T10:00:00Z",
@@ -133,6 +139,7 @@ Cart position endpoints
         "attendee_email": null,
         "voucher": null,
         "addon_to": null,
+        "is_bundled": false,
         "subevent": null,
         "datetime": "2018-06-11T10:00:00Z",
         "expires": "2018-06-11T10:00:00Z",
@@ -168,13 +175,15 @@ Cart position endpoints
 
        * does not validate if the event's ticket sales are already over or haven't started
 
-       * does not support add-on products at the moment
+       * does not validate constraints on add-on products at the moment
 
        * does not check or calculate prices but believes any prices you send
 
        * does not prevent you from buying items that can only be bought with a voucher
 
        * does not support file upload questions
+
+       Note that more validation might be added in the future, so please do not rely on missing validation.
 
    You can supply the following fields of the resource:
 
@@ -190,6 +199,8 @@ Cart position endpoints
    * ``includes_tax`` (optional, **deprecated**, do not use, will be removed)
    * ``sales_channel`` (optional)
    * ``voucher`` (optional, expect a voucher code)
+   * ``addons`` (optional, expect a list of nested objects of cart positions)
+   * ``bundled`` (optional, expect a list of nested objects of cart positions)
    * ``answers``
 
       * ``question``
@@ -221,6 +232,12 @@ Cart position endpoints
             "options": []
           }
         ],
+        "addons": [
+          {
+            "item": 2,
+            "variation": null,
+          }
+        ],
         "subevent": null
       }
 
@@ -232,7 +249,7 @@ Cart position endpoints
       Vary: Accept
       Content-Type: application/json
 
-      (Full cart position resource, see above.)
+      (Full cart position resource, see above, with additional nested objects "addons" and "bundled".)
 
    :param organizer: The ``slug`` field of the organizer of the event to create a position for
    :param event: The ``slug`` field of the event to create a position for
@@ -244,8 +261,8 @@ Cart position endpoints
 
 .. http:post:: /api/v1/organizers/(organizer)/events/(event)/cartpositions/bulk_create/
 
-   Creates multiple new cart position. This operation is deliberately not atomic, so each cart position can succeed
-   or fail individually, so the response code of the response is not the only thing to look at!
+   Creates multiple new cart position. **This operation is deliberately not atomic, so each cart position can succeed
+   or fail individually, so the response code of the response is not the only thing to look at!**
 
    .. warning:: This endpoint is considered **experimental**. It might change at any time without prior notice.
 
