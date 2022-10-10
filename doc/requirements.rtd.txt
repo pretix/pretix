@@ -1,0 +1,10 @@
+sphinx==2.3.*
+jinja2==3.0.*
+sphinx-rtd-theme
+sphinxcontrib-httpdomain
+sphinxcontrib-images
+sphinxcontrib-spelling==4.*
+sphinxemoji
+pygments-markdown-lexer
+# See https://github.com/rfk/pyenchant/pull/130
+git+https://github.com/raphaelm/pyenchant.git@patch-1#egg=pyenchant
