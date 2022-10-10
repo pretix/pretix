@@ -2671,7 +2671,7 @@ class CartPosition(AbstractPosition):
         if self.addon_to_id:
             return self.addon_to.sort_key + (1 if self.is_bundled else 2,) + sort_key
         else:
-            return sort_key + (0,) + sort_key
+            return sort_key
 
     def update_listed_price_and_voucher(self, voucher_only=False, max_discount=None):
         from pretix.base.services.pricing import (
