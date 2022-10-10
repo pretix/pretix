@@ -35,7 +35,7 @@
 from collections import defaultdict
 from datetime import datetime, timedelta
 from decimal import Decimal
-from functools import partial, wraps
+from functools import wraps
 from itertools import groupby
 
 from django.conf import settings
@@ -46,7 +46,7 @@ from django_scopes import scopes_disabled
 
 from pretix.base.i18n import language
 from pretix.base.models import (
-    CartPosition, Customer, InvoiceAddress, ItemAddOn, OrderPosition, Question,
+    CartPosition, Customer, InvoiceAddress, ItemAddOn, Question,
     QuestionAnswer, QuestionOption,
 )
 from pretix.base.services.cart import get_fees
@@ -145,57 +145,32 @@ class CartMixin:
         # Group items of the same variation
         # We do this by list manipulations instead of a GROUP BY query, as
         # Django is unable to join related models in a .values() query
-        def keyfunc(pos, for_sorting=False):
-            if isinstance(pos, OrderPosition):
-                if pos.addon_to_id:
-                    i = pos.addon_to.positionid
-                else:
-                    i = pos.positionid
-            else:
-                if pos.addon_to_id:
-                    i = pos.addon_to_id
-                else:
-                    i = pos.pk
-
+        def group_key(pos):  # only used for grouping, sorting is done before already
             has_attendee_data = pos.item.admission and (
                 self.request.event.settings.attendee_names_asked
                 or self.request.event.settings.attendee_emails_asked
+                or self.request.event.settings.attendee_company_asked
+                or self.request.event.settings.attendee_addresses_asked
                 or pos_additional_fields.get(pos.pk)
             )
+            grouping_allowed = (
+                # Never group when we have per-ticket download buttons
+                not downloads and
+                # Never group if the position has add-ons
+                pos.pk not in has_addons and
+                # Never group if we have answers to show
+                (not answers or (not has_attendee_data and not bool(pos.item.questions.all()))) and  # do not use .exists() to re-use prefetch cache
+                # Never group when we have a final order and a gift card code
+                (isinstance(pos, CartPosition) or not pos.item.issue_giftcard)
+            )
 
-            addon_penalty = 1 if pos.addon_to_id else 0
-
-            if downloads \
-                    or pos.pk in has_addons \
-                    or pos.item.issue_giftcard \
-                    or (answers and (has_attendee_data or bool(pos.item.questions.all()))):  # do not use .exists() to re-use prefetch cache
-                return (
-                    # standalone positions are grouped by main product position id, addons below them also sorted by position id
-                    i, addon_penalty, pos.positionid if isinstance(pos, OrderPosition) else pos.pk,
-                    # all other places are only used for positions that can be grouped. We just put zeros.
-                ) + (0, ) * 12
-
-            # positions are sorted and grouped by various attributes
-            category_key = (pos.item.category.position, pos.item.category.id) if pos.item.category is not None else (0, 0)
-            item_key = pos.item.position, pos.item_id
-            variation_key = (pos.variation.position, pos.variation.id) if pos.variation is not None else (0, 0)
-            subevent_key = (pos.subevent.date_from, str(pos.subevent.name), pos.subevent_id) if pos.subevent_id else (0, "", 0)
-            grp = subevent_key + category_key + item_key + variation_key + (pos.price, (pos.voucher_id or 0), (pos.seat_id or 0))
-            if pos.addon_to_id:
-                if for_sorting:
-                    ii = pos.positionid if isinstance(pos, OrderPosition) else pos.pk
-                else:
-                    ii = 0
-                return (
-                    i, addon_penalty, ii,
-                ) + grp
-            return (
-                # These are grouped by attributes so we don't put any position ids
-                0, 0, 0,
-            ) + grp
+            if not grouping_allowed:
+                return (pos.pk,) + (0, ) * 6
+            else:
+                return (pos.addon_to_id or 0), pos.subevent_id, pos.item_id, pos.variation_id, pos.price, (pos.voucher_id or 0), (pos.seat_id or 0)
 
         positions = []
-        for k, g in groupby(sorted(lcp, key=partial(keyfunc, for_sorting=True)), key=keyfunc):
+        for k, g in groupby(sorted(lcp, key=lambda c: c.sort_key), key=group_key):
             g = list(g)
             group = g[0]
             group.count = len(g)
@@ -291,7 +266,7 @@ def get_cart(request):
                 'item__category__position', 'item__category_id', 'item__position', 'item__name', 'variation__value'
             ).select_related(
                 'item', 'variation', 'subevent', 'subevent__event', 'subevent__event__organizer',
-                'item__tax_rule', 'addon_to', 'used_membership', 'used_membership__membership_type'
+                'item__tax_rule', 'item__category', 'used_membership', 'used_membership__membership_type'
             ).select_related(
                 'addon_to'
             ).prefetch_related(
@@ -312,8 +287,12 @@ def get_cart(request):
                          ).select_related('dependency_question'),
                          to_attr='questions_to_ask')
             )
+            by_id = {cp.pk: cp for cp in request._cart_cache}
             for cp in request._cart_cache:
-                cp.event = request.event  # Populate field with known value to save queries
+                # Populate fields with known values to save queries
+                cp.event = request.event
+                if cp.addon_to_id:
+                    cp.addon_to = by_id[cp.addon_to_id]
     return request._cart_cache
 
 

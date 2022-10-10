@@ -44,16 +44,6 @@ class BaseQuestionsViewMixin:
     form_class = BaseQuestionsForm
     all_optional = False
 
-    @staticmethod
-    def _keyfunc(pos):
-        # Sort addons after the item they are an addon to
-        if isinstance(pos, OrderPosition):
-            i = pos.addon_to.positionid if pos.addon_to else pos.positionid
-        else:
-            i = pos.addon_to.pk if pos.addon_to else pos.pk
-        addon_penalty = 1 if pos.addon_to else 0
-        return i, addon_penalty, pos.pk
-
     @cached_property
     def _positions_for_questions(self):
         raise NotImplementedError()

@@ -497,9 +497,9 @@ class AddOnsStep(CartMixin, AsyncAction, TemplateFlowStep):
         formset = []
         quota_cache = {}
         item_cache = {}
-        for cartpos in get_cart(self.request).filter(addon_to__isnull=True).prefetch_related(
+        for cartpos in sorted(get_cart(self.request).filter(addon_to__isnull=True).prefetch_related(
             'item__addons', 'item__addons__addon_category', 'addons', 'addons__variation',
-        ).order_by('pk'):
+        ), key=lambda c: c.sort_key):
             formsetentry = {
                 'pos': cartpos,
                 'item': cartpos.item,
