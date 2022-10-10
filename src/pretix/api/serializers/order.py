@@ -1285,6 +1285,9 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
 
             if not simulate:
                 for cp in delete_cps:
+                    if cp.addon_to_id:
+                        continue
+                    cp.addons.all().delete()
                     cp.delete()
 
         order.total = sum([p.price for p in pos_map.values()])
