@@ -35,6 +35,7 @@
 import hashlib
 import json
 import logging
+import urllib.parse
 
 import requests
 import stripe
@@ -63,7 +64,7 @@ from pretix.control.permissions import (
 )
 from pretix.control.views.event import DecoupleMixin
 from pretix.control.views.organizer import OrganizerDetailViewMixin
-from pretix.multidomain.urlreverse import eventreverse
+from pretix.multidomain.urlreverse import build_absolute_uri, eventreverse
 from pretix.plugins.stripe.forms import OrganizerStripeSettingsForm
 from pretix.plugins.stripe.models import ReferencedStripeObject
 from pretix.plugins.stripe.payment import StripeCC, StripeSettingsHolder
@@ -76,17 +77,24 @@ logger = logging.getLogger('pretix.plugins.stripe')
 
 @xframe_options_exempt
 def redirect_view(request, *args, **kwargs):
-    signer = signing.Signer(salt='safe-redirect')
     try:
-        url = signer.unsign(request.GET.get('url', ''))
+        data = signing.loads(request.GET.get('data', ''), salt='safe-redirect')
     except signing.BadSignature:
         return HttpResponseBadRequest('Invalid parameter')
 
-    r = render(request, 'pretixplugins/stripe/redirect.html', {
-        'url': url,
-    })
-    r._csp_ignore = True
-    return r
+    if 'go' in request.GET:
+        if 'session' in data:
+            for k, v in data['session'].items():
+                request.session[k] = v
+        return redirect(data['url'])
+    else:
+        params = request.GET.copy()
+        params['go'] = '1'
+        r = render(request, 'pretixplugins/stripe/redirect.html', {
+            'url': build_absolute_uri(request.event, 'plugins:stripe:redirect') + '?' + urllib.parse.urlencode(params),
+        })
+        r._csp_ignore = True
+        return r
 
 
 @scopes_disabled()
