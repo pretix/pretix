@@ -172,13 +172,12 @@ class WaitingListActionView(EventPermissionRequiredMixin, WaitingListQuerySetMix
     model = WaitingListEntry
     permission = 'can_change_orders'
     form_class = WaitingListEntryEditForm
-    #def get_queryset(self):
-    #    return super().get_queryset().prefetch_related(None).order_by()
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
-        kwargs['event'] = self.request.event
+        kwargs['queryset']=self.get_queryset()
         return kwargs
+
 
     def _redirect_back(self):
         if "next" in self.request.GET and is_safe_url(self.request.GET.get("next"), allowed_hosts=None):
@@ -189,6 +188,12 @@ class WaitingListActionView(EventPermissionRequiredMixin, WaitingListQuerySetMix
         }))
 
     def post(self, request, *args, **kwargs):
+        form = self.form_class(
+            event=request.event,
+            queryset=self.get_queryset(),
+            # data=(self.request.POST if self.request.method == 'POST' else None),
+            # files=(self.request.FILES if self.request.method == 'POST' else None),
+        )
         if request.POST.get('action') == 'delete':
             return render(request, 'pretixcontrol/waitinglist/delete_bulk.html', {
                 'allowed': self.get_queryset().filter(voucher__isnull=True),
@@ -203,25 +208,27 @@ class WaitingListActionView(EventPermissionRequiredMixin, WaitingListQuerySetMix
             return self._redirect_back()
 
         elif request.POST.get('action') == 'update':
-            form = self.form_class(event=request.event) #event = request.event)
             #obj = form.save(commit=False)
             #obj.save(update_fields='subevent')
-            #if form.is_valid(update_fields=["subevent"]):
-            #form.save()
+            print(form.is_valid())
+            if form.is_valid():
+                form.save()
+                print("isvalid")
             for field in form:
-                print("Field Error:", field.name, field.errors)
+                print("Field Error:", field.name, field.errors, form.errors)
             return render(request, 'pretixcontrol/waitinglist/update_bulk.html', {
                 'allowed': self.get_queryset(),
                 'forbidden': self.get_queryset().filter(voucher__isnull=False),
                 'form': form,
             })
-
+            #TODO: Change Button to action
         elif request.POST.get('action') == 'update_confirm':
+            print("update:confirm")
             for obj in self.get_queryset():
+                print("update:confirm:obj")
                 if not obj.voucher_id:
-                    obj.log_action('pretix.event.orders.waitinglist.transferred', user=self.request.user)
-                    obj.subevent = obj.subevent
-            messages.success(request, _('The selected entries have been transferred.'))
+                    obj.subevent = form.cleanned_data.get('subevent')
+            messages.success(request, _('The selected entries have been deleted.'))
             return self._redirect_back()
 
         if 'assign' in request.POST:
@@ -437,61 +444,21 @@ class EntryUpdate(EventPermissionRequiredMixin, UpdateView):
     form_class = WaitingListEntryEditForm
     context_object_name = 'entry'
 
-    #def dispatch(self, request, *args, **kwargs):
-        #self.fields['subevent'] = WaitingListEntry.objects.filter(event=self.request.event)
-    #    return super().dispatch(request, *args, **kwargs)
     def get_object(self, queryset=None) -> WaitingListEntry:
         return get_object_or_404(WaitingListEntry, pk=self.kwargs['entry'], event=self.request.event, voucher__isnull=True)
 
+    def get_queryset(self):
+        return super().get_queryset().prefetch_related(None).order_by()
 
     def get_success_url(self) -> str:
         return reverse('control:event.orders.waitinglist', kwargs={
             'event': self.request.event.slug,
             'organizer': self.request.event.organizer.slug
         })
-
-
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['queryset']=self.get_queryset()
+        return kwargs
+    #Maybe Add:
     #self.object.log_action('pretix.event.orders.waitinglist.transferred', user=self.request.user)
     #messages.success(self.request, _('The selected entry has been transferred.'))
-
-    #def get_form_kwargs(self):
-    #    kwargs = super().get_form_kwargs()
-    #    kwargs['event'] = self.request.event
-    #    return kwargs
-
-class EntriesUpdate(EventPermissionRequiredMixin, UpdateView):
-    #form_class = WaitingListForm
-    #model = WaitingListEntry
-    template_name = 'pretixcontrol/waitinglist/update_many.html'
-    permission = 'can_change_orders'
-    fields = ['subevent']
-    #context_object_name = 'entry'
-
-    def form_valid(self, form):
-        self.object.substage_set.update(myfield='new-value')
-        return super(EntriesUpdate, self).form_valid(form)
-
-    def get_object(self, queryset=None) -> WaitingListEntry:
-        try:
-            return self.request.event.waitinglistentries.get(
-                id=self.kwargs['entry'],
-                voucher__isnull=True,
-            )
-        except WaitingListEntry.DoesNotExist:
-            raise Http404(_("The requested entry does not exist."))
-
-    def get_success_url(self) -> str:
-        return reverse('control:event.orders.waitinglist', kwargs={
-            'event': self.request.event.slug,
-            'organizer': self.request.event.organizer.slug
-        })
-
-    @transaction.atomic
-    def update(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        success_url = self.get_success_url()
-        self.object.log_action('pretix.event.orders.waitinglist.transferred', user=self.request.user)
-        messages.success(self.request, _('The selected entry has been transferred.'))
-        if "next" in self.request.GET and is_safe_url(self.request.GET.get("next"), allowed_hosts=None):
-            return redirect(self.request.GET.get("next"))
-        return HttpResponseRedirect(success_url)

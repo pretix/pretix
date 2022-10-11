@@ -36,19 +36,16 @@
                 {% endfor %}
             </ul>
         {% endif %}
-        <div class="col-md-4">
-            {% bootstrap_field form.subevent %}
-            {{ form.errors }}
-            {{ form.non_field_errors }}
-        </div>
+        {% bootstrap_field form.subevent layout="control" %}
+        {{ form.errors }}
+        {{ form.non_field_errors }}
         <div class="form-group submit-group">
             <a href="{% url "control:event.orders.waitinglist" organizer=request.event.organizer.slug event=request.event.slug %}" class="btn btn-default btn-cancel">
                 {% trans "Cancel" %}
             </a>
-            <button type="submit" class="btn btn-primary btn-save">
+            <button type="submit" class="btn btn-primary btn-save" value="update_confirm" name="action">
                 {% trans "Update" %}
             </button>
         </div>
     </form>
 {% endblock %}
-SubEventBulkEditForm

@@ -264,10 +264,9 @@
                 <button type="submit" class="btn btn-danger btn-save" name="action" value="delete">
                     <i class="fa fa-trash"></i>{% trans "Delete selected" %}
                 </button>
-                            <button type="submit" class="btn btn-primary btn-save" name="action" value="update">
+                <button type="submit" class="btn btn-primary btn-save" name="action" value="update">
                     <span class="icon icon-upload"></span>{% trans "Transfer selected" %}
                 </button>
-            <a href="{% url "control:event.orders.waitinglist.update_many" organizer=request.event.organizer.slug event=request.event.slug %}?next={{ request.get_full_path|urlencode }}" class="btn btn-primary btn-sm"><i class="icon icon-upload"></i> {% trans "Transfer" %} </a>
 
             </div>
 
