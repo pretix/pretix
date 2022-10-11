@@ -140,7 +140,7 @@
                         {{ event.settings.presale_has_ended_text|rich_text }}
                     {% else %}
                         {% blocktrans trimmed %}
-                            The presale period for this event is over.
+                            The booking period for this event is over.
                         {% endblocktrans %}
                     {% endif %}
                 {% elif event.settings.presale_start_show_date %}
@@ -148,14 +148,14 @@
                     {% with time=ev.effective_presale_start|time:"TIME_FORMAT" time_24h=ev.effective_presale_start|time:"H:i" %}
                         <span data-time="{{ ev.effective_presale_start.isoformat }}" data-timezone="{{ request.event.timezone }}">
                             {% blocktrans trimmed with date="<time datetime='"|add:date_normalized|add:"'>"|add:date|add:"</time>"|safe time="<time datetime='"|add:time_24h|add:"'>"|add:time|add:"</time>"|safe %}
-                                The presale for this event will start on {{ date }} at {{ time }}.
+                                The booking period for this event will start on {{ date }} at {{ time }}.
                             {% endblocktrans %}
                         </span>
                     {% endwith %}
                     {% endwith %}
                 {% else %}
                     {% blocktrans trimmed %}
-                        The presale for this event has not yet started.
+                        The booking period for this event has not yet started.
                     {% endblocktrans %}
                 {% endif %}
             </div>

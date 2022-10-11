@@ -101,12 +101,12 @@ error_messages = {
     'min_items_per_product': _("You need to select at least %(min)s items of the product %(product)s."),
     'min_items_per_product_removed': _("We removed %(product)s from your cart as you can not buy less than "
                                        "%(min)s items of it."),
-    'not_started': _('The presale period for this event has not yet started.'),
-    'ended': _('The presale period for this event has ended.'),
+    'not_started': _('The booking period for this event has not yet started.'),
+    'ended': _('The booking period for this event has ended.'),
     'payment_ended': _('All payments for this event need to be confirmed already, so no new orders can be created.'),
-    'some_subevent_not_started': _('The presale period for this event has not yet started. The affected positions '
+    'some_subevent_not_started': _('The booking period for this event has not yet started. The affected positions '
                                    'have been removed from your cart.'),
-    'some_subevent_ended': _('The presale period for one of the events in your cart has ended. The affected '
+    'some_subevent_ended': _('The booking period for one of the events in your cart has ended. The affected '
                              'positions have been removed from your cart.'),
     'price_too_high': _('The entered price is to high.'),
     'voucher_invalid': _('This voucher code is not known in our database.'),

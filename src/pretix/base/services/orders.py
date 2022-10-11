@@ -113,8 +113,8 @@ error_messages = {
                                "surplus items from your cart."),
     'busy': _('We were not able to process your request completely as the '
               'server was too busy. Please try again.'),
-    'not_started': _('The presale period for this event has not yet started.'),
-    'ended': _('The presale period has ended.'),
+    'not_started': _('The booking period for this event has not yet started.'),
+    'ended': _('The booking period has ended.'),
     'voucher_invalid': _('The voucher code used for one of the items in your cart is not known in our database.'),
     'voucher_redeemed': _('The voucher code used for one of the items in your cart has already been used the maximum '
                           'number of times allowed. We removed this item from your cart.'),
@@ -125,9 +125,9 @@ error_messages = {
     'voucher_invalid_item': _('The voucher code used for one of the items in your cart is not valid for this item. We '
                               'removed this item from your cart.'),
     'voucher_required': _('You need a valid voucher code to order one of the products.'),
-    'some_subevent_not_started': _('The presale period for one of the events in your cart has not yet started. The '
+    'some_subevent_not_started': _('The booking period for one of the events in your cart has not yet started. The '
                                    'affected positions have been removed from your cart.'),
-    'some_subevent_ended': _('The presale period for one of the events in your cart has ended. The affected '
+    'some_subevent_ended': _('The booking period for one of the events in your cart has ended. The affected '
                              'positions have been removed from your cart.'),
     'seat_invalid': _('One of the seats in your order was invalid, we removed the position from your cart.'),
     'seat_unavailable': _('One of the seats in your order has been taken in the meantime, we removed the position from your cart.'),

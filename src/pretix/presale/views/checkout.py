@@ -56,7 +56,7 @@ class CheckoutView(View):
             return self.redirect(self.get_index_url(self.request))
 
         if not request.event.presale_is_running:
-            messages.error(request, _("The presale for this event is over or has not yet started."))
+            messages.error(request, _("The booking period for this event is over or has not yet started."))
             return self.redirect(self.get_index_url(self.request))
 
         cart_error = None

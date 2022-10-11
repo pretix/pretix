@@ -671,14 +671,14 @@ class WidgetAPIProductList(EventListMixin, View):
                 if request.event.settings.presale_has_ended_text:
                     data['error'] = str(request.event.settings.presale_has_ended_text)
                 else:
-                    data['error'] = gettext('The presale period for this event is over.')
+                    data['error'] = gettext('The booking period for this event is over.')
             elif request.event.settings.presale_start_show_date:
-                data['error'] = gettext('The presale for this event will start on %(date)s at %(time)s.') % {
+                data['error'] = gettext('The booking period for this event will start on %(date)s at %(time)s.') % {
                     'date': date_format(ev.effective_presale_start.astimezone(request.event.timezone), "SHORT_DATE_FORMAT"),
                     'time': date_format(ev.effective_presale_start.astimezone(request.event.timezone), "TIME_FORMAT"),
                 }
             else:
-                data['error'] = gettext('The presale for this event has not yet started.')
+                data['error'] = gettext('The booking period for this event has not yet started.')
 
         self.voucher = None
         if 'voucher' in request.GET:

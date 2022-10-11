@@ -95,11 +95,11 @@ class WaitingView(EventViewMixin, FormView):
             return redirect(self.get_index_url())
 
         if self.request.event.presale_has_ended:
-            messages.error(request, _("The presale period for this event is over."))
+            messages.error(request, _("The booking period for this event is over."))
             return redirect(self.get_index_url())
 
         if not self.request.event.presale_is_running:
-            messages.error(request, _("The presale for this event has not yet started."))
+            messages.error(request, _("The booking period for this event has not yet started."))
             return redirect(self.get_index_url())
 
         self.subevent = None

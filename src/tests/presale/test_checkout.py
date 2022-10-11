@@ -2942,7 +2942,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
         self.assertGreaterEqual(len(doc.select(".alert-danger")), 1)
-        assert 'presale period for one of the events in your cart has not yet started.' in response.content.decode()
+        assert 'booking period for one of the events in your cart has not yet started.' in response.content.decode()
         with scopes_disabled():
             assert not CartPosition.objects.filter(cart_id=self.session_key).exists()
 
@@ -2961,7 +2961,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
         self.assertGreaterEqual(len(doc.select(".alert-danger")), 1)
-        assert 'presale period for one of the events in your cart has ended.' in response.content.decode()
+        assert 'booking period for one of the events in your cart has ended.' in response.content.decode()
         with scopes_disabled():
             assert not CartPosition.objects.filter(cart_id=self.session_key).exists()
 
@@ -2981,7 +2981,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
         self.assertGreaterEqual(len(doc.select(".alert-danger")), 1)
-        assert 'presale period for one of the events in your cart has ended.' in response.content.decode()
+        assert 'booking period for one of the events in your cart has ended.' in response.content.decode()
         with scopes_disabled():
             assert not CartPosition.objects.filter(cart_id=self.session_key).exists()
 
