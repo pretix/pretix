@@ -2756,6 +2756,11 @@ PERSON_NAME_TITLE_GROUPS = OrderedDict([
         'Dr.',
         'Prof.',
         'Prof. Dr.',
+    ))),
+    ('dr_prof_he', ('Dr., Prof., H.E.', (
+        'Dr.',
+        'Prof.',
+        'H.E.',
     )))
 ])
 

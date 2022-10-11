@@ -589,7 +589,7 @@ class EventSettingsForm(SettingsForm):
             (k, '{scheme}: {samples}'.format(
                 scheme=v[0],
                 samples=', '.join(v[1])
-            ))
+            ) if v[0] != ', '.join(v[1]) else v[0])
             for k, v in PERSON_NAME_TITLE_GROUPS.items()
         ]
         if not self.event.has_subevents:
