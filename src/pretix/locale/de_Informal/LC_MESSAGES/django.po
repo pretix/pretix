@@ -8,16 +8,16 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-10-11 09:30+0000\n"
-"PO-Revision-Date: 2022-10-11 11:33+0200\n"
+"PO-Revision-Date: 2022-10-12 08:26+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
-"Language: de\n"
+"Language: de_Informal\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Poedit 3.1\n"
+"X-Generator: Weblate 4.14.1\n"
 
 #: pretix/api/auth/devicesecurity.py:28
 msgid ""
@@ -6452,7 +6452,7 @@ msgstr "Du hast nicht die nötige Berechtigung, um diesen Export durchzuführen.
 #, python-brace-format
 msgctxt "invoice"
 msgid "Please complete your payment before {expire_date}."
-msgstr "Bitte bezahle den offenen Betrag bis zum {expire_date}."
+msgstr "Wir bitten um Bezahlung des offenen Betrags bis zum {expire_date}."
 
 #: pretix/base/services/invoices.py:117
 #, python-brace-format
