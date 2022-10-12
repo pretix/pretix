@@ -312,7 +312,7 @@ def test_voucher_create_full(token_client, organizer, event, item):
         token_client, organizer, event,
         data={
             'code': 'ABCDEFGHI',
-            'max_usages': 1,
+            'max_usages': 10,
             'min_usages': 10,
             'valid_until': None,
             'block_quota': False,
@@ -329,7 +329,7 @@ def test_voucher_create_full(token_client, organizer, event, item):
     )
 
     assert v.code == 'ABCDEFGHI'
-    assert v.max_usages == 1
+    assert v.max_usages == 10
     assert v.min_usages == 10
     assert v.redeemed == 0
     assert v.valid_until is None
