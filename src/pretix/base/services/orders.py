@@ -115,6 +115,8 @@ error_messages = {
               'server was too busy. Please try again.'),
     'not_started': _('The booking period for this event has not yet started.'),
     'ended': _('The booking period has ended.'),
+    'voucher_min_usages': _('The voucher code "%(voucher)s" can only be used if you select at least %(number)s '
+                            'matching products.'),
     'voucher_invalid': _('The voucher code used for one of the items in your cart is not known in our database.'),
     'voucher_redeemed': _('The voucher code used for one of the items in your cart has already been used the maximum '
                           'number of times allowed. We removed this item from your cart.'),
@@ -569,6 +571,7 @@ def _check_positions(event: Event, now_dt: datetime, positions: List[CartPositio
     products_seen = Counter()
     q_avail = Counter()
     v_avail = Counter()
+    v_usages = Counter()
     v_budget = {}
     deleted_positions = set()
     seats_seen = set()
@@ -606,6 +609,7 @@ def _check_positions(event: Event, now_dt: datetime, positions: List[CartPositio
             break
 
         if cp.voucher:
+            v_usages[cp.voucher] += 1
             if cp.voucher not in v_avail:
                 redeemed_in_carts = CartPosition.objects.filter(
                     Q(voucher=cp.voucher) & Q(event=event) & Q(expires__gte=now_dt)
@@ -716,6 +720,13 @@ def _check_positions(event: Event, now_dt: datetime, positions: List[CartPositio
         if not quota_ok:
             # Sorry, can't let you keep that!
             delete(cp)
+
+    for voucher, cnt in v_usages.items():
+        if 0 < cnt < voucher.min_usages - voucher.redeemed:
+            raise OrderError(error_messages['voucher_min_usages'], {
+                'voucher': voucher.code,
+                'number': (voucher.min_usages - voucher.redeemed),
+            })
 
     # Check prices
     sorted_positions = [cp for cp in sorted_positions if cp.pk and cp.pk not in deleted_positions]

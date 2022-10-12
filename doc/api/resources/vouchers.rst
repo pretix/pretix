@@ -19,6 +19,8 @@ max_usages                            integer                    The maximum num
                                                                  redeemed (default: 1).
 redeemed                              integer                    The number of times this voucher already has been
                                                                  redeemed.
+min_usages                            integer                    The minimum number of times this voucher must be
+                                                                 redeemed on first usage (default: 1).
 valid_until                           datetime                   The voucher expiration date (or ``null``).
 block_quota                           boolean                    If ``true``, quota is blocked for this voucher.
 allow_ignore_quota                    boolean                    If ``true``, this voucher can be redeemed even if a
