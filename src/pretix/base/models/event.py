@@ -590,7 +590,6 @@ class Event(EventMixin, LoggedModel):
         self.settings.event_list_type = 'calendar'
         self.settings.invoice_email_attachment = True
         self.settings.name_scheme = 'given_family'
-        self.settings.payment_banktransfer_invoice_immediately = True
 
     @property
     def social_image(self):

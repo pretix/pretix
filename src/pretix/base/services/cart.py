@@ -971,7 +971,6 @@ class CartManager:
         new_cart_positions = []
 
         err = err or self._check_min_max_per_product()
-        err = err or self._check_min_per_voucher()
 
         self._operations.sort(key=lambda a: self.order[type(a)])
         seats_seen = set()
@@ -1221,6 +1220,7 @@ class CartManager:
 
         err = self._delete_out_of_timeframe()
         err = self.extend_expired_positions() or err
+        err = err or self._check_min_per_voucher()
 
         lockfn = NoLockManager
         if self._require_locking():
