@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-10-11 09:30+0000\n"
-"PO-Revision-Date: 2022-06-20 02:00+0000\n"
+"PO-Revision-Date: 2022-10-13 09:00+0000\n"
 "Last-Translator: fyksen <fredrik@fyksen.me>\n"
 "Language-Team: Norwegian Bokmål <https://translate.pretix.eu/projects/pretix/"
 "pretix/nb_NO/>\n"
@@ -17,14 +17,14 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.12.2\n"
+"X-Generator: Weblate 4.14.1\n"
 
 #: pretix/api/auth/devicesecurity.py:28
 msgid ""
 "Full device access (reading and changing orders and gift cards, reading of "
 "products and settings)"
 msgstr ""
-"Full enhetsadgang (se og endre ordre og gavekort, se produkter og "
+"Full enhetstilgang (se og endre ordre og gavekort, se produkter og "
 "innstillinger)"
 
 #: pretix/api/auth/devicesecurity.py:44
@@ -33,11 +33,11 @@ msgstr "pretixSCAN"
 
 #: pretix/api/auth/devicesecurity.py:79
 msgid "pretixSCAN (kiosk mode, no order sync, no search)"
-msgstr "pretixSCAN(kioskmodus, kun online, ingen synkronisering, ingen søk)"
+msgstr "pretixSCAN (kioskmodus, kun online, ingen synkronisering, ingen søk)"
 
 #: pretix/api/auth/devicesecurity.py:112
 msgid "pretixSCAN (online only, no order sync)"
-msgstr "pretixSCAN(kun online, ingen ordre synkronisering)"
+msgstr "pretixSCAN (kun online, ingen ordre synkronisering)"
 
 #: pretix/api/auth/devicesecurity.py:146
 msgid "pretixPOS"
@@ -49,7 +49,7 @@ msgstr "Applikasjonsnavn"
 
 #: pretix/api/models.py:42 pretix/base/models/customers.py:407
 msgid "Redirection URIs"
-msgstr "Videresendings URL"
+msgstr "Videresendingslenke"
 
 #: pretix/api/models.py:43 pretix/base/models/customers.py:408
 msgid "Allowed URIs list, space separated"
@@ -76,12 +76,12 @@ msgstr "Mål URL"
 #: pretix/api/models.py:99 pretix/base/models/devices.py:121
 #: pretix/base/models/organizer.py:259
 msgid "All events (including newly created ones)"
-msgstr "Alle eventer (inkludert nylagde)"
+msgstr "Alle eventer (inkludert nylig opprettede)"
 
 #: pretix/api/models.py:100 pretix/base/models/devices.py:122
 #: pretix/base/models/organizer.py:260
 msgid "Limit to events"
-msgstr "Begrens til eventer"
+msgstr "Begrens til arrngementer"
 
 #: pretix/api/serializers/cart.py:168 pretix/api/serializers/order.py:1128
 msgid "The product \"{}\" is not assigned to a quota."
@@ -90,13 +90,13 @@ msgstr "Dette produktet \"{}\" er ikke tildelt noe kvote."
 #: pretix/api/serializers/checkin.py:65 pretix/base/models/event.py:1523
 #: pretix/base/models/items.py:1470 pretix/base/models/items.py:1721
 msgid "One or more items do not belong to this event."
-msgstr "En eller flere gjenstander tilhører ikke dette eventet."
+msgstr "En eller flere produkter tilhører ikke dette arrangementet."
 
 #: pretix/api/serializers/checkin.py:69 pretix/api/serializers/checkin.py:72
 #: pretix/base/models/items.py:1732 pretix/base/models/items.py:1735
 #: pretix/base/models/waitinglist.py:239 pretix/base/models/waitinglist.py:242
 msgid "The subevent does not belong to this event."
-msgstr "Undereventet tilhører ikke dette eventet."
+msgstr "Undereventet tilhører ikke dette arrangementet."
 
 #: pretix/api/serializers/checkin.py:76
 msgid "Unknown sales channel."
