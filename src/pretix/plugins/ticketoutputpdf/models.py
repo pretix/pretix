@@ -202,7 +202,8 @@ DEFAULT_TICKET_LAYOUT = '''[{
     "type":"barcodearea",
     "left":"130.40",
     "bottom":"204.50",
-    "size":"64.00"
+    "size":"64.00",
+    "content":"secret"
 },
 {
     "type":"poweredby",
