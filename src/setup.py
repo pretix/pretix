@@ -222,7 +222,7 @@ setup(
         'reportlab==3.6.*',
         'requests==2.28.*',
         'sentry-sdk==1.8.*',
-        'sepaxml==2.4.*,>=2.4.1',
+        'sepaxml>=2.4,<2.6',
         'slimit',
         'static3==0.7.*',
         'stripe==4.2.*',
