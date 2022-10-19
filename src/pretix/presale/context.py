@@ -78,9 +78,9 @@ def _default_context(request):
     _html_foot = []
     _footer = []
 
-    if hasattr(request, 'event'):
+    if hasattr(request, 'event') and request.event:
         pretix_settings = request.event.settings
-    elif hasattr(request, 'organizer'):
+    elif hasattr(request, 'organizer') and request.organizer:
         pretix_settings = request.organizer.settings
     else:
         pretix_settings = GlobalSettingsObject().settings
