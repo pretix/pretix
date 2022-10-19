@@ -61,6 +61,7 @@ from pretix.api.serializers.orderchange import (
     OrderPositionCreateForExistingOrderSerializer,
     OrderPositionInfoPatchSerializer,
 )
+from pretix.api.views import RichOrderingFilter
 from pretix.base.i18n import language
 from pretix.base.models import (
     CachedCombinedTicket, CachedTicket, Checkin, Device, EventMetaValue,
@@ -930,7 +931,7 @@ with scopes_disabled():
 class OrderPositionViewSet(viewsets.ModelViewSet):
     serializer_class = OrderPositionSerializer
     queryset = OrderPosition.all.none()
-    filter_backends = (DjangoFilterBackend, OrderingFilter)
+    filter_backends = (DjangoFilterBackend, RichOrderingFilter)
     ordering = ('order__datetime', 'positionid')
     ordering_fields = ('order__code', 'order__datetime', 'positionid', 'attendee_name', 'order__status',)
     filterset_class = OrderPositionFilter
