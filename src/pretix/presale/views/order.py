@@ -669,7 +669,7 @@ class OrderPayChangeMethod(EventViewMixin, OrderDetailMixin, TemplateView):
                 request.session['payment_change_{}'.format(self.order.pk)] = '1'
 
                 with transaction.atomic():
-                    old_fee, new_fee, fee, newpayment = change_payment_provider(self.order, p['provider'], None)
+                    old_fee, new_fee, fee, newpayment = change_payment_provider(self.order, p['provider'], None, source=("pretix.presale", None))
 
                 resp = p['provider'].payment_prepare(request, newpayment)
                 if isinstance(resp, str):
@@ -954,7 +954,7 @@ class OrderCancelDo(EventViewMixin, OrderDetailMixin, AsyncAction, View):
         else:
             comment = gettext('Canceled by customer')
             return self.do(self.order.pk, cancellation_fee=fee, try_auto_refund=auto_refund, refund_as_giftcard=giftcard,
-                           refund_comment=comment)
+                           refund_comment=comment, source=("pretix.presale", None))
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)

@@ -148,7 +148,7 @@ def mark_order_paid(*args, **kwargs):
     raise NotImplementedError("This method is no longer supported since pretix 1.17.")
 
 
-def reactivate_order(order: Order, force: bool=False, user: User=None, auth=None):
+def reactivate_order(order: Order, force: bool=False, user: User=None, auth=None, source=None):
     """
     Reactivates a canceled order. If ``force`` is not set to ``True``, this will fail if there is not
     enough quota.
@@ -189,7 +189,7 @@ def reactivate_order(order: Order, force: bool=False, user: User=None, auth=None
                     for m in position.granted_memberships.all():
                         m.canceled = False
                         m.save()
-                order.create_transactions()
+                order.create_transactions(source=source)
         else:
             raise OrderError(is_available)
 
@@ -202,7 +202,7 @@ def reactivate_order(order: Order, force: bool=False, user: User=None, auth=None
         generate_invoice(order)
 
 
-def extend_order(order: Order, new_date: datetime, force: bool=False, user: User=None, auth=None):
+def extend_order(order: Order, new_date: datetime, force: bool=False, user: User=None, auth=None, source=None):
     """
     Extends the deadline of an order. If the order is already expired, the quota will be checked to
     see if this is actually still possible. If ``force`` is set to ``True``, the result of this check
@@ -231,7 +231,7 @@ def extend_order(order: Order, new_date: datetime, force: bool=False, user: User
             num_invoices = order.invoices.filter(is_cancellation=False).count()
             if num_invoices > 0 and order.invoices.filter(is_cancellation=True).count() >= num_invoices and invoice_qualified(order):
                 generate_invoice(order)
-            order.create_transactions()
+            order.create_transactions(source=source)
 
     if order.status == Order.STATUS_PENDING:
         change(was_expired=False)
@@ -245,16 +245,17 @@ def extend_order(order: Order, new_date: datetime, force: bool=False, user: User
 
 
 @transaction.atomic
-def mark_order_refunded(order, user=None, auth=None, api_token=None):
+def mark_order_refunded(order, user=None, auth=None, api_token=None, source=None):
     oautha = auth.pk if isinstance(auth, OAuthApplication) else None
     device = auth.pk if isinstance(auth, Device) else None
     api_token = (api_token.pk if api_token else None) or (auth if isinstance(auth, TeamAPIToken) else None)
     return _cancel_order(
-        order.pk, user.pk if user else None, send_mail=False, api_token=api_token, device=device, oauth_application=oautha
+        order.pk, user.pk if user else None, send_mail=False, api_token=api_token, device=device, oauth_application=oautha,
+        source=source
     )
 
 
-def mark_order_expired(order, user=None, auth=None):
+def mark_order_expired(order, user=None, auth=None, source=None):
     """
     Mark this order as expired. This sets the payment status and returns the order object.
     :param order: The order to change
@@ -273,13 +274,13 @@ def mark_order_expired(order, user=None, auth=None):
         i = order.invoices.filter(is_cancellation=False).last()
         if i and not i.refered.exists():
             generate_cancellation(i)
-        order.create_transactions()
+        order.create_transactions(source=source)
 
     order_expired.send(order.event, order=order)
     return order
 
 
-def approve_order(order, user=None, send_mail: bool=True, auth=None, force=False):
+def approve_order(order, user=None, send_mail: bool=True, auth=None, force=False, source=None):
     """
     Mark this order as approved
     :param order: The order to change
@@ -292,7 +293,7 @@ def approve_order(order, user=None, send_mail: bool=True, auth=None, force=False
         order.require_approval = False
         order.set_expires(now(), order.event.subevents.filter(id__in=[p.subevent_id for p in order.positions.all()]))
         order.save(update_fields=['require_approval', 'expires'])
-        order.create_transactions()
+        order.create_transactions(source=source)
 
         order.log_action('pretix.event.order.approved', user=user, auth=auth)
         if order.total == Decimal('0.00'):
@@ -341,7 +342,7 @@ def approve_order(order, user=None, send_mail: bool=True, auth=None, force=False
     return order.pk
 
 
-def deny_order(order, comment='', user=None, send_mail: bool=True, auth=None):
+def deny_order(order, comment='', user=None, send_mail: bool=True, auth=None, source=None):
     """
     Mark this order as canceled
     :param order: The order to change
@@ -365,7 +366,7 @@ def deny_order(order, comment='', user=None, send_mail: bool=True, auth=None):
         for position in order.positions.all():
             if position.voucher:
                 Voucher.objects.filter(pk=position.voucher.pk).update(redeemed=Greatest(0, F('redeemed') - 1))
-        order.create_transactions()
+        order.create_transactions(source=source)
 
     order_denied.send(order.event, order=order)
 
@@ -386,7 +387,7 @@ def deny_order(order, comment='', user=None, send_mail: bool=True, auth=None):
 
 
 def _cancel_order(order, user=None, send_mail: bool=True, api_token=None, device=None, oauth_application=None,
-                  cancellation_fee=None, keep_fees=None, cancel_invoice=True, comment=None):
+                  cancellation_fee=None, keep_fees=None, cancel_invoice=True, comment=None, source=None):
     """
     Mark this order as canceled
     :param order: The order to change
@@ -486,7 +487,7 @@ def _cancel_order(order, user=None, send_mail: bool=True, api_token=None, device
                          data={'cancellation_fee': cancellation_fee, 'comment': comment})
         order.cancellation_requests.all().delete()
 
-        order.create_transactions()
+        order.create_transactions(source=source)
 
         if send_mail:
             email_template = order.event.settings.mail_text_order_canceled
@@ -813,7 +814,7 @@ def _get_fees(positions: List[CartPosition], payment_provider: BasePaymentProvid
 def _create_order(event: Event, email: str, positions: List[CartPosition], now_dt: datetime,
                   payment_provider: BasePaymentProvider, locale: str=None, address: InvoiceAddress=None,
                   meta_info: dict=None, sales_channel: str='web', gift_cards: list=None, shown_total=None,
-                  customer=None):
+                  customer=None, source=None):
     p = None
     sales_channel = get_all_sales_channels()[sales_channel]
 
@@ -915,7 +916,7 @@ def _create_order(event: Event, email: str, positions: List[CartPosition], now_d
             )
 
         orderpositions = OrderPosition.transform_cart_positions(positions, order)
-        order.create_transactions(positions=orderpositions, fees=fees, is_new=True)
+        order.create_transactions(positions=orderpositions, fees=fees, is_new=True, source=source, dt_now=now_dt)
         order.log_action('pretix.event.order.placed')
         if order.require_approval:
             order.log_action('pretix.event.order.placed.require_approval')
@@ -967,7 +968,7 @@ def _order_placed_email_attendee(event: Event, order: Order, position: OrderPosi
 
 def _perform_order(event: Event, payment_provider: str, position_ids: List[str],
                    email: str, locale: str, address: int, meta_info: dict=None, sales_channel: str='web',
-                   gift_cards: list=None, shown_total=None, customer=None):
+                   gift_cards: list=None, shown_total=None, customer=None, source=None):
     if payment_provider:
         pprov = event.get_payment_providers().get(payment_provider)
         if not pprov:
@@ -1026,7 +1027,7 @@ def _perform_order(event: Event, payment_provider: str, position_ids: List[str],
         _check_positions(event, now_dt, positions, address=addr, sales_channel=sales_channel, customer=customer)
         order, payment = _create_order(event, email, positions, now_dt, pprov,
                                        locale=locale, address=addr, meta_info=meta_info, sales_channel=sales_channel,
-                                       gift_cards=gift_cards, shown_total=shown_total, customer=customer)
+                                       gift_cards=gift_cards, shown_total=shown_total, customer=customer, source=source)
 
         free_order_flow = payment and payment_provider == 'free' and order.pending_sum == Decimal('0.00') and not order.require_approval
         if free_order_flow:
@@ -1088,7 +1089,7 @@ def expire_orders(sender, **kwargs):
             expire = o.event.settings.get('payment_term_expire_automatically', as_type=bool)
             event_id = o.event_id
         if expire:
-            mark_order_expired(o)
+            mark_order_expired(o, source=("pretix.periodic", None))
 
 
 @receiver(signal=periodic_task)
@@ -1281,7 +1282,7 @@ class OrderChangeManager:
     CancelFeeOperation = namedtuple('CancelFeeOperation', ('fee', 'price_diff'))
     RegenerateSecretOperation = namedtuple('RegenerateSecretOperation', ('position',))
 
-    def __init__(self, order: Order, user=None, auth=None, notify=True, reissue_invoice=True):
+    def __init__(self, order: Order, user=None, auth=None, notify=True, reissue_invoice=True, source=None):
         self.order = order
         self.user = user
         self.auth = auth
@@ -1296,6 +1297,7 @@ class OrderChangeManager:
         self.notify = notify
         self._invoice_dirty = False
         self._invoices = []
+        self.source = source
 
     def change_item(self, position: OrderPosition, item: Item, variation: Optional[ItemVariation]):
         if (not variation and item.has_variations) or (variation and variation.item_id != item.pk):
@@ -2331,9 +2333,9 @@ class OrderChangeManager:
                 self._reissue_invoice()
             self._clear_tickets_cache()
             self.order.touch()
-            self.order.create_transactions()
+            self.order.create_transactions(source=self.source)
             if self.split_order:
-                self.split_order.create_transactions()
+                self.split_order.create_transactions(source=self.source)
 
         if self.notify:
             notify_user_changed_order(
@@ -2368,12 +2370,12 @@ class OrderChangeManager:
 @app.task(base=ProfiledEventTask, bind=True, max_retries=5, default_retry_delay=1, throws=(OrderError,))
 def perform_order(self, event: Event, payment_provider: str, positions: List[str],
                   email: str=None, locale: str=None, address: int=None, meta_info: dict=None,
-                  sales_channel: str='web', gift_cards: list=None, shown_total=None, customer=None):
+                  sales_channel: str='web', gift_cards: list=None, shown_total=None, customer=None, source=None):
     with language(locale):
         try:
             try:
                 return _perform_order(event, payment_provider, positions, email, locale, address, meta_info,
-                                      sales_channel, gift_cards, shown_total, customer)
+                                      sales_channel, gift_cards, shown_total, customer, source=source)
             except LockTimeoutException:
                 self.retry()
         except (MaxRetriesExceededError, LockTimeoutException):
@@ -2503,11 +2505,12 @@ def _try_auto_refund(order, auto_refund=True, manual_refund=False, allow_partial
 @scopes_disabled()
 def cancel_order(self, order: int, user: int=None, send_mail: bool=True, api_token=None, oauth_application=None,
                  device=None, cancellation_fee=None, try_auto_refund=False, refund_as_giftcard=False,
-                 email_comment=None, refund_comment=None, cancel_invoice=True):
+                 email_comment=None, refund_comment=None, cancel_invoice=True, source=None):
     try:
         try:
             ret = _cancel_order(order, user, send_mail, api_token, device, oauth_application,
-                                cancellation_fee, cancel_invoice=cancel_invoice, comment=email_comment)
+                                cancellation_fee, cancel_invoice=cancel_invoice, comment=email_comment,
+                                source=source)
             if try_auto_refund:
                 _try_auto_refund(order, refund_as_giftcard=refund_as_giftcard,
                                  comment=refund_comment)
@@ -2519,7 +2522,7 @@ def cancel_order(self, order: int, user: int=None, send_mail: bool=True, api_tok
 
 
 def change_payment_provider(order: Order, payment_provider, amount=None, new_payment=None, create_log=True,
-                            recreate_invoices=True):
+                            recreate_invoices=True, source=None):
     if not get_connection().in_atomic_block:
         raise Exception('change_payment_provider should only be called in atomic transaction!')
 
@@ -2607,7 +2610,7 @@ def change_payment_provider(order: Order, payment_provider, amount=None, new_pay
             generate_cancellation(i)
             generate_invoice(order)
 
-    order.create_transactions()
+    order.create_transactions(source=source)
     return old_fee, new_fee, fee, new_payment
 
 

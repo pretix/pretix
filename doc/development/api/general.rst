@@ -38,7 +38,7 @@ Frontend
 
 
 .. automodule:: pretix.presale.signals
-   :members: order_info, order_info_top, order_meta_from_request
+   :members: order_info, order_info_top, order_meta_from_request, order_source_from_request
 
 Request flow
 """"""""""""

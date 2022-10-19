@@ -73,7 +73,7 @@ from pretix.presale.forms.customer import AuthenticationForm, RegistrationForm
 from pretix.presale.signals import (
     checkout_all_optional, checkout_confirm_messages, checkout_flow_steps,
     contact_form_fields, contact_form_fields_overrides,
-    order_meta_from_request, question_form_fields,
+    order_meta_from_request, order_source_from_request, question_form_fields,
     question_form_fields_overrides,
 )
 from pretix.presale.utils import customer_login
@@ -1319,6 +1319,11 @@ class ConfirmStep(CartMixin, AsyncAction, TemplateFlowStep):
         for receiver, response in order_meta_from_request.send(sender=request.event, request=request):
             meta_info.update(response)
 
+        source = ("pretix.presale", request.sales_channel.identifier)
+        for receiver, response in order_source_from_request.send(sender=request.event, request=request):
+            if response:
+                source = response
+
         return self.do(
             self.request.event.id,
             payment_provider=self.payment_provider.identifier if self.payment_provider else None,
@@ -1331,6 +1336,7 @@ class ConfirmStep(CartMixin, AsyncAction, TemplateFlowStep):
             gift_cards=self.cart_session.get('gift_cards'),
             shown_total=self.cart_session.get('shown_total'),
             customer=self.cart_session.get('customer'),
+            source=source,
         )
 
     def get_success_message(self, value):

@@ -210,7 +210,8 @@ def cancel_event(self, event: Event, subevent: int, auto_refund: bool,
                         fee += min(p.price, Decimal(keep_fee_per_ticket))
             fee = round_decimal(min(fee, o.payment_refund_sum), event.currency)
 
-            _cancel_order(o.pk, user, send_mail=False, cancellation_fee=fee, keep_fees=keep_fee_objects)
+            _cancel_order(o.pk, user, send_mail=False, cancellation_fee=fee, keep_fees=keep_fee_objects,
+                          source=("pretix.cancelevent", None))
             refund_amount = o.payment_refund_sum
 
             try:

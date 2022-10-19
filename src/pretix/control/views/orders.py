@@ -557,7 +557,7 @@ class OrderApprove(OrderView):
     def post(self, *args, **kwargs):
         if self.order.require_approval:
             try:
-                approve_order(self.order, user=self.request.user)
+                approve_order(self.order, user=self.request.user, source=("pretix.control", f"user:{self.request.user.pk}"))
             except OrderError as e:
                 messages.error(self.request, str(e))
             else:
@@ -608,7 +608,8 @@ class OrderDeny(OrderView):
             try:
                 deny_order(self.order, user=self.request.user,
                            comment=self.request.POST.get('comment'),
-                           send_mail=self.request.POST.get('send_email') == 'on')
+                           send_mail=self.request.POST.get('send_email') == 'on',
+                           source=("pretix.control", f"user:{self.request.user.pk}"))
             except OrderError as e:
                 messages.error(self.request, str(e))
             else:
@@ -703,7 +704,7 @@ class OrderRefundProcess(OrderView):
 
             if self.order.status != Order.STATUS_CANCELED and self.order.positions.exists():
                 if self.request.POST.get("action") == "r":
-                    mark_order_refunded(self.order, user=self.request.user)
+                    mark_order_refunded(self.order, user=self.request.user, source=("pretix.control", f"user:{self.request.user.pk}"))
                 elif not (self.order.status == Order.STATUS_PAID and self.order.pending_sum <= 0):
                     self.order.status = Order.STATUS_PENDING
                     self.order.set_expires(
@@ -1071,7 +1072,7 @@ class OrderRefundView(OrderView):
                 if any_success:
                     if self.start_form.cleaned_data.get('action') == 'mark_refunded':
                         if self.order.cancel_allowed():
-                            mark_order_refunded(self.order, user=self.request.user)
+                            mark_order_refunded(self.order, user=self.request.user, source=("pretix.control", f"user:{self.request.user.pk}"))
                     elif self.start_form.cleaned_data.get('action') == 'mark_pending':
                         if not (self.order.status == Order.STATUS_PAID and self.order.pending_sum <= 0):
                             self.order.status = Order.STATUS_PENDING
@@ -1274,7 +1275,8 @@ class OrderTransition(OrderView):
                                  email_comment=self.mark_canceled_form.cleaned_data['comment'],
                                  send_mail=self.mark_canceled_form.cleaned_data['send_email'],
                                  cancel_invoice=self.mark_canceled_form.cleaned_data.get('cancel_invoice', True),
-                                 cancellation_fee=self.mark_canceled_form.cleaned_data.get('cancellation_fee'))
+                                 cancellation_fee=self.mark_canceled_form.cleaned_data.get('cancellation_fee'),
+                                 source=("pretix.control", f"user:{self.request.user.pk}"))
                 except OrderError as e:
                     messages.error(self.request, str(e))
                 else:
@@ -1297,7 +1299,7 @@ class OrderTransition(OrderView):
             else:
                 return self.get(self.request, *args, **kwargs)
         elif self.order.status == Order.STATUS_PENDING and to == 'e':
-            mark_order_expired(self.order, user=self.request.user)
+            mark_order_expired(self.order, user=self.request.user, source=("pretix.control", f"user:{self.request.user.pk}"))
             messages.success(self.request, _('The order has been marked as expired.'))
         return redirect(self.get_order_url())
 
@@ -1574,7 +1576,8 @@ class OrderReactivate(OrderView):
             reactivate_order(
                 self.order,
                 user=self.request.user,
-                force=self.reactivate_form.cleaned_data.get('force', False)
+                force=self.reactivate_form.cleaned_data.get('force', False),
+                source=("pretix.control", f"user:{self.request.user.pk}"),
             )
             messages.success(self.request, _('The order has been reactivated.'))
         except OrderError as e:

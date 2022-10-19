@@ -195,7 +195,8 @@ def import_orders(event: Event, fileid: str, settings: dict, locale: str, user) 
                         user=user,
                         data={'source': 'import'}
                     )
-                    save_transactions += o.create_transactions(is_new=True, fees=[], positions=o._positions, save=False)
+                    save_transactions += o.create_transactions(is_new=True, fees=[], positions=o._positions, save=False,
+                                                               source=('pretix.orderimport', None))
                 Transaction.objects.bulk_create(save_transactions)
 
             for o in orders:

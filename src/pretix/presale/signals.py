@@ -184,6 +184,22 @@ You will receive the request triggering the order creation as the ``request`` ke
 
 As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
 """
+
+
+order_source_from_request = EventPluginSignal()
+"""
+Arguments: ``request``
+
+This signal is sent before an order is created through the pretixpresale frontend. It allows you
+to return a tuple that will be used as the ``source_type, source_identifier`` information on the
+created transactions. If multiple plugins reply with a value that is not ``None``, there is no
+guarantee of preference so please only respond with a tuple if you're really sure that this plugin
+is the only one that cares about this order.
+You will receive the request triggering the order creation as the ``request`` keyword argument.
+
+As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
+"""
+
 checkout_confirm_page_content = EventPluginSignal()
 """
 Arguments: 'request'

@@ -1041,9 +1041,12 @@ class Order(LockModel, LoggedModel):
                 continue
             yield op
 
-    def create_transactions(self, is_new=False, positions=None, fees=None, dt_now=None, migrated=False,
-                            _backfill_before_cancellation=False, save=True):
+    def create_transactions(self, *, source=None, is_new=False, positions=None, fees=None,
+                            dt_now=None, migrated=False, _backfill_before_cancellation=False, save=True):
         dt_now = dt_now or now()
+
+        if source is not None and (not isinstance(source, tuple) or len(source) != 2 or not all(isinstance(a, str) or a is None for a in source)):
+            return ValueError("source needs to be a 2-tuple of (source_type(str), source_identifier(str))")
 
         # Count the transactions we already have
         current_transaction_count = Counter()
@@ -1089,6 +1092,8 @@ class Order(LockModel, LoggedModel):
                     tax_value=taxvalue,
                     fee_type=feetype,
                     internal_type=internaltype,
+                    source_type=source[0] if source else None,
+                    source_identifier=source[1] if source else None,
                 ))
         create.sort(key=lambda t: (0 if t.count < 0 else 1, t.positionid or 0))
         if save:
@@ -1573,7 +1578,7 @@ class OrderPayment(models.Model):
         return self.order.event.get_payment_providers(cached=True).get(self.provider)
 
     @transaction.atomic()
-    def _mark_paid_inner(self, force, count_waitinglist, user, auth, ignore_date=False, overpaid=False):
+    def _mark_paid_inner(self, force, count_waitinglist, user, auth, ignore_date=False, overpaid=False, source=None):
         from pretix.base.signals import order_paid
         can_be_paid = self.order._can_be_paid(count_waitinglist=count_waitinglist, ignore_date=ignore_date, force=force)
         if can_be_paid is not True:
@@ -1596,7 +1601,9 @@ class OrderPayment(models.Model):
             self.order.log_action('pretix.event.order.overpaid', {}, user=user, auth=auth)
         order_paid.send(self.order.event, order=self.order)
         if status_change:
-            self.order.create_transactions()
+            self.order.create_transactions(
+                source=source or ('pretix.payment', None),
+            )
 
     def fail(self, info=None, user=None, auth=None, log_data=None):
         """
@@ -1630,7 +1637,7 @@ class OrderPayment(models.Model):
         }, user=user, auth=auth)
 
     def confirm(self, count_waitinglist=True, send_mail=True, force=False, user=None, auth=None, mail_text='',
-                ignore_date=False, lock=True, payment_date=None):
+                ignore_date=False, lock=True, payment_date=None, source=None):
         """
         Marks the payment as complete. If possible, this also marks the order as paid if no further
         payment is required
@@ -1693,10 +1700,11 @@ class OrderPayment(models.Model):
             ))
             return
 
-        self._mark_order_paid(count_waitinglist, send_mail, force, user, auth, mail_text, ignore_date, lock, payment_sum - refund_sum)
+        self._mark_order_paid(count_waitinglist, send_mail, force, user, auth, mail_text, ignore_date, lock, payment_sum - refund_sum,
+                              source)
 
     def _mark_order_paid(self, count_waitinglist=True, send_mail=True, force=False, user=None, auth=None, mail_text='',
-                         ignore_date=False, lock=True, payment_refund_sum=0):
+                         ignore_date=False, lock=True, payment_refund_sum=0, source=None):
         from pretix.base.services.invoices import (
             generate_invoice, invoice_qualified,
         )
@@ -1710,7 +1718,7 @@ class OrderPayment(models.Model):
 
         with lockfn():
             self._mark_paid_inner(force, count_waitinglist, user, auth, overpaid=payment_refund_sum > self.order.total,
-                                  ignore_date=ignore_date)
+                                  ignore_date=ignore_date, source=source)
 
         invoice = None
         if invoice_qualified(self.order):
@@ -2483,6 +2491,8 @@ class Transaction(models.Model):
 
     :param id: ID of the transaction
     :param order: Order the transaction belongs to
+    :param source_type: Functionality that caused the transaction to be created, usually the name of a module or plugin
+    :param source_identifier: Identifier of the entity that caused the transaction to be created, as defined by the module or plugin noted in ``source_type``.
     :param datetime: Date and time of the transaction
     :param migrated: Whether this object was reconstructed because the order was created before transactions where introduced
     :param positionid: Affected Position ID, in case this transaction represents a change in an order position
@@ -2504,6 +2514,12 @@ class Transaction(models.Model):
         verbose_name=_("Order"),
         related_name='transactions',
         on_delete=models.PROTECT
+    )
+    source_type = models.CharField(
+        max_length=190, db_index=True, null=True, blank=True
+    )
+    source_identifier = models.CharField(
+        max_length=190, db_index=True, null=True, blank=True
     )
     created = models.DateTimeField(
         auto_now_add=True,
