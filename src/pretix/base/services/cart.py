@@ -110,6 +110,11 @@ error_messages = {
                              'positions have been removed from your cart.'),
     'price_too_high': _('The entered price is to high.'),
     'voucher_invalid': _('This voucher code is not known in our database.'),
+    'voucher_min_usages': _('The voucher code "%(voucher)s" can only be used if you select at least %(number)s '
+                            'matching products.'),
+    'voucher_min_usages_removed': _('The voucher code "%(voucher)s" can only be used if you select at least '
+                                    '%(number)s matching products. We have therefore removed some positions from '
+                                    'your cart that can no longer be purchased like this.'),
     'voucher_redeemed': _('This voucher code has already been used the maximum number of times allowed.'),
     'voucher_redeemed_cart': _('This voucher code is currently locked since it is already contained in a cart. This '
                                'might mean that someone else is redeeming this voucher right now, or that you tried '
@@ -524,6 +529,15 @@ class CartManager:
             voucher_use_diff[voucher] += 1
             ops.append((listed_price - price_after_voucher, self.VoucherOperation(p, voucher, price_after_voucher)))
 
+        for voucher, cnt in list(voucher_use_diff.items()):
+            if 0 < cnt < (voucher.min_usages - voucher.redeemed):
+                raise CartError(
+                    _(error_messages['voucher_min_usages']) % {
+                        'voucher': voucher.code,
+                        'number': (voucher.min_usages - voucher.redeemed),
+                    }
+                )
+
         # If there are not enough voucher usages left for the full cart, let's apply them in the order that benefits
         # the user the most.
         ops.sort(key=lambda k: k[0], reverse=True)
@@ -915,6 +929,41 @@ class CartManager:
                     )
         return err
 
+    def _check_min_per_voucher(self):
+        vouchers = Counter()
+        for p in self.positions:
+            vouchers[p.voucher] += 1
+        for op in self._operations:
+            if isinstance(op, self.AddOperation):
+                vouchers[op.voucher] += op.count
+            elif isinstance(op, self.RemoveOperation):
+                vouchers[op.position.voucher] -= 1
+
+        err = None
+        for voucher, count in vouchers.items():
+            if not voucher or count == 0:
+                continue
+            if count < (voucher.min_usages - voucher.redeemed):
+                self._operations = [o for o in self._operations if not (
+                    isinstance(o, self.AddOperation) and o.voucher.pk == voucher.pk
+                )]
+                removals = [o.position.pk for o in self._operations if isinstance(o, self.RemoveOperation)]
+                for p in self.positions:
+                    if p.voucher_id == voucher.pk and p.pk not in removals:
+                        self._operations.append(self.RemoveOperation(position=p))
+                        err = _(error_messages['voucher_min_usages_removed']) % {
+                            'voucher': voucher.code,
+                            'number': (voucher.min_usages - voucher.redeemed),
+                        }
+                if not err:
+                    raise CartError(
+                        _(error_messages['voucher_min_usages']) % {
+                            'voucher': voucher.code,
+                            'number': (voucher.min_usages - voucher.redeemed),
+                        }
+                    )
+        return err
+
     def _perform_operations(self):
         vouchers_ok = self._get_voucher_availability()
         quotas_ok = _get_quota_availability(self._quota_diff, self.now_dt)
@@ -1171,6 +1220,7 @@ class CartManager:
 
         err = self._delete_out_of_timeframe()
         err = self.extend_expired_positions() or err
+        err = err or self._check_min_per_voucher()
 
         lockfn = NoLockManager
         if self._require_locking():

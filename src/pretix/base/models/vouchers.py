@@ -137,6 +137,8 @@ class Voucher(LoggedModel):
     :type max_usages: int
     :param redeemed: The number of times this voucher already has been redeemed
     :type redeemed: int
+    :param min_usages: The minimum number of times this voucher must be redeemed
+    :type min_usages: int
     :param valid_until: The expiration date of this voucher (optional)
     :type valid_until: datetime
     :param block_quota: If set to true, this voucher will reserve quota for its holder
@@ -198,6 +200,14 @@ class Voucher(LoggedModel):
     redeemed = models.PositiveIntegerField(
         verbose_name=_("Redeemed"),
         default=0
+    )
+    min_usages = models.PositiveIntegerField(
+        verbose_name=_("Minimum usages"),
+        help_text=_("If set to more than one, the voucher must be redeemed for this many products when it is used for "
+                    "the first time. On later usages, it can also be used for lower numbers of products. Note that "
+                    "this means that the total number of usages in some cases can be lower than this limit, e.g. in "
+                    "case of cancellations."),
+        default=1
     )
     budget = models.DecimalField(
         verbose_name=_("Maximum discount budget"),
@@ -350,6 +360,10 @@ class Voucher(LoggedModel):
                     'redeemed': redeemed
                 }
             )
+        if data.get('max_usages', 1) < data.get('min_usages', 1):
+            raise ValidationError(
+                _('The maximum number of usages may not be lower than the minimum number of usages.'),
+            )
 
     @staticmethod
     def clean_subevent(data, event):
@@ -464,7 +478,7 @@ class Voucher(LoggedModel):
         if quota:
             raise ValidationError(_('You need to choose a specific product if you select a seat.'))
 
-        if data.get('max_usages', 1) > 1:
+        if data.get('max_usages', 1) > 1 or data.get('min_usages', 1) > 1:
             raise ValidationError(_('Seat-specific vouchers can only be used once.'))
 
         if item and seat.product != item:

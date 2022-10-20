@@ -66,6 +66,7 @@ TEST_VOUCHER_RES = {
     'id': 1,
     'code': '43K6LKM37FBVR2YG',
     'max_usages': 1,
+    'min_usages': 1,
     'redeemed': 0,
     'valid_until': None,
     'block_quota': False,
@@ -311,7 +312,8 @@ def test_voucher_create_full(token_client, organizer, event, item):
         token_client, organizer, event,
         data={
             'code': 'ABCDEFGHI',
-            'max_usages': 1,
+            'max_usages': 10,
+            'min_usages': 10,
             'valid_until': None,
             'block_quota': False,
             'allow_ignore_quota': False,
@@ -327,10 +329,10 @@ def test_voucher_create_full(token_client, organizer, event, item):
     )
 
     assert v.code == 'ABCDEFGHI'
-    assert v.max_usages == 1
+    assert v.max_usages == 10
+    assert v.min_usages == 10
     assert v.redeemed == 0
     assert v.valid_until is None
-    assert v.max_usages == 1
     assert v.block_quota is False
     assert v.price_mode == 'set'
     assert v.value == Decimal('12.00')

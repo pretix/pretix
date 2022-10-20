@@ -1281,6 +1281,35 @@ class CartTest(CartTestMixin, TestCase):
         with scopes_disabled():
             self.assertFalse(CartPosition.objects.filter(cart_id=self.session_key, event=self.event).exists())
 
+    def test_remove_voucher_min_usages(self):
+        with scopes_disabled():
+            v = Voucher.objects.create(item=self.ticket, value=Decimal('12.00'), event=self.event,
+                                       redeemed=1, min_usages=3, max_usages=10)
+            CartPosition.objects.create(
+                event=self.event, cart_id=self.session_key, item=self.ticket, voucher=v,
+                price=23, expires=now() + timedelta(minutes=10)
+            )
+            cp2 = CartPosition.objects.create(
+                event=self.event, cart_id=self.session_key, item=self.ticket, voucher=v,
+                price=23, expires=now() + timedelta(minutes=10)
+            )
+            cp3 = CartPosition.objects.create(
+                event=self.event, cart_id=self.session_key, item=self.ticket, voucher=v,
+                price=23, expires=now() + timedelta(minutes=10)
+            )
+        self.client.post('/%s/%s/cart/remove' % (self.orga.slug, self.event.slug), {
+            'id': cp3.pk
+        }, follow=True)
+        with scopes_disabled():
+            self.assertEqual(2, CartPosition.objects.filter(cart_id=self.session_key, event=self.event).count())
+        response = self.client.post('/%s/%s/cart/remove' % (self.orga.slug, self.event.slug), {
+            'id': cp2.pk
+        }, follow=True)
+        doc = BeautifulSoup(response.rendered_content, "lxml")
+        self.assertIn('at least 2', doc.select('.alert-danger')[0].text)
+        with scopes_disabled():
+            self.assertEqual(0, CartPosition.objects.filter(cart_id=self.session_key, event=self.event).count())
+
     def test_remove_min(self):
         self.ticket.min_per_order = 2
         self.ticket.save()
@@ -1724,6 +1753,27 @@ class CartTest(CartTestMixin, TestCase):
         with scopes_disabled():
             self.assertEqual(1, CartPosition.objects.filter(cart_id=self.session_key, event=self.event).count())
 
+    def test_voucher_min_usages(self):
+        with scopes_disabled():
+            v = Voucher.objects.create(item=self.ticket, value=Decimal('12.00'), event=self.event, redeemed=1,
+                                       min_usages=5, max_usages=10)
+        response = self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
+            'item_%d' % self.ticket.id: '1',
+            '_voucher_code': v.code,
+        }, follow=True)
+        doc = BeautifulSoup(response.rendered_content, "lxml")
+        self.assertIn('select at least 4', doc.select('.alert-danger')[0].text)
+        with scopes_disabled():
+            self.assertFalse(CartPosition.objects.filter(cart_id=self.session_key, event=self.event).exists())
+        response = self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
+            'item_%d' % self.ticket.id: '4',
+            '_voucher_code': v.code,
+        }, follow=True)
+        doc = BeautifulSoup(response.rendered_content, "lxml")
+        self.assertFalse(doc.select('.alert-danger'))
+        with scopes_disabled():
+            self.assertEqual(4, CartPosition.objects.filter(cart_id=self.session_key, event=self.event).count())
+
     def test_require_voucher(self):
         with scopes_disabled():
             v = Voucher.objects.create(quota=self.quota_shirts, event=self.event)
@@ -2037,6 +2087,45 @@ class CartTest(CartTestMixin, TestCase):
             v = Voucher.objects.create(
                 event=self.event, price_mode='set', quota=self.quota_all, value=Decimal('4.00'), max_usages=100
             )
+        response = self.client.post('/%s/%s/cart/voucher' % (self.orga.slug, self.event.slug), {
+            'voucher': v.code,
+        }, follow=True)
+        assert 'alert-success' in response.rendered_content
+        with scopes_disabled():
+            cp1.refresh_from_db()
+            cp2.refresh_from_db()
+            assert cp1.voucher == v
+            assert cp1.price == Decimal('4.00')
+            assert cp2.voucher == v
+            assert cp2.price == Decimal('4.00')
+
+    def test_voucher_apply_min_usages(self):
+        with scopes_disabled():
+            cp1 = CartPosition.objects.create(
+                event=self.event, cart_id=self.session_key, item=self.ticket,
+                price=23, listed_price=23, price_after_voucher=23, expires=now() + timedelta(minutes=10)
+            )
+            cp2 = CartPosition.objects.create(
+                event=self.event, cart_id=self.session_key, item=self.shirt, variation=self.shirt_blue,
+                price=150, listed_price=150, price_after_voucher=150, expires=now() + timedelta(minutes=10)
+            )
+            v = Voucher.objects.create(
+                event=self.event, price_mode='set', quota=self.quota_all, value=Decimal('4.00'), max_usages=100,
+                min_usages=4, redeemed=1
+            )
+        response = self.client.post('/%s/%s/cart/voucher' % (self.orga.slug, self.event.slug), {
+            'voucher': v.code,
+        }, follow=True)
+        assert 'alert-danger' in response.rendered_content
+        assert 'at least 3' in response.rendered_content
+        with scopes_disabled():
+            cp1.refresh_from_db()
+            cp2.refresh_from_db()
+            assert not cp1.voucher
+            assert not cp2.voucher
+
+        v.redeemed = 2
+        v.save()
         response = self.client.post('/%s/%s/cart/voucher' % (self.orga.slug, self.event.slug), {
             'voucher': v.code,
         }, follow=True)

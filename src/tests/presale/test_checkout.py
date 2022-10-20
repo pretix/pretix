@@ -2305,6 +2305,34 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
         with scopes_disabled():
             assert CartPosition.objects.filter(cart_id=self.session_key).count() == 1
 
+    def test_voucher_min_usages(self):
+        with scopes_disabled():
+            v = Voucher.objects.create(item=self.ticket, value=Decimal('12.00'), price_mode='set', event=self.event,
+                                       valid_until=now() + timedelta(days=2), max_usages=10, redeemed=1,
+                                       min_usages=3)
+            CartPosition.objects.create(
+                event=self.event, cart_id=self.session_key, item=self.ticket,
+                price=12, expires=now() + timedelta(minutes=10), voucher=v
+            )
+        self._set_session('payment', 'banktransfer')
+        response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
+        doc = BeautifulSoup(response.content.decode(), "lxml")
+        self.assertIn("at least 2", doc.select(".alert-danger")[0].text)
+
+        with scopes_disabled():
+            CartPosition.objects.create(
+                event=self.event, cart_id=self.session_key, item=self.ticket,
+                price=12, expires=now() + timedelta(minutes=10), voucher=v
+            )
+        self.client.get('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug))  # required for session['shown_total']
+        response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
+        doc = BeautifulSoup(response.content.decode(), "lxml")
+        print(doc)
+        self.assertEqual(len(doc.select(".thank-you")), 1)
+        with scopes_disabled():
+            self.assertEqual(Order.objects.count(), 1)
+            self.assertEqual(OrderPosition.objects.count(), 2)
+
     def test_voucher_ignore_quota(self):
         self.quota_tickets.size = 0
         self.quota_tickets.save()
