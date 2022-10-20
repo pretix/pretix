@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-10-11 09:30+0000\n"
-"PO-Revision-Date: 2022-10-13 09:00+0000\n"
+"PO-Revision-Date: 2022-10-21 04:00+0000\n"
 "Last-Translator: fyksen <fredrik@fyksen.me>\n"
 "Language-Team: Norwegian Bokmål <https://translate.pretix.eu/projects/pretix/"
 "pretix/nb_NO/>\n"
@@ -25878,7 +25878,7 @@ msgstr ""
 
 #: pretix/settings.py:853
 msgid "Read access"
-msgstr ""
+msgstr "Leserettighet"
 
 #: pretix/settings.py:854
 msgid "Write access"
