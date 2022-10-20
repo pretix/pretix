@@ -318,7 +318,7 @@ class CustomerStep(CartMixin, TemplateFlowStep):
                 self.cart_session['customer'] = request.customer.pk
                 self.cart_session['customer_cart_tied_to_login'] = True
                 return redirect(self.get_next_url(request))
-            elif "login-sso-data" in self.request.POST:
+            elif self.request.POST.get("login-sso-data"):
                 if not self._handle_sso_login():
                     messages.error(request, _('We failed to process your authentication request, please try again.'))
                     return self.render()
