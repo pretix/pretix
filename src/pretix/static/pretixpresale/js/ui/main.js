@@ -23,6 +23,14 @@ function interpolate(fmt, object, named) {
 }
 
 var form_handlers = function (el) {
+    el.find('input, select, textarea').on('invalid', function (e) {
+        if (!$(this).is(':visible')) {
+            var panel = $(this).closest('.panel');
+            if (!panel.attr('open')) panel.addClass('details-open').attr('open', true).children(':not(summary)').slideDown();
+            if (!$(document.activeElement).is(':invalid')) this.focus();
+        }
+    });
+
     el.find(".datetimepicker").each(function () {
         $(this).datetimepicker({
             format: $("body").attr("data-datetimeformat"),
