@@ -25,7 +25,7 @@ function interpolate(fmt, object, named) {
 var form_handlers = function (el) {
     el.find('input, select, textarea').on('invalid', function (e) {
         if (!$(this).is(':visible')) {
-            $(this).closest('.panel').find('.panel-heading').trigger('click');
+            $(this).closest('.panel').addClass('details-open').attr('open', true).children(':not(summary)').slideDown();
             this.focus();
         }
     });
