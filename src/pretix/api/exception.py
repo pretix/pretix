@@ -28,7 +28,6 @@ from rest_framework.views import exception_handler, status
 
 from pretix.base.services.locking import LockTimeoutException
 
-
 logger = logging.getLogger(__name__)
 
 
