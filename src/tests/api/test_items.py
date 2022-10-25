@@ -477,6 +477,39 @@ def test_item_create(token_client, organizer, event, item, category, taxrule, me
 
 
 @pytest.mark.django_db
+def test_item_create_price_required(token_client, organizer, event, item, category, taxrule):
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/items/'.format(organizer.slug, event.slug),
+        {
+            "category": category.pk,
+            "name": {
+                "en": "Ticket"
+            },
+            "active": True,
+            "description": None,
+        },
+        format='json'
+    )
+    assert resp.status_code == 400
+    assert resp.data == {"default_price": ["This field is required."]}
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/items/'.format(organizer.slug, event.slug),
+        {
+            "category": category.pk,
+            "name": {
+                "en": "Ticket"
+            },
+            "active": True,
+            "description": None,
+            "default_price": None,
+        },
+        format='json'
+    )
+    assert resp.status_code == 400
+    assert resp.data == {"default_price": ["This field may not be null."]}
+
+
+@pytest.mark.django_db
 def test_item_create_with_variation(token_client, organizer, event, item, category, taxrule):
     resp = token_client.post(
         '/api/v1/organizers/{}/events/{}/items/'.format(organizer.slug, event.slug),
