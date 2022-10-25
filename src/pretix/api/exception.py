@@ -19,10 +19,17 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
+import logging
+
+import ujson
+from rest_framework import exceptions
 from rest_framework.response import Response
 from rest_framework.views import exception_handler, status
 
 from pretix.base.services.locking import LockTimeoutException
+
+
+logger = logging.getLogger(__name__)
 
 
 def custom_exception_handler(exc, context):
@@ -36,5 +43,8 @@ def custom_exception_handler(exc, context):
                 'Retry-After': 5
             }
         )
+
+    if isinstance(exc, exceptions.APIException):
+        logger.info(f'API Exception [{exc.status_code}]: {ujson.dumps(exc.detail)}')
 
     return response
