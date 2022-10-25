@@ -92,6 +92,11 @@ class CartPositionViewSet(CreateModelMixin, DestroyModelMixin, viewsets.ReadOnly
     def perform_create(self, serializer):
         raise NotImplementedError()
 
+    @transaction.atomic()
+    def perform_destroy(self, instance):
+        instance.addons.all().delete()
+        instance.delete()
+
     def _require_locking(self, quota_diff, voucher_use_diff, seat_diff):
         if voucher_use_diff or seat_diff:
             # If any vouchers or seats are used, we lock to make sure we don't redeem them to often

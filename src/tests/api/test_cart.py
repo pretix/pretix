@@ -167,6 +167,12 @@ def test_cp_delete(token_client, organizer, event, item, taxrule, question):
             datetime=datetime.datetime(2018, 6, 11, 10, 0, 0, 0, tzinfo=UTC),
             expires=datetime.datetime(2018, 6, 11, 10, 0, 0, 0, tzinfo=UTC)
         )
+        CartPosition.objects.create(
+            event=event, cart_id="aaa@api", item=item, addon_to=cr,
+            price=23, attendee_name_parts={'full_name': 'Peter'},
+            datetime=datetime.datetime(2018, 6, 11, 10, 0, 0, 0, tzinfo=UTC),
+            expires=datetime.datetime(2018, 6, 11, 10, 0, 0, 0, tzinfo=UTC)
+        )
     res = dict(TEST_CARTPOSITION_RES)
     res["id"] = cr.pk
     res["item"] = item.pk
