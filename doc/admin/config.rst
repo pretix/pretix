@@ -117,6 +117,9 @@ Example::
 ``loglevel``
     Set console and file log level (``DEBUG``, ``INFO``, ``WARNING``, ``ERROR`` or ``CRITICAL``). Defaults to ``INFO``.
 
+``request_id_header``
+    Specifies the name of a header that should be used for logging request IDs. Off by default.
+
 Locale settings
 ---------------
 

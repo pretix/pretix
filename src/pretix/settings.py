@@ -178,6 +178,8 @@ CSRF_TRUSTED_ORIGINS = [urlparse(SITE_URL).hostname]
 
 TRUST_X_FORWARDED_FOR = config.get('pretix', 'trust_x_forwarded_for', fallback=False)
 
+REQUEST_ID_HEADER = config.get('pretix', 'request_id_header', fallback=False)
+
 if config.get('pretix', 'trust_x_forwarded_proto', fallback=False):
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
@@ -439,6 +441,7 @@ CORE_MODULES = {
 }
 
 MIDDLEWARE = [
+    'pretix.helpers.logs.RequestIdMiddleware',
     'pretix.api.middleware.IdempotencyMiddleware',
     'pretix.multidomain.middlewares.MultiDomainMiddleware',
     'pretix.base.middleware.CustomCommonMiddleware',
@@ -684,31 +687,41 @@ LOGGING = {
     'disable_existing_loggers': False,
     'formatters': {
         'default': {
-            'format': '%(levelname)s %(asctime)s %(name)s %(module)s %(message)s'
+            'format': (
+                '%(levelname)s %(asctime)s RequestId=%(request_id)s %(name)s %(module)s %(message)s'
+                if REQUEST_ID_HEADER
+                else '%(levelname)s %(asctime)s %(name)s %(module)s %(message)s'
+            )
         },
     },
     'filters': {
         'require_admin_enabled': {
             '()': 'pretix.helpers.logs.AdminExistsFilter',
-        }
+        },
+        'request_id': {
+            '()': 'pretix.helpers.logs.RequestIdFilter'
+        },
     },
     'handlers': {
         'console': {
             'level': loglevel,
             'class': 'logging.StreamHandler',
-            'formatter': 'default'
+            'formatter': 'default',
+            'filters': ['request_id'],
         },
         'csp_file': {
             'level': loglevel,
             'class': 'logging.FileHandler',
             'filename': os.path.join(LOG_DIR, 'csp.log'),
-            'formatter': 'default'
+            'formatter': 'default',
+            'filters': ['request_id'],
         },
         'file': {
             'level': loglevel,
             'class': 'logging.FileHandler',
             'filename': os.path.join(LOG_DIR, 'pretix.log'),
-            'formatter': 'default'
+            'formatter': 'default',
+            'filters': ['request_id'],
         },
         'mail_admins': {
             'level': 'ERROR',
