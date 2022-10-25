@@ -411,10 +411,10 @@
             {% if event.presale_is_running and options > 0 %}
                 <div class="row checkout-button-row">
                     <div class="col-md-4 col-md-offset-8 col-xs-12 text-center">
-                        {% if voucher.min_usages > 1 %}
+                        {% if voucher.min_usages_remaining > 1 %}
                             <p class="text-muted">
                                 <small>
-                                    {% blocktrans trimmed with number=voucher.min_usages %}
+                                    {% blocktrans trimmed with number=voucher.min_usages_remaining %}
                                         You need to select at least {{ number }} products.
                                     {% endblocktrans %}
                                 </small>

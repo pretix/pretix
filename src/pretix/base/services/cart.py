@@ -530,11 +530,11 @@ class CartManager:
             ops.append((listed_price - price_after_voucher, self.VoucherOperation(p, voucher, price_after_voucher)))
 
         for voucher, cnt in list(voucher_use_diff.items()):
-            if 0 < cnt < (voucher.min_usages - voucher.redeemed):
+            if 0 < cnt < voucher.min_usages_remaining:
                 raise CartError(
                     _(error_messages['voucher_min_usages']) % {
                         'voucher': voucher.code,
-                        'number': (voucher.min_usages - voucher.redeemed),
+                        'number': voucher.min_usages_remaining,
                     }
                 )
 
@@ -943,7 +943,7 @@ class CartManager:
         for voucher, count in vouchers.items():
             if not voucher or count == 0:
                 continue
-            if count < (voucher.min_usages - voucher.redeemed):
+            if count < voucher.min_usages_remaining:
                 self._operations = [o for o in self._operations if not (
                     isinstance(o, self.AddOperation) and o.voucher.pk == voucher.pk
                 )]
@@ -953,13 +953,13 @@ class CartManager:
                         self._operations.append(self.RemoveOperation(position=p))
                         err = _(error_messages['voucher_min_usages_removed']) % {
                             'voucher': voucher.code,
-                            'number': (voucher.min_usages - voucher.redeemed),
+                            'number': voucher.min_usages_remaining,
                         }
                 if not err:
                     raise CartError(
                         _(error_messages['voucher_min_usages']) % {
                             'voucher': voucher.code,
-                            'number': (voucher.min_usages - voucher.redeemed),
+                            'number': voucher.min_usages_remaining,
                         }
                     )
         return err

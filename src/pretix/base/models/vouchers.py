@@ -581,6 +581,10 @@ class Voucher(LoggedModel):
         else:
             return bool(subevent.seating_plan) if subevent else self.event.seating_plan
 
+    @property
+    def min_usages_remaining(self):
+        return max(1, self.min_usages - self.redeemed)
+
     @classmethod
     def annotate_budget_used_orders(cls, qs):
         opq = OrderPosition.objects.filter(

@@ -722,10 +722,10 @@ def _check_positions(event: Event, now_dt: datetime, positions: List[CartPositio
             delete(cp)
 
     for voucher, cnt in v_usages.items():
-        if 0 < cnt < voucher.min_usages - voucher.redeemed:
+        if 0 < cnt < voucher.min_usages_remaining:
             raise OrderError(error_messages['voucher_min_usages'], {
                 'voucher': voucher.code,
-                'number': (voucher.min_usages - voucher.redeemed),
+                'number': voucher.min_usages_remaining,
             })
 
     # Check prices
