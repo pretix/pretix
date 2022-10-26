@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-10-26 18:56+0000\n"
-"PO-Revision-Date: 2022-10-11 11:32+0200\n"
+"PO-Revision-Date: 2022-10-26 19:09+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
 ">\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Poedit 3.1\n"
+"X-Generator: Weblate 4.14.1\n"
 "X-Poedit-Bookmarks: -1,-1,904,-1,-1,-1,-1,-1,-1,-1\n"
 
 #: htmlcov/pretix_control_views_dashboards_py.html:963
@@ -4828,10 +4828,8 @@ msgid "Redeemed"
 msgstr "Eingelöst"
 
 #: pretix/base/models/vouchers.py:205
-#, fuzzy
-#| msgid "Maximum usages"
 msgid "Minimum usages"
-msgstr "Maximale Nutzungen"
+msgstr "Minimale Nutzungen"
 
 #: pretix/base/models/vouchers.py:206
 msgid ""
@@ -4841,6 +4839,12 @@ msgid ""
 "usages in some cases can be lower than this limit, e.g. in case of "
 "cancellations."
 msgstr ""
+"Wenn dies auf einen Wert von mehr als 1 gesetzt wird, muss der Gutschein bei "
+"der ersten Einlösung für mindestens so viele Produkte eingelöst werden. Bei "
+"späteren Einlösungen kann auch eine geringere Anzahl an Produkten ausgewählt "
+"werden. In manchen Fällen kann es trotzdem dazu kommen, dass der Gutschein "
+"weniger oft als diese Anzahl eingelöst wurde, z.B. im Fall von späteren "
+"Stornierungen."
 
 #: pretix/base/models/vouchers.py:213
 msgid "Maximum discount budget"
@@ -5007,16 +5011,11 @@ msgstr ""
 "maximale Anzahl Nutzungen nicht niedriger als diese Anzahl einstellen."
 
 #: pretix/base/models/vouchers.py:365
-#, fuzzy
-#| msgid ""
-#| "The maximum number per order can not be lower than the minimum number per "
-#| "order."
 msgid ""
 "The maximum number of usages may not be lower than the minimum number of "
 "usages."
 msgstr ""
-"Die minimale Anzahl pro Bestellung muss unter der maximalen Anzahl pro "
-"Bestellung liegen."
+"Die minimale Anzahl an Verwendungen muss unter der maximalen Anzahl liegen."
 
 #: pretix/base/models/vouchers.py:371 pretix/base/models/vouchers.py:429
 msgid ""
@@ -6253,6 +6252,8 @@ msgid ""
 "The voucher code \"%(voucher)s\" can only be used if you select at least "
 "%(number)s matching products."
 msgstr ""
+"Der Gutscheincode \"%(voucher)s\" kann nur verwendet werden, wenn Sie "
+"mindestens %(number)s passende Produkte auswählen."
 
 #: pretix/base/services/cart.py:115
 #, python-format
@@ -6261,6 +6262,10 @@ msgid ""
 "%(number)s matching products. We have therefore removed some positions from "
 "your cart that can no longer be purchased like this."
 msgstr ""
+"Der Gutscheincode \"%(voucher)s\" kann nur verwendet werden, wenn Sie "
+"mindestens %(number)s passende Produkte auswählen. Wir haben daher einige "
+"Positionen aus Ihrem Warenkorb entfernt, die deswegen nicht weiter gekauft "
+"werden können."
 
 #: pretix/base/services/cart.py:118
 msgid ""
@@ -23168,6 +23173,9 @@ msgid ""
 "invalid values in your databases, such as answers to number questions which "
 "are not a number."
 msgstr ""
+"Die Daten konnten nicht wie gewünscht konvertiert werden. Dies kann an "
+"ungültigen Werten in der Datenbank liegen, z.B. wenn es Antworten auf eine "
+"Frage vom Typ Zahl gibt, die keine gültige Zahl sind."
 
 #: pretix/plugins/badges/forms.py:42
 msgid "(Do not print badges)"
@@ -28058,11 +28066,9 @@ msgid "FREE"
 msgstr "GRATIS"
 
 #: pretix/presale/templates/pretixpresale/event/voucher.html:417
-#, fuzzy, python-format
-#| msgid ""
-#| "You need to select at least %(min)s items of the product %(product)s."
+#, python-format
 msgid "You need to select at least %(number)s products."
-msgstr "Sie müssen das Produkt %(product)s mindestens %(min)s mal auswählen."
+msgstr "Sie müssen mindestens %(number)s Produkte auswählen."
 
 #: pretix/presale/templates/pretixpresale/event/waitinglist.html:5
 msgid "Add me to the waiting list"
