@@ -47,7 +47,9 @@ from django_scopes import scope, scopes_disabled
 
 from pretix.base.email import get_email_context
 from pretix.base.i18n import language
-from pretix.base.models import Event, Order, OrderPayment, Organizer, Quota
+from pretix.base.models import (
+    Event, Invoice, Order, OrderPayment, Organizer, Quota,
+)
 from pretix.base.payment import PaymentException
 from pretix.base.services.locking import LockTimeoutException
 from pretix.base.services.mail import SendMailException
@@ -113,20 +115,42 @@ def _find_order_for_code(base_qs, code):
             pass
 
 
+def _find_order_for_invoice_id(base_qs, prefix, number):
+    try:
+        # Working with __iregex here is an experiment, if this turns out to be too slow in production
+        # we might need to switch to a different approach.
+        return base_qs.select_related('order').get(
+            prefix__istartswith=prefix,  # redundant, but hopefully makes it a little faster
+            full_invoice_no__iregex=prefix + r'[\- ]*0*' + number
+        ).order
+    except (Invoice.DoesNotExist, Invoice.MultipleObjectsReturned):
+        pass
+
+
 @transaction.atomic
 def _handle_transaction(trans: BankTransaction, matches: tuple, event: Event = None, organizer: Organizer = None):
     orders = []
     if event:
         for slug, code in matches:
             order = _find_order_for_code(event.orders, code)
-            if order and order.code not in {o.code for o in orders}:
-                orders.append(order)
+            if order:
+                if order.code not in {o.code for o in orders}:
+                    orders.append(order)
+            else:
+                order = _find_order_for_invoice_id(Invoice.objects.filter(event=event), slug, code)
+                if order and order.code not in {o.code for o in orders}:
+                    orders.append(order)
     else:
         qs = Order.objects.filter(event__organizer=organizer)
         for slug, code in matches:
             order = _find_order_for_code(qs.filter(event__slug__iexact=slug), code)
-            if order and order.code not in {o.code for o in orders}:
-                orders.append(order)
+            if order:
+                if order.code not in {o.code for o in orders}:
+                    orders.append(order)
+            else:
+                order = _find_order_for_invoice_id(Invoice.objects.filter(event__organizer=organizer), slug, code)
+                if order and order.code not in {o.code for o in orders}:
+                    orders.append(order)
 
     if not orders:
         # No match
@@ -283,24 +307,44 @@ def process_banktransfers(self, job: int, data: list) -> None:
 
                 transactions = _get_unknown_transactions(job, data, **job.owner_kwargs)
 
+                # Match order codes
                 code_len_agg = Order.objects.filter(event__organizer=job.organizer).annotate(
                     clen=Length('code')
                 ).aggregate(min=Min('clen'), max=Max('clen'))
                 if job.event:
-                    prefixes = [job.event.slug.upper()]
+                    prefixes = {job.event.slug.upper()}
                 else:
-                    prefixes = [e.slug.upper()
-                                for e in job.organizer.events.all()]
+                    prefixes = {e.slug.upper() for e in job.organizer.events.all()}
+
+                # Match invoice numbers
+                inr_len_agg = Invoice.objects.filter(event__organizer=job.organizer).annotate(
+                    clen=Length('invoice_no')
+                ).aggregate(min=Min('clen'), max=Max('clen'))
+                if job.event:
+                    prefixes |= {p.rstrip(' -') for p in Invoice.objects.filter(event=job.event).distinct().values_list('prefix', flat=True)}
+                else:
+                    prefixes |= {p.rstrip(' -') for p in Invoice.objects.filter(event__organizer=job.organizer).distinct().values_list('prefix', flat=True)}
+
                 pattern = re.compile(
                     "(%s)[ \\-_]*([A-Z0-9]{%s,%s})" % (
-                        "|".join(p.replace(".", r"\.").replace("-", r"[\- ]*") for p in prefixes),
-                        code_len_agg['min'] or 0,
-                        code_len_agg['max'] or 5
+                        "|".join(re.escape(p).replace("\\-", r"[\- ]*") for p in prefixes),
+                        min(code_len_agg['min'] or 1, inr_len_agg['min'] or 1),
+                        max(code_len_agg['max'] or 5, inr_len_agg['max'] or 5)
                     )
                 )
 
                 for trans in transactions:
-                    matches = pattern.findall(trans.reference.replace(" ", "").replace("\n", "").upper())
+                    # Whitespace in references is unreliable since linebreaks and spaces can occur almost anywhere, e.g.
+                    # DEMOCON-123\n45 should be matched to DEMOCON-12345. However, sometimes whitespace is important,
+                    # e.g. when there are two references. "DEMOCON-12345 DEMOCON-45678" would otherwise be parsed as
+                    # "DEMOCON-12345DE" in some conditions. We'll naively take whatever has more matches.
+                    matches_with_whitespace = pattern.findall(trans.reference.replace("\n", " ").upper())
+                    matches_without_whitespace = pattern.findall(trans.reference.replace(" ", "").replace("\n", "").upper())
+
+                    if len(matches_without_whitespace) > len(matches_with_whitespace):
+                        matches = matches_without_whitespace
+                    else:
+                        matches = matches_with_whitespace
 
                     if matches:
                         if job.event:
