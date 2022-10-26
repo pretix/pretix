@@ -33,6 +33,7 @@
 # License for the specific language governing permissions and limitations under the License.
 
 import json
+import logging
 from collections import OrderedDict
 from datetime import datetime, time, timedelta
 from io import BytesIO
@@ -44,8 +45,9 @@ from django.contrib.staticfiles import finders
 from django.core.files import File
 from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
-from django.db.models import Exists, OuterRef, Q
-from django.db.models.functions import Coalesce
+from django.db import DataError, models
+from django.db.models import Exists, OuterRef, Q, Subquery
+from django.db.models.functions import Cast, Coalesce
 from django.utils.timezone import make_aware
 from django.utils.translation import gettext as _, gettext_lazy
 from PyPDF2 import PdfMerger, PdfReader, PdfWriter, Transformation
@@ -56,12 +58,15 @@ from reportlab.pdfgen import canvas
 
 from pretix.base.exporter import BaseExporter
 from pretix.base.i18n import language
-from pretix.base.models import Order, OrderPosition
+from pretix.base.models import Order, OrderPosition, Question, QuestionAnswer
 from pretix.base.pdf import Renderer
+from pretix.base.services.export import ExportError
 from pretix.base.services.orders import OrderError
 from pretix.base.settings import PERSON_NAME_SCHEMES
 from pretix.helpers.templatetags.jsonfield import JSONExtract
 from pretix.plugins.badges.models import BadgeItem, BadgeLayout
+
+logger = logging.getLogger(__name__)
 
 
 def _renderer(event, layout):
@@ -304,7 +309,16 @@ class BadgeExporter(BaseExporter):
                      ] + ([
                          ('name:{}'.format(k), _('Attendee name: {part}').format(part=label))
                          for k, label, w in name_scheme['fields']
-                     ] if len(name_scheme['fields']) > 1 else []),
+                     ] if len(name_scheme['fields']) > 1 else []) + ([
+                         ('question:{}'.format(q.identifier), _('Question: {question}').format(question=q.question))
+                         for q in self.event.questions.filter(type__in=(
+                             # All except TYPE_FILE and future ones
+                             Question.TYPE_TIME, Question.TYPE_TEXT, Question.TYPE_DATE, Question.TYPE_BOOLEAN,
+                             Question.TYPE_COUNTRYCODE, Question.TYPE_DATETIME, Question.TYPE_NUMBER,
+                             Question.TYPE_PHONENUMBER, Question.TYPE_STRING, Question.TYPE_CHOICE,
+                             Question.TYPE_CHOICE_MULTIPLE
+                         ))
+                     ] if not self.is_multievent else []),
                  )),
             ]
         )
@@ -355,6 +369,54 @@ class BadgeExporter(BaseExporter):
             ).order_by(
                 'resolved_name_part'
             )
+        elif form_data.get('order_by', '').startswith('question:'):
+            part = form_data['order_by'].split(':', 1)[1]
+            question = self.event.questions.get(identifier=part)
+            if question.type == Question.TYPE_NUMBER:
+                # We use a database-level type cast to sort numbers like 1, 2, 10, 11 and not like 1, 10, 11, 2.
+                # This works perfectly fine e.g. on SQLite where an invalid number will be casted to 0, but will
+                # raise a DataError on PostgreSQL if there is a non-number in the data.
+                question_subquery = Subquery(
+                    QuestionAnswer.objects.filter(
+                        orderposition_id=OuterRef('pk'),
+                        question_id=question.pk,
+                    ).annotate(
+                        converted_answer=Cast('answer', output_field=models.FloatField())
+                    ).order_by().values('converted_answer')[:1]
+                )
+            elif question.type in (Question.TYPE_CHOICE, Question.TYPE_CHOICE_MULTIPLE):
+                # Sorting by choice questions must be handled differently because the QuestionAnswer.value
+                # attribute may be dependent on the submitters locale, which we don't want here. So we sort by
+                # order of the position instead. In case of multiple choice, the first selected order counts, which
+                # is not perfect but better than no sorting at all.
+                question_subquery = Subquery(
+                    QuestionAnswer.options.through.objects.filter(
+                        questionanswer__orderposition_id=OuterRef('pk'),
+                        questionanswer__question_id=question.pk,
+                    ).order_by('questionoption__position').values('questionoption__position')[:1]
+                )
+            else:
+                # For all other types, we just sort by treating the answer field as a string. This works fine for
+                # all string-y types including dates and date-times (due to ISO 8601 format), country codes, etc
+                question_subquery = Subquery(
+                    QuestionAnswer.objects.filter(
+                        orderposition_id=OuterRef('pk'),
+                        question_id=question.pk,
+                    ).order_by().values('answer')[:1]
+                )
 
-        outbuffer = render_pdf(self.event, qs, OPTIONS[form_data.get('rendering', 'one')])
+            qs = qs.annotate(
+                question_answer=question_subquery,
+            ).order_by(
+                'question_answer'
+            )
+
+        try:
+            outbuffer = render_pdf(self.event, qs, OPTIONS[form_data.get('rendering', 'one')])
+        except DataError:
+            logging.exception('DataError during export')
+            raise ExportError(
+                _('Your data could not be converted as requested. This could be caused by invalid values in your '
+                  'databases, such as answers to number questions which are not a number.')
+            )
         return 'badges.pdf', 'application/pdf', outbuffer.read()
