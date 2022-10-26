@@ -93,7 +93,7 @@ def test_membership_detail(token_client, organizer, membershiptype, membership):
     res = dict(TEST_MEMBERSHIP_RES)
     res['membership_type'] = membershiptype.pk
     res['id'] = membership.pk
-    resp = token_client.get('/api/v1/organizers/{}/memberships/{}/'.format(organizer.slug, membershiptype.pk))
+    resp = token_client.get('/api/v1/organizers/{}/memberships/{}/'.format(organizer.slug, membership.pk))
     assert resp.status_code == 200
     assert res == resp.data
 
