@@ -46,6 +46,7 @@ from pretix.base.models import (
     Event, Item, Order, OrderFee, OrderPayment, OrderPosition, Organizer,
     Quota, Team, User,
 )
+from pretix.base.services.invoices import generate_invoice
 from pretix.plugins.banktransfer.models import BankImportJob, BankTransaction
 from pretix.plugins.banktransfer.tasks import process_banktransfers
 
@@ -57,6 +58,8 @@ def env():
         organizer=o, name='Dummy', slug='dummy',
         date_from=now(), plugins='pretix.plugins.banktransfer,pretix.plugins.paypal'
     )
+    event.settings.invoice_numbers_prefix = 'INV-'
+    event.settings.invoice_numbers_counter_length = 3
     user = User.objects.create_user('dummy@dummy.dummy', 'dummy')
     t = Team.objects.create(organizer=event.organizer, can_view_orders=True, can_change_orders=True)
     t.members.add(user)
@@ -83,6 +86,10 @@ def env():
     item1 = Item.objects.create(event=event, name="Ticket", default_price=23)
     quota.items.add(item1)
     OrderPosition.objects.create(order=o1, item=item1, variation=None, price=23)
+    i1 = generate_invoice(o1)
+    assert i1.full_invoice_no == 'INV-001'
+    i2 = generate_invoice(o2)
+    assert i2.full_invoice_no == 'INV-002'
     return event, user, o1, o2
 
 
@@ -225,6 +232,42 @@ def test_autocorrection(env, job):
     process_banktransfers(job, [{
         'payer': 'Karla Kundin',
         'reference': 'Bestellung DUMMY12345',
+        'amount': '23.00',
+        'date': '2016-01-26',
+    }])
+    env[2].refresh_from_db()
+    assert env[2].status == Order.STATUS_PAID
+
+
+@pytest.mark.django_db
+def test_invoice_id(env, job):
+    process_banktransfers(job, [{
+        'payer': 'Karla Kundin',
+        'reference': 'Bestellung INV-001',
+        'amount': '23.00',
+        'date': '2016-01-26',
+    }])
+    env[2].refresh_from_db()
+    assert env[2].status == Order.STATUS_PAID
+
+
+@pytest.mark.django_db
+def test_invoice_id_missing_separator(env, job):
+    process_banktransfers(job, [{
+        'payer': 'Karla Kundin',
+        'reference': 'Bestellung INV001',
+        'amount': '23.00',
+        'date': '2016-01-26',
+    }])
+    env[2].refresh_from_db()
+    assert env[2].status == Order.STATUS_PAID
+
+
+@pytest.mark.django_db
+def test_invoice_id_missing_zeros(env, job):
+    process_banktransfers(job, [{
+        'payer': 'Karla Kundin',
+        'reference': 'Bestellung INV1',
         'amount': '23.00',
         'date': '2016-01-26',
     }])
