@@ -28,7 +28,7 @@ from xdist.dsession import DSession
 CRASHED_ITEMS = set()
 
 
-@pytest.mark.trylast
+@pytest.hookimpl(trylast=True)
 def pytest_configure(config):
     """
     Somehow, somewhere, our test suite causes a segfault in SQLite, but only when run
