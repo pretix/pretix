@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-11 09:30+0000\n"
+"POT-Creation-Date: 2022-10-26 18:57+0000\n"
 "PO-Revision-Date: 2022-03-03 07:00+0000\n"
 "Last-Translator: MaLund13 <mart.lund13@gmail.com>\n"
 "Language-Team: Swedish <https://translate.pretix.eu/projects/pretix/pretix-"
@@ -628,32 +628,32 @@ msgid_plural "The items in your cart are reserved for you for {num} minutes."
 msgstr[0] "Artiklarna i din varukorg är reserverade för dig i en minut."
 msgstr[1] "Artiklarna i din varukorg är reserverade för dig i {num} minuter."
 
-#: pretix/static/pretixpresale/js/ui/main.js:144
+#: pretix/static/pretixpresale/js/ui/main.js:152
 msgid "The organizer keeps %(currency)s %(amount)s"
 msgstr "Arrangören behåller %(amount)s %(currency)s"
 
-#: pretix/static/pretixpresale/js/ui/main.js:152
+#: pretix/static/pretixpresale/js/ui/main.js:160
 msgid "You get %(currency)s %(amount)s back"
 msgstr "Du får %(amount)s %(currency)s tillbaka"
 
-#: pretix/static/pretixpresale/js/ui/main.js:168
+#: pretix/static/pretixpresale/js/ui/main.js:176
 msgid "Please enter the amount the organizer can keep."
 msgstr "Vänligen ange det belopp som arrangören kan behålla."
 
-#: pretix/static/pretixpresale/js/ui/main.js:380
+#: pretix/static/pretixpresale/js/ui/main.js:388
 msgid "Please enter a quantity for one of the ticket types."
 msgstr "Vänligen ange en kvantitet för en av biljettyperna."
 
-#: pretix/static/pretixpresale/js/ui/main.js:416
+#: pretix/static/pretixpresale/js/ui/main.js:424
 msgid "required"
 msgstr "obligatorisk"
 
-#: pretix/static/pretixpresale/js/ui/main.js:519
-#: pretix/static/pretixpresale/js/ui/main.js:538
+#: pretix/static/pretixpresale/js/ui/main.js:527
+#: pretix/static/pretixpresale/js/ui/main.js:546
 msgid "Time zone:"
 msgstr "Tidszon:"
 
-#: pretix/static/pretixpresale/js/ui/main.js:529
+#: pretix/static/pretixpresale/js/ui/main.js:537
 msgid "Your local time:"
 msgstr "Din lokala tid:"
 

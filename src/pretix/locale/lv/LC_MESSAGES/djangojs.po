@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-11 09:30+0000\n"
+"POT-Creation-Date: 2022-10-26 18:57+0000\n"
 "PO-Revision-Date: 2022-04-06 03:00+0000\n"
 "Last-Translator: Liga V <lerning_by_dreaming@gmx.de>\n"
 "Language-Team: Latvian <https://translate.pretix.eu/projects/pretix/pretix-"
@@ -638,32 +638,32 @@ msgstr[0] "Preces jūsu grozā ir rezervētas nulle minūtes."
 msgstr[1] "Preces jūsu grozā ir rezervētas vienu minūti."
 msgstr[2] "Preces jūsu grozā ir rezervētas uz {num} minūtēm."
 
-#: pretix/static/pretixpresale/js/ui/main.js:144
+#: pretix/static/pretixpresale/js/ui/main.js:152
 msgid "The organizer keeps %(currency)s %(amount)s"
 msgstr "Pasākuma organizators patur %(valūta)s %(skaits)s"
 
-#: pretix/static/pretixpresale/js/ui/main.js:152
+#: pretix/static/pretixpresale/js/ui/main.js:160
 msgid "You get %(currency)s %(amount)s back"
 msgstr "Jūs saņemsiet %(valūta)s %(cena)s atpakaļ"
 
-#: pretix/static/pretixpresale/js/ui/main.js:168
+#: pretix/static/pretixpresale/js/ui/main.js:176
 msgid "Please enter the amount the organizer can keep."
 msgstr "Lūdzu ievadiet skaitu (summu), ko pasākuma organizators var paturēt."
 
-#: pretix/static/pretixpresale/js/ui/main.js:380
+#: pretix/static/pretixpresale/js/ui/main.js:388
 msgid "Please enter a quantity for one of the ticket types."
 msgstr "Lūdzu, ievadiet nepieciešamo daudzumu izvēlētajam biļešu veidam."
 
-#: pretix/static/pretixpresale/js/ui/main.js:416
+#: pretix/static/pretixpresale/js/ui/main.js:424
 msgid "required"
 msgstr "obligāts"
 
-#: pretix/static/pretixpresale/js/ui/main.js:519
-#: pretix/static/pretixpresale/js/ui/main.js:538
+#: pretix/static/pretixpresale/js/ui/main.js:527
+#: pretix/static/pretixpresale/js/ui/main.js:546
 msgid "Time zone:"
 msgstr "Laika zona:"
 
-#: pretix/static/pretixpresale/js/ui/main.js:529
+#: pretix/static/pretixpresale/js/ui/main.js:537
 msgid "Your local time:"
 msgstr "Vietējais laiks:"
 

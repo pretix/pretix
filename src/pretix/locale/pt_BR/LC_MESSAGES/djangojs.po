@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-11 09:30+0000\n"
+"POT-Creation-Date: 2022-10-26 18:57+0000\n"
 "PO-Revision-Date: 2019-03-19 09:00+0000\n"
 "Last-Translator: Vitor Reis <vitor.reis7@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.pretix.eu/projects/"
@@ -679,40 +679,40 @@ msgstr[0] "Os items em seu carrinho estão reservados para você por 1 minuto."
 msgstr[1] ""
 "Os items em seu carrinho estão reservados para você por {num} minutos."
 
-#: pretix/static/pretixpresale/js/ui/main.js:144
+#: pretix/static/pretixpresale/js/ui/main.js:152
 #, fuzzy
 #| msgctxt "widget"
 #| msgid "from %(currency)s %(price)s"
 msgid "The organizer keeps %(currency)s %(amount)s"
 msgstr "A partir de %(currency)s %(price)s"
 
-#: pretix/static/pretixpresale/js/ui/main.js:152
+#: pretix/static/pretixpresale/js/ui/main.js:160
 #, fuzzy
 #| msgctxt "widget"
 #| msgid "from %(currency)s %(price)s"
 msgid "You get %(currency)s %(amount)s back"
 msgstr "A partir de %(currency)s %(price)s"
 
-#: pretix/static/pretixpresale/js/ui/main.js:168
+#: pretix/static/pretixpresale/js/ui/main.js:176
 msgid "Please enter the amount the organizer can keep."
 msgstr ""
 
-#: pretix/static/pretixpresale/js/ui/main.js:380
+#: pretix/static/pretixpresale/js/ui/main.js:388
 msgid "Please enter a quantity for one of the ticket types."
 msgstr ""
 
-#: pretix/static/pretixpresale/js/ui/main.js:416
+#: pretix/static/pretixpresale/js/ui/main.js:424
 #, fuzzy
 #| msgid "Cart expired"
 msgid "required"
 msgstr "O carrinho expirou"
 
-#: pretix/static/pretixpresale/js/ui/main.js:519
-#: pretix/static/pretixpresale/js/ui/main.js:538
+#: pretix/static/pretixpresale/js/ui/main.js:527
+#: pretix/static/pretixpresale/js/ui/main.js:546
 msgid "Time zone:"
 msgstr ""
 
-#: pretix/static/pretixpresale/js/ui/main.js:529
+#: pretix/static/pretixpresale/js/ui/main.js:537
 msgid "Your local time:"
 msgstr ""
 
