@@ -64,6 +64,10 @@ class EventPluginSignal(django.dispatch.Signal):
             # Send to all events!
             return True
 
+        # If sentry packed this in a wrapper, unpack that
+        if "sentry" in receiver.__module__:
+            receiver = receiver.__wrapped__
+
         # Find the Django application this belongs to
         searchpath = receiver.__module__
         core_module = any([searchpath.startswith(cm) for cm in settings.CORE_MODULES])

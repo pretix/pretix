@@ -22,12 +22,14 @@
 import re
 import weakref
 from collections import OrderedDict
+from functools import wraps
 
 from celery.exceptions import Retry
+from django.dispatch import Signal
 from sentry_sdk import Hub
-from sentry_sdk.integrations.django import (
-    LEGACY_RESOLVER, DjangoIntegration, _before_get_response, _set_user_info,
-)
+from sentry_sdk.consts import OP
+from sentry_sdk.integrations import django as djangosentry
+from sentry_sdk.integrations.django.signals_handlers import _get_receiver_name
 from sentry_sdk.utils import capture_internal_exceptions
 
 MASK = '*' * 8
@@ -43,6 +45,37 @@ KEYS = frozenset([
     'session',
 ])
 VALUES_RE = re.compile(r'^(?:\d[ -]*?){13,16}$')
+
+
+def patched_patch_signals():
+    # This is a workaround for https://github.com/getsentry/sentry-python/issues/1700
+    # that needs to stay until it is fixed
+
+    old_live_receivers = Signal._live_receivers
+
+    def _sentry_live_receivers(self, sender):
+        hub = Hub.current
+        receivers = old_live_receivers(self, sender)
+
+        def sentry_receiver_wrapper(receiver):
+            @wraps(receiver)
+            def wrapper(*args, **kwargs):
+                signal_name = _get_receiver_name(receiver)
+                with hub.start_span(
+                    op=OP.EVENT_DJANGO,
+                    description=signal_name,
+                ) as span:
+                    span.set_data("signal", signal_name)
+                    return receiver(*args, **kwargs)
+
+            return wrapper
+
+        for idx, receiver in enumerate(receivers):
+            receivers[idx] = sentry_receiver_wrapper(receiver)
+
+        return receivers
+
+    Signal._live_receivers = _sentry_live_receivers
 
 
 def scrub_data(data):
@@ -83,13 +116,13 @@ def _make_event_processor(weak_request, integration):
             return event
 
         with capture_internal_exceptions():
-            _set_user_info(request, event)
+            djangosentry._set_user_info(request, event)
             request_info = event.setdefault("request", {})
             request_info["cookies"] = dict(request.COOKIES)
 
-        # Sentry's DjangoIntegration already sets the transcation, but it gets confused by our multi-domain stuff
+        # Sentry's DjangoIntegration already sets the transaction, but it gets confused by our multi-domain stuff
         # where the URL resolver changes in the middleware stack. Additionally, we'd like to get the method.
-        url = LEGACY_RESOLVER.resolve(request.path_info, getattr(request, "urlconf", None))
+        url = djangosentry.LEGACY_RESOLVER.resolve(request.path_info, getattr(request, "urlconf", None))
         if hasattr(request, 'event_domain'):
             url = '/{organizer}/{event}' + url
         elif hasattr(request, 'organizer_domain'):
@@ -112,11 +145,16 @@ def _make_event_processor(weak_request, integration):
     return event_processor
 
 
-class PretixSentryIntegration(DjangoIntegration):
+class PretixSentryIntegration(djangosentry.DjangoIntegration):
 
     @staticmethod
     def setup_once():
-        DjangoIntegration.setup_once()
+        # This is a workaround for https://github.com/getsentry/sentry-python/issues/1700
+        # that needs to stay until it is fixed
+        djangosentry.patch_signals = patched_patch_signals
+        djangosentry.signals_handlers.patch_signals = patched_patch_signals
+
+        djangosentry.DjangoIntegration.setup_once()
         from django.core.handlers.base import BaseHandler
 
         # DjangoIntegration already patched get_response, we patch it again to add our custom
@@ -126,7 +164,7 @@ class PretixSentryIntegration(DjangoIntegration):
 
         def sentry_patched_get_response(self, request):
             hub = Hub.current
-            integration = hub.get_integration(DjangoIntegration)
+            integration = hub.get_integration(djangosentry.DjangoIntegration)
             if integration is not None:
                 with hub.configure_scope() as scope:
                     scope.add_event_processor(
@@ -142,7 +180,7 @@ class PretixSentryIntegration(DjangoIntegration):
                 patch_get_response_async,
             )
 
-            patch_get_response_async(BaseHandler, _before_get_response)
+            patch_get_response_async(BaseHandler, djangosentry._before_get_response)
 
 
 def ignore_retry(event, hint):
