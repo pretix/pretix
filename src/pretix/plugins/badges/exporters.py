@@ -309,7 +309,7 @@ class BadgeExporter(BaseExporter):
                      ] + ([
                          ('name:{}'.format(k), _('Attendee name: {part}').format(part=label))
                          for k, label, w in name_scheme['fields']
-                     ] if len(name_scheme['fields']) > 1 else []) + [
+                     ] if len(name_scheme['fields']) > 1 else []) + ([
                          ('question:{}'.format(q.identifier), _('Question: {question}').format(question=q.question))
                          for q in self.event.questions.filter(type__in=(
                              # All except TYPE_FILE and future ones
@@ -318,7 +318,7 @@ class BadgeExporter(BaseExporter):
                              Question.TYPE_PHONENUMBER, Question.TYPE_STRING, Question.TYPE_CHOICE,
                              Question.TYPE_CHOICE_MULTIPLE
                          ))
-                     ],
+                     ] if not self.is_multievent else []),
                  )),
             ]
         )
