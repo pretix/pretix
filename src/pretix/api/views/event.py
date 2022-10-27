@@ -241,13 +241,17 @@ class EventViewSet(viewsets.ModelViewSet):
             except Event.DoesNotExist:
                 raise ValidationError('Event to copy from was not found')
 
+        # Ensure that .installed() is only called when we NOT clone
+        plugins = serializer.validated_data.pop('plugins', None)
+        serializer.validated_data['plugins'] = None
+
         new_event = serializer.save(organizer=self.request.organizer)
 
         if copy_from:
             new_event.copy_data_from(copy_from)
 
-            if 'plugins' in serializer.validated_data:
-                new_event.set_active_plugins(serializer.validated_data['plugins'])
+            if plugins:
+                new_event.set_active_plugins(plugins)
             if 'is_public' in serializer.validated_data:
                 new_event.is_public = serializer.validated_data['is_public']
             if 'testmode' in serializer.validated_data:
@@ -261,6 +265,10 @@ class EventViewSet(viewsets.ModelViewSet):
                 new_event.settings.timezone = serializer.validated_data['timezone']
         else:
             serializer.instance.set_defaults()
+
+            if plugins:
+                new_event.set_active_plugins(plugins)
+                new_event.save(update_fields=['plugins'])
 
         serializer.instance.log_action(
             'pretix.event.added',

@@ -411,7 +411,7 @@ class CloneEventSerializer(EventSerializer):
         has_subevents = validated_data.pop('has_subevents', None)
         tz = validated_data.pop('timezone', None)
         sales_channels = validated_data.pop('sales_channels', None)
-        new_event = super().create(validated_data)
+        new_event = super().create({**validated_data, 'plugins': None})
 
         event = Event.objects.filter(slug=self.context['event'], organizer=self.context['organizer'].pk).first()
         new_event.copy_data_from(event)
