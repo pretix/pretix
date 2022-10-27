@@ -112,7 +112,7 @@ def dictsum(*dicts) -> dict:
 
 def order_overview(
         event: Event, subevent: SubEvent=None, date_filter='', date_from=None, date_until=None, fees=False,
-        admission_only=False
+        admission_only=False, base_qs=None
 ) -> Tuple[List[Tuple[ItemCategory, List[Item]]], Dict[str, Tuple[Decimal, Decimal]]]:
     items = event.items.all().select_related(
         'category',  # for re-grouping
@@ -120,7 +120,7 @@ def order_overview(
         'variations'
     ).order_by('category__position', 'category_id', 'position', 'name')
 
-    qs = OrderPosition.all
+    qs = OrderPosition.all if base_qs is None else base_qs
     if isinstance(subevent, (list, QuerySet)):
         qs = qs.filter(subevent__in=subevent)
     elif subevent:
