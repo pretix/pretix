@@ -52,7 +52,8 @@ from django.utils.translation import gettext as _, gettext_lazy, pgettext
 from django_countries.fields import Country
 from reportlab.lib import colors
 from reportlab.lib.enums import TA_CENTER
-from reportlab.platypus import PageBreak
+from reportlab.platypus import PageBreak, Paragraph, Spacer, Table, TableStyle
+from reportlab.lib.units import mm
 
 from pretix.base.decimal import round_decimal
 from pretix.base.exporter import BaseExporter, MultiSheetListExporter
@@ -210,19 +211,56 @@ class OverviewReport(Report):
         if form_data.get('date_until'):
             form_data['date_until'] = parse(form_data['date_until'])
 
-        story = self._table_story(doc, form_data)
+        story = self._header_story(doc, form_data, net=False) + self._filter_story(doc, form_data, net=False) + self._table_story(doc, form_data)
         if self.event.tax_rules.exists():
             story += [PageBreak()]
+            story += self._header_story(doc, form_data, net=True)
+            story += self._filter_story(doc, form_data, net=True)
             story += self._table_story(doc, form_data, net=True)
         return story
 
-    def _table_story(self, doc, form_data, net=False):
-        from reportlab.lib.units import mm
-        from reportlab.platypus import Paragraph, Spacer, Table, TableStyle
-
+    def _header_story(self, doc, form_data, net=False):
         headlinestyle = self.get_style()
         headlinestyle.fontSize = 15
         headlinestyle.fontName = 'OpenSansBd'
+        story = [
+            Paragraph(_('Orders by product') + ' ' + (_('(excl. taxes)') if net else _('(incl. taxes)')), headlinestyle),
+            Spacer(1, 5 * mm)
+        ]
+        return story
+
+    def _filter_story(self, doc, form_data, net=False):
+        story = []
+        if form_data.get('date_axis') and (form_data.get('date_from') or form_data.get('date_until')):
+            story += [
+                Paragraph(_('{axis} between {start} and {end}').format(
+                    axis=dict(OverviewFilterForm(event=self.event).fields['date_axis'].choices)[form_data.get('date_axis')],
+                    start=date_format(form_data.get('date_from'), 'SHORT_DATE_FORMAT') if form_data.get('date_from') else '–',
+                    end=date_format(form_data.get('date_until'), 'SHORT_DATE_FORMAT') if form_data.get('date_until') else '–',
+                ), self.get_style()),
+                Spacer(1, 5 * mm)
+            ]
+
+        if form_data.get('subevent'):
+            try:
+                subevent = self.event.subevents.get(pk=self.form_data.get('subevent'))
+            except SubEvent.DoesNotExist:
+                subevent = self.form_data.get('subevent')
+            story.append(Paragraph(pgettext('subevent', 'Date: {}').format(subevent), self.get_style()))
+            story.append(Spacer(1, 5 * mm))
+        return story
+
+    def _get_data(self, form_data):
+        return order_overview(
+            self.event,
+            subevent=form_data.get('subevent'),
+            date_filter=form_data.get('date_axis'),
+            date_from=form_data.get('date_from'),
+            date_until=form_data.get('date_until'),
+            fees=True
+        )
+
+    def _table_story(self, doc, form_data, net=False):
         colwidths = [
             a * doc.width for a in (
                 1 - (0.05 + 0.075) * 6,
@@ -262,27 +300,6 @@ class OverviewReport(Report):
         tstyle_bold.fontName = 'OpenSansBd'
         tstyle_th = copy.copy(tstyle_bold)
         tstyle_th.alignment = TA_CENTER
-        story = [
-            Paragraph(_('Orders by product') + ' ' + (_('(excl. taxes)') if net else _('(incl. taxes)')), headlinestyle),
-            Spacer(1, 5 * mm)
-        ]
-        if form_data.get('date_axis'):
-            story += [
-                Paragraph(_('{axis} between {start} and {end}').format(
-                    axis=dict(OverviewFilterForm(event=self.event).fields['date_axis'].choices)[form_data.get('date_axis')],
-                    start=date_format(form_data.get('date_from'), 'SHORT_DATE_FORMAT') if form_data.get('date_from') else '–',
-                    end=date_format(form_data.get('date_until'), 'SHORT_DATE_FORMAT') if form_data.get('date_until') else '–',
-                ), self.get_style()),
-                Spacer(1, 5 * mm)
-            ]
-
-        if form_data.get('subevent'):
-            try:
-                subevent = self.event.subevents.get(pk=self.form_data.get('subevent'))
-            except SubEvent.DoesNotExist:
-                subevent = self.form_data.get('subevent')
-            story.append(Paragraph(pgettext('subevent', 'Date: {}').format(subevent), self.get_style()))
-            story.append(Spacer(1, 5 * mm))
         tdata = [
             [
                 _('Product'),
@@ -309,14 +326,7 @@ class OverviewReport(Report):
             ],
         ]
 
-        items_by_category, total = order_overview(
-            self.event,
-            subevent=form_data.get('subevent'),
-            date_filter=form_data.get('date_axis'),
-            date_from=form_data.get('date_from'),
-            date_until=form_data.get('date_until'),
-            fees=True
-        )
+        items_by_category, total = self._get_data(form_data)
         places = settings.CURRENCY_PLACES.get(self.event.currency, 2)
         states = (
             ('canceled', Order.STATUS_CANCELED),
@@ -360,8 +370,7 @@ class OverviewReport(Report):
 
         table = Table(tdata, colWidths=colwidths, repeatRows=3)
         table.setStyle(TableStyle(tstyledata))
-        story.append(table)
-        return story
+        return [table]
 
     @property
     def export_form_fields(self) -> dict:
