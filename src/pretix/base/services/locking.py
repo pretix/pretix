@@ -163,7 +163,7 @@ def lock_event_redis(event):
     retries = 5
     for i in range(retries):
         try:
-            if lock.acquire(False):
+            if lock.acquire(blocking=False):
                 return True
         except RedisError:
             logger.exception('Error locking an event')
