@@ -63,6 +63,7 @@ from django.utils.timezone import now, override
 from django.utils.translation import gettext as _, pgettext
 from django_scopes import scope, scopes_disabled
 from i18nfield.strings import LazyI18nString
+from text_unidecode import unidecode
 
 from pretix.base.email import ClassicMailRenderer
 from pretix.base.i18n import language
@@ -431,8 +432,9 @@ def mail_send_task(self, *args, to: List[str], subject: str, body: str, html: st
                                     }
                                 )
                         if attach_ical:
+                            fname = re.sub('[^a-zA-Z0-9 ]', '-', unidecode(pgettext('attachment_filename', 'Calendar invite')))
                             for i, cal in enumerate(get_private_icals(event, [position] if position else order.positions.all())):
-                                email.attach('event-{}.ics'.format(i), cal.serialize(), 'text/calendar')
+                                email.attach('{}{}.ics'.format(fname, f'-{i + 1}' if i > 0 else ''), cal.serialize(), 'text/calendar')
 
             email = email_filter.send_chained(event, 'message', message=email, order=order, user=user)
 
