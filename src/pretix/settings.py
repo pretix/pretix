@@ -802,6 +802,7 @@ if config.has_option('sentry', 'dsn') and not any(c in sys.argv for c in ('shell
         environment=urlparse(SITE_URL).netloc,
         release=__version__,
         send_default_pii=False,
+        propagate_traces=False,  # see https://github.com/getsentry/sentry-python/issues/1717
     )
     ignore_logger('pretix.base.tasks')
     ignore_logger('django.security.DisallowedHost')
