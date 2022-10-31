@@ -27,9 +27,14 @@ from functools import wraps
 from celery.exceptions import Retry
 from django.dispatch import Signal
 from sentry_sdk import Hub
-from sentry_sdk.consts import OP
+try:
+    from sentry_sdk.consts import OP
+    from sentry_sdk.integrations.django.signals_handlers import _get_receiver_name
+except ImportError:
+    # sentry-sdk<1.10
+    class OP:
+        EVENT_DJANGO = "event.django"
 from sentry_sdk.integrations import django as djangosentry
-from sentry_sdk.integrations.django.signals_handlers import _get_receiver_name
 from sentry_sdk.utils import capture_internal_exceptions
 
 MASK = '*' * 8
@@ -152,7 +157,11 @@ class PretixSentryIntegration(djangosentry.DjangoIntegration):
         # This is a workaround for https://github.com/getsentry/sentry-python/issues/1700
         # that needs to stay until it is fixed
         djangosentry.patch_signals = patched_patch_signals
-        djangosentry.signals_handlers.patch_signals = patched_patch_signals
+        try:
+            djangosentry.signals_handlers.patch_signals = patched_patch_signals
+        except AttributeError:
+            # sentry-sdk < 1.10.*
+            pass
 
         djangosentry.DjangoIntegration.setup_once()
         from django.core.handlers.base import BaseHandler
