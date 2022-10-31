@@ -79,9 +79,9 @@ class Command(BaseCommand):
                 if settings.SENTRY_ENABLED:
                     from sentry_sdk import capture_exception
                     capture_exception(err)
-                    self.stdout.write(self.style.ERROR(f'ERROR runperiodic {str(err)}\n'))
+                    self.stdout.write(self.style.ERROR(f'ERROR {name}: {str(err)}\n'))
                 else:
-                    self.stdout.write(self.style.ERROR(f'ERROR runperiodic {str(err)}\n'))
+                    self.stdout.write(self.style.ERROR(f'ERROR {name}: {str(err)}\n'))
                     traceback.print_exc()
             else:
                 if options.get('verbosity') > 1:
