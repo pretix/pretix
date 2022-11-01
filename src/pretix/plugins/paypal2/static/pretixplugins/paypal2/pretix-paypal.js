@@ -312,7 +312,6 @@ var pretixpaypal = {
             'tr_TR',
         ]
         let lang = $("body").attr("data-locale").split('-')[0];
-        console.log(allowed_locales.find(element => element.startsWith(lang)));
         return allowed_locales.find(element => element.startsWith(lang));
     }
 };
