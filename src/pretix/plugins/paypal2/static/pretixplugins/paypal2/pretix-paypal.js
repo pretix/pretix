@@ -72,8 +72,10 @@ var pretixpaypal = {
             pretixpaypal.currency = $("body").attr("data-currency");
             pretixpaypal.locale = this.guessLocale();
         }
-
-        pretixpaypal.continue_button.prop("disabled", true);
+        // if no payment option is selected, disable the continue button
+        if (!pretixpaypal.continue_button[0].form.elements['payment'].value) {
+            pretixpaypal.continue_button.prop("disabled", true);
+        }
 
         // We are setting the cogwheel already here, as the renderAPM() method might take some time to get loaded.
         let apmtextselector = $("label[for=input_payment_paypal_apm]");
