@@ -52,8 +52,8 @@ from django.utils.translation import gettext as _, gettext_lazy, pgettext
 from django_countries.fields import Country
 from reportlab.lib import colors
 from reportlab.lib.enums import TA_CENTER
-from reportlab.platypus import PageBreak, Paragraph, Spacer, Table, TableStyle
 from reportlab.lib.units import mm
+from reportlab.platypus import PageBreak, Paragraph, Spacer, Table, TableStyle
 
 from pretix.base.decimal import round_decimal
 from pretix.base.exporter import BaseExporter, MultiSheetListExporter
