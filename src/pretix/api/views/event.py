@@ -33,6 +33,7 @@
 # License for the specific language governing permissions and limitations under the License.
 
 import django_filters
+from django.conf import settings
 from django.db import transaction
 from django.db.models import Prefetch, ProtectedError, Q
 from django.utils.timezone import now
@@ -250,7 +251,7 @@ class EventViewSet(viewsets.ModelViewSet):
         if copy_from:
             new_event.copy_data_from(copy_from)
 
-            if plugins:
+            if plugins is not None:
                 new_event.set_active_plugins(plugins)
             if 'is_public' in serializer.validated_data:
                 new_event.is_public = serializer.validated_data['is_public']
@@ -266,9 +267,8 @@ class EventViewSet(viewsets.ModelViewSet):
         else:
             serializer.instance.set_defaults()
 
-            if plugins:
-                new_event.set_active_plugins(plugins)
-                new_event.save(update_fields=['plugins'])
+            new_event.set_active_plugins(plugins if plugins is not None else settings.PRETIX_PLUGINS_DEFAULT.split(','))
+            new_event.save(update_fields=['plugins'])
 
         serializer.instance.log_action(
             'pretix.event.added',

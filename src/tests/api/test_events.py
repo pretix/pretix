@@ -438,7 +438,7 @@ def test_event_create_with_clone(token_client, organizer, event, meta_prop, urls
     assert resp.status_code == 201
     with scopes_disabled():
         cloned_event = Event.objects.get(organizer=organizer.pk, slug='2031')
-        assert cloned_event.plugins == "pretix.plugins.banktransfer,pretix.plugins.ticketoutputpdf"
+        assert cloned_event.plugins == event.plugins
         assert cloned_event.is_public is True
         assert organizer.events.get(slug="2031").meta_values.filter(
             property__name=meta_prop.name, value="Conference"
