@@ -103,6 +103,8 @@ class Command(BaseCommand):
 
             with language(locale), override(timezone):
                 for receiver, response in signal_result:
+                    if not response:
+                        return None
                     ex = response(e, o, report_status)
                     if ex.identifier == options['export_provider']:
                         params = json.loads(options.get('parameters') or '{}')
