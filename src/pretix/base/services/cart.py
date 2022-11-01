@@ -945,7 +945,7 @@ class CartManager:
                 continue
             if count < voucher.min_usages_remaining:
                 self._operations = [o for o in self._operations if not (
-                    isinstance(o, self.AddOperation) and o.voucher.pk == voucher.pk
+                    isinstance(o, self.AddOperation) and o.voucher and o.voucher.pk == voucher.pk
                 )]
                 removals = [o.position.pk for o in self._operations if isinstance(o, self.RemoveOperation)]
                 for p in self.positions:
