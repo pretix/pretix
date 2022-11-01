@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-10-31 15:56+0000\n"
-"PO-Revision-Date: 2022-10-26 19:09+0000\n"
+"PO-Revision-Date: 2022-10-31 16:09+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
 ">\n"
@@ -6614,11 +6614,9 @@ msgstr ""
 "{event} getätigt haben."
 
 #: pretix/base/services/mail.py:435
-#, fuzzy
-#| msgid "Calendar invites"
 msgctxt "attachment_filename"
 msgid "Calendar invite"
-msgstr "Kalender-Einladungen"
+msgstr "Kalendereintrag"
 
 #: pretix/base/services/memberships.py:104
 #, python-brace-format
