@@ -157,6 +157,7 @@ TEST_ORDERPOSITION_RES = {
     "attendee_name": "Peter",
     "attendee_email": None,
     "voucher": None,
+    "discount": None,
     "tax_rate": "0.00",
     "tax_value": "0.00",
     "tax_rule": None,
