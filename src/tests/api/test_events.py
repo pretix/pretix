@@ -33,7 +33,7 @@
 # License for the specific language governing permissions and limitations under the License.
 
 import copy
-from datetime import datetime
+from datetime import datetime, timedelta
 from decimal import Decimal
 from unittest import mock
 
@@ -372,6 +372,8 @@ def test_event_create(team, token_client, organizer, event, meta_prop):
     '/api/v1/organizers/{}/events/?clone_from={}',
 ])
 def test_event_create_with_clone(token_client, organizer, event, meta_prop, urlstyle):
+    event.date_admission = event.date_from - timedelta(hours=1)
+    event.save()
     resp = token_client.post(
         urlstyle.format(organizer.slug, event.slug),
         {
@@ -384,7 +386,7 @@ def test_event_create_with_clone(token_client, organizer, event, meta_prop, urls
             "currency": "EUR",
             "date_from": "2018-12-27T10:00:00Z",
             "date_to": "2018-12-28T10:00:00Z",
-            "date_admission": None,
+            "date_admission": "2018-12-27T08:00:00Z",
             "is_public": False,
             "presale_start": None,
             "presale_end": None,
@@ -407,6 +409,7 @@ def test_event_create_with_clone(token_client, organizer, event, meta_prop, urls
         assert cloned_event.plugins == 'pretix.plugins.ticketoutputpdf'
         assert cloned_event.is_public is False
         assert cloned_event.testmode
+        assert cloned_event.date_admission.isoformat() == "2018-12-27T08:00:00+00:00"
         assert organizer.events.get(slug="2030").meta_values.filter(
             property__name=meta_prop.name, value="Conference"
         ).exists()

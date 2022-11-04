@@ -261,6 +261,8 @@ class EventViewSet(viewsets.ModelViewSet):
                 new_event.sales_channels = serializer.validated_data['sales_channels']
             if 'has_subevents' in serializer.validated_data:
                 new_event.has_subevents = serializer.validated_data['has_subevents']
+            if 'date_admission' in serializer.validated_data:
+                new_event.date_admission = serializer.validated_data['date_admission']
             new_event.save()
             if 'timezone' in serializer.validated_data:
                 new_event.settings.timezone = serializer.validated_data['timezone']
