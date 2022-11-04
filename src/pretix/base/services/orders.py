@@ -1097,8 +1097,16 @@ def expire_orders(sender, **kwargs):
     event_id = None
     expire = None
 
-    for o in Order.objects.filter(expires__lt=now(), status=Order.STATUS_PENDING,
-                                  require_approval=False).select_related('event').order_by('event_id'):
+    qs = Order.objects.filter(
+        expires__lt=now(),
+        status=Order.STATUS_PENDING,
+        require_approval=False
+    ).exclude(
+        Exists(
+            OrderFee.objects.filter(order_id=OuterRef('pk'), fee_type=OrderFee.FEE_TYPE_CANCELLATION)
+        )
+    ).select_related('event').order_by('event_id')
+    for o in qs:
         if o.event_id != event_id:
             expire = o.event.settings.get('payment_term_expire_automatically', as_type=bool)
             event_id = o.event_id

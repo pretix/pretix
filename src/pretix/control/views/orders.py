@@ -293,6 +293,7 @@ class OrderDetail(OrderView):
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         ctx['items'] = self.get_items()
+        ctx['has_cancellation_fee'] = any(f.fee_type == OrderFee.FEE_TYPE_CANCELLATION for f in ctx['items']['fees'])
         ctx['event'] = self.request.event
         ctx['payments'] = self.order.payments.order_by('-created')
         ctx['refunds'] = self.order.refunds.select_related('payment').order_by('-created')
