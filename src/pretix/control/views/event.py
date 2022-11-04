@@ -723,7 +723,7 @@ class MailSettingsPreview(EventPermissionRequiredMixin, View):
         if preview_item not in MailSettingsForm.base_context:
             return HttpResponseBadRequest(_('invalid item'))
 
-        regex = r"^" + re.escape(preview_item) + r"_(?P<idx>[\d+])$"
+        regex = r"^" + re.escape(preview_item) + r"_(?P<idx>[\d]+)$"
         msgs = {}
         for k, v in request.POST.items():
             # only accept allowed fields
