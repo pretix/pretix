@@ -4165,8 +4165,8 @@ msgstr ""
 
 #: pretix/base/models/orders.py:1760
 #, python-format
-msgid "Payment received for your order: %(code)s"
-msgstr "Tilauksesi %(code)s maksu vastaanotettu"
+msgid "Payment received for your order: {code}"
+msgstr "Tilauksesi {code} maksu vastaanotettu"
 
 #: pretix/base/models/orders.py:1870
 msgctxt "refund_state"
@@ -6412,8 +6412,8 @@ msgstr ""
 
 #: pretix/base/services/orders.py:1214
 #, python-format
-msgid "Your ticket is ready for download: %(code)s"
-msgstr "Lippusi on valmis ladattavaksi: %(code)s"
+msgid "Your ticket is ready for download: {code}"
+msgstr "Lippusi on valmis ladattavaksi: {code}"
 
 #: pretix/base/services/orders.py:1252
 #, python-format
@@ -25760,7 +25760,7 @@ msgid ""
 msgstr ""
 
 #: pretix/presale/views/user.py:83
-msgid "Your orders for {}"
+msgid "Your orders for {event}"
 msgstr ""
 
 #: pretix/presale/views/user.py:91

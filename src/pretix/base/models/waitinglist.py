@@ -216,7 +216,7 @@ class WaitingListEntry(LoggedModel):
         with language(self.locale, self.event.settings.region):
             mail(
                 self.email,
-                _('You have been selected from the waitinglist for {event}').format(event=str(self.event)),
+                self.event.settings.mail_subject_waiting_list,
                 self.event.settings.mail_text_waiting_list,
                 get_email_context(event=self.event, waiting_list_entry=self),
                 self.event,

@@ -4457,13 +4457,13 @@ msgstr "Betalingsinformatie"
 
 #: pretix/base/models/orders.py:1742
 #, python-format
-msgid "Event registration confirmed: %(code)s"
-msgstr "Aanmelding voor evenement bevestigd: %(code)s"
+msgid "Event registration confirmed: {code}"
+msgstr "Aanmelding voor evenement bevestigd: {code}"
 
 #: pretix/base/models/orders.py:1760
 #, python-format
-msgid "Payment received for your order: %(code)s"
-msgstr "Betaling ontvangen voor uw bestelling: %(code)s"
+msgid "Payment received for your order: {code}"
+msgstr "Betaling ontvangen voor uw bestelling: {code}"
 
 #: pretix/base/models/orders.py:1870
 msgctxt "refund_state"
@@ -6912,18 +6912,18 @@ msgstr "Deze bestelling hoeft niet goedgekeurd te worden."
 
 #: pretix/base/services/orders.py:327
 #, python-format
-msgid "Order approved and confirmed: %(code)s"
-msgstr "Bestelling goedgekeurd en bevestigd: %(code)s"
+msgid "Order approved and confirmed: {code}"
+msgstr "Bestelling goedgekeurd en bevestigd: {code}"
 
 #: pretix/base/services/orders.py:330
 #, python-format
-msgid "Order approved and awaiting payment: %(code)s"
-msgstr "Bestelling goedgekeurd en in afwachting van betaling: %(code)s"
+msgid "Order approved and awaiting payment: {code}"
+msgstr "Bestelling goedgekeurd en in afwachting van betaling: {code}"
 
 #: pretix/base/services/orders.py:378
 #, python-format
-msgid "Order denied: %(code)s"
-msgstr "Bestelling geweigerd: %(code)s"
+msgid "Order denied: {code}"
+msgstr "Bestelling geweigerd: {code}"
 
 #: pretix/base/services/orders.py:413 pretix/presale/views/order.py:857
 #: pretix/presale/views/order.py:906
@@ -6948,8 +6948,8 @@ msgstr ""
 
 #: pretix/base/services/orders.py:497
 #, python-format
-msgid "Order canceled: %(code)s"
-msgstr "Bestelling geannuleerd: %(code)s"
+msgid "Order canceled: {code}"
+msgstr "Bestelling geannuleerd: {code}"
 
 #: pretix/base/services/orders.py:915
 msgid ""
@@ -6975,23 +6975,23 @@ msgstr "Uw aanmelding: {code}"
 
 #: pretix/base/services/orders.py:1138
 #, python-format
-msgid "Your order is about to expire: %(code)s"
-msgstr "Uw bestelling staat op het punt om te verlopen: %(code)s"
+msgid "Your order is about to expire: {code}"
+msgstr "Uw bestelling staat op het punt om te verlopen: {code}"
 
 #: pretix/base/services/orders.py:1140
 #, python-format
-msgid "Your order is pending payment: %(code)s"
-msgstr "Uw bestelling wacht op betaling: %(code)s"
+msgid "Your order is pending payment: {code}"
+msgstr "Uw bestelling wacht op betaling: {code}"
 
 #: pretix/base/services/orders.py:1214
 #, python-format
-msgid "Your ticket is ready for download: %(code)s"
-msgstr "Uw ticket staat klaar om te downloaden: %(code)s"
+msgid "Your ticket is ready for download: {code}"
+msgstr "Uw ticket staat klaar om te downloaden: {code}"
 
 #: pretix/base/services/orders.py:1252
 #, python-format
-msgid "Your order has been changed: %(code)s"
-msgstr "Uw bestelling is aangepast: %(code)s"
+msgid "Your order has been changed: {code}"
+msgstr "Uw bestelling is aangepast: {code}"
 
 #: pretix/base/services/orders.py:1264
 msgid "You need to select a variation of the product."
@@ -28888,8 +28888,8 @@ msgstr ""
 "mailadres heeft ingevuld."
 
 #: pretix/presale/views/user.py:83
-msgid "Your orders for {}"
-msgstr "Uw bestellingen voor {}"
+msgid "Your orders for {event}"
+msgstr "Uw bestellingen voor {event}"
 
 #: pretix/presale/views/user.py:91
 msgid "We have trouble sending emails right now, please check back later."

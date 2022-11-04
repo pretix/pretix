@@ -4255,8 +4255,8 @@ msgstr ""
 
 #: pretix/base/models/orders.py:1760
 #, python-format
-msgid "Payment received for your order: %(code)s"
-msgstr "Pagamento ricevuto per il tuo ordine: %(code)s"
+msgid "Payment received for your order: {code}"
+msgstr "Pagamento ricevuto per il tuo ordine: {code}"
 
 #: pretix/base/models/orders.py:1870
 msgctxt "refund_state"
@@ -6503,8 +6503,8 @@ msgstr ""
 
 #: pretix/base/services/orders.py:327
 #, python-format
-msgid "Order approved and confirmed: %(code)s"
-msgstr "Ordine approvato e confermato: %(code)s"
+msgid "Order approved and confirmed: {code}"
+msgstr "Ordine approvato e confermato: {code}"
 
 #: pretix/base/services/orders.py:330
 #, python-format
@@ -6562,13 +6562,13 @@ msgstr ""
 
 #: pretix/base/services/orders.py:1140
 #, python-format
-msgid "Your order is pending payment: %(code)s"
-msgstr "Il tuo ordine è in attesa di pagamento: %(code)s"
+msgid "Your order is pending payment: {code}"
+msgstr "Il tuo ordine è in attesa di pagamento: {code}"
 
 #: pretix/base/services/orders.py:1214
 #, python-format
-msgid "Your ticket is ready for download: %(code)s"
-msgstr "Il tuo biglietto è pronto per il download: %(code)s"
+msgid "Your ticket is ready for download: {code}"
+msgstr "Il tuo biglietto è pronto per il download: {code}"
 
 #: pretix/base/services/orders.py:1252
 #, python-format
@@ -27003,7 +27003,7 @@ msgid ""
 msgstr ""
 
 #: pretix/presale/views/user.py:83
-msgid "Your orders for {}"
+msgid "Your orders for {event}"
 msgstr ""
 
 #: pretix/presale/views/user.py:91

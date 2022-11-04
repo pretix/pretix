@@ -4536,13 +4536,13 @@ msgstr "Информация о платеже"
 
 #: pretix/base/models/orders.py:1742
 #, python-format
-msgid "Event registration confirmed: %(code)s"
-msgstr "Регистрация мероприятия подтверждена: %(code)s"
+msgid "Event registration confirmed: {code}"
+msgstr "Регистрация мероприятия подтверждена: {code}"
 
 #: pretix/base/models/orders.py:1760
 #, python-format
-msgid "Payment received for your order: %(code)s"
-msgstr "Получена оплата за ваш заказ: %(code)s"
+msgid "Payment received for your order: {code}"
+msgstr "Получена оплата за ваш заказ: {code}"
 
 #: pretix/base/models/orders.py:1870
 msgctxt "refund_state"
@@ -7055,18 +7055,18 @@ msgstr "Этот заказ не ожидает утверждения."
 
 #: pretix/base/services/orders.py:327
 #, python-format
-msgid "Order approved and confirmed: %(code)s"
-msgstr "Заказ утверждён и подтверждён: %(code)s"
+msgid "Order approved and confirmed: {code}"
+msgstr "Заказ утверждён и подтверждён: {code}"
 
 #: pretix/base/services/orders.py:330
 #, python-format
-msgid "Order approved and awaiting payment: %(code)s"
-msgstr "Заказ утверждён и ожидает оплату: %(code)s"
+msgid "Order approved and awaiting payment: {code}"
+msgstr "Заказ утверждён и ожидает оплату: {code}"
 
 #: pretix/base/services/orders.py:378
 #, python-format
-msgid "Order denied: %(code)s"
-msgstr "Заказ отклонён: %(code)s"
+msgid "Order denied: {code}"
+msgstr "Заказ отклонён: {code}"
 
 #: pretix/base/services/orders.py:413 pretix/presale/views/order.py:857
 #: pretix/presale/views/order.py:906
@@ -7089,8 +7089,8 @@ msgstr ""
 
 #: pretix/base/services/orders.py:497
 #, python-format
-msgid "Order canceled: %(code)s"
-msgstr "Заказ отменён: %(code)s"
+msgid "Order canceled: {code}"
+msgstr "Заказ отменён: {code}"
 
 #: pretix/base/services/orders.py:915
 msgid ""
@@ -7115,23 +7115,23 @@ msgstr "Регистрация вашего мероприятия: {code}"
 
 #: pretix/base/services/orders.py:1138
 #, python-format
-msgid "Your order is about to expire: %(code)s"
-msgstr "Ваш заказ истекает: %(code)s"
+msgid "Your order is about to expire: {code}"
+msgstr "Ваш заказ истекает: {code}"
 
 #: pretix/base/services/orders.py:1140
 #, python-format
-msgid "Your order is pending payment: %(code)s"
-msgstr "Оплата вашего заказа не завершена: %(code)s"
+msgid "Your order is pending payment: {code}"
+msgstr "Оплата вашего заказа не завершена: {code}"
 
 #: pretix/base/services/orders.py:1214
 #, python-format
-msgid "Your ticket is ready for download: %(code)s"
-msgstr "Ваш билет готов к скачиванию: %(code)s"
+msgid "Your ticket is ready for download: {code}"
+msgstr "Ваш билет готов к скачиванию: {code}"
 
 #: pretix/base/services/orders.py:1252
 #, python-format
-msgid "Your order has been changed: %(code)s"
-msgstr "Ваш заказ был изменён: %(code)s"
+msgid "Your order has been changed: {code}"
+msgstr "Ваш заказ был изменён: {code}"
 
 #: pretix/base/services/orders.py:1264
 msgid "You need to select a variation of the product."
@@ -27805,8 +27805,8 @@ msgid ""
 msgstr ""
 
 #: pretix/presale/views/user.py:83
-msgid "Your orders for {}"
-msgstr "Ваши заказы на {}"
+msgid "Your orders for {event}"
+msgstr "Ваши заказы на {event}"
 
 #: pretix/presale/views/user.py:91
 msgid "We have trouble sending emails right now, please check back later."

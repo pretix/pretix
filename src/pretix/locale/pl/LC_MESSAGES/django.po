@@ -4550,8 +4550,8 @@ msgstr ""
 
 #: pretix/base/models/orders.py:1760
 #, python-format
-msgid "Payment received for your order: %(code)s"
-msgstr "Płatność otrzymana dla zamówienia: %(code)s"
+msgid "Payment received for your order: {code}"
+msgstr "Płatność otrzymana dla zamówienia: {code}"
 
 #: pretix/base/models/orders.py:1870
 msgctxt "refund_state"
@@ -27140,7 +27140,7 @@ msgid ""
 msgstr ""
 
 #: pretix/presale/views/user.py:83
-msgid "Your orders for {}"
+msgid "Your orders for {event}"
 msgstr ""
 
 #: pretix/presale/views/user.py:91

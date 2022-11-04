@@ -54,7 +54,7 @@ from django.db.transaction import get_connection
 from django.dispatch import receiver
 from django.utils.functional import cached_property
 from django.utils.timezone import make_aware, now
-from django.utils.translation import gettext as _, gettext_lazy
+from django.utils.translation import gettext as _
 from django_scopes import scopes_disabled
 
 from pretix.api.models import OAuthApplication
@@ -324,10 +324,10 @@ def approve_order(order, user=None, send_mail: bool=True, auth=None, force=False
         with language(order.locale, order.event.settings.region):
             if order.total == Decimal('0.00'):
                 email_template = order.event.settings.mail_text_order_approved_free
-                email_subject = _('Order approved and confirmed: %(code)s') % {'code': order.code}
+                email_subject = order.event.settings.mail_subject_order_approved_free
             else:
                 email_template = order.event.settings.mail_text_order_approved
-                email_subject = _('Order approved and awaiting payment: %(code)s') % {'code': order.code}
+                email_subject = order.event.settings.mail_subject_order_approved
 
             email_context = get_email_context(event=order.event, order=order)
             try:
@@ -373,9 +373,9 @@ def deny_order(order, comment='', user=None, send_mail: bool=True, auth=None):
 
     if send_mail:
         email_template = order.event.settings.mail_text_order_denied
+        email_subject = order.event.settings.mail_subject_order_denied
         email_context = get_email_context(event=order.event, order=order, comment=comment)
         with language(order.locale, order.event.settings.region):
-            email_subject = _('Order denied: %(code)s') % {'code': order.code}
             try:
                 order.send_mail(
                     email_subject, email_template, email_context,
@@ -491,10 +491,10 @@ def _cancel_order(order, user=None, send_mail: bool=True, api_token=None, device
         order.create_transactions()
 
         if send_mail:
-            email_template = order.event.settings.mail_text_order_canceled
             with language(order.locale, order.event.settings.region):
+                email_template = order.event.settings.mail_text_order_canceled
+                email_subject = order.event.settings.mail_subject_order_canceled
                 email_context = get_email_context(event=order.event, order=order, comment=comment or "")
-                email_subject = _('Order canceled: %(code)s') % {'code': order.code}
                 try:
                     order.send_mail(
                         email_subject, email_template, email_context,
@@ -938,13 +938,12 @@ def _create_order(event: Event, email: str, positions: List[CartPosition], now_d
     return order, p
 
 
-def _order_placed_email(event: Event, order: Order, pprov: BasePaymentProvider, email_template, log_entry: str,
-                        invoice, payment: OrderPayment, is_free=False):
+def _order_placed_email(event: Event, order: Order, pprov: BasePaymentProvider, email_template, subject_template,
+                        log_entry: str, invoice, payment: OrderPayment, is_free=False):
     email_context = get_email_context(event=event, order=order, payment=payment if pprov else None)
-    email_subject = gettext_lazy('Your order: {code}')
     try:
         order.send_mail(
-            email_subject, email_template, email_context,
+            subject_template, email_template, email_context,
             log_entry,
             invoices=[invoice] if invoice and event.settings.invoice_email_attachment else [],
             attach_tickets=True,
@@ -957,13 +956,13 @@ def _order_placed_email(event: Event, order: Order, pprov: BasePaymentProvider, 
         logger.exception('Order received email could not be sent')
 
 
-def _order_placed_email_attendee(event: Event, order: Order, position: OrderPosition, email_template, log_entry: str, is_free=False):
+def _order_placed_email_attendee(event: Event, order: Order, position: OrderPosition, email_template, subject_template,
+                                 log_entry: str, is_free=False):
     email_context = get_email_context(event=event, order=order, position=position)
-    email_subject = gettext_lazy('Your event registration: {code}')
 
     try:
         position.send_mail(
-            email_subject, email_template, email_context,
+            subject_template, email_template, email_context,
             log_entry,
             invoices=[],
             attach_tickets=True,
@@ -1059,29 +1058,34 @@ def _perform_order(event: Event, payment_provider: str, position_ids: List[str],
     if order.email:
         if order.require_approval:
             email_template = event.settings.mail_text_order_placed_require_approval
+            subject_template = event.settings.mail_subject_order_placed_require_approval
             log_entry = 'pretix.event.order.email.order_placed_require_approval'
 
             email_attendees = False
         elif free_order_flow:
             email_template = event.settings.mail_text_order_free
+            subject_template = event.settings.mail_subject_order_free
             log_entry = 'pretix.event.order.email.order_free'
 
             email_attendees = event.settings.mail_send_order_free_attendee
             email_attendees_template = event.settings.mail_text_order_free_attendee
+            subject_attendees_template = event.settings.mail_subject_order_free_attendee
         else:
             email_template = event.settings.mail_text_order_placed
+            subject_template = event.settings.mail_subject_order_placed
             log_entry = 'pretix.event.order.email.order_placed'
 
             email_attendees = event.settings.mail_send_order_placed_attendee
             email_attendees_template = event.settings.mail_text_order_placed_attendee
+            subject_attendees_template = event.settings.mail_subject_order_placed_attendee
 
         if sales_channel in event.settings.mail_sales_channel_placed_paid:
-            _order_placed_email(event, order, pprov, email_template, log_entry, invoice, payment,
+            _order_placed_email(event, order, pprov, email_template, subject_template, log_entry, invoice, payment,
                                 is_free=free_order_flow)
             if email_attendees:
                 for p in order.positions.all():
                     if p.addon_to_id is None and p.attendee_email and p.attendee_email != order.email:
-                        _order_placed_email_attendee(event, order, p, email_attendees_template, log_entry,
+                        _order_placed_email_attendee(event, order, p, email_attendees_template, subject_attendees_template, log_entry,
                                                      is_free=free_order_flow)
 
     return order.id
@@ -1135,9 +1139,9 @@ def send_expiry_warnings(sender, **kwargs):
                     email_template = settings.mail_text_order_expire_warning
                     email_context = get_email_context(event=o.event, order=o)
                     if settings.payment_term_expire_automatically:
-                        email_subject = _('Your order is about to expire: %(code)s') % {'code': o.code}
+                        email_subject = settings.mail_subject_order_expire_warning
                     else:
-                        email_subject = _('Your order is pending payment: %(code)s') % {'code': o.code}
+                        email_subject = settings.mail_subject_order_pending_warning
 
                     try:
                         o.send_mail(
@@ -1210,8 +1214,8 @@ def send_download_reminders(sender, **kwargs):
                 o.download_reminder_sent = True
                 o.save(update_fields=['download_reminder_sent'])
                 email_template = event.settings.mail_text_download_reminder
+                email_subject = event.settings.mail_subject_download_reminder
                 email_context = get_email_context(event=event, order=o)
-                email_subject = _('Your ticket is ready for download: %(code)s') % {'code': o.code}
                 try:
                     o.send_mail(
                         email_subject, email_template, email_context,
@@ -1234,6 +1238,7 @@ def send_download_reminders(sender, **kwargs):
                                 continue
                         if p.addon_to_id is None and p.attendee_email and p.attendee_email != o.email:
                             email_template = event.settings.mail_text_download_reminder_attendee
+                            email_subject = event.settings.mail_subject_download_reminder_attendee
                             email_context = get_email_context(event=event, order=o, position=p)
                             try:
                                 o.send_mail(
@@ -1249,7 +1254,7 @@ def notify_user_changed_order(order, user=None, auth=None, invoices=[]):
     with language(order.locale, order.event.settings.region):
         email_template = order.event.settings.mail_text_order_changed
         email_context = get_email_context(event=order.event, order=order)
-        email_subject = _('Your order has been changed: %(code)s') % {'code': order.code}
+        email_subject = order.event.settings.mail_subject_order_changed
         try:
             order.send_mail(
                 email_subject, email_template, email_context,

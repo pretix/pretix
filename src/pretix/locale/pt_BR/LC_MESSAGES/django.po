@@ -4548,8 +4548,8 @@ msgstr "Código do pedido"
 
 #: pretix/base/models/orders.py:1760
 #, python-format
-msgid "Payment received for your order: %(code)s"
-msgstr "Pagamento recebido pelo seu pedido: %(code)s"
+msgid "Payment received for your order: {code}"
+msgstr "Pagamento recebido pelo seu pedido: {code}"
 
 #: pretix/base/models/orders.py:1870
 msgctxt "refund_state"
@@ -27833,8 +27833,8 @@ msgid ""
 msgstr ""
 
 #: pretix/presale/views/user.py:83
-msgid "Your orders for {}"
-msgstr "Suas ordens para {}"
+msgid "Your orders for {event}"
+msgstr "Suas ordens para {event}"
 
 #: pretix/presale/views/user.py:91
 msgid "We have trouble sending emails right now, please check back later."

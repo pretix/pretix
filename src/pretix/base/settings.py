@@ -1708,6 +1708,14 @@ DEFAULTS = {
         'type': LazyI18nString,
         'default': ""
     },
+    'mail_subject_resend_link': {
+        'type': LazyI18nString,
+        'default': LazyI18nString.from_gettext(gettext_noop("Your order: {code}")),
+    },
+    'mail_subject_resend_link_attendee': {
+        'type': LazyI18nString,
+        'default': LazyI18nString.from_gettext(gettext_noop("Your event registration: {code}")),
+    },
     'mail_text_resend_link': {
         'type': LazyI18nString,
         'default': LazyI18nString.from_gettext(gettext_noop("""Hello,
@@ -1721,6 +1729,10 @@ You can change your order details and view the status of your order at
 Best regards,
 Your {event} team"""))
     },
+    'mail_subject_resend_all_links': {
+        'type': LazyI18nString,
+        'default': LazyI18nString.from_gettext(gettext_noop("Your orders for {event}")),
+    },
     'mail_text_resend_all_links': {
         'type': LazyI18nString,
         'default': LazyI18nString.from_gettext(gettext_noop("""Hello,
@@ -1733,6 +1745,10 @@ The list is as follows:
 Best regards,
 Your {event} team"""))
     },
+    'mail_subject_order_free_attendee': {
+        'type': LazyI18nString,
+        'default': LazyI18nString.from_gettext(gettext_noop("Your event registration: {code}")),
+    },
     'mail_text_order_free_attendee': {
         'type': LazyI18nString,
         'default': LazyI18nString.from_gettext(gettext_noop("""Hello {attendee_name},
@@ -1744,6 +1760,14 @@ You can view the details and status of your ticket here:
 
 Best regards,
 Your {event} team"""))
+    },
+    'mail_send_order_free_attendee': {
+        'type': bool,
+        'default': 'False'
+    },
+    'mail_subject_order_free': {
+        'type': LazyI18nString,
+        'default': LazyI18nString.from_gettext(gettext_noop("Your order: {code}")),
     },
     'mail_text_order_free': {
         'type': LazyI18nString,
@@ -1758,9 +1782,9 @@ You can change your order details and view the status of your order at
 Best regards,
 Your {event} team"""))
     },
-    'mail_send_order_free_attendee': {
-        'type': bool,
-        'default': 'False'
+    'mail_subject_order_placed_require_approval': {
+        'type': LazyI18nString,
+        'default': LazyI18nString.from_gettext(gettext_noop("Your order: {code}")),
     },
     'mail_text_order_placed_require_approval': {
         'type': LazyI18nString,
@@ -1775,6 +1799,10 @@ You can change your order details and view the status of your order at
 
 Best regards,
 Your {event} team"""))
+    },
+    'mail_subject_order_placed': {
+        'type': LazyI18nString,
+        'default': LazyI18nString.from_gettext(gettext_noop("Your order: {code}")),
     },
     'mail_text_order_placed': {
         'type': LazyI18nString,
@@ -1819,6 +1847,10 @@ Your {event} team"""))
         'type': bool,
         'default': 'False'
     },
+    'mail_subject_order_placed_attendee': {
+        'type': LazyI18nString,
+        'default': LazyI18nString.from_gettext(gettext_noop("Your event registration: {code}")),
+    },
     'mail_text_order_placed_attendee': {
         'type': LazyI18nString,
         'default': LazyI18nString.from_gettext(gettext_noop("""Hello {attendee_name},
@@ -1831,6 +1863,10 @@ You can view the details and status of your ticket here:
 Best regards,
 Your {event} team"""))
     },
+    'mail_subject_order_changed': {
+        'type': LazyI18nString,
+        'default': LazyI18nString.from_gettext(gettext_noop("Your order has been changed: {code}")),
+    },
     'mail_text_order_changed': {
         'type': LazyI18nString,
         'default': LazyI18nString.from_gettext(gettext_noop("""Hello,
@@ -1842,6 +1878,10 @@ You can view the status of your order at
 
 Best regards,
 Your {event} team"""))
+    },
+    'mail_subject_order_paid': {
+        'type': LazyI18nString,
+        'default': LazyI18nString.from_gettext(gettext_noop("Payment received for your order: {code}")),
     },
     'mail_text_order_paid': {
         'type': LazyI18nString,
@@ -1860,6 +1900,10 @@ Your {event} team"""))
     'mail_send_order_paid_attendee': {
         'type': bool,
         'default': 'False'
+    },
+    'mail_subject_order_paid_attendee': {
+        'type': LazyI18nString,
+        'default': LazyI18nString.from_gettext(gettext_noop("Event registration confirmed: {code}")),
     },
     'mail_text_order_paid_attendee': {
         'type': LazyI18nString,
@@ -1888,6 +1932,14 @@ Your {event} team"""))
         'type': int,
         'default': '3'
     },
+    'mail_subject_order_expire_warning': {
+        'type': LazyI18nString,
+        'default': LazyI18nString.from_gettext(gettext_noop("Your order is about to expire: {code}")),
+    },
+    'mail_subject_order_pending_warning': {
+        'type': LazyI18nString,
+        'default': LazyI18nString.from_gettext(gettext_noop("Your order is pending payment: {code}")),
+    },
     'mail_text_order_expire_warning': {
         'type': LazyI18nString,
         'default': LazyI18nString.from_gettext(gettext_noop("""Hello,
@@ -1901,6 +1953,10 @@ You can view the payment information and the status of your order at
 
 Best regards,
 Your {event} team"""))
+    },
+    'mail_subject_waiting_list': {
+        'type': LazyI18nString,
+        'default': LazyI18nString.from_gettext(gettext_noop("You have been selected from the waitinglist for {event}")),
     },
     'mail_text_waiting_list': {
         'type': LazyI18nString,
@@ -1931,6 +1987,10 @@ as possible to the next person on the waiting list:
 Best regards,
 Your {event} team"""))
     },
+    'mail_subject_order_canceled': {
+        'type': LazyI18nString,
+        'default': LazyI18nString.from_gettext(gettext_noop("Order canceled: {code}")),
+    },
     'mail_text_order_canceled': {
         'type': LazyI18nString,
         'default': LazyI18nString.from_gettext(gettext_noop("""Hello,
@@ -1944,6 +2004,10 @@ You can view the details of your order at
 
 Best regards,
 Your {event} team"""))
+    },
+    'mail_subject_order_approved': {
+        'type': LazyI18nString,
+        'default': LazyI18nString.from_gettext(gettext_noop("Order approved and awaiting payment: {code}")),
     },
     'mail_text_order_approved': {
         'type': LazyI18nString,
@@ -1961,6 +2025,10 @@ You can select a payment method and perform the payment here:
 Best regards,
 Your {event} team"""))
     },
+    'mail_subject_order_approved_free': {
+        'type': LazyI18nString,
+        'default': LazyI18nString.from_gettext(gettext_noop("Order approved and confirmed: {code}")),
+    },
     'mail_text_order_approved_free': {
         'type': LazyI18nString,
         'default': LazyI18nString.from_gettext(gettext_noop("""Hello,
@@ -1973,6 +2041,10 @@ You can change your order details and view the status of your order at
 
 Best regards,
 Your {event} team"""))
+    },
+    'mail_subject_order_denied': {
+        'type': LazyI18nString,
+        'default': LazyI18nString.from_gettext(gettext_noop("Order denied: {code}")),
     },
     'mail_text_order_denied': {
         'type': LazyI18nString,
@@ -2007,6 +2079,10 @@ Your {event} team"""))
         'type': bool,
         'default': 'False'
     },
+    'mail_subject_download_reminder_attendee': {
+        'type': LazyI18nString,
+        'default': LazyI18nString.from_gettext(gettext_noop("Your ticket is ready for download: {code}")),
+    },
     'mail_text_download_reminder_attendee': {
         'type': LazyI18nString,
         'default': LazyI18nString.from_gettext(gettext_noop("""Hello {attendee_name},
@@ -2019,6 +2095,10 @@ Your {event} team"""))
     Best regards,
     Your {event} team"""))
     },
+    'mail_subject_download_reminder': {
+        'type': LazyI18nString,
+        'default': LazyI18nString.from_gettext(gettext_noop("Your ticket is ready for download: {code}")),
+    },
     'mail_text_download_reminder': {
         'type': LazyI18nString,
         'default': LazyI18nString.from_gettext(gettext_noop("""Hello,
@@ -2030,6 +2110,10 @@ If you did not do so already, you can download your ticket here:
 
 Best regards,
 Your {event} team"""))
+    },
+    'mail_subject_customer_registration': {
+        'type': LazyI18nString,
+        'default': LazyI18nString.from_gettext(gettext_noop("Activate your account at {organizer}")),
     },
     'mail_text_customer_registration': {
         'type': LazyI18nString,
@@ -2049,6 +2133,10 @@ Best regards,
 
 Your {organizer} team"""))
     },
+    'mail_subject_customer_email_change': {
+        'type': LazyI18nString,
+        'default': LazyI18nString.from_gettext(gettext_noop("Confirm email address for your account at {organizer}")),
+    },
     'mail_text_customer_email_change': {
         'type': LazyI18nString,
         'default': LazyI18nString.from_gettext(gettext_noop("""Hello {name},
@@ -2066,6 +2154,10 @@ If you did not request this, please ignore this email.
 Best regards,
 
 Your {organizer} team"""))
+    },
+    'mail_subject_customer_reset': {
+        'type': LazyI18nString,
+        'default': LazyI18nString.from_gettext(gettext_noop("Set a new password for your account at {organizer}")),
     },
     'mail_text_customer_reset': {
         'type': LazyI18nString,

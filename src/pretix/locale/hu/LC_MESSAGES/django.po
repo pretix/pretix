@@ -25916,8 +25916,8 @@ msgid ""
 msgstr ""
 
 #: pretix/presale/views/user.py:83
-msgid "Your orders for {}"
-msgstr "{} rendeléseid"
+msgid "Your orders for {event}"
+msgstr "{event} rendeléseid"
 
 #: pretix/presale/views/user.py:91
 msgid "We have trouble sending emails right now, please check back later."

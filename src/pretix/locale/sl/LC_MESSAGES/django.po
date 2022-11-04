@@ -4445,13 +4445,13 @@ msgstr "Podatki o plačilu"
 
 #: pretix/base/models/orders.py:1742
 #, python-format
-msgid "Event registration confirmed: %(code)s"
-msgstr "Registracija na dogodek potrjena: %(code)s"
+msgid "Event registration confirmed: {code}"
+msgstr "Registracija na dogodek potrjena: {code}"
 
 #: pretix/base/models/orders.py:1760
 #, python-format
-msgid "Payment received for your order: %(code)s"
-msgstr "Plačilo naročila prejeto: %(code)s"
+msgid "Payment received for your order: {code}"
+msgstr "Plačilo naročila prejeto: {code}"
 
 #: pretix/base/models/orders.py:1870
 msgctxt "refund_state"
@@ -6882,18 +6882,18 @@ msgstr "To naročilo ne čaka na odobritev."
 
 #: pretix/base/services/orders.py:327
 #, python-format
-msgid "Order approved and confirmed: %(code)s"
-msgstr "Naročilo odobreno in potrjeno: %(code)s"
+msgid "Order approved and confirmed: {code}"
+msgstr "Naročilo odobreno in potrjeno: {code}"
 
 #: pretix/base/services/orders.py:330
 #, python-format
-msgid "Order approved and awaiting payment: %(code)s"
-msgstr "Naročilo odobreno in čaka na plačilo: %(code)s"
+msgid "Order approved and awaiting payment: {code}"
+msgstr "Naročilo odobreno in čaka na plačilo: {code}"
 
 #: pretix/base/services/orders.py:378
 #, python-format
-msgid "Order denied: %(code)s"
-msgstr "Naročilo zavrnjeno: %(code)s"
+msgid "Order denied: {code}"
+msgstr "Naročilo zavrnjeno: {code}"
 
 #: pretix/base/services/orders.py:413 pretix/presale/views/order.py:857
 #: pretix/presale/views/order.py:906
@@ -6917,8 +6917,8 @@ msgstr ""
 
 #: pretix/base/services/orders.py:497
 #, python-format
-msgid "Order canceled: %(code)s"
-msgstr "Naročilo preklicano: %(code)s"
+msgid "Order canceled: {code}"
+msgstr "Naročilo preklicano: {code}"
 
 #: pretix/base/services/orders.py:915
 msgid ""
@@ -6943,23 +6943,23 @@ msgstr "Registracija vašega dogodka: {code}"
 
 #: pretix/base/services/orders.py:1138
 #, python-format
-msgid "Your order is about to expire: %(code)s"
-msgstr "Vaše naročilo bo kmalu poteklo: %(code)s"
+msgid "Your order is about to expire: {code}"
+msgstr "Vaše naročilo bo kmalu poteklo: {code}"
 
 #: pretix/base/services/orders.py:1140
 #, python-format
-msgid "Your order is pending payment: %(code)s"
-msgstr "Naročilo čaka na plačilo: %(code)s"
+msgid "Your order is pending payment: {code}"
+msgstr "Naročilo čaka na plačilo: {code}"
 
 #: pretix/base/services/orders.py:1214
 #, python-format
-msgid "Your ticket is ready for download: %(code)s"
-msgstr "Vaša vstopnica je pripravljena za prenos: %(code)s"
+msgid "Your ticket is ready for download: {code}"
+msgstr "Vaša vstopnica je pripravljena za prenos: {code}"
 
 #: pretix/base/services/orders.py:1252
 #, python-format
-msgid "Your order has been changed: %(code)s"
-msgstr "Vaše naročilo je spremenjeno: %(code)s"
+msgid "Your order has been changed: {code}"
+msgstr "Vaše naročilo je spremenjeno: {code}"
 
 #: pretix/base/services/orders.py:1264
 msgid "You need to select a variation of the product."
@@ -27282,7 +27282,7 @@ msgid ""
 msgstr ""
 
 #: pretix/presale/views/user.py:83
-msgid "Your orders for {}"
+msgid "Your orders for {event}"
 msgstr ""
 
 #: pretix/presale/views/user.py:91

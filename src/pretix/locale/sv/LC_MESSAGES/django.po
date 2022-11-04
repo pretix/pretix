@@ -4470,13 +4470,13 @@ msgstr "Betalningsinformation"
 
 #: pretix/base/models/orders.py:1742
 #, python-format
-msgid "Event registration confirmed: %(code)s"
-msgstr "Evenemangsregistrering bekräftad: %(code)s"
+msgid "Event registration confirmed: {code}"
+msgstr "Evenemangsregistrering bekräftad: {code}"
 
 #: pretix/base/models/orders.py:1760
 #, python-format
-msgid "Payment received for your order: %(code)s"
-msgstr "Betalning mottagen för din beställning: %(code)s"
+msgid "Payment received for your order: {code}"
+msgstr "Betalning mottagen för din beställning: {code}"
 
 #: pretix/base/models/orders.py:1870
 msgctxt "refund_state"
@@ -27309,7 +27309,7 @@ msgid ""
 msgstr ""
 
 #: pretix/presale/views/user.py:83
-msgid "Your orders for {}"
+msgid "Your orders for {event}"
 msgstr ""
 
 #: pretix/presale/views/user.py:91

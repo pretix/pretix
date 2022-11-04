@@ -37,6 +37,7 @@ import re
 from datetime import timedelta
 from decimal import Decimal
 
+import bleach
 from django import forms
 from django.conf import settings
 from django.contrib import messages
@@ -333,9 +334,12 @@ class MailSettingsPreview(OrganizerPermissionRequiredMixin, View):
                 idx = matched.group('idx')
                 if idx in self.supported_locale:
                     with language(self.supported_locale[idx], self.request.organizer.settings.region):
-                        msgs[self.supported_locale[idx]] = markdown_compile_email(
-                            v.format_map(self.placeholders(preview_item))
-                        )
+                        if 'subject' in k:
+                            msgs[self.supported_locale[idx]] = bleach.clean(v).format_map(self.placeholders(preview_item))
+                        else:
+                            msgs[self.supported_locale[idx]] = markdown_compile_email(
+                                v.format_map(self.placeholders(preview_item))
+                            )
 
         return JsonResponse({
             'item': preview_item,
@@ -2236,7 +2240,7 @@ class CustomerDetailView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMi
             ) + '?id=' + self.customer.identifier + '&token=' + token
             mail(
                 self.customer.email,
-                _('Set a new password for your account at {organizer}').format(organizer=self.request.organizer.name),
+                self.request.organizer.settings.mail_subject_customer_reset,
                 self.request.organizer.settings.mail_text_customer_reset,
                 ctx,
                 locale=self.customer.locale,

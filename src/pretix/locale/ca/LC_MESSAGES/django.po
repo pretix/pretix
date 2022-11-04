@@ -4478,13 +4478,13 @@ msgstr "Dades de pagament"
 
 #: pretix/base/models/orders.py:1742
 #, python-format
-msgid "Event registration confirmed: %(code)s"
-msgstr "Registre confirmat: %(code)s"
+msgid "Event registration confirmed: {code}"
+msgstr "Registre confirmat: {code}"
 
 #: pretix/base/models/orders.py:1760
 #, python-format
-msgid "Payment received for your order: %(code)s"
-msgstr "S'ha rebut el pagament per a la vostra comanda: %(code)s"
+msgid "Payment received for your order: {code}"
+msgstr "S'ha rebut el pagament per a la vostra comanda: {code}"
 
 #: pretix/base/models/orders.py:1870
 msgctxt "refund_state"
@@ -6963,18 +6963,18 @@ msgstr "Aquesta comanda no està pendent d'aprovació."
 
 #: pretix/base/services/orders.py:327
 #, python-format
-msgid "Order approved and confirmed: %(code)s"
-msgstr "S'ha confirmat i aprovat la comanda: %(code)s"
+msgid "Order approved and confirmed: {code}"
+msgstr "S'ha confirmat i aprovat la comanda: {code}"
 
 #: pretix/base/services/orders.py:330
 #, python-format
-msgid "Order approved and awaiting payment: %(code)s"
-msgstr "S'ha aprovat i està pendent de pagament la comanda: %(code)s"
+msgid "Order approved and awaiting payment: {code}"
+msgstr "S'ha aprovat i està pendent de pagament la comanda: {code}"
 
 #: pretix/base/services/orders.py:378
 #, python-format
-msgid "Order denied: %(code)s"
-msgstr "S'ha denegat la comanda: %(code)s"
+msgid "Order denied: {code}"
+msgstr "S'ha denegat la comanda: {code}"
 
 #: pretix/base/services/orders.py:413 pretix/presale/views/order.py:857
 #: pretix/presale/views/order.py:906
@@ -6997,8 +6997,8 @@ msgstr ""
 
 #: pretix/base/services/orders.py:497
 #, python-format
-msgid "Order canceled: %(code)s"
-msgstr "S'ha cancel·lat la comanda: %(code)s"
+msgid "Order canceled: {code}"
+msgstr "S'ha cancel·lat la comanda: {code}"
 
 #: pretix/base/services/orders.py:915
 msgid ""
@@ -7019,23 +7019,23 @@ msgstr "El vostre registre: {code}"
 
 #: pretix/base/services/orders.py:1138
 #, python-format
-msgid "Your order is about to expire: %(code)s"
-msgstr "La vostra comanda està a punt d'expirar: %(code)s"
+msgid "Your order is about to expire: {code}"
+msgstr "La vostra comanda està a punt d'expirar: {code}"
 
 #: pretix/base/services/orders.py:1140
 #, python-format
-msgid "Your order is pending payment: %(code)s"
-msgstr "La vostra comanda està pendent de pagament: %(code)s"
+msgid "Your order is pending payment: {code}"
+msgstr "La vostra comanda està pendent de pagament: {code}"
 
 #: pretix/base/services/orders.py:1214
 #, python-format
-msgid "Your ticket is ready for download: %(code)s"
-msgstr "Està llest per la descàrrega el vostre tiquet: %(code)s"
+msgid "Your ticket is ready for download: {code}"
+msgstr "Està llest per la descàrrega el vostre tiquet: {code}"
 
 #: pretix/base/services/orders.py:1252
 #, python-format
-msgid "Your order has been changed: %(code)s"
-msgstr "Ha canviat la vostra comanda: %(code)s"
+msgid "Your order has been changed: {code}"
+msgstr "Ha canviat la vostra comanda: {code}"
 
 #: pretix/base/services/orders.py:1264
 msgid "You need to select a variation of the product."
@@ -28351,8 +28351,8 @@ msgid ""
 msgstr ""
 
 #: pretix/presale/views/user.py:83
-msgid "Your orders for {}"
-msgstr "Les vostres comandes per a {}"
+msgid "Your orders for {event}"
+msgstr "Les vostres comandes per a {event}"
 
 #: pretix/presale/views/user.py:91
 msgid "We have trouble sending emails right now, please check back later."

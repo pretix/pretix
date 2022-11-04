@@ -45,7 +45,9 @@ from django.utils.crypto import get_random_string
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _, pgettext_lazy
 from django_scopes.forms import SafeModelMultipleChoiceField
-from i18nfield.forms import I18nFormField, I18nFormSetMixin, I18nTextarea
+from i18nfield.forms import (
+    I18nFormField, I18nFormSetMixin, I18nTextarea, I18nTextInput,
+)
 from phonenumber_field.formfields import PhoneNumberField
 from pytz import common_timezones
 
@@ -457,15 +459,30 @@ class MailSettingsForm(SettingsForm):
         }}
     )
 
+    mail_subject_customer_registration = I18nFormField(
+        label=_("Subject"),
+        required=False,
+        widget=I18nTextInput,
+    )
     mail_text_customer_registration = I18nFormField(
         label=_("Text"),
         required=False,
         widget=I18nTextarea,
     )
+    mail_subject_customer_email_change = I18nFormField(
+        label=_("Subject"),
+        required=False,
+        widget=I18nTextInput,
+    )
     mail_text_customer_email_change = I18nFormField(
         label=_("Text"),
         required=False,
         widget=I18nTextarea,
+    )
+    mail_subject_customer_reset = I18nFormField(
+        label=_("Subject"),
+        required=False,
+        widget=I18nTextInput,
     )
     mail_text_customer_reset = I18nFormField(
         label=_("Text"),
@@ -475,8 +492,11 @@ class MailSettingsForm(SettingsForm):
 
     base_context = {
         'mail_text_customer_registration': ['customer', 'url'],
+        'mail_subject_customer_registration': ['customer', 'url'],
         'mail_text_customer_email_change': ['customer', 'url'],
+        'mail_subject_customer_email_change': ['customer', 'url'],
         'mail_text_customer_reset': ['customer', 'url'],
+        'mail_subject_customer_reset': ['customer', 'url'],
     }
 
     def _get_sample_context(self, base_parameters):
