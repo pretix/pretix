@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-10-31 15:56+0000\n"
-"PO-Revision-Date: 2022-11-06 06:00+0000\n"
+"PO-Revision-Date: 2022-11-07 04:00+0000\n"
 "Last-Translator: Maciej Szymczak <maciej+github@szymczak.at>\n"
 "Language-Team: Polish <https://translate.pretix.eu/projects/pretix/pretix/pl/"
 ">\n"
@@ -9167,23 +9167,23 @@ msgstr ""
 
 #: pretix/base/templates/400.html:4 pretix/base/templates/400.html:8
 msgid "Bad Request"
-msgstr ""
+msgstr "Wystąpił błąd (bad request)"
 
 #: pretix/base/templates/400.html:9
 msgid "We were unable to parse your request."
-msgstr ""
+msgstr "Nie udało się przetworzyć Twojego zapytania."
 
 #: pretix/base/templates/400.html:12 pretix/base/templates/400_hostname.html:47
 #: pretix/base/templates/403.html:12 pretix/base/templates/404.html:12
 #: pretix/base/templates/500.html:22 pretix/base/templates/csrffail.html:26
 msgid "Take a step back"
-msgstr ""
+msgstr "Wstecz"
 
 #: pretix/base/templates/400.html:13 pretix/base/templates/400_hostname.html:48
 #: pretix/base/templates/403.html:13 pretix/base/templates/500.html:23
 #: pretix/presale/templates/pretixpresale/event/cookies.html:40
 msgid "Try again"
-msgstr ""
+msgstr "Spróbuj ponownie"
 
 #: pretix/base/templates/400_hostname.html:4
 #: pretix/base/templates/400_hostname.html:8
@@ -9253,19 +9253,21 @@ msgstr ""
 
 #: pretix/base/templates/500.html:4 pretix/base/templates/500.html:8
 msgid "Internal Server Error"
-msgstr ""
+msgstr "Wewnętrzny błąd serwera (Internal Server Error)"
 
 #: pretix/base/templates/500.html:9
 msgid "We had trouble processing your request."
-msgstr ""
+msgstr "Wystąpił problem z przetwarzaniem Twojego zapytania."
 
 #: pretix/base/templates/500.html:10
 msgid "If this problem persists, please contact us."
-msgstr ""
+msgstr "Jeżeli problem będzie się powtarzał, skontaktuj się z nami."
 
 #: pretix/base/templates/500.html:13
 msgid "If you contact us, please send us the following code:"
 msgstr ""
+"Poniższy kod pomoże zdiagnozować ten konkretny problem - załącz go do "
+"komunikacji z nami:"
 
 #: pretix/base/templates/csrffail.html:4 pretix/base/templates/csrffail.html:8
 msgid "Verification failed"
@@ -21878,7 +21880,7 @@ msgstr ""
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_assign.html:50
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:23
 msgid "IBAN"
-msgstr ""
+msgstr "Numer IBAN"
 
 #: pretix/plugins/banktransfer/payment.py:104
 #: pretix/plugins/banktransfer/payment.py:250
@@ -21886,7 +21888,7 @@ msgstr ""
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_assign.html:66
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:24
 msgid "BIC"
-msgstr ""
+msgstr "Numer BIC (SWIFT)"
 
 #: pretix/plugins/banktransfer/payment.py:114
 msgid "Name of bank"
@@ -27121,7 +27123,6 @@ msgid "from %(start_date)s"
 msgstr ""
 
 #: pretix/settings.py:512
-#, fuzzy
 msgid "English"
 msgstr "Angielski"
 
