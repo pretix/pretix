@@ -832,6 +832,7 @@ class Renderer:
         except KeyError:  # font not known, fall back
             logger.warning(f'Use of unknown font "{font}"')
             font = 'Open Sans'
+            ad = getAscentDescent(font, float(o['fontsize']))
 
         align_map = {
             'left': TA_LEFT,
