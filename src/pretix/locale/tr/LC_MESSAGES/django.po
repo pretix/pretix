@@ -4739,13 +4739,13 @@ msgstr "Ödeme bilgileri"
 #: pretix/base/models/orders.py:1742
 #, fuzzy, python-format
 #| msgid "Order approved and confirmed: %(code)s"
-msgid "Event registration confirmed: %(code)s"
-msgstr "Sipariş onaylandı ve onaylandı: %(code)s"
+msgid "Event registration confirmed: {code}"
+msgstr "Sipariş onaylandı ve onaylandı: {code}"
 
 #: pretix/base/models/orders.py:1760
 #, python-format
-msgid "Payment received for your order: %(code)s"
-msgstr "Siparişiniz için ödeme alındı: %(code)s"
+msgid "Payment received for your order: {code}"
+msgstr "Siparişiniz için ödeme alındı: {code}"
 
 #: pretix/base/models/orders.py:1870
 msgctxt "refund_state"
@@ -7347,18 +7347,18 @@ msgstr "Bu sipariş onay bekliyor değil."
 
 #: pretix/base/services/orders.py:327
 #, python-format
-msgid "Order approved and confirmed: %(code)s"
-msgstr "Sipariş onaylandı ve onaylandı: %(code)s"
+msgid "Order approved and confirmed: {code}"
+msgstr "Sipariş onaylandı ve onaylandı: {code}"
 
 #: pretix/base/services/orders.py:330
 #, python-format
-msgid "Order approved and awaiting payment: %(code)s"
-msgstr "Sipariş onaylandı ve ödeme bekleniyor: %(code)s"
+msgid "Order approved and awaiting payment: {code}"
+msgstr "Sipariş onaylandı ve ödeme bekleniyor: {code}"
 
 #: pretix/base/services/orders.py:378
 #, python-format
-msgid "Order denied: %(code)s"
-msgstr "Sipariş reddedildi: %(code)s"
+msgid "Order denied: {code}"
+msgstr "Sipariş reddedildi: {code}"
 
 #: pretix/base/services/orders.py:413 pretix/presale/views/order.py:857
 #: pretix/presale/views/order.py:906
@@ -7379,8 +7379,8 @@ msgstr ""
 
 #: pretix/base/services/orders.py:497
 #, python-format
-msgid "Order canceled: %(code)s"
-msgstr "Sipariş iptal edildi: %(code)s"
+msgid "Order canceled: {code}"
+msgstr "Sipariş iptal edildi: {code}"
 
 #: pretix/base/services/orders.py:915
 msgid ""
@@ -7402,23 +7402,23 @@ msgstr "Siparişiniz: {code}"
 
 #: pretix/base/services/orders.py:1138
 #, python-format
-msgid "Your order is about to expire: %(code)s"
-msgstr "Siparişinizin süresi dolmak üzere: %(code)s"
+msgid "Your order is about to expire: {code}"
+msgstr "Siparişinizin süresi dolmak üzere: {code}"
 
 #: pretix/base/services/orders.py:1140
 #, python-format
-msgid "Your order is pending payment: %(code)s"
-msgstr "Siparişiniz ödemeyi bekliyor: %(code)s"
+msgid "Your order is pending payment: {code}"
+msgstr "Siparişiniz ödemeyi bekliyor: {code}"
 
 #: pretix/base/services/orders.py:1214
 #, python-format
-msgid "Your ticket is ready for download: %(code)s"
-msgstr "Biletin indirilmeye hazır: %(code)s"
+msgid "Your ticket is ready for download: {code}"
+msgstr "Biletin indirilmeye hazır: {code}"
 
 #: pretix/base/services/orders.py:1252
 #, python-format
-msgid "Your order has been changed: %(code)s"
-msgstr "Siparişiniz değiştirildi: %(code)s"
+msgid "Your order has been changed: {code}"
+msgstr "Siparişiniz değiştirildi: {code}"
 
 #: pretix/base/services/orders.py:1264
 msgid "You need to select a variation of the product."
@@ -30466,8 +30466,8 @@ msgid ""
 msgstr ""
 
 #: pretix/presale/views/user.py:83
-msgid "Your orders for {}"
-msgstr "{} İçin siparişleriniz"
+msgid "Your orders for {event}"
+msgstr "{event} İçin siparişleriniz"
 
 #: pretix/presale/views/user.py:91
 msgid "We have trouble sending emails right now, please check back later."

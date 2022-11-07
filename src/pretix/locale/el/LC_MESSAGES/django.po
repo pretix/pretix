@@ -4671,13 +4671,13 @@ msgstr "Πληροφορίες πληρωμής"
 
 #: pretix/base/models/orders.py:1742
 #, python-format
-msgid "Event registration confirmed: %(code)s"
-msgstr "Επιβεβαίωση εγγραφής εκδήλωσης: %(code)s"
+msgid "Event registration confirmed: {code}"
+msgstr "Επιβεβαίωση εγγραφής εκδήλωσης: {code}"
 
 #: pretix/base/models/orders.py:1760
 #, python-format
-msgid "Payment received for your order: %(code)s"
-msgstr "Η πληρωμή που λάβατε για την παραγγελία σας: %(code)s"
+msgid "Payment received for your order: {code}"
+msgstr "Η πληρωμή που λάβατε για την παραγγελία σας: {code}"
 
 #: pretix/base/models/orders.py:1870
 msgctxt "refund_state"
@@ -7304,18 +7304,18 @@ msgstr "Αυτή η παραγγελία δεν εκκρεμεί έγκριση.
 
 #: pretix/base/services/orders.py:327
 #, python-format
-msgid "Order approved and confirmed: %(code)s"
-msgstr "Η παραγγελία εγκρίθηκε και επιβεβαιώθηκε: %(code)s"
+msgid "Order approved and confirmed: {code}"
+msgstr "Η παραγγελία εγκρίθηκε και επιβεβαιώθηκε: {code}"
 
 #: pretix/base/services/orders.py:330
 #, python-format
-msgid "Order approved and awaiting payment: %(code)s"
-msgstr "Η παραγγελία εγκρίνεται και αναμένεται πληρωμή: %(code)s"
+msgid "Order approved and awaiting payment: {code}"
+msgstr "Η παραγγελία εγκρίνεται και αναμένεται πληρωμή: {code}"
 
 #: pretix/base/services/orders.py:378
 #, python-format
-msgid "Order denied: %(code)s"
-msgstr "Η παραγγελία απορρίφθηκε: %(code)s"
+msgid "Order denied: {code}"
+msgstr "Η παραγγελία απορρίφθηκε: {code}"
 
 #: pretix/base/services/orders.py:413 pretix/presale/views/order.py:857
 #: pretix/presale/views/order.py:906
@@ -7338,8 +7338,8 @@ msgstr ""
 
 #: pretix/base/services/orders.py:497
 #, python-format
-msgid "Order canceled: %(code)s"
-msgstr "Παραγγελία ακυρώθηκε: %(code)s"
+msgid "Order canceled: {code}"
+msgstr "Παραγγελία ακυρώθηκε: {code}"
 
 #: pretix/base/services/orders.py:915
 msgid ""
@@ -7360,23 +7360,23 @@ msgstr "Η εγγραφή σας στην εκδήλωση: {code}"
 
 #: pretix/base/services/orders.py:1138
 #, python-format
-msgid "Your order is about to expire: %(code)s"
-msgstr "Η παραγγελία σας πρόκειται να λήξει: %(code)s"
+msgid "Your order is about to expire: {code}"
+msgstr "Η παραγγελία σας πρόκειται να λήξει: {code}"
 
 #: pretix/base/services/orders.py:1140
 #, python-format
-msgid "Your order is pending payment: %(code)s"
-msgstr "Η παραγγελία σας εκκρεμεί πληρωμή: %(code)s"
+msgid "Your order is pending payment: {code}"
+msgstr "Η παραγγελία σας εκκρεμεί πληρωμή: {code}"
 
 #: pretix/base/services/orders.py:1214
 #, python-format
-msgid "Your ticket is ready for download: %(code)s"
-msgstr "Το εισιτήριό σας είναι έτοιμο για λήψη: %(code)s"
+msgid "Your ticket is ready for download: {code}"
+msgstr "Το εισιτήριό σας είναι έτοιμο για λήψη: {code}"
 
 #: pretix/base/services/orders.py:1252
 #, python-format
-msgid "Your order has been changed: %(code)s"
-msgstr "Η παραγγελία σας έχει αλλάξει: %(code)s"
+msgid "Your order has been changed: {code}"
+msgstr "Η παραγγελία σας έχει αλλάξει: {code}"
 
 #: pretix/base/services/orders.py:1264
 msgid "You need to select a variation of the product."
@@ -30541,8 +30541,8 @@ msgid ""
 msgstr ""
 
 #: pretix/presale/views/user.py:83
-msgid "Your orders for {}"
-msgstr "Οι παραγγελίες σας για {}"
+msgid "Your orders for {event}"
+msgstr "Οι παραγγελίες σας για {event}"
 
 #: pretix/presale/views/user.py:91
 msgid "We have trouble sending emails right now, please check back later."

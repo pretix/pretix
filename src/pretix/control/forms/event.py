@@ -927,6 +927,11 @@ class MailSettingsForm(SettingsForm):
         required=True,
         choices=[]
     )
+    mail_subject_order_placed = I18nFormField(
+        label=_("Subject sent to order contact address"),
+        required=False,
+        widget=I18nTextInput,
+    )
     mail_text_order_placed = I18nFormField(
         label=_("Text sent to order contact address"),
         required=False,
@@ -938,12 +943,22 @@ class MailSettingsForm(SettingsForm):
                     'tickets, the following email will be sent out to the attendees.'),
         required=False,
     )
+    mail_subject_order_placed_attendee = I18nFormField(
+        label=_("Subject sent to attendees"),
+        required=False,
+        widget=I18nTextInput,
+    )
     mail_text_order_placed_attendee = I18nFormField(
         label=_("Text sent to attendees"),
         required=False,
         widget=I18nTextarea,
     )
 
+    mail_subject_order_paid = I18nFormField(
+        label=_("Subject sent to order contact address"),
+        required=False,
+        widget=I18nTextInput,
+    )
     mail_text_order_paid = I18nFormField(
         label=_("Text sent to order contact address"),
         required=False,
@@ -955,12 +970,22 @@ class MailSettingsForm(SettingsForm):
                     'tickets, the following email will be sent out to the attendees.'),
         required=False,
     )
+    mail_subject_order_paid_attendee = I18nFormField(
+        label=_("Subject sent to attendees"),
+        required=False,
+        widget=I18nTextInput,
+    )
     mail_text_order_paid_attendee = I18nFormField(
         label=_("Text sent to attendees"),
         required=False,
         widget=I18nTextarea,
     )
 
+    mail_subject_order_free = I18nFormField(
+        label=_("Subject sent to order contact address"),
+        required=False,
+        widget=I18nTextInput,
+    )
     mail_text_order_free = I18nFormField(
         label=_("Text sent to order contact address"),
         required=False,
@@ -972,21 +997,46 @@ class MailSettingsForm(SettingsForm):
                     'tickets, the following email will be sent out to the attendees.'),
         required=False,
     )
+    mail_subject_order_free_attendee = I18nFormField(
+        label=_("Subject sent to attendees"),
+        required=False,
+        widget=I18nTextInput,
+    )
     mail_text_order_free_attendee = I18nFormField(
         label=_("Text sent to attendees"),
         required=False,
         widget=I18nTextarea,
     )
 
+    mail_subject_order_changed = I18nFormField(
+        label=_("Subject"),
+        required=False,
+        widget=I18nTextInput,
+    )
     mail_text_order_changed = I18nFormField(
         label=_("Text"),
         required=False,
         widget=I18nTextarea,
     )
+    mail_subject_resend_link = I18nFormField(
+        label=_("Subject (sent by admin)"),
+        required=False,
+        widget=I18nTextInput,
+    )
+    mail_subject_resend_link_attendee = I18nFormField(
+        label=_("Subject (sent by admin to attendee)"),
+        required=False,
+        widget=I18nTextInput,
+    )
     mail_text_resend_link = I18nFormField(
         label=_("Text (sent by admin)"),
         required=False,
         widget=I18nTextarea,
+    )
+    mail_subject_resend_all_links = I18nFormField(
+        label=_("Subject (requested by user)"),
+        required=False,
+        widget=I18nTextInput,
     )
     mail_text_resend_all_links = I18nFormField(
         label=_("Text (requested by user)"),
@@ -1005,10 +1055,30 @@ class MailSettingsForm(SettingsForm):
         required=False,
         widget=I18nTextarea,
     )
+    mail_subject_order_expire_warning = I18nFormField(
+        label=_("Subject (if order will expire automatically)"),
+        required=False,
+        widget=I18nTextInput,
+    )
+    mail_subject_order_pending_warning = I18nFormField(
+        label=_("Subject (if order will not expire automatically)"),
+        required=False,
+        widget=I18nTextInput,
+    )
+    mail_subject_waiting_list = I18nFormField(
+        label=_("Subject"),
+        required=False,
+        widget=I18nTextInput,
+    )
     mail_text_waiting_list = I18nFormField(
         label=_("Text"),
         required=False,
         widget=I18nTextarea,
+    )
+    mail_subject_order_canceled = I18nFormField(
+        label=_("Subject"),
+        required=False,
+        widget=I18nTextInput,
     )
     mail_text_order_canceled = I18nFormField(
         label=_("Text"),
@@ -1020,6 +1090,11 @@ class MailSettingsForm(SettingsForm):
         required=False,
         widget=I18nTextarea,
     )
+    mail_subject_download_reminder = I18nFormField(
+        label=_("Subject sent to order contact address"),
+        required=False,
+        widget=I18nTextInput,
+    )
     mail_text_download_reminder = I18nFormField(
         label=_("Text sent to order contact address"),
         required=False,
@@ -1030,6 +1105,11 @@ class MailSettingsForm(SettingsForm):
         help_text=_('If the order contains attendees with email addresses different from the person who orders the '
                     'tickets, the following email will be sent out to the attendees.'),
         required=False,
+    )
+    mail_subject_download_reminder_attendee = I18nFormField(
+        label=_("Subject sent to attendees"),
+        required=False,
+        widget=I18nTextInput,
     )
     mail_text_download_reminder_attendee = I18nFormField(
         label=_("Text sent to attendees"),
@@ -1043,50 +1123,90 @@ class MailSettingsForm(SettingsForm):
         help_text=_("This email will be sent out this many days before the order event starts. If the "
                     "field is empty, the mail will never be sent.")
     )
+    mail_subject_order_placed_require_approval = I18nFormField(
+        label=_("Subject for received order"),
+        required=False,
+        widget=I18nTextInput,
+    )
     mail_text_order_placed_require_approval = I18nFormField(
-        label=_("Received order"),
+        label=_("Text for received order"),
         required=False,
         widget=I18nTextarea,
     )
+    mail_subject_order_approved = I18nFormField(
+        label=_("Subject for approved order"),
+        required=False,
+        widget=I18nTextInput,
+    )
     mail_text_order_approved = I18nFormField(
-        label=_("Approved order"),
+        label=_("Text for approved order"),
         required=False,
         widget=I18nTextarea,
         help_text=_("This will only be sent out for non-free orders. Free orders will receive the free order "
                     "template from below instead."),
     )
+    mail_subject_order_approved_free = I18nFormField(
+        label=_("Subject for approved free order"),
+        required=False,
+        widget=I18nTextInput,
+    )
     mail_text_order_approved_free = I18nFormField(
-        label=_("Approved free order"),
+        label=_("Text for approved free order"),
         required=False,
         widget=I18nTextarea,
         help_text=_("This will only be sent out for free orders. Non-free orders will receive the non-free order "
                     "template from above instead."),
     )
+    mail_subject_order_denied = I18nFormField(
+        label=_("Subject for denied order"),
+        required=False,
+        widget=I18nTextInput,
+    )
     mail_text_order_denied = I18nFormField(
-        label=_("Denied order"),
+        label=_("Text for denied order"),
         required=False,
         widget=I18nTextarea,
     )
     base_context = {
         'mail_text_order_placed': ['event', 'order', 'payment'],
+        'mail_subject_order_placed': ['event', 'order', 'payment'],
         'mail_text_order_placed_attendee': ['event', 'order', 'position'],
+        'mail_subject_order_placed_attendee': ['event', 'order', 'position'],
         'mail_text_order_placed_require_approval': ['event', 'order'],
+        'mail_subject_order_placed_require_approval': ['event', 'order'],
         'mail_text_order_approved': ['event', 'order'],
+        'mail_subject_order_approved': ['event', 'order'],
         'mail_text_order_approved_free': ['event', 'order'],
+        'mail_subject_order_approved_free': ['event', 'order'],
         'mail_text_order_denied': ['event', 'order', 'comment'],
+        'mail_subject_order_denied': ['event', 'order', 'comment'],
         'mail_text_order_paid': ['event', 'order', 'payment_info'],
+        'mail_subject_order_paid': ['event', 'order', 'payment_info'],
         'mail_text_order_paid_attendee': ['event', 'order', 'position'],
+        'mail_subject_order_paid_attendee': ['event', 'order', 'position'],
         'mail_text_order_free': ['event', 'order'],
+        'mail_subject_order_free': ['event', 'order'],
         'mail_text_order_free_attendee': ['event', 'order', 'position'],
+        'mail_subject_order_free_attendee': ['event', 'order', 'position'],
         'mail_text_order_changed': ['event', 'order'],
+        'mail_subject_order_changed': ['event', 'order'],
         'mail_text_order_canceled': ['event', 'order', 'comment'],
+        'mail_subject_order_canceled': ['event', 'order', 'comment'],
         'mail_text_order_expire_warning': ['event', 'order'],
+        'mail_subject_order_expire_warning': ['event', 'order'],
+        'mail_subject_order_pending_warning': ['event', 'order'],
         'mail_text_order_custom_mail': ['event', 'order'],
         'mail_text_download_reminder': ['event', 'order'],
+        'mail_subject_download_reminder': ['event', 'order'],
         'mail_text_download_reminder_attendee': ['event', 'order', 'position'],
+        'mail_subject_download_reminder_attendee': ['event', 'order', 'position'],
         'mail_text_resend_link': ['event', 'order'],
+        'mail_subject_resend_link': ['event', 'order'],
+        'mail_subject_resend_link_attendee': ['event', 'order'],
         'mail_text_waiting_list': ['event', 'waiting_list_entry'],
+        'mail_subject_waiting_list': ['event', 'waiting_list_entry'],
         'mail_text_resend_all_links': ['event', 'orders'],
+        'mail_subject_resend_all_links': ['event', 'orders'],
         'mail_attach_ical_description': ['event', 'event_or_subevent'],
     }
 

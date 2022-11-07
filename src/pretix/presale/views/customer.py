@@ -311,7 +311,7 @@ class ResetPasswordView(FormView):
                                         'presale:organizer.customer.recoverpw') + '?id=' + customer.identifier + '&token=' + token
         mail(
             customer.email,
-            _('Set a new password for your account at {organizer}').format(organizer=self.request.organizer.name),
+            self.request.organizer.settings.mail_subject_customer_reset,
             self.request.organizer.settings.mail_text_customer_reset,
             ctx,
             locale=customer.locale,
@@ -504,7 +504,7 @@ class ChangeInformationView(CustomerRequiredMixin, FormView):
             }, salt='pretix.presale.views.customer.ChangeInformationView')
             mail(
                 new_email,
-                _('Confirm email address for your account at {organizer}').format(organizer=self.request.organizer.name),
+                self.request.organizer.settings.mail_subject_customer_email_change,
                 self.request.organizer.settings.mail_text_customer_email_change,
                 ctx,
                 locale=form.instance.locale,

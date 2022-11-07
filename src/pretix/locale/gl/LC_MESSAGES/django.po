@@ -4641,13 +4641,13 @@ msgstr "Información de pago"
 
 #: pretix/base/models/orders.py:1742
 #, python-format
-msgid "Event registration confirmed: %(code)s"
-msgstr "Pedido aprobado e confirmado: %(code)s"
+msgid "Event registration confirmed: {code}"
+msgstr "Pedido aprobado e confirmado: {code}"
 
 #: pretix/base/models/orders.py:1760
 #, fuzzy, python-format
-msgid "Payment received for your order: %(code)s"
-msgstr "Pago recibido por su pedido: %(code)s"
+msgid "Payment received for your order: {code}"
+msgstr "Pago recibido por su pedido: {code}"
 
 #: pretix/base/models/orders.py:1870
 #, fuzzy
@@ -7301,18 +7301,18 @@ msgstr "Esta orden no está pendiente de aprobación."
 
 #: pretix/base/services/orders.py:327
 #, python-format
-msgid "Order approved and confirmed: %(code)s"
-msgstr "Pedido aprobado e confirmado: %(code)s"
+msgid "Order approved and confirmed: {code}"
+msgstr "Pedido aprobado e confirmado: {code}"
 
 #: pretix/base/services/orders.py:330
 #, fuzzy, python-format
-msgid "Order approved and awaiting payment: %(code)s"
-msgstr "Orden aprobada y pendiente de pago: %(code)s"
+msgid "Order approved and awaiting payment: {code}"
+msgstr "Orden aprobada y pendiente de pago: {code}"
 
 #: pretix/base/services/orders.py:378
 #, fuzzy, python-format
-msgid "Order denied: %(code)s"
-msgstr "Orden denegada: %(code)s"
+msgid "Order denied: {code}"
+msgstr "Orden denegada: {code}"
 
 #: pretix/base/services/orders.py:413 pretix/presale/views/order.py:857
 #: pretix/presale/views/order.py:906
@@ -7338,8 +7338,8 @@ msgstr ""
 
 #: pretix/base/services/orders.py:497
 #, fuzzy, python-format
-msgid "Order canceled: %(code)s"
-msgstr "Pedido cancelado: %(code)s"
+msgid "Order canceled: {code}"
+msgstr "Pedido cancelado: {code}"
 
 #: pretix/base/services/orders.py:915
 #, fuzzy
@@ -7365,23 +7365,23 @@ msgstr "Su pedido: {code}"
 
 #: pretix/base/services/orders.py:1138
 #, fuzzy, python-format
-msgid "Your order is about to expire: %(code)s"
-msgstr "Su pedido está a punto de caducar: %(code)s"
+msgid "Your order is about to expire: {code}"
+msgstr "Su pedido está a punto de caducar: {code}"
 
 #: pretix/base/services/orders.py:1140
 #, fuzzy, python-format
-msgid "Your order is pending payment: %(code)s"
-msgstr "Su pedido está pendiente de pago: %(code)s"
+msgid "Your order is pending payment: {code}"
+msgstr "Su pedido está pendiente de pago: {code}"
 
 #: pretix/base/services/orders.py:1214
 #, python-format
-msgid "Your ticket is ready for download: %(code)s"
-msgstr "O seu ticket está listo para descargar: %(code)s"
+msgid "Your ticket is ready for download: {code}"
+msgstr "O seu ticket está listo para descargar: {code}"
 
 #: pretix/base/services/orders.py:1252
 #, fuzzy, python-format
-msgid "Your order has been changed: %(code)s"
-msgstr "Su pedido ha sido modificado: %(code)s"
+msgid "Your order has been changed: {code}"
+msgstr "Su pedido ha sido modificado: {code}"
 
 #: pretix/base/services/orders.py:1264
 #, fuzzy
@@ -30842,8 +30842,8 @@ msgid ""
 msgstr ""
 
 #: pretix/presale/views/user.py:83
-msgid "Your orders for {}"
-msgstr "Os teus pedidos de {}"
+msgid "Your orders for {event}"
+msgstr "Os teus pedidos de {event}"
 
 #: pretix/presale/views/user.py:91
 #, fuzzy

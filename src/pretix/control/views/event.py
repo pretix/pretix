@@ -41,6 +41,7 @@ from decimal import Decimal
 from itertools import groupby
 from urllib.parse import urlsplit
 
+import bleach
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.contenttypes.models import ContentType
@@ -732,9 +733,12 @@ class MailSettingsPreview(EventPermissionRequiredMixin, View):
                 idx = matched.group('idx')
                 if idx in self.supported_locale:
                     with language(self.supported_locale[idx], self.request.event.settings.region):
-                        msgs[self.supported_locale[idx]] = markdown_compile_email(
-                            v.format_map(self.placeholders(preview_item))
-                        )
+                        if k.startswith('mail_subject_'):
+                            msgs[self.supported_locale[idx]] = bleach.clean(v).format_map(self.placeholders(preview_item))
+                        else:
+                            msgs[self.supported_locale[idx]] = markdown_compile_email(
+                                v.format_map(self.placeholders(preview_item))
+                            )
 
         return JsonResponse({
             'item': preview_item,

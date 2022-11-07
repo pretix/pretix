@@ -262,7 +262,7 @@ class Customer(LoggedModel):
         ) + '?id=' + self.identifier + '&token=' + token
         mail(
             self.email,
-            _('Activate your account at {organizer}').format(organizer=self.organizer.name),
+            self.organizer.settings.mail_subject_customer_registration,
             self.organizer.settings.mail_text_customer_registration,
             ctx,
             locale=self.locale,

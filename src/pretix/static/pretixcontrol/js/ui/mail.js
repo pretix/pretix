@@ -45,7 +45,7 @@ $(function () {
         var previewUrl = $(parentForm).attr('mail-preview-url');
         var token = $(parentForm).find('input[name=csrfmiddlewaretoken]').val();
         var dataString = 'item=' + itemName + '&csrfmiddlewaretoken=' + token;
-        $('#' + itemName + '_edit textarea').each(function () {
+        $('#' + itemName + '_edit textarea, #' + itemName + '_edit input').each(function () {
             dataString += '&' + $(this).serialize();
         });
 

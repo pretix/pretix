@@ -25447,7 +25447,7 @@ msgid ""
 msgstr ""
 
 #: pretix/presale/views/user.py:83
-msgid "Your orders for {}"
+msgid "Your orders for {event}"
 msgstr ""
 
 #: pretix/presale/views/user.py:91

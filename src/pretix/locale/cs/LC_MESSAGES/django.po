@@ -4374,13 +4374,13 @@ msgstr "Informace o platbě"
 
 #: pretix/base/models/orders.py:1742
 #, python-format
-msgid "Event registration confirmed: %(code)s"
-msgstr "Registrace události potvrzena: %(code)s"
+msgid "Event registration confirmed: {code}"
+msgstr "Registrace události potvrzena: {code}"
 
 #: pretix/base/models/orders.py:1760
 #, python-format
-msgid "Payment received for your order: %(code)s"
-msgstr "Přijatá platba za vaši objednávku: %(code)s"
+msgid "Payment received for your order: {code}"
+msgstr "Přijatá platba za vaši objednávku: {code}"
 
 #: pretix/base/models/orders.py:1870
 msgctxt "refund_state"
@@ -6679,8 +6679,8 @@ msgstr "Tato objednávka není předmětem schvalování."
 
 #: pretix/base/services/orders.py:327
 #, python-format
-msgid "Order approved and confirmed: %(code)s"
-msgstr "Schválená a potvrzená objednávka: %(code)s"
+msgid "Order approved and confirmed: {code}"
+msgstr "Schválená a potvrzená objednávka: {code}"
 
 #: pretix/base/services/orders.py:330
 #, python-format
@@ -6689,8 +6689,8 @@ msgstr ""
 
 #: pretix/base/services/orders.py:378
 #, python-format
-msgid "Order denied: %(code)s"
-msgstr "Odmítnutí objednávky: %(code)s"
+msgid "Order denied: {code}"
+msgstr "Odmítnutí objednávky: {code}"
 
 #: pretix/base/services/orders.py:413 pretix/presale/views/order.py:857
 #: pretix/presale/views/order.py:906
@@ -6711,8 +6711,8 @@ msgstr ""
 
 #: pretix/base/services/orders.py:497
 #, python-format
-msgid "Order canceled: %(code)s"
-msgstr "Zrušená objednávka: %(code)s"
+msgid "Order canceled: {code}"
+msgstr "Zrušená objednávka: {code}"
 
 #: pretix/base/services/orders.py:915
 msgid ""
@@ -6748,8 +6748,8 @@ msgstr ""
 
 #: pretix/base/services/orders.py:1252
 #, python-format
-msgid "Your order has been changed: %(code)s"
-msgstr "Vaše objednávka byla změněna: %(code)s"
+msgid "Your order has been changed: {code}"
+msgstr "Vaše objednávka byla změněna: {code}"
 
 #: pretix/base/services/orders.py:1264
 msgid "You need to select a variation of the product."
@@ -26302,7 +26302,7 @@ msgid ""
 msgstr ""
 
 #: pretix/presale/views/user.py:83
-msgid "Your orders for {}"
+msgid "Your orders for {event}"
 msgstr ""
 
 #: pretix/presale/views/user.py:91
