@@ -197,7 +197,7 @@ def mail(email: Union[str, Sequence[str]], subject: str, template: Union[str, La
         else:
             sender = formataddr((settings.PRETIX_INSTANCE_NAME, sender))
 
-        subject = raw_subject = str(subject)
+        subject = raw_subject = str(subject).replace('\n', ' ').replace('\r', '')[:900]
         signature = ""
 
         bcc = []
