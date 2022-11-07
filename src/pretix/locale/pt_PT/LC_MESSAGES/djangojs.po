@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-31 15:56+0000\n"
+"POT-Creation-Date: 2022-11-07 15:22+0000\n"
 "PO-Revision-Date: 2022-11-07 14:50+0000\n"
 "Last-Translator: Fazenda Dengo <fazendadengo@gmail.com>\n"
 "Language-Team: Portuguese (Portugal) <https://translate.pretix.eu/projects/"
@@ -131,7 +131,7 @@ msgstr ""
 msgid "Mercado Pago"
 msgstr ""
 
-#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:157
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:159
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:48
 #, fuzzy
 #| msgctxt "widget"
@@ -139,13 +139,13 @@ msgstr ""
 msgid "Continue"
 msgstr "Continuar"
 
-#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:215
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:217
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:152
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:183
 msgid "Confirming your payment …"
 msgstr "A confirmar o seu pagamento…"
 
-#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:240
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:242
 msgid "Payment method unavailable"
 msgstr ""
 
@@ -648,7 +648,8 @@ msgstr "Carrinho expirado"
 #: pretix/static/pretixpresale/js/ui/cart.js:50
 msgid "The items in your cart are reserved for you for one minute."
 msgid_plural "The items in your cart are reserved for you for {num} minutes."
-msgstr[0] "Os artigos no seu carrinho estão reservados para você por um minuto."
+msgstr[0] ""
+"Os artigos no seu carrinho estão reservados para você por um minuto."
 msgstr[1] ""
 "Os artigos no seu carrinho estão reservados para você por {num} minutos."
 
