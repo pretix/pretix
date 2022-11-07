@@ -3529,10 +3529,10 @@ msgstr ""
 
 #: pretix/base/models/items.py:456
 msgid ""
-"If this product is part of an order, the order will be put into an "
-"\"approval\" state and will need to be confirmed by you before it can be "
-"paid and completed. You can use this e.g. for discounted tickets that are "
-"only available to specific groups."
+"If this product is part of an order, the order will be put into an \"approval"
+"\" state and will need to be confirmed by you before it can be paid and "
+"completed. You can use this e.g. for discounted tickets that are only "
+"available to specific groups."
 msgstr ""
 "Wenn dieses Produkt Teil einer Bestellung ist, wird die Bestellung nicht "
 "direkt freigegeben, sondern muss von Ihnen bestätigt werden, bevor sie "
@@ -5451,15 +5451,14 @@ msgstr "Berechne die Gebühr als Anteil vom Endbetrag."
 #, python-brace-format
 msgid ""
 "We recommend to enable this if you want your users to pay the payment fees "
-"of your payment provider. <a href=\"{docs_url}\" target=\"_blank\" "
-"rel=\"noopener\">Click here for detailed information on what this does.</a> "
+"of your payment provider. <a href=\"{docs_url}\" target=\"_blank\" rel="
+"\"noopener\">Click here for detailed information on what this does.</a> "
 "Don't forget to set the correct fees above!"
 msgstr ""
 "Wir empfehlen, diese Option zu aktivieren, wenn Sie die Gebühren Ihres "
 "Zahlungsdienstleisters an Ihre Kunden weitergeben wollen. Denken Sie daran, "
-"oben die richtigen Gebührensätze des Zahlungsanbieters einzustellen. <a "
-"href=\"{docs_url}\" target=\"_blank\" rel=\"noopener\">Weitere "
-"Informationen</a>."
+"oben die richtigen Gebührensätze des Zahlungsanbieters einzustellen. <a href="
+"\"{docs_url}\" target=\"_blank\" rel=\"noopener\">Weitere Informationen</a>."
 
 #: pretix/base/payment.py:343
 msgid "Restrict to countries"
@@ -8661,12 +8660,12 @@ msgstr "Anhang für neue Bestellungen"
 #, python-brace-format
 msgid ""
 "This file will be attached to the first email that we send for every new "
-"order. Therefore it will be combined with the \"Placed order\", \"Free "
-"order\", or \"Received order\" texts from above. It will be sent to both "
-"order contacts and attendees. You can use this e.g. to send your terms of "
-"service. Do not use it to send non-public information as this file might be "
-"sent before payment is confirmed or the order is approved. To avoid this "
-"vital email going to spam, you can only upload PDF files of up to {size} MB."
+"order. Therefore it will be combined with the \"Placed order\", \"Free order"
+"\", or \"Received order\" texts from above. It will be sent to both order "
+"contacts and attendees. You can use this e.g. to send your terms of service. "
+"Do not use it to send non-public information as this file might be sent "
+"before payment is confirmed or the order is approved. To avoid this vital "
+"email going to spam, you can only upload PDF files of up to {size} MB."
 msgstr ""
 "Diese Datei wird an die erste E-Mail angehängt, die wir beim Eingang einer "
 "neuen Bestellung verschicken. Sie kann daher mit den Textvorlagen "
@@ -12390,7 +12389,7 @@ msgstr "Gutscheine per E-Mail verschicken"
 #: pretix/control/forms/vouchers.py:265
 #, python-brace-format
 msgid "Your voucher for {event}"
-msgstr "Dein Gutschein für {event}"
+msgstr "Ihr Gutschein für {event}"
 
 #: pretix/control/forms/vouchers.py:271
 #, python-brace-format
@@ -16236,10 +16235,10 @@ msgstr "Steuer-Regel: %(name)s"
 #: pretix/control/templates/pretixcontrol/event/tax_edit.html:34
 #, python-format
 msgid ""
-"These settings are intended for advanced users. See the <a "
-"href=\"%(docs)s\">documentation</a> for more information. Note that we are "
-"not responsible for the correct handling of taxes in your ticket shop. If in "
-"doubt, please contact a lawyer or tax consultant."
+"These settings are intended for advanced users. See the <a href=\"%(docs)s"
+"\">documentation</a> for more information. Note that we are not responsible "
+"for the correct handling of taxes in your ticket shop. If in doubt, please "
+"contact a lawyer or tax consultant."
 msgstr ""
 "Diese Einstellungen sind für fortgeschrittene Benutzer gedacht. Mehr Infos "
 "gibt es in der <a href=\"%(docs)s\">Dokumentation</a>. Bitte beachten Sie, "
@@ -16900,9 +16899,9 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/item/create.html:85
 msgid ""
-"Examples: Ticket category with variations for \"full price\" and "
-"\"reduced\", merchandise with variations for different sizes, workshop add-"
-"on with variations for simultaneous workshops."
+"Examples: Ticket category with variations for \"full price\" and \"reduced"
+"\", merchandise with variations for different sizes, workshop add-on with "
+"variations for simultaneous workshops."
 msgstr ""
 "Beispiele: Ticketkategorie mit Varianten für \"Regulär\" und \"Ermäßigt\", "
 "Merchandise mit Varianten für verschiedene Größen, Workshop-Zusatzprodukte "
@@ -17166,8 +17165,8 @@ msgstr "Automatische Rabatte"
 msgid ""
 "With automatic discounts, you can automatically apply a discount to "
 "purchases from your customers based on certain conditions. For example, you "
-"can create group discounts like \"get 20%% off if you buy 3 or more "
-"tickets\" or \"buy 2 tickets, get 1 free\"."
+"can create group discounts like \"get 20%% off if you buy 3 or more tickets"
+"\" or \"buy 2 tickets, get 1 free\"."
 msgstr ""
 "Mit automatischen Rabatten können Sie automatisch Rabatte auf Käufe von "
 "Kunden basierend auf bestimmten Bedingungen gewähren. Beispielsweise können "
@@ -17179,8 +17178,8 @@ msgid ""
 "Automatic discounts are available to all customers as long as they are "
 "active. If you want to offer special prices only to specific customers, you "
 "can use vouchers instead. If you want to offer discounts across multiple "
-"purchases (\"buy a package of 10 you can turn into individual tickets "
-"later\"), you can use customer accounts and memberships instead."
+"purchases (\"buy a package of 10 you can turn into individual tickets later"
+"\"), you can use customer accounts and memberships instead."
 msgstr ""
 "Automatische Rabatte sind, solange sie aktiv sind, für alle Kunden "
 "verfügbar. Wenn Sie Rabatte nur bestimmten Kunden anbieten möchten, nutzen "
@@ -17636,8 +17635,8 @@ msgid ""
 "Are you sure you want to generate a new client secret for the application "
 "<strong>%(application)s</strong>?"
 msgstr ""
-"Möchten Sie wirklich einen neuen Schlüssel für die App "
-"<strong>%(application)s</strong> generieren?"
+"Möchten Sie wirklich einen neuen Schlüssel für die App <strong>"
+"%(application)s</strong> generieren?"
 
 #: pretix/control/templates/pretixcontrol/oauth/app_rollkeys.html:15
 msgid "Roll secret"
@@ -18556,14 +18555,14 @@ msgstr "Als erledigt markieren"
 msgid ""
 "We received notice that <strong>%(amount)s</strong> have been refunded via "
 "<strong>%(method)s</strong>. If this refund is processed, the order will be "
-"underpaid by <strong>%(pending)s</strong>. The order total is "
-"<strong>%(total)s</strong>."
+"underpaid by <strong>%(pending)s</strong>. The order total is <strong>"
+"%(total)s</strong>."
 msgstr ""
-"Uns wurde mitgeteilt, dass <strong>%(amount)s</strong> über "
-"<strong>%(method)s</strong> erstattet wurden. Wenn diese Erstattung "
-"verarbeitet wird, wird die Bestellung einen ausstehenden Betrag von "
-"<strong>%(pending)s</strong> haben. Der Gesamtbetrag der Bestellung ist "
-"<strong>%(total)s</strong>."
+"Uns wurde mitgeteilt, dass <strong>%(amount)s</strong> über <strong>"
+"%(method)s</strong> erstattet wurden. Wenn diese Erstattung verarbeitet "
+"wird, wird die Bestellung einen ausstehenden Betrag von <strong>%(pending)s</"
+"strong> haben. Der Gesamtbetrag der Bestellung ist <strong>%(total)s</"
+"strong>."
 
 #: pretix/control/templates/pretixcontrol/order/refund_process.html:30
 msgid "Since the order is already canceled, this will not affect its state."
@@ -20201,8 +20200,8 @@ msgid ""
 msgstr ""
 "Bitte prüfen Sie erneut, dass Sie wirklich die ausgewählten Daten von der "
 "Veranstaltung <strong>%(event)s</strong> entfernen wollen. Wenn dies der "
-"Fall ist, geben Sie bitte hier den Kurznamen der Veranstaltung "
-"(\"%(slug)s\") ein:"
+"Fall ist, geben Sie bitte hier den Kurznamen der Veranstaltung (\"%(slug)s"
+"\") ein:"
 
 #: pretix/control/templates/pretixcontrol/shredder/download.html:41
 msgid "Event short name"
@@ -21067,8 +21066,8 @@ msgstr "Warenkörbe löschen"
 #: pretix/control/templates/pretixcontrol/vouchers/delete_carts.html:9
 #, python-format
 msgid ""
-"Are you sure you want to delete any cart positions with voucher "
-"<strong>%(voucher)s</strong>?"
+"Are you sure you want to delete any cart positions with voucher <strong>"
+"%(voucher)s</strong>?"
 msgstr ""
 "Möchten Sie den alle Warenkorbpositionen mit Gutschein <strong>%(voucher)s</"
 "strong> wirklich löschen?"
@@ -21197,8 +21196,8 @@ msgstr "Eintrag löschen"
 #: pretix/control/templates/pretixcontrol/waitinglist/delete.html:9
 #, python-format
 msgid ""
-"Are you sure you want to delete the following waiting list entry "
-"<strong>%(entry)s</strong>?"
+"Are you sure you want to delete the following waiting list entry <strong>"
+"%(entry)s</strong>?"
 msgstr "Möchten Sie den Eintrag <strong>%(entry)s</strong> wirklich löschen?"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/delete_bulk.html:4
@@ -21283,12 +21282,12 @@ msgstr "Umsatz-Schätzung"
 #, python-format
 msgid ""
 "If you can make enough room at your event to fit all the persons on the "
-"waiting list in, you could sell tickets worth an additional "
-"<strong>%(amount)s</strong>."
+"waiting list in, you could sell tickets worth an additional <strong>"
+"%(amount)s</strong>."
 msgstr ""
 "Wenn Sie Ihre Veranstaltung so vergrößern können, dass Sie allen Personen "
-"auf dieser Liste Tickets verkaufen könnten, würden Sie zusätzliche "
-"<strong>%(amount)s</strong> einnehmen."
+"auf dieser Liste Tickets verkaufen könnten, würden Sie zusätzliche <strong>"
+"%(amount)s</strong> einnehmen."
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:98
 msgid "Successfully redeemed"
@@ -25345,10 +25344,10 @@ msgstr "Verbindung mit Stripe trennen"
 
 #: pretix/plugins/stripe/payment.py:128
 msgid ""
-"Please configure a <a href=\"https://dashboard.stripe.com/account/"
-"webhooks\">Stripe Webhook</a> to the following endpoint in order to "
-"automatically cancel orders when charges are refunded externally and to "
-"process asynchronous payment methods like SOFORT."
+"Please configure a <a href=\"https://dashboard.stripe.com/account/webhooks"
+"\">Stripe Webhook</a> to the following endpoint in order to automatically "
+"cancel orders when charges are refunded externally and to process "
+"asynchronous payment methods like SOFORT."
 msgstr ""
 "Bitte konfigurieren Sie einen <a href=\"https://dashboard.stripe.com/account/"
 "webhooks\">Stripe Webhook</a> zum folgenden Endpunkt, damit Bestellungen "
@@ -26203,8 +26202,8 @@ msgid ""
 msgstr ""
 "Sie haben dieses Konto bisher nicht aktiviert und ein Passwort gesetzt. "
 "Bitte klicken Sie den Link in der E-Mail an, die wir Ihnen zugeschickt "
-"haben. Wenn Sie die E-Mail nicht finden, wählen Sie \"Passwort "
-"zurücksetzen\" um eine neue E-Mail anzufordern."
+"haben. Wenn Sie die E-Mail nicht finden, wählen Sie \"Passwort zurücksetzen"
+"\" um eine neue E-Mail anzufordern."
 
 #: pretix/presale/forms/customer.py:134
 msgid ""
@@ -27683,9 +27682,8 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order.html:417
 #, python-format
 msgid ""
-"You can cancel this order. In this case, a cancellation fee of "
-"<strong>%(fee)s</strong> will be kept and you will receive a refund of the "
-"remainder."
+"You can cancel this order. In this case, a cancellation fee of <strong>"
+"%(fee)s</strong> will be kept and you will receive a refund of the remainder."
 msgstr ""
 "Sie können diese Bestellung stornieren. In diesem Fall wird eine "
 "Stornogebühr von <strong>%(fee)s</strong> einbehalten und der Restbetrag "
@@ -27850,12 +27848,12 @@ msgstr ""
 #, python-format
 msgid ""
 "\n"
-"                                                Add-on product to position "
-"#%(positionid)s"
+"                                                Add-on product to position #"
+"%(positionid)s"
 msgstr ""
 "\n"
-"                                                Zusatzprodukt zu Position "
-"#%(positionid)s"
+"                                                Zusatzprodukt zu Position #"
+"%(positionid)s"
 
 #: pretix/presale/templates/pretixpresale/event/order_change_confirm.html:56
 #, python-format
@@ -28896,6 +28894,60 @@ msgstr "Schreibzugriff"
 #: pretix/settings.py:878
 msgid "Kosovo"
 msgstr "Kosovo"
+
+#: pretix/base/models/orders.py:1742
+#, python-format
+msgid "Event registration confirmed: %(code)s"
+msgstr "Registrierung bestätigt: %(code)s"
+
+#: pretix/base/models/orders.py:1760
+#, python-format
+msgid "Payment received for your order: %(code)s"
+msgstr "Zahlung erhalten für die Bestellung: %(code)s"
+
+#: pretix/base/services/orders.py:327
+#, python-format
+msgid "Order approved and confirmed: %(code)s"
+msgstr "Bestellung bestätigt: %(code)s"
+
+#: pretix/base/services/orders.py:330
+#, python-format
+msgid "Order approved and awaiting payment: %(code)s"
+msgstr "Bestellung freigegeben und wartet auf Bezahlung: %(code)s"
+
+#: pretix/base/services/orders.py:378
+#, python-format
+msgid "Order denied: %(code)s"
+msgstr "Bestellung abgelehnt: %(code)s"
+
+#: pretix/base/services/orders.py:497
+#, python-format
+msgid "Order canceled: %(code)s"
+msgstr "Bestellung storniert: %(code)s"
+
+#: pretix/base/services/orders.py:1138
+#, python-format
+msgid "Your order is about to expire: %(code)s"
+msgstr "Ihre Bestellung läuft bald ab: %(code)s"
+
+#: pretix/base/services/orders.py:1140
+#, python-format
+msgid "Your order is pending payment: %(code)s"
+msgstr "Ihre Bestellung wurde noch nicht bezahlt: %(code)s"
+
+#: pretix/base/services/orders.py:1214
+#, python-format
+msgid "Your ticket is ready for download: %(code)s"
+msgstr "Ihr Ticket ist zum Download verfügbar: %(code)s"
+
+#: pretix/base/services/orders.py:1252
+#, python-format
+msgid "Your order has been changed: %(code)s"
+msgstr "Ihre Bestellung wurde geändert: %(code)s"
+
+#: pretix/presale/views/user.py:83
+msgid "Your orders for {}"
+msgstr "Ihre Bestellungen für {}"
 
 #~ msgid "The presale for this event has not yet started."
 #~ msgstr "Der Vorverkauf für diese Veranstaltung hat noch nicht begonnen."
