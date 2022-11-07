@@ -185,7 +185,7 @@ setup(
         'django-oauth-toolkit==1.2.*',
         'django-otp==1.1.*',
         'django-phonenumber-field==7.0.*',
-        'django-redis==5.0.*',
+        'django-redis>=5.0,<5.3',
         'django-scopes==1.2.*',
         'django-statici18n==2.3.*',
         'djangorestframework==3.14.*',
