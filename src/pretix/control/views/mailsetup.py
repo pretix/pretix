@@ -32,6 +32,7 @@ from django.utils.translation import gettext_lazy as _
 from django.views.generic import TemplateView
 
 from pretix.base import email
+from pretix.base.forms import SECRET_REDACTED
 from pretix.base.models import Event
 from pretix.base.services.mail import mail
 from pretix.control.forms.filter import OrganizerFilterForm
@@ -237,7 +238,8 @@ class MailSettingsSetupView(TemplateView):
 
             if request.POST.get('state') == 'save':
                 for k, v in self.smtp_form.cleaned_data.items():
-                    self.object.settings.set(k, v)
+                    if v != SECRET_REDACTED:
+                        self.object.settings.set(k, v)
                 self.object.settings.smtp_use_custom = True
                 self.log_action({**self.smtp_form.cleaned_data, 'smtp_use_custom': True})
                 messages.success(request, _('Your changes have been saved.'))
