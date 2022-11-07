@@ -733,7 +733,7 @@ class MailSettingsPreview(EventPermissionRequiredMixin, View):
                 idx = matched.group('idx')
                 if idx in self.supported_locale:
                     with language(self.supported_locale[idx], self.request.event.settings.region):
-                        if 'subject' in k:
+                        if k.startswith('mail_subject_'):
                             msgs[self.supported_locale[idx]] = bleach.clean(v).format_map(self.placeholders(preview_item))
                         else:
                             msgs[self.supported_locale[idx]] = markdown_compile_email(
