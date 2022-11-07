@@ -5,7 +5,7 @@
   "scripts": {},
   "dependencies": {
     "@babel/core": "^7.19.6",
-    "@babel/preset-env": "^7.19.3",
+    "@babel/preset-env": "^7.20.2",
     "@rollup/plugin-babel": "^6.0.2",
     "@rollup/plugin-node-resolve": "^14.1.0",
     "vue": "^2.7.13",
