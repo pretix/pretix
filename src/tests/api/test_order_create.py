@@ -1127,6 +1127,48 @@ def test_order_create_positionids_addons(token_client, organizer, event, item, q
 
 
 @pytest.mark.django_db
+def test_order_create_is_bundled_addons(token_client, organizer, event, item, quota):
+    res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
+    res['positions'] = [
+        {
+            "positionid": 1,
+            "item": item.pk,
+            "variation": None,
+            "price": "23.00",
+            "attendee_name_parts": {"full_name": "Peter"},
+            "attendee_email": None,
+            "addon_to": None,
+            "answers": [],
+            "subevent": None
+        },
+        {
+            "positionid": 2,
+            "item": item.pk,
+            "variation": None,
+            "price": "23.00",
+            "attendee_name_parts": {"full_name": "Peter"},
+            "attendee_email": None,
+            "addon_to": 1,
+            "is_bundled": True,
+            "answers": [],
+            "subevent": None
+        }
+    ]
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 201
+    with scopes_disabled():
+        o = Order.objects.get(code=resp.data['code'])
+        pos1 = o.positions.first()
+        pos2 = o.positions.last()
+    assert pos2.addon_to == pos1
+    assert pos2.is_bundled
+
+
+@pytest.mark.django_db
 def test_order_create_positionid_validation(token_client, organizer, event, item, quota):
     res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
     res['positions'] = [
