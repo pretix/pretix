@@ -2616,6 +2616,7 @@ def test_order_create_pdf_data(token_client, organizer, event, item, quota, ques
 
 @pytest.mark.django_db
 def test_create_cart_and_consume_cart_with_addons(token_client, organizer, event, item, quota, question):
+    # End to end test for the combination of cart creation and order creation, as used eg in POS
     with scopes_disabled():
         addon_cat = event.categories.create(name='Addons')
         addon_item = event.items.create(name='Workshop', default_price=2, category=addon_cat)
