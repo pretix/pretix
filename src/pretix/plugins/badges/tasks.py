@@ -31,8 +31,8 @@ from pretix.base.services.orders import OrderError
 from pretix.base.services.tasks import EventTask
 from pretix.celery_app import app
 
-from .exporters import OPTIONS, render_pdf
 from ...base.services.export import ExportError
+from .exporters import OPTIONS, render_pdf
 
 logger = logging.getLogger(__name__)
 
