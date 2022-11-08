@@ -1120,6 +1120,7 @@ def test_cartpos_create_bulk_with_addon(token_client, organizer, event, item, qu
         assert cp1a.item == addon_item
         assert not cp1a.is_bundled
         assert cp1a.attendee_name == "Peter's friend"
+        assert cp1a.cart_id == cp1.cart_id
 
 
 @pytest.mark.django_db
@@ -1210,6 +1211,7 @@ def test_cartpos_create_bulk_with_bundled(token_client, organizer, event, item, 
         cp1a = cp1.addons.get()
         assert cp1a.pk == resp.data['results'][0]['data']['bundled'][0]['id']
         assert cp1a.item == bundled_item
+        assert cp1a.cart_id == cp1.cart_id
         assert cp1a.is_bundled
         assert cp1a.attendee_name == "Peter's friend"
 

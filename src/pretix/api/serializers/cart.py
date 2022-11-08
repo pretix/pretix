@@ -237,12 +237,14 @@ class CartPositionCreateSerializer(BaseCartPositionCreateSerializer):
             for addon_data in addons_data:
                 addon_data['addon_to'] = cp
                 addon_data['is_bundled'] = False
+                addon_data['cart_id'] = cp.cart_id
                 super().create(addon_data)
 
         if bundled_data:
             for bundle_data in bundled_data:
                 bundle_data['addon_to'] = cp
                 bundle_data['is_bundled'] = True
+                bundle_data['cart_id'] = cp.cart_id
                 super().create(bundle_data)
 
         return cp
