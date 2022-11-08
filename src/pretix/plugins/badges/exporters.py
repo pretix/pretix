@@ -61,7 +61,6 @@ from pretix.base.i18n import language
 from pretix.base.models import Order, OrderPosition, Question, QuestionAnswer
 from pretix.base.pdf import Renderer
 from pretix.base.services.export import ExportError
-from pretix.base.services.orders import OrderError
 from pretix.base.settings import PERSON_NAME_SCHEMES
 from pretix.helpers.templatetags.jsonfield import JSONExtract
 from pretix.plugins.badges.models import BadgeItem, BadgeLayout
@@ -185,7 +184,7 @@ def render_pdf(event, positions, opt):
 
     op_renderers = [(op, renderermap.get(op.item_id, default_renderer)) for op in positions if renderermap.get(op.item_id, default_renderer)]
     if not len(op_renderers):
-        raise OrderError(_("None of the selected products is configured to print badges."))
+        raise ExportError(_("None of the selected products is configured to print badges."))
 
     # render each badge on its own page first
     merger = PdfMerger()

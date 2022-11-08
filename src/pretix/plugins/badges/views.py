@@ -235,7 +235,7 @@ class LayoutEditorView(BaseEditorView):
 class OrderPrintDo(EventPermissionRequiredMixin, AsyncAction, View):
     task = badges_create_pdf
     permission = 'can_view_orders'
-    known_errortypes = ['OrderError']
+    known_errortypes = ['OrderError', 'ExportError']
 
     def get_success_message(self, value):
         return None
