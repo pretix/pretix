@@ -345,8 +345,11 @@ class VoucherBulkForm(VoucherForm):
         if ',' in raw or ';' in raw:
             if '@' in r[0]:
                 raise ValidationError(_('CSV input needs to contain a header row in the first line.'))
-            dialect = csv.Sniffer().sniff(raw[:1024])
-            reader = csv.DictReader(StringIO(raw), dialect=dialect)
+            try:
+                dialect = csv.Sniffer().sniff(raw[:1024])
+                reader = csv.DictReader(StringIO(raw), dialect=dialect)
+            except csv.Error as e:
+                raise ValidationError(_('CSV parsing failed: {error}.').format(error=str(e)))
             if 'email' not in reader.fieldnames:
                 raise ValidationError(_('CSV input needs to contain a field with the header "{header}".').format(header="email"))
             unknown_fields = [f for f in reader.fieldnames if f not in ('email', 'name', 'tag', 'number')]
