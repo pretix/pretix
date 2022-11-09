@@ -72,9 +72,13 @@ var pretixpaypal = {
             pretixpaypal.currency = $("body").attr("data-currency");
             pretixpaypal.locale = this.guessLocale();
         }
-        // if no payment option is selected, disable the continue button
-        if (!pretixpaypal.continue_button[0].form.elements['payment'].value) {
-            pretixpaypal.continue_button.prop("disabled", true);
+
+        // If no payment option is selected, and we're not on the paypage (which doesn't have a continue button),
+        // disable the continue button
+        if (!pretixpaypal.paypage) {
+            if (!pretixpaypal.continue_button[0].form.elements['payment'].value) {
+                pretixpaypal.continue_button.prop("disabled", true);
+            }
         }
 
         // We are setting the cogwheel already here, as the renderAPM() method might take some time to get loaded.
