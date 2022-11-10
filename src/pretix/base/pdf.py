@@ -40,6 +40,7 @@ import os
 import re
 import subprocess
 import tempfile
+import unicodedata
 import uuid
 from collections import OrderedDict
 from functools import partial
@@ -859,6 +860,9 @@ class Renderer:
             text = "<br/>".join(get_display(reshaper.reshape(l)) for l in text.split("<br/>"))
         except:
             logger.exception('Reshaping/Bidi fixes failed on string {}'.format(repr(text)))
+
+        # reportlab does not support unicode combination characters
+        text = unicodedata.normalize("NFKC", text)
 
         p = Paragraph(text, style=style)
         w, h = p.wrapOn(canvas, float(o['width']) * mm, 1000 * mm)
