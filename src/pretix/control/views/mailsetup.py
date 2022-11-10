@@ -170,6 +170,13 @@ class MailSettingsSetupView(TemplateView):
             )
 
             if allow_save:
+                self.object.settings.smtp_use_custom = False
+                del self.object.settings.smtp_host
+                del self.object.settings.smtp_port
+                del self.object.settings.smtp_username
+                del self.object.settings.smtp_password
+                del self.object.settings.smtp_use_tls
+                del self.object.settings.smtp_use_ssl
                 for k, v in self.simple_form.cleaned_data.items():
                     self.object.settings.set(k, v)
                 self.log_action(self.simple_form.cleaned_data)
