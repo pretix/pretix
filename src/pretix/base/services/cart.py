@@ -826,6 +826,7 @@ class CartManager:
                     price_after_voucher=listed_price,
                     custom_price_input=custom_price,
                     custom_price_input_is_net=self.event.settings.display_net_prices,
+                    voucher_ignored=False,
                 )
                 self._check_item_constraints(op, operations)
                 operations.append(op)
