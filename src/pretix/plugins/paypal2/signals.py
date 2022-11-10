@@ -149,7 +149,16 @@ def signal_process_response(sender, request: HttpRequest, response: HttpResponse
 
         csps = {
             'script-src': ['https://www.paypal.com', "'nonce-{}'".format(_nonce(request))],
-            'frame-src': ['https://www.paypal.com', 'https://www.sandbox.paypal.com', "'nonce-{}'".format(_nonce(request))],
+
+            # When the stars align in an unpredictable manner and the temperature is just right, the PayPal SDK might
+            # decide to not open a popup for the payment process (which is in turn not tied to our CSP) but instead
+            # use a popover directly on the purchase page. Unfortunately, the latter will be tied to our CSP even when
+            # trying to iframe banking pages such as giropay and SOFORT.
+            # Until PayPal figures a way around this (or at least provides a way to inhibit the popover), we'll allow to
+            # frame any https page only on the pay-page.
+            # Ref: Z#23111577
+            # 'frame-src': ['https://www.paypal.com', 'https://www.sandbox.paypal.com', "'nonce-{}'".format(_nonce(request))],
+            'frame-src': ['https:', "'nonce-{}'".format(_nonce(request))],
             'connect-src': ['https://www.paypal.com', 'https://www.sandbox.paypal.com'],  # Or not - seems to only affect PayPal logging...
             'img-src': ['https://t.paypal.com'],
             'style-src': ["'nonce-{}'".format(_nonce(request))]
