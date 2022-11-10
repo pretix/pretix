@@ -462,9 +462,13 @@ def _cancel_order(order, user=None, send_mail: bool=True, api_token=None, device
                     f._calculate_tax()
                     f.save()
 
-                if order.payment_refund_sum < cancellation_fee:
-                    raise OrderError(_('The cancellation fee cannot be higher than the payment credit of this order.'))
-                order.status = Order.STATUS_PAID
+                if cancellation_fee > order.total:
+                    raise OrderError(_('The cancellation fee cannot be higher than the total amount of this order.'))
+                elif order.payment_refund_sum < cancellation_fee:
+                    order.status = Order.STATUS_PENDING
+                    order.set_expires()
+                else:
+                    order.status = Order.STATUS_PAID
                 order.total = cancellation_fee
                 order.cancellation_date = now()
                 order.save(update_fields=['status', 'cancellation_date', 'total'])
@@ -1097,8 +1101,16 @@ def expire_orders(sender, **kwargs):
     event_id = None
     expire = None
 
-    for o in Order.objects.filter(expires__lt=now(), status=Order.STATUS_PENDING,
-                                  require_approval=False).select_related('event').order_by('event_id'):
+    qs = Order.objects.filter(
+        expires__lt=now(),
+        status=Order.STATUS_PENDING,
+        require_approval=False
+    ).exclude(
+        Exists(
+            OrderFee.objects.filter(order_id=OuterRef('pk'), fee_type=OrderFee.FEE_TYPE_CANCELLATION)
+        )
+    ).select_related('event').order_by('event_id')
+    for o in qs:
         if o.event_id != event_id:
             expire = o.event.settings.get('payment_term_expire_automatically', as_type=bool)
             event_id = o.event_id

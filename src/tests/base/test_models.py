@@ -1403,6 +1403,8 @@ class OrderTestCase(BaseQuotaTestCase):
         self.order.total = 48
         self.order.save()
         self.order = Order.objects.get(pk=self.order.pk)
+        self.order.status = Order.STATUS_PAID
+        self.order.save()
         assert self.order.user_cancel_fee == Decimal('0.00')
 
         self.event.settings.cancel_allow_user_paid_keep = Decimal('2.50')
@@ -1418,6 +1420,27 @@ class OrderTestCase(BaseQuotaTestCase):
         assert self.order.user_cancel_fee == Decimal('9.10')
 
         self.event.settings.cancel_allow_user_paid_keep = Decimal('100.00')
+        self.order = Order.objects.get(pk=self.order.pk)
+        assert self.order.user_cancel_fee == Decimal('48.00')
+
+        self.order.status = Order.STATUS_PENDING
+        self.order.save()
+        self.order = Order.objects.get(pk=self.order.pk)
+        assert self.order.user_cancel_fee == Decimal('0.00')
+
+        self.event.settings.cancel_allow_user_unpaid_keep = Decimal('2.50')
+        self.order = Order.objects.get(pk=self.order.pk)
+        assert self.order.user_cancel_fee == Decimal('2.50')
+
+        self.event.settings.cancel_allow_user_unpaid_keep_percentage = Decimal('5.0')
+        self.order = Order.objects.get(pk=self.order.pk)
+        assert self.order.user_cancel_fee == Decimal('4.90')
+
+        self.event.settings.cancel_allow_user_unpaid_keep_fees = True
+        self.order = Order.objects.get(pk=self.order.pk)
+        assert self.order.user_cancel_fee == Decimal('6.80')
+
+        self.event.settings.cancel_allow_user_unpaid_keep = Decimal('100.00')
         self.order = Order.objects.get(pk=self.order.pk)
         assert self.order.user_cancel_fee == Decimal('48.00')
 

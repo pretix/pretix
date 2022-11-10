@@ -11,6 +11,9 @@
                 <legend>{% trans "Unpaid or free orders" %}</legend>
                 {% bootstrap_field form.cancel_allow_user layout="control" %}
                 {% bootstrap_field form.cancel_allow_user_until layout="control" %}
+                {% bootstrap_field form.cancel_allow_user_unpaid_keep layout="control" %}
+                {% bootstrap_field form.cancel_allow_user_unpaid_keep_percentage layout="control" %}
+                {% bootstrap_field form.cancel_allow_user_unpaid_keep_fees layout="control" %}
             </fieldset>
             <fieldset>
                 <legend>{% trans "Paid orders" %}</legend>

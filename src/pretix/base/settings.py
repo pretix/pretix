@@ -1421,6 +1421,45 @@ DEFAULTS = {
             label=_("Customers can cancel their unpaid orders"),
         )
     },
+    'cancel_allow_user_unpaid_keep': {
+        'default': '0.00',
+        'type': Decimal,
+        'form_class': forms.DecimalField,
+        'serializer_class': serializers.DecimalField,
+        'serializer_kwargs': dict(
+            max_digits=10, decimal_places=2
+        ),
+        'form_kwargs': dict(
+            label=_("Charge a fixed cancellation fee"),
+            help_text=_("Only affects orders pending payments, a cancellation fee for free orders is never charged. "
+                        "Note that it will be your responsibility to claim the cancellation fee from the user."),
+        )
+    },
+    'cancel_allow_user_unpaid_keep_fees': {
+        'default': 'False',
+        'type': bool,
+        'form_class': forms.BooleanField,
+        'serializer_class': serializers.BooleanField,
+        'form_kwargs': dict(
+            label=_("Charge payment, shipping and service fees"),
+            help_text=_("Only affects orders pending payments, a cancellation fee for free orders is never charged. "
+                        "Note that it will be your responsibility to claim the cancellation fee from the user."),
+        )
+    },
+    'cancel_allow_user_unpaid_keep_percentage': {
+        'default': '0.00',
+        'type': Decimal,
+        'form_class': forms.DecimalField,
+        'serializer_class': serializers.DecimalField,
+        'serializer_kwargs': dict(
+            max_digits=10, decimal_places=2
+        ),
+        'form_kwargs': dict(
+            label=_("Charge a percentual cancellation fee"),
+            help_text=_("Only affects orders pending payments, a cancellation fee for free orders is never charged. "
+                        "Note that it will be your responsibility to claim the cancellation fee from the user."),
+        )
+    },
     'cancel_allow_user_until': {
         'default': None,
         'type': RelativeDateWrapper,

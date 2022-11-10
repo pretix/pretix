@@ -496,7 +496,7 @@ def test_order_cancel_pending_fee_too_high(client, env):
     client.get('/control/event/dummy/dummy/orders/FOO/transition?status=c')
     client.post('/control/event/dummy/dummy/orders/FOO/transition', {
         'status': 'c',
-        'cancellation_fee': '6.00'
+        'cancellation_fee': '26.00'
     })
     with scopes_disabled():
         o = Order.objects.get(id=env[2].id)
@@ -507,7 +507,7 @@ def test_order_cancel_pending_fee_too_high(client, env):
 
 
 @pytest.mark.django_db
-def test_order_cancel_unpaid_no_fees_allowed(client, env):
+def test_order_cancel_unpaid_fees_allowed(client, env):
     client.login(email='dummy@dummy.dummy', password='dummy')
     client.get('/control/event/dummy/dummy/orders/FOO/transition?status=c')
     client.post('/control/event/dummy/dummy/orders/FOO/transition', {
@@ -516,10 +516,10 @@ def test_order_cancel_unpaid_no_fees_allowed(client, env):
     })
     with scopes_disabled():
         o = Order.objects.get(id=env[2].id)
-        assert o.positions.exists()
-        assert not o.fees.exists()
-    assert o.status == Order.STATUS_CANCELED
-    assert o.total == Decimal('14.00')
+        assert not o.positions.exists()
+        assert o.fees.exists()
+    assert o.status == Order.STATUS_PENDING
+    assert o.total == Decimal('6.00')
 
 
 @pytest.mark.django_db

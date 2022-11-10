@@ -286,6 +286,21 @@ def test_expire_twice(event):
 
 
 @pytest.mark.django_db
+def test_expire_skipped_if_canceled_with_fee(event):
+    o2 = Order.objects.create(
+        code='FO2', event=event, email='dummy@dummy.test',
+        status=Order.STATUS_PENDING, locale='en',
+        datetime=now(), expires=now() - timedelta(days=10),
+        total=12,
+    )
+    o2.fees.create(fee_type=OrderFee.FEE_TYPE_CANCELLATION, value=12)
+    generate_invoice(o2)
+    expire_orders(None)
+    o2 = Order.objects.get(id=o2.id)
+    assert o2.status == Order.STATUS_PENDING
+
+
+@pytest.mark.django_db
 def test_expiring_auto_disabled(event):
     event.settings.set('payment_term_expire_automatically', False)
     o1 = Order.objects.create(
