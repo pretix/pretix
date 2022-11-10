@@ -346,7 +346,7 @@ class CartTest(CartTestMixin, TestCase):
             '_voucher_ignore_if_redeemed': 'on',
         }, follow=True)
         with scopes_disabled():
-            objs = list(CartPosition.objects.filter(cart_id=self.session_key, event=self.event))
+            objs = list(CartPosition.objects.filter(cart_id=self.session_key, event=self.event).order_by('id'))
         self.assertEqual(len(objs), 3)
         self.assertEqual(objs[0].voucher, v)
         self.assertEqual(objs[1].voucher, v)
