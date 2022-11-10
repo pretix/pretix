@@ -252,7 +252,7 @@ setup(
             'pytest-mock==3.10.*',
             'pytest-rerunfailures==10.2',
             'pytest-sugar',
-            'pytest-xdist==2.5.*',
+            'pytest-xdist>=2.5,<3.1',
             'pytest==7.2.*',
             'responses',
         ],
