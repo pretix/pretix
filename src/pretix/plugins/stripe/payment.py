@@ -216,6 +216,21 @@ class StripeSettingsHolder(BasePaymentProvider):
                                  'country of residence.'),
                  )),
             ]
+
+        extra_fields = [
+            ('postfix',
+             forms.CharField(
+                 label=_('Statement descriptor postfix'),
+                 help_text=_('Any value entered here will be shown on the customer\'s credit card bill or bank account '
+                             'transaction. We will automatically add the order code in front of it. Note that depending '
+                             'on the payment method, only a very limited number of characters is allowed. We do not '
+                             'recommend entering more than {cnt} characters into this field.').format(
+                     cnt=22 - 1 - settings.ENTROPY['order_code']
+                 ),
+                 required=False,
+             )),
+        ]
+
         d = OrderedDict(
             fields + [
                 ('method_cc',
@@ -293,7 +308,7 @@ class StripeSettingsHolder(BasePaymentProvider):
                      help_text=_('Needs to be enabled in your Stripe account first.'),
                      required=False,
                  )),
-            ] + list(super().settings_form_fields.items()) + moto_settings
+            ] + extra_fields + list(super().settings_form_fields.items()) + moto_settings
         )
         if not self.settings.connect_client_id or self.settings.secret_key:
             d['connect_destination'] = forms.CharField(
@@ -378,11 +393,21 @@ class StripeMethod(BasePaymentProvider):
         return d
 
     def statement_descriptor(self, payment, length=22):
-        return '{event}-{code} {eventname}'.format(
-            event=self.event.slug.upper(),
-            code=payment.order.code,
-            eventname=re.sub('[^a-zA-Z0-9 ]', '', str(self.event.name))
-        )[:length]
+        if self.settings.postfix:
+            # If a custom postfix is set, we only transmit the order code, so we have as much room as possible for
+            # the postfix.
+            return '{code} {postfix}'.format(
+                code=payment.order.code,
+                postfix=self.settings.postfix,
+            )[:length]
+        else:
+            # If no custom postfix is set, we transmit the event slug and event name for backwards compatibility
+            # with older pretix versions.
+            return '{event}-{code} {eventname}'.format(
+                event=self.event.slug.upper(),
+                code=payment.order.code,
+                eventname=re.sub('[^a-zA-Z0-9 ]', '', str(self.event.name))
+            )[:length]
 
     @property
     def api_kwargs(self):
