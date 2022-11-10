@@ -136,7 +136,7 @@ class CartActionMixin:
         except InvoiceAddress.DoesNotExist:
             return InvoiceAddress()
 
-    def _item_from_post_value(self, key, value, voucher=None):
+    def _item_from_post_value(self, key, value, voucher=None, voucher_ignore_if_redeemed=False):
         if value.strip() == '' or '_' not in key:
             return
 
@@ -161,6 +161,7 @@ class CartActionMixin:
                     'seat': value,
                     'price': price,
                     'voucher': voucher,
+                    'voucher_ignore_if_redeemed': voucher_ignore_if_redeemed,
                     'subevent': subevent
                 }
             except ValueError:
@@ -183,6 +184,7 @@ class CartActionMixin:
                     'count': amount,
                     'price': price,
                     'voucher': voucher,
+                    'voucher_ignore_if_redeemed': voucher_ignore_if_redeemed,
                     'subevent': subevent
                 }
             except ValueError:
@@ -195,6 +197,7 @@ class CartActionMixin:
                     'count': amount,
                     'price': price,
                     'voucher': voucher,
+                    'voucher_ignore_if_redeemed': voucher_ignore_if_redeemed,
                     'subevent': subevent
                 }
             except ValueError:
@@ -219,7 +222,8 @@ class CartActionMixin:
         for key, values in req_items:
             for value in values:
                 try:
-                    item = self._item_from_post_value(key, value, self.request.POST.get('_voucher_code'))
+                    item = self._item_from_post_value(key, value, self.request.POST.get('_voucher_code'),
+                                                      voucher_ignore_if_redeemed=self.request.POST.get('_voucher_ignore_if_redeemed') == 'on')
                 except CartError as e:
                     messages.error(self.request, str(e))
                     return
