@@ -27,14 +27,19 @@
         data-api-lists="{% url "api-v1:checkinlist-list" event=request.event.slug organizer=request.organizer.slug %}"
         data-event-name="{{ request.event.name }}"
         id="app"></div>
-{# TODO: use vue.min.js #}
 {% compress js %}
     <script type="text/javascript" src="{% static "pretixbase/js/i18nstring.js" %}"></script>
     <script type="text/javascript" src="{% static "moment/moment-with-locales.js" %}"></script>
     <script type="text/javascript" src="{% static "moment/moment-timezone-with-data-1970-2030.js" %}"></script>
     <script type="text/javascript" src="{% static "jquery/js/jquery-2.1.1.min.js" %}"></script>
     <script type="text/javascript" src="{% static "datetimepicker/bootstrap-datetimepicker.js" %}"></script>
+{% endcompress %}
+{% if DEBUG %}
     <script type="text/javascript" src="{% static "vuejs/vue.js" %}"></script>
+{% else %}
+    <script type="text/javascript" src="{% static "vuejs/vue.min.js" %}"></script>
+{% endif %}
+{% compress js %}
     <script type="text/vue" src="{% static 'pretixplugins/webcheckin/components/checkinlist-item.vue' %}"></script>
     <script type="text/vue" src="{% static 'pretixplugins/webcheckin/components/checkinlist-select.vue' %}"></script>
     <script type="text/vue" src="{% static 'pretixplugins/webcheckin/components/searchresult-item.vue' %}"></script>
