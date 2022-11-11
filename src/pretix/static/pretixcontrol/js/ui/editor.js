@@ -432,10 +432,9 @@ var editor = {
 
     _ready: function () {
         var isOpera = (!!window.opr && !!opr.addons) || !!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0;
-        var isFirefox = typeof InstallTrigger !== 'undefined';
-        var isChrome = !!window.chrome && (!!window.chrome.webstore || !!window.chrome.runtime);
-        var isEdgeChromium = isChrome && (navigator.userAgent.indexOf("Edg") != -1);
-        if (isChrome || isOpera || isFirefox || isEdgeChromium) {
+        var isFirefox = navigator.userAgent.indexOf("Firefox") > 0;
+        var isChromeBased = !!window.chrome;
+        if (isChromeBased || isOpera || isFirefox) {
             $("#loading-container").hide();
             $("#loading-initial").remove();
         } else {
