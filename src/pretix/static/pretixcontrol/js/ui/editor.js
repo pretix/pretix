@@ -302,14 +302,18 @@ var editor = {
         editor.pdf.getPage(page_number).then(function (page) {
             var canvas = document.getElementById('pdf-canvas');
 
-            var scale = editor.$cva.width() / page.getViewport(1.0).width;
-            var viewport = page.getViewport(scale);
+            var scale = editor.$cva.width() / page.getViewport({scale: 1.0}).width;
+            var viewport = page.getViewport({ scale: scale });
+            var outputScale = window.devicePixelRatio || 1;
 
             // Prepare canvas using PDF page dimensions
             var context = canvas.getContext('2d');
             context.clearRect(0, 0, canvas.width, canvas.height);
-            canvas.height = viewport.height;
-            canvas.width = viewport.width;
+            canvas.width = Math.floor(viewport.width * outputScale);
+            canvas.height = Math.floor(viewport.height * outputScale);
+            canvas.style.width = Math.floor(viewport.width) + "px";
+            canvas.style.height =  Math.floor(viewport.height) + "px";
+            var transform = outputScale !== 1 ? [outputScale, 0, 0, outputScale, 0, 0] : null;
 
             editor.pdf_page = page;
             editor.pdf_scale = scale;
@@ -318,10 +322,11 @@ var editor = {
             // Render PDF page into canvas context
             var renderContext = {
                 canvasContext: context,
-                viewport: viewport
+                transform: transform,
+                viewport: viewport,
             };
             var renderTask = page.render(renderContext);
-            renderTask.then(function () {
+            renderTask.promise.then(function () {
                 editor.pdf_page_number = page_number
                 editor._init_page_nav();
 
@@ -361,10 +366,11 @@ var editor = {
         // TODO: Loading indicators
         var url = editor.pdf_url;
         // TODO: Handle cross-origin issues if static files are on a different origin
-        PDFJS.workerSrc = editor.$pdfcv.attr("data-worker-url");
+        var pdfjsLib = window['pdfjs-dist/build/pdf'];
+        pdfjsLib.GlobalWorkerOptions.workerSrc = editor.$pdfcv.attr("data-worker-url");
 
         // Asynchronous download of PDF
-        var loadingTask = PDFJS.getDocument(url);
+        var loadingTask = pdfjsLib.getDocument(url);
         loadingTask.promise.then(function (pdf) {
 
             editor.pdf = pdf;
