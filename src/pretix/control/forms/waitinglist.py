@@ -1,6 +1,6 @@
 from pretix.base.forms import I18nModelForm
 from pretix.base.models import WaitingListEntry
-from django_scopes import scopes_disabled
+from django_scopes.forms import SafeModelChoiceField
 from django.forms.utils import ErrorDict
 
 class WaitingListEntryEditForm(I18nModelForm):
@@ -17,3 +17,6 @@ class WaitingListEntryEditForm(I18nModelForm):
         fields = [
             'subevent',
         ]
+        field_classes = {
+            'subevent': SafeModelChoiceField,
+        }
