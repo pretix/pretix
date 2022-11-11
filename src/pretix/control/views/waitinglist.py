@@ -39,7 +39,7 @@ from django.db import transaction
 from django.db.models import F, Max, Min, Q, Sum
 from django.db.models.functions import Coalesce
 from django.http import Http404, HttpResponse, HttpResponseRedirect
-from django.shortcuts import redirect, render, get_object_or_404
+from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils.functional import cached_property
 from django.utils.http import is_safe_url
@@ -409,16 +409,9 @@ class EntryDelete(EventPermissionRequiredMixin, DeleteView):
     template_name = 'pretixcontrol/waitinglist/delete.html'
     permission = 'can_change_orders'
     context_object_name = 'entry'
-    #form_class = WaitingListEntryEditForm
 
     def get_object(self, queryset=None) -> WaitingListEntry:
-        try:
-            return self.request.event.waitinglistentries.get(
-                id=self.kwargs['entry'],
-                voucher__isnull=True,
-            )
-        except WaitingListEntry.DoesNotExist:
-            raise Http404(_("The requested entry does not exist."))
+        return get_object_or_404(WaitingListEntry, pk=self.kwargs['entry'], event=self.request.event, voucher__isnull=True)
 
     @transaction.atomic
     def delete(self, request, *args, **kwargs):
@@ -449,6 +442,16 @@ class EntryUpdate(EventPermissionRequiredMixin, UpdateView):
 
     def get_queryset(self):
         return super().get_queryset().prefetch_related(None).order_by()
+
+#    def form_valid(self, form):
+#        messages.success(self.request, _('The waitinglist entry has been transferred.'))
+#        if form.has_changed():
+#            self.object.log_action(
+#                'pretix.event.orders.waitinglist.transferred', user=self.request.user, data={
+#                    k: form.cleaned_data.get(k) for k in form.changed_data
+#                }
+#            )
+#        return super().form_valid(form)
 
     def get_success_url(self) -> str:
         return reverse('control:event.orders.waitinglist', kwargs={
