@@ -60,13 +60,13 @@ $slider-gray-1: #BEBEBE !default;
 $slider-gray-2: #DFDFDF !default;
 $slider-gray-3: #E5E5E5 !default;
 $slider-gray-4: #E9E9E9 !default;
-$slider-gray-5: #F5F5F5 !default;
+$slider-gray-5: #1c1c1c !default;
 $slider-gray-6: #F9F9F9 !default;
 
 // unicode color for demo page
 $slider-unicode-color: #726204 !default;
 
-@mixin slider_background-image($colorstart:#F5F5F5, $colorend:#F9F9F9, $backcolor: #F7F7F7) {
+@mixin slider_background-image($colorstart:#1c1c1c, $colorend:#F9F9F9, $backcolor: #F7F7F7) {
   background-color: $backcolor;
   background-image: -moz-linear-gradient(top, $colorstart, $colorend);
   background-image: -webkit-gradient(linear, 0 0, 0 100%, from($colorstart), to($colorend));

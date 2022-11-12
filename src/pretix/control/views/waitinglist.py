@@ -34,6 +34,7 @@
 
 import csv
 import io
+import random
 
 from django.contrib import messages
 from django.db import transaction
@@ -48,6 +49,7 @@ from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _, pgettext
 from django.views import View
 from django.views.generic import ListView
+from django.views.generic.edit import DeleteView
 
 from pretix.base.models import Item, Quota, WaitingListEntry
 from pretix.base.models.waitinglist import WaitingListException
@@ -242,9 +244,9 @@ class WaitingListView(EventPermissionRequiredMixin, WaitingListQuerySetMixin, Pa
             else:
                 ev = (wle.subevent or self.request.event)
                 disabled = (
-                    not ev.presale_is_running or
-                    (wle.subevent and not wle.subevent.active) or
-                    not wle.item.is_available()
+                        not ev.presale_is_running or
+                        (wle.subevent and not wle.subevent.active) or
+                        not wle.item.is_available()
                 )
                 if disabled:
                     wle.availability = (0, "forbidden")
@@ -254,7 +256,8 @@ class WaitingListView(EventPermissionRequiredMixin, WaitingListQuerySetMixin, Pa
                         if wle.variation
                         else wle.item.check_quotas(count_waitinglist=False, subevent=wle.subevent, _cache=quota_cache)
                     )
-                if wle.availability[0] == Quota.AVAILABILITY_OK and ev.seat_category_mappings.filter(product=wle.item).exists():
+                if wle.availability[0] == Quota.AVAILABILITY_OK and ev.seat_category_mappings.filter(
+                        product=wle.item).exists():
                     # See comment in WaitingListEntry.send_voucher() for rationale
                     num_free_seats_for_product = ev.free_seats().filter(product=wle.item).count()
                     num_valid_vouchers_for_product = self.request.event.vouchers.filter(
@@ -278,8 +281,8 @@ class WaitingListView(EventPermissionRequiredMixin, WaitingListQuerySetMixin, Pa
         ctx['estimate'] = self.get_sales_estimate()
 
         ctx['running'] = (
-            self.request.event.live
-            and (self.request.event.has_subevents or self.request.event.presale_is_running)
+                self.request.event.live
+                and (self.request.event.has_subevents or self.request.event.presale_is_running)
         )
 
         return ctx
@@ -297,14 +300,87 @@ class WaitingListView(EventPermissionRequiredMixin, WaitingListQuerySetMixin, Pa
     def get(self, request, *args, **kwargs):
         if request.GET.get("download", "") == "yes":
             return self._download_csv()
+        elif request.GET.get("lottery", "") == "run":
+            return self._run_lottery()
+        elif request.GET.get("lottery", "") == "revert":
+            return self._run_lottery( revert=True)
         return super().get(request, *args, **kwargs)
+
+    def _run_lottery(self, revert=False):
+        output = io.StringIO()
+        writer = csv.writer(output, quoting=csv.QUOTE_NONNUMERIC, delimiter=",")
+
+        qs = self.get_queryset()
+        qs = sorted(qs, key=lambda o: o.created,reverse=True)
+        priority_count = len(qs)
+        new_priorities = list(range(1, priority_count + 1))
+
+        if revert==False:
+            random.shuffle(new_priorities)
+            print(f"new_priority list: {new_priorities}")
+        new_priorities_iter = iter(new_priorities)
+
+        for w in qs:
+            w.old_priority = w.priority
+            w.priority = next(new_priorities_iter)
+            print(f"{w} created {w.created.isoformat(),} old priority {w.old_priority}, new {w.priority}")
+            w.save(update_fields=['priority'])
+            # w.save(update_fields=['old_priority'])
+
+        qs = sorted(qs, key=lambda o: o.priority, reverse=True)
+
+        headers = [
+            _('Name'), _('E-mail address'), _('Phone number'), _('Product'), _('On list since'), _('Status'),
+            _('Voucher code'),
+            _('Language'), _('Priority'), 'OldPriority'
+        ]
+        # if self.request.event.has_subevents:
+        #     headers.append(pgettext('subevent', 'Date'))
+        writer.writerow(headers)
+
+        for w in qs:
+            if w.item:
+                if w.variation:
+                    prod = '%s – %s' % (str(w.item), str(w.variation))
+                else:
+                    prod = '%s' % str(w.item)
+            if w.voucher:
+                if w.voucher.redeemed >= w.voucher.max_usages:
+                    status = _('Voucher redeemed')
+                elif not w.voucher.is_active():
+                    status = _('Voucher expired')
+                else:
+                    status = _('Voucher assigned')
+            else:
+                status = _('Waiting')
+
+            row = [
+                w.name,
+                w.email,
+                w.phone,
+                prod,
+                w.created.isoformat(),
+                status,
+                w.voucher.code if w.voucher else '',
+                w.locale,
+                str(w.priority),
+                str(w.old_priority)
+            ]
+            if self.request.event.has_subevents:
+                row.append(str(w.subevent))
+            writer.writerow(row)
+
+        r = HttpResponse(output.getvalue().encode("utf-8"), content_type='text/csv')
+        r['Content-Disposition'] = 'attachment; filename="{}.csv"'.format(self.get_lottery_filename(revert=revert))
+        return r
 
     def _download_csv(self):
         output = io.StringIO()
         writer = csv.writer(output, quoting=csv.QUOTE_NONNUMERIC, delimiter=",")
 
         headers = [
-            _('Name'), _('E-mail address'), _('Phone number'), _('Product'), _('On list since'), _('Status'), _('Voucher code'),
+            _('Name'), _('E-mail address'), _('Phone number'), _('Product'), _('On list since'), _('Status'),
+            _('Voucher code'),
             _('Language'), _('Priority')
         ]
         if self.request.event.has_subevents:
@@ -348,6 +424,12 @@ class WaitingListView(EventPermissionRequiredMixin, WaitingListQuerySetMixin, Pa
 
     def get_filename(self):
         return '{}_waitinglist'.format(self.request.event.slug)
+
+    def get_lottery_filename(self, revert):
+        if revert:
+            return '{}_lottery_results_REVERTED'.format(self.request.event.slug)
+        else:
+            return '{}_lottery_results'.format(self.request.event.slug)
 
 
 class EntryDelete(EventPermissionRequiredMixin, CompatDeleteView):

@@ -1586,7 +1586,7 @@ msgstr ""
 #: pretix/plugins/sendmail/views.py:444
 #: pretix/presale/templates/pretixpresale/event/fragment_availability.html:14
 #: pretix/presale/templates/pretixpresale/event/fragment_availability.html:27
-#: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:77
+
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:84
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_list.html:34
 #: pretix/presale/templates/pretixpresale/event/index.html:188
@@ -1600,6 +1600,18 @@ msgstr ""
 msgid "Waiting list"
 msgstr ""
 
+#: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:77
+msgid "Register here"
+msgstr ""
+
+
+#: pretix/base/exporters/items.py:78 pretix/base/models/discount.py:73
+#: pretix/base/models/items.py:168 pretix/base/models/items.py:224
+#: pretix/base/models/items.py:427 pretix/base/models/items.py:834
+#: pretix/control/forms/subevents.py:300 pretix/control/forms/subevents.py:322
+#: pretix/control/templates/pretixcontrol/subevents/bulk.html:505
+#: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html:169
+#: pretix/control/templates/pretixcontrol/subevents/detail.html:147
 #: pretix/base/exporters/items.py:81 pretix/base/models/discount.py:74
 #: pretix/base/models/items.py:174 pretix/base/models/items.py:230
 #: pretix/base/models/items.py:478 pretix/base/models/items.py:1047
@@ -27047,7 +27059,7 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/fragment_availability.html:8
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:73
-msgid "SOLD OUT"
+msgid "COLD OUT"
 msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/fragment_availability.html:20

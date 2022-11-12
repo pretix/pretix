@@ -529,7 +529,7 @@ def base_placeholders(sender, **kwargs):
             'url_remove', ['waiting_list_voucher', 'event'],
             lambda waiting_list_voucher, event: build_absolute_uri(
                 event, 'presale:event.waitinglist.remove'
-            ) + '?voucher=' + waiting_list_voucher.code,
+            ) + '?voucher=' + waiting_list_voucher.code if waiting_list_voucher else '68CYU2H6ZTP3WLK5',
             lambda event: build_absolute_uri(
                 event,
                 'presale:event.waitinglist.remove',
@@ -539,7 +539,7 @@ def base_placeholders(sender, **kwargs):
             'url', ['waiting_list_voucher', 'event'],
             lambda waiting_list_voucher, event: build_absolute_uri(
                 event, 'presale:event.redeem'
-            ) + '?voucher=' + waiting_list_voucher.code,
+            ) + '?voucher=' + waiting_list_voucher.code if waiting_list_voucher else '68CYU2H6ZTP3WLK5',
             lambda event: build_absolute_uri(
                 event,
                 'presale:event.redeem',
@@ -594,7 +594,7 @@ def base_placeholders(sender, **kwargs):
             _('Sample Admission Ticket')
         ),
         SimpleFunctionalMailTextPlaceholder(
-            'code', ['waiting_list_voucher'], lambda waiting_list_voucher: waiting_list_voucher.code,
+            'code', ['waiting_list_voucher'], lambda waiting_list_voucher: waiting_list_voucher.code if waiting_list_voucher else '68CYU2H6ZTP3WLK5',
             '68CYU2H6ZTP3WLK5'
         ),
         SimpleFunctionalMailTextPlaceholder(

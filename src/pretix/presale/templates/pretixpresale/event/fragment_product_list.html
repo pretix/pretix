@@ -70,11 +70,11 @@
                                     {% if not item.min_price %}
                                         <strong class="gone">{% trans "FULLY BOOKED" %}</strong>
                                     {% else %}
-                                        <strong class="gone">{% trans "SOLD OUT" %}</strong>
+                                        <strong class="gone">placeholder {% trans "Ticket lottery held on " %}</strong>
                                     {% endif %}
                                     {% if allow_waitinglist and item.allow_waitinglist %}
                                         <br/>
-                                        {% trans "Waiting list" %}
+                                        {% trans "Register here" %}
                                     {% endif %}
                                     <br>
                                 {% elif avail < 100 %}
@@ -369,4 +369,5 @@
             {% endif %}
         {% endfor %}
     </section>
+    </div>
 {% endfor %}

@@ -292,6 +292,17 @@ class WaitingListEntry(LoggedModel):
                     }
                 )
 
+    def send_confirm(self, quota_cache=None, user=None, auth=None):
+        with language(self.locale, self.event.settings.region):
+            mail(
+                self.email,
+                _('You have been added to the lottery waiting list for {event}').format(event=str(self.event)),
+                self.event.settings.mail_text_waiting_list_confirm,
+                get_email_context(event=self.event, waiting_list_entry=self),
+                self.event,
+                locale=self.locale
+            )
+
     @staticmethod
     def clean_itemvar(event, item, variation):
         if event != item.event:

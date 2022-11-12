@@ -266,20 +266,22 @@ class CustomerStep(CartMixin, TemplateFlowStep):
 
     @cached_property
     def signup_allowed(self):
-        return not any(
-            p.item.require_membership or
-            (p.variation and p.variation.require_membership)
-            for p in self.positions
-        ) and self.request.event.settings.customer_accounts_native
+        return False
+        # return not any(
+        #     p.item.require_membership or
+        #     (p.variation and p.variation.require_membership)
+        #     for p in self.positions
+        # ) and self.request.event.settings.customer_accounts_native
 
     @cached_property
     def guest_allowed(self):
-        return not any(
-            p.item.require_membership or
-            (p.variation and p.variation.require_membership) or
-            p.item.grant_membership_type_id
-            for p in self.positions
-        )
+        return False
+        # return not any(
+        #     p.item.require_membership or
+        #     (p.variation and p.variation.require_membership) or
+        #     p.item.grant_membership_type_id
+        #     for p in self.positions
+        # )
 
     @cached_property
     def register_form(self):

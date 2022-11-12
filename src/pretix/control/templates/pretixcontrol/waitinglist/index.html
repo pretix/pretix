@@ -124,6 +124,14 @@
         <a href="?{% url_replace request "download" "yes" %}"
                 class="btn btn-default"><i class="fa fa-download"></i>
             {% trans "Download list" %}</a>
+        <a href="?{% url_replace request "lottery" "run" %}"
+                class="btn btn-default"><i class="fa fa-download"></i>
+            {% trans "Run lottery" %}</a>
+
+        <a href="?{% url_replace request "lottery" "revert" %}"
+                class="btn btn-default"><i class="fa fa-download"></i>
+            {% trans "Revert list" %}</a>
+
     </form>
     </p>
     <form action="{% url "control:event.orders.waitinglist.action"  organizer=request.event.organizer.slug event=request.event.slug %}?next={{ request.get_full_path|urlencode }}" method="post">

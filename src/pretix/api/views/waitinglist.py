@@ -69,6 +69,15 @@ class WaitingListViewSet(viewsets.ModelViewSet):
             user=self.request.user,
             auth=self.request.auth,
         )
+        try:
+            self.get_object().send_confirm(
+                user=self.request.user,
+                auth=self.request.auth,
+            )
+        except WaitingListException as e:
+            raise ValidationError(str(e))
+        else:
+            return Response(status=204)
 
     def perform_update(self, serializer):
         if serializer.instance.voucher:

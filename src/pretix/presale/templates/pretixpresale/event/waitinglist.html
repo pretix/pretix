@@ -2,7 +2,13 @@
 {% load i18n eventurl bootstrap3 %}
 {% block title %}{% trans "Waiting list" %}{% endblock %}
 {% block content %}
-    <h2>{% trans "Add me to the waiting list" %}</h2>
+<h2>{% trans "How do tickets work for Hyperborea?" %}</h2>
+<p class="help-block">{% trans "Since demand for Hyperborea tickets outnumbers supply," %}<strong> {% trans "the first stage of getting a ticket is registering for the ticket lottery" %}</strong>. {% trans "Our ticket registration opens on" %} 2022-04-01.</p>
+<p class="help-block"><u><b>{% trans "If you’ve completed the required volunteer hours in 2019, don't worry! We have a guaranteed ticket for you! You will receive a separate email from us with your voucher." %}</b></u> {% trans "Completing your volunteer hours is the best way to ensure a Hyperborea ticket next year!" %}</p>
+<p class="help-block">{% trans "The registrations for the general sale are shuffled in a “lottery” ensuring that everyone registered has an equal chance of being offered a ticket." %} {% trans "General ticket sales for Hyperborea opens on" %} 2022-05-11.</p>
+<p class="help-block">{% trans "Available tickets are then offered in the order of the lottery, and registrants have two days to buy their available ticket before it’s added back to the pool and offered to the next in the list." %}</p>
+<p class="help-block">{% trans "If you register for a ticket after sales are already in progress, you simply get added to the bottom of the list." %}</p>
+    <h3>{% trans "Add me to the list" %}</h3>
     <form action="{{ request.get_full_path }}" method="post">
         {% csrf_token %}
         <div class="form-horizontal">
@@ -18,11 +24,6 @@
             {% bootstrap_form form layout="checkout" %}
             <div class="form-group">
                 <div class="col-md-9 col-md-offset-3">
-                    <p class="help-block">
-                        {% blocktrans trimmed with hours=event.settings.waiting_list_hours %}
-                            If tickets become available again, we will inform the first persons on the waiting list. If we notify you, you'll have {{ hours }} hours time to buy a ticket until we assign it to the next person on the list.
-                        {% endblocktrans %}
-                    </p>
                     <p class="help-block">
                         {% if event.settings.waiting_list_limit_per_user > 1 %}
                             {% blocktrans trimmed %}
