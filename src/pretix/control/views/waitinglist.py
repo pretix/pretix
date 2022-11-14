@@ -142,45 +142,9 @@ class WaitingListQuerySetMixin:
         return qs
 
 
-with scopes_disabled():
-    class WaitingListSettingsForm(I18nModelForm):
-        def __init__(self, *args, **kwargs):
-            # self.queryset = kwargs.pop('queryset')
-            super().__init__(*args, **kwargs)
-            # self.fields['subevent'] =
-
-        """subevent = forms.ChoiceField(
-            label=_("Date list"),
-            help_text=_(
-                "Select the date of the subevent the entries will be transfered to."
-            ).format(),
-            required=True,
-        )"""
-        event = forms.ChoiceField(
-            label=_("Date list"),
-            help_text=_(
-                "Select the date of the subevent the entries will be transfered to."
-            ).format(),
-            required=True,
-        )
-
-        class Meta:
-            model = WaitingListEntry
-            fields = [
-                # 'subevent',
-                'event',
-            ]
-
-
-class WaitingListActionView(EventPermissionRequiredMixin, WaitingListQuerySetMixin, FormView):
+class WaitingListActionView(EventPermissionRequiredMixin, WaitingListQuerySetMixin, View):
     model = WaitingListEntry
     permission = 'can_change_orders'
-    form_class = WaitingListEntryEditForm
-
-    def get_form_kwargs(self):
-        kwargs = super().get_form_kwargs()
-        kwargs['queryset'] = self.get_queryset()
-        return kwargs
 
     def _redirect_back(self):
         if "next" in self.request.GET and is_safe_url(self.request.GET.get("next"), allowed_hosts=None):
@@ -191,12 +155,6 @@ class WaitingListActionView(EventPermissionRequiredMixin, WaitingListQuerySetMix
         }))
 
     def post(self, request, *args, **kwargs):
-        form = self.form_class(
-            event=request.event,
-            queryset=self.get_queryset(),
-            # data=(self.request.POST if self.request.method == 'POST' else None),
-            # files=(self.request.FILES if self.request.method == 'POST' else None),
-        )
         if request.POST.get('action') == 'delete':
             return render(request, 'pretixcontrol/waitinglist/delete_bulk.html', {
                 'allowed': self.get_queryset().filter(voucher__isnull=True),
@@ -207,29 +165,6 @@ class WaitingListActionView(EventPermissionRequiredMixin, WaitingListQuerySetMix
                 if not obj.voucher_id:
                     obj.log_action('pretix.event.orders.waitinglist.deleted', user=self.request.user)
                     obj.delete()
-            messages.success(request, _('The selected entries have been deleted.'))
-            return self._redirect_back()
-        elif request.POST.get('action') == 'update':
-            # obj = form.save(commit=False)
-            # obj.save(update_fields='subevent')
-            print(form.is_valid())
-            if form.is_valid():
-                form.save()
-                print("isvalid")
-            for field in form:
-                print("Field Error:", field.name, field.errors, form.errors)
-            return render(request, 'pretixcontrol/waitinglist/update_bulk.html', {
-                'allowed': self.get_queryset(),
-                'forbidden': self.get_queryset().filter(voucher__isnull=False),
-                'form': form,
-            })
-            # TODO: Change Button to action
-        elif request.POST.get('action') == 'update_confirm':
-            print("update:confirm")
-            for obj in self.get_queryset():
-                print("update:confirm:obj")
-                if not obj.voucher_id:
-                    obj.subevent = form.cleanned_data.get('subevent')
             messages.success(request, _('The selected entries have been deleted.'))
             return self._redirect_back()
 
@@ -413,7 +348,13 @@ class EntryDelete(EventPermissionRequiredMixin, DeleteView):
     context_object_name = 'entry'
 
     def get_object(self, queryset=None) -> WaitingListEntry:
-        return get_object_or_404(WaitingListEntry, pk=self.kwargs['entry'], event=self.request.event, voucher__isnull=True)
+        try:
+            return self.request.event.waitinglistentries.get(
+                id=self.kwargs['entry'],
+                voucher__isnull=True,
+            )
+        except WaitingListEntry.DoesNotExist:
+            raise Http404(_("The requested entry does not exist."))
 
     @transaction.atomic
     def delete(self, request, *args, **kwargs):
