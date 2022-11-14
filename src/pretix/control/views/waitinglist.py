@@ -54,7 +54,7 @@ from pretix.base.models import Item, Quota, WaitingListEntry
 from pretix.base.models.waitinglist import WaitingListException
 from pretix.base.services.waitinglist import assign_automatically
 from pretix.base.views.tasks import AsyncAction
-from pretix.control.forms.waitinglist import WaitingListEntryEditForm
+from pretix.control.forms.waitinglist import WaitingListEntryTransferForm
 from pretix.control.permissions import EventPermissionRequiredMixin
 from pretix.control.views import PaginationMixin
 
@@ -371,11 +371,11 @@ class EntryDelete(EventPermissionRequiredMixin, DeleteView):
         })
 
 
-class EntryUpdate(EventPermissionRequiredMixin, UpdateView):
+class EntryTransfer(EventPermissionRequiredMixin, UpdateView):
     model = WaitingListEntry
-    template_name = 'pretixcontrol/waitinglist/update.html'
+    template_name = 'pretixcontrol/waitinglist/transfer.html'
     permission = 'can_change_orders'
-    form_class = WaitingListEntryEditForm
+    form_class = WaitingListEntryTransferForm
     context_object_name = 'entry'
 
     def dispatch(self, request, *args, **kwargs):

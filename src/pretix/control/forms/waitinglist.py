@@ -6,7 +6,7 @@ from pretix.base.models import WaitingListEntry
 from pretix.control.forms.widgets import Select2
 
 
-class WaitingListEntryEditForm(I18nModelForm):
+class WaitingListEntryTransferForm(I18nModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
