@@ -11,7 +11,7 @@
             {% trans "You configured your account to require authentication with a second medium, e.g. your phone. Please enter your verification code here:" %}
         </p>
         <div class="form-group">
-            <input class="form-control" name="token" placeholder="{% trans "Token" %}"
+            <input class="form-control" name="token" placeholder="{% trans "Token" %}" autocomplete="one-time-code"
                     type="text" required="required" autofocus="autofocus" id="webauthn-response">
         </div>
         <div class="sr-only alert alert-danger" id="webauthn-error">
