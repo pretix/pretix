@@ -7,7 +7,6 @@ from pretix.base.models import WaitingListEntry
 class WaitingListEntryEditForm(I18nModelForm):
 
     def __init__(self, *args, **kwargs):
-        self.queryset = kwargs.pop('queryset')
         super().__init__(*args, **kwargs)
         self.fields['subevent'].required = True
         self.fields['subevent'].empty_label = None
