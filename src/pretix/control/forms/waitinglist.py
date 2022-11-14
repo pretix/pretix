@@ -1,7 +1,8 @@
+from django_scopes.forms import SafeModelChoiceField
+
 from pretix.base.forms import I18nModelForm
 from pretix.base.models import WaitingListEntry
-from django_scopes.forms import SafeModelChoiceField
-from django.forms.utils import ErrorDict
+
 
 class WaitingListEntryEditForm(I18nModelForm):
 

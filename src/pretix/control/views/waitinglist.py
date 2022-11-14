@@ -34,11 +34,13 @@
 
 import csv
 import io
+
+from django import forms
 from django.contrib import messages
 from django.db import transaction
 from django.db.models import F, Max, Min, Q, Sum
 from django.db.models.functions import Coalesce
-from django.http import Http404, HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils.functional import cached_property
@@ -46,25 +48,26 @@ from django.utils.http import is_safe_url
 from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _, pgettext
 from django.views import View
-from django.views.generic import ListView, FormView
+from django.views.generic import FormView, ListView
 from django.views.generic.edit import DeleteView
-from . import UpdateView
+from django_scopes import scopes_disabled
+
 from pretix.base.forms import I18nModelForm
 from pretix.base.models import Item, Quota, WaitingListEntry
 from pretix.base.models.waitinglist import WaitingListException
 from pretix.base.services.waitinglist import assign_automatically
 from pretix.base.views.tasks import AsyncAction
+from pretix.control.forms.waitinglist import WaitingListEntryEditForm
 from pretix.control.permissions import EventPermissionRequiredMixin
 from pretix.control.views import PaginationMixin
-from django import forms
-from pretix.control.forms.waitinglist import WaitingListEntryEditForm
-from django_scopes import scopes_disabled
+
+from . import UpdateView
+
 
 class AutoAssign(EventPermissionRequiredMixin, AsyncAction, View):
     task = assign_automatically
     known_errortypes = ['WaitingListError']
     permission = 'can_change_orders'
-
 
     def get_success_message(self, value):
         return _('{num} vouchers have been created and sent out via email.').format(num=value)
@@ -142,9 +145,9 @@ class WaitingListQuerySetMixin:
 with scopes_disabled():
     class WaitingListSettingsForm(I18nModelForm):
         def __init__(self, *args, **kwargs):
-            #self.queryset = kwargs.pop('queryset')
+            # self.queryset = kwargs.pop('queryset')
             super().__init__(*args, **kwargs)
-            #self.fields['subevent'] =
+            # self.fields['subevent'] =
 
         """subevent = forms.ChoiceField(
             label=_("Date list"),
@@ -164,20 +167,20 @@ with scopes_disabled():
         class Meta:
             model = WaitingListEntry
             fields = [
-                #'subevent',
+                # 'subevent',
                 'event',
             ]
 
-class WaitingListActionView(EventPermissionRequiredMixin, WaitingListQuerySetMixin, FormView): #FormView
+
+class WaitingListActionView(EventPermissionRequiredMixin, WaitingListQuerySetMixin, FormView):
     model = WaitingListEntry
     permission = 'can_change_orders'
     form_class = WaitingListEntryEditForm
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
-        kwargs['queryset']=self.get_queryset()
+        kwargs['queryset'] = self.get_queryset()
         return kwargs
-
 
     def _redirect_back(self):
         if "next" in self.request.GET and is_safe_url(self.request.GET.get("next"), allowed_hosts=None):
@@ -206,10 +209,9 @@ class WaitingListActionView(EventPermissionRequiredMixin, WaitingListQuerySetMix
                     obj.delete()
             messages.success(request, _('The selected entries have been deleted.'))
             return self._redirect_back()
-
         elif request.POST.get('action') == 'update':
-            #obj = form.save(commit=False)
-            #obj.save(update_fields='subevent')
+            # obj = form.save(commit=False)
+            # obj.save(update_fields='subevent')
             print(form.is_valid())
             if form.is_valid():
                 form.save()
@@ -221,7 +223,7 @@ class WaitingListActionView(EventPermissionRequiredMixin, WaitingListQuerySetMix
                 'forbidden': self.get_queryset().filter(voucher__isnull=False),
                 'form': form,
             })
-            #TODO: Change Button to action
+            # TODO: Change Button to action
         elif request.POST.get('action') == 'update_confirm':
             print("update:confirm")
             for obj in self.get_queryset():
@@ -430,6 +432,7 @@ class EntryDelete(EventPermissionRequiredMixin, DeleteView):
             'organizer': self.request.event.organizer.slug
         })
 
+
 class EntryUpdate(EventPermissionRequiredMixin, UpdateView):
     model = WaitingListEntry
     template_name = 'pretixcontrol/waitinglist/update.html'
@@ -458,10 +461,11 @@ class EntryUpdate(EventPermissionRequiredMixin, UpdateView):
             'event': self.request.event.slug,
             'organizer': self.request.event.organizer.slug
         })
+
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
-        kwargs['queryset']=self.get_queryset()
+        kwargs['queryset'] = self.get_queryset()
         return kwargs
-    #Maybe Add:
-    #self.object.log_action('pretix.event.orders.waitinglist.transferred', user=self.request.user)
-    #messages.success(self.request, _('The selected entry has been transferred.'))
+    # TODO: Maybe Add:
+    # self.object.log_action('pretix.event.orders.waitinglist.transferred', user=self.request.user)
+    # messages.success(self.request, _('The selected entry has been transferred.'))
