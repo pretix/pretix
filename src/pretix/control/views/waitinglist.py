@@ -378,6 +378,11 @@ class EntryUpdate(EventPermissionRequiredMixin, UpdateView):
     form_class = WaitingListEntryEditForm
     context_object_name = 'entry'
 
+    def dispatch(self, request, *args, **kwargs):
+        if not self.request.event.has_subevents:
+            raise Http404(_("The requested entry does not have subevents."))
+        return super().dispatch(request, *args, **kwargs)
+
     def get_object(self, queryset=None) -> WaitingListEntry:
         return get_object_or_404(WaitingListEntry, pk=self.kwargs['entry'], event=self.request.event, voucher__isnull=True)
 
