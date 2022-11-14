@@ -1518,6 +1518,25 @@ def test_refund_create_mark_refunded(token_client, organizer, event, order):
 
 
 @pytest.mark.django_db
+def test_refund_create_webhook_sent(token_client, organizer, event, order):
+    res = copy.deepcopy(REFUND_CREATE_PAYLOAD)
+    res['state'] = "done"
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/{}/refunds/'.format(
+            organizer.slug, event.slug, order.code
+        ), format='json', data=res
+    )
+    assert resp.status_code == 201
+    with scopes_disabled():
+        r = order.refunds.get(local_id=resp.data['local_id'])
+    assert r.provider == "manual"
+    assert r.amount == Decimal("23.00")
+    assert r.state == "done"
+    with scopes_disabled():
+        assert order.all_logentries().get(action_type="pretix.event.order.refund.done")
+
+
+@pytest.mark.django_db
 def test_refund_optional_fields(token_client, organizer, event, order):
     res = copy.deepcopy(REFUND_CREATE_PAYLOAD)
     del res['info']

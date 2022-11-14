@@ -1610,6 +1610,17 @@ class RefundViewSet(CreateModelMixin, viewsets.ReadOnlyModelViewSet):
                 user=request.user if request.user.is_authenticated else None,
                 auth=request.auth
             )
+
+            if r.state in (OrderRefund.REFUND_STATE_DONE, OrderRefund.REFUND_STATE_CANCELED, OrderRefund.REFUND_STATE_FAILED):
+                r.order.log_action(
+                    f'pretix.event.order.refund.{r.state}', {
+                        'local_id': r.local_id,
+                        'provider': r.provider,
+                    },
+                    user=request.user if request.user.is_authenticated else None,
+                    auth=request.auth
+                )
+
             if mark_refunded:
                 try:
                     mark_order_refunded(
