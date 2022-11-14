@@ -267,6 +267,10 @@
                             data-asynctask-text="{% blocktrans with time=event.settings.reservation_time %}Once the items are in your cart, you will have {{ time }} minutes to complete your purchase.{% endblocktrans %}"
                         method="post" data-asynctask>
                         <input type="hidden" name="subevent" value="{{ line.subevent_id|default_if_none:"" }}" />
+                        {% if line.voucher and not line.voucher.seat %}
+                            <input type="hidden" name="_voucher_code" value="{{ line.voucher.code }}" />
+                            <input type="hidden" name="_voucher_ignore_if_redeemed" value="on" />
+                        {% endif %}
                         {% csrf_token %}
                         {% if line.variation %}
                             <input type="hidden" name="variation_{{ line.item.id }}_{{ line.variation.id }}"

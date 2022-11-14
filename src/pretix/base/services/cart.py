@@ -195,7 +195,7 @@ class CartManager:
     AddOperation = namedtuple('AddOperation', ('count', 'item', 'variation', 'voucher', 'quotas',
                                                'addon_to', 'subevent', 'bundled', 'seat', 'listed_price',
                                                'price_after_voucher', 'custom_price_input',
-                                               'custom_price_input_is_net'))
+                                               'custom_price_input_is_net', 'voucher_ignored'))
     RemoveOperation = namedtuple('RemoveOperation', ('position',))
     VoucherOperation = namedtuple('VoucherOperation', ('position', 'voucher', 'price_after_voucher'))
     ExtendOperation = namedtuple('ExtendOperation', ('position', 'count', 'item', 'variation', 'voucher',
@@ -330,12 +330,16 @@ class CartManager:
                 (isinstance(op, self.ExtendOperation) and op.position.is_bundled)
             ):
                 if op.item.require_voucher and op.voucher is None:
+                    if getattr(op, 'voucher_ignored', False):
+                        raise CartError(error_messages['voucher_redeemed'])
                     raise CartError(error_messages['voucher_required'])
 
                 if (
                     (op.item.hide_without_voucher or (op.variation and op.variation.hide_without_voucher)) and
                     (op.voucher is None or not op.voucher.show_hidden_items)
                 ):
+                    if getattr(op, 'voucher_ignored', False):
+                        raise CartError(error_messages['voucher_redeemed'])
                     raise CartError(error_messages['voucher_required'])
 
             if not op.item.is_available() or (op.variation and not op.variation.is_available()):
@@ -480,7 +484,7 @@ class CartManager:
             self._check_item_constraints(op)
 
             if cp.voucher:
-                self._voucher_use_diff[cp.voucher] += 1
+                self._voucher_use_diff[cp.voucher] += 2
 
             self._operations.append(op)
         return err
@@ -586,6 +590,7 @@ class CartManager:
             item = self._items_cache[i['item']]
             variation = self._variations_cache[i['variation']] if i['variation'] is not None else None
             voucher = None
+            voucher_ignored = False
 
             if i.get('voucher'):
                 try:
@@ -594,6 +599,24 @@ class CartManager:
                     raise CartError(error_messages['voucher_invalid'])
                 else:
                     voucher_use_diff[voucher] += i['count']
+
+                    if i.get('voucher_ignore_if_redeemed', False):
+                        # This is a special case handling for when a user clicks "+" on an existing line in their cart
+                        # that has a voucher attached. If the voucher still has redemptions left, we'll add another line
+                        # with the same voucher, but if it does not we silently continue as if there was no voucher,
+                        # leading to either a higher-priced ticket or an error. Still, this leads to less error cases
+                        # than either of the possible default assumptions.
+                        predicted_redeemed_after = (
+                            voucher.redeemed +
+                            CartPosition.objects.filter(voucher=voucher, expires__gte=self.now_dt).count() +
+                            self._voucher_use_diff[voucher] +
+                            voucher_use_diff[voucher]
+                        )
+                        if predicted_redeemed_after > voucher.max_usages:
+                            i.pop('voucher')
+                            voucher_ignored = True
+                            voucher = None
+                            voucher_use_diff[voucher] -= i['count']
 
             # Fetch all quotas. If there are no quotas, this item is not allowed to be sold.
             quotas = list(item.quotas.filter(subevent=subevent)
@@ -641,6 +664,7 @@ class CartManager:
                     price_after_voucher=bundle.designated_price,
                     custom_price_input=None,
                     custom_price_input_is_net=False,
+                    voucher_ignored=False,
                 )
                 self._check_item_constraints(bop, operations)
                 bundled.append(bop)
@@ -670,6 +694,7 @@ class CartManager:
                 price_after_voucher=price_after_voucher,
                 custom_price_input=custom_price,
                 custom_price_input_is_net=self.event.settings.display_net_prices,
+                voucher_ignored=voucher_ignored,
             )
             self._check_item_constraints(op, operations)
             operations.append(op)
@@ -801,6 +826,7 @@ class CartManager:
                     price_after_voucher=listed_price,
                     custom_price_input=custom_price,
                     custom_price_input_is_net=self.event.settings.display_net_prices,
+                    voucher_ignored=False,
                 )
                 self._check_item_constraints(op, operations)
                 operations.append(op)

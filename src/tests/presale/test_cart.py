@@ -327,6 +327,31 @@ class CartTest(CartTestMixin, TestCase):
             objs = list(CartPosition.objects.filter(cart_id=self.session_key, event=self.event))
         self.assertEqual(len(objs), 0)
 
+    def test_voucher_ignore_if_Redeemed(self):
+        with scopes_disabled():
+            v = Voucher.objects.create(item=self.ticket, event=self.event, max_usages=2)
+        self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
+            'item_%d' % self.ticket.id: '1',
+            '_voucher_code': v.code,
+            '_voucher_ignore_if_redeemed': 'on',
+        }, follow=True)
+        self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
+            'item_%d' % self.ticket.id: '1',
+            '_voucher_code': v.code,
+            '_voucher_ignore_if_redeemed': 'on',
+        }, follow=True)
+        self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
+            'item_%d' % self.ticket.id: '1',
+            '_voucher_code': v.code,
+            '_voucher_ignore_if_redeemed': 'on',
+        }, follow=True)
+        with scopes_disabled():
+            objs = list(CartPosition.objects.filter(cart_id=self.session_key, event=self.event).order_by('id'))
+        self.assertEqual(len(objs), 3)
+        self.assertEqual(objs[0].voucher, v)
+        self.assertEqual(objs[1].voucher, v)
+        self.assertIsNone(objs[2].voucher)
+
     def test_voucher_subevent(self):
         self.event.has_subevents = True
         self.event.save()
