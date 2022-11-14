@@ -806,7 +806,8 @@ class OrderSearchFilterForm(OrderFilterForm):
         # We ignore superuser permissions here. This is intentional – we do not want to show super
         # users a form with all meta properties ever assigned.
         return EventMetaProperty.objects.filter(
-            organizer_id__in=self.request.user.teams.values_list('organizer', flat=True)
+            organizer_id__in=self.request.user.teams.values_list('organizer', flat=True),
+            filter_allowed=True,
         )
 
 
@@ -1545,12 +1546,13 @@ class EventFilterForm(FilterForm):
     @cached_property
     def meta_properties(self):
         if self.organizer:
-            return self.organizer.meta_properties.all()
+            return self.organizer.meta_properties.filter(filter_allowed=True)
         else:
             # We ignore superuser permissions here. This is intentional – we do not want to show super
             # users a form with all meta properties ever assigned.
             return EventMetaProperty.objects.filter(
-                organizer_id__in=self.request.user.teams.values_list('organizer', flat=True)
+                organizer_id__in=self.request.user.teams.values_list('organizer', flat=True),
+                filter_allowed=True,
             )
 
 
