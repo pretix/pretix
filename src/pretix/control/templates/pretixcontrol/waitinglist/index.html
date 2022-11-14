@@ -266,10 +266,11 @@
                 <button type="submit" class="btn btn-danger btn-save" name="action" value="delete">
                     <i class="fa fa-trash"></i>{% trans "Delete selected" %}
                 </button>
+                {% if request.event.has_subevents %}
                 <button type="submit" class="btn btn-primary btn-save" name="action" value="update">
                     <span class="icon icon-upload"></span>{% trans "Transfer selected" %}
                 </button>
-
+                {% endif %}
             </div>
 
         {% endif %}
