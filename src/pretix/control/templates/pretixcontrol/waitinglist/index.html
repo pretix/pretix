@@ -267,12 +267,6 @@
                     <i class="fa fa-trash"></i>
                     {% trans "Delete selected" %}
                 </button>
-                {% if request.event.has_subevents %}
-                <button type="submit" class="btn btn-primary btn-save" name="action" value="update">
-                    <i class="fa fa-share-square-o" aria-hidden="true"></i>
-                    {% trans "Transfer selected" %}
-                </button>
-                {% endif %}
             </div>
 
         {% endif %}
