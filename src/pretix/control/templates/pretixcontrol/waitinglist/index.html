@@ -244,7 +244,7 @@
                                 </button>
                                 <a href="{% url "control:event.orders.waitinglist.delete" organizer=request.event.organizer.slug event=request.event.slug entry=e.id %}?next={{ request.get_full_path|urlencode }}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
                                 {% if request.event.has_subevents %}
-                                <a href="{% url "control:event.orders.waitinglist.update" organizer=request.event.organizer.slug event=request.event.slug entry=e.id %}" class="btn btn-primary btn-sm"><i class="icon icon-upload"></i> {% trans "Transfer" %} </a>
+                                <a href="{% url "control:event.orders.waitinglist.update" organizer=request.event.organizer.slug event=request.event.slug entry=e.id %}" class="btn btn-primary btn-sm" title="{% trans "Transfer" %}"><i class="fa fa-share-square-o" aria-hidden="true"></i></a>
                                 {% endif %}
                             {% else %}
                                 <button class="btn btn-default btn-sm disabled">
@@ -264,11 +264,13 @@
         {% if "can_change_orders" in request.eventpermset %}
             <div class="batch-select-actions">
                 <button type="submit" class="btn btn-danger btn-save" name="action" value="delete">
-                    <i class="fa fa-trash"></i>{% trans "Delete selected" %}
+                    <i class="fa fa-trash"></i>
+                    {% trans "Delete selected" %}
                 </button>
                 {% if request.event.has_subevents %}
                 <button type="submit" class="btn btn-primary btn-save" name="action" value="update">
-                    <span class="icon icon-upload"></span>{% trans "Transfer selected" %}
+                    <i class="fa fa-share-square-o" aria-hidden="true"></i>
+                    {% trans "Transfer selected" %}
                 </button>
                 {% endif %}
             </div>
