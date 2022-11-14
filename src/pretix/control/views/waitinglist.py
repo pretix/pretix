@@ -35,12 +35,11 @@
 import csv
 import io
 
-from django import forms
 from django.contrib import messages
 from django.db import transaction
 from django.db.models import F, Max, Min, Q, Sum
 from django.db.models.functions import Coalesce
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import Http404, HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils.functional import cached_property
@@ -48,11 +47,9 @@ from django.utils.http import is_safe_url
 from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _, pgettext
 from django.views import View
-from django.views.generic import FormView, ListView
+from django.views.generic import ListView
 from django.views.generic.edit import DeleteView
-from django_scopes import scopes_disabled
 
-from pretix.base.forms import I18nModelForm
 from pretix.base.models import Item, Quota, WaitingListEntry
 from pretix.base.models.waitinglist import WaitingListException
 from pretix.base.services.waitinglist import assign_automatically
