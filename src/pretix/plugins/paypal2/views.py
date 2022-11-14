@@ -179,7 +179,10 @@ class PayView(PaypalOrderView, TemplateView):
             return r
 
     def post(self, request, *args, **kwargs):
-        self.payment.payment_provider.execute_payment(request, self.payment)
+        try:
+            self.payment.payment_provider.execute_payment(request, self.payment)
+        except PaymentException as e:
+            messages.error(request, str(e))
         return self._redirect_to_order()
 
     def get_context_data(self, **kwargs):

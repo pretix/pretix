@@ -43,6 +43,7 @@ from paypalcheckoutsdk.orders import (
     OrdersPatchRequest,
 )
 from paypalcheckoutsdk.payments import CapturesRefundRequest, RefundsGetRequest
+from paypalhttp import HttpError
 
 from pretix import settings
 from pretix.base.decimal import round_decimal
@@ -659,10 +660,34 @@ class PaypalMethod(BasePaymentProvider):
                 try:
                     capturereq = OrdersCaptureRequest(pp_captured_order.id)
                     response = self.client.execute(capturereq)
-                except IOError as e:
-                    messages.error(request, _('We had trouble communicating with PayPal'))
+                except HttpError as e:
+                    text = _('We were unable to process your payment. See below for details on how to proceed.')
+                    try:
+                        error = json.loads(e.message)
+                    except ValueError:
+                        error = {"message": str(e.message)}
+
+                    try:
+                        if error["details"][0]["issue"] == "ORDER_ALREADY_CAPTURED":
+                            # ignore, do nothing, write nothing, just redirect user to order page, this is likely
+                            # a race condition
+                            logger.info('PayPal ORDER_ALREADY_CAPTURED, ignoring')
+                            return
+                        elif error["details"][0]["issue"] == "INSTRUMENT_DECLINED":
+                            # Use PayPal's rejection message
+                            text = error["details"][0]["description"]
+                    except (KeyError, IndexError):
+                        pass
+
+                    payment.fail(info={**pp_captured_order.dict(), "error": error}, log_data=error)
                     logger.exception('PayPal OrdersCaptureRequest: {}'.format(str(e)))
-                    return
+                    raise PaymentException(text)
+                except IOError as e:
+                    payment.fail(info={**pp_captured_order.dict(), "error": {"message": str(e)}}, log_data={"error": str(e)})
+                    logger.exception('PayPal OrdersCaptureRequest: {}'.format(str(e)))
+                    raise PaymentException(
+                        _('We were unable to process your payment. See below for details on how to proceed.')
+                    )
                 else:
                     pp_captured_order = response.result
 
@@ -685,7 +710,7 @@ class PaypalMethod(BasePaymentProvider):
 
             if pp_captured_order.status != 'COMPLETED':
                 payment.fail(info=pp_captured_order.dict())
-                logger.error('Invalid state: %s' % str(pp_captured_order))
+                logger.error('Invalid state: %s' % repr(pp_captured_order.dict()))
                 raise PaymentException(
                     _('We were unable to process your payment. See below for details on how to proceed.')
                 )
@@ -704,7 +729,8 @@ class PaypalMethod(BasePaymentProvider):
             except SendMailException:
                 messages.warning(request, _('There was an error sending the confirmation mail.'))
         finally:
-            del request.session['payment_paypal_oid']
+            if 'payment_paypal_oid' in request.session:
+                del request.session['payment_paypal_oid']
 
     def payment_pending_render(self, request, payment) -> str:
         retry = True
