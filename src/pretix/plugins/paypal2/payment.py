@@ -615,41 +615,46 @@ class PaypalMethod(BasePaymentProvider):
                                          'proceed.'))
 
             if pp_captured_order.status == 'APPROVED':
-                try:
-                    custom_id = '{prefix}{orderstring}{postfix}'.format(
-                        prefix='{} '.format(self.settings.prefix) if self.settings.prefix else '',
-                        orderstring=__('Order {slug}-{code}').format(
-                            slug=self.event.slug.upper(),
-                            code=payment.order.code
-                        ),
-                        postfix=' {}'.format(self.settings.postfix) if self.settings.postfix else ''
-                    )
-                    description = '{prefix}{orderstring}{postfix}'.format(
-                        prefix='{} '.format(self.settings.prefix) if self.settings.prefix else '',
-                        orderstring=__('Order {order} for {event}').format(
-                            event=request.event.name,
-                            order=payment.order.code
-                        ),
-                        postfix=' {}'.format(self.settings.postfix) if self.settings.postfix else ''
-                    )
-                    patchreq = OrdersPatchRequest(pp_captured_order.id)
-                    patchreq.request_body([
-                        {
-                            "op": "replace",
-                            "path": "/purchase_units/@reference_id=='default'/custom_id",
-                            "value": custom_id[:127],
-                        },
-                        {
-                            "op": "replace",
-                            "path": "/purchase_units/@reference_id=='default'/description",
-                            "value": description[:127],
-                        }
-                    ])
-                    self.client.execute(patchreq)
-                except IOError as e:
-                    messages.error(request, _('We had trouble communicating with PayPal'))
-                    logger.exception('PayPal OrdersPatchRequest: {}'.format(str(e)))
-                    return
+                # We are suspecting that some or even all APMs cannot be PATCHed after being approved by the buyer,
+                # without the PayPal Order losing its APPROVED-status again.
+                # Since APMs are already created with their proper custom_id and description (at the time the PayPal
+                # Order is created for the APM, we already have pretix order code), we skip the PATCH-request.
+                if payment.order.code not in pp_captured_order.purchase_units[0].custom_id:
+                    try:
+                        custom_id = '{prefix}{orderstring}{postfix}'.format(
+                            prefix='{} '.format(self.settings.prefix) if self.settings.prefix else '',
+                            orderstring=__('Order {slug}-{code}').format(
+                                slug=self.event.slug.upper(),
+                                code=payment.order.code
+                            ),
+                            postfix=' {}'.format(self.settings.postfix) if self.settings.postfix else ''
+                        )
+                        description = '{prefix}{orderstring}{postfix}'.format(
+                            prefix='{} '.format(self.settings.prefix) if self.settings.prefix else '',
+                            orderstring=__('Order {order} for {event}').format(
+                                event=request.event.name,
+                                order=payment.order.code
+                            ),
+                            postfix=' {}'.format(self.settings.postfix) if self.settings.postfix else ''
+                        )
+                        patchreq = OrdersPatchRequest(pp_captured_order.id)
+                        patchreq.request_body([
+                            {
+                                "op": "replace",
+                                "path": "/purchase_units/@reference_id=='default'/custom_id",
+                                "value": custom_id[:127],
+                            },
+                            {
+                                "op": "replace",
+                                "path": "/purchase_units/@reference_id=='default'/description",
+                                "value": description[:127],
+                            }
+                        ])
+                        self.client.execute(patchreq)
+                    except IOError as e:
+                        messages.error(request, _('We had trouble communicating with PayPal'))
+                        logger.exception('PayPal OrdersPatchRequest: {}'.format(str(e)))
+                        return
 
                 try:
                     capturereq = OrdersCaptureRequest(pp_captured_order.id)
