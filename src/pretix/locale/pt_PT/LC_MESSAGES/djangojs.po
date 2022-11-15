@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-11-07 15:22+0000\n"
-"PO-Revision-Date: 2022-11-07 14:50+0000\n"
-"Last-Translator: Fazenda Dengo <fazendadengo@gmail.com>\n"
+"PO-Revision-Date: 2022-11-15 21:00+0000\n"
+"Last-Translator: David Vaz <davidmgvaz@gmail.com>\n"
 "Language-Team: Portuguese (Portugal) <https://translate.pretix.eu/projects/"
 "pretix/pretix-js/pt_PT/>\n"
 "Language: pt_PT\n"
@@ -287,7 +287,7 @@ msgstr "Erro desconhecido."
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:57
 msgid "Ticket type not allowed here"
-msgstr ""
+msgstr "Tipo de bilhete não é permitido aqui"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:59
 msgid "Entry not allowed"
