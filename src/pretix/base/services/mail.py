@@ -98,7 +98,8 @@ def mail(email: Union[str, Sequence[str]], subject: str, template: Union[str, La
          context: Dict[str, Any] = None, event: Event = None, locale: str = None, order: Order = None,
          position: OrderPosition = None, *, headers: dict = None, sender: str = None, organizer: Organizer = None,
          customer: Customer = None, invoices: Sequence = None, attach_tickets=False, auto_email=True, user=None,
-         attach_ical=False, attach_cached_files: Sequence = None, attach_other_files: list=None):
+         attach_ical=False, attach_cached_files: Sequence = None, attach_other_files: list=None,
+         plain_text_without_links=False):
     """
     Sends out an email to a user. The mail will be sent synchronously or asynchronously depending on the installation.
 
@@ -242,7 +243,7 @@ def mail(email: Union[str, Sequence[str]], subject: str, template: Union[str, La
             if order and order.testmode:
                 subject = "[TESTMODE] " + subject
 
-            if order and position:
+            if order and position and not plain_text_without_links:
                 body_plain += _(
                     "You are receiving this email because someone placed an order for {event} for you."
                 ).format(event=event.name)
@@ -258,7 +259,7 @@ def mail(email: Union[str, Sequence[str]], subject: str, template: Union[str, La
                         }
                     )
                 )
-            elif order:
+            elif order and not plain_text_without_links:
                 body_plain += _(
                     "You are receiving this email because you placed an order for {event}."
                 ).format(event=event.name)
@@ -278,7 +279,9 @@ def mail(email: Union[str, Sequence[str]], subject: str, template: Union[str, La
 
         with override(timezone):
             try:
-                if 'position' in inspect.signature(renderer.render).parameters:
+                if plain_text_without_links:
+                    body_html = None
+                elif 'position' in inspect.signature(renderer.render).parameters:
                     body_html = renderer.render(content_plain, signature, raw_subject, order, position)
                 else:
                     # Backwards compatibility
@@ -596,8 +599,9 @@ def mail_send_task(self, *args, to: List[str], subject: str, body: str, html: st
             raise SendMailException('Failed to send an email to {}.'.format(to))
         else:
             for i in invoices_sent:
-                i.sent_to_customer = now()
-                i.save(update_fields=['sent_to_customer'])
+                if not i.order.invoice_address.invoice_email or i.order.invoice_address.invoice_email in to:
+                    i.sent_to_customer = now()
+                    i.save(update_fields=['sent_to_customer'])
 
 
 def mail_send(*args, **kwargs):

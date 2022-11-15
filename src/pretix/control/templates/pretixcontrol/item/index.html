@@ -12,7 +12,7 @@
                         <legend>{% trans "General" %}</legend>
                         {% bootstrap_field form.active layout="control" %}
                         {% bootstrap_field form.name layout="control" %}
-                        <div class="internal-name-wrapper">
+                        <div class="optional-field-wrapper" data-text="{% trans "Use a different name internally" %}">
                             {% bootstrap_field form.internal_name layout="control" %}
                         </div>
                         {% bootstrap_field form.category layout="control" %}

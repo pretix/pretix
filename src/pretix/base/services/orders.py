@@ -80,6 +80,7 @@ from pretix.base.secrets import assign_ticket_secret
 from pretix.base.services import tickets
 from pretix.base.services.invoices import (
     generate_cancellation, generate_invoice, invoice_qualified,
+    send_invoice_to_customer_alternative_email,
 )
 from pretix.base.services.locking import LockTimeoutException, NoLockManager
 from pretix.base.services.mail import SendMailException
@@ -1091,6 +1092,13 @@ def _perform_order(event: Event, payment_provider: str, position_ids: List[str],
                     if p.addon_to_id is None and p.attendee_email and p.attendee_email != order.email:
                         _order_placed_email_attendee(event, order, p, email_attendees_template, subject_attendees_template, log_entry,
                                                      is_free=free_order_flow)
+        try:
+            if invoice and order.invoice_address.invoice_email:
+                # We fire this task with a little delay since both mail() calls will call invoice_pdf_task and this
+                # will reduce the chance of the PDF renderer running twice except under exceptional load patterns.
+                send_invoice_to_customer_alternative_email.apply_async(args=(invoice.pk,), countdown=60)
+        except InvoiceAddress.DoesNotExist:
+            pass
 
     return order.id
 

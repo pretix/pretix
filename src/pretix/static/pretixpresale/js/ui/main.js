@@ -139,6 +139,28 @@ var form_handlers = function (el) {
         });
     });
 
+    // Hide optional field
+    el.find(".optional-field-wrapper").each(function () {
+        if ($(this).find("input").val() === "") {
+            var $fg = $(this).find(".form-group");
+            $fg.hide();
+            var $fgl = $("<div>").addClass("form-group").append(
+                $("<div>").addClass("col-md-9 col-md-offset-3").append(
+                    $("<div>").addClass("help-block").append(
+                        $("<a>").attr("href", "#").text(
+                            $(this).attr("data-text")
+                        ).click(function () {
+                            $fg.slideDown();
+                            $fgl.slideUp();
+                            return false;
+                        })
+                    )
+                )
+            );
+            $(this).append($fgl);
+        }
+    });
+
     el.find("input[name*=question], select[name*=question]").change(questions_toggle_dependent);
     questions_toggle_dependent();
     questions_init_photos(el);

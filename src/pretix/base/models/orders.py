@@ -1038,6 +1038,59 @@ class Order(LockModel, LoggedModel):
                     }
                 )
 
+    def send_invoice_to_alternate_email(self, invoice):
+        """
+        Sends an email to the alternate invoice address.
+        """
+        from pretix.base.services.mail import (
+            SendMailException, TolerantDict, mail, render_mail,
+        )
+
+        try:
+            recipient = self.invoice_address.invoice_email
+        except InvoiceAddress.DoesNotExist:
+            return
+        if not recipient:
+            return
+
+        with language(self.locale, self.event.settings.region):
+            context = get_email_context(event=self.event, order=self, invoice=invoice, event_or_subevent=self.event,
+                                        invoice_address=self.invoice_address)
+            template = self.event.settings.email_text_invoice_only
+            subject = self.event.settings.email_subject_invoice_only
+
+            try:
+                email_content = render_mail(template, context)
+                subject = subject.format_map(TolerantDict(context))
+                mail(
+                    recipient,
+                    subject,
+                    template,
+                    context=context,
+                    event=self.event,
+                    locale=self.locale,
+                    order=self,
+                    invoices=[invoice],
+                    attach_tickets=False,
+                    auto_email=True,
+                    attach_ical=False,
+                )
+            except SendMailException:
+                raise
+            else:
+                self.log_action(
+                    'pretix.event.order.email.order_invoice_only',
+                    data={
+                        'subject': subject,
+                        'message': email_content,
+                        'position': None,
+                        'recipient': recipient,
+                        'invoices': invoice.pk,
+                        'attach_tickets': False,
+                        'attach_ical': False,
+                    }
+                )
+
     def resend_link(self, user=None, auth=None):
         with language(self.locale, self.event.settings.region):
             email_template = self.event.settings.mail_text_resend_link
@@ -2781,6 +2834,14 @@ class InvoiceAddress(models.Model):
         verbose_name=_('Beneficiary'),
         blank=True
     )
+    invoice_email = models.EmailField(
+        verbose_name=_('Send invoice to'),
+        help_text=_('If your accounting department requires that we send them the invoice directly, you can enter '
+                    'their email address here. They will receive a separate email. You will still receive the invoice '
+                    'and booking confirmation as well.'),
+        blank=True,
+        null=True,
+    )
 
     objects = ScopedManager(organizer='order__event__organizer')
     profiles = ScopedManager(organizer='customer__organizer')
@@ -2865,6 +2926,7 @@ class InvoiceAddress(models.Model):
             'vat_id': self.vat_id,
             'custom_field': self.custom_field,
             'internal_reference': self.internal_reference,
+            'invoice_email': self.invoice_email,
             'beneficiary': self.beneficiary,
         })
         return d

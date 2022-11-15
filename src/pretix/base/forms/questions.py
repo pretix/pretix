@@ -919,7 +919,7 @@ class BaseInvoiceAddressForm(forms.ModelForm):
     class Meta:
         model = InvoiceAddress
         fields = ('is_business', 'company', 'name_parts', 'street', 'zipcode', 'city', 'country', 'state',
-                  'vat_id', 'internal_reference', 'beneficiary', 'custom_field')
+                  'vat_id', 'internal_reference', 'beneficiary', 'custom_field', 'invoice_email')
         widgets = {
             'is_business': BusinessBooleanRadio,
             'street': forms.Textarea(attrs={

@@ -972,6 +972,18 @@ DEFAULTS = {
                         "to emails."),
         )
     },
+    'invoice_email_asked': {
+        'default': 'False',
+        'type': bool,
+        'form_class': forms.BooleanField,
+        'serializer_class': serializers.BooleanField,
+        'form_kwargs': dict(
+            label=_("Allow customers to enter an alternate email address"),
+            help_text=_("If an alternate email address is entered, the invoice will be sent there in addition to being "
+                        "sent to the user."),
+            widget=forms.CheckboxInput(attrs={'data-checkbox-dependency': '#id_invoice_email_attachment'}),
+        )
+    },
     'invoice_email_organizer': {
         'default': '',
         'type': str,
@@ -2098,6 +2110,20 @@ You can view the details of your order here:
 {url}
 
 Best regards,
+Your {event} team"""))
+    },
+    'mail_subject_invoice_only': {
+        'type': LazyI18nString,
+        'default': LazyI18nString.from_gettext(gettext_noop("Invoice {invoice_number}")),
+    },
+    'mail_text_invoice_only': {
+        'type': LazyI18nString,
+        'default': LazyI18nString.from_gettext(gettext_noop("""Hello,
+
+you receive this message because an order for {event} was placed by {order_email} and we have been asked to forward the invoice to you.
+
+Best regards,
+
 Your {event} team"""))
     },
     'mail_text_order_custom_mail': {

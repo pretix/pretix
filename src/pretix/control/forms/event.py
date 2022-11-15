@@ -802,6 +802,7 @@ class InvoiceSettingsForm(SettingsForm):
         'invoice_numbers_counter_length',
         'invoice_address_explanation_text',
         'invoice_email_attachment',
+        'invoice_email_asked',
         'invoice_email_organizer',
         'invoice_address_from_name',
         'invoice_address_from',
@@ -1170,6 +1171,16 @@ class MailSettingsForm(SettingsForm):
         required=False,
         widget=I18nTextarea,
     )
+    mail_subject_invoice_only = I18nFormField(
+        label=_("Subject"),
+        required=False,
+        widget=I18nTextInput,
+    )
+    mail_text_invoice_only = I18nFormField(
+        label=_("Text"),
+        required=False,
+        widget=I18nTextarea,
+    )
     base_context = {
         'mail_text_order_placed': ['event', 'order', 'payment'],
         'mail_subject_order_placed': ['event', 'order', 'payment'],
@@ -1210,6 +1221,8 @@ class MailSettingsForm(SettingsForm):
         'mail_subject_waiting_list': ['event', 'waiting_list_entry'],
         'mail_text_resend_all_links': ['event', 'orders'],
         'mail_subject_resend_all_links': ['event', 'orders'],
+        'mail_subject_invoice_only': ['event', 'order', 'invoice'],
+        'mail_text_invoice_only': ['event', 'order', 'invoice'],
         'mail_attach_ical_description': ['event', 'event_or_subevent'],
     }
 

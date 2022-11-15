@@ -392,6 +392,7 @@ def pretixcontrol_logentry_display(sender: Event, logentry: LogEntry, **kwargs):
         'pretix.event.order.email.order_approved': _('An email has been sent to notify the user that the order has '
                                                      'been approved.'),
         'pretix.event.order.email.order_placed': _('An email has been sent to notify the user that the order has been received and requires payment.'),
+        'pretix.event.order.email.order_invoice_only': _('An invoice has been sent to an alternate email address.'),
         'pretix.event.order.email.order_placed_require_approval': _('An email has been sent to notify the user that '
                                                                     'the order has been received and requires '
                                                                     'approval.'),

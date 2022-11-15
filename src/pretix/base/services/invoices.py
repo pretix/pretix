@@ -379,13 +379,18 @@ def invoice_pdf_task(invoice: int):
     with scope(organizer=i.order.event.organizer):
         if i.shredded:
             return None
-        if i.file:
-            i.file.delete()
-        with language(i.locale, i.event.settings.region):
+
+        to_delete = i.file.name
+        with transaction.atomic(), language(i.locale, i.event.settings.region):
             fname, ftype, fcontent = i.event.invoice_renderer.generate(i)
             i.file.save(fname, ContentFile(fcontent), save=False)
             i.save(update_fields=['file'])
-            return i.file.name
+
+        try:
+            i.file.storage.delete(to_delete)
+        except:
+            logger.exception('Could not delete previous PDF file for invoice')
+        return i.file.name
 
 
 def invoice_qualified(order: Order):
@@ -482,6 +487,14 @@ def fetch_ecb_rates(sender, **kwargs):
         gs.settings.ecb_rates_dict = json.dumps(rates, cls=DjangoJSONEncoder)
     except urllib.error.URLError:
         logger.exception('Could not retrieve rates from ECB')
+
+
+@app.task(base=TransactionAwareTask)
+def send_invoice_to_customer_alternative_email(invoice_id):
+    with scopes_disabled():
+        i = Invoice.objects.get(pk=invoice_id)
+    with scope(organizer=i.order.event.organizer):
+        i.order.send_invoice_to_alternate_email(i)
 
 
 @receiver(signal=periodic_task)

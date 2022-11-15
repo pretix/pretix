@@ -412,7 +412,11 @@ function questions_init_profiles(el) {
                 var answer = selectedProfile[key].value;
                 var $field = selectedProfile[key].field;
                 if (!$field || !$field.length) return;
-              
+
+                if ($field.closest('.optional-field-wrapper').length) {
+                    $field.closest('.optional-field-wrapper').find('.form-group').first().show()
+                    $field.closest('.optional-field-wrapper').find('.form-group').last().hide()
+                }
                 if ($field.attr("type") === "checkbox") {
                     if (answer === true || answer === false) {
                         // boolean

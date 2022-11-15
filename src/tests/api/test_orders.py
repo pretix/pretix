@@ -265,6 +265,7 @@ TEST_ORDER_RES = {
         "country": "NZ",
         "state": "",
         "internal_reference": "",
+        "invoice_email": None,
         "custom_field": "Custom info",
         "vat_id": "DE123",
         "vat_id_validated": True

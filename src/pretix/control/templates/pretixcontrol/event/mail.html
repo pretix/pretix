@@ -119,6 +119,10 @@
 
                     {% blocktrans asvar title_require_approval %}Order approval process{% endblocktrans %}
                     {% include "pretixcontrol/event/mail_settings_fragment.html" with pid="ticket_reminder" title=title_require_approval  items="mail_subject_order_placed_require_approval,mail_text_order_placed_require_approval,mail_subject_order_approved,mail_text_order_approved,mail_subject_order_approved_free,mail_text_order_approved_free,mail_subject_order_denied,mail_text_order_denied" %}
+
+                    {% blocktrans asvar title_invoice_only %}Invoice to alternate address{% endblocktrans %}
+                    {% blocktrans asvar description_invoice_only %}This email text is used if you activated "Allow customers to enter an alternate email address" in your invoice settings and a user asks that the invoice is sent to an alternate email address. This email, unlike all other emails, will be sent without any styling to prevent issues with automated processing in accounting systems.{% endblocktrans %}
+                    {% include "pretixcontrol/event/mail_settings_fragment.html" with pid="ticket_reminder" title=title_invoice_only description=description_invoice_only items="mail_subject_invoice_only,mail_text_invoice_only" %}
                 </div>
                 <h4>{% trans "Attachments" %}</h4>
                 {% bootstrap_field form.mail_attachment_new_order layout="control" %}

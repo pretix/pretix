@@ -323,7 +323,8 @@ def test_order_create_simulate(token_client, organizer, event, item, quota, ques
             'vat_id': '',
             'vat_id_validated': False,
             'internal_reference': '',
-            'custom_field': None
+            'custom_field': None,
+            'invoice_email': None,
         },
         'positions': [
             {

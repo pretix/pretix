@@ -377,6 +377,14 @@ def base_placeholders(sender, **kwargs):
             'currency', ['event'], lambda event: event.currency, lambda event: event.currency
         ),
         SimpleFunctionalMailTextPlaceholder(
+            'order_email', ['order'], lambda order: order.email, 'john@example.org'
+        ),
+        SimpleFunctionalMailTextPlaceholder(
+            'invoice_number', ['invoice'],
+            lambda invoice: invoice.full_invoice_no,
+            f'{sender.settings.invoice_numbers_prefix or (sender.slug.upper() + "-")}00000'
+        ),
+        SimpleFunctionalMailTextPlaceholder(
             'refund_amount', ['event_or_subevent', 'refund_amount'],
             lambda event_or_subevent, refund_amount: LazyCurrencyNumber(refund_amount, event_or_subevent.currency),
             lambda event_or_subevent: LazyCurrencyNumber(Decimal('42.23'), event_or_subevent.currency)

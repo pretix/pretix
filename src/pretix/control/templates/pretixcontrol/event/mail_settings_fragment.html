@@ -10,6 +10,9 @@
     </summary>
     <div id="{{ pid }}">
         <div class="panel-body">
+            {% if description %}
+                <p class="help-block">{{ description }}</p>
+            {% endif %}
             {% with exclude|split as exclusion %}
             {% with items|split as item_list %}
             {% for item in item_list %}

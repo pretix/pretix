@@ -92,7 +92,7 @@ class InvoiceAddressSerializer(I18nAwareModelSerializer):
     class Meta:
         model = InvoiceAddress
         fields = ('last_modified', 'is_business', 'company', 'name', 'name_parts', 'street', 'zipcode', 'city', 'country',
-                  'state', 'vat_id', 'vat_id_validated', 'custom_field', 'internal_reference')
+                  'state', 'vat_id', 'vat_id_validated', 'custom_field', 'internal_reference', 'invoice_email')
         read_only_fields = ('last_modified',)
 
     def __init__(self, *args, **kwargs):

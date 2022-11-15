@@ -846,8 +846,8 @@ function setup_basics(el) {
         update();
     });
 
-    // Items and categories
-    el.find(".internal-name-wrapper").each(function () {
+    // Hide optional field
+    el.find(".optional-field-wrapper").each(function () {
         if ($(this).find("input").val() === "") {
             var $fg = $(this).find(".form-group");
             $fg.hide();
@@ -855,7 +855,7 @@ function setup_basics(el) {
                 $("<div>").addClass("col-md-9 col-md-offset-3").append(
                     $("<div>").addClass("help-block").append(
                         $("<a>").attr("href", "#").text(
-                            gettext("Use a different name internally")
+                            $(this).attr("data-text")
                         ).click(function () {
                             $fg.slideDown();
                             $fgl.slideUp();

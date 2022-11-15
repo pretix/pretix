@@ -339,6 +339,10 @@
                             {% endif %}
                             <dt>{% trans "Internal Reference" %}</dt>
                             <dd>{{ order.invoice_address.internal_reference }}</dd>
+                            {% if request.event.settings.invoice_email_asked and order.invoice_address.invoice_email %}
+                                <dt>{% trans "Send invoice to" %}</dt>
+                                <dd>{{ order.invoice_address.invoice_email }}</dd>
+                            {% endif %}
                         {% endif %}
                     </dl>
                 </div>

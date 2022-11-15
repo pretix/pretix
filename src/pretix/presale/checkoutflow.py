@@ -1048,7 +1048,8 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
 
                     for k in (
                         "company", "street", "zipcode", "city", "country", "state",
-                        "state_for_address", "vat_id", "custom_field", "internal_reference", "beneficiary"
+                        "state_for_address", "vat_id", "custom_field", "internal_reference",
+                        "beneficiary", "invoice_email",
                     ):
                         v = getattr(a, k) or ""
                         # always add all values of an address even when empty,

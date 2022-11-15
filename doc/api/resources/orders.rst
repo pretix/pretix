@@ -61,6 +61,7 @@ invoice_address                       object                     Invoice address
                                                                  AU, BR, CA, CN, MY, MX, and US.
 ├ internal_reference                  string                     Customer's internal reference to be printed on the invoice
 ├ custom_field                        string                     Custom invoice address field
+├ invoice_email                       string                     Email address that should receive all invoices
 ├ vat_id                              string                     Customer VAT ID
 └ vat_id_validated                    string                     ``true``, if the VAT ID has been validated against the
                                                                  EU VAT service and validation was successful. This only
@@ -342,6 +343,7 @@ List of all orders
                 "country": "DE",
                 "state": "",
                 "internal_reference": "",
+                "invoice_email": null,
                 "vat_id": "EU123456789",
                 "vat_id_validated": false
             },
@@ -518,6 +520,7 @@ Fetching individual orders
             "country": "DE",
             "state": "",
             "internal_reference": "",
+            "invoice_email": null,
             "vat_id": "EU123456789",
             "vat_id_validated": false
         },
@@ -895,6 +898,7 @@ Creating orders
       * ``country``
       * ``state``
       * ``internal_reference``
+      * ``invoice_email``
       * ``vat_id``
       * ``vat_id_validated`` (optional) – If you need support for reverse charge (rarely the case), you need to check
        yourself if the passed VAT ID is a valid EU VAT ID. In that case, set this to ``true``. Only valid VAT IDs will
@@ -992,6 +996,7 @@ Creating orders
           "country": "UK",
           "state": "",
           "internal_reference": "",
+          "invoice_email": null,
           "vat_id": ""
         },
         "positions": [
