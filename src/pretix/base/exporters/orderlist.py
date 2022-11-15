@@ -448,6 +448,10 @@ class OrderListExporter(MultiSheetListExporter):
 
         headers = [
             _('Event slug'),
+        ]
+        # get meta_data labels from first cached event
+        headers += [_('Meta: {}').format(l) for l in next(iter(self.event_object_cache.values())).meta_data.keys()]
+        headers += [
             _('Order code'),
             _('Status'),
             _('Email'),
@@ -481,6 +485,9 @@ class OrderListExporter(MultiSheetListExporter):
             tz = pytz.timezone(order.event.settings.timezone)
             row = [
                 self.event_object_cache[order.event_id].slug,
+            ]
+            row += self.event_object_cache[order.event_id].meta_data.values()
+            row += [
                 order.code,
                 _("canceled") if op.canceled else order.get_status_display(),
                 order.email,
