@@ -4,8 +4,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-11-07 15:22+0000\n"
-"PO-Revision-Date: 2022-10-26 01:00+0000\n"
-"Last-Translator: FlorianKohlerb88f86e20d524626 <florian.kohler@laposte.net>\n"
+"PO-Revision-Date: 2022-11-16 06:00+0000\n"
+"Last-Translator: Alexander Mohan Morzeria-Davis <chabgo.pwn@gmail.com>\n"
 "Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix/fr/"
 ">\n"
 "Language: fr\n"
@@ -20,6 +20,8 @@ msgid ""
 "Full device access (reading and changing orders and gift cards, reading of "
 "products and settings)"
 msgstr ""
+"Accès complet pour le dispositif (lire et changer des ordres et des cartes "
+"cadeaux, lire des produits et des paramètres)"
 
 #: pretix/api/auth/devicesecurity.py:44
 msgid "pretixSCAN"
@@ -284,8 +286,6 @@ msgid "Order expired"
 msgstr "Commande expirée"
 
 #: pretix/api/webhooks.py:229
-#, fuzzy
-#| msgid "The order's expiry date has been changed."
 msgid "Order expiry date changed"
 msgstr "La date d'expiration de la commande a été modifiée."
 
@@ -303,38 +303,28 @@ msgid "Order changed"
 msgstr "Commande modifiée"
 
 #: pretix/api/webhooks.py:245
-#, fuzzy
-#| msgid "Enable payment method"
 msgid "Refund of payment created"
-msgstr "Activer le mode de paiement"
+msgstr "Le remboursement de la paiement a été fait"
 
 #: pretix/api/webhooks.py:249 pretix/base/notifications.py:293
 msgid "External refund of payment"
 msgstr "Remboursement externe du paiement"
 
 #: pretix/api/webhooks.py:253
-#, fuzzy
-#| msgid "Text (requested by user)"
 msgid "Refund of payment requested by customer"
-msgstr "Texte (demandé par l'utilisateur)"
+msgstr "Une remboursement a été demandé par le.a client.e"
 
 #: pretix/api/webhooks.py:257
-#, fuzzy
-#| msgid "Payment completed."
 msgid "Refund of payment completed"
-msgstr "Paiement effectué."
+msgstr "Paiement effectué"
 
 #: pretix/api/webhooks.py:261
-#, fuzzy
-#| msgid "The order has been canceled."
 msgid "Refund of payment canceled"
-msgstr "La commande a été annulée."
+msgstr "La remboursement a été annulée"
 
 #: pretix/api/webhooks.py:265
-#, fuzzy
-#| msgid "Refund order"
 msgid "Refund of payment failed"
-msgstr "Demande de remboursement"
+msgstr "Le remboursement a échoué"
 
 #: pretix/api/webhooks.py:269
 msgid "Order approved"
@@ -365,18 +355,14 @@ msgid "Event deleted"
 msgstr "Événement supprimé"
 
 #: pretix/api/webhooks.py:297
-#, fuzzy
-#| msgid "Event begin date and time"
 msgctxt "subevent"
 msgid "Event series date added"
-msgstr "Date et heure de début de l'événement"
+msgstr "Une nouvelle date a été ajouté"
 
 #: pretix/api/webhooks.py:301
-#, fuzzy
-#| msgid "Event date range"
 msgctxt "subevent"
 msgid "Event series date changed"
-msgstr "Plage de dates de l'événement"
+msgstr "Plage de dates de l'événement changé"
 
 #: pretix/api/webhooks.py:305
 #, fuzzy
