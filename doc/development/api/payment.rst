@@ -126,6 +126,8 @@ The provider class
 
    .. automethod:: api_payment_details
 
+   .. automethod:: api_refund_details
+
    .. automethod:: matching_id
 
    .. automethod:: shred_payment_info

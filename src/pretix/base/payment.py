@@ -877,6 +877,15 @@ class BasePaymentProvider:
         """
         return {}
 
+    def api_refund_details(self, refund: OrderRefund):
+        """
+        Will be called to populate the ``details`` parameter of the refund in the REST API.
+
+        :param refund: The refund in question.
+        :return: A serializable dictionary
+        """
+        return {}
+
     def matching_id(self, payment: OrderPayment):
         """
         Will be called to get an ID for matching this payment when comparing pretix records with records of an external
@@ -958,6 +967,9 @@ class BoxOfficeProvider(BasePaymentProvider):
             "payment_type": payment.info_data.get('payment_type', None),
             "payment_data": payment.info_data.get('payment_data', {}),
         }
+
+    def api_refund_details(self, refund: OrderRefund):
+        return self.api_payment_details(refund)
 
     def payment_control_render(self, request, payment) -> str:
         if not payment.info:
@@ -1190,6 +1202,9 @@ class GiftCardPayment(BasePaymentProvider):
                 'organizer': gc.issuer.slug
             }
         }
+
+    def api_refund_details(self, refund: OrderRefund):
+        return self.api_payment_details(refund)
 
     def payment_partial_refund_supported(self, payment: OrderPayment) -> bool:
         return True

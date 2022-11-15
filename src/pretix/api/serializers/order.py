@@ -553,12 +553,22 @@ class OrderPaymentSerializer(I18nAwareModelSerializer):
                   'details')
 
 
+class RefundDetailsField(serializers.Field):
+    def to_representation(self, value: OrderRefund):
+        pp = value.payment_provider
+        if not pp:
+            return {}
+        return pp.api_refund_details(value)
+
+
 class OrderRefundSerializer(I18nAwareModelSerializer):
     payment = SlugRelatedField(slug_field='local_id', read_only=True)
+    details = RefundDetailsField(source='*', allow_null=True, read_only=True)
 
     class Meta:
         model = OrderRefund
-        fields = ('local_id', 'state', 'source', 'amount', 'payment', 'created', 'execution_date', 'comment', 'provider')
+        fields = ('local_id', 'state', 'source', 'amount', 'payment', 'created', 'execution_date', 'comment', 'provider',
+                  'details')
 
 
 class OrderURLField(serializers.URLField):
