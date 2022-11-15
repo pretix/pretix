@@ -99,6 +99,12 @@ class OrderListExporter(MultiSheetListExporter):
                  initial=False,
                  required=False
              )),
+            ('include_meta_data',
+             forms.BooleanField(
+                 label=_('Include event meta data'),
+                 initial=False,
+                 required=False
+             )),
             ('group_multiple_choice',
              forms.BooleanField(
                  label=_('Show multiple choice answers grouped in one column'),
@@ -270,7 +276,13 @@ class OrderListExporter(MultiSheetListExporter):
         tax_rates = self._get_all_tax_rates(qs)
 
         headers = [
-            _('Event slug'), _('Order code'), _('Order total'), _('Status'), _('Email'), _('Phone number'),
+            _('Event slug'),
+        ]
+        if form_data.get('include_meta_data'):
+            # get meta_data labels from first cached event
+            headers += [_('Meta: {}').format(l) for l in next(iter(self.event_object_cache.values())).meta_data.keys()]
+        headers += [
+            _('Order code'), _('Order total'), _('Status'), _('Email'), _('Phone number'),
             _('Order date'), _('Order time'), _('Company'), _('Name'),
         ]
         name_scheme = PERSON_NAME_SCHEMES[self.event.settings.name_scheme] if not self.is_multievent else None
@@ -345,6 +357,10 @@ class OrderListExporter(MultiSheetListExporter):
 
             row = [
                 self.event_object_cache[order.event_id].slug,
+            ]
+            if form_data.get('include_meta_data'):
+                row += self.event_object_cache[order.event_id].meta_data.values()
+            row += [
                 order.code,
                 order.total,
                 order.get_status_display(),
@@ -533,14 +549,20 @@ class OrderListExporter(MultiSheetListExporter):
             'order', 'order__invoice_address', 'order__customer', 'item', 'variation',
             'voucher', 'tax_rule'
         ).prefetch_related(
+            'subevent',
             'answers', 'answers__question', 'answers__options'
         )
+        if form_data.get('include_meta_data'):
+            qs = qs.prefetch_related('subevent__meta_values')
         if form_data['paid_only']:
             qs = qs.filter(order__status=Order.STATUS_PAID, canceled=False)
 
         qs = self._date_filter(qs, form_data, rel='order__')
 
         has_subevents = self.events.filter(has_subevents=True).exists()
+        if form_data.get('include_meta_data'):
+            # get meta_data labels from first cached event
+            meta_data_labels = [_('Meta: {}').format(l) for l in next(iter(self.event_object_cache.values())).meta_data.keys()]
 
         headers = [
             _('Event slug'),
@@ -556,6 +578,8 @@ class OrderListExporter(MultiSheetListExporter):
             headers.append(pgettext('subevent', 'Date'))
             headers.append(_('Start date'))
             headers.append(_('End date'))
+            if form_data.get('include_meta_data'):
+                headers += meta_data_labels
         headers += [
             _('Product'),
             _('Variation'),
@@ -652,10 +676,14 @@ class OrderListExporter(MultiSheetListExporter):
                             row.append(op.subevent.date_to.astimezone(self.event_object_cache[order.event_id].timezone).strftime('%Y-%m-%d %H:%M:%S'))
                         else:
                             row.append('')
+                        if form_data.get('include_meta_data'):
+                            row += op.subevent.meta_data.values()
                     else:
                         row.append('')
                         row.append('')
                         row.append('')
+                        if form_data.get('include_meta_data'):
+                            row += [''] * len(meta_data_labels)
                 row += [
                     str(op.item),
                     str(op.variation) if op.variation else '',
