@@ -9,7 +9,7 @@
             </summary>
             <ul class="events">
                 {% for event in day.events %}
-                    <li><a class="event {% if event.continued %}continued{% else %} {% spaceless %}
+                    <li><a class="event {% if event.continued %}continued{% endif %} {% spaceless %}
     {% if event.event.presale_is_running and show_avail %}
         {% if event.event.best_availability_state == 100 %}
             available
@@ -29,11 +29,12 @@
     {% else %}
         soon
     {% endif %}
-{% endspaceless %}{% endif %}"
+{% endspaceless %}"
                             href="{{ event.url }}">
                         {% if show_names|default_if_none:True %}
                             <span class="event-name">
                                 {{ event.event.name }}
+                                {% if event.continued %} <i class="event-name-continued">{% trans "(continued)" %}</i>{% endif %}
                             </span>
                         {% endif %}
                         {% if not event.continued %}
