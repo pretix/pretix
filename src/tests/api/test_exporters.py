@@ -68,10 +68,6 @@ SAMPLE_EXPORTER_CONFIG = {
             "required": False
         },
         {
-            "name": "include_meta_data",
-            "required": False
-        },
-        {
             "name": "group_multiple_choice",
             "required": False
         },
