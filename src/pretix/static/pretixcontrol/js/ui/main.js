@@ -119,6 +119,25 @@ var form_handlers = function (el) {
         form_handlers($(event.target));
     });
 
+    el.find("#add-options-csv").on("change", function(event) {
+        var formset = $(this).closest('.formset');
+        var addOptionButton = formset.find("button[data-formset-add]");
+        for (const file of event.target.files) {
+            const reader = new FileReader();
+            reader.addEventListener('load', (event) => {
+                event.target.result.split(/\r?\n/).forEach(function(line) {
+                    if (!line) return;
+                    var values = line.split(/[;,\t]/);
+                    addOptionButton.trigger("click");
+                    formset.find("[data-formset-body]>*:last-child").find("[type=text], textarea").each(function(i) {
+                        if (values[i]) this.value = values[i];
+                    });
+                });
+            });
+            reader.readAsText(file);
+        }
+    });
+
     // Vouchers
     el.find("#voucher-bulk-codes-generate").click(function () {
         var num = $("#voucher-bulk-codes-num").val();

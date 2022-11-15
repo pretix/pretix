@@ -118,6 +118,10 @@
                             <button type="button" class="btn btn-default" data-formset-add>
                                 <i class="fa fa-plus"></i> {% trans "Add a new option" %}</button>
                         </p>
+                        <p>
+                            {% trans "or add options from a csv file" %}
+                            <input type="file" id="add-options-csv" accept=".csv" aria-label="{% trans "csv file with answer options" %}">
+                        </p>
                     </div>
                 </div>
             </fieldset>
