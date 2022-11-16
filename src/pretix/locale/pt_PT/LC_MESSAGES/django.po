@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-11-07 15:22+0000\n"
-"PO-Revision-Date: 2022-11-16 10:43+0000\n"
-"Last-Translator: David Vaz <davidmgvaz@gmail.com>\n"
+"PO-Revision-Date: 2022-11-16 10:50+0000\n"
+"Last-Translator: tlm06 <tlm_pg06@hotmail.com>\n"
 "Language-Team: Portuguese (Portugal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/pt_PT/>\n"
 "Language: pt_PT\n"
@@ -2000,9 +2000,8 @@ msgid "Infinite"
 msgstr "Infinito"
 
 #: pretix/base/exporters/orderlist.py:891
-#, fuzzy
 msgid "Gift card transactions"
-msgstr "Resgates de cartão-presente"
+msgstr "Transações de cartão-presente"
 
 #: pretix/base/exporters/orderlist.py:936
 #: pretix/base/exporters/orderlist.py:979
@@ -2078,9 +2077,8 @@ msgid "Gift cards"
 msgstr "Cartões-presente"
 
 #: pretix/base/exporters/orderlist.py:1014
-#, fuzzy
 msgid "Show value at"
-msgstr "Mostrar variantes"
+msgstr "Mostrar valor em"
 
 #: pretix/base/exporters/orderlist.py:1020
 #: pretix/base/exporters/orderlist.py:1030 pretix/control/forms/filter.py:472
@@ -2151,19 +2149,16 @@ msgid "Current value"
 msgstr "Valor atual"
 
 #: pretix/base/exporters/orderlist.py:1077
-#, fuzzy
 msgid "Created in order"
-msgstr "Encomenda gratuita"
+msgstr "Criado em ordem"
 
 #: pretix/base/exporters/orderlist.py:1078
-#, fuzzy
 msgid "Last invoice number of order"
-msgstr "Factura prefixo de número"
+msgstr "Número da última fatura do pedido"
 
 #: pretix/base/exporters/orderlist.py:1079
-#, fuzzy
 msgid "Last invoice date of order"
-msgstr "Mostrar data de validade da encomenda"
+msgstr "Data da última fatura do pedido"
 
 #: pretix/base/exporters/waitinglist.py:47
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:87
@@ -2235,6 +2230,8 @@ msgid ""
 "Due to technical reasons you cannot set inputs, that need to be masked (e.g. "
 "passwords), to %(value)s."
 msgstr ""
+"Devido a razões técnicas, não pode definir entradas, que precisam de ser "
+"mascaradas (por exemplo, senhas), para %(value)s."
 
 #: pretix/base/forms/auth.py:57 pretix/base/forms/auth.py:168
 msgid "Keep me logged in"
@@ -2247,7 +2244,7 @@ msgstr "Esta combinação de credenciais não é conhecida pelo nosso sistema."
 #: pretix/base/forms/auth.py:61 pretix/base/forms/user.py:57
 #: pretix/presale/forms/customer.py:366 pretix/presale/forms/customer.py:438
 msgid "For security reasons, please wait 5 minutes before you try again."
-msgstr ""
+msgstr "Por motivos de segurança, aguarde 5 minutos antes de tentar novamente."
 
 #: pretix/base/forms/auth.py:62 pretix/base/forms/auth.py:262
 msgid "This account is inactive."
@@ -2276,9 +2273,8 @@ msgid "Repeat password"
 msgstr "Repita a palavra-passe"
 
 #: pretix/base/forms/questions.py:199
-#, fuzzy
 msgid "Please do not use special characters in names."
-msgstr "Por favor, indique um nome mais curto."
+msgstr "Por favor não use caracteres especiais em nomes."
 
 #: pretix/base/forms/questions.py:258
 msgid "Please enter a shorter name."
