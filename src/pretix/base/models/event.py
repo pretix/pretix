@@ -1580,6 +1580,11 @@ class EventMetaProperty(LoggedModel):
         verbose_name=_("Valid values"),
         help_text=_("If you keep this empty, any value is allowed. Otherwise, enter one possible value per line.")
     )
+    filter_allowed = models.BooleanField(
+        default=True, verbose_name=_("Can be used for filtering"),
+        help_text=_("This field will be shown to filter events or reports in the backend, and it can also be used "
+                    "for hidden filter parameters in the frontend (e.g. using the widget).")
+    )
 
     def full_clean(self, exclude=None, validate_unique=True):
         super().full_clean(exclude, validate_unique)

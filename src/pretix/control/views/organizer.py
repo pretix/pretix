@@ -205,7 +205,7 @@ class OrganizerDetail(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin
         ctx = super().get_context_data(**kwargs)
         ctx['filter_form'] = self.filter_form
         ctx['meta_fields'] = [
-            self.filter_form['meta_{}'.format(p.name)] for p in self.organizer.meta_properties.all()
+            self.filter_form['meta_{}'.format(p.name)] for p in self.organizer.meta_properties.filter(filter_allowed=True)
         ]
         return ctx
 

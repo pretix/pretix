@@ -92,7 +92,8 @@ def filter_qs_by_attr(qs, request):
 
     props = {
         p.name: p for p in request.organizer.meta_properties.filter(
-            name__in=attrs.keys()
+            name__in=attrs.keys(),
+            filter_allowed=True,
         )
     }
 

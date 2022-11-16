@@ -73,6 +73,11 @@ def test_attributes_on_page(env, client):
     r = client.get('/mrmcd/?attr[loc]=HH')
     assert 'MRMCD2015' in r.rendered_content
 
+    prop.filter_allowed = False
+    prop.save()
+    r = client.get('/mrmcd/?attr[loc]=MA')
+    assert 'MRMCD2015' in r.rendered_content
+
 
 @pytest.mark.django_db
 def test_non_public_event_not_on_page(env, client):

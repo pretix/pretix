@@ -182,7 +182,7 @@ class OrganizerUpdateForm(OrganizerForm):
 class EventMetaPropertyForm(forms.ModelForm):
     class Meta:
         model = EventMetaProperty
-        fields = ['name', 'default', 'required', 'protected', 'allowed_values']
+        fields = ['name', 'default', 'required', 'protected', 'allowed_values', 'filter_allowed']
         widgets = {
             'default': forms.TextInput()
         }
