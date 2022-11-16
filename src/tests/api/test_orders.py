@@ -219,6 +219,7 @@ TEST_REFUNDS_RES = [
         "execution_date": "2017-12-01T10:00:00Z",
         "comment": None,
         "provider": "stripe",
+        "details": {},
         "state": "done",
         "amount": "23.00"
     },

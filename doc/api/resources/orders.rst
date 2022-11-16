@@ -273,6 +273,15 @@ created                               datetime                   Date and time o
 comment                               string                     Reason for refund (shown to the customer in some cases, can be ``null``).
 execution_date                        datetime                   Date and time of completion of this refund (or ``null``)
 provider                              string                     Identification string of the payment provider
+details                               object                     Refund-specific information. This is a dictionary
+                                                                 with various fields that can be different between
+                                                                 payment providers, versions, payment states, etc. If
+                                                                 you read this field, you always need to be able to
+                                                                 deal with situations where values that you expect are
+                                                                 missing. Mostly, the field contains various IDs that
+                                                                 can be used for matching with other systems. If a
+                                                                 payment provider does not implement this feature,
+                                                                 the object is empty.
 ===================================== ========================== =======================================================
 
 List of all orders
@@ -2324,6 +2333,7 @@ Order refund endpoints
             "created": "2017-12-01T10:00:00Z",
             "execution_date": "2017-12-04T12:13:12Z",
             "comment": "Cancellation",
+            "details": {},
             "provider": "banktransfer"
           }
         ]
@@ -2367,6 +2377,7 @@ Order refund endpoints
         "created": "2017-12-01T10:00:00Z",
         "execution_date": "2017-12-04T12:13:12Z",
         "comment": "Cancellation",
+        "details": {},
         "provider": "banktransfer"
       }
 
@@ -2424,6 +2435,7 @@ Order refund endpoints
         "created": "2017-12-01T10:00:00Z",
         "execution_date": null,
         "comment": "Cancellation",
+        "details": {},
         "provider": "manual"
       }
 
