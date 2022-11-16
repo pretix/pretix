@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-11-07 15:22+0000\n"
-"PO-Revision-Date: 2022-11-16 12:00+0000\n"
+"PO-Revision-Date: 2022-11-16 16:12+0000\n"
 "Last-Translator: David Vaz <davidmgvaz@gmail.com>\n"
 "Language-Team: Portuguese (Portugal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/pt_PT/>\n"
@@ -5909,7 +5909,6 @@ msgid "Sesame Street 42"
 msgstr "Rua Sésamo 42"
 
 #: pretix/base/pdf.py:336
-#, fuzzy
 msgid "12345"
 msgstr "12345"
 
@@ -7840,7 +7839,6 @@ msgid "Default language"
 msgstr "Idioma padrão"
 
 #: pretix/base/settings.py:1040
-#, fuzzy
 msgid "Region"
 msgstr "Região"
 
@@ -9739,7 +9737,6 @@ msgid "Degree (after name)"
 msgstr "Grau (após o nome)"
 
 #: pretix/base/settings.py:3098
-#, fuzzy
 msgctxt "person_name_sample"
 msgid "MA"
 msgstr "MA"
@@ -10964,7 +10961,6 @@ msgid "Pending or paid"
 msgstr "Pendente ou pago"
 
 #: pretix/control/forms/filter.py:190
-#, fuzzy
 msgid "Cancellations"
 msgstr "Cancelamentos"
 
@@ -12530,10 +12526,9 @@ msgstr "Opcional"
 #: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html:48
 #: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html:193
 #: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html:280
-#, fuzzy
 msgctxt "form_bulk"
 msgid "change"
-msgstr "mudança"
+msgstr "mudar"
 
 #: pretix/control/forms/subevents.py:117
 #, fuzzy
@@ -12546,7 +12541,6 @@ msgid "Selection contains various values"
 msgstr "A seleção contém vários valores"
 
 #: pretix/control/forms/subevents.py:327
-#, fuzzy
 msgid "Available_until"
 msgstr "Disponível até"
 
@@ -14086,7 +14080,6 @@ msgstr "Histórico de check-in"
 
 #: pretix/control/navigation.py:354
 #: pretix/control/templates/pretixcontrol/orders/search.html:19
-#, fuzzy
 msgid "Search"
 msgstr "Procurar"
 
@@ -14158,7 +14151,6 @@ msgstr "Webhooks"
 #: pretix/control/navigation.py:536
 #: pretix/control/templates/pretixcontrol/organizers/customers.html:6
 #: pretix/control/templates/pretixcontrol/organizers/customers.html:9
-#, fuzzy
 msgid "Customers"
 msgstr "Clientes"
 
@@ -19989,7 +19981,6 @@ msgid "Create a new property"
 msgstr "Crie uma nova propriedade"
 
 #: pretix/control/templates/pretixcontrol/organizers/properties.html:20
-#, fuzzy
 msgid "Property"
 msgstr "Propriedade"
 
@@ -20835,7 +20826,6 @@ msgstr "Comprimento dos slots"
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:355
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:364
-#, fuzzy
 msgid "minutes"
 msgstr "minutos"
 
@@ -20845,9 +20835,8 @@ msgid "Break between slots"
 msgstr "Quebrar entre slots"
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:370
-#, fuzzy
 msgid "Create"
-msgstr "Crio"
+msgstr "Criar"
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:377
 #, fuzzy
@@ -21482,7 +21471,6 @@ msgid "Prefix (optional)"
 msgstr "Prefixo (opcional)"
 
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html:21
-#, fuzzy
 msgctxt "number_of_things"
 msgid "Number"
 msgstr "Número"
@@ -22302,7 +22290,6 @@ msgid "Your changes have not been saved, see below for errors."
 msgstr "Suas alterações não foram salvas, veja abaixo os erros."
 
 #: pretix/control/views/global_settings.py:193
-#, fuzzy
 msgid ""
 "You are in violation of the license. If you're not sure whether you qualify "
 "for the additional permission or if you offer the functionality of pretix to "
@@ -22669,7 +22656,17 @@ msgid_plural ""
 "\n"
 "Your {event} team"
 msgstr[0] ""
+"Olá,\n"
+"\n"
+"por favor, encontre a sua fatura anexa a este e-mail.\n"
+"\n"
+"A sua equipa {event}"
 msgstr[1] ""
+"Olá,\n"
+"\n"
+"por favor, encontre as suas faturas anexas a este e-mail.\n"
+"\n"
+"A sua equipa {event}"
 
 #: pretix/control/views/orders.py:464 pretix/presale/views/order.py:163
 #: pretix/presale/views/order.py:210 pretix/presale/views/order.py:322
@@ -22879,9 +22876,8 @@ msgid "No country specified."
 msgstr "Nenhum país selecionado."
 
 #: pretix/control/views/orders.py:1364
-#, fuzzy
 msgid "VAT ID could not be checked since this country is not supported."
-msgstr "O ID ID não pôde ser verificado, pois este país não é suportado."
+msgstr "O VAT ID não pôde ser verificado, pois este país não é suportado."
 
 #: pretix/control/views/orders.py:1375
 msgid ""
@@ -25515,29 +25511,29 @@ msgstr "na data {date} no horário {time}"
 #, python-format
 msgid "%(count)d day after event end at %(time)s"
 msgid_plural "%(count)d days after event end at %(time)s"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%(count)d dia após o fim do evento às %(time)s"
+msgstr[1] "%(count)d dias após o fim do evento às %(time)s"
 
 #: pretix/plugins/sendmail/models.py:265
 #, python-format
 msgid "%(count)d day before event end at %(time)s"
 msgid_plural "%(count)d days before event end at %(time)s"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%(count)d dia antes do fim do evento às %(time)s"
+msgstr[1] "%(count)d dias antes do fim do evento às %(time)s"
 
 #: pretix/plugins/sendmail/models.py:275
 #, python-format
 msgid "%(count)d day after event start at %(time)s"
 msgid_plural "%(count)d days after event start at %(time)s"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%(count)d dia depois do início do evento às %(time)s"
+msgstr[1] "%(count)d dias depois do início do evento às %(time)s"
 
 #: pretix/plugins/sendmail/models.py:284
 #, python-format
 msgid "%(count)d day before event start at %(time)s"
 msgid_plural "%(count)d days before event start at %(time)s"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%(count)d dia antes do início do evento às %(time)s"
+msgstr[1] "%(count)d dias antes do início do evento às %(time)s"
 
 #: pretix/plugins/sendmail/signals.py:97
 #, fuzzy
@@ -25757,8 +25753,8 @@ msgstr "Você precisa visualizar seu e -mail antes de poder enviá -lo."
 #, python-format
 msgid "%(number)s matching order"
 msgid_plural "%(number)s matching orders"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%(number)s encomenda encontrada"
+msgstr[1] "%(number)s encomendas encontradas"
 
 #: pretix/plugins/sendmail/views.py:121
 msgid "You supplied an invalid log entry ID"
@@ -26647,7 +26643,6 @@ msgid "Web Check-in"
 msgstr "Check-in na web"
 
 #: pretix/plugins/webcheckin/templates/pretixplugins/webcheckin/index.html:10
-#, fuzzy
 msgid "Check-in"
 msgstr "Check-in"
 
