@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-11-07 15:22+0000\n"
-"PO-Revision-Date: 2022-11-16 10:50+0000\n"
+"PO-Revision-Date: 2022-11-16 12:00+0000\n"
 "Last-Translator: tlm06 <tlm_pg06@hotmail.com>\n"
 "Language-Team: Portuguese (Portugal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/pt_PT/>\n"
@@ -2281,37 +2281,42 @@ msgid "Please enter a shorter name."
 msgstr "Por favor, indique um nome mais curto."
 
 #: pretix/base/forms/questions.py:275
-#, fuzzy
 msgctxt "phonenumber"
 msgid "International area code"
-msgstr "Referência interna"
+msgstr "Código de área internacional"
 
 #: pretix/base/forms/questions.py:299
 msgctxt "phonenumber"
 msgid "Phone number (without international area code)"
-msgstr ""
+msgstr "Número de telefone (sem código de área internacional)"
 
 #: pretix/base/forms/questions.py:442
 msgid ""
 "You uploaded an image in landscape orientation. Please upload an image in "
 "portrait orientation."
 msgstr ""
+"Carregou uma imagem na orientação paisagem. Por favor carregue uma imagem na "
+"orientação retrato."
 
 #: pretix/base/forms/questions.py:445
 msgid "Please upload an image where the width is 3/4 of the height."
-msgstr ""
+msgstr "Por favor carregue uma imagem em que a largura seja 3/4 da altura."
 
 #: pretix/base/forms/questions.py:448
 msgid ""
 "The file you uploaded has a very large number of pixels, please upload an "
 "image no larger than 10000 x 10000 pixels."
 msgstr ""
+"O ficheiro que carregou tem um número muito grande de pixels, por favor "
+"carregue uma imagem não maior que 10000 x 10000 pixels."
 
 #: pretix/base/forms/questions.py:451
 msgid ""
 "Upload a valid image. The file you uploaded was either not an image or a "
 "corrupted image."
 msgstr ""
+"Carregue uma imagem válida. O arquivo que carregou não era uma imagem ou era "
+"uma imagem corrompida."
 
 #: pretix/base/forms/questions.py:608 pretix/base/forms/questions.py:927
 msgid "Street and Number"
@@ -2338,16 +2343,21 @@ msgid ""
 "Optional, but depending on the country you reside in we might need to charge "
 "you additional taxes if you do not enter it."
 msgstr ""
+"Opcional, mas dependendo do país em que reside, podemos precisar de cobrar "
+"impostos adicionais caso não o insira."
 
 #: pretix/base/forms/questions.py:968 pretix/base/forms/questions.py:974
 msgid "If you are registered in Switzerland, you can enter your UID instead."
-msgstr ""
+msgstr "Se estiver registado na Suíça, poderá inserir o seu UID."
 
 #: pretix/base/forms/questions.py:972
 msgid ""
 "Optional, but it might be required for you to claim tax benefits on your "
 "invoice depending on your and the seller’s country of residence."
 msgstr ""
+"Opcional, mas pode ser necessário reivindicar benefícios fiscais na sua "
+"fatura, dependendo do seu país de residência e do país de residência do "
+"vendedor."
 
 #: pretix/base/forms/questions.py:1061
 msgid "You need to provide a company name."
@@ -2380,7 +2390,7 @@ msgstr "A palavra-passe atual digitada não estava correta."
 
 #: pretix/base/forms/user.py:58
 msgid "Please choose a password different to your current one."
-msgstr ""
+msgstr "Por favor escolha uma senha diferente da atual."
 
 #: pretix/base/forms/user.py:63 pretix/presale/forms/customer.py:373
 #: pretix/presale/forms/customer.py:442
@@ -2439,9 +2449,8 @@ msgid "Invalid placeholder(s): %(value)s"
 msgstr "Placeholder(s) inválido(s): %(value)s"
 
 #: pretix/base/forms/widgets.py:218 pretix/base/forms/widgets.py:223
-#, fuzzy
 msgid "Business or institutional customer"
-msgstr "Cliente empresarial"
+msgstr "Cliente empresarial ou institucional"
 
 #: pretix/base/forms/widgets.py:222
 msgid "Individual customer"
@@ -2603,16 +2612,14 @@ msgid "Outstanding payments"
 msgstr "Pagamentos pendentes"
 
 #: pretix/base/invoice.py:616
-#, fuzzy
 msgctxt "invoice"
 msgid "Paid by gift card"
-msgstr "Cartões-presente emitidos"
+msgstr "Pago com cartão-presente"
 
 #: pretix/base/invoice.py:619
-#, fuzzy
 msgctxt "invoice"
 msgid "Remaining amount"
-msgstr "Valor pendente"
+msgstr "Montante restante"
 
 #: pretix/base/invoice.py:659
 msgctxt "invoice"
@@ -2676,9 +2683,8 @@ msgid "Date joined"
 msgstr "Data de adesão"
 
 #: pretix/base/models/auth.py:256
-#, fuzzy
 msgid "Force user to select a new password"
-msgstr "Repita a nova palavra-passe"
+msgstr "Forçar utilizador a selecionar uma nova senha"
 
 #: pretix/base/models/auth.py:263
 msgid "Timezone"
@@ -2737,17 +2743,17 @@ msgid "Include pending orders"
 msgstr "Incluir encomendas pendentes"
 
 #: pretix/base/models/checkin.py:57
-#, fuzzy
 msgid ""
 "With this option, people will be able to check in even if the order has not "
 "been paid."
 msgstr ""
-"Com esta opção, as pessoas serão capazes de fazer check-in, mesmo que a "
-"encomenda não tenha sido paga."
+"Com esta opção, as pessoas poderão fazer o check-in mesmo que o pedido não "
+"tenha sido pago."
 
 #: pretix/base/models/checkin.py:60
 msgid "Allow checking in add-on tickets by scanning the main ticket"
 msgstr ""
+"Permitir o check-in de tickets adicionais digitalizando o ticket principal"
 
 #: pretix/base/models/checkin.py:62
 msgid ""
@@ -2755,6 +2761,9 @@ msgid ""
 "there is always exactly one matching add-on ticket. Ambiguous scans will be "
 "rejected.."
 msgstr ""
+"Um scan só será possível se a lista de check-in estiver configurada de forma "
+"que sempre haja exatamente um ticket complementar correspondente. Scans "
+"ambíguos serão rejeitados.."
 
 #: pretix/base/models/checkin.py:66 pretix/control/navigation.py:597
 #: pretix/control/templates/pretixcontrol/organizers/gates.html:5
@@ -2814,33 +2823,28 @@ msgid "Exit"
 msgstr "Saída"
 
 #: pretix/base/models/checkin.py:271
-#, fuzzy
 msgid "Unknown ticket"
-msgstr "Factura desconhecida."
+msgstr "Bilhete desconhecido"
 
 #: pretix/base/models/checkin.py:272
-#, fuzzy
 msgid "Ticket not paid"
-msgstr "Download ticket"
+msgstr "Bilhete não pago"
 
 #: pretix/base/models/checkin.py:273
 msgid "Forbidden by custom rule"
-msgstr ""
+msgstr "Proibido por regra personalizada"
 
 #: pretix/base/models/checkin.py:274
-#, fuzzy
 msgid "Ticket code revoked/changed"
-msgstr "Layout de bilhete alterado."
+msgstr "Código do bilhete revogado/alterado"
 
 #: pretix/base/models/checkin.py:275
-#, fuzzy
 msgid "Information required"
-msgstr "Ação necessária"
+msgstr "Informação necessária"
 
 #: pretix/base/models/checkin.py:276
-#, fuzzy
 msgid "Ticket already used"
-msgstr "Layouts de bilhetes"
+msgstr "Bilhete já usado"
 
 #: pretix/base/models/checkin.py:277
 msgid "Ticket type not allowed here"
@@ -2848,26 +2852,23 @@ msgstr "Tipo de bilhete não é permitido aqui"
 
 #: pretix/base/models/checkin.py:278
 msgid "Ticket code is ambiguous on list"
-msgstr ""
+msgstr "O código do bilhete é ambíguo na lista"
 
 #: pretix/base/models/checkin.py:279
-#, fuzzy
 msgid "Server error"
-msgstr "Erro Interno do Servidor"
+msgstr "Erro do servidor"
 
 #: pretix/base/models/customers.py:54
-#, fuzzy
 msgid "Provider name"
-msgstr "Nome do Produto"
+msgstr "Nome do provedor"
 
 #: pretix/base/models/customers.py:59
 msgid "Login button label"
-msgstr ""
+msgstr "Label do botão de login"
 
 #: pretix/base/models/customers.py:63
-#, fuzzy
 msgid "Single-sign-on method"
-msgstr "Método de reembolso"
+msgstr "Método de login único"
 
 #: pretix/base/models/customers.py:84 pretix/base/models/devices.py:72
 #: pretix/base/models/items.py:1249 pretix/base/models/items.py:1477
@@ -2883,6 +2884,8 @@ msgid ""
 "The identifier may only contain letters, numbers, dots, dashes, and "
 "underscores. It must start and end with a letter or number."
 msgstr ""
+"O identificador pode conter apenas letras, números, pontos, traços e "
+"sublinhados. Deve começar e terminar com uma letra ou número."
 
 #: pretix/base/models/customers.py:292 pretix/base/models/orders.py:1328
 #: pretix/base/models/orders.py:2747 pretix/base/settings.py:853
@@ -2898,16 +2901,14 @@ msgstr "Selecione o pais"
 #: pretix/base/models/customers.py:367
 msgctxt "openidconnect"
 msgid "Confidential"
-msgstr ""
+msgstr "Confidencial"
 
 #: pretix/base/models/customers.py:368
-#, fuzzy
 msgctxt "openidconnect"
 msgid "Public"
-msgstr "Perfil público"
+msgstr "Público"
 
 #: pretix/base/models/customers.py:374
-#, fuzzy
 msgctxt "openidconnect"
 msgid "Authorization code"
 msgstr "Código de autorização"
@@ -2915,26 +2916,23 @@ msgstr "Código de autorização"
 #: pretix/base/models/customers.py:375
 msgctxt "openidconnect"
 msgid "Implicit"
-msgstr ""
+msgstr "Implicito"
 
 #: pretix/base/models/customers.py:379
 msgid "OpenID Connect access (required)"
-msgstr ""
+msgstr "Acesso OpenID Connect (obrigatório)"
 
 #: pretix/base/models/customers.py:380
-#, fuzzy
 msgid "Profile data (name, addresses)"
-msgstr "Criar uma nova porta"
+msgstr "Dados do perfil (nome, moradas)"
 
 #: pretix/base/models/customers.py:400
-#, fuzzy
 msgid "Client type"
-msgstr "Tipos de evento"
+msgstr "Tipo de cliente"
 
 #: pretix/base/models/customers.py:403
-#, fuzzy
 msgid "Grant type"
-msgstr "Tipo de digitalização"
+msgstr "Tipo de concessão"
 
 #: pretix/base/models/customers.py:414
 #, fuzzy
@@ -2977,10 +2975,9 @@ msgid "Dates can be mixed without limitation"
 msgstr ""
 
 #: pretix/base/models/discount.py:45
-#, fuzzy
 msgctxt "subevent"
 msgid "All matching products must be for the same date"
-msgstr "Vários produtos correspondentes foram encontrados."
+msgstr "Todos os produtos correspondentes devem ser para a mesma data"
 
 #: pretix/base/models/discount.py:46
 #, fuzzy
@@ -3004,9 +3001,8 @@ msgid "Apply to all products (including newly created ones)"
 msgstr "Todos os produtos (incluindo os recém-criados)"
 
 #: pretix/base/models/discount.py:96
-#, fuzzy
 msgid "Apply to specific products"
-msgstr "Por favor, selecione uma quota."
+msgstr "Aplicar a produtos específicos"
 
 #: pretix/base/models/discount.py:101
 #, fuzzy
@@ -3929,9 +3925,8 @@ msgstr "Número mínimo"
 #: pretix/base/models/items.py:1303 pretix/base/models/items.py:1306
 #: pretix/base/models/items.py:1309 pretix/base/models/items.py:1312
 #: pretix/base/models/items.py:1315 pretix/base/models/items.py:1318
-#, fuzzy
 msgid "Currently not supported in our apps and during check-in"
-msgstr "Questão não pode depender de uma pergunta feita durante o check-in."
+msgstr "Atualmente não suportado nas nossas aplicações e durante o check-in"
 
 #: pretix/base/models/items.py:1305 pretix/base/models/items.py:1311
 #: pretix/base/models/items.py:1317
@@ -3959,9 +3954,8 @@ msgid "Invalid option selected."
 msgstr "Opção inválida selecionada."
 
 #: pretix/base/models/items.py:1417
-#, fuzzy
 msgid "The number is to low."
-msgstr "Esse número de página é inferior a 1"
+msgstr "O número é demasiado baixo."
 
 #: pretix/base/models/items.py:1419
 #, fuzzy
@@ -7020,11 +7014,8 @@ msgid ""
 msgstr ""
 
 #: pretix/base/settings.py:155
-#, fuzzy
 msgid "Allow customers to log in with email address and password"
-msgstr ""
-"Exigir que os clientes preencham o endereço de e-mail principal duas vezes "
-"para evitar erros."
+msgstr "Permitir que os clientes façam login com endereço de e-mail e senha"
 
 #: pretix/base/settings.py:156
 msgid ""
@@ -9639,9 +9630,8 @@ msgstr "Tente novamente"
 
 #: pretix/base/templates/400_hostname.html:4
 #: pretix/base/templates/400_hostname.html:8
-#, fuzzy
 msgid "Unknown host"
-msgstr "Factura desconhecida."
+msgstr "Host desconhecido"
 
 #: pretix/base/templates/400_hostname.html:10
 #, python-format
@@ -12047,10 +12037,8 @@ msgstr ""
 "dispositivos."
 
 #: pretix/control/forms/organizer.py:452
-#, fuzzy
 msgid "This will be attached to every email."
-msgstr ""
-"Este será anexado a cada e-mail. espaços reservados disponíveis: {event}"
+msgstr "Isto será anexado a todos os e-mails."
 
 #: pretix/control/forms/organizer.py:549
 msgctxt "webhooks"
@@ -12141,9 +12129,8 @@ msgid "{label} field"
 msgstr ""
 
 #: pretix/control/forms/organizer.py:824
-#, fuzzy
 msgid "Invalidate old client secret and generate a new one"
-msgstr "Um novo segredo de cliente foi gerado e agora é eficaz."
+msgstr "Invalide o antigo segredo do cliente e gere um novo"
 
 #: pretix/control/forms/renderers.py:54
 #: pretix/control/templates/pretixcontrol/items/question_edit.html:135
@@ -17937,9 +17924,8 @@ msgid "Invoice was emailed to customer"
 msgstr "Qualquer cliente"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:260
-#, fuzzy
 msgid "Invoice was not yet emailed to customer"
-msgstr "O download do bilhete (ainda) não está disponível para esta encomenda."
+msgstr "A fatura ainda não foi enviada por e-mail ao cliente"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:270
 msgid "Rebuild the invoice with updated data but the same invoice number."
@@ -19118,9 +19104,8 @@ msgstr "Logs"
 
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:185
 #: pretix/control/templates/pretixcontrol/subevents/index.html:193
-#, fuzzy
 msgid "Edit selected"
-msgstr "Nenhuma data selecionada."
+msgstr "Editar selecionado"
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:12
 msgid "Organizer settings"
@@ -23146,9 +23131,8 @@ msgid "Prefix for the payment reference"
 msgstr "Regra fiscal para as taxas de pagamento"
 
 #: pretix/plugins/banktransfer/payment.py:165
-#, fuzzy
 msgid "Additional text to show on pending orders"
-msgstr "Esta ação só é permitida para encomendas pendentes."
+msgstr "Texto adicional para mostrar em pedidos pendentes"
 
 #: pretix/plugins/banktransfer/payment.py:166
 msgid ""
@@ -24237,9 +24221,8 @@ msgid "Payment pending."
 msgstr "Pagamento pendente."
 
 #: pretix/plugins/paypal2/signals.py:64
-#, fuzzy
 msgid "Order approved."
-msgstr "Encomenda aprovada"
+msgstr "Pedido aprovado."
 
 #: pretix/plugins/paypal2/signals.py:73
 msgid "PayPal reported an event: {}"
@@ -24626,9 +24609,8 @@ msgid "Relative, after event end"
 msgstr "Relativo, após o fim do evento"
 
 #: pretix/plugins/sendmail/forms.py:309
-#, fuzzy
 msgid "Please specify the send date"
-msgstr "Por favor, indique um nome mais curto."
+msgstr "Por favor especifique a data de envio"
 
 #: pretix/plugins/sendmail/forms.py:314
 #, fuzzy
@@ -24636,9 +24618,8 @@ msgid "Please specify the offset days and time"
 msgstr "Por favor insira a mesma palavra-passe duas vezes"
 
 #: pretix/plugins/sendmail/forms.py:325
-#, fuzzy
 msgid "Please specify a product"
-msgstr "Por favor, selecione uma quota."
+msgstr "Por favor especifique um produto"
 
 #: pretix/plugins/sendmail/models.py:48
 #, fuzzy
@@ -24734,28 +24715,24 @@ msgid "A ticket holder of this order received a mass email."
 msgstr "Um portador de bilhete desta encomenda recebeu um e-mail em massa."
 
 #: pretix/plugins/sendmail/signals.py:123
-#, fuzzy
 msgid "An email rule was created"
-msgstr "A regra de imposto foi eliminada."
+msgstr "Uma regra de e-mail foi criada"
 
 #: pretix/plugins/sendmail/signals.py:124
-#, fuzzy
 msgid "An email rule was updated"
-msgstr "A regra de imposto foi eliminada."
+msgstr "Uma regra de e-mail foi alterada"
 
 #: pretix/plugins/sendmail/signals.py:125
 msgid "A scheduled email was sent to the order"
 msgstr "Um e-mail agendado foi enviado para a encomenda"
 
 #: pretix/plugins/sendmail/signals.py:126
-#, fuzzy
 msgid "A scheduled email was sent to a ticket holder"
-msgstr "Um e-mail personalizado foi enviado."
+msgstr "Um e-mail agendado foi enviado ao titular do bilhete"
 
 #: pretix/plugins/sendmail/signals.py:127
-#, fuzzy
 msgid "An email rule was deleted"
-msgstr "A regra de imposto foi eliminada."
+msgstr "Uma regra de e-mail foi excluída"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/history.html:8
 msgid ""
@@ -27625,9 +27602,8 @@ msgid "You already paid"
 msgstr "Encomenda já paga"
 
 #: pretix/presale/templates/pretixpresale/event/order_change_confirm.html:156
-#, fuzzy
 msgid "You will need to pay"
-msgstr "Produtos add-on não serão contados."
+msgstr "Vai precisar de pagar"
 
 #: pretix/presale/templates/pretixpresale/event/order_change_confirm.html:159
 msgid ""
@@ -28111,9 +28087,8 @@ msgid "No memberships are stored in your account."
 msgstr ""
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:208
-#, fuzzy
 msgid "No addresses are stored in your account."
-msgstr "Definir nova palavra-passe"
+msgstr "Nenhum endereço é armazenado na sua conta."
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:219
 #, fuzzy
@@ -28121,9 +28096,8 @@ msgid "Profile"
 msgstr "Perfil público"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:241
-#, fuzzy
 msgid "No attendee profiles are stored in your account."
-msgstr "Definir nova palavra-passe"
+msgstr "Nenhum perfil de participante é armazenado na sua conta."
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile_delete.html:4
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile_delete.html:7
@@ -28458,9 +28432,8 @@ msgstr ""
 "bilhetes ficarem disponível novamente."
 
 #: pretix/presale/views/waiting.py:155
-#, fuzzy
 msgid "We could not find you on our waiting list."
-msgstr "Enviar informações para a lista de espera"
+msgstr "Não o encontramos na nossa lista de espera."
 
 #: pretix/presale/views/waiting.py:159
 msgid ""
