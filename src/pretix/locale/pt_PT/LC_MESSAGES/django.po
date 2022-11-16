@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-26 09:20+0000\n"
 "PO-Revision-Date: 2023-05-30 21:25+0000\n"
-"Last-Translator: Vasco Baleia <vb2003.12@gmail.com>\n"
+"Last-Translator: tlm06 <tlm_pg06@hotmail.com>\n"
 "Language-Team: Portuguese (Portugal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/pt_PT/>\n"
 "Language: pt_PT\n"
@@ -3824,8 +3824,7 @@ msgstr ""
 
 #: pretix/base/models/event.py:1655
 msgid "A property can either be required or have a default value, not both."
-msgstr ""
-"Uma propriedade pode ser obrigatória ou ter um valor padrão, não ambos."
+msgstr "Uma propriedade pode ser obrigatória ou ter um valor padrão, não ambos."
 
 #: pretix/base/models/event.py:1657
 msgid "You cannot set a default value that is not a valid value."
@@ -5734,8 +5733,7 @@ msgstr ""
 msgid ""
 "The maximum number of usages may not be lower than the minimum number of "
 "usages."
-msgstr ""
-"O número máximo de usos pode não ser menor que o número mínimo de usos."
+msgstr "O número máximo de usos pode não ser menor que o número mínimo de usos."
 
 #: pretix/base/models/vouchers.py:383 pretix/base/models/vouchers.py:441
 msgid ""
