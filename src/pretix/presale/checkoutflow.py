@@ -52,7 +52,7 @@ from django.utils.translation import (
 from django.views.generic.base import TemplateResponseMixin
 from django_scopes import scopes_disabled
 
-from pretix.base.models import Customer, Order
+from pretix.base.models import Customer, Membership, Order
 from pretix.base.models.orders import InvoiceAddress, OrderPayment
 from pretix.base.models.tax import TaxedPrice, TaxRule
 from pretix.base.services.cart import (
@@ -401,10 +401,15 @@ class MembershipStep(CartMixin, TemplateFlowStep):
     def forms(self):
         forms = []
 
-        memberships = list(self.cart_customer.memberships.with_usages().filter(
-            Q(Q(membership_type__max_usages__isnull=True) | Q(usages__lt=F('membership_type__max_usages'))),
-            canceled=False
-        ).select_related('membership_type'))
+        if self.cart_customer:
+            memberships = list(self.cart_customer.memberships.with_usages().filter(
+                Q(Q(membership_type__max_usages__isnull=True) | Q(usages__lt=F('membership_type__max_usages'))),
+                canceled=False
+            ).select_related('membership_type'))
+        else:
+            # Only possible to reach if you have a product that requries membership but customer accoutns have been
+            # disabled entirely
+            memberships = Membership.objects.none()
 
         for p in self.applicable_positions:
             form = MembershipForm(
