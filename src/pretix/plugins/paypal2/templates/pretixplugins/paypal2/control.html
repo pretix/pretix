@@ -2,17 +2,31 @@
 
 {% if payment_info %}
     <dl class="dl-horizontal">
-        <dt>{% trans "Sale ID" %}</dt>
-        <dd>{{ payment_info.purchase_units.0.payments.captures.0.id }}</dd>
+        {% if payment_info.purchase_units.0.payments %}
+            <dt>{% trans "Sale ID" %}</dt>
+            <dd>{{ payment_info.purchase_units.0.payments.captures.0.id }}</dd>
+        {% endif %}
         <dt>{% trans "Status" %}</dt>
         <dd>{{ payment_info.status }}</dd>
-        <dt>{% trans "Payer" %}</dt>
-        <dd>{{ payment_info.payer.email_address }}</dd>
-        <dt>{% trans "Last update" %}</dt>
-        <dd>{{ payment_info.purchase_units.0.payments.captures.0.update_time }}</dd>
-        <dt>{% trans "Total value" %}</dt>
-        <dd>{{ payment_info.purchase_units.0.payments.captures.0.amount.value }}</dd>
-        <dt>{% trans "Currency" %}</dt>
-        <dd>{{ payment_info.purchase_units.0.payments.captures.0.amount.currency_code }}</dd>
+        {% if payment_info.payer %}
+            <dt>{% trans "Payer" %}</dt>
+            <dd>{{ payment_info.payer.email_address }}</dd>
+        {% endif %}
+        {% if payment_info.error %}
+            <dt>{% trans "Error" %}</dt>
+            <dd>[{{ payment_info.error.name }}] {{ payment_info.error.message }}</dd>
+            {% for d in payment_info.error.details %}
+                <dt>{% trans "Error" %}</dt>
+                <dd>[{{ d.issue }}] {{ d.description }}</dd>
+            {% endfor %}
+        {% endif %}
+        {% if payment_info.purchase_units.0.payments %}
+            <dt>{% trans "Last update" %}</dt>
+            <dd>{{ payment_info.purchase_units.0.payments.captures.0.update_time }}</dd>
+            <dt>{% trans "Total value" %}</dt>
+            <dd>{{ payment_info.purchase_units.0.payments.captures.0.amount.value }}</dd>
+            <dt>{% trans "Currency" %}</dt>
+            <dd>{{ payment_info.purchase_units.0.payments.captures.0.amount.currency_code }}</dd>
+        {% endif %}
     </dl>
 {% endif %}
