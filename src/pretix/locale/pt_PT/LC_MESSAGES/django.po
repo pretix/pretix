@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-11-07 15:22+0000\n"
-"PO-Revision-Date: 2022-11-15 21:00+0000\n"
+"PO-Revision-Date: 2022-11-16 10:43+0000\n"
 "Last-Translator: David Vaz <davidmgvaz@gmail.com>\n"
 "Language-Team: Portuguese (Portugal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/pt_PT/>\n"
@@ -6387,14 +6387,14 @@ msgid "{variable} is not {value}"
 msgstr ""
 
 #: pretix/base/services/checkin.py:270
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Maximum {variable} exceeded"
-msgstr "Número máximo"
+msgstr "Máximo {variable} excedido"
 
 #: pretix/base/services/checkin.py:272
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Minimum {variable} exceeded"
-msgstr "Número mínimo"
+msgstr "Mínimo {variable} excedido"
 
 #: pretix/base/services/checkin.py:274
 #, python-brace-format
@@ -6421,9 +6421,9 @@ msgid "This order is not marked as paid."
 msgstr "Esta encomenda não está marcada como paga."
 
 #: pretix/base/services/checkin.py:759
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Entry not permitted: {explanation}."
-msgstr "Explicação de reembolso menor voluntário"
+msgstr "Entrada não permitida: {explanation}."
 
 #: pretix/base/services/checkin.py:768
 msgid "You need to answer questions to complete this check-in."
@@ -6465,10 +6465,10 @@ msgstr ""
 "{country}"
 
 #: pretix/base/services/invoices.py:195 pretix/base/services/invoices.py:232
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgctxt "invoice"
 msgid "Event location: {location}"
-msgstr "Local do evento"
+msgstr "Localização do evento: {location}"
 
 #: pretix/base/services/invoices.py:211
 #, python-brace-format
@@ -6502,9 +6502,9 @@ msgid "Sample product A"
 msgstr "Exemplo de produto A"
 
 #: pretix/base/services/invoices.py:507
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "New invoice: {number}"
-msgstr "Número da factura"
+msgstr "Nova fatura: {number}"
 
 #: pretix/base/services/invoices.py:509
 #, python-brace-format
@@ -6554,11 +6554,13 @@ msgid ""
 msgstr ""
 
 #: pretix/base/services/memberships.py:112
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "You selected the product \"{product}\" which requires an active membership "
 "to be selected."
-msgstr "Você selecionou um produto que não está disponível para venda."
+msgstr ""
+"Selecionou o produto \"{product}\" que requer uma subscrição ativa para ser "
+"selecionada."
 
 #: pretix/base/services/memberships.py:141
 #, fuzzy
@@ -9962,16 +9964,16 @@ msgid "Discount \"{name}\" becomes inactive"
 msgstr "Produto \"{name}\" torna-se indisponível"
 
 #: pretix/base/timeline.py:280
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgctxt "timeline"
 msgid "Product variation \"{product} – {variation}\" becomes available"
-msgstr "Produto \"{name}\" torna-se disponível"
+msgstr "Variação do produto \"{product} – {variation}\" ficou disponível"
 
 #: pretix/base/timeline.py:294
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgctxt "timeline"
 msgid "Product variation \"{product} – {variation}\" becomes unavailable"
-msgstr "Produto \"{name}\" torna-se indisponível"
+msgstr "Variação do produto \"{product} – {variation}\" ficou indisponível"
 
 #: pretix/base/timeline.py:325
 #, python-brace-format
@@ -10139,9 +10141,9 @@ msgid "Do not copy"
 msgstr "Não copie"
 
 #: pretix/control/forms/event.py:315 pretix/control/forms/subevents.py:386
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Default ({value})"
-msgstr "Idioma padrão"
+msgstr "Predefinido ({value})"
 
 #: pretix/control/forms/event.py:367 pretix/control/forms/organizer.py:138
 msgid "Custom domain"
@@ -12373,9 +12375,9 @@ msgid "A voucher with one of these codes already exists."
 msgstr "Um voucher com um destes códigos já existe."
 
 #: pretix/control/forms/vouchers.py:391
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The voucher code {code} appears in your list twice."
-msgstr "Esse código de voucher não existe."
+msgstr "O código de voucher {code} aparece duas vezes na sua lista."
 
 #: pretix/control/forms/vouchers.py:395
 msgid ""
@@ -12410,9 +12412,9 @@ msgstr ""
 "({new_price})."
 
 #: pretix/control/logdisplay.py:82
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Position #{posid}: Used membership changed."
-msgstr "Posição #{posid} criado: {item} ({price})."
+msgstr "Posição #{posid}: A adesão usada mudou."
 
 #: pretix/control/logdisplay.py:86
 #, python-brace-format
@@ -12800,9 +12802,9 @@ msgid "The order has been approved."
 msgstr "A encomenda foi aprovada."
 
 #: pretix/control/logdisplay.py:358
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The order has been denied (comment: \"{comment}\")."
-msgstr "A encomenda foi negada."
+msgstr "A encomenda foi negada (comentário: \"{comment}\")."
 
 #: pretix/control/logdisplay.py:359
 #, python-brace-format
@@ -12818,11 +12820,11 @@ msgid ""
 msgstr ""
 
 #: pretix/control/logdisplay.py:363
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "The phone number has been changed from \"{old_phone}\" to \"{new_phone}\"."
 msgstr ""
-"O endereço de e-mail foi alterado de \"{old_email}\" para \"{new_email}\"."
+"O número de telefone foi alterado de \"{old_phone}\" para \"{new_phone}\"."
 
 #: pretix/control/logdisplay.py:365
 #, fuzzy
@@ -13462,9 +13464,9 @@ msgid "The user confirmed the following message: \"{}\""
 msgstr "O utilizador confirmou a seguinte mensagem: \"{}\""
 
 #: pretix/control/logdisplay.py:550
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The order has been canceled (comment: \"{comment}\")."
-msgstr "A encomenda foi negada."
+msgstr "A encomenda foi cancelada (comentário: \"{comment}\")."
 
 #: pretix/control/logdisplay.py:552 pretix/control/views/orders.py:1296
 #: pretix/presale/views/order.py:968
@@ -22519,13 +22521,13 @@ msgid ""
 msgstr ""
 
 #: pretix/control/views/organizer.py:2143
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "Your changes have been saved. Please note down the following client secret, "
 "it will never be shown again: {secret}"
 msgstr ""
-"As tuas mudanças foram salvas. Por favor, note que pode demorar um curto "
-"período de tempo até que as suas alterações se tornem ativas."
+"As tuas mudanças foram salvas. Por favor, anote a chave secreta seguinte, "
+"nunca mais será mostrada: {secret}"
 
 #: pretix/control/views/organizer.py:2252
 #, fuzzy
@@ -23206,9 +23208,9 @@ msgid "Invalid IBAN/BIC"
 msgstr "IBAN/BIC invalido"
 
 #: pretix/plugins/banktransfer/payment.py:398
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Bank account {iban}"
-msgstr "Tipo de conta bancária"
+msgstr "Conta bancária {iban}"
 
 #: pretix/plugins/banktransfer/payment.py:414
 msgid "Can only create a bank transfer refund from an existing payment."
@@ -24686,9 +24688,9 @@ msgid "Only enabled rules are actually sent"
 msgstr ""
 
 #: pretix/plugins/sendmail/models.py:250
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "on {date} at {time}"
-msgstr "Mostrar datas e horas"
+msgstr "na data {date} no horário {time}"
 
 #: pretix/plugins/sendmail/models.py:256
 #, python-format
@@ -25342,9 +25344,9 @@ msgstr "nome desconhecido"
 #: pretix/plugins/stripe/payment.py:1028 pretix/plugins/stripe/payment.py:1080
 #: pretix/plugins/stripe/payment.py:1195 pretix/plugins/stripe/payment.py:1347
 #: pretix/plugins/stripe/payment.py:1450
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Bank account at {bank}"
-msgstr "Tipo de conta bancária"
+msgstr "Conta bancária no banco {bank}"
 
 #: pretix/plugins/stripe/payment.py:1036
 msgid "iDEAL via Stripe"
@@ -25387,9 +25389,9 @@ msgid "Spain"
 msgstr "Espanha"
 
 #: pretix/plugins/stripe/payment.py:1272
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Bank account {iban} at {bank}"
-msgstr "Detalhes da conta bancária"
+msgstr "Conta bancária {iban} no banco {bank}"
 
 #: pretix/plugins/stripe/payment.py:1283
 msgid "EPS via Stripe"
