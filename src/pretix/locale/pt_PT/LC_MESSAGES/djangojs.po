@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-11-07 15:22+0000\n"
-"PO-Revision-Date: 2022-11-15 21:00+0000\n"
+"PO-Revision-Date: 2022-11-16 12:00+0000\n"
 "Last-Translator: David Vaz <davidmgvaz@gmail.com>\n"
 "Language-Team: Portuguese (Portugal) <https://translate.pretix.eu/projects/"
 "pretix/pretix-js/pt_PT/>\n"
@@ -494,8 +494,9 @@ msgid "Add condition"
 msgstr "Adicionar condição"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:121
+#, fuzzy
 msgid "minutes"
-msgstr ""
+msgstr "minutos"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:71
 msgid "Check-in QR"
