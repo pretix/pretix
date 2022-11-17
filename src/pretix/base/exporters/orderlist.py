@@ -270,8 +270,7 @@ class OrderListExporter(MultiSheetListExporter):
         tax_rates = self._get_all_tax_rates(qs)
 
         headers = [
-            _('Event slug'),
-            _('Order code'), _('Order total'), _('Status'), _('Email'), _('Phone number'),
+            _('Event slug'), _('Order code'), _('Order total'), _('Status'), _('Email'), _('Phone number'),
             _('Order date'), _('Order time'), _('Company'), _('Name'),
         ]
         name_scheme = PERSON_NAME_SCHEMES[self.event.settings.name_scheme] if not self.is_multievent else None
@@ -305,8 +304,7 @@ class OrderListExporter(MultiSheetListExporter):
                 headers.append(_('Paid by {method}').format(method=vn))
 
         # get meta_data labels from first cached event
-        print(list(next(iter(self.event_object_cache.values())).meta_data.keys()))
-        headers += list(next(iter(self.event_object_cache.values())).meta_data.keys())
+        headers += next(iter(self.event_object_cache.values())).meta_data.keys()
         yield headers
 
         full_fee_sum_cache = {
@@ -472,7 +470,7 @@ class OrderListExporter(MultiSheetListExporter):
         headers.append(_('Payment providers'))
 
         # get meta_data labels from first cached event
-        headers += list(next(iter(self.event_object_cache.values())).meta_data.keys())
+        headers += next(iter(self.event_object_cache.values())).meta_data.keys()
         yield headers
 
         yield self.ProgressSetTotal(total=qs.count())
@@ -551,9 +549,6 @@ class OrderListExporter(MultiSheetListExporter):
         qs = self._date_filter(qs, form_data, rel='order__')
 
         has_subevents = self.events.filter(has_subevents=True).exists()
-        # get meta_data labels from first cached event
-        meta_data_labels = list(next(iter(self.event_object_cache.values())).meta_data.keys())
-        print("has_subevents", has_subevents)
 
         headers = [
             _('Event slug'),
@@ -637,6 +632,8 @@ class OrderListExporter(MultiSheetListExporter):
             _('Payment providers'),
         ]
 
+        # get meta_data labels from first cached event
+        meta_data_labels = next(iter(self.event_object_cache.values())).meta_data.keys()
         if has_subevents:
             headers += meta_data_labels
         yield headers
