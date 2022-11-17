@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-11-07 15:22+0000\n"
-"PO-Revision-Date: 2022-11-16 16:12+0000\n"
-"Last-Translator: David Vaz <davidmgvaz@gmail.com>\n"
+"PO-Revision-Date: 2022-11-17 22:00+0000\n"
+"Last-Translator: tlm06 <tlm_pg06@hotmail.com>\n"
 "Language-Team: Portuguese (Portugal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/pt_PT/>\n"
 "Language: pt_PT\n"
@@ -2935,12 +2935,10 @@ msgid "Grant type"
 msgstr "Tipo de concessão"
 
 #: pretix/base/models/customers.py:414
-#, fuzzy
 msgid "Allowed access scopes"
-msgstr "Escopos de acesso permitidos"
+msgstr "Alcance de acesso permitido"
 
 #: pretix/base/models/customers.py:415
-#, fuzzy
 msgid "Separate multiple values with spaces"
 msgstr "Separe vários valores com espaços"
 
@@ -2970,7 +2968,6 @@ msgid "Initialization date"
 msgstr "Data de inicialização"
 
 #: pretix/base/models/discount.py:44
-#, fuzzy
 msgctxt "subevent"
 msgid "Dates can be mixed without limitation"
 msgstr "As datas podem ser misturadas sem limitação"
@@ -2981,7 +2978,6 @@ msgid "All matching products must be for the same date"
 msgstr "Todos os produtos correspondentes devem ser para a mesma data"
 
 #: pretix/base/models/discount.py:46
-#, fuzzy
 msgctxt "subevent"
 msgid "Each matching product must be for a different date"
 msgstr "Cada produto correspondente deve ser para uma data diferente"
@@ -2992,69 +2988,58 @@ msgid "Position"
 msgstr "Posição"
 
 #: pretix/base/models/discount.py:84
-#, fuzzy
 msgid "Event series handling"
 msgstr "Manipulação de séries de eventos"
 
 #: pretix/base/models/discount.py:92
-#, fuzzy
 msgid "Apply to all products (including newly created ones)"
-msgstr "Aplique a todos os produtos (incluindo os recém -criados)"
+msgstr "Aplique a todos os produtos (incluindo os recém-criados)"
 
 #: pretix/base/models/discount.py:96
 msgid "Apply to specific products"
 msgstr "Aplicar a produtos específicos"
 
 #: pretix/base/models/discount.py:101
-#, fuzzy
 msgid "Apply to add-on products"
-msgstr "Aplique-se a produtos complementares"
+msgstr "Aplique a produtos complementares"
 
 #: pretix/base/models/discount.py:102
-#, fuzzy
 msgid "Discounts never apply to bundled products"
 msgstr "Os descontos nunca se aplicam a produtos agrupados"
 
 #: pretix/base/models/discount.py:106
-#, fuzzy
 msgid "Ignore products discounted by a voucher"
 msgstr "Ignorar produtos descontados por um voucher"
 
 #: pretix/base/models/discount.py:107
-#, fuzzy
 msgid ""
 "If this option is checked, products that already received a discount through "
 "a voucher will not be considered for this discount. However, products that "
 "use a voucher only to e.g. unlock a hidden product or gain access to sold-"
 "out quota will still receive the discount."
 msgstr ""
-"Se essa opção for verificada, os produtos que já receberam um desconto por "
-"meio de um voucher não serão considerados para esse desconto. No entanto, "
-"produtos que usam um voucher apenas para, por exemplo, Desbloquear um "
-"produto oculto ou obter acesso à cota esgotada ainda receberá o desconto."
+"Se essa opção for verificada, os produtos que já receberam um desconto de um "
+"voucher não serão considerados para esse desconto. No entanto, produtos que "
+"usam um voucher apenas para, por exemplo, desbloquear um produto oculto ou "
+"obter acesso à cota esgotada ainda receberão o desconto."
 
 #: pretix/base/models/discount.py:112
-#, fuzzy
 msgid "Minimum number of matching products"
 msgstr "Número mínimo de produtos correspondentes"
 
 #: pretix/base/models/discount.py:116
-#, fuzzy
 msgid "Minimum gross value of matching products"
 msgstr "Valor bruto mínimo de produtos correspondentes"
 
 #: pretix/base/models/discount.py:123
-#, fuzzy
 msgid "Percentual discount on matching products"
 msgstr "Desconto percentual em produtos correspondentes"
 
 #: pretix/base/models/discount.py:130
-#, fuzzy
 msgid "Apply discount only to this number of matching products"
-msgstr "Aplique desconto apenas a esse número de produtos correspondentes"
+msgstr "Aplique desconto apenas ao número de produtos correspondentes"
 
 #: pretix/base/models/discount.py:132
-#, fuzzy
 msgid ""
 "This option allows you to create discounts of the type \"buy X get Y reduced/"
 "for free\". For example, if you set \"Minimum number of matching products\" "
@@ -3063,48 +3048,44 @@ msgid ""
 "discounted. If you want to grant the discount on all matching products, keep "
 "this field empty."
 msgstr ""
-"Esta opção permite que você crie descontos do tipo \"Buy X Get Y reduzido/"
-"gratuitamente\". Por exemplo, se você definir \"número mínimo de produtos "
+"Esta opção permite que crie descontos do tipo \"Buy X Get Y reduzido/"
+"gratuitamente\". Por exemplo, se definir \"número mínimo de produtos "
 "correspondentes\" para quatro e esse valor para dois, o carrinho do cliente "
 "será dividido em grupos de quatro ingressos e os dois ingressos mais baratos "
-"em todos os grupos serão descontados. Se você deseja conceder o desconto em "
-"todos os produtos correspondentes, mantenha esse campo vazio."
+"em todos os grupos serão descontados. Se deseja conceder o desconto em todos "
+"os produtos correspondentes, mantenha este campo vazio."
 
 #: pretix/base/models/discount.py:169
-#, fuzzy
 msgid ""
 "You can either set a minimum number of matching products or a minimum value, "
 "not both."
 msgstr ""
-"Você pode definir um número mínimo de produtos correspondentes ou um valor "
+"Pode definir um número mínimo de produtos correspondentes ou um valor "
 "mínimo, não ambos."
 
 #: pretix/base/models/discount.py:174
-#, fuzzy
 msgid ""
 "You need to either set a minimum number of matching products or a minimum "
 "value."
 msgstr ""
-"Você precisa definir um número mínimo de produtos correspondentes ou um "
-"valor mínimo."
+"Precisa de definir um número mínimo de produtos correspondentes ou um valor "
+"mínimo."
 
 #: pretix/base/models/discount.py:179
-#, fuzzy
 msgid ""
 "You cannot apply the discount only to some of the matched products if you "
 "are matching on a minimum value."
 msgstr ""
-"Você não pode aplicar o desconto apenas a alguns dos produtos "
-"correspondentes se estiver correspondendo com um valor mínimo."
+"Não pode aplicar o desconto apenas a alguns dos produtos correspondentes se "
+"estiver correspondendo com um valor mínimo."
 
 #: pretix/base/models/discount.py:185
-#, fuzzy
 msgid ""
 "You cannot apply the discount only to bookings of different dates if you are "
 "matching on a minimum value."
 msgstr ""
-"Você não pode aplicar o desconto apenas a reservas de datas diferentes se "
-"estiver correspondendo com um valor mínimo."
+"Não pode aplicar o desconto apenas a reservas de datas diferentes se estiver "
+"a corresponder com um valor mínimo."
 
 #: pretix/base/models/event.py:85
 msgid "The end of the presale period has to be later than its start."
@@ -3175,18 +3156,16 @@ msgid "Event series"
 msgstr "Série de eventos"
 
 #: pretix/base/models/event.py:558 pretix/base/models/event.py:1375
-#, fuzzy
 msgid "Seating plan"
-msgstr "Plano de assentos"
+msgstr "Plano de lugares"
 
 #: pretix/base/models/event.py:565 pretix/base/payment.py:356
 msgid "Restrict to specific sales channels"
 msgstr "Restringir a canais de vendas específicos"
 
 #: pretix/base/models/event.py:566
-#, fuzzy
 msgid "Only sell tickets for this event on the following sales channels."
-msgstr "Vende apenas ingressos para este evento nos seguintes canais de vendas."
+msgstr "Vende apenas bilhetes para este evento nos seguintes canais de vendas."
 
 #: pretix/base/models/event.py:573 pretix/base/models/items.py:347
 #: pretix/base/models/items.py:1583 pretix/base/models/orders.py:181
@@ -3226,9 +3205,9 @@ msgid "You need to configure at least one quota to sell anything."
 msgstr "Precisa configurar pelo menos uma quota para vender qualquer coisa."
 
 #: pretix/base/models/event.py:1160
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "You need to fill the meta parameter \"{property}\"."
-msgstr "Você precisa preencher o meta parâmetro \"{propriedade}\"."
+msgstr "Precisa de preencher o meta parâmetro\"{property}\"."
 
 #: pretix/base/models/event.py:1272
 msgid ""
@@ -3294,61 +3273,51 @@ msgid "The property name may only contain letters, numbers and underscores."
 msgstr "O nome da propriedade só pode conter letras, números e underscores."
 
 #: pretix/base/models/event.py:1570
-#, fuzzy
 msgid "Default value"
 msgstr "Valor padrão"
 
 #: pretix/base/models/event.py:1572
-#, fuzzy
 msgid "Can only be changed by organizer-level administrators"
 msgstr "Só pode ser alterado por administradores no nível do organizador"
 
 #: pretix/base/models/event.py:1574
-#, fuzzy
 msgid "Required for events"
 msgstr "Necessário para eventos"
 
 #: pretix/base/models/event.py:1575
-#, fuzzy
 msgid ""
 "If checked, an event can only be taken live if the property is set. In event "
 "series, its always optional to set a value for individual dates"
 msgstr ""
-"Se verificado, um evento só poderá ser realizado se a propriedade estiver "
+"Se selecionado, um evento só poderá ser realizado se a propriedade estiver "
 "definida. Na série de eventos, é sempre opcional definir um valor para datas "
 "individuais"
 
 #: pretix/base/models/event.py:1580
-#, fuzzy
 msgid "Valid values"
 msgstr "Valores válidos"
 
 #: pretix/base/models/event.py:1581
-#, fuzzy
 msgid ""
 "If you keep this empty, any value is allowed. Otherwise, enter one possible "
 "value per line."
 msgstr ""
-"Se você mantiver isso vazio, qualquer valor será permitido. Caso contrário, "
-"insira um valor possível por linha."
+"Se mantiver vazio, qualquer valor será permitido. Caso contrário, insira um "
+"valor possível por linha."
 
 #: pretix/base/models/event.py:1587
-#, fuzzy
 msgid "A property can either be required or have a default value, not both."
-msgstr "Uma propriedade pode ser necessária ou ter um valor padrão, não ambos."
+msgstr "Uma propriedade pode ser obrigatória ou ter um valor padrão, não ambos."
 
 #: pretix/base/models/event.py:1589
-#, fuzzy
 msgid "You cannot set a default value that is not a valid value."
-msgstr "Você não pode definir um valor padrão que não seja um valor válido."
+msgstr "Não pode definir um valor padrão que não seja um valor válido."
 
 #: pretix/base/models/event.py:1661 pretix/base/models/organizer.py:479
-#, fuzzy
 msgid "Link text"
 msgstr "Texto do link"
 
 #: pretix/base/models/event.py:1664 pretix/base/models/organizer.py:482
-#, fuzzy
 msgid "Link URL"
 msgstr "Link URL"
 
@@ -3484,11 +3453,9 @@ msgid "Show a waiting list for this ticket"
 msgstr "Mostra uma lista de espera para este bilhete"
 
 #: pretix/base/models/items.py:410
-#, fuzzy
 msgid "This will only work if waiting lists are enabled for this event."
 msgstr ""
-"Isso só funcionará se as listas de espera estiverem ativadas para este "
-"evento."
+"Só funcionará se as listas de espera estiverem ativadas para este evento."
 
 #: pretix/base/models/items.py:414 pretix/base/settings.py:1093
 #: pretix/control/forms/event.py:1454
