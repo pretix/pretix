@@ -316,6 +316,9 @@ but you can raise an OrderError with an appropriate exception message if you lik
 the order. We strongly discourage making changes to the order here.
 
 As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
+
+**DEPRECTATION:** Stop listening to the ``payment_provider`` attribute, it will be removed
+in the future, as the ``payments`` attribute gives more information.
 """
 
 validate_cart = EventPluginSignal()
@@ -574,8 +577,10 @@ As with all plugin signals, the ``sender`` keyword argument will contain the eve
 argument will contain the cart positions and ``invoice_address`` the invoice address (useful for
 tax calculation). The argument ``meta_info`` contains the order's meta dictionary. The ``total``
 keyword argument will contain the total cart sum without any fees. You should not rely on this
-``total`` value for fee calculations as other fees might interfere. The ``gift_cards`` argument lists
-the gift cards in use.
+``total`` value for fee calculations as other fees might interfere. The ``gift_cards`` argument
+lists the gift cards in use.
+
+**DEPRECTATION:** Stop listening to the ``gift_cards`` attribute, it will be removed in the future.
 """
 
 order_fee_type_name = EventPluginSignal()

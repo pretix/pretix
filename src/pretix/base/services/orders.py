@@ -794,23 +794,20 @@ def _check_positions(event: Event, now_dt: datetime, positions: List[CartPositio
 
 
 def _get_fees(positions: List[CartPosition], payment_requests: List[dict], address: InvoiceAddress,
-              meta_info: dict, event: Event, gift_cards: List[GiftCard]):
+              meta_info: dict, event: Event):
     fees = []
     total = sum([c.price for c in positions])
+
+    gift_cards = []  # for backwards compatibility
+    for p in payment_requests:
+        if p['provider'] == 'giftcard':
+            gift_cards.append(GiftCard.objects.get(pk=p['info_data']['gift_card']))
 
     for recv, resp in order_fee_calculation.send(sender=event, invoice_address=address, total=total,
                                                  meta_info=meta_info, positions=positions, gift_cards=gift_cards):
         if resp:
             fees += resp
     total += sum(f.value for f in fees)
-
-    gift_card_values = {}
-    for gc in gift_cards:
-        fval = Decimal(gc.value)  # TODO: don't require an extra query
-        fval = min(fval, total)
-        if fval > 0:
-            total -= fval
-            gift_card_values[gc] = fval
 
     total_remaining = total
     for p in payment_requests:
@@ -846,39 +843,24 @@ def _get_fees(positions: List[CartPosition], payment_requests: List[dict], addre
     if total_remaining != Decimal('0.00'):
         raise OrderError(_("This selected payment methods do not cover the total balance."))
 
-    return fees, gift_card_values
+    return fees
 
 
 def _create_order(event: Event, email: str, positions: List[CartPosition], now_dt: datetime,
                   payment_requests: List[dict], locale: str=None, address: InvoiceAddress=None,
-                  meta_info: dict=None, sales_channel: str='web', gift_cards: list=None, shown_total=None,
+                  meta_info: dict=None, sales_channel: str='web', shown_total=None,
                   customer=None):
     payments = []
     sales_channel = get_all_sales_channels()[sales_channel]
 
     with transaction.atomic():
-        checked_gift_cards = []
-        if gift_cards:
-            gc_qs = GiftCard.objects.select_for_update().filter(pk__in=gift_cards)
-            for gc in gc_qs:
-                if gc.currency != event.currency:
-                    raise OrderError(_("This gift card does not support this currency."))
-                if gc.testmode and not event.testmode:
-                    raise OrderError(_("This gift card can only be used in test mode."))
-                if not gc.testmode and event.testmode:
-                    raise OrderError(_("Only test gift cards can be used in test mode."))
-                if not gc.accepted_by(event.organizer):
-                    raise OrderError(_("This gift card is not accepted by this event organizer."))
-                checked_gift_cards.append(gc)
-        if checked_gift_cards and any(c.item.issue_giftcard for c in positions):
-            raise OrderError(_("You cannot pay with gift cards when buying a gift card."))
 
         try:
             validate_memberships_in_order(customer, positions, event, lock=True, testmode=event.testmode)
         except ValidationError as e:
             raise OrderError(e.message)
 
-        fees, gift_card_values = _get_fees(positions, payment_requests, address, meta_info, event, checked_gift_cards)
+        fees = _get_fees(positions, payment_requests, address, meta_info, event)
         total = pending_sum = sum([c.price for c in positions]) + sum([c.value for c in fees])
 
         order = Order(
@@ -915,28 +897,11 @@ def _create_order(event: Event, email: str, positions: List[CartPosition], now_d
                 fee.tax_rule = None  # TODO: deprecate
             fee.save()
 
-        for gc, val in gift_card_values.items():
-            p = order.payments.create(
-                state=OrderPayment.PAYMENT_STATE_CONFIRMED,
-                provider='giftcard',
-                amount=val,
-                fee=pf
-            )
-            trans = gc.transactions.create(
-                value=-1 * val,
-                order=order,
-                payment=p
-            )
-            p.info_data = {
-                'gift_card': gc.pk,
-                'transaction_id': trans.pk,
-            }
-            p.save()
-            pending_sum -= val
-
         # Safety check: Is the amount we're now going to charge the same amount the user has been shown when they
         # pressed "Confirm purchase"? If not, we should better warn the user and show the confirmation page again.
-        # The only *known* case where this happens is if a gift card is used in two concurrent sessions.
+        # We used to have a *known* case where this happened is if a gift card is used in two concurrent sessions,
+        # but this is now a payment error instead. So currently this code branch is usually only triggered by bugs
+        # in other places (e.g. tax calculation).
         if shown_total is not None:
             if Decimal(shown_total) != pending_sum:
                 raise OrderError(
@@ -1008,7 +973,7 @@ def _order_placed_email_attendee(event: Event, order: Order, position: OrderPosi
 
 def _perform_order(event: Event, payment_requests: List[dict], position_ids: List[str],
                    email: str, locale: str, address: int, meta_info: dict=None, sales_channel: str='web',
-                   gift_cards: list=None, shown_total=None, customer=None):
+                   shown_total=None, customer=None):
     for p in payment_requests:
         p['pprov'] = event.get_payment_providers(cached=True)[p['provider']]
         if not p['pprov']:
@@ -1074,7 +1039,7 @@ def _perform_order(event: Event, payment_requests: List[dict], position_ids: Lis
         _check_positions(event, now_dt, positions, address=addr, sales_channel=sales_channel, customer=customer)
         order, payment_objs = _create_order(event, email, positions, now_dt, payment_requests,
                                             locale=locale, address=addr, meta_info=meta_info, sales_channel=sales_channel,
-                                            gift_cards=gift_cards, shown_total=shown_total, customer=customer)
+                                            shown_total=shown_total, customer=customer)
 
         free_order_flow = (
             payment_objs and
@@ -2454,12 +2419,12 @@ class OrderChangeManager:
 @app.task(base=ProfiledEventTask, bind=True, max_retries=5, default_retry_delay=1, throws=(OrderError,))
 def perform_order(self, event: Event, payments: List[dict], positions: List[str],
                   email: str=None, locale: str=None, address: int=None, meta_info: dict=None,
-                  sales_channel: str='web', gift_cards: list=None, shown_total=None, customer=None):
+                  sales_channel: str='web', shown_total=None, customer=None):
     with language(locale):
         try:
             try:
                 return _perform_order(event, payments, positions, email, locale, address, meta_info,
-                                      sales_channel, gift_cards, shown_total, customer)
+                                      sales_channel, shown_total, customer)
             except LockTimeoutException:
                 self.retry()
         except (MaxRetriesExceededError, LockTimeoutException):

@@ -64,6 +64,7 @@ from pretix.base.services.memberships import validate_memberships_in_order
 from pretix.base.services.orders import perform_order
 from pretix.base.settings import PERSON_NAME_SCHEMES
 from pretix.base.signals import validate_cart_addons
+from pretix.base.templatetags.money import money_filter
 from pretix.base.templatetags.phone_format import phone_format
 from pretix.base.templatetags.rich_text import rich_text_snippet
 from pretix.base.views.tasks import AsyncAction
@@ -1167,7 +1168,7 @@ class PaymentStep(CartMixin, TemplateFlowStep):
             else:
                 matched = Decimal('0.00')
 
-        return matched == Decimal('0.00')
+        return matched == Decimal('0.00'), amount - matched
 
     def post(self, request):
         self.request = request
@@ -1201,18 +1202,33 @@ class PaymentStep(CartMixin, TemplateFlowStep):
                     return redirect(resp)
                 elif resp is True:
                     if pprov.multi_use_supported:
-                        # Provider needs to call add_payment_to_cart itself
+                        # Provider needs to call add_payment_to_cart itself, but we need to remove all previously
+                        # selected ones that don't have multi_use supported. Otherwise, if you first select a credit
+                        # card, then go back and switch to a gift card, you'll have both in the session and the credit
+                        # card has preference, which is unexpected.
+                        self.cart_session['payments'] = [p for p in self.cart_session.get('payments', []) if p.get('multi_use_supported')]
+
                         if pprov.identifier not in [p['provider'] for p in self.cart_session.get('payments', [])]:
                             raise ImproperlyConfigured(f'Payment provider {pprov.identifier} set multi_use_supported '
                                                        f'and returned True from payment_prepare, but did not call '
                                                        f'add_payment_to_cart')
 
-                        if self.current_payments_valid(cart['total']):
+                        valid, remainder = self.current_payments_valid(cart['total'])
+                        if valid:
                             return redirect(self.get_next_url(request))
                         else:
                             # Show payment step again to select another method
+                            messages.success(
+                                request,
+                                _("Your payment method has been applied, but {} still need to be paid. Please select "
+                                  "a payment method for the remainder.").format(
+                                    money_filter(remainder, self.event.currency)
+                                )
+                            )
                             return redirect(self.get_step_url(request))
                     else:
+                        # There can only be one payment method that does not have multi_use_supported, remove all
+                        # previous ones.
                         self.cart_session['payments'] = [p for p in self.cart_session.get('payments', []) if p.get('multi_use_supported')]
                         add_payment_to_cart(request, pprov, None, None, None)
                         return redirect(self.get_next_url(request))
@@ -1332,10 +1348,13 @@ class ConfirmStep(CartMixin, AsyncAction, TemplateFlowStep):
         ctx['cart'] = self.get_cart(answers=True)
 
         selected_payments = self.current_selected_payments(ctx['cart']['total'])
-        ctx['payments'] = [
-            (p, p['pprov'].checkout_confirm_render(self.request))
-            for p in selected_payments
-        ]
+        ctx['payments'] = []
+        for p in selected_payments:
+            if 'info_data' in inspect.signature(p['pprov'].checkout_confirm_render).parameters:
+                block = p['pprov'].checkout_confirm_render(self.request, info_data=p['info_data'])
+            else:
+                block = p['pprov'].checkout_confirm_render(self.request)
+            ctx['payments'].append((p, block))
 
         ctx['require_approval'] = any(cp.requires_approval(invoice_address=self.invoice_address) for cp in ctx['cart']['positions'])
         ctx['addr'] = self.invoice_address
@@ -1428,7 +1447,6 @@ class ConfirmStep(CartMixin, AsyncAction, TemplateFlowStep):
             address=self.invoice_address.pk,
             meta_info=meta_info,
             sales_channel=request.sales_channel.identifier,
-            gift_cards=self.cart_session.get('gift_cards'),
             shown_total=self.cart_session.get('shown_total'),
             customer=self.cart_session.get('customer'),
         )

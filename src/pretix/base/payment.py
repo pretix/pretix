@@ -63,14 +63,13 @@ from pretix.base.models import (
     OrderRefund, Quota,
 )
 from pretix.base.reldate import RelativeDateField, RelativeDateWrapper
-from pretix.base.services.cart import get_fees
 from pretix.base.settings import SettingsSandbox
 from pretix.base.signals import register_payment_providers
 from pretix.base.templatetags.money import money_filter
 from pretix.base.templatetags.rich_text import rich_text
 from pretix.helpers.countries import CachedCountries
 from pretix.helpers.money import DecimalTextInput
-from pretix.multidomain.urlreverse import build_absolute_uri, eventreverse
+from pretix.multidomain.urlreverse import build_absolute_uri
 from pretix.presale.views import get_cart, get_cart_total
 from pretix.presale.views.cart import cart_session, get_or_create_cart_id
 
@@ -616,7 +615,7 @@ class BasePaymentProvider:
         ctx = {'request': request, 'form': form}
         return template.render(ctx)
 
-    def checkout_confirm_render(self, request, order: Order=None) -> str:
+    def checkout_confirm_render(self, request, order: Order=None, info_data: dict=None) -> str:
         """
         If the user has successfully filled in their payment data, they will be redirected
         to a confirmation page which lists all details of their order for a final review.
@@ -626,7 +625,9 @@ class BasePaymentProvider:
         In most cases, this should include a short summary of the user's input and
         a short explanation on how the payment process will continue.
 
+        :param request: The current HTTP request.
         :param order: Only set when this is a change to a new payment method for an existing order.
+        :param info_data: The ``info_data`` dictionary you set during ``add_payment_to_cart`` (only filled if ``multi_use_supported`` is set)
         """
         raise NotImplementedError()  # NOQA
 
@@ -1179,6 +1180,8 @@ class GiftCardPayment(BasePaymentProvider):
     identifier = "giftcard"
     verbose_name = _("Gift card")
     priority = 10
+    multi_use_supported = True
+    execute_payment_needs_user = False
 
     @property
     def settings_form_fields(self):
@@ -1204,8 +1207,10 @@ class GiftCardPayment(BasePaymentProvider):
     def payment_form_render(self, request: HttpRequest, total: Decimal) -> str:
         return get_template('pretixcontrol/giftcards/checkout.html').render({})
 
-    def checkout_confirm_render(self, request) -> str:
-        return get_template('pretixcontrol/giftcards/checkout_confirm.html').render({})
+    def checkout_confirm_render(self, request, order=None, info_data=None) -> str:
+        return get_template('pretixcontrol/giftcards/checkout_confirm.html').render({
+            'info_data': info_data,
+        })
 
     def refund_control_render(self, request, refund) -> str:
         from .models import GiftCard
@@ -1259,6 +1264,8 @@ class GiftCardPayment(BasePaymentProvider):
         return True
 
     def checkout_prepare(self, request: HttpRequest, cart: Dict[str, Any]) -> Union[bool, str, None]:
+        from pretix.base.services.cart import add_payment_to_cart
+
         for p in get_cart(request):
             if p.item.issue_giftcard:
                 messages.error(request, _("You cannot pay with gift cards when buying a gift card."))
@@ -1284,35 +1291,22 @@ class GiftCardPayment(BasePaymentProvider):
             if gc.value <= Decimal("0.00"):
                 messages.error(request, _("All credit on this gift card has been used."))
                 return
-            if 'gift_cards' not in cs:
-                cs['gift_cards'] = []
-            elif gc.pk in cs['gift_cards']:
-                messages.error(request, _("This gift card is already used for your payment."))
-                return
-            cs['gift_cards'] = cs['gift_cards'] + [gc.pk]
 
-            total = sum(p.total for p in cart['positions'])
-            # Recompute fees. Some plugins, e.g. pretix-servicefees, change their fee schedule if a gift card is
-            # applied.
-            fees = get_fees(
-                self.event, request, total, cart['invoice_address'],
-                cs.get('payments', []),
-                cart['raw']
+            for p in cs.get('payments', []):
+                if p['provider'] == self.identifier and p['info_data']['gift_card'] == gc.pk:
+                    messages.error(request, _("This gift card is already used for your payment."))
+                    return
+
+            add_payment_to_cart(
+                request,
+                self,
+                max_value=gc.value,
+                info_data={
+                    'gift_card': gc.pk,
+                    'gift_card_secret': gc.secret,
+                }
             )
-            total += sum([f.value for f in fees])
-            remainder = total
-            if remainder > Decimal('0.00'):
-                del cs['payment']
-                messages.success(request, _("Your gift card has been applied, but {} still need to be paid. Please select a payment method.").format(
-                    money_filter(remainder, self.event.currency)
-                ))
-            else:
-                messages.success(request, _("Your gift card has been applied."))
-
-            kwargs = {'step': 'payment'}
-            if request.resolver_match and 'cart_namespace' in request.resolver_match.kwargs:
-                kwargs['cart_namespace'] = request.resolver_match.kwargs['cart_namespace']
-            return eventreverse(self.event, 'presale:event.checkout', kwargs=kwargs)
+            return True
         except GiftCard.DoesNotExist:
             if self.event.vouchers.filter(code__iexact=request.POST.get("giftcard")).exists():
                 messages.warning(request, _("You entered a voucher instead of a gift card. Vouchers can only be entered on the first page of the shop below "
@@ -1349,6 +1343,7 @@ class GiftCardPayment(BasePaymentProvider):
                 return
             payment.info_data = {
                 'gift_card': gc.pk,
+                'gift_card_secret': gc.secret,
                 'retry': True
             }
             payment.amount = min(payment.amount, gc.value)
@@ -1365,26 +1360,35 @@ class GiftCardPayment(BasePaymentProvider):
             messages.error(request, _("This gift card can not be redeemed since its code is not unique. Please contact the organizer of this event."))
 
     def execute_payment(self, request: HttpRequest, payment: OrderPayment) -> str:
-        # This method will only be called when retrying payments, e.g. after a payment_prepare call. It is not called
-        # during the order creation phase because this payment provider is a special case.
-        for p in payment.order.positions.all():  # noqa - just a safeguard
+        for p in payment.order.positions.all():
             if p.item.issue_giftcard:
                 raise PaymentException(_("You cannot pay with gift cards when buying a gift card."))
 
+        def _fail(msg):
+            payment.fail(info={'error': str(msg)})
+            raise PaymentException(msg)
+
         gcpk = payment.info_data.get('gift_card')
-        if not gcpk or not payment.info_data.get('retry'):
+        if not gcpk:
             raise PaymentException("Invalid state, should never occur.")
         with transaction.atomic():
-            gc = GiftCard.objects.select_for_update().get(pk=gcpk)
+            try:
+                gc = GiftCard.objects.select_for_update().get(pk=gcpk)
+            except GiftCard.DoesNotExist:
+                _fail(_("This gift card does not support this currency."))
             if gc.currency != self.event.currency:  # noqa - just a safeguard
-                raise PaymentException(_("This gift card does not support this currency."))
-            if not gc.accepted_by(self.event.organizer):  # noqa - just a safeguard
-                raise PaymentException(_("This gift card is not accepted by this event organizer."))
-            if payment.amount > gc.value:  # noqa - just a safeguard
-                raise PaymentException(_("This gift card was used in the meantime. Please try again."))
-            if gc.expires and gc.expires < now():  # noqa - just a safeguard
-                messages.error(request, _("This gift card is no longer valid."))
-                return
+                _fail(_("This gift card does not support this currency."))
+            if not gc.accepted_by(self.event.organizer):
+                _fail(_("This gift card is not accepted by this event organizer."))
+            if payment.amount > gc.value:
+                _fail(_("This gift card was used in the meantime. Please try again."))
+            if gc.testmode and not payment.order.testmode:
+                _fail(_("This gift card can only be used in test mode."))
+            if not gc.testmode and payment.order.testmode:
+                _fail(_("Only test gift cards can be used in test mode."))
+            if gc.expires and gc.expires < now():
+                _fail(_("This gift card is no longer valid."))
+
             trans = gc.transactions.create(
                 value=-1 * payment.amount,
                 order=payment.order,
