@@ -271,10 +271,6 @@ class OrderListExporter(MultiSheetListExporter):
 
         headers = [
             _('Event slug'),
-        ]
-        # get meta_data labels from first cached event
-        headers += [_('Meta: {}').format(l) for l in next(iter(self.event_object_cache.values())).meta_data.keys()]
-        headers += [
             _('Order code'), _('Order total'), _('Status'), _('Email'), _('Phone number'),
             _('Order date'), _('Order time'), _('Company'), _('Name'),
         ]
@@ -308,6 +304,9 @@ class OrderListExporter(MultiSheetListExporter):
             for id, vn in payment_methods:
                 headers.append(_('Paid by {method}').format(method=vn))
 
+        # get meta_data labels from first cached event
+        print(list(next(iter(self.event_object_cache.values())).meta_data.keys()))
+        headers += list(next(iter(self.event_object_cache.values())).meta_data.keys())
         yield headers
 
         full_fee_sum_cache = {
@@ -350,9 +349,6 @@ class OrderListExporter(MultiSheetListExporter):
 
             row = [
                 self.event_object_cache[order.event_id].slug,
-            ]
-            row += self.event_object_cache[order.event_id].meta_data.values()
-            row += [
                 order.code,
                 order.total,
                 order.get_status_display(),
@@ -424,6 +420,7 @@ class OrderListExporter(MultiSheetListExporter):
                         payment_sum_cache.get((order.id, id), Decimal('0.00')) -
                         refund_sum_cache.get((order.id, id), Decimal('0.00'))
                     )
+            row += self.event_object_cache[order.event_id].meta_data.values()
             yield row
 
     def iterate_fees(self, form_data: dict):
@@ -448,10 +445,6 @@ class OrderListExporter(MultiSheetListExporter):
 
         headers = [
             _('Event slug'),
-        ]
-        # get meta_data labels from first cached event
-        headers += [_('Meta: {}').format(l) for l in next(iter(self.event_object_cache.values())).meta_data.keys()]
-        headers += [
             _('Order code'),
             _('Status'),
             _('Email'),
@@ -477,6 +470,9 @@ class OrderListExporter(MultiSheetListExporter):
 
         headers.append(_('External customer ID'))
         headers.append(_('Payment providers'))
+
+        # get meta_data labels from first cached event
+        headers += list(next(iter(self.event_object_cache.values())).meta_data.keys())
         yield headers
 
         yield self.ProgressSetTotal(total=qs.count())
@@ -485,9 +481,6 @@ class OrderListExporter(MultiSheetListExporter):
             tz = pytz.timezone(order.event.settings.timezone)
             row = [
                 self.event_object_cache[order.event_id].slug,
-            ]
-            row += self.event_object_cache[order.event_id].meta_data.values()
-            row += [
                 order.code,
                 _("canceled") if op.canceled else order.get_status_display(),
                 order.email,
@@ -527,6 +520,7 @@ class OrderListExporter(MultiSheetListExporter):
                 str(self.providers.get(p, p)) for p in sorted(set((op.payment_providers or '').split(',')))
                 if p and p != 'free'
             ]))
+            row += self.event_object_cache[order.event_id].meta_data.values()
             yield row
 
     def iterate_positions(self, form_data: dict):
@@ -558,7 +552,8 @@ class OrderListExporter(MultiSheetListExporter):
 
         has_subevents = self.events.filter(has_subevents=True).exists()
         # get meta_data labels from first cached event
-        meta_data_labels = [_('Meta: {}').format(l) for l in next(iter(self.event_object_cache.values())).meta_data.keys()]
+        meta_data_labels = list(next(iter(self.event_object_cache.values())).meta_data.keys())
+        print("has_subevents", has_subevents)
 
         headers = [
             _('Event slug'),
@@ -574,7 +569,6 @@ class OrderListExporter(MultiSheetListExporter):
             headers.append(pgettext('subevent', 'Date'))
             headers.append(_('Start date'))
             headers.append(_('End date'))
-            headers += meta_data_labels
         headers += [
             _('Product'),
             _('Variation'),
@@ -643,6 +637,8 @@ class OrderListExporter(MultiSheetListExporter):
             _('Payment providers'),
         ]
 
+        if has_subevents:
+            headers += meta_data_labels
         yield headers
 
         all_ids = list(base_qs.order_by('order__datetime', 'positionid').values_list('pk', flat=True))
@@ -671,12 +667,10 @@ class OrderListExporter(MultiSheetListExporter):
                             row.append(op.subevent.date_to.astimezone(self.event_object_cache[order.event_id].timezone).strftime('%Y-%m-%d %H:%M:%S'))
                         else:
                             row.append('')
-                        row += op.subevent.meta_data.values()
                     else:
                         row.append('')
                         row.append('')
                         row.append('')
-                        row += [''] * len(meta_data_labels)
                 row += [
                     str(op.item),
                     str(op.variation) if op.variation else '',
@@ -768,6 +762,12 @@ class OrderListExporter(MultiSheetListExporter):
                     str(self.providers.get(p, p)) for p in sorted(set((op.payment_providers or '').split(',')))
                     if p and p != 'free'
                 ]))
+
+                if has_subevents:
+                    if op.subevent:
+                        row += op.subevent.meta_data.values()
+                    else:
+                        row += [''] * len(meta_data_labels)
                 yield row
 
     def get_filename(self):
