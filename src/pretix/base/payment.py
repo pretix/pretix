@@ -139,6 +139,32 @@ class BasePaymentProvider:
         return self.settings.get('_enabled', as_type=bool)
 
     @property
+    def multi_use_supported(self) -> bool:
+        """
+        Returns whether or whether not this payment provider supports being used multiple times in the same
+        checkout, or in addition to a different payment provider. This is usually only useful for payment providers
+        that represent gift cards, i.e. payment methods with an upper limit per payment instrument that can usually
+        be combined with other instruments.
+
+        If you set this property to ``True``, the behaviour of how pretix interacts with your payment provider changes
+        and you will need to respect the following rules:
+
+        - ``payment_form_render`` must not depend on session state, it must always allow a user to add a new payment.
+           Editing a payment is not possible, but pretix will give users an option to delete it.
+
+        - Returning ``True`` from ``payment_prepare`` is no longer enough. Instead, you must call
+          ``pretix.base.services.cart.add_payment_to_cart(request, provider, min_value, max_value, info_data)``
+          to add the payment to the session.
+
+        - ``payment_is_valid_session`` will not be called during checkout, don't rely on it.
+
+        The changed behaviour currently only affects the behaviour during initial checkout (i.e. ``checkout_prepare``),
+        for ``payment_prepare`` the regular behaviour applies and you are expected to just modify the amount of the
+        ``OrderPayment`` object if you need to.
+        """
+        return False
+
+    @property
     def test_mode_message(self) -> str:
         """
         If this property is set to a string, this will be displayed when this payment provider is selected

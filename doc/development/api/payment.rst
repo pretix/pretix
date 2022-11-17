@@ -138,6 +138,8 @@ The provider class
 
    .. autoattribute:: is_meta
 
+   .. autoattribute:: multi_use_supported
+
    .. autoattribute:: test_mode_message
 
    .. autoattribute:: requires_invoice_immediately
