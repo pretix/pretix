@@ -50,6 +50,7 @@ from pretix.base.customersso.oidc import (
 from pretix.base.models import Customer, InvoiceAddress, Order, OrderPosition
 from pretix.base.services.mail import mail
 from pretix.base.settings import PERSON_NAME_SCHEMES
+from pretix.helpers.http import redirect_to_url
 from pretix.multidomain.models import KnownDomain
 from pretix.multidomain.urlreverse import build_absolute_uri, eventreverse
 from pretix.presale.forms.customer import (
@@ -620,7 +621,7 @@ class SSOLoginView(RedirectBackMixin, View):
         })
 
         if self.provider.method == "oidc":
-            return redirect(oidc_authorize_url(self.provider, f'{nonce}§{next_url}', redirect_uri))
+            return redirect_to_url(oidc_authorize_url(self.provider, f'{nonce}§{next_url}', redirect_uri))
         else:
             raise Http404("Unknown SSO method.")
 
@@ -814,7 +815,7 @@ class SSOLoginReturnView(RedirectBackMixin, View):
             })
         else:
             customer_login(self.request, customer)
-            return redirect(self.get_success_url(redirect_to))
+            return redirect_to_url(self.get_success_url(redirect_to))
 
     def _fail(self, message, popup_origin):
         if not popup_origin:

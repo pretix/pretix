@@ -20,7 +20,9 @@
 # <https://www.gnu.org/licenses/>.
 #
 from django.conf import settings
-from django.http import StreamingHttpResponse
+from django.http import (
+    HttpResponsePermanentRedirect, HttpResponseRedirect, StreamingHttpResponse,
+)
 
 
 class ChunkBasedFileResponse(StreamingHttpResponse):
@@ -40,3 +42,8 @@ def get_client_ip(request):
         if x_forwarded_for:
             ip = x_forwarded_for.split(',')[0]
     return ip
+
+
+def redirect_to_url(to, permanent=False):
+    redirect_class = HttpResponsePermanentRedirect if permanent else HttpResponseRedirect
+    return redirect_class(to)

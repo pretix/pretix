@@ -63,6 +63,7 @@ from pretix.base.services.cart import (
     remove_cart_position,
 )
 from pretix.base.views.tasks import AsyncAction
+from pretix.helpers.http import redirect_to_url
 from pretix.multidomain.urlreverse import eventreverse
 from pretix.presale.views import (
     CartMixin, EventViewMixin, allow_cors_if_namespaced,
@@ -652,7 +653,7 @@ class RedeemView(NoSearchIndexViewMixin, EventViewMixin, CartMixin, TemplateView
 
         if err:
             messages.error(request, _(err))
-            return redirect(self.get_next_url() + "?voucher_invalid")
+            return redirect_to_url(self.get_next_url() + "?voucher_invalid")
 
         return super().dispatch(request, *args, **kwargs)
 

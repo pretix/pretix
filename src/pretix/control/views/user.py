@@ -71,6 +71,7 @@ from pretix.control.permissions import (
     AdministratorPermissionRequiredMixin, StaffMemberRequiredMixin,
 )
 from pretix.control.views.auth import get_u2f_appid
+from pretix.helpers.http import redirect_to_url
 from pretix.helpers.webauthn import generate_challenge, generate_ukey
 
 REAL_DEVICE_TYPES = (TOTPDevice, WebAuthnDevice, U2FDevice)
@@ -138,7 +139,7 @@ class ReauthView(TemplateView):
             request.session['pretix_auth_last_used'] = t
             next_url = get_auth_backends()[request.user.auth_backend].get_next_url(request)
             if next_url and url_has_allowed_host_and_scheme(next_url, allowed_hosts=None):
-                return redirect(next_url)
+                return redirect_to_url(next_url)
             return redirect(reverse('control:index'))
         else:
             messages.error(request, _('The password you entered was invalid, please try again.'))
@@ -153,7 +154,7 @@ class ReauthView(TemplateView):
             request.session['pretix_auth_login_time'] = t
             request.session['pretix_auth_last_used'] = t
             if next_url and url_has_allowed_host_and_scheme(next_url, allowed_hosts=None):
-                return redirect(next_url)
+                return redirect_to_url(next_url)
             return redirect(reverse('control:index'))
         return super().get(request, *args, **kwargs)
 
@@ -749,7 +750,7 @@ class StartStaffSession(StaffMemberRequiredMixin, RecentAuthenticationRequiredMi
             )
 
         if "next" in request.GET and url_has_allowed_host_and_scheme(request.GET.get("next"), allowed_hosts=None):
-            return redirect(request.GET.get("next"))
+            return redirect_to_url(request.GET.get("next"))
         else:
             return redirect(reverse("control:index"))
 

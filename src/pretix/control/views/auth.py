@@ -61,6 +61,7 @@ from pretix.base.forms.auth import (
 )
 from pretix.base.models import TeamInvite, U2FDevice, User, WebAuthnDevice
 from pretix.base.services.mail import SendMailException
+from pretix.helpers.http import redirect_to_url
 from pretix.helpers.webauthn import generate_challenge
 
 logger = logging.getLogger(__name__)
@@ -81,7 +82,7 @@ def process_login(request, user, keep_logged_in):
         twofa_url = reverse('control:auth.login.2fa')
         if next_url and url_has_allowed_host_and_scheme(next_url, allowed_hosts=None):
             twofa_url += '?next=' + quote(next_url)
-        return redirect(twofa_url)
+        return redirect_to_url(twofa_url)
     else:
         auth_login(request, user)
         request.session['pretix_auth_login_time'] = int(time.time())
@@ -110,7 +111,7 @@ def login(request):
     if request.user.is_authenticated:
         next_url = backend.get_next_url(request) or 'control:index'
         if next_url and url_has_allowed_host_and_scheme(next_url, allowed_hosts=None):
-            return redirect(next_url)
+            return redirect_to_url(next_url)
         return redirect(reverse('control:index'))
     if request.method == 'POST':
         form = LoginForm(backend=backend, data=request.POST, request=request)
@@ -136,8 +137,8 @@ def logout(request):
     if 'next' in request.GET and url_has_allowed_host_and_scheme(request.GET.get('next'), allowed_hosts=None):
         next += '?next=' + quote(request.GET.get('next'))
     if 'back' in request.GET and url_has_allowed_host_and_scheme(request.GET.get('back'), allowed_hosts=None):
-        return redirect(request.GET.get('back'))
-    return redirect(next)
+        return redirect_to_url(request.GET.get('back'))
+    return redirect_to_url(next)
 
 
 def register(request):
@@ -443,7 +444,7 @@ class Login2FAView(TemplateView):
             del request.session['pretix_auth_2fa_user']
             del request.session['pretix_auth_2fa_time']
             if "next" in request.GET and url_has_allowed_host_and_scheme(request.GET.get("next"), allowed_hosts=None):
-                return redirect(request.GET.get("next"))
+                return redirect_to_url(request.GET.get("next"))
             return redirect(reverse('control:index'))
         else:
             messages.error(request, _('Invalid code, please try again.'))
