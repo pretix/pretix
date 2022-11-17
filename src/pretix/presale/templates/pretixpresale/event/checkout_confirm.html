@@ -1,6 +1,7 @@
 {% extends "pretixpresale/event/base.html" %}
 {% load i18n %}
 {% load bootstrap3 %}
+{% load money %}
 {% load eventurl %}
 {% load eventsignal %}
 {% block title %}{% trans "Review order" %}{% endblock %}
@@ -37,7 +38,7 @@
                 {% include "pretixpresale/event/fragment_cart.html" with cart=cart event=request.event editable=False %}
             </div>
         </div>
-        {% if payment_provider %}
+        {% if payments %}
             <div class="panel panel-primary">
                 <div class="panel-heading">
                     {% if payment_provider.identifier != "free" %}
@@ -52,9 +53,25 @@
                         {% trans "Payment" %}
                     </h3>
                 </div>
-                <div class="panel-body">
-                    {{ payment }}
-                </div>
+                <ul class="list-group">
+                    {% for payment, rendered_block in payments %}
+                        <li class="list-group-item">
+                            {% if payments|length > 1 %}
+                                <div class="row">
+                                    <div class="col-sm-10 col-xs-12">
+                                        <h4>{{ payment.provider_name }}</h4>
+                                        {{ rendered_block }}
+                                    </div>
+                                    <div class="col-sm-2 col-xs-12 text-right">
+                                        <h4>{{ payment.payment_amount|money:request.event.currency }}</h4>
+                                    </div>
+                                </div>
+                            {% else %}
+                                {{ rendered_block }}
+                            {% endif %}
+                        </li>
+                    {% endfor %}
+                </ul>
             </div>
         {% endif %}
         {% eventsignal event "pretix.presale.signals.checkout_confirm_page_content" request=request %}

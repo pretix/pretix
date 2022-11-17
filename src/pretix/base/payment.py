@@ -146,23 +146,39 @@ class BasePaymentProvider:
         that represent gift cards, i.e. payment methods with an upper limit per payment instrument that can usually
         be combined with other instruments.
 
-        If you set this property to ``True``, the behaviour of how pretix interacts with your payment provider changes
+        If you set this property to ``True``, the behavior of how pretix interacts with your payment provider changes
         and you will need to respect the following rules:
 
         - ``payment_form_render`` must not depend on session state, it must always allow a user to add a new payment.
            Editing a payment is not possible, but pretix will give users an option to delete it.
 
-        - Returning ``True`` from ``payment_prepare`` is no longer enough. Instead, you must call
+        - Returning ``True`` from ``checkout_prepare`` is no longer enough. Instead, you must *also* call
           ``pretix.base.services.cart.add_payment_to_cart(request, provider, min_value, max_value, info_data)``
-          to add the payment to the session.
+          to add the payment to the session. You are still allowed to do a redirect from ``checkout_prepare`` and then
+          call this function upon return.
 
-        - ``payment_is_valid_session`` will not be called during checkout, don't rely on it.
+        - Unlike in the general case, when ``checkout_prepare`` is called, the ``cart['total']`` parameter will _not yet_
+          include payment fees charged by your provider as we don't yet know the amount of the charge, so you need to
+          take care of that yourself when setting your maximum amount.
 
-        The changed behaviour currently only affects the behaviour during initial checkout (i.e. ``checkout_prepare``),
-        for ``payment_prepare`` the regular behaviour applies and you are expected to just modify the amount of the
+        - ``payment_is_valid_session`` will not be called during checkout, don't rely on it. If you called
+          ``add_payment_to_cart``, we'll trust the payment is okay and your next chance to change that will be
+          ``execute_payment``.
+
+        The changed behavior currently only affects the behavior during initial checkout (i.e. ``checkout_prepare``),
+        for ``payment_prepare`` the regular behavior applies and you are expected to just modify the amount of the
         ``OrderPayment`` object if you need to.
         """
         return False
+
+    @property
+    def execute_payment_needs_user(self) -> bool:
+        """
+        Set this to ``True`` if your ``execute_payment`` function needs to be triggered by a user request, i.e. either
+        needs the ``request`` object or might require a browser redirect. If this is ``False``, you will not receive
+        a ``request`` and may not redirect since execute_payment might be called server-side.
+        """
+        return True
 
     @property
     def test_mode_message(self) -> str:
@@ -644,6 +660,10 @@ class BasePaymentProvider:
         .. IMPORTANT:: If this is called, the user has not yet confirmed their order.
            You may NOT do anything which actually moves money.
 
+        Note: The behavior of this method changes significantly when you set
+              ``multi_use_supported``. Please refer to the ``multi_use_supported`` documentation
+              for more information.
+
         :param cart: This dictionary contains at least the following keys:
 
             positions:
@@ -683,9 +703,9 @@ class BasePaymentProvider:
         You will be passed an :py:class:`pretix.base.models.OrderPayment` object that contains
         the amount of money that should be paid.
 
-        If you need any special behavior, you can return a string
-        containing the URL the user will be redirected to. If you are done with your process
-        you should return the user to the order's detail page.
+        If you need any special behavior, you can return a string containing the URL the user will be redirected to.
+        If you are done with your process you should return the user to the order's detail page. Redirection is not
+        allowed if you set ``execute_payment_needs_user`` to ``True``.
 
         If the payment is completed, you should call ``payment.confirm()``. Please note that this might
         raise a ``Quota.QuotaExceededException`` if (and only if) the payment term of this order is over and
@@ -697,7 +717,7 @@ class BasePaymentProvider:
 
         On errors, you should raise a ``PaymentException``.
 
-        :param order: The order object
+        :param request: A HTTP request, except if ``execute_payment_needs_user`` is ``False``
         :param payment: An ``OrderPayment`` instance
         """
         return None
@@ -1275,7 +1295,8 @@ class GiftCardPayment(BasePaymentProvider):
             # Recompute fees. Some plugins, e.g. pretix-servicefees, change their fee schedule if a gift card is
             # applied.
             fees = get_fees(
-                self.event, request, total, cart['invoice_address'], cs.get('payment'),
+                self.event, request, total, cart['invoice_address'],
+                cs.get('payments', []),
                 cart['raw']
             )
             total += sum([f.value for f in fees])

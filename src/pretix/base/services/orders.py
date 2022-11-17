@@ -74,7 +74,7 @@ from pretix.base.models.orders import (
 )
 from pretix.base.models.organizer import TeamAPIToken
 from pretix.base.models.tax import TAXED_ZERO, TaxedPrice, TaxRule
-from pretix.base.payment import BasePaymentProvider, PaymentException
+from pretix.base.payment import PaymentException
 from pretix.base.reldate import RelativeDateWrapper
 from pretix.base.secrets import assign_ticket_secret
 from pretix.base.services import tickets
@@ -793,7 +793,7 @@ def _check_positions(event: Event, now_dt: datetime, positions: List[CartPositio
         raise OrderError(err, errargs)
 
 
-def _get_fees(positions: List[CartPosition], payment_provider: BasePaymentProvider, address: InvoiceAddress,
+def _get_fees(positions: List[CartPosition], payment_requests: List[dict], address: InvoiceAddress,
               meta_info: dict, event: Event, gift_cards: List[GiftCard]):
     fees = []
     total = sum([c.price for c in positions])
@@ -812,24 +812,48 @@ def _get_fees(positions: List[CartPosition], payment_provider: BasePaymentProvid
             total -= fval
             gift_card_values[gc] = fval
 
-    if payment_provider:
-        payment_fee = payment_provider.calculate_fee(total)
-    else:
-        payment_fee = 0
-    pf = None
-    if payment_fee:
-        pf = OrderFee(fee_type=OrderFee.FEE_TYPE_PAYMENT, value=payment_fee,
-                      internal_type=payment_provider.identifier)
-        fees.append(pf)
+    total_remaining = total
+    for p in payment_requests:
+        # This algorithm of treating min/max values and fees needs to stay in sync between the following
+        # places in the code base:
+        # - pretix.base.services.cart.get_fees
+        # - pretix.base.services.orders._get_fees
+        # - pretix.presale.views.CartMixin.current_selected_payments
+        if p.get('min_value') and total_remaining < Decimal(p['min_value']):
+            p['payment_amount'] = Decimal('0.00')
+            continue
 
-    return fees, pf, gift_card_values
+        to_pay = total_remaining
+        if p.get('max_value') and to_pay > Decimal(p['max_value']):
+            to_pay = min(to_pay, Decimal(p['max_value']))
+
+        payment_fee = p['pprov'].calculate_fee(to_pay)
+        total_remaining += payment_fee
+        to_pay += payment_fee
+
+        if p.get('max_value') and to_pay > Decimal(p['max_value']):
+            to_pay = min(to_pay, Decimal(p['max_value']))
+
+        total_remaining -= to_pay
+
+        p['payment_amount'] = to_pay
+        if payment_fee:
+            pf = OrderFee(fee_type=OrderFee.FEE_TYPE_PAYMENT, value=payment_fee,
+                          internal_type=p['pprov'].identifier)
+            fees.append(pf)
+            p['fee'] = pf
+
+    if total_remaining != Decimal('0.00'):
+        raise OrderError(_("This selected payment methods do not cover the total balance."))
+
+    return fees, gift_card_values
 
 
 def _create_order(event: Event, email: str, positions: List[CartPosition], now_dt: datetime,
-                  payment_provider: BasePaymentProvider, locale: str=None, address: InvoiceAddress=None,
+                  payment_requests: List[dict], locale: str=None, address: InvoiceAddress=None,
                   meta_info: dict=None, sales_channel: str='web', gift_cards: list=None, shown_total=None,
                   customer=None):
-    p = None
+    payments = []
     sales_channel = get_all_sales_channels()[sales_channel]
 
     with transaction.atomic():
@@ -854,7 +878,7 @@ def _create_order(event: Event, email: str, positions: List[CartPosition], now_d
         except ValidationError as e:
             raise OrderError(e.message)
 
-        fees, pf, gift_card_values = _get_fees(positions, payment_provider, address, meta_info, event, checked_gift_cards)
+        fees, gift_card_values = _get_fees(positions, payment_requests, address, meta_info, event, checked_gift_cards)
         total = pending_sum = sum([c.price for c in positions]) + sum([c.value for c in fees])
 
         order = Order(
@@ -921,13 +945,16 @@ def _create_order(event: Event, email: str, positions: List[CartPosition], now_d
                       'check the prices below and try again.')
                 )
 
-        if payment_provider and not order.require_approval:
-            p = order.payments.create(
-                state=OrderPayment.PAYMENT_STATE_CREATED,
-                provider=payment_provider.identifier,
-                amount=pending_sum,
-                fee=pf
-            )
+        if payment_requests and not order.require_approval:
+            for p in payment_requests:
+                if p['payment_amount'] > Decimal('0.00'):
+                    payments.append(order.payments.create(
+                        state=OrderPayment.PAYMENT_STATE_CREATED,
+                        provider=p['provider'],
+                        amount=p['payment_amount'],
+                        fee=p.get('fee'),
+                        info=json.dumps(p['info_data']),
+                    ))
 
         orderpositions = OrderPosition.transform_cart_positions(positions, order)
         order.create_transactions(positions=orderpositions, fees=fees, is_new=True)
@@ -939,12 +966,12 @@ def _create_order(event: Event, email: str, positions: List[CartPosition], now_d
                 order.log_action('pretix.event.order.consent', data={'msg': msg})
 
     order_placed.send(event, order=order)
-    return order, p
+    return order, payments
 
 
-def _order_placed_email(event: Event, order: Order, pprov: BasePaymentProvider, email_template, subject_template,
-                        log_entry: str, invoice, payment: OrderPayment, is_free=False):
-    email_context = get_email_context(event=event, order=order, payment=payment if pprov else None)
+def _order_placed_email(event: Event, order: Order, email_template, subject_template,
+                        log_entry: str, invoice, payments: List[OrderPayment], is_free=False):
+    email_context = get_email_context(event=event, order=order, payments=payments)
     try:
         order.send_mail(
             subject_template, email_template, email_context,
@@ -979,15 +1006,13 @@ def _order_placed_email_attendee(event: Event, order: Order, position: OrderPosi
         logger.exception('Order received email could not be sent to attendee')
 
 
-def _perform_order(event: Event, payment_provider: str, position_ids: List[str],
+def _perform_order(event: Event, payment_requests: List[dict], position_ids: List[str],
                    email: str, locale: str, address: int, meta_info: dict=None, sales_channel: str='web',
                    gift_cards: list=None, shown_total=None, customer=None):
-    if payment_provider:
-        pprov = event.get_payment_providers().get(payment_provider)
-        if not pprov:
+    for p in payment_requests:
+        p['pprov'] = event.get_payment_providers(cached=True)[p['provider']]
+        if not p['pprov']:
             raise OrderError(error_messages['internal'])
-    else:
-        pprov = None
 
     if customer:
         customer = event.organizer.customers.get(pk=customer)
@@ -1017,8 +1042,17 @@ def _perform_order(event: Event, payment_provider: str, position_ids: List[str],
         id__in=position_ids, event=event
     )
 
-    validate_order.send(event, payment_provider=pprov, email=email, positions=positions, locale=locale,
-                        invoice_address=addr, meta_info=meta_info, customer=customer)
+    validate_order.send(
+        event,
+        payment_provider=payment_requests[0]['provider'],  # only for backwards compatibility
+        payments=payment_requests,
+        email=email,
+        positions=positions,
+        locale=locale,
+        invoice_address=addr,
+        meta_info=meta_info,
+        customer=customer,
+    )
 
     lockfn = NoLockManager
     locked = False
@@ -1038,21 +1072,28 @@ def _perform_order(event: Event, payment_provider: str, position_ids: List[str],
         if len(position_ids) != len(positions):
             raise OrderError(error_messages['internal'])
         _check_positions(event, now_dt, positions, address=addr, sales_channel=sales_channel, customer=customer)
-        order, payment = _create_order(event, email, positions, now_dt, pprov,
-                                       locale=locale, address=addr, meta_info=meta_info, sales_channel=sales_channel,
-                                       gift_cards=gift_cards, shown_total=shown_total, customer=customer)
+        order, payment_objs = _create_order(event, email, positions, now_dt, payment_requests,
+                                            locale=locale, address=addr, meta_info=meta_info, sales_channel=sales_channel,
+                                            gift_cards=gift_cards, shown_total=shown_total, customer=customer)
 
-        free_order_flow = payment and payment_provider == 'free' and order.pending_sum == Decimal('0.00') and not order.require_approval
+        free_order_flow = (
+            payment_objs and
+            any(p['provider'] == 'free' for p in payment_requests) and
+            order.pending_sum == Decimal('0.00') and
+            not order.require_approval
+        )
         if free_order_flow:
             try:
-                payment.confirm(send_mail=False, lock=not locked)
+                for p in payment_objs:
+                    if p.provider == 'free':
+                        p.confirm(send_mail=False, lock=not locked)
             except Quota.QuotaExceededException:
                 pass
 
     invoice = order.invoices.last()  # Might be generated by plugin already
     if not invoice and invoice_qualified(order):
         if event.settings.get('invoice_generate') == 'True' or (
-                event.settings.get('invoice_generate') == 'paid' and payment.payment_provider.requires_invoice_immediately):
+                event.settings.get('invoice_generate') == 'paid' and any(p['pprov'].requires_invoice_immediately for p in payment_requests)):
             invoice = generate_invoice(
                 order,
                 trigger_pdf=not event.settings.invoice_email_attachment or not order.email
@@ -1084,7 +1125,7 @@ def _perform_order(event: Event, payment_provider: str, position_ids: List[str],
             subject_attendees_template = event.settings.mail_subject_order_placed_attendee
 
         if sales_channel in event.settings.mail_sales_channel_placed_paid:
-            _order_placed_email(event, order, pprov, email_template, subject_template, log_entry, invoice, payment,
+            _order_placed_email(event, order, email_template, subject_template, log_entry, invoice, payment_objs,
                                 is_free=free_order_flow)
             if email_attendees:
                 for p in order.positions.all():
@@ -1092,7 +1133,24 @@ def _perform_order(event: Event, payment_provider: str, position_ids: List[str],
                         _order_placed_email_attendee(event, order, p, email_attendees_template, subject_attendees_template, log_entry,
                                                      is_free=free_order_flow)
 
-    return order.id
+    warnings = []
+    for p in payment_objs:
+        if not p.payment_provider.execute_payment_needs_user:
+            try:
+                p.process_initiated = True
+                p.save(update_fields=['process_initiated'])
+                resp = p.payment_provider.execute_payment(None, p)
+                if isinstance(resp, str):
+                    logger.warning('Payment provider returned URL from execute_payment even though execute_payment_needs_user is not set')
+            except PaymentException as e:
+                warnings.append(str(e))
+            except Exception:
+                logger.exception('Error during payment attempt')
+
+    return {
+        'order_id': order.id,
+        'warnings': warnings,
+    }
 
 
 @receiver(signal=periodic_task)
@@ -2394,13 +2452,13 @@ class OrderChangeManager:
 
 
 @app.task(base=ProfiledEventTask, bind=True, max_retries=5, default_retry_delay=1, throws=(OrderError,))
-def perform_order(self, event: Event, payment_provider: str, positions: List[str],
+def perform_order(self, event: Event, payments: List[dict], positions: List[str],
                   email: str=None, locale: str=None, address: int=None, meta_info: dict=None,
                   sales_channel: str='web', gift_cards: list=None, shown_total=None, customer=None):
     with language(locale):
         try:
             try:
-                return _perform_order(event, payment_provider, positions, email, locale, address, meta_info,
+                return _perform_order(event, payments, positions, email, locale, address, meta_info,
                                       sales_channel, gift_cards, shown_total, customer)
             except LockTimeoutException:
                 self.retry()

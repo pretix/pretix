@@ -138,6 +138,8 @@ The provider class
 
    .. autoattribute:: is_meta
 
+   .. autoattribute:: execute_payment_needs_user
+
    .. autoattribute:: multi_use_supported
 
    .. autoattribute:: test_mode_message

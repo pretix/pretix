@@ -31,7 +31,7 @@
 # Unless required by applicable law or agreed to in writing, software distributed under the Apache License 2.0 is
 # distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations under the License.
-
+import copy
 from collections import defaultdict
 from datetime import datetime, timedelta
 from decimal import Decimal
@@ -103,7 +103,7 @@ class CartMixin:
     def invoice_address(self):
         return cached_invoice_address(self.request)
 
-    def get_cart(self, answers=False, queryset=None, order=None, downloads=False):
+    def get_cart(self, answers=False, queryset=None, order=None, downloads=False, payments=None):
         if queryset is not None:
             prefetch = []
             if answers:
@@ -196,7 +196,8 @@ class CartMixin:
             fees = order.fees.all()
         elif positions:
             fees = get_fees(
-                self.request.event, self.request, total, self.invoice_address, self.cart_session.get('payment'),
+                self.request.event, self.request, total, self.invoice_address,
+                payments if payments is not None else self.cart_session.get('payments', []),
                 cartpos
             )
         else:
@@ -232,6 +233,46 @@ class CartMixin:
             'is_ordered': bool(order),
             'itemcount': sum(c.count for c in positions if not c.addon_to)
         }
+
+    def current_selected_payments(self, total):
+        raw_payments = copy.deepcopy(self.cart_session.get('payments', []))
+        payments = []
+        total_remaining = total
+        for p in raw_payments:
+            # This algorithm of treating min/max values and fees needs to stay in sync between the following
+            # places in the code base:
+            # - pretix.base.services.cart.get_fees
+            # - pretix.base.services.orders._get_fees
+            # - pretix.presale.views.CartMixin.current_selected_payments
+            if p.get('min_value') and total_remaining < Decimal(p['min_value']):
+                self._remove_payment(p['id'])
+                continue
+
+            to_pay = total_remaining
+            if p.get('max_value') and to_pay > Decimal(p['max_value']):
+                to_pay = min(to_pay, Decimal(p['max_value']))
+
+            pprov = self.request.event.get_payment_providers(cached=True).get(p['provider'])
+            if not pprov:
+                self._remove_payment(p['id'])
+                continue
+
+            fee = pprov.calculate_fee(to_pay)
+            total_remaining += fee
+            to_pay += fee
+
+            if p.get('max_value') and to_pay > Decimal(p['max_value']):
+                to_pay = min(to_pay, Decimal(p['max_value']))
+
+            p['payment_amount'] = to_pay
+            p['provider_name'] = pprov.public_name
+            p['pprov'] = pprov
+            total_remaining -= to_pay
+            payments.append(p)
+        return payments
+
+    def _remove_payment(self, payment_id):
+        self.cart_session['payments'] = [p for p in self.cart_session['payments'] if p.get('id') != payment_id]
 
 
 def cart_exists(request):
@@ -334,7 +375,7 @@ def get_cart_is_free(request):
         pos = get_cart(request)
         ia = get_cart_invoice_address(request)
         total = get_cart_total(request)
-        fees = get_fees(request.event, request, total, ia, cs.get('payment'), pos)
+        fees = get_fees(request.event, request, total, ia, cs.get('payments', []), pos)
         request._cart_free_cache = total + sum(f.value for f in fees) == Decimal('0.00')
     return request._cart_free_cache
 

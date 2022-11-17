@@ -33,12 +33,13 @@
 # License for the specific language governing permissions and limitations under the License.
 import copy
 import inspect
+import uuid
 from collections import defaultdict
 from decimal import Decimal
 
 from django.conf import settings
 from django.contrib import messages
-from django.core.exceptions import ValidationError
+from django.core.exceptions import ImproperlyConfigured, ValidationError
 from django.core.signing import BadSignature, loads
 from django.core.validators import EmailValidator
 from django.db.models import F, Q
@@ -56,7 +57,8 @@ from pretix.base.models import Customer, Membership, Order
 from pretix.base.models.orders import InvoiceAddress, OrderPayment
 from pretix.base.models.tax import TaxedPrice, TaxRule
 from pretix.base.services.cart import (
-    CartError, CartManager, error_messages, get_fees, set_cart_addons,
+    CartError, CartManager, add_payment_to_cart, error_messages, get_fees,
+    set_cart_addons,
 )
 from pretix.base.services.memberships import validate_memberships_in_order
 from pretix.base.services.orders import perform_order
@@ -1144,19 +1146,76 @@ class PaymentStep(CartMixin, TemplateFlowStep):
             })
         return providers
 
+    @cached_property
+    def single_use_payment(self):
+        singleton_payments = [p for p in self.cart_session.get('payments', []) if not p.get('multi_use_supported')]
+        if not singleton_payments:
+            return None
+        return singleton_payments[0]
+
+    def current_payments_valid(self, amount):
+        singleton_payments = [p for p in self.cart_session.get('payments', []) if not p.get('multi_use_supported')]
+        if len(singleton_payments) > 1:
+            return False
+
+        matched = Decimal('0.00')
+        for p in self.cart_session.get('payments', []):
+            if p.get('min_value') and (amount - matched) < Decimal(p['min_value']):
+                continue
+            if p.get('max_value') and (amount - matched) > Decimal(p['max_value']):
+                matched += Decimal(p['max_value'])
+            else:
+                matched = Decimal('0.00')
+
+        return matched == Decimal('0.00')
+
     def post(self, request):
         self.request = request
+
+        if "remove_payment" in request.POST:
+            self._remove_payment(request.POST["remove_payment"])
+            return redirect(self.get_step_url(request))
+
         for p in self.provider_forms:
-            if p['provider'].identifier == request.POST.get('payment', ''):
-                self.cart_session['payment'] = p['provider'].identifier
-                resp = p['provider'].checkout_prepare(
+            pprov = p['provider']
+            if pprov.identifier == request.POST.get('payment', ''):
+                if not pprov.multi_use_supported:
+                    # Providers with multi_use_supported will call this themselves
+                    simulated_payments = self.cart_session.get('payments', {})
+                    simulated_payments = [p for p in simulated_payments if p.get('multi_use_supported')]
+                    simulated_payments.append({
+                        'provider': pprov,
+                        'multi_use_supported': False,
+                        'min_value': None,
+                        'max_value': None,
+                        'info_data': {},
+                    })
+                    cart = self.get_cart(payments=simulated_payments)
+                else:
+                    cart = self.get_cart()
+                resp = pprov.checkout_prepare(
                     request,
-                    self.get_cart()
+                    cart,
                 )
                 if isinstance(resp, str):
                     return redirect(resp)
                 elif resp is True:
-                    return redirect(self.get_next_url(request))
+                    if pprov.multi_use_supported:
+                        # Provider needs to call add_payment_to_cart itself
+                        if pprov.identifier not in [p['provider'] for p in self.cart_session.get('payments', [])]:
+                            raise ImproperlyConfigured(f'Payment provider {pprov.identifier} set multi_use_supported '
+                                                       f'and returned True from payment_prepare, but did not call '
+                                                       f'add_payment_to_cart')
+
+                        if self.current_payments_valid(cart['total']):
+                            return redirect(self.get_next_url(request))
+                        else:
+                            # Show payment step again to select another method
+                            return redirect(self.get_step_url(request))
+                    else:
+                        self.cart_session['payments'] = [p for p in self.cart_session.get('payments', []) if p.get('multi_use_supported')]
+                        add_payment_to_cart(request, pprov, None, None, None)
+                        return redirect(self.get_next_url(request))
                 else:
                     return self.render()
         messages.error(self.request, _("Please select a payment method."))
@@ -1164,33 +1223,55 @@ class PaymentStep(CartMixin, TemplateFlowStep):
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
+        ctx['current_payments'] = [p for p in self.current_selected_payments(self._total_order_value) if p.get('multi_use_supported')]
         ctx['providers'] = self.provider_forms
         ctx['show_fees'] = any(p['fee'] for p in self.provider_forms)
-        ctx['selected'] = self.request.POST.get('payment', self.cart_session.get('payment', ''))
+
         if len(self.provider_forms) == 1:
             ctx['selected'] = self.provider_forms[0]['provider'].identifier
+        elif 'payment' in self.request.POST:
+            ctx['selected'] = self.request.POST['payment']
+        elif self.single_use_payment:
+            ctx['selected'] = self.single_use_payment['provider']
+        else:
+            ctx['selected'] = ''
         ctx['cart'] = self.get_cart()
         return ctx
-
-    @cached_property
-    def payment_provider(self):
-        return self.request.event.get_payment_providers().get(self.cart_session['payment'])
 
     def _is_allowed(self, prov, request):
         return prov.is_allowed(request, total=self._total_order_value)
 
     def is_completed(self, request, warn=False):
-        self.request = request
-        if 'payment' not in self.cart_session or not self.payment_provider:
+        if not self.cart_session.get('payments'):
             if warn:
                 messages.error(request, _('The payment information you entered was incomplete.'))
             return False
-        if not self.payment_provider.payment_is_valid_session(request) or \
-                not self.payment_provider.is_enabled or \
-                not self._is_allowed(self.payment_provider, request):
+
+        cart = get_cart(self.request)
+        total = get_cart_total(self.request)
+        total += sum([f.value for f in get_fees(self.request.event, self.request, total, self.invoice_address,
+                                                self.cart_session.get('payments', []), cart)])
+        selected = self.current_selected_payments(total)
+        if sum(p['payment_amount'] for p in selected) != total:
             if warn:
                 messages.error(request, _('The payment information you entered was incomplete.'))
             return False
+
+        if len([p for p in selected if not p['multi_use_supported']]) > 1:
+            raise ImproperlyConfigured('Multiple non-multi-use providers in session, should never happen')
+
+        for p in selected:
+            if not p['pprov'] or not p['pprov'].is_enabled or not self._is_allowed(p['pprov'], request):
+                self._remove_payment(p['id'])
+                if p['payment_amount']:
+                    if warn:
+                        messages.error(request, _('The payment information you entered was incomplete.'))
+                    return False
+
+            if not p['multi_use_supported'] and not p['pprov'].payment_is_valid_session(request):
+                if warn:
+                    messages.error(request, _('The payment information you entered was incomplete.'))
+                return False
         return True
 
     def is_applicable(self, request):
@@ -1198,18 +1279,28 @@ class PaymentStep(CartMixin, TemplateFlowStep):
 
         for cartpos in get_cart(self.request):
             if cartpos.requires_approval(invoice_address=self.invoice_address):
-                if 'payment' in self.cart_session:
-                    del self.cart_session['payment']
+                if 'payments' in self.cart_session:
+                    del self.cart_session['payments']
                 return False
 
+        used_providers = {p['provider'] for p in self.cart_session.get('payments', [])}
         for p in self.request.event.get_payment_providers().values():
             if p.is_implicit(request) if callable(p.is_implicit) else p.is_implicit:
                 if self._is_allowed(p, request):
-                    self.cart_session['payment'] = p.identifier
+                    self.cart_session['payments'] = [
+                        {
+                            'id': str(uuid.uuid4()),
+                            'provider': p.identifier,
+                            'multi_use_supported': False,
+                            'min_value': None,
+                            'max_value': None,
+                            'info_data': {},
+                        }
+                    ]
                     return False
-                elif self.cart_session.get('payment') == p.identifier:
+                elif p.identifier in used_providers:
                     # is_allowed might have changed, e.g. after add-on selection
-                    del self.cart_session['payment']
+                    self.cart_session['payments'] = [p for p in self.cart_session['payments'] if p['provider'] != p.identifier]
 
         return True
 
@@ -1239,9 +1330,13 @@ class ConfirmStep(CartMixin, AsyncAction, TemplateFlowStep):
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         ctx['cart'] = self.get_cart(answers=True)
-        if self.payment_provider:
-            ctx['payment'] = self.payment_provider.checkout_confirm_render(self.request)
-            ctx['payment_provider'] = self.payment_provider
+
+        selected_payments = self.current_selected_payments(ctx['cart']['total'])
+        ctx['payments'] = [
+            (p, p['pprov'].checkout_confirm_render(self.request))
+            for p in selected_payments
+        ]
+
         ctx['require_approval'] = any(cp.requires_approval(invoice_address=self.invoice_address) for cp in ctx['cart']['positions'])
         ctx['addr'] = self.invoice_address
         ctx['confirm_messages'] = self.confirm_messages
@@ -1326,7 +1421,7 @@ class ConfirmStep(CartMixin, AsyncAction, TemplateFlowStep):
 
         return self.do(
             self.request.event.id,
-            payment_provider=self.payment_provider.identifier if self.payment_provider else None,
+            payments=self.cart_session['payments'],
             positions=[p.id for p in self.positions],
             email=self.cart_session.get('email'),
             locale=translation.get_language(),
@@ -1340,9 +1435,14 @@ class ConfirmStep(CartMixin, AsyncAction, TemplateFlowStep):
 
     def get_success_message(self, value):
         create_empty_cart_id(self.request)
+        if isinstance(value, dict):
+            for w in value.get('warnings', []):
+                messages.warning(self.request, w)
         return None
 
     def get_success_url(self, value):
+        if isinstance(value, dict):
+            value = value['order_id']
         order = Order.objects.get(id=value)
         return self.get_order_url(order)
 

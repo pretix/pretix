@@ -4,7 +4,35 @@
 {% load bootstrap3 %}
 {% load rich_text %}
 {% block inner %}
-    <p>{% trans "Please select how you want to pay." %}</p>
+    {% if current_payments %}
+        <p>{% trans "You already selected the following payment methods:" %}</p>
+        <form method="post">
+            {% csrf_token %}
+            <div class="list-group">
+                {% for p in current_payments %}
+                    <div class="list-group-item">
+                        <div class="row">
+                            <div class="col-xs-9">
+                                {{ p.provider_name }}
+                            </div>
+                            <div class="col-xs-2 text-right">
+                                {{ p.payment_amount|money:request.event.currency }}
+                            </div>
+                            <div class="col-xs-1 text-right">
+                                <button name="remove_payment" value="{{ p.id }}" title="{% trans "Remove payment" %}"
+                                    class="btn btn-link btn-xs">
+                                    <span class="fa fa-trash text-danger"></span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </form>
+        <p>{% trans "Please select how you want to pay the remaining balance:" %}</p>
+    {% else %}
+        <p>{% trans "Please select how you want to pay." %}</p>
+    {% endif %}
     {% if event.settings.payment_explanation %}
         {{ event.settings.payment_explanation|rich_text }}
     {% endif %}
