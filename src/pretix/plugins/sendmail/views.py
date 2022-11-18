@@ -137,9 +137,14 @@ class SenderView(EventPermissionRequiredMixin, FormView):
         orders = qs.filter(statusq)
 
         opq = OrderPosition.objects.filter(
+            Q(item_id__in=[i.pk for i in form.cleaned_data.get('items')]) | Q(Exists(
+                OrderPosition.objects.filter(
+                    addon_to_id=OuterRef('pk'),
+                    item_id__in=[i.pk for i in form.cleaned_data.get('items')]
+                )
+            )),
             order=OuterRef('pk'),
             canceled=False,
-            item_id__in=[i.pk for i in form.cleaned_data.get('items')],
         )
 
         if form.cleaned_data.get('filter_checkins'):
@@ -149,7 +154,7 @@ class SenderView(EventPermissionRequiredMixin, FormView):
                 opq = opq.alias(
                     any_checkins=Exists(
                         Checkin.all.filter(
-                            position_id=OuterRef('pk'),
+                            Q(position_id=OuterRef('pk')) | Q(position__addon_to_id=OuterRef('pk')),
                             successful=True
                         )
                     )
@@ -159,7 +164,7 @@ class SenderView(EventPermissionRequiredMixin, FormView):
                 opq = opq.alias(
                     matching_checkins=Exists(
                         Checkin.all.filter(
-                            position_id=OuterRef('pk'),
+                            Q(position_id=OuterRef('pk')) | Q(position__addon_to_id=OuterRef('pk')),
                             list_id__in=[i.pk for i in form.cleaned_data.get('checkin_lists', [])],
                             successful=True
                         )
