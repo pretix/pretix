@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-11-07 15:22+0000\n"
 "PO-Revision-Date: 2022-11-19 02:00+0000\n"
-"Last-Translator: David Vaz <davidmgvaz@gmail.com>\n"
+"Last-Translator: tlm06 <tlm_pg06@hotmail.com>\n"
 "Language-Team: Portuguese (Portugal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/pt_PT/>\n"
 "Language: pt_PT\n"
@@ -4251,9 +4251,9 @@ msgstr ""
 "disponível para sua conveniência."
 
 #: pretix/base/models/orders.py:225
-#, fuzzy
 msgid "We'll show you this order to be due for a follow-up on this day."
-msgstr "Mostraremos a você que você deve ter um acompanhamento neste dia."
+msgstr ""
+"Vamos mostrar-lhe este pedido para ser para um acompanhamento neste dia."
 
 #: pretix/base/models/orders.py:231
 msgid ""
