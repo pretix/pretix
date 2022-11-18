@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-11-07 15:22+0000\n"
-"PO-Revision-Date: 2022-11-17 22:00+0000\n"
+"PO-Revision-Date: 2022-11-18 12:08+0000\n"
 "Last-Translator: tlm06 <tlm_pg06@hotmail.com>\n"
 "Language-Team: Portuguese (Portugal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/pt_PT/>\n"
@@ -3591,27 +3591,22 @@ msgstr ""
 "valor correspondente ao preço do produto."
 
 #: pretix/base/models/items.py:525
-#, fuzzy
 msgid "Allowed membership types"
 msgstr "Tipos de associação permitidos"
 
 #: pretix/base/models/items.py:530 pretix/base/models/items.py:829
-#, fuzzy
 msgid ""
 "Do not show this unless the customer is logged in and has a valid "
 "membership. Be aware that this means it will never be visible in the widget."
 msgstr ""
-"Não mostre isso a menos que o cliente esteja conectado e tenha uma "
-"associação válida. Esteja ciente de que isso significa que nunca será "
-"visível no widget."
+"Não mostrar a menos que o cliente esteja logado e tenha uma associação "
+"válida. Esteja ciente que isto significa que nunca será visível no widget."
 
 #: pretix/base/models/items.py:539
-#, fuzzy
 msgid "This product creates a membership of type"
 msgstr "Este produto cria uma associação do tipo"
 
 #: pretix/base/models/items.py:542
-#, fuzzy
 msgid ""
 "The duration of the membership is the same as the duration of the event or "
 "event series date"
@@ -3620,12 +3615,10 @@ msgstr ""
 "ou eventos"
 
 #: pretix/base/models/items.py:546
-#, fuzzy
 msgid "Membership duration in days"
 msgstr "Duração da associação em dias"
 
 #: pretix/base/models/items.py:550
-#, fuzzy
 msgid "Membership duration in months"
 msgstr "Duração da associação em meses"
 
@@ -3669,12 +3662,10 @@ msgid "This is shown below the variation name in lists."
 msgstr "Isto é mostrado abaixo do nome de variação em listas."
 
 #: pretix/base/models/items.py:812
-#, fuzzy
 msgid "Require approval"
 msgstr "Exigir aprovação"
 
 #: pretix/base/models/items.py:814
-#, fuzzy
 msgid ""
 "If this variation is part of an order, the order will be put into an "
 "\"approval\" state and will need to be confirmed by you before it can be "
@@ -3682,29 +3673,25 @@ msgid ""
 "only available to specific groups."
 msgstr ""
 "Se essa variação fizer parte de um pedido, o pedido será colocado em um "
-"estado de \"aprovação\" e precisará ser confirmado por você antes que ele "
-"possa ser pago e concluído. Você pode usar isso, por exemplo Para ingressos "
-"com desconto que estão disponíveis apenas para grupos específicos."
+"estado de \"aprovação\" e precisará ser confirmado antes que possa ser pago "
+"e concluído. Pode usar isto, por exemplo para ingressos com desconto que "
+"estão disponíveis apenas para grupos específicos."
 
 #: pretix/base/models/items.py:824 pretix/control/navigation.py:546
 #: pretix/control/templates/pretixcontrol/organizers/membershiptypes.html:4
 #: pretix/control/templates/pretixcontrol/organizers/membershiptypes.html:6
-#, fuzzy
 msgid "Membership types"
 msgstr "Tipos de associação"
 
 #: pretix/base/models/items.py:836
-#, fuzzy
 msgid "This variation will not be sold before the given date."
-msgstr "Essa variação não será vendida antes da data fornecida."
+msgstr "Esta variação não será vendida antes da data fornecida."
 
 #: pretix/base/models/items.py:841
-#, fuzzy
 msgid "This variation will not be sold after the given date."
-msgstr "Essa variação não será vendida após a data fornecida."
+msgstr "Esta variação não será vendida após a data fornecida."
 
 #: pretix/base/models/items.py:846 pretix/control/forms/item.py:705
-#, fuzzy
 msgid ""
 "The sales channel selection for the product as a whole takes precedence, so "
 "if a sales channel is selected here but not on product level, the variation "
@@ -3715,17 +3702,15 @@ msgstr ""
 "produto, a variação não estará disponível."
 
 #: pretix/base/models/items.py:851
-#, fuzzy
 msgid "Show only if a matching voucher is redeemed."
-msgstr "Mostre apenas se um voucher correspondente for resgatado."
+msgstr "Mostrar apenas se um voucher correspondente for resgatado."
 
 #: pretix/base/models/items.py:853
-#, fuzzy
 msgid ""
 "This variation will be hidden from the event page until the user enters a "
 "voucher that unlocks this variation."
 msgstr ""
-"Essa variação será oculta da página do evento até que o usuário insira um "
+"Esta variação será oculta da página do evento até que o utilizador insira um "
 "voucher que desbloqueie essa variação."
 
 #: pretix/base/models/items.py:860 pretix/base/models/vouchers.py:262
@@ -3792,7 +3777,6 @@ msgstr "Variação empacotada"
 
 #: pretix/base/models/items.py:1131
 #: pretix/control/templates/pretixcontrol/order/transactions.html:22
-#, fuzzy
 msgid "Quantity"
 msgstr "Quantidade"
 
@@ -3880,7 +3864,6 @@ msgid "Question"
 msgstr "Questão"
 
 #: pretix/base/models/items.py:1254 pretix/base/models/items.py:1482
-#, fuzzy
 msgid ""
 "The identifier may only contain letters, numbers, dots, dashes, and "
 "underscores."
@@ -3916,10 +3899,9 @@ msgstr ""
 "Pergunte durante o check-in em vez de no processo de compra de bilhetes"
 
 #: pretix/base/models/items.py:1285
-#, fuzzy
 msgid "Not supported by all check-in apps for all question types."
 msgstr ""
-"Não suportado por todos os aplicativos de check-in para todos os tipos de "
+"Não suportado por todas as aplicações de check-in para todos os tipos de "
 "perguntas."
 
 #: pretix/base/models/items.py:1289
@@ -3937,7 +3919,6 @@ msgstr "Imprimir resposta nas facturas"
 
 #: pretix/base/models/items.py:1302 pretix/base/models/items.py:1308
 #: pretix/base/models/items.py:1314
-#, fuzzy
 msgid "Minimum value"
 msgstr "Valor mínimo"
 
@@ -3949,23 +3930,20 @@ msgstr "Atualmente não suportado nas nossas aplicações e durante o check-in"
 
 #: pretix/base/models/items.py:1305 pretix/base/models/items.py:1311
 #: pretix/base/models/items.py:1317
-#, fuzzy
 msgid "Maximum value"
 msgstr "Valor máximo"
 
 #: pretix/base/models/items.py:1321
-#, fuzzy
 msgid "Validate file to be a portrait"
-msgstr "Validar o arquivo para ser um retrato"
+msgstr "Validar o ficheiro para ser um retrato"
 
 #: pretix/base/models/items.py:1322
-#, fuzzy
 msgid ""
 "If checked, files must be images with an aspect ratio of 3:4. This is "
 "commonly used for photos printed on badges."
 msgstr ""
-"Se verificado, os arquivos devem ser imagens com uma proporção de 3: 4. Isso "
-"é comumente usado para fotos impressas em crachás."
+"Se marcado, os ficheiros devem ser imagens com uma proporção de 3: 4. Isso é "
+"usado frequentemente para fotos impressas em crachás."
 
 #: pretix/base/models/items.py:1375
 msgid "An answer to this question is required to proceed."
@@ -3981,21 +3959,18 @@ msgid "The number is to low."
 msgstr "O número é demasiado baixo."
 
 #: pretix/base/models/items.py:1419
-#, fuzzy
 msgid "The number is to high."
-msgstr "O número é alto."
+msgstr "O número é demasiado alto."
 
 #: pretix/base/models/items.py:1422
 msgid "Invalid number input."
 msgstr "Número introduzido inválido."
 
 #: pretix/base/models/items.py:1429 pretix/base/models/items.py:1453
-#, fuzzy
 msgid "Please choose a later date."
 msgstr "Escolha uma data posterior."
 
 #: pretix/base/models/items.py:1431 pretix/base/models/items.py:1455
-#, fuzzy
 msgid "Please choose an earlier date."
 msgstr "Escolha uma data anterior."
 
@@ -4053,20 +4028,18 @@ msgstr "Variações"
 
 #: pretix/base/models/items.py:1615
 #: pretix/control/templates/pretixcontrol/items/quotas.html:70
-#, fuzzy
 msgid "Ignore this quota when determining event availability"
 msgstr "Ignore esta cota ao determinar a disponibilidade de eventos"
 
 #: pretix/base/models/items.py:1616
-#, fuzzy
 msgid ""
 "If you enable this, this quota will be ignored when determining event "
 "availability in your event calendar. This is useful e.g. for merchandise "
 "that is added to each event but should not stop the event from being shown "
 "as sold out."
 msgstr ""
-"Se você ativar isso, esta cota será ignorada ao determinar a disponibilidade "
-"de eventos no seu calendário de eventos. Isso é útil, por exemplo Para "
+"Se ativar isto, esta cota será ignorada ao determinar a disponibilidade de "
+"eventos no seu calendário de eventos. Isto é útil, por exemplo Para "
 "mercadorias que são adicionadas a cada evento, mas não devem impedir que o "
 "evento seja mostrado como esgotado."
 
@@ -4163,7 +4136,7 @@ msgid "Quota {val}"
 msgstr "Quota {val}"
 
 #: pretix/base/models/log.py:206
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Discount {val}"
 msgstr "Desconto {val}"
 
@@ -4183,36 +4156,31 @@ msgid "Tax rule {val}"
 msgstr "Regra fiscal {val}"
 
 #: pretix/base/models/memberships.py:44
-#, fuzzy
 msgid "Membership is transferable"
 msgstr "A associação é transferível"
 
 #: pretix/base/models/memberships.py:45
-#, fuzzy
 msgid ""
 "If this is selected, the membership can be used to purchase tickets for "
 "multiple persons. If not, the attendee name always needs to stay the same."
 msgstr ""
-"Se isso for selecionado, a associação poderá ser usada para comprar "
-"ingressos para várias pessoas. Caso contrário, o nome do participante sempre "
-"precisa permanecer o mesmo."
+"Se for selecionado, a associação poderá ser usada para comprar bilhetes para "
+"várias pessoas. Caso contrário, o nome do participante precisa sempre de "
+"permanecer o mesmo."
 
 #: pretix/base/models/memberships.py:50
-#, fuzzy
 msgid "Parallel usage is allowed"
 msgstr "O uso paralelo é permitido"
 
 #: pretix/base/models/memberships.py:51
-#, fuzzy
 msgid ""
 "If this is selected, the membership can be used to purchase tickets for "
 "events happening at the same time. Note that this will only check for an "
 "identical start time of the events, not for any overlap between events."
 msgstr ""
-"Se isso for selecionado, a associação poderá ser usada para comprar "
-"ingressos para eventos que acontecem ao mesmo tempo. Observe que isso verá "
-"apenas um horário de início idêntico dos eventos, não para qualquer "
-"sobreposição entre os eventos."
+"Se selecionado, a associação poderá ser usada para comprar bilhetes para "
+"eventos que acontecem ao mesmo tempo. Isto apenas verificará um horário de "
+"início idêntico dos eventos, não para qualquer sobreposição entre eles."
 
 #: pretix/base/models/memberships.py:56 pretix/base/models/vouchers.py:196
 #: pretix/control/views/vouchers.py:109
@@ -4221,9 +4189,8 @@ msgid "Maximum usages"
 msgstr "Usos máximos"
 
 #: pretix/base/models/memberships.py:57
-#, fuzzy
 msgid "Number of times this membership can be used in a purchase."
-msgstr "Número de vezes que essa associação pode ser usada em uma compra."
+msgstr "Número de vezes que esta associação pode ser usada numa compra."
 
 #: pretix/base/models/memberships.py:123
 #: pretix/control/templates/pretixcontrol/items/question.html:26
@@ -4240,9 +4207,8 @@ msgstr "Cancelado"
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:97
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:20
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:127
-#, fuzzy
 msgid "Membership type"
-msgstr "Tipo de Membro"
+msgstr "Tipo de membro"
 
 #: pretix/base/models/orders.py:161
 msgid "pending"
@@ -4441,12 +4407,11 @@ msgstr "Motivo do reembolso"
 #: pretix/base/models/orders.py:1925
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:198
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:200
-#, fuzzy
 msgid ""
 "May be shown to the end user or used e.g. as part of a payment reference."
 msgstr ""
-"Pode ser mostrado ao usuário final ou usado, por exemplo como parte de uma "
-"referência de pagamento."
+"Pode ser mostrado ao utilizador final ou usado, por exemplo como parte de "
+"uma referência de pagamento."
 
 #: pretix/base/models/orders.py:2036
 msgid "Payment fee"
@@ -4659,7 +4624,6 @@ msgid "Seat {number}"
 msgstr "Lugar {number}"
 
 #: pretix/base/models/tax.py:145
-#, fuzzy
 msgid "Official name"
 msgstr "Nome oficial"
 
@@ -4672,12 +4636,11 @@ msgid "The configured product prices include the tax amount"
 msgstr "Os preços dos produtos configurados incluem o valor do imposto"
 
 #: pretix/base/models/tax.py:159
-#, fuzzy
 msgid ""
 "Keep gross amount constant if the tax rate changes based on the invoice "
 "address"
 msgstr ""
-"Mantenha o valor bruto constante se a taxa de imposto mudar com base no "
+"Manter o valor bruto constante se a taxa de imposto mudar com base no "
 "endereço da fatura"
 
 #: pretix/base/models/tax.py:163
@@ -4773,7 +4736,6 @@ msgid "Redeemed"
 msgstr "Resgatado"
 
 #: pretix/base/models/vouchers.py:205
-#, fuzzy
 msgid "Minimum usages"
 msgstr "Usos mínimos"
 
@@ -4950,7 +4912,6 @@ msgstr ""
 "máximo de usos abaixo deste número."
 
 #: pretix/base/models/vouchers.py:365
-#, fuzzy
 msgid ""
 "The maximum number of usages may not be lower than the minimum number of "
 "usages."
@@ -5045,9 +5006,8 @@ msgid "This product is currently not available."
 msgstr "Este produto não está disponível no momento."
 
 #: pretix/base/models/waitinglist.py:180
-#, fuzzy
 msgid "No seat with this product is currently available."
-msgstr "Nenhum assento com este produto está atualmente disponível."
+msgstr "Nenhum lugar com este produto está atualmente disponível."
 
 #: pretix/base/models/waitinglist.py:183
 msgid "A voucher has already been sent to this person."
@@ -5196,7 +5156,6 @@ msgid "Invalid setting for column \"{header}\"."
 msgstr "Definição inválida para a coluna \"{header}\"."
 
 #: pretix/base/orderimport.py:176
-#, fuzzy
 msgid "Enter a valid phone number."
 msgstr "Digite um número de telefone válido."
 
@@ -5311,9 +5270,8 @@ msgid "Please enter a valid sales channel."
 msgstr "Por favor, indique um canal de vendas válido."
 
 #: pretix/base/orderimport.py:686
-#, fuzzy
 msgid "Multiple matching seats were found."
-msgstr "Vários assentos correspondentes foram encontrados."
+msgstr "Vários lugares correspondentes foram encontrados."
 
 #: pretix/base/orderimport.py:688
 msgid "No matching seat was found."
@@ -5659,7 +5617,6 @@ msgid "Order position number"
 msgstr "Número da posição da encomenda"
 
 #: pretix/base/pdf.py:106
-#, fuzzy
 msgid "Order code and position number"
 msgstr "Código do pedido e número de posição"
 
@@ -5694,12 +5651,10 @@ msgid "Sample product – sample variation"
 msgstr "Exemplo de produto - exemplo de variação"
 
 #: pretix/base/pdf.py:134
-#, fuzzy
 msgid "Product variation description"
 msgstr "Descrição da variação do produto"
 
 #: pretix/base/pdf.py:135
-#, fuzzy
 msgid "Sample product variation description"
 msgstr "Descrição da variação do produto de amostra"
 
@@ -5746,24 +5701,20 @@ msgstr ""
 "Atlantis"
 
 #: pretix/base/pdf.py:177
-#, fuzzy
 msgid "Attendee street"
 msgstr "Rua do participante"
 
 #: pretix/base/pdf.py:182
-#, fuzzy
 msgid "Attendee ZIP code"
 msgstr "Código postal do participante"
 
 #: pretix/base/pdf.py:187
-#, fuzzy
 msgid "Attendee city"
 msgstr "Cidade do participante"
 
 #: pretix/base/pdf.py:192
-#, fuzzy
 msgid "Attendee state"
-msgstr "Estado dos participantes"
+msgstr "Região do participante"
 
 #: pretix/base/pdf.py:197
 msgid "Attendee country"
@@ -5816,7 +5767,6 @@ msgid "20:00"
 msgstr "20:00"
 
 #: pretix/base/pdf.py:255
-#, fuzzy
 msgid "Event begin weekday"
 msgstr "Evento começa a dia da semana"
 
@@ -5838,7 +5788,6 @@ msgid "22:00"
 msgstr "22:00"
 
 #: pretix/base/pdf.py:284
-#, fuzzy
 msgid "Event end weekday"
 msgstr "Evento final do dia da semana"
 
@@ -5871,7 +5820,6 @@ msgid "Invoice address company"
 msgstr "Endereço de empresa de factura"
 
 #: pretix/base/pdf.py:331
-#, fuzzy
 msgid "Sesame Street 42"
 msgstr "Rua Sésamo 42"
 
@@ -5884,9 +5832,8 @@ msgid "Sample city"
 msgstr "Exemplo de cidade"
 
 #: pretix/base/pdf.py:345
-#, fuzzy
 msgid "Invoice address state"
-msgstr "Estado do endereço da fatura"
+msgstr "Localidade do endereço da fatura"
 
 #: pretix/base/pdf.py:346
 #, fuzzy
@@ -5928,7 +5875,6 @@ msgid "Event organizer info text"
 msgstr "Informações do organizador do evento"
 
 #: pretix/base/pdf.py:377 pretix/base/pdf.py:378
-#, fuzzy
 msgid "Event info text"
 msgstr "Texto de informação do evento"
 
@@ -5974,19 +5920,16 @@ msgid "Seat: seat number"
 msgstr "Lugar: número do lugar"
 
 #: pretix/base/pdf.py:428
-#, fuzzy
 msgid "Date and time of first scan"
-msgstr "Data e hora da primeira varredura"
+msgstr "Data e hora do primeiro scan"
 
 #: pretix/base/pdf.py:434
-#, fuzzy
 msgid "Gift card: Issuance date"
-msgstr "Cartão de presente: data de emissão"
+msgstr "Cartão-presente: data de emissão"
 
 #: pretix/base/pdf.py:439
-#, fuzzy
 msgid "Gift card: Expiration date"
-msgstr "Cartão de presente: data de validade"
+msgstr "Cartão-presente: data de validade"
 
 #: pretix/base/pdf.py:480 pretix/base/pdf.py:518 pretix/base/pdf.py:524
 #: pretix/plugins/badges/exporters.py:313
@@ -6001,7 +5944,6 @@ msgid "<Answer: {question}>"
 msgstr "<Resposta: {question}>"
 
 #: pretix/base/pdf.py:565
-#, fuzzy
 msgid "Attendee name for salutation"
 msgstr "Nome do participante para saudação"
 
@@ -6015,7 +5957,6 @@ msgid "Attendee name: {part}"
 msgstr "Nome do participante: {part}"
 
 #: pretix/base/pdf.py:588
-#, fuzzy
 msgid "Invoice address name for salutation"
 msgstr "Nome do endereço da fatura para saudação"
 
@@ -6082,7 +6023,6 @@ msgstr ""
 
 #: pretix/base/services/cancelevent.py:221
 #: pretix/base/services/cancelevent.py:279
-#, fuzzy
 msgid "Event canceled"
 msgstr "Evento cancelado"
 
