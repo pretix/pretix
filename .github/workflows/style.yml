@@ -15,7 +15,7 @@ on:
 jobs:
   isort:
     name: isort
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v2
       - name: Set up Python 3.8
@@ -36,7 +36,7 @@ jobs:
         working-directory: ./src
   flake:
     name: flake8
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v2
       - name: Set up Python 3.8
@@ -57,7 +57,7 @@ jobs:
         working-directory: ./src
   licenseheader:
     name: licenseheaders
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v2
       - name: Set up Python 3.8
