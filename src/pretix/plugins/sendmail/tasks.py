@@ -31,12 +31,12 @@
 # Unless required by applicable law or agreed to in writing, software distributed under the Apache License 2.0 is
 # distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations under the License.
-
+from django.db.models import Exists, OuterRef, Q
 from i18nfield.strings import LazyI18nString
 
 from pretix.base.email import get_email_context
 from pretix.base.i18n import language
-from pretix.base.models import Event, InvoiceAddress, Order, User
+from pretix.base.models import Checkin, Event, InvoiceAddress, Order, User
 from pretix.base.services.mail import SendMailException, mail
 from pretix.base.services.tasks import ProfiledEventTask
 from pretix.celery_app import app
@@ -61,7 +61,19 @@ def send_mails(event: Event, user: int, subject: dict, message: dict, orders: li
             ia = InvoiceAddress(order=o)
 
         if recipients in ('both', 'attendees'):
-            for p in o.positions.prefetch_related('addons'):
+            for p in o.positions.annotate(
+                any_checkins=Exists(
+                    Checkin.objects.filter(
+                        Q(position_id=OuterRef('pk')) | Q(position__addon_to_id=OuterRef('pk')),
+                    )
+                ),
+                matching_checkins=Exists(
+                    Checkin.objects.filter(
+                        Q(position_id=OuterRef('pk')) | Q(position__addon_to_id=OuterRef('pk')),
+                        list_id__in=checkin_lists or []
+                    )
+                ),
+            ).prefetch_related('addons'):
                 if p.addon_to_id is not None:
                     continue
 
@@ -69,10 +81,9 @@ def send_mails(event: Event, user: int, subject: dict, message: dict, orders: li
                     continue
 
                 if filter_checkins:
-                    checkins = list(p.checkins.all())
                     allowed = (
-                        (not_checked_in and not checkins)
-                        or (any(c.list_id in checkin_lists for c in checkins))
+                        (not_checked_in and not p.any_checkins)
+                        or p.matching_checkins
                     )
                     if not allowed:
                         continue
