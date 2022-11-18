@@ -453,12 +453,15 @@ class CartManager:
             if cp.is_bundled:
                 bundle = cp.addon_to.item.bundles.filter(bundled_item=cp.item, bundled_variation=cp.variation).first()
                 if bundle:
-                    listed_price = bundle.designated_price or 0
+                    listed_price = bundle.designated_price or Decimal('0.00')
                 else:
                     listed_price = cp.price
                 price_after_voucher = listed_price
             else:
-                listed_price = get_listed_price(cp.item, cp.variation, cp.subevent)
+                if cp.addon_to_id and is_included_for_free(cp.item, cp.addon_to):
+                    listed_price = Decimal('0.00')
+                else:
+                    listed_price = get_listed_price(cp.item, cp.variation, cp.subevent)
                 if cp.voucher:
                     price_after_voucher = cp.voucher.calculate_price(listed_price)
                 else:
