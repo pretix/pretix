@@ -62,6 +62,7 @@ from pretix.base.services.memberships import validate_memberships_in_order
 from pretix.base.services.orders import perform_order
 from pretix.base.settings import PERSON_NAME_SCHEMES
 from pretix.base.signals import validate_cart_addons
+from pretix.base.templatetags.country import country_name
 from pretix.base.templatetags.phone_format import phone_format
 from pretix.base.templatetags.rich_text import rich_text_snippet
 from pretix.base.views.tasks import AsyncAction
@@ -1028,7 +1029,7 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
                 for a in addresses:
                     data = {
                         "_pk": a.pk,
-                        "_country_for_address": a.country.name,
+                        "_country_for_address": country_name(a.country, self.event.settings.country_names_common),
                         "_state_for_address": a.state_for_address,
                         "_name": a.name,
                         "is_business": "business" if a.is_business else "individual",

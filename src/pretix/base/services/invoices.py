@@ -62,6 +62,7 @@ from pretix.base.models.tax import EU_CURRENCIES
 from pretix.base.services.tasks import TransactionAwareTask
 from pretix.base.settings import GlobalSettingsObject
 from pretix.base.signals import invoice_line_text, periodic_task
+from pretix.base.templatetags.country import country_name
 from pretix.celery_app import app
 from pretix.helpers.database import rolledback_transaction
 from pretix.helpers.models import modelcopy
@@ -122,7 +123,7 @@ def build_invoice(invoice: Invoice) -> Invoice:
             invoice.invoice_to = "\n".join(
                 a.strip() for a in addr_template.format(
                     i=ia,
-                    country=ia.country.name if ia.country else ia.country_old,
+                    country=country_name(ia.country, invoice.event.settings.country_names_common) if ia.country else ia.country_old,
                     state=ia.state_for_address
                 ).split("\n") if a.strip()
             )

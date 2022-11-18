@@ -1,6 +1,7 @@
 {% extends "pretixpresale/event/base.html" %}
 {% load i18n %}
 {% load bootstrap3 %}
+{% load country %}
 {% load eventurl %}
 {% load eventsignal %}
 {% block title %}{% trans "Review order" %}{% endblock %}
@@ -86,7 +87,7 @@
                                 <dt>{% trans "ZIP code and city" %}</dt>
                                 <dd>{{ addr.zipcode }} {{ addr.city }}</dd>
                                 <dt>{% trans "Country" %}</dt>
-                                <dd>{{ addr.country.name }}</dd>
+                                <dd>{{ addr.country|country_name:request.event.settings.country_names_common }}</dd>
                                 {% if addr.state %}
                                     <dt>{% trans "State" context "address" %}</dt>
                                     <dd>{{ addr.state_name }}</dd>

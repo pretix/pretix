@@ -2,6 +2,7 @@
 {% load eventurl %}
 {% load safelink %}
 {% load rich_text %}
+{% load country %}
 {% load money %}
 {% blocktrans asvar s_taxes %}taxes{% endblocktrans %}
 <div role="table" aria-label="{% trans "Your cart" %}" aria-describedby="{% if cart.is_ordered %}cart-description{% else%}cart-deadline{% endif %}" aria-rowcount="{{ cart.positions|length|add:2 }}">
@@ -167,7 +168,7 @@
                                         <span data-toggle="tooltip" title="{% trans "Attendee address" %}">
                                             {{ line.street|default_if_none:""|linebreaksbr }}<br>
                                             {{ line.zipcode|default_if_none:"" }} {{ line.city|default_if_none:"" }}<br>
-                                            {{ line.country.name|default_if_none:"" }}
+                                            {{ line.country|country_name:event.settings.country_names_common }}
                                             {% if line.state %}<br>{{ line.state }}{% endif %}
                                         </span>
                                     </dd>

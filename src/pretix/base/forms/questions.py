@@ -87,7 +87,7 @@ from pretix.control.forms import (
     ExtFileField, ExtValidationMixin, SizeValidationMixin, SplitDateTimeField,
 )
 from pretix.helpers.countries import (
-    CachedCountries, get_phone_prefixes_sorted_and_localized,
+    get_cached_countries_class, get_phone_prefixes_sorted_and_localized,
 )
 from pretix.helpers.escapejson import escapejson_attr
 from pretix.helpers.i18n import get_format_without_seconds
@@ -630,7 +630,7 @@ class BaseQuestionsForm(forms.Form):
             )
             country = (cartpos.country if cartpos else orderpos.country) or guess_country(event)
             add_fields['country'] = CountryField(
-                countries=CachedCountries
+                countries=get_cached_countries_class(common_names=event.settings.country_names_common),
             ).formfield(
                 required=event.settings.attendee_addresses_required and not self.all_optional,
                 label=_('Country'),
@@ -726,7 +726,7 @@ class BaseQuestionsForm(forms.Form):
                 )
             elif q.type == Question.TYPE_COUNTRYCODE:
                 field = CountryField(
-                    countries=CachedCountries,
+                    countries=get_cached_countries_class(common_names=event.settings.country_names_common),
                     blank=True, null=True, blank_label=' ',
                 ).formfield(
                     label=label, required=required,
@@ -974,7 +974,7 @@ class BaseInvoiceAddressForm(forms.ModelForm):
                 str(_('If you are registered in Switzerland, you can enter your UID instead.')),
             ])
 
-        self.fields['country'].choices = CachedCountries()
+        self.fields['country'].choices = get_cached_countries_class(event.settings.country_names_common)()
 
         c = [('', pgettext_lazy('address', 'Select state'))]
         fprefix = self.prefix + '-' if self.prefix else ''

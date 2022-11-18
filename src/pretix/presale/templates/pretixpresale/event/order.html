@@ -3,6 +3,7 @@
 {% load bootstrap3 %}
 {% load eventsignal %}
 {% load money %}
+{% load country %}
 {% load expiresformat %}
 {% load eventurl %}
 {% load phone_format %}
@@ -324,7 +325,9 @@
                             <dt>{% trans "ZIP code and city" %}</dt>
                             <dd>{{ order.invoice_address.zipcode }} {{ order.invoice_address.city }}</dd>
                             <dt>{% trans "Country" %}</dt>
-                            <dd>{{ order.invoice_address.country.name|default:order.invoice_address.country_old }}</dd>
+                            <dd>
+                                {{ order.invoice_address.country|country_name:request.event.settings.country_names_common|default:order.invoice_address.country_old }}
+                            </dd>
                             {% if order.invoice_address.state %}
                                 <dt>{% trans "State" context "address" %}</dt>
                                 <dd>{{ order.invoice_address.state_name }}</dd>

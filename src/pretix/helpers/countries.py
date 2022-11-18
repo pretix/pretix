@@ -35,6 +35,7 @@ _collator = pyuca.Collator()
 class CachedCountries(Countries):
     _cached_lists = {}
     cache_subkey = None
+    common_names = True
 
     def __iter__(self):
         """
@@ -42,7 +43,7 @@ class CachedCountries(Countries):
         django-countries performs a unicode-aware sorting based on pyuca which is incredibly
         slow.
         """
-        cache_key = "countries:all:{}".format(get_language_without_region())
+        cache_key = "countries:all:{}:{}".format(get_language_without_region(), self.common_names)
         if self.cache_subkey:
             cache_key += ":" + self.cache_subkey
         if cache_key in self._cached_lists:
@@ -59,6 +60,17 @@ class CachedCountries(Countries):
         self._cached_lists[cache_key] = val
         cache.set(cache_key, val, 3600 * 24 * 30)
         yield from val
+
+
+class CachedCountriesOfficialNames(CachedCountries):
+    common_names = False
+
+
+def get_cached_countries_class(common_names=True):
+    if common_names:
+        return CachedCountries
+    else:
+        return CachedCountriesOfficialNames
 
 
 class FastCountryField(CountryField):
