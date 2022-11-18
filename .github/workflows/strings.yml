@@ -14,7 +14,7 @@ on:
 
 jobs:
   compile:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     name: Check gettext syntax
     steps:
       - uses: actions/checkout@v2
