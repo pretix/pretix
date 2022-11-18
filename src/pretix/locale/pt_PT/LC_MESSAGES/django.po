@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-11-07 15:22+0000\n"
-"PO-Revision-Date: 2022-11-18 12:08+0000\n"
-"Last-Translator: tlm06 <tlm_pg06@hotmail.com>\n"
+"PO-Revision-Date: 2022-11-18 12:28+0000\n"
+"Last-Translator: David Vaz <davidmgvaz@gmail.com>\n"
 "Language-Team: Portuguese (Portugal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/pt_PT/>\n"
 "Language: pt_PT\n"
@@ -6305,14 +6305,14 @@ msgid "Unknown reason"
 msgstr "Razão desconhecida"
 
 #: pretix/base/services/checkin.py:207
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Only allowed before {datetime}"
-msgstr "Permitido apenas antes {DateTime}"
+msgstr "Permitido apenas antes {datetime}"
 
 #: pretix/base/services/checkin.py:209
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Only allowed after {datetime}"
-msgstr "Somente permitido após {DateTime}"
+msgstr "Permitido após {datetime}"
 
 #: pretix/base/services/checkin.py:212
 msgid "Ticket type not allowed"
@@ -6373,9 +6373,9 @@ msgid "Sunday"
 msgstr "Domingo"
 
 #: pretix/base/services/checkin.py:268
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{variable} is not {value}"
-msgstr "{variável} não é {value}"
+msgstr "{variable} não é {value}"
 
 #: pretix/base/services/checkin.py:270
 #, python-brace-format
@@ -6388,9 +6388,9 @@ msgid "Minimum {variable} exceeded"
 msgstr "Mínimo {variable} excedido"
 
 #: pretix/base/services/checkin.py:274
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{variable} is {value}"
-msgstr "{variável} é {value}"
+msgstr "{variable} é {value}"
 
 #: pretix/base/services/checkin.py:714
 msgid "This order position has been canceled."
@@ -6498,7 +6498,7 @@ msgid "New invoice: {number}"
 msgstr "Nova fatura: {number}"
 
 #: pretix/base/services/invoices.py:509
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -6509,10 +6509,10 @@ msgid ""
 msgstr ""
 "Olá,\n"
 "\n"
-"Uma nova fatura para {Event} foi criada, consulte anexado.\n"
+"Uma nova fatura para {event} foi criada, consulte anexo.\n"
 "\n"
-"Estamos enviando este e -mail porque você nos configurou para fazê -lo em "
-"suas configurações de evento."
+"Estamos a enviar este e -mail porque configurou para fazê -lo nas suas "
+"configurações de evento."
 
 #: pretix/base/services/mail.py:247
 #, python-brace-format
@@ -6544,13 +6544,13 @@ msgid "Calendar invite"
 msgstr "Convite do calendário"
 
 #: pretix/base/services/memberships.py:104
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "You selected a membership for the product \"{product}\" which does not "
 "require a membership."
 msgstr ""
-"Você selecionou uma associação para o produto \"{Product}\", que não requer "
-"uma associação."
+"Selecionou uma associação para o produto \"{product}\", que não requer uma "
+"associação."
 
 #: pretix/base/services/memberships.py:112
 #, python-brace-format
@@ -6590,32 +6590,32 @@ msgstr ""
 "um evento que ocorre em {date}."
 
 #: pretix/base/services/memberships.py:173
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "You selected a membership of type \"{type}\", which is not allowed for the "
 "product \"{product}\"."
 msgstr ""
 "Você selecionou uma associação do tipo \"{type}\", que não é permitido para "
-"o produto \"{Product}\"."
+"o produto \"{product}\"."
 
 #: pretix/base/services/memberships.py:182
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "You are trying to use a membership of type \"{type}\" more than {number} "
 "times, which is the maximum amount."
 msgstr ""
-"Você está tentando usar uma associação do tipo \"{tipo}\" mais que {número} "
+"Está a tentar usar uma associação do tipo \"{type}\" mais que {number} "
 "vezes, que é o valor máximo."
 
 #: pretix/base/services/memberships.py:193
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "You are trying to use a membership of type \"{type}\" for an event taking "
 "place at {date}, however you already used the same membership for a "
 "different ticket at the same time."
 msgstr ""
-"Você está tentando usar uma associação do tipo \"{tipo}\" para um evento que "
-"ocorre em {date}, no entanto, você já usou a mesma associação para um ticket "
+"Está a tentar usar uma associação do tipo \"{type}\" para um evento que "
+"ocorre em {date}, no entanto, já usou a mesma associação para um ticket "
 "diferente ao mesmo tempo."
 
 #: pretix/base/services/orderimport.py:113
