@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-11-07 15:22+0000\n"
-"PO-Revision-Date: 2022-11-18 12:32+0000\n"
-"Last-Translator: David Vaz <davidmgvaz@gmail.com>\n"
+"PO-Revision-Date: 2022-11-18 15:32+0000\n"
+"Last-Translator: tlm06 <tlm_pg06@hotmail.com>\n"
 "Language-Team: Portuguese (Portugal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/pt_PT/>\n"
 "Language: pt_PT\n"
@@ -417,7 +417,7 @@ msgstr "Loja online"
 #: pretix/base/context.py:45
 #, python-brace-format
 msgid "powered by {name} based on <a {a_attr}>pretix</a>"
-msgstr "powered by {name} based on <a {a_attr}>pretix</a>"
+msgstr "desenvolvido por {name} baseado em <a {a_attr}>pretix</a>"
 
 #: pretix/base/context.py:52
 #, python-format
@@ -6145,15 +6145,15 @@ msgstr ""
 "menos %(number)s de produtos correspondentes."
 
 #: pretix/base/services/cart.py:115
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "The voucher code \"%(voucher)s\" can only be used if you select at least "
 "%(number)s matching products. We have therefore removed some positions from "
 "your cart that can no longer be purchased like this."
 msgstr ""
-"O código do voucher \" %(voucher) s\" só pode ser usado se você selecionar "
-"pelo menos %(número) de produtos correspondentes. Portanto, removemos "
-"algumas posições do seu carrinho que não podem mais ser compradas assim."
+"O código do voucher \"%(voucher)s\" só pode ser usado se selecionar pelo "
+"menos %(number)s de produtos correspondentes. Portanto, removemos algumas "
+"posições do seu carrinho que não podem ser compradas assim."
 
 #: pretix/base/services/cart.py:118
 msgid ""
@@ -6315,32 +6315,26 @@ msgid "Ticket type not allowed"
 msgstr "Tipo de bilhete não é permitido"
 
 #: pretix/base/services/checkin.py:231
-#, fuzzy
 msgid "time since last entry"
-msgstr "Tempo desde a última entrada"
+msgstr "tempo desde a última entrada"
 
 #: pretix/base/services/checkin.py:232
-#, fuzzy
 msgid "time since first entry"
-msgstr "Tempo desde a primeira entrada"
+msgstr "tempo desde a primeira entrada"
 
 #: pretix/base/services/checkin.py:233
-#, fuzzy
 msgid "number of days with an entry"
-msgstr "Número de dias com uma entrada"
+msgstr "número de dias com uma entrada"
 
 #: pretix/base/services/checkin.py:234
-#, fuzzy
 msgid "number of entries"
 msgstr "número de entradas"
 
 #: pretix/base/services/checkin.py:235
-#, fuzzy
 msgid "number of entries today"
-msgstr "Número de entradas hoje"
+msgstr "número de entradas hoje"
 
 #: pretix/base/services/checkin.py:236
-#, fuzzy
 msgid "week day"
 msgstr "dia da semana"
 
@@ -6425,9 +6419,8 @@ msgid "Your export did not contain any data."
 msgstr "Sua exportação não contém dados."
 
 #: pretix/base/services/export.py:129
-#, fuzzy
 msgid "You do not have sufficient permission to perform this export."
-msgstr "Você não tem permissão suficiente para executar essa exportação."
+msgstr "Não tem permissão suficiente para executar essa exportação."
 
 #: pretix/base/services/invoices.py:106
 #, python-brace-format
@@ -6534,7 +6527,6 @@ msgid "You are receiving this email because you placed an order for {event}."
 msgstr "Está recebendo este e-mail porque colocou uma encomenda para {event}."
 
 #: pretix/base/services/mail.py:435
-#, fuzzy
 msgctxt "attachment_filename"
 msgid "Calendar invite"
 msgstr "Convite do calendário"
@@ -6558,32 +6550,27 @@ msgstr ""
 "selecionada."
 
 #: pretix/base/services/memberships.py:141
-#, fuzzy
 msgid ""
 "You selected a membership that is connected to a different customer account."
-msgstr ""
-"Você selecionou uma associação conectada a uma conta de cliente diferente."
+msgstr "Selecionou uma associação conectada a uma conta de cliente diferente."
 
 #: pretix/base/services/memberships.py:146
-#, fuzzy
 msgid "You selected membership that has been canceled."
-msgstr "Você selecionou a associação que foi cancelada."
+msgstr "Selecionou uma associação que foi cancelada."
 
 #: pretix/base/services/memberships.py:151
-#, fuzzy
 msgid "You can only use a test mode membership for test mode tickets."
 msgstr ""
-"Você só pode usar uma associação ao modo de teste para tickets de modo de "
-"teste."
+"Só pode usar uma associação no modo de teste para tickets de modo de teste."
 
 #: pretix/base/services/memberships.py:158
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "You selected a membership that is valid from {start} to {end}, but selected "
 "an event taking place at {date}."
 msgstr ""
-"Você selecionou uma associação válida de {start} para {end}, mas selecionou "
-"um evento que ocorre em {date}."
+"Selecionou uma associação válida de {start} a {end}, mas selecionou um "
+"evento que ocorre em {date}."
 
 #: pretix/base/services/memberships.py:173
 #, python-brace-format
@@ -6670,7 +6657,6 @@ msgstr ""
 "Removemos os artigos em excesso do seu carrinho."
 
 #: pretix/base/services/orders.py:117
-#, fuzzy
 msgid "The booking period has ended."
 msgstr "O período de reserva terminou."
 
@@ -6716,10 +6702,8 @@ msgstr ""
 "para este item. Removemos este item do seu carrinho."
 
 #: pretix/base/services/orders.py:129
-#, fuzzy
 msgid "You need a valid voucher code to order one of the products."
-msgstr ""
-"Você precisa de um código de voucher válido para solicitar um dos produtos."
+msgstr "Precisa de um código de voucher válido para solicitar um dos produtos."
 
 #: pretix/base/services/orders.py:130
 #, fuzzy
@@ -8266,7 +8250,7 @@ msgstr ""
 
 #: pretix/base/settings.py:1587 pretix/control/forms/event.py:1477
 msgid "Imprint URL"
-msgstr "Imprint URL"
+msgstr "URL de impressão"
 
 #: pretix/base/settings.py:1588 pretix/control/forms/event.py:1478
 msgid ""
@@ -9935,7 +9919,7 @@ msgstr ""
 #: pretix/base/templates/pretixbase/email/email_footer.html:3
 #, python-format
 msgid "powered by <a %(a_attr)s>pretix</a>"
-msgstr "powered by <a %(a_attr)s>pretix</a>"
+msgstr "desenvolvido por <a %(a_attr)s>pretix</a>"
 
 #: pretix/base/templates/pretixbase/email/notification.html:55
 #: pretix/base/templates/pretixbase/email/notification.txt:14
@@ -11384,7 +11368,7 @@ msgstr "texto de detalhe do banner de mensagem global"
 
 #: pretix/control/forms/global_settings.py:80
 msgid "OpenCage API key for geocoding"
-msgstr "OpenCage API key for geocoding"
+msgstr "OpenCage API key para geocoding"
 
 #: pretix/control/forms/global_settings.py:84
 #, fuzzy
@@ -11393,7 +11377,7 @@ msgstr "Chave da API do MapQuest para geocodificação"
 
 #: pretix/control/forms/global_settings.py:88
 msgid "Leaflet tiles URL pattern"
-msgstr "Leaflet tiles URL pattern"
+msgstr "Caminho do URL para camadas Leaflet"
 
 #: pretix/control/forms/global_settings.py:89
 #: pretix/control/forms/global_settings.py:94
@@ -11403,7 +11387,7 @@ msgstr "por exemplo. {sample}"
 
 #: pretix/control/forms/global_settings.py:93
 msgid "Leaflet tiles attribution"
-msgstr "Leaflet tiles attribution"
+msgstr "Atribuição camadas Leaflet"
 
 #: pretix/control/forms/global_settings.py:110
 msgid "Perform update checks"
@@ -20057,7 +20041,7 @@ msgstr "Adicionar"
 
 #: pretix/control/templates/pretixcontrol/organizers/team_members.html:88
 msgid "API tokens"
-msgstr "API tokens"
+msgstr "Tokens da API"
 
 #: pretix/control/templates/pretixcontrol/organizers/team_members.html:132
 msgid "Team history"
@@ -20307,7 +20291,7 @@ msgstr "Altura (mm)"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:189
 msgid "Background PDF"
-msgstr "Background PDF"
+msgstr "Fundo do PDF"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:192
 msgid "Create empty background"
