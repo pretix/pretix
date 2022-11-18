@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-11-07 15:22+0000\n"
 "PO-Revision-Date: 2022-11-18 12:28+0000\n"
-"Last-Translator: David Vaz <davidmgvaz@gmail.com>\n"
+"Last-Translator: tlm06 <tlm_pg06@hotmail.com>\n"
 "Language-Team: Portuguese (Portugal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/pt_PT/>\n"
 "Language: pt_PT\n"
@@ -6096,12 +6096,10 @@ msgstr ""
 #: pretix/base/services/cart.py:104 pretix/base/services/orders.py:116
 #: pretix/presale/templates/pretixpresale/event/index.html:157
 #: pretix/presale/views/waiting.py:102 pretix/presale/views/widget.py:681
-#, fuzzy
 msgid "The booking period for this event has not yet started."
 msgstr "O período de reserva para este evento ainda não começou."
 
 #: pretix/base/services/cart.py:105
-#, fuzzy
 msgid "The booking period for this event has ended."
 msgstr "O período de reserva para este evento terminou."
 
@@ -6114,7 +6112,6 @@ msgstr ""
 "contrario nenhuma nova encomenda pode ser criada."
 
 #: pretix/base/services/cart.py:107
-#, fuzzy
 msgid ""
 "The booking period for this event has not yet started. The affected "
 "positions have been removed from your cart."
@@ -6123,7 +6120,6 @@ msgstr ""
 "afetadas foram removidas do seu carrinho."
 
 #: pretix/base/services/cart.py:109 pretix/base/services/orders.py:132
-#, fuzzy
 msgid ""
 "The booking period for one of the events in your cart has ended. The "
 "affected positions have been removed from your cart."
@@ -6140,13 +6136,13 @@ msgid "This voucher code is not known in our database."
 msgstr "Este código do voucher não é conhecido na nossa base de dados."
 
 #: pretix/base/services/cart.py:113 pretix/base/services/orders.py:118
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "The voucher code \"%(voucher)s\" can only be used if you select at least "
 "%(number)s matching products."
 msgstr ""
-"O código do voucher \" %(voucher) s\" só pode ser usado se você selecionar "
-"pelo menos %(número) de produtos correspondentes."
+"O código do voucher \"%(voucher)s\" só pode ser usado se selecionar pelo "
+"menos %(number)s de produtos correspondentes."
 
 #: pretix/base/services/cart.py:115
 #, fuzzy, python-format
@@ -8976,7 +8972,7 @@ msgid "Your ticket is ready for download: {code}"
 msgstr "O seu bilhete está pronto para download: {code}"
 
 #: pretix/base/settings.py:2088
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "Hello {attendee_name},\n"
 "\n"
@@ -8988,15 +8984,15 @@ msgid ""
 "    Best regards,\n"
 "    Your {event} team"
 msgstr ""
-"Olá {participante_name},\n"
+"Olá {attendee_name},\n"
 "\n"
-"    você está registrado para {event}.\n"
+"    está registado para {event}.\n"
 "\n"
-"    Se você ainda não o fez, pode baixar seu ingresso aqui:\n"
+"    Se ainda não o fez, pode fazer download do seu bilhete aqui:\n"
 "    {url}\n"
 "\n"
 "    Atenciosamente,\n"
-"    Sua equipe {Event}"
+"    Equipa {Event}"
 
 #: pretix/base/settings.py:2104
 #, python-brace-format
