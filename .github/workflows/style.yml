@@ -12,6 +12,9 @@ on:
       - 'src/pretix/locale/**'
       - 'src/pretix/static/**'
 
+permissions:
+  contents: read  #  to fetch code (actions/checkout)
+
 jobs:
   isort:
     name: isort

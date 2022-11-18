@@ -12,6 +12,9 @@ on:
       - 'doc/**'
       - 'src/pretix/locale/**'
 
+permissions:
+  contents: read  #  to fetch code (actions/checkout)
+
 jobs:
   test:
     runs-on: ubuntu-22.04
