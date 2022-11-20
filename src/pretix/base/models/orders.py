@@ -2737,6 +2737,7 @@ class CartPosition(AbstractPosition):
             tax_rule=self.item.tax_rule,
             invoice_address=invoice_address,
             bundled_sum=sum([b.price_after_voucher for b in bundled_positions]),
+            is_bundled=self.is_bundled,
         )
         if line_price.gross != self.line_price_gross or line_price.rate != self.tax_rate:
             self.line_price_gross = line_price.gross
