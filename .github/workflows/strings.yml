@@ -43,7 +43,7 @@ jobs:
         run: python manage.py compilejsi18n
         working-directory: ./src
   spelling:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     name: Spellcheck
     steps:
       - uses: actions/checkout@v2
@@ -58,7 +58,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pip-
       - name: Install system packages
-        run: sudo apt update && sudo apt install enchant hunspell hunspell-de-de aspell-en aspell-de
+        run: sudo apt update && sudo apt install enchant-2 hunspell hunspell-de-de aspell-en aspell-de
       - name: Install Dependencies
         run: pip3 install -e ".[dev]"
         working-directory: ./src
