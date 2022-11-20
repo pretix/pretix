@@ -15,7 +15,7 @@
                 <span class="fa fa-sign-out" aria-hidden="true"></span>
             </a>
         {% else %}
-            <a href="{% abseventurl request.organizer "presale:organizer.customer.login" %}?next={% if request.event_domain %}{{ request.scheme }}://{{ request.get_host }}{% endif %}{{ request.path|urlencode }}%3F{{ request.META.QUERY_STRING|urlencode }}{% if request.event_domain %}&request_cross_domain_customer_auth=true{% endif %}">
+            <a href="{% abseventurl request.organizer "presale:organizer.customer.login" %}{% if request.resolver_match.url_name != "organizer.customer.login" %}?next={% if request.event_domain %}{{ request.scheme }}://{{ request.get_host }}{% endif %}{{ request.path|urlencode }}%3F{{ request.META.QUERY_STRING|urlencode }}{% endif %}{% if request.event_domain %}&request_cross_domain_customer_auth=true{% endif %}">
                 {% trans "Log in" %}</a>
 
         {% endif %}
