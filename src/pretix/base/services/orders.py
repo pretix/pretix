@@ -794,7 +794,7 @@ def _check_positions(event: Event, now_dt: datetime, positions: List[CartPositio
 
 
 def _get_fees(positions: List[CartPosition], payment_requests: List[dict], address: InvoiceAddress,
-              meta_info: dict, event: Event):
+              meta_info: dict, event: Event, require_approval=False):
     fees = []
     total = sum([c.price for c in positions])
 
@@ -840,7 +840,7 @@ def _get_fees(positions: List[CartPosition], payment_requests: List[dict], addre
             fees.append(pf)
             p['fee'] = pf
 
-    if total_remaining != Decimal('0.00'):
+    if total_remaining != Decimal('0.00') and not require_approval:
         raise OrderError(_("This selected payment methods do not cover the total balance."))
 
     return fees
@@ -860,7 +860,8 @@ def _create_order(event: Event, email: str, positions: List[CartPosition], now_d
         except ValidationError as e:
             raise OrderError(e.message)
 
-        fees = _get_fees(positions, payment_requests, address, meta_info, event)
+        require_approval = any(p.requires_approval(invoice_address=address) for p in positions)
+        fees = _get_fees(positions, payment_requests, address, meta_info, event, require_approval=require_approval)
         total = pending_sum = sum([c.price for c in positions]) + sum([c.value for c in fees])
 
         order = Order(
@@ -873,7 +874,7 @@ def _create_order(event: Event, email: str, positions: List[CartPosition], now_d
             total=total,
             testmode=True if sales_channel.testmode_supported and event.testmode else False,
             meta_info=json.dumps(meta_info or {}),
-            require_approval=any(p.requires_approval(invoice_address=address) for p in positions),
+            require_approval=require_approval,
             sales_channel=sales_channel.identifier,
             customer=customer,
         )
@@ -912,7 +913,7 @@ def _create_order(event: Event, email: str, positions: List[CartPosition], now_d
 
         if payment_requests and not order.require_approval:
             for p in payment_requests:
-                if p['payment_amount'] > Decimal('0.00'):
+                if not p.get('multi_use_supported') or p['payment_amount'] > Decimal('0.00'):
                     payments.append(order.payments.create(
                         state=OrderPayment.PAYMENT_STATE_CREATED,
                         provider=p['provider'],
@@ -1009,7 +1010,7 @@ def _perform_order(event: Event, payment_requests: List[dict], position_ids: Lis
 
     validate_order.send(
         event,
-        payment_provider=payment_requests[0]['provider'],  # only for backwards compatibility
+        payment_provider=payment_requests[0]['provider'] if payment_requests else None,  # only for backwards compatibility
         payments=payment_requests,
         email=email,
         positions=positions,

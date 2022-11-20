@@ -674,7 +674,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
         assert cr1.price == Decimal('27.37')
         assert cr1.tax_rate == Decimal('0.00')
 
-        self._set_session('payment', 'banktransfer')
+        self._set_payment()
 
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
@@ -738,7 +738,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
         assert cr1.price == Decimal('40.00')
         assert cr1.tax_rate == Decimal('0.00')
 
-        self._set_session('payment', 'banktransfer')
+        self._set_payment()
 
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
@@ -1350,7 +1350,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
         }, follow=True)
         self.assertRedirects(response, '/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug),
                              target_status_code=200)
-        assert '-€20.00' in response.content.decode()
+        assert '€20.00' in response.content.decode()
         assert '3.00' in response.content.decode()
         assert 'alert-success' in response.content.decode()
 
@@ -1359,7 +1359,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
         }, follow=True)
         self.assertRedirects(response, '/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug),
                              target_status_code=200)
-        assert '-€20.00' in response.content.decode()
+        assert '€20.00' in response.content.decode()
         assert '3.00' in response.content.decode()
 
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
@@ -1370,7 +1370,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
             assert o.payments.get(provider='giftcard').amount == Decimal('20.00')
             assert o.payments.get(provider='banktransfer').amount == Decimal('3.00')
 
-        assert '-€20.00' in response.content.decode()
+        assert '€20.00' in response.content.decode()
         assert '3.00' in response.content.decode()
 
     def test_giftcard_full_with_multiple(self):
@@ -1394,8 +1394,8 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
         }, follow=True)
         self.assertRedirects(response, '/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug),
                              target_status_code=200)
-        assert '-€20.00' in response.content.decode()
-        assert '3.00' in response.content.decode()
+        assert '€20.00' in response.content.decode()
+        assert '€3.00' in response.content.decode()
         assert 'alert-success' in response.content.decode()
 
         response = self.client.post('/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug), {
@@ -1432,8 +1432,6 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
         }, follow=True)
         self.assertRedirects(response, '/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug),
                              target_status_code=200)
-        assert '-€23.00' in response.content.decode()
-        assert '0.00' in response.content.decode()
 
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
@@ -1461,7 +1459,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
         }, follow=True)
         self.assertRedirects(response, '/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug),
                              target_status_code=200)
-        assert '-€20.00' in response.content.decode()
+        assert '€20.00' in response.content.decode()
         assert '3.00' in response.content.decode()
         assert 'alert-success' in response.content.decode()
 
@@ -1470,24 +1468,20 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
         }, follow=True)
         self.assertRedirects(response, '/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug),
                              target_status_code=200)
-        assert '-€20.00' in response.content.decode()
+        assert '€20.00' in response.content.decode()
         assert '3.00' in response.content.decode()
 
         gc.transactions.create(value=-2)
 
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
-        self.assertEqual(len(doc.select(".alert-danger")), 1)
-        assert '-€18.00' in response.content.decode()
-        assert '5.00' in response.content.decode()
-
-        response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
-        doc = BeautifulSoup(response.content.decode(), "lxml")
-        self.assertEqual(len(doc.select(".thank-you")), 1)
         with scopes_disabled():
             o = Order.objects.last()
+            assert o.status == Order.STATUS_PENDING
             assert o.payments.get(provider='giftcard').amount == Decimal('18.00')
+            assert o.payments.get(provider='giftcard').state == OrderPayment.PAYMENT_STATE_FAILED
             assert o.payments.get(provider='banktransfer').amount == Decimal('5.00')
+            assert o.payments.get(provider='banktransfer').state == OrderPayment.PAYMENT_STATE_CREATED
 
     def test_giftcard_expired(self):
         gc = self.orga.issued_gift_cards.create(currency="EUR", expires=now() - timedelta(days=1))
@@ -1554,8 +1548,6 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
         }, follow=True)
         self.assertRedirects(response, '/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug),
                              target_status_code=200)
-        assert '-€23.00' in response.content.decode()
-        assert '0.00' in response.content.decode()
 
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
@@ -1663,7 +1655,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
         self.assertRedirects(response, '/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug),
                              target_status_code=200)
 
-        self._set_session('payment', 'banktransfer')
+        self._set_payment()
 
         self.event.settings.set('attendee_names_asked', True)
         self.event.settings.set('attendee_names_required', True)
@@ -1706,7 +1698,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 event=self.event, cart_id=self.session_key, item=self.ticket,
                 price=23, expires=now() + timedelta(minutes=10), subevent=se
             )
-        self._set_session('payment', 'banktransfer')
+        self._set_payment()
 
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
@@ -1798,7 +1790,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 event=self.event, cart_id=self.session_key, item=self.ticket,
                 price=42, listed_price=42, price_after_voucher=42, expires=now() + timedelta(minutes=10)
             )
-        self._set_session('payment', 'banktransfer')
+        self._set_payment()
 
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
@@ -1815,7 +1807,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 event=self.event, cart_id=self.session_key, item=self.ticket,
                 price=0, listed_price=0, price_after_voucher=0, expires=now() + timedelta(minutes=10)
             )
-        self._set_session('payment', 'free')
+        self._set_payment()
 
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
@@ -1835,7 +1827,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 event=self.event, cart_id=self.session_key, item=self.ticket,
                 price=0, listed_price=0, price_after_voucher=0, expires=now() + timedelta(minutes=10)
             )
-        self._set_session('payment', 'free')
+        self._set_payment()
 
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
@@ -1854,7 +1846,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 event=self.event, cart_id=self.session_key, item=self.ticket,
                 price=23, expires=now() + timedelta(minutes=10)
             )
-        self._set_session('payment', 'banktransfer')
+        self._set_payment()
 
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
@@ -1880,7 +1872,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 event=self.event, cart_id=self.session_key, item=self.ticket,
                 price=23, expires=now() - timedelta(minutes=10), subevent=se
             )
-        self._set_session('payment', 'banktransfer')
+        self._set_payment()
 
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
@@ -1896,7 +1888,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 event=self.event, cart_id=self.session_key, item=self.ticket,
                 price=23, expires=now() - timedelta(minutes=10)
             )
-        self._set_session('payment', 'banktransfer')
+        self._set_payment()
 
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
@@ -1918,7 +1910,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 event=self.event, cart_id=self.session_key, item=self.ticket,
                 price=23, expires=now() - timedelta(minutes=10), subevent=se
             )
-        self._set_session('payment', 'banktransfer')
+        self._set_payment()
 
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
@@ -1939,7 +1931,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 event=self.event, cart_id=self.session_key, item=self.ticket,
                 price=23, expires=now() - timedelta(minutes=10), subevent=se
             )
-        self._set_session('payment', 'banktransfer')
+        self._set_payment()
 
         self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         with scopes_disabled():
@@ -1958,7 +1950,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 event=self.event, cart_id=self.session_key, item=self.workshop2, variation=self.workshop2b,
                 price=23, expires=now() - timedelta(minutes=10), subevent=se
             )
-        self._set_session('payment', 'banktransfer')
+        self._set_payment()
 
         self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         with scopes_disabled():
@@ -1976,7 +1968,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 event=self.event, cart_id=self.session_key, item=self.ticket,
                 price=23, expires=now() - timedelta(minutes=10), subevent=se
             )
-        self._set_session('payment', 'banktransfer')
+        self._set_payment()
 
         self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         with scopes_disabled():
@@ -1995,11 +1987,21 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 event=self.event, cart_id=self.session_key, item=self.workshop2, variation=self.workshop2b,
                 price=23, expires=now() - timedelta(minutes=10), subevent=se
             )
-        self._set_session('payment', 'banktransfer')
+        self._set_payment()
 
         self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         with scopes_disabled():
             assert not CartPosition.objects.filter(id=cr1.id).exists()
+
+    def _set_payment(self):
+        self._set_session('payments', [{
+            "id": "test1",
+            "provider": "banktransfer",
+            "max_value": None,
+            "min_value": None,
+            "multi_use_supported": False,
+            "info_data": {},
+        }])
 
     def test_addon_price_included(self):
         with scopes_disabled():
@@ -2015,7 +2017,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 addon_to=cp1
             )
 
-        self._set_session('payment', 'banktransfer')
+        self._set_payment()
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
         self.assertEqual(len(doc.select(".thank-you")), 1)
@@ -2031,7 +2033,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 event=self.event, cart_id=self.session_key, item=self.ticket,
                 price=23, expires=now() - timedelta(minutes=10)
             )
-        self._set_session('payment', 'banktransfer')
+        self._set_payment()
 
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
@@ -2051,7 +2053,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 event=self.event, cart_id=self.session_key, item=self.ticket,
                 price=23, expires=now() - timedelta(minutes=10)
             )
-        self._set_session('payment', 'banktransfer')
+        self._set_payment()
 
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
@@ -2069,7 +2071,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 event=self.event, cart_id=self.session_key, item=self.ticket,
                 price=23, expires=now() - timedelta(minutes=10)
             )
-        self._set_session('payment', 'banktransfer')
+        self._set_payment()
 
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
@@ -2088,7 +2090,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 event=self.event, cart_id=self.session_key, item=self.ticket,
                 price=23, expires=now() - timedelta(minutes=10)
             )
-        self._set_session('payment', 'banktransfer')
+        self._set_payment()
 
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
@@ -2108,7 +2110,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 listed_price=23, price_after_voucher=23, custom_price_input=23, price=23,
                 expires=now() - timedelta(minutes=10)
             )
-        self._set_session('payment', 'banktransfer')
+        self._set_payment()
 
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
@@ -2125,7 +2127,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 event=self.event, cart_id=self.session_key, item=self.ticket,
                 price=12, expires=now() + timedelta(minutes=10), voucher=v
             )
-        self._set_session('payment', 'banktransfer')
+        self._set_payment()
 
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
@@ -2147,7 +2149,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 event=self.event, cart_id=self.session_key, item=self.ticket,
                 price=12, expires=now() + timedelta(minutes=10), voucher=v
             )
-        self._set_session('payment', 'banktransfer')
+        self._set_payment()
 
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
@@ -2163,7 +2165,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 event=self.event, cart_id=self.session_key, item=self.ticket,
                 price=12, expires=now() + timedelta(minutes=10)
             )
-        self._set_session('payment', 'banktransfer')
+        self._set_payment()
 
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
@@ -2177,7 +2179,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 event=self.event, cart_id=self.session_key, item=self.ticket,
                 price=13, expires=now() - timedelta(minutes=10), voucher=v
             )
-        self._set_session('payment', 'banktransfer')
+        self._set_payment()
 
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
@@ -2194,7 +2196,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 event=self.event, cart_id=self.session_key, item=self.ticket,
                 price=12, expires=now() - timedelta(minutes=10), voucher=v
             )
-        self._set_session('payment', 'banktransfer')
+        self._set_payment()
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
         self.assertIn("has already been", doc.select(".alert-danger")[0].text)
@@ -2207,7 +2209,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 event=self.event, cart_id=self.session_key, item=self.ticket,
                 price=12, expires=now() - timedelta(minutes=10), voucher=v
             )
-        self._set_session('payment', 'banktransfer')
+        self._set_payment()
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
         self.assertIn("has already been", doc.select(".alert-danger")[0].text)
@@ -2224,7 +2226,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 event=self.event, cart_id=self.session_key, item=self.ticket,
                 price=12, expires=now() - timedelta(minutes=10), voucher=v
             )
-        self._set_session('payment', 'banktransfer')
+        self._set_payment()
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
         self.assertIn("has already been", doc.select(".alert-danger")[0].text)
@@ -2243,7 +2245,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 event=self.event, cart_id=self.session_key, item=self.ticket,
                 price=12, expires=now() - timedelta(minutes=10), voucher=v
             )
-        self._set_session('payment', 'banktransfer')
+        self._set_payment()
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         with scopes_disabled():
             doc = BeautifulSoup(response.content.decode(), "lxml")
@@ -2271,7 +2273,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 event=self.event, cart_id=self.session_key, item=self.ticket,
                 price=12, expires=now() - timedelta(minutes=10), voucher=v
             )
-        self._set_session('payment', 'banktransfer')
+        self._set_payment()
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
         self.assertEqual(len(doc.select(".thank-you")), 1)
@@ -2298,7 +2300,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 event=self.event, cart_id=self.session_key, item=self.ticket,
                 price=12, expires=now() - timedelta(minutes=10), voucher=v
             )
-        self._set_session('payment', 'banktransfer')
+        self._set_payment()
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
         self.assertIn("has already been", doc.select(".alert-danger")[0].text)
@@ -2314,7 +2316,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 event=self.event, cart_id=self.session_key, item=self.ticket,
                 price=12, expires=now() + timedelta(minutes=10), voucher=v
             )
-        self._set_session('payment', 'banktransfer')
+        self._set_payment()
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
         self.assertIn("at least 2", doc.select(".alert-danger")[0].text)
@@ -2327,7 +2329,6 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
         self.client.get('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug))  # required for session['shown_total']
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
-        print(doc)
         self.assertEqual(len(doc.select(".thank-you")), 1)
         with scopes_disabled():
             self.assertEqual(Order.objects.count(), 1)
@@ -2343,7 +2344,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 event=self.event, cart_id=self.session_key, item=self.ticket,
                 price=12, expires=now() - timedelta(minutes=10), voucher=v
             )
-        self._set_session('payment', 'banktransfer')
+        self._set_payment()
 
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
@@ -2363,7 +2364,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 event=self.event, cart_id=self.session_key, item=self.ticket,
                 price=12, expires=now() - timedelta(minutes=10)
             )
-        self._set_session('payment', 'banktransfer')
+        self._set_payment()
 
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
@@ -2396,7 +2397,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 event=self.event, cart_id=self.session_key, item=self.ticket,
                 price=12, expires=now() - timedelta(minutes=10), voucher=v
             )
-            self._set_session('payment', 'banktransfer')
+        self._set_payment()
 
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
@@ -2418,7 +2419,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 event=self.event, cart_id=self.session_key, item=self.ticket,
                 price=23, expires=now() + timedelta(minutes=10), voucher=v
             )
-        self._set_session('payment', 'banktransfer')
+        self._set_payment()
 
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
@@ -2446,7 +2447,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 event=self.event, cart_id=self.session_key, item=self.ticket,
                 listed_price=23, price_after_voucher=23, price=18.4, expires=now() - timedelta(minutes=10),
             )
-        self._set_session('payment', 'banktransfer')
+        self._set_payment()
 
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
@@ -2468,7 +2469,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 event=self.event, cart_id=self.session_key, item=self.ticket,
                 listed_price=23, price_after_voucher=23, price=23, expires=now() - timedelta(minutes=10),
             )
-        self._set_session('payment', 'banktransfer')
+        self._set_payment()
 
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
@@ -2491,7 +2492,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 event=self.event, cart_id=self.session_key, item=self.ticket,
                 price=23, expires=now() + timedelta(minutes=10),
             )
-        self._set_session('payment', 'banktransfer')
+        self._set_payment()
 
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
@@ -2530,7 +2531,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 event=self.event, cart_id=self.session_key, item=self.ticket,
                 price=23, expires=now() - timedelta(minutes=10), subevent=se2
             )
-        self._set_session('payment', 'banktransfer')
+        self._set_payment()
 
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
@@ -2550,7 +2551,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 event=self.event, cart_id=self.session_key, item=self.ticket,
                 price=23, expires=now() - timedelta(minutes=10)
             )
-        self._set_session('payment', 'banktransfer')
+        self._set_payment()
 
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
@@ -2566,7 +2567,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 event=self.event, cart_id=self.session_key, item=self.ticket,
                 price=23, expires=now() + timedelta(minutes=10)
             )
-        self._set_session('payment', 'banktransfer')
+        self._set_payment()
 
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
@@ -2580,7 +2581,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 event=self.event, cart_id=self.session_key, item=self.ticket,
                 price=23, expires=now() + timedelta(minutes=10)
             )
-        self._set_session('payment', 'banktransfer')
+        self._set_payment()
 
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
@@ -2593,7 +2594,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 event=self.event, cart_id=self.session_key, item=self.ticket,
                 price=23, expires=now() + timedelta(minutes=10)
             )
-        self._set_session('payment', 'banktransfer')
+        self._set_payment()
 
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
@@ -2607,7 +2608,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 event=self.event, cart_id=self.session_key, item=self.ticket,
                 price=23, expires=now() + timedelta(minutes=10)
             )
-        self._set_session('payment', 'banktransfer')
+        self._set_payment()
 
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
@@ -2623,7 +2624,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 event=self.event, cart_id=self.session_key, item=self.ticket,
                 price=23, expires=now() + timedelta(minutes=10)
             )
-        self._set_session('payment', 'banktransfer')
+        self._set_payment()
 
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
@@ -2639,7 +2640,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 event=self.event, cart_id=self.session_key, item=self.ticket,
                 price=23, expires=now() + timedelta(minutes=10)
             )
-        self._set_session('payment', 'banktransfer')
+        self._set_payment()
 
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
@@ -2655,7 +2656,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 event=self.event, cart_id=self.session_key, item=self.ticket,
                 price=23, expires=now() + timedelta(minutes=10)
             )
-        self._set_session('payment', 'banktransfer')
+        self._set_payment()
 
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
@@ -2671,7 +2672,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 event=self.event, cart_id=self.session_key, item=self.ticket,
                 price=23, expires=now() - timedelta(minutes=10)
             )
-        self._set_session('payment', 'banktransfer')
+        self._set_payment()
 
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
@@ -2686,7 +2687,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 event=self.event, cart_id=self.session_key, item=self.ticket,
                 price=23, expires=now() - timedelta(minutes=10)
             )
-        self._set_session('payment', 'banktransfer')
+        self._set_payment()
 
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
@@ -2703,7 +2704,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 event=self.event, cart_id=self.session_key, item=self.ticket, voucher=v,
                 price=23, expires=now() - timedelta(minutes=10)
             )
-        self._set_session('payment', 'banktransfer')
+        self._set_payment()
 
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
@@ -2718,7 +2719,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 event=self.event, cart_id=self.session_key, item=self.ticket, voucher=v,
                 price=23, expires=now() - timedelta(minutes=10)
             )
-        self._set_session('payment', 'banktransfer')
+        self._set_payment()
 
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
@@ -2735,7 +2736,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 event=self.event, cart_id=self.session_key, item=self.ticket, voucher=v,
                 price=23, expires=now() + timedelta(minutes=10)
             )
-        self._set_session('payment', 'banktransfer')
+        self._set_payment()
 
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
@@ -2750,7 +2751,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 event=self.event, cart_id=self.session_key, item=self.ticket, voucher=v,
                 price=23, expires=now() + timedelta(minutes=10)
             )
-        self._set_session('payment', 'banktransfer')
+        self._set_payment()
 
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
@@ -2965,8 +2966,8 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 event=self.event, cart_id=self.session_key, item=self.ticket,
                 price=23, expires=now() + timedelta(minutes=10), subevent=se
             )
-            self._set_session('payment', 'banktransfer')
 
+        self._set_payment()
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
         self.assertGreaterEqual(len(doc.select(".alert-danger")), 1)
@@ -2984,8 +2985,8 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 event=self.event, cart_id=self.session_key, item=self.ticket,
                 price=23, expires=now() + timedelta(minutes=10), subevent=se
             )
-            self._set_session('payment', 'banktransfer')
 
+        self._set_payment()
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
         self.assertGreaterEqual(len(doc.select(".alert-danger")), 1)
@@ -3004,8 +3005,8 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 event=self.event, cart_id=self.session_key, item=self.ticket,
                 price=23, expires=now() + timedelta(minutes=10), subevent=se
             )
-            self._set_session('payment', 'banktransfer')
 
+        self._set_payment()
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
         self.assertGreaterEqual(len(doc.select(".alert-danger")), 1)
@@ -3023,8 +3024,8 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 event=self.event, cart_id=self.session_key, item=self.ticket,
                 price=23, expires=now() + timedelta(minutes=10), subevent=se
             )
-            self._set_session('payment', 'banktransfer')
 
+        self._set_payment()
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
         self.assertEqual(len(doc.select(".thank-you")), 1)
@@ -3037,8 +3038,8 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 event=self.event, cart_id=self.session_key, item=self.ticket,
                 price=23, expires=now() + timedelta(minutes=10)
             )
-        self._set_session('payment', 'banktransfer')
 
+        self._set_payment()
         response = self.client.get('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         assert "test mode" in response.content.decode()
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
@@ -3054,8 +3055,8 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 event=self.event, cart_id=self.session_key, item=self.ticket,
                 price=23, expires=now() + timedelta(minutes=10)
             )
-        self._set_session('payment', 'banktransfer')
 
+        self._set_payment()
         response = self.client.get('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         assert "test mode" not in response.content.decode()
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
@@ -3218,7 +3219,7 @@ class QuestionsTestCase(BaseCheckoutTestCase, TestCase):
             )
             cp2.answers.create(question=q1, answer='12')
 
-        self._set_session('payment', 'banktransfer')
+        self._set_payment()
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
         self.assertEqual(len(doc.select(".thank-you")), 1)
@@ -3834,7 +3835,7 @@ class CheckoutBundleTest(BaseCheckoutTestCase, TestCase):
             price=0, expires=now() + timedelta(minutes=10), is_bundled=False
         )
 
-        self._set_session('payment', 'banktransfer')
+        self._set_payment()
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
         self.assertEqual(len(doc.select(".thank-you")), 1)
@@ -4085,7 +4086,7 @@ class CustomerCheckoutTestCase(BaseCheckoutTestCase, TestCase):
             self.customer.save()
 
     def _finish(self):
-        self._set_session('payment', 'banktransfer')
+        self._set_payment()
         self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         with scopes_disabled():
             return Order.objects.last()

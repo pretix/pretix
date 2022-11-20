@@ -1185,7 +1185,7 @@ class PaymentStep(CartMixin, TemplateFlowStep):
                     simulated_payments = self.cart_session.get('payments', {})
                     simulated_payments = [p for p in simulated_payments if p.get('multi_use_supported')]
                     simulated_payments.append({
-                        'provider': pprov,
+                        'provider': pprov.identifier,
                         'multi_use_supported': False,
                         'min_value': None,
                         'max_value': None,
@@ -1440,7 +1440,7 @@ class ConfirmStep(CartMixin, AsyncAction, TemplateFlowStep):
 
         return self.do(
             self.request.event.id,
-            payments=self.cart_session['payments'],
+            payments=self.cart_session.get('payments', []),
             positions=[p.id for p in self.positions],
             email=self.cart_session.get('email'),
             locale=translation.get_language(),
