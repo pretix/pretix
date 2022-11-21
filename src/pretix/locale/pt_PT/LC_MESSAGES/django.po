@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-26 09:20+0000\n"
 "PO-Revision-Date: 2023-05-30 21:25+0000\n"
-"Last-Translator: tlm06 <tlm_pg06@hotmail.com>\n"
+"Last-Translator: David Vaz <davidmgvaz@gmail.com>\n"
 "Language-Team: Portuguese (Portugal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/pt_PT/>\n"
 "Language: pt_PT\n"
@@ -4643,8 +4643,7 @@ msgstr ""
 
 #: pretix/base/models/items.py:1510
 msgid "Ask during check-in instead of in the ticket buying process"
-msgstr ""
-"Pergunte durante o check-in em vez de no processo de compra de bilhetes"
+msgstr "Pergunte durante o check-in em vez de no processo de compra de bilhetes"
 
 #: pretix/base/models/items.py:1511
 msgid "Not supported by all check-in apps for all question types."
@@ -4856,8 +4855,7 @@ msgstr "Quotas"
 
 #: pretix/base/models/items.py:1952
 msgid "All variations must belong to an item contained in the items list."
-msgstr ""
-"Todas as variações devem pertencer a um item contido na lista de itens."
+msgstr "Todas as variações devem pertencer a um item contido na lista de itens."
 
 #: pretix/base/models/items.py:1963
 msgid ""
@@ -5666,8 +5664,7 @@ msgstr "Vouchers"
 
 #: pretix/base/models/vouchers.py:338
 msgid "You cannot select a quota that belongs to a different event."
-msgstr ""
-"Não é possível selecionar uma quota que pertence a um evento diferente."
+msgstr "Não é possível selecionar uma quota que pertence a um evento diferente."
 
 #: pretix/base/models/vouchers.py:340
 msgid "You cannot select a quota and a specific product at the same time."
@@ -6179,10 +6176,9 @@ msgid ""
 "Don't forget to set the correct fees above!"
 msgstr ""
 "Recomendamos permitir isto se desejar que seus utilizadores paguem as taxas "
-"de pagamento de seu provedor de pagamento. <a href=\"{docs_url}\" "
-"target=\"_blank\" rel=\"noopener\">Clique aqui para obter informações "
-"detalhadas sobre o que faz.</a> Não se esqueça de definir as taxas corretas "
-"acima!"
+"de pagamento de seu provedor de pagamento. <a href=\"{docs_url}\" target="
+"\"_blank\" rel=\"noopener\">Clique aqui para obter informações detalhadas "
+"sobre o que faz.</a> Não se esqueça de definir as taxas corretas acima!"
 
 #: pretix/base/payment.py:378
 msgid "Text on invoices"
@@ -7077,8 +7073,7 @@ msgstr[1] ""
 #: pretix/base/services/cart.py:155
 msgid ""
 "This voucher code has already been used the maximum number of times allowed."
-msgstr ""
-"Este código do voucher já foi usado o número máximo de vezes permitido."
+msgstr "Este código do voucher já foi usado o número máximo de vezes permitido."
 
 #: pretix/base/services/cart.py:157
 #, python-format
@@ -7202,8 +7197,8 @@ msgid ""
 "You can select every add-ons from the category %(cat)s for the product "
 "%(base)s at most once."
 msgstr ""
-"Pode selecionar todos os add-ons da categoria %(cat)s para o produto "
-"%(base)s no máximo uma vez."
+"Pode selecionar todos os add-ons da categoria %(cat)s para o produto %(base)"
+"s no máximo uma vez."
 
 #: pretix/base/services/cart.py:194
 #, fuzzy
@@ -7219,8 +7214,7 @@ msgstr ""
 
 #: pretix/base/services/cart.py:195
 msgid "One of the products you selected can only be bought part of a bundle."
-msgstr ""
-"Um dos produtos que selecionou só pode ser comprado parte de um pacote."
+msgstr "Um dos produtos que selecionou só pode ser comprado parte de um pacote."
 
 #: pretix/base/services/cart.py:197
 msgid "Please select a valid seat."
@@ -7611,8 +7605,8 @@ msgid ""
 "Error while importing value \"{value}\" for column \"{column}\" in line "
 "\"{line}\": {message}"
 msgstr ""
-"Erro ao importar valor \"{value}\" para a coluna \"{column}\" em linha "
-"\"{line}\": {message}"
+"Erro ao importar valor \"{value}\" para a coluna \"{column}\" em linha \""
+"{line}\": {message}"
 
 #: pretix/base/services/orderimport.py:147
 #, python-brace-format
@@ -10009,8 +10003,8 @@ msgstr ""
 "\n"
 "Temos agora um bilhete pronto para si! Pode resgatá-lo na nossa loja de "
 "bilhetes.\n"
-"dentro das próximas horas {hours} introduzindo o seguinte código de "
-"voucher:\n"
+"dentro das próximas horas {hours} introduzindo o seguinte código de voucher:"
+"\n"
 "\n"
 "{code}\n"
 "\n"
@@ -10524,8 +10518,7 @@ msgstr "Imagem do logotipo"
 
 #: pretix/base/settings.py:2820
 msgid "We will show your logo with a maximal height and width of 2.5 cm."
-msgstr ""
-"Vamos mostrar o seu logotipo com uma altura e largura maxima de 2,5 cm."
+msgstr "Vamos mostrar o seu logotipo com uma altura e largura maxima de 2,5 cm."
 
 #: pretix/base/settings.py:2846 pretix/base/settings.py:2952
 msgid "Info text"
@@ -14286,16 +14279,16 @@ msgid ""
 "Unknown scan of code \"{barcode}…\" at {datetime} for list \"{list}\", type "
 "\"{type}\"."
 msgstr ""
-"Scan de código desconhecido \"{barcode}\" em {datetime} para a lista de "
-"\"{list}\", tipo \"{type}\"."
+"Scan de código desconhecido \"{barcode}\" em {datetime} para a lista de \""
+"{list}\", tipo \"{type}\"."
 
 #: pretix/control/logdisplay.py:236
 #, python-brace-format
 msgid ""
 "Unknown scan of code \"{barcode}…\" for list \"{list}\", type \"{type}\"."
 msgstr ""
-"Scan de código desconhecido \"{barcode}\" para a lista \"{list}\", tipo "
-"\"{type}\"."
+"Scan de código desconhecido \"{barcode}\" para a lista \"{list}\", tipo \""
+"{type}\"."
 
 #: pretix/control/logdisplay.py:247
 #, python-brace-format
@@ -14303,8 +14296,8 @@ msgid ""
 "Scan scan of revoked code \"{barcode}…\" at {datetime} for list \"{list}\", "
 "type \"{type}\", was uploaded."
 msgstr ""
-"Scan de código desconhecido \"{barcode}\" em {datetime} para a lista de "
-"\"{list}\", tipo \"{type}\", foi carregada."
+"Scan de código desconhecido \"{barcode}\" em {datetime} para a lista de \""
+"{list}\", tipo \"{type}\", foi carregada."
 
 #: pretix/control/logdisplay.py:257
 #, python-brace-format
@@ -14312,8 +14305,8 @@ msgid ""
 "Scan of revoked code \"{barcode}\" for list \"{list}\", type \"{type}\", was "
 "uploaded."
 msgstr ""
-"Scan de código excluido \"{barcode}\" para a lista de \"{list}\", tipo "
-"\"{type}, foi carregada."
+"Scan de código excluido \"{barcode}\" para a lista de \"{list}\", tipo \""
+"{type}, foi carregada."
 
 #: pretix/control/logdisplay.py:268
 #, python-brace-format
@@ -15417,8 +15410,8 @@ msgid ""
 "The selected event was not found or you have no permission to administrate "
 "it."
 msgstr ""
-"O evento selecionado não foi encontrado ou não tem permissão para administrá-"
-"lo."
+"O evento selecionado não foi encontrado ou não tem permissão para "
+"administrá-lo."
 
 #: pretix/control/middleware.py:177 pretix/control/middleware.py:187
 msgid ""
@@ -16369,8 +16362,8 @@ msgstr "Excluir lista de check-in"
 msgid ""
 "Are you sure you want to delete the check-in list <strong>%(name)s</strong>?"
 msgstr ""
-"Tem certeza de que deseja apagar a lista de check-in <strong>%(name)s</"
-"strong>?"
+"Tem certeza de que deseja apagar a lista de check-in "
+"<strong>%(name)s</strong>?"
 
 #: pretix/control/templates/pretixcontrol/checkin/list_delete.html:11
 #, python-format
@@ -16698,8 +16691,8 @@ msgid ""
 msgstr ""
 "Olá,\n"
 "\n"
-"Alguém solicitou usar %(address)s como endereço do remetente em "
-"%(instance)s.\n"
+"Alguém solicitou usar %(address)s como endereço do remetente em %(instance)s."
+"\n"
 "Isso permitirá que eles enviem e -mails que são mostrados como originados "
 "neste endereço de email.\n"
 "Se foi você, digite o seguinte código de confirmação:\n"
@@ -18050,8 +18043,8 @@ msgstr "Apagar regra fiscal"
 msgid ""
 "Are you sure you want to delete the tax rule <strong>%(taxrule)s</strong>?"
 msgstr ""
-"Tem certeza de que deseja excluir a regra fiscal <strong>%(taxrule)s</"
-"strong>?"
+"Tem certeza de que deseja excluir a regra fiscal "
+"<strong>%(taxrule)s</strong>?"
 
 #: pretix/control/templates/pretixcontrol/event/tax_delete.html:12
 msgid ""
@@ -19034,8 +19027,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/items/discount_delete.html:21
 #, python-format
 msgid "Are you sure you want to delete the discount <strong>%(name)s</strong>?"
-msgstr ""
-"Tem certeza de que deseja excluir o desconto <strong>%(name)s</strong>?"
+msgstr "Tem certeza de que deseja excluir o desconto <strong>%(name)s</strong>?"
 
 #: pretix/control/templates/pretixcontrol/items/discount_delete.html:25
 #, python-format
@@ -19269,8 +19261,7 @@ msgstr "Opções de resposta"
 
 #: pretix/control/templates/pretixcontrol/items/question_edit.html:56
 msgid "Only applicable if you choose 'Choose one/multiple from a list' above."
-msgstr ""
-"Aplicável apenas se escolher 'Escolha um/múltiplos de uma lista' acima."
+msgstr "Aplicável apenas se escolher 'Escolha um/múltiplos de uma lista' acima."
 
 #: pretix/control/templates/pretixcontrol/items/question_edit.html:58
 msgid ""
@@ -21708,8 +21699,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcards.html:124
 msgid "You are currently not accepting gift cards from other organizers."
-msgstr ""
-"No momento não está a aceitar cartões-presente de outros organizadores."
+msgstr "No momento não está a aceitar cartões-presente de outros organizadores."
 
 #: pretix/control/templates/pretixcontrol/organizers/index.html:9
 msgid ""
@@ -22734,8 +22724,7 @@ msgstr "Apagar data"
 #: pretix/control/templates/pretixcontrol/subevents/delete.html:9
 #, python-format
 msgid "Are you sure you want to delete the date <strong>%(subevent)s</strong>?"
-msgstr ""
-"Tem certeza de que deseja excluir a data <strong>%(subevent)s</strong>?"
+msgstr "Tem certeza de que deseja excluir a data <strong>%(subevent)s</strong>?"
 
 #: pretix/control/templates/pretixcontrol/subevents/delete_bulk.html:4
 #: pretix/control/templates/pretixcontrol/subevents/delete_bulk.html:6
@@ -22915,8 +22904,8 @@ msgstr "Eliminar um dispositivo de autenticação de dois fatores"
 msgid ""
 "Are you sure you want to delete the authentication device \"%(device)s\"?"
 msgstr ""
-"Tem certeza de que deseja apagar a autenticação do dispositivo "
-"\"%(device)s\"?"
+"Tem certeza de que deseja apagar a autenticação do dispositivo \"%(device)s\""
+"?"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_delete.html:12
 msgid "You will no longer be able to use this device to log in to pretix."
@@ -25579,8 +25568,8 @@ msgstr "Imprimir crachás"
 msgid ""
 "Are you sure you want to delete the badge layout <strong>%(layout)s</strong>?"
 msgstr ""
-"Tem certeza de que deseja excluir o layout de crachá <strong>%(layout)s</"
-"strong>?"
+"Tem certeza de que deseja excluir o layout de crachá "
+"<strong>%(layout)s</strong>?"
 
 #: pretix/plugins/badges/templates/pretixplugins/badges/edit.html:6
 #: pretix/plugins/badges/templates/pretixplugins/badges/edit.html:13
@@ -27358,8 +27347,7 @@ msgstr "URL de redirecionamento base"
 
 #: pretix/plugins/returnurl/views.py:36
 msgid "Redirection will only be allowed to URLs that start with this prefix."
-msgstr ""
-"A reorientação só será permitida aos URLs que comecem com este prefixo."
+msgstr "A reorientação só será permitida aos URLs que comecem com este prefixo."
 
 #: pretix/plugins/sendmail/apps.py:38
 msgid "Send out emails to all your customers or specific groups of customers."
@@ -27999,8 +27987,8 @@ msgid ""
 "The provided key \"%(value)s\" does not look valid. It should start with "
 "\"%(prefix)s\"."
 msgstr ""
-"A chave fornecida \"%(value)s\" não parece válida. Deve começar com "
-"\"%(prefix)s\"."
+"A chave fornecida \"%(value)s\" não parece válida. Deve começar com \""
+"%(prefix)s\"."
 
 #: pretix/plugins/stripe/forms.py:51 pretix/plugins/stripe/signals.py:152
 msgid "Stripe Connect: App fee (percent)"
@@ -28662,8 +28650,7 @@ msgstr "Layout de bilhete"
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/delete.html:9
 #, python-format
 msgid "Are you sure you want to delete the layout <strong>%(layout)s</strong>?"
-msgstr ""
-"Tem certeza de que deseja excluir o layout <strong>%(layout)s</strong>?"
+msgstr "Tem certeza de que deseja excluir o layout <strong>%(layout)s</strong>?"
 
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/edit.html:6
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/edit.html:13
@@ -31181,8 +31168,8 @@ msgid ""
 "If you're looking to configure this installation, please <a %(a_attr)s>head "
 "over here</a>."
 msgstr ""
-"Se estiver procurando para configurar esta instalação, por favor <a "
-"%(a_attr)s>comece aqui</a>."
+"Se estiver procurando para configurar esta instalação, por favor <a %(a_attr)"
+"s>comece aqui</a>."
 
 #: pretix/presale/templates/pretixpresale/index.html:24
 msgid "Enjoy!"
