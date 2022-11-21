@@ -952,7 +952,7 @@ class FreeOrderProvider(BasePaymentProvider):
     is_implicit = True
     is_enabled = True
     identifier = "free"
-    execute_payment_requires_user = False
+    execute_payment_needs_user = False
 
     def checkout_confirm_render(self, request: HttpRequest) -> str:
         return _("No payment is required as this order only includes products which are free of charge.")
@@ -1039,7 +1039,7 @@ class BoxOfficeProvider(BasePaymentProvider):
 class ManualPayment(BasePaymentProvider):
     identifier = 'manual'
     verbose_name = _('Manual payment')
-    execute_payment_requires_user = False
+    execute_payment_needs_user = False
 
     @property
     def test_mode_message(self):

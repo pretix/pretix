@@ -920,6 +920,7 @@ def _create_order(event: Event, email: str, positions: List[CartPosition], now_d
                         amount=p['payment_amount'],
                         fee=p.get('fee'),
                         info=json.dumps(p['info_data']),
+                        process_initiated=False,
                     ))
 
         orderpositions = OrderPosition.transform_cart_positions(positions, order)
