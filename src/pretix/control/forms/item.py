@@ -38,7 +38,9 @@ from decimal import Decimal
 from urllib.parse import urlencode
 
 from django import forms
+from django.conf import settings
 from django.core.exceptions import ValidationError
+from django.core.files.uploadedfile import UploadedFile
 from django.db.models import Max
 from django.forms.formsets import DELETION_FIELD_NAME
 from django.urls import reverse
@@ -61,7 +63,8 @@ from pretix.base.models import (
 from pretix.base.models.items import ItemAddOn, ItemBundle, ItemMetaValue
 from pretix.base.signals import item_copy_data
 from pretix.control.forms import (
-    ItemMultipleChoiceField, SplitDateTimeField, SplitDateTimePickerWidget,
+    ItemMultipleChoiceField, SizeValidationMixin, SplitDateTimeField,
+    SplitDateTimePickerWidget,
 )
 from pretix.control.forms.widgets import Select2
 from pretix.helpers.models import modelcopy
@@ -583,6 +586,14 @@ class ItemUpdateForm(I18nModelForm):
                     )
                 )
         return d
+
+    def clean_picture(self):
+        value = self.cleaned_data.get('picture')
+        if isinstance(value, UploadedFile) and value.size > settings.FILE_UPLOAD_MAX_SIZE_IMAGE:
+            raise forms.ValidationError(_("Please do not upload files larger than {size}!").format(
+                size=SizeValidationMixin._sizeof_fmt(settings.FILE_UPLOAD_MAX_SIZE_IMAGE)
+            ))
+        return value
 
     class Meta:
         model = Item
