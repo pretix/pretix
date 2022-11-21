@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-07 15:22+0000\n"
+"POT-Creation-Date: 2022-11-21 14:52+0000\n"
 "PO-Revision-Date: 2019-10-03 19:00+0000\n"
 "Last-Translator: Chris Spy <chrispiropoulou@hotmail.com>\n"
 "Language-Team: Greek <https://translate.pretix.eu/projects/pretix/pretix-js/"
@@ -131,7 +131,7 @@ msgstr ""
 msgid "Mercado Pago"
 msgstr ""
 
-#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:159
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:163
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:48
 #, fuzzy
 #| msgctxt "widget"
@@ -139,13 +139,13 @@ msgstr ""
 msgid "Continue"
 msgstr "Συνέχεια"
 
-#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:217
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:221
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:152
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:183
 msgid "Confirming your payment …"
 msgstr ""
 
-#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:242
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:246
 msgid "Payment method unavailable"
 msgstr ""
 
@@ -518,51 +518,51 @@ msgstr ""
 msgid "Check-in QR"
 msgstr "Έλεγχος QR"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:378
+#: pretix/static/pretixcontrol/js/ui/editor.js:384
 msgid "The PDF background file could not be loaded for the following reason:"
 msgstr ""
 "Το αρχείο φόντου PDF δεν ήταν δυνατό να φορτωθεί για τον ακόλουθο λόγο:"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:648
+#: pretix/static/pretixcontrol/js/ui/editor.js:653
 msgid "Group of objects"
 msgstr "Ομάδα αντικειμένων"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:654
+#: pretix/static/pretixcontrol/js/ui/editor.js:659
 msgid "Text object"
 msgstr "Αντικείμενο κειμένου"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:656
+#: pretix/static/pretixcontrol/js/ui/editor.js:661
 msgid "Barcode area"
 msgstr "Περιοχή Barcode"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:658
+#: pretix/static/pretixcontrol/js/ui/editor.js:663
 #, fuzzy
 #| msgid "Barcode area"
 msgid "Image area"
 msgstr "Περιοχή Barcode"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:660
+#: pretix/static/pretixcontrol/js/ui/editor.js:665
 msgid "Powered by pretix"
 msgstr "Υποστηρίζεται από το Pretix"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:662
+#: pretix/static/pretixcontrol/js/ui/editor.js:667
 msgid "Object"
 msgstr "Αντικείμενο"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:666
+#: pretix/static/pretixcontrol/js/ui/editor.js:671
 msgid "Ticket design"
 msgstr "Σχεδιασμός εισιτηρίων"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:956
+#: pretix/static/pretixcontrol/js/ui/editor.js:961
 msgid "Saving failed."
 msgstr "Η αποθήκευση απέτυχε."
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:1006
-#: pretix/static/pretixcontrol/js/ui/editor.js:1045
+#: pretix/static/pretixcontrol/js/ui/editor.js:1011
+#: pretix/static/pretixcontrol/js/ui/editor.js:1050
 msgid "Error while uploading your PDF file, please try again."
 msgstr "Σφάλμα κατά τη μεταφόρτωση του αρχείου PDF, δοκιμάστε ξανά."
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:1030
+#: pretix/static/pretixcontrol/js/ui/editor.js:1035
 msgid "Do you really want to leave the editor without saving your changes?"
 msgstr ""
 "Θέλετε πραγματικά να αφήσετε τον επεξεργαστή χωρίς να αποθηκεύσετε τις "

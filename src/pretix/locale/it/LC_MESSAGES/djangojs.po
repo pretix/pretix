@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-07 15:22+0000\n"
+"POT-Creation-Date: 2022-11-21 14:52+0000\n"
 "PO-Revision-Date: 2022-05-08 19:00+0000\n"
 "Last-Translator: Emanuele Signoretta <signorettae@gmail.com>\n"
 "Language-Team: Italian <https://translate.pretix.eu/projects/pretix/pretix-"
@@ -133,18 +133,18 @@ msgstr ""
 msgid "Mercado Pago"
 msgstr ""
 
-#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:159
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:163
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:48
 msgid "Continue"
 msgstr "Continua"
 
-#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:217
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:221
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:152
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:183
 msgid "Confirming your payment …"
 msgstr "Stiamo processando il tuo pagamento …"
 
-#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:242
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:246
 msgid "Payment method unavailable"
 msgstr ""
 
@@ -485,48 +485,48 @@ msgstr "minuti"
 msgid "Check-in QR"
 msgstr "Check-in con QR"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:378
+#: pretix/static/pretixcontrol/js/ui/editor.js:384
 msgid "The PDF background file could not be loaded for the following reason:"
 msgstr "Il file PDF di sfondo non può essere caricato per le seguenti ragioni:"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:648
+#: pretix/static/pretixcontrol/js/ui/editor.js:653
 msgid "Group of objects"
 msgstr "Gruppo di oggetti"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:654
+#: pretix/static/pretixcontrol/js/ui/editor.js:659
 msgid "Text object"
 msgstr "Oggetto testo"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:656
+#: pretix/static/pretixcontrol/js/ui/editor.js:661
 msgid "Barcode area"
 msgstr "Area codice a barra"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:658
+#: pretix/static/pretixcontrol/js/ui/editor.js:663
 msgid "Image area"
 msgstr "Area immagini"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:660
+#: pretix/static/pretixcontrol/js/ui/editor.js:665
 msgid "Powered by pretix"
 msgstr "Powered by Pretix"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:662
+#: pretix/static/pretixcontrol/js/ui/editor.js:667
 msgid "Object"
 msgstr "Oggetto"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:666
+#: pretix/static/pretixcontrol/js/ui/editor.js:671
 msgid "Ticket design"
 msgstr "Design biglietto"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:956
+#: pretix/static/pretixcontrol/js/ui/editor.js:961
 msgid "Saving failed."
 msgstr "Salvataggio fallito."
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:1006
-#: pretix/static/pretixcontrol/js/ui/editor.js:1045
+#: pretix/static/pretixcontrol/js/ui/editor.js:1011
+#: pretix/static/pretixcontrol/js/ui/editor.js:1050
 msgid "Error while uploading your PDF file, please try again."
 msgstr "Errore durante il caricamento del tuo file PDF, prova di nuovo."
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:1030
+#: pretix/static/pretixcontrol/js/ui/editor.js:1035
 msgid "Do you really want to leave the editor without saving your changes?"
 msgstr "Vuoi davvero abbandonare l'editor senza salvare le modifiche?"
 

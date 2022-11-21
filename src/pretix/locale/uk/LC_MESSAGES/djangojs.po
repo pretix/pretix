@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-07 15:22+0000\n"
+"POT-Creation-Date: 2022-11-21 14:52+0000\n"
 "PO-Revision-Date: 2022-05-10 02:00+0000\n"
 "Last-Translator: Iryna N <in380@nyu.edu>\n"
 "Language-Team: Ukrainian <https://translate.pretix.eu/projects/pretix/pretix-"
@@ -134,18 +134,18 @@ msgstr ""
 msgid "Mercado Pago"
 msgstr ""
 
-#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:159
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:163
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:48
 msgid "Continue"
 msgstr "Продовжити"
 
-#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:217
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:221
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:152
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:183
 msgid "Confirming your payment …"
 msgstr "Підтверджується ваш платіж…"
 
-#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:242
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:246
 msgid "Payment method unavailable"
 msgstr ""
 
@@ -486,48 +486,48 @@ msgstr ""
 msgid "Check-in QR"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:378
+#: pretix/static/pretixcontrol/js/ui/editor.js:384
 msgid "The PDF background file could not be loaded for the following reason:"
 msgstr "Не вдалося завантажити фоновий файл PDF з наступної причини:"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:648
+#: pretix/static/pretixcontrol/js/ui/editor.js:653
 msgid "Group of objects"
 msgstr "Група об'єктів"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:654
+#: pretix/static/pretixcontrol/js/ui/editor.js:659
 msgid "Text object"
 msgstr "Текстовий об’єкт"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:656
+#: pretix/static/pretixcontrol/js/ui/editor.js:661
 msgid "Barcode area"
 msgstr "Область штрих-коду"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:658
+#: pretix/static/pretixcontrol/js/ui/editor.js:663
 msgid "Image area"
 msgstr "Область зображення"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:660
+#: pretix/static/pretixcontrol/js/ui/editor.js:665
 msgid "Powered by pretix"
 msgstr "На базі pretix"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:662
+#: pretix/static/pretixcontrol/js/ui/editor.js:667
 msgid "Object"
 msgstr "Об'єкт"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:666
+#: pretix/static/pretixcontrol/js/ui/editor.js:671
 msgid "Ticket design"
 msgstr "Дизайн квитка"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:956
+#: pretix/static/pretixcontrol/js/ui/editor.js:961
 msgid "Saving failed."
 msgstr "Не вдалося зберегти."
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:1006
-#: pretix/static/pretixcontrol/js/ui/editor.js:1045
+#: pretix/static/pretixcontrol/js/ui/editor.js:1011
+#: pretix/static/pretixcontrol/js/ui/editor.js:1050
 msgid "Error while uploading your PDF file, please try again."
 msgstr "Під час завантаження PDF-файлу сталася помилка. Повторіть спробу."
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:1030
+#: pretix/static/pretixcontrol/js/ui/editor.js:1035
 msgid "Do you really want to leave the editor without saving your changes?"
 msgstr "Ви дійсно хочете вийти з редактора, не зберігаючи зміни?"
 
