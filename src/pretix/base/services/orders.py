@@ -1100,6 +1100,7 @@ def _perform_order(event: Event, payment_requests: List[dict], position_ids: Lis
                                                      is_free=free_order_flow)
 
     warnings = []
+    any_failed = False
     for p in payment_objs:
         if not p.payment_provider.execute_payment_needs_user:
             try:
@@ -1110,8 +1111,16 @@ def _perform_order(event: Event, payment_requests: List[dict], position_ids: Lis
                     logger.warning('Payment provider returned URL from execute_payment even though execute_payment_needs_user is not set')
             except PaymentException as e:
                 warnings.append(str(e))
+                any_failed = True
             except Exception:
                 logger.exception('Error during payment attempt')
+
+    if any_failed:
+        # Cancel all other payments because their amount might be wrong now.
+        for p in payment_objs:
+            if p.state == OrderPayment.PAYMENT_STATE_CREATED:
+                p.state = OrderPayment.PAYMENT_STATE_CANCELED
+                p.save(update_fields=['state'])
 
     return {
         'order_id': order.id,

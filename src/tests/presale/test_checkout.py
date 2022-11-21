@@ -98,6 +98,26 @@ class BaseCheckoutTestCase:
         session['carts'][get_cart_session_key(self.client, self.event)][key] = value
         session.save()
 
+    def _set_payment(self):
+        self._set_session('payments', [{
+            "id": "test1",
+            "provider": "banktransfer",
+            "max_value": None,
+            "min_value": None,
+            "multi_use_supported": False,
+            "info_data": {},
+        }])
+
+    def _manual_payment(self):
+        return [{
+            "id": "test1",
+            "provider": "manual",
+            "max_value": None,
+            "min_value": None,
+            "multi_use_supported": False,
+            "info_data": {},
+        }]
+
 
 class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
 
@@ -1475,13 +1495,16 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
 
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
+        assert "used in the meantime" in doc.select('.alert-warning')[0].text
         with scopes_disabled():
             o = Order.objects.last()
             assert o.status == Order.STATUS_PENDING
-            assert o.payments.get(provider='giftcard').amount == Decimal('18.00')
-            assert o.payments.get(provider='giftcard').state == OrderPayment.PAYMENT_STATE_FAILED
-            assert o.payments.get(provider='banktransfer').amount == Decimal('5.00')
-            assert o.payments.get(provider='banktransfer').state == OrderPayment.PAYMENT_STATE_CREATED
+            p1 = o.payments.get(provider='giftcard')
+            p2 = o.payments.get(provider='banktransfer')
+            assert p1.amount == Decimal('20.00')
+            assert p1.state == OrderPayment.PAYMENT_STATE_FAILED
+            assert p2.amount == Decimal('3.00')
+            assert p2.state == OrderPayment.PAYMENT_STATE_CANCELED
 
     def test_giftcard_expired(self):
         gc = self.orga.issued_gift_cards.create(currency="EUR", expires=now() - timedelta(days=1))
@@ -1992,16 +2015,6 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
         self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         with scopes_disabled():
             assert not CartPosition.objects.filter(id=cr1.id).exists()
-
-    def _set_payment(self):
-        self._set_session('payments', [{
-            "id": "test1",
-            "provider": "banktransfer",
-            "max_value": None,
-            "min_value": None,
-            "multi_use_supported": False,
-            "info_data": {},
-        }])
 
     def test_addon_price_included(self):
         with scopes_disabled():
@@ -3073,9 +3086,9 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 price=23, expires=now() + timedelta(minutes=10)
             )
             djmail.outbox = []
-            oid = _perform_order(self.event, 'manual', [cp1.pk], 'admin@example.org', 'en', None, {}, 'web')
+            oid = _perform_order(self.event, self._manual_payment(), [cp1.pk], 'admin@example.org', 'en', None, {}, 'web')
             assert len(djmail.outbox) == 1
-            o = Order.objects.get(pk=oid)
+            o = Order.objects.get(pk=oid['order_id'])
             o.payments.first().confirm()
             assert len(djmail.outbox) == 2
 
@@ -3087,9 +3100,9 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
             )
             djmail.outbox = []
             self.event.settings.mail_sales_channel_placed_paid = []
-            oid = _perform_order(self.event, 'manual', [cp1.pk], 'admin@example.org', 'en', None, {}, 'web')
+            oid = _perform_order(self.event, self._manual_payment(), [cp1.pk], 'admin@example.org', 'en', None, {}, 'web')
             assert len(djmail.outbox) == 0
-            o = Order.objects.get(pk=oid)
+            o = Order.objects.get(pk=oid['order_id'])
             o.payments.first().confirm()
             assert len(djmail.outbox) == 0
 
@@ -3497,8 +3510,8 @@ class CheckoutBundleTest(BaseCheckoutTestCase, TestCase):
 
     @classscope(attr='orga')
     def test_simple_bundle(self):
-        oid = _perform_order(self.event, 'manual', [self.cp1.pk, self.bundled1.pk], 'admin@example.org', 'en', None, {}, 'web')
-        o = Order.objects.get(pk=oid)
+        oid = _perform_order(self.event, self._manual_payment(), [self.cp1.pk, self.bundled1.pk], 'admin@example.org', 'en', None, {}, 'web')
+        o = Order.objects.get(pk=oid['order_id'])
         cp = o.positions.get(addon_to__isnull=True)
         assert cp.item == self.ticket
         assert cp.price == 23 - 1.5
@@ -3516,8 +3529,8 @@ class CheckoutBundleTest(BaseCheckoutTestCase, TestCase):
         self.bundled1.variation = v
         self.bundled1.save()
 
-        oid = _perform_order(self.event, 'manual', [self.cp1.pk, self.bundled1.pk], 'admin@example.org', 'en', None, {}, 'web')
-        o = Order.objects.get(pk=oid)
+        oid = _perform_order(self.event, self._manual_payment(), [self.cp1.pk, self.bundled1.pk], 'admin@example.org', 'en', None, {}, 'web')
+        o = Order.objects.get(pk=oid['order_id'])
         cp = o.positions.get(addon_to__isnull=True)
         assert cp.item == self.ticket
         assert cp.price == 23 - 1.5
@@ -3535,8 +3548,8 @@ class CheckoutBundleTest(BaseCheckoutTestCase, TestCase):
             event=self.event, cart_id=self.session_key, item=self.trans, addon_to=self.cp1,
             price=1.5, expires=now() + timedelta(minutes=10), is_bundled=True
         )
-        oid = _perform_order(self.event, 'manual', [self.cp1.pk, self.bundled1.pk, bundled2.pk], 'admin@example.org', 'en', None, {}, 'web')
-        o = Order.objects.get(pk=oid)
+        oid = _perform_order(self.event, self._manual_payment(), [self.cp1.pk, self.bundled1.pk, bundled2.pk], 'admin@example.org', 'en', None, {}, 'web')
+        o = Order.objects.get(pk=oid['order_id'])
         cp = o.positions.get(addon_to__isnull=True)
         assert cp.item == self.ticket
         assert cp.price == 23 - 1.5 - 1.5
@@ -3560,8 +3573,8 @@ class CheckoutBundleTest(BaseCheckoutTestCase, TestCase):
         self.cp1.price = 20 - 1.5
         self.cp1.save()
 
-        oid = _perform_order(self.event, 'manual', [self.cp1.pk, self.bundled1.pk], 'admin@example.org', 'en', None, {}, 'web')
-        o = Order.objects.get(pk=oid)
+        oid = _perform_order(self.event, self._manual_payment(), [self.cp1.pk, self.bundled1.pk], 'admin@example.org', 'en', None, {}, 'web')
+        o = Order.objects.get(pk=oid['order_id'])
         cp = o.positions.get(addon_to__isnull=True)
         assert cp.item == self.ticket
         assert cp.price == 20 - 1.5
@@ -3581,8 +3594,8 @@ class CheckoutBundleTest(BaseCheckoutTestCase, TestCase):
         self.cp1.price = 0
         self.cp1.save()
 
-        oid = _perform_order(self.event, 'manual', [self.cp1.pk, self.bundled1.pk], 'admin@example.org', 'en', None, {}, 'web')
-        o = Order.objects.get(pk=oid)
+        oid = _perform_order(self.event, self._manual_payment(), [self.cp1.pk, self.bundled1.pk], 'admin@example.org', 'en', None, {}, 'web')
+        o = Order.objects.get(pk=oid['order_id'])
         cp = o.positions.get(addon_to__isnull=True)
         assert cp.item == self.ticket
         assert cp.price == Decimal('0.00')
@@ -3606,8 +3619,8 @@ class CheckoutBundleTest(BaseCheckoutTestCase, TestCase):
         self.trans.tax_rule = tr7
         self.trans.save()
 
-        oid = _perform_order(self.event, 'manual', [self.cp1.pk, self.bundled1.pk], 'admin@example.org', 'en', None, {}, 'web')
-        o = Order.objects.get(pk=oid)
+        oid = _perform_order(self.event, self._manual_payment(), [self.cp1.pk, self.bundled1.pk], 'admin@example.org', 'en', None, {}, 'web')
+        o = Order.objects.get(pk=oid['order_id'])
         cp = o.positions.get(addon_to__isnull=True)
         assert cp.item == self.ticket
         assert cp.price == Decimal('21.50')
@@ -3626,8 +3639,8 @@ class CheckoutBundleTest(BaseCheckoutTestCase, TestCase):
                                    valid_until=now() + timedelta(days=2))
         self.cp1.voucher = v
         self.cp1.save()
-        oid = _perform_order(self.event, 'manual', [self.cp1.pk, self.bundled1.pk], 'admin@example.org', 'en', None, {}, 'web')
-        o = Order.objects.get(pk=oid)
+        oid = _perform_order(self.event, self._manual_payment(), [self.cp1.pk, self.bundled1.pk], 'admin@example.org', 'en', None, {}, 'web')
+        o = Order.objects.get(pk=oid['order_id'])
         cp = o.positions.get(addon_to__isnull=True)
         assert cp.item == self.ticket
         assert cp.price == 23 - 1.5
@@ -3643,8 +3656,8 @@ class CheckoutBundleTest(BaseCheckoutTestCase, TestCase):
         self.bundled1.expires = now() - timedelta(minutes=10)
         self.bundled1.save()
 
-        oid = _perform_order(self.event, 'manual', [self.cp1.pk, self.bundled1.pk], 'admin@example.org', 'en', None, {}, 'web')
-        o = Order.objects.get(pk=oid)
+        oid = _perform_order(self.event, self._manual_payment(), [self.cp1.pk, self.bundled1.pk], 'admin@example.org', 'en', None, {}, 'web')
+        o = Order.objects.get(pk=oid['order_id'])
         cp = o.positions.get(addon_to__isnull=True)
         b = cp.addons.first()
         assert cp.price == 21.5
@@ -3658,8 +3671,8 @@ class CheckoutBundleTest(BaseCheckoutTestCase, TestCase):
         self.cp1.save()
         self.bundled1.expires = now() - timedelta(minutes=10)
         self.bundled1.save()
-        oid = _perform_order(self.event, 'manual', [self.cp1.pk, self.bundled1.pk], 'admin@example.org', 'en', None, {}, 'web')
-        o = Order.objects.get(pk=oid)
+        oid = _perform_order(self.event, self._manual_payment(), [self.cp1.pk, self.bundled1.pk], 'admin@example.org', 'en', None, {}, 'web')
+        o = Order.objects.get(pk=oid['order_id'])
         cp = o.positions.get(addon_to__isnull=True)
         b = cp.addons.first()
         assert cp.price == 21
@@ -3674,7 +3687,7 @@ class CheckoutBundleTest(BaseCheckoutTestCase, TestCase):
         self.bundled1.expires = now() - timedelta(minutes=10)
         self.bundled1.save()
         with self.assertRaises(OrderError):
-            _perform_order(self.event, 'manual', [self.cp1.pk, self.bundled1.pk], 'admin@example.org', 'en', None, {}, 'web')
+            _perform_order(self.event, self._manual_payment(), [self.cp1.pk, self.bundled1.pk], 'admin@example.org', 'en', None, {}, 'web')
         self.cp1.refresh_from_db()
         self.bundled1.refresh_from_db()
         assert self.cp1.price == 0
@@ -3689,7 +3702,7 @@ class CheckoutBundleTest(BaseCheckoutTestCase, TestCase):
         self.bundled1.expires = now() - timedelta(minutes=10)
         self.bundled1.save()
         with self.assertRaises(OrderError):
-            _perform_order(self.event, 'manual', [self.cp1.pk, self.bundled1.pk], 'admin@example.org', 'en', None, {}, 'web')
+            _perform_order(self.event, self._manual_payment(), [self.cp1.pk, self.bundled1.pk], 'admin@example.org', 'en', None, {}, 'web')
         self.cp1.refresh_from_db()
         self.bundled1.refresh_from_db()
         assert self.cp1.price == 23.5
@@ -3706,8 +3719,8 @@ class CheckoutBundleTest(BaseCheckoutTestCase, TestCase):
         self.bundled1.expires = now() - timedelta(minutes=10)
         self.bundled1.save()
 
-        oid = _perform_order(self.event, 'manual', [self.cp1.pk, self.bundled1.pk, a.pk], 'admin@example.org', 'en', None, {}, 'web')
-        o = Order.objects.get(pk=oid)
+        oid = _perform_order(self.event, self._manual_payment(), [self.cp1.pk, self.bundled1.pk, a.pk], 'admin@example.org', 'en', None, {}, 'web')
+        o = Order.objects.get(pk=oid['order_id'])
         cp = o.positions.get(addon_to__isnull=True)
         b = cp.addons.order_by('price').first()
         a = cp.addons.order_by('price').last()
@@ -3726,7 +3739,7 @@ class CheckoutBundleTest(BaseCheckoutTestCase, TestCase):
         self.bundled1.expires = now() - timedelta(minutes=10)
         self.bundled1.save()
         with self.assertRaises(OrderError):
-            _perform_order(self.event, 'manual', [self.cp1.pk, self.bundled1.pk], 'admin@example.org', 'en', None, {}, 'web')
+            _perform_order(self.event, self._manual_payment(), [self.cp1.pk, self.bundled1.pk], 'admin@example.org', 'en', None, {}, 'web')
         assert not CartPosition.objects.exists()
 
     @classscope(attr='orga')
@@ -3738,7 +3751,7 @@ class CheckoutBundleTest(BaseCheckoutTestCase, TestCase):
         self.bundled1.expires = now() - timedelta(minutes=10)
         self.bundled1.save()
         with self.assertRaises(OrderError):
-            _perform_order(self.event, 'manual', [self.cp1.pk, self.bundled1.pk], 'admin@example.org', 'en', None, {}, 'web')
+            _perform_order(self.event, self._manual_payment(), [self.cp1.pk, self.bundled1.pk], 'admin@example.org', 'en', None, {}, 'web')
         assert not CartPosition.objects.exists()
 
     @classscope(attr='orga')
@@ -3755,7 +3768,7 @@ class CheckoutBundleTest(BaseCheckoutTestCase, TestCase):
         self.bundled1.expires = now() - timedelta(minutes=10)
         self.bundled1.save()
         with self.assertRaises(OrderError):
-            _perform_order(self.event, 'manual', [self.cp1.pk, self.bundled1.pk, a.pk], 'admin@example.org', 'en', None, {}, 'web')
+            _perform_order(self.event, self._manual_payment(), [self.cp1.pk, self.bundled1.pk, a.pk], 'admin@example.org', 'en', None, {}, 'web')
         assert not CartPosition.objects.exists()
 
     @classscope(attr='orga')
@@ -3776,8 +3789,8 @@ class CheckoutBundleTest(BaseCheckoutTestCase, TestCase):
         self.bundled1.price = Decimal('1.40')
         self.bundled1.save()
 
-        oid = _perform_order(self.event, 'manual', [self.cp1.pk, self.bundled1.pk], 'admin@example.org', 'en', ia.pk, {}, 'web')
-        o = Order.objects.get(pk=oid)
+        oid = _perform_order(self.event, self._manual_payment(), [self.cp1.pk, self.bundled1.pk], 'admin@example.org', 'en', ia.pk, {}, 'web')
+        o = Order.objects.get(pk=oid['order_id'])
         cp = o.positions.get(addon_to__isnull=True)
         assert cp.item == self.ticket
         assert cp.price == Decimal('21.50')
@@ -3809,8 +3822,8 @@ class CheckoutBundleTest(BaseCheckoutTestCase, TestCase):
         self.bundled1.price = Decimal('1.40')
         self.bundled1.save()
 
-        oid = _perform_order(self.event, 'manual', [self.cp1.pk, self.bundled1.pk], 'admin@example.org', 'en', ia.pk, {}, 'web')
-        o = Order.objects.get(pk=oid)
+        oid = _perform_order(self.event, self._manual_payment(), [self.cp1.pk, self.bundled1.pk], 'admin@example.org', 'en', ia.pk, {}, 'web')
+        o = Order.objects.get(pk=oid['order_id'])
         cp = o.positions.get(addon_to__isnull=True)
         assert cp.item == self.ticket
         assert cp.price == Decimal('18.07')
@@ -3861,8 +3874,8 @@ class CheckoutSeatingTest(BaseCheckoutTestCase, TestCase):
 
     @scopes_disabled()
     def test_passes(self):
-        oid = _perform_order(self.event, 'manual', [self.cp1.pk], 'admin@example.org', 'en', None, {}, 'web')
-        o = Order.objects.get(pk=oid)
+        oid = _perform_order(self.event, self._manual_payment(), [self.cp1.pk], 'admin@example.org', 'en', None, {}, 'web')
+        o = Order.objects.get(pk=oid['order_id'])
         op = o.positions.first()
         assert op.item == self.ticket
         assert op.seat == self.seat_a1
@@ -3872,7 +3885,7 @@ class CheckoutSeatingTest(BaseCheckoutTestCase, TestCase):
         self.cp1.seat = None
         self.cp1.save()
         with self.assertRaises(OrderError):
-            _perform_order(self.event, 'manual', [self.cp1.pk], 'admin@example.org', 'en', None, {}, 'web')
+            _perform_order(self.event, self._manual_payment(), [self.cp1.pk], 'admin@example.org', 'en', None, {}, 'web')
         assert not CartPosition.objects.filter(pk=self.cp1.pk).exists()
 
     @scopes_disabled()
@@ -3880,14 +3893,14 @@ class CheckoutSeatingTest(BaseCheckoutTestCase, TestCase):
         self.cp1.seat = None
         self.cp1.save()
         self.event.settings.seating_choice = False
-        _perform_order(self.event, 'manual', [self.cp1.pk], 'admin@example.org', 'en', None, {}, 'web')
+        _perform_order(self.event, self._manual_payment(), [self.cp1.pk], 'admin@example.org', 'en', None, {}, 'web')
 
     @scopes_disabled()
     def test_seat_not_allowed(self):
         self.cp1.item = self.workshop1
         self.cp1.save()
         with self.assertRaises(OrderError):
-            _perform_order(self.event, 'manual', [self.cp1.pk], 'admin@example.org', 'en', None, {}, 'web')
+            _perform_order(self.event, self._manual_payment(), [self.cp1.pk], 'admin@example.org', 'en', None, {}, 'web')
         assert not CartPosition.objects.filter(pk=self.cp1.pk).exists()
 
     @scopes_disabled()
@@ -3898,7 +3911,7 @@ class CheckoutSeatingTest(BaseCheckoutTestCase, TestCase):
             layout_category='Foo', product=self.workshop1
         )
         with self.assertRaises(OrderError):
-            _perform_order(self.event, 'manual', [self.cp1.pk], 'admin@example.org', 'en', None, {}, 'web')
+            _perform_order(self.event, self._manual_payment(), [self.cp1.pk], 'admin@example.org', 'en', None, {}, 'web')
         assert not CartPosition.objects.filter(pk=self.cp1.pk).exists()
 
     @scopes_disabled()
@@ -3908,7 +3921,7 @@ class CheckoutSeatingTest(BaseCheckoutTestCase, TestCase):
             price=21.5, expires=now() + timedelta(minutes=10), seat=self.seat_a1
         )
         with self.assertRaises(OrderError):
-            _perform_order(self.event, 'manual', [self.cp1.pk, cp2.pk], 'admin@example.org', 'en', None, {}, 'web')
+            _perform_order(self.event, self._manual_payment(), [self.cp1.pk, cp2.pk], 'admin@example.org', 'en', None, {}, 'web')
         assert not CartPosition.objects.filter(pk=self.cp1.pk).exists()
         assert not CartPosition.objects.filter(pk=cp2.pk).exists()
 
@@ -3917,7 +3930,7 @@ class CheckoutSeatingTest(BaseCheckoutTestCase, TestCase):
         self.seat_a1.blocked = True
         self.seat_a1.save()
         with self.assertRaises(OrderError):
-            _perform_order(self.event, 'manual', [self.cp1.pk], 'admin@example.org', 'en', None, {}, 'web')
+            _perform_order(self.event, self._manual_payment(), [self.cp1.pk], 'admin@example.org', 'en', None, {}, 'web')
         assert not CartPosition.objects.filter(pk=self.cp1.pk).exists()
 
     @scopes_disabled()
@@ -3927,7 +3940,7 @@ class CheckoutSeatingTest(BaseCheckoutTestCase, TestCase):
             price=21.5, expires=now() + timedelta(minutes=10), seat=self.seat_a1
         )
         with self.assertRaises(OrderError):
-            _perform_order(self.event, 'manual', [self.cp1.pk], 'admin@example.org', 'en', None, {}, 'web')
+            _perform_order(self.event, self._manual_payment(), [self.cp1.pk], 'admin@example.org', 'en', None, {}, 'web')
         assert not CartPosition.objects.filter(pk=self.cp1.pk).exists()
 
 
@@ -3948,9 +3961,9 @@ class CheckoutVoucherBudgetTest(BaseCheckoutTestCase, TestCase):
 
     @scopes_disabled()
     def test_no_budget(self):
-        oid = _perform_order(self.event, 'manual', [self.cp1.pk, self.cp2.pk], 'admin@example.org', 'en', None, {},
+        oid = _perform_order(self.event, self._manual_payment(), [self.cp1.pk, self.cp2.pk], 'admin@example.org', 'en', None, {},
                              'web')
-        o = Order.objects.get(pk=oid)
+        o = Order.objects.get(pk=oid['order_id'])
         op = o.positions.first()
         assert op.item == self.ticket
         assert op.voucher_budget_use == Decimal('1.50')
@@ -3959,14 +3972,14 @@ class CheckoutVoucherBudgetTest(BaseCheckoutTestCase, TestCase):
     def test_budget_exceeded_for_second_order(self):
         self.v.budget = Decimal('1.50')
         self.v.save()
-        oid = _perform_order(self.event, 'manual', [self.cp1.pk], 'admin@example.org', 'en', None, {},
+        oid = _perform_order(self.event, self._manual_payment(), [self.cp1.pk], 'admin@example.org', 'en', None, {},
                              'web')
-        o = Order.objects.get(pk=oid)
+        o = Order.objects.get(pk=oid['order_id'])
         op = o.positions.first()
         assert op.item == self.ticket
 
         with self.assertRaises(OrderError):
-            _perform_order(self.event, 'manual', [self.cp2.pk], 'admin@example.org', 'en', None, {},
+            _perform_order(self.event, self._manual_payment(), [self.cp2.pk], 'admin@example.org', 'en', None, {},
                            'web')
         self.cp2.refresh_from_db()
         assert self.cp2.price == Decimal('23.00')
@@ -3976,7 +3989,7 @@ class CheckoutVoucherBudgetTest(BaseCheckoutTestCase, TestCase):
         self.v.budget = Decimal('1.50')
         self.v.save()
         with self.assertRaises(OrderError):
-            _perform_order(self.event, 'manual', [self.cp1.pk, self.cp2.pk], 'admin@example.org', 'en', None, {},
+            _perform_order(self.event, self._manual_payment(), [self.cp1.pk, self.cp2.pk], 'admin@example.org', 'en', None, {},
                            'web')
         self.cp1.refresh_from_db()
         assert self.cp1.price == Decimal('21.50')
@@ -3988,7 +4001,7 @@ class CheckoutVoucherBudgetTest(BaseCheckoutTestCase, TestCase):
         self.v.budget = Decimal('1.00')
         self.v.save()
         with self.assertRaises(OrderError):
-            _perform_order(self.event, 'manual', [self.cp1.pk, self.cp2.pk], 'admin@example.org', 'en', None, {},
+            _perform_order(self.event, self._manual_payment(), [self.cp1.pk, self.cp2.pk], 'admin@example.org', 'en', None, {},
                            'web')
         self.cp1.refresh_from_db()
         assert self.cp1.price == Decimal('22.00')
@@ -4000,7 +4013,7 @@ class CheckoutVoucherBudgetTest(BaseCheckoutTestCase, TestCase):
         self.v.budget = Decimal('2.50')
         self.v.save()
         with self.assertRaises(OrderError):
-            _perform_order(self.event, 'manual', [self.cp1.pk, self.cp2.pk], 'admin@example.org', 'en', None, {},
+            _perform_order(self.event, self._manual_payment(), [self.cp1.pk, self.cp2.pk], 'admin@example.org', 'en', None, {},
                            'web')
         self.cp1.refresh_from_db()
         assert self.cp1.price == Decimal('21.50')
@@ -4018,7 +4031,7 @@ class CheckoutVoucherBudgetTest(BaseCheckoutTestCase, TestCase):
         self.cp2.save()
 
         with self.assertRaises(OrderError):
-            _perform_order(self.event, 'manual', [self.cp1.pk, self.cp2.pk], 'admin@example.org', 'en', None, {},
+            _perform_order(self.event, self._manual_payment(), [self.cp1.pk, self.cp2.pk], 'admin@example.org', 'en', None, {},
                            'web')
         self.cp1.refresh_from_db()
         assert self.cp1.price == Decimal('21.00')
@@ -4036,7 +4049,7 @@ class CheckoutVoucherBudgetTest(BaseCheckoutTestCase, TestCase):
         self.cp2.save()
 
         with self.assertRaises(OrderError):
-            _perform_order(self.event, 'manual', [self.cp1.pk, self.cp2.pk], 'admin@example.org', 'en', None, {},
+            _perform_order(self.event, self._manual_payment(), [self.cp1.pk, self.cp2.pk], 'admin@example.org', 'en', None, {},
                            'web')
         self.cp1.refresh_from_db()
         assert self.cp1.price == Decimal('23.00')
@@ -4052,9 +4065,9 @@ class CheckoutVoucherBudgetTest(BaseCheckoutTestCase, TestCase):
         self.cp1.save()
         self.cp2.expires = now() - timedelta(hours=1)
         self.cp2.save()
-        oid = _perform_order(self.event, 'manual', [self.cp1.pk], 'admin@example.org', 'en', None, {},
+        oid = _perform_order(self.event, self._manual_payment(), [self.cp1.pk], 'admin@example.org', 'en', None, {},
                              'web')
-        o = Order.objects.get(pk=oid)
+        o = Order.objects.get(pk=oid['order_id'])
         op = o.positions.first()
 
         assert op.item == self.ticket
@@ -4062,7 +4075,7 @@ class CheckoutVoucherBudgetTest(BaseCheckoutTestCase, TestCase):
         self.v.save()
 
         with self.assertRaises(OrderError):
-            _perform_order(self.event, 'manual', [self.cp2.pk], 'admin@example.org', 'en', None, {},
+            _perform_order(self.event, self._manual_payment(), [self.cp2.pk], 'admin@example.org', 'en', None, {},
                            'web')
         self.cp2.refresh_from_db()
         assert self.cp2.price == Decimal('23.00')

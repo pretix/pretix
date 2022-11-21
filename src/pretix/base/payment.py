@@ -1364,41 +1364,41 @@ class GiftCardPayment(BasePaymentProvider):
             if p.item.issue_giftcard:
                 raise PaymentException(_("You cannot pay with gift cards when buying a gift card."))
 
-        def _fail(msg):
-            payment.fail(info={'error': str(msg)})
-            raise PaymentException(msg)
-
         gcpk = payment.info_data.get('gift_card')
         if not gcpk:
             raise PaymentException("Invalid state, should never occur.")
-        with transaction.atomic():
-            try:
-                gc = GiftCard.objects.select_for_update().get(pk=gcpk)
-            except GiftCard.DoesNotExist:
-                _fail(_("This gift card does not support this currency."))
-            if gc.currency != self.event.currency:  # noqa - just a safeguard
-                _fail(_("This gift card does not support this currency."))
-            if not gc.accepted_by(self.event.organizer):
-                _fail(_("This gift card is not accepted by this event organizer."))
-            if payment.amount > gc.value:
-                _fail(_("This gift card was used in the meantime. Please try again."))
-            if gc.testmode and not payment.order.testmode:
-                _fail(_("This gift card can only be used in test mode."))
-            if not gc.testmode and payment.order.testmode:
-                _fail(_("Only test gift cards can be used in test mode."))
-            if gc.expires and gc.expires < now():
-                _fail(_("This gift card is no longer valid."))
+        try:
+            with transaction.atomic():
+                try:
+                    gc = GiftCard.objects.select_for_update().get(pk=gcpk)
+                except GiftCard.DoesNotExist:
+                    raise PaymentException(_("This gift card does not support this currency."))
+                if gc.currency != self.event.currency:  # noqa - just a safeguard
+                    raise PaymentException(_("This gift card does not support this currency."))
+                if not gc.accepted_by(self.event.organizer):
+                    raise PaymentException(_("This gift card is not accepted by this event organizer."))
+                if payment.amount > gc.value:
+                    raise PaymentException(_("This gift card was used in the meantime. Please try again."))
+                if gc.testmode and not payment.order.testmode:
+                    raise PaymentException(_("This gift card can only be used in test mode."))
+                if not gc.testmode and payment.order.testmode:
+                    raise PaymentException(_("Only test gift cards can be used in test mode."))
+                if gc.expires and gc.expires < now():
+                    raise PaymentException(_("This gift card is no longer valid."))
 
-            trans = gc.transactions.create(
-                value=-1 * payment.amount,
-                order=payment.order,
-                payment=payment
-            )
-            payment.info_data = {
-                'gift_card': gc.pk,
-                'transaction_id': trans.pk,
-            }
-            payment.confirm()
+                trans = gc.transactions.create(
+                    value=-1 * payment.amount,
+                    order=payment.order,
+                    payment=payment
+                )
+                payment.info_data = {
+                    'gift_card': gc.pk,
+                    'transaction_id': trans.pk,
+                }
+                payment.confirm()
+        except PaymentException as e:
+            payment.fail(info={'error': str(e)})
+            raise e
 
     def payment_is_valid_session(self, request: HttpRequest) -> bool:
         return True
