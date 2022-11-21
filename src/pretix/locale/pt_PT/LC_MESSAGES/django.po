@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-11-07 15:22+0000\n"
 "PO-Revision-Date: 2022-11-21 14:48+0000\n"
-"Last-Translator: David Vaz <davidmgvaz@gmail.com>\n"
+"Last-Translator: tlm06 <tlm_pg06@hotmail.com>\n"
 "Language-Team: Portuguese (Portugal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/pt_PT/>\n"
 "Language: pt_PT\n"
@@ -4739,7 +4739,6 @@ msgid "Minimum usages"
 msgstr "Usos mínimos"
 
 #: pretix/base/models/vouchers.py:206
-#, fuzzy
 msgid ""
 "If set to more than one, the voucher must be redeemed for this many products "
 "when it is used for the first time. On later usages, it can also be used for "
@@ -4747,11 +4746,11 @@ msgid ""
 "usages in some cases can be lower than this limit, e.g. in case of "
 "cancellations."
 msgstr ""
-"Se definido como mais de um, o voucher deve ser resgatado por tantos "
+"Se definido para mais de um, o voucher deve ser resgatado por tantos "
 "produtos quando for usado pela primeira vez. Em usos posteriores, também "
-"pode ser usado para um número menor de produtos. Observe que isso significa "
-"que o número total de usos em alguns casos pode ser menor que esse limite, "
-"por exemplo, em caso de cancelamentos."
+"pode ser usado para um número menor de produtos. Isso significa que o número "
+"total de usos em alguns casos pode ser menor que esse limite, por exemplo, "
+"em caso de cancelamentos."
 
 #: pretix/base/models/vouchers.py:213
 msgid "Maximum discount budget"
@@ -6837,9 +6836,8 @@ msgid "The selected product does not allow to select a seat."
 msgstr "O produto selecionado não permite selecionar um lugar."
 
 #: pretix/base/services/orders.py:1283
-#, fuzzy
 msgid "The selected country is blocked by your tax rule."
-msgstr "O país selecionado está bloqueado por sua regra tributária."
+msgstr "O país selecionado está bloqueado pela sua regra tributária."
 
 #: pretix/base/services/orders.py:1284
 msgid ""
@@ -6998,7 +6996,6 @@ msgid "The voucher has been sent to {recipient}."
 msgstr "O voucher foi enviado para {recipient}."
 
 #: pretix/base/settings.py:111
-#, fuzzy
 msgid "Allow usage of restricted plugins"
 msgstr "Permitir o uso de plugins restritos"
 
@@ -7007,24 +7004,23 @@ msgid "Allow customers to create accounts"
 msgstr "Permitir que os clientes criem contas"
 
 #: pretix/base/settings.py:145
-#, fuzzy
 msgid ""
 "This will allow customers to sign up for an account on your ticket shop. "
 "This is a prerequisite for some advanced features like memberships."
 msgstr ""
-"Isso permitirá que os clientes se inscrevam em uma conta em sua oficina. "
-"Este é um pré -requisito para alguns recursos avançados, como associações."
+"Permite que os clientes criem uma conta na bilheteira. Este é um pré-"
+"requisito para alguns recursos avançados, como associações."
 
 #: pretix/base/settings.py:155
 msgid "Allow customers to log in with email address and password"
 msgstr "Permitir que os clientes façam login com endereço de e-mail e senha"
 
 #: pretix/base/settings.py:156
-#, fuzzy
 msgid ""
 "If disabled, you will need to connect one or more single-sign-on providers."
 msgstr ""
-"Se desativado, você precisará conectar um ou mais provedores de sinal único."
+"Se desativado, será necessário conectar um ou mais providers de single-sign-"
+"on."
 
 #: pretix/base/settings.py:166
 #, fuzzy
