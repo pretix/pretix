@@ -582,7 +582,7 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
             else:
                 if len(lines) > 1:
                     single_price_line = pgettext('invoice', 'Single price: {price}').format(
-                        money_filter(gross_value, self.invoice.event.currency),
+                        price=money_filter(gross_value, self.invoice.event.currency),
                     )
                     description = description + "\n" + single_price_line
                 tdata.append((
