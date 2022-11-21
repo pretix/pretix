@@ -1276,7 +1276,7 @@ class GiftCardPayment(BasePaymentProvider):
         cs = cart_session(request)
         try:
             gc = self.event.organizer.accepted_gift_cards.get(
-                secret=request.POST.get("giftcard")
+                secret=request.POST.get("giftcard").strip()
             )
             if gc.currency != self.event.currency:
                 messages.error(request, _("This gift card does not support this currency."))
@@ -1326,7 +1326,7 @@ class GiftCardPayment(BasePaymentProvider):
 
         try:
             gc = self.event.organizer.accepted_gift_cards.get(
-                secret=request.POST.get("giftcard")
+                secret=request.POST.get("giftcard").strip()
             )
             if gc.currency != self.event.currency:
                 messages.error(request, _("This gift card does not support this currency."))
@@ -1353,7 +1353,7 @@ class GiftCardPayment(BasePaymentProvider):
 
             return True
         except GiftCard.DoesNotExist:
-            if self.event.vouchers.filter(code__iexact=request.POST.get("giftcard")).exists():
+            if self.event.vouchers.filter(code__iexact=request.POST.get("giftcard").strip()).exists():
                 messages.warning(request, _("You entered a voucher instead of a gift card. Vouchers can only be entered on the first page of the shop below "
                                             "the product selection."))
             else:

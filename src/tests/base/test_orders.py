@@ -31,15 +31,18 @@ from django.test import TestCase
 from django.utils.timezone import make_aware, now
 from django_countries.fields import Country
 from django_scopes import scope
+from tests.testdummy.signals import FoobazSalesChannel
 
 from pretix.base.decimal import round_decimal
 from pretix.base.models import (
-    CartPosition, Event, InvoiceAddress, Item, Order, OrderPosition, Organizer,
-    SeatingPlan, GiftCard,
+    CartPosition, Event, GiftCard, InvoiceAddress, Item, Order, OrderPosition,
+    Organizer, SeatingPlan,
 )
 from pretix.base.models.items import SubEventItem
 from pretix.base.models.orders import OrderFee, OrderPayment, OrderRefund
-from pretix.base.payment import FreeOrderProvider, GiftCardPayment, PaymentException
+from pretix.base.payment import (
+    FreeOrderProvider, GiftCardPayment, PaymentException,
+)
 from pretix.base.reldate import RelativeDate, RelativeDateWrapper
 from pretix.base.services.invoices import generate_invoice
 from pretix.base.services.orders import (
@@ -49,7 +52,6 @@ from pretix.base.services.orders import (
 )
 from pretix.plugins.banktransfer.payment import BankTransfer
 from pretix.testutils.scope import classscope
-from tests.testdummy.signals import FoobazSalesChannel
 
 
 @pytest.fixture(scope='function')

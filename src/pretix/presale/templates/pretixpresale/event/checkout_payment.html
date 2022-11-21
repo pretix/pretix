@@ -40,7 +40,7 @@
         {% csrf_token %}
         <div class="panel-group" id="payment_accordion">
             {% for p in providers %}
-                <div class="panel panel-default" data-total="{{ p.total|floatformat:2 }}">
+                <div class="panel panel-default">
                     <div class="accordion-radio">
                         <div class="panel-heading">
                             <p class="panel-title">

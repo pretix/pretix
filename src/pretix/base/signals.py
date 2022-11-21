@@ -567,7 +567,7 @@ an OrderedDict of (setting name, form field).
 
 order_fee_calculation = EventPluginSignal()
 """
-Arguments: ``positions``, ``invoice_address``, ``meta_info``, ``total``, ``gift_cards``
+Arguments: ``positions``, ``invoice_address``, ``meta_info``, ``total``, ``gift_cards``, ``payment_requests``
 
 This signals allows you to add fees to an order while it is being created. You are expected to
 return a list of ``OrderFee`` objects that are not yet saved to the database

@@ -803,7 +803,7 @@ def _get_fees(positions: List[CartPosition], payment_requests: List[dict], addre
         if p['provider'] == 'giftcard':
             gift_cards.append(GiftCard.objects.get(pk=p['info_data']['gift_card']))
 
-    for recv, resp in order_fee_calculation.send(sender=event, invoice_address=address, total=total,
+    for recv, resp in order_fee_calculation.send(sender=event, invoice_address=address, total=total, payment_requests=payment_requests,
                                                  meta_info=meta_info, positions=positions, gift_cards=gift_cards):
         if resp:
             fees += resp

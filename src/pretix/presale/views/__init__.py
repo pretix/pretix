@@ -237,7 +237,7 @@ class CartMixin:
             'itemcount': sum(c.count for c in positions if not c.addon_to)
         }
 
-    def current_selected_payments(self, total, warn=False):
+    def current_selected_payments(self, total, warn=False, total_includes_payment_fees=False):
         raw_payments = copy.deepcopy(self.cart_session.get('payments', []))
         payments = []
         total_remaining = total
@@ -267,9 +267,10 @@ class CartMixin:
                 self._remove_payment(p['id'])
                 continue
 
-            fee = pprov.calculate_fee(to_pay)
-            total_remaining += fee
-            to_pay += fee
+            if not total_includes_payment_fees:
+                fee = pprov.calculate_fee(to_pay)
+                total_remaining += fee
+                to_pay += fee
 
             if p.get('max_value') and to_pay > Decimal(p['max_value']):
                 to_pay = min(to_pay, Decimal(p['max_value']))

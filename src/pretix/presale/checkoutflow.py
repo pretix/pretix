@@ -1267,7 +1267,7 @@ class PaymentStep(CartMixin, TemplateFlowStep):
         total = get_cart_total(self.request)
         total += sum([f.value for f in get_fees(self.request.event, self.request, total, self.invoice_address,
                                                 self.cart_session.get('payments', []), cart)])
-        selected = self.current_selected_payments(total, warn=warn)
+        selected = self.current_selected_payments(total, warn=warn, total_includes_payment_fees=True)
         if sum(p['payment_amount'] for p in selected) != total:
             if warn:
                 messages.error(request, _('Please select a payment method to proceed.'))
@@ -1347,7 +1347,7 @@ class ConfirmStep(CartMixin, AsyncAction, TemplateFlowStep):
         ctx = super().get_context_data(**kwargs)
         ctx['cart'] = self.get_cart(answers=True)
 
-        selected_payments = self.current_selected_payments(ctx['cart']['total'])
+        selected_payments = self.current_selected_payments(ctx['cart']['total'], total_includes_payment_fees=True)
         ctx['payments'] = []
         for p in selected_payments:
             if 'info_data' in inspect.signature(p['pprov'].checkout_confirm_render).parameters:

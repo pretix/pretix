@@ -1297,7 +1297,7 @@ def get_fees(event, request, total, invoice_address, payments, positions):
 
     fees = []
     for recv, resp in fee_calculation_for_cart.send(sender=event, request=request, invoice_address=invoice_address,
-                                                    total=total, positions=positions):
+                                                    total=total, positions=positions, payment_requests=payments):
         if resp:
             fees += resp
 

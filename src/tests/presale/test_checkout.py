@@ -1700,6 +1700,103 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
             with pytest.raises(OrderError, match='The selected payment methods do not cover the total balance.'):
                 _perform_order(self.event, payments, [cp1.pk], 'admin@example.org', 'en', None, {}, 'web')
 
+    def test_payment_fee_for_giftcard_payment_paid_with_same_card(self):
+        # Our built-in gift card payment does not actually support setting a payment fee, but we still want to
+        # test the core behavior in case a gift-card plugin does
+        gc = self.orga.issued_gift_cards.create(currency="EUR")
+        gc.transactions.create(value=27)
+        self.event.settings.set('payment_giftcard__fee_percent', 10)
+        self.event.settings.set('payment_giftcard__fee_reverse_calc', False)
+        with scopes_disabled():
+            CartPosition.objects.create(
+                event=self.event, cart_id=self.session_key, item=self.ticket,
+                price=23, expires=now() + timedelta(minutes=10)
+            )
+        response = self.client.get('/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug), follow=True)
+        doc = BeautifulSoup(response.content.decode(), "lxml")
+        self.assertEqual(len(doc.select('input[name="payment"]')), 2)
+
+        response = self.client.post('/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug), {
+            'payment': 'giftcard',
+            'giftcard': gc.secret
+        }, follow=True)
+        self.assertRedirects(response, '/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug),
+                             target_status_code=200)
+
+        fees = response.context_data['cart']['fees']
+        assert len(fees) == 1
+        assert fees[0].value == Decimal('2.30')
+        assert response.context_data['cart']['total'] == Decimal('25.30')
+
+        response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
+        doc = BeautifulSoup(response.content.decode(), "lxml")
+        self.assertEqual(len(doc.select(".thank-you")), 1)
+        with scopes_disabled():
+            o = Order.objects.last()
+            p1 = o.payments.get()
+            assert p1.amount == Decimal('25.30')
+            assert p1.state == OrderPayment.PAYMENT_STATE_CONFIRMED
+            assert p1.fee.value == Decimal("2.30")
+            assert o.total == Decimal("25.30")
+
+    def test_payment_fee_for_giftcard_payment_paid_with_other_method(self):
+        # Our built-in gift card payment does not actually support setting a payment fee, but we still want to
+        # test the core behavior in case a gift-card plugin does
+        gc = self.orga.issued_gift_cards.create(currency="EUR")
+        gc.transactions.create(value=23)
+        self.event.settings.set('payment_banktransfer__enabled', True)
+        self.event.settings.set('payment_banktransfer__fee_percent', 20)
+        self.event.settings.set('payment_banktransfer__fee_reverse_calc', False)
+        self.event.settings.set('payment_giftcard__fee_percent', 10)
+        self.event.settings.set('payment_giftcard__fee_reverse_calc', False)
+        with scopes_disabled():
+            CartPosition.objects.create(
+                event=self.event, cart_id=self.session_key, item=self.ticket,
+                price=23, expires=now() + timedelta(minutes=10)
+            )
+        response = self.client.get('/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug), follow=True)
+        doc = BeautifulSoup(response.content.decode(), "lxml")
+        self.assertEqual(len(doc.select('input[name="payment"]')), 2)
+
+        response = self.client.post('/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug), {
+            'payment': 'giftcard',
+            'giftcard': gc.secret
+        }, follow=True)
+        self.assertRedirects(response, '/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug),
+                             target_status_code=200)
+
+        fees = response.context_data['cart']['fees']
+        assert len(fees) == 1
+        assert fees[0].value == Decimal('2.30')
+        assert response.context_data['cart']['total'] == Decimal('25.30')
+
+        response = self.client.post('/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug), {
+            'payment': 'banktransfer',
+        }, follow=True)
+        self.assertRedirects(response, '/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug),
+                             target_status_code=200)
+
+        fees = response.context_data['cart']['fees']
+        assert len(fees) == 2
+        assert fees[0].value == Decimal('2.30')
+        assert fees[1].value == Decimal('0.46')
+        assert response.context_data['cart']['total'] == Decimal('25.76')
+
+        response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
+        doc = BeautifulSoup(response.content.decode(), "lxml")
+        self.assertEqual(len(doc.select(".thank-you")), 1)
+        with scopes_disabled():
+            o = Order.objects.last()
+            p1 = o.payments.get(provider='giftcard')
+            p2 = o.payments.get(provider='banktransfer')
+            assert p1.amount == Decimal('23.00')
+            assert p1.state == OrderPayment.PAYMENT_STATE_CONFIRMED
+            assert p2.amount == Decimal('2.76')
+            assert p2.state == OrderPayment.PAYMENT_STATE_CREATED
+            assert p1.fee.value == Decimal("2.30")
+            assert p2.fee.value == Decimal("0.46")
+            assert o.total == Decimal("25.76")
+
     def test_premature_confirm(self):
         response = self.client.get('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         self.assertRedirects(response, '/%s/%s/?require_cookie=true' % (self.orga.slug, self.event.slug),
