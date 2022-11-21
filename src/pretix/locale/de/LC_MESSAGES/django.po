@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-11-21 14:51+0000\n"
-"PO-Revision-Date: 2022-11-15 21:00+0000\n"
+"PO-Revision-Date: 2022-11-21 15:06+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
 ">\n"
@@ -2610,14 +2610,13 @@ msgstr "Betrag"
 #, python-brace-format
 msgctxt "invoice"
 msgid "Single price: {net_price} net / {gross_price} gross"
-msgstr ""
+msgstr "Einzelpreis: {net_price} netto / {gross_price} brutto"
 
 #: pretix/base/invoice.py:584
-#, fuzzy, python-brace-format
-#| msgid "Single price"
+#, python-brace-format
 msgctxt "invoice"
 msgid "Single price: {price}"
-msgstr "Einzelpreis"
+msgstr "Einzelpreis: {price}"
 
 #: pretix/base/invoice.py:602 pretix/base/invoice.py:607
 msgctxt "invoice"
@@ -3338,7 +3337,7 @@ msgstr ""
 
 #: pretix/base/models/event.py:1584
 msgid "Can be used for filtering"
-msgstr ""
+msgstr "Kann zur Filterung benutzt werden"
 
 #: pretix/base/models/event.py:1585
 msgid ""
@@ -3346,6 +3345,9 @@ msgid ""
 "can also be used for hidden filter parameters in the frontend (e.g. using "
 "the widget)."
 msgstr ""
+"Diese Meta-Eigenschaft wird angezeigt um Veranstaltungslisten oder Berichte "
+"im Backend zu filtern. Sie kann außerdem für versteckte Filter im Shop "
+"verwendet werden, z.B. über das Widget."
 
 #: pretix/base/models/event.py:1592
 msgid "A property can either be required or have a default value, not both."
@@ -6842,15 +6844,10 @@ msgstr ""
 "Wertgutschein {card} bereits eingelöst wurde."
 
 #: pretix/base/services/orders.py:466 pretix/control/forms/orders.py:191
-#, fuzzy
-#| msgid ""
-#| "The cancellation fee cannot be higher than the payment credit of this "
-#| "order."
 msgid ""
 "The cancellation fee cannot be higher than the total amount of this order."
 msgstr ""
-"Die Stornogebühr darf nicht größer sein als der Betrag, der für diese "
-"Bestellung bereits bezahlt wurde."
+"Die Stornogebühr darf nicht größer sein als der Gesamtbetrag der Bestellung."
 
 #: pretix/base/services/orders.py:919
 msgid ""
@@ -8191,10 +8188,8 @@ msgid "Customers can cancel their unpaid orders"
 msgstr "Kunden können unbezahlte Bestellungen stornieren"
 
 #: pretix/base/settings.py:1433
-#, fuzzy
-#| msgid "Keep a fixed cancellation fee"
 msgid "Charge a fixed cancellation fee"
-msgstr "Feste Stornogebühr einbehalten"
+msgstr "Feste Stornogebühr berechnen"
 
 #: pretix/base/settings.py:1434 pretix/base/settings.py:1445
 #: pretix/base/settings.py:1459
@@ -8203,18 +8198,17 @@ msgid ""
 "never charged. Note that it will be your responsibility to claim the "
 "cancellation fee from the user."
 msgstr ""
+"Betrifft nur ausstehende Zahlungen, für kostenlose Bestellungen wird nie "
+"eine Stornogebühr erhoben. Bitte beachten Sie, dass Sie für das Eintreiben "
+"der Stornogebühr selbst verantwortlich sind."
 
 #: pretix/base/settings.py:1444
-#, fuzzy
-#| msgid "Keep payment, shipping and service fees"
 msgid "Charge payment, shipping and service fees"
-msgstr "Zahlungs-, Versand- und Servicegebühren einbehalten"
+msgstr "Zahlungs-, Versand- und Servicegebühren berechnen"
 
 #: pretix/base/settings.py:1458
-#, fuzzy
-#| msgid "Keep a percentual cancellation fee"
 msgid "Charge a percentual cancellation fee"
-msgstr "Prozentuale Stornogebühr einbehalten"
+msgstr "Prozentuale Stornogebühr berechnen"
 
 #: pretix/base/settings.py:1469 pretix/base/settings.py:1608
 msgid "Do not allow cancellations after"
@@ -10563,9 +10557,8 @@ msgstr "HTML-E-Mail-Renderer"
 
 #: pretix/control/forms/event.py:934 pretix/control/forms/event.py:961
 #: pretix/control/forms/event.py:988 pretix/control/forms/event.py:1097
-#, fuzzy
 msgid "Subject sent to order contact address"
-msgstr "Text an die Besteller-Adresse"
+msgstr "Betreff an die Besteller-Adresse"
 
 #: pretix/control/forms/event.py:939 pretix/control/forms/event.py:966
 #: pretix/control/forms/event.py:993 pretix/control/forms/event.py:1102
@@ -10590,9 +10583,8 @@ msgstr ""
 
 #: pretix/control/forms/event.py:950 pretix/control/forms/event.py:977
 #: pretix/control/forms/event.py:1004 pretix/control/forms/event.py:1113
-#, fuzzy
 msgid "Subject sent to attendees"
-msgstr "Text an die Teilnehmer"
+msgstr "Betreff an die Teilnehmer"
 
 #: pretix/control/forms/event.py:955 pretix/control/forms/event.py:982
 #: pretix/control/forms/event.py:1009 pretix/control/forms/event.py:1118
@@ -10620,23 +10612,20 @@ msgid "Text"
 msgstr "Text"
 
 #: pretix/control/forms/event.py:1025
-#, fuzzy
 msgid "Subject (sent by admin)"
-msgstr "Text (vom Admin verschickt)"
+msgstr "Betreff (vom Admin verschickt)"
 
 #: pretix/control/forms/event.py:1030
-#, fuzzy
 msgid "Subject (sent by admin to attendee)"
-msgstr "Text an die Teilnehmer"
+msgstr "Betreff (vom Admin an Teilnehmer geschickt)"
 
 #: pretix/control/forms/event.py:1035
 msgid "Text (sent by admin)"
 msgstr "Text (vom Admin verschickt)"
 
 #: pretix/control/forms/event.py:1040
-#, fuzzy
 msgid "Subject (requested by user)"
-msgstr "Text (vom Benutzer beantragt)"
+msgstr "Betreff (vom Benutzer beantragt)"
 
 #: pretix/control/forms/event.py:1045
 msgid "Text (requested by user)"
@@ -10644,11 +10633,11 @@ msgstr "Text (vom Benutzer beantragt)"
 
 #: pretix/control/forms/event.py:1062
 msgid "Subject (if order will expire automatically)"
-msgstr ""
+msgstr "Betreff (wenn Bestellung automatisch abläuft)"
 
 #: pretix/control/forms/event.py:1067
 msgid "Subject (if order will not expire automatically)"
-msgstr ""
+msgstr "Betreff (wenn Bestellung nicht automatisch abläuft)"
 
 #: pretix/control/forms/event.py:1126
 msgid ""
@@ -10659,24 +10648,20 @@ msgstr ""
 "verschickt. Wenn das Feld leer ist, wird die Mail nicht verschickt."
 
 #: pretix/control/forms/event.py:1130
-#, fuzzy
 msgid "Subject for received order"
-msgstr "Bestellung erhalten"
+msgstr "Betreff für erhaltene Bestellung"
 
 #: pretix/control/forms/event.py:1135
-#, fuzzy
 msgid "Text for received order"
-msgstr "Bestellung erhalten"
+msgstr "Text für erhaltene Bestellung"
 
 #: pretix/control/forms/event.py:1140
-#, fuzzy
 msgid "Subject for approved order"
-msgstr "Ja, Bestellung freigeben"
+msgstr "Betreff für freigegebene Bestellung"
 
 #: pretix/control/forms/event.py:1145
-#, fuzzy
 msgid "Text for approved order"
-msgstr "Ja, Bestellung freigeben"
+msgstr "Text für freigegebene Bestellung"
 
 #: pretix/control/forms/event.py:1148
 msgid ""
@@ -10688,14 +10673,12 @@ msgstr ""
 "verwendet."
 
 #: pretix/control/forms/event.py:1152
-#, fuzzy
 msgid "Subject for approved free order"
-msgstr "Bestätigte kostenlose Bestellung"
+msgstr "Betreff für freigegebene kostenlose Bestellung"
 
 #: pretix/control/forms/event.py:1157
-#, fuzzy
 msgid "Text for approved free order"
-msgstr "Bestätigte kostenlose Bestellung"
+msgstr "Text für freigegebene kostenlose Bestellung"
 
 #: pretix/control/forms/event.py:1160
 msgid ""
@@ -10706,14 +10689,12 @@ msgstr ""
 "Bestellungen wird die E-Mail-Vorlage \"Bestätigte Bestellung\" verwendet."
 
 #: pretix/control/forms/event.py:1164
-#, fuzzy
 msgid "Subject for denied order"
-msgstr "Bestellung erhalten"
+msgstr "Betreff für abgelehnte Bestellung"
 
 #: pretix/control/forms/event.py:1169
-#, fuzzy
 msgid "Text for denied order"
-msgstr "Abgelehnte Bestellung"
+msgstr "Text für abgelehnte Bestellung"
 
 #: pretix/control/forms/event.py:1221 pretix/control/forms/orders.py:635
 #: pretix/control/forms/orders.py:829 pretix/control/forms/organizer.py:528
@@ -11872,13 +11853,6 @@ msgid "Keep a cancellation fee of"
 msgstr "Stornogebühr einbehalten"
 
 #: pretix/control/forms/orders.py:160
-#, fuzzy
-#| msgid ""
-#| "If you keep a fee, all positions within this order will be canceled and "
-#| "the order will be reduced to a paid cancellation fee. Payment and "
-#| "shipping fees will be canceled as well, so include them in your "
-#| "cancellation fee if you want to keep them. Please always enter a gross "
-#| "value, tax will be calculated automatically."
 msgid ""
 "If you keep a fee, all positions within this order will be canceled and the "
 "order will be reduced to a cancellation fee. Payment and shipping fees will "
@@ -11887,11 +11861,11 @@ msgid ""
 "automatically."
 msgstr ""
 "Wenn Sie eine Gebühr einbehalten, werden alle Positionen dieser Bestellung "
-"einzeln storniert. Die Bestellung selbst bleibt als bezahlte Bestellung "
-"vorhanden und enthält nur noch die Stornogebühr. Zahlungs- und "
-"Versandgebühren werden ebenfalls storniert und müssen ggf. manuell in die "
-"Stornogebühr aufgenommen werden. Bitte geben Sie einen Bruttobetrag ein, die "
-"Steuern werden automatisch berechnet."
+"einzeln storniert. Die Bestellung selbst bleibt als Bestellung vorhanden und "
+"enthält nur noch die Stornogebühr. Zahlungs- und Versandgebühren werden "
+"ebenfalls storniert und müssen ggf. manuell in die Stornogebühr aufgenommen "
+"werden. Bitte geben Sie einen Bruttobetrag ein, die Steuern werden "
+"automatisch berechnet."
 
 #: pretix/control/forms/orders.py:166
 msgid "Generate cancellation for invoice"
@@ -12594,7 +12568,7 @@ msgstr "CSV-Eingabedaten müssen eine Kopfzeile haben."
 #: pretix/control/forms/vouchers.py:352
 #, python-brace-format
 msgid "CSV parsing failed: {error}."
-msgstr ""
+msgstr "CSV-Lesen fehlgeschlagen: {error}."
 
 #: pretix/control/forms/vouchers.py:354
 #, python-brace-format
@@ -18220,6 +18194,8 @@ msgstr "Stornodatum"
 msgid ""
 "This order will not expire automatically as it has an open cancellation fee."
 msgstr ""
+"Diese Bestellung wird nicht automatisch ablaufen, da sie eine offene "
+"Stornogebühr hat."
 
 #: pretix/control/templates/pretixcontrol/order/index.html:202
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:129
@@ -24693,9 +24669,6 @@ msgstr ""
 
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control.html:16
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control.html:19
-#, fuzzy
-#| msgctxt "alert-messages"
-#| msgid "Error"
 msgid "Error"
 msgstr "Fehler"
 
@@ -25573,7 +25546,7 @@ msgstr ""
 
 #: pretix/plugins/stripe/payment.py:223
 msgid "Statement descriptor postfix"
-msgstr ""
+msgstr "Postfix für Kontoauszugszeile"
 
 #: pretix/plugins/stripe/payment.py:224
 #, python-brace-format
@@ -25584,6 +25557,11 @@ msgid ""
 "of characters is allowed. We do not recommend entering more than {cnt} "
 "characters into this field."
 msgstr ""
+"Der hier eingegebene Wert wird auf der Kreditkartenabrechnung oder auf dem "
+"Kontoauszug des Kunden angezeigt. Die Bestellnummer wird automatisch davor "
+"eingefügt. Abhängig von der Zahlungsmethode ist nur eine eingeschränke "
+"Anzahl Zeichen erlaubt, wir empfehlen daher die Eingabe von maximal {cnt} "
+"Buchstaben."
 
 #: pretix/plugins/stripe/payment.py:238
 msgid "Credit card payments"
@@ -27876,6 +27854,9 @@ msgid ""
 "You can cancel this order. As per our cancellation policy, you will still be "
 "required to pay a cancellation fee of <strong>%(fee)s</strong>."
 msgstr ""
+"Sie können diese Bestellung stornieren. Aufgrund unserer Stornobedingungen "
+"sind Sie trotzdem verpflichtet, eine Stornogebühr in Höhe von "
+"<strong>%(fee)s</strong> zu zahlen."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:468
 msgid "You can cancel this order using the following button."
@@ -28296,10 +28277,8 @@ msgstr "Kalender"
 #: pretix/presale/templates/pretixpresale/fragment_calendar.html:52
 #: pretix/presale/templates/pretixpresale/fragment_day_calendar.html:65
 #: pretix/presale/templates/pretixpresale/fragment_week_calendar.html:37
-#, fuzzy
-#| msgid "Continue"
 msgid "(continued)"
-msgstr "Fortfahren"
+msgstr "(fortgesetzt)"
 
 #: pretix/presale/templates/pretixpresale/fragment_calendar.html:61
 #: pretix/presale/templates/pretixpresale/fragment_week_calendar.html:46
