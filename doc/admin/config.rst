@@ -399,9 +399,9 @@ The two ``transport_options`` entries can be omitted in most cases.
 If they are present they need to be a valid JSON dictionary.
 For possible entries in that dictionary see the `Celery documentation`_.
 
-To use redis with sentinels set the broker or backend to ``sentinel://sentinel_host_1:26379;sentinal_host_2:26379/0``
+To use redis with sentinels set the broker or backend to ``sentinel://sentinel_host_1:26379;sentinel_host_2:26379/0``
 and the respective transport_options to ``{"master_name":"mymaster"}``.
-If your redis instances behind the sentinel have a password use ``sentinel://:my_password@sentinel_host_1:26379;sentinal_host_2:26379/0``.
+If your redis instances behind the sentinel have a password use ``sentinel://:my_password@sentinel_host_1:26379;sentinel_host_2:26379/0``.
 If your redis sentinels themselves have a password set the transport_options to ``{"master_name":"mymaster","sentinel_kwargs":{"password":"my_password"}}``.
 
 Sentry
