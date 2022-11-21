@@ -39,9 +39,11 @@ from functools import wraps
 from itertools import groupby
 
 from django.conf import settings
+from django.contrib import messages
 from django.db.models import Exists, OuterRef, Prefetch, Sum
 from django.utils.functional import cached_property
 from django.utils.timezone import now
+from django.utils.translation import gettext_lazy as _
 from django_scopes import scopes_disabled
 
 from pretix.base.i18n import language
@@ -50,6 +52,7 @@ from pretix.base.models import (
     QuestionAnswer, QuestionOption,
 )
 from pretix.base.services.cart import get_fees
+from pretix.base.templatetags.money import money_filter
 from pretix.helpers.cookies import set_cookie_without_samesite
 from pretix.multidomain.urlreverse import eventreverse
 from pretix.presale.signals import question_form_fields
@@ -234,7 +237,7 @@ class CartMixin:
             'itemcount': sum(c.count for c in positions if not c.addon_to)
         }
 
-    def current_selected_payments(self, total):
+    def current_selected_payments(self, total, warn=False):
         raw_payments = copy.deepcopy(self.cart_session.get('payments', []))
         payments = []
         total_remaining = total
@@ -245,6 +248,13 @@ class CartMixin:
             # - pretix.base.services.orders._get_fees
             # - pretix.presale.views.CartMixin.current_selected_payments
             if p.get('min_value') and total_remaining < Decimal(p['min_value']):
+                if warn:
+                    messages.warning(
+                        self.request,
+                        _('Your selected payment method can only be used for a payment of at least {amount}.').format(
+                            amount=money_filter(Decimal(p['min_value']), self.request.event.currency)
+                        )
+                    )
                 self._remove_payment(p['id'])
                 continue
 

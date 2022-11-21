@@ -841,7 +841,7 @@ def _get_fees(positions: List[CartPosition], payment_requests: List[dict], addre
             p['fee'] = pf
 
     if total_remaining != Decimal('0.00') and not require_approval:
-        raise OrderError(_("This selected payment methods do not cover the total balance."))
+        raise OrderError(_("The selected payment methods do not cover the total balance."))
 
     return fees
 

@@ -27,6 +27,7 @@ from datetime import timedelta
 from decimal import Decimal
 from unittest import mock
 
+import pytest
 from bs4 import BeautifulSoup
 from django.conf import settings
 from django.core import mail as djmail
@@ -1387,11 +1388,12 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
         self.assertEqual(len(doc.select(".thank-you")), 1)
         with scopes_disabled():
             o = Order.objects.last()
-            assert o.payments.get(provider='giftcard').amount == Decimal('20.00')
-            assert o.payments.get(provider='banktransfer').amount == Decimal('3.00')
-
-        assert '€20.00' in response.content.decode()
-        assert '3.00' in response.content.decode()
+            p1 = o.payments.get(provider='giftcard')
+            p2 = o.payments.get(provider='banktransfer')
+            assert p1.amount == Decimal('20.00')
+            assert p1.state == OrderPayment.PAYMENT_STATE_CONFIRMED
+            assert p2.amount == Decimal('3.00')
+            assert p2.state == OrderPayment.PAYMENT_STATE_CREATED
 
     def test_giftcard_full_with_multiple(self):
         gc = self.orga.issued_gift_cards.create(currency="EUR")
@@ -1430,8 +1432,11 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
         self.assertEqual(len(doc.select(".thank-you")), 1)
         with scopes_disabled():
             o = Order.objects.last()
-            assert o.payments.get(provider='giftcard', amount=Decimal('20.00'))
-            assert o.payments.get(provider='giftcard', amount=Decimal('20.00'))
+            [p1, p2] = o.payments.all()
+            assert p1.amount == Decimal('20.00')
+            assert p1.state == OrderPayment.PAYMENT_STATE_CONFIRMED
+            assert p2.amount == Decimal('3.00')
+            assert p2.state == OrderPayment.PAYMENT_STATE_CONFIRMED
 
     def test_giftcard_full(self):
         gc = self.orga.issued_gift_cards.create(currency="EUR")
@@ -1458,7 +1463,9 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
         self.assertEqual(len(doc.select(".thank-you")), 1)
         with scopes_disabled():
             o = Order.objects.last()
-            assert o.payments.get(provider='giftcard').amount == Decimal('23.00')
+            p1 = o.payments.get(provider='giftcard')
+            assert p1.amount == Decimal('23.00')
+            assert p1.state == OrderPayment.PAYMENT_STATE_CONFIRMED
 
     def test_giftcard_racecondition(self):
         gc = self.orga.issued_gift_cards.create(currency="EUR")
@@ -1660,6 +1667,38 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
             'giftcard': gc.secret
         }, follow=True)
         assert 'You cannot pay with gift cards when buying a gift card.' in response.content.decode()
+
+    def test_giftcard_like_method_with_min_value(self):
+        gc = self.orga.issued_gift_cards.create(currency="EUR")
+        gc.transactions.create(value=20)
+        self.event.settings.set('payment_stripe__enabled', True)
+        self.event.settings.set('payment_banktransfer__enabled', True)
+        with scopes_disabled():
+            cp1 = CartPosition.objects.create(
+                event=self.event, cart_id=self.session_key, item=self.ticket,
+                price=23, expires=now() + timedelta(minutes=10)
+            )
+
+        payments = [{
+            "id": "test1",
+            "provider": "giftcard",
+            "max_value": None,
+            "min_value": "25.00",
+            "multi_use_supported": True,
+            "info_data": {
+                'gift_card': gc.pk
+            },
+        }]
+        self._set_session('payments', payments)
+        response = self.client.get('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
+        self.assertRedirects(response, '/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug),
+                             target_status_code=200)
+        assert 'at least €25.00' in response.content.decode()
+
+        # perform_order should never be called, but let's see what happens if it does…
+        with scopes_disabled():
+            with pytest.raises(OrderError, match='The selected payment methods do not cover the total balance.'):
+                _perform_order(self.event, payments, [cp1.pk], 'admin@example.org', 'en', None, {}, 'web')
 
     def test_premature_confirm(self):
         response = self.client.get('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)

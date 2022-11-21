@@ -1260,17 +1260,17 @@ class PaymentStep(CartMixin, TemplateFlowStep):
     def is_completed(self, request, warn=False):
         if not self.cart_session.get('payments'):
             if warn:
-                messages.error(request, _('The payment information you entered was incomplete.'))
+                messages.error(request, _('Please select a payment method to proceed.'))
             return False
 
         cart = get_cart(self.request)
         total = get_cart_total(self.request)
         total += sum([f.value for f in get_fees(self.request.event, self.request, total, self.invoice_address,
                                                 self.cart_session.get('payments', []), cart)])
-        selected = self.current_selected_payments(total)
+        selected = self.current_selected_payments(total, warn=warn)
         if sum(p['payment_amount'] for p in selected) != total:
             if warn:
-                messages.error(request, _('The payment information you entered was incomplete.'))
+                messages.error(request, _('Please select a payment method to proceed.'))
             return False
 
         if len([p for p in selected if not p['multi_use_supported']]) > 1:
@@ -1281,7 +1281,7 @@ class PaymentStep(CartMixin, TemplateFlowStep):
                 self._remove_payment(p['id'])
                 if p['payment_amount']:
                     if warn:
-                        messages.error(request, _('The payment information you entered was incomplete.'))
+                        messages.error(request, _('Please select a payment method to proceed.'))
                     return False
 
             if not p['multi_use_supported'] and not p['pprov'].payment_is_valid_session(request):
