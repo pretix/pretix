@@ -29,6 +29,7 @@ class Thumbnail(models.Model):
     source = models.CharField(max_length=255)
     size = models.CharField(max_length=255)
     thumb = models.FileField(upload_to='pub/thumbs/', max_length=255)
+    created = models.DateTimeField(auto_now_add=True, null=True)
 
     class Meta:
         unique_together = (('source', 'size'),)
