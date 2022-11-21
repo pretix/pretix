@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-11-21 14:51+0000\n"
-"PO-Revision-Date: 2022-11-21 14:48+0000\n"
+"PO-Revision-Date: 2022-11-22 00:00+0000\n"
 "Last-Translator: tlm06 <tlm_pg06@hotmail.com>\n"
 "Language-Team: Portuguese (Portugal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/pt_PT/>\n"
@@ -2752,13 +2752,13 @@ msgstr "Montante"
 #, python-brace-format
 msgctxt "invoice"
 msgid "Single price: {net_price} net / {gross_price} gross"
-msgstr ""
+msgstr "Preço único: {net_price} líquido / {gross_price} bruto"
 
 #: pretix/base/invoice.py:584
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgctxt "invoice"
 msgid "Single price: {price}"
-msgstr "Preço único"
+msgstr "Preço único: {price}"
 
 #: pretix/base/invoice.py:602 pretix/base/invoice.py:607
 #: pretix/base/invoice.py:585 pretix/base/invoice.py:590
@@ -3487,7 +3487,7 @@ msgstr ""
 
 #: pretix/base/models/event.py:1584
 msgid "Can be used for filtering"
-msgstr ""
+msgstr "Pode ser usado para filtrar"
 
 #: pretix/base/models/event.py:1585
 msgid ""
@@ -3495,6 +3495,9 @@ msgid ""
 "can also be used for hidden filter parameters in the frontend (e.g. using "
 "the widget)."
 msgstr ""
+"Este campo será mostrado para filtrar eventos ou relatórios no back-end e "
+"também pode ser usado para parâmetros de filtro ocultos no front-end (por "
+"exemplo, usando o widget)."
 
 #: pretix/base/models/event.py:1592 pretix/base/models/event.py:1587
 msgid "A property can either be required or have a default value, not both."
