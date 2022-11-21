@@ -23,6 +23,7 @@ import logging
 from collections import defaultdict
 from decimal import Decimal
 from io import BytesIO
+from itertools import groupby
 from typing import Tuple
 
 import bleach
@@ -554,31 +555,47 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
                 pgettext('invoice', 'Amount'),
             )]
 
+        def _group_key(line):
+            return (line.description, line.tax_rate, line.tax_name, line.net_value, line.gross_value, line.subevent_id,
+                    line.event_date_from, line.event_date_to)
+
         total = Decimal('0.00')
-        for line in self.invoice.lines.all():
+        for (description, tax_rate, tax_name, net_value, gross_value, *ignored), lines in groupby(self.invoice.lines.all(), key=_group_key):
+            lines = list(lines)
             if has_taxes:
+                if len(lines) > 1:
+                    single_price_line = pgettext('invoice', 'Single price: {net_price} net / {gross_price} gross').format(
+                        net_price=money_filter(net_value, self.invoice.event.currency),
+                        gross_price=money_filter(gross_value, self.invoice.event.currency),
+                    )
+                    description = description + "\n" + single_price_line
                 tdata.append((
                     Paragraph(
-                        bleach.clean(line.description, tags=['br']).strip().replace('<br>', '<br/>').replace('\n', '<br />\n'),
+                        bleach.clean(description, tags=['br']).strip().replace('<br>', '<br/>').replace('\n', '<br />\n'),
                         self.stylesheet['Normal']
                     ),
-                    "1",
-                    localize(line.tax_rate) + " %",
-                    money_filter(line.net_value, self.invoice.event.currency),
-                    money_filter(line.gross_value, self.invoice.event.currency),
+                    str(len(lines)),
+                    localize(tax_rate) + " %",
+                    money_filter(net_value * len(lines), self.invoice.event.currency),
+                    money_filter(gross_value * len(lines), self.invoice.event.currency),
                 ))
             else:
+                if len(lines) > 1:
+                    single_price_line = pgettext('invoice', 'Single price: {price}').format(
+                        money_filter(gross_value, self.invoice.event.currency),
+                    )
+                    description = description + "\n" + single_price_line
                 tdata.append((
                     Paragraph(
-                        bleach.clean(line.description, tags=['br']).strip().replace('<br>', '<br/>').replace('\n', '<br />\n'),
+                        bleach.clean(description, tags=['br']).strip().replace('<br>', '<br/>').replace('\n', '<br />\n'),
                         self.stylesheet['Normal']
                     ),
-                    "1",
-                    money_filter(line.gross_value, self.invoice.event.currency),
+                    str(len(lines)),
+                    money_filter(gross_value * len(lines), self.invoice.event.currency),
                 ))
-            taxvalue_map[line.tax_rate, line.tax_name] += line.tax_value
-            grossvalue_map[line.tax_rate, line.tax_name] += line.gross_value
-            total += line.gross_value
+            taxvalue_map[tax_rate, tax_name] += (gross_value - net_value) * len(lines)
+            grossvalue_map[tax_rate, tax_name] += gross_value * len(lines)
+            total += gross_value * len(lines)
 
         if has_taxes:
             tdata.append([
