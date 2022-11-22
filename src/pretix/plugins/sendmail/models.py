@@ -92,6 +92,8 @@ class ScheduledMail(models.Model):
                 is_dst=False,  # prevent AmbiguousTimeError
             )
 
+        if self.computed_datetime > timezone.now() and self.state == self.STATE_MISSED:
+            self.state = self.STATE_SCHEDULED
         self.last_computed = timezone.now()
 
     def send(self):
@@ -241,7 +243,7 @@ class Rule(models.Model, LoggingMixin):
                 if sm.computed_datetime != previous:
                     update_sms.append(sm)
 
-            ScheduledMail.objects.bulk_update(update_sms, ['computed_datetime', 'last_computed'], 100)
+            ScheduledMail.objects.bulk_update(update_sms, ['computed_datetime', 'last_computed', 'state'], 100)
 
     @property
     def human_readable_time(self):

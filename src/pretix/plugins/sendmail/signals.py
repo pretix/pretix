@@ -142,7 +142,7 @@ def sendmail_run_rules(sender, **kwargs):
             previous = m.computed_datetime
             m.recompute()
             if m.computed_datetime != previous:
-                m.save(update_fields=['last_computed', 'computed_datetime'])
+                m.save(update_fields=['last_computed', 'computed_datetime', 'state'])
             else:
                 unchanged.append(m.pk)
 
