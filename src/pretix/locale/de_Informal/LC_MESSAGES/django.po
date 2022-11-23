@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-11-23 13:56+0000\n"
-"PO-Revision-Date: 2022-11-21 15:14+0000\n"
+"PO-Revision-Date: 2022-11-23 14:49+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
@@ -6828,10 +6828,8 @@ msgstr ""
 "Die Stornogebühr darf nicht größer sein als der Gesamtbetrag der Bestellung."
 
 #: pretix/base/services/orders.py:844
-#, fuzzy
-#| msgid "This payment method does not support automatic refunds."
 msgid "The selected payment methods do not cover the total balance."
-msgstr "Diese Zahlungsmethode unterstützt keine automatische Erstattung."
+msgstr "Diese gewählten Zahlungsmethoden decken noch nicht den Gesamtbetrag ab."
 
 #: pretix/base/services/orders.py:909
 msgid ""
@@ -16709,29 +16707,18 @@ msgstr ""
 "    "
 
 #: pretix/control/templates/pretixcontrol/giftcards/checkout_confirm.html:4
-#, fuzzy, python-format
-#| msgid ""
-#| "\n"
-#| "        Your gift card will be used to pay for this order. If the credit "
-#| "on the gift card is lower than the order total, you will be able to pay "
-#| "the\n"
-#| "        difference with a different payment method. If the credit is "
-#| "higher than the order total, you will be able to re-use the gift card in "
-#| "the future.\n"
-#| "    "
+#, python-format
 msgid ""
 "Your gift card %(card)s will be used to pay for this order. If the credit on "
 "the gift card is lower than the order total, you will be able to pay the "
 "difference with a different payment method. If the credit is higher than the "
 "order total, you will be able to re-use the gift card in the future."
 msgstr ""
-"\n"
-"        Dein Wertgutschein wird zur Bezahlung dieser Bestellung benutzt. "
+"Dein Wertgutschein %(card)s wird zur Bezahlung dieser Bestellung benutzt. "
 "Wenn das Guthaben auf dem Wertgutschein niedriger ist als die\n"
 "Bestellsumme, kannst du den Restbetrag mit einer anderen Zahlungsmethode "
 "bezahlen. Wenn das Guthaben höher ist als die Bestellsumme,\n"
-"kannst du den Gutschein in Zukunft erneut verwenden.\n"
-"    "
+"kannst du den Gutschein in Zukunft erneut verwenden."
 
 #: pretix/control/templates/pretixcontrol/global_license.html:8
 msgid ""
@@ -26207,15 +26194,11 @@ msgid "Payment"
 msgstr "Zahlung"
 
 #: pretix/presale/checkoutflow.py:1223
-#, fuzzy
-#| msgid ""
-#| "Your gift card has been applied, but {} still need to be paid. Please "
-#| "select a payment method."
 msgid ""
 "Your payment method has been applied, but {} still need to be paid. Please "
 "select a payment method for the remainder."
 msgstr ""
-"Der Wertgutschein kann eingelöst werden, aber {} müssen noch bezahlt werden. "
+"Die Zahlungsmethode wurde hinzugefügt, aber {} müssen noch bezahlt werden. "
 "Bitte wähle eine Zahlungsmethode für den Restbetrag aus."
 
 #: pretix/presale/checkoutflow.py:1242 pretix/presale/views/order.py:693
@@ -26224,10 +26207,8 @@ msgstr "Bitte wähle eine Zahlungsmethode aus."
 
 #: pretix/presale/checkoutflow.py:1269 pretix/presale/checkoutflow.py:1279
 #: pretix/presale/checkoutflow.py:1290
-#, fuzzy
-#| msgid "Please select a payment method."
 msgid "Please select a payment method to proceed."
-msgstr "Bitte wähle eine Zahlungsmethode aus."
+msgstr "Bitte wähle zum Fortfahren eine Zahlungsmethode aus."
 
 #: pretix/presale/checkoutflow.py:1295 pretix/presale/views/order.py:463
 #: pretix/presale/views/order.py:533
@@ -26725,36 +26706,24 @@ msgid "You will not be able to continue."
 msgstr "Du kannst daher nicht fortfahren."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html:8
-#, fuzzy
-#| msgid "Please confirm the following payment details."
 msgid "You already selected the following payment methods:"
-msgstr "Bitte bestätige die folgenden Zahlungsdetails."
+msgstr "Du hast bereits die folgenden Zahlungsmethoden ausgewählt:"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html:22
-#, fuzzy
-#| msgctxt "invoice"
-#| msgid "Received payments"
 msgid "Remove payment"
-msgstr "Bereits eingegangene Zahlungen"
+msgstr "Zahlung entfernen"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html:34
-#, fuzzy
-#| msgctxt "invoice"
-#| msgid "Remaining amount"
 msgid "Remaining balance"
-msgstr "Restbetrag"
+msgstr "Verbleibender Betrag"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html:35
-#, fuzzy
-#| msgid "Please select a payment method."
 msgid "Please select a payment method below."
-msgstr "Bitte wähle eine Zahlungsmethode aus."
+msgstr "Bitte wähle eine der folgenden Zahlungsmethoden aus."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html:48
-#, fuzzy
-#| msgid "Please select how you want to pay."
 msgid "Please select how you want to pay the remaining balance:"
-msgstr "Bitte wähle die gewünschte Zahlungsmethode aus."
+msgstr "Bitte wähle aus, wie du den verbleibenden Betrag zahlen möchtest."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html:90
 msgid "This sales channel does not provide support for test mode."
@@ -28637,6 +28606,8 @@ msgid ""
 "Your selected payment method can only be used for a payment of at least "
 "{amount}."
 msgstr ""
+"Die von dir gewählte Zahlungsmethode kann nur für Zahlungen von mindestens "
+"{amount} verwendet werden."
 
 #: pretix/presale/views/cart.py:169 pretix/presale/views/cart.py:174
 #: pretix/presale/views/cart.py:192 pretix/presale/views/cart.py:205
