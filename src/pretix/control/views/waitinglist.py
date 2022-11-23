@@ -40,7 +40,7 @@ from django.db import transaction
 from django.db.models import F, Max, Min, Q, Sum
 from django.db.models.functions import Coalesce
 from django.http import Http404, HttpResponse, HttpResponseRedirect
-from django.shortcuts import redirect, render
+from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils.functional import cached_property
 from django.utils.http import is_safe_url
@@ -54,8 +54,11 @@ from pretix.base.models import Item, Quota, WaitingListEntry
 from pretix.base.models.waitinglist import WaitingListException
 from pretix.base.services.waitinglist import assign_automatically
 from pretix.base.views.tasks import AsyncAction
+from pretix.control.forms.waitinglist import WaitingListEntryTransferForm
 from pretix.control.permissions import EventPermissionRequiredMixin
 from pretix.control.views import PaginationMixin
+
+from . import UpdateView
 
 
 class AutoAssign(EventPermissionRequiredMixin, AsyncAction, View):
@@ -360,6 +363,43 @@ class EntryDelete(EventPermissionRequiredMixin, DeleteView):
         if "next" in self.request.GET and is_safe_url(self.request.GET.get("next"), allowed_hosts=None):
             return redirect(self.request.GET.get("next"))
         return HttpResponseRedirect(success_url)
+
+    def get_success_url(self) -> str:
+        return reverse('control:event.orders.waitinglist', kwargs={
+            'event': self.request.event.slug,
+            'organizer': self.request.event.organizer.slug
+        })
+
+
+class EntryTransfer(EventPermissionRequiredMixin, UpdateView):
+    model = WaitingListEntry
+    template_name = 'pretixcontrol/waitinglist/transfer.html'
+    permission = 'can_change_orders'
+    form_class = WaitingListEntryTransferForm
+    context_object_name = 'entry'
+
+    def dispatch(self, request, *args, **kwargs):
+        if not self.request.event.has_subevents:
+            raise Http404(_("This is not an event series."))
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_object(self, queryset=None) -> WaitingListEntry:
+        return get_object_or_404(WaitingListEntry, pk=self.kwargs['entry'], event=self.request.event, voucher__isnull=True)
+
+    @transaction.atomic
+    def form_valid(self, form):
+        messages.success(self.request, _('The waitinglist entry has been transferred.'))
+        if form.has_changed():
+            self.object.log_action(
+                'pretix.event.order.waitinglist.transferred', user=self.request.user, data={
+                    k: form.cleaned_data.get(k) for k in form.changed_data
+                }
+            )
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        messages.error(self.request, _('We could not save your changes. See below for details.'))
+        return super().form_invalid(form)
 
     def get_success_url(self) -> str:
         return reverse('control:event.orders.waitinglist', kwargs={

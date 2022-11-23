@@ -1,0 +1,23 @@
+{% extends "pretixcontrol/event/base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% block title %}{% trans "Transfer entry" %}{% endblock %}
+{% block content %}
+    <h1>{% trans "Transfer entry" %}</h1>
+    <form action="" method="post" class="form-horizontal">
+        {% csrf_token %}
+        <p>{% blocktrans trimmed context "subevent" %}
+            Please select the date to which the following waiting list entry should be
+            transferred: <strong>{{ entry }}</strong>?
+        {% endblocktrans %}</p>
+        {% bootstrap_field form.subevent layout="control" %}
+        <div class="form-group submit-group">
+            <a href="{% url "control:event.orders.waitinglist" organizer=request.event.organizer.slug event=request.event.slug %}" class="btn btn-default btn-cancel">
+                {% trans "Cancel" %}
+            </a>
+            <button type="submit" class="btn btn-primary btn-save">
+                {% trans "Transfer" %}
+            </button>
+        </div>
+    </form>
+{% endblock %}
