@@ -380,7 +380,7 @@ class EntryTransfer(EventPermissionRequiredMixin, UpdateView):
 
     def dispatch(self, request, *args, **kwargs):
         if not self.request.event.has_subevents:
-            raise Http404(_("The requested entry does not have subevents."))
+            raise Http404(_("This is not an event series."))
         return super().dispatch(request, *args, **kwargs)
 
     def get_object(self, queryset=None) -> WaitingListEntry:

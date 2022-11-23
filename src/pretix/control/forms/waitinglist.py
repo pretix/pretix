@@ -13,7 +13,7 @@ class WaitingListEntryTransferForm(I18nModelForm):
 
         if self.event.has_subevents:
             self.fields['subevent'].required = True
-            self.fields['subevent'].queryset = self.event.subevents.filter(active=True)
+            self.fields['subevent'].queryset = self.event.subevents.all()
             self.fields['subevent'].widget = Select2(
                 attrs={
                     'data-model-select2': 'event',
