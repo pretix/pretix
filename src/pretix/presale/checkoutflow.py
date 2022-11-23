@@ -1240,6 +1240,7 @@ class PaymentStep(CartMixin, TemplateFlowStep):
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         ctx['current_payments'] = [p for p in self.current_selected_payments(self._total_order_value) if p.get('multi_use_supported')]
+        ctx['remaining'] = self._total_order_value - sum(p['payment_amount'] for p in ctx['current_payments']) + sum(p['fee'] for p in ctx['current_payments'])
         ctx['providers'] = self.provider_forms
         ctx['show_fees'] = any(p['fee'] for p in self.provider_forms)
 

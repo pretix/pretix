@@ -27,6 +27,21 @@
                         </div>
                     </div>
                 {% endfor %}
+                {% if remaining %}
+                    <div class="list-group-item">
+                        <div class="row">
+                            <div class="col-xs-9">
+                                <strong>{% trans "Remaining balance" %}</strong><br>
+                                <span class="text-muted">{% trans "Please select a payment method below." %}</span>
+                            </div>
+                            <div class="col-xs-2 text-right">
+                                <strong>
+                                    {{ remaining|money:request.event.currency }}
+                                </strong>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
             </div>
         </form>
         <p>{% trans "Please select how you want to pay the remaining balance:" %}</p>

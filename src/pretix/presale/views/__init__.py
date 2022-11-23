@@ -271,6 +271,8 @@ class CartMixin:
                 fee = pprov.calculate_fee(to_pay)
                 total_remaining += fee
                 to_pay += fee
+            else:
+                fee = Decimal('0.00')
 
             if p.get('max_value') and to_pay > Decimal(p['max_value']):
                 to_pay = min(to_pay, Decimal(p['max_value']))
@@ -278,6 +280,7 @@ class CartMixin:
             p['payment_amount'] = to_pay
             p['provider_name'] = pprov.public_name
             p['pprov'] = pprov
+            p['fee'] = fee
             total_remaining -= to_pay
             payments.append(p)
         return payments
