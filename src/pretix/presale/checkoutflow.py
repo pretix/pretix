@@ -1306,13 +1306,13 @@ class PaymentStep(CartMixin, TemplateFlowStep):
                 return False
 
         used_providers = {p['provider'] for p in self.cart_session.get('payments', [])}
-        for p in self.request.event.get_payment_providers().values():
-            if p.is_implicit(request) if callable(p.is_implicit) else p.is_implicit:
-                if self._is_allowed(p, request):
+        for provider in self.request.event.get_payment_providers().values():
+            if provider.is_implicit(request) if callable(provider.is_implicit) else provider.is_implicit:
+                if self._is_allowed(provider, request):
                     self.cart_session['payments'] = [
                         {
                             'id': str(uuid.uuid4()),
-                            'provider': p.identifier,
+                            'provider': provider.identifier,
                             'multi_use_supported': False,
                             'min_value': None,
                             'max_value': None,
@@ -1320,9 +1320,9 @@ class PaymentStep(CartMixin, TemplateFlowStep):
                         }
                     ]
                     return False
-                elif p.identifier in used_providers:
+                elif provider.identifier in used_providers:
                     # is_allowed might have changed, e.g. after add-on selection
-                    self.cart_session['payments'] = [p for p in self.cart_session['payments'] if p['provider'] != p.identifier]
+                    self.cart_session['payments'] = [p for p in self.cart_session['payments'] if p['provider'] != provider.identifier]
 
         return True
 
