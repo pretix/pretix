@@ -1234,6 +1234,11 @@ class PaymentStep(CartMixin, TemplateFlowStep):
                         return redirect(self.get_next_url(request))
                 else:
                     return self.render()
+
+        if self.is_completed(request, warn=False):
+            # All payments already accounted for, no need to select one
+            return redirect(self.get_next_url(request))
+
         messages.error(self.request, _("Please select a payment method."))
         return self.render()
 
