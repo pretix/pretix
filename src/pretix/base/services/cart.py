@@ -31,7 +31,7 @@
 # Unless required by applicable law or agreed to in writing, software distributed under the Apache License 2.0 is
 # distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations under the License.
-
+import uuid
 from collections import Counter, defaultdict, namedtuple
 from datetime import datetime, time, timedelta
 from decimal import Decimal
@@ -1265,44 +1265,71 @@ class CartManager:
                 raise CartError(err)
 
 
-def get_fees(event, request, total, invoice_address, provider, positions):
+def add_payment_to_cart(request, provider, min_value: Decimal=None, max_value: Decimal=None, info_data: dict=None):
+    """
+    :param request: The current HTTP request context.
+    :param provider: The instance of your payment provider.
+    :param min_value: The minimum value this payment instrument supports, or ``None`` for unlimited.
+    :param max_value: The maximum value this payment instrument supports, or ``None`` for unlimited. Highly discouraged
+                      to use for payment providers which charge a payment fee, as this can be very user-unfriendly if
+                      users need a second payment method just for the payment fee of the first method.
+    :param info_data: A dictionary of information that will be passed through to the ``OrderPayment.info_data`` attribute.
+    :return:
+    """
     from pretix.presale.views.cart import cart_session
+
+    cs = cart_session(request)
+    cs.setdefault('payments', [])
+
+    cs['payments'].append({
+        'id': str(uuid.uuid4()),
+        'provider': provider.identifier,
+        'multi_use_supported': provider.multi_use_supported,
+        'min_value': str(min_value) if min_value is not None else None,
+        'max_value': str(max_value) if max_value is not None else None,
+        'info_data': info_data or {},
+    })
+
+
+def get_fees(event, request, total, invoice_address, payments, positions):
+    if payments and not isinstance(payments, list):
+        raise TypeError("payments must now be a list")
 
     fees = []
     for recv, resp in fee_calculation_for_cart.send(sender=event, request=request, invoice_address=invoice_address,
-                                                    total=total, positions=positions):
+                                                    total=total, positions=positions, payment_requests=payments):
         if resp:
             fees += resp
 
     total = total + sum(f.value for f in fees)
 
-    cs = cart_session(request)
-    if cs.get('gift_cards'):
-        gcs = cs['gift_cards']
-        gc_qs = event.organizer.accepted_gift_cards.filter(pk__in=cs.get('gift_cards'), currency=event.currency)
-        for gc in gc_qs:
-            if gc.testmode != event.testmode:
-                gcs.remove(gc.pk)
+    if total != 0 and payments:
+        total_remaining = total
+        for p in payments:
+            # This algorithm of treating min/max values and fees needs to stay in sync between the following
+            # places in the code base:
+            # - pretix.base.services.cart.get_fees
+            # - pretix.base.services.orders._get_fees
+            # - pretix.presale.views.CartMixin.current_selected_payments
+            if p.get('min_value') and total_remaining < Decimal(p['min_value']):
                 continue
-            fval = Decimal(gc.value)  # TODO: don't require an extra query
-            fval = min(fval, total)
-            if fval > 0:
-                total -= fval
-                fees.append(OrderFee(
-                    fee_type=OrderFee.FEE_TYPE_GIFTCARD,
-                    internal_type='giftcard',
-                    description=gc.secret,
-                    value=-1 * fval,
-                    tax_rate=Decimal('0.00'),
-                    tax_value=Decimal('0.00'),
-                    tax_rule=TaxRule.zero()
-                ))
-        cs['gift_cards'] = gcs
 
-    if provider and total != 0:
-        provider = event.get_payment_providers().get(provider)
-        if provider:
-            payment_fee = provider.calculate_fee(total)
+            to_pay = total_remaining
+            if p.get('max_value') and to_pay > Decimal(p['max_value']):
+                to_pay = min(to_pay, Decimal(p['max_value']))
+
+            pprov = event.get_payment_providers(cached=True).get(p['provider'])
+            if not pprov:
+                continue
+
+            payment_fee = pprov.calculate_fee(to_pay)
+            total_remaining += payment_fee
+            to_pay += payment_fee
+
+            if p.get('max_value') and to_pay > Decimal(p['max_value']):
+                to_pay = min(to_pay, Decimal(p['max_value']))
+
+            total_remaining -= to_pay
 
             if payment_fee:
                 payment_fee_tax_rule = event.settings.tax_rate_default or TaxRule.zero()

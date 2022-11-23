@@ -184,9 +184,10 @@ You will receive the request triggering the order creation as the ``request`` ke
 
 As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
 """
+
 checkout_confirm_page_content = EventPluginSignal()
 """
-Arguments: 'request'
+Arguments: ``request``
 
 This signals allows you to add HTML content to the confirmation page that is presented at the
 end of the checkout process, just before the order is being created.
@@ -197,7 +198,7 @@ argument will contain the request object.
 
 fee_calculation_for_cart = EventPluginSignal()
 """
-Arguments: 'request', 'invoice_address', 'total', 'positions'
+Arguments: ``request``, ``invoice_address``, ``total``, ``positions``, ``payment_requetss``
 
 This signals allows you to add fees to a cart. You are expected to return a list of ``OrderFee``
 objects that are not yet saved to the database (because there is no order yet).

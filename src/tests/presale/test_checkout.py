@@ -27,6 +27,7 @@ from datetime import timedelta
 from decimal import Decimal
 from unittest import mock
 
+import pytest
 from bs4 import BeautifulSoup
 from django.conf import settings
 from django.core import mail as djmail
@@ -97,6 +98,26 @@ class BaseCheckoutTestCase:
         session = self.client.session
         session['carts'][get_cart_session_key(self.client, self.event)][key] = value
         session.save()
+
+    def _set_payment(self):
+        self._set_session('payments', [{
+            "id": "test1",
+            "provider": "banktransfer",
+            "max_value": None,
+            "min_value": None,
+            "multi_use_supported": False,
+            "info_data": {},
+        }])
+
+    def _manual_payment(self):
+        return [{
+            "id": "test1",
+            "provider": "manual",
+            "max_value": None,
+            "min_value": None,
+            "multi_use_supported": False,
+            "info_data": {},
+        }]
 
 
 class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
@@ -674,7 +695,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
         assert cr1.price == Decimal('27.37')
         assert cr1.tax_rate == Decimal('0.00')
 
-        self._set_session('payment', 'banktransfer')
+        self._set_payment()
 
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
@@ -738,7 +759,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
         assert cr1.price == Decimal('40.00')
         assert cr1.tax_rate == Decimal('0.00')
 
-        self._set_session('payment', 'banktransfer')
+        self._set_payment()
 
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
@@ -1350,7 +1371,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
         }, follow=True)
         self.assertRedirects(response, '/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug),
                              target_status_code=200)
-        assert '-€20.00' in response.content.decode()
+        assert '€20.00' in response.content.decode()
         assert '3.00' in response.content.decode()
         assert 'alert-success' in response.content.decode()
 
@@ -1359,7 +1380,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
         }, follow=True)
         self.assertRedirects(response, '/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug),
                              target_status_code=200)
-        assert '-€20.00' in response.content.decode()
+        assert '€20.00' in response.content.decode()
         assert '3.00' in response.content.decode()
 
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
@@ -1367,11 +1388,12 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
         self.assertEqual(len(doc.select(".thank-you")), 1)
         with scopes_disabled():
             o = Order.objects.last()
-            assert o.payments.get(provider='giftcard').amount == Decimal('20.00')
-            assert o.payments.get(provider='banktransfer').amount == Decimal('3.00')
-
-        assert '-€20.00' in response.content.decode()
-        assert '3.00' in response.content.decode()
+            p1 = o.payments.get(provider='giftcard')
+            p2 = o.payments.get(provider='banktransfer')
+            assert p1.amount == Decimal('20.00')
+            assert p1.state == OrderPayment.PAYMENT_STATE_CONFIRMED
+            assert p2.amount == Decimal('3.00')
+            assert p2.state == OrderPayment.PAYMENT_STATE_CREATED
 
     def test_giftcard_full_with_multiple(self):
         gc = self.orga.issued_gift_cards.create(currency="EUR")
@@ -1394,8 +1416,8 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
         }, follow=True)
         self.assertRedirects(response, '/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug),
                              target_status_code=200)
-        assert '-€20.00' in response.content.decode()
-        assert '3.00' in response.content.decode()
+        assert '€20.00' in response.content.decode()
+        assert '€3.00' in response.content.decode()
         assert 'alert-success' in response.content.decode()
 
         response = self.client.post('/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug), {
@@ -1410,8 +1432,11 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
         self.assertEqual(len(doc.select(".thank-you")), 1)
         with scopes_disabled():
             o = Order.objects.last()
-            assert o.payments.get(provider='giftcard', amount=Decimal('20.00'))
-            assert o.payments.get(provider='giftcard', amount=Decimal('20.00'))
+            [p1, p2] = o.payments.all()
+            assert p1.amount == Decimal('20.00')
+            assert p1.state == OrderPayment.PAYMENT_STATE_CONFIRMED
+            assert p2.amount == Decimal('3.00')
+            assert p2.state == OrderPayment.PAYMENT_STATE_CONFIRMED
 
     def test_giftcard_full(self):
         gc = self.orga.issued_gift_cards.create(currency="EUR")
@@ -1432,15 +1457,15 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
         }, follow=True)
         self.assertRedirects(response, '/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug),
                              target_status_code=200)
-        assert '-€23.00' in response.content.decode()
-        assert '0.00' in response.content.decode()
 
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
         self.assertEqual(len(doc.select(".thank-you")), 1)
         with scopes_disabled():
             o = Order.objects.last()
-            assert o.payments.get(provider='giftcard').amount == Decimal('23.00')
+            p1 = o.payments.get(provider='giftcard')
+            assert p1.amount == Decimal('23.00')
+            assert p1.state == OrderPayment.PAYMENT_STATE_CONFIRMED
 
     def test_giftcard_racecondition(self):
         gc = self.orga.issued_gift_cards.create(currency="EUR")
@@ -1461,7 +1486,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
         }, follow=True)
         self.assertRedirects(response, '/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug),
                              target_status_code=200)
-        assert '-€20.00' in response.content.decode()
+        assert '€20.00' in response.content.decode()
         assert '3.00' in response.content.decode()
         assert 'alert-success' in response.content.decode()
 
@@ -1470,24 +1495,23 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
         }, follow=True)
         self.assertRedirects(response, '/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug),
                              target_status_code=200)
-        assert '-€20.00' in response.content.decode()
+        assert '€20.00' in response.content.decode()
         assert '3.00' in response.content.decode()
 
         gc.transactions.create(value=-2)
 
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
-        self.assertEqual(len(doc.select(".alert-danger")), 1)
-        assert '-€18.00' in response.content.decode()
-        assert '5.00' in response.content.decode()
-
-        response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
-        doc = BeautifulSoup(response.content.decode(), "lxml")
-        self.assertEqual(len(doc.select(".thank-you")), 1)
+        assert "used in the meantime" in doc.select('.alert-warning')[0].text
         with scopes_disabled():
             o = Order.objects.last()
-            assert o.payments.get(provider='giftcard').amount == Decimal('18.00')
-            assert o.payments.get(provider='banktransfer').amount == Decimal('5.00')
+            assert o.status == Order.STATUS_PENDING
+            p1 = o.payments.get(provider='giftcard')
+            p2 = o.payments.get(provider='banktransfer')
+            assert p1.amount == Decimal('20.00')
+            assert p1.state == OrderPayment.PAYMENT_STATE_FAILED
+            assert p2.amount == Decimal('3.00')
+            assert p2.state == OrderPayment.PAYMENT_STATE_CANCELED
 
     def test_giftcard_expired(self):
         gc = self.orga.issued_gift_cards.create(currency="EUR", expires=now() - timedelta(days=1))
@@ -1554,8 +1578,6 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
         }, follow=True)
         self.assertRedirects(response, '/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug),
                              target_status_code=200)
-        assert '-€23.00' in response.content.decode()
-        assert '0.00' in response.content.decode()
 
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
@@ -1646,6 +1668,135 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
         }, follow=True)
         assert 'You cannot pay with gift cards when buying a gift card.' in response.content.decode()
 
+    def test_giftcard_like_method_with_min_value(self):
+        gc = self.orga.issued_gift_cards.create(currency="EUR")
+        gc.transactions.create(value=20)
+        self.event.settings.set('payment_stripe__enabled', True)
+        self.event.settings.set('payment_banktransfer__enabled', True)
+        with scopes_disabled():
+            cp1 = CartPosition.objects.create(
+                event=self.event, cart_id=self.session_key, item=self.ticket,
+                price=23, expires=now() + timedelta(minutes=10)
+            )
+
+        payments = [{
+            "id": "test1",
+            "provider": "giftcard",
+            "max_value": None,
+            "min_value": "25.00",
+            "multi_use_supported": True,
+            "info_data": {
+                'gift_card': gc.pk
+            },
+        }]
+        self._set_session('payments', payments)
+        response = self.client.get('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
+        self.assertRedirects(response, '/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug),
+                             target_status_code=200)
+        assert 'at least €25.00' in response.content.decode()
+
+        # perform_order should never be called, but let's see what happens if it does…
+        with scopes_disabled():
+            with pytest.raises(OrderError, match='The selected payment methods do not cover the total balance.'):
+                _perform_order(self.event, payments, [cp1.pk], 'admin@example.org', 'en', None, {}, 'web')
+
+    def test_payment_fee_for_giftcard_payment_paid_with_same_card(self):
+        # Our built-in gift card payment does not actually support setting a payment fee, but we still want to
+        # test the core behavior in case a gift-card plugin does
+        gc = self.orga.issued_gift_cards.create(currency="EUR")
+        gc.transactions.create(value=27)
+        self.event.settings.set('payment_giftcard__fee_percent', 10)
+        self.event.settings.set('payment_giftcard__fee_reverse_calc', False)
+        with scopes_disabled():
+            CartPosition.objects.create(
+                event=self.event, cart_id=self.session_key, item=self.ticket,
+                price=23, expires=now() + timedelta(minutes=10)
+            )
+        response = self.client.get('/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug), follow=True)
+        doc = BeautifulSoup(response.content.decode(), "lxml")
+        self.assertEqual(len(doc.select('input[name="payment"]')), 2)
+
+        response = self.client.post('/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug), {
+            'payment': 'giftcard',
+            'giftcard': gc.secret
+        }, follow=True)
+        self.assertRedirects(response, '/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug),
+                             target_status_code=200)
+
+        fees = response.context_data['cart']['fees']
+        assert len(fees) == 1
+        assert fees[0].value == Decimal('2.30')
+        assert response.context_data['cart']['total'] == Decimal('25.30')
+
+        response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
+        doc = BeautifulSoup(response.content.decode(), "lxml")
+        self.assertEqual(len(doc.select(".thank-you")), 1)
+        with scopes_disabled():
+            o = Order.objects.last()
+            p1 = o.payments.get()
+            assert p1.amount == Decimal('25.30')
+            assert p1.state == OrderPayment.PAYMENT_STATE_CONFIRMED
+            assert p1.fee.value == Decimal("2.30")
+            assert o.total == Decimal("25.30")
+
+    def test_payment_fee_for_giftcard_payment_paid_with_other_method(self):
+        # Our built-in gift card payment does not actually support setting a payment fee, but we still want to
+        # test the core behavior in case a gift-card plugin does
+        gc = self.orga.issued_gift_cards.create(currency="EUR")
+        gc.transactions.create(value=23)
+        self.event.settings.set('payment_banktransfer__enabled', True)
+        self.event.settings.set('payment_banktransfer__fee_percent', 20)
+        self.event.settings.set('payment_banktransfer__fee_reverse_calc', False)
+        self.event.settings.set('payment_giftcard__fee_percent', 10)
+        self.event.settings.set('payment_giftcard__fee_reverse_calc', False)
+        with scopes_disabled():
+            CartPosition.objects.create(
+                event=self.event, cart_id=self.session_key, item=self.ticket,
+                price=23, expires=now() + timedelta(minutes=10)
+            )
+        response = self.client.get('/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug), follow=True)
+        doc = BeautifulSoup(response.content.decode(), "lxml")
+        self.assertEqual(len(doc.select('input[name="payment"]')), 2)
+
+        response = self.client.post('/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug), {
+            'payment': 'giftcard',
+            'giftcard': gc.secret
+        }, follow=True)
+        self.assertRedirects(response, '/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug),
+                             target_status_code=200)
+
+        fees = response.context_data['cart']['fees']
+        assert len(fees) == 1
+        assert fees[0].value == Decimal('2.30')
+        assert response.context_data['cart']['total'] == Decimal('25.30')
+
+        response = self.client.post('/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug), {
+            'payment': 'banktransfer',
+        }, follow=True)
+        self.assertRedirects(response, '/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug),
+                             target_status_code=200)
+
+        fees = response.context_data['cart']['fees']
+        assert len(fees) == 2
+        assert fees[0].value == Decimal('2.30')
+        assert fees[1].value == Decimal('0.46')
+        assert response.context_data['cart']['total'] == Decimal('25.76')
+
+        response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
+        doc = BeautifulSoup(response.content.decode(), "lxml")
+        self.assertEqual(len(doc.select(".thank-you")), 1)
+        with scopes_disabled():
+            o = Order.objects.last()
+            p1 = o.payments.get(provider='giftcard')
+            p2 = o.payments.get(provider='banktransfer')
+            assert p1.amount == Decimal('23.00')
+            assert p1.state == OrderPayment.PAYMENT_STATE_CONFIRMED
+            assert p2.amount == Decimal('2.76')
+            assert p2.state == OrderPayment.PAYMENT_STATE_CREATED
+            assert p1.fee.value == Decimal("2.30")
+            assert p2.fee.value == Decimal("0.46")
+            assert o.total == Decimal("25.76")
+
     def test_premature_confirm(self):
         response = self.client.get('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         self.assertRedirects(response, '/%s/%s/?require_cookie=true' % (self.orga.slug, self.event.slug),
@@ -1663,7 +1814,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
         self.assertRedirects(response, '/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug),
                              target_status_code=200)
 
-        self._set_session('payment', 'banktransfer')
+        self._set_payment()
 
         self.event.settings.set('attendee_names_asked', True)
         self.event.settings.set('attendee_names_required', True)
@@ -1706,7 +1857,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 event=self.event, cart_id=self.session_key, item=self.ticket,
                 price=23, expires=now() + timedelta(minutes=10), subevent=se
             )
-        self._set_session('payment', 'banktransfer')
+        self._set_payment()
 
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
@@ -1798,7 +1949,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 event=self.event, cart_id=self.session_key, item=self.ticket,
                 price=42, listed_price=42, price_after_voucher=42, expires=now() + timedelta(minutes=10)
             )
-        self._set_session('payment', 'banktransfer')
+        self._set_payment()
 
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
@@ -1815,7 +1966,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 event=self.event, cart_id=self.session_key, item=self.ticket,
                 price=0, listed_price=0, price_after_voucher=0, expires=now() + timedelta(minutes=10)
             )
-        self._set_session('payment', 'free')
+        self._set_payment()
 
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
@@ -1835,7 +1986,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 event=self.event, cart_id=self.session_key, item=self.ticket,
                 price=0, listed_price=0, price_after_voucher=0, expires=now() + timedelta(minutes=10)
             )
-        self._set_session('payment', 'free')
+        self._set_payment()
 
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
@@ -1854,7 +2005,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 event=self.event, cart_id=self.session_key, item=self.ticket,
                 price=23, expires=now() + timedelta(minutes=10)
             )
-        self._set_session('payment', 'banktransfer')
+        self._set_payment()
 
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
@@ -1880,7 +2031,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 event=self.event, cart_id=self.session_key, item=self.ticket,
                 price=23, expires=now() - timedelta(minutes=10), subevent=se
             )
-        self._set_session('payment', 'banktransfer')
+        self._set_payment()
 
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
@@ -1896,7 +2047,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 event=self.event, cart_id=self.session_key, item=self.ticket,
                 price=23, expires=now() - timedelta(minutes=10)
             )
-        self._set_session('payment', 'banktransfer')
+        self._set_payment()
 
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
@@ -1918,7 +2069,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 event=self.event, cart_id=self.session_key, item=self.ticket,
                 price=23, expires=now() - timedelta(minutes=10), subevent=se
             )
-        self._set_session('payment', 'banktransfer')
+        self._set_payment()
 
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
@@ -1939,7 +2090,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 event=self.event, cart_id=self.session_key, item=self.ticket,
                 price=23, expires=now() - timedelta(minutes=10), subevent=se
             )
-        self._set_session('payment', 'banktransfer')
+        self._set_payment()
 
         self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         with scopes_disabled():
@@ -1958,7 +2109,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 event=self.event, cart_id=self.session_key, item=self.workshop2, variation=self.workshop2b,
                 price=23, expires=now() - timedelta(minutes=10), subevent=se
             )
-        self._set_session('payment', 'banktransfer')
+        self._set_payment()
 
         self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         with scopes_disabled():
@@ -1976,7 +2127,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 event=self.event, cart_id=self.session_key, item=self.ticket,
                 price=23, expires=now() - timedelta(minutes=10), subevent=se
             )
-        self._set_session('payment', 'banktransfer')
+        self._set_payment()
 
         self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         with scopes_disabled():
@@ -1995,7 +2146,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 event=self.event, cart_id=self.session_key, item=self.workshop2, variation=self.workshop2b,
                 price=23, expires=now() - timedelta(minutes=10), subevent=se
             )
-        self._set_session('payment', 'banktransfer')
+        self._set_payment()
 
         self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         with scopes_disabled():
@@ -2015,7 +2166,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 addon_to=cp1
             )
 
-        self._set_session('payment', 'banktransfer')
+        self._set_payment()
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
         self.assertEqual(len(doc.select(".thank-you")), 1)
@@ -2031,7 +2182,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 event=self.event, cart_id=self.session_key, item=self.ticket,
                 price=23, expires=now() - timedelta(minutes=10)
             )
-        self._set_session('payment', 'banktransfer')
+        self._set_payment()
 
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
@@ -2051,7 +2202,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 event=self.event, cart_id=self.session_key, item=self.ticket,
                 price=23, expires=now() - timedelta(minutes=10)
             )
-        self._set_session('payment', 'banktransfer')
+        self._set_payment()
 
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
@@ -2069,7 +2220,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 event=self.event, cart_id=self.session_key, item=self.ticket,
                 price=23, expires=now() - timedelta(minutes=10)
             )
-        self._set_session('payment', 'banktransfer')
+        self._set_payment()
 
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
@@ -2088,7 +2239,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 event=self.event, cart_id=self.session_key, item=self.ticket,
                 price=23, expires=now() - timedelta(minutes=10)
             )
-        self._set_session('payment', 'banktransfer')
+        self._set_payment()
 
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
@@ -2108,7 +2259,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 listed_price=23, price_after_voucher=23, custom_price_input=23, price=23,
                 expires=now() - timedelta(minutes=10)
             )
-        self._set_session('payment', 'banktransfer')
+        self._set_payment()
 
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
@@ -2125,7 +2276,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 event=self.event, cart_id=self.session_key, item=self.ticket,
                 price=12, expires=now() + timedelta(minutes=10), voucher=v
             )
-        self._set_session('payment', 'banktransfer')
+        self._set_payment()
 
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
@@ -2147,7 +2298,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 event=self.event, cart_id=self.session_key, item=self.ticket,
                 price=12, expires=now() + timedelta(minutes=10), voucher=v
             )
-        self._set_session('payment', 'banktransfer')
+        self._set_payment()
 
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
@@ -2163,7 +2314,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 event=self.event, cart_id=self.session_key, item=self.ticket,
                 price=12, expires=now() + timedelta(minutes=10)
             )
-        self._set_session('payment', 'banktransfer')
+        self._set_payment()
 
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
@@ -2177,7 +2328,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 event=self.event, cart_id=self.session_key, item=self.ticket,
                 price=13, expires=now() - timedelta(minutes=10), voucher=v
             )
-        self._set_session('payment', 'banktransfer')
+        self._set_payment()
 
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
@@ -2194,7 +2345,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 event=self.event, cart_id=self.session_key, item=self.ticket,
                 price=12, expires=now() - timedelta(minutes=10), voucher=v
             )
-        self._set_session('payment', 'banktransfer')
+        self._set_payment()
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
         self.assertIn("has already been", doc.select(".alert-danger")[0].text)
@@ -2207,7 +2358,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 event=self.event, cart_id=self.session_key, item=self.ticket,
                 price=12, expires=now() - timedelta(minutes=10), voucher=v
             )
-        self._set_session('payment', 'banktransfer')
+        self._set_payment()
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
         self.assertIn("has already been", doc.select(".alert-danger")[0].text)
@@ -2224,7 +2375,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 event=self.event, cart_id=self.session_key, item=self.ticket,
                 price=12, expires=now() - timedelta(minutes=10), voucher=v
             )
-        self._set_session('payment', 'banktransfer')
+        self._set_payment()
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
         self.assertIn("has already been", doc.select(".alert-danger")[0].text)
@@ -2243,7 +2394,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 event=self.event, cart_id=self.session_key, item=self.ticket,
                 price=12, expires=now() - timedelta(minutes=10), voucher=v
             )
-        self._set_session('payment', 'banktransfer')
+        self._set_payment()
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         with scopes_disabled():
             doc = BeautifulSoup(response.content.decode(), "lxml")
@@ -2271,7 +2422,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 event=self.event, cart_id=self.session_key, item=self.ticket,
                 price=12, expires=now() - timedelta(minutes=10), voucher=v
             )
-        self._set_session('payment', 'banktransfer')
+        self._set_payment()
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
         self.assertEqual(len(doc.select(".thank-you")), 1)
@@ -2298,7 +2449,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 event=self.event, cart_id=self.session_key, item=self.ticket,
                 price=12, expires=now() - timedelta(minutes=10), voucher=v
             )
-        self._set_session('payment', 'banktransfer')
+        self._set_payment()
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
         self.assertIn("has already been", doc.select(".alert-danger")[0].text)
@@ -2314,7 +2465,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 event=self.event, cart_id=self.session_key, item=self.ticket,
                 price=12, expires=now() + timedelta(minutes=10), voucher=v
             )
-        self._set_session('payment', 'banktransfer')
+        self._set_payment()
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
         self.assertIn("at least 2", doc.select(".alert-danger")[0].text)
@@ -2327,7 +2478,6 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
         self.client.get('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug))  # required for session['shown_total']
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
-        print(doc)
         self.assertEqual(len(doc.select(".thank-you")), 1)
         with scopes_disabled():
             self.assertEqual(Order.objects.count(), 1)
@@ -2343,7 +2493,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 event=self.event, cart_id=self.session_key, item=self.ticket,
                 price=12, expires=now() - timedelta(minutes=10), voucher=v
             )
-        self._set_session('payment', 'banktransfer')
+        self._set_payment()
 
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
@@ -2363,7 +2513,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 event=self.event, cart_id=self.session_key, item=self.ticket,
                 price=12, expires=now() - timedelta(minutes=10)
             )
-        self._set_session('payment', 'banktransfer')
+        self._set_payment()
 
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
@@ -2396,7 +2546,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 event=self.event, cart_id=self.session_key, item=self.ticket,
                 price=12, expires=now() - timedelta(minutes=10), voucher=v
             )
-            self._set_session('payment', 'banktransfer')
+        self._set_payment()
 
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
@@ -2418,7 +2568,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 event=self.event, cart_id=self.session_key, item=self.ticket,
                 price=23, expires=now() + timedelta(minutes=10), voucher=v
             )
-        self._set_session('payment', 'banktransfer')
+        self._set_payment()
 
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
@@ -2446,7 +2596,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 event=self.event, cart_id=self.session_key, item=self.ticket,
                 listed_price=23, price_after_voucher=23, price=18.4, expires=now() - timedelta(minutes=10),
             )
-        self._set_session('payment', 'banktransfer')
+        self._set_payment()
 
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
@@ -2468,7 +2618,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 event=self.event, cart_id=self.session_key, item=self.ticket,
                 listed_price=23, price_after_voucher=23, price=23, expires=now() - timedelta(minutes=10),
             )
-        self._set_session('payment', 'banktransfer')
+        self._set_payment()
 
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
@@ -2491,7 +2641,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 event=self.event, cart_id=self.session_key, item=self.ticket,
                 price=23, expires=now() + timedelta(minutes=10),
             )
-        self._set_session('payment', 'banktransfer')
+        self._set_payment()
 
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
@@ -2530,7 +2680,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 event=self.event, cart_id=self.session_key, item=self.ticket,
                 price=23, expires=now() - timedelta(minutes=10), subevent=se2
             )
-        self._set_session('payment', 'banktransfer')
+        self._set_payment()
 
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
@@ -2550,7 +2700,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 event=self.event, cart_id=self.session_key, item=self.ticket,
                 price=23, expires=now() - timedelta(minutes=10)
             )
-        self._set_session('payment', 'banktransfer')
+        self._set_payment()
 
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
@@ -2566,7 +2716,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 event=self.event, cart_id=self.session_key, item=self.ticket,
                 price=23, expires=now() + timedelta(minutes=10)
             )
-        self._set_session('payment', 'banktransfer')
+        self._set_payment()
 
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
@@ -2580,7 +2730,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 event=self.event, cart_id=self.session_key, item=self.ticket,
                 price=23, expires=now() + timedelta(minutes=10)
             )
-        self._set_session('payment', 'banktransfer')
+        self._set_payment()
 
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
@@ -2593,7 +2743,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 event=self.event, cart_id=self.session_key, item=self.ticket,
                 price=23, expires=now() + timedelta(minutes=10)
             )
-        self._set_session('payment', 'banktransfer')
+        self._set_payment()
 
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
@@ -2607,7 +2757,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 event=self.event, cart_id=self.session_key, item=self.ticket,
                 price=23, expires=now() + timedelta(minutes=10)
             )
-        self._set_session('payment', 'banktransfer')
+        self._set_payment()
 
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
@@ -2623,7 +2773,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 event=self.event, cart_id=self.session_key, item=self.ticket,
                 price=23, expires=now() + timedelta(minutes=10)
             )
-        self._set_session('payment', 'banktransfer')
+        self._set_payment()
 
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
@@ -2639,7 +2789,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 event=self.event, cart_id=self.session_key, item=self.ticket,
                 price=23, expires=now() + timedelta(minutes=10)
             )
-        self._set_session('payment', 'banktransfer')
+        self._set_payment()
 
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
@@ -2655,7 +2805,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 event=self.event, cart_id=self.session_key, item=self.ticket,
                 price=23, expires=now() + timedelta(minutes=10)
             )
-        self._set_session('payment', 'banktransfer')
+        self._set_payment()
 
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
@@ -2671,7 +2821,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 event=self.event, cart_id=self.session_key, item=self.ticket,
                 price=23, expires=now() - timedelta(minutes=10)
             )
-        self._set_session('payment', 'banktransfer')
+        self._set_payment()
 
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
@@ -2686,7 +2836,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 event=self.event, cart_id=self.session_key, item=self.ticket,
                 price=23, expires=now() - timedelta(minutes=10)
             )
-        self._set_session('payment', 'banktransfer')
+        self._set_payment()
 
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
@@ -2703,7 +2853,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 event=self.event, cart_id=self.session_key, item=self.ticket, voucher=v,
                 price=23, expires=now() - timedelta(minutes=10)
             )
-        self._set_session('payment', 'banktransfer')
+        self._set_payment()
 
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
@@ -2718,7 +2868,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 event=self.event, cart_id=self.session_key, item=self.ticket, voucher=v,
                 price=23, expires=now() - timedelta(minutes=10)
             )
-        self._set_session('payment', 'banktransfer')
+        self._set_payment()
 
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
@@ -2735,7 +2885,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 event=self.event, cart_id=self.session_key, item=self.ticket, voucher=v,
                 price=23, expires=now() + timedelta(minutes=10)
             )
-        self._set_session('payment', 'banktransfer')
+        self._set_payment()
 
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
@@ -2750,7 +2900,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 event=self.event, cart_id=self.session_key, item=self.ticket, voucher=v,
                 price=23, expires=now() + timedelta(minutes=10)
             )
-        self._set_session('payment', 'banktransfer')
+        self._set_payment()
 
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
@@ -2965,8 +3115,8 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 event=self.event, cart_id=self.session_key, item=self.ticket,
                 price=23, expires=now() + timedelta(minutes=10), subevent=se
             )
-            self._set_session('payment', 'banktransfer')
 
+        self._set_payment()
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
         self.assertGreaterEqual(len(doc.select(".alert-danger")), 1)
@@ -2984,8 +3134,8 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 event=self.event, cart_id=self.session_key, item=self.ticket,
                 price=23, expires=now() + timedelta(minutes=10), subevent=se
             )
-            self._set_session('payment', 'banktransfer')
 
+        self._set_payment()
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
         self.assertGreaterEqual(len(doc.select(".alert-danger")), 1)
@@ -3004,8 +3154,8 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 event=self.event, cart_id=self.session_key, item=self.ticket,
                 price=23, expires=now() + timedelta(minutes=10), subevent=se
             )
-            self._set_session('payment', 'banktransfer')
 
+        self._set_payment()
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
         self.assertGreaterEqual(len(doc.select(".alert-danger")), 1)
@@ -3023,8 +3173,8 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 event=self.event, cart_id=self.session_key, item=self.ticket,
                 price=23, expires=now() + timedelta(minutes=10), subevent=se
             )
-            self._set_session('payment', 'banktransfer')
 
+        self._set_payment()
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
         self.assertEqual(len(doc.select(".thank-you")), 1)
@@ -3037,8 +3187,8 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 event=self.event, cart_id=self.session_key, item=self.ticket,
                 price=23, expires=now() + timedelta(minutes=10)
             )
-        self._set_session('payment', 'banktransfer')
 
+        self._set_payment()
         response = self.client.get('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         assert "test mode" in response.content.decode()
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
@@ -3054,8 +3204,8 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 event=self.event, cart_id=self.session_key, item=self.ticket,
                 price=23, expires=now() + timedelta(minutes=10)
             )
-        self._set_session('payment', 'banktransfer')
 
+        self._set_payment()
         response = self.client.get('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         assert "test mode" not in response.content.decode()
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
@@ -3072,9 +3222,9 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 price=23, expires=now() + timedelta(minutes=10)
             )
             djmail.outbox = []
-            oid = _perform_order(self.event, 'manual', [cp1.pk], 'admin@example.org', 'en', None, {}, 'web')
+            oid = _perform_order(self.event, self._manual_payment(), [cp1.pk], 'admin@example.org', 'en', None, {}, 'web')
             assert len(djmail.outbox) == 1
-            o = Order.objects.get(pk=oid)
+            o = Order.objects.get(pk=oid['order_id'])
             o.payments.first().confirm()
             assert len(djmail.outbox) == 2
 
@@ -3086,9 +3236,9 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
             )
             djmail.outbox = []
             self.event.settings.mail_sales_channel_placed_paid = []
-            oid = _perform_order(self.event, 'manual', [cp1.pk], 'admin@example.org', 'en', None, {}, 'web')
+            oid = _perform_order(self.event, self._manual_payment(), [cp1.pk], 'admin@example.org', 'en', None, {}, 'web')
             assert len(djmail.outbox) == 0
-            o = Order.objects.get(pk=oid)
+            o = Order.objects.get(pk=oid['order_id'])
             o.payments.first().confirm()
             assert len(djmail.outbox) == 0
 
@@ -3218,7 +3368,7 @@ class QuestionsTestCase(BaseCheckoutTestCase, TestCase):
             )
             cp2.answers.create(question=q1, answer='12')
 
-        self._set_session('payment', 'banktransfer')
+        self._set_payment()
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
         self.assertEqual(len(doc.select(".thank-you")), 1)
@@ -3496,8 +3646,8 @@ class CheckoutBundleTest(BaseCheckoutTestCase, TestCase):
 
     @classscope(attr='orga')
     def test_simple_bundle(self):
-        oid = _perform_order(self.event, 'manual', [self.cp1.pk, self.bundled1.pk], 'admin@example.org', 'en', None, {}, 'web')
-        o = Order.objects.get(pk=oid)
+        oid = _perform_order(self.event, self._manual_payment(), [self.cp1.pk, self.bundled1.pk], 'admin@example.org', 'en', None, {}, 'web')
+        o = Order.objects.get(pk=oid['order_id'])
         cp = o.positions.get(addon_to__isnull=True)
         assert cp.item == self.ticket
         assert cp.price == 23 - 1.5
@@ -3515,8 +3665,8 @@ class CheckoutBundleTest(BaseCheckoutTestCase, TestCase):
         self.bundled1.variation = v
         self.bundled1.save()
 
-        oid = _perform_order(self.event, 'manual', [self.cp1.pk, self.bundled1.pk], 'admin@example.org', 'en', None, {}, 'web')
-        o = Order.objects.get(pk=oid)
+        oid = _perform_order(self.event, self._manual_payment(), [self.cp1.pk, self.bundled1.pk], 'admin@example.org', 'en', None, {}, 'web')
+        o = Order.objects.get(pk=oid['order_id'])
         cp = o.positions.get(addon_to__isnull=True)
         assert cp.item == self.ticket
         assert cp.price == 23 - 1.5
@@ -3534,8 +3684,8 @@ class CheckoutBundleTest(BaseCheckoutTestCase, TestCase):
             event=self.event, cart_id=self.session_key, item=self.trans, addon_to=self.cp1,
             price=1.5, expires=now() + timedelta(minutes=10), is_bundled=True
         )
-        oid = _perform_order(self.event, 'manual', [self.cp1.pk, self.bundled1.pk, bundled2.pk], 'admin@example.org', 'en', None, {}, 'web')
-        o = Order.objects.get(pk=oid)
+        oid = _perform_order(self.event, self._manual_payment(), [self.cp1.pk, self.bundled1.pk, bundled2.pk], 'admin@example.org', 'en', None, {}, 'web')
+        o = Order.objects.get(pk=oid['order_id'])
         cp = o.positions.get(addon_to__isnull=True)
         assert cp.item == self.ticket
         assert cp.price == 23 - 1.5 - 1.5
@@ -3559,8 +3709,8 @@ class CheckoutBundleTest(BaseCheckoutTestCase, TestCase):
         self.cp1.price = 20 - 1.5
         self.cp1.save()
 
-        oid = _perform_order(self.event, 'manual', [self.cp1.pk, self.bundled1.pk], 'admin@example.org', 'en', None, {}, 'web')
-        o = Order.objects.get(pk=oid)
+        oid = _perform_order(self.event, self._manual_payment(), [self.cp1.pk, self.bundled1.pk], 'admin@example.org', 'en', None, {}, 'web')
+        o = Order.objects.get(pk=oid['order_id'])
         cp = o.positions.get(addon_to__isnull=True)
         assert cp.item == self.ticket
         assert cp.price == 20 - 1.5
@@ -3580,8 +3730,8 @@ class CheckoutBundleTest(BaseCheckoutTestCase, TestCase):
         self.cp1.price = 0
         self.cp1.save()
 
-        oid = _perform_order(self.event, 'manual', [self.cp1.pk, self.bundled1.pk], 'admin@example.org', 'en', None, {}, 'web')
-        o = Order.objects.get(pk=oid)
+        oid = _perform_order(self.event, self._manual_payment(), [self.cp1.pk, self.bundled1.pk], 'admin@example.org', 'en', None, {}, 'web')
+        o = Order.objects.get(pk=oid['order_id'])
         cp = o.positions.get(addon_to__isnull=True)
         assert cp.item == self.ticket
         assert cp.price == Decimal('0.00')
@@ -3605,8 +3755,8 @@ class CheckoutBundleTest(BaseCheckoutTestCase, TestCase):
         self.trans.tax_rule = tr7
         self.trans.save()
 
-        oid = _perform_order(self.event, 'manual', [self.cp1.pk, self.bundled1.pk], 'admin@example.org', 'en', None, {}, 'web')
-        o = Order.objects.get(pk=oid)
+        oid = _perform_order(self.event, self._manual_payment(), [self.cp1.pk, self.bundled1.pk], 'admin@example.org', 'en', None, {}, 'web')
+        o = Order.objects.get(pk=oid['order_id'])
         cp = o.positions.get(addon_to__isnull=True)
         assert cp.item == self.ticket
         assert cp.price == Decimal('21.50')
@@ -3625,8 +3775,8 @@ class CheckoutBundleTest(BaseCheckoutTestCase, TestCase):
                                    valid_until=now() + timedelta(days=2))
         self.cp1.voucher = v
         self.cp1.save()
-        oid = _perform_order(self.event, 'manual', [self.cp1.pk, self.bundled1.pk], 'admin@example.org', 'en', None, {}, 'web')
-        o = Order.objects.get(pk=oid)
+        oid = _perform_order(self.event, self._manual_payment(), [self.cp1.pk, self.bundled1.pk], 'admin@example.org', 'en', None, {}, 'web')
+        o = Order.objects.get(pk=oid['order_id'])
         cp = o.positions.get(addon_to__isnull=True)
         assert cp.item == self.ticket
         assert cp.price == 23 - 1.5
@@ -3642,8 +3792,8 @@ class CheckoutBundleTest(BaseCheckoutTestCase, TestCase):
         self.bundled1.expires = now() - timedelta(minutes=10)
         self.bundled1.save()
 
-        oid = _perform_order(self.event, 'manual', [self.cp1.pk, self.bundled1.pk], 'admin@example.org', 'en', None, {}, 'web')
-        o = Order.objects.get(pk=oid)
+        oid = _perform_order(self.event, self._manual_payment(), [self.cp1.pk, self.bundled1.pk], 'admin@example.org', 'en', None, {}, 'web')
+        o = Order.objects.get(pk=oid['order_id'])
         cp = o.positions.get(addon_to__isnull=True)
         b = cp.addons.first()
         assert cp.price == 21.5
@@ -3657,8 +3807,8 @@ class CheckoutBundleTest(BaseCheckoutTestCase, TestCase):
         self.cp1.save()
         self.bundled1.expires = now() - timedelta(minutes=10)
         self.bundled1.save()
-        oid = _perform_order(self.event, 'manual', [self.cp1.pk, self.bundled1.pk], 'admin@example.org', 'en', None, {}, 'web')
-        o = Order.objects.get(pk=oid)
+        oid = _perform_order(self.event, self._manual_payment(), [self.cp1.pk, self.bundled1.pk], 'admin@example.org', 'en', None, {}, 'web')
+        o = Order.objects.get(pk=oid['order_id'])
         cp = o.positions.get(addon_to__isnull=True)
         b = cp.addons.first()
         assert cp.price == 21
@@ -3673,7 +3823,7 @@ class CheckoutBundleTest(BaseCheckoutTestCase, TestCase):
         self.bundled1.expires = now() - timedelta(minutes=10)
         self.bundled1.save()
         with self.assertRaises(OrderError):
-            _perform_order(self.event, 'manual', [self.cp1.pk, self.bundled1.pk], 'admin@example.org', 'en', None, {}, 'web')
+            _perform_order(self.event, self._manual_payment(), [self.cp1.pk, self.bundled1.pk], 'admin@example.org', 'en', None, {}, 'web')
         self.cp1.refresh_from_db()
         self.bundled1.refresh_from_db()
         assert self.cp1.price == 0
@@ -3688,7 +3838,7 @@ class CheckoutBundleTest(BaseCheckoutTestCase, TestCase):
         self.bundled1.expires = now() - timedelta(minutes=10)
         self.bundled1.save()
         with self.assertRaises(OrderError):
-            _perform_order(self.event, 'manual', [self.cp1.pk, self.bundled1.pk], 'admin@example.org', 'en', None, {}, 'web')
+            _perform_order(self.event, self._manual_payment(), [self.cp1.pk, self.bundled1.pk], 'admin@example.org', 'en', None, {}, 'web')
         self.cp1.refresh_from_db()
         self.bundled1.refresh_from_db()
         assert self.cp1.price == 23.5
@@ -3705,8 +3855,8 @@ class CheckoutBundleTest(BaseCheckoutTestCase, TestCase):
         self.bundled1.expires = now() - timedelta(minutes=10)
         self.bundled1.save()
 
-        oid = _perform_order(self.event, 'manual', [self.cp1.pk, self.bundled1.pk, a.pk], 'admin@example.org', 'en', None, {}, 'web')
-        o = Order.objects.get(pk=oid)
+        oid = _perform_order(self.event, self._manual_payment(), [self.cp1.pk, self.bundled1.pk, a.pk], 'admin@example.org', 'en', None, {}, 'web')
+        o = Order.objects.get(pk=oid['order_id'])
         cp = o.positions.get(addon_to__isnull=True)
         b = cp.addons.order_by('price').first()
         a = cp.addons.order_by('price').last()
@@ -3725,7 +3875,7 @@ class CheckoutBundleTest(BaseCheckoutTestCase, TestCase):
         self.bundled1.expires = now() - timedelta(minutes=10)
         self.bundled1.save()
         with self.assertRaises(OrderError):
-            _perform_order(self.event, 'manual', [self.cp1.pk, self.bundled1.pk], 'admin@example.org', 'en', None, {}, 'web')
+            _perform_order(self.event, self._manual_payment(), [self.cp1.pk, self.bundled1.pk], 'admin@example.org', 'en', None, {}, 'web')
         assert not CartPosition.objects.exists()
 
     @classscope(attr='orga')
@@ -3737,7 +3887,7 @@ class CheckoutBundleTest(BaseCheckoutTestCase, TestCase):
         self.bundled1.expires = now() - timedelta(minutes=10)
         self.bundled1.save()
         with self.assertRaises(OrderError):
-            _perform_order(self.event, 'manual', [self.cp1.pk, self.bundled1.pk], 'admin@example.org', 'en', None, {}, 'web')
+            _perform_order(self.event, self._manual_payment(), [self.cp1.pk, self.bundled1.pk], 'admin@example.org', 'en', None, {}, 'web')
         assert not CartPosition.objects.exists()
 
     @classscope(attr='orga')
@@ -3754,7 +3904,7 @@ class CheckoutBundleTest(BaseCheckoutTestCase, TestCase):
         self.bundled1.expires = now() - timedelta(minutes=10)
         self.bundled1.save()
         with self.assertRaises(OrderError):
-            _perform_order(self.event, 'manual', [self.cp1.pk, self.bundled1.pk, a.pk], 'admin@example.org', 'en', None, {}, 'web')
+            _perform_order(self.event, self._manual_payment(), [self.cp1.pk, self.bundled1.pk, a.pk], 'admin@example.org', 'en', None, {}, 'web')
         assert not CartPosition.objects.exists()
 
     @classscope(attr='orga')
@@ -3775,8 +3925,8 @@ class CheckoutBundleTest(BaseCheckoutTestCase, TestCase):
         self.bundled1.price = Decimal('1.40')
         self.bundled1.save()
 
-        oid = _perform_order(self.event, 'manual', [self.cp1.pk, self.bundled1.pk], 'admin@example.org', 'en', ia.pk, {}, 'web')
-        o = Order.objects.get(pk=oid)
+        oid = _perform_order(self.event, self._manual_payment(), [self.cp1.pk, self.bundled1.pk], 'admin@example.org', 'en', ia.pk, {}, 'web')
+        o = Order.objects.get(pk=oid['order_id'])
         cp = o.positions.get(addon_to__isnull=True)
         assert cp.item == self.ticket
         assert cp.price == Decimal('21.50')
@@ -3808,8 +3958,8 @@ class CheckoutBundleTest(BaseCheckoutTestCase, TestCase):
         self.bundled1.price = Decimal('1.40')
         self.bundled1.save()
 
-        oid = _perform_order(self.event, 'manual', [self.cp1.pk, self.bundled1.pk], 'admin@example.org', 'en', ia.pk, {}, 'web')
-        o = Order.objects.get(pk=oid)
+        oid = _perform_order(self.event, self._manual_payment(), [self.cp1.pk, self.bundled1.pk], 'admin@example.org', 'en', ia.pk, {}, 'web')
+        o = Order.objects.get(pk=oid['order_id'])
         cp = o.positions.get(addon_to__isnull=True)
         assert cp.item == self.ticket
         assert cp.price == Decimal('18.07')
@@ -3834,7 +3984,7 @@ class CheckoutBundleTest(BaseCheckoutTestCase, TestCase):
             price=0, expires=now() + timedelta(minutes=10), is_bundled=False
         )
 
-        self._set_session('payment', 'banktransfer')
+        self._set_payment()
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
         self.assertEqual(len(doc.select(".thank-you")), 1)
@@ -3860,8 +4010,8 @@ class CheckoutSeatingTest(BaseCheckoutTestCase, TestCase):
 
     @scopes_disabled()
     def test_passes(self):
-        oid = _perform_order(self.event, 'manual', [self.cp1.pk], 'admin@example.org', 'en', None, {}, 'web')
-        o = Order.objects.get(pk=oid)
+        oid = _perform_order(self.event, self._manual_payment(), [self.cp1.pk], 'admin@example.org', 'en', None, {}, 'web')
+        o = Order.objects.get(pk=oid['order_id'])
         op = o.positions.first()
         assert op.item == self.ticket
         assert op.seat == self.seat_a1
@@ -3871,7 +4021,7 @@ class CheckoutSeatingTest(BaseCheckoutTestCase, TestCase):
         self.cp1.seat = None
         self.cp1.save()
         with self.assertRaises(OrderError):
-            _perform_order(self.event, 'manual', [self.cp1.pk], 'admin@example.org', 'en', None, {}, 'web')
+            _perform_order(self.event, self._manual_payment(), [self.cp1.pk], 'admin@example.org', 'en', None, {}, 'web')
         assert not CartPosition.objects.filter(pk=self.cp1.pk).exists()
 
     @scopes_disabled()
@@ -3879,14 +4029,14 @@ class CheckoutSeatingTest(BaseCheckoutTestCase, TestCase):
         self.cp1.seat = None
         self.cp1.save()
         self.event.settings.seating_choice = False
-        _perform_order(self.event, 'manual', [self.cp1.pk], 'admin@example.org', 'en', None, {}, 'web')
+        _perform_order(self.event, self._manual_payment(), [self.cp1.pk], 'admin@example.org', 'en', None, {}, 'web')
 
     @scopes_disabled()
     def test_seat_not_allowed(self):
         self.cp1.item = self.workshop1
         self.cp1.save()
         with self.assertRaises(OrderError):
-            _perform_order(self.event, 'manual', [self.cp1.pk], 'admin@example.org', 'en', None, {}, 'web')
+            _perform_order(self.event, self._manual_payment(), [self.cp1.pk], 'admin@example.org', 'en', None, {}, 'web')
         assert not CartPosition.objects.filter(pk=self.cp1.pk).exists()
 
     @scopes_disabled()
@@ -3897,7 +4047,7 @@ class CheckoutSeatingTest(BaseCheckoutTestCase, TestCase):
             layout_category='Foo', product=self.workshop1
         )
         with self.assertRaises(OrderError):
-            _perform_order(self.event, 'manual', [self.cp1.pk], 'admin@example.org', 'en', None, {}, 'web')
+            _perform_order(self.event, self._manual_payment(), [self.cp1.pk], 'admin@example.org', 'en', None, {}, 'web')
         assert not CartPosition.objects.filter(pk=self.cp1.pk).exists()
 
     @scopes_disabled()
@@ -3907,7 +4057,7 @@ class CheckoutSeatingTest(BaseCheckoutTestCase, TestCase):
             price=21.5, expires=now() + timedelta(minutes=10), seat=self.seat_a1
         )
         with self.assertRaises(OrderError):
-            _perform_order(self.event, 'manual', [self.cp1.pk, cp2.pk], 'admin@example.org', 'en', None, {}, 'web')
+            _perform_order(self.event, self._manual_payment(), [self.cp1.pk, cp2.pk], 'admin@example.org', 'en', None, {}, 'web')
         assert not CartPosition.objects.filter(pk=self.cp1.pk).exists()
         assert not CartPosition.objects.filter(pk=cp2.pk).exists()
 
@@ -3916,7 +4066,7 @@ class CheckoutSeatingTest(BaseCheckoutTestCase, TestCase):
         self.seat_a1.blocked = True
         self.seat_a1.save()
         with self.assertRaises(OrderError):
-            _perform_order(self.event, 'manual', [self.cp1.pk], 'admin@example.org', 'en', None, {}, 'web')
+            _perform_order(self.event, self._manual_payment(), [self.cp1.pk], 'admin@example.org', 'en', None, {}, 'web')
         assert not CartPosition.objects.filter(pk=self.cp1.pk).exists()
 
     @scopes_disabled()
@@ -3926,7 +4076,7 @@ class CheckoutSeatingTest(BaseCheckoutTestCase, TestCase):
             price=21.5, expires=now() + timedelta(minutes=10), seat=self.seat_a1
         )
         with self.assertRaises(OrderError):
-            _perform_order(self.event, 'manual', [self.cp1.pk], 'admin@example.org', 'en', None, {}, 'web')
+            _perform_order(self.event, self._manual_payment(), [self.cp1.pk], 'admin@example.org', 'en', None, {}, 'web')
         assert not CartPosition.objects.filter(pk=self.cp1.pk).exists()
 
 
@@ -3947,9 +4097,9 @@ class CheckoutVoucherBudgetTest(BaseCheckoutTestCase, TestCase):
 
     @scopes_disabled()
     def test_no_budget(self):
-        oid = _perform_order(self.event, 'manual', [self.cp1.pk, self.cp2.pk], 'admin@example.org', 'en', None, {},
+        oid = _perform_order(self.event, self._manual_payment(), [self.cp1.pk, self.cp2.pk], 'admin@example.org', 'en', None, {},
                              'web')
-        o = Order.objects.get(pk=oid)
+        o = Order.objects.get(pk=oid['order_id'])
         op = o.positions.first()
         assert op.item == self.ticket
         assert op.voucher_budget_use == Decimal('1.50')
@@ -3958,14 +4108,14 @@ class CheckoutVoucherBudgetTest(BaseCheckoutTestCase, TestCase):
     def test_budget_exceeded_for_second_order(self):
         self.v.budget = Decimal('1.50')
         self.v.save()
-        oid = _perform_order(self.event, 'manual', [self.cp1.pk], 'admin@example.org', 'en', None, {},
+        oid = _perform_order(self.event, self._manual_payment(), [self.cp1.pk], 'admin@example.org', 'en', None, {},
                              'web')
-        o = Order.objects.get(pk=oid)
+        o = Order.objects.get(pk=oid['order_id'])
         op = o.positions.first()
         assert op.item == self.ticket
 
         with self.assertRaises(OrderError):
-            _perform_order(self.event, 'manual', [self.cp2.pk], 'admin@example.org', 'en', None, {},
+            _perform_order(self.event, self._manual_payment(), [self.cp2.pk], 'admin@example.org', 'en', None, {},
                            'web')
         self.cp2.refresh_from_db()
         assert self.cp2.price == Decimal('23.00')
@@ -3975,7 +4125,7 @@ class CheckoutVoucherBudgetTest(BaseCheckoutTestCase, TestCase):
         self.v.budget = Decimal('1.50')
         self.v.save()
         with self.assertRaises(OrderError):
-            _perform_order(self.event, 'manual', [self.cp1.pk, self.cp2.pk], 'admin@example.org', 'en', None, {},
+            _perform_order(self.event, self._manual_payment(), [self.cp1.pk, self.cp2.pk], 'admin@example.org', 'en', None, {},
                            'web')
         self.cp1.refresh_from_db()
         assert self.cp1.price == Decimal('21.50')
@@ -3987,7 +4137,7 @@ class CheckoutVoucherBudgetTest(BaseCheckoutTestCase, TestCase):
         self.v.budget = Decimal('1.00')
         self.v.save()
         with self.assertRaises(OrderError):
-            _perform_order(self.event, 'manual', [self.cp1.pk, self.cp2.pk], 'admin@example.org', 'en', None, {},
+            _perform_order(self.event, self._manual_payment(), [self.cp1.pk, self.cp2.pk], 'admin@example.org', 'en', None, {},
                            'web')
         self.cp1.refresh_from_db()
         assert self.cp1.price == Decimal('22.00')
@@ -3999,7 +4149,7 @@ class CheckoutVoucherBudgetTest(BaseCheckoutTestCase, TestCase):
         self.v.budget = Decimal('2.50')
         self.v.save()
         with self.assertRaises(OrderError):
-            _perform_order(self.event, 'manual', [self.cp1.pk, self.cp2.pk], 'admin@example.org', 'en', None, {},
+            _perform_order(self.event, self._manual_payment(), [self.cp1.pk, self.cp2.pk], 'admin@example.org', 'en', None, {},
                            'web')
         self.cp1.refresh_from_db()
         assert self.cp1.price == Decimal('21.50')
@@ -4017,7 +4167,7 @@ class CheckoutVoucherBudgetTest(BaseCheckoutTestCase, TestCase):
         self.cp2.save()
 
         with self.assertRaises(OrderError):
-            _perform_order(self.event, 'manual', [self.cp1.pk, self.cp2.pk], 'admin@example.org', 'en', None, {},
+            _perform_order(self.event, self._manual_payment(), [self.cp1.pk, self.cp2.pk], 'admin@example.org', 'en', None, {},
                            'web')
         self.cp1.refresh_from_db()
         assert self.cp1.price == Decimal('21.00')
@@ -4035,7 +4185,7 @@ class CheckoutVoucherBudgetTest(BaseCheckoutTestCase, TestCase):
         self.cp2.save()
 
         with self.assertRaises(OrderError):
-            _perform_order(self.event, 'manual', [self.cp1.pk, self.cp2.pk], 'admin@example.org', 'en', None, {},
+            _perform_order(self.event, self._manual_payment(), [self.cp1.pk, self.cp2.pk], 'admin@example.org', 'en', None, {},
                            'web')
         self.cp1.refresh_from_db()
         assert self.cp1.price == Decimal('23.00')
@@ -4051,9 +4201,9 @@ class CheckoutVoucherBudgetTest(BaseCheckoutTestCase, TestCase):
         self.cp1.save()
         self.cp2.expires = now() - timedelta(hours=1)
         self.cp2.save()
-        oid = _perform_order(self.event, 'manual', [self.cp1.pk], 'admin@example.org', 'en', None, {},
+        oid = _perform_order(self.event, self._manual_payment(), [self.cp1.pk], 'admin@example.org', 'en', None, {},
                              'web')
-        o = Order.objects.get(pk=oid)
+        o = Order.objects.get(pk=oid['order_id'])
         op = o.positions.first()
 
         assert op.item == self.ticket
@@ -4061,7 +4211,7 @@ class CheckoutVoucherBudgetTest(BaseCheckoutTestCase, TestCase):
         self.v.save()
 
         with self.assertRaises(OrderError):
-            _perform_order(self.event, 'manual', [self.cp2.pk], 'admin@example.org', 'en', None, {},
+            _perform_order(self.event, self._manual_payment(), [self.cp2.pk], 'admin@example.org', 'en', None, {},
                            'web')
         self.cp2.refresh_from_db()
         assert self.cp2.price == Decimal('23.00')
@@ -4085,7 +4235,7 @@ class CustomerCheckoutTestCase(BaseCheckoutTestCase, TestCase):
             self.customer.save()
 
     def _finish(self):
-        self._set_session('payment', 'banktransfer')
+        self._set_payment()
         self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         with scopes_disabled():
             return Order.objects.last()

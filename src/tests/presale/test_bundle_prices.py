@@ -70,6 +70,16 @@ class BundlePricesTest(TestCase):
 
         self.session_key = get_cart_session_key(self.client, self.event)
 
+    def _manual_payment(self):
+        return [{
+            "id": "test1",
+            "provider": "manual",
+            "max_value": None,
+            "min_value": None,
+            "multi_use_supported": False,
+            "info_data": {},
+        }]
+
     def test_simple_case(self):
         # Verify correct price displayed on event page
         response = self.client.get('/%s/%s/' % (self.orga.slug, self.event.slug))
@@ -96,7 +106,7 @@ class BundlePricesTest(TestCase):
 
         # Verify price is kept if cart expires and order is sent
         with scopes_disabled():
-            _perform_order(self.event, 'manual', [cp1.pk, cp2.pk], 'admin@example.org', 'en', None, {}, 'web')
+            _perform_order(self.event, self._manual_payment(), [cp1.pk, cp2.pk], 'admin@example.org', 'en', None, {}, 'web')
             op1 = OrderPosition.objects.get(is_bundled=False)
             op2 = OrderPosition.objects.get(is_bundled=True)
         assert op1.price == Decimal('13.00')
@@ -141,7 +151,7 @@ class BundlePricesTest(TestCase):
 
         # Verify price is kept if cart expires and order is sent
         with scopes_disabled():
-            _perform_order(self.event, 'manual', [cp1.pk, cp2.pk], 'admin@example.org', 'en', None, {}, 'web')
+            _perform_order(self.event, self._manual_payment(), [cp1.pk, cp2.pk], 'admin@example.org', 'en', None, {}, 'web')
             op1 = OrderPosition.objects.get(is_bundled=False)
             op2 = OrderPosition.objects.get(is_bundled=True)
         assert op1.price == Decimal('17.37')

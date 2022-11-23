@@ -63,14 +63,13 @@ from pretix.base.models import (
     OrderRefund, Quota,
 )
 from pretix.base.reldate import RelativeDateField, RelativeDateWrapper
-from pretix.base.services.cart import get_fees
 from pretix.base.settings import SettingsSandbox
 from pretix.base.signals import register_payment_providers
 from pretix.base.templatetags.money import money_filter
 from pretix.base.templatetags.rich_text import rich_text
 from pretix.helpers.countries import CachedCountries
 from pretix.helpers.money import DecimalTextInput
-from pretix.multidomain.urlreverse import build_absolute_uri, eventreverse
+from pretix.multidomain.urlreverse import build_absolute_uri
 from pretix.presale.views import get_cart, get_cart_total
 from pretix.presale.views.cart import cart_session, get_or_create_cart_id
 
@@ -137,6 +136,48 @@ class BasePaymentProvider:
         By default, this is determined by the value of the ``_enabled`` setting.
         """
         return self.settings.get('_enabled', as_type=bool)
+
+    @property
+    def multi_use_supported(self) -> bool:
+        """
+        Returns whether or whether not this payment provider supports being used multiple times in the same
+        checkout, or in addition to a different payment provider. This is usually only useful for payment providers
+        that represent gift cards, i.e. payment methods with an upper limit per payment instrument that can usually
+        be combined with other instruments.
+
+        If you set this property to ``True``, the behavior of how pretix interacts with your payment provider changes
+        and you will need to respect the following rules:
+
+        - ``payment_form_render`` must not depend on session state, it must always allow a user to add a new payment.
+           Editing a payment is not possible, but pretix will give users an option to delete it.
+
+        - Returning ``True`` from ``checkout_prepare`` is no longer enough. Instead, you must *also* call
+          ``pretix.base.services.cart.add_payment_to_cart(request, provider, min_value, max_value, info_data)``
+          to add the payment to the session. You are still allowed to do a redirect from ``checkout_prepare`` and then
+          call this function upon return.
+
+        - Unlike in the general case, when ``checkout_prepare`` is called, the ``cart['total']`` parameter will _not yet_
+          include payment fees charged by your provider as we don't yet know the amount of the charge, so you need to
+          take care of that yourself when setting your maximum amount.
+
+        - ``payment_is_valid_session`` will not be called during checkout, don't rely on it. If you called
+          ``add_payment_to_cart``, we'll trust the payment is okay and your next chance to change that will be
+          ``execute_payment``.
+
+        The changed behavior currently only affects the behavior during initial checkout (i.e. ``checkout_prepare``),
+        for ``payment_prepare`` the regular behavior applies and you are expected to just modify the amount of the
+        ``OrderPayment`` object if you need to.
+        """
+        return False
+
+    @property
+    def execute_payment_needs_user(self) -> bool:
+        """
+        Set this to ``True`` if your ``execute_payment`` function needs to be triggered by a user request, i.e. either
+        needs the ``request`` object or might require a browser redirect. If this is ``False``, you will not receive
+        a ``request`` and may not redirect since execute_payment might be called server-side.
+        """
+        return True
 
     @property
     def test_mode_message(self) -> str:
@@ -574,7 +615,7 @@ class BasePaymentProvider:
         ctx = {'request': request, 'form': form}
         return template.render(ctx)
 
-    def checkout_confirm_render(self, request, order: Order=None) -> str:
+    def checkout_confirm_render(self, request, order: Order=None, info_data: dict=None) -> str:
         """
         If the user has successfully filled in their payment data, they will be redirected
         to a confirmation page which lists all details of their order for a final review.
@@ -584,7 +625,9 @@ class BasePaymentProvider:
         In most cases, this should include a short summary of the user's input and
         a short explanation on how the payment process will continue.
 
+        :param request: The current HTTP request.
         :param order: Only set when this is a change to a new payment method for an existing order.
+        :param info_data: The ``info_data`` dictionary you set during ``add_payment_to_cart`` (only filled if ``multi_use_supported`` is set)
         """
         raise NotImplementedError()  # NOQA
 
@@ -617,6 +660,10 @@ class BasePaymentProvider:
 
         .. IMPORTANT:: If this is called, the user has not yet confirmed their order.
            You may NOT do anything which actually moves money.
+
+        Note: The behavior of this method changes significantly when you set
+              ``multi_use_supported``. Please refer to the ``multi_use_supported`` documentation
+              for more information.
 
         :param cart: This dictionary contains at least the following keys:
 
@@ -657,9 +704,9 @@ class BasePaymentProvider:
         You will be passed an :py:class:`pretix.base.models.OrderPayment` object that contains
         the amount of money that should be paid.
 
-        If you need any special behavior, you can return a string
-        containing the URL the user will be redirected to. If you are done with your process
-        you should return the user to the order's detail page.
+        If you need any special behavior, you can return a string containing the URL the user will be redirected to.
+        If you are done with your process you should return the user to the order's detail page. Redirection is not
+        allowed if you set ``execute_payment_needs_user`` to ``True``.
 
         If the payment is completed, you should call ``payment.confirm()``. Please note that this might
         raise a ``Quota.QuotaExceededException`` if (and only if) the payment term of this order is over and
@@ -671,7 +718,7 @@ class BasePaymentProvider:
 
         On errors, you should raise a ``PaymentException``.
 
-        :param order: The order object
+        :param request: A HTTP request, except if ``execute_payment_needs_user`` is ``False``
         :param payment: An ``OrderPayment`` instance
         """
         return None
@@ -905,6 +952,7 @@ class FreeOrderProvider(BasePaymentProvider):
     is_implicit = True
     is_enabled = True
     identifier = "free"
+    execute_payment_needs_user = False
 
     def checkout_confirm_render(self, request: HttpRequest) -> str:
         return _("No payment is required as this order only includes products which are free of charge.")
@@ -991,6 +1039,7 @@ class BoxOfficeProvider(BasePaymentProvider):
 class ManualPayment(BasePaymentProvider):
     identifier = 'manual'
     verbose_name = _('Manual payment')
+    execute_payment_needs_user = False
 
     @property
     def test_mode_message(self):
@@ -1133,6 +1182,8 @@ class GiftCardPayment(BasePaymentProvider):
     identifier = "giftcard"
     verbose_name = _("Gift card")
     priority = 10
+    multi_use_supported = True
+    execute_payment_needs_user = False
 
     @property
     def settings_form_fields(self):
@@ -1158,8 +1209,10 @@ class GiftCardPayment(BasePaymentProvider):
     def payment_form_render(self, request: HttpRequest, total: Decimal) -> str:
         return get_template('pretixcontrol/giftcards/checkout.html').render({})
 
-    def checkout_confirm_render(self, request) -> str:
-        return get_template('pretixcontrol/giftcards/checkout_confirm.html').render({})
+    def checkout_confirm_render(self, request, order=None, info_data=None) -> str:
+        return get_template('pretixcontrol/giftcards/checkout_confirm.html').render({
+            'info_data': info_data,
+        })
 
     def refund_control_render(self, request, refund) -> str:
         from .models import GiftCard
@@ -1213,6 +1266,8 @@ class GiftCardPayment(BasePaymentProvider):
         return True
 
     def checkout_prepare(self, request: HttpRequest, cart: Dict[str, Any]) -> Union[bool, str, None]:
+        from pretix.base.services.cart import add_payment_to_cart
+
         for p in get_cart(request):
             if p.item.issue_giftcard:
                 messages.error(request, _("You cannot pay with gift cards when buying a gift card."))
@@ -1221,7 +1276,7 @@ class GiftCardPayment(BasePaymentProvider):
         cs = cart_session(request)
         try:
             gc = self.event.organizer.accepted_gift_cards.get(
-                secret=request.POST.get("giftcard")
+                secret=request.POST.get("giftcard").strip()
             )
             if gc.currency != self.event.currency:
                 messages.error(request, _("This gift card does not support this currency."))
@@ -1238,34 +1293,22 @@ class GiftCardPayment(BasePaymentProvider):
             if gc.value <= Decimal("0.00"):
                 messages.error(request, _("All credit on this gift card has been used."))
                 return
-            if 'gift_cards' not in cs:
-                cs['gift_cards'] = []
-            elif gc.pk in cs['gift_cards']:
-                messages.error(request, _("This gift card is already used for your payment."))
-                return
-            cs['gift_cards'] = cs['gift_cards'] + [gc.pk]
 
-            total = sum(p.total for p in cart['positions'])
-            # Recompute fees. Some plugins, e.g. pretix-servicefees, change their fee schedule if a gift card is
-            # applied.
-            fees = get_fees(
-                self.event, request, total, cart['invoice_address'], cs.get('payment'),
-                cart['raw']
+            for p in cs.get('payments', []):
+                if p['provider'] == self.identifier and p['info_data']['gift_card'] == gc.pk:
+                    messages.error(request, _("This gift card is already used for your payment."))
+                    return
+
+            add_payment_to_cart(
+                request,
+                self,
+                max_value=gc.value,
+                info_data={
+                    'gift_card': gc.pk,
+                    'gift_card_secret': gc.secret,
+                }
             )
-            total += sum([f.value for f in fees])
-            remainder = total
-            if remainder > Decimal('0.00'):
-                del cs['payment']
-                messages.success(request, _("Your gift card has been applied, but {} still need to be paid. Please select a payment method.").format(
-                    money_filter(remainder, self.event.currency)
-                ))
-            else:
-                messages.success(request, _("Your gift card has been applied."))
-
-            kwargs = {'step': 'payment'}
-            if request.resolver_match and 'cart_namespace' in request.resolver_match.kwargs:
-                kwargs['cart_namespace'] = request.resolver_match.kwargs['cart_namespace']
-            return eventreverse(self.event, 'presale:event.checkout', kwargs=kwargs)
+            return True
         except GiftCard.DoesNotExist:
             if self.event.vouchers.filter(code__iexact=request.POST.get("giftcard")).exists():
                 messages.warning(request, _("You entered a voucher instead of a gift card. Vouchers can only be entered on the first page of the shop below "
@@ -1283,7 +1326,7 @@ class GiftCardPayment(BasePaymentProvider):
 
         try:
             gc = self.event.organizer.accepted_gift_cards.get(
-                secret=request.POST.get("giftcard")
+                secret=request.POST.get("giftcard").strip()
             )
             if gc.currency != self.event.currency:
                 messages.error(request, _("This gift card does not support this currency."))
@@ -1302,6 +1345,7 @@ class GiftCardPayment(BasePaymentProvider):
                 return
             payment.info_data = {
                 'gift_card': gc.pk,
+                'gift_card_secret': gc.secret,
                 'retry': True
             }
             payment.amount = min(payment.amount, gc.value)
@@ -1309,7 +1353,7 @@ class GiftCardPayment(BasePaymentProvider):
 
             return True
         except GiftCard.DoesNotExist:
-            if self.event.vouchers.filter(code__iexact=request.POST.get("giftcard")).exists():
+            if self.event.vouchers.filter(code__iexact=request.POST.get("giftcard").strip()).exists():
                 messages.warning(request, _("You entered a voucher instead of a gift card. Vouchers can only be entered on the first page of the shop below "
                                             "the product selection."))
             else:
@@ -1318,36 +1362,45 @@ class GiftCardPayment(BasePaymentProvider):
             messages.error(request, _("This gift card can not be redeemed since its code is not unique. Please contact the organizer of this event."))
 
     def execute_payment(self, request: HttpRequest, payment: OrderPayment) -> str:
-        # This method will only be called when retrying payments, e.g. after a payment_prepare call. It is not called
-        # during the order creation phase because this payment provider is a special case.
-        for p in payment.order.positions.all():  # noqa - just a safeguard
+        for p in payment.order.positions.all():
             if p.item.issue_giftcard:
                 raise PaymentException(_("You cannot pay with gift cards when buying a gift card."))
 
         gcpk = payment.info_data.get('gift_card')
-        if not gcpk or not payment.info_data.get('retry'):
+        if not gcpk:
             raise PaymentException("Invalid state, should never occur.")
-        with transaction.atomic():
-            gc = GiftCard.objects.select_for_update().get(pk=gcpk)
-            if gc.currency != self.event.currency:  # noqa - just a safeguard
-                raise PaymentException(_("This gift card does not support this currency."))
-            if not gc.accepted_by(self.event.organizer):  # noqa - just a safeguard
-                raise PaymentException(_("This gift card is not accepted by this event organizer."))
-            if payment.amount > gc.value:  # noqa - just a safeguard
-                raise PaymentException(_("This gift card was used in the meantime. Please try again."))
-            if gc.expires and gc.expires < now():  # noqa - just a safeguard
-                messages.error(request, _("This gift card is no longer valid."))
-                return
-            trans = gc.transactions.create(
-                value=-1 * payment.amount,
-                order=payment.order,
-                payment=payment
-            )
-            payment.info_data = {
-                'gift_card': gc.pk,
-                'transaction_id': trans.pk,
-            }
-            payment.confirm()
+        try:
+            with transaction.atomic():
+                try:
+                    gc = GiftCard.objects.select_for_update().get(pk=gcpk)
+                except GiftCard.DoesNotExist:
+                    raise PaymentException(_("This gift card does not support this currency."))
+                if gc.currency != self.event.currency:  # noqa - just a safeguard
+                    raise PaymentException(_("This gift card does not support this currency."))
+                if not gc.accepted_by(self.event.organizer):
+                    raise PaymentException(_("This gift card is not accepted by this event organizer."))
+                if payment.amount > gc.value:
+                    raise PaymentException(_("This gift card was used in the meantime. Please try again."))
+                if gc.testmode and not payment.order.testmode:
+                    raise PaymentException(_("This gift card can only be used in test mode."))
+                if not gc.testmode and payment.order.testmode:
+                    raise PaymentException(_("Only test gift cards can be used in test mode."))
+                if gc.expires and gc.expires < now():
+                    raise PaymentException(_("This gift card is no longer valid."))
+
+                trans = gc.transactions.create(
+                    value=-1 * payment.amount,
+                    order=payment.order,
+                    payment=payment
+                )
+                payment.info_data = {
+                    'gift_card': gc.pk,
+                    'transaction_id': trans.pk,
+                }
+                payment.confirm()
+        except PaymentException as e:
+            payment.fail(info={'error': str(e)})
+            raise e
 
     def payment_is_valid_session(self, request: HttpRequest) -> bool:
         return True

@@ -519,7 +519,17 @@ def test_use_membership(event, customer, membership, requiring_ticket):
         used_membership=membership
     )
     order = _create_order(event, email='dummy@example.org', positions=[cp1],
-                          now_dt=now(), payment_provider=BankTransfer(event),
+                          now_dt=now(),
+                          payment_requests=[{
+                              "id": "test0",
+                              "provider": "banktransfer",
+                              "max_value": None,
+                              "min_value": None,
+                              "multi_use_supported": False,
+                              "info_data": {},
+                              "payment_amount": Decimal("23.00"),
+                              "pprov": BankTransfer(event)
+                          }],
                           locale='de', customer=customer)[0]
     assert order.positions.first().used_membership == membership
 
@@ -535,7 +545,15 @@ def test_use_membership_invalid(event, customer, membership, requiring_ticket):
     )
     with pytest.raises(OrderError) as excinfo:
         _perform_order(event, email='dummy@example.org', position_ids=[cp1.pk],
-                       payment_provider='banktransfer', address=None,
+                       payment_requests=[{
+                           "id": "test0",
+                           "provider": "banktransfer",
+                           "max_value": None,
+                           "min_value": None,
+                           "multi_use_supported": False,
+                           "info_data": {},
+                       }],
+                       address=None,
                        locale='de', customer=customer.pk)[0]
     assert 'membership' in str(excinfo.value)
 
@@ -543,12 +561,22 @@ def test_use_membership_invalid(event, customer, membership, requiring_ticket):
 @pytest.mark.django_db
 def test_grant_when_paid_and_changed(event, customer, granting_ticket):
     cp1 = CartPosition.objects.create(
-        item=granting_ticket, price=0, expires=now() + timedelta(days=1), event=event, cart_id="123",
+        item=granting_ticket, price=23, expires=now() + timedelta(days=1), event=event, cart_id="123",
     )
     q = event.quotas.create(size=None, name="foo")
     q.items.add(granting_ticket)
     order = _create_order(event, email='dummy@example.org', positions=[cp1],
-                          now_dt=now(), payment_provider=BankTransfer(event),
+                          now_dt=now(),
+                          payment_requests=[{
+                              "id": "test0",
+                              "provider": "banktransfer",
+                              "max_value": None,
+                              "min_value": None,
+                              "multi_use_supported": False,
+                              "info_data": {},
+                              "pprov": BankTransfer(event),
+                              "payment_amount": Decimal("23.00"),
+                          }],
                           locale='de', customer=customer)[0]
     assert not customer.memberships.exists()
 

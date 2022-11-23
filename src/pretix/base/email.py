@@ -320,13 +320,16 @@ def get_email_context(**kwargs):
     return ctx
 
 
-def _placeholder_payment(order, payment):
-    if not payment:
-        return None
-    if 'payment' in inspect.signature(payment.payment_provider.order_pending_mail_render).parameters:
-        return str(payment.payment_provider.order_pending_mail_render(order, payment))
-    else:
-        return str(payment.payment_provider.order_pending_mail_render(order))
+def _placeholder_payments(order, payments):
+    d = []
+    for payment in payments:
+        if 'payment' in inspect.signature(payment.payment_provider.order_pending_mail_render).parameters:
+            d.append(str(payment.payment_provider.order_pending_mail_render(order, payment)))
+        else:
+            d.append(str(payment.payment_provider.order_pending_mail_render(order)))
+    d = [line for line in d if line.strip()]
+    if d:
+        return '\n\n'.join(d)
 
 
 def get_best_name(position_or_address, parts=False):
@@ -617,7 +620,7 @@ def base_placeholders(sender, **kwargs):
             _('An individual text with a reason can be inserted here.'),
         ),
         SimpleFunctionalMailTextPlaceholder(
-            'payment_info', ['order', 'payment'], _placeholder_payment,
+            'payment_info', ['order', 'payments'], _placeholder_payments,
             _('The amount has been charged to your card.'),
         ),
         SimpleFunctionalMailTextPlaceholder(

@@ -1509,6 +1509,9 @@ class OrderPayment(models.Model):
     :type info: str
     :param fee: The ``OrderFee`` object used to track the fee for this order.
     :type fee: pretix.base.models.OrderFee
+    :param process_initiated: Only for internal use inside pretix.presale to check which payments have started
+                              the execution process.
+    :type process_initiated: bool
     """
     PAYMENT_STATE_CREATED = 'created'
     PAYMENT_STATE_PENDING = 'pending'
@@ -1559,6 +1562,9 @@ class OrderPayment(models.Model):
         null=True, blank=True, related_name='payments', on_delete=models.SET_NULL
     )
     migrated = models.BooleanField(default=False)
+    process_initiated = models.BooleanField(
+        null=True  # null = created before this field was introduced
+    )
 
     objects = ScopedManager(organizer='order__event__organizer')
 

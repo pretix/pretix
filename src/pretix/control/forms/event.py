@@ -1171,8 +1171,8 @@ class MailSettingsForm(SettingsForm):
         widget=I18nTextarea,
     )
     base_context = {
-        'mail_text_order_placed': ['event', 'order', 'payment'],
-        'mail_subject_order_placed': ['event', 'order', 'payment'],
+        'mail_text_order_placed': ['event', 'order', 'payments'],
+        'mail_subject_order_placed': ['event', 'order', 'payments'],
         'mail_text_order_placed_attendee': ['event', 'order', 'position'],
         'mail_subject_order_placed_attendee': ['event', 'order', 'position'],
         'mail_text_order_placed_require_approval': ['event', 'order'],

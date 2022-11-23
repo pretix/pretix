@@ -68,6 +68,7 @@ from pretix.plugins.paypal2.client.customer.partners_merchantintegrations_get_re
 from pretix.plugins.paypal2.payment import PaypalMethod, PaypalMethod as Paypal
 from pretix.plugins.paypal.models import ReferencedPayPalObject
 from pretix.presale.views import get_cart, get_cart_total
+from pretix.presale.views.cart import cart_session
 
 logger = logging.getLogger('pretix.plugins.paypal2')
 
@@ -142,26 +143,27 @@ class XHRView(View):
             else:
                 fee = prov.calculate_fee(order.pending_sum)
 
-            cart = {
-                'positions': order.positions,
-                'cart_total': order.pending_sum,
-                'cart_fees': Decimal('0.00'),
-                'payment_fee': fee,
-            }
+            cart_total = order.pending_sum + fee
         else:
             cart_total = get_cart_total(request)
-            cart_fees = Decimal('0.00')
-            for fee in get_fees(request.event, request, cart_total, None, None, get_cart(request)):
-                cart_fees += fee.value
+            cart_payments = cart_session(request).get('payments', [])
+            for fee in get_fees(request.event, request, cart_total, None, cart_payments, get_cart(request)):
+                cart_total += fee.value
 
-            cart = {
-                'positions': get_cart(request),
-                'cart_total': cart_total,
-                'cart_fees': cart_fees,
-                'payment_fee': prov.calculate_fee(cart_total + cart_fees),
-            }
+            total_remaining = cart_total
+            for p in cart_session(request).get('payments', []):
+                if p['provider'] != 'paypal':
+                    if p.get('min_value') and total_remaining < Decimal(p['min_value']):
+                        continue
 
-        paypal_order = prov._create_paypal_order(request, None, cart)
+                    to_pay = total_remaining
+                    if p.get('max_value') and to_pay > Decimal(p['max_value']):
+                        to_pay = min(to_pay, Decimal(p['max_value']))
+                    total_remaining -= to_pay
+
+            cart_total = total_remaining
+
+        paypal_order = prov._create_paypal_order(request, None, cart_total)
         r = JsonResponse(paypal_order.dict() if paypal_order else {})
         r._csp_ignore = True
         return r

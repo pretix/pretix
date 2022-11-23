@@ -495,7 +495,7 @@ class PaypalMethod(BasePaymentProvider):
     def abort_pending_allowed(self):
         return False
 
-    def _create_paypal_order(self, request, payment=None, cart=None):
+    def _create_paypal_order(self, request, payment=None, cart_total=None):
         self.init_api()
         kwargs = {}
         if request.resolver_match and 'cart_namespace' in request.resolver_match.kwargs:
@@ -510,7 +510,7 @@ class PaypalMethod(BasePaymentProvider):
         else:
             payee = {}
 
-        if payment and not cart:
+        if payment and not cart_total:
             value = self.format_price(payment.amount)
             currency = payment.order.event.currency
             description = '{prefix}{orderstring}{postfix}'.format(
@@ -528,8 +528,8 @@ class PaypalMethod(BasePaymentProvider):
                 postfix=' {}'.format(self.settings.postfix) if self.settings.postfix else ''
             )
             request.session['payment_paypal_payment'] = payment.pk
-        elif cart and not payment:
-            value = self.format_price(cart['cart_total'] + cart['cart_fees'] + cart['payment_fee'])
+        elif cart_total and not payment:
+            value = self.format_price(cart_total)
             currency = request.event.currency
             description = __('Event tickets for {event}').format(event=request.event.name)
             custom_id = '{prefix}{slug}{postfix}'.format(

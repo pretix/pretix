@@ -699,8 +699,8 @@ class OrderViewSet(viewsets.ModelViewSet):
                     subject_attendees_template = request.event.settings.mail_subject_order_placed_attendee
 
                 _order_placed_email(
-                    request.event, order, payment.payment_provider if payment else None, email_template, subject_template,
-                    log_entry, invoice, payment, is_free=free_flow
+                    request.event, order, email_template, subject_template,
+                    log_entry, invoice, [payment] if payment else [], is_free=free_flow
                 )
                 if email_attendees:
                     for p in order.positions.all():

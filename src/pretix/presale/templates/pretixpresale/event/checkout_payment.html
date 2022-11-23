@@ -4,73 +4,120 @@
 {% load bootstrap3 %}
 {% load rich_text %}
 {% block inner %}
-    <p>{% trans "Please select how you want to pay." %}</p>
-    {% if event.settings.payment_explanation %}
-        {{ event.settings.payment_explanation|rich_text }}
+    {% if current_payments %}
+        <p>{% trans "You already selected the following payment methods:" %}</p>
+        <form method="post">
+            {% csrf_token %}
+            <div class="list-group">
+                {% for p in current_payments %}
+                    <div class="list-group-item">
+                        <div class="row">
+                            <div class="col-xs-9">
+                                {{ p.provider_name }}
+                            </div>
+                            <div class="col-xs-2 text-right">
+                                {{ p.payment_amount|money:request.event.currency }}
+                            </div>
+                            <div class="col-xs-1 text-right">
+                                <button name="remove_payment" value="{{ p.id }}" title="{% trans "Remove payment" %}"
+                                    class="btn btn-link btn-xs">
+                                    <span class="fa fa-trash text-danger"></span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+                {% if remaining %}
+                    <div class="list-group-item">
+                        <div class="row">
+                            <div class="col-xs-9">
+                                <strong>{% trans "Remaining balance" %}</strong><br>
+                                <span class="text-muted">{% trans "Please select a payment method below." %}</span>
+                            </div>
+                            <div class="col-xs-2 text-right">
+                                <strong>
+                                    {{ remaining|money:request.event.currency }}
+                                </strong>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        </form>
+        {% if remaining %}
+            <p>{% trans "Please select how you want to pay the remaining balance:" %}</p>
+        {% endif %}
+    {% else %}
+        <p>{% trans "Please select how you want to pay." %}</p>
     {% endif %}
     <form method="post">
         {% csrf_token %}
-        <div class="panel-group" id="payment_accordion">
-            {% for p in providers %}
-                <div class="panel panel-default" data-total="{{ p.total|floatformat:2 }}">
-                    <div class="accordion-radio">
-                        <div class="panel-heading">
-                            <p class="panel-title">
-                                {% if show_fees %}
-                                    <strong class="pull-right flip">{% if p.fee < 0 %}-{% else %}+{% endif %} {{ p.fee|money:event.currency|cut:"-" }}</strong>
-                                {% endif %}
-                                <input type="radio" name="payment" value="{{ p.provider.identifier }}"
-                                       title="{{ p.provider.public_name }}"
-                                       data-parent="#payment_accordion"
-                                       {% if selected == p.provider.identifier %}checked="checked"{% endif %}
-                                       id="input_payment_{{ p.provider.identifier }}"
-                                       aria-describedby="payment_{{ p.provider.identifier }}"
-                                       data-toggle="radiocollapse" data-target="#payment_{{ p.provider.identifier }}"/>
-                                <label for="input_payment_{{ p.provider.identifier }}"><strong>{{ p.provider.public_name }}</strong></label>
-                            </p>
+        {% if not current_payments or remaining %}
+            {% if event.settings.payment_explanation %}
+                {{ event.settings.payment_explanation|rich_text }}
+            {% endif %}
+            <div class="panel-group" id="payment_accordion">
+                {% for p in providers %}
+                    <div class="panel panel-default">
+                        <div class="accordion-radio">
+                            <div class="panel-heading">
+                                <p class="panel-title">
+                                    {% if show_fees %}
+                                        <strong class="pull-right flip">{% if p.fee < 0 %}-{% else %}+{% endif %} {{ p.fee|money:event.currency|cut:"-" }}</strong>
+                                    {% endif %}
+                                    <input type="radio" name="payment" value="{{ p.provider.identifier }}"
+                                           title="{{ p.provider.public_name }}"
+                                           data-parent="#payment_accordion"
+                                           {% if selected == p.provider.identifier %}checked="checked"{% endif %}
+                                           id="input_payment_{{ p.provider.identifier }}"
+                                           aria-describedby="payment_{{ p.provider.identifier }}"
+                                           data-toggle="radiocollapse" data-target="#payment_{{ p.provider.identifier }}"/>
+                                    <label for="input_payment_{{ p.provider.identifier }}"><strong>{{ p.provider.public_name }}</strong></label>
+                                </p>
+                            </div>
                         </div>
-                    </div>
-                    <div id="payment_{{ p.provider.identifier }}"
-                         class="panel-collapse collapsed {% if selected == p.provider.identifier %}in{% endif %}">
-                        <div class="panel-body form-horizontal">
-                            {% if request.event.testmode %}
-                                {% if p.provider.test_mode_message %}
-                                    <div class="alert alert-info">
-                                        <p>{{ p.provider.test_mode_message }}</p>
-                                    </div>
-                                    {% if not request.sales_channel.testmode_supported %}
-                                        <div class="alert alert-danger">
+                        <div id="payment_{{ p.provider.identifier }}"
+                             class="panel-collapse collapsed {% if selected == p.provider.identifier %}in{% endif %}">
+                            <div class="panel-body form-horizontal">
+                                {% if request.event.testmode %}
+                                    {% if p.provider.test_mode_message %}
+                                        <div class="alert alert-info">
+                                            <p>{{ p.provider.test_mode_message }}</p>
+                                        </div>
+                                        {% if not request.sales_channel.testmode_supported %}
+                                            <div class="alert alert-danger">
+                                                <p>
+                                                {% trans "This sales channel does not provide support for test mode." %}
+                                                <strong>
+                                                    {% trans "If you continue, you might pay an actual order with non-existing money!" %}
+                                                </strong>
+                                                </p>
+                                            </div>
+                                        {% endif %}
+                                    {% else %}
+                                        <div class="alert alert-warning">
                                             <p>
-                                            {% trans "This sales channel does not provide support for test mode." %}
+                                            {% trans "This payment provider does not provide support for test mode." %}
                                             <strong>
-                                                {% trans "If you continue, you might pay an actual order with non-existing money!" %}
+                                                {% trans "If you continue, actual money might be transferred." %}
                                             </strong>
                                             </p>
                                         </div>
                                     {% endif %}
-                                {% else %}
-                                    <div class="alert alert-warning">
-                                        <p>
-                                        {% trans "This payment provider does not provide support for test mode." %}
-                                        <strong>
-                                            {% trans "If you continue, actual money might be transferred." %}
-                                        </strong>
-                                        </p>
-                                    </div>
                                 {% endif %}
-                            {% endif %}
-                            {{ p.form }}
+                                {{ p.form }}
+                            </div>
                         </div>
                     </div>
-                </div>
-            {% endfor %}
-            {% if not providers %}
-                <p><em>{% trans "There are no payment providers enabled." %}</em></p>
-                {% if not event.live %}
-                    <p>{% trans "Please go to the payment settings and activate one or more payment providers." %}</p>
+                {% endfor %}
+                {% if not providers %}
+                    <p><em>{% trans "There are no payment providers enabled." %}</em></p>
+                    {% if not event.live %}
+                        <p>{% trans "Please go to the payment settings and activate one or more payment providers." %}</p>
+                    {% endif %}
                 {% endif %}
-            {% endif %}
-        </div>
+            </div>
+        {% endif %}
         <div class="row checkout-button-row">
             <div class="col-md-4 col-sm-6">
                 <a class="btn btn-block btn-default btn-lg"
