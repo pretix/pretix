@@ -257,7 +257,10 @@ class EventWizard(SafeSessionWizardView):
     def done(self, form_list, form_dict, **kwargs):
         foundation_data = self.get_cleaned_data_for_step('foundation')
         basics_data = self.get_cleaned_data_for_step('basics')
-        copy_data = self.get_cleaned_data_for_step('copy')
+        try:
+            copy_data = self.get_cleaned_data_for_step('copy')
+        except KeyError:
+            copy_data = None
 
         with transaction.atomic(), language(basics_data['locale']):
             event = form_dict['basics'].instance
