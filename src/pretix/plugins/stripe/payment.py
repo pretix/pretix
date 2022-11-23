@@ -429,7 +429,7 @@ class StripeMethod(BasePaymentProvider):
         return kwargs
 
     def _init_api(self):
-        stripe.api_version = '2022-08-01'
+        stripe.api_version = '2022-11-15'
         stripe.set_app_info(
             "pretix",
             partner_id="pp_partner_FSaz4PpKIur7Ox",
