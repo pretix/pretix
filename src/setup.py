@@ -250,7 +250,7 @@ setup(
             'pytest-cov',
             'pytest-django==4.*',
             'pytest-mock==3.10.*',
-            'pytest-rerunfailures==10.2',
+            'pytest-rerunfailures==10.3',
             'pytest-sugar',
             'pytest-xdist==3.0.*',
             'pytest==7.2.*',
