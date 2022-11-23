@@ -174,7 +174,7 @@ setup(
         'django-countries==7.4.*',
         'django-filter==22.1',
         'django-formset-js-improved==0.5.0.3',
-        'django-formtools==2.3',
+        'django-formtools==2.4',
         'django-hierarkey==1.1.*',
         'django-hijack==3.2.*',
         'django-i18nfield==1.9.*,>=1.9.4',
