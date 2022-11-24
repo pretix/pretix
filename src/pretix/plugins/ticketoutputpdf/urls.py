@@ -31,7 +31,7 @@ from pretix.plugins.ticketoutputpdf.views import (
 )
 
 urlpatterns = [
-    re_path(r'^control/event/(?P<organizer>[^/]+)/(?P<event>[^/]+)/badges/print$',
+    re_path(r'^control/event/(?P<organizer>[^/]+)/(?P<event>[^/]+)/pdfoutput/print$',
             OrderPrintDo.as_view(), name='print'),
     re_path(r'^control/event/(?P<organizer>[^/]+)/(?P<event>[^/]+)/pdfoutput/$',
             LayoutListView.as_view(), name='index'),
