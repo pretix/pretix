@@ -1,0 +1,23 @@
+{% load i18n %}
+{% load eventurl %}
+{% load bootstrap3 %}
+<div class="btn-group">
+    <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+            aria-expanded="false">
+        {% trans "Alternative ticket" %} <span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu">
+
+        {% for l in layouts %}
+            <li>
+                <form action="{% url "plugins:ticketoutputpdf:print" event=event.slug organizer=event.organizer.slug %}?code={{ order.code }}&position={{ position.pk }}&channel={{ l.channel }}"
+                    method="post" data-asynctask data-asynctask-download data-asynctask-long class="form-inline helper-display-inline">
+                    {% csrf_token %}
+                    <button class="btn btn-link" type="submit">
+                        {{ l.label }}
+                    </button>
+                </form>
+            </li>
+        {% endfor %}
+    </ul>
+</div>
