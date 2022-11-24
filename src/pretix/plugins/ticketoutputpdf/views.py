@@ -21,6 +21,7 @@
 #
 import json
 import logging
+from datetime import timedelta
 from io import BytesIO
 
 from django.contrib import messages
@@ -29,10 +30,11 @@ from django.core.files import File
 from django.core.files.storage import default_storage
 from django.db import transaction
 from django.http import Http404
-from django.shortcuts import redirect
+from django.shortcuts import get_object_or_404, redirect
 from django.templatetags.static import static
 from django.urls import reverse
 from django.utils.functional import cached_property
+from django.utils.timezone import now
 from django.utils.translation import gettext, gettext_lazy as _
 from django.views import View
 from django.views.generic import CreateView, DeleteView, DetailView, ListView
@@ -48,7 +50,9 @@ from pretix.helpers.models import modelcopy
 from pretix.plugins.ticketoutputpdf.forms import TicketLayoutForm
 from pretix.plugins.ticketoutputpdf.ticketoutput import PdfTicketOutput
 
+from ...base.views.tasks import AsyncAction
 from .models import TicketLayout
+from .tasks import tickets_create_pdf
 
 logger = logging.getLogger(__name__)
 
@@ -286,3 +290,42 @@ class LayoutEditorView(BaseEditorView):
             self.layout.background.delete()
         self.layout.background.save('background.pdf', f.file)
         invalidate_cache.apply_async(kwargs={'event': self.request.event.pk, 'provider': 'pdf'})
+
+
+class OrderPrintDo(EventPermissionRequiredMixin, AsyncAction, View):
+    task = tickets_create_pdf
+    permission = 'can_view_orders'
+    known_errortypes = ['OrderError', 'ExportError']
+
+    def get_success_message(self, value):
+        return None
+
+    def get_success_url(self, value):
+        return reverse('cachedfile.download', kwargs={'id': str(value)})
+
+    def get_error_url(self):
+        return reverse('control:event.index', kwargs={
+            'organizer': self.request.organizer.slug,
+            'event': self.request.event.slug,
+        })
+
+    def get_error_message(self, exception):
+        if isinstance(exception, str):
+            return exception
+        return super().get_error_message(exception)
+
+    def post(self, request, *args, **kwargs):
+        order = get_object_or_404(self.request.event.orders, code=request.GET.get("code"))
+        cf = CachedFile(web_download=True, session_key=self.request.session.session_key)
+        cf.date = now()
+        cf.type = 'application/pdf'
+        cf.expires = now() + timedelta(days=3)
+        position = get_object_or_404(order.positions, pk=request.GET.get('position'))
+        cf.filename = f'tickets_{self.request.event.slug}_{order.code}-{position.positionid}.pdf'
+        cf.save()
+        return self.do(
+            self.request.event.pk,
+            str(cf.id),
+            position.pk,
+            request.GET.get('channel'),
+        )

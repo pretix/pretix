@@ -65,9 +65,10 @@ class PdfTicketOutput(BaseTicketOutput):
     multi_download_button_text = _('Download tickets (PDF)')
     long_download_button_text = _('Download ticket (PDF)')
 
-    def __init__(self, event, override_layout=None, override_background=None):
+    def __init__(self, event, override_layout=None, override_background=None, override_channel=None):
         self.override_layout = override_layout
         self.override_background = override_background
+        self.override_channel = override_channel
         super().__init__(event)
 
     @cached_property
@@ -117,7 +118,7 @@ class PdfTicketOutput(BaseTicketOutput):
             for op in order.positions_with_tickets:
                 layout = override_layout.send_chained(
                     order.event, 'layout', orderposition=op, layout=self.layout_map.get(
-                        (op.item_id, order.sales_channel),
+                        (op.item_id, self.override_channel or order.sales_channel),
                         self.layout_map.get(
                             (op.item_id, 'web'),
                             self.default_layout
@@ -138,7 +139,7 @@ class PdfTicketOutput(BaseTicketOutput):
 
         layout = override_layout.send_chained(
             order.event, 'layout', orderposition=op, layout=self.layout_map.get(
-                (op.item_id, order.sales_channel),
+                (op.item_id, self.override_channel or order.sales_channel),
                 self.layout_map.get(
                     (op.item_id, 'web'),
                     self.default_layout
