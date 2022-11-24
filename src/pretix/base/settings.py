@@ -743,6 +743,18 @@ DEFAULTS = {
         'default': 'True',
         'type': bool
     },
+    'payment_giftcard_public_name': {
+        'default': LazyI18nString.from_gettext(gettext_noop('Gift card')),
+        'type': LazyI18nString
+    },
+    'payment_giftcard_public_description': {
+        'default': LazyI18nString.from_gettext(gettext_noop(
+            'If you have a gift card, please enter the gift card code here. If the gift card does not have '
+            'enough credit to pay for the full order, you will be shown this page again and you can either '
+            'redeem another gift card or select a different payment method for the difference.'
+        )),
+        'type': LazyI18nString
+    },
     'payment_resellers__restrict_to_sales_channels': {
         'default': ['resellers'],
         'type': list

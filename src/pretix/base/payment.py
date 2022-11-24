@@ -1180,20 +1180,42 @@ class OffsettingProvider(BasePaymentProvider):
 
 class GiftCardPayment(BasePaymentProvider):
     identifier = "giftcard"
-    verbose_name = _("Gift card")
     priority = 10
     multi_use_supported = True
     execute_payment_needs_user = False
+    verbose_name = _("Gift card")
+
+    @property
+    def public_name(self) -> str:
+        return str(self.settings.get("public_name", as_type=LazyI18nString)) or _(
+            "Gift card"
+        )
 
     @property
     def settings_form_fields(self):
-        f = super().settings_form_fields
+        fields = [
+            (
+                "public_name",
+                I18nFormField(
+                    label=_("Payment method name"), widget=I18nTextInput, required=False
+                ),
+            ),
+            (
+                "public_description",
+                I18nFormField(
+                    label=_("Payment method description"), widget=I18nTextarea, required=False
+                ),
+            ),
+        ]
+
+        f = OrderedDict(fields + list(super().settings_form_fields.items()))
         del f['_fee_abs']
         del f['_fee_percent']
         del f['_fee_reverse_calc']
         del f['_total_min']
         del f['_total_max']
         del f['_invoice_text']
+        f.move_to_end("_enabled", last=False)
         return f
 
     @property
@@ -1207,7 +1229,9 @@ class GiftCardPayment(BasePaymentProvider):
         return super().order_change_allowed(order) and self.event.organizer.has_gift_cards
 
     def payment_form_render(self, request: HttpRequest, total: Decimal) -> str:
-        return get_template('pretixcontrol/giftcards/checkout.html').render({})
+        return get_template('pretixcontrol/giftcards/checkout.html').render({
+            'request': request,
+        })
 
     def checkout_confirm_render(self, request, order=None, info_data=None) -> str:
         return get_template('pretixcontrol/giftcards/checkout_confirm.html').render({
