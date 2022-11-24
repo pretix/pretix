@@ -75,6 +75,10 @@ last_modified                         datetime                   Last modificati
 
    The ``available_from``/``available_until`` attributes have been added to ``item_price_overrides`` and ``variation_price_overrides``.
 
+.. versionchanged:: 4.15
+
+    The ``search`` query parameter has been added to filter sub-events by their name or location in any language.
+
 Endpoints
 ---------
 
@@ -147,6 +151,7 @@ Endpoints
    :query is_future: If set to ``true`` (``false``), only events that happen currently or in the future are (not) returned.
    :query is_past: If set to ``true`` (``false``), only events that are over are (not) returned.
    :query ends_after: If set to a date and time, only events that happen during of after the given time are returned.
+   :query search: Only return events matching a given search query.
    :param organizer: The ``slug`` field of a valid organizer
    :param event: The ``slug`` field of the main event
    :query datetime modified_since: Only return objects that have changed since the given date. Be careful: This does not
