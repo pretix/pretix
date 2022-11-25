@@ -387,8 +387,9 @@ var editor = {
     },
 
     _init_fabric: function (dump) {
-        editor.$fcv.get(0).width = editor.$pdfcv.get(0).width;
-        editor.$fcv.get(0).height = editor.$pdfcv.get(0).height;
+        var outputScale = window.devicePixelRatio || 1;
+        editor.$fcv.get(0).width = editor.$pdfcv.get(0).width / outputScale;
+        editor.$fcv.get(0).height = editor.$pdfcv.get(0).height / outputScale;
         editor.fabric = new fabric.Canvas('fabric-canvas');
 
         editor.fabric.on('object:modified', editor._create_savepoint);
