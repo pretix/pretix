@@ -1198,10 +1198,8 @@ class PaymentStep(CartMixin, TemplateFlowStep):
                     request,
                     cart,
                 )
-                if isinstance(resp, str):
-                    return redirect(resp)
-                elif resp is True:
-                    if pprov.multi_use_supported:
+                if pprov.multi_use_supported:
+                    if resp is True:
                         # Provider needs to call add_payment_to_cart itself, but we need to remove all previously
                         # selected ones that don't have multi_use supported. Otherwise, if you first select a credit
                         # card, then go back and switch to a gift card, you'll have both in the session and the credit
@@ -1226,14 +1224,20 @@ class PaymentStep(CartMixin, TemplateFlowStep):
                                 )
                             )
                             return redirect(self.get_step_url(request))
-                    else:
+                    elif isinstance(resp, str):
+                        return redirect(resp)
+                else:
+                    if resp is True or isinstance(resp, str):
                         # There can only be one payment method that does not have multi_use_supported, remove all
                         # previous ones.
                         self.cart_session['payments'] = [p for p in self.cart_session.get('payments', []) if p.get('multi_use_supported')]
                         add_payment_to_cart(request, pprov, None, None, None)
-                        return redirect(self.get_next_url(request))
-                else:
-                    return self.render()
+
+                        if isinstance(resp, str):
+                            return redirect(resp)
+                        else:
+                            return redirect(self.get_next_url(request))
+                return self.render()
 
         if self.is_completed(request, warn=False):
             # All payments already accounted for, no need to select one

@@ -58,14 +58,16 @@ from paypalcheckoutsdk import orders as pp_orders, payments as pp_payments
 
 from pretix.base.models import Event, Order, OrderPayment, OrderRefund, Quota
 from pretix.base.payment import PaymentException
-from pretix.base.services.cart import get_fees
+from pretix.base.services.cart import add_payment_to_cart, get_fees
 from pretix.base.settings import GlobalSettingsObject
 from pretix.control.permissions import event_permission_required
 from pretix.multidomain.urlreverse import eventreverse
 from pretix.plugins.paypal2.client.customer.partners_merchantintegrations_get_request import (
     PartnersMerchantIntegrationsGetRequest,
 )
-from pretix.plugins.paypal2.payment import PaypalMethod, PaypalMethod as Paypal
+from pretix.plugins.paypal2.payment import (
+    PaypalMethod, PaypalMethod as Paypal, PaypalWallet,
+)
 from pretix.plugins.paypal.models import ReferencedPayPalObject
 from pretix.presale.views import get_cart, get_cart_total
 from pretix.presale.views.cart import cart_session
@@ -311,6 +313,7 @@ def success(request, *args, **kwargs):
             'secret': payment.order.secret
         }) + ('?paid=yes' if payment.order.status == Order.STATUS_PAID else ''))
     else:
+        add_payment_to_cart(request, PaypalWallet(request.event), None, None, None)
         urlkwargs['step'] = 'confirm'
         return redirect(eventreverse(request.event, 'presale:event.checkout', kwargs=urlkwargs))
 
