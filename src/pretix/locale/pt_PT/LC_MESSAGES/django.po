@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-11-24 15:28+0000\n"
-"PO-Revision-Date: 2022-11-22 00:00+0000\n"
+"PO-Revision-Date: 2022-11-25 19:00+0000\n"
 "Last-Translator: tlm06 <tlm_pg06@hotmail.com>\n"
 "Language-Team: Portuguese (Portugal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/pt_PT/>\n"
@@ -5558,10 +5558,8 @@ msgid "Balanced against orders: %s"
 msgstr "Equilibrado contra encomendas: %s"
 
 #: pretix/base/payment.py:1206
-#, fuzzy
-#| msgid "Payment method name"
 msgid "Payment method description"
-msgstr "Nome do método de pagamento"
+msgstr "Descrição do método de pagamento"
 
 #: pretix/base/payment.py:1223
 msgid "In test mode, only test cards will work."
