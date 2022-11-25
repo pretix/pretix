@@ -1384,8 +1384,10 @@ class Question(LoggedModel):
         if self.type == Question.TYPE_CHOICE:
             if isinstance(answer, QuestionOption):
                 return answer
+            if not isinstance(answer, (int, str)):
+                raise ValidationError(_('Invalid input type.'))
             q = Q(identifier=answer)
-            if isinstance(answer, int) or answer.isdigit():
+            if isinstance(answer, int) or (isinstance(answer, str) and answer.isdigit()):
                 q |= Q(pk=answer)
             o = self.options.filter(q).first()
             if not o:
