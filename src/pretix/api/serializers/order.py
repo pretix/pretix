@@ -29,6 +29,7 @@ import pycountry
 from django.conf import settings
 from django.core.files import File
 from django.db.models import F, Q
+from django.utils.encoding import force_str
 from django.utils.timezone import now
 from django.utils.translation import gettext_lazy
 from django_countries.fields import Country
@@ -61,14 +62,25 @@ from pretix.base.services.pricing import (
 )
 from pretix.base.settings import COUNTRIES_WITH_STATE_IN_ADDRESS
 from pretix.base.signals import register_ticket_outputs
+from pretix.helpers.countries import CachedCountries
 from pretix.multidomain.urlreverse import build_absolute_uri
 
 logger = logging.getLogger(__name__)
 
 
 class CompatibleCountryField(serializers.Field):
+    countries = CachedCountries()
+    default_error_messages = {
+        'invalid_choice': gettext_lazy('"{input}" is not a valid choice.')
+    }
+
     def to_internal_value(self, data):
-        return {self.field_name: Country(data)}
+        country = self.countries.alpha2(data)
+        if data and not country:
+            country = self.countries.by_name(force_str(data))
+            if not country:
+                self.fail("invalid_choice", input=data)
+        return {self.field_name: country}
 
     def to_representation(self, instance: InvoiceAddress):
         if instance.country:
