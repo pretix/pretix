@@ -68,6 +68,7 @@ from pretix.base.signals import register_payment_providers
 from pretix.base.templatetags.money import money_filter
 from pretix.base.templatetags.rich_text import rich_text
 from pretix.helpers.countries import CachedCountries
+from pretix.helpers.format import format_map
 from pretix.helpers.money import DecimalTextInput
 from pretix.multidomain.urlreverse import build_absolute_uri
 from pretix.presale.views import get_cart, get_cart_total
@@ -1120,12 +1121,12 @@ class ManualPayment(BasePaymentProvider):
         }
 
     def order_pending_mail_render(self, order, payment) -> str:
-        msg = str(self.settings.get('email_instructions', as_type=LazyI18nString)).format_map(self.format_map(order, payment))
+        msg = format_map(self.settings.get('email_instructions', as_type=LazyI18nString), self.format_map(order, payment))
         return msg
 
     def payment_pending_render(self, request, payment) -> str:
         return rich_text(
-            str(self.settings.get('pending_description', as_type=LazyI18nString)).format_map(self.format_map(payment.order, payment))
+            format_map(self.settings.get('pending_description', as_type=LazyI18nString), self.format_map(payment.order, payment))
         )
 
 

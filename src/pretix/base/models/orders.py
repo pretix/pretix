@@ -80,6 +80,7 @@ from pretix.base.settings import PERSON_NAME_SCHEMES
 from pretix.base.signals import order_gracefully_delete
 
 from ...helpers.countries import CachedCountries, FastCountryField
+from ...helpers.format import format_map
 from ._transactions import (
     _fail, _transactions_mark_order_clean, _transactions_mark_order_dirty,
 )
@@ -996,7 +997,7 @@ class Order(LockModel, LoggedModel):
                          position and the attendee email will be used if available.
         """
         from pretix.base.services.mail import (
-            SendMailException, TolerantDict, mail, render_mail,
+            SendMailException, mail, render_mail,
         )
 
         if not self.email and not (position and position.attendee_email):
@@ -1012,7 +1013,7 @@ class Order(LockModel, LoggedModel):
 
             try:
                 email_content = render_mail(template, context)
-                subject = str(subject).format_map(TolerantDict(context))
+                subject = format_map(subject, context)
                 mail(
                     recipient, subject, template, context,
                     self.event, self.locale, self, headers=headers, sender=sender,
@@ -2413,7 +2414,7 @@ class OrderPosition(AbstractPosition):
         :param attach_ical: Attach relevant ICS files
         """
         from pretix.base.services.mail import (
-            SendMailException, TolerantDict, mail, render_mail,
+            SendMailException, mail, render_mail,
         )
 
         if not self.attendee_email:
@@ -2426,7 +2427,7 @@ class OrderPosition(AbstractPosition):
             recipient = self.attendee_email
             try:
                 email_content = render_mail(template, context)
-                subject = str(subject).format_map(TolerantDict(context))
+                subject = format_map(subject, context)
                 mail(
                     recipient, subject, template, context,
                     self.event, self.order.locale, order=self.order, headers=headers, sender=sender,

@@ -40,6 +40,7 @@ from pretix.base.models import Checkin, Event, InvoiceAddress, Order, User
 from pretix.base.services.mail import SendMailException, mail
 from pretix.base.services.tasks import ProfiledEventTask
 from pretix.celery_app import app
+from pretix.helpers.format import format_map
 
 
 @app.task(base=ProfiledEventTask, acks_late=True)
@@ -116,8 +117,8 @@ def send_mails(event: Event, user: int, subject: dict, message: dict, orders: li
                             user=user,
                             data={
                                 'position': p.positionid,
-                                'subject': subject.localize(o.locale).format_map(email_context),
-                                'message': message.localize(o.locale).format_map(email_context),
+                                'subject': format_map(subject.localize(o.locale), email_context),
+                                'message': format_map(message.localize(o.locale), email_context),
                                 'recipient': p.attendee_email
                             }
                         )
@@ -143,8 +144,8 @@ def send_mails(event: Event, user: int, subject: dict, message: dict, orders: li
                         'pretix.plugins.sendmail.order.email.sent',
                         user=user,
                         data={
-                            'subject': subject.localize(o.locale).format_map(email_context),
-                            'message': message.localize(o.locale).format_map(email_context),
+                            'subject': format_map(subject.localize(o.locale), email_context),
+                            'message': format_map(message.localize(o.locale), email_context),
                             'recipient': o.email
                         }
                     )

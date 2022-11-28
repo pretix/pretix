@@ -30,6 +30,7 @@ from django.utils.translation import gettext as _
 
 from pretix.base.email import get_email_context
 from pretix.base.models import Event
+from pretix.helpers.format import format_map
 from pretix.multidomain.urlreverse import build_absolute_uri
 
 
@@ -112,9 +113,6 @@ def get_private_icals(event, positions):
     - It would be pretty hard to implement it in a way that doesn't require us to use distinct
       settings fields for emails to customers and to attendees, which feels like an overcomplication.
     """
-
-    from pretix.base.services.mail import TolerantDict
-
     tz = pytz.timezone(event.settings.timezone)
 
     creation_time = datetime.datetime.now(pytz.utc)
@@ -131,7 +129,7 @@ def get_private_icals(event, positions):
 
         if event.settings.mail_attach_ical_description:
             ctx = get_email_context(event=event, event_or_subevent=ev)
-            description = str(event.settings.mail_attach_ical_description).format_map(TolerantDict(ctx))
+            description = format_map(str(event.settings.mail_attach_ical_description), ctx)
         else:
             # Default description
             descr = []
