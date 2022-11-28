@@ -350,7 +350,7 @@ class ProfileView(CustomerRequiredMixin, ListView):
 
     def get_queryset(self):
         q = Q(customer=self.request.customer)
-        if self.request.organizer.settings.customer_accounts_link_by_email:
+        if self.request.organizer.settings.customer_accounts_link_by_email and self.request.customer.email:
             # This is safe because we only let customers with verified emails log in
             q |= Q(email__iexact=self.request.customer.email)
         qs = Order.objects.filter(
