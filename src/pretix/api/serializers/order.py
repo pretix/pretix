@@ -80,7 +80,7 @@ class CompatibleCountryField(serializers.Field):
             country = self.countries.by_name(force_str(data))
             if not country:
                 self.fail("invalid_choice", input=data)
-        return {self.field_name: country}
+        return {self.field_name: Country(country)}
 
     def to_representation(self, instance: InvoiceAddress):
         if instance.country:
