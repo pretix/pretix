@@ -443,6 +443,64 @@ def test_order_detail(token_client, organizer, event, order, item, taxrule, ques
 
 
 @pytest.mark.django_db
+def test_include_exclude_fields(token_client, organizer, event, order, item, taxrule, question):
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/orders/{}/?exclude=positions.secret'.format(
+        organizer.slug, event.slug, order.code
+    ))
+    assert resp.status_code == 200
+    assert 'email' in resp.data
+    assert 'url' in resp.data
+    assert 'positions' in resp.data
+    assert 'subevent' in resp.data['positions'][0]
+    assert 'secret' not in resp.data['positions'][0]
+
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/orders/{}/?exclude=positions'.format(
+        organizer.slug, event.slug, order.code
+    ))
+    assert resp.status_code == 200
+    assert 'email' in resp.data
+    assert 'url' in resp.data
+    assert 'positions' not in resp.data
+
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/orders/{}/?exclude=email&exclude=url'.format(
+        organizer.slug, event.slug, order.code
+    ))
+    assert resp.status_code == 200
+    assert 'email' not in resp.data
+    assert 'url' not in resp.data
+    assert 'positions' in resp.data
+    assert 'secret' in resp.data['positions'][0]
+
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/orders/{}/?include=email'.format(
+        organizer.slug, event.slug, order.code
+    ))
+    assert resp.status_code == 200
+    assert 'email' in resp.data
+    assert 'url' not in resp.data
+    assert 'positions' not in resp.data
+
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/orders/{}/?include=email&include=positions&exclude=positions.secret'.format(
+        organizer.slug, event.slug, order.code
+    ))
+    assert resp.status_code == 200
+    assert 'email' in resp.data
+    assert 'url' not in resp.data
+    assert 'positions' in resp.data
+    assert 'subevent' in resp.data['positions'][0]
+    assert 'secret' not in resp.data['positions'][0]
+
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/orders/{}/?include=email&include=positions.subevent'.format(
+        organizer.slug, event.slug, order.code
+    ))
+    assert resp.status_code == 200
+    assert 'email' in resp.data
+    assert 'url' not in resp.data
+    assert 'positions' in resp.data
+    assert 'subevent' in resp.data['positions'][0]
+    assert 'secret' not in resp.data['positions'][0]
+
+
+@pytest.mark.django_db
 def test_payment_list(token_client, organizer, event, order):
     resp = token_client.get('/api/v1/organizers/{}/events/{}/orders/{}/payments/'.format(organizer.slug, event.slug,
                                                                                          order.code))

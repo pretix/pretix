@@ -191,6 +191,7 @@ class OrderViewSet(viewsets.ModelViewSet):
         ctx['event'] = self.request.event
         ctx['pdf_data'] = self.request.query_params.get('pdf_data', 'false') == 'true'
         ctx['exclude'] = self.request.query_params.getlist('exclude')
+        ctx['include'] = self.request.query_params.getlist('include')
         return ctx
 
     def get_queryset(self):

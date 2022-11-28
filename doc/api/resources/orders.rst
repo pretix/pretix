@@ -142,6 +142,10 @@ last_modified                         datetime                   Last modificati
 
    The ``order.fees.id`` attribute has been added.
 
+.. versionchanged:: 4.15
+
+   The ``include`` query parameter has been added.
+
 
 .. _order-position-resource:
 
@@ -458,6 +462,7 @@ List of all orders
    :query datetime subevent_after: Only return orders that contain a ticket for a subevent taking place after the given date. This is an exclusive after, and it considers the **end** of the subevent (or its start, if the end is not set).
    :query datetime subevent_before: Only return orders that contain a ticket for a subevent taking place after the given date. This is an exclusive before, and it considers the **start** of the subevent.
    :query string exclude: Exclude a field from the output, e.g. ``fees`` or ``positions.downloads``. Can be used as a performance optimization. Can be passed multiple times.
+   :query string include: Include only the given field in the output, e.g. ``fees`` or ``positions.downloads``. Can be used as a performance optimization. Can be passed multiple times. ``include`` is applied before ``exclude``, so ``exclude`` takes precedence.
    :param organizer: The ``slug`` field of the organizer to fetch
    :param event: The ``slug`` field of the event to fetch
    :resheader X-Page-Generated: The server time at the beginning of the operation. If you're using this API to fetch

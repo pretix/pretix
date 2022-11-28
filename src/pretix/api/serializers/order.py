@@ -622,6 +622,23 @@ class OrderSerializer(I18nAwareModelSerializer):
         if not self.context['pdf_data']:
             self.fields['positions'].child.fields.pop('pdf_data', None)
 
+        includes = set(self.context['include'])
+        if includes:
+            for fname, field in list(self.fields.items()):
+                if fname in includes:
+                    continue
+                elif hasattr(field, 'child'):
+                    found_any = False
+                    for childfname, childfield in list(field.child.fields.items()):
+                        if f'{fname}.{childfname}' not in includes:
+                            field.child.fields.pop(childfname)
+                        else:
+                            found_any = True
+                    if not found_any:
+                        self.fields.pop(fname)
+                else:
+                    self.fields.pop(fname)
+
         for exclude_field in self.context['exclude']:
             p = exclude_field.split('.')
             if p[0] in self.fields:
