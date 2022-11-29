@@ -71,6 +71,10 @@
                             <dt>{% trans "Notes" %}</dt>
                             <dd>{{ customer.notes|linebreaks }}</dd>
                         {% endif %}
+                        <dt>{% trans "Lifetime spending" %}</dt>
+                        {% for currency, total in lifetime_spending.items %}
+                            <dd>{{ total|money:currency }}</dd>
+                        {% endfor %}
                         </dl>
                     </form>
                     <div class="text-right">
