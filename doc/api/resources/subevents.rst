@@ -59,32 +59,12 @@ seat_category_mapping                 object                     An object mappi
 last_modified                         datetime                   Last modification of this object
 ===================================== ========================== =======================================================
 
-.. versionchanged:: 3.3
-
-   The attributes ``geo_lat`` and ``geo_lon`` have been added.
-
-.. versionchanged:: 3.10
-
-   The ``disabled`` attribute has been added to ``item_price_overrides`` and ``variation_price_overrides``.
-
-.. versionchanged:: 3.12
-
-   The ``last_modified`` attribute has been added.
-
-.. versionchanged:: 3.18
-
-   The ``available_from``/``available_until`` attributes have been added to ``item_price_overrides`` and ``variation_price_overrides``.
-
 .. versionchanged:: 4.15
 
     The ``search`` query parameter has been added to filter sub-events by their name or location in any language.
 
 Endpoints
 ---------
-
-.. versionchanged:: 3.3
-
-    The sub-events resource can now be filtered by meta data attributes.
 
 .. versionchanged:: 4.1
 

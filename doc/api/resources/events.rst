@@ -52,33 +52,8 @@ sales_channels                        list                       A list of sales
 ===================================== ========================== =======================================================
 
 
-.. versionchanged:: 3.3
-
-   The attributes ``geo_lat`` and ``geo_lon`` have been added.
-
-.. versionchanged:: 3.4
-
-   The attribute ``timezone`` has been added.
-
-.. versionchanged:: 3.7
-
-   The attribute ``item_meta_properties`` has been added.
-
-.. versionchanged:: 3.12
-
-   The attribute ``valid_keys`` has been added.
-
-.. versionchanged:: 3.14
-
-    The attribute ``sales_channels`` has been added.
-
-
 Endpoints
 ---------
-
-.. versionchanged:: 3.3
-
-    The events resource can now be filtered by meta data attributes.
 
 .. versionchanged:: 4.0
 
@@ -566,10 +541,6 @@ information about the properties.
 
 .. warning:: This API is intended for advanced users. Even though we take care to validate your input, you will be
              able to break your event using this API by creating situations of conflicting settings. Please take care.
-
-.. versionchanged:: 3.6
-
-   Initial support for settings has been added to the API.
 
 .. http:get:: /api/v1/organizers/(organizer)/events/(event)/settings/
 

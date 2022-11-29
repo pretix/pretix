@@ -6,10 +6,6 @@ Data exporters
 pretix and it's plugins include a number of data exporters that allow you to bulk download various data from pretix in
 different formats. This page shows you how to use these exporters through the API.
 
-.. versionchanged:: 3.13
-
-   This feature has been added to the API.
-
 .. warning::
 
    While we consider the methods listed on this page to be a stable API, the availability and specific input field

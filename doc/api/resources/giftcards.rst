@@ -40,10 +40,6 @@ text                                  string                     Custom text of 
 Endpoints
 ---------
 
-.. versionadded:: 3.14
-
-   The transaction list endpoint was added.
-
 .. http:get:: /api/v1/organizers/(organizer)/giftcards/
 
    Returns a list of all gift cards issued by a given organizer.
@@ -256,10 +252,6 @@ Endpoints
         "conditions": null,
         "value": "15.37"
       }
-
-   .. versionchanged:: 3.5
-
-      This endpoint now returns status code ``409`` if the transaction would lead to a negative gift card value.
 
    :param organizer: The ``slug`` field of the organizer to modify
    :param id: The ``id`` field of the gift card to modify

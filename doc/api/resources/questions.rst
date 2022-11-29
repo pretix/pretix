@@ -76,25 +76,8 @@ dependency_value                      string                     An old version 
                                                                  for one value. **Deprecated.**
 ===================================== ========================== =======================================================
 
-.. versionchanged:: 3.5
-
-  The attribute ``help_text`` has been added.
-
-.. versionchanged:: 3.14
-
-  The attributes ``valid_*`` have been added.
-
-.. versionchanged:: 3.18
-
-  The attribute ``valid_file_portrait`` have been added.
-
 Endpoints
 ---------
-
-.. versionchanged:: 1.15
-
-   The questions endpoint has been extended by the filter queries ``ask_during_checkin``, ``requred``, and
-   ``identifier``.
 
 .. http:get:: /api/v1/organizers/(organizer)/events/(event)/questions/
 

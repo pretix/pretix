@@ -39,23 +39,6 @@ exit_all_at                           datetime                   Automatically c
 addon_match                           boolean                    If ``true``, tickets on this list can be redeemed by scanning their parent ticket if this still leads to an unambiguous match.
 ===================================== ========================== =======================================================
 
-.. versionchanged:: 3.9
-
-    The ``subevent`` attribute may now be ``null`` inside event series. The ``allow_multiple_entries``,
-    ``allow_entry_after_exit``, and ``rules`` attributes have been added.
-
-.. versionchanged:: 3.11
-
-    The ``subevent_match`` and ``exclude`` query parameters have been added.
-
-.. versionchanged:: 3.12
-
-    The ``exit_all_at`` attribute has been added.
-
-.. versionchanged:: 3.17
-
-    The ``ends_after`` and ``expand`` query parameters have been added.
-
 .. versionchanged:: 4.12
 
     The ``addon_match`` attribute has been added.

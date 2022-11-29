@@ -146,14 +146,6 @@ bundles                               list of objects            Definition of b
 meta_data                             object                     Values set for event-specific meta data parameters.
 ===================================== ========================== =======================================================
 
-.. versionchanged:: 3.7
-
-   The attribute ``meta_data`` has been added.
-
-.. versionchanged:: 3.10
-
-   The attribute ``multi_allowed`` has been added to ``addons``.
-
 .. versionchanged:: 4.0
 
    The attributes ``require_membership``, ``require_membership_types``, ``grant_membership_type``, ``grant_membership_duration_like_event``,

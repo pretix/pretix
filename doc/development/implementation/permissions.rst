@@ -184,11 +184,6 @@ Most of these methods work identically on :class:`pretix.base.models.TeamAPIToke
 Staff sessions
 --------------
 
-.. versionchanged:: 1.14
-
-   In 1.14, the ``User.is_superuser`` attribute has been deprecated and statically set to return ``False``. Staff
-   sessions have been newly introduced.
-
 System administrators of a pretix instance are identified by the ``is_staff`` attribute on the user model. By default,
 the regular permission rules apply for users with ``is_staff = True``. The only difference is that such users can
 temporarily turn on "staff mode" via a button in the user interface that grants them **all permissions** as long as

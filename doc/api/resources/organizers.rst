@@ -109,10 +109,6 @@ information about the properties.
 .. warning:: This API is intended for advanced users. Even though we take care to validate your input, you will be
              able to break your shops using this API by creating situations of conflicting settings. Please take care.
 
-.. versionchanged:: 3.14
-
-   Initial support for settings has been added to the API.
-
 .. http:get:: /api/v1/organizers/(organizer)/settings/
 
    Get current values of organizer settings.

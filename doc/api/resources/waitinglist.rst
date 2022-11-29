@@ -30,12 +30,6 @@ subevent                              integer                    ID of the date 
 ===================================== ========================== =======================================================
 
 
-.. versionchanged:: 1.15
-
-   The write operations ``POST``, ``PATCH``, ``PUT``, and ``DELETE`` have been added as well as a method to send out
-   vouchers.
-
-
 Endpoints
 ---------
 

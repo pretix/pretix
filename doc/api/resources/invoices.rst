@@ -108,16 +108,6 @@ internal_reference                    string                     Customer's refe
 ===================================== ========================== =======================================================
 
 
-.. versionchanged:: 3.4
-
-   The attribute ``lines.number`` has been added.
-
-.. versionchanged:: 3.17
-
-   The attribute ``invoice_to_*``, ``invoice_from_*``, ``custom_field``, ``lines.item``, ``lines.variation``, ``lines.event_date_from``,
-   ``lines.event_date_to``, and ``lines.attendee_name`` have been added.
-   ``refers`` now returns an invoice number including the prefix.
-
 .. versionchanged:: 4.1
 
    The attributes ``fee_type`` and ``fee_internal_type`` have been added.

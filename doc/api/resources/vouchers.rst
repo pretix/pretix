@@ -50,10 +50,6 @@ show_hidden_items                     boolean                    Only if set to 
 ===================================== ========================== =======================================================
 
 
-.. versionchanged:: 3.4
-
-   The attribute ``seat`` has been added.
-
 Endpoints
 ---------
 

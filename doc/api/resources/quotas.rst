@@ -36,10 +36,6 @@ available_number                      integer                    Number of avail
                                                                  slightly out of date. ``null`` means unlimited.
 ===================================== ========================== =======================================================
 
-.. versionchanged:: 3.10
-
-   The attribute ``release_after_exit`` has been added.
-
 .. versionchanged:: 4.1
 
     The ``with_availability`` query parameter has been added.

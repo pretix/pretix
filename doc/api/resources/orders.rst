@@ -98,30 +98,6 @@ last_modified                         datetime                   Last modificati
 ===================================== ========================== =======================================================
 
 
-.. versionchanged:: 3.5
-
-   The ``order.fees.canceled`` attribute has been added.
-
-.. versionchanged:: 3.8
-
-   The ``reactivate`` operation has been added.
-
-.. versionchanged:: 3.10
-
-   The ``search`` query parameter has been added.
-
-.. versionchanged:: 3.11
-
-   The ``exclude`` and ``subevent_after`` query parameter has been added.
-
-.. versionchanged:: 3.13
-
-   The ``subevent_before`` query parameter has been added.
-
-.. versionchanged:: 3.14
-
-   The ``phone`` attribute has been added.
-
 .. versionchanged:: 4.0
 
    The ``customer`` attribute has been added.
@@ -210,27 +186,6 @@ pdf_data                              object                     Data object req
                                                                  ``pdf_data=true`` query parameter to your request.
 ===================================== ========================== =======================================================
 
-.. versionchanged:: 3.3
-
-  The ``url`` of a ticket ``download`` can now also return a ``text/uri-list`` instead of a file. See
-  :ref:`order-position-ticket-download` for details.
-
-.. versionchanged:: 3.5
-
-  The attribute ``canceled`` has been added.
-
-.. versionchanged:: 3.8
-
-  The attributes ``company``, ``street``, ``zipcode``, ``city``, ``country``, and ``state`` have been added.
-
-.. versionchanged:: 3.9
-
-  The ``checkin.type`` attribute has been added.
-
-.. versionchanged:: 3.16
-
-   Answers to file questions are now returned as an URL.
-
 .. _order-payment-resource:
 
 Order payment resource
@@ -290,10 +245,6 @@ details                               object                     Refund-specific
 
 List of all orders
 ------------------
-
-.. versionchanged:: 3.5
-
-   The ``include_canceled_positions`` and ``include_canceled_fees`` query parameters have been added.
 
 .. http:get:: /api/v1/organizers/(organizer)/events/(event)/orders/
 
@@ -473,10 +424,6 @@ List of all orders
 
 Fetching individual orders
 --------------------------
-
-.. versionchanged:: 3.5
-
-   The ``include_canceled_positions`` and ``include_canceled_fees`` query parameters have been added.
 
 .. http:get:: /api/v1/organizers/(organizer)/events/(event)/orders/(code)/
 
@@ -1052,10 +999,6 @@ Creating orders
 Order state operations
 ----------------------
 
-.. versionchanged:: 3.12
-
-   The ``mark_paid`` operation now takes a ``send_email`` parameter.
-
 .. http:post:: /api/v1/organizers/(organizer)/events/(event)/orders/(code)/mark_paid/
 
    Marks a pending or expired order as successfully paid.
@@ -1457,10 +1400,6 @@ Sending e-mails
 List of all order positions
 ---------------------------
 
-.. versionchanged:: 3.5
-
-   The ``include_canceled_positions`` and ``include_canceled_fees`` query parameters have been added.
-
 .. http:get:: /api/v1/organizers/(organizer)/events/(event)/orderpositions/
 
    Returns a list of all order positions within a given event.
@@ -1714,10 +1653,6 @@ Order position ticket download
 
 Manipulating individual positions
 ---------------------------------
-
-.. versionchanged:: 3.15
-
-   The ``PATCH`` method has been added for individual positions.
 
 .. versionchanged:: 4.8
 
@@ -2024,14 +1959,6 @@ otherwise, such as splitting an order or changing fees.
 
 Order payment endpoints
 -----------------------
-
-.. versionchanged:: 3.6
-
-   Payments can now be created through the API.
-
-.. versionchanged:: 3.12
-
-   The ``confirm`` operation now takes a ``send_email`` parameter.
 
 .. http:get:: /api/v1/organizers/(organizer)/events/(event)/orders/(code)/payments/
 
@@ -2569,10 +2496,6 @@ Revoked ticket secrets
 ----------------------
 
 With some non-default ticket secret generation methods, a list of revoked ticket secrets is required for proper validation.
-
-.. versionchanged:: 3.12
-
-   Added revocation lists.
 
 .. http:get:: /api/v1/organizers/(organizer)/events/(event)/revokedsecrets/
 

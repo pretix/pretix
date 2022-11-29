@@ -447,8 +447,4 @@ Hosted or pretix Enterprise are active, you can pass the following fields:
     </script>
 
 
-.. versionchanged:: 3.6
-
-   Dynamically opening the widget has been added in pretix 3.6.
-
 .. _Let's Encrypt: https://letsencrypt.org/
