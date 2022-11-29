@@ -330,6 +330,8 @@ def _placeholder_payments(order, payments):
     d = [line for line in d if line.strip()]
     if d:
         return '\n\n'.join(d)
+    else:
+        return ''
 
 
 def get_best_name(position_or_address, parts=False):
