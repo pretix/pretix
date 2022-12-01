@@ -45,8 +45,8 @@ from django.core.exceptions import PermissionDenied, ValidationError
 from django.core.files import File
 from django.db import connections, transaction
 from django.db.models import (
-    Count, Exists, IntegerField, Max, Min, OuterRef, Prefetch, ProtectedError,
-    Q, Subquery, Sum, F,
+    Count, Exists, F, IntegerField, Max, Min, OuterRef, Prefetch,
+    ProtectedError, Q, Subquery, Sum,
 )
 from django.db.models.functions import Coalesce, Greatest
 from django.forms import DecimalField
