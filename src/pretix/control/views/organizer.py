@@ -46,7 +46,7 @@ from django.core.files import File
 from django.db import connections, transaction
 from django.db.models import (
     Count, Exists, IntegerField, Max, Min, OuterRef, Prefetch, ProtectedError,
-    Q, Subquery, Sum,
+    Q, Subquery, Sum, F,
 )
 from django.db.models.functions import Coalesce, Greatest
 from django.forms import DecimalField
@@ -2296,7 +2296,6 @@ class CustomerDetailView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMi
             )
         }
 
-        spending = {}
         scs = get_all_sales_channels()
         for o in ctx['orders']:
             if o.pk not in annotated:
@@ -2311,15 +2310,14 @@ class CustomerDetailView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMi
             o.computed_payment_refund_sum = annotated.get(o.pk)['computed_payment_refund_sum']
             o.icnt = annotated.get(o.pk)['icnt']
             o.sales_channel_obj = scs[o.sales_channel]
-            currency = o.event.currency
-            if currency in spending:
-                total = spending[currency]
-                total += o.total
-                spending[currency] = total
-            else:
-                spending[currency] = o.total
 
-        ctx['lifetime_spending'] = spending
+        ctx["lifetime_spending"] = (
+            self.get_queryset()
+            .filter(status__in=[Order.STATUS_PAID, Order.STATUS_PENDING])
+            .values(currency=F("event__currency"))
+            .order_by("currency")
+            .annotate(spending=Sum("total"))
+        )
 
         return ctx
 
