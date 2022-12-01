@@ -22,7 +22,8 @@
                     </h3>
                 </div>
                 <div class="panel-body">
-                    <form action="" method="post">
+                <div class="row">
+                    <form action="" method="post" class="col-lg-8 col-md-6 col-sm-12">
                         {% csrf_token %}
                         <dl class="dl-horizontal">
                             <dt>{% trans "Customer ID" %}</dt>
@@ -71,12 +72,22 @@
                             <dt>{% trans "Notes" %}</dt>
                             <dd>{{ customer.notes|linebreaks }}</dd>
                         {% endif %}
-                        <dt>{% trans "Lifetime spending" %}</dt>
-                        {% for s in lifetime_spending %}
-                            <dd>{{ s.spending|money:s.currency }}</dd>
-                        {% endfor %}
                         </dl>
                     </form>
+                    {% if lifetime_spending %}
+                        <div class="text-right col-lg-4 col-md-6 col-sm-12"
+                                data-toggle="tooltip"
+                                title="{% trans "This includes all paid orders by this customer across all your events." %}"
+                        >
+                            <p class="text-muted">{% trans "Lifetime spending" %}</p>
+                                <h3 class="text-success">
+                                    {% for s in lifetime_spending %}
+                                            {{ s.spending|money:s.currency }}
+                                    {% endfor %}
+                                </h3>
+                        </div>
+                    {% endif %}
+                </div>
                     <div class="text-right">
                         <a href="{% url "control:organizer.customer.edit" organizer=request.organizer.slug customer=customer.identifier %}"
                                 class="btn btn-default">
