@@ -156,8 +156,8 @@ class BaseEditorView(EventPermissionRequiredMixin, TemplateView):
             p = PdfWriter()
             try:
                 p.add_blank_page(
-                    width=float(request.POST.get('width')) * mm,
-                    height=float(request.POST.get('height')) * mm,
+                    width=Decimal('%.5f' % (float(request.POST.get('width')) * mm)),
+                    height=Decimal('%.5f' % (float(request.POST.get('height')) * mm)),
                 )
             except ValueError:
                 return JsonResponse({
