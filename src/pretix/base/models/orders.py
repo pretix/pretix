@@ -1651,7 +1651,7 @@ class OrderPayment(models.Model):
         }, user=user, auth=auth)
 
     def confirm(self, count_waitinglist=True, send_mail=True, force=False, user=None, auth=None, mail_text='',
-                ignore_date=False, lock=True, payment_date=None):
+                ignore_date=False, lock=True, payment_date=None, generate_invoice=True):
         """
         Marks the payment as complete. If possible, this also marks the order as paid if no further
         payment is required
@@ -1714,10 +1714,11 @@ class OrderPayment(models.Model):
             ))
             return
 
-        self._mark_order_paid(count_waitinglist, send_mail, force, user, auth, mail_text, ignore_date, lock, payment_sum - refund_sum)
+        self._mark_order_paid(count_waitinglist, send_mail, force, user, auth, mail_text, ignore_date, lock, payment_sum - refund_sum,
+                              generate_invoice)
 
     def _mark_order_paid(self, count_waitinglist=True, send_mail=True, force=False, user=None, auth=None, mail_text='',
-                         ignore_date=False, lock=True, payment_refund_sum=0):
+                         ignore_date=False, lock=True, payment_refund_sum=0, allow_generate_invoice=True):
         from pretix.base.services.invoices import (
             generate_invoice, invoice_qualified,
         )
@@ -1734,7 +1735,7 @@ class OrderPayment(models.Model):
                                   ignore_date=ignore_date)
 
         invoice = None
-        if invoice_qualified(self.order):
+        if invoice_qualified(self.order) and allow_generate_invoice:
             invoices = self.order.invoices.filter(is_cancellation=False).count()
             cancellations = self.order.invoices.filter(is_cancellation=True).count()
             gen_invoice = (

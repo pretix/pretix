@@ -175,7 +175,9 @@ class BasePaymentProvider:
         """
         Set this to ``True`` if your ``execute_payment`` function needs to be triggered by a user request, i.e. either
         needs the ``request`` object or might require a browser redirect. If this is ``False``, you will not receive
-        a ``request`` and may not redirect since execute_payment might be called server-side.
+        a ``request`` and may not redirect since execute_payment might be called server-side. You should ensure that
+        your ``execute_payment`` method has a limited execution time (i.e. by using ``timeout`` for all external calls)
+        and handles all error cases appropriately.
         """
         return True
 
@@ -1385,7 +1387,7 @@ class GiftCardPayment(BasePaymentProvider):
         except GiftCard.MultipleObjectsReturned:
             messages.error(request, _("This gift card can not be redeemed since its code is not unique. Please contact the organizer of this event."))
 
-    def execute_payment(self, request: HttpRequest, payment: OrderPayment) -> str:
+    def execute_payment(self, request: HttpRequest, payment: OrderPayment, is_early_special_case=False) -> str:
         for p in payment.order.positions.all():
             if p.item.issue_giftcard:
                 raise PaymentException(_("You cannot pay with gift cards when buying a gift card."))
@@ -1421,7 +1423,7 @@ class GiftCardPayment(BasePaymentProvider):
                     'gift_card': gc.pk,
                     'transaction_id': trans.pk,
                 }
-                payment.confirm()
+                payment.confirm(send_mail=not is_early_special_case, generate_invoice=not is_early_special_case)
         except PaymentException as e:
             payment.fail(info={'error': str(e)})
             raise e
