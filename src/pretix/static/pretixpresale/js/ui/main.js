@@ -711,6 +711,8 @@ function copy_answers(elements, answers) {
                             input.prop("checked", answers.filter("[name$=" + suffix + "]").prop("checked"));
                         }
                         break;
+                    case "file":
+                        break
                     default:
                         input.val(answers.filter("[name$=" + suffix + "]").val());
                 }
