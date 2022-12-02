@@ -293,8 +293,8 @@ $(function () {
             const elements = $(this).find('input, select, textarea');
 
             const addonIdx = $(this).attr("data-addonidx");
-            const answersDiv = $('div[data-idx="0"][data-addonidx="' + addonIdx + '"]');
             const answers = answersDiv.find('input, select, textarea');
+            var answersDiv = $('div[data-idx="' + (idx - 1) + '"][data-addonidx="' + addonIdx + '"]');
 
             copy_answers(elements, answers);
         })
