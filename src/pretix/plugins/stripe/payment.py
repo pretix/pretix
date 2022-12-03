@@ -903,12 +903,14 @@ class StripePaymentIntentMethod(StripeMethod):
                     payment_method_types=[self.method],
                     confirmation_method='manual',
                     confirm=True,
-                    description='{event}-{code}'.format(
+                    description='{user}-{event}-{code}'.format(
+                        user=payment.order.email,
                         event=self.event.slug.upper(),
                         code=payment.order.code
                     ),
                     statement_descriptor=self.statement_descriptor(payment),
                     metadata={
+                        'customer': payment.order.email,
                         'order': str(payment.order.id),
                         'event': self.event.id,
                         'code': payment.order.code
