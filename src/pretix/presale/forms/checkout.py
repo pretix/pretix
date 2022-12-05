@@ -113,6 +113,7 @@ class ContactForm(forms.Form):
 class InvoiceAddressForm(BaseInvoiceAddressForm):
     required_css_class = 'required'
     vat_warning = True
+    address_validation = True
 
     def __init__(self, *args, **kwargs):
         allow_save = kwargs.pop('allow_save', False)

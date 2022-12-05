@@ -377,6 +377,7 @@ INSTALLED_APPS = [
     'django_countries',
     'hijack',
     'oauth2_provider',
+    'localflavor',
     'phonenumber_field'
 ]
 

@@ -915,6 +915,7 @@ class BaseQuestionsForm(forms.Form):
 
 class BaseInvoiceAddressForm(forms.ModelForm):
     vat_warning = False
+    address_validation = False
 
     class Meta:
         model = InvoiceAddress
@@ -1050,6 +1051,9 @@ class BaseInvoiceAddressForm(forms.ModelForm):
                 v.widget.attrs['autocomplete'] = 'section-invoice billing ' + v.widget.attrs.get('autocomplete', '')
 
     def clean(self):
+        from pretix.base.addressvalidation import \
+            validate_address  # local import to prevent impact on startup time
+
         data = self.cleaned_data
         if not data.get('is_business'):
             data['company'] = ''
@@ -1065,9 +1069,8 @@ class BaseInvoiceAddressForm(forms.ModelForm):
         if 'vat_id' in self.changed_data or not data.get('vat_id'):
             self.instance.vat_id_validated = False
 
-        if data.get('city') and data.get('country') and str(data['country']) in COUNTRIES_WITH_STATE_IN_ADDRESS:
-            if not data.get('state'):
-                self.add_error('state', _('This field is required.'))
+        if self.address_validation:
+            self.cleaned_data = data = validate_address(data)
 
         self.instance.name_parts = data.get('name_parts')
 
