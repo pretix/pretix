@@ -1051,7 +1051,8 @@ class BaseInvoiceAddressForm(forms.ModelForm):
                 v.widget.attrs['autocomplete'] = 'section-invoice billing ' + v.widget.attrs.get('autocomplete', '')
 
     def clean(self):
-        from pretix.base.addressvalidation import validate_address  # local import to prevent impact on startup time
+        from pretix.base.addressvalidation import \
+            validate_address  # local import to prevent impact on startup time
 
         data = self.cleaned_data
         if not data.get('is_business'):

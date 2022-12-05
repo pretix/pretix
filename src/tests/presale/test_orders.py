@@ -345,6 +345,35 @@ class OrdersTest(BaseOrdersTest):
         with scopes_disabled():
             assert self.ticket_pos.answers.get(question=self.question).answer == 'ABC'
 
+    def test_modify_invoice_address_validated(self):
+        self.event.settings.set('invoice_reissue_after_modify', True)
+        self.event.settings.set('invoice_address_asked', True)
+        with scopes_disabled():
+            generate_invoice(self.order)
+
+        response = self.client.post(
+            '/%s/%s/order/%s/%s/modify' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret), {
+                '%s-question_%s' % (self.ticket_pos.id, self.question.id): 'ABC',
+            }, follow=True)
+        self.assertRedirects(response,
+                             '/%s/%s/order/%s/%s/' % (self.orga.slug, self.event.slug, self.order.code,
+                                                      self.order.secret),
+                             target_status_code=200)
+        # Only questions changed
+        with scopes_disabled():
+            assert self.order.invoices.count() == 1
+
+        response = self.client.post(
+            '/%s/%s/order/%s/%s/modify' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret), {
+                '%s-question_%s' % (self.ticket_pos.id, self.question.id): 'ABC',
+                'zipcode': 'XXINVALIDXX',
+                'street': 'Main Street',
+                'city': 'Heidelberg',
+                'country': 'DE',
+            }, follow=True)
+        doc = BeautifulSoup(response.content.decode(), "lxml")
+        self.assertGreaterEqual(len(doc.select('.has-error')), 1)
+
     def test_modify_invoice_regenerate(self):
         self.event.settings.set('invoice_reissue_after_modify', True)
         self.event.settings.set('invoice_address_asked', True)
@@ -366,7 +395,10 @@ class OrdersTest(BaseOrdersTest):
         response = self.client.post(
             '/%s/%s/order/%s/%s/modify' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret), {
                 '%s-question_%s' % (self.ticket_pos.id, self.question.id): 'ABC',
-                'zipcode': '1234',
+                'zipcode': '12345',
+                'street': 'Main Street',
+                'city': 'Heidelberg',
+                'country': 'DE',
             }, follow=True)
         self.assertRedirects(response,
                              '/%s/%s/order/%s/%s/' % (self.orga.slug, self.event.slug, self.order.code,
@@ -381,6 +413,9 @@ class OrdersTest(BaseOrdersTest):
             '/%s/%s/order/%s/%s/modify' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret), {
                 '%s-question_%s' % (self.ticket_pos.id, self.question.id): 'ABC',
                 'zipcode': '54321',
+                'street': 'Main Street',
+                'city': 'Heidelberg',
+                'country': 'DE',
             }, follow=True)
         self.assertRedirects(response,
                              '/%s/%s/order/%s/%s/' % (self.orga.slug, self.event.slug, self.order.code,

@@ -22,7 +22,7 @@
 from collections import defaultdict
 
 from django.core.exceptions import ValidationError
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from localflavor.ar.forms import ARPostalCodeField
 from localflavor.at.forms import ATZipCodeField
 from localflavor.au.forms import AUPostCodeField

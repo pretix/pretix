@@ -170,7 +170,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 'company': 'Foo',
                 'name': 'Bar',
                 'street': 'Baz',
-                'zipcode': '12345',
+                'zipcode': '1234',
                 'city': 'Here',
                 'country': 'AT',
                 'vat_id': 'AT123456',
@@ -193,7 +193,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 'is_business': 'individual',
                 'name': 'Bar',
                 'street': 'Baz',
-                'zipcode': '12345',
+                'zipcode': '1234',
                 'city': 'Here',
                 'country': 'AT',
                 'vat_id': '',
@@ -229,7 +229,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 'company': 'Foo',
                 'name': 'Bar',
                 'street': 'Baz',
-                'zipcode': '12345',
+                'zipcode': '1234',
                 'city': 'Here',
                 'country': 'AT',
                 'vat_id': 'AT123456',
@@ -259,7 +259,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 'company': 'Foo',
                 'name': 'Bar',
                 'street': 'Baz',
-                'zipcode': '12345',
+                'zipcode': '3000',
                 'city': 'Here',
                 'country': 'AU',
                 'state': 'QLD',
@@ -293,7 +293,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 'company': 'Foo',
                 'name': 'Bar',
                 'street': 'Baz',
-                'zipcode': '12345',
+                'zipcode': '1234',
                 'city': 'Here',
                 'country': 'AT',
                 'vat_id': 'AT123456',
@@ -324,7 +324,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
             'company': 'Foo',
             'name': 'Bar',
             'street': 'Baz',
-            'zipcode': '12345',
+            'zipcode': '1234',
             'city': 'Here',
             'country': 'FR',
             'vat_id': 'AT123456',
@@ -357,7 +357,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 'company': 'Foo',
                 'name': 'Bar',
                 'street': 'Baz',
-                'zipcode': '12345',
+                'zipcode': '1234',
                 'city': 'Here',
                 'country': 'AT',
                 'vat_id': 'AT123456',
@@ -391,7 +391,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 'company': 'Foo',
                 'name': 'Bar',
                 'street': 'Baz',
-                'zipcode': '12345',
+                'zipcode': '1234',
                 'city': 'Here',
                 'country': 'AT',
                 'vat_id': 'AT123456',
@@ -428,7 +428,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 'company': 'Foo',
                 'name': 'Bar',
                 'street': 'Baz',
-                'zipcode': '12345',
+                'zipcode': '1234',
                 'city': 'Here',
                 'country': 'AT',
                 'vat_id': 'AT123456',
@@ -492,7 +492,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 'company': 'Foo',
                 'name': 'Bar',
                 'street': 'Baz',
-                'zipcode': '12345',
+                'zipcode': '1234',
                 'city': 'Here',
                 'country': 'AT',
                 'vat_id': 'AT123456',
@@ -551,7 +551,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 'is_business': 'individual',
                 'name': 'Bar',
                 'street': 'Baz',
-                'zipcode': '12345',
+                'zipcode': '1234',
                 'city': 'Here',
                 'country': 'AT',
                 'email': 'admin@localhost'
@@ -603,7 +603,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 'is_business': 'individual',
                 'name': 'Bar',
                 'street': 'Baz',
-                'zipcode': '12345',
+                'zipcode': '1234',
                 'city': 'Here',
                 'country': 'AT',
                 'email': 'admin@localhost'
@@ -631,7 +631,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 'is_business': 'individual',
                 'name': 'Bar',
                 'street': 'Baz',
-                'zipcode': '12345',
+                'zipcode': '99501',
                 'city': 'Here',
                 'country': 'US',
                 'state': 'CA',
@@ -684,7 +684,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 'company': 'Foo',
                 'name': 'Bar',
                 'street': 'Baz',
-                'zipcode': '12345',
+                'zipcode': '1345',
                 'city': 'Here',
                 'country': 'AT',
                 'vat_id': 'AT123456',
@@ -748,7 +748,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
                 'company': 'Foo',
                 'name': 'Bar',
                 'street': 'Baz',
-                'zipcode': '12345',
+                'zipcode': '1234',
                 'city': 'Here',
                 'country': 'AT',
                 'vat_id': 'AT123456',
@@ -1102,6 +1102,57 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
         }
         assert ia.name_cached == 'Mr John Kennedy'
 
+    def test_invoice_address_validated(self):
+        self.event.settings.invoice_address_asked = True
+        self.event.settings.invoice_address_required = True
+        self.event.settings.invoice_address_not_asked_free = True
+        self.event.settings.set('name_scheme', 'title_given_middle_family')
+
+        with scopes_disabled():
+            CartPosition.objects.create(
+                event=self.event, cart_id=self.session_key, item=self.ticket,
+                price=23, expires=now() + timedelta(minutes=10)
+            )
+        response = self.client.get('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), follow=True)
+        doc = BeautifulSoup(response.content.decode(), "lxml")
+        self.assertEqual(len(doc.select('input[name="city"]')), 1)
+
+        # Not all required fields filled out correctly, expect failure
+        response = self.client.post('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), {
+            'is_business': 'business',
+            'company': 'Foo',
+            'name_parts_0': 'Mr',
+            'name_parts_1': 'John',
+            'name_parts_2': '',
+            'name_parts_3': 'Kennedy',
+            'street': 'Baz',
+            'zipcode': '123456',
+            'city': 'Here',
+            'country': 'DE',
+            'vat_id': 'DE123456',
+            'email': 'admin@localhost'
+        }, follow=True)
+        doc = BeautifulSoup(response.content.decode(), "lxml")
+        self.assertGreaterEqual(len(doc.select('.has-error')), 1)
+
+        # Corrected request
+        response = self.client.post('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), {
+            'is_business': 'business',
+            'company': 'Foo',
+            'name_parts_0': 'Mr',
+            'name_parts_1': 'John',
+            'name_parts_2': '',
+            'name_parts_3': 'Kennedy',
+            'street': 'Baz',
+            'zipcode': '12345',
+            'city': 'Here',
+            'country': 'DE',
+            'vat_id': 'DE123456',
+            'email': 'admin@localhost'
+        }, follow=True)
+        self.assertRedirects(response, '/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug),
+                             target_status_code=200)
+
     def test_invoice_address_hidden_for_free(self):
         self.event.settings.invoice_address_asked = True
         self.event.settings.invoice_address_required = True
@@ -1136,10 +1187,19 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
         doc = BeautifulSoup(response.content.decode(), "lxml")
         self.assertEqual(len(doc.select('input[name="city"]')), 1)
 
-        # Not all required fields filled out, expect failure
+        # Partial address is not allowed
         response = self.client.post('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), {
             'is_business': 'business',
-            'city': 'Here',
+            'country': 'DE',
+            'city': 'Musterstadt',
+            'email': 'admin@localhost'
+        }, follow=True)
+        doc = BeautifulSoup(response.content.decode(), "lxml")
+        self.assertGreaterEqual(len(doc.select('.has-error')), 1)
+
+        # No address works
+        response = self.client.post('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), {
+            'is_business': 'business',
             'country': 'DE',
             'vat_id': 'DE123456',
             'email': 'admin@localhost'
