@@ -110,7 +110,6 @@ def validate_address(address: dict):
 
     for klass in _validator_classes[str(address['country'])]:
         validator = klass()
-        validator.validate_required_fields(address)
         try:
             address['zipcode'] = validator.validate_zipcode(address['zipcode'])
         except ValidationError as e:
@@ -196,11 +195,16 @@ _zip_code_fields = {
     'ZA': ZAPostCodeField,
 }
 
-for cc, k in _zip_code_fields.items():
-    @register_validator_for(cc)
+
+def _generate_class_from_zipcode_field(field_class):
     class _GeneratedValidator(BaseValidator):
         def validate_zipcode(self, value):
-            return k().clean(value)
+            return field_class().clean(value)
+    return _GeneratedValidator
+
+
+for cc, field_class in _zip_code_fields.items():
+    register_validator_for(cc)(_generate_class_from_zipcode_field(field_class))
 
 
 @register_validator_for('IS')
