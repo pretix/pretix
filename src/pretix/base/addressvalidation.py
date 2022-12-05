@@ -98,7 +98,7 @@ def validate_address(address: dict):
         return address
 
     if not address.get('country'):
-        raise ValidationError({'state': [_('This field is required.')]})
+        raise ValidationError({'country': [_('This field is required.')]})
 
     if str(address['country']) in COUNTRIES_WITH_STATE_IN_ADDRESS and not address.get('state'):
         raise ValidationError({'state': [_('This field is required.')]})
