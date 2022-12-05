@@ -307,7 +307,7 @@ $(function () {
         var addonId = $(this).data('addonid');
         var addonDiv = $('div[data-idx="' + id +'"][data-addonidx="' + addonId + '"]');
         var elements = addonDiv.find('input, select, textarea');
-        var answers = $('[data-idx="' + id + '"][data-addonidx="' + (addonId - 1) + '"] input, [data-idx="' + id + '"][data-addonidx="' + (addonId - 1) + '"] select, [data-idx="' + id + '"][data-addonidx="' + (addonId - 1) + '"] textarea');
+        var answers = $('[data-idx="' + id + '"][data-addonidx="' + (addonId - 1) + '"] input, [data-idx="' + id + '"][data-addonidx="' + (addonId - 1) + '"] select, [data-idx="' + id + '"][data-addonidx="' + (addonId - 1) + '"] textarea').reverse();
         copy_answers(elements, answers);
         return false;
     });
