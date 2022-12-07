@@ -287,14 +287,14 @@ $(function () {
     $(".js-copy-answers").click(function (e) {
         e.preventDefault();
         e.stopPropagation();
-        let idx = $(this).data('id');
-        const addonDivs = $('div[data-idx="' + idx +'"]')
+        var idx = $(this).data('id');
+        var addonDivs = $('div[data-idx="' + idx +'"]');
         addonDivs.each(function (index) {
-            const elements = $(this).find('input, select, textarea');
+            var elements = $(this).find('input, select, textarea');
 
-            const addonIdx = $(this).attr("data-addonidx");
-            const answersDiv = $('div[data-idx="0"][data-addonidx="' + addonIdx + '"]');
-            const answers = answersDiv.find('input, select, textarea');
+            var addonIdx = $(this).attr("data-addonidx");
+            var answersDiv = $('div[data-idx="' + (idx - 1) + '"][data-addonidx="' + addonIdx + '"]');
+            var answers = answersDiv.find('input, select, textarea');
 
             copy_answers(elements, answers);
         })
@@ -303,11 +303,11 @@ $(function () {
     $(".js-copy-answers-addon").click(function (e) {
         e.preventDefault();
         e.stopPropagation();
-        const id = $(this).data('id');
-        const addonId = $(this).data('addonid');
-        const addonDiv = $('div[data-idx="' + id +'"][data-addonidx="' + addonId + '"]');
-        const elements = addonDiv.find('input, select, textarea');
-        const answers = $('*[data-idx="' + id + '"] input, *[data-idx="' + id + '"] select, *[data-idx="' + id + '"] textarea');
+        var id = $(this).data('id');
+        var addonId = $(this).data('addonid');
+        var addonDiv = $('div[data-idx="' + id +'"][data-addonidx="' + addonId + '"]');
+        var elements = addonDiv.find('input, select, textarea');
+        var answers = $('[data-idx="' + id + '"][data-addonidx="' + (addonId - 1) + '"] input, [data-idx="' + id + '"][data-addonidx="' + (addonId - 1) + '"] select, [data-idx="' + id + '"][data-addonidx="' + (addonId - 1) + '"] textarea').reverse();
         copy_answers(elements, answers);
         return false;
     });
@@ -711,6 +711,8 @@ function copy_answers(elements, answers) {
                             input.prop("checked", answers.filter("[name$=" + suffix + "]").prop("checked"));
                         }
                         break;
+                    case "file":
+                        break
                     default:
                         input.val(answers.filter("[name$=" + suffix + "]").val());
                 }
