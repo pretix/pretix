@@ -239,7 +239,7 @@ setup(
             'coverage',
             'coveralls',
             'django-debug-toolbar==3.7.*',
-            'flake8==5.0.*',
+            'flake8>=5.0,<6.1',
             'freezegun',
             'isort==5.10.*',
             'pep8-naming==0.12.*',
