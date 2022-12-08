@@ -91,6 +91,7 @@ Field                                 Type                       Description
 ===================================== ========================== =======================================================
 id                                    integer                    Internal content ID
 title                                 multi-lingual string       The content title (required)
+internal_name                         string                     An optional name that is only used in the backend
 content_type                          string                     The type of content, valid values are ``webinar``, ``video``, ``livestream``, ``link``, ``file``
 url                                   string                     The location of the digital content
 file                                  file                       A downloadable file. Either ``url`` or ``file`` must be ``null``.
