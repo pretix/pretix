@@ -35,12 +35,13 @@ from pretix.base.models import (
     SubEvent, User, WaitingListEntry,
 )
 from pretix.base.services.locking import LockTimeoutException
-from pretix.base.services.mail import SendMailException, TolerantDict, mail
+from pretix.base.services.mail import SendMailException, mail
 from pretix.base.services.orders import (
     OrderChangeManager, OrderError, _cancel_order, _try_auto_refund,
 )
 from pretix.base.services.tasks import ProfiledEventTask
 from pretix.celery_app import app
+from pretix.helpers.format import format_map
 
 logger = logging.getLogger(__name__)
 
@@ -51,7 +52,7 @@ def _send_wle_mail(wle: WaitingListEntry, subject: LazyI18nString, message: Lazy
         try:
             mail(
                 wle.email,
-                str(subject).format_map(TolerantDict(email_context)),
+                format_map(subject, email_context),
                 message,
                 email_context,
                 wle.event,
@@ -71,7 +72,7 @@ def _send_mail(order: Order, subject: LazyI18nString, message: LazyI18nString, s
 
         email_context = get_email_context(event_or_subevent=subevent or order.event, refund_amount=refund_amount,
                                           order=order, position_or_address=ia, event=order.event)
-        real_subject = str(subject).format_map(TolerantDict(email_context))
+        real_subject = format_map(subject, email_context)
         try:
             order.send_mail(
                 real_subject, message, email_context,
@@ -86,7 +87,7 @@ def _send_mail(order: Order, subject: LazyI18nString, message: LazyI18nString, s
                 continue
 
             if p.addon_to_id is None and p.attendee_email and p.attendee_email != order.email:
-                real_subject = str(subject).format_map(TolerantDict(email_context))
+                real_subject = format_map(subject, email_context)
                 email_context = get_email_context(event_or_subevent=p.subevent or order.event,
                                                   event=order.event,
                                                   refund_amount=refund_amount,

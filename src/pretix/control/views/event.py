@@ -93,8 +93,8 @@ from ...base.i18n import language
 from ...base.models.items import (
     Item, ItemCategory, ItemMetaProperty, Question, Quota,
 )
-from ...base.services.mail import TolerantDict
 from ...base.settings import SETTINGS_AFFECTING_CSS, LazyI18nStringList
+from ...helpers.format import format_map
 from ..logdisplay import OVERVIEW_BANLIST
 from . import CreateView, PaginationMixin, UpdateView
 
@@ -734,10 +734,10 @@ class MailSettingsPreview(EventPermissionRequiredMixin, View):
                 if idx in self.supported_locale:
                     with language(self.supported_locale[idx], self.request.event.settings.region):
                         if k.startswith('mail_subject_'):
-                            msgs[self.supported_locale[idx]] = bleach.clean(v).format_map(self.placeholders(preview_item))
+                            msgs[self.supported_locale[idx]] = format_map(bleach.clean(v), self.placeholders(preview_item))
                         else:
                             msgs[self.supported_locale[idx]] = markdown_compile_email(
-                                v.format_map(self.placeholders(preview_item))
+                                format_map(v, self.placeholders(preview_item))
                             )
 
         return JsonResponse({
@@ -761,7 +761,7 @@ class MailSettingsRendererPreview(MailSettingsPreview):
 
     def get(self, request, *args, **kwargs):
         v = str(request.event.settings.mail_text_order_placed)
-        v = v.format_map(TolerantDict(self.placeholders('mail_text_order_placed')))
+        v = format_map(v, self.placeholders('mail_text_order_placed'))
         renderers = request.event.get_html_mail_renderers()
         if request.GET.get('renderer') in renderers:
             with rolledback_transaction():

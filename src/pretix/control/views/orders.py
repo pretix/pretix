@@ -93,9 +93,7 @@ from pretix.base.services.invoices import (
     invoice_qualified, regenerate_invoice,
 )
 from pretix.base.services.locking import LockTimeoutException
-from pretix.base.services.mail import (
-    SendMailException, TolerantDict, render_mail,
-)
+from pretix.base.services.mail import SendMailException, render_mail
 from pretix.base.services.orders import (
     OrderChangeManager, OrderError, approve_order, cancel_order, deny_order,
     extend_order, mark_order_expired, mark_order_refunded,
@@ -127,6 +125,7 @@ from pretix.control.forms.orders import (
 from pretix.control.permissions import EventPermissionRequiredMixin
 from pretix.control.signals import order_search_forms
 from pretix.control.views import PaginationMixin
+from pretix.helpers.format import format_map
 from pretix.helpers.safedownload import check_token
 from pretix.presale.signals import question_form_fields
 
@@ -2032,7 +2031,7 @@ class OrderSendMail(EventPermissionRequiredMixin, OrderViewMixin, FormView):
         with language(order.locale, self.request.event.settings.region):
             email_context = get_email_context(event=order.event, order=order)
         email_template = LazyI18nString(form.cleaned_data['message'])
-        email_subject = str(form.cleaned_data['subject']).format_map(TolerantDict(email_context))
+        email_subject = format_map(str(form.cleaned_data['subject']), email_context)
         email_content = render_mail(email_template, email_context)
         if self.request.POST.get('action') == 'preview':
             self.preview_output = {
@@ -2097,7 +2096,7 @@ class OrderPositionSendMail(OrderSendMail):
         with language(position.order.locale, self.request.event.settings.region):
             email_context = get_email_context(event=position.order.event, order=position.order, position=position)
         email_template = LazyI18nString(form.cleaned_data['message'])
-        email_subject = str(form.cleaned_data['subject']).format_map(TolerantDict(email_context))
+        email_subject = format_map(str(form.cleaned_data['subject']), email_context)
         email_content = render_mail(email_template, email_context)
         if self.request.POST.get('action') == 'preview':
             self.preview_output = {

@@ -76,6 +76,7 @@ from pretix.base.services.tasks import TransactionAwareTask
 from pretix.base.services.tickets import get_tickets_for_order
 from pretix.base.signals import email_filter, global_email_filter
 from pretix.celery_app import app
+from pretix.helpers.format import format_map
 from pretix.helpers.hierarkey import clean_filename
 from pretix.multidomain.urlreverse import build_absolute_uri
 from pretix.presale.ical import get_private_icals
@@ -85,6 +86,7 @@ INVALID_ADDRESS = 'invalid-pretix-mail-address'
 
 
 class TolerantDict(dict):
+    # kept for backwards compatibility with plugins
 
     def __missing__(self, key):
         return key
@@ -109,7 +111,7 @@ def mail(email: Union[str, Sequence[str]], subject: str, template: Union[str, La
 
     :param template: The filename of a template to be used. It will be rendered with the locale given in the locale
         argument and the context given in the next argument. Alternatively, you can pass a LazyI18nString and
-        ``context`` will be used as the argument to a  Python ``.format_map()`` call on the template.
+        ``context`` will be used as the argument to a ``pretix.helpers.format.format_map(template, context)`` call on the template.
 
     :param context: The context for rendering the template (see ``template`` parameter)
 
@@ -177,7 +179,7 @@ def mail(email: Union[str, Sequence[str]], subject: str, template: Union[str, La
                 })
         renderer = ClassicMailRenderer(None, organizer)
         content_plain = body_plain = render_mail(template, context)
-        subject = str(subject).format_map(TolerantDict(context))
+        subject = format_map(str(subject), context)
         sender = (
             sender or
             (event.settings.get('mail_from') if event else None) or
@@ -608,7 +610,7 @@ def render_mail(template, context):
     if isinstance(template, LazyI18nString):
         body = str(template)
         if context:
-            body = body.format_map(TolerantDict(context))
+            body = format_map(body, context)
     else:
         tpl = get_template(template)
         body = tpl.render(context)

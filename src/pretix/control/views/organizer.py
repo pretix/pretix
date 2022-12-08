@@ -109,6 +109,7 @@ from pretix.control.views import PaginationMixin
 from pretix.control.views.mailsetup import MailSettingsSetupView
 from pretix.helpers import GroupConcat
 from pretix.helpers.dicts import merge_dicts
+from pretix.helpers.format import format_map
 from pretix.helpers.urls import build_absolute_uri as build_global_uri
 from pretix.multidomain.urlreverse import build_absolute_uri
 from pretix.presale.forms.customer import TokenGenerator
@@ -335,10 +336,10 @@ class MailSettingsPreview(OrganizerPermissionRequiredMixin, View):
                 if idx in self.supported_locale:
                     with language(self.supported_locale[idx], self.request.organizer.settings.region):
                         if k.startswith('mail_subject_'):
-                            msgs[self.supported_locale[idx]] = bleach.clean(v).format_map(self.placeholders(preview_item))
+                            msgs[self.supported_locale[idx]] = format_map(bleach.clean(v), self.placeholders(preview_item))
                         else:
                             msgs[self.supported_locale[idx]] = markdown_compile_email(
-                                v.format_map(self.placeholders(preview_item))
+                                format_map(v, self.placeholders(preview_item))
                             )
 
         return JsonResponse({
