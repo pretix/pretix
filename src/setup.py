@@ -244,7 +244,7 @@ setup(
             'isort==5.10.*',
             'pep8-naming==0.12.*',
             'potypo',
-            'pycodestyle==2.10.*',
+            'pycodestyle==2.9.*',
             'pyflakes==2.5.*',
             'pytest-cache',
             'pytest-cov',
