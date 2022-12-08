@@ -111,7 +111,7 @@ def mail(email: Union[str, Sequence[str]], subject: str, template: Union[str, La
 
     :param template: The filename of a template to be used. It will be rendered with the locale given in the locale
         argument and the context given in the next argument. Alternatively, you can pass a LazyI18nString and
-        ``context`` will be used as the argument to a  Python ``.format_map()`` call on the template.
+        ``context`` will be used as the argument to a ``pretix.helpers.format.format_map(template, context)`` call on the template.
 
     :param context: The context for rendering the template (see ``template`` parameter)
 
