@@ -24,8 +24,7 @@ from inspect import isgenerator
 
 from openpyxl import Workbook
 from openpyxl.cell.cell import (
-    ILLEGAL_CHARACTERS_RE, KNOWN_TYPES, TIME_TYPES, TYPE_FORMULA, TYPE_STRING,
-    Cell,
+    KNOWN_TYPES, TIME_TYPES, TYPE_FORMULA, TYPE_STRING, Cell,
 )
 from openpyxl.compat import NUMERIC_TYPES
 from openpyxl.utils import column_index_from_string
@@ -48,6 +47,12 @@ There are mainly two problems this solves:
 
 - It removes characters considered invalid by Excel to avoid exporter crashes.
 """
+
+ILLEGAL_CHARACTERS_RE = re.compile(
+    # From the XML specification
+    # Char ::= #x9 | #xA | #xD | [#x20-#xD7FF] | [#xE000-#xFFFD] | [#x10000-#x10FFFF]
+    r'[^\u0020-\uD7FF\u0009\u000A\u000D\uE000-\uFFFD\U00010000-\U0010FFFF]'
+)
 
 
 def remove_invalid_excel_chars(val):

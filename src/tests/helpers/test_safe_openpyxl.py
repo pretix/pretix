@@ -24,11 +24,13 @@ from openpyxl.cell.cell import TYPE_STRING
 from pretix.helpers.safe_openpyxl import SafeWorkbook
 
 
-def test_nullbyte_removed():
+def test_invalid_byte_removed():
     wb = SafeWorkbook()
     ws = wb.create_sheet()
     ws.append(["foo\u0000bar"])
     assert ws.cell(1, 1).value == "foobar"
+    ws.append(["foo\uffffbaz"])
+    assert ws.cell(2, 1).value == "foobaz"
 
 
 def test_no_formulas():
