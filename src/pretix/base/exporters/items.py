@@ -29,7 +29,7 @@ from openpyxl.utils import get_column_letter
 from ...helpers.safe_openpyxl import SafeCell
 from ..channels import get_all_sales_channels
 from ..exporter import ListExporter
-from ..models import ItemMetaValue
+from ..models import ItemMetaValue, ItemVariation, ItemVariationMetaValue
 from ..signals import register_data_exporters
 
 
@@ -106,18 +106,27 @@ class ItemDataExporter(ListExporter):
         yield row
 
         for i in self.event.items.prefetch_related(
-            'variations',
             Prefetch(
                 'meta_values',
                 ItemMetaValue.objects.select_related('property'),
                 to_attr='meta_values_cached'
-            )
+            ),
+            Prefetch(
+                'variations',
+                queryset=ItemVariation.objects.prefetch_related(
+                    Prefetch(
+                        'meta_values',
+                        ItemVariationMetaValue.objects.select_related('property'),
+                        to_attr='meta_values_cached'
+                    ),
+                ),
+            ),
         ).select_related('category', 'tax_rule'):
-            m = i.meta_data
             vars = list(i.variations.all())
 
             if vars:
                 for v in vars:
+                    m = v.meta_data
                     row = [
                         i.pk,
                         v.pk,
@@ -160,6 +169,7 @@ class ItemDataExporter(ListExporter):
                     yield row
 
             else:
+                m = i.meta_data
                 row = [
                     i.pk,
                     "",

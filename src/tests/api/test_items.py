@@ -384,7 +384,8 @@ def test_item_detail_variations(token_client, organizer, event, team, item):
         "available_from": None,
         "available_until": None,
         "hide_without_voucher": False,
-        "original_price": None
+        "original_price": None,
+        "meta_data": {}
     }]
     res["has_variations"] = True
     resp = token_client.get('/api/v1/organizers/{}/events/{}/items/{}/'.format(organizer.slug, event.slug,
@@ -551,7 +552,10 @@ def test_item_create_with_variation(token_client, organizer, event, item, catego
                     "description": None,
                     "position": 0,
                     "default_price": None,
-                    "price": "23.00"
+                    "price": "23.00",
+                    "meta_data": {
+                        "day": "Wednesday",
+                    },
                 }
             ]
         },
@@ -564,6 +568,7 @@ def test_item_create_with_variation(token_client, organizer, event, item, catego
         assert new_item.variations.first().value.localize('en') == "Comment"
         assert new_item.variations.first().require_approval is True
         assert set(new_item.variations.first().sales_channels) == set(get_all_sales_channels().keys())
+        assert new_item.variations.first().meta_data == {"day": "Wednesday"}
 
 
 @pytest.mark.django_db
@@ -1258,7 +1263,8 @@ TEST_VARIATIONS_RES = {
     "available_from": None,
     "available_until": None,
     "hide_without_voucher": False,
-    "original_price": None
+    "original_price": None,
+    "meta_data": {}
 }
 
 TEST_VARIATIONS_UPDATE = {
@@ -1277,7 +1283,8 @@ TEST_VARIATIONS_UPDATE = {
     "available_from": None,
     "available_until": None,
     "hide_without_voucher": False,
-    "original_price": None
+    "original_price": None,
+    "meta_data": {}
 }
 
 
@@ -1314,7 +1321,10 @@ def test_variations_create(token_client, organizer, event, item, variation):
             "position": 1,
             "default_price": None,
             "original_price": "23.42",
-            "price": 23.0
+            "price": 23.0,
+            "meta_data": {
+                "day": "Wednesday",
+            },
         },
         format='json'
     )
@@ -1324,6 +1334,7 @@ def test_variations_create(token_client, organizer, event, item, variation):
     assert var.position == 1
     assert var.price == 23.0
     assert set(var.sales_channels) == set(get_all_sales_channels().keys())
+    assert var.meta_data == {"day": "Wednesday"}
 
 
 @pytest.mark.django_db
@@ -1355,6 +1366,7 @@ def test_variations_update(token_client, organizer, event, item, item3, variatio
     res["price"] = "20.00"
     res["default_price"] = "20.00"
     res["original_price"] = "50.00"
+    res["meta_data"] = {"day": "Thursday"}
     resp = token_client.patch(
         '/api/v1/organizers/{}/events/{}/items/{}/variations/{}/'.format(organizer.slug, event.slug, item.pk, variation.pk),
         {
@@ -1364,7 +1376,10 @@ def test_variations_update(token_client, organizer, event, item, item3, variatio
             "position": 1,
             "sales_channels": ["web"],
             "default_price": "20.00",
-            "original_price": "50.00"
+            "original_price": "50.00",
+            "meta_data": {
+                "day": "Thursday",
+            },
         },
         format='json'
     )

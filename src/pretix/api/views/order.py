@@ -65,9 +65,10 @@ from pretix.api.views import RichOrderingFilter
 from pretix.base.i18n import language
 from pretix.base.models import (
     CachedCombinedTicket, CachedTicket, Checkin, Device, EventMetaValue,
-    Invoice, InvoiceAddress, ItemMetaValue, Order, OrderFee, OrderPayment,
-    OrderPosition, OrderRefund, Quota, SubEvent, SubEventMetaValue, TaxRule,
-    TeamAPIToken, generate_secret,
+    Invoice, InvoiceAddress, ItemMetaValue, ItemVariation,
+    ItemVariationMetaValue, Order, OrderFee, OrderPayment, OrderPosition,
+    OrderRefund, Quota, SubEvent, SubEventMetaValue, TaxRule, TeamAPIToken,
+    generate_secret,
 )
 from pretix.base.models.orders import QuestionAnswer, RevokedTicketSecret
 from pretix.base.payment import PaymentException
@@ -232,7 +233,9 @@ class OrderViewSet(viewsets.ModelViewSet):
                     Prefetch('item', queryset=self.request.event.items.prefetch_related(
                         Prefetch('meta_values', ItemMetaValue.objects.select_related('property'), to_attr='meta_values_cached')
                     )),
-                    'variation',
+                    Prefetch('variation', queryset=ItemVariation.objects.prefetch_related(
+                        Prefetch('meta_values', ItemVariationMetaValue.objects.select_related('property'), to_attr='meta_values_cached')
+                    )),
                     'answers', 'answers__options', 'answers__question',
                     'item__category',
                     'addon_to__answers', 'addon_to__answers__options', 'addon_to__answers__question',
@@ -999,7 +1002,11 @@ class OrderPositionViewSet(viewsets.ModelViewSet):
                                 Prefetch('meta_values', ItemMetaValue.objects.select_related('property'),
                                          to_attr='meta_values_cached')
                             )),
-                            'variation', 'answers', 'answers__options', 'answers__question',
+                            Prefetch('variation', queryset=self.request.event.items.prefetch_related(
+                                Prefetch('meta_values', ItemVariationMetaValue.objects.select_related('property'),
+                                         to_attr='meta_values_cached')
+                            )),
+                            'answers', 'answers__options', 'answers__question',
                             'item__category',
                             Prefetch('subevent', queryset=self.request.event.subevents.prefetch_related(
                                 Prefetch('meta_values', to_attr='meta_values_cached',

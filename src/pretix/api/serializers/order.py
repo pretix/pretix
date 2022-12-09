@@ -371,10 +371,19 @@ class PdfDataSerializer(serializers.Field):
             for k, v in ev._cached_meta_data.items():
                 res['meta:' + k] = v
 
-            if not hasattr(instance.item, '_cached_meta_data'):
-                instance.item._cached_meta_data = instance.item.meta_data
-            for k, v in instance.item._cached_meta_data.items():
-                res['itemmeta:' + k] = v
+            if instance.variation_id:
+                print(instance, instance.variation, instance.variation_id, instance.item)
+                if not hasattr(instance.variation, '_cached_meta_data'):
+                    instance.variation.item = instance.item  # saves some database lookups
+                    instance.variation._cached_meta_data = instance.variation.meta_data
+                print(instance.variation._cached_meta_data.items())
+                for k, v in instance.variation._cached_meta_data.items():
+                    res['itemmeta:' + k] = v
+            else:
+                if not hasattr(instance.item, '_cached_meta_data'):
+                    instance.item._cached_meta_data = instance.item.meta_data
+                for k, v in instance.item._cached_meta_data.items():
+                    res['itemmeta:' + k] = v
 
             res['images'] = {}
 

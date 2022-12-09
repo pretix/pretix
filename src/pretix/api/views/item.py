@@ -84,7 +84,9 @@ class ItemViewSet(ConditionalListView, viewsets.ModelViewSet):
 
     def get_queryset(self):
         return self.request.event.items.select_related('tax_rule').prefetch_related(
-            'variations', 'addons', 'bundles', 'meta_values'
+            'variations', 'addons', 'bundles', 'meta_values', 'meta_values__property',
+            'variations__meta_values', 'variations__meta_values__property',
+            'require_membership_types', 'variations__require_membership_types',
         ).all()
 
     def perform_create(self, serializer):
@@ -147,7 +149,11 @@ class ItemVariationViewSet(viewsets.ModelViewSet):
         return get_object_or_404(Item, pk=self.kwargs['item'], event=self.request.event)
 
     def get_queryset(self):
-        return self.item.variations.all()
+        return self.item.variations.all().prefetch_related(
+            'meta_values',
+            'meta_values__property',
+            'require_membership_types'
+        )
 
     def get_serializer_context(self):
         ctx = super().get_serializer_context()

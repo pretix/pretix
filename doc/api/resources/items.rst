@@ -123,6 +123,7 @@ variations                            list of objects            A list with one
 ├ hide_without_voucher                boolean                    If ``true``, this variation is only shown during the voucher
                                                                  redemption process, but not in the normal shop
                                                                  frontend.
+├ meta_data                           object                     Values set for event-specific meta data parameters.
 └ position                            integer                    An integer, used for sorting
 addons                                list of objects            Definition of add-ons that can be chosen for this item.
                                                                  Only writable during creation,
@@ -154,6 +155,10 @@ meta_data                             object                     Values set for 
 .. versionchanged:: 4.4
 
    The attributes ``require_membership_hidden`` attribute has been added.
+
+.. versionchanged:: 4.16
+
+   The ``variations[x].meta_data`` attribute has been added.
 
 Notes
 -----
@@ -247,6 +252,7 @@ Endpoints
                  "available_until": null,
                  "hide_without_voucher": false,
                  "description": null,
+                 "meta_data": {},
                  "position": 0
               },
               {
@@ -262,6 +268,7 @@ Endpoints
                  "available_until": null,
                  "hide_without_voucher": false,
                  "description": null,
+                 "meta_data": {},
                  "position": 1
               }
             ],
@@ -361,6 +368,7 @@ Endpoints
              "available_from": null,
              "available_until": null,
              "hide_without_voucher": false,
+             "meta_data": {},
              "position": 0
           },
           {
@@ -376,6 +384,7 @@ Endpoints
              "available_until": null,
              "hide_without_voucher": false,
              "description": null,
+             "meta_data": {},
              "position": 1
           }
         ],
@@ -455,6 +464,7 @@ Endpoints
              "available_until": null,
              "hide_without_voucher": false,
              "description": null,
+             "meta_data": {},
              "position": 0
           },
           {
@@ -470,6 +480,7 @@ Endpoints
              "available_until": null,
              "hide_without_voucher": false,
              "description": null,
+             "meta_data": {},
              "position": 1
           }
         ],
@@ -538,6 +549,7 @@ Endpoints
              "available_until": null,
              "hide_without_voucher": false,
              "description": null,
+             "meta_data": {},
              "position": 0
           },
           {
@@ -553,6 +565,7 @@ Endpoints
              "available_until": null,
              "hide_without_voucher": false,
              "description": null,
+             "meta_data": {},
              "position": 1
           }
         ],
@@ -652,6 +665,7 @@ Endpoints
              "available_until": null,
              "hide_without_voucher": false,
              "description": null,
+             "meta_data": {},
              "position": 0
           },
           {
@@ -667,6 +681,7 @@ Endpoints
              "available_until": null,
              "hide_without_voucher": false,
              "description": null,
+             "meta_data": {},
              "position": 1
           }
         ],

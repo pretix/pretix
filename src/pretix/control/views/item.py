@@ -1426,7 +1426,7 @@ class ItemUpdateGeneral(ItemDetailMixin, EventPermissionRequiredMixin, MetaDataE
                 can_order=True, can_delete=True, extra=0
             )(
                 self.request.POST if self.request.method == "POST" else None,
-                queryset=ItemVariation.objects.filter(item=self.get_object()),
+                queryset=ItemVariation.objects.filter(item=self.get_object()).prefetch_related('meta_values', 'require_membership_types'),
                 event=self.request.event, prefix="variations"
             )),
             ('addons', inlineformset_factory(

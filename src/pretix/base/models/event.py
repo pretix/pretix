@@ -728,7 +728,7 @@ class Event(EventMixin, LoggedModel):
         from ..signals import event_copy_data
         from . import (
             Discount, Item, ItemAddOn, ItemBundle, ItemCategory, ItemMetaValue,
-            Question, Quota,
+            ItemVariationMetaValue, Question, Quota,
         )
 
         #  Note: avoid self.set_active_plugins(), it causes trouble e.g. for the badges plugin.
@@ -804,10 +804,16 @@ class Event(EventMixin, LoggedModel):
                 v.item = i
                 v.save(force_insert=True)
 
-        for imv in ItemMetaValue.objects.filter(item__event=other).prefetch_related('item', 'property'):
+        for imv in ItemMetaValue.objects.filter(item__event=other).prefetch_related('property'):
+            imv.pk = None
+            imv.property = item_meta_properties_map[imv.property_id]
+            imv.item = item_map[imv.item.pk]
+            imv.save(force_insert=True)
+
+        for imv in ItemVariationMetaValue.objects.filter(variation__item__event=other).prefetch_related('property'):
             imv.pk = None
             imv.property = item_meta_properties_map[imv.property.pk]
-            imv.item = item_map[imv.item.pk]
+            imv.variation = variation_map[imv.variation_id]
             imv.save(force_insert=True)
 
         for ia in ItemAddOn.objects.filter(base_item__event=other).prefetch_related('base_item', 'addon_category'):

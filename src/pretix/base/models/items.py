@@ -1008,6 +1008,16 @@ class ItemVariation(models.Model):
             return False
         return True
 
+    @property
+    def meta_data(self):
+        data = self.item.meta_data
+        if hasattr(self, 'meta_values_cached'):
+            data.update({v.property.name: v.value for v in self.meta_values_cached})
+        else:
+            data.update({v.property.name: v.value for v in self.meta_values.select_related('property').all()})
+
+        return OrderedDict((k, v) for k, v in sorted(data.items(), key=lambda k: k[0]))
+
 
 class ItemAddOn(models.Model):
     """
@@ -1787,8 +1797,21 @@ class ItemMetaValue(LoggedModel):
     class Meta:
         unique_together = ('item', 'property')
 
-    def delete(self, *args, **kwargs):
-        super().delete(*args, **kwargs)
 
-    def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)
+class ItemVariationMetaValue(LoggedModel):
+    """
+    A meta-data value assigned to an item variation, overriding the value on the item.
+
+    :param variation: The variation this metadata is valid for
+    :type variation: ItemVariation
+    :param property: The property this value belongs to
+    :type property: ItemMetaProperty
+    :param value: The actual value
+    :type value: str
+    """
+    variation = models.ForeignKey('ItemVariation', on_delete=models.CASCADE, related_name='meta_values')
+    property = models.ForeignKey('ItemMetaProperty', on_delete=models.CASCADE, related_name='variation_values')
+    value = models.TextField()
+
+    class Meta:
+        unique_together = ('variation', 'property')
