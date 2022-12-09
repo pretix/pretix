@@ -135,6 +135,10 @@ class NamePartsWidget(forms.MultiWidget):
             data.append(value.get(fname, ""))
         if '_legacy' in value and not data[-1]:
             data[-1] = value.get('_legacy', '')
+        elif not any(d for d in data) and '_scheme' in value:
+            scheme = PERSON_NAME_SCHEMES[value['_scheme']]
+            data[-1] = scheme['concatenation'](value).strip()
+
         return data
 
     def render(self, name: str, value, attrs=None, renderer=None) -> str:
