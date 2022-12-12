@@ -26,29 +26,49 @@ from pretix.base.addressvalidation import validate_address
 
 
 @pytest.mark.parametrize(
-    "input,output",
+    "input,output,all_optional",
     [
         # No address is allowed
-        ({"name": "Peter"}, {"name": "Peter"}),
+        ({"name": "Peter"}, {"name": "Peter"}, False),
         # Country must be given if any part of the address is filled
-        ({"street": "Main Street"}, {"country": ["This field is required."]}),
+        ({"street": "Main Street"}, {"country": ["This field is required."]}, False),
         # Country without any semantic validation
         (
             {"street": "Main Street", "country": "CR"},
             {"street": "Main Street", "country": "CR"},
+            False,
         ),
         # Country that requires all fields except state to be filled
         (
             {"street": "Main Street", "country": "DE"},
             {"zipcode": ["This field is required."]},
+            False,
         ),
         (
             {"street": "Main Street", "country": "DE", "zipcode": "12345"},
             {"city": ["This field is required."]},
+            False,
         ),
         (
             {"city": "Heidelberg", "country": "DE", "zipcode": "12345"},
             {"street": ["This field is required."]},
+            False,
+        ),
+        # All-optional flag works
+        (
+            {"street": "Main Street", "country": "DE"},
+            {"street": "Main Street", "country": "DE"},
+            True,
+        ),
+        (
+            {"street": "Main Street", "country": "DE", "zipcode": "12345"},
+            {"street": "Main Street", "country": "DE", "zipcode": "12345"},
+            True,
+        ),
+        (
+            {"city": "Heidelberg", "country": "DE", "zipcode": "12345"},
+            {"city": "Heidelberg", "country": "DE", "zipcode": "12345"},
+            True,
         ),
         (
             {
@@ -58,6 +78,7 @@ from pretix.base.addressvalidation import validate_address
                 "zipcode": "12345",
             },
             True,
+            False,
         ),
         # Country that requires state to be filled
         (
@@ -68,6 +89,7 @@ from pretix.base.addressvalidation import validate_address
                 "zipcode": "12345",
             },
             {"state": ["This field is required."]},
+            False,
         ),
         # Country with zip code validation inherited from django-localflavor
         (
@@ -78,6 +100,7 @@ from pretix.base.addressvalidation import validate_address
                 "zipcode": "ABCDE",
             },
             {"zipcode": ["Enter a zip code in the format XXXXX."]},
+            False,
         ),
         # Country with zip code validation implemented directly
         (
@@ -88,6 +111,7 @@ from pretix.base.addressvalidation import validate_address
                 "zipcode": "ABCDE",
             },
             {"zipcode": ["Enter a postal code in the format XXX."]},
+            False,
         ),
         # Country with zip code normalization inherited from django-localflavor
         (
@@ -103,12 +127,13 @@ from pretix.base.addressvalidation import validate_address
                 "country": "GB",
                 "zipcode": "SE1 9DE",
             },
+            False,
         ),
     ],
 )
-def test_validate_address(input, output):
+def test_validate_address(input, output, all_optional):
     try:
-        actual_output = validate_address(input)
+        actual_output = validate_address(input, all_optional)
     except ValidationError as e:
         assert {
             k: ["".join(s for s in e) for e in v] for k, v in e.error_dict.items()

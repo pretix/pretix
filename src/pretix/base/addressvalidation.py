@@ -85,7 +85,7 @@ COUNTRIES_WITH_STREET_ZIPCODE_AND_CITY_REQUIRED = {
 }
 
 
-def validate_address(address: dict):
+def validate_address(address: dict, all_optional=False):
     """
     :param address: A dictionary with at least the entries ``street``, ``zipcode``, ``city``, ``country``,
                     ``state``
@@ -100,10 +100,10 @@ def validate_address(address: dict):
     if not address.get('country'):
         raise ValidationError({'country': [_('This field is required.')]})
 
-    if str(address['country']) in COUNTRIES_WITH_STATE_IN_ADDRESS and not address.get('state'):
+    if str(address['country']) in COUNTRIES_WITH_STATE_IN_ADDRESS and not address.get('state') and not all_optional:
         raise ValidationError({'state': [_('This field is required.')]})
 
-    if str(address['country']) in COUNTRIES_WITH_STREET_ZIPCODE_AND_CITY_REQUIRED:
+    if str(address['country']) in COUNTRIES_WITH_STREET_ZIPCODE_AND_CITY_REQUIRED and not all_optional:
         for f in ('street', 'zipcode', 'city'):
             if not address.get(f):
                 raise ValidationError({f: [_('This field is required.')]})
@@ -111,7 +111,8 @@ def validate_address(address: dict):
     for klass in _validator_classes[str(address['country'])]:
         validator = klass()
         try:
-            address['zipcode'] = validator.validate_zipcode(address['zipcode'])
+            if address.get('zipcode'):
+                address['zipcode'] = validator.validate_zipcode(address['zipcode'])
         except ValidationError as e:
             raise ValidationError({'zipcode': list(e)})
 

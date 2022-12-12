@@ -1074,7 +1074,7 @@ class BaseInvoiceAddressForm(forms.ModelForm):
             self.instance.vat_id_validated = False
 
         if self.address_validation:
-            self.cleaned_data = data = validate_address(data)
+            self.cleaned_data = data = validate_address(data, self.all_optional)
 
         self.instance.name_parts = data.get('name_parts')
 
