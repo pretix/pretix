@@ -73,12 +73,21 @@ var pretixpaypal = {
             pretixpaypal.locale = this.guessLocale();
         }
 
-        // If no payment option is selected, and we're not on the paypage (which doesn't have a continue button),
-        // disable the continue button
-        if (!pretixpaypal.paypage) {
-            if (!pretixpaypal.continue_button[0].form.elements['payment'].value) {
+        $("input[name=payment][value^='paypal']").change(function () {
+            if (pretixpaypal.paypal !== null) {
+                pretixpaypal.renderButton($(this).val());
+            } else {
                 pretixpaypal.continue_button.prop("disabled", true);
             }
+        });
+
+        $("input[name=payment]").not("[value^='paypal']").change(function () {
+            pretixpaypal.restore();
+        });
+
+        // If paypal is the only payment option, it is preselected and we must disable the continue button until the sdk is ready
+        if ($("input[name=payment][value^='paypal']").is(':checked')) {
+            pretixpaypal.continue_button.prop("disabled", true);
         }
 
         // We are setting the cogwheel already here, as the renderAPM() method might take some time to get loaded.
@@ -139,14 +148,6 @@ var pretixpaypal = {
             pretixpaypal.renderAPMs();
         }
 
-        $("input[name=payment][value^='paypal']").change(function () {
-            pretixpaypal.renderButton($(this).val());
-        });
-
-        $("input[name=payment]").not("[value^='paypal']").change(function () {
-            pretixpaypal.restore();
-        });
-
         if ($("input[name=payment][value^='paypal']").is(':checked')) {
             pretixpaypal.renderButton($("input[name=payment][value^='paypal']:checked").val());
         } else if ($(".payment-redo-form").length) {
@@ -162,8 +163,8 @@ var pretixpaypal = {
             $('#paypal-button-container').empty()
             pretixpaypal.continue_button.text(gettext('Continue'));
             pretixpaypal.continue_button.show();
-            pretixpaypal.continue_button.prop("disabled", false);
         }
+        pretixpaypal.continue_button.prop("disabled", false);
     },
 
     renderButton: function (method) {
