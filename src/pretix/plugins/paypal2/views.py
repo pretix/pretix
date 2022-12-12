@@ -149,11 +149,20 @@ class XHRView(View):
         else:
             cart_total = get_cart_total(request)
             cart_payments = cart_session(request).get('payments', [])
-            for fee in get_fees(request.event, request, cart_total, None, cart_payments, get_cart(request)):
+            multi_use_cart_payments = [p for p in cart_payments if p.get('multi_use_supported')]
+            simulated_payments = multi_use_cart_payments + [{
+                'provider': 'paypal',
+                'multi_use_supported': False,
+                'min_value': prov.settings._total_min,
+                'max_value': prov.settings._total_max,
+                'info_data': {},
+            }]
+
+            for fee in get_fees(request.event, request, cart_total, None, simulated_payments, get_cart(request)):
                 cart_total += fee.value
 
             total_remaining = cart_total
-            for p in cart_session(request).get('payments', []):
+            for p in multi_use_cart_payments:
                 if p['provider'] != 'paypal':
                     if p.get('min_value') and total_remaining < Decimal(p['min_value']):
                         continue
