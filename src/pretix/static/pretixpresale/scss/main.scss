@@ -367,6 +367,14 @@ body.loading .container {
     background-color: darken($btn-primary-bg, 10%);
 }
 
+.panel-title a.h6 {
+    text-decoration: underline;
+    margin-left: .5em;
+}
+.panel-title a.h6 .fa {
+    margin-left: .25em;
+    margin-right: .25em;
+}
 
 details {
     list-style: none;

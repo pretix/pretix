@@ -198,10 +198,8 @@
             <h3 class="panel-title">
                 {% trans "Ordered items" %}
                 {% if order.can_modify_answers %}
-                    &nbsp;
                     <a href="{% eventurl event "presale:event.order.modify" secret=order.secret order=order.code %}" aria-label="{% trans "Change ordered items" %}" class="h6">
-                        <span class="fa fa-edit" aria-hidden="true"></span>
-                        <u>{% trans "Change details" %}</u>
+                        <span class="fa fa-edit" aria-hidden="true"></span>{% trans "Change details" %}
                     </a>
                 {% endif %}
             </h3>
@@ -299,10 +297,8 @@
                         {% trans "Your information" %}
                         {% if invoice_address_asked or request.event.settings.invoice_name_required %}
                             {% if order.can_modify_answers %}
-                                &nbsp;
                                 <a href="{% eventurl event "presale:event.order.modify" secret=order.secret order=order.code %}" aria-label="{% trans "Change your information" %}" class="h6">
-                                    <span class="fa fa-edit" aria-hidden="true"></span>
-                                    <u>{% trans "Change details" %}</u>
+                                    <span class="fa fa-edit" aria-hidden="true"></span>{% trans "Change details" %}
                                 </a>
                             {% endif %}
                         {% endif %}
