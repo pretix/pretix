@@ -191,7 +191,7 @@
         {% endif %}
     {% endif %}
     {% include "pretixpresale/event/fragment_downloads.html" with position_page=False %}
-    <div class="panel panel-primary cart">
+    <div class="panel panel-default cart">
         <div class="panel-heading">
             {% if order.can_modify_answers %}
                 <div class="pull-right flip">
@@ -284,7 +284,7 @@
             </div>
         {% endif %}
         <div class="col-xs-12 {% if invoices or can_generate_invoice %}col-md-6{% endif %}">
-            <div class="panel panel-primary">
+            <div class="panel panel-default">
                 <div class="panel-heading">
                     {% if invoice_address_asked or request.event.settings.invoice_name_required %}
                         {% if order.can_modify_answers %}
@@ -347,7 +347,7 @@
         <div class="clearfix"></div>
     </div>
     {% if user_change_allowed or user_cancel_allowed %}
-        <div class="panel panel-primary panel-cancellation">
+        <div class="panel panel-default panel-cancellation">
             <div class="panel-heading">
                 <h3 class="panel-title">
                     {% trans "Change or cancel your order" context "action" %}
