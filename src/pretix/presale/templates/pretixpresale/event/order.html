@@ -103,11 +103,7 @@
                         <p>
                             <a href="{% eventurl event "presale:event.order.pay.change" secret=order.secret order=order.code %}"
                                     class="btn btn-primary">
-                                {% trans "Retry payment" %}
-                            </a>
-                            <a href="{% eventurl event "presale:event.order.pay.change" secret=order.secret order=order.code %}"
-                                    class="btn btn-default">
-                                {% trans "Choose another payment method" %}
+                                {% trans "Re-try payment or choose another payment method" %}
                             </a>
                         </p>
                     {% endif %}
@@ -226,14 +222,6 @@
                     <div class="clearfix"></div>
                 </div>
             {% endif %}
-            {% if order.can_modify_answers %}
-                <p>
-                    <a href="{% eventurl event "presale:event.order.modify" secret=order.secret order=order.code %}" aria-label="{% trans "Change ordered items" %}" class="btn btn-primary">
-                        <span class="fa fa-edit" aria-hidden="true"></span>
-                        {% trans "Change details" %}
-                    </a>
-                </p>
-            {% endif %}
         </div>
     </div>
     {% eventsignal event "pretix.presale.signals.order_info" order=order request=request %}
@@ -345,16 +333,6 @@
                             <dd>{{ order.invoice_address.internal_reference }}</dd>
                         {% endif %}
                     </dl>
-                    {% if invoice_address_asked or request.event.settings.invoice_name_required %}
-                        {% if order.can_modify_answers %}
-                            <p>
-                                <a href="{% eventurl event "presale:event.order.modify" secret=order.secret order=order.code %}" aria-label="{% trans "Change your information" %}" class="btn btn-primary">
-                                    <span class="fa fa-edit" aria-hidden="true"></span>
-                                    {% trans "Change details" %}
-                                </a>
-                            </p>
-                        {% endif %}
-                    {% endif %}
                 </div>
             </div>
         </div>
