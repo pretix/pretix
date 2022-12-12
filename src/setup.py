@@ -211,7 +211,7 @@ setup(
         'psycopg2-binary',
         'pycountry',
         'pycparser==2.21',
-        'pycryptodome==3.15.*',
+        'pycryptodome>=3.15,<3.17',
         'PyPDF2==2.11.*',
         'python-bidi==0.4.*',  # Support for Arabic in reportlab
         'python-dateutil==2.8.*',
