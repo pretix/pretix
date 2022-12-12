@@ -249,7 +249,7 @@ EXPECTED = [
     ],
     [
         {'amount': '5000.00', 'date': '2002-03-17',
-         'reference': '68790452\nVerwendungszweck 1\nVerwendungszweck 2\nEmpfÃ¤nger\nBuchungstext\n12345\n1000\n4711'},
+         'reference': '68790452\nVerwendungszweck 1\nVerwendungszweck 2\nEmpf√§nger\nBuchungstext\n12345\n1000\n4711'},
         {'amount': '20000.00', 'date': '2002-03-22', 'reference': ''},
         {'amount': '20000.00', 'date': '2002-03-22', 'reference': ''},
         {'amount': '20000.00', 'date': '2002-03-22', 'reference': ''},
