@@ -163,14 +163,13 @@ class XHRView(View):
 
             total_remaining = cart_total
             for p in multi_use_cart_payments:
-                if p['provider'] != 'paypal':
-                    if p.get('min_value') and total_remaining < Decimal(p['min_value']):
-                        continue
+                if p.get('min_value') and total_remaining < Decimal(p['min_value']):
+                    continue
 
-                    to_pay = total_remaining
-                    if p.get('max_value') and to_pay > Decimal(p['max_value']):
-                        to_pay = min(to_pay, Decimal(p['max_value']))
-                    total_remaining -= to_pay
+                to_pay = total_remaining
+                if p.get('max_value') and to_pay > Decimal(p['max_value']):
+                    to_pay = min(to_pay, Decimal(p['max_value']))
+                total_remaining -= to_pay
 
             cart_total = total_remaining
 
