@@ -900,6 +900,7 @@ class ItemBundleFormSet(I18nFormSet):
     def _construct_form(self, i, **kwargs):
         kwargs['event'] = self.event
         kwargs['item'] = self.item
+        kwargs['item_qs'] = self.item_qs
         return super()._construct_form(i, **kwargs)
 
     @property
