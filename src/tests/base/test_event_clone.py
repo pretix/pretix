@@ -73,6 +73,7 @@ def test_full_clone_same_organizer():
     assert item1.meta_data
     item2 = event.items.create(category=category, tax_rule=tax_rule, name="T-shirt", default_price=15)
     item2v = item2.variations.create(value="red", default_price=15)
+    item2v.meta_values.create(property=item_meta, value="Bar")
     item2.require_membership_types.add(membership_type)
     ItemAddOn.objects.create(base_item=item1, addon_category=category)
     ItemBundle.objects.create(base_item=item1, bundled_item=item2, bundled_variation=item2v)
@@ -147,6 +148,7 @@ def test_full_clone_same_organizer():
     assert copied_item1.tax_rule == copied_event.tax_rules.get()
     assert copied_item1.category == copied_event.categories.get()
     assert copied_item1.meta_data == item1.meta_data
+    assert copied_item2.variations.get().meta_data == item2v.meta_data
     assert copied_item1.hidden_if_available == copied_q2
     assert copied_item1.grant_membership_type == membership_type
     assert copied_item2.variations.count() == 1

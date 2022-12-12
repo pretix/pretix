@@ -44,6 +44,7 @@ from django.core.files.uploadedfile import UploadedFile
 from django.db.models import Max
 from django.forms.formsets import DELETION_FIELD_NAME
 from django.urls import reverse
+from django.utils.functional import cached_property
 from django.utils.html import escape
 from django.utils.safestring import mark_safe
 from django.utils.translation import (
@@ -436,12 +437,21 @@ class ItemCreateForm(I18nModelForm):
                     v.pk = None
                     v.item = instance
                     v.save()
+                    for mv in variation.meta_values.all():
+                        mv.pk = None
+                        mv.variation = v
+                        mv.save(force_insert=True)
             else:
                 ItemVariation.objects.create(
                     item=instance, value=__('Standard')
                 )
 
         if self.cleaned_data.get('copy_from'):
+            for mv in self.cleaned_data['copy_from'].meta_values.all():
+                mv.pk = None
+                mv.item = instance
+                mv.save(force_insert=True)
+
             for question in self.cleaned_data['copy_from'].questions.all():
                 question.items.add(instance)
                 question.log_action('pretix.event.question.changed', user=self.user, data={
@@ -727,6 +737,31 @@ class ItemVariationForm(I18nModelForm):
             del self.fields['require_membership']
             del self.fields['require_membership_types']
 
+        self.meta_fields = []
+        meta_defaults = {}
+        if self.instance.pk:
+            for mv in self.instance.meta_values.all():
+                meta_defaults[mv.property_id] = mv.value
+        for p in self.meta_properties:
+            self.initial[f'meta_{p.name}'] = meta_defaults.get(p.pk)
+            self.fields[f'meta_{p.name}'] = forms.CharField(
+                label=p.name,
+                widget=forms.TextInput(
+                    attrs={
+                        'placeholder': _('Use value from product'),
+                        'data-typeahead-url': reverse('control:event.items.meta.typeahead', kwargs={
+                            'organizer': self.event.organizer.slug,
+                            'event': self.event.slug
+                        }) + '?' + urlencode({
+                            'property': p.name,
+                        }),
+                    },
+                ),
+                required=False,
+
+            )
+            self.meta_fields.append(f'meta_{p.name}')
+
     class Meta:
         model = ItemVariation
         localized_fields = '__all__'
@@ -756,6 +791,26 @@ class ItemVariationForm(I18nModelForm):
                 'class': 'scrolling-multiple-choice'
             }),
         }
+
+    def save(self, commit=True):
+        instance = super().save(commit)
+        self.meta_fields = []
+        current_values = {v.property_id: v for v in instance.meta_values.all()}
+        for p in self.meta_properties:
+            if self.cleaned_data[f'meta_{p.name}']:
+                if p.pk in current_values:
+                    current_values[p.pk].value = self.cleaned_data[f'meta_{p.name}']
+                    current_values[p.pk].save()
+                else:
+                    instance.meta_values.create(property=p, value=self.cleaned_data[f'meta_{p.name}'])
+            elif p.pk in current_values:
+                current_values[p.pk].delete()
+
+    @property
+    def meta_properties(self):
+        if not hasattr(self.event, '_cached_item_meta_properties'):
+            self.event._cached_item_meta_properties = self.event.item_meta_properties.all()
+        return self.event._cached_item_meta_properties
 
 
 class ItemAddOnsFormSet(I18nFormSet):
@@ -845,6 +900,7 @@ class ItemBundleFormSet(I18nFormSet):
     def _construct_form(self, i, **kwargs):
         kwargs['event'] = self.event
         kwargs['item'] = self.item
+        kwargs['item_qs'] = self.item_qs
         return super()._construct_form(i, **kwargs)
 
     @property
@@ -856,11 +912,16 @@ class ItemBundleFormSet(I18nFormSet):
             empty_permitted=True,
             use_required_attribute=False,
             locales=self.locales,
+            item_qs=self.item_qs,
             item=self.item,
             event=self.event
         )
         self.add_fields(form, None)
         return form
+
+    @cached_property
+    def item_qs(self):
+        return self.event.items.prefetch_related('variations').all()
 
     def clean(self):
         super().clean()
@@ -889,6 +950,7 @@ class ItemBundleForm(I18nModelForm):
 
     def __init__(self, *args, **kwargs):
         self.item = kwargs.pop('item')
+        self.item_qs = kwargs.pop('item_qs')
         super().__init__(*args, **kwargs)
         instance = kwargs.get('instance', None)
         initial = kwargs.get('initial', {})
@@ -906,7 +968,7 @@ class ItemBundleForm(I18nModelForm):
         super().__init__(*args, **kwargs)
 
         choices = []
-        for i in self.event.items.prefetch_related('variations').all():
+        for i in self.item_qs:
             pname = str(i)
             if not i.is_available():
                 pname += ' ({})'.format(_('inactive'))

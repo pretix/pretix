@@ -43,7 +43,12 @@ available_until                       datetime                   The last date t
 hide_without_voucher                  boolean                    If ``true``, this variation is only shown during the voucher
                                                                  redemption process, but not in the normal shop
                                                                  frontend.
+meta_data                             object                     Values set for event-specific meta data parameters.
 ===================================== ========================== =======================================================
+
+.. versionchanged:: 4.16
+
+   The ``meta_data`` attribute has been added.
 
 Endpoints
 ---------
@@ -94,6 +99,7 @@ Endpoints
             "default_price": "223.00",
             "price": 223.0,
             "original_price": null,
+            "meta_data": {}
           },
           {
             "id": 3,
@@ -108,7 +114,8 @@ Endpoints
             "description": {},
             "position": 1,
             "default_price": null,
-            "price": 15.0
+            "price": 15.0,
+            "meta_data": {}
           }
         ]
       }
@@ -161,7 +168,8 @@ Endpoints
         "available_until": null,
         "hide_without_voucher": false,
         "description": null,
-        "position": 0
+        "position": 0,
+        "meta_data": {}
       }
 
    :param organizer: The ``slug`` field of the organizer to fetch
@@ -198,7 +206,8 @@ Endpoints
         "available_until": null,
         "hide_without_voucher": false,
         "description": null,
-        "position": 0
+        "position": 0,
+        "meta_data": {}
       }
 
    **Example response**:
@@ -225,7 +234,8 @@ Endpoints
         "available_until": null,
         "hide_without_voucher": false,
         "description": null,
-        "position": 0
+        "position": 0,
+        "meta_data": {}
       }
 
    :param organizer: The ``slug`` field of the organizer of the event/item to create a variation for
@@ -283,7 +293,8 @@ Endpoints
         "available_until": null,
         "hide_without_voucher": false,
         "description": null,
-        "position": 1
+        "position": 1,
+        "meta_data": {}
       }
 
    :param organizer: The ``slug`` field of the organizer to modify

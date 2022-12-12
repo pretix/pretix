@@ -637,6 +637,8 @@ class ItemsTest(ItemFormTest):
             q = Question.objects.create(event=self.event1, question="Size", type="N")
             q.items.add(self.item2)
         self.item2.sales_channels = ["web", "bar"]
+        prop = self.event1.item_meta_properties.create(name="Foo")
+        self.item2.meta_values.create(property=prop, value="Bar")
 
         self.client.post('/control/event/%s/%s/items/add' % (self.orga1.slug, self.event1.slug), {
             'name_0': 'Intermediate',
@@ -657,6 +659,7 @@ class ItemsTest(ItemFormTest):
             assert i_new.hide_without_voucher == i_old.hide_without_voucher
             assert i_new.allow_cancel == i_old.allow_cancel
             assert i_new.sales_channels == i_old.sales_channels
+            assert i_new.meta_data == i_old.meta_data == {"Foo": "Bar"}
             assert set(i_new.questions.all()) == set(i_old.questions.all())
             assert set([str(v.value) for v in i_new.variations.all()]) == set([str(v.value) for v in i_old.variations.all()])
 

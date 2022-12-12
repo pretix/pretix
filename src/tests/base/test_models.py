@@ -1962,6 +1962,32 @@ class ItemTest(TestCase):
         assert not Item.objects.filter_available().exists()
         assert Item.objects.filter_available(voucher=v).exists()
 
+    @classscope(attr='o')
+    def test_meta_data_inheritance(self):
+        prop = self.event.item_meta_properties.create(name="day", default="Monday")
+        i = Item.objects.create(
+            event=self.event, name="Ticket", default_price=23,
+            active=True, available_until=now() + timedelta(days=1),
+        )
+        v = i.variations.create(value="Day 1")
+
+        assert i.meta_data == {"day": "Monday"}
+        assert v.meta_data == {"day": "Monday"}
+
+        i.meta_values.create(property=prop, value="Tuesday")
+        i = Item.objects.get(pk=i.pk)
+        v = ItemVariation.objects.get(pk=v.pk)
+
+        assert i.meta_data == {"day": "Tuesday"}
+        assert v.meta_data == {"day": "Tuesday"}
+
+        v.meta_values.create(property=prop, value="Wednesday")
+        i = Item.objects.get(pk=i.pk)
+        v = ItemVariation.objects.get(pk=v.pk)
+
+        assert i.meta_data == {"day": "Tuesday"}
+        assert v.meta_data == {"day": "Wednesday"}
+
 
 class EventTest(TestCase):
     @classmethod

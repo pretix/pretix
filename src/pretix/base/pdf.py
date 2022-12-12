@@ -746,6 +746,8 @@ class Renderer:
 
             def replace(x):
                 if x.group(1).startswith('itemmeta:'):
+                    if op.variation_id:
+                        return op.variation.meta_data.get(x.group(1)[9:]) or ''
                     return op.item.meta_data.get(x.group(1)[9:]) or ''
                 elif x.group(1).startswith('meta:'):
                     return ev.meta_data.get(x.group(1)[5:]) or ''
@@ -766,6 +768,8 @@ class Renderer:
             return re.sub(r'\{([a-zA-Z0-9:_]+)\}', replace, text)
 
         elif o['content'].startswith('itemmeta:'):
+            if op.variation_id:
+                return op.variation.meta_data.get(o['content'][9:]) or ''
             return op.item.meta_data.get(o['content'][9:]) or ''
 
         elif o['content'].startswith('meta:'):

@@ -1,6 +1,7 @@
 {% load i18n %}
 {% load bootstrap3 %}
 {% load formset_tags %}
+{% load getitem %}
 <div class="formset" data-formset data-formset-prefix="{{ formset.prefix }}" id="item_variations">
     {{ formset.management_form }}
     {% bootstrap_formset_errors formset %}
@@ -29,16 +30,20 @@
                             {% endif %}
                         </div>
                         <div class="col-md-2 col-xs-6">
-                            <span class="fa fa-clock-o fa-fw text-muted variation-timeframe variation-icon-hidden" data-toggle="tooltip" title="{% trans "Only available in a limited timeframe" %}"></span>
-                            <span class="fa fa-tags fa-fw text-muted variation-voucher variation-icon-hidden" data-toggle="tooltip"
-                                    title="{% trans "Only visible with a voucher" %}"></span>
-                            <span class="fa fa-id-badge fa-fw text-muted variation-membership variation-icon-hidden" data-toggle="tooltip"
-                                    title="{% trans "Require a valid membership" %}"></span>
+                            <span class="fa fa-clock-o fa-fw text-muted variation-timeframe variation-icon-hidden"
+                                  data-toggle="tooltip"
+                                  title="{% trans "Only available in a limited timeframe" %}"></span>
+                            <span class="fa fa-tags fa-fw text-muted variation-voucher variation-icon-hidden"
+                                  data-toggle="tooltip"
+                                  title="{% trans "Only visible with a voucher" %}"></span>
+                            <span class="fa fa-id-badge fa-fw text-muted variation-membership variation-icon-hidden"
+                                  data-toggle="tooltip"
+                                  title="{% trans "Require a valid membership" %}"></span>
                         </div>
                         <div class="col-md-2 col-xs-6">
                             {% for k, c in sales_channels.items %}
                                 <span class="fa fa-fw fa-{{ c.icon }} text-muted variation-channel-{{ k }} variation-icon-hidden"
-                                        data-toggle="tooltip" title="{% trans c.verbose_name %}"></span>
+                                      data-toggle="tooltip" title="{% trans c.verbose_name %}"></span>
                             {% endfor %}
                         </div>
                         <div class="col-md-1 col-xs-6 text-right flip variation-price">
@@ -69,6 +74,27 @@
                     {% bootstrap_field form.default_price addon_after=request.event.currency layout="control" %}
                     {% bootstrap_field form.original_price addon_after=request.event.currency layout="control" %}
                     {% bootstrap_field form.description layout="control" %}
+                    {% if form.meta_fields %}
+                        <div class="form-group metadata-group">
+                            <label class="col-md-3 control-label">{% trans "Meta data" %}</label>
+                            <div class="col-md-9">
+                                {% for fname in form.meta_fields %}
+                                    {% with form|getitem:fname as field %}
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <label for="{{ field.id_for_label }}">
+                                                    {{ field.label }}
+                                                </label>
+                                            </div>
+                                            <div class="col-md-8">
+                                                {% bootstrap_field field layout="inline" %}
+                                            </div>
+                                        </div>
+                                    {% endwith %}
+                                {% endfor %}
+                            </div>
+                        </div>
+                    {% endif %}
                     {% bootstrap_field form.available_from layout="control" %}
                     {% bootstrap_field form.available_until layout="control" %}
                     {% bootstrap_field form.sales_channels layout="control" %}
@@ -110,16 +136,20 @@
                             {% endif %}
                         </div>
                         <div class="col-md-2 col-xs-6">
-                            <span class="fa fa-clock-o fa-fw text-muted variation-timeframe variation-icon-hidden" data-toggle="tooltip" title="{% trans "Only available in a limited timeframe" %}"></span>
-                            <span class="fa fa-tags fa-fw text-muted variation-voucher variation-icon-hidden" data-toggle="tooltip"
-                                    title="{% trans "Only visible with a voucher" %}"></span>
-                            <span class="fa fa-id-badge fa-fw text-muted variation-membership variation-icon-hidden" data-toggle="tooltip"
-                                    title="{% trans "Require a valid membership" %}"></span>
+                            <span class="fa fa-clock-o fa-fw text-muted variation-timeframe variation-icon-hidden"
+                                  data-toggle="tooltip"
+                                  title="{% trans "Only available in a limited timeframe" %}"></span>
+                            <span class="fa fa-tags fa-fw text-muted variation-voucher variation-icon-hidden"
+                                  data-toggle="tooltip"
+                                  title="{% trans "Only visible with a voucher" %}"></span>
+                            <span class="fa fa-id-badge fa-fw text-muted variation-membership variation-icon-hidden"
+                                  data-toggle="tooltip"
+                                  title="{% trans "Require a valid membership" %}"></span>
                         </div>
                         <div class="col-md-2 col-xs-6">
                             {% for k, c in sales_channels.items %}
                                 <span class="fa fa-fw fa-{{ c.icon }} text-muted variation-channel-{{ k }} variation-icon-hidden"
-                                        data-toggle="tooltip" title="{% trans c.verbose_name %}"></span>
+                                      data-toggle="tooltip" title="{% trans c.verbose_name %}"></span>
                             {% endfor %}
                         </div>
                         <div class="col-md-1 col-xs-6 text-right flip variation-price">
@@ -141,6 +171,27 @@
                     {% bootstrap_field formset.empty_form.default_price addon_after=request.event.currency layout="control" %}
                     {% bootstrap_field formset.empty_form.original_price addon_after=request.event.currency layout="control" %}
                     {% bootstrap_field formset.empty_form.description layout="control" %}
+                    {% if formset.empty_form.meta_fields %}
+                        <div class="form-group metadata-group">
+                            <label class="col-md-3 control-label">{% trans "Meta data" %}</label>
+                            <div class="col-md-9">
+                                {% for fname in formset.empty_form.meta_fields %}
+                                    {% with formset.empty_form|getitem:fname as field %}
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <label for="{{ field.id_for_label }}">
+                                                    {{ field.label }}
+                                                </label>
+                                            </div>
+                                            <div class="col-md-8">
+                                                {% bootstrap_field field layout="inline" %}
+                                            </div>
+                                        </div>
+                                    {% endwith %}
+                                {% endfor %}
+                            </div>
+                        </div>
+                    {% endif %}
                     {% bootstrap_field formset.empty_form.available_from layout="control" %}
                     {% bootstrap_field formset.empty_form.available_until layout="control" %}
                     {% bootstrap_field formset.empty_form.sales_channels layout="control" %}

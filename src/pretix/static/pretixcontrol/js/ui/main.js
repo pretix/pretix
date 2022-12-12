@@ -499,6 +499,10 @@ var form_handlers = function (el) {
 
     el.find('input[data-typeahead-url]').each(function () {
         var $inp = $(this);
+        if ($inp.data("ttTypeahead") || $inp.hasClass("tt-hint")) {
+            // Already initialized on this element
+            return;
+        }
         $inp.typeahead(null, {
             minLength: 1,
             highlight: true,

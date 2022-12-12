@@ -48,7 +48,7 @@ from django.utils.translation import gettext as _, pgettext
 
 from pretix.base.models import (
     EventMetaProperty, EventMetaValue, ItemMetaProperty, ItemMetaValue,
-    ItemVariation, Order, Organizer, User, Voucher,
+    ItemVariation, ItemVariationMetaValue, Order, Organizer, User, Voucher,
 )
 from pretix.control.forms.event import EventWizardCopyForm
 from pretix.control.permissions import (
@@ -747,6 +747,10 @@ def item_meta_values(request, organizer, event):
         value__icontains=q,
         property__name=propname
     )
+    var_matches = ItemVariationMetaValue.objects.filter(
+        value__icontains=q,
+        property__name=propname
+    )
     defaults = ItemMetaProperty.objects.filter(
         name=propname,
         default__icontains=q
@@ -758,6 +762,7 @@ def item_meta_values(request, organizer, event):
 
     defaults = defaults.filter(event__organizer_id=organizer.pk)
     matches = matches.filter(item__event__organizer_id=organizer.pk)
+    var_matches = var_matches.filter(variation__item__event__organizer_id=organizer.pk)
     all_access = (
         request.user.has_active_staff_session(request.session.session_key)
         or request.user.teams.filter(all_events=True, organizer=organizer, can_change_items=True).exists()
@@ -773,10 +778,19 @@ def item_meta_values(request, organizer, event):
                 'limit_events__id', flat=True
             )
         )
+        var_matches = matches.filter(
+            variation__item__event__id__in=request.user.teams.filter(can_change_items=True).values_list(
+                'limit_events__id', flat=True
+            )
+        )
 
     return JsonResponse({
         'results': [
             {'name': v, 'id': v}
-            for v in sorted(set(defaults.values_list('default', flat=True)[:10]) | set(matches.values_list('value', flat=True)[:10]))
+            for v in sorted(
+                set(defaults.values_list('default', flat=True)[:10]) |
+                set(matches.values_list('value', flat=True)[:10]) |
+                set(var_matches.values_list('value', flat=True)[:10])
+            )
         ]
     })

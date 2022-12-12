@@ -36,9 +36,11 @@ import json
 from decimal import Decimal
 
 from django.core.serializers.json import DjangoJSONEncoder
+from django.db.models import Prefetch
 from django.dispatch import receiver
 
 from ..exporter import BaseExporter
+from ..models import ItemMetaValue, ItemVariation, ItemVariationMetaValue
 from ..signals import register_data_exporters
 
 
@@ -106,9 +108,26 @@ class JSONExporter(BaseExporter):
                                 'available_from': variation.available_from,
                                 'available_until': variation.available_until,
                                 'hide_without_voucher': variation.hide_without_voucher,
+                                'meta_data': variation.meta_data,
                             } for variation in item.variations.all()
                         ]
-                    } for item in self.event.items.select_related('tax_rule').prefetch_related('variations')
+                    } for item in self.event.items.select_related('tax_rule').prefetch_related(
+                        Prefetch(
+                            'meta_values',
+                            ItemMetaValue.objects.select_related('property'),
+                            to_attr='meta_values_cached'
+                        ),
+                        Prefetch(
+                            'variations',
+                            queryset=ItemVariation.objects.prefetch_related(
+                                Prefetch(
+                                    'meta_values',
+                                    ItemVariationMetaValue.objects.select_related('property'),
+                                    to_attr='meta_values_cached'
+                                ),
+                            ),
+                        ),
+                    )
                 ],
                 'questions': [
                     {
