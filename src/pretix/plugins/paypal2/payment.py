@@ -611,7 +611,7 @@ class PaypalMethod(BasePaymentProvider):
                 pass
             if str(pp_captured_order.purchase_units[0].amount.value) != str(payment.amount) or \
                     pp_captured_order.purchase_units[0].amount.currency_code != self.event.currency:
-                logger.error('Value mismatch: Payment %s vs paypal trans %s' % (payment.id, str(pp_captured_order)))
+                logger.error('Value mismatch: Payment %s vs paypal trans %s' % (payment.id, str(pp_captured_order.dict())))
                 raise PaymentException(_('We were unable to process your payment. See below for details on how to '
                                          'proceed.'))
 
