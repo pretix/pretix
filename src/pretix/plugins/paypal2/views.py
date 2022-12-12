@@ -153,8 +153,8 @@ class XHRView(View):
             simulated_payments = multi_use_cart_payments + [{
                 'provider': 'paypal',
                 'multi_use_supported': False,
-                'min_value': prov.settings._total_min,
-                'max_value': prov.settings._total_max,
+                'min_value': None,
+                'max_value': None,
                 'info_data': {},
             }]
 
