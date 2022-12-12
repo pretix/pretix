@@ -321,6 +321,23 @@ var pretixpaypal = {
 };
 
 $(function () {
+    // This script is always loaded if paypal is enabled as a payment method, regardless of
+    // whether it is available (it could e.g. be hidden or limited to certain countries).
+    // We do not want to unnecessarily load the sdk.
+    let sdk_needed = false
+    // If we are on a payment method selection page (event.checkout "payment" step or
+    // event.order.pay.change) and paypal/paypal_apm is one of the options, we need the sdk.
+    if ($("input[name=payment][value^='paypal']").length) {
+        sdk_needed = true
+    }
+    // If we are on the (APM) PayView, we need the sdk.
+    if ($('#paypal-button-container').data('paypage')) {
+        sdk_needed = true
+    }
+    if (!sdk_needed) {
+        return
+    }
+
     pretixpaypal.load();
 
     (async() => {
