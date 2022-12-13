@@ -1404,7 +1404,7 @@ class GiftCardDetailView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMi
                     messages.error(request, _('The transaction could not be reversed.'))
                 else:
                     messages.success(request, _('The transaction has been reversed.'))
-        elif 'value' in request.POST:
+        elif request.POST.get('value'):
             try:
                 value = DecimalField(localize=True).to_python(request.POST.get('value'))
             except ValidationError:
