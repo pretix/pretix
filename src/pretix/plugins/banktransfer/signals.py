@@ -22,11 +22,13 @@
 from django.dispatch import receiver
 from django.template.loader import get_template
 from django.urls import resolve, reverse
-from django.utils.translation import gettext_lazy as _
+from django.utils.translation import gettext_lazy as _, gettext_noop
+from i18nfield.strings import LazyI18nString
 
-from pretix.base.signals import register_payment_providers
+from pretix.base.signals import logentry_display, register_payment_providers
 from pretix.control.signals import html_head, nav_event, nav_organizer
 
+from ...base.settings import settings_hierarkey
 from .payment import BankTransfer
 
 
@@ -113,3 +115,30 @@ def html_head_presale(sender, request=None, **kwargs):
         return template.render({})
     else:
         return ""
+
+
+@receiver(signal=logentry_display)
+def pretixcontrol_logentry_display(sender, logentry, **kwargs):
+    plains = {
+        'pretix.plugins.banktransfer.order.email.invoice': _('The invoice was sent to the designated email address.'),
+    }
+    if logentry.action_type in plains:
+        return plains[logentry.action_type]
+
+
+settings_hierarkey.add_default(
+    'payment_banktransfer_invoice_email_subject',
+    default_type=LazyI18nString,
+    value=LazyI18nString.from_gettext(gettext_noop("Invoice {invoice_number}"))
+)
+settings_hierarkey.add_default(
+    'payment_banktransfer_invoice_email_text',
+    default_type=LazyI18nString,
+    value=LazyI18nString.from_gettext(gettext_noop("""Hello,
+
+you receive this message because an order for {event} was placed by {order_email} and we have been asked to forward the invoice to you.
+
+Best regards,
+
+Your {event} team"""))
+)

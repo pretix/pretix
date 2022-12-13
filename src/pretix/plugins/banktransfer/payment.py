@@ -41,6 +41,7 @@ from django import forms
 from django.core.exceptions import ValidationError
 from django.http import HttpRequest
 from django.template.loader import get_template
+from django.utils.functional import cached_property
 from django.utils.translation import gettext, gettext_lazy as _
 from i18nfield.fields import I18nFormField, I18nTextarea
 from i18nfield.forms import I18nTextInput
@@ -49,8 +50,13 @@ from localflavor.generic.forms import BICFormField, IBANFormField
 from localflavor.generic.validators import IBANValidator
 from text_unidecode import unidecode
 
+from pretix.base.email import get_available_placeholders, get_email_context
+from pretix.base.forms import PlaceholderValidator
+from pretix.base.i18n import language
 from pretix.base.models import Order, OrderPayment, OrderRefund
 from pretix.base.payment import BasePaymentProvider
+from pretix.base.services.mail import SendMailException, mail, render_mail
+from pretix.helpers.format import format_map
 from pretix.plugins.banktransfer.templatetags.ibanformat import ibanformat
 
 
@@ -81,7 +87,8 @@ class BankTransfer(BasePaymentProvider):
             )),
             ('bank_details_sepa_name', forms.CharField(
                 label=_('Name of account holder'),
-                help_text=_('Please note: special characters other than letters, numbers, and some punctuation can cause problems with some banks.'),
+                help_text=_(
+                    'Please note: special characters other than letters, numbers, and some punctuation can cause problems with some banks.'),
                 widget=forms.TextInput(
                     attrs={
                         'data-display-dependency': '#id_payment_banktransfer_bank_details_type_0',
@@ -166,12 +173,15 @@ class BankTransfer(BasePaymentProvider):
                 help_text=_('This text will be shown on the order confirmation page for pending orders in addition to '
                             'the standard text.'),
                 widget=I18nTextarea,
+                widget_kwargs={'attrs': {
+                    'rows': '2',
+                }},
                 required=False,
             )),
             ('refund_iban_blocklist', forms.CharField(
                 label=_('IBAN blocklist for refunds'),
                 required=False,
-                widget=forms.Textarea,
+                widget=forms.Textarea(attrs={'rows': 4}),
                 help_text=_('Put one IBAN or IBAN prefix per line. The system will not attempt to send refunds to any '
                             'of these IBANs. Useful e.g. if you receive a lot of "forwarded payments" by a third-party payment '
                             'provider. You can also list country codes such as "GB" if you never want to send refunds to '
@@ -194,7 +204,54 @@ class BankTransfer(BasePaymentProvider):
 
     @property
     def settings_form_fields(self):
-        d = OrderedDict(list(super().settings_form_fields.items()) + list(BankTransfer.form_fields().items()))
+        phs = [
+            '{%s}' % p
+            for p in sorted(get_available_placeholders(self.event, ['event', 'order', 'invoice']).keys())
+        ]
+        phs_ht = _('Available placeholders: {list}').format(
+            list=', '.join(phs)
+        )
+        more_fields = OrderedDict([
+            ('invoice_email',
+             forms.BooleanField(
+                 label=_('Allow users to enter an additional email address that the invoice will be sent to.'),
+                 help_text=_(
+                     'This requires that the invoice creation settings allow the invoice to be created right after '
+                     'the payment method was chosen. Only the invoice will be sent to this email address, subsequent '
+                     'invoice corrections will not be sent automatically. Only the invoice will be sent, no additional '
+                     'information.'
+                 ),
+                 required=False,
+             )),
+            ('invoice_email_subject',
+             I18nFormField(
+                 label=_('Invoice email subject'),
+                 widget=I18nTextInput,
+                 widget_kwargs={'attrs': {
+                     'data-display-dependency': '#id_payment_banktransfer_invoice_email',
+                     'data-required-if': '#id_payment_banktransfer_invoice_email',
+                 }},
+                 validators=[PlaceholderValidator(phs)],
+                 help_text=phs_ht,
+                 required=False
+             )),
+            ('invoice_email_text',
+             I18nFormField(
+                 label=_('Invoice email text'),
+                 widget=I18nTextarea,
+                 widget_kwargs={'attrs': {
+                     'rows': '8',
+                     'data-display-dependency': '#id_payment_banktransfer_invoice_email',
+                     'data-required-if': '#id_payment_banktransfer_invoice_email',
+                 }},
+                 validators=[PlaceholderValidator(phs)],
+                 help_text=phs_ht,
+                 required=False
+             )),
+        ])
+
+        d = OrderedDict(list(super().settings_form_fields.items()) + list(BankTransfer.form_fields().items()) + list(more_fields.items()))
+        d.move_to_end('invoice_immediately', last=False)
         d.move_to_end('bank_details', last=False)
         d.move_to_end('bank_details_sepa_bank', last=False)
         d.move_to_end('bank_details_sepa_bic', last=False)
@@ -207,7 +264,10 @@ class BankTransfer(BasePaymentProvider):
 
     def settings_form_clean(self, cleaned_data):
         if cleaned_data.get('payment_banktransfer_bank_details_type') == 'sepa':
-            for f in ('bank_details_sepa_name', 'bank_details_sepa_bank', 'bank_details_sepa_bic', 'bank_details_sepa_iban'):
+            for f in (
+                'bank_details_sepa_name', 'bank_details_sepa_bank', 'bank_details_sepa_bic',
+                'bank_details_sepa_iban'
+            ):
                 if not cleaned_data.get('payment_banktransfer_%s' % f):
                     raise ValidationError(
                         {'payment_banktransfer_%s' % f: _('Please fill out your bank account details.')})
@@ -217,10 +277,45 @@ class BankTransfer(BasePaymentProvider):
                     {'payment_banktransfer_bank_details': _('Please enter your bank account details.')})
         return cleaned_data
 
+    @cached_property
+    def _invoice_email_asked(self):
+        return (
+            self.settings.get('invoice_email', as_type=bool) and
+            (self.event.settings.invoice_generate == 'True' or (
+                self.event.settings.invoice_generate == 'paid' and
+                self.settings.get('invoice_immediately', as_type=bool)
+            ))
+        )
+
+    @property
+    def payment_form_fields(self) -> dict:
+        if self._invoice_email_asked:
+            return {
+                'send_invoice': forms.BooleanField(
+                    label=_('Please send my invoice directly to our accounting department'),
+                    required=False,
+                ),
+                'send_invoice_to': forms.EmailField(
+                    label=_('Invoice recipient e-mail'),
+                    required=False,
+                    help_text=_('The invoice recipient will receive an email which includes the invoice and your email '
+                                'address so they know who placed this order.'),
+                    widget=forms.EmailInput(
+                        attrs={
+                            'data-display-dependency': '#id_payment_banktransfer-send_invoice',
+                        }
+                    )
+                ),
+            }
+        else:
+            return {}
+
     def payment_form_render(self, request, total=None, order=None) -> str:
         template = get_template('pretixplugins/banktransfer/checkout_payment_form.html')
+        form = self.payment_form(request)
         ctx = {
             'request': request,
+            'form': form,
             'event': self.event,
             'settings': self.settings,
             'code': self._code(order) if order else None,
@@ -229,16 +324,97 @@ class BankTransfer(BasePaymentProvider):
         return template.render(ctx)
 
     def checkout_prepare(self, request, total):
-        return True
+        form = self.payment_form(request)
+        if form.is_valid():
+            for k, v in form.cleaned_data.items():
+                request.session['payment_%s_%s' % (self.identifier, k)] = v
+            return True
+        else:
+            return False
+
+    def send_invoice_to_alternate_email(self, order, invoice, email):
+        """
+        Sends an email to the alternate invoice address.
+        """
+        with language(order.locale, self.event.settings.region):
+            context = get_email_context(event=self.event,
+                                        order=order,
+                                        invoice=invoice,
+                                        event_or_subevent=self.event,
+                                        invoice_address=order.invoice_address)
+            template = self.settings.get('invoice_email_text', as_type=LazyI18nString)
+            subject = self.settings.get('invoice_email_subject', as_type=LazyI18nString)
+
+            try:
+                email_content = render_mail(template, context)
+                subject = format_map(subject, context)
+                mail(
+                    email,
+                    subject,
+                    template,
+                    context=context,
+                    event=self.event,
+                    locale=order.locale,
+                    order=order,
+                    invoices=[invoice],
+                    attach_tickets=False,
+                    auto_email=True,
+                    attach_ical=False,
+                    plain_text_only=True,
+                    no_order_links=True,
+                )
+            except SendMailException:
+                raise
+            else:
+                order.log_action(
+                    'pretix.plugins.banktransfer.order.email.invoice',
+                    data={
+                        'subject': subject,
+                        'message': email_content,
+                        'position': None,
+                        'recipient': email,
+                        'invoices': invoice.pk,
+                        'attach_tickets': False,
+                        'attach_ical': False,
+                    }
+                )
+
+    def execute_payment(self, request: HttpRequest, payment: OrderPayment) -> str:
+        send_invoice = (
+            self._invoice_email_asked and
+            request and
+            request.session.get('payment_%s_%s' % (self.identifier, 'send_invoice')) and
+            request.session.get('payment_%s_%s' % (self.identifier, 'send_invoice_to'))
+        )
+        if send_invoice:
+            recipient = request.session.get('payment_%s_%s' % (self.identifier, 'send_invoice_to'))
+            payment.info_data = {
+                'send_invoice_to': recipient,
+            }
+            payment.save(update_fields=['info'])
+            i = payment.order.invoices.filter(is_cancellation=False).last()
+            if i:
+                self.send_invoice_to_alternate_email(payment.order, i, recipient)
+        if request:
+            request.session.pop('payment_%s_%s' % (self.identifier, 'send_invoice'), None)
+            request.session.pop('payment_%s_%s' % (self.identifier, 'send_invoice_to'), None)
 
     def payment_prepare(self, request: HttpRequest, payment: OrderPayment):
-        return True
+        return self.checkout_prepare(request, payment.amount)
 
     def payment_is_valid_session(self, request):
         return True
 
     def checkout_confirm_render(self, request, order=None):
-        return self.payment_form_render(request, order=order)
+        template = get_template('pretixplugins/banktransfer/checkout_confirm.html')
+        ctx = {
+            'request': request,
+            'event': self.event,
+            'settings': self.settings,
+            'code': self._code(order) if order else None,
+            'details': self.settings.get('bank_details', as_type=LazyI18nString),
+        }
+        return template.render(ctx)
 
     def order_pending_mail_render(self, order, payment) -> str:
         template = get_template('pretixplugins/banktransfer/email/order_pending.txt')
@@ -355,6 +531,7 @@ class BankTransfer(BasePaymentProvider):
         d = obj.info_data
         d['reference'] = '█'
         d['payer'] = '█'
+        d['send_invoice_to'] = '█'
         d['_shredded'] = True
         obj.info = json.dumps(d)
         obj.save(update_fields=['info'])

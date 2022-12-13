@@ -30,8 +30,10 @@
         </strong>
     </p>
 {% endif %}
-{% if form.fields %}
-    <div class="col-md-12">
-        {% bootstrap_form form layout='inline' %}
-    </div>
+{% if request.session.payment_banktransfer_send_invoice and request.session.payment_banktransfer_send_invoice_to %}
+    <p>
+        {% blocktrans trimmed with recipient=request.session.payment_banktransfer_send_invoice_to %}
+            We will send a copy of your invoice directly to {{ recipient }}.
+        {% endblocktrans %}
+    </p>
 {% endif %}

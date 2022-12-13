@@ -325,16 +325,6 @@ class BasePaymentProvider:
                  help_text=_('Users will not be able to choose this payment provider after the given date.'),
                  required=False,
              )),
-            ('_invoice_text',
-             I18nFormField(
-                 label=_('Text on invoices'),
-                 help_text=_('Will be printed just below the payment figures and above the closing text on invoices. '
-                             'This will only be used if the invoice is generated before the order is paid. If the '
-                             'invoice is generated later, it will show a text stating that it has already been paid.'),
-                 required=False,
-                 widget=I18nTextarea,
-                 widget_kwargs={'attrs': {'rows': '2'}}
-             )),
             ('_total_min',
              forms.DecimalField(
                  label=_('Minimum order total'),
@@ -381,6 +371,16 @@ class BasePaymentProvider:
                              'for detailed information on what this does.</a> Don\'t forget to set the correct fees '
                              'above!').format(docs_url='https://docs.pretix.eu/en/latest/user/payments/fees.html'),
                  required=False
+             )),
+            ('_invoice_text',
+             I18nFormField(
+                 label=_('Text on invoices'),
+                 help_text=_('Will be printed just below the payment figures and above the closing text on invoices. '
+                             'This will only be used if the invoice is generated before the order is paid. If the '
+                             'invoice is generated later, it will show a text stating that it has already been paid.'),
+                 required=False,
+                 widget=I18nTextarea,
+                 widget_kwargs={'attrs': {'rows': '2'}}
              )),
             ('_restricted_countries',
              forms.MultipleChoiceField(

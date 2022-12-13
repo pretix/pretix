@@ -86,7 +86,6 @@ INVALID_ADDRESS = 'invalid-pretix-mail-address'
 
 
 class TolerantDict(dict):
-    # kept for backwards compatibility with plugins
 
     def __missing__(self, key):
         return key
@@ -100,7 +99,8 @@ def mail(email: Union[str, Sequence[str]], subject: str, template: Union[str, La
          context: Dict[str, Any] = None, event: Event = None, locale: str = None, order: Order = None,
          position: OrderPosition = None, *, headers: dict = None, sender: str = None, organizer: Organizer = None,
          customer: Customer = None, invoices: Sequence = None, attach_tickets=False, auto_email=True, user=None,
-         attach_ical=False, attach_cached_files: Sequence = None, attach_other_files: list=None):
+         attach_ical=False, attach_cached_files: Sequence = None, attach_other_files: list=None,
+         plain_text_only=False, no_order_links=False):
     """
     Sends out an email to a user. The mail will be sent synchronously or asynchronously depending on the installation.
 
@@ -150,11 +150,20 @@ def mail(email: Union[str, Sequence[str]], subject: str, template: Union[str, La
 
     :param attach_other_files: A list of file paths on our storage to attach.
 
+    :param plain_text_only: If set to ``True``, rendering a HTML version will be skipped.
+
+    :param no_order_links: If set to ``True``, no link to the order confirmation page will be auto-appended. Currently
+                           only allowed to use together with ``plain_text_only`` since HTML renderers add their own
+                           links.
+
     :raises MailOrderException: on obvious, immediate failures. Not raising an exception does not necessarily mean
         that the email has been sent, just that it has been queued by the email backend.
     """
     if email == INVALID_ADDRESS:
         return
+
+    if no_order_links and not plain_text_only:
+        raise ValueError('If you set no_order_links, you also need to set plain_text_only.')
 
     headers = headers or {}
     if auto_email:
@@ -179,7 +188,7 @@ def mail(email: Union[str, Sequence[str]], subject: str, template: Union[str, La
                 })
         renderer = ClassicMailRenderer(None, organizer)
         content_plain = body_plain = render_mail(template, context)
-        subject = format_map(str(subject), context)
+        subject = str(subject).format_map(TolerantDict(context))
         sender = (
             sender or
             (event.settings.get('mail_from') if event else None) or
@@ -244,7 +253,7 @@ def mail(email: Union[str, Sequence[str]], subject: str, template: Union[str, La
             if order and order.testmode:
                 subject = "[TESTMODE] " + subject
 
-            if order and position:
+            if order and position and not no_order_links:
                 body_plain += _(
                     "You are receiving this email because someone placed an order for {event} for you."
                 ).format(event=event.name)
@@ -260,7 +269,7 @@ def mail(email: Union[str, Sequence[str]], subject: str, template: Union[str, La
                         }
                     )
                 )
-            elif order:
+            elif order and not no_order_links:
                 body_plain += _(
                     "You are receiving this email because you placed an order for {event}."
                 ).format(event=event.name)
@@ -280,7 +289,9 @@ def mail(email: Union[str, Sequence[str]], subject: str, template: Union[str, La
 
         with override(timezone):
             try:
-                if 'position' in inspect.signature(renderer.render).parameters:
+                if plain_text_only:
+                    body_html = None
+                elif 'position' in inspect.signature(renderer.render).parameters:
                     body_html = renderer.render(content_plain, signature, raw_subject, order, position)
                 else:
                     # Backwards compatibility
