@@ -187,6 +187,11 @@ function setup_basics(el) {
         $($(this).attr("data-parent")).find(".collapse.in").collapse('hide');
         $($(this).attr("data-target")).collapse('show');
     });
+    el.find("input[data-toggle=radiocollapse]:checked").each(function () {
+        if (!$($(this).attr("data-parent")).find(".collapse.in").length) {
+            $($(this).attr("data-target")).collapse('show');
+        }
+    });
     el.find(".js-only").removeClass("js-only");
     el.find(".js-hidden").hide();
 
