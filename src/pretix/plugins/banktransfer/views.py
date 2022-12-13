@@ -797,7 +797,7 @@ class SepaXMLExportForm(forms.Form):
     bic = BICFormField(label="BIC")
 
     def set_initial_from_event(self, event: Event):
-        banktransfer = event.get_payment_providers(cached=True)[BankTransfer.identifier]
+        banktransfer = BankTransfer(event)
         self.initial["account_holder"] = banktransfer.settings.get("bank_details_sepa_name")
         self.initial["iban"] = banktransfer.settings.get("bank_details_sepa_iban")
         self.initial["bic"] = banktransfer.settings.get("bank_details_sepa_bic")
