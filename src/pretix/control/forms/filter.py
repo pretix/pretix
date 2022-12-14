@@ -77,6 +77,31 @@ def get_all_payment_providers():
     if PAYMENT_PROVIDERS:
         return PAYMENT_PROVIDERS
 
+    class FakeSettings:
+        def __init__(self, orig_settings):
+            self.orig_settings = orig_settings
+
+        def set(self, *args, **kwargs):
+            pass
+
+        def __getattr__(self, item):
+            return getattr(self.orig_settings, item)
+
+    class FakeEvent:
+        def __init__(self, orig_event):
+            self.orig_event = orig_event
+
+        @property
+        def settings(self):
+            return FakeSettings(self.orig_event.settings)
+
+        def __getattr__(self, item):
+            return getattr(self.orig_event, item)
+
+        @property
+        def __class__(self):  # hackhack
+            return Event
+
     with rolledback_transaction():
         event = Event.objects.create(
             plugins=",".join([app.name for app in apps.get_app_configs()]),
@@ -84,6 +109,7 @@ def get_all_payment_providers():
             date_from=now(),
             organizer=Organizer.objects.create(name="INTERNAL")
         )
+        event = FakeEvent(event)
         provs = register_payment_providers.send(
             sender=event
         )
