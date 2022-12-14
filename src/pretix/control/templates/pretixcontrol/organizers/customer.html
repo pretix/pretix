@@ -25,7 +25,6 @@
                     <form action="" method="post" class="row">
                         {% csrf_token %}
                         <dl class="dl-horizontal col-lg-6 col-sm-12">
-                            <div>
                                 <dt>{% trans "Customer ID" %}</dt>
                                 <dd>#{{ customer.identifier }}</dd>
                                 {% if customer.provider %}
@@ -72,24 +71,21 @@
                                 <dt>{% trans "Notes" %}</dt>
                                 <dd>{{ customer.notes|linebreaks }}</dd>
                             {% endif %}
-                            </div>
                         </dl>
+                        {% if lifetime_spending %}
                         <dl class="col-lg-6 col-sm-12 text-right">
-                            <div>
-                            {% if lifetime_spending %}
-                                <dt class="text-muted"
-                                    data-toggle="tooltip"
-                                    title="{% trans "This includes all paid orders by this customer across all your events." %}">
-                                    {% trans "Lifetime spending" %}
-                                </dt>
-                                <dd class="text-success helper-font-size-24">
-                                    {% for s in lifetime_spending %}
-                                            {{ s.spending|money:s.currency }} <br>
-                                    {% endfor %}
-                                </dd>
-                            {% endif %}
-                            </div>
+                            <dt class="text-muted"
+                                data-toggle="tooltip"
+                                title="{% trans "This includes all paid orders by this customer across all your events." %}">
+                                {% trans "Lifetime spending" %}
+                            </dt>
+                            <dd class="text-success helper-font-size-24">
+                                {% for s in lifetime_spending %}
+                                        {{ s.spending|money:s.currency }} <br>
+                                {% endfor %}
+                            </dd>
                         </dl>
+                        {% endif %}
                     </form>
                     <div class="text-right">
                         <a href="{% url "control:organizer.customer.edit" organizer=request.organizer.slug customer=customer.identifier %}"
