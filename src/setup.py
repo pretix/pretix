@@ -241,7 +241,7 @@ setup(
             'django-debug-toolbar==3.7.*',
             'flake8==6.0.*',
             'freezegun',
-            'isort==5.10.*',
+            'isort>=5.10,<5.12',
             'pep8-naming==0.12.*',
             'potypo',
             'pycodestyle==2.10.*',
