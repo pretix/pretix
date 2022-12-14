@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-12-14 13:09+0000\n"
-"PO-Revision-Date: 2022-11-29 20:43+0000\n"
+"PO-Revision-Date: 2022-12-14 15:23+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
 ">\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.14.1\n"
+"X-Generator: Weblate 4.14.2\n"
 "X-Poedit-Bookmarks: -1,-1,904,-1,-1,-1,-1,-1,-1,-1\n"
 
 #: pretix/api/auth/devicesecurity.py:28
@@ -406,11 +406,11 @@ msgstr "Dieses Feld ist erforderlich."
 
 #: pretix/base/addressvalidation.py:215
 msgid "Enter a postal code in the format XXX."
-msgstr ""
+msgstr "Bitte eine Postleitzahl im Format XXX eingeben."
 
 #: pretix/base/addressvalidation.py:224 pretix/base/addressvalidation.py:226
 msgid "Enter a postal code in the format XXXX."
-msgstr ""
+msgstr "Bitte eine Postleitzahl im Format XXXX eingeben."
 
 #: pretix/base/auth.py:143
 #, python-brace-format
@@ -11738,10 +11738,8 @@ msgstr ""
 "stattdessen auf \"inaktiv\"."
 
 #: pretix/control/forms/item.py:751
-#, fuzzy
-#| msgid "Calculate from product"
 msgid "Use value from product"
-msgstr "Aus den Produktdaten berechnen"
+msgstr "Wert aus dem Produkt verwenden"
 
 #: pretix/control/forms/item.py:817
 msgid "Add-ons"
@@ -23593,6 +23591,8 @@ msgid ""
 "Allow users to enter an additional email address that the invoice will be "
 "sent to."
 msgstr ""
+"Erlaube Kunden, eine zusätzliche E-Mail-Adresse für den Versand der Rechnung "
+"anzugeben."
 
 #: pretix/plugins/banktransfer/payment.py:219
 msgid ""
@@ -23601,19 +23601,19 @@ msgid ""
 "sent to this email address, subsequent invoice corrections will not be sent "
 "automatically. Only the invoice will be sent, no additional information."
 msgstr ""
+"Dies erfordert, dass die Rechnungseinstellungen die Erstellung der Rechnung "
+"direkt nach Auswahl der Zahlungsmethode erlauben. Nur die initiale Rechnung "
+"wird an die E-Mail-Adresse geschickt, spätere Rechnungskorrekturen werden "
+"nicht automatisch verschickt. Nur die Rechnung wird verschickt, keine "
+"weiteren Informationen."
 
 #: pretix/plugins/banktransfer/payment.py:228
-#, fuzzy
-#| msgid "Email subject"
 msgid "Invoice email subject"
-msgstr "E-Mail-Betreff"
+msgstr "Rechnungs-E-Mail-Betreff"
 
 #: pretix/plugins/banktransfer/payment.py:240
-#, fuzzy
-#| msgctxt "invoice"
-#| msgid "Invoice date"
 msgid "Invoice email text"
-msgstr "Rechnungsdatum"
+msgstr "Rechnungs-E-Mail-Text"
 
 #: pretix/plugins/banktransfer/payment.py:273
 msgid "Please fill out your bank account details."
@@ -23626,18 +23626,20 @@ msgstr "Bitte geben Sie Ihre Bankdaten ein."
 #: pretix/plugins/banktransfer/payment.py:295
 msgid "Please send my invoice directly to our accounting department"
 msgstr ""
+"Ich möchte, dass die Rechnung direkt an unsere Buchhaltung geschickt wird"
 
 #: pretix/plugins/banktransfer/payment.py:299
-#, fuzzy
-#| msgid "Invoice recipient:"
 msgid "Invoice recipient e-mail"
-msgstr "Rechnungsempfänger:"
+msgstr "E-Mail Rechnungsempfang:"
 
 #: pretix/plugins/banktransfer/payment.py:301
 msgid ""
 "The invoice recipient will receive an email which includes the invoice and "
 "your email address so they know who placed this order."
 msgstr ""
+"Wir senden die Rechnung per E-Mail an diese Adresse. Ihre E-Mail-Adresse "
+"wird ebenfalls enthalten sein, damit zugeordnet werden kann, wer diese "
+"Bestellung getätigt hat."
 
 #: pretix/plugins/banktransfer/payment.py:424
 #: pretix/plugins/banktransfer/payment.py:606
@@ -23710,30 +23712,16 @@ msgid "Export refunds"
 msgstr "Erstattungen exportieren"
 
 #: pretix/plugins/banktransfer/signals.py:123
-#, fuzzy
-#| msgid "Please enter the same email address twice."
 msgid "The invoice was sent to the designated email address."
-msgstr "Bitte geben Sie zweimal dieselbe E-Mail-Adresse ein."
+msgstr "Die Rechnung wurde an die angegebene E-Mail-Adresse verschickt."
 
 #: pretix/plugins/banktransfer/signals.py:132
-#, fuzzy, python-brace-format
-#| msgid "Invoice number"
+#, python-brace-format
 msgid "Invoice {invoice_number}"
-msgstr "Rechnungsnummer"
+msgstr "Rechnung {invoice_number}"
 
 #: pretix/plugins/banktransfer/signals.py:137
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Hello,\n"
-#| "\n"
-#| "you receive this message because you asked us to send you the link\n"
-#| "to your order for {event}.\n"
-#| "\n"
-#| "You can change your order details and view the status of your order at\n"
-#| "{url}\n"
-#| "\n"
-#| "Best regards,\n"
-#| "Your {event} team"
+#, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -23746,12 +23734,9 @@ msgid ""
 msgstr ""
 "Hallo,\n"
 "\n"
-"Sie erhalten diese Nachricht weil Sie einen neuen Link zu Ihrer Bestellung "
-"für\n"
-"{event} angefordert haben.\n"
-"\n"
-"Sie können Ihre Bestellung unter folgender Adresse ändern und einsehen:\n"
-"{url}\n"
+"Sie erhalten diese Nachricht weil eine Bestellung für {event} von "
+"{order_email} aufgegeben wurde und wir darum gebeten wurden, Ihnen die "
+"Rechnung weiterzuleiten.\n"
 "\n"
 "Viele Grüße,\n"
 "Das {event} Team"
@@ -23797,14 +23782,11 @@ msgstr ""
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_confirm.html:35
 #, python-format
 msgid "We will send a copy of your invoice directly to %(recipient)s."
-msgstr ""
+msgstr "Wir senden eine Kopie der Rechnung direkt an %(recipient)s."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/control.html:6
-#, fuzzy
-#| msgctxt "invoice"
-#| msgid "Invoice to"
 msgid "Send invoice to"
-msgstr "Rechnungsempfänger"
+msgstr "Rechnung senden an"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/control.html:14
 msgid "Account"
