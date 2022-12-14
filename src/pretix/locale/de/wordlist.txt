@@ -337,6 +337,9 @@ WeChat
 WhatsApp
 Widget
 xlsx
+XXX
+XXXX
+XXXXX
 Yubikey
 Zahlungs
 Zahlungsbestätigungs
