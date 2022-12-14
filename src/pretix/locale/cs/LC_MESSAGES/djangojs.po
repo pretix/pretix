@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-29 20:31+0000\n"
+"POT-Creation-Date: 2022-12-14 13:09+0000\n"
 "PO-Revision-Date: 2021-12-06 23:00+0000\n"
 "Last-Translator: Ondřej Sokol <osokol@treesoft.cz>\n"
 "Language-Team: Czech <https://translate.pretix.eu/projects/pretix/pretix-js/"
@@ -573,15 +573,15 @@ msgstr "Hledaný výraz"
 msgid "Selected only"
 msgstr "Pouze vybrané"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:858
+#: pretix/static/pretixcontrol/js/ui/main.js:862
 msgid "Use a different name internally"
 msgstr "Interně používat jiný název"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:894
+#: pretix/static/pretixcontrol/js/ui/main.js:898
 msgid "Click to close"
 msgstr "Kliknutím zavřete"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:966
+#: pretix/static/pretixcontrol/js/ui/main.js:970
 msgid "You have unsaved changes!"
 msgstr "Máte neuložené změny!"
 
@@ -648,20 +648,20 @@ msgstr "Dostanete %(currency)s %(amount)s zpět"
 msgid "Please enter the amount the organizer can keep."
 msgstr "Zadejte částku, kterou si organizátor může ponechat."
 
-#: pretix/static/pretixpresale/js/ui/main.js:388
+#: pretix/static/pretixpresale/js/ui/main.js:393
 msgid "Please enter a quantity for one of the ticket types."
 msgstr "Zadejte prosím množství pro jeden z typů vstupenek."
 
-#: pretix/static/pretixpresale/js/ui/main.js:424
+#: pretix/static/pretixpresale/js/ui/main.js:429
 msgid "required"
 msgstr "povinný"
 
-#: pretix/static/pretixpresale/js/ui/main.js:527
-#: pretix/static/pretixpresale/js/ui/main.js:546
+#: pretix/static/pretixpresale/js/ui/main.js:532
+#: pretix/static/pretixpresale/js/ui/main.js:551
 msgid "Time zone:"
 msgstr "Časové pásmo:"
 
-#: pretix/static/pretixpresale/js/ui/main.js:537
+#: pretix/static/pretixpresale/js/ui/main.js:542
 msgid "Your local time:"
 msgstr "Místní čas:"
 

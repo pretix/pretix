@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-29 20:31+0000\n"
+"POT-Creation-Date: 2022-12-14 13:09+0000\n"
 "PO-Revision-Date: 2022-05-10 02:00+0000\n"
 "Last-Translator: Iryna N <in380@nyu.edu>\n"
 "Language-Team: Ukrainian <https://translate.pretix.eu/projects/pretix/pretix-"
@@ -577,15 +577,15 @@ msgstr "Пошуковий запит"
 msgid "Selected only"
 msgstr "Тільки вибрані"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:858
+#: pretix/static/pretixcontrol/js/ui/main.js:862
 msgid "Use a different name internally"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/main.js:894
+#: pretix/static/pretixcontrol/js/ui/main.js:898
 msgid "Click to close"
 msgstr "Натисніть, щоб закрити"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:966
+#: pretix/static/pretixcontrol/js/ui/main.js:970
 msgid "You have unsaved changes!"
 msgstr "У вас є незбережені зміни!"
 
@@ -647,20 +647,20 @@ msgstr ""
 msgid "Please enter the amount the organizer can keep."
 msgstr ""
 
-#: pretix/static/pretixpresale/js/ui/main.js:388
+#: pretix/static/pretixpresale/js/ui/main.js:393
 msgid "Please enter a quantity for one of the ticket types."
 msgstr "Будь ласка, введіть кількість для одного типу квитків."
 
-#: pretix/static/pretixpresale/js/ui/main.js:424
+#: pretix/static/pretixpresale/js/ui/main.js:429
 msgid "required"
 msgstr "обов'язково"
 
-#: pretix/static/pretixpresale/js/ui/main.js:527
-#: pretix/static/pretixpresale/js/ui/main.js:546
+#: pretix/static/pretixpresale/js/ui/main.js:532
+#: pretix/static/pretixpresale/js/ui/main.js:551
 msgid "Time zone:"
 msgstr "Часовий пояс:"
 
-#: pretix/static/pretixpresale/js/ui/main.js:537
+#: pretix/static/pretixpresale/js/ui/main.js:542
 msgid "Your local time:"
 msgstr "Ваш місцевий час:"
 

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-29 20:31+0000\n"
+"POT-Creation-Date: 2022-12-14 13:09+0000\n"
 "PO-Revision-Date: 2022-06-20 02:00+0000\n"
 "Last-Translator: fyksen <fredrik@fyksen.me>\n"
 "Language-Team: Norwegian Bokmål <https://translate.pretix.eu/projects/pretix/"
@@ -566,15 +566,15 @@ msgstr "Søkeord"
 msgid "Selected only"
 msgstr "Kun valgte"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:858
+#: pretix/static/pretixcontrol/js/ui/main.js:862
 msgid "Use a different name internally"
 msgstr "Bruk et annet navn internt"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:894
+#: pretix/static/pretixcontrol/js/ui/main.js:898
 msgid "Click to close"
 msgstr "Klikk for å lukke"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:966
+#: pretix/static/pretixcontrol/js/ui/main.js:970
 msgid "You have unsaved changes!"
 msgstr "Du har ikke-lagrede endringer!"
 
@@ -636,20 +636,20 @@ msgstr "Du mottar %(currency)s %(amount)s tilbake"
 msgid "Please enter the amount the organizer can keep."
 msgstr "Vennligst skriv inn beløpet arrangøren kan beholde."
 
-#: pretix/static/pretixpresale/js/ui/main.js:388
+#: pretix/static/pretixpresale/js/ui/main.js:393
 msgid "Please enter a quantity for one of the ticket types."
 msgstr "Vennligst skriv inn et antall for en av billetttypene."
 
-#: pretix/static/pretixpresale/js/ui/main.js:424
+#: pretix/static/pretixpresale/js/ui/main.js:429
 msgid "required"
 msgstr "nødvendig"
 
-#: pretix/static/pretixpresale/js/ui/main.js:527
-#: pretix/static/pretixpresale/js/ui/main.js:546
+#: pretix/static/pretixpresale/js/ui/main.js:532
+#: pretix/static/pretixpresale/js/ui/main.js:551
 msgid "Time zone:"
 msgstr "Tidssone:"
 
-#: pretix/static/pretixpresale/js/ui/main.js:537
+#: pretix/static/pretixpresale/js/ui/main.js:542
 msgid "Your local time:"
 msgstr "Din lokale tid:"
 

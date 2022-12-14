@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-29 20:31+0000\n"
+"POT-Creation-Date: 2022-12-14 13:09+0000\n"
 "PO-Revision-Date: 2021-09-24 13:54+0000\n"
 "Last-Translator: ofirtro <ofir.tro@gmail.com>\n"
 "Language-Team: Hebrew <https://translate.pretix.eu/projects/pretix/pretix-js/"
@@ -559,15 +559,15 @@ msgstr ""
 msgid "Selected only"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/main.js:858
+#: pretix/static/pretixcontrol/js/ui/main.js:862
 msgid "Use a different name internally"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/main.js:894
+#: pretix/static/pretixcontrol/js/ui/main.js:898
 msgid "Click to close"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/main.js:966
+#: pretix/static/pretixcontrol/js/ui/main.js:970
 msgid "You have unsaved changes!"
 msgstr ""
 
@@ -631,20 +631,20 @@ msgstr ""
 msgid "Please enter the amount the organizer can keep."
 msgstr ""
 
-#: pretix/static/pretixpresale/js/ui/main.js:388
+#: pretix/static/pretixpresale/js/ui/main.js:393
 msgid "Please enter a quantity for one of the ticket types."
 msgstr ""
 
-#: pretix/static/pretixpresale/js/ui/main.js:424
+#: pretix/static/pretixpresale/js/ui/main.js:429
 msgid "required"
 msgstr ""
 
-#: pretix/static/pretixpresale/js/ui/main.js:527
-#: pretix/static/pretixpresale/js/ui/main.js:546
+#: pretix/static/pretixpresale/js/ui/main.js:532
+#: pretix/static/pretixpresale/js/ui/main.js:551
 msgid "Time zone:"
 msgstr ""
 
-#: pretix/static/pretixpresale/js/ui/main.js:537
+#: pretix/static/pretixpresale/js/ui/main.js:542
 msgid "Your local time:"
 msgstr ""
 
