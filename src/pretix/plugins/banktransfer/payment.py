@@ -531,7 +531,8 @@ class BankTransfer(BasePaymentProvider):
         d = obj.info_data
         d['reference'] = '█'
         d['payer'] = '█'
-        d['send_invoice_to'] = '█'
+        if 'send_invoice_to' in d:
+            d['send_invoice_to'] = '█'
         d['_shredded'] = True
         obj.info = json.dumps(d)
         obj.save(update_fields=['info'])
