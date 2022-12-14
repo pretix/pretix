@@ -206,6 +206,7 @@ def _handle_transaction(trans: BankTransaction, matches: tuple, event: Event = N
             ).last()
 
         p.info_data = {
+            **p.info_data,
             'reference': trans.reference,
             'date': trans.date_parsed.isoformat() if trans.date_parsed else trans.date,
             'payer': trans.payer,
