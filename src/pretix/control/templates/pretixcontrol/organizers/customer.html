@@ -72,20 +72,22 @@
                                 <dd>{{ customer.notes|linebreaks }}</dd>
                             {% endif %}
                         </dl>
-                        {% if lifetime_spending %}
                         <dl class="col-lg-6 col-sm-12 text-right">
                             <dt class="text-muted"
                                 data-toggle="tooltip"
                                 title="{% trans "This includes all paid orders by this customer across all your events." %}">
                                 {% trans "Lifetime spending" %}
                             </dt>
+                        {% if lifetime_spending %}
                             <dd class="text-success helper-font-size-24">
                                 {% for s in lifetime_spending %}
                                         {{ s.spending|money:s.currency }} <br>
                                 {% endfor %}
                             </dd>
-                        </dl>
+                        {% else %}
+                            <dd class="helper-font-size-24">–</dd>
                         {% endif %}
+                        </dl>
                     </form>
                     <div class="text-right">
                         <a href="{% url "control:organizer.customer.edit" organizer=request.organizer.slug customer=customer.identifier %}"
