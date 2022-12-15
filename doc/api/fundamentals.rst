@@ -48,10 +48,11 @@ Possible permissions are:
 Compatibility
 -------------
 
-We currently see pretix' API as a beta-stage feature. We therefore do not give any guarantees
-for compatibility between feature releases of pretix (such as 1.5 and 1.6). However, as always,
-we try not to break things when we don't need to. Any backwards-incompatible changes will be
-prominently noted in the release notes.
+We try to avoid any breaking changes to our API to avoid hassle on your end. If possible, we'll
+build new features in a way that keeps all pre-existing API usage unchanged. In some cases,
+this might not be possible or only possible with restrictions. In these case, any
+backwards-incompatible changes will be prominently noted in the "Changes to the REST API"
+section of our release notes. If possible, we will announce them multiple releases in advance.
 
 We treat the following types of changes as *backwards-compatible* so we ask you to make sure
 that your clients can deal with them properly:
@@ -60,6 +61,7 @@ that your clients can deal with them properly:
 * Support of new HTTP methods for a given API endpoint
 * Support of new query parameters for a given API endpoint
 * New fields contained in API responses
+* New possible values of enumeration-like fields
 * Response body structure or message texts on failed requests (``4xx``, ``5xx`` response codes)
 
 We treat the following types of changes as *backwards-incompatible*:
