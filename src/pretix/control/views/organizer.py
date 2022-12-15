@@ -2313,7 +2313,7 @@ class CustomerDetailView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMi
 
         ctx["lifetime_spending"] = (
             self.get_queryset()
-            .filter(status__in=[Order.STATUS_PAID, Order.STATUS_PENDING])
+            .filter(status=Order.STATUS_PAID)
             .values(currency=F("event__currency"))
             .order_by("currency")
             .annotate(spending=Sum("total"))

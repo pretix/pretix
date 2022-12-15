@@ -79,13 +79,15 @@
                                 {% trans "Lifetime spending" %}
                             </dt>
                         {% if lifetime_spending %}
-                            <dd class="text-success text-h3">
-                                {% for s in lifetime_spending %}
-                                        {{ s.spending|money:s.currency }} <br>
-                                {% endfor %}
-                            </dd>
+                            {% for s in lifetime_spending %}
+                                {% if s.spending >= 0 %}
+                                    <dd class="text-success text-h3">{{ s.spending|money:s.currency }}</dd>
+                                {% elif s.spending < 0 %}
+                                    <dd class="text-error text-h3">{{ s.spending|money:s.currency }}</dd>
+                                {% endif %}
+                            {% endfor %}
                         {% else %}
-                            <dd class="helper-font-size-24">–</dd>
+                            <dd class="text-muted text-h3">{{ 0|floatformat:2 }}</dd>
                         {% endif %}
                         </dl>
                     </form>
