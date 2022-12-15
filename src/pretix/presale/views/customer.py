@@ -31,7 +31,9 @@ from django.contrib import messages
 from django.core.exceptions import ValidationError
 from django.core.signing import BadSignature, dumps, loads
 from django.db import IntegrityError, transaction
-from django.db.models import Count, IntegerField, OuterRef, Q, Subquery
+from django.db.models import (
+    Count, IntegerField, OuterRef, Prefetch, Q, Subquery,
+)
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.crypto import get_random_string
@@ -355,7 +357,9 @@ class ProfileView(CustomerRequiredMixin, ListView):
             q |= Q(email__iexact=self.request.customer.email)
         qs = Order.objects.filter(
             q
-        ).select_related('event').order_by('-datetime')
+        ).prefetch_related(
+            Prefetch('event', queryset=self.request.organizer.events.prefetch_related('_settings_objects'))
+        ).order_by('-datetime')
         return qs
 
     def get_context_data(self, **kwargs):

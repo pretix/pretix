@@ -91,6 +91,9 @@
                             </td>
                             <td>
                                 {{ o.event }}
+                                {% if not o.event.has_subevents and o.event.settings.show_dates_on_frontpage %}
+                                    <br><small class="text-muted">{{ o.event.get_date_range_display }}</small>
+                                {% endif %}
                             </td>
                             <td>
                                 {{ o.datetime|date:"SHORT_DATETIME_FORMAT" }}
