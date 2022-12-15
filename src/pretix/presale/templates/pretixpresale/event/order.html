@@ -100,23 +100,21 @@
                 {% if last_payment %}
                     {{ last_payment_info }}
                     {% if can_pay %}
-                        <div class="text-right flip">
+                        <p>
                             <a href="{% eventurl event "presale:event.order.pay.change" secret=order.secret order=order.code %}"
-                                    class="btn btn-default">
+                                    class="btn btn-primary">
                                 {% trans "Re-try payment or choose another payment method" %}
                             </a>
-                        </div>
+                        </p>
                     {% endif %}
                 {% else %}
                     {% if can_pay %}
-                        <div class="text-right flip">
+                        <p>
                             <a href="{% eventurl event "presale:event.order.pay.change" secret=order.secret order=order.code %}"
                                     class="btn btn-primary btn-lg">{% trans "Pay now" %}</a>
-                        </div>
+                        </p>
                     {% endif %}
                 {% endif %}
-
-                <div class="clearfix"></div>
             </div>
         </div>
     {% endif %}
@@ -191,18 +189,15 @@
         {% endif %}
     {% endif %}
     {% include "pretixpresale/event/fragment_downloads.html" with position_page=False %}
-    <div class="panel panel-primary cart">
+    <div class="panel panel-default cart">
         <div class="panel-heading">
-            {% if order.can_modify_answers %}
-                <div class="pull-right flip">
-                    <a href="{% eventurl event "presale:event.order.modify" secret=order.secret order=order.code %}" aria-label="{% trans "Change ordered items" %}">
-                        <span class="fa fa-edit" aria-hidden="true"></span>
-                        {% trans "Change details" %}
-                    </a>
-                </div>
-            {% endif %}
             <h3 class="panel-title">
                 {% trans "Ordered items" %}
+                {% if order.can_modify_answers %}
+                    <a href="{% eventurl event "presale:event.order.modify" secret=order.secret order=order.code %}" aria-label="{% trans "Change ordered items" %}" class="h6">
+                        <span class="fa fa-edit" aria-hidden="true"></span>{% trans "Change details" %}
+                    </a>
+                {% endif %}
             </h3>
         </div>
         <div class="panel-body">
@@ -284,20 +279,17 @@
             </div>
         {% endif %}
         <div class="col-xs-12 {% if invoices or can_generate_invoice %}col-md-6{% endif %}">
-            <div class="panel panel-primary">
+            <div class="panel panel-default">
                 <div class="panel-heading">
-                    {% if invoice_address_asked or request.event.settings.invoice_name_required %}
-                        {% if order.can_modify_answers %}
-                            <div class="pull-right flip">
-                                <a href="{% eventurl event "presale:event.order.modify" secret=order.secret order=order.code %}" aria-label="{% trans "Change your information" %}">
-                                    <span class="fa fa-edit" aria-hidden="true"></span>
-                                    {% trans "Change details" %}
-                                </a>
-                            </div>
-                        {% endif %}
-                    {% endif %}
                     <h3 class="panel-title">
                         {% trans "Your information" %}
+                        {% if invoice_address_asked or request.event.settings.invoice_name_required %}
+                            {% if order.can_modify_answers %}
+                                <a href="{% eventurl event "presale:event.order.modify" secret=order.secret order=order.code %}" aria-label="{% trans "Change your information" %}" class="h6">
+                                    <span class="fa fa-edit" aria-hidden="true"></span>{% trans "Change details" %}
+                                </a>
+                            {% endif %}
+                        {% endif %}
                     </h3>
                 </div>
                 <div class="panel-body">
@@ -347,7 +339,7 @@
         <div class="clearfix"></div>
     </div>
     {% if user_change_allowed or user_cancel_allowed %}
-        <div class="panel panel-primary panel-cancellation">
+        <div class="panel panel-default panel-cancellation">
             <div class="panel-heading">
                 <h3 class="panel-title">
                     {% trans "Change or cancel your order" context "action" %}

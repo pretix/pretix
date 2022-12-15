@@ -140,6 +140,7 @@ article.item-with-variations .product-row:last-child:after {
     display: none;
 }
 
+.panel-body > *:last-child,
 .panel-body address:last-child {
     margin-bottom: 0;
 }
