@@ -79,7 +79,7 @@
                                 {% trans "Lifetime spending" %}
                             </dt>
                         {% if lifetime_spending %}
-                            <dd class="text-success helper-font-size-24">
+                            <dd class="text-success text-h3">
                                 {% for s in lifetime_spending %}
                                         {{ s.spending|money:s.currency }} <br>
                                 {% endfor %}
