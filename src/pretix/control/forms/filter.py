@@ -792,6 +792,12 @@ class OrderSearchFilterForm(OrderFilterForm):
                 )
             )
 
+    def use_query_hack(self):
+        return (
+            self.cleaned_data.get('query') or
+            self.cleaned_data.get('status') in ('overpaid', 'partially_paid', 'underpaid', 'pendingpaid')
+        )
+
     def filter_qs(self, qs):
         fdata = self.cleaned_data
         qs = super().filter_qs(qs)
