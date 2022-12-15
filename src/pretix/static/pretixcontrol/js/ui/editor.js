@@ -256,7 +256,7 @@ var editor = {
             } else if (d.content === "other_i18n") {
                 o.text_i18n = d.text_i18n
                 o.setText(d.text_i18n[Object.keys(d.text_i18n)[0]]);
-            } else {
+            } else if (d.content) {
                 o.setText(editor._get_text_sample(d.content));
             }
             if (d.locale) {
