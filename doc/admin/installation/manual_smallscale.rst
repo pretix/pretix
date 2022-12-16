@@ -318,6 +318,27 @@ example::
     (venv)$ python -m pretix rebuild
     # systemctl restart pretix-web pretix-worker
 
+System updates
+--------------
+
+After system updates, such as updates to a new Ubuntu or Debian release, you might be using a new Python version.
+That's great, but requires some adjustments. First, adjust any old version paths in your nginx configuration file.
+Then, re-create your Python environment::
+
+    $ source /var/pretix/venv/bin/activate
+    (venv)$ pip3 freeze > /tmp/pip-backup.txt
+    $ rm -rf /var/pretix/venv
+    $ python3 -m venv /var/pretix/venv
+    $ source /var/pretix/venv/bin/activate
+    (venv)$ pip3 install -U pip wheel setuptools
+    (venv)$ pip3 install -r /tmp/pip-backup.txt
+
+Then, proceed like after any plugin installation::
+
+    (venv)$ python -m pretix migrate
+    (venv)$ python -m pretix rebuild
+    (venv)$ python -m pretix updatestyles
+    # systemctl restart pretix-web pretix-worker
 
 .. _Postfix: https://www.digitalocean.com/community/tutorials/how-to-install-and-configure-postfix-as-a-send-only-smtp-server-on-ubuntu-16-04
 .. _nginx: https://botleg.com/stories/https-with-lets-encrypt-and-nginx/
