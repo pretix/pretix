@@ -23,7 +23,7 @@ installation guides):
 
 * A SMTP server to send out mails, e.g. `Postfix`_ on your machine or some third-party server you have credentials for
 * A HTTP reverse proxy, e.g. `nginx`_ or Apache to allow HTTPS connections
-* A `PostgreSQL`_ 9.6+ database server
+* A `PostgreSQL`_ 11+ database server
 * A `redis`_ server
 * A `nodejs`_ installation
 
@@ -127,7 +127,7 @@ We now install pretix, its direct dependencies and gunicorn::
 
     (venv)$ pip3 install pretix gunicorn
 
-Note that you need Python 3.7 or newer. You can find out your Python version using ``python -V``.
+Note that you need Python 3.9 or newer. You can find out your Python version using ``python -V``.
 
 We also need to create a data directory::
 
