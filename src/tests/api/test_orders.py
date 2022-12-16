@@ -479,15 +479,19 @@ def test_include_exclude_fields(token_client, organizer, event, order, item, tax
     assert 'url' not in resp.data
     assert 'positions' not in resp.data
 
-    resp = token_client.get('/api/v1/organizers/{}/events/{}/orders/{}/?include=email&include=positions&exclude=positions.secret'.format(
-        organizer.slug, event.slug, order.code
-    ))
+    resp = token_client.get(
+        '/api/v1/organizers/{}/events/{}/orders/{}/?include=email&include=positions&include=invoice_address.name&exclude=positions.secret'.format(
+            organizer.slug, event.slug, order.code
+        )
+    )
     assert resp.status_code == 200
     assert 'email' in resp.data
     assert 'url' not in resp.data
     assert 'positions' in resp.data
     assert 'subevent' in resp.data['positions'][0]
     assert 'secret' not in resp.data['positions'][0]
+    assert 'city' not in resp.data['invoice_address']
+    assert 'name' in resp.data['invoice_address']
 
     resp = token_client.get('/api/v1/organizers/{}/events/{}/orders/{}/?include=email&include=positions.subevent'.format(
         organizer.slug, event.slug, order.code
