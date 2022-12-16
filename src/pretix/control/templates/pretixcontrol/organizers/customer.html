@@ -22,54 +22,72 @@
                     </h3>
                 </div>
                 <div class="panel-body">
-                    <form action="" method="post">
+                    <form action="" method="post" class="row">
                         {% csrf_token %}
-                        <dl class="dl-horizontal">
-                            <dt>{% trans "Customer ID" %}</dt>
-                            <dd>#{{ customer.identifier }}</dd>
-                            {% if customer.provider %}
-                                <dt>{% trans "SSO provider" %}</dt>
-                                <dd>{{ customer.provider.name }}</dd>
-                            {% endif %}
-                            {% if customer.external_identifier %}
-                                <dt>{% trans "External identifier" %}</dt>
-                                <dd>{{ customer.external_identifier }}</dd>
-                            {% endif %}
-                            <dt>{% trans "Status" %}</dt>
-                            <dd>
-                                {% if not customer.is_active %}
-                                    {% trans "disabled" %}
-                                {% elif not customer.is_verified %}
-                                    {% trans "not yet activated" %}
-                                {% else %}
-                                    {% trans "active" %}
+                        <dl class="dl-horizontal col-lg-6 col-sm-12">
+                                <dt>{% trans "Customer ID" %}</dt>
+                                <dd>#{{ customer.identifier }}</dd>
+                                {% if customer.provider %}
+                                    <dt>{% trans "SSO provider" %}</dt>
+                                    <dd>{{ customer.provider.name }}</dd>
                                 {% endif %}
-                            </dd>
-                            <dt>{% trans "E-mail" %}</dt>
-                            <dd>
-                                {{ customer.email|default_if_none:"" }}
-                                {% if customer.email and not customer.provider %}
-                                    <button type="submit" name="action" value="pwreset" class="btn btn-xs btn-default">
-                                    {% trans "Send password reset link" %}
-                                    </button>
+                                {% if customer.external_identifier %}
+                                    <dt>{% trans "External identifier" %}</dt>
+                                    <dd>{{ customer.external_identifier }}</dd>
                                 {% endif %}
-                            </dd>
-                            <dt>{% trans "Name" %}</dt>
-                            <dd>{{ customer.name }}</dd>
-                        {% if customer.phone %}
-                            <dt>{% trans "Phone" %}</dt>
-                            <dd>{{ customer.phone }}</dd>
-                        {% endif %}
-                            <dt>{% trans "Locale" %}</dt>
-                            <dd>{{ display_locale }}</dd>
-                            <dt>{% trans "Registration date" %}</dt>
-                            <dd>{{ customer.date_joined|date:"SHORT_DATETIME_FORMAT" }}</dd>
-                            <dt>{% trans "Last login" %}</dt>
-                            <dd>{% if customer.last_login %}{{ customer.last_login|date:"SHORT_DATETIME_FORMAT" }}{% else %}
-                                –{% endif %}</dd>
-                        {% if customer.notes %}
-                            <dt>{% trans "Notes" %}</dt>
-                            <dd>{{ customer.notes|linebreaks }}</dd>
+                                <dt>{% trans "Status" %}</dt>
+                                <dd>
+                                    {% if not customer.is_active %}
+                                        {% trans "disabled" %}
+                                    {% elif not customer.is_verified %}
+                                        {% trans "not yet activated" %}
+                                    {% else %}
+                                        {% trans "active" %}
+                                    {% endif %}
+                                </dd>
+                                <dt>{% trans "E-mail" %}</dt>
+                                <dd>
+                                    {{ customer.email|default_if_none:"" }}
+                                    {% if customer.email and not customer.provider %}
+                                        <button type="submit" name="action" value="pwreset" class="btn btn-xs btn-default">
+                                        {% trans "Send password reset link" %}
+                                        </button>
+                                    {% endif %}
+                                </dd>
+                                <dt>{% trans "Name" %}</dt>
+                                <dd>{{ customer.name }}</dd>
+                            {% if customer.phone %}
+                                <dt>{% trans "Phone" %}</dt>
+                                <dd>{{ customer.phone }}</dd>
+                            {% endif %}
+                                <dt>{% trans "Locale" %}</dt>
+                                <dd>{{ display_locale }}</dd>
+                                <dt>{% trans "Registration date" %}</dt>
+                                <dd>{{ customer.date_joined|date:"SHORT_DATETIME_FORMAT" }}</dd>
+                                <dt>{% trans "Last login" %}</dt>
+                                <dd>{% if customer.last_login %}{{ customer.last_login|date:"SHORT_DATETIME_FORMAT" }}{% else %}
+                                    –{% endif %}</dd>
+                            {% if customer.notes %}
+                                <dt>{% trans "Notes" %}</dt>
+                                <dd>{{ customer.notes|linebreaks }}</dd>
+                            {% endif %}
+                        </dl>
+                        <dl class="col-lg-6 col-sm-12 text-right">
+                            <dt class="text-muted"
+                                data-toggle="tooltip"
+                                title="{% trans "This includes all paid orders by this customer across all your events." %}">
+                                {% trans "Lifetime spending" %}
+                            </dt>
+                        {% if lifetime_spending %}
+                            {% for s in lifetime_spending %}
+                                {% if s.spending >= 0 %}
+                                    <dd class="text-success text-h3">{{ s.spending|money:s.currency }}</dd>
+                                {% elif s.spending < 0 %}
+                                    <dd class="text-error text-h3">{{ s.spending|money:s.currency }}</dd>
+                                {% endif %}
+                            {% endfor %}
+                        {% else %}
+                            <dd class="text-muted text-h3">{{ 0|floatformat:2 }}</dd>
                         {% endif %}
                         </dl>
                     </form>

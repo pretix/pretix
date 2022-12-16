@@ -45,8 +45,8 @@ from django.core.exceptions import PermissionDenied, ValidationError
 from django.core.files import File
 from django.db import connections, transaction
 from django.db.models import (
-    Count, Exists, IntegerField, Max, Min, OuterRef, Prefetch, ProtectedError,
-    Q, Subquery, Sum,
+    Count, Exists, F, IntegerField, Max, Min, OuterRef, Prefetch,
+    ProtectedError, Q, Subquery, Sum,
 )
 from django.db.models.functions import Coalesce, Greatest
 from django.forms import DecimalField
@@ -2311,6 +2311,14 @@ class CustomerDetailView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMi
             o.computed_payment_refund_sum = annotated.get(o.pk)['computed_payment_refund_sum']
             o.icnt = annotated.get(o.pk)['icnt']
             o.sales_channel_obj = scs[o.sales_channel]
+
+        ctx["lifetime_spending"] = (
+            self.get_queryset()
+            .filter(status=Order.STATUS_PAID)
+            .values(currency=F("event__currency"))
+            .order_by("currency")
+            .annotate(spending=Sum("total"))
+        )
 
         return ctx
 
