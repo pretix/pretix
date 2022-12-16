@@ -162,7 +162,7 @@ setup(
         'babel',
         'BeautifulSoup4==4.11.*',
         'bleach==5.0.*',
-        'celery==4.4.*',
+        'celery==5.2.*',
         'chardet==5.1.*',
         'cryptography>=3.4.2',
         'css-inline==0.8.*',
@@ -193,7 +193,7 @@ setup(
         'drf_ujson2==1.7.*',
         'isoweek',
         'jsonschema',
-        'kombu==4.6.*',
+        'kombu==5.2.*',
         'libsass==0.22.*',
         'lxml',
         'markdown==3.3.4',  # 3.3.5 requires importlib-metadata>=4.4, but django-bootstrap3 requires importlib-metadata<3.
