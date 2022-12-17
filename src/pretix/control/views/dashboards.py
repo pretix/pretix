@@ -51,7 +51,7 @@ from django.utils import formats
 from django.utils.formats import date_format
 from django.utils.html import escape
 from django.utils.timezone import now
-from django.utils.translation import gettext_lazy as _, pgettext, ungettext
+from django.utils.translation import gettext_lazy as _, ngettext, pgettext
 
 from pretix.base.decimal import round_decimal
 from pretix.base.models import (
@@ -555,7 +555,7 @@ def widgets_for_event_qs(request, qs, user, nmax, lazy=False):
                             'event': event.slug,
                             'organizer': event.organizer.slug
                         }),
-                        orders_text=ungettext('{num} order', '{num} orders', event.order_count or 0).format(
+                        orders_text=ngettext('{num} order', '{num} orders', event.order_count or 0).format(
                             num=event.order_count or 0
                         )
                     ) if user.has_active_staff_session(request.session.session_key) or event.pk in events_with_orders else ''

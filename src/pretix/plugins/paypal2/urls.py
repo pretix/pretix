@@ -19,7 +19,8 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
-from django.conf.urls import include, re_path
+from django.conf.urls import re_path
+from django.urls import include
 
 from .views import (
     PayView, XHRView, abort, isu_disconnect, isu_return, redirect_view,

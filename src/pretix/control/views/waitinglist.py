@@ -43,7 +43,7 @@ from django.http import Http404, HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils.functional import cached_property
-from django.utils.http import is_safe_url
+from django.utils.http import url_has_allowed_host_and_scheme
 from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _, pgettext
 from django.views import View
@@ -144,7 +144,7 @@ class WaitingListActionView(EventPermissionRequiredMixin, WaitingListQuerySetMix
     permission = 'can_change_orders'
 
     def _redirect_back(self):
-        if "next" in self.request.GET and is_safe_url(self.request.GET.get("next"), allowed_hosts=None):
+        if "next" in self.request.GET and url_has_allowed_host_and_scheme(self.request.GET.get("next"), allowed_hosts=None):
             return redirect(self.request.GET.get("next"))
         return redirect(reverse('control:event.orders.waitinglist', kwargs={
             'event': self.request.event.slug,
@@ -360,7 +360,7 @@ class EntryDelete(EventPermissionRequiredMixin, DeleteView):
         self.object.log_action('pretix.event.orders.waitinglist.deleted', user=self.request.user)
         self.object.delete()
         messages.success(self.request, _('The selected entry has been deleted.'))
-        if "next" in self.request.GET and is_safe_url(self.request.GET.get("next"), allowed_hosts=None):
+        if "next" in self.request.GET and url_has_allowed_host_and_scheme(self.request.GET.get("next"), allowed_hosts=None):
             return redirect(self.request.GET.get("next"))
         return HttpResponseRedirect(success_url)
 

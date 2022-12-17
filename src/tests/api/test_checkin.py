@@ -23,8 +23,6 @@ import datetime
 import time
 from decimal import Decimal
 from unittest import mock
-# deprecated: from django.utils.http import urlquote
-# use urlib instead
 from urllib.parse import quote as urlquote
 
 import pytest

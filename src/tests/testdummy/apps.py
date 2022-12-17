@@ -19,23 +19,16 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
-from django.conf.urls import re_path
-from django.urls import include
+from django.apps import AppConfig
 
-from .views import abort, oauth_disconnect, redirect_view, success
 
-event_patterns = [
-    re_path(r'^paypal/', include([
-        re_path(r'^abort/$', abort, name='abort'),
-        re_path(r'^return/$', success, name='return'),
-        re_path(r'^redirect/$', redirect_view, name='redirect'),
+class TestDummyApp(AppConfig):
+    name = 'tests.testdummy'
+    verbose_name = '.testdummy'
 
-        re_path(r'w/(?P<cart_namespace>[a-zA-Z0-9]{16})/abort/', abort, name='abort'),
-        re_path(r'w/(?P<cart_namespace>[a-zA-Z0-9]{16})/return/', success, name='return'),
-    ])),
-]
+    class PretixPluginMeta:
+        name = '.testdummy'
+        version = '1.0.0'
 
-urlpatterns = [
-    re_path(r'^control/event/(?P<organizer>[^/]+)/(?P<event>[^/]+)/paypal/disconnect/',
-            oauth_disconnect, name='oauth.disconnect'),
-]
+    def ready(self):
+        from tests.testdummy import signals  # noqa

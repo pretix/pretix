@@ -28,7 +28,7 @@ from django.urls import reverse
 
 
 def _is_samesite_referer(request):
-    referer = request.META.get('HTTP_REFERER')
+    referer = request.headers.get('referer')
     if referer is None:
         return False
 

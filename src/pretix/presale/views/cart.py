@@ -48,7 +48,7 @@ from django.utils import translation
 from django.utils.crypto import get_random_string
 from django.utils.decorators import method_decorator
 from django.utils.functional import cached_property
-from django.utils.http import is_safe_url, url_has_allowed_host_and_scheme
+from django.utils.http import url_has_allowed_host_and_scheme
 from django.utils.timezone import now
 from django.utils.translation import gettext as _, pgettext
 from django.views.decorators.clickjacking import xframe_options_exempt
@@ -83,7 +83,7 @@ except:
 class CartActionMixin:
 
     def get_next_url(self):
-        if "next" in self.request.GET and is_safe_url(self.request.GET.get("next"), allowed_hosts=None):
+        if "next" in self.request.GET and url_has_allowed_host_and_scheme(self.request.GET.get("next"), allowed_hosts=None):
             u = self.request.GET.get('next')
         else:
             kwargs = {}
@@ -106,7 +106,7 @@ class CartActionMixin:
         return self.get_next_url()
 
     def get_error_url(self):
-        if "next_error" in self.request.GET and is_safe_url(self.request.GET.get("next_error"), allowed_hosts=None):
+        if "next_error" in self.request.GET and url_has_allowed_host_and_scheme(self.request.GET.get("next_error"), allowed_hosts=None):
             u = self.request.GET.get('next_error')
             if '?' in u:
                 u += '&require_cookie=true'

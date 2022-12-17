@@ -19,19 +19,3 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
-from django.apps import AppConfig
-
-
-class TestDummyApp(AppConfig):
-    name = 'tests.testdummy'
-    verbose_name = '.testdummy'
-
-    class PretixPluginMeta:
-        name = '.testdummy'
-        version = '1.0.0'
-
-    def ready(self):
-        from tests.testdummy import signals  # noqa
-
-
-default_app_config = 'tests.testdummy.TestDummyApp'
