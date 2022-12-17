@@ -2572,6 +2572,9 @@ msgstr "La loterie des billets a eu lieu le"
 msgid "Please register for the waiting list."
 msgstr "Veuillez vous inscrire sur la liste d'attente."
 
+#: pretix/base/exporters/orderlist.py:863
+#, fuzzy
+#| msgid "Expire order"
 
 #: pretix/base/exporters/orderlist.py:1087
 msgid "Exited orders"
