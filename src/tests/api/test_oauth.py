@@ -37,6 +37,7 @@ import json
 from urllib.parse import quote
 
 import pytest
+from django.utils.crypto import get_random_string
 
 from pretix.api.models import (
     OAuthAccessToken, OAuthApplication, OAuthGrant, OAuthRefreshToken,
@@ -64,12 +65,17 @@ def admin_user(admin_team):
 
 @pytest.fixture
 def application():
-    return OAuthApplication.objects.create(
+    secret = get_random_string(32)
+    a = OAuthApplication.objects.create(
         name="pretalx",
         redirect_uris="https://pretalx.com",
         client_type='confidential',
+        client_secret=secret,
         authorization_grant_type='authorization-code'
     )
+    a._cached_secret = secret
+    a.save()
+    return a
 
 
 @pytest.mark.django_db
@@ -267,7 +273,7 @@ def test_token_from_code(client, admin_user, organizer, application: OAuthApplic
         'redirect_uri': application.redirect_uris,
         'grant_type': 'authorization_code',
     }, HTTP_AUTHORIZATION='Basic ' + base64.b64encode(
-        ('%s:%s' % (application.client_id, application.client_secret)).encode()).decode())
+        ('%s:%s' % (application.client_id, application._cached_secret)).encode()).decode())
     assert resp.status_code == 200
     data = json.loads(resp.content.decode())
     assert data['expires_in'] == 86400
@@ -306,7 +312,7 @@ def test_use_token_for_access_one_organizer(client, admin_user, organizer, appli
         'redirect_uri': application.redirect_uris,
         'grant_type': 'authorization_code',
     }, HTTP_AUTHORIZATION='Basic ' + base64.b64encode(
-        ('%s:%s' % (application.client_id, application.client_secret)).encode()).decode())
+        ('%s:%s' % (application.client_id, application._cached_secret)).encode()).decode())
     assert resp.status_code == 200
     data = json.loads(resp.content.decode())
     access_token = data['access_token']
@@ -348,7 +354,7 @@ def test_use_token_for_access_two_organizers(client, admin_user, organizer, appl
         'redirect_uri': application.redirect_uris,
         'grant_type': 'authorization_code',
     }, HTTP_AUTHORIZATION='Basic ' + base64.b64encode(
-        ('%s:%s' % (application.client_id, application.client_secret)).encode()).decode())
+        ('%s:%s' % (application.client_id, application._cached_secret)).encode()).decode())
     assert resp.status_code == 200
     data = json.loads(resp.content.decode())
     access_token = data['access_token']
@@ -389,7 +395,7 @@ def test_token_refresh(client, admin_user, organizer, application: OAuthApplicat
         'redirect_uri': application.redirect_uris,
         'grant_type': 'authorization_code',
     }, HTTP_AUTHORIZATION='Basic ' + base64.b64encode(
-        ('%s:%s' % (application.client_id, application.client_secret)).encode()).decode())
+        ('%s:%s' % (application.client_id, application._cached_secret)).encode()).decode())
     assert resp.status_code == 200
     data = json.loads(resp.content.decode())
     refresh_token = data['refresh_token']
@@ -398,7 +404,7 @@ def test_token_refresh(client, admin_user, organizer, application: OAuthApplicat
         'refresh_token': refresh_token,
         'grant_type': 'refresh_token',
     }, HTTP_AUTHORIZATION='Basic ' + base64.b64encode(
-        ('%s:%s' % (application.client_id, application.client_secret)).encode()).decode())
+        ('%s:%s' % (application.client_id, application._cached_secret)).encode()).decode())
     assert resp.status_code == 200
     assert not OAuthAccessToken.objects.filter(token=access_token).exists()  # old token revoked
     data = json.loads(resp.content.decode())
@@ -431,7 +437,7 @@ def test_allow_write(client, admin_user, organizer, application: OAuthApplicatio
         'redirect_uri': application.redirect_uris,
         'grant_type': 'authorization_code',
     }, HTTP_AUTHORIZATION='Basic ' + base64.b64encode(
-        ('%s:%s' % (application.client_id, application.client_secret)).encode()).decode())
+        ('%s:%s' % (application.client_id, application._cached_secret)).encode()).decode())
     assert resp.status_code == 200
     data = json.loads(resp.content.decode())
     access_token = data['access_token']
@@ -463,7 +469,7 @@ def test_allow_read_only(client, admin_user, organizer, application: OAuthApplic
         'redirect_uri': application.redirect_uris,
         'grant_type': 'authorization_code',
     }, HTTP_AUTHORIZATION='Basic ' + base64.b64encode(
-        ('%s:%s' % (application.client_id, application.client_secret)).encode()).decode())
+        ('%s:%s' % (application.client_id, application._cached_secret)).encode()).decode())
     assert resp.status_code == 200
     data = json.loads(resp.content.decode())
     access_token = data['access_token']
@@ -495,7 +501,7 @@ def test_token_revoke_refresh_token(client, admin_user, organizer, application: 
         'redirect_uri': application.redirect_uris,
         'grant_type': 'authorization_code',
     }, HTTP_AUTHORIZATION='Basic ' + base64.b64encode(
-        ('%s:%s' % (application.client_id, application.client_secret)).encode()).decode())
+        ('%s:%s' % (application.client_id, application._cached_secret)).encode()).decode())
     assert resp.status_code == 200
     data = json.loads(resp.content.decode())
     refresh_token = data['refresh_token']
@@ -503,7 +509,7 @@ def test_token_revoke_refresh_token(client, admin_user, organizer, application: 
     resp = client.post('/api/v1/oauth/revoke_token', data={
         'token': refresh_token,
     }, HTTP_AUTHORIZATION='Basic ' + base64.b64encode(
-        ('%s:%s' % (application.client_id, application.client_secret)).encode()).decode())
+        ('%s:%s' % (application.client_id, application._cached_secret)).encode()).decode())
     assert resp.status_code == 200
     assert not OAuthAccessToken.objects.get(token=access_token).is_valid()
     assert not OAuthRefreshToken.objects.filter(token=refresh_token, revoked__isnull=True).exists()
@@ -511,7 +517,7 @@ def test_token_revoke_refresh_token(client, admin_user, organizer, application: 
         'refresh_token': refresh_token,
         'grant_type': 'refresh_token',
     }, HTTP_AUTHORIZATION='Basic ' + base64.b64encode(
-        ('%s:%s' % (application.client_id, application.client_secret)).encode()).decode())
+        ('%s:%s' % (application.client_id, application._cached_secret)).encode()).decode())
     assert resp.status_code == 400
 
 
@@ -539,7 +545,7 @@ def test_token_revoke_access_token(client, admin_user, organizer, application: O
         'redirect_uri': application.redirect_uris,
         'grant_type': 'authorization_code',
     }, HTTP_AUTHORIZATION='Basic ' + base64.b64encode(
-        ('%s:%s' % (application.client_id, application.client_secret)).encode()).decode())
+        ('%s:%s' % (application.client_id, application._cached_secret)).encode()).decode())
     assert resp.status_code == 200
     data = json.loads(resp.content.decode())
     refresh_token = data['refresh_token']
@@ -547,7 +553,7 @@ def test_token_revoke_access_token(client, admin_user, organizer, application: O
     resp = client.post('/api/v1/oauth/revoke_token', data={
         'token': access_token,
     }, HTTP_AUTHORIZATION='Basic ' + base64.b64encode(
-        ('%s:%s' % (application.client_id, application.client_secret)).encode()).decode())
+        ('%s:%s' % (application.client_id, application._cached_secret)).encode()).decode())
     assert resp.status_code == 200
     assert not OAuthAccessToken.objects.get(token=access_token).is_valid()  # old token revoked
 
@@ -555,7 +561,7 @@ def test_token_revoke_access_token(client, admin_user, organizer, application: O
         'refresh_token': refresh_token,
         'grant_type': 'refresh_token',
     }, HTTP_AUTHORIZATION='Basic ' + base64.b64encode(
-        ('%s:%s' % (application.client_id, application.client_secret)).encode()).decode())
+        ('%s:%s' % (application.client_id, application._cached_secret)).encode()).decode())
     assert resp.status_code == 200
     data = json.loads(resp.content.decode())
     access_token = data['access_token']
@@ -587,7 +593,7 @@ def test_user_revoke(client, admin_user, organizer, application: OAuthApplicatio
         'redirect_uri': application.redirect_uris,
         'grant_type': 'authorization_code',
     }, HTTP_AUTHORIZATION='Basic ' + base64.b64encode(
-        ('%s:%s' % (application.client_id, application.client_secret)).encode()).decode())
+        ('%s:%s' % (application.client_id, application._cached_secret)).encode()).decode())
     assert resp.status_code == 200
     data = json.loads(resp.content.decode())
     refresh_token = data['refresh_token']
@@ -606,7 +612,7 @@ def test_user_revoke(client, admin_user, organizer, application: OAuthApplicatio
         'refresh_token': refresh_token,
         'grant_type': 'refresh_token',
     }, HTTP_AUTHORIZATION='Basic ' + base64.b64encode(
-        ('%s:%s' % (application.client_id, application.client_secret)).encode()).decode())
+        ('%s:%s' % (application.client_id, application._cached_secret)).encode()).decode())
     assert resp.status_code == 400
 
 
@@ -634,7 +640,7 @@ def test_allow_profile_only(client, admin_user, organizer, application: OAuthApp
         'redirect_uri': application.redirect_uris,
         'grant_type': 'authorization_code',
     }, HTTP_AUTHORIZATION='Basic ' + base64.b64encode(
-        ('%s:%s' % (application.client_id, application.client_secret)).encode()).decode())
+        ('%s:%s' % (application.client_id, application._cached_secret)).encode()).decode())
     assert resp.status_code == 200
     data = json.loads(resp.content.decode())
     access_token = data['access_token']
@@ -642,3 +648,18 @@ def test_allow_profile_only(client, admin_user, organizer, application: OAuthApp
     assert resp.status_code == 403
     resp = client.get('/api/v1/me', HTTP_AUTHORIZATION='Bearer %s' % access_token)
     assert resp.status_code == 200
+
+
+@pytest.mark.django_db
+def test_reject_other_response_types(client, admin_user, organizer, application: OAuthApplication):
+    client.login(email='dummy@dummy.dummy', password='dummy')
+    resp = client.get('/api/v1/oauth/authorize?client_id=%s&redirect_uri=%s&response_type=code+id_token' % (
+        application.client_id, quote(application.redirect_uris)
+    ))
+    assert resp.status_code == 302
+    assert 'error=unauthorized_client' in resp['Location']
+    resp = client.get('/api/v1/oauth/authorize?client_id=%s&redirect_uri=%s&response_type=id_token' % (
+        application.client_id, quote(application.redirect_uris)
+    ))
+    assert resp.status_code == 302
+    assert 'error=unsupported_response_type' in resp['Location']
