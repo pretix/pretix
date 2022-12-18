@@ -108,7 +108,7 @@ class AuthorizationView(RecentAuthenticationRequiredMixin, BaseAuthorizationView
                 application_name=application.name
             )
         ]
-        self.request.user.send_security_notice(msgs)
+        #self.request.user.send_security_notice(msgs)
         self.request.user.log_action('pretix.user.oauth.authorized', user=self.request.user, data={
             'application_id': application.pk,
             'application_name': application.name,
