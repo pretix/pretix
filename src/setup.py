@@ -53,7 +53,7 @@ except:
         raise
 
 CURRENT_PYTHON = sys.version_info[:2]
-REQUIRED_PYTHON = (3, 6)
+REQUIRED_PYTHON = (3, 9)
 if CURRENT_PYTHON < REQUIRED_PYTHON:
     sys.stderr.write("""
 ==========================
@@ -150,9 +150,9 @@ setup(
         'Topic :: Internet :: WWW/HTTP :: Dynamic Content',
         'Environment :: Web Environment',
         'License :: OSI Approved :: GNU Affero General Public License v3',
-        'Programming Language :: Python :: 3.7',
-        'Programming Language :: Python :: 3.8',
         'Programming Language :: Python :: 3.9',
+        'Programming Language :: Python :: 3.10',
+        'Programming Language :: Python :: 3.11',
         'Framework :: Django :: 3.2'
     ],
 
