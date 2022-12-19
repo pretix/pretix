@@ -452,7 +452,7 @@ def build_preview_invoice_pdf(event):
 
         if event.tax_rules.exists():
             for i, tr in enumerate(event.tax_rules.all()):
-                for j in range(150):
+                for j in range(5):
                     tax = tr.tax(Decimal('100.00'), base_price_is='gross')
                     InvoiceLine.objects.create(
                         invoice=invoice, description=_("Sample product {}").format(i + 1),
@@ -460,7 +460,7 @@ def build_preview_invoice_pdf(event):
                         tax_rate=tax.rate
                     )
         else:
-            for i in range(150):
+            for i in range(5):
                 InvoiceLine.objects.create(
                     invoice=invoice, description=_("Sample product A"),
                     gross_value=100, tax_value=0, tax_rate=0
