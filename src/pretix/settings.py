@@ -861,6 +861,7 @@ AUTH_PASSWORD_VALIDATORS = [
 OAUTH2_PROVIDER_APPLICATION_MODEL = 'pretixapi.OAuthApplication'
 OAUTH2_PROVIDER_GRANT_MODEL = 'pretixapi.OAuthGrant'
 OAUTH2_PROVIDER_ACCESS_TOKEN_MODEL = 'pretixapi.OAuthAccessToken'
+OAUTH2_PROVIDER_ID_TOKEN_MODEL = 'pretixapi.OAuthIDToken'
 OAUTH2_PROVIDER_REFRESH_TOKEN_MODEL = 'pretixapi.OAuthRefreshToken'
 OAUTH2_PROVIDER = {
     'SCOPES': {
@@ -872,7 +873,8 @@ OAUTH2_PROVIDER = {
     'ALLOWED_REDIRECT_URI_SCHEMES': ['https'] if not DEBUG else ['http', 'https'],
     'ACCESS_TOKEN_EXPIRE_SECONDS': 3600 * 24,
     'ROTATE_REFRESH_TOKEN': False,
-
+    'PKCE_REQUIRED': False,
+    'OIDC_RESPONSE_TYPES_SUPPORTED': ["code"],  # We don't support proper OIDC for now
 }
 
 COUNTRIES_OVERRIDE = {
