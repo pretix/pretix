@@ -224,6 +224,11 @@ def _merge_csp(a, b):
         if k not in a:
             a[k] = b[k]
 
+    for k, v in a.items():
+        if "'unsafe-inline'" in v:
+            # If we need unsafe-inline, drop any hashes or nonce as they will be ignored otherwise
+            a[k] = [i for i in v if not i.startswith("'nonce-") and not i.startswith("'sha-")]
+
 
 class SecurityMiddleware(MiddlewareMixin):
     CSP_EXEMPT = (
