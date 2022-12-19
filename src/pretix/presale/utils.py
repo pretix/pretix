@@ -411,7 +411,7 @@ def _event_view(function=None, require_live=True, require_plugin=None):
 def event_view(function=None, require_live=True):
     warnings.warn('The event_view decorator is deprecated since it will be automatically applied by the URL routing '
                   'layer when you use event_urls.',
-                  DeprecationWarning)
+                  DeprecationWarning, stacklevel=2)
 
     def noop(fn):
         return fn
