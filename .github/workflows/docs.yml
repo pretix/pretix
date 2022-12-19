@@ -17,6 +17,9 @@ on:
 permissions:
   contents: read  #  to fetch code (actions/checkout)
 
+env:
+  FORCE_COLOR: 1
+
 jobs:
   spelling:
     name: Spellcheck
