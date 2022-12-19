@@ -161,7 +161,7 @@ def signal_process_response(sender, request: HttpRequest, response: HttpResponse
             'frame-src': ['https:', "'nonce-{}'".format(_nonce(request))],
             'connect-src': ['https://www.paypal.com', 'https://www.sandbox.paypal.com'],  # Or not - seems to only affect PayPal logging...
             'img-src': ['https://t.paypal.com'],
-            'style-src': ["'nonce-{}'".format(_nonce(request))]
+            'style-src': ["'unsafe-inline'"]  # PayPal does not comply with our nonce unfortunately, see Z#23113213
         }
 
         _merge_csp(h, csps)
