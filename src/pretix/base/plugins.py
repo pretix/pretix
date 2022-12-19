@@ -65,7 +65,14 @@ def get_all_plugins(event=None) -> List[type]:
     )
 
 
-class PluginConfig(AppConfig):
+class PluginConfigMeta(type):
+    def __getattribute__(cls, item):
+        if item == "default" and cls is PluginConfig:
+            return False
+        return super().__getattribute__(item)
+
+
+class PluginConfig(AppConfig, metaclass=PluginConfigMeta):
     IGNORE = False
 
     def __init__(self, *args, **kwargs):
