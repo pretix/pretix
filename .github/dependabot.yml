@@ -9,6 +9,7 @@ updates:
     directory: "/src"
     schedule:
       interval: "daily"
+    versioning-strategy: increase
   - package-ecosystem: "npm"
     directory: "/src/pretix/static/npm_dir"
     schedule:
