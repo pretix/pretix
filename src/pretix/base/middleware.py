@@ -306,7 +306,7 @@ class SecurityMiddleware(MiddlewareMixin):
             resp['Content-Security-Policy'] = _render_csp(h).format(static=staticdomain, dynamic=dynamicdomain,
                                                                     media=mediadomain)
             for k, v in h.items():
-                h[k] = ' '.join(v).format(static=staticdomain, dynamic=dynamicdomain, media=mediadomain).split(' ')
+                h[k] = sorted(set(' '.join(v).format(static=staticdomain, dynamic=dynamicdomain, media=mediadomain).split(' ')))
             resp['Content-Security-Policy'] = _render_csp(h)
         elif 'Content-Security-Policy' in resp:
             del resp['Content-Security-Policy']
