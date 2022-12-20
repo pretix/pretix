@@ -698,7 +698,7 @@ class PaypalMethod(BasePaymentProvider):
                         except ReferencedPayPalObject.MultipleObjectsReturned:
                             pass
 
-                        if capture.status == 'PENDING':
+                        if capture.status != 'COMPLETED':
                             messages.warning(request, _('PayPal has not yet approved the payment. We will inform you as '
                                                         'soon as the payment completed.'))
                             payment.info = json.dumps(pp_captured_order.dict())
