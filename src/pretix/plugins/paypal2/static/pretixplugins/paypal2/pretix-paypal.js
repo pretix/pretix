@@ -85,7 +85,7 @@ var pretixpaypal = {
             pretixpaypal.restore();
         });
 
-        // If paypal is the only payment option, it is preselected and we must disable the continue button until the sdk is ready
+        // If paypal is pre-selected, we must disable the continue button and handle it after SDK is loaded
         if ($("input[name=payment][value^='paypal']").is(':checked')) {
             pretixpaypal.continue_button.prop("disabled", true);
         }
@@ -325,17 +325,9 @@ $(function () {
     // This script is always loaded if paypal is enabled as a payment method, regardless of
     // whether it is available (it could e.g. be hidden or limited to certain countries).
     // We do not want to unnecessarily load the sdk.
-    let sdk_needed = false
-    // If we are on a payment method selection page (event.checkout "payment" step or
-    // event.order.pay.change) and paypal/paypal_apm is one of the options, we need the sdk.
-    if ($("input[name=payment][value^='paypal']").length) {
-        sdk_needed = true
-    }
-    // If we are on the (APM) PayView, we need the sdk.
-    if ($('#paypal-button-container').data('paypage')) {
-        sdk_needed = true
-    }
-    if (!sdk_needed) {
+    // If no paypal/paypal_apm payment option is present and we are not on
+    // the (APM) PayView, then we do not need the SDK.
+    if (!$("input[name=payment][value^='paypal']").length && !$('#paypal-button-container').data('paypage')) {
         return
     }
 
